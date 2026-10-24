@@ -926,6 +926,8 @@ class cSwatchTexture {
  public:
   void* GetTexture();                              // 0x0080d610
   cRefCountedModel2* GetModelManager();            // 0x0080db70
+  void FUN_0080dfc0();                             // 0x0080dfc0 (thiscall, no args)
+  void FUN_0080df80();                             // 0x0080df80 (thiscall, no args)
 };
 }
 namespace SP {
@@ -2817,6 +2819,7 @@ class cUILayeredObject_s005f_5f20 {
  public:
   void SetVisible(bool visible);   // 0x0080d7c0
   void RemoveModel(void* model);   // 0x0080e980
+  void FUN_0080dda0(int a, int b); // 0x0080dda0 (thiscall, ret 8)
 };
 }
 namespace SP {
@@ -2884,7 +2887,12 @@ namespace SP {
 void FUN_0080df80(void* a);          // 0x0080df80
 }
 namespace SP {
-void* cSPBoundingBox_AddBoundingBox2(int, int, int);  // 0x0067cad0
+class cBoundingBoxList {
+ public:
+  void FUN_0080f7c0(void* a);      // 0x0080f7c0 (thiscall, ret 4)
+};
+cBoundingBoxList* cSPBoundingBox_AddBoundingBox2();          // 0x0067cad0 (no-arg getter)
+cBoundingBoxList* cSPBoundingBox_AddBoundingBox2(void* a);   // 0x0067cad0 (same getter, argument ignored)
 }
 namespace SP {
 class cRefVt {
@@ -4236,40 +4244,47 @@ void cSwatch3DView_s005f_5f20::Shutdown()
 {
   if (mCamera) {
     ((cRefVt*)mCamera)->Vt44();
-    if (mCamera) {
+    void* camera = mCamera;
+    if (camera) {
       mCamera = 0;
-      ((cRefVt*)mCamera)->Vt4();
+      ((cRefVt*)camera)->Vt4();
     }
   }
   RemoveAllModels();
   if (mLayeredObject) {
-    FUN_0080dda0(0, 0);
-    if (cSPBoundingBox_AddBoundingBox2(0, 0, 0)) {
-      FUN_0080f7c0(mLayeredObject);
+    mLayeredObject->FUN_0080dda0(0, 0);
+    if (cSPBoundingBox_AddBoundingBox2()) {
+      cUILayeredObject_s005f_5f20* boxed = mLayeredObject;
+      cBoundingBoxList* list = cSPBoundingBox_AddBoundingBox2(boxed);
+      list->FUN_0080f7c0(boxed);
     }
-    if (mLayeredObject) {
+    cUILayeredObject_s005f_5f20* layered = mLayeredObject;
+    if (layered) {
       mLayeredObject = 0;
-      ((cRefVt*)mLayeredObject)->Vt8();
+      ((cRefVt*)layered)->Vt8();
     }
   }
   if (mWindow) {
     ((cRefVt*)mWindow)->Vt20();
-    if (mWindow) {
+    IWindow_s005f_5f20* window = mWindow;
+    if (window) {
       mWindow = 0;
-      ((cRefVt*)mWindow)->Vt4();
+      ((cRefVt*)window)->Vt4();
     }
   }
   if (mTexture) {
     ((cRefVt*)mRenderer)->Vt88();
-    FUN_0080dfc0(mTexture);
-    if (mTexture) {
+    mTexture->FUN_0080dfc0();
+    cSwatchTexture* texture = mTexture;
+    if (texture) {
       mTexture = 0;
-      FUN_0080df80(mTexture);
+      texture->FUN_0080df80();
     }
   }
   if (mRenderer) {
+    cSwatchRenderer_s005f_5f20* renderer = mRenderer;
     mRenderer = 0;
-    ((cRefVt*)mRenderer)->Vt4();
+    ((cRefVt*)renderer)->Vt4();
   }
   mVisible = false;
 }
