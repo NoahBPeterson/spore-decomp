@@ -1,3 +1,1 @@
 # va  diff-bytes  reason
-008c4f40  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 986 B.  GetFontWideSbitMetrics (PDB name), void (undefined4, undefined4, ushort, ushort, undefined4*, undefined4*): calls FUN_008c4dc0 and FUN_008c5060; no relocs.
-008c5320  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 424 B.  FindGlyph_blocClass (PDB candidate), bool (undefined4, undefined4, undefined4, ushort, undefined4, undefined4, int*): calls FUN_008c4dc0 and dispatches through the relocated function-pointer table at 0x8c54b4 (`call dword ptr [edx*4 + 0x8c54b4]`), internal branches to 0x8c548f/0x8c5492; 6 base relocs (the table dwords) emitted raw.

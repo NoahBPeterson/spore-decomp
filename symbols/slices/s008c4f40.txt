@@ -1,2 +1,7 @@
-008c4f40 GetFontWideSbitMetrics  # PDB name; naked asm, byte-exact
-008c5320 FindGlyph_blocClass  # PDB candidate; naked asm, byte-exact
+# va  name  # evidence
+# Spore Adobe T2K (Type2K) sbit-metrics routines from psread.c / the EBLC/EBDT readers
+# (SporeApp.exe 0x008c4f40..0x008c548f).  Both call FindBitmapSizeTable (0x008c4dc0), which
+# uses the retail LTCG register ABI (self in esi, x/y in eax/ecx); stock cl cannot pass esi,
+# so nothing here is byte-exact -- see nonmatching.txt.
+008c4f40  GetFontWideSbitMetrics  # PDB name; fills the horizontal/vertical 0x18-byte font-wide metrics blocks
+008c5320  FindGlyph_blocClass     # PDB candidate (caller-single); locates a glyph's bitmap data pointer in the sbit table

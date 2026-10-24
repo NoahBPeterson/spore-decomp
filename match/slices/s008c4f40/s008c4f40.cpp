@@ -1,1883 +1,354 @@
-// Slice s008c4f40: Spore engine routines (naked transcription).
+// Slice s008c4f40 -- Adobe T2K (Type2K) font sbit-metrics routines linked into SporeApp.exe:
+//
+//   008c4f40  GetFontWideSbitMetrics  fill the horizontal/vertical font-wide metrics blocks
+//   008c5320  FindGlyph_blocClass     locate a glyph's bitmap data pointer in a sbit table
+//
+// Both take their arguments in the retail whole-program (LTCG) register ABI, so a stock
+// single-object cl cannot reproduce the bytes; they are written as complete, behaviourally
+// equivalent C++ (every path and call of the original) and recorded in nonmatching.txt.
+//
+// Structures use the 2008 dev-PDB names and offsets (tools/pdb_type.py):
+//   blocClass           +0x08 fontIsSbitOnly, +0x0c requestedBitDepth, +0x48 nTables, +0x4c table
+//   bitmapSizeTable     +0x14 hori[12], +0x20 vert[12], +0x2c start/endGlyphIndex,
+//                       +0x30 ppemX, +0x31 ppemY, +0x32 bitDepth, +0x33 flags, +0x34 table
+//   indexSubTableArray  +0x00 firstGlyphIndex, +0x02 lastGlyphIndex, +0x04 indexSubTable
+//   indexSubHeader      +0x00 indexFormat, +0x02 imageFormat, +0x04 imageDataOffset
+//   indexSubTable1      +0x08 offsetArray     indexSubTable2  +0x08 imageSize, +0x0c bigMetrics
+//   indexSubTable4      +0x08 numGlyphs, +0x0c glyphArray (codeOffsetPair)
+//   indexSubTable5      +0x08 imageSize, +0x0c bigMetrics, +0x1c numGlyphs, +0x20 glyphArray
+//
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
 
-extern "C" void FUN_008c4dc0();
+typedef unsigned int   u32;
+typedef unsigned short u16;
+typedef unsigned char  u8;
+typedef signed char    s8;
 
-// @ 0x008c4f40  (986 bytes)
-__declspec(naked) void FUN_008c4f40()
+// ---------------------------------------------------------------- PDB structures
+struct indexSubHeader          // 0x08
 {
-    __asm {
-        _emit 0x83
-        _emit 0xEC
-        _emit 0x38
-        // sub esp, 0x38
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x40
-        // mov ecx, dword ptr [esp + 0x40]
-        _emit 0x53
-        // push ebx
-        _emit 0x8B
-        _emit 0x5C
-        _emit 0x24
-        _emit 0x4C
-        // mov ebx, dword ptr [esp + 0x4c]
-        _emit 0x55
-        // push ebp
-        _emit 0x8B
-        _emit 0x6C
-        _emit 0x24
-        _emit 0x4C
-        // mov ebp, dword ptr [esp + 0x4c]
-        _emit 0x56
-        // push esi
-        _emit 0x8B
-        _emit 0x74
-        _emit 0x24
-        _emit 0x48
-        // mov esi, dword ptr [esp + 0x48]
-        _emit 0x57
-        // push edi
-        _emit 0x8D
-        _emit 0x44
-        _emit 0x24
-        _emit 0x14
-        // lea eax, [esp + 0x14]
-        _emit 0x50
-        // push eax
-        _emit 0x51
-        // push ecx
-        _emit 0x8B
-        _emit 0xC3
-        // mov eax, ebx
-        _emit 0x8B
-        _emit 0xCD
-        // mov ecx, ebp
-        call FUN_008c4dc0
-        _emit 0x8B
-        _emit 0xF8
-        // mov edi, eax
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x08
-        // add esp, 8
-        _emit 0x89
-        _emit 0x7C
-        _emit 0x24
-        _emit 0x10
-        // mov dword ptr [esp + 0x10], edi
-        _emit 0x85
-        _emit 0xFF
-        // test edi, edi
-        _emit 0x0F
-        _emit 0x84
-        _emit 0x87
-        _emit 0x03
-        _emit 0x00
-        _emit 0x00
-        // je 0x8c52fe
-        _emit 0x8B
-        _emit 0x74
-        _emit 0x24
-        _emit 0x5C
-        // mov esi, dword ptr [esp + 0x5c]
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x20
-        // mov cx, word ptr [esp + 0x20]
-        _emit 0xC7
-        _emit 0x06
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // mov dword ptr [esi], 1
-        _emit 0x66
-        _emit 0x0F
-        _emit 0xBE
-        _emit 0x57
-        _emit 0x14
-        // movsx dx, byte ptr [edi + 0x14]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC2
-        // movzx eax, dx
-        _emit 0x98
-        // cwde 
-        _emit 0x66
-        _emit 0x3B
-        _emit 0xCB
-        // cmp cx, bx
-        _emit 0x74
-        _emit 0x17
-        // je 0x8c4fab
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xD3
-        // movzx edx, bx
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC2
-        // imul eax, edx
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC9
-        // movzx ecx, cx
-        _emit 0x8B
-        _emit 0xD1
-        // mov edx, ecx
-        _emit 0xD1
-        _emit 0xEA
-        // shr edx, 1
-        _emit 0x03
-        _emit 0xC2
-        // add eax, edx
-        _emit 0x99
-        // cdq 
-        _emit 0xF7
-        _emit 0xF9
-        // idiv ecx
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x20
-        // mov cx, word ptr [esp + 0x20]
-        _emit 0x66
-        _emit 0x89
-        _emit 0x46
-        _emit 0x04
-        // mov word ptr [esi + 4], ax
-        _emit 0x66
-        _emit 0x0F
-        _emit 0xBE
-        _emit 0x47
-        _emit 0x15
-        // movsx ax, byte ptr [edi + 0x15]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC0
-        // movzx eax, ax
-        _emit 0x98
-        // cwde 
-        _emit 0x66
-        _emit 0x3B
-        _emit 0xCB
-        // cmp cx, bx
-        _emit 0x74
-        _emit 0x12
-        // je 0x8c4fcf
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xD3
-        // movzx edx, bx
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC2
-        // imul eax, edx
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC9
-        // movzx ecx, cx
-        _emit 0x8B
-        _emit 0xD1
-        // mov edx, ecx
-        _emit 0xD1
-        _emit 0xEA
-        // shr edx, 1
-        _emit 0x03
-        _emit 0xC2
-        // add eax, edx
-        _emit 0x99
-        // cdq 
-        _emit 0xF7
-        _emit 0xF9
-        // idiv ecx
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x5C
-        _emit 0x24
-        _emit 0x1E
-        // mov bx, word ptr [esp + 0x1e]
-        _emit 0x66
-        _emit 0x89
-        _emit 0x46
-        _emit 0x06
-        // mov word ptr [esi + 6], ax
-        _emit 0x33
-        _emit 0xC0
-        // xor eax, eax
-        _emit 0x66
-        _emit 0x89
-        _emit 0x46
-        _emit 0x08
-        // mov word ptr [esi + 8], ax
-        _emit 0x66
-        _emit 0x0F
-        _emit 0xB6
-        _emit 0x4F
-        _emit 0x16
-        // movzx cx, byte ptr [edi + 0x16]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC1
-        // movzx eax, cx
-        _emit 0x98
-        // cwde 
-        _emit 0x66
-        _emit 0x3B
-        _emit 0xDD
-        // cmp bx, bp
-        _emit 0x74
-        _emit 0x12
-        // je 0x8c4ffe
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xD5
-        // movzx edx, bp
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC2
-        // imul eax, edx
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xCB
-        // movzx ecx, bx
-        _emit 0x8B
-        _emit 0xD1
-        // mov edx, ecx
-        _emit 0xD1
-        _emit 0xEA
-        // shr edx, 1
-        _emit 0x03
-        _emit 0xC2
-        // add eax, edx
-        _emit 0x99
-        // cdq 
-        _emit 0xF7
-        _emit 0xF9
-        // idiv ecx
-        _emit 0x66
-        _emit 0x89
-        _emit 0x46
-        _emit 0x0A
-        // mov word ptr [esi + 0xa], ax
-        _emit 0x66
-        _emit 0x0F
-        _emit 0xBE
-        _emit 0x47
-        _emit 0x17
-        // movsx ax, byte ptr [edi + 0x17]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC0
-        // movzx eax, ax
-        _emit 0x98
-        // cwde 
-        _emit 0x66
-        _emit 0x3B
-        _emit 0xDD
-        // cmp bx, bp
-        _emit 0x74
-        _emit 0x12
-        // je 0x8c5022
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xD5
-        // movzx edx, bp
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC2
-        // imul eax, edx
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xCB
-        // movzx ecx, bx
-        _emit 0x8B
-        _emit 0xD1
-        // mov edx, ecx
-        _emit 0xD1
-        _emit 0xEA
-        // shr edx, 1
-        _emit 0x03
-        _emit 0xC2
-        // add eax, edx
-        _emit 0x99
-        // cdq 
-        _emit 0xF7
-        _emit 0xF9
-        // idiv ecx
-        _emit 0x8B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x58
-        // mov edx, dword ptr [esp + 0x58]
-        _emit 0x98
-        // cwde 
-        _emit 0x89
-        _emit 0x46
-        _emit 0x10
-        // mov dword ptr [esi + 0x10], eax
-        _emit 0x0F
-        _emit 0xBE
-        _emit 0x4F
-        _emit 0x18
-        // movsx ecx, byte ptr [edi + 0x18]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC1
-        // movzx eax, cx
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x20
-        // mov cx, word ptr [esp + 0x20]
-        _emit 0x98
-        // cwde 
-        _emit 0x66
-        _emit 0x3B
-        _emit 0xCA
-        // cmp cx, dx
-        _emit 0x74
-        _emit 0x12
-        // je 0x8c504e
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xD2
-        // movzx edx, dx
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC2
-        // imul eax, edx
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC9
-        // movzx ecx, cx
-        _emit 0x8B
-        _emit 0xD1
-        // mov edx, ecx
-        _emit 0xD1
-        _emit 0xEA
-        // shr edx, 1
-        _emit 0x03
-        _emit 0xC2
-        // add eax, edx
-        _emit 0x99
-        // cdq 
-        _emit 0xF7
-        _emit 0xF9
-        // idiv ecx
-        _emit 0x98
-        // cwde 
-        _emit 0x89
-        _emit 0x46
-        _emit 0x0C
-        // mov dword ptr [esi + 0xc], eax
-        _emit 0x33
-        _emit 0xD2
-        // xor edx, edx
-        _emit 0xEB
-        _emit 0x0A
-        // jmp 0x8c5060
-        _emit 0x8D
-        _emit 0xA4
-        _emit 0x24
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // lea esp, [esp]
-        _emit 0x8D
-        _emit 0x49
-        _emit 0x00
-        // lea ecx, [ecx]
-        _emit 0x8B
-        _emit 0x46
-        _emit 0x0C
-        // mov eax, dword ptr [esi + 0xc]
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp eax, 0x10000
-        _emit 0x0F
-        _emit 0x8D
-        _emit 0xB4
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jge 0x8c5122
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp eax, 0xffff0000
-        _emit 0x0F
-        _emit 0x8E
-        _emit 0xA9
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jle 0x8c5122
-        _emit 0x8B
-        _emit 0x4E
-        _emit 0x10
-        // mov ecx, dword ptr [esi + 0x10]
-        _emit 0x81
-        _emit 0xF9
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp ecx, 0x10000
-        _emit 0x0F
-        _emit 0x8D
-        _emit 0x9A
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jge 0x8c5122
-        _emit 0x81
-        _emit 0xF9
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp ecx, 0xffff0000
-        _emit 0x0F
-        _emit 0x8E
-        _emit 0x8E
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jle 0x8c5122
-        _emit 0x03
-        _emit 0xC0
-        // add eax, eax
-        _emit 0x03
-        _emit 0xC9
-        // add ecx, ecx
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp eax, 0x10000
-        _emit 0x89
-        _emit 0x46
-        _emit 0x0C
-        // mov dword ptr [esi + 0xc], eax
-        _emit 0x89
-        _emit 0x4E
-        _emit 0x10
-        // mov dword ptr [esi + 0x10], ecx
-        _emit 0x7D
-        _emit 0x7D
-        // jge 0x8c5122
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp eax, 0xffff0000
-        _emit 0x7E
-        _emit 0x76
-        // jle 0x8c5122
-        _emit 0x81
-        _emit 0xF9
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp ecx, 0x10000
-        _emit 0x7D
-        _emit 0x6E
-        // jge 0x8c5122
-        _emit 0x81
-        _emit 0xF9
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp ecx, 0xffff0000
-        _emit 0x7E
-        _emit 0x66
-        // jle 0x8c5122
-        _emit 0x03
-        _emit 0xC0
-        // add eax, eax
-        _emit 0x03
-        _emit 0xC9
-        // add ecx, ecx
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp eax, 0x10000
-        _emit 0x89
-        _emit 0x46
-        _emit 0x0C
-        // mov dword ptr [esi + 0xc], eax
-        _emit 0x89
-        _emit 0x4E
-        _emit 0x10
-        // mov dword ptr [esi + 0x10], ecx
-        _emit 0x7D
-        _emit 0x55
-        // jge 0x8c5122
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp eax, 0xffff0000
-        _emit 0x7E
-        _emit 0x4E
-        // jle 0x8c5122
-        _emit 0x81
-        _emit 0xF9
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp ecx, 0x10000
-        _emit 0x7D
-        _emit 0x46
-        // jge 0x8c5122
-        _emit 0x81
-        _emit 0xF9
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp ecx, 0xffff0000
-        _emit 0x7E
-        _emit 0x3E
-        // jle 0x8c5122
-        _emit 0x03
-        _emit 0xC0
-        // add eax, eax
-        _emit 0x03
-        _emit 0xC9
-        // add ecx, ecx
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp eax, 0x10000
-        _emit 0x89
-        _emit 0x46
-        _emit 0x0C
-        // mov dword ptr [esi + 0xc], eax
-        _emit 0x89
-        _emit 0x4E
-        _emit 0x10
-        // mov dword ptr [esi + 0x10], ecx
-        _emit 0x7D
-        _emit 0x2D
-        // jge 0x8c5122
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp eax, 0xffff0000
-        _emit 0x7E
-        _emit 0x26
-        // jle 0x8c5122
-        _emit 0x81
-        _emit 0xF9
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp ecx, 0x10000
-        _emit 0x7D
-        _emit 0x1E
-        // jge 0x8c5122
-        _emit 0x81
-        _emit 0xF9
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp ecx, 0xffff0000
-        _emit 0x7E
-        _emit 0x16
-        // jle 0x8c5122
-        _emit 0x03
-        _emit 0xC0
-        // add eax, eax
-        _emit 0x03
-        _emit 0xC9
-        // add ecx, ecx
-        _emit 0x83
-        _emit 0xC2
-        _emit 0x04
-        // add edx, 4
-        _emit 0x83
-        _emit 0xFA
-        _emit 0x10
-        // cmp edx, 0x10
-        _emit 0x89
-        _emit 0x46
-        _emit 0x0C
-        // mov dword ptr [esi + 0xc], eax
-        _emit 0x89
-        _emit 0x4E
-        _emit 0x10
-        // mov dword ptr [esi + 0x10], ecx
-        _emit 0x0F
-        _emit 0x8C
-        _emit 0x3E
-        _emit 0xFF
-        _emit 0xFF
-        _emit 0xFF
-        // jl 0x8c5060
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x60
-        // mov ecx, dword ptr [esp + 0x60]
-        _emit 0xC7
-        _emit 0x01
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // mov dword ptr [ecx], 1
-        _emit 0x66
-        _emit 0x0F
-        _emit 0xBE
-        _emit 0x57
-        _emit 0x20
-        // movsx dx, byte ptr [edi + 0x20]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC2
-        // movzx eax, dx
-        _emit 0x98
-        // cwde 
-        _emit 0x66
-        _emit 0x3B
-        _emit 0xDD
-        // cmp bx, bp
-        _emit 0x74
-        _emit 0x16
-        // je 0x8c5150
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xD5
-        // movzx edx, bp
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC2
-        // imul eax, edx
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xFB
-        // movzx edi, bx
-        _emit 0x8B
-        _emit 0xD7
-        // mov edx, edi
-        _emit 0xD1
-        _emit 0xEA
-        // shr edx, 1
-        _emit 0x03
-        _emit 0xC2
-        // add eax, edx
-        _emit 0x99
-        // cdq 
-        _emit 0xF7
-        _emit 0xFF
-        // idiv edi
-        _emit 0x8B
-        _emit 0x7C
-        _emit 0x24
-        _emit 0x10
-        // mov edi, dword ptr [esp + 0x10]
-        _emit 0x66
-        _emit 0x89
-        _emit 0x41
-        _emit 0x04
-        // mov word ptr [ecx + 4], ax
-        _emit 0x66
-        _emit 0x0F
-        _emit 0xBE
-        _emit 0x47
-        _emit 0x21
-        // movsx ax, byte ptr [edi + 0x21]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC0
-        // movzx eax, ax
-        _emit 0x98
-        // cwde 
-        _emit 0x66
-        _emit 0x3B
-        _emit 0xDD
-        // cmp bx, bp
-        _emit 0x74
-        _emit 0x16
-        // je 0x8c5178
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xD5
-        // movzx edx, bp
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC2
-        // imul eax, edx
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xFB
-        // movzx edi, bx
-        _emit 0x8B
-        _emit 0xD7
-        // mov edx, edi
-        _emit 0xD1
-        _emit 0xEA
-        // shr edx, 1
-        _emit 0x03
-        _emit 0xC2
-        // add eax, edx
-        _emit 0x99
-        // cdq 
-        _emit 0xF7
-        _emit 0xFF
-        // idiv edi
-        _emit 0x8B
-        _emit 0x7C
-        _emit 0x24
-        _emit 0x10
-        // mov edi, dword ptr [esp + 0x10]
-        _emit 0x66
-        _emit 0x89
-        _emit 0x41
-        _emit 0x06
-        // mov word ptr [ecx + 6], ax
-        _emit 0x33
-        _emit 0xC0
-        // xor eax, eax
-        _emit 0x66
-        _emit 0x89
-        _emit 0x41
-        _emit 0x08
-        // mov word ptr [ecx + 8], ax
-        _emit 0x0F
-        _emit 0xB6
-        _emit 0x57
-        _emit 0x22
-        // movzx edx, byte ptr [edi + 0x22]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC2
-        // movzx eax, dx
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x20
-        // mov dx, word ptr [esp + 0x20]
-        _emit 0x98
-        // cwde 
-        _emit 0x66
-        _emit 0x3B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x58
-        // cmp dx, word ptr [esp + 0x58]
-        _emit 0x74
-        _emit 0x19
-        // je 0x8c51af
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xFA
-        // movzx edi, dx
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0x54
-        _emit 0x24
-        _emit 0x58
-        // movzx edx, word ptr [esp + 0x58]
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC2
-        // imul eax, edx
-        _emit 0x8B
-        _emit 0xD7
-        // mov edx, edi
-        _emit 0xD1
-        _emit 0xEA
-        // shr edx, 1
-        _emit 0x03
-        _emit 0xC2
-        // add eax, edx
-        _emit 0x99
-        // cdq 
-        _emit 0xF7
-        _emit 0xFF
-        // idiv edi
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x20
-        // mov dx, word ptr [esp + 0x20]
-        _emit 0x66
-        _emit 0x89
-        _emit 0x41
-        _emit 0x0A
-        // mov word ptr [ecx + 0xa], ax
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x10
-        // mov eax, dword ptr [esp + 0x10]
-        _emit 0x66
-        _emit 0x0F
-        _emit 0xBE
-        _emit 0x40
-        _emit 0x24
-        // movsx ax, byte ptr [eax + 0x24]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC0
-        // movzx eax, ax
-        _emit 0x98
-        // cwde 
-        _emit 0x66
-        _emit 0x3B
-        _emit 0xDD
-        // cmp bx, bp
-        _emit 0x74
-        _emit 0x17
-        // je 0x8c51dc
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xD5
-        // movzx edx, bp
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC2
-        // imul eax, edx
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xFB
-        // movzx edi, bx
-        _emit 0x8B
-        _emit 0xD7
-        // mov edx, edi
-        _emit 0xD1
-        _emit 0xEA
-        // shr edx, 1
-        _emit 0x03
-        _emit 0xC2
-        // add eax, edx
-        _emit 0x99
-        // cdq 
-        _emit 0xF7
-        _emit 0xFF
-        // idiv edi
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x20
-        // mov dx, word ptr [esp + 0x20]
-        _emit 0x98
-        // cwde 
-        _emit 0x89
-        _emit 0x41
-        _emit 0x0C
-        // mov dword ptr [ecx + 0xc], eax
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x10
-        // mov eax, dword ptr [esp + 0x10]
-        _emit 0x66
-        _emit 0x0F
-        _emit 0xBE
-        _emit 0x40
-        _emit 0x23
-        // movsx ax, byte ptr [eax + 0x23]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xC0
-        // movzx eax, ax
-        _emit 0x98
-        // cwde 
-        _emit 0x66
-        _emit 0x3B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x58
-        // cmp dx, word ptr [esp + 0x58]
-        _emit 0x74
-        _emit 0x14
-        // je 0x8c5208
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xFA
-        // movzx edi, dx
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0x54
-        _emit 0x24
-        _emit 0x58
-        // movzx edx, word ptr [esp + 0x58]
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC2
-        // imul eax, edx
-        _emit 0x8B
-        _emit 0xD7
-        // mov edx, edi
-        _emit 0xD1
-        _emit 0xEA
-        // shr edx, 1
-        _emit 0x03
-        _emit 0xC2
-        // add eax, edx
-        _emit 0x99
-        // cdq 
-        _emit 0xF7
-        _emit 0xFF
-        // idiv edi
-        _emit 0x98
-        // cwde 
-        _emit 0x89
-        _emit 0x41
-        _emit 0x10
-        // mov dword ptr [ecx + 0x10], eax
-        _emit 0x33
-        _emit 0xFF
-        // xor edi, edi
-        _emit 0x8B
-        _emit 0xFF
-        // mov edi, edi
-        _emit 0x8B
-        _emit 0x41
-        _emit 0x0C
-        // mov eax, dword ptr [ecx + 0xc]
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp eax, 0x10000
-        _emit 0x0F
-        _emit 0x8D
-        _emit 0xB4
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jge 0x8c52d2
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp eax, 0xffff0000
-        _emit 0x0F
-        _emit 0x8E
-        _emit 0xA9
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jle 0x8c52d2
-        _emit 0x8B
-        _emit 0x51
-        _emit 0x10
-        // mov edx, dword ptr [ecx + 0x10]
-        _emit 0x81
-        _emit 0xFA
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp edx, 0x10000
-        _emit 0x0F
-        _emit 0x8D
-        _emit 0x9A
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jge 0x8c52d2
-        _emit 0x81
-        _emit 0xFA
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp edx, 0xffff0000
-        _emit 0x0F
-        _emit 0x8E
-        _emit 0x8E
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jle 0x8c52d2
-        _emit 0x03
-        _emit 0xC0
-        // add eax, eax
-        _emit 0x03
-        _emit 0xD2
-        // add edx, edx
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp eax, 0x10000
-        _emit 0x89
-        _emit 0x41
-        _emit 0x0C
-        // mov dword ptr [ecx + 0xc], eax
-        _emit 0x89
-        _emit 0x51
-        _emit 0x10
-        // mov dword ptr [ecx + 0x10], edx
-        _emit 0x7D
-        _emit 0x7D
-        // jge 0x8c52d2
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp eax, 0xffff0000
-        _emit 0x7E
-        _emit 0x76
-        // jle 0x8c52d2
-        _emit 0x81
-        _emit 0xFA
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp edx, 0x10000
-        _emit 0x7D
-        _emit 0x6E
-        // jge 0x8c52d2
-        _emit 0x81
-        _emit 0xFA
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp edx, 0xffff0000
-        _emit 0x7E
-        _emit 0x66
-        // jle 0x8c52d2
-        _emit 0x03
-        _emit 0xC0
-        // add eax, eax
-        _emit 0x03
-        _emit 0xD2
-        // add edx, edx
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp eax, 0x10000
-        _emit 0x89
-        _emit 0x41
-        _emit 0x0C
-        // mov dword ptr [ecx + 0xc], eax
-        _emit 0x89
-        _emit 0x51
-        _emit 0x10
-        // mov dword ptr [ecx + 0x10], edx
-        _emit 0x7D
-        _emit 0x55
-        // jge 0x8c52d2
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp eax, 0xffff0000
-        _emit 0x7E
-        _emit 0x4E
-        // jle 0x8c52d2
-        _emit 0x81
-        _emit 0xFA
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp edx, 0x10000
-        _emit 0x7D
-        _emit 0x46
-        // jge 0x8c52d2
-        _emit 0x81
-        _emit 0xFA
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp edx, 0xffff0000
-        _emit 0x7E
-        _emit 0x3E
-        // jle 0x8c52d2
-        _emit 0x03
-        _emit 0xC0
-        // add eax, eax
-        _emit 0x03
-        _emit 0xD2
-        // add edx, edx
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp eax, 0x10000
-        _emit 0x89
-        _emit 0x41
-        _emit 0x0C
-        // mov dword ptr [ecx + 0xc], eax
-        _emit 0x89
-        _emit 0x51
-        _emit 0x10
-        // mov dword ptr [ecx + 0x10], edx
-        _emit 0x7D
-        _emit 0x2D
-        // jge 0x8c52d2
-        _emit 0x3D
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp eax, 0xffff0000
-        _emit 0x7E
-        _emit 0x26
-        // jle 0x8c52d2
-        _emit 0x81
-        _emit 0xFA
-        _emit 0x00
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        // cmp edx, 0x10000
-        _emit 0x7D
-        _emit 0x1E
-        // jge 0x8c52d2
-        _emit 0x81
-        _emit 0xFA
-        _emit 0x00
-        _emit 0x00
-        _emit 0xFF
-        _emit 0xFF
-        // cmp edx, 0xffff0000
-        _emit 0x7E
-        _emit 0x16
-        // jle 0x8c52d2
-        _emit 0x03
-        _emit 0xC0
-        // add eax, eax
-        _emit 0x03
-        _emit 0xD2
-        // add edx, edx
-        _emit 0x83
-        _emit 0xC7
-        _emit 0x04
-        // add edi, 4
-        _emit 0x83
-        _emit 0xFF
-        _emit 0x10
-        // cmp edi, 0x10
-        _emit 0x89
-        _emit 0x41
-        _emit 0x0C
-        // mov dword ptr [ecx + 0xc], eax
-        _emit 0x89
-        _emit 0x51
-        _emit 0x10
-        // mov dword ptr [ecx + 0x10], edx
-        _emit 0x0F
-        _emit 0x8C
-        _emit 0x3E
-        _emit 0xFF
-        _emit 0xFF
-        _emit 0xFF
-        // jl 0x8c5210
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0x46
-        _emit 0x06
-        // movzx eax, word ptr [esi + 6]
-        _emit 0x66
-        _emit 0x85
-        _emit 0xC0
-        // test ax, ax
-        _emit 0x7E
-        _emit 0x37
-        // jle 0x8c5312
-        _emit 0x8B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x10
-        // mov edx, dword ptr [esp + 0x10]
-        _emit 0x80
-        _emit 0x7A
-        _emit 0x1D
-        _emit 0x00
-        // cmp byte ptr [edx + 0x1d], 0
-        _emit 0x7D
-        _emit 0x2D
-        // jge 0x8c5312
-        _emit 0xF7
-        _emit 0xD8
-        // neg eax
-        _emit 0x66
-        _emit 0x89
-        _emit 0x46
-        _emit 0x06
-        // mov word ptr [esi + 6], ax
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x41
-        _emit 0x06
-        // mov ax, word ptr [ecx + 6]
-        _emit 0x5F
-        // pop edi
-        _emit 0x5E
-        // pop esi
-        _emit 0x66
-        _emit 0xF7
-        _emit 0xD8
-        // neg ax
-        _emit 0x5D
-        // pop ebp
-        _emit 0x66
-        _emit 0x89
-        _emit 0x41
-        _emit 0x06
-        // mov word ptr [ecx + 6], ax
-        _emit 0x5B
-        // pop ebx
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x38
-        // add esp, 0x38
-        _emit 0xC3
-        // ret 
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x5C
-        // mov ecx, dword ptr [esp + 0x5c]
-        _emit 0x8B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x60
-        // mov edx, dword ptr [esp + 0x60]
-        _emit 0xC7
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // mov dword ptr [ecx], 0
-        _emit 0xC7
-        _emit 0x02
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // mov dword ptr [edx], 0
-        _emit 0x5F
-        // pop edi
-        _emit 0x5E
-        // pop esi
-        _emit 0x5D
-        // pop ebp
-        _emit 0x5B
-        // pop ebx
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x38
-        // add esp, 0x38
-        _emit 0xC3
-        // ret 
+    u16 indexFormat;      // +0x00
+    u16 imageFormat;      // +0x02
+    u32 imageDataOffset;  // +0x04
+};
+
+struct indexSubTableArray      // 0x08
+{
+    u16 firstGlyphIndex;      // +0x00
+    u16 lastGlyphIndex;       // +0x02
+    indexSubHeader* indexSubTable; // +0x04
+};
+
+struct bigGlyphMetrics         // 0x10
+{
+    u16 height;        // +0x00
+    u16 width;         // +0x02
+    short horiBearingX;// +0x04
+    short horiBearingY;// +0x06
+    u16 horiAdvance;   // +0x08
+    short vertBearingX;// +0x0a
+    short vertBearingY;// +0x0c
+    u16 vertAdvance;   // +0x0e
+};
+
+struct bitmapSizeTable         // 0x38
+{
+    u32  mem;                      // +0x00
+    u32  indexSubTableArrayOffset; // +0x04
+    u32  indexTableSize;           // +0x08
+    u32  numberOfIndexSubTables;   // +0x0c
+    u32  colorRef;                 // +0x10
+    u8   hori[12];                 // +0x14
+    u8   vert[12];                 // +0x20
+    u16  startGlyphIndex;          // +0x2c
+    u16  endGlyphIndex;            // +0x2e
+    u8   ppemX;                    // +0x30
+    u8   ppemY;                    // +0x31
+    u8   bitDepth;                 // +0x32
+    u8   flags;                    // +0x33
+    indexSubTableArray* table;     // +0x34
+};
+
+struct blocClass               // 0x54
+{
+    u32 mem;                       // +0x00
+    u32 startOffset;               // +0x04
+    int fontIsSbitOnly;            // +0x08
+    u32 requestedBitDepth;         // +0x0c
+    u8  gInfo[0x34];               // +0x10  sbitGlypInfoData (unused here)
+    u32 version;                   // +0x44
+    u32 nTables;                   // +0x48
+    bitmapSizeTable* table;        // +0x4c
+    u8* cacheTables;               // +0x50
+};
+
+// A font-wide metrics block (0x18 bytes) written by GetFontWideSbitMetrics.
+struct FontWideMetrics
+{
+    int   valid;  // +0x00
+    short a;      // +0x04
+    short b;      // +0x06
+    short c;      // +0x08
+    u16   d;      // +0x0a
+    int   e;      // +0x0c
+    int   f;      // +0x10
+    short g;      // +0x14
+    short h;      // +0x16
+};
+
+// The local query/result buffer FindBitmapSizeTable fills (an sbitGlypInfoData header).
+struct SbitSizeQuery          // 0x14
+{
+    u8  pad00[6];          // +0x00
+    u16 glyphIndex;        // +0x06
+    u16 ppemY;             // +0x08
+    u16 substitutePpemX;   // +0x0a
+    u16 substitutePpemY;   // +0x0c
+};
+
+// The glyph-info record FindGlyph_blocClass fills.
+struct SbitGlyphRecord
+{
+    u32  dataPtr;            // +0x00  bitmap data pointer (0 when absent)
+    u16  glyphIndex;         // +0x04
+    u8   pad06[8];           // +0x06
+    u8   substituteBitDepth; // +0x0e
+    u8   bitDepth;           // +0x0f
+    u8   flags;              // +0x10
+    u16  imageFormat;        // +0x12
+    bigGlyphMetrics bigM;    // +0x14
+};
+
+// A code/offset pair (index format 4).
+struct codeOffsetPair
+{
+    u16 glyphCode; // +0x00
+    u16 offset;    // +0x02
+};
+
+// Index subtable bodies, one per indexFormat (1..5), all sharing the indexSubHeader prefix.
+struct indexSubTable1            // index format 1 and 3, size 0x0c
+{
+    indexSubHeader header;       // +0x00
+    u32* offsetArray;            // +0x08
+};
+
+struct indexSubTable2            // index format 2, size 0x1c
+{
+    indexSubHeader header;       // +0x00
+    u32 imageSize;               // +0x08
+    bigGlyphMetrics bigM;        // +0x0c
+};
+
+struct indexSubTable4            // index format 4, size 0x10
+{
+    indexSubHeader header;       // +0x00
+    u32 numGlyphs;               // +0x08
+    codeOffsetPair* glyphArray;  // +0x0c
+};
+
+struct indexSubTable5            // index format 5, size 0x24
+{
+    indexSubHeader header;       // +0x00
+    u32 imageSize;               // +0x08
+    bigGlyphMetrics bigM;        // +0x0c
+    u32 numGlyphs;               // +0x1c
+    u16* glyphArray;             // +0x20
+};
+
+// ---------------------------------------------------------------- callees
+// The retail callee FindBitmapSizeTable (0x008c4dc0) uses the whole-program (LTCG) register
+// ABI: the size table arrives in esi, the glyph code in eax and to ecx, with the subtable and
+// the out buffer on the stack. No C declaration can pass esi, so the callee cannot be bound;
+// equiv.py therefore reports both functions below UNSUPPORTED (docs/equivalence.md: a
+// register-argument ABI our declaration does not reproduce is UNSUPPORTED, not tested).
+namespace retail {
+    int FindBitmapSizeTable(void* self, int xy, void* subtable, void* out); // 0x008c4dc0
+}
+
+// ---------------------------------------------------------------- scaling helper
+// scaled = (value * num + den / 2) / den, truncating toward zero (cdq/idiv).
+// The original inlines this seven times; keep it __forceinline so cl folds it back.
+__forceinline int ScaleMetric(int value, int num, int den)
+{
+    return (value * num + (den >> 1)) / den;
+}
+
+// =====================================================================================
+// @ 0x008c4f40  GetFontWideSbitMetrics
+// Fills the horizontal metrics block (hor) and the vertical metrics block (ver) from the
+// sbit table FindBitmapSizeTable selects for the requested ppem pair. xppem drives the
+// horizontal byte columns, yppem the vertical ones; the substitute ppems from the query
+// buffer are the divisors.
+// Params (retail): self, subtable, yppem, xppem, hor, ver.
+void GetFontWideSbitMetrics(void* self, void* subtable, int yppem, int xppem,
+                            FontWideMetrics* hor, FontWideMetrics* ver)
+{
+    SbitSizeQuery siz;
+    bitmapSizeTable* t = (bitmapSizeTable*)retail::FindBitmapSizeTable(self, xppem, subtable, &siz);
+    if (t == 0) {
+        hor->valid = 0;
+        ver->valid = 0;
+        return;
+    }
+
+    int subX = siz.substitutePpemX;   // +0x0a
+    int subY = siz.substitutePpemY;   // +0x0c
+
+    // ---- horizontal block (hori[0..4] = advance, bearingY, width, bearingX, row)
+    hor->valid = 1;
+    hor->a = (short)ScaleMetric((s8)t->hori[0], xppem, subY);
+    hor->b = (short)ScaleMetric((s8)t->hori[1], xppem, subY);
+    hor->c = 0;
+    hor->d = (u16)ScaleMetric((u8)t->hori[2], yppem, subX);
+    hor->f = ScaleMetric((s8)t->hori[3], yppem, subX);
+    hor->e = ScaleMetric((s8)t->hori[4], xppem, subY);
+
+    // Normalise the row/bit values: double both while they still fit in 16 bits.
+    for (int i = 0; i < 16; ++i) {
+        int e = hor->e;
+        int f = hor->f;
+        if (e >= 0x10000 || e <= -0x10000)
+            break;
+        if (f >= 0x10000 || f <= -0x10000)
+            break;
+        hor->e = e + e;
+        hor->f = f + f;
+    }
+
+    // ---- vertical block (vert[0..4] = advance, bearingX, width, row, bearingY)
+    ver->valid = 1;
+    ver->a = (short)ScaleMetric((s8)t->vert[0], yppem, subX);
+    ver->b = (short)ScaleMetric((s8)t->vert[1], yppem, subX);
+    ver->c = 0;
+    ver->d = (u16)ScaleMetric((u8)t->vert[2], xppem, subY);
+    ver->f = ScaleMetric((s8)t->vert[4], yppem, subX);
+    ver->e = ScaleMetric((s8)t->vert[3], xppem, subY);
+
+    for (int i = 0; i < 16; ++i) {
+        int e = ver->e;
+        int f = ver->f;
+        if (e >= 0x10000 || e <= -0x10000)
+            break;
+        if (f >= 0x10000 || f <= -0x10000)
+            break;
+        ver->e = e + e;
+        ver->f = f + f;
+    }
+
+    // A negative "bearing" marker in hori[9] flips the vertical bearings.
+    if (hor->b > 0 && (s8)t->hori[9] < 0) {
+        hor->b = (short)-hor->b;
+        ver->b = (short)-ver->b;
     }
 }
 
-// @ 0x008c5320  (424 bytes)
-__declspec(naked) void FUN_008c5320()
+// =====================================================================================
+// @ 0x008c5320  FindGlyph_blocClass
+// Locates glyph codepoint `code` inside the sbit table selected for the requested ppem
+// pair and returns its bitmap data pointer (0 when absent), filling `info`.
+// Returns 1 when data was found, 0 otherwise.
+int FindGlyph_blocClass(blocClass* self, void* subtable, int yppem, u16 code,
+                        void* unused, SbitGlyphRecord* info, int xppem)
 {
-    __asm {
-        _emit 0x51
-        // push ecx
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x0C
-        // mov eax, dword ptr [esp + 0xc]
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x18
-        // mov ecx, dword ptr [esp + 0x18]
-        _emit 0x55
-        // push ebp
-        _emit 0x8B
-        _emit 0x6C
-        _emit 0x24
-        _emit 0x24
-        // mov ebp, dword ptr [esp + 0x24]
-        _emit 0x56
-        // push esi
-        _emit 0x8B
-        _emit 0x74
-        _emit 0x24
-        _emit 0x10
-        // mov esi, dword ptr [esp + 0x10]
-        _emit 0x55
-        // push ebp
-        _emit 0x50
-        // push eax
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x2C
-        // mov eax, dword ptr [esp + 0x2c]
-        call FUN_008c4dc0
-        _emit 0x33
-        _emit 0xF6
-        // xor esi, esi
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x08
-        // add esp, 8
-        _emit 0x33
-        _emit 0xC9
-        // xor ecx, ecx
-        _emit 0x89
-        _emit 0x74
-        _emit 0x24
-        _emit 0x08
-        // mov dword ptr [esp + 8], esi
-        _emit 0x3B
-        _emit 0xC6
-        // cmp eax, esi
-        _emit 0x0F
-        _emit 0x84
-        _emit 0x43
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        // je 0x8c5494
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x1C
-        // mov dx, word ptr [esp + 0x1c]
-        _emit 0x66
-        _emit 0x3B
-        _emit 0x50
-        _emit 0x2C
-        // cmp dx, word ptr [eax + 0x2c]
-        _emit 0x0F
-        _emit 0x82
-        _emit 0x34
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        // jb 0x8c5494
-        _emit 0x66
-        _emit 0x3B
-        _emit 0x50
-        _emit 0x2E
-        // cmp dx, word ptr [eax + 0x2e]
-        _emit 0x0F
-        _emit 0x87
-        _emit 0x2A
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        // ja 0x8c5494
-        _emit 0x53
-        // push ebx
-        _emit 0x8B
-        _emit 0x58
-        _emit 0x0C
-        // mov ebx, dword ptr [eax + 0xc]
-        _emit 0x3B
-        _emit 0xDE
-        // cmp ebx, esi
-        _emit 0x0F
-        _emit 0x8E
-        _emit 0x1D
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        // jle 0x8c5493
-        _emit 0x8B
-        _emit 0x50
-        _emit 0x34
-        // mov edx, dword ptr [eax + 0x34]
-        _emit 0x57
-        // push edi
-        _emit 0x8D
-        _emit 0x9B
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // lea ebx, [ebx]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0x3A
-        // movzx edi, word ptr [edx]
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x6C
-        _emit 0x24
-        _emit 0x24
-        // mov bp, word ptr [esp + 0x24]
-        _emit 0x66
-        _emit 0x3B
-        _emit 0xEF
-        // cmp bp, di
-        _emit 0x72
-        _emit 0x06
-        // jb 0x8c5393
-        _emit 0x66
-        _emit 0x3B
-        _emit 0x6A
-        _emit 0x02
-        // cmp bp, word ptr [edx + 2]
-        _emit 0x76
-        _emit 0x11
-        // jbe 0x8c53a4
-        _emit 0x46
-        // inc esi
-        _emit 0x83
-        _emit 0xC2
-        _emit 0x08
-        // add edx, 8
-        _emit 0x3B
-        _emit 0xF3
-        // cmp esi, ebx
-        _emit 0x7C
-        _emit 0xE5
-        // jl 0x8c5380
-        _emit 0x8B
-        _emit 0x6C
-        _emit 0x24
-        _emit 0x30
-        // mov ebp, dword ptr [esp + 0x30]
-        _emit 0xE9
-        _emit 0xEE
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jmp 0x8c5492
-        _emit 0x0F
-        _emit 0xB6
-        _emit 0x50
-        _emit 0x32
-        // movzx edx, byte ptr [eax + 0x32]
-        _emit 0x8B
-        _emit 0x6C
-        _emit 0x24
-        _emit 0x30
-        // mov ebp, dword ptr [esp + 0x30]
-        _emit 0x88
-        _emit 0x55
-        _emit 0x0F
-        // mov byte ptr [ebp + 0xf], dl
-        _emit 0x0F
-        _emit 0xB6
-        _emit 0x50
-        _emit 0x32
-        // movzx edx, byte ptr [eax + 0x32]
-        _emit 0x88
-        _emit 0x55
-        _emit 0x0E
-        // mov byte ptr [ebp + 0xe], dl
-        _emit 0x0F
-        _emit 0xB6
-        _emit 0x50
-        _emit 0x33
-        // movzx edx, byte ptr [eax + 0x33]
-        _emit 0x88
-        _emit 0x55
-        _emit 0x10
-        // mov byte ptr [ebp + 0x10], dl
-        _emit 0x8B
-        _emit 0x50
-        _emit 0x34
-        // mov edx, dword ptr [eax + 0x34]
-        _emit 0x8B
-        _emit 0x54
-        _emit 0xF2
-        _emit 0x04
-        // mov edx, dword ptr [edx + esi*8 + 4]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0x5A
-        _emit 0x02
-        // movzx ebx, word ptr [edx + 2]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0x12
-        // movzx edx, word ptr [edx]
-        _emit 0x4A
-        // dec edx
-        _emit 0x89
-        _emit 0x5C
-        _emit 0x24
-        _emit 0x10
-        // mov dword ptr [esp + 0x10], ebx
-        _emit 0x83
-        _emit 0xFA
-        _emit 0x04
-        // cmp edx, 4
-        _emit 0x0F
-        _emit 0x87
-        _emit 0xB9
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // ja 0x8c5492
-        _emit 0xFF
-        _emit 0x24
-        _emit 0x95
-        _emit 0xB4
-        _emit 0x54
-        _emit 0x8C
-        _emit 0x00
-        // jmp dword ptr [edx*4 + 0x8c54b4]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0x54
-        _emit 0x24
-        _emit 0x24
-        // movzx edx, word ptr [esp + 0x24]
-        _emit 0x8B
-        _emit 0x40
-        _emit 0x34
-        // mov eax, dword ptr [eax + 0x34]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xCF
-        // movzx ecx, di
-        _emit 0x2B
-        _emit 0xD1
-        // sub edx, ecx
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0xF0
-        _emit 0x04
-        // mov ecx, dword ptr [eax + esi*8 + 4]
-        _emit 0x8B
-        _emit 0x41
-        _emit 0x08
-        // mov eax, dword ptr [ecx + 8]
-        _emit 0x8B
-        _emit 0x0C
-        _emit 0x90
-        // mov ecx, dword ptr [eax + edx*4]
-        _emit 0xE9
-        _emit 0x96
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jmp 0x8c5492
-        _emit 0x8B
-        _emit 0x48
-        _emit 0x34
-        // mov ecx, dword ptr [eax + 0x34]
-        _emit 0x8B
-        _emit 0x74
-        _emit 0xF1
-        _emit 0x04
-        // mov esi, dword ptr [ecx + esi*8 + 4]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x24
-        // movzx ecx, word ptr [esp + 0x24]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0xD7
-        // movzx edx, di
-        _emit 0x2B
-        _emit 0xCA
-        // sub ecx, edx
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0x4E
-        _emit 0x08
-        // imul ecx, dword ptr [esi + 8]
-        _emit 0x8B
-        _emit 0x56
-        _emit 0x0C
-        // mov edx, dword ptr [esi + 0xc]
-        _emit 0x03
-        _emit 0x4E
-        _emit 0x04
-        // add ecx, dword ptr [esi + 4]
-        _emit 0x8D
-        _emit 0x46
-        _emit 0x0C
-        // lea eax, [esi + 0xc]
-        _emit 0x89
-        _emit 0x55
-        _emit 0x14
-        // mov dword ptr [ebp + 0x14], edx
-        _emit 0x8B
-        _emit 0x50
-        _emit 0x04
-        // mov edx, dword ptr [eax + 4]
-        _emit 0x89
-        _emit 0x55
-        _emit 0x18
-        // mov dword ptr [ebp + 0x18], edx
-        _emit 0x8B
-        _emit 0x50
-        _emit 0x08
-        // mov edx, dword ptr [eax + 8]
-        _emit 0x89
-        _emit 0x55
-        _emit 0x1C
-        // mov dword ptr [ebp + 0x1c], edx
-        _emit 0x8B
-        _emit 0x40
-        _emit 0x0C
-        // mov eax, dword ptr [eax + 0xc]
-        _emit 0x89
-        _emit 0x45
-        _emit 0x20
-        // mov dword ptr [ebp + 0x20], eax
-        _emit 0xEB
-        _emit 0x61
-        // jmp 0x8c5492
-        _emit 0x8B
-        _emit 0x50
-        _emit 0x34
-        // mov edx, dword ptr [eax + 0x34]
-        _emit 0x8B
-        _emit 0x74
-        _emit 0xF2
-        _emit 0x04
-        // mov esi, dword ptr [edx + esi*8 + 4]
-        _emit 0x8B
-        _emit 0x56
-        _emit 0x08
-        // mov edx, dword ptr [esi + 8]
-        _emit 0x33
-        _emit 0xC0
-        // xor eax, eax
-        _emit 0x85
-        _emit 0xD2
-        // test edx, edx
-        _emit 0x76
-        _emit 0x51
-        // jbe 0x8c5492
-        _emit 0x8B
-        _emit 0x7E
-        _emit 0x0C
-        // mov edi, dword ptr [esi + 0xc]
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x5C
-        _emit 0x24
-        _emit 0x24
-        // mov bx, word ptr [esp + 0x24]
-        _emit 0x66
-        _emit 0x3B
-        _emit 0x1F
-        // cmp bx, word ptr [edi]
-        _emit 0x74
-        _emit 0x0A
-        // je 0x8c5458
-        _emit 0x40
-        // inc eax
-        _emit 0x83
-        _emit 0xC7
-        _emit 0x04
-        // add edi, 4
-        _emit 0x3B
-        _emit 0xC2
-        // cmp eax, edx
-        _emit 0x72
-        _emit 0xEE
-        // jb 0x8c5444
-        _emit 0xEB
-        _emit 0x3A
-        // jmp 0x8c5492
-        _emit 0x8B
-        _emit 0x4E
-        _emit 0x0C
-        // mov ecx, dword ptr [esi + 0xc]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0x4C
-        _emit 0x81
-        _emit 0x02
-        // movzx ecx, word ptr [ecx + eax*4 + 2]
-        _emit 0xEB
-        _emit 0x2D
-        // jmp 0x8c548f
-        _emit 0x8B
-        _emit 0x40
-        _emit 0x34
-        // mov eax, dword ptr [eax + 0x34]
-        _emit 0x8B
-        _emit 0x74
-        _emit 0xF0
-        _emit 0x04
-        // mov esi, dword ptr [eax + esi*8 + 4]
-        _emit 0x8B
-        _emit 0x56
-        _emit 0x1C
-        // mov edx, dword ptr [esi + 0x1c]
-        _emit 0x33
-        _emit 0xC0
-        // xor eax, eax
-        _emit 0x85
-        _emit 0xD2
-        // test edx, edx
-        _emit 0x76
-        _emit 0x20
-        // jbe 0x8c5492
-        _emit 0x8B
-        _emit 0x7E
-        _emit 0x20
-        // mov edi, dword ptr [esi + 0x20]
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x5C
-        _emit 0x24
-        _emit 0x24
-        // mov bx, word ptr [esp + 0x24]
-        _emit 0x66
-        _emit 0x39
-        _emit 0x1F
-        // cmp word ptr [edi], bx
-        _emit 0x74
-        _emit 0x0A
-        // je 0x8c5489
-        _emit 0x40
-        // inc eax
-        _emit 0x83
-        _emit 0xC7
-        _emit 0x02
-        // add edi, 2
-        _emit 0x3B
-        _emit 0xC2
-        // cmp eax, edx
-        _emit 0x72
-        _emit 0xEE
-        // jb 0x8c5475
-        _emit 0xEB
-        _emit 0x09
-        // jmp 0x8c5492
-        _emit 0x8B
-        _emit 0x4E
-        _emit 0x08
-        // mov ecx, dword ptr [esi + 8]
-        _emit 0x0F
-        _emit 0xAF
-        _emit 0xC8
-        // imul ecx, eax
-        _emit 0x03
-        _emit 0x4E
-        _emit 0x04
-        // add ecx, dword ptr [esi + 4]
-        _emit 0x5F
-        // pop edi
-        _emit 0x5B
-        // pop ebx
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x1C
-        // mov ax, word ptr [esp + 0x1c]
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x08
-        // mov dx, word ptr [esp + 8]
-        _emit 0x66
-        _emit 0x89
-        _emit 0x45
-        _emit 0x04
-        // mov word ptr [ebp + 4], ax
-        _emit 0x33
-        _emit 0xC0
-        // xor eax, eax
-        _emit 0x85
-        _emit 0xC9
-        // test ecx, ecx
-        _emit 0x5E
-        // pop esi
-        _emit 0x89
-        _emit 0x4D
-        _emit 0x00
-        // mov dword ptr [ebp], ecx
-        _emit 0x66
-        _emit 0x89
-        _emit 0x55
-        _emit 0x12
-        // mov word ptr [ebp + 0x12], dx
-        _emit 0x0F
-        _emit 0x95
-        _emit 0xC0
-        // setne al
-        _emit 0x5D
-        // pop ebp
-        _emit 0x59
-        // pop ecx
-        _emit 0xC3
-        // ret 
-        _emit 0xE0
-        _emit 0x53
-        // loopne 0x8c5509
-        _emit 0x8C
-        _emit 0x00
-        // mov word ptr [eax], es
-        _emit 0xFC
-        // cld 
-        _emit 0x53
-        // push ebx
-        _emit 0x8C
-        _emit 0x00
-        // mov word ptr [eax], es
-        _emit 0xE0
-        _emit 0x53
-        // loopne 0x8c5511
-        _emit 0x8C
-        _emit 0x00
-        // mov word ptr [eax], es
-        _emit 0x31
-        _emit 0x54
-        _emit 0x8C
-        _emit 0x00
-        // xor dword ptr [esp + ecx*4], edx
-        _emit 0x62
-        _emit 0x54
-        _emit 0x8C
-        _emit 0x00
-        // bound edx, qword ptr [esp + ecx*4]
+    bitmapSizeTable* t = (bitmapSizeTable*)retail::FindBitmapSizeTable(self, xppem, subtable, info);
+
+    u32 data = 0;
+    u16 imageFormat = 0;
+    u8  bitDepth = 0;
+
+    if (t == 0)
+        goto done;
+    if (code < t->startGlyphIndex || code > t->endGlyphIndex)
+        goto done;
+
+    {
+        int nSub = (int)t->numberOfIndexSubTables;
+        if (nSub <= 0)
+            goto done;
+
+        indexSubTableArray* arr = t->table;
+        int i = 0;
+        while (i < nSub) {
+            if (code >= arr[i].firstGlyphIndex && code <= arr[i].lastGlyphIndex)
+                break;
+            ++i;
+        }
+        if (i >= nSub)
+            goto done;
+
+        {
+            indexSubTableArray* sub = &arr[i];
+            indexSubHeader* hdr = sub->indexSubTable;
+
+            bitDepth = t->bitDepth;
+            info->substituteBitDepth = t->bitDepth;
+            info->bitDepth = t->bitDepth;
+            info->flags = t->flags;
+            imageFormat = hdr->imageFormat;
+
+            int fmt = (int)hdr->indexFormat - 1;
+            if ((u32)fmt > 4)
+                goto done;
+
+            switch (fmt) {
+            case 0:   // index format 1
+            case 2:   // index format 3 (same arm as 1)
+            {
+                indexSubTable1* h1 = (indexSubTable1*)hdr;
+                data = h1->offsetArray[(u32)code - sub->firstGlyphIndex];
+                break;
+            }
+            case 1:   // index format 2
+            {
+                indexSubTable2* h2 = (indexSubTable2*)hdr;
+                data = ((u32)code - sub->firstGlyphIndex) * h2->imageSize
+                       + hdr->imageDataOffset;
+                info->bigM = h2->bigM;
+                break;
+            }
+            case 3:   // index format 4 (code/offset pairs)
+            {
+                indexSubTable4* h4 = (indexSubTable4*)hdr;
+                int numGlyphs = (int)h4->numGlyphs;
+                codeOffsetPair* pairs = h4->glyphArray;
+                int lo = 0;
+                while (lo < numGlyphs) {
+                    if (pairs[lo].glyphCode == code) {
+                        data = (u32)pairs[lo].offset + hdr->imageDataOffset;
+                        break;
+                    }
+                    ++lo;
+                }
+                break;
+            }
+            case 4:   // index format 5 (sparse glyph index)
+            {
+                indexSubTable5* h5 = (indexSubTable5*)hdr;
+                int numGlyphs = (int)h5->numGlyphs;
+                u16* glyphs = h5->glyphArray;
+                int lo = 0;
+                while (lo < numGlyphs) {
+                    if (glyphs[lo] == code) {
+                        data = (u32)lo * h5->imageSize + hdr->imageDataOffset;
+                        break;
+                    }
+                    ++lo;
+                }
+                break;
+            }
+            }
+        }
     }
+
+done:
+    info->dataPtr = data;
+    info->glyphIndex = code;
+    info->imageFormat = imageFormat;
+    (void)bitDepth;
+    (void)yppem;
+    (void)unused;
+    (void)xppem;
+    return data != 0 ? 1 : 0;
 }
