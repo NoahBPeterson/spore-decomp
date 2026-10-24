@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00d9f530  23  social-band slot lookup (inlined): complete reconstruction - equiv PASS (400/400 valid, 0 mismatch, 65.4% coverage); 71 vs 74 B, only codegen idiom differs (cl reuses one register with add/test-imm where the original emits lea + shr/test-cl for the sign test)
+00d9f6f0  2  partial_sort over 4-byte elements: complete reconstruction - equiv WEAK (167/400 valid, 0 mismatch, 48.1% coverage); 238 vs 239 B, one load pair in the swap body is scheduled p-before-first where the original loads *first first

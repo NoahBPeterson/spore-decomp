@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+00d9ec20  245  insertion_sort over 0x20-byte elements (comparator by pointer): approximate; 246 vs 230 B - shift/copy loop and comparator protocol not reproduced exactly
+00d9ed10  275  unguarded insertion_sort over 0x20-byte elements: approximate; 256 vs 217 B - loop shape and element spill order differ
+00d9edf0  86  make_heap over 0x20-byte elements: approximate; 99 vs 118 B - __adjust_heap call arity/loop framing not reproduced
+00d9ee70  209  sort_heap pop loop over 0x20-byte elements: approximate; 216 vs 199 B - top-element save/restore order differs
+00d9efa0  79  sort_heap pop loop over 4-byte elements: approximate; 101 vs 112 B - float-argument hoisting and loop-bound form differ
+00d9f010  151  PaintSystem/Skinner destructor: approximate; 151 vs 138 B - member-dtor call sequence incomplete; equiv UNSUPPORTED (original reads ecx at entry)
+00d9f0a0  122  SP::FindSocialBandGroup: approximate; 141 vs 132 B - equiv FAIL (mis-called Fbc9b50 with the wrong protocol; faults)
+00d9f130  75  SP::FindPrimaryAgentForSocialBandGroup: approximate; 128 vs 133 B - equiv FAIL (returns 1 where the original returns 2)
+00d9f1c0  253  SOCIAL_BAND_REACT_Activate: stub only; 47 vs 255 B - the activate/owner-probe logic is not reconstructed
+00d9f2c0  609  SP::SOCIAL_BAND_REACT_Tick: stub only; 11 vs 616 B - the full behaviour tick is not reconstructed
+00d9f580  312  partial_sort over 0x20-byte elements: approximate; 279 vs 222 B - make_heap/loop/pop helper shapes differ
+00d9f7e0  418  SOCIAL_PROPOSE constructor: stub only; 88 vs 419 B - only field-zeroing is reconstructed
+00d9f990  348  vector<0xc>::insert(position,n,value): approximate; 359 vs 390 B - growth/rotate/fill helper usage differs
