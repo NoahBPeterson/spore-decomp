@@ -27,8 +27,16 @@ class cTimeObj {
   float mFloat0c;         // +0xc
   cTimeObj* mChild;       // +0x10
 };
-inline float FMax(float a, float b) { return a > b ? a : b; }
-inline float FMin(float a, float b) { return a < b ? a : b; }
+inline float Clamp(float x, float lo, float hi)
+{
+  __asm {
+    movss xmm0, x
+    maxss xmm0, lo
+    minss xmm0, hi
+    movss x, xmm0
+  }
+  return x;
+}
 class cInterp {
  public:
   char pad0[0x88];
@@ -387,8 +395,7 @@ void SpineBigStub(void* a, void* b, void* c)
 void cInterp::Interp(float a, float b, float* out1, float* out2)
 {
   float t = ((a + b) * 0.5f) / mFloat98;
-  t = FMax(t, 0.0f);
-  t = FMin(t, 1.0f);
+  t = Clamp(t, 0.0f, 1.0f);
   t = (mFloat94 - mFloat90) * (1.0f - t) + mFloat90;
   *out1 = mFloat88 * t;
   *out2 = mFloat8c * t;
@@ -592,11 +599,10 @@ void* SP::cSpineHelper::GetHandle(int id)
 void NormalizeVector2(float* out, const float* in)
 {
   float x = in[0];
-  float y = in[1];
-  float len = sqrtf(x * x + y * y + 1e-8f);
-  float scale = 1.0f / len;
-  out[0] = scale * x;
-  out[1] = scale * y;
+  float len = sqrtf(x * x + in[1] * in[1] + 1e-8f);
+  volatile float scale = 1.0f / len;
+  out[1] = in[1] * scale;
+  out[0] = x * scale;
 }
 
 
@@ -615,24 +621,44 @@ void SP::cSPEditorSpine::LoadDynamicTuning()
 
 
 
+// Layout of the vertebra shape buffer passed in as `shape` by the caller.
+struct cVertebraShape {
+  unsigned char mFlags;   // +0x00
+  unsigned char mPad[3];  // +0x01
+  float mCenterX;         // +0x04
+  float mCenterY;         // +0x08
+  float mCenterZ;         // +0x0c
+  float mScale;           // +0x10
+  float mRow0X;           // +0x14
+  float mRow0Y;           // +0x18
+  float mRow0Z;           // +0x1c
+  float mRow1X;           // +0x20
+  float mRow1Y;           // +0x24
+  float mRow1Z;           // +0x28
+  float mRow2X;           // +0x2c
+  float mRow2Y;           // +0x30
+  float mRow2Z;           // +0x34
+};
+
 // @ 0x005ce680
 void SP::cSPEditorSpine_s005c_dd00::CalcVertebraPhysicsBoundingBox(float scale, unsigned char* shape, float* out)
 {
-  float offset = SP::EditorUtils::GetExactSkinRadiusFromVertebra(scale) +
+  cVertebraShape* vs = (cVertebraShape*)shape;
+  __declspec(align(16)) float offset = SP::EditorUtils::GetExactSkinRadiusFromVertebra(scale) +
                  (mVertebraHalfWidth + mVertebraHalfWidth) * mSpineVertebraMaxMassProportion * 0.25f;
   float dx = scale * -0.15993178f;
   float x = 0.0f;
   float y = 0.0f;
   float z = dx;
-  if (shape[0] & 2) {
-    x = (*(float*)(shape + 0x20) + *(float*)(shape + 0x14)) * 0.0f + *(float*)(shape + 0x2c) * dx;
-    y = (*(float*)(shape + 0x24) + *(float*)(shape + 0x18)) * 0.0f + *(float*)(shape + 0x30) * dx;
-    z = (*(float*)(shape + 0x28) + *(float*)(shape + 0x1c)) * 0.0f + *(float*)(shape + 0x34) * dx;
+  if (vs->mFlags & 2) {
+    x = (vs->mRow1X + vs->mRow0X) * 0.0f + vs->mRow2X * dx;
+    y = (vs->mRow1Y + vs->mRow0Y) * 0.0f + vs->mRow2Y * dx;
+    z = (vs->mRow1Z + vs->mRow0Z) * 0.0f + vs->mRow2Z * dx;
   }
-  float m01 = *(float*)(shape + 0x10);
-  float cx = *(float*)(shape + 4) + m01 * x;
-  float cy = *(float*)(shape + 8) + m01 * y;
-  float cz = *(float*)(shape + 0xc) + m01 * z;
+  float m01 = vs->mScale;
+  float cx = vs->mCenterX + m01 * x;
+  float cy = vs->mCenterY + m01 * y;
+  float cz = vs->mCenterZ + m01 * z;
   out[0] = cx - offset;
   out[1] = cy - offset;
   out[2] = cz - offset;
