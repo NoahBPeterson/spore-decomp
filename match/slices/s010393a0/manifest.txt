@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s010393a0/s010393a0.cpp  ?AddTradingItems@SP@@YGHPAUPropertyList@@_N@Z  01039520  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010393a0/s010393a0.cpp  ?MapRareToSpiceKey@SP@@YGXPAUResourceKey@@@Z  01039690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010393a0/s010393a0.cpp  ?Cast@cHandlerIface@SP@@UAEPAXI@Z  010397b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010393a0/s010393a0.cpp  ?GetUserItem@cSPSpaceTrading@SP@@QAEPAUcSpaceInventoryItem@@I@Z  01039ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010393a0/s010393a0.cpp  ?GetNPCItem@cSPSpaceTrading@SP@@QAEPAUcSpaceInventoryItem@@I@Z  01039ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010393a0/s010393a0.cpp  ?MarkNPCStores@cSPSpaceTrading@SP@@QAEX_N@Z  01039b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010393a0/s010393a0.cpp  ?GetItemValue@cSPSpaceTrading@SP@@QAEHPAUcSpaceInventoryItem@@@Z  01039b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010393a0/s010393a0.cpp  ?GetTradeBalance@cSPSpaceTrading@SP@@QAEHXZ  01039ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010393a0/s010393a0.cpp  ?GetRareKeyCount@cSPSpaceTrading@SP@@QAEHI@Z  01039ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010393a0/s010393a0.cpp  ?eastl_insertion_sort@@YAXPAU?$intrusive_ptr@UcSpaceInventoryItem@@@@0P6AHPAUcSpaceInventoryItem@@1@Z@Z  0103a0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010393a0/s010393a0.cpp  ?eastl_iter_swap@@YAXAAU?$intrusive_ptr@UcSpaceInventoryItem@@@@0@Z  0103a330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
