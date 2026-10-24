@@ -37,7 +37,7 @@ public:
     void CallF2(int a, float b);                              // 0x006e69a0
     void CallF1(float b);                                     // 0x006e6930
     void CallF3(int a, float b, int c);                       // 0x006e6970
-    void SetMode(int mode);                                   // 0x006e69e0
+    void SetMode(int mode, int value);                        // 0x006e69e0
     int  ComputeSize(int a, int b, int c);                    // 0x006e6a20
     int  ResetCounter();                                      // 0x006e6b40
     void SetParams(int a, int b, char c1, char c2, char c3);  // 0x006e6b70
@@ -843,13 +843,13 @@ void ShaderHost::CallF2(int a, float b)
 }
 
 // @ 0x006e69e0
-void ShaderHost::SetMode(int mode)
+void ShaderHost::SetMode(int mode, int value)
 {
     Manager* m = (Manager*)FUN_0067dd50();
     if (mode != 6 && mode != 5) {
         VirtualFn1 fn = (VirtualFn1)((void**)m->vtbl)[0x58 / 4];
         if (fn(m, 0x16) != 0) {
-            *(char*)((char*)this + 0x368) = (char)mode;
+            *(char*)((char*)this + 0x368) = (char)value;
         }
     }
 }
