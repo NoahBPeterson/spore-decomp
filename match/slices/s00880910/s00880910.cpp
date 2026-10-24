@@ -27,6 +27,7 @@
 #include <EASTL/fixed_string.h>
 
 typedef eastl::fixed_string<wchar_t, 16, 1> LocString;   // 0x34 bytes
+typedef eastl::fixed_string<wchar_t, 512, 1> LocString512;  // map value string
 
 namespace EA {
 namespace Locale {
@@ -41,6 +42,37 @@ int       GetCountryDataString(const LocString& field, int index, bool direct, c
                                wchar_t* out, size_t cap);                                    // 0x880750
 int       GetLanguageDataString(const LocString& field, int index, bool direct, const LocString& locale,
                                 wchar_t* out, size_t cap);                                   // 0x880830
+
+// ---- date/time format support ---------------------------------------------
+struct FmtElem {                 // 0x4c bytes, one parsed format directive
+    LocString      s;            // +0x00 formatted text
+    int            flags;        // +0x34
+    int            type;         // +0x38
+    unsigned       width;        // +0x3c
+    unsigned       prec;         // +0x40
+    const wchar_t* begin;        // +0x44
+    const wchar_t* end;          // +0x48
+};
+struct LocScan { const wchar_t* cur; unsigned len; };
+
+char          FUN_0087d6d0(wchar_t* s, FmtElem* fields, int* pCount, wchar_t** pOut);  // 0x87d6d0
+char          FUN_0087f370(FmtElem* dst, int count, const wchar_t* str);               // 0x87f370
+int           FUN_008804d0(wchar_t* out, int cap, LocScan* v, FmtElem* first, int count); // 0x8804d0
+LocString     FUN_0087f210(const wchar_t* s);                                          // 0x87f210
+LocString*    __fastcall FUN_0087e080(LocString* self, void*, const wchar_t* s);       // 0x87e080
+struct LocaleMap {
+    LocString512* Find(const LocString* key);                                          // 0x880610 (map::operator[])
+};
+void          FUN_0092d060(int lo, int hi, wchar_t* out);                              // 0x92d060
+extern "C" __declspec(dllimport) wchar_t* __cdecl _ltow(long, wchar_t*, int);
+extern const wchar_t DAT_014278e4[];      // default English fallback string
+
+static inline unsigned WcsLen(const wchar_t* s)
+{
+    const wchar_t* e = s;
+    while (*e) ++e;
+    return (unsigned)(e - s);
+}
 
 // ---- globals ---------------------------------------------------------------
 extern const LocString kSystemLocale;     // 0x15490e4
@@ -173,6 +205,141 @@ int GetLocaleInfoString(int type, int index, wchar_t* pResult, size_t resultCapa
     }
     }
     return -1;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x00881220  EA::Locale::GetLocaleInfoInt
+//   Insert "canonical locale key -> raw name" pairs into the two global maps.
+// ---------------------------------------------------------------------------
+void GetLocaleInfoInt(const wchar_t* a, const wchar_t* b)
+{
+    LocString key;
+
+    key = FUN_0087f210(a);
+
+    LocString512* v = ((LocaleMap*)0x1549180)->Find(&key);
+    if (v->c_str() != a) {
+        v->clear();
+        v->assign(a, a + WcsLen(a));
+    }
+
+    key = FUN_0087f210(b);
+
+    LocString512* v2 = ((LocaleMap*)0x154919c)->Find(&key);
+    if (v2->c_str() != b) {
+        v2->clear();
+        v2->assign(b, b + WcsLen(b));
+    }
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x008813e0  EA::Locale::SetDateString
+//   Format day/month/year through the parsed date format elements.
+// ---------------------------------------------------------------------------
+int SetDateString(int day, int month, int year, wchar_t* out, int cap,
+                  const wchar_t* str, const wchar_t* fmt)
+{
+    FmtElem  elems[16];
+    int      count = 16;
+    wchar_t* pOut = 0;
+    int      ret = -1;
+
+    if (fmt != 0) {
+        if (FUN_0087d6d0((wchar_t*)fmt, elems, &count, &pOut) != 0) {
+            if (pOut == 0) {
+                FUN_0087f370(elems, 16, str);
+
+                LocScan scan;
+                scan.cur = fmt;
+                scan.len = WcsLen(fmt);
+
+                wchar_t buf[128];
+                wchar_t num[128];
+                for (int i = 0; i < count; ++i) {
+                    FmtElem* el = &elems[i];
+                    if ((el->flags & 0x20) != 0)
+                        continue;
+
+                    const wchar_t* src;
+                    switch (el->type) {
+                    case 9: {           // day of month
+                        if ((el->flags & 0x40) != 0) {
+                            _ltow(day, num, 10);
+                            src = num;
+                        } else {
+                            int id = ((el->flags & 4) != 0) ? 11 : 12;
+                            int n = GetLocaleInfoString(id, day, buf, 0x80, kSystemLocale);
+                            if (n > 0x80 || n < 0) {
+                                const short* d = (const short*)DAT_014278e4;
+                                short* o = (short*)buf;
+                                for (;;) {
+                                    short c = *d++;
+                                    *o++ = c;
+                                    if (c == 0)
+                                        break;
+                                }
+                            }
+                            src = buf;
+                        }
+                        break;
+                    }
+                    case 10: {          // month
+                        if ((el->flags & 0x40) != 0) {
+                            _ltow(month, num, 10);
+                            src = num;
+                        } else {
+                            int id = ((el->flags & 4) != 0) ? 13 : 14;
+                            int n = GetLocaleInfoString(id, month, buf, 0x80, kSystemLocale);
+                            if (n > 0x80 || n < 0) {
+                                const short* d = (const short*)DAT_014278e4;
+                                short* o = (short*)buf;
+                                for (;;) {
+                                    short c = *d++;
+                                    *o++ = c;
+                                    if (c == 0)
+                                        break;
+                                }
+                            }
+                            src = buf;
+                        }
+                        break;
+                    }
+                    case 11: {          // year
+                        if ((int)el->width < 1) {
+                            _ltow(year, num, 10);
+                            src = num;
+                        } else {
+                            wchar_t ybuf[32];
+                            FUN_0092d060(year, year >> 31, ybuf);
+                            const wchar_t* e = ybuf;
+                            while (*e) ++e;
+                            unsigned len = (unsigned)(e - ybuf);
+                            if (el->width < len)
+                                src = ybuf + (len - el->width);
+                            else
+                                src = ybuf;
+                        }
+                        break;
+                    }
+                    default:
+                        continue;
+                    }
+                    FUN_0087e080(&el->s, 0, src);
+                }
+                ret = FUN_008804d0(out, cap, &scan, elems, 16);
+            }
+        }
+    }
+    return ret;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x00881720  date-string wrapper (supplies the global date format)
+// ---------------------------------------------------------------------------
+void FUN_00881720(int day, int month, int year, wchar_t* out, int cap,
+                  const wchar_t* str)
+{
+    SetDateString(day, month, year, out, cap, str, gField1650470.c_str());
 }
 
 }  // namespace Locale

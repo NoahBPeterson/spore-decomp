@@ -1,2 +1,16 @@
-00880910 EA::Locale::GetLocaleInfoString  # byte-exact; 30-way switch over locale info type; cards of 0x880750/0x880830 callers
-0087f350 EA::Locale::CanonicalLocale  # cdecl LocString(out, const LocString&): forwards in->mpBegin to 0x87f210; used by GetLocaleInfoString cases 2/26/27
+# slice s00880910 (gold7) - EA::Locale string/integer/date accessors
+# Modelled types:
+#   LocString       eastl::fixed_string<wchar_t,16,1>, 0x34 bytes:
+#                     mpBegin +0x00, mpEnd +0x04, mpCapacity +0x08,
+#                     fixed allocator +0x0c (overflow alloc + pool-begin),
+#                     inline buffer +0x14 (16 wchar_t)
+#   LocString512    eastl::fixed_string<wchar_t,512,1>: map value string
+#   LocaleMap       eastl::map<LocString,LocString512>: Find() is map::operator[]
+#   FmtElem         0x4c bytes: LocString s +0x00, flags +0x34, type +0x38,
+#                     width +0x3c, prec +0x40, begin +0x44, end +0x48
+#   LocScan         { const wchar_t* cur; unsigned len; }
+#   map globals     0x1549180 (first name), 0x154919c (second name)
+00880910 ?GetLocaleInfoString@Locale@EA@@YAHHHPA_WIABV?$fixed_string@_W$0BA@$00Vallocator@eastl@@@eastl@@@Z  # (type,index,out,cap,locale): locale field as wide string
+00881220 ?GetLocaleInfoInt@Locale@EA@@YAXPB_W0@Z  # (name1,name2): canonicalise (FUN_0087f210) then map[key]=name in both maps
+008813e0 ?SetDateString@Locale@EA@@YAHHHHPA_WHPB_W1@Z  # (day,month,year,out,cap,str,fmt): parse fmt (FUN_0087d6d0), fill day/month/year elements, MakeStringFromFormatElements
+00881720 ?FUN_00881720@Locale@EA@@YAXHHHPA_WHPB_W@Z  # (day,month,year,out,cap,str): forward to SetDateString with the global date format
