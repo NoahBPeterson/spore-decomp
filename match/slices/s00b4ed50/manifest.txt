@@ -1,1 +1,7 @@
 # source  symbol  va  flags
+slices/s00b4ed50/s00b4ed50.cpp  ?FUN_00b4f3e0@@YGXPAUListenerArg@@@Z  00b4f3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b4ed50/s00b4ed50.cpp  ?FUN_00b4f420@@YGXPAUListenerArg@@@Z  00b4f420  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b4ed50/s00b4ed50.cpp  ??0Inner@@QAE@ABU0@@Z  00b4f610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b4ed50/s00b4ed50.cpp  ?scalarDtor@hkRefObject@@QAEPAXH@Z  00b4f7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b4ed50/s00b4ed50.cpp  ?FUN_00b4f7f0@@YAXXZ  00b4f7f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b4ed50/s00b4ed50.cpp  ??0Outer@@QAE@ABUKey3@@ABUInner@@@Z  00b4f830  /O2 /MD /Gy /TP /arch:SSE /fp:fast

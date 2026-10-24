@@ -1,0 +1,15 @@
+00b4ed50 FUN_00b4ed50  # per-frame radial rest-depth impulse step (nonmatching)
+00b4f3e0 FUN_00b4f3e0  # registered-list listener add: entity-relative ref active (byte +0x18 == 1), self-derived entity, != entity+0x0c, owner property 4 append; byte-exact
+00b4f420 FUN_00b4f420  # registered-list listener remove: enabled byte +0x08 gate then the same owner property 4 remove; byte-exact
+00b4f470 FUN_00b4f470  # orthonormal basis factory for the 0x30-byte 0x010c2730 object: largest-axis pick, 0.25f*(other two) w, 0.5f*max-w with sign-mask negation, Havok allocate; nonmatching (equiv PASS)
+00b4f610 Inner::Inner  # 0x74-byte shape-instance copy ctor: four key dwords, float +0x10, +0x14/+0x18, 0x50-byte transform (0x00b4d3f0) at +0x20, +0x70; byte-exact
+00b4f660 FUN_00b4f660  # render-config dispatch on the +0x04 flag word bits 14/18 and the kind word; nonmatching (equiv WEAK)
+00b4f6d0 FUN_00b4f6d0  # locomotive mesh AABB into the entity world: slot +0x6c GetAabb, +/- 1.0f margin, 8-float min/max, addAabb and removeEntity; nonmatching (equiv FAIL on the uninitialised flag byte)
+00b4f7c0 hkRefObject::scalarDtor  # scalar deleting destructor: base dtor 0x0108c790 then, when flags&1, the +0x04 size tag returned to the memory manager with tag 0x2e; byte-exact
+00b4f7f0 FUN_00b4f7f0  # release the registered object global: removeReference then removeEntity and clear the global; byte-exact
+00b4f830 Outer::Outer  # 0x84-byte wrapper ctor: three key dwords then the inlined 0x74-byte inner copy (transform via 0x00b4d3f0); byte-exact
+00b4f8a0 Table90::erase  # 0x90-stride hash node unlink returning the carry-over iterator; nonmatching (equiv UNSUPPORTED)
+00b4f930 Table10::erase  # 0x10-stride hash node unlink returning the carry-over iterator; nonmatching (equiv UNSUPPORTED)
+00b4fae0 FUN_00b4fae0  # three-dword key find along a 0x90-stride chain; nonmatching (equiv PASS)
+00b4fbd0 TableB::rehash  # bucket-table rehash with static/heap/free-list release of the old array; nonmatching (equiv WEAK)
+00b4fc80 FUN_00b4fc80  # reload the mesh-holder properties (four floats, a signed char, and a vector property with zeroed w); nonmatching (equiv WEAK)
