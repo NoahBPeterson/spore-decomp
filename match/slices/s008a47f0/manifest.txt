@@ -1,1 +1,1 @@
-# source  symbol  original VA  [cl flags override]
+slices/s008a47f0/s008a47f0.cpp  ?FUN_008a4900@@YIIPBM@Z  008a4900  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

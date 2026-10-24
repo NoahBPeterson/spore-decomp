@@ -33,3 +33,32 @@ void WeightedCovariance(float* cov, int n, const Vec3* pts, const float* w)
         cov[5] += dw.z * d.z;
     }
 }
+
+// --- 0x008A4900: pack a normalised RGB triple into a 5-6-5 word -------
+extern const float kScale31;      // 0x014321FC (31.0f)
+extern const float kScale63;      // 0x014321F8 (63.0f)
+extern const float kRoundHalf;    // 0x01471064 (0.5f)
+
+// @ 0x008a4900
+unsigned __fastcall FUN_008a4900(const float* rgb)
+{
+    int r = (int)(rgb[0] * kScale31 + kRoundHalf);
+    if (r < 0)
+        r = 0;
+    else if (r > 0x1f)
+        r = 0x1f;
+
+    int g = (int)(rgb[1] * kScale63 + kRoundHalf);
+    if (g < 0)
+        g = 0;
+    else if (g > 0x3f)
+        g = 0x3f;
+
+    int b = (int)(rgb[2] * kScale31 + kRoundHalf);
+    if (b < 0)
+        b = 0;
+    else if (b > 0x1f)
+        b = 0x1f;
+
+    return ((unsigned)(r << 6 | g) << 5) | (unsigned)b;
+}
