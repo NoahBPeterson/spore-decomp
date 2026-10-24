@@ -71,13 +71,13 @@ struct cRTTManager_s0076_db40 {
     // @ 0x0076db40  lazily resolve the raster from a page's texture instance.
     void* GetTextureHandle(int i);  // 0x0076db40 (cRTTManager::GetTextureHandle)
     // @ 0x0076dbb0  page texture pointer.
-    void* GetTexture(int i);  // 0x0076dbb0 (cRTTManager::GetTexture)
+    void* GetTexture(int i, int reserved);  // 0x0076dbb0 (cRTTManager::GetTexture, ret 8)
     // @ 0x0076dc00  copy a 4-dword rect for sub-page `sub` into out.
     bool  GetRect(int i, int sub, int* out);  // 0x0076dc00 (cRTTManager::GetRect)
     // @ 0x0076dc70  copy the rect and its (w,h) deltas.
     bool  GetRectSizes(int i, int sub, int* a, int* b, int* c, int* d);  // 0x0076dc70 (cRTTManager::GetRectSizes)
     // @ 0x0076dcf0  copy mA/mB.
-    bool  GetAB(int i, int* a, int* b);  // 0x0076dcf0 (cRTTManager::GetAB)
+    bool  GetAB(int i, int reserved, int* a, int* b);  // 0x0076dcf0 (cRTTManager::GetAB, ret 0x10)
     // @ 0x0076dd60  fill the page raster and a sprite texture.
     bool  FillSprite(int i, int a, int b);
     // @ 0x0076ddb0  find a page by (mA,mB,refcount == criteria); returns index.
@@ -224,7 +224,7 @@ void* cRTTManager_s0076_db40::GetTextureHandle(int i)
 }
 
 // @ 0x0076dbb0
-void* cRTTManager_s0076_db40::GetTexture(int i)
+void* cRTTManager_s0076_db40::GetTexture(int i, int)
 {
     if (i < 0) return 0;
     if (i >= (int)(mTexturePages.mEnd - mTexturePages.mBegin)) return 0;
@@ -255,7 +255,7 @@ bool cRTTManager_s0076_db40::GetRectSizes(int i, int sub, int* a, int* b, int* c
 }
 
 // @ 0x0076dcf0
-bool cRTTManager_s0076_db40::GetAB(int i, int* a, int* b)
+bool cRTTManager_s0076_db40::GetAB(int i, int, int* a, int* b)
 {
     if (i < 0) return false;
     if (i >= (int)(mTexturePages.mEnd - mTexturePages.mBegin)) return false;
@@ -266,7 +266,7 @@ bool cRTTManager_s0076_db40::GetAB(int i, int* a, int* b)
 }
 
 // @ 0x0076de20
-void __cdecl UninitCopyPageRecords(PageRecord** out, PageRecord* first, PageRecord* last, PageRecord* dst)
+PageRecord* __cdecl UninitCopyPageRecords(PageRecord** out, PageRecord* first, PageRecord* last, PageRecord* dst)
 {
     *out = dst;
     if (first != last) {
@@ -277,13 +277,15 @@ void __cdecl UninitCopyPageRecords(PageRecord** out, PageRecord* first, PageReco
         } while (first != last);
         *out = dst;
     }
+    return (PageRecord*)out;
 }
 
 // @ 0x0076de80
-void __cdecl CopyPageRecords(PageRecord* first, PageRecord* last, PageRecord* out)
+PageRecord* __cdecl CopyPageRecords(PageRecord* first, PageRecord* last, PageRecord* out)
 {
     for (; first != last; ++first, ++out)
         *out = *first;
+    return out;
 }
 
 // @ 0x0076e040
@@ -454,10 +456,106 @@ void* cRTTCheat::Construct()
     return this;   // skeleton: cRTTCheat ctor (see partial.txt)
 }
 
+// ---- cRTTCheat::Execute support (0x0076eb00): local retail-ABI declarations
+namespace EA { namespace ArgScript {
+struct cArguments;
+struct cIParser;
+struct cArgumentSpec {
+    void Parse(cArguments* args, cIParser* parser);   // 0x0083b9d0
+};
+void Output(cIParser* parser, const char* fmt, ...);  // 0x00841000
+} }  // namespace EA::ArgScript
+struct FlagHolder {
+    unsigned char IsSet() const;                      // 0x007ae960
+};
+// retail 0x011f0000 takes one stack arg (the dev PDB calls it Raster::Fill(const void*, unsigned char))
+struct RetailRasterMip {
+    unsigned D3D9GetMipLevelSize(unsigned char level);   // 0x011f0000
+};
+struct rwRasterView {
+    int      m_format;   // +0x00
+    char     pad04[8];
+    uint16_t m_width;    // +0x0c
+    uint16_t m_height;   // +0x0e
+};
+struct RTTPageRec_s0076_db40 {
+    char     pad00[0x28];
+    uint16_t mType;      // +0x28
+    uint16_t mWidth;     // +0x2c
+    uint16_t mHeight;    // +0x30
+    uint16_t mAllocs;    // +0x34
+    char     pad36[6];
+};
+struct RTTPageHolder {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void Release();                              // +0x3c
+    RTTPageRec_s0076_db40* mBegin;   // +0x18
+    RTTPageRec_s0076_db40* mEnd;     // +0x1c
+};
+struct cRTTCheatLayout_s0076_db40 {
+    char                         pad00[4];
+    EA::ArgScript::cIParser*     mParser;     // +0x04
+    char                         pad08[8];
+    EA::ArgScript::cArgumentSpec mSpec;       // +0x10
+    char                         pad14[0x6c];
+    unsigned                     mFlags;      // +0x80, bit0 = list pages, bit1 = release
+    char                         pad84[0x54];
+    RTTPageHolder*               mPages;      // +0xd8
+};
+extern rwRasterView* g_defaultCameraRaster;   // 0x015d0838
+extern rwRasterView* g_defaultZBufferRaster;  // 0x015d083c
+extern "C" const float g_kBytesToMB;          // 0x0140e4b0 = 9.536743e-07f
+
 // @ 0x0076eb00
 void cRTTCheat::Execute(void* args)
 {
-    (void)args;   // skeleton: cRTTCheat::Execute (see partial.txt)
+    cRTTCheatLayout_s0076_db40* self = (cRTTCheatLayout_s0076_db40*)this;
+    self->mSpec.Parse((EA::ArgScript::cArguments*)args, self->mParser);
+    if (self->mFlags & 1) {
+        unsigned count = (unsigned)((self->mPages->mEnd - self->mPages->mBegin) / 0x3c);
+        count &= 0xffff;
+        EA::ArgScript::Output(self->mParser, "%d render target pages allocated:\n", count);
+
+        int total = 0;
+        int freed = 0;
+        rwRasterView* r = g_defaultCameraRaster;
+        if (r != 0) {
+            unsigned size = ((RetailRasterMip*)r)->D3D9GetMipLevelSize(0);
+            total = (int)size;
+            EA::ArgScript::Output(self->mParser,
+                " DebugName: %hs, page %d, %d x %d, type %d, allocs %d, used %d, size %d K\n",
+                "MainColor", 0, (int)r->m_width, (int)r->m_height, (int)r->m_format,
+                1, 1, (size + 0x3ff) >> 10);
+        }
+        r = g_defaultZBufferRaster;
+        if (r != 0) {
+            unsigned size = ((RetailRasterMip*)r)->D3D9GetMipLevelSize(0);
+            total += (int)size;
+            EA::ArgScript::Output(self->mParser,
+                " DebugName: %hs, page %d, %d x %d, type %d, allocs %d, used %d, size %d K\n",
+                "MainDepth", 0, (int)r->m_width, (int)r->m_height, (int)r->m_format,
+                1, 1, (size + 0x3ff) >> 10);
+        }
+        for (int i = 0; i < (int)count; ++i) {
+            RTTPageRec_s0076_db40* rec = self->mPages->mBegin + i;
+            int size = RasterFormatSize(rec->mWidth, rec->mHeight, rec->mType);
+            total += size;
+            if (rec->mAllocs == 0)
+                freed += size;
+            unsigned char used = ((FlagHolder*)rec)->IsSet();
+            EA::ArgScript::Output(self->mParser,
+                " DebugName: %hs, page %d, %d x %d, type %d, allocs %d, used %d, size %d K\n",
+                0, i, (int)rec->mWidth, (int)rec->mHeight, (int)rec->mType, (int)rec->mAllocs,
+                (int)used, (size + 0x3ff) >> 10);
+        }
+        EA::ArgScript::Output(self->mParser, "Total RTT pages: %1.1f MB freed: %1.1f MB\n",
+            (double)((float)total * g_kBytesToMB), (double)((float)freed * g_kBytesToMB));
+    }
+    if ((self->mFlags >> 1) & 1)
+        self->mPages->Release();
 }
 
 // @ 0x0076ed30

@@ -1,15 +1,15 @@
-0076db40 ?GetTextureHandle@cRTTManager_s0076_db40@@QAEPAXH@Z  # cRTTManager_s0076_db40::GetTextureHandle migrated from s0076db40 (verbatim, slice spelling)
-0076dbb0 ?GetTexture@cRTTManager_s0076_db40@@QAEPAXH@Z  # cRTTManager_s0076_db40::GetTexture migrated from s0076db40 (verbatim, slice spelling)
-0076dc00 ?GetRect@cRTTManager_s0076_db40@@QAE_NHHPAH@Z  # cRTTManager_s0076_db40::GetRect migrated from s0076db40 (verbatim, slice spelling)
-0076dc70 ?GetRectSizes@cRTTManager_s0076_db40@@QAE_NHHPAH000@Z  # cRTTManager_s0076_db40::GetRectSizes migrated from s0076db40 (verbatim, slice spelling)
-0076dcf0 ?GetAB@cRTTManager_s0076_db40@@QAE_NHPAH0@Z  # cRTTManager_s0076_db40::GetAB migrated from s0076db40 (verbatim, slice spelling)
+0076db40 ?GetTextureHandle@cRTTManager@@QAEPAXHH@Z  # cRTTManager::GetTextureHandle (ret 8; lazy raster resolve)
+0076dbb0 ?GetTexture@cRTTManager@@QAEPAXHH@Z  # cRTTManager::GetTexture (ret 8: int i + reserved)
+0076dc00 ?GetRect@cRTTManager@@QAE_NHHPAH@Z  # cRTTManager::GetRect
+0076dc70 ?GetRectSizes@cRTTManager@@QAE_NHHPAH000@Z  # cRTTManager::GetRectSizes
+0076dcf0 ?GetAB@cRTTManager@@QAE_NHHPAH0@Z  # cRTTManager::GetAB (ret 0x10: i + reserved + int* a + int* b)
 0076dd60  cRTTManager::FillSprite  # raster fill + sprite blit
 0076ddb0  cRTTManager::FindPage  # page search
-0076de20 ?UninitCopyPageRecords@@YAXPAPAUPageRecord@@PAU1@11@Z  # UninitCopyPageRecords migrated from s0076db40 (verbatim, slice spelling)
-0076de80 ?CopyPageRecords@@YAXPAUPageRecord@@00@Z  # CopyPageRecords migrated from s0076db40 (verbatim, slice spelling)
+0076de20 ?UninitCopyPageRecords@@YAPAUPageRecord@@PAPAU1@PAU1@11@Z  # UninitCopyPageRecords (cdecl, returns advanced out)
+0076de80 ?CopyPageRecords@@YAPAUPageRecord@@PAU1@00@Z  # CopyPageRecords (cdecl, returns advanced out)
 0076dee0  capture-job registration  # viewer + behaviour message
-0076e040 ?GetScaledRect@cRTTManager_s0076_db40@@QAE_NHHPAM0@Z  # cRTTManager_s0076_db40::GetScaledRect migrated from s0076db40 (verbatim, slice spelling)
-0076e110 ?AllocateNewPage@cRTTManager_s0076_db40@@QAE_NHHHH@Z  # cRTTManager_s0076_db40::AllocateNewPage migrated from s0076db40 (verbatim, slice spelling)
+0076e040 ?GetScaledRect@cRTTManager@@QAE_NHHPAM0@Z  # cRTTManager::GetScaledRect
+0076e110 ?AllocateNewPage@cRTTManager@@QAE_NHHHH@Z  # cRTTManager::AllocateNewPage
 0076e1e0 ?DeallocateSelf@SpVec@@QAEXXZ  # SpVec::DeallocateSelf migrated from s0076db40 (verbatim, slice spelling)
 0076e2c0 ?DestroyOne@Rec3c@@QAEXXZ  # Rec3c::DestroyOne migrated from s0076db40 (verbatim, slice spelling)
 0076e320 ?DestroyRecRange@@YAPAURec3c@@PAU1@00@Z  # DestroyRecRange migrated from s0076db40 (verbatim, slice spelling)

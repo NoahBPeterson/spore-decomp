@@ -2,4 +2,3 @@
 0076e900  171  CopyBigRecRange2: skeleton (0x3c record range assign omitted)
 0076e9b0  171  CopyBigRecRangeBack: skeleton (backward range assign omitted)
 0076ea60  137  cRTTCheat ctor: skeleton (base ctors + vtable stores omitted)
-0076eb00  551  cRTTCheat::Execute: skeleton (argument parsing + RTT page allocation omitted)

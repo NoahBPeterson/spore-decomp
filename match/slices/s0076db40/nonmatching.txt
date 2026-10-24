@@ -1,8 +1,8 @@
-0076dbb0  64   cRTTManager::GetTexture: bounds+refcount check and texture return complete; register schedule differs
+0076dbb0  81   cRTTManager::GetTexture: bounds+refcount check and texture return complete; ABI fixed (2-arg ret 8), register schedule differs (i in esi vs original edi; compiler writes ecx the original never writes) [equiv: FAIL-KEPT ecx untouched]
 0076dc00  103  cRTTManager::GetRect: rect copy complete; register schedule/bounds code differs
 0076dc70  111  cRTTManager::GetRectSizes: rect + w/h deltas complete; register schedule differs
-0076dcf0  88   cRTTManager::GetAB: mA/mB copy complete; register schedule differs
-0076de20  79   UninitCopyPageRecords: full copy loop complete; argument/register mapping differs
+0076dcf0  94   cRTTManager::GetAB: mA/mB copy complete; ABI fixed (4-arg ret 0x10) [equiv: PASS]
+0076de20  80   UninitCopyPageRecords: full copy loop complete; returns out (ABI fixed) [equiv: PASS]
 0076de80  33   CopyPageRecords: memberwise 0x1d-record copy loop complete; first/dest register roles differ
 0076e040  222  cRTTManager::GetScaledRect: 1/mA,1/mB scaling of sub-rect complete; SSE schedule differs
 0076db40  97   cRTTManager::GetTextureHandle: lazy raster resolve (0067dd60 -> vtbl[0x34] Resolve, return raster) complete; register ABI differs (i in esi vs original edi, count in eax vs esi)
@@ -23,3 +23,4 @@
 0076e320  134  DestroyRecRange: inlines DestroyOne (same refcount release); register rotation differs [equiv: UNSUPPORTED] (needs live guards)
 0076e3b0  120  DestroyRecArray: inlines DestroyOne (same refcount release); register rotation differs [equiv: WEAK]
 0076e5c0  79   SomeObj3 destructor: vector range destroy + base vtable stores complete; register schedule differs [equiv: PASS]
+0076eb00  390  cRTTCheat::Execute: argument parsing + RTT page/dump loop + x87 MB totals + release vcall complete [equiv: UNSUPPORTED] (0 valid inputs at default 400: the leading cArgumentSpec::Parse runs a real callee on a random cArguments* and faults; WEAK (218 valid, 9.8% cov) at --inputs 3000; replay of the former FAIL input matches the original exactly)
