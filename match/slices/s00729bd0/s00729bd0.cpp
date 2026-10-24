@@ -1,6 +1,7 @@
 // Slice s00729bd0 — vertex-buffer / span helpers around the UV pipeline.
 // Simple accessors/constructors reconstructed; the large bulk/copy routines are partial.
 #include "types.h"
+#include <intrin.h>
 
 void operator_delete(void* p);   // 0x00f47380
 
@@ -110,8 +111,8 @@ SpanAlloc* SpanAlloc::Init(int n, int* other)
     return this;
 }
 
-// @ 0x0072a080  reset the child boxes to inverted-infinite (PARTIAL form: SSE stack-roundtrip not reproduced)
-__declspec(noinline) void __fastcall FUN_0072a080(SplitNode* self)
+// @ 0x0072a080 FUN_0072a080  reset the child boxes to inverted-infinite; retail keeps `this` in eax
+__declspec(noinline) SplitNode* __fastcall FUN_0072a080(SplitNode* self)
 {
     const float kMax =  3.402823466e+38F;
     const float kMin = -3.402823466e+38F;
@@ -119,6 +120,7 @@ __declspec(noinline) void __fastcall FUN_0072a080(SplitNode* self)
     self->left.mx[0] = kMin; self->left.mx[1] = kMin; self->left.mx[2] = kMin;
     self->right.mn[0] = kMax; self->right.mn[1] = kMax; self->right.mn[2] = kMax;
     self->right.mx[0] = kMin; self->right.mx[1] = kMin; self->right.mx[2] = kMin;
+    return self;
 }
 
 // ---------------------------------------------------------------------------
@@ -215,7 +217,7 @@ static inline void ExpandPoint(Box6& cur, const float* v)
     }
 }
 
-// @ 0x00729c60  grow a box over one vertex stream and track the largest radius
+// @ 0x00729c60 FUN_00729c60  grow a box over one vertex stream and track the largest radius
 void FUN_00729c60(MeshModel* model, Box6* box, float* radius)
 {
     int idx = FUN_0071ddc0(model, 1, 0, 3, 0xe);
@@ -271,7 +273,7 @@ static inline void ExpandBox(Box& cur, const Box& e)
     }
 }
 
-// @ 0x00729de0  partition idx[0..n) around node->axis / node->pos by box centre; fills child boxes and counts
+// @ 0x00729de0 FUN_00729de0  partition idx[0..n) around node->axis / node->pos by box centre; fills child boxes and counts
 __declspec(noinline) void FUN_00729de0(SplitNode* node, const Box* box, Box* const* items, unsigned* idx, int n)
 {
     Box inv;
@@ -281,28 +283,59 @@ __declspec(noinline) void FUN_00729de0(SplitNode* node, const Box* box, Box* con
     node->right.mx[0] = inv.mn[0]; node->right.mx[1] = inv.mn[1]; node->right.mx[2] = inv.mn[2];
     node->left = node->right;
 
+    // Retail reads `c[node->axis]` from the stack slot array before it has stored the
+    // current element's box copy, so an out-of-range axis sees the *previous* iteration's
+    // values (or the initial `<box>` copy on the first pass).  The /O2 schedule used to
+    // store the copy first, which changed the partition for axis > 2.  Model those slots
+    // explicitly: c[3..6] are the previous element's mn[0..2]/mx[0]; c[7..8] are the
+    // current element's mx[1]/mx[2] (retail stores those two before the compare).
+    float staleMn0 = box->mx[0];
+    float staleMn1 = box->mx[1];
+    float staleMn2 = box->mx[2];
+    float staleMx0 = box->mn[0];
+
     int i = 0;
     int j = n - 1;
     if (j >= 0) {
         do {
             unsigned k = idx[i];
-            struct { float c[3]; Box e; } L;   // centre then box: contiguous, as in the original frame
-            Box& e = L.e;
-            float* c = L.c;
             const Box& src = (*items)[k];
-            e.mx[0] = src.mx[0]; e.mx[1] = src.mx[1]; e.mx[2] = src.mx[2];
-            e.mn[0] = src.mn[0]; e.mn[1] = src.mn[1]; e.mn[2] = src.mn[2];
-            c[0] = (e.mx[0] + e.mn[0]) * 0.5f;
-            c[1] = (e.mx[1] + e.mn[1]) * 0.5f;
-            c[2] = (e.mx[2] + e.mn[2]) * 0.5f;
-            if (c[node->axis] > node->pos) {
+            float c0 = (src.mx[0] + src.mn[0]) * 0.5f;
+            float c1 = (src.mx[1] + src.mn[1]) * 0.5f;
+            float c2 = (src.mx[2] + src.mn[2]) * 0.5f;
+
+            int a = node->axis;
+            float cv;
+            if (a == 0)       cv = c0;
+            else if (a == 1)  cv = c1;
+            else if (a == 2)  cv = c2;
+            else if (a == 3)  cv = staleMn0;
+            else if (a == 4)  cv = staleMn1;
+            else if (a == 5)  cv = staleMn2;
+            else if (a == 6)  cv = staleMx0;
+            else if (a == 7)  cv = src.mx[1];
+            else if (a == 8)  cv = src.mx[2];
+            else {
+                // Retail computes `[esp + axis*4 + 0x10]` with 32-bit wrapping; with its
+                // frame at E-0x34 at that point the effective address is E-0x24+axis*4
+                // (E = entry ESP).  Reproduce the same wrapped read so huge / negative
+                // axes observe the same pool or stack bytes instead of an arbitrary c0.
+                unsigned int E = (unsigned int)(uintptr_t)_AddressOfReturnAddress();
+                unsigned int addr = E - 0x24u + ((unsigned int)a << 2);
+                cv = *(const float*)(uintptr_t)addr;
+            }
+
+            staleMn0 = src.mn[0]; staleMn1 = src.mn[1];
+            staleMn2 = src.mn[2]; staleMx0 = src.mx[0];
+
+            if (cv > node->pos) {
                 idx[i] = idx[j];
                 idx[j] = k;
                 --j;
-                ExpandBox(node->right, e);
+                ExpandBox(node->right, src);
             } else {
                 ++i;
-                ExpandBox(node->left, e);
+                ExpandBox(node->left, src);
             }
         } while (i <= j);
     }
