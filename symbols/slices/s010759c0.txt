@@ -1,0 +1,8 @@
+010759c0  ?Fn10759C0@cSPUISpaceTrading@@QAEXPAUIWindow@@PAUTradeItem@@I@Z  # fill the item tooltip layout: swap the item's count, classify it (Fn103B950), size/place the name+icon windows, pick the kind string, play sounds - nonmatching/equivalent
+01075db0  ?Fn1075DB0@cSPUISpaceTrading@@QAEXXZ  # destructor body: reset the three vtables, remove the handler, release mLayout, destroy the strings/tooltip/vectors/AutoRefCount ptrs, then restore the base vtables - nonmatching/equivalent
+01075ef0  ?Deactivate@cSPUISpaceTrading@@QAEXXZ  # deactivate the panel: clear the flag/current item, remove the handler, cancel the transaction, release the item/anim animation vectors, shutdown the sub-windows and the tooltip, notify the message server - nonmatching/equivalent
+01075ff0  ?UpdateMidPanel@cSPUISpaceTrading@@QAEXXZ  # refresh the mid-panel price/total text (money + "/" + total) - nonmatching/equivalent
+01076180  ?Init@cSPUISpaceTrading@@QAEXXZ  # bind the panel to the global layout: install the layout, wire windows 0x5da83b8/0x5e62a48/0x4c19a88 to this, hold 0x5da83b9/0x5da83b8, hide 0x5e3c090 - nonmatching/equivalent
+010762d0  ?Fn10762D0@cSPUISpaceTrading@@QAEXXZ  # if the active flag (+0x11c) is set, tail-call Deactivate - byte-exact
+010762e0  ?Fn10762E0@cSPUISpaceTrading@@QAEPAU1@XZ  # constructor body: install the three vtables, zero the AutoRefCount/vector fields, construct the tooltip and the four cStrings, clear the handler slots - nonmatching/equivalent
+010763c0  ?Fn10763C0@cSPUISpaceTrading@@QAEXXZ  # refresh the item picture/price windows for the current item: set the image key, refresh the mid panel, set the two price labels by ownership - nonmatching/equivalent

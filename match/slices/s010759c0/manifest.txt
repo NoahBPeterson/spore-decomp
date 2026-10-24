@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s010759c0/s010759c0.cpp  ?Fn10762D0@cSPUISpaceTrading@@QAEXXZ  010762d0  /O2 /MD /Gy /TP /arch:SSE /GS-
