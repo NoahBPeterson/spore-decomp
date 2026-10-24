@@ -15,16 +15,11 @@ struct EltArray
 extern uint32_t g_masks[];
 
 int   FUN_007330d0(int, int, int*, int);
-int   FUN_00734660(int*, int*);
-void  FUN_007346d0(int*, int, int, int);
-void  FUN_00b85500(int, int);
 int*  FUN_00732ff0(void*);
 int   FUN_0072ac10(int*);
 void  FUN_007348a0(int*);
 void* FUN_00723680(int);
-int*  FUN_007334b0(uint32_t, int, int);
-void  FUN_00714b10(int, int);
-int   FUN_0071e7d0(int, int, int);
+int   FUN_0071e7d0(int, int, int); // 0x71e7d0 cdecl copy helper
 void  FUN_0047b290(void**, int, int, int, void*);
 void  FUN_0072a1a0(uint32_t, int*);
 void* EAAlloc(int, const char*, int, int, const char*, int);
@@ -40,6 +35,11 @@ struct Vec
     int8_t mFlag;    // +0x14
 
     int*   insertL(int* a, int* b);     // 0x735350
+    int*   FUN_00734660(int* a, int* b); // 0x734660 (thiscall helper, ecx = this)
+    void   FUN_00b85500(int* dst, int* src); // 0xb85500 Vertex3DVec::CopyUninit (thiscall)
+    void   FUN_007346d0(int* dst, int count, int value); // 0x7346d0 fill/construct (thiscall)
+    int*   FUN_007334b0(uint32_t n, int src, int srcEnd); // 0x7334b0 realloc (thiscall)
+    void   FUN_00714b10(int from, int to); // 0x714b10 destroy range (thiscall)
     int*   operator=(int* other);       // 0x735dd0
     int*   findLower(int* key);         // 0x735ec0
     void   resize24(uint32_t n, int v); // 0x735f30
@@ -56,12 +56,12 @@ int* Vec::insertL(int* param_2, int* param_3)
     {
         if ((*param_3 < *param_2) || ((*param_3 <= *param_2 && (param_3[1] < param_2[1]))))
         {
-            uVar1 = mFlag;
+            uVar1 = (uint8_t)mFlag;
             piVar3 = mBegin;
             goto call;
         }
     }
-    uVar1 = mFlag;
+    uVar1 = (uint8_t)mFlag;
     piVar3 = param_2;
     param_2 = piVar2;
 call:
@@ -76,24 +76,25 @@ call:
                 return piVar3;
         }
     }
-    return (int*)FUN_00734660(piVar3, param_3);
+    return FUN_00734660(piVar3, param_3);
 }
 
 // @ 0x00735ec0
 int* Vec::findLower(int* param_2)
 {
     int* piVar1 = mEnd;
-    int* piVar2 = (int*)FUN_007330d0((int)mBegin, (int)piVar1, param_2, mFlag);
+    int* piVar2 = (int*)FUN_007330d0((int)mBegin, (int)piVar1, param_2, (uint8_t)mFlag);
     if (piVar2 != piVar1)
     {
         if ((*piVar2 <= *param_2) && ((*piVar2 < *param_2) || (piVar2[1] <= param_2[1])))
             goto ret;
     }
     {
-        int local_c = *param_2;
-        int local_8 = param_2[1];
-        int local_4 = 0;
-        piVar2 = insertL(piVar2, &local_c);
+        int key[3];
+        key[0] = param_2[0];
+        key[1] = param_2[1];
+        key[2] = 0;
+        piVar2 = insertL(piVar2, key);
     }
 ret:
     return piVar2 + 2;
@@ -102,14 +103,15 @@ ret:
 // @ 0x00735f30
 void Vec::resize24(uint32_t param_2, int param_3)
 {
-    int iVar1 = mEnd ? (int)mEnd : 0;
-    int iVar2 = (int)mBegin;
-    if ((uint32_t)((iVar1 - iVar2) / 0x24) < param_2)
+    uint8_t* begin = (uint8_t*)mBegin;
+    uint8_t* end = (uint8_t*)mEnd;
+    int count = (int)(end - begin) / 0x24;
+    if (param_2 > (uint32_t)count)
     {
-        FUN_007346d0((int*)iVar1, param_2 - (iVar1 - iVar2) / 0x24, param_3, 0);
+        FUN_007346d0((int*)end, (int)(param_2 - (uint32_t)count), param_3);
         return;
     }
-    FUN_00b85500(iVar2 + param_2 * 0x24, iVar1);
+    FUN_00b85500((int*)(begin + param_2 * 0x24), (int*)end);
 }
 
 // @ 0x00735dd0
@@ -118,7 +120,7 @@ int* Vec::operator=(int* param_2)
     if (param_2 != (int*)this)
     {
         int iVar1 = *param_2;
-        int iVar4 = *mBegin;
+        int iVar4 = (int)mBegin;
         int iVar2 = param_2[1];
         uint32_t uVar7 = (uint32_t)(iVar2 - iVar1) >> 5;
         if ((uint32_t)((int)mCap - iVar4) >> 5 < uVar7)
