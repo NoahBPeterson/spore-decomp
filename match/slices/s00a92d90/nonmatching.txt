@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00a92d90  2576  ?UpdateSamples@cDistributeEffect@@QAEHH@Z: equivalence WEAK (258 valid inputs, no behavioural mismatch found, 30.8% coverage: the deep surface/pin paths are unreachable by the input generator, so the standard 60% gate cannot be met). Source is byte-exact-shaped except for the sp_vector swap path, which is correct (removal of the local int[2] `offs` array that forced an MSVC /GS stack cookie, and the mEffects->mRenderSamples swap call, were both required and are in place); remaining byte diff is MSVC scheduling / register-vs-memory placement.
+00a93980  336  ??0cMetaParticlesEffect@@QAE@XZ: equivalence PASS (233 valid inputs, 80.4% coverage); instruction-identical, only MSVC store scheduling differs (size 706 vs 700).
+00a93c60  72  ?Erase@cSampleRange@@QAEXABUVector3@@@Z: equivalence PASS (400 valid inputs, 100% coverage); instruction-identical, only MSVC store scheduling differs (size 126 vs 130).

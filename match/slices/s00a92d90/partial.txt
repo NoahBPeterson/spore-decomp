@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a934e0  805  ?ApplyEffect@cDistributeEffect@@QAEHPAXM0@Z: equivalence FAIL on the return value only (orig eax=bfa40003 leftover vs ours 0; 5/5 valid inputs, 24.4% coverage). The original leaves eax holding the leftover result of ClearSamples/mod-count on the paths where the tail stats guard is skipped, i.e. the int return value is undefined C++ (never assigned on those paths); it cannot be reproduced deterministically from source. All side-effect memory writes compare equal; only eax differs.

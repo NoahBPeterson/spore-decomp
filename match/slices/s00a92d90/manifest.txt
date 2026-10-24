@@ -1,0 +1,2 @@
+slices/s00a92d90/s00a92d90.cpp  ?RegisterMeshStreamers2@@YAX_N@Z  00a938d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a92d90/s00a92d90.cpp  ??1cMetaParticlesEffect@@QAE@XZ  00a93910  /O2 /MD /Gy /TP /arch:SSE /fp:fast
