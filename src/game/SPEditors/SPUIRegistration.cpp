@@ -626,8 +626,8 @@ struct cRegDialog {
 };
 struct DialogSub {                 // this = cRegDialog + 8
   char pad0[0xc];
-  cSPUILayout_s0062_0bd0* mpLayout;           // +0xc
-  char pad10[0x50];
+  cSPUILayout_s0062_0bd0 mLayout;             // +0xc (embedded; FindWindowByID gets this = &mLayout)
+  char pad10[0x53];
   int  mState;                     // +0x60
   void OnModalEnd(void* pWindow, int id);  // 0x620dc0
 };
@@ -923,22 +923,22 @@ void DialogSub::OnModalEnd(void* pWindow, int id)
   if (self->mState == 1) {
     if (id == -0xf) {
       ((cRegDialog*)((char*)self - 8))->ConfirmLogin();
-      self->mState = 0;
-      return;
     }
-  } else if (self->mState == 2) {
+    self->mState = 0;
+    return;
+  }
+  if (self->mState == 2) {
     if (id == 0x5107b1a) {
       ((cRegDialog*)((char*)self - 8))->SubmitRegistrationForm();
-      self->mState = 0;
-      return;
+    } else {
+      void* w = self->mLayout.FindWindowByID(0x6555770, true);
+      if (w) {
+        void* c = ((void*(__thiscall*)(void*, uint32_t))Vt(w)[3])(w, 0x8ed27e7a);  // +0xc
+        if (c) ((void(__thiscall*)(void*, int, int))Vt(c)[10])(c, 4, 0);           // +0x28
+      }
     }
-    void* w = self->mpLayout->FindWindowByID(0x6555770, true);
-    if (w) {
-      void* c = ((void*(__thiscall*)(void*, uint32_t))Vt(w)[3])(w, 0x8ed27e7a);  // +0xc
-      if (c) ((void(__thiscall*)(void*, int, int))Vt(c)[10])(c, 4, 0);           // +0x28
-    }
+    self->mState = 0;
   }
-  self->mState = 0;
   (void)pWindow;
 }
 

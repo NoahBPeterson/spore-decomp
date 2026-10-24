@@ -1,1 +1,2 @@
 # source  symbol  original VA  [cl flags override]
+slices/s00620bd0/s00620bd0.cpp  ?OnModalEnd@DialogSub@@QAEXPAXH@Z  00620dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
