@@ -1,1 +1,3 @@
 009e9af0 1930 IKSumDelegatedGoals complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); no calls; size 2102 vs 2162; equiv PASS 294 inputs 100% coverage; frame 0x90 vs 0xac, SSE scheduling of inlined quaternion math differs
+009e9430 1166 IK blended-goal transform complete (normalise four joint contributions, resolve goal orientation/position, delegate pos/rot); size 1380 vs 1387; x87/SSE register scheduling and stack-slot order differ; equiv PASS 394 valid inputs 100% coverage
+009e99a0 305 ComputeSplineNormal complete (rest-orientation matrix, double cross with spline direction, normalise); size 340 vs 333; entry ABI is LTCG register (this in eax, out in ecx, dir on stack) so a C declaration cannot reproduce it; equiv UNSUPPORTED
