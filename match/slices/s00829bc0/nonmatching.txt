@@ -5,4 +5,4 @@
 0082aa70 23  complete translation; original keeps a dead store to +0x10 that cl eliminates
 0082aac0 23  complete translation; original keeps a dead store to +0x10 that cl eliminates
 0082ab00 11  complete translation; parameter register allocation differs (a in ecx vs eax)
-0082ab40 128 complete translation; wide-string compare not identical to the inlined form
+0082ab40 134 complete translation; retail's TableLookup is __stdcall (callee pops both args, ret 8), so the source now declares it __stdcall: saved replay identical, fresh gate PASS 397/400 valid, 100%. The inlined wide-string compare schedule still differs (chk diff 134; 131 orig vs 136 ours).

@@ -255,7 +255,7 @@ static int CmpStr16(const unsigned short* a, const unsigned short* b) {
 }
 
 // @ 0x0082AB40
-uint32_t TableLookup(Table* t, const unsigned short* key) {
+uint32_t __stdcall TableLookup(Table* t, const unsigned short* key) {
   if (t->m4 != 1) return 0;
   for (int i = 0; i < t->mCount; ++i) {
     if (CmpStr16(t->mEntries[i].mpName, key) == 0) return t->mEntries[i].mValue;
