@@ -1,1 +1,12 @@
-00ccdd70 SP::cTribeDisplayStrategy::Activate  # PDB name; retail layout recovered in source comment
+00ccdd70 ?Activate@cTribeDisplayStrategy@@QAEXXZ  # nonmatching (1738) - build the tribe display (minimap, posse, ornaments, swatches, windows)
+00cce590 ?FUN_00cce590@@YA_NXZ  # MATCH - game-time pause gate 0x64beb65 is open
+00cce5b0 ?FUN_00cce5b0@cSPUITCCCursorStrategy@@QAEXXZ  # MATCH - toggle/end ban mode 1
+00cce5e0 ?FUN_00cce5e0@cSPUITCCCursorStrategy@@QAEXXZ  # MATCH - toggle/end the second ban mode
+00cce610 ?RegisterCursors@cSPUITCCCursorStrategy@@QAEXXZ  # MATCH - retail symbol is ??0cSPUITCCCursorStrategy@@QAE@XZ (PDB candidate); 30 AddCursor registrations
+00cce940 ?FUN_00cce940@cSPUITCCCursorStrategy@@QAEXXZ  # MATCH - drop the cursor helper, the message handler and the registered server callback
+00cce9b0 ?FUN_00cce9b0@@YGIPAPAXPAX11@Z  # nonmatching (10) - SP::cTribeInputStrategy::GiveGroupOrder
+00ccea10 ?FUN_00ccea10@cSPUITCCCursorStrategy@@QAEXPAX_N@Z  # nonmatching (9) - stopwatch/cursor-target reseat, camera guard
+00cceae0 ?FUN_00cceae0@cSPUITCCCursorStrategy@@QAEIPAXI0@Z  # MATCH - cursor mode switch, tribe-wide slot refresh, cursor strategy mode set
+00ccebd0 ?FUN_00ccebd0@cSPUITCCCursorStrategy@@QAEIPAXH0@Z  # MATCH - cursor strategy mode set (0x9c)
+00ccec20 ?FUN_00ccec20@cSPUITCCCursorStrategy@@QAEXI@Z  # nonmatching (8) - mission card / mode flag toggle
+00cceca0 ?FUN_00cceca0@cSPUITCCCursorStrategy@@QAEIPAX0@Z  # nonmatching (43) - camera toggle from the stopwatch state

@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ccdd70/s00ccdd70.cpp  ?FUN_00cce590@@YA_NXZ  00cce590  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00ccdd70/s00ccdd70.cpp  ?FUN_00cce5b0@cSPUITCCCursorStrategy@@QAEXXZ  00cce5b0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00ccdd70/s00ccdd70.cpp  ?FUN_00cce5e0@cSPUITCCCursorStrategy@@QAEXXZ  00cce5e0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00ccdd70/s00ccdd70.cpp  ?RegisterCursors@cSPUITCCCursorStrategy@@QAEXXZ  00cce610  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00ccdd70/s00ccdd70.cpp  ?FUN_00cce940@cSPUITCCCursorStrategy@@QAEXXZ  00cce940  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00ccdd70/s00ccdd70.cpp  ?FUN_00cceae0@cSPUITCCCursorStrategy@@QAEIPAXI0@Z  00cceae0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00ccdd70/s00ccdd70.cpp  ?FUN_00ccebd0@cSPUITCCCursorStrategy@@QAEIPAXH0@Z  00ccebd0  /O2 /MD /Gy /TP /arch:SSE /GS-
