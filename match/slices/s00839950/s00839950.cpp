@@ -20,6 +20,7 @@ inline void  operator delete(void*, void*) {}
 static const char g_allocFile[] =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 static const char g_allocName[] = "ArgScript";
+extern "C" const char g_newline_1401b70[];   // original "\n" literal at 0x1401b70
 
 namespace eastl {
 class allocator { public: unsigned char pad[4]; };
@@ -299,7 +300,7 @@ void cArgumentSpec::AddArgDocs(eastl::string8* out, VecArgInfo* args, int style)
     }
     if (style == 2)
         out->append("</i>", "</i>" + 4);
-    out->append("\n", "\n" + 1);
+    out->append(g_newline_1401b70, g_newline_1401b70 + 1);
 }
 
 // ===========================================================================

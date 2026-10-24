@@ -1,5 +1,5 @@
 00839950  99  complete: eastl::vector<cArgInfo> copy ctor; /GS- EH prologue and this/arg register swap not reproduced
-00839c00  203 complete: cArgumentSpec::AddArgDocs; append/SprintfAppend scheduling and loop register allocation differ
+00839c00  203 complete: cArgumentSpec::AddArgDocs; fixed the final newline append to reference the original literal at 0x1401b70 via a bound symbol (the compiler pooled its own "\n" at 0x13f0ce0, so replay/import args differed); replay matches, fresh WEAK 168 valid/29.7% with no mismatch; remaining diff is append/SprintfAppend scheduling and loop register allocation (size 362 vs 376). flags /O2 /MD /Gy /EHsc /TP /GS-
 00839e00  176 complete: cOptionsSpec copy ctor; EH prologue (would need vector dtor) and stack-slot layout differ; equiv: PASS (stub-class receiver, 391 valid, 100% cov)
 00839f90  n/a complete: cArgumentSpec::CreateHelpString; large, string temp construction differs
 0083a3c0  266 complete: vector<cArgInfo>::DoInsertValue; /GS- EH frame + this/arg register swap differ

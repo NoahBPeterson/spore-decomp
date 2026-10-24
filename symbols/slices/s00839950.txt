@@ -14,3 +14,4 @@
 0083a8b0 ??4cOptionsSpec@@QAEAAU0@ABU0@@Z  # cOptionsSpec::operator= migrated from s00839950 (verbatim, slice spelling)
 0083a900 ?CopyOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  # CopyOptionsRange migrated from s00839950 (verbatim, slice spelling)
 0083a970 ?CopyBackwardOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  # CopyBackwardOptionsRange migrated from s00839950 (verbatim, slice spelling)
+1401b70 _g_newline_1401b70  # original "\n" string literal used by cArgumentSpec::AddArgDocs (0x839c00)
