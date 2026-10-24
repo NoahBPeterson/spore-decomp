@@ -11,11 +11,30 @@
   },
   "project": "spore-decomp",
   "status": "in-progress",
-  "targets": ["Windows"],
-  "toolchain": ["MSVC 9.0", "Ghidra"],
+  "targets": [
+    "Windows"
+  ],
+  "toolchain": [
+    "MSVC 9.0",
+    "Ghidra"
+  ],
   "approach": "Per-function C++ compiled with the original MSVC 9.0, checked byte-for-byte or by differential tests",
   "maintainers": [
-    { "name": "Noah Peterson", "link": "https://github.com/NoahBPeterson" }
+    {
+      "name": "Noah Peterson",
+      "link": "https://github.com/NoahBPeterson"
+    }
+  ],
+  "links": [
+    {
+      "label": "Help wanted: equivalent functions to make byte-exact",
+      "url": "https://github.com/NoahBPeterson/spore-decomp/blob/main/docs/help-wanted.md"
+    }
+  ],
+  "help": [
+    "Make equivalent functions byte-exact: about 21,000 compile and behave like the original, but their bytes still differ",
+    "Start with the functions closest to matching: docs/help-wanted.md lists them, smallest difference first",
+    "MSVC 9.0 codegen know-how: which source shapes produce a given register allocation, branch layout or inlining"
   ],
   "notes": "Decompilation of SporeApp.exe. As of 2026-10-24: 69% of game functions byte-exact and 92% with compilable source; code is being moved from per-function slices into one source file per original object file. The repository contains no game code or data."
 }

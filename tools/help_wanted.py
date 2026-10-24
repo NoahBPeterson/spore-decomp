@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""help_wanted.py — list the equivalent (compilable, not yet byte-exact) functions for outside helpers.
+
+Writes docs/equivalent_functions.csv (every equivalent function) and docs/help-wanted.md (how to help, plus the
+functions closest to byte-exact). Linked from .recomp.json, so people who find the project on recomp.fyi can pick one.
+
+Per function: VA, name, size, differing bytes and equivalence verdict from its nonmatching.txt row, and the source
+file that defines it (the src/game module TU once migrated, else the slice). Sorted by differing bytes, smallest
+first; rows without a byte count go last. Rerun after waves: .venv/bin/python tools/help_wanted.py
+"""
+import contextlib, csv, glob, io, os, re, runpy
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+W = lambda *p: os.path.join(ROOT, *p)
+REPO = "https://github.com/NoahBPeterson/spore-decomp/blob/main/"
+TOP = 300
+VERDICT = re.compile(r"\b(PASS|WEAK|FAIL|UNSUPPORTED)\b")
+
+with contextlib.redirect_stdout(io.StringIO()):
+    ns = runpy.run_path(W("tools", "status.py"))
+funcs, equiv = ns["funcs"], ns["equiv"]
+
+names = {}
+for f in glob.glob(W("symbols", "slices", "*.txt")):
+    for line in open(f, errors="replace"):
+        p = line.split("#", 1)[0].split()
+        if len(p) >= 2 and re.fullmatch(r"[0-9a-fA-F]{6,8}", p[0]):
+            names.setdefault(int(p[0], 16), p[1])
+
+rows = {}   # va -> (source file, diff bytes or None, verdict, note); a migrated module row wins over its slice row
+for nm in sorted(glob.glob(W("match", "slices", "*", "nonmatching.txt"))) + \
+          sorted(glob.glob(W("src", "game", "**", "nonmatching.txt"), recursive=True)):
+    d = os.path.dirname(nm)
+    rel = os.path.relpath(d, ROOT)
+    src = rel + ".cpp" if rel.startswith("src/game/") else os.path.join(rel, os.path.basename(d) + ".cpp")
+    for line in open(nm, errors="replace"):
+        p = line.rstrip("\n").split(None, 2)
+        if len(p) < 2 or not re.fullmatch(r"[0-9a-fA-F]{6,8}", p[0]):
+            continue
+        note = p[2] if len(p) > 2 else ""
+        v = VERDICT.search(note)
+        # 0 is a placeholder (Havok's "havok-equivalent" rows, unmeasured), not "no difference": treat it as unknown
+        nb = int(p[1]) if p[1].isdigit() and int(p[1]) > 0 else None
+        rows[int(p[0], 16)] = (src, nb, v.group(1) if v else "", note)
+
+out = []
+for va in equiv:
+    src, nbytes, verdict, note = rows.get(va, ("", None, "", ""))
+    f = funcs.get(va, {})
+    out.append({"va": "0x%08x" % va, "name": names.get(va) or f.get("name", ""), "size": f.get("size", ""),
+                "diff_bytes": "" if nbytes is None else nbytes, "verdict": verdict, "source": src})
+out.sort(key=lambda r: (r["diff_bytes"] == "", r["diff_bytes"] if r["diff_bytes"] != "" else 0, r["size"] or 0))
+
+with open(W("docs", "equivalent_functions.csv"), "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=["va", "name", "size", "diff_bytes", "verdict", "source"])
+    w.writeheader(); w.writerows(out)
+
+close = [r for r in out if r["diff_bytes"] != "" and r["verdict"] in ("PASS", "WEAK") and r["source"]][:TOP]
+md = ["# Help wanted: make equivalent functions byte-exact", "",
+      "Every function listed here already has complete C++ source that compiles and behaves like the original "
+      "(checked by differential tests), but the compiled bytes still differ from `SporeApp.exe`. Closing that gap "
+      "means finding the source shape the original compiler (MSVC 9.0) was given: declaration order, types, "
+      "temporaries, inlining, loop form. No new reverse engineering is needed to start.", "",
+      "## How to work on one", "",
+      "1. Set up the repository as in the [README](../README.md); you need your own copy of the game, from which "
+      "the tools derive their local analysis files. The repository contains no game code or data.",
+      "2. Read [docs/matching.md](matching.md): how functions are compiled, compared and recorded.",
+      "3. Pick a function below. `source` is the file that defines it, at the `// @ 0x<va>` marker.",
+      "4. Compare your build with the original: `.venv/bin/python tools/matching/chk.py <source> <va>`, and "
+      "`tools/matching/cmpdis.py` for an instruction-level diff (usage in docs/matching.md).",
+      "5. When it matches, move its row from `nonmatching.txt` to `manifest.txt` and open a pull request; "
+      "`tools/matching/run_all.py --manifest <dir>/manifest.txt` must print every row MATCH.", "",
+      "Never change what a function does to make bytes match, and never paste in assembly: the source has to be "
+      "plain C++ that compiles to the original.", "",
+      "## Closest to byte-exact", "",
+      "The %d functions with the fewest differing bytes whose behaviour check passed (PASS or WEAK). "
+      "All %d equivalent functions are in [equivalent_functions.csv](equivalent_functions.csv), "
+      "smallest difference first. Regenerated by `tools/help_wanted.py`." % (len(close), len(out)), "",
+      "| VA | Function | Size | Differing bytes | Verdict | Source |", "|---|---|---:|---:|---|---|"]
+for r in close:
+    md.append("| `%s` | `%s` | %s | %s | %s | [%s](%s%s) |" % (r["va"], r["name"].replace("|", "\\|"), r["size"],
+              r["diff_bytes"], r["verdict"], r["source"], REPO, r["source"]))
+open(W("docs", "help-wanted.md"), "w").write("\n".join(md) + "\n")
+print("%d equivalent functions -> docs/equivalent_functions.csv; %d closest -> docs/help-wanted.md" % (len(out), len(close)))
