@@ -1,5 +1,11 @@
 // Slice s00c2c7b0 -- 0x00c2cac0 (1887 bytes, cdecl, 7 args): creature path-ahead update.
 //
+// Also holds 0x00c2c7b0 (771 bytes, cdecl, 5 args): the per-creature trace-cache variant. It first
+// validates the eight cached trace results (the object behind each hit must still be within 0.1 of
+// where it was hit), then traces a single step towards path->cur and, when the trace reports state 3
+// with exactly one hit that carries a limit, lowers *pLimit. Returns true when the cache was
+// invalidated or nothing useful was found.
+//
 // Traces a few steps ahead of a locomotive creature along the planet surface toward the first
 // waypoint of its path (TracePlanetPath with CreatureObstacleSweep, slice s00c2b170, as the cast
 // callback), then reconciles the creature's waypoint path with what the trace found. This is the
@@ -90,7 +96,8 @@ struct Hit {
     int   f0c;                       // +0x0c (cache entry: kind)
     char  p10[0x20 - 0x10];
     unsigned id;                     // +0x20
-    char  p24[0x34 - 0x24];
+    char  p24[4];
+    Vec3  srcPos;                    // +0x28 (object position when the hit was cached)
     Vec3  normal;                    // +0x34
     bool  flag;                      // +0x40
     char  p41[3];
@@ -120,7 +127,8 @@ int __cdecl TracePlanetPath(CreatureSweepCtx* ctx, const Vec3* initDir, float p3
                             float* outLen, const Hit* prev, int extra);                 // 0x00af6bf0
 
 struct Creature;
-Hit* __cdecl GetTraceCache(Creature* creature);                          // 0x00c2b110
+struct TraceCache;
+TraceCache* __cdecl GetTraceCache(Creature* creature);                   // 0x00c2b110
 void __cdecl SaveHits(const Hit* src, Hit* dst);                         // 0x00cb01e0
 void __cdecl FUN_00cadb50(Hit* cache);                                   // 0x00cadb50
 void __cdecl SnapToGround(Creature* creature, Vec3* pos, uint32_t* continent);   // 0x00c28290
@@ -148,6 +156,23 @@ struct Creature {
     unsigned flags;                               // +0x330
 };
 
+// Per-creature trace cache: the eight last trace results followed by the objects that produced
+// them (the objects are reference counted and released through their slot 1).
+struct ICastable {
+    PAD(0) PAD(1) PAD(2)
+    virtual void* Cast(int id);                   // +0x0c (0x01186577 = position component)
+};
+
+struct IPosition {
+    PAD(0) PAD(1) PAD(2) PAD(3) PAD(4) PAD(5) PAD(6) PAD(7) PAD(8) PAD(9) PAD(10)
+    virtual const Vec3* GetPosition();            // +0x2c
+};
+
+struct TraceCache {
+    Hit        hits[8];                           // +0x000
+    ICastable* objects[8];                        // +0x800
+};
+
 // @ 0x00c2cac0
 unsigned __cdecl UpdatePathAhead(Creature* self, const Vec3* fallbackDir, WaypointPath* path, char* pBlocked,
                                  float* pDist, float* pScale, int* pKind)
@@ -156,7 +181,8 @@ unsigned __cdecl UpdatePathAhead(Creature* self, const Vec3* fallbackDir, Waypoi
     float outLen = 0.0f;
     Hit hits[8];
 
-    Hit* cache = GetTraceCache(self);
+    TraceCache* traceCache = GetTraceCache(self);
+    Hit* cache = traceCache->hits;
     Waypoint cur(path->cur);
     LocoPart* loco = (LocoPart*)((char*)self + 0xc0);
     const Vec3* pos = loco->GetPosition();
@@ -315,7 +341,7 @@ small:
     if (path->mode & 2) {
         self->flags &= 0xffffffe4;
     } else {
-        FUN_00cadb50(GetTraceCache(self));
+        FUN_00cadb50(GetTraceCache(self)->hits);
         switch (state) {
         case 0:
             self->flags |= 8;
@@ -331,4 +357,82 @@ small:
     }
 done:
     return state;
+}
+
+// Cache-carrying variant of the same trace: it first checks that the objects of the cached hits are
+// still where they were hit, then traces a single step and only reports a blocking limit.
+// @ 0x00c2c7b0
+bool __cdecl FUN_00c2c7b0(Creature* self, WaypointPath* path, const Vec3* fallbackDir, float* pLimit,
+                          int* pKind)
+{
+    TraceCache* traceCache = GetTraceCache(self);
+
+    if (traceCache->hits[0].f04 != 0)
+        return true;
+
+    // a cached hit whose object has moved invalidates the whole cache
+    for (unsigned i = 0; i < 8; i++) {
+        Hit& hit = traceCache->hits[i];
+        if (hit.id == 0)
+            break;
+        ICastable* obj = traceCache->objects[i];
+        if (!obj)
+            continue;
+        if (!hit.flag)
+            continue;
+        IPosition* comp = (IPosition*)obj->Cast(0x1186577);
+        const Vec3* p = comp->GetPosition();
+        float dz = p->z - hit.srcPos.z;
+        float dy = p->y - hit.srcPos.y;
+        float dx = p->x - hit.srcPos.x;
+        if (dz * dz + dy * dy + dx * dx > 0.1f)
+            return true;
+    }
+
+    unsigned state = 0;
+    float outLen = 0.0f;
+    Hit hits[8];
+
+    LocoPart* loco = (LocoPart*)((char*)self + 0xc0);
+    const Vec3* pos = loco->GetPosition();
+
+    // trace direction
+    const Vec3* vel = loco->GetVelocity();
+    Vec3 velDir;
+    if (vel->x != kZeroVector.x || vel->y != kZeroVector.y || vel->z != kZeroVector.z) {
+        const Vec3* v = loco->GetVelocity();
+        float k = 1.0f / sqrtf((v->x * v->x + v->y * v->y) + v->z * v->z + 1e-08f);
+        velDir.x = v->x * k;
+        velDir.y = v->y * k;
+        velDir.z = v->z * k;
+        fallbackDir = &velDir;
+    }
+
+    Vec3 initDir;
+    initDir.x = fallbackDir->x;
+    initDir.y = fallbackDir->y;
+    initDir.z = fallbackDir->z;
+
+    CreatureSweepCtx ctx;
+    float radius = loco->GetRadius();
+    bool ign = loco->IsFlagSet();
+    ctx.self = self;
+    ctx.pos.x = pos->x; ctx.pos.y = pos->y; ctx.pos.z = pos->z;
+    ctx.radius = radius;
+    ctx.ignoreObjects = ign;
+    ctx.goal.x = path->cur.pos.x; ctx.goal.y = path->cur.pos.y; ctx.goal.z = path->cur.pos.z;
+
+    int n = TracePlanetPath(&ctx, &initDir, 0.25f, CreatureObstacleSweep, pos, &path->cur.pos, hits, 1,
+                            &state, &outLen, traceCache->hits, 1);
+
+    bool ok = true;
+    if (n == 1 && state == 3) {
+        ok = false;
+        if (hits[0].f04 != 0 && *pLimit > hits[0].f08) {
+            *pLimit = hits[0].f08;
+            *pKind = hits[0].f0c;
+        }
+    }
+    self->flags &= 0xfffffff4;
+    return ok;
 }
