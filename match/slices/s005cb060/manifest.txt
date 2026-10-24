@@ -2,6 +2,7 @@ slices/s005cb060/s005cb060.cpp  ?SetExpanded@cSPPaletteUI@SP@@QAEX_N@Z  005cb060
 slices/s005cb060/s005cb060.cpp  ?SetVisible@cSPPaletteUI@SP@@QAEX_N@Z  005cb180  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cb060/s005cb060.cpp  ?GetCategoryInfo@cSPPaletteUI@SP@@QAE?AUcCategoryInfo@2@XZ  005cb1b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cb060/s005cb060.cpp  ?SetCurrentCategoryIndex@cSPPaletteUI@SP@@QAEXH@Z  005cb240  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005cb060/s005cb060.cpp  ?ToggleExpanded@cSPPaletteUI@SP@@QAEXXZ  005cb380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cb060/s005cb060.cpp  ??0cSPPaletteUI@SP@@QAE@XZ  005cb3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cb060/s005cb060.cpp  ??1cSPPaletteUI@SP@@UAE@XZ  005cb420  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cb060/s005cb060.cpp  ?DoMessage@cSPPaletteUI@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABVMessage@45@@Z  005cb4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

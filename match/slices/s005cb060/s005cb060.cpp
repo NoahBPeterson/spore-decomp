@@ -428,7 +428,8 @@ void cSPPaletteUI::SetCurrentCategoryIndex(int index) {
 
 // @ 0x005CB380
 void cSPPaletteUI::ToggleExpanded() {
-  SetExpanded(!mCurrentCategory->IsExpanded());
+  bool expanded = !mCurrentCategory->IsExpanded();
+  SetExpanded(expanded);
 }
 
 // @ 0x005CB3B0
