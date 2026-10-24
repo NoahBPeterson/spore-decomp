@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38930@@YGXH@Z  00d38930  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38980@@YGHH@Z  00d38980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d389d0@@YGXHH@Z  00d389d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38b10@CRefSlot@@QAEPAU1@PAUCRefCounted@@@Z  00d38b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38bb0@@YAXPAUCPair8@@0@Z  00d38bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38c50@@YAXPAUCPair8@@HHHH@Z  00d38c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38ca0@@YAXXZ  00d38ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38cc0@@YAXPAUcSPCreatureBase@SP@@H@Z  00d38cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38d80@@YAXD@Z  00d38d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38dd0@@YAXHPAUCCollisionNoun@@HHHHPAM@Z  00d38dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38e60@CStateNode@@QAEXH@Z  00d38e60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d38ec0@CStateNode@@QAE_NHPAX@Z  00d38ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d392f0@CLocatingOwner@@QAEXXZ  00d392f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d38930/s00d38930.cpp  ?FUN_00d397c0@@YA_NHPAUCPtrRange@@@Z  00d397c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

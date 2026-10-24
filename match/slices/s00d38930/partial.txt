@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00d38a30  216  tutorial-ref magic-hash switch returning float (noun/terrain calls); not emitted
+00d38f40  180  EA::Random shuffle of the 8-byte global locating table (RandomDoubleUniform + swap); not emitted
+00d39000  110  15-byte jmp thunk to 0x00d39010; chk.py bounds span the following non-slice function; not emitted
+00d39070  346  not emitted
+00d391d0  281  not emitted
+00d39360  780  not emitted
+00d39670  322  SP::cCreatureModeStrategy::AddStat (avatar stat pipeline); not emitted

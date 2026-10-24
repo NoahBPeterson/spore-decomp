@@ -1,0 +1,1 @@
+00d38c00 64 insertion-sort hole walk over 8-byte {key,value} pairs; algorithm reproduced exactly but MSVC keeps the end pointer in ebx and uses disp8 addressing [eax-8]/[eax-4], while the original spills end to its stack home and materialises the byte offset in edx (sub edx,ecx / add edx,-4) with ebp as the 8-byte copy temp, 70 vs 79 bytes
