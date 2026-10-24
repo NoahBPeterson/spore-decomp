@@ -1,0 +1,22 @@
+# source  symbol  original VA  [flags override]
+slices/s00b71a60/s00b71a60.cpp  ?Init@cObjectPool@@QAEXHH@Z  00b72080  /O2 /MD /Gy /TP
+slices/s00b71a60/s00b71a60.cpp  ?Destroy@cObjectPool@@QAEXXZ  00b720e0  /O2 /MD /Gy /TP
+slices/s00b71a60/s00b71a60.cpp  ?Reset@cObjectPool@@QAEXXZ  00b72110  /O2 /MD /Gy /TP
+slices/s00b71a60/s00b71a60.cpp  ?GetScriptId@cGameModeManager@@QAEIXZ  00b72320  /O2 /MD /Gy /TP
+slices/s00b71a60/s00b71a60.cpp  ?PreRotateXYZ@cXform@@QAEXMMM@Z  00b72520  /O2 /MD /Gy /TP
+slices/s00b71a60/s00b71a60.cpp  ?SetFlag2@cFlagObject@@QAEXXZ  00b72870  /O2 /MD /Gy /TP
+slices/s00b71a60/s00b71a60.cpp  ?ClearFlag2@cFlagObject@@QAEXXZ  00b72880  /O2 /MD /Gy /TP
+slices/s00b71a60/s00b71a60.cpp  ?At@cObjectPool@@QAEPAXI@Z  00b72210  /O2 /MD /Gy /TP
+slices/s00b71a60/s00b71a60.cpp  ?Free@cObjectPool@@QAEXI@Z  00b72260  /O2 /MD /Gy /TP
+slices/s00b71a60/s00b71a60.cpp  ?Fn_00b72410@@YG_KII@Z  00b72410  /O2 /MD /Gy /TP
+slices/s00b71a60/s00b71a60.cpp  ?Get@cObjectPool@@QAEPAXI@Z  00b721d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b71a60/s00b71a60.cpp  ?Next@cObjectPool@@QAEPAXPAH@Z  00b72230  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b71a60/s00b71a60.cpp  ?Fn_00b72290@@YA_NPBM0@Z  00b72290  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b71a60/s00b71a60.cpp  ?Register@cMessageListener@@QAEXXZ  00b72370  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b71a60/s00b71a60.cpp  ?Fn_00b72560@@YA_NPBM0@Z  00b72560  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b71a60/s00b71a60.cpp  ?Fn_00b72580@@YA_NPBM0@Z  00b72580  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b71a60/s00b71a60.cpp  ?Fn_00b725a0@@YA_NPBM0@Z  00b725a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b71a60/s00b71a60.cpp  ?SetActive@cGridEntryOwner@@QAEX_N@Z  00b725e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b71a60/s00b71a60.cpp  ?Advance@cObjectPool@@SIXPAHPAU1@@Z  00b72120  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b71a60/s00b71a60.cpp  ?Fn_00b72430@@YAPADPAD0P6AD00@Z@Z  00b72430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b71a60/s00b71a60.cpp  ??_GcOwner@@QAEPAXI@Z  00b71e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
