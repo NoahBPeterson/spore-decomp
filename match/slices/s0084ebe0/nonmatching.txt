@@ -1,8 +1,8 @@
 # va  diff-bytes  reason
 0084ebe0 1106 TGAreadline: original uses a non-C register convention (gimex in EAX, dest in ECX); complete faithful C rewrite, ABI not reproducible from C
-0084f170   99 TGAflipline: original uses a non-C register convention (count in EAX, ptr in ECX, bpp on stack); complete faithful C rewrite, ABI not reproducible from C
+0084f170   99 TGAflipline: original uses a non-C register convention (count in EAX, ptr in ECX, bpp on stack); complete faithful C rewrite, ABI not reproducible from C; difftest FAIL-KEPT (LTCG reg ABI: ptr ECX, count EAX)
 0084f300  201 TGA_is: complete; structural regalloc/scheduling differs (cl keeps height/y-origin/width in ebx/ebp/edi, original in same but load order and frame not reproducible)
 0084f3f0   57 TGA_open: complete; cl chooses ebx/ecx for the live zero instead of the original's esi
-0084f440 1099 TGA_info: complete; large function, cl register allocation and frame differ (handle in ebx vs esi)
+0084f440 1137 TGA_info: complete; large function, cl register allocation and frame differ (handle in ebx vs esi); difftest WEAK (fixed: TGA header is packed and x/y origin are s16)
 0084f900  226 TGA_read: original forwards to TGAreadline/TGAflipline which use non-C register conventions; complete faithful C rewrite, ABI not reproducible from C
-0084fa60   29 TGA_display_check: original uses a non-C register convention (array in EBX, elem size in EDI, count on stack); complete faithful C rewrite, ABI not reproducible from C
+0084fa60  162 TGA_display_check: original uses a non-C register convention (array in EBX, elem size in EDI, count on stack); complete faithful C rewrite, ABI not reproducible from C; difftest FAIL-KEPT (LTCG reg ABI: array EBX, elem size EDI); fixed compare-against-element-0 and early return

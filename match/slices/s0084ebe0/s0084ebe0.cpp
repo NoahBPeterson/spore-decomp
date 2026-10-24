@@ -21,6 +21,9 @@ extern "C" void* __cdecl memset(void* dst, int val, unsigned int n);
 extern "C" char* __cdecl strcpy(char* dst, const char* src);                        // 0x011e0744
 
 // ---------------------------------------------------------------- header layout
+// On-disk TGA header: every field is packed, 18 bytes total (the retail code
+// loads cmap_first as a word at +3, so the struct has no internal padding).
+#pragma pack(push, 1)
 struct TgaHeader {
     u8  id_length;      // +0x00
     u8  cmap_type;      // +0x01
@@ -28,13 +31,14 @@ struct TgaHeader {
     u16 cmap_first;     // +0x03
     u16 cmap_length;    // +0x05
     u8  cmap_depth;     // +0x07
-    u16 x_origin;       // +0x08
-    u16 y_origin;       // +0x0a
+    s16 x_origin;       // +0x08  (signed: retail movsx)
+    s16 y_origin;       // +0x0a  (signed: retail movsx)
     u16 width;          // +0x0c
     u16 height;         // +0x0e
     u8  pixel_depth;    // +0x10
     u8  image_desc;     // +0x11
 };
+#pragma pack(pop)
 
 // GIMEX descriptor (0x2a70 bytes) - same family as the PNG one.
 static inline u32* D(void* p) { return (u32*)p; }
@@ -526,22 +530,28 @@ int __stdcall TGA_free(void* p)
 int TGA_display_check(u8* arr, int count, int elemsize)
 {
     int i = 0;
+    const u8* base = arr;
     if (count > 0x80)
         count = 0x80;
     else if (count < 1)
         return 0;
     do {
-        u32 a, b;
-        if (elemsize == 1) { a = arr[0]; b = arr[0]; }
-        else if (elemsize == 2) { a = *(u16*)arr; b = *(u16*)arr; }
-        else if (elemsize == 4) { a = *(u32*)arr; b = *(u32*)arr; }
-        else if (elemsize == 3) {
+        u32 a = 0, b = 0;
+        int cmp = 1;
+        switch (elemsize) {
+        case 1: a = arr[0]; b = base[0]; break;
+        case 2: a = *(u16*)arr; b = *(u16*)base; break;
+        case 4: a = *(u32*)arr; b = *(u32*)base; break;
+        case 3:
             a = (u32)arr[2] << 8 | arr[1];
             a = a << 8 | arr[0];
-            b = (u32)arr[2] << 8 | arr[1];
-            b = b << 8 | arr[0];
+            b = (u32)base[2] << 8 | base[1];
+            b = b << 8 | base[0];
+            break;
+        default: cmp = 0; break;   // unknown depth: original skips the compare
         }
-        else { } // unknown depth: original falls through to the compare
+        if (cmp && a != b)
+            return i;
         i++;
         arr += elemsize;
     } while (i < count);

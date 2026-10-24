@@ -30,6 +30,8 @@ extern "C" int          __stdcall gseek(void* h, long off, int whence);         
 extern "C" unsigned long long __stdcall glen(void* h);                             // 0x0087d560
 extern "C" void* __cdecl memset(void* dst, int val, unsigned int n);
 extern "C" char* __cdecl strcpy(char* dst, const char* src);                        // 0x011e0744
+// On-disk TGA header: packed, 18 bytes (retail loads cmap_first as a word at +3).
+#pragma pack(push, 1)
 struct TgaHeader {
     u8  id_length;      // +0x00
     u8  cmap_type;      // +0x01
@@ -37,13 +39,14 @@ struct TgaHeader {
     u16 cmap_first;     // +0x03
     u16 cmap_length;    // +0x05
     u8  cmap_depth;     // +0x07
-    u16 x_origin;       // +0x08
-    u16 y_origin;       // +0x0a
+    s16 x_origin;       // +0x08  (signed: retail movsx)
+    s16 y_origin;       // +0x0a  (signed: retail movsx)
     u16 width;          // +0x0c
     u16 height;         // +0x0e
     u8  pixel_depth;    // +0x10
     u8  image_desc;     // +0x11
 };
+#pragma pack(pop)
 // ---- items of slice s0084ebe0 end
 
 // @ 0x0084ebe0
