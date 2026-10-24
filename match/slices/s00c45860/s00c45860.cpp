@@ -236,10 +236,11 @@ void* __cdecl FUN_010666a0(void* p);                     // 0x010666a0
 void  __cdecl FUN_0106f120(void* p);                     // 0x0106f120
 void* __cdecl FUN_01005180(u32 a);                       // 0x01005180
 void  __cdecl IntVectorResize(void* v, u32 n);           // 0x007eb820
-void* __cdecl GetMissionManager();                       // 0x00feb9f0
-void  __cdecl MissionMgrRemove(void* mission);           // 0x00febe00
-void  __cdecl MissionMgrEvent(void* mission);            // 0x00fecbb0
+void* __cdecl GetMissionManager();                       // 0x00feb9f0 (no push: arg in ecx)
+void* __stdcall GetMissionManager(u32 a);                // 0x00feb9f0 (arg on stack)
 struct cMissionManager {
+    void  RemoveMission(void* mission);                  // 0x00febe00
+    void  Event();                                       // 0x00fecbb0
     void* GetOtherVec();                                 // 0x00897670
     void* GetVec();                                      // 0x00febaa0
 };
@@ -255,7 +256,10 @@ void* __cdecl GetSourcePlanetClue();                     // 0x00c452a0
 void  __cdecl AddVisual(void* a);                        // 0x00c46590
 void  __cdecl cSPUILayoutCtor();                         // 0x00dd1ca0
 void  __cdecl cSPUILayoutAdd();                          // 0x00dd27c0
-void  __cdecl TerraformingManagerAdd(void* a);           // 0x00bc1b10
+struct cTerraformingManager {
+    void  AddPlanet(void* planet);                       // 0x00bc1b10
+};
+cTerraformingManager* __cdecl TerraformingManager(void* planet);  // 0x00b3d430
 struct cRelationshipManager {
     void RecordEvent(u32 a, u32 b, u32 ev, f32 v);       // 0x00d06240
     f32 RelGetRelation(u32 a, u32 b, u32 c);             // 0x00d00a10
@@ -830,8 +834,8 @@ void cSPMission::PostLoad()
     (*(void(__thiscall**)(void*, u32, u32, void**))((char*)*(void**)mgr + 0x2c))(mgr, mRewardToolKey, 0x2ae1a8e, &mpMissionPropList);
     if (mpMissionPropList == 0) {
         mState = 1;
-        GetMissionManager();
-        MissionMgrRemove(this);
+        cMissionManager* mm = (cMissionManager*)GetMissionManager((u32)(void*)this);
+        mm->RemoveMission(this);
         (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x44))(this);
     }
     if (mState == 2 || mState == 3) {
@@ -839,7 +843,7 @@ void cSPMission::PostLoad()
         (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x194))(this);
     }
     if (mpTargetPlanet != 0)
-        TerraformingManagerAdd(mpTargetPlanet);
+        TerraformingManager(mpTargetPlanet)->AddPlanet(mpTargetPlanet);
     (*(void(__thiscall**)(void*, u32))((char*)*(void**)this + 0x190))(this, 0);
 }
 
@@ -910,8 +914,8 @@ u32 cSPMission::CanAccept()
 void cSPMission::OnReject()
 {
     if ((mFlags130 & 8) != 0) {
-        GetMissionManager();
-        MissionMgrEvent(this);
+        cMissionManager* mm = (cMissionManager*)GetMissionManager(mRewardMoney);
+        mm->Event();
     }
     cEntity* owner = (cEntity*)GetOwnerEmpire();
     if (owner != 0 && owner != (cEntity*)GetPlayerEmpire()) {
