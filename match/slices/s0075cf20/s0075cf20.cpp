@@ -1,6 +1,7 @@
 // Slice s0075cf20: SP::cMultiBlender update/driver helpers, SP::cRenderer small
 // accessors, and device callback helpers. /O2, SSE (/arch:SSE2).
 #include "types.h"
+#include <intrin.h>
 
 namespace rw { namespace oldanimation {
 struct ControllerVTable {
@@ -269,8 +270,7 @@ void cRenderer::NumLayers(int* out)
 {
     cRenderer* self = this;
     self->mMutex.Lock((const void*)0x140dca0);
-    for (int i = 0; i != 0xb; i++)
-        out[i] = self->mStats[i];
+    __movsd((unsigned long*)out, (const unsigned long*)self->mStats, 0xb);
     self->mMutex.Unlock();
 }
 
