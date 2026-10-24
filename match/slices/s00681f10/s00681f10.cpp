@@ -210,7 +210,7 @@ struct Map1 {
     uint32_t mAlloc;                            // +0x18
     void InsertHint(Node1** out, Node1* hint, int* key, char flag); // 0x06825d0 (below)
     void InsertUnique(PairOut2* out, const int* key);               // 0x06815f0 (out-of-slice)
-    ObjC30* operator[](int key);                // 0x0682af0 (below)
+    ObjC30* operator[](const int& key);                // 0x0682af0 (below)
 };
 
 // rbtree node with value Obj2A10 (node size 0x60)
@@ -352,36 +352,30 @@ void SerCtx::WriteVecA(VV12* v, IWrt* w) {
 // =====================================================================
 void Map1::InsertHint(Node1** out, Node1* hint, int* key, char flag) {
     Node1* anchor = (Node1*)&mpAnchor;
+    Node1* pos = anchor;
+    int side = 0;
     if (hint == mpBegin || hint == anchor) {
-        if (mnSize != 0 && *key > mpBegin->mKey) {
-            int bIns = (mpBegin == anchor || *key < mpBegin->mKey) ? 0 : 1;
-            Node1* nNew = (Node1*)CreateNode1(key);
-            RBTreeInsert(nNew, mpBegin, anchor, bIns);
-            ++mnSize;
-            *out = nNew;
-            return;
-        }
+        if (mnSize != 0 && *key > mpBegin->mKey) { pos = mpBegin; side = 0; }
+        else { pos = 0; side = 0; }
     } else {
         Node1* next = (Node1*)RBTreeIncrement(hint);
         if (*key > hint->mKey && next->mKey > *key) {
-            if (hint->mpRight == 0) {
-                Node1* nNew = (Node1*)CreateNode1(key);
-                RBTreeInsert(nNew, hint, anchor, 0);
-                ++mnSize;
-                *out = nNew;
-                return;
-            }
-            Node1* nNew = (Node1*)CreateNode1(key);
-            RBTreeInsert(nNew, next, anchor, 1);
-            ++mnSize;
-            *out = nNew;
-            return;
-        }
+            if (hint->mpRight != 0) { pos = next; side = 1; }
+            else { pos = hint; side = 0; }
+        } else { pos = 0; side = 0; }
     }
-    PairOut2 pair;
-    pair.first = 0;
-    InsertUnique(&pair, key);
-    *out = (Node1*)pair.first;
+    if (pos == 0) {
+        PairOut2 pair;
+        pair.first = 0;
+        InsertUnique(&pair, key);
+        *out = (Node1*)pair.first;
+        return;
+    }
+    side = side || pos == anchor || *key < pos->mKey;
+    Node1* nNew = (Node1*)CreateNode1(key);
+    RBTreeInsert(nNew, pos, anchor, side);
+    ++mnSize;
+    *out = nNew;
 }
 
 // =====================================================================
@@ -478,7 +472,7 @@ Obj2A10::Obj2A10(const Obj2A10& o)
 // =====================================================================
 // @ 0x00682af0  Map1 operator[] -> &value
 // =====================================================================
-ObjC30* Map1::operator[](int key) {
+ObjC30* Map1::operator[](const int& key) {
     Node1* anchor = (Node1*)&mpAnchor;
     Node1* pos = anchor;
     Node1* cur = mpRoot;
@@ -491,12 +485,10 @@ ObjC30* Map1::operator[](int key) {
         }
     }
     if (pos == anchor || pos->mKey < key) {
-        int tmp[10];
-        tmp[0] = key;
-        Node1* nNew = (Node1*)CreateNode1(tmp);
+        Node1* nNew = 0;
         Node1** out = &nNew;
-        InsertHint(out, pos, tmp, 0);
-        return &(*out)->mVal;
+        InsertHint(out, pos, (int*)&key, 0);
+        return &nNew->mVal;
     }
     return &pos->mVal;
 }

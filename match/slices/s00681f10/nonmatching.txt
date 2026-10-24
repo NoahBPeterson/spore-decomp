@@ -2,12 +2,12 @@
 00681f10  217  complete: write map<int,Obj1700>; register allocation / call scheduling differs; equiv: UNSUPPORTED (0 valid inputs, faults); now SerCtx member
 006820c0  803  complete: write vector<Obj1800> (stride 0xc4); per element 4x 0x680500 field saves, dword + 3x WriteUint32, 0x6805c0, four u32 vectors; scheduling differs; equiv: UNSUPPORTED (0 valid inputs, faults; harness cannot drive the vtable writer)
 006823f0  472  complete: write vector<ObjA> (stride 0x60); per element dwords at +0/+8/+0xc then mF0/mF2 u32 vectors; scheduling + frame size differ; equiv: UNSUPPORTED (0 valid inputs, faults)
-006825d0  201  complete: Map1 insert-with-hint (int,ObjC30); register allocation/scheduling differs
+006825d0  211  complete: Map1 insert-with-hint (int,ObjC30); hint-chain + single insert tail; register allocation/scheduling differs; equiv: FAIL (5/5, fake-arity: an arg register (esi/ebx) differs at a callee call site, so the callee's return address is misread)
 00682740  142  complete: vector<Obj1800> copy ctor; EH frame size + arg scheduling differ
-006828a0  53   complete: Map2 insert-with-hint; signed-compare operand order and register roles differ
-00682900  237  complete: Map2 insert_unique returning pair<iter,bool>; scheduling differs
+006828a0  53   complete: Map2 insert-with-hint; signed-compare operand order and register roles differ; equiv: FAIL (5/5, fake-arity: arg register differs at a callee call site)
+00682900  237  complete: Map2 insert_unique returning pair<iter,bool>; our frame is 4 bytes smaller (orig push ecx scratch) -> esp after ret differs; equiv: FAIL (5/5, esp +0x10 vs +0xc)
 00682a10  169  complete: Obj2A10 copy ctor; frame size (sub esp,8 vs push ecx) and register relief differ
-00682af0  186  complete: Map1 operator[]; duplicated insert tail + scheduling differs; equiv: FAIL (5/5 mismatched)
-00682be0  103  complete: Map2 rbtree clone; this(cx)/src register roles swapped vs original
+00682af0  150  complete: Map1 operator[] (const int& key, ret 4); hint-insert at end; ours returns &node->mVal (no crash) but the freshly allocated node sits at a different heap address (harness does not normalise a heap pointer in eax) and the original had an EH frame from a value temp; equiv: FAIL (5/5, eax = node addr)
+00682be0  103  complete: Map2 rbtree clone (recursive, tail-loop on mpLeft); logic matches but this(ecx)/src register roles (esi/edi) swapped vs original; equiv: FAIL (5/5, fake-arity: an arg register differs at a recursive call site)
 00682ca0  370  complete: write map<int,Obj2A10>; per-field write scheduling differs; equiv: UNSUPPORTED (0 valid inputs, faults); now SerCtx member
 00682e90  139  complete: load map<int,ObjC30>; loop/register scheduling differs; equiv: UNSUPPORTED (0 valid inputs, faults); now SerCtx member
