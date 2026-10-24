@@ -2997,10 +2997,11 @@ void HashFreeStub::DoFreeNodes(void** pArr, unsigned n)
     for (unsigned i = 0; i < n; ++i) {
         void* node = pArr[i];
         while (node) {
-            void* next = *(void**)node;
+            void* next = *(void**)((char*)node + 8);
             EASTL_allocator_deallocate(node);
             node = next;
         }
+        pArr[i] = 0;
     }
 }
 
