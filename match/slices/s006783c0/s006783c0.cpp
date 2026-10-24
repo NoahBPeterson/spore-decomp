@@ -2,6 +2,8 @@
 // intrusive refcount-vector assignment and destructors.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE.
 #include "types.h"
+#include <math.h>
+#pragma intrinsic(sqrt, atan2, fabs)
 
 struct VObj { void** vt; };
 typedef void (__thiscall *FnV1)(void*);
@@ -11,6 +13,24 @@ void __fastcall FUN_008e2b20(char* p);
 void __fastcall FUN_00929d50(char* p);
 void __fastcall FUN_00678f70(char* p);
 void __fastcall FUN_00679120(char* p);
+
+// ---- HUD anchor/animate helpers -------------------------------------------
+extern "C" void* __cdecl FUN_00816ca0();                                   // 0x00816ca0
+extern "C" void __cdecl AnchorWindowToWindow(void* target, void* anchor, int flags, int zero); // 0x00807340
+extern "C" float* __cdecl GetBoundingScreenRect(float* out, void* w, char flags);              // 0x00808d20
+extern "C" void __cdecl FUN_00808230(void* w, float* v);                    // 0x00808230
+extern float g_01471064;   // 0x01471064 = 0.5f
+extern float g_01485720;   // 0x01485720 = 1.0f
+extern float g_013eb964;   // 0x013eb964 = -0.1f
+extern float g_014013c0;   // 0x014013c0 = -0.25f
+extern float g_015fc748;   // 0x015fc748
+
+typedef float* (__thiscall *GetRectFn)(void*);
+typedef void   (__thiscall *SetPosFn)(void*, float, float);
+
+static __forceinline float HudSqrt(float x) { return (float)sqrt((double)x); }
+static __forceinline float HudAtan2(float y, float x) { return (float)atan2((double)y, (double)x); }
+static __forceinline float HudFabs(float x) { return (float)fabs((double)x); }
 
 struct Thunk1 { void One(int a); };                       // 0x006781d0
 struct Thunk4 { Thunk4* Init(int a, int b, int c, int d); }; // 0x00679080
@@ -100,13 +120,14 @@ void __fastcall FUN_00679120(char* p) {
 // ---- 0x006792f0 : advance one element (destroy + recycle) ------------
 // @ 0x006792f0
 void __fastcall FUN_006792f0(char* p) {
-    int n = *(int*)(p + 8) + 0x134;
+    char* elem = *(char**)(p + 8);
+    int n = (int)elem + 0x134;
     if (n != *(int*)(p + 0x10)) {
         *(int*)(p + 8) = n;
-        FUN_00678f70(p);
+        FUN_00678f70(elem);
         return;
     }
-    FUN_00678f70(p);
+    FUN_00678f70(elem);
     if (*(int*)(p + 0xc)) DeleteObj(*(void**)(p + 0xc));
     int* q = (int*)(*(int*)(p + 0x14) + 4);
     *(int**)(p + 0x14) = q;
@@ -207,9 +228,73 @@ void* __fastcall FUN_00679520(char* p) {
     return p;
 }
 
-// ---- 0x006783c0 : anchor window + animation (partial) ----------------
+// ---- 0x006783c0 : anchor window + animation --------------------------
 // @ 0x006783c0
-void __fastcall FUN_006783c0(char* p) { (void)p; }
+void __stdcall FUN_006783c0(char* p) {
+    void* other = *(void**)(p + 0xb0);
+    void* target = *(void**)(p + 0xb4);
+    if (*(int*)(p + 0xac) == 0 || target == 0) return;
+
+    void* win = FUN_00816ca0();
+    AnchorWindowToWindow(win, target, 0x300, 0);
+
+    float rect[4];
+    GetBoundingScreenRect(rect, win, 0);
+
+    float x = *(float*)(p + 0xbc);
+    float y = *(float*)(p + 0xc0);
+    float dx = x - (rect[0] + rect[2]) * g_01471064;
+    float dy = y - (rect[1] + rect[3]) * g_01471064;
+    float distance = HudSqrt(dx * dx + dy * dy);
+    float inv = g_01485720 / distance;
+    float nx = inv * dx;
+    float ny = inv * dy;
+    *(float*)(p + 0xd0) = nx;
+    *(float*)(p + 0xd4) = ny;
+
+    float best = distance;
+    if (other != 0) {
+        float orect[4];
+        GetBoundingScreenRect(orect, other, 0);
+        orect[2] = orect[2] + g_01485720;
+        orect[3] = orect[3] + g_01485720;
+
+        float step = distance * g_013eb964;
+        bool wasInside = true;
+        int remaining = 0x14;
+        float px = x;
+        float py = y;
+        float lastStep = step;
+        do {
+            px = nx * step + px;
+            py = ny * step + py;
+            best = step + best;
+            bool inside = !((px < (orect[0] - g_01485720)) ||
+                            (py < (orect[1] - g_01485720)) ||
+                            (orect[2] <= px) || (orect[3] <= py));
+            if (inside != wasInside) {
+                step = step * g_014013c0;
+                wasInside = inside;
+                lastStep = step;
+            }
+        } while (HudFabs(lastStep) > g_01485720 && --remaining > 0);
+    }
+
+    void** vt = *(void***)target;
+    float* r = ((GetRectFn)vt[0x38 / 4])(target);
+    float pos = best - (r[2] - r[0]) * g_01471064;
+    float tx = nx * pos + r[0];
+    float ty = ny * pos + r[1];
+    g_015fc748 = pos;
+    ((SetPosFn)vt[0x70 / 4])(target, tx, ty);
+
+    float params[4];
+    params[0] = 0.0f;
+    params[1] = 0.0f;
+    params[2] = g_01485720;
+    params[3] = HudAtan2(ny, nx);
+    FUN_00808230(target, params);
+}
 
 // ---- 0x00678670 : show/enable animation (partial) --------------------
 // @ 0x00678670
