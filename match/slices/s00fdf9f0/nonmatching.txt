@@ -1,0 +1,25 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00fdf9f0 = SP::cAppModeSpace (0x00fdf9f0..0x00fe056b): the space-view
+# application-mode cluster -- the high-LOD planet simulator rebuild plus the
+# per-element space-grid refresh (00fdf9f0), the "first wild planet" UFO target
+# query (00fdfb10), the space-mode message dispatcher HandleMessage (00fdfbc0)
+# and the civilisation -> space transition setup (00fe0160).  Interesting
+# fields: this+0x15c SimGame (its +0x54 high-LOD planet slot), the transition
+# -data flag at this+0x24, the GetGameDataVector container (begin +0x04 / end
+# +0x08), the embedded grid-query sub-objects at cSpaceObj+0x120 and
+# cPlayerInventory+0x34 (vtable slot +0x2c).  1/4 byte-exact.  The remaining 3
+# are complete C++ reconstructions of the original control flow; the byte-exact
+# budget is missed by one register-scheduling artefact (00fdfb10) and by the two
+# very large functions (00fdfbc0, 00fe0160) whose original bodies could only be
+# recovered in outline.  Per-row verdicts are the equivalence-gate results
+# measured with the flags above.
+#
+# MATCHes (1/4): FUN_00fdf9f0(00fdf9f0).
+
+00fdfb10  33 cAppModeSpace::FUN_00fdfb10(void): the "first wild planet" target query.  The whole body matches instruction-for-instruction -- the 5-argument GetGameDataVector call, GetUFOSimulator()->GetPlayerInventory(), the +0x34 embedded sub-object's vtbl+0x2c getter, the 3-float Vec3 copy, the 4-byte flag built from a single zeroed low byte, FUN_00fdb280(vec+4,&v,flag) and the r00()/r04() calls with the +0x34 tail passed back.  The original is 166 bytes; ours 162.  The only difference is MSVC register scheduling: the original materialises the return address `r+0x34` into the callee-saved edi BEFORE the second virtual call (`lea edi,[esi+0x34]` ... `mov eax,edi; pop edi`, with a shrink-wrapped `push edi` inside the branch), whereas ours rematerialises it after the call as `lea eax,[esi+0x34]`.  The value is trivially recomputable from the still-live esi, so MSVC prefers rematerialisation here; the edi materialisation cannot be forced from C++.  equiv UNSUPPORTED only 0/400 inputs valid (discards: fault(read)=400 -- both sides dereference the null simulator returned by the emulated FUN_00ffbe50).
+
+00fdfbc0  1164 SP::cAppModeSpace::HandleMessage(void): the space-mode message dispatcher.  Reconstructed in outline from the disassembly + decompile: the editor GetCurrentTerrainSphere/NounManager state gather, the two FUN_00c772c0(0x5f1f0bc/0x5f1f0ca) gates, the FUN_01021230/FUN_01021260 planet refresh, the FUN_00bba100/FUN_00bb9d40 rare-ambush feedback, the GetGameDataVector walk with the +0x658==2 ("SPG_TerraformToolClose") and +0x658==4 ("SPG_RareClose" / player-empire rare-planet) branches, and the closing "SPG_FirstBarrenPlanetInEmptySystem"/"SPG_FirstWildPlanetInEmptySystem" event section (which calls FUN_00fdfb10).  The original is 1427 bytes; ours 708 -- many of the inlined eastl string helpers (FUN_00b93c60-range memcpy/allocate + inlined strncpy) and the property/key accessors are written as ordinary calls, and several sub-paths are summarised, so the block layout and store scheduling differ throughout.  equiv UNSUPPORTED 1 unresolved reference (FUN_00e0b3f0 -- the annotation address is implausible as a function start).
+
+00fe0160  837 cAppModeSpace::FUN_00fe0160(void): civilisation -> space transition setup.  The main call sequence is recovered -- the FUN_01021260 planet refresh guarded by FUN_0102f660, the GetGameDataVector gather, the PlanetModel/UFOSimulator bring-up (FUN_00b8d750 with the FUN_00c713c0/FUN_00c713e0 counts, FUN_00b88420, FUN_00ffd390), the FUN_01003690 + FUN_00fdf9f0() calls, the `this+0x24 = 1` transition flag, the MessageServer slot dispatch, the +0xc70xxx/+0xc73xxx list resets, the FUN_00c710c0/FUN_00c71030 player-civilisation loop, FUN_00b87bb0(PlanetModel), FUN_00fdba50(this,1,1) and the trailing GetCurrentTerrainSphere/FUN_00c75770 position copy.  The original is 1035 bytes; ours 343 -- the stack SlotMessage/RefBaseA22 theatre (frame +0x10..+0x74), the two inline vector walks with their operator_delete_array cleanup, the eastl string helpers and the exact argument/stack layout of the many +0xc6xxxx table resets are only reproduced in outline, so the store scheduling and block layout differ throughout.  equiv UNSUPPORTED 1 unresolved reference (FUN_00a1c4e0 -- the annotation address is implausible as a function start); resolution conflict for the FUN_00c75770 call site (hex-name 00c75770 vs aligned 01066d60) because the outline places that call at a different position in the sequence.

@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+# No incomplete functions: every target in this slice is a complete C++
+# reconstruction with a col-0 `// @ 0x<VA>` marker and a full body.
+# The two very large functions (00fdfbc0, 00fe0160) are outline-faithful rather
+# than byte-exact; see nonmatching.txt for the 3 non-byte-exact rows.
