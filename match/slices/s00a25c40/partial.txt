@@ -1,0 +1,18 @@
+00a25c40  581  Update: SEH frame + queue/stopwatch timing loop approximated
+00a25ed0  273  RemoveFromList: intrusive-list unlink/refcount body approximated
+00a26040  103  RemovePrimitiveFromUpdate: EH string temp + vtable[0xf4] dispatch approximated
+00a26100  165  Map_26100: EH frame around hashtable find + refcount, approximated
+00a261c0  85   Map_261c0: bucket-walk broadcast, schedule differs (WEAK)
+00a26230  111  Map_26230: bucket-walk broadcast with two args, schedule differs (WEAK)
+00a262a0  88   Map_262a0: hashtable find + virtual dispatch not equivalent
+00a26300  88   Map_26300: hashtable find + virtual dispatch (slot 0x110) not equivalent
+00a263a0  157  Map_263a0: EH frame + refcount acquire/release approximated
+00a26450  -    UpdateSoundStates: rbtree AssignLess2 + inbound walk approximated
+00a265b0  68   Lookup_265b0: hashtable find, returns node value or 0 (WEAK)
+00a265f0  103  Map_265f0: guard byte + bucket-walk virtual broadcast, schedule differs
+00a266e0  89   Map_266e0: hashtable find + float setter not equivalent
+00a267d0  151  Map_267d0: find2/EraseNode erase + ring notify approximated (WEAK)
+00a26860  63   Dtor_26860: rbtree nuke + vtable store, this/edx mismatch
+00a268b0  182  Shutdown_268b0: profiler hash free + queue flush, fault path differs
+00a26990  -    InitPool_26990: fixed_pool init sequence approximated
+00a26be0  210  Insert_26be0: hashtable insert with operator_new unresolved
