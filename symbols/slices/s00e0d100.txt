@@ -1,1 +1,9 @@
-00e0d2e0 MinimapWin::DrawCameraArrow  # draws camera direction arrow quad on minimap; Begin2D/DrawQuads/End2D
+s00e0d100 MinimapWin::DrawCameraArrow  # model name = cSPUIMinimapWin camera arrow (pre-existing nonmatching row 0x00e0d2e0); RenderContext Begin2D/End2D + DrawQuads, minimap map->screen remap
+s00e0d100 cSPUIMinimapWin::DrawIcon  # model name; thiscall(window*, float angle, void* owner): icon at this+0x98c, window subobject vt at this+4
+s00e0d100 cSPUIMinimapWin::ProjectEvent  # model name; thiscall(const Vec2* mapPos, Vec3* out) ret 8, bool; terrain projection via ITerrain vt+0xc (variadic slot: 0 args for the map set, 4 args here)
+s00e0d100 cSPUIMinimapWin::FindEvent  # model name; thiscall(uint32_t key) -> EA::AutoRefCount<event>* (node+0x14) via eastl rbtree find at this+0x31c (anchor +0x320, begin +0x324)
+s00e0d100 cSPUIMinimapWin::OnTick  # model name; thiscall() -> uint32_t (always 1); per-frame feedback icon/event update
+s00e0d100 feedback event node  # eastl rbtree node: parent +0, left +4, right +8, colour +0xc, key +0x10, AutoRefCount event +0x14, direction Vec3 +0x18, flags +0x24, target +0x28, time +0x2c, state +0x30
+s00e0d100 event flags  # 0x40103 icon-feedback group, 0x100 surface direction target (Find 0x137e8e0), 0x2000 second target kind (Find 0x4f176642)
+s00e0d100 cSPUIMinimapWin fields  # mWindow vt +4, mIconsHidden +0x238, mW +0x23c, mH +0x240, mpImage +0x250, mEvents +0x31c, mAxisA +0x338, mAxisB +0x344, mScale +0x350, mpIcon +0x98c
+s00e0d100 globals  # icon radius 0x015a4be8, alt radius 0x015a4bec, angle offset 0x015a4bfc, icon scale 0x015a4be4, rotating mode tag 0x01654c10, effects 0x016a1fa0/0x016a1fa4..ac/0x016a1f98..9c/0x016a2028/0x016a203c/0x016a2040

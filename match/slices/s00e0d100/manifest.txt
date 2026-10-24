@@ -1,0 +1,1 @@
+slices/s00e0d100/s00e0d100.cpp  ?FindEvent@cMinimapOverlay@@QAEPAUAutoRefCountEvent@@I@Z  00e0df30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
