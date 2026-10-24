@@ -581,15 +581,14 @@ struct Dir {
     bool FUN_0054eb10(int param2, char param3);
     bool FUN_0054ed50(int param2, int param3, char param4);
     char FUN_0054efb0();
-    int  FUN_0054f0f0();
+    char FUN_0054f0f0();
 };
 struct CJob {
     int GetStatus();           // 0x690120
+    void Start();              // 0x6909b0
 };
 int*  ObjectTemplateDB();      // 0x67cb40
-void  FUN_0054f1a0(int self);
 void* FUN_0068f4d0();
-int   FUN_006909b0();
 void  FUN_0068f5a0();
 struct It { int a; int b; };
 // ---- items of slice s0054eb10 end
@@ -1291,6 +1290,11 @@ namespace eastl {
 void EASTL_allocator_deallocate(void* p); // 0x00f47380
 }
 struct HashFreeStub { void DoFreeNodes(void** pArr, unsigned n); };
+struct HashIteratorStub {
+    void* mpNode;
+    void* mpBucket;
+    void increment_bucket();   // 0x00552750
+};
 // ---- items of slice s00567a90 end
 
 // ---- items of slice s00849f70 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1415,6 +1419,7 @@ struct vector_set_u32 {
     uint32_t* mpCapacity;
     sp_vector_allocator_s0054_c780 mAllocator;
     InsertResult insert(const uint32_t& value);   // 0x00554020
+    void equal_range(void* out, void* key);       // 0x00555980
 };
 }
 namespace SP {
@@ -2202,7 +2207,7 @@ char Dir::FUN_0054efb0()
     char* s = (char*)self;
     if (*(char*)(s + 0x38) != 0) {
         Mtx* mtx = (Mtx*)(s + 8);
-        mtx->Lock(0);
+        mtx->Lock((const void*)0x13f3cb0);   // EA::Thread infinite-timeout word
         void* q[2];
         ((Ctr*)(s + 0x5c))->F140(q);
         ((Ctr*)(s + 0x3c))->F3a0(*(void**)(s + 0x40), *(void**)(s + 0x44));
@@ -2211,21 +2216,21 @@ char Dir::FUN_0054efb0()
         *(int*)(s + 0x68) = 0;
         ((Ctr*)(s + 0x9c))->FreeNodes(*(void**)(s + 0xa0), *(void**)(s + 0xa4));
         *(int*)(s + 0xa8) = 0;
-        FUN_0054f1a0(self);
+        ((AssetDir*)s)->Save();
         mtx->Unlock();
     }
     return *(char*)(s + 0x38);
 }
 
 // @ 0x0054f0f0
-int Dir::FUN_0054f0f0()
+char Dir::FUN_0054f0f0()
 {
     int* job = 0;
     int* sched = (int*)FUN_0068f4d0();
     if (job != 0) {
         ((CJob*)job)->GetStatus();
     }
-    int ok = ((int(__thiscall*)(int*, int**))((*(void***)sched)[0x10 / 4]))(sched, &job);
+    char ok = ((char(__thiscall*)(int*, int**))((*(void***)sched)[0x10 / 4]))(sched, &job);
     if (ok == 0) {
         if (job != 0) ((CJob*)job)->GetStatus();
         return 0;
@@ -2233,7 +2238,7 @@ int Dir::FUN_0054f0f0()
     job[6] = 4;
     job[0] = (int)&FUN_0068f5a0;
     job[1] = 0x15e3188;
-    FUN_006909b0();
+    ((CJob*)job)->Start();
     if (job != 0) ((CJob*)job)->GetStatus();
     return 1;
 }
@@ -2398,13 +2403,16 @@ void SP::Pollen::cAssetDirectory::PurgePendingAssets()
     char* self = (char*)this;
     int* piVar3 = *(int**)(self + 0x80);
     int* puVar1 = (int*)*piVar3;
-    if (puVar1 == 0) {
-        FUN_00552750();
+    HashIteratorStub it;
+    it.mpNode = puVar1;
+    it.mpBucket = piVar3;
+    if (it.mpNode == 0) {
+        it.increment_bucket();
     }
     int* local_10 = (int*)(*(int*)(self + 0x80) + *(int*)(self + 0x84) * 4);
     int* local_14 = (int*)*local_10;
-    int* local_c = puVar1;
-    int* local_8 = piVar3;
+    int* local_c = (int*)it.mpNode;
+    int* local_8 = (int*)it.mpBucket;
     while (local_c != local_14) {
         int local_20 = 0, local_1c = 0, local_18 = 0;
         char cVar2 = FUN_0054e460(local_c[0], local_c[1], &local_20);
@@ -2423,7 +2431,7 @@ void SP::Pollen::cAssetDirectory::PurgePendingAssets()
             local_c = (int*)*local_8;
         }
     }
-    DoFreeNodes(*(void**)(self + 0x80), *(void**)(self + 0x84));
+    ((HashFreeStub*)(self + 0x7c))->DoFreeNodes((void**)*(void**)(self + 0x80), *(unsigned*)(self + 0x84));
     *(int*)(self + 0x88) = 0;
 }
 
@@ -2540,9 +2548,10 @@ unsigned Meta::FUN_00550a60(unsigned idx)
 bool Meta::FUN_00550aa0(void* key)
 {
     char* s = (char*)this;
-    int local_c;
-    int local_8;
-    FUN_00555980(&local_c, &key);
+    int range[2];
+    ((eastl::vector_set_u32*)(s + 0xc0))->equal_range(&range[0], &key);
+    int local_c = range[0];
+    int local_8 = range[1];
     int local_2c;
     if (local_c == local_8) {
         local_2c = *(int*)(s + 0xc4);
