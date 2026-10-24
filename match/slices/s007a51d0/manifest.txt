@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007a51d0/s007a51d0.cpp  ?UpdateRendering@cGraphicsSystem@SP@@QAEXH@Z  007a5290  /O2 /MD /Gy /EHsc /TP
