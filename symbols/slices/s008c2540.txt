@@ -1,1 +1,2 @@
 008c2540 T2K_TV_Effects  # PDB candidate (caller-scored); expands glyph bitmap to ARGB with outline/shadow modes 1..5
+008c2c80 T2K_CreateBorderedCharacter  # PDB caller-scored name: builds the 32-bit bordered glyph buffer (distance transform + ARGB colorize + blend)

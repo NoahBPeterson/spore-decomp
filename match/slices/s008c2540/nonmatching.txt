@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
 008c2540  1787  T2K_TV_Effects: complete; register allocation/scheduling differ (dx*2,dy*2 hoisted by the original, loop-invariant spills), size 1787 vs 1852
+008c2c80  1000  COMPLETE T2K_CreateBorderedCharacter (/O2 /MD /Gy /TP). 1143 vs 1177 bytes; same distance-transform/colorize/blend passes and cleanup, but pass counters and pointer increments are expressed as named loops so cl schedules them differently. Equiv UNSUPPORTED: 0/400 valid (fake T2K buffer faults, longjmp import).
