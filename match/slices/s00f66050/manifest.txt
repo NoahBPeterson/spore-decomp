@@ -1,0 +1,2 @@
+slices/s00f66050/s00f66050.cpp  ?ApplyEffect@cTerrainDistributeEffect@SP@@QAEXHHH@Z  00f66cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00f66050/s00f66050.cpp  ??1cDistCellMesh@SP@@QAE@XZ  00f66e70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

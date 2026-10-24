@@ -1,1 +1,12 @@
-00f660d0 DistCell::Construct  # thiscall init; operator new 0x00f473a0, delete 0x00f47380, Matrix3 Assign 0x0041cb40
+00f66050 SP::cDistGrid::~cDistGrid  # dtor: release cell slots, map set, level info, type array
+00f660d0 DistCell::Construct  # build a cell from a descriptor (float copies via x87 in retail)
+00f662c0 SP::cTerrainDistributeEffect::Init  # params host, level size/mod count, dist grid + info
+00f66440 SP::slot_deque::create  # grow deque and append a cActiveCellInfo
+00f66560 SP::cDistGrid::ActivateCell  # height clamp, slot release/re-fill, mark cell active
+00f66770 SP::cTerrainDistributeEffect::Shutdown  # release mpDistGrid and mpDistInfo
+00f667e0 SP::cDistGrid::UpdateCell  # facing/dist/cone math, activity decision, child recursion
+00f66ba0 SP::cDistGrid::Update  # camera pos/orient, forward vector, camera height, per-level UpdateCell
+00f66cb0 SP::cTerrainDistributeEffect::ApplyEffect  # byte-exact
+00f66d20 SP::cDistCellMesh::Init  # free old buffer, store mesh/geometry, grow index buffer
+00f66e70 SP::cDistCellMesh::~cDistCellMesh  # byte-exact
+00f66ef0 SP::cDistCellMesh::LockItems  # ring offset/type selection, lock, commit counts
