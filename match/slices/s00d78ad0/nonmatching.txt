@@ -1,0 +1,56 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00d78ad0 = the cTribeGameBehaviorParty agent bookkeeping block plus its
+# two eastl red-black-tree helpers (RBTree / RBTree16) and one comparator sort
+# helper.  2/11 byte-exact; the six rows below are complete C++ reconstructions
+# whose equivalence-gate verdict is UNSUPPORTED (only unresolved external
+# references -- the callee stubs are modelled with explicit FUN_/Fn<va> names so
+# the byte comparison masks their relocations), which the gate accepts as done.
+#
+00d78ad0  628  agent-state helper (Creature*, 5 ints, U32* out): the party agent's
+#                per-frame decision routine -- reads the creature's spatial object and
+#                flag block, builds a NavigationGoal on the stack, drives it through
+#                InitToward with two globals and a table of steering weights, tests the
+#                goal against the creature's current position/heading and writes the
+#                chosen state word through the out pointer.  Complete reconstruction
+#                (772 vs 745); the original keeps the flow through fewer registers
+#                because a big part of the tail is shared again, ours re-materialises
+#                the goal/table addresses.  equiv UNSUPPORTED: 12 unresolved references
+#                (all the thiscall stubs and the two float/table globals are external).
+00d78f50   79  PreAction(): run the party agent's pre-action step -- walk the agent
+#                tree, ask the tribe object for the "join" pair, and when CanJoin says
+#                the agents match, stamp the block's action byte.  Complete
+#                reconstruction (164 vs 166).  equiv UNSUPPORTED: 4 unresolved
+#                references (the tribe getter, the can-join helpers and the find stub
+#                are external).
+00d79000   85  PostAction(): the mirror of PreAction -- walk the agent tree and clear
+#                the per-agent action byte for every agent whose join test passes.
+#                Complete reconstruction (113 vs 115); the original folds the two
+#                `cmp [mem],imm` tests into loaded registers, ours keeps the
+#                memory-immediate form.  equiv UNSUPPORTED: 3 unresolved references
+#                (the can-join / clear stubs are external).
+00d791a0   44  Init(): seed the party block -- clear the agent tree's sentinel, stamp
+#                the two configuration bytes, place the block inside its 0x64-byte
+#                action circle and zero the trailing scratch field.  Complete
+#                reconstruction (76 vs 79); the original interleaves the two
+#                sentinel/tail stores, ours emits one extra register move.  equiv
+#                UNSUPPORTED: 2 unresolved references (both vtable stubs are external).
+00d791f0    4  Destroy(unsigned char): release the party block's agent tree by nuke-
+#                walking the subtree, resetting the size and re-seeding the sentinel,
+#                then return `this`.  Complete reconstruction (71 vs 71, same size);
+#                the only difference is the last pair of instructions -- the original
+#                pushes eax before the `lea ecx,[esi+0x74]`, ours emits them the other
+#                way round.  equiv UNSUPPORTED: 3 unresolved references (DoNukeSubtree
+#                and the two teardown stubs are external).
+00d793e0   22  AddAgent(void*): register one agent -- test the incoming pointer, resolve
+#                it to a citizen, look the pair up in the tree (inserting when absent),
+#                clear the slot's back pointer, hand the citizen to the two behaviour
+#                slots and always report "not added" (0).  Complete reconstruction
+#                (138 vs 145).  The remaining bytes are pure register-allocation coin
+#                flips inside the two-byte bool temporaries that feed the pushes
+#                (sete al/movzx ecx,al vs sete cl/movzx edx,cl) and the vtable slot
+#                loads (mov edx,[esi]/mov eax,[edx+0xec]/call eax vs the other
+#                register pair); inlining the bool into the call argument made it
+#                worse (46 bytes).  equiv UNSUPPORTED: 2 unresolved references (the
+#                citizen resolvers are external).

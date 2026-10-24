@@ -1,0 +1,17 @@
+# slice s00d78ad0 = 0x00d78ad0..0x00d793e0 (the cTribeGameBehaviorParty agent
+# bookkeeping block: CanJoin / PreAction / PostAction / Init / Destroy /
+# RemoveAgent / AddAgent, the two eastl red-black-tree helpers RBTree /
+# RBTree16, and one comparator sort helper)
+# Exact decorated names so find_symbol resolves each overload-free function
+# unambiguously.
+00d78ad0 ?FUN_00d78ad0@@YADPAUCreature@@IIIIPAI@Z                    # agent-state helper (Creature*, 4 ints, U32* out)
+00d78e20 ?FUN_00d78e20@@YAXPAPAX0UComparator@@@Z                     # sort an array of (value,node) pairs with a comparator
+00d78e90 ?CanJoin@cTribeGameBehaviorParty@@QAEDPAXI@Z                # cTribeGameBehaviorParty::CanJoin(void*, uint)
+00d78f50 ?PreAction@cTribeGameBehaviorParty@@QAEXXZ                  # cTribeGameBehaviorParty::PreAction()
+00d79000 ?PostAction@cTribeGameBehaviorParty@@QAEXXZ                 # cTribeGameBehaviorParty::PostAction()
+00d79080 ?InsertNode@RBTree16@@QAEXPAPAURBNode16@@PAURBNodeBase@@PBURBValue16@@D@Z  # RBTree16::InsertNode(RBNode16**, RBNodeBase*, const RBValue16*, char)
+00d791a0 ?Init@cTribeGameBehaviorParty@@QAEPAXXZ                     # cTribeGameBehaviorParty::Init()
+00d791f0 ?Destroy@cTribeGameBehaviorParty@@QAEPAU1@E@Z               # cTribeGameBehaviorParty::Destroy(unsigned char)
+00d79270 ?RemoveAgent@cTribeGameBehaviorParty@@QAEXPAPAXIIIII@Z      # cTribeGameBehaviorParty::RemoveAgent(void**, uint x5)
+00d79350 ?InsertOrFind@RBTree@@QAEPAIPBI@Z                           # RBTree::InsertOrFind(const uint*)
+00d793e0 ?AddAgent@cTribeGameBehaviorParty@@QAEDPAX@Z                # cTribeGameBehaviorParty::AddAgent(void*)

@@ -1,0 +1,55 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00d78ad0: 3 complete reconstructions that do NOT pass the equivalence
+# gate, so they are not claimed as decompiled.  The gate verdict is FAIL on the
+# final source state (tools/difftest/equiv.py s00d78ad0 ...); the first mismatch
+# is a register/scheduling artefact left by cl 15.00.30729.01 at /O2 or by a
+# modelled internal callee that the emulator cannot execute, not a missing piece
+# of the algorithm.  Kept here (rather than nonmatching.txt) because a FAIL row
+# may not claim behavioural equivalence.
+#
+00d79080    8  RBTree16::InsertNode(RBNode16**, RBNodeBase*, const RBValue16*, char):
+#                decide the child side from the parent key, allocate a 0x20-byte node,
+#                copy the 4-dword pair into it, link it through the tree insert helper,
+#                bump the size and hand the node back through the out pointer.
+#                Complete reconstruction, same size as the original (141 vs 141); the
+#                ONLY byte difference is the tail schedule: the original loads the out
+#                pointer into eax BEFORE the `inc [esi+0x14]`, ours loads it into edx
+#                AFTER it (the store itself and the `add esp,0x10` position agree).
+#                equiv FAIL: 5/5 valid inputs, 83.3% coverage -- the sole mismatch is
+#                eax, which the gate compares because the original writes eax before
+#                every ret (declared void), and our schedule leaves the freshly
+#                allocated node there instead of the out pointer.  Both the
+#                "mSize++ then store" and the reversed order, an explicit local copy,
+#                a void**-casted local, a bound reference and a swapped statement order
+#                all coalesce back to the same two schedules under /O2.
+00d79270  193  cTribeGameBehaviorParty::RemoveAgent(void**, 6 ints): remove one agent --
+#                clear the owner's behaviour flag, drop the agent from the behaviour
+#                space, signal the tribe, nuke the agent's tree, then rescan/reinsert
+#                the remaining agents and finally release the block.  Complete
+#                reconstruction (214 vs 220); our frame and register discipline differ
+#                from the original's shrink-wrapped version, so several call sites load
+#                their vtable slots from a different base register.  equiv FAIL: 5/8
+#                valid inputs, 75.3% coverage (10 inputs discarded as faulting reads).
+#                The one mismatch is "fake call #1": the indirect call's target comes
+#                from a vtable slot that the emulator has to synthesise, and it reads
+#                back as 0x00000009 in the original but 0x44bc0000 in ours -- i.e. our
+#                differing preamble leaves a different pointer in the slot the call
+#                goes through.  Every directly-resolved call on the path (the rbtree
+#                find, the behaviour-space RemoveAgent) matches.
+00d79350  122  RBTree::InsertOrFind(const U32*): look the 0x14-keyed pair up by key --
+#                walk the tree comparing keys, and on a miss build the {key,0} pair,
+#                call the eastl DoInsertValue helper and return the payload slot
+#                (node+0x14).  Complete reconstruction (142 vs 121); our prologue keeps
+#                one more register live, so the same call is laid out against a
+#                different frame.  equiv FAIL: 5/16 valid inputs, 100% coverage.  The
+#                external DoInsertValue call now matches the original exactly
+#                (ecx=the tree, args=[&out, pParent, &value, pKey]) -- passing the pair
+#                value instead of its address in the 4th slot was the last argument
+#                difference -- and the only remaining mismatch is eax, which the gate
+#                compares because the original writes eax before every ret.  The
+#                original obtains that pointer from the out-parameter slot that the
+#                real eastl helper fills in; the emulator does not execute the real
+#                helper for our object (it synthesises the callee), so our out
+#                parameter keeps the address we passed instead of the new node.
