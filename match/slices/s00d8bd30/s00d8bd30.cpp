@@ -284,3 +284,256 @@ float __cdecl Decide(cCreature* c, int p2, int p3, uint32_t flags)
     }
     return 0.0f;
 }
+
+// ---------------------------------------------------------------- behaviour-tree deciders (AI module)
+// All of them share one signature: (creature, unused, unused, flags, stimuli, out).  Each walks one of the
+// creature's neighbour lists, keeps the first acceptable entry and reports the entity through the stimuli,
+// returning 1.0 when it committed and 0.0 otherwise.
+
+struct cAICreature;
+
+struct cStimuli {                                     // nSPBehaviorTree::behavior_stimuli
+    void* mpField0;                                   // +0x00
+    void GetAny();                                    // 00d997e0 (thiscall)
+    void* mpField4;                                   // +0x04 (entity + 0x5a8)
+    void* mpField8;                                   // +0x08
+};
+
+struct cNeighbourEntry {                              // entry of the creature+0x1124 list
+    float mValue;                                     // +0x00
+    uint8_t mEnabled;                                 // +0x04
+    uint8_t pad05[3];
+    cAICreature* mpObj;                               // +0x08
+};
+struct cNeighbourEntry2 {                             // entry of the creature+0x140c list
+    uint32_t pad00[4];
+    cAICreature* mpObj;                               // +0x10
+};
+
+struct cEntryPred {                                   // stateless filter predicate (+0x1124 list)
+    bool Test(cNeighbourEntry* e);                    // 00c02600 (thiscall, ret 4)
+};
+struct cEntryPred2 {                                  // stateless filter predicate (+0x140c list)
+    bool Test(cNeighbourEntry2* e);                   // 00c03520 (thiscall, ret 4)
+};
+struct cEntryIter {                                   // filtered iterator over the +0x1124 list
+    cNeighbourEntry** mpCur;                          // +0x00
+    cNeighbourEntry** mpEnd;                          // +0x04
+    cEntryPred mPred;                                 // +0x08
+    void SkipToValid();                               // 00b3d850 (thiscall)
+};
+struct cEntryIter2 {                                  // filtered iterator over the +0x140c list
+    cNeighbourEntry2** mpCur;                         // +0x00
+    cNeighbourEntry2** mpEnd;                         // +0x04
+    cEntryPred2 mPred;                                // +0x08
+    void SkipToValid();                               // 00b3d870 (thiscall)
+};
+
+struct cAICreature {                                  // creature as seen by the behaviour-tree deciders
+    VPAD(0); VPAD(1); VPAD(2); VPAD(3); VPAD(4); VPAD(5); VPAD(6); VPAD(7);
+    virtual uint32_t GetClassId();                    // slot 8 / vtable +0x20
+    VPAD(9);
+    uint32_t pad04[(0xc0 - 0x04) / 4];                // +0x04 (object holds only the vptr)
+    cLocomotive mLoco;                                // +0xc0
+    uint32_t pad_c4[(0x5a8 - 0xc4) / 4];
+    uint32_t mField5a8;                               // +0x5a8 (nID-ish payload, handed to the stimuli)
+    uint32_t pad5ac[(0xb20 - 0x5ac) / 4];
+    void* mpB20;                                      // +0xb20
+    uint32_t padB24[(0xb4c - 0xb24) / 4];
+    void* mpBehavior;                                 // +0xb4c
+    uint32_t padB50[(0xb58 - 0xb50) / 4];
+    uint32_t mFlagsB58;                               // +0xb58 (bit 8 = busy)
+    uint8_t padB5c[0xb5e - 0xb5c];
+    uint8_t mbB5e;                                    // +0xb5e
+    uint8_t padB5f[0x1124 - 0xb5f];
+    cNeighbourEntry** mpEntries1Begin;                // +0x1124
+    cNeighbourEntry** mpEntries1End;                  // +0x1128
+    uint8_t pad112c[0x140c - 0x112c];
+    cNeighbourEntry2** mpEntries2Begin;               // +0x140c
+    cNeighbourEntry2** mpEntries2End;                 // +0x1410
+
+    cAICreature* GetTargetAsCreature();               // 00c0ee70 (thiscall)
+    bool CanAttack(cAICreature* t, int a);            // 00c0e8d0 (thiscall, ret 8)
+    bool FUN_00c02eb0(cAICreature* t);                // 00c02eb0 (thiscall, ret 4)
+    bool FUN_00c0b7c0(cAICreature* t);                // 00c0b7c0 (thiscall, ret 4)
+    bool FUN_00c0b770();                              // 00c0b770 (thiscall)
+    bool FUN_00c0b8a0(cAICreature* t);                // 00c0b8a0 (thiscall, ret 4)
+    bool FUN_00c0b780();                              // 00c0b780 (thiscall)
+    bool FUN_00c0b860(cAICreature* t);                // 00c0b860 (thiscall, ret 4)
+    bool Flag388();                                   // 00c0c0e0 (thiscall)
+};
+
+bool __cdecl FUN_00d7e090(Vector3* pos);               // 00d7e090
+void* __cdecl WatchMemoryBlock(void* block);           // 00d999d0
+void* __cdecl FUN_00d99470(void* obj);                 // 00d99470
+float __cdecl FUN_00d38a30(int kind, cAICreature* c);  // 00d38a30
+
+// The deciders answer "target found": remember the entity in the stimuli and return 1.0.
+static __forceinline float Answer(cStimuli* stim, uint8_t* out, cAICreature* target)
+{
+    if (stim)
+        stim->GetAny();
+    *out = 1;
+    stim->mpField4 = &target->mField5a8;
+    return 1.0f;
+}
+
+// @ 0x00d8c3e0
+float __cdecl FUN_00d8c3e0(cAICreature* c, int, int, uint32_t flags, cStimuli* stim, uint8_t* out)
+{
+    cAICreature* t = c->GetTargetAsCreature();
+    if (t) {
+        if (!c->CanAttack(t, 4) && t->mbB5e == 0 && c->FUN_00c02eb0(t)) {
+            if (((c->mFlagsB58 >> 8) & 1) == 0 || FUN_00d7e090(t->mLoco.GetPosition()))
+                return Answer(stim, out, t);
+        }
+    }
+    void* anim = ((cStimSet*)((char*)c->mpBehavior + 8))->PlayIdleAnimation(0x80000000, 0);
+    if (anim) {
+        cAICreature* idle = (cAICreature*)WatchMemoryBlock(anim);
+        if (idle && idle->mbB5e == 0) {
+            Vector3* p = c->mLoco.GetPosition();
+            Vector3* q = idle->mLoco.GetPosition();
+            float dx = q->x - p->x;
+            float dy = q->y - p->y;
+            float dz = q->z - p->z;
+            float reach = FUN_00d38a30(5, c);
+            if (reach * reach >= dx * dx + dy * dy + dz * dz)
+                return Answer(stim, out, idle);
+        }
+    }
+    cEntryIter it;
+    it.mpCur = c->mpEntries1Begin;
+    it.mpEnd = c->mpEntries1End;
+    if (it.mpCur != it.mpEnd) {
+        if (!it.mPred.Test(*it.mpCur))
+            it.SkipToValid();
+        while (it.mpCur != it.mpEnd) {
+            cNeighbourEntry* e = *it.mpCur;
+            cAICreature* n = e->mpObj;
+            if ((flags & 8) != 0 || n == 0 || n->GetClassId() != 0x18eb4b7) {
+                if (n->mbB5e == 0 && !c->CanAttack(n, 4) && c->FUN_00c02eb0(n)
+                    && (((c->mFlagsB58 >> 8) & 1) == 0 || FUN_00d7e090(n->mLoco.GetPosition())))
+                    return Answer(stim, out, n);
+            }
+            do {
+                ++it.mpCur;
+                if (it.mpCur == it.mpEnd)
+                    break;
+            } while (!it.mPred.Test(*it.mpCur));
+        }
+    }
+    return 0.0f;
+}
+
+// @ 0x00d8c780
+float __cdecl FUN_00d8c780(cAICreature* c, int, int, int, cStimuli* stim, uint8_t* out)
+{
+    cEntryIter2 it;
+    it.mpCur = c->mpEntries2Begin;
+    it.mpEnd = c->mpEntries2End;
+    if (it.mpCur != it.mpEnd) {
+        if (!it.mPred.Test(*it.mpCur))
+            it.SkipToValid();
+        while (it.mpCur != it.mpEnd) {
+            cAICreature* t = (*it.mpCur)->mpObj;
+            if (t && t->GetClassId() == 0x18c431c && c->FUN_00c0b7c0(t)) {
+                if (stim)
+                    stim->GetAny();
+                *out = 1;
+                stim->mpField8 = t;
+                return 1.0f;
+            }
+            do {
+                ++it.mpCur;
+                if (it.mpCur == it.mpEnd)
+                    break;
+            } while (!it.mPred.Test(*it.mpCur));
+        }
+    }
+    return 0.0f;
+}
+
+// @ 0x00d8c850
+float __cdecl FUN_00d8c850(cAICreature* c, int, int, int, cStimuli* stim, uint8_t* out)
+{
+    if (((c->mFlagsB58 >> 8) & 1) != 0)
+        return 0.0f;
+    float reach = FUN_00d38a30(3, c);
+    cEntryIter it;
+    it.mpCur = c->mpEntries1Begin;
+    it.mpEnd = c->mpEntries1End;
+    if (it.mpCur != it.mpEnd) {
+        if (!it.mPred.Test(*it.mpCur))
+            it.SkipToValid();
+        while (it.mpCur != it.mpEnd) {
+            cNeighbourEntry* e = *it.mpCur;
+            cAICreature* t = e->mpObj;
+            if ((e->mValue <= reach || t->Flag388())
+                && !t->mLoco.IsMovingFast()
+                && t->mpB20 != c->mpB20
+                && t->FUN_00c0b770()
+                && t->mbB5e == 0
+                && c->FUN_00c0b8a0(t))
+                return Answer(stim, out, t);
+            do {
+                ++it.mpCur;
+                if (it.mpCur == it.mpEnd)
+                    break;
+            } while (!it.mPred.Test(*it.mpCur));
+        }
+    }
+    return 0.0f;
+}
+
+// @ 0x00d8c9c0
+float __cdecl FUN_00d8c9c0(cAICreature* c, int, int, int, cStimuli* stim, uint8_t* out)
+{
+    cEntryIter it;
+    it.mpCur = c->mpEntries1Begin;
+    it.mpEnd = c->mpEntries1End;
+    if (it.mpCur != it.mpEnd) {
+        if (!it.mPred.Test(*it.mpCur))
+            it.SkipToValid();
+        while (it.mpCur != it.mpEnd) {
+            cNeighbourEntry* e = *it.mpCur;
+            cAICreature* t = e->mpObj;
+            if (t->mpB20 != c->mpB20 && e->mEnabled != 0 && FUN_00d99470(t) != 0
+                && e->mValue < FUN_00d38a30(3, c))
+                return Answer(stim, out, t);
+            do {
+                ++it.mpCur;
+                if (it.mpCur == it.mpEnd)
+                    break;
+            } while (!it.mPred.Test(*it.mpCur));
+        }
+    }
+    return 0.0f;
+}
+
+// @ 0x00d8cab0
+float __cdecl FUN_00d8cab0(cAICreature* c, int, int, int, cStimuli* stim, uint8_t* out)
+{
+    cEntryIter it;
+    it.mpCur = c->mpEntries1Begin;
+    it.mpEnd = c->mpEntries1End;
+    if (it.mpCur != it.mpEnd) {
+        if (!it.mPred.Test(*it.mpCur))
+            it.SkipToValid();
+        while (it.mpCur != it.mpEnd) {
+            cNeighbourEntry* e = *it.mpCur;
+            cAICreature* t = (cAICreature*)FUN_00d99470(e->mpObj);
+            if (t && !c->CanAttack(t, 4) && e->mEnabled != 0
+                && e->mValue < FUN_00d38a30(3, c)
+                && t->FUN_00c0b780()
+                && c->FUN_00c0b860(t))
+                return Answer(stim, out, t);
+            do {
+                ++it.mpCur;
+                if (it.mpCur == it.mpEnd)
+                    break;
+            } while (!it.mPred.Test(*it.mpCur));
+        }
+    }
+    return 0.0f;
+}
