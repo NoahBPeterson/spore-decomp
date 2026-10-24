@@ -1,1 +1,2 @@
 010eee10 hkRagdollConstraintData::buildJacobian  # havok_names.txt
+010ef4b0 ??1hkPoweredRagdollConstraintData@@UAE@XZ  # byte-exact (flags /vc71 /O2 /MD /Gy /TP) - hkPoweredRagdollConstraintData virtual destructor: drops the reference on the three friction motors at +0xc4/+0xc8/+0xcc through the inlined hkReferencedObject::removeReference (skip while mLockCount at +4 is set, then `dec mReferenceCount` at +6 and, at zero, `push 1; call [vfptr]`), then the inlined base destructor stores the hkReferencedObject vtable (0x013ef094)
