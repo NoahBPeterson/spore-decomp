@@ -1,0 +1,11 @@
+010146c0 421 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 421 bytes - simulator universe helper not reconstructed.
+01014870 387 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 387 bytes - simulator universe helper not reconstructed.
+01014a00 118 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 103 bytes - grob-shock purge: the erase loop, timer comparison and record destruction match instruction for instruction, but retail keeps a redundant initial empty-range guard (loads mGrobShockBegin into eax, tests, then copies to ebx) and splits the exits into a cold block (relocated je/jb), so mine folds the guard into the loop condition and inlines the epilogue (108 vs 118).
+01014a80 804 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 804 bytes - AdjustAwareness not reconstructed.
+01014db0 126 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 126 bytes - eastl::quick_sort<tGrobShockData*> instantiation not reconstructed.
+01014e30 762 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 762 bytes - OnTick not reconstructed.
+01015130 112 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 112 bytes - simulator universe helper not reconstructed.
+010151a0 171 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 171 bytes - simulator universe helper not reconstructed.
+01015250 322 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 322 bytes - vector insert-value slow path not reconstructed.
+010153a0 103 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 93 bytes - pair-vector insert: element stride 0x18, the (position - mpBegin) index, the append/DoInsertValue split and the placement construct call are all reproduced, but MSVC keeps mpBegin in a register and never caches this in esi (retail: this=esi, position=ebx, index=edi; mine: this=edi, position=ebp, index=esi, plus an extra ebp push).
+01015410 209 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 209 bytes - eastl::vector_map operator[] instantiation not reconstructed.
