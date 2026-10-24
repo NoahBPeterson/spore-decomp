@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0088a490 962 UNRECOVERED-EQUIV: body recovered (format 3 + DXT block packing and squish::Compress; format 3 nibble/palette expansion with 1-bpp and 4-bpp variants; format 0x20 8-bpp->32-bpp, 1-bpp->32-bpp and 32-bpp memcpy passes; all under the +0x168 critical section); 1212 bytes (same size): stack-frame layout, register allocation and parameter-slot reuse differ throughout; difftest WEAK low coverage 22.0% (need 60%)
