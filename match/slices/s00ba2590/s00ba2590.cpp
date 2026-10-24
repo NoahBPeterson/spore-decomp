@@ -8,14 +8,28 @@ void* __cdecl EA_Messaging_GetServer();                    // 0x883860
 void* __cdecl SP_PropertyManager();                        // 0x67de30
 void  __cdecl EA_IO_WriteUint32(void*, void*, int, int);   // 0x93aa70
 void  __cdecl EA_IO_ReadInt32(void*, void*, int, int);     // 0x93a780
-int   __cdecl FUN_00c0b8e0(void*, void*);                  // 0xc0b8e0
-bool  __cdecl FUN_00c0b780(void*);                         // 0xc0b780
-bool  __cdecl FUN_00c0b7a0(void*);                         // 0xc0b7a0
+struct RelCmp {
+  int __thiscall Cmp(void* b);                             // 0xc0b8e0
+};
+struct RelFlagA {
+  bool __thiscall Get();                                   // 0xc0b780
+};
+struct RelFlagB {
+  bool __thiscall Get();                                   // 0xc0b7a0
+};
 void  __cdecl FUN_00ae2e40();                              // 0xae2e40
 void  __cdecl FUN_00ae2ed0();                              // 0xae2ed0
 void  __cdecl FUN_00695b40(void*, void*, const wchar_t*);  // 0x695b40
 void  __cdecl FUN_00921440(void*, int, int, int);          // 0x921440
-void  __cdecl FUN_00ba2980(int, int);                      // 0xba2980
+void  __cdecl FUN_00ba2980(int, int);                      // 0xba2980 (partial 33e0 only)
+struct VecHdr {
+  int pad0; void* data; unsigned size; int fieldC;
+  void __thiscall FreeInts(int* arr, unsigned n);          // 0xba2980
+  __declspec(noinline) void FreeNodes(void* arr, unsigned n);   // 0xba2e00
+};
+struct PosseReload {
+  void __thiscall Run();                                    // 0xba2af0
+};
 void  __cdecl FUN_00ba29d0(int);                           // 0xba29d0
 void* __cdecl FUN_00bc3e60(unsigned, int, int);            // 0xbc3e60
 void  __cdecl FUN_00ac4440(void*, void*, void*);           // 0xac4440
@@ -39,14 +53,13 @@ struct W {
   void __thiscall Run_00ba2f20();
   void* __thiscall Run_00ba2f90();
   void __thiscall Run_00ba3010();
-  void* __thiscall Run_00ba30c0(void* out, uint32_t* key);
+  void* __thiscall Run_00ba30c0(void* out, uint32_t* key, int);
   void* __thiscall Run_00ba31d0(void* out, void* node, void** head);
   void __thiscall Run_00ba3310();
   void __thiscall Run_00ba3350();
   void* __thiscall Run_00ba3550(void* src);
   void* __thiscall Run_00ba3620(void* src);
   void __thiscall Run_00ba37a0();
-  void __thiscall Run_00ba2e50(int lo, int hi, uint32_t* key);
 };
 
 // @ 0x00ba2590  intrusive list insert
@@ -84,41 +97,38 @@ void __thiscall W::Run_00ba2750() {
 }
 
 // @ 0x00ba27b0
-int __cdecl FUN_00ba27b0(void* a, void* b) {
-  int s = FUN_00c0b8e0(a, b);
+int __stdcall FUN_00ba27b0(void* a, void* b) {
+  int s = ((RelCmp*)a)->Cmp(b);
   int v;
   if (s < g_156c198) v = (s >= g_156c194) ? 1 : 0;
   else v = 2;
   if (*(int*)((char*)a + 0xb20) == *(int*)((char*)b + 0xb20)) return 6;
-  if (FUN_00c0b780(a) && v >= 1) return 2;
-  if (FUN_00c0b780(a)) {
-    if (FUN_00c0b780(a) && v < 1) return 1;
-    if (FUN_00c0b7a0(a) && v < 2) return 1;
+  if (((RelFlagA*)a)->Get() && v >= 1) return 2;
+  if (((RelFlagA*)b)->Get()) {
+    if (((RelFlagA*)a)->Get() && v < 1) return 1;
+    if (((RelFlagB*)a)->Get() && v < 2) return 1;
   }
-  if (FUN_00c0b780(a) && FUN_00c0b7a0(a) && v < 1) return 3;
-  if (FUN_00c0b7a0(a) && FUN_00c0b780(a) && v > 1) return 3;
+  if (((RelFlagA*)a)->Get() && ((RelFlagB*)b)->Get() && v < 1) return 3;
+  if (((RelFlagB*)a)->Get() && ((RelFlagA*)b)->Get() && v > 1) return 3;
   return 4;
 }
 
 // @ 0x00ba28a0
-struct RelCell { char pad00[0x4a8]; int f4a8; int f4ac; int f4c8; void* f4cc; void* f4d0; };
-char __cdecl FUN_00ba28a0(void* mgr, int idx, void* other) {
+struct RelCell { char pad00[0x4a8]; int f4a8; int f4ac; char pad4b0[0x18]; uint8_t f4c8; char pad4c9[3]; void* f4cc; void* f4d0; };
+int __cdecl FUN_00ba28a0(void* mgr, int idx, void* other) {
   if (mgr == 0) return 0;
   RelCell* c = (RelCell*)((char*)*(void**)((char*)mgr + 0x70) + idx * 0x4e0);
   int state = c->f4a8;
   if (other != 0 && ((*(uint32_t*)((char*)other + 0xb58) >> 8) & 1)) state = 2;
   switch (state) {
     case 1:
-      if (c->f4c8 == 0) return (c->f4ac - 1 < 1) ? 3 : 5;
+      if (c->f4c8 == 0) return ((unsigned)(c->f4ac - 1) <= 1u) ? 3 : 5;
       {
         int n = (int)(((char*)c->f4d0 - (char*)c->f4cc) >> 5);
-        if (n > 0) {
-          int32_t* p = (int32_t*)((char*)c->f4cc + 0xc);
-          for (int i = 0; i < n; ++i) { if (*p == 0xb) return 3; p += 8; }
-          return 5;
-        }
+        int32_t* p = (int32_t*)((char*)c->f4cc + 0xc);
+        for (int i = 0; i < n; ++i) { if (*p == 0xb) return 3; p += 8; }
+        return 5;
       }
-      return 5;
     case 2: return (c->f4ac != 3 || c->f4c8 != 0) ? 6 : 5;
     case 3: case 4: case 5: return 5;
     default: return 0;
@@ -168,25 +178,21 @@ void __thiscall W::Run_00ba2ca0(void* p2) {
 char __thiscall W::Run_00ba2d80(void* p2) { (void)p2; return 1; }
 
 // @ 0x00ba2e00
-void __cdecl FUN_00ba2e00(void* arr, unsigned n) {
-  unsigned i = 0;
-  if (n != 0) {
-    do {
-      void* p = *((void**)arr + i);
-      while (p != 0) {
-        void* next = *(void**)((char*)p + 8);
-        if (*(void**)p) Release(*(void**)p);
-        operator_delete__(p);
-        p = next;
-      }
-      *((void**)arr + i) = 0;
-      ++i;
-    } while (i < n);
+void __thiscall VecHdr::FreeNodes(void* arr, unsigned n) {
+  for (unsigned i = 0; i < n; ++i) {
+    void* p = *((void**)arr + i);
+    while (p != 0) {
+      void* cur = p;
+      p = *(void**)((char*)p + 8);
+      if (*(void**)cur) Release(*(void**)cur);
+      operator_delete__(cur);
+    }
+    *((void**)arr + i) = 0;
   }
 }
 
 // @ 0x00ba2e50
-void __thiscall W::Run_00ba2e50(int lo, int hi, uint32_t* key) {
+void* __cdecl FUN_00ba2e50(int lo, int hi, uint32_t* key) {
   int n = (hi - lo) >> 4;
   int left = n;
   if (left > 0) {
@@ -194,12 +200,14 @@ void __thiscall W::Run_00ba2e50(int lo, int hi, uint32_t* key) {
       int mid = left >> 1;
       uint32_t* e = (uint32_t*)(mid * 0x10 + lo);
       bool less;
-      if (e[0] == key[0]) less = e[2] < key[2] ? true : (e[2] == key[2] ? (e[1] < key[1]) : false);
-      else less = e[0] < key[0];
-      if (less) { lo = (int)e + 0x10; mid = left + (-1 - mid); }
-      left = mid;
+      if (e[0] != key[0]) less = e[0] < key[0];
+      else if (e[2] != key[2]) less = e[2] < key[2];
+      else less = e[1] < key[1];
+      if (less) { lo = (int)e + 0x10; left += -1 - mid; }
+      else left = mid;
     } while (left > 0);
   }
+  return (void*)lo;
 }
 
 // @ 0x00ba2f20
@@ -231,15 +239,24 @@ void* __thiscall W::Run_00ba2f90() {
 
 // @ 0x00ba3010
 void __thiscall W::Run_00ba3010() {
-  FUN_00ba2af0();
+  ((PosseReload*)((char*)this - 4))->Run();
   void* srv = EA_Messaging_GetServer();
   (*(void(__thiscall*)(void*, void*, int))((*(void***)srv)[0x20 / 4]))(srv, (char*)this - 4, 0xf62def);
 }
 
 // @ 0x00ba30c0
-struct HashNode { int key[3]; char pad[0x14]; HashNode* next; };
-struct HashSet { int pad0; HashNode** buckets; unsigned mask; int count; };
-void* __thiscall W::Run_00ba30c0(void* out, uint32_t* key) {
+struct HashNode { int key[8]; HashNode* next; };
+struct HashPolicy {
+  float f0; float f4; unsigned cap;
+  void __thiscall CheckSize(void* out, unsigned mask, unsigned count, int grow);  // 0x00921440
+};
+struct HashSet {
+  int pad0; HashNode** buckets; unsigned mask; int count;
+  float f10; float f14; unsigned cap;
+  void __thiscall Rehash(unsigned newmask);   // 0x00ba29d0
+};
+struct InsertRes { unsigned char flag; char pad[3]; unsigned size; };
+void* __thiscall W::Run_00ba30c0(void* out, uint32_t* key, int) {
   HashSet* self = (HashSet*)this;
   uint32_t h = key[0] ^ key[2];
   unsigned b = h % self->mask;
@@ -251,9 +268,17 @@ void* __thiscall W::Run_00ba30c0(void* out, uint32_t* key) {
     }
     n = n->next;
   }
+  InsertRes res;
+  ((HashPolicy*)((char*)self + 0x10))->CheckSize(&res, self->mask, (unsigned)self->count, 1);
   n = (HashNode*)operator_new(0x24, "Simulator", 0, 0,
      "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
   for (int i = 0; i < 8; ++i) n->key[i] = (int)key[i];
+  n->next = 0;
+  if (res.flag) {
+    unsigned nb = h % res.size;
+    self->Rehash(res.size);
+    b = nb;
+  }
   n->next = self->buckets[b];
   self->buckets[b] = n;
   ++self->count;
@@ -279,10 +304,12 @@ void* __thiscall W::Run_00ba31d0(void* out, void* nodev, void** head) {
 // @ 0x00ba3310
 void __thiscall W::Run_00ba3310() {
   char* s = (char*)this;
-  FUN_00ba2980(*(int*)(s + 0x24), *(int*)(s + 0x28));
-  *(int*)(s + 0x2c) = 0;
-  FUN_00ba2e00(*(void**)(s + 0x44), *(unsigned*)(s + 0x48));
-  *(int*)(s + 0x4c) = 0;
+  VecHdr* a = (VecHdr*)(s + 0x20);
+  a->FreeInts((int*)a->data, a->size);
+  a->fieldC = 0;
+  VecHdr* b = (VecHdr*)(s + 0x40);
+  b->FreeNodes(b->data, b->size);
+  b->fieldC = 0;
 }
 
 // @ 0x00ba3350
@@ -362,12 +389,14 @@ void __thiscall W::Run_00ba37a0() {
   *(void**)s = (void*)0x1465dc8;
   *(void**)(s + 4) = (void*)0x1465d78;
   *(void**)(s + 8) = (void*)0x1465d70;
-  FUN_00ba2e00(*(void**)(s + 0x44), *(unsigned*)(s + 0x48));
-  *(int*)(s + 0x4c) = 0;
-  if (*(unsigned*)(s + 0x48) > 1) operator_delete__(*(void**)(s + 0x44));
-  FUN_00ba2980(*(int*)(s + 0x24), *(int*)(s + 0x28));
-  *(int*)(s + 0x2c) = 0;
-  if (*(unsigned*)(s + 0x28) > 1) operator_delete__(*(void**)(s + 0x24));
+  VecHdr* b = (VecHdr*)(s + 0x40);
+  b->FreeNodes(b->data, b->size);
+  b->fieldC = 0;
+  if (b->size > 1) operator_delete__(b->data);
+  VecHdr* a = (VecHdr*)(s + 0x20);
+  a->FreeInts((int*)a->data, a->size);
+  a->fieldC = 0;
+  if (a->size > 1) operator_delete__(a->data);
   ((CGZSub*)(s + 4))->Dtor();
-  *(void**)s = (void*)0x1465dc8;
+  *(void**)s = (void*)0x13eb394;
 }

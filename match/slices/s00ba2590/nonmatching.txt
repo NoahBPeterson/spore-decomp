@@ -1,15 +1,10 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00ba2590   83  intrusive-list insert: complete; refcount call scheduling differs
-00ba27b0   194 relationship-priority code: complete; condition ordering differs
-00ba28a0   159 relationship-state code: complete; switch/jump-table shape differs
-00ba2e00   25  free node-list array: complete; loop register assignment (p/next)
-00ba2e50   79  lower_bound over 16-byte records: complete; branch/compare schedule
+00ba27b0   88  relationship-priority code (/O2 /MD /Gy /TP /arch:SSE /fp:fast): fixed the callee conventions (0xc0b8e0 Cmp is ecx=a + one stack arg; 0xc0b780/0xc0b7a0 are ecx-only) and the b-side conditions; equiv PASS 100%; only the /O2 branch-block ordering (v = 2 inline vs out-of-line) differs
+00ba28a0  165  relationship-state code (/O2 /MD /Gy /TP /arch:SSE /fp:fast): return type is int (original xor eax,eax), f4c8 is a byte flag and case 1 uses the unsigned (f4ac-1)<=1 test; equiv PASS; remaining bytes are the switch jump-table block order and the loop pre-test shape
 00ba2f90   81  PlayerPlanetData ctor: complete; field clear/store order
-00ba3010   19  message handler: complete; call ordering around GetServer
-00ba30c0   218 hashtable insert: complete; EASTL bucket/% shape differs
+00ba30c0  319  hashtable insert (/O2 /MD /Gy /TP /arch:SSE /fp:fast): 318 vs 272 bytes; added the missing resize check (0x921440 on this+0x10) and rehash call (0xba29d0), 0x20-byte key copy and third stack arg (ret 0xc); equiv PASS at --inputs 600 (301 valid, 91% coverage), no mismatch; original inlines the allocator/node helpers, so byte layout is not reached at /O2 /Ob1
 00ba31d0   98  hashtable erase: complete; unlink pointer bookkeeping differs
-00ba3310   50  clear two hash sets: complete; call/count reset schedule
-00ba3550   179 vector assign (stride 16): complete; capacity/overlap branches
-00ba3620   180 vector assign (stride 8): complete; capacity/overlap branches
-00ba36f0   143 PlayerPlanetData array dtor: complete; stride/order of frees
-00ba37a0   93  cGonzagoSubsystem-derived dtor: complete; vptr/free order
+00ba3550  179  vector assign (stride 16): complete; capacity/overlap branches
+00ba3620  180  vector assign (stride 8): complete; capacity/overlap branches
+00ba36f0  143  PlayerPlanetData array dtor: complete; stride/order of frees
