@@ -7,6 +7,13 @@
 
 #define NOINLINE __declspec(noinline)
 
+/* The original's whole-program build passes the hash table in a register (like ECX in a
+   member call) and leaves only the remaining arguments on the stack, so call 0x00903dd0
+   through a member-shaped stub rather than the cdecl prototype in the expat header. */
+struct ElementTypeTable {
+  ELEMENT_TYPE *lookup(KEY name, size_t createSize);   // 0x00903dd0
+};
+
 /* poolStoreString inlined into storeAtts by the original's whole-program build (poolAppend +
    poolGrow + 16-bit NUL store). */
 static __forceinline XML_Char *
@@ -29,6 +36,7 @@ storeAtts(XML_Parser parser, const ENCODING *enc,
 {
   DTD * const dtd = _dtd;  /* save one level of indirection */
   ELEMENT_TYPE *elementType;
+  ElementTypeTable * const elemTable = (ElementTypeTable *)&dtd->elementTypes;
   int nDefaultAtts;
   const XML_Char **appAtts;   /* the attribute list for the application */
   int attIndex = 0;
@@ -41,13 +49,12 @@ storeAtts(XML_Parser parser, const ENCODING *enc,
   const XML_Char *localPart;
 
   /* lookup the element type name */
-  elementType = (ELEMENT_TYPE *)lookup(&dtd->elementTypes, tagNamePtr->str, 0);
+  elementType = (ELEMENT_TYPE *)elemTable->lookup(tagNamePtr->str, 0);
   if (!elementType) {
     const XML_Char *name = poolCopyString(&dtd->pool, tagNamePtr->str);
     if (!name)
       return XML_ERROR_NO_MEMORY;
-    elementType = (ELEMENT_TYPE *)lookup(&dtd->elementTypes, name,
-                                         sizeof(ELEMENT_TYPE));
+    elementType = (ELEMENT_TYPE *)elemTable->lookup(name, sizeof(ELEMENT_TYPE));
     if (!elementType)
       return XML_ERROR_NO_MEMORY;
     if (ns && !setElementTypePrefix(parser, elementType))
