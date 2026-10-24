@@ -42,7 +42,6 @@ extern "C" void  FUN_00682e90(void*, void*);
 extern "C" void  FUN_00683ab0(void*, void*);
 extern "C" void  FUN_00684740(void*, void*);
 extern "C" void  FUN_00684a90(void*, void*);
-extern "C" void  read_6840d0(void*, int*);
 extern char g_1402d55[];
 
 // ===========================================================================
@@ -196,6 +195,7 @@ struct Factory : GmeEditorResBase {
 
     char Create(int* mgr, int** out, int a, int b);
     void ReadMapA(MapA* map, IRd* r);
+    void ReadMapC(MapC* map, IRd* r);               // 0x0684a90
     void WriteMapC(MapC* map, IWrt* w);
     void ReadMapB(MapB* map, IRd* r);
 
@@ -536,11 +536,31 @@ ObjY* MapC::Idx(const int& key)
 }
 
 // ===========================================================================
-// @ 0x00684A90  read records (partial)
+// @ 0x00684A90  load map<int, ObjY> (thiscall, ret 8)
 // ===========================================================================
-void read_684a90(void* unused, int* stream)
+// Same record layout as ReadMapA: a count, then per record the key, the value's byte string
+// (clear, length, resize, read) and finally the value's nested map, which the original hands to
+// the very same reader at 0x006840D0.
+void Factory::ReadMapC(MapC* map, IRd* r)
 {
-    read_6840d0(unused, stream);
+    uint32_t count;
+    r->Read(&count, 4);
+    for (uint32_t i = 0; i < count; ++i) {
+        int key;
+        r->Read(&key, 4);
+        ObjY* val = map->Idx(key);
+        if (val->mVec.mpBegin != val->mVec.mpEnd) {
+            *val->mVec.mpBegin = 0;
+            val->mVec.mpEnd = val->mVec.mpBegin;
+        }
+        int len;
+        ReadInt32(r, &len, 1, 0);
+        if (len) {
+            ((S8*)&val->mVec)->Resize(len, 0);
+            r->Read(val->mVec.mpBegin, len);
+        }
+        ReadMapA((MapA*)&val->mMap, r);
+    }
 }
 
 // ===========================================================================
