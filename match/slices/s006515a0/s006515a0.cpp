@@ -321,16 +321,16 @@ struct cSPUIAssetGrid : GB0, GB1, GB2, GB3 {
     unsigned int pad1d0[5];                       // +0x1d0
     bool m1e4, m1e5, m1e6, m1e7, m1e8;            // +0x1e4
 
-    cSPUIAssetGrid();                             // @ 0x00651990
-    ~cSPUIAssetGrid();                            // @ 0x00651c80
-    void SetupWindows(IWindow* a, IWindow* b, IWindow* c);   // @ 0x00651ff0
-    void UpdateScrollRegion();                    // @ 0x006524a0
-    static void __cdecl ReloadCallback(cSPUIAssetGrid* self, ILayout* l, int flag);   // @ 0x650630
-    void ComputeCardLayoutParameters();           // @ 0x650020
-    void UpdateScrolling(int a);                  // @ 0x64fa20
-    void FUN_650470();                            // @ 0x650470
-    void FUN_66bd00();                            // @ 0x66bd00
-    void FUN_64e5d0(int rows, float* out);        // @ 0x64e5d0
+    cSPUIAssetGrid();                             // def 0x00651990
+    ~cSPUIAssetGrid();                            // def 0x00651c80
+    void SetupWindows(IWindow* a, IWindow* b, IWindow* c);   // def 0x00651ff0
+    void UpdateScrollRegion();                    // def 0x006524a0
+    static void __cdecl ReloadCallback(cSPUIAssetGrid* self, ILayout* l, int flag);   // def 0x650630
+    void ComputeCardLayoutParameters();           // def 0x650020
+    void UpdateScrolling(int a);                  // def 0x64fa20
+    void FUN_650470();                            // def 0x650470
+    void FUN_66bd00();                            // def 0x66bd00
+    void FUN_64e5d0(int rows, float* out);        // def 0x64e5d0
 };
 
 // @ 0x00651990
