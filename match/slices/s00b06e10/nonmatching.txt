@@ -1,0 +1,6 @@
+00b06e10 573 not reconstructed in this pass (glyph/text layout helper); not byte-exact; size 0 vs 573; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b07050 240 not reconstructed in this pass (glyph/text layout helper); not byte-exact; size 0 vs 240; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b07140 79 reconstructed as cBigVector::Erase (destroy_range_big at 0x00b03f10, virtual dtor slot 2 for each 0x80-byte element, end pointer adjusted by (last-first)>>7*-0x80); not byte-exact: the element increment and end-adjust expression schedule differently - 77 vs 79 bytes; equiv: not run (0x00b03f10 unresolved); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b07190 307 not reconstructed in this pass (glyph/text layout helper); not byte-exact; size 0 vs 307; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b07310 582 not reconstructed in this pass (text-run/format constructor: 0x1485720 one, 0x167b554 9-dword copy, 0x167af5c/60/64 fields, +0x1cc buffer); not byte-exact; size 0 vs 582; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b07560 1045 not reconstructed in this pass (large text-run helper); not byte-exact; size 0 vs 1045; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
