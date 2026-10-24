@@ -1,0 +1,5 @@
+slices/s00ff11c0/s00ff11c0.cpp  ??4cOrnamentDataA@@QAEAAU0@ABU0@@Z  00ff11c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00ff11c0/s00ff11c0.cpp  ??4cOrnamentDataB@@QAEAAU0@ABU0@@Z  00ff1230  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00ff11c0/s00ff11c0.cpp  ?SetText40@cTextHolder@@QAEXPBUcWString@@@Z  00ff14f0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00ff11c0/s00ff11c0.cpp  ?SetText50@cTextHolder@@QAEXPBUcWString@@@Z  00ff1510  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00ff11c0/s00ff11c0.cpp  ?EraseCity@cCivData@@QAEXH@Z  00ff1fb0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
