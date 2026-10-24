@@ -1,26 +1,20 @@
 // Slice s004af210 — SP::cSPEditorModel vector helpers.
 #include "types.h"
 
-extern void FUN_00454280(void* first, void* last);
-extern void FUN_004769b0(void* first, void* last);
-extern void FUN_004b0590(void* end, int n, void** out);
-extern void FUN_004b0a10(void* end, int n, void** out);
-extern void FUN_00409c00(void* bbox);
-extern void FUN_004b1800(void* end, int n, void* bbox);
-extern void FUN_004b0490(void* first, void* last);
 extern void* FUN_0042dee0(void* p, int size, int align, int flags);
-extern void FUN_004b00a0(void* p);
-extern void FUN_004b0180(void* p);
-extern void FUN_004b0140();
 extern void FUN_004b03f0(void* a, void* b, void* c);
 extern void FUN_f47380(void* p);
 
 struct Block194 { uint32_t d[0x76]; };
 
+struct BBox24 { char b[0x18]; void FUN_00409c00(); };            // 0x409c00 (thiscall ctor)
+struct ReserveLock { void FUN_004b00a0(void* owner); void FUN_004b0140(); };  // 0x4b00a0 / 0x4b0140
+
 struct VecBase {
     char* mpBegin;      // +0x0
     char* mpEnd;        // +0x4
     char* mpCapacity;   // +0x8
+    char* mpAllocName;  // +0xc (eastl allocator name passed to EASTL_Allocate)
 
     void Resize4(unsigned int n);     // 0x4afbf0
     void Resize4F(unsigned int n);    // 0x4afc80
@@ -29,6 +23,16 @@ struct VecBase {
     void Reserve194(unsigned int n);  // 0x4afdd0
     Block194* Erase194(Block194* dst, Block194* end);  // 0x4b0340
     void* Init8();                    // 0x4b0040
+
+    // out-of-line vector primitives: thiscall, ecx is the vector base, the callee pops the stack args
+    void FUN_00454280(char* first, char* last);            // 0x454280
+    void FUN_004b0590(char* end, int n, void** out);       // 0x4b0590
+    void FUN_004b0a10(char* end, int n, void** out);       // 0x4b0a10
+    void FUN_004b1800(char* end, int n, void* elem);       // 0x4b1800
+    void FUN_004b11f0(char* end, int n, void* elem);       // 0x4b11f0
+    void FUN_004b0490(char* first, char* last);            // 0x4b0490
+    char* FUN_004769b0(char* first, char* last);           // 0x4769b0
+    void FUN_004b0180(void* local);                        // 0x4b0180
 };
 
 // @ 0x004af210
@@ -51,9 +55,10 @@ bool GetPropertyAsUint32(void* propList, unsigned int id, unsigned int* out)
 // @ 0x004afbf0
 void VecBase::Resize4(unsigned int n)
 {
-    if ((unsigned int)((mpEnd - mpBegin) >> 2) < n) {
+    unsigned int count = (unsigned int)((mpEnd - mpBegin) >> 2);
+    if (count < n) {
         void* local = 0;
-        FUN_004b0590(mpEnd, n - ((mpEnd - mpBegin) >> 2), &local);
+        FUN_004b0590(mpEnd, (int)(n - count), &local);
         if (local != 0) {
             (*(void(__thiscall*)(void*))(*(uint32_t*)local + 8))(local);
         }
@@ -66,9 +71,10 @@ void VecBase::Resize4(unsigned int n)
 // @ 0x004afc80
 void VecBase::Resize4F(unsigned int n)
 {
-    if ((unsigned int)((mpEnd - mpBegin) >> 2) < n) {
+    unsigned int count = (unsigned int)((mpEnd - mpBegin) >> 2);
+    if (count < n) {
         float local = 0.0f;
-        FUN_004b0a10(mpEnd, n - ((mpEnd - mpBegin) >> 2), (void**)&local);
+        FUN_004b0a10(mpEnd, (int)(n - count), (void**)&local);
     }
     else {
         FUN_004769b0(mpBegin + n * 4, mpEnd);
@@ -78,10 +84,11 @@ void VecBase::Resize4F(unsigned int n)
 // @ 0x004aff80
 void VecBase::Resize24(unsigned int n)
 {
-    if ((unsigned int)((mpEnd - mpBegin) / 0x18) < n) {
+    int count = (int)((mpEnd - mpBegin) / 0x18);
+    if ((unsigned int)count < n) {
         char local[0x18];
-        FUN_00409c00(local);
-        FUN_004b1800(mpEnd, n - (mpEnd - mpBegin) / 0x18, local);
+        ((BBox24*)local)->FUN_00409c00();
+        FUN_004b1800(mpEnd, (int)(n - (unsigned int)count), local);
     }
     else {
         FUN_004b0490(mpBegin + n * 0x18, mpEnd);
@@ -124,13 +131,13 @@ void* VecBase::Init8()
 }
 
 // @ 0x004afd00
-extern void FUN_004b11f0(void* end, int n, void* elem);
 void VecBase::Resize1d8(unsigned int n)
 {
-    if ((unsigned int)((mpEnd - mpBegin) / 0x1d8) < n) {
+    int count = (int)((mpEnd - mpBegin) / 0x1d8);
+    if ((unsigned int)count < n) {
         char tmp[0x1d8];
-        void* elem = Init8();
-        FUN_004b11f0(mpEnd, n - (mpEnd - mpBegin) / 0x1d8, elem);
+        void* elem = ((VecBase*)tmp)->Init8();
+        FUN_004b11f0(mpEnd, (int)(n - (unsigned int)count), elem);
     }
     else {
         Erase194((Block194*)(mpBegin + n * 0x1d8), (Block194*)mpEnd);
@@ -140,16 +147,16 @@ void VecBase::Resize1d8(unsigned int n)
 // @ 0x004afdd0
 void VecBase::Reserve194(unsigned int n)
 {
-    int size = (int)((mpEnd - mpBegin) / 0x1d8);
-    if (n == 0xffffffff || (int)n <= size) {
-        if (n < (unsigned int)size) Resize1d8(n);
-        FUN_004b00a0(this);
+    unsigned int size = (unsigned int)((mpEnd - mpBegin) / 0x1d8);
+    if (n == 0xffffffffu || n <= size) {
+        if (n < size) Resize1d8(n);
         char local[0x14];
+        ((ReserveLock*)local)->FUN_004b00a0(this);
         FUN_004b0180(local);
-        FUN_004b0140();
+        ((ReserveLock*)local)->FUN_004b0140();
     }
     else {
-        void* p = (n == 0) ? 0 : FUN_0042dee0(&mpCapacity, n * 0x1d8, 4, 0);
+        void* p = (n == 0) ? 0 : FUN_0042dee0(&mpAllocName, n * 0x1d8, 4, 0);
         FUN_004b03f0(mpBegin, mpEnd, p);
         char* old = mpBegin;
         if (old != 0 && *(int*)(old - 4) != 0) {

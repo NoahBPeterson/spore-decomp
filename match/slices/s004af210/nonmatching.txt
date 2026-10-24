@@ -1,7 +1,7 @@
-004afbf0  96   complete vector grow (4-byte elems); condition operand order / slot shape differ
-004afc80  82   complete vector grow (float default); x87/SSE slot shape differs
-004afd00  120  complete vector grow (0x1d8 elems)
-004afdd0  250  complete vector reserve (0x1d8 elems); allocator/dealloc paths approximate
-004aff80  105  complete vector grow (0x18 bbox elems)
-004b0040  101  complete two dead-stride loops; loop shape differs
-004b0340  156  complete vector erase-range (0x1d8 elems)
+004afbf0 105  complete vector grow (4-byte elems); erase (0x454280) and insert-values (0x4b0590) are thiscall VecBase members (ecx=this, callee pops the args); remaining diff is /Od stack-slot layout [equiv: PASS 210 valid, 90.4% cov]
+004afc80  94  complete vector grow (float default); erase (0x4769b0) and insert-values (0x4b0a10) are thiscall VecBase members with ecx=this; remaining diff is /Od stack-slot layout [equiv: PASS 208 valid, 100% cov]
+004afd00 157  complete vector grow (0x1d8 elems); the temp-block helper (0x4b0040) is called with ecx=&tmp, not this, and insert-values (0x4b11f0) takes ecx=this; remaining diff is /Od stack-slot layout [equiv: PASS 217 valid, 100% cov]
+004afdd0 379  complete vector reserve (0x1d8 elems); condition is unsigned (n==0xffffffff or n<=size), the EASTL_Allocate name pointer is this+0xc (not &mpCapacity), and the lock ctor/attach/dtor (0x4b00a0/0x4b0180/0x4b0140) are thiscall with ecx=&local / this / &local [equiv: PASS 369 valid, 91.2% cov; free(oldBegin) path unreached]
+004aff80 105  complete vector grow (0x18 bbox elems); 0x409c00 is a thiscall ctor on the stack temp (ecx=&local), and erase/insert (0x4b0490/0x4b1800) are VecBase members with ecx=this [equiv: PASS 387 valid, 100% cov]
+004b0040 113  complete two dead-stride loops; loop shape differs
+004b0340 159  complete vector erase-range (0x1d8 elems)
