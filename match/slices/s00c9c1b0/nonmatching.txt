@@ -1,1 +1,14 @@
-00c9c8a0 1100 complete; stub-class model, same call/vcall sequence (65 calls, 30 vcalls), size 1555 vs 1565; register allocation/scheduling differ
+00c9c1b0  145  equiv=FAIL(fake-calls: releases/calls into stubbed vtables)  RemoveOwner: noun release, combatant detach, noun-manager remove, owner-interface release, spatial teardown; newer MSVC schedules vtable/refcount release differently
+00c9c250  5  equiv=PASS 100% cov  SetOwnerIface logic identical; original hoists the this-vtable load ahead of the GetOwnerKey call, newer compiler schedules it after
+00c9c2e0  32  equiv=WEAK 33.3% cov  HasToolNoun recreated; vtable +0x5c noun lookup and +0x58 type query not byte-identical (extra null-check folding)
+00c9c310  19  equiv=UNSUPPORTED 0/400 (stream vtable faults)  Serialize_Write recreated (version 0xee02c7, game-data/spatial/combatant write, var-list serialize); differs in 4-byte frame size, version-store scheduling, key push folded to 0
+00c9c3c0  121  equiv=UNSUPPORTED 0/400 (stream vtable faults)  Serialize_Read recreated; boolean goto layout and 4-byte frame size differ, plus spatial ref32/ref38 tail scheduling
+00c9c500  174  equiv=WEAK 25.0% cov  SetupTribeHut recreated (hut noun creation, func54h, effect id); stack/call ordering and GetCurrentGameMode comparison differ
+00c9c5e0  44  equiv=UNSUPPORTED 0/400 (default-key reads fault)  GetToolPosition recreated (key lookup via 0059aed0, 0059ab70 validate, 3-float copy); register/stack scheduling differs
+00c9c680  463  equiv=UNSUPPORTED 0/400 (property-manager reads fault)  RefreshModelProps recreated (12 damage-key copies + hi/md/lo property lookups via PropertyManager); property value-pointer inlining and loop layout differ
+00c9cee0  112  equiv=FAIL(fake-arity on fallback call)  AsInterface comparison tree recreated (0x13f94d4/0xe89adf71/0x116d858/0x102a041a + fallbacks); signed compare ordering and null guards differ
+00c9cf70  12  equiv=PASS 100% cov  IsNotType10 (mField14 != 10); MSVC emits an extra xor eax,eax before setne al (newer compiler bool zero-extension)
+00c9cfd0  92  equiv=UNSUPPORTED 0/400 (fake-arity: float tail-call)  SpawnToolIcon recreated (tribe-tool table lookup, 1.0f - combatant value, int multiply by mField38, 0.001 scale); tail-call and float arg convention differ
+00c9d030  37  equiv=WEAK 45.5% cov  ReleaseToolIcon recreated (PlanetModel +0x24 lookup, vtable +0x58 release with flag 1); null-check layout differs
+00c9d160  49  equiv=WEAK 39.3% cov  GetTimeSinceCreation recreated (cSPTimer at +0x200, u64 elapsed * 0.001, FLT_MAX when stopped); x87 u64->float sign decomposition scheduled differently
+00c9d1c0  51  equiv=WEAK 39.3% cov  GetTimeSinceLastUse recreated (cSPTimer at +0x220, u64 elapsed * 0.001, 0.0 when stopped); x87 u64->float sign decomposition scheduled differently
