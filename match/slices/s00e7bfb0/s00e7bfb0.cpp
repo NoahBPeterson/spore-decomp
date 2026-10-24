@@ -141,12 +141,13 @@ void  FUN_00e780a0(int id, int a, float b, int c);                             /
 void  FUN_00e553a0(int n, void* array, void* out);                             // 0x00e553a0
 void  FluidParticlesSampleVelocity(void* out, void* world, void* pos);         // 0x00e4e3c0
 void  FUN_00e6d790(void* out);                                                 // 0x00e6d790
-void  FUN_00e87040(int a, int b, void* c, void* d);                            // 0x00e87040
+void  FUN_00e87040(int a, int b, void* c, float d);                            // 0x00e87040
 bool  sCellIsOutOfRange(cSPCell* p);                                           // 0x00e5f8c0
 float FUN_00e5a9c0(cMarker* m, ...);                                           // 0x00e5a9c0
 float FUN_00e5a910(float a, float b, float c, float d, int e, int f, int g,
                    void* h, int i, int j);                                     // 0x00e5a910
 float sGetBoxSizeMultiplier2(int a, int b);                                    // 0x00e51ff0
+int   __fastcall SP_sGetSourceLevel(int unusedEcx, int level);                 // 0x00e4ee60 (level in edx)
 void  sRandomExtents(void* out, int a, int b);                                 // 0x00e5fb50
 void  sMarkerActivate(cMarker* m, int a, int b, int c, int d, int e);          // 0x00e7c3f0
 void  sGenPlants(int a, int b, int c, float d, float e, float f);              // 0x00e78830
@@ -154,8 +155,15 @@ void  sGenCluster(int a, int b, float c, float d, int e, float f);             /
 void  sGenDistribute(int a, int b, float c, float d, float e);                 // 0x00e75900
 void  FUN_00e5aa20(void* out, int a, void* b);                                 // 0x00e5aa20
 void* FUN_00e4cc40(int a, void* out);                                          // 0x00e4cc40 -> 0x00e823a0
-void  FUN_00743b50(void* p);                                                   // 0x00743b50
-void  FUN_00e82130(void* p);                                                   // 0x00e82130
+// 0x18-byte scratch object the spawn/scatter helpers build in their frame. The retail helpers take
+// it in ecx (__thiscall): 0x00743b50 zeroes its first dword, 0x00e82130 releases whatever
+// refcounted object is stored there. Declaring them as free functions left ecx holding whatever the
+// caller had in it, so the store/release hit a random address.
+struct TempScratch {
+    char raw[0x18];
+    void Clear();     // 0x00743b50
+    void Release();   // 0x00e82130
+};
 void  sCinematicGoldy_Start();                                                 // 0x00e79720
 bool  FUN_00e7bfb0(cSPCell* p, float dt);                                      // 0x00e7bfb0
 void  FUN_00e7a190();                                                          // 0x00e7a190
@@ -250,9 +258,12 @@ void SP_sUpdateCellPosition(cSPCell* p, char* def, float dt)
     }
 
     {
-        char local[0x18];
-        FUN_00e6d790(local);
-        FUN_00e87040(p->f35c, p->f360, local, 0);
+        // The retail code keeps two overlapping frame blocks: a Vec3-style input at the low end of
+        // the scratch (passed as the third argument) and, 0x10 bytes above it, the 4-float temp
+        // that 0x00e6d790 fills -- whose first float is passed by value as the fourth argument.
+        char local[0x30];
+        FUN_00e6d790(local + 0x10);
+        FUN_00e87040(p->f35c, p->f360, local, *(float*)(local + 0x10));
     }
     if (sCellIsOutOfRange(p) && p->f354 == 0) {
         if (p->id != *(int*)(gspCellGame + 0x51b0))
@@ -293,7 +304,7 @@ void FUN_00e7c500(float f, int a2, int a3, int a4, void* a5, void* a6, void* a7)
         double r = sMathRandom.RandomDoubleUniform();
         if (!(r > (double)f)) {
             char local18[0x18];
-            FUN_00743b50(local18);
+            ((TempScratch*)local18)->Clear();
             void* key = FUN_00e4cc40((int)a6, local18);
             cListA* list = (cListA*)key;
             float ext[6];
@@ -315,7 +326,7 @@ void FUN_00e7c500(float f, int a2, int a3, int a4, void* a5, void* a6, void* a7)
                     }
                 }
             }
-            FUN_00e82130(local18);
+            ((TempScratch*)local18)->Release();
         }
         f -= g_1485720;
     }
@@ -336,7 +347,7 @@ void FUN_00e7c6c0(cGridBlock* b, int a2)
     float y0 = (float)b->y * size + 0.0f;
     float x1 = (float)(b->x + 1) * size - 0.0f;
     float y1 = (float)(b->y + 1) * size - 0.0f;
-    float s = 1.0f / (*(float*)(gspCellGame + 0x514c) / (sGetBoxSizeMultiplier2(lvl, b->a4) * g_13f6a20));
+    float s = g_1485720 / (*(float*)(gspCellGame + 0x514c) / (sGetBoxSizeMultiplier2(lvl, b->a4) * g_13f6a20));
     float bx0 = x0 * s, by0 = y0 * s, bz0 = z * s;
     float bx1 = x1 * s, by1 = y1 * s, bz1 = z * s;
     int handle, u8;
@@ -347,9 +358,11 @@ void FUN_00e7c6c0(cGridBlock* b, int a2)
         handle = *(int*)(gspCellGame + 0x40fc);
         u8 = *(int*)(gspCellGame + 0x4114);
     }
-    int srcLevel = *(int*)(*(char**)(gspCellGame + 0x5190) + 0x1c);
+    // The retail code does not read the level id directly: it maps it through the source-level
+    // lookup (level id in edx, ecx ignored) -- 0x00e4ee60.
+    int srcLevel = SP_sGetSourceLevel(0, *(int*)(*(char**)(gspCellGame + 0x5190) + 0x1c));
     char local[0x18];
-    FUN_00743b50(local);
+    ((TempScratch*)local)->Clear();
     cListB* list = (cListB*)FUN_00e4cc40(u8, local);
     if (list) {
         for (int i = 0; i < list->count; i++) {
@@ -361,7 +374,7 @@ void FUN_00e7c6c0(cGridBlock* b, int a2)
             }
         }
     }
-    FUN_00e82130(local);
+    ((TempScratch*)local)->Release();
     (void)lo0; (void)lo1; (void)lo2; (void)bx1; (void)by1; (void)bz1;
     (void)by0; (void)bz0; (void)hi0; (void)hi1; (void)hi2;
 }
@@ -376,7 +389,7 @@ void SP_sUpdateCells(float dt)
     while ((p = (cSPCell*)pool->Next(&it)) != 0) {
         uint32 id = p->id;
         char local[0x18];
-        FUN_00743b50(local);
+        ((TempScratch*)local)->Clear();
         void* def = FUN_00e4cc40(p->f108, local);
         bool ok = FUN_00e78c00(p, def);
         if (ok) {
@@ -435,7 +448,7 @@ void SP_sUpdateCells(float dt)
                 }
             }
         }
-        FUN_00e82130(local);
+        ((TempScratch*)local)->Release();
         p = (cSPCell*)pool->Next(&it);
     }
 }
@@ -461,16 +474,16 @@ void FUN_00e7cbb0(char a1, char a2, int* obj)
     (*(void(__thiscall**)(int*))(*(int*)obj + 4))(obj);
     if (a2 != 1) {
         char local[0x18];
-        FUN_00743b50(local);
+        ((TempScratch*)local)->Clear();
         int* lv = (int*)LayerCatalog_ApplyA(local);
         int v = lv[0xdc / 4];
-        FUN_00e82130(local);
+        ((TempScratch*)local)->Release();
         if (v != 1) {
             char local2[0x18];
-            FUN_00743b50(local2);
+            ((TempScratch*)local2)->Clear();
             int* lv2 = (int*)LayerCatalog_ApplyA(local2);
             int v2 = lv2[0xdc / 4];
-            FUN_00e82130(local2);
+            ((TempScratch*)local2)->Release();
             if (v2 != 2) {
                 if (FUN_00e4fca0() != 0)
                     return;
