@@ -468,6 +468,11 @@ bool INetFileCache::CommitNewCachedDataStream(IStream* pStream, const char* pURL
     ListNode* pFirst = (ListNode*)&mStreamList;
     ListNode* pLast = mStreamList.mpNext;
     pFirst = FindReverse(pFirst, pLast, pStream);
+    if (pFirst == pLast) {
+        if (++mnCacheAccessCountSinceLastMaintenance > 0x28)
+            DoPeriodicCacheMaintenance();
+        return bResult;
+    }
     if (pFirst != pLast) {
         ListNode* pNode = pFirst->mpPrev->mpNext->mpPrev;
         pNode->mpPrev->mpNext = pNode->mpNext;

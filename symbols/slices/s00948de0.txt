@@ -9,3 +9,4 @@
 00949b00 ?ReadCacheIniFile@INetFileCache@Internet@EA@@QAE_NXZ  # EA::Internet::INetFileCache::ReadCacheIniFile migrated from s00948de0
 00949b80 ??0INetFileCache_s0094_8de0@Internet@EA@@QAE@XZ  # INetFileCache_s0094_8de0::INetFileCache migrated from s00948de0 (verbatim, slice spelling)
 00949c10 ??1INetFileCache_s0094_8de0@Internet@EA@@QAE@XZ  # INetFileCache_s0094_8de0::~INetFileCache migrated from s00948de0 (verbatim, slice spelling)
+00f47380 ?operator_delete__@@YAXPAX@Z  # operator_delete__ thunk used by CommitNewCachedDataStream (0x00949674)

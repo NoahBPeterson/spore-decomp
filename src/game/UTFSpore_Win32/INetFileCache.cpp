@@ -1310,6 +1310,11 @@ bool EA::Internet::INetFileCache_s0094_8de0::CommitNewCachedDataStream(IStream* 
     ListNode* pFirst = (ListNode*)&mStreamList;
     ListNode* pLast = mStreamList.mpNext;
     pFirst = FindReverse(pFirst, pLast, pStream);
+    if (pFirst == pLast) {
+        if (++mnCacheAccessCountSinceLastMaintenance > 0x28)
+            DoPeriodicCacheMaintenance();
+        return bResult;
+    }
     if (pFirst != pLast) {
         ListNode* pNode = pFirst->mpPrev->mpNext->mpPrev;
         pNode->mpPrev->mpNext = pNode->mpNext;
