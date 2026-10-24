@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b40a20/s00b40a20.cpp  ?FUN_00b41020@@YAXXZ  00b41020  /O2 /MD /Gy /GS- /TP /arch:SSE
+slices/s00b40a20/s00b40a20.cpp  ?LoadSphereTuning@CapsuleShape@@QAEXPAUIPropertyList@@@Z  00b41390  /O2 /MD /Gy /GS- /TP /arch:SSE

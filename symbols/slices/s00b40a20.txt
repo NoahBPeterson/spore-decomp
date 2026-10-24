@@ -1,1 +1,3 @@
-00b40a20 CollideSphereShape_00b40a20  # centre/radius test, convex hull edge search (0x698b30 seg dist, 0x698e00 closest point, 0x69a050 point-in-polygon), contact struct: A pt +0, B pt +0xc0, count +0x180, normal +0x184
+00b40a20 CollideSphereShape_00b40a20  # nonmatching: sphere-vs-shape contact generation (hull edge search + sphere fallback), SSE operand order / register allocation differ
+00b41020 FUN_00b41020  # refresh 13 global tuning floats from the "gold" property list (0x93e8e9b7) via PropertyManager::GetPropertyList + Property::GetFloat
+00b41390 CapsuleShape::LoadSphereTuning  # LoadPlanetTuning(0x00b51460) + CapsuleConstant(0x00b4d930), then 13 property reads into the shared tuning block (0x0167eb70 +0xa8..+0xb8) and globals
