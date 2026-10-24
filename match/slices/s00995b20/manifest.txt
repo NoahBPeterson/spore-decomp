@@ -1,0 +1,6 @@
+slices/s00995b20/s00995b20.cpp  ?FUN_00996280@cXHTMLFrameSet@@QAEXIIII@Z  00996280  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00995b20/s00995b20.cpp  ?FUN_00996410@cXHTMLFrameSet@@QAE_NPAX0@Z  00996410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00995b20/s00995b20.cpp  ?clear@StarDeque@@QAEXXZ  00996460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00995b20/s00995b20.cpp  ??YJobIter@@QAEAAU0@H@Z  009964c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00995b20/s00995b20.cpp  ??1cXHTMLFrameSet@@QAE@XZ  009968a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00995b20/s00995b20.cpp  ?FUN_00996a80@cXHTMLFrameSet@@QAEPAXE@Z  00996a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
