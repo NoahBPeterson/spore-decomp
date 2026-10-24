@@ -3,13 +3,17 @@
 #include "types.h"
 
 void  operator_delete_(void* p);            // 0x00f47380
-void* FindWindowByID(void* lay, int id, int a); // 0x008105b0 thiscall ret8
-void  FUN_d3a0(void* p);                    // 0x00dfd3a0
-void  FUN_e0e0(void* self, void* p);        // 0x00dfdfe0
+struct Lay   { void* FindWindowByID(int id, int a); };  // 0x008105b0 thiscall ret8
+void  FUN_d3a0(void* self, void* p);        // 0x00dfd3a0 (__thiscall ret4, see TFun2)
+void  FUN_e0e0(void* self, void* p);        // 0x00dfdfe0 (__thiscall ret4, see TFun2)
+// Both helpers are __thiscall (ecx = the sub-object, one stack word, callee pops
+// it).  MSVC 2008 refuses an explicit __thiscall on a free function, so the calls
+// go through thiscall function pointers instead.
+typedef void (__thiscall* TFun2)(void* self, void* p);
 struct F28 { void M(); };                   // 0x00f280f0 thiscall
 struct VecC { void F(unsigned a, unsigned b); }; // 0x00dfc600 thiscall ret8
 struct Obj4 { void F_bba0(); };             // 0x00dfbba0 thiscall
-struct VecB { void F_b850(); };             // 0x00dfb850 thiscall
+struct VecB { void F_b850(unsigned a, unsigned b); }; // 0x00dfb850 thiscall ret8
 struct UI2 {
     void M_d8a0();              // 0x00dfd8a0 thiscall
     void F_de90();              // 0xdfde90
@@ -184,19 +188,21 @@ void UI2::F_de90()
         }
     }
     *(unsigned char*)((char*)this + 0x7e) = 1;
-    int local = 0;
+    // The "was any slot empty" flag: retail keeps it in a single byte (mov byte
+    // [esp+0x10],0 / ,1) and pushes that byte's stack dword to the window.
+    bool local = false;
     if (*(int*)((char*)this + 0x30) != 0) {
         char* p = base;
         int n = *(int*)((char*)this + 0x30);
         do {
-            if (*p == 0) local = 1;
+            if (*p == 0) local = true;
             p += 0x38;
             --n;
         } while (n != 0);
     }
-    void* w = FindWindowByID((char*)this + 0x48, 0x7ccc115, 1);
+    void* w = ((Lay*)((char*)this + 0x48))->FindWindowByID(0x7ccc115, 1);
     if (w != 0)
-        ((void(__thiscall*)(void*, int, int))(*(void***)w)[0x7c / 4])(w, 2, local);
+        ((void(__thiscall*)(void*, int, bool))(*(void***)w)[0x7c / 4])(w, 2, local);
 }
 
 // @ 0x00dfdf10
@@ -233,7 +239,7 @@ void* UI2::F_e170(int* p)
         int v = *(int*)((char*)this + 0x210);
         if (v != 0 && *(int*)(v - 4) != 0)
             operator_delete_((void*)v);
-        ((VecB*)((char*)this + 0x2c))->F_b850();
+        ((VecB*)((char*)this + 0x2c))->F_b850(*(unsigned*)((char*)this + 0x2c), *(unsigned*)((char*)this + 0x30));
         int w = *(int*)((char*)this + 0x2c);
         if (w != 0 && *(int*)(w - 4) != 0) {
             operator_delete_((void*)w);
@@ -243,12 +249,12 @@ void* UI2::F_e170(int* p)
     } else if (-1 < *p) {
         if (*(int*)this < 0) {
             if (this != (UI2*)0xfffffffc) {
-                FUN_e0e0((char*)this + 4, p + 1);
+                ((TFun2)FUN_e0e0)((char*)this + 4, p + 1);
                 *(int*)this = *p;
                 return this;
             }
         } else {
-            FUN_d3a0(p + 1);
+            ((TFun2)FUN_d3a0)((char*)this + 4, p + 1);
         }
     }
     *(int*)this = *p;
@@ -512,7 +518,7 @@ void SP::cSPUIMissions::UpdateMissionFieldsSpace()
         sl.z = 0;
         sl.state = 0;
 
-        void* win = FindWindowByID(lay, (int)g_147ebe0[i], 1);
+        void* win = ((Lay*)lay)->FindWindowByID((int)g_147ebe0[i], 1);
         if (win != 0) {
             void* box = ((void*(__thiscall*)(void*, unsigned))(*(void***)win)[0xc / 4])
                           (win, 0x8ed27e7a);
@@ -522,22 +528,22 @@ void SP::cSPUIMissions::UpdateMissionFieldsSpace()
                 ((void(__thiscall*)(void*, int, int))(*(void***)panel)[0x7c / 4])(panel, 0x10, 1);
             }
         }
-        win = FindWindowByID(lay, (int)g_147ebec[i], 1);
+        win = ((Lay*)lay)->FindWindowByID((int)g_147ebec[i], 1);
         if (win != 0)
             ((void(__thiscall*)(void*, int, int))(*(void***)win)[0x7c / 4])(win, 2, 1);
     }
 
     for (int i = 0; i < 8; i += 2) {
-        void* win = FindWindowByID(lay, (int)table[i], 1);
+        void* win = ((Lay*)lay)->FindWindowByID((int)table[i], 1);
         ((void(__thiscall*)(void*, int, int))(*(void***)win)[0x7c / 4])
             (win, 1, table[i + 1] != 0);
     }
 
-    void* win = FindWindowByID(lay, 0x7ccdc3b, 1);
+    void* win = ((Lay*)lay)->FindWindowByID(0x7ccdc3b, 1);
     if (win != 0)
         ((void(__thiscall*)(void*, unsigned))(*(void***)win)[0x80 / 4])(win, 0x13ec468);
 
-    win = FindWindowByID(lay, 0x7e0bb68, 1);
+    win = ((Lay*)lay)->FindWindowByID(0x7e0bb68, 1);
     if (win != 0)
         ((void(__thiscall*)(void*, int, int))(*(void***)win)[0x7c / 4])(win, 1, 0);
 
