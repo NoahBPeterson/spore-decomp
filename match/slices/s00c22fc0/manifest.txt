@@ -1,0 +1,1 @@
+slices/s00c22fc0/s00c22fc0.cpp  ?GetActiveTool@cCreatureBase@@QAEPAXXZ  00c23290  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
