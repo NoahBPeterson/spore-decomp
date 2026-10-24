@@ -1,1 +1,4 @@
-00fdeac0 SP::cAppModeSpace::TransitionFromSolarToPlanet  # card/PDB name; members match dev cAppModeSpace shifted +0x5c (mLastBakedTag +0x16c, mNeedsBakingForTransition +0x170, mOldRenderLayerStates +0x17c)
+00fdeac0 SP::cAppModeSpace::TransitionFromSolarToPlanet  # preserved from s00fdeac0; nonmatching
+00fdf5b0 SP::cAppModeSpace::OnPlanetRecordReady  # newly claimed; nonmatching (tail-call form differs)
+00fdf5f0 SP::cAppModeSpace::EnterPlanetTransition  # newly claimed; partial
+00fdf8e0 SP::cAppModeSpace::ExitPlanetTransition  # newly claimed; partial

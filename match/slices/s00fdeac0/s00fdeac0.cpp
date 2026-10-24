@@ -277,7 +277,13 @@ struct cPlanetRecord {
     ResourceKey* mPlantsBegin;                  // +0xbc  vector<ResourceKey>
     ResourceKey* mPlantsEnd;                    // +0xc0
     uint32_t size() const { return (uint32_t)(mPlantsEnd - mPlantsBegin); }
+    void* GetTransitionData();                  // 0x00b8d9b0
 };
+
+struct ITransitionTarget {
+    void Enter();                               // 0x010727e0
+};
+ITransitionTarget* GetTransitionTarget(int a, int b);   // 0x010666a0
 
 struct cBioProtector { const ResourceKey* GetKey(); };   // 0x00bb9b80
 struct cStarRecordRef {
@@ -291,6 +297,7 @@ struct cPlanetItem {
     ResourceKey* mKeysEnd;                      // +0x04
     int GetOwnerID();                           // 0x00ff0420
     void ApplyKeyMap(const cKeyMap& map);       // 0x00ff3190
+    void SetActive(bool active);                // 0x00c37130
 };
 struct PlanetItemVector {
     cPlanetItem** mpBegin;
@@ -452,6 +459,9 @@ class cAppModeSpace { public:
     eastl::list<bool> mOldRenderLayerStates;    // +0x17c
 
     void TransitionFromSolarToPlanet();
+    void OnPlanetRecordReady();                 // 0x00fdf5b0
+    void EnterPlanetTransition();               // 0x00fdf5f0
+    void ExitPlanetTransition();                // 0x00fdf8e0
 };
 
 // @ 0x00fdeac0
@@ -615,6 +625,56 @@ void cAppModeSpace::TransitionFromSolarToPlanet()
     GameTimeManager()->IncPauseGate(0x4bf38a7);
     LayoutCollection()->Show();
     GameInputManager()->mInputLock++;
+}
+
+// @ 0x00fdf5b0
+void cAppModeSpace::OnPlanetRecordReady()
+{
+    cSPLivingUniverse::GetActivePlanet();
+    cPlanetRecord* record = cSPLivingUniverse::GetActivePlanetRecord();
+    if (record->GetTransitionData()) {
+        ITransitionTarget* target = GetTransitionTarget(0, 0);
+        void (ITransitionTarget::*enter)() = &ITransitionTarget::Enter;
+        (target->*enter)();
+    } else {
+        TransitionFromSolarToPlanet();
+    }
+}
+
+// @ 0x00fdf5f0
+void cAppModeSpace::EnterPlanetTransition()
+{
+    cPlanet* planet = cSPLivingUniverse::GetActivePlanet();
+    cPlanetRecord* record = cSPLivingUniverse::GetActivePlanetRecord();
+    GonzagoTransition()->Begin();
+
+    if (!record->GetTransitionData()) {
+        TransitionFromSolarToPlanet();
+        return;
+    }
+
+    mDisabledRenderLayersForBaking = true;
+    mBakingForPlanetEntryEnded = false;
+    mElapsedBakeTimeForTransitionMS = 0;
+
+    PlanetItemVector& items = planet->GetItems();
+    for (int i = 0; i < items.size(); ++i)
+        items.mpBegin[i]->SetActive(false);
+
+    UniverseUpdateActive();
+    MessageServer()->PostMSG(0x279a5da, 0, 0);
+}
+
+// @ 0x00fdf8e0
+void cAppModeSpace::ExitPlanetTransition()
+{
+    cPlanet* planet = cSPLivingUniverse::GetActivePlanet();
+    cPlanetRecord* record = cSPLivingUniverse::GetActivePlanetRecord();
+    (void)record;
+
+    PlanetItemVector& items = planet->GetItems();
+    for (int i = 0; i < items.size(); ++i)
+        items.mpBegin[i]->SetActive(true);
 }
 
 } // namespace SP
