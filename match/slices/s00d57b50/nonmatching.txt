@@ -1,0 +1,16 @@
+# Slice s00d57b50 nonmatching functions (compiled; behaviourally faithful but not byte-exact).
+# Format: <va> <difftest-verdict> <reason>
+00d57b50 FAIL 5/5 valid inputs mismatched (execution fault); SetupVignetteSpots; large vignette ring reconstruction, speculative helper ABIs (bd9480/af9cf0/afdfe0) cause read fault (719 vs 617 bytes)
+00d57e20 PASS 398 valid inputs 86.4% coverage but not byte-exact; animation recharge walker; register-allocation tie - original self in ebx/base in ebp/result in edi, ours self in ebp/base in esi (199 vs 209 bytes)
+00d57ef0 PASS 400 valid inputs 100.0% coverage but not byte-exact; vignette counter reseed; original reserves 8-byte frame + spills [+0x644] to a stack local, ours omits the shadow slot (136 vs 112 bytes)
+00d57f80 WEAK 358 valid inputs but only 19.3% coverage; StopVignetteInstance; thiscall vtable dispatch on opaque objects, only partial path exercised (250 vs 257 bytes)
+00d58080 FAIL 5/5 valid inputs mismatched (first: ecx untouched by original); city grid ring emitter; helper FUN_00bc97f0 arg/ABI + loop nesting differ (291 vs 187 bytes)
+00d581b0 FAIL 5/5 valid inputs mismatched (first: memory pool @40010a60); UpdatePolice; object vtable walks + pointer-transfer assignment reconstruction incomplete (383 vs 394 bytes)
+00d58330 WEAK 366 valid inputs but only 41.9% coverage; cAbandonedCitizenVisualizer::OnTick; s64 timebase + FUN_00d995f0 call reconstruction diverges (290 vs 296 bytes)
+00d58460 WEAK 230 valid inputs but only 44.4% coverage; object vector notify walk; register-allocation tie - original self in esi/index in edi, ours self in edi (65 vs 79 bytes)
+00d584b0 PASS 399 valid inputs 88.6% coverage but not byte-exact; cCitizenLocomotion ctor; register-allocation tie - original arg in ebp + dead old=0 in edi, ours arg in edi (85 vs 56 bytes)
+00d58510 WEAK 140 valid inputs but only 47.4% coverage; surface-orientation build; speculative vtable method slots + float path reconstruction (249 vs 256 bytes)
+00d58610 UNSUPPORTED 0/400 valid inputs (fault(read) 398, fake-arity 2); pointer-vector insertion sort; comparator is thiscall (ecx=&stack temp) and function is a 2-arg __fastcall; only 4-byte frame + call form differ (230 vs 231 bytes)
+00d58700 UNSUPPORTED 0/400 valid inputs (fault(read) 396, fake-arity 1); pointer-vector shift helper; same comparator-thiscall + 1-byte frame/call-form difference (209 vs 210 bytes)
+00d587e0 FAIL 5/5 valid inputs mismatched (first: esp); sift-up helper; arg/ABI (thiscall comparator, hi/lo order) reconstruction diverges (192 vs 182 bytes)
+00d588a0 UNSUPPORTED 0/400 valid inputs (fault(read) 400); SetUpCitizenBodyScaleRanges; PropertyManager property-lookup chain reconstructed but opaque pointers fault under difftest (468 vs 488 bytes)
