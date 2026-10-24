@@ -23,6 +23,8 @@ extern void  sub_921880(void*, void*);              // RBTreeErase
 extern void  sub_f47380(void*);                     // allocator deallocate
 extern void  sub_9a9600(void*);                     // rbtree nuke subtree
 extern void  sub_6bf8f0(void*, void*, void*, void*, int); // DoInsertValue (this=set)
+extern void  __fastcall sub_6be890(void*, int, void*, const void*); // lowerBound (set, out, key)
+extern void  __fastcall sub_8dae70(void*, int, void*, void*);       // Erase (set, out next, node)
 extern void  sub_11e0744(void*, void*, u32);        // vector<bool> DoInsertValue / copy
 extern void  sub_93bd50(void*, const char*);        // MemoryStream ctor(name)
 extern void  sub_93bde0(void*);                     // MemoryStream dtor
@@ -156,6 +158,8 @@ struct HoleNode {
     HoleRec   rec;      // +0x10
 };
 
+extern void __fastcall FUN_006bfc20(void* set, int edx, void* out, HoleNode* pos, const HoleRec* rec); // 0x6bfc20 insert hole
+
 struct HoleTable {
     char data[0x20];
     void FUN_006bfda0(u32 startLo, u32 startHi, u32 sizeLo, u32 sizeHi); // 0x6bfda0
@@ -248,44 +252,64 @@ void HoleTable::FUN_006bff10(HoleTable* other)
 // ---------------------------------------------------------------------------
 // @ 0x006bff90
 // ---------------------------------------------------------------------------
-bool HoleTable::FUN_006bff90(u32 a, u32 b, u32 c, u32 d)
+bool HoleTable::FUN_006bff90(u32 startLo, u32 startHi, u32 sizeLo, u32 sizeHi)
 {
-    char* base = data;
-    if (c == 0 && d == 0)
+    u32* base = (u32*)data;
+    if ((sizeLo | sizeHi) == 0)
         return true;
-    u32 endLo = a + c;
-    u32 endHi = b + d + (endLo < a ? 1 : 0);
-    u32 extLo = *(u32*)(base + 0);
-    u32 extHi = *(u32*)(base + 4);
+
+    u32 endLo = startLo + sizeLo;
+    u32 endHi = startHi + sizeHi + (endLo < startLo ? 1 : 0);
+    u32 extLo = base[0];
+    u32 extHi = base[1];
     if (endHi < extHi || (endHi == extHi && endLo <= extLo)) {
-        HoleNode* root;
-        u32 key0 = a, key1 = b;
-        sub_a057f0(base + 8, &root, &key0);
-        if (root == *(HoleNode**)(base + 8 + 4))
+        // The range ends inside the current extent: split the hole that
+        // contains `start` and re-insert the two remainder ranges around it.
+        HoleRec key;
+        key.startLo = startLo; key.startHi = startHi;
+        key.sizeLo  = sizeLo;  key.sizeHi  = sizeHi;
+
+        HoleNode* node;
+        sub_6be890(data + 8, 0, &node, &key);               // 0x6be890 lowerBound
+        if (node == *(HoleNode**)(data + 0x10))             // set.end()
             return false;
-        HoleNode* prev = (HoleNode*)sub_9215c0(root);
-        u32 plo = prev->rec.startLo, phi = prev->rec.startHi;
-        u32 szlo = prev->rec.sizeLo, szhi = prev->rec.sizeHi;
-        u32 pEndLo = plo + szlo;
-        u32 pEndHi = phi + szhi + (pEndLo < plo ? 1 : 0);
-        if (phi < b || (phi == b && plo < a)) {
-            // gap before this hole: is there one?
+
+        HoleNode* prev = (HoleNode*)sub_9215c0(node);       // RBTreeDecrement
+        u32 plo   = prev->rec.startLo;
+        u32 phi   = prev->rec.startHi;
+        u32 pEndLo = plo + prev->rec.sizeLo;
+        u32 pEndHi = phi + prev->rec.sizeHi + (pEndLo < plo ? 1 : 0);
+
+        HoleNode* erased;
+        sub_8dae70(data + 8, 0, &erased, prev);             // erase prev -> next
+
+        if (phi < startHi || (phi == startHi && plo < startLo)) {
+            // [prevStart, start) stays free.
+            HoleRec gap;
+            gap.startLo = plo;
+            gap.startHi = phi;
+            gap.sizeLo  = startLo - plo;
+            gap.sizeHi  = (startHi - phi) - (startLo < plo ? 1 : 0);
+            FUN_006bfc20(data + 8, 0, &erased, node, &gap); // 0x6bfc20 insert
         }
-        (void)pEndHi;
+        if (endHi < pEndHi || (endHi == pEndHi && endLo < pEndLo)) {
+            // [end, prevEnd) stays free.
+            HoleRec gap;
+            gap.startLo = endLo;
+            gap.startHi = endHi;
+            gap.sizeLo  = pEndLo - endLo;
+            gap.sizeHi  = (pEndHi - endHi) - (pEndLo < endLo ? 1 : 0);
+            FUN_006bfc20(data + 8, 0, &node, node, &gap);   // 0x6bfc20 insert
+        }
     } else {
-        if (b < extHi || (b == extHi && a < extLo))
+        // The range extends past the current extent.
+        if (startHi < extHi || (startHi == extHi && startLo < extLo))
             return false;
-        *(u32*)(base + 0) = endLo;
-        *(u32*)(base + 4) = endHi;
-        if (extHi < b || (extHi < b) || (b < extHi) || (b == extHi && extLo < a)) {
-            // old extent is entirely inside the new hole -> drop it
-        }
-        if (extHi < b || (extHi == b && extLo <= a)) {
-            if (extHi < b || extHi < b || (b > extHi) || (b == extHi && extLo < a)) {
-                FUN_006bfda0(extLo, extHi, a - extLo, (b - extHi) - (a < extLo ? 1 : 0));
-                return true;
-            }
-        }
+        base[0] = endLo;
+        base[1] = endHi;
+        if (startHi > extHi || (startHi == extHi && startLo > extLo))
+            FUN_006bfda0(extLo, extHi, startLo - extLo,
+                         (startHi - extHi) - (startLo < extLo ? 1 : 0));
     }
     return true;
 }

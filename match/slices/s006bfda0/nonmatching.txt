@@ -16,3 +16,4 @@
 006c09c0  32  PFRecordRead ctor; EH frame + scheduling differ
 006c0b20  32  PFRecordRead::InitFromInfo ctor; EH frame + scheduling differ
 006c0c40  32  PFRecordWrite ctor; EH frame + FileStream handling differ
+006bff90  398  PFHoleTable hole-range add (lowerBound 0x6be890 -> RBTreeDecrement -> erase 0x8dae70 -> up to two 0x6bfc20 split inserts; else grow extent + 0x6bfda0 gap); 64-bit add/sbb-neg carry materialization + register allocation differ (445 vs 398); equiv PASS (305 valid inputs, 0 mismatches, 96.0% coverage)
