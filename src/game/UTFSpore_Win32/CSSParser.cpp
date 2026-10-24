@@ -642,7 +642,6 @@ private:
 namespace EA {
 namespace XHTML {
 namespace Style {
-static char sImportStatic[16];
 }
 }
 }
@@ -1227,7 +1226,8 @@ bool CSSParser_s008f_9220::Parse(Stylesheet_s008f_9220* pSheet)
             Advance();
             if (mToken != 3 || wcscmp(L"import", mReader.mMatchText.mpBegin) != 0) {
                 Error(0x23b0024);
-                mReader.SetDefault(sImportStatic);
+                if ((gTokFlag & 1) == 0) gTokFlag = gTokFlag | 1;
+                mReader.SetDefault(&gTokStart);
                 if (mReader.mScanPos < mReader.mScanEnd && *mReader.mScanPos == L';')
                     mReader.mScanPos += 1;
                 while (mToken == 2) {
@@ -1260,13 +1260,14 @@ bool CSSParser_s008f_9220::Parse(Stylesheet_s008f_9220* pSheet)
                     if (pSheet->mVecEnd < pSheet->mVecCap) {
                         void** p = pSheet->mVecEnd;
                         pSheet->mVecEnd = p + 1;
-                        *p = v;
+                        if (p) *p = v;      // retail stores only when the old end pointer is non-null
                     } else {
                         pSheet->InsertRuleAt(pSheet->mVecEnd, &v);
                     }
                 } else {
                     Error(0x23b000b);
-                    mReader.SetDefault(sImportStatic);
+                    if ((gTokFlag & 1) == 0) gTokFlag = gTokFlag | 1;
+                    mReader.SetDefault(&gTokStart);
                     if (mReader.mScanPos < mReader.mScanEnd && *mReader.mScanPos == L';')
                         mReader.mScanPos += 1;
                     SkipSpace();
