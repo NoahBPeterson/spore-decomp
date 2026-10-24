@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+0104f2a0  929  SP::cSPToolManager::UpdateToolEffects; not emitted (large tool-effect walk, still in progress)
+0104f740  183  dtor chain (RemoveHandler + 25x cString dtor loop + rbtree/hashtable teardown); not emitted
+0104f850  176  0x38 hashtable find + create-property-list fallback through 0x920090/0x104c510/0xb6ff20; not emitted
+0104f960  268  not emitted
+0104fa90  273  SP::cSPToolManager::UseToolStop; not emitted
+0104fc10  182  property-refresh + tool stop/object release chain; not emitted
+0104fcd0  148  red-black tree lower_bound walk + node insert via 0x104f650; not emitted
+0104fd70  156  cVarListSerializer stack object (0xa10 frame) + EA::IO::ReadInt32 + ActivateTool; not emitted
+0104ff10  213  dual cSPTimer threshold compare ((uint)(f*1000.0) saturate + float->uint64 conversion); not emitted

@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0104f2a0/s0104f2a0.cpp  ?FUN_0104fff0@@YIHPAUCToolObject@@@Z  0104fff0  /O2 /MD /Gy /EHsc /TP
+slices/s0104f2a0/s0104f2a0.cpp  ?FUN_0104f930@@YIPAUCPropertyList@@PAUCToolObject@@@Z  0104f930  /O2 /MD /Gy /EHsc /TP
+slices/s0104f2a0/s0104f2a0.cpp  ?FUN_0104fe10@@YIXPAUCToolObject@@@Z  0104fe10  /O2 /MD /Gy /EHsc /TP
+slices/s0104f2a0/s0104f2a0.cpp  ?FUN_01050020@@YIXPAUCToolObject@@@Z  01050020  /O2 /MD /Gy /EHsc /TP
+slices/s0104f2a0/s0104f2a0.cpp  ?FUN_0104fe50@@YI_NPAUCToolObject@@@Z  0104fe50  /O2 /MD /Gy /EHsc /TP
+slices/s0104f2a0/s0104f2a0.cpp  ?FUN_0104feb0@@YI_NPAUCToolObject@@@Z  0104feb0  /O2 /MD /Gy /EHsc /TP
+slices/s0104f2a0/s0104f2a0.cpp  ?FUN_0104fbb0@@YG_NPAUCToolObject@@@Z  0104fbb0  /O2 /MD /Gy /EHsc /TP
