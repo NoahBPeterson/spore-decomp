@@ -1,1 +1,7 @@
 00db0130 SP::TRIBE_NPC_GIFT_Activate  # PDB anchor name (symbols/pdb_names.json); table entry at 0x01593b04 next to the _Tick/_Deactivate pointers
+00db09c0 FUN_00db09c0  # TribeEat task objective: locomotion + report order to tribe, aim at tool/centre
+00db0b80 FUN_00db0b80  # TribeEat task bind: create/fetch the TribeEat task node, idle anim, seed the state block
+00db0cb0 FUN_00db0cb0  # TribeEat post-tick: re-find the spot, clear the consumed target, tell the tribe (BYTE-EXACT)
+00db0d40 FUN_00db0d40  # TribeEat distance probe: arm the stimuli when the target bundle is in range
+00db0e30 EatState::FUN_00db0e30  # TribeEat per-frame target maintenance (bool probe) -> can the order still be fulfilled
+00db1030 EatState::FUN_00db1030  # TribeEat task deactivate / re-select (char)

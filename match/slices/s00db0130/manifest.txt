@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00db0130/tribe_eat.cpp  FUN_00db0cb0@@YAXPAUCitizen@@HHHHPAUEatState@@@Z  00db0cb0
