@@ -11,7 +11,6 @@ typedef unsigned int uint;
 
 // ---------------------------------------------------------------- masked externs
 void* __cdecl EAAllocate(uint size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
-uint  __stdcall FUN_00b72890(uint, int);
 // 0x00a887b0 is a __thiscall member: it reads [ecx+0xbc]/[ecx+0xc0]/[ecx+0xa8]/[ecx+0xac]
 // and takes (int index, float value) on the stack -> modelled as a member call (see cRc54).
 
@@ -33,62 +32,77 @@ extern const int   g_i2;     // 0x01687af8
 // ================================================================================================
 // 00b72b60 -- obstacle query/segment test.  this (ebx) is the Simulator (scale table at +0x548c).
 // ================================================================================================
-struct OP;                                   // obstacle-ish: float x,y,z at +0x38/+0x3c/+0x40
 struct V3 { float x, y, z; };
+// Obstacle record: position at +0x38, the distance band it quotes at +0x44/+0x48, its radius at
+// +0x4c and its type index at +0x88.
+struct Op {
+    char  pad[0x38];
+    float x, y, z;                           // +0x38, +0x3c, +0x40
+    float mDistMin;                          // +0x44
+    float mDistMax;                          // +0x48
+    float mRadius;                           // +0x4c
+    char  pad2[0x88 - 0x50];
+    int   mType;                             // +0x88
+};
+
+// 0x00b72890 -- segment/obstacle test: (ray origin, ray length, normalized direction, obstacle
+// position, normalized obstacle normal, distance limit, radius limit, flag, out distance).  The hit
+// result is al; the caller keeps the rest of eax, so the return type stays uint.
+uint __cdecl FUN_00b72890(const V3* origin, float len, const V3* dir, const V3* pos,
+                          const V3* normal, float dist, float lim, char flag, float* outDist);
+
 struct Sim {
     char  pad[0x548c];
     float mScale[4];                         // +0x548c
     float m5498;                             // +0x5498
-    uint FUN_00b72b60(V3* a, V3* b, float c, OP* obj, char flag, float* outDist, bool* outFlag);
+    uint FUN_00b72b60(V3* a, V3* b, float c, Op* obj, char flag, float* outDist, bool* outFlag);
 };
 
 // @ 0x00b72b60 -- Sim::FUN_00b72b60
-uint Sim::FUN_00b72b60(V3* a, V3* b, float c, OP* obj, char flag, float* outDist, bool* outFlag) {
-    float* ox = (float*)((char*)obj + 0x38);
-    int    n  = *(int*)((char*)obj + 0x88);
+uint Sim::FUN_00b72b60(V3* a, V3* b, float c, Op* obj, char flag, float* outDist, bool* outFlag) {
+    int   n    = obj->mType;
+    float len  = sqrtf(obj->x * obj->x + obj->y * obj->y + obj->z * obj->z) + g_eps;
+    float ninv = 1.0f / len;
+    V3    nrm;                               // normalized obstacle position
+    nrm.x = obj->x * ninv;
+    nrm.y = obj->y * ninv;
+    nrm.z = obj->z * ninv;
 
-    float len = sqrtf(ox[0] * ox[0] + ox[1] * ox[1] + ox[2] * ox[2]) + g_eps;
-    float inv = 1.0f / len;
-    float nx = ox[0] * inv;
-    float ny = ox[1] * inv;
-    float nz = ox[2] * inv;
-
-    float bl = sqrtf(b->x * b->x + b->y * b->y + b->z * b->z);
+    float bl   = sqrtf(b->x * b->x + b->y * b->y + b->z * b->z);
     float binv = 1.0f / (bl + g_eps);
-    float bx = b->x * binv;
-    float by = b->y * binv;
-    float bz = b->z * binv;
+    V3    dir;                               // normalized query direction
+    dir.x = b->x * binv;
+    dir.y = b->y * binv;
+    dir.z = b->z * binv;
 
     float al = sqrtf(a->x * a->x + a->y * a->y + a->z * a->z);
 
-    bool  bf;
-    float f10;
-    if (n != 0 || al < *(float*)((char*)obj + 0x4c) * g_fb4 + len) {
-        bf = false; f10 = g_fc0;
+    bool  near;                              // the obstacle reaches the query ray
+    float pad;
+    if (n != 0 || al < obj->mRadius * g_fb4 + len) {
+        near = false; pad = g_fc0;
     } else {
-        bf = true; f10 = g_fbc;
+        near = true;  pad = g_fbc;
     }
 
-    float f9;
+    float scale;
     if (n < 3)
-        f9 = bf ? g_fb8 : mScale[n];
+        scale = near ? g_fb8 : mScale[n];
     else
-        f9 = 0.0f;
+        scale = 0.0f;
 
-    char u8 = (bf || flag == 0) ? 0 : 1;
+    char u8 = (near || flag == 0) ? 0 : 1;
 
-    float dist = ((((*(float*)((char*)obj + 0x48) - *(float*)((char*)obj + 0x44)) * f9) +
-                   *(float*)((char*)obj + 0x44)) + f10) + c;
-    float lim = *(float*)((char*)obj + 0x4c) + f10;
+    float dist = ((((obj->mDistMax - obj->mDistMin) * scale) + obj->mDistMin) + pad) + c;
+    float lim  = obj->mRadius + pad;
 
-    uint r = FUN_00b72890(*(uint*)b, 0);
-    (void)a; (void)nx; (void)ny; (void)nz; (void)bx; (void)by; (void)bz;
-    (void)dist; (void)lim; (void)u8; (void)outDist; (void)outFlag;
+    // the obstacle position doubles as the segment point handed to the test
+    uint r = FUN_00b72890(a, bl, &dir, (const V3*)&obj->x, &nrm, dist, lim, u8, outDist);
     if ((char)r == 0) {
         *outDist = 0.0f;
-        return r & 0xffffff00u;
+        return r & 0xffffff00u;              // retail only clears al here
     }
-    if (al < m5498 * *(float*)((char*)obj + 0x4c) + len) {
+    if (al < m5498 * obj->mRadius + len) {
         *outFlag = false;
         return 1;
     }
@@ -219,10 +233,6 @@ void FUN_00b732a0(K12* first, K12* last, Pred12 pred) {
 // ================================================================================================
 // 00b73350 / 00b73420 -- insertion_sort over OP** by squared distance to (x,y,z)
 // ================================================================================================
-struct Op {
-    char  pad[0x38];
-    float x, y, z;                   // +0x38
-};
 // @ 0x00b73350 -- FUN_00b73350
 void FUN_00b73350(Op** first, Op** last, float x, float y, float z) {
     if (first == last)
