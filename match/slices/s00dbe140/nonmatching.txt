@@ -1,2 +1,7 @@
 # va  diff-bytes  reason
 00dbe520  1001  MOVE_Activate complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; self/zero swap esi<->edi and out-of-line placement of the no-target block differ
+00dbe140  91  Reserve complete; capacity load and signed /0x250 magic match, but allocator-argument push order, ebp/edi scheduling and jbe-vs-jle remain
+00dbe200  266  Insert complete; the insert/grow/range-copy control flow matches, but register allocation and the allocator/copy call sequencing differ (376 vs 383)
+00dbe380  29  PushDefault complete; only the header bit-test form (mov/shr/test al,1 vs test [esp],0x80000000) and the object/vtable register swap differ (88 vs 89)
+00dbe3e0  200  CreateSlot complete; grow and free-list paths match, but the register plan, repeated mpBegin reloads and grown-slot flag ops differ (219 vs 243)
+00dbedc0  61  complete; flags extraction folded to test [mem],0x2000 instead of mov/shr/test al,1, and the id load/callee-saved order differs (103 vs 104); equiv hits a fake-vtable read

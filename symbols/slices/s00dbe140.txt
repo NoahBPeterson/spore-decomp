@@ -1,1 +1,24 @@
 00dbe520 SP::MOVE_Activate  # PDB candidate (caller-scored); cdecl (creature, 3 unused, flags, result block, move params); creates the pooled move state and fills the result block
+00dbe140 SP::SlotVector::Reserve  # Claude-coined; EASTL vector reserve over 0x250-byte slot entries (cGroupMovement object pool)
+00dbe200 SP::SlotVector::Insert  # Claude-coined; EASTL vector insert/grow for slot entries, aliasing value pointer shifted by one slot
+00dbe380 SP::SlotVector::PushDefault  # Claude-coined; append a header-only default slot, destroying the temp payload if its header says constructed
+00dbe3e0 SP::SlotVector::CreateSlot  # Claude-coined; pop the free list (or grow), clear/set the slot flags and copy the 0x24c payload
+00dbe4e0 SP::cResizableObjectPoolT<SP::cGroupMovement>::CreateObject  # PDB-style; default-constructs a cGroupMovement and returns CreateSlot(id)|0x40000000
+00dbec30 SP::IsInGameMode_1654C05  # Claude-coined; true when GetCurrentGameMode()==0x1654c05
+00dbec60 SP::IsInGameMode_1654C01_or_C02  # Claude-coined; true when GetCurrentGameMode() is 0x1654c01 or 0x1654c02
+00dbeca0 SP::IsUfoField540BelowEpsilon  # Claude-coined; compares entity +0x540 against the 1.5258789e-05f epsilon
+00dbece0 SP::IsTriggerStateTwo  # Claude-coined; TriggerMgr +0x28 byte zero and +0x2c int == 2
+00dbed20 SP::IsUfoReadyAndFar  # Claude-coined; entity readiness predicate and 0xc37260() > 30000
+00dbed50 SP::IsUfoReady  # Claude-coined; single entity readiness predicate (0xc372b0)
+00dbed70 SP::IsEmpireRelationshipHostile  # Claude-coined; compares the object's empire and the player empire through RelationshipManager
+00dbedc0 SP::IsUfoInventoryTargetCurrent  # Claude-coined; flags bit 13 resets the component, else compares entity +0x544 with the player inventory component id
+00dbee30 SP::IsPlanetKindNotFive  # Claude-coined; active planet record kind != 5
+00dbee70 SP::IsEmpireAtWarWithPlayer  # Claude-coined; resolves both empires through StarManager and tests the war predicate
+00dbeef0 SP::HasUfoService  # Claude-coined; non-null result from 0xc38b80
+00dbef10 SP::HasTwoFileEntries  # Claude-coined; nested component GetFileCount()==2
+00dbef30 SP::ReleaseUfoService  # Claude-coined; releases the service if present, then resets component slot 0x50
+00dbef60 SP::ResetUfoToPlanetRadius  # Claude-coined; SetOrigin(pos), SetAltitude(PlanetModel()->GetRadiusAt(pos)+k), reset scales
+00dbefc0 SP::ResetUfoScale  # Claude-coined; writes 1.0f to entity +0x6b4 and +0x6b8
+00dbefe0 SP::ResetUfoIfNotReady  # Claude-coined; calls 0xc37270 when 0xc372b0 is false, returns true
+00dbf000 SP::ResetUfoToLocalRadius  # Claude-coined; SetOrigin + sqrtf(x^2+y^2+z^2) altitude, fills out[0]=3.0f out[1]=1.0f
+00dbf060 SP::ResetUfoToWaterHeight  # Claude-coined; SetOrigin(pos), SetAltitude(PlanetModel()->GetWaterHeight2()+k), reset scales

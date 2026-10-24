@@ -1,1 +1,19 @@
 # source  symbol  original VA  [flags override]
+slices/s00dbe140/s00dbe140.cpp  ?CreateObject@GroupMovementPool@@QAEIXZ  00dbe4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbec30@@YAMXZ  00dbec30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbec60@@YAMXZ  00dbec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbeca0@@YAMPAUUfoBehaviour@@@Z  00dbeca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbece0@@YAMXZ  00dbece0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbed20@@YAMPAUUfoBehaviour@@@Z  00dbed20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbed50@@YAMPAUUfoBehaviour@@@Z  00dbed50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbed70@@YAMPAUEmpireRef@@@Z  00dbed70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbee30@@YAMXZ  00dbee30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbee70@@YAMPAUEmpireRef@@@Z  00dbee70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbeef0@@YAMPAUUfoBehaviour@@@Z  00dbeef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbef10@@YADPAUUfoBehaviour@@@Z  00dbef10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbef30@@YAXPAUUfoBehaviour@@@Z  00dbef30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbef60@@YA_NPAUUfoBehaviour@@@Z  00dbef60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbefc0@@YAXPAUUfoBehaviour@@@Z  00dbefc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbefe0@@YA_NPAUUfoBehaviour@@@Z  00dbefe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbf000@@YA_NPAUUfoBehaviour@@HHHHPAM@Z  00dbf000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dbe140/s00dbe140.cpp  ?FUN_00dbf060@@YA_NPAUUfoBehaviour@@@Z  00dbf060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
