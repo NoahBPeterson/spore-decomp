@@ -1,0 +1,22 @@
+# slice s00b80630 - rw::graphics::ImmediateMode / planet-layer event dispatch cluster
+# Modelled types (retail member offsets):
+#   Layer      outer event layer: vtable pair @0x00/@0x04, atomic lock @0x08, flags @0x0c/@0x28,
+#              pointers @0x10..@0x1c, refcounted range container @0x20, ImmediateMode @0x24,
+#              three refcounted modifier modes @0x2c/@0x30/@0x34
+#   Mode       ImmediateMode-style object: vtable @0x00, atomic refcount @0x04, cStaticBuffer @0x08,
+#              per-range second vertex array @0x0c, span table @0x20 (stride 0x14), id vector @0x34/@0x38
+#   RefArray   refcounted vertex-range container: vtable @0x00, flags @0x04, refcount @0x40
+#   RefObj     0x0c-byte modifier: vtable @0x00, refcount @0x04, payload @0x08
+00b80630  Layer::Init() -> Layer*  # construct outer layer: base/derived vtables (0x13f1ab0/0x13ef094 -> 0x1465474/0x1465470), atomic-clear +8, zero +0xc..+0x34, create three 0xc-byte refcounted modes (vtable 0x13ef094 -> 0x146545c) and assign to +0x2c/+0x30/+0x34 with addref/old-release
+00b807e0  Mode::BuildRibbon(pVerts, pOther, count, color) -> void  # ribbon/trail vertex generation into 0x18-byte vertices {float x,y,z; u32 color; float u,v}; obtains a static-buffer vertex window via cStaticBuffer::GetVertexBuffer, walks segments accumulating XY distance, closes the last vertex
+00b80a50  Mode::DrawMaterial(pMaterial, pParam) -> void  # if mode buffer: FUN_00761cf0(200) then cStaticBuffer::Dispatch(pParam, pMaterial->+0x04)
+00b80a80  Mode::SetMaterialA(pParam) -> void  # MaterialManager vtable[0x28](0x9276314a); if material and buffer, Dispatch(pParam, material->+0x04)
+00b80ac0  Mode::SetMaterialB(pParam) -> void  # MaterialManager vtable[0x28](0x32fb723); if material and buffer, Dispatch(pParam, material->+0x04)
+00b80b00  Mode::SetMaterialC(pParam) -> void  # MaterialManager vtable[0x28](0xc13ad5ef); if material and buffer, Dispatch(pParam, material->+0x04)
+00b80b40  Mode::Submit() -> void  # release old buffer, DrawHolder::Begin(0,4,2,0x1000), per planet id: PlanetModel records[id].+0x11 gate, color from NounManager(+0xc4..0xcc) clamped to bytes, per-range BuildRibbon, then Flush and adopt the singleton buffer
+00b80d30  Layer::Destroy() -> void  # reset derived vtables; release modifiers +0x34/+0x30/+0x2c/+0x24 (atomic dec, reset, vtable[0]); release range container +0x20 (refcount @0x40, destroy via (*vtable)[0x170](obj, flag)); release +0x1c (vtable[1]); base vtables 0x13eb938/0x13ef094
+00b80e40  Layer::StopAudio() -> void  # FUN_0067dd50()->vtable[0x50](9) then (0x19); release mode +0x24 and clear it
+00b80ea0  Layer::DispatchEvent(p2, event, pViewer, pMaterial) -> void  # gate on +0x24/+0x2c, terrain sphere, universe context; flush pending Submit; viewer Update; identity 3x4 matrix + EffectsDispatch(4); event 9 -> material 0x8c4c893e -> DrawMaterial; event 0x19 -> SetMaterialA/B/C; viewer Finish
+00b80ff0  Mode::DeleteInstance(flags) -> Mode*  # deleting dtor: release buffer +0x08 via vtable[2], install base vtable 0x13ef094, operator delete[] when flags&1
+00b81020  StampState::Stamp(pDir, radius, planeMask) -> void  # terrain-sphere stamping: reject zero direction, scale radius to a 128-grid step count, pick dominant axis, compute two face coordinates, FUN_00685450 -> spans; per cell test the two-bit coverage mask, rebuild the surface normal from the face permutation table 0x14653b8, and clear mask/bit-plane bits within the angular reach
+00b81470  cPlanetModel::DistanceBetweenPoints(a, b) -> float  # acos(clamp(dot(normalize(a), normalize(b)), -1, 1)) * ((GetRadiusAt(a)+GetRadiusAt(b)) * 0.5)

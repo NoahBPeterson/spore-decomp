@@ -1,0 +1,6 @@
+slices/s00b80630/s00b80630.cpp  ?DrawMaterial@Mode@@QAEXPAX0@Z  00b80a50  /O2 /MD /Gy /EHsc /TP
+slices/s00b80630/s00b80630.cpp  ?SetMaterialA@Mode@@QAEXPAX@Z  00b80a80  /O2 /MD /Gy /EHsc /TP
+slices/s00b80630/s00b80630.cpp  ?SetMaterialB@Mode@@QAEXPAX@Z  00b80ac0  /O2 /MD /Gy /EHsc /TP
+slices/s00b80630/s00b80630.cpp  ?SetMaterialC@Mode@@QAEXPAX@Z  00b80b00  /O2 /MD /Gy /EHsc /TP
+slices/s00b80630/s00b80630.cpp  ?StopAudio@Layer@@QAEXXZ  00b80e40  /O2 /MD /Gy /EHsc /TP
+slices/s00b80630/s00b80630.cpp  ?DeleteInstance@Mode@@QAEPAU1@I@Z  00b80ff0  /O2 /MD /Gy /EHsc /TP
