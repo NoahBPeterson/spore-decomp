@@ -1,1 +1,14 @@
-0100f930 350 partial: source compiles and covers every path and call, but equiv.py reports FAIL (fake-arity at a call through an extern global vtable); cl also differs in the uint64 to float fild/mask order, so treated as partial until the harness resolves it
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s0100f3e0.  Every one of the 10 functions has a complete reconstruction (no stubs, no sketches),
+# so this file holds only the caveats the equivalence gate could not clear; all rows are also listed in
+# nonmatching.txt.
+#
+0100f3e0  391  PirateRaidPlunderEvent::GetEventFrequency: complete body; the gate reports FAIL on 5/5 valid inputs at 24.2% coverage because the fabricated tuning object's vtable makes our extra indirect GetProperty call fault where the original returns, so the property-gate path (0x397a073 / 0x397a072, the 0x200 raid-speed factor, the radius/nRoutes divisor and the 1-exp tail) is unverified.
+0100f600  370  PirateRaidAllyEvent::GetEventFrequency: complete body; the gate reports FAIL on 5/5 valid inputs at 64.8% coverage for a register side effect only (our epilogue zeroes ecx, the original leaves the receiver there), so the computed frequency itself agrees on every valid input.
+0100f7c0  263  CreateArtifact::Start: complete body; the gate reports UNSUPPORTED (0/400 valid) because the stubbed PropertyManager/ToolManager entry points fault on every generated input, so the slot count, the 0x2e05842 cap and the BuildPlanetEntry tail are unverified.
+0100fb00  87   cSimulatorUniverse::HasVisibleAvatar: complete body; 400/400 inputs valid but only 59.7% coverage - the fabricated nouns rarely reach the planet-value (m118) branch, so the empire-flag tail is verified and the planet branch is not.
+0100fbc0  341  HappinessDisasterEvent::GetEventFrequency: complete body; 383/400 valid at 32.3% coverage - the planet selection and the uncolonized early-out are exercised, the property/radius/delta tail needs a live star manager the stubs do not provide.
+0100fdb0  190  HappinessDisasterEvent::TryCreateMission: complete body; 284/400 valid at 53.8% coverage - the m08 mission path and the planet scan head are exercised, the mUncolonized branch and the final release tail are not.
+01010190  103  AdjustPlanetHeap: complete body; 225/400 valid at 39.4% coverage - the heap walk runs on the inputs whose nouns survive the stub GetNounManager/GetCities calls; the promote tail is not reached.
