@@ -1,0 +1,8 @@
+slices/s00b230b0/s00b230b0.cpp  ?FUN_00b230b0@cEAString@@QAEXI@Z  00b230b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b230b0/s00b230b0.cpp  ?FUN_00b23260@cMilitaryAttackCityOrder@@QAEPAV1@E@Z  00b23260  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b230b0/s00b230b0.cpp  ?ClearPosseMembers@cGameNounManager@@QAEXXZ  00b234c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b230b0/s00b230b0.cpp  ?FUN_00b23510@cGameNounManager@@QAEXXZ  00b23510  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b230b0/s00b230b0.cpp  ?FUN_00b23610@cGameNounManager@@QAEXXZ  00b23610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b230b0/s00b230b0.cpp  ?FUN_00b23640@cGNMThunk@@QAEXII@Z  00b23640  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b230b0/s00b230b0.cpp  ?FUN_00b23650@cGameNounManager@@QAEPAVcNoun@@PAX0000@Z  00b23650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b230b0/s00b230b0.cpp  ?FUN_00b23690@cGameNounManager@@QAEPAXI@Z  00b23690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
