@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-006d4410 638  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d46d0 685  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d49d0 659  bake evaluator (uv4x8/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d4cd0 650  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d4fa0 659  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
+006d4410 649  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ; equiv PASS 504/1200 inputs (100% coverage)
+006d46d0 677  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ; equiv PASS 534/1200 inputs (100% coverage)
+006d49d0 669  bake evaluator (uv4x8/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ; equiv PASS 487/1200 inputs (100% coverage)
+006d4cd0 646  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ; equiv PASS 535/1200 inputs (100% coverage)
+006d4fa0 670  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ; equiv PASS 520/1200 inputs (100% coverage)
