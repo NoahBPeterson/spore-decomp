@@ -237,6 +237,8 @@ extern uint32_t g_16c78bc;
 extern uint32_t g_16c78c0;
 extern float g_16c79a4, g_16c79b4, g_16c79d4, g_16c79e4;
 extern float g_16c7944, g_16c7964, g_15d96b8;
+extern float g_16c7994, g_16c79c4, g_16c7924;   // per-typeID float constants read by f_00eed280
+extern float g_1485720;                          // _HK_REAL_ONE == 1.0f
 
 struct NounMgr { void* FUN_00b21000(uint32_t type, uint32_t inst); };
 NounMgr* __cdecl NounManager();
@@ -629,6 +631,45 @@ bool __cdecl f_00eed0b0(const ResourceKey* key, float* a, float* b)
 }
 
 // ===========================================================================
-// @ 0x00eed280   property float read (not part of this slice)
+// @ 0x00eed280   property float read (per-typeID dispatch)
 // ===========================================================================
-float __cdecl f_00eed280(int* key) { (void)key; return 1.0f; }
+float __cdecl f_00eed280(int* key)
+{
+    float v = g_1485720;                       // _HK_REAL_ONE
+    switch ((uint32_t)key[1]) {                // key->typeID
+    case 0x24682294:
+    case 0x476a98c7:
+        v = g_16c7994;
+        break;
+    case 0x2399be55:
+        v = g_16c79c4;
+        break;
+    case 0x2b978c46:
+        v = g_16c7924;
+        break;
+    case 0xb1b104: {
+        ResourceKey k;
+        FUN_00eeca60(&k, key);
+        switch (k.typeID) {
+        case 0x2a8fb3f:
+        case 0x3a2511e: {
+            void* n = NounManager()->FUN_00b21000(k.typeID, k.instanceID);
+            if (!n)
+                break;
+            GetPropertyT(*(void**)((char*)n + 0xc), 0x7611535, &v);
+            break;
+        }
+        case 0x74e0069:
+        case 0x7b38ba7: {
+            IntrusivePtr<IPropList> ptr;
+            PropMgr* pm = FUN_0067de30();
+            if (pm->GetPropertyList((uint32_t)key[0], (uint32_t)key[2], &ptr))
+                GetPropertyT(ptr, 0x7611535, &v);
+            break;
+        }
+        }
+        break;
+    }
+    }
+    return v;
+}

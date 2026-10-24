@@ -16,3 +16,4 @@
 00eed010  NounPropertyKey      # property-as-key fetch for a resource key
 00eed090  SetGlobal55c0377     # thunk: g_015aca38.Set(0x55c0377, g_015aca34)
 00eed0b0  PropertyPairRead     # resource key -> (float,float) pair, bool ok
+00eed280  PropertyFloatRead    # typeID dispatch -> single property float (1.0f default)
