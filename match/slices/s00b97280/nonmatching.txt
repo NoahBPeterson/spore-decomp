@@ -1,1 +1,2 @@
 00b97720  1809 complete: planet cube-grid spawn-point picker (ring search + random candidate); size 2696/2684, 17/17 calls in same order, same compare/branch kinds; register/stack-slot allocation differs
+00b976f0  30  complete: ClearGlobal16 clears the shared 16-byte vector via 0x705250 and rewinds the global end pointer; size 46/45, only the call setup and end-pointer arithmetic scheduling differ; equiv PASS (400/400 valid, 100% coverage)

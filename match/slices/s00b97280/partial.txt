@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00b97280  406  IntVector::insert(pos,count,value): capacity/tail-shift/grow paths transcribed from the original; external byte-copy helper was modelled as a load from 0x13cc480, so the default-input equivalence run faults where the original resolves memcpy (equiv FAIL, 5/37 valid inputs mismatched; ours 473 / orig 478)
+00b97600  212  EraseGlobal16: guessed 16-byte global-vector compaction around the 0xb96220/0x705250 helpers; control flow and predicate handling remain incomplete (ours 68 / orig 227); equiv UNSUPPORTED (0/400 valid inputs, all fault reads)

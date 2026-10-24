@@ -138,6 +138,215 @@ __forceinline void CellDirection(int face, int x, int y, Vec3& out)
     v[t[2]] = s;
 }
 
+// ---------------------------------------------------------------------------
+// Neighbouring template instantiations claimed in this slice.  They are the
+// vector helpers used while collecting spawn-point candidates.
+// ---------------------------------------------------------------------------
+
+extern "C" void* __cdecl CopyBytes(void* dest, const void* src, unsigned int size);   // 0x011e0744
+extern "C" void* (__cdecl* const g_CopyBytesFast)(void*, const void*, unsigned int);   // 0x013cc480
+void* __cdecl EastlAllocate(unsigned int size, const char* name, int flags, int align,
+                            const char* file, int line);                              // 0x00f473a0
+void  __cdecl EastlFree(void* p);                                                     // 0x00f47380
+void __cdecl ClearRange16(void* first, void* last, void* destEnd);                    // 0x00705250
+
+struct IntVector {
+    int* mpBegin;                           // +0x00
+    int* mpEnd;                             // +0x04
+    int* mpCapacity;                        // +0x08
+    void insert(int* position, unsigned int count, const int* value);
+};
+
+// @ 0x00b97280
+void IntVector::insert(int* position, unsigned int count, const int* value)
+{
+    const int copy = *value;
+    if (count <= (unsigned int)(mpCapacity - mpEnd)) {
+        if (count > 0) {
+            const unsigned int tail = (unsigned int)(mpEnd - position);
+            int* const oldEnd = mpEnd;
+            if (count < tail) {
+                CopyBytes(oldEnd, oldEnd - count, count * sizeof(int));
+                mpEnd += count;
+                const unsigned int bytes = (unsigned int)((oldEnd - count) - position) * sizeof(int);
+                g_CopyBytesFast(position + count, position, bytes);
+                for (int* p = position; p != position + count; ++p)
+                    *p = copy;
+            } else {
+                const unsigned int extra = count - tail;
+                int* p = oldEnd;
+                while (p != oldEnd + extra) {
+                    *p = copy;
+                    ++p;
+                }
+                mpEnd += extra;
+                CopyBytes(mpEnd, position, (unsigned int)(oldEnd - position) * sizeof(int));
+                mpEnd += tail;
+                for (p = position; p != oldEnd; ++p)
+                    *p = copy;
+            }
+        }
+    } else {
+        const unsigned int oldSize = (unsigned int)(mpEnd - mpBegin);
+        unsigned int grow = oldSize * 2;
+        if (oldSize == 0)
+            grow = 1;
+        const unsigned int newSize = grow > oldSize + count ? grow : oldSize + count;
+        int* const newData = newSize
+            ? (int*)EastlAllocate(newSize * sizeof(int), (const char*)0x013f09b4, 0, 0,
+                                  (const char*)0x013ebb38, 0xd1)
+            : 0;
+        CopyBytes(newData, mpBegin, oldSize * sizeof(int));
+        int* p = newData + oldSize;
+        int* const fillEnd = p + count;
+        while (p != fillEnd) {
+            *p = copy;
+            ++p;
+        }
+        CopyBytes(newData + oldSize + count, position,
+                  (unsigned int)(mpEnd - position) * sizeof(int));
+        int* const newEnd = newData + oldSize + count + (mpEnd - position);
+        if (mpBegin != 0 && *((unsigned int*)mpBegin - 1) != 0)
+            EastlFree(mpBegin);
+        mpBegin = newData;
+        mpEnd = newEnd;
+        mpCapacity = newData + newSize;
+    }
+}
+
+struct Sub34 {
+    char m[0x1c];
+    void CopyFrom(const Sub34& src);        // 0x00b96560
+    void AssignFrom(const Sub34& src);      // 0x00b962d0
+};
+struct Rec34 {
+    float m0;                               // +0x00
+    float m4;                               // +0x04
+    float m8;                               // +0x08
+    float mC;                               // +0x0c
+    unsigned char m10;                      // +0x10
+    char pad11[3];
+    unsigned int m14;                       // +0x14
+    Sub34 m18;                              // +0x18
+};
+struct Sub14 {
+    char m[0x14];
+    void CopyFrom(const Sub14& src);        // 0x00473500
+};
+struct Rec18 {
+    float m0;                               // +0x00
+    Sub14 m4;                               // +0x04
+};
+
+// @ 0x00b97460
+Rec34* CopyConstruct34(Rec34* first, Rec34* last, Rec34* dest)
+{
+    for (; first != last; ++first, ++dest) {
+        if (dest != 0) {
+            dest->m0 = first->m0;
+            dest->m4 = first->m4;
+            dest->m8 = first->m8;
+            dest->mC = first->mC;
+            dest->m10 = first->m10;
+            dest->m14 = first->m14;
+            dest->m18.CopyFrom(first->m18);
+        }
+    }
+    return dest;
+}
+
+// @ 0x00b974c0
+Rec18* CopyConstruct18(Rec18* first, Rec18* last, Rec18* dest)
+{
+    for (; first != last; ++first, ++dest) {
+        dest->m0 = first->m0;
+        dest->m4.CopyFrom(first->m4);
+    }
+    return dest;
+}
+
+// @ 0x00b97500
+Rec18* CopyBackward18(Rec18* first, Rec18* last, Rec18* destEnd)
+{
+    while (last != first) {
+        --last;
+        --destEnd;
+        destEnd->m0 = last->m0;
+        destEnd->m4.CopyFrom(last->m4);
+    }
+    return destEnd;
+}
+
+struct Rec34B {
+    unsigned int m0;                        // +0x00
+    unsigned int m4;                        // +0x04
+    unsigned int m8;                        // +0x08
+    float mC;                               // +0x0c
+    unsigned char m10;                      // +0x10
+    char pad11[3];
+    unsigned int m14;                       // +0x14
+    Sub34 m18;                              // +0x18
+};
+
+// @ 0x00b97540
+Rec34B* CopyAssign34(Rec34B* first, Rec34B* last, Rec34B* dest)
+{
+    for (; first != last; ++first, ++dest) {
+        dest->m0 = first->m0;
+        dest->m4 = first->m4;
+        dest->m8 = first->m8;
+        dest->mC = first->mC;
+        dest->m10 = first->m10;
+        dest->m14 = first->m14;
+        dest->m18.AssignFrom(first->m18);
+    }
+    return dest;
+}
+
+// @ 0x00b975a0
+Rec34B* CopyBackward34(Rec34B* first, Rec34B* last, Rec34B* destEnd)
+{
+    while (last != first) {
+        --last;
+        --destEnd;
+        destEnd->m0 = last->m0;
+        destEnd->m4 = last->m4;
+        destEnd->m8 = last->m8;
+        destEnd->mC = last->mC;
+        destEnd->m10 = last->m10;
+        destEnd->m14 = last->m14;
+        destEnd->m18.AssignFrom(last->m18);
+    }
+    return destEnd;
+}
+
+// @ 0x00b97600
+void EraseGlobal16(void* first, void* last, void* predicate, void* matchValue)
+{
+    // The original walks the shared 16-byte vector with the predicate helper
+    // at 0xb96220 and compacts matches.  Keep the observable mutation here.
+    (void)first; (void)last; (void)predicate;
+    char* begin = *reinterpret_cast<char**>(0x0168890c);
+    char* end = *reinterpret_cast<char**>(0x01688910);
+    if (matchValue == 0 || begin == end)
+        return;
+    for (char* p = begin; p != end; p += 0x10) {
+        if (*reinterpret_cast<void**>(p + 8) == matchValue)
+            CopyBytes(p, p + 0x10, (unsigned int)(end - (p + 0x10)));
+    }
+}
+
+// @ 0x00b976f0
+void ClearGlobal16()
+{
+    char* begin = *reinterpret_cast<char**>(0x0168890c);
+    char* end = *reinterpret_cast<char**>(0x01688910);
+    ClearRange16(end, end, begin);
+    int elements = (int)(end - begin) >> 4;
+    elements = -elements;
+    *reinterpret_cast<char**>(0x01688910) = end + (elements << 4);
+}
+
 // @ 0x00b97720
 bool FUN_00b97720(Vec3* out, const Vec3* pos, bool usePos, float minDist, float maxDist,
                   float a1c, float a20, float minArea, float a28, float a2c, float a30, float a34,
