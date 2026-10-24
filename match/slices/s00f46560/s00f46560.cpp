@@ -7,6 +7,7 @@
 // (work/match/scratch_s00f46560_cards.txt).
 #include "types.h"
 #include <intrin.h>
+#include <xmmintrin.h>
 
 extern "C" __declspec(dllimport) void* __stdcall GetProcessHeap();
 extern "C" __declspec(dllimport) void* __stdcall HeapAlloc(void*, unsigned long, unsigned int);
@@ -794,5 +795,17 @@ int Timer::Elapsed() {
     long long t;
     QueryPerformanceCounter(&t);
     long long d = t - last;
-    return (int)((float)d * freq);
+    union { float f; unsigned u; } c;
+    c.f = (float)d * freq;
+    unsigned bits = c.u;
+    int exp = (int)((bits >> 23) & 0xFF) - 127;
+    if (exp < 0)
+        return 0;
+    if (exp >= 31)
+        return (int)0x80000000u;
+    unsigned mant = (bits & 0x7FFFFF) | 0x800000;
+    unsigned mag = (exp >= 23) ? (mant << (exp - 23)) : (mant >> (23 - exp));
+    if (bits & 0x80000000u)
+        return -(int)mag;
+    return (int)mag;
 }
