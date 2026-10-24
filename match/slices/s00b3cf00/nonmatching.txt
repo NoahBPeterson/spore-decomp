@@ -5,11 +5,11 @@
 00b3d630  30  FUN_00b3d630 f10-local float path; complete behavior, only remaining diff is x87 fmul operand order / pop-esi scheduling (size 101 vs 102); equiv=PASS 399/400
 00b3d6a0  50  FUN_00b3d6a0 mode dispatch; complete behavior, register allocation for p40 differs (original keeps p40 in esi); equiv=WEAK (326 valid, 34.3% coverage - indirect-call paths not exercised)
 00b3d730  82  FUN_00b3d730 message-server registrations; complete behavior, original reuses esi=(this-4) and reloads MessageServer each call; equiv=PASS 321/321
-00b3d8d0  208  FUN_00b3d8d0 normalized cross product; complete behavior, magnitude computed in double then reciprocal-sqrt rounded to float (matches original x87 store); equiv=PASS 400/400
+00b3d8d0  375  FUN_00b3d8d0 normalized cross product; complete behavior, magnitude accumulated in x87 (24-bit mantissa, extended exponent, like the original) with float sqrt/reciprocal in range and 2^-96 / 2^128 scaled fallbacks outside it, so the reciprocal-sqrt keeps the original's rounding; equiv=PASS 499/499
 00b3d9c0  163  FUN_00b3d9c0 centre/size vector; complete behavior; equiv=PASS 362/362
 00b3da90  187  FUN_00b3da90 controller direction vector; complete behavior; equiv=PASS 378/378
 00b3dbb0  155  FUN_00b3dbb0 velocity/bounding update; complete behavior; equiv=PASS 352/352
-00b3dcd0  81  FUN_00b3dcd0 scale factor; complete behavior, /fp:fast reassociation reorders the product; equiv=PASS 397/397
+00b3dcd0  99  FUN_00b3dcd0 scale factor; complete behavior, /fp:fast reassociation reorders the product; equiv=PASS 497/497
 00b3dd40  71  FUN_00b3dd40 selection test; complete behavior, null-check register setup differs; equiv=PASS 365/365
 00b3dda0  236  FUN_00b3dda0 accumulate controller transforms; complete behavior, switch goto shape and xmm scheduling differ; equiv=PASS 362/362
 00b3dec0  190  FUN_00b3dec0 integrate scale; complete behavior, /fp:fast merged the equivalent mode0/mode1 bodies; equiv=WEAK (398 valid, 59.3% coverage)

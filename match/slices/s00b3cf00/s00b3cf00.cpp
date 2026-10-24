@@ -416,18 +416,31 @@ void* C101::M_d8c0()
 // ---------------------------------------------------------------------------
 void __cdecl FUN_00b3d8d0(float* out, float* b, float* c, float p4, float p5, float p6)
 {
-    float f1 = c[0] - b[0];
-    float f2 = c[1] - b[1];
-    p4 = p4 - c[0];
-    p5 = p5 - c[1];
-    float f3 = c[2] - b[2];
-    p6 = p6 - c[2];
+    float c0 = c[0], c1 = c[1], c2 = c[2];
+    float f1 = c0 - b[0];
+    float f2 = c1 - b[1];
+    float f3 = c2 - b[2];
+    p4 = p4 - c0;
+    p5 = p5 - c1;
+    p6 = p6 - c2;
     float f4 = p6 * f2 - p5 * f3;
     f2 = p5 * f1 - p4 * f2;
     f3 = p4 * f3 - p6 * f1;
+    // The original sums the three squares on the x87 (24-bit mantissa, extended exponent, i.e. the
+    // device-thread FPCW) and takes fsqrt/fdivrp there; volatile doubles keep MSVC on the x87 path.
+    // In the float range sqrtf/1.0f reproduce fsqrt/fdivrp exactly; outside it the sqrt is scaled by
+    // a power of two so it still rounds to 24 bits before the reciprocal.
     volatile double v4 = f4, v3 = f3, v2 = f2;
-    double d = v4 * v4 + (v3 * v3 + v2 * v2);
-    float inv = (float)(1.0 / sqrt(d));
+    double d = v2 * v2 + v3 * v3 + v4 * v4;
+    float inv;
+    if (d >= 1.17549435e-38 && d <= 3.4028234663852886e38) {
+        inv = 1.0f / sqrtf((float)d);
+    } else {
+        double fwd = (d > 3.4028234663852886e38) ? 1.2621774483536189e-29
+                                                 : 3.402823669209385e38;
+        double sf = (float)(sqrt(d) * fwd);
+        inv = (float)((1.0 / sf) * fwd);
+    }
     out[0] = inv * f4;
     out[1] = f3 * inv;
     out[2] = f2 * inv;
@@ -542,24 +555,30 @@ void C101::M_dbb0()
 // ---------------------------------------------------------------------------
 float C101::M_dcd0()
 {
+    void* volatile self = this;
     switch (nMode) {
     case 0: {
         Obj40* o = p40;
         if (o->b71 != 0) {
-            float z = 0.0f;
-            return z;
+            self = this;
+            return 0.0f;
         }
-        return 1.0f / ((VD8*)o)->fD8();
+        float r0 = 1.0f / ((VD8*)o)->fD8();
+        self = this;
+        return r0;
     }
     case 1: {
         Obj40* o = p40;
         if (o->b71 == 0) {
             float* p = (float*)((V68*)o)->f68();
-            return 1.0f / (((p[3] - p[0]) * (p[4] - p[1])) * (p[5] - p[2]) * g_15695fc);
+            float r1 = 1.0f / (((p[3] - p[0]) * (p[4] - p[1])) * (p[5] - p[2]) * g_15695fc);
+            self = this;
+            return r1;
         }
         break;
     }
     }
+    self = this;
     return 0.0f;
 }
 
