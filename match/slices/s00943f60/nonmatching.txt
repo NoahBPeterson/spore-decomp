@@ -1,1 +1,8 @@
-009440e0  279  register/frame: zero kept in ebx, extra push ecx hole, filter loop order
+009440e0  279  register/frame: zero kept in ebx, extra push ecx hole, filter loop order (pre-existing committed function)
+00944250  119  eastl::basic_string<char>::push_back; complete but the growth uses the max/min local-slot idiom cl schedules differently (95 vs 129); equiv.py UNSUPPORTED (our symbol not found)
+00944660  466  UTFInternet::HTTPRequest::AddRequestParameter; complete but the SSO temp layout/scheduling differ; equiv.py UNSUPPORTED (one unresolved reference _sso_grow)
+009448c0  383  eastl vector<pair>::insert; complete but the growth/copy helper call schedule and register allocation differ; equiv.py UNSUPPORTED (0/400 inputs valid)
+00944a30    2  HTTPHeaders::RemoveHeaderEntryWorker; complete and same size (138 bytes), only the header loop counter is eax in the original and ecx here; a stable allocator tie-break; equiv.py WEAK (56.7% coverage)
+00944ac0   13  HTTPHeaders::RemoveHeaderEntry; complete but the name-arg evaluation order and register selection differ; equiv.py PASS
+00944af0  257  eastl vector<pair>::push_back(empty); complete but the grow-vs-in-place branch is scheduled differently (264 vs 223); equiv.py PASS
+00944d50    8  HTTPHeaders::AddHeaderEntryField; complete but this is kept in esi in the original and edi here (a stable register swap); equiv.py PASS

@@ -1,1 +1,20 @@
 009440e0 ?Shutdown@HTTPClient_s0094_3f60@Internet@EA@@QAE_NXZ  # HTTPClient_s0094_3f60::Shutdown migrated from s00943f60 (verbatim, slice spelling)
+00943f60 ?ctor@HTTPClientCtor@Internet@EA@@QAEXXZ  # EA::Internet::HTTPClient ctor (slice spelling HTTPClientCtor::ctor)
+00944250 ?push_back@?$basic_string@D@eastl@Internet@EA@@QAEXD@Z  # eastl::basic_string<char>::push_back(char)
+009442e0 ?Construct@UTFHTTPRequest@Internet@EA@@QAEXXZ  # UTFInternet::HTTPRequest ctor
+00944380 ?Destroy@UTFHTTPRequest@Internet@EA@@QAEXXZ  # UTFInternet::HTTPRequest dtor
+00944450 ?CreateHTTPGetRequest@Internet@EA@@YA_NPBDPAXPAPAUUTFHTTPRequest@12@@Z  # EA::Internet::HTTPRequest::CreateHTTPGetRequest
+00944570 ?Destroy@HTTPClientEx@Internet@EA@@QAEXXZ  # EA::Internet::HTTPClientEx dtor
+00944660 ?AddRequestParameter@UTFHTTPRequest@Internet@EA@@QAE_NPBD0@Z  # UTFInternet::HTTPRequest::AddRequestParameter
+00944850 ?erase@HeaderVec@Internet@EA@@QAEPAUHeaderPair@23@PAU423@@Z  # eastl::vector<pair>::erase
+009448c0 ?insert@HeaderVec@Internet@EA@@QAEXPAUHeaderPair@23@ABU423@@Z  # eastl::vector<pair>::insert
+00944a10 ?AddRequestParameterStr@UTFHTTPRequest@Internet@EA@@QAE_NABU?$basic_string@D@eastl@23@0@Z  # UTFInternet::HTTPRequest::AddRequestParameterStr
+00944a30 ?RemoveHeaderEntryWorker@HTTPHeaders@Internet@EA@@QAE_NPBDH@Z  # EA::Internet::HTTPHeaders::RemoveHeaderEntryWorker
+00944ac0 ?RemoveHeaderEntry@HTTPHeaders@Internet@EA@@QAE_NHH@Z  # EA::Internet::HTTPHeaders::RemoveHeaderEntry
+00944af0 ?push_back_empty@HeaderVec@Internet@EA@@QAEXXZ  # eastl::vector<pair>::push_back (empty header)
+00944bd0 ?Clear@HTTPResponse@Internet@EA@@QAEXXZ  # EA::Internet::HTTPResponse::Clear
+00944cb0 ?AddHeaderEntry@HTTPHeaders@Internet@EA@@QAE_NPBDPAPBD@Z  # EA::Internet::HTTPHeaders::AddHeaderEntry
+00944d00 ?AddHeaderEntryV@HTTPHeaders@Internet@EA@@QAE_NPBD0@Z  # EA::Internet::HTTPHeaders::AddHeaderEntryV
+00944d50 ?AddHeaderEntryField@HTTPHeaders@Internet@EA@@QAE_NHPAPBD@Z  # EA::Internet::HTTPHeaders::AddHeaderEntryField
+00944db0 ?AddHeaderEntryFieldV@HTTPHeaders@Internet@EA@@QAE_NHPBD@Z  # EA::Internet::HTTPHeaders::AddHeaderEntryFieldV
+00944e10 ?AddCookie@HTTPClientEx@Internet@EA@@QAE_NPAUCookieJob@23@D@Z  # EA::Internet::HTTPClient::AddCookie

@@ -1,0 +1,6 @@
+00943f60  263  HTTPClient ctor; complete source but equiv FAIL (execution mismatch): field-store order and agent-string copy loop scheduled differently (334 vs 361)
+009442e0   99  UTFHTTPRequest ctor; complete source but equiv FAIL (eax mismatch): store ordering and the implicit "return this" differ
+00944380   42  UTFHTTPRequest dtor; complete source but equiv FAIL (execution): &mVec2f4 is kept in edi in the original and folded into esi here, plus call-target reloc forms
+00944450  174  CreateHTTPGetRequest; complete source but equiv FAIL (execution): interlocked ref-count sequence and register allocation differ
+00944bd0  137  HTTPResponse::Clear; complete source but equiv FAIL (execution): header-array clear shape and register allocation differ (208 vs 212)
+00944e10  223  HTTPClient::AddCookie; complete source but equiv FAIL (fault: Invalid memory read): worker/response field semantics modelled differently (254 vs 275)
