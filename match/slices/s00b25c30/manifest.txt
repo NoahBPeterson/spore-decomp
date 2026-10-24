@@ -1,0 +1,18 @@
+# source  symbol  original VA  [flags override]
+# the game-noun manager plus the story-timeline subsystem: 12 of the 23 functions reproduce
+# byte-for-byte; the other 11 are listed in nonmatching.txt.
+# 00b25c30/00b25ee0/00b25f40 noun lookups, 00b25e80 messaging sub-object ctor, 00b25fb0 player civ,
+# 00b25fe0/00b26320 whole-manager teardown, 00b262c0 city lookup, 00b26710 mode switch,
+# 00b26a10 frame timer, 00b26c20 timeline serializer
+slices/s00b25c30/s00b25c30.cpp  ?FUN_00b25cd0@@YAXXZ  00b25cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ?FUN_00b26600@cGameNounManager@@QAEXXZ  00b26600  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ?FUN_00b26790@cSPUITimeline@@QAEXXZ  00b26790  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ?FUN_00b269d0@@YAXPAUcUIString@@@Z  00b269d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ?FUN_00b269f0@@YGXH@Z  00b269f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ?leave_game@cSPUITimeline@@QAEXHH@Z  00b26af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ?OnModalWindowStart@cSPUITimeline@@QAEXH@Z  00b26c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ??0cSPUIStringConfig@@QAE@XZ  00b26d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ??1cSPUIStringConfig@@QAE@XZ  00b26db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ??0cSPUITimeline@@QAE@XZ  00b26e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ??1cSPUITimeline@@UAE@XZ  00b26ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ?FUN_00b26f40@@YGPAVcISerializableObject@@HH@Z  00b26f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
