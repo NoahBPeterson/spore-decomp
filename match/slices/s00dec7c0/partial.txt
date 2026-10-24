@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (incomplete or approximate, not byte-exact)
+00dec990  294  approximate; the verb-icon probe body (editor-entry lookup, `0x100f0f5a`/`0x11b79a74`/`0x11b79a70`/`0x32f92e6` predicate chain and the returned icon indices) is reconstructed, but the original receives its `cEditorEntry*` in eax (`mov esi,eax` at entry, caller does `mov eax,<entry>; call`), a convention plain C++ cannot express, so the emitted prologue/ABI differs (321 vs 319 bytes)

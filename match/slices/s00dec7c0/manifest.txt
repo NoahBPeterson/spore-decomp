@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00dec7c0/s00dec7c0.cpp  ?LoadAsset@cGalaxyGameEntryUIStateMachine@SP@@QAEXI@Z  00dec940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dec7c0/s00dec7c0.cpp  ?ShowAssetButtonsForLevel@cGalaxyGameEntryUIStateMachine@SP@@QAEXH@Z  00decad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dec7c0/s00dec7c0.cpp  ?SetupStartState@cGalaxyGameEntryUIStateMachine@SP@@QAEXXZ  00dece10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dec7c0/s00dec7c0.cpp  ?FUN_00decf00@cPanelHost@@QAEXH@Z  00decf00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dec7c0/s00dec7c0.cpp  ?FUN_00decf20@@YGXPAVcUIWindow@@H@Z  00decf20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dec7c0/s00dec7c0.cpp  ?HighlightPanelButton@cGalaxyGameEntryUIStateMachine@SP@@QAEXI@Z  00decf70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dec7c0/s00dec7c0.cpp  ?ToggleAssetLock@cGalaxyGameEntryUIStateMachine@SP@@QAEXI@Z  00decfd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dec7c0/s00dec7c0.cpp  ?FUN_00ded030@cGalaxyGameEntryUIStateMachine@SP@@QAEXXZ  00ded030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dec7c0/s00dec7c0.cpp  ?ResetAssetButtons@cGalaxyGameEntryUIStateMachine@SP@@QAEX_N00@Z  00ded140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dec7c0/s00dec7c0.cpp  ?ResetThemeIcons@cGalaxyGameEntryUIStateMachine@SP@@QAEXXZ  00ded390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dec7c0/s00dec7c0.cpp  ?EditExistingAsset@cGalaxyGameEntryUIStateMachine@SP@@QAEXI@Z  00ded410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
