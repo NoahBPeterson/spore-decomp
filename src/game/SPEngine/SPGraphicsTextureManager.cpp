@@ -14,6 +14,7 @@ extern "C" void  FUN_00690_120_GetStatus(void*);
 extern "C" void* SP_CreateRaster(int, int, int, unsigned int, int);
 extern "C" char  FUN_006b4b60();
 #pragma intrinsic(_InterlockedExchangeAdd)
+#pragma intrinsic(_InterlockedExchange)
 #include <new>
 #include <xmmintrin.h>
 #include <intrin.h>
@@ -97,7 +98,7 @@ struct cNodeAllocator {
 };
 struct JobSlots {
     void Clear();      // 007aa320
-    int  Transfer(int param_2);   // 007aa3a0
+    char Transfer(int param_2);   // 007aa3a0 (returns in al)
 };
 struct FixedAllocatorBase { bool AddCore(int, int); };
 // ---- items of slice s007a9ae0 end
@@ -583,16 +584,31 @@ DequeIter2& DequeIter2::operator+=(int n)
 }
 
 // @ 0x007a9d70
-void FUN_007a9d70(int** out, int* end, int* first, int** map, int* mfirst, int* mlast, int** map2)
+// eastl deque copy_backward: move [first, last) to the range ending at last2.
+// The three iterators arrive by value (4 dwords each); the function returns the
+// new destination begin, so all 13 stack dwords of the original are consumed.
+DequeIter2* FUN_007a9d70(DequeIter2* result, DequeIter2 first, DequeIter2 last, DequeIter2 last2)
 {
-    int* a = first; int* b = map[0]; int** c = map; int* d = mfirst;
-    while (a != end) {
-        if (a == b) { --c; b = *c; a = b + 0x40; }
-        --a;
-        if (d == mlast) { --map2; mlast = *map2; d = mlast + 0x40; }
-        --d; *d = *a;
+    while (last.cur != first.cur) {
+        if (last.cur == last.first) {
+            --last.map;
+            last.first = *last.map;
+            last.last = last.first + 0x40;      // EASTL subarray = 64 ints
+        }
+        --last.cur;
+        if (last2.cur == last2.first) {
+            --last2.map;
+            last2.first = *last2.map;
+            last2.last = last2.first + 0x40;
+        }
+        --last2.cur;
+        *last2.cur = *last.cur;
     }
-    out[0] = d; out[1] = mlast; out[2] = *map2; out[3] = (int*)map2;
+    result->cur = last2.cur;
+    result->first = last2.first;
+    result->last = last2.last;
+    result->map = last2.map;
+    return result;
 }
 
 // @ 0x007a9eb0
@@ -625,17 +641,17 @@ int FUN_007aa200(int* self)
 { (void)self; return 0; }
 
 // @ 0x007aa3a0
-int JobSlots::Transfer(int param_2)
+char JobSlots::Transfer(int param_2)
 {
     int self = (int)this;
     int* a = *(int**)(self + 0xc);
     if (a && *(int*)(self + 8) == 0) {
         int* b = *(int**)(self + 8);
-        if (b) { *(int*)(self + 8) = 0; ((void(__thiscall*)(void*))((void**)b)[1])(b); }
-        ((void(__thiscall*)(void*, int*))((void**)a)[0x14 / 4])(a, (int*)(self + 8));
+        if (b) { *(int*)(self + 8) = 0; ((void(__thiscall*)(void*))(*(void***)b)[1])(b); }
+        ((void(__thiscall*)(void*, int*))(*(void***)a)[0x14 / 4])(a, (int*)(self + 8));
     }
     int* c = *(int**)(self + 0xc);
-    if (c) { *(int*)(self + 0xc) = 0; ((void(__thiscall*)(void*))((void**)c)[1])(c); }
+    if (c) { *(int*)(self + 0xc) = 0; ((void(__thiscall*)(void*))(*(void***)c)[1])(c); }
     int* d = *(int**)(self + 8);
     if (d && d[6]) {
         void (*cb)(int) = *(void(**)(int))(param_2 + 0x24);
@@ -671,7 +687,7 @@ Chunk* cNodeAllocator::Create()
     *(int*)((char*)p + 0) = 0;
     *(int*)((char*)p + 8) = 0;
     *(unsigned char*)((char*)p + 0xc) = 0;
-    _InterlockedExchangeAdd((volatile long*)((char*)p + 0x10), 1);
+    _InterlockedExchange((volatile long*)((char*)p + 0x10), 1);   // retail: xchg [p+0x10], 1
     *(int*)((char*)p + 0x18) = 0;
     *(int*)((char*)p + 0x1c) = 0;
     *(int*)((char*)p + 0x20) = 0;
