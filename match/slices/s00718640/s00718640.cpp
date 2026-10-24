@@ -30,8 +30,8 @@ struct MeshBuilder8 {
 
     void addIndices0(int count, const int* values, int delta);
     void addIndices1(int count, const int* values, int delta);
-    void addIndicesSlot(int count, const int* values, int delta, int index);
-    void addIndicesSlot6(int count, const int* values, int delta, int index);
+    void addIndicesSlot(int count, const int* values, int index, int delta);
+    void addIndicesSlot6(int count, const int* values, int index, int delta);
     void finish();
     // callees (other slices / TUs), masked
     void sub18820();
@@ -97,7 +97,7 @@ void MeshBuilder8::addIndices1(int count, const int* values, int delta)
 }
 
 // @ 0x00718740
-void MeshBuilder8::addIndicesSlot(int count, const int* values, int delta, int index)
+void MeshBuilder8::addIndicesSlot(int count, const int* values, int index, int delta)
 {
     VecN& v = v188[2 + index].v;
     v.insert(v.mpEnd, values, values + count, count);
@@ -111,7 +111,7 @@ void MeshBuilder8::addIndicesSlot(int count, const int* values, int delta, int i
 }
 
 // @ 0x007187b0
-void MeshBuilder8::addIndicesSlot6(int count, const int* values, int delta, int index)
+void MeshBuilder8::addIndicesSlot6(int count, const int* values, int index, int delta)
 {
     VecN& v = v188[6 + index].v;
     v.insert(v.mpEnd, values, values + count, count);
