@@ -1,1 +1,5 @@
-# (no byte-exact functions in this slice)
+# source  symbol  original VA  [cl flags override]
+slices/s00dd85c0/s00dd85c0.cpp  ?Update@cSPUIEventLog@@QAEXH@Z  00dd8d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd85c0/s00dd85c0.cpp  ?SetVisibility@cSPUIEventLog@@QAEX_N@Z  00dd8da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd85c0/s00dd85c0.cpp  ?FUN_00dd8ea0@cThrobberAnimator@@QAE_NPAUcSPUIThrobber@@M@Z  00dd8ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd85c0/s00dd85c0.cpp  ?FUN_00dd9040@@YGXPAUcSPUIThrobber@@@Z  00dd9040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

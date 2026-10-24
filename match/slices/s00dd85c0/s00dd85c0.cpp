@@ -9,6 +9,7 @@
 // Returns the instance ID of the last event entered (0 when nothing was posted).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (UI module, no /EHsc).
 #include <string.h>
+#include <math.h>
 #include "types.h"
 
 #pragma pack(push, 4)
@@ -66,6 +67,7 @@ cSPUIWindowAnimation SPUICreateWindowAnimationTargetShadeAlpha(IWindow* window, 
                                                               float duration, int interpolation);  // 0x007f8290
 class cSPUIAnimator { public:
     void AddAnimation(const cSPUIWindowAnimation& anim, Object* owner, uint32_t id);  // 0x007f8d10
+    void Update();                                                    // 0x007f63b0 AnimatorS::Update
 };
 namespace SPUIHelpers {
 float GetElapsedSeconds();                                        // 0x00805080
@@ -235,12 +237,23 @@ struct EventMap {
     rbtree_node_base mAnchor;   // +0x04
     uint32_t mnSize;
     uint32_t mAllocator;
-    EventSlot& operator[](const uint32_t& key);                   // 0x00dd85c0
+    EventSlot& GetOrInsert(const uint32_t& key);                  // 0x00dd85c0 (map operator[])
+    void* FUN_00dd6f50(const uint32_t* pKey, rbtree_node_base* pHint, bool bInsert);  // 0x00dd6f50
 };
 
-struct EASystemAT { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-                    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-                    virtual int GetHandle(); };                    // +0x20
+struct EASystemAT {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual int GetHandle();                                        // +0x20
+    virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12();
+    virtual void v13();                                             // +0x24 .. +0x34
+    virtual void PlaySoundEvent(uint32_t eventID);                   // +0x38
+    virtual void v15();                                             // +0x3c
+    virtual void SetSoundParam(uint32_t paramID, uint32_t value);    // +0x40
+    virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20();
+    virtual void v21();                                             // +0x44 .. +0x54
+    virtual void StopSoundEvent();                                   // +0x58
+};
 EASystemAT* GetSystemAT();                                         // 0x00a206f0
 void PlayEventSound(uint32_t soundId, int system);                 // 0x00435ed0
 void* GetUniverseContext_01021080();
@@ -261,7 +274,107 @@ struct cSPUIEventLog {
     void update_event_ui_state(cFeedbackEvent* ev);                   // 0x00dd60c0
     uint32_t PostFeedbackEvent(uint32_t instanceID, uint32_t groupID, const float* pPosition, bool bAlways,
                                int unused, void* userData);
+    void Update(int param);                                           // 0x00dd8d80
+    void SetVisibility(bool bVisible);                                // 0x00dd8da0
+    void FUN_00dd7970(int param);                                     // 0x00dd7970
 };
+
+// ---------------------------------------------------------------- window manager (0x0067caa0)
+class cWindowManager {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48();
+    virtual void SetVisible(bool bShow, int flags);                   // +0x4c
+};
+cWindowManager* WindowManager();                                      // 0x0067caa0
+
+// ---------------------------------------------------------------- stopwatch (EA::Stopwatch, 8 bytes of ticks)
+union LargeInteger {                                                  // LARGE_INTEGER
+    int64_t mQuadPart;
+    struct { uint32_t mLowPart; uint32_t mHighPart; };
+};
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(uint64_t* pCounter);
+inline int64_t rdtsc64()
+{
+    __asm { rdtsc }
+}
+
+struct EAStopwatch {
+    uint32_t mLow;                      // +0x00  start tick (low)
+    uint32_t mHigh;                     // +0x04  start tick (high)
+    uint32_t mElapsedLow;               // +0x08
+    uint32_t mElapsedHigh;              // +0x0c
+    int32_t  mnMode;                    // +0x10  1 = rdtsc, otherwise QueryPerformanceCounter
+    float    mPeriod;                   // +0x14  ticks -> seconds factor
+    int64_t GetElapsedTimeFloat();                                // 0x0093a3a0
+    void SetBoolProperty();                                       // 0x0093a2e0
+};
+
+struct Vec3 { float x, y, z; };
+struct Quaternion { float x, y, z, w; };
+struct Matrix33 { float m[3][3]; };
+
+// ---------------------------------------------------------------- timer driven UI element ("throbber")
+struct cSPUIThrobber {
+    uint32_t pad00[3];                  // +0x00
+    Vec3 mPosition;                     // +0x0c  design position
+    uint32_t pad18[9];                  // +0x18
+    Vec3 mSoundPosition;                // +0x3c  position the 3d sound is started at
+    uint32_t pad48[0x14];               // +0x48
+    float mf98;                         // +0x98  offset applied to the window
+    uint32_t pad9c[3];                  // +0x9c
+    float mfA8;                         // +0xa8  amplitude
+    uint32_t padAC;                     // +0xac
+    EAStopwatch mStopwatch;             // +0xb0
+    uint32_t padC8[2];                  // +0xc8
+    uint32_t mSoundId;                  // +0xd0
+    bool mbFinished;                    // +0xd4
+    bool mbReverse;                     // +0xd5
+
+    void FUN_00dd9080();                                          // 0x00dd9080
+};
+
+struct cThrobberAnimator {              // drives one cSPUIThrobber
+    uint32_t mnKind;                    // +0x00
+    bool mbReverse;                     // +0x04
+    bool FUN_00dd8ea0(cSPUIThrobber* pTarget, float unused);       // 0x00dd8ea0
+};
+
+void __cdecl FUN_00572020(uint32_t soundId, int action);              // 0x00572020
+void __cdecl Start3dSoundByName(uint32_t soundName, uint32_t soundId, float x, float y, float z);  // 0x00571f80
+void __stdcall FUN_00dd8e30(cSPUIThrobber* pTarget);                  // 0x00dd8e30
+void __stdcall FUN_00dd8f50(cSPUIThrobber* pTarget);                  // 0x00dd8f50
+void __stdcall FUN_00dd8ff0(cSPUIThrobber* pTarget);                  // 0x00dd8ff0
+void __stdcall FUN_00dd9040(cSPUIThrobber* pTarget);                  // 0x00dd9040
+bool __stdcall FUN_00dd9050(cSPUIThrobber* pTarget, int unused);      // 0x00dd9050
+void FUN_00dd9130(const float* pDirection, Vec3* pOutA, Vec3* pOutB); // 0x00dd9130
+Quaternion* FUN_00dd91b0(const Vec3* pA, const Vec3* pB, Quaternion* pOut);   // 0x00dd91b0
+Vec3* FUN_00dd93d0(Vec3* pOut);                                       // 0x00dd93d0
+
+void* FUN_00b3d360(const float* pVector);                             // 0x00b3d360
+bool FUN_00b7d4f0(void* pVector);                                     // 0x00b7d4f0
+void FUN_00b7d440(uint32_t x, uint32_t y, uint32_t z, int a, int b, int c, int d,
+                  Vec3* pOutA, Vec3* pOutB);                          // 0x00b7d440
+Quaternion* QuaternionFromMatrix33_00472b80(Quaternion* pOut, const Matrix33* pMatrix,
+                                            float w);                 // 0x00472b80
+
+struct cRandomGlobal {
+    double RandomDouble(double low, double high);                     // 0x009360d0
+};
+extern cRandomGlobal gRandomGlobal_01601760;                          // 0x01601760
+
+extern float g_01485720;        // 1.0f
+extern float g_016a0b58;        // sine frequency of the throbber animation
+extern float g_01471064;        // 0.5f
+extern float g_015a2de0;        // period divisor of the 0x00dd9080 variant
+extern float g_013f561c;        // "finished" threshold of 0x00dd9050
+extern float g_013ec4b8;        // 1e-8f, added to the squared lengths before normalising
+extern uint32_t g_016a0c5c;     // scratch direction table init flags
+extern float g_016a0c58;        // 50.0f
+extern float g_016a0c54;        // 35.0f
 
 #pragma pack(pop)
 
@@ -413,7 +526,7 @@ uint32_t cSPUIEventLog::PostFeedbackEvent(uint32_t instanceID, uint32_t groupID,
     }
 
     mLastEventEntered = ev.mpObject->mInstanceID;
-    mEvents[mLastEventEntered].Assign(ev.mpObject);
+    mEvents.GetOrInsert(mLastEventEntered).Assign(ev.mpObject);
     if (cFeedbackEvent* old = find_in_history(ev.mpObject))
         remove_event(old->mInstanceID);
     update_event_ui_state(ev.mpObject);
@@ -426,4 +539,284 @@ uint32_t cSPUIEventLog::PostFeedbackEvent(uint32_t instanceID, uint32_t groupID,
     if (str.mpCapacity - str.mpBegin > 1 && str.mpBegin)
         operator_delete_array_00f47380(str.mpBegin);
     return result;
+}
+
+// ---------------------------------------------------------------- event map
+// @ 0x00dd85c0
+EventSlot& EventMap::GetOrInsert(const uint32_t& key)
+{
+    EventNode* y = (EventNode*)&mAnchor;
+    rbtree_node_base* x = mAnchor.mpNodeParent;
+    while (x != 0) {
+        EventNode* node = (EventNode*)x;
+        if (node->mKey < key) {
+            x = node->mpNodeRight;
+        } else {
+            y = node;
+            x = node->mpNodeLeft;
+        }
+    }
+    if (y != (EventNode*)&mAnchor && !(key < y->mKey))
+        return y->mValue;
+    EventNode* inserted = (EventNode*)FUN_00dd6f50(&key, y, false);
+    return inserted->mValue;
+}
+
+// ---------------------------------------------------------------- cSPUIEventLog
+// @ 0x00dd8d80
+void cSPUIEventLog::Update(int param)
+{
+    if (mpAnimator) {
+        mpAnimator->Update();
+        FUN_00dd7970(param);
+    }
+}
+
+// @ 0x00dd8da0
+void cSPUIEventLog::SetVisibility(bool bVisible)
+{
+    if (mbVisible != bVisible) {
+        mbVisible = bVisible;
+        if (!bVisible) {
+            cWindowManager* pManager = WindowManager();
+            pManager->SetVisible(1, 0);
+        }
+        for (rbtree_node_base* it = mEvents.mAnchor.mpNodeLeft; it != &mEvents.mAnchor;
+             it = RBTreeIncrement_00921580(it)) {
+            cFeedbackEvent* pEvent = ((EventNode*)it)->mValue.mpObject;
+            IWindow* pWindow = pEvent->mpItemLayout->FindWindowByID(0x35ee914, true);
+            if (pWindow)
+                pWindow->SetFlag(1, mbVisible);
+        }
+    }
+    if (mpAnimator) {
+        mpAnimator->Update();
+        FUN_00dd7970(1);
+    }
+}
+
+// ---------------------------------------------------------------- stopwatch driven throbber
+// @ 0x00dd8e30
+void __stdcall FUN_00dd8e30(cSPUIThrobber* pTarget)
+{
+    uint64_t ticks;
+    EAStopwatch* pStopwatch = &pTarget->mStopwatch;
+    if (pStopwatch->mnMode == 1) {
+        ticks = (uint64_t)rdtsc64();
+        pStopwatch->mLow = (uint32_t)ticks;
+    } else {
+        uint64_t counter;
+        QueryPerformanceCounter(&counter);
+        ticks = counter;
+        pStopwatch->mLow = (uint32_t)ticks;
+    }
+    pStopwatch->mHigh = (uint32_t)(ticks >> 32);
+    pStopwatch->mElapsedLow = 0;
+    pStopwatch->mElapsedHigh = 0;
+    uint32_t soundId = pTarget->mSoundId;
+    if (soundId != 0)
+        FUN_00572020(soundId, 1);
+}
+
+// @ 0x00dd8f50
+void __stdcall FUN_00dd8f50(cSPUIThrobber* pTarget)
+{
+    uint64_t ticks;
+    EAStopwatch* pStopwatch = &pTarget->mStopwatch;
+    if (pStopwatch->mnMode == 1) {
+        ticks = (uint64_t)rdtsc64();
+        pStopwatch->mLow = (uint32_t)ticks;
+    } else {
+        uint64_t counter;
+        QueryPerformanceCounter(&counter);
+        ticks = counter;
+        pStopwatch->mLow = (uint32_t)ticks;
+    }
+    pStopwatch->mHigh = (uint32_t)(ticks >> 32);
+    pStopwatch->mElapsedLow = 0;
+    pStopwatch->mElapsedHigh = 0;
+    uint32_t soundId = pTarget->mSoundId;
+    EASystemAT* pAudio = GetSystemAT();
+    if (pAudio) {
+        pAudio->PlaySoundEvent(0x347536b);
+        pAudio->SetSoundParam(0x3475385, soundId);
+        pAudio->SetSoundParam(0x34753a0, 1);
+        pAudio->StopSoundEvent();
+    }
+}
+
+// @ 0x00dd8ff0
+void __stdcall FUN_00dd8ff0(cSPUIThrobber* pTarget)
+{
+    pTarget->mSoundPosition = pTarget->mPosition;
+    uint32_t soundId = pTarget->mSoundId;
+    Start3dSoundByName(0x44f21a5d, soundId, pTarget->mPosition.x, pTarget->mPosition.y,
+                       pTarget->mPosition.z);
+}
+
+// @ 0x00dd9040
+void __stdcall FUN_00dd9040(cSPUIThrobber* pTarget)
+{
+    pTarget->mbFinished = 1;
+}
+
+// @ 0x00dd9050
+bool __stdcall FUN_00dd9050(cSPUIThrobber* pTarget, int unused)
+{
+    if (pTarget->mPosition.y >= g_013f561c)
+        return true;
+    pTarget->mbFinished = 0;
+    return false;
+}
+
+// @ 0x00dd8ea0
+bool cThrobberAnimator::FUN_00dd8ea0(cSPUIThrobber* pTarget, float unused)
+{
+    EAStopwatch* pStopwatch = &pTarget->mStopwatch;
+    bool bFinished = true;
+    float t = (float)pStopwatch->GetElapsedTimeFloat() * pStopwatch->mPeriod;
+    if (t > 1.0f) {
+        pStopwatch->SetBoolProperty();
+        t = 1.0f;
+        bFinished = false;
+    }
+    if (!mbReverse)
+        t = 1.0f - t;
+    float wobble = sinf(-g_016a0b58 * t) * pTarget->mfA8 * 0.5f;
+    pTarget->mf98 = pTarget->mfA8 * t + wobble;
+    return bFinished;
+}
+
+// The original takes the element in EDI, so this is a __usercall in the retail build.
+// @ 0x00dd9080
+void cSPUIThrobber::FUN_00dd9080()
+{
+    EAStopwatch* pStopwatch = &mStopwatch;
+    if (pStopwatch->mLow != 0 || pStopwatch->mHigh != 0) {
+        float t = (float)pStopwatch->GetElapsedTimeFloat() * pStopwatch->mPeriod;
+        t = t / g_015a2de0;
+        if (t > 1.0f) {
+            pStopwatch->SetBoolProperty();
+            t = 1.0f;
+        }
+        if (mbReverse)
+            mf98 = (1.0f - t) * mfA8;
+        else
+            mf98 = mfA8 * t;
+    }
+}
+
+// ---------------------------------------------------------------- orientation helpers
+// The retail build passes the direction in EBX and returns the two basis vectors through
+// EDI/ESI, so this is a __usercall; the natural form takes them as ordinary out parameters.
+// @ 0x00dd9130
+void FUN_00dd9130(const float* pDirection, Vec3* pOutA, Vec3* pOutB)
+{
+    if (FUN_00b7d4f0(FUN_00b3d360(pDirection))) {
+        FUN_00b7d440(pDirection[0], pDirection[1], pDirection[2], 0, 0, 0, 0, pOutA, pOutB);
+    } else {
+        pOutA->x = 0.0f;
+        pOutA->y = 0.0f;
+        pOutA->z = 0.0f;
+        pOutB->x = 0.0f;
+        pOutB->y = 0.0f;
+        pOutB->z = 0.0f;
+    }
+}
+
+// Retail takes the two directions in EAX/ECX and returns the quaternion in ESI (__usercall).
+// @ 0x00dd91b0
+Quaternion* FUN_00dd91b0(const Vec3* pA, const Vec3* pB, Quaternion* pOut)
+{
+    Vec3 cross1, cross2, normal;
+    float scale;
+
+    cross1.x = pA->z * pB->y - pA->y * pB->z;
+    cross1.y = pA->x * pB->z - pA->z * pB->x;
+    cross1.z = pA->y * pB->x - pA->x * pB->y;
+    scale = 1.0f / sqrtf(cross1.x * cross1.x + cross1.y * cross1.y + cross1.z * cross1.z + g_013ec4b8);
+    cross1.x = cross1.x * scale;
+    cross1.y = cross1.y * scale;
+    cross1.z = cross1.z * scale;
+
+    cross2.x = cross1.y * pA->z - cross1.z * pA->y;
+    cross2.y = cross1.z * pA->x - cross1.x * pA->z;
+    cross2.z = cross1.x * pA->y - cross1.y * pA->x;
+    scale = 1.0f / sqrtf(cross2.x * cross2.x + cross2.y * cross2.y + cross2.z * cross2.z + g_013ec4b8);
+    cross2.x = cross2.x * scale;
+    cross2.y = cross2.y * scale;
+    cross2.z = cross2.z * scale;
+
+    normal = *pA;
+    scale = 1.0f / sqrtf(pA->x * pA->x + pA->y * pA->y + pA->z * pA->z + g_013ec4b8);
+    normal.x = normal.x * scale;
+    normal.y = normal.y * scale;
+    normal.z = normal.z * scale;
+
+    Matrix33 matrix;
+    matrix.m[0][0] = cross2.x;
+    matrix.m[0][1] = cross2.y;
+    matrix.m[0][2] = cross2.z;
+    matrix.m[1][0] = cross1.x;
+    matrix.m[1][1] = cross1.y;
+    matrix.m[1][2] = cross1.z;
+    matrix.m[2][0] = normal.x;
+    matrix.m[2][1] = normal.y;
+    matrix.m[2][2] = normal.z;
+
+    Quaternion temp;
+    Quaternion* pQuat = QuaternionFromMatrix33_00472b80(&temp, &matrix, 0.0f);
+    pOut->x = pQuat->x;
+    pOut->y = pQuat->y;
+    pOut->z = pQuat->z;
+    pOut->w = pQuat->w;
+    return pOut;
+}
+
+// Retail builds the result in ESI and returns that register (__usercall), so the natural form
+// takes the output vector as a parameter.
+// @ 0x00dd93d0
+Vec3* FUN_00dd93d0(Vec3* pOut)
+{
+    if (!(g_016a0c5c & 1)) {
+        g_016a0c5c |= 1;
+        g_016a0c58 = 50.0f;
+    }
+    if (!(g_016a0c5c & 2)) {
+        g_016a0c5c |= 2;
+        g_016a0c54 = 35.0f;
+    }
+
+    float half = g_016a0c58;
+    float length;
+    int attempt = 0;
+    for (;;) {
+        double low = -(double)half;
+        double high = (double)half;
+        double value = gRandomGlobal_01601760.RandomDouble(low, high);
+        if (value < low)
+            value = low;
+        if (value > high)
+            value = high;
+        pOut->x = (float)value;
+
+        low = -(double)half;
+        high = (double)half;
+        value = gRandomGlobal_01601760.RandomDouble(low, high);
+        if (value < low)
+            value = low;
+        if (value > high)
+            value = high;
+        pOut->y = (float)value;
+
+        pOut->z = 0.0f;
+        length = sqrtf(pOut->x * pOut->x + pOut->y * pOut->y + pOut->z * pOut->z);
+        if (g_016a0c54 <= length && length <= g_016a0c58)
+            break;
+        int current = attempt;
+        ++attempt;
+        if (current >= 1000)
+            break;
+    }
+    return pOut;
 }
