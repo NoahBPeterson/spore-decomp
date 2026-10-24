@@ -1,6 +1,6 @@
 # Complete (all paths present) but not byte-exact.
 006b1dc0  67   AutoRefCount pair ctor; needs the EH-managed construction path (no EH frame in ours)
-006b1e20  68   AutoRefCount pair dtor; EH unwind funclet path differs
+006b1e20  88   AutoRefCount pair dtor: complete and equivalent (equiv PASS 386/400 valid, 100% coverage). The last `a->ref.Release()` was emitted as a tail `jmp edx` because nothing followed it in our EH-free body, while the original has a C++ EH frame (`push -1; push <handler>; push fs:[0]; push ecx; push esi; state [esp+0x10]=0` before `b->Release()`, `state=-1` after it) and therefore ends with `call edx; mov ecx,[esp+8]; pop esi; mov fs:[0],ecx; add esp,0x10; ret`. On the replay this showed as `fake-arity: no call site before 7efff000` after the second fake vcall. Adding `_ReadWriteBarrier()` after the second Release keeps the return path non-empty, so cl emits a real `call edx; pop esi; ret`. Residual 50 bytes are the EH prologue/epilogue the source cannot request (we do not reproduce the original's try-level/frame) plus b being reloaded for `test` instead of `mov ecx,[esi+4]; test ecx,ecx`
 006b1e90  74   AutoRefCount pair copy ctor; EH-managed path differs
 006b1ef0  74   AutoRefCount pair operator=; register allocation (o in ebp/ebx vs edi) differs
 006b2000  108  keyed save-area lookup; prologue schedule of the find args differs (esi saved later)

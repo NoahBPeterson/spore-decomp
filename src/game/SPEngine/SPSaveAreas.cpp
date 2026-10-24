@@ -8,6 +8,8 @@
 #include "EA/ResourceMan/Resource.h"
 #include "SP/cPropertyList.h"
 #include "SP/cString.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* RBTreeIncrement(void*);        // 0x00921580
@@ -318,6 +320,7 @@ void RefPair::Dtor()
   if (a != 0) {
     a->ref.Release();
   }
+  _ReadWriteBarrier();
 }
 
 // @ 0x006b1e90

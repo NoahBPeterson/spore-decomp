@@ -1,6 +1,8 @@
 // Slice s006b18c0: SP save-area subsystem and App::LRUCache manager methods.
 // Compiled with /O2 /MD /Gy /EHsc /TP /GS-.
 #include "s006b18c0.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // @ 0x6b1d40
 void SetSaveAreaFlag(uint8_t b) {
@@ -150,6 +152,7 @@ void RefPair::Dtor() {
   if (a != 0) {
     a->ref.Release();
   }
+  _ReadWriteBarrier();
 }
 
 // @ 0x6b1e90
