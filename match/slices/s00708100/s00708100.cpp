@@ -5,14 +5,21 @@
 #include "types.h"
 
 void __cdecl EastlFree(void* p);                      // 0x00F47380
-void PushPtr(void* pos, void* val);                   // 0x006C1570
 void ReleaseElem(void* p);                            // 0x007610F0
+
+// free-list vector at cLightingWorld + 0x478 (fixed_vector<int,128>)
+struct LightFreeVec {
+    void** mpBegin;
+    void** mpEnd;
+    void** mpCapacity;
+    void DoInsertValue(void** position, void* const& value);  // 0x006C1570
+};
 
 // ===========================================================================
 // geometry / element types
 // ===========================================================================
 struct CellInfo { int x, y; };
-struct V32 { float f[8]; };
+struct V32 { union { float f[8]; uint32_t u[8]; }; };
 
 // ===========================================================================
 // spstl slot-vector base helpers (0x1f0 / 0x1e0 / 0xc4 strided slots)
@@ -101,7 +108,7 @@ void Vec8b::resize(uint32_t n)
         uint64_t z = 0;
         DoInsertValues(mpEnd, n - size, &z);
     } else {
-        Erase(mpBegin + n, mpEnd);
+        Erase(mpBegin + n * 8, mpEnd);
     }
 }
 
@@ -129,7 +136,7 @@ void Vec16::resize(uint32_t n)
     }
     char* mid = mpBegin + n * 0x10;
     Copy16(mpEnd, mpEnd, mid);
-    mpEnd = (char*)(mpEnd - (mpEnd - mid));
+    mpEnd -= ((uint32_t)(mpEnd - mid) >> 4) * 0x10;
 }
 
 // ===========================================================================
@@ -161,18 +168,22 @@ void ClearVec::clear()
 // ===========================================================================
 // cLightingWorld
 // ===========================================================================
+struct IdVec {
+    uint32_t* mpBegin;       // +0x00
+    uint32_t* mpEnd;         // +0x04
+    uint32_t* mpCapacity;    // +0x08
+    void DoInsertValue(uint32_t* position, const uint32_t& value);  // 0x4558a0
+};
+
 struct SampleVec {
     V32* mpBegin;            // +0x00
     V32* mpEnd;              // +0x04
     V32* mpCapacity;         // +0x08
     char pad0c[8];
-    uint32_t* mpIdsBegin;    // +0x14
-    uint32_t* mpIdsEnd;      // +0x18
-    uint32_t* mpIdsCapacity; // +0x1c
+    IdVec mIds;              // +0x14
     char pad20[8];
     int mCount;              // +0x28
     void DoInsertValue(V32* position, const V32* value);   // 0x707a50
-    void PushIdRange(uint32_t* first, uint32_t* last, uint32_t* dst);  // 0x4558a0
 };
 
 struct cLightingWorld {
@@ -186,9 +197,10 @@ struct cLightingWorld {
 // @ 0x00708810
 void cLightingWorld::AddLocalSample(uint32_t id, int index, SampleVec* vec)
 {
-    char* entry = (char*)(*(int*)((char*)this + 0x428) + ((uint32_t)id >> 7) * 4)
+    char* entry = (char*)(*(int*)(*(int*)((char*)this + 0x428) + ((uint32_t)id >> 7) * 4))
                   + 4 + (id & 0x7f) * 0xc4;
-    *(int*)(*(int*)(entry + 0x28) + 4 + index * 8) = (int)((vec->mpEnd - vec->mpBegin) >> 5);
+    *(int*)(*(int*)(entry + 0x28) + 4 + index * 8) =
+        (int)(((char*)vec->mpEnd - (char*)vec->mpBegin) >> 5);
     V32* p = vec->mpEnd;
     if (p < vec->mpCapacity) {
         vec->mpEnd = p + 1;
@@ -197,23 +209,23 @@ void cLightingWorld::AddLocalSample(uint32_t id, int index, SampleVec* vec)
         vec->DoInsertValue(p, &tmp);
     }
     V32* dst = (V32*)((char*)vec->mpEnd - 0x20);
-    const float* src = (const float*)entry;
-    dst->f[0] = src[0];
-    dst->f[1] = src[1];
-    dst->f[2] = src[2];
-    dst->f[3] = src[3];
-    dst->f[4] = src[4];
-    dst->f[5] = src[5];
-    dst->f[6] = src[6];
-    dst->f[7] = src[7];
-    uint32_t* ip = vec->mpIdsEnd;
-    if (ip < vec->mpIdsCapacity) {
-        vec->mpIdsEnd = ip + 1;
+    const V32* src = (const V32*)entry;
+    dst->u[0] = src->u[0];
+    dst->u[1] = src->u[1];
+    dst->u[2] = src->u[2];
+    dst->u[3] = src->u[7];
+    dst->u[4] = src->u[4];
+    dst->u[5] = src->u[5];
+    dst->u[6] = src->u[6];
+    dst->u[7] = src->u[3];
+    uint32_t* ip = vec->mIds.mpEnd;
+    if (ip < vec->mIds.mpCapacity) {
+        vec->mIds.mpEnd = ip + 1;
         if (ip)
             *ip = id;
     } else {
         uint32_t local = id;
-        vec->PushIdRange(&local, &local + 1, ip);
+        vec->mIds.DoInsertValue(ip, local);
     }
     ++vec->mCount;
 }
@@ -253,16 +265,16 @@ void cLightingWorld::DestroyLightingInfo(void* e)
     *(int**)(prev + 4) = next;
     *(int*)((char*)e + 4) = 0;
     *(int*)((char*)e + 8) = 0;
-    char* v = (char*)this + 0x478;
-    int* p = *(int**)(v + 4);
-    if (p < *(int**)(v + 8)) {
-        *(int**)(v + 4) = p + 1;
+    LightFreeVec* freeList = (LightFreeVec*)((char*)this + 0x478);
+    void** p = freeList->mpEnd;
+    if (p < freeList->mpCapacity) {
+        freeList->mpEnd = p + 1;
         if (p) {
-            *p = (int)e;
+            *p = e;
             return;
         }
     } else {
-        PushPtr(p, e);
+        freeList->DoInsertValue(p, e);
     }
 }
 

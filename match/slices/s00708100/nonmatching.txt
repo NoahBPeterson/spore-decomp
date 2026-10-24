@@ -1,6 +1,6 @@
 00708340 108 VecCell::assign: complete eastl DoAssignFromIterator; register schedule of begin/size and the extra tag arg differ
-00708710 101 cLightingWorld::DestroyLightingInfo: complete; intrusive-list unlink and free-vector append scheduling diverge
+00708710 188 cLightingWorld::DestroyLightingInfo: complete; free-list append is fixed_vector<int,128>::DoInsertValue via this+0x478 with (end,&e); intrusive-list unlink and scheduling diverge
 007087a0 62 ClearVec::clear: complete; element-destroy loop and the zero-size memcpy schedule differ
-00708d90 70 Vec8b::resize: complete; short-circuit branch and local-zero slot linger differently
-00708e60 83 Vec16::resize: complete; frame and copy_impl argument / mpEnd arithmetic schedule diverge
-00708810 217 cLightingWorld::AddLocalSample: complete; 8-float entry copy and id-vector push diverge
+00708d90 63 Vec8b::resize: complete; Erase takes the byte offset n*8; short-circuit branch and local-zero slot schedule differ
+00708e60 52 Vec16::resize: complete; mpEnd only moves back by whole 16-byte units of (end-mid); frame/codegen diverge
+00708810 214 cLightingWorld::AddLocalSample: complete; entry is a double dereference, the size is the byte difference >>5, the 8 floats copy in [0,1,2,7,4,5,6,3] order, and the id push is a member on vec+0x14
