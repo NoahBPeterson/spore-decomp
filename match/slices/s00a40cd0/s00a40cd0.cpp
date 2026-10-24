@@ -417,7 +417,7 @@ extern char PTR_AddRef_01453c30[];
 extern int  DAT_0166ef48;
 
 char FUN_008dde10(void);
-char FUN_008dde50(int a, int b, int c, int d);
+char __stdcall FUN_008dde50(int a, int b, int c, int d);
 void FUN_008ddff0(void);
 
 struct AddRefObj {
@@ -449,28 +449,36 @@ void AddRefObj::Dtor() {
 // @ 0x00a417b0
 char FactoryObj::Run(int key, int* out, int a, int b) {
     if (out == 0) return 0;
-    char result;
-    AddRefObj* obj = (AddRefObj*)operator new(0x20, "Audio", 0, 0, 0, 0);
-    if (obj == 0) {
-        obj = 0;
-    } else {
-        obj->CTor();
-        *(int*)obj = (int)PTR_AddRef_01453c30;
-    }
-    if (obj != 0) obj->AddRef();
-    result = 0;
-    if (obj != 0) {
-        if (key == 0) {
-            result = 1;
+    char result = 0;
+    AddRefObj* obj = 0;
+    __try {
+        obj = (AddRefObj*)operator new(0x20, "Audio", 0, 0, 0, 0);
+        if (obj == 0) {
+            obj = 0;
         } else {
-            result = Create(key, (int*)obj, a, b);
-            if (result == 0) goto done;
+            obj->CTor();
+            *(int*)obj = (int)PTR_AddRef_01453c30;
         }
-        *out = (int)obj;
-        obj->AddRef();
+        if (obj != 0) obj->AddRef();
+        if (obj != 0) {
+            bool store = false;
+            if (key == 0) {
+                result = 1;
+                store = true;
+            } else {
+                result = Create(key, (int*)obj, a, b);
+                if (result != 0)
+                    store = true;
+            }
+            if (store) {
+                *out = (int)obj;
+                obj->AddRef();
+            }
+        }
+        if (obj != 0) obj->Release();
+    } __except (1) {
+        result = 0;
     }
-done:
-    if (obj != 0) obj->Release();
     return result;
 }
 
@@ -479,16 +487,17 @@ unsigned char __stdcall FUN_00a418b0(int a, int self, int c, int d) {
     int saved = *(int*)(self + 0x14);
     unsigned char result = 0;
     *(int*)(self + 0x14) = 0;
-    char ok = FUN_008dde50(a, self, c, d);
+    volatile int va = a;
+    char ok = FUN_008dde50(va, self, c, d);
     if (ok) {
         int* s = EA::Audio::GetSystemAT();
-        if (s) ((void(**)(int*))*((int**)s))[0xC0 / 4]((int*)s);
+        if (s) ((void(__thiscall*)(int*))(*((int**)s))[0xC0 / 4])((int*)s);
         int* e = EA::Audio::Eapd::ISystem::GetSingletonPtr();
         result = 0;
         if (e)
             result = (unsigned char)((int(__thiscall*)(int*, int, int, int))(*((int**)e))[0x4C / 4])((int*)e, *(int*)(self + 0x14), *(int*)(self + 0x18), self + 0x1c);
         s = EA::Audio::GetSystemAT();
-        if (s) ((void(**)(int*))*((int**)s))[0xC4 / 4]((int*)s);
+        if (s) ((void(__thiscall*)(int*))(*((int**)s))[0xC4 / 4])((int*)s);
     }
     if (saved != 0) ((SP::cLocalLightInfo*)SP::DAT_016c8b44)->Dtor(saved);
     return result;
