@@ -603,44 +603,26 @@ struct WinGridBase {                             // the IWinGrid sub-object at g
     virtual void Slot35();                       // +0x8c
     virtual void v36();
     virtual void Slot37(float x, float y);       // +0x94
-    virtual void Slot38(int* w, int* h);         // +0x98
-    virtual void Slot39(int* x, int* y);         // +0x9c
+    virtual void Slot38(float* w, float* h);     // +0x98
+    virtual void Slot39(float* x, float* y);     // +0x9c
 };
 
-struct GridScroll {                              // the object at grid+0x1c0
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void* Slot4();                       // +0x10
-    virtual void v5(); virtual void v6();
-    virtual void Slot7(int a);                   // +0x1c
-    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
-    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
-    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
-    virtual void v24(); virtual void v25();
-    virtual bool Slot26();                       // +0x28
-    virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30();
-    virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34();
-    virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38();
-    virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42();
-    virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46();
-    virtual void v47(); virtual void v48(); virtual void v49(); virtual void v50();
-    virtual void v51(); virtual void v52(); virtual void v53(); virtual void v54();
-    virtual void v55(); virtual void v56(); virtual void v57(); virtual void v58();
-    virtual void v59(); virtual void v60(); virtual void v61(); virtual void v62();
-    virtual void v63(); virtual void v64(); virtual void v65(); virtual void v66();
-    virtual void v67(); virtual void v68(); virtual void v69(); virtual void v70();
-    virtual void v71(); virtual void v72(); virtual void v73(); virtual void v74();
-    virtual void v75(); virtual void v76(); virtual void v77(); virtual void v78();
-    virtual void v79(); virtual void v80(); virtual void v81(); virtual void v82();
-    virtual void v83(); virtual void v84(); virtual void v85(); virtual void v86();
-    virtual void v87(); virtual void v88(); virtual void v89(); virtual void v90();
-    virtual void v91(); virtual void v92(); virtual void v93(); virtual void v94();
-    virtual void v95(); virtual void v96(); virtual void v97(); virtual void v98();
-    virtual void v99(); virtual void v100(); virtual void v101();
-    virtual void DrawRow(float x, float rowH);   // +0x68
+struct GridScroll {                              // the scrolling-row object at grid+0x1c0
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void* Slot4();                       // +0x10  (4)
+    virtual void v05(); virtual void v06();
+    virtual void Slot7(int a);                   // +0x1c  (7)
+    virtual void v08(); virtual void v09();
+    virtual bool Slot26();                       // +0x28  (10)
+    virtual void v11(); virtual void v12(); virtual void v13();
+    virtual const float* GetArea();              // +0x38  (14)
+    virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18();
+    virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22();
+    virtual void v23(); virtual void v24(); virtual void v25();
+    virtual void DrawRow(float x, float rowH);   // +0x68  (26)
 };
 
-struct GridObj {                                 // the WinGrid main object
+struct WinGrid {                                 // the WinGrid main object (this)
     char  pad0[0x134];
     float mRowH;                                 // +0x134
     char  pad1[0x164 - 0x138];
@@ -652,50 +634,60 @@ struct GridObj {                                 // the WinGrid main object
 };
 
 // @ 0x0097f130  WinGrid::UpdateArea
-void GridObj::UpdateArea()
+void WinGrid::UpdateArea()
 {
     WinGridBase* base = (WinGridBase*)((char*)this - 0x20c);
-    int w, h, sw, sh;
-    float x, y;
+    float sw, sh, w, h;
     float limit;
-    float rowH;
-    float bottom;
-    float first;
-    GridScroll* sc;
-    void* row;
+    float x, y;
+    float pos, height, drawX;
+    GridScroll* row;
+    const float* area;
 
     base->Slot35();
     base->Slot38(&sw, &sh);
     base->Slot39(&w, &h);
     limit = mRowH * 2.0f;
     x = mX;
-    if (x < (float)sw)
-        x = (float)sw;
+    if (limit + mX < sw)
+        x = sw;
     y = mY;
-    if (y < (float)sh)
-        y = (float)sh;
+    if (limit + mY < sh)
+        y = sh;
 
-    sc = mpScroll;
-    if (sc != 0) {
-        row = sc->Slot4();
-        if (((GridScroll*)row)->Slot26() & 1) {
-            sc->Slot7(0);
-            row = sc->Slot4();
-            first = 0.0f;
-            rowH = 0.0f;
-            while ((float)w < x) {
-                sc->Slot7(0);
-                row = sc->Slot4();
-                rowH = 0.0f;
-                sc->Slot7(1);
-                row = sc->Slot4();
-                if ((float)w >= x)
-                    break;
+    if (mpScroll != 0) {
+        row = (GridScroll*)mpScroll->Slot4();
+        if (row->Slot26() & 1) {
+            mpScroll->Slot7(0);
+            row = (GridScroll*)mpScroll->Slot4();
+            area = row->GetArea();
+            pos = area[2] - area[0];
+            row = (GridScroll*)mpScroll->Slot4();
+            area = row->GetArea();
+            height = area[3] - area[1];
+            if (pos > x) {
+                do {
+                    if (pos <= height * 4.0f)
+                        break;
+                    if (pos > w) {
+                        drawX = w;
+                    } else {
+                        drawX = pos - 10.0f;
+                        if (x > pos - 10.0f)
+                            drawX = x;
+                    }
+                    row = (GridScroll*)mpScroll->Slot4();
+                    row->DrawRow(drawX, height);
+                    mpScroll->Slot7(1);
+                    row = (GridScroll*)mpScroll->Slot4();
+                    area = row->GetArea();
+                    height = area[3] - area[1];
+                    pos = drawX;
+                } while (pos > x);
             }
-            bottom = (mRowH + rowH) + y;
-            if ((float)w < x)
-                x = (float)w;
-            y = bottom;
+            y = (mRowH + height) + y;
+            if (pos > x)
+                x = pos;
         }
     }
     limit = mRowH * 2.0f;
