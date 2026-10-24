@@ -7,6 +7,22 @@ typedef unsigned int size_t;
 typedef void* HANDLE;
 typedef unsigned long DWORD;
 
+#pragma warning(disable:4035)
+// EA math helper: hand-written SSE asm (cvtss2si is round-to-nearest, then bump).
+__forceinline int CeilToInt(float f)
+{
+    __asm {
+        movss    xmm0, f
+        cvtss2si eax, xmm0
+        cvtsi2ss xmm1, eax
+        mov      ecx, eax
+        add      ecx, 1
+        ucomiss  xmm1, xmm0
+        cmovb    eax, ecx
+    }
+}
+__forceinline int TruncToInt(float f) { __asm cvttss2si eax, f }
+
 extern "C" __declspec(dllimport) void __stdcall OutputDebugStringA(const char*);
 extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, size_t);
 
@@ -16,6 +32,10 @@ void  EASTL_allocator_deallocate(void* p);                     // 0x00f47380
 
 void FUN_009223a0(int a, void* b);      // 0x9223a0 lock
 void FUN_00922480();                    // 0x922480 unlock
+struct EapdLock {
+    int  Lock(int reason, void* name);   // 0x9223a0
+    void Unlock();                       // 0x922480
+};
 struct RangeMapper {   // receiver arrives in ECX
     float scale;        // +0
     float growth;       // +4
@@ -25,9 +45,7 @@ struct RangeMapper {   // receiver arrives in ECX
     void  Map(unsigned char* out, int a, int b, int c);            // 0x921440
 };
 void FUN_00920340(unsigned a);          // 0x920340
-void FUN_00920560(void* out, void* key);  // 0x920560
 void FUN_00920490(void* out, void* a, void* b); // 0x920490
-void FUN_008e3f10(wchar_t c);           // 0x8e3f10 append char
 void FUN_006859b0(void* a, void* b, void* c); // 0x6859b0
 void FUN_00b4f930(void* a, void* b, void* c); // 0xb4f930
 void* FUN_00922500(int a, int b);       // 0x922500
@@ -36,7 +54,12 @@ void  sys_gui();                        // 0xc2e4e0
 extern wchar_t* g_pNullStr;             // 0x1667b88
 
 // ---------------------------------------------------------------- path helpers
-struct Range { wchar_t* begin; wchar_t* end; };
+struct Range {
+    wchar_t* begin;
+    wchar_t* end;
+    void append(const wchar_t* first, const wchar_t* last);   // 0x672750
+    void appendChar(wchar_t c);                               // 0x8e3f10
+};
 void FUN_00920f30(Range* r, char flag);
 wchar_t* FindExtension(wchar_t* first, wchar_t* last);
 
@@ -178,34 +201,36 @@ wchar_t* FindExtension(wchar_t* first, wchar_t* last) {
 }
 
 // @ 0x00921150
-void FUN_00921150(void* out, wchar_t* first, wchar_t* last) {
+Range* FUN_00921150(Range* out, wchar_t* first, wchar_t* last) {
     if (last == g_pNullStr) {
-        wchar_t c = *first;
-        last = first;
-        while (c != 0) {
-            ++last;
-            c = *last;
-        }
+        wchar_t* e = first;
+        while (*e != 0)
+            ++e;
+        last = e;
     }
     if (first == last)
-        return;
-    if (first < last && (HasAltSeparator(first, last) ||
-        (first < last && (*first == L'\\' || *first == L'/')))) {
-        if (*(void**)((char*)out) != *(void**)((char*)out + 4)) {
-            **(wchar_t**)out = 0;
-            *(wchar_t**)((char*)out + 4) = *(wchar_t**)out;
-            return;
+        return out;
+    bool alt = first < last && HasAltSeparator(first, last);
+    if (!alt)
+        alt = first < last && (*first == L'\\' || *first == L'/');
+    if (alt) {
+        if (out->begin != out->end) {
+            *out->begin = 0;
+            out->end = out->begin;
+            out->append(first, last);
+            return out;
         }
-    } else if (*(void**)out == *(void**)((char*)out + 4) ||
-               (*(wchar_t**)((char*)out + 4))[-1] != L'\\' &&
-               (*(wchar_t**)((char*)out + 4))[-1] != L'/') {
-        FUN_008e3f10(L'\\');
+    } else if (out->begin == out->end ||
+               (out->end[-1] != L'\\' && out->end[-1] != L'/')) {
+        out->appendChar(L'\\');
     }
+    out->append(first, last);
+    return out;
 }
 
 // @ 0x00921210
 void FUN_00921210(void* out, Range* r) {
-    FUN_00921150(out, r->begin, r->end);
+    FUN_00921150((Range*)out, r->begin, r->end);
     FUN_00920f30((Range*)out, 1);
 }
 
@@ -236,6 +261,9 @@ void FixedPool::init(unsigned char* p, unsigned count, unsigned blockSize, unsig
     }
     *(unsigned char**)head = 0;
 }
+
+__declspec(noinline) unsigned* UpperBound(unsigned* first, unsigned* last, const unsigned* key);
+__declspec(noinline) unsigned* LowerBound(unsigned* first, unsigned* last, const unsigned* key);
 
 // @ 0x009212c0  first element strictly greater than key
 unsigned* UpperBound(unsigned* first, unsigned* last, const unsigned* key) {
@@ -283,81 +311,53 @@ int FUN_00921340(unsigned key) {
 
 // @ 0x00921360
 int RangeMapper::Round1(unsigned key) {
-    RangeMapper* p0 = this;
-    float* p = (float*)p0;
     unsigned* r = LowerBound(g_boundLo, g_boundHi, &key);
-    int v = (int)*r;
+    unsigned v = *r;
     float f = (float)v;
-    if (v < 0)
-        f += g_mathConst;
-    float x = f * p[0];
-    int i = (int)x;
-    if ((float)i < x)
-        ++i;
-    limit = i;
-    return v;
+    float x = f * scale;
+    limit = CeilToInt(x);
+    return (int)v;
 }
 
 // @ 0x009213c0
 int RangeMapper::Round2(int key) {
-    float* p = (float*)this;
-    float f = (float)key;
-    if (key < 0)
-        f += g_mathConst;
-    unsigned q = (unsigned)(int)(f / p[0]);
-    unsigned* r = LowerBound(g_boundLo, g_boundHi, &q);
-    int v = (int)*r;
+    float f = (float)(unsigned)key;
+    float t = f / scale;
+    int q = TruncToInt(t);
+    unsigned* r = LowerBound(g_boundLo, g_boundHi, (unsigned*)&q);
+    unsigned v = *r;
     float g = (float)v;
-    if (v < 0)
-        g += g_mathConst;
-    float x = g * p[0];
-    int i = (int)x;
-    if ((float)i < x)
-        ++i;
-    limit = i;
-    return v;
+    float x = g * scale;
+    limit = CeilToInt(x);
+    return (int)v;
 }
 
 // @ 0x00921380/0x14.. use shared rounding: reproduce 00921360/13c0 tails above.
 // @ 0x00921440
 void RangeMapper::Map(unsigned char* out, int a, int b, int c) {
-    float* p = (float*)this;
     unsigned n = (unsigned)(c + b);
     if ((unsigned)limit < n) {
         if (a == 1)
             a = 0;
-        float f = (float)(int)n;
-        if ((int)n < 0)
-            f += g_mathConst;
-        float q = f / p[0];
-        float g = (float)a;
-        if (a < 0)
-            g += g_mathConst;
-        if (g < q) {
-            float t = p[1] * g;
-            float* sel = &t;
-            if (p[1] * g <= q)
-                sel = &q;
-            unsigned key = (unsigned)(int)*sel;
+        float f = (float)n;
+        float q = f / scale;
+        float g = (float)(unsigned)a;
+        if (q <= g) {
+            limit = CeilToInt(g * scale);
+        } else {
+            float t = growth * g;
+            float sel = t;
+            if (sel < q)
+                sel = q;
+            unsigned key = (unsigned)TruncToInt(sel);
             unsigned* r = LowerBound(g_boundLo, g_boundHi, &key);
-            int v = (int)*r;
+            unsigned v = *r;
             float h = (float)v;
-            if (v < 0)
-                h += g_mathConst;
-            float x = h * p[0];
-            int i = (int)x;
-            if ((float)i < x)
-                ++i;
-            limit = i;
+            limit = CeilToInt(h * scale);
             out[0] = 1;
-            *(int*)(out + 4) = v;
+            *(int*)(out + 4) = (int)v;
             return;
         }
-        float x = g * p[0];
-        int i = (int)x;
-        if ((float)i < x)
-            ++i;
-        limit = i;
     }
     *(int*)(out + 4) = 0;
     out[0] = 0;
@@ -407,9 +407,48 @@ struct EapdSymbolTable {
 };
 
 extern HashNode* FUN_006859b0_ret(void* a, void* b, void* c);
+void FUN_00920560(void* out, void* key);                    // 0x920560
 extern HashNode* FUN_00920560_get(void* ht, unsigned key);  // 0x920560
 extern HashNode* FUN_00922500_get(void* p);                 // 0x922500
 extern HashNode* FUN_00685f30_find(void* ht, unsigned key); // 0x685f30
+
+// ---- the two Eapd hash tables whose find wrappers live at 009209c0 / 00920a70 ----
+struct EapdNode {
+    unsigned mKey;      // +0
+    unsigned mValue;    // +4
+    unsigned mExtra;    // +8
+    EapdNode* mpNext;   // +0xc
+};
+struct EapdFind {
+    EapdNode*  node;
+    EapdNode** slot;
+};
+struct EapdEastlTable {
+    unsigned    pad0;         // +0
+    EapdNode**  mpBuckets;    // +4
+    unsigned    mnBucketCount;// +8
+    unsigned    mnSize;       // +0xc
+    void find(EapdFind* out, const unsigned* key);   // 0x685f30
+};
+
+struct EapdGroupNode {
+    unsigned mKey;      // +0
+    unsigned mValue;    // +4
+    unsigned mExtra;    // +8
+    unsigned mData;     // +0xc
+    EapdGroupNode* mpNext;  // +0x10
+};
+struct EapdGroupFind {
+    EapdGroupNode*  node;
+    EapdGroupNode** slot;
+};
+struct EapdGroupTable {
+    unsigned        pad0;          // +0
+    EapdGroupNode** mpBuckets;     // +4
+    unsigned        mnBucketCount; // +8
+    unsigned        mnSize;        // +0xc
+    void Find(EapdGroupFind* out, const unsigned* key);   // 0x920560
+};
 
 // @ 0x009205e0
 void* HashTable::insert(void* out, HashNode* src) {
@@ -490,42 +529,74 @@ bool EapdSymbolTable::LoadSymbols(void* stream) {
 
 // @ 0x009209c0
 unsigned HashTable::lookup(unsigned key) {
-    FUN_009223a0(1, (void*)0x143d820);
-    HashNode* found = 0;
-    HashNode* p = FUN_00685f30_find(this, key);
-    while (p != 0) {
-        if (p->mKey != key)
-            break;
-        if (found == 0 || found->mValue < (unsigned)(size_t)p->pad08)
-            found = p;
-        p = p->mpNext;
+    EapdLock* lk = (EapdLock*)((char*)this + 8);
+    lk->Lock(1, (void*)0x143d820);
+    EapdEastlTable* t = (EapdEastlTable*)((char*)this + 0x108);
+    EapdFind it;
+    t->find(&it, &key);
+    EapdNode* end = t->mpBuckets[t->mnBucketCount];
+    EapdNode* p = it.node;
+    unsigned* found = 0;
+    if (p != end) {
+        while (true) {
+            if (p->mKey != key)
+                break;
+            if (found == 0 || found[1] < p->mExtra)
+                found = &p->mValue;
+            p = p->mpNext;
+            if (p == 0) {
+                EapdNode** slot = it.slot + 1;
+                do {
+                    p = *slot;
+                    ++slot;
+                } while (p == 0);
+            }
+            if (p == end)
+                break;
+        }
     }
     unsigned r = 0;
     if (found != 0)
-        r = found->mKey;
-    FUN_00922480();
+        r = *found;
+    lk->Unlock();
     return r;
 }
 
 // @ 0x00920a70
 unsigned HashTable::find2(unsigned key, unsigned* out) {
-    FUN_009223a0(1, (void*)0x143d820);
-    HashNode* found = 0;
-    HashNode* p = FUN_00920560_get(this, key);
-    while (p != 0) {
-        if (p->mKey != key)
-            break;
-        if (found == 0 || found->mValue < (unsigned)(size_t)p->pad08)
-            found = p;
-        p = p->mpNext;
+    EapdLock* lk = (EapdLock*)((char*)this + 8);
+    lk->Lock(1, (void*)0x143d820);
+    EapdGroupTable* t = (EapdGroupTable*)((char*)this + 0x128);
+    EapdGroupFind it;
+    t->Find(&it, &key);
+    EapdGroupNode* end = t->mpBuckets[t->mnBucketCount];
+    EapdGroupNode* p = it.node;
+    unsigned* found = 0;
+    if (p != end) {
+        while (true) {
+            if (p->mKey != key)
+                break;
+            if (found == 0 || found[1] < p->mExtra)
+                found = &p->mValue;
+            p = p->mpNext;
+            if (p == 0) {
+                EapdGroupNode** slot = it.slot + 1;
+                do {
+                    p = *slot;
+                    ++slot;
+                } while (p == 0);
+            }
+            if (p == end)
+                break;
+        }
     }
     unsigned r = 0;
     if (found != 0) {
-        if (out)
-            *out = (unsigned)(size_t)found->pad08;
-        r = found->mKey;
+        if (out != 0)
+            *out = found[2];
+        r = *found;
     }
-    FUN_00922480();
+    lk->Unlock();
     return r;
 }
 

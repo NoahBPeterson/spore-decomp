@@ -1,16 +1,14 @@
-009206d0  110  EapdSymbolTable ctor: field-store order / vtable store schedule differ
-009209c0  154  hash-table lookup: find() iterator loop / lock shape differs
-00920a70  -    hash-table find2: size/shape differs (no comparable symbol)
-00920c20  29   HasAltSeparator: register allocation differs
-00920c60  111  SkipComponent: path-component loop register/branch schedule differs
-00920d00  99   SkipComponentBack: backward component loop schedule differs
-00920da0  32   ComponentAt: index loop shape / register allocation differs
-00920e30  149  FindExtension: dot/extension scan schedule differs
-00921150  -    FUN_00921150: size/shape differs (no comparable symbol)
-009212c0  -    UpperBound: 50 bytes vs 63 (loop/register form differs)
-00921300  -    LowerBound: 50 bytes vs 63 (loop/register form differs)
-00921340  13   FUN_00921340: caller wrapper schedule differs
-00921360  70   FUN_00921360: x87/SSE rounding sequence schedule differs; equiv FAIL (limit field 80000001 vs 90000001 in memory pool, input 4) after RangeMapper::Round1 member fix
-009213c0  107  FUN_009213c0: x87/SSE rounding sequence schedule differs; equiv FAIL (return value mismatch, eax 823f12d9 vs 00000002) after RangeMapper::Round2 member fix
-00921440  301  FUN_00921440: range mapper arithmetic/compare schedule differs; equiv FAIL (memory pool +4 823f12d9 vs 00000002, 78% cov) after RangeMapper::Map member fix
-00921580  34   RBTreeIncrement: parameter register (eax vs ecx) and loop layout differ
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+009206d0  109  EapdSymbolTable ctor: field-store order / vtable store schedule differ
+009209c0  139  hash-table lookup: equiv PASS at --inputs 900 (401 valid, 92.4% cov); remaining bytes are the find-iterator/bucket-chain loop layout (156 vs 169)
+00920a70  152  hash-table find2: equiv WEAK at --inputs 900 (355 valid, 43.7% cov, no mismatch); node-selection loop is unreachable with generated inputs, so its shape is unverified (169 vs 182)
+00920c20   29  HasAltSeparator: register allocation differs
+00920c60  132  SkipComponent: path-component loop register/branch schedule differs
+00920d00   99  SkipComponentBack: backward component loop schedule differs
+00920da0   32  ComponentAt: index loop shape / register allocation differs
+00920e30  150  FindExtension: dot/extension scan schedule differs
+00921150   93  FUN_00921150: equiv PASS 100% (368 valid at --inputs 900); original keeps a redundant second `first < last` test after HasAltSeparator that this compiler folds away (175 vs 179)
+009212c0   38  UpperBound: 50 bytes vs 63 (loop/register form differs)
+00921300   38  LowerBound: 50 bytes vs 63 (loop/register form differs)
+00921440  243  RangeMapper::Map: equiv PASS 100% (900 valid); remaining bytes are the x87 stack-slot/compare-operand ordering (297 vs 315)
+00921580   41  RBTreeIncrement: parameter register (eax vs ecx) and loop layout differ

@@ -1,5 +1,8 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s009205e0/s009205e0.cpp  FUN_00921210    00921210  /O2 /MD /Gy /EHsc /TP
-slices/s009205e0/s009205e0.cpp  DebugPrint      00921250  /O2 /MD /Gy /EHsc /TP
-slices/s009205e0/s009205e0.cpp  init@FixedPool  00921260  /O2 /MD /Gy /EHsc /TP
-slices/s009205e0/s009205e0.cpp  ?NormalizeSeparators@@YAPAURange@@PAU1@@Z  00920f00  /O2 /MD /Gy /EHsc /TP
+slices/s009205e0/s009205e0.cpp  ?NormalizeSeparators@@YAPAURange@@PAU1@@Z  00920f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009205e0/s009205e0.cpp  ?FUN_00921210@@YAXPAXPAURange@@@Z  00921210  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009205e0/s009205e0.cpp  ?DebugPrint@@YAXPBD@Z  00921250  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009205e0/s009205e0.cpp  ?init@FixedPool@@QAEXPAEIIII@Z  00921260  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009205e0/s009205e0.cpp  ?FUN_00921340@@YAHI@Z  00921340  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009205e0/s009205e0.cpp  ?Round1@RangeMapper@@QAEHI@Z  00921360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009205e0/s009205e0.cpp  ?Round2@RangeMapper@@QAEHH@Z  009213c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
