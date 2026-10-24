@@ -23,6 +23,7 @@
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
+#include <intrin.h>
 
 namespace checkerlib {
 class vector_3 { public:
@@ -79,9 +80,19 @@ struct creature_body_static_data {
     unsigned long caps_flags;                   // +0x150
 
     bool HasCap(unsigned int bit) const { return ((caps_flags >> bit) & 1) != 0; }
-    uint32_t      pad_154[(0x344 - 0x154) / 4];
+    uint8_t       field_154;                    // +0x154
+    uint8_t       pad_155[3];
+    uint32_t      pad_158[(0x344 - 0x158) / 4];
     vector_3      ik_joint_r__SCALABLE;         // +0x344 (name guessed)
     vector_3      parent_local_joint_r__SCALABLE;  // +0x350 (name guessed)
+};
+
+struct creature_deform {                        // 0x14 bytes
+    int32_t key;                                // +0x00
+    int32_t flags;                              // +0x04
+    float   value8;                             // +0x08
+    int32_t field_0c;                           // +0x0c
+    float   value10;                            // +0x10
 };
 
 struct creature_body_instance_data {            // size 0x2bc (retail)
@@ -91,10 +102,23 @@ struct creature_body_instance_data {            // size 0x2bc (retail)
     creature_body_instance_data* first_child;   // +0x00c
     vector_3                     center;        // +0x010
     vector_4                     orientation;   // +0x01c
-    uint32_t                     pad_02c[(0x38 - 0x2c) / 4];
+    vector_3                     velocity;      // +0x02c
     bool                         floored;       // +0x038
     uint8_t                      pad_039[3];
-    uint32_t                     pad_03c[(0x29c - 0x3c) / 4];
+    vector_3                     blended_center; // +0x03c
+    int32_t                      field_048;     // +0x048
+    int32_t                      field_04c;     // +0x04c
+    int32_t                      field_050;     // +0x050
+    uint8_t                      field_054;     // +0x054
+    uint8_t                      field_055;     // +0x055
+    uint8_t                      pad_056[2];
+    float                        reset_floats[18]; // +0x058..+0x09f
+    uint32_t                     field_0a0;     // +0x0a0
+    creature_deform              deforms[11];  // +0x0a4..+0x17f
+    uint32_t                     pad_180[4];   // +0x180..+0x18f
+    vector_3                     saved_center; // +0x190
+    vector_4                     saved_orientation; // +0x19c
+    uint32_t                     pad_1ac[(0x29c - 0x1ac) / 4];
     float                        floored_weight;     // +0x29c
     bool                         known_ground_pos;   // +0x2a0
     uint8_t                      pad_2a1[3];
@@ -104,7 +128,9 @@ struct creature_body_instance_data {            // size 0x2bc (retail)
 
 struct creature_instance_data {
     creature_static_data* static_data;          // +0x000
-    uint32_t pad_004[(0x18 - 0x4) / 4];
+    uint32_t pad_004[3];                        // +0x004
+    int32_t  reset_counter;                     // +0x010
+    uint32_t pad_014;                           // +0x014
     vector_3 position;                          // +0x018
     uint32_t pad_024[(0x3c - 0x24) / 4];
     vector_4 orientation;                       // +0x03c
@@ -113,7 +139,18 @@ struct creature_instance_data {
     uint32_t pad_074[(0xe8 - 0x74) / 4];
     vector_3 ground_pos;                        // +0x0e8
     vector_3 ground_normal;                     // +0x0f4
-    uint32_t pad_100[(0x2e4 - 0x100) / 4];
+    uint32_t pad_100[4];                        // +0x100
+    float    reset_110;                         // +0x110
+    float    reset_114;                         // +0x114
+    uint32_t pad_118[(0x13c - 0x118) / 4];
+    float    reset_floats[27];                  // +0x13c..+0x1a7
+    uint8_t  reset_1a8;                         // +0x1a8
+    uint8_t  reset_1a9;                         // +0x1a9
+    uint8_t  pad_1aa[0x1b8 - 0x1aa];
+    uint8_t  reset_mask;                        // +0x1b8
+    uint8_t  pad_1b9[0x262 - 0x1b9];
+    uint8_t  reset_262;                         // +0x262
+    uint8_t  pad_263[0x2e4 - 0x263];
     eastl::vector<creature_body_instance_data, eastl::sp_vector_allocator> Bodies;  // +0x2e4
     uint32_t pad_2f4[(0x168c - 0x2f4) / 4];
     uint8_t  pad_168c;
@@ -288,6 +325,196 @@ void FloorBodies(creature_instance_data* c)
         }
         b.floored = true;
     }
+}
+
+}  // namespace nSPCreatureAnim
+
+extern "C" void* memset(void* dst, int value, unsigned int size);
+
+namespace nSPCreatureAnim {
+
+// @ 0x009bd340
+void ResetBodies(creature_instance_data* c)
+{
+    int count = (int)(c->Bodies.mpEnd - c->Bodies.mpBegin);
+    if (count != 0) {
+        int offset = 0;
+        int remaining = count;
+        do {
+            creature_body_instance_data* b =
+                (creature_body_instance_data*)((char*)c->Bodies.mpBegin + offset);
+            b->reset_floats[0] = 0.0f;
+            b->reset_floats[1] = 0.0f;
+            b->reset_floats[2] = 0.0f;
+            b->reset_floats[3] = 0.0f;
+            b->reset_floats[4] = 0.0f;
+            b->reset_floats[5] = 0.0f;
+            b->reset_floats[6] = 0.0f;
+            b->reset_floats[7] = 0.0f;
+            b->reset_floats[8] = 0.0f;
+            b->reset_floats[9] = 0.0f;
+            b->reset_floats[10] = 0.0f;
+            b->reset_floats[11] = 0.0f;
+            b->reset_floats[12] = 0.0f;
+            b->reset_floats[13] = 0.0f;
+            b->reset_floats[14] = 0.0f;
+            b->reset_floats[15] = 0.0f;
+            b->reset_floats[16] = 0.0f;
+            b->reset_floats[17] = 0.0f;
+            b->field_0a0 = 0;
+            b->field_048 = 0;
+            b->field_04c = 0;
+            b->field_050 = 0;
+            _ReadWriteBarrier();
+            offset += (int)sizeof(creature_body_instance_data);
+            remaining--;
+            b->field_054 = 0;
+            b->field_055 = 0;
+            b->known_ground_pos = 0;
+            b->floored = 0;
+        } while (remaining != 0);
+    }
+
+    c->reset_114 = 0.0f;
+    c->reset_110 = 0.0f;
+    c->reset_floats[0] = 0.0f;
+    c->reset_floats[1] = 0.0f;
+    c->reset_floats[2] = 0.0f;
+    c->reset_floats[3] = 0.0f;
+    c->reset_floats[4] = 0.0f;
+    c->reset_floats[5] = 0.0f;
+    c->reset_floats[6] = 0.0f;
+    c->reset_floats[7] = 0.0f;
+    c->reset_floats[8] = 0.0f;
+    c->reset_floats[9] = 0.0f;
+    c->reset_floats[10] = 0.0f;
+    c->reset_floats[11] = 0.0f;
+    c->reset_floats[12] = 0.0f;
+    c->reset_floats[13] = 0.0f;
+    c->reset_floats[14] = 0.0f;
+    c->reset_floats[15] = 0.0f;
+    c->reset_floats[16] = 0.0f;
+    c->reset_floats[17] = 0.0f;
+    c->reset_floats[18] = 0.0f;
+    c->reset_floats[19] = 0.0f;
+    c->reset_floats[20] = 0.0f;
+    c->reset_floats[21] = 0.0f;
+    c->reset_floats[22] = 0.0f;
+    c->reset_floats[23] = 0.0f;
+    c->reset_floats[24] = 0.0f;
+    c->reset_floats[25] = 0.0f;
+    const unsigned int maskSize = ((unsigned int)(count * 2 + 7)) >> 3;
+    _ReadWriteBarrier();
+    c->reset_floats[26] = 0.0f;
+    _ReadWriteBarrier();
+    memset((c->reset_1a8 = 0, c->reset_1a9 = 0, c->reset_262 = 1, &c->reset_mask),
+           0, maskSize);
+    c->reset_counter++;
+}
+
+}  // namespace nSPCreatureAnim
+
+namespace nSPCreatureAnim {
+
+// @ 0x009bd550
+void BlendBodyPoses(float dt, float blend, creature_instance_data* c, bool keep_pose)
+{
+    int count = (int)(c->Bodies.mpEnd - c->Bodies.mpBegin);
+    if (count == 0)
+        return;
+
+    float invBlend = 1.0f - blend;
+    int offset = 0;
+    int remaining = count;
+    do {
+        creature_body_instance_data* b =
+            (creature_body_instance_data*)((char*)c->Bodies.mpBegin + offset);
+
+        if (!keep_pose) {
+            vector_3 velocity;
+            if (dt <= 1e-06f) {
+                velocity.x = 0.0f;
+                velocity.y = 0.0f;
+                velocity.z = 0.0f;
+            } else {
+                float invDt = 1.0f / dt;
+                velocity.x = (b->saved_center.x - b->center.x) * invDt;
+                velocity.y = (b->saved_center.y - b->center.y) * invDt;
+                velocity.z = (b->saved_center.z - b->center.z) * invDt;
+            }
+            b->velocity = velocity;
+            b->center = b->saved_center;
+            b->orientation.x = b->saved_orientation.x;
+            b->orientation.y = b->saved_orientation.y;
+            b->orientation.z = b->saved_orientation.z;
+            b->orientation.w = b->saved_orientation.w;
+            b->floored = 1;
+        }
+
+        b->blended_center.x = b->center.x * invBlend + b->blended_center.x * blend;
+        b->blended_center.y = b->center.y * invBlend + b->blended_center.y * blend;
+        b->blended_center.z = b->center.z * invBlend + b->blended_center.z * blend;
+
+        offset += (int)sizeof(creature_body_instance_data);
+        remaining--;
+    } while (remaining != 0);
+}
+
+// @ 0x009be150
+void UpdateDeforms(creature_instance_data* c)
+{
+    int count = (int)(c->Bodies.mpEnd - c->Bodies.mpBegin);
+    if (count == 0)
+        return;
+
+    int offset = 0;
+    int remaining = count;
+    do {
+        creature_body_instance_data* b =
+            (creature_body_instance_data*)((char*)c->Bodies.mpBegin + offset);
+
+        if ((b->static_data->field_154 & 0x20) != 0) {
+            uint32_t n = b->field_0a0;
+            uint32_t first = 0;
+            if (n != 0) {
+                creature_deform* p = &b->deforms[0];
+                do {
+                    if (p->key == 0x4d5bf589)
+                        goto found_first;
+                    first++;
+                    p++;
+                } while (first < n);
+            }
+            first = 0xffffffffu;
+        found_first:
+            if (first < n) {
+                creature_deform* src = &b->deforms[first];
+                uint32_t second = 0;
+                if (n != 0) {
+                    creature_deform* p = &b->deforms[0];
+                    do {
+                        if (p->key == 0x89e06a31)
+                            goto found_second;
+                        second++;
+                        p++;
+                    } while (second < n);
+                }
+                second = 0xffffffffu;
+            found_second:
+                if (second < n) {
+                    creature_deform* dst = &b->deforms[second];
+                    dst->value8 = src->value8 + dst->value8;
+                    dst->value10 = src->value10 + dst->value10;
+                } else {
+                    src->flags &= ~1;
+                    src->key = 0x89e06a31;
+                }
+            }
+        }
+
+        offset += (int)sizeof(creature_body_instance_data);
+        remaining--;
+    } while (remaining != 0);
 }
 
 }  // namespace nSPCreatureAnim

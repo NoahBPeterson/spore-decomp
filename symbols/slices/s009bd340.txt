@@ -1,1 +1,4 @@
-009bd6f0 ?FloorBodies@nSPCreatureAnim@@YAXPAUcreature_instance_data_s009b_d340@1@@Z  # FloorBodies migrated from s009bd340 (verbatim, slice spelling)
+009bd340 nSPCreatureAnim::ResetBodies  # clears per-body pose/velocity/deform fields, clears instance deform state, zeroes the body bitmask and bumps the reset counter
+009bd550 nSPCreatureAnim::BlendBodyPoses  # integrates saved poses into velocities when not keeping the pose, blends center into the 0x3c vector
+009be150 nSPCreatureAnim::UpdateDeforms  # propagates deform entries keyed 0x4d5bf589 into 0x89e06a31 entries or rekeys the source entry
+009bd6f0 nSPCreatureAnim::FloorBodies  # keeps bodies above the ground plane (pre-existing)
