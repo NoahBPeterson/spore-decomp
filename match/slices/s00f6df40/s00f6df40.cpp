@@ -186,3 +186,80 @@ void BrushCubeSplitter::SplitPolysToCubeFaces(int arg, BrushTarget* target, int 
         }
     }
 }
+
+// @ 0x00f6eb40
+void __stdcall FUN_00f6eb40(AABox* box) {
+    AABox tmp;
+    tmp.mMin = cSPVector3(-1000.0f, -1000.0f, -1000.0f);
+    tmp.mMax = cSPVector3(1000.0f, 1000.0f, 1000.0f);
+    const AABox& r = tmp;
+    box->mMax = r.mMax;
+    box->mMin = r.mMin;
+}
+
+extern "C" double __cdecl fabs(double);
+#pragma intrinsic(fabs)
+
+struct cTerrainUV {
+    float mU;      // +0x00
+    float mV;      // +0x04
+    int   mFace;   // +0x08
+};
+
+struct cTerrainMap {
+    float GetFloat(const cTerrainUV* uv);    // 0x00f8d620
+};
+
+struct cTerrainRef {
+    void*         mPad00;   // +0x00
+    void*         mPad04;   // +0x04
+    cTerrainMap*  mpMap;    // +0x08
+};
+
+struct cFaceMapper {
+    void*        mPad00;        // +0x00
+    void*        mPad04;        // +0x04
+    void*        mPad08;        // +0x08
+    cTerrainRef* mpTerrain;     // +0x0c
+
+    float GetFaceValue(const cSPVector3* pDir);
+};
+
+// @ 0x00f6ebe0
+float cFaceMapper::GetFaceValue(const cSPVector3* pDir) {
+    cTerrainMap* pMap = mpTerrain->mpMap;
+    if (pMap != 0) {
+        cSPVector3 d = *pDir;
+        float fx = (float)fabs(d.x);
+        float fy = (float)fabs(d.y);
+        float fz = (float)fabs(d.z);
+        cTerrainUV uv;
+        if (fx <= fz && fy <= fz) {
+            uv.mU = (d.x / d.z + 1.0f) * 0.5f;
+            uv.mV = (d.y / fz + 1.0f) * 0.5f;
+            if (d.z >= 0.0f) {
+                uv.mFace = 0;
+                return pMap->GetFloat(&uv);
+            }
+            uv.mFace = 1;
+            return pMap->GetFloat(&uv);
+        }
+        if (fy >= fx) {
+            uv.mU = (d.z / d.y + 1.0f) * 0.5f;
+            uv.mV = (d.x / fy + 1.0f) * 0.5f;
+            if (d.y >= 0.0f) {
+                uv.mFace = 4;
+                return pMap->GetFloat(&uv);
+            }
+            uv.mFace = 5;
+            return pMap->GetFloat(&uv);
+        }
+        uv.mU = (d.y / d.x + 1.0f) * 0.5f;
+        uv.mV = (d.z / fx + 1.0f) * 0.5f;
+        uv.mFace = 2;
+        if (d.x < 0.0f)
+            uv.mFace = 3;
+        return pMap->GetFloat(&uv);
+    }
+    return 0.0f;
+}
