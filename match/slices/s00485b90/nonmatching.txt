@@ -1,2 +1,4 @@
 # va  diff-bytes  reason
+00485b90  568  rotation-ring distance blend complete; equiv PASS 357/400 valid (98.5% cov); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; /Od slot ordering differs and the hidden-return cSPVector3 copy is component-wise rather than a whole-struct move
+00485eb0  322  bounding-box transform radius complete; equiv PASS 337/400 valid (99.2% cov); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; /Od slot ordering differs and the Transform ctor/matrix copy scheduling differs from the original
 004860b0  1614  complete; UpdateBig (31/31 calls in order, 2093 B vs 2142 B); /Od local slot order and hidden inline-helper frames differ; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

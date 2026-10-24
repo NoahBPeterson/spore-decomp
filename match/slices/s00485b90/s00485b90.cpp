@@ -3,6 +3,8 @@
 // (dominated by inlined bounding-box transforms and vector math).
 // Module flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
+#include <math.h>
+#pragma intrinsic(fabs)
 
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 
@@ -81,18 +83,53 @@ template<int N> struct bitset {
     }
 };
 
+// Trivially copyable 12/36-byte math storage (rw::math::fpu templates); struct copies
+// are three/nine integer moves, as in the original.
+struct Vec3 {
+    float x, y, z;
+    float& operator[](int i) { return (&x)[i]; }
+};
+struct Mat33 { float m[9]; };
+
+// SP::Transform: scale/rotate/translate transform applied to a bounding box.
+//   0x409930 ctor (flags/version cleared, pos from g_ZeroVector, scale, identity rot)
+//   0x409DD0 BoundingBox::TransformBy
+struct Transform {
+    unsigned short mFlags;      // +0x00  bit0 = scaled, bit1 = rotated, bit2 = translated
+    unsigned short mVersion;    // +0x02  bumped on every change
+    Vec3  mPos;                 // +0x04
+    float mScale;               // +0x10
+    Mat33 mRot;                 // +0x14
+    Transform();                // 0x00409930
+};
+
+// Bounding box (min/max corners, 24 bytes).
+struct cSPBoundingBox {
+    Vec3 mMin;                  // +0x00
+    Vec3 mMax;                  // +0x0c
+    void TransformBy(const Transform& t);   // 0x00409DD0
+};
+
+struct cSPEditorModel {
+    float FUN_004adb00();       // 0x004adb00
+};
+
 struct cSPEditorBlock {
-    char pad0[0x48];
+    char pad00[0x28];
+    cSPEditorModel* mEditorModel;                                   // +0x28
+    char pad2c[0x48 - 0x2c];
     Vector3T mPosition;                                             // +0x48
     char pad1[0xa8 - 0x54];
     cSPMatrix3 mOrientation;                                        // +0xa8
     char pad2[0x340 - 0xcc];
     vector<AutoRefCount<cSPEditorBlock> > mSymmetricBlocks;         // +0x340
-    char pad3[0x3ec - 0x354];
+    char pad3[0x3ec - 0x350];
     void* mSkin;                                                    // +0x3ec
     char pad4[0xdc8 - 0x3f0];
     bitset<60> mFlags;                                              // +0xdc8
     float GetRadius();                                              // 0x0043EED0
+    cSPBoundingBox GetBBox(bool a, bool b, bool c);                 // 0x0044AE00
+    float FUN_0043f250();                                           // 0x0043F250
 };
 
 namespace SP { namespace EditorUtils {
@@ -105,22 +142,73 @@ struct RotationRing {
     cSPEditorBlock* mBlock;                 // +0x00
     int   pad4;
     vector<HandleRef*> mHandles;            // +0x08
+    uint32_t pad18;                         // +0x18
+    Vec3  mField1c;                         // +0x1c
 
-    float Compute1();          // 0x485b90
-    float Compute2();          // 0x485eb0
-    void  UpdateBig(float rA, float rB);    // 0x4860b0
+    cSPVector3* ComputeDistance(cSPVector3* out);   // 0x485b90
+    float ComputeBoundingRadius();                  // 0x485eb0
+    void  UpdateBig(float rA, float rB);            // 0x4860b0
+    Mat33 FUN_00488600(int index);                  // 0x488600
 };
 
-// @ 0x00485b90 -- PARTIAL: bbox/direction distance blend; body omitted.
-float RotationRing::Compute1()
+// @ 0x00485b90
+cSPVector3* RotationRing::ComputeDistance(cSPVector3* out)
 {
-    return 0.0f;
+    cSPEditorModel* model = mBlock->mEditorModel;
+    float dist = model->FUN_004adb00();
+    if (mBlock->mFlags.test(11) || mBlock->mFlags.test(20)) {
+        dist = mBlock->FUN_0043f250() * 1.2f + model->FUN_004adb00();
+    } else {
+        cSPVector3 pos(mBlock->mPosition);
+        cSPBoundingBox bb = mBlock->GetBBox(false, false, false);
+        cSPVector3 bbox;
+        bbox.x = bb.mMin.x;
+        bbox.y = bb.mMin.y;
+        bbox.z = bb.mMin.z;
+        cSPVector3 d = pos - bbox;
+        dist = d[2];
+        if (mBlock->mFlags.test(44)) {
+            cSPBoundingBox bb2 = mBlock->GetBBox(true, false, false);
+            dist = (float)fabs(bb2.mMin[1]) * 0.8f;
+        }
+    }
+    cSPVector3 result;
+    result.x = mField1c.x;
+    result.y = mField1c.y;
+    result.z = mField1c.z;
+    result[2] = dist;
+    out->x = result.x;
+    out->y = result.y;
+    out->z = result.z;
+    return out;
 }
 
-// @ 0x00485eb0 -- PARTIAL: bounding-box transform returning a min component; body omitted.
-float RotationRing::Compute2()
+// @ 0x00485eb0
+float RotationRing::ComputeBoundingRadius()
 {
-    return 0.0f;
+    if (mBlock->mFlags.test(45)) {
+        cSPBoundingBox bb = mBlock->GetBBox(true, false, false);
+        Transform t;
+        t.mPos = mField1c;
+        t.mFlags |= 4;
+        t.mVersion = (unsigned short)(t.mVersion + 1);
+        t.mRot = *(Mat33*)((char*)mBlock + 0x60);
+        t.mFlags |= 2;
+        t.mVersion = (unsigned short)(t.mVersion + 1);
+        bb.TransformBy(t);
+        return bb.mMin[2];
+    } else {
+        cSPBoundingBox bb = mBlock->GetBBox(true, false, false);
+        Transform t;
+        t.mPos = mField1c;
+        t.mFlags |= 4;
+        t.mVersion = (unsigned short)(t.mVersion + 1);
+        t.mRot = FUN_00488600(0);
+        t.mFlags |= 2;
+        t.mVersion = (unsigned short)(t.mVersion + 1);
+        bb.TransformBy(t);
+        return bb.mMin[2];
+    }
 }
 
 static inline float Dot(const Vector3T& a, const Vector3T& b)
