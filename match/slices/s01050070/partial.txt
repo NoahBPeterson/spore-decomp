@@ -1,0 +1,2 @@
+01050070 843 partial: UseToolStart source incomplete (best-effort translation of the tool-start path; 1069 vs 1027 bytes); equivalence UNSUPPORTED (0/400 valid; discards fault(read)=400); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+010504a0 102 partial: UseToolUpdate source incomplete (best-effort translation; 102-byte register allocation/scheduling diff); equivalence UNSUPPORTED (0/400 valid; discards fault(read)=400); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

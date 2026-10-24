@@ -1,0 +1,2 @@
+01050640 411 nonmatching: CreateGenericToolEffect; remaining diff is register allocation/scheduling noise; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (390 valid, 14.4% coverage)
+01050850 438 nonmatching: cVec14::insert; remaining diff is register allocation/scheduling noise; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (200 valid, 13.2% coverage)
