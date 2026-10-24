@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00e24a50  162  cSPUIPosse destructor (vtbl_UI::Posse + vtbl literals, cSPUILayout dtor 0x811fe0, FUN_00e23870, operator_delete_array, Vec2b::Free, base refcount release); not emitted
+00e24ba0  233  cSPUIPosse::find_item (inlined eastl::lower_bound 0x00e23e30 with comparator FUN_00e23c00, EA::AutoRefCount AddRef/Release); not emitted
+00e24d10  369  UI notification sender (FUN_006895b0, EA::Variant, message-server virtual slots 0x18/0x20/0x54, FUN_00e21b30/FUN_006a3570); not emitted
+00e24f10  305  cSPUIPosseItemTribeBaby::DoMessage (RenderContext Begin2D/End2D, sGetWindowImage, FUN_00e23340, float globals); not emitted
+00e25240  371  eastl heap sift-down (function-pointer comparator, element move/construct, tail release); not emitted
+00e253c0  152  eastl vector grow/relocate helper (element dtor/ctor, FUN_00e23e80/FUN_00e25240, tail-call Release); not emitted
+00e25460  318  UI::cScenarioEditPosseItem constructor (vtable literals, base ctor, field init); not emitted
+00e255c0  334  cSPUIPosseItem constructor (vtable literals, base ctor, field init); not emitted

@@ -1,0 +1,2 @@
+00e248b0 13 int-bool materialization: original emits test/jne/xor/jmp/mov eax,ebx; our /O2 build emits mov eax,0/setne al (scheduling-dependent, not source-reachable); all other bytes identical, size exact 416
+00e24b10 80 container teardown: MSVC keeps mFieldA8 in eax across the popped-item read and picks mFieldA8 for both begin/end compares; original reloads mFieldA8 and uses mFieldA4 in the compares (133 vs 139 bytes)
