@@ -41,7 +41,6 @@ extern void __stdcall FUN_00b6faa0(void*);
 extern void FUN_00a7bf40(void*, void*);
 extern void FUN_009615c0(void*, void*, int);
 extern int  FUN_6ab760(void*, void*);
-extern unsigned __stdcall FUN_011f3620(unsigned, unsigned, unsigned);
 extern void* FUN_009512c0(...);
 extern void FUN_011f2bc0();
 extern void FUN_011ed910();
@@ -62,6 +61,7 @@ struct S962da0c {
 };
 struct S11f36a0 {
   void f();                            // 0x011f36a0
+  unsigned FUN_011f3620(unsigned char flags, unsigned a, unsigned b);  // 0x011f3620
 };
 struct S925e60 {
   void f();                            // 0x00925e60
@@ -545,7 +545,7 @@ void S9628f0::f(void* win) {
   *(int*)(p + 4) = n;
   *(int*)(obj + 8) = 0;
   *(int*)(obj + 0xc) = 0;
-  RefObj* r = *(RefObj**)obj;
+  RefObj* r = (RefObj*)obj;
   *(int*)(obj + 0x38) = 0;
   r->Release();
 }
@@ -697,7 +697,8 @@ unsigned S962e80::f(unsigned a, unsigned b) {
   unsigned flags = ((old != 0) * 4u + 4u) | 2u;
   unsigned n = b ? b : (unsigned)p[3];
   unsigned char stride = *(unsigned char*)((size_t)p[0] + 0xf);
-  return FUN_011f3620(flags, (unsigned)(p[2] + old) * stride, (unsigned)stride * n);
+  return ((S11f36a0*)p)->FUN_011f3620((unsigned char)flags, (unsigned)(p[2] + old) * stride,
+                                     (unsigned)stride * n);
 }
 
 // ---------------------------------------------------------------------------
