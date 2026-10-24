@@ -1,0 +1,9 @@
+00a43d30 SP::Audio::cSystem::Init          # PDB name; engine embedded at +0x15bc18, this = the cSystem member
+00a441b0 EA::Audio::Eapd::Remove           # GroupMap (Eapd+0xd4) erase of one group
+00a44230 EA::Audio::Eapd::SetListener      # byte-exact; listener position from the group param
+00a44290 EA::Audio::Eapd::GetCurveValue    # curve map (Eapd+0x320) lookup, modf/pow interpolation
+00a443c0 SoundMap::erase                  # curve map node unlink + config Release + delete
+00a44440 SP::Audio::cAudioSystem::ShutdownSystem  # teardown: listener, messages, cache, cheats, groups, Sys::Shutdown
+00a445a0 SP::Audio::cAudioSystem::InitCurve       # response-curve setup from an IConfiguration
+00a449a0 EA::Audio::Eapd::Play             # start the group's sound and record it as playing
+00a44a80 EA::Audio::Eapd::PlayOrStop       # start/stop shared body
