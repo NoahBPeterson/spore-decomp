@@ -1,1 +1,26 @@
 01159cc0 ?GetScaleFactors@HELPER_CEALayer3@core@audio@rw@@QAEXHH@Z  # HELPER_CEALayer3::GetScaleFactors migrated from s01159630 (verbatim, slice spelling)
+
+# ------------------------------------------------------------------ gold7 batch id "s01159630"
+01159630 ?MpegBase_Init@core@audio@rw@@YAPAXPAUMpegDecoderState@123@HH@Z  # cdecl factory: new decoder state (0x48), init base + tables, return state
+011596d0 ?MpegList_Insert@core@audio@rw@@YAXPAPAXPAUMpegListNode@123@@Z  # intrusive list push-front
+01159710 ?MpegList_Unlink@core@audio@rw@@YAXPAPAXPAUMpegListNode@123@@Z  # intrusive list remove
+01159760 ?ReaderTable_Init1@core@audio@rw@@YAXXZ  # installs 8 immediate / table entries into reader-table slots
+011597d0 ?ReaderTable_Init2@core@audio@rw@@YAXXZ  # installs 8 more reader-table slots
+01159810 ?ReaderTable_Init3@core@audio@rw@@YAXXZ  # installs the last 8 reader-table slots
+01159850 ?InstallDoInsertValue@core@audio@rw@@YAHPAX@Z  # sets the insert-callback slot, returns 1
+01159860 ?LoadBitRegister@HELPER_CMpegBase@core@audio@rw@@QAEXXZ  # refill 24-bit shift register while < 24 bits
+011598a0 ?GetBits@HELPER_CMpegBase@core@audio@rw@@QAEGH@Z  # read n bits, MSB first; source spelling (u16 result)
+01159920 ??1HELPER_CEALayer3@core@audio@rw@@QAE@XZ  # scalar deleting dtor: reset vftable, free decoded frame
+01159950 ?GetSideInfo@HELPER_CEALayer3@core@audio@rw@@QAE_NH@Z  # parse Layer III side info (bool result in al); source spelling
+0115a380 ?Huffman_UnpackTableSet@HELPER_CEALayer3@core@audio@rw@@QAEXHIPAX@Z  # build the Huffman decode table set for one granule
+
+# ------------------------------------------------------------------ object model (gold7 retail offsets)
+# HELPER_CMpegBase 0x48: +0x18 mBufPtr; +0x24 mShiftReg; +0x28 mShiftRegBits
+# HELPER_CEALayer3 0x1d4: base 0x48; +0x6c mSideInfo; +0x70 mGrInfo[2][2] (0x18 each);
+#   +0xd0 mScaleFac[2]; +0x1c8 mpPrevBlockX4; +0x1cc mFrameStart; +0x1d0 mpDecodedFrame
+# GranuleInfo 0x18: +0x00 part2_3_length; +0x02 big_values; +0x04 scalefac_compress;
+#   +0x06 global_gain; +0x07 window_switching_flag; +0x08 block_type; +0x09 mixed_block_flag;
+#   +0x0a region0_count; +0x0b region1_count; +0x0c table_select[3]; +0x0f count1_table_select;
+#   +0x10 sub_block_gain[3]; +0x13 pre_flag; +0x14 scale_fac_scale
+# g_pHeap @0x016e61a8 (System::Free @0x0112c850); g_huffGroupLen @0x014d9ff8;
+# g_vtbl_EALayer3 @0x014ce8a0; reader-table slots @0x016e8088..0x016e80fc

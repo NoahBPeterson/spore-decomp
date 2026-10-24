@@ -1,2 +1,9 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s01159630/s01159630.cpp  GetScaleFactors@HELPER_CEALayer3  01159cc0
+slices/s01159630/s01159630.cpp  ?MpegBase_Init@core@audio@rw@@YAPAXPAUMpegDecoderState@123@HH@Z  01159630  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01159630/s01159630.cpp  ?MpegList_Insert@core@audio@rw@@YAXPAPAXPAUMpegListNode@123@@Z  011596d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01159630/s01159630.cpp  ?MpegList_Unlink@core@audio@rw@@YAXPAPAXPAUMpegListNode@123@@Z  01159710  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01159630/s01159630.cpp  ?ReaderTable_Init2@core@audio@rw@@YAXXZ  011597d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01159630/s01159630.cpp  ?ReaderTable_Init3@core@audio@rw@@YAXXZ  01159810  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01159630/s01159630.cpp  ?InstallDoInsertValue@core@audio@rw@@YAHPAX@Z  01159850  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01159630/s01159630.cpp  ??1HELPER_CEALayer3@core@audio@rw@@QAE@XZ  01159920  /O2 /MD /Gy /TP /arch:SSE /fp:fast
