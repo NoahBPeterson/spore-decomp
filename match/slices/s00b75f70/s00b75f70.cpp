@@ -7,7 +7,11 @@
 #include "types.h"
 #include <math.h>
 
-struct Vec3 { float x, y, z; };
+struct Vec3 {
+    float x, y, z;
+    Vec3() {}
+    Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {}
+};
 
 // ---------------------------------------------------------------- external callees
 void  __cdecl FUN_00b75750(void* base, void* cur, Vec3 p);      // 0xb75750
@@ -19,38 +23,91 @@ void  __cdecl FUN_00b754d0(void* first, void* last, void* last2, void* comp); //
 void* __cdecl FUN_00b75620(void* first, void* last, void* pivot);             // 0xb75620
 void* __cdecl FUN_00b734e0(void* first, void* mid, void* last, Vec3 a, Vec3 b); // 0xb734e0
 void* __cdecl FUN_00b749c0(void* begin, void* end, float x, float y, float z); // 0xb749c0
-void  __cdecl FUN_00b74f80(void* o, float a, float b);          // 0xb74f80
 void* __cdecl EAAllocate(unsigned int sz, const char* name, int a, int b, int c, int d); // 0xf473a0
 void  __cdecl opdel(void* p);                                   // 0xf47380  ??3@YAXPAX@Z
-void  __cdecl FUN_005765e0(void* a);                            // 0x5765e0
-void  __cdecl FUN_00478db0(void* a);                            // 0x478db0
 void  __cdecl FUN_0102c7f0(void* a, int b);                     // 0x102c7f0
-void  __cdecl FUN_00ae5530(void* a, int b, void* c, const wchar_t* d); // 0xae5530
+char  __cdecl FUN_00ae5530(void* a, int b, void* c, const wchar_t* d); // 0xae5530
 void* __cdecl FUN_00401010();                                   // 0x401010
-void  __cdecl FUN_00b72520(float x, float y, float z);          // 0xb72520
 void  __cdecl FUN_00407190(void* comp, unsigned key, void* out); // 0x407190
-void  __cdecl FUN_00537dc0(void* dst, void* src);               // 0x537dc0
-void* __cdecl FUN_005dd750(void* a);                            // 0x5dd750
 void* __cdecl FUN_00b3d2a0();                                   // 0xb3d2a0
-void* __cdecl FUN_00ba93b0(void* empire);                       // 0xba93b0
-int*  __cdecl FUN_00c326b0(void* empire);                       // 0xc326b0
 void* __cdecl FUN_00b3d520();                                   // 0xb3d520
 void* __cdecl FUN_00b3d350();                                   // 0xb3d350
-void  __cdecl FUN_0093c5a0(void* out, const char* s, unsigned n); // 0x93c5a0
-void  __cdecl FUN_00579a90(void* s, int n);                     // 0x579a90
-void  __cdecl FUN_0056e2d0(void* dst, void* src);               // 0x56e2d0
-double __cdecl FUN_009360d0();                                  // 0x9360d0 RandomDoubleUniform
+void  __cdecl FUN_0093c5a0(void* out, const char* s, int n);    // 0x93c5a0
+struct C579a90 {
+    void __thiscall RangeInitialize(int n);                     // 0x579a90
+};
+struct C56e2d0 {
+    void __thiscall Copy(const void* src);                      // 0x56e2d0
+};
+
+extern const float g_14650a4;
+extern char g_1601760;                                          // +0x1601760 RNG global object
+struct Var {
+    char pad_0[0x10];                                           // +0x00
+    unsigned short mFlags;                                      // +0x10
+    unsigned short mTypeId;                                     // +0x12
+};
+struct C5dd750 {
+    Var* __thiscall SetBool(const unsigned char* src);          // 0x5dd750
+};
+struct CVariant {
+    void __thiscall Destruct(bool b);                           // 0x93db80
+};
+struct C5765e0 {
+    void __thiscall Release();                                  // 0x5765e0
+};
+struct C478db0 {
+    void* __thiscall Assign(void* p);                           // 0x478db0
+};
+struct C537dc0 {
+    void* __thiscall Assign(const void* src);                   // 0x537dc0
+};
+struct C72520 {
+    void __thiscall Rotate(float x, float y, float z);          // 0xb72520
+};
+struct CRandomGlob {
+    double __thiscall RandomDoubleUniform();                    // 0x9360d0
+};
+struct CStarManager {
+    void* __thiscall GetUFO();                                  // 0xba93b0
+};
+struct CEmpire {
+    int* __thiscall GetUFOKey();                                // 0xc326b0
+};
+struct CSubObj {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10();
+    virtual void v14(unsigned key, void* val);
+};
 
 // thiscall callees modelled as members of dummy classes so the call carries ecx.
-struct C74860 { void __thiscall Find(int* out, int* key); };    // 0xb74860
-struct C75910 { void __thiscall Next(void* out, void* it); };   // 0xb75910
-struct C75a30 { void __thiscall Grow(void* end, const void* v); }; // 0xb75a30
-struct C752f0 { void __thiscall Insert(void* out, const void* v, int z); }; // 0xb752f0
-struct C75890 { int* __thiscall InsertKey(const void* k); };    // 0xb75890
-struct C74f80 { void __thiscall Notify(void* o, float a, float b); }; // 0xb74f80
-struct C75c00 { void __thiscall DoFreeNodes(void* buckets, int nb); }; // 0xa1b6c0
-struct C82060 { void __thiscall Run(const Vec3* d, const Vec3* a, const Vec3* dir); }; // 0xb82060
-struct CXForm { void __thiscall BackTransform(Vec3* p); };      // 0x4ff6d0
+struct C74860 {
+    void __thiscall Find(int* out, int* key);                   // 0xb74860
+};
+struct C75910 {
+    void __thiscall Next(void* out, void* it);                  // 0xb75910
+};
+struct C75a30 {
+    void __thiscall Grow(void* end, const void* v);             // 0xb75a30
+};
+struct C752f0 {
+    void __thiscall Insert(void* out, const void* v, int z);    // 0xb752f0
+};
+struct C75890 {
+    int* __thiscall InsertKey(const void* k);                   // 0xb75890
+};
+struct C74f80 {
+    void __thiscall Notify(void* o, float a, float b);          // 0xb74f80
+};
+struct C75c00 {
+    void __thiscall DoFreeNodes(void* buckets, int nb);         // 0xa1b6c0
+};
+struct C82060 {
+    void __thiscall Run(const Vec3* d, const Vec3* a, const Vec3* dir); // 0xb82060
+};
+struct CXForm {
+    void __thiscall BackTransform(Vec3* p);                     // 0x4ff6d0
+};
 struct CVec3v {
     void** begin;                                               // +0x00
     void** end;                                                 // +0x04
@@ -139,7 +196,7 @@ struct MR {
     int pad;
     NRef** buckets;
     unsigned nb;
-    ItR find(const int& k);
+    ItR find(const int& k);              // 0x645ed0
     PR insertr(const VTR& v, ZF z);     // 0xb752f0
 };
 // @ 0x00b76460
@@ -399,7 +456,8 @@ struct C76d20 {
 void __fastcall FUN_00b76d20(char* self, int, float* p, float a3, int a4, char a5, char a6) {
     if (p[0] == g_1687ad4 && p[1] == g_1687ad8 && p[2] == g_1687adc) return;
     char* vv = self + 0x4908;
-    if (FUN_00b749c0(vv, *(void**)(self + 0x490c), p[0], p[1], p[2]) != *(void**)(self + 0x490c))
+    if (FUN_00b749c0(*(void**)(self + 0x4908), *(void**)(self + 0x490c), p[0], p[1], p[2])
+            != *(void**)(self + 0x490c))
         return;
     if (a6) a3 = *(float*)(self + 0x54a4);
     El18 local;
@@ -489,12 +547,12 @@ void __fastcall FUN_00b76160(char* self) {
         int ai30[2];
         ((C74860*)(self + 0x56c0))->Find(ai30, piVar3);
         if (ai30[0] == *(int*)(*(int*)(self + 0x56c4) + *(int*)(self + 0x56c8) * 4)) {
-            if (FUN_009360d0() <= (double)g_1464fdc) {
+            if (((CRandomGlob*)&g_1601760)->RandomDoubleUniform() <= (double)g_1464fdc) {
                 FUN_0102c7f0(&s28, 0);
             } else {
-                void* emp = FUN_00b3d2a0();
-                void* ufo = FUN_00ba93b0(emp);
-                int* key = FUN_00c326b0(ufo);
+                void* sm = FUN_00b3d2a0();
+                void* emp = ((CStarManager*)sm)->GetUFO();
+                int* key = ((CEmpire*)emp)->GetUFOKey();
                 s28 = key[0]; s24 = key[1]; s20 = key[2];
             }
             int* dst = ((C75890*)(self + 0x56c0))->InsertKey(piVar3);
@@ -508,7 +566,7 @@ void __fastcall FUN_00b76160(char* self) {
             CSink4c* obj = (CSink4c*)FUN_00401010();
             unsigned param[2];
             param[0] = 0x2ea8fb98;
-            param[1] = 4;
+            param[1] = 0x40000;
             obj->s4c(&s28, param);
             CGonzago* gw = (CGonzago*)FUN_00b3d520();
             int created = gw->g0c(ai30[0], s28, 4);
@@ -517,50 +575,77 @@ void __fastcall FUN_00b76160(char* self) {
                 *(unsigned*)(e + 4) &= ~1u;
                 unsigned char flag = 0;
                 FUN_00407190(*(void**)(e + 0x90), 0x3eb2e21, &flag);
-                FUN_00537dc0((void*)(created + 8), (void*)(e + 8));
-                FUN_00b72520(0.0f, -5.5657e-08f, 0.0f);
-                FUN_00478db0((void*)created);
+                ((C537dc0*)(created + 8))->Assign((void*)(e + 8));
+                ((C72520*)(created + 8))->Rotate(0.0f, g_14650a4, 0.0f);
+                ((C478db0*)&((int*)*(int*)(self + 0x55a8))[i])->Assign((void*)created);
                 int* sub = (int*)*(int*)(created + 0x90);
-                void* uvar7 = FUN_005dd750(&flag);
-                ((void(__cdecl*)(int*, unsigned, void*))*(void**)(*sub + 0x14))(sub, 0x3eb2e21, uvar7);
-                FUN_005765e0(&flag);
+                Var v;
+                Var* vp = ((C5dd750*)&v)->SetBool(&flag);
+                ((CSubObj*)sub)->v14(0x3eb2e21, vp);
+                if (v.mFlags & 4) ((CVariant*)&v)->Destruct(false);
             }
+            ((C5765e0*)&created)->Release();
         }
     }
 }
 
 // ============================================================ 0xb76750
 // EA::ResourceMan key walk: build the wide string for a resource key, notify
-// the sink for each node, then notify again with the fallback key text.
+// the sink for each table node until the sink rejects one, then notify again.
 struct WStr { wchar_t* begin; wchar_t* end; wchar_t* cap; };
+struct ResTable {
+    uint32_t pad_0;                                          // +0x00
+    void**   mpBuckets;                                      // +0x04
+    uint32_t mnBucketCount;                                  // +0x08
+    uint32_t mnElementCount;                                 // +0x0c
+};
+struct ResTableNode {
+    char pad_0[0xc];                                         // +0x00
+    char mKey[0xc];                                          // +0x0c (payload)
+    ResTableNode* mpNext;                                    // +0x18
+};
+struct ResSink {
+    virtual void v00(const void* t);
+    virtual void v04(const void* t);
+};
 // @ 0x00b76750
-bool __cdecl FUN_00b76750(int* sink, const char* name, char* table) {
+bool __cdecl FUN_00b76750(int* sink, const char* name, ResTable* table) {
     bool result = true;
-    if (*(int*)(table + 0xc) == 0) return result;
+    if (table->mnElementCount == 0) return result;
     WStr s;
     if (name != 0) {
-        FUN_0093c5a0(&s, name, 0xffffffff);
+        WStr t;
+        FUN_0093c5a0(&t, name, -1);
+        ((C56e2d0*)&s)->Copy(&t);
+        if (t.begin != 0 && (((int)((char*)t.cap - (char*)t.begin)) & 0xfffffffe) > 2)
+            opdel(t.begin);
     } else {
-        s.begin = 0; s.end = 0; s.cap = 0;
-        FUN_00579a90(&s, 0);
+        WStr t;
+        t.begin = 0; t.end = 0; t.cap = 0;
+        ((C579a90*)&t)->RangeInitialize(0);
+        ((C56e2d0*)&s)->Copy(&t);
+        if (t.begin != 0 && (((int)((char*)t.cap - (char*)t.begin)) & 0xfffffffe) > 2)
+            opdel(t.begin);
     }
-    FUN_0056e2d0(&s, &s);
-    int* pv = *(int**)(table + 4);
-    int node = *pv;
-    int* bp = pv;
+    void** buckets = table->mpBuckets;
+    void** bucket = buckets;
+    ResTableNode* node = (ResTableNode*)*bucket;
     if (node == 0) {
-        bp = pv + 1;
-        node = pv[1];
-        while (node == 0) { ++bp; node = *bp; }
+        ++bucket;
+        while (*bucket == 0) ++bucket;
+        node = (ResTableNode*)*bucket;
     }
-    ((void(__cdecl*)(void*))*(void**)sink)(s.begin == s.end ? (void*)&g_13f6254 : (void*)s.begin);
-    int end = pv[*(int*)(name + 8)];
+    const void* text = (s.begin == s.end) ? (const void*)&g_13f6254 : (const void*)s.begin;
+    ((ResSink*)sink)->v00(text);
+    ResTableNode* end = (ResTableNode*)buckets[table->mnBucketCount];
     while (node != end) {
-        FUN_00ae5530(sink, 0, (void*)(node + 0xc), L"EA::ResourceMan::Key");
-        node = *(int*)(node + 0x18);
-        while (node == 0) { ++bp; node = *bp; }
+        result = result && (FUN_00ae5530(sink, 0, node->mKey, L"EA::ResourceMan::Key") != 0);
+        node = node->mpNext;
+        while (node == 0) { ++bucket; node = (ResTableNode*)*bucket; }
     }
-    ((void(__cdecl*)(void*, void*))*(void**)(*(int*)sink + 4))(
-        sink, s.begin == s.end ? (void*)&g_13f6254 : (void*)s.begin);
+    const void* text2 = (s.begin == s.end) ? (const void*)&g_13f6254 : (const void*)s.begin;
+    ((ResSink*)sink)->v04(text2);
+    if (s.begin != 0 && (((int)((char*)s.cap - (char*)s.begin)) & 0xfffffffe) > 2)
+        opdel(s.begin);
     return result;
 }
