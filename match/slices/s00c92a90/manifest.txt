@@ -1,0 +1,2 @@
+slices/s00c92a90/s00c92a90.cpp  ?FUN_00c92c70@@YAPAPAHPAPAH000@Z  00c92c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c92a90/s00c92a90.cpp  ?FUN_00c93690@@YGXII@Z  00c93690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
