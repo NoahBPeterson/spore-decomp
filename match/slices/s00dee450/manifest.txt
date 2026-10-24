@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00dee450/s00dee450.cpp  ?FUN_00deebc0@GalaxyUI@SP@@QAEPAXI@Z  00deebc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dee450/s00dee450.cpp  ?FUN_00deec00@Wrapper@SP@@QAEXMMM@Z  00deec00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dee450/s00dee450.cpp  ?FUN_00deed00@Record@@QAE_NI@Z  00deed00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dee450/s00dee450.cpp  ?FUN_00def020@Wrapper@SP@@QAEXXZ  00def020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

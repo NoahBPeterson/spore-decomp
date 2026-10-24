@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00dee450  641  798-byte HandleMessage ui message switch (0x625e26a/0x5b5c746/0x30c11c7): approximate reconstruction omitting the eastl::wstring localised-name plumbing and parts of the editor launch-data setup; no flipped string list and empty-string defaults are not reproduced
+00deede0  155  160-byte prologue rebuilds the grid display name through the eastl::wstring/collate helpers (FUN_004010a0 / FUN_005ecf80); our 65-byte function only performs the layout-window image update half
+00def050  894  942-byte in-place filename sanitation over an eastl::wstring; our 252-byte version approximates the leading alpha-numeric strip and separator-run removal but does not reproduce the collate/sort/growable-vector machinery
