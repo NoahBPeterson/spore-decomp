@@ -1,0 +1,5 @@
+# slice s00d124e0 -- Class12 update / dispatch / teardown cluster.
+# Reconstructed from work/SporeApp.analysis.bin; not byte-exact.
+# One VA per row: va  diff-bytes  reason (difftest verdict; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-).
+#
+00d12fc0  38  Class12 release/teardown (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): the +0x28 block freed through the 5-argument 0x571db0 Free5, then the conditional releases -- 0xd100b0 on +0x40, the vtable+4 Release on +0x3c, the vtable+0x24 call then vtable+4 on +0x84, 0xea13e0 then vtable+4 on +0xac, the +0x88 converter ping (0x8105b0(-1,1), vtable+0xdc with the +0x2f8 smart-pointer payload, then Release), the 0x811ad0(-1) finish and finally clearing +0x44 and tail-jumping its vtable+8.  Not byte-exact: our pointer-before-tests and the release thunks schedule differently; size 258 vs 263.  equiv WEAK (179/400 valid, 61.0% coverage) with NO mismatches on any valid input -- the discards are the harness's synthetic-arity faults on an arbitrary this, so the body is behaviourally confirmed.
