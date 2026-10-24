@@ -1,0 +1,6 @@
+00d7e340 16 FUN_00d7e340: size 408 vs 408; equiv WEAK (391 valid, coverage 29.3% < 60%)
+00d7e4e0 31 FUN_00d7e4e0: size 147 vs 147; equiv WEAK (355 valid, coverage 37.3% < 60%)
+00d7e580 277 FUN_00d7e580: size 340 vs 285; equiv WEAK (341 valid, coverage 14.4% < 60%)
+00d7e6e0 90 FUN_00d7e6e0: size 379 vs 379; equiv WEAK (266 valid, coverage 23.3% < 60%)
+00d7e860 16 FUN_00d7e860: size 165 vs 165; equiv WEAK (179 valid, coverage 74.2% < 60%)
+00d7e910 19 FUN_00d7e910: size 180 vs 180; equiv WEAK (254 valid, coverage 46.3% < 60%)
