@@ -5,7 +5,7 @@
 0067ee60  89  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
 0067efc0  117  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)  ; difftest WEAK (no mismatch; 275 valid, 34% coverage)
 0067f0c0  150  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
-0067f1f0  19  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
+0067f1f0  18  StrTree::InsertAt: complete; equivalence fixed - retail leaves the `out` argument in eax at `ret 0x10` (its tail is `mov eax,[esp+0x24]; inc [esi+0x14]; add esp,0x10; mov [eax],edi`), so the function is now declared `NodeHdr**` and returns out (it was void and left RBTreeInsert's garbage in eax: equiv FAIL "return value" 0x48de0000 vs 0x40020000, everything else identical); leftover 18 = register allocation / instruction scheduling (mov edi,eax right after the call, `&a` via lea eax vs ecx, mov eax,[out] hoisted before vs after `inc count`); equiv PASS 376 valid 69.0% cov (--inputs 800 --seed 7; default 400 gives WEAK 179/400 valid, no mismatches)
 0067f260  150  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
 0067f390  122  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)  ; difftest PASS
 0067f470  182  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)  ; difftest PASS

@@ -203,7 +203,7 @@ struct StrTree {
     Node* NewNodeFromPair(const PairB* v);      // 0x67eef0
     void InsertKey(InsResult* out, const EStr* key, char flag);     // 0x67f0c0
     void InsertPair(InsResult* out, const PairB* v, char flag);        // 0x67f260
-    void InsertAt(NodeHdr** out, NodeHdr* at, const PairB* v, char flag);  // 0x67f1f0
+    NodeHdr** InsertAt(NodeHdr** out, NodeHdr* at, const PairB* v, char flag);  // 0x67f1f0 (eax out on return, as retail)
     NodeHdr** InsertHint(NodeHdr** out, NodeHdr* pos, const PairB* v, int unused4);  // 0x67f790
     NodeHdr** find(NodeHdr** out, const EStr& key) throw();   // 0x923ac0
     void NukeSub(Node* n);                                // 0x67f670
@@ -450,7 +450,7 @@ void StrTree::InsertKey(InsResult* out, const EStr* key, char)
 // ===========================================================================
 // @ 0x0067F1F0  StrTree::InsertAt (insert with parent hint)
 // ===========================================================================
-void StrTree::InsertAt(NodeHdr** out, NodeHdr* at, const PairB* val, char flag)
+NodeHdr** StrTree::InsertAt(NodeHdr** out, NodeHdr* at, const PairB* val, char flag)
 {
     int left;
     if (!flag && at != &a && _stricmp(val->k.b, ((Node*)at)->v.k.b) >= 0) left = 1; else left = 0;
@@ -458,6 +458,7 @@ void StrTree::InsertAt(NodeHdr** out, NodeHdr* at, const PairB* val, char flag)
     RBTreeInsert(nn, at, &a, left);
     count += 1;
     *out = nn;
+    return out;
 }
 
 // ===========================================================================
