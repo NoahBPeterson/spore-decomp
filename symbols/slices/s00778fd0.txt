@@ -12,3 +12,4 @@
 007799f0  rw::graphics::RWShader_SetShConst_projector
 00779b60  rw::graphics::RWShader_SetShConst_arrayB  # global[0x16f6e34]+4, lazily zeroed fallback 0x1632ea4
 00779c10  rw::graphics::RWShader_SetShConst_cameraLight
+011e0738 lib_crt::sqrt  # CRT sqrt thunk (fsqrt on st0) for the focus-distance setter

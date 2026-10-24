@@ -3,6 +3,7 @@
 #include "types.h"
 #include <string.h>
 #include <math.h>
+#include <intrin.h>
 
 // ---- D3D9 device (IDirect3DDevice9) ------------------------------------------------------
 extern void* g_pDevice;  // 0x16f89d0
@@ -27,6 +28,7 @@ extern unsigned char g_buf_1632ea0[];  // 0x1632ea0
 
 // lights / camera (complex functions)
 struct LightRow { char pad[0x10]; float px, py, pz; float cx, cy, cz, cw; };
+struct __declspec(align(16)) Vec4f { float x, y, z, w; };
 extern int     g_lightsCount;   // 0x16f8910
 extern LightRow* g_lights[];    // 0x16f8914
 extern void*   g_17a5b8;        // 0x16fa5b8
@@ -217,10 +219,9 @@ void FUN_007793e0(unsigned reg, unsigned count, int isVS) {
 }
 
 // @ 0x007795a0  distance between the current transform origin and a focus point
+#pragma intrinsic(sqrt)
 void FUN_007795a0(unsigned reg, unsigned count, int isVS) {
-    float a0 = *(float*)((char*)g_17a5b8 + 0x30);
-    float a1 = *(float*)((char*)g_17a5b8 + 0x34);
-    float a2 = *(float*)((char*)g_17a5b8 + 0x38);
+    __m128 a = *(const __m128*)((const char*)g_17a5b8 + 0x30);
     float b0, b1, b2;
     if (g_16f6e40) {
         b0 = g_16f6e40[0];
@@ -231,15 +232,15 @@ void FUN_007795a0(unsigned reg, unsigned count, int isVS) {
         b1 = *(float*)(g_16f85ac + 0x34);
         b2 = *(float*)(g_16f85ac + 0x38);
     }
-    float v[4];
-    v[0] = (float)sqrt((a2 - b2) * (a2 - b2) + (a1 - b1) * (a1 - b1) + (a0 - b0) * (a0 - b0));
-    v[1] = 0.0f;
-    v[2] = 0.0f;
-    v[3] = 1.0f;
+    Vec4f v;
+    v.x = (float)sqrt((double)((a.m128_f32[2] - b2) * (a.m128_f32[2] - b2) + (a.m128_f32[1] - b1) * (a.m128_f32[1] - b1) + (a.m128_f32[0] - b0) * (a.m128_f32[0] - b0)));
+    v.y = 0.0f;
+    v.z = 0.0f;
+    v.w = 1.0f;
     if (isVS)
-        SETVS(g_pDevice, reg, v, count);
+        SETVS(g_pDevice, reg, &v.x, count);
     else
-        SETPS(g_pDevice, reg, v, count);
+        SETPS(g_pDevice, reg, &v.x, count);
 }
 
 // @ 0x007799f0  projector / texture-scale constants
