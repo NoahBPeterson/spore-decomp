@@ -1,0 +1,8 @@
+00d5b0c0 UpdateBackgroundNoise  # cCityVisualizer::UpdateBackgroundNoise: pick and start/stop the city background noise loops
+00d5b6c0 Viz::FUN_00d5b6c0  # pick the background ambience track for the visualised city from band/specialty/time/size/flags
+00d5b8d0 Viz::FUN_00d5b8d0  # tear down the four staged culture scenes and release their reference-counted objects
+00d5b9f0 Viz::FUN_00d5b9f0  # build a Vector3 list from the city patrol entries, set the action circle and emit the decal
+00d5bc30 Vec3Slots::DoInsertValue  # eastl vector<Vector3>::DoInsertValue(index,value): grow/fill/shift 12-byte elements
+00d5bdb0 SlotRange::Assign  # eastl vector<tSlot>::operator=: reuse, grow or shrink the 0x18-stride slot buffer
+00d5bf00 UninitializedCopy<tSlot>  # eastl uninitialized_copy for the action-circle slot record (76 bytes)
+00d5bf50 UninitializedCopyBackward<tSlot>  # eastl uninitialized_copy_backward for the action-circle slot record (77 bytes)
