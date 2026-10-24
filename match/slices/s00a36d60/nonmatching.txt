@@ -10,4 +10,4 @@
 00a37a10  7  EmitterSub::SetPropertyEx: complete; MSVC merged the two equal return epilogues into one (original keeps two). difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00a37b90  15  EmitterSub::Shutdown: complete; MSVC hoists the mpPatch load above the two field clears (original does not). difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00a37c40  79  cEmitterEAPD::~cEmitterEAPD: complete; original has a base-with-destructor EH prolog, ours is flat. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00a37cc0  200  cEmitterEAPD::Load: complete; large body, call scheduling and register allocation differ. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37cc0  206  cEmitterEAPD::Load: complete/behaviourally equivalent; large body, scheduling/size differ (ours 150 vs 222), but fresh PASS 584 valid at 81.8% coverage and the src/game copy also PASS 584/600. Saved replay is a bad input that faults both (orig read at 00a37d0a, ours call at 3000002c), so FAIL-KEPT there. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
