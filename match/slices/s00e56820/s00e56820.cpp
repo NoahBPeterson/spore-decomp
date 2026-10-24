@@ -10,6 +10,7 @@ extern "C" char  g_16b3c0c[];             // SPUI layout manager global (pointer
 extern "C" void* g_16b3c10;
 extern float g_16b3c28, g_16b3c2c, g_16b3c30;
 extern float g_15a7c4c, g_15a7c50, g_15a7c54, g_15a7c58;
+extern float gUp_15a7c40[3];               // 0x015a7c40 world up axis (x, y, z)
 extern "C" float g_1483f08;
 extern "C" int   gLvlTableA[];            // 0x01483c14, stride 7 dwords
 extern "C" int   gLvlTableB[];            // 0x01483c34
@@ -211,16 +212,22 @@ float FUN_00e56b50(char* p, unsigned flags, float x) {
 // @ 0x00e56c30
 void FUN_00e56c30(float tile, float* in, int* outA, int* outB) {
   float inv = 1.0f / tile;
-  float fx = inv * in[0];
-  float fz = inv * in[1];
   float scale = inv * 127.999985f;
-  float ax = (fx - (float)eaftol_floor((double)(fx))) * scale;
+  // The original evaluates x's quotient and remainder in x87 double precision (the floor()
+  // argument is the unrounded double product in[0]*inv), but z's floor argument is the
+  // float-rounded fz = inv*in[1] -- so a quotient that rounds across an integer boundary
+  // keeps its original band on each axis independently.
+  float fz = inv * in[1];
+  float ax = (float)(((double)in[0] - (double)tile * eaftol_floor((double)in[0] * (double)inv)) *
+                     (double)scale);
   int ix = (int)ax;
-  if (ax < (float)ix) ix = ix - 1;
+  // The original decrements on the unordered (NaN) case too (ucomiss + cmovb), so the guard
+  // is !(ax >= ix), not (ax < ix): a NaN tile (tile==0 -> inf*0) must still yield 0x7fffffff.
+  if (!(ax >= (float)ix)) ix = ix - 1;
   *outA = ix;
-  float az = (fz - (float)eaftol_floor((double)fz)) * scale;
+  float az = (float)(((double)in[1] - (double)tile * eaftol_floor((double)fz)) * (double)scale);
   int iz = (int)az;
-  if (az < (float)iz) iz = iz - 1;
+  if (!(az >= (float)iz)) iz = iz - 1;
   *outB = iz;
   int a = *outA;
   if (a < 1) a = 0;
@@ -297,31 +304,34 @@ bool FUN_00e56f20(int idx) {
 // @ 0x00e56f80
 void FUN_00e56f80(char* p, float* to) {
   char* e = (char*)CellsPool().GetValid(*(int*)(p + 0x170));
-  float nx, ny, nz;
+  float n[3];   // facing vector handed to QuaternionFromFacingAndUp (must be contiguous)
   if (!e) {
-    nx = to[0] - *(float*)(p + 0x4c);
-    ny = to[1] - *(float*)(p + 0x50);
-    nz = to[2] - *(float*)(p + 0x54);
-    float inv = 1.0f / SqrtF((nx * nx + ny * ny + nz * nz) + 1e-08f);
-    nx = inv * nx;
-    ny = ny * inv;
-    nz = nz * inv;
+    n[0] = to[0] - *(float*)(p + 0x4c);
+    n[1] = to[1] - *(float*)(p + 0x50);
+    n[2] = to[2] - *(float*)(p + 0x54);
+    float inv = 1.0f / SqrtF((n[0] * n[0] + n[1] * n[1] + n[2] * n[2]) + 1e-08f);
+    n[0] = inv * n[0];
+    n[1] = n[1] * inv;
+    n[2] = n[2] * inv;
   } else {
-    nx = *(float*)(e + 0x4c) - *(float*)(p + 0x4c);
-    ny = *(float*)(e + 0x50) - *(float*)(p + 0x50);
-    nz = *(float*)(e + 0x54) - *(float*)(p + 0x54);
-    float inv = 1.0f / SqrtF((nx * nx + ny * ny + nz * nz) + 1e-08f);
-    nx = inv * nx;
-    ny = ny * inv;
-    nz = nz * inv;
+    n[0] = *(float*)(e + 0x4c) - *(float*)(p + 0x4c);
+    n[1] = *(float*)(e + 0x50) - *(float*)(p + 0x50);
+    n[2] = *(float*)(e + 0x54) - *(float*)(p + 0x54);
+    float inv = 1.0f / SqrtF((n[0] * n[0] + n[1] * n[1] + n[2] * n[2]) + 1e-08f);
+    n[0] = inv * n[0];
+    n[1] = n[1] * inv;
+    n[2] = n[2] * inv;
   }
-  if (nx * nx + ny * ny + nz * nz < 1.5258789e-05f) {
+  if (n[0] * n[0] + n[1] * n[1] + n[2] * n[2] < 1.5258789e-05f) {
     *(char*)(p + 4) = 1;
     return;
   }
   if (*(int*)(p + 0x174) == 0) {
-    float a = -nx, b = -ny, c = -nz;
-    float* q = (float*)QuaternionFromFacingAndUp(&nx, &a, &g_15a7c4c);
+    float neg[3];
+    neg[0] = -n[0];
+    neg[1] = -n[1];
+    neg[2] = -n[2];
+    float* q = (float*)QuaternionFromFacingAndUp(n, neg, gUp_15a7c40);
     *(int*)(p + 0x14) = ((int*)q)[0];
     *(int*)(p + 0x18) = ((int*)q)[1];
     *(int*)(p + 0x1c) = ((int*)q)[2];

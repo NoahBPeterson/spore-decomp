@@ -1,10 +1,10 @@
 # va  diff-bytes  reason
 00e56820  51   complete: 3 calls in original order (curve 0xe56700 + FindWindowByID + apply); call/arg shape differs, size 80 vs 70
 00e56870  4    complete: 3 calls in original order; only the final GridPool().Get arg-push vs this-add scheduling differs (int3 padding)
-00e56b50  155  complete: 7 calls in original order; Ref temp / resource resolve call shape and x87-SSE mix differ, size 195 vs 211
-00e56c30  204  complete: 2 calls in original order; float tile math (cvtss2si/cmovb/clamp) reg-alloc differs, size 231 vs 270
+00e56b50  171  complete: 7 calls in original order; Ref temp / resource resolve call shape and x87-SSE mix differ, size 195 vs 211. FAIL-KEPT registers: the original returns its float in xmm0 (LTCG register ABI: every branch ends `movss xmm0,[esp+0x14]; ret`); a `float` declaration must return in st0 and leaves x87 depth 1, and no C type/expression puts a float in xmm0 without __asm (see 00c2d220 precedent)
+00e56c30  219  complete: 2 calls in original order; x87 tile math now matches (x floors the unrounded double product in[0]/tile and z floors the float-rounded fz; remainder is in[i]-tile*floor; NaN guard is !(ax>=ix) so tile==0 gives 0x7fffffff -> clamped 0x80); only reg-alloc differs [equiv PASS 400 valid, 100% cov]
 00e56d40  67   complete: 1 call in original order; idx*3/out reg-alloc (eax vs ecx) and load order differ, size 115 vs 114
-00e56f80  258  complete: 2 calls in original order; long normalize/quaternion path with inlined helper, size 328 vs 488
+00e56f80  404  complete: 2 calls in original order; normalize/quaternion path now matches (up axis is the 3-float global at 0x15a7c40, and n/neg must be real arrays so the callee reads contiguous float[3]); only inlined-helper/reg-alloc differs [equiv PASS 247 valid, 77.9% cov]
 00e57170  71   complete: 2 calls in original order; original takes id in EAX by static ABI, ours uses a normal first param
 00e57340  65   complete: 1 call in original order; sGetSourceLevel(fastcall level in EDX) + level-table index reg-alloc differs
 00e573e0  73   complete: 2 calls in original order; two sGetSourceLevel sites; slot-clamp frame/reg-alloc differs, size 97 vs 120
