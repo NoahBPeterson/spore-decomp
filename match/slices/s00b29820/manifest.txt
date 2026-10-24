@@ -1,0 +1,8 @@
+slices/s00b29820/s00b29820.cpp  ?FUN_00b2a100@@YAXXZ  00b2a100  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b29820/s00b29820.cpp  ?FUN_00b2a2a0@@YGXPAUSgNoun@@D@Z  00b2a2a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b29820/s00b29820.cpp  ?FUN_00b2a3b0@@YAPAUSgElement24@@PAU1@00@Z  00b2a3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b29820/s00b29820.cpp  ?FUN_00b2a400@@YAPAUSgElement24@@PAU1@00@Z  00b2a400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b29820/s00b29820.cpp  ??_GSgElement24@@UAEPAXI@Z  00b2a4b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b29820/s00b29820.cpp  ??0SgEntry@@QAE@IIIPAUSgRefObj@@@Z  00b2a620  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b29820/s00b29820.cpp  ??1SgEntry@@QAE@XZ  00b2a650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b29820/s00b29820.cpp  ?FUN_00b2a6f0@@YGXPAUSgEntry@@@Z  00b2a6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

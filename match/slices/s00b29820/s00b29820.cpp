@@ -147,6 +147,7 @@ struct tGameDataVector { uint32_t pad0; GameDataPtrVector mData; };   // vector 
 class cGameNounManager {
 public:
     tGameDataVector* GetGameDataVector(void* create, void* f2, void* filter, void* f4, uint32_t typeID);  // 0x00b21340 (ret 0x14)
+    void RemoveNoun(void* noun);                                                                          // 0x00b225d0 (ret 4)
 };
 cGameNounManager* NounManager();                                   // 0x00b3d300
 void FUN_00cd7d10();
@@ -374,3 +375,401 @@ public:
 bool (cSaveGameHandler::*gKeepHandleMessage)(uint32_t, void*) = &cSaveGameHandler::HandleMessage;
 
 }  // namespace
+
+// ================================================================================================
+// Claimed functions 00b2a100..00b2a880 (same save-game module).
+// ================================================================================================
+
+// --- external helpers ---------------------------------------------------------------------------
+void __stdcall FUN_00b294c0(const wchar_t* name, int flag);                 // 0x00b294c0 (ret 8)
+void  __cdecl   SgMemset(void* dst, int value, unsigned size);             // 0x011e073e
+void* __cdecl   RBTreeIncrement(void* node);                               // 0x00921580
+extern int      g167e09c;                                                  // 0x0167e09c
+
+struct SgTarget;
+struct SgVec3 {
+    float x, y, z;
+    int IsCloser(const SgTarget& a, const SgTarget& b) const;              // 0x00b2a540 (ret 8)
+};
+extern SgVec3   gVec167e0a0;                                               // 0x0167e0a0
+
+struct SgModel;
+struct SgPlanet {
+    SgModel* FUN_008414c0();                                               // 0x008414c0
+};
+SgPlanet* __cdecl FUN_01021260();                                          // 0x01021260
+void*     __cdecl FUN_00b3d3b0();                                          // 0x00b3d3b0
+void*     __cdecl FUN_00b3d3c0();                                          // 0x00b3d3c0
+
+struct SgObstacleMgr {
+    uint64_t FUN_00b72410(uint32_t a, uint32_t b);                         // 0x00b72410 (ret 8)
+    void*    FindById(uint32_t a, uint32_t b, uint32_t c);                 // 0x00b74e90 (ret 0xc)
+    void     FUN_00b74ef0(void* obj);                                      // 0x00b74ef0 (ret 4)
+};
+
+struct SgObstacle {
+    char     pad[0x64];
+    uint32_t m64;                                                          // +0x64
+    void FUN_00b73de0(int v);                                              // 0x00b73de0 (ret 4)
+    void FUN_00b725e0(int v);                                              // 0x00b725e0 (ret 4)
+};
+
+struct SgNoun {
+    char     pad[0x13c];
+    uint32_t m13c;                                                         // +0x13c
+    uint32_t m140;                                                         // +0x140
+};
+
+// The mask owner updated by FUN_00b2a110: a 16-bit slot mask per (row, block, column).
+struct SgMaskOwner {
+    char     pad[0x258];
+    int      m258;                                                         // +0x258 changed-cell counter
+    char     pad25c[0x2c0 - 0x25c];
+    uint16_t mMask[6][4][4];                                               // +0x2c0 (0xc0 bytes)
+    void FUN_00b2a110();
+};
+
+struct SgIface35e0 {
+    void FUN_00ff35e0(int v);                                              // 0x00ff35e0 (ret 4)
+};
+
+struct SgHandler750 {
+    char         pad[0x3c];
+    SgIface35e0* m3c;                                                      // +0x3c
+    SgMaskOwner* m40;                                                      // +0x40
+    void FUN_00b2a750(uint32_t flags);                                     // 0x00b2a750 (ret 4)
+};
+
+// --- reference-counted object and the 0x18-byte entry used by the list --------------------------
+struct SgRefObj {
+    virtual void AddRef();
+    virtual void Release();
+};
+
+struct SgSmartPtr {
+    SgRefObj* p;
+    SgSmartPtr() : p(0) {}
+    SgSmartPtr(SgRefObj* q) : p(q) { if (p) p->AddRef(); }
+    ~SgSmartPtr() { if (p) p->Release(); }
+    void Reset() { if (SgRefObj* q = p) { p = 0; q->Release(); } }
+};
+
+struct SgEntry {
+    uint32_t   m0;                                                         // +0x00
+    uint32_t   m4;                                                         // +0x04
+    uint32_t   m8;                                                         // +0x08
+    uint32_t   mC;                                                         // +0x0c
+    SgSmartPtr mObj;                                                       // +0x10
+    uint32_t   m14;                                                        // +0x14
+    SgEntry(uint32_t a, uint32_t b, uint32_t c, SgRefObj* o);
+    ~SgEntry();
+};
+
+struct SgEntryList {
+    char     pad[0x15c];
+    SgEntry* mBegin;                                                       // +0x15c
+    SgEntry* mEnd;                                                         // +0x160
+    SgEntry* FUN_00b2a690(uint32_t a, uint32_t b, uint32_t c);             // 0x00b2a690 (ret 0xc)
+};
+
+// --- 0x24-byte element copied by the two eastl vector helpers ----------------------------------
+struct SgElement24 {
+    virtual ~SgElement24();                                                // scalar deleting dtor 0x00b2a4b0
+    SgElement24(const SgElement24& o);                                     // 0x00b2a460 (ret 4)
+    SgElement24& operator=(const SgElement24& o);
+    int   m4, m8, mC;
+    float f10, f14, f18;
+    int   m1c, m20;
+};
+
+SgElement24* FUN_00b2a3b0(SgElement24* first, SgElement24* last, SgElement24* dst);   // 0x00b2a3b0
+SgElement24* FUN_00b2a400(SgElement24* first, SgElement24* last, SgElement24* dst);   // 0x00b2a400
+
+// --- geometry ----------------------------------------------------------------------------------
+struct SgIPoint {
+    virtual void p00(); virtual void p01(); virtual void p02(); virtual void p03();
+    virtual void p04(); virtual void p05(); virtual void p06(); virtual void p07();
+    virtual void p08(); virtual void p09(); virtual void p10();
+    virtual const SgVec3* GetPoint() const;                                // +0x2c
+};
+
+struct SgTarget {
+    char     pad[0x34];
+    SgIPoint m34;                                                          // +0x34 embedded object (vptr at +0x34)
+};
+
+struct SgProjectile {
+    void GetEndPoints(SgVec3* a, SgVec3* b);                               // 0x00cb8ba0 (ret 8)
+};
+
+struct SgTool {
+    char          pad[0x124];
+    SgProjectile* m124;                                                    // +0x124
+    bool  FUN_0104cd50();                                                  // 0x0104cd50
+    void* GetStrategy();                                                   // 0x0104f930
+};
+
+struct SgInventoryObj {
+    char     pad[0x34];
+    SgIPoint m34;                                                          // +0x34 embedded object (vptr at +0x34)
+    SgTool* FUN_00ff3f00();                                                // 0x00ff3f00
+};
+
+struct SgSpaceGame {
+    SgInventoryObj* GetPlayerInventory();                                  // 0x00a1ad60
+};
+
+SgSpaceGame* __cdecl SP_SpaceGameGet();                                    // 0x01002bd0
+SgSpaceGame* __cdecl SP_GetUFOSimulator();                                 // 0x00ffbe50
+
+struct SgNode {
+    char     pad[0x10];
+    uint32_t m10;                                                          // +0x10
+    void*    m14;                                                          // +0x14
+};
+struct SgVal {
+    char     pad[0x120];
+    uint32_t m120;                                                         // +0x120
+    uint32_t m124;                                                         // +0x124
+};
+
+// --- functions ---------------------------------------------------------------------------------
+
+// @ 0x00b2a100
+void FUN_00b2a100()
+{
+    FUN_00b294c0(L"snapshot.spo", 0);
+}
+
+// @ 0x00b2a110
+void SgMaskOwner::FUN_00b2a110()
+{
+    SgPlanet* planet = FUN_01021260();
+    if (planet)
+        planet = (SgPlanet*)planet->FUN_008414c0();
+    if (!planet)
+    {
+        SgMemset((char*)this + 0x2c0, 0, 0xc0);
+        return;
+    }
+    char* candBase = (char*)FUN_00b3d3b0() + 0x4c;
+    char* cell = (char*)planet + 0x54;
+    unsigned short* out = &mMask[0][0][0];
+    for (int a = 0; a < 6; ++a)
+    {
+        int changed = 0;
+        for (int b = 0; b < 4; ++b)
+        {
+            for (int c = 0; c < 4; ++c)
+            {
+                unsigned mask = 0;
+                char* g = cell;
+                char* cand = candBase;
+                for (int i = 0; i < 9; i += 3)
+                {
+                    if (*(int*)(g + 0xc) > 0)
+                    {
+                        for (int j = 0; j < 3; ++j)
+                        {
+                            int* e = (int*)(cand + j * 0x1c - 8);
+                            if (e[0] == *(int*)g && e[1] == *(int*)(g + 4) && e[2] == *(int*)(g + 8))
+                            {
+                                mask |= 1u << (i + j);
+                                break;
+                            }
+                        }
+                    }
+                    g += 0x10;
+                    cand += 0x54;
+                }
+                if ((unsigned short)(out[c] & 0x7fff) != (unsigned short)mask)
+                {
+                    out[c] = (unsigned short)(mask | 0x8000);
+                    ++changed;
+                }
+                cell += 0x54;
+            }
+            out += 4;
+        }
+        if (changed)
+            ++m258;
+    }
+}
+
+// @ 0x00b2a2a0
+void __stdcall FUN_00b2a2a0(SgNoun* noun, char flag)
+{
+    if (flag)
+    {
+        SgObstacle* o = (SgObstacle*)((SgObstacleMgr*)FUN_00b3d3c0())->FindById(noun->m13c, 0, noun->m140);
+        if (o)
+        {
+            o->FUN_00b73de0(0);
+            if (o->m64 == 0)
+                o->FUN_00b725e0(1);
+        }
+    }
+    NounManager()->RemoveNoun(noun);
+}
+
+// @ 0x00b2a3b0
+SgElement24* FUN_00b2a3b0(SgElement24* first, SgElement24* last, SgElement24* dst)
+{
+    for (; first != last; ++first, ++dst)
+        *dst = *first;
+    return dst;
+}
+
+// @ 0x00b2a400
+SgElement24* FUN_00b2a400(SgElement24* first, SgElement24* last, SgElement24* dst)
+{
+    while (last != first)
+    {
+        --last;
+        --dst;
+        *dst = *last;
+    }
+    return dst;
+}
+
+// @ 0x00b2a460
+SgElement24::SgElement24(const SgElement24& o)
+{
+    m20 = 0;
+    *this = o;
+}
+
+// @ 0x00b2a4b0
+SgElement24::~SgElement24()
+{
+    m4 = 0;
+    m8 = 0;
+    mC = 0;
+    f10 = 0.0f;
+    f14 = 0.0f;
+    f18 = 0.0f;
+    m1c = 0;
+    m20 = 0;
+}
+
+SgElement24& SgElement24::operator=(const SgElement24& o)
+{
+    m4 = o.m4;
+    m8 = o.m8;
+    mC = o.mC;
+    f10 = o.f10;
+    f14 = o.f14;
+    f18 = o.f18;
+    m1c = o.m1c;
+    m20 = o.m20;
+    return *this;
+}
+
+// @ 0x00b2a540
+int SgVec3::IsCloser(const SgTarget& a, const SgTarget& b) const
+{
+    const SgVec3* pa = a.m34.GetPoint();
+    SgVec3 da;
+    da.x = x - pa->x;
+    da.y = y - pa->y;
+    da.z = z - pa->z;
+    const SgVec3* pb = b.m34.GetPoint();
+    SgVec3 db;
+    db.z = z - pb->z;
+    db.y = y - pb->y;
+    db.x = x - pb->x;
+    return da.y * da.y + da.x * da.x + da.z * da.z
+        < db.z * db.z + db.y * db.y + db.x * db.x;
+}
+
+// @ 0x00b2a620
+SgEntry::SgEntry(uint32_t a, uint32_t b, uint32_t c, SgRefObj* o)
+    : m0(a), m8(b), mC(c), mObj(o)
+{
+}
+
+// @ 0x00b2a650
+SgEntry::~SgEntry()
+{
+    m0 = 0xffffffff;
+    m8 = 0;
+    mC = 0;
+    mObj.Reset();
+}
+
+// @ 0x00b2a690
+SgEntry* SgEntryList::FUN_00b2a690(uint32_t a, uint32_t b, uint32_t c)
+{
+    SgEntry* result = 0;
+    uint64_t key = ((SgObstacleMgr*)FUN_00b3d3c0())->FUN_00b72410(a, b);
+    for (SgEntry* e = mBegin; e != mEnd; ++e)
+    {
+        uint32_t v = e->m8;
+        if (v == (uint32_t)key && (v = e->mC) == (uint32_t)(key >> 32) && e->m0 == c)
+        {
+            result = e;
+            break;
+        }
+    }
+    return result;
+}
+
+// @ 0x00b2a6f0
+void __stdcall FUN_00b2a6f0(SgEntry* e)
+{
+    SgObstacleMgr* mgr = (SgObstacleMgr*)FUN_00b3d3c0();
+    SgObstacle* o = (SgObstacle*)mgr->FindById(e->m8, e->mC, e->m0);
+    if (o)
+        mgr->FUN_00b74ef0(o);
+    if (e->mObj.p)
+    {
+        NounManager()->RemoveNoun(e->mObj.p);
+        e->mObj.Reset();
+    }
+}
+
+// @ 0x00b2a750
+void SgHandler750::FUN_00b2a750(uint32_t flags)
+{
+    SgHandler750* self = this;
+    uint32_t f = flags & 0xf;
+    if (f)
+        g167e09c = 0;
+    SgIface35e0* p = self->m3c;
+    if ((flags & 8) && p)
+        p->FUN_00ff35e0(1);
+    if (self->m40 && f)
+        self->m40->FUN_00b2a110();
+}
+
+// @ 0x00b2a790
+SgVec3 __stdcall FUN_00b2a790()
+{
+    SgTool* tool = ((SgSpaceGame*)SP_SpaceGameGet())->GetPlayerInventory()->FUN_00ff3f00();
+    if (tool && tool->FUN_0104cd50() && tool->GetStrategy() && tool->m124)
+    {
+        SgVec3 a, b;
+        tool->m124->GetEndPoints(&a, &b);
+        return a;
+    }
+    if (((SgSpaceGame*)SP_GetUFOSimulator())->GetPlayerInventory())
+    {
+        SgInventoryObj* inv = ((SgSpaceGame*)SP_GetUFOSimulator())->GetPlayerInventory();
+        const SgVec3* p = inv->m34.GetPoint();
+        return *p;
+    }
+    return gVec167e0a0;
+}
+
+// @ 0x00b2a880
+void FUN_00b2a880(void** out, void* begin, void* end, uint32_t idLo, uint32_t idHi)
+{
+    while (begin != end)
+    {
+        SgVal* v = (SgVal*)((SgNode*)begin)->m14;
+        if (v->m120 == idLo && v->m124 == idHi)
+            break;
+        begin = RBTreeIncrement(begin);
+    }
+    *out = begin;
+}

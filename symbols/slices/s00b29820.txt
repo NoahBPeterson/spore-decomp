@@ -1,1 +1,16 @@
-00b29820  SP::cSaveGameHandler::HandleMessage  # coined; messages 0x1cd20f0 (ui_global_save request), 0x685dbfa (timer tick -> save), 0x689c9b9 (quick save), 0x62d91c2; builds the save name from the home planet name + L".spo"
+00b29820 ?HandleMessage@cSaveGameHandler@?A0x46518cc2@@QAE_NIPAX@Z  # cSaveGameHandler::HandleMessage (pre-existing row; nonmatching)
+00b2a100 ?FUN_00b2a100@@YAXXZ  # free helper (byte-exact)
+00b2a110 ?FUN_00b2a110@SgMaskOwner@@QAEXXZ  # SgMaskOwner mask refresh: 6x4x4 cells, 9 candidates per cell
+00b2a2a0 ?FUN_00b2a2a0@@YGXPAUSgNoun@@D@Z  # free stdcall noun helper (byte-exact)
+00b2a3b0 ?FUN_00b2a3b0@@YAPAUSgElement24@@PAU1@00@Z  # SgElement24 range copy (byte-exact)
+00b2a400 ?FUN_00b2a400@@YAPAUSgElement24@@PAU1@00@Z  # SgElement24 backward range copy (byte-exact)
+00b2a460 ??0SgElement24@@QAE@ABU0@@Z  # SgElement24 copy ctor
+00b2a4b0 ??_GSgElement24@@UAEPAXI@Z  # SgElement24 scalar deleting dtor (byte-exact)
+00b2a540 ?IsCloser@SgVec3@@QBEHABUSgTarget@@0@Z  # SgVec3::IsCloser: compare squared distances to two targets' embedded GetPoint
+00b2a620 ??0SgEntry@@QAE@IIIPAUSgRefObj@@@Z  # SgEntry ctor (byte-exact)
+00b2a650 ??1SgEntry@@QAE@XZ  # SgEntry dtor (byte-exact)
+00b2a690 ?FUN_00b2a690@SgEntryList@@QAEPAUSgEntry@@III@Z  # SgEntryList lookup by (key64, extra id)
+00b2a6f0 ?FUN_00b2a6f0@@YGXPAUSgEntry@@@Z  # entry cleanup helper (byte-exact)
+00b2a750 ?FUN_00b2a750@SgHandler750@@QAEXI@Z  # SgHandler750 flag handler
+00b2a790 ?FUN_00b2a790@@YG?AUSgVec3@@XZ  # endpoint getter: tool ends, then UFO inventory point, then global
+00b2a880 ?FUN_00b2a880@@YAXPAPAXPAX1II@Z  # RB-tree find by SgVal id pair
