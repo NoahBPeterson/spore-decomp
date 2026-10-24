@@ -1417,7 +1417,10 @@ void LogFilterGroupLevels_s0092_45b0::AddGroupLevel(const char* group, int level
             do { c = *s; ((char*)s)[off] = c; ++s; } while (c != 0);
             struct { const char* k; int v; } val = { copy, level };
             char out[8];
-            ((GroupLevelMap*)&mapBase)->DoInsertValue(out, &val, 0);
+            // EASTL's bool tag: the original's compiler stores a 0 byte into the dead
+            // `level` parameter slot, so the dword pushed is level's upper 24 bits.
+            int tag = level & ~0xff;
+            ((GroupLevelMap*)&mapBase)->DoInsertValue(out, &val, tag);
         } else {
             it.mpNode->value = level;
         }

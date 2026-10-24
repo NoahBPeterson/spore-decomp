@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 009245b0  4    LogFormatterFancy::Clone: complete; only the cx/dx register choice for the flags copy differs
-00924600  ~140 LogFilterGroupLevels::AddGroupLevel: complete; this/group register swap, DoInsertValue's 3rd arg is a stack-slot-reuse bool in the original
+00924600  180  LogFilterGroupLevels::AddGroupLevel: complete; this/group register swap and frame size (0x14 vs 0x10) differ; DoInsertValue's 3rd arg now reproduces the original's stack-slot-reuse bool tag (an InsertTag struct gives level&0xffffff00); flags /O2 /MD /Gy /TP /GS-; difftest PASS (314 valid, 90.7% coverage)
 009246c0  ~110 LogFilterGroupLevels::Clone: complete; inline rbtree ctor store order/zero-register differs, extra push ecx slot
 009248f0  ~250 Server::AddLogReporter: complete; ebp mutex-pointer spill/reload pattern differs
 00924bd0  7    Server::~Server: complete; ebx/edi swap for the mutex/vector pointers ; difftest PASS (after mapping the IServer/ITracerBase base vtables to 0x013eb938 in symbols/slices/s009245b0.txt)

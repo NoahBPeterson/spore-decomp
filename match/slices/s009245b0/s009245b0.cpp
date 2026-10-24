@@ -221,9 +221,10 @@ void FString::push_back(char c) {
 struct RBNodeBase { RBNodeBase* mpNodeRight; RBNodeBase* mpNodeLeft; RBNodeBase* mpNodeParent; int mColor; };
 struct RBNode : RBNodeBase { const char* key; int value; };
 struct RBIter { RBNode* mpNode; };
+struct InsertTag { bool b; };            // EASTL bool tag, passed by value (one byte + padding)
 struct GroupLevelMap {                   // eastl::map<const char*, int, KeyLess, EASTLCoreAllocator>
     void find(RBIter* out, const char** key);                 // 0x00923ac0
-    void DoInsertValue(void* out, void* val, int flag);       // 0x00924060
+    void DoInsertValue(void* out, void* val, InsertTag tag);  // 0x00924060
 };
 RBNodeBase* __cdecl RBTreeIncrement(RBNodeBase* n);                   // 0x00921580
 struct ICoreAllocator { static ICoreAllocator* GetDefaultAllocator(); };  // 0x00925cb0
@@ -252,8 +253,7 @@ extern char g_vtbl_LogFilterGroupLevels[];  // 0x0143dd9c
 void LogFilterGroupLevels::AddGroupLevel(const char* group, int level) {
     if (group && *group) {
         RBIter it;
-        const char* key = group;
-        ((GroupLevelMap*)&mapBase)->find(&it, &key);
+        ((GroupLevelMap*)&mapBase)->find(&it, &group);
         if ((RBNodeBase*)it.mpNode == &mAnchor) {
             size_t n = strlen(group) + 1;
             char* copy = (char*)eanew6((int)n, "EATrace/LogFilterGroupLevels/GroupContainer/char[]", 0, 0, 0, 0);
@@ -263,7 +263,9 @@ void LogFilterGroupLevels::AddGroupLevel(const char* group, int level) {
             do { c = *s; ((char*)s)[off] = c; ++s; } while (c != 0);
             struct { const char* k; int v; } val = { copy, level };
             char out[8];
-            ((GroupLevelMap*)&mapBase)->DoInsertValue(out, &val, 0);
+            InsertTag tag;
+            tag.b = false;
+            ((GroupLevelMap*)&mapBase)->DoInsertValue(out, &val, tag);
         } else {
             it.mpNode->value = level;
         }
