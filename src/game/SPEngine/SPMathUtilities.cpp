@@ -185,9 +185,46 @@ Quaternion_s0069_a9a0_b* QuaternionFromMatrix33(Quaternion_s0069_a9a0_b* out, co
 namespace SP {
 void QuaternionFromDirections(Quaternion* out, const Vector3* a, const Vector3* b)
 {
-  (void)out;
-  (void)a;
-  (void)b;
+  float a0 = a->x;
+  float a1 = a->y;
+  float a2 = a->z;
+  volatile double inv = 1.0 / sqrt(((double)a0 * a0 + (double)a1 * a1) + (double)a2 * a2);
+  volatile float invf = (float)inv;
+  volatile float p = a0 * invf;
+  volatile double lx = (double)a1 * inv;
+  volatile double nx = (double)a2 * inv;
+  float l = (float)lx;
+  float n = (float)nx;
+  float binv = 1.0f / sqrtf(b->x * b->x + b->y * b->y + b->z * b->z);
+  float q = b->x * binv + p;
+  float m = b->y * binv + l;
+  float o = b->z * binv + n;
+  volatile float dot = (q * q + o * o) + m * m;
+  if (dot > 1e-4f) {
+    volatile float s = 1.0f / sqrtf(dot);
+    float ms = m * s;
+    float os = o * s;
+    float qs = q * s;
+    out->x = os * l - ms * n;
+    out->y = n * qs - os * p;
+    out->z = ms * p - l * qs;
+    out->w = (ms * l + os * n) + qs * p;
+    return out;
+  }
+  if (fabsf(p) > 0.0f) {
+    volatile float s = (float)(1.0 / sqrt((double)p * (double)p + nx * nx));
+    out->y = 0.0f;
+    out->x = -(n * s);
+    out->z = p * s;
+    out->w = 0.0f;
+    return out;
+  }
+  volatile float s = (float)(1.0 / sqrt(lx * lx + nx * nx));
+  out->x = 0.0f;
+  out->y = -(n * s);
+  out->z = l * s;
+  out->w = 0.0f;
+  return out;
 }
 }  // namespace SP
 
@@ -195,8 +232,38 @@ void QuaternionFromDirections(Quaternion* out, const Vector3* a, const Vector3* 
 namespace SP {
 void MatrixFromDirection(Matrix3* out, const Vector3* dir)
 {
-  (void)out;
-  (void)dir;
+  float s = 1.0f / sqrtf(dir->x * dir->x + dir->y * dir->y + dir->z * dir->z + 1e-8f);
+  float x = dir->x * s;
+  float y = dir->y * s;
+  float z = dir->z * s;
+  out->m[6] = x;
+  out->m[7] = y;
+  out->m[8] = z;
+  float v0, v1, v2, v3, v4, v5;
+  if (!(fabsf(z) < 0.999)) {
+    float k = 1.0f / sqrtf(x * x + z * z + 1e-8f);
+    v0 = k * z;
+    v1 = k * -0.0f;
+    v2 = -x * k;
+    v3 = v2 * y - v1 * z;
+    v4 = v0 * z - v2 * x;
+    v5 = v1 * x - v0 * y;
+  } else {
+    float k = 1.0f / sqrtf(x * x + y * y + 1e-8f);
+    v0 = -y * k;
+    v1 = x * k;
+    v2 = k * -0.0f;
+    v3 = v2 * y - v1 * z;
+    v4 = v0 * z - v2 * x;
+    v5 = v1 * x - v0 * y;
+  }
+  out->m[0] = v0;
+  out->m[1] = v1;
+  out->m[2] = v2;
+  out->m[3] = v3;
+  out->m[4] = v4;
+  out->m[5] = v5;
+  (void)*(volatile unsigned int*)&out->m[5];
 }
 }  // namespace SP
 
@@ -225,10 +292,62 @@ void OrthogonalVector(Vector3* out, const Vector3* v)
 
 // @ 0x00698650
 namespace SP {
-void MatrixFromQuaternion(Matrix3* out, const Quaternion* q)
+void MatrixFromQuaternion(Matrix3* m, const Quaternion* q)
 {
-  (void)out;
   (void)q;
+  double inv = 1.0 / (sqrt((double)m->m[3] * m->m[3] + (double)m->m[4] * m->m[4] + (double)m->m[5] * m->m[5]) + 1e-8);
+  volatile float t3 = (float)((double)m->m[3] * inv);
+  volatile float t4 = (float)((double)m->m[4] * inv);
+  volatile float t5 = (float)((double)m->m[5] * inv);
+  m->m[3] = t3;
+  m->m[4] = t4;
+  m->m[5] = t5;
+  volatile float p1 = m->m[5] * m->m[8];
+  volatile float p2 = m->m[4] * m->m[7];
+  volatile float p3 = m->m[3] * m->m[6];
+  volatile float s12 = p1 + p2;
+  volatile float d = s12 + p3;
+  volatile float q3 = m->m[3] * d;
+  volatile float q4 = m->m[4] * d;
+  volatile float q5 = m->m[5] * d;
+  m->m[6] = m->m[6] - q3;
+  m->m[7] = m->m[7] - q4;
+  m->m[8] = m->m[8] - q5;
+  double inv2 = 1.0 / (sqrt((double)m->m[6] * m->m[6] + (double)m->m[7] * m->m[7] + (double)m->m[8] * m->m[8]) + 1e-8);
+  m->m[6] = (float)((double)m->m[6] * inv2);
+  m->m[7] = (float)((double)m->m[7] * inv2);
+  m->m[8] = (float)((double)m->m[8] * inv2);
+  volatile float u0 = m->m[8] * m->m[4];
+  volatile float v0 = m->m[7] * m->m[5];
+  m->m[0] = u0 - v0;
+  volatile float u1 = m->m[6] * m->m[5];
+  volatile float v1 = m->m[3] * m->m[8];
+  m->m[1] = u1 - v1;
+  volatile float u2 = m->m[3] * m->m[7];
+  volatile float v2 = m->m[6] * m->m[4];
+  m->m[2] = u2 - v2;
+  volatile float s0 = m->m[0] * m->m[0];
+  volatile float s1 = m->m[1] * m->m[1];
+  volatile float s2 = m->m[2] * m->m[2];
+  volatile float t01 = s0 + s1;
+  volatile float len = t01 + s2;
+  if (len < 0.95f) {
+    Vector3 tmp;
+    typedef Vector3* (*OrthoPtr)(Vector3*, const Vector3*);
+    Vector3* r = ((OrthoPtr)OrthogonalVector)(&tmp, (const Vector3*)&m->m[3]);
+    m->m[6] = r->x;
+    m->m[7] = r->y;
+    m->m[8] = r->z;
+    volatile float w0 = m->m[8] * m->m[4];
+    volatile float w1 = m->m[7] * m->m[5];
+    m->m[0] = w0 - w1;
+    volatile float w2 = m->m[6] * m->m[5];
+    volatile float w3 = m->m[3] * m->m[8];
+    m->m[1] = w2 - w3;
+    volatile float w4 = m->m[3] * m->m[7];
+    volatile float w5 = m->m[6] * m->m[4];
+    m->m[2] = w4 - w5;
+  }
 }
 }  // namespace SP
 

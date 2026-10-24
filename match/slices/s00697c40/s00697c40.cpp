@@ -297,8 +297,9 @@ Quaternion* QuaternionFromDirections(Quaternion* out, const Vector3* a, const Ve
   float q = b->x * binv + p;
   float m = b->y * binv + l;
   float o = b->z * binv + n;
-  if ((q * q + o * o) + m * m > 1e-4f) {
-    volatile float s = 1.0f / sqrtf((q * q + o * o) + m * m);
+  volatile float dot = (q * q + o * o) + m * m;
+  if (dot > 1e-4f) {
+    volatile float s = 1.0f / sqrtf(dot);
     float ms = m * s;
     float os = o * s;
     float qs = q * s;
@@ -308,18 +309,18 @@ Quaternion* QuaternionFromDirections(Quaternion* out, const Vector3* a, const Ve
     out->w = (ms * l + os * n) + qs * p;
     return out;
   }
-  if (!(fabs((double)p) > fabs((double)lx))) {
-    volatile float s = (float)(1.0 / sqrt(lx * lx + nx * nx));
-    out->x = 0.0f;
-    out->y = -(n * s);
-    out->z = l * s;
+  if (fabsf(p) > 0.0f) {
+    volatile float s = (float)(1.0 / sqrt((double)p * (double)p + nx * nx));
+    out->y = 0.0f;
+    out->x = -(n * s);
+    out->z = p * s;
     out->w = 0.0f;
     return out;
   }
-  volatile float s = (float)(1.0 / sqrt((double)p * (double)p + nx * nx));
-  out->y = 0.0f;
-  out->x = -(n * s);
-  out->z = p * s;
+  volatile float s = (float)(1.0 / sqrt(lx * lx + nx * nx));
+  out->x = 0.0f;
+  out->y = -(n * s);
+  out->z = l * s;
   out->w = 0.0f;
   return out;
 }
