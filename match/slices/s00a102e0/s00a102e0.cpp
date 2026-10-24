@@ -559,12 +559,12 @@ bool EmitterSndPlayer::Create() {
         void* c1 = *(void**)(m + 0x374);
         ((ResponseCurve*)(m + 0x10))->InitFromConfiguration(c1, 0x1e4db1eb);
         void* c2 = *(void**)(m + 0x374);
-        ((void(__thiscall*)(void*, void*, int))((void**)*(void**)c2)[0x2c / 4])(c2, m + 0xd20, 0xed1f36d5);
+        ((void(__thiscall*)(void*, int, void*))((void**)*(void**)c2)[0x2c / 4])(c2, 0xed1f36d5, m + 0xd20);
         void* c3 = *(void**)(m + 0x374);
-        uint32_t r = 0;
+        uint32_t r;
         if (((bool(__thiscall*)(void*, int, void*))((void**)*(void**)c3)[0x24 / 4])(c3, 0x12d2a4d4, &r)) {
             SetFlag(4, (char)r);
         }
     }
-    return ((int(__thiscall*)(void*))Vt()[0x4c / 4])(this) != 0;
+    return ((((int(__thiscall*)(void*))Vt()[0x4c / 4])(this)) & 0xff) != 0;
 }

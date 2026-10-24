@@ -15,4 +15,4 @@
 00a112c0  35  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
 00a11310  19  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
 00a11380  45  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
-00a113c0  176  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
+00a113c0  52  EmitterSndPlayer::Create: complete; fixed 0x2c vcall arg order, low-byte bool test of the 0x4c vcall, and left the 0x24 output slot uninitialized like the original; difftest PASS 280 valid inputs, 100% coverage (slice and hybrid source)
