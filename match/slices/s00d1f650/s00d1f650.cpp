@@ -168,10 +168,10 @@ void FUN_008d2f30(int a, int b);               // 0x008d2f30 cdecl
 void CanvasVisibilitySetter(int* v);           // 0x008013d0
 void CursorLayoutIsThing(int* v);              // 0x00801950
 void CursorLayoutSetEnabled(int* v);           // 0x00801980
-void* FUN_0067cab0(int a);                     // 0x0067cab0 cdecl
+void* FUN_0067cab0();                          // 0x0067cab0: no args (reads a global, ignores any pushed value)
 
-struct CanvasObj { void SetVisibility(); };    // 0x008013d0 thiscall
-struct CursorLayout { void IsThing(); void SetEnabled(); }; // 0x00801950/80 thiscall
+struct CanvasObj { char SetVisibility(bool v); };                       // 0x008013d0 thiscall, ret 4 (bool arg)
+struct CursorLayout { char IsThing(int v); char SetEnabled(bool v); };  // 0x00801950/80 thiscall, ret 4 (1 dword arg)
 
 struct Cam {
     unsigned char Init(int a);
@@ -213,13 +213,13 @@ void Cam::SetCameraUI(char on)
 {
     if (on != 0) {
         FUN_008d2f30((int)((char*)this + 0x30c), (int)((char*)this + 0x310));
-        ((CanvasObj*)FUN_0067cab0(0))->SetVisibility();
-        ((CursorLayout*)FUN_0067cab0(0x67f5c34))->IsThing();
-        ((CursorLayout*)FUN_0067cab0(1))->SetEnabled();
+        ((CanvasObj*)FUN_0067cab0())->SetVisibility(0);
+        ((CursorLayout*)FUN_0067cab0())->IsThing(0x67f5c34);
+        ((CursorLayout*)FUN_0067cab0())->SetEnabled(1);
         *(unsigned char*)((char*)this + 0x314) = 1;
     } else {
-        ((CanvasObj*)FUN_0067cab0(1))->SetVisibility();
-        ((CursorLayout*)FUN_0067cab0(0))->SetEnabled();
+        ((CanvasObj*)FUN_0067cab0())->SetVisibility(1);
+        ((CursorLayout*)FUN_0067cab0())->SetEnabled(0);
         *(unsigned char*)((char*)this + 0x314) = 0;
     }
 }
@@ -253,8 +253,8 @@ unsigned char Cam::OnMouseWheel(int a, float b, float c, int d)
     if (*(int*)((char*)this + 0x1ec) == 2) {
         float v = f * *(float*)((char*)this + 0x188);
         float lo = *(float*)((char*)this + 0x210);
-        v = (v < lo) ? lo : v;
-        v = (v > 1500.0f) ? 1500.0f : v;
+        v = (v > lo) ? v : lo;                   // maxss v, lo  (returns lo when v <= lo, incl. -0.0 vs 0.0)
+        v = (v < 1500.0f) ? v : 1500.0f;         // minss v, 1500 (returns 1500 when v >= 1500 / v is NaN)
         *(float*)((char*)this + 0x188) = v;
     } else {
         *(float*)((char*)this + 0x17c) = f * *(float*)((char*)this + 0x17c);
