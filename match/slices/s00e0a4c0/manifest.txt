@@ -1,0 +1,9 @@
+slices/s00e0a4c0/s00e0a4c0.cpp  ?FUN_00e0a5c0@@YIXPAUcPaletteGrid@@PAX@Z  00e0a5c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e0a4c0/s00e0a4c0.cpp  ?FUN_00e0a640@@YIXPAUcPaletteGrid@@PAX@Z  00e0a640  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e0a4c0/s00e0a4c0.cpp  ?FUN_00e0a950@@YA_NXZ  00e0a950  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e0a4c0/s00e0a4c0.cpp  ?FUN_00e0a9a0@@YAXPBUFloat3@@II@Z  00e0a9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e0a4c0/s00e0a4c0.cpp  ?FUN_00e0aba0@@YIXPAUcPaletteGrid@@PAX1@Z  00e0aba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e0a4c0/s00e0a4c0.cpp  ?FUN_00e0abc0@@YI_NPAUcPaletteGrid@@PAXIII1@Z  00e0abc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e0a4c0/s00e0a4c0.cpp  ?FUN_00e0ad00@@YIXPAUcPaletteGrid@@PAXI@Z  00e0ad00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e0a4c0/s00e0a4c0.cpp  ?FUN_00e0b230@@YIXPAUcPaletteGrid2@@PAXPAUISlot@@@Z  00e0b230  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e0a4c0/s00e0a4c0.cpp  ?FUN_00e0b290@@YI_NPAUcPaletteGrid2@@PAX1@Z  00e0b290  /O2 /MD /Gy /TP /arch:SSE /fp:fast
