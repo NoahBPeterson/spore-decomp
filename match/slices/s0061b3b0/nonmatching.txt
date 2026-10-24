@@ -1,1 +1,10 @@
 0061bbc0  84  eastl::quick_sort_impl<unsigned*, TimeGreater>: complete; register allocation around median/get_partition (compare kept in esi vs ecx)
+0061b3b0  618  cYouTubeAuthenticationTransaction::HandleResult: complete/non-exact (590 vs 618); equiv UNSUPPORTED (unresolved _sscanf); flags /O2 /MD /Gy /TP /arch:SSE
+0061b620  891  cYouTubeVideoUploadTransaction::ConstructRequest: complete/non-exact (733 vs 891); equiv UNSUPPORTED (unresolved CreateHTTPPostRequest); flags /O2 /MD /Gy /TP /arch:SSE
+0061b9a0  534  PollenRequestHelper: complete/non-exact (498 vs 534); equiv FAIL 5/5 valid inputs (replay imports fixture); flags /O2 /MD /Gy /TP /arch:SSE
+0061bc50  152  FixedString8::swap: complete/non-exact (156 vs 152); equiv WEAK 132 valid, 61.7% coverage; flags /O2 /MD /Gy /TP /arch:SSE
+0061bcf0  387  cPropertyListWriter::WritePropertyListAndPNG: complete/non-exact (278 vs 387); equiv UNSUPPORTED (unresolved lower_bound instantiation); flags /O2 /MD /Gy /TP /arch:SSE
+0061be80  185  cContentValidationTransaction::cContentValidationTransaction: complete/non-exact (251 vs 185); equiv PASS 286 valid, 100% coverage; flags /O2 /MD /Gy /TP /arch:SSE
+0061c070  208  VectorAssign: complete/non-exact (192 vs 208); equiv UNSUPPORTED (custom register ABI); flags /O2 /MD /Gy /TP /arch:SSE
+0061c1c0  89  AllocateAndFill70: complete/non-exact (75 vs 89); equiv UNSUPPORTED (0/400 valid inputs, discards fault(write)); flags /O2 /MD /Gy /TP /arch:SSE
+0061c280  206  FixedString8::set_capacity: complete/non-exact (172 vs 206); equiv WEAK 125 valid, 82.9% coverage; flags /O2 /MD /Gy /TP /arch:SSE

@@ -1,1 +1,2 @@
-# no byte-exact functions yet
+# byte-exact functions
+slices/s0061b3b0/s0061b3b0.cpp  ?Destroy@cContentValidationTransaction@Pollen@SP@@QAEXXZ  0061bf50  /O2 /MD /Gy /TP /arch:SSE

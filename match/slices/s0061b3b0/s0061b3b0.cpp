@@ -5,7 +5,10 @@
 
 extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
-                                          unsigned debugFlags, const char* file, int line);
+                                          unsigned debugFlags, const char* file,
+                                          int line);  // 0x00f473a0
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
 extern "C" long __cdecl _InterlockedExchangeAdd(long volatile*, long);
 #pragma intrinsic(_InterlockedExchange, _InterlockedExchangeAdd)
@@ -113,6 +116,8 @@ void FixedString8::set_capacity(unsigned int n) {
     return;
   }
   if (n < (unsigned int)(mpEnd - mpBegin)) shrink_capacity(n);
+  FixedString8 tmp(*this);
+  swap(tmp);
 }
 
 // =============================================================================================
@@ -165,8 +170,8 @@ struct Vec70S {  // 0x14-byte eastl::vector<T, sp_allocator> header
   unsigned int mStateC;
   unsigned int mState10;
 };
-void UninitFill70(unsigned int* pn, const void* a, const void* b, void* dst, unsigned int n);
-// 0x006195d0
+void UninitFill70(unsigned int* pn, const void* a, const void* b, void* dst,
+                  unsigned int n);  // 0x006195d0
 long ByteVectorAllocate(unsigned int n, const void* src, unsigned int nbytes);  // 0x005968b0
 void VectorCopyBytes(void* dst, const void* src, unsigned int nbytes);          // 0x011e0744
 
@@ -219,8 +224,9 @@ union Data {
 };
 class IMessageRC {
  public:
-  virtual int AddRef();
-  virtual int Release();
+  virtual void Destroy();  // vtable slot 0 (dtor in retail)
+  virtual int AddRef();    // +0x04
+  virtual int Release();   // +0x08
 };
 class BehaviorMessage : public IMessageRC {
  public:
@@ -386,21 +392,26 @@ cContentValidationTransaction::cContentValidationTransaction(const char* a, cons
 
 // @ 0x0061bf50
 void cContentValidationTransaction::Destroy() {
-  mVtbl = (unsigned int*)0x13fc854;
+  *(unsigned int* volatile*)this = (unsigned int*)0x13fc854;
+  _ReadWriteBarrier();
   if ((mStr98.mpCapacity - mStr98.mpBegin) > 1 && mStr98.mpBegin)
     EASTL_allocator_deallocate(mStr98.mpBegin);
   if ((mStr88.mpCapacity - mStr88.mpBegin) > 1 && mStr88.mpBegin)
     EASTL_allocator_deallocate(mStr88.mpBegin);
   if ((mStr78.mpCapacity - mStr78.mpBegin) > 1 && mStr78.mpBegin)
     EASTL_allocator_deallocate(mStr78.mpBegin);
-  if ((((unsigned int)(mStr50.mpCapacity - mStr50.mpBegin) & 0xfffffffeu) > 2) && mStr50.mpBegin)
+  if ((((int)(mStr50.mpCapacity - mStr50.mpBegin) & ~1) > 2) && mStr50.mpBegin)
     EASTL_allocator_deallocate(mStr50.mpBegin);
   char* p;
-  for (p = (char*)mVec3c.mpBegin; p < (char*)mVec3c.mpEnd; p += 0x70) ((Rec70*)p)->~Rec70();
+  char* e;
+  e = (char*)mVec3c.mpEnd;
+  for (p = (char*)mVec3c.mpBegin; p < e; p += 0x70) ((Rec70*)p)->~Rec70();
   if (mVec3c.mpBegin && *((int*)mVec3c.mpBegin - 1) != 0) EASTL_allocator_deallocate(mVec3c.mpBegin);
-  for (p = (char*)mVec28.mpBegin; p < (char*)mVec28.mpEnd; p += 0x70) ((Rec70*)p)->~Rec70();
+  e = (char*)mVec28.mpEnd;
+  for (p = (char*)mVec28.mpBegin; p < e; p += 0x70) ((Rec70*)p)->~Rec70();
   if (mVec28.mpBegin && *((int*)mVec28.mpBegin - 1) != 0) EASTL_allocator_deallocate(mVec28.mpBegin);
-  for (p = (char*)mVec14.mpBegin; p < (char*)mVec14.mpEnd; p += 0x70) ((Rec70*)p)->~Rec70();
+  e = (char*)mVec14.mpEnd;
+  for (p = (char*)mVec14.mpBegin; p < e; p += 0x70) ((Rec70*)p)->~Rec70();
   if (mVec14.mpBegin && *((int*)mVec14.mpBegin - 1) != 0) EASTL_allocator_deallocate(mVec14.mpBegin);
   mVtbl = (unsigned int*)0x13ec458;
 }
@@ -590,11 +601,11 @@ char PollenRequestHelper(unsigned int which, DownloadObject* pDownload) {
   pMsg->mID = 0x55e8be4;
   if (bFound) {
     pMsg->mData[0].mUint32 = 1;
-    SetMessageString8(pMsg, 2, (const char*)payload);
+    SetMessageString8(pMsg, 1, (const char*)payload);
   } else {
     pMsg->mData[0].mUint32 = 0;
-    pMsg->mData[2].mUint32 = payload;
-    SetMessageString8(pMsg, 3, url.mpBegin);
+    pMsg->mData[1].mUint32 = payload;
+    SetMessageString8(pMsg, 2, url.mpBegin);
   }
   SP::MessageServer()->PostMSG(pMsg->mID, pMsg, 0);
   pMsg->Release();
@@ -612,7 +623,9 @@ void Fun_0060d210(void* p);                       // 0x0060d210
 void* Fun_0060d240(void* p);                      // 0x0060d240
 namespace eastl {
 template <typename It, typename T>
-It lower_bound(It first, It last, const T& value, unsigned char comp);
+It lower_bound(It first, It last, const T& value, unsigned char comp);  // 0x00549dc0
+unsigned int* lower_bound(unsigned int* first, unsigned int* last, const unsigned int& value,
+                          unsigned char comp);  // 0x00549dc0
 }
 
 class cPropertyListWriter {
