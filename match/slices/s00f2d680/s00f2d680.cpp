@@ -78,7 +78,7 @@ E4e0::E4e0()
     *(wchar_t**)(b + 0x478) = g_emptyW;
     *(wchar_t**)(b + 0x47c) = g_emptyW2;
 
-    *(float*)(b + 0x484) = 500.0f;
+    *(float*)(b + 0x484) = 50.0f;
     *(float*)(b + 0x488) = 20.0f;
     *(float*)(b + 0x48c) = 1.0f;
     *(float*)(b + 0x490) = 1.0f;
