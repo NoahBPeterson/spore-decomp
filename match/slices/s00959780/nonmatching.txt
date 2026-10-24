@@ -1,2 +1,6 @@
 # va  diff-bytes  reason
 00959cf0  146  cf0: complete (slot-change notify via vtable slot 0x4c + GameViewManager event 0xb); regalloc/branch layout differ; difftest PASS (217 valid inputs, 64.2% coverage)
+00959e00  402  DetachWindow: complete; regalloc/order differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fault(read) 398 -> dereferences ctx-owned pointers)
+00959fe0  162  fe0: complete; ebx-vs-edx argv reg + folded null test differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fake-arity 211, fault(read) 182 -> vtable calls through win+4)
+0095a140  852  UpdateRenderState: complete (ours 1200B vs orig 973B); regalloc/order differ; /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2; difftest UNSUPPORTED (0/400 valid; fault(read) 356, fake-arity 39)
+0095a510  5  RenderWindow: complete; lea reg choice for &ev and win+4 differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fake-arity 210, fault(read) 179)
