@@ -1,4 +1,4 @@
-006bb670 26 complete; refcount release via lock xadd idiom not reproduced
+006bb670 3 complete; refcount release via _InterlockedDecrement reproduces the lock xadd idiom; only vtable scratch register choice (eax vs edx) differs; difftest PASS 588/600 valid, 100% coverage (also src/game/SPEngine/DebugConsoleW32.cpp --src PASS 588/600); flags /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
 006bbb10 8 complete; teardown correct, tail-jmp to OleUninitialize becomes call+ret
 006bbe20 13 complete; AsInterface null-mask expression emits extra neg
 006bb1c0 748 complete; EH frame + EASTL string replace loop differs in frame size/shape [equiv: UNSUPPORTED (0/400 valid: fault+strtoul import)]

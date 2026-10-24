@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement(long*);
@@ -33,9 +34,10 @@ class DebugMessage : public BaseA2 { public:
 // @ 0x006bb670
 int __fastcall FUN_006bb670(void* self)
 {
-    long* pc = (long*)((char*)self + 0x14);
-    long n = InterlockedDecrement(pc);
-    if (n == 0 && self) ((void(__thiscall*)(void*, int))(*(void***)self)[0])(self, 1);
+    int obj = (int)(size_t)self;
+    long* pc = (long*)((char*)obj + 0x14);
+    long n = _InterlockedDecrement((volatile long*)pc);
+    if (n == 0 && obj) ((void(__thiscall*)(int, int))(*(int**)obj)[0])(obj, 1);
     return n;
 }
 

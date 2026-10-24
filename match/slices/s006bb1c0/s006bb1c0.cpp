@@ -1,6 +1,7 @@
 // Slice s006bb1c0: Win32 drag/drop + ResourceMan::DatabasePackedFile helpers.
 // Same module family: /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE.
 #include "types.h"
+#include <intrin.h>
 
 typedef unsigned int UINT;
 typedef void* HWND;
@@ -113,9 +114,10 @@ void MutexOwner::LockOrUnlock(bool lock)
 // ---------------------------------------------------------------------------
 int __fastcall FUN_006bb670(void* self)
 {
-    long* pc = (long*)((char*)self + 0x14);
-    long n = InterlockedDecrement(pc);
-    if (n == 0 && self) ((void(__thiscall*)(void*, int))(*(void***)self)[0])(self, 1);
+    int obj = (int)(size_t)self;
+    long* pc = (long*)((char*)obj + 0x14);
+    long n = _InterlockedDecrement((volatile long*)pc);
+    if (n == 0 && obj) ((void(__thiscall*)(int, int))(*(int**)obj)[0])(obj, 1);
     return n;
 }
 
