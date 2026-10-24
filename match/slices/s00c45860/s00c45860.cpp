@@ -72,6 +72,7 @@ struct cEntity {
 struct cPlanetClueObj {
     cPlanetClueObj* SortBanners(u32 zero);               // 0x00b8de30
     void FUN_00bb9c10();                                 // 0x00bb9c10
+    void* GetCommContext();                              // 0x00ce6950 (returns [this+0x184])
 };
 
 struct cPlanet {
@@ -208,28 +209,37 @@ extern "C" {
 }
 
 struct cStarMap {
-    void RemoveVisual();                                 // 0x01045a60
+    void RemoveVisual(u32 handle, u32 flag);             // 0x01045a60
+    void* Lookup(u32 a, u32 b);                          // 0x01045120
 };
 struct cSPUIEventLog {
     void RemoveEvent(u32 id, u32 flag);                  // 0x00dd6d10
 };
 struct cCommManager {
     void RemoveMatching(i32 a, i32 b, void* mission);    // 0x00aea720
+    void* FindEntry(u32 a, u32 b, u32 c, u32 d, u32 e);  // 0x00ae93f0
+    void  RemoveByPtr(void* entry);                      // 0x00aea7f0
+    void  Add(u32 a, u32 b, u32 c, u32 d, u32 e, u32 f, u32 g); // 0x00aeb7a0
 };
 
 f32   __cdecl GetPropertyAsFloat();                      // 0x0041ea70
 u32   __cdecl GetPlayerEmpireID();                       // 0x01021090
 void* __cdecl GetPlayerEmpire();                         // 0x01021300
-void  __cdecl GetPropertyAsFloatArray(void* list, u32 key, i32* count, f32* out); // 0x006a08b0
+void  __cdecl GetPropertyAsFloatArray(void* list, u32 key, i32* count, void** out); // 0x006a08b0
 u8    __cdecl GetPropertyAsKeyInstance(void* list, u32 key, void** out);          // 0x006a12a0
 void* __cdecl NounManager();                             // 0x00b3d300
-void* __cdecl GameTimeManager();                         // 0x00b3d380
-u64   __cdecl GameTimeGet(u32 a);                        // 0x00b316c0
-u64   __cdecl aullrem(u64 a, u64 b, u64 c);              // 0x011e0e20
-cStarMap* __stdcall GetStarMap(u32 handle, u32 flag);    // 0x01046fc0
-void* __cdecl StarMapHelper(u32 a, u32 b);               // 0x01045120
-void* __cdecl GetTerrainSphere();                        // 0x00f67d90
-f32   __cdecl TerrainSphereGetValue();                   // 0x00c75c30
+struct cGameTimeManager {
+    u64 GetTime();                                       // 0x00b316c0 ([this+0x38])
+};
+cGameTimeManager* __cdecl GameTimeManager();             // 0x00b3d380
+u64   __cdecl aullrem(u64 a, u64 b);                     // 0x011e0e20
+cStarMap* __cdecl GetStarMap();                          // 0x01046fc0 (no args, returns singleton)
+struct cTerrainSphere {
+    f32 GetValue(u32 key);                               // 0x00c75c30
+};
+struct cNounManager {
+    cTerrainSphere* GetCurrentTerrainSphere();           // 0x00f67d90 ([this+0x74])
+};
 void* __cdecl SpaceGameGet();                            // 0x01002bd0
 void* __cdecl SpaceGameGet(int a);                       // 0x01002bd0
 void* __cdecl FUN_010666a0(void* p);                     // 0x010666a0
@@ -247,10 +257,6 @@ struct cMissionManager {
 void* __cdecl PropertyManager();                         // 0x0067de30
 cSPUIEventLog* __cdecl EventLog();                       // 0x00b3d3e0
 cCommManager* __cdecl CommManager();                     // 0x00b3d4a0
-void* __cdecl CommFindEntry(u32 empire, void* ctx);      // 0x00ae93f0
-void  __cdecl CommRemoveByPtr(void* entry);              // 0x00aea7f0
-void  __cdecl CommAdd(u32 empire, void* ctx, u32 a, u32 b, u32 c, u32 d, u32 e); // 0x00aeb7a0
-void* __cdecl GetCommContext(u32 a, u32 b, u32 c, u32 d, u32 e);  // 0x00ce6950
 void  __cdecl WriteUint32(void* stream, void* value, u32 count, u32 flag); // 0x0093aa70
 void* __cdecl GetSourcePlanetClue();                     // 0x00c452a0
 void  __cdecl AddVisual(void* a);                        // 0x00c46590
@@ -333,21 +339,22 @@ u32 cSPMission::CalculateDuration()
         mFlags130 |= 0x20;
     else
         mFlags130 &= ~0x20;
-    if (mTargetSpeciesKey[1] != 0xffffffff &&
-        mTargetSpeciesKey[1] != GetPlayerEmpireID()) {
+    if (mOwnerEmpireID != 0xffffffff &&
+        mOwnerEmpireID != GetPlayerEmpireID()) {
         i32 count = 0;
-        f32 value = 0.0f;
-        GetPropertyAsFloatArray(mpMissionPropList, 0x5efaf8b, &count, &value);
+        void* array = 0;
+        GetPropertyAsFloatArray(mpMissionPropList, 0x5efaf8b, &count, &array);
         if (count > 0) {
             cEntity* owner = (cEntity*)GetOwnerEmpire();
             owner->GetWeaponryLevel();
         }
     }
-    f32 scale = TerrainSphereGetValue();
+    cTerrainSphere* sphere = ((cNounManager*)NounManager())->GetCurrentTerrainSphere();
+    f32 scale = sphere->GetValue(0x77174715);
     f32 total = (scale * duration) * g_missionTimeScale;
-    mRewardMoney = total;
-    mDuration = (u32)(i64)total;
-    return (u32)(i64)total;
+    u32 v = (u32)(i64)total;
+    mDuration = v;
+    return v;
 }
 
 // ---------------------------------------------------------------------------
@@ -468,23 +475,21 @@ u32 cSPMission::GetMissionIconEffectGroup()
 // @ 0x00c45e10
 void cSPMission::UpdateStarMapEffects(u8 useZero)
 {
-    GameTimeManager();
-    u64 time = GameTimeGet(0);
-    u64 rem = aullrem(time, 1000, 0);
+    cGameTimeManager* gt = GameTimeManager();
+    u64 time = gt->GetTime();
+    u64 rem = aullrem(time, 1000);
     f32 frac = (f32)(i64)(rem & 0x7fffffffffffffffULL);
     frac = frac * g_oneHalf;
 
     if (mStarMapIconEffect != 0xffffffff) {
         f32 v = useZero != 0 ? g_defaultHintValue : frac;
-        GetStarMap(mStarMapIconEffect, 0);
-        void* obj = StarMapHelper(0, mStarMapIconEffect);
+        void* obj = GetStarMap()->Lookup(0, mStarMapIconEffect);
         if (obj != 0)
             (*(void(__thiscall**)(void*, u32, f32*, u32))((char*)*(void**)obj + 0x44))(obj, 4, &v, 1);
     }
     if (mStarMapDestEffect != 0xffffffff) {
         f32 v = useZero != 0 ? g_defaultHintValue : frac;
-        GetStarMap(mStarMapDestEffect, 0);
-        void* obj = StarMapHelper(0, mStarMapDestEffect);
+        void* obj = GetStarMap()->Lookup(0, mStarMapDestEffect);
         if (obj != 0)
             (*(void(__thiscall**)(void*, u32, f32*, u32))((char*)*(void**)obj + 0x44))(obj, 4, &v, 1);
     }
@@ -496,8 +501,7 @@ void cSPMission::UpdateStarMapEffects(u8 useZero)
                 u32 h = mStarMapEffects.mpBegin[i];
                 if (h != 0xffffffff) {
                     f32 v = useZero != 0 ? g_defaultHintValue : frac;
-                    GetStarMap(h, 0);
-                    void* obj = StarMapHelper(0, h);
+                    void* obj = GetStarMap()->Lookup(0, h);
                     if (obj != 0)
                         (*(void(__thiscall**)(void*, u32, f32*, u32))((char*)*(void**)obj + 0x44))(obj, 4, &v, 1);
                 }
@@ -524,11 +528,11 @@ void cSPMission::UpdateHints(u8 param)
 {
     if (mpMissionPropList != 0) {
         cProperty* prop = 0;
-        if (((MissionPropList*)mpMissionPropList)->GetProperty(0x5590946, &prop) &&
-            prop->mType == 1 && *prop->GetBool() == 0)
-            goto body;
+        if (((MissionPropList*)mpMissionPropList)->GetProperty(0x5590946, &prop)) {
+            if (prop->mType == 1 && *prop->GetBool() == 0)
+                return;
+        }
     }
-body:
     {
         u32 e1;
         cEntity* owner1 = (cEntity*)GetOwnerEmpire();
@@ -538,11 +542,10 @@ body:
         } else {
             e1 = 0xffffffff;
         }
-        void* ctx1 = GetCommContext(0xc8fbf7d7, 0x305a4a16, 0,
-                                    (u32)mpSourcePlanet->mpPlanetClue, 0);
-        void* entry1 = CommFindEntry(e1, ctx1);
+        void* ctx1 = mpSourcePlanet->mpPlanetClue->GetCommContext();
+        void* entry1 = CommManager()->FindEntry(e1, (u32)ctx1, 0, 0xc8fbf7d7, 0x305a4a16);
         if (entry1 != 0)
-            CommRemoveByPtr(entry1);
+            CommManager()->RemoveByPtr(entry1);
 
         u32 e2;
         cEntity* owner2 = (cEntity*)GetOwnerEmpire();
@@ -552,11 +555,10 @@ body:
         } else {
             e2 = 0xffffffff;
         }
-        void* ctx2 = GetCommContext(0xc8fbf7d7, 0xa789391d, 0,
-                                    (u32)mpSourcePlanet->mpPlanetClue, 0);
-        void* entry2 = CommFindEntry(e2, ctx2);
+        void* ctx2 = mpSourcePlanet->mpPlanetClue->GetCommContext();
+        void* entry2 = CommManager()->FindEntry(e2, (u32)ctx2, 0, 0xc8fbf7d7, 0xa789391d);
         if (entry2 != 0)
-            CommRemoveByPtr(entry2);
+            CommManager()->RemoveByPtr(entry2);
 
         u32 e3;
         cEntity* owner3 = (cEntity*)GetOwnerEmpire();
@@ -567,9 +569,8 @@ body:
             e3 = 0xffffffff;
         }
         u32 key = param != 0 ? 0xa789391d : (0x88d110f9 + 0xa789391d);
-        void* ctx3 = GetCommContext(0xc8fbf7d7, key, 0,
-                                    (u32)mpSourcePlanet->mpPlanetClue, 0);
-        CommAdd(e3, ctx3, 0xc8fbf7d7, key, 0, 1, 0x493e0);
+        void* ctx3 = mpSourcePlanet->mpPlanetClue->GetCommContext();
+        CommManager()->Add(e3, (u32)ctx3, 0xc8fbf7d7, key, 0, 1, 0x493e0);
     }
 }
 
@@ -783,18 +784,18 @@ void cSPMission::ShutdownSystems()
     mSystemsShutdown = 1;
     CommManager()->RemoveMatching(-1, -1, this);
     if (mStarMapIconEffect != 0xffffffff) {
-        GetStarMap(mStarMapIconEffect, 0)->RemoveVisual();
+        GetStarMap()->RemoveVisual(mStarMapIconEffect, 0);
         mStarMapIconEffect = 0xffffffff;
     }
     if (mStarMapDestEffect != 0xffffffff) {
-        GetStarMap(mStarMapDestEffect, 0)->RemoveVisual();
+        GetStarMap()->RemoveVisual(mStarMapDestEffect, 0);
         mStarMapDestEffect = 0xffffffff;
     }
     i32 n = (i32)(mStarMapEffects.mpEnd - mStarMapEffects.mpBegin);
     if (n > 0) {
         do {
             u32 handle = mStarMapEffects.mpEnd[-1];
-            GetStarMap(handle, 0)->RemoveVisual();
+            GetStarMap()->RemoveVisual(handle, 0);
             mStarMapEffects.mpEnd -= 1;
             --n;
         } while (n != 0);
