@@ -3,6 +3,7 @@
 // and puts a small icon effect at the midpoint of the link (pushed out from the planet).
 // Types follow the dev PDB (tBuildingLinkEffect, cCommunityEditor) and the ModAPI IVisualEffect vtable.
 #include "types.h"
+#include <math.h>
 
 struct SVec3 { float x, y, z; };                    // plain POD triple (copied through integer registers)
 struct Vec3c {                                      // by-value argument flavour: user copy ctor (fld/fstp)
@@ -71,11 +72,16 @@ struct Key { int a, b; };
 struct Node { Node* r; Node* l; Node* p; int color; Key key; tBuildingLinkEffect value; };
 struct Iter { Node* node; Iter() {} };
 struct LinkMap {                                                            // eastl::map<pair<int,int>, tBuildingLinkEffect>
-    int pad;
-    char anchor[0x10];                                                      // +4: the end() node
+    int      mPad00;                                                        // +0x00
+    Node*    mpAnchorParent;                                                // +0x04
+    Node*    mpAnchorLeft;                                                  // +0x08  (begin)
+    Node*    mpAnchorRight;                                                 // +0x0c
+    uint32_t mAnchorColor;                                                  // +0x10
+    int      mCount;                                                        // +0x14
     Iter find(const Key& k);                                                // 0x00d0bd60 (thiscall, sret)
     tBuildingLinkEffect& operator[](const Key& k);                          // 0x00d0ff80 (thiscall)
-    Node* End() { return (Node*)anchor; }
+    Node* End() { return mpAnchorParent; }
+    Node* Begin() { return mpAnchorLeft; }
 };
 
 struct PtVec { Vec3c* b; Vec3c* e; Vec3c* c; };
@@ -96,9 +102,160 @@ void operator_delete__(void* p);                                            // 0
 template <class T> inline const T& Min(const T& a, const T& b) { return b < a ? b : a; }
 template <class T> inline const T& Max(const T& a, const T& b) { return a < b ? b : a; }
 
+// ---------------------------------------------------------------------------------------------
+// Editor proxies. The community editor keeps engine objects behind a small proxy interface:
+// slot +0x0c fetches an object by id, +0x38 is the object's kind, +0x3c the current selection,
+// +0x5c the per-object colour/effect query, +0x6c the slot offset and +0xb8 the editor object.
+struct IEditorObj {
+    virtual void   s00();                                   // +0x00
+    virtual void   s01();                                   // +0x04
+    virtual void   s02();                                   // +0x08
+    virtual void*  GetObject(uint32_t nID);                 // +0x0c
+    virtual void   s04();                                   // +0x10
+    virtual void   s05();                                   // +0x14
+    virtual void   AttachObject(int nSlot, void* pObject);  // +0x18
+    virtual void   GetViewport(void* pRect, void* pPoint);  // +0x1c
+    virtual void   s08();                                   // +0x20
+    virtual void   s09();                                   // +0x24
+    virtual void   s10();                                   // +0x28
+    virtual SVec3* GetPosition();                           // +0x2c
+    virtual SVec3* GetPositionCopy();                       // +0x30
+    virtual void   s13();                                   // +0x34
+    virtual uint32_t GetKind();                             // +0x38
+    virtual void*  GetSelection();                          // +0x3c
+    virtual void   s16(); virtual void s17(); virtual void s18(); virtual void s19();
+    virtual void*  GetUiRoot();                             // +0x50
+    virtual void   s21(); virtual void s22();
+    virtual void*  GetColor(void* pOut, int nIndex, void* pArg, float fValue);  // +0x5c
+    virtual void   s24(); virtual void s25(); virtual void s26();
+    virtual int    GetSlotOffset();                         // +0x6c
+    virtual void   s28(); virtual void s29(); virtual void s30(); virtual void s31();
+    virtual void   s32(); virtual void s33(); virtual void s34(); virtual void s35();
+    virtual void   s36(); virtual void s37(); virtual void s38(); virtual void s39();
+    virtual void   s40(); virtual void s41(); virtual void s42(); virtual void s43();
+    virtual void   s44(); virtual void s45();
+    virtual void*  FindEditorObject(uint32_t nID);          // +0xb8
+};
+struct ILinkAnchor : IEditorObj {                           // editor proxy with per-slot link flags
+    uint8_t mPad04[0x274 - 4];
+    bool    mLinkable[0x100];                               // +0x274
+};
+struct ICreatureProxy : IEditorObj {                        // proxy with the placed flag
+    uint8_t mPad04[0x289 - 4];
+    bool    mbPlaced;                                       // +0x289
+};
+struct IEffectHost {                                        // manager/audio host (+0x3c/+0x5c)
+    virtual void   s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void   s04(); virtual void s05(); virtual void s06(); virtual void s07();
+    virtual void   s08();                                   // +0x20
+    virtual void   s09(); virtual void s10(); virtual void s11(); virtual void s12();
+    virtual void   s13(); virtual void s14();
+    virtual void   GetSelectionSlots(void* pOut, int nCount);   // +0x3c
+    virtual void   s16(); virtual void s17(); virtual void s18(); virtual void s19();
+    virtual void   s20(); virtual void s21(); virtual void s22();
+    virtual void   AddEffect(uint32_t nID, const SVec3* pPos);  // +0x5c
+};
+struct IWinProc {
+    virtual void s0(); virtual void s1();
+    virtual void Hide();                                    // +0x08 (0x005cc690)
+};
+struct IPalette {
+    int GetCurrentCategoryIndex();                          // 0x005ca9c0
+};
+struct ICircleSlot {                                        // cActionCircle slot
+    uint8_t mPad00[0x0c];
+    SVec3   mPosition;                                      // +0x0c
+    uint8_t mPad18[0x289 - 0x18];
+    bool    mbLinkable;                                     // +0x289
+    IEditorObj* GetObject();                                // 0x00fcc210
+};
+struct IActionCircle {
+    ICircleSlot* SlotAt(unsigned nIndex);                   // 0x00af9ff0
+};
+struct LinkPair { uint32_t a, b; uint8_t mPad08[0x50 - 8]; };
+struct LinkPairList { LinkPair* mpBegin; LinkPair* mpEnd; };
+struct PlacementTrail {
+    SVec3* Add(IEditorObj** ppVehicle);                     // 0x00d0fee0
+};
+struct VehicleList {
+    IEditorObj** mpBegin;                                   // +0x00
+    IEditorObj** mpEnd;                                     // +0x04
+    void erase(IEditorObj** ppSlot);                        // 0x00bf3420
+    IEditorObj** find(IEditorObj* p) {
+        IEditorObj** pIt = mpBegin;
+        while (pIt != mpEnd && *pIt != p) ++pIt;
+        return pIt;
+    }
+};
+
+struct cCommunityEditor;
+
+IEditorObj*  App();                                         // 0x0067dd10
+void         FUN_007c4900(void* a, void* b);                // 0x007c4900
+IEffectHost* FUN_00b3d240();                                // 0x00b3d240
+float        DistancePointSegment(const SVec3* pA, const SVec3* pB,
+                                  const SVec3* pC, float fD);   // 0x00698e00
+IEditorObj*  PlanetModel(const SVec3* pDir, const SVec3* pIn);  // 0x00b3d350
+void         BuildSurfaceOrientation(IEditorObj* pModel);   // 0x00b7f1f0
+IEditorObj*  FUN_00d0a3f0(IEditorObj* pVehicle);            // 0x00d0a3f0
+void         FUN_00d0dea0(cCommunityEditor* pEditor);       // 0x00d0dea0
+void         FUN_00d0a5b0(cCommunityEditor* pEditor);       // 0x00d0a5b0
+void         FUN_005cc690(IWinProc* pWin);                  // 0x005cc690
+void         SetManipulatedObject(cCommunityEditor* pEditor, void* pObject);  // 0x00d09f60
+IActionCircle* FUN_00bd7f40(ICreatureProxy* pCurrent);      // 0x00bd7f40
+LinkPairList*  FUN_00bd8230(ICreatureProxy* pCurrent);      // 0x00bd8230
+bool         FUN_00c3f540(ILinkAnchor* pAnchor);            // 0x00c3f540
+void         FUN_00d0d880(void* pArg, tBuildingLinkEffect* pValue);  // 0x00d0d880
+IEffectHost* GetAudioSystem();                              // 0x00a206f0 (EA::Audio::GetSystemAT)
+void         KillSetiEffects(IEffectHost* pAudio, uint32_t nID);     // 0x00435ed0
+void         DisbandUnit(IEditorObj* pVehicle, char bFlag);          // 0x00caa610
+Node*        RBTreeIncrement(Node* pNode);                  // 0x00921580
+void         RBTreeErase(Node* pNode, Node* pHeader);       // 0x00921880
+
+static int LinkKind(IEditorObj* pObj1, IEditorObj* pObj2)
+{
+    uint32_t k1 = pObj1->GetKind();
+    uint32_t k2 = pObj2->GetKind();
+    if (k1 == 0x1007ae63u || k1 == 0x0ff10521u) {
+        if (k2 == 0x0ecade42u || k2 == 0x1007ae63u || k2 == 0x0ff10521u)
+            return 4;
+        return (k2 == 0x01a55e4du) ? 2 : 1;
+    }
+    if (k1 == 0x0ecade42u) {
+        if (k2 == 0x1007ae63u || k2 == 0x0ff10521u)
+            return 4;
+        return (k2 == 0x01a55e4du) ? 3 : 1;
+    }
+    if (k2 == 0x1007ae63u || k2 == 0x0ff10521u)
+        return 2;
+    return (k2 == 0x0ecade42u) ? 3 : 1;
+}
+
 struct cCommunityEditor {
+    uint8_t         mPad00[0x40];
+    IEditorObj*     mpSelection;                            // +0x40
+    uint8_t         mPad44[0x68 - 0x44];
+    IEditorObj*     mpPlacementServices;                    // +0x68
+    uint8_t         mPad6c[0x7c - 0x6c];
+    IWinProc*       mpSellBackRollover;                     // +0x7c
+    uint8_t         mPad80[0x84 - 0x80];
+    IWinProc*       mpEditorWin;                            // +0x84
+    uint8_t         mPad88[0xb4 - 0x88];
+    IPalette*       mpPalette;                              // +0xb4
+    uint8_t         mPadB8[0xc0 - 0xb8];
+    Ref<IEditorObj> mPlacementVehicle;                      // +0xc0
+    uint8_t         mPadC4[0xf8 - 0xc4];
+    int             mCurrentSlot;                           // +0xf8
+    uint8_t         mPadFC[0x108 - 0xfc];
+    SVec3           mPlanetOffset;                          // +0x108
+    PlacementTrail  mTrail;                                 // +0x114
+    uint8_t         mPad118[0x1f0 - 0x118];
+    VehicleList     mPotentialVehicles;                     // +0x1f0
+
     const SVec3* GetCommunityCenter();                                      // 0x00d09960 (thiscall)
     void RefreshOrCreateBuildingLinkEffect(LinkMap* map, int a, int b, SVec3 p1, SVec3 p2, int type);
+    int  EndVehiclePlacement(int nArg0, int nArg1);                         // 0x00d11730
+    void UpdateBuildingLinkEffects(LinkMap* map, int nMode, void* pArg);    // 0x00d11f80
 };
 
 // @ 0x00D11950
@@ -234,5 +391,171 @@ void cCommunityEditor::RefreshOrCreateBuildingLinkEffect(LinkMap* map, int a, in
         (*icon)->SetSourceTransform(&msg);
         (*icon)->SetFloatParams(4, &f, 1);
         (*icon)->Start(0);
+    }
+}
+
+// @ 0x00D11730
+int cCommunityEditor::EndVehiclePlacement(int nArg0, int nArg1)
+{
+    if (mpSelection)
+        mpSelection->GetObject(0xee9b2232);
+
+    ICreatureProxy* pVehicle = 0;
+    if (mPlacementVehicle.p)
+        pVehicle = (ICreatureProxy*)mPlacementVehicle.p->FindEditorObject(0x137e8e0);
+    if (pVehicle) {
+        IEditorObj* pUi = (IEditorObj*)App()->GetUiRoot();
+        SVec3 rect;
+        SVec3 point;
+        pUi->GetViewport(&rect, &point);
+        FUN_007c4900(&rect, &point);
+
+        IEffectHost* pSelection = FUN_00b3d240();
+        SVec3 slotPos;
+        pSelection->GetSelectionSlots(&slotPos, 1);
+
+        SVec3 probe;
+        float fDist = DistancePointSegment(&probe, &slotPos, &mPlanetOffset, 0.0f);
+        (void)fDist;
+
+        IEditorObj* pModel = PlanetModel(pVehicle->GetPositionCopy(), &probe);
+        BuildSurfaceOrientation(pModel);
+
+        float dx = probe.x - mPlanetOffset.x;
+        float dy = probe.y - mPlanetOffset.y;
+        float dz = probe.z - mPlanetOffset.z;
+        float fSurfaceDist = sqrtf(dx * dx + dy * dy + dz * dz);
+        if (fSurfaceDist < 15.0f) {
+            SVec3* pTrail = mTrail.Add(&mPlacementVehicle.p);
+            *pTrail = mPlanetOffset;
+        } else {
+            IEditorObj* pFaded = FUN_00d0a3f0(pVehicle);
+            mpPlacementServices->AttachObject(0, pFaded);
+
+            IEffectHost* pHost = FUN_00b3d240();
+            char colorBuf[0x0c];
+            void* pColor = mPlacementVehicle.p->GetColor(colorBuf, -1, pFaded, 1.0f);
+            (void)pColor;
+            pColor = mPlacementVehicle.p->GetPosition();
+            pHost->AddEffect(0x64bf470, (const SVec3*)pColor);
+
+            IEffectHost* pAudio = GetAudioSystem();
+            if (pAudio)
+                pAudio->s08();
+            KillSetiEffects(pAudio, 0x275cdfce);
+            DisbandUnit(pFaded, 0);
+
+            IEditorObj** pFound = mPotentialVehicles.find(pFaded);
+            if (pFound != mPotentialVehicles.mpEnd)
+                mPotentialVehicles.erase(pFound);
+        }
+    }
+
+    FUN_00d0dea0(this);
+    SetManipulatedObject(this, 0);
+    if (mpEditorWin)
+        FUN_005cc690(mpEditorWin);
+    if (mpSellBackRollover)
+        mpSellBackRollover->Hide();
+    FUN_00d0a5b0(this);
+    return 0;
+}
+
+// @ 0x00D11F80
+void cCommunityEditor::UpdateBuildingLinkEffects(LinkMap* map, int nMode, void* pArg)
+{
+    if (!mpSelection)
+        return;
+    ICreatureProxy* pCurrent = (ICreatureProxy*)mpSelection->GetObject(0xee9b2232);
+    if (!pCurrent)
+        return;
+
+    IActionCircle* pActionCircle = FUN_00bd7f40(pCurrent);
+
+    for (Node* pNode = map->Begin(); pNode != map->End(); pNode = RBTreeIncrement(pNode))
+        pNode->value.mTicked = false;
+
+    if (mpPalette && mpPalette->GetCurrentCategoryIndex() == 0) {
+        if (nMode == 0) {
+            LinkPairList* pPairs = FUN_00bd8230(pCurrent);
+            int nCount = (int)(pPairs->mpEnd - pPairs->mpBegin);
+            for (int i = 0; i < nCount; ++i) {
+                LinkPair* pPair = &pPairs->mpBegin[i];
+                ICircleSlot* pSlot1 = pActionCircle->SlotAt(pPair->a);
+                ICircleSlot* pSlot2 = pActionCircle->SlotAt(pPair->b);
+                if (!pSlot1 || !pSlot2)
+                    continue;
+                IEditorObj* pObj1 = pSlot1->GetObject()
+                    ? (IEditorObj*)pSlot1->GetObject()->GetObject(0xe9cb8ba) : 0;
+                IEditorObj* pObj2 = pSlot2->GetObject()
+                    ? (IEditorObj*)pSlot2->GetObject()->GetObject(0xe9cb8ba) : 0;
+                bool bPlaced = (pObj1 && ((ICreatureProxy*)pObj1)->mbPlaced)
+                            || (pObj2 && ((ICreatureProxy*)pObj2)->mbPlaced);
+                if (!bPlaced)
+                    continue;
+                // The two slots may reference the same editor object only when both are
+                // present; a lone null endpoint is skipped.
+                if ((!pObj1 || !pObj2) && (pObj1 != pObj2))
+                    continue;
+                RefreshOrCreateBuildingLinkEffect(map, (int)pPair->a, (int)pPair->b,
+                                                 pSlot1->mPosition, pSlot2->mPosition,
+                                                 LinkKind(pObj1, pObj2));
+            }
+        } else if (nMode == 1 && mPlacementVehicle.p) {
+            ILinkAnchor* pAnchor = (ILinkAnchor*)mPlacementVehicle.p->FindEditorObject(0xe9cb8ba);
+            if (pAnchor) {
+                int nSlotOffset = pAnchor->GetSlotOffset();
+                int nBase = 0;
+                for (int nRow = 0; nRow < 0xc4; nRow += 14) {
+                    for (int nCol = 0; nCol < 14; ++nCol) {
+                        if ((!FUN_00c3f540(pAnchor)
+                             || nRow == mCurrentSlot || nCol == mCurrentSlot)
+                            && pAnchor->mLinkable[nSlotOffset + nBase + nCol]) {
+                            ICircleSlot* pSlot1 = pActionCircle->SlotAt(nRow);
+                            ICircleSlot* pSlot2 = pActionCircle->SlotAt(nCol);
+                            if (pSlot1 && pSlot2) {
+                                IEditorObj* pObj1 = pSlot1->GetObject()
+                                    ? (IEditorObj*)pSlot1->GetObject()->GetObject(0xe9cb8ba) : 0;
+                                IEditorObj* pObj2 = pSlot2->GetObject()
+                                    ? (IEditorObj*)pSlot2->GetObject()->GetObject(0xe9cb8ba) : 0;
+                                if ((pObj1 && ((ICreatureProxy*)pObj1)->mbPlaced)
+                                    || (pObj2 && ((ICreatureProxy*)pObj2)->mbPlaced)) {
+                                    if (pObj1 == (IEditorObj*)pAnchor || pObj2 == (IEditorObj*)pAnchor)
+                                        continue;
+                                    RefreshOrCreateBuildingLinkEffect(map, nRow, nCol,
+                                                                     pSlot1->mPosition,
+                                                                     pSlot2->mPosition, 0);
+                                }
+                            }
+                        }
+                    }
+                    nBase += 14;
+                }
+            }
+        }
+    }
+
+    Node* pNode = map->Begin();
+    while (pNode != map->End()) {
+        FUN_00d0d880(pArg, &pNode->value);
+        if (!pNode->value.mTicked && pNode->value.mState != 2 && pNode->value.mState != 3)
+            pNode->value.mState = 2;
+        if (pNode->value.mState != 3) {
+            pNode = RBTreeIncrement(pNode);
+            continue;
+        }
+        if (pNode->value.mLinkEffect.p)
+            pNode->value.mLinkEffect.p->Stop(0);
+        if (pNode->value.mIconEffect.p)
+            pNode->value.mIconEffect.p->Stop(0);
+        --map->mCount;
+        Node* pNext = RBTreeIncrement(pNode);
+        RBTreeErase(pNode, map->End());
+        if (pNode->value.mIconEffect.p)
+            pNode->value.mIconEffect.p->Release();
+        if (pNode->value.mLinkEffect.p)
+            pNode->value.mLinkEffect.p->Release();
+        operator_delete__(pNode);
+        pNode = pNext;
     }
 }
