@@ -31,8 +31,11 @@ def unrecorded(entry):
     """VAs of a slice entry that are in none of its manifest (VA = 3rd column), nonmatching or partial rows.
     A rework entry ("rework": true, batch part1 on: functions that are already partial) is settled per VA once the
     VA is in manifest.txt or nonmatching.txt, or the session logged "<va> <verdict> <reason>" in
-    work/match/scratch_<id>_fixlog.txt (it could not be completed); a partial.txt row alone does not count."""
+    work/match/scratch_<id>_fixlog.txt (it could not be completed); a partial.txt row alone does not count.
+    VAs in the entry's "fail" list (equivalence FAILs folded into a rework batch, 2026-10-24) already have a
+    nonmatching.txt row, so they settle only by a manifest row or a fixlog line."""
     want = {v.lower().lstrip("0") for v in entry["vas"]}
+    fail = {v.lower().lstrip("0") for v in entry.get("fail", [])}
     seen = set()
     files = (("manifest.txt", 2), ("nonmatching.txt", 0)) if entry.get("rework") else \
         (("manifest.txt", 2), ("nonmatching.txt", 0), ("partial.txt", 0))
@@ -50,8 +53,9 @@ def unrecorded(entry):
         for l in open(p, errors="replace"):
             parts = l.split("#", 1)[0].split() if l[:1] not in " \t" else []
             if len(parts) > col:
-                va = parts[col].lower()
-                seen.add((va[2:] if va.startswith("0x") else va).lstrip("0"))
+                va = (lambda v: (v[2:] if v.startswith("0x") else v).lstrip("0"))(parts[col].lower())
+                if f == "manifest.txt" or va not in fail:
+                    seen.add(va)
     return sorted(want - seen)
 
 
@@ -74,6 +78,16 @@ def worker_progress(batch, recs, worker, unsettled=None):
     return tot, done, len(recs) - len(c["claims"])
 
 
+def print_fails(e):
+    """Equivalence FAILs folded into a rework entry: the replay command, and the src/game unit holding a migrated copy."""
+    for v in e.get("fail", []):
+        print("equivalence FAIL %s: replay with .venv/bin/python tools/difftest/equiv.py %s %s --replay "
+              "work/difftest/fail_inputs/%s_%s.pkl -v" % (v, e["id"], v, e["id"], v))
+        if e.get("fail_src", {}).get(v):
+            print("  %s also lives in %s (the hybrid build's copy): fix it there too and check it with "
+                  "equiv.py %s %s --src %s" % (v, e["fail_src"][v], e["id"], v, e["fail_src"][v]))
+
+
 def main():
     batch, worker = sys.argv[1], sys.argv[2]
     recs = json.load(open(W("work/batches", batch + ".json")))
@@ -94,6 +108,7 @@ def main():
             i = mine[-1]
             print("slice", recs[i]["id"])
             print("functions", " ".join(recs[i]["vas"]))
+            print_fails(recs[i])
             print("(you already hold this slice: %d of its %d functions are not yet in manifest/nonmatching/partial; "
                   "finish it before claiming another)" % (len(unrecorded(recs[i])), len(recs[i]["vas"])))
             return 0
@@ -108,6 +123,7 @@ def main():
         os.replace(tmp, claims_path(batch))
     print("slice", recs[i]["id"])
     print("functions", " ".join(recs[i]["vas"]))
+    print_fails(recs[i])
     print("(queue: %d slices left after this one)" % (len(free) - 1))
     return 0
 
