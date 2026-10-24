@@ -2175,7 +2175,7 @@ struct basic_string_s0061_a650 {
     RangeInitialize(pBegin, pEnd);
   }
   struct CtorSprintf {};
-  basic_string_s0061_a650(CtorSprintf, const T* pFormat, ...);  // 0x00473020 (wchar_t), 0x00472f50 (char)
+  basic_string_s0061_a650(CtorSprintf, const T* pFormat, ...);  // 0x00472f50 (char)
   basic_string_s0061_a650& sprintf(const T* pFormat, ...);       // 0x00472fe0 (char)
   // (out of line at 0x0057cb10 elsewhere; this TU inlines it with AllocateSelf expanded)
   basic_string_s0061_a650(const basic_string_s0061_a650& x) : mpBegin(0), mpEnd(0), mpCapacity(0), mAllocator(x.mAllocator) {
@@ -2311,17 +2311,8 @@ class cFeedTransactionBase_s0061_a650 : public cITransaction_s0061_a650 {
   uint32_t pad28[1];
   FixedPtrVector_s0061_a650 mAssets;  // +0x30
   uint8_t mFlag;           // +0xe8
-  cFeedTransactionBase_s0061_a650(uint32_t type, const char* str, uint32_t intParam);
+  cFeedTransactionBase_s0061_a650(uint32_t type, const char* str, uint32_t intParam);  // 0x00618DA0
 };
-}
-}
-namespace SP {
-namespace Pollen {
-cFeedTransactionBase_s0061_a650::cFeedTransactionBase_s0061_a650(uint32_t type, const char* str, uint32_t intParam)
-    : mpFeed(0), mFeedType(type), mnIntParam(intParam), mnCount(0xffffffff), mUnk18(0),
-      mStringParam(), mFlag(0) {
-  mStringParam.assign(str, str + strlen(str));
-}
 }
 }
 namespace SP {
@@ -4491,8 +4482,12 @@ bool AssetFeedGetRequest(void** ppRequest)
 
 // @ 0x0061a810
 namespace SP { namespace Pollen {
+extern void* vtGetAssetFeedTransaction_s0061_a650[];    // 0x013FC604
+extern void* vtGetAssetFeedTransactionEx_s0061_a650[];  // 0x013FC628
+struct VtblPtr_s0061_a650 { void* vptr; };
 cGetAssetFeedTransaction_s0061_a650::cGetAssetFeedTransaction_s0061_a650(uint32_t lo, uint32_t hi)
 : cFeedTransactionBase_s0061_a650(3, (const char*)0x013ec47c, 0) {
+  ((VtblPtr_s0061_a650*)this)->vptr = vtGetAssetFeedTransaction_s0061_a650;
   string8_s0061_a650 tmp(eastl::basic_string_s0061_a650<char>::CtorSprintf(), "%I64u", lo, hi);
   mStringParam.assign(tmp.mpBegin, tmp.mpEnd);
   mFlag = 1;
@@ -4503,6 +4498,7 @@ cGetAssetFeedTransaction_s0061_a650::cGetAssetFeedTransaction_s0061_a650(uint32_
 namespace SP { namespace Pollen {
 cGetAssetFeedTransactionEx_s0061_a650::cGetAssetFeedTransactionEx_s0061_a650(uint32_t lo, uint32_t hi)
 : cFeedTransactionBase_s0061_a650(3, (const char*)0x013ec47c, 0), mId((uint64_t)lo | ((uint64_t)hi << 32)) {
+  ((VtblPtr_s0061_a650*)this)->vptr = vtGetAssetFeedTransactionEx_s0061_a650;
   mExtra.mpBegin = 0;
   mExtra.mpEnd = 0;
   mExtra.mpCapacity = 0;

@@ -1,3 +1,3 @@
-0061a810  32  cGetAssetFeedTransaction ctor: complete; base + CtorSprintf schedule (extra callee-saved frame, manual strlen)
-0061a8b0  32  cGetAssetFeedTransactionEx ctor: complete; ctor scheduling / 64-bit id assembly differs
+0061a810  98  cGetAssetFeedTransaction ctor: equivalent (WEAK, 176 valid / 100% coverage); base ctor now external at 0x00618DA0, char CtorSprintf at 0x00472F50, image vtable 0x013FC604; /O2 instruction schedule differs (139 vs 146 bytes)
+0061a8b0 138  cGetAssetFeedTransactionEx ctor: equivalent (WEAK, 186 valid / 100% coverage); same fixes plus image vtable 0x013FC628; /O2 instruction schedule differs (183 vs 179 bytes)
 0061a970  12  cEditFeedTransaction ctor: complete; vptr/mOpType store order and the second hash-set bucket-array store order

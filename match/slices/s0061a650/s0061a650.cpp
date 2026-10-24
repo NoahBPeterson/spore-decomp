@@ -5,6 +5,13 @@
 extern "C" unsigned int __cdecl strlen(const char*);
 #pragma intrinsic(strlen)
 
+// eastl::basic_string<char>::basic_string(CtorSprintf, const char*, ...)
+void CtorSprintfU64(string8* out, int tag, const char* format, ...);  // 0x00472F50
+
+extern void* vtGetAssetFeedTransaction[];    // 0x013FC604
+extern void* vtGetAssetFeedTransactionEx[];  // 0x013FC628
+struct VtblPtr { void* vptr; };
+
 namespace SP {
 namespace Pollen {
 class cITransaction : public EA::RefCountVTemplate<int> {
@@ -32,13 +39,8 @@ class cFeedTransactionBase : public cITransaction {
   uint32_t pad28[1];
   FixedPtrVector mAssets;  // +0x30
   uint8_t mFlag;           // +0xe8
-  cFeedTransactionBase(uint32_t type, const char* str, uint32_t intParam);
+  cFeedTransactionBase(uint32_t type, const char* str, uint32_t intParam);  // 0x00618DA0
 };
-cFeedTransactionBase::cFeedTransactionBase(uint32_t type, const char* str, uint32_t intParam)
-    : mpFeed(0), mFeedType(type), mnIntParam(intParam), mnCount(0xffffffff), mUnk18(0),
-      mStringParam(), mFlag(0) {
-  mStringParam.assign(str, str + strlen(str));
-}
 
 class cGetAssetFeedTransaction : public cFeedTransactionBase {
  public:
@@ -84,7 +86,9 @@ class cEditFeedTransaction : public cITransaction {
 // @ 0x0061a810
 cGetAssetFeedTransaction::cGetAssetFeedTransaction(uint32_t lo, uint32_t hi)
     : cFeedTransactionBase(3, (const char*)0x013ec47c, 0) {
-  string8 tmp(eastl::basic_string<char>::CtorSprintf(), "%I64u", lo, hi);
+  ((VtblPtr*)this)->vptr = vtGetAssetFeedTransaction;
+  string8 tmp;
+  CtorSprintfU64(&tmp, 0, "%I64u", lo, hi);
   mStringParam.assign(tmp.mpBegin, tmp.mpEnd);
   mFlag = 1;
 }
@@ -92,10 +96,12 @@ cGetAssetFeedTransaction::cGetAssetFeedTransaction(uint32_t lo, uint32_t hi)
 // @ 0x0061a8b0
 cGetAssetFeedTransactionEx::cGetAssetFeedTransactionEx(uint32_t lo, uint32_t hi)
     : cFeedTransactionBase(3, (const char*)0x013ec47c, 0), mId((uint64_t)lo | ((uint64_t)hi << 32)) {
+  ((VtblPtr*)this)->vptr = vtGetAssetFeedTransactionEx;
   mExtra.mpBegin = 0;
   mExtra.mpEnd = 0;
   mExtra.mpCapacity = 0;
-  string8 tmp(eastl::basic_string<char>::CtorSprintf(), "%I64u", lo, hi);
+  string8 tmp;
+  CtorSprintfU64(&tmp, 0, "%I64u", lo, hi);
   mStringParam.assign(tmp.mpBegin, tmp.mpEnd);
   mFlag = 1;
 }
