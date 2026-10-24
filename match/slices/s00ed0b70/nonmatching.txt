@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
-00ed0c60 63   two-id switch/refptr assignment: register/refptr shape differs [equiv: FAIL eax 5/38]
+00ed0c60 63   two-id switch/refptr assignment: the return is the last vcall's eax (or the incoming id when no vcall runs) masked with &0xffffff00 (retail `xor al,al`); the slot-1/slot-2/slot-0x14 calls' returns are captured. equiv PASS: 1199 valid, 100% coverage
 00ed1380 61   float bounds check: local order and comiss operands differ [equiv: UNSUPPORTED import _decode_pointer]
-00ed13e0 87   window lookup + size math: virtual slot args differ [equiv: FAIL esp 5/5]
+00ed13e0 87   window lookup + size math: thiscall with two stack args (int id, float scale), ret 8; the 0xf0 slot takes (0x665fe90, 0), and the 0x74 slot gets (f[2]-f[0])*scale and f[3]-f[1] as floats. equiv PASS: 817 valid, 100% coverage
 00ed1460 13   new-object factory: cl merges the two ctor+tail branches [equiv: UNSUPPORTED 0 valid inputs (faults)]
 00ed0b70 6    handler/field teardown: one store/load pair ordered differently by the scheduler [equiv: UNSUPPORTED 0 valid inputs (every input faults in the release path)]
 00ed0ce0 632  large event dispatcher (838 B): case bodies and register scheduling differ [equiv: WEAK 398 valid 15.1% coverage]

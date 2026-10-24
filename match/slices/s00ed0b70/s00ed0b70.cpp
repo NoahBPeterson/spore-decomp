@@ -98,6 +98,9 @@ struct Fn0041ea70 {
 
 typedef void* (__thiscall *FV_1)(void*);
 typedef void* (__thiscall *FV_i)(void*, int);
+typedef void* (__thiscall *FV_pii)(void*, int, int);
+typedef void  (__thiscall *FV_ff)(void*, float, float);
+typedef unsigned (__thiscall *FV_u)(void*);
 typedef int   (__thiscall *FV_ii)(void*, int, int);
 typedef void  (__thiscall *FV_v)(void*);
 typedef void  (__thiscall *FV_vi)(void*, int);
@@ -129,16 +132,15 @@ unsigned ObjC60::f(unsigned a, int* b)
         if (*(char*)((char*)this + 4) != 0) {
             int* old = *(int**)((char*)this + 0x2c);
             if (b != old) {
-                if (b) ((FV_v)(*(void***)b)[4 / 4])(b);
+                if (b) a = ((FV_u)(*(void***)b)[4 / 4])(b);
                 *(int**)((char*)this + 0x2c) = b;
-                if (old) ((FV_v)(*(void***)old)[8 / 4])(old);
+                if (old) a = ((FV_u)(*(void***)old)[8 / 4])(old);
             }
         }
     } else if (a == 0x72bdb11) {
-        ((FV_v)(*(void***)(*(int**)((char*)this + 0x10)))[0x14 / 4])(*(int**)((char*)this + 0x10));
-        return 0;
+        a = ((FV_u)(*(void***)(*(int**)((char*)this + 0x10)))[0x14 / 4])(*(int**)((char*)this + 0x10));
     }
-    return 0;
+    return a & 0xffffff00u;
 }
 
 // ---------------------------------------------------------------- 0x00ed0cc0
@@ -241,16 +243,16 @@ bool __fastcall FUN_00ed1380(void* self)
 
 // ---------------------------------------------------------------- 0x00ed13e0
 // @ 0x00ed13e0
-bool __fastcall FUN_00ed13e0(void* self, int param)
+bool __fastcall FUN_00ed13e0(void* self, int dummy, int id, float scale)
 {
-    char* w = (char*)((ILayout*)*(void**)((char*)self + 0x50))->FindWindowByID(param, 1);
+    char* w = (char*)((ILayout*)*(void**)((char*)self + 0x50))->FindWindowByID(id, 1);
     if (w == 0)
         return false;
-    char* q = (char*)((FV_i)(*(void***)w)[0xf0 / 4])(w, 0x665fe90);
+    char* q = (char*)((FV_pii)(*(void***)w)[0xf0 / 4])(w, 0x665fe90, 0);
     if (q == 0)
         return false;
     float* f = (float*)((FV_1)(*(void***)q)[0x38 / 4])(q);
-    ((FV_ii)(*(void***)w)[0x74 / 4])(w, (int)((f[2] - f[0]) * 0.0f), (int)(f[3] - f[1]));
+    ((FV_ff)(*(void***)w)[0x74 / 4])(w, (f[2] - f[0]) * scale, f[3] - f[1]);
     return true;
 }
 
