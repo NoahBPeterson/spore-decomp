@@ -1,1 +1,2 @@
-01092360 hkPrismaticConstraintData::buildJacobian  # mangled name in card (Havok 3.1 symbols)
+01092360 hkPrismaticConstraintData::buildJacobian  # vtable override ?buildJacobian@hkPrismaticConstraintData@@UAEXABVhkConstraintQueryIn@@AAVhkConstraintQueryOut@@@Z; thiscall(ecx=this),(in,out) stdcall stack; 13 calls to hkBegin/hk1d* builders
+01092d80 hkPoweredHingeConstraintData::~hkPoweredHingeConstraintData  # ?_7 hkPoweredHingeConstraintData vtable 0x149e2c8 (base 0x13ef094); hkRemoveReference on member pointers
