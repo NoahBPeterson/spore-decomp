@@ -1,2 +1,3 @@
 # source  symbol  original VA  [cl flags override]
 slices/s011577d0/s011577d0.cpp  ?ReadBlock@BitDecoder@@QAEXHH@Z  011577d0
+slices/s011577d0/s011577d0.cpp  ?FUN_01158670@BitDecoder@@QAEHPBEH@Z  01158670  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS-
