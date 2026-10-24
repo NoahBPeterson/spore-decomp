@@ -8,7 +8,7 @@
 #include <string.h>
 
 // ---- external helpers ------------------------------------------------------------------
-void* __cdecl operator_new__(void* p, int a, unsigned int size);   // 0x011e073e
+void* __cdecl MemZero(void* p, int value, unsigned int size);       // 0x011e073e (CRT memset thunk)
 void  __cdecl operator_delete(void* p);                            // 0x00f47380
 
 // ---- rdata float constants -------------------------------------------------------------
@@ -137,7 +137,9 @@ struct cTerrainSphere141 {
     uint8_t  pad30[0x2f4 - 0x30];
     uint8_t* mpArr2f4;              // +0x2f4
     uint8_t* mpArr2f8;              // +0x2f8
-    uint8_t  pad2fc[0x36c - 0x2fc];
+    uint8_t  pad2fc[0x308 - 0x2fc];
+    int      mF308;                 // +0x308
+    uint8_t  pad30c[0x36c - 0x30c];
     int      mFaceBase;             // +0x36c
     uint8_t  pad370[4];
     Rect     mRects[24];            // +0x374
@@ -226,10 +228,9 @@ void cTerrainSphere141::FUN_00f9a760(int key, float v)
 // @ 0x00f9a7c0
 void cTerrainSphere141::RenderLightingRegion(void* a, void* b)
 {
-    // 'this' is the view holder; 'a' is the region object; 'b' is the transform owner.
+    // 'this' is unused; `a` is the lighting-region object, `b` is passed through unchanged.
     uint8_t* region = (uint8_t*)a;
-    uint8_t* xform  = (uint8_t*)b;
-    cViewer2* viewer = (cViewer2*)((uint8_t*)this + 4);
+    cViewer2* viewer = (cViewer2*)(region + 4);
 
     region[0x1d4] = 0;
     int n = (*(int*)(region + 0x1c0) - *(int*)(region + 0x1bc)) >> 2;
@@ -246,22 +247,27 @@ void cTerrainSphere141::RenderLightingRegion(void* a, void* b)
     viewer->Clear(7);
     IMaterialMgr* mm = MaterialManager();
     void* mat = mm->Get(0x44558011);
-    float stack[4];
-    if (!FUN_006ddcc0(3, n * 4, stack, stack)) {
+    void* buf = 0;
+    void* extra = 0;
+    if (!FUN_006ddcc0(3, n * 4, &buf, &extra)) {
         viewer->Reset();
         return;
     }
-    void* buf = operator_new__(0, 0, 0x70);
-    int i = 0;
+    MemZero(buf, 0, 0x70);
     if (n > 0) {
+        float3 nrm[4];
+        nrm[0].x = 0.0f; nrm[0].y = 0.0f; nrm[0].z = 0.0f;
+        nrm[1].x = 1.0f; nrm[1].y = 0.0f; nrm[1].z = 0.0f;
+        nrm[2].x = 1.0f; nrm[2].y = 1.0f; nrm[2].z = 0.0f;
+        nrm[3].x = 0.0f; nrm[3].y = 1.0f; nrm[3].z = 0.0f;
         int off = 0;
-        for (; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             uint8_t* e = *(uint8_t**)(*(int*)(region + 0x1bc) + i * 4);
             float3 p;
             p.x = *(float*)(e + 4);
             p.y = *(float*)(e + 8);
             p.z = *(float*)(e + 0xc);
-            ((cSPTransform*)(xform + 0x178))->BackTransformPoint(&p);
+            ((cSPTransform*)(region + 0x178))->BackTransformPoint(&p);
             float u = p.x * kTwo - kOne;
             float w = p.y * kTwo - kOne;
             uint8_t* v = (uint8_t*)buf + off;
@@ -270,7 +276,7 @@ void cTerrainSphere141::RenderLightingRegion(void* a, void* b)
             *(float*)(v + 0x38) = u; *(float*)(v + 0x3c) = w; *(float*)(v + 0x40) = 0.0f;
             *(float*)(v + 0x54) = u; *(float*)(v + 0x58) = w; *(float*)(v + 0x5c) = 0.0f;
 
-            float h = (*(float*)(e + 0x1c) / *(float*)(xform + 0x188)) * kTwo;
+            float h = (*(float*)(e + 0x1c) / *(float*)(region + 0x188)) * kTwo;
             *(float*)(v + 0x00) += -h;
             *(float*)(v + 0x04) +=  h;
             *(float*)(v + 0x1c) +=  h;
@@ -280,13 +286,10 @@ void cTerrainSphere141::RenderLightingRegion(void* a, void* b)
             *(float*)(v + 0x54) += -h;
             *(float*)(v + 0x58) += -h;
 
-            *(uint32_t*)(v + 0x10) = 0; *(uint32_t*)(v + 0x14) = 0; *(uint32_t*)(v + 0x18) = 0;
-            *(uint32_t*)(v + 0x2c) = 0x3f800000; *(uint32_t*)(v + 0x30) = 0;
-            *(uint32_t*)(v + 0x34) = 0;
-            *(uint32_t*)(v + 0x48) = 0x3f800000; *(uint32_t*)(v + 0x4c) = 0x3f800000;
-            *(uint32_t*)(v + 0x50) = 0;
-            *(uint32_t*)(v + 0x64) = 0; *(uint32_t*)(v + 0x68) = 0x3f800000;
-            *(uint32_t*)(v + 0x6c) = 0x3f800000;
+            *(float3*)(v + 0x10) = nrm[0];
+            *(float3*)(v + 0x2c) = nrm[1];
+            *(float3*)(v + 0x48) = nrm[2];
+            *(float3*)(v + 0x64) = nrm[3];
 
             float rgba[3];
             rgba[0] = *(float*)(e + 0x10);
@@ -300,7 +303,7 @@ void cTerrainSphere141::RenderLightingRegion(void* a, void* b)
             off += 0x70;
         }
     }
-    FUN_006ddd80(3, mat, *(int*)(region + 0x30c), region);
+    FUN_006ddd80(3, mat, mF308, b);
     viewer->Reset();
 }
 
@@ -646,7 +649,7 @@ cSPTransform2* cSPTransform2::CopyFrom(const float* pos, const cSPTransform2* sr
     mFa0 = pos[2];
     mFa4 = flag ? 0x4000000 : 0;
     mFa8 = (float)(int)FUN_00f96390((void*)src, (void*)pos);
-    operator_new__((uint8_t*)this + 0x38, 0, 0x60);
+    MemZero((uint8_t*)this + 0x38, 0, 0x60);
     return this;
 }
 
