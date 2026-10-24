@@ -1,7 +1,0 @@
-# va  diff-bytes  reason
-00ac45e0  253  approximate; Vec3c::DoInsertValue uses a raw placement copy where the original calls the cCurvePoint copy-constructor (0xac1ff0) producing a derived value; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest FAIL (5/49 valid)
-00ac4970  171  approximate; reverse() over 0x3c-byte elements (temp SSE copy + byte at +0x1c); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest FAIL (5/6 valid)
-00ac4a60  371  approximate; GlyphVec2::insert (fill path); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest FAIL (3/198 valid)
-00ac4720  217  approximate; Vec12::DoAssignValues (x87 Vector3, grow 0x7ec550); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED/timeout (loop under random inputs exceeds the 200s budget)
-00ac4850  256  approximate; Vec4/u32::DoAssignValues (pool check mpPool +0x10); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest timeout (>200s on pointer-loop inputs)
-00ac4f50  115  approximate; CAStar::drain over the free list at +0x40 (records same as release); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid - the original loops on random inputs)

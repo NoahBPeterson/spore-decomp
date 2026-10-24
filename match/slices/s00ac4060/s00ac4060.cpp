@@ -190,7 +190,12 @@ GlyphVec& GlyphVec::assignVec(const GlyphVec& x)
 
 // ================================================================================================
 // 0x00ac4570 -- vector<T 0x3c>::erase(first, last).
-struct T3c { uint d[15]; };
+// 0x3c-byte element; a full copy is a 60-byte block, but element construction
+// out-of-line (cCurvePoint::CopyFrom) is used where the original builds a new value.
+struct T3c {
+    uint d[15];
+    void CopyFrom(const T3c& src);   // 0x00ac1ff0
+};
 struct SpVec3c {
     T3c* mpBegin; T3c* mpEnd; T3c* mpCapacity;
     T3c* erase(T3c* first, T3c* last);
@@ -222,7 +227,7 @@ void Vec3c::DoInsertValue(T3c* position, const T3c& value)
         if (pv >= position && pv < mpEnd)
             ++pv;
         if (mpEnd)
-            *mpEnd = *(mpEnd - 1);
+            mpEnd->CopyFrom(*(mpEnd - 1));
         T3c* p = mpEnd - 1;
         while (p != position) {
             *p = *(p - 1);
@@ -239,7 +244,7 @@ void Vec3c::DoInsertValue(T3c* position, const T3c& value)
     else nb = (T3c*)EA_ALLOC(cap * sizeof(T3c));
     T3c* p = copy_2130(mpBegin, position, nb);
     if (p)
-        *p = value;
+        p->CopyFrom(value);
     ++p;
     p = copy_2130(position, mpEnd, p);
     if (mpBegin && *(int*)((char*)mpBegin - 4) != 0)
@@ -403,21 +408,18 @@ void GlyphVec2::insert(GlyphInfo* position, uint n, const GlyphInfo& value)
     GlyphInfo* oldend = mpEnd;
     uint tail = (uint)(oldend - position);
     if (n < tail) {
-        GlyphInfo* newend = oldend + n;
-        copyback_73fe50(position, oldend, newend);
-        mpEnd = mpEnd + n;
-        fill_a52da0(position, newend, &v);
+        mpEnd = oldend + n;
+        copyback_73fe50(position, oldend, mpEnd);
+        fill_a52da0(position, position + n, &v);
         return;
     }
     uint extra = n - tail;
     filln_6ac440(oldend, extra, &v);
     mpEnd = mpEnd + extra;
-    GlyphInfo* p = position;
-    GlyphInfo* q = mpEnd;
-    while (p != q) {
-        *q = *p;
-        ++p;
-        ++q;
+    for (GlyphInfo* s = oldend, *d = mpEnd; s != position; ) {
+        --s;
+        --d;
+        *d = *s;
     }
     fill_a52da0(position, oldend, &v);
 }
