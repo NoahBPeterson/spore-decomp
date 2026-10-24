@@ -1,8 +1,11 @@
-00d39dc0 UpdateEffectPlacement  # placeholder name
-0067ddd0 SP::EffectsManager  # getter returning the global at 0x015fd8e8
-00b3d350 SP::PlanetModel  # getter returning the global at 0x0167eaf8
-00b7f190 SP::cPlanetModel::BuildSurfaceOrientation  # thiscall ret 8
-0059c190 Matrix3FromQuaternion  # cdecl
-0041cb40 Matrix3::Assign  # thiscall ret 4
-004df420 SP::cSPEditorSpeciesManager::GetAvatarProfile  # thiscall
-00401090 GetSetting9  # returns the global at 0x015d0c24 (see s00401000)
+00d39800 ?Write@cCreatureModeStrategy@@QAE_NPAVISerializerStream@@@Z  # SP::cCreatureModeStrategy::Write(ISerializerStream*): serialise tuning variable list (complete)
+00d399b0 ?RunCinematicIfNotOccurred@cCreatureModeStrategy@@QAEHHH_N@Z  # SP::cCreatureModeStrategy::RunCinematicIfNotOccurred(int,int,bool): run a tutorial cinematic once (byte-exact)
+00d39a10 ?LoadPrivateTuningVariables@@YAXPAVcTuningSource@@@Z  # LoadPrivateTuningVariables(cTuningSource*): resolve and store private tuning properties (byte-exact)
+00d39c30 ?Rehash@cModeHash@@QAEXI@Z  # cModeHash::Rehash(unsigned int): grow the mode hashtable and reinsert (complete)
+00d39d50 ?SiftDown@@YAXPAHHHHHHH@Z  # SiftDown(int*,int,int,int,int,int,int,int): sift-down for 8-byte key/value pairs (byte-exact)
+00d39f70 ?SpawnLocatingCallEffect@@YAXPAX@Z  # SpawnLocatingCallEffect(void*): build the locating-call effect descriptor and submit it (complete)
+00d3a0d0 ?NotifyNounCreatureCollision@@YAXPAX00PBM101M@Z  # SP::NotifyNounCreatureCollision(void*,void*,void*,float const*,void*,void*,float const*,float): creature collision reaction (complete)
+00d3a450 ?CreatureModeCollisionCallback@@YAXPAUcCollisionEvent@@@Z  # CreatureModeCollisionCallback(cCollisionEvent*): dispatch creature-mode collision by mode (complete)
+00d3a5a0 ?EvaluateCreatureEvent@@YG_NIPAH@Z  # EvaluateCreatureEvent(unsigned int,int*): creature-mode telemetry event evaluation (complete)
+00d3a710 ?ResolveCreatureModeStrategy@@YGHHH@Z  # ResolveCreatureModeStrategy(int,int): pick a creature-mode strategy id from a property set (complete)
+00d3a7f0 ?RegisterCreatureModeModule@@YA_NXZ  # RegisterCreatureModeModule(): register the creature-mode strategy module (byte-exact)

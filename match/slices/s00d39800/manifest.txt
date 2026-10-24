@@ -1,0 +1,4 @@
+slices/s00d39800/s00d39800.cpp  ?RunCinematicIfNotOccurred@cCreatureModeStrategy@@QAEHHH_N@Z  00d399b0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00d39800/s00d39800.cpp  ?LoadPrivateTuningVariables@@YAXPAVcTuningSource@@@Z  00d39a10  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00d39800/s00d39800.cpp  ?SiftDown@@YAXPAHHHHHHH@Z  00d39d50  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00d39800/s00d39800.cpp  ?RegisterCreatureModeModule@@YA_NXZ  00d3a7f0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
