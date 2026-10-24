@@ -72,7 +72,8 @@ struct D2890 : B2890 {
     virtual int AddRef();
     virtual ~D2890();
 };
-struct B2900 { virtual int AddRef(); virtual int Release(); };
+extern void* g_vtblB2900;                           // 0x13ef094
+struct B2900 { virtual int AddRef(); virtual int Release(); ~B2900() { *(void**)this = &g_vtblB2900; } };
 struct D2900 : B2900 {
     char pad[0x20];
     void* mObj;                                     // +0x24
@@ -4214,6 +4215,7 @@ void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float
     float ey = b[4] - b[1];
     float ez = b[5] - b[2];
     float r = sqrtf(ey * ey + (ez * ez + ex * ex)) * 0.5f;
+    _ReadWriteBarrier();
     float cx = (b[3] + b[0]) * 0.5f;
     float cy = (b[4] + b[1]) * 0.5f;
     float cz = (b[5] + b[2]) * 0.5f;
@@ -4609,7 +4611,8 @@ char FitJob::Fit6d50(SphereVec* v, cViewer_s007b_6570* vw, const float* c, const
             return 0;
         }
     }
-    vw->SetViewAngleY(fv * g_13ec4b4);
+    float scaled = fv * g_13ec4b4;
+    vw->SetViewAngleY(scaled);
     cFrustumCull_s007b_6570 cull2;
     Mat16 vp2 = *(Mat16*)vw->viewProj;
     cull2.Setup(vp2.m);
