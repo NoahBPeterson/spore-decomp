@@ -1,2 +1,5 @@
 # va  diff-bytes  reason
 0108eb30 1500 complete (flags /vc71 /O2 /MD /Gy /TP /fp:fast): all 7 calls in original order, same callees/conventions; x87 scheduling and frame (0xb4 vs 0xd4) differ; equiv 5/165 float-rounding mismatches on huge-magnitude inputs (cancellation), cause not found
+0108f3e0 21 complete (flags /vc71 /O2 /MD /Gy /TP /fp:fast): bounds() extends past the 32-byte ctor into the adjacent unnamed deleting-destructor code (target size 53); equiv PASS 400/400 valid, 100% coverage
+0108f420 1014 complete (flags /vc71 /O2 /MD /Gy /TP /fp:fast): faithful transcription (1170 vs 1199 bytes); equiv FAIL on one special-float input only, orig x87 indefinite NaN 0xffc00000 vs 0 in m_angularVelocity.xyz (invalid-op handling under /fp:fast), all other outputs including translation/rotation/velocity match
+0108f950 167 complete (flags /vc71 /O2 /MD /Gy /TP /fp:fast): 326 vs 336 bytes, direction/length on FPU stack and identity-basis handling differ; equiv PASS 392/392 valid, 100% coverage

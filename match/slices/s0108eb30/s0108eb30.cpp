@@ -5,16 +5,25 @@
 // +0x90..+0x9c. Rows: 2 angular bilateral, 2 linear bilateral (pivotB projected on the suspension axis), the
 // suspension limit and the user-tau spring row.
 #include "types.h"
+#include <math.h>
 
 typedef float hkReal;
 
 extern const float kZero;   // 0x01485378
 
-class __declspec(align(16)) hkVector4
+class hkRotation;
+class hkTransform;
+
+__declspec(align(16)) class hkVector4
 {
 public:
 	float x, y, z, w;
 	__forceinline void addTranslation(const hkVector4& t) { x = x + t.x; y = y + t.y; z = z + t.z; w = t.w; }
+	void setRotatedDir(const hkRotation& r, const hkVector4& v);         // 0x010814a0
+	void setRotatedInverseDir(const hkRotation& r, const hkVector4& v);  // 0x01081440
+	void setTransformedPos(const hkTransform& t, const hkVector4& p);    // 0x01081360
+	void setMul(const hkVector4& a, const hkVector4& b);                 // 0x01082210
+	void normalize();                                                    // 0x010821a0
 };
 
 class hkMatrix3
@@ -22,7 +31,11 @@ class hkMatrix3
 public:
 	hkVector4 m_col[3];
 };
-class hkRotation : public hkMatrix3 {};
+class hkRotation : public hkMatrix3
+{
+public:
+	void set(const hkVector4& q);                                        // 0x010824a0
+};
 
 class hkTransform
 {
@@ -238,5 +251,460 @@ void hkWheelConstraintData::buildJacobian(const hkConstraintQueryIn& in, hkConst
 		spr.m_min = m_suspensionStrength;
 		spr.m_max = m_suspensionDamping;
 		hk1dLinearBilateralConstraintUserTauBuildJacobian(spr, in, out);
+	}
+}
+
+// ===================================================================================================
+// shared Havok 3.1 declarations used by the functions below
+// ===================================================================================================
+typedef hkVector4 hkQuaternion;
+
+class hkMemory
+{
+public:
+	virtual void* allocate(int nbytes, int cl);                       // 0
+	virtual void  deallocate(void* p);                                // 1
+	virtual void* alignedAllocate(int alignment, int nbytes, int cl); // 2
+	virtual void  alignedDeallocate(void* p);                         // 3
+	virtual void* allocateChunk(int nbytes, int cl);                  // 4
+	virtual void  deallocateChunk(void* p, int nbytes, int cl);       // 5
+	static hkMemory* s_instance;                                      // 0x016e4178
+};
+hkMemory* hkMemory::s_instance;
+
+class hkBool
+{
+public:
+	hkBool() {}
+	hkBool(bool b) : m_bool(b ? 1 : 0) {}
+	unsigned char m_bool;
+};
+
+// ---------------------------------------------------------------------------------------------------------
+// constraint motors
+// ---------------------------------------------------------------------------------------------------------
+class hkConstraintMotorInput
+{
+public:
+	float m_virtualMass;             // +0x00
+	hkConstraintQueryIn* m_stepInfo; // +0x04
+	hkSolverResults m_lastResults;   // +0x08
+	float m_deltaTarget;             // +0x10
+	float m_positionError;           // +0x14
+};
+
+class hkConstraintMotorOutput
+{
+public:
+	float m_targetPosition;          // +0x00
+	float m_targetVelocity;          // +0x04
+	float m_minForce;                // +0x08
+	float m_maxForce;                // +0x0c
+	float m_tau;                     // +0x10
+	float m_damping;                 // +0x14
+};
+
+class hkConstraintMotor
+{
+public:
+	virtual ~hkConstraintMotor();
+	virtual hkConstraintMotor* clone() const;
+	virtual void calcMotorData(const hkConstraintMotorInput& in, hkConstraintMotorOutput& out);
+	short m_memSizeAndFlags;         // +0x04
+	short m_referenceCount;          // +0x06
+};
+
+class hkLimitedForceConstraintMotor : public hkConstraintMotor
+{
+public:
+	float m_minForce;                // +0x08
+	float m_maxForce;                // +0x0c
+};
+
+class hkVelocityConstraintMotor : public hkLimitedForceConstraintMotor
+{
+public:
+	float m_tau;                     // +0x10
+	float m_velocityTarget;          // +0x14
+	bool m_useVelocityTargetFromConstraintTargets;  // +0x18
+	virtual void calcMotorData(const hkConstraintMotorInput& in, hkConstraintMotorOutput& out);
+	virtual hkConstraintMotor* clone() const;
+};
+
+// @ 0x0108f320
+void hkVelocityConstraintMotor::calcMotorData(const hkConstraintMotorInput& in, hkConstraintMotorOutput& out)
+{
+	if (m_useVelocityTargetFromConstraintTargets)
+		out.m_targetVelocity = (in.m_positionError + in.m_deltaTarget) * in.m_stepInfo->m_frameInvDeltaTime;
+	else
+		out.m_targetVelocity = m_velocityTarget;
+
+	out.m_targetPosition = in.m_lastResults.m_internalSolverData;
+	out.m_tau = m_tau;
+	out.m_damping = m_tau;
+	out.m_minForce = m_maxForce;
+	out.m_maxForce = m_minForce;
+}
+
+// @ 0x0108f390
+hkConstraintMotor* hkVelocityConstraintMotor::clone() const
+{
+	hkVelocityConstraintMotor* p = (hkVelocityConstraintMotor*)hkMemory::s_instance->allocateChunk(0x1c, 0x29);
+	*(const void**)p = (const void*)0x014a1808;
+	p->m_memSizeAndFlags = 0x1c;
+	p->m_referenceCount = 1;
+	p->m_minForce = m_minForce;
+	p->m_maxForce = m_maxForce;
+	*(const void**)p = (const void*)0x014a181c;
+	p->m_tau = m_tau;
+	p->m_velocityTarget = m_velocityTarget;
+	p->m_useVelocityTargetFromConstraintTargets = m_useVelocityTargetFromConstraintTargets;
+	return p;
+}
+
+// ---------------------------------------------------------------------------------------------------------
+// motions
+// ---------------------------------------------------------------------------------------------------------
+class hkSweptTransform
+{
+public:
+	hkVector4 m_centerOfMass0;       // +0x00
+	hkVector4 m_centerOfMass1;       // +0x10
+	hkQuaternion m_rotation0;        // +0x20
+	hkQuaternion m_rotation1;        // +0x30
+	hkVector4 m_centerOfMassLocal;   // +0x40
+};
+
+class hkMotionState
+{
+public:
+	hkTransform m_transform;             // +0x00
+	hkSweptTransform m_sweptTransform;   // +0x40
+	hkVector4 m_deltaAngle;              // +0x90
+	float m_objectRadius;                // +0xa0
+	float m_maxLinearVelocity;           // +0xa4
+	float m_maxAngularVelocity;          // +0xa8
+	unsigned short m_deactivationClass;  // +0xac
+	unsigned short m_deactivationCounter;// +0xae
+};
+
+class hkStepInfo
+{
+public:
+	float m_startTime;     // +0x00
+	float m_endTime;       // +0x04
+	float m_deltaTime;     // +0x08
+	float m_invDeltaTime;  // +0x0c
+};
+
+class hkVelocityAccumulator
+{
+public:
+	unsigned char m_type;              // +0x00
+	unsigned char m_pad01[3];
+	short m_deactivationClass;         // +0x04
+	unsigned char m_pad06[6];
+	unsigned char m_flag0c;
+	unsigned char m_pad0d[3];
+	hkVector4 m_linearVelocity;        // +0x10
+	hkVector4 m_angularVelocity;       // +0x20
+	hkVector4 m_deltaPosition;         // +0x30
+	hkVector4 m_linearVelocity2;       // +0x40
+	hkVector4 m_angularVelocity2;      // +0x50
+	hkVector4 m_deltaPosition2;        // +0x60
+	unsigned int m_pad70[4];           // +0x70
+	hkVector4 m_centerOfMass;          // +0x80
+};
+
+class hkReferencedMotion
+{
+public:
+	virtual ~hkReferencedMotion();
+	short m_memSizeAndFlags;    // +0x04
+	short m_referenceCount;     // +0x06
+};
+
+class hkMotion : public hkReferencedMotion
+{
+public:
+	virtual int getType() const;
+	virtual void step(const hkStepInfo& stepInfo);
+	virtual void applyForcesAndStep(const hkStepInfo& s, const hkVector4& d);
+	virtual hkVelocityAccumulator* applyForcesAndBuildAccumulator(const hkStepInfo& stepInfo, hkVelocityAccumulator* acc);
+	virtual const hkVelocityAccumulator* applyAccumulator(const hkStepInfo& stepInfo, const hkVelocityAccumulator* acc);
+	int m_solverData;           // +0x08
+};
+
+class hkRigidMotion : public hkMotion
+{
+public:
+	hkMotionState m_motionState;         // +0x10 (16-aligned)
+	float m_massInv;                     // +0xc0
+	float m_particleMinInertiaDiagInv;   // +0xc4
+	float m_linearDamping;               // +0xc8
+	float m_angularDamping;              // +0xcc
+	hkVector4 m_linearVelocity;          // +0xd0
+	hkVector4 m_angularVelocity;         // +0xe0
+};
+
+class hkBoxMotion : public hkRigidMotion
+{
+public:
+	hkBoxMotion(const hkVector4& position, const hkVector4& rotation);  // 0x01098140
+	hkVector4 m_inertiaAndMassInv;       // +0xf0
+};
+
+class hkThinBoxMotion : public hkBoxMotion
+{
+public:
+	hkThinBoxMotion(const hkVector4& position, const hkVector4& rotation);
+	virtual const hkVelocityAccumulator* applyAccumulator(const hkStepInfo& stepInfo,
+	                                                      const hkVelocityAccumulator* acc);
+};
+
+// @ 0x0108f3e0
+hkThinBoxMotion::hkThinBoxMotion(const hkVector4& position, const hkVector4& rotation)
+	: hkBoxMotion(position, rotation)
+{
+	*(const void**)this = (const void*)0x014a1838;
+}
+
+// @ 0x0108f420
+const hkVelocityAccumulator* hkThinBoxMotion::applyAccumulator(const hkStepInfo& stepInfo,
+                                                               const hkVelocityAccumulator* acc)
+{
+	m_linearVelocity = acc->m_linearVelocity2;
+	setRotatedDir(m_angularVelocity, m_motionState.m_transform.m_rotation, acc->m_angularVelocity2);
+
+	m_motionState.m_deactivationCounter = (unsigned short)acc->m_deactivationClass;
+
+	// Angular velocity -> body-frame angular momentum -> world space.  The rotation update below
+	// re-derives the velocity from this momentum, so it survives the renormalisation unchanged
+	// (the "thin" box integration; heavier boxes use the plain hkBoxMotion path).
+	hkVector4 bodyAngular;
+	bodyAngular.setRotatedInverseDir(m_motionState.m_transform.m_rotation, m_angularVelocity);
+
+	float invIx = 1.0f / m_inertiaAndMassInv.x;
+	float invIy = 1.0f / m_inertiaAndMassInv.y;
+	float invIz = 1.0f / m_inertiaAndMassInv.z;
+	bodyAngular.x = bodyAngular.x * invIx;
+	bodyAngular.y = bodyAngular.y * invIy;
+	bodyAngular.z = bodyAngular.z * invIz;
+	bodyAngular.w = bodyAngular.w * 0.0f;
+
+	hkVector4 worldMomentum;
+	worldMomentum.setRotatedDir(m_motionState.m_transform.m_rotation, bodyAngular);
+
+	m_motionState.m_sweptTransform.m_centerOfMass0 = m_motionState.m_sweptTransform.m_centerOfMass1;
+	m_motionState.m_sweptTransform.m_centerOfMass0.w = stepInfo.m_startTime;
+
+	float lx = m_linearVelocity.x;
+	float ly = m_linearVelocity.y;
+	float lz = m_linearVelocity.z;
+	float linearVelocitySq = (lx * lx + ly * ly) + lz * lz;
+	if (m_motionState.m_maxLinearVelocity * m_motionState.m_maxLinearVelocity < linearVelocitySq) {
+		float s = m_motionState.m_maxLinearVelocity / sqrtf(linearVelocitySq);
+		m_linearVelocity.x = s * m_linearVelocity.x;
+		m_linearVelocity.y = s * m_linearVelocity.y;
+		m_linearVelocity.z = s * m_linearVelocity.z;
+		m_linearVelocity.w = s * m_linearVelocity.w;
+	}
+
+	float dt = stepInfo.m_deltaTime;
+	m_motionState.m_sweptTransform.m_centerOfMass1.x = dt * m_linearVelocity.x + m_motionState.m_sweptTransform.m_centerOfMass1.x;
+	m_motionState.m_sweptTransform.m_centerOfMass1.y = dt * m_linearVelocity.y + m_motionState.m_sweptTransform.m_centerOfMass1.y;
+	m_motionState.m_sweptTransform.m_centerOfMass1.z = dt * m_linearVelocity.z + m_motionState.m_sweptTransform.m_centerOfMass1.z;
+	m_motionState.m_sweptTransform.m_centerOfMass1.w = dt * m_linearVelocity.w + m_motionState.m_sweptTransform.m_centerOfMass1.w;
+	m_motionState.m_sweptTransform.m_centerOfMass1.w = stepInfo.m_invDeltaTime;
+
+	hkQuaternion rotation = m_motionState.m_sweptTransform.m_rotation1;
+	m_motionState.m_sweptTransform.m_rotation0 = rotation;
+
+	float halfDt = dt * 0.5f;
+	hkQuaternion delta;
+	delta.x = halfDt * m_angularVelocity.x;
+	delta.y = halfDt * m_angularVelocity.y;
+	delta.z = halfDt * m_angularVelocity.z;
+
+	float angleSq = (delta.x * delta.x + delta.y * delta.y + delta.z * delta.z) * 0.4052847f;
+
+	float maxAngle = m_motionState.m_maxAngularVelocity * dt;
+	if (maxAngle > 0.9f)
+		maxAngle = 0.9f;
+	float maxAngleSq = maxAngle * maxAngle;
+	if (angleSq > maxAngleSq) {
+		float s = maxAngle / sqrtf(angleSq);
+		m_angularVelocity.x = s * m_angularVelocity.x;
+		m_angularVelocity.y = s * m_angularVelocity.y;
+		m_angularVelocity.z = s * m_angularVelocity.z;
+		m_angularVelocity.w = s * m_angularVelocity.w;
+		delta.x = s * delta.x;
+		delta.y = s * delta.y;
+		delta.z = s * delta.z;
+		angleSq = maxAngleSq;
+	}
+
+	delta.w = ((1.0f - angleSq * 0.822948f) - (angleSq * angleSq) * 0.130529f)
+	        - ((angleSq * angleSq) * angleSq) * 0.044408f;
+
+	rotation.setMul(delta, rotation);
+	rotation.normalize();
+
+	m_motionState.m_deltaAngle.x = delta.x + delta.x;
+	m_motionState.m_deltaAngle.y = delta.y + delta.y;
+	m_motionState.m_deltaAngle.z = delta.z + delta.z;
+	m_motionState.m_deltaAngle.w = delta.w + delta.w;
+	m_motionState.m_deltaAngle.w = sqrtf(angleSq) * 3.1415927f;
+
+	m_motionState.m_sweptTransform.m_rotation1 = rotation;
+	m_motionState.m_transform.m_rotation.set(m_motionState.m_sweptTransform.m_rotation1);
+
+	hkVector4 rotatedLocal;
+	setRotatedDir(rotatedLocal, m_motionState.m_transform.m_rotation, m_motionState.m_sweptTransform.m_centerOfMassLocal);
+	m_motionState.m_transform.m_translation.x = m_motionState.m_sweptTransform.m_centerOfMass1.x - rotatedLocal.x;
+	m_motionState.m_transform.m_translation.y = m_motionState.m_sweptTransform.m_centerOfMass1.y - rotatedLocal.y;
+	m_motionState.m_transform.m_translation.z = m_motionState.m_sweptTransform.m_centerOfMass1.z - rotatedLocal.z;
+	m_motionState.m_transform.m_translation.w = m_motionState.m_sweptTransform.m_centerOfMass1.w;
+
+	m_linearVelocity = acc->m_linearVelocity;
+
+	hkVector4 tmp;
+	tmp.setRotatedInverseDir(m_motionState.m_transform.m_rotation, worldMomentum);
+	tmp.x = tmp.x * m_inertiaAndMassInv.x;
+	tmp.y = tmp.y * m_inertiaAndMassInv.y;
+	tmp.z = tmp.z * m_inertiaAndMassInv.z;
+	tmp.w = tmp.w * m_inertiaAndMassInv.w;
+	m_angularVelocity.setRotatedDir(m_motionState.m_transform.m_rotation, tmp);
+
+	return (const hkVelocityAccumulator*)&acc->m_centerOfMass;
+}
+
+// ---------------------------------------------------------------------------------------------------------
+// stiff-spring constraints
+// ---------------------------------------------------------------------------------------------------------
+struct hkConstraintInfo
+{
+	int m_numSolverResults;    // +0x00
+	int m_sizeOfSchema;        // +0x04
+	int m_sizeOfRuntime;       // +0x08
+	int m_numSolverResults2;   // +0x0c
+};
+
+struct RuntimeInfo
+{
+	int m_size;                // +0x00
+	int m_numSolverResults;    // +0x04
+};
+
+extern const hkVector4 g_identityBasis_015b9b20;   // 0x015b9b20 (_hk_identityBasis)
+extern "C" void _hkReplacePreviousRhs(float rhs, const hkConstraintQueryIn& in,
+                                      hkConstraintQueryOut& out, int index);   // 0x010aa050
+
+class hkStiffSpringConstraintData : public hkConstraintData
+{
+public:
+	hkReal m_springLength;   // +0x0c
+	hkVector4 m_pivotInA;    // +0x10
+	hkVector4 m_pivotInB;    // +0x20
+	virtual hkBool isValid() const;
+	virtual void buildJacobian(const hkConstraintQueryIn& in, hkConstraintQueryOut& out);
+	virtual void getRuntimeInfo(hkBool wantRuntime, RuntimeInfo& info) const;
+};
+
+class hkStiffSpringChainData : public hkConstraintData
+{
+public:
+	void* m_infosData;       // +0x0c
+	int m_infosSize;         // +0x10
+	int m_infosCapacity;     // +0x14
+	hkReal m_tau;            // +0x18
+	hkReal m_damping;        // +0x1c
+	hkReal m_cfm;            // +0x20
+	virtual void getConstraintInfo(hkConstraintInfo& info) const;
+	virtual void getRuntimeInfo(hkBool wantRuntime, RuntimeInfo& info) const;
+};
+
+// @ 0x0108f8d0
+void hkStiffSpringConstraintData::getRuntimeInfo(hkBool wantRuntime, RuntimeInfo& info) const
+{
+	if (wantRuntime.m_bool) {
+		info.m_numSolverResults = 1;
+		info.m_size = 8;
+	} else {
+		info.m_numSolverResults = 0;
+		info.m_size = 0;
+	}
+}
+
+// @ 0x0108f900
+hkBool hkStiffSpringConstraintData::isValid() const
+{
+	hkBool result;
+	if (m_springLength <= 0.0f) {
+		result.m_bool = 0;
+		return result;
+	}
+	result.m_bool = 1;
+	return result;
+}
+
+// @ 0x0108f950
+void hkStiffSpringConstraintData::buildJacobian(const hkConstraintQueryIn& in, hkConstraintQueryOut& out)
+{
+	hkBeginConstraints(in, out, (hkSolverResults*)in.m_constraintRuntime, 8);
+
+	hkVector4 direction;
+	hk1dLinearBilateralConstraintInfo lin;
+	lin.m_pivotA.setTransformedPos(*in.m_transformA, m_pivotInA);
+	lin.m_pivotB.setTransformedPos(*in.m_transformB, m_pivotInB);
+
+	float dx = lin.m_pivotA.x - lin.m_pivotB.x;
+	float dy = lin.m_pivotA.y - lin.m_pivotB.y;
+	float dz = lin.m_pivotA.z - lin.m_pivotB.z;
+	float dw = lin.m_pivotA.w - lin.m_pivotB.w;
+	float length = sqrtf(dz * dz + dy * dy + dx * dx);
+	float invLength = 1.0f / length;
+
+	direction.x = dx * invLength;
+	direction.y = dy * invLength;
+	direction.z = dz * invLength;
+	direction.w = dw * invLength;
+
+	if (length > 0.0f) {
+		lin.m_constrainedDofW = direction;
+	} else {
+		lin.m_constrainedDofW = g_identityBasis_015b9b20;
+		length = 0.0f;
+	}
+
+	hk1dLinearBilateralConstraintBuildJacobian(lin, in, out);
+
+	_hkReplacePreviousRhs(m_springLength - length, in, out, 1);
+}
+
+// @ 0x0108faa0
+void hkStiffSpringChainData::getConstraintInfo(hkConstraintInfo& info) const
+{
+	info.m_sizeOfSchema = 0;
+	info.m_numSolverResults2 = 0;
+	info.m_numSolverResults = 0;
+	info.m_sizeOfRuntime = 0x18;
+
+	int n = m_infosSize;
+	info.m_sizeOfRuntime = n * 4 + 0x2c;
+	info.m_sizeOfSchema = (n * 0x40 + 0x13) & ~0xf;
+	info.m_numSolverResults2 = n;
+}
+
+// @ 0x0108fae0
+void hkStiffSpringChainData::getRuntimeInfo(hkBool wantRuntime, RuntimeInfo& info) const
+{
+	if (wantRuntime.m_bool) {
+		int n = m_infosSize;
+		info.m_numSolverResults = n;
+		info.m_size = n * 8;
+	} else {
+		info.m_numSolverResults = 0;
+		info.m_size = 0;
 	}
 }
