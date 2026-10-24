@@ -144,10 +144,19 @@ struct HtEntry { u32 lo; u32 hi; Obj* obj; };
 struct HtResult { HtIter it; };
 
 struct TrueTag {};      // eastl::true_type: no user ctor, so it is stored as a zero byte
-struct HashTable {
-    u32 pad[2];
+struct HashTable {      // eastl fixed hashtable header (full object is 0x43c bytes, see SpawnTable)
+    u32      mUnk00;             // +0x00
+    HtNode** mpBucketArray;      // +0x04  mBucketCount + 1 slots, the spare one is the end sentinel
+    u32      mBucketCount;       // +0x08
+    u32      mElementCount;      // +0x0c
     void Insert(HtResult* out, HtEntry* e, TrueTag t);       // 0x00b75240 thiscall ret 0xc
     void Erase(HtResult* out, HtIter first, HtIter last); // 0x00b764e0 thiscall ret 0x14
+    HtRange* Find(HtRange* out, const u32* pKey);           // 0x00b746a0 thiscall ret 8
+    void clear(HtNode** pBuckets, u32 bucketCount);         // 0x00b759b0 thiscall ret 8
+    void Rehash(u32 bucketCount);                           // 0x00b5d220 thiscall ret 4
+    // eastl::hashtable<...>::hashtable(...) as instantiated for the fixed-pool table
+    void CtorBase(void* pPoolBlock, const void* pHasher, const void* pEq1, const void* pEq2,
+                  const void* pEq3, const void* pEq4, const void* pAlloc);  // 0x00c14400
 };
 
 struct Grid {
@@ -174,12 +183,32 @@ struct Global2 { u32 pad[0x55a4 / 4]; Grid* pGrid; };
 Global2*    GetGlobal2();     // 0x00b3d3c0
 PlanetModel* GetPlanet();     // 0x00b3d350
 
+struct AutoRef;      // AutoRefCount<Obj>: 4-byte handle that AddRefs on construction
+struct RefModel;     // refcounted cMWModel held by Spawner::mModels
+
+struct ObjPtrVec {                   // SPVector<AutoRefCount<cMWModel>> at Spawner +0x40f0
+    Obj** mpBegin;                   // +0x00
+    Obj** mpEnd;                     // +0x04
+    Obj** mpCap;                     // +0x08
+    void DoInsertPtr(Obj** pPos, const AutoRef& value);   // 0x00aea5d0 thiscall ret 8
+};
+struct RefModelVec {                 // vector<AutoRefCount<cMWModel>> at Spawner +0x5508
+    RefModel** mpBegin;              // +0x00
+    RefModel** mpEnd;                // +0x04
+};
+
+extern u32 g_MaxModelRefs;           // 0x0156b3ac: cap of the live-noun list
+
 struct Spawner {
     u32 pad0[0x38 / 4];
     HashTable mAlt;           // +0x38
-    u32 pad1[(0x2094 - 0x40) / 4];
+    u32 pad1[(0x2094 - (0x38 + 0x10)) / 4];
     HashTable mMain;          // +0x2094
-    u32 pad2[(0x55a4 - 0x209c) / 4];
+    u32 pad2[(0x40f0 - (0x2094 + 0x10)) / 4];
+    ObjPtrVec mModelRefs;     // +0x40f0
+    u32 pad3[(0x5508 - (0x40f0 + 0x0c)) / 4];
+    RefModelVec mModels;      // +0x5508
+    u32 pad4[(0x55a4 - (0x5508 + 0x08)) / 4];
     Grid* mpGrid;             // +0x55a4
 
     bool Find(HtRange* out, u32 lo, u32 hi, u32 count, bool alt);  // 0x00b751b0 ret 0x14
@@ -187,6 +216,8 @@ struct Spawner {
     void InitGrid();                                               // 0x00b74130
 
     bool Spawn(SpawnReq* p, u32 hash);                             // 0x00b76f10 ret 8
+    void ClearTable(HashTable* pTable, u32 keyLo, u32 keyHi);      // @ 0x00b77b60 ret 0xc
+    void ClearModels();                                            // @ 0x00b77aa0
 };
 
 // @ 0x00b76f10
@@ -377,4 +408,319 @@ foundEntry:
     }
 done:
     return result;
+}
+
+// ================================================================================================
+// 0x00b77780 - 0x00b77b60: the spawner's fixed-pool hash table, container shims and the noun
+// teardown paths.
+// ================================================================================================
+typedef uint16_t u16;
+
+// ---- vector<Quad16>::resize (0x00b77850) -------------------------------------------------------
+struct Quad16 { float x, y, z, w; };   // 16-byte element, see copy_705250<Quad16>
+
+Quad16* copy_705250(const Quad16* first, const Quad16* last, Quad16* dst);   // 0x00705250 cdecl
+
+struct QuadVec {
+    Quad16* mpBegin;    // +0x00
+    Quad16* mpEnd;      // +0x04
+    Quad16* mpCap;      // +0x08
+    void insert(Quad16* pPos, u32 count, const Quad16& value);   // 0x00b75dc0 thiscall ret 0xc
+    void resize(u32 n);                                          // @ 0x00b77850 ret 4
+    __forceinline void erase(Quad16* first, Quad16* last)
+    {
+        copy_705250(last, last, first);
+        mpEnd += first - last;
+    }
+};
+
+// @ 0x00b77850
+void QuadVec::resize(u32 n)
+{
+    if (n > (u32)(mpEnd - mpBegin)) {
+        Quad16 value;                     // uninitialised fill value, as in the original
+        insert(mpEnd, n - (u32)(mpEnd - mpBegin), value);
+    } else {
+        erase(mpBegin + n, mpEnd);
+    }
+}
+
+// ---- Vec3 array sort (0x00b77940) --------------------------------------------------------------
+void FUN_00b76950(Vec3* first, Vec3* last, int depth,
+                  bool (__cdecl* less)(const Vec3*, const Vec3*));   // 0x00b76950 cdecl ret 0x10
+void FUN_00b73200(Vec3* first, Vec3* last,
+                  bool (__cdecl* less)(const Vec3*, const Vec3*));   // 0x00b73200 cdecl ret 0xc
+void FUN_00b732a0(Vec3* first, Vec3* last,
+                  bool (__cdecl* less)(const Vec3*, const Vec3*));   // 0x00b732a0 cdecl ret 0xc
+
+// @ 0x00b77940
+void SortVec3Array(Vec3* pBegin, Vec3* pEnd, bool (__cdecl* less)(const Vec3*, const Vec3*))
+{
+    if (pBegin == pEnd) return;
+    int n = (int)(pEnd - pBegin);
+    int v = n;
+    int bits = 0;
+    while (v != 0) {
+        v >>= 1;
+        ++bits;
+    }
+    FUN_00b76950(pBegin, pEnd, bits * 2 - 2, less);
+    if (n > 0x1c) {
+        Vec3* mid = pBegin + 0x1c;        // 28 elements = 0x150 bytes
+        FUN_00b73200(pBegin, mid, less);
+        FUN_00b732a0(mid, pEnd, less);
+    } else {
+        FUN_00b73200(pBegin, pEnd, less);
+    }
+}
+
+// ---- record copy constructor (0x00b778b0) ------------------------------------------------------
+struct cSPMatrix3 {                    // rw::math::Matrix33Template<float,0>
+    float m[9];                        // +0x00 3x3
+    cSPMatrix3() {}
+    cSPMatrix3(const cSPMatrix3& o);   // 0x0041cb40 out of line
+};
+
+struct Vec20 { u32 v[5]; };            // 20-byte element of the record's inline vector
+
+struct Vec20B {                        // vector with 0xc00 bytes of inline storage
+    Vec20* mpBegin;                     // +0x00
+    Vec20* mpEnd;                       // +0x04
+    Vec20* mpCap;                       // +0x08
+    u32    mAlloc[2];                   // +0x0c
+    u32    mCount;                      // +0x14
+    u8     mStorage[0xc00];             // +0x18
+    __forceinline void reset()          // point the vector at its own storage
+    {
+        mpBegin = (Vec20*)mStorage;
+        mpEnd   = mpBegin;
+        mCount  = 0;
+        mpCap   = (Vec20*)((char*)mpBegin + 0xc00);
+    }
+    Vec20B& operator=(const Vec20B& o);// 0x00473500 thiscall ret 4
+};
+
+struct SwarmRecord {                    // 0xc64-byte record (name not in the symbol map)
+    u16        mA;                      // +0x00
+    u16        mB;                      // +0x02
+    float      mC;                      // +0x04
+    float      mD;                      // +0x08
+    float      mE;                      // +0x0c
+    float      mF;                      // +0x10
+    cSPMatrix3 mMat;                    // +0x14
+    float      mG;                      // +0x38
+    float      mH;                      // +0x3c
+    float      mI;                      // +0x40
+    float      mJ;                      // +0x44
+    float      mK;                      // +0x48
+    Vec20B     mVec;                    // +0x4c
+    SwarmRecord(const SwarmRecord& src);// @ 0x00b778b0 ret 4
+};
+
+// @ 0x00b778b0
+SwarmRecord::SwarmRecord(const SwarmRecord& src)
+    : mA(src.mA), mB(src.mB), mC(src.mC), mD(src.mD), mE(src.mE), mF(src.mF),
+      mMat(src.mMat), mG(src.mG), mH(src.mH), mI(src.mI), mJ(src.mJ), mK(src.mK)
+{
+    mVec.reset();
+    mVec = src.mVec;
+}
+
+// ---- fixed-pool hash table constructor (0x00b77780) --------------------------------------------
+struct FixedHashtableAllocator {        // eastl::fixed_hashtable_allocator<6,12,4,4,0,1>
+    void*    mpHead;                    // +0x00 free-list head
+    void*    mpNext;                    // +0x04
+    u8*      mpNodeBegin;               // +0x08 inline node pool
+    u8*      mpNodeEnd;                 // +0x0c
+    u32      mnNodeSize;                // +0x10
+    HtNode** mpBucketArray;             // +0x14 inline bucket array
+    void init(void* pNodes, u32 bytes, u32 nodeSize, u32 align, u32 flags);  // 0x00921260 ret 0x14
+};
+
+struct PrimeRehashPolicy {              // eastl::prime_rehash_policy
+    float mMaxLoadFactor;               // +0x00
+    float mGrowthFactor;                // +0x04
+    u32   mNextResize;                  // +0x08
+    u32 get_next_bucket_count(u32 elementCount);   // 0x009213c0 thiscall ret 4
+};
+
+extern const float g_TableMaxLoadFactor;    // 0x013f0620
+extern const float g_TableGrowthFactor;     // 0x01470f1c
+void* AllocPoolBlock(u32 bytes);            // 0x00921340 cdecl
+
+struct SpawnTable {                     // eastl::hashtable<u32, pair<u32 const,
+                                        //   AutoRefCount<EA::Swarm::cIVisualEffect> >,
+                                        //   fixed_hashtable_allocator<6,12,4,4,0,1> >
+    HashTable mHeader;                  // +0x000
+    float     mMaxLoadFactor;           // +0x010
+    float     mGrowthFactor;            // +0x014
+    u32       mNextResize;              // +0x018
+    u8        pad01c[0x034 - 0x01c];
+    HtNode*   mBuckets[6];              // +0x034 inline bucket array
+    u8        pad04c[0x13c - 0x04c];
+    u8        mNodePool[0x300];         // +0x13c inline node pool (64 * 0xc bytes)
+
+    SpawnTable(const void* pHasher, const void* pEqual);   // @ 0x00b77780 ret 8
+};
+
+// @ 0x00b77780
+SpawnTable::SpawnTable(const void* pHasher, const void* pEqual)
+{
+    {   // the allocator temporary only lives until the base constructor has read it
+        FixedHashtableAllocator alloc;
+        alloc.mpHead = 0;
+        alloc.init(mNodePool, sizeof(mNodePool), 0xc, 4, 0);
+        alloc.mpNodeBegin   = mNodePool;
+        alloc.mpNodeEnd     = mNodePool + sizeof(mNodePool);
+        alloc.mnNodeSize    = 0xc;
+        alloc.mpBucketArray = mBuckets;
+
+        // eastl hashtable base constructor: (pool block, hasher, equal, equal, equal, equal,
+        // allocator). The empty policy objects travel both by value and by address; the order
+        // below is the one the compiler produced for this instantiation.
+        mHeader.CtorBase(AllocPoolBlock(0x41), pHasher,
+                         (const void*)&pEqual, (const void*)&pEqual, pEqual,
+                         (const void*)&pEqual, &alloc);
+    }
+
+    PrimeRehashPolicy policy;
+    policy.mMaxLoadFactor = g_TableMaxLoadFactor;
+    policy.mGrowthFactor  = g_TableGrowthFactor;
+    policy.mNextResize    = 0;
+    mMaxLoadFactor = policy.mMaxLoadFactor;
+    mGrowthFactor  = policy.mGrowthFactor;
+    mNextResize    = policy.mNextResize;
+
+    u32 bucketCount = policy.get_next_bucket_count(mHeader.mElementCount);
+    if (mHeader.mBucketCount < bucketCount) mHeader.Rehash(bucketCount);
+}
+
+// ---- refcounted handles and the noun teardown paths --------------------------------------------
+struct AutoRef {                        // AutoRefCount<Obj>: 4-byte refcounted handle
+    Obj* mpObject;                      // +0x00
+    AutoRef(Obj* p) : mpObject(p) { if (p) p->AddRef(); }
+    ~AutoRef() { if (mpObject) mpObject->Release(); }
+};
+
+struct RefModel : Shared {              // refcounted spawned noun (AutoRefCount<cMWModel>)
+    u32       pad044[0x64 / 4 - 0x44 / 4];
+    RefModel* mpSub;                    // +0x64 sub-object released through its vtable
+};
+
+static __forceinline void ReleaseModelRef(RefModel* m)
+{
+    if (m) {
+        if (m->mRefCount > 1) {
+            --m->mRefCount;
+        } else {
+            VCALL2(m->mpOwner, 0x170, m, (u8)((m->mFlags >> 31) & 1));
+        }
+    }
+}
+
+void copy_5f4e10(RefModel** first, RefModel** last, RefModel** dst);   // 0x005f4e10 cdecl
+
+// @ 0x00b77aa0
+void Spawner::ClearModels()
+{
+    RefModel** it = mModels.mpBegin;
+    while (it != mModels.mpEnd) {
+        RefModel* m = *it;
+        if (m) {
+            if (m->mpSub) {
+                RefModel* pSub = m->mpSub;
+                m->mpSub = 0;
+                VCALL0(pSub, 4);
+            }
+            m->mFlags &= ~1u;
+            VCALL2(m->mpOwner, 0x16c, m, 0);
+        }
+        // erase(it): shift the tail down, then release the duplicated element
+        RefModel** end = mModels.mpEnd;
+        if (it + 1 < end) copy_5f4e10(it + 1, end, it);
+        --mModels.mpEnd;
+        ReleaseModelRef(*mModels.mpEnd);
+    }
+}
+
+struct cGameNounManager {
+    void RemoveNoun(Obj* pNoun);        // 0x00b225d0 thiscall ret 4
+};
+cGameNounManager* GetNounManager();     // 0x00b3d300 cdecl
+
+// @ 0x00b77b60
+void Spawner::ClearTable(HashTable* pTable, u32 keyLo, u32 keyHi)
+{
+    HtIter last;
+    last.bucket = pTable->mpBucketArray + pTable->mBucketCount;
+    last.node   = *last.bucket;
+
+    HtNode** pSlot = pTable->mpBucketArray;
+    HtNode*  pNode = *pSlot;
+    if (!pNode) {
+        do {
+            ++pSlot;
+            pNode = *pSlot;
+        } while (!pNode);
+    }
+
+    HtRange range;
+    range.first.node   = pNode;
+    range.first.bucket = pSlot;
+    range.last         = last;
+
+    if (keyLo | keyHi) {
+        HtRange found;
+        pTable->Find(&found, &keyLo);
+        range = found;
+    }
+
+    for (HtIter it = range.first; it.node != range.last.node; ) {
+        AutoRef ref(it.node->obj);
+        Obj* o = it.node->obj;
+
+        Grid* g = GetGlobal2()->pGrid;
+        if (g && o->mGridSlot >= 0) {
+            if (g->mBegin != g->mEnd) g->Remove(o->mGridSlot);
+            o->mGridSlot = -1;
+        }
+        if (o->mpB) {
+            VCALL2(o->mpB->mpOwner, 0x16c, o->mpB, 0);
+        }
+        ReleaseShared(o->mpB);
+        o->mFlags &= ~1u;
+        if (o->mpModel) {
+            o->mpModel->SetAlpha(o->mIndex, 1.0f);
+        } else if (o->mpA) {
+            o->mpA->mFlags |= 1;
+            VCALL2(o->mpA->mpOwner, 0x16c, o->mpA, 1);
+        }
+
+        ObjPtrVec& refs = mModelRefs;
+        if ((u32)(refs.mpEnd - refs.mpBegin) < g_MaxModelRefs) {
+            VCALL0(o, 0x44);
+            if (refs.mpEnd < refs.mpCap) {
+                Obj** p = refs.mpEnd++;
+                if (p) {
+                    *p = o;
+                    o->AddRef();
+                }
+            } else {
+                refs.DoInsertPtr(refs.mpEnd, ref);
+            }
+        } else {
+            GetNounManager()->RemoveNoun(o);
+        }
+
+        it.node = it.node->next;
+        while (!it.node) it.node = *++it.bucket;
+    }
+
+    if (keyLo | keyHi) {
+        HtResult res;
+        pTable->Erase(&res, range.first, range.last);
+    } else {
+        pTable->clear(pTable->mpBucketArray, pTable->mBucketCount);
+        pTable->mElementCount = 0;
+    }
 }
