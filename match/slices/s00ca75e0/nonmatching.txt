@@ -1,10 +1,11 @@
-00ca75e0 64 deque read loop; MSVC register/slot allocation differs (count/temp in different dead arg slots, pushed argument copy temp)
-00ca7690 32 deque write; evaluation order and register/slot allocation differ, n reuses a different dead arg slot
-00ca77b0 107 heap make: vtable slot 0x60 callback ABI (extra stack self arg) and cSPVector4 copy via integer movs vs movss
-00ca7830 83 heap pop loop: cSPVector4 by-value copy emitted with integer movs instead of movss
-00ca78a0 741 cVehicle constructor; full field-init layout transcribed but base-ctor call sequencing and partial ctor inlining differ
-00ca7ef0 247 cVehicle destructor; teardown order and base-dtor inlining differ
-00ca81d0 161 locomotor vtable slot 0x2c call arg layout and timer restart sequence differ
-00ca8340 202 continent check; virtual GetPositionPtr/GetContinent call scheduling and branch layout differ
-00ca8470 308 list reader; inlined eastl wstring construction differs (ConvertToString16/range_initialize/copy-ctor sequence)
-00ca85c0 305 list writer; inlined eastl wstring construction and element reader loop differ
+# va  diff-bytes  reason
+00ca75e0 64 Simulator::cVehicle::FUN_00ca75e0 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (fake cListArchive stream, 0/400 valid). Not exact: MSVC register/slot allocation differs (loop counter and count/v temps land in different dead argument slots vs the inlined deque push_back copy)
+00ca7690 32 Simulator::cVehicle::FUN_00ca7690 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (fake cListArchive stream, 0/400 valid). Not exact: evaluation order and register/slot allocation differ, n reuses a different dead argument slot
+00ca77b0 Simulator::cVehicle::FUN_00ca77b0 107 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (28.9% coverage). Not exact: vtable slot 0x60 compare callback ABI (extra stack self arg) and cSPVector4 copy emitted with integer movs instead of movss
+00ca7830 83 Simulator::cVehicle::FUN_00ca7830 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (41.7% coverage). Not exact: cSPVector4 by-value copy emitted with integer movs instead of movss
+00ca78a0 741 Simulator::cVehicle::cVehicle (ctor) complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (99.5% coverage). Not exact: base-constructor call sequencing and partial ctor inlining differ
+00ca7ef0 247 Simulator::cVehicle::~cVehicle (dtor) complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (fake cListArchive stream, 0/400 valid). Not exact: teardown order and base-dtor inlining differ
+00ca81d0 Simulator::cVehicle::FUN_00ca81d0 161 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid). Not exact: locomotor vtable slot 0x2c call argument layout and timer restart sequence differ
+00ca8340 Simulator::cVehicle::FUN_00ca8340 202 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (9.6% coverage). Not exact: virtual GetPositionPtr/GetContinent call scheduling and branch layout differ
+00ca8470 FUN_00ca8470 315 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (68.1% coverage). Not exact: inlined eastl wstring construction (ConvertToString16 / range_initialize / copy-ctor sequence) and frame layout differ
+00ca85c0 FUN_00ca85c0 304 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (12.6% coverage). Not exact: inlined eastl wstring construction and element-reader loop scheduling differ

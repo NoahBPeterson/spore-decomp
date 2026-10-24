@@ -408,7 +408,7 @@ bool __cdecl FUN_00ca8470(cListArchive* a, int key, UIntDeque* d)
 
     eWstring name;
     buildListName(&name, key);
-    const wchar_t* nm = (name.mpBegin == name.mpCapacity) ? L"list" : (const wchar_t*)name.mpBegin;
+    const wchar_t* nm = (name.mpBegin == name.mpEnd) ? L"list" : (const wchar_t*)name.mpBegin;
     a->v00(nm);
 
     bool flag = true;
@@ -440,7 +440,7 @@ bool __cdecl FUN_00ca85c0(cListArchive* a, int key, void** v)
 
     eWstring name;
     buildListName(&name, key);
-    const wchar_t* nm = (name.mpBegin == name.mpCapacity) ? L"list" : (const wchar_t*)name.mpBegin;
+    const wchar_t* nm = (name.mpBegin == name.mpEnd) ? L"list" : (const wchar_t*)name.mpBegin;
     a->v00(nm);
 
     bool ok = true;
