@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00f3c870  692  incomplete: stub
 00f3cb60  219  incomplete: stub
 00f3cc40  139  incomplete: content-validation summarizer ctor stub
 00f3cd10   66  incomplete: scalar deleting dtor stub
