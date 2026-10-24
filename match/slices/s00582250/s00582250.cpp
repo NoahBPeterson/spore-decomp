@@ -25,6 +25,7 @@ struct Vector3 {
 
 // ---------------------------------------------------------------- minimal EASTL pieces
 extern char gEmptyString[1];                          // 0x01667bac
+extern char sz_13ec47c[];                             // 0x013ec47c (shared empty string)
 
 template<class T> struct vector {
     T* mpBegin;
@@ -386,7 +387,7 @@ bool cAppModeEditorBase::OnBlockWheel(cSPEditorBlock* block, cSPEditorHandle* ha
     if (block) {
         SnapBlock(block, 0, 0, 0, 0, 0, 1, 1);
         string name(block->mpName);
-        if (!(name == "")) {
+        if (!(name == sz_13ec47c)) {
             SetSoundSymbol(0xb07c3bbf, 0x1e8bda2a, name.c_str());
             PlayEditorSound(0xb07c3bbf, 0xfdedb725, soundValue, 0);
         }

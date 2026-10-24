@@ -1,1 +1,1 @@
-00582250  2093  complete; /O2 register allocation and frame size (0xa0 vs 0xc0) differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00582250  2098  complete; the empty-string compare now uses the shared sz_13ec47c (0x013ec47c), matching the original's literal; /O2 register allocation and frame size (0xa0 vs 0xc0) differ. [equiv: WEAK 441 valid (--layout 0 --inputs 800), 26.9% cov, 0 mismatches; replay PASS; src PASS]
