@@ -28,7 +28,7 @@ public:
     virtual void* Cast(uint32_t typeID);                            // 0x0c
     virtual IWindow* GetParent();                                   // 0x10
     virtual void  v14(); virtual void v18(); virtual void v1c(); virtual void v20();
-    virtual void  v24(); virtual void v28(); virtual void v2c(); virtual void v30();
+    virtual void  v24(); virtual uint32_t GetState28(); virtual void v2c(); virtual void v30();
     virtual void  v34();
     virtual const Rect& GetRealArea();                              // 0x38
     virtual void  v3c(); virtual void v40(); virtual void v44(); virtual void v48();
@@ -113,7 +113,27 @@ extern GameState* g_pGame;     // 0x016c7aa4
 
 class LimitStopwatch {
 public:
+    int64_t  mStart;           // +0x00  (QPC start, low/high pair)
+    uint32_t mPad08[4];        // +0x08
+    int64_t  mDeadline;        // +0x18
     void SetTimeLimit(uint32_t limit, int units);   // 0x0093a480
+    bool IsTimeUp();                                // 0x005ff1c0
+    void SetBoolProperty();                         // 0x0093a2e0
+};
+
+// Animator used by the mission card (+0x28).
+class cSPUIAnimator {
+public:
+    bool Empty();      // 0x007f6340
+    void Update();     // 0x007f63b0
+};
+
+// Base vtable for the panel/card object (only the slots this slice calls).
+class cUIPanelVtbl {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(int on); virtual void v2c(int on);
 };
 extern uint32_t g_AlertTimeLimit;   // 0x015a4cc8
 extern float g_TimerWarnSeconds; // 0x015a4cd8
@@ -123,11 +143,15 @@ void SetWindowImageResource(IWindow* w, ResourceKey* key, int flags);   // 0x008
 
 template<class T> inline const T& Max(const T& a, const T& b) { return (a < b) ? b : a; }
 
-class cMissionPanel {
+class cMissionPanel : public cUIPanelVtbl {
 public:
-    uint32_t  pad00[0x24 / 4];
+    uint8_t   pad04[0x10 - 0x04];  // +0x04 .. +0x0f
+    uint8_t   mbFlag10;            // +0x10  (set by the two refresh entry points)
+    uint8_t   mbAnimDirty;         // +0x11
+    uint8_t   pad12[0x24 - 0x12];  // +0x12 .. +0x23
     IWindow*  mpRoot;              // +0x24
-    uint32_t  pad28[2];
+    cSPUIAnimator* mpAnimator;     // +0x28
+    uint32_t  pad2c;               // +0x2c
     IWindow*  mpTitleWin;          // +0x30
     IWindow*  mpListWin;           // +0x34
     uint32_t  pad38[(0x98 - 0x38) / 4];
@@ -136,9 +160,69 @@ public:
     uint8_t   mbAlerted[3];        // +0xa8
     uint8_t   pada[5];
     LimitStopwatch mAlertTimer;    // +0xb0
+    LimitStopwatch mStateTimer;    // +0xd0
+    int       mState;              // +0xf0
 
     void FUN_00e154d0(int arg);    // 0x00e154d0
     void FUN_00e16a70(bool bSkipList);
+    void FUN_00e170f0();           // 0x00e170f0
+    void FUN_00e173b0();           // 0x00e173b0
+    void FUN_00e173c0();           // 0x00e173c0
+    void FUN_00e17470(int id);     // 0x00e17470
+
+    // thiscall helpers that clean their stack arguments.
+    void FUN_00e14900();                             // 0x00e14900
+    void HideButtons();                              // 0x00e149e0
+    void FUN_00e133b0(int a, int b);                 // 0x00e133b0 (ret 8)
+    void FUN_00e17570(void* mission);                // 0x00e17570
+    void FUN_00e145b0(void* mission);                // 0x00e145b0
+    void FUN_00e14690(void* mission);                // 0x00e14690
+    void FUN_00e14c10(int on);                       // 0x00e14c10
+};
+
+// Free/cdecl helpers used by the card refresh.
+void FillIconResource(ResourceKey* out, int icon);                      // 0x00edcac0
+void SetWindowImageResource(IWindow* w, ResourceKey* key, int flags);   // 0x00807cb0
+void FUN_00e12fa0(IWindow* w, int on);                                  // 0x00e12fa0 (cdecl)
+float SPUIHelpers_GetElapsedSeconds();                                  // 0x00805080 (cdecl)
+
+// Object carried by the PaintSystem +0x28 list: a window whose +0x98 id is matched.
+struct CardTarget {
+    uint32_t pad00[0x98 / 4];
+    int mId;                       // +0x98
+    void FUN_00e16800();           // 0x00e16800 (thiscall)
+};
+
+extern uint32_t g_Limit15a4ccc;   // 0x015a4ccc
+extern uint32_t g_Limit15a4cd0;   // 0x015a4cd0
+extern uint32_t g_Limit15a4cd4;   // 0x015a4cd4
+extern float    g_f10;            // 0x01473c70
+extern float    g_f5;             // 0x01486110
+
+struct LARGE_INTEGER { long long QuadPart; };
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(LARGE_INTEGER* out);
+
+class GonzagoCtor { public: void Init(); };   // 0x00b5b960
+
+// Skinner::PaintSystem-ish object built by the 0x00e173d0 constructor; its +0x28 list
+// is walked by 0x00e17470.
+class PaintSystem {
+public:
+    void* volatile mVtbl0;        // +0x00
+    void* volatile mVtbl4;        // +0x04
+    uint32_t mPad08[5];  // +0x08 .. +0x1b
+    void* volatile mVtbl1c;       // +0x1c
+    uint32_t mZero20;    // +0x20
+    void* volatile mVtbl24;       // +0x24
+    IWindow** mpBegin;   // +0x28
+    IWindow** mpEnd;     // +0x2c
+    IWindow** mpCap;     // +0x30
+    uint32_t m34;        // +0x34
+    uint32_t m38;        // +0x38
+    uint32_t m3c, m40, m44, m48, m4c, m50, m54;
+    float    m58, m5c, m60;
+    PaintSystem();               // 0x00e173d0
+    void FUN_00e17470(int id);   // 0x00e17470
 };
 
 // @ 0x00E16A70
@@ -276,3 +360,147 @@ void cMissionPanel::FUN_00e16a70(bool bSkipList)
         }
     }
 }
+
+// @ 0x00e173b0
+void cMissionPanel::FUN_00e173b0()
+{
+    mbFlag10 = 1;
+    FUN_00e16a70(false);
+}
+
+// @ 0x00e173c0
+void cMissionPanel::FUN_00e173c0()
+{
+    mbFlag10 = 0;
+    FUN_00e16a70(false);
+}
+
+// @ 0x00e17470
+void PaintSystem::FUN_00e17470(int id)
+{
+    int i = 0;
+    int count = (int)(mpEnd - mpBegin);
+    for (; i < count; ++i) {
+        IWindow* p = mpBegin[i];
+        if (p) {
+            CardTarget* r = (CardTarget*)p->Cast(0x334c6eef);
+            if (r && r->mId == id)
+                r->FUN_00e16800();
+        }
+    }
+}
+
+// @ 0x00e170f0
+void cMissionPanel::FUN_00e170f0()
+{
+    if (mAlertTimer.mStart) {
+        LARGE_INTEGER now;
+        QueryPerformanceCounter(&now);
+        __int64 diff = mAlertTimer.mDeadline - now.QuadPart;
+        if (diff < 0) {
+            mAlertTimer.SetBoolProperty();
+            HideButtons();
+        }
+    }
+
+    switch (mState) {
+    case 1:
+        if (!(mpRoot->FindWindowByID(0x7a15027, true)->GetState28() & 1)) {
+            if (mpRoot)
+                mpRoot->SetFlag(2, false);
+            mStateTimer.SetTimeLimit(g_Limit15a4ccc, 1);
+            mState = 2;
+        }
+        break;
+    case 2:
+        if (mStateTimer.mStart && mStateTimer.IsTimeUp()) {
+            FUN_00e12fa0(mpRoot, 1);
+            FUN_00e14900();
+            FUN_00e16a70(false);
+            FUN_00e133b0(0, 0);
+            v2c(0);
+            mStateTimer.SetTimeLimit(g_Limit15a4ccc, 1);
+            mState = 3;
+        }
+        break;
+    case 3:
+        if (mStateTimer.mStart && mStateTimer.IsTimeUp()) {
+            mStateTimer.SetTimeLimit(g_Limit15a4cd0, 1);
+            mState = 4;
+        }
+        break;
+    case 4:
+        if (mStateTimer.mStart && mStateTimer.IsTimeUp()) {
+            v28(1);
+            mStateTimer.SetTimeLimit(g_Limit15a4cd4, 1);
+            mState = 5;
+        }
+        break;
+    case 5:
+        if (mStateTimer.mStart && mStateTimer.IsTimeUp()) {
+            cMissionLog* log = g_pGame->mpLog;
+            int noPlayers = (g_pGame->mnPlayerCount == 0);
+            int count = log->GetEntryCount();
+            for (int i = 0; i < count; ++i) {
+                if (log->IsEntryComplete(i) || noPlayers) {
+                    IWindow* w = mpRoot->FindWindowByID(i + 0x795a200, true);
+                    if (w)
+                        w->SetFlag(2, false);
+                    break;
+                }
+            }
+            mStateTimer.SetBoolProperty();
+            mState = 0;
+        }
+        break;
+    }
+
+    SPUIHelpers_GetElapsedSeconds();
+    if (mpAnimator && !mpAnimator->Empty()) {
+        mbAnimDirty = 1;
+        mpAnimator->Update();
+    }
+}
+
+// @ 0x00e173d0
+PaintSystem::PaintSystem()
+{
+    ((GonzagoCtor*)this)->Init();      // SP::cGonzagoSubsystem::cGonzagoSubsystem
+    mVtbl1c = (void*)0x13ec458;
+    mZero20 = 0;
+    mVtbl24 = (void*)0x13eb394;
+    mVtbl0 = (void*)0x147ffe8;
+    mVtbl4 = (void*)0x147ffe0;
+    mVtbl1c = (void*)0x147ffd0;
+    mVtbl24 = (void*)0x147ffc8;
+    mpBegin = 0;
+    mpEnd = 0;
+    mpCap = 0;
+    m3c = 0;
+    m40 = 0;
+    m44 = 0;
+    m48 = 0;
+    m4c = 0;
+    m50 = 0;
+    m54 = 0;
+    m58 = g_f10;
+    m5c = g_f5;
+    m60 = g_f5;
+}
+
+// @ 0x00e17570
+// SP::cUIMissionCard::InitForCreature (1323 bytes) -- INCOMPLETE skeleton.
+//
+// The body builds the localized title/subtitle strings through cSPMission vtable
+// slots 0xb8/0xbc, then looks up main-window controls (0x54bf5692, 0x5397388, ...)
+// through IWindow slot 0xf0, sizes/captions them via slots 0x104/0x7c/0x80/0x5c/
+// 0x38/0x6c/0x68/0x94, fills the mission timer text through slot 0xac +
+// FUN_00881730 + eastl::string::append, and drives the expandable progress-icon
+// layout through cSPUILayout::FindWindowByID/Init/SetParentWin/Shutdown and
+// UpdateProgessIcons.  Reproducing it needs the full cUIMissionCard/cSPMission
+// layouts and eastl string temporaries, which are not recovered yet; it is
+// recorded in partial.txt rather than claimed equivalent.
+void cMissionPanel::FUN_00e17570(void* mission)
+{
+}
+

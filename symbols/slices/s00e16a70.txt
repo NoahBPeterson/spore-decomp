@@ -1,1 +1,8 @@
 00e16a70 cMissionPanel::FUN_00e16a70  # Claude-coined class: UI panel refreshing title, three objective rows (controls 0x795a200+i, 0x792dcc5+i) and the timer control 0x754f66e from the game's mission log (game state +0x78)
+00e170f0 cMissionPanel::FUN_00e170f0  # per-frame card state machine (states 1..5) over the +0xd0 LimitStopwatch, the +0x28 animator and the +0xf0 state
+00e173b0 cMissionPanel::FUN_00e173b0  # set the +0x10 flag and refresh the card (byte-exact)
+00e173c0 cMissionPanel::FUN_00e173c0  # clear the +0x10 flag and refresh the card (byte-exact)
+00e173d0 PaintSystem::PaintSystem  # ctor: cGonzagoSubsystem base + two base/derived vtable pairs, zeroed +0x28/+0x3c vectors, 10.0f at +0x58 and 5.0f at +0x5c/+0x60
+00e17470 PaintSystem::FUN_00e17470  # walk the +0x28 list, Cast(0x334c6eef), match the result's +0x98 id, then call 0x00e16800
+00e17570 cMissionPanel::FUN_00e17570  # SP::cUIMissionCard::InitForCreature (partial skeleton)
+

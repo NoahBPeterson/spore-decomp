@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e17570  1323  cUIMissionCard::InitForCreature: incomplete skeleton (size 3 vs 1323); needs the full cUIMissionCard/cSPMission layouts plus eastl string temporaries for the title/subtitle (mission vtable 0xb8/0xbc), the timer text (slot 0xac + FUN_00881730 + string::append), the mission-control lookups (0x54bf5692/0x5397388 via IWindow 0xf0) and the expandable progress-icon layout (cSPUILayout Init/SetParentWin/Shutdown, UpdateProgessIcons); not equiv-tested
