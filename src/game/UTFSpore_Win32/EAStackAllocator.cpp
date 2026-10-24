@@ -146,7 +146,7 @@ void StackAllocator_s0092_8b00::Reset(void* p)
         if (mpTopBookmark != 0) {
             void* bm = mpTopBookmark;
             while (bm != 0 && *(char**)((char*)bm + 4) >= start && b->mpEnd > *(char**)((char*)bm + 4)
-                   && bm >= (void*)start) {
+                   && bm >= (void*)start && bm < (void*)b->mpEnd) {
                 bm = *(void**)bm;
             }
             mpTopBookmark = (Bookmark_s0092_8b00*)bm;
@@ -168,6 +168,8 @@ StackAllocator_s0092_8b00::StackAllocator_s0092_8b00(void* pBlock, uint32 blockS
     mpCurrentBlockEnd = 0;
     mpCurrentObjectBegin = 0;
     mpCurrentObjectEnd = 0;
+    CoreAllocFn origAlloc = alloc;
+    CoreFreeFn  origFree = free;
     if (alloc == 0)
         alloc = &SP_Pool_AllocGlobal;
     mpCoreAllocationFunction = alloc;
@@ -176,7 +178,8 @@ StackAllocator_s0092_8b00::StackAllocator_s0092_8b00(void* pBlock, uint32 blockS
     mpCoreFreeFunction = free;
     mpCoreFunctionContext = 0;
     mpTopBookmark = 0;
+    // Init receives the caller's original (possibly null) callbacks.
     if (blockSize != 0xffffffff)
-        Init((Block_s0092_8b00*)pBlock, blockSize, alloc, free, ctx);
+        Init((Block_s0092_8b00*)pBlock, blockSize, origAlloc, origFree, ctx);
 }
 }}  // namespace EA::Allocator

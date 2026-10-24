@@ -138,6 +138,8 @@ StackAllocator::StackAllocator(void* pBlock, uint32 blockSize, CoreAllocFn alloc
     mpCurrentBlockEnd = 0;
     mpCurrentObjectBegin = 0;
     mpCurrentObjectEnd = 0;
+    CoreAllocFn origAlloc = alloc;
+    CoreFreeFn  origFree = free;
     if (alloc == 0)
         alloc = &SP_Pool_AllocGlobal;
     mpCoreAllocationFunction = alloc;
@@ -146,8 +148,9 @@ StackAllocator::StackAllocator(void* pBlock, uint32 blockSize, CoreAllocFn alloc
     mpCoreFreeFunction = free;
     mpCoreFunctionContext = 0;
     mpTopBookmark = 0;
+    // Init receives the caller's original (possibly null) callbacks.
     if (blockSize != 0xffffffff)
-        Init((Block*)pBlock, blockSize, alloc, free, ctx);
+        Init((Block*)pBlock, blockSize, origAlloc, origFree, ctx);
 }
 
 // @ 0x00928c40
@@ -173,7 +176,7 @@ void StackAllocator::Reset(void* p)
         if (mpTopBookmark != 0) {
             void* bm = mpTopBookmark;
             while (bm != 0 && *(char**)((char*)bm + 4) >= start && b->mpEnd > *(char**)((char*)bm + 4)
-                   && bm >= (void*)start) {
+                   && bm >= (void*)start && bm < (void*)b->mpEnd) {
                 bm = *(void**)bm;
             }
             mpTopBookmark = (Bookmark*)bm;
@@ -213,9 +216,9 @@ char BigFile::FUN_00929290()
 {
     void* self = this;
     char* p = (char*)self;
-    char** begin = (char**)p;
-    char** end = (char**)(p + 4);
-    if (*p == *(int*)(p + 4))
+    char** begin = *(char***)p;
+    char** end = *(char***)(p + 4);
+    if (begin == end)
         return 1;
     for (char** it = begin; it != end; it++) {
         int* obj = (int*)*it;
@@ -225,8 +228,10 @@ char BigFile::FUN_00929290()
             (*(void(__thiscall**)(void*, int))vt[0])(*it, 1);
         }
     }
-    memmove(*begin, *end, 0);
-    *(int*)(p + 4) = *(int*)(p + 4) + ((int)end - (int)begin >> 2) * -4;
+    char** b2 = *(char***)p;
+    char** e2 = *(char***)(p + 4);
+    memmove(b2, e2, 0);
+    *(char**)(p + 4) = (char*)((char*)e2 - ((char*)e2 - (char*)b2));
     *(int*)(p + 0x434) = 0;
     *(int*)(p + 0x438) = 0;
     *(int*)(p + 0x43c) = 0;
@@ -284,8 +289,8 @@ void BigFile::FUN_00928f80(const wchar_t* name)
 char BigFile::FUN_009290c0()
 {
     void* self = this;
-    int** begin = (int**)self;
-    int** end = (int**)((char*)self + 4);
+    int** begin = *(int***)self;
+    int** end = *(int***)((char*)self + 4);
     char r = 0;
     if (begin != end) {
         r = 1;
@@ -308,7 +313,8 @@ char BigFile::FUN_009290c0()
 // ===========================================================================
 // big functions: behaviourally-shaped skeletons (partial)
 // ===========================================================================
-void BigFile::FUN_00928e20() { }
+// Kept out of line: the original call site makes a real call to 0x00928e20.
+__declspec(noinline) void BigFile::FUN_00928e20() { volatile int keep = 0; (void)keep; }
 void FUN_00928f00(wchar_t* dst, unsigned n, int idx) { (void)dst; (void)n; (void)idx; }
 int  FUN_00928fc0(void* self) { (void)self; return -1; }
 int  FUN_00929000(void* self) { (void)self; return 0; }
