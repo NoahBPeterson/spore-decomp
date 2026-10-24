@@ -1,0 +1,66 @@
+# Slice s00e61e20 -- Simulator cell-game "attach the selected creature" cluster.
+# flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+
+00e61e20  ?sCellOrientToward@@YAXPAUcSPCell@@MM@Z  # PDB candidate SP::sCellOrientToward; name is the retail symbol
+00e62120  ?sResolvePartName@@YADPAX0@Z  # PDB candidate SP::sResolvePartName; name is the retail symbol
+00e62200  ?sFindOrCreateUI@@YAPAXHM@Z  # PDB candidate SP::sFindOrCreateUI (also at 0x00b68aa0)
+00e62380  ?sAttachPart@@YAXPAII0PAE@Z  # PDB candidate SP::sAttachPart wrapper
+00e62440  ?sGotoCreatureEnd@@YAXXZ  # PDB candidate SP::sGotoCreature_End
+00e624b0  ?sErasePartsCacheEntry@@YAXH@Z  # PDB candidate SP::sErasePartsCacheEntry
+00e62500  ?sTickSelectedPart@@YAXM@Z  # PDB candidate SP::sTickSelectedPart
+00e629a0  ?sPostBehaviorMessage@@YAXXZ  # PDB candidate SP::sPostBehaviorMessage
+
+# ------------------------------------------------------------------ callees / globals
+016b3c04  gspCellGame  # SP::cCellGame*
+016b3c0c  gspCellGfx   # SP::cCellGfx*
+0067dd10  SP::App
+0067dcc0  MessageServer
+00b3d4d0  GetTriggerMgr  # __stdcall
+00ad7e40  Screen::setModal  # thiscall
+00e61140  FUN_00e61140  # modal-close side effects
+00628450  SP::CreateEffectSafe
+00e5e850  SP::sCellSetOrientation
+00472b80  rw::math::fpu::QuaternionFromMatrix33<float,0>  # sret (Quat*, const Mat3*, float)
+007dcb00  FUN_007dcb00  # sret quaternion product (out, a, b)
+00743b50  cModelWorld::VecClear
+00e4cc40  FUN_00e4cc40
+006b54b0  cString::Load
+006b55c0  cString::GetText
+00423650  eastl::basic_string<wchar_t>::assign
+005c3d90  eastl::basic_string<wchar_t>::append
+00e84510  FUN_00e84510
+00e82130  FUN_00e82130
+00b72230  FUN_00b72230  # UI cache lookup
+00b72160  FUN_00b72160  # UI cache insert
+00b72210  FUN_00b72210  # UI cache get-by-id
+00b721d0  FUN_00b721d0  # UI cache has-by-id
+00e54050  FUN_00e54050  # layout create
+008105b0  cSPUILayout::FindWindowByID  # slot 5
+00810590  cSPUILayout::SetVisibility  # slot 4
+00e87200  FUN_00e87200  # gather nearby cells
+00e50590  FUN_00e50590
+00e505f0  FUN_00e505f0
+0041cb40  cSPMatrix3::Assign
+0040efa0  cSPTransform::Invert
+0040ccb0  ComposeTransforms
+00e5f450  SP::sAttach
+00f473a0  operator new
+00e39fb0  eastl::rbtree<...>::find  # thiscall (out, key)
+00b36360  FUN_00b36360  # map erase-by-key, thiscall
+011e08c8  _CIacos  # acos
+013eb90c  ??_7RefBaseA22@@6B@  # vtable
+013eb844  PTR_FUN_013eb844  # vtable
+013ebc58  "App"
+01654c05  gAppNameTag  # DAT_01654c05
+
+# ------------------------------------------------------------------ object model (retail offsets)
+# SP::cSPCell   +0x14 mDesiredOrientation (cSPQuaternion, 0x10)
+#               +0x48 mTransform (cSPTransform, 0x38); +0x5c mTransform.mRotation (cSPMatrix3)
+#               +0x108 mModelWorld handle; +0x112 "no icon" byte; +0x168 attached-model handle
+#               +0x244 mGfxID
+# SP::cCellGame +0x70 mPartsCache (eastl::map<int,cCreatureDefinition>); +0x74 map end node
+#               +0x40fc midPlayerCell; +0x411c mCurrentWorld; +0x5169 inGoldyCinematic
+# SP::cCellGfx  +0x24 cfg flag; +0x26 flag; +0x9c cSPUILayout member (GetPriority slot 0)
+#               +0xfc selected part id; +0x100 pending-parts vector; +0x900 pending count
+#               +0x904 cursor-follow timer; +0x910 SP::cString (name); +0x920 SP::cString (desc)
+#               +0x936 "ended" flag; +0x161c8 world handle
