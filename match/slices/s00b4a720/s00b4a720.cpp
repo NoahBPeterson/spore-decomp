@@ -5,6 +5,7 @@
 struct Vec3 {
     float x, y, z;
     Vec3() {}
+    Vec3(float a, float b, float c) { x = a; y = b; z = c; }
     Vec3(const Vec3& o) { x = o.x; y = o.y; z = o.z; }
 };
 
@@ -279,5 +280,300 @@ void FUN_00b4a720(Loco* self, uint32_t dtMs, char flag, char applyCorrection)
         out.y = newVel.y * dt + p->y;
         out.z = newVel.z * dt + p->z;
         FUN_00b444c0(&out, self);
+    }
+}
+
+// ===========================================================================
+// Helpers below the locomotive update: contact-plane construction,
+// fixed-pool hashtable ctor, pair-vector erase, sphere/box contact and the
+// world event flush.
+// ===========================================================================
+typedef unsigned int   u32;
+typedef unsigned short u16;
+typedef unsigned char  u8;
+
+// 0x921260 / 0x921340 / 0x9213c0 / 0xb41a80 / 0xb41ea0 / 0xef7c00 family.
+struct FixedPoolBase {
+    void Init(void* buf, unsigned size, unsigned elem, int a, int b); // 0x921260
+};
+struct PoolDesc {
+    void* head;        // +0x00
+    int   pad04;       // +0x04
+    void* begin;       // +0x08
+    void* end;         // +0x0c
+    int   elem;        // +0x10
+    void* alloc;       // +0x14
+};
+struct PoolBase {
+    int SizeFor(int n); // 0x9213c0
+};
+struct F2 { float a, b; F2() {} F2(float x, float y) { a = x; b = y; } };
+struct F2Z { float a, b; int c; F2Z() {} F2Z(float x, float y, int z) { a = x; b = y; c = z; } };
+
+struct B4B060 {
+    bool run(void* a1, void* a2, float* a3, float* a4, float f5, float f6,
+             void* out); // 0xb4b060
+};
+
+struct B4B1D0 {
+    int init(void* a, void* b); // 0xb4b1d0
+    void FUN_00b41a80(void* h, void* a, void** pb, void** pb2, void* bv,
+                      void** pb3, void* desc); // 0xb41a80
+    void DoFreeNodes(int n);                   // 0xef7c00
+};
+
+struct PairVec {
+    int* begin;        // +0x00
+    int* end;          // +0x04
+    char pad08[0x0c];  // +0x08
+    u8   flags14;      // +0x14
+    char pad15[3];     // +0x15
+    int remove(int* key); // 0xb4b2b0
+};
+
+struct Matrix33 { float m[9]; void Assign(const void* src); }; // 0x41cb40
+
+struct Box26 { Vec3 lo; Vec3 hi; };
+struct SphLocal { short s0, s1; float x, y, z, r; };
+struct ContactLocals {
+    float local5c[3];   // +0x00
+    Box26 box;          // +0x0c
+    SphLocal sph;       // +0x24
+    Matrix33 mtx;       // +0x38
+};
+
+struct ContactObj {
+    void  FUN_00b3d9c0(void* out); // 0xb3d9c0
+    float FUN_00b3d630();          // 0xb3d630
+    void  FUN_00b3f420(void* box); // 0xb3f420
+    int   FUN_00b3f6c0(void* sph); // 0xb3f6c0
+};
+
+struct EventNode {
+    u32 f0;            // +0x00
+    u32 f4;            // +0x04
+    u32 f8;            // +0x08
+    char pad0c[0x2c];  // +0x0c
+    u32 f38;           // +0x38
+};
+struct EventMgr {
+    char pad00[0x1c];
+    int GetPriority();              // 0xe31100
+    EventNode* Find(int* key);      // 0xb72230
+    void Remove(void* node);        // 0xb72260
+};
+struct WorldB4 {
+    int field00;       // +0x00
+    char pad04[4];     // +0x04
+    EventMgr mgr;      // +0x08
+    PairVec pairs;     // +0x24
+    char pad3c[0x7c];  // +0x3c..0xb7
+    int fieldB8;       // +0xb8
+};
+
+extern "C" void* __cdecl FUN_00921340(int n); // 0x921340
+extern "C" bool __stdcall FUN_00b489d0(void* a, void* b, float* delta, float dist,
+                                       float* outA, float* outB); // 0xb489d0
+extern "C" bool __stdcall FUN_00b45540(void* a, void* b, void* c, void* d, void* e); // 0xb45540
+extern "C" void* __cdecl FUN_00b41ea0(void* first, void* last, void* key, unsigned flags); // 0xb41ea0
+extern "C" char __cdecl FUN_00b3fc80(void* node); // 0xb3fc80
+extern "C" void __cdecl FUN_00b3fe40(void* g, float radius, void* box, void* sph,
+                                     int flags, void* out); // 0xb3fe40
+
+extern u8    g_167ecc4;             // 0x167ecc4
+extern float g_1461150;             // +FLT_MAX
+extern float g_13f51ac;             // -FLT_MAX
+extern float g_167eb8c, g_167eb90, g_167eb94;
+extern float g_1485720;             // 1.0f
+extern float g_167ec08;             // matrix source
+extern void* g_167eb70;             // world pointer cell
+
+// ---------------------------------------------------------------------------
+// 0x00b4b060 -- build a contact plane, normalize it, and run the pair check.
+// ---------------------------------------------------------------------------
+// @ 0x00b4b060
+bool B4B060::run(void* a1, void* a2, float* a3, float* a4, float f5, float f6,
+                 void* out)
+{
+    if (!a1 || !a2)
+        return false;
+
+    Vec3 delta;
+    delta.x = a4[0];
+    delta.y = a4[1];
+    delta.z = a4[2];
+    delta.x = delta.x - a3[0];
+    delta.y = delta.y - a3[1];
+    delta.z = delta.z - a3[2];
+
+    float* pmin;
+    if (f5 <= f6)
+        pmin = &f5;
+    else
+        pmin = &f6;
+
+    float* plane = (float*)((char*)out + 0x184);
+    float* hit   = (float*)((char*)out + 0x190);
+
+    if (!FUN_00b489d0(a1, a2, &delta.x, *pmin, hit, plane))
+        return false;
+
+    if (*hit == 0.0f) {
+        u32* p = (u32*)plane;
+        *(u32*)((char*)out + 0x194) = p[0];
+        *(u32*)((char*)out + 0x198) = p[1];
+        *(u32*)((char*)out + 0x19c) = p[2];
+    }
+
+    float x = plane[0];
+    float y = plane[1];
+    float z = plane[2];
+    float inv = 1.0f / sqrtf((x * x + y * y) + z * z);
+    x = x * inv;
+    plane[0] = x;
+    y = y * inv;
+    plane[1] = y;
+    z = z * inv;
+    plane[2] = z;
+
+    return FUN_00b45540(a1, a2, a3, a4, out) != 0;
+}
+
+// ---------------------------------------------------------------------------
+// 0x00b4b1d0 -- construct the fixed-pool-backed table at this+0x43c.
+// ---------------------------------------------------------------------------
+// @ 0x00b4b1d0
+int B4B1D0::init(void* a, void* b)
+{
+    PoolDesc d;
+    char* base = (char*)this + 0x43c;
+
+    d.head = 0;
+    ((FixedPoolBase*)&d)->Init(base, 0x800, 8, 4, 0);
+    d.begin = base;
+    d.end = base + 0x800;
+    d.elem = 8;
+    d.alloc = (char*)this + 0x34;
+
+    int h = (int)FUN_00921340(0x101);
+    this->FUN_00b41a80((void*)h, a, (void**)&b, (void**)&b, b, (void**)&b, &d);
+
+    F2* f = (F2*)&d;
+    f->a = 10000.0f;
+    f->b = 2.0f;
+    *(F2*)((char*)this + 0x10) = *f;
+    d.begin = 0;
+    *(int*)((char*)this + 0x18) = (int)d.begin;
+
+    unsigned n = (unsigned)((PoolBase*)&d)->SizeFor(*(int*)((char*)this + 0xc));
+    if (n > *(unsigned*)((char*)this + 8))
+        DoFreeNodes((int)n);
+    return (int)this;
+}
+
+// ---------------------------------------------------------------------------
+// 0x00b4b2b0 -- erase one 8-byte key/pair from the vector at this+0x24.
+// ---------------------------------------------------------------------------
+// @ 0x00b4b2b0
+int PairVec::remove(int* key)
+{
+    int* last = this->end;
+    int* it = (int*)FUN_00b41ea0(this->begin, last, key, this->flags14);
+    if (it == last || *key < *it || it == it + 2)
+        it = last;
+    if (it == last)
+        return 0;
+
+    int* src = it + 2;
+    if (src < last) {
+        do {
+            it[0] = src[0];
+            it[1] = src[1];
+            src += 2;
+            it += 2;
+        } while (src != last);
+    }
+    this->end = this->end - 2;
+    return 1;
+}
+
+// ---------------------------------------------------------------------------
+// 0x00b4b320 -- sphere-vs-box contact between two proxies.
+// ---------------------------------------------------------------------------
+// @ 0x00b4b320
+void __cdecl FUN_00b4b320(void* a, void* b, void* nrm, float f)
+{
+    ContactLocals L;
+
+    ((ContactObj*)a)->FUN_00b3d9c0(L.local5c);
+    float radius = ((ContactObj*)a)->FUN_00b3d630();
+
+    if (g_167ecc4 != 0) {
+        ((B4B060*)0x15696f0)->run(a, b, (float*)((char*)a + 0x1c),
+                                   (float*)((char*)b + 0x1c), f, f, nrm);
+        return;
+    }
+
+    L.box.lo = Vec3(g_1461150, g_1461150, g_1461150);
+    L.box.hi = Vec3(g_13f51ac, g_13f51ac, g_13f51ac);
+    ((ContactObj*)b)->FUN_00b3f420(&L.box);
+
+    L.sph.s0 = 0;
+    L.sph.s1 = 0;
+    L.sph.x = g_167eb8c;
+    L.sph.y = g_167eb90;
+    L.sph.z = g_167eb94;
+    L.sph.r = g_1485720;
+    L.mtx.Assign(&g_167ec08);
+
+    u32 flags = (u32)((ContactObj*)b)->FUN_00b3f6c0(&L.sph);
+    if (*(char*)((char*)a + 0x34) == 0 || *(char*)((char*)b + 0x34) == 0)
+        flags = 1;
+    else
+        flags &= 0xffffff00u;
+
+    FUN_00b3fe40(L.local5c, radius, &L.box, &L.sph, (int)flags, nrm);
+}
+
+// ---------------------------------------------------------------------------
+// 0x00b4b4a0 -- flush stale events from the world's priority table.
+// ---------------------------------------------------------------------------
+// @ 0x00b4b4a0
+void __cdecl FUN_00b4b4a0()
+{
+    int one = 1;
+    int* pn = &((WorldB4*)g_167eb70)->fieldB8;
+    if (*pn <= 1)
+        pn = &one;
+    int n = *pn;
+
+    if (n > 0) {
+    int remaining = n;
+    do {
+        int key = ((WorldB4*)g_167eb70)->mgr.GetPriority();
+        EventNode* e;
+        while ((e = ((WorldB4*)g_167eb70)->mgr.Find(&key)) != 0) {
+            if (e->f38 != (u32)((WorldB4*)g_167eb70)->field00 ||
+                !FUN_00b3fc80(e)) {
+                u32 a = e->f4;
+                u32 b = e->f8;
+                ((WorldB4*)g_167eb70)->mgr.Remove((void*)e->f0);
+
+                union {
+                    u32 u;
+                    struct { u16 lo, hi; } s;
+                } pair;
+                if (a < b) {
+                    pair.s.hi = (u16)a;
+                    pair.s.lo = (u16)b;
+                } else {
+                    pair.s.hi = (u16)b;
+                    pair.s.lo = (u16)a;
+                }
+                u32 pairValue = pair.u;
+                ((WorldB4*)g_167eb70)->pairs.remove((int*)&pairValue);
+            }
+        }
+    } while (--remaining);
     }
 }
