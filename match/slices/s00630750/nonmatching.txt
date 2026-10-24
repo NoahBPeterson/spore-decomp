@@ -5,7 +5,7 @@
 006309e0   49  eastl::operator+<wchar_t>: complete; strlen/append call setup order
 00630a50  142  cSPPlayModePhotoBrowser ctor: complete; 0x63-entry loop body store order
 00630b30  207  vector<cSettingsTab*>::DoInsertValue: complete; reallocation path memmove/DoInsertValue shape
-00630930  117  ~cSPPlayModePhotoBrowser: complete; release/free loops re-addressed (lea self+0xea0/[esi] instead of self+0xea4/[esi-4], extra nop in the 0x63-entry free loop -> +1 byte, size 163 vs 162)
-00630d10  202  UpdatePhotoCountText: complete; CString16 temp spill slot (0x18 vs 0x1c), g_015f7cf4 reload order and an extra ebx save; size 499 vs 514
-00630f20  675  ShowSendEmailWindow: complete; image/AutoRef block ordering, out-of-line no-photo tail (0x6312d1) and CString16 temp spill; size 947 vs 962
-006312f0 1053  photo-name parser: complete; by-value string aliasing, substr/assign/erase temp reuse and the inlined separator-length/compare loops; size 1076 vs 1307
+00630930  117  ~cSPPlayModePhotoBrowser: complete; release/free loops re-addressed (lea self+0xea0/[esi] instead of self+0xea4/[esi-4], extra nop in the 0x63-entry loop -> +1 byte, size 163 vs 162); difftest UNSUPPORTED (0/400 valid, original live-object faults)
+00630d10  202  UpdatePhotoCountText: complete; CString16 temp spill slot (0x18 vs 0x1c), g_015f7cf4 reload order and an extra ebx save, size 499 vs 514; difftest FAIL-KEPT (5/5 valid, identical call trace, needs the live UI singleton)
+00630f20  675  ShowSendEmailWindow: complete; image/AutoRef block ordering, out-of-line no-photo tail (0x6312d1) and CString16 temp spill, size 947 vs 962; difftest UNSUPPORTED (0/400 valid, live-manager faults)
+006312f0 1053  photo-name parser: complete; by-value string aliasing, substr/assign/erase temp reuse and the inlined separator-length/compare loops, size 1076 vs 1307; difftest WEAK (253 valid, no mismatch, coverage 38%)
