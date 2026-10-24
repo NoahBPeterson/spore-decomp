@@ -1,2 +1,16 @@
 008f2c10 EA::XHTML::Style::StyleState::SetHeight  # Claude-coined name: thiscall, writes Length (value +0x374, units +0x378)
 008f7f20 ?ParseBoxHeight@CSSParser_s008f_7690@Style@XHTML@EA@@QAE_NPAVPropertyList@234@@Z  # CSSParser_s008f_7690::ParseBoxHeight migrated from s008f7690 (verbatim, slice spelling)
+008f7690 EA::XHTML::Style::CSSParser::ParsePadding  # parses 1..4 Length values, then SetEdgeProperties<Length> (0x8f31f0)
+008f7740 EA::XHTML::Style::CSSParser::ParseBorderWidthEdge  # Length or thin/medium/thick keyword, then CreatePropertyFunc<Length,EdgeIndex> (0x8f3170)
+008f7820 EA::XHTML::Style::CSSParser::ParseBorderWidth  # 1..4 Lengths or border-width keywords, then SetEdgeProperties<Length> (0x8f31f0)
+008f7a00 EA::XHTML::Style::CSSParser::ParseBorderColorEdge  # MatchColor then CreatePropertyFunc<unsigned,EdgeIndex> (0x8f3410)
+008f7a70 EA::XHTML::Style::CSSParser::ParseBorderColor  # 1..4 colors, then SetEdgeProperties<unsigned> (0x8f32d0)
+008f7b00 EA::XHTML::Style::CSSParser::ParseBorderStyleEdge  # MatchSymbol over the border-style table (0x8f5140), then CreatePropertyFunc<unsigned,EdgeIndex>
+008f7b70 FUN_008f7b70  # 1..4 border-style symbols, then SetEdgeProperties<unsigned> (0x8f32d0)
+008f7c30 EA::XHTML::Style::CSSParser::ParseBorder  # combined border shorthand: width/style/color, defaulting unset components
+008f7e50 EA::XHTML::Style::CSSParser::ParseBorderStyle  # auto keyword or Length; previous name ParseBoxWidth; CreatePropertyFunc<Length> (0x8f3090)
+008f81b0 EA::XHTML::Style::CSSParser::ParseListStyle  # list-style shorthand: type table equal_range, then ParseListStyleImage/Position fallbacks
+008f82d0 EA::XHTML::Style::CSSParser::ParsePosition  # position symbol table MatchSymbol<...,7> (0x8f5320), then CreatePropertyFunc<unsigned> (0x8f33a0)
+008f8340 EA::XHTML::Style::CSSParser::ParseBoxEdge  # Length or auto/inherit, then CreatePropertyFunc<Length,EdgeIndex> (0x8f3170)
+008f8400 EA::XHTML::Style::CSSParser::ParseBorderSpacing  # one or two Lengths -> SetBorderSpacing / SetBorderSpacingX/Y (0x8f3090)
+008f8510 EA::XHTML::Style::CSSParser::ParseFontSmooth  # Length or never/always/auto, then CreatePropertyFunc<Length> (0x8f3090)

@@ -1,0 +1,3 @@
+slices/s008f7690/s008f7690.cpp  ?ParseBorderColorEdge@CSSParser@Style@XHTML@EA@@QAE_NPAVPropertyList@234@PAX@Z  008f7a00  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008f7690/s008f7690.cpp  ?ParseBorderStyleEdge@CSSParser@Style@XHTML@EA@@QAE_NPAVPropertyList@234@PAX@Z  008f7b00  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008f7690/s008f7690.cpp  ?ParseBorderStyle2@CSSParser@Style@XHTML@EA@@QAE_NPAVPropertyList@234@@Z  008f7e50  /O2 /MD /Gy /EHsc /TP /arch:SSE

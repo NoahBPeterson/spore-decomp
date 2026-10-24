@@ -1,1 +1,12 @@
 008f7f20  147  complete; diff is register allocation (this kept in ebx in the original, esi here) and the compare loop shape (original uses dx/eax/ecx with a -1/0/1 result and an extra jump), so later jumps shift. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f7690   63  complete ParsePadding; diff is register allocation, the SkipWhitespace end-pointer reload, and the SetEdgeProperties<Length> argument setup. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f7740  136  complete ParseBorderWidthEdge; diff is the Length local layout and the SetEdgeProperties/CreatePropertyFunc argument setup, with the fail epilogue inlined vs tail-placed. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f7820  369  complete ParseBorderWidth; diff is the zero-init of the Length[4] array, the wcscmp/Advance loop shape, and register allocation. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f7a70   58  complete ParseBorderColor; diff is pure register allocation of the counter/array (original ebp/edi, ours edi/ebx) with the same instruction sequence otherwise. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f7b70  158  complete ParseBorderStyle; diff is the symbol-table match call setup, the zero-init of the unsigned[4] array, and register allocation. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f7c30  547  complete ParseBorder; diff is the MatchSymbol/MatchColor call setup and the repeated Length/unsigned default-property blocks, plus register allocation. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f81b0  237  complete ParseListStyle; diff is the list-style table lookup (equal_range) and the ParseListStyleImage/Position call setup. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f82d0   73  complete ParsePosition; diff is the MatchSymbol table push and the CreatePropertyFunc<unsigned> argument setup (ecx clobbered where the original leaves it). Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f8340  142  complete ParseBoxEdge; diff is the fail epilogue placement (inlined vs tail) and the Length local register allocation. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f8400  172  complete ParseBorderSpacing; diff is the fail epilogue placement (inlined vs tail) and the CreatePropertyFunc<Length> argument setup. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+008f8510  149  complete ParseFontSmooth; diff is the Length value/units construction (x87 vs SSE move) and the keyword compare branch layout. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE
