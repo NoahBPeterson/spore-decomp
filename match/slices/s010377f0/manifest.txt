@@ -1,0 +1,11 @@
+# slice s010377f0 - space trade routes (gold6 worker 36)
+slices/s010377f0/s010377f0.cpp  ?SP_CaptureImposterModel@@YAXPAX@Z  01037a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s010377f0/s010377f0.cpp  ??0cTradeRoutePair@@QAE@ABV0@@Z  01037a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s010377f0/s010377f0.cpp  ?SP_SerializeTradeRouteList@@YA_NPAXPAVcTradeRouteTree@@@Z  01037ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s010377f0/s010377f0.cpp  ?IsTradeRouteBetween@cSpaceTradeRouteManager@@QAE_NII@Z  01037d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s010377f0/s010377f0.cpp  ?HasTradeRouteWithPlayer@cSpaceTradeRouteManager@@QAE_NI@Z  01037d90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s010377f0/s010377f0.cpp  ?SystemHasTradeRouteWithPlayer@cSpaceTradeRouteManager@@QAEMII@Z  01037dd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s010377f0/s010377f0.cpp  ?GetPlayerProgressOnTradeRoute@cSpaceTradeRouteManager@@QAEXII@Z  01037e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s010377f0/s010377f0.cpp  ?ResetPlayerProgressOnTradeRoute@cSpaceTradeRouteManager@@QAEXIIM@Z  01037eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s010377f0/s010377f0.cpp  ?GetNumberOfPlayerTradeRoutes@cSpaceTradeRouteManager@@QAEHXZ  01037f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s010377f0/s010377f0.cpp  ?erase@cTradeRouteTree@@QAEXPAUcRBNodeBase@@@Z  010380b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
