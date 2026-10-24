@@ -1,0 +1,23 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# (build flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+# 30 of 30 functions decompiled: 18 byte-exact, 12 nonmatching
+# (00dc4a60 00dc4ab0 00dc4ae0 00dc4c20 00dc4c40 00dc4d40 00dc4ed0 00dc4f90
+#  00dc5050 00dc51c0 00dc54e0 00dc5670). See nonmatching.txt / partial.txt.
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc48e0@@YADPAUObj@@@Z  00dc48e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc4900@@YADPAX0000PAH@Z  00dc4900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc4920@@YADPAUObj@@@Z  00dc4920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc4940@@YADPAUObj@@@Z  00dc4940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc4990@@YADPAUObj@@@Z  00dc4990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc49b0@@YAMPAUObj@@@Z  00dc49b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc49d0@@YAXPAUObj@@@Z  00dc49d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc49f0@@YADPAUObj@@@Z  00dc49f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc4a10@@YADPAX0000PAM@Z  00dc4a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc4a30@@YAXPAUObj@@@Z  00dc4a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc4b00@@YAMXZ  00dc4b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc4b20@@YADPAUObj@@@Z  00dc4b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc4b50@@YADXZ  00dc4b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc4b70@@YAXPAUObj@@@Z  00dc4b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?Reset@KeyLookup@@QAEXXZ  00dc4c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?IsValidFireTarget@@YADPAUObj@@0@Z  00dc4e20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc5030@@YADPAUObj@@PAX111PAPAU1@@Z  00dc5030  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc48e0/s00dc48e0.cpp  ?FUN_00dc5760@@YAXPAUObj@@@Z  00dc5760  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

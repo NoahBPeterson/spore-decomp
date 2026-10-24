@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+# (no behavioural sketches in this slice: all 30 target functions have complete
+#  source implementations; the 12 byte-mismatches are register-schedule / SSE-vs-x87
+#  resynthesis differences and are recorded in nonmatching.txt.)
