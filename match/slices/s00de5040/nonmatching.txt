@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00de52d0  35  dword pop-back into current slot: complete reconstruction - equiv PASS (400/400 valid, 0 mismatch, 100.0% coverage); 44 vs 48 B, only the compare-operand/CSE choice differs (orig reloads mEnd into eax for the compare, cl folds the load)
+00de56f0  6   rbtree find-or-zero helper: complete reconstruction - equiv PASS (348/400 valid, 0 mismatch, 100.0% coverage); 70 vs 70 B, the +0x24 field load is scheduled after the +4 store instead of before it
+00de57b0  8   rbtree insert helper: complete reconstruction - equiv PASS (345/400 valid, 0 mismatch, 100.0% coverage); 127 vs 127 B, the tree-count increment is scheduled after the out-store instead of between the out-load and the call cleanup
+00de5cb0  22  achievement-presence probe: complete reconstruction - equiv PASS (309/400 valid, 0 mismatch, 100.0% coverage); 73 vs 75 B, the iterator dereference is folded into the compare instead of a separate load

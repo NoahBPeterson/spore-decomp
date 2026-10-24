@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00de5040  538  cGalaxyGameEntryImpl::UpdateLoginButton (large): stub only; 1 vs 538 B - the login-button body is not reconstructed
+00de5470  632  cGalaxyGameEntryImpl::ShowGalaxy (large): stub only; 1 vs 632 B - the galaxy-show body is not reconstructed
+00de5950  859  cGalaxyGameEntryImpl helper (large): stub only; 1 vs 859 B - the helper body is not reconstructed
+00de5d00  226  cGalaxyGameEntryImpl helper (GUI launch): stub only; 1 vs 226 B - the helper body is not reconstructed
+00de5df0  226  cGalaxyGameEntryImpl helper (eastl hashtable insert): stub only; 1 vs 226 B - the helper body is not reconstructed
