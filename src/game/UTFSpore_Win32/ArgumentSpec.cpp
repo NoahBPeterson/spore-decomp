@@ -330,7 +330,7 @@ struct cArgumentSpec_s0083_a9f0 {
     int  ParseVectorArgument(cArgInfo_s0083_a9f0* ai, const char* str, ArgParser* p);// 0x0083ac80
     int  ParseArgument(cArgInfo_s0083_a9f0* ai, const char* str);                    // 0x0083afc0
     int  ParseArgumentEx(cArgInfo_s0083_a9f0* ai, const char* str, ArgParser* p);    // 0x0083b1d0
-    int  ParseOptionArgs(cOptionsSpec_s0083_a9f0* opt, int** ppArgs, const char** ppEnd, ArgParser* p);  // 0x0083b580
+    int  ParseOptionArgs(VecArgInfo_s0083_a9f0* args, int** ppArgs, const char** ppEnd, ArgParser* p);  // 0x0083b580
     int  ParseOption(int** ppArgs, const char** ppEnd, ArgParser* p);     // 0x0083b6d0
 };
 void __cdecl Sprintf(eastl::string8_s0083_a9f0* out, const char* fmt, ...);          // 0x00840c20
@@ -345,14 +345,14 @@ void  __cdecl PushCStringVec(eastl::vec_s0083_a9f0<const char*>* v, const char**
 void  __cdecl PushStringVec(eastl::vec_s0083_a9f0<eastl::string8_s0083_a9f0>* v, const eastl::string8_s0083_a9f0* p); // 0x00553cc0
 void  __cdecl PushVec3(eastl::vec_s0083_a9f0<unsigned>* v, void* p);                // 0x007ed3e0
 void  __cdecl PushVec4(eastl::vec_s0083_a9f0<unsigned>* v, void* p);                // 0x00839dc0
-inline bool   PBool(ArgParser* p, const char* s) { return ((bool(__thiscall*)(ArgParser*, const char*))((void**)p->vtbl)[0x94 / 4])(p, s); }
-inline int    PInt(ArgParser* p, const char* s) { return ((int(__thiscall*)(ArgParser*, const char*))((void**)p->vtbl)[0x9c / 4])(p, s); }
-inline long double PFloat(ArgParser* p, const char* s) { return ((long double(__thiscall*)(ArgParser*, const char*))((void**)p->vtbl)[0x98 / 4])(p, s); }
-inline void*  PVec2(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xa4 / 4])(p, out, s); }
-inline void*  PVec3(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xa8 / 4])(p, out, s); }
-inline void*  PVec4(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xac / 4])(p, out, s); }
-inline void*  PColor3(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xb0 / 4])(p, out, s); }
-inline void*  PColor4(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xb4 / 4])(p, out, s); }
+__forceinline bool   PBool(ArgParser* p, const char* s) { return ((bool(__thiscall*)(ArgParser*, const char*))((void**)p->vtbl)[0x94 / 4])(p, s); }
+__forceinline int    PInt(ArgParser* p, const char* s) { return ((int(__thiscall*)(ArgParser*, const char*))((void**)p->vtbl)[0x9c / 4])(p, s); }
+__forceinline long double PFloat(ArgParser* p, const char* s) { return ((long double(__thiscall*)(ArgParser*, const char*))((void**)p->vtbl)[0x98 / 4])(p, s); }
+__forceinline void*  PVec2(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xa4 / 4])(p, out, s); }
+__forceinline void*  PVec3(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xa8 / 4])(p, out, s); }
+__forceinline void*  PVec4(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xac / 4])(p, out, s); }
+__forceinline void*  PColor3(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xb0 / 4])(p, out, s); }
+__forceinline void*  PColor4(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xb4 / 4])(p, out, s); }
 // ---- items of slice s0083a9f0 end
 
 // ---- items of slice s0083b810 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1390,31 +1390,35 @@ int cArgumentSpec_s0083_a9f0::ParseArgumentEx(cArgInfo_s0083_a9f0* ai, const cha
 }
 
 // @ 0x0083b580
-int cArgumentSpec_s0083_a9f0::ParseOptionArgs(cOptionsSpec_s0083_a9f0* opt, int** ppArgs, const char** ppEnd, ArgParser* p)
+int cArgumentSpec_s0083_a9f0::ParseOptionArgs(VecArgInfo_s0083_a9f0* args, int** ppArgs, const char** ppEnd, ArgParser* p)
 {
-    int nArgs = (int)((opt->mArguments.mpEnd - opt->mArguments.mpBegin));
-    int nUsed = 0;
+    int nArgs = (int)((args->mpEnd - args->mpBegin));
+    int offset = 0;
     bool bVector = false;
     while ((char*)*ppArgs < (char*)ppEnd) {
-        char* s = *(char**)*ppArgs;
+        int nUsed = offset >> 5;
         if (nUsed >= nArgs) break;
+        char* s = *(char**)*ppArgs;
         if (s[0] == '-' && isalpha((unsigned char)s[1])) break;
-        if (nUsed == nArgs - 1 && (opt->mArguments.mpBegin[nUsed].mType & 0x8000)) {
+        int r;
+        if (nUsed == nArgs - 1 && (args->mpBegin[nUsed].mType & 0x8000)) {
             bVector = true;
-            if (p) ParseVectorArgument(&opt->mArguments.mpBegin[nUsed], s, p);
-            else   ParseVectorArgument(&opt->mArguments.mpBegin[nUsed], s);
+            if (p) r = ParseVectorArgument(&args->mpBegin[nUsed], s, p);
+            else   r = ParseVectorArgument(&args->mpBegin[nUsed], s);
         } else {
-            if (p) ParseArgumentEx(&opt->mArguments.mpBegin[nUsed], s, p);
-            else   ParseArgument(&opt->mArguments.mpBegin[nUsed], s);
-            ++nUsed;
+            if (p) r = ParseArgumentEx(&args->mpBegin[nUsed], s, p);
+            else   r = ParseArgument(&args->mpBegin[nUsed], s);
+            offset += 0x20;
         }
+        if (r != 0) return r;
         ++*ppArgs;
     }
     if (!bVector) {
+        int nUsed = offset >> 5;
         int i = nUsed;
         if (i >= nArgs) return 0;
-        if (!opt->mArguments.mpBegin[i].mIsDependent) return 0;
-        while (i < nArgs && opt->mArguments.mpBegin[i].mIsDependent) ++i;
+        if (!args->mpBegin[i].mIsDependent) return 0;
+        while (i < nArgs && args->mpBegin[i].mIsDependent) ++i;
         Sprintf(&mErrorString, "Not enough arguments: expecting at least %d more", i - nUsed);
         return 2;
     }
@@ -1437,7 +1441,7 @@ int cArgumentSpec_s0083_a9f0::ParseOption(int** ppArgs, const char** ppEnd, ArgP
             int flag = mOptions.mpBegin[i].mFlagToSet;
             if (flag >= 0)
                 mFlags |= 1 << flag;
-            int r = ParseOptionArgs(&mOptions.mpBegin[i], ppArgs, ppEnd, p);
+            int r = ParseOptionArgs(&mOptions.mpBegin[i].mArguments, ppArgs, ppEnd, p);
             if (r != 0) {
                 mErrorString.append(" in -", " in -" + 5);
                 const char* q = name;
