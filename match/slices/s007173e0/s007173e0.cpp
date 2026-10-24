@@ -42,7 +42,7 @@ void Vec30::resize(unsigned n, const void* value)
 struct Vec18 {
     char* mpBegin; char* mpEnd; char* mpCapacity;
     void  insert(char* pos, unsigned n, const void* value);   // masked (0x722580)
-    void  move(char* first, char* last, char* dest);          // masked (0x720250)
+    static void move(char* first, char* last, char* dest);    // masked (0x720250), cdecl: the original sets no ecx
     void  resize(unsigned n);
 };
 
@@ -55,8 +55,9 @@ void Vec18::resize(unsigned n)
         insert(mpEnd, n - cur, fill);
     } else {
         char* p = mpBegin + n * 0x18;
-        move(mpEnd, mpEnd, p);
-        mpEnd += (int)((mpEnd - p) / 0x18) * 0x18;
+        char* end = mpEnd;
+        move(end, end, p);
+        mpEnd += (int)((p - end) / 0x18) * 0x18;
     }
 }
 
