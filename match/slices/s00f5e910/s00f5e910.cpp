@@ -26,6 +26,7 @@
 // field clearly corresponds; names marked "(name guessed)" are Claude-coined.
 #include "types.h"
 #include <math.h>
+#include <string.h>
 
 namespace rw { namespace math { namespace fpu {
 
@@ -220,23 +221,30 @@ struct cParticlesDescription        // ModAPI Swarm::Components::ParticleEffect,
     float    mColorVary[3];         // +0xe4
     uint32_t mPadf0[5];
     float    mAlphaVary;            // +0x104
-    uint32_t mPad108[9];
+    uint8_t  mPad108[0x20];
+    uint8_t  mField128;             // +0x128 (name guessed)
+    uint8_t  mPad129[3];
     uint16_t mPad12c;
     uint8_t  mFrameStride;          // +0x12e (name guessed)
     uint8_t  mFrameRandom;          // +0x12f (name guessed)
     uint32_t mPad130[6];
     float    mRadialForce;          // +0x148
     Vector3  mRadialForceLocation;  // +0x14c
-    float    mPad158;
+    float    mField158;             // +0x158 (name guessed)
     float    mStretchScale;         // +0x15c (name guessed)
-    uint32_t mPad160[61];
+    uint32_t mPad160[(0x238 - 0x160) / 4];
+    void*    mImpulseTable;         // +0x238 (name guessed)
+    uint32_t mPad23c[(0x254 - 0x23c) / 4];
     cPathPoints mPathPoints;        // +0x254
 };
 
 class cParticlesEffect
 {
 public:
-    uint32_t               mPad0[9];
+    uint8_t                mPad00[0x15];
+    bool                   mField15;            // +0x15 (name guessed)
+    uint8_t                mPad16[0xa];
+    uint32_t               mField20;            // +0x20 (name guessed)
     cParticlesDescription* mDesc;               // +0x24
     uint32_t               mPad28[3];
     cGlobalParams*         mGlobalParams;       // +0x34
@@ -265,9 +273,14 @@ public:
     bool                   mHaveSurfacePin;     // +0x218
     uint8_t                mPad219[3];
     cPathPoints            mPathPoints;         // +0x21c
+    uint32_t               mPad22c;
+    struct cParticleManager* mManager;           // +0x230
 
     bool PlaceParticleOnSurface(cParticle* particle);   // 0x00f59e40 (name guessed)
     bool InitParticle(cParticle* particle);             // 0x00f5ebf0 (name guessed)
+    void FUN_00f5eb80(cParticle* particle, float dt);   // 0x00f5eb80 (name guessed)
+    void FUN_00f5f6a0(cParticle* particle);             // 0x00f5f6a0 (name guessed)
+    void FUN_00f5f770(cParticle* particle);             // 0x00f5f770 (name guessed)
 };
 
 // @ 0x00f5ebf0
@@ -421,6 +434,183 @@ Properties:
     particle->mForces[3] = Vector3(0.0f, 0.0f, 0.0f);
     particle->mCollided = false;
     return true;
+}
+
+}} // namespace EA::Swarm
+
+namespace EA {
+namespace Swarm {
+
+struct ParticlePoolVTable {
+    void* mpSlot0;
+    void* mpSlot1;
+    void (*mpRelease)(void* self, int arg);          // +0x08
+    void (*mpShutdown)(void* self);                 // +0x0c
+    bool (*mpCanAllocate)(void* self);              // +0x10
+};
+
+struct ParticlePool {
+    ParticlePoolVTable* mpVtable;                   // +0x00
+};
+
+struct cParticleManager {
+    uint32_t         mPad00[2];
+    ParticlePool     mPool;                         // +0x08
+    uint32_t         mPad0c[3];
+    void*            mListNext;                     // +0x18
+    void*            mListPrev;                     // +0x1c
+    uint32_t         mCount;                        // +0x20
+    cParticlesDescription* mDesc;                   // +0x24
+};
+
+struct cParticleUpdateParams {
+    uint8_t mPad00[0x6c];
+    Vector3 mImpulse;                               // +0x6c
+    uint8_t mPad78[0x1c];
+    Vector3 mTarget;                                // +0x94
+    float   mFieldA0;                               // +0xa0
+    uint8_t mPadA4[0x114];
+    uint32_t mField1b8;                             // +0x1b8
+};
+
+struct cParticleQuadTable {
+    void*    mSlot0;                                // +0x00
+    uint32_t mPad04;
+    void*    mSlot8;                                // +0x08
+    void*    mSlotC;                                // +0x0c
+    uint8_t  mPad10[0x70];
+};
+
+struct cParticleGlobals {
+    void*             mSlot0;                       // +0x00
+    uint8_t           mPad04[0x70];
+    cParticleQuadTable mQuadTable;                  // +0x74
+};
+
+cParticleGlobals g_particleGlobals;                 // 0x016c9314
+cParticle*       g_freeParticles;                   // 0x016c9478
+void*            g_particleAdvanceTable[16];        // 0x015b0c00 (name guessed)
+
+bool ApplyDirectedImpulse(const void* table, const Vector3* direction, float scale, Vector3* out); // 0x00a79500
+bool AdvanceCloud(cParticle* particle, float dt, cParticlesDescription* desc, cParticlesEffect* effect); // 0x00f58120
+bool FUN_00f58a60(cParticle* particle, const Vector3* previousPosition); // 0x00f58a60 (name guessed)
+bool ApplyForceMap(cParticle* particle, float dt);  // 0x00f595e0 (name guessed)
+
+// @ 0x00f5eb30
+void InitParticleQuadTables(bool init)
+{
+    if (init) {
+        memset(&g_particleGlobals.mQuadTable, 0, 0x80);
+        g_particleGlobals.mQuadTable.mSlot0 = (void*)0xf5a7a0;
+        g_particleGlobals.mQuadTable.mSlot8 = (void*)0xf5bba0;
+        g_particleGlobals.mQuadTable.mSlotC = (void*)0xf5dbb0;
+        g_particleGlobals.mSlot0 = (void*)0xf5ccf0;
+    }
+}
+
+// @ 0x00f5e910
+bool UpdateParticleMotion(cParticle* particle, float dt, cParticlesDescription* desc,
+                          cParticleUpdateParams* params)
+{
+    float age = particle->mBase.mAge + dt;
+    particle->mBase.mAge = age;
+    if (particle->mBase.mLife <= age)
+        return false;
+
+    for (;;) {
+        float step;
+        if (dt > 0.06666667f)
+            step = 0.06666667f;
+        else
+            step = dt;
+
+        Vector3 oldPosition = particle->mBase.mPosition;
+        particle->mBase.mPosition.x = oldPosition.x + particle->mBase.mVelocity.x * step;
+        particle->mBase.mPosition.y = oldPosition.y + particle->mBase.mVelocity.y * step;
+        particle->mBase.mPosition.z = oldPosition.z + particle->mBase.mVelocity.z * step;
+
+        Vector3 impulse = params->mImpulse;
+        if (((desc->mFlags >> 23) & 1) != 0) {
+            Vector3 direction;
+            direction.x = params->mTarget.x - particle->mBase.mPosition.x;
+            direction.y = params->mTarget.y - particle->mBase.mPosition.y;
+            direction.z = params->mTarget.z - particle->mBase.mPosition.z;
+            if (!ApplyDirectedImpulse(desc->mImpulseTable, &direction, params->mFieldA0, &impulse))
+                return false;
+        }
+
+        particle->mBase.mVelocity.x += impulse.x * step;
+        particle->mBase.mVelocity.y += impulse.y * step;
+        particle->mBase.mVelocity.z += impulse.z * step;
+        float damping = 1.0f - desc->mField158 * step;
+        particle->mBase.mVelocity.x *= damping;
+        particle->mBase.mVelocity.y *= damping;
+        particle->mBase.mVelocity.z *= damping;
+
+        if (((desc->mFlags >> 12) & 1) != 0 && !FUN_00f58a60(particle, &oldPosition))
+            return false;
+        if (params->mField1b8 != 0 && !ApplyForceMap(particle, step))
+            return false;
+
+        dt -= step;
+        if (dt <= 0.0f)
+            return true;
+    }
+}
+
+// @ 0x00f5eb80
+void cParticlesEffect::FUN_00f5eb80(cParticle* particle, float dt)
+{
+    void* advance = g_particleAdvanceTable[mDesc->mField128];
+    if (advance != 0) {
+        ((void (*)(cParticle*))advance)(particle);
+        return;
+    }
+    if (mDesc->mField158 * dt > 0.05f) {
+        UpdateParticleMotion(particle, dt, mDesc, (cParticleUpdateParams*)this);
+        return;
+    }
+    AdvanceCloud(particle, dt, mDesc, this);
+}
+
+// @ 0x00f5f6a0
+void cParticlesEffect::FUN_00f5f6a0(cParticle* particle)
+{
+    cParticleManager* manager = mManager;
+    cParticlesDescription* desc = manager->mDesc;
+    particle->mBase.mAge = 0.0f;
+    particle->mBase.mLife = (float)RandomRange(desc->mLife);
+
+    ParticlePool* pool = &manager->mPool;
+    if (!pool->mpVtable->mpCanAllocate(pool))
+        pool->mpVtable->mpRelease(pool, 0);
+
+    if (((desc->mFlags >> 26) & 1) != 0)
+        InitParticle(particle);
+
+    particle->mpPrev = manager->mListPrev;
+    particle->mpNext = &manager->mListNext;
+    manager->mListPrev = particle;
+    *(void**)particle->mpPrev = particle;
+    manager->mCount++;
+}
+
+// @ 0x00f5f770
+void cParticlesEffect::FUN_00f5f770(cParticle* particle)
+{
+    if (mManager == 0 ||
+        (particle->mBase.mAge < particle->mBase.mLife &&
+         ((mDesc->mFlags >> 27) & 1) == 0)) {
+        particle->mpNext = g_freeParticles;
+        g_freeParticles = particle;
+        return;
+    }
+
+    FUN_00f5f6a0(particle);
+    if (mManager != 0 && mField20 == 0 && mField15) {
+        ParticlePool* pool = &mManager->mPool;
+        pool->mpVtable->mpShutdown(pool);
+    }
 }
 
 }} // namespace EA::Swarm

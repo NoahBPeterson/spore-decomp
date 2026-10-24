@@ -1,0 +1,6 @@
+00f5e910 EA::Swarm::UpdateParticleMotion  # substeps particle position/velocity with impulse, damping and callbacks
+00f5eb30 EA::Swarm::InitParticleQuadTables  # zeroes the 0x80 quad table and installs the four stream/quad function pointers
+00f5eb80 EA::Swarm::cParticlesEffect::FUN_00f5eb80  # selects advance table / UpdateParticleMotion / AdvanceCloud
+00f5ebf0 EA::Swarm::cParticlesEffect::InitParticle  # initializes one newly emitted particle (pre-existing)
+00f5f6a0 EA::Swarm::cParticlesEffect::FUN_00f5f6a0  # initializes and links a particle into the manager list
+00f5f770 EA::Swarm::cParticlesEffect::FUN_00f5f770  # recycles a particle to the free list or emits it
