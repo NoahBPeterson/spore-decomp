@@ -290,42 +290,41 @@ void cSPPaletteCursor::SetPalette(cSPPalette* palette) {
 // @ 0x005C7C10
 bool cSPPaletteCursor::Advance() {
   cSPPaletteCategory* category;
-  if (mCategoryIndex >= (int)(mPalette->mCategories.mpEnd - mPalette->mCategories.mpBegin)) {
-    return false;
+  if (mCategoryIndex < (int)(mPalette->mCategories.mpEnd - mPalette->mCategories.mpBegin)) {
+    do {
+      category = mPalette->GetCategory(mCategoryIndex);
+      if (mSubCategoryIndex <
+          (int)(category->mSubCategories.mpEnd - category->mSubCategories.mpBegin)) {
+        do {
+          cSPPaletteCategory* sub = category->GetSubCategory(mSubCategoryIndex);
+          if (mPageIndex < (int)(sub->mPages.mpEnd - sub->mPages.mpBegin)) {
+            do {
+              cSPPalettePage* page = sub->GetPage(mPageIndex);
+              if (mItemIndex < (int)(page->mItems.mpEnd - page->mItems.mpBegin))
+                return true;
+              mPageIndex++;
+              mItemIndex = 0;
+            } while (mPageIndex < (int)(sub->mPages.mpEnd - sub->mPages.mpBegin));
+          }
+          mSubCategoryIndex++;
+          mPageIndex = 0;
+        } while (mSubCategoryIndex <
+                 (int)(category->mSubCategories.mpEnd - category->mSubCategories.mpBegin));
+      }
+      mSubCategoryIndex = 0;
+      if (mPageIndex < (int)(category->mPages.mpEnd - category->mPages.mpBegin)) {
+        do {
+          cSPPalettePage* page = category->GetPage(mPageIndex);
+          if (mItemIndex < (int)(page->mItems.mpEnd - page->mItems.mpBegin))
+            return true;
+          mPageIndex++;
+          mItemIndex = 0;
+        } while (mPageIndex < (int)(category->mPages.mpEnd - category->mPages.mpBegin));
+      }
+      mCategoryIndex++;
+      mPageIndex = 0;
+    } while (mCategoryIndex < (int)(mPalette->mCategories.mpEnd - mPalette->mCategories.mpBegin));
   }
-  do {
-    category = mPalette->GetCategory(mCategoryIndex);
-    if (mSubCategoryIndex <
-        (int)(category->mSubCategories.mpEnd - category->mSubCategories.mpBegin)) {
-      do {
-        cSPPaletteCategory* sub = category->GetSubCategory(mSubCategoryIndex);
-        if (mPageIndex < (int)(sub->mPages.mpEnd - sub->mPages.mpBegin)) {
-          do {
-            cSPPalettePage* page = sub->GetPage(mPageIndex);
-            if (mItemIndex < (int)(page->mItems.mpEnd - page->mItems.mpBegin))
-              return true;
-            mPageIndex++;
-            mItemIndex = 0;
-          } while (mPageIndex < (int)(sub->mPages.mpEnd - sub->mPages.mpBegin));
-        }
-        mSubCategoryIndex++;
-        mPageIndex = 0;
-      } while (mSubCategoryIndex <
-               (int)(category->mSubCategories.mpEnd - category->mSubCategories.mpBegin));
-    }
-    mSubCategoryIndex = 0;
-    if (mPageIndex < (int)(category->mPages.mpEnd - category->mPages.mpBegin)) {
-      do {
-        cSPPalettePage* page = category->GetPage(mPageIndex);
-        if (mItemIndex < (int)(page->mItems.mpEnd - page->mItems.mpBegin))
-          return true;
-        mPageIndex++;
-        mItemIndex = 0;
-      } while (mPageIndex < (int)(category->mPages.mpEnd - category->mPages.mpBegin));
-    }
-    mCategoryIndex++;
-    mItemIndex = 0;
-  } while (mCategoryIndex < (int)(mPalette->mCategories.mpEnd - mPalette->mCategories.mpBegin));
   return false;
 }
 
