@@ -1,1 +1,1 @@
-00730d10  1567  COMPLETE translation (float-normal sibling of 0x00730240); not byte-exact: x87/SSE mix, 12 live transform values and 6-slot weight array.
+00730d10  4482  COMPLETE translation (float-normal sibling of 0x00730240); not byte-exact: x87/SSE normalisation leaves 1-2 ulp on the intended p3<=4 path, and fuzzed p3>4 reads past the retail 6-slot weight array into stack garbage.  Fresh --inputs 600: FAIL 5/33 valid (first p3=0x1a2, NaN vs inf); --inputs 200 --mutate 0: FAIL 5/69 valid (first p3=3, 1-2 ulp normal output).
