@@ -1,0 +1,5 @@
+009f3390 nSPCreatureAnim::IKSolveSpineAlphas  # spine-alpha relaxation pass; creature arrives in eax, calls IKEnforceAltitudes (0x9e7840 per-constraint)
+009f3af0 nSPCreatureAnim::IKSolveDistances  # particle/soft-distance solve driver; creature at [esp+4]; calls ComputeBodyParticles (0x9f1730), SolveSoftDistance (0x9e7840), EnforceAltitudes (0x9e7510), IKSolveParticles (0x9f2a00)
+009f3e20 eastl::vector<nSPCreatureAnim::ik_constraint,eastl::sp_vector_allocator>::DoInsertValue  # push_back slow path; ret 8
+009f3f40 nSPCreatureAnim::AddSerialSpineConstraint  # builds one ik_constraint over a run of bodies; helper for 0x9f4100
+009f4100 nSPCreatureAnim::AddSerialSpineConstraints  # returns bool; splits a spine chain into <=g_IKMaxSerialConstraintCount arcs
