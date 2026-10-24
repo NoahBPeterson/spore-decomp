@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e34290/s00e34290.cpp  ?RefreshRecord@cAssetView@@QAEXI@Z  00e34da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e34290/s00e34290.cpp  ?SetEnabled@cToolButton@@QAEX_N@Z  00e34ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e34290/s00e34290.cpp  ?SetTool@cToolButton@@QAE_NII@Z  00e34eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e34290/s00e34290.cpp  ?ShowRelationship@cAssetView@@QAEXHH_N@Z  00e35290  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e34290/s00e34290.cpp  ?InitLayout@cAssetSwatchWidget@@QAEXXZ  00e34470  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e34290/s00e34290.cpp  ??1cSwatchStripService@@UAE@XZ  00e351b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
