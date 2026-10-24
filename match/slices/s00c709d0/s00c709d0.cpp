@@ -9,6 +9,8 @@ inline float MaxF(float a, float b) { __asm { movss xmm0, a
 inline float MinF(float a, float b) { __asm { movss xmm0, a
                                              minss xmm0, b
                                              movss a, xmm0 } return a; }
+// x87 fsqrt on an extended-precision sum (sqrt(double) inlines under /fp:fast).
+#define SqrtF(x) ((float)sqrt((double)(x)))
 
 struct PlanetData;
 struct VPlanet;
@@ -19,14 +21,15 @@ struct RandomLCG;
 extern RandomLCG g_rng_01601760;
 extern uint32_t g_01693f08, g_01693f0c, g_01693f10;
 extern void* g_simSingleton_0167a60c;
-extern void* vtbl_VPlanet_01472480;
-extern void* vtbl_VPlanet_gd_01472428;
-extern void* vtbl_VPlanet_d8_01472414;
+extern void* vtbl_VPlanet_01472480[];
+extern void* vtbl_VPlanet_gd_01472428[];
+extern void* vtbl_VPlanet_d8_01472414[];
 extern float g_f_013f1cac;
 extern float g_f_01486110;
 extern float g_f_01485720;
 extern float g_f_01472568;
 extern float g_f_013ef550;
+extern float g_f_01472410;
 
 struct PropertyT {
     uint32_t mData[4];
@@ -59,7 +62,11 @@ struct PlanetData {
     char pad_08[0x28 - 4];
     uint32_t mField28;             // +0x28
     uint32_t mField2C;             // +0x2c
-    char pad_2d[0x98 - 0x30];
+    char pad_2d[0x44 - 0x30];
+    float mPosX;                   // +0x44
+    float mPosY;                   // +0x48
+    float mPosZ;                   // +0x4c
+    char pad_50[0x98 - 0x50];
     uint8_t mField98;              // +0x98
     char pad_99[0xb0 - 0x99];
     float mB0;                     // +0xb0
@@ -86,9 +93,8 @@ struct PlanetData {
     int   fn_00b8dab0();
     void* fn_00b8dad0();
     bool  fn_00b8dac0();
-    void* fn_00b8da70();
-    void  fn_00b8d920(int b);
-    void  fn_00b8d910();
+    int   fn_00b8da70();
+    void  fn_00b8d920(int b);    void  fn_00b8d910();
     void  fn_00b8dde0(int a, int b);
 };
 
@@ -99,8 +105,38 @@ struct cCivData {
 };
 struct SimSingleton { bool FUN_00ae3740(); bool FUN_00ae4180_00(int id); };
 struct NodeBB9 { int fn_00bb9ae0(); };
-struct StarMgr { void* GetEmpireByID_00ba9370(); };
+struct StarMgr {
+    void* GetEmpireByID_00ba9370(void* avatar);   // +0xba9370 (ret 4)
+    void* FUN_00ba6dc0(int id);                   // +0xba6dc0 (ret 4)
+};
 struct Empire { int GetHomePlanet_00c31730(); };
+
+// Reference-counted object at VPlanet::mp154.
+struct PropHolder { void FUN_00c7e280(void* self); };          // +0xc7e280 (ret 4)
+// AutoRefCount-style slot: pass the slot itself as `this`.
+struct RefSlot { void* p; void FUN_00c70110(void* v); };       // +0xc70110 (ret 4)
+struct AutoRef { void* p; void FUN_00b5f950(void* v); };       // +0xb5f950 (ret 4)
+// Noun object at VPlanet::mp188 (also the target of its 0x70 subobject).
+struct NounBase {
+    void FUN_00571d90();                          // +0x571d90
+    void FUN_007d44a0();                          // +0x7d44a0
+};
+struct NounObj {
+    void FUN_00c3f160(void* a, float b);          // +0xc3f160 (ret 8)
+    void FUN_00c3f1b0(float a, float b);          // +0xc3f1b0 (ret 8)
+    void FUN_00c3f2d0(void* p);                   // +0xc3f2d0 (ret 4)
+    char pad_00[0x240];
+    float mField240;                              // +0x240
+};
+// Star record returned by StarMgr::FUN_00ba6dc0 (position at +0x44).
+struct StarRef {
+    virtual int AddRef();
+    virtual int Release();
+    char pad_08[0x44 - 4];
+    float mPosX;                    // +0x44
+    float mPosY;                    // +0x48
+    float mPosZ;                    // +0x4c
+};
 
 // Node with a vtable slot 0xac returning a pointer.
 struct Node0AC {
@@ -178,24 +214,30 @@ struct VPlanet {
     void  FUN_00c713f0();
     bool  FUN_00c71400(int i);
     VPlanet* FUN_00c71430(int i, char on);
-    int   FUN_00c71470();
+    float FUN_00c71470();
     void  FUN_00c71560(uint32_t mask);
     void  FUN_00c71680();
     void  FUN_00c71750(PlanetData* p);
     void  FUN_00c71910();
     void  FUN_00c719d0(int mode);
     void* FUN_00c71570();
+    int   FUN_00c70880();
     void  fn_00c8b2e0();
 };
 
 // ---------------------------------------------------------------- free calls
-void*  StarManager_00b3d2a0(void* avatar);
+void*  StarManager_00b3d2a0();
 void*  NounManager_00b3d300();
 PropMgr* PropertyManager_0067de30();
 void*  MessageServer_0067dcc0();
 void*  __stdcall TerraformingManager_00b3d430(void* p);
 struct TerraformingMgr { void F670(); };
-struct NounMgr { void* GetAvatar(); };
+struct NounMgr {
+    void* GetAvatar();                            // +0xb1fdb0
+    void* FUN_00c716d0();                         // +0xc716d0
+    void* FUN_00c716f0();                         // +0xc716f0
+    void  FUN_00b225d0(void* p);                  // +0xb225d0 (ret 4)
+};
 void*  GetSetting9_00401090();
 void*  FUN_00b3d420(int p);
 void*  FUN_00b90410_00(void* mgr, int id);
@@ -208,8 +250,8 @@ void   SetPlanetTechLevel_00c706d0(PlanetData* pd, int v);
 void*  operator_new_00f473a0(int size, const char* file, int a, int b, int c, int d);
 void*  SimSingleton_ctor_00ae5c30(void* mem);
 void*  FUN_00c65e0_00();
-void   cSpatialObject_ctor_00c89630(void* p);
-void   cGameData_ctor_00b18660(void* p);
+void __fastcall cSpatialObject_ctor_00c89630(void* p);
+void __fastcall cGameData_ctor_00b18660(void* p);
 void   FUN_00c8b2e0(VPlanet* p);
 uint32_t RandomUint32Uniform_00a68fb0(void* rng, int n);
 struct RandomLCG { uint32_t RandomUint32Uniform(int n); };
@@ -292,8 +334,8 @@ bool VPlanet::FUN_00c70b50()
     NodeBB9* o = (NodeBB9*)pd->fn_00b8de30();
     if (o->fn_00bb9ae0() == 5) {
         void* av = ((NounMgr*)o)->GetAvatar();
-        void* sm = StarManager_00b3d2a0(av);
-        void* emp = ((StarMgr*)sm)->GetEmpireByID_00ba9370();
+        void* sm = StarManager_00b3d2a0();
+        void* emp = ((StarMgr*)sm)->GetEmpireByID_00ba9370(av);
         return ((Empire*)emp)->GetHomePlanet_00c31730() == (int)pd;
     }
     return false;
@@ -370,33 +412,26 @@ int VPlanet::FUN_00c70e00()
 float __cdecl FUN_00c70e20(PlanetData* pd, int mode)
 {
     if (!pd->fn_00b8dac0())
-        return -1.0f * 0.0f + sqrtf(pd->mB0 * pd->mB0 + (pd->mB4 * pd->mB4) + pd->mB8 * pd->mB8);
-    void* a = pd->fn_00b8da70();
-    void* sm = StarManager_00b3d2a0(a);
-    int* o = (int*)FUN_00ba6dc0_00(sm);
-    int* ref = 0;
-    if (o != 0) { ((void(__thiscall*)(void*))(*(void***)o)[0])(o); ref = o; }
+        return SqrtF(pd->mPosX * pd->mPosX + pd->mPosY * pd->mPosY + pd->mPosZ * pd->mPosZ);
+    int id = pd->fn_00b8da70();
+    void* sm = StarManager_00b3d2a0();
+    StarRef* o = (StarRef*)((StarMgr*)sm)->FUN_00ba6dc0(id);
+    StarRef* ref = 0;
+    if (o != 0) { o->AddRef(); ref = o; }
     float dist;
-    void* fl = (char*)ref + 0x44;
     if (mode == 0) {
-        dist = sqrtf(*(float*)((char*)ref + 0x44) * *(float*)((char*)ref + 0x44)
-                   + (*(float*)((char*)ref + 0x48) * *(float*)((char*)ref + 0x48))
-                   + *(float*)((char*)ref + 0x4c) * *(float*)((char*)ref + 0x4c))
-             - sqrtf(pd->mB0 * pd->mB0 + (pd->mB4 * pd->mB4) + pd->mB8 * pd->mB8);
+        dist = SqrtF(ref->mPosX * ref->mPosX + ref->mPosY * ref->mPosY + ref->mPosZ * ref->mPosZ)
+             - SqrtF(pd->mPosX * pd->mPosX + pd->mPosY * pd->mPosY + pd->mPosZ * pd->mPosZ);
     } else if (mode == 1) {
-        dist = sqrtf(*(float*)((char*)ref + 0x44) * *(float*)((char*)ref + 0x44)
-                   + (*(float*)((char*)ref + 0x48) * *(float*)((char*)ref + 0x48))
-                   + *(float*)((char*)ref + 0x4c) * *(float*)((char*)ref + 0x4c));
+        dist = SqrtF(ref->mPosX * ref->mPosX + ref->mPosY * ref->mPosY + ref->mPosZ * ref->mPosZ);
     } else if (mode == 2) {
-        dist = sqrtf(pd->mB0 * pd->mB0 + (pd->mB4 * pd->mB4) + pd->mB8 * pd->mB8)
-             + sqrtf(*(float*)((char*)ref + 0x44) * *(float*)((char*)ref + 0x44)
-                   + (*(float*)((char*)ref + 0x48) * *(float*)((char*)ref + 0x48))
-                   + *(float*)((char*)ref + 0x4c) * *(float*)((char*)ref + 0x4c));
+        dist = SqrtF(pd->mPosX * pd->mPosX + pd->mPosY * pd->mPosY + pd->mPosZ * pd->mPosZ)
+             + SqrtF(ref->mPosX * ref->mPosX + ref->mPosY * ref->mPosY + ref->mPosZ * ref->mPosZ);
     } else {
-        dist = 0.0f;
+        if (ref != 0) ref->Release();
+        return SqrtF(pd->mPosX * pd->mPosX + pd->mPosY * pd->mPosY + pd->mPosZ * pd->mPosZ);
     }
-    (void)fl;
-    if (ref != 0) ((void(__thiscall*)(void*))(*(void***)ref)[1])(ref);
+    if (ref != 0) ref->Release();
     return dist;
 }
 
@@ -535,26 +570,21 @@ VPlanet* VPlanet::FUN_00c71430(int i, char on)
 }
 
 // @ 0x00c71470
-int VPlanet::FUN_00c71470()
+float VPlanet::FUN_00c71470()
 {
     PlanetData* pd = mpPlanet;
-    if (pd != 0 && pd->mField28 == 0) {
-        // original returns the raw float bits as int
-        float f = 0.0f;
-        (void)f;
-    }
     float v = 0.0f;
-    if ((pd == 0 || pd->mField28 != 0)) {
+    if (pd == 0 || pd->mField28 != 0) {
         void* o;
-        if (mp18c != 0 && ((void*(__thiscall*)(void*))(*(void***)mp18c)[0xac / 4])(mp18c) != 0)
+        if (mp18c != 0 && ((Node0AC*)mp18c)->naC() != 0)
             o = mp18c;
-        else if (mp188 != 0 && ((void*(__thiscall*)(void*))(*(void***)((char*)mp188 + 0x70))[0xac / 4])((char*)mp188 + 0x70) != 0)
+        else if (mp188 != 0 && ((Node0AC*)((char*)mp188 + 0x70))->naC() != 0)
             o = (char*)mp188 + 0x70;
-        else return 0;
-        void* r = ((void*(__thiscall*)(void*))(*(void***)o)[0xac / 4])(o);
+        else return v;
+        void* r = ((Node0AC*)o)->naC();
         v = *(float*)((char*)r + 0x18);
     }
-    union { float f; int i; } u; u.f = v; return u.i;
+    return v;
 }
 
 // @ 0x00c71560
@@ -634,7 +664,7 @@ void VPlanet::FUN_00c71750(PlanetData* p)
 // @ 0x00c71910
 void VPlanet::FUN_00c71910()
 {
-    if (mp154 != 0) FUN_00c7e280_00(this);
+    if (mp154 != 0) ((PropHolder*)mp154)->FUN_00c7e280(this);
     if (mpPlanet != 0) {
         void* ref = 0;
         PropMgr* pm = PropertyManager_0067de30();
@@ -657,13 +687,13 @@ void VPlanet::FUN_00c719d0(int mode)
     bool handled = false;
     if (mode == 3) {
         if (old == 2 && mp18c != 0
-            && ((void*(__thiscall*)(void*))(*(void***)mp18c)[0xac / 4])(mp18c) != 0) {
-            FUN_00571d90_00(((void*(__thiscall*)(void*))(*(void***)mp18c)[0xac / 4])(mp18c));
+            && ((Node0AC*)mp18c)->naC() != 0) {
+            ((NounBase*)((Node0AC*)mp18c)->naC())->FUN_00571d90();
             handled = true;
         }
     } else if (mode == 2 && old == 3 && mp18c != 0
-               && ((void*(__thiscall*)(void*))(*(void***)mp18c)[0xac / 4])(mp18c) != 0) {
-        FUN_007d44a0_00(((void*(__thiscall*)(void*))(*(void***)mp18c)[0xac / 4])(mp18c));
+               && ((Node0AC*)mp18c)->naC() != 0) {
+        ((NounBase*)((Node0AC*)mp18c)->naC())->FUN_007d44a0();
         handled = true;
     }
     mField158 = mode;
@@ -671,32 +701,41 @@ void VPlanet::FUN_00c719d0(int mode)
     if (handled) return;
     if (mode == 0 || mode == 3) {
         if (mp18c != 0) {
-            FUN_00b225d0_00(NounManager_00b3d300(), (char*)mp18c + 0xd4);
-            if (mp18c != 0) { mp18c = 0; ((void(__thiscall*)(void*))(*(void***)mp18c)[0xc0 / 4])(mp18c); }
+            ((NounMgr*)NounManager_00b3d300())->FUN_00b225d0((char*)mp18c + 0xd4);
+            if (mp18c != 0) {
+                void* o = mp18c;
+                mp18c = 0;
+                ((void(__thiscall*)(void*))(*(void***)o)[0xc0 / 4])(o);
+            }
         }
     } else if (mp18c == 0) {
         void* m = NounManager_00b3d300();
-        FUN_00c70110_00(&mp18c, FUN_00c716d0_00(m));
+        ((RefSlot*)&mp18c)->FUN_00c70110(((NounMgr*)m)->FUN_00c716d0());
         ((void(__thiscall*)(void*, int))(*(void***)mp18c)[0x38 / 4])(mp18c, v2c());
-        FUN_00c70110_00((char*)this + 0x108, (void*)this);
+        ((RefSlot*)((char*)mp18c + 0x108))->FUN_00c70110(this);
     }
     if (mode == 1) {
         if (mp188 == 0 && (mpPlanet == 0 || mpPlanet->mField28 != 0)) {
             void* m = NounManager_00b3d300();
-            void* r = FUN_00c716f0_00(m);
-            FUN_00c3f160_00(r, r);
-            float f = mField184 * 5.0f;
-            void* a = (void*)v2c();
-            FUN_00c3f160_00(a, (void*)(int)f);
-            FUN_00c3f1b0_00(0, 50.0f, 3.4e38f);
-            float ff = (FUN_00c70880_this(this), 1) ? 0.96f : 0.20f;
-            *(float*)((char*)mp188 + 0x240) = ff;
-            FUN_00c3f2d0_00(mp188, (char*)this + 0xd4);
+            void* r = ((NounMgr*)m)->FUN_00c716f0();
+            ((AutoRef*)&mp188)->FUN_00b5f950(r);
+            float f = mField184 * g_f_01486110;
+            ((NounObj*)mp188)->FUN_00c3f160((void*)v2c(), f);
+            ((NounObj*)mp188)->FUN_00c3f1b0(g_f_013f1cac, g_f_01472410);
+            float ff;
+            if (FUN_00c70880() == 1) ff = g_f_01472568;
+            else ff = g_f_013ef550;
+            ((NounObj*)mp188)->mField240 = ff;
+            ((NounObj*)mp188)->FUN_00c3f2d0((char*)this + 0xd4);
         }
     } else {
         if (mp188 != 0) {
-            FUN_00b225d0_00(NounManager_00b3d300(), mp188);
-            if (mp188 != 0) { mp188 = 0; ((void(__thiscall*)(void*))(*(void***)mp188)[4 / 4])(mp188); }
+            ((NounMgr*)NounManager_00b3d300())->FUN_00b225d0(mp188);
+            if (mp188 != 0) {
+                void* o = mp188;
+                mp188 = 0;
+                ((void(__thiscall*)(void*))(*(void***)o)[4 / 4])(o);
+            }
         }
     }
 }
