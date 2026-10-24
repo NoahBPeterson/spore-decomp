@@ -11,3 +11,4 @@ slices/s010869e0/s010869e0.cpp  ?setPosition@hkRigidBody@@QAEXABUhkVector4@@@Z  
 slices/s010869e0/s010869e0.cpp  ?setRotation@hkRigidBody@@QAEXABUhkVector4@@@Z  01087840  /vc71 /O2 /MD /Gy /TP
 slices/s010869e0/s010869e0.cpp  ?setPositionAndRotation@hkRigidBody@@QAEXABUhkVector4@@0@Z  01087860  /vc71 /O2 /MD /Gy /TP
 slices/s010869e0/s010869e0.cpp  ?setTransform@hkRigidBody@@QAEXABVhkTransform@@@Z  01087890  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ?setMotionType@hkRigidBody@@QAEXW4MotionType@hkMotion@@W4hkEntityActivation@@W4hkUpdateCollisionFilterOnEntityMode@@@Z  01087520  /vc71 /O2 /MD /Gy /TP

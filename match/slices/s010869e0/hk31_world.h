@@ -159,10 +159,11 @@ class hkStabilizedSphereMotion : public hkSphereMotion                 // vtable
 public:
 	hkStabilizedSphereMotion(const hkVector4& position, const hkQuaternion& rotation);   // 0x01087030
 };
-class hkBoxMotion : public hkRigidMotion                               // vtable 0x014A18B8
+class hkBoxMotion : public hkRigidMotion                               // vtable 0x014A18B8, size 0x100
 {
 public:
 	hkBoxMotion(const hkVector4& position, const hkQuaternion& rotation);                  // 0x01098140
+	hkVector4 m_inertiaAndMassInv;                                     // +0xf0 (reflected layout)
 };
 class hkThinBoxMotion : public hkBoxMotion                             // vtable 0x014A1838
 {
@@ -237,6 +238,7 @@ public:
 		return p;
 	}
 	static void operator delete(void* p) { hkMemory::s_instance->deallocateChunk(p, ((hkReferencedObject*)p)->m_memSizeAndFlags, 0x28); }
+	uint8_t m_pad8[0x68];                                          // +0x8..0x6f (ctor 0x01091670 writes the full 0x70-byte object)
 	virtual hkBool shouldDeactivateHighFrequency(const hkEntity*) const;   // 0x010916E0
 	virtual hkBool shouldDeactivateLowFrequency(const hkEntity*) const;    // 0x010917E0
 	virtual int getDeactivatorType() const;
@@ -427,7 +429,8 @@ namespace hkWorldOperation
 	struct AddConstraint : BaseOperation { hkConstraintInstance* m_constraint; };                      // +4
 	struct RemoveConstraint : BaseOperation { hkConstraintInstance* m_constraint; };                   // +4
 	struct RemoveAction : BaseOperation { hkAction* m_action; };                                       // +4
-	struct SetRigidBodyMotionType : BaseOperation { hkRigidBody* m_rigidBody; uint8_t m_motionType, m_activation, m_filterMode; };
+	// 0x10 bytes: the queue copies sizeof(hkWorldOperation) bytes, so the trailing pad is part of the frame.
+	struct SetRigidBodyMotionType : BaseOperation { hkRigidBody* m_rigidBody; uint8_t m_motionType, m_activation, m_filterMode; uint8_t m_pad0b[5]; };
 	struct SetShape : BaseOperation { hkEntity* m_entity; const hkShape* m_shape; };
 	struct UpdateMovedBodyInfo : BaseOperation { hkEntity* m_entity; };
 }

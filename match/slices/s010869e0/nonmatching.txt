@@ -1,7 +1,6 @@
 010869e0 0 havok-equivalent
 01086da0 0 havok-equivalent
 01087050 0 havok-equivalent; equiv UNSUPPORTED: 0/1200 inputs valid (original also takes extents in ESI, a custom register, so the emulated write faults); ECX receiver fixed
-01087290 0 havok-equivalent
-01087520 0 havok-equivalent
+01087290 595 complete; motion factory builds the right subclass per type; gate WEAK 244/400 valid, 55.6% coverage, no mismatch; remaining diff is codegen shape (motion subclass ctors are external)
 01087590 0 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv WEAK (119/400 valid, 67.9% cov, no mismatch): setShape now calls a TU-local static CalcShapeExtentsAndObjectRadius instead of the original 01087050, whose extents-out-in-ESI ABI C++ cannot express; also fixed the depth test to < 0.0f (fcomp/test ah,0x41/jp)
-010876d0 0 havok-equivalent
+010876d0 85 complete; deactivator setter now allocates the real 0x70-byte hkSpatialRigidBodyDeactivator; gate PASS 386/400 valid, 84.8% coverage; remaining diff is the lazy-init/allocator register shape
