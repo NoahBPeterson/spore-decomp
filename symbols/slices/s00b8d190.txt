@@ -1,0 +1,28 @@
+00b8d190 FUN_00b8d190  # Ghidra FUN; minimap blit/scroll helper: clamps the source and destination row rectangles, walks the clamped rows through the source surface at +0xd8 and restores the scissor; not reconstructed
+00b8d2a0 HandleMessage  # PDB name SP::cPlanetModel::HandleMessage; model message handler: 0x1b537e5 forwards the payload to UpdateMinimap and returns true, 0x44448ed and 0x45fe992 raise the 0x78 / 0xea flags and return false; not byte-exact
+00b8d2f0 FUN_00b8d2f0  # Ghidra FUN; reset the model's star/minimap state: clear the star handle at +0x184, the count at +0x194 and the mode word at +0x28, then release the two owned-pointer containers; byte-exact
+00b8d320 FUN_00b8d320  # Ghidra FUN; begin a minimap interaction: stop the audio layer, destroy the sub-object at +(-4) and rebuild the mode/flag and cursor state; not reconstructed
+00b8d420 FUN_00b8d420  # Ghidra FUN; minimap draw: early-out on a null cursor, build the clip rectangle from the layout helper at +0x128, draw each cell and refresh the minimap; not reconstructed
+00b8d750 FUN_00b8d750  # Ghidra FUN; rebuild the minimap after a cursor change: re-derive the row/column counts, re-clamp the cell origin and re-emit UpdateMinimap; not reconstructed
+00b8d8a0 FUN_00b8d8a0  # Ghidra FUN; add a banner to the star's banner list with an optional refresh: store the star id, insert through FUN_00b8d750 and, when the refresh flag is set, push the refreshed value to the cursor host (slot 0x8c); byte-exact
+00b8d8f0 FUN_00b8d8f0  # Ghidra FUN; forward to the star's banner-list getter via SP::StarManager(+0x184) -> FUN_00ba6440; not byte-exact
+00b8d910 FUN_00b8d910  # Ghidra FUN; clear the two minimap dirty bytes at +0x78 and +0xea; byte-exact
+00b8d920 FUN_00b8d920  # Ghidra FUN; set or clear the 0x40 flag in the mode word at +0x2c; byte-exact
+00b8d950 FUN_00b8d950  # Ghidra FUN; set or clear the 0x200 flag in the mode word at +0x2c; byte-exact
+00b8d980 FUN_00b8d980  # Ghidra FUN; set or clear the 0x400 flag in the mode word at +0x2c; byte-exact
+00b8d9b0 FUN_00b8d9b0  # Ghidra FUN; return the star's bio-protector count via SP::GetMissionManager, falling back to the first star lookup; not byte-exact
+00b8d9f0 FUN_00b8d9f0  # Ghidra FUN; true when the model is ready for the minimap: reject modes 0/1, flag bit 8, a pending star count and the 0x800 flag; not byte-exact
+00b8da70 FUN_00b8da70  # Ghidra FUN; return -1, the idle minimap index sentinel; byte-exact
+00b8db70 FUN_00b8db70  # Ghidra FUN; minimap cell hit-test/tooltip: format the hovered cell text in a 0xa18-byte buffer and forward it; not reconstructed
+00b8dd60 FUN_00b8dd60  # Ghidra FUN; read/cache the model key: query the key service (virtual slot +4) when the cached word at +0x1a4 is set, else fall back to the empty star key; not byte-exact
+00b8dde0 FUN_00b8dde0  # Ghidra FUN; cache the caller's key in the three words at +0x1a4/+0x1a8/+0x1ac when it differs; not byte-exact
+00b8de30 cBioElemSort::SortBanners  # PDB name `anonymous_namespace'::BioProtectorSort::operator(); resort the star's bio-protector banner list through FUN_00ba6440 / FUN_00ba6d80; not byte-exact
+00b8de60 FUN_00b8de60  # Ghidra FUN; drain the first owned-pointer container (+0x15c/+0x160): destroy and free each element; not byte-exact
+00b8dec0 FUN_00b8dec0  # Ghidra FUN; indexed access into the first owned-pointer container, null when out of range; not byte-exact
+00b8def0 FUN_00b8def0  # Ghidra FUN; indexed access into the second owned-pointer container (+0x170/+0x174); not byte-exact
+00b8df20 FUN_00b8df20  # Ghidra FUN; drain the second owned-pointer container (+0x170/+0x174): destroy and free each element; not byte-exact
+00b8df80 FUN_00b8df80  # Ghidra FUN; erase one element of the first owned-pointer container (swap with the last, shrink by one); not byte-exact
+00b8dfe0 FUN_00b8dfe0  # Ghidra FUN; erase one element of the second owned-pointer container (swap with the last, shrink by one); not byte-exact
+00b8e040 FUN_00b8e040  # Ghidra FUN; true when the 0x2c-byte record container (+0x134/+0x138) holds a record with the given id; not byte-exact
+00b8e090 FUN_00b8e090  # Ghidra FUN; return the model's current star banner key, or the shared empty key when the count at +0x194 is <= 1; byte-exact
+00b8e0f0 FUN_00b8e0f0  # Ghidra FUN; copy-uninitialized helper: store the destination through the out parameter and memberwise-copy first..last into it; not byte-exact

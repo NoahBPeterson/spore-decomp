@@ -1,0 +1,8 @@
+slices/s00b8d190/s00b8d190.cpp  ?FUN_00b8d2f0@cPlanetModel@@QAEXXZ  00b8d2f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b8d190/s00b8d190.cpp  ?FUN_00b8d8a0@cPlanetModel@@QAE_NI_NI@Z  00b8d8a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b8d190/s00b8d190.cpp  ?FUN_00b8d910@cPlanetModel@@QAEXXZ  00b8d910  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b8d190/s00b8d190.cpp  ?FUN_00b8d920@cPlanetModel@@QAEX_N@Z  00b8d920  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b8d190/s00b8d190.cpp  ?FUN_00b8d950@cPlanetModel@@QAEX_N@Z  00b8d950  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b8d190/s00b8d190.cpp  ?FUN_00b8d980@cPlanetModel@@QAEX_N@Z  00b8d980  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b8d190/s00b8d190.cpp  ?FUN_00b8da70@cPlanetModel@@QAEHXZ  00b8da70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b8d190/s00b8d190.cpp  ?FUN_00b8e090@cPlanetModel@@QAEPAUcKey3@@XZ  00b8e090  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
