@@ -1,0 +1,4 @@
+slices/s00a0aca0/s00a0aca0.cpp  ?saDestroyClipRange@@YGXPAUsaClip@@0@Z  00a0aca0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a0aca0/s00a0aca0.cpp  ?CreateCreatureWide@AnimWorld@@QAEPAUanim_creature@@PB_WIPBUvector_3@@PBUvector_4@@PAX_N@Z  00a0b8a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a0aca0/s00a0aca0.cpp  ?CreateCreatureFromObject@AnimWorld@@QAEPAUanim_creature@@PAPAUResourceObject@@IPBUvector_3@@PBUvector_4@@_N@Z  00a0b940  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a0aca0/s00a0aca0.cpp  ?CreateCreatureFromKey@AnimWorld@@QAEPAUanim_creature@@PBUResourceKey@@IPBUvector_3@@PBUvector_4@@_N@Z  00a0b980  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
