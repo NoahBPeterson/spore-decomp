@@ -12,7 +12,7 @@ typedef unsigned int u32;
 // External callees (address-labelled).
 // ---------------------------------------------------------------------------------------
 extern void  f_00921260(void* pool, unsigned size, unsigned buckets, unsigned align, unsigned n);
-extern void  f_00921340(int n);
+extern u32   f_00921340(int n);
 extern unsigned f_009213c0(void* self, unsigned v);
 extern void  f_00a22220(void* self, unsigned n);
 extern void  f_00a1cdb0(void* self, void* a, void* b, void* c, void* d, void* e, void* f, void* g);
@@ -50,6 +50,39 @@ static float  g_166d9e8;
     ((ret (__thiscall*)(void*, __VA_ARGS__))((void**)*(void**)(obj))[(slot) / 4])
 
 // ---------------------------------------------------------------------------------------
+// EASTL fixed-pool / fixed-hashtable helpers used by the two factory ctors.  The original
+// code builds a fixed_pool_base on the stack, initialises it over a slice of the owner and
+// then hands a pointer to it to the hashtable constructor (which re-creates the same pool
+// at owner+0x1c and reads the bucket count from the descriptor).
+// ---------------------------------------------------------------------------------------
+struct FixedPoolBase {
+    void* mpBuffer;         // +0x00  set by init(): aligned free-list buffer
+    void* mpUnk04;          // +0x04
+    void* mpBegin;          // +0x08  buffer handed to the hashtable pool
+    void* mpEnd;            // +0x0c  begin + size
+    u32   mnCount;          // +0x10  element count
+    void* mpBuckets;        // +0x14  owner-embedded bucket array (copied to pool+0x14)
+    void* mpUnk18;          // +0x18
+    void init(void* p, u32 size, u32 count, u32 align, u32 offset);  // 0x00921260 (thiscall, ret 0x14)
+};
+struct HashtableCtor {      // eastl::hashtable<unsigned,EA::AutoRefCount<PrimitiveRegister>,...>
+    // Only args 1 (bucket count) and 7 (pool descriptor) are consumed.
+    void ctor(u32 buckets, void* a, void** b, void** c, void* d, void** e, void* pool); // 0x00a1cdb0 (thiscall, ret 0x1c)
+};
+struct HashtableCtor2 {     // same shape, larger fixed allocator
+    void ctor(u32 buckets, void* a, void** b, void** c, void* d, void** e, void* pool); // 0x00a1ce60 (thiscall, ret 0x1c)
+};
+struct RehashCalc {         // bucket count for a load factor: ecx = &loadFactor
+    u32 calc(u32 n);        // 0x009213c0 (thiscall, ret 4)
+};
+struct SimpleVecPush {      // SP::SimpleVector<CellData*>
+    void* mpBegin;          // +0x00
+    void* mpEnd;            // +0x04
+    void* mpCap;            // +0x08
+    void Insert(void** pos, void** value);   // 0x00a80dd0 (thiscall, ret 8)
+};
+
+// ---------------------------------------------------------------------------------------
 // 4-byte element eastl vector.
 // ---------------------------------------------------------------------------------------
 struct Vec4 {
@@ -67,8 +100,8 @@ struct Vec4 {
 struct Sound74 {
     unsigned char m[0xd40];
 
-    void* ctor_00a1e320();
-    void* ctor_00a1e420();
+    void* ctor_00a1e320(void* a1, void* a2);
+    void* ctor_00a1e420(void* a1, void* a2);
     void AddCell(void* p);
     void ReleaseAllCells();
     void UpdateCells(int a, float* b);
@@ -81,38 +114,50 @@ struct Sound74 {
 // 0x00A1E320  factory ctor (fixed hashtable + pool). EH frame; reconstruction.
 // =======================================================================================
 // @ 0x00A1E320
-void* Sound74::ctor_00a1e320() {
-    Sound74* self = this;
-    unsigned char* t = self->m;
-    unsigned tmp = 0;
-    f_00921260(t + 0x8c, 0xf0, 0xc, 4, 0);
-    f_00921340(0x15);
-    f_00a1cdb0(t, t + 0x18, t + 0x48, t + 0x48, t + 0x50, t + 0x18, t + 0x48, t);
-    *(u32*)(t + 0x10) = 0x3f800000;
-    *(u32*)(t + 0x14) = 0x00000000;
+void* Sound74::ctor_00a1e320(void* a1, void* a2) {
+    u8* t = m;
+    FixedPoolBase pool;
+    pool.init(t + 0x8c, 0xf0, 0xc, 4, 0);
+    pool.mpBegin = t + 0x8c;
+    pool.mpEnd = t + 0x17c;
+    pool.mnCount = 0xc;
+    pool.mpBuckets = t + 0x34;
+    u32 buckets = f_00921340(0x15);
+    ((HashtableCtor*)t)->ctor(buckets, a1, &a2, &a2, a2, &a2, &pool);
+    struct RehashPolicy { float mfMaxLoadFactor; float mfGrowthFactor; u32 mnBucketCount; };
+    RehashPolicy policy = { 10000.0f, 2.0f, 0 };
+    *(u32*)(t + 0x10) = 0x461c4000;
+    *(u32*)(t + 0x14) = 0x40000000;
     *(u32*)(t + 0x18) = 0;
-    if ((tmp = f_009213c0(t + 0x0c, *(u32*)(t + 0x0c))) > *(u32*)(t + 8))
-        f_00a22220(t, tmp);
-    return self;
+    u32 need = ((RehashCalc*)&policy)->calc(*(u32*)(t + 0x0c));
+    if (need > *(u32*)(t + 8))
+        f_00a22220(t, need);
+    return this;
 }
 
 // =======================================================================================
 // 0x00A1E420  factory ctor (larger fixed hashtable + pool). EH frame; reconstruction.
 // =======================================================================================
 // @ 0x00A1E420
-void* Sound74::ctor_00a1e420() {
-    Sound74* self = this;
-    unsigned char* t = self->m;
-    unsigned tmp = 0;
-    f_00921260(t + 0xdc, 0x1e0, 0xc, 4, 0);
-    f_00921340(0x29);
-    f_00a1ce60(t, t + 0x18, t + 0x48, t + 0x48, t + 0x50, t + 0x18, t + 0x48, t);
-    *(u32*)(t + 0x10) = 0x3f800000;
-    *(u32*)(t + 0x14) = 0x00000000;
+void* Sound74::ctor_00a1e420(void* a1, void* a2) {
+    u8* t = m;
+    FixedPoolBase pool;
+    pool.init(t + 0xdc, 0x1e0, 0xc, 4, 0);
+    pool.mpBegin = t + 0xdc;
+    pool.mpEnd = t + 0x2bc;
+    pool.mnCount = 0xc;
+    pool.mpBuckets = t + 0x34;
+    u32 buckets = f_00921340(0x29);
+    ((HashtableCtor2*)t)->ctor(buckets, a1, &a2, &a2, a2, &a2, &pool);
+    struct RehashPolicy { float mfMaxLoadFactor; float mfGrowthFactor; u32 mnBucketCount; };
+    RehashPolicy policy = { 10000.0f, 2.0f, 0 };
+    *(u32*)(t + 0x10) = 0x461c4000;
+    *(u32*)(t + 0x14) = 0x40000000;
     *(u32*)(t + 0x18) = 0;
-    if ((tmp = f_009213c0(t + 0x0c, *(u32*)(t + 0x0c))) > *(u32*)(t + 8))
-        f_00a22220(t, tmp);
-    return self;
+    u32 need = ((RehashCalc*)&policy)->calc(*(u32*)(t + 0x0c));
+    if (need > *(u32*)(t + 8))
+        f_00a22220(t, need);
+    return this;
 }
 
 // =======================================================================================
@@ -157,7 +202,7 @@ void Sound74::AddCell(void* p) {
         *(void***)(m + 0xc80) = end + 1;
         if (end != 0) *end = p;
     } else {
-        f_00a80dd0(end, &p);
+        ((SimpleVecPush*)(m + 0xc7c))->Insert(end, &p);
     }
     VPTR(void, p, 0)(p);
 }
