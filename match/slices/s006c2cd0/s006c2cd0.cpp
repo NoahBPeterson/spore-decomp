@@ -17,6 +17,14 @@ static __forceinline float MulSS(float a, float b) {
   return _mm_cvtss_f32(_mm_mul_ss(_mm_set_ss(a), _mm_set_ss(b)));
 }
 
+// Single-precision add with float32 rounding only (same reason as MulSS). Also
+// pins the operation order: the original re-associates the dot products (e.g.
+// `b2*m8` first for outA[0]), and a plain C expression lets cl15 pick its own
+// grouping, which shows up as 1-ulp and signed-zero differences.
+static __forceinline float AddSS(float a, float b) {
+  return _mm_cvtss_f32(_mm_add_ss(_mm_set_ss(a), _mm_set_ss(b)));
+}
+
 // ---------------------------------------------------------------------------
 // Small shared value types.
 // ---------------------------------------------------------------------------
@@ -47,7 +55,9 @@ float* ScaleMatrixReversed(float* out, const float* m, float s) {
   t[4]  = m[0x8] * s; t[5]  = m[0x9] * s; t[6]  = m[0xa] * s; t[7]  = m[0xb] * s;
   t[8]  = m[0x4] * s; t[9]  = m[0x5] * s; t[10] = m[0x6] * s; t[11] = m[0x7] * s;
   t[12] = m[0x0] * s; t[13] = m[0x1] * s; t[14] = m[0x2] * s; t[15] = m[0x3] * s;
-  ((Mat4*)out)->SetRows(t, t + 4, t + 8, t + 12);
+  // The temporary is filled bottom-up, so the rows go back to SetRows in reverse:
+  // out row 0 is the last-computed block (m[0..3]*s).
+  ((Mat4*)out)->SetRows(t + 12, t + 8, t + 4, t);
   return out;
 }
 
@@ -150,26 +160,35 @@ struct RBNode {
   int key1;  // +0x14
 };
 
-void RBTreeInsert(RBNode* node, RBNode* hint, RBNode* header, bool right); // 0x009216a0
+// The side selector is compared as a whole dword by 0x009216a0 (`cmp [esp+0x18], 0`),
+// so it must be a well-formed 0/1 int, not a byte-sized bool.
+void RBTreeInsert(RBNode* node, RBNode* hint, RBNode* header, int side); // 0x009216a0
 void* EASTL_alloc(int size, const char* tag, int a, int b, const char* file, int line); // 0x00f473a0
 
 struct RBTree {
   char pad0[0x14];
   int count;       // +0x14
-  void insert(RBNode** out, RBNode* hint, const int* key, bool flag);
+  RBNode** insert(RBNode** out, RBNode* hint, const int* key, bool flag);
 };
 
 // @ 0x006c3330
-void RBTree::insert(RBNode** out, RBNode* hint, const int* key, bool flag) {
-  bool right = (flag == 0) && ((char*)hint != (char*)this + 4) && (hint->key0 <= key[0]);
-  RBNode* node = (RBNode*)EASTL_alloc(0x18, "Graphics", 0, 0, "EASTL/allocator.h", 0xd1);
+// The original leaves the out slot pointer in eax (callers do `mov eax, edi`
+// with edi == out), so it returns the parameter.
+RBNode** RBTree::insert(RBNode** out, RBNode* hint, const int* key, bool flag) {
+  int side = (!flag && (char*)hint != (char*)this + 4 && !(key[0] < hint->key0)) ? 1 : 0;
+  RBNode* node = (RBNode*)EASTL_alloc(0x18, "Graphics", 0, 0,
+                                      "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\"
+                                      "SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\"
+                                      "EASTL/allocator.h",
+                                      0xd1);
   if ((char*)node + 0x10 != 0) {
     node->key0 = key[0];
     node->key1 = key[1];
   }
-  RBTreeInsert(node, hint, (RBNode*)((char*)this + 4), right);
+  RBTreeInsert(node, hint, (RBNode*)((char*)this + 4), side);
   ++count;
   *out = node;
+  return out;
 }
 
 // ---------------------------------------------------------------------------
@@ -277,8 +296,10 @@ bool FUN_006c3080(float* out, int count, int res, int* data, const Range* vtx,
 
 // @ 0x006c3550
 // Transforms a direction and a point by a baked block matrix scaled by s[0].
-void FUN_006c3550(float* outA, float* outB, const float* base, const float* dir,
-                  const float* s, const int* idx, int layout) {
+// The original leaves outA in eax (the hidden return of the out-parameter), so
+// declare it as the return value.
+float* FUN_006c3550(float* outA, float* outB, const float* base, const float* dir,
+                    const float* s, const int* idx, int layout) {
   char* p = (char*)(*(int*)(layout + 4) + (uint16_t)*(uint16_t*)(layout + 0xa) * idx[0]);
   float fourth[4] = {0.0f, 0.0f, 0.0f, 1.0f};
   Mat4 m;
@@ -286,19 +307,32 @@ void FUN_006c3550(float* outA, float* outB, const float* base, const float* dir,
   float sm[16];
   ScaleMatrixReversed(sm, m.m, s[0]);
 
-  outB[0] = sm[0] * dir[0] + sm[4] * dir[1] + sm[8] * dir[2];
-  outB[1] = sm[1] * dir[0] + sm[5] * dir[1] + sm[9] * dir[2];
-  outB[2] = sm[2] * dir[0] + sm[6] * dir[1] + sm[10] * dir[2];
+  // The original is SSE-scalar and groups the products as shown (the direction
+  // rows start with the z term, the point rows with the y/z terms); the fourth
+  // column is multiplied by the literal 0.0f, which only matters for the sign
+  // of an exact zero result. Reproduce that order exactly.
+  float d0 = dir[0], d1 = dir[1], d2 = dir[2];
+  float b0 = base[0], b1 = base[1], b2 = base[2];
+  volatile float vzero = 0.0f;
+  float z = vzero;
 
-  outA[0] = sm[0] * base[0] + sm[4] * base[1] + sm[8] * base[2] + sm[12];
-  outA[1] = sm[1] * base[0] + sm[5] * base[1] + sm[9] * base[2] + sm[13];
-  outA[2] = sm[2] * base[0] + sm[6] * base[1] + sm[10] * base[2] + sm[14];
+  outB[0] = AddSS(AddSS(AddSS(MulSS(sm[0], d0), MulSS(sm[8], d2)), MulSS(sm[4], d1)),
+                  MulSS(sm[12], z));
+  outB[1] = AddSS(AddSS(AddSS(MulSS(sm[9], d2), MulSS(sm[5], d1)), MulSS(sm[1], d0)),
+                  MulSS(sm[13], z));
+  outB[2] = AddSS(AddSS(AddSS(MulSS(sm[10], d2), MulSS(sm[6], d1)), MulSS(sm[2], d0)),
+                  MulSS(sm[14], z));
+
+  outA[0] = AddSS(AddSS(AddSS(MulSS(sm[8], b2), MulSS(sm[0], b0)), MulSS(sm[4], b1)), sm[12]);
+  outA[1] = AddSS(AddSS(AddSS(MulSS(sm[5], b1), MulSS(sm[9], b2)), MulSS(sm[1], b0)), sm[13]);
+  outA[2] = AddSS(AddSS(AddSS(MulSS(sm[6], b1), MulSS(sm[10], b2)), MulSS(sm[2], b0)), sm[14]);
+  return outA;
 }
 
 // @ 0x006c3780
 // As FUN_006c3550, but a second block contributes a per-row offset weighted by s[1].
-void FUN_006c3780(float* outA, float* outB, const float* base, const float* dir,
-                  const float* s, const int* idx, int layout) {
+float* FUN_006c3780(float* outA, float* outB, const float* base, const float* dir,
+                    const float* s, const int* idx, int layout) {
   uint16_t stride = *(uint16_t*)(layout + 0xa);
   char* seg = (char*)*(int*)(layout + 4);
   char* p = seg + stride * idx[0];
@@ -310,17 +344,35 @@ void FUN_006c3780(float* outA, float* outB, const float* base, const float* dir,
 
   const float* off = (const float*)(seg + stride * idx[1]);
   float k = s[1];
-  sm[0] += off[0] * k; sm[1] += off[1] * k; sm[2] += off[2] * k;
-  sm[4] += off[4] * k; sm[5] += off[5] * k; sm[6] += off[6] * k;
-  sm[8] += off[8] * k; sm[9] += off[9] * k; sm[10] += off[10] * k;
+  volatile float vzero = 0.0f;
+  float z = vzero;
+  // A zero-width lane of the offset block is folded into the translation column
+  // (s[1] * 0.0f): it can flip an exact -0.0 translation to +0.0.
+  float t12 = AddSS(sm[12], MulSS(k, z));
+  float t13 = AddSS(sm[13], MulSS(k, z));
+  float t14 = AddSS(sm[14], MulSS(k, z));
 
-  outB[0] = sm[0] * dir[0] + sm[4] * dir[1] + sm[8] * dir[2];
-  outB[1] = sm[1] * dir[0] + sm[5] * dir[1] + sm[9] * dir[2];
-  outB[2] = sm[2] * dir[0] + sm[6] * dir[1] + sm[10] * dir[2];
+  float o0 = AddSS(sm[0], MulSS(off[0], k));
+  float o1 = AddSS(sm[1], MulSS(off[1], k));
+  float o2 = AddSS(sm[2], MulSS(off[2], k));
+  float o4 = AddSS(sm[4], MulSS(off[4], k));
+  float o5 = AddSS(sm[5], MulSS(off[5], k));
+  float o6 = AddSS(sm[6], MulSS(off[6], k));
+  float o8 = AddSS(sm[8], MulSS(off[8], k));
+  float o9 = AddSS(sm[9], MulSS(off[9], k));
+  float o10 = AddSS(sm[10], MulSS(off[10], k));
 
-  outA[0] = sm[0] * base[0] + sm[4] * base[1] + sm[8] * base[2] + sm[12];
-  outA[1] = sm[1] * base[0] + sm[5] * base[1] + sm[9] * base[2] + sm[13];
-  outA[2] = sm[2] * base[0] + sm[6] * base[1] + sm[10] * base[2] + sm[14];
+  float d0 = dir[0], d1 = dir[1], d2 = dir[2];
+  float b0 = base[0], b1 = base[1], b2 = base[2];
+
+  outB[0] = AddSS(AddSS(AddSS(MulSS(o0, d0), MulSS(o8, d2)), MulSS(o4, d1)), MulSS(t12, z));
+  outB[1] = AddSS(AddSS(AddSS(MulSS(o5, d1), MulSS(o9, d2)), MulSS(o1, d0)), MulSS(t13, z));
+  outB[2] = AddSS(AddSS(AddSS(MulSS(o6, d1), MulSS(o10, d2)), MulSS(o2, d0)), MulSS(t14, z));
+
+  outA[0] = AddSS(AddSS(AddSS(MulSS(o8, b2), MulSS(o0, b0)), MulSS(o4, b1)), t12);
+  outA[1] = AddSS(AddSS(AddSS(MulSS(o5, b1), MulSS(o9, b2)), MulSS(o1, b0)), t13);
+  outA[2] = AddSS(AddSS(AddSS(MulSS(o6, b1), MulSS(o10, b2)), MulSS(o2, b0)), t14);
+  return outA;
 }
 
 // ---------------------------------------------------------------------------

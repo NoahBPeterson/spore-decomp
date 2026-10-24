@@ -1,8 +1,7 @@
-006c2cd0  346  complete source; original is SSE-scalar (prebuilt/different toolset), cl15 emits x87
 006c2ea0  727  complete source; original is SSE-scalar basis projection, cl15 emits x87; denormal multiplies via SSE MulSS to round once; equiv: PASS
 006c3080  547  complete source; SSE-scalar / EASTL allocator prebuilt codegen
 006c32f0   59  complete source; differs only in stack-slot scheduling of the outgoing vcall args
-006c3330  103  complete source; EASTL allocator/rbtree wrapper, prebuilt codegen
+006c3330   20  complete source; 127 vs 127 bytes, the 20 diffs are only cl15 register roles (esi/edi for this/node, ebx/ebp for key/hint) and the inc-count scheduling; returns out and passes the RBTreeSide as a dword 0/1 (0x009216a0 compares the full dword); equiv: PASS (600 inputs, mutate 0.5)
 006c3510   39  complete source; MI vptr-store ordering differs from cl15's output
-006c3550  504  complete source; SSE-scalar matrix transform, cl15 emits x87
-006c3780 1025  complete source; SSE-scalar matrix transform + offset, cl15 emits x87
+006c3550 2723  complete source; original is SSE-scalar, so every product/sum goes through MulSS/AddSS in the retail order ((sm0*d0 + sm8*d2) + sm4*d1 + sm12*0.0f, and the point rows start with the y/z terms) - a plain cl15 expression double-rounds in x87 and, without the *0.0f fourth column, returns -0.0 where the original returns +0.0; intrinsic form is 1697 vs 547 bytes; equiv: PASS (600 inputs, mutate 0.5)
+006c3780 3923  complete source; as 006c3550 plus the s[1]-weighted offset rows (sm[i] + off[i]*s[1] for i in 0..2/4..6/8..10) and the s[1]*0.0f fold into the translation column, all in the retail order with MulSS/AddSS; intrinsic form is 2573 vs 1025 bytes; equiv: PASS (600 inputs, mutate 0.5)
