@@ -1,0 +1,2 @@
+slices/s00ffd220/s00ffd220.cpp  ?FUN_00ffd280@cSPSimulatorPlayerUFO@@QAEXXZ  00ffd280  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ffd220/s00ffd220.cpp  ?FUN_00ffdbb0@cSPSimulatorPlayerUFO@@QAE_NXZ  00ffdbb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
