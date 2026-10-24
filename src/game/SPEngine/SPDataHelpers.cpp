@@ -12,9 +12,29 @@ extern "C" void* EASTL_alloc6(uint32_t, void*, uint32_t, uint32_t, const char*, 
 extern "C" char  g_allocTag[];                    // 0x013ebc58 "App"
 extern "C" char  g_fileEASTL[];                   // 0x013ebb38
 extern "C" void __cdecl ReadInt32(void*, void*, int, int);        // 0x093a780
-extern "C" void* __cdecl HashFind(void* out, const void* key);    // 0x0685f30
-extern "C" void __cdecl HashInsert(void*, void*, const void*);    // 0x0685f90
 extern "C" int*  __cdecl GetManager();                            // 0x067dcd0
+
+// ---- SP/EA intrusive hashtable (shared by the global map at 0x0152b5f8) ----
+struct HashIter {
+    void*  mpNode;      // +0x00
+    void** mpBucket;    // +0x04
+};
+struct HashIterPair {
+    HashIter first;     // +0x00
+    uint8_t  second;    // +0x08
+    uint8_t  pad[3];
+};
+struct Hashtable {
+    char pad00[0x04];   // +0x00
+    void** mpBucket;    // +0x04
+    int    mnBucket;    // +0x08
+    int    mnCount;     // +0x0c
+    char pad10[0x08];   // +0x10..+0x17
+    void FreeNodes();                       // 0x0685ed0
+    HashIter find(const void* key);         // 0x0685f30
+    HashIter erase(HashIter i);             // 0x06859b0
+    HashIterPair insert(const void* value, const void* hint); // 0x0685f90
+};
 
 // ---- items of slice s006860e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  EASTL_dealloc(void*);                            // 0x0f47380
@@ -59,7 +79,6 @@ struct HashMap {
     uint32_t f0;
     int* buckets;               // +0x04
     int bucketCount;            // +0x08
-    int* findOut(int* out, const int* key) { HashFind(out, key); return out; }
     int* operator[](const int* key);
 };
 struct WFixed {
@@ -452,16 +471,15 @@ typedef void (__thiscall *MgrSlot90)(void*, int, const wchar_t*);
 // @ 0x00686380
 int* HashMap::operator[](const int* key)
 {
-    int local_18[6];
-    HashFind(local_18, key);
-    if (local_18[0] == *(int*)((char*)buckets + bucketCount * 4)) {
-        local_18[0] = *key;
-        local_18[1] = 0;
-        local_18[2] = 0;
-        HashInsert(local_18 + 3, local_18, 0);
-        local_18[0] = local_18[3];
+    HashIter it = ((Hashtable*)this)->find(key);
+    if (it.mpNode == (void*)(*(int*)((char*)buckets + bucketCount * 4))) {
+        int value[3];
+        value[0] = *key;
+        value[1] = 0;
+        value[2] = 0;
+        it = ((Hashtable*)this)->insert(value, key).first;
     }
-    return (int*)(local_18[0] + 4);
+    return (int*)((char*)it.mpNode + 4);
 }
 
 // @ 0x006863e0

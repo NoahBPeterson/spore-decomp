@@ -15,11 +15,35 @@ extern "C" bool __cdecl ReadInt32(void*, void*, int, int);        // 0x093a780
 extern "C" bool __cdecl ReadByte2(void*, void*, int, int);        // 0x093a700
 extern "C" void __cdecl WStrAssign(void* dst, const wchar_t* first, const wchar_t* last); // 0x0423650
 extern "C" void __cdecl WideAppend(void* self, const wchar_t* first, const wchar_t* last); // 0x042f9d0
-extern "C" void __cdecl FreeNodesHashtable(void*);                // 0x0685ed0
-extern "C" void* __cdecl HashFind(void* out, const void* key);    // 0x0685f30
-extern "C" void __cdecl HashInsert(void*, void*, const void*);    // 0x0685f90
-extern "C" void __cdecl HashErase(void*, void*, void*);           // 0x06859b0
 extern "C" int*  __cdecl GetManager();                            // 0x067dcd0
+
+// ---- SP/EA intrusive hashtable (the global map at 0x0152b5f8) ----
+// Every operation is __thiscall on the table object: find returns an 8-byte
+// iterator through the usual hidden out pointer, erase takes that iterator by
+// value and returns the next one, insert takes an out iterator plus the 12-byte
+// value tuple, and free-nodes takes nothing.
+struct HashIter {
+    void*  mpNode;      // +0x00
+    void** mpBucket;    // +0x04
+};
+// eastl::pair<iterator,bool> as returned by hashtable::insert: 12 bytes.
+struct HashIterPair {
+    HashIter first;     // +0x00
+    uint8_t  second;    // +0x08
+    uint8_t  pad[3];
+};
+struct Hashtable {
+    char pad00[0x04];   // +0x00
+    void** mpBucket;    // +0x04
+    int    mnBucket;    // +0x08
+    int    mnCount;     // +0x0c
+    char pad10[0x08];   // +0x10..+0x17 (editor map is 0x18 bytes)
+    void FreeNodes();                       // va 00685ed0
+    HashIter find(const void* key);         // va 00685f30
+    HashIter erase(HashIter i);             // va 006859b0
+    HashIterPair insert(const void* value, const void* hint); // va 00685f90
+};
+static Hashtable* const gHashtable = (Hashtable*)0x0152b5f8;
 
 // ---- wide string (eastl::basic_string<wchar_t>) view, 16 bytes ----
 struct WStr {
@@ -81,16 +105,15 @@ Elem* CopyBackElems(Elem* first, Elem* last, Elem* dstLast) {
 // @ 0x006861d0  hashtable find+erase of a refcounted entry (partial)
 // =====================================================================
 extern "C" void EraseEntry(void* key) {
-    int local_8;
-    HashFind(&local_8, &key);
-    if (local_8 != *(int*)(*(int*)0x0152b5fc + *(int*)0x0152b600 * 4)) {
-        void* p = *(void**)(local_8 + 4);
+    HashIter it = gHashtable->find(&key);
+    if (it.mpNode != (void*)(*(int*)(*(int*)0x0152b5fc + *(int*)0x0152b600 * 4))) {
+        void* p = *(void**)((char*)it.mpNode + 4);
         ((void (__thiscall*)(void*))VT(p)[0x24 / 4])(p);
-        int* rc = (int*)(local_8 + 8);
+        int* rc = (int*)((char*)it.mpNode + 8);
         *rc = *rc - 1;
         if (*rc == 0) {
             ((void (__thiscall*)(void*))VT(p)[8 / 4])(p);
-            HashErase(&local_8, (void*)local_8, 0);
+            it = gHashtable->erase(it);
         }
     }
 }
@@ -127,7 +150,7 @@ struct cPropertyList {
     void* vtbl;                 // +0x00
     volatile int mRef;          // +0x04
     uint32_t f08, f0c, f10, f14;
-    uint32_t f18[6];            // +0x18 (mPropertyMap)
+    Hashtable mPropertyMap;     // +0x18 (embedded hashtable: FreeNodes on this)
     void* mModCount;            // +0x30 (retail: pointer to a refcounted object)
     uint32_t f34;               // +0x34
     bool Read(void* stream);    // 0x006a2f60
@@ -137,8 +160,8 @@ struct cPropertyList {
 cPropertyList::~cPropertyList() {
     if (mModCount != 0)
         ((void (__thiscall*)(void*))VT(mModCount)[1])(mModCount);
-    FreeNodesHashtable(&f18[0]);
-    vtbl = 0;
+    mPropertyMap.FreeNodes();
+    vtbl = (void*)0x013eb938;   // Editor::cEditorResource vtable
 }
 
 // =====================================================================
@@ -148,21 +171,19 @@ struct HashMap {
     uint32_t f0;
     int* buckets;               // +0x04
     int bucketCount;            // +0x08
-    int* findOut(int* out, const int* key) { HashFind(out, key); return out; }
     int* operator[](const int* key);
 };
 // @ 0x00686380
 int* HashMap::operator[](const int* key) {
-    int local_18[6];
-    HashFind(local_18, key);
-    if (local_18[0] == *(int*)((char*)buckets + bucketCount * 4)) {
-        local_18[0] = *key;
-        local_18[1] = 0;
-        local_18[2] = 0;
-        HashInsert(local_18 + 3, local_18, 0);
-        local_18[0] = local_18[3];
+    HashIter it = ((Hashtable*)this)->find(key);
+    if (it.mpNode == (void*)(*(int*)((char*)buckets + bucketCount * 4))) {
+        int value[3];
+        value[0] = *key;
+        value[1] = 0;
+        value[2] = 0;
+        it = ((Hashtable*)this)->insert(value, key).first;
     }
-    return (int*)(local_18[0] + 4);
+    return (int*)((char*)it.mpNode + 4);
 }
 
 // =====================================================================
