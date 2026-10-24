@@ -117,14 +117,10 @@ public:
     void SetWeight(int key, int grp, float w);
     bool GetAnimationRange(int key, int grp, float* pMin, float* pMax);
     void Notify(struct cNotifyOther* other);
-    // @ 0x0073B7E0
-    int GetNumBones();
-    // @ 0x0073B800
-    void SetBoneTable(int a, void* b);
-    // @ 0x0073B840
-    void SetBoneCallback(int boneIndex, void* a2, void* a3, void* a4);
-    // @ 0x0073B8E0
-    void SetDynamicDraw(void* p, bool flag);
+    int GetNumBones();                                      // @ 0x0073B7E0
+    void SetBoneTable(int a, void* b);                      // @ 0x0073B800
+    cMaterial* SetBoneCallback(int boneIndex, void* a2, void* a3, void* a4);   // @ 0x0073B840
+    void SetDynamicDraw(void* p, bool flag);                // @ 0x0073B8E0
 };
 
 // @ 0x0073B7E0 — number of bones = last group's bone count + bone offset.
@@ -147,36 +143,45 @@ void cModelInstance::SetBoneTable(int a, void* b)
     mCounter += 1;
 }
 
-// @ 0x0073B840
-void cModelInstance::SetBoneCallback(int boneIndex, void* a2, void* a3, void* a4)
+// @ 0x0073B840 — the original leaves eax live at every ret (equiv's void_hides_eax): the material
+// record on the store paths, the bone index on the early-outs, and the low-byte-substituted group
+// pointer when a binding index is negative.  Return those values.
+cMaterial* cModelInstance::SetBoneCallback(int boneIndex, void* a2, void* a3, void* a4)
 {
+    uint32_t ret = (uint32_t)boneIndex;
     if (boneIndex == -1) {
         if (mGroupBegin == mGroupEnd)
-            return;
+            return (cMaterial*)(uint32_t)ret;
         cAnimGroupInfo* p = mGroupBegin;
         do {
-            char idx = p->mBindingIdx;
-            if (idx >= 0) {
+            int idx = (unsigned char)p->mBindingIdx;
+            ret = (ret & 0xFFFFFF00u) | (uint32_t)idx;   // mov al, byte ptr [edx]
+            if ((signed char)idx >= 0) {
                 cMaterial* m = &mMaterials[idx];
                 m->f_b8 = a3;
                 m->f_c0 = a4;
                 m->f_bc = a2;
+                ret = (uint32_t)(uint32_t)m;
             }
             p = (cAnimGroupInfo*)((char*)p + 8);
         } while (p != mGroupEnd);
-        return;
+        return (cMaterial*)(uint32_t)ret;
     }
     if (boneIndex < 0)
-        return;
+        return (cMaterial*)(uint32_t)ret;
     if (boneIndex >= (int)(mGroupEnd - mGroupBegin))
-        return;
-    char idx = mGroupBegin[boneIndex].mBindingIdx;
-    if (idx < 0)
-        return;
+        return (cMaterial*)(uint32_t)ret;
+    int idx = (unsigned char)mGroupBegin[boneIndex].mBindingIdx;
+    if ((signed char)idx < 0) {
+        uint32_t gp = (uint32_t)(void*)&mGroupBegin[boneIndex];
+        uint32_t v = (gp & ~0xFFu) | (uint32_t)(unsigned char)idx;
+        return (cMaterial*)v;
+    }
     cMaterial* m = &mMaterials[idx];
     m->f_b8 = a3;
     m->f_c0 = a4;
     m->f_bc = a2;
+    return m;
 }
 
 // @ 0x0073B8E0 — set the dynamic-draw object and its flag bit.
