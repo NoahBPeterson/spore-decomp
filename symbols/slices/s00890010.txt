@@ -1,0 +1,4 @@
+00890d20 ?GetMaxBaseline@Layout@Text@EA@@QAEMPBUTextStyle@23@@Z  # EA::Text::Layout::GetMaxBaseline (nonmatching: register allocation)
+00890e20 ?GetMinDescent@Layout@Text@EA@@QAEMPBUTextStyle@23@@Z  # EA::Text::Layout::GetMinDescent (nonmatching: register allocation)
+00890f50 ??0Layout@Text@EA@@QAE@XZ  # EA::Text::Layout::Layout
+00890f60 ?CompareFontCallback@@YAHPAUIFontCompareTarget@Text@EA@@HHH@Z  # font-set comparison callback used by the fixed_set ctor

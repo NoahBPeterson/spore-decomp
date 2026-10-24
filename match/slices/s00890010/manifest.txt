@@ -1,0 +1,3 @@
+# source  symbol  original VA  [flags override]
+slices/s00890010/s00890010.cpp  ??0Layout@Text@EA@@QAE@XZ  00890f50  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00890010/s00890010.cpp  ?CompareFontCallback@@YAHPAUIFontCompareTarget@Text@EA@@HHH@Z  00890f60  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
