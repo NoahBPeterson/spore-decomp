@@ -195,7 +195,7 @@ Vertex3D *Vertex3DVec::CopyUninit(Vertex3D *pDst, Vertex3D *pSrc)
         s += 1;
         d += 1;
     }
-    mpEnd = mpEnd + (pSrc - pDst);
+    mpEnd = mpEnd + (pDst - pSrc);
     return pDst;
 }
 
@@ -269,7 +269,6 @@ void Vertex3DVec::GrowAndInsert(Vertex3D *pos, const Vertex3D *pVal)
     mpCap = (Vertex3D *)pNew + newCap;
 }
 
-// @ 0x00b855e0
 // assign(begin,end) for a 0x18-byte vertex vector.
 struct Vertex2D { float x, y, z, w; u32 m10; u32 m14; };  // 0x18
 
@@ -285,7 +284,7 @@ struct Vertex2DVec {
 Vertex2D *Vertex2DVec::Assign(const Vertex2DVec *pSrc)
 {
     if (pSrc == this)
-        return mpBegin;
+        return (Vertex2D *)this;
     Vertex2D *pFirst = pSrc->mpBegin;
     Vertex2D *pLast = pSrc->mpEnd;
     u32 n = (u32)(pLast - pFirst);
@@ -297,21 +296,20 @@ Vertex2D *Vertex2DVec::Assign(const Vertex2DVec *pSrc)
         mpCap = pNew + n;
         mpBegin = pNew;
         mpEnd = pNew + n;
-        return mpBegin;
+        return (Vertex2D *)this;
     }
     u32 size = (u32)(mpEnd - mpBegin);
     if (size < n) {
         FUN_720250_CopyVertex3D(pFirst, pFirst + size, mpBegin);
         FUN_00b7f5c0(&pLast, mpBegin + size, pLast, mpEnd, pLast);
         mpEnd = mpBegin + n;
-        return mpBegin;
+        return (Vertex2D *)this;
     }
     FUN_720250_CopyVertex3D(pFirst, pLast, mpBegin);
     mpEnd = mpBegin + n;
-    return mpBegin;
+    return (Vertex2D *)this;
 }
 
-// @ 0x00b859c0
 // TileMap lookup: the container holds a vector of 4-byte keys at +0x34/+0x38 and
 // a parallel array of 0x14-byte elements at +0x0c.
 struct TileMapLookup {
@@ -392,6 +390,13 @@ extern "C" void SP__cGonzagoSubsystem__ctor(void *p);      // 0x00b5b960
 extern "C" void FUN_00b7f430(void *a, void *b);            // 0x00b7f430
 extern "C" void FUN_00b7f3f0(void *a, void *b);            // 0x00b7f3f0
 
+// eastl fixed-pool / free-list helpers are thiscall: ecx = the container.
+typedef void (__thiscall *PoolFreeNodesFn)(void *self, void *begin, void *count);
+typedef void (__thiscall *PoolFreeVecFn)(void *self, void *begin, void *end);
+// cGonzagoSubsystem ctor/dtor are thiscall: ecx = the embedded subsystem.
+typedef void (__thiscall *SubsystemDtorFn)(void *self);
+typedef void (__thiscall *SubsystemCtorFn)(void *self);
+
 // @ 0x00b85a30
 void PaintSystem::Dtor()
 {
@@ -399,7 +404,7 @@ void PaintSystem::Dtor()
     mpSubVtbl   = (void *)0x01465490;
     mpSubVtbl08 = (void *)0x01465488;
 
-    FUN_00b7f430(mPool.mpBegin, (void *)mPool.mCount);
+    ((PoolFreeNodesFn)0x00b7f430)(&mPool, mPool.mpBegin, (void *)mPool.mCount);
     mPool.mSize = 0;
     u32   count = mPool.mCount;
     void *first = mPool.mpBegin;
@@ -412,7 +417,7 @@ void PaintSystem::Dtor()
         }
     }
 
-    FUN_00b7f3f0(mpVecD4, mpVecD8);
+    ((PoolFreeVecFn)0x00b7f3f0)(&mpVecD4, mpVecD4, mpVecD8);
     if (BlockIsOurs(mpVecD4))
         operator_delete_array(mpVecD4);
     if (BlockIsOurs(mpVecC0))
@@ -435,78 +440,122 @@ void PaintSystem::Dtor()
     if (mpField20 != 0)
         ((void (__thiscall *)(void *))((void **)*(void **)mpField20)[1])(mpField20);
 
-    SP__cGonzagoSubsystem__dtor(&mpSubVtbl);
+    ((SubsystemDtorFn)0x00b5b9a0)(&mpSubVtbl);
     mpVtbl = (void *)0x013eb394;
 }
 
-// @ 0x00b85bc0
-// Initialises the PaintSystem's fixed pool and node bookkeeping.
-// Flat object laid out by this routine (retail offsets +0x08..+0x12838).
+// Stack-local eastl fixed_pool_base built by InitPool.
+struct FixedPoolBase {
+    u32  m0;            // +0x00
+    u32  m4;            // +0x04
+    void *mpBegin;      // +0x08
+    void *mpEnd;        // +0x0c
+    u32  mElemSize;     // +0x10
+    void *mpOwner;      // +0x14
+};
+
+// eastl helpers used by InitPool are all thiscall (ecx = the container).
+typedef void (__thiscall *FixedPoolInitFn)(void *self, void *pBegin, u32 nBytes, u32 nElem, u32 nAlign, u32 nFlags);
+typedef void (__thiscall *PoolInitNodesFn)(void *self, u32 nCount,
+                                           void *a, void *pB1, void *pB2, void *b, void *pB3, void *pPool);
+typedef u32  (__thiscall *PoolSizeFn)(void *self, u32 nCount);
+typedef void (__thiscall *PoolGrowFn)(void *self, u32 nCount);
+
+// Flat fixed-pool object embedded at PaintSystem+0xf4.
+// Laid out by PaintSystemPool::InitPool (retail offsets +0x08..+0x12838).
 struct PaintSystemPool {
     u8   mPad00[0x08];      // +0x00..0x07
     u32  mSize;             // +0x08
     u32  mCount;            // +0x0c
-    u32  mBoundHigh;        // +0x10 (0x461c4000)
-    u32  mBoundLow;         // +0x14 (0x40000000)
+    u32  mBoundHigh;        // +0x10 (10000.0f)
+    u32  mBoundLow;         // +0x14 (2.0f)
     u32  mField18;          // +0x18
     u8   mPad1c[0x18];      // +0x1c..0x33
     u8   mField34[0x04];    // +0x34
     u8   mPad38[0x800];     // +0x38..0x837
     u8   mNodes[0x12000];   // +0x838 fixed-block pool
     u8   mTail[0x04];       // +0x12838
+
+    void *InitPool(void *a, void *b);   // 0x00b85bc0 (thiscall)
 };
 
-void *PaintSystem_InitPool(void *pThis, void *a, void *b)
+// @ 0x00b85bc0
+// Initialises the PaintSystem's fixed pool and node bookkeeping.
+void *PaintSystemPool::InitPool(void *a, void *b)
 {
-    PaintSystemPool *p = (PaintSystemPool *)pThis;
-    u8 fixedPool[8];
-    *(void **)fixedPool = 0;
-    FUN_00921260(fixedPool, (u32)p->mNodes, 0x12000, 0x24, 4, 0);
+    FixedPoolBase fixedPool;
+    fixedPool.m0 = 0;
+    ((FixedPoolInitFn)0x00921260)(&fixedPool, mNodes, 0x12000, 0x24, 4, 0);
+
+    fixedPool.mpBegin   = mNodes;
+    fixedPool.mpEnd     = mNodes + 0x12000;
+    fixedPool.mElemSize = 0x24;
+    fixedPool.mpOwner   = (u8 *)this + 0x34;
 
     u32 nNodes = FUN_00921340(0x200);
-    FUN_00b83a40((void *)nNodes, a, &b, &b, b, &b, fixedPool);
+    ((PoolInitNodesFn)0x00b83a40)(this, nNodes, a, &b, &b, b, &b, &fixedPool);
 
-    p->mBoundHigh = 0x461c4000;
-    p->mBoundLow  = 0x40000000;
-    p->mField18   = 0;
-    u32 need = FUN_009213c0(p->mCount);
-    if (need > p->mSize)
-        FUN_00b7f510(need);
-    return pThis;
+    mBoundHigh = *(const u32 *)0x013f0620;   // 10000.0f
+    mBoundLow  = *(const u32 *)0x01470f1c;   // 2.0f
+    mField18   = 0;
+    fixedPool.mpBegin = 0;                   // +0x08 cleared before the size query
+    u32 need = ((PoolSizeFn)0x009213c0)(&fixedPool, mCount);
+    if (need > mSize)
+        ((PoolGrowFn)0x00b7f510)(this, need);
+    return this;
 }
 
-// @ 0x00b85ca0
-// TileMap::operator[](key): finds or creates the 0x14-byte record at +0xc.
-// Header of the owning TileMap (only +0x04/+0x08 are touched here).
+// TileMap header (only +0x04/+0x08 are touched by IndexLookup).
 struct TileMapIndex {
     u8      mPad00[0x04];   // +0x00
     void  **mpTable;        // +0x04 indexed record table
     u32     mIndex;         // +0x08
+
+    void *IndexLookup(void *pKey);   // 0x00b85ca0 (thiscall)
 };
 
-// The 0x18-byte lookup key handed to the find/insert helper.
+// The 0x18-byte lookup key built for the insert helper.
 struct TileMapKey {
     u32 m0;                 // +0x00
     u32 m4;                 // +0x04
     u32 m8;                 // +0x08
-    u8  mPad0c[0x0c];       // +0x0c..0x17
+    u32 mC;                 // +0x0c
+    u32 m10;                // +0x10
+    u32 m14;                // +0x14
 };
 
-void *TileMap_IndexLookup(void *pThis, void *pKey)
+// TileMap hash-map helpers are thiscall (ecx = the TileMap).
+typedef void (__thiscall *MapFindFn)(void *self, void *pOut, const void *pKey);
+typedef void (__thiscall *MapInsertFn)(void *self, void *pRec, const void *pKey, void *pArg);
+
+// One 0x34-byte scratch buffer: the find helper fills it, then the insert key
+// is built overlapping its tail (exactly as the retail compiler laid it out).
+struct LookupBuffer {
+    u32        mRec[5];     // +0x00..0x13 located/inserted record
+    TileMapKey key;         // +0x14..0x2b (overlaps the buffer tail)
+    u32        mTail0;      // +0x2c
+    u32        mTail1;      // +0x30
+};
+
+// @ 0x00b85ca0
+// TileMap::operator[](key): finds or creates the 0x14-byte record at +0xc.
+void *TileMapIndex::IndexLookup(void *pKey)
 {
-    u8 local[0x34];
-    FUN_00b83af0(local, pKey);
-    void *pRec = *(void **)local;
-    TileMapIndex *p = (TileMapIndex *)pThis;
-    if (pRec == p->mpTable[p->mIndex]) {
-        const TileMapKey *pIn = (const TileMapKey *)pKey;
-        TileMapKey key;
-        key.m0 = pIn->m0;
-        key.m8 = pIn->m8;
-        key.m4 = pIn->m4;
-        FUN_00b848f0(local, &key, (void *)((u32)pKey & 0xffffff00));
+    LookupBuffer buf;
+    ((MapFindFn)0x00b83af0)(this, &buf, pKey);
+    if (buf.mRec[0] == (u32)mpTable[mIndex]) {
+        const u32 *pIn = (const u32 *)pKey;
+        buf.key.m0  = pIn[0];
+        buf.key.m4  = pIn[1];
+        buf.key.m8  = pIn[2];
+        buf.mTail0  = buf.mRec[3];
+        buf.mTail1  = buf.mRec[4];
+        buf.key.mC  = buf.mRec[0];
+        buf.key.m10 = buf.mRec[1];
+        buf.key.m14 = buf.mRec[2];
+        ((MapInsertFn)0x00b848f0)(this, &buf, &buf.key, (void *)((u32)pKey & 0xffffff00));
     }
-    return (u8 *)pRec + 0xc;
+    return (u8 *)buf.mRec[0] + 0xc;
 }
 
 // @ 0x00b85e10
@@ -731,7 +780,6 @@ void Vertex3DVec::InsertFillN(Vertex3D *pos, u32 n, const Vertex3D *pVal)
 // ---------------------------------------------------------------- listener ctor
 // @ 0x00b863e0
 // Constructs a cGonzago listener / PaintSystem object.
-extern "C" void FUN_00b85bc0_m(void *p, void *a, void *b);   // 0x00b85bc0 (thiscall)
 
 struct cGonzagoListener {
     u32 m00;                    // +0x00 vtable (cListenerBase)
@@ -756,13 +804,13 @@ struct cGonzagoListener {
     u8  mf0;                    // +0xf0
     u8  mpPool[4];              // +0xf4 fixed pool (thiscall member target)
 
-    void Ctor();                // 0x00b863e0
+    cGonzagoListener *Ctor();   // 0x00b863e0 (returns this)
 };
 
-void cGonzagoListener::Ctor()
+cGonzagoListener *cGonzagoListener::Ctor()
 {
     m00 = 0x013eb384u;
-    SP__cGonzagoSubsystem__ctor(&mSubVtbl);
+    ((SubsystemCtorFn)0x00b5b960)(&mSubVtbl);
     m00 = 0x014654e0u;
     mSubVtbl   = 0x01465490u;
     mSubVtbl08 = 0x01465488u;
@@ -804,5 +852,6 @@ void cGonzagoListener::Ctor()
     mf0 = 0;
     mec = 0xffffffffu;
     u32 tmp = 0;
-    FUN_00b85bc0_m(mpPool, &tmp, &tmp);
+    ((PaintSystemPool *)mpPool)->InitPool(&tmp, &tmp);
+    return this;
 }
