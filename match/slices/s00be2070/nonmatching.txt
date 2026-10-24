@@ -1,1 +1,2 @@
 00be2440 937 complete; diff is register allocation in the id-propagation loops (i kept in memory in the original) and a few lea/add choices
+00be2340 39 complete part-list compaction (ours 72B, orig 71B); original keeps `this` in edi, spills the incoming ecx and reloads it for the insert allocator argument, ours materialises a volatile spill with one extra store; equiv PASS (206 valid inputs, 100% coverage)
