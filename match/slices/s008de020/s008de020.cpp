@@ -275,12 +275,11 @@ bool EA::ResourceMan::Manager::IsDatabaseRegistered(int a, void** pOut)
     EA::ResourceMan::DbNode* n = ((EA::ResourceMan::DbList*)mDatabaseList)->mpHead;
     for (;;) {
         if (!n) return false;
-        if ((int)n->mpObject == a) {
-            if (pOut) *pOut = n->mpValue;
-            return true;
-        }
+        if ((int)n->mpObject == a) break;
         n = n->mpNext;
     }
+    if (pOut) *pOut = n->mpValue;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -390,11 +389,11 @@ struct ChangeSet {
     const char* mpName;        // +0x1c
 
     void DoFreeNodes(RbNode* node);   // @ 0x008de4f0
-    void LowerBound(void** ppOut, const uint32* pKey); // @ 0x008de450
+    void** LowerBound(void** ppOut, const uint32* pKey); // @ 0x008de450
 };
 
 // @ 0x008de450
-void ChangeSet::LowerBound(void** ppOut, const uint32* pKey)
+void** ChangeSet::LowerBound(void** ppOut, const uint32* pKey)
 {
     char* pAnchor = (char*)this + 4;
     char* p = *(char**)((char*)this + 0xc);
@@ -434,9 +433,10 @@ void ChangeSet::LowerBound(void** ppOut, const uint32* pKey)
         } else {
             less = (int)n[7] < (int)pKey[3];
         }
-        if (!less) { *ppOut = pParent; return; }
+        if (!less) { *ppOut = pParent; return ppOut; }
     }
     *ppOut = pAnchor;
+    return ppOut;
 }
 
 // @ 0x008de4f0
@@ -456,12 +456,24 @@ void ChangeSet::DoFreeNodes(RbNode* node)
 // ---------------------------------------------------------------------------
 // @ 0x008de530 / @ 0x008de5e0 / @ 0x008de690  (hashtable DoRehash variants)
 // ---------------------------------------------------------------------------
+struct RehashResult {           // 12-byte result of the rehash policy query
+    bool   mRequired;           // +0x00
+    uint32 mnNewCount;          // +0x04
+    uint32 mPad;                // +0x08
+};
+
 struct HashBase {
     uint32 mUnk0;               // +0x00
     void** mpBucketArray;       // +0x04
     uint32 mnBucketCount;       // +0x08
     uint32 mnElementCount;      // +0x0c
-    uint32 mRehash[3];          // +0x10
+    struct RehashPolicy {                                   // +0x10 (12-byte policy object)
+        bool     mRequired;     // +0x00  first byte: 1 => a rehash is needed
+        uint32   mnNewCount;    // +0x04  the bucket count to grow to
+        uint32   mPad;          // +0x08
+        void GetRehashRequired(RehashResult* out, uint32 nBucketCount,
+                               uint32 nElementCount, uint32 nAdd);  // 0x00921440
+    } mRehash;
     EA::ResourceMan::IAllocatorV* mpAllocator;  // +0x1c
     const char* mpName;         // +0x20
 
@@ -469,7 +481,7 @@ struct HashBase {
     void DoRehash2(uint32 n);   // @ 0x008de5e0
     void DoRehash3(uint32 n);   // @ 0x008de690
     void DoFreeNodes(void** pBucketArray, uint32 n); // @ 0x008de7f0
-    void HashBase_Insert(void** ppResult, uint32* pKey, uint32 extra); // @ 0x008ded00
+    void** HashBase_Insert(void** ppResult, uint32* pKey, uint32 extra); // @ 0x008ded00
 };
 
 // @ 0x008de530
@@ -889,7 +901,7 @@ void Vec8::Fn8decb0()
         }
     }
     if (mpBegin) {
-        size_t bytes = ((char*)mpEnd - (char*)mpBegin) >> 3;
+        size_t bytes = ((char*)mpCapacity - (char*)mpBegin) >> 3;
         mpAllocator->Deallocate(mpBegin, bytes * 8);
     }
 }
@@ -897,7 +909,7 @@ void Vec8::Fn8decb0()
 // ---------------------------------------------------------------------------
 // @ 0x008ded00  (hashtable insert with rehash-on-demand)
 // ---------------------------------------------------------------------------
-void HashBase::HashBase_Insert(void** ppResult, uint32* pKey, uint32 extra)
+void** HashBase::HashBase_Insert(void** ppResult, uint32* pKey, uint32 extra)
 {
     (void)extra;
     uint32 hash = *pKey;
@@ -909,13 +921,14 @@ void HashBase::HashBase_Insert(void** ppResult, uint32* pKey, uint32 extra)
             *ppResult = node;
             *((char*)ppResult + 8) = 0;
             *(void**)((char*)ppResult + 4) = pSlot;
-            return;
+            return ppResult;
         }
         node = *(char**)(node + 8);
     }
-    char dontCare;
-    void* allocObj;
-    Fn921440(&allocObj, (void*)(size_t)mnBucketCount, (void*)(size_t)mnElementCount, 1);
+    char dontCare = 0;
+    RehashResult rehash;
+    rehash.mRequired = 0;
+    mRehash.GetRehashRequired(&rehash, mnBucketCount, mnElementCount, 1);
     node = (char*)mpAllocator->Allocate(0xc, 0, mpName);
     if (node) {
         *(uint32*)node = *(uint32*)pKey;
@@ -923,9 +936,10 @@ void HashBase::HashBase_Insert(void** ppResult, uint32* pKey, uint32 extra)
     }
     *(void**)(node + 8) = 0;
     (void)dontCare;
-    if (*(char*)&dontCare) {
-        idx = hash % mnElementCount;
-        DoRehash1(mnElementCount);
+    char rehashRequired = rehash.mRequired;
+    if (rehashRequired) {
+        idx = hash % rehash.mnNewCount;
+        DoRehash1(rehash.mnNewCount);
     }
     uint32 off = idx * 4;
     *(void**)(node + 8) = *(void**)((char*)mpBucketArray + off);
@@ -934,6 +948,7 @@ void HashBase::HashBase_Insert(void** ppResult, uint32* pKey, uint32 extra)
     *(void**)((char*)ppResult + 0) = node;
     *((char*)ppResult + 8) = 1;
     *(void**)((char*)ppResult + 4) = (char*)mpBucketArray + off;
+    return ppResult;
 }
 
 // ---------------------------------------------------------------------------
