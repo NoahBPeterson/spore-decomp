@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00ccd050  848  SP::cTribeDisplayStrategy::Deactivate: stub only; 1 vs 848 B - long linear teardown (RemoveHandler message deregistration, FindWindowByID + virtual +0x108 call, the +0xb0/+0x74/+0x78/+0x50/+0x2b8/+0x2bc release chains, two 0x14-slot noun-removal loops, the +0xb8 0x60-stride ReleaseIf loop, the 0x38-stride cSPTransformOps::Assign sweep and the +0x2c0 map erase) not reconstructed
+00ccd3a0  1277  SP::cTribeDisplayStrategy::UpdateTargetedTreeEffects: stub only; 1 vs 1277 B - eastl fixed-vector / rbtree template bodies, atexit-guarded statics, _ftol2 conversions and the targeted-tree-effect walk not reconstructed
+00ccd8a0  902  SP::cTribeDisplayStrategy::MakeTribeIcons: stub only; 1 vs 902 B - GetGameDataVector sweeps, minimap RemoveAllIcons, citizen/citizen-tribe icon passes and the final MakeTribeIcon loop not reconstructed
