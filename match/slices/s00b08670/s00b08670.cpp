@@ -15,6 +15,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc; x87 sqrt/fild with SSE arithmetic, like s01019090)
 #include "types.h"
 #include <math.h>
+#include <string.h>
 
 struct Vector3
 {
@@ -43,7 +44,9 @@ struct cSpatialObject
     virtual const Vector3* GetPosition();              // +0x2c
     PV2
     virtual void SetPosition(const Vector3* v);        // +0x38
-    PV8 PV4                                            // slots 15..26
+    PV                                                 // slot 15 (+0x3c)
+    virtual void SetF40(float v);                      // +0x40
+    PV8 PV2                                            // slots 17..26
     virtual const float* GetExtents(void* tmp);        // +0x6c (min xyz, max xyz)
     virtual float GetBoundingRadius();                 // +0x70
     PV8                                                // slots 29..36
@@ -100,7 +103,7 @@ struct ItemVector
     Item** insert(Item** pos, const AutoRef& v);       // 0x00b05b40 (ret 8)
 };
 
-struct Model { char pad[0x20]; int mMode; void FUN_00b452f0(cSpatialObject* s, const Vector3* v, int flag); };   // 0x00b452f0 (ret 0xc)
+struct Model { char pad[0x20]; int mMode; void FUN_00b452f0(cSpatialObject* s, const Vector3* v, int flag); void FUN_00b453a0(cSpatialObject* s); };   // 0x00b452f0 (ret 0xc), 0x00b453a0 (ret 4)
 Model* __cdecl FUN_00b3d310();                         // 0x00b3d310 (mode at +0x20)
 
 struct IReferencePoint
@@ -126,10 +129,14 @@ Vector3 __cdecl Normalize(const Vector3& v);           // 0x00436ce0
 
 struct ItemManager
 {
-    char pad000[0x1b905c];
+    char pad000[0x1b8f44];
+    Item** mpPendingBegin;                             // +0x1b8f44
+    Item** mpPendingEnd;                               // +0x1b8f48
+    char pad18f4c[0x1b905c - 0x1b8f4c];
     Item** mpBegin;                                    // +0x1b905c
     Item** mpEnd;                                      // +0x1b9060
     Item** FUN_00b06a40(Item** it, bool erase);        // 0x00b06a40 (ret 8)
+    Item*  FUN_00b08e90();                             // 0x00b08e90
     void Update(uint32_t dt);
 };
 
@@ -318,4 +325,360 @@ void ItemManager::Update(uint32_t dt)   // @ 0x00B08670
             }
         } while (it != mpEnd);
     }
+}
+
+// ===================================================================================================================
+// Remaining functions of this slice (gold7): model-instance spawn/acquire, spatial query, hit-box model init,
+// bounding-sphere query and the effect-pool init.
+// ===================================================================================================================
+
+extern uint32_t g_167afa8;                 // 0x0167afa8
+extern const float g_1485720;              // 0x01485720 (_HK_REAL_ONE)
+struct Data9 { uint32_t d[9]; };
+extern const Data9 g_167b554;              // 0x0167b554
+void __cdecl ea_delete(void* p);           // 0x00f47380
+
+// ---------------- 0x00b08e90 ---------------------------------------------------------------------------------------
+
+struct Viewer { PV4 PV2 PV virtual void* v1c(); };                    // +0x1c
+struct AppObj { PV8 PV8 PV4 virtual void* v50(); };                   // +0x50
+AppObj* __cdecl App();                                                // 0x0067dd10
+
+struct Camera
+{
+    void GetCameraLocationInfo(Vector3* a, Vector3* b, Vector3* c, Vector3* d) const;   // 0x007c3d30 (ret 0x10)
+};
+
+// @ 0x00b08e90
+Item* ItemManager::FUN_00b08e90()
+{
+    Item* result = 0;
+    if ((uint32_t)(mpPendingEnd - mpPendingBegin) > 0)
+    {
+        Item* item = mpPendingEnd[-1];
+        if (item)
+        {
+            item->AddRef();
+            result = item;
+        }
+        --mpPendingEnd;
+        Item* popped = *mpPendingEnd;
+        if (popped)
+            popped->Release();
+    }
+    else
+    {
+        Camera* cam = (Camera*)((Viewer*)App()->v50())->v1c();
+        Vector3 camPos = g_167af5c;
+        Vector3 camUp = g_167af5c;
+        if (cam)
+            cam->GetCameraLocationInfo(&camPos, &camUp, 0, 0);
+        Item** end = mpEnd;
+        Item** best = end;
+        float bestDist = 0.0f;
+        for (Item** it = mpBegin; it != end; ++it)
+        {
+            Item* item = *it;
+            if (!item)
+                continue;
+            if (item->mState == 3)
+                continue;
+            if (item->mFlags148 & 1)
+                continue;
+            if (item->mpEffect)
+                continue;
+            const Vector3* p = item->mSpatial.GetPosition();
+            const float dy = p->y - camPos.y;
+            const float dx = p->x - camPos.x;
+            const float dz = p->z - camPos.z;
+            const float d = dz * dz + dy * dy + dx * dx;
+            if (d > bestDist)
+            {
+                best = it;
+                bestDist = d;
+            }
+        }
+        if (best == end)
+            return 0;
+        Item* item = *best;
+        if (item)
+        {
+            item->AddRef();
+            result = item;
+        }
+        FUN_00b06a40(best, false);
+    }
+    if (result)
+    {
+        result->mSpatial.SetF40(1.0f);
+        if (FUN_00b3d310())
+            FUN_00b3d310()->FUN_00b453a0(&result->mSpatial);
+        result->Release();
+    }
+    return result;
+}
+
+// ---------------- 0x00b09070 ---------------------------------------------------------------------------------------
+
+struct ResObj
+{
+    virtual void AddRef();                                        // +0x00
+    virtual void Release();                                       // +0x04
+    PV                                                            // +0x08
+    virtual ResObj* v0c(uint32_t a, uint32_t b, uint32_t c);      // +0x0c
+    void FUN_00b79c30();                                          // 0x00b79c30
+};
+
+struct SPVec
+{
+    uint32_t* mpBegin;                                    // +0x00
+    uint32_t* mpEnd;                                      // +0x04
+    uint32_t* mpCapacity;                                 // +0x08
+    uint32_t mPad0c;                                      // +0x0c
+    uint32_t mPad10;                                      // +0x10
+    uint32_t mAlloc;                                      // +0x14
+    void FUN_00d01790(uint32_t n);                        // 0x00d01790 (ret 4)
+    void DoInsertKey(uint32_t* pos, const uint32_t& key); // 0x00b96600 (ret 8)
+    void erase(uint32_t* first, uint32_t* last)           // eastl::vector::erase, inlined
+    {
+        memcpy(first, last, (char*)mpEnd - (char*)last);
+        mpEnd -= (last - first);
+    }
+};
+
+template <class T> const T& Min(const T& a, const T& b) { return (a < b) ? a : b; }
+
+ResObj* __stdcall FUN_00b3d3c0(uint32_t a1, SPVec* v, uint32_t n, float f, uint32_t one, uint32_t zero);   // 0x00b3d3c0
+void __cdecl FUN_00b062c0(uint32_t* begin, uint32_t* end, int a3);                                          // 0x00b062c0
+
+struct cQueryMgr
+{
+    uint32_t FindNth(uint32_t key, uint32_t a, uint32_t b);           // 0x00b03320 (ret 0xc)
+    void FUN_00b09070(uint32_t a1, float a2, SPVec* out, int a4);
+};
+
+// @ 0x00b09070
+void cQueryMgr::FUN_00b09070(uint32_t a1, float a2, SPVec* out, int a4)
+{
+    uint32_t buf[256];
+    SPVec local;
+    local.mpBegin = buf;
+    local.mpEnd = buf;
+    local.mpCapacity = buf + 256;
+    local.mAlloc = 0;
+
+    out->erase(out->mpBegin, out->mpEnd);
+
+    ResObj* q = FUN_00b3d3c0(a1, &local, 6, a2, 1, 0);
+    q->FUN_00b79c30();
+
+    out->FUN_00d01790((uint32_t)(local.mpEnd - local.mpBegin));
+
+    for (uint32_t* it = local.mpBegin; it != local.mpEnd; ++it)
+    {
+        uint32_t* e = (uint32_t*)*it;
+        uint32_t key;
+        switch (e[0x88 / 4])
+        {
+        case 0: key = 0x3a8be428; break;
+        case 1: key = 0x29c388a;  break;
+        case 2: key = 0x6d60a1cc; break;
+        default: continue;
+        }
+        uint32_t r = FindNth(key, e[0x50 / 4], e[0x5c / 4]);
+        if (r)
+        {
+            if (out->mpEnd < out->mpCapacity)
+                *out->mpEnd++ = r;
+            else
+                out->DoInsertKey(out->mpEnd, r);
+        }
+    }
+
+    if (a4)
+        FUN_00b062c0(out->mpBegin, out->mpEnd, a4);
+
+    struct AllocHeader { uint32_t mFlag; };
+    if (local.mpBegin && ((AllocHeader*)local.mpBegin)[-1].mFlag != 0)
+        ea_delete(local.mpBegin);
+}
+
+// ---------------- 0x00b091d0 ---------------------------------------------------------------------------------------
+
+struct ModelInst
+{
+    PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV2 PV      // slots 0..90
+    virtual void v16c(int a);                              // +0x16c
+    virtual void v170(int a);                              // +0x170
+    uint32_t mField04;                                     // +0x04
+    uint16_t mWord08;                                      // +0x08
+    uint16_t mWord0a;                                      // +0x0a
+    Vector3  mPos;                                         // +0x0c
+    float    mF18;                                         // +0x18
+    Data9    mData1c;                                       // +0x1c
+    int32_t  mRefCount;                                    // +0x40
+};
+
+struct ModelList
+{
+    ModelInst** mpBegin;                                   // +0x00
+    ModelInst** mpEnd;                                     // +0x04
+    ModelInst** mpCapacity;                                // +0x08
+    void FUN_00473270(uint32_t n);                         // 0x00473270 (ret 4)
+};
+
+struct ModelMgr { PV4 PV2 PV virtual void* v1c(uint32_t id); };   // +0x1c
+ModelMgr* __cdecl ModelManager();                                 // 0x0067dd80
+
+struct cCreatureHitBoxes
+{
+    char pad000[0x16504];
+    ModelList mList;                                       // +0x16504
+    void FUN_00b06cd0();                                   // 0x00b06cd0
+    void FUN_00b091d0();
+};
+
+// @ 0x00b091d0
+void cCreatureHitBoxes::FUN_00b091d0()
+{
+    if ((uint32_t)(mList.mpEnd - mList.mpBegin) > 0)
+        FUN_00b06cd0();
+
+    ModelMgr* mm = ModelManager();
+    ResObj* model = (ResObj*)mm->v1c(0xeb9968);
+    if (model)
+        model->AddRef();
+
+    mList.FUN_00473270(0x14);
+
+    const uint32_t n = (uint32_t)(mList.mpEnd - mList.mpBegin);
+    for (uint32_t i = 0; i < n; ++i)
+    {
+        if (mList.mpBegin[i] == 0)
+        {
+            ResObj* made = model->v0c(0x2e81370, g_167afa8, 0x10);
+            ModelInst* old = mList.mpBegin[i];
+            if (made != (ResObj*)old)
+            {
+                if (made)
+                    ++((ModelInst*)made)->mRefCount;
+                mList.mpBegin[i] = (ModelInst*)made;
+                if (old)
+                {
+                    if (old->mRefCount > 1)
+                        --old->mRefCount;
+                    else
+                        old->v170((old->mField04 >> 31) & 1);
+                }
+            }
+            ModelInst* inst = mList.mpBegin[i];
+            inst->mData1c = g_167b554;
+            inst->mF18 = g_1485720;
+            inst->mPos = g_167af5c;
+            inst->mWord08 = 0;
+            inst->mWord0a = 0;
+            inst->mField04 &= ~1u;
+            inst->v16c(0);
+        }
+    }
+
+    if (model)
+        model->Release();
+}
+
+// ---------------- 0x00b09340 ---------------------------------------------------------------------------------------
+
+struct BigElem
+{
+    char pad000[0x08];
+    Vector3 mPos;                                          // +0x08
+    float   mRadius;                                       // +0x14
+    char pad018[0x28 - 0x18];
+    Vector3 mCmp0;                                         // +0x28
+    Vector3 mCmp1;                                         // +0x34
+    Vector3 mCmp2;                                         // +0x40
+    char pad04c[0x19a8 - 0x4c];
+};
+
+struct cBigList
+{
+    char pad000[0x1e5f0];
+    BigElem* mpBegin;                                      // +0x1e5f0
+    BigElem* mpEnd;                                        // +0x1e5f4
+    void FUN_00b09340(Vector3* p, float radius, SPVec* out, bool full, Vector3* filter);
+};
+
+void __cdecl FUN_00b06420(uint32_t* begin, uint32_t* end, Vector3 v);   // 0x00b06420
+
+// @ 0x00b09340
+void cBigList::FUN_00b09340(Vector3* p, float radius, SPVec* out, bool full, Vector3* filter)
+{
+    const int n = (int)(mpEnd - mpBegin);
+    if (n == 0)
+    {
+        out->erase(out->mpBegin, out->mpEnd);
+        return;
+    }
+
+    out->FUN_00d01790(Min(n, 0x20));
+
+    for (BigElem* e = mpBegin; e != mpEnd; ++e)
+    {
+        if (filter != 0 &&
+            memcmp(filter, &e->mCmp0, sizeof(Vector3)) != 0 &&
+            memcmp(filter, &e->mCmp1, sizeof(Vector3)) != 0 &&
+            memcmp(filter, &e->mCmp2, sizeof(Vector3)) != 0)
+            continue;
+
+        const float dy = e->mPos.y - p->y;
+        const float dz = e->mPos.z - p->z;
+        const float dx = e->mPos.x - p->x;
+        const float rr = e->mRadius + radius;
+        const float d = dy * dy + dz * dz + dx * dx;
+        if (rr * rr > d)
+        {
+            if (out->mpEnd < out->mpCapacity)
+                *out->mpEnd++ = (uint32_t)&e->mPos;
+            else
+                out->DoInsertKey(out->mpEnd, (const uint32_t&)e->mPos);
+        }
+    }
+
+    if (full)
+        FUN_00b06420(out->mpBegin, out->mpEnd, *p);
+}
+
+// ---------------- 0x00b09510 ---------------------------------------------------------------------------------------
+
+struct FixedPool
+{
+    void* mpHead;                                          // +0x00
+    void* mpNext;                                          // +0x04
+    void* mpStart;                                         // +0x08
+    void* mpEnd;                                           // +0x0c
+    uint32_t mSize;                                        // +0x10
+    void init(void* p, uint32_t size, uint32_t itemSize, uint32_t align, uint32_t flags);   // 0x00921260 (ret 0x14)
+};
+
+struct cEffectPool
+{
+    char pad000[0x2c];
+    char mBuffer[0xe000];                                  // +0x2c .. +0xe02c
+    cEffectPool* FUN_00b09510(int a1);
+    void FUN_00b00610(int a1, FixedPool* pool);            // 0x00b00610 (ret 8)
+    void FUN_00b05ba0(int a1);                             // 0x00b05ba0 (ret 4)
+};
+
+// @ 0x00b09510
+cEffectPool* cEffectPool::FUN_00b09510(int a1)
+{
+    FixedPool pool;
+    pool.mpHead = 0;
+    pool.init(mBuffer, 0xe000, 0x38, 8, 0);
+    pool.mpStart = mBuffer;
+    pool.mpEnd = (char*)pool.mpStart + 0xe000;
+    pool.mSize = 0x38;
+    FUN_00b00610(a1, &pool);
+    FUN_00b05ba0(a1);
+    return this;
 }

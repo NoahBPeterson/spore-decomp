@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b08670/s00b08670.cpp  ?FUN_00b09510@cEffectPool@@QAEPAU1@H@Z  00b09510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
