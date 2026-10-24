@@ -10,16 +10,17 @@ struct U16Vec {
   unsigned short* mpBegin;    // +0x00
   unsigned short* mpEnd;      // +0x04
   unsigned short* mpEndCap;   // +0x08
-  void Setup(unsigned n, const void* alloc);
-  void Init(unsigned n, const void* alloc);
+  __declspec(noinline) U16Vec* Setup(unsigned n, const void* alloc);
+  U16Vec* Init(unsigned n, const void* alloc);
   void AddZero();
+  void InsertAt(void* pos, const void* value);  // 0x0082c970 (thiscall)
 };
-extern void VecInsertU16(unsigned short* pos, unsigned short val);
+void* EA_New(unsigned int size, const char* group, int, int, int, int); // 0x00f473a0
 
 // @ 0x0082BFA0
-void U16Vec::Setup(unsigned n, const void* alloc) {
+U16Vec* U16Vec::Setup(unsigned n, const void* alloc) {
   if (n != 0) {
-    unsigned short* p = (unsigned short*)::operator new(n * 2);
+    unsigned short* p = (unsigned short*)EA_New(n * 2, (const char*)0x13f6b3c, 0, 0, 0x13ebb38, 0xd1);
     mpBegin = p;
     mpEnd = p;
     mpEndCap = p + n;
@@ -28,10 +29,11 @@ void U16Vec::Setup(unsigned n, const void* alloc) {
     mpEnd = 0;
     mpEndCap = 0;
   }
+  return this;
 }
 
 // @ 0x0082CC60
-void U16Vec::Init(unsigned n, const void* alloc) {
+U16Vec* U16Vec::Init(unsigned n, const void* alloc) {
   Setup(n, alloc);
   if (n != 0) {
     unsigned short* p = mpBegin;
@@ -39,16 +41,19 @@ void U16Vec::Init(unsigned n, const void* alloc) {
     while (p < e) *p++ = 0;
   }
   mpEnd = mpBegin + n;
+  return this;
 }
 
 // @ 0x0082CCB0
 void U16Vec::AddZero() {
-  if (mpEnd < mpEndCap) {
-    *mpEnd = 0;
-    ++mpEnd;
+  unsigned short* e = mpEnd;
+  if (e < mpEndCap) {
+    mpEnd = (unsigned short*)((char*)e + 4);
+    if (e != 0)
+      *(unsigned int*)e = 0;
   } else {
-    unsigned short v = 0;
-    VecInsertU16(mpEnd, v);
+    unsigned int v = 0;
+    InsertAt(e, &v);
   }
 }
 
