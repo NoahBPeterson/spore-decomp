@@ -80,6 +80,9 @@ struct IObj : IRef {
     virtual void SetVec4(float* v);                                 // +0x6c
     virtual void s28(); virtual void s29(); virtual void s30();
     virtual void SetFlags(int a, int b);                            // +0x7c
+
+    char     pad04[0x18 - 4];
+    uint32_t mField18;                                              // +0x18 (key of the animation maps)
 };
 struct MapIntObj {                                                  // map<int, IObj*> at this+0xc8
     IObj*& operator[](const int& key);                              // 0x00e3ec20
@@ -92,6 +95,30 @@ struct Vec2 {
     float x, y;
     Vec2() {}
     Vec2(const Vec2& o) : x(o.x), y(o.y) {}
+};
+struct Vec4 {
+    float x, y, z, w;
+};
+
+// eastl::map<uint32_t, Vec2> at EntryPanel+0x138 (the anchor/end node sits at +0x13c).
+struct MapU32Vec2 {
+    void*  mpRoot;                                                  // +0x00
+    void*  mpAnchor;                                                // +0x04
+    void** find(void** outIt, const uint32_t& key);                 // 0x00e5c780 (ret 8)
+    Vec2*  Get(const uint32_t& key);                                // 0x00e3eca0 (ret 4)
+};
+// eastl::map<uint32_t, Vec4> at EntryPanel+0x154
+struct MapU32Vec4 {
+    void*  mpRoot;                                                  // +0x00
+    void*  mpAnchor;                                                // +0x04
+    Vec4*  Get(const uint32_t& key);                                // 0x00e3ed30 (ret 4)
+};
+// eastl::map<Ref<IObj>, IObj*> at EntryPanel+0x100 (anchor at +0x104)
+struct MapRefIObj {
+    void*  mpRoot;                                                  // +0x00
+    void*  mpAnchor;                                                // +0x04
+    void** find(void** outIt, const Ref<IObj>& key);                // 0x00e5c780 (ret 8)
+    IObj*& operator[](const Ref<IObj>& key);                        // 0x00ceb2b0 (ret 4)
 };
 
 // panel entry widget (0x10c bytes)
@@ -211,7 +238,13 @@ struct EntryPanel {
     MapIntObj  mObjs;                                               // +0xc8
     char       padc9[0xe4 - 0xc9];
     MapRefObj  mObjRefs;                                            // +0xe4
-    char       pade5[0x184 - 0xe5];
+    char       pade5[0x100 - 0xe5];
+    MapRefIObj mRefs100;                                            // +0x100
+    char       pad108[0x138 - 0x108];
+    MapU32Vec2 mMap138;                                             // +0x138
+    char       pad140[0x154 - 0x140];
+    MapU32Vec4 mMap154;                                             // +0x154
+    char       pad15c[0x184 - 0x15c];
     PanelVec   mEntries;                                            // +0x184
     char       pad190[0x1dc - 0x190];
     char       mField1dc;                                           // +0x1dc
@@ -230,6 +263,10 @@ struct EntryPanel {
     void  Fe3caa0();                                                // 0x00e3caa0
 
     void Refresh();                                                 // 0x00e3f970
+
+    Vec2* GetAnimVec2(Vec2* out, IObj* obj);                        // 0x00e40010 (ret 8)
+    Vec4* GetAnimVec4(Vec4* out, IObj* obj);                        // 0x00e40080 (ret 8)
+    IObj* GetMappedObject(IObj* src);                               // 0x00e40670 (ret 4)
 };
 
 // @ 0x00e3f970
@@ -371,4 +408,61 @@ void EntryPanel::Refresh()
     }
     if (propList)
         propList->Release();
+}
+
+// @ 0x00e40010
+Vec2* EntryPanel::GetAnimVec2(Vec2* out, IObj* obj)
+{
+    out->x = 0.0f;
+    out->y = 0.0f;
+    if (obj)
+    {
+        uint32_t key = obj->mField18;
+        void* it;
+        if (*mMap138.find(&it, key) != &mMap138.mpAnchor)
+        {
+            Vec2* v = mMap138.Get(key);
+            out->x = v->x;
+            out->y = v->y;
+        }
+    }
+    return out;
+}
+
+// @ 0x00e40080
+Vec4* EntryPanel::GetAnimVec4(Vec4* out, IObj* obj)
+{
+    if (obj)
+    {
+        uint32_t key = obj->mField18;
+        void* it;
+        if (*mMap138.find(&it, key) != &mMap138.mpAnchor)
+        {
+            Vec4* v = mMap154.Get(key);
+            out->x = v->x;
+            out->y = v->y;
+            out->z = v->z;
+            out->w = v->w;
+        }
+    }
+    return out;
+}
+
+// @ 0x00e40670
+IObj* EntryPanel::GetMappedObject(IObj* src)
+{
+    bool found;
+    {
+        Ref<IObj> key(src);
+        void* it;
+        found = *mRefs100.find(&it, key) != &mRefs100.mpAnchor;
+    }
+    if (!found)
+        return 0;
+    IObj* result;
+    {
+        Ref<IObj> key(src);
+        result = mRefs100[key];
+    }
+    return result;
 }

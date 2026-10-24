@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e40670  134  EntryPanel::GetMappedObject; equiv PASS 366 inputs, 61% coverage (39/64 insns), memory effects match; only callee-saved register roles and the Ref-local promotion differ
