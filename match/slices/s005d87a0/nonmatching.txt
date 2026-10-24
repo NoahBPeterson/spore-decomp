@@ -1,4 +1,3 @@
 005d87b0  61  UpdateComponent(float): spring/overshoot/linear switch; original tail-merges cases 0/1/default into one block, cl keeps two copies
-005d88b0  345  LerpCursor: switch index computed in a scratch register (lea) instead of in-place add on eax; rest is a 2-byte shift
 005d8f10  16  UpdateComponent(transform): the two quaternion locals land in swapped stack slots
 005d9800  180  map<AutoRefCount<cMWModel>, AutoRefCount<cIModelWorld>>::operator[]: original keeps the temp pair's key in a register and elides the null mapped-value release (looks like cross-function const knowledge); cl reloads and releases [equiv: PASS 911 valid inputs, 100% coverage]

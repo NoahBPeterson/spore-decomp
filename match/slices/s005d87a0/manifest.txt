@@ -19,3 +19,4 @@ slices/s005d87a0/s005d87a0.cpp  ??0?$pair@$$CBV?$AutoRefCount@VIWindow@UTFWin@EA
 slices/s005d87a0/s005d87a0.cpp  ??0?$pair@QAMV?$vector@PAUcSPEditorTactileComponent@SP@@Usp_vector_allocator@eastl@@@eastl@@@eastl@@QAE@ABU01@@Z  005d9680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s005d87a0/s005d87a0.cpp  ??0cSPEditorTactilityManager@SP@@QAE@XZ  005d96d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s005d87a0/s005d87a0.cpp  ??_GcSPEditorTactilityManager@SP@@UAEPAXI@Z  005d9770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d87a0/s005d87a0.cpp  ?LerpCursor@cSPEditorTactilityManager@SP@@QAEXW4eEditorTactileType@2@MMW4eEditorTactileLerp@2@@Z  005d88b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

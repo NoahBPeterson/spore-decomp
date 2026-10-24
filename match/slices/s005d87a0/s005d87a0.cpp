@@ -425,34 +425,35 @@ bool __stdcall cSPEditorTactilityManager::UpdateComponent(cSPEditorTactileCompon
 void cSPEditorTactilityManager::LerpCursor(eEditorTactileType type, float finalValue, float time, eEditorTactileLerp lerp)
 {
     float historyValue;
+    eEditorTactileType newType;
     switch (type) {
-    case 0x1002: historyValue = 0.0f; type = (eEditorTactileType)0xb; break;
-    case 0x1012: historyValue = 0.1f; type = (eEditorTactileType)0xb; break;
-    case 0x1013: historyValue = 0.2f; type = (eEditorTactileType)0xb; break;
-    case 0x1014: historyValue = 0.3f; type = (eEditorTactileType)0xb; break;
-    case 0x1015: historyValue = 0.4f; type = (eEditorTactileType)0xb; break;
-    case 0x1016: historyValue = 0.5f; type = (eEditorTactileType)0xb; break;
-    case 0x1017: historyValue = 0.6f; type = (eEditorTactileType)0xb; break;
-    case 0x1018: historyValue = 0.7f; type = (eEditorTactileType)0xb; break;
-    case 0x1019: historyValue = 0.8f; type = (eEditorTactileType)0xb; break;
-    case 0x101a: historyValue = 0.9f; type = (eEditorTactileType)0xb; break;
-    case 0x1005: historyValue = 0.0f; type = (eEditorTactileType)0xc; break;
-    case 0x101b: historyValue = 0.1f; type = (eEditorTactileType)0xc; break;
-    case 0x101c: historyValue = 0.2f; type = (eEditorTactileType)0xc; break;
-    case 0x101d: historyValue = 0.3f; type = (eEditorTactileType)0xc; break;
-    case 0x101e: historyValue = 0.4f; type = (eEditorTactileType)0xc; break;
-    case 0x101f: historyValue = 0.5f; type = (eEditorTactileType)0xc; break;
-    case 0x1020: historyValue = 0.6f; type = (eEditorTactileType)0xc; break;
-    case 0x1021: historyValue = 0.7f; type = (eEditorTactileType)0xc; break;
-    case 0x1022: historyValue = 0.8f; type = (eEditorTactileType)0xc; break;
-    case 0x1023: historyValue = 0.9f; type = (eEditorTactileType)0xc; break;
+    case 0x1002: historyValue = 0.0f; newType = (eEditorTactileType)0xb; break;
+    case 0x1012: historyValue = 0.1f; newType = (eEditorTactileType)0xb; break;
+    case 0x1013: historyValue = 0.2f; newType = (eEditorTactileType)0xb; break;
+    case 0x1014: historyValue = 0.3f; newType = (eEditorTactileType)0xb; break;
+    case 0x1015: historyValue = 0.4f; newType = (eEditorTactileType)0xb; break;
+    case 0x1016: historyValue = 0.5f; newType = (eEditorTactileType)0xb; break;
+    case 0x1017: historyValue = 0.6f; newType = (eEditorTactileType)0xb; break;
+    case 0x1018: historyValue = 0.7f; newType = (eEditorTactileType)0xb; break;
+    case 0x1019: historyValue = 0.8f; newType = (eEditorTactileType)0xb; break;
+    case 0x101a: historyValue = 0.9f; newType = (eEditorTactileType)0xb; break;
+    case 0x1005: historyValue = 0.0f; newType = (eEditorTactileType)0xc; break;
+    case 0x101b: historyValue = 0.1f; newType = (eEditorTactileType)0xc; break;
+    case 0x101c: historyValue = 0.2f; newType = (eEditorTactileType)0xc; break;
+    case 0x101d: historyValue = 0.3f; newType = (eEditorTactileType)0xc; break;
+    case 0x101e: historyValue = 0.4f; newType = (eEditorTactileType)0xc; break;
+    case 0x101f: historyValue = 0.5f; newType = (eEditorTactileType)0xc; break;
+    case 0x1020: historyValue = 0.6f; newType = (eEditorTactileType)0xc; break;
+    case 0x1021: historyValue = 0.7f; newType = (eEditorTactileType)0xc; break;
+    case 0x1022: historyValue = 0.8f; newType = (eEditorTactileType)0xc; break;
+    case 0x1023: historyValue = 0.9f; newType = (eEditorTactileType)0xc; break;
     default: break;
     }
     mCursorAnimation.mHistoryValue = historyValue;
     mCursorAnimation.mFinalValue = finalValue;
     mCursorAnimation.mTimeRemaining = time;
     mCursorAnimation.mTimeTotal = time;
-    mCursorAnimation.mType = type;
+    mCursorAnimation.mType = newType;
     mCursorAnimation.mLerp = lerp;
     mCursorAnimation.mVelocity = 0.0f;
     mCursorAnimation.mOverShootScale = 1.1f;
