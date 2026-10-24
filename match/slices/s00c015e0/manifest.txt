@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c015e0/s00c015e0.cpp  ?FUN_00c01ce0@@YAXPAUISerializableObject@@PAUEmptyBubbleVec@@@Z  00c01ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c015e0/s00c015e0.cpp  ?UpdateZone@ILaneObject@@QAEX_N@Z  00c01e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c015e0/s00c015e0.cpp  ?ClearLanes@ILaneObject@@QAEXXZ  00c01e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c015e0/s00c015e0.cpp  ?FUN_00c024f0@@YAXPAUISerializableObject@@PAULaneRecVec@@@Z  00c024f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

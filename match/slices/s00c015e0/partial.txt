@@ -1,0 +1,6 @@
+# va  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00c015e0.  4/5 byte-exact (00c01ce0, 00c01e20, 00c01e80, 00c024f0).
+#
+00c01f90  cCommunity::UpdateLanes: complete reconstruction (no stubs, no naked/asm bodies) but the retail stack/register shape is not reproduced; the two 0xbd9b40 call sites (GetCityHall() with no stack args, then GetCityHall(&pos,&radius)) are modelled as overloads; ownership notes: the lane-point vector and the lane-graph vector share the 0x20-byte LaneRec (mDir doubles as mNext), the circle spoke table is read at cActionCircle+0x50; Equivalence FAIL (5/151 valid inputs, 21.3% coverage) - the failing runs abort in the difftest fake-call harness ("fake-arity: no call site before 00000000") on a vcall through a faked vt[26]/vt[3] result that the original never reaches
