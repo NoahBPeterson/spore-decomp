@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00d2ba60    6 cTimerBarHost::Initialize; equiv PASS 400 inputs, 100% coverage; only the lea/store scheduling differs
+00d2bac0  216 cTimerBarFull::Init; equiv WEAK 364 valid inputs, 5.9% coverage; retail's five-float placement block and rect store order differ, register allocation otherwise agrees

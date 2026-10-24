@@ -1,1 +1,11 @@
-# (no byte-exact functions in this slice)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d2aec0/s00d2aec0.cpp  ?AwardCreatureAchievements@@YAXXZ  00d2b5f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2aec0/s00d2aec0.cpp  ?RefreshSimBar@@YGXPAUcSimBarHost@@@Z  00d2b6b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2aec0/s00d2aec0.cpp  ?SetPosseWindowState@cCreatureDisplayStrategyA@@QAEXI_N@Z  00d2b6e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2aec0/s00d2aec0.cpp  ?UpdateTimerVisibility@cCreatureDisplayStrategyC@@QAEXPAUcTimerVisTarget@@@Z  00d2b720  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2aec0/s00d2aec0.cpp  ?OnRemovePosseMemberMessage@@YG_NIPAUcPosseMessage@@@Z  00d2b8c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2aec0/s00d2aec0.cpp  ?RemoveUIForPosseMember@cCreatureDisplayStrategyB@@QAEXPAX@Z  00d2b8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2aec0/s00d2aec0.cpp  ?UpdatePosseItemGhosts@cCreatureDisplayStrategyE@@QAEXXZ  00d2b950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2aec0/s00d2aec0.cpp  ?Terminate@cTimerBarHost@@QAEXXZ  00d2ba90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2aec0/s00d2aec0.cpp  ?Shutdown@cCreatureTimerBar@@QAEXXZ  00d2bc60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2aec0/s00d2aec0.cpp  ?SetVisibility@cCreatureTimerBar@@QAEX_N@Z  00d2bc90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

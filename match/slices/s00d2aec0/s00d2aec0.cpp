@@ -231,3 +231,480 @@ void cCreatureCamera::Update(unsigned ticks, ICameraHelper* pHelper)
 }
 
 }  // namespace SP
+
+// ---------------------------------------------------------------------------------------------
+// Achievement / UI / posse helpers that live next to the camera code.
+struct cAchievementsController {
+    void AwardAchievement(uint32_t id);                             // 0x00676710
+    bool HasAchievement(uint32_t id);                               // 0x006766f0
+    void AutoTest(uint32_t id, int value);                          // 0x00676e90
+};
+cAchievementsController* GetAchievementsController();               // 0x00675250
+
+struct ITerrainSphere {
+    int32_t GetSurfaceKind();                                       // 0x00c75420
+};
+struct cNounManagerTerrain {
+    ITerrainSphere* GetCurrentTerrainSphere();                      // 0x00f67d90
+};
+cNounManagerTerrain* GetNounManagerTerrain();                       // 0x00b3d300
+
+// @ 0x00d2b5f0
+void AwardCreatureAchievements()
+{
+    cAchievementsController* ctrl = GetAchievementsController();
+    ctrl->AwardAchievement(0x8f5e1285u);
+    if (ctrl->HasAchievement(0x6e36e67fu))
+        ctrl->AwardAchievement(0x6e36e67fu);
+    if (ctrl->HasAchievement(0xba577381u))
+        ctrl->AwardAchievement(0xba577381u);
+    if (ctrl->HasAchievement(0x94f5e078u))
+        ctrl->AwardAchievement(0x94f5e078u);
+    if (ctrl->HasAchievement(0x838a3cf4u))
+        ctrl->AwardAchievement(0x838a3cf4u);
+    ctrl->AutoTest(0x8baf77deu, 1);
+    if (GetNounManagerTerrain()->GetCurrentTerrainSphere()->GetSurfaceKind() == 2)
+        ctrl->AwardAchievement(0x24545cdfu);
+}
+
+struct cSimBlob {
+    float NodeRatio();                                              // 0x00bfc490
+    uint8_t pad04[0x20];                                            // sizeof == 0x20
+};
+struct cSimBarHost {
+    uint8_t  pad00[0x5a8];
+    cSimBlob mSim;                                                  // +0x5a8
+};
+void FUN_00b69930(void* pOwner, float ratio, int flag);             // 0x00b69930
+
+// @ 0x00d2b6b0
+void __stdcall RefreshSimBar(cSimBarHost* pOwner)
+{
+    FUN_00b69930(pOwner, pOwner->mSim.NodeRatio(), 0);
+}
+
+struct Vec4;
+
+struct cUIWindow {
+    virtual void V00(); virtual void V01(); virtual void V02(); virtual void V03();
+    virtual void V04(); virtual void V05(); virtual void V06(); virtual void V07();
+    virtual void V08(); virtual void V09(); virtual void V10(); virtual void V11();
+    virtual void V12();
+    virtual Vec4* GetRect();                                        // +0x34
+    virtual void V14(); virtual void V15(); virtual void V16(); virtual void V17();
+    virtual void V18(); virtual void V19(); virtual void V20(); virtual void V21();
+    virtual void V22(); virtual void V23();
+    virtual void SetRect(Vec4* pRect);                              // +0x60
+    virtual void V25(); virtual void V26(); virtual void V27();
+    virtual void V28(); virtual void V29(); virtual void V30();
+    virtual void SetSelected(bool selected, bool animate);          // +0x7c
+};
+struct cUIWindowHost {
+    void* FindWindowByID(uint32_t id);                              // 0x00e012b0
+};
+struct cPosseUIState {
+    uint8_t pad00[0xdc];
+    uint8_t mVisibleFlag;                                           // +0xdc
+};
+extern cPosseUIState* g_pPosseUIState;                              // 0x0169e294
+
+struct cCreatureDisplayStrategyA {
+    uint8_t      pad00[0x58];
+    cUIWindowHost* mpPosseUI;                                       // +0x58
+    void SetPosseWindowState(uint32_t id, bool visible);
+};
+
+// @ 0x00d2b6e0
+void cCreatureDisplayStrategyA::SetPosseWindowState(uint32_t id, bool visible)
+{
+    if (!mpPosseUI)
+        return;
+    cUIWindow* w = (cUIWindow*)mpPosseUI->FindWindowByID(id);
+    if (!w)
+        return;
+    w->SetSelected(true, visible);
+    if (id == 0x6455b55u)
+        g_pPosseUIState->mVisibleFlag = (uint8_t)visible;
+}
+
+struct cPosseMessage {
+    uint8_t pad00[8];
+    void*   mpMember;                                               // +0x08
+};
+struct cPosseSimulator {
+    static cPosseSimulator* Instance();                             // 0x00d539d0
+    void RemovePosseMember(void* member, int a, int b);             // 0x00d53490
+    uint32_t GetMemberCount();                                      // 0x00d52e10
+};
+
+// @ 0x00d2b8c0
+bool __stdcall OnRemovePosseMemberMessage(uint32_t msg, cPosseMessage* pMsg)
+{
+    if (msg == 0x14051500u)
+    {
+        void* pMember = pMsg->mpMember;
+        cPosseSimulator::Instance()->RemovePosseMember(pMember, 1, 0);
+    }
+    return false;
+}
+
+struct cGonzagoTimerLike {
+    void ResetTimer();                                              // 0x00b63890
+    void ShutdownTimer();                                           // 0x00b638b0
+    uint8_t pad04[0x20];                                            // sizeof == 0x20
+};
+struct IRefV08 {
+    virtual void V00(); virtual void V04();
+    virtual void Release();                                         // +0x08
+};
+struct cTimerBarHost {
+    uint8_t        mVisible;                                        // +0x00
+    uint8_t        pad01[3];
+    IRefV08*       mpRef;                                           // +0x04
+    uint8_t        pad08[0x38 - 0x08];
+    cGonzagoTimerLike mTimerA;                                      // +0x38
+    cGonzagoTimerLike mTimerB;                                      // +0x58
+    cTimerBarHost* Initialize();
+    void Terminate();
+};
+
+// @ 0x00d2ba60
+cTimerBarHost* cTimerBarHost::Initialize()
+{
+    mVisible = 1;
+    mpRef = 0;
+    mTimerA.ResetTimer();
+    mTimerB.ResetTimer();
+    return this;
+}
+
+// @ 0x00d2ba90
+void cTimerBarHost::Terminate()
+{
+    mTimerB.ShutdownTimer();
+    mTimerA.ShutdownTimer();
+    IRefV08* pRef = mpRef;
+    if (pRef)
+        pRef->Release();
+}
+
+struct PosseItem {
+    void* mpObject;
+    void* mpWindow;
+};
+
+struct PosseItemVec {
+    PosseItem* mpBegin;                                             // +0xa4
+    PosseItem* mpEnd;                                               // +0xa8
+    uint32_t Size() const { return (uint32_t)(mpEnd - mpBegin); }
+};
+
+struct cSPUIPosse {
+    virtual void V00(); virtual void V01(); virtual void V02(); virtual void V03();
+    virtual void V04(); virtual void V05(); virtual void V06(); virtual void V07();
+    virtual void V08(); virtual void V09(); virtual void V10(); virtual void V11();
+    virtual void V12(); virtual void V13(); virtual void V14(); virtual void V15();
+    virtual void V16(); virtual void V17(); virtual void V18(); virtual void V19();
+    virtual void V20(); virtual void V21(); virtual void V22(); virtual void V23();
+    virtual void V24(); virtual void V25(); virtual void V26(); virtual void V27();
+    virtual void V28(); virtual void V29(); virtual void V30(); virtual void V31();
+    virtual void V32(); virtual void V33(); virtual void V34(); virtual void V35();
+    virtual void V36(); virtual void V37(); virtual void V38(); virtual void V39();
+    virtual void V40();
+    virtual void AddItem(void* pItem);                              // +0xa4
+    virtual void RemoveItem(void* pItem, bool animate);             // +0xa8
+    virtual void V43(); virtual void V44(); virtual void V45(); virtual void V46();
+    virtual void V47();
+    virtual void SetSelectedItem(void* pItem);                      // +0xc0
+    uint8_t  pad00[0xa4 - 4];
+    PosseItemVec mItems;                                            // +0xa4
+    void* FindItem(void* pKey);                                     // 0x00e24c90
+};
+
+struct cCreatureDisplayStrategyB {
+    uint8_t      pad00[0x5c];
+    cSPUIPosse*  mpPosse;                                           // +0x5c
+    void RemoveUIForPosseMember(void* pMember);
+};
+
+// @ 0x00d2b8f0
+void cCreatureDisplayStrategyB::RemoveUIForPosseMember(void* pMember)
+{
+    if (!mpPosse)
+        return;
+    void* pItem = mpPosse->FindItem(pMember);
+    if (!pItem)
+        return;
+    mpPosse->RemoveItem(pItem, true);
+    if (mpPosse->mItems.Size() != 0)
+        return;
+    mpPosse->SetSelectedItem(0);
+}
+
+struct cSPUILayoutBar {
+    virtual void V00(); virtual void V04();
+    virtual void Release();                                         // +0x08
+    void Shutdown(int a);                                           // 0x00811ad0
+    cUIWindow* FindWindowByIDPair(uint32_t id, int a);              // 0x008105b0
+};
+struct cCreatureTimerBar {
+    uint8_t  mVisible;                                              // +0x00
+    uint8_t  pad01[3];
+    cSPUILayoutBar* mpLayout;                                       // +0x04
+    void Shutdown();
+    void SetVisibility(bool visible);
+};
+
+// @ 0x00d2bc60
+void cCreatureTimerBar::Shutdown()
+{
+    if (mpLayout)
+        mpLayout->Shutdown(1);
+    cSPUILayoutBar* pLayout = mpLayout;
+    if (pLayout)
+    {
+        mpLayout = 0;
+        pLayout->Release();
+    }
+}
+
+// @ 0x00d2bc90
+void cCreatureTimerBar::SetVisibility(bool visible)
+{
+    mVisible = visible;
+    if (!visible)
+    {
+        mpLayout->FindWindowByIDPair(0x738ff863u, 1)->SetSelected(true, false);
+        mpLayout->FindWindowByIDPair(0x738ff864u, 1)->SetSelected(true, false);
+        mpLayout->FindWindowByIDPair(0x738ff865u, 1)->SetSelected(true, false);
+    }
+}
+
+struct IToggleWindow {
+    virtual void V00(); virtual void V04();
+    virtual void Show(int animate);                                 // +0x08
+    virtual void Hide(int animate);                                 // +0x0c
+    virtual bool IsVisible();                                       // +0x10
+};
+struct cTriggerMgrState {
+    uint8_t pad00[0x2c];
+    int32_t mState;                                                 // +0x2c
+};
+cTriggerMgrState* GetTriggerMgr();                                  // 0x00b3d4d0
+bool FUN_00809970();                                                // 0x00809970
+
+struct cTimerVisTarget {
+    uint8_t  pad00[0x5a8];
+    cSimBlob mSim;                                                  // +0x5a8
+    uint8_t  pad5c8[0xb5e - 0x5c8];
+    uint8_t  mSuppressed;                                           // +0xb5e
+};
+
+struct cCreatureDisplayStrategyC {
+    uint8_t   pad00[0x188];
+    IToggleWindow* mpTimerA;                                        // +0x188
+    IToggleWindow* mpTimerB;                                        // +0x18c
+    void UpdateTimerVisibility(cTimerVisTarget* pTarget);
+};
+
+extern const float kTimerRatioScale;                                // 0x01687a00
+extern const float kTimerRatioMid;                                  // 0x01687a0c
+extern const float kTimerRatioHigh;                                 // 0x01687a10
+
+// @ 0x00d2b720
+void cCreatureDisplayStrategyC::UpdateTimerVisibility(cTimerVisTarget* pTarget)
+{
+    if (pTarget->mSuppressed == 0)
+    {
+        cTriggerMgrState* pTrig = GetTriggerMgr();
+        if (pTrig->mState != 1 && pTrig->mState != 2 && !FUN_00809970())
+        {
+            cSimBlob* pSim = &pTarget->mSim;
+            if (pSim->NodeRatio() * kTimerRatioScale < kTimerRatioHigh)
+            {
+                if (mpTimerA->IsVisible())
+                    mpTimerA->Hide(0);
+                if (!mpTimerB->IsVisible())
+                    mpTimerB->Show(0);
+            }
+            else if (pSim->NodeRatio() * kTimerRatioScale < kTimerRatioMid)
+            {
+                if (!mpTimerA->IsVisible())
+                    mpTimerA->Show(0);
+                if (mpTimerB->IsVisible())
+                    mpTimerB->Hide(0);
+            }
+            else
+            {
+                if (mpTimerA->IsVisible())
+                    mpTimerA->Hide(0);
+                if (mpTimerB->IsVisible())
+                    mpTimerB->Hide(0);
+            }
+            return;
+        }
+    }
+    if (mpTimerA->IsVisible())
+        mpTimerA->Hide(0);
+    if (mpTimerB->IsVisible())
+        mpTimerB->Hide(0);
+}
+
+struct cItemRange {
+    void** mpBegin;                                                 // +0x00
+    void** mpEnd;                                                   // +0x04
+};
+struct cNounManagerItems {
+    cItemRange* GetItemIDRange();                                   // 0x00b1f9c0
+};
+
+struct cPosseItem {
+    virtual void V00(); virtual void V01(); virtual void V02(); virtual void V03();
+    virtual void V04(); virtual void V05(); virtual void V06(); virtual void V07();
+    virtual void V08(); virtual void V09(); virtual void V10(); virtual void V11();
+    virtual void V12(); virtual void V13(); virtual void V14(); virtual void V15();
+    virtual void V16(); virtual void V17(); virtual void V18(); virtual void V19();
+    virtual void V20(); virtual void V21(); virtual void V22(); virtual void V23();
+    virtual void V24(); virtual void V25(); virtual void V26(); virtual void V27();
+    virtual void V28(); virtual void V29(); virtual void V30(); virtual void V31();
+    virtual void SetGhostState(int state, float ratio, int a, int b);   // +0x80
+    cPosseItem* Init(uint32_t layoutId);                            // 0x00e25ad0
+};
+
+struct cPosseMemberObj {
+    uint8_t  pad00[0x5a8];
+    cSimBlob mSim;                                                  // +0x5a8
+};
+
+void*  FUN_009512c0();                                              // 0x009512c0
+void*  FUN_009512d0(int size, int align, const char* pName, void* pAlloc);   // 0x009512d0
+extern const char kPosseItemGhostShell[];                           // 0x0147a458
+extern const float kPosseItemRatioScale;                            // 0x013ec4d0
+
+struct cCreatureDisplayStrategyE {
+    uint8_t      pad00[0x5c];
+    cSPUIPosse*  mpPosse;                                           // +0x5c
+    void UpdatePosseItemGhosts();
+};
+struct cPosseSimulatorCounts {
+    static cPosseSimulator* Instance();                             // 0x00d539d0
+};
+int32_t FUN_00d52e10();                                             // member of the posse simulator
+
+// @ 0x00d2b950
+void cCreatureDisplayStrategyE::UpdatePosseItemGhosts()
+{
+    if (!mpPosse)
+        return;
+
+    cItemRange* pRange = ((cNounManagerItems*)GetNounManagerTerrain())->GetItemIDRange();
+    void** it = pRange->mpBegin;
+    void** end = pRange->mpEnd;
+    if (it != end)
+    {
+        do
+        {
+            cPosseMemberObj* pMember = (cPosseMemberObj*)*it;
+            cPosseItem* pItem = (cPosseItem*)mpPosse->FindItem(pMember);
+            if (pItem)
+                pItem->SetGhostState(0x3d99162, pMember->mSim.NodeRatio() * kPosseItemRatioScale, 1, 1);
+            ++it;
+        } while (it != end);
+    }
+
+    if (mpPosse->mItems.Size() >= cPosseSimulator::Instance()->GetMemberCount())
+        return;
+
+    void* pMem = FUN_009512d0(0x14c, 4, kPosseItemGhostShell, FUN_009512c0());
+    cPosseItem* pNew = pMem ? ((cPosseItem*)pMem)->Init(0x15a5538u) : 0;
+    mpPosse->AddItem(pNew);
+    mpPosse->SetSelectedItem((void*)1);
+}
+
+struct Vec4 {
+    float x, y, z, w;
+};
+
+// Placement rectangle handed to cUIWindow::SetRect; retail builds five floats here.
+struct cTimerBarPlacement {
+    float mHeight;                                                  // +0x00
+    float mOffset;                                                  // +0x04
+    float mLeft;                                                    // +0x08
+    float mBottom;                                                  // +0x0c
+    float mRight;                                                   // +0x10
+};
+void* FUN_00f473a0(int size, const char* pTag, int a, int b, int c, int d);  // 0x00f473a0
+Vec4* SPUIHelpers_GetMainWindowArea(Vec4* pOut);                     // 0x00805ea0
+extern const float kTimerBarAreaScale;                               // 0x01471064
+
+struct cSPUILayoutFull {
+    virtual void V00();
+    virtual void AddRef();                                          // +0x04
+    virtual void Release();                                         // +0x08
+    virtual void V03(); virtual void V04(); virtual void V05(); virtual void V06();
+    virtual void V07(); virtual void V08(); virtual void V09(); virtual void V10();
+    virtual void V11(); virtual void V12();
+    virtual Vec4* GetRect();                                        // +0x34
+    virtual void V14(); virtual void V15(); virtual void V16(); virtual void V17();
+    virtual void V18(); virtual void V19(); virtual void V20(); virtual void V21();
+    virtual void V22(); virtual void V23();
+    virtual void SetRect(Vec4* pRect);                              // +0x60
+    cSPUILayoutFull* ctor();                                        // 0x00810000
+    bool Init(const wchar_t* pName, uint32_t a, int b, uint32_t c); // 0x00812160
+    cUIWindow* FindWindowByIDPair(uint32_t id, int a);              // 0x008105b0
+};
+
+struct cTimerBarFull {
+    uint8_t          mVisible;                                      // +0x00
+    uint8_t          pad01[3];
+    cSPUILayoutFull* mpLayout;                                      // +0x04
+    Vec4             mRectA;                                        // +0x08
+    Vec4             mRectB;                                        // +0x18
+    Vec4             mRectC;                                        // +0x28
+    void Init();
+};
+
+static inline void CopyRect(Vec4& dst, const Vec4* src)
+{
+    dst.x = src->x;
+    dst.y = src->y;
+    dst.z = src->z;
+    dst.w = src->w;
+}
+
+// @ 0x00d2bac0
+void cTimerBarFull::Init()
+{
+    if (mpLayout)
+        return;
+
+    void* pMem = FUN_00f473a0(0x18, "Simulator", 0, 0, 0, 0);
+    cSPUILayoutFull* pNew = pMem ? ((cSPUILayoutFull*)pMem)->ctor() : 0;
+    cSPUILayoutFull* pOld = mpLayout;
+    if (pNew != pOld)
+    {
+        if (pNew)
+            pNew->AddRef();
+        mpLayout = pNew;
+        if (pOld)
+            pOld->Release();
+    }
+
+    mpLayout->Init(L"CreatureTimerBar", 0x40464100u, 1, 0x5b598fau);
+
+    cUIWindow* pWin = mpLayout->FindWindowByIDPair(0x33a11d87u, 1);
+    Vec4* pRect = pWin->GetRect();
+    float height = pRect->z - pRect->x;
+    Vec4 placement;
+    placement.x = height;
+    Vec4 area;
+    SPUIHelpers_GetMainWindowArea(&area);
+    placement.y = (area.z - area.x) * kTimerBarAreaScale - height * kTimerBarAreaScale;
+    placement.z = pRect->y;
+    placement.w = placement.y + height;
+    pWin->SetRect(&placement);
+
+    CopyRect(mRectA, mpLayout->FindWindowByIDPair(0x938ff6d1u, 1)->GetRect());
+    CopyRect(mRectB, mpLayout->FindWindowByIDPair(0x938ff6d2u, 1)->GetRect());
+    CopyRect(mRectC, mpLayout->FindWindowByIDPair(0x938ff6d3u, 1)->GetRect());
+}
