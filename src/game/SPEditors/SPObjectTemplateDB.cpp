@@ -1816,6 +1816,9 @@ namespace SP {
 struct CandidateDBStub {
     void AssignCandidates(void* out, void* pRange);
     bool TryFilterCandidates(void* a, void* b, void* pRange);
+    void FUN_00565500(void* list, void* first, int count);   // 0x565500 (thiscall, ecx=DB)
+    bool FUN_00562510(void* list, void* out);                // 0x562510 (thiscall, ecx=DB)
+    bool FUN_0055c2e0(void* a, int b);                       // 0x55c2e0 (thiscall, ecx=DB)
 };
 }
 // ---- items of slice s005628d0 end
@@ -4613,11 +4616,11 @@ void cSPObjectTemplateDB_s0056_1970::ClearExcludedParameter()
 namespace SP {
 void CandidateDBStub::AssignCandidates(void* out, void* pRange)
 {
-    void* this_ = this;
-    FUN_004769b0(*(void**)((char*)this_ + 0x12c), *(void**)((char*)this_ + 0x130));
+    U32Vec* list = (U32Vec*)((char*)this + 0x12c);
+    list->erase(list->mpBegin, list->mpEnd);
     int* r = (int*)pRange;
-    FUN_00565500((char*)this_ + 0x12c, (void*)*r, (r[1] - *r) / 0x24);
-    FUN_00562510((char*)this_ + 0x12c, out);
+    FUN_00565500(list, (void*)*r, (r[1] - *r) / 0x24);
+    FUN_00562510(list, out);
 }
 }  // namespace SP
 
@@ -4634,14 +4637,13 @@ bool FUN_00562c00(void* this_, void* out)
 namespace SP {
 bool CandidateDBStub::TryFilterCandidates(void* a, void* b, void* pRange)
 {
-    void* this_ = this;
-    FUN_004769b0(*(void**)((char*)this_ + 0x12c), *(void**)((char*)this_ + 0x130));
+    U32Vec* list = (U32Vec*)((char*)this + 0x12c);
+    list->erase(list->mpBegin, list->mpEnd);
     int* r = (int*)pRange;
-    FUN_00565500((char*)this_ + 0x12c, (void*)*r, (r[1] - *r) / 0x24);
-    if (!FUN_00562510((char*)this_ + 0x12c, a))
+    FUN_00565500(list, (void*)*r, (r[1] - *r) / 0x24);
+    if (!FUN_00562510(list, a))
         return false;
-    FUN_0055c2e0(a, b);
-    return true;
+    return FUN_0055c2e0(a, (int)b);
 }
 }  // namespace SP
 
