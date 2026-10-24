@@ -36,6 +36,8 @@ struct Sub {
     char* f88;               // +0x88 end
 };
 
+struct IntVec { int* begin; int* end; int* cap; };
+
 struct Manager {
     void  Lock();                     // FUN_00f45970
     void  Unlock();                   // FUN_00f45a80
@@ -43,6 +45,7 @@ struct Manager {
     int   Count();                    // FUN_00f3be30
     Sub*  Get(int i);                 // FUN_00f3be60
     void* Find(int x);                // FUN_00f3e8a0
+    void* CollectByNoun(void* a, IntVec* out);   // 0x00f40c20
 };
 
 struct X25 { bool IsSet(); };         // FUN_00f25ed0
@@ -66,7 +69,6 @@ bool  __cdecl   FUN_00f3b340(int x);
 int   __stdcall FUN_00f416b0(int a, void* b, int c, int d, int e, int f, int g, int h);
 void  __cdecl   FUN_00eef170(void* p, int i);
 int   __cdecl   FUN_00efc520();
-void* __cdecl   FUN_00f40c20(void* a, void* out);
 void  __cdecl   operator_delete(void* p);
 
 // ---------------------------------------------------------------------------
@@ -312,8 +314,6 @@ save:
 // ===========================================================================
 // @ 0x00ee06d0   bool(Container*, Elem* e, int idx, void* arg4) -- property +0x4b8
 // ===========================================================================
-struct IntVec { int* begin; int* end; int* cap; };
-
 bool __cdecl f_ee06d0(Container* c, Elem* e, int idx, void* arg4)
 {
     if (idx < 0 || idx >= 5)
@@ -328,9 +328,9 @@ bool __cdecl f_ee06d0(Container* c, Elem* e, int idx, void* arg4)
         g_16c7aa4->f74->Lock();
         e->v4b8 = newval;
         if (!((cur == 4 && newval == 6) || (cur == 6 && newval == 4))) {
-            IntVec vec;
-            FUN_00f40c20(arg4, &vec);
-            int n = (int)((vec.end - vec.begin) >> 2);
+            IntVec vec = { 0, 0, 0 };
+            g_16c7aa4->f74->CollectByNoun(arg4, &vec);
+            int n = (int)(vec.end - vec.begin);
             if (n > 0) {
                 for (int i = 0; i < n; ++i)
                     FUN_00eef170((void*)vec.begin[i], FUN_00efc520());
@@ -360,9 +360,9 @@ save:
             int old = *slot;
             *slot = newval;
             if (!((old == 4 && newval == 6) || (old == 6 && newval == 4))) {
-                IntVec vec;
-                FUN_00f40c20(arg4, &vec);
-                int n = (int)((vec.end - vec.begin) >> 2);
+                IntVec vec = { 0, 0, 0 };
+                g_16c7aa4->f74->CollectByNoun(arg4, &vec);
+                int n = (int)(vec.end - vec.begin);
                 if (n > 0) {
                     for (int k = 0; k < n; ++k)
                         FUN_00eef170((void*)vec.begin[k], i);
