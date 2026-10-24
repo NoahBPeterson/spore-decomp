@@ -20,25 +20,24 @@ struct cGonzagoMode
     char   b2c;         // +0x2c
     char   pad_2d[3];
     int    m30, m34, m38, m3c, m40, m44, m48, m4c;
-    int    m50, m54, m58, m5c, m60, m64;
+    int    m50, m54, m58;
+    union { int m5c; void** vecBegin; }; // +0x5c  eastl::vector<AutoRefCount<cStarRecord>>
+    union { int m60; void** vecEnd;   }; // +0x60
+    int    m64;                          // +0x64
 
-    cGonzagoMode();                     // @ 0x00b5df90
-    ~cGonzagoMode();                    // @ 0x00b5d7c0
-    bool  FUN_00b5d510(int);            // @ 0x00b5d510
-    bool  FUN_00b5db40(int);            // @ 0x00b5db40
-    void  FUN_00b5db90();               // @ 0x00b5db90
+    cGonzagoMode();                         // @ 0x00b5df90
+    ~cGonzagoMode();                        // @ 0x00b5d7c0
+    bool  FUN_00b5d510(int);                // @ 0x00b5d510
+    void  FUN_00b5cfe0(unsigned);           // @ 0x00b5cfe0
+    void  FUN_00b5d130(unsigned);           // @ 0x00b5d130
+    void  FUN_00b5d430(int);                // @ 0x00b5d430
+    bool  FUN_00b5d540();                   // @ 0x00b5d540
+    void  FUN_00b5da50(void*, char);        // @ 0x00b5da50
+    bool  FUN_00b5db40(int);                // @ 0x00b5db40
+    void  FUN_00b5db90();                   // @ 0x00b5db90
+    void  FUN_00b5dbb0(unsigned, unsigned); // @ 0x00b5dbb0
 };
 
 extern "C" void  FUN_00b5d3f0(int*);
 extern "C" void __stdcall FUN_00b5d760(int);
 extern "C" void __stdcall FUN_00b5d7a0(int*);
-extern "C" void  FUN_00b5d130(void*, int);
-extern "C" void  FUN_00b5d220(void*, int);
-extern "C" void  FUN_00b5d2c0(void*, void*);
-extern "C" void  FUN_00b5d430(void*, int);
-extern "C" void  FUN_00b5d540(void*);
-extern "C" void  FUN_00b5d870(void*, void*);
-extern "C" void  FUN_00b5da50(void*, void*);
-extern "C" void  FUN_00b5dbb0(void*);
-extern "C" void  FUN_00b5cfe0(void*, void*);
-extern "C" int   FUN_00b5e050(void*, int*);
