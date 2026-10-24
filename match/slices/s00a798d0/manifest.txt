@@ -1,0 +1,3 @@
+slices/s00a798d0/s00a798d0.cpp  ?FUN_00a7a3b0@@YAXPAXPAUPathCmdStream@@@Z  00a7a3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a798d0/s00a798d0.cpp  ?FUN_00a7a450@@YAXPAXPAUPathCmdTail@@@Z  00a7a450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a798d0/s00a798d0.cpp  ?FUN_00a7a4a0@@YIXPAUPathCommandObj@@PAX@Z  00a7a4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

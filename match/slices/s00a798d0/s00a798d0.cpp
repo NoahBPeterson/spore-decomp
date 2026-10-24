@@ -23,6 +23,8 @@ struct HXform {            // Transform: flags / offset / scale / rotation
     float off[3];          // +0x04
     float scale;           // +0x10
     float m[9];            // +0x14
+    void Transform(V3* v);       // 0x7cdee0
+    void TransformDir(V3* v);    // 0xa797f0
 };
 
 struct HState {
@@ -130,4 +132,230 @@ void HermiteStep(HState* s, float dt, HKeyVec* keys, float maxSpeed, HXform* xf)
           ((oz * dn + dp * pz) + vz * d2) + d1 * qz);
     s->pos = np;
     s->vel = nv;
+}
+
+// =====================================================================
+// 0x00a79f60  EA::Swarm::SnapParticleToPath
+// =====================================================================
+// @ 0x00a79f60
+bool SnapParticleToPath(HState* s, float dt, HKeyVec* keys, V3* defPos,
+                        V3* defTan, HXform* xf)
+{
+    float newTime = s->time + dt;
+    float endTime = s->defaultEnd;
+    s->time = newTime;
+    if (endTime <= newTime)
+        return false;
+
+    HKey* first = keys->mpBegin;
+    HKey* last = keys->mpEnd - 1;
+    HKey* cur = FindAfter(first, last, newTime);
+
+    float px = cur->p.x, py = cur->p.y, pz = cur->p.z;
+    float tx = cur->t.x, ty = cur->t.y, tz = cur->t.z;
+    float keyTime = cur->time;
+    float segEnd;
+    if (keyTime != 0.0f) {
+        if (keyTime < newTime)
+            return false;
+        segEnd = keyTime;
+    } else {
+        segEnd = endTime;
+    }
+
+    float ppx, ppy, ppz, ptx, pty, ptz, prevTime;
+    if (cur > first) {
+        HKey* prev = cur - 1;
+        ppx = prev->p.x; ppy = prev->p.y; ppz = prev->p.z;
+        ptx = prev->t.x; pty = prev->t.y; ptz = prev->t.z;
+        prevTime = prev->time;
+    } else {
+        ppx = defPos->x; ppy = defPos->y; ppz = defPos->z;
+        ptx = defTan->x; pty = defTan->y; ptz = defTan->z;
+        prevTime = 0.0f;
+    }
+
+    float T = segEnd - prevTime;
+    if (T > 1e-6f) {
+        float inv = 1.0f / T;
+        float u = (newTime - prevTime) * inv;
+        float u2 = u * u;
+        float A = u2 * u - u2;
+        float u2x = u * 2.0f;
+        float h1 = u2 - A * 2.0f;
+        float h0 = 1.0f - h1;
+        float d1 = u2 * 3.0f - u2x;
+        float d2 = (d1 - u2x) + 1.0f;
+        float d3 = u2x - d1 * 2.0f;
+        float m1 = ((A - u2) + u) * T;
+        float m2 = A * T;
+        float dn = -d3 * inv;
+        float dp = d3 * inv;
+        s->pos.x = ((h0 * ppx + h1 * px) + m1 * ptx) + m2 * tx;
+        s->pos.y = ((h0 * ppy + h1 * py) + m1 * pty) + m2 * ty;
+        s->pos.z = ((h0 * ppz + h1 * pz) + m1 * ptz) + m2 * tz;
+        s->vel.x = ((dn * ppx + dp * px) + d2 * ptx) + d1 * tx;
+        s->vel.y = ((dn * ppy + dp * py) + d2 * pty) + d1 * ty;
+        s->vel.z = ((dn * ppz + dp * pz) + d2 * ptz) + d1 * tz;
+        xf->Transform(&s->pos);
+        xf->TransformDir(&s->vel);
+    }
+    return true;
+}
+
+// =====================================================================
+// 0x00a7a3b0  path-command serializer (two 8-byte blocks + 3 floats + tail)
+// =====================================================================
+struct PathCmdStream {
+    unsigned mField00;      // +0x00
+    unsigned mField04;      // +0x04
+    unsigned mField08;      // +0x08
+    unsigned mField0c;      // +0x0c
+    float    mField10;      // +0x10
+    float    mField14;      // +0x14
+    float    mField18;      // +0x18
+    char     mField1c[0x14];// +0x1c..0x2f (tail)
+    unsigned char mField30; // +0x30
+};
+
+typedef void (__thiscall* StreamWriteFn)(void* self, void* data, int size);
+
+extern "C" void FUN_007d0250(void* stream, void* obj);                       // 0x7d0250
+extern "C" void EA_WriteUint32(void* stream, const void* data, int count, int flags); // 0x93aa70
+extern "C" void EA_StreamWrite(void* stream, const void* data, int count);   // 0x93a9a0
+
+// @ 0x00a7a3b0
+void FUN_00a7a3b0(void* stream, PathCmdStream* obj)
+{
+    ((StreamWriteFn)(*(void***)stream)[0x38 / 4])(stream, obj, 8);
+    ((StreamWriteFn)(*(void***)stream)[0x38 / 4])(stream, &obj->mField08, 8);
+    float v = obj->mField10;
+    EA_WriteUint32(stream, &v, 1, 0);
+    v = obj->mField14;
+    EA_WriteUint32(stream, &v, 1, 0);
+    v = obj->mField18;
+    EA_WriteUint32(stream, &v, 1, 0);
+    FUN_007d0250(stream, &obj->mField1c);
+    *(unsigned char*)&v = obj->mField30;
+    EA_StreamWrite(stream, &v, 1);
+}
+
+// =====================================================================
+// 0x00a7a450  path-command serializer (tail + two floats)
+// =====================================================================
+struct PathCmdTail {
+    char  mPad00[0x14];     // +0x00..0x13
+    float mField14;         // +0x14
+    float mField18;         // +0x18
+};
+
+// @ 0x00a7a450
+void FUN_00a7a450(void* stream, PathCmdTail* obj)
+{
+    FUN_007d0250(stream, obj);
+    float v = obj->mField14;
+    EA_WriteUint32(stream, &v, 1, 0);
+    v = obj->mField18;
+    EA_WriteUint32(stream, &v, 1, 0);
+}
+
+// =====================================================================
+// 0x00a7a4a0  cPathCommand destructor (release four ref-counted blocks)
+// =====================================================================
+struct RefCountHeader {
+    unsigned mRefCount;     // stored immediately before the payload
+};
+
+static inline unsigned RefCountOf(void* payload)
+{
+    return reinterpret_cast<RefCountHeader*>(payload)[-1].mRefCount;
+}
+
+extern "C" void operator_delete__(void* p);   // 0xf47380
+
+struct PathCommandObj {
+    void* mField00;         // +0x00
+    void* mField04;         // +0x04
+    char  mPad08[0x10];     // +0x08..0x17
+    void* mField18;         // +0x18
+    char  mPad1c[0x10];     // +0x1c..0x2b
+    void* mField2c;         // +0x2c
+    char  mPad30[0x10];     // +0x30..0x3f
+    void* mField40;         // +0x40
+};
+
+// @ 0x00a7a4a0
+void __fastcall FUN_00a7a4a0(PathCommandObj* self, void* dummy)
+{
+    void* p = self->mField40;
+    if (p != 0 && RefCountOf(p) != 0)
+        operator_delete__(p);
+    p = self->mField2c;
+    if (p != 0 && RefCountOf(p) != 0)
+        operator_delete__(p);
+    p = self->mField18;
+    if (p != 0 && RefCountOf(p) != 0)
+        operator_delete__(p);
+    p = self->mField04;
+    if (p != 0 && RefCountOf(p) != 0)
+        operator_delete__(p);
+}
+
+// =====================================================================
+// 0x00a7a500  ArgScript::Path / cPathCommand::cPathState constructor
+// =====================================================================
+struct AppPropsFields {
+    void ctor();            // 0x83cdd0
+};
+
+struct PathObj {
+    void*    mVtbl;         // +0x00
+    char     mBase[0x30];   // +0x04..0x33
+    unsigned mField34;      // +0x34
+    void*    mField38;      // +0x38
+    void*    mField3c;      // +0x3c
+    void*    mField40;      // +0x40
+    char     mPad44[0x08];  // +0x44..0x4b
+    void*    mField4c;      // +0x4c
+    void*    mField50;      // +0x50
+    void*    mField54;      // +0x54
+    char     mPad58[0x08];  // +0x58..0x5f
+    void*    mField60;      // +0x60
+    void*    mField64;      // +0x64
+    void*    mField68;      // +0x68
+    char     mPad6c[0x08];  // +0x6c..0x73
+    void*    mField74;      // +0x74
+    void*    mField78;      // +0x78
+    void*    mField7c;      // +0x7c
+    char     mPad80[0x08];  // +0x80..0x87
+    unsigned mField88;      // +0x88
+    unsigned mField8c;      // +0x8c
+    unsigned mField90;      // +0x90
+};
+
+extern const unsigned vtbl_ArgScript_Path[];
+
+// @ 0x00a7a500
+PathObj* __fastcall FUN_00a7a500(PathObj* self, void* dummy,
+                                 unsigned a, unsigned b, unsigned c)
+{
+    ((AppPropsFields*)self)->ctor();
+    *(volatile void**)&self->mVtbl = (void*)vtbl_ArgScript_Path;
+    *(volatile unsigned*)&self->mField34 = 0xad5c3612;
+    self->mField38 = 0;
+    self->mField3c = 0;
+    self->mField40 = 0;
+    self->mField4c = 0;
+    self->mField50 = 0;
+    self->mField54 = 0;
+    self->mField60 = 0;
+    self->mField64 = 0;
+    self->mField68 = 0;
+    self->mField74 = 0;
+    self->mField78 = 0;
+    self->mField7c = 0;
+    self->mField88 = a;
+    self->mField8c = b;
+    self->mField90 = c;
+    return self;
 }
