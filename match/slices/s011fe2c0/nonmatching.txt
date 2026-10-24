@@ -1,0 +1,13 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# RenderWare 4 core (rwoldanimation) was built with VC .NET 2003 /GL+/LTCG; a single-object
+# /vc71 rebuild cannot reproduce the cross-call register allocation, so only the leaves match.
+# All rows compile with flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE and were checked with
+# tools/difftest/equiv.py (verdicts at the end of this file).
+011fe2c0  59  Interpolator::AdvanceBack: complete - step = rate*delta, m_done cleared, the wrap loop adding the loop length, the positive remainder handed to Advance2 (0x011fe180), then both reverse key-pointer searches (12-byte layout stepping by the link at +8, plain layout stepping by the stride). Instruction stream is identical after normalization; cl assigns `this`/tracks/keys to ebx/edi/esi where the original uses edi/esi/ebx (299 vs 299 bytes). equiv PASS (299 valid inputs, 65.1% coverage).
+011fe550  169  Interpolator::GetResourceDescriptor: complete - alignment (4 or 16 from the low byte of the format dword), per-key stride `(hi*4 + lo + mid)*4+4` rounded up, the data block `size*4+0xc`, the 0x38 header, `size*8` key table, `stride*size+stride` and the eight {size,alignment} descriptor words. cl schedules the stride/extra/total chain and the descriptor stores differently (136 vs 174 bytes). equiv PASS (100% coverage).
+011fe650  22  Interpolator::GetResourceSize: complete - descriptor of (m_tracks, m_format, m_map != NULL) in an 8-dword local, returning its first word. cl keeps m_format in edx and computes the buffer address late (lea after two pushes, +4 offset) where the original loads it into eax/ecx and leas the buffer first (37 vs 36 bytes). equiv PASS (100% coverage).
+011fe680   7  Interpolator::Fixup: complete - ControllerFixup(0x011fdb30) relocation, key-pointer rebase by the block delta, Arena::IdToObject (0x011e2300) on m_ctrl, the Interpolator vtable store, rebinding the two emitters through FUN_011ffa40 and shifting both key pointers of every track by the new controller base. Only difference: cl sinks the `mov [esi+0x1c],eax` store past the `mov edi,[esi+0x34]/push edi` pair (132 bytes both sides). equiv PASS (217 valid inputs, 90.4% coverage).
+
+# equivalence verdicts (tools/difftest/equiv.py s011fe2c0 ..., one run, default inputs):
+#   011fe2c0 PASS   011fe550 PASS   011fe650 PASS   011fe680 PASS
+#   011fe3f0 WEAK   011fe730 UNSUPPORTED (_sinf)   011fed20 UNSUPPORTED (_sinf, _sqrtf)
