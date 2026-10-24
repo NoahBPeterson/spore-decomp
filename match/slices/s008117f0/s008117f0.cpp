@@ -26,8 +26,15 @@ extern void  __cdecl eastl_RBTreeErase(void*, void*);              // 0x921880
 extern void  __cdecl SPKeyFromName(void*, u32, u32, u32);          // 0x68d840
 extern void* __cdecl FUN_008100d0_(void*);                         // 0x8100d0 (collection ctor)
 extern void  __cdecl FUN_00810b90_(void*, void*, void*);           // 0x810b90
-extern void  __cdecl FUN_00812280_(void*, void*, void*, int);      // 0x812280
+void __fastcall FUN_00812280_(void* self, void* edxu, void* out, void* last, void* key, int z); // 0x812280
 extern void  __cdecl FUN_005c1dc0_(void*, void*, void*);           // 0x5c1dc0
+extern float __cdecl SPUI_GetElapsedSeconds();                      // 0x805080
+extern void  __cdecl SPUI_UpdateMouseFocus(int);                    // 0x804f50
+extern void* __cdecl Messaging_GetServer();                         // 0x883860
+extern void  __cdecl SlotMessage_Destruct(void*);                   // 0x421cf0
+extern void* __cdecl RBTreeUintFind_(void* self, void* out, void* key); // 0xe5c780 (tree find)
+extern float g_closeLayoutLag;                                     // 0x147b9f0
+extern float g_closeLayoutWindow;                                  // 0x14181a4
 
 extern char vtbl_014182a4, vtbl_014182a0, vtbl_SimCreatureAbility, vtbl_SkinnerPaintSystem,
             vtbl_UI_cConnectionDialog, vtbl_SimContentValidationSummarizer,
@@ -43,7 +50,12 @@ struct PtrVec {
     void*  mAlloc;   // +0xc
     void*  mInline;  // +0x10
     void __thiscall swap(PtrVec& rhs);                 // 0x811a20
+    PtrVec& __thiscall operator=(const PtrVec& rhs);   // 0x811260
 };
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
+void __fastcall VecCtorCount_(void* self, void* edx_unused, unsigned count, void* alloc); // 0x810a90 (vector(count,alloc))
+void __cdecl PtyVecInsert_(void** pos, void** val);                // 0x810e30 (PtrVec::insert)
+void __cdecl PtrVecDtor_(PtrVec*);                                 // 0x810a50 (PtrVec::dtor)
 // key/value views
 
 class cSPUILayoutObjectCollection;
@@ -139,7 +151,7 @@ struct RBTree1 {
     i32     count;          // +0x10
     void __thiscall DoNukeSubtree(void* node);   // 0x810df0
     void __thiscall eraseSys(void** out, void* node);  // 0x812310
-    void __thiscall Method12370(void** out, VecView* key);  // 0x812370
+    void __thiscall Method12370(void** out, VecView* key, int unused);  // 0x812370
 };
 struct RBTree2 {
     RBNode1 anchor;         // +0
@@ -149,36 +161,134 @@ struct RBTree2 {
 
 // ============================ bodies ============================
 
+// Node of the manager's per-layout trees: {left,right,parent} then a value pointer,
+// a byte flag and a float timestamp; sentinel/root bookkeeping lives in the tree header.
+struct CloseLayoutNode {
+    CloseLayoutNode* left;    // +0
+    CloseLayoutNode* right;   // +4
+    CloseLayoutNode* parent;  // +8
+    void*            value;   // +0x10
+    u8               flag;    // +0x14
+    u8               pad15[3];
+    f32              time;    // +0x18
+};
+
+static void ReleaseIface_(void* obj)                       // COM-ish: release through (u8*)obj+8
+{
+    if (!obj) return;
+    void* inner = *(void**)((u8*)obj + 8);
+    if (!inner) return;
+    ((void(__thiscall*)(void*))(*(void***)inner)[8 / 4])((u8*)obj + 8);
+}
+
 // @ 0x008117f0
 void* __thiscall cSPUILayoutManager::CloseLayout(void* coll, u32 param)
 {
-    // 554-byte body not reconstructed
-    (void)coll; (void)param;
-    return 0;
+    u8* m = (u8*)this;
+    char didWork = 0;                                   // [esp+0x13]
+    f32 now = SPUI_GetElapsedSeconds();                 // 0x805080
+
+    // ---- expire/lookup the layout record for `coll` in the tree at +0x28 ---------------
+    void* key = coll;
+    void* found = 0;
+    void* endSentinel = m + 0x2c;
+    RBTreeUintFind_(m + 0x28, &found, &key);            // 0xe5c780
+    CloseLayoutNode* node = (CloseLayoutNode*)found;
+    if (node != (CloseLayoutNode*)endSentinel) {
+        node->flag = 1;
+        node->time = now;
+        if (param != 0) {
+            node->time = now - g_closeLayoutLag;        // 0x147b9f0
+        } else {
+            // notify each child window in the collection's box
+            void** p = *(void***)((u8*)coll + 0x64);
+            void** end = *(void***)((u8*)coll + 0x68);
+            while (p != end) {
+                void* o = *p++;
+                void* sub = ((void*(__thiscall*)(void*, void*))VT(o)[0xc / 4])(o, (void*)0xeeee8218);
+                if (sub)
+                    ((void(__thiscall*)(void*, int, int))VT(sub)[0x7c / 4])(sub, 1, 0);
+            }
+            SPUI_UpdateMouseFocus(1);                   // 0x804f50
+        }
+        // post a close-layout message (tag 0x22568e7) through the messaging server
+        u8 msg[0x34];
+        *(u32*)(msg + 0x30) = 0x22568e7;                // [esp+0x50]
+        *(u32*)(msg + 0x00) = 0x13eb90c;                // vtable ([esp+0x20])
+        *(u32*)(msg + 0x04) = 0x13eb844;                // ([esp+0x20] retagged)
+        didWork = 1;                                    // [esp+0x13] = 1
+        void* srv = Messaging_GetServer();              // 0x883860
+        void* srvvt = *(void**)srv;
+        ((void(__thiscall*)(void*, u32, void*))*(void**)((u8*)srvvt + 0x14))(srv, 0x22568e7, msg);
+        SlotMessage_Destruct(msg);                      // 0x421cf0
+    }
+
+    // ---- expire records in the tree at +0x30 whose elapsed time exceeds the window ------
+    CloseLayoutNode* cur = *(CloseLayoutNode**)(m + 0x30);
+    PtrVec collected;                                   // esp+0x60..0x70 (inline empty vector)
+    collected.mBegin = (void**)&collected;
+    collected.mEnd   = (void**)&collected;
+    collected.mCap   = (void**)&collected;
+    collected.mAlloc = 0;
+    collected.mInline= 0;
+    while (cur != (CloseLayoutNode*)endSentinel) {
+        CloseLayoutNode* n = cur;
+        cur = (CloseLayoutNode*)eastl_RBTreeIncrement_(cur);      // 0x921580
+        if (n->flag != 0) {
+            f32 dt = now - n->time;
+            if (dt > g_closeLayoutWindow) {                       // 0x14181a4
+                // collect the value pointer
+                void** slot = collected.mEnd;
+                if (slot < collected.mCap) {
+                    collected.mEnd = slot + 1;
+                    if (slot) *slot = n->value;
+                } else {
+                    PtyVecInsert_((void**)&collected.mEnd, &n->value);    // 0x810e30
+                }
+                // unlink and free the node
+                --*(int*)((u8*)this + 0x3c);                      // tree2 count--
+                eastl_RBTreeIncrement_(n);
+                eastl_RBTreeErase((u8*)this + 0x2c, n);           // 0x921880
+                if (n->value)
+                    ((void(__thiscall*)(void*))(*(void***)n->value)[8 / 4])(n->value);
+                operator_delete__(n);                             // 0xf47380
+            }
+        }
+    }
+    // release the collected references
+    void** v = collected.mEnd;
+    while (v != collected.mBegin) {
+        void* obj = *--v;
+        ReleaseIface_(obj);
+    }
+    PtrVecDtor_(&collected);                            // 0x810a50
+    return (void*)(int)didWork;
 }
 
 // @ 0x00811a20
 void __thiscall PtrVec::swap(PtrVec& rhs)
 {
-    bool aOwner = (mBegin == 0) || (*(int*)((u8*)mBegin - 4) != 0);
-    bool bOwner = (rhs.mBegin == 0) || (*(int*)((u8*)rhs.mBegin - 4) != 0);
-    if (aOwner && bOwner) {
+    void** a = mBegin;
+    void** b = rhs.mBegin;
+    if ((a == 0 || *((int*)a - 1) != 0) &&
+        (b == 0 || *((int*)b - 1) != 0)) {
         void** t;
         t = mBegin;  mBegin = rhs.mBegin;  rhs.mBegin = t;
         t = mEnd;    mEnd   = rhs.mEnd;    rhs.mEnd   = t;
         t = mCap;    mCap   = rhs.mCap;    rhs.mCap   = t;
         return;
     }
-    // mismatch path uses a temporary copy + operator=; approximated
+    // allocator mismatch: build tmp as a copy of *this, then *this = rhs, rhs = tmp, free tmp
     PtrVec tmp;
-    tmp.mBegin = 0; tmp.mEnd = 0; tmp.mCap = 0; tmp.mAlloc = 0; tmp.mInline = 0;
-    u32 n = (u32)((u8*)mEnd - (u8*)mBegin);
-    tmp.mBegin = (void**)operator_new(n, &g_spLayoutManager, 0, 0, 0, 0);
-    FUN_005c1dc0_(tmp.mBegin, mBegin, (void*)n);
-    tmp.mEnd = (void**)((u8*)tmp.mBegin + n);
-    tmp.mCap = tmp.mEnd;
-    *this = rhs;   // not a real operator= here; behavioural approximation
-    mBegin = tmp.mBegin; mEnd = tmp.mEnd; mCap = tmp.mCap;
+    u32 count = (u32)(((u8*)mEnd - (u8*)mBegin) >> 2);
+    VecCtorCount_(&tmp, 0, count, &mAlloc);   // 0x810a90 (this, count, alloc)
+    u32 bytes = (u32)((u8*)mEnd - (u8*)mBegin);
+    memcpy(tmp.mBegin, mBegin, bytes);
+    tmp.mEnd = (void**)((u8*)tmp.mBegin + bytes);
+    this->operator=(rhs);      // 0x811260
+    rhs.operator=(tmp);        // 0x811260
+    if (tmp.mBegin != 0 && *((int*)tmp.mBegin - 1) != 0)
+        operator_delete__(tmp.mBegin);
 }
 
 // @ 0x00811ad0
@@ -221,28 +331,39 @@ void __thiscall cSPUILayoutObjectCollectionV8::OnLoad()
 {
     u8* self = (u8*)this;
     cSPUILayoutObjectCollection* coll = (cSPUILayoutObjectCollection*)(self - 8);
-    coll->attach_parent();
-    if (*(void**)(self + 0x8c)) {
-        void* fn = *(void**)(self + 0x8c);
+    coll->attach_parent();                                  // 0x811b30
+    void* fn = *(void**)(self + 0x8c);
+    if (fn) {
         void* a1 = *(void**)(self + 0x90);
-        ((void(__cdecl*)(void*, void*, int))fn)(a1, *(void**)(self + 0x88), 1);
+        void* a2 = *(void**)(self + 0x88);
+        ((void(__cdecl*)(void*, void*, int))fn)(a1, a2, 1);
     }
-    ResetChildWindowCache_();
-    if ((*(u8*)(self - 8 + 0x20) & 1) != 0) {
-        void* svc = *(void**)(self - 8 + 0xc);
+    ResetChildWindowCache_();                               // 0x962be0
+    u8* base = self - 8;
+    if ((*(u8*)(base + 0x20) & 1) != 0) {                   // [esi+0x20], esi = self-8
+        void* svc = *(void**)(base + 0x0c);                 // [esi+0xc]
         void* au = ((void*(__thiscall*)(void*, unsigned int))VT(svc)[0x10 / 4])(svc, 0x2fbf2058);
-        *(void**)(self - 8 + 0x10) = au;
+        *(void**)(base + 0x10) = au;                        // [esi+0x10]
         if (au) {
-            struct { u32 x, y, z; } k = { 0xefbda3ff, 0x050f4731, 0x250fe9a2 };
-            ((VF2v)VT(au)[0x10 / 4])(au, &k, (void*)(self - 8 + 8));
+            u32 v14 = *(u32*)(base + 0x14);
+            u32 v1c = *(u32*)(base + 0x1c);
+            u32 keyA[3] = { 0xefbda3ff, v14, v1c };
+            u32 keyB[3] = { 0x050f4731, v14, v1c };
+            void* dst = (void*)(base + 8);
+            ((void(__thiscall*)(void*, u32*, void*))VT(au)[0x10 / 4])(au, keyA, dst);
+            void* au2 = *(void**)(base + 0x10);
+            ((void(__thiscall*)(void*, u32*, void*))VT(au2)[0x10 / 4])(au2, keyB, dst);
         }
     }
 }
 
 // @ 0x00811c20
+// 768-byte COM/UI body still to reconstruct: swaps the pointer vector at +0x5c, queries the
+// layout-root service (0x8de1a0) with the key from +0xc/+0x10/+0x14 (tag 0x510a95b), then
+// branches on the found child's +0x1c / +0x18 member to rebuild streams vs. tear down.
 void* __thiscall cSPUILayoutManager::Method11c20()
 {
-    return 0;   // 768-byte body not reconstructed
+    return 0;   // not reconstructed: see slice notes / partial.txt
 }
 
 // @ 0x00811f20
@@ -403,39 +524,42 @@ void __thiscall RBTree1::eraseSys(void** out, void* node)
     *out = next;
 }
 
-// @ 0x00812370
-void __thiscall RBTree1::Method12370(void** out, VecView* key)
+// @ 0x00812370  (lower_bound/upper_bound over the tree; 3-arg (out, key, unused), ret 0xc)
+void __thiscall RBTree1::Method12370(void** out, VecView* key, int unused)
 {
     u8* self = (u8*)this;
+    (void)unused;
     bool bLess = true;
-    RBNode1* node = *(RBNode1**)(self + 0xc);
-    RBNode1* last = 0;
+    RBNode1* node = *(RBNode1**)(self + 0xc);   // root / begin (edi)
+    RBNode1* last = (RBNode1*)(self + 4);       // sentinel-ish (esi)
     while (node) {
-        last = node;
         u8* n = (u8*)node;
         int kl = (int)((u8*)key->end - (u8*)key->begin);
-        int nl = *(int*)(n + 0x14) - *(int*)(n + 0x10);
-        int len = kl <= nl ? kl : nl;
+        int nl = (int)(*(u8**)(n + 0x14) - *(u8**)(n + 0x10));
+        int len = nl < kl ? nl : kl;                 // min(nl, kl)
         int r = eastl_Compare_((void*)key->begin, *(void**)(n + 0x10), len);
-        if (r == 0) r = (kl < nl) ? -1 : (nl < kl);
+        if (r == 0)
+            r = (kl < nl) ? -1 : (kl > nl ? 1 : 0);
         bLess = r < 0;
+        last = node;
         node = bLess ? *(RBNode1**)(n + 4) : *(RBNode1**)n;
     }
-    RBNode1* cand = last;
-    int useUpper = 0;
+    RBNode1* cand = last;                    // edi = esi
     if (bLess) {
-        if (last == *(RBNode1**)(self + 8)) { useUpper = 1; }
-        else cand = (RBNode1*)eastl_RBTreeDecrement_(last);
-    }
-    if (!useUpper) {
-        bool lt = FUN_00812210((VecView*)((u8*)cand + 0x10), key);
-        if (!lt) {
-            *out = cand;
-            *((u8*)out + 4) = 0;
+        if (last == *(RBNode1**)(self + 8)) {          // esi == [ebx+8] -> upper bound
+            FUN_00812280_(this, 0, out, last, key, 0);
+            *out = *(void**)out;
+            *((u8*)out + 4) = 1;
             return;
         }
+        cand = (RBNode1*)eastl_RBTreeDecrement_(last);  // 0x9215c0
     }
-    FUN_00812280_(out, cand, key, 0);
+    if (!FUN_00812210((VecView*)((u8*)cand + 0x10), key)) {
+        *out = cand;
+        *((u8*)out + 4) = 0;
+        return;
+    }
+    FUN_00812280_(this, 0, out, last, key, 0);
     *out = *(void**)out;
     *((u8*)out + 4) = 1;
 }

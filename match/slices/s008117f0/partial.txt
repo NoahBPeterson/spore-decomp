@@ -1,5 +1,1 @@
-008117f0  4   approximate: 554-byte CloseLayout body stubbed
-00811a20  153 approximate: vector swap allocator-mismatch branch approximated
-00811b80  110 approximate: OnLoad reload callback / notification path simplified
-00811c20  3   approximate: 768-byte body stubbed
-00812370  181 approximate: multimap lower_bound/equal_range node search approximated
+00811c20  768 skeleton: 768-byte COM/UI body not reconstructed (swaps the pointer vector at +0x5c, queries layout-root service 0x8de1a0 with key from +0xc/+0x10/+0x14 tag 0x510a95b, then branches on the found child's +0x1c/+0x18 to rebuild streams 0x93c2c0/0x93bb40/0x83f5d0/0x902fc0/0x93c0c0/0x999480/0x999050/0x57cb60/0x933960 vs tear down).
