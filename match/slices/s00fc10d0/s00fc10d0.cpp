@@ -2,7 +2,6 @@
 // Real PDB names: SP::cTerrainSystem::Init, SP::GetTerraformPlanetType,
 // SP::cSetCloudTypeStep::Step.  Module flags /O2 /MD /Gy /TP.
 #include "types.h"
-#include <math.h>
 
 extern float kTerraformRadiusT1, kTerraformRadiusT2, _kTerraformRadiusT3;
 extern float kLavaThreshold;
@@ -23,7 +22,8 @@ void  __cdecl FUN_0067dd50();
 void  __cdecl FUN_00517240();
 void  __cdecl FUN_00a6aaa0(void*, int, void*);
 void  __cdecl FUN_006f43e0(int, int, int);
-void  __cdecl FUN_0070f520(int, int);
+struct VecBase { void DestroyRange(int* first, int* last); };
+void  __fastcall FUN_0075e6d0(int, int, void*);
 void  __cdecl FUN_00f7be60();
 void  __cdecl FUN_00f580f0();
 void  __cdecl FUN_00f61a70();
@@ -38,6 +38,45 @@ void  __cdecl FUN_00f94cb0(); void __cdecl FUN_00f94dd0(); void __cdecl FUN_00f6
 void  __cdecl FUN_00f63170(); void __cdecl FUN_00fc5480(); void __cdecl FUN_00f4b690();
 
 struct cTerrainSphere { virtual char slot(); };
+
+namespace SP {
+class cDirectPropertyList {
+public:
+    virtual void v0();
+    virtual void v1();
+};
+extern cDirectPropertyList* sAppProperties;
+}
+
+// Object types reached through the cTerrainSystem constructor / destructor.
+struct VtblTwo { virtual void v0(); virtual void v1(); };
+struct VtblFour { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); };
+struct RefCounted { virtual void Release(int flag); int mRefCount; };
+struct CountedHolder { int mPad0; RefCounted mRef; };
+
+struct cTerrainSystem {
+    int mVtable0;                      // +0x00
+    int mVtable1;                      // +0x04
+    int mField08;                      // +0x08
+    VtblFour* mObj0c;                  // +0x0c
+    CountedHolder* mObj10;             // +0x10 (RefCounted subobject at +0x04)
+    VtblTwo* mObj14;                   // +0x14
+    float mField18;                    // +0x18
+    SP::cDirectPropertyList* mProps1c; // +0x1c
+    int mTag20;                        // +0x20
+    int mZero24;                       // +0x24
+};
+
+// Fixed-vector holder destroyed at 0x00fc1780.
+struct FixedVectorHolder {
+    int mVtable0;          // +0x00
+    int mPad04[5];         // +0x04..+0x17
+    int mVecBegin;         // +0x18
+    int mVecEnd;           // +0x1c
+    int mPad20[3];         // +0x20..+0x2b
+    int mVec2Begin;        // +0x2c
+};
+
 
 // ===========================================================================
 // 0x00fc10d0 -- cSetCloudTypeStep::Step (approximate state machine)
@@ -67,12 +106,14 @@ void __fastcall FUN_00fc18c0(int* p) {
 // 0x00fc1780 -- destructor of the fixed-vector holder
 // ===========================================================================
 // @ 0x00fc1780
-int __fastcall FUN_00fc1780(int p, char del) {
-    int* q = (int*)p;
-    int v = q[0xb];
+int __fastcall FUN_00fc1780(int p, int dummy, char del) {
+    FixedVectorHolder* h = (FixedVectorHolder*)p;
+    (void)dummy;
+    h->mVtable0 = 0x1490b80;
+    int v = h->mVec2Begin;
     if (v && *(int*)(v - 4)) operator_del((void*)v);
-    FUN_0070f520(q[6], q[7]);
-    v = q[6];
+    ((VecBase*)&h->mVecBegin)->DestroyRange((int*)h->mVecBegin, (int*)h->mVecEnd);
+    v = h->mVecBegin;
     if (v && *(int*)(v - 4)) operator_del((void*)v);
     if (del & 1) operator_del((void*)p);
     return p;
@@ -104,15 +145,23 @@ float __stdcall FUN_00fc1ad0(int a, int b, int c, int d, int e) {
 // ===========================================================================
 // @ 0x00fc1ae0
 void __fastcall FUN_00fc1ae0(int* p) {
-    if (p[7]) (*(void(__cdecl**)(void*))(*(void**)((char*)*(void**)p[7] + 4)))((void*)p[7]);
-    if (p[5]) (*(void(__cdecl**)(void*))(*(void**)((char*)*(void**)p[5] + 4)))((void*)p[5]);
-    int r = p[4];
-    if (r) {
-        int n = *(int*)(r + 8) - 1;
-        *(int*)(r + 8) = n;
-        if (n == 0) { *(int*)(r + 8) = 1; (*(void(__cdecl**)(int))(*(void**)(r + 4)))(1); }
+    cTerrainSystem* s = (cTerrainSystem*)p;
+    s->mVtable0 = 0x1491318;
+    s->mVtable1 = 0x1491314;
+    if (s->mProps1c) s->mProps1c->v1();
+    if (s->mObj14) s->mObj14->v1();
+    if (s->mObj10) {
+        RefCounted* rc = &s->mObj10->mRef;
+        int n = rc->mRefCount - 1;
+        rc->mRefCount = n;
+        if (n == 0) {
+            rc->mRefCount = 1;
+            rc->Release(1);
+        }
     }
-    if (p[3]) (*(void(__cdecl**)(void*))(*(void**)((char*)*(void**)p[3] + 0xc)))((void*)p[3]);
+    if (s->mObj0c) s->mObj0c->v3();
+    s->mVtable0 = 0x13eb938;
+    s->mVtable1 = 0x13ef094;
 }
 
 // ===========================================================================
@@ -144,8 +193,22 @@ void __fastcall FUN_00fc1ba0(int self) {
 // ===========================================================================
 // @ 0x00fc1c00
 int* __fastcall FUN_00fc1c00(int* p) {
-    p[3] = 0; p[4] = 0; p[5] = 0;
-    p[6] = 0; p[7] = 0; p[8] = 0x26b7d69; p[9] = 0;
+    cTerrainSystem* s = (cTerrainSystem*)p;
+    SP::cDirectPropertyList* props;
+    s->mVtable1 = 0x13ef094;
+    s->mField08 = 0;
+    s->mVtable0 = 0x1491318;
+    s->mVtable1 = 0x1491314;
+    s->mObj0c = 0;
+    s->mObj10 = 0;
+    s->mObj14 = 0;
+    props = SP::sAppProperties;
+    s->mField18 = 0.0f;
+    s->mProps1c = props;
+    if (props) props->v0();
+    s->mTag20 = 0x26b7d69;
+    s->mZero24 = 0;
+    if (props) FUN_0075e6d0((int)&s->mField18, 0, props);
     return p;
 }
 
@@ -192,9 +255,20 @@ int __cdecl FUN_00fc1fd0(float f) {
 // ===========================================================================
 // 0x00fc2040 -- radial falloff factor
 // ===========================================================================
+// The original computes the whole falloff in x87 and takes the root with an inline fsqrt.
+// cl only inlines sqrt under /fp:fast, which this module's flags do not use, so do the root
+// with x87 directly (double keeps enough precision that the float result matches).
+static inline double SqrtX87(double v) {
+    __asm fld v
+    __asm fsqrt
+    __asm fstp v
+    return v;
+}
 // @ 0x00fc2040
 float __cdecl FUN_00fc2040(float x, float y) {
-    float f = 1.0f - sqrtf((y - 0.5f) * (y - 0.5f) + (x - 0.5f) * (x - 0.5f)) * 1.4142135f;
+    double dx = (double)x - 0.5;
+    double dy = (double)y - 0.5;
+    float f = (float)(1.0 - SqrtX87(dy * dy + dx * dx) * (double)1.4142135f);
     float r = 0.0f;
     if (0.0f <= f) r = f;
     return r;
