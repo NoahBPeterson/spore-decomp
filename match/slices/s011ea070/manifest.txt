@@ -1,1 +1,9 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011ea070/s011ea070_g7.cpp  ?Wrapper770@@YAHPADIZZ  011ea770  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s011ea070/s011ea070_g7.cpp  ?Wrapper790@@YAHPADIPBDZZ  011ea790  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s011ea070/s011ea070_g7.cpp  ?RegisterHooksA@@YAXXZ  011eaa50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s011ea070/s011ea070_g7.cpp  ?UnregisterHooksA@@YAXXZ  011eaa80  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s011ea070/s011ea070_g7.cpp  ?RegisterHooksB@@YAXXZ  011eaaa0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s011ea070/s011ea070_g7.cpp  ?UnregisterHooksB@@YAXXZ  011eaad0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s011ea070/s011ea070_g7.cpp  ?Init@ArrayOwner@@QAEXPAX@Z  011eaaf0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s011ea070/s011ea070_g7.cpp  ?RelocateHolder@@YAPAXPAHPAX@Z  011eaf50  /O2 /MD /Gy /EHsc /TP /GS-
