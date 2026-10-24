@@ -1,1 +1,5 @@
 00d3cdc0  1112  SignalCreatureEvent: complete (76/76 calls, 75 direct targets in order, all constants); diff from float-cast spill ([esp+0x10]) regalloc and local layout
+00d3c970  203  cIntVector::Assign: full grow/shrink/replace paths, callee stubs as in original; positional diff from regalloc and local slot layout (size 238 vs 234). equiv WEAK 143 valid, 41.3% cov
+00d3ca90  32  Fn_00d3ca90: 7 inlined ImportIntProperty blocks + prop lookup + entry-table update match structurally; MSVC sinks `push edi` past the early-out (prologue split) and swaps two regs in the last block. equiv WEAK 76 valid, 7.5% cov
+00d3d420  8  Fn_00d3d420: same operations and same 21-byte size; base pointer held in eax instead of ecx so `lea ecx,[eax+4]` replaces `add ecx,4`. equiv PASS 330 valid, 100% cov
+00d3d4f0  556  Fn_00d3d4f0 (__stdcall, 5 args): all calls/constants/vtable slots match; diff is vector-math regalloc (`pos + unit*scale` stores interleaved) and re-pushed args. equiv WEAK 191 valid, 47.8% cov (module flags; default /fp:fast absence makes sqrtf import a false FAIL)
