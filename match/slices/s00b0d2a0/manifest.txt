@@ -1,0 +1,2 @@
+slices/s00b0d2a0/s00b0d2a0.cpp  ?GetActiveValue@cKeySlotList@@QAEIXZ  00b0d350  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00b0d2a0/s00b0d2a0.cpp  ?Destroy@cSkinner@@QAEXXZ  00b0d610  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
