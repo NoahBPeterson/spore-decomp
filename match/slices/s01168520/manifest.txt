@@ -1,0 +1,8 @@
+# byte-exact functions for slice s01168520 (Snd resampler / pitch helpers, VC9 SSE)
+slices/s01168520/s01168520.cpp  ?FUN_01168520@Snd@@YAHPAUResampler@1@HPAM1@Z  01168520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01168520/s01168520.cpp  ?FUN_01168580@Snd@@YAHPAUResampler@1@@Z  01168580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01168520/s01168520.cpp  ?FUN_011685b0@Snd@@YAXPAUResampler@1@PAH@Z  011685b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01168520/s01168520.cpp  ?FUN_011685f0@Snd@@YAHPAUResampler@1@HPAM1@Z  011685f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01168520/s01168520.cpp  ?FUN_01168640@Snd@@YAHPAUResampler@1@@Z  01168640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01168520/s01168520.cpp  ?FUN_01168730@Snd@@YAXPAUResampler@1@H@Z  01168730  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01168520/s01168520.cpp  ?FUN_01168960@Snd@@YAXPAUResampler@1@EH@Z  01168960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

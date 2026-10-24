@@ -1,1 +1,25 @@
-011689e0 Snd::Dct32  # 32-point integer DCT (Snd MMX build): even/odd butterfly, two 16-row Q14 matrices at 0x015c41f8, cdecl 3 args; same code as 01170630 (MmxDct32), own table copy
+# slice s01168520 (gold7) - Snd (EATech audio) resampler / pitch helpers, VC9 SSE build
+# Modelled types:
+#   Resampler            +0x00 process {int (*)(Resampler*,int,float*,float*)}, +0x04 field_04,
+#                        +0x08 SndSource* source, +0x0c/+0x10/+0x14 fields, +0x18 short field_18,
+#                        +0x1a char fmt, +0x1b char field_1b, +0x1c union{int step; float step_f}
+#                        (1.0 == 0x10000), +0x20 Fixed16 acc, +0x24 SndResampleFn resample,
+#                        +0x28 short flag_28, +0x2a short nOffset, +0x2c float hist[4], +0x3c pad,
+#                        +0x50 float ratio
+#   Fixed16              union{int value; struct{short frac; short whole;}} (whole is the high word)
+#   SndSource            +0x00 read {int (*)(SndSource*,int count,float* out0,float* out1,char fmt)}
+#   SndResampleFn        int (*)(int count, float* dst, float* src, int* num, int* frac,
+#                        int stepHi, int stepLo), cdecl; kernels 0x01173eb0/0x01173c10/0x01173770/
+#                        0x01173fa0 are hand-written asm reading [ebp+8]..[ebp+0x20]
+#   SndPitchState        +0x20 float field_20, +0x24 float field_24 (pitch crossfade weights)
+01168520 ?FUN_01168520@Snd@@YAHPAUResampler@1@HPAM1@Z  # (self,count,out0,out1)->int: read via source->read into (out1,out0), reject count<=0, then resample into out0 from out1
+01168580 ?FUN_01168580@Snd@@YAHPAUResampler@1@@Z  # (self)->int: read 4 history samples? returns source->read(self->source, 4, hist, hist+4, fmt) clamp style
+011685b0 ?FUN_011685b0@Snd@@YAXPAUResampler@1@PAH@Z  # (self,values): ratio = (float)(values[0]>>7) / (float)(values[1]>>8), stored at +0x50; then writes 3-element resampler step array
+011685f0 ?FUN_011685f0@Snd@@YAHPAUResampler@1@HPAM1@Z  # (self,count,out0,out1)->int: read into (out0,out1), reject result<=0, else resample and return the original count
+01168640 ?FUN_01168640@Snd@@YAHPAUResampler@1@@Z  # (self)->int: read one sample pair, return source->read result
+01168670 ?FUN_01168670@Snd@@YAXPAUSndPitchState@1@PAH@Z  # (self,values): r = values[0]*2/values[1]; field_20 = 1-r; field_24 = r; both scaled by values[2]/256 (nonmatching, diff 4)
+011686e0 ?FUN_011686e0@Snd@@YAIXZ  # ()->unsigned: hand-written asm EFLAGS.ID CPUID-presence probe (nonmatching, diff 28)
+011686fd ?FUN_011686fd@Snd@@YAXPAIH@Z  # (unsigned out[4], int leaf): hand-written asm cpuid wrapper (nonmatching, diff 91)
+01168730 ?FUN_01168730@Snd@@YAXPAUResampler@1@H@Z  # (self,pitch): step = pitch (16.16), triggers process dispatch
+01168740 ?FUN_01168740@Snd@@YAHPAUResampler@1@HPAM1@Z  # (self,count,out0,out1)->int: process entry; step==1.0 fast path, else fixed-point resample with history carry (nonmatching, diff 6)
+01168960 ?FUN_01168960@Snd@@YAXPAUResampler@1@EH@Z  # (self,flags,half): init process=01168740, acc/flag_28/nOffset=0, pick resample kernel (01173fa0/01173eb0 or 01173c10/01173770) by flags bit1 and half

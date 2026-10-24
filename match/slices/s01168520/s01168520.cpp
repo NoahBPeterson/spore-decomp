@@ -15,6 +15,7 @@
 // Flags: /O2 /MD /Gy /TP /GS- (intrinsic-only MMX; the original has no stack cookie).
 #include "types.h"
 #include <mmintrin.h>
+#include <intrin.h>
 
 // 0x015c41f8: 512 s16 Q14 DCT coefficients. Rows 0..15 (offset 0x000) are the odd-output matrix O,
 // rows 16..31 (offset 0x200, VA 0x015c43f8) the even-output matrix E. Each row is 16 s16 (32 bytes).
@@ -132,6 +133,270 @@ void Dct32(int16_t* pColumnA, int16_t* pColumnB, const int16_t* pIn)
     y = DctTap(mat + 52, dv); pColumnB[176] = y;
     y = DctTap(mat + 56, dv); pColumnB[208] = y;
     y = DctTap(mat + 60, dv); pColumnB[240] = y;
+}
+
+// ---------------------------------------------------------------------------
+// EATech Snd resampler / source interface (0x01168520..0x01168960).
+// The 0x01173xxx callees are stack-argument assembly helpers of the codec.
+// ---------------------------------------------------------------------------
+
+struct Resampler;
+
+// Stream source: the first dword of the object is its read callback.
+struct SndSource {
+    int (*read)(SndSource* self, int count, float* dst0, float* dst1, char fmt);
+};
+
+// Fixed-point resampling kernel: (count, in, out, &num, &frac, stepHi, stepLo).
+typedef int (*SndResampleFn)(int count, float* dst, float* src, int* num, int* frac,
+                             int stepHi, int stepLo);
+
+// Fixed-point step/accumulator (1.0 == 0x10000): the high word is the integer part.
+union Fixed16 {
+    int value;
+    struct { short frac; short whole; }; // +0x00 / +0x02
+};
+
+struct Resampler {
+    int (*process)(Resampler* self, int count, float* out0, float* out1); // 0x00 entry point
+    int            field_04;   // 0x04
+    SndSource*     source;     // 0x08
+    int            field_0c;   // 0x0c
+    int            field_10;   // 0x10
+    int            field_14;   // 0x14
+    short          field_18;   // 0x18
+    char           fmt;        // 0x1a
+    char           field_1b;   // 0x1b
+    union { int step; float step_f; }; // 0x1c fixed-point step (1.0 == 0x10000)
+    Fixed16        acc;        // 0x20 fractional accumulator
+    SndResampleFn  resample;   // 0x24
+    short          flag_28;    // 0x28 priming flag
+    short          nOffset;    // 0x2a filter offset
+    float          hist[4];    // 0x2c previous output samples
+    char           pad_3c[0x14]; // 0x3c..0x4f
+    float          ratio;      // 0x50
+};
+
+void FUN_01173100(void* state);                                        // 0x01173100
+void FUN_01173130(void* state, int count, float* out0, float* out1);   // 0x01173130
+void FUN_01173460(void* state, int mode);                              // 0x01173460
+void FUN_01173730(void* state, int count, float* out0, float* out1);   // 0x01173730
+int  FUN_01173770(int count, float* dst, float* src, int* num, int* frac, int hi, int lo); // 0x01173770
+int  FUN_01173c10(int count, float* dst, float* src, int* num, int* frac, int hi, int lo); // 0x01173c10
+int  FUN_01173eb0(int count, float* dst, float* src, int* num, int* frac, int hi, int lo); // 0x01173eb0
+int  FUN_01173fa0(int count, float* dst, float* src, int* num, int* frac, int hi, int lo); // 0x01173fa0
+
+// @ 0x01168520
+int FUN_01168520(Resampler* self, int count, float* out0, float* out1)
+{
+    if (self->source != 0) {
+        count = self->source->read(self->source, count, out1, out0, self->fmt);
+        if (count <= 0)
+            return count;
+    }
+    FUN_01173130(&self->step, count, out0, out1);
+    return count;
+}
+
+// @ 0x01168580
+int FUN_01168580(Resampler* self)
+{
+    self->source = 0;
+    self->field_0c = 0;
+    self->field_10 = 0;
+    self->field_14 = 0;
+    self->field_1b = 0;
+    self->field_04 = 0;
+    self->process = FUN_01168520;
+    FUN_01173100(&self->step);
+    return 0;
+}
+
+// @ 0x011685b0
+void FUN_011685b0(Resampler* self, int* values)
+{
+    self->ratio = (float)(values[0] >> 7) / (float)(values[1] >> 8);
+    FUN_01173460(&self->step, 3);
+}
+
+// @ 0x011685f0
+int FUN_011685f0(Resampler* self, int count, float* out0, float* out1)
+{
+    if (self->source != 0) {
+        int result = self->source->read(self->source, count, out1, out0, self->fmt);
+        if (result <= 0)
+            return result;
+    }
+    FUN_01173730(&self->step, count, out0, out1);
+    return count;
+}
+
+// @ 0x01168640
+int FUN_01168640(Resampler* self)
+{
+    self->source = 0;
+    self->field_0c = 0;
+    self->field_10 = 0;
+    self->field_14 = 0;
+    self->field_1b = 0;
+    self->field_04 = 0;
+    self->process = FUN_011685f0;
+    self->step_f = 0.0f;
+    return 0;
+}
+
+// @ 0x01168670
+struct SndPitchState {
+    char  pad_00[0x20];
+    float field_20;   // 0x20
+    float field_24;   // 0x24
+};
+
+void FUN_01168670(SndPitchState* self, int* values)
+{
+    float r = ((float)values[0] * 2.0f) / (float)values[1];
+    self->field_20 = 1.0f - r;
+    _ReadWriteBarrier();
+    self->field_24 = r;
+    self->field_24 = (float)values[2] * r * 0.00390625f;
+    self->field_20 = (float)values[2] * self->field_20 * 0.00390625f;
+}
+
+// @ 0x011686e0
+unsigned int FUN_011686e0()
+{
+    unsigned int flags = __readeflags();
+    __writeeflags(flags ^ 0x200000);
+    unsigned int after = __readeflags();
+    __writeeflags(flags);
+    return after ^ flags;
+}
+
+// @ 0x011686fd
+void FUN_011686fd(unsigned int* out, int leaf)
+{
+    int regs[4];
+    __cpuid(regs, leaf);
+    out[0] = (unsigned int)regs[0];
+    out[1] = (unsigned int)regs[1];
+    out[2] = (unsigned int)regs[2];
+    out[3] = (unsigned int)regs[3];
+}
+
+// @ 0x01168730
+void FUN_01168730(Resampler* self, int pitch)
+{
+    self->step = pitch;
+}
+
+// @ 0x01168740
+int FUN_01168740(Resampler* self, int count, float* out0, float* out1)
+{
+    int n = count;
+    float* tail = out1;
+    float* dst = out0;
+    int result = count;
+    int frac;
+    int num;
+    if (self->step == 0x10000) {
+        int readCount;
+        if (self->flag_28 == 0) {
+            readCount = n - self->nOffset + 4;
+        } else {
+            readCount = n;
+            for (int i = 0; i < 4 - self->nOffset; ++i)
+                *tail++ = self->hist[self->nOffset + i];
+        }
+        if (self->source != 0)
+            result = self->source->read(self->source, readCount, dst, tail, self->fmt);
+        if (result <= 0) {
+            if (self->flag_28 == 0)
+                self->flag_28 = 1;
+            self->hist[0] = 0.0f;
+            self->hist[1] = 0.0f;
+            self->hist[2] = 0.0f;
+            self->hist[3] = 0.0f;
+            return result;
+        }
+        if (self->flag_28 == 0) {
+            self->flag_28 = 1;
+            tail += n - self->nOffset;
+        } else {
+            tail += n - 4;
+        }
+        self->hist[0] = tail[0];
+        self->hist[1] = tail[1];
+        self->hist[2] = tail[2];
+        self->hist[3] = tail[3];
+        return n;
+    } else {
+        int readCount = (int)((unsigned)(self->step * n + self->acc.value) >> 16);
+        if (self->flag_28 == 0) {
+            readCount += 4 - self->nOffset;
+            for (int i = 0; i < self->nOffset; ++i)
+                *dst++ = 0.0f;
+        } else {
+            dst[0] = self->hist[0];
+            dst[1] = self->hist[1];
+            dst[2] = self->hist[2];
+            dst[3] = self->hist[3];
+            dst += 4;
+        }
+        if (readCount <= 0 || self->source == 0 ||
+            (result = self->source->read(self->source, readCount, out1, dst, self->fmt)) > 0) {
+            if (self->flag_28 != 0)
+                dst += self->nOffset - 4;
+            else
+                self->flag_28 = 1;
+            int frac;
+            int num;
+            num = 0;
+            frac = self->acc.value << 16;
+            self->resample(n, dst, out1, &num, &frac, (unsigned)self->step >> 16, self->step << 16);
+            int acc = (num << 16) | ((unsigned)frac >> 16);
+            self->acc.value = acc;
+            dst += (int)((unsigned)acc >> 16) - self->nOffset;
+            self->hist[0] = dst[0];
+            self->hist[1] = dst[1];
+            self->hist[2] = dst[2];
+            self->hist[3] = dst[3];
+            self->acc.whole = 0;
+            return n;
+        }
+        if (self->flag_28 == 0)
+            self->flag_28 = 1;
+        self->hist[0] = 0.0f;
+        self->hist[1] = 0.0f;
+        self->hist[2] = 0.0f;
+        self->hist[3] = 0.0f;
+        return result;
+    }
+}
+
+// @ 0x01168960
+void FUN_01168960(Resampler* self, unsigned char flags, int half)
+{
+    self->process = FUN_01168740;
+    self->field_04 = 0;
+    self->acc.value = 0;
+    self->flag_28 = 0;
+    self->nOffset = 0;
+    if (half == 0) {
+        if ((flags & 2) != 0)
+            self->resample = FUN_01173fa0;
+        else
+            self->resample = FUN_01173eb0;
+    } else {
+        self->nOffset = 1;
+        if ((flags & 2) != 0)
+            self->resample = FUN_01173c10;
+        else
+            self->resample = FUN_01173770;
+    }
+    self->hist[0] = 0.0f;
+    self->hist[1] = 0.0f;
+    self->hist[2] = 0.0f;
+    self->hist[3] = 0.0f;
 }
 
 } // namespace Snd
