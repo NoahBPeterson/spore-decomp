@@ -1,0 +1,25 @@
+; slice s00ead1a0 = 0x00ead1a0..0x00eae040 (SP::Audio::cPlayerCityMusic city-mode music driver + eastl list/vector helpers)
+00ead1a0 SP::Audio::cPlayerCityMusic::Reset(char)                   ; 0x00ead1a0  thiscall: publish/unpublish every music property (active indices, counters, octave vectors, 0xead8248/0x6c3a5e1c) through AESystem
+00ead660 cMusicVec::~cMusicVec / FUN_00ead660(void)                ; 0x00ead660  thiscall: destroy the 0x6c-byte elements (slot 8 then,0) then free the buffer
+00ead6a0 cEditorResource::FUN_00ead6a0(void)                       ; 0x00ead6a0  thiscall: free +0x58/+0x44/+0x30/+0x1c, reset vptr 0x13eb938  byte-exact (MATCH)
+00ead6f0 SP::Audio::cPlayerCityMusic::Start(int)                   ; 0x00ead6f0  thiscall: acquire the AESystem (slot 0x20), subscribe MessageServer at +0x208, arm the 3-entry table, Reset(1)  byte-exact (MATCH)
+00ead7b0 SP::Audio::cPlayerCityMusic::Stop(void)                    ; 0x00ead7b0  thiscall: Reset(0), release the +0x10c handle, unregister the +0x208 MessageServer handler
+00ead840 cQuery840::FUN_00ead840(void)                             ; 0x00ead840  thiscall: +0xfc != (the active +0xf0/+0xd8/+0xdc pointer advanced by -0x6c)  byte-exact (MATCH)
+00ead870 SP::Audio::cPlayerCityMusic::SetNotePitch(int,int)         ; 0x00ead870  thiscall: set +0x1cc[idx], fold into the +0x74 semitone table, derive +0x13c octave + +0x128 flag, publish 0xe7b72656/0xfe31e5d9
+00eada10 cList::FUN_00eada10(const int*)                           ; 0x00eada10  thiscall: walk the list, unlink+free every node whose key equals *keyPtr  byte-exact (MATCH)
+00eada50 FUN_00eada50(cListNode*,int*,int*,int)                  ; 0x00eada50  stdcall (ret 0x10): append nodes built from [begin,end) onto the sentinel  byte-exact (MATCH)
+00eadab0 FUN_00eadab0(cListNode*,unsigned,const int*)            ; 0x00eadab0  stdcall (ret 0xc): append `count` nodes each holding *valuePtr  byte-exact (MATCH)
+00eadb10 FUN_00eadb10(void**,int)                                ; 0x00eadb10  cdecl: `for (;n;--n) *p = *(void**)*p`  byte-exact (MATCH)
+00eadb30 SP::Audio::cPlayerCityMusic::~cPlayerCityMusic(void)      ; 0x00eadb30  thiscall: reset vptrs, release both handler pairs + every owned vector/list, chain to the base vftable  byte-exact (MATCH)
+00eadd60 SP::Audio::cPlayerCityMusic::SelectAmbience(int,u32*)      ; 0x00eadd60  thiscall: find `state` in the +0x114 vector, publish 0xaa1b3b8d and drop it, else append the key to the +0x1b8 list
+00eade60 cIntVec::FUN_00eade60(unsigned)                          ; 0x00eade60  thiscall: grow-back-to(newCap) -- reallocate, copy, free the old buffer, fix begin/end/cap  byte-exact (MATCH)
+00eadee0 cList::FUN_00eadee0(int*,int*,int)                       ; 0x00eadee0  thiscall: overwrite existing keys from [begin,end), splice the rest on, or erase the tail
+00eadf40 cFloatVec::FUN_00eadf40(float*,float*)                    ; 0x00eadf40  thiscall: grow-or-insert one float (in-place memmove, or double-capacity rebuild)
+00eae010 FUN_00eae010(void*,void*,int*)                           ; 0x00eae010  cdecl: forward-copy node key (+8) from [first,last) into *out, returns out
+00eae040 FUN_00eae040(void*,void*,int*)                           ; 0x00eae040  cdecl: backward-copy node key (+8) from (first,last] into *--out, returns out
+; helpers: EAAllocate 0x00f473a0, operator_delete_array 0x00f47380, memcpy 0x011e0744, memmove 0x013cc480
+;          GetSystemAT 0x00a206f0, MessageServer 0x0067dcc0, SetGlobalProperty 0x005ca880, RemoveHandler 0x00571db0
+;          FUN_00572020 0x00572020, KillSetiEffects 0x00435ed0, ListErase 0x00973d10
+;          vtable dispatch slots 0x20 (returns ptr), 0x24/0x40 (int,int), 0x30/0x38 (int), 0x3c (int,float), 0x58 (void);
+;          property id 0x3cdd1a9; Reset property ids 0x330df985/0x3fbc0a67/0xec66947a/0xf7db2353/0x34753a7/0x34753aa/0xaa1b3b8d/0x7df75892/0xcbc8ae11
+;          globals g_tab_1488414 0x01488414, g_tab_1488420 0x01488420, vftables 0x01488444/0x0148843c/0x0148842c/0x013ec458/0x013eb394/0x013eb938; "Simulator" 0x013f09b4

@@ -1,0 +1,10 @@
+slices/s00ead1a0/s00ead1a0.cpp  ?FUN_00ead660@cMusicVec@@QAEXXZ  00ead660  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ead1a0/s00ead1a0.cpp  ?FUN_00ead6a0@cEditorResource@@QAEXXZ  00ead6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ead1a0/s00ead1a0.cpp  ?Start@cPlayerCityMusic@Audio@SP@@QAEXH@Z  00ead6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ead1a0/s00ead1a0.cpp  ?FUN_00ead840@cQuery840@@QAE_NXZ  00ead840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ead1a0/s00ead1a0.cpp  ?FUN_00eada10@cList@@QAEXPBH@Z  00eada10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ead1a0/s00ead1a0.cpp  ?FUN_00eada50@@YGXPAUcListNode@@PAH1H@Z  00eada50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ead1a0/s00ead1a0.cpp  ?FUN_00eadab0@@YGXPAUcListNode@@IPBH@Z  00eadab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ead1a0/s00ead1a0.cpp  ?FUN_00eadb10@@YAXPAPAXH@Z  00eadb10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ead1a0/s00ead1a0.cpp  ??1cPlayerCityMusic@Audio@SP@@QAE@XZ  00eadb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ead1a0/s00ead1a0.cpp  ?FUN_00eade60@cIntVec@@QAEXI@Z  00eade60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
