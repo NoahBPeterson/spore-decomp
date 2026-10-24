@@ -1831,33 +1831,61 @@ struct KeyFlags {
     uint16_t flags;      // +4: 0x1 = add, 0x20 = skip, 0x100 = extra
     uint16_t index;      // +6
 };
+struct RefCounted;
+// 0x1c-byte container iterator returned by the slot map (420270 / 420120 / find_if).
+struct Iter28_s0040_a170 { uint32_t v[7]; };
+// 0x30-byte keyed record stored in the slot map: v[0..2] key, v[3] info->id,
+// v[4] flags|index<<16, v[5..11] refcounted pointers.
+struct KeyedRecord_s0040_a170 { uint32_t v[12]; };
 extern void* EASTL_allocator_allocate(uint32_t size, const char* name, uint32_t, uint32_t, uint32_t, uint32_t);
-extern bool  FUN_00401d90(const ResourceKey_s0040_a170* k);
-extern void* FUN_00423110(void* self, uint32_t);
-extern void* FUN_00421c80(void* self, uint32_t);
-extern bool  FUN_006a25a0(void* self, uint32_t);
+// The container helpers take `this` in ECX and pop their stack arguments themselves (ret N); model
+// that with __fastcall plus an unused EDX filler.
+extern bool  FUN_00401d90(const ResourceKey_s0040_a170* k);                              // cdecl, 1 arg
+extern void* __fastcall FUN_00423110(void* self, int, uint32_t);                          // ctor (ret 4)
+extern void* __fastcall FUN_00421c80(void* self, int, uint32_t);                          // ctor (ret 4)
+extern bool  __fastcall FUN_006a25a0(void* self, int, uint32_t);                          // ret 4
 extern void  FUN_0068c700(ResourceKey_s0040_a170* k, int);
 extern void  FUN_0068c6d0(ResourceKey_s0040_a170* k, uint32_t, int);
+extern void  __fastcall FUN_004036e0(void* self);                                          // KeyedRecord ctor
+extern void* __fastcall FUN_00401e40(void* self);                                          // 0x18-byte modifier ctor
+extern void  __fastcall FUN_00401ef0(void* self, int, const ResourceKey_s0040_a170* key);   // ret 4
+extern void  __fastcall FUN_00401f20(void* self);                                          // KeyedRecord dtor
+extern void* __fastcall FUN_005658b0(void* self);                                          // *(void**)self
+extern void  __fastcall FUN_004063d0(void* self, int, const KeyedRecord_s0040_a170* src);   // copy ctor (ret 4)
+extern void  __fastcall FUN_00453540(void* self);                                          // release
 struct Notifier {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5();
     virtual void Post(uint32_t msg, void* payload, int, int); // slot 6 (+0x18)
 };
 Notifier* GetNotifier();     // FUN_0067dcc0
+struct ResourceMessenger {   // FUN_0067de30 result; vtable slot 11 (+0x2c) = send
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10();
+    virtual void Send(uint32_t id, uint32_t tagged, RefCounted** outRef);
+};
+ResourceMessenger* GetResourceMessenger();   // @ 0x0067de30
 struct SlotMap {};           // lives at EditorList+0xc8
+extern void  __fastcall FUN_00420270(void* self, int, Iter28_s0040_a170* out, uint32_t idx);            // upper_bound (ret 8)
+extern void  __fastcall FUN_00420120(void* self, int, Iter28_s0040_a170* out, uint32_t idx);            // lower_bound (ret 8)
+extern void  __fastcall FUN_004204f0(void* self, int, const KeyedRecord_s0040_a170* rec, uint32_t idx); // push front (ret 8)
+extern void  __fastcall FUN_004204d0(void* self, int, const KeyedRecord_s0040_a170* rec, uint32_t idx); // replace (ret 8)
+extern void  __fastcall FUN_00420390(void* self, int, Iter28_s0040_a170 it, void* out);                 // assign (ret 0x20)
+extern Iter28_s0040_a170* FUN_00422140(Iter28_s0040_a170* out, Iter28_s0040_a170 first,
+                                       Iter28_s0040_a170 last, const KeyFlags* info,
+                                       const ResourceKey_s0040_a170* key);                          // find_if
 struct EditorList {
-    char pad[0xc8];
+    char pad[0xc4];          // vptr + 0xc4 == slots at +0xc8
     SlotMap slots;
-    // @ 0x0040a170
-    void ApplyEntry(const ResourceKey_s0040_a170* key, const KeyFlags* info);
-    // @ 0x0040a590
-    bool HandleKey(const ResourceKey_s0040_a170* key, const KeyFlags* info);
+    void ApplyEntry(const ResourceKey_s0040_a170* key, const KeyFlags* info);   // @ 0x0040a170
+    bool HandleKey(const ResourceKey_s0040_a170* key, const KeyFlags* info);    // @ 0x0040a590
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6();
     virtual bool Accept(const ResourceKey_s0040_a170* k, bool extra);   // slot 7 (+0x1c)
 };
-extern void  EditorList_Prepare(EditorList* self, ResourceKey_s0040_a170* k);           // FUN_00407280
-extern void  EditorList_Forward(EditorList* self, ResourceKey_s0040_a170* k, const void* extra); // FUN_004157d0
+extern void  __fastcall EditorList_Prepare(EditorList* self, int, ResourceKey_s0040_a170* k);                 // FUN_00407280 (ret 4)
+extern void  __fastcall EditorList_Forward(EditorList* self, int, ResourceKey_s0040_a170* k, const void* extra); // FUN_004157d0 (ret 8)
 static inline bool IsEditorType(const ResourceKey_s0040_a170* k)
 {
     return k->type == 0x2b978c46 || k->type == 0x438f6347 || k->type == 0x3d97a8e4;
@@ -4896,20 +4924,77 @@ void Transform::Scale(float s)
     mVersion++;
 }
 
+// @ 0x0040a170
+void EditorList::ApplyEntry(const ResourceKey_s0040_a170* key, const KeyFlags* info)
+{
+    Iter28_s0040_a170 last, first, cur, endIter;
+    void* sm = &slots;
+
+    FUN_00420270(sm, 0, &last, info->index);        // upper_bound(idx)
+    FUN_00420120(sm, 0, &first, info->index);       // lower_bound(idx)
+    FUN_00422140(&cur, first, last, info, key);     // find_if over [first,last)
+    FUN_00420270(sm, 0, &endIter, info->index);     // upper_bound(idx) again (the "end")
+
+    bool exists = (cur.v[0] == endIter.v[0]) &&
+                  (cur.v[0] == cur.v[6] || cur.v[1] == endIter.v[1]);
+    if (exists) {
+        KeyedRecord_s0040_a170 rec;
+        FUN_004036e0(&rec);                         // KeyedRecord ctor (tag, zeroed refs)
+        void* mem = EASTL_allocator_allocate(0x18, "Editor", 0, 0, 0, 0);
+        void* mod = mem ? FUN_00401e40(mem) : 0;
+        if (mod != (void*)rec.v[5]) {               // intrusive-ptr assign into rec.v[5]
+            if (mod) ++*(uint32_t*)((char*)mod + 4);
+            void* old = (void*)rec.v[5];
+            rec.v[5] = (uint32_t)mod;
+            if (old) FUN_00453540(old);
+        }
+        FUN_00401ef0(mod, 0, key);                  // modifier takes a copy of the key
+        rec.v[0] = key->instance;
+        rec.v[1] = key->type;
+        rec.v[2] = key->group;
+        rec.v[3] = info->id;
+        rec.v[4] = info->flags | ((uint32_t)info->index << 16);
+        ResourceMessenger* m = GetResourceMessenger();
+        m->Send(key->instance, (key->group & 0xffff00ffu) | (0x62u << 8), (RefCounted**)&rec.v[9]);
+        m = GetResourceMessenger();
+        m->Send(key->instance, (key->group & 0xffff00ffu) | (0x7eu << 8), (RefCounted**)&rec.v[10]);
+        if (info->flags & 1)
+            FUN_004204f0(sm, 0, &rec, info->index);
+        else
+            FUN_004204d0(sm, 0, &rec, info->index);
+        FUN_00401f20(&rec);
+    } else {
+        if (info->flags & 0x100) {
+            KeyedRecord_s0040_a170* e = (KeyedRecord_s0040_a170*)FUN_005658b0(&cur.v[1]);
+            *(uint16_t*)&e->v[4] |= 0x100;
+        }
+        if (info->flags & 1) {
+            KeyedRecord_s0040_a170* e = (KeyedRecord_s0040_a170*)FUN_005658b0(&cur.v[1]);
+            KeyedRecord_s0040_a170 rec;
+            FUN_004063d0(&rec, 0, e);               // copy the slot's record
+            uint32_t dst;
+            FUN_00420390(sm, 0, cur, &dst);         // assign at the found iterator
+            FUN_004204f0(sm, 0, &rec, info->index);
+            FUN_00401f20(&rec);
+        }
+    }
+}
+
 // @ 0x0040a590
 bool EditorList::HandleKey(const ResourceKey_s0040_a170* key, const KeyFlags* info)
 {
-    bool needNotify = false;
-    if (((key->group >> 30) & 3) == 0)
+    bool needNotify;
+    if (((key->group >> 30) & 3) != 1)
         needNotify = true;
-    else if (FUN_00401d90(key))
-        needNotify = true;
+    else
+        needNotify = FUN_00401d90(key);
 
     if (needNotify) {
         uint32_t* msg = (uint32_t*)EASTL_allocator_allocate(0x40, "Editor", 0, 0, 0, 0);
         if (msg) {
-            FUN_00423110(msg, 0x695e243);
-            msg[2] = 0; // fields written below
+            FUN_00423110(msg, 0, 0x695e243);
+            msg[0]  = 0x13eb844;   // message vtable
+            msg[14] = 0;           // +0x38
         }
         msg[2]  = key->instance;
         msg[4]  = key->group;
@@ -4925,7 +5010,7 @@ bool EditorList::HandleKey(const ResourceKey_s0040_a170* key, const KeyFlags* in
         ResourceKey_s0040_a170 k = *key;
         if (((key->group >> 16) & 0xff) == 0x6b) ki.f |= 0x10;
         if (((k.group >> 16) & 0xff) == 0x62) FUN_0068c700(&k, 0);
-        EditorList_Forward(this, &k, &ki);
+        EditorList_Forward(this, 0, &k, &ki);
         return true;
     }
 
@@ -4933,12 +5018,12 @@ bool EditorList::HandleKey(const ResourceKey_s0040_a170* key, const KeyFlags* in
     if (((key->group >> 8) & 0xff) == 0x7e) FUN_0068c6d0(&k, 0x62, 0);
 
     bool handled = false;
-    if (!(info->flags & 0x20) && FUN_006a25a0(g_Manager, 0x26cd3a5))
+    if (!(info->flags & 0x20) && FUN_006a25a0(g_Manager, 0, 0x26cd3a5))
         handled = Accept(&k, (info->flags & 0x100) != 0);
 
     if (handled) {
         uint32_t* msg = (uint32_t*)EASTL_allocator_allocate(0x40, "Editor", 0, 0, 0, 0);
-        if (msg) FUN_00421c80(msg, 0x695e243);
+        if (msg) msg = (uint32_t*)FUN_00421c80(msg, 0, 0x695e243);
         msg[2]  = key->instance;
         msg[4]  = key->group;
         msg[6]  = key->type;
@@ -4947,7 +5032,7 @@ bool EditorList::HandleKey(const ResourceKey_s0040_a170* key, const KeyFlags* in
         GetNotifier()->Post(0x695e243, msg, 0, 0);
         return true;
     }
-    EditorList_Prepare(this, &k);
+    EditorList_Prepare(this, 0, &k);
     ApplyEntry(&k, info);
     return true;
 }

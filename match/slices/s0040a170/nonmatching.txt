@@ -1,2 +1,2 @@
-0040a170  413  EditorList::ApplyEntry; /Od inlined smart-ptr/EASTL map code not reproduced (ours 468B vs 1041B orig)
-0040a590  675  EditorList::HandleKey; /Od inlined key-tag helpers and message struct init not reproduced (ours 760B vs 1072B orig)
+0040a170  953  EditorList::ApplyEntry; /Od inlined smart-ptr/EASTL map code not reproduced (ours 572B vs 1041B orig); difftest WEAK 73% (fixed: container/find_if/record helpers take this in ECX and pop their stack args (__fastcall + EDX filler), slots is at +0xc8 (pad after vptr is 0xc4), and both message sends write their result into the record's ref fields)
+0040a590  977  EditorList::HandleKey; /Od inlined key-tag helpers and message struct init not reproduced (ours 561B vs 1072B orig); difftest WEAK 35% (fixed: notify test is "tag != 1 or 00401d90(key)", message ctor side effects (vtable/+0x38) reproduced, and the member markers bind the right symbol)
