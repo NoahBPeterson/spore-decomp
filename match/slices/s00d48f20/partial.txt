@@ -1,0 +1,2 @@
+# va  size  reason
+00d49950  521  FUN_00d49950 - panel driver for one of the creature-detail windows: cSPUILayout::FindWindowByID(param, 1, 0x6283c92), then a single long loop over the layout window's child slots (vtable +0xa8 / +0xc / +0x14 / +0x1c / +0x24 / +0x2c / +0x34 / +0x3c) doing movss/comiss float divide-and-scale work against _HK_REAL_ONE (0x01485720); no source, not attempted (the whole body is one vtable-driven loop with SSE float math and many unnamed window slots). flags /O2 /MD /Gy /TP /arch:SSE /GS-

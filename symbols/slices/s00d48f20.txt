@@ -1,0 +1,13 @@
+00d48f20  ?FUN_00d48f20@@YA_NPAUCmpObj@@@Z  # ability record -> verb-tray sub-slot gate (mType tables per game mode) - byte-exact
+00d48ff0  ?FUN_00d48ff0@@YAHPAUCmpObj@@@Z  # ability record -> verb-tray sub-slot index 0..4 / -1 (mType tables per game mode) - nonmatching/equivalent
+00d49110  ?FUN_00d49110@@YA_NH@Z            # ability id -> is one of the four "direct" creature abilities (mType 0x11/0x12/0x51/0x53) - byte-exact
+00d49190  ?FUN_00d49190@@YAXXZ             # refresh verb tray 0x7e495e0 (vfn+0x7c(1,0)) - byte-exact
+00d491b0  ?FUN_00d491b0@@YAXD@Z           # set the current ability's icon image + tooltip on window 0x7e45040, optionally refresh 0x7e495e0 - byte-exact
+00d49270  ?FUN_00d49270@@YAHH@Z           # ability id -> verb-tray slot (combat-target / widget slot count / +6 creature slots) - nonmatching/equivalent
+00d49300  ?sActivatePanel@@YAXH@Z         # switch the two verb panels and scroll the panel window selected by mode - nonmatching/equivalent
+00d49450  ?FUN_00d49450@@YAXXZ            # rebuild the global verb-slot table (0x0169e3ec) from the avatar's abilities + the six mode-0x1654c02 slots - nonmatching/equivalent
+00d49560  ?FUN_00d49560@@YAMH@Z           # ability index -> range value from the +0xc28 array, or ScoreAbilityRange in mode 0x1654c02 - byte-exact
+00d495b0  ?sPlayerUseAbility@@YAXI@Z      # verb-tray click handler: record selected verb, refresh tray, play hashed sounds per verb slot - nonmatching/equivalent
+00d49820  ?FUN_00d49820@@YA_NH@Z          # button click handler: update current verb per game mode, else resolve button category and use the ability - nonmatching/equivalent
+00d49920  ?FUN_00d49920@@YA_NI@Z          # with an avatar present, sPlayerUseAbility(param) -> true, else false - byte-exact
+00d49950  ?FUN_00d49950@@YAXPAX@Z         # detail-window slot driver (FindWindowByID 0x6283c92 + vtable/float loop) - no source (partial)
