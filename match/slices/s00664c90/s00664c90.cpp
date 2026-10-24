@@ -82,7 +82,8 @@ struct cSPUIFeedListCategory {
     char  m9c;                         // 0x9c
     char  pad9d[3];
     void* pA0; void* pA4; void* pA8;   // vector<pair8>
-    void* padAc;
+    void* padAc;                       // 0xac
+    char  padB0[4];                    // 0xb0 (padding: pB4 really starts at 0xb4)
     void* pB4;
     void* pB8; void* pBc; void* pC0;
     void* pC4; void* pC8; void* pCc;
@@ -300,28 +301,32 @@ void FUN_00665870(char* p) {
         FUN_00669410(p);
 }
 
-extern "C" void  FUN_006b5060(void* self);
-extern "C" void  FUN_006b5240(void* self);
-extern "C" void  FUN_006b55c0(void* self);
+struct cStringLocal {                   // SP::cString (0x14 bytes), used as a stack buffer
+    void* p00; void* p04; void* p08; void* p0c; unsigned int p10;
+    void        FUN_006b5060();         // @ 0x006b5060  ctor
+    void        FUN_006b5240();         // @ 0x006b5240  dtor
+    const char* FUN_006b55c0();         // @ 0x006b55c0  c_str
+};
 extern "C" char  FUN_006a1360(void* obj, int k, void* out);
-extern "C" char  FUN_006a0ae0(void* obj, int k, int* count, void** ptr);
+extern "C" char  FUN_006a0ae0(void* obj, int k, void** ptr, int* count);
 
 // @ 0x00665c50
 void cSPUIFeedListCategory::Populate() {
-    char* p = (char*)this;
-    if (!*(void**)(p + 0x7c) || !*(void**)(p + 0xb8)) return;
-    char str[0x14];
-    FUN_006b5060(str);
-    if (*(void**)(p + 0x78)) {
-        if (FUN_006a1360(*(void**)(p + 0xb8), 0x744717c2, str))
-            FUN_006b55c0(str);
+    if (!p7c || !pB8) return;
+    cStringLocal str;
+    str.FUN_006b5060();
+    if (p78) {
+        if (FUN_006a1360(pB8, 0x744717c2, &str)) {
+            const char* s = str.FUN_006b55c0();
+            ((void(__thiscall*)(void*, const char*))Vslot(p78, 0x80))(p78, s);
+        }
     }
-    int a = 0;
-    void* b = 0;
-    if (FUN_006a0ae0(*(void**)(p + 0xb8), 0x744717c1, &a, &b)) {
-        for (int i = 0; i < a; ++i)
-            Refresh(*(int*)((char*)b + i * 0xc), 0);
+    void* ptr = 0;
+    int count = 0;
+    if (FUN_006a0ae0(pB8, 0x744717c1, &ptr, &count)) {
+        for (int i = 0; i < count; ++i)
+            Refresh(*(int*)((char*)ptr + i * 0xc), 0);
     }
-    FUN_006657f0(*(void**)(p + 0x8c), *(void**)(p + 0x88), b);
-    FUN_006b5240(str);
+    FUN_006657f0(childBegin, childEnd, ptr);
+    str.FUN_006b5240();
 }

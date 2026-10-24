@@ -1,4 +1,4 @@
 00664c90 138 cSPUIFeedListCategory ctor - complete, vtable/field store scheduling differs
 00664dc0 180 cSPUIFeedListCategory dtor - complete, refcount cleanup ordering differs
 006650c0 294 vector<AutoRefCount4>::insert - complete, reallocation path not byte-exact; equiv: UNSUPPORTED (0 valid inputs; vector-insert state not generated)
-00665c50 190 cSPUIFeedListCategory::Populate - complete, cString/property path scheduling differs
+00665c50 196 cSPUIFeedListCategory::Populate - complete and equivalent (equiv PASS 305/400 valid, 68.0% cov): cString is a local 0x14-byte stack buffer with thiscall ctor/dtor/c_str (0x6b5060/0x6b5240/0x6b55c0; the extern "C" decls pushed an argument and left ecx garbage, so the dtor faulted at 0x6b5280), the missing vtable 0x20 call on [this+0x78] with the c_str result is back, 0x6a0ae0 out-params are (&ptr,&count) not (&count,&ptr), 0x6657f0 gets (childBegin, childEnd, ptr); class layout fixed at 0xb0 (pB8 was really 0xb4). Remaining 196 bytes: ebx-frame/register scheduling
