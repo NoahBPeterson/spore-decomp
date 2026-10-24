@@ -3,7 +3,7 @@
 004b25e0  125  destructor; inlined container destruct loops and frame holes differ
 004b2710  67  Reset; inline-buffer clear holes and loop layout differ
 004b2800  325  ReadFromAsset; many inlined-helper frames/register choices differ
-004b29b0  424  ReadFromProp2; many inlined-helper frames/register choices differ
+004b29b0  422  ReadFromProp2; many inlined-helper frames/register choices differ. Fixed this session: the function returns bool, not uint32_t - the original normalizes through a byte temp (`mov byte [ebp-0x19],1` ... `mov al,[ebp-0x19]`) and thus keeps the upper eax bits left by the `list->Release()` vtable call, while a uint32_t return made cl emit `xor eax,eax` for `return 0` (eax 0 instead of 0x41170000). Declared bool in the slice and in the hybrid copy. equiv WEAK (273-686 valid, 20.8% cov, 0 mismatches)
 004b2bb0  724  ReadFromProp; /Od frame, inlined value-accessor temps and placement-new null check differ (equivalence PASS at reduced coverage)
 004b2f80  362  WriteToProp; many inlined-helper frames/register choices differ
 004b31d0  379  Apply; many inlined-helper frames/register choices differ
