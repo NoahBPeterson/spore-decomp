@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0106da70/s0106da70.cpp  ??0cSPUIBase@@QAE@XZ  0106da70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0106da70/s0106da70.cpp  ??1cSPUIBase@@UAE@XZ  0106db90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0106da70/s0106da70.cpp  ?PushToolWindowId@cSPUISpace@@QAEXI@Z  0106dcd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0106da70/s0106da70.cpp  ?OnContextDeactivate@cSPUISpace@@QAEXXZ  0106e270  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0106da70/s0106da70.cpp  ??_GcSPUISpace@@UAEPAXI@Z  0106e380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
