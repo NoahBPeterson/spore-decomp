@@ -1,3 +1,2 @@
-00b308f0  -  IsCursorPointInRect-style bounding-box/projection routine; math reconstructed from the decompile but call dataflow and scale/clamp roles not fully verified
-00b31030  -  cGameTerrainCursor::func7Ch_ drag-select; projection call and per-object filter branch roles guessed
-00b313b0  -  cGameTerrainCursor::funcA0h_ selection-commit; cArithmeticaProgram temporary copy emulated through Assign, several call arguments approximate
+# va  diff-bytes  reason  (incomplete / approximate, or equiv did not confirm: not counted as decompiled)
+00b313b0  659  cGameTerrainCursor::funcA0h_ selection-commit (rectangle-select f84/f50/f54 branch vs non-rect fB8V branch, the g_167e770 / g_167e76c+68 / g_167e7b4+b8+bc stores, the 0x90-byte cArithmeticaProgram temporary assigned into 0x0167e7e0 through cGameTerrainCursor::Assign, FUN_007f2240, vtable(0xc8), FUN_00bc3130_); complete but untestable -- gate UNSUPPORTED, 0/400 inputs valid because the ORIGINAL itself never survives (import:GetCursorPos=288 via the input-manager vtable(0x34) call, fault(pool-limit)=95, fault(read)=14, budget=2, fake-arity=1). PARTIAL UNSUPPORTED, see work/match/scratch_s00b308f0_fixlog.txt.

@@ -186,7 +186,7 @@ struct cGameTerrainCursor {
 bool __cdecl FUN_00b308f0(void* obj, float f2, float f3, float f4, float f5)
 {
     if (!_sAppProperties->GetDescription(0x424be05u)) {
-        float a = 0.0f, b = 0.0f;
+        float a, b;                       // the original leaves these unwritten unless the callee stores them
         FUN_00b7c8e0(obj, &b, &a);
         return (f2 <= b) && (b <= f4) && (f3 <= a) && (a <= f5);
     }
