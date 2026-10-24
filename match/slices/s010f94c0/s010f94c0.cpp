@@ -56,9 +56,12 @@ class hkArray
 class hkMemory
 {
 public:
-	virtual void* allocate(int nbytes, int memClass);   // slot 0
+	virtual void* allocate(int nbytes, int memClass);   // slot 0, 0x0107d960
+	void deallocate(void* p, int nbytes, int memClass); // 0x0107db10
 };
 extern hkMemory* hkMemory_s_instance;   // 0x016e4178
+extern void* hkMemory_s_memory;         // 0x016e4174
+extern void* hkMemory_s_getInstance;    // 0x013cc2bc (function pointer)
 
 __declspec(align(16)) class hkVector4
 {
@@ -108,6 +111,21 @@ static __forceinline void hkConvertToInt(const hkVector4& v, hkUint32* out)
 
 class hkBroadPhaseHandle;
 
+class hkBool
+{
+public:
+	hkBool() { }
+	hkBool(bool b) : m_bool(b) { }
+	bool m_bool;
+};
+
+class hkBroadPhaseHandlePair
+{
+public:
+	hkBroadPhaseHandle* m_a;   // +0
+	hkBroadPhaseHandle* m_b;   // +4
+};
+
 class hkReferencedObject
 {
 public:
@@ -136,7 +154,7 @@ struct hkBpMarker
 {
 	BpInt m_nodeIndex;                  // +0
 	BpInt m_position;                   // +2
-	hkArray<hkUint32> m_overlapping;    // +4
+	hkArray<BpInt> m_overlapping;       // +4
 };
 struct hkBpAxis
 {
@@ -148,6 +166,12 @@ class hk3AxisSweep : public hkBroadPhase
 public:
 	hk3AxisSweep(const hkVector4& worldMin, const hkVector4& worldMax, int numMarkers);
 
+protected:
+	void queryBatchAabbSub(hkUint32* batchBits, hkArray<hkBroadPhaseHandlePair>& pairs, hkBool addOverlaps) const;   // 0x010f9ac0
+	__forceinline void testPair(hkBpNode* node, hkBpNode* other, hkArray<hkBroadPhaseHandlePair>& pairs, hkBool addOverlaps) const;
+	__forceinline void addRemoveMarker(hkBpNode* tagged, hkBpNode* plain, hkBool addOverlaps) const;
+
+public:
 	hkVector4 m_offsetLow;              // +0x10
 	hkVector4 m_offsetHigh;             // +0x20
 	hkVector4 m_scale;                  // +0x30
@@ -280,4 +304,130 @@ hk3AxisSweep::hk3AxisSweep(const hkVector4& worldMin, const hkVector4& worldMax,
 	m_axis[0].m_endPoints.pushBackUnchecked(last);
 	m_axis[1].m_endPoints.pushBackUnchecked(last);
 	m_axis[2].m_endPoints.pushBackUnchecked(last);
+}
+
+// Inlined overlap test for one node pair.  The packed (y,z) dwords of the two nodes are subtracted both ways; a
+// sign bit in either 16-bit half means the intervals are disjoint.
+__forceinline void hk3AxisSweep::testPair(hkBpNode* node, hkBpNode* other,
+	hkArray<hkBroadPhaseHandlePair>& pairs, hkBool addOverlaps) const
+{
+	const hkUint32 d0 = *(const hkUint32*)&other->max_y - *(const hkUint32*)&node->min_y;
+	const hkUint32 d1 = *(const hkUint32*)&node->max_y - *(const hkUint32*)&other->min_y;
+	if ((d0 | d1) & 0x80008000)
+		return;
+
+	if ((hkUint32)node->m_handle & 1)
+	{
+		addRemoveMarker(node, other, addOverlaps);
+	}
+	else if ((hkUint32)other->m_handle & 1)
+	{
+		addRemoveMarker(other, node, addOverlaps);
+	}
+	else
+	{
+		hkBroadPhaseHandlePair pair;
+		pair.m_a = other->m_handle;
+		pair.m_b = node->m_handle;
+		pairs.pushBackUnchecked(pair);
+	}
+}
+
+// A marker node stores (markerIndex << 4) | 1 in m_handle, so the byte offset of the marker is the handle with the
+// tag bit cleared.  The other node's index is added to / removed from that marker's overlapping list.
+__forceinline void hk3AxisSweep::addRemoveMarker(hkBpNode* tagged, hkBpNode* plain, hkBool addOverlaps) const
+{
+	const hkUint32 markerOffset = (hkUint32)tagged->m_handle & 0xfffffffe;
+	hkBpMarker* marker = (hkBpMarker*)((char*)m_markers + markerOffset);
+	const int index = (int)(plain - m_nodes.m_data);
+	hkArray<BpInt>& overlapping = marker->m_overlapping;
+
+	if (addOverlaps.m_bool)
+	{
+		overlapping.pushBackUnchecked((BpInt)index);
+	}
+	else
+	{
+		const int n = overlapping.m_size;
+		int found = -1;
+		for (int i = 0; i < n; i++)
+		{
+			if (overlapping.m_data[i] == index)
+			{
+				found = i;
+				break;
+			}
+		}
+		overlapping.m_data[found] = overlapping.m_data[--overlapping.m_size];
+	}
+}
+
+// @ 0x010f9ac0
+void hk3AxisSweep::queryBatchAabbSub(hkUint32* batchBits, hkArray<hkBroadPhaseHandlePair>& pairs, hkBool addOverlaps) const
+{
+	BpInt openBuffer[256];
+	BpInt batchBuffer[256];
+	hkArray<BpInt> openList;
+	hkArray<BpInt> batchList;
+	openList.m_data = openBuffer;
+	openList.m_size = 0;
+	openList.m_capacityAndFlags = (int)0x80000100;
+	batchList.m_data = batchBuffer;
+	batchList.m_size = 0;
+	batchList.m_capacityAndFlags = (int)0x80000100;
+
+	const hkBpEndPoint* it = m_axis[0].m_endPoints.m_data + 1;
+	const hkBpEndPoint* end = m_axis[0].m_endPoints.m_data + m_axis[0].m_endPoints.m_size - 1;
+
+	while (it < end)
+	{
+		const int nodeIndex = it->m_nodeIndex;
+		const hkUint32 inBatch = batchBits[nodeIndex >> 5] & (1u << (nodeIndex & 0x1f));
+
+		if (it->m_value & 1)
+		{
+			// Max endpoint: the node leaves the list of open nodes.
+			hkArray<BpInt>& list = inBatch ? batchList : openList;
+			const int n = list.m_size;
+			int found = -1;
+			for (int i = 0; i < n; i++)
+			{
+				if (list.m_data[i] == nodeIndex)
+				{
+					found = i;
+					break;
+				}
+			}
+			list.m_data[found] = list.m_data[--list.m_size];
+		}
+		else
+		{
+			// Min endpoint: test against every open node, then open this one.
+			hkBpNode* node = &m_nodes.m_data[nodeIndex];
+			for (int i = 0; i < batchList.m_size; i++)
+				testPair(node, &m_nodes.m_data[batchList.m_data[i]], pairs, addOverlaps);
+			if (inBatch)
+			{
+				for (int i = 0; i < openList.m_size; i++)
+					testPair(node, &m_nodes.m_data[openList.m_data[i]], pairs, addOverlaps);
+				batchList.pushBackUnchecked((BpInt)nodeIndex);
+			}
+			else
+			{
+				openList.pushBackUnchecked((BpInt)nodeIndex);
+			}
+		}
+		it++;
+	}
+
+	if (!(openList.m_capacityAndFlags & (int)0x80000000))
+	{
+		hkMemory* mem = ((hkMemory* (__stdcall*)(void*))hkMemory_s_getInstance)(hkMemory_s_memory);
+		mem->deallocate(openList.m_data, (openList.m_capacityAndFlags & 0x3fffffff) * 2, 0x14);
+	}
+	if (!(batchList.m_capacityAndFlags & (int)0x80000000))
+	{
+		hkMemory* mem = ((hkMemory* (__stdcall*)(void*))hkMemory_s_getInstance)(hkMemory_s_memory);
+		mem->deallocate(batchList.m_data, (batchList.m_capacityAndFlags & 0x3fffffff) * 2, 0x14);
+	}
 }
