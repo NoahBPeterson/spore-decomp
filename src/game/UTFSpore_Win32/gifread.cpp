@@ -50,13 +50,17 @@ struct GifFilePrivate {
     void* fd;                                                       // 0x38
     int masks[13];                                                  // 0x3c..0x6f
     unsigned char Buf[256];                                         // 0x70..0x16f
-    unsigned char StackArea[0x2000];                                // 0x170..0x216f
+    unsigned char Suffix[0x1000];                                   // 0x170..0x116f
+    unsigned char Stack[0x1000];                                    // 0x1170..0x216f
     int Prefix[0x1000];                                             // 0x2170..0x616f
 };
 int  DGifSetupDecompress(GifFileType* f);                     // 0x0084bd20
 int  DGifGetPrefixChar(GifFileType* f);                       // 0x0084bd90
 GifFileType* DGifOpenFileHandle(void* fh);                    // 0x0084c2b0
 int  DGifDecompressInput(GifFileType* f, unsigned int* out);  // 0x0084c1f0
+// LTCG view of 0x0084c1f0: the callee takes the private object in ESI (0x84c475 `mov esi,ebp`)
+// and only the out-pointer on the stack (0x84c470 `lea edx,[esp+0x18]; push edx`).
+int  DGifDecompressInputPriv(unsigned int* out);             // 0x0084c1f0
 int  DGifDecompressLine(GifFileType* f, int line, int len);   // 0x0084c400
 int  DGifGetLine(GifFileType* f, unsigned char* line, int len); // 0x0084c680
 int  LoadImage(GifFileType* f, int dest, int stride);         // 0x0084c710
@@ -261,11 +265,27 @@ fail:
     return 0;
 }
 
+// 0x0084bd90 DGifGetPrefixChar(Prefix, Code, ClearCode): LTCG passes Prefix in ESI, Code in
+// EAX and ClearCode in EDX, so the call cannot be spelled in C++.  The walk is pure (it only
+// reads Prefix), so reproduce it locally; callers get the same value.
+static int DGifGetPrefixCharLocal(const int* prefix, int code, int clear)
+{
+    int i = 0;
+    while (code > clear) {
+        if (i > 0xfff)
+            break;
+        code = prefix[code];
+        i++;
+    }
+    return code;
+}
+
 // @ 0x0084c400
 int DGifDecompressLine(GifFileType* f, int line, int len)
 {
     GifFilePrivate* p = f->Private;
-    unsigned char* stack = p->StackArea;
+    unsigned char* suffix = p->Suffix;
+    unsigned char* stack = p->Stack;
     int local_4 = p->EOFCode;
     int local_14 = p->StackPtr;
     int iVar5 = p->LastCode;
@@ -276,7 +296,7 @@ int DGifDecompressLine(GifFileType* f, int line, int len)
     while (local_14 != 0) {
         if (len <= local_18)
             goto done;
-        unsigned char b = stack[local_14 - 1];
+        unsigned char b = suffix[local_14 - 1];
         local_14--;
         if ((unsigned)b != (unsigned)f->ImageTransparent)
             ((unsigned char*)line)[local_18] = b;
@@ -288,7 +308,7 @@ int DGifDecompressLine(GifFileType* f, int line, int len)
         int iVar6 = 0;
         int iVar8;
         iVar4 = iVar5;
-        if (DGifDecompressInput(f, &local_10) == 0)
+        if (DGifDecompressInputPriv(&local_10) == 0)
             return 0;
         if ((int)local_10 == local_4) {
             if ((local_18 != len - 1) || (p->PixelCount != 0))
@@ -312,23 +332,23 @@ int DGifDecompressLine(GifFileType* f, int line, int len)
                 local_18++;
                 iVar6 = iVar5;
             } else {
-                iVar6 = local_c;
+                iVar6 = iVar5;
                 iVar4 = (int)local_10;
                 if (p->Prefix[local_10] == 0x1002) {
                     if ((int)local_10 != p->RunningCode - 2)
                         return 0;
-                    uVar3 = (unsigned)DGifGetPrefixChar(f);
-                    stack[local_14] = (unsigned char)uVar3;
-                    stack[0xffd + p->RunningCode] = (unsigned char)uVar3;
+                    uVar3 = (unsigned)DGifGetPrefixCharLocal(p->Prefix, iVar5, local_c);
+                    suffix[local_14] = (unsigned char)uVar3;
+                    stack[p->RunningCode - 3] = (unsigned char)uVar3;
                     local_14++;
                     iVar4 = iVar5;
                 }
                 iVar8 = 0;
                 do {
                     iVar8++;
-                    if ((iVar4 <= iVar6) || (0xfff < iVar4))
+                    if ((iVar4 <= local_c) || (0xfff < iVar4))
                         goto lab_c59c;
-                    stack[local_14] = stack[iVar4 - 1];
+                    suffix[local_14] = stack[iVar4 - 1];
                     iVar4 = p->Prefix[iVar4];
                     local_14++;
                 } while (iVar8 < 0x1000);
@@ -338,10 +358,10 @@ int DGifDecompressLine(GifFileType* f, int line, int len)
                     return 0;
                 if (0xfff < iVar4)
                     return 0;
-                stack[local_14] = (unsigned char)iVar4;
+                suffix[local_14] = (unsigned char)iVar4;
                 local_14++;
                 while (local_14 != 0 && local_18 < len) {
-                    unsigned char b = stack[local_14 - 1];
+                    unsigned char b = suffix[local_14 - 1];
                     local_14--;
                     if ((unsigned)b != (unsigned)f->ImageTransparent)
                         ((unsigned char*)line)[local_18] = b;
@@ -353,8 +373,9 @@ int DGifDecompressLine(GifFileType* f, int line, int len)
             if (iVar6 != 0x1002) {
                 p->Prefix[p->RunningCode - 2] = iVar6;
                 iVar5 = p->RunningCode;
-                uVar3 = (unsigned)DGifGetPrefixChar(f);
-                stack[0xffd + iVar5] = (unsigned char)uVar3;
+                uVar3 = (unsigned)DGifGetPrefixCharLocal(p->Prefix,
+                    (int)local_10 == p->RunningCode - 2 ? iVar6 : (int)local_10, local_c);
+                stack[iVar5 - 3] = (unsigned char)uVar3;
                 iVar5 = (int)local_10;
                 iVar4 = (int)local_10;
             }
