@@ -1,0 +1,8 @@
+00d0d0e0  ?FUN_00d0d0e0@@YGXXZ  # SP::cCommunityEditor helper - eastl RBTree multi-insert - no source (partial)
+00d0d200  ?FUN_00d0d200@@YGXXZ  # Simulator::cCommunityEditor::cCommunityEditor (842-byte ctor) - no source (partial)
+00d0d570  ?FUN_00d0d570@@YGXXZ  # SP::cCommunityEditor helper - retarget manipulated object + push effect - no source (partial)
+00d0d6b0  ?FUN_00d0d6b0@@YGXXZ  # SP::CreatedInterpolatedVectorList (SSE Vector3 interpolation) - no source (partial)
+00d0d880  ?FUN_00d0d880@@YGXXZ  # SP::cCommunityEditor::UpdateBuildingLinkEffect (PDB candidate) - no source (partial)
+00d0db30  ?FUN_00d0db30@@YGXXZ  # SP::cCommunityEditor helper - community-noun virtual query loop - no source (partial)
+00d0ddc0  ?StartVehicleAttractorEffects@CE@@QAEXPAX@Z  # CE::StartVehicleAttractorEffects = SP::cCommunityEditor::StartVehicleAttractorEffects (empty-vector effect spawn + ref-counted push) - nonmatching/equivalent
+00d0dea0  ?FUN_00d0dea0@CE@@QAEXXZ  # CE::FUN_00d0dea0 = SP::cCommunityEditor helper (call vfn(+0xc)(0) on every mSpan handle, then erase-range 0x533500) - byte-exact
