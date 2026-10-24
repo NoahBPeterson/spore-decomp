@@ -1,0 +1,4 @@
+00cdc8b0 FUN_00cdc8b0  # Ghidra FUN; stamp the transition targets onto the planet model using three settings-bag floats, then walk the game-data vector; not reconstructed
+00cdcb10 FUN_00cdcb10  # Ghidra FUN; finish a tribe-mode transition: clear the editor byte, drop the pause gate, shut down tribe planners, register the city-hall cinematic and run the ownership teardown; not reconstructed
+00cdce40 FUN_00cdce40  # Ghidra FUN; rotate the transition-target vector: reset the 0x1c-stride timeline, push a slot, swap its words with the receiver's timeline fields and per-element repeat; not reconstructed
+00cdcf70 StartCvgTransitionCinematic  # PDB name SP::cTribeModeStrategy::StartCvgTransitionCinematic; seed the transition-target vector and play the coverage transition; not reconstructed
