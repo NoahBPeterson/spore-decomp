@@ -4148,9 +4148,7 @@ ProfileTimer::ProfileTimer(void* acc)
 // @ 0x00a24900
 void ProfileTimer::Accumulate()
 {
-    long long e = sw.GetElapsedTimeFloat();
-    float* acc = (float*)mpAccumulator;
-    *acc = (float)e * sw.mfCyclesToUnitsCoefficient + *acc;
+    *(float*)mpAccumulator = (float)sw.GetElapsedTimeFloat() * sw.mfCyclesToUnitsCoefficient + *(float*)mpAccumulator;
 }
 
 // @ 0x00a24930
