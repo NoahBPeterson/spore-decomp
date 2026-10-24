@@ -6,8 +6,6 @@
 struct cGuard19 { void* p; cGuard19(); ~cGuard19(); };
 
 extern "C" {
-  void*     __cdecl FUN_00b721d0(int id);
-  void*     __cdecl FUN_00b72210(int handle);
   int       __cdecl FUN_00e57340(int p);
   char      __cdecl FUN_00e4ff10(char* p);
   int       __cdecl FUN_00e4fca0();
@@ -33,7 +31,6 @@ extern "C" {
   void      __cdecl FUN_00e50020(float* a, float* b);
   float     __cdecl FUN_00e4ffe0();
   bool      __cdecl FUN_00e53280();
-  char      __fastcall FUN_006ffbd0(int lo, float* p, float r);
   void*     __cdecl FUN_00b3d400(int a);
   void*     __cdecl FUN_00b3d3f0(int a);
   void      __cdecl FUN_00e14d00(int a, int b, int c);
@@ -43,16 +40,30 @@ extern "C" {
   void      __cdecl FUN_00e5da10();
 }
 
-extern char  g_16b3c04[];
-extern char  g_16b3c0c[];
-extern float g_16b3c88, g_16b3c8c, g_16b3c90, g_16b3c94, g_16b3c98, g_16b3c9c;
-extern int   g_15a83a4, g_15a83a8, g_15a83ac;
+extern "C" char* g_16b3c04;    // 0x016b3c04
+extern "C" char* g_16b3c0c;    // 0x016b3c0c
+extern "C" float g_16b3c88;    // 0x016b3c88
+extern "C" float g_16b3c8c;    // 0x016b3c8c
+extern "C" float g_16b3c90;    // 0x016b3c90
+extern "C" float g_16b3c94;    // 0x016b3c94
+extern "C" float g_16b3c98;    // 0x016b3c98
+extern "C" float g_16b3c9c;    // 0x016b3c9c
+extern "C" int   g_15a83a4;    // 0x015a83a4
+extern "C" int   g_15a83a8;    // 0x015a83a8
+extern "C" int   g_15a83ac;    // 0x015a83ac
 
 static inline void** Vt(void* p) { return *(void***)p; }
 
+// external thiscall/bound callees
+struct CMgr19 {
+  void* FUN_00b721d0(int id);
+  void* FUN_00b72210(int handle);          // 0xb72210
+  char  FUN_006ffbd0(float* p, float r);   // 0x6ffbd0
+};
+
 // @ 0x00e5d340  point-in-extended-box predicate
 bool FUN_00e5d340() {
-  char* e = (char*)FUN_00b721d0(*(int*)(g_16b3c04 + 0x516c));
+  char* e = (char*)((CMgr19*)(g_16b3c04 + 0x1c))->FUN_00b721d0(*(int*)(g_16b3c04 + 0x516c));
   if (!e) return false;
   float x = *(float*)(e + 0x4c);
   float r = *(float*)(e + 0x58);
@@ -71,7 +82,7 @@ bool FUN_00e5d340() {
 // @ 0x00e5d410
 bool FUN_00e5d410(int id, float* p, float r) {
   if (id != *(int*)(g_16b3c04 + 0x40fc)) {
-    char c = FUN_006ffbd0(0x16b3cb8, p, r);
+    char c = ((CMgr19*)0x16b3cb8)->FUN_006ffbd0(p, r);
     return (c & 0x40) == 0;
   }
   float x = p[0];
@@ -97,7 +108,7 @@ bool FUN_00e5d580(int p) {
 // @ 0x00e5daa0
 void FUN_00e5daa0() {
   FUN_00e5da10();
-  char* e = (char*)FUN_00b721d0(*(int*)(g_16b3c04 + 0x411c));
+  char* e = (char*)((CMgr19*)(g_16b3c04 + 0x1c))->FUN_00b721d0(*(int*)(g_16b3c04 + 0x411c));
   if (e != 0 && e[0x113] == 0 && e[0x112] == 0) {
     *(int*)(g_16b3c04 + 0x5158) = 5;
     FUN_00e539c0();
@@ -126,7 +137,7 @@ void FUN_00e5da10() {
   else if (id == (int)0x5ece4770) key = 0x7115ede5;
   int a[9];
   for (int i = 0; i < 9; ++i) a[i] = 0;
-  FUN_00e394f0(key, *(int*)(g_16b3c04 + 0x5190) + 0x10, &a[4], &a[2], &a[0]);
+  FUN_00e394f0(key, *(int*)(g_16b3c04 + 0x5190) + 0x10, &a[6], &a[3], &a[0]);
 }
 
 // @ 0x00e5d500
@@ -155,9 +166,9 @@ float FUN_00e5d2b0(int handle, int level) {
 // @ 0x00e5d5b0  pickup search -- partial
 void FUN_00e5d5b0(float dt) {
   *(float*)(g_16b3c04 + 0x51bc) = *(float*)(g_16b3c04 + 0x51bc) - dt;
-  char* target = (char*)FUN_00b721d0(*(int*)(g_16b3c04 + 0x411c));
+  char* target = (char*)((CMgr19*)(g_16b3c04 + 0x1c))->FUN_00b721d0(*(int*)(g_16b3c04 + 0x411c));
   if (!target) return;
-  if (FUN_00b721d0(*(int*)(g_16b3c04 + 0x51b0))) {
+  if (((CMgr19*)(g_16b3c04 + 0x1c))->FUN_00b721d0(*(int*)(g_16b3c04 + 0x51b0))) {
     *(float*)(g_16b3c04 + 0x51bc) = FUN_00e52b70();
     return;
   }
@@ -168,15 +179,15 @@ void FUN_00e5d5b0(float dt) {
   float cy = (g_16b3c98 + g_16b3c8c) * 0.5f;
   float cz = (g_16b3c9c + g_16b3c90) * 0.5f;
   int hits[512];
-  int n = FUN_00e87260(*(int*)(g_16b3c04 + 0x40fc), &cx, (int)b, hits, 0x200, 0);
+  int n = FUN_00e87260(*(int*)(g_16b3c04 + 0x40fc), &cx, *(int*)&a, hits, 0x200, 0);
   for (int i = 0; i < n; ++i) {
-    char* c = (char*)FUN_00b72210(hits[i]);
+    char* c = (char*)((CMgr19*)(g_16b3c04 + 0x1c))->FUN_00b72210(hits[i]);
     if (FUN_00e5cd00()) continue;
     float dx = *(float*)(c + 0x4c) - *(float*)(target + 0x4c);
     float dy = *(float*)(c + 0x50) - *(float*)(target + 0x50);
     float dz = *(float*)(c + 0x54) - *(float*)(target + 0x54);
-    float dist2 = dx * dx + dy * dy + dz * dz;
-    if (dist2 > a * a) continue;
+    float dist = dx * dx + dy * dy + dz * dz;
+    if (dist > b * b) continue;
     if (!FUN_00e5d580((int)c)) continue;
     g_16b3c04[0x51c0] = 1;
     char* s = (char*)(*(int*)(g_16b3c04 + 0x5190) + 0xb0);

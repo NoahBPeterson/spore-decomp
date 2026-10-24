@@ -1,8 +1,9 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00e5d340  118  extended-box distance predicate: complete; float compare/branch schedule differs
-00e5d410  162  box/creature predicate: complete; FUN_006ffbd0 fastcall path + float schedule differ
+00e5d340  150  extended-box distance predicate: complete; equivalence PASS (1371 valid, 100% coverage); float compare/branch schedule differs so not byte-exact
+00e5d410  155  box/creature predicate: complete; equivalence PASS (300 valid, 100% coverage); FUN_006ffbd0 is thiscall(ecx=0x16b3cb8) with (p,r) stack args and float schedule differs
 00e5d500   48  resource lookup with fallback key: complete; smart-pointer calls/schedule differ
 00e5d580   31  pickup predicate: complete; short-circuit compare shape differs
-00e5da10  115  key from pick result -> FUN_00e394f0: complete; local out-slot layout differs
-00e5daa0  68   show mission panel: complete; best-symbol size mismatch
+00e5d5b0  265  pickup search over broadphase: complete; equivalence WEAK (1375 valid, 0 mismatches, 19.7% coverage); loop body only reachable when broadphase returns hits; distance is x87 sqrt(dx^2+dy^2+dz^2) vs b, arg3 of FUN_00e87260 is float a
+00e5da10  115  key from pick result -> FUN_00e394f0: complete; equivalence PASS (873 valid, 100% coverage); out-pointers are &a[6]/&a[3]/&a[0]
+00e5daa0   19   show mission panel: complete; equivalence WEAK (857 valid, 0 mismatches, 56.2% coverage); tail path needs e[0x113]==0 && e[0x112]==0; only register/tail-jump schedule differs
 00e5daf0  150  callout config by pick result: complete; FNV/hash call schedule differs

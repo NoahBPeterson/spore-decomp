@@ -9,3 +9,10 @@
 00e5da10 key from pick result  # FUN_00e5c9d0 id switch, FUN_00e394f0
 00e5daa0 show mission panel  # FUN_00b721d0(0x411c), +0x112/0x113, +0x5158=5, FUN_00e539c0
 00e5daf0 callout config by pick result  # FUN_00e4fca0, Callout_CLG_Ending/TransitionButton, SPIDFromName
+016b3c04 g_16b3c04  # POINTER (not an array): mov eax,[0x16b3c04] then [eax+off]; the manager object
+016b3c0c g_16b3c0c  # pointer companion (used as g_16b3c0c[0x938])
+00b721d0 FUN_00b721d0  # __thiscall(this=mgrobj+0x1c, int id) -> void* ; registry lookup
+00b72210 FUN_00b72210  # __thiscall(this=mgrobj+0x1c, int handle) -> void* ; handle deref
+006ffbd0 FUN_006ffbd0  # __thiscall(this=0x16b3cb8, float* p, float r) -> char ; returns (c&0x40)==0
+00e394f0 FUN_00e394f0  # __cdecl(key, int, int* x, int* y, int* z)  -- 5 args, add esp,0x14
+00e87260 FUN_00e87260  # __cdecl(id, float* center, float radius, int* hits, int n, int f) -> int
