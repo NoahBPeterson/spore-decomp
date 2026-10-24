@@ -1,6 +1,6 @@
 // Swarm skin-paint particle "paint variable" commands: registration, vector
 // int Read/Write, the paint-variable Execute handlers and a Dot helper.
-// Unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast.
+// Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast (unoptimized module).
 #include "types.h"
 
 typedef unsigned int size_t;
@@ -202,7 +202,7 @@ void PaintAddVar_Execute(void* self, EA::ArgScript::cArguments& args)
 // @ 0x0053c480
 float Dot3(const float* a, const float* b)
 {
-    return a[2] * b[2] + (a[1] * b[1] + a[0] * b[0]);
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }
 
 // Receiver (ECX) of the thiscall `ret 4` command; the stack argument is unused.
