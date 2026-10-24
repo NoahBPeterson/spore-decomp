@@ -1,4 +1,4 @@
 007e8ba0 ?PreInit@cAppSystem_s007e_8ba0@@QAE_NPAUCommandLine@@H@Z  # cAppSystem_s007e_8ba0::PreInit migrated from s007e8ba0 (verbatim, slice spelling)
 007e9300 ?InitPlugins@cAppSystem_s007e_8ba0@@QAE_NPAX@Z  # cAppSystem_s007e_8ba0::InitPlugins migrated from s007e8ba0 (verbatim, slice spelling)
 007e93d0 ?SetUserDirNames@cAppSystem_s007e_8ba0@@QAEXPA_W0@Z  # cAppSystem_s007e_8ba0::SetUserDirNames migrated from s007e8ba0 (verbatim, slice spelling)
-007e9450 ?cAppSystemShutdown@@YAXPAX@Z  # cAppSystemShutdown migrated from s007e8ba0 (verbatim, slice spelling)
+007e9450 ?Shutdown@cAppSystem@@QAE_NXZ  # cAppSystem::Shutdown (thiscall teardown, returns true); reconstructed in s007e8ba0 (was slice spelling ?cAppSystemShutdown@@YAXPAX@Z)
