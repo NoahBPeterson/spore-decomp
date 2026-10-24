@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-006d52a0 716  bake evaluator (uv4x8/colour4x8/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d55d0 674  bake evaluator (uv2x16/colour4x8/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d58d0 716  bake evaluator (uv4x16/colour4x8/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d5c00 689  bake evaluator (uv4x8/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d5f10 645  bake evaluator (uv2x16/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
+006d52a0 716  bake evaluator (uv4x8/colour4x8/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv WEAK (100% cov, 0/118 mismatches; <200 valid inputs). Tail fixed to read res[1] for o0 (was res[0]).
+006d55d0 674  bake evaluator (uv2x16/colour4x8/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv WEAK (100% cov, 0/161 mismatches; <200 valid inputs). Tail fixed to read res[1] for o0 (was res[0]).
+006d58d0 716  bake evaluator (uv4x16/colour4x8/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL 2/143: o0 differs only in signed zero (+0.0 vs -0.0, 0 ulp) from SSE-vs-x87 last-bit rounding of res[1]*axis[0]+axis[2] then *scale; tail fixed to res[1]/res[2] (was res[0]/res[2], 5/143).
+006d5c00 689  bake evaluator (uv4x8/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv WEAK (100% cov, 0/163 mismatches; <200 valid inputs). Tail fixed to read res[1] for o0 (was res[0]).
+006d5f10 645  bake evaluator (uv2x16/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv WEAK (100% cov, 0/138 mismatches; <200 valid inputs). Tail fixed to read res[1] for o0 (was res[0]).

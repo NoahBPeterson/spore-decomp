@@ -1,6 +1,9 @@
 // Slice s006d52a0: bake evaluators (dot tail).
 #include "../s006ccf50/s006ccf50.h"
 
+// shared evaluator macro lives in ../s006ccf50/s006ccf50.h
+// Tail reads res[1] (o0) and res[2] (o1); see docs/matching.md.
+
 DEFINE_BAKE(Bake_6d52a0, 0, 4, 0, 0, 1)   // @ 0x006d52a0  uv4u8  / colour4u8 / dot
 DEFINE_BAKE(Bake_6d55d0, 0, 2, 1, 0, 1)   // @ 0x006d55d0  uv2u16 / colour4u8 / dot
 DEFINE_BAKE(Bake_6d58d0, 0, 4, 1, 0, 1)   // @ 0x006d58d0  uv4u16 / colour4u8 / dot
