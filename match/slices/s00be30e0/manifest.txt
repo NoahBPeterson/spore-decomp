@@ -1,0 +1,6 @@
+slices/s00be30e0/s00be30e0.cpp  ?IncrementCounter@cAgentAction@@QAEXXZ  00be32b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00be30e0/s00be30e0.cpp  ?IncrementCounterBy@cAgentAction@@QAEXH@Z  00be32f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00be30e0/s00be30e0.cpp  ?DestroyAgent@cAgentAction@@QAEXPAUcNoun@@@Z  00be33e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00be30e0/s00be30e0.cpp  ?DestroyAgentsOfType@cAgentAction@@QAEXIH@Z  00be3420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00be30e0/s00be30e0.cpp  ?RemoveAgentAndFlag@cAgentAction@@QAEXPAUcNoun@@@Z  00be34e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00be30e0/s00be30e0.cpp  ?ClearRefs@cAgentAction@@QAEPAUcRefList@@XZ  00be3fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
