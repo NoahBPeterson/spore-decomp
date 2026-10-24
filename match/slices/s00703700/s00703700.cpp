@@ -18,6 +18,8 @@ char __cdecl ReadBlocks(void* stream, int n, int flag);                   // 0x0
 char __cdecl ReadInto(void* stream, void* dst, int n);                    // 0x0093a6c0
 void __cdecl SlotVectorGrow(void* self);                                  // 0x00702e00
 void __cdecl SlotVectorDestroy(void* self, unsigned index);               // 0x00700ff0
+// spstl slot_vector_base::create(void const*) — 0x00703470, this = &cHierGrid::mObjInfoSlots
+struct SlotVectorStub { unsigned create(const void* value); };
 void __cdecl HashMapFindIdx(void* self, void* key);                       // 0x00703360
 unsigned __cdecl CellFromPos(void* self, float x, float y, float z, unsigned char level); // 0x00700da0
 
@@ -25,6 +27,8 @@ unsigned __cdecl CellFromPos(void* self, float x, float y, float z, unsigned cha
 struct ObjListNode { ObjListNode* pNext; ObjListNode* pPrev; void* mObj; };
 struct CellInfo { ObjListNode mHead; unsigned char mOctantFlags; char _pad[3]; };
 struct Vec3 { float x, y, z; };
+
+struct CellMap;                 // eastl map embedded at cGrid+0x1c (0x20 bytes)
 
 struct cGrid {
     float mCellSize;         // +0x00
@@ -34,12 +38,15 @@ struct cGrid {
     float mCentreOriginX;    // +0x10
     float mCentreOriginY;    // +0x14
     float mCentreOriginZ;    // +0x18
-    char  mCells[0x20];      // +0x1c
+    char  mCellMap[0x20];    // +0x1c
     unsigned char* mMask;    // +0x3c
     unsigned char* mChildMask; // +0x40
     void Destroy();
     cGrid* CopyConstruct(const cGrid& src);
 };
+
+// CellMap::Assign(CellMap const&) — 0x00702f60
+struct CellMap { char raw[0x20]; CellMap& Assign(const CellMap& src); };
 
 struct GridVec {                 // eastl::vector<cGrid,sp_vector_allocator> at cHierGrid+0x24
     cGrid* mpBegin;
@@ -72,7 +79,7 @@ struct cHierGrid {
     cHierGrid();
     void  Add(unsigned index, float radius, const Vec3& pos, unsigned extra);
     void  Update(unsigned index, float radius, const Vec3& pos);
-    unsigned CreateEntry(unsigned a, unsigned b, float c);
+    unsigned CreateEntry(float c, const Vec3* b, unsigned a);
     bool  Shutdown();
     void  Resize(unsigned n);
     bool  Init(const Vec3& origin, float size, int maxLevel);
@@ -122,7 +129,7 @@ void __thiscall cHierGrid::Add(unsigned index, float radius, const Vec3& pos, un
         return;
     }
     cGrid* g = mGrids.mpBegin + level;
-    HashMapFindIdx((char*)g->mCells, &cellID);
+    HashMapFindIdx((char*)g->mCellMap, &cellID);
     (void)index;
 }
 
@@ -158,7 +165,7 @@ cGrid* __cdecl grid_assign_fill(cGrid* first, cGrid* last, const cGrid* src)
         first->mInvCellSize = src->mInvCellSize;
         first->mCellRadius = src->mCellRadius;
         *(Vec3*)&first->mCentreOriginX = *(Vec3*)&src->mCentreOriginX;
-        first->CopyConstruct(src[0]);         // mCells assignment (callee masked)
+        ((CellMap*)first->mCellMap)->Assign(*(const CellMap*)src->mCellMap);
         first->mMask = src->mMask;
         first->mChildMask = src->mChildMask;
     }
@@ -189,13 +196,13 @@ cHierGrid::cHierGrid()
 }
 
 // @ 0x00703d50
-unsigned __thiscall cHierGrid::CreateEntry(unsigned a, unsigned b, float c)
+unsigned __thiscall cHierGrid::CreateEntry(float c, const Vec3* b, unsigned a)
 {
-    unsigned value[2] = { 0, 0 };
-    unsigned id = 0;
-    SlotVectorGrow(&value);
+    unsigned value[3];
+    value[2] = 0;
+    unsigned id = ((SlotVectorStub*)((char*)this + 0x60))->create(value);
     mNumObjects += 1;
-    Add(id, c, *(Vec3*)&b, a);
+    Add(id, c, *b, a);
     return id;
 }
 
