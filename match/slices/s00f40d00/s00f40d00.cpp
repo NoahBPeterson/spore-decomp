@@ -21,13 +21,13 @@ void  __cdecl  FUN_00f3ecb0(int, int, void*);
 char  __cdecl  FUN_00f3f110(int, void*, int, int, int);
 void* __cdecl  FUN_00ae66d0(int, void*);
 void  __cdecl  FUN_00f3c120(void*, int);
-int   __cdecl  FUN_00f3c160_(int);
-void  __cdecl  FUN_00dfb850(int, int);
-int   __cdecl  FUN_00f3ff70(int);
+int   __fastcall FUN_00f3c160(int, int, int);      // thiscall(this, idx)
+void  __fastcall FUN_00dfb850(int, int, int, int);  // thiscall(this, a, b)
+char  __fastcall FUN_00f3ff70(int, int, int);       // thiscall(this, a)
 char  __cdecl  FUN_00f3b420();
 int   __cdecl  FUN_00eeca30(int);
 void  __cdecl  FUN_00f3fd90(int*);
-char  __cdecl  FUN_00f3b9e0(int, int, int);
+char  __fastcall FUN_00f3b9e0(int, int, int, int, int); // thiscall(this, a, b, c)
 void* __cdecl  EA_Messaging_GetServer();
 void  __cdecl  FUN_00b227c0(int);
 void  __cdecl  FUN_00b25fe0();
@@ -46,7 +46,8 @@ void  __cdecl  FUN_00dfb380();
 int   __cdecl  FUN_00edfde0();
 int   __cdecl  FUN_00f40d00_(int, int**);
 int   __cdecl  FUN_00f40ed0_(int, int, int, int);
-int   __cdecl  FUN_00f3e8a0(int);
+char  __fastcall FUN_00f40ed0(int, int, int, int, int, int);  // thiscall(this, a0..a3)
+int   __fastcall FUN_00f3e8a0(int, int, int);       // thiscall(this, id)
 void  __fastcall FUN_00f41890(int, int, int*);
 int   __cdecl  eastl_lower_bound(void*, void*, void*, char);
 
@@ -85,19 +86,19 @@ void __fastcall FUN_00f410f0(int* p, int dummy, int idx) {
     int* e = (int*)(idx * 0x238 + *p);
     int v = (int)e[0x84];
     if (v && *(int*)(v - 4)) operator_del((void*)v);
-    FUN_00dfb850(e[0xb], e[0xc]);
+    FUN_00dfb850((int)&e[0xb], 0, e[0xb], e[0xc]);
     v = e[0xb];
     if (v && *(int*)(v - 4)) operator_del((void*)v);
     *e = (*e & 0xc0000000) | (p[6] & 0x3fffffff) | 0x80000000;
     p[6] = idx;
-    if (p[5] == idx) p[5] = (int)FUN_00f3c160_(idx);
+    if (p[5] == idx) p[5] = FUN_00f3c160((int)p, 0, idx);
 }
 
 // ===========================================================================
 // 0x00f41270 -- classify the current scenario state
 // ===========================================================================
 // @ 0x00f41270
-int __fastcall FUN_00f41270(int self, int dummy, int* out) {
+char __fastcall FUN_00f41270(int self, int dummy, int* out) {
     (void)dummy;
     int v = 0;
     if (*(int*)((char*)g_16c7aa4 + 0xcc) == 1) {
@@ -121,17 +122,17 @@ int __fastcall FUN_00f41270(int self, int dummy, int* out) {
 // 0x00f41420 -- validate the node against the active scenario
 // ===========================================================================
 // @ 0x00f41420
-int __fastcall FUN_00f41420(int self, int dummy, int a, int b, int c) {
+char __fastcall FUN_00f41420(int self, int dummy, int a0, int a1, int a2, int a3) {
     (void)dummy;
-    int r = FUN_00eeca30(self);
+    int r = FUN_00eeca30(a0);
     if (r) {
-        if (FUN_00f3b9e0(self, r, 0) == 0) { *(uint32_t*)(self + 0x224) |= 0x10; return 0; }
-        *(uint32_t*)(self + 0x224) &= 0xffffffef;
+        if (FUN_00f3b9e0(self, 0, a0, r, 0) == 0) { *(uint32_t*)(a0 + 0x224) |= 0x10; return 0; }
+        *(uint32_t*)(a0 + 0x224) &= 0xffffffef;
     }
-    if (FUN_00f3ff70(self) == 0) { *(uint32_t*)(self + 0x224) |= 2; return 0; }
-    *(uint32_t*)(self + 0x224) &= 0xfffffffd;
-    if (FUN_00f40ed0_(self, a, b, c) == 0) { *(uint32_t*)(self + 0x224) |= 4; return 0; }
-    *(uint32_t*)(self + 0x224) &= 0xfffffffb;
+    if (FUN_00f3ff70(self, 0, a0) == 0) { *(uint32_t*)(a0 + 0x224) |= 2; return 0; }
+    *(uint32_t*)(a0 + 0x224) &= 0xfffffffd;
+    if (FUN_00f40ed0(self, 0, a0, a1, a2, a3) == 0) { *(uint32_t*)(a0 + 0x224) |= 4; return 0; }
+    *(uint32_t*)(a0 + 0x224) &= 0xfffffffb;
     return 1;
 }
 
@@ -161,7 +162,7 @@ void __fastcall FUN_00f41820(int self, int dummy, int* node) {
 // @ 0x00f41a10
 void __fastcall FUN_00f41a10(int self, int dummy, int id) {
     (void)dummy;
-    if (!FUN_00f3e8a0(id)) return;
+    if (!FUN_00f3e8a0(self, 0, id)) return;
     int* piVar4 = *(int**)(self + 0xb4);
     int* piVar3 = (int*)*piVar4;
     if (!piVar3) {
@@ -173,7 +174,7 @@ void __fastcall FUN_00f41a10(int self, int dummy, int id) {
     while (piVar3 != piVar1) {
         int base = *(int*)(*(int*)(self + 0x10) + 0x2c10);
         int* rec = (int*)(*piVar3 * 0x238 + 4 + base);
-        if (*rec == id) FUN_00f41890(0, 0, rec);
+        if (*rec == id) FUN_00f41890(self, 0, rec);
         piVar3 = (int*)piVar3[2];
         while (!piVar3) { piVar4++; piVar3 = (int*)*piVar4; }
     }
@@ -230,7 +231,7 @@ int FUN_00f40ed0_(int, int, int, int) { return 0; }
 
 void __fastcall FUN_00f41180(int self, int dummy, int* out) { (void)self;(void)dummy;(void)out; }
 int __fastcall FUN_00f40d00(int self, int dummy, int** out) { (void)self; (void)dummy; (void)out; return 0; }
-int __fastcall FUN_00f40ed0(int self, int a, int b, char c, char d) { (void)self;(void)a;(void)b;(void)c;(void)d; return 1; }
+char __fastcall FUN_00f40ed0(int self, int dummy, int a0, int a1, int a2, int a3) { (void)self;(void)dummy;(void)a0;(void)a1;(void)a2;(void)a3; return 1; }
 void __fastcall FUN_00f41300(int self) { (void)self; }
 void __fastcall FUN_00f414b0(int self) { (void)self; }
 int FUN_00f416b0(int a, int* b, int c, int d, char e, char f, void* g, int h) { (void)a;(void)b;(void)c;(void)d;(void)e;(void)f;(void)g;(void)h; return 0; }

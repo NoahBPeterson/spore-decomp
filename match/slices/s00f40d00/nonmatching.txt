@@ -1,15 +1,8 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
-00f40ea0   40  one-second timer test: complete; the fld1/fcompi compare and the; equiv UNSUPPORTED (0/1200 valid inputs)
-               0x20 vcall receiver convention differ
-00f410f0   70  recycle a surface-node slot: complete; the (mask<<30 | idx<<0 | bit31); equiv FAIL (5/5 mismatched)
-               merge and the inline-allocator frees schedule differently
-00f41270  112  classify scenario state: complete; the compare tree and register homes; equiv FAIL (5/5 mismatched, eax)
-               differ from cl's original
-00f41420  107  validate node vs scenario: complete; flag set/clear scheduling and the; equiv FAIL (5/5 mismatched)
-               leaf-call argument homes differ
-00f41820   76  release surface-node record: complete; the -2 branch global copies and; equiv UNSUPPORTED (0/1200 valid inputs)
-               messaging vcall argument setup differ
-00f41a10  113  destroy node records for a noun: complete; the eastl hashtable iteration; equiv FAIL (5/5 mismatched)
-               register allocation differs
-00f41aa0  111  ordered map find-or-insert: complete; the two eastl::lower_bound calls; equiv UNSUPPORTED (unresolved eastl_lower_bound)
-               and the iterator/insert path schedule differently
+00f40ea0   40  one-second timer test: complete; the fld1/fcompi compare and the; equiv UNSUPPORTED (0/1200 valid inputs) 0x20 vcall receiver convention differ
+00f410f0   72  recycle a surface-node slot: FIXED this session to equiv WEAK (0 mismatches). Two wrong callee conventions made the emulator fake-call: FUN_00dfb850 is thiscall(this=&e[0xb], e[0xb], e[0xc]) (ret 8), not cdecl, and FUN_00f3c160 is thiscall(this=p, idx) (ret 4); both now go through __fastcall(this, dummy, ...) so ecx carries the real this. The old `FUN_00f3c160_` spelling also failed the hex-name resolver (trailing '_' kills the trailing \b), so the call had no target. equiv WEAK: 135/400 valid (original itself faults on the rest), 100% coverage, 0 mismatches; frozen replay first difference None. Not byte-exact: 72 diff, size 140 vs 136.
+00f41270  109  classify scenario state: FIXED this session to equiv WEAK (0 mismatches). The return type was `int`, so cl zeroed eax on every return; retail returns in **al** only (`xor al,al` / `mov al,bl`) and leaves the high 24 bits stale - on this replay eax keeps the DAT_016c7aa4 pointer value 0x413b0000. Declaring the function `char` reproduces that. equiv WEAK: 400/400 valid, 58.3% coverage (the deep state ladder needs field values the generator does not reach), 0 mismatches; frozen replay first difference None. Not byte-exact: 109 diff, size 129 vs 130.
+00f41420  105  validate node vs scenario: FIXED this session to equiv UNSUPPORTED (0 mismatches). Retail is thiscall(ecx=this, then FOUR stack args, ret 0x10) and reads the 0x224 flag word off stack arg0 (`esi`), while this (ecx/`edi`) is only the receiver for FUN_00f3b9e0/FUN_00f3ff70/FUN_00f40ed0. The old source used the ecx `self` for the flag word and passed only 3 stack args, so it read a bogus address and faulted at 0x645ed8. Now 4 stack args, members receive ecx=this and arg0 on the stack, and the FUN_00f40ed0 stub was retyped to __fastcall(this, dummy, a0..a3) ret 0x10 to match. equiv UNSUPPORTED: the original itself faults (fault(read)) on all 400 generated inputs; the frozen replay faults identically on both sides at eip=00f3ff79 with equal registers. Not byte-exact: 105 diff, size 97 vs 139.
+00f41820   76  release surface-node record: complete; the -2 branch global copies and; equiv UNSUPPORTED (0/1200 valid inputs) messaging vcall argument setup differ
+00f41a10  139  destroy node records for a noun: FIXED this session to equiv WEAK (0 mismatches). FUN_00f3e8a0 is thiscall(this, id) (ret 4) and was being called cdecl with the id as the only argument, and FUN_00f41890 is thiscall(this, node) (ret 4) but was called with this=0. Both now pass the real receiver in ecx. equiv WEAK: 279/400 valid (original faults on the rest), 47.1% coverage (the hashtable probe loop needs a populated table), 0 mismatches; frozen replay first difference None. Not byte-exact: 139 diff, size 149 vs 135.
+00f41aa0  111  ordered map find-or-insert: complete; the two eastl::lower_bound calls; equiv UNSUPPORTED (unresolved eastl_lower_bound) and the iterator/insert path schedule differently
