@@ -1,1 +1,13 @@
 011675c0 NegateRows  # 8x9 cell table, negates floats +0x14/+0x1c per 0x20 cell
+01167cf0 ?PackHeightBlock@@YAXPBMPAF@Z  # PackHeightBlock(src, dst): 8x8x4 float source cells -> int16 fixed-14 words
+011680b0 ??_GcHeightBlock@@UAEPAXI@Z  # cHeightBlock scalar deleting destructor: free mpLinked then call the base destructor
+011680f0 ?SetHandle@cHeightCodec@@QAEXI@Z  # cHeightCodec::SetHandle(handle): store the packed id as the source pointer and reset the cursor
+01168110 ??0cHeightCodec@@QAE@XZ  # cHeightCodec::cHeightCodec: clear the inited flag and the fallback id
+01168130 ?AllocBlocks@cHeightCodec@@QAEXXZ  # cHeightCodec::AllocBlocks: allocate and zero 1 or 2 blocks of 0x480 (compact) or 0x900 bytes
+01168190 ?Decode@cHeightCodec@@QAEHI@Z  # cHeightCodec::Decode(desc): unpack the packed height descriptor and derive the block layout codes and byte sizes
+01168330 ?ResolveSource@cHeightCodec@@QAEHXZ  # cHeightCodec::ResolveSource: resolve the source handle (direct id or big-endian word) through vtable slot 1
+011683d0 ?CopyHandle@cHeightCodec@@QAEXXZ  # cHeightCodec::CopyHandle: reset the cursor to the source pointer
+01168400 ??1cHeightCodec@@UAE@XZ  # cHeightCodec::~cHeightCodec: release the allocated block data
+01168420 ??_GcHeightCodec@@UAEPAXI@Z  # cHeightCodec scalar deleting destructor
+01168460 ?Init@cHeightCodec@@QAEHII@Z  # cHeightCodec::Init(handle, unused): release any old source, resolve, allocate and let the derived class bind
+011684c0 ?ReadBigEndian@@YAHPBEH@Z  # ReadBigEndian(data, count): assemble count big-endian bytes and sign-extend 1/2/3-byte results

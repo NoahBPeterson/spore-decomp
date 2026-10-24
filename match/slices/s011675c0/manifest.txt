@@ -1,2 +1,11 @@
 # source  symbol  va
 slices/s011675c0/s011675c0.cpp  ?NegateRows@@  011675c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s011675c0/s011675c0_block.cpp  ??_GcHeightBlock@@UAEPAXI@Z  011680b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s011675c0/s011675c0.cpp  ?SetHandle@cHeightCodec@@QAEXI@Z  011680f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s011675c0/s011675c0.cpp  ??0cHeightCodec@@QAE@XZ  01168110  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s011675c0/s011675c0.cpp  ?AllocBlocks@cHeightCodec@@QAEXXZ  01168130  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s011675c0/s011675c0.cpp  ?CopyHandle@cHeightCodec@@QAEXXZ  011683d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s011675c0/s011675c0.cpp  ??1cHeightCodec@@UAE@XZ  01168400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s011675c0/s011675c0.cpp  ??_GcHeightCodec@@UAEPAXI@Z  01168420  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s011675c0/s011675c0.cpp  ?Init@cHeightCodec@@QAEHII@Z  01168460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s011675c0/s011675c0.cpp  ?ReadBigEndian@@YAHPBEH@Z  011684c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
