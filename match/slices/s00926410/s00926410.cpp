@@ -204,7 +204,7 @@ struct Pool {
 // @ 0x00926a30
 void* Pool::Find(unsigned p)
 {
-    void* e = end;
+    void* e = (char*)this + 0x448;   // end is an embedded sentinel node, not a stored pointer
     void* c = cur;
     while (c != e) {
         if (p >= (unsigned)c && p < (unsigned)c + *(int*)((char*)c + 4))
@@ -231,7 +231,7 @@ bool Pool::FreeBlock(void* block, char flag)
     if (*(char*)((char*)block + 0xd) != 0 ||
         (flag != 0 && *(char*)((char*)block + 0xe) != 0)) {
         if (*(void**)((char*)block + 0x10) != 0) {
-            (*(void(__cdecl**)(void*, void*, void*, void*))(*(void**)((char*)block + 0x10)))
+            ((void(__cdecl*)(void*, void*, void*, void*))(*(void**)((char*)block + 0x10)))
                 (this, block, *(void**)((char*)block + 8), *(void**)((char*)block + 0x14));
             return true;
         }
@@ -290,13 +290,11 @@ void __fastcall FUN_00926410(void* self)
 // @ 0x009265b0
 bool __fastcall FUN_009265b0(void* self)
 {
-    void* p = *(void**)((char*)self + 0x0c);
-    while (p != 0) {
+    while (*(void**)((char*)self + 0x0c) != 0) {
         void* q = *(void**)((char*)self + 0x0c);
         *(void**)((char*)self + 0x0c) = *(void**)q;
-        (*(void(__cdecl**)(void*, void*))(*(void**)((char*)self + 0x18)))
+        ((void(__cdecl*)(void*, void*))(*(void**)((char*)self + 0x18)))
             (q, *(void**)((char*)self + 0x1c));
-        p = *(void**)((char*)self + 0x0c);
     }
     *(int*)((char*)self + 0x10) = 0;
     return true;

@@ -11,3 +11,5 @@ slices/s00926410/s00926410.cpp  ?FUN_00926930@Allocator@EA@@  00926930
 slices/s00926410/s00926410.cpp  ?FUN_00926a10@Allocator@EA@@  00926a10
 slices/s00926410/s00926410.cpp  ?SetTopAndLink@FreePool@Allocator@EA@@QAEXPAUFreeChunk@23@D@Z  00926840
 slices/s00926410/s00926410.cpp  ?SetTop@FreePool@Allocator@EA@@QAEXPAUFreeChunk@23@I@Z  009268b0
+slices/s00926410/s00926410.cpp  ?FUN_009265b0@Allocator@EA@@YI_NPAX@Z  009265b0
+slices/s00926410/s00926410.cpp  ?Find@Pool@Allocator@EA@@QAEPAXI@Z  00926a30
