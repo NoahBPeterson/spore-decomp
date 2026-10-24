@@ -6,7 +6,7 @@
 00c7e8f0  133  CS::FUN_00c7e8f0: complete; write-64 serializer wrapper; the large stack object trips /GS (frame 0xa18 vs 0xa14); equiv: UNSUPPORTED (0/400 inputs valid: fault(read) 398)
 00c7e950  133  CS::FUN_00c7e950: complete; read-64 serializer wrapper; same /GS frame issue (0xa18 vs 0xa14); equiv: UNSUPPORTED (0/400 inputs valid: fault(read) 396)
 00c7ea30   21  FUN_00c7ea30: complete; 4-dword copy loop; register allocation of (a,out) swapped; equiv: FAIL (return eax differs)
-00c7eaf0  377  CS::FUN_00c7eaf0: complete; cube-face-from-direction; SSE (andps) vs x87 fabs schedule, size 296 vs 436; equiv: FAIL (clobbers xmm4, untouched by the original)
+00c7eaf0  338  CS::FUN_00c7eaf0: complete; cube-face-from-direction; x87 fabs (not SSE2 andps, which put the mask in xmm4) and volatile abs locals keep the original's xmm0-3-only register footprint, size 401 vs 436; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv: PASS (400 valid, 98% coverage)
 00c7ecb0    9  CS::FUN_00c7ecb0: complete; release/remove-handler; MSVC hoists the mp2C load above the mp4C=0 store; equiv: PASS
 00c7ed00   34  CS::FUN_00c7ed00: complete; 6-int face-local build then FUN_00c7e780; &local goes in edx vs esi and the frame differs; equiv: PASS
 00c7ee50  488  CS::FUN_00c7ee50: complete; terraform bullseye check (x87 geometry), size 585 vs 520; equiv: FAIL (clobbers xmm2, untouched by the original)

@@ -369,22 +369,38 @@ void CS::FUN_00c7ead0(int* out)
 // @ 0x00c7eaf0
 CubeElem* CS::FUN_00c7eaf0(float* p)
 {
-    float x = p[0], y = p[1], z = p[2];
-    float ax = fabsf(x), ay = fabsf(y), az = fabsf(z);
+    float x = p[0];
+    volatile float ax = (float)fabs((double)x);
+    float y = p[1];
+    volatile float ay = (float)fabs((double)y);
+    float z = p[2];
+    volatile float az = (float)fabs((double)z);
     int i7, i8, i9;
     if (az < ax || az < ay) {
         if (ay < ax) {
-            i7 = (int)((y / x + 1.0f) * 2.0f);
-            i8 = (int)((z / ax + 1.0f) * 2.0f);
+            float t = y / x;
+            t = (t + 1.0f) * 2.0f;
+            i7 = (int)t;
+            t = z / ax;
+            t = (t + 1.0f) * 2.0f;
+            i8 = (int)t;
             i9 = (x < 0.0f) ? 3 : 2;
         } else {
-            i7 = (int)((z / y + 1.0f) * 2.0f);
-            i8 = (int)((x / ay + 1.0f) * 2.0f);
+            float t = z / y;
+            t = (t + 1.0f) * 2.0f;
+            i7 = (int)t;
+            t = x / ay;
+            t = (t + 1.0f) * 2.0f;
+            i8 = (int)t;
             i9 = (y < 0.0f) ? 5 : 4;
         }
     } else {
-        i7 = (int)((x / z + 1.0f) * 2.0f);
-        i8 = (int)((y / az + 1.0f) * 2.0f);
+        float t = x / z;
+        t = (t + 1.0f) * 2.0f;
+        i7 = (int)t;
+        t = y / az;
+        t = (t + 1.0f) * 2.0f;
+        i8 = (int)t;
         i9 = (z < 0.0f) ? 1 : 0;
     }
     if (i7 == 4) i7 = 3;
