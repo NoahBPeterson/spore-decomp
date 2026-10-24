@@ -11,6 +11,7 @@
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
+#include <math.h>
 
 typedef unsigned int u32;
 extern "C" void* __cdecl memmove(void* dst, const void* src, unsigned int n);   // thunk 0x011e0744
@@ -29,6 +30,10 @@ template <class R, class A, class B> static inline R VC2(void* o, int slot, A a,
     typedef R(__thiscall * Fn)(void*, A, B);
     return ((Fn)(*(void***)o)[slot])(o, a, b);
 }
+template <class R, class A, class B, class C> static inline R VC3(void* o, int slot, A a, B b, C c) {
+    typedef R(__thiscall * Fn)(void*, A, B, C);
+    return ((Fn)(*(void***)o)[slot])(o, a, b, c);
+}
 
 // Intrusive ref-counted object: slot 0 AddRef, slot 1 Release, slot 3 Destroy(flag).
 struct IRef {
@@ -39,6 +44,7 @@ struct IRef {
 };
 
 struct Vec3 { u32 x, y, z; };
+struct Vec3f { float x, y, z; };
 struct Rec18 { u32 d[6]; };
 struct Rec20 { u32 d[5]; };
 
@@ -93,6 +99,9 @@ struct City {
     void  FUN_00bd9e80(int i);      // ret 4
     u32   GetMembers();             // 0x00c8e810 (as cTribe)
     u32   FUN_00bd8130();           // 0x00bd8130
+    struct Layout* FUN_00bd7f40();  // 0x00bd7f40 (returns this+0x3ec)
+    Vec3f* FUN_00bd9480(Vec3f* out);// 0x00bd9480 (ret 4)
+    void  FUN_00bd7f70(Vec3f* a, Vec3f* b);  // 0x00bd7f70 (ret 8)
 };
 
 template <class T> struct DstVec;   // unused
@@ -124,6 +133,7 @@ struct Viz {
     void FUN_00d5bfa0(int a);                   // 0x00d5bfa0
     void FUN_00d5c8c0();
     void UpdateSlotCircles();                   // 0x00d60ce0
+    void LayoutChanged();                       // 0x00d61880
     void SetupVignetteSpots(int a);             // 0x00d57b50
     void UpdateArtifacts();                     // 0x00d5de40
     void FUN_00d5c720();
@@ -427,4 +437,272 @@ void Viz::SetCity(City* city)
     F<u32>(F<char*>(this, 0xaf0), 0x2d0) = 0;
     F<u32>(this, 0xa38) = 0;
     F<u32>(this, 0xa3c) = 0;
+}
+
+// ============================================================================
+// worker 18 additions (gold7): 0x00d60ce0, 0x00d61880, 0x00d61b20..0x00d61be0
+// ============================================================================
+
+// SP::cActionCircle (0x64 bytes) - only the members the loop needs are named.
+struct ACircle {
+    u32 d[0x19];
+    void ctor();                                                 // 0x00afba10
+    void dtor();                                                 // 0x00afbad0
+    void FUN_00afd6d0(float a, float b, int c);                  // 0x00afd6d0
+    void SetAtCenter(const Vec3f* center, float radius,
+                     const Vec3f* facing, float altitude);       // 0x00af9cf0 (ret 0x10)
+};
+
+// eastl::vector<cActionCircle> (0x14 bytes)
+struct CircleVec {
+    ACircle* mpBegin;
+    ACircle* mpEnd;
+    ACircle* mpCapacity;
+    u32 mAlloc[2];
+    ACircle* erase(ACircle* first, ACircle* last);               // 0x00d5edc0 (ret 8)
+    void FUN_00d5ee20(ACircle* pos, ACircle* val);               // 0x00d5ee20 (ret 8)
+};
+
+// element returned by Layout::SlotAt; GetOccupant reads its +4 pointer.
+struct SlotElem {
+    void* GetOccupant();                                         // 0x00fcc210
+};
+
+// The object FUN_00bd7f40 returns is the city's layout block at city+0x3ec.
+struct Layout {
+    u32 pad0[4];
+    float mField10;          // +0x10
+    u32 pad14[0xf];
+    void* mpSlotBegin;       // +0x50
+    void* mpSlotEnd;         // +0x54
+    void* SlotAt(u32 i);                                         // 0x00af9ff0 (ret 4)
+};
+
+// eastl::vector<pointer> (0x14 bytes) - the gate-citizen lists and city lists.
+struct PtrVec {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    u32 mAlloc[2];
+    void Assign(void* other);                                    // 0x01011cc0 (ret 4)
+};
+
+extern float g_eps_13ec4b8;   // 0x013ec4b8
+extern u32   g_negmask;       // 0x013eb8b0
+extern float g_c1470f1c;      // 0x01470f1c
+extern float g_c1471064;      // 0x01471064
+extern float g_one_1485720;   // 0x01485720
+extern float g_c147b9a4;      // 0x0147b9a4
+
+void FUN_00d5b9f0();          // 0x00d5b9f0
+
+// @ 0x00d60ce0
+void Viz::UpdateSlotCircles()
+{
+    CircleVec* circles = (CircleVec*)((char*)this + 0x220);
+    circles->erase(circles->mpBegin, circles->mpEnd);
+
+    Layout* lay = F<City*>(this, 0xaf0)->FUN_00bd7f40();
+    float base = F<float>(lay, 0x10);
+    int n = (int)((char*)F<void*>(lay, 0x54) - (char*)F<void*>(lay, 0x50)) / 0x18;
+
+    for (int i = 0; i < n; ++i) {
+        void* slot = lay->SlotAt(i);
+        void* occ = ((SlotElem*)slot)->GetOccupant();
+        float radius;
+        if (occ) {
+            void* item = VC1<void*, u32>(occ, 3, 0x1186577);
+            if (item) radius = VC0<float>(item, 29);
+            else radius = base;
+        } else {
+            radius = base;
+        }
+
+        float* pv = (float*)((char*)F<void*>(lay, 0x50) + i * 0x18 + 0xc);
+        Vec3f pos;
+        pos.x = pv[0];
+        pos.y = pv[1];
+        pos.z = pv[2];
+
+        if (circles->mpEnd < circles->mpCapacity) {
+            ACircle* e = circles->mpEnd;
+            circles->mpEnd = e + 1;
+            if (e) e->ctor();
+        } else {
+            ACircle tmp;
+            tmp.ctor();
+            circles->FUN_00d5ee20(circles->mpEnd, &tmp);
+            tmp.dtor();
+        }
+
+        Vec3f outv;
+        Vec3f* ctr = F<City*>(this, 0xaf0)->FUN_00bd9480(&outv);
+        float dy = ctr->y - pos.y;
+        float dz = ctr->z - pos.z;
+        float dx = ctr->x - pos.x;
+        float inv = 1.0f / sqrtf(dy * dy + dz * dz + dx * dx + g_eps_13ec4b8);
+        Vec3f dir;
+        dir.x = inv * dx;
+        dir.y = inv * dy;
+        dir.z = inv * dz;
+
+        ACircle* last = circles->mpEnd - 1;
+        last->SetAtCenter(&pos, radius, &dir, 0.0f);
+        last->FUN_00afd6d0(g_c1470f1c, 1.0f, 12);
+    }
+}
+
+// @ 0x00d61880
+void Viz::LayoutChanged()
+{
+    F<bool>(this, 8) = true;
+
+    IRef* old = F<IRef*>(this, 0x38c);
+    F<IRef*>(this, 0x38c) = 0;
+    if (old) VC0<void>(old, 48);
+
+    int flag = 4;
+    City* city = F<City*>(this, 0xaf0);
+    PtrVec* members = (PtrVec*)city->GetMembers();
+    PtrVec* others = (PtrVec*)city->FUN_00bd8130();
+
+    {
+        u32* it = (u32*)members->mpBegin;
+        u32* end = (u32*)members->mpEnd;
+        for (; it != end; ++it) {
+            u32* g = (u32*)F<void*>(this, 0x364);
+            u32* ge = (u32*)F<void*>(this, 0x368);
+            while (g != ge && *g != *it) ++g;
+            if (g != ge) continue;
+
+            IRef* obj = *it ? (IRef*)(*it + 0x34) : 0;
+            IRef* prev = F<IRef*>(this, 0x38c);
+            if (obj != prev) {
+                if (obj) VC0<void>(obj, 47);
+                F<IRef*>(this, 0x38c) = obj;
+                if (prev) VC0<void>(prev, 48);
+            }
+            flag = 0xc;
+        }
+    }
+
+    if (F<void*>(this, 0x38c) == 0) {
+        u32* it = (u32*)others->mpBegin;
+        u32* end = (u32*)others->mpEnd;
+        for (; it != end; ++it) {
+            u32* g = (u32*)F<void*>(this, 0x378);
+            u32* ge = (u32*)F<void*>(this, 0x37c);
+            while (g != ge && *g != *it) ++g;
+            if (g != ge) continue;
+
+            IRef* obj = *it ? (IRef*)(*it + 0x70) : 0;
+            IRef* prev = F<IRef*>(this, 0x38c);
+            if (obj != prev) {
+                if (obj) VC0<void>(obj, 47);
+                F<IRef*>(this, 0x38c) = obj;
+                if (prev) VC0<void>(prev, 48);
+            }
+        }
+    }
+
+    char* obj = F<char*>(this, 0x38c);
+    if (obj) {
+        Vec3f tmp;
+        Vec3f* p = VC1<Vec3f*, Vec3f*>(obj, 23, &tmp);
+        Vec3f neg;
+        neg.x = -p->x;
+        neg.y = -p->y;
+        neg.z = -p->z;
+        float r = VC1<float, Vec3f*>(obj, 29, &neg) + 1.0f;
+        Vec3f* ctr = VC1<Vec3f*, float>(obj, 11, r);
+        ACircle* circ = (ACircle*)((char*)this + 0x1bc);
+        circ->SetAtCenter(ctr, r, &neg, 0.0f);
+        circ->FUN_00afd6d0(g_c1470f1c, g_c1471064, flag);
+    }
+
+    ((PtrVec*)((char*)this + 0x364))->Assign(members);
+    ((PtrVec*)((char*)this + 0x378))->Assign(others);
+    SetupVignetteSpots(1);
+
+    Vec3f a, b;
+    F<City*>(this, 0xaf0)->FUN_00bd7f70(&a, &b);
+    float dx = F<float>(this, 0x20) - a.x;
+    float dy = F<float>(this, 0x24) - b.z;
+    float dz = F<float>(this, 0x28) - b.x;
+    if (sqrtf(dz * dz + dy * dy + dx * dx) <= g_c147b9a4)
+        FUN_00d5b9f0();
+    else
+        FUN_00d5c8c0();
+    UpdateSlotCircles();
+}
+
+// --- small behaviour-tree guards (0x00d61b20 .. 0x00d61be0) ------------------
+
+typedef unsigned char u8;
+
+struct Node {
+    char pad0[0x6c];
+    u32  mFlags;                // +0x6c
+    int  Parent();              // 0x00ff0420
+};
+Node* GetActiveNode();          // 0x00d51660
+
+struct CreatureB {
+    void FUN_00c0b370(int a);       // 0x00c0b370
+    void UpdateLocomotion(int m);   // 0x00c14750
+};
+
+struct StimSetB {
+    void ClearAll(int type, int flags);   // 0x00bc98f0
+};
+
+struct AvatarN { int Get(); };            // 0x00c04590
+struct NounMgr { AvatarN* GetAvatar(); }; // 0x00b1fdb0
+NounMgr* NounManagerB();                  // 0x00b3d300
+
+// @ 0x00d61b20
+void FUN_00d61b20(Creature* c)
+{
+    VC3<void, int, int, int>(c, 33, 0, 0, 0);
+    ((CreatureB*)c)->UpdateLocomotion(0);
+}
+
+// @ 0x00d61b50
+float FUN_00d61b50(int v)
+{
+    Node* n = GetActiveNode();
+    if (((u8)(n->mFlags >> 4) & 1) != 0 && n->Parent() == v)
+        return 1.0f;
+    return 0.0f;
+}
+
+// @ 0x00d61b80
+void FUN_00d61b80(CreatureB* c, int a2, int a3, int a4, int a5, int* out)
+{
+    c->FUN_00c0b370(-1);
+    ((StimSetB*)(F<char*>(c, 0xb4c) + 8))->ClearAll(0, 0x10);
+    out[2] = -1;
+}
+
+// @ 0x00d61bb0
+float FUN_00d61bb0()
+{
+    Node* n = GetActiveNode();
+    if (((u8)(n->mFlags >> 4) & 1) != 0 && n->Parent() != 0)
+        return 1.0f;
+    return 0.0f;
+}
+
+// @ 0x00d61be0
+float FUN_00d61be0(void* a1)
+{
+    AvatarN* avatar = NounManagerB()->GetAvatar();
+    Node* n = GetActiveNode();
+    if (((u8)(n->mFlags >> 4) & 1) != 0) {
+        int x = avatar->Get();
+        int y = ((AvatarN*)a1)->Get();
+        if (y == x)
+            return 1.0f;
+    }
+    return 0.0f;
 }

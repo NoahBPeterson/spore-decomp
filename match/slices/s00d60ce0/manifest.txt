@@ -1,0 +1,5 @@
+slices/s00d60ce0/s00d60ce0.cpp  ?FUN_00d61b20@@YAXPAUCreature@@@Z  00d61b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d60ce0/s00d60ce0.cpp  ?FUN_00d61b50@@YAMH@Z  00d61b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d60ce0/s00d60ce0.cpp  ?FUN_00d61b80@@YAXPAUCreatureB@@HHHHPAH@Z  00d61b80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d60ce0/s00d60ce0.cpp  ?FUN_00d61bb0@@YAMXZ  00d61bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d60ce0/s00d60ce0.cpp  ?FUN_00d61be0@@YAMPAX@Z  00d61be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
