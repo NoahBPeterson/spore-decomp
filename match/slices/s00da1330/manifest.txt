@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00da1330/s00da1330.cpp  ?resize@BigVec@@QAEXI@Z  00da1db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

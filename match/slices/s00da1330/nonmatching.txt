@@ -1,1 +1,3 @@
 00da1330 1423 complete behavioural source (all paths; call sequence identical, 39 calls); frame 0x48 vs 0x2c and x87/SSE scheduling differ
+00da1b00 142 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 119 diff / 140 vs 142 bytes; same 5 calls in order and the same three vector-slot paths; ours re-reads the AutoRefCount temporary from its stack home after the ctor's AddRef call (original forwards the parameter register) and drops the callee-saved copy of the temp (no push ebx). equiv PASS (230 valid inputs, 100% coverage)
+00da1b90 127 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 102 diff / 120 vs 127 bytes; same 3 calls in order, same push_back/DoInsertPtr split; same temporary-forwarding delta as 00da1b00. equiv PASS (263 valid inputs, 90.0% coverage)

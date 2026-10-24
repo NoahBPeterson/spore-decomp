@@ -7,6 +7,7 @@
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc)
 #include "types.h"
 #include <math.h>
+#include <string.h>
 
 struct Vec3 { float x, y, z; };
 struct Quat { float x, y, z, w; };
@@ -28,7 +29,7 @@ struct PosSub {
 };
 
 struct KeyedRef : IRef {
-    virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6();
+    virtual void v2(); virtual void SetParam(uint32_t id); virtual void v4(); virtual void v5(); virtual void v6();
     virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
     virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16();
     virtual void v17(); virtual void v18();
@@ -293,4 +294,406 @@ void CommunityApproach::Start(Community* comm, Object2* o2, Entity* ent, Entity*
 
     mSavedF = mObj2->f2cc;
     mObj2->f2cc = 0.0f;
+}
+
+// ---------------------------------------------------------------------------
+// 0x00da1b00 .. 0x00da1fc0: tribe "social band" reaction object (retail class unnamed).
+// The band keeps two reference-counted creature lists (+0x64, +0x78), one ref list at
+// +0x8c, a command-id vector at +0x1e4 and the reaction state in +0x04/+0x44..+0x60.
+
+struct Creature;
+struct OrderNode;
+
+struct AutoRefCount {                                  // 4-byte ref-counted handle (AutoRefCount)
+    Entity* mpObj;
+    AutoRefCount(Entity* o) : mpObj(o) { if (o) o->AddRef(); }
+    AutoRefCount(const AutoRefCount& o) : mpObj(o.mpObj) { if (mpObj) mpObj->AddRef(); }
+    ~AutoRefCount() { if (mpObj) mpObj->Release(); }
+};
+
+struct RefVec {                                        // SPVector<AutoRefCount>
+    AutoRefCount* mpBegin;                             // +0x00
+    AutoRefCount* mpEnd;                               // +0x04
+    AutoRefCount* mpCapacity;                          // +0x08
+    void DoInsertPtr(AutoRefCount* pos, const AutoRefCount& v);   // 0x00aea5d0 (thiscall, ret 8)
+
+    void push_back(const AutoRefCount& v)
+    {
+        AutoRefCount* p = mpEnd;
+        if (p < mpCapacity) {
+            mpEnd = p + 1;
+            if (p) {
+                Entity* o = v.mpObj;
+                p->mpObj = o;
+                if (o)
+                    o->AddRef();
+            }
+        } else {
+            DoInsertPtr(p, v);
+        }
+    }
+};
+
+// Appends a creature to a reference list; the temporary ref dies right after the insert.
+__forceinline void PushCreature(RefVec& list, Entity* e)
+{
+    AutoRefCount ref(e);
+    list.push_back(ref);
+}
+
+struct RefToSkin {                                     // EA::AutoRefCount<...>, out-of-line ctor
+    Entity* mpObj;
+    RefToSkin(Entity* o);                              // 0x00572660 (thiscall, ret 4)
+    ~RefToSkin() { if (mpObj) mpObj->Release(); }
+};
+
+struct SkinVec {                                       // vector at +0x8c
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    void Insert(const RefToSkin& v);                   // 0x00e26c40 (thiscall, ret 4)
+};
+
+struct TribeSlot {                                     // 0xac-byte slot of the +0xb4c holder
+    char pad00[4];
+    int mState;                                        // +0x04
+    char pad08[4];
+    IRef* mObj;                                        // +0x0c
+    uint8_t mFlag10;                                   // +0x10
+};
+
+struct Anim {                                          // sub-object at +8 of the +0xb4c holder
+    void* Play(int a, uint32_t flags);                 // 0x00bc96a0 (thiscall, ret 8)
+    void PlayWait(int a, uint32_t flags, float f, int b);   // 0x00bc97f0 (thiscall, ret 0x10)
+};
+
+struct TribeHolder {                                   // creature +0xb4c
+    char pad00[8];
+    Anim anim;                                         // +0x08
+    char pad0c[0x1d0 - 0x0c];
+    TribeSlot mSlots[1];                               // +0x1d0 (slot i lives at &mSlots[0] + i*0xac - 0x70)
+    int mIndex;                                        // +0x1dc
+    void Close();                                      // 0x00b45410 (thiscall)
+    void FUN_00bcb480(OrderNode* n, Creature* c, void* r, void* fn);   // 0x00bcb480 (ret 0x10)
+};
+
+__forceinline TribeSlot* TribeSlotAt(TribeHolder* h, int i)
+{
+    return (TribeSlot*)((char*)&h->mSlots[0] + i * 0xac - 0x70);
+}
+
+struct Creature : Entity {
+    char padB24[0xb4c - 0xb24];
+    TribeHolder* mTribe;                               // +0xb4c
+    char padB50[0xb58 - 0xb50];
+    uint32_t mFlags;                                   // +0xb58
+    uint32_t GetTribe();                               // 0x00c22f50 (thiscall)
+    void UpdateLocomotion(int on);                     // 0x00c14750 (thiscall, ret 4)
+    int FUN_00c22dc0();                                // 0x00c22dc0 (thiscall)
+    void FUN_00c0b2f0(int anim, void* obj, int* out);  // 0x00c0b2f0 (thiscall, ret 0xc)
+    int InterruptAnimation(int anim, int a, int b);    // 0x00c12310 (thiscall, ret 0xc)
+    void FUN_00c1d460(uint32_t a, uint32_t b);         // 0x00c1d460 (thiscall, ret 8)
+};
+Creature* __cdecl FUN_00c0c380(Entity* e);             // 0x00c0c380
+
+TribeHolder* __stdcall FUN_00b3d310(PosSub* sub);      // 0x00b3d310 (stdcall, 1 arg)
+void* __cdecl Fun_00b45410(TribeHolder* h);            // 0x00b45410
+
+struct Owner {                                         // object at band +0x0c
+    char pad00[0x550];
+    void* mBandInfo;                                   // +0x550
+};
+
+struct Msg {                                           // audio EAPD message
+    uint32_t GetType();                                // 0x00fcc210 (thiscall)
+    bool GetNextFloat(float* out);                     // 0x00a34e30 (thiscall, ret 4)
+};
+
+struct MsgSink { void Close(); };                      // 0x0067c830 (thiscall)
+MsgSink* __cdecl FUN_0067cac0(uint32_t id);            // 0x0067cac0
+
+struct Random {
+    uint32_t RandomUint32Uniform(uint32_t n);          // 0x00a68fb0 (thiscall, ret 4)
+};
+extern Random g_random;                                // 0x01601760
+
+struct SocialBand;                                     // band object returned by the pool
+struct SocialBandPool {
+    void* GetObject(uint32_t id);                      // 0x00d9eb70 (thiscall, ret 4)
+};
+extern SocialBandPool g_socialBandPool;                // 0x015935a8
+
+struct BandKey { uint32_t mTribe1, mTribe2; Vec3 mPos; };
+struct OrderNode { char pad00[0x1a8]; uint32_t mBandId; };
+struct OrderManager {
+    OrderNode* FindNode(uint32_t id, void* fn, void* ctx);          // 0x00bca620 (thiscall, ret 0xc)
+};
+OrderManager* __cdecl FUN_00bc9b00(uint32_t id, void* fn, void* ctx);   // 0x00bc9b00
+void* __cdecl SP_FindSocialBandGroup(BandKey* key);                     // 0x00d9f0a0 (address used only)
+void* __cdecl WatchMemoryBlock(void* block);                            // 0x00d999d0
+Creature* __cdecl FUN_00d994c0(void* block);                            // 0x00d994c0
+
+struct ReactResult {
+    uint32_t f0, f1, f2, f3;
+};
+struct ReactRunner {
+    void FUN_00d9d100(Creature* c, void* band);        // 0x00d9d100 (thiscall, ret 8)
+};
+
+extern const float kFloatMax;                          // 0x0147c190
+extern const float kSmallEpsilon;                      // 0x0147c194
+extern const float g_reactionTimer;                    // 0x0158132c
+
+float __cdecl RandomInRange(const float* range);       // 0x004df2d0
+void __cdecl FUN_00d9b480();                           // 0x00d9b480 (address used only)
+void* __cdecl FUN_00c8ea70(void* info);                // 0x00c8ea70
+void __cdecl FUN_00e26de0(void* begin, void* end, void* fn);   // 0x00e26de0
+
+struct SocialBand {
+    char pad00[4];
+    int mState04;                                      // +0x04 (6 = done)
+    char pad08[4];
+    Owner* mOwner;                                     // +0x0c
+    char pad10[0x44 - 0x10];
+    uint32_t mCount;                                   // +0x44
+    uint32_t mLimit;                                   // +0x48
+    float mDelay;                                      // +0x4c
+    char pad50[1];
+    uint8_t mFlag51;                                   // +0x51
+    char pad52[2];
+    float mTimer;                                      // +0x54
+    uint8_t mFlag58;                                   // +0x58
+    char pad59[0x60 - 0x59];
+    uint32_t mHandle;                                  // +0x60
+    RefVec mListA;                                     // +0x64
+    char pad70[0x78 - 0x70];
+    RefVec mListB;                                     // +0x78
+    char pad84[0x8c - 0x84];
+    SkinVec mSkins;                                    // +0x8c
+    char pad98[0x1dc - 0x98];
+    int mMode;                                         // +0x1dc
+    uint32_t mChosen;                                  // +0x1e0
+    IntVec mCommands;                                  // +0x1e4
+
+    void AddCreature(Creature* e);                     // 0x00da1b00
+    void AddOther(Creature* e);                        // 0x00da1b90
+    bool OnMessage(uint32_t msg, Msg* m);              // 0x00da1fc0
+};
+
+// @ 0x00da1b00
+void SocialBand::AddCreature(Creature* e)
+{
+    if (e)
+        e->SetParam(0x4f176642);
+    PushCreature(mListA, e);
+    e->mFlags |= 0x20;
+    FUN_00b3d310(&e->sub)->Close();
+}
+
+// @ 0x00da1b90
+void SocialBand::AddOther(Creature* e)
+{
+    PushCreature(mListB, e);
+    e->mFlags |= 0x20;
+    FUN_00b3d310(&e->sub)->Close();
+}
+
+// @ 0x00da1c10
+bool FUN_00da1c10(Creature* c, int, int, int, ReactResult* res)
+{
+    if (res) {
+        res->f1 = 5;
+        res->f2 = 0;
+        res->f3 = 0;
+    }
+    void* block = c->mTribe->anim.Play(0, 0x200000);
+    if (!block)
+        return false;
+    Creature* other = FUN_00d994c0(WatchMemoryBlock(block));
+    if (!other)
+        return false;
+    BandKey key;
+    key.mTribe1 = other->GetTribe();
+    key.mTribe2 = c->GetTribe();
+    key.mPos = *c->sub.GetPos();
+    BandKey* kp = &key;
+    void* fn = (void*)&SP_FindSocialBandGroup;
+    OrderManager* mgr = FUN_00bc9b00(0xf445d1cc, fn, kp);
+    OrderNode* node = mgr->FindNode(0xf445d1cc, fn, kp);
+    if (!node)
+        return false;
+    c->mTribe->FUN_00bcb480(node, c, res, fn);
+    SocialBand* band = (SocialBand*)g_socialBandPool.GetObject(node->mBandId);
+    band->AddOther(c);
+    c->mTribe->anim.PlayWait(0, 0x2000000, kFloatMax, 0);
+    ((ReactRunner*)res)->FUN_00d9d100(c, band);
+    c->UpdateLocomotion(1);
+    res->f0 = 0;
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// Vector helpers (element sizes 0x20 and 4).
+
+struct Elem32 { uint32_t mWords[8]; };                 // 32-byte value element
+
+struct BigVec {                                        // eastl::vector<32-byte element>
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    __forceinline uint32_t size() const { return (uint32_t)((int)((char*)mpEnd - (char*)mpBegin) >> 5); }
+    void DoInsert(void* pos, uint32_t n, const Elem32& value);     // 0x00d9fb20 (thiscall, ret 0xc)
+    void Erase(void* first, void* last);                           // 0x00899420 (thiscall, ret 8)
+    void resize(uint32_t n);                           // 0x00da1db0
+};
+
+// @ 0x00da1db0
+void BigVec::resize(uint32_t n)
+{
+    if (n > size()) {
+        Elem32 value;
+        DoInsert(mpEnd, n - size(), value);
+    } else {
+        Erase((char*)mpBegin + n * 0x20, mpEnd);
+    }
+}
+
+struct IntV {                                          // eastl::vector<int>
+    int* mpBegin; int* mpEnd; int* mpCapacity;
+    void assign(const int* first, const int* last, int tag);       // 0x00da1e70
+};
+
+// @ 0x00da1e70
+void IntV::assign(const int* first, const int* last, int)
+{
+    int bytes = (int)((const char*)last - (const char*)first);
+    int n = bytes >> 2;
+    if ((uint32_t)n > (uint32_t)((int)((char*)mpCapacity - (char*)mpBegin) >> 2)) {
+        memcpy(0, first, bytes);
+        mpBegin = 0;
+        mpCapacity = (int*)(n * 4);
+        mpEnd = (int*)(n * 4);
+        return;
+    }
+    int size = (int)((char*)mpEnd - (char*)mpBegin) >> 2;
+    if ((uint32_t)n > (uint32_t)size) {
+        const char* mid = (const char*)first + size * 4;
+        memcpy(mpBegin, first, mid - (const char*)first);
+        mpEnd = (int*)memcpy(mpEnd, mid, (const char*)last - mid)
+              + (((const char*)last - mid) >> 2);
+        return;
+    }
+    mpEnd = (int*)memcpy(mpBegin, first, bytes) + n;
+}
+
+// ---------------------------------------------------------------------------
+// 0x00da1fc0: message handler of the reaction object (0x41638ca = "community approach").
+
+// @ 0x00da1fc0
+bool SocialBand::OnMessage(uint32_t msg, Msg* m)
+{
+    if (msg != 0x41638ca)
+        return false;
+    switch (m->GetType()) {
+    case 0xaceb7ea7: {
+        if (mCount >= mLimit)
+            return false;
+        if (mState04 == 6)
+            return false;
+        mCount++;
+        if (!mFlag58)
+            mTimer = g_reactionTimer;
+        AutoRefCount* it = mListA.mpBegin;
+        AutoRefCount* end = mListA.mpEnd;
+        while (it != end) {
+            Creature* e = (Creature*)it->mpObj;
+            Creature* c = FUN_00c0c380(e);
+            if (c) {
+                TribeSlot* slot = TribeSlotAt(c->mTribe, c->mTribe->mIndex);
+                int kind = c->FUN_00c22dc0();
+                if (slot->mFlag10 == 0) {
+                    int base = mCount <= 5 ? (int)mCount : 5;
+                    int anim = 0;
+                    switch (kind) {
+                    case 6: anim = base + 0x5508f8cd; break;
+                    case 5: anim = base - 0x0af70712; break;
+                    case 4: anim = base - 0x4af70817; break;
+                    }
+                    if (anim != 0) {
+                        int out;
+                        e->FUN_00c0b2f0(anim, slot->mObj, &out);
+                        slot->mState = e->InterruptAnimation(out, -1, 0);
+                    }
+                }
+                if (mFlag58)
+                    slot->mFlag10 = 0;
+            }
+            ++it;
+        }
+        return false;
+    }
+    case 0x79836ba6: {
+        float f = 0.0f;
+        m->GetNextFloat(&f);
+        if (f > kSmallEpsilon)
+            mDelay = f;
+        return false;
+    }
+    case 0xf69ff317: {
+        float f = 0.0f;
+        m->GetNextFloat(&f);
+        if (f > kSmallEpsilon)
+            mLimit = (uint32_t)(int)f;
+        return false;
+    }
+    case 0xff77507f: {
+        if (mCount >= mLimit)
+            return false;
+        if (mState04 == 6)
+            return false;
+        mFlag58 = 0;
+        void* info = mOwner->mBandInfo;
+        if (!info)
+            return false;
+        char* band = (char*)FUN_00c8ea70(info);
+        int n = (int)(mCommands.mpEnd - mCommands.mpBegin);
+        if (n <= 0) {
+            mChosen = 0;
+            mMode = -1;
+            return false;
+        }
+        if (mHandle > 1) {
+            FUN_0067cac0(0xe807e90c)->Close();
+            mHandle = 0;
+        }
+        mFlag51 = 1;
+        mChosen = (uint32_t)(int)RandomInRange((const float*)(band + 0x98));
+        uint32_t idx = g_random.RandomUint32Uniform(
+            (uint32_t)(mCommands.mpEnd - mCommands.mpBegin));
+        int cmd = mCommands.mpBegin[idx];
+        uint32_t key = 0x9de794a4;
+        if (cmd == 5) {
+            mMode = 2;
+            key = 0xc3933f3f;
+        } else if (cmd == 6) {
+            mMode = 0;
+            key = 0x4ea19703;
+        } else if (cmd == 7) {
+            mMode = 1;
+        }
+        FUN_00e26de0(mListB.mpBegin, mListB.mpEnd, (void*)&FUN_00d9b480);
+        int cnt = (int)(mListB.mpEnd - mListB.mpBegin);
+        if (mChosen > (uint32_t)cnt)
+            mChosen = (uint32_t)cnt;
+        for (uint32_t i = 0; i < mChosen; ++i) {
+            Creature* c = (Creature*)mListB.mpBegin[i].mpObj;
+            TribeSlot* slot = TribeSlotAt(c->mTribe, c->mTribe->mIndex);
+            if (slot->mState == 5 || slot->mState == 4)
+                continue;
+            slot->mState = 4;
+            c->InterruptAnimation(0x61e0675, -1, 0);
+            c->FUN_00c1d460(key, 0x950a2438);
+            RefToSkin ref(c);
+            mSkins.Insert(ref);
+        }
+        return false;
+    }
+    }
+    return false;
 }
