@@ -18,6 +18,7 @@ void ReadEvalList(EA::IO::IStream*, char*);                        // @ 0x53a6d0
 void WriteEvalList(EA::IO::IStream*, char*);                       // @ 0x53a930 (slice 31)
 void ReadDescBase(EA::IO::IStream*, char*);                        // @ 0x53bc90
 void WriteDescBase(EA::IO::IStream*, char*);                       // @ 0x53bd00
+void __fastcall FUN_0083c800(void* self);                          // @ 0x83c800 (cCommandBase::cCommandBase, this in ECX)
 
 // The IStream vtable slots used here: +0x30 ReadBytes, +0x38 WriteBytes.
 struct IStreamV {
@@ -175,15 +176,17 @@ struct PaintCompatB { PaintCompatB* Ctor1f0(); };
 // @ 0x0053b1c0
 PaintCompatA* PaintCompatA::Ctor1b0()
 {
-    *(void**)this = (void*)0x13f4b30;
-    *(void**)this = (void*)0x13f4b30;
+    FUN_0083c800(this);                          // cCommandBase::cCommandBase
+    *(void**)this = (void*)0x13f2424;            // vtbl_ArgScript::PaintCompat
+    *(void**)this = (void*)0x13f2424;
     return this;
 }
 
 // @ 0x0053b1f0
 PaintCompatB* PaintCompatB::Ctor1f0()
 {
-    *(void**)this = (void*)0x13f4b30;
+    FUN_0083c800(this);                          // cCommandBase::cCommandBase
+    *(void**)this = (void*)0x13f2424;            // vtbl_ArgScript::PaintCompat
     return this;
 }
 

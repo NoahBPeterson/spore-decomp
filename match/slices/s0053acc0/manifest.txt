@@ -1,1 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0053acc0/s0053acc0.cpp  ?Ctor1b0@PaintCompatA@@QAEPAU1@XZ  0053b1c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0053acc0/s0053acc0.cpp  ?Ctor1f0@PaintCompatB@@QAEPAU1@XZ  0053b1f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
