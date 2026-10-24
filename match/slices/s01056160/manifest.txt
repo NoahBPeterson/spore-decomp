@@ -1,0 +1,4 @@
+slices/s01056160/s01056160.cpp  ?StartTool@cSPDefaultAoETool@@QAE_NHHH@Z  01056b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01056160/s01056160.cpp  ?CanUseTool_56bf0@@YG_NPAVcSPToolStrategy@@HPAH@Z  01056bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01056160/s01056160.cpp  ?StartTool@cSPRepairAOEToolStrategy@@QAE_NHHH@Z  01056c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01056160/s01056160.cpp  ?CanUseTool_56cb0@@YG_NPAVcSPToolStrategy@@HPAH@Z  01056cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,4 @@
+01056bb0  8  register allocation only; arithmetic identical (SSE/interactable-object value path), MSVC schedules arg loads differently
+010568b0  467  structural: original uses a 0x40-byte MessageBasicRC<5> frame and stores GetActivePlanet() result into a local; recreated logic differs in stack layout and call ordering
+01056d30  480  structural: large multi-branch CanUseTool with different branch/loop layout from the recreated source
+01056160  1843  large multi-branch CanUseTool (1863 bytes) not reproduced; body is a placeholder
