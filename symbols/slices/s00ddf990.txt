@@ -1,0 +1,12 @@
+00ddf990 ??0cInterfaceState@@QAE@PAUcDispatchObject@@@Z  # cInterfaceState::cInterfaceState
+00ddfaa0 ??1cInterfaceState@@QAE@XZ  # cInterfaceState::~cInterfaceState
+00ddfaf0 ?ResetDefaults@cInterfaceState@@QAE_NXZ  # bool cInterfaceState::ResetDefaults
+00ddfb50 ?PushMatrix@cInterfaceState@@QAEXI@Z  # void cInterfaceState::PushMatrix
+00ddfbe0 ?UpdateTransition@cInterfaceState@@QAEXII@Z  # void cInterfaceState::UpdateTransition
+00ddfef0 ?UpdateFade@cInterfaceState@@QAEXM@Z  # void cInterfaceState::UpdateFade
+00de00e0 ?UpdateSequence@cInterfaceState@@QAEXH@Z  # void cInterfaceState::UpdateSequence
+00de0450 ?UpdateAlpha@cInterfaceState@@QAEXH@Z  # void cInterfaceState::UpdateAlpha
+00de0670 ?BeginSequence@cInterfaceState@@QAEXEE@Z  # void cInterfaceState::BeginSequence
+00de07a0 ?ResetSequence@cInterfaceState@@QAEXXZ  # void cInterfaceState::ResetSequence
+00de0890 ?NotifySequence@cInterfaceState@@QAEXXZ  # void cInterfaceState::NotifySequence
+00de0900 ?IsIdle@cInterfaceState@@QAE_NXZ  # bool cInterfaceState::IsIdle
