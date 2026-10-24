@@ -181,25 +181,44 @@ void cUIMissionCard::Update()
 }
 
 // ============================================================ cUIMissionCardPanel
-struct cUIMissionCardPanel {
-    void **m_vtbl00;        // +0x00
-    void  *m_sub04;         // +0x04
-    void  *m_slotVtbl08;    // +0x08
-    void  *m_slotVtbl0c;    // +0x0c
-    u32    m_field10;       // +0x10
-    void  *m_field14;       // +0x14
-    void  *m_layout;        // +0x18
-    void  *m_card;          // +0x1c
-    union {                 // +0x20: message-handler view / card-vector view
+// The original panel is a composite: two non-polymorphic sub-objects that receive
+// their own "this" (a message handler at +0x0c and another handler record at
+// +0x24).  Modelling them as real bases makes cl reproduce the subobject this and
+// the shift back to the panel itself.
+struct cPanelHead0c {               // +0x00
+    void **m_vtbl00;                // +0x00
+    void  *m_sub04;                 // +0x04
+    void  *m_slotVtbl08;            // +0x08
+};
+
+struct cPanelMsg0c {                // +0x0c  (OnMessage's this)
+    void  *m_slotVtbl0c;            // +0x0c
+    u32    m_field10;               // +0x10
+    void  *m_field14;               // +0x14
+    void  *m_layout;                // +0x18
+    void  *m_card;                  // +0x1c
+
+    char   OnMessage(u32 msg, void *arg); // 0x00e18600
+};
+
+struct cPanelMsg24 {                // +0x20
+    void  *m_handlerObj;            // +0x20
+};
+
+struct cPanelHandler24 {            // +0x24  (HandleMessage's this)
+    void  *m_handlerArg1;           // +0x24
+
+    char   HandleMessage(u32 msg, void *arg); // 0x00e18380
+};
+
+struct cUIMissionCardPanel : cPanelHead0c, cPanelMsg0c, cPanelMsg24, cPanelHandler24 {
+    union {                 // +0x28: message-handler view / card-vector view
         struct {
-            void *m_handlerObj;  // +0x20
-            void *m_handlerArg1; // +0x24
             void *m_handlerArg2; // +0x28
             u32   m_handlerN;    // +0x2c
             void *m_handlerArg4; // +0x30
         };
         struct {
-            u8     m_pad20[8];
             void **m_vec28;      // +0x28 vector begin
             void **m_vec2c;      // +0x2c vector end
             union {              // +0x30: vector capacity / layout object
@@ -235,9 +254,7 @@ struct cUIMissionCardPanel {
     bool  RemoveMissionCard(void *mission); // 0x00e17fb0
     void *AddMissionCard(u32 mission);   // 0x00e18150
     void *SetupMissionCard(void *mission, u32 a, u32 b, char c); // 0x00e18200
-    char  HandleMessage(u32 msg, void *arg); // 0x00e18380
     void  RefreshFromMissionList();      // 0x00e184d0
-    char  OnMessage(u32 msg, void *arg); // 0x00e18600
     void  OnNotify(u32 a, u32 b, u32 c, u32 d); // 0x00e186d0
 };
 
@@ -573,10 +590,6 @@ void *cUIMissionCardPanel::Construct()
     m_field14 = 0;
     m_layout = 0;
     m_card = 0;
-    m_treeBegin34 = 0;
-    m_curMission = 0;
-    m_field3c = 0;
-    m_treeBase40 = 0;
     m_treeBegin34 = (u8 *)this + 0x34;
     m_curMission = (u8 *)this + 0x34;
     u32 hash = 0x65ff54a;
@@ -753,8 +766,9 @@ void *cUIMissionCardPanel::SetupMissionCard(void *mission, u32 a, u32 b, char c)
 }
 
 // @ 0x00e18380
-char cUIMissionCardPanel::HandleMessage(u32 msg, void *arg)
+char cPanelHandler24::HandleMessage(u32 msg, void *arg)
 {
+    cUIMissionCardPanel *self = static_cast<cUIMissionCardPanel *>(this);
     if (msg == 0x38cf2fd) {
         void *p = *(void **)((u8 *)arg + 8);
         if (p == 0) {
@@ -764,46 +778,48 @@ char cUIMissionCardPanel::HandleMessage(u32 msg, void *arg)
         if (mission == 0) {
             mission = p;
         }
-        if (((bool (__thiscall *)(void *, void *))FUN_00e15cd0)(this, mission)) {
+        if (((bool (__thiscall *)(void *, void *))FUN_00e15cd0)(self, mission)) {
             if (((bool (__thiscall *)(void *))FUN_00c44c80)(mission)) {
                 if (((bool (__thiscall *)(void *, void *, u32))FUN_00febe50)(GetMissionManager(), mission, 0)
                     || ((void *(__thiscall *)(void *))FUN_00febc70)(GetMissionManager()) == mission) {
-                    UpdateCardDetails(mission);
+                    self->UpdateCardDetails(mission);
                 } else {
-                    RemoveMissionCard(mission);
+                    self->RemoveMissionCard(mission);
                 }
             } else {
-                RemoveMissionCard(mission);
+                self->RemoveMissionCard(mission);
             }
             return 0;
         }
         if (((bool (__thiscall *)(void *, void *, u32))FUN_00febe50)(GetMissionManager(), mission, 0)) {
             if ((u32)(unsigned long)SP_GetCurrentGameMode() == 0x1654c05) {
-                SetupMissionCard(mission, 1, 1, 0);
+                self->SetupMissionCard(mission, 1, 1, 0);
             } else {
                 u8 r = ((u8 (__thiscall *)(void *))(*(void ***)mission)[0x180 / 4])(mission);
-                SetupMissionCard(mission, r, 1, 0);
+                self->SetupMissionCard(mission, r, 1, 0);
             }
             return 0;
         }
         if (((void *(__thiscall *)(void *))FUN_00febc70)(GetMissionManager()) == mission) {
             if ((u32)(unsigned long)SP_GetCurrentGameMode() == 0x1654c05) {
-                SetupMissionCard(mission, 1, 1, 0);
+                self->SetupMissionCard(mission, 1, 1, 0);
             } else {
-                SetupMissionCard(mission, 1, 0, 0);
+                self->SetupMissionCard(mission, 1, 0, 0);
             }
         }
         return 0;
     }
     if (msg == 0x38cf2ff) {
         void *p = *(void **)((u8 *)arg + 8);
-        RemoveMissionCard(p);
+        self->RemoveMissionCard(p);
         return 0;
     }
     if (msg == 0xf46092d0) {
         void *p = *(void **)((u8 *)arg + 8);
-        ((void (__thiscall *)(void *, void *))FUN_00e15c70)(this, p);
-        return 1;
+        ((void (__thiscall *)(void *, void *))FUN_00e15c70)(self, p);
+        // eax must be zero-extended on return (upper bits are compared).
+        volatile int zero = 0;
+        return (char)(zero + 1);
     }
     return 0;
 }
@@ -842,8 +858,9 @@ void cUIMissionCardPanel::RefreshFromMissionList()
 }
 
 // @ 0x00e18600
-char cUIMissionCardPanel::OnMessage(u32 msg, void *arg)
+char cPanelMsg0c::OnMessage(u32 msg, void *arg)
 {
+    cUIMissionCardPanel *self = static_cast<cUIMissionCardPanel *>(this);
     char visible = 0;
     if (msg != 0x65ff54a || m_layout == 0) {
         return visible;
@@ -853,7 +870,7 @@ char cUIMissionCardPanel::OnMessage(u32 msg, void *arg)
     }
     void *mission = *(void **)((u8 *)arg + 0x18);
     u32 key = m_field10;
-    void *cur = ((void *(__thiscall *)(void *, u32))m_vtbl00[0x30 / 4])(this, key);
+    void *cur = ((void *(__thiscall *)(void *, u32))self->m_vtbl00[0x30 / 4])(self, key);
     if (mission != cur) {
         return visible;
     }
@@ -863,13 +880,13 @@ char cUIMissionCardPanel::OnMessage(u32 msg, void *arg)
     u32 r570 = (u32)(unsigned long)((void *(__thiscall *)(void *))FUN_00810570)(layout);
     visible = ((bool (__thiscall *)(void *))FUN_00810070)(layout) ? 1 : 0;
     if (visible) {
-        ((void (__thiscall *)(void *))m_vtbl00[0x20 / 4])(this);
+        ((void (__thiscall *)(void *))self->m_vtbl00[0x20 / 4])(self);
     }
-    ((void (__thiscall *)(void *))m_vtbl00[0x14 / 4])(this);
-    ((void (__thiscall *)(void *, u32, u32, u32, u32))m_vtbl00[0x10 / 4])(
-        this, key, saved14, r570, savedCard);
+    ((void (__thiscall *)(void *))self->m_vtbl00[0x14 / 4])(self);
+    ((void (__thiscall *)(void *, u32, u32, u32, u32))self->m_vtbl00[0x10 / 4])(
+        self, key, saved14, r570, savedCard);
     if (visible) {
-        ((void (__thiscall *)(void *, u32))m_vtbl00[0x1c / 4])(this, 0);
+        ((void (__thiscall *)(void *, u32))self->m_vtbl00[0x1c / 4])(self, 0);
     }
     return 1;
 }

@@ -2,9 +2,13 @@
 # Modelled types (retail member offsets):
 #   cUIMissionCard       vtable @0x00, collapsed byte @0x10, animated byte @0x11, animator @0x28,
 #                        mission ptr @0x9c
-#   cUIMissionCardPanel  vtable @0x00, field @0x10, layout @0x18, card @0x1c, card vector @0x28/@0x2c,
-#                        layout/visObj @0x30 (also vector capacity view), tree begin @0x34, current
-#                        mission @0x38, field @0x3c, tree base @0x40, field @0x58/@0x5c, tree @0x74
+#   cUIMissionCardPanel  composite (real multiple inheritance): cPanelHead0c (vtable @0x00,
+#                        sub @0x04, slot vtable @0x08), cPanelMsg0c (slot vtable @0x0c, field @0x10,
+#                        field @0x14, layout @0x18, card @0x1c; owns OnMessage, this=panel+0x0c),
+#                        cPanelMsg24 (handler obj @0x20), cPanelHandler24 (handler arg @0x24; owns
+#                        HandleMessage, this=panel+0x24); then handler args @0x28/@0x2c/@0x30
+#                        (also card vector begin/end/cap), tree begin @0x34, current mission @0x38,
+#                        field @0x3c, tree base @0x40, field @0x58/@0x5c, tree @0x74
 #   cUIMissionCardList   card vector @0x28/@0x2c, field @0x3c, handler ptr @0x40, handler args
 #                        @0x44/@0x48/@0x4c/@0x50, layout @0x54
 00e17c10  cUIMissionCard::UpdateDetails(flag) -> void  # if mission: game-mode switch -> UpdateFromMission(vtbl[0xc](0x14066ce5)) / SetMissionSub(vtbl[0xc](0x2aa5ada)); then state=vtbl[0x64]?1:(vtbl[0x68]?2:0) drives InitForCreature/ResizeToContent(1,state) (NOT byte-exact; see nonmatching.txt)
@@ -19,9 +23,9 @@
 00e18150  cUIMissionCardPanel::AddMissionCard(mission) -> void*  # operator_new 0x9c -> ctor 0xe147a0, push card, init from mission, UpdateCardPositions (NOT byte-exact; see nonmatching.txt)
 00e18200  cUIMissionCardPanel::SetupMissionCard(mission, a, b, c) -> void*  # operator_new 0xa0 -> ctor 0xe141a0, push, Setup, position, optional handler object 0xe4a6e0 (NOT byte-exact; see nonmatching.txt)
 00e18340  cUIMissionCardList::RemoveHandlerAndRelease() -> void  # ReleaseAll then EA::Messaging::RemoveHandler @0x40 (once, compare+clear)
-00e18380  cUIMissionCardPanel::HandleMessage(msg, arg) -> char  # dispatch 0x38cf2fd (add/remove/update card), 0x38cf2ff (remove), 0xf46092d0 (collapse others) (NOT byte-exact; see nonmatching.txt)
+00e18380  cPanelHandler24::HandleMessage(msg, arg) -> char  # this=panel+0x24; dispatch 0x38cf2fd (add/remove/update card), 0x38cf2ff (remove), 0xf46092d0 (collapse others) (NOT byte-exact; see nonmatching.txt)
 00e184d0  cUIMissionCardPanel::RefreshFromMissionList() -> void  # mode 0x1654c05: walk mission list adding missing cards (NOT byte-exact; see nonmatching.txt)
-00e18600  cUIMissionCardPanel::OnMessage(msg, arg) -> char  # handler sub-object message 0x65ff54a path (NOT byte-exact; see nonmatching.txt)
+00e18600  cPanelMsg0c::OnMessage(msg, arg) -> char  # this=panel+0x0c; handler sub-object message 0x65ff54a path (NOT byte-exact; see nonmatching.txt)
 00e186d0  cUIMissionCardPanel::OnNotify(a, b) -> void  # rebuild layout via cConnectionDialog, Init/SetParentWin/FindWindowByID, vtbl[0x104] (NOT byte-exact; see nonmatching.txt)
 00e18810  cUIMissionCardPanel::ShutdownCard() -> void  # release card, shutdown layout, reset field
 00e18860  cUIMissionCardPanel::SetVisibleSlot(v) -> void  # if layout: tail-call SetVisibility(layout, 1)
