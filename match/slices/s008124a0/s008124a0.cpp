@@ -471,7 +471,7 @@ struct cDirectPropertyList {
     virtual bool p0(void*); virtual bool p1(void*); virtual bool p2(void*);
     virtual bool p3(void*); virtual bool p4(void*); virtual bool p5(void*);
     virtual bool p6(void*); virtual bool p7(void*); virtual bool p8(void*);
-    virtual bool GetProp(uint32_t id, Property* out);
+    virtual bool GetProp(uint32_t id, Property** out);
 };
 extern cDirectPropertyList* g_AppProperties;             // 0x15fd918
 void __cdecl SetDropShadowQuality(int q, int level);     // 0x96e500
@@ -479,13 +479,13 @@ void __cdecl SetDropShadowQuality(int q, int level);     // 0x96e500
 // @ 0x00813120
 void sInitDropShadowQuality() {
     cDirectPropertyList* props = g_AppProperties;
-    Property p;
-    int q = 0;
-    if (props && props->GetProp(0xe30a842c, &p) && p.type == 9)
-        q = *p.GetInt();
+    Property* p;
+    int q;
+    if (props && props->GetProp(0xe30a842c, &p) && p->type == 9)
+        q = *p->GetInt();
     SetDropShadowQuality(q, 0);
-    if (props && props->GetProp(0xa5bbb508, &p) && p.type == 9)
-        q = *p.GetInt();
+    if (props && props->GetProp(0xa5bbb508, &p) && p->type == 9)
+        q = *p->GetInt();
     SetDropShadowQuality(q, 1);
 }
 

@@ -4,7 +4,6 @@
 00812b70  64  complete: cSPUILayoutZoom ctor; cl reorders the raw vtable stores vs member init (real base-ctor form needed)
 00812db0  335 complete: cSPUIMainWin::BuildMouseMsg; same-TU GetFlags/MapFlags bodies let cl assume register clobbers (original kept result in ebx)
 00812f70  39  complete: GetScaledMouse; cvtsi2ss/mulss schedule and register choice differ
-00813120  83  complete: sInitDropShadowQuality; property-variant branch shape differs
 00813300  76  complete: cSPUIMainWin::ApplyToFocus; test-then-reload vs load-once register allocation
 00813370  74  complete: cSPUIMainWin::RouteKey; callee-saved register assignment differs
 008124a0  966 complete: cSPUILayoutCheat::Execute; full list/load/unload/textures + optional id-attach paths restored, but the EASTL string/map plumbing (key-buffer alloc, pair build, map insert/erase) keeps a different frame/register/schedule - [equiv: WEAK, 157 valid inputs, no mismatch]
