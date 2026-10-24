@@ -1,8 +1,8 @@
 # va  diff-bytes  reason
 00ecb010 89   row-find then 5-dword copy: p register (esi vs eax) and copy order differ; equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
 00ecb150 115  row-find + reset + copy: register schedule differs; equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
-00ecb6b0 73   window guard: byte reload and virtual slot schedule differ; equiv FAIL: 5/5 valid inputs mismatched; first: execution
-00ecb730 25   tail-call vs ret placement after virtual test; equiv FAIL: 5/5 valid inputs mismatched; first: execution
+00ecb6b0 41   window guard: g_16c7584 must be dereferenced once (the active layout is the object's first field); that fixed the wrong-this fault. Remaining diff is the original's byte reload/CSE and call/ret shape. equiv WEAK: 443/1000 valid, no mismatches, 59.5% coverage (the branch coverage limit is the harness's, not a divergence).
+00ecb730 0    byte-exact after dereferencing g_16c7584 to get the active layout (the original loads [0x16c7584] then [eax]); moved to manifest.txt. equiv PASS: 485/1000 valid, no mismatches, 92.3% coverage.
 00ecb7a0 97   slider clamp: needs __asm Min/Max helper shape (not reproduced); equiv FAIL: 5/433 valid inputs mismatched; first: st0
 00ecb830 97   slider clamp: needs __asm Min/Max helper shape (not reproduced); equiv FAIL: 3/1200 valid inputs mismatched; first: st0
-00ecb8c0 54   palette-item dtor: vtable store order / virtual releases differ; equiv FAIL: 5/5 valid inputs mismatched; first: execution
+00ecb8c0 14   palette-item dtor: the three releases are real __thiscall virtual calls (vtable +8/+8/+4) on the member objects, and the dtor ends with a direct qualified base-dtor call to 0x005c6c50. Fixed the old cast that passed the object on the stack instead of ecx and added the missing base-dtor tail call. equiv PASS 275/400, 100% coverage; the 14 diff bytes are load scheduling (ecx=+0x2c hoisted above the vtable stores).

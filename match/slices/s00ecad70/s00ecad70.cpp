@@ -162,7 +162,9 @@ void FUN_00ecb690(float f)
 // @ 0x00ecb730
 void FUN_00ecb730(void)
 {
-    char* w = (char*)((ILayout*)g_16c7584)->FindWindowByID(0x8de6958, 1);
+    // g_16c7584 is the object pointer; its first field is the active layout.
+    ILayout* layout = *(ILayout**)g_16c7584;
+    char* w = (char*)layout->FindWindowByID(0x8de6958, 1);
     if (((FI_1)(*(void***)w)[0x28 / 4])(w) & 1)
         FUN_00eca2f0();
 }
@@ -173,7 +175,8 @@ unsigned char FUN_00ecb6b0(int param_1)
 {
     int idx = (int)FUN_00efc520();
     char bl = *(char*)(*(int*)(param_1 + 0x70) + idx * 0x4e0 + 0x4c8);
-    char* w = (char*)((ILayout*)g_16c7584)->FindWindowByID(0x8de6958, 1);
+    ILayout* layout = *(ILayout**)g_16c7584;
+    char* w = (char*)layout->FindWindowByID(0x8de6958, 1);
     if ((((FI_1)(*(void***)w)[0x28 / 4])(w) & 1) && param_1 != (int)*g_16c757c) {
         if (*(char*)(*(int*)(param_1 + 0x70) + idx * 0x4e0 + 0x4c8) == 1) {
             FUN_00eca2f0();
@@ -226,6 +229,19 @@ float CItem::FUN_B(float param)
 }
 
 // ---------------------------------------------------------------- 0x00ecb8c0
+// Interface subobjects released through their vtables (slots +4 / +8).
+struct IRelease {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+};
+
+namespace SP {
+struct cSPPaletteItemUI_s005c_6340 {
+    virtual ~cSPPaletteItemUI_s005c_6340();   // 0x005c6c50
+};
+}
+
 struct PaletteItem {
     void* vt0;
     char pad[0x20 - 4];
@@ -242,10 +258,11 @@ void PaletteItem::dtor()
     *(void**)((char*)this + 0xc) = (void*)0x1489334;
     *(void**)((char*)this + 0x10) = (void*)0x1489324;
     *(void**)((char*)this + 0x20) = (void*)0x1489314;
-    if (p2c) (*(void(__thiscall**)(void*))((*(void***)p2c)[2]))(p2c);
-    if (p28) (*(void(__thiscall**)(void*))((*(void***)p28)[2]))(p28);
-    if (p24) (*(void(__thiscall**)(void*))((*(void***)p24)[1]))(p24);
+    if (p2c) ((IRelease*)p2c)->v2();
+    if (p28) ((IRelease*)p28)->v2();
+    if (p24) ((IRelease*)p24)->v1();
     *(void**)((char*)this + 0x20) = (void*)0x13eb394;
+    ((SP::cSPPaletteItemUI_s005c_6340*)this)->SP::cSPPaletteItemUI_s005c_6340::~cSPPaletteItemUI_s005c_6340();
 }
 // ================================================================ remaining (best-effort / incomplete)
 void FUN_00ecad70(void) {}
