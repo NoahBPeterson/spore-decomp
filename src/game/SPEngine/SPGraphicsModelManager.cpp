@@ -198,8 +198,13 @@ struct ResHolder { ResInfo* Get(); };
 bool  __stdcall Check434b0(void*);   // 0x007434b0
 struct EffectInner;
 struct EffectEntry {
-    uint32_t     mID;         // +0x00
-    uint32_t     mPad4;       // +0x04
+    union {
+        struct {
+            uint32_t mID;     // +0x00
+            uint32_t mPad4;   // +0x04
+        };
+        uint64_t mKey;        // +0x00 id along with its zero tag word
+    };
     EffectInner* mpInner;     // +0x08
     char         pad0C[0x44 - 0x0C];
     uint8_t      mEnabled;    // +0x44
@@ -219,6 +224,9 @@ struct Prop {
     float* GetFloat();
 };
 struct PropHolder {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0C();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1C();
+    virtual void v20();
     virtual bool Find(int id, void** out);   // slot 9 (0x24)
 };
 struct SlotVec { int* mp; int next(int idx); };
@@ -574,8 +582,8 @@ struct Stub00747270 { void F(); };
 // ---- hand-kept items of s007469b0 end
 
 // ---- hand-kept items of s00747920 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
-void  FUN_00745e00(void* first, int top, int size, int pos, float vx, float vy, void* cmp);
-void  FUN_00745e80(void* first, int top, int size, int pos, float vx, float vy, void* cmp);
+void  FUN_00745e00(void* first, int top, int size, int pos, float vx, float vy, uint32_t cmp);
+void  FUN_00745e80(void* first, int top, int size, int pos, float vx, float vy, uint32_t cmp);
 static inline void RelObj(RCObj* o)
 {
     if (o && --o->mRefCount == 0) {
@@ -599,6 +607,36 @@ struct Occluder4 { float a, b, c, d, e, f; };
 struct FKP { float x, y; FKP() {} FKP(const FKP& v) { x = v.x; y = v.y; } };
 struct CmpGt { bool operator()(const FKP& a, const FKP& b) const { return a.y > b.y; } };
 struct CmpLt { bool operator()(const FKP& a, const FKP& b) const { return a.y < b.y; } };
+// 0x3c-byte POD element: dword key, two words, then 13 floats (+8..+0x38)
+struct Plain3C74 { uint32_t key; unsigned short a, b; float f[13]; };
+// deque iterator passed by value: {current, block begin, block end, map slot}
+struct DequeBlockIter74 { char* cur; char* begin; char* end; char** map; };
+// 0x1c-byte refcounted element: key, object (+4), five dwords (+8..+0x18)
+struct RCElem3C74 { uint32_t key; RCObj* obj; uint32_t f0, f1, f2, f3, f4; };
+static inline void AddRefRaw74(RCObj* o)
+{
+    if (o) (*(void(__thiscall**)(RCObj*))(*(void***)o)[0])(o);
+}
+static inline void ReleaseRaw74(RCObj* o)
+{
+    if (o) (*(void(__thiscall**)(RCObj*))(*(void***)o)[1])(o);
+}
+static inline void CopyElem3C74(RCElem3C74* d, const RCElem3C74* s)
+{
+    d->key = s->key;
+    RCObj* o = s->obj;
+    RCObj* old = d->obj;
+    if (o != old) {
+        AddRefRaw74(o);
+        d->obj = o;
+        ReleaseRaw74(old);
+    }
+    d->f0 = s->f0;
+    d->f1 = s->f1;
+    d->f2 = s->f2;
+    d->f3 = s->f3;
+    d->f4 = s->f4;
+}
 // ---- hand-kept items of s00747920 end
 
 // ---- hand-kept items of s00748800 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
@@ -3223,19 +3261,20 @@ void cModelWorld_s0074_4ad0::SetLOD(Model_s0074_4ad0* model, int lod)
 void cModelWorld_s0074_4ad0::SetSomeFloat(Model_s0074_4ad0* model, float v)
 {
     cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
-    if (0.0f <= v) {
-        m->mFlags138 |= 0x20000000;
-        m->mField124 = v;
-    } else {
+    if (v < 0.0f) {
         m->mFlags138 &= 0xdfffffff;
         m->mField124 = 0.0f;
         PropHolder* h = *(PropHolder**)((char*)m + 0x98);
         if (h) {
-            void* tmp = 0;
+            void* tmp;
             if (h->Find(0x2a907b8, &tmp) && ((Prop*)tmp)->mType == 0xd) {
-                m->mField124 = *((Prop*)tmp)->GetFloat();
+                float f = *((Prop*)tmp)->GetFloat();
+                m->mField124 = f;
             }
         }
+    } else {
+        m->mFlags138 |= 0x20000000;
+        m->mField124 = v;
     }
 }
 
@@ -3266,19 +3305,20 @@ char cModelWorld_s0074_4ad0::ForEachEffectA(Model_s0074_4ad0* model, int a, int 
 {
     cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
     EffectEntry* e = *(EffectEntry**)((char*)m + 0xdc);
-    if (!e)
-        return 0;
-    EffectInner* inner = e->mpInner;
-    char result = 0;
-    while (inner) {
-        if (id == 0 || (id == (int)e->mID && e->mPad4 == 0)) {
-            if (inner->v44(a, b, c))
-                result = 1;
+    if (e) {
+        EffectInner* inner = e->mpInner;
+        char result = 0;
+        while (inner) {
+            if (id == 0 || (uint64_t)(uint32_t)id == e->mKey) {
+                if (inner->v44(a, b, c) != 0 || result != 0)
+                    result = 1;
+            }
+            inner = *(EffectInner**)((char*)e + 0x50);
+            e = (EffectEntry*)((char*)e + 0x48);
         }
-        inner = *(EffectInner**)((char*)e + 0x50);
-        e = (EffectEntry*)((char*)e + 0x48);
+        return result;
     }
-    return result;
+    return 0;
 }
 
 // @ 0x00744e90
@@ -3286,19 +3326,20 @@ char cModelWorld_s0074_4ad0::ForEachEffectB(Model_s0074_4ad0* model, int a, int 
 {
     cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
     EffectEntry* e = *(EffectEntry**)((char*)m + 0xdc);
-    if (!e)
-        return 0;
-    EffectInner* inner = e->mpInner;
-    char result = 0;
-    while (inner) {
-        if (id == 0 || (id == (int)e->mID && e->mPad4 == 0)) {
-            if (inner->v48(a, b, c))
-                result = 1;
+    if (e) {
+        EffectInner* inner = e->mpInner;
+        char result = 0;
+        while (inner) {
+            if (id == 0 || (uint64_t)(uint32_t)id == e->mKey) {
+                if (inner->v48(a, b, c) != 0 || result != 0)
+                    result = 1;
+            }
+            inner = *(EffectInner**)((char*)e + 0x50);
+            e = (EffectEntry*)((char*)e + 0x48);
         }
-        inner = *(EffectInner**)((char*)e + 0x50);
-        e = (EffectEntry*)((char*)e + 0x48);
+        return result;
     }
-    return result;
+    return 0;
 }
 
 // @ 0x00744f10
@@ -3306,19 +3347,20 @@ char cModelWorld_s0074_4ad0::ForEachEffectC(Model_s0074_4ad0* model, int a, int 
 {
     cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
     EffectEntry* e = *(EffectEntry**)((char*)m + 0xdc);
-    if (!e)
-        return 0;
-    EffectInner* inner = e->mpInner;
-    char result = 0;
-    while (inner) {
-        if (id == 0 || (id == (int)e->mID && e->mPad4 == 0)) {
-            if (inner->v4C(a, b))
-                result = 1;
+    if (e) {
+        EffectInner* inner = e->mpInner;
+        char result = 0;
+        while (inner) {
+            if (id == 0 || (uint64_t)(uint32_t)id == e->mKey) {
+                if (inner->v4C(a, b) != 0 || result != 0)
+                    result = 1;
+            }
+            inner = *(EffectInner**)((char*)e + 0x50);
+            e = (EffectEntry*)((char*)e + 0x48);
         }
-        inner = *(EffectInner**)((char*)e + 0x50);
-        e = (EffectEntry*)((char*)e + 0x48);
+        return result;
     }
-    return result;
+    return 0;
 }
 
 // @ 0x00744f80
@@ -4555,26 +4597,22 @@ void FUN_00747b70(E3CResult* res, E3C* first, E3C* last, E3C* dst)
 }
 
 // @ 0x00747c90
-void FUN_00747c90(E3C* dst, int n, E3C* value)
+void* FUN_00747c90(E3C* dst, int n, E3C* value)
 {
-    for (; n != 0; --n, dst += 1) {
-        dst->key = value->key;
-        RCObj* o = value->obj;
-        if (o) (*(void(__thiscall**)(RCObj*))(*(void**)o))(o);
-        dst->obj = o;
-        dst->a = value->a;
-        dst->b = value->b;
-        dst->d = value->d;
-        dst->e = value->e;
-        dst->f = value->f;
-        dst->g = value->g;
-        dst->h = value->h;
-        dst->i = value->i;
-        dst->j = value->j;
-        dst->k = value->k;
-        dst->l = value->l;
-        dst->m = value->m;
+    // the original only computes eax after the n>0 test, so an n==0 call returns
+    // the caller's incoming eax unchanged
+    uint32_t entryEax;
+    __asm { mov entryEax, eax }
+    if ((uint32_t)n == 0)
+        return (void*)entryEax;
+    Plain3C74* d = (Plain3C74*)dst;
+    Plain3C74* v = (Plain3C74*)value;
+    for (uint32_t i = (uint32_t)n; i != 0; --i, ++d) {
+        if (d == 0) break;
+        *d = *v;
     }
+    // the original keeps the cursor pre-biased by +0x10 and hands it back in eax
+    return (char*)d + 0x10;
 }
 
 // @ 0x00747eb0
@@ -4594,15 +4632,16 @@ void MakeHeapOccluder(Occluder* first, Occluder* last, OccluderCmp compare)
 // @ 0x00747f30
 void PopHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
 {
-    Occluder4 temp(*(last - 1));
-    *(last - 1) = *first;
-    int n = (int)(last - first) - 1;
-    if (n > 0)
+    for (; (last - first) > 1; --last) {
+        Occluder4 temp(*(last - 1));
+        *(last - 1) = *first;
+        int n = (int)(last - first) - 1;
         AdjustHeapOccluder((Occluder*)first, 0, n, 0, *(Occluder*)&temp, compare);
+    }
 }
 
 // @ 0x00748010
-void MakeHeapGt(FKP* first, FKP* last, CmpGt compare)
+void MakeHeapGt(FKP* first, FKP* last, uint32_t compare)
 {
     int heapSize = (int)(last - first);
     if (heapSize >= 2) {
@@ -4610,23 +4649,23 @@ void MakeHeapGt(FKP* first, FKP* last, CmpGt compare)
         do {
             --parentPosition;
             FUN_00745e00(first, parentPosition, heapSize, parentPosition,
-                         first[parentPosition].x, first[parentPosition].y, &compare);
+                         first[parentPosition].x, first[parentPosition].y, compare);
         } while (parentPosition != 0);
     }
 }
 
 // @ 0x00748060
-void SortHeapGt(FKP* first, FKP* last, CmpGt compare)
+void SortHeapGt(FKP* first, FKP* last, uint32_t compare)
 {
     for (; (last - first) > 1; --last) {
         FKP temp(*(last - 1));
         *(last - 1) = *first;
-        FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
+        FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, compare);
     }
 }
 
 // @ 0x007480c0
-void MakeHeapLt(FKP* first, FKP* last, CmpLt compare)
+void MakeHeapLt(FKP* first, FKP* last, uint32_t compare)
 {
     int heapSize = (int)(last - first);
     if (heapSize >= 2) {
@@ -4634,18 +4673,18 @@ void MakeHeapLt(FKP* first, FKP* last, CmpLt compare)
         do {
             --parentPosition;
             FUN_00745e80(first, parentPosition, heapSize, parentPosition,
-                         first[parentPosition].x, first[parentPosition].y, &compare);
+                         first[parentPosition].x, first[parentPosition].y, compare);
         } while (parentPosition != 0);
     }
 }
 
 // @ 0x00748110
-void SortHeapLt(FKP* first, FKP* last, CmpLt compare)
+void SortHeapLt(FKP* first, FKP* last, uint32_t compare)
 {
     for (; (last - first) > 1; --last) {
         FKP temp(*(last - 1));
         *(last - 1) = *first;
-        FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
+        FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, compare);
     }
 }
 
@@ -4675,45 +4714,79 @@ void FUN_00748170(int* first, int* last, int* dst)
 }
 
 // @ 0x00748280
-void FUN_00748280(int* out, int* first, int* a, int* last, int* mapFirst, int* mapLast)
+// three iterators are passed by value: {current, block begin, block end, map slot}
+void* FUN_00748280(void* out,
+                   char* fcur, char* fbeg, char* fend, char** fmap,
+                   char* lcur, char* lbeg, char* lend, char** lmap,
+                   char* rcur, char* rbeg, char* rend, char** rmap)
 {
-    (void)a; (void)mapFirst; (void)mapLast;
-    int* dst = (int*)out[0];
-    for (; first != last; first += 7) {
-        int* o = dst;
-        o[0] = first[0];
-        RCObj* src = (RCObj*)first[1];
-        RCObj* d = (RCObj*)o[1];
-        if (src != d) {
-            if (src) (*(void(__thiscall**)(RCObj*))(*(void**)src))(src);
-            o[1] = (int)src;
-            if (d) RelObj(d);
+    DequeBlockIter74 first = { fcur, fbeg, fend, fmap };
+    DequeBlockIter74 last = { lcur, lbeg, lend, lmap };
+    DequeBlockIter74 result = { rcur, rbeg, rend, rmap };
+    while (first.cur != last.cur) {
+        CopyElem3C74((RCElem3C74*)result.cur, (const RCElem3C74*)first.cur);
+        result.cur += 0x1c;
+        if (result.cur == result.end) {
+            result.map += 1;
+            char* nb = *result.map;
+            result.cur = nb;
+            result.begin = nb;
+            result.end = nb + 0xe0;
         }
-        o[2] = first[2]; o[3] = first[3]; o[4] = first[4]; o[5] = first[5]; o[6] = first[6];
-        dst = o + 7;
+        first.cur += 0x1c;
+        if (first.cur == first.end) {
+            first.map += 1;
+            char* nb = *first.map;
+            first.cur = nb;
+            first.begin = nb;
+            first.end = nb + 0xe0;
+        }
     }
-    out[1] = (int)dst;
+    DequeBlockIter74* o = (DequeBlockIter74*)out;
+    o->cur = result.cur;
+    o->begin = result.begin;
+    o->end = result.end;
+    o->map = result.map;
+    return out;
 }
 
 // @ 0x00748380
-void FUN_00748380(int* out, int* last)
+void* FUN_00748380(void* out,
+                   char* fcur, char* fbeg, char* fend, char** fmap,
+                   char* lcur, char* lbeg, char* lend, char** lmap,
+                   char* rcur, char* rbeg, char* rend, char** rmap)
 {
-    int* dst = (int*)out[0];
-    while (dst != last) {
-        int* s = dst;
-        int* d = s - 7;
-        d[0] = s[-7];
-        RCObj* src = (RCObj*)s[-6];
-        RCObj* old = (RCObj*)d[1];
-        if (src != old) {
-            if (src) (*(void(__thiscall**)(RCObj*))(*(void**)src))(src);
-            d[1] = (int)src;
-            if (old) RelObj(old);
+    DequeBlockIter74 first = { fcur, fbeg, fend, fmap };
+    DequeBlockIter74 src = { lcur, lbeg, lend, lmap };
+    DequeBlockIter74 dst = { rcur, rbeg, rend, rmap };
+    if (src.cur != first.cur) {
+        for (;;) {
+            if (src.cur == src.begin) {
+                src.map -= 1;
+                char* nb = *src.map;
+                src.begin = nb;
+                src.end = nb + 0xe0;
+                src.cur = src.end;
+            }
+            src.cur -= 0x1c;
+            if (dst.cur == dst.begin) {
+                dst.map -= 1;
+                char* nb = *dst.map;
+                dst.begin = nb;
+                dst.end = nb + 0xe0;
+                dst.cur = dst.end;
+            }
+            dst.cur -= 0x1c;
+            CopyElem3C74((RCElem3C74*)dst.cur, (const RCElem3C74*)src.cur);
+            if (src.cur == first.cur) break;
         }
-        d[2] = s[-5]; d[3] = s[-4]; d[4] = s[-3]; d[5] = s[-2]; d[6] = s[-1];
-        dst = d;
     }
-    out[1] = (int)dst;
+    DequeBlockIter74* o = (DequeBlockIter74*)out;
+    o->cur = dst.cur;
+    o->begin = dst.begin;
+    o->end = dst.end;
+    o->map = dst.map;
+    return out;
 }
 
 // @ 0x00748470

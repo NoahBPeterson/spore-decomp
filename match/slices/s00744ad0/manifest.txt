@@ -5,6 +5,10 @@ slices/s00744ad0/s00744ad0.cpp  ?SetAnimationGroupTransform@cModelWorld@@QAEXPAU
 slices/s00744ad0/s00744ad0.cpp  ?GetMaterialInfo@cModelWorld@@QAEHPAUModel@@H@Z  00744ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00744ad0/s00744ad0.cpp  ?GetNumLODs@cModelWorld@@QAEHPAUModel@@@Z  00744c30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00744ad0/s00744ad0.cpp  ?SetLOD@cModelWorld@@QAEXPAUModel@@H@Z  00744c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00744ad0/s00744ad0.cpp  ?SetSomeFloat@cModelWorld@@QAEXPAUModel@@M@Z  00744cf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00744ad0/s00744ad0.cpp  ?ForEachEffectA@cModelWorld@@QAEDPAUModel@@HHHH@Z  00744e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00744ad0/s00744ad0.cpp  ?ForEachEffectB@cModelWorld@@QAEDPAUModel@@HHHH@Z  00744e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00744ad0/s00744ad0.cpp  ?ForEachEffectC@cModelWorld@@QAEDPAUModel@@HHH@Z  00744f10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00744ad0/s00744ad0.cpp  ?GetDeformationHandles@cModelWorld@@QAEHPAUModel@@PAX1@Z  00744f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00744ad0/s00744ad0.cpp  ?GetRuntimeMeshes@cModelWorld@@QAE_NPAUModel@@HHHH@Z  00744fc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00744ad0/s00744ad0.cpp  ?GetSlot@cModelWorld@@QAEIH@Z  007450a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

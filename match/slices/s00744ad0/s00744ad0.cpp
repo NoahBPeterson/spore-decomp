@@ -95,8 +95,13 @@ struct IModelWorld {
 
 struct EffectInner;
 struct EffectEntry {
-    uint32_t     mID;         // +0x00
-    uint32_t     mPad4;       // +0x04
+    union {
+        struct {
+            uint32_t mID;     // +0x00
+            uint32_t mPad4;   // +0x04
+        };
+        uint64_t mKey;        // +0x00 id along with its zero tag word
+    };
     EffectInner* mpInner;     // +0x08
     char         pad0C[0x44 - 0x0C];
     uint8_t      mEnabled;    // +0x44
@@ -323,30 +328,42 @@ void cModelWorld::SetLOD(Model* model, int lod) {
 }
 
 // 0x00744cf0
-struct Prop {
-    char pad[0x12];
-    uint16_t mType;                 // +0x12
-    float* GetFloat();
+struct Property {
+    char*    data;                  // +0x00
+    unsigned pad[3];                // +0x04
+    uint16_t flags;                 // +0x10
+    uint16_t type;                  // +0x12
+    float* GetFloat();              // 0x0041ea70
 };
 struct PropHolder {
+    virtual void v00();             // +0x00
+    virtual void v04();             // +0x04
+    virtual void v08();             // +0x08
+    virtual void v0C();             // +0x0c
+    virtual void v10();             // +0x10
+    virtual void v14();             // +0x14
+    virtual void v18();             // +0x18
+    virtual void v1C();             // +0x1c
+    virtual void v20();             // +0x20
     virtual bool Find(int id, void** out);   // slot 9 (0x24)
 };
 // @ 0x00744cf0
 void cModelWorld::SetSomeFloat(Model* model, float v) {
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
-    if (0.0f <= v) {
-        m->mFlags138 |= 0x20000000;
-        m->mField124 = v;
-    } else {
+    if (v < 0.0f) {
         m->mFlags138 &= 0xdfffffff;
         m->mField124 = 0.0f;
         PropHolder* h = *(PropHolder**)((char*)m + 0x98);
         if (h) {
-            void* tmp = 0;
-            if (h->Find(0x2a907b8, &tmp) && ((Prop*)tmp)->mType == 0xd) {
-                m->mField124 = *((Prop*)tmp)->GetFloat();
+            void* tmp;
+            if (h->Find(0x2a907b8, &tmp) && ((Property*)tmp)->type == 0xd) {
+                float f = *((Property*)tmp)->GetFloat();
+                m->mField124 = f;
             }
         }
+    } else {
+        m->mFlags138 |= 0x20000000;
+        m->mField124 = v;
     }
 }
 
@@ -416,19 +433,20 @@ void cModelWorld::SetEffectEnabled(Model* model, char a, char b, int id) {
 char cModelWorld::ForEachEffectA(Model* model, int a, int b, int c, int id) {
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
     EffectEntry* e = *(EffectEntry**)((char*)m + 0xdc);
-    if (!e)
-        return 0;
-    EffectInner* inner = e->mpInner;
-    char result = 0;
-    while (inner) {
-        if (id == 0 || (id == (int)e->mID && e->mPad4 == 0)) {
-            if (inner->v44(a, b, c))
-                result = 1;
+    if (e) {
+        EffectInner* inner = e->mpInner;
+        char result = 0;
+        while (inner) {
+            if (id == 0 || (uint64_t)(uint32_t)id == e->mKey) {
+                if (inner->v44(a, b, c) != 0 || result != 0)
+                    result = 1;
+            }
+            inner = *(EffectInner**)((char*)e + 0x50);
+            e = (EffectEntry*)((char*)e + 0x48);
         }
-        inner = *(EffectInner**)((char*)e + 0x50);
-        e = (EffectEntry*)((char*)e + 0x48);
+        return result;
     }
-    return result;
+    return 0;
 }
 
 // 0x00744e90
@@ -436,19 +454,20 @@ char cModelWorld::ForEachEffectA(Model* model, int a, int b, int c, int id) {
 char cModelWorld::ForEachEffectB(Model* model, int a, int b, int c, int id) {
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
     EffectEntry* e = *(EffectEntry**)((char*)m + 0xdc);
-    if (!e)
-        return 0;
-    EffectInner* inner = e->mpInner;
-    char result = 0;
-    while (inner) {
-        if (id == 0 || (id == (int)e->mID && e->mPad4 == 0)) {
-            if (inner->v48(a, b, c))
-                result = 1;
+    if (e) {
+        EffectInner* inner = e->mpInner;
+        char result = 0;
+        while (inner) {
+            if (id == 0 || (uint64_t)(uint32_t)id == e->mKey) {
+                if (inner->v48(a, b, c) != 0 || result != 0)
+                    result = 1;
+            }
+            inner = *(EffectInner**)((char*)e + 0x50);
+            e = (EffectEntry*)((char*)e + 0x48);
         }
-        inner = *(EffectInner**)((char*)e + 0x50);
-        e = (EffectEntry*)((char*)e + 0x48);
+        return result;
     }
-    return result;
+    return 0;
 }
 
 // 0x00744f10
@@ -456,19 +475,20 @@ char cModelWorld::ForEachEffectB(Model* model, int a, int b, int c, int id) {
 char cModelWorld::ForEachEffectC(Model* model, int a, int b, int id) {
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
     EffectEntry* e = *(EffectEntry**)((char*)m + 0xdc);
-    if (!e)
-        return 0;
-    EffectInner* inner = e->mpInner;
-    char result = 0;
-    while (inner) {
-        if (id == 0 || (id == (int)e->mID && e->mPad4 == 0)) {
-            if (inner->v4C(a, b))
-                result = 1;
+    if (e) {
+        EffectInner* inner = e->mpInner;
+        char result = 0;
+        while (inner) {
+            if (id == 0 || (uint64_t)(uint32_t)id == e->mKey) {
+                if (inner->v4C(a, b) != 0 || result != 0)
+                    result = 1;
+            }
+            inner = *(EffectInner**)((char*)e + 0x50);
+            e = (EffectEntry*)((char*)e + 0x48);
         }
-        inner = *(EffectInner**)((char*)e + 0x50);
-        e = (EffectEntry*)((char*)e + 0x48);
+        return result;
     }
-    return result;
+    return 0;
 }
 
 // 0x007456a0
@@ -554,7 +574,7 @@ struct DequeIter { int v[4]; int* Advance(int n); };
 int* DequeIter::Advance(int n) {
     int* self = (int*)this;
     int d = (self[0] - self[1]) / 0x1c + n;
-    if (d < 8) {
+    if (d < 8u) {
         self[0] = self[0] + n * 0x1c;
         return self;
     }
@@ -701,11 +721,13 @@ void cModelWorld::FillColor(int* out) {
     case 0xc:
         x = 1.0f; y = 0.0f; z = 0.0f; w = 1.0f; break;
     case 2:
-    case 3:
-        out[1] = *(int*)((char*)this + 0x850);
-        out[2] = *(int*)((char*)this + 0x854);
-        out[3] = *(int*)((char*)this + 0x858);
-        out[4] = *(int*)((char*)this + 0x85c); return;
+    case 3: {
+        int* p = out + 1;
+        const int* s = (const int*)((char*)this + 0x850);
+        for (int i = 0; i < 4; ++i)
+            p[i] = s[i];
+        return;
+    }
     case 4:
         x = 0.0f; y = 0.5f; z = 1.0f; w = 1.0f; break;
     case 5:
