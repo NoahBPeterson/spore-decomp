@@ -1,0 +1,20 @@
+# slice s00b02830 = 0x00b02830..0x00b037e0 (SPGonzago/SPPlanet.obj Simulator heap-sift helpers + cFruitGroup/cTreeData)
+00b02830 FUN_00b02830
+00b02930 FUN_00b02930
+00b02a40 FUN_00b02a40
+00b02b90 GetFruitPos
+00b02c40 ScopedDtor
+00b02ca0 cFruitGroup_Ctor
+00b02dd0 cFruitGroup_SetGameDataOwner
+00b02fa0 FUN_00b02fa0
+00b03320 FindNth
+00b033b0 FillSlots
+00b034f0 FUN_00b034f0
+00b03550 M3550
+00b035b0 FUN_00b035b0
+00b03680 cTreeData
+00b03740 ?4cTreeData  # cTreeData::operator= (mangled ??4cTreeData@@...; base identifier)
+00b037e0 FUN_00b037e0
+# helpers: FUN_00b3d3b0 0x00b3d3b0, FUN_00b3d420 0x00b3d420, FUN_00b3d440 0x00b3d440,
+#          FUN_00401090 0x00401090, FUN_00b02430 0x00b02430, FUN_00b014f0 0x00b014f0,
+#          FUN_00b015c0 0x00b015c0, FUN_00b01690 0x00b01690, FUN_00921580 0x00921580

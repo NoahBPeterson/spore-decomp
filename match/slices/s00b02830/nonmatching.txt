@@ -1,0 +1,26 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00b02830 = SPGonzago/SPPlanet.obj: the three Simulator distance-keyed heap sift-down
+# helpers, the cFruitGroupSlots / cFruitView / cFruitGroup members and the cTreeData ctor,
+# copy-assign and fruit-tree serialize walk.  1/16 byte-exact (00b03550).  The remaining 15 are
+# complete C++ that reproduces the original control flow and container semantics; the byte-exact
+# budget is missed because the SSE squared-distance reload/add ordering, the loop-prologue
+# scheduling and the inlined eastl rbtree/handle sequences are emitted differently by our
+# compiler run.  The per-row verdict is the equivalence-gate result measured with the flags above.
+
+00b02830 204 sim_heap_sift_down_big: distance-keyed heap sift over big elements (position at +0x5c); the SSE pivot-distance reload and the squared-distance add order are scheduled differently (orig 251 vs 247 emitted) ; equiv PASS 309 valid inputs, 100.0% coverage
+00b02930 245 sim_heap_sift_down_small: sift over small elements (position at +0x10); same pivot-reload/add-order scheduling divergence (orig 264 vs 240 emitted) ; equiv PASS 317 valid inputs, 95.9% coverage
+00b02a40 243 sim_heap_sift_down_plain: sift over plain elements (position at +0x00); same squared-distance add-order divergence, forced to the orig's z,x,y / z,y,x accumulation (orig 258 vs 238 emitted) ; equiv PASS 360 valid inputs, 100.0% coverage
+00b02b90 163 cFruitGroupSlots::GetFruitPos: complete object-heavy slot-position read; the original faults on every synthetic input (needs a live slot tree), so the gate cannot run (orig 169 vs 186 emitted) ; equiv UNSUPPORTED only 0/400 inputs valid (discards: fault(read)=400)
+00b02c40 49 cFruitView::ScopedDtor: scoped destructor; the base vtable store, the effect-release branch and the trailing operator-delete/return-this sequence are scheduled differently (orig 89 vs 88 emitted) ; equiv PASS 283 valid inputs, 61.1% coverage
+00b02ca0 137 cFruitGroup_Ctor: ctor; the member-init stores and the vtable / embedded-subobject store order diverge (orig 261 vs 252 emitted) ; equiv PASS 400 valid inputs, 100.0% coverage
+00b02dd0 365 cFruitGroup_SetGameDataOwner: the initial cGameData sub-ctor call, the inline eastl handle release, the matrix copy and the (dead) m1cc-reload arms are scheduled differently (orig 459 vs 304 emitted) ; equiv WEAK 344 valid inputs (need 200), 45.1% coverage (need 60%)
+00b02fa0 712 cFruitGroup::UpdateFruitForCreatureTree: large per-slot walk with an inlined rbtree find and per-slot writes; the loop-carried register allocation diverges (orig 885 vs 837 emitted) ; equiv WEAK 241 valid inputs (need 200), 12.4% coverage (need 60%)
+00b03320 119 cFruitGroupOps::FindNth: the eastl rbtree-iterator walk and the nth-successor popcount window differ (orig 137 vs 139 emitted) ; equiv PASS 366 valid inputs, 61.0% coverage
+00b033b0 231 cFruitGroup::FillSlots: the slot-fill loop and the 64-bit mask set sequence diverge (orig 315 vs 310 emitted) ; equiv WEAK 361 valid inputs (need 200), 15.4% coverage (need 60%)
+00b034f0 85 sim_rbtree_run_length: __stdcall run-length helper; the count loop and tail layout are scheduled differently (orig 88 vs 93 emitted) ; equiv PASS 377 valid inputs, 71.1% coverage
+00b035b0 166 cTreeData::SerializeFruitTree: fruit-tree serialize walk; complete object-heavy code, but the original faults on every synthetic input, so the gate cannot run (orig 196 vs 183 emitted) ; equiv UNSUPPORTED only 0/400 inputs valid (discards: fault(read)=400)
+00b03680 10 cTreeData::cTreeData: ctor; a single push-edi scheduling difference in the prologue (orig 188 vs 188 emitted) ; equiv PASS 378 valid inputs, 100.0% coverage
+00b03740 42 cTreeData::operator=: copy-assign; the intrusive-pointer assign (AddRef/Release) branch and the copy sequence are scheduled differently (orig 148 vs 148 emitted) ; equiv PASS 275 valid inputs, 100.0% coverage
+00b037e0 52 sim_fill_range: fill-range helper; the fill loop's register allocation differs (orig 57 vs 60 emitted) ; equiv WEAK 170 valid inputs (need 200), 47.6% coverage (need 60%)
