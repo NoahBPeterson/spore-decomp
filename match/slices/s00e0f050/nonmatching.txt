@@ -1,0 +1,9 @@
+00e0f050 166 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 166 bytes - minimap icon add helper not reconstructed.
+00e0f100 93 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 93 bytes - minimap draw helper: four float arguments copied through x87 fld/fstp with one SSE movss, which /fp:fast does not regenerate.
+00e0f2c0 1349 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1349 bytes - draw_civilization_borders not reconstructed.
+00e0f810 334 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 334 bytes - cSPUIMinimapWin destructor not reconstructed.
+00e0f9c0 391 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 390 bytes - RemoveIcon not reconstructed.
+00e0fb50 64 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 62 bytes - RemoveAllIcons: the loop, the icon-count guard and the ok/RemoveIcon short-circuit are reconstructed, but MSVC 2008 normalises the short-circuit with setne instead of retail's branchy mov al,1 / xor al,al (size 26 vs 64).
+00e0fb90 248 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 248 bytes - icon-tree mass erase by flag mask not reconstructed.
+00e0fc90 709 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 709 bytes - CRG_Minimap constructor not reconstructed.
+00e0ff80 213 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 213 bytes - minimap helper not reconstructed.
