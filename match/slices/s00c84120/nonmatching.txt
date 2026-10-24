@@ -1,0 +1,11 @@
+00c84120 128 not reconstructed in this pass (SP::cSolarSystem::GetStarRadius); not byte-exact; size 0 vs 128; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c841a0 256 not reconstructed in this pass (SP::cSolarSystem::GetStarMass); not byte-exact; size 0 vs 256; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c842a0 100 not reconstructed in this pass (SP::cSolarSystem::GetStarRotationRate); not byte-exact; size 0 vs 100; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c84310 271 not reconstructed in this pass (SP::cSolarSystem::GetStarTemperature); not byte-exact; size 0 vs 271; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c84420 501 not reconstructed in this pass (cSolarSystem helper); not byte-exact; size 0 vs 501; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c84620 816 not reconstructed in this pass (SP::cSolarSystem::ActivateEffects); not byte-exact; size 0 vs 816; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c84950 497 not reconstructed in this pass (cSolarSystem helper); not byte-exact; size 0 vs 497; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c84b50 64 reconstructed as Simulator::cSolarSystem ctor (refcount 0, secondary vtable 0x01444434 then 0x01473478 at +0x08, primary vtable 0x0147349c at +0x00, then zero-init owner/three pointer-vectors/two star pointers); not byte-exact: MSVC dead-store-eliminates the base-vtable write 0x01444434 at +0x08 (same address overwritten later), 57 vs 64 bytes; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c84be0 115 not reconstructed in this pass (cSolarSystem model-vector destroy helper); not byte-exact; size 0 vs 115; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c84c60 213 not reconstructed in this pass (cSolarSystem helper); not byte-exact; size 0 vs 213; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c84d40 25 not reconstructed in this pass (tiny cSolarSystem accessor); not byte-exact; size 0 vs 25; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
