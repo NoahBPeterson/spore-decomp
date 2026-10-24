@@ -37,10 +37,8 @@ void*  __cdecl  FUN_00c0ee60_dummy();
 void*  __cdecl  SP_SpaceGameGet(int a);                 // 0x01002bd0 (ret 4)
 void   __cdecl  FUN_00b76d20(void* a, float f, int b, int c, int d); // 0x00b76d20 (ret 0x14)
 void*  __cdecl   FUN_00b3d3b0();                        // 0x00b3d3b0
-void*  __cdecl   FUN_00b3d420_p(void* key);             // 0x00b3d420 (ret 4)
-void*  __cdecl   FUN_00401090_p(void* key);             // 0x00401090 (ret 4)
-void*  __cdecl   FUN_00b90410(void* key);               // 0x00b90410 (ret 4)
-void*  __cdecl   FUN_004df440(void* key);               // 0x004df440 (ret 4)
+void*  __cdecl   FUN_00b3d420_p();                     // 0x00b3d420 (0-arg getter)
+void*  __cdecl   FUN_00401090_p();                     // 0x00401090 (0-arg getter)
 void   __cdecl   FUN_00aea5d0(void* end, void* val);    // 0x00aea5d0 (ret 8)
 void   __cdecl   FUN_00b22930(void* noun);              // 0x00b22930 (ret 4)
 void*  __cdecl   FUN_00c04590();                        // 0x00c04590
@@ -68,7 +66,36 @@ extern float g_169e384;
 // Shared stub types
 // ---------------------------------------------------------------------------
 struct Vec3 { float x, y, z; };
-struct Mat3 { void Assign(const void* src); };          // 0x41cb40 ret 4
+struct Mat3 {
+    void Assign(const void* src);  // 0x41cb40 ret 4
+};
+
+// A named game property.  Property lookups write the found Property* into an
+// out slot; GetFloat() returns a pointer to the stored float.
+struct Property {
+    u8  pad_00[0x12];
+    u16 mType_12;                       // +0x12
+    float* GetFloat();                  // 0x0041ea70 ret 4
+};
+
+// The trigger manager (0x00b3d4d0).
+struct TriggerMgr {
+    u8  pad_00[0x2c];
+    int mState_2c;                      // +0x2c
+};
+
+// The object returned by 0x00b3d310 (a gameplay manager).
+struct GameMgr {
+    u8  pad_00[0x20];
+    int mField_20;                      // +0x20
+};
+
+// The avatar handle object referenced by cSPSimulatorWalkAround::mpAvatar's
+// +0xb54 slot.
+struct AvatarHandle {
+    u8   pad_00[0x80];
+    float mFloat_80;                    // +0x80
+};
 
 static inline char* vpt(void* o) { return *(char**)o; }
 
@@ -172,12 +199,15 @@ struct cGameNounManager {
 
 // Sub-object at plant+0x34 with a vtable (a cGameData / asset object).
 struct ObstacleData {
+    void* mpVtbl_00;                                   // +0x00
+    u8  pad_04[0x30];                                  // 0x04..0x33
     u32 mFlags_34;                                     // +0x34 (bit2 used)
+    u8  pad_38[0xc];                                   // 0x38..0x43
     float mFloat_44;                                   // +0x44
-    u8  mFlag_54;                                      // +0x54
-    u8  pad_55[0x27];
+    u8  pad_48[0xc];                                   // 0x48..0x53
+    u32 mFlag_54;                                      // +0x54
+    u8  pad_58[0x24];                                  // 0x58..0x7b
     void* mpKey_7c;                                    // +0x7c
-    u8  vcall_2c();                                    // vtable slot 0x2c
     void FUN_00b73de0(int a);                          // 0x00b73de0 ret 4
     void FUN_00b73e70_desc(void* out);                 // 0x00b73e70 ret 4
 };
@@ -196,6 +226,12 @@ struct Plant {
     void FUN_00b73de0(int a);                          // 0x00b73de0 ret 4
 };
 
+// The avatar creature (mpAvatar).  Only the +0xb54 slot is read by this slice.
+struct AvatarFields {
+    u8    pad_00[0xb54];
+    void* mpHandle_b54;                                // +0xb54
+};
+
 // Descriptor returned by Plant::GetDesc() (0x38 bytes).
 struct PlantDesc {
     u16 a;            // +0x00
@@ -207,18 +243,19 @@ struct PlantDesc {
     Mat3  m;          // +0x14 (0x24 bytes)
 };
 
-// A newly created plant object (from FUN_00b2b430).
+// A newly created plant object (from FUN_00b2b430).  The obstacle record is
+// embedded at +0x34.
 struct NewPlant {
     void* mpVtbl_0;                                    // +0x00
-    u8  pad_04[0x30];
-    ObstacleData* mpData_34;                           // +0x34
+    u8  pad_04[0x30];                                  // 0x04..0x33
+    ObstacleData mData_34;                             // +0x34 (embedded)
     float mFloat_44;                                   // +0x44
     void FUN_00c3e270(float f);                        // 0x00c3e270 ret 4
 };
 
 // The plant-species manager (found through the global getter 0xb3d3b0).
 struct SpeciesMgr {
-    void* FUN_00b2b430(void* profile, void* key, void* desc, int a, Vec3 v); // ret 0x1c
+    void* FUN_00b2b430(Vec3 v, int a, void* profile, void* key, void* desc); // ret 0x1c
 };
 
 struct SpeciesProfile {
@@ -226,12 +263,22 @@ struct SpeciesProfile {
     float mField_90;                                   // +0x90
 };
 
+// Lookups reached through the 0-arg getters FUN_00b3d420 / FUN_00401090.
+struct PlantSpeciesManager {
+    SpeciesProfile* GetSpeciesFromID(void* key);       // 0x00b90410 ret 4
+};
+struct EditorSpeciesManager {
+    SpeciesProfile* GetPlantProfile(void* key);        // 0x004df440 ret 4
+};
+
 struct cSPCameraControllerSolarSystem {
     // vtable-using base (cDefaultCameraController) occupies 0x00..0x67
     u8  pad_00[0x68];
     Vec3 mVec_68;                                      // +0x68 (saved/desired)
     Vec3 mVec_74;                                      // +0x74 (current)
-    u8  pad_80[0x10];                                  // 0x80..0x8f
+    u8   pad_80[4];                                    // 0x80..0x83
+    void* mpProperty_84;                               // +0x84 (property manager)
+    u8   pad_88[8];                                    // 0x88..0x8f
     float mFloat_90;                                   // +0x90
     u8  pad_94[0x64];                                  // 0x94..0xf7
     Blk64 mBlk_f8;                                     // +0xf8 (0x40 bytes)
@@ -440,36 +487,36 @@ u8 cSPCameraControllerSolarSystem::Read(void* stream)
 float cSPCameraControllerSolarSystem::FUN_01017410(int a)
 {
     float f0 = g_1485720;      // property 0x195e020
-    void* prop = *(void**)((char*)this + 0x84);
+    void* prop = mpProperty_84;
     if (prop != 0) {
-        u32 out;
-        if ((**(u8(__thiscall**)(void*, u32, void*))(*(void***)prop + 9))(prop, 0x195e020, &out) &&
-            *(u16*)(out + 0x12) == 0xd)
-            f0 = *SP_GetPropertyAsFloat((void*)out);
+        Property* out;
+        if ((**(u8(__thiscall**)(void*, u32, Property**))(*(void***)prop + 9))(prop, 0x195e020, &out) &&
+            out->mType_12 == 0xd)
+            f0 = *out->GetFloat();
     }
     float f1 = g_13ec4d0;      // property 0x195e021
-    prop = *(void**)((char*)this + 0x84);
+    prop = mpProperty_84;
     if (prop != 0) {
-        u32 out;
-        if ((**(u8(__thiscall**)(void*, u32, void*))(*(void***)prop + 9))(prop, 0x195e021, &out) &&
-            *(u16*)(out + 0x12) == 0xd)
-            f1 = *SP_GetPropertyAsFloat((void*)out);
+        Property* out;
+        if ((**(u8(__thiscall**)(void*, u32, Property**))(*(void***)prop + 9))(prop, 0x195e021, &out) &&
+            out->mType_12 == 0xd)
+            f1 = *out->GetFloat();
     }
     float f2 = g_1485720;      // property 0x195e022
-    prop = *(void**)((char*)this + 0x84);
+    prop = mpProperty_84;
     if (prop != 0) {
-        u32 out;
-        if ((**(u8(__thiscall**)(void*, u32, void*))(*(void***)prop + 9))(prop, 0x195e022, &out) &&
-            *(u16*)(out + 0x12) == 0xd)
-            f2 = *SP_GetPropertyAsFloat((void*)out);
+        Property* out;
+        if ((**(u8(__thiscall**)(void*, u32, Property**))(*(void***)prop + 9))(prop, 0x195e022, &out) &&
+            out->mType_12 == 0xd)
+            f2 = *out->GetFloat();
     }
     float f3 = g_1485720;      // property 0x195e023
-    prop = *(void**)((char*)this + 0x84);
+    prop = mpProperty_84;
     if (prop != 0) {
-        u32 out;
-        if ((**(u8(__thiscall**)(void*, u32, void*))(*(void***)prop + 9))(prop, 0x195e023, &out) &&
-            *(u16*)(out + 0x12) == 0xd)
-            f3 = *SP_GetPropertyAsFloat((void*)out);
+        Property* out;
+        if ((**(u8(__thiscall**)(void*, u32, Property**))(*(void***)prop + 9))(prop, 0x195e023, &out) &&
+            out->mType_12 == 0xd)
+            f3 = *out->GetFloat();
     }
     float r = FUN_01041cd0(f0, f1, a);
     if (r <= 0.0f)
@@ -504,7 +551,7 @@ void cSPSimulatorWalkAround::RemoveHighLODPlant(void* plant, char flag)
             if (last != 0)
                 (**(void(__thiscall**)(void*))(*(void***)last + 1))(last);
             ObstacleData* ob = (ObstacleData*)*o;
-            if (!ob->vcall_2c() && ob->mFlag_54 != 0) {
+            if (!(**(u8(__thiscall**)(void*))(*(void***)ob + 0xb))(ob) && ob->mFlag_54 != 0) {
                 ob->FUN_00b73de0(flag == 0);
                 if (flag == 0)
                     ob->mFlags_34 |= 2;
@@ -581,23 +628,24 @@ void cSPSimulatorWalkAround::SetHighLODPlant(void* plant)
     desc.m.Assign(&d->m);
 
     if ((pa->mFlags_34 >> 2 & 1) != 0) {
-        SpeciesProfile* sp = (SpeciesProfile*)FUN_00b90410(pa->mpKey_7c);
+        SpeciesProfile* sp =
+            ((PlantSpeciesManager*)FUN_00b3d420_p())->GetSpeciesFromID(&pa->mpKey_7c);
         desc.w = desc.w / sp->mField_90;
         desc.b = (u16)(desc.b + 1);
     }
     pa->FUN_00b73de0(1);
 
     SpeciesProfile* profile =
-        (SpeciesProfile*)FUN_004df440(FUN_00401090_p(pa->mpKey_7c));
+        ((EditorSpeciesManager*)FUN_00401090_p())->GetPlantProfile(&pa->mpKey_7c);
     if (profile == 0)
         return;
 
     Vec3 v = { desc.x, desc.y, desc.z };
     SpeciesMgr* mgr = (SpeciesMgr*)FUN_00b3d3b0();
-    NewPlant* np = (NewPlant*)mgr->FUN_00b2b430(profile, pa->mpKey_7c, &desc, 0, v);
+    NewPlant* np = (NewPlant*)mgr->FUN_00b2b430(v, 0, profile, &pa->mpKey_7c, &desc);
     np->FUN_00c3e270(pa->mFloat_44);
 
-    ObstacleData* data = np->mpData_34;
+    ObstacleData* data = &np->mData_34;
     void* r1 = (**(void*(__thiscall**)(ObstacleData*))(*(void***)data + 0x2c))(data);
     void* r2 = (**(void*(__thiscall**)(ObstacleData*, int))(*(void***)data + 0x2b))(data, 1);
     (**(void(__thiscall**)(void*, void*))(*(void***)r1 + 0x2d))(r1, r2);
@@ -678,7 +726,7 @@ void cSPSimulatorWalkAround::FUN_01016950()
     }
     void* hints = FUN_0067cac0(1, 1);
     (**(void(__thiscall**)(void*, int, int))(*(void***)hints + 0))(hints, 1, 1);
-    *(int*)((char*)FUN_00b3d310() + 0x20) = 2;
+    ((GameMgr*)FUN_00b3d310())->mField_20 = 2;
     while (ClearOldestPlant())
         ;
     void* ui = FUN_010666a0();
@@ -736,7 +784,7 @@ void cSPSimulatorWalkAround::FUN_01016e50(void* param_2)
     }
     if (mpAvatar != 0) {
         if (FUN_00b3d3c0() != 0) {
-            int st = *(int*)((char*)FUN_00b3d4d0() + 0x2c);
+            int st = ((TriggerMgr*)FUN_00b3d4d0())->mState_2c;
             if (st != 1 && st != 2) {
                 void* o = (char*)mpAvatar + 0xc0;
                 float tmp[6];
@@ -807,10 +855,10 @@ void cSPSimulatorWalkAround::FUN_01016ad0()
                     long long e = (long long)tm->GetElapsed();
                     if (e < 0) e = -e;
                     if ((float)e < 2000.0f) {
-                        int m = *(int*)((char*)mpAvatar + 0x2d5 * 4);
+                        void* m = ((AvatarFields*)mpAvatar)->mpHandle_b54;
                         long long e2 = (long long)tm->GetElapsed();
                         if (e2 < 0) e2 = -e2;
-                        *(float*)((char*)m + 0x80) = (float)((2.0 - (double)e2 * 0.001) * 0.5);
+                        ((AvatarHandle*)m)->mFloat_80 = (float)((2.0 - (double)e2 * 0.001) * 0.5);
                     } else {
                         (**(void(__thiscall**)(void*, int))(*(void***)o + 0x27))(o, 0);
                         if (FUN_00b3d3c0() != 0) {
