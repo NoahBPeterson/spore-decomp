@@ -223,6 +223,7 @@ void GetBlockPile(cSPEditorBlock* block, BlockVector* blocks, int flags);  // 0x
 struct cCantAffordReason {
     cString  mTitle;      // +0x0
     cString  mText;       // +0x14
+    uint32_t mUnk28;      // +0x28
     uint32_t mImageID;    // +0x2c
     bool     mbBlocking;  // +0x30
 };

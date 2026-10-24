@@ -245,6 +245,7 @@ namespace SP {
 struct cCantAffordReason {
     cString_s0059_e360  mTitle;      // +0x0
     cString_s0059_e360  mText;       // +0x14
+    uint32_t mUnk28;      // +0x28
     uint32_t mImageID;    // +0x2c
     bool     mbBlocking;  // +0x30
 };
