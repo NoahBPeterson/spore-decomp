@@ -1,0 +1,11 @@
+00dcb8e0 1240 combat steering loop abbreviated (target/mode/position logic); 537 vs 1305 bytes
+00dcbe00 149 wander timer callback partially reconstructed; 86 vs 174 bytes
+00dcbeb0 428 symbol extent (492 B) covers the following wander bodies; 88 bytes emitted
+00dcc0a0 514 vehicle movement/wander state machine abbreviated; 245 vs 543 bytes
+00dcc2c0 26 NounManager arg re-pushed (extra push + add esp) instead of reused by RemoveNoun; 68 vs 64 bytes
+00dcc300 58 vector base not hoisted into ecx (no add ecx,0x24); loop adds nop/jmp; 69 vs 71 bytes
+00dcc350 218 feedback-event set/vector logic abbreviated; 113 vs 225 bytes
+00dcc440 370 city-selection scan abbreviated (world/noun state opaque); 33 vs 374 bytes
+00dcc5c0 9 ticker construction null branch omits explicit xor eax,eax/jmp (known-zero fold); 72 vs 76 bytes
+00dcc610 119 ticker/service-slot branch layout and register allocation differ; 200 bytes
+00dcc750 139 trade-order activation partially reconstructed; 211 vs 216 bytes

@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00dcb8e0/s00dcb8e0.cpp  ?FUN_00dcc6e0@@YA_NPAUBehaviorObj@@@Z  00dcc6e0  /O2 /MD /Gy /TP /arch:SSE
