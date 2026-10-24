@@ -106,12 +106,12 @@ void MeshAdj::AddTri(int a, int n, int c, int* in, Pair16* out, int d)
     rec->f1 = out;
     rec->f2 = 0;
     rec->f3 = d;
-    rec->f4 = c;
-    rec->f5 = n;
+    rec->f4 = n;
+    rec->f5 = c;
 
     int counter = 0;
     int i6 = 0;
-    if (c > 0) {
+    if (n > 0) {
         do {
             int mod = rec->f5;
             i6 = counter + 1;
@@ -163,7 +163,7 @@ void MeshAdj::AddTri(int a, int n, int c, int* in, Pair16* out, int d)
             }
             out++;
             counter = i6;
-        } while (i6 < c);
+        } while (i6 < n);
     }
 }
 
@@ -210,7 +210,7 @@ void MeshAdj::Build()
 }
 
 // @ 0x00720590
-uint32_t __cdecl HashVec(const float* v)
+uint32_t __stdcall HashVec(const float* v)
 {
     int key[3];
     float f0 = *(float*)v + 192.0f;
@@ -445,6 +445,7 @@ void __cdecl FillFace28(cFaceCluster* dst, uint32_t n, const cFaceCluster* src)
             dst->mSumAreaNormal.x = src->mSumAreaNormal.x;
             dst->mSumAreaNormal.y = src->mSumAreaNormal.y;
             dst->mSumAreaNormal.z = src->mSumAreaNormal.z;
+            dst->mArea = src->mArea;
             dst->mFirstEdge = src->mFirstEdge;
             dst->mParentCluster = src->mParentCluster;
             dst->mPreviousDE = src->mPreviousDE;
@@ -530,7 +531,7 @@ void cMeshClusterer::MergeEdgeLists(int param_2, int param_3)
     cFaceCluster* fa = &faceBase[param_2];
     cFaceCluster* fb = &faceBase[param_3];
 
-    int e = fa->mFirstEdge;
+    int e = fb->mFirstEdge;
     while (e >= 0) {
         int count = (int)(mDualEdges.mpEnd - mDualEdges.mpBegin);
         int q = e / count;
@@ -559,10 +560,10 @@ void cMeshClusterer::MergeEdgeLists(int param_2, int param_3)
             plink = &de->mNextEdges[q];
             if (hi >= 1) {
                 cHeapEntry* par = mEdgeHeap.mHeapEntries.mpBegin[(hi - 1) >> 1];
-                if (par->mCost > de->mCost || par->mCost == de->mCost)
-                    mEdgeHeap.HeapifyDown(hi);
-                else
+                if (par->mCost > de->mCost)
                     mEdgeHeap.HeapifyUp(hi);
+                else
+                    mEdgeHeap.HeapifyDown(hi);
             } else {
                 mEdgeHeap.HeapifyDown(hi);
             }
@@ -590,10 +591,10 @@ void cMeshClusterer::MergeEdgeLists(int param_2, int param_3)
             plink2 = pe;
             if (hi >= 1) {
                 cHeapEntry* par = mEdgeHeap.mHeapEntries.mpBegin[(hi - 1) >> 1];
-                if (par->mCost > de->mCost || par->mCost == de->mCost)
-                    mEdgeHeap.HeapifyDown(hi);
-                else
+                if (par->mCost > de->mCost)
                     mEdgeHeap.HeapifyUp(hi);
+                else
+                    mEdgeHeap.HeapifyDown(hi);
             } else {
                 mEdgeHeap.HeapifyDown(hi);
             }
