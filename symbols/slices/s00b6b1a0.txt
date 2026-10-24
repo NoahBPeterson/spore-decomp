@@ -1,0 +1,4 @@
+00b6b1a0  Execute               # SP::cSPConvTextCommand::Execute (candidate) - build the conversation-target charge tooltip text and drive its progress bars/caption/swatch
+00b6b4c0  ConsiderRolloverUpdate # SP::cCreatureDisplayStrategy::ConsiderRolloverUpdate - pick the creature rollover subtitle (~Pet/~Baby/~Epic/~MiniBoss/~Alpha/UiName)
+00b6b810  FUN_00b6b810          # rollover subtitle variant driven by the citizen archetype (IsLeader + nine-way FUN_00c22dc0 switch)
+00b6ba50  FUN_00b6ba50          # convincing-text lookup for a creature id, falling back to an empty EStr
