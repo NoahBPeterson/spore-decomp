@@ -1,0 +1,1 @@
+slices/s00fd9f70/s00fd9f70.cpp  ?ShutdownGonzagoSubsystem@cAppModeSpace@SP@@QAEXXZ  00fda4f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

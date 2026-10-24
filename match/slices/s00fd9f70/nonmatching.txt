@@ -1,0 +1,13 @@
+00fd9f70 628 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 628 bytes - cAppModeSpace::OnMouseUp not reconstructed.
+00fda1f0 228 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 228 bytes - space-mode helper not reconstructed.
+00fda2e0 162 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - space-mode helper not reconstructed.
+00fda390 230 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 230 bytes - cAppModeSpace::Deactivate not reconstructed.
+00fda480 109 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 109 bytes - space-mode helper not reconstructed.
+00fda530 172 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 172 bytes - cAppModeSpace::SetPlanetTimeOnFirstEntry not reconstructed.
+00fda5e0 360 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 360 bytes - space-mode helper not reconstructed.
+00fda750 489 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 489 bytes - space-mode helper not reconstructed.
+00fda940 162 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - space-mode helper not reconstructed.
+00fda9f0 148 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 148 bytes - space-mode helper not reconstructed.
+00fdaa90 165 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 165 bytes - cAppModeSpace::Write not reconstructed.
+00fdab40 162 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - space-mode helper not reconstructed.
+00fdabf0 492 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 492 bytes - space-mode helper not reconstructed.
