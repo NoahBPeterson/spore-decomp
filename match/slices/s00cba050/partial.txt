@@ -1,0 +1,3 @@
+00cba050  1109  behavioural reconstruction only: 1158-byte SSE effect/message block not fully reproduced
+00cba560  291  register-ABI function (args in eax/edi at entry); behavioural reconstruction only
+00cba690  1372  behavioural reconstruction only: large SSE effect block partially reproduced

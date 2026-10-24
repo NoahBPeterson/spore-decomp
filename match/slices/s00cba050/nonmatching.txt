@@ -1,0 +1,4 @@
+00cbac80  94  register allocation and x87 accumulation order differ; equiv PASS
+00cbad00  80  ebx/edi holding this vs loco swapped; x87 accumulation order differs; equiv UNSUPPORTED (no valid inputs)
+00cbad90  29  register roles (ebx/esi/edi) swapped for pList/count; equiv UNSUPPORTED (no valid inputs)
+00cbaf00  234  member copies inlined instead of direct 0x00473460 call; vftable store order; equiv WEAK (no mismatch)

@@ -1,0 +1,1 @@
+slices/s00cba050/s00cba050.cpp  ?TakeHit@cCombatant@SP@@QAEXMHHHH@Z  00cba4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
