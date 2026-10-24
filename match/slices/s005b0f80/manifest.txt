@@ -5,3 +5,4 @@ slices/s005b0f80/s005b0f80.cpp  ?OnMouseDown@MObj@@QAEXHMMH@Z  005b0fd0  /O2 /MD
 slices/s005b0f80/s005b0f80.cpp  ?OnMouseMove@MObj@@QAE_NMMH@Z  005b1010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005b0f80/s005b0f80.cpp  ??0S80@@QAE@MMMMMM@Z  005b1080  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005b0f80/s005b0f80.cpp  ?FUN_005b1c80@@YAHPBM0@Z  005b1c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005b0f80/s005b0f80.cpp  ?Consider@Sd0@@QAEXMMM@Z  005b10d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

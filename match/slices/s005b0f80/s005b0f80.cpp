@@ -160,8 +160,10 @@ struct Sd0 {
   float mDirX, mDirY, mDirZ;            // +0x0c
   bool  mHasBest;                       // +0x18
   char  pad_19[3];
-  float mBestX, mBestY, mBestZ;         // +0x1c
-  float mBestDist;                      // +0x28
+  union { float mBestX; uint32_t mBestXBits; };     // +0x1c
+  union { float mBestY; uint32_t mBestYBits; };     // +0x20
+  union { float mBestZ; uint32_t mBestZBits; };     // +0x24
+  union { float mBestDist; uint32_t mBestDistBits; }; // +0x28
   __declspec(noinline) void Consider(float x, float y, float z);
   __declspec(noinline) void FUN_005b1130(float a, float b, float c, float t);
   __declspec(noinline) void FUN_005b11e0(float px, float py, float pz, float dx, float dy, float dz, bool b);
@@ -176,11 +178,14 @@ void Sd0::Consider(float x, float y, float z) {
   float dz = mOriginZ - z;
   float d = sqrtf(dx * dx + dy * dy + dz * dz);
   if (!mHasBest || d < mBestDist) {
-    mBestX = x;
-    mBestY = y;
+    // The retail code copies the arguments with integer loads/stores (it leaves
+    // eax = the z bits on return), so store the argument bit patterns instead
+    // of using float moves.
+    mBestXBits = *(uint32_t*)&x;
+    mBestYBits = *(uint32_t*)&y;
     mHasBest = true;
     mBestDist = d;
-    mBestZ = z;
+    mBestZBits = *(uint32_t*)&z;
   }
 }
 
@@ -203,8 +208,12 @@ void Sd0::FUN_005b11e0(float px, float py, float pz, float dx, float dy, float d
   if (!b || g_13f5c90 < fabsf(mDirZ * dz + mDirY * dy + mDirX * dx)) {
     float denom = mDirZ * dz + mDirY * dy + mDirX * dx;
     if (denom != g_1485378) {
-      float t = -((mOriginX * dx + mOriginY * dy + mOriginZ * dz) +
-                  -(px * dx + py * dy + pz * dz)) / denom;
+      // Keep the retail association: inner = (py*dy + pz*dz) + px*dx and
+      // outer = (mOriginZ*dz + mOriginY*dy) + mOriginX*dx; reassociating the
+      // sums changes the last bit of the resulting t.
+      float inner = (py * dy + pz * dz) + px * dx;
+      float outer = (mOriginZ * dz + mOriginY * dy) + mOriginX * dx;
+      float t = -((outer - inner) / denom);
       if (t >= g_1485378) {
         Consider(mOriginX + t * mDirX, mOriginY + t * mDirY, mOriginZ + t * mDirZ);
       }
