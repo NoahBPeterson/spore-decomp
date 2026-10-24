@@ -4,10 +4,10 @@
 00746cf0 180 cModelManager::DebugPick complete; pick-protocol shape differs (equiv: UNSUPPORTED 0/400 valid)
 00746e50 227 cLoadingModel ctor complete; SEH try-level frame absent (equiv: UNSUPPORTED 5 unresolved globals)
 00746fc0 140 load-entry destructor shape differs
-007470c0 173 member release sequence shape differs; equiv: WEAK 81.8% cov
+007470c0 210 member release sequence complete; vtable+4 releases take no stack arg; equiv: PASS 100% cov
 00747190  77 entry copy-assign register shape differs; equiv: WEAK 90.2% cov
 007471f0 110 cLoadingModel::cLoadingModel complete; SEH frame absent (equiv: PASS 100% cov)
-00747270  88 cLoadingModel dtor shape differs; equiv: FAIL 5/5 mismatch (execution)
+00747270 178 cLoadingModel dtor complete; SEH frame absent; equiv: PASS 80.3% cov
 00747340 638 load-queue slot refresh complete; SEH/refcount shape differs (equiv: UNSUPPORTED 1 unresolved ref)
 00747640 199 deque entry lookup complete; by-value 16B iterator args not reproduced (equiv: PASS 100% cov)
 00747720 121 deque< cLoadQueueEntry >::~deque shape differs

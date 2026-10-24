@@ -359,22 +359,39 @@ struct Stub007470c0 { void F(); };
 void Stub007470c0::F()
 {
     unsigned char* b = (unsigned char*)this;
+    void* volatile self = this;
     *(int*)(b + 0x138) = 0x8000000;
     RCObj* p = (RCObj*)*(void**)(b + 0x98);
-    if (p) { *(void**)(b + 0x98) = 0; (*(void(__thiscall**)(RCObj*, int))(((char*)(*(void**)p) + 4)))(p, 1); }
+    if (p) { *(void**)(b + 0x98) = 0; (*(void(__thiscall**)(RCObj*))(((char*)(*(void**)p) + 4)))(p); }
     RCObj* q = (RCObj*)*(void**)(b + 0x6c);
-    if (q) { *(void**)(b + 0x6c) = 0; (*(void(__thiscall**)(RCObj*, int))(((char*)(*(void**)q) + 4)))(q, 1); }
-    for (int i = 0; i < 6; ++i) {
-        RCObj* a = (RCObj*)*(void**)(b + 0x9c + i * 4);
-        if (a) { *(void**)(b + 0x9c + i * 4) = 0; if (--a->mRefCount == 0) { a->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)a))(a, 1); } }
-        RCObj* c = (RCObj*)*(void**)(b + 0xb4 + i * 4);
-        if (c) { *(void**)(b + 0xb4 + i * 4) = 0; if (--c->mRefCount == 0) { c->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)c))(c, 1); } }
-    }
+    if (q) { *(void**)(b + 0x6c) = 0; (*(void(__thiscall**)(RCObj*))(((char*)(*(void**)q) + 4)))(q); }
+    unsigned char* slot = b + 0xb4;
+    int n = 6;
+    do {
+        RCObj* a = (RCObj*)*(void**)(slot - 0x18);
+        if (a) {
+            *(void**)(slot - 0x18) = 0;
+            int ac = a->mRefCount;
+            a->mRefCount = ac - 1;
+            if (ac - 1 == 0) { a->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)a))(a, 1); }
+        }
+        RCObj* c = (RCObj*)*(void**)(slot);
+        if (c) {
+            *(void**)(slot) = 0;
+            int cc = c->mRefCount;
+            c->mRefCount = cc - 1;
+            if (cc - 1 == 0) { c->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)c))(c, 1); }
+        }
+        slot += 4;
+    } while (--n);
     RCObj* r = (RCObj*)*(void**)(b + 0xd8);
     if (r) {
         *(void**)(b + 0xd8) = 0;
-        if (--r->mRefCount == 0) { r->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)r))(r, 1); }
+        int rc = r->mRefCount;
+        r->mRefCount = rc - 1;
+        if (rc - 1 == 0) { r->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)r))(r, 1); }
     }
+    self = this;
 }
 
 struct Stub00747190 { void* F(int* src); };
@@ -418,19 +435,35 @@ void __fastcall FUN_007471f0(void* self, void* dummy)
     ehvec_ctor_11e0b85(b + 0x34, 4, 6, (void*)FUN_00743b50, (void*)FUN_0073a820);
 }
 
+struct CJobObj_s007469b0 {
+    int Release();  // 0x00690120 (thiscall, no stack args)
+};
+
 struct Stub00747270 { void F(); };
 // @ 0x00747270 : SP::cModelWorld::cLoadingModel::~cLoadingModel
 void Stub00747270::F()
 {
     unsigned char* b = (unsigned char*)this;
-    for (int i = 0; i < 6; ++i) {
-        RCObj* r = (RCObj*)*(void**)(b + 0x9c + i * 4);
-        if (r && --r->mRefCount == 0) { r->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)r))(r, 1); }
+    ehvec_dtor_11e0b22(b + 0x34, 4, 6, (void*)FUN_0073a820);
+    if (*(void**)(b + 0x30)) ((CJobObj_s007469b0*)*(void**)(b + 0x30))->Release();
+    void* p = *(void**)(b + 0x28);
+    if (p) {
+        int cnt = *(int*)((char*)p + 0x40);
+        if (cnt < 2) {
+            int bit = (int)((*(unsigned int*)((char*)p + 4) >> 31) & 1u);
+            void* q = *(void**)p;
+            void** vt = *(void***)q;
+            ((void(__thiscall*)(void*, void*, int))(vt[0x170 / 4]))(q, p, bit);
+        } else {
+            *(int*)((char*)p + 0x40) = cnt - 1;
+        }
     }
-    RCObj* p = (RCObj*)*(void**)(b + 0x18);
-    if (p && --p->mRefCount == 0) { p->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)p))(p, 1); }
-    RCObj* q = (RCObj*)*(void**)(b + 0x10);
-    if (q && --q->mRefCount == 0) { q->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)q))(q, 1); }
+    if (*(void**)(b + 0x24)) ((CJobObj_s007469b0*)*(void**)(b + 0x24))->Release();
+    if (*(void**)(b + 0x20)) ((CJobObj_s007469b0*)*(void**)(b + 0x20))->Release();
+    volatile int epilogue = 0;
+    RCObj* r = (RCObj*)*(void**)(b + 0x04);
+    if (r) (*(void(__thiscall**)(RCObj*))(((char*)(*(void**)r) + 4)))(r);
+    epilogue = 1;
 }
 
 // Rebuild every non-empty slot from its stored model reference: this is the tail
