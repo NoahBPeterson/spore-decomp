@@ -343,7 +343,11 @@ private:
     EA::Allocator::StackAllocator* mAllocator;  // +0x4c
 };
 
-static char sImportStatic[16];
+// The original keeps a function-local static here: a 4-byte object at 0x01667b04 whose MSVC
+// one-time init-guard word sits right after it (0x01667b08).  Both error paths set bit 0 of the
+// guard and then hand the object's address to SetDefault (0x008F35D0, which ignores it).
+extern "C" char gTokStart[];   // 0x01667b04
+extern "C" int  gTokFlag;      // 0x01667b08
 
 // ============================================================================
 
@@ -609,7 +613,8 @@ bool CSSParser::Parse(Stylesheet* pSheet) {
             Advance();
             if (mToken != 3 || wcscmp(L"import", mReader.mMatchText.mpBegin) != 0) {
                 Error(0x23b0024);
-                mReader.SetDefault(sImportStatic);
+                if ((gTokFlag & 1) == 0) gTokFlag = gTokFlag | 1;
+                mReader.SetDefault(&gTokStart);
                 if (mReader.mScanPos < mReader.mScanEnd && *mReader.mScanPos == L';')
                     mReader.mScanPos += 1;
                 while (mToken == 2) {
@@ -642,13 +647,14 @@ bool CSSParser::Parse(Stylesheet* pSheet) {
                     if (pSheet->mVecEnd < pSheet->mVecCap) {
                         void** p = pSheet->mVecEnd;
                         pSheet->mVecEnd = p + 1;
-                        *p = v;
+                        if (p) *p = v;      // retail stores only when the old end pointer is non-null
                     } else {
                         pSheet->InsertRuleAt(pSheet->mVecEnd, &v);
                     }
                 } else {
                     Error(0x23b000b);
-                    mReader.SetDefault(sImportStatic);
+                    if ((gTokFlag & 1) == 0) gTokFlag = gTokFlag | 1;
+                    mReader.SetDefault(&gTokStart);
                     if (mReader.mScanPos < mReader.mScanEnd && *mReader.mScanPos == L';')
                         mReader.mScanPos += 1;
                     SkipSpace();
