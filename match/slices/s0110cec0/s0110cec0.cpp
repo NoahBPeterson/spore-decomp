@@ -108,7 +108,13 @@ void __cdecl hkGsk_getClosestPointFromSimplex(const hkVector4* verticesA, const 
         n.x = inv * n.x; n.y = inv * n.y; n.z = inv * n.z;
         n.w = inv * 0.0f;
         hkCopy4(pointOut, A[0]);
-        n.w = n.z * (A[0].z - B[0].z) + n.y * (A[0].y - B[0].y) + n.x * (A[0].x - B[0].x);
+        {
+            const hkReal dz = A[0].z - B[0].z;
+            const hkReal dy = A[0].y - B[0].y;
+            const hkReal dx = A[0].x - B[0].x;
+            const hkReal nz = n.z, ny = n.y, nx = n.x;
+            n.w = (nz * dz + ny * dy) + nx * dx;
+        }
         break;
     }
     case 25: {  // triangle / vertex
