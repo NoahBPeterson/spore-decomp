@@ -1,0 +1,3 @@
+slices/s00d58a80/s00d58a80.cpp  ?FUN_00d59280@@YIPAUCVec@@PAU1@PAXH1@Z  00d59280  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d58a80/s00d58a80.cpp  ?FUN_00d59580@@YIPAXPAX0@Z  00d59580  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d58a80/s00d58a80.cpp  ?FUN_00d59940@@YIPAXPAX0@Z  00d59940  /O2 /MD /Gy /TP /arch:SSE /fp:fast
