@@ -1,0 +1,7 @@
+slices/s00e17c10/s00e17c10.cpp  ?DoCollapse@cUIMissionCard@@QAEXXZ                 00e17d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e17c10/s00e17c10.cpp  ?Update@cUIMissionCard@@QAEXXZ                     00e17d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e17c10/s00e17c10.cpp  ?RemoveHandlerAndRelease@cUIMissionCardList@@QAEXXZ 00e18340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e17c10/s00e17c10.cpp  ?ShutdownCard@cUIMissionCardPanel@@QAEXXZ          00e18810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e17c10/s00e17c10.cpp  ?SetVisibleSlot@cUIMissionCardPanel@@QAEXH@Z        00e18860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e17c10/s00e17c10.cpp  ?ClearTree@cUIMissionCardPanel@@QAEXXZ              00e18a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e17c10/s00e17c10.cpp  ?FindMission@cUIMissionCardPanel@@QAEPAXI@Z        00e18b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

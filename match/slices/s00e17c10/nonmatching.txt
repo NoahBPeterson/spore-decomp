@@ -1,0 +1,26 @@
+# complete behaviorally-equivalent source, not byte-exact (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+# difftest verdicts: PASS = equivalence harness verified it; WEAK = no mismatch seen but coverage
+# below threshold; UNSUPPORTED = harness could not run it (unresolved externals / no valid inputs).
+# FAIL = an observed mismatch (none in this slice).
+# Bounded gate: --budget 200000 --time-limit 60 --min-valid 1 --min-cov 0
+00e17c10  cUIMissionCard::UpdateDetails -- mission substream switch + state-driven relayout; resists byte-exactness (switch table reloc + branchy-vs-branchless state computation)
+00e17cf0  cUIMissionCard::DoExpand -- expand card then post 0xf46092d0 message via MessageServer; message-frame construction differs
+00e17df0  cUIMissionCardPanel::Refresh -- iterate card vector calling UpdateDetails on each; register allocator differs
+00e17e40  cUIMissionCardPanel::UpdateCardDetails -- iterate card vector matching mission then UpdateDetails
+00e17f40  cUIMissionCard::Setup -- Init then mission swap (addref/release) then UpdateDetails + vtbl[0x28]/[0x2c]
+00e17fb0  cUIMissionCardPanel::RemoveMissionCard -- locate card for mission, release, erase from vector
+00e180d0  cUIMissionCardList::ReleaseAll -- release every card, erase vector, shut down layout + field3c
+00e18150  cUIMissionCardPanel::AddMissionCard -- allocate cUIMissionCard (0x9c), push into vector, init from mission
+00e18200  cUIMissionCardPanel::SetupMissionCard -- allocate card (0xa0), push, Setup, position, optional handler object
+00e18380  cUIMissionCardPanel::HandleMessage -- dispatch 0x38cf2fd/0x38cf2ff/0xf46092d0 mission messages
+00e184d0  cUIMissionCardPanel::RefreshFromMissionList -- walk mission manager list adding cards
+00e18600  cUIMissionCardPanel::OnMessage -- handler sub-object message (0x65ff54a) update path
+00e186d0  cUIMissionCardPanel::OnNotify -- rebuild layout, SetParentWin, FindWindowByID + vtbl[0x104]
+00e188b0  cUIMissionCardPanel::InitHints -- allocate hint object (0x18), Init layout, SetVisibility, bind window
+00e18980  cUIMissionCardPanel::DestroyMembers -- tear down vtables/tree/handler/layout
+00e18a30  cUIMissionCardPanel::ShutdownA -- unregister handler, clear tree, hide layout
+00e18ac0  cUIMissionCardPanel::ForEach -- iterate tree calling vtbl[0x18] per node; register allocator differs
+00e18b50  cUIMissionCardPanel::ShutdownB -- unregister handler, clear trees, release children
+00e18bb0  cUIMissionCardPanel::Construct -- constructor: set vtables, init fields, register message handler
+00e18c70  cUIMissionCardPanel::ShouldShow -- visibility + current-mission check; branch layout differs
+00e18cb0  cUIMissionCardPanel::SetSlotAndMission -- find mission in rbtree, bind window slot, swap current mission

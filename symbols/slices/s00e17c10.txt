@@ -1,0 +1,37 @@
+# slice s00e17c10 - SP::cUIMissionCard / cUIMissionCardPanel / cUIMissionCardList (mission-card UI)
+# Modelled types (retail member offsets):
+#   cUIMissionCard       vtable @0x00, collapsed byte @0x10, animated byte @0x11, animator @0x28,
+#                        mission ptr @0x9c
+#   cUIMissionCardPanel  vtable @0x00, field @0x10, layout @0x18, card @0x1c, card vector @0x28/@0x2c,
+#                        layout/visObj @0x30 (also vector capacity view), tree begin @0x34, current
+#                        mission @0x38, field @0x3c, tree base @0x40, field @0x58/@0x5c, tree @0x74
+#   cUIMissionCardList   card vector @0x28/@0x2c, field @0x3c, handler ptr @0x40, handler args
+#                        @0x44/@0x48/@0x4c/@0x50, layout @0x54
+00e17c10  cUIMissionCard::UpdateDetails(flag) -> void  # if mission: game-mode switch -> UpdateFromMission(vtbl[0xc](0x14066ce5)) / SetMissionSub(vtbl[0xc](0x2aa5ada)); then state=vtbl[0x64]?1:(vtbl[0x68]?2:0) drives InitForCreature/ResizeToContent(1,state) (NOT byte-exact; see nonmatching.txt)
+00e17cf0  cUIMissionCard::DoExpand() -> void  # set collapsed=1 animated=1; UpdateDetails(0); post 0xf46092d0 message via MessageServer (NOT byte-exact; see nonmatching.txt)
+00e17d60  cUIMissionCard::DoCollapse() -> void  # collapsed=0 animated=1 UpdateDetails(0)
+00e17d70  cUIMissionCard::Update() -> void  # elapsed-seconds tick; animator vtbl[0x7f6340]/[0x7f63b0]; in mode 0x1654c05 substream 0x2aa5ada -> FUN_00c44c90 -> count >0 -> UpdateDetails(1)
+00e17df0  cUIMissionCardPanel::Refresh() -> void  # iterate card vector, card->vtbl[0xc](0x334c6eec)->UpdateDetails(0) (NOT byte-exact; see nonmatching.txt)
+00e17e40  cUIMissionCardPanel::UpdateCardDetails(mission) -> void  # iterate card vector, match mission @sub+0x9c then UpdateDetails(0) (NOT byte-exact; see nonmatching.txt)
+00e17f40  cUIMissionCard::Setup(mission, a, b) -> void  # Init(b); mission swap addref vtbl[0]/release vtbl[1]; UpdateDetails(0); vtbl[0x28]/[0x2c] (NOT byte-exact; see nonmatching.txt)
+00e17fb0  cUIMissionCardPanel::RemoveMissionCard(mission) -> bool  # find card by mission, release, erase from vector, UpdateCardPositions (NOT byte-exact; see nonmatching.txt)
+00e180d0  cUIMissionCardList::ReleaseAll() -> void  # release every card, erase vector, shut down layout @0x54 + field @0x3c (NOT byte-exact; see nonmatching.txt)
+00e18150  cUIMissionCardPanel::AddMissionCard(mission) -> void*  # operator_new 0x9c -> ctor 0xe147a0, push card, init from mission, UpdateCardPositions (NOT byte-exact; see nonmatching.txt)
+00e18200  cUIMissionCardPanel::SetupMissionCard(mission, a, b, c) -> void*  # operator_new 0xa0 -> ctor 0xe141a0, push, Setup, position, optional handler object 0xe4a6e0 (NOT byte-exact; see nonmatching.txt)
+00e18340  cUIMissionCardList::RemoveHandlerAndRelease() -> void  # ReleaseAll then EA::Messaging::RemoveHandler @0x40 (once, compare+clear)
+00e18380  cUIMissionCardPanel::HandleMessage(msg, arg) -> char  # dispatch 0x38cf2fd (add/remove/update card), 0x38cf2ff (remove), 0xf46092d0 (collapse others) (NOT byte-exact; see nonmatching.txt)
+00e184d0  cUIMissionCardPanel::RefreshFromMissionList() -> void  # mode 0x1654c05: walk mission list adding missing cards (NOT byte-exact; see nonmatching.txt)
+00e18600  cUIMissionCardPanel::OnMessage(msg, arg) -> char  # handler sub-object message 0x65ff54a path (NOT byte-exact; see nonmatching.txt)
+00e186d0  cUIMissionCardPanel::OnNotify(a, b) -> void  # rebuild layout via cConnectionDialog, Init/SetParentWin/FindWindowByID, vtbl[0x104] (NOT byte-exact; see nonmatching.txt)
+00e18810  cUIMissionCardPanel::ShutdownCard() -> void  # release card, shutdown layout, reset field
+00e18860  cUIMissionCardPanel::SetVisibleSlot(v) -> void  # if layout: tail-call SetVisibility(layout, 1)
+00e188b0  cUIMissionCardPanel::InitHints(param) -> void*  # operator_new 0x18 -> cConnectionDialog ctor, swap @0x30, layout Init, SetVisibility, FindWindowByID, vtbl[0x104] (NOT byte-exact; see nonmatching.txt)
+00e18980  cUIMissionCardPanel::DestroyMembers() -> void  # reset vtables, free tree, RemoveHandler, release handler/layout (NOT byte-exact; see nonmatching.txt)
+00e18a30  cUIMissionCardPanel::ShutdownA() -> void  # unregister handler hash 0xf45f7d78, clear tree, hide layout (NOT byte-exact; see nonmatching.txt)
+00e18a90  cUIMissionCardPanel::ClearTree() -> void  # free tree @0x34 and reset sentinel
+00e18ac0  cUIMissionCardPanel::ForEach(a, b) -> void  # field @0x58 hook then tree walk calling vtbl[0x18](b) (NOT byte-exact; see nonmatching.txt)
+00e18b10  cUIMissionCardPanel::FindMission(id) -> void*  # rbtree find @0x3c, return node @+0x14
+00e18b50  cUIMissionCardPanel::ShutdownB() -> void  # unregister handler 0x6244208, free trees @0x74/@0x40 releasing children (NOT byte-exact; see nonmatching.txt)
+00e18bb0  cUIMissionCardPanel::Construct(param) -> void*  # ctor: set vtables, init fields, register message handler (NOT byte-exact; see nonmatching.txt)
+00e18c70  cUIMissionCardPanel::ShouldShow(id) -> bool  # visObj + IsVisible + current-mission check (NOT byte-exact; see nonmatching.txt)
+00e18cb0  cUIMissionCardPanel::SetSlotAndMission(slot, mission) -> void  # rbtree find, window slot rebind, swap current mission (NOT byte-exact; see nonmatching.txt)
