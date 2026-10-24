@@ -1,11 +1,11 @@
-# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE)
-00701a00  n/a  complete SP::cHierGrid range-query over two world-space endpoints; reconstruction is much smaller than the original because the original inlines more of the per-cell scan
-00702500  90  dtor with an /EHsc frame and a freed raw pointer; the local EH object shape (state word, unwind funclet) is not reproduced
-00702550  n/a  eastl vector<_Ty>::insert; the DoInsertValue/reallocation schedule is not reproduced
-00702660  87  bucket-array clear; structurally complete, register allocation (index kept in eax/stack vs esi) differs
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00701a00  994  SP::cHierGrid::QuerySegment: complete (endpoint deltas in SSE, level test, clamped x/y/z slabs, inlined FindKey + list copy, `any == 0` now returns like the original instead of falling to the next level); reconstruction is still smaller because the original keeps the six slab bounds in a frame (and esp,-8 / 0xa4) instead of registers. equiv FAIL on 3/31 mutated inputs, eax only: the original's eax is a dead loop leftover (minz on the empty-z exit, the z counter on the `any == 0` exit) which the retail callers 0x70280b/0x702893 never read
+00702500  110  dtor with an /EHsc frame and a freed raw pointer; the local EH object shape (state word, unwind funclet) is not reproduced
+00702550  218  PtrVec::insert: grow path now the real eastl sequence (capacity 0 -> 1 else doubled, operator new, DoInsertValue(pNew, mpBegin, head) with `+ (head & ~3)`, `*pEnd = *value`, second DoInsertValue(pEnd+1, pos, tail), delete of the old buffer, mpBegin/mpEnd/mpCap); remaining diff is expression form / one dword of frame. equiv WEAK: 190 valid inputs of 1000, 63.0% coverage, 0 mismatches (the default 400-input run is UNSUPPORTED because most mutated vectors make the original's memcpy thunk discard)
+00702660  97  bucket-array clear; structurally complete, register allocation (index kept in eax/stack vs esi) differs
 007026d0  27  FrustumQuery wrapper; only the copy-out loop's register allocation differs (ebx+register step vs ecx+immediate)
 00702760  59  sphere-query wrapper; copy-out loop register allocation differs
 007027e0  59  segment-query wrapper; copy-out loop register allocation differs
-00702860  98  3-argument query wrapper; copy-out loop register allocation differs
+00702860  60  3-argument query wrapper; copy-out loop register allocation differs
 007028e0  88  eastl hashtable erase; structurally complete, register allocation differs
-00701e40  n/a  complete cHierGrid::Query3 (z/y/x slab traversal of the segment p0->p1 per level, third arg unused as in the original); 0 calls, size 1853 vs 1724; the original keeps deltas in SSE and only fabs in x87 with an 8-aligned frame, mine computes the deltas in x87
+00701e40  1562  cHierGrid::Query3: complete z/y/x slab traversal of the segment p0->p1 per level (third arg unused as in the original), `p1[2]` now read after the level test like the retail code. equiv FAIL on 3/15 mutated inputs, eax only: the original leaves p1 / a loop counter in eax, ours leaves another leftover; both callers (0x70280b, 0x702893) ignore eax

@@ -1,5 +1,7 @@
 // Slice s00701a00: SP::cHierGrid query wrappers and container helpers (retail build).
-// Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+// Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+//   (/fp:fast: the retail query code is plain SSE scalar float -- subss/mulss/cvtss2si, no
+//    x87 and no cvtps2pd/subsd; under the default /fp:precise model this cl emits both.)
 #include "types.h"
 #include <math.h>
 
@@ -82,7 +84,7 @@ void __fastcall list_dtor_with_eh(int* p)
 
 // @ 0x00702550  (vector<_Ty>::insert, 4-byte elements)
 struct PtrVec { void** mpBegin; void** mpEnd; void** mpCap; void insert(void** pos, void** value); };
-void __cdecl Vec_DoInsertValue(void* dst, void* src, int n);     // 0x011e0744
+void* __cdecl Vec_DoInsertValue(void* dst, void* src, int n);    // 0x011e0744
 void __thiscall PtrVec::insert(void** pos, void** value)
 {
     void** end = mpEnd;
@@ -98,17 +100,27 @@ void __thiscall PtrVec::insert(void** pos, void** value)
         mpEnd = end + 1;
         return;
     }
+    // no spare capacity: allocate a bigger buffer and splice the two halves around the
+    // inserted element (eastl's DoInsertValue returns its destination, so `call + n` is the
+    // end of each copied run)
     int cap = (int)((char*)end - (char*)mpBegin) >> 2;
-    if (cap == 0)
+    if (cap <= 0)
         cap = 1;
     else
-        cap *= 2;
-    void* dst = (void*)operator new(cap * 4, "Graphics", 0, 0,
+        cap += cap;
+    void** pNew = (void**)operator new(cap * 4, "Graphics", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-    int off = (int)((char*)pos - (char*)mpBegin);
-    mpBegin = (void**)dst;
-    mpEnd = (void**)((char*)dst + off);
-    mpCap = (void**)((char*)dst + cap * 4);
+    int head = (int)((char*)pos - (char*)mpBegin);
+    void** pEnd = (void**)((char*)Vec_DoInsertValue(pNew, mpBegin, head) + (head & ~3));
+    if (pEnd)
+        *pEnd = *value;
+    int tail = (int)((char*)end - (char*)pos);
+    void** pLast = (void**)((char*)Vec_DoInsertValue(pEnd + 1, pos, tail) + (tail & ~3));
+    if (mpBegin)
+        operator delete(mpBegin);
+    mpBegin = pNew;
+    mpEnd = pLast;
+    mpCap = (void**)((char*)pNew + cap * 4);
 }
 
 // @ 0x00702660  (free every bucket chain of a hash table's bucket array)
@@ -290,12 +302,15 @@ static unsigned BuildCellID(unsigned x, unsigned y, unsigned z)
 // @ 0x00701a00  (range query over two world-space endpoints; no radius filter)
 void __thiscall cHierGrid::QuerySegment(float* p0, float* p1)
 {
-    float x0 = p0[0], y0 = p0[1], z0 = p0[2];
-    float x1 = p1[0], y1 = p1[1], z1 = p1[2];
-    float ox = mOriginX, oy = mOriginY, oz = mOriginZ;
+    float x0 = p0[0] - mOriginX;
+    float y0 = p0[1] - mOriginY;
+    float z0 = p0[2] - mOriginZ;
+    float x1 = p1[0] - mOriginX;
     int level = mTopLevel;
     if (level > mLeafLevel)
         return;
+    float y1 = p1[1] - mOriginY;   // read after the level test, as the retail code does
+    float z1 = p1[2] - mOriginZ;
     int off = level * 0x44;
     for (;;) {
         cGrid* grid = (cGrid*)((char*)mGridBegin + off);
@@ -303,12 +318,12 @@ void __thiscall cHierGrid::QuerySegment(float* p0, float* p1)
             float inv = grid->mInvCellSize;
             float cr = grid->mCellRadius;
             unsigned n = 1u << level;
-            int minx = (int)((x0 - ox - cr) * inv);
-            int maxx = (int)((x1 - ox + cr) * inv);
-            int miny = (int)((y0 - oy - cr) * inv);
-            int maxy = (int)((y1 - oy + cr) * inv);
-            int minz = (int)((z0 - oz - cr) * inv);
-            int maxz = (int)((z1 - oz + cr) * inv);
+            int minx = (int)((x0 - cr) * inv);
+            int maxx = (int)((x1 + cr) * inv);
+            int miny = (int)((y0 - cr) * inv);
+            int maxy = (int)((y1 + cr) * inv);
+            int minz = (int)((z0 - cr) * inv);
+            int maxz = (int)((z1 + cr) * inv);
             unsigned umask = ~(n - 1);
             if ((umask & ((unsigned)maxz | (unsigned)minz | (unsigned)maxy | (unsigned)miny | (unsigned)maxx | (unsigned)minx)) != 0) {
                 if (((unsigned)minx & umask) != 0) minx = 0;
@@ -344,12 +359,12 @@ void __thiscall cHierGrid::QuerySegment(float* p0, float* p1)
                 }
             }
             if (any == 0)
-                break;
+                return;               // no child cells below this one: nothing deeper to visit
         }
         level++;
         off += 0x44;
         if (level > mLeafLevel)
-            break;
+            return;
     }
 }
 
@@ -454,11 +469,11 @@ void __thiscall cHierGrid::Query3(float* p0, float* p1, float r)
     float sz = p0[2] - mOriginZ;
     float dx = (p1[0] - mOriginX) - sx;
     float dy = (p1[1] - mOriginY) - sy;
-    float ez = p1[2] - mOriginZ;
-    float dz = ez - sz;
     int level = mTopLevel;
     if (level > mLeafLevel)
         return;
+    float ez = p1[2] - mOriginZ;   // read after the level test, as the retail code does
+    float dz = ez - sz;
     int off = level * 0x44;
     do {
         cGrid* grid = (cGrid*)((char*)mGridBegin + off);
