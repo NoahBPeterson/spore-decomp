@@ -41,7 +41,10 @@ struct cCivilization {
 
 struct cCity;
 struct cCivNoun {
-    char     pad0[0x108];
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09)
+    PV(0a) PV(0b) PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12)
+    virtual int Vf4c();                                            // +0x4c
+    char     pad0[0x104];
     cSPTimer mTimer108;                                            // +0x108
     char     pad10c[0x128 - 0x10c];
     cSPTimer mTimer128;                                            // +0x128
@@ -53,6 +56,11 @@ struct cCivNoun {
     void Fbf0330(cCity* city);                                     // 0x00bf0330
     void Fbef8c0();                                                // 0x00bef8c0 (mTimer108.Restart)
     Vector3 mPosC4();                                              // placeholder
+    float Fbf0640();                                               // 0x00bf0640
+    float Fbf06d0();                                               // 0x00bf06d0
+    float GetMoney();                                              // 0x00bef6d0
+    void  SpendMoney(float amount);                                // 0x00bef710
+    void  FcivicRadiusAccum(float f, int n);                       // 0x00befd80
 };
 struct cCivNounPos {            // the +0xc4 position of a noun
     char    pad[0xc4];
@@ -95,15 +103,52 @@ struct cVehicle {
     char           pad4[0x30];
     cSpatialObject mLoco;                                          // +0x34
     char           pad38[0x2a4 - 0x38];
-    uint8_t        mPathFlags;                                     // +0x2a4
-    char           pad2a5[0x508 - 0x2a5];
+    union {
+        uint8_t    mPathFlags;                                     // +0x2a4
+        uint32_t   mPathFlags32;
+    };
+    char           pad2a8[0x508 - 0x2a8];
     cGameData      mGameData;                                      // +0x508
 
     CityRef* Fca71d0();                                            // 0x00ca71d0
     void Fca7250(const char* msg);                                 // 0x00ca7250
     void Fcaa900();                                                // 0x00caa900
     void Fcac000(cCity* city, int a, int b);                       // 0x00cac000
+    void Fcacbe0();                                                // 0x00cacbe0
     void Fca80e0(int n);                                           // 0x00ca80e0
+};
+
+void __cdecl AttemptRepark(cVehicle* v);                            // 0x00dc9430
+
+// The object returned by cCity::Cast(0x403df5f): a community whose spatial
+// interface sits at +0x34 (rather than the cCity +0x120 layout).
+struct cCommunitySpatial {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
+    virtual Vector3* GetPoint(float f, int n);                     // +0x2c
+    PV(0c) PV(0d)
+    virtual void SetPosition(const Vector3& pos);                  // +0x38
+    PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
+    virtual bool IsPlayerControlled();                             // +0x58
+};
+
+struct cCommunity {
+    PV(00) PV(01) PV(02)
+    virtual cCommunity* Cast(uint32_t typeID);                     // +0x0c
+    PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b)
+    PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12)
+    virtual int Vf4c();                                            // +0x4c
+    char pad4[0x30];
+    cCommunitySpatial mSpatial;                                    // +0x34
+    cCivNoun* GetNoun();                                           // 0x00bfdf80
+};
+
+struct cPathArcBuilder {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09)
+    PV(0a) PV(0b) PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11)
+    virtual void SetCiv(int civ);                                  // +0x48
+    char pad4[0x30];
+    cCommunitySpatial mSpatial;                                    // +0x34
+    void Start(cCivNoun* civ, cCommunity* city, const Vector3* pos, float speed, int flag);  // 0x00cbe640
 };
 
 struct cCivNounMgr {
@@ -111,9 +156,11 @@ struct cCivNounMgr {
 };
 struct cGameNounManager {
     cCivNoun* Fb25f40(int nounID);                                 // 0x00b25f40
+    cPathArcBuilder* Fbfe7a0();                                    // 0x00bfe7a0
 };
 struct cRelationshipManager {
     float Fd00d60(cCivilization* civ, cCivNoun* noun, int n);      // 0x00d00d60
+    float RecordEvent(int a, int b, int id, float value);          // 0x00d06240
 };
 struct cScoreTable {
     float Fceee30(cCity* city, cCivNoun* noun);                    // 0x00ceee30
@@ -125,6 +172,7 @@ struct cStarRecord {
     char pad[0x184];
     int  mCommContext;                                             // +0x184
     int  GetCommContext();                                         // 0x00ce6950
+    int  GetCommContext(uint32_t id, uint32_t group, int mode);    // 0x00ce6950
 };
 struct cPlanet {
     char         pad[0x13c];
@@ -132,6 +180,7 @@ struct cPlanet {
 };
 struct cCommManager {
     void ShowCommEvent(cCity* a, cCity* b, int ctx, uint32_t id, uint32_t grp, int e);   // 0x00aeb760
+    void ShowCommEvent(cCivNoun* noun, int a, int ctx);                                  // 0x00aeb760
 };
 struct cSomething {
     void Fae37c0(int n, Vector3 pos);                              // 0x00ae37c0
@@ -157,6 +206,7 @@ extern cCommManager*      __cdecl CommManager();                   // 0x00b3d4a0
 extern cStrategy*         __cdecl CivModeStrategy();               // 0x00cf74c0
 extern cSomething*        __cdecl Fb26930();                       // 0x00b26930
 extern cPlanet*           __cdecl GetActivePlanet();               // 0x01021260
+extern void*              __cdecl GetCurrentGameMode();            // 0x00b5b800
 extern void __cdecl PlayEffectAt(uint32_t id, Vector3 pos);        // 0x00dc4560
 extern bool __cdecl StandardVehicleMoveTick(cVehicle* v);          // 0x00dc95b0
 
@@ -164,6 +214,8 @@ struct TradeMem {
     int     mState;        // 0 heading to city, 1 at city
     float   mTime;
     bool    mFlag8;
+    char    pad9[3];
+    int     mFieldC;       // selects the mineral / relationship branch at state 1
 };
 
 static __forceinline bool Fail(cVehicle* self, const char* msg)
@@ -302,6 +354,98 @@ bool EstablishTradeRouteOrder_Tick(cVehicle* self, int, int, int, int, TradeMem*
         }
     }
     return Fail(self, "(32) TR: bad city");
+}
+
+// @ 0x00dca7b0
+bool OfferToBuyCityOrder_Tick(cVehicle* self, int, int, int, int, TradeMem* mem, int, float)
+{
+    bool bGameMode = (GetCurrentGameMode() == (void*)0x1654c04);
+
+    if (self->mPathFlags & 8)
+        return Fail(self, "(36) BC: path failure");
+
+    cGameData* gd = &self->mGameData;
+    cCivNoun* civNoun = NounManager()->Fb25f40(gd->GetNounID());
+    (void)gd->GetNounID();
+
+    CityRef* ref = self->Fca71d0();
+    cCity* city = ref->mpCity;
+    if (city) {
+        cCommunity* comm = (cCommunity*)city->Cast(0x403df5f);
+        if (comm) {
+            int selfVf4c = self->Vf4c();
+            if (comm->Vf4c() != selfVf4c && comm->Vf4c() != -1) {
+                (void)comm->mSpatial.IsPlayerControlled();
+                if (bGameMode)
+                    (void)self->mLoco.IsPlayerControlled();
+
+                switch (mem->mState) {
+                case 0:
+                    if (self->mLoco.IsNearGoal()) {
+                        mem->mTime = 0.0f;
+                        mem->mState = 1;
+                        return true;
+                    }
+                    if (!StandardVehicleMoveTick(self))
+                        return Fail(self, "(37) BC: move failure");
+                    return true;
+
+                case 1:
+                    if (mem->mFieldC == 0) {
+                        float cost = civNoun->Fbf0640();
+                        if (cost > civNoun->GetMoney())
+                            return Fail(self, "(39a) BC: not enough money");
+                        comm->GetNoun()->FcivicRadiusAccum(cost, 0);
+                        civNoun->SpendMoney(cost);
+
+                        cStarRecord* star = GetActivePlanet()->mpStarRecord;
+                        int ctx = star->GetCommContext(0xdbf385bf, 0x4ce5b975, 0);
+                        CommManager()->ShowCommEvent(comm->GetNoun(), 0, ctx);
+
+                        cPathArcBuilder* builder = NounManager()->Fbfe7a0();
+                        builder->SetCiv(civNoun->Vf4c());
+                        builder->mSpatial.SetPosition(self->mLoco.GetPosition());
+                        Vector3* p = comm->mSpatial.GetPoint(20.0f, 1);
+                        builder->Start(civNoun, comm, p, 20.0f, 1);
+                        return Fail(self, "(40a) BC: normal completion");
+                    } else {
+                        float cost = civNoun->Fbf06d0();
+                        if (cost > civNoun->GetMoney())
+                            return Fail(self, "(39b) BC: not enough money");
+                        civNoun->SpendMoney(cost);
+                        (void)RelationshipManager()->RecordEvent(comm->Vf4c(), civNoun->Vf4c(), 0x526e4fb, 1.0f);
+
+                        cPathArcBuilder* builder = NounManager()->Fbfe7a0();
+                        builder->SetCiv(civNoun->Vf4c());
+                        builder->mSpatial.SetPosition(self->mLoco.GetPosition());
+                        Vector3* p = comm->mSpatial.GetPoint(20.0f, 1);
+                        builder->Start(civNoun, comm, p, 20.0f, 1);
+                        return Fail(self, "(40b) BC: normal completion");
+                    }
+
+                default:
+                    return Fail(self, "(41) BC: unknown exit");
+                }
+            }
+        }
+    }
+    return Fail(self, "(38) BC: bad mineral");
+}
+
+// @ 0x00dcaad0
+bool MoveToPointOrder_Tick(cVehicle* self)
+{
+    if (self->mPathFlags32 & 2)
+        AttemptRepark(self);
+    else if (self->mPathFlags32 & 4)
+        self->Fcacbe0();
+
+    if (self->mLoco.IsNearGoal()) {
+        self->Fca7250("(43) MTP: normal completion");
+        self->Fcaa900();
+        return false;
+    }
+    return true;
 }
 
 }}
