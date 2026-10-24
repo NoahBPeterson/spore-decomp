@@ -1,12 +1,12 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
 00f02160  1003  update dispatcher: 4-way window-message state dispatch; branch/register schedule differs throughout (equiv WEAK 344/400 valid, 11.7% cov)
-00f02670  158  init: temp V4 ctor/assign/dtor scheduling and vtable+0x18 call differ
+00f02670  158  init: temp V4 ctor/assign/dtor scheduling and vtable+0x18 call differ; default PASS 380/88.1%, replay PASS
 00f02700  680  build: plane ctor + App::v58 + planet query + SSE quaternion product + slot 0x38/0x3c schedule differs (equiv UNSUPPORTED 0/400 valid: original faults on uninitialised reads)
 00f02a10  143  message switch: jump-table layout and case block ordering differ (equiv PASS 375/400 valid, 83.3% cov)
 00f02b00  46   update gate: FUN_0067dd10 chain + g_mgr branch/tail-jmp schedule differs
 00f02b80  81   ctor: Stopwatch arg setup hoisted above the zero-store block by cl
 00f02c50  52   update gate (variant): FUN_00f02160/FUN_00f01c20 branch + tail-jmp schedule
-00f02cd0  64   ctor: operator_new literal string argument not relocation-masked; ctor schedule
+00f02cd0  64   ctor: operator_new literal string argument not relocation-masked; ctor schedule; default PASS 344/77.4%, replay PASS
 00f02dd0  8    singleton teardown: `this` register choice (ecx vs esi) differs
 00f02e00  381  scene build: window path + VecBox temp schedule differs (equiv WEAK 400/400 valid, 5.4% cov)
 00f03010  16   list dtor: outer/inner callee-saved register swap (edi<->esi) only (equiv PASS 260/400 valid, 100% cov)

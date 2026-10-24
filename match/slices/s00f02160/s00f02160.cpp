@@ -20,7 +20,7 @@ extern float   g_f16c7ba0;        // 0x016c7ba0
 extern "C" void* __cdecl operator_new6(unsigned, const char*, int, int, const char*, int); // 0xf473a0
 extern "C" void  __cdecl operator_delete_(void*);          // 0x00f47380
 extern "C" void* __cdecl FUN_0067dd10();                    // 0x0067dd10  SP::App
-extern "C" void  __cdecl FUN_00f31fd0(void*);               // 0x00f31fd0
+extern "C" void* __fastcall FUN_00f31fd0(void* self, int dummy); // 0x00f31fd0
 extern "C" void* __cdecl FUN_00eebf80(void*);               // 0x00eebf80
 extern "C" void* __cdecl FUN_00b18e00(void*);               // 0x00b18e00
 extern "C" void* __cdecl FUN_00b3d350();                    // 0x00b3d350  SP::PlanetModel
@@ -264,8 +264,8 @@ PL* PL::ctor_2cd0()
     *(void**)((char*)self + 0x10) = 0;
     void* m = operator_new6(0x10, (const char*)0x148b76c, 0, 0, 0, 0);
     if (m) {
-        FUN_00f31fd0(m);
-        *(void**)((char*)self + 0xc) = m;
+        void* v = FUN_00f31fd0(m, 0);
+        *(void**)((char*)self + 0xc) = v;
     } else {
         *(void**)((char*)self + 0xc) = 0;
     }
@@ -310,20 +310,19 @@ void PL::f02670()
     b6 = 0;
     b7 = 0;
     V4 tmp;
-    tmp.p0 = 0; tmp.f4 = 0; tmp.f8 = 0; tmp.fC = 0;
-    FUN_00f31fd0(&tmp);
+    V4* t = (V4*)FUN_00f31fd0(&tmp, 0);
     V4* dst = pC;
     void* old = dst->p0;
-    void* nw = tmp.p0;
+    void* nw = t->p0;
     if (nw != old) {
         if (nw) ((Ref*)nw)->v0();
         dst->p0 = nw;
         if (old) ((Ref*)old)->v4();
     }
-    dst->f4 = tmp.f4;
-    dst->f8 = tmp.f8;
-    dst->fC = tmp.fC;
-    if (tmp.p0) ((Ref*)tmp.p0)->v4();
+    dst->f4 = t->f4;
+    dst->f8 = t->f8;
+    dst->fC = t->fC;
+    if (t->p0) ((Ref*)t->p0)->v4();
 }
 
 // @ 0x00f02b00
