@@ -1,0 +1,4 @@
+00899ae0 Vec8::DoInsertValueN  # Claude-coined: eastl vector<T8>::DoInsertValue(position, count, value) - 8-byte text-run elements
+00899e10 Vec16::DoInsertValueN  # Claude-coined: eastl vector<E16>::DoInsertValue(position, count, value) - 16-byte expanded-run elements
+00899fb0 Vec12::InsertRange  # Claude-coined: eastl vector<AnalysisInfo>::insert(position, first, last) - 12-byte text analysis records
+0089a1b0 Vec8Range::InsertRange  # Claude-coined: eastl vector<GlyphInfo*>::insert(position, first, last) - 8-byte pointer elements
