@@ -5,4 +5,4 @@
 00667ac0 ?FUN_00667ac0@FeedItem@@QAEXXZ  # FeedItem::FUN_00667ac0 migrated from s00666cb0 (verbatim, slice spelling)
 00667ae0 ?FUN_00667ae0@FeedItem@@QAEXXZ  # FeedItem::FUN_00667ae0 migrated from s00666cb0 (verbatim, slice spelling)
 00667b00 ?OnLeftMouseDown@cSPUIFeedListItem@SP@@QAEXXZ  # SP::cSPUIFeedListItem::OnLeftMouseDown migrated from s00666cb0
-00667c40 ?FUN_00667c40@@YGXPAPAX@Z  # FUN_00667c40 migrated from s00666cb0 (verbatim, slice spelling)
+00667c40 ?assignPair@WString@@QAEXPAPAX@Z  # WString::assignPair (was FUN_00667c40); thiscall preserves incoming ecx

@@ -111,7 +111,10 @@ void  __cdecl EASTL_allocator_deallocate(void* p);            // 0x00f47380
 void  __cdecl FUN_00571db0(void* h, void* a, void* b, void* c, void* d); // RemoveHandler
 void* __cdecl EA_Audio_GetSystemAT();                         // 0x00a206f0
 void* __cdecl SP_MessageServer();                             // 0x0067dcc0
-void  __stdcall WString_Assign(void* a, void* b);             // 0x00423650
+struct WString {
+    void assign(const void* b, const void* e);   // 0x00423650
+    void assignPair(void** p);                   // 0x00667c40
+};
 struct P184Obj { void FUN_00829160(int v); };      // 0x00829160
 struct FeedItem {
     void       FUN_00666cb0();
@@ -146,14 +149,13 @@ struct FeedItem_s0066_8be0 {
     void FUN_00669410();
 };
 struct Item { int a; int b; int c; void* d; };
-struct Vec4 { void* begin; void* end; void* cap; };
+struct Vec4 { void* begin; void* end; void* cap; void reserve(int count, void* p); };
 struct Obj9360 {
     void* vt;        // +0x00
     Vec4  v;         // +0x04
     char  pad10[8];  // +0x10
     void* m18;       // +0x18
     Obj9360* init(int p2, Vec* p3);
-    void reserve(int count, void* p);   // 0x004aa350
 };
 // ---- items of slice s00668be0 end
 
@@ -689,11 +691,9 @@ void SP::cSPUIFeedListItem::OnLeftMouseDown()
 }
 
 // @ 0x00667c40
-void __stdcall FUN_00667c40(void** p)
+void WString::assignPair(void** p)
 {
-    void* b = p[1];
-    void* a = p[0];
-    WString_Assign(a, b);
+    assign(p[0], p[1]);
 }
 
 // @ 0x00668be0
@@ -794,7 +794,7 @@ Obj9360* Obj9360::init(int p2, Vec* p3)
 {
     vt = &gVt14002a8;
     int count = (int)((char*)p3->end - (char*)p3->begin) >> 2;
-    reserve(count, (char*)p3 + 0xc);
+    v.reserve(count, (char*)p3 + 0xc);
     int nbytes = (int)((char*)p3->end - (char*)p3->begin);
     void* r = DoInsertValue0066(v.begin, p3->begin, nbytes);
     v.end = (char*)r + (nbytes >> 2) * 4;

@@ -3,3 +3,4 @@ slices/s00666cb0/s00666cb0.cpp  FUN_006676b0  006676b0  /O2 /MD /Gy /TP /arch:SS
 slices/s00666cb0/s00666cb0.cpp  FUN_006678f0  006678f0  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00666cb0/s00666cb0.cpp  FUN_00667ac0  00667ac0  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00666cb0/s00666cb0.cpp  FUN_00667ae0  00667ae0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00666cb0/s00666cb0.cpp  ?assignPair@WString@@QAEXPAPAX@Z  00667c40  /O2 /MD /Gy /TP /arch:SSE /GS-

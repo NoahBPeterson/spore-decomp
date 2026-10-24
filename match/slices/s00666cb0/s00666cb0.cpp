@@ -25,7 +25,10 @@ void  __cdecl FUN_00571db0(void* h, void* a, void* b, void* c, void* d); // Remo
 void* __cdecl EA_Audio_GetSystemAT();                         // 0x00a206f0
 void* __cdecl SP_MessageServer();                             // 0x0067dcc0
 void  __cdecl SlotMessage_Destruct(void* self);               // 0x00421cf0
-void  __stdcall WString_Assign(void* a, void* b);             // 0x00423650
+struct WString {
+    void assign(const void* b, const void* e);   // 0x00423650
+    void assignPair(void** p);                   // 0x00667c40
+};
 float __cdecl FUN_004e1c70(void* a, unsigned key, float v);   // 0x004e1c70 GetPropertyT<float>
 
 class cSPUILayout { public:
@@ -443,8 +446,6 @@ void FeedItem::FUN_00667b00() {
 }
 
 // @ 0x00667c40
-void __stdcall FUN_00667c40(void** p) {
-    void* b = p[1];
-    void* a = p[0];
-    WString_Assign(a, b);
+void WString::assignPair(void** p) {
+    assign(p[0], p[1]);
 }
