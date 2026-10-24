@@ -1,0 +1,9 @@
+011f0840 rw::graphics::ActiveState::Initialize  # global initialiser, returns 1; zeros/fills the D3D9 soft-state mirror
+011f0fc0 rw::graphics::ActiveState::Reset  # fills render/texture-stage/sampler shadows with 0xcdcdcdcd, clears raster/lights/colour/ambient
+011f1130 rw::graphics::ActiveState::FindLights  # buckets the 8 light slots by their first dword into m_lightsArray..m_lightsArray4
+011f1210 rw::graphics::ActiveState::CheckUVMapping  # builds m_UVUsed mask + m_numUsedUV from m_UVMapping[17], sets soft-state bit 0x100000 on change
+011f1280 rw::graphics::ActiveState::SetTexture  # stores m_rasterShadow[stage] and calls IDirect3DDevice9 vtbl 0x104 (SetTexture); unbinds when null
+011f12e0 FUN_011f12e0  # SetTexture without the shadow compare; sets m_softStateUpdated |= 0x400000 then binds/unbinds
+011f1340 rw::graphics::GlobalState::SetBlendMode  # byte-exact; 0x10002 -> default, else split src/dst and mark m_renderStateDirty
+011f13a0 rw::graphics::GlobalState::GetBlendMode  # byte-exact; returns 0x10002 when default, else (m_blendModeDst << 16) | m_blendModeSrc
+011f13c0 rw::graphics::GlobalState::D3D9InitializeBitShiftTable  # lazy fill of rwgD3D9BitShiftTable[256] with trailing-zero shift
