@@ -1,2 +1,16 @@
 # va        diff-bytes  reason
 00f28b30  50  complete; constructor store scheduling / this-register choice differs
+00f28680  207  complete; serialize wrapper around FUN_00f26770 (L"cScenarioGoal"); size 188 vs 256; equiv FAIL (eax upper bits, byte return)
+00f28780  207  complete; serialize wrapper around FUN_00f26810 (L"cScenarioClassAct"); size 188 vs 256; equiv FAIL (eax upper bits, byte return)
+00f28880  278  complete; cString group writer (BeginGroup/SetValue/EndGroup); size 272 vs 327; equiv FAIL (eax upper bits)
+00f289d0  292  complete; cScenarioDialog wrapper around 00f28880; size 292 vs 338; equiv FAIL (eax upper bits)
+00f28b80  95  complete; BigObj::fn28b80 cString get-vs-assign; size 132 vs 137; equiv FAIL (eax upper bits)
+00f28c50  293  complete; cVarListSerializer Read + cString rebuild; size 241 vs 131; equiv UNSUPPORTED (0 valid inputs, fault(read))
+00f28ce0  209  complete; cVarListSerializer over 0x238-stride array; size 249 vs 226; equiv UNSUPPORTED (0 valid inputs)
+00f28dd0  89  complete; Vec38::erase (0x38-stride); size 112 vs 110; equiv WEAK (126 valid, no mismatch)
+00f28e40  477  complete; Vec38::insert (0x38-stride); size 522 vs 494; equiv WEAK (no mismatch)
+00f29030  280  complete; Vec38::insertOne (0x38-stride); size 324 vs 320; equiv WEAK (no mismatch)
+00f29170  208  complete; Vec18::DoInsertSlow (0x18-stride); size 334 vs 329; equiv WEAK (no mismatch)
+00f292c0  16  complete; E34 0x34-stride fill (7 floats + vector + dword); size equal; equiv WEAK (150 valid, 100% cov, no mismatch)
+00f29330  101  complete; E34 0x34-stride copy (7 floats + vector + dword); size 115 vs 116; equiv UNSUPPORTED (0 valid inputs)
+00f29410  283  complete; cScenarioDialog list serializer; size 257 vs 326; equiv FAIL (eax upper bits)
