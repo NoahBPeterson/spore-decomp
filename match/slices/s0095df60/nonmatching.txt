@@ -7,4 +7,4 @@
 0095ea30  4    Mat4::Scale: operand order of the first mulss pairs
 0095eb00  246  Mat4::RotateX: original loads all column values to locals before fsin/fcos
 0095ec30  237  Mat4::RotateY: same local-spill pattern
-0095ed60  222  Mat4::RotateZ: same local-spill pattern
+0095ed60  202  FIXED: /fp:fast gives inline x87 fsin/fcos; a volatile pad forces a 0x24 frame so the compiler does not reuse the saved ecx slot for a float spill; default PASS (400 valid, 100% coverage), replay first-difference None; size 210 vs 222

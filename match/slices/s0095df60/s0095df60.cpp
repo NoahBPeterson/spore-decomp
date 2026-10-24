@@ -211,6 +211,8 @@ void Mat4::RotateY(float a)
 // @ 0x95ed60
 void Mat4::RotateZ(float a)
 {
+    volatile float pad[8];
+    pad[0] = a;
     if (flags < 2) flags = 2;
     float f4 = m[4];
     float sn = (float)sin((double)a);
