@@ -185,6 +185,7 @@ public:
     float   GetWaterHeight();                                                  // 0x00b7e390
     Vector3 GetSurfaceNormal(const Vector3& pos);                              // 0x00b7e3b0
     Vector3 MakeRandomWorldPosition(const Vector3& pos, float minDist, float maxDist);   // 0x00b81780
+    Vector3 DirectionToSurfacePosition(const Vector3& dir);                     // 0x00b815a0
 };
 
 class cSpotGrid {
@@ -296,4 +297,231 @@ int FUN_00b9b090(const void* context, uint32_t* ids, uint32_t count, uint32_t in
         }
     }
     return placed;
+}
+
+// =======================================================================================
+// FUN_00b9bb40: place one city described by a CityInfo (called by 0xb9c5b0 through the
+// wrapper's +0x30 pointer).  Removes the old noun, rebuilds the surface position and the
+// city object, and either registers a spawn marker + starts the city effect (in civ mode,
+// or when the old city was already placed) or feeds a zeroed marker to the spawn callback.
+// =======================================================================================
+
+typedef unsigned int size_t;
+inline void* operator new(size_t, void* p) { return p; }
+void* operator new(size_t size, const char* name, int flags, unsigned debugFlags,
+                   const char* file, int line);
+
+// 3x3 matrix whose out-of-line copy constructor is 0x0041cb40; assignment is the implicit
+// memberwise copy (the retail code copies the 36 bytes inline).
+struct Matrix3Copy {
+    float m[3][3];
+    __forceinline Matrix3Copy() {}
+    Matrix3Copy(const Matrix3Copy& other);   // 0x0041cb40
+};
+
+// Quaternion with the float-wise copy constructor the retail build used (movss copies).
+struct QuatSP {
+    float x, y, z, w;
+    __forceinline QuatSP() {}
+    __forceinline QuatSP(const QuatSP& o) : x(o.x), y(o.y), z(o.z), w(o.w) {}
+};
+
+extern Vector3     g_ZeroVector;         // 0x0168889c
+extern Matrix3Copy g_IdentityMatrix3;    // 0x01688958
+extern float       g_DefaultSurface[4];  // 0x0156bfe0
+
+struct cSPTransform {
+    uint16_t    mFlags;              // +0x00
+    uint16_t    mModificationCount;  // +0x02
+    Vector3     mTranslation;        // +0x04
+    float       mScale;              // +0x10
+    Matrix3Copy mRotation;           // +0x14
+
+    __forceinline cSPTransform()
+        : mFlags(0), mModificationCount(0), mTranslation(g_ZeroVector), mScale(1.0f),
+          mRotation(g_IdentityMatrix3)
+    {
+    }
+    __forceinline void SetTranslation(Vector3 v)
+    {
+        mTranslation = v;
+        mFlags |= 4;
+        mModificationCount++;
+    }
+    __forceinline void SetRotation(const Matrix3Copy& m)
+    {
+        mRotation = m;
+        mFlags |= 2;
+        mModificationCount++;
+    }
+};
+
+Matrix3Copy* QuaternionToMatrixSP(Matrix3Copy* dst, const QuatSP* q);   // 0x004a9b40
+
+// Marker payload (cGameplayMarkerView::tMarker): +0x34 is reused here for the city object.
+struct tMarker {
+    int     mId;            // +0x00
+    Vector3 mPosition;      // +0x04
+    void*   mpUnk10;        // +0x10
+    void*   mpOrientation;  // +0x14
+    void*   mpArgument;     // +0x18
+    int     mUnk1c;         // +0x1c
+    float   mSurface[4];    // +0x20
+    int     mStyle;         // +0x30
+    void*   mpCity;         // +0x34
+    int     mUnk38;         // +0x38
+};
+
+void FUN_00b90c50(tMarker* marker);   // 0x00b90c50
+
+struct CityInfo {
+    int        mPoliticalID;   // +0x00
+    Vector3    mPosition;      // +0x04
+    QuatSP     mOrientation;   // +0x10
+    int        mContinent;     // +0x20
+    bool       mbPlaced;       // +0x24
+    bool       mb25;           // +0x25
+    uint8_t    pad26[2];       // +0x26
+    int        mTerrainKind;   // +0x28
+    uint32_t   pad2c;          // +0x2c
+    bool       mb30;           // +0x30
+    bool       mbNearWater;    // +0x31
+    uint8_t    pad32[2];       // +0x32
+    int        mStyle;         // +0x34
+    void*      mpNoun;         // +0x38
+    int        mEmpireID;      // +0x3c
+
+    void* GetNoun();           // 0x00a1ad10  (returns this->mpNoun)
+    void  SetNoun(void* p);    // 0x00ae38f0  (ref-counted assignment)
+};
+
+struct cGameNounManager { void RemoveNoun(void* noun); };   // 0x00b225d0
+
+// Vtable-only views used for the ownership probe in the prologue.
+#define VIRT(n) virtual void v##n();
+struct INounVtbl {
+    VIRT(00) VIRT(04) VIRT(08) VIRT(0c) VIRT(10) VIRT(14) VIRT(18) VIRT(1c)
+    VIRT(20) VIRT(24) VIRT(28) VIRT(2c) VIRT(30) VIRT(34) VIRT(38) VIRT(3c)
+    VIRT(40) VIRT(44) VIRT(48) VIRT(4c) VIRT(50) VIRT(54) VIRT(58) VIRT(5c)
+    VIRT(60) VIRT(64) VIRT(68) VIRT(6c) VIRT(70) VIRT(74) VIRT(78) VIRT(7c)
+    VIRT(80) VIRT(84) VIRT(88) VIRT(8c) VIRT(90) VIRT(94) VIRT(98) VIRT(9c)
+    VIRT(a0) VIRT(a4) VIRT(a8)
+    virtual void* GetSub();   // +0xac
+};
+struct ISubVtbl {
+    VIRT(00) VIRT(04) VIRT(08) VIRT(0c) VIRT(10) VIRT(14) VIRT(18) VIRT(1c)
+    VIRT(20) VIRT(24) VIRT(28) VIRT(2c) VIRT(30) VIRT(34) VIRT(38) VIRT(3c)
+    VIRT(40) VIRT(44)
+    virtual bool Check();     // +0x48
+};
+#undef VIRT
+
+class cCivModeStrategy { public: void CheckEvents(); };   // 0x00cf9ba0
+cCivModeStrategy* GetCivModeStrategy();                   // 0x00cf74c0
+
+struct cTriggerMgr { uint8_t pad[0x2c]; int mMode; };
+cTriggerMgr* GetTriggerMgr();                             // 0x00b3d4d0
+
+struct IManager {
+    virtual void f0(); virtual void f4(); virtual void f8(); virtual void fc();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28();
+    virtual bool GetEntry(uint32_t key, int a, void* value);   // +0x2c
+};
+IManager* EffectsManager();                               // 0x0067ddd0
+
+struct IEffect {
+    virtual void f0();             // +0x00
+    virtual void Release();        // +0x04
+    virtual void SetFlag0(int);    // +0x08
+    virtual void fc();             // +0x0c
+    virtual void f10();            // +0x10
+    virtual void f14();            // +0x14
+    virtual void SetTransform(void*);  // +0x18
+};
+
+class SimSingleton {
+public:
+    uint8_t pad[0xc8];
+    SimSingleton();   // 0x00ae5c30
+    tMarker* AddMarker(void* callback, int empire, const Vector3* pos, int kind,
+                       uint32_t typeID, CityInfo* info, const QuatSP* orient, int flag);   // 0x00ae49d0
+    static SimSingleton* sInstance;   // 0x0167a60c
+    __forceinline static SimSingleton* Get()
+    {
+        if (!sInstance)
+            sInstance = new("Simulator/SimSingleton", 0, 0, 0, 0) SimSingleton();
+        return sInstance;
+    }
+};
+
+void*       FUN_00b998a0(CityInfo* info);   // 0x00b998a0 (create the city object)
+uint32_t    FUN_00bef920(int terrainKind);  // 0x00bef920
+uint32_t    FUN_00bebc90(int a, int style); // 0x00bebc90
+
+// @ 0x00b9bb40
+void FUN_00b9bb40(CityInfo* info)
+{
+    bool flag = false;
+    void* noun = info->GetNoun();
+    if (noun) {
+        void* sub = ((INounVtbl*)noun)->GetSub();
+        if (sub && ((ISubVtbl*)((char*)sub + 0x34))->Check())
+            flag = true;
+        ((cGameNounManager*)NounManager())->RemoveNoun(noun);
+        info->SetNoun(0);
+    }
+
+    uint32_t type = FUN_00bebc90(FUN_00bef920(info->mTerrainKind), info->mStyle);
+    int kind = info->mbNearWater ? ((info->mb25 == 0) + 2) : (info->mb25 == 0);
+
+    Vector3 pos = info->mPosition;
+    info->mPosition = PlanetModel()->DirectionToSurfacePosition(pos);
+    QuatSP orient = info->mOrientation;
+
+    void* city = FUN_00b998a0(info);
+
+    GetCivModeStrategy()->CheckEvents();
+    int mode = GetTriggerMgr()->mMode;
+    if (mode == 1 || mode == 2 || flag) {
+        Vector3 markerPos = info->mPosition;
+        tMarker* marker = SimSingleton::Get()->AddMarker(
+            (void*)FUN_00b90c50, info->mEmpireID, &markerPos, kind, type, info, &orient, 0);
+        marker->mpCity = city;
+
+        IManager* mgr = EffectsManager();
+        void* effect = 0;
+        if (effect != 0) {
+            effect = 0;
+            ((IEffect*)effect)->Release();
+        }
+        if (mgr->GetEntry(0x74bc5e71, 0, &effect)) {
+            cSPTransform transform;
+            transform.SetTranslation(info->mPosition);
+            Matrix3Copy rot;
+            transform.SetRotation(*QuaternionToMatrixSP(&rot, &orient));
+            ((IEffect*)effect)->SetTransform(&transform);
+            ((IEffect*)effect)->SetFlag0(0);
+        }
+        if (effect != 0)
+            ((IEffect*)effect)->Release();
+    } else {
+        tMarker marker;
+        marker.mId = -1;
+        marker.mPosition.x = 0.0f;
+        marker.mPosition.y = 0.0f;
+        marker.mPosition.z = 0.0f;
+        marker.mpUnk10 = 0;
+        marker.mpOrientation = 0;
+        marker.mpArgument = 0;
+        marker.mUnk1c = 0;
+        marker.mSurface[0] = g_DefaultSurface[0];
+        marker.mSurface[1] = g_DefaultSurface[1];
+        marker.mSurface[2] = g_DefaultSurface[2];
+        marker.mSurface[3] = g_DefaultSurface[3];
+        marker.mStyle = 0;
+        marker.mpCity = city;
+        marker.mUnk38 = 0;
+        FUN_00b90c50(&marker);
+    }
 }
