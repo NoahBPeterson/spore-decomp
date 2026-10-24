@@ -35,12 +35,27 @@ char  __cdecl EA_ParseEnum(int, void*);
 int   __cdecl EA_GetPropertyAsKey(void*, int, void*);
 void  __cdecl EA_cCommandBase_ctor(void*);
 
+// virtual call through the object's vtable: VPTR(ret, obj, byte-offset, argtypes...)(obj, args...)
+#define VPTR(ret, obj, slot, ...) \
+    ((ret (__thiscall*)(void*, __VA_ARGS__))((void**)*(void**)(obj))[(slot) / 4])
+
 // thiscall cArguments
 struct cArguments {
     int  MainArguments(int def);
     int* OptionArguments(const char* name, int n);
     char HasFlag(const char* name);
 };
+// The two overloads the terrain commands actually call (annotated instead of matched by name:
+// the PDB's cArguments::MainArguments for 0x00838020 is the 3-argument internal form).
+struct cArguments3 {
+    int* MainArgsThree(int* out, int a, int b);   // 0x00838020 (thiscall, ret 0xc)
+};
+struct cArguments1 {
+    int* MainArgsOne(int def);                    // 0x00838320 (thiscall, ret 4)
+};
+// vtables installed by the cTerrainDistributeEffectCommand constructor (0x145fd8c/0x145fd90)
+extern int g_0145fd90;
+extern int g_0145fd8c;
 
 struct cTerrainEditor { void* GetCurrentTerrainSphere(); };
 
@@ -107,12 +122,11 @@ void __cdecl FUN_00f62bc0(int writer, int* d) {
 // 0x00f62d80 -- cTerrainDistributeEffectCommand constructor
 // ===========================================================================
 // @ 0x00f62d80
-void __fastcall FUN_00f62d80(int* p) {
+unsigned __fastcall FUN_00f62d80(int* p) {
     float fmax = kFXMaxFloat;
-    p[1] = 0;
+    p[1] = (int)&g_0145fd8c;      // secondary vtable
     p[2] = 0;
-    p[0] = 0;
-    p[1] = 0;
+    p[0] = (int)&g_0145fd90;      // primary vtable
     int* q = p + 4;
     for (int i = 8; i >= 0; i--) {
         q[0] = 0;
@@ -125,6 +139,7 @@ void __fastcall FUN_00f62d80(int* p) {
         q += 0x10;
     }
     p[0x94] = 0; p[0x95] = 0; p[0x96] = 0;
+    return (unsigned)(size_t)p;
 }
 
 // ===========================================================================
@@ -215,15 +230,20 @@ void __fastcall FUN_00f631f0(int self, int dummy, cArguments* args) {
 // @ 0x00f63280
 void __fastcall FUN_00f63280(int self, int dummy, cArguments* args) {
     (void)dummy;
-    int* a = (int*)args->MainArguments(1);
-    int n = 0; (void)a;
-    if (n < 1) { int* pi = (int*)(*(int*)(self + 0x30) + 0xd8); *pi = *pi + 1; }
-    else {
-        int v = (*(int(__cdecl**)(int))(*(void**)((char*)*(int**)(self + 4) + 0x9c)))(*a);
+    int n = 0;
+    int* a = ((cArguments3*)args)->MainArgsThree(&n, 0, 1);
+    if (n > 0) {
+        void* obj = *(void**)(self + 4);
+        int v = VPTR(int, obj, 0x9c, int)(obj, a[0]);
         *(int*)(*(int*)(self + 0x30) + 0xd8) = v;
+    } else {
+        ++*(int*)(*(int*)(self + 0x30) + 0xd8);
     }
     int lvl = *(int*)(*(int*)(self + 0x30) + 0xd8);
-    if (lvl >= -1 && lvl < 5) (*(void(__cdecl**)(int))(*(void**)((char*)*(int**)(self + 4) + 0x8c)))(self);
+    if (lvl >= 0 && lvl < 5) {
+        void* obj = *(void**)(self + 4);
+        VPTR(void, obj, 0x8c, int)(obj, self);
+    }
 }
 
 // ===========================================================================
@@ -250,10 +270,11 @@ void __fastcall FUN_00f632f0(int self, int dummy, cArguments* args) {
 // @ 0x00f63360
 void __fastcall FUN_00f63360(int self, int dummy, cArguments* args) {
     (void)dummy;
-    int a = args->MainArguments(1);
+    int* a = ((cArguments1*)args)->MainArgsOne(1);
+    void* obj = *(void**)(self + 4);
+    float f = VPTR(float, obj, 0x98, int)(obj, a[0]);
     int d = *(int*)(self + 0xc);
-    float f = (float)(*(int(__cdecl**)(int))(*(void**)((char*)*(int**)(self + 4) + 0x98)))(a);
-    *(float*)(d + 0x1c + *(int*)(d + 0xd8) * 0x28) = f;
+    *(float*)(d + *(int*)(d + 0xd8) * 0x28 + 0x1c) = f;
 }
 
 // ===========================================================================

@@ -1,19 +1,10 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
-00f62b70   59  cTerrainDistributeInfo ctor: complete; the SSE constant preload order  [equiv: PASS (400 valid, 100% cov)]
-               (0.1f / kFXMaxFloat / 1.0f) differs from cl's original schedule; declared a non-void
-               return so cl keeps `this` live in eax (ctor return register) instead of 0
-00f62bc0  333  description serializer: complete; the WriteUint32 call schedule and the  [equiv: UNSUPPORTED (unresolved EA_IO_WriteUint32)]
-               element-loop byte reads use a different stack temp layout
-00f62d80  166  effect-command ctor: complete; the vtable stores and the 8x0x40 element  [equiv: FAIL (memory pool mismatch)]
-               init loop are scheduled differently
-00f631e0   17  base init wrapper: complete; the tail call and the [esp+8] store order  [equiv: UNSUPPORTED (orig-abi-broken)]
-               differ
-00f631f0   88  cTDDebugCommand::Execute: complete; HasFlag/vtable call scheduling and  [equiv: UNSUPPORTED (unresolved cArguments::OptionArguments)]
-               the flag masks differ
-00f63280  100  cTDLevelCommand::Execute: complete; the atoi vcall and level-bounds  [equiv: FAIL (execution)]
-               branch schedule differ
-00f632f0  106  cTDDistanceCommand::Execute: complete; the float vcall/store schedule  [equiv: UNSUPPORTED (unresolved cArguments::OptionArguments)]
-               differs
-00f63360   43  cTDFacingCommand::Execute: complete; same float vcall/store schedule  [equiv: FAIL (execution)]
-00f63650  110  SWARM_TerrainDistributeAddCommands: complete; the operator new / command  [equiv: UNSUPPORTED (unresolved operator_new, PTR_s_terrainDistribute)]
-               registration vcall sequence differs
+00f62b70   59  cTerrainDistributeInfo ctor: complete; the SSE constant preload order  [equiv: PASS (400 valid, 100% cov)] (0.1f / kFXMaxFloat / 1.0f) differs from cl's original schedule; declared a non-void return so cl keeps `this` live in eax (ctor return register) instead of 0
+00f62bc0  333  description serializer: complete; the WriteUint32 call schedule and the  [equiv: UNSUPPORTED (unresolved EA_IO_WriteUint32)] element-loop byte reads use a different stack temp layout
+00f62d80  1430  effect-command ctor: complete; the two vtable slots were left as 0 -- they are now the real image addresses (g_0145fd90 / g_0145fd8c, resolved as hex-name data symbols) and the ctor returns `this` in eax again (non-void return, as in 00f62b70). The 9x0x40 element-init loop is still fully unrolled by cl and the scalar float moves go through x87 instead of SSE, so the code is much larger than the original.  [equiv: PASS (400 valid, 100% cov, 46/46 insns)]
+00f63280   94  cTDLevelCommand::Execute: complete; the argument parse was calling the wrong overload -- 0x00838020 is the 3-argument internal form, the 1-argument wrapper is 0x00838320. It is now an annotated thiscall member `MainArgsThree(&n, 0, 1)` whose int* result is dereferenced, the branch tests the written-back count (n > 0), the two virtual calls go through this = *(self+4) with slots 0x9c (level) and 0x8c (apply, arg = self), and the bounds test is 0 <= lvl < 5 (the old -1 lower bound was wrong).  [equiv: PASS (234 valid, 100% cov, 34/34 insns); same body in --src SPTerrainDistributeDescription.cpp (287 valid)]
+00f63360   38  cTDFacingCommand::Execute: complete; same overload fix (annotated 1-argument thiscall wrapper 0x00838320, int* result dereferenced), the virtual call uses slot 0x98 with this = *(self+4) and returns the float in st0 (declared float; it used to be read out of eax as an int), and the store is desc + (*(desc+0xd8))*0x28 + 0x1c.  [equiv: PASS (209 valid with --alias 0.7, 100% cov, 17/17 insns); same body in --src SPTerrainDistributeDescription.cpp (333 valid)]
+00f631e0   17  base init wrapper: complete; the tail call and the [esp+8] store order  [equiv: UNSUPPORTED (orig-abi-broken)] differ
+00f631f0   88  cTDDebugCommand::Execute: complete; HasFlag/vtable call scheduling and  [equiv: UNSUPPORTED (unresolved cArguments::OptionArguments)] the flag masks differ
+00f632f0  106  cTDDistanceCommand::Execute: complete; the float vcall/store schedule  [equiv: UNSUPPORTED (unresolved cArguments::OptionArguments)] differs
+00f63650  110  SWARM_TerrainDistributeAddCommands: complete; the operator new / command  [equiv: UNSUPPORTED (unresolved operator_new, PTR_s_terrainDistribute)] registration vcall sequence differs
