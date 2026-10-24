@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00cd75f0/s00cd75f0.cpp  ?CreateGameDataVector@@YAPAUtGameDataVectorT@Simulator@@XZ  00cd7d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
