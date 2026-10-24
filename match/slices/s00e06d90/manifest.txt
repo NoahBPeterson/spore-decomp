@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e06d90/s00e06d90.cpp  ?Show@cSPUILoyaltyMeter@SP@@QAEXXZ  00e07950  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e06d90/s00e06d90.cpp  ?Hide@cSPUILoyaltyMeter@SP@@QAEXXZ  00e07990  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e06d90/s00e06d90.cpp  ?ShowExpanded@cSPUILoyaltyMeter@SP@@QAEXXZ  00e07b20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e06d90/s00e06d90.cpp  ?HideExpanded@cSPUILoyaltyMeter@SP@@QAEXXZ  00e07b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
