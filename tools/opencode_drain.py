@@ -282,6 +282,10 @@ while True:
         # entries may be appended to a running queue batch (part1's 3 late FAILs, 2026-10-24: a claim of index 902
         # against the 901 entries read at start crashed the drain)
         BATCH = json.load(open(W("work/batches", G["batch"] + ".json")))
+    else:  # range groups: a supervisor launches or relaunches ranges while the drain runs (mig21, 2026-10-24: the
+        # drain kept the start-up session list, so relaunched ranges were never nudged and the old ones still were)
+        G = json.load(open(GF))
+        SESS = G.get("sessions", {})
     now = time.time()
     active = api("GET", "/api/session/active").get("data", {})
     if isinstance(active, list):
