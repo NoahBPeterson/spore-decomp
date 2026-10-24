@@ -16,9 +16,29 @@ unsigned int __stdcall FUN_009213c0(unsigned int);               // 0x009213c0
 void __cdecl FUN_00a136f0(void*, void*, void*);                  // 0x00a136f0
 
 struct FixedPoolBase {
-    void* mpHead;
-    void* pad[7];
+    void* mpHead;          // +0x0  (free list head; set by init)
+    void* pad0[4];         // +0x4  .. +0x13 (init fills mpNext/mpCapacity/nodeSize)
+    void* mpBucketArray;   // +0x14 bucket array of the owning hash map
+    void* pad1[2];         // +0x18 .. +0x1f
     void init(void* base, u32 size, u32 nodeSize, u32 align, u32 flags);  // 0x00921260
+};
+
+struct HashHead {
+    void* pad0[2];           // +0x00 .. +0x07
+    u32   mnBucketCount;     // +0x08
+    u32   mnElementCount;    // +0x0c
+    float mfMaxLoadFactor;   // +0x10
+    float mfGrowthFactor;    // +0x14
+    u32   mnNextResize;      // +0x18
+    u32   pad1[6];           // +0x1c .. +0x33
+    void* mpBucketArray;     // +0x34
+};
+
+struct RehashPolicy {
+    float mfMaxLoadFactor;   // +0x0
+    float mfGrowthFactor;    // +0x4
+    u32   mnNextResize;      // +0x8
+    u32 get_next_bucket_size(u32 n);   // 0x009213c0
 };
 
 struct HashBase {
@@ -89,8 +109,10 @@ bool SysLike::ConnectSubmixTree()
 // 0x00a2a150  hashtable operator[]-style helper
 // ---------------------------------------------------------------------------
 struct HashFindStub { void find(void* sret, const void* key); };   // 0x00645ed0
+struct BoolTag { bool b; };                                        // 1-byte by-value tag
 struct SmallStubs {
     int  GetOrInsert(int* key);
+    void Insert(void* sret, const int* key, BoolTag tag);          // 0x00a136f0
     void Dtor();
     void DestroyBuckets(int param_2, u32 param_3);
     int  EraseRange(int param_2, int param_3);
@@ -108,7 +130,9 @@ int SmallStubs::GetOrInsert(int* key)
     int local_18[3];
     int k = *key;
     local_18[0] = 0; local_18[1] = 0; local_18[2] = 0;
-    FUN_00a136f0(local_18, &k, 0);
+    BoolTag tag;
+    tag.b = false;
+    Insert(local_18, &k, tag);
     return local_18[0] + 4;
 }
 
@@ -129,17 +153,23 @@ struct FixedMap {
 #define FIXED_CTOR(NAME, POOLOFF, POOLSIZE, NODE, MAXARG, CTOR, REHASH)          \
 int FixedMap::NAME(void* a2, void* a3)                                           \
 {                                                                                \
+    HashHead& h = *(HashHead*)this;                                              \
     FixedPoolBase fb;                                                            \
     fb.mpHead = 0;                                                               \
     fb.init((char*)this + (POOLOFF), (POOLSIZE), (NODE), 4, 0);                  \
+    fb.mpBucketArray = (char*)this + 0x34;                                       \
     u32 v = FUN_00921340(MAXARG);                                                \
     ((HashBase*)this)->CTOR(v, a2, (void*)&a3, (void*)&a3, (u32)(size_t)a3,     \
                             (void*)&a3, &fb);                                    \
-    *(u32*)((char*)this + 0x10) = 0x461c4000;                                    \
-    *(u32*)((char*)this + 0x14) = 0x40000000;                                    \
-    *(u32*)((char*)this + 0x18) = 0;                                             \
-    u32 u = FUN_009213c0(*(u32*)((char*)this + 0xc));                            \
-    if (*(u32*)((char*)this + 8) < u)                                            \
+    RehashPolicy pol;                                                            \
+    pol.mfMaxLoadFactor = 10000.0f;                                              \
+    pol.mfGrowthFactor  = 2.0f;                                                  \
+    pol.mnNextResize    = 0;                                                     \
+    h.mfMaxLoadFactor = pol.mfMaxLoadFactor;                                     \
+    h.mfGrowthFactor  = pol.mfGrowthFactor;                                      \
+    h.mnNextResize    = 0;                                                       \
+    u32 u = pol.get_next_bucket_size(h.mnElementCount);                          \
+    if (h.mnBucketCount < u)                                                     \
         ((HashBase*)this)->REHASH(u);                                            \
     return (int)this;                                                            \
 }
@@ -151,8 +181,31 @@ FIXED_CTOR(a570, 0xfdc,  0x1f40,  8,   0x3e9, ctorD, rehashB)   // @ 0x00a2a570
 FIXED_CTOR(a670, 0x1cc,  0x320,   8,   0x65,  ctorE, rehashB)   // @ 0x00a2a670
 FIXED_CTOR(a770, 0xfdc,  0x1d4c0, 0xc, 0x3e9, ctorF, rehashA)   // @ 0x00a2a770
 FIXED_CTOR(a870, 0x1cc,  0x4b0,   0xc, 0x65,  ctorG, rehashA)   // @ 0x00a2a870
-FIXED_CTOR(a970, 0x104,  0x190,   8,   0x33,  ctorH, rehashB)   // @ 0x00a2a970
 #undef FIXED_CTOR
+
+// @ 0x00a2a970
+int FixedMap::a970(void* a2, void* a3)
+{
+    HashHead& h = *(HashHead*)this;
+    FixedPoolBase fb;
+    fb.mpHead = 0;
+    fb.init((char*)this + 0x104, 0x190, 8, 4, 0);
+    fb.mpBucketArray = (char*)this + 0x34;
+    u32 v = FUN_00921340(0x33);
+    ((HashBase*)this)->ctorH(v, a2, (void*)&a3, (void*)&a3, (u32)(size_t)a3,
+                             (void*)&a3, &fb);
+    RehashPolicy pol;
+    pol.mfMaxLoadFactor = 10000.0f;
+    pol.mfGrowthFactor  = 2.0f;
+    pol.mnNextResize    = 0;
+    h.mfMaxLoadFactor = pol.mfMaxLoadFactor;
+    h.mfGrowthFactor  = pol.mfGrowthFactor;
+    h.mnNextResize    = 0;
+    u32 u = pol.get_next_bucket_size(h.mnElementCount);
+    if (h.mnBucketCount < u)
+        ((HashBase*)this)->rehashB(u);
+    return (int)this;
+}
 
 // ---------------------------------------------------------------------------
 // 0x00a2aa70  hashtable destructor
@@ -348,12 +401,12 @@ void SmallStubs::DestroyBuckets(int param_2, u32 param_3)
 // ---------------------------------------------------------------------------
 // 0x00a2ae90  erase a range of 0x14-byte ref-counted elements
 // ---------------------------------------------------------------------------
-struct ArrOwner { void* FindInsertPos(void*, void*, void*); };  // 0x00a22730
+void* ARCopy(void* a, void* b, void* c);   // 0x00a22730
 
 // @ 0x00a2ae90
 int SmallStubs::EraseRange(int param_2, int param_3)
 {
-    u32 u = (u32)(size_t)((ArrOwner*)this)->FindInsertPos((void*)param_3,
+    u32 u = (u32)(size_t)ARCopy((void*)param_3,
                               *(void**)((char*)this + 4), (void*)param_2);
     u32 end = *(u32*)((char*)this + 4);
     if (u < end) {
@@ -366,6 +419,6 @@ int SmallStubs::EraseRange(int param_2, int param_3)
             --n;
         } while (n);
     }
-    *(int*)((char*)this + 4) += ((param_3 - param_2) / 0x14) * 0x14;
+    *(int*)((char*)this + 4) -= ((param_3 - param_2) / 0x14) * 0x14;
     return param_2;
 }
