@@ -1029,10 +1029,12 @@ int Host3::Method7fa0(int index, int value)
         return fn(p, index, value);
     }
     if (index >= 0) {
-        int count = (*(int*)((char*)this + 0x1bc) - *(int*)((char*)this + 0x1b8)) / 0x68;
+        int n = *(int*)((char*)this + 0x1bc) - *(int*)((char*)this + 0x1b8);
+        int count = n / 0x68;
         if (index < count) {
             *(char*)(e + 0x50) = (char)value;
         }
+        return (int)(0x4ec4ec4fu * (unsigned)n);
     }
     return (int)this;
 }
@@ -2512,7 +2514,9 @@ void Effects0B90::Render(unsigned flags, Region** pr, int arg)
     }
     m260.Set((char*)*(int*)pr + 0xc0);
     if (g_pProps) {
-        Prop* p;
+        // cl homes the out-pointer of this first Get in the live-range-dead `flags`
+        // argument slot, so a Get that returns true without writing *out leaves flags there
+        Prop* p = (Prop*)(unsigned)flags;
         if (g_pProps->Get(0x13d7382, &p) && p->type == 0xd) {
             float* f = (float*)p;
             if (p->flags & 0x30)
