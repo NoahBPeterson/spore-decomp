@@ -1,0 +1,3 @@
+01376850 FUN_01376850  # global field-descriptor table initialiser (compiler-generated $E dynamic initializer): fills the 11-record SP::cFieldDef array at 0x016b1584 (count/count_med/count_easy/count_hard/size/zOffset/zOffsetMax)
+01376cc0 $E187  # same shape for the 9-record table at 0x016b277c (encounterScale/count/.../count_hard); $E187 is the dev-PDB dynamic-initializer name
+01377070 FUN_01377070  # same shape for the 11-record table at 0x016b119c (count/count_med/count_easy/count_hard/size/zOffset/zOffsetMax)
