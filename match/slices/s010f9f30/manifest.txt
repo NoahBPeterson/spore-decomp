@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s010f9f30/s010f9f30.cpp  ?hk3AxisSweep16CreateBroadPhase@@YAPAVhkBroadPhase@@ABUhkVector4@@0H@Z  010faca0  /vc71 /O2 /MD /Gy /TP

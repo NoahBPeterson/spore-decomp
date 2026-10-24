@@ -6,6 +6,11 @@
 // cache (three hkArray<hkBpEndPoint> headers followed by their storage) is filled with the min/max endpoints of
 // each overlapping node per axis, framed by a 0 and a 0xfffc sentinel and sorted between them.
 // Layouts are the 32-bit offsets seen in the binary (Havok 2013 hkp3AxisSweep.h used for names only).
+// Flags: /vc71 /O2 /MD /Gy /TP (Havok 3.1.0 code, built with VC7.1; no /EHsc, no /GS).
+//
+// Also holds the rest of the class: defragment (rebuild the node array in sorted order and remap every stored
+// index), the 16 bit factory (allocate + m_memSizeAndFlags + ctor) and the destructor (marker overlap arrays,
+// the marker block, then the implicit array members).
 #include "types.h"
 #include <intrin.h>
 #include <stddef.h>
@@ -25,6 +30,19 @@ extern unsigned long g_hkThreadMemoryTls;           // 0x016e4174
 extern unsigned long g_hkMonitorStreamCurrentTls;   // 0x016e42a4
 extern unsigned long g_hkMonitorStreamEndTls;       // 0x016e42a8
 extern const char hkMonitorListEndTag[];            // 0x0143cd94 ("lt")
+
+// ---- memory manager ------------------------------------------------------------------------------------------------
+class hkMemory
+{
+public:
+	virtual void v00();
+	virtual void deallocate(void* block);                    // slot 1 (+0x04)
+	virtual void v08();
+	virtual void v0c();
+	virtual void* allocate(int numBytes, int memoryClass);   // slot 4 (+0x10)
+};
+
+extern hkMemory* g_hkMemoryInstance;                // 0x016e4178
 
 // ---- monitor stream timers ----------------------------------------------------------------------------------------
 struct hkMonitorCommand { const char* m_command; hkUint32 m_time0; hkUint32 m_pad; };
@@ -79,10 +97,12 @@ public:
 		int size = (nbytes + 0x10) & ~0xf;
 		char* current = m_stackCurrent;
 		char* next = current + size;
-		if (next > m_stackEnd)
-			return onStackOverflow(size);
-		m_stackCurrent = next;
-		return current;
+		if (next <= m_stackEnd)
+		{
+			m_stackCurrent = next;
+			return current;
+		}
+		return onStackOverflow(size);
 	}
 	__forceinline void deallocateStack(void* p)
 	{
@@ -111,7 +131,7 @@ class hkArray
 	hkArray(T* buffer, int size, int capacity) : m_data(buffer), m_size(size), m_capacityAndFlags(capacity | (int)0x80000000) {}
 	__forceinline ~hkArray()
 	{
-		if (m_capacityAndFlags >= 0)
+		if ((m_capacityAndFlags & (int)0x80000000) == 0)
 			hkThreadMemory::getInstance().deallocateChunk(m_data, (m_capacityAndFlags & CAPACITY_MASK) * (int)sizeof(T), HK_MEMORY_CLASS_ARRAY);
 	}
 	int getSize() const { return m_size; }
@@ -141,6 +161,7 @@ struct hkLocalBuffer
 	__forceinline explicit hkLocalBuffer(int n) { m_p = (T*)hkThreadMemory::getInstance().allocateStack(n * (int)sizeof(T)); }
 	__forceinline ~hkLocalBuffer() { hkThreadMemory::getInstance().deallocateStack(m_p); }
 	T* begin() { return m_p; }
+	T& operator[](int i) { return m_p[i]; }
 	T* m_p;
 };
 
@@ -206,17 +227,23 @@ namespace hkAlgorithm
 }
 
 // ---- hk3AxisSweep -----------------------------------------------------------------------------------------------
-class hkBroadPhaseHandle;
+// The broadphase handle: the sweep writes the node index into its first dword.
+class hkBroadPhaseHandle
+{
+public:
+	hkUint32 m_id;                // +0
+};
 class hkReferencedObject
 {
 public:
-	virtual ~hkReferencedObject();
+	virtual void v00();           // root virtual (the reference count is not used by this slice)
 	hkUint16 m_memSizeAndFlags;   // +4
 	hkUint16 m_referenceCount;    // +6
 };
 class hkBroadPhase : public hkReferencedObject
 {
 public:
+	virtual ~hkBroadPhase() {}    // inline: only stores the hkBroadPhase vptr
 	hkUint32 m_type;              // +8 (padding up to the aligned members at +0x10)
 };
 class hk3AxisSweep : public hkBroadPhase
@@ -263,6 +290,10 @@ public:
 
 	virtual void calcAabbCache(const hkAabb& aabb, char* aabbCacheOut);
 
+	hk3AxisSweep(const hkVector4& offsetLow, const hkVector4& offsetHigh, int numMarkers);   // 0x010f94c0
+	virtual ~hk3AxisSweep();
+	virtual void defragment();
+
 	__forceinline void _querySingleAabb(const hkAabb& aabb, hkArray<const hkBpNode*>& nodesOut);
 
 	hkVector4 m_offsetLow;              // +0x10
@@ -273,8 +304,12 @@ public:
 	int m_numMarkers;                   // +0x70
 	int m_ld2NumMarkers;                // +0x74
 	hkBpMarker* m_markers;              // +0x78
+	hkReal m_intToFloatFloorCorrection; // +0x7c
 };
-typedef char hk3AxisSweep_layout_check[(offsetof(hk3AxisSweep, m_nodes) == 0x40 && offsetof(hk3AxisSweep, m_markers) == 0x78) ? 1 : -1];
+typedef char hk3AxisSweep_layout_check[(offsetof(hk3AxisSweep, m_nodes) == 0x40 && offsetof(hk3AxisSweep, m_markers) == 0x78
+                                        && offsetof(hk3AxisSweep, m_intToFloatFloorCorrection) == 0x7c) ? 1 : -1];
+
+hkBroadPhase* hk3AxisSweep16CreateBroadPhase(const hkVector4& offsetLow, const hkVector4& offsetHigh, int numMarkers);   // 0x010faca0
 
 // hkAlgorithm::quickSortRecursive<hk3AxisSweep::hkBpEndPoint, hkAlgorithm::less<...> > (out-of-line template instance).
 // Declared as a plain function so the differential tester can bind it by its address.
@@ -476,4 +511,87 @@ void hk3AxisSweep::calcAabbCache(const hkAabb& aabb, char* aabbCacheOut)
 		lists[1].pushBackUnchecked(last);
 		lists[2].pushBackUnchecked(last);
 	}
+}
+
+// Rebuild the node array without holes: the nodes are moved to the front and the indices stored in the endpoints,
+// the handles and the marker overlap lists are remapped afterwards.
+// @ 0x010faa10
+void hk3AxisSweep::defragment()
+{
+	int numNodes = m_nodes.getSize();
+	hkLocalBuffer<hkBpNode> newNodes(numNodes);
+	hkLocalBuffer<hkBpEndPoint> endPoints(numNodes);
+	hkLocalBuffer<int> remap(numNodes);
+
+	// copy the nodes and sort them by their min_x endpoint value
+	for (int i = 0; i < m_nodes.getSize(); i++)
+	{
+		newNodes[i] = m_nodes[i];
+		endPoints[i].m_value = m_axis[0].m_endPoints[m_nodes[i].min_x].m_value;
+		endPoints[i].m_nodeIndex = (BpInt)i;
+	}
+
+	hkAlgorithm::quickSort(&endPoints[1], numNodes - 1, hkAlgorithm::less<hkBpEndPoint>());
+
+	// move the nodes into their sorted order, remembering the old index of every new one
+	for (int i = 0; i < m_nodes.getSize(); i++)
+	{
+		remap[endPoints[i].m_nodeIndex] = i;
+		m_nodes[i] = newNodes[endPoints[i].m_nodeIndex];
+	}
+
+	// update the handles (a tagged handle points into the marker array, one that is not tagged is a plain id)
+	for (int i = 1; i < m_nodes.getSize(); i++)
+	{
+		hkBroadPhaseHandle* handle = m_nodes[i].m_handle;
+		if (!((hkUint32)handle & 1))
+		{
+			handle->m_id = (hkUint32)i;
+		}
+		else
+		{
+			hkBpMarker* marker = (hkBpMarker*)((char*)m_markers + ((hkUint32)handle & 0xfffffffe));
+			marker->m_nodeIndex = (BpInt)i;
+		}
+	}
+
+	// remap the node indices kept in the marker overlap lists
+	for (int m = 0; m < m_numMarkers; m++)
+	{
+		hkArray<BpInt>& overlapping = m_markers[m].m_overlappingObjects;
+		for (int i = overlapping.getSize() - 1; i >= 0; i--)
+			overlapping[i] = (BpInt)remap[overlapping[i]];
+	}
+
+	// and the node indices stored in the per-axis endpoint arrays
+	for (int a = 0; a < 3; a++)
+	{
+		hkArray<hkBpEndPoint>& axisEndPoints = m_axis[a].m_endPoints;
+		for (int i = 0; i < axisEndPoints.getSize(); i++)
+			axisEndPoints[i].m_nodeIndex = (BpInt)remap[axisEndPoints[i].m_nodeIndex];
+	}
+}
+
+// @ 0x010faca0
+hkBroadPhase* hk3AxisSweep16CreateBroadPhase(const hkVector4& offsetLow, const hkVector4& offsetHigh, int numMarkers)
+{
+	hk3AxisSweep* sweep = (hk3AxisSweep*)g_hkMemoryInstance->allocate(sizeof(hk3AxisSweep), 0x1e);
+	sweep->m_memSizeAndFlags = (hkUint16)sizeof(hk3AxisSweep);
+	return new (sweep) hk3AxisSweep(offsetLow, offsetHigh, numMarkers);
+}
+
+// @ 0x010facd0
+hk3AxisSweep::~hk3AxisSweep()
+{
+	// the markers are placement constructed in the block, so their overlap arrays go first
+	for (int i = 0; i < m_numMarkers; i++)
+	{
+		hkArray<BpInt>& overlapping = m_markers[i].m_overlappingObjects;
+		if (overlapping.m_capacityAndFlags >= 0)
+			hkThreadMemory::getInstance().deallocateChunk(overlapping.m_data,
+				(overlapping.m_capacityAndFlags & hkArray<BpInt>::CAPACITY_MASK) * (int)sizeof(BpInt),
+				HK_MEMORY_CLASS_ARRAY);
+	}
+	g_hkMemoryInstance->deallocate(m_markers);
+	// m_axis[2..0].m_endPoints and m_nodes are destroyed implicitly after the body
 }
