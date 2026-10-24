@@ -1,0 +1,18 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c8db30/s00c8db30.cpp  ?resize@Vec0C@@QAEXIABUVec3@@@Z             00c8de50  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?PostDataLoad@TotemPole@@QAE_NI@Z           00c8df10  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?Tribe_AsInterface@@YIPAXPAUTribe@@HI@Z     00c8e420  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?Community_IsPlayer@@YI_NPAUTribe@@@Z        00c8e4d0  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8e570@@YGXPAX@Z                            00c8e570  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?Tribe_GetPlayer@@YIPAHPAUTribe@@@Z          00c8e650  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8e680@@YIXPAXHH@Z                          00c8e680  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8e720@@YGXH@Z                              00c8e720  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8e830@@YIXPAUTribe@@HPAXH@Z                00c8e830  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8e850@@YI_NPAUTribe@@@Z                     00c8e850  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8e870@@YI_NPAUTribe@@@Z                     00c8e870  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8ea70@@YAPAXI@Z                            00c8ea70  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?Tribe_GetMaxPopulation@@YIHPAUTribe@@@Z     00c8eae0  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8eb50@@YI_NPAUTribe@@HPAUVec3@@@Z          00c8eb50  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8eb90@@YI_NPAUTribe@@@Z                     00c8eb90  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8ebe0@@YIXPAUTribe@@HI@Z                   00c8ebe0  /O2 /MD /Gy /TP
+slices/s00c8db30/s00c8db30.cpp  ?F8ec00@@YI_NPAUTribe@@HI@Z                   00c8ec00  /O2 /MD /Gy /TP

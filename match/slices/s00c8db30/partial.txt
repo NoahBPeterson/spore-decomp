@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00c8e000  726  Spatial::LoadModel: incomplete. The world-model swap-in and the bounding-sphere recompute are reconstructed, but the segment-table iteration that instantiates one model per segment (and the cTotemPole/cSpatialObject owner bookkeeping around it) is still a placeholder, so the body emits 295 of the target's 784 bytes; not a complete definition.
