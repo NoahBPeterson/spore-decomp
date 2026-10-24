@@ -1,6 +1,7 @@
 // Slice s0048c0f0: SP::cSPEditorLimbStructure joint building / pile list / model size.
 // Module flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
+#include <float.h>
 
 inline void* operator new(unsigned int, void* p) { return p; }
 
@@ -321,7 +322,7 @@ float GetModelMinZ(cSPEditorModel* model)
 {
     float result = 0.0f;
     if (model != 0) {
-        float minZ = 1.0e38f;
+        float minZ = FLT_MAX;
         int n = model->GetNumParts();
         for (int i = 0; i < n; i++) {
             cSPEditorBlock* block = model->GetPart(i);

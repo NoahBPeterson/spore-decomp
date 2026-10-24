@@ -6,4 +6,4 @@
 0048ca10  464  /Od; complete. CalculateModelSize; hash-flag checks and bbox AXBXC sum; frame slot layout differs
 0048cc20  117  /Od; complete. CountModelParts; extra /Od resource-id temp slot differs
 0048ccf0  422  /Od; complete. CollectPartsRec flag walk; frame slot layout and bitset temps differ
-0048cf00  195  /Od; complete. GetModelMinZ; frame slot layout differs
+0048cf00  217  /Od; complete. GetModelMinZ; minZ must start at FLT_MAX (0x7f7fffff, constant 0x13ef4c0), not 1.0e38f, or the untouched minimum leaves a different x87 result. Equiv WEAK 426 valid, 31.5% coverage (no mismatch); residual diff is /Od frame slot layout
