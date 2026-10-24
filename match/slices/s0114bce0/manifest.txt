@@ -1,0 +1,2 @@
+slices/s0114bce0/s0114bce0.cpp  ?Swap16Bytes@core@audio@rw@@YIXPAEPBE@Z  0114c600  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0114bce0/s0114bce0.cpp  ?Reset@SampleRegions@core@audio@rw@@QAEXPBEI@Z  0114c880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
