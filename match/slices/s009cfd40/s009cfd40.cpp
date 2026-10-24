@@ -9,6 +9,7 @@
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 #include <math.h>
+#include <xmmintrin.h>
 
 typedef unsigned int uint;
 
@@ -31,15 +32,16 @@ extern float g_1;      // 0x01485720 = 1.0f
 
 // ---- external callees (relocations; shapes only) ----
 extern "C" float FUN_009cdbe0(float, float, float, float, float);   // ?FUN_009cdbe0@@YAMMMMMM@Z
-extern "C" float FUN_009cdb20(float, float, float, float, float, float);
+extern "C" __m128 FUN_009cdb20(float, float);   // returns in xmm0 (original: movss [esp],xmm0 right after the call)
 
 struct Inner70 { char pad[0x70]; float c; };
+struct TgtVec { char pad[0x10c]; float f10c, f110, f114; };   // *this->f0's +0x00 target
 
 // ---------------------------------------------------------------------------
 // "SA": the skinned-bone objects the animation containers walk.
 // ---------------------------------------------------------------------------
 struct SA {
-    char     pad00[0x04];
+    void*    q0_0;                // +0x00 pointer used by 009d0460/009d0b10
     void*    p04;                 // +0x04 pointer
     char     pad08[0x48 - 0x08];
     float    f48;                 // +0x48
@@ -196,19 +198,23 @@ void HostD::FUN_009d00a0(float* out, Param0* p)
             az = g_h05 * az;
         }
     } else {
-        float inv = 1.0f / (float)(int)n;
+        float inv = (float)(1.0 / (double)(int)n);
+        float f = 1.0f - f34 * g_09;
+        ax = ax * inv;
         ay = ay * inv;
         az = az * inv;
-        float f = 1.0f - f34 * g_09;
-        ax = f * (inv * ax);
+        ax = ax * f;
         ay = ay * f;
         az = az * f;
     }
     float k = g_08;
     float ik = 1.0f - k;
-    f18 = f18 * k + ax * ik;
-    f1c = f1c * k + ay * ik;
-    f20 = f20 * k + az * ik;
+    ax = ax * ik;
+    ay = ay * ik;
+    az = az * ik;
+    f18 = f18 * k + ax;
+    f1c = f1c * k + ay;
+    f20 = f20 * k + az;
     out[0] = f18;
     out[1] = f1c;
     out[2] = f20;
@@ -226,25 +232,27 @@ struct HostR {
     float f28;                    // +0x28
     float f2c;                    // +0x2c
     float f30;                    // +0x30
-    float FUN_009d0280();
+    void  FUN_009d0280();
 };
 
-float HostR::FUN_009d0280()
+void HostR::FUN_009d0280()
 {
     BN** v = f4;
     BN*  a = v[0];
     BN*  b = v[1];
-    BP*  X = (BP*)*(int*)(*(int*)((char*)a->fC8 + 0x2e4) + a->f58 * 0x2bc + 8);
-    BP*  Y = (BP*)*(int*)(*(int*)((char*)b->fC8 + 0x2e4) + b->f58 * 0x2bc + 8);
-    float dx = b->f0 - a->f0;
-    float dy = b->f4 - a->f4;
-    float dz = b->f8 - a->f8;
+    int  offA = *(int*)((char*)a->fC8 + 0x2e4) + a->f58 * 0x2bc;
+    int  offB = *(int*)((char*)b->fC8 + 0x2e4) + b->f58 * 0x2bc;
+    BP*  X = (BP*)*(int*)(*(int*)(offA + 8));
+    BP*  Y = (BP*)*(int*)(*(int*)(offB + 8));
     float xlen = sqrtf(X->f350 * X->f350 + X->f354 * X->f354 + X->f358 * X->f358);
     float ylen = sqrtf(Y->f350 * Y->f350 + Y->f354 * Y->f354 + Y->f358 * Y->f358);
-    float d = sqrtf(dx * dx + dy * dy + dz * dz);
+    float dx = Y->f350 - X->f350;
+    float dy = Y->f354 - X->f354;
+    float dz = Y->f358 - X->f358;
+    float d = sqrtf((dx * dx + dz * dz) + dy * dy);
     f28 = d;
     if (d > g_eps) {
-        float f = (xlen * xlen - ylen * ylen + d * d) / (g_2 * d * xlen);
+        float f = (xlen * xlen - ylen * ylen + d * d) / ((d * xlen) * g_2);
         if (f > g_m1) {
             if (f > 1.0f)
                 f = 1.0f;
@@ -263,7 +271,6 @@ float HostR::FUN_009d0280()
         f2c = g_half;
         f30 = 0.0f;
     }
-    return f28;
 }
 
 // ===========================================================================
@@ -277,26 +284,28 @@ struct HostE {
     float f18, f1c, f20;          // +0x18
     char  pad24[0x28 - 0x24];
     float f28, f2c, f30;          // +0x28
-    char  pad34[0x88 - 0x34];
-    int   f88;                    // +0x88
-    void FUN_009d0460(int* out, float dt);
+    void FUN_009d0460(float* out, float dt);
 };
 
-void HostE::FUN_009d0460(int* out, float dt)
+void HostE::FUN_009d0460(float* out, float dt)
 {
     BN** v = f4;
     BN*  a = v[0];
     BN*  b = v[1];
-    BP*  X = (BP*)*(int*)(*(int*)((char*)a->fC8 + 0x2e4) + a->f58 * 700 + 8);
-    BP*  Y = (BP*)*(int*)(*(int*)((char*)b->fC8 + 0x2e4) + b->f58 * 700 + 8);
-    float la = ((BP*)*(int*)(*(int*)((char*)a->fC8 + 0x2e4) + a->f58 * 700))->f434
+    SA*  a0 = f0;
+    int  offA = *(int*)((char*)a->fC8 + 0x2e4) + a->f58 * 700;
+    int  offB = *(int*)((char*)b->fC8 + 0x2e4) + b->f58 * 700;
+    BP*  X = (BP*)*(int*)(*(int*)(offA + 8));
+    BP*  Y = (BP*)*(int*)(*(int*)(offB + 8));
+    float la = ((BP*)*(int*)offA)->f434
              - sqrtf(X->f350 * X->f350 + X->f354 * X->f354 + X->f358 * X->f358);
-    float lb = ((BP*)*(int*)(*(int*)((char*)b->fC8 + 0x2e4) + b->f58 * 700))->f434
+    float lb = ((BP*)*(int*)offB)->f434
              - sqrtf(Y->f350 * Y->f350 + Y->f354 * Y->f354 + Y->f358 * Y->f358);
-    float dirx = b->f0 - a->f0;
-    float diry = b->f4 - a->f4;
-    float dirz = b->f8 - a->f8;
-    float d = sqrtf(dirx * dirx + diry * diry + dirz * dirz);
+    float ax = a->f0, ay = a->f4, az = a->f8;
+    float dirx = b->f0 - ax;
+    float diry = b->f4 - ay;
+    float dirz = b->f8 - az;
+    float d = sqrtf((diry * diry + dirz * dirz) + dirx * dirx);
     if (d != 0.0f) {
         float s = 1.0f / d;
         dirx *= s;
@@ -311,17 +320,17 @@ void HostE::FUN_009d0460(int* out, float dt)
     float sinA, cosA;
     if (d <= g_eps) {
         d = 0.0f;
-        sinA = 1.0f;
-        cosA = 1.0f;
+        sinA = g_1;
+        cosA = 0.0f;
     } else {
-        float c = ((la * la - lb * lb) + d * d) / ((d * la) * 2.0f);
+        float c = ((la * la - lb * lb) + d * d) / ((d * la) * g_2);
         if (c > g_m1) {
-            if (c > 1.0f)
-                c = 1.0f;
+            if (c > g_1)
+                c = g_1;
         } else {
             c = g_m1;
         }
-        float t = 1.0f - c * c;
+        float t = g_1 - c * c;
         float z = 0.0f;
         float* pv = &z;
         if (0.0f <= t)
@@ -331,66 +340,63 @@ void HostE::FUN_009d0460(int* out, float dt)
     }
     float off = sinA * la - f30;
     float s2 = f2c * f28 + cosA * la;
-    float px = a->f0 + dirx * s2;
-    float py = a->f4 + diry * s2;
-    float pz = a->f8 + dirz * s2;
-    float tgtx, tgty, tgtz;
-    if ((float)f88 <= g_eps) {
-        void* q = *(void**)f0;
-        float sc = ((Inner70*)((char*)f0->p04))->c;
-        tgtx = *(float*)((char*)q + 0x10c) * sc;
-        tgty = *(float*)((char*)q + 0x110) * sc;
-        tgtz = *(float*)((char*)q + 0x114);
+    float px = ax + dirx * s2;
+    float py = ay + diry * s2;
+    float pz = az + dirz * s2;
+    float tgtx, tgty, tgtz, sc;
+    if (a0->f88 <= g_eps) {
+        TgtVec* q = (TgtVec*)a0->q0_0;
+        sc = ((Inner70*)a0->p04)->c;
+        tgtx = q->f10c * sc;
+        tgty = q->f110 * sc;
+        tgtz = q->f114;
     } else {
-        float inv = 1.0f / (float)f88;
-        tgtx = (float)*(int*)((char*)f0 + 0x7c) * inv;
-        tgty = (float)*(int*)((char*)f0 + 0x80) * inv;
-        tgtz = (float)*(int*)((char*)f0 + 0x84);
+        sc = g_1 / a0->f88;
+        tgtx = a0->f7c * sc;
+        tgty = a0->f80 * sc;
+        tgtz = a0->f84;
     }
-    tgtz = tgtz * (1.0f / (float)f88);
+    tgtz = tgtz * sc;
     float bx = tgtx - px, by = tgty - py, bz = tgtz - pz;
     float dot = bx * dirx + bz * dirz + by * diry;
     float nx = bx - dirx * dot;
     float nz = bz - dirz * dot;
     float ny = by - diry * dot;
-    float r2 = nx * nx + nz * nz + ny * ny;
-    float ox, oy, oz;
+    float r2 = (nz * nz + ny * ny) + nx * nx;
+    float qx, qy, qz;
     if (off * off <= r2) {
         r2 = sqrtf(r2);
         if (r2 != 0.0f) {
             float s = 1.0f / r2;
             nx *= s; nz *= s; ny *= s;
         }
-        ox = nx * off; oz = nz * off; oy = ny * off;
+        qx = nx * off + px;
+        qy = ny * off + py;
+        qz = nz * off + pz;
     } else {
-        r2 = off * off - nx * nx - nz * nz;
+        r2 = off * off - nx * nx - ny * ny;
         float z = 0.0f;
         float* pv = &r2;
         if (r2 <= 0.0f)
             pv = &z;
-        oy = 0.0f;
-        oz = sqrtf(*pv);
-        ox = 0.0f;
-        (void)oy;
+        qx = nx + px;
+        qy = ny + py;
+        qz = sqrtf(*pv) + pz;
     }
-    (void)ox; (void)oy; (void)oz;
-    float qx = ox + px, qy = oy + py, qz = oz + pz;
-    float amp = FUN_009cdbe0(dt, 0.0f, g_25, 0.0f, 1.0f);
+    float amp = FUN_009cdbe0(dt, 0.0f, g_25, 0.0f, g_1);
     float u = (dt - g_25) / (g_10 - g_25);
     if (u < 0.0f) u = 0.0f;
-    else if (u > 1.0f) u = 1.0f;
-    FUN_009cdb20(u, g_m2, 0.0f, 1.0f, 1.0f, 0.5f);
-    float w = FUN_009cdbe0(u, 0.0f, g_25, 0.0f, 1.0f) * amp;
-    float c2 = 1.0f - g_c08;
-    float n6 = (float)*(int*)((char*)this + 0x18) * g_c08 + ((qx - tgtx) * w) * c2;
-    float n7 = (float)*(int*)((char*)this + 0x1c) * g_c08 + ((qy - tgty) * w) * c2;
-    float n8 = (float)*(int*)((char*)this + 0x20) * g_c08 + ((qz - tgtz) * w) * c2;
-    *(float*)((char*)this + 0x18) = n6;
-    *(float*)((char*)this + 0x1c) = n7;
-    *(float*)((char*)this + 0x20) = n8;
-    out[0] = (int)n6;
-    out[1] = (int)n7;
-    out[2] = (int)n8;
+    else if (u > g_1) u = g_1;
+    float t2 = _mm_cvtss_f32(FUN_009cdb20(u, g_m2));
+    float w = FUN_009cdbe0(t2, 0.0f, g_1, g_1, g_half) * amp;
+    float k = g_c08;
+    float c2 = g_1 - k;
+    f18 = f18 * k + ((qx - tgtx) * w) * c2;
+    f1c = f1c * k + ((qy - tgty) * w) * c2;
+    f20 = f20 * k + ((qz - tgtz) * w) * c2;
+    out[0] = f18;
+    out[1] = f1c;
+    out[2] = f20;
 }
 
 // ===========================================================================
