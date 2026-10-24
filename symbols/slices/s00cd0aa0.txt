@@ -1,0 +1,1 @@
+00cd0aa0 ?Init@cTribeInputStrategy@SP@@QAEXPAVcSPUIInputOwner@@@Z  # void cTribeInputStrategy::Init(cSPUIInputOwner*) - re-initialises the tribe-input strategy for the cursor the owner reports, dispatching the 36 preparation cases
