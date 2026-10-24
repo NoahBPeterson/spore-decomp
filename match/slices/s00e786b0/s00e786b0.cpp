@@ -370,19 +370,19 @@ void __cdecl FUN_00e78d10(void)
 }
 
 // ---------------------------------------------------------------- 0x00e78de0
-int  __cdecl FUN_00b3d4d0(int);
-void __cdecl FUN_00e77930(int);
+int  __cdecl FUN_00b3d4d0(void);
+static __declspec(noinline) void FUN_00e77930(int);   // static: retail passes the object in ESI
 
-struct ObjStub  { void ad7e40(); };
+struct ObjStub  { void ad7e40(int modal); };
 
 // @ 0x00e78de0
 void __cdecl FUN_00e78de0(void)
 {
-    void* o = (void*)FUN_00b3d4d0(0);
-    ((ObjStub*)o)->ad7e40();
+    ((ObjStub*)FUN_00b3d4d0())->ad7e40(0);
     *(char*)(g_16b3c0c + 0x936) = 0;
     *(char*)(g_16b3c0c + 0xe4) = 0;
-    int v = ((CellStub*)(g_cellGame + 0x1c))->b721d0(*(int*)(g_cellGame + 0x411c));
+    CellStub* cells = (CellStub*)(g_cellGame + 0x1c);
+    int v = cells->b721d0(*(int*)(g_cellGame + 0x411c));
     *(char*)(g_cellGame + 0x51dc) = 0;
     if (v)
         FUN_00e77930(v);
@@ -397,6 +397,17 @@ void __cdecl FUN_00e78e40(void)
     int v = ((CellStub*)(g_cellGame + 0x1c))->b721d0(*(int*)(g_cellGame + 0x411c));
     if (v)
         FUN_00e77930(v);
+}
+
+// Static stand-in for the retail TU-local callee (0x00e77930).  The replay resolves the
+// call site to the original body, so this body is never executed; it only keeps the
+// internal register convention (object arrives in ESI) at the two call sites above.
+static __declspec(noinline) void FUN_00e77930(int v)
+{
+    if (*(char*)(v + 0x180) != 1) {
+        FUN_00b3d4d0();
+        *(volatile int*)(v + 0x60) = v;
+    }
 }
 
 // ---------------------------------------------------------------- 0x00e78e70
