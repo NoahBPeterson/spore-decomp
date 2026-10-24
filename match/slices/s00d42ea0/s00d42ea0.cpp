@@ -176,12 +176,17 @@ public:
     cHerd* GetHerd();                     // 0x00c04590
 };
 
+struct cGameDataVector;
 class cGameNounManager
 {
 public:
     cSPCreatureBase* GetAvatar();                  // 0x00b1fdb0
     cTerrainSphere* GetCurrentTerrainSphere();     // 0x00f67d90
     cHerd* GetPlayerHerd();                        // 0x00989360
+    cGameDataVector* GetGameDataVector(void* a, void* b, void* c, void* d, int type); // 0x00b21340
+    int FUN_00b1f9c0();                            // 0x00b1f9c0
+    void FUN_00b22650(int type);                   // 0x00b22650 RemoveNounsOfType
+    void FUN_00b23510();                           // 0x00b23510
 };
 namespace SP { cGameNounManager* NounManager(); }   // 0x00b3d300
 
@@ -672,3 +677,279 @@ bool cCreatureModeStrategy::HandleMessage(uint32_t messageID, void* msg)
 }
 
 }   // namespace SP
+
+// ===========================================================================
+// SP::cCreatureModeStrategy::PreGameModeTransition (PDB candidate)
+//
+// Called with the old mode and the new mode when the creature mode strategy
+// changes mode.  The function reaches most of its collaborators through virtual
+// dispatch, so the generic VTFN helper keeps the slot numbers explicit.
+// ===========================================================================
+
+#define VTFN(p, slot)  ((*(void***)(p))[slot])
+
+typedef void  (__thiscall* TCV)(void*);
+typedef int   (__thiscall* TCI)(void*);
+typedef void* (__thiscall* TCP)(void*);
+typedef void  (__thiscall* TCVI)(void*, int);
+typedef void  (__thiscall* TCVII)(void*, int, int);
+typedef void  (__thiscall* TCVP)(void*, void*);
+typedef void* (__thiscall* TCPI)(void*, int);
+
+struct TransitionPendingBatch
+{
+    void* mpHandler;                 // +0x00
+    int   m0;                        // +0x04
+    int   m1;                        // +0x08
+    int   m2;                        // +0x0c
+    int   m3;                        // +0x10
+    void FUN_004039f0();             // 0x004039f0 PendingBatch::Flush
+};
+
+struct TransitionStrategy
+{
+    char pad00[0x5c];
+    cRefCounted* mpField5c;          // +0x5c
+    cCreatureDisplayStrategy* mpDisplay60; // +0x60
+    uint8_t mbField64;               // +0x64
+    char pad65[0x68 - 0x65];
+    TransitionPendingBatch mBatch68; // +0x68
+    char pad7c[0xb4 - 0x7c];
+    cCreatureModeActionHandler** mActionHandlersBegin; // +0xb4
+    cCreatureModeActionHandler** mActionHandlersEnd;   // +0xb8
+    char padbc[0xc8 - 0xbc];
+    cRefCounted* mpFieldC8;          // +0xc8
+
+    void PreGameModeTransition(void* oldMode, void* newMode);
+};
+
+struct NounVector
+{
+    void** mpBegin;                  // +0x00
+    void** mpEnd;                    // +0x04
+    void** mpCapacity;               // +0x08
+};
+
+struct cGameDataVector
+{
+    char pad0[4];
+    NounVector mData;                // +0x04
+};
+
+struct LocomotionRequest
+{
+    void* mpBegin;                   // +0x00
+    int   pad[11];
+};
+
+struct cLocomotionCtor       { void FUN_00ac9850(); };
+struct cStrategyBase         { void FUN_00d414e0(void* newMode); void AddStat(int, int); };
+struct cCreatureExtra        { void FUN_00c0cff0(int); };
+struct cPosseSim             { void FUN_00d52e40(int); };
+struct cTribeStrategy        { void FUN_00cdce40(void* oldMode, int id); };
+struct cCitySim              { void FUN_00ae6a70(); void FUN_00ae6570(); };
+struct cSpeciesMgr           { void* FUN_004df420(); };
+
+void  FUN_00b3d310();            // 0x00b3d310
+void* FUN_00b3d460();            // 0x00b3d460
+void  FUN_00d3c610();            // 0x00d3c610
+void  FUN_00d3a960();            // 0x00d3a960
+void* FUN_00d539d0();            // 0x00d539d0 cPosseSimulator::Instance
+void* FUN_0067ddc0();            // 0x0067ddc0
+void* FUN_00401090();            // 0x00401090
+void* FUN_00cd40b0(void* oldMode, int id); // 0x00cd40b0 cTribeModeStrategy::Instance
+void  RemoveHandler(void* handler, int a, int b, int c, int d); // 0x00571db0
+void  operator delete[](void*);
+
+void FUN_00cd7d10();             // game-data discriminator
+void FUN_00d3d420();
+void FUN_00ace0f0();
+void FUN_00b1e500();
+
+namespace SP
+{
+void* EffectsManager();          // 0x0067ddd0
+void* SimTicker();               // 0x00b3d330
+}
+
+// @ 0x00d43a00
+void TransitionStrategy::PreGameModeTransition(void* oldMode, void* newMode)
+{
+    if (((TCP)VTFN(this, 0x1c / 4))(this) == newMode)
+        return;
+
+    ((TCVI)VTFN(this, 0x40 / 4))(this, (int)newMode);
+
+    void* transition = FUN_00b3d460();
+    ((TCVII)VTFN(transition, 0x14 / 4))(transition, (int)oldMode, (int)newMode);
+
+    ((cStrategyBase*)((char*)this - 8))->FUN_00d414e0(newMode);
+    FUN_00b3d310();
+
+    if (newMode == (void*)0x1654c01) {
+        *(void**)0x0167eb88 = (void*)0x00d3a450;
+        ((TCV)VTFN(this, 0x48 / 4))(this);
+        return;
+    }
+
+    if (oldMode != (void*)0x1654c01) {
+        ((TCV)VTFN(this, 0x48 / 4))(this);
+        return;
+    }
+
+    void* effects = SP::EffectsManager();
+    ((TCVII)VTFN(effects, 0x98 / 4))(effects, 8, 0);
+
+    if (newMode == (void*)0xdbdba1) {
+        this->mpDisplay60->SetVisible(0);
+    } else {
+        FUN_00d3c610();
+    }
+
+    FUN_00d3a960();
+
+    cGameNounManager* nouns = SP::NounManager();
+    void* ticker = SP::SimTicker();
+
+    if (FUN_0067ddc0() != 0) {
+        void* p = FUN_0067ddc0();
+        ((TCVI)VTFN(p, 0x28 / 4))(p, 0);
+        p = FUN_0067ddc0();
+        ((TCV)VTFN(p, 0x24 / 4))(p);
+    }
+
+    if (this->mpField5c != 0) {
+        ((TCV)VTFN(this->mpField5c, 0x0c / 4))(this->mpField5c);
+        cRefCounted* p = this->mpField5c;
+        if (p != 0) {
+            this->mpField5c = 0;
+            void* sub = (char*)p + 0x3c;
+            ((TCV)VTFN(sub, 0x08 / 4))(sub);
+        }
+    }
+
+    cSPCreatureBase* avatar = nouns->GetAvatar();
+    if (avatar != 0) {
+        void* locomotion = (char*)avatar + 0xc0;
+        LocomotionRequest request;
+        ((cLocomotionCtor*)&request)->FUN_00ac9850();
+        ((TCVP)VTFN(locomotion, 0xdc / 4))(locomotion, &request);
+
+        if (request.mpBegin != 0 && ((int*)request.mpBegin)[-1] != 0)
+            operator delete[](request.mpBegin);
+
+        ((cCreatureExtra*)avatar)->FUN_00c0cff0(0);
+    }
+
+    for (cCreatureModeActionHandler** it = this->mActionHandlersBegin;
+         it != this->mActionHandlersEnd; ++it)
+    {
+        ((TCV)VTFN(*it, 0x14 / 4))(*it);
+    }
+
+    if (newMode == (void*)0xdbdba1) {
+        void* app = SP::App();
+        void* wm = ((TCP)VTFN(app, 0x50 / 4))(app);
+        void* win = ((TCP)VTFN(wm, 0x38 / 4))(wm);
+        if (win != 0) {
+            void* r = ((TCPI)VTFN(win, 0x0c / 4))(win, 0x2a7ecd2);
+            if (r != 0)
+                *(uint8_t*)((char*)r + 0x11) = 1;
+        }
+
+        void* species = FUN_00401090();
+        ((cSpeciesMgr*)species)->FUN_004df420();
+
+        NounVector* others = &nouns->GetGameDataVector(
+            (void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+            (void*)FUN_00ace0f0, (void*)FUN_00b1e500,
+            0x18eb45e)->mData;
+
+        uint32_t count = (uint32_t)(others->mpEnd - others->mpBegin);
+        for (uint32_t i = 0; i < count; ++i) {
+            cSPCreatureBase* noun = (cSPCreatureBase*)others->mpBegin[i];
+            if (*(uint8_t*)((char*)noun + 0x135) == 0)
+                continue;
+
+            void* locomotion = (char*)noun + 0xc0;
+            if (((TCI)VTFN(locomotion, 0x58 / 4))(locomotion) != 0)
+                continue;
+            if (*(uint8_t*)((char*)noun + 0xb5e) == 0)
+                continue;
+            if (*(uint8_t*)((char*)noun + 0xb67) == 0)
+                continue;
+
+            cHerd* herd = noun->GetHerd();
+            if (herd == 0 || *(int*)((char*)herd + 0x15c) == 9)
+                continue;
+
+            ((TCVI)VTFN(noun, 0xc8 / 4))(noun, 1);
+        }
+
+        ((TCV)VTFN(this, 0x48 / 4))(this);
+        return;
+    }
+
+    if (newMode == (void*)0x2ccd1d2 || newMode == (void*)0xffffffff) {
+        nouns->FUN_00b22650(0x18eb45e);
+        nouns->FUN_00b23510();
+
+        if (this->mBatch68.mpHandler != 0) {
+            void* handler = this->mBatch68.mpHandler;
+            this->mBatch68.mpHandler = 0;
+            RemoveHandler(handler,
+                          this->mBatch68.m0, this->mBatch68.m1,
+                          this->mBatch68.m2, this->mBatch68.m3);
+        }
+        this->mbField64 = 0;
+    } else if (newMode != (void*)0x1654c06 && newMode != (void*)0x1654c08) {
+        ((TCVI)VTFN(avatar, 0xe8 / 4))(avatar, 1);
+        void* posse = FUN_00d539d0();
+        ((cPosseSim*)posse)->FUN_00d52e40(1);
+        this->mBatch68.FUN_004039f0();
+        this->mbField64 = 0;
+    }
+
+    if (newMode == (void*)0x1654c02) {
+        cGameNounManager* item = SP::NounManager();
+        int id = item->FUN_00b1f9c0();
+        void* tribe = FUN_00cd40b0(avatar, id);
+        ((cTribeStrategy*)tribe)->FUN_00cdce40(avatar, id);
+        ((cStrategyBase*)((char*)this - 8))->AddStat(6, 0);
+    }
+
+    void* posse = FUN_00d539d0();
+    ((TCV)VTFN(posse, 0x20 / 4))(posse);
+    ((TCVP)VTFN(ticker, 0x54 / 4))(ticker, FUN_00d539d0());
+
+    cSPDramaManager* drama = CreatureSimulator();
+    ((TCV)VTFN(drama, 0x20 / 4))(drama);
+    ((TCVP)VTFN(ticker, 0x54 / 4))(ticker, CreatureSimulator());
+
+    void* city = *(void**)0x0167a690;
+    if (city == 0) {
+        city = (void*)operator new(0x40, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (city != 0)
+            ((cCitySim*)city)->FUN_00ae6a70();
+        *(void**)0x0167a690 = city;
+    }
+    ((cCitySim*)city)->FUN_00ae6570();
+
+    city = *(void**)0x0167a690;
+    if (city == 0) {
+        city = (void*)operator new(0x40, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (city != 0)
+            ((cCitySim*)city)->FUN_00ae6a70();
+        *(void**)0x0167a690 = city;
+    }
+    ((TCVP)VTFN(ticker, 0x54 / 4))(ticker, city);
+
+    ((TCV)VTFN(this->mpFieldC8, 0x24 / 4))(this->mpFieldC8);
+    if (this->mpFieldC8 != 0) {
+        cRefCounted* p = this->mpFieldC8;
+        this->mpFieldC8 = 0;
+        ((TCV)VTFN(p, 0x08 / 4))(p);
+    }
+
+    ((TCV)VTFN(this, 0x48 / 4))(this);
+}
