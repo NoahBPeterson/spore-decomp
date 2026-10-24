@@ -1,1 +1,3 @@
-0106f5b0 SP::cSPUISpace::~cSPUISpace  # pdb_names; retail layout, byte-exact
+0106f5b0 ??1cSPUISpace@SP@@UAE@XZ  # nonmatching (2340) - cSPUISpace destructor, only the members with destructors modelled
+0106fc90 ?DoFocusChange@cSPUISpace@SP@@QAE_NPAUIFocusTarget@2@PBUcFocusChangeData@2@@Z  # nonmatching (1026) - focus-change dispatch on class hash, tooltips/windows/civ rollover
+010701e0 ?FUN_010701e0@SP@@YAIPBX@Z  # nonmatching (110) - tool-chest key -> tool id -> UI space hook
