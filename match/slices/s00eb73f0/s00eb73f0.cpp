@@ -419,3 +419,59 @@ bool CamMsg::HandleMessage(uint32_t id, void* data)
     }
     return false;
 }
+
+// ---------------------------------------------------------------------------
+// 0x00eb82c0 -- derived view constructor (UI::AssetDiscovery_View + second base).
+// ---------------------------------------------------------------------------
+// The target writes both base vtable pointers directly after the base constructor
+// and returns this in eax.  Modelling it as an ordinary C++ constructor makes cl
+// emit the vptr stores twice (once during base construction and once in the
+// derived epilogue), so use the free-fastcall shape with explicit vptr fields.
+struct ViewerLayout {
+    void**   mpVtable0;               // +0x000
+    void**   mpVtable1;               // +0x004
+    char     pad008[0x108 - 8];
+    uint32_t m108;                    // +0x108
+    uint32_t m10c;                    // +0x10c
+    uint32_t m110;                    // +0x110
+    uint32_t m114;                    // +0x114
+    uint32_t m118;                    // +0x118
+    uint32_t m11c;                    // +0x11c
+    uint32_t m120;                    // +0x120
+    uint32_t m124;                    // +0x124
+    uint32_t m128;                    // +0x128
+    uint32_t m12c;                    // +0x12c
+    uint32_t m130;                    // +0x130
+    char     pad134[1];
+    uint8_t  b135;                    // +0x135
+};
+
+#include <intrin.h>
+extern void* g_vtable0[];             // 0x01488728
+extern void* g_vtable1[];             // 0x01488718
+void __fastcall UI_AssetDiscovery_View_ctor(void* self); // 0x00657f70
+
+// @ 0x00eb82c0
+void* __fastcall Viewer_Init(ViewerLayout* self)
+{
+    UI_AssetDiscovery_View_ctor(self);
+
+    uint32_t zero = 0;
+    self->mpVtable0 = g_vtable0;
+    self->mpVtable1 = g_vtable1;
+    _ReadWriteBarrier();
+
+    self->m108 = zero;
+    self->m10c = zero;
+    self->m110 = zero;
+    self->m114 = zero;
+    self->m118 = zero;
+    self->m11c = zero;
+    self->m120 = zero;
+    self->m124 = zero;
+    self->m128 = zero;
+    self->m12c = zero;
+    self->m130 = zero;
+    self->b135 = (uint8_t)zero;
+    return self;
+}
