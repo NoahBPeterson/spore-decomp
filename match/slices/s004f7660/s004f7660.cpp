@@ -7,6 +7,7 @@
 // ScratchSlots<N>() reproduces the unused stack slots that the original's inlined EASTL helpers
 // left in each /Od frame (needed for byte-identical frame offsets).
 #include "types.h"
+#include <intrin.h>
 
 typedef unsigned int size_t;
 inline void* operator new(size_t, void* p) { return p; }
@@ -312,26 +313,23 @@ extern unsigned char g_FxsaveArea[512];                // 0x015DB390
 // @ 0x004F8120
 int GetSimdLevel()
 {
-    if (g_SimdLevel < 0) {
-        g_SimdFlags = 0;
-        g_SimdLevel = 0;
-        __asm {
-            mov eax, 1
-            cpuid
-            test edx, 0x2000000
-            jz done
-            mov g_SimdLevel, 1
-            test edx, 0x4000000
-            jz done
-            mov g_SimdLevel, 2
-            test edx, 0x1000000
-            jz done
-            fxsave g_FxsaveArea
-            mov eax, dword ptr [g_FxsaveArea + 0x1C]
-            test eax, 0x40
-            jz done
-            mov g_SimdFlags, 0x40
-        done:
+    if (g_SimdLevel >= 0)
+        return g_SimdLevel;
+    g_SimdFlags = 0;
+    g_SimdLevel = 0;
+    register int featuresEdx;
+    __asm { mov eax, 1
+        cpuid
+        mov featuresEdx, edx }
+    if (featuresEdx & 0x2000000) {          // SSE2
+        g_SimdLevel = 1;
+        if (featuresEdx & 0x4000000) {      // SSE3
+            g_SimdLevel = 2;
+            if (featuresEdx & 0x1000000) {  // SSE
+                __asm { fxsave [g_FxsaveArea] }
+                if (*(uint32_t*)(g_FxsaveArea + 0x1C) & 0x40)
+                    g_SimdFlags = 0x40;
+            }
         }
     }
     return g_SimdLevel;
