@@ -261,7 +261,7 @@ struct DatabasePackedFile : DBase1 {
     bool Sync();
     bool DeleteRecord(const Key* key);
     bool ReadHeaderRecord();
-    uint32_t WriteEmptyHeaderRecord();
+    bool WriteEmptyHeaderRecord();
     bool WriteHeaderRecord();
     bool VerifyIndexRecordIntegrity();
     bool ReadAt(void* dst, int pos, int size);
@@ -760,7 +760,7 @@ bool DatabasePackedFile::ReadHeaderRecord()
 }
 
 // @ 0x008d8e20
-uint32_t DatabasePackedFile::WriteEmptyHeaderRecord()
+bool DatabasePackedFile::WriteEmptyHeaderRecord()
 {
     for (int i = 0; i < 10; ++i)
         mHeaderBlock.f[i] = 0;
@@ -769,11 +769,11 @@ uint32_t DatabasePackedFile::WriteEmptyHeaderRecord()
     for (int i = 2; i < 10; ++i)
         mHeaderBlock.f[i] = 0;
     mbFlag330 = true;
-    uint32_t r = (uint32_t)((TFi0)(*(void***)this)[0x70 / 4])(this);
-    if ((char)r != 0) {
+    bool r = ((TFb0)(*(void***)this)[0x70 / 4])(this);
+    if (r) {
         if (mpMemoryBase)
-            return r & 0xffffff00u;
-        r = (uint32_t)((TFi1)(*(void***)mpMemoryLocation.p)[0x20 / 4])(mpMemoryLocation.p, 0x60);
+            return false;
+        r = ((TFb1)(*(void***)mpMemoryLocation.p)[0x20 / 4])(mpMemoryLocation.p, 0x60);
     }
     return r;
 }

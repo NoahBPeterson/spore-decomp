@@ -11,3 +11,4 @@
 008d8ee0 91 complete: WriteHeaderRecord; 0x60-byte DBPF header field packing order differs (return semantics verified PASS)
 008d90e0 30 complete: ReadRecordRaw; branch layout for the memory-mode false return is inverted
 008d9170 26 complete: ReadRecordSpan; register assignment of size / e->size swapped
+008d8e20 123 complete: WriteEmptyHeaderRecord; the 10-dword header wipe uses eax in the original (zeroed above the prologue pushes) and ebx in ours, and the second wipe's store order differs (0x328/0x324 swapped); declared bool (false on the memory-mode path); difftest UNSUPPORTED (0/400 valid - fake-arity, the checker cannot synthesise the arity of the indirect vf70/vf20 calls)
