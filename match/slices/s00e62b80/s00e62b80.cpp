@@ -287,3 +287,69 @@ void cAnimGroup::Place(const cSPTransform* base, float p2, float z0, float z1, c
         } while (i < list->mCount);
     }
 }
+
+// ===========================================================================
+// 0x00e63400: destruction of a set of model references.  This is a member of
+// the (large) cell-gfx object and owns
+//   +0x00  eastl::vector<EA::AutoRefCount<SP::cMWModel>, sp_vector_allocator>
+//   +0x14  eastl::vector<void*, sp_vector_allocator>
+//   +0x28  a raw sp_vector_allocator block
+//   +0x3c  one reference-counted object (shared vtable: +0 addRef, +4 release)
+// Only the fields the destructor touches are modelled.
+// ===========================================================================
+struct cMWModel;                                        // SP::cMWModel
+
+struct MWModelRef {                                     // EA::AutoRefCount<SP::cMWModel>
+    cMWModel* mpModel;                                  // +0x00
+};
+
+struct MWModelRefVec {                                  // eastl::vector<...AutoRefCount...>
+    MWModelRef* mpBegin;                                // +0x00
+    MWModelRef* mpEnd;                                  // +0x04
+    MWModelRef* mpCapEnd;                               // +0x08
+    void DoDestroyValues(MWModelRef* first, MWModelRef* last);    // 0x005f3680
+};
+
+struct PtrVec {                                         // eastl::vector<void*, sp_vector_allocator>
+    void** mpBegin;                                     // +0x00
+    void** mpEnd;                                       // +0x04
+    void** mpCapEnd;                                    // +0x08
+    void DestroyRange(void** first, void** last);       // 0x0070f520
+};
+
+void __cdecl FreeRawBlock(void* p);                     // 0x00f47380 EASTL_allocator_deallocate
+
+struct cMWModelRefSet {
+    MWModelRefVec mModels;                              // +0x00
+    char          pad0c[0x08];                          // +0x0c
+    PtrVec        mPtrs;                                // +0x14
+    char          pad20[0x08];                          // +0x20
+    void*         mpBlock;                              // +0x28
+    char          pad2c[0x10];                          // +0x2c
+    void*         mpRefObj;                             // +0x3c
+    void Destroy();                                     // 0x00e63400
+};
+
+static inline void** VTable(void* o) { return *(void***)o; }
+
+// @ 0x00e63400
+void cMWModelRefSet::Destroy()
+{
+    void* obj = mpRefObj;
+    if (obj)
+        ((void(__thiscall*)(void*))VTable(obj)[1])(obj);
+    if (mpBlock) {
+        if (((int*)mpBlock)[-1])
+            FreeRawBlock(mpBlock);
+    }
+    mPtrs.DestroyRange(mPtrs.mpBegin, mPtrs.mpEnd);
+    if (mPtrs.mpBegin) {
+        if (((int*)mPtrs.mpBegin)[-1])
+            FreeRawBlock(mPtrs.mpBegin);
+    }
+    mModels.DoDestroyValues(mModels.mpBegin, mModels.mpEnd);
+    if (mModels.mpBegin) {
+        if (((int*)mModels.mpBegin)[-1])
+            FreeRawBlock(mModels.mpBegin);
+    }
+}
