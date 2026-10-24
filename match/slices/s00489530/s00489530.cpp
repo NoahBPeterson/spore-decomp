@@ -43,7 +43,7 @@ template<class T> struct vector {
     T* begin() { return mpBegin; }
     T* end() { return mpEnd; }
     bool empty() const;                          // @ 0x526430
-    void clear();                                // @ 0x454280 (erase(first,last))
+    void erase(T* first, T* last);               // @ 0x454280 (erase(first,last))
 };
 
 template<int N> struct bitset {
@@ -121,6 +121,17 @@ class cSPEditorLimbStructure { public:
     void UpdateLimbScale();                                                            // @ 0x489bc0
     void FinalizeJoints(cSPEditorLimbJoint* joint, bool b);                            // @ 0x489c60
     void RepinJoint(cSPEditorLimbJoint* joint);                                        // @ 0x489cf0
+
+    // out-of-line members of this class (original callees, thiscall)
+    cSPVector3 GetLimbOriginalPosition();                                              // @ 0x48c610
+    void Refresh(bool relative);                                                       // @ 0x4890e0
+    void MirrorOriginal(cSPEditorLimbJoint* joint, float f);                           // @ 0x4893f0
+    void MirrorCreation(cSPEditorLimbJoint* joint, float f);                           // @ 0x489490
+    void UpdateSymmetry();                                                             // @ 0x488a50
+    void FUN_0048bdd0();                                                               // @ 0x48bdd0
+    void FUN_0048bf70(cSPEditorLimbJoint* joint, int i);                               // @ 0x48bf70
+    void FUN_0048bae0(int i);                                                          // @ 0x48bae0
+    void SetUIStateBlock(void* arg);                                                   // @ 0x48a560
 };
 
 // external helpers
@@ -128,22 +139,13 @@ void RepinBlockToTorso(cSPEditorBlock* b, cSPVector3 pos, RwMat33 orient, int fl
 float FUN_00496760(cSPEditorBlock* b, float f, int flag);               // @ 0x496760
 RwMat33 FUN_004a25f0(RwMat33 m, int sign);                              // @ 0x4a25f0
 RwMat33 MatrixFromAxes2(const Vector3T& a, const Vector3T& b);          // @ 0x4a89e0
-cSPVector3 GetLimbOriginalPosition(cSPEditorLimbStructure* self);       // @ 0x48c610
 void FUN_0049d1f0(cSPEditorBlock* block, float x, int a, int b);        // @ 0x49d1f0
 void FUN_004961d0(cSPEditorBlock* block, cSPEditorLimbStructure* self); // @ 0x4961d0
 void BuildPileList(cSPEditorBlock* block, cSPEditorLimbStructure* limb, int depth); // @ 0x48c790
-void Refresh(cSPEditorLimbStructure* self, bool relative);              // @ 0x4890e0
-void MirrorOriginal(cSPEditorLimbJoint* joint, float f);                // @ 0x4893f0
-void MirrorCreation(cSPEditorLimbJoint* joint, float f);                // @ 0x489490
-void UpdateSymmetry(cSPEditorLimbStructure* self);                      // @ 0x488a50
 bool FixJoint(cSPEditorLimbJoint* joint);                               // @ 0x48afc0
-void SetUIStateBlock(cSPEditorLimbStructure* self, void* arg);          // @ 0x48a560
 cSPEditorBlock* FUN_004a9a00(cSPEditorBlock* block, bool b);            // @ 0x4a9a00
 cSPEditorBlock* GetFirstFootBlock(cSPEditorBlock* block);               // @ 0x4a9840
 cSPEditorBlock* FUN_004a9920(cSPEditorBlock* block);                    // @ 0x4a9920
-void FUN_0048bdd0(cSPEditorLimbStructure* self);                        // @ 0x48bdd0
-void FUN_0048bf70(cSPEditorLimbJoint* joint, int i);                    // @ 0x48bf70
-void FUN_0048bae0(cSPEditorLimbStructure* self, int i);                 // @ 0x48bae0
 
 // @ 0x489530
 void cSPEditorLimbStructure::MirrorTargets(cSPEditorLimbJoint* joint, vector<cSPEditorLimbJoint*>* list)
@@ -185,7 +187,7 @@ void cSPEditorLimbStructure::RefreshTargets(vector<cSPEditorLimbJoint*>* list, b
     MirrorTargets(mBaseJoint, list);
     MirrorOriginal(mBaseJoint, mBaseJoint->mOriginalPosition.x);
     MirrorCreation(mBaseJoint, mBaseJoint->mPositionAtCreation.x);
-    UpdateSymmetry(this);
+    UpdateSymmetry();
 }
 
 // @ 0x4897b0
@@ -205,9 +207,9 @@ void cSPEditorLimbStructure::Rebuild(cSPEditorBlock* block)
 {
     CollectBlocks(block);
     UpdateLimbScale();
-    mPileList.clear();
+    mPileList.erase(mPileList.begin(), mPileList.end());
     BuildPileList(mBaseBlock, this, 0);
-    Refresh(this, true);
+    Refresh(true);
 }
 
 // @ 0x489900
@@ -225,7 +227,7 @@ void cSPEditorLimbStructure::CollectBlocks(cSPEditorBlock* block)
         }
     }
     if (!done) {
-        bool b = (block->mLink33c == 0 || block->mLink33c->mFlags.test(0xb));
+        bool b = (block->mLink33c != 0 && !block->mLink33c->mFlags.test(0xb));
         mLastBone = FUN_004a9a00(mBaseBlock, b);
         mEndBlock = GetFirstFootBlock(mBaseBlock);
         if (mEndBlock == 0) mEndBlock = FUN_004a9920(mBaseBlock);
@@ -238,7 +240,7 @@ void cSPEditorLimbStructure::FixAllJoints()
     if (mEndBlock) {
         for (int i = 0, n = mBaseJoint->mLowerJoints.size(); i < n; i++)
             FixJoint(mBaseJoint->mLowerJoints[i]);
-        FUN_0048bdd0(this);
+        FUN_0048bdd0();
         for (int i = 0, n = mBaseJoint->mLowerJoints.size(); i < n; i++)
             FixJoint(mBaseJoint->mLowerJoints[i]);
         FinalizeJoints(mBaseJoint, true);
@@ -248,8 +250,12 @@ void cSPEditorLimbStructure::FixAllJoints()
 // @ 0x489bc0
 void cSPEditorLimbStructure::UpdateLimbScale()
 {
-    cSPVector3 p = GetLimbOriginalPosition(this);
-    cSPVector3 d = mBaseBlock->mPosition - p;
+    cSPVector3 p = GetLimbOriginalPosition();
+    Vector3T basePos;
+    basePos.x = mBaseBlock->mPosition.x;
+    basePos.y = mBaseBlock->mPosition.y;
+    basePos.z = mBaseBlock->mPosition.z;
+    cSPVector3 d = p - basePos;
     mLimbOriginalScale = VectorLength(d);
 }
 
@@ -258,10 +264,10 @@ void cSPEditorLimbStructure::FinalizeJoints(cSPEditorLimbJoint* joint, bool b)
 {
     if (joint == 0) joint = mBaseJoint;
     if (b) FUN_0048bf70(joint, 0);
-    FUN_0048bae0(this, 0);
+    FUN_0048bae0(0);
     RepinJoint(mBaseJoint);
-    SetUIStateBlock(this, joint->mJointBlock);
-    UpdateSymmetry(this);
+    SetUIStateBlock(joint->mJointBlock);
+    UpdateSymmetry();
 }
 
 // @ 0x489cf0

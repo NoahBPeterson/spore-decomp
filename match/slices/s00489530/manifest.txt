@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00489530/s00489530.cpp  ?FinalizeJoints@cSPEditorLimbStructure@SP@@QAEXPAVcSPEditorLimbJoint@2@_N@Z  00489c60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
