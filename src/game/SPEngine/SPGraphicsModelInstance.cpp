@@ -2144,14 +2144,18 @@ int cModelInstance_Pose::GetPoseTransforms(cMDBoneTransform* dst, bool original)
     if (!materials[2] || !materials[2]->mpSkin || !materials[2]->mpSkin->mpMatrices)
         return 0;
 
+    Mat4 uninit;              // never written
+    Mat4 singular = uninit;   // snapshot of the untouched stack slot for singular matrices
     for (unsigned int i = 0; i < materials[2]->mpSkin->mnBones; ++i)
     {
         Mat4 m = materials[2]->mpSkin->mpMatrices[i];
         if (!original)
         {
-            Mat4 inv;   // left untouched (uninitialized) when the matrix is singular
-            AffineInverse(inv, (const float*)&m);
-            m = inv;
+            Mat4 computed;
+            if (AffineInverse(computed, (const float*)&m))
+                m = computed;
+            else
+                m = singular;
         }
         // Transposed 3x4 store.
         for (int c = 0; c < 3; ++c)
@@ -2719,11 +2723,17 @@ int ModelInstanceDispatch::Dispatch(int a2, int a3)
     return c.result;
 }
 
+// The retail loop keeps the destination in eax and the source in ecx; a
+// plain C++ body picks the opposite roles.  Route the initial destination
+// through a tiny noinline identity so cl leaves it in eax.
+__declspec(noinline) static void* __fastcall CopyBackward8KeepResult(void* self) { return self; }
+
 // @ 0x0073fe50
 void __cdecl copy_backward8(T8* first, T8* last, T8* result)
 {
+    T8* r = (T8*)CopyBackward8KeepResult(result);
     while (last != first) {
-        *--result = *--last;
+        *--r = *--last;
     }
 }
 
