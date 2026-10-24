@@ -31,6 +31,10 @@ struct HashHolder { void FUN_00925e60() { *(void**)this = (void*)0x0143e104; FUN
 // ---- items of slice s0095eeb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void __cdecl FUN_00958860(void*);
 extern "C" void __cdecl FUN_009580E0(void*);
+struct W {
+    void m860(char* p);   // 0x00958860
+    void x0e0(char* p);   // 0x009580E0
+};
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 #pragma intrinsic(_InterlockedExchangeAdd)
 struct Window {
@@ -483,8 +487,9 @@ void Window::Set1D4(int v)
     if (m1d4 != v) {
         m1d4 = v;
         if (m30 != 0) {
-            FUN_00958860((char*)this - 4);
-            FUN_009580E0((char*)this - 4);
+            W* w = (W*)m30;
+            w->m860((char*)this - 4);
+            w->x0e0((char*)this - 4);
         }
     }
 }
