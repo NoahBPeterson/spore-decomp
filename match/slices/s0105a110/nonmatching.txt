@@ -1,0 +1,1 @@
+0105a110 1497 cSPToolStrategy::DoToolAction: flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (219 valid, 8.1% cov); size 1720 vs 1908, retail keeps the tool/building pointers in different registers, uses a 0x34 frame and a different artifact/human dispatch layout

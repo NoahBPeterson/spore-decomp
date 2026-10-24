@@ -1,0 +1,1 @@
+slices/s0105a110/s0105a110.cpp  ?DoToolAction@cSPScanToolStrategy@@UAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  0105a890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
