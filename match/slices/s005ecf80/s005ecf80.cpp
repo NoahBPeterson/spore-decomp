@@ -17,7 +17,10 @@ class cRefObj3 {
 };
 
 void* __stdcall AddBoundingBox(void* box, int arg, int flag);
-void ResetLayout(int value);
+// 0x00828020 is a thiscall member (SetFlag); the object is the rollover `this`.
+struct cSPUIPropertyLayout {
+  void SetFlag(int value);  // 0x00828020
+};
 
 namespace SP {
 class cSPPaletteItemRollover {
@@ -60,10 +63,13 @@ void cSPPaletteItemRollover::AddBox(int arg) {
 // @ 0x005ed6c0
 void cSPPaletteItemRollover::ResetRollover() {
   if (!mFieldB8)
-    ResetLayout(0);
+    ((cSPUIPropertyLayout*)this)->SetFlag(0);
   if (mFieldB4) {
-    mFieldB4 = 0;
-    ((cRefObj3*)mFieldB4)->Release();
+    cRefObj3* pB4 = *(cRefObj3* volatile*)&mFieldB4;
+    if (pB4) {
+      mFieldB4 = 0;
+      pB4->Release();
+    }
   }
 }
 
