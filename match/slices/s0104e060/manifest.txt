@@ -1,0 +1,1 @@
+slices/s0104e060/s0104e060.cpp  ?FreeEffectBuffers@cSPSpaceToolData@@QAEXXZ  0104e6f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
