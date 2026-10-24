@@ -81,15 +81,19 @@ inline void AssignObj(cRefCounted** dst, cRefCounted* src) {
   }
 }
 
+struct cSPTransform {                             // 0x38 bytes (dev PDB)
+  uint16_t mFlags;                                  // +0x00
+  uint16_t mModificationCount;                      // +0x02
+  float    mTranslation[3];                         // +0x04
+  float    mScale;                                  // +0x10
+  Matrix3  mRotation;                               // +0x14
+  cSPTransform& operator=(const cSPTransform& o);   // 0x00537dc0
+};
+
+// SP::cMWGroup::cModelInfo (dev PDB, 0x3c bytes)
 struct cModelInfo {
-  void*  mObject;                                   // +0x00
-  struct {
-    uint16_t mFlags;                                // +0x04
-    uint16_t mModificationCount;                    // +0x06
-    float    mTranslation[3];                       // +0x08
-    float    mScale;                                // +0x14
-    Matrix3  mRotation;                             // +0x18
-  } mLocalTransform;
+  void*        mObject;                             // +0x00 (SP::cMWObject*)
+  cSPTransform mLocalTransform;                     // +0x04
 };
 
 // what cQueueElem::mpModel points at (= the model instance base + 8)
@@ -106,6 +110,15 @@ struct VecModelInfo {
   cModelInfo* mpCapacity;                           // +0x08
   void  resize(uint32_t n);                         // 0x00751ed0 (thiscall, ret 4)
   void  DoInsertValues(cModelInfo* at, uint32_t n, const cModelInfo* v);  // 0x0074f5d0
+  // eastl::vector::erase(first, last): move the tail down, then drop (last - first) elements (trivial dtor)
+  __forceinline cModelInfo* erase(cModelInfo* first, cModelInfo* last) {
+    cModelInfo* const end = mpEnd;
+    cModelInfo* d = first;
+    for (cModelInfo* s = last; s != end; ++s, ++d)
+      *d = *s;
+    mpEnd -= (last - first);
+    return first;
+  }
 };
 
 // SpVector<float>
@@ -238,10 +251,120 @@ struct cElemVec {
   void Cleanup();                                   // 0x07478b0 (thiscall, ecx = this)
 };
 
-struct cMWGroupInternal;
-struct cMWGroupDtorStub {
-  cMWGroupInternal* mp;                             // +0x00
-  void F();                                         // 0x0751d00
+// SP::cIModelWorld: only slot 92 (+0x170) is called here
+struct cMWObject;
+struct cIModelWorld {
+  virtual void v00();
+  virtual void v01();
+  virtual void v02();
+  virtual void v03();
+  virtual void v04();
+  virtual void v05();
+  virtual void v06();
+  virtual void v07();
+  virtual void v08();
+  virtual void v09();
+  virtual void v10();
+  virtual void v11();
+  virtual void v12();
+  virtual void v13();
+  virtual void v14();
+  virtual void v15();
+  virtual void v16();
+  virtual void v17();
+  virtual void v18();
+  virtual void v19();
+  virtual void v20();
+  virtual void v21();
+  virtual void v22();
+  virtual void v23();
+  virtual void v24();
+  virtual void v25();
+  virtual void v26();
+  virtual void v27();
+  virtual void v28();
+  virtual void v29();
+  virtual void v30();
+  virtual void v31();
+  virtual void v32();
+  virtual void v33();
+  virtual void v34();
+  virtual void v35();
+  virtual void v36();
+  virtual void v37();
+  virtual void v38();
+  virtual void v39();
+  virtual void v40();
+  virtual void v41();
+  virtual void v42();
+  virtual void v43();
+  virtual void v44();
+  virtual void v45();
+  virtual void v46();
+  virtual void v47();
+  virtual void v48();
+  virtual void v49();
+  virtual void v50();
+  virtual void v51();
+  virtual void v52();
+  virtual void v53();
+  virtual void v54();
+  virtual void v55();
+  virtual void v56();
+  virtual void v57();
+  virtual void v58();
+  virtual void v59();
+  virtual void v60();
+  virtual void v61();
+  virtual void v62();
+  virtual void v63();
+  virtual void v64();
+  virtual void v65();
+  virtual void v66();
+  virtual void v67();
+  virtual void v68();
+  virtual void v69();
+  virtual void v70();
+  virtual void v71();
+  virtual void v72();
+  virtual void v73();
+  virtual void v74();
+  virtual void v75();
+  virtual void v76();
+  virtual void v77();
+  virtual void v78();
+  virtual void v79();
+  virtual void v80();
+  virtual void v81();
+  virtual void v82();
+  virtual void v83();
+  virtual void v84();
+  virtual void v85();
+  virtual void v86();
+  virtual void v87();
+  virtual void v88();
+  virtual void v89();
+  virtual void v90();
+  virtual void v91();
+  virtual void DestroyModel(cMWObject* pModel, bool flag);   // +0x170
+};
+
+// SP::cMWObject (dev PDB, 0x44 bytes)
+struct cMWObject {
+  cIModelWorld* mWorld;                             // +0x00
+  uint32_t      mFlags;                             // +0x04 (eastl::bitset<32>)
+  cSPTransform  mTransform;                         // +0x08
+  int           mRefCount;                          // +0x40
+};
+
+// SP::cMWGroupInternal (dev PDB): eastl::intrusive_list_node, then SP::cMWGroup (a cMWObject followed by
+// eastl::fixed_vector<cModelInfo, 8> mObjects)
+struct cMWGroupInternal {
+  void*        mpNext;                              // +0x00
+  void*        mpPrev;                              // +0x04
+  cMWObject    mBase;                               // +0x08
+  VecModelInfo mObjects;                            // +0x4c
+  ~cMWGroupInternal();                              // 0x00751d00
 };
 
 // the model-reference vector eastl::vector<EA::AutoRefCount<cMWModel>, sp_vector_allocator>
@@ -531,7 +654,7 @@ bool cModelWorld::Shutdown() {
       next->mpPrev = prev;
       n->mpNext = 0;
       n->mpPrev = 0;
-      reinterpret_cast<cMWGroupDtorStub*>(n)->F();
+      reinterpret_cast<cMWGroupInternal*>(n)->~cMWGroupInternal();
       reinterpret_cast<void(__thiscall*)(void*)>(mpVtbl[0])(this);
       n = next;
     }
@@ -755,4 +878,24 @@ void cModelWorld::FinishBackgroundLoad(cLoadEntry* e) {
   m->mF70 = (uint16_t)(m->mF70 + 1);
 }
 
+}  // namespace SP
+
+// ---------------------------------------------------------------------------
+// 00751d00  cMWGroupInternal::~cMWGroupInternal
+// ---------------------------------------------------------------------------
+namespace SP {
+// @ 0x00751d00
+cMWGroupInternal::~cMWGroupInternal() {
+  int n = (int)(mObjects.mpEnd - mObjects.mpBegin);
+  for (int i = 0; i < n; ++i) {
+    cMWObject* o = (cMWObject*)mObjects.mpBegin[i].mObject;
+    if (o) {
+      if (o->mRefCount > 1)
+        o->mRefCount--;
+      else
+        o->mWorld->DestroyModel(o, ((o->mFlags >> 31) & 1) != 0);   // mFlags.test(31)
+    }
+  }
+  mObjects.erase(mObjects.mpBegin, mObjects.mpEnd);
+}
 }  // namespace SP

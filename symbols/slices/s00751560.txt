@@ -1,6 +1,6 @@
 00751560 ?cModelWorld_FinishBackgroundLoad@SP@@YAXPAX@Z  # cModelWorld_FinishBackgroundLoad migrated from s00751560 (verbatim, slice spelling)
 00751b30 ?cModelWorld_UpdateHighlightProps@SP@@YAXPAX@Z  # cModelWorld_UpdateHighlightProps migrated from s00751560 (verbatim, slice spelling)
-00751d00 ?F@MWGroupDtorStub@SP@@QAEXXZ  # MWGroupDtorStub::F migrated from s00751560 (verbatim, slice spelling)
+00751d00 ??1cMWGroupInternal@SP@@QAE@XZ  # SP::cMWGroupInternal::~cMWGroupInternal (dev PDB layout)
 00751de0 ?FUN_00751de0@SP@@YAXPAX@Z  # FUN_00751de0 migrated from s00751560 (verbatim, slice spelling)
 00751ed0 ?FUN_00751ed0@SP@@YAXPAX@Z  # FUN_00751ed0 migrated from s00751560 (verbatim, slice spelling)
 00751ff0 ?cModelWorld_Init@SP@@YAXPAX@Z  # cModelWorld_Init migrated from s00751560 (verbatim, slice spelling)

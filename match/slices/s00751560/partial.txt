@@ -1,1 +1,1 @@
-# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)00751d00  0  PARTIAL: definition lost in the part1 rewrite (row said:  n/a complete behaviourally: destroys each cModelInfo then resets the fixed_vector; the re); restore the source from commit 7e24bc158
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
