@@ -10,10 +10,8 @@
 00bd7ca0 45  Sim::FUN_00bd7ca0: complete. Register allocation / block-order mismatch. difftest PASS (400 valid, 100.0% coverage).
 00bd7d10 40  Sim::FUN_00bd7d10: complete. Register allocation / block-order mismatch. difftest PASS (400 valid, 100.0% coverage).
 00bd7d90 88  FUN_00bd7d90: complete (SP_cSPTimer_Restart wrapper). difftest UNSUPPORTED (1 unresolved ref SP_cSPTimer_Restart).
-00bd7e40 55  FUN_00bd7e40: complete (Sim helper; forwards to FUN_00ac8d40 via the +0x120 object). Difftest FAIL: ours faults at 00ac8d6a where the original succeeded (harness did not fake the callee); logic is otherwise faithful.
+00bd7e40 55  FUN_00bd7e40: complete (Sim helper; gate on the 0xb3d4d0 trigger manager's +0x2c state, then clear +0x6c0, restart the +0x6c8 timer and set +0x2a0 unless the 0xb3d480 object's 0xac8d60 thiscall test vetoes). Ours folds the two signed range tests into one unsigned compare (retail: test/jl + cmp/jge) and the timer restart is a thiscall; semantics verified. difftest PASS (replay identical; fresh 1600 inputs: 1593 valid, 84.6% coverage).
 00bd7ea0 2   FUN_00bd7ea0: complete (clear this+0x2e4, NounManager->GetPlayerCivilization, FUN_00b3d480(this,civ), FUN_00ac8d00). Sole diff is MSVC tail-calling the final __fastcall callee (`jmp`) where the original emits `call; ret`. difftest UNSUPPORTED (0/400 valid).
-00bd7f30 1   FUN_00bd7f30: complete (forward this into trigger/audio). Sole diff is `call; ret` vs a tail `jmp`. difftest FAIL (fake-arity: harness cannot resolve the callee).
 00bd7fc0 29  FUN_00bd7fc0: complete (predicate: selection matches + "needs upgrade" meter >= 100). Diff is register allocation / block order. difftest UNSUPPORTED (0/400 valid).
 00bd8000 130 FUN_00bd8000: complete (message-topic registration). Diff is scheduling / register allocation. difftest UNSUPPORTED (1 unresolved ref m_send@ObjMsgsvr).
 00bd80d0 31  FUN_00bd80d0: complete. Diff is register allocation / block order. difftest UNSUPPORTED (0/400 valid).
-00bd8110 1   FUN_00bd8110: complete (reset the terraforming manager: SP::TerraformingManager(0) then FUN_00bbe5f0). Sole diff is `call; ret` vs a tail `jmp`. difftest FAIL (fake-arity: harness cannot resolve the callee).

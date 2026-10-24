@@ -5,6 +5,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
 #include "types.h"
+#include <intrin.h>
 
 #pragma warning(disable: 4100)
 
@@ -31,6 +32,7 @@ struct Obj {
     void* m00c884f0(int);
     void* m00ac0320(int);
     void  m00ac8d40();
+    char  m00ac8d60(void* param);
     void  m00bbe5f0();
     void  m00ff03b0(int);
     void  m00ff03c0(float);
@@ -455,20 +457,22 @@ int __fastcall FUN_00bd7e20(char* this_)
 // @ 0x00bd7e40 — trigger-manager gate then re-arm.
 // ===========================================================================
 extern "C" void* __cdecl FUN_00b3d4d0();
-extern "C" void* __cdecl FUN_00b3d480p(int);
-extern "C" char  __cdecl FUN_00ac8d60p(void*);
+extern "C" void* __cdecl FUN_00b3d480p(void);      // 0x00b3d480: `mov eax,[0x167eb3c]; ret`, no arguments
+struct cSPTimer { void m00bc3130(); };              // 0x00bc3130: thiscall, restarts the timer at `this`
 void __fastcall FUN_00bd7e40(char* this_)
 {
     *(char*)(this_ + 0x2e1) = 0;
     int v = *(int*)(this_ + 0x29c);
-    if (v >= 0 && v < 3) {
+    if (v < 0) return;
+    if (v >= 3) return;
+    {
         void* t = FUN_00b3d4d0();
         if (*(int*)((char*)t + 0x2c) != 1 && *(int*)((char*)t + 0x2c) != 2) {
-            void* r = FUN_00b3d480p((int)this_);
-            if (FUN_00ac8d60p(r) == 0) return;
+            Obj* r = (Obj*)FUN_00b3d480p();
+            if (r->m00ac8d60(this_) == 0) return;
         }
         *(char*)(this_ + 0x6c0) = 0;
-        SP_cSPTimer_Restart(this_ + 0x6c8);
+        ((cSPTimer*)(this_ + 0x6c8))->m00bc3130();
         *(char*)(this_ + 0x2a0) = 1;
     }
 }
@@ -517,6 +521,7 @@ void __fastcall FUN_00bd7f30(int param_1)
 {
     void* r = FUN_00b3d480(param_1);
     ((Obj*)r)->m00ac8d40();
+    _ReadWriteBarrier();        // the original ends with `call 0xac8d40; ret`, not a tail jmp
 }
 
 // ===========================================================================
@@ -580,9 +585,10 @@ float __cdecl FUN_00bd80d0(int* param_1)
 // ===========================================================================
 // @ 0x00bd8110 — reset the terraforming manager.
 // ===========================================================================
-extern "C" void* __stdcall SP_TerraformingManager(int);
+extern "C" void* __stdcall FUN_00b3d430(int);      // SP::TerraformingManager()
 void __cdecl FUN_00bd8110(void)
 {
-    void* r = SP_TerraformingManager(0);
+    void* r = FUN_00b3d430(0);
     ((Obj*)r)->m00bbe5f0();
+    _ReadWriteBarrier();        // the original ends with `call 0xbbe5f0; ret`, not a tail jmp
 }
