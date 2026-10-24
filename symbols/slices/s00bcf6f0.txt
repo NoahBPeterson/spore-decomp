@@ -1,1 +1,8 @@
 00bcf6f0  SP::cBuilding::TakeDamage_Combatant  # Claude-coined name; cCombatant::TakeDamage override (vtable slot 0x18 of the cCombatant subobject at cBuilding+0x120); tail-calls base 0x00bcece0
+00bcff00  CostObj::GetCost_A  # Claude-coined class name CostObj; F00bcd480(empireID, float, float) cdecl helper
+00bcff40  CostObj::GetCost_B  # same shape, different constant pair
+00bcff80  CostObj::GetCost_C  # same shape, different constant pair
+00bd0110  CostObj::GetCost_D  # same shape, different constant pair
+00bd0000  UFOObject::RefreshTools  # Claude-coined names; sports the 3-row specialty table init guard at 0x168b648
+00bd0390  UFOSlice::GetTransformedPosition  # builds an Xform (flags/pos/scale/rot) from the UFOBase vtable at this-0x554 then applies it
+00bd0140  cGameData::FireAtTarget  # picks/assigns m_tool104 from {m_tool108,m_tool10c,m_tool110} by engagement range; ret 4
