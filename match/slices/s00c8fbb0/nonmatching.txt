@@ -1,0 +1,9 @@
+00c8fbb0 148 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 148 bytes - cTribe::UpdateRoboTribeness not reconstructed.
+00c8fd50 204 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 204 bytes - cTribe::PromoteChieftain not reconstructed.
+00c8fe20 164 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 164 bytes - cTribe::GetClosestWater not reconstructed.
+00c8fef0 1385 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1385 bytes - cTribe::InitDomesticatedAnimalsHerd not reconstructed.
+00c904b0 237 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 237 bytes - tool scan over the terrain sphere cell (GetToolOfType, x87 scaling) not reconstructed.
+00c905c0 560 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 560 bytes - tribe helper not reconstructed.
+00c908a0 119 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 119 bytes - thunk that forwards four 16-byte struct-by-value arguments to FUN_00c8ed90 (cPointerBlockIter); the argument pack is not reconstructed.
+00c90920 286 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 286 bytes - eastl::insertion_sort<cSPVector3_*, ComparePositions> instantiation not reconstructed.
+00c90a40 250 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 250 bytes - eastl::insertion_sort_simple<cSPVector3_*, ComparePositions> instantiation not reconstructed.

@@ -1,0 +1,6 @@
+slices/s00c8fbb0/s00c8fbb0.cpp  ?FUN_00c8fc50@cTribe@SP@@QAEX_N@Z  00c8fc50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c8fbb0/s00c8fbb0.cpp  ?GetCenter@cTribe@SP@@QAEPAUtVec3@2@PAU32@@Z  00c8fcc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c8fbb0/s00c8fbb0.cpp  ?GetPoliticalCenter@cTribe@SP@@QAEPAUtVec3@2@PAU32@@Z  00c8fcf0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c8fbb0/s00c8fbb0.cpp  ?GetChieftain@cTribe@SP@@QAEPAXXZ  00c8fd30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c8fbb0/s00c8fbb0.cpp  ?FUN_00c90470@cTribe@SP@@QAEXXZ  00c90470  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c8fbb0/s00c8fbb0.cpp  ?FUN_00c905a0@cTribe@SP@@QAE_NXZ  00c905a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
