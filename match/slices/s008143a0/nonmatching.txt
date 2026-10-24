@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
 00814d50  131 complete: cSPUIMainWin::KeyHandler - logic reproduced; same-TU helper clobber analysis and vcall scheduling differ
 00815310  48  complete: vector remove-by-value; cl keeps loop `end` in ecx, original reloads it into edx for the copy bound
-00815370  78  complete: vector push_back; AutoRefCount temp/dup AddRef ordering differs
+00815370  92  complete: the vector-grow helper at 0x814a30 is __thiscall (ecx=&mVec, stack args end/&tmp); declared as Vec::Grow so cl sets ecx and the replay no longer faults in its memcpy. equiv: PASS 286/400 valid (rest discarded: pool-limit/write/read faults, fake-arity), 100% cov (42/42). AutoRefCount temp/dup AddRef ordering and register/frame allocation still differ (chk size 111 vs 110)
 008153e0  52  complete: vector clear; cl saves `this` in ebx and vector addr in ebp, original uses ecx/ebx

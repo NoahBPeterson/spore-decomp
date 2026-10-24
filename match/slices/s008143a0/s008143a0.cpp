@@ -24,10 +24,10 @@ struct Vec {
     void* mEnd;     // +4
     void* mCap;     // +8
     void erase(void* first, void* last);
+    void Grow(void* pos, void** val);  // 0x814a30
 };
 
 void __cdecl CopyImpl(void* first, void* last, void* dst);   // 0x6782c0
-void __cdecl FUN_00814a30(void*, void**);                    // 0x814a30
 
 struct WinBase { void SetArea(int); };
 struct WinSub : WinBase {};
@@ -135,7 +135,7 @@ void MainWin::AddElem(Elem* p) {
             if (p) p->e00();
         }
     } else {
-        FUN_00814a30(mVec.mEnd, (void**)&tmp);
+        mVec.Grow(mVec.mEnd, (void**)&tmp);
     }
     if (tmp) tmp->e01();
 }
