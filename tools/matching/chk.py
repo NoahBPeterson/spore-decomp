@@ -23,11 +23,21 @@ SKIP = ("__ehhandler", "__unwindfunclet", "__catch", "__tryend", "$")
 
 
 def slice_vas(sid):
+    """Every VA any batch lists for the slice. A slice can be in several batches (gold7 re-offers slices of earlier
+    trial batches with more functions); taking only the first file's entry scored 1 of s008ea290's 19 VAs and the
+    session spent its nudges puzzling over "0 / 1 target functions" (2026-10-24)."""
+    vas = set()
     for f in sorted(glob.glob(os.path.join(ROOT, "work", "batches", "*.json"))):
-        for s in json.load(open(f)):
-            if s["id"] == sid:
-                return [int(v, 16) for v in s["vas"]]
-    sys.exit("slice %s not found in work/batches/*.json" % sid)
+        try:
+            recs = json.load(open(f))
+        except ValueError:
+            continue
+        for s in recs if isinstance(recs, list) else []:
+            if isinstance(s, dict) and s.get("id") == sid:
+                vas |= {int(v, 16) for v in s.get("vas", [])}
+    if not vas:
+        sys.exit("slice %s not found in work/batches/*.json" % sid)
+    return sorted(vas)
 
 
 def manifest_syms(src):
