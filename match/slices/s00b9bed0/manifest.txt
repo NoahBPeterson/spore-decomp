@@ -1,0 +1,2 @@
+slices/s00b9bed0/s00b9bed0.cpp  ?FUN_00b9c250@TObj@@QAEXXZ  00b9c250  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b9bed0/s00b9bed0.cpp  ?FUN_00b9c5b0@@YAXPAVTObj@@@Z  00b9c5b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
