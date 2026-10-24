@@ -36,18 +36,31 @@ void* cStringDtor(void*);
 void* cStringTokenTranslatorCtor(void*);
 void* cStringDetokenizerCtor(void*);
 int   cStringLoad(void*, unsigned int, unsigned int, int);
-void* CommandLineFindSwitch(void*, unsigned int, int, int, int);
-unsigned int WStr_Format(void*, unsigned int, unsigned int);
-void* GetDataDir(int);
+unsigned int FUN_0041e050(void*, unsigned int, unsigned int);   // eastl::wstring::sprintf
+void* FUN_00688cb0(int);                                         // SP::GetDataDir
 void* FUN_009309b0(void*, void*, void*);
-void* RangeInitialize(void*);
 void* FUN_006884f0(int, int, int, void*, void*);
-void  operator_delete__(void*);
+void  FUN_00f47380(void*);                                       // operator delete[]
 void* g_sAppProperties;
-void* g_CommandLine;
+void* g_015fd920;   // EA::CommandLine* instance (0x15fd920)
 void* g_15fd928;
 
-struct WString { int assign(unsigned int b, unsigned int e); };
+struct WString { int assign(unsigned int b, unsigned int e); };  // 0x00459ff0
+
+// Non-virtual thiscall helpers used by f47d80: EA::CommandLine::FindSwitch
+// (0x0092b300) and eastl::wstring::RangeInitialize (0x00579a90) are called with
+// the object in ecx and the remaining arguments on the stack.
+namespace EA { struct CommandLine { int FindSwitch(unsigned int name, int, int, int); }; }
+namespace eastl {
+    struct allocator {};
+    template <class T, class A> struct basic_string {
+        T* mpBegin;
+        T* mpEnd;
+        T* mpCapacity;
+        void RangeInitialize(const T* pBegin);
+    };
+}
+typedef eastl::basic_string<wchar_t, eastl::allocator> EWStr16;
 
 #define VC0(p, off)        (*(void (__thiscall**)(void*))((*(char**)(p)) + (off)))(p)
 #define VC1(p, off, a)     (*(void (__thiscall**)(void*, int))((*(char**)(p)) + (off)))(p, (a))
@@ -343,25 +356,36 @@ void f47ca0(char flag, void* outString)
 // @ 0x00F47D80  command-line driven data-directory setup
 void f47d80()
 {
-    void* cl = g_CommandLine;
-    int r = (int)CommandLineFindSwitch(cl, 0x13f8d84, 0, 0, 0);
-    if (r == -1) {
-        r = (int)CommandLineFindSwitch(cl, 0x148d850, 0, 0, 0);
-        if (r != -1) {
-            char buf[0x40];
-            WStr_Format(buf, 0x13f3da0, 0x148d844);
-            char path[0x200];
-            FUN_009309b0(path, buf, GetDataDir(4));
-            char s2[0x10];
-            *(char**)(s2 + 0) = (char*)0x1667bac;
-            *(char**)(s2 + 4) = (char*)0x1667bac;
-            *(char**)(s2 + 8) = (char*)0x1667bae;
-            RangeInitialize(s2);
-            int out[4];
-            out[0] = 0; out[1] = 0; out[2] = 0;
-            FUN_006884f0(1, 1, 0x6f4b5d1, out, s2);
-            operator_delete__((void*)out[0]);
-            operator_delete__((void*)out[2]);
-        }
-    }
+    EA::CommandLine* cl = (EA::CommandLine*)g_015fd920;
+    if (cl->FindSwitch(0x13f8d84, 0, 0, 0) != -1)      // L"shipDirs"
+        return;
+    if (cl->FindSwitch(0x148d850, 0, 0, 0) == -1)
+        return;
+
+    EWStr16 t0;                                         // formatted buffer
+    t0.mpBegin = (wchar_t*)0x1667bac;                   // eastl::gEmptyString16
+    t0.mpEnd   = (wchar_t*)0x1667bac;
+    t0.mpCapacity = (wchar_t*)0x1667bae;
+    FUN_0041e050(&t0, 0x13f3da0, 0x148d844);
+    wchar_t* buf = t0.mpBegin;
+
+    wchar_t path[0x104];
+    FUN_009309b0(path, buf, FUN_00688cb0(4));
+
+    EWStr16 a;                                          // resolved data directory
+    a.mpBegin = 0; a.mpEnd = 0; a.mpCapacity = 0;
+    a.RangeInitialize(path);
+
+    EWStr16 out;
+    out.mpBegin = (wchar_t*)0x1667bac;
+    out.mpEnd   = (wchar_t*)0x1667bac;
+    out.mpCapacity = (wchar_t*)0x1667bae;
+    FUN_006884f0(1, 1, 0x6f4b5d1, &a, &out);
+
+    if ((((int)out.mpCapacity - (int)out.mpBegin) & ~1) > 2 && out.mpBegin)
+        FUN_00f47380(out.mpBegin);
+    if ((((int)a.mpCapacity - (int)a.mpBegin) & ~1) > 2 && a.mpBegin)
+        FUN_00f47380(a.mpBegin);
+    if ((((int)t0.mpCapacity - (int)t0.mpBegin) & ~1) > 2 && t0.mpBegin)
+        FUN_00f47380(t0.mpBegin);
 }
