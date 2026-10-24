@@ -392,37 +392,41 @@ bool XmlReaderState::ReadStructArray(int* param_2, unsigned param_3)
     unsigned n        = 0;
     int      stride   = param_2[1];
     int      elemSize = *(int*)(param_2[0] + 8);
-    if (!Reader()->Next())
-        goto failTail;
-    while (true) {
-        if (Reader()->GetNodeType() == 1) {
-            if (wcscmp(Reader()->GetName(), L"struct") != 0) {
-                ReportResult((void*)0x2fc50001);
-                return 0;
+    if (Reader()->Next()) {
+        for (;;) {
+            if (Reader()->GetNodeType() == 1) {
+                if (wcscmp(Reader()->GetName(), L"struct") != 0)
+                    goto typeErr;
+                if (n >= (unsigned)param_2[2])
+                    goto rangeErr;
+                SerItem item;
+                item.w[1] = (uint32_t)stride;
+                item.w[0] = (uint32_t)param_2[0];
+                item.w[2] = 1;
+                if (!ReadPropertyList(&item, (IList*)param_3))
+                    return 0;
+                stride += elemSize;
+                ++n;
+            } else if (Reader()->GetNodeType() == 2) {
+                goto endCheck;
             }
-            if (n >= (unsigned)param_2[2]) {
-                ReportResult((void*)0x2fc50007);
-                return 0;
-            }
-            SerItem item;
-            item.w[1] = (uint32_t)stride;
-            item.w[0] = (uint32_t)param_2[0];
-            item.w[2] = 1;
-            if (!ReadPropertyList(&item, (IList*)param_3))
-                return 0;
-            stride += elemSize;
-            ++n;
-        } else if (Reader()->GetNodeType() == 2) {
-            if (n == (unsigned)param_2[2])
-                return 1;
-            ReportResult((void*)0x2fc50007);
-            return 0;
+            if (!Reader()->Next())
+                break;
         }
-        if (!Reader()->Next())
-            break;
     }
-failTail:
     ReportResult((void*)Reader()->GetErrorCode());
+    return 0;
+
+rangeErr:
+    ReportResult((void*)0x2fc50007);
+    return 0;
+typeErr:
+    ReportResult((void*)0x2fc50001);
+    return 0;
+endCheck:
+    if (n == (unsigned)param_2[2])
+        return 1;
+    ReportResult((void*)0x2fc50007);
     return 0;
 }
 
