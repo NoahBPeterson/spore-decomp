@@ -6,9 +6,9 @@
 bool DatabasePackedFile::FUN_006bd150(void* src, uint32 n, void** ppMem, uint32* pSize, uint16* pFlags)
 {
     bool bWasNull = (*ppMem == 0);
-    *pFlags = 0xffff;
     CompressionRefpack refpack;
     if (n - 1 < 39999999) {
+        *pFlags = 0xffff;
         uint32 r = refpack.FUN_0092c9f0(src, n, 0, 0, 1);
         if (bWasNull && r != 0) {
             *pSize = r;
@@ -105,14 +105,10 @@ bool DatabasePackedFile::FUN_006bd580(uint32 p2, int p3, void** p4, uint32* p5, 
 {
     *p4 = 0;
     *p5 = 0;
-    if (!FUN_006bd150((void*)p2, (uint32)p3, p4, p5, (uint16*)&p6))
+    if (!FUN_006bd150((void*)p2, (uint32)p3, p4, p5, (uint16*)p6))
         return false;
     float a = (float)*p5;
-    if ((int)*p5 < 0)
-        a += 4294967296.0f;
-    float b = (float)p3;
-    if (p3 < 0)
-        b += 4294967296.0f;
+    float b = (float)(uint32)p3;
     if (a / b < field_4ec)
         return true;
     if (*p4 != 0)

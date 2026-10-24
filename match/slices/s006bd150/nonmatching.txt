@@ -1,4 +1,4 @@
-006bd150  400  complete; compressed-record allocation path; RefPack local + register/frame differs
+006bd150  352  complete; compressed-record allocation path; *pFlags = 0xffff now written only inside the compression branch; RefPack local + register/frame differs [equiv: PASS 233/233, 79.0% cov]
 006bd430  112  complete; Close(); duplicated cleanup blocks merged differently by cl
 006bd4d0  137  complete; GetOpenCount rbtree walk; iterator/frame differences
-006bd580  160  complete; ratio check with x87; unsigned->float conversion schedule differs
+006bd580  91  complete; ratio check with x87; p6 passed as the pFlags pointer and unsigned conversions used; register/frame differs [equiv: PASS 203/203, 86.4% cov]
