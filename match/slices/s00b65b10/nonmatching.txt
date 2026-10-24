@@ -1,2 +1,3 @@
-# va  diff-bytes  reason
-00b65b10  1979  complete; same size/call sequence, /O2 register allocation and spill layout differ (frame 0x134 vs 0xe4)
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00b65b10  1979  complete; same size/call sequence, /O2 register allocation and spill layout differ (frame 0x134 vs 0xe4) [equiv WEAK 385/400 valid inputs, 56.2% coverage]
+00b66460  25  complete; same 343 B and identical instruction stream, only the cold-block order differs (original lays the miss block before the hit-only block; ours reverses those two blocks). No tested source layout or flag variant changes the layout [equiv PASS 298/400 valid inputs, 64.2% coverage]

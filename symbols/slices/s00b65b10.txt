@@ -1,0 +1,6 @@
+00b65b10 ?FUN_00b65b10@@YAXPBURadialRay@@PAVhkWorld@@PAURayObj@@_NIPAURayHitResult@@@Z  # radial ray cast against one RayObj (pre-existing row; nonmatching)
+00b66460 ?FUN_00b66460@@YAXPBURadialRay@@PAVhkWorld@@PAURayObjList@@_NIPAURayHitResult@@@Z  # radial ray cast against a RayObjList, farthest-hit merge plus world fallback (nonmatching, cold-block order)
+00b665c0 ?FUN_00b665c0@@YAXPBURadialRay@@PAVcPlanetModel@@PAURayHitResult@@@Z  # planet hit point, radial distance and surface normal (byte-exact)
+00b66740 ?FUN_00b66740@@YAXPBURadialRay@@MPAVcPlanetModel@@PAURayHitResult@@@Z  # planet hit point at height offset, distance and normal (byte-exact)
+00b668c0 ?FUN_00b668c0@@YAXPAURadialRay@@PAVcPlanetModel@@PAVhkWorld@@PAURayObj@@_NPAURayHitResult@@4@Z  # planet plus RayObj radial hit helper (byte-exact)
+00b669b0 ?FUN_00b669b0@@YAXPAURadialRay@@PAVcPlanetModel@@PAVhkWorld@@PAURayObjList@@_NPAURayHitResult@@4@Z  # planet plus RayObjList radial hit helper (byte-exact)

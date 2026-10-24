@@ -197,6 +197,7 @@ struct RayHitResult {
     hkReal* m_distOut;                     // +0x24
     void* m_userData;                      // +0x28
     hkEntity* m_entity;                    // +0x2c
+    void FUN_00b655f0(const RayHitResult* src);   // 0x00b655f0 (thiscall copy; defined out of line)
 };
 
 void __cdecl FUN_00b65710(hkVector4* up, const RadialRay* ray);
@@ -312,4 +313,254 @@ void __cdecl FUN_00b65b10(const RadialRay* r, hkWorld* world, RayObj* obj, bool 
     }
     else
         out->m_status = 0;
+}
+
+// ---------------------------------------------------------------------------------------------------
+// Farthest-hit radial query wrappers (00b66460..00b669b0).
+
+struct Vec3 {
+    float x, y, z;
+};
+
+class cPlanetModel {
+public:
+    uint32_t m_pad00[0x3c];                    // +0x000 .. +0x0ef
+    uint8_t  m_useSurfaceF0;                   // +0x0f0
+    void FUN_00b816f0(Vec3* out, const void* pos);                 // 0x00b816f0 (ret 8)
+    Vec3* FUN_00b82060(Vec3* out, const void* pos, int h);         // 0x00b82060 (ret 0xc)
+    Vec3* GetNormalAt(Vec3* out, const Vec3* at);                   // 0x00b7e3b0 (ret 8)
+};
+
+struct RayObjList {
+    RayObj** m_objects;                        // +0x00
+    int      m_count;                          // +0x04
+};
+
+void __cdecl FUN_00b65660(RayHitResult* a, const RayHitResult* b, RayHitResult* dst);   // 0x00b65660
+
+template <class T> inline const T& min(const T& a, const T& b) { return (b < a) ? b : a; }
+
+// @ 0x00b66460
+void __cdecl FUN_00b66460(const RadialRay* r, hkWorld* world, RayObjList* list, bool useWorld,
+                          uint32_t filterInfo, RayHitResult* out)
+{
+    out->m_status = 0;
+    int count = list->m_count;
+    if (count == 0 && useWorld)
+    {
+        FUN_00b65b10(r, world, 0, true, filterInfo, out);
+        return;
+    }
+    RayHitResult hit;
+    hkVector4 normal;
+    float dist;
+    hit.m_normalOut = 0;
+    hit.m_distOut = 0;
+    hit.m_userData = 0;
+    hit.m_entity = 0;
+    if (out->m_distOut)
+        hit.m_distOut = &dist;
+    if (out->m_normalOut)
+        hit.m_normalOut = &normal;
+    if (count > 0)
+    {
+        int i = 0;
+        do
+        {
+            FUN_00b65b10(r, world, list->m_objects[i], false, filterInfo, &hit);
+            if (hit.m_status != 0)
+            {
+                if (out->m_status != 0)
+                {
+                    float hitDist2 = hit.m_pos.z * hit.m_pos.z + hit.m_pos.y * hit.m_pos.y +
+                                     hit.m_pos.x * hit.m_pos.x;
+                    float outDist2 = out->m_pos.x * out->m_pos.x + out->m_pos.y * out->m_pos.y +
+                                     out->m_pos.z * out->m_pos.z;
+                    if (hitDist2 > outDist2)
+                        out->FUN_00b655f0(&hit);
+                    else
+                        out->FUN_00b655f0(out);
+                }
+                else
+                {
+                    out->FUN_00b655f0(&hit);
+                }
+            }
+            else if (out->m_status != 0)
+            {
+                out->FUN_00b655f0(out);
+            }
+            else
+            {
+                out->m_status = 0;
+            }
+            i++;
+        } while (i < count);
+    }
+}
+
+// @ 0x00b665c0
+void __cdecl FUN_00b665c0(const RadialRay* r, cPlanetModel* planet, RayHitResult* out)
+{
+    Vec3 point;
+    Vec3 normal;
+    planet->FUN_00b816f0(&point, r);
+    if (out->m_distOut)
+    {
+        float d = (float)(sqrt(r->m_pos.x * r->m_pos.x + r->m_pos.y * r->m_pos.y +
+                              r->m_pos.z * r->m_pos.z) -
+                          sqrt(point.x * point.x + (point.z * point.z + point.y * point.y)));
+        *out->m_distOut = d;
+    }
+    if (out->m_normalOut)
+    {
+        hkVector4* n = out->m_normalOut;
+        if (planet->m_useSurfaceF0 != 0)
+        {
+            n->x = r->m_pos.x;
+            n->y = r->m_pos.y;
+            n->z = r->m_pos.z;
+            hkVector4 tmp;
+            tmp.w = r->m_pos.w;
+            n->w = tmp.w;
+            n = out->m_normalOut;
+            const hkReal lenSq = n->x * n->x + n->y * n->y + n->z * n->z;
+            hkReal inv;
+            if (lenSq != 0.0f)
+                inv = hkSqrtInverse(lenSq);
+            else
+                inv = 0.0f;
+            n->z *= inv;
+            n->x *= inv;
+            n->y *= inv;
+            n->w *= inv;
+        }
+        else
+        {
+            Vec3* nrm = planet->GetNormalAt(&normal, &point);
+            hkVector4 nv;
+            nv.x = nrm->x;
+            nv.y = nrm->y;
+            nv.z = nrm->z;
+            nv.w = 0.0f;
+            *out->m_normalOut = nv;
+        }
+    }
+    out->m_pos.x = point.x;
+    out->m_pos.y = point.y;
+    out->m_pos.z = point.z;
+    out->m_pos.w = 0.0f;
+    out->m_status = 2;
+}
+
+// @ 0x00b66740
+void __cdecl FUN_00b66740(const RadialRay* r, float h, cPlanetModel* planet, RayHitResult* out)
+{
+    Vec3 point;
+    Vec3 normal;
+    planet->FUN_00b82060(&point, r, *(int*)&h);
+    if (out->m_distOut)
+    {
+        float d = (float)(sqrt(r->m_pos.x * r->m_pos.x + r->m_pos.y * r->m_pos.y +
+                              r->m_pos.z * r->m_pos.z) -
+                          sqrt(point.x * point.x + (point.z * point.z + point.y * point.y)));
+        *out->m_distOut = d;
+    }
+    if (out->m_normalOut)
+    {
+        hkVector4* n = out->m_normalOut;
+        if (planet->m_useSurfaceF0 != 0)
+        {
+            n->x = r->m_pos.x;
+            n->y = r->m_pos.y;
+            n->z = r->m_pos.z;
+            hkVector4 tmp;
+            tmp.w = r->m_pos.w;
+            n->w = tmp.w;
+            n = out->m_normalOut;
+            const hkReal lenSq = n->x * n->x + n->y * n->y + n->z * n->z;
+            hkReal inv;
+            if (lenSq != 0.0f)
+                inv = hkSqrtInverse(lenSq);
+            else
+                inv = 0.0f;
+            n->z *= inv;
+            n->x *= inv;
+            n->y *= inv;
+            n->w *= inv;
+        }
+        else
+        {
+            Vec3* nrm = planet->GetNormalAt(&normal, &point);
+            hkVector4 nv;
+            nv.x = nrm->x;
+            nv.y = nrm->y;
+            nv.z = nrm->z;
+            nv.w = 0.0f;
+            *out->m_normalOut = nv;
+        }
+    }
+    out->m_pos.x = point.x;
+    out->m_pos.y = point.y;
+    out->m_pos.z = point.z;
+    out->m_pos.w = 0.0f;
+    out->m_status = 2;
+}
+
+// @ 0x00b668c0
+void __cdecl FUN_00b668c0(RadialRay* r, cPlanetModel* planet, hkWorld* world, RayObj* obj,
+                          bool useWorld, RayHitResult* out, bool adjust)
+{
+    RayHitResult hit;
+    hkVector4 normal;
+    float dist;
+    float d;
+    hit.m_normalOut = 0;
+    hit.m_distOut = 0;
+    hit.m_userData = 0;
+    hit.m_entity = 0;
+    if (out->m_distOut)
+        hit.m_distOut = &dist;
+    if (out->m_normalOut)
+        hit.m_normalOut = &normal;
+    FUN_00b665c0(r, planet, out);
+    if (adjust && out->m_status == 2)
+    {
+        d = (float)(sqrt(out->m_pos.x * out->m_pos.x + out->m_pos.y * out->m_pos.y +
+                         out->m_pos.z * out->m_pos.z) -
+                    sqrt(r->m_pos.x * r->m_pos.x + r->m_pos.y * r->m_pos.y +
+                         r->m_pos.z * r->m_pos.z));
+        r->m_h1 = min(r->m_h1, d);
+    }
+    FUN_00b65b10(r, world, obj, useWorld, 6, &hit);
+    FUN_00b65660(out, &hit, out);
+}
+
+// @ 0x00b669b0
+void __cdecl FUN_00b669b0(RadialRay* r, cPlanetModel* planet, hkWorld* world, RayObjList* list,
+                          bool useWorld, RayHitResult* out, bool adjust)
+{
+    RayHitResult hit;
+    hkVector4 normal;
+    float dist;
+    float d;
+    hit.m_normalOut = 0;
+    hit.m_distOut = 0;
+    hit.m_userData = 0;
+    hit.m_entity = 0;
+    if (out->m_distOut)
+        hit.m_distOut = &dist;
+    if (out->m_normalOut)
+        hit.m_normalOut = &normal;
+    FUN_00b665c0(r, planet, out);
+    if (adjust && out->m_status == 2)
+    {
+        d = (float)(sqrt(out->m_pos.x * out->m_pos.x + out->m_pos.y * out->m_pos.y +
+                         out->m_pos.z * out->m_pos.z) -
+                    sqrt(r->m_pos.x * r->m_pos.x + r->m_pos.y * r->m_pos.y +
+                         r->m_pos.z * r->m_pos.z));
+        r->m_h1 = min(r->m_h1, d);
+    }
+    FUN_00b66460(r, world, list, useWorld, 6, &hit);
+    FUN_00b65660(out, &hit, out);
 }
