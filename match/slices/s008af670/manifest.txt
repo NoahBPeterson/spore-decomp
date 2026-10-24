@@ -1,2 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s008af670/s008af670.cpp  ?ReadDeltaXYValue@@YAIPAUInputStream@@PAF1@Z  008af670  /O2 /MD /Gy /TP
+slices/s008af670/s008af670.cpp  ?glyph_AllocContours@@YAXPAUGlyphClass@@F@Z  008afd50  /O2 /MD /Gy /TP
+slices/s008af670/s008af670.cpp  ?Delete_GlyphClass@@YAXPAUGlyphClass@@@Z  008b0280  /O2 /MD /Gy /TP
+slices/s008af670/s008af670.cpp  ?glyph_StartLine@@YAXPAUGlyphClass@@HH@Z  008b0440  /O2 /MD /Gy /TP

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+008b0480  214  New_EmptyGlyph: flags /O2 /MD /Gy /TP; body fully recovered (allocate zeroed 0x78 glyph, init fields/defaults, allocate zeroed 0x34 point block, lay out x32/y32/xs/ys/flags for 4 points, seed (0,0),(a,0),(0,field72+b),(0,field72)); size 215 vs 214, only the pointCapacity store placement and seed register choice differ; difftest FAIL (5/5 valid inputs mismatched; first: memory pool pointer written by the allocator, orig 0x40f93e00 vs ours 0x40000000; 100.0% cov), so equivalence is not confirmed
