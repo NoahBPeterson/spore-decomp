@@ -1,0 +1,23 @@
+00c14350 ?GetContentValidationSummarizer@@YAPAUcContentValidationSummarizer@@XZ  # Simulator content-validation summarizer singleton
+00c144e0 ?Alloc@Pool@@QAEPAXPAI@Z  # eastl pool free-list alloc
+00c14530 ?DestroyPool@@YAXXZ  # eastl pool destructor
+00c14590 ?AnimationAction@CreatureBase@@QAEHIH@Z  # CreatureBase::AnimationAction
+00c14640 ?UpdateLocomotionAnimation@CreatureBase@@QAEXXZ  # CreatureBase::UpdateLocomotionAnimation
+00c14750 ?UpdateLocomotion@CreatureBase@@QAEXH@Z  # CreatureBase::UpdateLocomotion
+00c148a0 ?ReleaseEffectRef@@YA_NPAI@Z  # release a body-effect refcount
+00c14910 ?PlayAnimationWithTarget@CreatureBase@@QAEHIPAXH@Z  # CreatureBase::PlayAnimationWithTarget
+00c14940 ?PlayAnimationWithTargetObj@CreatureBase@@QAEHIPAXH@Z  # CreatureBase::PlayAnimationWithTargetObj
+00c14990 ?InterruptAnimationWithTarget@CreatureBase@@QAEHIPAXH@Z  # CreatureBase::InterruptAnimationWithTarget
+00c149c0 ?InterruptAnimationWithTargetObj@CreatureBase@@QAEHIPAXH@Z  # CreatureBase::InterruptAnimationWithTargetObj
+00c14a10 ?AssignDefinitionName@@YIXPAX0PAUStr@@@Z  # assign the creature definition name
+00c14a60 ?GetGlobalNameList@@YAPAXXZ  # global name list accessor
+00c14aa0 ?ReadGameData@@YA_NPAUcGameData@@PAX@Z  # cGameData::Read
+00c14cb0 ?DoHitGround@CreatureBase@@QAEXXZ  # CreatureBase::OnJumpLand
+00c14e10 ?OnStartSwimming@CreatureBase@@QAEXXZ  # CreatureBase::OnStartSwimming
+00c14e50 ?NotifySummarizer@CreatureBase@@QAEXXZ  # CreatureBase::NotifySummarizer
+00c14e70 ?LookupTextStyle@@YIPAXPAX0PAI@Z  # text-style hash lookup
+00c14ef0 ?WaitForAnimEventOrEnd@CreatureBase@@QAEHHPAIHH@Z  # CreatureBase::WaitForAnimEventOrEnd
+00c14f70 ?CreateBodyEffectByIndex@CreatureBase@@QAEPAXHII@Z  # CreatureBase::CreateBodyEffect
+00c15150 ?DetachBodyEffectById@CreatureBase@@QAE_NPAX0@Z  # CreatureBase::DetachBodyEffectById
+00c151b0 ?DetachAllBodyEffects@CreatureBase@@QAEXXZ  # CreatureBase::DetachAllBodyEffects
+00c15270 ?SetBodyEffectParam@CreatureBase@@QAEXI@Z  # CreatureBase::SetBodyEffectParam

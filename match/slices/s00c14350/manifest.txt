@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c14350/s00c14350.cpp  ?PlayAnimationWithTarget@CreatureBase@@QAEHIPAXH@Z  00c14910  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c14350/s00c14350.cpp  ?InterruptAnimationWithTarget@CreatureBase@@QAEHIPAXH@Z  00c14990  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c14350/s00c14350.cpp  ?GetGlobalNameList@@YAPAXXZ  00c14a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c14350/s00c14350.cpp  ?OnStartSwimming@CreatureBase@@QAEXXZ  00c14e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
