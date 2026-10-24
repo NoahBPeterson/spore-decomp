@@ -2,9 +2,49 @@
 // Shared stub types for the mesh/attribute bake region 0x006ccf50-0x006d7xxx.
 // Layouts cross-checked against the sibling slice s004248c0 (Elem32 / Handle).
 #include "types.h"
+#include <xmmintrin.h>
 
-extern "C" double __cdecl sqrt(double);
+// cl15 does not inline sqrt here (the original ends the root in x87 fsqrt);
+// sqrtss keeps the same single-precision result without a _CIsqrt import call.
+static inline float BakeSqrtSS(float x)
+{
+    return _mm_cvtss_f32(_mm_sqrt_ss(_mm_set_ss(x)));
+}
+
+// The retail tail divides |dx| by |len| with divss and stores the single-precision
+// quotient before calling acos; keep it in SSE so x87 excess precision does not leak
+// into the acos argument (it changes the result for NaN/Inf operands).
+static inline float BakeDivSS(float a, float b)
+{
+    return _mm_cvtss_f32(_mm_div_ss(_mm_set_ss(a), _mm_set_ss(b)));
+}
+
+// The retail tail multiplies the acos angle by 1.2732406f and then by the scale with
+// three separate mulss steps.  Keeping the chain in x87 would carry the 1.2732406
+// product in 80-bit excess precision and differ in the last bits.
+static inline float BakeMulSS(float a, float b)
+{
+    return _mm_cvtss_f32(_mm_mul_ss(_mm_set_ss(a), _mm_set_ss(b)));
+}
+
+// dx*dx + dy*dy is built with a mulss/addss pair in the retail code; doing the
+// sum in x87 would round once instead of twice and can change len's last bits.
+static inline float BakeAddSS(float a, float b)
+{
+    return _mm_cvtss_f32(_mm_add_ss(_mm_set_ss(a), _mm_set_ss(b)));
+}
+
+// 1.0f - weight is a subss in the retail tail; keeping it in x87 leaks excess
+// precision into the final store.
+static inline float BakeSubSS(float a, float b)
+{
+    return _mm_cvtss_f32(_mm_sub_ss(_mm_set_ss(a), _mm_set_ss(b)));
+}
+
+extern "C" double __cdecl atan2(double, double);
 extern "C" double __cdecl acos(double);
+extern "C" double __cdecl sqrt(double);
+extern "C" float __cdecl sqrtf(float);
 
 // Intrusive reference-counted object.  vtable slot 0 = AddRef, slot 1 = Release.
 struct RefObject
@@ -97,7 +137,7 @@ void FUN_006c3780(void* out0, void* out1, const void* pos3, const void* dir3,
 //   COLMODE: 0 = 4 bytes / 255, 1 = 4 floats, 2 = 2 floats, 3 = constant (1,0,0,0)
 //   TAIL   : 0 = acos (weight = axis.y * res.z)
 //            1 = dot  (out0 = axis.x*res.x + axis.z; out1 = 1 - (res.y*axis.y + axis.w))
-//            2 = acos (weight = axis.y * |res.xy - axis.zw|)
+//            2 = acos (weight = axis.y * len, len = sqrt((res.x-axis.z)^2 + (res.y-axis.w)^2))
 // ---------------------------------------------------------------------------------------------
 #define DEFINE_BAKE(NAME, COREID, UVN, UVT, COLMODE, TAIL)                                            \
 bool NAME(float* out, int count, ElemTable* table, BakeEntry* entries, StreamDesc* pos,               \
@@ -119,9 +159,11 @@ bool NAME(float* out, int count, ElemTable* table, BakeEntry* entries, StreamDes
         {                                                                                             \
             uint32_t u[4];                                                                            \
             if (UVT == 0) { uint8_t* s = (uint8_t*)(hA.b + hA.d * e->fc);                             \
-                u[0] = s[0] / 3; u[1] = s[1] / 3; u[2] = s[2] / 3; u[3] = s[3] / 3; }                 \
+                u[0] = s[0] / 3; u[1] = s[1] / 3; u[2] = 0; u[3] = 0;                                 \
+                if (UVN == 4) { u[2] = s[2] / 3; u[3] = s[3] / 3; } }                                 \
             else { uint16_t* s = (uint16_t*)(hA.b + hA.d * e->fc);                                    \
-                u[0] = s[0] / 3; u[1] = s[1] / 3; u[2] = s[2] / 3; u[3] = s[3] / 3; }                 \
+                u[0] = s[0] / 3; u[1] = s[1] / 3; u[2] = 0; u[3] = 0;                                 \
+                if (UVN == 4) { u[2] = s[2] / 3; u[3] = s[3] / 3; } }                                 \
             float color[4];                                                                           \
             if (COLMODE == 0) { uint8_t* c = (uint8_t*)(hB.b + hB.d * e->f8);                         \
                 color[0] = (float)c[0] * (1.0f / 255.0f); color[1] = (float)c[1] * (1.0f / 255.0f);   \
@@ -129,7 +171,7 @@ bool NAME(float* out, int count, ElemTable* table, BakeEntry* entries, StreamDes
             else if (COLMODE == 1) { float* c = (float*)(hB.b + hB.d * e->f8);                        \
                 color[0] = c[0]; color[1] = c[1]; color[2] = c[2]; color[3] = c[3]; }                 \
             else if (COLMODE == 2) { float* c = (float*)(hB.b + hB.d * e->f8);                        \
-                color[0] = c[0]; color[1] = c[1]; color[2] = c[2]; color[3] = 0.0f; }                 \
+                color[0] = c[0]; color[1] = c[1]; color[2] = 0.0f; color[3] = 0.0f; }                 \
             else { color[0] = white[0]; color[1] = white[1]; color[2] = white[2]; color[3] = white[3]; }\
             float* ps = (float*)(pos->base + pos->stride * e->f0);                                    \
             float p3[3];                                                                              \
@@ -147,15 +189,25 @@ bool NAME(float* out, int count, ElemTable* table, BakeEntry* entries, StreamDes
                 o[0] = (axis[0] * res[0] + axis[2]) * scale;                                          \
                 o[1] = (1.0f - (res[1] * axis[1] + axis[3])) * scale;                                 \
             }                                                                                         \
+            else if (TAIL == 2)                                                                       \
+            {                                                                                         \
+                float dx = res[0] - axis[2];                                                          \
+                float dy = res[1] - axis[3];                                                          \
+                float len = BakeSqrtSS(BakeAddSS(BakeMulSS(dx, dx), BakeMulSS(dy, dy)));             \
+                float angle = (float)acos(BakeDivSS(dx, len));                                        \
+                float weight = axis[1] * len;                                                         \
+                o[0] = BakeMulSS(BakeMulSS(BakeMulSS(axis[0], angle), 1.2732406f), scale);            \
+                o[1] = (1.0f - weight) * scale;                                                       \
+            }                                                                                         \
             else                                                                                      \
             {                                                                                         \
                 float dx = res[0] - axis[2];                                                          \
                 float dy = res[1] - axis[3];                                                          \
-                float len = (float)sqrt(dx * dx + dy * dy);                                           \
-                float angle = (float)acos(dx / len);                                                  \
-                float weight = (TAIL == 0) ? axis[1] * res[2] : axis[1] * len;                        \
-                o[0] = ((axis[0] * angle) * 1.2732406f) * scale;                                      \
-                o[1] = (1.0f - weight) * scale;                                                       \
+                float len = BakeSqrtSS(BakeAddSS(BakeMulSS(dx, dx), BakeMulSS(dy, dy)));              \
+                float angle = (float)acos(BakeDivSS(dx, len));                                        \
+                float weight = axis[1] * res[2];                                                      \
+                o[0] = BakeMulSS(BakeMulSS(BakeMulSS(axis[0], angle), 1.2732406f), scale);            \
+                o[1] = BakeMulSS(BakeSubSS(1.0f, weight), scale);                                     \
             }                                                                                         \
             o += 2;                                                                                   \
             e += 1;                                                                                   \
