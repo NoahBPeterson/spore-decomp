@@ -8,6 +8,8 @@
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  SPKeyFromName(void* out, void* name, int, int);   // 0x0068d840 (equiv t2)
 extern "C" int   CtrlIDMapFind(int* id);
+struct HashIter { void* node; void* other; };
+extern "C" void __fastcall HashFind_645ed0(void* self, int dummy, HashIter* out, const unsigned int* key); // 0x00645ed0
 extern "C" void  operator_delete(void*);
 extern void* vtbl_Simulator_cCreatureAbility;   // 0x013ef094 (equiv t2)
 extern void* vtbl_Skinner_PaintSystem;   // 0x013eb394 (equiv t2)
@@ -193,13 +195,18 @@ void** Destroy6370(void** p, int flags)
 void SP::cCameraManager::Update(unsigned int dt)
 {
     if (mActiveControllerIndex < 0) return;
+    if (mViewer == 0) return;
     void* ctrl = mControllers.mpBegin[mActiveControllerIndex];
-    void* vt = *(void**)ctrl;
-    void* p = (void*)((int(__thiscall*)(void*))((void**)vt)[0x4c / 4])(ctrl);
+    void** vt = *(void***)ctrl;
+    void* p = (void*)((int(__thiscall*)(void*))vt[0x4c / 4])(ctrl);
     if (p != 0) {
-        this->UpdateFromControllerProperties();
-        ((void(__thiscall*)(void*, int, void*))((void**)vt)[0x20 / 4])(ctrl, dt, 0);
+        p = (void*)((int(__thiscall*)(void*))vt[0x4c / 4])(ctrl);
+        void* parent = *(void**)((char*)p + 0x30);
+        unsigned int mods = parent != 0 ? ((SP::cPropertyList*)parent)->GetModificationCount() : 0;
+        if (*(unsigned int*)((char*)p + 0x34) + mods != mPropModCount)
+            this->UpdateFromControllerProperties();
     }
+    ((void(__thiscall*)(void*, int, void*))vt[0x20 / 4])(ctrl, (int)dt, mViewer);
 }
 
 // @ 0x007c6420
@@ -263,8 +270,14 @@ int cCameraManager::SetActiveControllerByID(int id)
 // @ 0x007c6700
 void* cCameraManager::Controller(int id)
 {
-    int found = CtrlIDMapFind(&id);
-    if (found != 0) return mControllersBegin[found];
+    char* map = (char*)this + 0x60;
+    HashIter it;
+    HashFind_645ed0(map, 0, &it, (const unsigned int*)&id);
+    void* end = *(void**)(*(char**)(map + 4) + *(int*)(map + 8) * 4);
+    if (it.node != end) {
+        int idx = *(int*)((char*)it.node + 4);
+        return mControllersBegin[idx];
+    }
     return 0;
 }
 
