@@ -1,5 +1,5 @@
-00479830 - complete source; vector<8-byte,4>::insert(n,value), NOT byte-exact; equiv FAIL (5/89; allocator arg is &this+0xc, ours passes mpCapacity)
-00479c00 - complete source; uninitialized_copy<8-byte> out-param wrapper, loop rotation/frame differs
+00479830 - complete source; vector<8-byte,4>::insert(n,value), NOT byte-exact; allocator arg is &this+0xc (named mAlloc field) and the grow path uses UninitCopy8Destruct (0x4763a0) with the begin[-4] guard around operator_delete__ (0xf47380); equiv PASS (520 valid inputs)
+00479c00 - complete source; 8-byte out-param copy wrapper: 4 args, returns out, copies two floats via x87; equiv PASS (960 valid inputs)
 00479c80 - complete source; vector<8-byte,2>::insert(n,value), NOT byte-exact
 0047a040 - complete source; vector<16-byte,4>::insert(n,value), NOT byte-exact
 0047a500 - complete source; uninitialized_copy<16-byte non-trivial>, NOT byte-exact
