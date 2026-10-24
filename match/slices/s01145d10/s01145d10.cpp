@@ -109,6 +109,10 @@ void CMpegLayer3Base::Reorder(int gr, int ch, float* src, float* dst)
                 dst[base + 3 * j + win] = src[base + win * w + j];
         base += 3 * w;
     }
+    // The original (LTCG) leaves eax = src at every real return (the hidden return value the
+    // difftest compares for this void function); keep the same value live past the loops.
+    const float* volatile keepSrc = src;
+    (void)keepSrc;
 }
 
 // @ 0x01146200
