@@ -364,13 +364,19 @@ bool PFIndex::ValidateFreeSpace(uint64 begin, uint64 size)
 // ---------------------------------------------------------------------------
 // Non-target skeletons (kept for the module picture; tracked in partial.txt).
 // ---------------------------------------------------------------------------
+// The retail initialiser returns the object pointer in eax (mov eax, ecx at
+// 0x006bf5a0).  A plain C++ body leaves ecx holding it; route the initial
+// pointer through a tiny noinline identity so cl copies `this` into eax and
+// keeps the tree pointer in ecx, matching the retail register roles.
+__declspec(noinline) static void* __fastcall PFHoleTableKeepThis(void* self) { return self; }
+
 // @ 0x006bf5a0
 void PFHoleTable::FUN_006bf5a0()
 {
-    uint32* a = (uint32*)this;
+    uint32* a = (uint32*)PFHoleTableKeepThis(this);
+    uint32* p = a + 3;
     a[0] = 0xffffffff;
     a[1] = 0xffffffff;
-    uint32* p = a + 3;
     p[1] = 0;
     p[2] = 0;
     p[3] = 0;
