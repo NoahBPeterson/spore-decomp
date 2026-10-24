@@ -1,0 +1,12 @@
+slices/s00c45860/s00c45860.cpp  ?IsTutorialMission@cSPMission@@QAEEXZ  00c45f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?ReadTargetPlanetType@cSPMission@@QAEIXZ  00c45b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?ReadTargetAnimalSpeciesType@cSPMission@@QAEIXZ  00c45b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?GetMissionIconEffect@cSPMission@@QAEIXZ  00c45db0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?GetMissionIconEffectGroup@cSPMission@@QAEIXZ  00c45de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?HasValidDescription@cSPMission@@QAEIXZ  00c46120  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?ReleaseRefMember@@YIPAPAXPAPAX@Z  00c463d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?ScalarDeletingDtor@cGenericPressureEvent@@QAEPAXI@Z  00c46540  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?PickTargetAnimalSpecies@cSPMission@@QAEEXZ  00c46790  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?QueueConversation@cSPMission@@QAEIXZ  00c46800  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?CanAccept@cSPMission@@QAEIXZ  00c46840  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c45860/s00c45860.cpp  ?ctor@cGenericPressureEvent@@QAEPAV1@XZ  00c46500  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
