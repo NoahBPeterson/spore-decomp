@@ -249,11 +249,15 @@ void DequeBase::Insert(DequeIter position, const Pair& value)         // @ 0x005
 struct KeyElem { float key; int value; };
 struct KeyIter {
     KeyElem* mpCurrent; KeyElem* mpFirst; KeyElem* mpLast; KeyElem** mpNode;
+    KeyIter(const KeyIter& x);                                   // 0x420050
+    KeyElem& operator*() const;                                  // 0x5658b0
+    KeyIter& operator++();                                       // 0x5677f0
+    KeyIter& operator+=(int n);                                  // 0x56a270
     KeyIter& operator--();
     KeyIter operator+(int n) const;
     bool operator!=(const KeyIter& o) const { return mpCurrent != o.mpCurrent; }
-    const KeyElem& operator*() const { return *mpCurrent; }
 };
+int distance(KeyIter first, KeyIter last);                       // 0x56a090
 
 KeyIter& KeyIter::operator--()
 {
@@ -276,12 +280,14 @@ KeyIter KeyIter::operator+(int n) const
 
 KeyIter LowerBound(KeyIter first, KeyIter last, const float& value)   // @ 0x00569380
 {
-    int n = (int)(last.mpCurrent - first.mpCurrent) / (int)sizeof(KeyElem);
+    int n = distance(first, last);
     while (n > 0) {
+        KeyIter it = first;
         int half = n >> 1;
-        KeyIter it = first + half;
-        if (value > (*it).key) {
-            first = it + 1;
+        it += half;
+        bool below = value > (*it).key;
+        if (below) {
+            first = ++it;
             n -= half + 1;
         }
         else {
