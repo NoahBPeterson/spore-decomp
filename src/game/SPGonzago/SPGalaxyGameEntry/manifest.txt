@@ -1,0 +1,51 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?IsIdle@cInterfaceState@@QAE_NXZ  00de0900  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_de3300@GameEntry@@QAEXXZ  00de3300  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_de38b0@GameEntry@@QAEXII@Z  00de38b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de3be0@@YAXPAUAnimObj@@@Z  00de3be0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de3d00@@YA_NPAULayout@@II@Z  00de3d00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?sGetWindowImage@@YAIPAX@Z  00de3e00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de3e40@@YAXI@Z  00de3e40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de3f00@@YA_NPAXI0@Z  00de3f00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de3fa0@@YAPAUEaString16@@PAU1@I@Z  00de3fa0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de40e0@@YAPAUEaString16@@PAU1@PAX@Z  00de40e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de5260@cGalaxyGameEntryImpl_s00de_5040@@QAEXXZ  00de5260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de5300@cGalaxyGameEntryImpl_s00de_5040@@QAEXXZ  00de5300  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de5330@cGalaxyGameEntryImpl_s00de_5040@@QAEXD@Z  00de5330  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de53d0@cGalaxyGameEntryImpl_s00de_5040@@QAEXD@Z  00de53d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de58c0@@YAPAURecBC@@PAU1@00@Z  00de58c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de5ee0@@YGXPAURecBC@@0@Z  00de5ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?CloseAssetBrowserUI@@YAXXZ  00dec360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?ShowGlobalUI@@YAXXZ  00dec3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?RefreshWhenIdle@cGalaxyGameEntryUIStateMachine@@QAEXH@Z  00dec3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?SetDeferredWindow@cGalaxyGameEntryUIStateMachine@@QAEXIPAX@Z  00dec430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?CanPlay@cGalaxyGameEntryUIStateMachine@@QAE_NXZ  00dec4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?UpdateLocks@cGalaxyGameEntryUIStateMachine@@QAEXXZ  00dec570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?ShowSkin@cGalaxyGameEntryUIStateMachine@@QAEXI@Z  00dec6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?QueueEditorLaunch@cGalaxyGameEntryUIStateMachine@@QAEXIPBI@Z  00dec770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?LoadAsset@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXI@Z  00dec940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?ShowAssetButtonsForLevel@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXH@Z  00decad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?SetupStartState@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXXZ  00dece10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00decf00@cPanelHost@@QAEXH@Z  00decf00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00decf20@@YGXPAVcUIWindow@@H@Z  00decf20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?HighlightPanelButton@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXI@Z  00decf70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?ToggleAssetLock@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXI@Z  00decfd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00ded030@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXXZ  00ded030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?ResetAssetButtons@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEX_N00@Z  00ded140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?ResetThemeIcons@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXXZ  00ded390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?EditExistingAsset@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXI@Z  00ded410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00deebc0@GalaxyUI@SP@@QAEPAXI@Z  00deebc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00deec00@Wrapper@SP@@QAEXMMM@Z  00deec00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00deed00@Record@@QAE_NI@Z  00deed00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00def020@Wrapper@SP@@QAEXXZ  00def020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df0980@cGalaxyGameEntryUIStateMachine_s00df_0280@SP@@QAEXXZ  00df0980  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?PickRandomBuilding@cGalaxyGameEntryUIStateMachine_s00df_1e70@SP@@QAEXXZ  00df2d60  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?TestEditorToGame@Impl@@QAEXPAH@Z  00df2e20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df3a70@@YIXPAUHolder@@@Z  00df3a70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df5ef0@@YA_NXZ  00df5ef0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df5f10@@YAXXZ  00df5f10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df68c0@WinA@@QAE_NIPAX@Z  00df68c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df9650@GGUI@@QAEXXZ  00df9650  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df9770@GGUI@@QAEXXZ  00df9770  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?e00560@@YGXH@Z  00e00560  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?init_16a0dc4@@YAXXZ  0136bfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

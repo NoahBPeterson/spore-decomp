@@ -1,8 +1,10 @@
-00e00670 SP::cTribeModeStrategy::Shutdown  # Ghidra PDB candidate (caller-scored)
-00e000a0 resource-manager lookup  # calls EA::ResourceMan::GetManager
 00dff790 Vec27e0::sub_dff790  # eastl::vector<0x27e0>::operator= reconstruction (nonmatching: MSVC regalloc; equiv WEAK)
 00dff8e0 Vec27e8::sub_dff8e0  # eastl::vector<0x27e8>::operator= reconstruction (nonmatching: MSVC regalloc; equiv WEAK)
 00dffa30 PropBaseA22::sub_dffa30  # memberwise copy assign reconstruction (nonmatching; equiv UNSUPPORTED)
 00dffda0 cEditorModeUI::sub_dffda0  # mode-8 resource lookup + UI dispatch reconstruction (nonmatching; equiv UNSUPPORTED)
+00e000a0 resource-manager lookup  # calls EA::ResourceMan::GetManager
 00e001a0 cEditorModeUI::sub_e001a0  # simulator-message dispatch reconstruction (nonmatching; equiv WEAK)
 00e002b0 cEditorModeUI::sub_e002b0  # message handler, bool return reconstruction (nonmatching; equiv WEAK)
+00e00560 ?e00560@@YGXH@Z  # e00560 migrated from s00dff790 (verbatim, slice spelling)
+00e005b0 ?e005b0@@YAXXZ  # e005b0 migrated from s00dff790 (verbatim, slice spelling)
+00e00670 SP::cTribeModeStrategy::Shutdown  # Ghidra PDB candidate (caller-scored)

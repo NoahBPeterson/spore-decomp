@@ -1,5 +1,5 @@
-00df9650  ?FUN_00df9650@GGUI@@QAEXXZ  # GGUI::FUN_00df9650 (re-enters the galaxy-game-entry screen) - byte-exact
-00df9770  ?FUN_00df9770@GGUI@@QAEXXZ  # GGUI::FUN_00df9770 - byte-exact
+00df9650 ?FUN_00df9650@GGUI@@QAEXXZ  # GGUI::FUN_00df9650 migrated from s00df9650 (verbatim, slice spelling)
+00df9770 ?FUN_00df9770@GGUI@@QAEXXZ  # GGUI::FUN_00df9770 migrated from s00df9650 (verbatim, slice spelling)
 00df97d0  ?FUN_00df97d0@GGUI@@QAEXXZ  # GGUI::FUN_00df97d0 - byte-exact
 00df97e0  ?FUN_00df97e0@GGUI@@QAEXXZ  # GGUI::FUN_00df97e0 (hides four nav windows) - byte-exact
 00df9850  ?FUN_00df9850@GGUI@@QAEXI@Z  # GGUI::FUN_00df9850 (slot -> resource image) - nonmatching/equivalent

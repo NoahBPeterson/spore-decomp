@@ -1,0 +1,5 @@
+00df7ce0 ?FUN_00df7ce0@@YAXXZ  # FUN_00df7ce0 migrated from s00df7ce0 (verbatim, slice spelling)
+00df7f60 ?GetSavedGames@@YAXXZ  # GetSavedGames migrated from s00df7ce0 (verbatim, slice spelling)
+00df82d0 ?FUN_00df82d0@@YAXXZ  # FUN_00df82d0 migrated from s00df7ce0 (verbatim, slice spelling)
+00df8330 ?SetupRolloverStarEffects@@YAXXZ  # SetupRolloverStarEffects migrated from s00df7ce0 (verbatim, slice spelling)
+00df85e0 ?SetGameToEnter@@YAXXZ  # SetGameToEnter migrated from s00df7ce0 (verbatim, slice spelling)

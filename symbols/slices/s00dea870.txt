@@ -1,5 +1,6 @@
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s00dea870, named from the dev publics; slice address comment)
 00dea870 FUN_00dea870  # cGalaxyGameEntryImpl message handler (ret 8, this in ecx); not byte-exact
-00deaad0 cGalaxyGameEntryImpl::PlayOpeningMovie  # PDB candidate (this in ecx); not byte-exact
+00deaad0 ?cGalaxyGameEntryImpl_PlayOpeningMovie@@YAXPAUcGalaxyGameEntryImpl_s00de_a870@@@Z  # cGalaxyGameEntryImpl_PlayOpeningMovie migrated from s00dea870 (verbatim, slice spelling)
 00deac20 FUN_00deac20  # cSPUILayout helper (this in ecx); not byte-exact
 00deacd0 FUN_00deacd0  # panel-id jump table over kGUI_PanelIDs +0x204 array (this in ecx, float); not byte-exact
 00deafc0 FUN_00deafc0  # +0x204 entry float helper (this in ecx, float); not byte-exact

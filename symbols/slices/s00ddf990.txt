@@ -9,4 +9,4 @@
 00de0670 ?BeginSequence@cInterfaceState@@QAEXEE@Z  # void cInterfaceState::BeginSequence
 00de07a0 ?ResetSequence@cInterfaceState@@QAEXXZ  # void cInterfaceState::ResetSequence
 00de0890 ?NotifySequence@cInterfaceState@@QAEXXZ  # void cInterfaceState::NotifySequence
-00de0900 ?IsIdle@cInterfaceState@@QAE_NXZ  # bool cInterfaceState::IsIdle
+00de0900 ?IsIdle@cInterfaceState@@QAE_NXZ  # cInterfaceState::IsIdle migrated from s00ddf990 (verbatim, slice spelling)

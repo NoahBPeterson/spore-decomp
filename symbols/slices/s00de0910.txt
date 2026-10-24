@@ -1,0 +1,2 @@
+00de0ae0 ?FUN_00de0ae0@cGalaxyGameEntryImpl@@QAEXI@Z  # cGalaxyGameEntryImpl::FUN_00de0ae0 migrated from s00de0910 (verbatim, slice spelling)
+00de0bc0 ?FUN_00de0bc0@cGalaxyGameEntryImpl@@QAEXIII@Z  # cGalaxyGameEntryImpl::FUN_00de0bc0 migrated from s00de0910 (verbatim, slice spelling)

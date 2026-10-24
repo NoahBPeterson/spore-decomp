@@ -1,0 +1,5 @@
+00df0280 ?ShowPanel@cGalaxyGameEntryUIStateMachine_s00df_0280@SP@@QAEXXZ  # cGalaxyGameEntryUIStateMachine_s00df_0280::ShowPanel migrated from s00df0280 (verbatim, slice spelling)
+00df0670 ?SetCurrentState@cGalaxyGameEntryUIStateMachine_s00df_0280@SP@@QAEXH@Z  # cGalaxyGameEntryUIStateMachine_s00df_0280::SetCurrentState migrated from s00df0280 (verbatim, slice spelling)
+00df0980 ?FUN_00df0980@cGalaxyGameEntryUIStateMachine_s00df_0280@SP@@QAEXXZ  # cGalaxyGameEntryUIStateMachine_s00df_0280::FUN_00df0980 migrated from s00df0280 (verbatim, slice spelling)
+00df09a0 ?FUN_00df09a0@@YAXXZ  # FUN_00df09a0 migrated from s00df0280 (verbatim, slice spelling)
+00df0a40 ?FUN_00df0a40@@YAXXZ  # FUN_00df0a40 migrated from s00df0280 (verbatim, slice spelling)

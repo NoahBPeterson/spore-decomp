@@ -1,0 +1,4 @@
+0080ea50 ?RemoveAllModels@cSPUILayeredObject@@QAEXXZ  # cSPUILayeredObject::RemoveAllModels (callee of s00ded5a0, named from the dev publics; slice address comment)
+00ded920 ?PickStarForEditorToGameFlow@cGalaxyGameEntryUIStateMachine_s00de_d5a0@@QAEXIH@Z  # cGalaxyGameEntryUIStateMachine_s00de_d5a0::PickStarForEditorToGameFlow migrated from s00ded5a0 (verbatim, slice spelling)
+00dedda0 ?SetLayout@cGalaxyGameEntryUIStateMachine_s00de_d5a0@@QAE_NPB_W@Z  # cGalaxyGameEntryUIStateMachine_s00de_d5a0::SetLayout migrated from s00ded5a0 (verbatim, slice spelling)
+00dee3d0 ?ReleaseOwned@cGalaxyGameEntryMode@@QAEXXZ  # cGalaxyGameEntryMode::ReleaseOwned migrated from s00ded5a0 (verbatim, slice spelling)
