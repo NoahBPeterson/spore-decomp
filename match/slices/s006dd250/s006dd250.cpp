@@ -20,6 +20,13 @@ extern int*  _sAppProperties;
 
 // ---- helpers ----------------------------------------------------------------
 int  __cdecl FUN_011f3620(int a, int b, int c);
+struct VBi {
+    uint32_t FUN_011f3620(uint32_t a, uint32_t b, uint32_t c);  // 0x011F3620
+};
+struct VertexBuffer {
+    int* Lock(int a, int* b, int c, int d, int e);  // 0x006DD250
+    int* Unlock();                                  // 0x011F36A0
+};
 int  __cdecl FUN_007c3af0(const char* name);
 int  __cdecl FUN_00762b70(int a, int b, int c, int d);
 void* __cdecl FUN_00762c60(void* desc, int a, int b, int c, int d, int e);
@@ -54,7 +61,7 @@ void __fastcall FUN_006dd4d0(void* self);
 
 // ---------------------------------------------------------------------------
 // 0x006dd250: lock a channel's vertex/index buffer range.
-int* FUN_006dd250(void* self, int param_2, int* param_3, int param_4, int param_5, int param_6)   // @ 0x006dd250
+int* __cdecl FUN_006dd250(void* self, int param_2, int* param_3, int param_4, int param_5, int param_6)   // @ 0x006dd250
 {
     int* p = (int*)self;
     if (param_6 == 0)
@@ -177,7 +184,7 @@ void __fastcall FUN_006dd4d0(void* self)   // @ 0x006dd4d0
 
 // 0x006dd540: SP::cBufferDrawImpl::IssueDraw
 // 0x006dd540: SP::cBufferDrawImpl::IssueDraw
-struct CBufferDraw { void IssueDraw(int param_2); int Lock(int count, void* out, uint32_t* stride, int flag); uint32_t FUN_006ddb40(int param_2, void* param_3, uint32_t* param_4, int param_5, int* param_6, int param_7); };
+struct CBufferDraw { void IssueDraw(int param_2); int Lock(int count, void* out, uint32_t* stride, int flag); bool FUN_006ddb40(int param_2, void* param_3, uint32_t* param_4, int param_5, int* param_6, int param_7); };
 // @ 0x006dd540
 void CBufferDraw::IssueDraw(int param_2)
 {
@@ -376,7 +383,7 @@ int CBufferDraw::Lock(int param_2, void* param_3, uint32_t* param_4, int param_5
     int n = iVar5;
     if (iVar5 == 0)
         n = piVar1[3];
-    iVar3 = FUN_011f3620((iVar3 != 0) * 4 + 4 | 2,
+    iVar3 = ((VBi*)piVar1)->FUN_011f3620((iVar3 != 0) * 4 + 4 | 2,
                          (piVar1[2] + iVar3) * (uint32_t)*(uint8_t*)(*piVar1 + 0xf),
                          (uint32_t)*(uint8_t*)(*piVar1 + 0xf) * n);
     if (iVar3 == 0)
@@ -400,7 +407,7 @@ int CBufferDraw::Lock(int param_2, void* param_3, uint32_t* param_4, int param_5
 
 // 0x006ddb40: lock a rectangle of the index/vertex buffer
 // @ 0x006ddb40
-uint32_t CBufferDraw::FUN_006ddb40(int param_2, void* param_3, uint32_t* param_4, int param_5, int* param_6, int param_7)
+bool CBufferDraw::FUN_006ddb40(int param_2, void* param_3, uint32_t* param_4, int param_5, int* param_6, int param_7)
 {
     void* self = this;
     char* p = (char*)this;
@@ -420,8 +427,8 @@ uint32_t CBufferDraw::FUN_006ddb40(int param_2, void* param_3, uint32_t* param_4
         }
         int iVar4 = *(int*)(p + 0x70 + *(int*)(p + 0x1a0) * 4);
         int local_8[2];
-        int* r = FUN_006dd250(self, (iVar4 != 0) * 4 + 4 | 2, local_8, (int)&param_2, iVar4, iVar2);
-        uint32_t uVar5 = 0;
+        void* vb = *(void**)(p + *(int*)(p + 0x1a0) * 4);
+        int* r = ((VertexBuffer*)vb)->Lock((iVar4 != 0) * 4 + 4 | 2, local_8, (int)&param_2, iVar4, iVar2);
         if (r != 0)
         {
             if (FUN_011f4f20(2, p + 100) != 0)
@@ -436,13 +443,13 @@ uint32_t CBufferDraw::FUN_006ddb40(int param_2, void* param_3, uint32_t* param_4
                 *(uint8_t*)(p + 0x19c) = 1;
                 *piVar1 = *piVar1 + iVar2;
                 *(uint8_t*)(p + 400) = 1;
-                return 1;
+                return true;
             }
-            uVar5 = VertexBuffer_UnlockR(*(void**)(p + *(int*)(p + 0x1a0) * 4));
+            ((VertexBuffer*)vb)->Unlock();
         }
-        return uVar5 & 0xffffff00;
+        return false;
     }
-    return 0;
+    return false;
 }
 
 // 0x006ddc90: destroy the singleton
