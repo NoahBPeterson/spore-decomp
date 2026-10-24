@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /vc71 /O2 /MD /Gy /TP
+#
+# Slice s01083400.  All six functions have complete reconstructions (no stubs, no sketches) and two are
+# byte-exact (010834f0, 01083530); this file holds the caveats of the four that are not.  All rows are
+# also listed in nonmatching.txt.
+#
+01083400  88   hkWorld::removePhantom: complete body; size-exact within 2 bytes, the gate reports WEAK (157/400 valid at 23.0% coverage) because the op queue and the world callback are stubs, so only the early-return and deferred-op paths execute and the swap-remove tail is unverified.
+01083570  751  hkWorld::calcStatistics: complete body covering all 24 reported members; the gate reports UNSUPPORTED (0/400 valid) because every report goes through the pure-virtual collector stub, so nothing is verified, and the 5-byte `and eax,0x3fffffff` that the original keeps after each capacity sign test is folded away by cl 13.10.3052 (all of the size gap).
+010839e0  1142 hkWorld::~hkWorld: complete body in retail order (23 teardown steps, 15 array releases); the gate reports UNSUPPORTED (0/400 valid) because the referenced-object stubs fault on the first release, so the teardown order is unverified.  Plus the missing 1-byte removeEntity out slot and the hoisted DeleteCriticalSection import call.
+01083ff0  181  hkWorld::activateRegion: complete body; the gate reports FAIL on 5/6 valid inputs at 63.9% coverage for the array-storage release only (the stubbed broadphase query leaves a data pointer the original does not free, so ours faults in deallocateChunk); the query walk, the offset chain and the activate() gate run on the valid inputs.

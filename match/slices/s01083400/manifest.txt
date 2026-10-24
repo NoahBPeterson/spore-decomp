@@ -1,0 +1,2 @@
+slices/s01083400/s01083400.cpp  ?addCollisionListener@hkWorld@@QAEXPAX@Z  010834f0  /vc71 /O2 /MD /Gy /TP
+slices/s01083400/s01083400.cpp  ?addWorldDeletionListener@hkWorld@@QAEXPAX@Z  01083530  /vc71 /O2 /MD /Gy /TP
