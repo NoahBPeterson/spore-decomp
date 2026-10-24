@@ -168,7 +168,9 @@ struct CMeshClusterer2 {
 // ---- items of slice s00721240 end
 
 // ---- items of slice s00722410 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void __stdcall VectorAppend8(void* dstEnd, void* val);      // 00722410
+struct VecAppend8 {                                 // thiscall target: vector in ECX, ret 8 (cleans e,val)
+    void Append(void* e, void* val);                // 0x00722410
+};
 struct Vec8 { float x, y; };
 struct VecAny { int* begin; int* end; int* cap; void Assign(int n, int value, int dummy); void Push8(Vec8* val); };
 // ---- items of slice s00722410 end
@@ -2625,7 +2627,7 @@ void __thiscall VecAny::Push8(Vec8* val)
             return;
         }
     } else {
-        VectorAppend8(e, val);
+        ((VecAppend8*)this)->Append(e, val);
     }
 }
 
