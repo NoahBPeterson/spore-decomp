@@ -1,0 +1,2 @@
+# slice s00d366c0 - creature mode input cursor/handler setup (gold6 worker 36)
+slices/s00d366c0/s00d366c0.cpp  ?InitCursors@cCreatureModeInputStrategy@@QAEXXZ  00d366c0  /O2 /MD /Gy /TP /arch:SSE /GS-
