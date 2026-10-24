@@ -1,2 +1,3 @@
 # s00cbcde0 recovered names
-00cbcde0 BuildFlightArcPath  # cdecl(float x6, SpVector<Vector3>*): arcs A->B over the planet at radius+80, returns false when |A-B| < 300
+00cbcde0 BuildFlightArcPath  # preserved; cdecl(float x6, SpVector<Vector3>*): arcs A->B over the planet at radius+80, returns false when |A-B| < 300
+00cbd620 BuildFlightArcPathFromObjects  # newly claimed; partial: 64-segment object-to-object flight arc

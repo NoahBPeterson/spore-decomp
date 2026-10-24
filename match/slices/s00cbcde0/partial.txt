@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00cbd620  920  BuildFlightArcPathFromObjects: partial 64-segment arc between two positioned objects (object positions, optional +offset, PlanetModel arc query, radius+80, great-circle-ish interpolation, push_back); 547 vs 993 B; the original's x87/SSE angle integration, tangent basis, static angle-step initialization and 64-iteration convergence test are not reproduced; equiv UNSUPPORTED (0/400 valid, read faults)

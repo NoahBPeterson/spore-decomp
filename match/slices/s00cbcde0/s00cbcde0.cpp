@@ -37,8 +37,41 @@ struct SpVectorV3 {                    // eastl::vector<Vector3, sp_vector_alloc
 
 struct PlanetModel {
     float GetRadius();                                                  // 0x00b7e4d0 (thiscall, float in st0)
+    float GetArcRadius(const Vector3* pA, const Vector3* pB);           // 0x00b81470
 };
 PlanetModel* __cdecl GetPlanetModel();                                  // 0x00b3d350 (SP::PlanetModel)
+
+struct IPositioned {
+    virtual void p00(); virtual void p04(); virtual void p08(); virtual void p0c();
+    virtual void p10(); virtual void p14(); virtual void p18(); virtual void p1c();
+    virtual void p20(); virtual void p24(); virtual void p28();
+    virtual Vector3* GetPosition();                                     // +0x2c
+};
+
+// @ 0x00cbd620  BuildFlightArcPathFromObjects (cdecl: two positioned objects, out vector, 3 floats; 64-segment arc)
+bool BuildFlightArcPathFromObjects(IPositioned* pA, IPositioned* pB, SpVectorV3* out,
+                                   float ox, float oy, float oz)
+{
+    Vector3 a = *pA->GetPosition();
+    Vector3 b;
+    if (pB)
+        b = *pB->GetPosition() + Vector3(ox, oy, oz);
+    else
+        b = Vector3(ox, oy, oz);
+
+    float arcRadius = GetPlanetModel()->GetArcRadius(&a, &b);
+    if (arcRadius < 300.0f)
+        return false;
+
+    float R = arcRadius + 80.0f;
+    for (int i = 0; i < 64; ++i) {
+        float t = (float)i * (1.0f / 64.0f);
+        Vector3 p = a * (1.0f - t) + b * t;
+        p = NormalizedSafe(p) * R;
+        out->push_back(p);
+    }
+    return true;
+}
 
 // @ 0x00cbcde0  BuildFlightArcPath (cdecl: 6 floats + out vector; returns false when the points are < 300 apart)
 bool BuildFlightArcPath(Vector3 a, Vector3 b, SpVectorV3* out)
