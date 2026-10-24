@@ -1,1 +1,3 @@
 0133ba60 Simulator::InitMissionAttributes  # $E577 dynamic initializer of the cMission serializer attribute table (26 records at 0x015745f0: mMissionID..mpGalaxyCommEvent); name coined like s013388f0
+0133c5a0 Simulator::InitPlanetClueAttributes  # $E585 dynamic initializer of the SP::cPlanetClue attribute table at 0x01574d38 (mType/mPlanetType/mOrbitOrder)
+0133e850 Simulator::InitMissionBiosphereAttributes  # $E490 dynamic initializer of the SP::cSPMissionBiosphere attribute table at 0x01575128 (10 records, mCollapseTimer is a cGonzagoTimer object value)

@@ -159,12 +159,19 @@ bool Validate_00c45120();
 bool ToXml_0057cde0(void* pData, const char* pName, int depth);
 bool ToXml_0057ce00(void* pData, const char* pName, int depth);
 bool ToXml_00ac8050(void* pData, const char* pName, int depth);
+
+// Object-valued attributes (cGonzagoTimer etc.): whole-object read/write.
+bool Read_00ae3470(ISerializerReadStream* pStream, void* pData);
+bool Write_00ae3490(ISerializerWriteStream* pStream, void* pData);
+bool Validate_00ae3310();
 bool ToXml_00acbb80(void* pData, const char* pName, int depth);
 bool ToXml_00ae5720(void* pData, const char* pName, int depth);
 bool ToXml_00c6c4e0(void* pData, const char* pName, int depth);
 
 struct AttrSlot { uint32_t d[15]; };
 extern AttrSlot cMission_sAttributes[26];   // 0x015745f0
+extern AttrSlot cPlanetClue_sAttributes[3]; // 0x01574d38 (SP::cPlanetClue)
+extern AttrSlot cSPMissionBiosphere_sAttributes[10]; // 0x01575128
 
 // ToXml 0x00675ca0 is a per-type template instance as well (unsigned int fields).
 template<typename T> bool ToXmlUInt(void* pData, const char* pName, int depth);
@@ -175,8 +182,11 @@ template<typename T> bool ToXmlUInt(void* pData, const char* pName, int depth);
 #define KEY_ATTR   Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080, AlwaysValid<ResourceKey>, ToXml_00ae5720
 #define IDLIST_ATTR Read_00c95780, Write_00c6adc0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<UInt32Vector>, ToXml_00c6c4e0
 #define PTR_ATTR(T, R, W, V)  /* T: pointee, for reading only */ R, W, ReadText_00c2e4e0, WriteText_00692fb0, V, ToXml_00ac8050
+// Whole-object attribute (cGonzagoTimer and other by-value class members).
+#define OBJ_ATTR Read_00ae3470, Write_00ae3490, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00ae3310, ToXml_00ac8050
 
 #define ADD(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cMission_sAttributes[IDX] = a; }
+#define ADD_TO(TABLE, IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&(TABLE)[IDX] = a; }
 
 // @ 0x0133ba60
 void InitMissionAttributes()
@@ -207,6 +217,34 @@ void InitMissionAttributes()
     ADD(23, "mAcceptCost", 0x03f6b0e4, 0x184, INT_ATTR)
     ADD(24, "mToolCost", 0x03f6b0e5, 0x188, INT_ATTR)
     ADD(25, "mpGalaxyCommEvent", 0x0679f2f3, 0x1e4, PTR_ATTR(cGalaxyCommEvent, Read_00ae9dd0, Write_00bca960, Validate_00b6f550))
+}
+
+// Simulator::cPlanetClue serializer attributes (SP::cPlanetClue, 0x01574d38):
+// mType, mPlanetType, mOrbitOrder are three consecutive ints at +0x00/+0x04/+0x08.
+// @ 0x0133c5a0
+void InitPlanetClueAttributes()
+{
+    ADD_TO(cPlanetClue_sAttributes, 0, "mType",       0x03f2c297, 0x00, INT_ATTR)
+    ADD_TO(cPlanetClue_sAttributes, 1, "mPlanetType", 0x03f2c298, 0x04, INT_ATTR)
+    ADD_TO(cPlanetClue_sAttributes, 2, "mOrbitOrder", 0x03f2c2a7, 0x08, INT_ATTR)
+}
+
+// Simulator::cSPMissionBiosphere serializer attributes (0x01575128). The last
+// record, mCollapseTimer, is a cGonzagoTimer object value and uses the
+// whole-object read/write/toXml callbacks.
+// @ 0x0133e850
+void InitMissionBiosphereAttributes()
+{
+    ADD_TO(cSPMissionBiosphere_sAttributes, 0, "mBiosphereMissionState",  0x0437456f, 0x1f0, INT_ATTR)
+    ADD_TO(cSPMissionBiosphere_sAttributes, 1, "mInitialTerraformScore",  0x0686fae9, 0x1f4, INT_ATTR)
+    ADD_TO(cSPMissionBiosphere_sAttributes, 2, "mInitialNumPlants",       0x0686fb14, 0x1f8, INT_ATTR)
+    ADD_TO(cSPMissionBiosphere_sAttributes, 3, "mInitialNumAnimals",      0x0686fb22, 0x1fc, INT_ATTR)
+    ADD_TO(cSPMissionBiosphere_sAttributes, 4, "mCurrentBiosphereRow",    0x0686fd4f, 0x200, INT_ATTR)
+    ADD_TO(cSPMissionBiosphere_sAttributes, 5, "mMaxNumDiseasedCreatures", 0x043b48ea, 0x204, INT_ATTR)
+    ADD_TO(cSPMissionBiosphere_sAttributes, 6, "mNumDiseasedKills",       0x043b4913, 0x208, INT_ATTR)
+    ADD_TO(cSPMissionBiosphere_sAttributes, 7, "mMaxNumHealthyKills",     0x043b491e, 0x20c, INT_ATTR)
+    ADD_TO(cSPMissionBiosphere_sAttributes, 8, "mNumHealthyKills",        0x043b4928, 0x210, INT_ATTR)
+    ADD_TO(cSPMissionBiosphere_sAttributes, 9, "mCollapseTimer",          0x0686fd9a, 0x218, OBJ_ATTR)
 }
 
 }  // namespace Simulator
