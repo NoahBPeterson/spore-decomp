@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s0137b550 = three __cdecl static initialisers that populate the SP
+# reflection property-descriptor tables (0x0137b550..0x0137bc7c):
+#   $E311       0x0137b550  tiling-grid tool descriptor table  (0x016b28e4..0x016b2a1c)
+#   $E315       0x0137b890  effect-map tool descriptor table   (0x015a679c..0x015a68ac)
+#   FUN_0137bb60 0x0137bb60 space transporter descriptor table (0x015a7b14..0x015a7b84)
+#
+# All three are byte-exact (diff 0) on the first compile round, so there are no
+# nonmatching rows.  No equivalence run was needed: every target in the slice is
+# a MATCH row in manifest.txt, and "nonmatched VAs" is therefore the empty set.
+#
+# MATCHes (3/3): all targets byte-exact.

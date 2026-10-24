@@ -1,0 +1,3 @@
+slices/s0137b550/s0137b550.cpp  ?E311_InitTilingTable@@YAXXZ  0137b550  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137b550/s0137b550.cpp  ?E315_InitEffectMapTable@@YAXXZ  0137b890  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0137b550/s0137b550.cpp  ?FUN_0137bb60@@YAXXZ  0137bb60  /O2 /MD /Gy /TP /arch:SSE /fp:fast

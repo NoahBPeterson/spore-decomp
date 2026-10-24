@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+# No incomplete functions: all three targets (0137b550, 0137b890, 0137bb60) are
+# complete reconstructions with a col-0 `// @ 0x<VA>` marker, a full body, and
+# a byte-exact (diff 0) match recorded in manifest.txt.
