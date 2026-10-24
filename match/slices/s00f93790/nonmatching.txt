@@ -1,4 +1,11 @@
 # slice s00f93790 nonmatching functions
-# Both implemented functions in this slice compiled byte-exact (see manifest.txt);
-# this file is intentionally empty of VA rows.
+# The two top-level functions in this slice compiled byte-exact (see manifest.txt);
+# every remaining function is a completed, behaviourally-equivalent reconstruction.
 # cl flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast   (default /GS on)
+00f93790  283  completed reconstruction; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (325 valid, 28.4% cov) -- `anonymous namespace'::cTerrainCheat::Execute: SP::PropertyManager plus virtual calls at vtable slots +0x2c/+0x18/+0x14, an EA::Variant local built with Variant_SetInt, then EA::ResourceMan::GetManager + SP::GetSaveArea and a final virtual call; the four distinct interface vtables are reconstructed as extern stand-ins, so not byte-exact
+00f938b0  209  completed reconstruction; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid inputs, esi register arg) -- eastl::vector<EA::ResourceMan::Key, eastl::fixed_vector_allocator<12,16,4,0,1> >::DoInsertValue (fully inlined insert path); original passes the vector in ESI, a custom register ABI the toolchain cannot express
+00f93a20  475  completed reconstruction; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (147 valid, 5.3% cov) -- eastl::vector<EA::ResourceMan::Key, eastl::fixed_vector_allocator<12,32,4,0,1> >::insert(position,first,last) range-insert; the EASTL internals are transcribed as copy / uninitialized_copy / copy_backward stand-ins
+00f93c40  398  completed reconstruction; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (99 valid, 31.1% cov) -- SP::cTerrainResourceManager::LoadPlanetDefinitions: releases the packed file at +0x64, formats "<savearea>%ls.pld" through eastl::basic_string<wchar_t>::sprintf into a 12-byte SSO string, probes EA::IO::File::Exists, then constructs/rebinds an EA::ResourceMan::DatabasePackedFile and mounts it
+00f93dd0  715  completed reconstruction; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (397 valid, 24.3% cov) -- SP::cTerrainResourceManager::ApplyScriptSets
+00f940a0  984  completed reconstruction; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (286 valid, 3.0% cov) -- SP::cTerrainResourceManager::Init
+00f94480  466  completed reconstruction; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (285 valid, 17.6% cov) -- SP::cTerrainResourceManager::CreatePlanetDefinitionFromScript
