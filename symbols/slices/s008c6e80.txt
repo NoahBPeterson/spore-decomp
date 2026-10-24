@@ -1,0 +1,6 @@
+008c6e80 ?FUN_008c6e80@@YAXXZ  # FUN_008c6e80 (T2K input-stream / node reader)
+008c75f0 ?FUN_008c75f0@@YAXXZ  # FUN_008c75f0 (scan-line bitmap decoder)
+008c77d0 ?AllocFreeNodes@T2KReader@@QAEXH@Z  # T2KReader::AllocFreeNodes
+008c7960 ?FreeAllNodes@T2KReader@@QAEXXZ  # T2KReader::FreeAllNodes
+008c79c0 ?ComputeScanBBox@T2KReader@@QAEXXZ  # T2KReader::ComputeScanBBox
+008c7be0 ?ComputeOutlineBBox@@YIXPAHH@Z  # ComputeOutlineBBox
