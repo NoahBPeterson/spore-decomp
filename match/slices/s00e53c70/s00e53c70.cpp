@@ -1,11 +1,12 @@
 // Slice s00e53c70 (batch bfs3, slice 18). Region 0xe53c70-0xe54bf6.
 // Cell-game medal/save UI glue. Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
+#include <math.h>
+#include <xmmintrin.h>
 
 struct cGuard18 { void* p; cGuard18(); ~cGuard18(); };
 
 extern "C" {
-  void*  __cdecl FUN_00b721d0(int id);
   void   __cdecl FUN_00e82690(int id, float v);
   void   __cdecl FUN_00e53660(int a, int b);
   void   __cdecl FUN_00e53b40();
@@ -29,11 +30,20 @@ extern "C" {
   void   __cdecl FUN_00e4fac0(char* state);
   void   __cdecl FUN_00e4ce40_dummy();
 }
-extern char g_16b3c04[];
-extern char g_16b3c0c[];
+extern char* g_16b3c04;
+extern char* g_16b3c0c;
 extern int  g_15a7bb0, g_15a7bac;
 
 static inline void** Vt(void* p) { return *(void***)p; }
+
+// thiscall lookup on the manager sub-object at manager+0x1c
+struct cCellLookup18 {
+  void* Get(int id);   // 0x00b721d0
+};
+
+static inline void* CellById(int id) {
+  return ((cCellLookup18*)(g_16b3c04 + 0x1c))->Get(id);
+}
 
 __declspec(noinline) void FUN_00e53f70();                         // 0x00e53f70 allocate cell UI windows
 void RepositionWindows(void* a, void* b, int mode);  // 0x00e540b0 reposition two windows (cdecl)
@@ -44,36 +54,85 @@ struct cSPUILayout18 {
   void  Init(void* a, int b, int c);        // 0x8120d0
 };
 
+// Cell object whose medal/UI flags the two helpers below write (layout from usage).
+struct cCell18 {
+  char  pad0[0x4c];
+  float mCenterX;            // +0x4c  box centre copied to the UI state
+  float mCenterY;            // +0x50
+  float mCenterZ;            // +0x54
+  char  pad1[0x16c - 0x58];
+  unsigned char mbFlag16c;   // +0x16c
+  char  pad2[0x178 - 0x16d];
+  unsigned char mbFlag178;   // +0x178
+  char  pad3[0x17a - 0x179];
+  unsigned char mbFlag17a;   // +0x17a
+  unsigned char mbFlag17b;   // +0x17b
+  unsigned char mbFlag17c;   // +0x17c
+  char  pad4[0x17e - 0x17d];
+  unsigned char mbFlag17e;   // +0x17e
+  unsigned char mbFlag17f;   // +0x17f
+  char  pad5[0x188 - 0x180];
+  unsigned char mbFlag188;   // +0x188
+  unsigned char mbFlag189;   // +0x189
+  char  pad6[0x18b - 0x18a];
+  unsigned char mbMedalShown; // +0x18b  set by the proximity check
+  int   mMedalState;          // +0x18c  switch selector / 0x44 / 0x43
+};
+
+// Cell UI state object reached through the global pointer at 0x016b3c0c.
+struct cCellUI18 {
+  char  pad0[0xe4];
+  unsigned char mbActive;    // +0xe4
+  char  pad1[0xe8 - 0xe5];
+  float mCenterX;            // +0xe8
+  float mCenterY;            // +0xec
+  float mCenterZ;            // +0xf0
+  float mRadius;             // +0xf4
+};
+
+// Manager reached through the global pointer at 0x016b3c04.
+struct cCellManager18 {
+  char  pad0[0x411c];
+  int   mMissionCellId;      // +0x411c
+  char  pad1[0x51d4 - 0x4120];
+  int   mMedalCellId;        // +0x51d4
+  char  pad2[0x51dc - 0x51d8];
+  unsigned char mbMissionStarted; // +0x51dc
+};
+
 // @ 0x00e53c70
 bool FUN_00e53c70(float f) {
-  char* e = (char*)FUN_00b721d0(*(int*)(g_16b3c04 + 0x411c));
-  if (!e) return false;
+  cCellManager18* mgr = (cCellManager18*)g_16b3c04;
+  cCell18* c = (cCell18*)CellById(mgr->mMissionCellId);
+  if (!c) return false;
   FUN_00e82690(0x8a4d210e, 1.0f);
-  e[0x17c] = 1; e[0x17b] = 1; e[0x17f] = 1;
-  e[0x178] = 1; e[0x17a] = 1; e[0x17e] = 1;
-  e[0x188] = 1; e[0x16c] = 1; e[0x189] = 1;
-  if (f > 0.0f) *(int*)(e + 0x18c) = 0x44;
-  g_16b3c0c[0xe4] = 1;
-  *(int*)(g_16b3c0c + 0xe8) = *(int*)(e + 0x4c);
-  *(int*)(g_16b3c0c + 0xec) = *(int*)(e + 0x50);
-  *(int*)(g_16b3c0c + 0xf0) = *(int*)(e + 0x54);
-  *(float*)(g_16b3c0c + 0xf4) = 3.0f;
-  g_16b3c04[0x51dc] = 1;
+  c->mbFlag17c = 1; c->mbFlag17b = 1; c->mbFlag17f = 1;
+  c->mbFlag178 = 1; c->mbFlag17a = 1; c->mbFlag17e = 1;
+  c->mbFlag188 = 1; c->mbFlag16c = 1; c->mbFlag189 = 1;
+  if (f > 0.0f) c->mMedalState = 0x44;
+  cCellUI18* ui = (cCellUI18*)g_16b3c0c;
+  ui->mbActive = 1;
+  ui->mCenterX = c->mCenterX;
+  ui->mCenterY = c->mCenterY;
+  ui->mCenterZ = c->mCenterZ;
+  ui->mRadius = 3.0f;
+  mgr->mbMissionStarted = 1;
   return true;
 }
 
 // @ 0x00e53d50
 bool FUN_00e53d50(float a, float b) {
-  char* x = (char*)FUN_00b721d0(*(int*)(g_16b3c04 + 0x51d4));
-  char* y = (char*)FUN_00b721d0(*(int*)(g_16b3c04 + 0x411c));
+  cCellManager18* mgr = (cCellManager18*)g_16b3c04;
+  cCell18* x = (cCell18*)CellById(mgr->mMedalCellId);
+  cCell18* y = (cCell18*)CellById(mgr->mMissionCellId);
   if (!x || !y) return false;
-  if (a < 8.0f) x[0x18b] = 1;
-  if (a < 4.0f) y[0x18b] = 1;
+  if (a < 8.0f) x->mbMedalShown = 1;
+  if (a < 4.0f) y->mbMedalShown = 1;
   if (b > 0.0f) {
-    switch (*(int*)(y + 0x18c)) {
+    switch (y->mMedalState) {
       case 0: case 1: case 2: case 3:
       case 0x15: case 0x16: case 0x28: case 0x31:
-        *(int*)(y + 0x18c) = 0x43;
+        y->mMedalState = 0x43;
     }
   }
   return true;
@@ -133,19 +192,24 @@ void FUN_00e53f70() {
   FUN_00e11e073e((void*)0x16b4278, 0, 0x40);
 }
 
-// @ 0x00e53e30  closest-point on 3D box -- approximated x87
+// @ 0x00e53e30  closest-point on 3D box -- x87 division, SSE midpoint/clamp
 void FUN_00e53e30(float* out, float* box, float* ext) {
-  float midz = (box[2] + box[0]) * 0.5f;
-  float midy = (box[4] + box[1]) * 0.5f;
-  float midx = (box[5] + box[3]) * 0.5f;
   float ax = (box[3] - box[0]) / ext[0];
   float ay = (box[4] - box[1]) / ext[1];
-  float t = (ax < 0 ? -ax : ax) * 0.5f;
-  float t2 = (ay < 0 ? -ay : ay) * 0.5f;
-  if (t2 < t) t = t2;
-  out[0] = ext[0] * t + midz;
-  out[1] = ext[1] * t + midy;
-  out[2] = ext[2] * t + midx;
+  float ta = fabsf(ax) * 0.5f;
+  float tb = fabsf(ay) * 0.5f;
+  float t = _mm_cvtss_f32(_mm_min_ss(_mm_set_ss(tb), _mm_set_ss(ta)));
+  __m128 tv = _mm_set_ss(t);
+  float r0 = _mm_cvtss_f32(_mm_add_ss(_mm_mul_ss(tv, _mm_set_ss(ext[0])),
+      _mm_mul_ss(_mm_add_ss(_mm_set_ss(box[0]), _mm_set_ss(box[3])), _mm_set_ss(0.5f))));
+  float r1 = _mm_cvtss_f32(_mm_add_ss(_mm_mul_ss(tv, _mm_set_ss(ext[1])),
+      _mm_mul_ss(_mm_add_ss(_mm_set_ss(box[1]), _mm_set_ss(box[4])), _mm_set_ss(0.5f))));
+  float r2 = _mm_cvtss_f32(_mm_add_ss(_mm_mul_ss(tv, _mm_set_ss(ext[2])),
+      _mm_mul_ss(_mm_add_ss(_mm_set_ss(box[2]), _mm_set_ss(box[5])), _mm_set_ss(0.5f))));
+  volatile float* o = out;
+  o[0] = r0;
+  o[1] = r1;
+  o[2] = r2;
 }
 
 // ---- remaining slice-18 functions: not reconstructed ---------------------
