@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0106ea40/s0106ea40.cpp  ?FUN_0106f120@cSPUISpace@@QAEXI@Z  0106f120  /O2 /MD /Gy /EHsc /TP
+slices/s0106ea40/s0106ea40.cpp  ?FUN_0106f160@cSPUISpace@@QAEXI@Z  0106f160  /O2 /MD /Gy /EHsc /TP
+slices/s0106ea40/s0106ea40.cpp  ?FUN_0106f380@cSPUISpace@@QAEXXZ  0106f380  /O2 /MD /Gy /EHsc /TP

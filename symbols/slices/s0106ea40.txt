@@ -1,0 +1,11 @@
+0106ea40 cSPUISpace::FUN_0106ea40  # strategy-slot rebuild: copy simulator tool list, append empire id, replace the matching entry
+0106eb40 Blk28Vec::erase  # shift [last, end) to first via 0x010686d0, release the moved-from tail, mpEnd += (last-first)
+0106ebb0 Blk28Vec::insert  # eastl insert: grow path (newCap*0x28 realloc) / in-place path (shift + fill)
+0106edc0 cSPUISpace::FUN_0106edc0  # strategy id lookup: find, else +0x2f4 counter, else recycle dead tool ids onto +0x2c0
+0106ef30 cSPUISpace::FUN_0106ef30  # full tool-strategy teardown (tool table, three interfaces, vectors, counters)
+0106f120 cSPUISpace::FUN_0106f120  # refresh one tool id: FUN_0106e680 then window push FUN_0106edc0(id)
+0106f160 cSPUISpace::FUN_0106f160  # refresh one tool id (alternate immediate/window constant)
+0106f1a0 cSPUISpace::FUN_0106f1a0  # tool-item activation: mode 0 (selector ordinal) / mode 3 (predicate scan over the list)
+0106f380 cSPUISpace::FUN_0106f380  # pending-tool list teardown: v0c(1) per element then erase
+0106f3d0 cSPUISpace::FUN_0106f3d0  # text-zoom rebuild: new/Construct/AddRef per layout, SetId + SetTargetWindow
+0106f540 cSPUISpace::FUN_0106f540  # text-zoom teardown: Shutdown + zero + Release per element, then erase
