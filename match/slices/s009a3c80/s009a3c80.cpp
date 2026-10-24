@@ -36,7 +36,7 @@ struct AnimTree {
     void* FUN_009a3da0(void* out, void* hint, void* key);      // 0x9a3da0
     unsigned FUN_009a3f50(int key, unsigned limit);            // 0x9a3f50
     unsigned FUN_009a4020(int key, unsigned limit);            // 0x9a4020
-    void FUN_009a4190(int param);                              // 0x9a4190
+    static void FUN_009a4190(int param);                      // 0x9a4190
     void* FUN_009a4310(void* key);                             // 0x9a4310
     void* FUN_009a4390(void* key);                             // 0x9a4390
 
@@ -300,9 +300,77 @@ unsigned nSPCreatureAnim::AnimTree::FUN_009a4020(int, unsigned)
     return 0;
 }
 
+namespace nSPCreatureAnim {
+
+// SP::SimpleVector<void*> used by the cache walk (begin/end/cap, 4-byte elements).
+struct CacheVec {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCap;
+    void FUN_009529d0(unsigned n);                       // 0x9529d0  reserve(n)
+    void FUN_00a80dd0(void** pos, void* const& value);   // 0xa80dd0  DoInsertValue(pos, value)
+};
+
+} // namespace nSPCreatureAnim
+
+// Empty one-byte heap comparator; MSVC materialises the temporary in a byte slot and
+// pushes it as one dword, which is what the original call sites do.
+struct CacheLess { char mPad; CacheLess() : mPad(0) {} };
+
+void* __cdecl FUN_00921580(void* node);                                     // 0x921580 eastl::RBTreeIncrement
+void __cdecl FUN_009a36a0(void* first, int a, int b, void* value, CacheLess c);  // 0x9a36a0 heap sift-up
+void __cdecl FUN_009a36f0(void* first, int a, int b, int hole, void* value, CacheLess c);  // 0x9a36f0 heap sift-down
+unsigned __cdecl FUN_009a4020_cdecl(int key, unsigned limit);               // 0x9a4020 tree erase-by-key (cdecl entry)
+
+// Walks the global anim-cache tree in key order, pushing each node payload (node+0x14)
+// onto a temporary vector as a max-heap keyed on the node's +0x12c field, then drains
+// the heap while the global counter 0x166c060 stays above 60% of the limit 0x1550b7c,
+// erasing every popped entry from the tree (FUN_009a4020) except the one equal to param.
 // @ 0x009a4190
-void nSPCreatureAnim::AnimTree::FUN_009a4190(int)
+void nSPCreatureAnim::AnimTree::FUN_009a4190(int param)
 {
+    if (*(unsigned*)0x166c060 <= *(unsigned*)0x1550b7c)
+        return;
+
+    char* cache = *(char**)0x166c058;
+    nSPCreatureAnim::CacheVec v = { 0, 0, 0 };
+    v.FUN_009529d0(*(unsigned*)(cache + 0x14));
+
+    char* const anchor = cache + 4;
+    for (char* node = *(char**)(cache + 8); node != anchor; node = (char*)FUN_00921580(node)) {
+        void* item = *(void**)(node + 0x14);
+        if (item == 0)
+            continue;
+        void** slot = (void**)v.mpEnd;
+        if (slot < (void**)v.mpCap) {
+            v.mpEnd = slot + 1;
+            *slot = item;
+        } else {
+            void* tmp = item;
+            v.FUN_00a80dd0(slot, tmp);
+        }
+        FUN_009a36a0(v.mpBegin, 0, (int)(((char*)v.mpEnd - (char*)v.mpBegin) >> 2) - 1,
+                     *((void**)v.mpEnd - 1), CacheLess());
+    }
+
+    int limit = (int)(*(unsigned*)0x1550b7c * 0.6);
+    void** first = (void**)v.mpBegin;
+    void** last = (void**)v.mpEnd;
+    while (*(unsigned*)0x166c060 > (unsigned)limit) {
+        int count = (int)(last - first);
+        if (count <= 1)
+            break;
+        void* popped = last[-1];
+        last[-1] = first[0];
+        FUN_009a36f0(first, 0, count - 1, 0, popped, CacheLess());
+        void* top = last[-1];
+        v.mpEnd = --last;
+        if (top != (void*)param)
+            FUN_009a4020_cdecl((int)top, 0xffffffffu);
+    }
+
+    if (v.mpBegin != 0 && ((int*)v.mpBegin)[-1] != 0)
+        operator_delete(v.mpBegin);
 }
 
 // @ 0x009a4310
