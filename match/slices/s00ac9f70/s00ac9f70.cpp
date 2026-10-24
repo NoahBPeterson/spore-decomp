@@ -9,7 +9,9 @@ static void* vc(void* obj, int off) { return ((void**)*(void**)obj)[off / 4]; }
 void* __cdecl operator_new(size_t, const char*, int, int, const char*, int);
 void  __cdecl operator_delete(void*);
 void  __cdecl FUN_00829110(void* a, void* b, void* c, void* d, void* e);
-void  __cdecl FUN_00b93c60(uint n, void* p);
+struct VecObj {                       // EASTL vector header {begin, end, capacity}
+  void FUN_00b93c60(uint n, void* p); // 0x00b93c60
+};
 void  __cdecl FUN_00ac0730(void* a, void* b);
 void  __cdecl FUN_00ac93c0(void* a, void* b, int c);
 void  __cdecl FUN_00d5ccf0(void* p);
@@ -137,7 +139,7 @@ void FUN_00aca730(void* obj, int* vec) {
 }
 
 // @ 0x00aca7b0
-void FUN_00aca7b0(uchar* p, uchar* end) {
+void __stdcall FUN_00aca7b0(uchar* p, uchar* end) {
     if (p < end) {
         uint n = (((uint)(end - p) - 1) >> 5) + 1;
         do {
@@ -178,7 +180,7 @@ int* VecCopyStub::FUN_00aca970(int* src) {
     void* o = *(void**)src;
     *obj = (int)o;
     if (o) ((void (__thiscall*)(void*))vc(o, 0))(o);
-    FUN_00b93c60((src[2] - src[1]) >> 2, src + 4);
+    ((VecObj*)((char*)this + 4))->FUN_00b93c60((src[2] - src[1]) >> 2, src + 4);
     int* ret = 0;
     FUN_00829110(&ret, (void*)src[1], (void*)src[2], (void*)obj[1], (void*)src);
     obj[2] = (int)ret;
