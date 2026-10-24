@@ -1,1 +1,6 @@
 00af7c60  1337  SweepSphereVsTerrain complete; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; register allocation and frame layout differ
+00af82e0  436  SweepSphereVsNoun complete; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; callee-spill/scheduling differences (reused dead arg slot, push ecx;push ecx;fstp [esp] arg setup)
+00af8600  127  ProjectBehindPlane complete; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; xmm register naming and component load order differ
+00af86c0  309  ProjectRayToSurface complete; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; retail keeps an extra normalized-direction stack local and zero dword slots
+00af8840  25  SetEntity complete; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; pop edi placed earlier in the out-of-line zero-fill branch
+00af8920  14  SetFromSource complete; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; flag store scheduled into the last fld/fstp copy pair

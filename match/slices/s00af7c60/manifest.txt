@@ -1,1 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00af7c60/s00af7c60.cpp  ?ReleaseSource@cContactProxy@@QAEXPAUcProxySource@@@Z  00af84f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00af7c60/s00af7c60.cpp  ?UpdateClosestPoint@cContactProxy@@QAEXXZ  00af8540  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00af7c60/s00af7c60.cpp  ?Update@cContactProxy@@QAEX_NM@Z  00af8a10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

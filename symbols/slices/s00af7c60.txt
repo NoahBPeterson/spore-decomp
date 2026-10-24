@@ -1,1 +1,21 @@
 00af7c60 SweepSphereVsTerrain  # name from slice s00c2b170 callers; returns bool (al), sweeps sphere vs object list from 0xb7a4a0, bounding sphere via 0xaf16f0, refine via SweepSphereVsMesh 0xaf5400
+
+# ------------------------------------------------------------------ gold7 batch id "s00af7c60"
+00af82e0 ?SweepSphereVsNoun@@YA_NPBUVector3@@0MPAUcSweepResult@@PAM@Z  # cdecl bool: noun-manager lookup, object bounding sphere, RaySphere, scale distance
+00af84f0 ?ReleaseSource@cContactProxy@@QAEXPAUcProxySource@@@Z  # thiscall: forward source release to owner vtable slots 2 and 1
+00af8540 ?UpdateClosestPoint@cContactProxy@@QAEXXZ  # thiscall: zero the record, SurfaceHitQuery from +0x10, store squared plane distance
+00af8600 ?ProjectBehindPlane@@YAXPBUVector4@@0PAU1@@Z  # cdecl: push point out of the plane when the signed distance is negative, else zero
+00af86c0 ?ProjectRayToSurface@@YAXPBUVector4@@0PAXPAU1@@Z  # cdecl: normalize from->to, SurfaceRayQuery, copy hit point or fall back to the target
+00af8840 ?SetEntity@cContactProxy@@QAEXPAXPAVD961@@PBUVector4@@@Z  # thiscall: rebind the owned entity, listener bookkeeping, inverse-transform the position
+00af8920 ?SetFromSource@cContactProxy@@QAEXPAUcContactRecord@@@Z  # thiscall: adopt a contact record, resolve the owner, optionally SetEntity
+00af8a10 ?Update@cContactProxy@@QAEX_NM@Z  # thiscall: build a sweep input from world/local position and run SurfaceSweepQuery, then SetFromSource
+
+# ------------------------------------------------------------------ object model (gold7 retail offsets)
+# cContactProxy 0xac: +0x10 m_vec10 (Vector4); +0x48 m_b48; +0x4c m_type4c;
+#   +0x50 m_vec50 (Vector4); +0x60 mpEntity; +0x68 m_listenerVtbl; +0x70 m_vec70 (Vector4);
+#   +0x80 m_vec80 (Vector4); +0x9c mpCtx9c; +0xa8 m_fA8; +0xac m_fAC; +0xb0 mpB0; +0xb4 mpB4
+# cContactRecord 0x30: +0x00 mType; +0x10 mPoint; +0x20 mpPoint; +0x28 mpOwner; +0x2c mpEntity
+# SweepInput 0x20: +0x00 m_vec00 (Vector4); +0x10 mRadius; +0x14 m_f14; +0x18 pad18[2]
+# Vector4 is 16-byte aligned; hkVector4/hkTransform from hkEntity (+0x58 holder, +0x30 transform block)
+# globals: kContactEps 0x0145c3e4; kDirectionEps 0x013f11c8; kDefaultPointX..W 0x016e42d0..dc;
+#   gInvalidVec 0x0167ae24; kZero 0x01485378; sign mask 0x013eb8b0; SP::NounManager 0x00b3d300
