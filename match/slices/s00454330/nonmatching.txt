@@ -3,18 +3,17 @@
 # are real out-of-line member definitions instead)
 00454330 19 ref-ptr vector erase; wrapper form not member
 00454400 14 ctor-style wrapper
-00454420 102 rbtree find-or-insert (int key), locals/slot order not fitted
+00454420 142 rbtree find-or-insert (int key): complete; value is pair<key,SP::Trans> built from a stack Trans ctor temp, insert is thiscall 0x4552e0; begin/end temps and call-site slots differ  flags /Od /Ob1 /arch:SSE /GS- /Gy [equiv: PASS 271 valid, 100% cov]
 004544d0 289 complete eastl::rbtree<uint32_t,uint32_t>::find_or_insert: lower_bound, end() iterator, then the hint insert through two 8-slot stack scratch vectors (the second copy-constructed from the first) and the returned iterator dereferenced to the mapped value; call sequence and argument order match retail 1:1 (find, iterator assign, value, Construct, ConstructFrom, insert, Destroy, Destroy, value), 274 vs 358 bytes because retail also copies the hint iterator through 0x5673e0 (our RbIter is a plain word) and reloads through extra temp slots. flags /Od /Ob1 /arch:SSE /GS- /Gy; difftest WEAK (120 valid, no mismatch, 44.0% coverage with --repairs 0; the default run reports FAIL only because equiv repairs the original's soup-tree faults and not ours, see work/match/scratch_s00454330_fixlog.txt)
 00454640 193 vector reserve, slot order not fitted
-00454730 14 ctor-style wrapper
-00454750 108 rbtree find-or-insert (uint key)
-004547f0 77 vector push_back, float copy via fld/fstp not reproduced
-004548d0 115 vector<Key> resize
+00454730 17 ctor-style wrapper: calls 0x4fc4a0 (the 0x41d050 twin is a different fold); retail frame reserves 0x14, cl uses push ecx  flags /Od /Ob1 /arch:SSE /GS- /Gy [equiv: PASS 400 valid, 100% cov]
+00454750 133 rbtree find-or-insert (uint key): complete; value pair<key,0> (local zero temp), insert is thiscall 0x455590; begin/end temps differ  flags /Od /Ob1 /arch:SSE /GS- /Gy [equiv: PASS 265 valid, 100% cov]
+004547f0 91 vector push_back: complete; realloc call is thiscall 0x455660 (self in ECX); retail keeps two extra result slots  flags /Od /Ob1 /arch:SSE /GS- /Gy [equiv: PASS 263 valid, 100% cov]
+004548d0 126 vector<Key> resize: complete; fill/copy are thiscall 0x541030 / 0x50f740; retail keeps a 3-word zero temp  flags /Od /Ob1 /arch:SSE /GS- /Gy [equiv: PASS 266 valid, 100% cov]
 004549b0 158 remove(first,last,value) for intrusive ptrs
 00454aa0 99 angle between vectors (acos)
 00454b10 89 VariantTypeTraits<Key>::GetTPTR
-00454b80 97 vector resize
-00454c00 148 cross product
+00454b80 101 vector<ptr> resize: complete; fill/copy are thiscall 0x4566e0 / 0x4769b0; the old source halved the element count twice (ptr diff >> 2), fixed to the element count  flags /Od /Ob1 /arch:SSE /GS- /Gy [equiv: PASS 280 valid, 100% cov]
 00454cb0 77 complete eastl::basic_string<char>::assign(first,last): copy what fits and append the rest when the range is longer than the current contents, otherwise copy the range and erase(first+n,end) (memmove of the terminator, mpEnd -= last-first); same size as retail (148 bytes), the differing bytes are branch layout (cl emits jbe to the else arm, retail ja to the grow arm) and the argument order of the append call. flags /Od /Ob1 /arch:SSE /GS- /Gy; difftest UNSUPPORTED (0/400 valid, discards {'fault': 362, 'import:memcpy': 25, 'fault(write)': 11, 'fault(read)': 2}: every generated first/last pair spans a huge range, so the memcpy import handler stops the run before anything is compared)
 00454d50 76 complete wide-string find(needle,pos,count): element index of the first match at or after pos, or -1; 105 vs 109 bytes, retail evaluates mpBegin+pos*2 before needle+count*2 and keeps one extra frame slot. flags /Od /Ob1 /arch:SSE /GS- /Gy; difftest PASS (317 valid, 100.0% coverage, no mismatch; 77 read-fault inputs discarded)
 00454dc0 178 erase range of 32-byte elements
@@ -22,4 +21,4 @@
 00454ee0 620 complete vector<intrusive_ptr>::DoInsertValue(position,value): grow path (capacity*2 or 1, allocate 4-byte slots, copy the head with memcpy, construct the new slot with an AddRef, memcpy the tail, operator delete of the old block when its -4 header word is set) and in-place path (value fix-up when it aliases the shifted range, duplicate the last slot with an AddRef, move_backward, then AddRef/Release swap at position); call sequence matches retail 1:1 (Allocate, memcpy, AddRef, memcpy, operator delete, AddRef, Ptr_Move, AddRef, Release), 547 vs 671 bytes because retail keeps the block in esi and spills every temporary separately. flags /Od /Ob1 /arch:SSE /GS- /Gy; difftest UNSUPPORTED (0/400 valid, discards {'fault(read)': 338, 'fault(pool-limit)': 22, 'fault(write)': 22, 'import:memcpy': 15, 'budget': 1, 'fault(write-prot)': 2}: position/value/mpBegin are random soup, no vector layout available)
 004551e0 75 uninitialized copy of intrusive ptrs
 00455290 37 free storage unless fixed buffer
-004552e0 129 rbtree insert with hint
+004552e0 175 rbtree insert with hint: complete; both lower_bound calls 0x456410 and the hint insert thiscall 0x456360 (was bound to 0x455590); branch/call slots differ  flags /Od /Ob1 /arch:SSE /GS- /Gy [equiv: PASS 289 valid, 100% cov]

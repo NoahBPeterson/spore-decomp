@@ -17,10 +17,11 @@ struct Vector3 { float x, y, z; };
 // ---- external callees (not in this slice) ----
 void  __cdecl  RefPtr_CopyBackward(void* first, void* last, void* destEnd);          // 0x4571d0
 void* __fastcall Slot_Init0(void* self);                                              // 0x41d050
+void* __fastcall Slot_Init_4fc4a0(void* self);                                        // 0x4fc4a0
 void* __cdecl  Tree_LowerBound(void* b, void* e, const int* key, bool cmpflag);       // 0x456410
-void* __fastcall Tree_AllocNode0(void* self);                                         // 0x440f60
-void  __fastcall Tree_ConstructValue(void* self, void* alloc);                        // 0x440ff0
-void* __fastcall Tree_DoInsert(void* self, void* pos, void* value);                   // 0x4552e0 (thiscall)
+struct TransObj { char m[0x1c]; };                                                    // SP::Trans
+TransObj* __fastcall Trans_Ctor(TransObj* self);                                      // 0x440f60
+TransObj* __fastcall Trans_CopyCtor(TransObj* self, const TransObj* src);             // 0x440ff0
 void* __cdecl  EASTL_Allocate(void* alloc, unsigned n, unsigned align, unsigned off); // 0x42dee0
 void  __cdecl  EASTL_allocator_deallocate(void* p);                                   // 0xf47380
 void  __cdecl  Hashtable_DoFreeNodes(void* b, void* e, void* dest);                   // 0x4554f0
@@ -61,6 +62,19 @@ struct WVec   { char* mpBegin; char* mpEnd; char* mpCapacity;      // 2-byte ele
     int find(const wchar_t* needle, unsigned pos, int count); };
 struct BlockVec { char* mpBegin; char* mpEnd; char* mpCapacity; int mAlloc; char* mpFixed; }; // 32-byte elements
 
+// EASTL vector/rbtree entry points in this region: thiscall (the container in ECX, the rest on the
+// stack, `ret 8` / `ret 0xc`), so they are declared as members of a stub that is really the container.
+struct cVecHelpers {
+    void  Fill_541030(void* at, unsigned n, void* value);   // 0x541030  ret 0xc
+    void  Fill_4566e0(void* at, unsigned n, void* value);   // 0x4566e0  ret 0xc
+    void  Copy_50f740(void* first, void* last);             // 0x50f740  ret 8
+    void  Copy_4769b0(void* first, void* last);             // 0x4769b0  ret 8
+    void  Realloc_455660(void* pos, const float* value);     // 0x455660  ret 8
+    void* Insert_4552e0(void* pos, void* value);            // 0x4552e0  ret 8
+    void* Insert_455590(void* pos, void* value);            // 0x455590  ret 8
+    void* Insert_456360(void* pos, void* value);            // 0x456360  ret 8
+};
+
 // @ 0x00454330  (erase one intrusive pointer from a ref-ptr vector; returns position)
 struct PtrVecOps : PtrVector {
     cRefCounted** erase(cRefCounted** position)
@@ -85,16 +99,16 @@ void* __fastcall SlotInit_Wrapper(void* self)
 }
 
 // @ 0x00454420
+struct PairIntTrans { int mKey; TransObj mValue; };
 struct RbIntMap : RbSet {
     int* find_or_insert(const int* key)
     {
         int* node = (int*)Tree_LowerBound(mpBegin, mpEnd, key, mFlag118);
         if (node == (int*)mpEnd || *key < *node) {
-            void* alloc = Tree_AllocNode0(this);
-            int value[9];
-            value[0] = *key;
-            Tree_ConstructValue(value + 1, alloc);
-            node = (int*)Tree_DoInsert(this, node, value);
+            TransObj t;
+            Trans_Ctor(&t);                      // 0x440f60
+            PairIntTrans value = { *key, t };    // key, then the Trans copy (0x440ff0 inlined by cl)
+            node = (int*)((cVecHelpers*)this)->Insert_4552e0(node, &value);
         }
         return node + 1;
     }
@@ -190,26 +204,24 @@ void __fastcall HashVec8_reserve(HashVec8* self, int, unsigned n)
 // @ 0x00454730
 void* __fastcall SlotInit_Wrapper2(void* self)
 {
-    Slot_Init0(self);  // calls 0x4fc4a0
+    Slot_Init_4fc4a0(self);  // 0x4fc4a0
     return self;
 }
 
 // @ 0x00454750
 struct RbUIntSet : RbSetSmall {
-    unsigned* find_or_insert(const unsigned* key)
+    unsigned* find_or_insert98(const unsigned* key)   // named apart from RbIntMap's: the marker name must be unique
     {
         unsigned* node = (unsigned*)Tree2_LowerBound(mpBegin, mpEnd, key, mFlag98);
         if (node == (unsigned*)mpEnd || *key < *node) {
-            unsigned value[3];
-            value[1] = 0;
-            value[0] = *key;
-            value[2] = value[1];
-            node = (unsigned*)Tree2_DoInsert(this, node, value);
+            unsigned zero = 0;
+            struct PairUU { unsigned mKey; unsigned mValue; } value = { *key, zero };
+            node = (unsigned*)((cVecHelpers*)this)->Insert_455590(node, &value);
         }
         return node + 1;
     }
 };
-unsigned* __fastcall RbUIntSet_Index(RbUIntSet* self, int, const unsigned* key) { return self->find_or_insert(key); }
+unsigned* __fastcall RbUIntSet_Index(RbUIntSet* self, int, const unsigned* key) { return self->find_or_insert98(key); }
 
 // @ 0x004547f0  (vector<Vector3Template<float>-element, 4 bytes>::push_back)
 void __fastcall FloatVec_push_back(FloatVec* self, int, const float* value)
@@ -221,7 +233,7 @@ void __fastcall FloatVec_push_back(FloatVec* self, int, const float* value)
             *p = *value;
         }
     } else {
-        Vec3_PushBackRealloc(self, self->mpEnd, value);
+        ((cVecHelpers*)self)->Realloc_455660(self->mpEnd, value);
     }
 }
 
@@ -230,9 +242,9 @@ void __fastcall KeyVec_resize(KeyVec* self, int, unsigned n)
 {
     if ((unsigned)((self->mpEnd - self->mpBegin) / 12) < n) {
         unsigned zero[3] = {0, 0, 0};
-        Key_FillConstruct(self->mpEnd, n - (self->mpEnd - self->mpBegin) / 12, zero);
+        ((cVecHelpers*)self)->Fill_541030(self->mpEnd, n - (self->mpEnd - self->mpBegin) / 12, zero);
     } else {
-        Key_Copy(self->mpBegin + n * 12, self->mpEnd);
+        ((cVecHelpers*)self)->Copy_50f740(self->mpBegin + n * 12, self->mpEnd);
     }
 }
 
@@ -295,21 +307,24 @@ void* __fastcall VariantTypeTraits_Key_GetTPTR(Variant* v)
 // @ 0x00454b80  (vector<ptr> resize)
 void __fastcall PtrVecInt_resize(IntVec* self, int, unsigned n)
 {
-    if ((unsigned)((self->mpEnd - self->mpBegin)) >> 2 < n) {
+    if ((unsigned)(self->mpEnd - self->mpBegin) < n) {
         int zero = 0;
-        Ptr_FillConstruct(self->mpEnd, n - (unsigned)(self->mpEnd - self->mpBegin) / 4, &zero);
+        ((cVecHelpers*)self)->Fill_4566e0(self->mpEnd, n - (unsigned)(self->mpEnd - self->mpBegin), &zero);
     } else {
-        Ptr_Copy((char*)self->mpBegin + n * 4, self->mpEnd);
+        ((cVecHelpers*)self)->Copy_4769b0((char*)self->mpBegin + n * 4, self->mpEnd);
     }
 }
 
 // @ 0x00454c00  (cross product)
 Vector3* __cdecl Vec3_Cross(Vector3* out, const Vector3* a, const Vector3* b)
 {
-    float az = a->z, bx = b->x, ax = a->x, bz = b->z, by = b->y, ay = a->y;
-    out->x = a->y * b->z - b->y * a->z;
-    out->y = az * bx - ax * bz;
-    out->z = ax * by - ay * bx;
+    Vector3 r;
+    r.x = a->y * b->z - b->y * a->z;
+    r.y = a->z * b->x - a->x * b->z;
+    r.z = a->x * b->y - a->y * b->x;
+    out->x = r.x;
+    out->y = r.y;
+    out->z = r.z;
     return out;
 }
 
@@ -453,7 +468,7 @@ struct RbHint : RbSet {
             node = (int*)Tree_LowerBound(mpBegin, position, key, mFlag118);
         }
         if (node == (int*)mpEnd || *key < *node) {
-            node = (int*)Tree2_DoInsert(this, node, key);   // 0x456360
+            node = (int*)((cVecHelpers*)this)->Insert_456360(node, key);   // 0x456360
         }
         return node;
     }

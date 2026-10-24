@@ -1,1 +1,2 @@
 # source  symbol  va
+slices/s00454330/s00454330.cpp  ?Vec3_Cross@@YAPAUVector3@@PAU1@PBU1@1@Z  00454c00  /Od /Ob1 /arch:SSE /GS- /Gy /fp:fast
