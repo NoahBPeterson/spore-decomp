@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
 004f87f0  -  complete; vtable stores / empty cleanup loop not byte-exact
-004f8880  -  complete; pool-allocation sequence not byte-exact
-004f89a0  -  complete; light-vector destructor not byte-exact
-004f8d80  -  complete; weighted-distance loop not byte-exact
+004f8880  245  complete: aligned pool bump allocator; the retail function is __thiscall and both callees are members: SP::cSPMemPool::LockedAligned (0x928a30, ecx = *(0x16c8b44), 8 stack args) and the chunk-list push_back 0x4fc610 (ecx = this+0x58, arg = &base); /Od frame size still differs (locals not inferable); equiv: PASS (512/800 valid, 100% coverage)
+004f89a0  111  complete: chunk-list teardown: frees every element through the pool (SP::cSPMemPool free 0x9276c0, ecx = *(0x16c8b44)) then SimpleVector<uint>::erase(0x4769b0, ecx = this+0x58) and clears +0xf0/+0xf4 (bump pointer/remaining); the old code called the pool object's vtable instead of the free slot and passed the vector as a cdecl arg; /Od reserves a larger frame than the body uses; equiv: PASS (597/700 valid, 76.6% coverage)
+004f8d80  122  complete: weighted distance sum; __thiscall (ret 8). The table lookup 0x4f8f70 and the per-entry evaluator 0x4f8e20 are thiscall members (ecx = this / table+i*0x80, arg1 on the stack), the loop bound is unsigned (jae), and the accumulations stay in x87 (fadd/fstp on the local); /Od frame/scheduling still differs; equiv: PASS (546/600 valid, 100% coverage)
