@@ -1,0 +1,8 @@
+slices/s00dd2240/s00dd2240.cpp  ?FUN_00dd22f0@SP@@YAPAXXZ  00dd22f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd2240/s00dd2240.cpp  ?FUN_00dd2320@cSPUICommScreen@SP@@QAEPAVIWin@2@PAVcKindObj@2@PAX@Z  00dd2320  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd2240/s00dd2240.cpp  ?FUN_00dd2780@cSPUICommScreen@SP@@QAEXHH@Z  00dd2780  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd2240/s00dd2240.cpp  ?FUN_00dd27c0@cSPUICommScreen@SP@@QAEXXZ  00dd27c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd2240/s00dd2240.cpp  ?FUN_00dd2800@cSPUICommScreen@SP@@QAEXPAX@Z  00dd2800  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd2240/s00dd2240.cpp  ?FUN_00dd2a10@cSPUICommScreen@SP@@QAEXXZ  00dd2a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd2240/s00dd2240.cpp  ?GetMainCreatureScreen@cSPUICommScreen@SP@@QAEXXZ  00dd2cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd2240/s00dd2240.cpp  ?FUN_00dd2d00@cSPUICommScreen@SP@@QAEXXZ  00dd2d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
