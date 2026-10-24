@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0103d580  -  cSPSpaceTrading::ConsiderBuyingRareGroup: not reconstructed this pass - 405-byte /O2 routine (Property lookups via Property::GetInt, cSPSpaceTrading::IsRareGroupComplete and the trade-consideration branch tree); only the other slice functions were written
+0103d720  -  cSPSpaceTrading::CreateCommodityFromID: not reconstructed this pass - 644-byte /O2 routine with a 19-entry jump table (0x103d958) switching on the commodity type to select a property-string id, then PropertyManager lookups and the commodity construction; only the other slice functions were written
+0103d9b0  -  not reconstructed this pass - 540-byte /O2 routine over the palette/sp_ref_vector page lists (erase/insert/relocate loop); not analysed in this pass

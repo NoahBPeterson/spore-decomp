@@ -1,0 +1,3 @@
+0103d580 SP::cSPSpaceTrading::ConsiderBuyingRareGroup  # PDB name via card (callee-scored)
+0103d720 SP::cSPSpaceTrading::CreateCommodityFromID  # PDB name via card (callee-scored)
+0103dd20 SP::cSPSpaceTrading::ShutdownGonzagoSubsystem  # PDB name via card (gap-align)
