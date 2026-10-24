@@ -1,1 +1,5 @@
 00b5e9a0 SP::UpdateWorldVisibility  # Claude-coined name; builds a fixed_hash_map<id,bool> of cSPUILayoutManager world visibility from game state, applies it via IsWorldVisible/SetWorldVisible
+00b5e0b0  FUN_00b5e0b0  # register a cGonzagoSubsystemContainer key in the global hashtable 0x0152d69c (find/insert), else create via operator new(0x74,"Simulator")+Big2::init+WStr_Format; nonmatching
+00b5e260  GonzSub2::Construct  # ctor of the cGonzagoSubsystem subclass owning five 0x20-byte eastl::hashtable channels; returns this; nonmatching
+00b5e380  GonzSub2::Destroy  # dtor: DoFreeBuckets+free the five hashtable channels, tail-call cGonzagoSubsystem::~cGonzagoSubsystem; byte-exact
+00b5e3f0  FUN_00b5e3f0  # per-game-mode day-length/time-of-day/sky-const update from the "9:7:9:9" property group; nonmatching
