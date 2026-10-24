@@ -1,9 +1,9 @@
 # va  diff-bytes  reason
-007eb060  31  int-range copy complete; relative-index loop shape differs (cl folds off+dst)
+007eb060  25  int-range copy complete (first!=last guard, null-dst check and relative-index loop); equiv WEAK on inputs only: 403/1200 valid, 35% coverage because every loop-entering input faults retail on the generated first/dst ints (only first==last runs validate; all match); chk no MATCH, scheduling differs (cl folds off+dst)
 007eb090  95  rbtree node-count complete; bucket-walk register/schedule differs; equiv: WEAK (51% coverage, member/ecx receiver fixed)
-007eb100  41  hashtable find wrapper complete; bucket-array register/offset scheduling differs
+007eb100  17  hashtable find wrapper complete; out is the 8-byte {node,bucket} iterator (the old 4-byte local let find overwrite the return address) and the key is passed by address; bucket-array register scheduling differs; equiv PASS 363/600, 100% coverage
 007eb360  38  vector assign-from-other complete; FUN_007eb000 call arg/register schedule differs
-007eb3b0  47  copyDown complete; register allocation (edi/esi/eax) differs
+007eb3b0  66  copyDown complete; end moves by the ORIGINAL src/dst span (cursor kept in a local, long shift keeps retail's round-down-to-4) and the original dst is returned; register allocation (retail edi destination pointer vs our folded [ebx+edx]) differs; equiv PASS 268/800, 100% coverage; hybrid copy in src/game/SPEngine/SPAppTelemetry.cpp also fixed (PASS 268/800)
 007eb3f0  27  freeNodes complete; node/next register swap (edi/esi)
 007eb140  478  complete serializer write (cTelemetry::Write: magic + per-key item dumps + session); EASTL iterator/loop-tail scheduling differs; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; difftest UNSUPPORTED (original faults 391/400 random inputs, 0 valid)
 007eaa10  856  complete cAppSystem::InitGraphics (switch chain, viewer, materials, effects manager, message handlers, cheat+command allocs); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; difftest UNSUPPORTED (0/400 valid: fault(read)=305, fault(pool-limit)=52, fault(write)=41)

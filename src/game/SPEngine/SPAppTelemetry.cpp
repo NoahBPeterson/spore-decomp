@@ -20,7 +20,13 @@ struct ObjB3 {
     void FUN_007eb000(int n, void* tag);
     ObjB3* FUN_007eb360(VecB* src);
 };
-struct ObjB3b { int* begin; int* end; void copyDown(int* dst, int* src); };
+struct ObjB3b {
+  int* begin;
+  int* end;
+  int* cap;
+  int* copyDown(int* dst, int* src);
+  void DoInsertValues(int* position, uint32_t n, const int& value);  // 0x007EB430
+};
 // ---- items of slice s007ea440 end
 
 // ---- items of slice s007eb430 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -153,8 +159,8 @@ struct TItemList {
   TItemList();
   TItemList(const TItemList& x);
   ~TItemList();
-  TItemListNode* AllocNode(const cTelemetryItem_s007e_b430& value);
-  void CopyRange(TItemListNode* first, TItemListNode* last, TItemList* dst);
+  __declspec(noinline) TItemListNode* AllocNode(const cTelemetryItem_s007e_b430& value);
+  void CopyRange(TItemListNode* dst, TItemListNode* first, TItemList* last, uint32_t flags);
 };
 }
 namespace SP {
@@ -181,11 +187,10 @@ struct TItemMap {
 }
 namespace SP {
 struct IntVector {
-  int* mpBegin;   // +0x0
-  int* mpEnd;     // +0x4
-  int* mpCapacity;  // +0x8
-  void DoInsertValues(int* position, uint32_t n, const int& value);  // 0x007EB430
-  void resize(uint32_t n);                                           // 0x007EB820
+  int64_t mSystemTime;  // +0x0
+  uint32_t mType;       // +0x8
+  ObjB3b mData;         // +0xc
+  void resize(uint32_t n);  // 0x007EB820
 };
 }
 namespace SP {
@@ -377,14 +382,20 @@ ObjB3* ObjB3::FUN_007eb360(VecB* src)
 }
 
 // @ 0x007eb3b0
-void ObjB3b::copyDown(int* dst, int* src)
+int* ObjB3b::copyDown(int* dst, int* src)
 {
+    int* e = end;
     int* d = dst;
-    for (int* s = src; s != end; ++s) {
+    int* s = src;   // cursor; retail computes the new end from the original src/dst
+    while (s != e) {
         *d = *s;
         ++d;
+        ++s;
     }
-    end += ((int)src - (int)dst >> 2) * -4;
+    // pull this->end back by the elements moved (retail rounds the byte span down to 4)
+    long moved = (long)((int)src - (int)dst) >> 2;
+    end = (int*)((char*)end - moved * 4);
+    return dst;
 }
 
 // @ 0x007eb600
@@ -425,29 +436,26 @@ SP::TItemListNode* SP::TItemList::AllocNode(const cTelemetryItem_s007e_b430& val
 }
 
 // @ 0x007eb7d0
-void SP::TItemList::CopyRange(TItemListNode* first, TItemListNode* last, TItemList* dst)
+void SP::TItemList::CopyRange(TItemListNode* dst, TItemListNode* first, TItemList* last, uint32_t flags)
 {
-  for (; first != last; first = first->mpNext) {
-    TItemListNode* pNode = dst->AllocNode(first->mValue);
-    pNode->mpNext = dst->mpNext;
-    pNode->mpPrev = (TItemListNode*)dst;
-    dst->mpNext->mpPrev = pNode;
-    dst->mpNext = pNode;
-    ++dst->mnSize;
+  for (; first != (TItemListNode*)last; first = first->mpNext) {
+    TItemListNode* pNode = AllocNode(first->mValue);
+    pNode->mpNext = dst;
+    pNode->mpPrev = dst->mpPrev;
+    dst->mpPrev->mpNext = pNode;
+    dst->mpPrev = pNode;
   }
 }
 
 // @ 0x007eb820
 void SP::IntVector::resize(uint32_t n)
 {
-  uint32_t cur = (uint32_t)(mpEnd - mpBegin);
-  if ((uint32_t)(mpCapacity - mpBegin) < n) {
+  uint32_t cur = (uint32_t)(mData.end - mData.begin);
+  if (n > cur) {
     int zero = 0;
-    DoInsertValues(mpEnd, n - cur, zero);
+    mData.DoInsertValues(mData.end, n - cur, zero);
   } else {
-    // erase tail (FUN_007EB3B0)
-    extern void IntVecEraseRange(int* first, int* last);
-    IntVecEraseRange(mpBegin + n, mpEnd);
+    mData.copyDown(mData.begin + n, mData.end);
   }
 }
 
@@ -457,8 +465,8 @@ SP::TItemList::TItemList(const TItemList& x)
   mpNext = (TItemListNode*)this;
   mpPrev = (TItemListNode*)this;
   mnSize = 0;
-  extern void ListCopyRange(TItemList* dst, TItemListNode* first, TItemListNode* last);
-  ListCopyRange(this, x.mpNext, (TItemListNode*)&x);
+  extern void ListCopyRange(TItemList* dst, TItemListNode* first, TItemListNode* last, uint32_t flags);
+  ListCopyRange(this, x.mpNext, (TItemListNode*)&x, 0);
 }
 
 // @ 0x007eb8d0

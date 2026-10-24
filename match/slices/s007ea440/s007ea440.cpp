@@ -30,8 +30,8 @@ void* ObjAF::Cast(int id) {
     return 0;
 }
 
-// @ 0x007EB060  (copy ints [first,last) to dst)
-void FUN_007eb060(int first, int last, int* dst) {
+// @ 0x007EB060  (copy ints [first,last) to dst; eax is left holding the advanced dst)
+int* FUN_007eb060(int first, int last, int* dst) {
     if (first != last) {
         int off = first - (int)dst;
         do {
@@ -40,6 +40,7 @@ void FUN_007eb060(int first, int last, int* dst) {
             ++dst;
         } while (off + (int)dst != last);
     }
+    return dst;
 }
 
 // @ 0x007EB090  (rbtree node count)
@@ -77,7 +78,7 @@ struct HashTable {
     char pad0[4];
     int* mpBucketArray;   // +4
     int  mnBucketCount;   // +8
-    void find(void* out, void* key);
+    void find(void* out, const void* key);   // 0x00db4780; out is an 8-byte {node, bucket} iterator
 };
 struct ObjB1 {
     char pad[0xc];
@@ -85,10 +86,11 @@ struct ObjB1 {
     int FUN_007eb100(int key);
 };
 int ObjB1::FUN_007eb100(int key) {
-    int local;
-    ht.find(&local, (void*)key);
-    if (local != ht.mpBucketArray[ht.mnBucketCount])
-        return local + 4;
+    int local[2];         // iterator: {node, bucket pointer}
+    // retail passes the address of the stack argument, not its value
+    ht.find(local, &key);
+    if (local[0] != (int)ht.mpBucketArray[ht.mnBucketCount])
+        return local[0] + 4;
     return 0;
 }
 
@@ -112,15 +114,21 @@ ObjB3* ObjB3::FUN_007eb360(VecB* src) {
     return this;
 }
 
-// @ 0x007EB3B0  (copy [src,..) backwards)
-struct ObjB3b { int* begin; int* end; void copyDown(int* dst, int* src); };
-void ObjB3b::copyDown(int* dst, int* src) {
+// @ 0x007EB3B0  (copy [src,..) backwards; eax is left holding dst)
+struct ObjB3b { int* begin; int* end; int* copyDown(int* dst, int* src); };
+int* ObjB3b::copyDown(int* dst, int* src) {
+    int* e = end;
     int* d = dst;
-    for (int* s = src; s != end; ++s) {
+    int* s = src;   // cursor; retail computes the new end from the original src/dst
+    while (s != e) {
         *d = *s;
         ++d;
+        ++s;
     }
-    end += ((int)src - (int)dst >> 2) * -4;
+    // this->end moves to the end of the destination run (the byte span rounded down to 4)
+    long moved = (long)((int)src - (int)dst) >> 2;
+    end = (int*)((char*)end - moved * 4);
+    return dst;
 }
 
 // @ 0x007EB3F0  (free list nodes)
