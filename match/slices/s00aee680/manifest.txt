@@ -1,0 +1,3 @@
+slices/s00aee680/s00aee680.cpp  ?GetOwner@cDebugBehavior@@QAEPAXXZ  00aef2e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00aee680/s00aee680.cpp  ?SetEnabled@cDebugBehavior@@QAEXEM@Z  00aef390  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00aee680/s00aee680.cpp  ?SetTransform@cDebugBehavior@@QAEXPBUVec4@@_N@Z  00aef530  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
