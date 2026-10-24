@@ -8,5 +8,5 @@
 00a17520  3  GetPropertyAsKeyInstance: complete, value/out register naming differs
 00a168c0 39 sys_gui scalar deleting dtor: complete; original omits the EH state=-1 store after member dtor; difftest PASS (written as named member SysGui::ScalarDeletingDtor; ours adds a /GS cookie to the EH frame)
 00a16920 160 VuMeter init: complete; zero register hoisted across call to 0xa161c0 in original (interprocedural xmm use)
-00a16d00 91 PrimitiveAggregate ctor: complete; original reloads vector begin/end for the inlined clear() instead of forwarding stores; difftest PASS (vtables mapped in symbols/slices)
+00a16d00 85 FIXED: volatile re-reads of mpEnd/mpBegin and moving the m68 store last keep edx untouched (the original never writes edx); default PASS (400 valid, 100% coverage), replay and hybrid AudioPrimitiveAggregate.cpp first-difference None; size 146 vs 145
 00a173f0 4 PResp ctor: complete; load order of arg vs float const; difftest PASS (globals annotated, vtables mapped in symbols/slices)

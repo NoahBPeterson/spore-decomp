@@ -833,11 +833,11 @@ PAggC::PAggC(int arg)
     mbDirty = true;
     mMethod = 0xd256aaba;
     mValue = g_aggDefault;
-    m68 = arg;
-    char* last = mpEnd;
-    char* first = mpBegin;
+    char* last = *(char* volatile*)&mpEnd;
+    char* first = *(char* volatile*)&mpBegin;
     memcpy(first, last, mpEnd - last);
     mpEnd -= ((last - first) >> 2) * 4;
+    m68 = arg;
 }
 
 // ---------------------------------------------------------------------------
