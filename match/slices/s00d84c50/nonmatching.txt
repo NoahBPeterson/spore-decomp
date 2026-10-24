@@ -1,0 +1,8 @@
+00d84d70  59   complete: EPIC_BITE_HELD_CREATURE_Activate — epic-bite anim start, stores ctx idx (+8) and PlayAnimation handle (0x4bc0476); equiv PASS (278 valid, 100% cov), frame/register differences only
+00d84dc0 140   complete: epic-bite tick — anim-finished poll, anim-event wait (g_1590c3c), damage apply via 0xb8 slot + vcall 0x58/0x18; equiv WEAK (271 valid, 59.5% cov), no mismatch observed
+00d84ec0  42   complete: approach-target facing move — x87 reciprocal sqrt(d²+1e-8), MoveToPointAndFacingAtSpeed(2,...,1,2) then tool-slot resolve; equiv WEAK (194 valid, 11.1% cov), no mismatch observed
+00d851c0 167   complete: stalk-avatar range gate (0xd51660 info +0x10) then out-of-range reposition toward avatar; equiv WEAK (180 valid, 11.3% cov), no mismatch observed
+00d85400  45   complete: UpdateLoudness — clamp mf04*dt+mf0c to mf08 via pointer-select, add (val-cur) to component mf1000; equiv PASS (306 valid, 100% cov), xmm numbering/scheduling differences only
+00d85480  83   complete: AddHeldObject — behaviour-tree stimuli (0xbc97f0 / ClearAll 0x400000) + anim slot 0x4f26350b; equiv WEAK (225 valid, 13.5% cov), no mismatch observed
+00d854f0  35   complete: AddAlphaFade — alpha decay from dt, success when >= 0 or behaviour-tree single-arg slot == 0x341bd4be; equiv PASS (356 valid, 100% cov)
+00d856e0 288   complete: avatar-distance follow — normalise d, >30 range or loco gate triggers v8c/vc8, else step vOut toward avatar; equiv WEAK (107 valid, 67.5% cov), no mismatch observed
