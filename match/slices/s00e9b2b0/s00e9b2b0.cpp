@@ -109,23 +109,51 @@ __forceinline Vector3 Rotate(const Quaternion* q, const Vector3& v)
     return r;
 }
 
+struct VecUFO {
+    UFOCollisionEffectInfo* mpBegin;            // +0x00
+    UFOCollisionEffectInfo* mpEnd;              // +0x04
+    UFOCollisionEffectInfo* mpCapacity;         // +0x08
+    UFOCollisionEffectInfo* erase(UFOCollisionEffectInfo* first,
+                                  UFOCollisionEffectInfo* last); // 0x0065DED0 (thiscall, ret 8)
+};
+
 class cSPUFOGfx {
 public:
-    uint32_t pad00[3];
+    uint32_t pad00[3];                          // +0x00
     cSpatialObject* mpObject;                   // +0x0c
-    uint32_t pad10[(0xc0 - 0x10) / 4];
-    UFOCollisionEffectInfo* mpEffectsBegin;     // +0xc0
-    UFOCollisionEffectInfo* mpEffectsEnd;       // +0xc4
+    uint32_t pad10[0x0c];                       // +0x10..+0x3f
+    void*    mpHandler;                         // +0x40
+    uint32_t mHandler44;                        // +0x44
+    uint32_t mHandler48;                        // +0x48
+    uint32_t mHandler4c;                        // +0x4c
+    uint32_t mHandler50;                        // +0x50
+    uint32_t pad54[0x0b];                       // +0x54..+0x7f
+    cIVisualEffect* mFilterRangeEffect;         // +0x80
+    cIVisualEffect* mSelectionEffect;           // +0x84
+    cIVisualEffect* mRolloverEffect;            // +0x88
+    cIVisualEffect* mRadarEffect;               // +0x8c
+    cIVisualEffect* mAOERepairEffect;           // +0x90
+    cIVisualEffect* mRallyCallEffect;           // +0x94
+    uint32_t pad98[0x04];                       // +0x98..+0xa7
+    cIVisualEffect* mEffectA8;                  // +0xa8
+    cIVisualEffect* mEffectAc;                  // +0xac
+    cIVisualEffect* mEffectB0;                  // +0xb0
+    uint32_t padB4;                             // +0xb4
+    cIVisualEffect* mEffectB8;                  // +0xb8
+    cIVisualEffect* mEffectBc;                  // +0xbc
+    VecUFO mEffects;                            // +0xc0
 
+    void SetVisible(bool visible);              // 0x00E98DB0
     void erase(UFOCollisionEffectInfo* position)
     {
-        if (position + 1 < mpEffectsEnd)
-            DoCopy(position + 1, mpEffectsEnd, position);
-        --mpEffectsEnd;
-        mpEffectsEnd->~UFOCollisionEffectInfo();
+        if (position + 1 < mEffects.mpEnd)
+            DoCopy(position + 1, mEffects.mpEnd, position);
+        --mEffects.mpEnd;
+        mEffects.mpEnd->~UFOCollisionEffectInfo();
     }
-    unsigned size() const { return (unsigned)(mpEffectsEnd - mpEffectsBegin); }
+    unsigned size() const { return (unsigned)(mEffects.mpEnd - mEffects.mpBegin); }
     void UpdateHitEffects();                    // 0x00e9b2b0
+    void ClearEffects();                        // 0x00e9b8e0
 };
 
 // @ 0x00e9b2b0
@@ -135,15 +163,15 @@ void cSPUFOGfx::UpdateHitEffects()
 
     unsigned i = 0;
     while (i < size()) {
-        if (!mpEffectsBegin[i].mpEffect->IsRunning()) {
-            erase(mpEffectsBegin + i);
+        if (!mEffects.mpBegin[i].mpEffect->IsRunning()) {
+            erase(mEffects.mpBegin + i);
         } else {
             Transform t;
             cLocomotiveIface* loco = &ufo->mLoco;
             const Vector3* ufoPos = loco->GetPosition();
             const Quaternion* q = loco->GetOrientation();
 
-            Vector3 rotated = Rotate(q, mpEffectsBegin[i].mOffset);
+            Vector3 rotated = Rotate(q, mEffects.mpBegin[i].mOffset);
             Vector3 pos(ufoPos->x + rotated.x, ufoPos->y + rotated.y, ufoPos->z + rotated.z);
             t.SetOffset(pos);
 
@@ -154,8 +182,79 @@ void cSPUFOGfx::UpdateHitEffects()
             Matrix3 mat;
             t.SetRotation(*Matrix3FromQuaternion(&mat, &orient));
 
-            mpEffectsBegin[i].mpEffect->SetSourceTransform(t);
+            mEffects.mpBegin[i].mpEffect->SetSourceTransform(t);
             ++i;
         }
+    }
+}
+
+void RemoveHandler(void* handler, void* arg1, void* arg2, void* arg3, void* arg4); // 0x00571DB0 (cdecl)
+
+__forceinline void ReleaseEffect(cIVisualEffect*& slot)
+{
+    cIVisualEffect* effect = slot;
+    if (effect != 0) {
+        void* vtable = *(void**)effect;
+        void* stop = ((void**)vtable)[0x0c / 4];
+        ((void (__thiscall*)(void*, int))stop)(effect, 0);
+        effect = slot;
+        if (effect != 0) {
+            slot = 0;
+            vtable = *(void**)effect;
+            void* release = ((void**)vtable)[0x04 / 4];
+            ((void (__thiscall*)(void*))release)(effect);
+        }
+    }
+}
+
+// @ 0x00e9b8e0
+void cSPUFOGfx::ClearEffects()
+{
+    SetVisible(false);
+
+    VecUFO& vector = mEffects;
+    int count = (int)(vector.mpEnd - vector.mpBegin);
+    if (count > 0) {
+        int offset = 0;
+        do {
+            cIVisualEffect* effect =
+                *(cIVisualEffect**)((uint8_t*)vector.mpBegin + offset + 0x0c);
+            void* vtable = *(void**)effect;
+            void* stop = ((void**)vtable)[0x0c / 4];
+            ((void (__thiscall*)(void*, int))stop)(effect, 1);
+            effect = *(cIVisualEffect**)((uint8_t*)vector.mpBegin + offset + 0x0c);
+            if (effect != 0) {
+                *(cIVisualEffect**)((uint8_t*)vector.mpBegin + offset + 0x0c) = 0;
+                vtable = *(void**)effect;
+                void* release = ((void**)vtable)[0x04 / 4];
+                ((void (__thiscall*)(void*))release)(effect);
+            }
+            offset += 0x10;
+            --count;
+        } while (count != 0);
+    }
+
+    vector.erase(vector.mpBegin, vector.mpEnd);
+
+    ReleaseEffect(mEffectA8);
+    ReleaseEffect(mFilterRangeEffect);
+    ReleaseEffect(mEffectB8);
+    ReleaseEffect(mSelectionEffect);
+    ReleaseEffect(mRolloverEffect);
+    ReleaseEffect(mRadarEffect);
+    ReleaseEffect(mAOERepairEffect);
+    ReleaseEffect(mRallyCallEffect);
+    ReleaseEffect(mEffectB0);
+    ReleaseEffect(mEffectAc);
+    ReleaseEffect(mEffectBc);
+
+    void* handler = mpHandler;
+    if (handler != 0) {
+        void* arg1 = (void*)mHandler44;
+        void* arg2 = (void*)mHandler48;
+        void* arg3 = (void*)mHandler4c;
+        void* arg4 = (void*)mHandler50;
+        mpHandler = 0;
+        RemoveHandler(handler, arg1, arg2, arg3, arg4);
     }
 }
