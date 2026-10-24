@@ -193,7 +193,7 @@ Vec10* Vec10::init(int n, int unused)
 // @ 0x00706c80  forward copy of 9-dword elements (destination nullable)
 // ==========================================================================
 struct E9 { int a; float b, c, d, e, f, g, h, i; };
-void FUN_00706c80(E9** out, E9* first, E9* last, E9* dst)
+E9** FUN_00706c80(E9** out, E9* first, E9* last, E9* dst)
 {
     *out = dst;
     if (first != last) {
@@ -214,6 +214,7 @@ void FUN_00706c80(E9** out, E9* first, E9* last, E9* dst)
         } while (first != last);
         *out = dst;
     }
+    return out;
 }
 
 // ==========================================================================
@@ -287,7 +288,7 @@ struct SHGroundQuery {
     virtual void q0(); virtual void q1(); virtual void q2(); virtual void q3();
     virtual void q4(); virtual void q5(); virtual void q6(); virtual void q7();
     virtual void q8(); virtual void q9(); virtual void q10();
-    virtual V4Ret Query(const Vec3f* pos);                                       // +0x2c
+    virtual float* Query(float* scratch, const Vec3f* pos);                      // +0x2c
 };
 
 struct LightCfg {
@@ -392,8 +393,9 @@ void EnvLW::UpdateEnvLightSample(EnvSample* out)
             d2.y = m.m[3] * dir->x + m.m[4] * dir->y + m.m[5] * dir->z;
             d2.z = m.m[6] * dir->x + m.m[7] * dir->y + m.m[8] * dir->z;
             SH_Accumulate(&d2.x, nBands, tmp, buf490);
-            V4Ret g = ground->Query(&out->pos);
-            __m128 P = _mm_set_ps(g.f(3), g.f(2), g.f(1), g.f(0));
+            float q[4];
+            float* g = ground->Query(q, &out->pos);
+            __m128 P = _mm_set_ps(g[3], g[2], g[1], g[0]);
             __m128 va = _mm_mul_ps(_mm_set1_ps(cfg->groundScaleA), P);
             __m128 vb = _mm_mul_ps(_mm_set1_ps(cfg->groundScaleB), P);
             SH_AddGroundBounce(nBands, buf490, &vb, &va);
