@@ -25,7 +25,7 @@ struct ShadowDesc {
     uint32_t f24;     // +0x24
 
     void SetMode1(int mode);                 // 0x00830280
-    void SetMode2(int mode);                 // 0x00830150
+    __declspec(noinline) void SetMode2(int mode);   // 0x00830150
 };
 
 extern ShadowDesc g_shadowDefaults;   // 0x1547690
@@ -61,7 +61,7 @@ void ShadowDesc::SetMode1(int mode)
 }
 
 // ---------------------------------------------------------------- 0x00830150
-void ShadowDesc::SetMode2(int mode)
+__declspec(noinline) void ShadowDesc::SetMode2(int mode)
 {
     mode2 = mode;
     switch (mode) {
@@ -131,6 +131,15 @@ extern "C" void __cdecl VisitCallback_30020();                             // 0x
 extern "C" void __cdecl FUN_008304a0(void *, void *);                      // 0x8304a0
 extern "C" double __cdecl TypesetterValidate(double);                      // 0x11e0906
 struct StdBase { void ctor(); void dtor(); };
+
+// External view of ShadowDesc::SetMode2 (defined above in this TU but the
+// original caller's TU only saw a declaration, so it must stay opaque).
+struct ShadowDescExt {
+    uint32_t mode1, mode2, f8, fc, f10;
+    float    s14, s18, s1c, s20;
+    uint32_t f24;
+    void SetMode2(int mode);   // 0x00830150
+};
 
 // ---------------------------------------------------------------- 0x00830080
 struct VisitCtx { uint8_t b; char pad[3]; uint32_t v; };
@@ -213,19 +222,18 @@ int *FactoryRegistry::CreateInstance(int **out, int a1, int a2, int a3)
 // @ 0x008306e0
 float *FUN_008306e0(float *dst, float *a, float *b, float *c)
 {
-    float f1 = a[0], f2 = a[1], f3 = a[2], f4 = a[3];
-    dst[0] = f1;
-    dst[1] = f2;
-    dst[2] = f3;
-    dst[3] = f4;
-    double d6 = TypesetterValidate((double)(((b[0] - 1.0f) * (f3 - f1)) * 0.5f));
-    double d7 = TypesetterValidate((double)(((b[1] - 1.0f) * (f4 - f2)) * 0.5f));
-    double d8 = TypesetterValidate((double)c[1]);
-    double d9 = TypesetterValidate((double)c[0]);
-    dst[0] = (dst[0] - (float)d6) + (float)d9;
-    dst[1] = (dst[1] - (float)d7) + (float)d8;
-    dst[2] = (dst[2] + (float)d9) + (float)d6;
-    dst[3] = ((float)d8 + dst[3]) + (float)d7;
+    float f1 = a[0]; dst[0] = f1;
+    float f2 = a[1]; dst[1] = f2;
+    float f3 = a[2]; dst[2] = f3;
+    float f4 = a[3]; dst[3] = f4;
+    float d6 = (float)TypesetterValidate((double)(((b[0] - 1.0f) * (f3 - f1)) * 0.5f));
+    float d7 = (float)TypesetterValidate((double)(((b[1] - 1.0f) * (f4 - f2)) * 0.5f));
+    float d8 = (float)TypesetterValidate((double)c[1]);
+    float d9 = (float)TypesetterValidate((double)c[0]);
+    dst[0] = (dst[0] - d6) + d9;
+    dst[1] = (dst[1] - d7) + d8;
+    dst[2] = (dst[2] + d9) + d6;
+    dst[3] = (d8 + dst[3]) + d7;
     return dst;
 }
 
@@ -264,11 +272,11 @@ ImageInfo *ImageInfo::Construct()
 
     stroke.mode1 = 0; stroke.mode2 = 2; stroke.f8 = 3; stroke.fc = 0; stroke.f10 = 0;
     stroke.s14 = 0; stroke.s18 = 0; stroke.s1c = 0; stroke.s20 = 0; stroke.f24 = 0;
-    stroke.SetMode2(2);
+    ((ShadowDescExt *)&stroke)->SetMode2(2);
 
     halo.mode1 = 0; halo.mode2 = 2; halo.f8 = 3; halo.fc = 0; halo.f10 = 0;
     halo.s14 = 0; halo.s18 = 0; halo.s1c = 0; halo.s20 = 0; halo.f24 = 0;
-    halo.SetMode2(2);
+    ((ShadowDescExt *)&halo)->SetMode2(2);
     return this;
 }
 
@@ -293,7 +301,7 @@ struct Drawable {
     void *mImageInfos[8];          // +0x114
     uint8_t mbHasUserDefaults;     // +0x134
     char  pad135[3];
-    uint32_t mDrawParams[8];       // +0x138
+    uint32_t mDrawParams[4];       // +0x138
     float  mDrawArea[4];           // +0x148
     float  mOODrawAreaSize[2];     // +0x158
     Drawable *Construct();         // 0x00830950
@@ -303,14 +311,16 @@ struct Drawable {
 // @ 0x00830950
 Drawable *Drawable::Construct()
 {
+    void *src = (char *)this + 0x7c;
     ((StdBase *)this)->ctor();
     *(void **)this = &g_vtblDrawable;
     *(void **)((char *)this + 4) = &g_vtblDrawableSec;
     *(void **)((char *)this + 0xc) = &g_vtblDrawableThr;
-    mImageInfo.Construct();
+    ((ImageInfo *)src)->Construct();
 
+    void **q = mImageInfos;
     for (int i = 0; i < 8; ++i)
-        mImageInfos[i] = 0;
+        q[i] = 0;
     mbHasUserDefaults = 0;
     mDrawParams[0] = 0;
     mDrawParams[1] = 0;
@@ -323,14 +333,13 @@ Drawable *Drawable::Construct()
     mOODrawAreaSize[0] = 1.0f;
     mOODrawAreaSize[1] = 1.0f;
 
-    void *src = (char *)this + 0x7c;
     ((void (__thiscall *)(void *))(*(void ***)src)[0])(src);
     for (int i = 0; i < 8; ++i) {
-        void *old = mImageInfos[i];
+        void *old = q[i];
         if (src != old) {
             if (src)
                 ((void (__thiscall *)(void *))(*(void ***)src)[0])(src);
-            mImageInfos[i] = src;
+            q[i] = src;
             if (old)
                 ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
         }

@@ -3,9 +3,9 @@
 008300e0  35  SetThing: refcount swap + virtual layout call schedule differs; equiv: WEAK (97.8% coverage)
 00830430  21  QueryInterface: switch comparison tree shape differs from cl's lowering
 008304c0  45  FactoryRegistry::CreateInstance: register (esi) output convention differs; equiv: UNSUPPORTED (0 valid inputs)
-008306e0  158 bbox adjust: x87 double Validate calls / register alloc differ; equiv: FAIL (1 ulp float)
-00830810  174 cSPUIStdDrawableImageInfo ctor: vptr + descriptor store schedule differs; equiv: PASS
+008306e0   41 bbox adjust: kept the four Validate results as float (fstp dword) instead of double locals, which removes the realigned frame/qword spills and restores the original x87 dword arithmetic; remaining diff is load/store + Validate-call scheduling. [equiv: PASS]
+00830810  205 cSPUIStdDrawableImageInfo ctor: SetMode2 is defined in this TU so cl inlines/IPO's it and clobbers edx; calling the external ShadowDescExt view of 0x00830150 keeps this in esi and the -1/1 constants in eax. Remaining diff is the vptr/descriptor store schedule. [equiv: PASS]
 00830910  34  SmallSet::Do: /Od frame layout (force /Od flags) differs; equiv: PASS
-00830950  152 cSPUIStdDrawable ctor: base ctor + 8 AutoRefCount stores schedule differs; equiv: FAIL (field stores differ)
+00830950  206 cSPUIStdDrawable ctor: mDrawParams was uint32_t[8], shifting mDrawArea/mOODrawAreaSize by 0x10 (original has 4 dwords at +0x138); fixed to [4], compute src before the base ctor and keep an mImageInfos cursor for the zero-fill/refcount loop. Field contents now match; remaining diff is loop/register layout. [equiv: PASS]
 00830b30  124 cSPUIStdDrawable dtor: embedded image-info release loop differs; equiv: PASS
 0082f9a0  1285  SPUI shader proxy ArgScript parser: complete (46/46-equivalent call set, size 0.94x; 5 StoreParams sites tail-merged to 1); stack-slot/register allocation and loop layout differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
