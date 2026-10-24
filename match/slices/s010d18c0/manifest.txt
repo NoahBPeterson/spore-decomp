@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s010d18c0/s010d18c0_b.cpp  ?getPenetrations@hkSymmetricAgent_hkMultiSphereTriangleAgent@@QAEXABVhkCdBody@@0ABUhkCollisionInput@@AAUhkCdBodyPairCollector@@@Z  010d25b0  /vc71 /O2 /MD /Gy /TP
+slices/s010d18c0/s010d18c0_b.cpp  ?getClosestPoints@hkSymmetricAgent_hkMultiSphereTriangleAgent@@QAEXABVhkCdBody@@0ABUhkCollisionInput@@AAUhkCdPointCollector@@@Z  010d2630  /vc71 /O2 /MD /Gy /TP
+slices/s010d18c0/s010d18c0_b.cpp  ?processCollision@hkSymmetricAgent_hkMultiSphereTriangleAgent@@QAEXABVhkCdBody@@0ABUhkProcessCollisionInput@@AAUhkProcessCollisionOutput@@@Z  010d26b0  /vc71 /O2 /MD /Gy /TP
+slices/s010d18c0/s010d18c0_b.cpp  ?createCapsuleTriangleAgent@hkCapsuleTriangleAgent@@SAPAVhkCollisionAgent@@ABVhkCdBody@@0ABUhkCollisionInput@@PAUhkContactMgr@@@Z  010d2800  /vc71 /O2 /MD /Gy /TP
+slices/s010d18c0/s010d18c0_b.cpp  ?createTriangleCapsuleAgent@hkCapsuleTriangleAgent@@SAPAVhkCollisionAgent@@ABVhkCdBody@@0ABUhkCollisionInput@@PAUhkContactMgr@@@Z  010d2860  /vc71 /O2 /MD /Gy /TP
+slices/s010d18c0/s010d18c0_b.cpp  ?cleanup@hkCapsuleTriangleAgent@@QAEXXZ  010d27c0  /vc71 /O2 /MD /Gy /TP
