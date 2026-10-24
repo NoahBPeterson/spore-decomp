@@ -1237,7 +1237,7 @@ void RebuildResources2(int self)
 }
 
 // @ 0x0070e6b0
-void** MakeHashNode(void** src)
+void** __stdcall MakeHashNode(void** src)
 {
     void** p = (void**)EAlloc(0xc, "Graphics", 0, 0, ALLOC_FILE, 0xd1);
     if (p != 0)
@@ -1349,7 +1349,7 @@ void FillB(void** first, void** last, void** value)
 }
 
 // @ 0x0070ea70
-void UninitCopyAtomic8(void** out, void** first, void** last, void** dst)
+void** UninitCopyAtomic8(void** out, void** first, void** last, void** dst)
 {
     *out = dst;
     for (; first != last; ++first)
@@ -1364,6 +1364,7 @@ void UninitCopyAtomic8(void** out, void** first, void** last, void** dst)
         }
         *out = (void**)((char*)*out + 4);
     }
+    return out;
 }
 
 // @ 0x0070eac0
@@ -1474,7 +1475,7 @@ void AssignWeak14(void** first, void** last, void** dst)
 }
 
 // @ 0x0070ec30
-void CopyBackwardWeak14(void** first, void** last, void** dstEnd)
+void** CopyBackwardWeak14(void** first, void** last, void** dstEnd)
 {
     while (last != first)
     {
@@ -1495,6 +1496,7 @@ void CopyBackwardWeak14(void** first, void** last, void** dstEnd)
             }
         }
     }
+    return dstEnd;
 }
 
 // @ 0x0070ec80
