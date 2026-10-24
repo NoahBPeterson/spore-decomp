@@ -1,12 +1,9 @@
-0092acb0  79   SetClipboardText: alloc/ctor vtable call schedule differs
 0092ad50  57   GetClipboard: operator_new path / returned old pointer schedule differs
 0092afb0  181  Win32Clipboard ctor: WNDCLASS layout + RegisterClass/CreateWindow schedule differs
 0092b0b0  49   Clipboard platform-enable: alloc/ctor schedule differs; difftest WEAK (1198 valid, 44.0% coverage)
-0092b0f0  60   SetUserEnabled: mutex/teardown schedule differs; difftest FAIL (5/5 mismatched: execution)
-0092b140  88   EnsurePlatform: mutex/enable schedule differs; difftest FAIL (5/5 mismatched: execution)
+0092b140  21   EnsurePlatform: complete; only remaining diff is `xor eax,eax; mov [esi+8],eax` vs our `mov [esi+8],0` on the failed-alloc path; difftest WEAK (315 valid inputs, 56.4% coverage, no mismatch)
 0092b1b0  36   CommandLine::at: register allocation (mpBegin kept live) differs
 0092b1d0  33   CommandLine ctor: vtable/field-init order differs
 0092b690  55   CommandLineB ctor: vtable-last field-init order differs
-0092b700  59   vector<wstring>::erase: copy/dealloc schedule differs; difftest FAIL (5/6 mismatched: execution)
 0092b5f0  106  GetCurrentAppPath: cached GetModuleFileNameW call/loop schedule differs
 0092b300  310  COMPLETE CommandLine::FindSwitch (quote strip, ":" value, both search fns); this/start/sw register allocation differs [equiv: WEAK 309 valid inputs, 34.9% coverage, no mismatch]
