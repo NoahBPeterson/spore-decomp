@@ -7,4 +7,4 @@
 00743030  247  complete; original omits the final state=-1 store before the inline FixedVec64 dtor and reloads info after the null test [equiv: PASS]
 00743150  84   complete; load scheduling and register allocation of the slot loop [equiv: WEAK (no mismatch, 193 valid, 50% cov)]
 00743270  509  complete; frame is 12 bytes smaller (original spills loop index/count) and cl inlines the mesh-vector dtor at both exits [equiv: WEAK (no mismatch, 304 valid, 17% cov)]
-007434b0  817  complete; frame 4 bytes smaller (original keeps the DynArr pointer in a stack slot), register allocation [equiv: WEAK (no mismatch, 293 valid, 41% cov)]
+007434b0  987  complete; frame 4 bytes smaller (original keeps the DynArr pointer in a stack slot), register allocation [equiv: WEAK (no mismatch, 461 valid, 41% cov)]
