@@ -1,0 +1,4 @@
+00dab1f0 ?TRIBE_GET_TOOL_Tick@SP@@YA_NPAUCitizen@@HMHHPAUGetToolState@@@Z  # PDB anchor name SP::TRIBE_GET_TOOL_Tick; real size 800 (decomp index) -- the chk span to 00dabc30 is 2613 because the unnamed tail function below is not an index start
+00dab510 FUN_00dab510  # unnamed function with its own prologue (sub esp,0x40; GetTribe; 8-entry jump table at 0x00dabba8); in no batch slice; boundary recorded here for documentation only (card.py load_funcs reads names, not starts)
+00dabc30 ?FUN_00dabc30@@YA_NPAUCitizen@@@Z  # unnamed helper, 211 bytes (decomp index)
+00dabd10 ?FUN_00dabd10@@YA_NPAUIteratorB9@@PAUCitizen@@@Z  # unnamed helper, 215 bytes (decomp index)
