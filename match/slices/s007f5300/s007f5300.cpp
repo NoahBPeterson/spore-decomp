@@ -442,6 +442,7 @@ void Obj::M5D00()
     int rows = *(int*)((char*)this + 0x240);
     int cw = *(int*)((char*)this + 0x234);
     int r = 1;
+    int c = 1;                          // eax at the +0x23c store (1 in the spr==0 arm)
     if (spr == 0) {
         rows = 1;
         cw = 0x20;
@@ -465,14 +466,14 @@ void Obj::M5D00()
             if (cols < 1)
                 cols = 1;
         }
-        int c = *(int*)((char*)spr + 0x20) / cols;
+        c = *(int*)((char*)spr + 0x20) / cols;
         if (frames < 1)
             frames = c * r;
     }
     *(int*)((char*)this + 0x234) = cw;
     *(int*)((char*)this + 0x238) = cols;
     *(int*)((char*)this + 0x240) = r;
-    *(int*)((char*)this + 0x23c) = (*(int*)((char*)this + 0x23c));
+    *(int*)((char*)this + 0x23c) = c;
     void* sub = (char*)this + 4;
     void* dp = ((FPR0)VTOBJ(sub)[0xa8 / 4])(sub);
     *(int*)((char*)this + 0x230) = frames;
@@ -620,7 +621,7 @@ struct AnimatorS {
     char pad1[0xc];
     float mLast;    // +0x18
     bool  mActive;  // +0x1c
-    bool RemoveAnimation(void* obj, int type);
+    void RemoveAnimation(void* obj, int type);
     bool HasAnimation(void* obj, int type);
     bool Empty();
     void Update();
@@ -630,23 +631,24 @@ typedef void (__cdecl *AnimFn1)(void*, float, float, int, int);
 typedef bool (__cdecl *AnimFn2)(void*, float, float, int, int);
 
 // @ 0x007F6210
-bool AnimatorS::RemoveAnimation(void* obj, int type)
+// Declared void, not bool: retail leaves eax live at the ret (the caller's eax on the obj==0 arm,
+// the signed-division scratch of the re-evaluated loop bound otherwise). The original symbol is
+// bool, so equiv still compares eax&0xff; declaring a return type here would clobber that value.
+void AnimatorS::RemoveAnimation(void* obj, int type)
 {
-    if (obj == 0)
-        return false;
-    uint32_t n = (uint32_t)((mEnd - mBegin) / 0x88);
-    for (uint32_t i = 0; i < n; ++i) {
-        char* e = mBegin + i * 0x88;
-        if (*(void**)e == obj && (*(int*)(e + 4) == type || type == -1)) {
-            ((AnimFn1)*(void**)(e + 0xc))(e + 8, 0.0f, 0.0f, 1, 0);
-            void* r = *(void**)e;
-            if (r) {
-                *(void**)e = 0;
-                ((FV0)VTOBJ(r)[4 / 4])(r);
+    if (obj != 0) {
+        for (int i = 0; i < (int)((mEnd - mBegin) / 0x88); ++i) {
+            char* e = mBegin + i * 0x88;
+            if (*(void**)e == obj && (*(int*)(e + 4) == type || type == -1)) {
+                ((AnimFn1)*(void**)(e + 0xc))(e + 8, 0.0f, 0.0f, 1, 0);
+                void* r = *(void**)e;
+                if (r) {
+                    *(void**)e = 0;
+                    ((FV0)VTOBJ(r)[4 / 4])(r);
+                }
             }
         }
     }
-    return false;
 }
 
 // @ 0x007F62C0

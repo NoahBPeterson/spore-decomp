@@ -9,10 +9,10 @@
 007f59e0  2  complete; vtable slot loaded into eax instead of edx
 007f5a60  289  complete; render sprite/UV setup float ordering differs
 007f5c20  85  complete; constructor vtable-store scheduling differs
-007f5d00  339  complete; drawable factory branch layout differs
+007f5d00  381  complete; drawable factory branch layout differs (fixed: the +0x23c store was a self-load placeholder and must store the frame-count division result `c` (or 1 in the spr==0 arm) that eax holds in retail; the old code copied the soup value back and failed equiv at this+0x23c)  [equiv: PASS (205 valid, 99% cov, no mismatch)]
 007f5eb0  164  complete; channel-lerp expression evaluation order differs
 007f5ff0  7  complete; member load hoisted above the vtable stores
 007f6170  92  complete; ctor/call argument forms differ (mixed int/float params)
-007f6210  130  complete; loop strength-reduction/register allocation differs
+007f6210  148  complete; loop strength-reduction/register allocation differs (fixed: declare it void, not bool - retail leaves eax live at the ret and the original symbol is bool, so equiv compares eax&0xff; a `return false` clobbers it. Re-evaluating the loop bound in the for condition reproduces retail's signed-division scratch in eax)  [equiv: PASS (334 valid, 65% cov, no mismatch)]
 007f62c0  111  complete; keeps `this` in ecx (original re-reads mBegin/mEnd each iteration); _ReadWriteBarrier() stops the loop bound being hoisted into ecx; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; equiv PASS (249 valid, 100% cov)
 007f6340  101  complete; loop register allocation differs
