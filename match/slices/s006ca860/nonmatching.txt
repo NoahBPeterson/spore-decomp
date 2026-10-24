@@ -1,4 +1,4 @@
-006ca860  797  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006cab80  851  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006caee0  816  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006cb210  744  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
+006ca860  814  complete source (weighted-x3 transform, 2-lane 16-bit colours); prebuilt SSE-scalar codegen vs cl15 x87 for the dy/dz subtraction; this helper reads the transform's output as (1-cos,dy,dz)=(outA[1],outA[2],outA[0]); equiv WEAK 182/400 valid, 100% cov, 0 mismatches
+006cab80  824  complete source (weighted-x3 transform, 4-lane 16-bit colours); same output-order, handle-assign, sqrt, parameter-layout and output-math fixes as 006ca860; equiv WEAK 167/400 valid, 100% cov, 0 mismatches
+006caee0  852  complete source (point transform, 4-lane byte colours); prebuilt SSE-scalar codegen vs cl15 x87; this helper reads the point transform's output as (1-cos,dy,dz)=(outA[2],outA[0],outA[1]), unlike the s006c80f0 point helpers; equiv WEAK 185/400 valid, 100% cov, 0 mismatches
+006cb210  855  complete source (point transform, 2-lane 16-bit colours); same point-helper output order as 006caee0; equiv WEAK 160/400 valid, 100% cov, 0 mismatches
