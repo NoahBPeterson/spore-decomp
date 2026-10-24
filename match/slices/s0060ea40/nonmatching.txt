@@ -3,4 +3,4 @@
 # Flags (all rows): /O2 /MD /Gy /TP /GS- /arch:SSE
 # Run:  .venv/bin/python tools/difftest/equiv.py s0060ea40
 0060ea40  8    MakeNode; complete (0x20 node + placement copy ctor with AddRef vcall + interlked AddRef), cl hoists `mov ecx,1` above `add eax,4` in the lock-xadd setup [equiv: PASS]
-0060ec20  147  EASTL UploadQueue::DoInsertValue; complete algorithm (tail-insert, overlapping-value fixup, memmove, doubling growth, allocator-header-guarded free); cl chooses the opposite register allocation for the (value, position) pointer pair, which shifts the whole body [equiv: FAIL]
+0060ec20  136  EASTL UploadQueue::DoInsertValue; complete algorithm (tail-insert, overlapping-value fixup, memmove, doubling growth, allocator-header-guarded free); cl chooses the opposite register allocation for the (value, position) pointer pair, and the non-full insert copies the whole 16-byte entry while reallocation copies only live fields [equiv: WEAK]

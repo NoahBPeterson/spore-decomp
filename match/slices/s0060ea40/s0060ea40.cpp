@@ -73,7 +73,30 @@ struct QValue {
     QValue() {}
     QValue(const QValue& x)
         : mKey0(x.mKey0), mKey1(x.mKey1), mKey2(x.mKey2), mFlag0(x.mFlag0), mFlag1(x.mFlag1) {}
+    QValue& operator=(const QValue& x);
 };
+#pragma optimize("", off)
+inline QValue& QValue::operator=(const QValue& x) {
+    mKey0 = x.mKey0;
+    mKey1 = x.mKey1;
+    mKey2 = x.mKey2;
+    mFlag0 = x.mFlag0;
+    mFlag1 = x.mFlag1;
+    return *this;
+}
+#pragma optimize("", on)
+
+// Retail's non-full vector-insert path assigns the whole 16-byte entry (including the
+// two padding bytes); the reallocation path copies only the live fields.
+void QValue_assign16(QValue* dest, const QValue* src) {
+    dest->mKey0 = src->mKey0;
+    dest->mKey1 = src->mKey1;
+    dest->mKey2 = src->mKey2;
+    dest->mFlag0 = src->mFlag0;
+    dest->mFlag1 = src->mFlag1;
+    dest->mPad[0] = src->mPad[0];
+    dest->mPad[1] = src->mPad[1];
+}
 
 QValue* QValue_copy(const QValue* first, const QValue* last, QValue* dest) {
     for (; first != last; ++first, ++dest) *dest = *first;
@@ -111,7 +134,7 @@ void UploadQueue::DoInsertValue(QValue* value, const QValue* position) {
         if (position >= value && position < mpEnd) position = (const QValue*)((const char*)position + 16);
         if (mpEnd) ::new (mpEnd) QValue(*(QValue*)((char*)mpEnd - 16));
         FUN_00edba80(value, (char*)mpEnd - 16, mpEnd);
-        *value = *position;
+        QValue_assign16(value, position);
         ++mpEnd;
         return;
     }
