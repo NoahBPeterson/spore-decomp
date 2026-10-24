@@ -1,1 +1,5 @@
 # va  diff-bytes  reason
+01031ef0  nonmatching  equiv UNSUPPORTED (0/400 valid, fault(read)=397, fake-arity=3; needs a live cLocomotiveObject + planet model, default inputs fault)
+01032330  nonmatching  equiv PASS (292 valid, 87.9% coverage); retail cmp [this+0x24],imm + id reload + tail-jump Release vs ours eax-held id, call+ret
+010323d0  nonmatching  equiv WEAK (181 valid < 200, 11.5% coverage; entity/behaviour table + EA allocator not satisfyable with default inputs)
+010326d0  nonmatching  equiv PASS (400 valid, 100% coverage); only size differs (81 vs 84): retail emits two provably-dead mAnchor zero stores

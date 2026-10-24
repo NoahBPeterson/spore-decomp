@@ -1,2 +1,6 @@
 # va  diff-bytes  reason
 010317d0  1274 cAbductionBeamLocomotion::Update: complete; stack frame/scheduling differs (x87 vs SSE sum shapes, Vec3 temps)
+01031ef0  829  cDropToGroundLocomotion::Execute: complete; scale/water branches reordered into goto-free shape, request struct initialised by its ctor instead of inline stores
+01032330  132  cSPSpaceGameBehaviorAbducted::RefreshAgent: complete and semantically identical; retail guards with cmp [this+0x24],imm then reloads the id and tail-jumps the final Release(), ours keeps the id in eax and ends with call+ret
+010323d0  594  cSPSpaceGameBehaviorAbducted::AddAgent: complete; 623 vs 757 bytes, retail builds cLocomotionRequest with inline stores and reuses ebp/edi differently
+010326d0   42  cSPSpaceGameBehaviorAbducted ctor: complete; 81 vs 84 bytes, retail keeps two provably-dead zero stores of mAnchor.mpNodeLeft/mpNodeParent
