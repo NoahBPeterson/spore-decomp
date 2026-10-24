@@ -75,6 +75,8 @@ struct Vehicle {                   // SP::cVehicle (fields used here)
     int  mState;                   // +0xb20
     bool Func_C9FE40(void* o);                    // 0x00c9fe40 (ret 4)
     void Func_CAC000(void* o, int a, int b);      // 0x00cac000 (ret 0xc)
+    void Func_CAC0E0(Vec3 pos, int n);            // 0x00cac0e0 (ret 0x10)
+    void SetTimer(int t);                         // 0x00c9ee30 (ret 4)
     bool Func_CA8340(void* x);                    // 0x00ca8340 (ret 4)
 };
 struct TerrainSphere {
@@ -86,7 +88,12 @@ struct NounMgr {
     int GetPlayerEmpireOrMinus1();             // 0x00b1f9d0
     Civilization* GetPlayerCivilization();     // 0x00b25fb0
 };
+struct BanOwner {                              // object at civStrategy+0xec
+    void Func_CE96B0(int flag);                // 0x00ce96b0
+};
 struct CivModeStrategy {
+    char pad[0xec];
+    BanOwner* GetBanOwner();                   // 0x00cf7500 (mov eax,[ecx+0xec])
     float Func_CF7A50();                       // 0x00cf7a50
 };
 struct CommManager {
@@ -180,7 +187,15 @@ struct CityInputStrategy {
     char   pad114[0x118 - 0x114];
     Obj118* mp118;                                        // +0x118
     Sel*   mp11c;                                         // +0x11c
+    char   pad120[0x13c - 0x120];                         // +0x120
+    int    mBanMode;                                      // +0x13c (0 = off)
+    int    mBanId;                                        // +0x140
     void Func_CF30B0(void* target, Vec3 pos, int flag);   // 0x00cf30b0 (ret 0x14)
+    void SetDefaultPickPriorities();                      // 0x00cf28f0 (ret 0)
+    void Func_CF2B70();                                   // 0x00cf2b70 (ret 0)
+    void Func_CF2D60();                                   // 0x00cf2d60 (ret 0)
+    void ToggleTribeBanning();                            // 0x00cf2fd0 (ret 0)
+    void ToggleCityBanning();                             // 0x00cf3040 (ret 0)
     bool HandleMenuItem(int id);
 };
 
@@ -396,4 +411,82 @@ bool CityInputStrategy::HandleMenuItem(int id)
 
     HideUTFMenu(1);
     return true;
+}
+
+// ------------------------------------------------------------------------------------------------
+// 0x00cf2fd0 / 0x00cf3040: the two banning-content toggles (mode 1 = tribe, mode 2 = city) and
+// 0x00cf30b0: the vehicle dispatch helper the menu cases above call through Func_CF30B0.
+// ------------------------------------------------------------------------------------------------
+struct PathMgr {                       // singleton behind 0x00b3d290
+    char pad[0x48];
+    void NextStamp();                  // 0x00ac15e0 (++[(this)+0x48])
+};
+PathMgr* GetPathManager();             // 0x00b3d290
+void __cdecl SortVehicles(Vehicle** first, Vehicle** last, Vec3 pos);   // 0x00cf2440
+void __cdecl EndBanMode(int flag);     // 0x00dd1840 (cUIBanningContent::EndBanMode)
+void __cdecl ToggleTribeBanMode(int flag);   // 0x00dd17f0 (cTribeInputStrategy::ToggleBanningContent)
+void __cdecl Func_00E09A50(int flag);  // 0x00e09a50 (leaves the mode-2 ban UI)
+void __cdecl Func_00E099D0(int flag);  // 0x00e099d0 (enters the mode-2 ban UI)
+extern Vec3 g_banDefaultPos;           // 0x0169cc8c (position meaning "keep the current order")
+
+// @ 0x00CF2FD0
+void CityInputStrategy::ToggleTribeBanning()
+{
+    if (mBanMode == 1) {
+        mBanMode = 0;
+        SetDefaultPickPriorities();
+        EndBanMode(1);
+        return;
+    }
+    mBanId = -1;
+    GetCivModeStrategy()->GetBanOwner()->Func_CE96B0(1);
+    mBanMode = 1;
+    Func_CF2B70();
+    ToggleTribeBanMode(1);
+}
+
+// @ 0x00CF3040
+void CityInputStrategy::ToggleCityBanning()
+{
+    if (mBanMode == 2) {
+        mBanMode = 0;
+        SetDefaultPickPriorities();
+        Func_00E09A50(1);
+        return;
+    }
+    mBanId = -1;
+    GetCivModeStrategy()->GetBanOwner()->Func_CE96B0(1);
+    mBanMode = 2;
+    Func_CF2D60();
+    Func_00E099D0(1);
+}
+
+// Sends every selected vehicle to `target` (flag != 6, the flag is handed on to the vehicle) or to
+// the position `pos` (flag == 6), refreshing its timer, then drops the whole selection.
+// @ 0x00CF30B0
+void CityInputStrategy::Func_CF30B0(void* target, Vec3 pos, int flag)
+{
+    VehVec& sel = mSelected;
+    if (sel.mpBegin != sel.mpEnd) {
+        int count = (int)(sel.mpEnd - sel.mpBegin);
+        if (count > 1) {
+            GetPathManager()->NextStamp();
+            if (!(pos.x == g_banDefaultPos.x && pos.y == g_banDefaultPos.y
+                  && pos.z == g_banDefaultPos.z))
+                SortVehicles(sel.mpBegin, sel.mpEnd, pos);
+        }
+        // the index qualifier is 1 for the first ten vehicles of the group, 2 for the rest
+        if (flag == 6) {
+            for (int i = 0; i < count; ++i) {
+                sel.mpBegin[i]->Func_CAC0E0(pos, (i >= 10) + 1);
+                sel.mpBegin[i]->SetTimer(0);
+            }
+        } else {
+            for (int i = 0; i < count; ++i) {
+                sel.mpBegin[i]->Func_CAC000(target, flag, (i >= 10) + 1);
+                sel.mpBegin[i]->SetTimer(0);
+            }
+        }
+        sel.erase(sel.mpBegin, sel.mpEnd);
+    }
 }
