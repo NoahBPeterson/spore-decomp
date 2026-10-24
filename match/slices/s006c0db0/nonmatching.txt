@@ -1,10 +1,7 @@
-006c0db0  220  PFRecordWrite ctor from blob; EH prolog/frame not reproduced
+006c0db0  218  PFRecordWrite ctor from blob; complete, equiv PASS (250/400 valid, 100% coverage). The four MemoryStream/FileStream members are called with the receiver in ECX; the FileStream field is 0x22c bytes so mbTriedToCreateFile/mnOpenCount land at +0x274/+0x278. The original EH prolog/frame is not reproduced.
 006c0ed0  129  PFRecordWrite dtor; EH frame + member dtor order differ
 006c1180  252  arena pointer fixup; memmove/order scheduling differs
 006c12a0  35   BlendShape::RegisterArenaReadCallbacks; register/schedule differs
 006c12e0  52   vector<0x38> destructor-iterator helper; CRT helper call shape differs
-006c1320  26   vector<0x38> construct+copy; CRT helper call shape differs; equiv: FAIL (now Vec38 member, ecx dst; ours faults in CRT helper call)
-006c1350  17   vector<0x38> destructor range; loop bound/reg differs; equiv: FAIL (now Vec38 member, thiscall ret 8; fake-arity no call site)
 006c1380  101  vector<0x38> clear; EH frame + dealloc schedule differ; equiv: PASS (now Vec38::Clear member, 748 valid inputs)
-006c1c30  55   animation state classification; branch tree differs
-006c1c80  61   make stream from a 2-word descriptor; schedule differs
+006c1c80  35   make stream from a 2-word descriptor; complete, equiv PASS (216/400 valid, 100% coverage). Calls SP::cSPMemPool::LockedAligned through the [0x16c8b44] singleton receiver in ECX; the function returns `out` in EAX like the original (declared to return u32).

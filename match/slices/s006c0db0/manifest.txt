@@ -12,3 +12,6 @@ slices/s006c0db0/s006c0db0.cpp  ?m10c0@BlendShape@@QAEIH@Z  006c10c0
 slices/s006c0db0/s006c0db0.cpp  ?m1120@BlendShape@@QAEIXZ  006c1120
 slices/s006c0db0/s006c0db0.cpp  ?m1140@BlendShape@@QAEIXZ  006c1140
 slices/s006c0db0/s006c0db0.cpp  ?m1160@BlendShape@@QAEIH@Z  006c1160
+slices/s006c0db0/s006c0db0.cpp  ?CtorCopy@Vec38@@QAEII@Z  006c1320
+slices/s006c0db0/s006c0db0.cpp  ?DtorRange2@Vec38@@QAEXII@Z  006c1350
+slices/s006c0db0/s006c0db0.cpp  ?StateFromGlobal@@YAHPAI@Z  006c1c30

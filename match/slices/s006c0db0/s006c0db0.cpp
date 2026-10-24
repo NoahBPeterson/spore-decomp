@@ -13,6 +13,10 @@ typedef unsigned char  u8;
 // ---------------------------------------------------------------------------
 extern void  sub_11e0b22(void*, u32, u32, void*);          // ??_M vector dtor iterator
 extern void  sub_11e0b85(void*, u32, u32, void*, void*);   // ??_L vector ctor iterator
+// ??_M / ??_L are __stdcall CRT helpers (their mangled names are ...YG..., and the original call
+// sites have no `add esp` after the call).  These aliases are used by the two vector helpers below.
+extern void  __stdcall sub_11e0b22_s(void*, u32, u32, void*);         // 0x11e0b22
+extern void  __stdcall sub_11e0b85_s(void*, u32, u32, void*, void*);  // 0x11e0b85
 extern void* sub_11e0744(void*, void*, u32);               // memcpy-ish
 extern void* sub_11e22c0(u32);                             // ArenaTypeRegGetType
 extern u32   sub_11e23a0(void*);                           // Arena::GetNumExportedObjects
@@ -23,16 +27,28 @@ extern void  sub_93bd50(void*, const char*);               // MemoryStream ctor
 extern void  sub_93bde0(void*);                            // MemoryStream dtor
 extern void  sub_93bb40(void*, int, float);                // set stream param
 extern bool  sub_93be30(void*, const void*, u32, u32, int, void*); // MemoryStream::SetData
+// The four MemoryStream/FileStream members the PFRecordWrite constructor uses are __thiscall
+// (receiver in ECX).  cl 15.00 cannot express __thiscall explicitly, so __fastcall with a dummy
+// second register argument is used: ECX = receiver, EDX = 0, the rest on the stack.
+extern void  __fastcall sub_93bd50_t(void* self, int, const char*);          // 0x93bd50
+extern void  __fastcall sub_931da0_t(void* self, int, int);                  // 0x931da0
+extern void  __fastcall sub_93bb40_t(void* self, int, int, float);           // 0x93bb40
+extern bool  __fastcall sub_93be30_t(void* self, int, const void*, u32, u32, int, void*); // 0x93be30
 extern void  sub_8dcbf0(void*);                            // IStream base dtor
 extern void  sub_f47380(void*);                            // allocator deallocate
 extern void* sub_f473a0(u32, const char*, int, int, const char*, int); // allocator allocate
 extern void* sub_f25ea0(void*, void*, void*);              // eastl uninitialized copy
 extern void* sub_11fd860(int);                             // some global query
+// Ctl::KeyOf is __thiscall (receiver in ECX, one stack argument, `ret 4`).  Calling it through a
+// member keeps ECX as the receiver without touching EDX (a __fastcall dummy would clobber EDX).
+struct CtlKey { void* KeyOf(int idx); };                   // 0x11fd860
 extern void  sub_acfe0(u32, u32);                          // FUN_006acfe0
 extern void  sub_b4b60(u32, u32);                          // FUN_006b4b60
 extern u32   sub_b1f90(u32, int, int);                     // SP::GetSaveArea
 extern void  sub_ac040(u32, int);                          // SP::SetCachingType
 extern u32   sub_928a30(u32, u32, int,int,int,int,int,int);
+extern u32   __fastcall sub_928a30_t(void* self, int, u32, u32, int,int,int,int,int,int); // 0x928a30
+extern void* g_16c8b44;                                    // 0x16c8b44  SP::cSPMemPool singleton
 extern u32   sub_6c24b0(void*, void*, void*, int, int, int, const char*);
 extern void* EAGetManager();
 extern void* IDGenerator();
@@ -152,10 +168,9 @@ struct PFRecordWrite {
     int   access;                // +0x1c
     void* vtbl20;                // +0x20
     char  mem[0x24];             // +0x24  MemoryStream
-    char  file[0x228];           // +0x48  FileStream
-    u8    triedCreate;           // +0x270
-    u8    pad271[3];
-    u32   field274;              // +0x274
+    char  file[0x22c];           // +0x48  FileStream (556 bytes in the original)
+    u8    triedCreate;           // +0x274
+    u8    pad275[3];
     int   openCount;             // +0x278
 
     void* Ctor(u32 a, u32 b, u32 c, u32* key, void* parent);
@@ -177,15 +192,15 @@ void* PFRecordWrite::Ctor(u32 a, u32 b, u32 c, u32* key, void* parent_)
     vtbl20 = (void*)0x13f3a68;
     vtbl0 = (void*)0x140a364;
     vtbl20 = (void*)0x140a328;
-    sub_93bd50(mem, "ResourceMan/PFRecordWrite");
-    sub_931da0(file, 0);
+    sub_93bd50_t(mem, 0, "ResourceMan/PFRecordWrite");
+    sub_931da0_t(file, 0, 0);
     triedCreate = 0;
     openCount = 1;
     ((void(__thiscall*)(void*))(*(void***)mem)[4 / 4])(mem);
     ((void(__thiscall*)(void*))(*(void***)file)[4 / 4])(file);
-    sub_93bb40(mem, 1, 1.0f);
+    sub_93bb40_t(mem, 0, 1, 1.0f);
     void* alloc = ((void*(__thiscall*)(void*))(*(void***)parent)[0x48 / 4])(parent);
-    sub_93be30(mem, (const void*)a, b, c, 1, alloc);
+    sub_93be30_t(mem, 0, (const void*)a, b, c, 1, alloc);
     return this;
 }
 
@@ -271,7 +286,7 @@ u32 VecDtorRange(u32 first, u32 last, u32 out)
 u32 Vec38::CtorCopy(u32 src)
 {
     u32 dst = (u32)this;
-    sub_11e0b85((void*)dst, 8, 4, (void*)0x6c0fa0, (void*)0xc2e4e0);
+    sub_11e0b85_s((void*)dst, 8, 4, (void*)0x6c0fa0, (void*)0xc2e4e0);
     *(u32*)dst = *(u32*)src;
     *(u32*)(dst + 4) = *(u32*)(src + 4);
     return dst;
@@ -281,7 +296,7 @@ u32 Vec38::CtorCopy(u32 src)
 void Vec38::DtorRange2(u32 first, u32 last)
 {
     while (first < last) {
-        sub_11e0b22((void*)(first + 0x18), 8, 4, (void*)0xc2e4e0);
+        sub_11e0b22_s((void*)(first + 0x18), 8, 4, (void*)0xc2e4e0);
         first += 0x38;
     }
 }
@@ -466,7 +481,7 @@ int StateFromGlobal(u32* p)
     if (v == 1)
         return 0;
     if (v == 3) {
-        u8* q = (u8*)sub_11fd860(0);
+        u8* q = (u8*)((CtlKey*)p)->KeyOf(0);
         if (q != 0) {
             if (q[8] == 1 && q[9] == 6)
                 return 1;
@@ -480,12 +495,13 @@ int StateFromGlobal(u32* p)
 // ---------------------------------------------------------------------------
 // @ 0x006c1c80
 // ---------------------------------------------------------------------------
-void MakeStream(u32* out, u32* in)
+u32 MakeStream(u32* out, u32* in)
 {
-    u32 v = sub_928a30(in[0], in[1], 0, 0, 0, 0, 0, 0);
+    u32 v = sub_928a30_t(g_16c8b44, 0, in[0], in[1], 0, 0, 0, 0, 0, 0);
     out[0] = 0;
     out[1] = 0;
     out[2] = 0;
     out[3] = 0;
     out[0] = v;
+    return (u32)out;
 }
