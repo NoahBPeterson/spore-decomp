@@ -8,9 +8,7 @@ inline void* operator new(unsigned int, void* p) { return p; }
 extern "C" void* __cdecl memcpy(void*, const void*, uint32_t);
 
 // helpers (external instantiations)
-void  DoInsertPairs(void* end, uint32_t n, const void* value);     // 0x004cef00
-void* ErasePairs(void* first, void* last);                         // vector<pair<int,float>>::erase
-void  ClustersAndEdges(void* mesh, int flags);                     // 0x00733ed0 / CreateClustersAndEdges
+void  ClustersAndEdges(void* mesh, int flags);                     // 0x00735470 / CreateClustersAndEdges
 int   MeshOp1(void* mesh);                                         // 0x00733ed0
 int   MeshOp2(void* mesh, int, int, int, int);                     // 0x0071ddc0
 int   MeshOp3(void* mesh, int, int*, int*, int, int*, int);           // 0x0071ded0
@@ -30,17 +28,33 @@ void* V3NormalizeSafe(void* out, void* in);                        // SP::normal
 int   FUN_00467980(int);
 void  FUN_004cd3c0(int);
 void  FUN_00533680(void*, void*, char);
+struct BoneWeightEntry {
+    unsigned char   bone;       // +0x00
+    unsigned char   pad[3];
+    float           weight;     // +0x04
+};
 struct BoneWeightList {
+    BoneWeightEntry* mpBegin;       // +0x00
+    int              mUnused04;     // +0x04
+    int              mUnused08;     // +0x08
+    int              mUnused0c;     // +0x0c
+    int              mUnused10;     // +0x10
+    int              mCount;        // +0x14
     void Accum(int param_2, float param_3);     // 0x0052b060
     void Normalize(float param_2);              // 0x0052b170
     void CopyTop(int param_2);                  // 0x0052b220
 };
 void  FUN_0052ae30(uint32_t, const void*);
-bool  SP_GetResourceTypeFromModelType();               // 0x00526430
+
+// A vector of per-block objects; only used for its emptiness test here.
+struct VectorU32 {
+    bool empty() const;                        // 0x00526430
+};
 
 extern uint8_t DAT_013f18d0[3];
 extern uint8_t DAT_013f18d8[3];
 extern float   _DAT_0150cb00;
+extern "C" const float g_zero0;     // 0x01485378
 extern uint8_t DAT_013f1f10[64];
 
 struct TexMgr {
@@ -121,12 +135,12 @@ int LoadSkinnerMesh(int mesh, int md)
     uint32_t i = 0;
     uint32_t nBlocks = (uint32_t)((*(int*)(mesh + 0x20) - *(int*)(mesh + 0x1c)) / 0x8c);
     while (i < nBlocks) {
-        if (SP_GetResourceTypeFromModelType())
-            break;
+        // each block carries a list at +0x44; bail out if it is already populated
+        VectorU32* pList = (VectorU32*)(i * 0x8c + *(int*)(mesh + 0x1c) + 0x44);
+        if (!pList->empty())
+            return 0;
         i++;
     }
-    if (i < nBlocks)
-        return 0;
 
     int r = MeshOp2((void*)mesh, 3, -1, 3, 0xe);
     if (r < 0)
@@ -203,6 +217,12 @@ int LoadSkinnerMesh(int mesh, int md)
 }
 
 // @ 0x0052ae30  vector<pair<int,float>>::resize(n, value)
+struct PairVec;
+struct VectorIF {
+    void  FUN_004cef00(void* end, uint32_t n, const void* value);  // vector::_Insert_n
+    void* FUN_00530c80(void* first, void* last);                   // vector::erase
+};
+
 struct PairVec {
     void* mpBegin;
     void* mpEnd;
@@ -212,11 +232,11 @@ struct PairVec {
 };
 void PairVec::resize(uint32_t n, const void* value)
 {
-    uint32_t cur = (uint32_t)((uint32_t*)mpEnd - (uint32_t*)mpBegin) >> 1;
-    if (cur < n)
-        DoInsertPairs(mpEnd, n - cur, value);
+    int cur = (int)((char*)mpEnd - (char*)mpBegin) >> 3;
+    if (n > cur)
+        ((VectorIF*)this)->FUN_004cef00(mpEnd, n - cur, value);
     else
-        ErasePairs((char*)mpBegin + n * 8, mpEnd);
+        ((VectorIF*)this)->FUN_00530c80((char*)mpBegin + n * 8, mpEnd);
 }
 
 // ---------------------------------------------------------------- skinning
@@ -249,18 +269,22 @@ void SkinBoneWeights(int out1, int out2, int param_3, int param_4, float param_5
 // @ 0x0052b060
 void BoneWeightList::Accum(int param_2, float param_3)
 {
-    int* this_ = (int*)this;
-    for (int i = 0; i < 4 && 0.0f < *(float*)(param_2 + 4 + i * 4); i++) {
+    int maxBones = 4;
+    (void)maxBones;
+    for (int i = 0; i < 4; i++) {
+        if (g_zero0 >= *(float*)(param_2 + 4 + i * 4))
+            break;
         int j = 0;
-        while (j < this_[5] && *(char*)(*this_ + j * 8) != *(char*)(param_2 + i))
+        while (j < mCount &&
+               *(unsigned char*)((char*)mpBegin + j * 8) != *(unsigned char*)(param_2 + i))
             j++;
-        if (j < this_[5]) {
-            float* pf = (float*)(*this_ + 4 + j * 8);
+        if (j < mCount) {
+            float* pf = (float*)((char*)mpBegin + 4 + j * 8);
             *pf = *(float*)(param_2 + 4 + i * 4) * param_3 + *pf;
         } else {
-            *(uint8_t*)(*this_ + this_[5] * 8) = *(uint8_t*)(param_2 + i);
-            *(float*)(*this_ + 4 + this_[5] * 8) = *(float*)(param_2 + 4 + i * 4) * param_3;
-            this_[5] = this_[5] + 1;
+            *(unsigned char*)((char*)mpBegin + mCount * 8) = *(unsigned char*)(param_2 + i);
+            *(float*)((char*)mpBegin + 4 + mCount * 8) = *(float*)(param_2 + 4 + i * 4) * param_3;
+            mCount = mCount + 1;
         }
     }
 }
@@ -268,13 +292,12 @@ void BoneWeightList::Accum(int param_2, float param_3)
 // @ 0x0052b170
 void BoneWeightList::Normalize(float param_2)
 {
-    int* this_ = (int*)this;
     float total = 0.0f;
-    for (int i = 0; i < this_[5]; i++)
-        total = total + *(float*)(*this_ + 4 + i * 8);
+    for (int i = 0; i < mCount; i++)
+        total = total + *(float*)((char*)mpBegin + 4 + i * 8);
     if (0.0f < total) {
-        for (int i = 0; i < this_[5]; i++) {
-            float* pf = (float*)(*this_ + 4 + i * 8);
+        for (int i = 0; i < mCount; i++) {
+            float* pf = (float*)((char*)mpBegin + 4 + i * 8);
             *pf = (param_2 / total) * *pf;
         }
     }

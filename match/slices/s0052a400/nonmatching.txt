@@ -1,7 +1,7 @@
 0052a400 300 nSPSkinner::CreatePlaceholderTextures; complete but /Od layout differs
-0052a700 1689 LoadSkinnerMesh; complete but /Od layout/helper inlining differs
-0052ae30 60 vector<pair<int,float>>::resize; complete but /Od frame differs
+0052a700 1651 LoadSkinnerMesh; complete; /Od layout/helper inlining differs; equiv: WEAK (268 valid, 0 mismatched, 19.7% cov — deeper path behind a faked external call)
+0052ae30 84 vector<pair<int,float>>::resize; complete; /Od frame differs; equiv: PASS (278 valid, 100% cov)
 0052aeb0 383 SkinBoneWeights; complete but /Od layout differs
-0052b060 240 AccumBoneWeight; complete but /Od layout differs; equiv: FAIL (ecx fixed; 5/157 mismatched)
-0052b170 141 NormalizeBoneWeights; complete but /Od layout differs; equiv: FAIL (ecx fixed; 5/86 mismatched)
+0052b060 183 AccumBoneWeight; complete; /Od layout differs; equiv: PASS (394 valid, 100% cov)
+0052b170 8 NormalizeBoneWeights; complete; /Od layout differs (this slot -0x14 vs -0x10); equiv: PASS (310 valid, 100% cov)
 0052b220 253 CopyTopBoneWeights; complete but /Od layout differs; equiv: WEAK (ecx fixed; 56.1% coverage)
