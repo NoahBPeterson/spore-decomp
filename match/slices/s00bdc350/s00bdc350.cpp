@@ -1,238 +1,502 @@
-// Slice s00bdc350: cCity::<find a free spot near the city walls> (0x00bdca30, 1772 bytes, __thiscall,
-// hidden Vector3 return + one int arg, ret 8).  The method name is Claude-coined; class layout from the ModAPI
-// cCity (mpCityWalls +0x324, field_32C Vector3 +0x32c) and the earlier cCity::Initialize slice (s00be7bf0).
+// Slice s00bdc350: effect, minimap and range-helper functions.
 //
-// What it does: given a mode (0/2 = sample around the walls' requested position, 1 = around the stored
-// target position of the walls, other = the default), it builds a target point 2 units beyond the walls'
-// RequestPosition (modes 0/2) or takes the walls' stored position (mode 1; if field_32C is still the zero
-// vector it returns zero straight away), sets up a cCommunityLayout (cActionCircle) of radius 136 at
-// target + 4*dir, asks the collision manager for the objects inside that circle, and walks the layout's
-// candidate points (0x18-byte records, position at +0xc): each is projected to the planet surface, rejected
-// when too close to the walls (mode 1: nearer than the walls' radius; others: closer than walls radius +
-// the circle's radius), randomly pushed outwards in mode 2, rejected when blocked (IsPointFree) or
-// within 16 units (squared 255.99998) of any queried object. The first accepted point is returned,
-// otherwise the target point. All temporaries (object list with Release of every element) are freed.
-//
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc).
-#include "types.h"
+// Targets:
+//   00bdc350  effect attach/refresh with XformMsg
+//   00bdc4a0  effect enable/disable (bool)
+//   00bdc6f0  range-for over 0xc-byte entries, virtual notify
+//   00bdc7b0  fill an output iterator from a range of objects
+//   00bdc8a0  combat/empire reaction update (8-byte delta)
+//   00bdd120  minimap message handler
+//   00bdd2f0  copy a transform block into object+0x70
+//   00bdd350  two virtual calls (report + notify)
+#include <stddef.h>
+#include <xmmintrin.h>
 
-typedef unsigned int size_t;
-void operator delete[](void* p);                                         // 0x00f47380
-#include <math.h>
+// ---------------------------------------------------------------------------
+// Shared vtable-call helpers.
+// ---------------------------------------------------------------------------
+typedef void (__thiscall *Void0)(void*);
+typedef void (__thiscall *Void1)(void*, void*);
+typedef int  (__thiscall *Int1)(void*, int);
+typedef bool (__thiscall *Bool2)(void*, int, void*);
 
-struct Vector3 {
-    float x, y, z;
-    __forceinline Vector3() {}
-    __forceinline Vector3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
-    __forceinline Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
-    __forceinline Vector3 operator-(const Vector3& v) const { return Vector3(x - v.x, y - v.y, z - v.z); }
-    __forceinline Vector3 operator*(float s) const { return Vector3(x * s, y * s, z * s); }
-    __forceinline Vector3& operator+=(const Vector3& v) { x += v.x; y += v.y; z += v.z; return *this; }
-};
-__forceinline Vector3 operator+(const Vector3& a, const Vector3& b) { return Vector3(a.x + b.x, a.y + b.y, a.z + b.z); }
+struct VObj { void** mpVtbl; };
 
-__forceinline Vector3 Normalized(const Vector3& v)
+// ---------------------------------------------------------------------------
+// 00bdd350
+// ---------------------------------------------------------------------------
+// ecx is not used; both parameters are ordinary stack objects.  The first is
+// an object whose vtable supplies the final notify method, the second is a
+// pointer to an optional object whose vtable supplies the query method.
+// @ 0x00bdd350
+bool __cdecl FUN_00bdd350(void* self, void** other)
 {
-    float inv = 1.0f / sqrtf(v.x * v.x + v.y * v.y + v.z * v.z + 1e-8f);
-    return Vector3(v.x * inv, v.y * inv, v.z * inv);
-}
-__forceinline float Length(const Vector3& v) { return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z); }
-__forceinline float LengthSquared(const Vector3& v) { return v.x * v.x + v.y * v.y + v.z * v.z; }
+    int value = 0;
+    void* obj = *other;
+    if (obj != 0)
+        value = ((Int1)(*(void***)obj)[0xb8 / 4])(obj, 0x179c807);
 
-extern Vector3 g_ZeroVector;        // 0x0168bd70  (Vector3::ZERO)
-
-// SP's vector allocator keeps a header word in front of each block.
-struct sp_vector_allocator {
-    uint32_t mData[2];
-};
-__forceinline void SpFree(void* p)
-{
-    if (((uint32_t*)p)[-1] != 0)
-        operator delete[](p);
+    ((Void1)(*(void***)self)[0x2c / 4])(self, (void*)value);
+    return true;
 }
 
-template <class T> struct intrusive_ptr {
-    T* mpObject;
-    __forceinline intrusive_ptr() : mpObject(0) {}
-    __forceinline ~intrusive_ptr() { if (mpObject) intrusive_ptr_release(mpObject); }
-    __forceinline T* get() const { return mpObject; }
-    __forceinline T* operator->() const { return mpObject; }
+// ---------------------------------------------------------------------------
+// 00bdd2f0
+// ---------------------------------------------------------------------------
+// Copies the cached transform (three ints/float bits from +0x51c..+0x524) and
+// the constant 8.0f into the object reached through +0x70, at +0x50.
+struct Obj2f0 {
+    char pad00[0x70];
+    char* mp70;                 // +0x70
+    char pad74[0x320 - 0x74];
+    int m320;                   // +0x320
+    char pad324[0x51c - 0x324];
+    int m51c;                   // +0x51c (float bits)
+    int m520;                   // +0x520 (float bits)
+    int m524;                   // +0x524 (float bits)
+    void __thiscall Notify();   // 0x00bdbaa0
 };
 
-template <class T> struct SpVector {
-    T* mpBegin;
-    T* mpEnd;
-    T* mpCapacity;
-    sp_vector_allocator mAllocator;
+// @ 0x00bdd2f0
+void __fastcall FUN_00bdd2f0(Obj2f0* self)
+{
+    if (self->m320 == 0)
+        return;
 
-    __forceinline SpVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-    __forceinline ~SpVector()
-    {
-        for (T* p = mpBegin; p < mpEnd; ++p)
-            p->~T();
-        if (mpBegin) SpFree(mpBegin);
+    self->Notify();
+
+    struct Transform2f0 {
+        int mX;                 // +0x50
+        int mY;                 // +0x54
+        int mZ;                 // +0x58
+        float mW;               // +0x5c
+        int mE;                 // +0x60
+        Transform2f0(int x, int y, int z, float w, int e)
+            : mX(x), mY(y), mZ(z), mW(w), mE(e) {}
+    };
+    int zero = 0;
+    *(Transform2f0*)(self->mp70 + 0x50) =
+        Transform2f0(self->m51c, self->m520, self->m524,
+                     *(float*)0x013eeda0, zero);
+}
+
+// ---------------------------------------------------------------------------
+// 00bdc6f0
+// ---------------------------------------------------------------------------
+// The range is an array of 0xc-byte entries; each entry owns two optional
+// objects.  Every live object receives a virtual notify with the same context.
+struct Entry6f0 {
+    void* mpFirst;              // +0x00
+    void* mpSecond;             // +0x04
+    int mPad;                   // +0x08
+};
+
+struct Range6f0 {
+    Entry6f0* mpBegin;          // +0x00
+    Entry6f0* mpEnd;            // +0x04
+};
+
+// @ 0x00bdc6f0
+bool __cdecl FUN_00bdc6f0(void* context, Range6f0* range)
+{
+    Entry6f0* it = range->mpBegin;
+    Entry6f0* end = range->mpEnd;
+    if (it != end) {
+        do {
+            if (it != 0) {
+                void* first = it->mpFirst;
+                if (first != 0)
+                    ((Void1)(*(void***)first)[0x1c / 4])(first, context);
+
+                void* second = it->mpSecond;
+                if (second != 0)
+                    ((Void1)(*(void***)second)[0x1c / 4])(second, context);
+            }
+            it = (Entry6f0*)((char*)it + 0xc);
+        } while (it != end);
     }
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// 00bdc7b0
+// ---------------------------------------------------------------------------
+// Writes `value` through the output iterator, then for each source object
+// stores its +0x34 subobject through the iterator and calls that subobject's
+// virtual method at +0xbc.  The iterator is advanced by one int per element.
+struct Object7b0 {
+    char pad00[0x34];
+    int mSub;                   // +0x34
 };
 
-class cSpatialObject {
-public:
+// @ 0x00bdc7b0
+int** __cdecl FUN_00bdc7b0(int** out, Object7b0** first, Object7b0** last,
+                          int value)
+{
+    *out = (int*)value;
+    while (first != last) {
+        if (*out != 0) {
+            Object7b0* obj = *first;
+            int* sub = obj ? (int*)((char*)obj + 0x34) : 0;
+            *(*out) = (int)sub;
+            if (sub != 0)
+                ((Void0)(*(void***)sub)[0xbc / 4])(sub);
+        }
+        *out = *out + 1;
+        ++first;
+    }
+    return out;
+}
+
+// ---------------------------------------------------------------------------
+// Shared types for the effect/minimap cluster.
+// ---------------------------------------------------------------------------
+typedef unsigned int   u32;
+typedef unsigned short u16;
+typedef unsigned char  u8;
+typedef unsigned long long u64;
+extern "C" long __stdcall _InterlockedExchange(volatile long*, long);
+
+struct Vector3 { float x, y, z; };
+struct Vector4 { float x, y, z, w; };
+struct Quaternion { float x, y, z, w; };
+struct Matrix3 { float m[9]; };
+
+struct XformMsg {                       // ctor 0x00434040, 0x38 bytes
+    u16 mFlags;                         // +0x00
+    short mCount;                       // +0x02
+    Vector3 mPosition;                  // +0x04
+    float mScale;                       // +0x10
+    Matrix3 mRotation;                  // +0x14
+    XformMsg();
+    void SetPos(const Vector3& v) { mPosition = v; mFlags |= 4; ++mCount; }
+    void SetRot(const Matrix3& m) { mRotation = m; mFlags |= 2; ++mCount; }
+};
+
+struct IEffect {
+    virtual void AddRef();              // +0x00
+    virtual void Release();             // +0x04
+    virtual void Start(int flags);      // +0x08
+    virtual void Stop(int flags);       // +0x0c
+    virtual void v10();                 // +0x10
+    virtual void v14();                 // +0x14
+    virtual void SetTransform(XformMsg* msg);  // +0x18
+};
+
+struct EffectsMgr {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();
-    virtual const Vector3& GetPosition();                                // 0x2c
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
-    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
-    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
-    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
-    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
-    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
-    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
-    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
-    virtual void vb0(); virtual void vb4(); virtual void vb8(); virtual int SpAddRef();   // 0xbc
-    virtual int SpRelease();                                             // 0xc0
-};
-__forceinline void intrusive_ptr_release(cSpatialObject* p) { p->SpRelease(); }
-
-// The walls object (cCityWalls) as used here.
-class cCityWalls {
-public:
-    Vector3* GetPosition(Vector3* out);                                  // 0x00bec190 (thiscall, ret 4)
-    Vector3* RequestPosition(Vector3* out, int arg);                     // 0x00bec2d0 (thiscall, ret 8)
-    Vector3* GetStoredPosition(Vector3* out);                            // 0x00bec760 (thiscall, ret 4): copies +0x230
-    uint32_t pad[0x25c / 4];
-    float mRadius;                                                       // +0x25c
+    virtual bool CreateEffect(u32 id, int flags, IEffect** out);  // +0x2c
 };
 
-// cCommunityLayout / cActionCircle: the result list (0x18-byte records, position at +0xc) is at +0x50.
-struct tLayoutPoint {
-    uint32_t pad[3];
-    Vector3 mPosition;                                                   // +0x0c
-};
-class cCommunityLayout {
-public:
-    cCommunityLayout();                                                  // 0x00afba10
-    ~cCommunityLayout();                                                 // 0x00afbad0
-    void SetCenter(const Vector3& pos, float radius, const Vector3& dir, float arg);   // 0x00af9cf0 (ret 0x10)
-    void SetSlots(int arg, float spacing);                               // 0x00afef10 (ret 8)
-
-    uint32_t mHead[0xc / 4];
-    float mRadius;                                                       // +0x0c
-    float mField10;                                                      // +0x10
-    Vector3 mCenter;                                                     // +0x14
-    uint32_t mBody[(0x50 - 0x20) / 4];
-    tLayoutPoint* mpPointsBegin;                                         // +0x50
-    tLayoutPoint* mpPointsEnd;                                           // +0x54
-    tLayoutPoint* mpPointsCapacity;                                      // +0x58
+struct Obj590 {
+    char padC4[0xc4];
+    Vector3 mC4;                        // +0xc4
+    char* __thiscall F00bef950();       // 0x00bef950
 };
 
-class cObjectQuery {
-public:
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
-    virtual void v40(); virtual void v44();
-    virtual void FindInSphere(const Vector3* center, float radius, SpVector<intrusive_ptr<cSpatialObject> >* out,
-                              int a, int b, int c);                      // 0x48 (ret 0x18)
-};
-cObjectQuery* ObjectQuery();                                             // 0x00b3d240
-
-class cPlanetModel {
-public:
-    void Flush();                                                        // 0x00b88420
-    Vector3 ToSurface(const Vector3& pos);                               // 0x00b81630
-};
-cPlanetModel* PlanetModel();                                             // 0x00b3d350
-
-bool IsPointFree(int kind, const Vector3* pos);                       // 0x00c9e8e0
-float RandomPushFactor();                                                // 0x00c9eb60 (cdecl, float in st0)
-
-class cCity {
-public:
-    Vector3 FindSpot(int mode);                                          // 0x00bdca30
-
-    uint32_t pad0[0x324 / 4];
-    cCityWalls* mpCityWalls;                                             // +0x324
-    uint32_t pad328[1];
-    Vector3 field_32C;                                                   // +0x32c
+struct Timer {
+    char m[0x20];
+    void __thiscall Restart();          // 0x00bc3130
 };
 
-// @ 0x00BDCA30
-Vector3 cCity::FindSpot(int mode)
+struct SelfB {
+    char pad00[0x120];
+    void* m120Vtbl;                     // +0x120 (inline subobject)
+    char pad124[0x220 - 0x124];
+    float m220;                         // +0x220
+    char pad224[0x2cc - 0x224];
+    int m2cc;                           // +0x2cc
+    int m2d0;                           // +0x2d0
+    char pad2d4[0x320 - 0x2d4];
+    void* m320;                         // +0x320
+    char pad324[0x58c - 0x324];
+    u8 m58c;                            // +0x58c
+    char pad58d[0x590 - 0x58d];
+    Obj590* m590;                       // +0x590
+    char pad594[0x64c - 0x594];
+    int m64c;                           // +0x64c
+    char pad650[0x758 - 0x650];
+    float m758;                         // +0x758
+    int m75c;                           // +0x75c
+    char pad760[0x764 - 0x760];
+    int m764;                           // +0x764
+    IEffect* m768;                      // +0x768
+    char pad76c[4];
+    Timer m770;                         // +0x770
+    char pad790[0x7d4 - 0x790];
+    IEffect* m7d4;                      // +0x7d4
+
+    void __thiscall F00bdbc20(void* p); // 0x00bdbc20
+    void __thiscall F00bdbf10();        // 0x00bdbf10
+    int __thiscall F00bf01e0();         // helper on the noun result
+    bool __thiscall FUN_00bdc4a0(char enable);
+    void __thiscall FUN_00bdc8a0(u64 delta);
+    void __thiscall FUN_00bdd120(float amount, int key);
+};
+
+EffectsMgr* __cdecl EffectsManager();                    // 0x0067ddd0
+Vector3 __cdecl normalized_safe(const Vector3& v);       // 0x00449c20
+Matrix3& __cdecl Matrix3FromQuaternion(Matrix3& out, const Quaternion& q); // 0x0059c190
+Matrix3& __cdecl QuaternionToMatrix(Matrix3& out, const Quaternion& q);    // 0x004a9b40
+int __cdecl GetPlayerEmpireID();                         // 0x01021090
+u32 __cdecl GetCurrentGameMode();                        // 0x00b5b800
+void __cdecl DoCommunityReaction(void* self, float f, const Vector3& pos); // 0x00ff5270
+void* __cdecl RelationshipManager();                     // 0x00b3d2c0
+void* __cdecl FUN_00b3d240();                            // 0x00b3d240
+void* __cdecl MessageServer();                           // 0x00883860
+
+struct RelationshipMgr {
+    float __thiscall RecordEvent(int a, int b, u32 ev, float amount); // 0x00d06240
+};
+
+struct NounMgr {
+    void* __thiscall FUN_00b25f40(int id);  // 0x00b25f40
+    int __thiscall GetPlayerEmpireOrMinus1(); // 0x00b1f9d0
+};
+
+struct NounObj {
+    int __thiscall FUN_00bf01e0();          // 0x00bf01e0
+};
+
+NounMgr* __cdecl NounManager();              // 0x00b3d300
+
+struct MessageBasicRC5 {
+    void* mpVtbl;                           // +0x00
+    volatile int mRefCount;                 // +0x04
+    void* mData0;                           // +0x08
+    char pad0c[4];
+    u32 mData1;                             // +0x10
+    char pad14[0x30 - 0x14];
+    u32 mId;                                // +0x30
+    char pad34[4];
+    int mRCFlags;                           // +0x38
+    char pad3c[4];
+    void __thiscall Destruct();             // 0x00421cf0
+};
+
+struct CivStrategy {
+    void __thiscall PostFeedback(SelfB* self, u32 a, u32 b, void* pos,
+                                 Vector4* p4, int x, int y); // 0x00cf9040
+};
+CivStrategy* __cdecl CivModeStrategyGet();   // 0x00cf74c0
+
+struct RandomGlobal {
+    double __thiscall RandomDouble();        // 0x009360d0
+};
+
+// ---------------------------------------------------------------------------
+// 00bdc350
+// ---------------------------------------------------------------------------
+// @ 0x00bdc350
+void __fastcall FUN_00bdc350(SelfB* self)
 {
-    Vector3 target = g_ZeroVector;
-    float radiusSq;
-
-    switch (mode) {
-    case 0:
-    case 2: {
-        Vector3 requested;
-        mpCityWalls->RequestPosition(&requested, 0);
-        Vector3 center;
-        mpCityWalls->GetPosition(&center);
-        target = requested + Normalized(requested - center) * 2.0f;
-        break;
-    }
-    case 1: {
-        if (field_32C.x == g_ZeroVector.x && field_32C.y == g_ZeroVector.y && field_32C.z == g_ZeroVector.z)
-            return g_ZeroVector;
-        Vector3 stored;
-        target = *mpCityWalls->GetStoredPosition(&stored);
-        Vector3 center;
-        mpCityWalls->GetPosition(&center);
-        radiusSq = LengthSquared(target - center);
-        break;
-    }
-    }
-
-    Vector3 wallsPos;
-    mpCityWalls->GetPosition(&wallsPos);
-    Vector3 dir = Normalized(target - wallsPos);
-
-    cCommunityLayout layout;
-    Vector3 layoutCenter = dir * 4.0f + target;
-    layout.SetCenter(layoutCenter, 136.0f, dir, 0.0f);
-    layout.SetSlots(0, 4.0f);
-
-    SpVector<intrusive_ptr<cSpatialObject> > objects;
-    ObjectQuery()->FindInSphere(&layout.mCenter, layout.mRadius, &objects, 0, 0, 0);
-    const int numObjects = objects.mpEnd - objects.mpBegin;
-    const int numPoints = layout.mpPointsEnd - layout.mpPointsBegin;
-    PlanetModel()->Flush();
-
-    for (int i = 0; i < numPoints; i++) {
-        Vector3 p = PlanetModel()->ToSurface(layout.mpPointsBegin[i].mPosition);
-        if (mode == 1) {
-            Vector3 center;
-            mpCityWalls->GetPosition(&center);
-            if (radiusSq > LengthSquared(p - center))
-                continue;
-        } else if (mode == 2) {
-            float push = RandomPushFactor();
-            p += Normalized(p) * push;
+    if (self->m764 != 0) {
+        if (self->m768 != 0) {
+            self->m768->Stop(0);
+            IEffect* old = self->m768;
+            self->m768 = 0;
+            if (old != 0)
+                old->Release();
         }
-
-        const float spare = layout.mField10;
-        if (mpCityWalls) {
-            Vector3 center;
-            mpCityWalls->GetPosition(&center);
-            if (mpCityWalls->mRadius + spare > Length(p - center))
-                continue;
-        }
-        if (!IsPointFree(mode, &p))
-            continue;
-
-        bool tooClose = false;
-        for (int j = 0; j < numObjects; j++) {
-            if (tooClose)
-                break;
-            const Vector3& q = objects.mpBegin[j]->GetPosition();
-            if (LengthSquared(q - p) < 255.99998f)
-                tooClose = true;
-        }
-        if (tooClose)
-            continue;
-        return p;
+        self->m770.Restart();
+        return;
     }
-    return target;
+
+    char* p = self->m590->F00bef950();
+    self->F00bdbc20(p + 0x504);
+
+    if (self->m768 == 0) {
+        EffectsMgr* mgr = EffectsManager();
+        IEffect* old = self->m768;
+        if (old != 0) {
+            self->m768 = 0;
+            old->Release();
+        }
+        if (mgr->CreateEffect(0xb332de96, 0, &self->m768)) {
+            XformMsg msg;
+            Vector3* pos = ((Vector3* (__thiscall*)(void*))
+                            (*(void***)&self->m120Vtbl)[0x2c / 4])
+                           (&self->m120Vtbl);
+            msg.SetPos(*pos);
+            Quaternion* q = ((Quaternion* (__thiscall*)(void*))
+                             (*(void***)((char*)self->m320 + 0x34))[0x30 / 4])
+                            ((char*)self->m320 + 0x34);
+            Matrix3 rot;
+            Matrix3FromQuaternion(rot, *q);
+            msg.SetRot(rot);
+            self->m768->SetTransform(&msg);
+            self->m768->Start(0);
+        }
+    }
+    self->m770.Restart();
+}
+
+// ---------------------------------------------------------------------------
+// 00bdc4a0
+// ---------------------------------------------------------------------------
+// @ 0x00bdc4a0
+bool __thiscall SelfB::FUN_00bdc4a0(char enable)
+{
+    SelfB* self = this;
+    IEffect* effect = self->m7d4;
+    bool had = effect != 0;
+
+    if (enable != 0) {
+        if (effect == 0) {
+            EffectsMgr* mgr = EffectsManager();
+            IEffect* old = self->m7d4;
+            if (old != 0) {
+                self->m7d4 = 0;
+                old->Release();
+            }
+            if (mgr->CreateEffect(0xc66a87f2, 0, &self->m7d4)) {
+                void* sub = (char*)self->m320 + 0x34;
+                Vector3* posPtr = ((Vector3* (__thiscall*)(void*))
+                                   (*(void***)sub)[0x2c / 4])(sub);
+                Vector3 pos;
+                pos.x = posPtr->x;
+                pos.y = posPtr->y;
+                pos.z = posPtr->z;
+                float scale = *(float*)((char*)((void* (__thiscall*)(void*))
+                                  (*(void***)sub)[0x68 / 4])(sub) + 0x14);
+                Vector3 n = normalized_safe(pos);
+                pos.x = n.x * scale + pos.x;
+                pos.y = n.y * scale + pos.y;
+                pos.z = n.z * scale + pos.z;
+
+                XformMsg msg;
+                msg.SetPos(pos);
+                Quaternion* q = ((Quaternion* (__thiscall*)(void*))
+                                 (*(void***)sub)[0x30 / 4])(sub);
+                Matrix3 rot;
+                QuaternionToMatrix(rot, *q);
+                msg.SetRot(rot);
+                self->m7d4->SetTransform(&msg);
+                self->m7d4->Start(0);
+            }
+        }
+        return had;
+    }
+
+    if (effect != 0) {
+        effect->Stop(1);
+        IEffect* old = self->m7d4;
+        if (old != 0) {
+            self->m7d4 = 0;
+            old->Release();
+        }
+    }
+    return had;
+}
+
+// ---------------------------------------------------------------------------
+// 00bdc8a0
+// ---------------------------------------------------------------------------
+// @ 0x00bdc8a0
+void __thiscall SelfB::FUN_00bdc8a0(u64 delta)
+{
+    SelfB* self = this;
+    if (self->m2cc == 2 || self->m2d0 < 1) {
+        if (self->m2cc != 0 && self->m2d0 == 0)
+            self->m2cc = 0;
+    } else {
+        if (self->m64c <= self->m2d0) {
+            self->m2cc = 2;
+            int empire = ((int (__thiscall*)(void*))
+                          (*(void***)self)[0x4c / 4])(self);
+            if (empire != GetPlayerEmpireID()) {
+                float f = ((RelationshipMgr*)RelationshipManager())
+                          ->RecordEvent(((int (__thiscall*)(void*))
+                                         (*(void***)self)[0x4c / 4])(self),
+                                        GetPlayerEmpireID(), 0x526e52d, 1.0f);
+                Vector3* pos = ((Vector3* (__thiscall*)(void*))
+                                (*(void***)&self->m120Vtbl)[0x2c / 4])
+                               (&self->m120Vtbl);
+                DoCommunityReaction(self, f, *pos);
+                self->F00bdbf10();
+            }
+            void* obj = FUN_00b3d240();
+            char buf[12];
+            void* value = ((void* (__thiscall*)(void*, char*, void*))
+                           (*(void***)self)[0x5c / 4])(self, buf,
+                                                       (void*)0x0168bd70);
+            ((void (__thiscall*)(void*, u32, void*))
+             (*(void***)obj)[0x60 / 4])(obj, 0x2df3697, value);
+        }
+        if (self->m2cc == 1) {
+            double r = ((RandomGlobal*)0x01601760)->RandomDouble();
+            if (r < *(float*)0x01471064)
+                ++self->m2d0;
+        }
+    }
+
+    if (self->m220 > 0.0f)
+        self->m220 -= (float)delta * 0.001f;
+    if (self->m220 < 0.0f)
+        self->m220 = 0.0f;
+}
+
+// ---------------------------------------------------------------------------
+// 00bdd120
+// ---------------------------------------------------------------------------
+// @ 0x00bdd120
+void __thiscall SelfB::FUN_00bdd120(float amount, int key)
+{
+    SelfB* self = this;
+    int empire = ((int (__thiscall*)(void*))
+                  (*(void***)self)[0x4c / 4])(self);
+    if (key == empire)
+        return;
+
+    if (self->m75c == -1)
+        self->m75c = key;
+
+    float f = *(float*)0x013eeda0 * amount;
+    NounObj* noun = (NounObj*)NounManager()->FUN_00b25f40(key);
+    int count = noun->FUN_00bf01e0();
+    f = f / ((float)count + *(float*)0x0147b9f0);
+
+    if (self->m75c == key)
+        self->m758 += f;
+    else
+        self->m758 -= f;
+
+    if (self->m758 < 0.0f) {
+        self->m75c = key;
+        self->m758 = -self->m758;
+        return;
+    }
+
+    if (self->m758 > *(float*)0x013ec4d0) {
+        self->m758 = *(float*)0x013ec4d0;
+        if (self->m75c == NounManager()->GetPlayerEmpireOrMinus1()) {
+            MessageBasicRC5 msg;
+            msg.mId = 0;
+            msg.mpVtbl = (void*)0x013eb90c;
+            _InterlockedExchange((volatile long*)&msg.mRefCount, 0);
+            msg.mpVtbl = (void*)0x013eb844;
+            msg.mRCFlags = 0;
+            msg.mId = 0x53039b6;
+            msg.mData0 = self;
+            msg.mData1 = 0xffffff00;
+
+            void* server = MessageServer();
+            ((void (__thiscall*)(void*, u32, MessageBasicRC5*, int))
+             (*(void***)server)[0x14 / 4])(server, msg.mId, &msg, 0);
+
+            if (GetCurrentGameMode() == 0x01654c04 && self->m58c == 0) {
+                Vector3* p = &self->m590->mC4;
+                self->m58c = 1;
+                Vector4 pos = { p->x, p->y, p->z, *(float*)0x01485720 };
+                CivModeStrategyGet()->PostFeedback(
+                    self, 0x927dca97, 0xaa9a8ed7,
+                    ((void* (__thiscall*)(void*))
+                     (*(void***)&self->m120Vtbl)[0x2c / 4])(&self->m120Vtbl),
+                    &pos, 0, 0);
+            }
+            msg.Destruct();
+        }
+    }
 }

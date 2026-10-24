@@ -1,2 +1,7 @@
 # va  diff-bytes  reason
 00bdca30 1528 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): 23/23 calls, 1758 vs 1772 B; register allocation / copy shapes differ
+00bdc4a0 443 complete effect enable/disable (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): 468 vs 482 B; m7d4 create/stop/release paths, position-scale-normalize, QuaternionToMatrix and XformMsg all present; frame 0x84 vs 0x78 and normalized_safe temporary/matrix-copy placement differ
+00bdc7b0 195 partial first 83 B of a 203 B target: output-iterator fill, value plus each source object's +0x34 subobject and virtual +0xbc; the benchmark target continues with unrelated code after the iterator body, so it is not a single 203 B function
+00bdc8a0 298 complete combat/empire reaction update (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): 383 vs 390 B; repeated GetPoliticalID and 7-arg RecordEvent/DoCommunityReaction/FUN_00bdbf10/vtable+0x5c+0x60 flow preserved; prologue, register allocation and 64-bit delta conversion differ
+00bdd120 39 complete minimap threat message handler (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): 464 B; only the amount*source-constant operand order, sign-mask literal reference, and Vector4 z/w store scheduling differ
+00bdd2f0 21 complete cached-transform copy (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): 87 B; aggregate layout and all stores are correct, only register allocation differs (ours ecx/edx/edi/ebx, original edx/edi/ebx/ecx)

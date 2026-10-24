@@ -1,0 +1,1 @@
+00bdc7b0  partial: readable output-iterator fill; writes the seed value and then each live source object's +0x34 subobject through the iterator, calling that subobject's virtual +0xbc. The reconstructed iterator body is 83 B; the 203 B benchmark target continues with unrelated code after the iterator body, so it is not byte-comparable as one function.

@@ -1,0 +1,8 @@
+00bdc350 SelfB_FUN_00bdc350  # exact; effect attach/refresh: m764 flag, m768 effect stop/release, F00bef950+0x504, XformMsg position+quaternion, timer +0x770; Claude-coined
+00bdc4a0 SelfB_FUN_00bdc4a0  # effect enable/disable with m7d4, normalized_safe position/scale, QuaternionToMatrix and XformMsg; Claude-coined
+00bdc6f0 FUN_00bdc6f0  # exact; range of 0xc-byte entries, each optional object gets virtual +0x1c notify with context; Claude-coined
+00bdc7b0 FUN_00bdc7b0  # partial output-iterator fill; +0x34 subobject and virtual +0xbc; target tail is unrelated; Claude-coined
+00bdc8a0 SelfB_FUN_00bdc8a0  # combat/empire reaction update: m2cc/m2d0/m64c state, RecordEvent/DoCommunityReaction, vtable +0x5c/+0x60, timer m220; Claude-coined
+00bdd120 SelfB_FUN_00bdd120  # minimap threat message: m75c/m758, MessageBasicRC<5> 0x53039b6, PostFeedback 0x927dca97/0xaa9a8ed7; Claude-coined
+00bdd2f0 FUN_00bdd2f0  # cached transform copy: +0x51c/+0x520/+0x524 and 8.0f into object+0x70 at +0x50, zero at +0x60; Claude-coined
+00bdd350 FUN_00bdd350  # exact; query other's vtable +0xb8, pass result to self's vtable +0x2c, return true; Claude-coined
