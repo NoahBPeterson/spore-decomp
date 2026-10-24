@@ -173,13 +173,15 @@ struct cAppSystem {
   char     pad68[0x98 - 0x68];
   uint32_t* mEffectCollectionIDs;  // +0x98
   void*    mEffectCollections;     // +0x9c
-  char     pad_a0[0xb8 - 0xa0];
+  void**   mEffectVecBegin;    // +0xa0 (pointer vector torn down at shutdown)
+  void**   mEffectVecEnd;      // +0xa4
+  char     pad_a8[0xb8 - 0xa8];
   int      mGameInfoPaused;    // +0xb8
   char     pad_bc[0xc0 - 0xbc];
   float    mFieldC0;           // +0xc0
   float    mFieldC4;           // +0xc4
   struct IRefObj* mApp;        // +0xc8  (CreateApp() result, AddRef/Release smart pointer)
-  char     pad_cc[0xd0 - 0xcc];
+  void*    mFieldCC;           // +0xcc  (ref-counted slot, released at shutdown)
   uint32_t mPluginLibraries;   // +0xd0  (vptr of an embedded plugin-library list object)
   char     pad_d4[0x128 - 0xd4];
   wchar_t* mDdfDirBegin;       // +0x128 (string begin)
@@ -196,7 +198,9 @@ struct cAppSystem {
   bool     mToggleFullscreen;  // +0x171
   bool     mToggleDisplay;     // +0x172
   WStringVec mURLsToOpen;      // +0x174
-  char     pad184[0x1e8 - 0x184];
+  char     pad184[0x188 - 0x184];
+  bool     mSaveUserDirs;      // +0x188 (guards the user-directory persistence block)
+  char     pad189[0x1e8 - 0x189];
   bool     mDemo;              // +0x1e8
   bool     mDev;               // +0x1e9
 
@@ -216,6 +220,7 @@ struct cAppSystem {
   bool LoadPlugins();
   bool InitPlugins(void* commandLine);
   bool PreInit(struct CommandLine* cmd, int unused);  // 0x007e8ba0
+  bool Shutdown();                                    // 0x007e9450
   void SetupDirectories(struct CommandLine* cmd);     // 0x007e7d00
   void FUN_007e7b50();                                // 0x007e7b50
   void SetUserDirNames(wchar_t* publicDir, wchar_t* privateDir);

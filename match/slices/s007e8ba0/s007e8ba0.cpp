@@ -51,6 +51,8 @@ struct WStr {
     }
     const wchar_t* c_str() const { return mpBegin; }
     bool empty() const { return mpBegin == mpEnd; }
+    void assign(const wchar_t* first, const wchar_t* last);   // 0x00423650
+    void append(const wchar_t* first, const wchar_t* last);   // 0x00429580
 };
 
 struct WStrNoDtor {
@@ -136,6 +138,79 @@ static inline void AssignRef(IRefObj*& slot, IRefObj* p) {
         if (old) old->Release();
     }
 }
+
+// ---- vtable-slot call helpers used by cAppSystem::Shutdown (0x007E9450) ----
+typedef void  (__thiscall *VF0)(void*);
+typedef void  (__thiscall *VF1)(void*, int);
+typedef void  (__thiscall *VF2)(void*, int, int);
+typedef void  (__thiscall *VF1P)(void*, void*);
+typedef void* (__thiscall *VF0R)(void*);
+typedef void* (__thiscall *VF1PR)(void*, void*);
+
+static __forceinline void  VC0(void* o, int off) {
+    ((VF0)*(void**)((char*)*(void**)o + off))(o);
+}
+static __forceinline void  VC1(void* o, int off, int a) {
+    ((VF1)*(void**)((char*)*(void**)o + off))(o, a);
+}
+static __forceinline void  VC2(void* o, int off, int a, int b) {
+    ((VF2)*(void**)((char*)*(void**)o + off))(o, a, b);
+}
+static __forceinline void  VC1P(void* o, int off, void* a) {
+    ((VF1P)*(void**)((char*)*(void**)o + off))(o, a);
+}
+static __forceinline void* VC0R(void* o, int off) {
+    return ((VF0R)*(void**)((char*)*(void**)o + off))(o);
+}
+static __forceinline void* VC1PR(void* o, int off, void* a) {
+    return ((VF1PR)*(void**)((char*)*(void**)o + off))(o, a);
+}
+
+// ---- extra free functions called by cAppSystem::Shutdown ----
+void  FUN_0067def0(int a);
+void  FUN_006ad850(void* p);
+void  FUN_006b4780();
+void  FUN_0067dff0(int a);
+void  FUN_0067e000(int a);
+void  FUN_006bbb10(void* a, void* b);
+void  FUN_0067dee0(int a);
+void  FUN_008d3120(int a);
+void  FUN_0067ded0(int a);
+void  FUN_0067e0d0(int a);
+void  FUN_0067df40(int a);
+void  FUN_006b3610();
+void  FUN_0067df10(int a);
+void  FUN_0067e040(int a);
+void  FUN_0067e0b0(int a);
+void  FUN_006895c0(int a);
+void  FUN_0067e060(int a);
+void  FUN_0067e080(int a);
+void  FUN_00929ca0();
+void  FUN_007cdd80();
+void* FUN_0094cd50(int a);
+void* FUN_0094f0d0();
+void  FUN_0094f0e0(int a);
+void* FUN_006782c0(void* a, void* b, void* c);
+void  FUN_006bb4b0(const wchar_t* a, void* b, int c);   // 0x006bb4b0
+void  GetSystemPath(int id, wchar_t* out, int flags);   // 0x009323c0
+
+// Direct (non-virtual) __thiscall helpers: MSVC rejects __thiscall on free
+// functions, so each target address gets a member-function thunk whose receiver
+// is the object pointer.
+struct DirectCall {
+    void call_7c3ba0();   // 0x007c3ba0  mMainViewer teardown step
+    void call_7c4000();   // 0x007c4000  mMainViewer destructor
+    void call_7db8b0();   // 0x007db8b0  mPackManager teardown step
+    void call_7a41a0();   // 0x007a41a0  mPackManager destructor
+    void call_695f00();   // 0x00695f00  mLocaleManager teardown step
+    void call_695c30();   // 0x00695c30  mLocaleManager teardown step
+    void call_68c4d0();   // 0x0068c4d0  mGarbageMan teardown step
+    void call_68c4e0();   // 0x0068c4e0  mGarbageMan destructor
+    void call_94fcc0();   // 0x0094fcc0  device teardown step
+};
+
+extern wchar_t g_01413dcc[];   // 0x1413dcc  L"\\home\\ehshell.exe"
+extern int     g_013ec47c;     // 0x13ec47c  (nil descriptor passed to the writer)
 
 // @ 0x007E8BA0  (cAppSystem::PreInit)
 bool cAppSystem::PreInit(CommandLine* cmd, int unused) {
@@ -308,7 +383,259 @@ void cAppSystem::SetUserDirNames(wchar_t* publicDir, wchar_t* privateDir) {
 }
 
 // @ 0x007E9450  (cAppSystem::Shutdown)
-void cAppSystemShutdown(void* self) {
-    // 1453-byte shutdown sequence not reconstructed; see partial.txt.
-    (void)self;
+bool cAppSystem::Shutdown() {
+    FUN_0067def0(0);
+
+    if (mResourceManager) {
+        for (int i = 0; i < 3; ++i)
+            VC2(mResourceManager, 0x70, 0, 0);
+        FUN_006ad850(mResourceManager);
+    }
+
+    FUN_006b4780();
+
+    if (mEffectsManager) {
+        FUN_0067dff0(0);
+        if (mEffectsParser)
+            VC1P(mEffectsManager, 0x68, VC0R(mEffectsParser, 0x38));
+
+        void** begin = mEffectVecBegin;
+        void** end = mEffectVecEnd;
+        int n = (int)(end - begin);
+        for (int i = 0; i < n; ++i)
+            VC1P(mEffectsManager, 0x68, begin[i]);
+
+        void** p = (void**)FUN_006782c0(end, end, begin);
+        while (p < mEffectVecEnd) {
+            if (*p)
+                VC0(*p, 4);
+            ++p;
+        }
+        mEffectVecEnd = (void**)((char*)end - n * 4);
+
+        VC0(mEffectsManager, 4);
+        if (mEffectsManager) {
+            void* old = mEffectsManager;
+            mEffectsManager = 0;
+            VC0(old, 0xc);
+        }
+    }
+
+    if (mEffectsParser) {
+        FUN_0067e000(0);
+        VC0(mEffectsParser, 0xc);
+        if (mEffectsParser) {
+            void* old = mEffectsParser;
+            mEffectsParser = 0;
+            VC0(old, 4);
+        }
+    }
+
+    if (mGraphicsSystem) {
+        VC0(mGraphicsSystem, 0x14);
+        if (mGraphicsSystem) {
+            void* old = mGraphicsSystem;
+            mGraphicsSystem = 0;
+            VC0(old, 4);
+        }
+    }
+
+    if (mMainViewer) {
+        ((DirectCall*)mMainViewer)->call_7c3ba0();
+        void* view = mMainViewer;
+        if (view) {
+            ((DirectCall*)view)->call_7c4000();
+            FreeWString(view);
+        }
+        mMainViewer = 0;
+    }
+
+    if (mCanvas) {
+        FUN_006bbb10(VC1PR(mCanvas, 0x94, mpDropTarget), mpDropTarget);
+        while (mLockCount)
+            VC0(this, 0x70);
+        FUN_0067dee0(0);
+        VC0(mCanvas, 8);
+        if (mCanvas)
+            VC1(mCanvas, 0, 1);
+        mCanvas = 0;
+    }
+
+    if (mInputManager) {
+        FUN_008d3120(0);
+        FUN_0067ded0(0);
+        VC0(mInputManager, 8);
+        if (mInputManager)
+            VC1(mInputManager, 0, 1);
+        mInputManager = 0;
+    }
+
+    if (mPackManager) {
+        ((DirectCall*)mPackManager)->call_7db8b0();
+        FUN_0067e0d0(0);
+        void* pack = mPackManager;
+        if (pack) {
+            ((DirectCall*)pack)->call_7a41a0();
+            FreeWString(pack);
+        }
+        mPackManager = 0;
+    }
+
+    if (mConfigManager) {
+        FUN_0067df40(0);
+        VC0(mConfigManager, 0x10);
+        if (mConfigManager) {
+            void* old = mConfigManager;
+            mConfigManager = 0;
+            VC0(old, 4);
+        }
+    }
+
+    FUN_006b3610();
+
+    if (mLocaleManager)
+        ((DirectCall*)mLocaleManager)->call_695f00();
+
+    if (mResourceManager) {
+        FUN_008de1b0(0);
+        FUN_0067dec0(0);
+        VC0(mResourceManager, 8);
+        if (mResourceManager)
+            VC1(mResourceManager, 0, 1);
+        mResourceManager = 0;
+    }
+
+    FUN_0067df10(0);
+
+    if (mFieldCC) {
+        void* old = mFieldCC;
+        mFieldCC = 0;
+        VC0(old, 4);
+    }
+
+    if (mPropertyManager) {
+        FUN_0067e040(0);
+        VC0(mPropertyManager, 0x14);
+        if (mPropertyManager) {
+            void* old = mPropertyManager;
+            mPropertyManager = 0;
+            VC0(old, 4);
+        }
+    }
+
+    if (mTelemetry) {
+        FUN_0067e0b0(0);
+        VC0(mTelemetry, 8);
+        if (mTelemetry) {
+            void* old = mTelemetry;
+            mTelemetry = 0;
+            VC0((char*)old + 8, 4);
+        }
+    }
+
+    if (mCommandServer) {
+        FUN_006895c0(0);
+        VC0(mCommandServer, 0x14);
+        if (mCommandServer) {
+            VC1(mCommandServer, 8, 1);
+            mCommandServer = 0;
+        }
+    }
+
+    if (mLocaleManager) {
+        FUN_0067e060(0);
+        ((DirectCall*)mLocaleManager)->call_695c30();
+        if (mLocaleManager) {
+            void* old = mLocaleManager;
+            mLocaleManager = 0;
+            VC0(old, 8);
+        }
+    }
+
+    if (mCheatManager) {
+        FUN_0067e030(0);
+        VC0(mCheatManager, 0x10);
+        if (mCheatManager) {
+            void* old = mCheatManager;
+            mCheatManager = 0;
+            VC0(old, 4);
+        }
+    }
+
+    if (mMessageServer) {
+        FUN_00883870(0);
+        FUN_0067deb0(0);
+        VC0(mMessageServer, 8);
+        if (mMessageServer)
+            VC1(mMessageServer, 0, 1);
+        mMessageServer = 0;
+    }
+
+    if (mJobManager) {
+        VC0(mJobManager, 0xc);
+        if (mJobManager)
+            VC1(mJobManager, 0, 1);
+        mJobManager = 0;
+        FUN_0068f4c0(0);
+    }
+
+    if (mGarbageMan) {
+        ((DirectCall*)mGarbageMan)->call_68c4d0();
+        FUN_0067e0a0(0);
+        void* gc = mGarbageMan;
+        if (gc) {
+            ((DirectCall*)gc)->call_68c4e0();
+            FreeWString(gc);
+        }
+        mGarbageMan = 0;
+    }
+
+    FUN_00929ca0();
+
+    if (mIDGen) {
+        FUN_0067e080(0);
+        if (mIDGen)
+            VC1(mIDGen, 0, 1);
+        mIDGen = 0;
+    }
+
+    FUN_00c2e4e0();
+    FUN_007cdd80();
+    FUN_00936410(0);
+
+    VC1(&mPluginLibraries, 0x18, 1);
+    VC0(&mPluginLibraries, 8);
+
+    void* loader = FUN_0094cd50(0);
+    if (loader) {
+        VC0(loader, 8);
+        VC1(loader, 0, 1);
+    }
+    void* device = FUN_0094f0d0();
+    if (device) {
+        ((DirectCall*)device)->call_94fcc0();
+        FUN_0094f0e0(0);
+        VC1(device, 0, 1);
+    }
+
+    if (mSaveUserDirs) {
+        WStr   message;
+        wchar_t path[260];
+        GetSystemPath(2, path, 0);
+
+        const wchar_t* e = path;
+        while (*e) ++e;
+        int n = (int)(e - path);
+        message.assign(path, path + n);
+
+        const wchar_t* tail = g_01413dcc;
+        const wchar_t* te = tail;
+        while (*te) ++te;
+        int m = (int)(te - tail);
+        message.append(tail, tail + m);
+
+        FUN_006bb4b0(message.mpBegin, &g_013ec47c, 0);
+    }
+
+    return true;
 }
