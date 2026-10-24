@@ -168,7 +168,7 @@ void FUN_00ed8690(void)
 }
 
 // ================================================================ 0x00ed8780
-struct Obj8780 { void f(int b); };
+struct Obj8780 { void f(unsigned char b); };
 static void grab(int id, int* field)
 {
     int* em = (int*)SP_EffectsManager();
@@ -192,7 +192,7 @@ static void clear2(int* field)
     }
 }
 // @ 0x00ed8780
-void Obj8780::f(int b)
+void Obj8780::f(unsigned char b)
 {
     char* s = (char*)this;
     if (b != 0) {
@@ -207,9 +207,27 @@ void Obj8780::f(int b)
         clear2((int*)(s + 4));
         clear2((int*)(s + 8));
         clear2((int*)(s + 0xc));
-        for (int i = 0; i < 3; i++) {
-            clear2((int*)(s + 0x10 + i * 4));
-            clear2((int*)(s + 0x1c + i * 4));
+        int* pa = (int*)(s + 0x10);
+        for (int i = 0; i < 3; i++, pa++) {
+            // The original clears the paired +0xc field only inside this branch, and its
+            // first call is not null-checked (it assumes a live pair).
+            if (*(int**)pa != 0) {
+                int* a = *(int**)pa;
+                ((FVf_i)(*(void***)a)[0xc / 4])(a, 0);
+                int* q = *(int**)pa;
+                if (q != 0) {
+                    *(int**)pa = 0;
+                    ((FVf_v)(*(void***)q)[4 / 4])(q);
+                }
+                int* pb = (int*)((char*)pa + 0xc);
+                int* c = *(int**)pb;
+                ((FVf_i)(*(void***)c)[0xc / 4])(c, 0);
+                int* d = *(int**)pb;
+                if (d != 0) {
+                    *(int**)pb = 0;
+                    ((FVf_v)(*(void***)d)[4 / 4])(d);
+                }
+            }
         }
     }
 }

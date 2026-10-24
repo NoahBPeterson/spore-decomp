@@ -4,5 +4,5 @@
 00ed8570 116  array scan (variant 3): same hoisting / register allocation difference [equiv: PASS equiv]
 00ed8610 101  destructor: member release loop register/branch shape differs [equiv: WEAK 93.9% cov]
 00ed8690 168  noun iteration + effect setters: loop and vtable call schedule differ [equiv: UNSUPPORTED 0 valid inputs (read faults)]
-00ed8780 421  effect grab/clear: unrolled effect-manager pattern differs (register use) [equiv: FAIL execution 2/235]
+00ed8780 410  effect grab/clear: the b==0 half clears the paired +0x1c field only inside the +0x10 field's non-null branch and dereferences it without a null test (reproduced); the remaining difference is cl scheduling the field address before the SP_EffectsManager call and loop-start padding. The argument is a one-byte flag (compared as a byte), so the parameter is declared unsigned char.  [equiv: PASS (307 valid, 100% cov, 180/180 insns)]
 00ed8a30 1280  complete noun-effect loop; whole-program arg reuse/inlining and register allocation differ
