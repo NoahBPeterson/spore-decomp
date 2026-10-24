@@ -1,0 +1,20 @@
+# slice s00d512f0 (gold7) - names inferred from the cards and behaviour
+# Modelled types (retail member offsets):
+#   RT::Task          cl2 task object: owner @0x40, vector_map<uint,uint> counters @0x44, RefMap slots @0x5c
+#   RT::ValueMap      vector_map<uint,uint> (operator[] @0x564a10)
+#   RT::RefMap        vector_map<uint, ref-counted Obj*> with find/Remove @0xd4e8e0
+#   G7::DramaManager  singleton @0x169e43c (0x70 bytes): mp14 @0x14, mpMate @0x38, multimap mEvents @0x50
+#   G7::MeteorStrikeEvent  two vtables @0/4, mp40 @0x40, mp44 @0x44, embed @0x5c, chunks @0xc8/@0x2e0
+#   G7::SeaMonsterEvent    float @0x2c, vector_map counters @0x44
+#   G7::SeaObj        flag @0x135, sub-object @0xb4c, text-style flag @0xf90
+#   G7::Mate          order manager @0xb48
+00d512f0  SeaMonsterEvent::TriggerEvent(u32 arg) -> void  # thiscall: sea-monster event trigger / distance check
+00d51540  RT::Task::Method1540() -> void  # thiscall: herd-teardown helper (detach creatures, remove noun/slot)
+00d516a0  DramaManager::GetVal() -> u32  # reads counter 0 of the active event (FUN_00d4cad0(2,1))
+00d516d0  DramaManager::SetVal(u32) -> void  # writes counter 0 of the active event
+00d51700  DramaManager::Method1700(u32 arg) -> void  # event-7 counter bump / message 0x5f11333 at threshold
+00d517d0  MeteorStrikeEvent::~MeteorStrikeEvent() -> void  # thiscall: destructor (vtables, Clear, chunks, mp40/mp44)
+00d51890  MeteorStrikeEvent::Method1890() -> void  # thiscall: audio cues, meteor data reload, mate clear
+00d51950  Function1950() -> void  # free: place/orient the avatar's mate on the surface
+00d51b60  Function1b60() -> void  # free: activate the mate order and release the manager's mate
+00d51c30  RT::Task::Activate() -> int  # cl2: herd finder/activator (recorded by the cl2 batch)
