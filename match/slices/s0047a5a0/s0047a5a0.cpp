@@ -4,6 +4,7 @@
 
 typedef unsigned int uint;
 void* EASTL_Allocate(void* alloc, uint bytes, uint align, uint flags);   // @ 0x0042dee0
+void  FUN_00f47380(void* p);                                           // @ 0x00f47380
 
 struct Matrix44 {
     float m[16];
@@ -18,6 +19,7 @@ struct V16 { P16* mpBegin; P16* mpEnd; P16* mpCapacity; void Insert(P16* positio
 void  ConstructM44(void* dst, uint n, const void* v);          // @ 0x0047cbe0
 void  ShiftM44(void* out, void* first, void* last, void* dest); // @ 0x0047cb60
 void* CopyM44(const void* first, const void* last, void* dest); // @ 0x0047a9a0
+void* UninitCopyM44(const void* first, const void* last, void* dest); // @ 0x0045dc00
 void  Construct16(void* dst, uint n, const void* v);            // @ 0x0047ccc0
 void  Shift16(void* out, void* first, void* last, void* dest);  // @ 0x0047cc40
 void* Copy16(const void* first, const void* last, void* dest);  // @ 0x0047c240
@@ -41,19 +43,28 @@ void VM44::Insert(Matrix44* position, uint n, const Matrix44& value)
         uint oldSize = (uint)((char*)mpEnd - (char*)mpBegin) / 0x40;
         uint grow = oldSize ? oldSize * 2 : 1;
         uint newSize = (oldSize + n < grow) ? grow : oldSize + n;
-        Matrix44* pNew = newSize ? (Matrix44*)EASTL_Allocate(mpCapacity, newSize * 0x40, 4, 0) : 0;
+        // the empty allocator subobject is at this+0xc (0x0047a870: `lea eax,[edx+0xc]; push eax`)
+        Matrix44* pNew = newSize ? (Matrix44*)EASTL_Allocate((char*)this + 0xc, newSize * 0x40, 4, 0) : 0;
         Matrix44* p = CopyM44Range(mpBegin, position, pNew);
         ConstructM44(p, n, &value);
         Matrix44* pNewEnd = CopyM44Range(position, mpEnd, p + n);
-        if (mpBegin) EASTL_Allocate(mpBegin, 0, 0, 0);
+        // deallocate through the shared allocator, only when the block header dword is set
+        // (0x0047a941: `cmp dword [eax-4],0 / je skip`, then call 0x00f47380)
+        if (mpBegin && ((uint*)mpBegin)[-1] != 0) FUN_00f47380(mpBegin);
         mpBegin = pNew;
         mpEnd = pNewEnd;
         mpCapacity = pNew + newSize;
     } else if (n != 0) {
         Matrix44 v = value;
-        uint tail = (uint)((char*)mpEnd - (char*)position) / 0x40;
+        Matrix44* oldEnd = mpEnd;
+        uint tail = (uint)((char*)oldEnd - (char*)position) / 0x40;
         if (n < tail) {
-            ShiftM44(position, mpEnd - n, mpEnd, mpEnd);
+            // 0x0047cb60 writes its result pointer through its first argument (and returns it):
+            // the original passes a stack local (`lea edx,[ebp-0x64]`, the discarded return slot),
+            // never `position` - writing the helper's out value into the element array corrupted
+            // the vector contents the caller passed in (memory pool mismatch at position + n*0x40).
+            Matrix44* shifted;
+            ShiftM44(&shifted, mpEnd - n, mpEnd, mpEnd);
             mpEnd += n;
             Matrix44* p = mpEnd - n;
             while (p != position) { --p; p[n] = *p; }
@@ -61,9 +72,12 @@ void VM44::Insert(Matrix44* position, uint n, const Matrix44& value)
         } else {
             ConstructM44(mpEnd, n - tail, &v);
             mpEnd += n - tail;
-            CopyM44(position, mpEnd - n + tail, position + n);
+            // the n >= tail path uses the generic uninitialized_copy (0x0045dc00), not vec::Copy
+            UninitCopyM44(position, mpEnd - n + tail, position + n);
             mpEnd += tail;
-            for (Matrix44* w = position; w != position + n; ++w) *w = v;
+            // bound is the old end (`cmp ecx,[ebp-0x4]` at 0x0047a7db), not position + n:
+            // only the elements that were already present get overwritten with the value
+            for (Matrix44* w = position; w != oldEnd; ++w) *w = v;
         }
     }
 }
