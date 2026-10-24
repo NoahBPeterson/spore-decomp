@@ -1,0 +1,2 @@
+slices/s00e043c0/s00e043c0.cpp  ?SetProgress@cSPUIGlobalUICiv@@QAEXMH@Z  00e04540  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00e043c0/s00e043c0.cpp  ?FlashCivCommButton@@YGXHPAXH@Z  00e04a50  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
