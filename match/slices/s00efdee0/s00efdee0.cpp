@@ -64,7 +64,7 @@ int   __cdecl FUN_00efc930();
 void* __cdecl FUN_00efcbe0(int);
 int   __cdecl FUN_00efc570(void*);
 int   __cdecl FUN_00efc5f0(int, float);
-bool  __stdcall FUN_00efe630(int, void*);
+bool  __cdecl FUN_00efe630(int, void*);
 void* __cdecl FUN_00eec3d0(void*, int);
 void* __cdecl FUN_00eece20(void*);
 void  __cdecl FUN_00efe110();
@@ -79,7 +79,7 @@ int __cdecl FUN_00efe240()
 }
 
 // @ 0x00efe5d0
-bool __cdecl FUN_00efe5d0(int v)
+__declspec(noinline) bool __cdecl FUN_00efe5d0(int v)
 {
     char* g = (char*)g_016c7b88;
     int n = (*(int*)(g + 0x90) - *(int*)(g + 0x8c)) >> 5;
@@ -95,7 +95,7 @@ bool __cdecl FUN_00efe5d0(int v)
 }
 
 // @ 0x00efe610
-int __cdecl FUN_00efe610(void* a)
+bool __cdecl FUN_00efe610(void* a)
 {
     int r = (int)FUN_00eebf80(a);
     return FUN_00efe5d0(r);
@@ -117,7 +117,7 @@ bool __stdcall FUN_00efeac0(int unused)
 }
 
 // @ 0x00efe630
-bool __stdcall FUN_00efe630(int id, void* p)
+bool __cdecl FUN_00efe630(int id, void* p)
 {
     if (id == (int)0xcf56099a) {
         if (p == 0)
@@ -131,8 +131,6 @@ bool __stdcall FUN_00efe630(int id, void* p)
         return true;
     }
     if (id == (int)0xe34e8a60)
-        return true;
-    if (id == 0x5b3d1d0a)  // 0x5b3d1d0d handled below
         return true;
     if (id == 0x5b3d1d0d)
         return true;
@@ -148,8 +146,8 @@ int __cdecl FUN_00efe870(int* key)
     int* end = *(int**)(base + 0x2bf8);
     int* p = begin;
     while (p != end) {
-        if (p[0] == key[0] && p[1] == key[1] && p[2] == key[2])
-            return (int)(p - begin);
+        if (p[2] == key[0] && p[3] == key[1] && p[4] == key[2])
+            return p[0];
         p = (int*)((char*)p + 0x27e8);
     }
     return -1;
