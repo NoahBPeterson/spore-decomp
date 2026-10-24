@@ -1,4 +1,4 @@
 # <va>  <diff-bytes>  <reason>
-005229c0  127  /Od stack-temp Vector3 pass schedule differs; complete global user-colour setter
+005229c0  205  /Od stack-temp Vector3 pass schedule differs; complete global user-colour setter; fixed the RGB->HSV converter declaration and call (destination pointer + 12-byte V3 by value), so the g_userColors2 writes now match the original; slice and SPSkinnerPaintSystem.cpp both PASS 348 valid/100% coverage, replays first difference None; size 182 vs 127
 00523570  11   /Od mem/this/result slot permutation only; complete alloc factory
 00522b40  1568  /Od frame: original has ~0xc0 more temp slots (inline ref/copy temps); complete SetCreatureSkin, same calls in order (fabs inline needs /Oi)
