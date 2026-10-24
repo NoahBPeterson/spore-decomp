@@ -1,0 +1,8 @@
+00a3af80 SP::Audio::cEventModifierPrimitiveFootTypeBase::ReadTuningValues  # override: base loader, then 10 ResponseCurve tuning curves (mCurves stride 0x364) each InitFromConfiguration else default data
+00a3b3a0 SP::Audio::cEventModifierPrimitiveMouthType::ModifyEvent  # command -> mouth-name suffix: 0x39fb001 map hit direct, else 0x39f9e01/0x39f9e08 select map name / AudioSystem::vt[0xec] name, plus 'b'/'e' case overrides
+00a3b640 StrHashTable::OperatorIndex  # eastl::hash_map<unsigned, String8>::operator[] (find-or-insert-default)
+00a3b720 SP::Audio::cEventModifierPrimitiveMouthType::Rebuild  # unnamed: GetConfiguration(instance,g_layoutManager) -> GetKeys/GetDisplayName -> mirror names into mTable -> free list -> Release
+00a3b890 SP::Audio::cEventModifierPrimitiveMouthType::RebuildAll  # unnamed: Eapd::Debug::ObjectError::GetList -> Rebuild each entry (stride 0xc) -> free list
+00a3b970 SP::Audio::cEventModifierPrimitiveMouthType::RebuildIfCurrent  # unnamed predicate: entry+8 == g_layoutManager -> Rebuild(entry[0],0)
+00a3b9a0 SP::Audio::cEventModifierPrimitiveSurfaceType::ModifyEvent  # 0x39fa376 surface-id switch -> "_wade"/"_splash"/"_grass"/"_ice"/"_lava" + sand/wood/rock/glass/metal/dirt hashes
+00a3bb60 SP::Audio::cListener::Shutdown  # posts 8 deregistration messages (keys 0x2b0c259..0x539a4cf) to SP::MessageServer with the +0x8 IHandler payload

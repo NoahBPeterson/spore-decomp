@@ -1,2 +1,3 @@
-# va  size  reason (complete/approximate; not byte-exact)
-# s00a3af80: the one target function is complete but not byte-exact (see nonmatching.txt).
+# va  diff-bytes  reason
+# s00a3af80: no partial/approximate function. 3 targets are byte-exact (manifest.txt); the other 4 are
+# complete but not byte-exact and are recorded in nonmatching.txt.
