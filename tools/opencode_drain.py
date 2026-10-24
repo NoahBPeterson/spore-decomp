@@ -338,6 +338,19 @@ while True:
         if last and last.get("id") not in toolfixed and TOOL_TEXT.search(txt):
             toolfixed.add(last.get("id"))
             toolfix_n[k] = toolfix_n.get(k, 0) + 1
+            if toolfix_n[k] >= 2 and G.get("relaunch_on_leak", True):
+                # second leak: the session copies the markup from its own history, so replace it with a fresh session
+                # (user, 2026-10-24: "if a session leaks twice, cancel it ... taken up in a new session, but without
+                # the transcript or the leaked tool call"); claims stay with worker k
+                r = subprocess.run([sys.executable, W("tools/opencode_sup.py"), a.group, "relaunch", str(k)],
+                                   capture_output=True, text=True, timeout=300)
+                log("REVIVED r%d (second text tool call: %s)" % (k, (r.stdout.strip() or r.stderr.strip())[-160:]))
+                toolfix_n[k] = 0
+                nudges.pop(k, None)
+                G = json.load(open(GF))
+                SESS = G.get("sessions", {})
+                busy += 1
+                continue
             if toolfix_n[k] > 2 and model_of(k).get("providerID") == "cheaperinference" and G.get("fallback", True):
                 # the session keeps copying the leaked markup from its own history: move it to OpenRouter (0 leaks
                 # in 2,079 responses of the same model), via the group's worker_model override

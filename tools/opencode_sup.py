@@ -7,6 +7,7 @@ usage: opencode_sup.py <group> <command> [args]
   reply once|reject [-m MSG] <sid:rid>...   answer requests (logged to work/opencode/decisions.jsonl)
   status                  one line per session: range, state, cost, cache share, slice progress; plus group totals
   launch [N]              start sessions for the next N unlaunched ranges (default 1)
+  relaunch K[,K...]       replace those workers' sessions with fresh ones (no transcript); claims carry over
   unhang [SECS]           interrupt + re-prompt sessions whose current model call has run > SECS (default 600)
   nudge <sid>             re-prompt one idle, unfinished session to continue
   switch [K,K,...]        interrupt every launched session (or those workers) and re-prompt it on its current
@@ -267,6 +268,26 @@ elif cmd == "launch":
         print("launched r%d %s" % (k, sid))
         n -= 1
     save()
+
+elif cmd == "relaunch":  # replace workers' sessions with fresh ones (no transcript), same worker index and claims
+    # A session whose history holds tool-call markup the provider returned as text keeps copying it
+    # (CheaperInference, 2026-10-24); a new session starts from the wave prompt alone, and claim.py hands it the
+    # slice the old one held (claims belong to the worker index), so it resumes from the files on disk.
+    for k in [x.strip() for x in args[0].split(",") if x.strip()]:
+        old = SESS.get(k)
+        if old:
+            api("POST", "/api/session/%s/interrupt" % old, {})
+        s = api("POST", "/api/session", {"title": "spore-%s-%s" % (group, k), "location": {"directory": ROOT},
+                                         "model": model(int(k))})
+        sid = s.get("id") or s.get("data", {}).get("id")
+        if not sid:
+            print("relaunch r%s failed: %s" % (k, s))
+            continue
+        SESS[k] = sid
+        G.setdefault("replaced", {}).setdefault(k, []).append(old)
+        save()  # broker must know the session before its first request
+        r = api("POST", "/api/session/%s/prompt" % sid, {"text": prompt_for(int(k)), "model": model(int(k))})
+        print("relaunched r%s %s -> %s %s" % (k, old, sid, "ERR %s" % r if "error" in r else "ok"))
 
 elif cmd == "unhang":
     lim = int(args[0]) if args else 600
