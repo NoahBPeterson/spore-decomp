@@ -1,0 +1,33 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00c25a50 = SP::cSPCreatureCitizen (0x00c25a50..0x00c26730): the
+# tool-effect / pending-order state machine that drives which "tool" the citizen
+# is using, plus two standalone helpers the surrounding code owns.  Interesting
+# fields: +0x1010 owner city, +0x1014 owner tribe, +0x102c tool-effect index,
+# +0x0ffc current tool effect, +0x0fc4 behavior-tree handle, +0x0fc8 current
+# interactor, +0x0b4c the cAgentOrderManager whose FirstPending() order record
+# carries the order type at +0x00, the active flag at +0x28, a byte at +0x38 and
+# a u16 sub-type at +0x4b.  3/10 byte-exact.  The remaining 7 are complete C++
+# that reproduces the original control flow; the byte-exact budget is missed
+# mostly because of MSVC register scheduling, an unreproducible `sete`
+# materialisation, and two functions whose original bodies could not be fully
+# recovered.  Per-row verdicts are the equivalence-gate results measured with the
+# flags above.
+#
+# MATCHes (3/10): IsWaitingForTool(00c26380), SetToolOnAnimEvent(00c263e0),
+# cOrderData::FUN_00c26730(00c26730).
+
+00c25a50 1241 cSPCreatureCitizen::FUN_00c25a50(void*): the tree-interaction animation state.  Only the outer dispatch was recovered -- the +0x590 float "done" test (against _HK_REAL_ZERO), the 0x66897b4/0x2796b30 animation ids, the +0x1002 flag, the +0x1004/8/c offset write from DAT_0168dbb0/b4/b8, the 0xbfa50b5a WaitForAnimEventOrEnd gate and the PerformSocialAction tail.  The original is 1315 bytes of deep nested countdown/animation sub-states; ours is a 321-byte partial.  equiv FAIL 5/37 valid inputs mismatched; first: execution (ours: fake-arity, no call site before 40020000)
+
+00c25f80  395 cSPCreatureCitizen::FUN_00c25f80(void): behavior-tree teardown.  We reproduce the main path (bail on a null +0xfc4, FUN_00c24040, FUN_00c15150, and reset +0xffc when the handle is unchanged) but the original body is 406 bytes and carries additional state we did not recover (ours 51 bytes). equiv FAIL 5/40 valid inputs mismatched; first: execution (ours fault: Invalid memory read at eip=00c15162)
+
+00c26120   19 cSPCreatureCitizen::FUN_00c26120(void): current tool effect.  Every load and branch matches -- GetToolEffect(+0x102c) when nonzero, otherwise walk +0x1010 then +0x1014 and return 0x11 when GetLeader()==this, else 0.  The original ends with `sete al; test al,al; je`; MSVC 15.00 /O2 emits `jne` for all 16 reconstructed source forms tried (bool temp, ternary, `!=0`, if/else-to-bool, inlined bool helper, negated tests).  Size 61 vs 66.  equiv PASS 400 valid inputs, 88.5% coverage
+
+00c26170  280 cSPCreatureCitizen::FUN_00c26170(void): desired tool effect for the pending order type.  The full case map is recovered (1->0x11/4, 2->0x11/0x10, 4->FUN_00c26120, 5->0x12 when tool==9 else fall to +0xffc, 3/6/0x1c->+0xffc, 7/10/0xf and 0x1a gated by FUN_00c22dd0, 0x16->0x11, 0x18->float compare, 0x19->0x0c).  The original dispatches through a byte-indexed jump table at 0xc262bc (index table 0xc262ec); a plain C++ switch compiles to a dword table, and the return/register scheduling differs.  Size 336 vs 409.  equiv WEAK 190 valid inputs (need 200), 23.5% coverage (need 60%)
+
+00c26310   47 cSPCreatureCitizen::FUN_00c26310(void*): recompute the tool effect and forward to SetCurrentToolEffect(0xc24f40).  Shares the `sete al; test al,al; je` limitation with 00c26120 (ours `jne`); the +0xfc4/+0xffc comparison and the forward call match.  Size 92 vs 97.  equiv WEAK 172 valid inputs (need 200), 93.9% coverage (need 60%)
+
+00c26450  210 cSPCreatureCitizen::ForceOrdersUpdate(void): map the pending order type to an action bitmask, drive the +0xb4c player Play() (0xbc96a0), then patch the returned record's +0xc from the order variant at +0x4b.  Full bitmask map and the early 0x4000/FUN_00bc97f0 path recovered; the original's 66-byte jump table and per-case scheduling differ.  Size 614 vs 616.  equiv FAIL 5/242 valid inputs mismatched; first: memory pool @491700ac (ours emits the 0x4000 action where the original wrote 0)
+
+00c266c0   80 FUN_00c266c0(cElem18**,cElem18*,cElem18*,cElem18*): forward-copy 0x18-byte elements from [begin,end), AddRef the +4 ref-counted pointer, advance *out.  Same size (99); the only difference is register assignment -- the original keeps pBegin/pEnd in their stack home slots and reloads pBegin after the inlined AddRef (`mov edi,[esp+0x14]`), while MSVC keeps them in ebp/esi here.  equiv WEAK 107 valid inputs (need 200), 30.0% coverage (need 60%)

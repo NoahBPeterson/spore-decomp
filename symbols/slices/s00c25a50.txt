@@ -1,0 +1,19 @@
+; slice s00c25a50 = 0x00c25a50..0x00c26730 (SP::cSPCreatureCitizen tool / order state machine + two helpers)
+00c25a50 SP::cSPCreatureCitizen::FUN_00c25a50(void*)            ; 0x00c25a50  thiscall ret 4: tree-interaction animation state (countdown local, 0x2796b30 anim, +0x1002 flag, +0x1004/8/c offsets)
+00c25f80 SP::cSPCreatureCitizen::FUN_00c25f80(void)             ; 0x00c25f80  thiscall: behavior-tree teardown, resets +0xffc when the tree handle is unchanged
+00c26120 SP::cSPCreatureCitizen::FUN_00c26120(void)              ; 0x00c26120  thiscall: current tool effect -- GetToolEffect(+0x102c), else 0x11 when this is the city/tribe leader
+00c26170 SP::cSPCreatureCitizen::FUN_00c26170(void)              ; 0x00c26170  thiscall: desired tool effect for the pending order type (0xc262bc byte-indexed jump table); returns +0xffc for several types
+00c26310 SP::cSPCreatureCitizen::FUN_00c26310(void*)             ; 0x00c26310  thiscall ret 4: recompute the tool effect and forward to SetCurrentToolEffect(+0xc24f40) when the tree/effect changed
+00c26380 SP::cSPCreatureCitizen::IsWaitingForTool(int)          ; 0x00c26380  thiscall ret 4: +0xffc != GetToolEffect(tool) and (specialized tool or effect set) -> InterruptAnimation(0x2c39200, tree, 0)  byte-exact (MATCH)
+00c263e0 SP::cSPCreatureCitizen::SetToolOnAnimEvent(int)        ; 0x00c263e0  thiscall ret 4: sanitize the tool, and when the current anim guid is 0x2c39200 wait on 0xffffffff then SetCurrentToolEffect  byte-exact (MATCH)
+00c26450 SP::cSPCreatureCitizen::ForceOrdersUpdate(void)         ; 0x00c26450  thiscall: map the pending order type to an action bitmask, drive the +0xb4c player Play(), then patch the returned record's +0xc from the order variant (+0x4b)
+00c266c0 FUN_00c266c0(cElem18**,cElem18*,cElem18*,cElem18*)     ; 0x00c266c0  cdecl: forward-copy 0x18-byte elements from [begin,end), AddRef on the +4 ref-counted pointer, advance *out
+00c26730 SP::cOrderData::FUN_00c26730(cOrderData const*)        ; 0x00c26730  thiscall ret 4: field-by-field copy with ref-count AddRef/Release at +0x28 and four Variants at +0x39/+0x4d/+0x61/+0x75  byte-exact (MATCH)
+; helpers: cCommunity::GetLeader 0x00c00650, GetToolEffect 0x00c235e0, HasSpecializedTool 0x00c236e0, IsLeader 0x00c232d0
+;          InterruptAnimation 0x00c12310, AnimationFinished 0x00c123f0, GetCurrentAnimationGUID 0x00c0e040
+;          WaitForAnimEventOrEnd 0x00c14ef0, SetCurrentToolEffect 0x00c24f40, PlayAnimationWithTarget 0x00c14910
+;          cAgentOrderManager::FirstPending 0x00bca2c0, cOrderPlay::Play 0x00bc96a0 / FUN_00bc97f0 0x00bc97f0
+;          FUN_00c22dd0 0x00c22dd0, FUN_00cee330 0x00cee330, FUN_00c245e0 0x00c245e0, FUN_005727b0/eee0 0x005727b0/5727e0
+;          EA::Variant::operator= 0x00542b80
+;          globals _HK_REAL_ZERO 0x01485378, DAT_0168dbb0/b4/b8, DAT_0146aa40 (FLT_MAX), DAT_0169ef30, DAT_0169f028, DAT_01572068, anim names 0x02796b30 / 0x02c39200
+;          cSPCreatureCitizen fields: +0x1010 mpOwnerCity, +0x1014 mpOwnerTribe, +0x102c mnToolEffectIndex, +0xffc mnCurTool, +0xfc4 mpBT, +0xfc8 mpInteract, +0xb4c mpOrders, +0xb20 mpAnim
