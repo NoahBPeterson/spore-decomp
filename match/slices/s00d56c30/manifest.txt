@@ -1,0 +1,4 @@
+slices/s00d56c30/s00d56c30.cpp  ?GetEntry@CTribe@@QAEPAUCEntry@@H@Z  00d576b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d56c30/s00d56c30.cpp  ?SeedCitizenTool@@YAXPAUCCitizen@@@Z  00d576d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d56c30/s00d56c30.cpp  ?DeactivateCitizen@@YGXPAUCCitizen@@@Z  00d57940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d56c30/s00d56c30.cpp  ?ComputeVisualizedPopulation@cCityVisualizer@SP@@QAEHXZ  00d57a00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
