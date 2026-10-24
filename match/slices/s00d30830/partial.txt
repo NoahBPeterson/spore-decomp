@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00d30830  348  FUN_00d30830 -- creature-mode input gate: GetTriggerMgr()->[0x2c] == 1|2 early-out, then FUN_00b3d230/FUN_00b5ca60 predicate, GameInputManager vtable slot 0x34, and a hashed-name lookup (0x17f243b) through vtable slot 0x0c feeding FUN_00dd18b0; not emitted
+00d30990  1357  SP::cCreatureModeInputStrategy::ReloadTuning (largest routine in the slice; tuning-table walk); not emitted
+00d30fb0  500  SP::cCreatureModeInputStrategy::SpawnMovementGoalEffect -- AutoRefCount release/store of the effect handle at this+0xe0 (vtable slots 0x0c and 4), effects-manager locale-hash lookup `IsValid(0x384e54a4, 0, &handle)` vtable slot 0x2c, PlanetModel() and an SSE constant-vector build from 0x169e214/0x169e218/0x169e21c/_HK_REAL_ONE; not emitted
