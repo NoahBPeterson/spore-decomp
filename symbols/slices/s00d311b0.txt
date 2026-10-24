@@ -1,0 +1,4 @@
+00d311b0  ?FUN_00d311b0@@QAE_NI@Z  # partial: thiscall audio-emitter effect/state update driver; 1580 bytes of SSE + XformMsg/EffectsManager bitfield work, not reconstructed
+00d317e0  ?FUN_00d317e0@@YA_NH@Z  # game-mode/kind predicate: false in creature mode (0x1654c10), else true for every FUN_00d30830 kind 3..0x1b except 4 and 6 - byte-exact
+00d31840  ?FUN_00d31840@@YAXPAURef@@HHHUValue@@@Z  # sift-down for a heap of ref-counted objects: while (idx = 2*hole+2) < len pick the child the position functor prefers, move it into the hole (AddRef/Release), then sift the value up at the end - nonmatching/equivalent
+00d31980  ?FUN_00d31980@@YAXPAURef@@0UPrior@@@Z  # pop: save *(last-1) ref-counted, move *first to *(last-1), then sift-down from the root with the saved element and the seven incoming priority floats - nonmatching/equivalent
