@@ -13,7 +13,8 @@
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long index);
 extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
 extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
-#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange)
+extern "C" long __cdecl _InterlockedDecrement(volatile long*);
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange, _InterlockedDecrement)
 
 #define PVCAT2(a, b) a##b
 #define PVCAT(a, b) PVCAT2(a, b)
@@ -160,6 +161,18 @@ struct MGRef {
     MeshGroup* p;
     MGRef() : p(0) {}
     MGRef& operator=(const MGRefExt& o);           // 0x006df280 (AddRef new, Release old)
+    void AssignRefPtr(const MGRef& src);           // 0x006df280 (AddRef src, Release old)
+    __forceinline void Reset()
+    {
+        MeshGroup* g = p;
+        if (g) {
+            p = 0;
+            if (_InterlockedDecrement(&g->mRefCount) == 0) {
+                _InterlockedExchange(&g->mRefCount, 1);
+                g->Destroy(1);
+            }
+        }
+    }
     __forceinline ~MGRef()
     {
         MeshGroup* g = p;
@@ -272,6 +285,120 @@ struct Base {                          // the layered object
 
 bool FUN_00b64870(Mesh* m, int hash, const cSPTransform* xf, MGRefExt* out, int* n1, int* n2);   // 0x00b64870
 int FUN_00b63f70(Base* b, int idx);                                                                // 0x00b63f70
+
+// ---- Havok shape-builder registry -------------------------------------------------------------
+// Every collision shape class registers a builder in one shared pointer map, keyed by the class'
+// static hkClass object. The two dispatch helpers below look a key up through an interface slot and
+// then call the registered builder with (owner, scale, source).
+struct hkMemoryAllocator {
+    PV4
+    virtual void* alloc(int numBytes, int memClass);   // +0x10
+};
+extern hkMemoryAllocator* g_hkMemoryInstance;          // 0x016E4178
+
+struct hkShapeBuilderMap {
+    void Init();                                       // 0x0107DE00 (hkPointerMapBase ctor)
+    void insert(void* key, void* value);               // 0x0107DE70
+    void* find(void* key, void* def);                  // 0x0107E540
+};
+extern hkShapeBuilderMap* g_hkShapeBuilders;           // 0x016872E4
+
+void FUN_00b63eb0();                                   // 0x00b63eb0
+void FUN_00b64040();                                   // 0x00b64040
+void FUN_00b63e30();                                   // 0x00b63e30
+void FUN_00b64470();                                   // 0x00b64470
+extern uint8_t g_hkClassHull[];                        // 0x016E5700
+extern uint8_t g_hkClassMesh[];                        // 0x016E5214
+extern uint8_t g_hkClassCompound[];                    // 0x016E537C
+extern uint8_t g_hkClassSphere[];                      // 0x016E588C
+
+// A shape source: slot +0x0c maps an owner key to the registered shape class.
+struct IShapeSource {
+    PV2 PV
+    virtual void* MakeShapeKey(void* owner);           // +0x0c
+};
+// Container returned by the collision-world singleton (slot +0x0c resolves the source).
+struct IShapeContainer {
+    PV2 PV
+    virtual void* ResolveSource(void* owner);          // +0x0c
+    virtual IShapeContainer* Self();                   // +0x10
+};
+struct ICollisionWorld {
+    PV4
+    virtual IShapeContainer* GetContainer();           // +0x10
+};
+extern ICollisionWorld* g_hkCollisionWorld;            // 0x016E60A8
+
+typedef int (*ShapeBuilderFn)(void* owner, float scale, void* source);
+
+// @ 0x00b647e0
+hkShapeBuilderMap* GetShapeBuilderMap()
+{
+    if (g_hkShapeBuilders)
+        return g_hkShapeBuilders;
+    hkShapeBuilderMap* map = (hkShapeBuilderMap*)g_hkMemoryInstance->alloc(0xc, 0x19);
+    g_hkShapeBuilders = map ? (map->Init(), map) : 0;
+    g_hkShapeBuilders->insert(g_hkClassHull, (void*)&FUN_00b63eb0);
+    g_hkShapeBuilders->insert(g_hkClassMesh, (void*)&FUN_00b64040);
+    g_hkShapeBuilders->insert(g_hkClassCompound, (void*)&FUN_00b64470);
+    g_hkShapeBuilders->insert(g_hkClassSphere, (void*)&FUN_00b63e30);
+    return g_hkShapeBuilders;
+}
+
+// @ 0x00b649b0
+int BuildShapeFromSource(void* owner, float scale, IShapeSource* source)
+{
+    void* key = source->MakeShapeKey(owner);
+    if (!key)
+        return 0;
+    int result = 0;
+    ShapeBuilderFn builder = (ShapeBuilderFn)GetShapeBuilderMap()->find(key, 0);
+    if (builder)
+        result = builder(owner, scale, source);
+    return result;
+}
+
+// @ 0x00b64a00
+int BuildShapeFromWorld(void* owner, float scale)
+{
+    IShapeContainer* container = g_hkCollisionWorld->GetContainer();
+    void* key = container->ResolveSource(owner);
+    if (!key)
+        return 0;
+    int result = 0;
+    ShapeBuilderFn builder = (ShapeBuilderFn)GetShapeBuilderMap()->find(key, 0);
+    if (builder)
+        result = builder(owner, scale, container);
+    return result;
+}
+
+// ---- Mesh-group selection for one layer --------------------------------------------------------
+struct cModelInstance {
+    bool GetMeshes(void* out);                                // 0x0073EB90 (fills a RefVec3)
+};
+void FUN_00734d00(const cSPTransform* xf, MeshGroup* group);  // 0x00734d00
+void FUN_00b64390(MeshGroup* group, int* numVerts, int* numTris);      // 0x00b64390
+
+// @ 0x00b64870
+bool BuildMeshGroup(cModelInstance* model, int index, const cSPTransform* xf, MGRef* out,
+                    int unusedA, int unusedB, int* numVerts, int* numTris)
+{
+    RefVec3 meshes;
+    meshes.mpBegin = 0;
+    meshes.mpEnd = 0;
+    meshes.mpCap = 0;
+    if (!model->GetMeshes(&meshes))
+        return false;
+    int count = (int)(meshes.mpEnd - meshes.mpBegin);
+    if (index >= count) {
+        out->Reset();
+        return false;
+    }
+    out->AssignRefPtr(meshes.mpBegin[index]);
+    FUN_00734d00(xf, out->p);
+    FUN_00b64390(out->p, numVerts, numTris);
+    return true;
+}
 
 // @ 0x00b64a60
 bool CollectLayerGeometry(Sec* p, int idx, bool useParent, int maxCount, const cSPTransform& delta,

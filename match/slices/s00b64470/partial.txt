@@ -1,0 +1,6 @@
+# va  verdict  notes
+00b64470  UNSUPPORTED  no symbol: the 869-byte convex-vertex-cloud builder was not reconstructed in this pass (only the registry and the two dispatch helpers were added)
+00b649b0  UNSUPPORTED  0/400 valid inputs (discards: fault(write)=190, fake-arity=158, budget=46): the source slot and the shape-builder map lookup are both fake callees, so every input dies before the builder call
+00b64870  WEAK  254 valid inputs (need 200), 50.9% coverage (need 60%): the GetMeshes fail path, the index>=count release path and the ref-vector teardown run identically; coverage stops at the fake mesh-group calls
+00b64a00  UNSUPPORTED  0/400 valid inputs (discards: fault(read)=293, fault(write)=49, fake-arity=44): the collision-world singleton and its container slot are fake, so the key lookup never returns
+00b65250  UNSUPPORTED  no symbol: the 378-byte convex-hull builder was not reconstructed in this pass

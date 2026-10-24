@@ -1,0 +1,1 @@
+slices/s00b64470/s00b64470.cpp  ?GetShapeBuilderMap@@YAPAUhkShapeBuilderMap@@XZ  00b647e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
