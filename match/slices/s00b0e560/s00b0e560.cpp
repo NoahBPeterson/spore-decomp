@@ -30,6 +30,9 @@ extern "C" void FUN_00abec70(void*);
 extern "C" void FUN_00abf2b0();
 extern "C" void FUN_00abf110(void*);
 extern "C" void FUN_00ac0010(void*);
+extern "C" void FUN_00abe9b0();                                // slot-vector iterator++
+extern "C" int  FUN_00b0d010(void*, void*, int);               // live slot count
+extern "C" void* FUN_00b30d70();                               // SP::GetGameTerrainCursor
 extern "C" void FUN_00b0dc60();
 extern float g_2pi;                                           // +0x167bd10
 
@@ -318,178 +321,328 @@ void cRenderQueue::FUN_00b0e890()
 }
 
 // @ 0x00b0e920
-// Removes unused entries from the +0x7c and +0x5c slot vectors.
-void cRenderQueue::FUN_00b0e920()
+// Empties the +0x7c slot vector, then moves every live slot of the +0x60 vector
+// into it and releases the +0x60 entries.
+int cRenderQueue::FUN_00b0e920()
 {
-    char* self = (char*)this;
-    {   // clear +0x7c
-        char* v = self + 0x7c;
-        void* b = *(void**)v;
-        void* e = *(void**)(v + 4);
-        void* p = FUN_00b0d1d0(e, e, b);
-        FUN_00b0cfd0(p, *(void**)(v + 4));
-        *(int*)(v + 4) = *(int*)(v + 4) + ((int)((char*)e - (char*)b) >> 3) * -8;
-        *(uint32_t*)(v + 0x14) = 0x3fffffffu;
-        *(uint32_t*)(v + 0x18) = 0x3fffffffu;
-    }
-    char* v = self + 0x5c;
-    uint32_t* cur = (*(uint32_t*)(v + 0x14) < 0x3fffffffu)
-        ? (uint32_t*)(*(uint32_t*)(v + 4) + *(uint32_t*)(v + 0x14) * 8)
-        : *(uint32_t**)(v + 8);
-    uint32_t* end = *(uint32_t**)(v + 8);
-    while (cur != end)
+    RenderQueueView* q = (RenderQueueView*)this;
+    SlotVector* vc = &q->mVecC;   // +0x7c
+    SlotVector* vb = &q->mVecB;   // +0x60
+
+    // 1) erase everything the +0x7c vector currently holds
+    uint8_t* begC = vc->mpSlots;
+    uint8_t* endC = vc->mpSlotsEnd;
+    void* moved = FUN_00b0d1d0(endC, endC, begC);
+    ((void (__thiscall*)(SlotVector*, void*, void*))FUN_00b0cfd0)(vc, moved, vc->mpSlotsEnd);
+    vc->mpSlotsEnd += -8 * (int)((endC - begC) >> 3);
+    vc->mBegin = SlotVector::kNil;
+    vc->mFreeChain = SlotVector::kNil;
+
+    // 2) re-insert every live slot of the +0x60 vector, skipping free runs
+    uint8_t* cur = vb->beginSlot();
+    uint8_t* endB = vb->mpSlotsEnd;
+    while (endB != cur)
     {
-        FUN_00b0e490(cur + 1);
+        ((void (__thiscall*)(SlotVector*, void*))FUN_00b0e490)(vc, cur + 4);
         do
         {
-            uint32_t w = *cur; cur += 2;
-            if (w >> 30 & 1) break;
-        } while ((int)*cur >= 0);
+            uint32_t w = *(uint32_t*)cur;
+            cur += 8;
+            if (w & 0x40000000u) break;
+        } while ((int)*(uint32_t*)cur < 0);
     }
-    uint32_t* a = *(uint32_t**)(v + 8);
-    uint32_t* b = *(uint32_t**)(v + 4);
-    for (uint32_t* q = b; q != a; q += 2)
-        FUN_00b0d050(q);
-    for (uint32_t* q = b; q < a; q += 2)
-        if ((-1 < (int)q[0]) && q[1])
-            vcall0<void>((void*)q[1], 0x4);
-    *(int*)(v + 8) = *(int*)(v + 8) + ((int)((char*)a - (char*)b) >> 3) * -8;
-    *(uint32_t*)(v + 0x18) = 0x3fffffffu;
-    *(uint32_t*)(v + 0x1c) = 0x3fffffffu;
+
+    // 3) release and drop every slot of the +0x60 vector
+    uint8_t* begB = vb->mpSlots;
+    uint8_t* p = begB;
+    uint8_t* endVb = vb->mpSlotsEnd;
+    while (p < endVb)
+    {
+        SlotEntry* e = (SlotEntry*)p;
+        if ((int)e->mSlotInfo >= 0 && e->mpData != 0)
+            vcall0<void>(e->mpData, 0x4);
+        p += 8;
+    }
+    vb->mpSlotsEnd += -8 * (int)((endVb - begB) >> 3);
+    vb->mBegin = SlotVector::kNil;
+    vb->mFreeChain = SlotVector::kNil;
+
+    return 0x3fffffff;
 }
 
 // @ 0x00b0ea30
 // Destroys the per-frame jobs and empties the manager.
 void cRenderQueue::FUN_00b0ea30()
 {
-    char* self = (char*)this;
-    uint32_t n = (uint32_t)((*(int*)(self + 0x28) - *(int*)(self + 0x24)) >> 2);
-    for (uint32_t i = 0; i < n; ++i)
-        vcall0<void>(*(void**)(*(uint32_t*)(self + 0x24) + i * 4), 0x34);
+    RenderQueueView* q = (RenderQueueView*)this;
 
-    while (*(uint32_t*)(self + 0x58) != 0x3fffffffu)
-        vcall1<void, uint32_t>(self, 0x18, *(uint32_t*)(self + 0x58));
-    while (*(uint32_t*)(self + 0x9c) != 0x3fffffffu || *(uint32_t*)(self + 0xb8) != 0x3fffffffu)
+    // 1) notify every entry of the +0x24 job vector
+    uint32_t n = (uint32_t)(q->mpJobEnd - q->mpJobBegin);
+    for (uint32_t i = 0; i < n; ++i)
+        vcall0<void>(q->mpJobBegin[i], 0x34);
+
+    // 2) drop every live slot of the +0x44 vector
+    SlotVector* va = &q->mVecA;   // +0x44
+    while (va->mBegin != SlotVector::kNil)
+        vcall1<void, void*>(this, 0x18, va->slotData(va->mBegin));
+
+    // 3) drain the +0x60 and +0x7c vectors
+    while (q->mVecB.mBegin != SlotVector::kNil || q->mVecC.mBegin != SlotVector::kNil)
     {
-        FUN_00b0dc60();
+        ((void (__thiscall*)(void*))FUN_00b0dc60)(this);
         FUN_00b0e920();
     }
-    char* sentinel = self + 0x38;
-    char* it = *(char**)sentinel;
+
+    // 4) tear down the +0x38 intrusive list
+    JobListNode* sentinel = &q->mJobList;
+    JobListNode* it = sentinel->mpNext;
     while (it != sentinel)
     {
-        char* next = *(char**)it;
-        if (*(void**)(it + 8))
-            vcall0<void>(*(void**)(it + 8), 0x4);
+        JobListNode* next = it->mpNext;
+        if (it->mpPayload != 0)
+            vcall0<void>(it->mpPayload, 0x4);
         destructor_00f47380(it);
         it = next;
     }
-    *(int*)(self + 0x3c) = (int)sentinel;
-    *(int*)sentinel = (int)sentinel;
+    sentinel->mpPrev = sentinel;
+    sentinel->mpNext = sentinel;
+}
+
+// lower_bound probe of the ordered map embedded at InteractionAgentView::+0x50
+// (the map's own header node is at +0x50, its root pointer at +0x58, a node's
+// key at +0x10).
+static MapNode* rq_map_lower_bound(InteractionAgentView* agent, uint32_t key)
+{
+    MapNode* header = (MapNode*)&agent->mpMapHeader;
+    MapNode* node   = (MapNode*)agent->mpMapRoot;
+    MapNode* best   = header;
+    while (node != 0)
+    {
+        if (node->mKey < key)
+            node = node->mpChild0;
+        else
+        {
+            best = node;
+            node = node->mpChild1;
+        }
+    }
+    if (best != header && key >= best->mKey)
+        return best;
+    return header;
 }
 
 // @ 0x00b0eae0
-// Interaction-agent tick: rebuild the +0x44 slots, then run each agent's
-// interactions into the +0x20 vector.
-void cRenderQueue::FUN_00b0eae0(int agents_, int flag)
+// Interaction-agent tick: rebuild the +0x40 slot vector, account every slot of
+// each agent's own vector, then push each job's interaction object.
+// `this` is 4 bytes above the base the other methods see; the two member calls
+// and FUN_00b0e890() are therefore made through this-4.
+void cRenderQueue::FUN_00b0eae0(int /*unused*/, int agents_)
 {
     char* self = (char*)this;
-    (void)agents_; (void)flag;
-    FUN_00b0dc60();
-    FUN_00b0e920();
+    cRenderQueue* base = (cRenderQueue*)(void*)(self - 4);
+    ((void (__thiscall*)(void*))FUN_00b0dc60)(self - 4);
+    base->FUN_00b0e920();
 
-    if (*(int*)(self + 0x50) == 0 || *(char*)(self + 0x9c) != 0)
+    if (agents_ == 0 || *(char*)(self + 0x9c) != 0)
         return;
-    *(int*)(self + 0x98) = *(int*)(self + 0x50);
+    *(int*)(self + 0x98) = agents_;
 
-    char* v = self + 0x40;
-    uint32_t* it = (*(uint32_t*)(v + 0x14) < 0x3fffffffu)
-        ? (uint32_t*)(*(uint32_t*)(v + 4) + *(uint32_t*)(v + 0x14) * 8)
-        : *(uint32_t**)(v + 8);
-    uint32_t* vend = *(uint32_t**)(v + 8);
-    while (it != vend)
+    RenderQueueInnerView* q = (RenderQueueInnerView*)self;
+    SlotVector* va = &q->mVecA;   // +0x40
+
+    uint8_t* it = va->beginSlot();
+    uint8_t* vend = va->mpSlotsEnd;
+    while (vend != it)
     {
-        void* agent = (void*)it[1];
+        InteractionAgentView* agent = (InteractionAgentView*)((SlotEntry*)it)->mpData;
         if (agent)
             vcall0<void>(agent, 0x0);
-        if (*(int*)((char*)agent + 0x70) == 1)
-            FUN_00ac0010(agent);
-        *(int*)((char*)agent + 0x70) = vcall0<int>(agent, 0x18);
-        if (!vcall0<int>(agent, 0x58))
+
+        if (agent->mTickState == 1)
+        {
+            // walk the agent's own slot vector (at +0x2c), accounting every slot
+            SlotIter iter;
+            iter.mpOwner = &agent->mpBlocks;
+            iter.mIndex  = agent->mFreeChain;
+            if (iter.mIndex >= SlotVector::kNil)
+                iter.mIndex = agent->indexEnd();
+            while (iter.mIndex != agent->indexEnd())
+            {
+                uint32_t key = (uint32_t)(uintptr_t)((SlotEntry*)((char*)agent->mpBlocks[iter.mIndex >> 7]
+                                             + (iter.mIndex & 0x7f) * 8))->mpData;
+                MapNode* header = (MapNode*)&agent->mpMapHeader;
+                MapNode* node = rq_map_lower_bound(agent, key);
+                if (node == header || node->mValue == 0)
+                {
+                    MapNode* found = rq_map_lower_bound(agent, key);
+                    int32_t v  = (found == header) ? 0 : found->mValue2;
+                    int32_t lo = (v <= agents_) ? v : agents_;
+                    uint32_t lookup = key;
+                    MapNode* ins = (MapNode*)((void* (__thiscall*)(void*, uint32_t*))FUN_00ac0010)(
+                                       (char*)agent + 0x4c, &lookup);
+                    ins->mValue = v - lo;
+                }
+                ((void (__thiscall*)(void*))FUN_00abe9b0)(&iter);
+            }
+            agent->mTickState = vcall0<int>(agent, 0x18);
+        }
+
+        if (vcall0<int>(agent, 0x58) == 0)
         {
             void* bm = SP_BehaviorManager();
             vcall1<void, void*>(bm, 0x18, agent);
         }
         vcall0<void>(agent, 0x4);
-        do { uint32_t w = *it; it += 2; if (w >> 30 & 1) break; } while ((int)*it >= 0);
+
+        do
+        {
+            uint32_t w = *(uint32_t*)it; it += 8;
+            if (w & 0x40000000u) break;
+        } while ((int)*(uint32_t*)it < 0);
     }
 
-    char* w = self + 0x20;
-    uint32_t* q = *(uint32_t**)w;
-    uint32_t* qend = *(uint32_t**)(w + 4);
-    void* alive = 0;
-    for (; q != qend; ++q)
+    // push each job's interaction object into the +0x20 job vector
+    typedef void (__thiscall* FnV44)(void*, uint32_t, uint32_t, uint32_t,
+                                     uint32_t, uint32_t, uint32_t);
+    void** p     = q->mpJobBegin;
+    void** pend  = q->mpJobEnd;
+    void*  g2    = 0;
+    void*  g3    = 0;
+    void*  prevG2 = 0;
+    void*  prevG3 = 0;
+    for (; p != pend; ++p)
     {
-        void* x = (void*)*q;
-        if (x != alive)
+        void* x   = *p;
+        void* cur = prevG2;
+        if (x != prevG2)
         {
             if (x) vcall0<void>(x, 0x60);
-            if (alive) vcall0<void>(alive, 0x5c);
-            alive = x;
+            cur = x;
+            if (prevG2) vcall0<void>(prevG2, 0x5c);
         }
-        if (vcall0<char>(alive, 0x1c))
+        g2 = cur;
+
+        void* y = prevG3;
+        if (vcall0<char>(g2, 0x1c) != 0)
         {
-            void* y = vcall0<void*>(alive, 0x20);
-            if (*(int*)((char*)y + 0x70) == 0)
+            InteractionAgentView* a2 = (InteractionAgentView*)vcall0<void*>(g2, 0x20);
+            if (a2->mTickState == 0)
             {
-                void* old = 0;
-                if (y != old)
+                void* y2 = vcall0<void*>(g2, 0x20);
+                if (y2 != prevG3)
                 {
-                    if (y) vcall0<void>(y, 0x0);
-                    if (old) vcall0<void>(old, 0x4);
+                    if (y2) vcall0<void>(y2, 0x0);
+                    y = y2;
+                    if (prevG3) vcall0<void>(prevG3, 0x4);
                 }
-                FUN_00abf110(y);
-                uint32_t a = 0, b = 0, c = 0, d = 0, e = 0, f2 = 0;
-                if (a + b != c + d)
-                    vcall2<void, uint32_t, uint32_t>(alive, 0x44, a, b);
-                (void)e; (void)f2;
+                uint32_t buf[6] = { 0, 0, 0, 0, 0, 0 };
+                ((void (__thiscall*)(void*, uint32_t*, void*))FUN_00abf110)(y, buf, g2);
+                if (buf[0] + buf[1] != buf[2] + buf[3])
+                    ((FnV44)g_vfn(y, 0x44))(y, buf[0], buf[1], buf[2],
+                                            buf[3], buf[4], buf[5]);
             }
         }
+        g3 = y;
+        prevG2 = g2;
+        prevG3 = g3;
     }
-    FUN_00b0e890();
-    if (alive) vcall0<void>(alive, 0x4);
+
+    base->FUN_00b0e890();
+    if (g3) vcall0<void>(g3, 0x4);
+    if (g2) vcall0<void>(g2, 0x5c);
 }
 
 // @ 0x00b0ee10
-// Selects the next live job, advancing past dead slots.
-void cRenderQueue::FUN_00b0ee10(int start_, int flag)
+// Walks the +0x44 slot vector from `start_`, skipping one live slot per unit of
+// budget; when the budget runs out it flags the selected agent's interactions
+// and returns the budget, otherwise it returns -1.
+int cRenderQueue::FUN_00b0ee10(int start_)
 {
-    char* self = (char*)this;
-    (void)flag;
-    char* v = self + 0x44;
-    uint32_t* it = (*(uint32_t*)(v + 0x14) < 0x3fffffffu)
-        ? (uint32_t*)(*(uint32_t*)v + *(uint32_t*)(v + 0x14) * 8)
-        : *(uint32_t**)(v + 4);
-    uint32_t* end = *(uint32_t**)(v + 4);
-    int budget = (start_ != -1) ? (start_ + 1) : 0;
-    uint32_t local[3] = { 0, 0, 0 };
-    (void)local;
-    while (it != end)
+    RenderQueueView* q = (RenderQueueView*)this;
+    SlotVector* va = &q->mVecA;   // +0x44
+
+    int budget;                       // decremented as live slots are consumed
+    if (start_ == -1)
+        budget = 0;
+    else
     {
-        char* job = (char*)it[1];
-        if (job)
+        budget = start_ + 1;
+        if (FUN_00b0d010(va->beginSlot(), va->mpSlotsEnd, start_) <= start_ + 1)
+            budget = 0;
+    }
+    int ret = budget;                 // stored back into the result slot
+
+    AgentBlocks lv = { 0, 0, 0, 0 };
+    uint32_t    lvCur = 0x7f;
+    uint32_t    lvIdx  = SlotVector::kNil;   // agent + 0x44
+    uint32_t    lvIdx2 = SlotVector::kNil;   // agent + 0x48 (unused, kept for parity)
+
+    uint8_t* it = va->beginSlot();
+    uint8_t* vend = va->mpSlotsEnd;
+    while (vend != it)
+    {
+        InteractionAgentView* agent = (InteractionAgentView*)((SlotEntry*)it)->mpData;
+        ((cRenderQueue*)(void*)&lv)->FUN_00b0e780((int)((char*)agent + 0x2c));
+        lvIdx  = *(uint32_t*)((char*)agent + 0x44);
+        lvIdx2 = *(uint32_t*)((char*)agent + 0x48);
+        if (lvIdx != SlotVector::kNil)
         {
-            void* obj = vcall1<void*, int>(job, 0x8, 0x1186577);
-            if (obj && vcall0<char>(obj, 0x58))
+            void* ref = ((SlotEntry*)((char*)lv.mpBegin[lvIdx >> 7]
+                                      + (lvIdx & 0x7f) * 8))->mpData;
+            if (ref != 0)
             {
-                if (budget) { --budget; }
-                else
+                void* itf = vcall1<void*, int>(ref, 0x8, 0x1186577);
+                if (itf != 0 && vcall0<char>(itf, 0x58) != 0)
                 {
-                    FUN_00abec70(local);
-                    break;
+                    if (budget == 0) break;           // -> the "found" tail
+                    --budget;
                 }
             }
+            ((void (__thiscall*)(void*, int))FUN_00abec70)(&lv, ret);
+            lvIdx  = SlotVector::kNil;
+            lvIdx2 = SlotVector::kNil;
         }
-        do { uint32_t w = *it; it += 2; if (w >> 30 & 1) break; } while ((int)*it >= 0);
+        (void)lvIdx2;
+
+        do
+        {
+            uint32_t w = *(uint32_t*)it; it += 8;
+            if (w & 0x40000000u) break;
+        } while ((int)*(uint32_t*)it < 0);
     }
+
+    if (budget == 0 && lvIdx != SlotVector::kNil)
+    {
+        vcall0<void>(FUN_00b30d70(), 0x64);
+
+        SlotIter iter;
+        iter.mpOwner = &lv;
+        iter.mIndex  = lvIdx;
+        if (iter.mIndex >= SlotVector::kNil)
+            iter.mIndex = (uint32_t)(((char*)lv.mpEnd - (char*)lv.mpBegin) >> 2) * 0x80
+                          - 0x7f + lvCur;
+        for (;;)
+        {
+            uint32_t endIdx = (uint32_t)(((char*)lv.mpEnd - (char*)lv.mpBegin) >> 2) * 0x80
+                              - 0x7f + lvCur;
+            if (iter.mIndex == endIdx) break;
+            void* ref = ((SlotEntry*)((char*)lv.mpBegin[iter.mIndex >> 7]
+                                      + (iter.mIndex & 0x7f) * 8))->mpData;
+            if (ref != 0)
+            {
+                void* itf = vcall1<void*, int>(ref, 0x8, 0x1186577);
+                if (itf != 0 && vcall0<char>(itf, 0x58) != 0)
+                    vcall1<void, int>(itf, 0x54, 1);
+            }
+            ((void (__thiscall*)(void*))FUN_00abe9b0)(&iter);
+        }
+    }
+    else
+        ret = -1;
+
+    vcall0<void>(FUN_00b30d70(), 0x74);
+    ((void (__thiscall*)(void*, int))FUN_00abec70)(&lv, ret);
+    if (lv.mpBegin)
+        destructor_00f47380(lv.mpBegin);
+    return ret;
 }

@@ -6,3 +6,7 @@
 00b0e810   94  refcount + slot_vector swap; AutoRefCount template not reproduced
 00b0e890  118  EASTL list job sweep; intrusive-list node erasure schedule differs
 00b0f0c0    1  angle-wrap branch block placement one branch displacement off
+00b0e920  231  slot_vector trim/erase rebuilt over named fields; register/branch schedule differs
+00b0ea30  133  per-frame teardown rebuilt; +0x58 live-index loop and sentinel-list teardown schedule differ
+00b0eae0  766  interaction-agent tick fully rebuilt; inlined EASTL map lower_bound/insert schedule differs
+00b0ee10  537  next-live-job selection rebuilt; slot-iterator walk and slot_vector index arithmetic schedule differ
