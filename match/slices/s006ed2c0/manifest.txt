@@ -1,1 +1,2 @@
 slices/s006ed2c0/s006ed2c0.cpp  ?AddResourceRef@cEffectsModel@@QAEXPAUIRefCounted@@@Z  006edaa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s006ed2c0/s006ed2c0.cpp  ?Update@cEffectsModel@@QAEDXZ  006ee140  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
