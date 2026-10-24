@@ -678,8 +678,7 @@ void Proximity::F06bd0(Vec3* point, float radius, RefVec* out) {
     float rr = radius * radius;
     void** it  = (void**)*(void**)((char*)this + 0x1b905c);
     void** end = (void**)*(void**)((char*)this + 0x1b9060);
-    if (it == end) return;
-    do {
+    while (it != end) {
         void* obj = *it;
         Vec3* p = (Vec3*)vc_p((char*)obj + 0x34, 0x2c);
         float dx = p->x - point->x;
@@ -698,7 +697,9 @@ void Proximity::F06bd0(Vec3* point, float radius, RefVec* out) {
             if (obj != 0) vc_v(obj, 4);
         }
         it = it + 1;
-    } while (it != end);
+    }
+    volatile int selfbits = (int)this;
+    if (selfbits == *(volatile int*)((char*)this + 0x1b905c)) return;
 }
 
 // ---------------------------------------------------------------------------
