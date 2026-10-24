@@ -3,6 +3,7 @@
 // init hook), clears a 3x3 table of collectable-item refs, creates six cCollectableItems inventories,
 // reads a byte option and registers a message-id table with the MessageServer.
 // Built /O2 /MD /Gy /EHsc /TP.
+#include "types.h"
 typedef unsigned int  uint;
 typedef unsigned char uchar;
 typedef unsigned long long u64;
@@ -256,4 +257,363 @@ struct HMap {
 struct HandlerBase {
     HandlerBase();   // 0x00e00630 (equiv t3)
 };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Layout-manager maps and Simulator teardown (0x00de7200, 0x00de7330, 0x00de74c0, 0x00de7530,
+// 0x00de7590, 0x00de7630, 0x00de7eb0). All of these walk eastl rbtree anchors whose sentinel is
+// the anchor itself; keys live at +0x10 of a node and the payload right after them.
+struct RbNode {                                     // eastl::rbtree_node_base
+    RbNode*  mpLeft;                                // +0x00
+    RbNode*  mpRight;                               // +0x04
+    RbNode*  mpParent;                              // +0x08
+    uint32_t mColor;                                // +0x0c
+};
+struct Key { uint32_t a, b, c; };                   // EA::ResourceMan::Key
+
+struct RefObj {                                     // an IAutoRefCount target
+    virtual void s00();                             // +0x00
+    virtual int  Release();                         // +0x04
+    virtual void s08(int nFlag);                    // +0x08
+    virtual void s0c(); virtual void s10(); virtual void s14(); virtual void s18();
+    virtual void s1c(); virtual void s20(); virtual void s24(); virtual void s28();
+    virtual void s2c();
+    virtual void Stop();                            // +0x30
+};
+
+struct FeedbackNode : RbNode {                      // node of map<ResourceMan::Key, AutoRefCount>
+    Key   mKey;                                     // +0x10
+    void* mpValue;                                  // +0x1c
+};
+struct KeyRbTree {                                  // RbTree_00a21dc0 at +0x70
+    void*  mpRoot;                                  // +0x00
+    RbNode mAnchor;                                 // +0x04  (end = &mAnchor)
+    void* Find(const void* pKey, void** ppOut);     // 0x00a21dc0
+};
+struct FeedbackMap {
+    uint32_t  mPad00;                               // +0x00
+    RbNode    mAnchor;                              // +0x04  (begin = mpRight, end = &mAnchor)
+    uint32_t  mCount;                               // +0x14
+    uint8_t   mPad18[0x70 - 0x18];
+    KeyRbTree mKeyTree;                             // +0x70
+    void  FindUintKey(FeedbackNode** ppNode, uint32_t nKey);         // 0x00e5c780 (eastl rbtree find)
+    void  FindKey(FeedbackNode** ppNode, const Key* pKey);           // 0x00c7f560
+    void* FindOrInsertKey(const Key* pKey);                          // 0x00de7590
+    void  EraseUintKey(uint32_t nKey);                               // 0x00de74c0
+    void  RemoveKeyEntry(uint32_t nKey, void* pValue);               // 0x00de6f20
+    void  InsertKey(FeedbackNode** ppNode, RbNode* pWhere, const Key* pKey, char bFlag);  // 0x00de6900
+};
+struct FeedbackWriter {
+    virtual void Begin(const wchar_t* pName);       // +0x00
+    virtual void End(const wchar_t* pName);         // +0x04
+};
+bool WriteKeyValue(void* pWriter, int nZero, const void* pKey, const wchar_t* pTypeName);
+bool SerializeFeedback(FeedbackWriter* pWriter, const wchar_t* pName, FeedbackMap* pMap);
+
+struct WorldNode : RbNode {                         // node of map<Key, cSPUILayoutManager::cWorld>
+    Key      mKey;                                  // +0x10
+    uint32_t mValueA;                               // +0x1c
+    uint32_t mValueB;                               // +0x20
+    uint32_t mValueC;                               // +0x24
+};
+struct WorldMap {
+    uint32_t mPad00;                                // +0x00
+    RbNode   mAnchor;                               // +0x04
+    uint32_t mPad14;                                // +0x14
+    void NukeSubtree(RbNode* pRoot);                // 0x009a9600
+    void Insert(WorldNode** ppNode, const void* pKey, char bFlag);   // 0x00de5f60
+};
+struct ReaderHost {
+    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void s04(); virtual void s05();
+    virtual void* GetStream();                      // +0x18
+};
+struct Reader {
+    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void s04(); virtual void s05();
+    virtual void  ReadKey(void* pOut);              // +0x18
+    virtual void  NextKey();                        // +0x1c
+    virtual ReaderHost* GetHost();                  // +0x20
+};
+void ReadInt32(void* pStream, void* pOut, int nCount, void* pZero);  // 0x0093a780 EA::IO::ReadInt32
+void ReadKeyData(void* pReader, void* pOut);        // 0x00ae2ed0
+void ReadWorldMap(Reader* pReader, WorldMap* pMap); // 0x00de7200
+
+struct KeyVector {                                  // eastl::sp_vector<EA::ResourceMan::Key>
+    uint32_t mPad00;                                // +0x00
+    Key*     mpEnd;                                 // +0x04
+    Key*     mpCap;                                 // +0x08
+    void DoInsertKey(Key* pPos, const Key* pKey);   // 0x004e3e10
+};
+struct KeyListNode : RbNode {
+    uint32_t mPad10;                                // +0x10
+    uint32_t mPad14;                                // +0x14
+    uint32_t mPad18;                                // +0x18
+    Key      mKey;                                  // +0x1c
+};
+struct KeyCollector {
+    uint8_t mPad00[0x3c];
+    RbNode  mAnchor;                                // +0x3c
+    void CollectKeys(KeyVector* pOut);              // 0x00de7530
+};
+
+struct IntNode : RbNode {
+    int      mKey;                                  // +0x10
+    Handler* mpValue;                               // +0x14
+};
+struct IntMap {
+    uint32_t mPad00;                                // +0x00
+    RbNode   mAnchor;                               // +0x04
+    uint32_t mPad14;                                // +0x14
+    Handler** Slot(int* pKey);                      // 0x00de7630
+    void      Insert(RbNode** ppNode, RbNode* pWhere, const int* pKey, char* pFlag);   // 0x00de6a60
+};
+struct InsertResult {                               // the locals of 0x00de7630
+    RbNode*  mpNode;                                // +0x00
+    uint32_t mPad04;                                // +0x04
+    uint32_t mPad08;                                // +0x08
+    uint32_t mPad0c;                                // +0x0c
+    char     mFlag;                                 // +0x10
+    uint8_t  mPad11[3];
+    uint32_t mPad12;                                // +0x14
+};
+
+struct EffectNode : RbNode {
+    int       mKey;                                 // +0x10
+    RefObj*   mpEffect;                             // +0x14
+};
+struct GlobalMgr {
+    void Shutdown();                                // 0x00df9510
+};
+void  FUN_00de4850(void* pThis);                    // 0x00de4850
+void* FUN_00df5f40();                               // 0x00df5f40
+void  RemoveHandler(void* pServer, void* pTarget, uint* pTable, uint nCount, uint nZero);   // 0x00571db0
+void  FUN_00de5df0(void* pSet, void* pValue, char bFlag);  // 0x00de5df0
+
+struct SimTeardown {
+    uint8_t    mPad00[0x10];
+    void*      mpServer;                            // +0x10
+    void*      mpTarget;                            // +0x14
+    uint*      mpTable;                             // +0x18
+    uint       mCount;                              // +0x1c
+    uint       mZero;                               // +0x20
+    uint8_t    mPad24[0x124 - 0x24];
+    IntMap     mHandlers;                           // +0x124
+    uint8_t    mPad13c[0x160 - 0x13c];
+    RefObj*    mpC160;                              // +0x160
+    RefObj*    mpC164;                              // +0x164
+    RefObj*    mpC168;                              // +0x168
+    RefObj*    mpC16c;                              // +0x16c
+    RefObj*    mpC170;                              // +0x170
+    RefObj*    mpC174;                              // +0x174
+    uint8_t    mPad178[0x198 - 0x178];
+    RefObj*    mpC198;                              // +0x198
+    RefObj*    mpC19c;                              // +0x19c
+    RefObj*    mpC1a0;                              // +0x1a0
+    RefObj*    mpC1a4;                              // +0x1a4
+    RefObj*    mpC1a8;                              // +0x1a8
+    uint32_t   mPad1ac;                             // +0x1ac
+    RefObj*    mpC1b0;                              // +0x1b0
+    RefObj*    mGrid[9];                            // +0x1b4
+    RefObj**   mpVecBegin;                          // +0x1d8
+    RefObj**   mpVecEnd;                            // +0x1dc
+    uint8_t    mPad1e0[0x250 - 0x1e0];
+    RefObj*    mpC250;                              // +0x250
+    void Teardown();                                // 0x00de7eb0
+};
+
+static void ReleaseSlot(RefObj*& pSlot, int nVTableSlot)
+{
+    if (pSlot) {
+        RefObj* pOld = pSlot;
+        pSlot = 0;
+        if (nVTableSlot == 8)
+            pOld->s08(1);
+        else
+            pOld->Release();
+    }
+}
+
+RbNode* RBTreeIncrement(RbNode* pNode);             // 0x00921580
+void    RBTreeErase(RbNode* pNode, RbNode* pHeader); // 0x00921880
+void    operator_delete__(void* p);                 // 0x00f47380
+
+// @ 0x00de7200
+void ReadWorldMap(Reader* pReader, WorldMap* pMap)
+{
+    pMap->NukeSubtree(pMap->mAnchor.mpParent);
+    pMap->mAnchor.mpLeft = &pMap->mAnchor;
+    pMap->mAnchor.mpRight = &pMap->mAnchor;
+    pMap->mAnchor.mpParent = 0;
+    pMap->mAnchor.mColor = 0;
+    pMap->mPad14 = 0;
+
+    uint32_t nCount = 0;
+    void* pStream = pReader->GetHost()->GetStream();
+    ReadInt32(pStream, &nCount, 1, 0);
+
+    for (uint32_t i = 0; i < nCount; ++i) {
+        Key key;
+        Key value;
+        ReadKeyData(pReader, &key);
+        pReader->NextKey();
+        ReadKeyData(pReader, &value);
+        pReader->NextKey();
+
+        WorldNode* pNode = 0;
+        pMap->Insert(&pNode, &key, 0);
+        pNode->mValueA = value.a;
+        pNode->mValueB = value.b;
+        pNode->mValueC = value.c;
+    }
+    pReader->NextKey();
+}
+
+// @ 0x00de7330
+bool SerializeFeedback(FeedbackWriter* pWriter, const wchar_t* pName, FeedbackMap* pMap)
+{
+    if (pMap->mCount == 0)
+        return true;
+
+    const wchar_t* pKeyName = pName ? pName : L"";
+    pWriter->Begin(pKeyName);
+
+    bool bOk = true;
+    for (RbNode* pNode = pMap->mAnchor.mpRight; pNode != &pMap->mAnchor;
+         pNode = RBTreeIncrement(pNode)) {
+        if (bOk)
+            bOk = WriteKeyValue(pWriter, 0, &((FeedbackNode*)pNode)->mpValue,
+                                L"EA::ResourceMan::Key");
+        else
+            bOk = false;
+    }
+
+    pWriter->End(pKeyName);
+    return bOk;
+}
+
+// @ 0x00de74c0
+void FeedbackMap::EraseUintKey(uint32_t nKey)
+{
+    FeedbackNode* pNode = 0;
+    FindUintKey(&pNode, nKey);
+    if (pNode != (FeedbackNode*)&mAnchor) {
+        --mCount;
+        RbNode* pNext = RBTreeIncrement(pNode);
+        (void)pNext;
+        RBTreeErase(pNode, &mAnchor);
+        operator_delete__(pNode);
+    }
+
+    void* pFound = mKeyTree.Find(&nKey, 0);
+    if (pFound && pFound != &mKeyTree.mAnchor)
+        RemoveKeyEntry(nKey, &((FeedbackNode*)pFound)->mpValue);
+}
+
+// @ 0x00de7530
+void KeyCollector::CollectKeys(KeyVector* pOut)
+{
+    for (RbNode* pNode = mAnchor.mpRight; pNode != &mAnchor;
+         pNode = RBTreeIncrement(pNode)) {
+        Key* pKey = &((KeyListNode*)pNode)->mKey;
+        Key* pDst = pOut->mpEnd;
+        if (pDst < pOut->mpCap) {
+            pOut->mpEnd = pDst + 1;
+            if (pDst)
+                *pDst = *pKey;
+        } else {
+            pOut->DoInsertKey(pOut->mpEnd, pKey);
+        }
+    }
+}
+
+// @ 0x00de7590
+void* FeedbackMap::FindOrInsertKey(const Key* pKey)
+{
+    FeedbackNode* pNode = 0;
+    FindKey(&pNode, pKey);
+
+    bool bInsert = false;
+    if (pNode == (FeedbackNode*)&mAnchor) {
+        bInsert = true;
+    } else if (pKey->a != pNode->mKey.a) {
+        bInsert = pKey->a < pNode->mKey.a;
+    } else if (pKey->c != pNode->mKey.c) {
+        bInsert = pKey->c < pNode->mKey.c;
+    } else {
+        bInsert = pKey->b < pNode->mKey.b;
+    }
+
+    if (bInsert) {
+        FeedbackNode* pNew = 0;
+        InsertKey(&pNew, pNode, pKey, 0);
+        pNode = pNew;
+    }
+    return &pNode->mpValue;
+}
+
+// @ 0x00de7630
+Handler** IntMap::Slot(int* pKey)
+{
+    RbNode* pHeader = &mAnchor;
+    InsertResult res;
+    RbNode* pCandidate = pHeader;
+    RbNode* pNode = mAnchor.mpParent;
+    int nKey = *pKey;
+
+    while (pNode) {
+        if (((IntNode*)pNode)->mKey < nKey) {
+            pNode = pNode->mpLeft;
+        } else {
+            pCandidate = pNode;
+            pNode = pNode->mpRight;
+        }
+    }
+
+    if (pCandidate != pHeader && nKey >= ((IntNode*)pCandidate)->mKey)
+        return &((IntNode*)pCandidate)->mpValue;
+
+    res.mpNode = pNode;
+    res.mFlag = 0;
+    Insert(&res.mpNode, pCandidate, &nKey, &res.mFlag);
+    return &((IntNode*)res.mpNode)->mpValue;
+}
+
+// @ 0x00de7eb0
+void SimTeardown::Teardown()
+{
+    FUN_00de4850(this);
+    ReleaseSlot(mpC174, 4);
+    if (FUN_00df5f40())
+        ((GlobalMgr*)FUN_00df5f40())->Shutdown();
+    if (mpServer) {
+        void* pServer = mpServer;
+        mpServer = 0;
+        RemoveHandler(pServer, mpTarget, mpTable, mCount, mZero);
+    }
+    ReleaseSlot(mpC160, 4);
+    ReleaseSlot(mpC164, 4);
+    ReleaseSlot(mpC168, 4);
+    ReleaseSlot(mpC16c, 4);
+    ReleaseSlot(mpC170, 4);
+    ReleaseSlot(mpC250, 8);
+    for (RbNode* pNode = mHandlers.mAnchor.mpRight; pNode != &mHandlers.mAnchor;
+         pNode = RBTreeIncrement(pNode)) {
+        RefObj* pEffect = ((EffectNode*)pNode)->mpEffect;
+        if (!pEffect) continue;
+        pEffect->Stop();
+        pEffect->s08(1);
+    }
+    ReleaseSlot(mpC198, 4);
+    ReleaseSlot(mpC19c, 4);
+    ReleaseSlot(mpC1a0, 4);
+    ReleaseSlot(mpC1a4, 4);
+    ReleaseSlot(mpC1a8, 4);
+    for (RefObj** pp = mpVecBegin; pp != mpVecEnd; ++pp)
+        if (*pp) (*pp)->Release();
+    mpVecEnd = mpVecBegin;
+    ReleaseSlot(mpC1b0, 4);
+    for (int nRow = 0; nRow < 3; ++nRow)
+        for (int nCol = 0; nCol < 3; ++nCol)
+            ReleaseSlot(mGrid[nRow * 3 + nCol], 4);
 }
