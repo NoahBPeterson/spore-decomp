@@ -100,3 +100,64 @@ void ConeClip::Clip(float *out, float px, float py, float pz, float dx, float dy
         out[2] = oz + (pz - oz) * f;
     }
 }
+
+// ---------------------------------------------------------------- planet camera
+namespace SP {
+
+struct Vector3 { float x, y, z; };
+
+// Camera rig hung off the player inventory at +0x34.
+class cInventoryCamera {
+ public:
+  virtual void pv00(); virtual void pv01(); virtual void pv02(); virtual void pv03();
+  virtual void pv04(); virtual void pv05(); virtual void pv06(); virtual void pv07();
+  virtual void pv08(); virtual void pv09(); virtual void pv10();
+  virtual Vector3* GetPosition();   // +0x2c
+};
+
+class cPlayerInventory {
+ public:
+  char pad00[0x34];
+  cInventoryCamera mCamera;         // +0x34
+  char pad38[0x74c - 0x38];
+  bool mbCameraOverride;            // +0x74c
+  char pad74d[0x750 - 0x74d];
+  Vector3 mCameraOverridePos;       // +0x750
+};
+
+class cSPSimulatorSpaceGame {
+ public:
+  cPlayerInventory* GetPlayerInventory();   // 0x00a1ad60
+};
+
+cSPSimulatorSpaceGame* GetUFOSimulator();   // 0x00ffbe50
+
+// Game clock; bit 0 of the flags at +0x48 pauses the scripted camera.
+class cGameTimeManager {
+ public:
+  char pad00[0x48];
+  uint32_t mnFlags;                 // +0x48
+};
+cGameTimeManager* GameTimeManager();   // 0x00b3d380
+
+class cSPSpacePlanetCameraController {
+ public:
+  float GetCurrentZoom();           // 0x010187c0
+};
+
+// @ 0x010187c0
+// Distance of the planet camera from the inventory's camera anchor (or from the scripted
+// override position while the game clock is running).
+float cSPSpacePlanetCameraController::GetCurrentZoom()
+{
+  cPlayerInventory* pInventory = GetUFOSimulator()->GetPlayerInventory();
+  const Vector3* pPos;
+  if (pInventory->mbCameraOverride && (GameTimeManager()->mnFlags & 1) == 0) {
+    pPos = &pInventory->mCameraOverridePos;
+  } else {
+    pPos = pInventory->mCamera.GetPosition();
+  }
+  return sqrtf(pPos->x * pPos->x + pPos->y * pPos->y + pPos->z * pPos->z);
+}
+
+}  // namespace SP
