@@ -1,2 +1,6 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008cfd50/s008cfd50.cpp  ?GetUPEM@@YAGPAUsfntClass@@@Z  008ceb70  /O2 /MD /Gy /EHsc /TP
+slices/s008cfd50/s008cfd50.cpp  ?GetTableDirEntry_sfntClass@@YAPAUsfnt_DirectoryEntry@@PAUsfntClass@@H@Z  008cebe0  /O2 /MD /Gy /EHsc /TP
 slices/s008cfd50/s008cfd50.cpp  ?CacheKeyTables_sfntClass@@YAHPAUsfntClass@@PAUInputStream@@H@Z  008cffd0  /O2 /MD /Gy /EHsc /TP
+slices/s008cfd50/s008cfd50.cpp  ?ff_LoadCMAP@@YAXPAUsfntClass@@@Z  008d0a80  /O2 /MD /Gy /EHsc /TP
+slices/s008cfd50/s008cfd50.cpp  ?GetSfntClassGlyphIndex@@YAGPAUsfntClass@@H@Z  008d0b00  /O2 /MD /Gy /EHsc /TP

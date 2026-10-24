@@ -52,6 +52,7 @@ struct InputStream;
 #define tag_EBSC            0x45425343 /* 'EBSC' */
 #define tag_PostScript      0x706f7374 /* 'post' */
 #define tag_OS_2            0x4f532f32 /* 'OS/2' */
+#define tag_cmap            0x636d6170 /* 'cmap' */
 
 #define T2K_ERR_BAD_HMTX    10025
 
@@ -199,23 +200,60 @@ struct kernClass {
 struct T1Class {
     uint32_t pad00[0x30 / 4];
     int16 NumCharStrings;      // +0x030
-    uint16 pad32;
-    uint32_t pad34[(0x1e0 - 0x34) / 4];
+    uint16 pad32;              // +0x032
+    int16* codes;              // +0x034  per-glyph Adobe codes
+    int16* adobeCodes;         // +0x038
+    uint32_t pad3c[(0x1e0 - 0x3c) / 4];
     int32 upem;                // +0x1e0
 };
 
 struct CFFClass {
     uint32_t pad00[0xc / 4];
     int32 NumCharStrings;      // +0x00c
-    uint32_t pad10[(0x21c - 0x10) / 4];
+    uint16 charCodeToSID[256]; // +0x010
+    uint32_t pad210[(0x21c - 0x210) / 4];
     int32 upem;                // +0x21c
 };
 
+// Entry of the PFR character table (8 bytes each): code at +0x0.
+struct PFR_CmapEntry {
+    uint16 code;             // +0x0
+    uint16 f02;              // +0x2
+    uint32 rest;             // +0x4
+};
+
 struct PFRClass {
-    uint32_t pad00[0x108 / 4];
+    uint32_t pad00[0xc / 4];
+    PFR_CmapEntry* cmap;       // +0x00c  character table
+    uint32_t pad10[(0x108 - 0x10) / 4];
     int16 NumCharStrings;      // +0x108
-    uint16 pad10a;
+    uint16 pad10a;             // +0x10a
     int32 upem;                // +0x10c
+};
+
+// One 'cmap' encoding record (8 bytes each), pointed to by CMap2::table.
+struct CMap2_SubTable {
+    uint16 platformID;   // +0x0
+    uint16 encodingID;   // +0x2
+    uint32 offset;       // +0x4
+};
+
+// 'cmap' object; the char-index dispatcher keeps the currently probed format in +0x1a and a
+// small state in +0x20 (layout shared with 0x008cfcb0 cmap_char_index).
+struct CMap2 {
+    tsiMemObject* mem;             // +0x00
+    uint16 version;                // +0x04
+    int16 nTables;                 // +0x06
+    int32 numGlyphs;               // +0x08
+    CMap2_SubTable** table;        // +0x0c  array of sub-table records
+    uint8* data;                   // +0x10  loaded table data
+    int32 length;                  // +0x14
+    int16 selected;                // +0x18  selected sub-table index
+    uint16 format;                 // +0x1a  format of the selected sub-table
+    uint16 platformID;             // +0x1c
+    uint16 encodingID;             // +0x1e
+    uint16 f20;                    // +0x20
+    uint16 charIndex[10];          // +0x22  glyph indices of the characters '0'..'9'
 };
 
 struct ffstClass;
@@ -265,7 +303,7 @@ struct sfntClass {
     hheaClass* vhea;                     // +0x64
     hmtxClass* hmtx;                     // +0x68
     hmtxClass* vmtx;                     // +0x6c
-    void* cmap;                          // +0x70
+    CMap2* cmap;                         // +0x70
     kernClass* kern;                     // +0x74
     CFF_Class CFF;                       // +0x78
     DSIGClass DSIG;                      // +0x80
@@ -299,12 +337,14 @@ struct sfntClass {
 };
 
 extern "C" {
-void* tsi_AllocMem(tsiMemObject* mem, int32 size);
+void* tsi_AllocMem(tsiMemObject* mem, int32 size);                                 // 0x008d1260
 void tsi_DeAllocMem(tsiMemObject* mem, void* p);
-void tsi_Error(tsiMemObject* mem, int32 errCode);
-int32 ReadInt32(InputStream* in);
-int16 ReadInt16(InputStream* in);
-void Rewind_InputStream(InputStream* in);
+void tsi_Error(tsiMemObject* mem, int32 errCode);                                  // 0x008d10c0
+int32 ReadInt32(InputStream* in);                                                  // 0x008cc0f0
+int16 ReadInt16(InputStream* in);                                                  // 0x008cc190
+int16 PeekInt16(InputStream* in);                                                  // 0x008cc220
+int32 GetStreamLength(InputStream* in);                                            // 0x008cc2a0
+void Rewind_InputStream(InputStream* in);                                          // 0x008cc550
 void Seek_InputStream(InputStream* in, uint32 offset);
 InputStream* New_InputStream2(tsiMemObject* mem, InputStream* in, uint32 offset, uint32 length,
                               int32 unused, int* errCode);
@@ -325,6 +365,15 @@ ebscClass* New_ebscClass(tsiMemObject* mem, InputStream* in);                   
 void Delete_ebscClass(ebscClass* t);                                               // 0x008cd910 (ICF)
 T2KTTClass* New_T2KTTClass(tsiMemObject* mem, InputStream* in, sfntClass* font);   // 0x008cc770
 }
+
+// 'cmap' sub-table lookup (defined in slice s008cef90, 0x008cfcb0); __fastcall: code in ECX,
+// cmap in EDX.
+uint16 __fastcall cmap_char_index(uint32 code, CMap2* cmap);                        // 0x008cfcb0
+
+// Font backends used for glyph lookup when the corresponding table is present.
+extern "C" uint16 tsi_T1CodeToGlyphIndex(T1Class* t, int16 code);                  // 0x008b81a0
+extern "C" uint16 T2_CharCodeToGlyphIndex(CFFClass* t, uint16 code);               // 0x008bdfe0
+extern "C" uint16 FUN_008b3400(PFRClass* obj, int16 key);                          // 0x008b3400
 
 // ---------------------------------------------------------------- static table readers
 // (bodies of 0x008cdb00, 0x008cdb80, 0x008cd940, 0x008cdc50, 0x008cda70, 0x008cd6f0)
@@ -581,7 +630,8 @@ static kernClass* New_kernClass(tsiMemObject* mem, InputStream* in)
     return t;
 }
 
-// @ 0x008ceb70 (not in this slice) -- in the same TU, so cl knows which registers it clobbers
+// In the same TU as CacheKeyTables_sfntClass, so cl knows which registers it clobbers.
+// @ 0x008ceb70
 uint16 GetUPEM(sfntClass* t)
 {
     if (t->upem == 0) {
@@ -612,7 +662,8 @@ int32 GetNumGlyphs_sfntClass(sfntClass* t)
     return n;
 }
 
-// @ 0x008cebe0 (not in this slice; inlined at most call sites below)
+// Inlined at most call sites in the original TU.
+// @ 0x008cebe0
 sfnt_DirectoryEntry* GetTableDirEntry_sfntClass(sfntClass* t, int32 tag)
 {
     int i;
@@ -626,7 +677,8 @@ sfnt_DirectoryEntry* GetTableDirEntry_sfntClass(sfntClass* t, int32 tag)
 
 // ---------------------------------------------------------------- CacheKeyTables_sfntClass
 
-// @ 0x008cffd0 (static: t in ESI)
+// static: t in ESI
+// @ 0x008cffd0
 static int CacheKeyTables_sfntClass(sfntClass* t, InputStream* in, int32 logicalFontNumber)
 {
     sfnt_DirectoryEntry* dirEntry;
@@ -818,6 +870,164 @@ static int CacheKeyTables_sfntClass(sfntClass* t, InputStream* in, int32 logical
         t->lastCharCode = 0xffff;
     }
     return 1;
+}
+
+// ---------------------------------------------------------------- cmap
+
+// 'cmap' table loader.  Original convention: `in` in EAX, mem/platformID/platformSpecificID on
+// the stack.  Byte-exact only if a single caller (ff_LoadCMAP) lets cl pick that assignment.
+// @ 0x008cfd50
+static CMap2* New_cmapClass(tsiMemObject* mem, InputStream* in, uint16 platformID,
+                            uint16 platformSpecificID)
+{
+    CMap2* t;
+    int32 i;
+    int32 j;
+    uint8 c;
+
+    t = (CMap2*)tsi_AllocMem(mem, sizeof(CMap2));
+    t->mem = mem;
+    t->version = (uint16)ReadInt16(in);
+    t->nTables = ReadInt16(in);
+    t->numGlyphs = 0xffffff;
+    t->table = (CMap2_SubTable**)tsi_AllocMem(mem, t->nTables * 4);
+    for (i = 0; i < t->nTables; i++) {
+        t->table[i] = (CMap2_SubTable*)tsi_AllocMem(mem, 8);
+        t->table[i]->platformID = (uint16)ReadInt16(in);
+        t->table[i]->encodingID = (uint16)ReadInt16(in);
+        t->table[i]->offset = (uint32)ReadInt32(in);
+    }
+    Rewind_InputStream(in);
+    t->length = GetStreamLength(in);
+    t->data = (uint8*)tsi_AllocMem(mem, t->length);
+    PeekInt16(in);
+    t->selected = 0;
+    for (i = 0; i <= 4; i++) {
+        for (j = 0; j < t->nTables; j++) {
+            CMap2_SubTable* entry = t->table[j];
+            uint16 fmt = (uint16)((t->data[entry->offset] << 8)
+                                  | t->data[entry->offset + 1]);
+            if (i == 0) {
+                // First pass: honour the preferred platform/encoding pair.
+                if (fmt != 0 && fmt != 2 && fmt != 4 && fmt != 6 && fmt != 9999)
+                    continue;
+                bool platformMatch = entry->platformID == platformID;
+                bool encodingMatch = entry->encodingID == platformSpecificID;
+                if (platformMatch) {
+                    if (encodingMatch || platformSpecificID == 0xffff) {
+                        t->selected = (int16)j;
+                        i = 999;
+                        break;
+                    }
+                } else if (encodingMatch && platformID == 0xffff) {
+                    t->selected = (int16)j;
+                    i = 999;
+                    break;
+                }
+            } else if (i == 1) {
+                if (fmt != 0) continue;
+                t->selected = 0;
+                i = 999;
+                break;
+            } else if (i == 2) {
+                if (fmt != 2) continue;
+                t->selected = 0;
+                i = 999;
+                break;
+            } else if (i == 3) {
+                if (fmt != 4) continue;
+                t->selected = 0;
+                i = 999;
+                break;
+            } else {
+                if (fmt != 6 && fmt != 9999) continue;
+                t->selected = 0;
+                i = 999;
+                break;
+            }
+        }
+    }
+    i = t->selected;
+    t->format = (uint16)((t->data[t->table[i]->offset] << 8)
+                         | t->data[t->table[i]->offset + 1]);
+    t->platformID = t->table[i]->platformID;
+    t->encodingID = t->table[i]->encodingID;
+    if (t->format != 0 && t->format != 2 && t->format != 4 && t->format != 6
+        && t->format != 9999) {
+        tsi_Error(mem, 0x2725);
+    }
+    uint16* charIndex = t->charIndex;
+    for (c = '0'; c <= '9'; c++) {
+        uint16 index = cmap_char_index(c, t);
+        *charIndex = index;
+        if (index == 0)
+            *charIndex = 0xffff;
+        charIndex++;
+    }
+    return t;
+}
+
+// @ 0x008d0a80
+void ff_LoadCMAP(sfntClass* t)
+{
+    sfnt_DirectoryEntry* dirEntry;
+    InputStream* in2;
+
+    if (t->cmap != NULL)
+        return;
+    dirEntry = GetTableDirEntry_sfntClass(t, tag_cmap);
+    if (dirEntry == NULL)
+        return;
+    in2 = New_InputStream2(t->mem, t->in, dirEntry->offset, dirEntry->length, 0, NULL);
+    t->cmap = New_cmapClass(t->mem, in2, t->preferedPlatformID, t->preferedPlatformSpecificID);
+    t->cmap->numGlyphs = t->numGlyphs;
+    Delete_InputStream(in2, NULL);
+}
+
+// @ 0x008d0b00
+uint16 GetSfntClassGlyphIndex(sfntClass* t, int32 code)
+{
+    if (t->T1 != NULL)
+        return tsi_T1CodeToGlyphIndex(t->T1, (int16)code);
+    if (t->T2 != NULL && t->CFF.length == 0)
+        return T2_CharCodeToGlyphIndex(t->T2, (uint16)code);
+    if (t->PFR != NULL)
+        return FUN_008b3400(t->PFR, (int16)code);
+    ff_LoadCMAP(t);
+    if (t->cmap != NULL)
+        return cmap_char_index((uint32)code, t->cmap);
+    return 0;
+}
+
+// @ 0x008d0b60
+int IsFigure(sfntClass* t, uint16 code)
+{
+    uint16 i;
+    int32 n;
+
+    if (t->T1 != NULL) {
+        int32 v = t->T1->codes[code] - 0x30;
+        return (uint16)v <= 9;
+    }
+    if (t->T2 != NULL && t->CFF.length == 0) {
+        for (i = 0x30; i < 0x3a; i++) {
+            if (t->T2->charCodeToSID[i] == code)
+                return 1;
+        }
+        return 0;
+    }
+    if (t->PFR != NULL) {
+        int32 v = t->PFR->cmap[code].code - 0x30;
+        return (uint16)v <= 9;
+    }
+    ff_LoadCMAP(t);
+    if (t->cmap != NULL) {
+        for (n = 0; n < 10; n++) {
+            if (t->cmap->charIndex[n] == code)
+                return 1;
+        }
+    }
+    return 0;
 }
 
 // Stand-in for New_sfntClassLogical's two calls (0x008d0d39, 0x008d101a): makes cl emit
