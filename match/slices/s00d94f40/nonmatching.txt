@@ -1,0 +1,11 @@
+00d94f40 107 not reconstructed in this pass (CitizenTree helper); not byte-exact; size 0 vs 107; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d94fb0 101 not reconstructed in this pass (CitizenTree helper); not byte-exact; size 0 vs 101; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d95020 105 not reconstructed in this pass (ExtinguishBuilding_memory_block destructor, pool free path); not byte-exact; size 0 vs 105; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d95090 454 not reconstructed in this pass (SP::CitizenTree::RepairBuilding_Activate); not byte-exact; size 0 vs 454; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d95260 118 not reconstructed in this pass (SP::CitizenTree::RepairBuilding_Deactivate); not byte-exact; size 0 vs 118; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d952e0 718 not reconstructed in this pass (large CitizenTree helper); not byte-exact; size 0 vs 718; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d955b0 66 not reconstructed in this pass (creature action tail: release 6th-arg ref, SetSprinting(0), clear creature+0xfb8 byte 0xa51, insert FUN_00b3e5e0 into the +0xc0 callback vector); not byte-exact; size 0 vs 66; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d95600 120 not reconstructed in this pass (SP::CitizenTree::Policeman_Activate); not byte-exact; size 0 vs 120; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d95680 94 not reconstructed in this pass (CitizenTree helper); not byte-exact; size 0 vs 94; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d956e0 747 not reconstructed in this pass (SP::CitizenTree::CaptureReaction_Activate); not byte-exact; size 0 vs 747; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d959d0 616 not reconstructed in this pass (large CitizenTree helper); not byte-exact; size 0 vs 616; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
