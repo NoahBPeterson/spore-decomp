@@ -1,1 +1,2 @@
-# source (relative to match/)   symbol   original VA   [cl flags override]
+# source  symbol  original VA
+slices/s01070290/s01070290.cpp  ?resize@cFoodwebSlotVec@@QAEXI@Z  01070af0  /O2 /MD /Gy /TP /arch:SSE /GS-
