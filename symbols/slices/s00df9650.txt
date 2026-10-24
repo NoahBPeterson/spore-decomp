@@ -1,0 +1,20 @@
+00df9650  ?FUN_00df9650@GGUI@@QAEXXZ  # GGUI::FUN_00df9650 (re-enters the galaxy-game-entry screen) - byte-exact
+00df9770  ?FUN_00df9770@GGUI@@QAEXXZ  # GGUI::FUN_00df9770 - byte-exact
+00df97d0  ?FUN_00df97d0@GGUI@@QAEXXZ  # GGUI::FUN_00df97d0 - byte-exact
+00df97e0  ?FUN_00df97e0@GGUI@@QAEXXZ  # GGUI::FUN_00df97e0 (hides four nav windows) - byte-exact
+00df9850  ?FUN_00df9850@GGUI@@QAEXI@Z  # GGUI::FUN_00df9850 (slot -> resource image) - nonmatching/equivalent
+00df98f0  ?FUN_00df98f0@GGUI@@QAEXXZ  # GGUI::FUN_00df98f0 (refresh selected-resource image) - nonmatching/equivalent
+00df9990  ?FUN_00df9990@@YIXPAUGGUI@@@Z  # AdvancedLaunch wrapper (tag 0x7edf94a2, flag 1) - byte-exact
+00df9a00  ?FUN_00df9a00@@YIXPAUGGUI@@@Z  # AdvancedLaunch wrapper (tag 0x7edf94a2, flags 0/1) - byte-exact
+00df9a70  ?FUN_00df9a70@@YIXPAUGGUI@@@Z  # AdvancedLaunch wrapper (tag 0x8f6443b2) - byte-exact
+00df9ad0  ?FUN_00df9ad0@GGUI@@QAEXXZ  # GGUI::FUN_00df9ad0 - byte-exact
+00df9b30  ?FUN_00df9b30@GGUI@@QAEXH@Z  # GGUI::FUN_00df9b30 (update nav-control enable states) - byte-exact
+00df9be0  ?FUN_00df9be0@GGUI@@QAEXXZ  # GGUI::FUN_00df9be0 (commit slot, insert key, start frame timer) - nonmatching
+00df9c80  ?FUN_00df9c80@GGUI@@QAEXI@Z  # GGUI::FUN_00df9c80 (highlight a sub-window by id) - byte-exact
+00df9d20  ?FUN_00df9d20@GGUI@@QAEXPAX@Z  # GGUI::FUN_00df9d20 (apply a value triple) - nonmatching/equivalent
+00df9dc0  ?FUN_00df9dc0@GGUI@@QAEXIH@Z  # GGUI::FUN_00df9dc0 (fill the per-slot verb tray) - nonmatching/equivalent
+00df9e60  ?FUN_00df9e60@GGUI@@QAEXXZ  # GGUI::FUN_00df9e60 (step selection back) - nonmatching/equivalent
+00df9ef0  ?FUN_00df9ef0@GGUI@@QAEXXZ  # GGUI::FUN_00df9ef0 (step selection forward) - nonmatching/equivalent
+00df9fc0  ?FUN_00df9fc0@GGUI@@QAEXXZ  # GGUI::FUN_00df9fc0 (refresh all descriptor windows) - nonmatching
+00dfa370  ?FUN_00dfa370@@YAXXZ  # FUN_00dfa370 (random swarm spawn) - nonmatching
+00dfa460  ?FUN_00dfa460@GGUI@@QAEXPAHE@Z  # GGUI::FUN_00dfa460 (launch an asset with a summary object) - no source (partial)

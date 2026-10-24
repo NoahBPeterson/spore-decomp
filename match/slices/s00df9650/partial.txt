@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00dfa460  341  GGUI::FUN_00dfa460 - approximate: descriptor/vtable setup, the summary object fields and the AdvancedLaunch call are reproduced, but the original's swap of the current/previous summary-object pointer (local_4) and the paired release virtual calls are not; equiv UNSUPPORTED (1 unresolved reference: LAB_00ad0e52). flags /O2 /MD /Gy /TP /arch:SSE /GS-

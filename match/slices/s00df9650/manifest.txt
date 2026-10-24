@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00df9650/s00df9650.cpp  ?FUN_00df9650@GGUI@@QAEXXZ  00df9650  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00df9650/s00df9650.cpp  ?FUN_00df9770@GGUI@@QAEXXZ  00df9770  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00df9650/s00df9650.cpp  ?FUN_00df97d0@GGUI@@QAEXXZ  00df97d0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00df9650/s00df9650.cpp  ?FUN_00df97e0@GGUI@@QAEXXZ  00df97e0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00df9650/s00df9650.cpp  ?FUN_00df9990@@YIXPAUGGUI@@@Z  00df9990  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00df9650/s00df9650.cpp  ?FUN_00df9a00@@YIXPAUGGUI@@@Z  00df9a00  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00df9650/s00df9650.cpp  ?FUN_00df9a70@@YIXPAUGGUI@@@Z  00df9a70  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00df9650/s00df9650.cpp  ?FUN_00df9ad0@GGUI@@QAEXXZ  00df9ad0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00df9650/s00df9650.cpp  ?FUN_00df9b30@GGUI@@QAEXH@Z  00df9b30  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00df9650/s00df9650.cpp  ?FUN_00df9c80@GGUI@@QAEXI@Z  00df9c80  /O2 /MD /Gy /TP /arch:SSE /GS-
