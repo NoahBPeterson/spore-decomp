@@ -1,137 +1,292 @@
-// Slice s00f8e6c0 -- terrain-sphere ray cast against a cube-map heightfield (0x00f8e6c0).
-// Intersects the ray P + t*D with the shell between radii (base - scale*1.001) and
-// (base + scale*1.001) using FUN_00f884a0 (ray/sphere), then marches the ray in steps of 2.0 until
-// the point drops below the terrain radius (map height * scale + base), then bisects (<= 20 steps).
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-#include "types.h"
-#include <float.h>
-#include <math.h>
+// Slice s00f8e6c0 -- Simulator eastl vector constructors and vector<T>::insert(pos,n,value)
+// specialisations for 4-, 2- and 1-byte elements, plus the 4-byte grow helper.
+// Reconstructed from the retail object.
 
-struct FaceUV { float u, v; int face; };
-struct Vec3 { float x, y, z; Vec3() {} Vec3(const Vec3& o) { x = o.x; y = o.y; z = o.z; } };
+#include <string.h>
 
-namespace SP {
-struct cTerrainMapU16 {
-    float GetFloat(FaceUV* uv);   // 0x00f8d620 SP::cTerrainMap<unsigned short>::GetFloat
+typedef unsigned char  u8;
+typedef unsigned short u16;
+typedef unsigned int   u32;
+
+extern "C" void* operator_new(int size, int align, int a3, const char* a4,
+                              int a5, int a6, const char* file, int line); // 0xf473d0
+extern "C" void  operator_delete__(void* p);                                  // 0xf47380
+extern "C" void* eastl_fill(void* dst, const void* src, int nbytes);          // 0x11e0744 (memcpy)
+extern "C" void  eastl_set(void* dst, int value, int nbytes);                 // 0x11e073e (memset)
+
+#define ALLOC_FILE \
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
+
+// ---------------------------------------------------------------------------
+// Simulator compact-vector constructors (vtbl + six zeroed words)
+// ---------------------------------------------------------------------------
+struct SimVecHead {
+    void* m00;      // +0x00  vftable
+    int   m04;      // +0x04
+    int   m08;      // +0x08
+    int   m0c;      // +0x0c
+    int   m10;      // +0x10
+    int   m14;      // +0x14
+    int   m18;      // +0x18
 };
+
+// @ 0x00f8ee70
+extern "C" void* __fastcall FUN_00f8ee70(SimVecHead* self)
+{
+    self->m04 = 0;
+    self->m08 = 0;
+    self->m0c = 0;
+    self->m00 = (void*)0x1490020;
+    self->m10 = 0;
+    self->m14 = 0;
+    self->m18 = 0;
+    return self;
 }
 
-// 0x00f884a0 ray (P, D) vs sphere of radius r: t0/t1 roots; false if no hit
-bool __cdecl RaySphere(Vec3* p, Vec3* d, float r, float* t0, float* t1);   // 0x00f884a0
-
-static __forceinline const float& Max(const float& a, const float& b) { return (a < b) ? b : a; }
-static __forceinline const float& Min(const float& a, const float& b) { return (b < a) ? b : a; }
-
-// direction -> cube face index + (u, v) in [0,1]
-static __forceinline void DirToCubeInto(FaceUV& r, const Vec3& v)
+// @ 0x00f8ee90
+extern "C" void* __fastcall FUN_00f8ee90(SimVecHead* self)
 {
-    float x = v.x;
-    float y = v.y;
-    float z = v.z;
-    float ax = fabsf(x);
-    float ay = fabsf(y);
-    float az = fabsf(z);
-    if (az >= ax && az >= ay) {
-        r.u = (x / z + 1.0f) * 0.5f;
-        r.v = (y / az + 1.0f) * 0.5f;
-        if (z >= 0.0f) r.face = 0; else r.face = 1;
-    } else if (ay >= ax) {
-        r.u = (z / y + 1.0f) * 0.5f;
-        r.v = (x / ay + 1.0f) * 0.5f;
-        if (y >= 0.0f) r.face = 4; else r.face = 5;
+    self->m04 = 0;
+    self->m08 = 0;
+    self->m0c = 0;
+    self->m00 = (void*)0x1490028;
+    self->m10 = 0;
+    self->m14 = 0;
+    self->m18 = 0;
+    return self;
+}
+
+// @ 0x00f8eeb0
+extern "C" void* __fastcall FUN_00f8eeb0(SimVecHead* self)
+{
+    self->m04 = 0;
+    self->m08 = 0;
+    self->m0c = 0;
+    self->m00 = (void*)0x1490030;
+    self->m10 = 0;
+    self->m14 = 0;
+    self->m18 = 0;
+    return self;
+}
+
+// @ 0x00f8eed0
+extern "C" void* __fastcall FUN_00f8eed0(SimVecHead* self)
+{
+    self->m04 = 0;
+    self->m08 = 0;
+    self->m0c = 0;
+    self->m00 = (void*)0x1490038;
+    self->m10 = 0;
+    self->m14 = 0;
+    self->m18 = 0;
+    return self;
+}
+
+// ---------------------------------------------------------------------------
+// 4-byte grow helper: allocate n*4 bytes and copy [first,last)
+// ---------------------------------------------------------------------------
+// @ 0x00f8eef0
+extern "C" void* __fastcall FUN_00f8eef0(void* self, void*, int n,
+                                          const void* first, const void* last)
+{
+    void* p;
+    if (n) {
+        p = operator_new(n * 4, 0x80, 0, "Simulator", 0, 0, ALLOC_FILE, 0xe5);
     } else {
-        r.u = (y / x + 1.0f) * 0.5f;
-        r.v = (z / ax + 1.0f) * 0.5f;
-        r.face = 2;
-        if (!(x >= 0.0f)) r.face = 3;
+        p = 0;
     }
+    eastl_fill(p, first, (int)((const char*)last - (const char*)first));
+    return p;
 }
 
-static __forceinline FaceUV DirToCube(const Vec3& v)
+// ---------------------------------------------------------------------------
+// eastl::vector<u32>::insert(pos, n, value)
+// ---------------------------------------------------------------------------
+struct Vec4 {
+    u32* mpBegin;   // +0x00
+    u32* mpEnd;     // +0x04
+    u32* mpCap;     // +0x08
+};
+
+// @ 0x00f8ef50
+extern "C" void __fastcall FUN_00f8ef50(Vec4* self, void*, u32* pos,
+                                         unsigned int n, const u32* pvalue)
 {
-    FaceUV r;
-    DirToCubeInto(r, v);
-    return r;
-}
-
-// @ 0x00f8e6c0
-bool __cdecl TerrainRayCast(SP::cTerrainMapU16* map, float base, float scale,
-                            Vec3* origin, Vec3* dir, Vec3* out)
-{
-    float hi = scale * 1.001f + base;
-    float lo = base - scale * 1.001f;
-    Vec3 o = *origin;
-    Vec3 d = *dir;
-    float len2 = (o.y * o.y + o.x * o.x) + o.z * o.z;
-    if (lo * lo > len2)
-        return false;
-
-    FaceUV uv;
-    DirToCubeInto(uv, o);
-    float r = map->GetFloat(&uv) * scale + base;
-    if (r * r > len2)
-        return false;
-
-    float tmin = 0.0f;
-    float tmax = FLT_MAX;
-    float t0, t1;
-    if (!RaySphere(&o, &d, hi, &t0, &t1))
-        return false;
-    if (1e-6f > fabsf(t0 - t1))
-        return false;
-    tmin = Max(tmin, t0);
-    tmax = Min(tmax, t1);
-    if (RaySphere(&o, &d, lo, &t0, &t1) && tmin < t0)
-        tmax = Min(tmax, t0);
-
-    float len = sqrtf((d.x * d.x + d.y * d.y) + d.z * d.z);
-    float inv = 1.0f / len;
-    float nx = d.x * inv;
-    float ny = d.y * inv;
-    float nz = d.z * inv;
-    float t = len * tmin;
-    float tEnd = len * tmax + 2.0f;
-    float prev = t;
-    if (!(tEnd > t))
-        return false;
-
-    Vec3 p;
-    for (;;) {
-        p.x = nx * t + o.x;
-        p.y = ny * t + o.y;
-        p.z = nz * t + o.z;
-        uv = DirToCube(p);
-        float rr = map->GetFloat(&uv) * scale + base;
-        rr = rr * rr;
-        float pl = (p.x * p.x + p.z * p.z) + p.y * p.y;
-        if (rr >= pl)
-            break;
-        prev = t;
-        t = t + 2.0f;
-        if (!(tEnd > t))
-            return false;
-    }
-
-    float a = prev;
-    float b = t;
-    for (int i = 0; i < 20; i++) {
-        float mid = (b + a) * 0.5f;
-        p.x = nx * mid + o.x;
-        p.y = ny * mid + o.y;
-        p.z = nz * mid + o.z;
-        uv = DirToCube(p);
-        float rr = map->GetFloat(&uv) * scale + base;
-        rr = rr * rr;
-        float pl = (p.x * p.x + p.z * p.z) + p.y * p.y;
-        if (fabsf(rr - pl) < 0.01f)
-            break;
-        if (!(rr >= pl))
-            a = mid;
+    if (n > (unsigned int)(self->mpCap - self->mpEnd)) {
+        int size = (int)(self->mpEnd - self->mpBegin);
+        unsigned int newCap = (unsigned int)(size * 2);
+        if (size == 0)
+            newCap = 1;
+        unsigned int need = (unsigned int)size + n;
+        if (newCap <= need)
+            newCap = need;
+        u32* pNew;
+        if (newCap != 0)
+            pNew = (u32*)operator_new((int)(newCap * 4), 0x80, 0, "Simulator", 0, 0,
+                                      ALLOC_FILE, 0xe5);
         else
-            b = mid;
+            pNew = 0;
+        unsigned int off = (unsigned int)((char*)pos - (char*)self->mpBegin);
+        char* base = (char*)eastl_fill(pNew, self->mpBegin, (int)off);
+        u32* dst = (u32*)(base + off);
+        u32 v = *pvalue;
+        for (unsigned int i = 0; i < n; ++i)
+            dst[i] = v;
+        unsigned int tail = (unsigned int)((char*)self->mpEnd - (char*)pos);
+        char* newEnd = (char*)eastl_fill(dst + n, pos, (int)tail);
+        if (self->mpBegin != 0)
+            operator_delete__(self->mpBegin);
+        self->mpBegin = pNew;
+        self->mpEnd = (u32*)(newEnd + tail);
+        self->mpCap = (u32*)((char*)pNew + (int)(newCap * 4));
+    } else if (n != 0) {
+        u32 v = *pvalue;
+        unsigned int tailCount = (unsigned int)(self->mpEnd - pos);
+        if (n < tailCount) {
+            u32* src = self->mpEnd - n;
+            eastl_fill(self->mpEnd, src, (int)(n * 4));
+            self->mpEnd = (u32*)((char*)self->mpEnd + n * 4);
+            memmove(pos + n, pos, (int)((char*)src - (char*)pos));
+            for (u32* q = pos; q != pos + n; ++q)
+                *q = v;
+        } else {
+            u32* oldEnd = self->mpEnd;
+            unsigned int fill = n - tailCount;
+            for (unsigned int i = 0; i < fill; ++i)
+                self->mpEnd[i] = v;
+            self->mpEnd = (u32*)((char*)self->mpEnd + fill * 4);
+            eastl_fill(self->mpEnd, pos, (int)((char*)oldEnd - (char*)pos));
+            self->mpEnd = (u32*)((char*)self->mpEnd + tailCount * 4);
+            for (u32* q = pos; q != oldEnd; ++q)
+                *q = v;
+        }
     }
-    out->x = p.x;
-    out->y = p.y;
-    out->z = p.z;
-    return true;
+}
+
+// ---------------------------------------------------------------------------
+// eastl::vector<u16>::insert(pos, n, value)
+// ---------------------------------------------------------------------------
+struct Vec2 {
+    u16* mpBegin;   // +0x00
+    u16* mpEnd;     // +0x04
+    u16* mpCap;     // +0x08
+};
+
+// @ 0x00f8f130
+extern "C" void __fastcall FUN_00f8f130(Vec2* self, void*, u16* pos,
+                                         unsigned int n, const u16* pvalue)
+{
+    if (n > (unsigned int)(self->mpCap - self->mpEnd)) {
+        int size = (int)(self->mpEnd - self->mpBegin);
+        unsigned int newCap = (unsigned int)(size * 2);
+        if (size == 0)
+            newCap = 1;
+        unsigned int need = (unsigned int)size + n;
+        if (newCap <= need)
+            newCap = need;
+        u16* pNew;
+        if (newCap != 0)
+            pNew = (u16*)operator_new((int)(newCap * 2), 0x80, 0, "Simulator", 0, 0,
+                                      ALLOC_FILE, 0xe5);
+        else
+            pNew = 0;
+        unsigned int off = (unsigned int)((char*)pos - (char*)self->mpBegin);
+        char* base = (char*)eastl_fill(pNew, self->mpBegin, (int)off);
+        u16* dst = (u16*)(base + off);
+        u16 v = *pvalue;
+        for (unsigned int i = 0; i < n; ++i)
+            dst[i] = v;
+        unsigned int tail = (unsigned int)((char*)self->mpEnd - (char*)pos);
+        char* newEnd = (char*)eastl_fill(dst + n, pos, (int)tail);
+        if (self->mpBegin != 0)
+            operator_delete__(self->mpBegin);
+        self->mpBegin = pNew;
+        self->mpEnd = (u16*)(newEnd + tail);
+        self->mpCap = (u16*)((char*)pNew + (int)(newCap * 2));
+    } else if (n != 0) {
+        u16 v = *pvalue;
+        unsigned int tailCount = (unsigned int)(self->mpEnd - pos);
+        if (n < tailCount) {
+            u16* src = self->mpEnd - n;
+            eastl_fill(self->mpEnd, src, (int)(n * 2));
+            self->mpEnd = (u16*)((char*)self->mpEnd + n * 2);
+            memmove(pos + n, pos, (int)((char*)src - (char*)pos));
+            for (u16* q = pos; q != pos + n; ++q)
+                *q = v;
+        } else {
+            u16* oldEnd = self->mpEnd;
+            unsigned int fill = n - tailCount;
+            for (unsigned int i = 0; i < fill; ++i)
+                self->mpEnd[i] = v;
+            self->mpEnd = (u16*)((char*)self->mpEnd + fill * 2);
+            eastl_fill(self->mpEnd, pos, (int)((char*)oldEnd - (char*)pos));
+            self->mpEnd = (u16*)((char*)self->mpEnd + tailCount * 2);
+            for (u16* q = pos; q != oldEnd; ++q)
+                *q = v;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// eastl::vector<u8>::insert(pos, n, value)
+// ---------------------------------------------------------------------------
+struct Vec1 {
+    u8* mpBegin;    // +0x00
+    u8* mpEnd;      // +0x04
+    u8* mpCap;      // +0x08
+};
+
+// @ 0x00f8f330
+extern "C" void __fastcall FUN_00f8f330(Vec1* self, void*, u8* pos,
+                                         unsigned int n, const u8* pvalue)
+{
+    if (n > (unsigned int)(self->mpCap - self->mpEnd)) {
+        int size = (int)(self->mpEnd - self->mpBegin);
+        unsigned int newCap = (unsigned int)(size * 2);
+        if (size == 0)
+            newCap = 1;
+        unsigned int need = (unsigned int)size + n;
+        if (newCap <= need)
+            newCap = need;
+        u8* pNew;
+        if (newCap != 0)
+            pNew = (u8*)operator_new((int)newCap, 0x80, 0, "Simulator", 0, 0,
+                                     ALLOC_FILE, 0xe5);
+        else
+            pNew = 0;
+        unsigned int off = (unsigned int)(pos - self->mpBegin);
+        char* base = (char*)eastl_fill(pNew, self->mpBegin, (int)off);
+        u8* dst = (u8*)(base + off);
+        u8 v = *pvalue;
+        for (unsigned int i = 0; i < n; ++i)
+            dst[i] = v;
+        unsigned int tail = (unsigned int)(self->mpEnd - pos);
+        char* newEnd = (char*)eastl_fill(dst + n, pos, (int)tail);
+        if (self->mpBegin != 0)
+            operator_delete__(self->mpBegin);
+        self->mpBegin = pNew;
+        self->mpEnd = (u8*)(newEnd + tail);
+        self->mpCap = (u8*)((char*)pNew + (int)newCap);
+    } else if (n != 0) {
+        u8 v = *pvalue;
+        unsigned int tailCount = (unsigned int)(self->mpEnd - pos);
+        if (n < tailCount) {
+            u8* src = self->mpEnd - n;
+            eastl_fill(self->mpEnd, src, (int)n);
+            self->mpEnd = (u8*)((char*)self->mpEnd + n);
+            memmove(pos + n, pos, (int)((char*)src - (char*)pos));
+            for (u8* q = pos; q != pos + n; ++q)
+                *q = v;
+        } else {
+            u8* oldEnd = self->mpEnd;
+            unsigned int fill = n - tailCount;
+            for (unsigned int i = 0; i < fill; ++i)
+                self->mpEnd[i] = v;
+            self->mpEnd = (u8*)((char*)self->mpEnd + fill);
+            eastl_fill(self->mpEnd, pos, (int)((char*)oldEnd - (char*)pos));
+            self->mpEnd = (u8*)((char*)self->mpEnd + tailCount);
+            for (u8* q = pos; q != oldEnd; ++q)
+                *q = v;
+        }
+    }
 }
