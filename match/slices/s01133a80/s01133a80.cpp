@@ -719,9 +719,10 @@ bool __cdecl FUN_01134700(int p)
 // ---------------------------------------------------------------------------
 void __cdecl FUN_01134740(int a, int b, uint16_t* s, float* out, int stride)
 {
-	if (a >= b)
+	int i = a;
+	if (i >= b)
 		return;
-	for (int i = a; i < b; i++)
+	for (; i < b; i++)
 	{
 		uint16_t v = *s;
 		v = (uint16_t)((v >> 8) | (v << 8));
