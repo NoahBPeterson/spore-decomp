@@ -248,6 +248,7 @@ struct cSPUIAssetGrid {
     void ComputeCardLayoutParameters();         // 0x00650020
     bool FUN_650190(uint32_t msg, GridMessage* m);  // 0x00650190
     void FUN_650470();                          // 0x00650470
+    GridEntry* Find(AssetView* card);           // 0x006505d0 (card 0: the first entry)
 
     bool FUN_64e7d0(uint32_t idx);              // 0x0064e7d0 (this = grid)
     void FUN_64eb60(int idx, bool state);       // 0x0064eb60 (this = grid)
@@ -634,4 +635,27 @@ void cSPUIAssetGrid::FUN_650470() {
     rect.w = a[2];
     rect.h = mfCellSpacingY + lastY;
     mpWinFeedHeader->SetArea((float*)&rect);
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x006505d0
+// ---------------------------------------------------------------------------
+// Entry whose card is `card`, or 0; a null card selects entry 0 (index form kept: the original tests the found
+// index against -1 before scaling it).
+GridEntry* cSPUIAssetGrid::Find(AssetView* card) {
+    int index = -1;
+    if (card == 0) {
+        index = 0;
+    } else {
+        const int n = (int)(mpGridEnd - mpGridBegin);
+        for (int i = 0; i < n; ++i) {
+            if (mpGridBegin[i].mpCard == card) {
+                index = i;
+                break;
+            }
+        }
+    }
+    if (index == -1)
+        return 0;
+    return &mpGridBegin[index];
 }

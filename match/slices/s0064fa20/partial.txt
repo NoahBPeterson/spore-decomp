@@ -1,1 +1,0 @@
-006505d0  0  PARTIAL: definition lost in the part1 rewrite (row said:  58 cSPUIAssetGrid::Find(id): complete, branch/register layout differs); restore the source from commit 6691fe9d7

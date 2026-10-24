@@ -6,3 +6,4 @@
 00650020  316  cSPUIAssetGrid::ComputeCardLayoutParameters: complete; equiv PASS (279 valid, 67.7% cov); instruction scheduling differs
 00650190  631  cSPUIAssetGrid::FUN_650190 (DoMessage): complete (all four message arms and their callees present); equiv WEAK (399 valid, 15.0% cov); no mismatch, switch/register layout differs
 00650470  316  cSPUIAssetGrid::FUN_650470: complete; equiv WEAK (195 valid, 52.3% cov); no mismatch, frame/register layout differs
+006505d0  58  cSPUIAssetGrid::Find(card): complete (restored after the part1 rewrite dropped it; compares each entry's card at +0x10); equiv PASS (327 valid, 100.0% cov); original re-reads mpGridBegin and tail-merges the return-0 exit
