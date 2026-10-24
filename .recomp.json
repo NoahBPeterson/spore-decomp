@@ -1,0 +1,21 @@
+{
+  "$schema": "https://recomp.fyi/schema/v1.json",
+  "game": "Spore",
+  "wikidata": "Q210844",
+  "system": "PC (Windows)",
+  "type": "decomp",
+  "original": {
+    "region": "World",
+    "revision": "Steam release (SporeApp.exe, PE timestamp 2024-09-30)",
+    "serial": "17390"
+  },
+  "project": "spore-decomp",
+  "status": "in-progress",
+  "targets": ["Windows"],
+  "toolchain": ["MSVC 9.0", "Ghidra"],
+  "approach": "Per-function C++ compiled with the original MSVC 9.0, checked byte-for-byte or by differential tests",
+  "maintainers": [
+    { "name": "Noah Peterson", "link": "https://github.com/NoahBPeterson" }
+  ],
+  "notes": "Decompilation of SporeApp.exe. As of 2026-10-24: 69% of game functions byte-exact and 92% with compilable source; code is being moved from per-function slices into one source file per original object file. The repository contains no game code or data."
+}
