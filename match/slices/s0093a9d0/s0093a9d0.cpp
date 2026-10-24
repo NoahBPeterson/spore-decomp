@@ -47,7 +47,7 @@ public:
     virtual int         GetAvailable() const;        // +2c
     virtual int         Read(void* pData, size_t nSize);     // +30
     virtual bool        Flush();                     // +34
-    virtual int         Write(const void* pData, size_t nSize); // +38
+    virtual bool        Write(const void* pData, size_t nSize); // +38
 };
 
 // ---- StreamBuffer -----------------------------------------------------------
@@ -74,10 +74,10 @@ public:
     virtual int       GetAvailable() const;
     virtual int       Read(void* pData, size_t nSize);
     virtual bool      Flush();
-    virtual int       Write(const void* pData, size_t nSize);
+    virtual bool      Write(const void* pData, size_t nSize);
 
     bool FillWriteBuffer(const char* pData, size_type nSize);
-    bool FlushWriteBuffer();
+    __declspec(noinline) bool FlushWriteBuffer();
 
     IStream*  mpStream;                   // +04
     int       mnRefCount;                 // +08
@@ -114,7 +114,7 @@ public:
     virtual int       GetAvailable() const;
     virtual int       Read(void* pData, size_t nSize);
     virtual bool      Flush();
-    virtual int       Write(const void* pData, size_t nSize);
+    virtual bool      Write(const void* pData, size_t nSize);
 
     int       mnRefCount;        // +04
     int       mnAccessFlags;     // +08
@@ -140,7 +140,7 @@ public:
     virtual int       GetAvailable() const;
     virtual int       Read(void* pData, size_t nSize);
     virtual bool      Flush();
-    virtual int       Write(const void* pData, size_t nSize);
+    virtual bool      Write(const void* pData, size_t nSize);
 
     bool SetData(const void* pData, size_type nSize);
 
@@ -242,34 +242,33 @@ bool WriteString(IStream* pStream, const char* pStr, int count, int mode)
 {
     if (pStream->GetState() != 0)
         return false;
+
+    bool bResult(true);
+
     if (count == -1) {
         count = 0;
-        if (*pStr == 0)
-            goto done;
-        const char* p = pStr;
-        do {
-            p++;
-            count++;
-        } while (*p != 0);
+        const char* pCurrent = pStr;
+        while (*pCurrent++)
+            ++count;
     }
-    if (count != 0 && !pStream->Write(pStr, count))
-        return false;
-done:
-    if (mode == 1) {
-        if (count != 0) {
-            if (pStr[count - 1] == '\n')
-                return true;
-            if (pStr[count - 1] == '\r')
-                return true;
+
+    if (count)
+        bResult = pStream->Write(pStr, count);
+
+    if (bResult) {
+        if (mode == 1) {
+            if (!count || ((pStr[count - 1] != '\n') && (pStr[count - 1] != '\r')))
+                mode = 2;
         }
-    } else if (mode == 3) {
-        uint16 crlf = 0x0a0d;
-        return pStream->Write(&crlf, 2) != 0;
-    } else if (mode != 2) {
-        return true;
+        if (mode == 3) {
+            const char terminator[2] = { '\r', '\n' };
+            bResult = pStream->Write(terminator, sizeof(terminator));
+        } else if (mode == 2) {
+            const char terminator[1] = { '\n' };
+            bResult = pStream->Write(terminator, sizeof(terminator));
+        }
     }
-    char lf = 10;
-    return pStream->Write(&lf, 1) != 0;
+    return bResult;
 }
 
 // @ 0x0093ac80
@@ -292,23 +291,24 @@ int ReadString(IStream* pStream, char* pOut, int maxCount, int endian)
     if (pStream->GetState() != 0)
         return 0;
     int len = 0;
-    if (!EA::IO::ReadInt32(pStream, &len, 1, endian))
-        return -1;
-    if (pOut != 0) {
-        if ((uint32)(maxCount - 1) < (uint32)len) {
-            if (!ReadBytes(pStream, pOut, maxCount))
-                return -1;
-            pOut[maxCount - 1] = 0;
-            pStream->SetPosition(pStream->GetPosition(0), 0);
-        } else {
-            if (!ReadBytes(pStream, pOut, len))
-                return -1;
+    if (EA::IO::ReadInt32(pStream, &len, 1, endian)) {
+        bool ok;
+        if (pOut == 0) {
+            ok = pStream->SetPosition(pStream->GetPosition(0) - 4, 0);
+        } else if ((uint32)len <= (uint32)(maxCount - 1)) {
+            ok = ReadBytes(pStream, pOut, len);
             pOut[len] = 0;
+        } else {
+            ok = ReadBytes(pStream, pOut, maxCount);
+            pOut[maxCount - 1] = 0;
+            if (!ok)
+                return -1;
+            ok = pStream->SetPosition(pStream->GetPosition(0) + (len - maxCount), 0);
         }
-    } else {
-        pStream->SetPosition(pStream->GetPosition(0) + (len + 3u & 0xfffffffc), 0);
+        if (ok)
+            return len;
     }
-    return (int)len;
+    return -1;
 }
 
 // @ 0x0093adb0
@@ -588,33 +588,30 @@ bool StreamBuffer::Flush()
 // @ 0x0093b310
 bool StreamBuffer::FillWriteBuffer(const char* pData, size_type nSize)
 {
-    bool result = true;
-    if (nSize != 0) {
-        size_type used = mnWriteBufferUsed;
-        if (used == 0)
+    bool bReturnValue = true;
+    if (nSize > 0) {
+        if (mnWriteBufferUsed == 0)
             mnWriteBufferStartPosition = mnPositionInternal;
-        if ((size_type)(used + nSize) <= mnWriteBufferSize) {
-            MemCpyThunk(mpWriteBuffer + used, pData, nSize);
+        if ((mnWriteBufferUsed + nSize) <= mnWriteBufferSize) {
+            MemCpyThunk(mpWriteBuffer + mnWriteBufferUsed, pData, (size_t)nSize);
             mnWriteBufferUsed += nSize;
         } else {
-            while (result) {
-                size_type take = mnWriteBufferSize - mnWriteBufferUsed;
-                if ((size_type)nSize < take)
-                    take = nSize;
-                if (take != 0) {
-                    MemCpyThunk(mpWriteBuffer + mnWriteBufferUsed, pData, take);
-                    mnWriteBufferUsed += take;
-                    pData += take;
-                    nSize -= take;
+            while (nSize && bReturnValue) {
+                const size_type nSizeToBuffer =
+                    (mnWriteBufferSize - mnWriteBufferUsed < nSize)
+                        ? (mnWriteBufferSize - mnWriteBufferUsed) : nSize;
+                if (nSizeToBuffer) {
+                    MemCpyThunk(mpWriteBuffer + mnWriteBufferUsed, pData, (size_t)nSizeToBuffer);
+                    mnWriteBufferUsed += nSizeToBuffer;
+                    pData += nSizeToBuffer;
+                    nSize -= nSizeToBuffer;
                 }
                 if (mnWriteBufferUsed == mnWriteBufferSize)
-                    result = FlushWriteBuffer();
-                if (nSize == 0)
-                    break;
+                    bReturnValue = FlushWriteBuffer();
             }
         }
     }
-    return result;
+    return bReturnValue;
 }
 
 // @ 0x0093b3c0
@@ -665,10 +662,10 @@ bool StreamBuffer::Close()
 }
 
 // @ 0x0093b490
-int StreamBuffer::Write(const void* pData, size_t nSize)
+bool StreamBuffer::Write(const void* pData, size_t nSize)
 {
     if (mpStream == 0)
-        return 0;
+        return false;
     if (mnReadBufferUsed != 0) {
         mnReadBufferStartPosition = 0;
         mnReadBufferUsed = 0;
@@ -676,20 +673,20 @@ int StreamBuffer::Write(const void* pData, size_t nSize)
             mpStream->SetPosition(mnPositionExternal, 0);
     }
     if (mnWriteBufferSize != 0) {
-        int r = FillWriteBuffer((const char*)pData, nSize) ? 1 : 0;
+        bool r = FillWriteBuffer((const char*)pData, nSize);
         mnPositionExternal += nSize;
         return r;
     }
-    bool ok = mpStream->Write(pData, nSize) != 0;
+    bool ok = mpStream->Write(pData, nSize);
     if (ok) {
         mnPositionInternal += nSize;
         mnPositionExternal = mnPositionInternal;
-        return 1;
+        return true;
     }
     size_type pos = mpStream->GetPosition(0);
     mnPositionInternal = pos;
     mnPositionExternal = pos;
-    return 0;
+    return false;
 }
 
 // @ 0x0093b530

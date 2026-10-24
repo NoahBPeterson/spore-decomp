@@ -9,7 +9,6 @@
 0093af60  126  complete: SetBufferSizes, allocator call/loop scheduling differs
 0093b0a0  145  complete: StreamBuffer::SetPosition, scheduling differs
 0093b140  416  complete: StreamBuffer::Read, buffer-management schedule differs
-0093b310  152  complete: FillWriteBuffer, loop schedule differs
 0093b3c0  108  complete: SetStream, refcount/field ordering differs
 0093b450  38   complete: Close, field-store ordering differs
 0093b490  101  complete: Write, branch layout differs
