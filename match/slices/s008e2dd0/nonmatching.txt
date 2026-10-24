@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-008e3850  74  vector<AutoRefCount<Document>>::push_back; register/codegen differs (equiv FAIL: 5/19 valid inputs mismatched, execution)
+008e3850  61  vector<AutoRefCount<Document>>::push_back over the vector embedded at this+0x108: fast path (end < capacity -> *end=0, return old index) else grow via 0x00962210 called as a thiscall member with ecx = the vector object, then releases the temporary via its vtable slot 1; size 86 vs 87; register/codegen only (cl15 reuses the loaded end in esi instead of reloading [ecx+4]); flags /O2 /MD /Gy /EHsc /TP [equiv: PASS 283/400 valid, 90.9% coverage]
 008e3a70  69  basic_string<wchar_t>::erase; register allocation differs (equiv WEAK: 67% coverage; now a thiscall member)
 008e37e0  80  Document::Stylesheets; rebuilt via named fields (mbDocumentChanged@0x2c, mpDocumentElement@0x40, mStylesheets@0x50, mUserStylesheets@0xa8): erase + Fn8e2f30 merge + FindChildNodeByName(L"head")/Fn8e3660 restyle, clears mbDocumentChanged; size 80 vs 101; equiv FAIL (return value differs)
 008e3a10  80  path-trim helper (truncate last element at the previous '/'): backward scan + memmove + mpEnd shrink; size 81 vs 87; equiv UNSUPPORTED (original reads ebx/ecx register ABI)

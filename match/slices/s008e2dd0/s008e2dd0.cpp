@@ -312,7 +312,10 @@ void Doc::Fn8e3600(void* arg)
 // ===========================================================================
 // 0x008e3850  vector<AutoRefCount<Document>>::push_back -- returns index
 // ===========================================================================
-extern "C" void Fn962210(void* end, void** out);   // 0x00962210
+// 0x00962210  vector grow/insert helper; ecx = the vector object itself
+struct DocumentVec {
+    void Fn962210(void* end, void** out);
+};
 extern void* Fn8e28b0Thunk();
 
 // @ 0x008e3850
@@ -326,7 +329,7 @@ __declspec(noinline) int __fastcall Fn8e3850(void* pThis)
         *(int**)(base + 4) = end + 1;
         if (end) { *end = 0; return idx; }
     } else {
-        Fn962210(end, (void**)&local);
+        ((DocumentVec*)base)->Fn962210(end, (void**)&local);
         if (local) {
             void** vt = *(void***)local;
             typedef void (__fastcall *Fn)(void*);
