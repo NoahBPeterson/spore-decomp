@@ -1,2 +1,11 @@
 # va  diff-bytes  reason
-# (none) -- no non-exact function reached equiv PASS; all 10 are recorded in partial.txt.
+00b537f0  268  complete; sim high-LOD per-tick update (velocity/position/motion-type + AABB notify); size 325 vs 323; equiv UNSUPPORTED (unresolved CObj vcall refs)
+00b53940   52  complete; two-stage map lookup tail-calling d2e0; size 155 vs 154; equiv UNSUPPORTED (?find / ?d2e0 unresolved)
+00b539e0  134  complete; hashtable-driven dispatch (find -> 0xb4e1d0 + notify via 00b537f0); size 193 vs 183; equiv UNSUPPORTED (faults on every input)
+00b53aa0   60  complete; 16-char wide-name + _fcvt format from per-id table; size 126 vs 124; equiv UNSUPPORTED (faults / _fcvt import)
+00b53b20  111  complete; hash-bucket walk appending to an eastl wstring (gEmptyString16); size 141 vs 157; equiv UNSUPPORTED (_gEmptyString16 unresolved)
+00b54230  164  complete; hashtable/key update path (find + setPosition + d7e0); size 215 vs 201; equiv UNSUPPORTED (?find / ?setPosition / ?d7e0 unresolved)
+00b54340  184  complete; locomotion update (getMass/setMotionType/find/d2e0/d570); size 377 vs 378; equiv UNSUPPORTED (multiple unresolved refs)
+00b54640  152  complete; ?FUN_00b54640@C54640@@QAEHH@Z eastl fixed_pool + hashtable setup over this+0x43c, returns this; size 255 vs 259; equiv WEAK (130/200 valid inputs, no mismatch)
+00b54000  520  complete; hkAabbPhantom build/registration (hkMemory alloc 0xa0, ctor at +0x70, addPhantom, walk +0x90 overlaps via D961::Find, scale+setVec+notify, removePhantom); size 586 vs 506; equiv UNSUPPORTED (_sqrtf unresolved)
+00b53bc0  902  complete; symmetry-aware phantom query: hkBoxShape+hkConvexTranslateShape build, hkSimpleShapePhantom addPhantom, hkAllCdPointCollector query+sortPoints, per-point D961::Find/type-key scan, removePhantom + collector dealloc; size 1059 vs 1083; equiv UNSUPPORTED (0/400 valid inputs)

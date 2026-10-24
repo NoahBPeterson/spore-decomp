@@ -233,18 +233,223 @@ extern "C" void FUN_00b53b20(void)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00b53bc0  (approximate)
-extern "C" char FUN_00b53bc0(CObj* p, void* a2, void* a3, Vec4* a4, char a5)
+// Havok / entity types used by 00b53bc0.
+extern "C" void   FUN_00b3d350();                       // 0x00b3d350  SP::PlanetModel()
+
+extern "C" void*  FUN_010c05d0(const float* v, float f);// 0x010c05d0  hkBoxShape::hkBoxShape
+extern "C" void*  FUN_010bfeb0(void* self, const void* shape, const float* v); // 0x010bfeb0
+extern "C" void*  FUN_0108c750(void* self, void* shape, const void* xform, uint info); // 0x0108c750
+extern "C" void*  FUN_01083320(void* world, void* phantom);  // 0x01083320 hkWorld::addPhantom
+extern "C" void   FUN_0109ae60(void* self);             // 0x0109ae60 removeReference
+extern "C" void   FUN_010c2570(void* collector);        // 0x010c2570 hkAllCdPointCollector::sortPoints
+extern "C" void   FUN_01083400(void* world, void* phantom);  // 0x01083400 hkWorld::removePhantom
+extern "C" void   FUN_0107db10(void* mem, uint size, uint align);  // 0x0107db10 deallocateChunk
+extern "C" void*  TlsGetValue_fn(uint idx);             // [0x13cc2bc] kernel32!TlsGetValue
+extern "C" char   DAT_01569aba;                         // 0x01569aba  symmetry enabled flag
+extern "C" float  DAT_015ba104;                         // 0x015ba104  box hull thickness
+extern "C" float  DAT_01471064;                         // 0x01471064  one half
+extern "C" float  DAT_013f9428;                         // 0x013f9428
+extern "C" float  DAT_01461294;                         // 0x01461294
+extern "C" void*  HKMEM_S_INSTANCE;                     // 0x016e4178  hkMemory::s_instance
+extern "C" void*  HKWORLD_S_INSTANCE;                   // 0x0167ecd0  hkWorld::s_instance
+
+struct HkMemory {
+    virtual void* v00(); virtual void* v01();
+    virtual void* v02(); virtual void* v03();
+    virtual void* alloc(uint size, uint align);          // +0x10
+};
+
+// Candidate body reached through D961::Find; slot 3 is the type-key query.
+struct HkBodyKey {
+    virtual void* k00(); virtual void* k01(); virtual void* k02();
+    virtual void* match(const void* key);                // +0x0c
+};
+extern "C" void   FUN_00b55680(void*, void*, int);
+extern "C" int*   FUN_00496140(int* out, int which);    // 0x00496140  D961::Find (this = entity)
+
+// The editing entity returned by FUN_00b53940.
+struct EditEntity {
+    char  _pad00[0x1c];
+    void* mShape;        // +0x1c  fallback collideable shape
+    char  _pad20[0x58 - 0x20];
+    void* mBodyTransform; // +0x58  body transform (shape at +0x10)
+    int*  Find(int* out, int which);        // 0x00496140
+};
+typedef int* (EditEntity::*EditEntityFind)(int*, int);
+
+// hkSimpleShapePhantom -- only the query entry point this slice uses.
+struct HkPhantomQuery {
+    virtual void* q00(); virtual void* q01(); virtual void* q02();
+    virtual void* q03(); virtual void* q04(); virtual void* q05();
+    virtual void* q06(); virtual void* q07(); virtual void* q08();
+    virtual void* q09(); virtual void* q10(); virtual void* q11();
+    virtual void  query(const void* a, void* collector, int flag);   // +0x30
+};
+
+// hkAllCdPointCollector -- count at +0x14, point array at +0x10.
+struct HkPointCollector {
+    char  _pad00[0x08];
+    void* mVtable;       // +0x08
+    float mRadius;       // +0x0c
+    void* mPoints;       // +0x10
+    int   mCount;        // +0x14
+    char  _pad18[0x1c - 0x18];
+    int   mCapacity;     // +0x1c
+};
+struct HkCdPoint {
+    float mPos[3];       // +0x00 contact position
+    char  _pad0c[0x28 - 0x0c];
+    void* mBody;         // +0x28
+    char  _pad2c[0x30 - 0x2c];
+};
+
+// @ 0x00b53bc0  build a phantom around the entity body and scan its collideables
+extern "C" char FUN_00b53bc0(CObj* p, float* a2, float* a3, float* a4, char a5)
 {
-    (void)a2; (void)a3; (void)a4; (void)a5;
-    int e = FUN_00b53940(p);
-    if (e == 0)
+    FUN_00b3d350();                                     // SP::PlanetModel()
+    EditEntity* ent = (EditEntity*)FUN_00b53940(p);
+    if (ent == 0)
         return 0;
-    return 1;
+
+    float dir[4];                                       // local_1f0..local_1e4
+    dir[0] = a2[0]; dir[1] = a2[1]; dir[2] = a2[2]; dir[3] = 0.0f;
+    float origin[3];                                    // local_200..local_1f8
+    origin[0] = a3[0]; origin[1] = a3[1]; origin[2] = a3[2];
+
+    void* shape;                                        // local_1e0 result
+    if (DAT_01569aba != 0) {
+        float* bb = (float*)p->m26();                   // body AABB
+        float size[4];                                  // +0x60
+        size[0] = bb[3] - bb[0];
+        size[1] = bb[4] - bb[1];
+        size[2] = bb[5] - bb[2];
+        size[3] = 0.0f;
+
+        void* boxMem = ((HkMemory*)HKMEM_S_INSTANCE)->alloc(0x20, 0x24);
+        *(unsigned short*)((char*)boxMem + 4) = 0x20;
+        void* box = FUN_010c05d0(size, DAT_015ba104);   // hkBoxShape
+
+        float offset[4];                                // +0x20
+        offset[0] = 0.0f; offset[1] = 0.0f; offset[2] = 0.0f; offset[3] = 0.0f;
+        int fbuf[1];
+        int* found = ent->Find(fbuf, 6);
+        if (*found != 0) {
+            float* bb2 = (float*)p->m26();
+            offset[0] = (bb2[3] + bb2[0]) * DAT_01471064;
+            offset[1] = (bb2[4] + bb2[1]) * DAT_01471064;
+            offset[2] = (bb2[5] + bb2[2]) * DAT_01471064;
+            offset[3] = 0.0f;
+        }
+        void* convMem = ((HkMemory*)HKMEM_S_INSTANCE)->alloc(0x30, 0x24);
+        *(unsigned short*)((char*)convMem + 4) = 0x30;
+        shape = FUN_010bfeb0(convMem, box, offset);     // hkConvexTranslateShape
+        if (*(unsigned short*)((char*)box + 4) != 0 &&
+            (*(unsigned short*)((char*)box + 6) -= 1) == 0)
+            (**(void (***)(int))box)(1);
+    } else {
+        shape = ent->mShape;                            // +0x1c fallback
+    }
+
+    void* phMem = ((HkMemory*)HKMEM_S_INSTANCE)->alloc(0x130, 0x2e);
+    *(unsigned short*)((char*)phMem + 4) = 0x130;
+    void* phantom = FUN_0108c750(phMem, shape, (void*)((char*)ent->mBodyTransform + 0x10),
+                                 a5 != 0 ? 7u : 4u);
+    FUN_01083320(HKWORLD_S_INSTANCE, phantom);
+    FUN_0109ae60(phantom);
+
+    float sweep[4];                                     // hkVector4 at +0x70
+    sweep[0] = origin[0]; sweep[1] = origin[1]; sweep[2] = origin[2]; sweep[3] = 0.0f;
+
+    char collectorMem[0x2c];                            // hkAllCdPointCollector at +0x90
+    HkPointCollector* coll = (HkPointCollector*)collectorMem;
+    coll->mVtable = (void*)0x013ef55c;
+    coll->mRadius = DAT_01461294;
+    coll->mPoints = collectorMem + 0x24;                // local point array
+    coll->mCount = 0;
+    coll->mCapacity = 0x80000008;
+
+    ((HkPhantomQuery*)phantom)->query(dir, sweep, 0);   // virtual slot 12
+
+    char hit = 0;
+    if (coll->mCount > 0) {
+        int other = p != 0 ? p->m46(0x17f243b) : 0;
+        FUN_010c2570(coll);                             // sortPoints
+        for (int i = 0, off = 0; i < coll->mCount; ++i, off += 0x30) {
+            if (hit != 0)
+                break;
+            HkCdPoint* pt = (HkCdPoint*)((char*)coll->mPoints + off);
+            int id = *(int*)((char*)pt->mBody + 0x10);
+            int rbuf[1];
+            int* f = FUN_00496140(rbuf, 0);
+            void* cand = (*f == 3) ? *(void**)((char*)pt->mBody + id + 0xc) : 0;
+            if (cand != (void*)other && (cand == 0 || ((HkBodyKey*)cand)->match((void*)0xce9f6639) == 0)) {
+                if (a4 != 0) {
+                    a4[0] = pt->mPos[0];
+                    a4[1] = pt->mPos[1];
+                    a4[2] = pt->mPos[2];
+                }
+                hit = 1;
+            }
+        }
+    }
+
+    FUN_01083400(HKWORLD_S_INSTANCE, phantom);
+    if (DAT_01569aba != 0 && *(unsigned short*)((char*)shape + 4) != 0 &&
+        (*(unsigned short*)((char*)shape + 6) -= 1) == 0)
+        (**(void (***)(int))shape)(1);
+
+    ((HkPointCollector*)collectorMem)->mVtable = (void*)0x013ef55c;
+    {
+        uint cap = ((HkPointCollector*)collectorMem)->mCapacity;
+        if ((int)cap >= 0) {
+            TlsGetValue_fn(0);
+            FUN_0107db10(collectorMem + 0x18, (cap & 0x3fffffff) * 0x30, 0x14);
+        }
+    }
+    return hit;
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00b54000  (approximate)
+// Havok types used by 00b54000 (only the members this slice touches).
+extern "C" void* HKWORLD_S_INSTANCE;    // (declared above)
+extern "C" int   HKC_KEY_1186577;       // key object addressed by the caller's lookup below
+extern "C" int*  FUN_00496140(int* out, int which);   // 0x00496140  D961::Find
+extern "C" float sqrtf(float);
+
+struct HkPhantom {
+    void*          mVtable;        // +0x00
+    unsigned short mMemSize;       // +0x04
+    HkPhantom* construct(void* shape, uint filterInfo);  // 0x108dfe0 hkAabbPhantom::hkAabbPhantom
+    void       removeReference();                        // 0x109ae60
+};
+
+struct HkArray { int* mData; int mSize; int mCapacity; };   // +0x00
+
+struct HkAabbPhantom {
+    void*          mVtable;        // +0x00
+    unsigned short mMemSize;       // +0x04
+    char           _pad06[0x90 - 0x06];
+    HkArray        mOverlaps;      // +0x90
+};
+
+struct HkWorld {
+    void* addPhantom(void* phantom);        // 0x1083320
+    void  removePhantom(void* phantom);     // 0x1083400
+};
+
+struct HkCdBody {
+    virtual void*  v00(); virtual void* v01(); virtual void* v02();
+    virtual void*  lookup(const void* key);      // +0x0c
+    virtual void*  v04(); virtual void* v05(); virtual void* v06(); virtual void* v07();
+    virtual void*  v08(); virtual void* v09(); virtual void* v10();
+    virtual float* v11();                        // +0x2c
+    virtual void*  v12(); virtual void* v13();
+    virtual void   v14(float* v);                // +0x38
+    char           _pad[0x77 - 4];
+    char           mFlag77;                      // +0x77
+};
+
+// @ 0x00b54000  build + register an hkAabbPhantom, then touch each child
 extern "C" void FUN_00b54000(CObj* p, int a2)
 {
     if (a2 == 0) {
@@ -256,7 +461,48 @@ extern "C" void FUN_00b54000(CObj* p, int a2)
         if (a2 == 0)
             return;
     }
-    (void)p; (void)a2;
+
+    HkPhantom* mem = (HkPhantom*)((HkMemory*)HKMEM_S_INSTANCE)->alloc(0xa0, 0x2e);
+    mem->mMemSize = 0xa0;
+    HkAabbPhantom* ph = (HkAabbPhantom*)mem->construct((void*)(a2 + 0x70), 8);
+    ((HkWorld*)HKWORLD_S_INSTANCE)->addPhantom(ph);
+    mem->removeReference();
+
+    int buf[6];
+    int key = 0;
+    for (int i = 0; i < ph->mOverlaps.mSize; ++i) {
+        int child = ph->mOverlaps.mData[i];
+        child = *(int*)((char*)child + 0x10) + child;
+        if (child == 0)
+            continue;
+        int* f = FUN_00496140(buf, 0);
+        if (*f != 3)
+            continue;
+        int* o = FUN_00496140(buf + 2, 1);
+        HkCdBody* body = (HkCdBody*)*o;
+        if (body == 0)
+            continue;
+        HkCdBody* res = (HkCdBody*)body->lookup(&key);
+        if (res == 0 || res->mFlag77 == 0)
+            continue;
+
+        float* bb = (float*)p->m11();                    // body bounding box
+        float x = bb[0], y = bb[1], z = bb[2];
+        float extra = p->m28();                          // +0x70
+        float* rb = (float*)res->v11();
+        float s = (float)(double)(extra + sqrtf(x * x + y * y + z * z))
+                  / sqrtf(rb[0] * rb[0] + rb[1] * rb[1] + rb[2] * rb[2]);
+        float* rb2 = (float*)res->v11();
+        float v[3];
+        v[0] = rb2[0] * s;
+        v[1] = rb2[1] * s;
+        v[2] = rb2[2] * s;
+        res->v14(v);
+        FUN_00b539e0(res);
+        FUN_00b55680(res, (void*)child, 1);
+    }
+    if (ph != 0)
+        ((HkWorld*)HKWORLD_S_INSTANCE)->removePhantom(ph);
 }
 
 // ---------------------------------------------------------------------------
@@ -416,9 +662,70 @@ extern "C" bool __stdcall FUN_00b545b0(S12* p)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00b54640  (approximate)
-struct C54640 { int FUN_00b54640(int); };
-int C54640::FUN_00b54640(int a)
+// @ 0x00b54640  member: eastl pool + hashtable setup over this+0x43c, returns this
+extern "C" void* FUN_00921340(int a);                 // 0x00921340
+extern "C" const float F_013f0620;                    // 0x013f0620
+extern "C" const float F_01470f1c;                    // 0x01470f1c
+
+// eastl::fixed_pool_base -- only the two methods this slice calls.
+struct FixedPool {
+    void* mpHead;                                             // +0x00
+    void  FUN_00921260(void* mem, uint size, int a, int b, int c);  // 0x00921260 init
+    uint  FUN_009213c0(void* p);                              // 0x009213c0
+};
+
+struct C54640 {
+    char  _pad0[0x08];
+    uint  m08;                    // +0x08
+    void* m0c;                    // +0x0c
+    float m10;                    // +0x10
+    float m14;                    // +0x14
+    float m18;                    // +0x18
+    char  _pad1[0x34 - 0x1c];
+    char  m34[0x10];              // +0x34
+    char  m44[0x43c - 0x44];
+    char  m43c[0xc00];            // +0x43c  pool storage
+    char  m103c[0x04];            // +0x103c
+    int   FUN_00b54640(int a2);
+    void  FUN_00b516d0(void* a, void* b, void* c, void* d, void* e, void* f,
+                       void* g);                                 // 0x00b516d0
+    void  FUN_00b5d220(uint n);                                  // 0x00b5d220
+    void  FUN_00b53410(int a, int* b, int c, int* d);            // 0x00b53410
+};
+
+int C54640::FUN_00b54640(int a2)
 {
-    return (int)this + a;
+    char pool[0x18];
+    FixedPool* fp = (FixedPool*)pool;
+    fp->mpHead = 0;
+    fp->FUN_00921260(m43c, 0xc00, 0xc, 4, 0);
+
+    char* hdr = pool + 0x08;                       // {begin, end, cap, tail} descriptor
+    *(void**)(hdr + 0x00) = m43c;
+    *(void**)(hdr + 0x04) = m43c + 0xc00;
+    *(int*)(hdr + 0x08) = 0x0c;
+    *(void**)(hdr + 0x0c) = m34;
+
+    void* v = FUN_00921340(0x101);
+    FUN_00b516d0(v, &a2, &a2, &a2, &a2, &a2, pool);
+
+    *(float*)(pool + 0) = F_013f0620;
+    *(float*)(pool + 4) = F_01470f1c;
+    m10 = F_013f0620;
+    m14 = F_01470f1c;
+    *(void**)(hdr + 0x00) = 0;
+    m18 = 0.0f;
+
+    uint n = fp->FUN_009213c0(m0c);
+    if (n > m08) FUN_00b5d220(n);
+
+    int* p5 = *(int**)(a2 + 4);
+    int* e = p5 + *(int*)(a2 + 8);
+    int v1 = *e;
+    int v6 = *p5;
+    if (v6 == 0) {
+        do { p5 = p5 + 1; v6 = *p5; } while (v6 == 0);
+    }
+    FUN_00b53410(v6, p5, v1, e);
+    return (int)this;
 }
