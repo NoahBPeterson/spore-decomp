@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00dc8d10  440  cMovingFormation vehicle tick/list walk (largest of the small group); not emitted
+00dc8ed0  92  eastl::hashtable<...>::operator= -- copy-and-swap: out-of-line copy ctor 0x00dc8a60 and swap 0x00dc8ba0, then the inlined bucket-array destructor (0x00ba2980 release call plus operator delete[] via 0x00f47380 when the bucket count is > 1); hashtable member layout not recoverable from this VA alone; not emitted
+00dc8f30  1269  cMovingFormation formation tick (largest routine in the slice); not emitted
+00dc9430  369  `anonymous_namespace'::AttemptRepark (repark candidate search over the formation list); not emitted
+00dc95e0  157  repark distance check (x87 sqrt/compare path: sub-object at +0x34 vtable 0xc8 then 0x2c, 0x00c9e8a0 sample calls, AttemptRepark when the distance leaves the interval); not emitted
+00dc96f0  121  entity/message handler: formation sub-objects at +0x34 and +0x508 used through vtable slots 0x2c/0x50/0xc4, a 6th stack argument holding an AutoRefCount pointer (slot 0x2c predicate then Release slot 4), tail call 0x00c9ee50; not emitted
