@@ -46,20 +46,28 @@ void*__cdecl cSPUILayout_FindWindowByID(void* layout, int id, int b);
 // generic nuke on a rbtree node
 void __cdecl DoNukeSubtree(int node);
 
+// ABI views of the callees (the slice's globals hold the object bases).
+struct KeyNode   { void __thiscall FUN_01012f30(void* a); };      // 0x01012f30 (this = node+0x10)
+struct TreeFind  { int* __thiscall FUN_00ec9530(int* key); };     // 0x00ec9530 (this = map+0x18)
+struct TreeFind2 { int* __thiscall FUN_00ec9820(int* key); };     // 0x00ec9820 (this = map+0x50)
+// 6-arg debug allocator operator new(size, name, flags, debugFlags, file, line)
+void* __cdecl FUN_00f473a0(unsigned size, const char* name, int a, int b, const char* file, int line);
+
 // ------------------------------------------------------------------ 0x00ec8d20
 // @ 0x00ec8d20
 void FUN_00ec8d20(int param_1)
 {
-    int local_8 = 7;
+    int pair[2];
+    pair[0] = 7;
     unsigned u = 0;
     do {
         int* p = *(int**)(param_1 + 4);
-        int local_4 = g_14892a8[u / 4];
+        pair[1] = g_14892a8[u / 4];
         if (p < *(int**)(param_1 + 8)) {
             *(int**)(param_1 + 4) = p + 2;
-            if (p) { p[0] = local_8; p[1] = local_4; }
+            if (p) { p[0] = pair[0]; p[1] = pair[1]; }
         } else {
-            FUN_00b534c0(p, &local_8);
+            ((VecInsert*)param_1)->insert(p, pair);
         }
         u += 4;
     } while (u < 0xc);
@@ -117,21 +125,26 @@ void FUN_00ec8e50(int param_1, int param_2)
 }
 
 // ------------------------------------------------------------------ 0x00ec8ed0
-struct Vec32 { int first; int last; void Resize(unsigned n); };
+struct Vec32 {
+    int* begin;   // +0x00
+    int* end;     // +0x04
+    int* cap;     // +0x08
+    void Resize(unsigned n);                          // 0x00ec8ed0
+    void* FUN_00899420(void* first, void* last);      // 0x00899420 vector::erase (thiscall)
+    void FUN_00ec7d00(void* end, unsigned n, void* val);  // 0x00ec7d00 (thiscall grow)
+};
 
 // @ 0x00ec8ed0
 void Vec32::Resize(unsigned n)
 {
-    int* v = (int*)this;
-    int base = *v;
-    if ((unsigned)(v[1] - base) >> 5 < n) {
-        char tmp[0x20];
-        for (int i = 0; i < 0x20; ++i) tmp[i] = 0;
-        FUN_00ec7d00((void*)v[1], n - ((v[1] - base) >> 5), tmp);
+    int cap = (int)((char*)end - (char*)begin) >> 5;
+    if ((unsigned)n > (unsigned)cap) {
+        int tmp[8];
+        for (int i = 0; i < 8; ++i) tmp[i] = 0;
+        FUN_00ec7d00((void*)end, n - cap, tmp);
         return;
     }
-    // keep first n elements (copy_impl truncated)
-    v[1] = base + n * 0x20;
+    FUN_00899420((char*)begin + n * 0x20, end);
 }
 
 // ------------------------------------------------------------------ 0x00ec8f40
@@ -166,31 +179,33 @@ void FUN_00ec8f40(int* p)
 
 // ------------------------------------------------------------------ 0x00ec90c0
 // @ 0x00ec90c0
-void __fastcall FUN_00ec90c0(char* p)
+void* __fastcall FUN_00ec90c0(char* p)
 {
     *(int*)(p + 4) = 0; *(int*)(p + 8) = 0; *(int*)(p + 0xc) = 0;
-    *(int*)(p + 0x20) = 0; *(int*)(p + 0x24) = 0; *(int*)(p + 0x24) = 0;
-    *(char*)(p + 0x28) = 0; *(int*)(p + 0x2c) = 0;
+    *(int*)(p + 0x20) = 0; *(int*)(p + 0x24) = 0; *(int*)(p + 0x28) = 0;
+    *(int*)(p + 0x24) = 0; *(char*)(p + 0x28) = 0; *(int*)(p + 0x2c) = 0;
     *(int*)(p + 0x1c) = (int)(p + 0x1c);
     *(int*)(p + 0x20) = (int)(p + 0x1c);
-    *(int*)(p + 0x3c) = 0; *(int*)(p + 0x40) = 0; *(int*)(p + 0x40) = 0;
-    *(char*)(p + 0x44) = 0; *(int*)(p + 0x48) = 0;
+    *(int*)(p + 0x3c) = 0; *(int*)(p + 0x40) = 0; *(int*)(p + 0x44) = 0;
+    *(int*)(p + 0x40) = 0; *(char*)(p + 0x44) = 0; *(int*)(p + 0x48) = 0;
     *(int*)(p + 0x38) = (int)(p + 0x38);
     *(int*)(p + 0x3c) = (int)(p + 0x38);
-    *(int*)(p + 0x58) = 0; *(int*)(p + 0x5c) = 0; *(int*)(p + 0x54) = (int)(p + 0x54);
+    *(int*)(p + 0x58) = 0; *(int*)(p + 0x5c) = 0; *(int*)(p + 0x60) = 0;
+    *(int*)(p + 0x54) = (int)(p + 0x54);
     *(int*)(p + 0x58) = (int)(p + 0x54);
     *(int*)(p + 0x5c) = 0; *(char*)(p + 0x60) = 0; *(int*)(p + 0x64) = 0;
     *(int*)(p + 0x70) = (int)(p + 0x70);
     *(int*)(p + 0x74) = 0; *(int*)(p + 0x78) = 0; *(int*)(p + 0x7c) = 0;
     *(int*)(p + 0x74) = (int)(p + 0x70);
     *(int*)(p + 0x78) = 0; *(char*)(p + 0x7c) = 0; *(int*)(p + 0x80) = 0;
+    return p;
 }
 
 // ------------------------------------------------------------------ 0x00ec9140
-struct RbTree { void Insert(int* param_2, int param_3, int* param_4, char param_5); };
+struct RbTree { int* Insert(int* param_2, int param_3, int* param_4, char param_5); };
 
 // @ 0x00ec9140
-void RbTree::Insert(int* param_2, int param_3, int* param_4, char param_5)
+int* RbTree::Insert(int* param_2, int param_3, int* param_4, char param_5)
 {
     int param_1 = (int)this;
     unsigned dir;
@@ -198,12 +213,13 @@ void RbTree::Insert(int* param_2, int param_3, int* param_4, char param_5)
         dir = 1;
     else
         dir = 0;
-    int node = (int)operator new(0x28);
-    if (node != -0x10)
-        FUN_01012f30(param_4);
+    int node = (int)FUN_00f473a0(0x28, (const char*)0x13f09b4, 0, 0, (const char*)0x13ebb38, 0xd1);
+    if ((char*)node + 0x10)
+        ((KeyNode*)((char*)node + 0x10))->FUN_01012f30(param_4);
     RBTreeInsert(node, param_3, param_1 + 4, dir);
     *(int*)(param_1 + 0x14) += 1;
     *param_2 = node;
+    return param_2;
 }
 
 // ------------------------------------------------------------------ 0x00ec9250
@@ -314,8 +330,9 @@ int* FUN_00ec9530(int param_1, int* param_2)
 long long FUN_00ec95f0(int param_1, int param_2)
 {
     if (param_2 != -1) {
-        int x = *(int*)(*(int*)(g_16c757c + 4) + param_1 * 4);
-        int* p = FUN_00ec9530((int)&x, (int*)&param_2);
+        int* ids = *(int**)((char*)g_16c757c + 4);
+        int id = ids[param_1];
+        int* p = ((TreeFind*)((char*)g_16c757c + 0x18))->FUN_00ec9530(&id);
         int iVar1 = *p;
         if (iVar1 != p[1]) {
             long long r;
@@ -330,15 +347,28 @@ long long FUN_00ec95f0(int param_1, int param_2)
 // @ 0x00ec9640
 long long FUN_00ec9640(int param_1, int param_2)
 {
-    return FUN_00ec95f0(param_1, param_2);
+    if (param_2 != -1) {
+        int* ids = *(int**)((char*)g_16c757c + 4);
+        int id = ids[param_1];
+        int* p = ((TreeFind*)((char*)g_16c757c + 0x34))->FUN_00ec9530(&id);
+        int iVar1 = *p;
+        if (iVar1 != p[1]) {
+            long long r;
+            ((int*)&r)[0] = *(int*)(iVar1 + param_2 * 8);
+            ((int*)&r)[1] = *(int*)(iVar1 + 4 + param_2 * 8);
+            return r;
+        }
+    }
+    return -1;
 }
 
 // ------------------------------------------------------------------ 0x00ec9690 / 0x00ec96f0
 // @ 0x00ec9690
 void FUN_00ec9690(int param_1, int param_2)
 {
-    int x = *(int*)(*(int*)(g_16c757c + 4) + param_1 * 4);
-    int* p = FUN_00ec9530((int)&x, &x);
+    int* ids = *(int**)((char*)g_16c757c + 4);
+    int id = ids[param_1];
+    int* p = ((TreeFind*)((char*)g_16c757c + 0x18))->FUN_00ec9530(&id);
     int iVar3 = *p;
     int i = 0;
     int n = (p[1] - iVar3) >> 3;
@@ -421,9 +451,9 @@ void FUN_00ec9a80(int param_1, int param_2)
 // @ 0x00ec9ae0
 int FUN_00ec9ae0(int param_1, int param_2)
 {
-    int id = *(int*)(*(int*)(g_16c757c + 4) + param_1 * 4);
-    int* p = FUN_00ec9820((int)&id, &id);
-    int* v = (int*)*p;
+    int id = (*(int**)((char*)g_16c757c + 4))[param_1];
+    int* p = ((TreeFind2*)((char*)g_16c757c + 0x50))->FUN_00ec9820(&id);
+    int* v = *(int**)p;
     int n = (p[1] - (int)v) >> 2;
     for (int i = 0; i < n; ++i)
         if (v[i] == param_2)

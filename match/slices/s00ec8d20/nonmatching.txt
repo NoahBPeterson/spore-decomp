@@ -1,12 +1,12 @@
 # va  diff-bytes  reason
-00ec8d20   44  complete pair-emit loop; data/loop scheduling differs; equiv: FAIL (ours faults in unresolved callee FUN_00b534c0)
+00ec8d20   69  complete pair-emit loop; calls the __thiscall VecInsert owner (ECX) with an adjacent k/v pair; equiv: WEAK (176 valid, 0 mismatch, 100% coverage; min_valid 200 unreachable because most random owner pointers fault)
 00ec8d80  119  complete pair-emit loops; callee FUN_00b534c0 is __thiscall (owner in ECX) and reads the value pair from the pointer it is given, so the source now calls a VecInsert member with an adjacent k/v pair. equiv: WEAK (137 valid, 0 mismatch, 100% coverage; min_valid 200 unreachable because most random owner pointers fault). flags /O2 /MD /Gy /EHsc /TP
-00ec8ed0   69  complete vector resize; copy_impl truncation inlined differently; equiv: FAIL (equiv, now member Vec32::Resize)
-00ec90c0   65  complete intrusive-list initializer; store order differs; equiv: FAIL (equiv: pool init value differs)
-00ec9140   61  complete rbtree insert; node/arg scheduling differs; equiv: FAIL (equiv, now member RbTree::Insert)
+00ec8ed0   70  complete vector resize; signed cap and __thiscall grow/erase callees; equiv: PASS (not byte-exact: tmp-buffer init and loop scheduling)
+00ec90c0  113  complete intrusive-list initializer; returns the object and matches the original store order; equiv: PASS (our code is shorter -- cl folds some of the original's redundant stores)
+00ec9140   16  complete rbtree insert; 6-arg EA debug new, key ctor with this=node+0x10, returns the out slot; equiv: WEAK (185 valid, 0 mismatch, 100% coverage)
 00ec9250   52  complete rbtree teardown; subtree offset scheduling differs; equiv: UNSUPPORTED (unresolved refs DoNukeSubtree, operator delete)
 00ec94d0   50  complete shutdown; refcount release scheduling differs; equiv: UNSUPPORTED (unresolved ref operator delete)
-00ec95f0   50  complete map pair lookup; frame/scheduling differs; equiv: FAIL (equiv: ours faults on callee)
-00ec9640   50  complete map pair lookup; frame/scheduling differs; equiv: FAIL (equiv: ours faults on callee)
-00ec9690   65  complete pair iteration; loop scheduling differs; equiv: FAIL (equiv, 5/5 mismatched)
-00ec9ae0   55  complete index-of search; loop scheduling differs; equiv: FAIL (equiv, 5/5 mismatched)
+00ec95f0   45  complete map pair lookup; id via map+4, map find with this=map+0x18; equiv: PASS
+00ec9640   45  complete map pair lookup; same body but map find with this=map+0x34; equiv: PASS
+00ec9690   59  complete pair iteration; map find with this=map+0x18 and 8-byte elements; equiv: WEAK (282 valid, 0 mismatch, 57% coverage)
+00ec9ae0   36  complete index-of search; map find with this=map+0x50 and 4-byte elements; equiv: PASS
