@@ -1,0 +1,14 @@
+# source  symbol  original VA  [flags override]
+slices/s01077470/s01077470.cpp  ?FUN_01077830@cSPUISpaceTrading@SP@@QAE_NPAX@Z  01077830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01077900@cSPUISpaceTrading@SP@@QAEEPAX@Z  01077900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01077960@cSPUISpaceTrading@SP@@QAEIPAX@Z  01077960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01077990@cSPUISpaceTrading@SP@@QAEXPAX@Z  01077990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_010779e0@cSPUISpaceTrading@SP@@QAEXXZ  010779e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01077b40@@YAIPAX@Z  01077b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01077b70@cSPUISpaceTrading@SP@@QAE_NPAXPAI@Z  01077b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01077ce0@cSPUISpaceTrading@SP@@QAEXPAX@Z  01077ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01077d30@cSPUISpaceTrading@SP@@QAEXXZ  01077d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01077f70@@YAXPAUcScrollElem@@I0@Z  01077f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01077fb0@@YAPAUcScrollElem@@PAU1@00@Z  01077fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01078000@@YAPAUcScrollElem@@PAU1@00@Z  01078000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01077470/s01077470.cpp  ?FUN_01078060@@YAPAUcScrollElem@@PAU1@00@Z  01078060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
