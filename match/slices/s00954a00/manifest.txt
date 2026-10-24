@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00954a00/s00954a00.cpp  ?Flush@Draw2D@UTFWin@EA@@QAEPAUIRenderable@23@XZ  009557c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
