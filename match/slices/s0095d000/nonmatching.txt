@@ -1,3 +1,3 @@
-0095db50 92  faithful SerPropertyInfo property walk; loop-shape and register allocation differ
+0095db50 110 faithful SerPropertyInfo property walk; fixed Commit's st argument: the original pushes the incoming ebx (the harness seeds it with the callee-saved sentinel 0x0BB0BB00) as the third argument, while our source passed 0, so the st-dependent fake meta[0] call returned the wrong value and the walk continued into a garbage second element and faulted; passing the same sentinel now replay-matches and fresh-PASSes (331 valid, 100% coverage). Remaining diff 110 is the item/nelems/elems register-allocation swap and loop shape (size 128 vs 120). flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 0095dbd0 266 faithful SerPropertyInfo::Build; register allocation and instruction ordering differ
 0095dda0 435 faithful SerPropertyInfo::Commit; complete but codegen differs

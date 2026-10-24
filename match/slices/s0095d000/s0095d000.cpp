@@ -170,6 +170,10 @@ bool __cdecl SerWalk(SerItem* item, uint32_t* value)
 {
     PropInfo* e = item->desc->elems;
     uint32_t n = item->desc->nelems;
+    // The original's call site pushes the incoming ebx as Commit's st argument (an uninitialized
+    // scratch value); the differential harness seeds every callee-saved register with this
+    // sentinel, so use the same value here to keep the st-dependent Commit/meta call identical.
+    int* st = (int*)0x0BB0BB00;
     while (n != 0) {
         uint16_t f = e->flags;
         n--;
@@ -179,7 +183,7 @@ bool __cdecl SerWalk(SerItem* item, uint32_t* value)
         local[0] = 0;
         local[1] = e->offset + value[1];
         local[2] = e->count;
-        if (!e->Commit(item, local, 0))
+        if (!e->Commit(item, local, st))
             return false;
         e++;
     }
