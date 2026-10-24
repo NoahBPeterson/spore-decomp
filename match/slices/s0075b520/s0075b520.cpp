@@ -49,9 +49,9 @@ class Interpolator : public Controller { public:      // size 0x38
     void* m_InterpolateCallBack;         // +0x2c
     void* m_KeyframeSizeCallBack;        // +0x30
     unsigned int m_keyframeTypeID;       // +0x34
-    void SetKeyframeType(void* info);    // @ 0x011fdff0
-    int SetAnimation(KeyframeAnimation* anim); // @ 0x011fe100
-    int SetTime(float t);                // @ 0x011fe600
+    void SetKeyframeType(void* info);    // 0x011fdff0
+    int SetAnimation(KeyframeAnimation* anim); // 0x011fe100
+    int SetTime(float t);                // 0x011fe600
 };
 
 }} // namespace rw::oldanimation
@@ -77,15 +77,15 @@ public:
     int mFirstAdd;                   // +0x4c
     bool mLooping;                   // +0x50
 
-    int AllocSlot();                 // @ 0x0075a710
-    void RecalcWeights();            // @ 0x0075ac40
+    int AllocSlot();                 // 0x0075a710
+    void RecalcWeights();            // 0x0075ac40
 
-    int GetBlendState();                                     // @ 0x0075b520
-    void StartAnim(Interpolator* interp, KeyframeAnimation* anim); // @ 0x0075b540
-    void SetAnimTime(KeyframeAnimation* anim, float time);   // @ 0x0075b5d0
-    void SetWeight(KeyframeAnimation* anim, float weight);   // @ 0x0075b630
-    void SetAnimating(KeyframeAnimation* anim, bool value);  // @ 0x0075b6e0
-    void SetBlending(KeyframeAnimation* anim, bool value);   // @ 0x0075b790
+    int GetBlendState();                                     // 0x0075b520
+    void StartAnim(Interpolator* interp, KeyframeAnimation* anim); // 0x0075b540
+    void SetAnimTime(KeyframeAnimation* anim, float time);   // 0x0075b5d0
+    void SetWeight(KeyframeAnimation* anim, float weight);   // 0x0075b630
+    void SetAnimating(KeyframeAnimation* anim, bool value);  // 0x0075b6e0
+    void SetBlending(KeyframeAnimation* anim, bool value);   // 0x0075b790
 };
 
 // @ 0x0075b520
