@@ -1,6 +1,6 @@
-# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast)
 007d9460  n/a  SP::cMouseCameraController::ConfigUpdated; complete (all ~20 property lookups into zoom/pan/rotate/offset/angle/pitch/clip fields), property-extraction scheduling/register allocation differs
-007d9a50  n/a  quaternion -> 3x3 matrix helper (then Sub_6a3430 copy); complete, SSE multiply/add schedule and constant folding differ
+007d9a50  272 quaternion -> 3x3 matrix helper (then Sub_6a3430 copy); complete, /fp:fast makes the SSE mulss/addss schedule match; equiv: PASS 600/600 valid, 100% cov
 007d9bd0  102  SP::cMouseCameraController::Begin (capture start state); complete, float load/store interleave and Vec3 integer-copy scheduling differ; equiv PASS (1200 inputs, 100% coverage)
-007d9c40  789  SP::cMouseCameraController::SetConfigValue (big id switch); complete (all 12 cases incl. quaternion paths and 9-float base-orientation copy), switch compare tree/schedule differs; equiv FAIL (memory pool mismatch at input 56, 23% coverage)
-007d9fb0  686  SP::cMouseCameraController::cMouseCameraController; complete (3 vtables, config addref, all lerp/vector defaults, ConfigUpdated tail), aligned frame/EH/store order differs
+007d9c40  790  SP::cMouseCameraController::SetConfigValue (big id switch); complete (all cases incl. quaternion paths and 9-float base-orientation copy); quaternion input is copied to a stack temp and the matrix copies land at the retail field offsets; equiv: WEAK 600 valid, 23.1% coverage
+007d9fb0  641  SP::cMouseCameraController::cMouseCameraController; complete (3 vtables, config addref, all lerp/vector defaults, ConfigUpdated tail); thiscall Matrix3_Assign and tLerpVector steps/minChange order / pitch limits corrected; equiv: WEAK 139 valid, 96.7% coverage

@@ -1,6 +1,6 @@
 // Slice s007d9460 (batch w2g5): SP::cMouseCameraController — config refresh,
 // config-value setter, start-state capture, quaternion->matrix helper, ctor.
-// Retail module flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+// Retail module flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
 
@@ -26,7 +26,7 @@ char*  Property_GetBool(void* prop);                  // 0x0041e920
 
 struct Vec3 { float x, y, z; };
 struct tLerpAngle  { float mCurrent; float mTarget; int mSteps; float mMinChange; };   // 0x10
-struct tLerpVector { Vec3 mCurrent; Vec3 mTarget; float mMinChange; int mSteps; };     // 0x20
+struct tLerpVector { Vec3 mCurrent; Vec3 mTarget; int mSteps; float mMinChange; };     // 0x20
 struct cSPMatrix3 { float m[9]; };
 
 struct cPropertyList { void** vftable; };
@@ -50,8 +50,10 @@ struct cMouseCameraController {           // size 0x124
     float  mRotateScale;                  // +0x38
     float  mAnchorX;                      // +0x3c
     float  mAnchorY;                      // +0x40
-    bool   mZUp;                          // +0x44
-    char   pad45[3];
+    union {
+        bool   mZUp;                      // +0x44
+        float  mCameraThetaPre;           // +0x44 (quaternion setter alias)
+    };
     tLerpAngle  mCameraTheta;             // +0x48
     tLerpAngle  mCameraPhi;               // +0x58
     tLerpAngle  mCameraRoll;              // +0x68
@@ -211,57 +213,53 @@ bool cMouseCameraController::SetConfigValue(unsigned id, const void* value) {
     const float* p = (const float*)value;
     switch (id) {
     case 0x101b534:
-        mSubjectPosition.mCurrent.x = p[0];
-        mSubjectPosition.mTarget.x = p[0];
-        mSubjectPosition.mCurrent.y = p[1];
-        mSubjectPosition.mTarget.y = p[1];
-        mSubjectPosition.mCurrent.z = p[2];
-        mSubjectPosition.mTarget.z = p[2];
+        mSubjectPosition.mCurrent.z = p[0];
+        mSubjectPosition.mTarget.x = p[1];
+        mSubjectPosition.mTarget.y = p[2];
+        mFieldOfView.mMinChange = 0.0f;
         mCamOffset.mCurrent.x = 0.0f;
+        mCamOffset.mCurrent.y = mCamOffset.mTarget.y;
+        mCamOffset.mCurrent.z = 0.0f;
         mCamOffset.mTarget.x = 0.0f;
-        mCamOffset.mCurrent.y = 0.0f;
-        mCamOffset.mTarget.y = 0.0f;
-        mCamOffset.mCurrent.z = mCamOffset.mCurrent.z;
-        mCamOffset.mTarget.z = mCamOffset.mCurrent.z;
         return true;
     case 0x101b537:
-        mSubjectPosition.mCurrent.x = p[0];
-        mSubjectPosition.mTarget.x = p[0];
-        mSubjectPosition.mCurrent.y = p[1];
-        mSubjectPosition.mTarget.y = p[1];
-        mSubjectPosition.mCurrent.z = p[2];
-        mSubjectPosition.mTarget.z = p[2];
-        mCamOffset.mCurrent.z = mCamOffset.mCurrent.z;
-        mCamOffset.mTarget.z = mCamOffset.mCurrent.z;
+        mSubjectPosition.mCurrent.z = p[0];
+        mSubjectPosition.mTarget.x = p[1];
+        mSubjectPosition.mTarget.y = p[2];
+        mCameraBaseOrientation.m[8] = p[0];
+        mSubjectPosition.mCurrent.x = p[1];
+        mSubjectPosition.mCurrent.y = p[2];
+        mFieldOfView.mMinChange = 0.0f;
+        mCamOffset.mCurrent.x = 0.0f;
+        mCamOffset.mCurrent.y = mCamOffset.mTarget.y;
+        mCamOffset.mCurrent.z = 0.0f;
+        mCamOffset.mTarget.x = 0.0f;
         return true;
     case 0x101b543:
     case 0x101d576: {
         float m[9];
         QuatToMatrix(m, p);
+        mCameraPhi.mCurrent = -m[0];
         mCameraTheta.mCurrent = -m[2];
-        mCameraTheta.mTarget = -m[2];
-        mCameraPhi.mCurrent = -m[1];
-        mCameraPhi.mTarget = -m[1];
-        mCameraRoll.mCurrent = -m[0];
-        mCameraRoll.mTarget = -m[0];
+        mCameraRoll.mCurrent = -m[1];
         return true;
     }
     case 0x101d445:
-        mCamOffset.mCurrent.z = p[0];
-        mCamOffset.mTarget.z = p[0];
+        mCamOffset.mCurrent.y = p[0];
+        mCamOffset.mTarget.y = p[0];
         return true;
     case 0x101d4c7:
-        mCamOffset.mTarget.z = p[0];
+        mCamOffset.mTarget.y = p[0];
         return true;
     case 0x101d51f: {
         float m[9];
         QuatToMatrix(m, p);
-        mCameraRoll.mCurrent = -m[0];
-        mCameraRoll.mTarget = -m[0];
+        mCameraThetaPre = -m[2];
         mCameraTheta.mCurrent = -m[2];
-        mCameraTheta.mTarget = -m[2];
-        mCameraPhi.mCurrent = -m[1];
-        mCameraPhi.mTarget = -m[1];
+        mCameraTheta.mMinChange = -m[0];
+        mCameraPhi.mCurrent = -m[0];
+        mCameraPhi.mMinChange = -m[1];
+        mCameraRoll.mCurrent = -m[1];
         return true;
     }
     case 0x109d174:
@@ -277,13 +275,15 @@ bool cMouseCameraController::SetConfigValue(unsigned id, const void* value) {
         return true;
     case 0x109d352:
         mFieldOfView.mCurrent = p[0];
-        mCameraMinZoomDistance = p[0];
+        mSubjectPosition.mMinChange = p[0];
         return true;
     case 0x479c05b: {
+        float q[4] = { p[0], p[1], p[2], p[3] };
         float m[9];
-        Sub_4a9b40(m, p);
+        Sub_4a9b40(m, q);
+        float* dst = &mCameraRoll.mMinChange;
         for (int i = 0; i < 9; ++i)
-            mCameraBaseOrientation.m[i] = m[i];
+            dst[i] = m[i];
         return true;
     }
     default:
@@ -314,10 +314,7 @@ cMouseCameraController::cMouseCameraController(cPropertyList* config) {
     mAnchorX = 0.0f;
     mAnchorY = 0.0f;
     mZUp = true;
-    {
-        const float ident[9] = { 1,0,0, 0,1,0, 0,0,1 };
-        Matrix3_Assign(&mCameraBaseOrientation, ident);
-    }
+    ((void(__thiscall*)(void*, const void*))Matrix3_Assign)(&mCameraBaseOrientation, (const void*)0x01637eb8);
     mCameraMinZoomDistance = 1.0f;
     mCameraMaxZoomDistance = 10000.0f;
     mStartCameraTheta = 0.0f;
@@ -325,8 +322,8 @@ cMouseCameraController::cMouseCameraController(cPropertyList* config) {
     mStartCameraDistance = 0.0f;
     mStartCameraOffsetX = 0.0f;
     mStartCameraOffsetY = 0.0f;
-    mCameraMaxPitch = 1.5533431f;
-    mCameraMinPitch = -1.5533431f;
+    mCameraMaxPitch = 1.5707964f;
+    mCameraMinPitch = -1.5707964f;
     mNearClip = -1.0f;
     mFarClip = -1.0f;
     mPreviousModifiers[0] = 0;
