@@ -1,0 +1,8 @@
+00db3e90 ?CheckSocialTarget@cSocialActionHost@@QAE_NPAUcSocialTarget@@@Z  # bool cSocialActionHost::CheckSocialTarget
+00db4050 ?ResolveTarget@cSocialActionHost@@QAE_NPAUcActionState@@@Z  # bool cSocialActionHost::ResolveTarget
+00db40f0 ?ReleaseSocialTargetState@@YAXPAX0000PAUcActionState@@@Z  # void ReleaseSocialTargetState
+00db4140 ?Start@cSocialActionHost@@QAEHPAUcActionState@@@Z  # int cSocialActionHost::Start
+00db4370 ?Update@cSocialActionHost@@QAEHPAUcActionState@@@Z  # int cSocialActionHost::Update
+00db4900 ?TryTribeTool@cSocialActionHost@@QAEMIIIPAVcBehaviorStimuli@@PAE@Z  # float cSocialActionHost::TryTribeTool
+00db4a20 ?CancelSocialAction@@YAEPAX@Z  # bool CancelSocialAction
+00db4a60 ?PlaceTargets@cSocialActionHost@@QAEXPAUcSocialData@@_N@Z  # void cSocialActionHost::PlaceTargets
