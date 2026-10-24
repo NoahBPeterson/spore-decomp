@@ -50,6 +50,13 @@ struct CTribe { unsigned int GetAdultPopulation(); };  // 0x00c8f370
 struct CProps { unsigned char GetDesc(int id); }; // 0x006a25a0
 struct C9630 { void M(); };              // 0x00cc9630
 struct CUnk { virtual void AddRef(); virtual void Release(); };
+// SP::cLocalInputState is embedded at cTribeModeStrategy+0x1e0; these are *direct* (non-virtual)
+// calls in the original, unlike the GameInputManager vtable calls that follow them.
+struct LocalInputState {
+    void OnMouseDown(int button, float x, float y, int state);   // 0x00697ab0
+    void OnMouseUp(int button, float x, float y, int state);     // 0x00697af0
+    void OnMouseWheel(float x, float y, int button);             // 0x00697b20
+};
 struct CTrig { void PostAction(int id, void* tgt, void* c); }; // 0x00ae09b0
 struct CPanel {
     unsigned char HasMissionCard(void* card);   // 0x00e15cd0 thiscall ret 4
@@ -60,6 +67,9 @@ struct CPanel {
 struct CAch { void F(int a, int b); };   // 0x00676ed0
 
 struct TM {
+    char pad00[0x1e0];           // +0x000 .. +0x1df
+    LocalInputState mInput;      // +0x1e0 SP::cLocalInputState
+
     void M_b6f7d0();
     void M_b6f650(int a, int b);
     void M_b6f760();
@@ -72,11 +82,11 @@ struct TM {
     void F_cd3650();
     void F_cd3670(void* a);
     void F_cd3760(int a);
-    void* F_cd4070(int id);
+    TM* F_cd4070(int id);
     void F_cd40f0(void* p);
     unsigned char F_cd4160(void* p);
     void F_cd4180(int a, float f1, float f2, int b);
-    void F_cd41d0(float f, int a);
+    void F_cd41d0(float f1, float f2, int a);
     void F_cd4220(int a, float f1, float f2, int b);
     void F_cd43c0(int a);
     bool F_cd4490();
@@ -156,24 +166,24 @@ void TM::F_cd3760(int a)
 }
 
 // @ 0x00cd4070
-void* TM::F_cd4070(int id)
+TM* TM::F_cd4070(int id)
 {
+    TM* r = this;
     if (id <= 0x116dd1b) {
         if (id == 0x116dd1b)
-            return this;
-        if (id != (int)0xee3f516e) {
-            if (id != 0x116d389)
-                return 0;
-            return this;
-        }
-        goto tail;
+            return r;
+        if (id == (int)0xee3f516e)
+            goto tail;
+        if (id != 0x116d389)
+            r = 0;
+        return r;
     }
     if (id != 0x2f009dd0)
         return 0;
 tail:
-    if (this == 0)
+    if (r == 0)
         return 0;
-    return (char*)this + 4;
+    return (TM*)((char*)r + 4);
 }
 
 // ============================================================ 0x00cd40c0
@@ -212,26 +222,23 @@ void TM::F_cd40f0(void* p)
 // @ 0x00cd4180
 void TM::F_cd4180(int a, float f1, float f2, int b)
 {
-    void* in = (char*)this + 0x1e0;
-    ((void(__thiscall*)(void*, int, float, float, int))(*(void***)in)[0 / 4])(in, a, f1, f2, b);
+    mInput.OnMouseDown(a, f1, f2, b);
     void* m = GetGameInputManager();
     ((void(__thiscall*)(void*, int, float, float, int))(*(void***)m)[0x54 / 4])(m, a, f1, f2, b);
 }
 
 // @ 0x00cd41d0
-void TM::F_cd41d0(float f, int a)
+void TM::F_cd41d0(float f1, float f2, int a)
 {
-    void* in = (char*)this + 0x1e0;
-    ((void(__thiscall*)(void*, float, int))(*(void***)in)[0 / 4])(in, f, a);
+    mInput.OnMouseWheel(f1, f2, a);
     void* m = GetGameInputManager();
-    ((void(__thiscall*)(void*, float, int))(*(void***)m)[0x5c / 4])(m, f, a);
+    ((void(__thiscall*)(void*, float, float, int))(*(void***)m)[0x5c / 4])(m, f1, f2, a);
 }
 
 // @ 0x00cd4220
 void TM::F_cd4220(int a, float f1, float f2, int b)
 {
-    void* in = (char*)this + 0x1e0;
-    ((void(__thiscall*)(void*, int, float, float, int))(*(void***)in)[0 / 4])(in, a, f1, f2, b);
+    mInput.OnMouseUp(a, f1, f2, b);
     void* m = GetGameInputManager();
     ((void(__thiscall*)(void*, int, float, float, int))(*(void***)m)[0x58 / 4])(m, a, f1, f2, b);
 }

@@ -11,3 +11,6 @@ slices/s00cd3480/s00cd3480.cpp  ?F_cd3f20@@YAXI@Z  00cd3f20  /O2 /MD /Gy /EHsc /
 slices/s00cd3480/s00cd3480.cpp  ?F_cd3fb0@@YAXH@Z  00cd3fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00cd3480/s00cd3480.cpp  ?F_cd3fd0@@YAXH@Z  00cd3fd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00cd3480/s00cd3480.cpp  ??0ThemeMgr@@QAE@XZ  00cd4580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd4180@TM@@QAEXHMMH@Z  00cd4180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd41d0@TM@@QAEXMMH@Z  00cd41d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd4220@TM@@QAEXHMMH@Z  00cd4220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
