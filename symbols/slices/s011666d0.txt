@@ -1,1 +1,3 @@
 011666d0 Imdct36  # EA Layer3 decoder long-block 36-point IMDCT + window (mpg123 dct36 shape, doubled COS9); TU-static, register args
+01167190 ?FUN_01167190@@YAXPAMPBM0@Z  # nonmatching (28) - overlap-add the 72 fresh samples with the 72-sample lane history, then rotate the history (4 interleaved lanes); retail takes the history pointer in eax
+011673e0 ?Transform@HELPER_Imdct12X4Implementation@@QAEXIIPAM@Z  # nonmatching (363) - lazily allocate/clear the per-channel work buffer, then 8 subblocks of four 36-point (long window) or four 12-point (eight-short sequence) IMDCTs, overlap-added into the output

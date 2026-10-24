@@ -118,3 +118,130 @@ void Imdct36Caller(float* in, float* out)
     Imdct36(in, out, kImdctWindows[0]);
     Imdct36(in + 1, out + 1, kImdctWindows[0]);
 }
+
+// ---------------------------------------------------------------------------
+// 0x01167190 / 0x011673E0: the eight-subblock driver around the scalar IMDCT helpers.
+// The core is /GL + /LTCG code with register ABIs (HELPER_Imdct12X1 takes `out` in eax and
+// its input on the stack, see s01145d10/s01165820); cl has no spelling for those, so the
+// helpers are declared with plain argument lists and the call sequences differ from retail.
+// ---------------------------------------------------------------------------
+
+extern "C" void* __cdecl memset(void* pDst, int nValue, unsigned int nBytes);
+
+// 0x011661b0: 12-point IMDCT of one lane (retail: out in eax, in on the stack).
+void HELPER_Imdct12X1(float* pOut, float* pIn);
+
+// 0x016f16ec: the module's allocator (import pointer).
+extern void* (*const g_pfnAudioAlloc)(unsigned int nBytes);
+
+// One band's lapping state; the band table at +0x58 holds entries of 0x18 bytes.
+struct BandState
+{
+    unsigned char mPad00[7];         // +0x00
+    bool          mbLeftWindow;      // +0x07 the previous block overlaps this one
+    unsigned char mnWindowSequence;  // +0x08 2 = eight short windows (12-point IMDCTs)
+    bool          mbRightWindow;     // +0x09 this block overlaps the next one
+    unsigned char mPad0a[0x0e];      // +0x0a
+};
+
+// rw::audio::core::HELPER_Imdct12X4Implementation: renders the eight hybrid subblocks of one
+// granule for one channel. Each subblock runs four 36-point IMDCTs (long window) or four
+// 12-point IMDCTs (eight-short sequence), is overlap-added into the output and leaves the
+// second half of its fresh samples as that lane's 72-sample history in the work buffer.
+class HELPER_Imdct12X4Implementation
+{
+public:
+    void Transform(unsigned int nChannel, unsigned int nBlock, float* pOutput);  // 0x011673e0
+
+    unsigned char mPad000[0x48];   // +0x000
+    unsigned char mnChannelCount;  // +0x048
+    unsigned char mPad049[0x0f];   // +0x049
+    BandState     mBands[14];      // +0x058 entry = nBlock + 2 * nChannel
+    unsigned char mPad1a8[8];      // +0x1a8
+    void*         mpWorkBuffer;    // +0x1b0 mnChannelCount * 0x900 bytes (8 blocks of 72 floats)
+};
+
+// Overlap-adds the fresh samples in `pIn` with the lane history in `pHistory` into `pOut`,
+// then rotates that history: the second half of the fresh block becomes the new history.
+// The four lanes are interleaved (stride 4 floats).
+// The original body is fully unrolled (18 lines per lane); the two halves are kept apart:
+// first the overlap-add of the fresh 72 samples, then the rotation of the history.
+#define ADD(k)  pOut[lane + (k)] = pIn[lane + (k)] + pHistory[lane + (k)]
+#define ROT(k)  pHistory[lane + (k)] = pIn[lane + (k) + 72]
+
+// @ 0x01167190
+void FUN_01167190(float* pOut, const float* pIn, float* pHistory)
+{
+    for (unsigned int lane = 0; lane < 4; ++lane)
+    {
+        ADD(0);  ADD(4);  ADD(8);  ADD(12); ADD(16); ADD(20);
+        ADD(24); ADD(28); ADD(32); ADD(36); ADD(40); ADD(44);
+        ADD(48); ADD(52); ADD(56); ADD(60); ADD(64); ADD(68);
+
+        ROT(0);  ROT(4);  ROT(8);  ROT(12); ROT(16); ROT(20);
+        ROT(24); ROT(28); ROT(32); ROT(36); ROT(40); ROT(44);
+        ROT(48); ROT(52); ROT(56); ROT(60); ROT(64); ROT(68);
+    }
+}
+
+// @ 0x011673e0
+void HELPER_Imdct12X4Implementation::Transform(unsigned int nChannel, unsigned int nBlock, float* pOutput)
+{
+    if (mpWorkBuffer == 0)
+    {
+        unsigned int nBytes = (unsigned int)mnChannelCount * 0x900;
+        mpWorkBuffer = g_pfnAudioAlloc(nBytes);
+        if (mpWorkBuffer == 0)
+            pOutput[0] = 0.0f;
+        else
+            memset(mpWorkBuffer, 0, nBytes);
+    }
+
+    unsigned int nBand = nBlock + 2 * nChannel;
+    float* pWork = (float*)((char*)mpWorkBuffer + nChannel * 0x900);
+    float sTime[144];
+    unsigned int nDone = 0;
+
+    if (mBands[nBand].mbLeftWindow && mBands[nBand].mbRightWindow)
+    {
+        Imdct36(pOutput + 0, sTime + 0, kImdctWindows[0]);
+        Imdct36(pOutput + 1, sTime + 1, kImdctWindows[0]);
+        HELPER_Imdct12X1(sTime + 2, pOutput + 2);
+        HELPER_Imdct12X1(sTime + 3, pOutput + 3);
+        FUN_01167190(pOutput, sTime, pWork);
+        nDone = 1;
+    }
+
+    if (mBands[nBand].mnWindowSequence == 2)
+    {
+        if (nDone < 8)
+        {
+            float* pBlock = pOutput + nDone * 72;
+            unsigned int nLeft = 8 - nDone;
+            do
+            {
+                HELPER_Imdct12X1(sTime + 0, pBlock + 0);
+                HELPER_Imdct12X1(sTime + 1, pBlock + 1);
+                HELPER_Imdct12X1(sTime + 2, pBlock + 2);
+                HELPER_Imdct12X1(sTime + 3, pBlock + 3);
+                FUN_01167190(pBlock, sTime, pWork);
+                pBlock += 72;
+                pWork += 72;
+            } while (--nLeft != 0);
+        }
+    }
+    else if (nDone < 8)
+    {
+        const float* pWindow = kImdctWindows[mBands[nBand].mnWindowSequence];
+        float* pBlock = pOutput + nDone * 72;
+        unsigned int nLeft = 8 - nDone;
+        do
+        {
+            for (unsigned int j = 0; j < 4; ++j)
+                Imdct36(pBlock + j, sTime + j, pWindow);
+            FUN_01167190(pBlock, sTime, pWork);
+            pBlock += 72;
+            pWork += 72;
+        } while (--nLeft != 0);
+    }
+}
