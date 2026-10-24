@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00fa3860/s00fa3860.cpp  ?resize@VecRec20@@QAEXI@Z  00fa4730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
