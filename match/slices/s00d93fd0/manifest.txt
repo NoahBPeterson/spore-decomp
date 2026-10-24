@@ -1,0 +1,2 @@
+slices/s00d93fd0/s00d93fd0.cpp  ?ForcedDeath_Decide@CitizenTree@SP@@YAMPAVCitizen@2@@Z  00d94610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d93fd0/s00d93fd0.cpp  ?ArtifactHeld_Decide@CitizenTree@SP@@YAMPAVCitizen@2@@Z  00d946e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
