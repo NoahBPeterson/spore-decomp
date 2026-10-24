@@ -1,0 +1,4 @@
+slices/s00c278e0/s00c278e0.cpp  ?funcC4h@cCreatureBase@@QAEXXZ  00c27b70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c278e0/s00c278e0.cpp  ?FindOrAddKey@cActionMapOwner@@QAEHH@Z  00c27db0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c278e0/s00c278e0.cpp  ?FUN_00c27ff0@@YAEPAVcActionCircle@@@Z  00c27ff0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c278e0/s00c278e0.cpp  ?FUN_00c28000@@YAPAEPAE00P6A_N0@Z@Z  00c28000  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
