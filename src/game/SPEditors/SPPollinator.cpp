@@ -593,6 +593,32 @@ struct TxnMem {
 void* __cdecl Alloc0xf0(size_t);
 void* __cdecl Alloc0x70(size_t);
 void* __cdecl Alloc0x18(size_t);
+// cString::Format-style variadic helper (self, format, ...): writes a cString in place.
+void __cdecl StringFormat(void* self, const char* fmt, ...);   // 0x00472fe0
+// Array container passed to UpdateMyFeed: data pointer at +4, element count at +8.
+struct FeedContainer {
+    int     mField0;      // +0x0
+    void**  mpData;       // +0x4
+    int     mnSize;       // +0x8
+};
+// Feed assembler sub-object (t+0x30 / t+0x50): four-argument thiscall helper.
+struct FeedAssembler {
+    void FUN_0060f0d0(void* a, void* b, void* c, void* d);   // 0x0060f0d0
+};
+// Replicates the shipped first-non-null scan then forwards to 0x60f0d0.
+static void FeedAppendEntry(void* obj, void* container) {
+    FeedContainer* fc = (FeedContainer*)container;
+    void** data = fc->mpData;
+    void** endPtr = data + fc->mnSize;
+    void* endVal = *endPtr;
+    void** cur = data;
+    void* val = *cur;
+    if (val == 0) {
+        do { ++cur; } while (*cur == 0);
+        val = *cur;
+    }
+    ((FeedAssembler*)obj)->FUN_0060f0d0(val, cur, endVal, endPtr);
+}
 namespace SP {
 struct cPollinator_s0060_f910 {
     virtual void v0();
@@ -604,7 +630,7 @@ struct cPollinator_s0060_f910 {
 
     void ProcessTransactionQueue();                       // 0x00610140
     void CreateMyFeed(void* a, void* b, int c);           // 0x006104f0
-    void UpdateMyFeed(void* a, void* b, int c);           // 0x006105d0
+    void UpdateMyFeed(void* a, void* b, void* c, void* d); // 0x006105d0
     void DeleteMyFeed(void* a);                           // 0x006106f0
     void SubscribeToFeed(void* a);                        // 0x00610780
     void UnsubscribeToFeed(void* a);                      // 0x00610810
@@ -2087,12 +2113,16 @@ void cPollinator_s0060_f910::CreateMyFeed(void* a, void* b, int c)
 
 // @ 0x006105d0
 namespace SP {
-void cPollinator_s0060_f910::UpdateMyFeed(void* a, void* b, int c)
+void cPollinator_s0060_f910::UpdateMyFeed(void* a, void* b, void* c, void* d)
 {
     if (mEnabled == 0) return;
     cITransaction* t = 0;
     void* const mem = Alloc0x70(0x70);
     if (mem) t = ((TxnMem*)mem)->EditFeed(1);
+    StringFormat((char*)t + 0x10, (const char*)0x13f5b98, a);
+    StringFormat((char*)t + 0x20, (const char*)0x13ef064, b);
+    FeedAppendEntry((char*)t + 0x30, c);
+    FeedAppendEntry((char*)t + 0x50, d);
     if (t) {
         AutoRefCount<cITransaction> ref(t);
         mTransactionQueue.push_front(ref);
