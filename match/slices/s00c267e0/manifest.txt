@@ -1,0 +1,2 @@
+slices/s00c267e0/s00c267e0.cpp  ?CreateLocomotionStrategy@cCreatureCitizen@@QAEXXZ  00c26c10  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c267e0/s00c267e0.cpp  ?RebuildCitizenOrderListDefault@@YAXXZ  00c26c80  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
