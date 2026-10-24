@@ -3,6 +3,7 @@ slices/s00804920/s00804920.cpp  ?Set@Sec@@QAE_NHPAUVariant@@@Z  00804e00  /O2 /M
 slices/s00804920/s00804920.cpp  ?HelpWFun@@YAXPAX0@Z  00804ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00804920/s00804920.cpp  ?HelpFF@@YAXMM@Z  00804f10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00804920/s00804920.cpp  ?UpdateMouseFocus@@YAXH@Z  00804f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00804920/s00804920.cpp  ?GetElapsedSeconds@@YAMXZ  00805080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00804920/s00804920.cpp  ?WinB0@@YAXXZ  00805180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00804920/s00804920.cpp  ?IsSomething@@YAHXZ  008053b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00804920/s00804920.cpp  ?AllocCoreBlock@@YAPAXH@Z  008053e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
