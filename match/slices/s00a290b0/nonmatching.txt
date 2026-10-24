@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+# NOTE: all 12 functions are complete and equivalence-checked. Deltas are systemic: inlined EASTL
+# hashtable find/insert/erase shapes, x87 selection under /fp:fast, and register colouring/block
+# ordering of the "single-object compile cannot match" class described in docs/matching.md.
+00a290b0  130  complete; inlined EASTL find/insert prologue and the twice-recomputed id register colouring differ; the 8-byte pair insert (0xa26ce0) shape is reproduced semantically only. difftest WEAK (92/400 valid, 24.5% coverage)
+00a29140   90  complete; hashtable iterator by-value erase (0xd2c9f0) and inlined find prologue differ. difftest WEAK (98/400 valid, 25.6% coverage)
+00a291b0  121  complete; the bucket scan is one shared tail in the original but duplicated by cl here, plus register colouring; size 121 vs 113. difftest PASS (232/400 valid, 65.2% coverage)
+00a29230  141  complete; same shared-vs-duplicated bucket scan and value-detach ordering; size 169 vs 159. difftest WEAK (198/400 valid, 56.1% coverage)
+00a292d0   71  complete; ring wrap and Tag-by-value insert are semantically identical; canonicalises at this size across ~17 source variants (register colouring / block order). difftest PASS (253/400 valid, 93.1% coverage)
+00a29340  104  complete; two Tag-by-value inserts into tables C and A; register colouring and block order differ. difftest PASS (212/400 valid, 95.2% coverage)
+00a293e0   72  complete; same shape as PopIdA. difftest PASS (241/400 valid, 93.1% coverage)
+00a29450  541  complete; factory Create 4-arg call, AutoRefCount assignment and inlined find/insert schedules differ; size 495 vs 576. difftest WEAK (174/400 valid, 35.0% coverage)
+00a29690  554  complete; effect-holder construction and inlined find/insert schedules differ; size 459 vs 598. difftest WEAK (221/400 valid, 41.0% coverage)
+00a298f0  311  complete; two AddRef / two Release schedule and inlined find/insert/erase differ; size 271 vs 341. difftest WEAK (197/400 valid, 90.5% coverage)
+00a29a50  344  complete; x87 compare/selection under /fp:fast, shared bucket scan and erase iterator maintenance differ. difftest WEAK (340/400 valid, 26.1% coverage)
+00a29be0  838  complete; wide-string hashtable lookups, IConfiguration vtable slots and x87/branch shapes differ; size 1039 vs 1086. difftest WEAK (400/400 valid, 5.8% coverage)
