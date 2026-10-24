@@ -1,0 +1,1 @@
+00cfb890 892 not reconstructed in this pass (single 892-byte editor-avatar helper: gets the avatar profile through 0x00401090/0x004df420, appends an 0x0c-byte record at +0x40 with vector growth via 0x0049dbb0, plus further editor state updates); not byte-exact; size 0 vs 892; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
