@@ -1,6 +1,12 @@
-00e786b0 SP::sCreatePlant_Type3  # decomp index name
-00e78830 SP::sGenPlants  # decomp index name
-00e78fc0 SP::sUpdateAICaterpillar  # decomp index name
-00e791f0 SP::sDigestionOutput  # decomp index name
-00e792b0 SP::sDigestion_End  # decomp index name
-00e79320 SP::sOnEatEater  # decomp index name
+00e786b0 SP::sCreatePlant_Type3  # plant type 3 creation (complete, nonmatching - UNSUPPORTED)
+00e78830 SP::sGenPlants         # plant spawner (complete, nonmatching - FAIL)
+00e78fc0 SP::sUpdateAICaterpillar # caterpillar AI update (complete, nonmatching - WEAK)
+00e791f0 SP::sDigestionOutput   # cell digestion/drop-loot output (complete, nonmatching)
+00e792b0 SP::sDigestion_End     # digestion end-of-step (complete, nonmatching - WEAK)
+00e79320 SP::sOnEatEater        # eat-eater message handler (complete, nonmatching - FAIL)
+00e78b20 FUN_00e78b20           # cell sweep helper (complete, nonmatching)
+00e78b80 FUN_00e78b80           # cell sweep helper, id-exclusion via EDI (complete, nonmatching)
+00e78c00 FUN_00e78c00           # cell class dispatcher (complete, nonmatching)
+00e78d10 FUN_00e78d10           # cell proximity trigger (complete, nonmatching - equivalence WEAK)
+00e791a0 FUN_00e791a0           # emit-if-primary (complete, nonmatching - register ABI)
+00e79460 FUN_00e79460           # cell sweep helper with visibility gate (complete, nonmatching)
