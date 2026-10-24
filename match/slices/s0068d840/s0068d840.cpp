@@ -275,7 +275,7 @@ struct Coder {
     bool EncodeBit(u8 bit);       // 0x68de20
     void Flush();                 // 0x68df00
     bool DecodeBit(u8* out);      // 0x68dfd0
-    int  DecodeFinish();          // 0x68e0c0
+    bool DecodeFinish();          // 0x68e0c0
     void Init2();                 // 0x68db70
     char Serialize(void* io, int mode);  // 0x68e1a0
     int  Read(void* dst, u32 n);         // 0x68e3b0
@@ -328,8 +328,8 @@ NameMapCtor::NameMapCtor() : mVt((void*)0x1403594), mUptime(0) {
 Coder::~Coder() {
     mBuf = (u8*)0x1403594;
     // nuke two embedded rbtrees at +0x24 and +0x08
-    Nuke_9a9600((char*)this + 0x24, *(void**)((char*)this + 0x30));
-    Nuke_9a9600((char*)this + 0x08, *(void**)((char*)this + 0x14));
+    ((void(__thiscall*)(void*, void*))Nuke_9a9600)((char*)this + 0x24, *(void**)((char*)this + 0x30));
+    ((void(__thiscall*)(void*, void*))Nuke_9a9600)((char*)this + 0x08, *(void**)((char*)this + 0x14));
 }
 
 // =====================================================================
@@ -349,21 +349,27 @@ void Citizen::Init(void* param_2, void* param_3, u32 param_4) {
         out[2] = param_4;
     else
         out[2] = 0x40010000;
-    u32 tmp = f04;
-    u8 l10 = (u8)(param_4 >> 0x10);
-    u8 l8 = 0;
-    Sub68dc00(&l10, &l8, out);
-    if (l8 == 0)
-        f14 += 1;
-    *out = f14;
+    struct RBKeyPair {
+        u32 key;
+        u32 value;
+    } key = { (param_4 >> 0x10) & 0xff, f04 };
+    struct RBLookupResult {
+        void* p;
+        u8 found;
+        u8 pad[3];
+    } l8;
+    ((void(__thiscall*)(void*, void*, void*, void*))Sub68dc00)((char*)this + 8, &l8, &key, out);
+    SetNode* node = (SetNode*)l8.p;
+    if (!l8.found)
+        node->mVal += 1;
+    *out = node->mVal;
     void* mgr = GetResourceManager();
     if (mgr != 0) {
         while (ResourceManagerAdd(out) != 0) {
-            f14 += 1;
-            *out = f14;
+            node->mVal += 1;
+            *out = node->mVal;
         }
     }
-    (void)tmp; (void)l10;
 }
 
 // =====================================================================
@@ -544,11 +550,11 @@ bool Coder::DecodeBit(u8* out) {
 // 0x0068e0c0  decode finish / check
 // =====================================================================
 // @ 0x0068e0c0
-int Coder::DecodeFinish() {
+bool Coder::DecodeFinish() {
     u32 uVar1 = f44;
     for (;;) {
         if (uVar1 != f44)
-            return 1;
+            return true;
         u32 cur = f3c;
         if (f40 <= cur) {
             do {
@@ -564,7 +570,7 @@ int Coder::DecodeFinish() {
             } while (f40 <= cur);
         }
         if (uVar1 != f44)
-            return 1;
+            return true;
         u32 cur2 = f3c;
         u32 mask = f48;
         u32 byte = mBuf[cur2];
@@ -585,10 +591,10 @@ int Coder::DecodeFinish() {
             f44 = uVar1 * 2;
             f48 = mask * 2;
             if (uVar1 * 2 == f4c)
-                return 0;
+                return false;
         }
         if (tb != 0)
-            return 0;
+            return false;
     }
 }
 
