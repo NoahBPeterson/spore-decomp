@@ -1,0 +1,6 @@
+00d32fd0 SP::cCreatureModeInputStrategy::InteractWithObject  # object-command dispatcher; preserved existing source
+00d33930 SP::MakeHeap  # cdecl(SortRef* first, SortRef* last, SortCompare comp); bottom-up heap build
+00d339d0 SP::SortHeap  # cdecl(SortRef* first, SortRef* last, SortCompare comp); heap sort of [first,last)
+00d33a60 SP::PartialSort  # cdecl(first, middle, last, comp); heap-based partial sort
+00d33c30 SP::cCreatureModeInputStrategy::RegisterCommandHandlers  # two Command objects (0x20) inserted with ids 0x16/0x18 into map at +0x6c
+00d33ce0 SP::IntrosortLoop  # cdecl(first, last, depth, comp); median-of-three introsort loop, 28-element cutoff
