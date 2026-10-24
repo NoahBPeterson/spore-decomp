@@ -1,13 +1,13 @@
-00d1f650 SP::CanUseAbility  # PDB candidate (card)
-00d1fa20 SP::IsAbilityAvailable  # Claude-coined; tool-type switch
-00d1fb30 SP::ValidateAbilityTarget  # Claude-coined
-00d1fe00 SP::ActivateAbilityTarget  # Claude-coined
-00d200a0 SP::ScoreAbilityRange  # Claude-coined
-00d201f0 SP::cTribeGameBehaviorFish::Score  # PDB candidate (card)
-00d203d0 SP::cCreatureCamera::Init  # PDB name (card)
-00d203e0 SP::cCreatureCamera::Deactivate  # PDB name (card)
-00d20430 SP::cCreatureCamera::SetCameraUI  # Claude-coined
-00d204c0 SP::cCreatureCamera::OnKeyDown  # card
-00d204e0 SP::cCreatureCamera::OnKeyUp  # PDB name (card)
-00d20500 SP::cCreatureCamera::OnMouseUp  # PDB name (card)
-00d20530 SP::cCreatureCamera::OnMouseWheel  # PDB name (card)
+00d1f650 SP::CanUseAbility  # 74-case ability-type dispatch (types 0xd..0x56) to 12 distinct actions: mode/script/animation gates + spatial-target checks (complete, nonmatching - FAIL)
+00d1fa20 SP::IsAbilityAvailable  # ability-slot/current-mode gate + tribe tool-type switch (5/6/7 -> 4/5/6, 0x2b -> 3, 0x3a -> 1, 0x3b -> 2) (complete, nonmatching - WEAK)
+00d1fb30 SP::ValidateAbilityTarget  # eastl::vector<cSpatialObject*> terrain scan; 55-entry type dispatch (5/6/7 -> tools 4/5/6, 0x2b/0x3a/0x3b -> tools 3/1/2); returns 0/13/14/15/1 (complete, nonmatching - WEAK)
+00d1fe00 SP::ActivateAbilityTarget  # same terrain scan + dispatch, then 0xd1e5c0 slot lookup, >=g_kOne gate and 0xbc97f0 activation anim (complete, nonmatching - WEAK)
+00d200a0 SP::ScoreAbilityRange  # range probe (0xd1e830/0xd1e610), caster vtable slot 0xb0 distance, tool-index matched terrain scan, max score (complete, nonmatching - WEAK)
+00d201f0 SP::cTribeGameBehaviorFish::Score  # tribe tool lookup per behavior type (5/6/7 -> 4/5/6, 0x2b/0x3a/0x3b -> 1/2/3) then terrain scan for a wielding creature (complete, nonmatching - WEAK)
+00d203d0 SP::cCreatureCamera::Init  # (byte-exact)
+00d203e0 SP::cCreatureCamera::Deactivate  # (byte-exact)
+00d20430 SP::cCreatureCamera::SetCameraUI  # UI panel visibility/cursor toggling (complete, nonmatching - FAIL)
+00d204c0 SP::cCreatureCamera::OnKeyDown  # (byte-exact)
+00d204e0 SP::cCreatureCamera::OnKeyUp  # (byte-exact)
+00d20500 SP::cCreatureCamera::OnMouseUp  # (byte-exact)
+00d20530 SP::cCreatureCamera::OnMouseWheel  # wheel-zoom clamp needs SSE maxss/minss (complete, nonmatching - FAIL)
