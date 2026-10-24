@@ -5,6 +5,16 @@
 #include "types.h"
 #include <math.h>
 
+#define NOINLINE __declspec(noinline)
+
+extern "C" double __cdecl sin(double);
+extern "C" double __cdecl cos(double);
+extern "C" double __cdecl sqrt(double);
+#pragma intrinsic(sin, cos, sqrt)
+
+extern "C" void* __cdecl memset(void* dst, int value, unsigned size);  // 0x011e073e
+#pragma function(memset)
+
 struct Elem { float f0, f1, f2, f3; };                       // 0x10 bytes each at params+0x2c
 
 struct Params {                                              // *(this+0x98)
@@ -35,10 +45,60 @@ struct Section {                                             // this+*(u16*)(thi
 void __stdcall Fn_0114ff00(Section* s, float v);                       // 0x0114ff00
 void __stdcall Fn_0114ffd0(void* p, float a, float b);                 // 0x0114ffd0
 
+extern const float _HK_REAL_ONE;                                       // 0x01485720
+
+struct Sub40 {
+    float mf40;                                              // +0x40
+    char pad44[4];
+    float mf48;                                              // +0x48
+    char pad4c[8];
+};
+
+struct Arc4 {
+    float x;                                                 // +0x00
+    float y;                                                 // +0x04
+    float len2;                                              // +0x08
+    float angle;                                             // +0x0c
+    void __thiscall Set(float a, float b);                   // 0x01150b20
+};
+
+struct IkRow {
+    float mW0;                                               // +0x00  r*(t*w0)
+    float mMid;                                              // +0x04  r*local4
+    float mW1;                                               // +0x08  r*(t*w1)
+    float mW2;                                               // +0x0c  (w2*s)*r
+    float mW3;                                               // +0x10  (s*w3)*r
+};
+
+struct FrameBuffer {
+    char pad00[4];
+    void* mpData;                                            // +0x04
+    char pad08[0x0e - 0x08];
+    uint16_t mStride;                                        // +0x0e
+};
+
+struct UpdateContext {
+    char pad00[0x3000c];
+    FrameBuffer* mpA;                                        // +0x3000c
+    FrameBuffer* mpB;                                        // +0x30010
+};
+
 class Smoother {
 public:
-    char pad00[0x40];
-    char mSub[0x14];                                         // +0x40
+    char pad00[0x20];
+    uint8_t mb20;                                            // +0x20
+    uint8_t mb21;                                            // +0x21
+    char pad22[0x28 - 0x22];
+    float mf28;                                              // +0x28
+    char pad2c[4];
+    float mf30;                                              // +0x30
+    char pad34[4];
+    float mf38;                                              // +0x38
+    char pad3c[4];
+    union {
+        char mSub[0x14];                                     // +0x40
+        Sub40 sub;
+    };
     float mSampleRate;                                       // +0x54
     float mLimit;                                            // +0x58
     float mf5c;                                              // +0x5c
@@ -46,7 +106,8 @@ public:
     float mf6c, mf70;                                        // +0x6c
     char pad74[4];
     uint32_t mu78;
-    uint32_t mu7c, mu80;                                     // +0x7c
+    union { uint32_t mu7c; float mf7c; };                    // +0x7c
+    union { uint32_t mu80; float mf80; };                    // +0x80
     char pad84[4];
     float mf88;                                              // +0x88
     char pad8c[0x98 - 0x8c];
@@ -54,15 +115,24 @@ public:
     uint32_t mCapacity;                                      // +0x9c
     uint32_t mCount;                                         // +0xa0
     uint32_t mua4;                                           // +0xa4
-    char paddA8[0xb4 - 0xa8];
+    char paddA8[0xb0 - 0xa8];
+    uint32_t mub0;                                           // +0xb0
     uint32_t mub4;                                           // +0xb4
     uint32_t mub8;                                           // +0xb8
-    char padbc[4];
+    uint32_t mubc;                                           // +0xbc
     uint16_t mOffSection;                                    // +0xc0
     uint16_t mOffBands;                                      // +0xc2
     char padc4;
     uint8_t mbC5;                                            // +0xc5
     uint8_t mbC6;                                            // +0xc6
+    char padc7[0xcc - 0xc7];
+    uint32_t mmodeCC;                                        // +0xcc
+    uint32_t mmodeD0;                                        // +0xd0
+    IkRow mIk[5];                                            // +0xd4 .. +0x137
+    char pad138[4];
+    float mf13c, mf140, mf144, mf148, mf14c;
+    float mf150, mf154, mf158, mf15c, mf160;
+    Arc4 mArcs[5];                                           // +0x164 .. +0x1b3
 
     void __thiscall Fn_011501f0(float a, float b, float c, float d, float* out);   // 0x011501f0
     void __thiscall Fn_01150100(float a, float b, float* out);                      // 0x01150100
@@ -72,7 +142,11 @@ public:
             return v * mSampleRate;
         return 0.0f;
     }
-    void __thiscall Update(bool reset);                      // 0x011503e0
+    void __thiscall Update(uint32_t reset);                  // 0x011503e0
+    void __thiscall ProcessFrame(FrameBuffer* b, FrameBuffer* a);        // 0x0114fab0
+    void __thiscall CopyRowScaled(FrameBuffer* b, FrameBuffer* a);       // 0x0114fe20
+    void __thiscall UpdateArcs();                            // 0x01150b80
+    void __thiscall BlendIk(int index);                      // 0x01150fb0
 };
 
 inline void SetRamp(Smoother* self, float* target, float* delta, const float* prev, float v)
@@ -83,7 +157,7 @@ inline void SetRamp(Smoother* self, float* target, float* delta, const float* pr
 }
 
 // @ 0x011503e0
-void Smoother::Update(bool reset)
+void Smoother::Update(uint32_t reset)
 {
     Params* p = mpParams;
     Section* sec = (Section*)((char*)this + mOffSection);
@@ -101,7 +175,7 @@ void Smoother::Update(bool reset)
     mu80 = mu7c;
     mu7c = mub4;
     float cur = sec->f60;
-    if (reset) {
+    if ((uint8_t)reset) {
         sec->f64 = cur;
         mf6c = cur;
         mf70 = cur;
@@ -206,7 +280,7 @@ void Smoother::Update(bool reset)
         q[10] = time;
         *(int16_t*)((char*)q + 0x26) = (int16_t)ib;
         q[4] = fb;
-        if (reset) {
+        if ((uint8_t)reset) {
             q[7] = q[3];
             q[12] = 0.0f;
             q[11] = time;
@@ -239,4 +313,193 @@ void Smoother::Update(bool reset)
     mf88 = p->f24;
     mbC5 = 1;
     mua4 = 0;
+}
+
+// @ 0x01150a40
+void __cdecl ProcessSmoother(Smoother* self, UpdateContext* ctx, uint32_t flags)
+{
+    if ((uint8_t)flags) {
+        self->mbC6 = 0;
+        self->mub0 = 0x100;
+        self->mub4 = 0;
+        self->mub8 = 0;
+    }
+    if (self->mua4 == 1)
+        self->Update(flags);
+
+    FrameBuffer* a = ctx->mpA;
+    FrameBuffer* b = ctx->mpB;
+    if (self->mubc == 0) {
+        for (unsigned i = 0; i < self->mb21; ++i)
+            memset((char*)b->mpData + (unsigned)b->mStride * i * 4, 0, 0x400);
+    } else if (self->mubc == 1) {
+        if (self->mbC5 == 1)
+            self->ProcessFrame(b, a);
+        else
+            self->CopyRowScaled(b, a);
+    }
+    ctx->mpA = b;
+    ctx->mpB = a;
+    ++self->mub4;
+}
+
+// @ 0x01150b20
+NOINLINE void __thiscall Arc4::Set(float a, float b)
+{
+    x = a;
+    y = b;
+    float sum = a * a + b * b;
+    len2 = sum;
+    if (sum > _HK_REAL_ONE) {
+        len2 = _HK_REAL_ONE;
+        double inv = 1.0 / sqrt((double)sum);
+        x = (float)(inv * (double)a);
+        y = (float)((double)b * inv);
+    }
+}
+
+static __forceinline void SetArcInline(Arc4* v, float a, float b)
+{
+    v->x = a;
+    v->y = b;
+    float sum = a * a + b * b;
+    v->len2 = sum;
+    if (sum > _HK_REAL_ONE) {
+        v->len2 = _HK_REAL_ONE;
+        double inv = 1.0 / sqrt((double)sum);
+        v->x = (float)((double)a * inv);
+        v->y = (float)(inv * (double)b);
+    }
+}
+
+#pragma float_control(precise, off, push)
+// @ 0x01150b80
+void __thiscall Smoother::UpdateArcs()
+{
+    const float DEG2RAD = -0.017453292f;
+    double aE = (double)mf28 * (double)DEG2RAD;
+    double f14E = (double)sub.mf40 * (double)DEG2RAD;
+    float a = (float)aE;
+    float f14 = (float)f14E;
+    float f13 = mf38;
+    float r = mf30;
+    float ca = (float)(cos(aE) * (double)r);
+    float sa = (float)(sin(aE) * (double)r);
+
+    uint32_t mode = mmodeCC;
+    if (mode - 1 > 4)
+        return;
+
+    double aC = aE;
+    switch (mode) {
+    case 1: {
+        mArcs[0].Set(ca, sa);
+        float ang = a;
+        if (r <= 0.0f)
+            ang = a + 3.1415927f;
+        mArcs[0].angle = ang;
+        break;
+    }
+    case 2: {
+        double ang = ((double)f14 + aE) + (double)1.5707964f;
+        mArcs[0].Set((float)((double)ca + cos(ang) * (double)f13),
+                     (float)((double)sa + sin(ang) * (double)f13));
+        mArcs[0].angle = (float)atan2((double)mArcs[0].y, (double)mArcs[0].x);
+        mArcs[1].Set((float)((double)ca - cos(ang) * (double)f13),
+                     (float)((double)sa - sin(ang) * (double)f13));
+        mArcs[1].angle = (float)atan2((double)mArcs[1].y, (double)mArcs[1].x);
+        break;
+    }
+    case 3:
+        break;
+    case 5: {
+        double ang = (double)f14 + aE;
+        mArcs[1].Set((float)((double)ca + cos(ang) * (double)f13),
+                     (float)((double)sa + sin(ang) * (double)f13));
+        mArcs[1].angle = (float)atan2((double)mArcs[1].y, (double)mArcs[1].x);
+        aC = (double)a;
+        /* fall through */
+    }
+    case 4: {
+        int i0, i1, i2;
+        if (mode == 4) {
+            i0 = 1; i1 = 2; i2 = 3;
+        } else {
+            i0 = 2; i1 = 3; i2 = 4;
+        }
+        double ang;
+
+        ang = ((double)mf7c + (double)f14) + aC;
+        SetArcInline(&mArcs[0],
+                     (float)(cos(ang) * (double)f13 + (double)ca),
+                     (float)(sin(ang) * (double)f13 + (double)sa));
+        mArcs[0].angle = (float)atan2((double)mArcs[0].y, (double)mArcs[0].x);
+
+        ang = ((double)f14 + (double)a) - (double)mf7c;
+        SetArcInline(&mArcs[i0],
+                     (float)(cos(ang) * (double)f13 + (double)ca),
+                     (float)(sin(ang) * (double)f13 + (double)sa));
+        mArcs[i0].angle = (float)atan2((double)mArcs[i0].y, (double)mArcs[i0].x);
+
+        ang = ((double)mf80 + (double)f14) + aC;
+        SetArcInline(&mArcs[i1],
+                     (float)(cos(ang) * (double)f13 + (double)ca),
+                     (float)(sin(ang) * (double)f13 + (double)sa));
+        mArcs[i1].angle = (float)atan2((double)mArcs[i1].y, (double)mArcs[i1].x);
+
+        ang = ((double)f14 + (double)a) - (double)mf80;
+        SetArcInline(&mArcs[i2],
+                     (float)(cos(ang) * (double)f13 + (double)ca),
+                     (float)(sin(ang) * (double)f13 + (double)sa));
+        mArcs[i2].angle = (float)atan2((double)mArcs[i2].y, (double)mArcs[i2].x);
+        break;
+    }
+    }
+}
+#pragma float_control(pop)
+
+// @ 0x01150fb0
+void __thiscall Smoother::BlendIk(int index)
+{
+    Arc4* arc = &mArcs[index];
+    float ax = arc->x;
+    float ay = arc->y;
+
+    float d0x = mf13c - ax, d0y = mf140 - ay;
+    float d1x = mf14c - ax, d1y = mf150 - ay;
+    float d2x = mf154 - ax, d2y = mf158 - ay;
+    float d3x = mf15c - ax, d3y = mf160 - ay;
+
+    float w0 = 1.0f - (float)(sqrt((double)d0x * (double)d0x + (double)d0y * (double)d0y) * 0.5);
+    float w1 = 1.0f - (float)(sqrt((double)d1x * (double)d1x + (double)d1y * (double)d1y) * 0.5);
+    float w2 = 1.0f - (float)(sqrt((double)d2x * (double)d2x + (double)d2y * (double)d2y) * 0.5);
+    float w3 = 1.0f - (float)(sqrt((double)d3x * (double)d3x + (double)d3y * (double)d3y) * 0.5);
+
+    float u = (ax + 1.0f) * 0.5f;
+    if (fabs((double)u) < (double)0.0005f)
+        u = 0.0f;
+    float v = 1.0f - u;
+    if (fabs((double)v) < (double)0.0005f)
+        v = 0.0f;
+
+    float t;
+    float local4 = 0.0f;
+    if (mmodeD0 == 5) {
+        float d4x = mf144 - ax, d4y = mf148 - ay;
+        local4 = (1.0f - (float)(sqrt((double)d4y * (double)d4y + (double)d4x * (double)d4x) * 0.5)) * sub.mf48;
+        t = (float)sqrt((double)u / ((double)local4 * (double)local4 +
+                                     ((double)w0 * (double)w0 + (double)w1 * (double)w1)));
+        local4 = t * local4;
+    } else {
+        t = (float)sqrt((double)u / ((double)w0 * (double)w0 + (double)w1 * (double)w1));
+    }
+    float s = (float)sqrt((double)v / ((double)w2 * (double)w2 + (double)w3 * (double)w3));
+    float rr = (float)sqrt(1.0 - (double)arc->len2 * (double)arc->len2);
+
+    IkRow* row = &mIk[index];
+    row->mW0 = (float)((double)rr * ((double)t * (double)w0));
+    row->mMid = (float)((double)rr * (double)local4);
+    row->mW1 = (float)((double)rr * ((double)t * (double)w1));
+    row->mW2 = (float)(((double)w2 * (double)s) * (double)rr);
+    row->mW3 = (float)(((double)s * (double)w3) * (double)rr);
 }
