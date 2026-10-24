@@ -2,3 +2,7 @@
 slices/s00dfc5b0/s00dfc5b0.cpp  ?dtor@BlobAC0@@QAEXXZ   00dfcac0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00dfc5b0/s00dfc5b0.cpp  ?dtor@BlobE40@@QAEXXZ   00dfce40  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00dfc5b0/s00dfc5b0.cpp  ?dtor@BlobE90@@QAEXXZ   00dfce90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00dfc5b0/s00dfc5b0.cpp  ??4Entry188@@QAEAAU0@ABU0@@Z  00dfcc90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00dfc5b0/s00dfc5b0.cpp  ?uninitCopy188@@YAPADPAD00@Z  00dfd250  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00dfc5b0/s00dfc5b0.cpp  ??4Sub028@@QAEAAU0@ABU0@@Z  00dfd3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00dfc5b0/s00dfc5b0.cpp  ?ctorr@Entry188@@QAEAAU1@ABU1@@Z  00dfd020  /O2 /MD /Gy /EHsc /TP /arch:SSE
