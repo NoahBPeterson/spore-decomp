@@ -1,0 +1,5 @@
+# All 1 function in this slice byte-matches (see manifest.txt); run_all reports 1 / 1.
+
+# Equivalence check (tools/difftest/equiv.py s0131c960 0131c960):
+# 0131c960  PASS  400/400 valid inputs, 100.0% coverage (211/211 insns)
+# Log: work/match/scratch_s0131c960_equiv.txt
