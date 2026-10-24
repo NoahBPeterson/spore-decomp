@@ -1,2 +1,16 @@
 008eee90 EA::Text::RectSet::RectSet  # out-of-line ctor of the fixed_set<Rectangle> (rbtree + fixed node pool, buffer at +0x2c); builds the temp fixed allocator then calls the rbtree ctor 0x008eed10
 008eeee0 ?DrawTextLine@RenderingContext@Layout@XHTML@EA@@QAEXPAULineLayout_s008e_ebb0@Text@4@@Z  # RenderingContext::DrawTextLine migrated from s008eebb0 (verbatim, slice spelling)
+008eebb0 RenderingContext::DrawQuadSet2  # offset four float[2] points by mfOffsetX/mfOffsetY into one quad and hand it to IDrawContext slot 0x48; nonmatching
+008eec80 RenderingContext::DrawImage2  # texture guard + uv {0,0,1,1} + rect {x+ox,y+oy,+w,+h} into IDrawContext slot 0x58; nonmatching
+008eed10 RectSetExt::Init  # rbtree/fixed-pool construct from a caller-supplied buffer (anchor self-links, pool over 0x80 bytes of 0x20-byte nodes); returns this; nonmatching
+008eed80 RenderingContext::SetContextRect  # copy the 16-byte context rect into mfOffsetX..mfHeight then RefreshMargins; byte-exact
+008eedb0 RenderingContext::SetContextRectRelative  # add the context offsets to a relative rect and store it back, then RefreshMargins; nonmatching
+008eee30 RenderingContext::PlaceFloat  # append an inline item to the float list and purge the items whose bottom is above the current Y; byte-exact
+008ef550 RenderingContext::BeginContent  # position the typesetter and lay out every line of type 1: finalize, draw, advance Y by ceil-floor of the line metrics, purge floats, advance the line base index, NextLine; byte-exact
+008ef6d0 RenderingContext::Reset  # same layout loop until the typesetter reports type 2, then Reset(1) and clear the selection range / line base index; byte-exact
+008ef870 SizingContext::SizingContext  # typesetter ctor + zeroed maxima, height from the argument, Reset(1); byte-exact
+008ef8b0 SizingContext::Clear  # zero both maxima and Reset(1); byte-exact
+008ef8d0 SizingContext::AddRun  # set the run style then append a text run; byte-exact
+008ef900 SizingContext::Finish  # two measure passes (max ceil advance metric, then max metric), Reset(0)/Reset(1) and game-data render mode 3, width falls back to the height maximum when 0; nonmatching
+008efa50 RenderingContext::AddTextRun  # set the run style, append a text run, clear the float flag and the selection start; byte-exact
+008efa90 RenderingContext::AddLineBreak  # set the run style, append a line break run, clear the float flag and the selection start; byte-exact

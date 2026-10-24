@@ -1,0 +1,10 @@
+slices/s008eebb0/s008eebb0.cpp  ?SetContextRect@RenderingContext@Layout@XHTML@EA@@QAEXPBUContextRectF@234@@Z  008eed80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008eebb0/s008eebb0.cpp  ?PlaceFloat@RenderingContext@Layout@XHTML@EA@@QAEXPAVInlineItem@234@@Z  008eee30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008eebb0/s008eebb0.cpp  ??0RectSetExt@Text@EA@@QAE@XZ  008eee90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008eebb0/s008eebb0.cpp  ?BeginContent@RenderingContext@Layout@XHTML@EA@@QAEXXZ  008ef550  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008eebb0/s008eebb0.cpp  ?Reset@RenderingContext@Layout@XHTML@EA@@QAEXXZ  008ef6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008eebb0/s008eebb0.cpp  ??0SizingContext@Layout@XHTML@EA@@QAE@M@Z  008ef870  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008eebb0/s008eebb0.cpp  ?Clear@SizingContext@Layout@XHTML@EA@@QAEXXZ  008ef8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008eebb0/s008eebb0.cpp  ?AddRun@SizingContext@Layout@XHTML@EA@@QAEXPB_WIH@Z  008ef8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008eebb0/s008eebb0.cpp  ?AddTextRun@RenderingContext@Layout@XHTML@EA@@QAEXPB_WIH@Z  008efa50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008eebb0/s008eebb0.cpp  ?AddLineBreak@RenderingContext@Layout@XHTML@EA@@QAEXPB_WIH@Z  008efa90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
