@@ -1,0 +1,4 @@
+0100a7c0  ?FUN_0100a7c0@@YGXXZ  # __thiscall (6 stack args): trigger/terrain gate, then build a 0x1c-byte eastl-string element and push_back into the this+0xc8 vector - no source (partial)
+0100a960  ?FUN_0100a960@@YGXXZ  # SimSingleton bring-up / planet activation (1364-byte engine teardown+setup chain) - no source (partial)
+0100aec0  ?FUN_0100aec0@@YGXXZ  # __thiscall (1 stack arg): embassy rbtree find + PropertyManager switch + this+0xdc banner-vector push_back - no source (partial)
+0100b0a0  ?FUN_0100b0a0@@YGXXZ  # mission / UFO activation (CreateUFOForSolarOrGalaxy, SetDestination, AutoRefCount) - no source (partial)
