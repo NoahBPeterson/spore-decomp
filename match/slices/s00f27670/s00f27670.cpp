@@ -6,7 +6,12 @@ typedef unsigned int size_t;
 extern "C" {
   int  sub_eece20(void*);
   void* sub_00572590(void*);
+  void* __cdecl FUN_00f473a0(unsigned size, const char* name, int a, int b, int c, int d);
+  void  __cdecl FUN_00f47380(void* p);
+  void  __cdecl FUN_00720200(void* a, void* b, void* c);
+  void  __cdecl FUN_00f25ea0(void* a, void* b, void* c);
 }
+struct CBase { void dtor(); };  // 0x006b5240 base destructor
 extern "C" size_t __cdecl wcslen(const wchar_t*);
 
 struct CS {
@@ -116,12 +121,76 @@ void fn27d80(void* a) { (void)a; }
 void fn27e00(void* a) { (void)a; }
 // @ 0x00f27ee0
 void fn27ee0(void* a, void* b) { (void)a; (void)b; }
+struct CStr {
+  char  _pad00[0x14];  // 0x00..0x13
+  char* mBegin1;       // +0x14
+  char* mCap1;         // +0x18
+  char* mEnd1;         // +0x1c
+  char  _pad20[0x0c];  // 0x20..0x2b
+  char* mBegin2;       // +0x2c
+  char* mCap2;         // +0x30
+  char* mEnd2;         // +0x34
+  ~CStr();
+};
 // @ 0x00f280f0
-void fn280f0(void* a) { (void)a; }
+CStr::~CStr()
+{
+  if (((((int)(mEnd2 - mBegin2)) & ~1) > 2) && mBegin2) FUN_00f47380(mBegin2);
+  if (((((int)(mEnd1 - mBegin1)) & ~1) > 2) && mBegin1) FUN_00f47380(mBegin1);
+  ((CBase*)this)->dtor();
+}
+struct Vec18 {
+  char* begin;   // +0x00
+  char* end;     // +0x04
+  char* cap;     // +0x08
+  void reserve(unsigned n);
+};
 // @ 0x00f28140
-void fn28140(void* a, uint n) { (void)a; (void)n; }
+void Vec18::reserve(unsigned n)
+{
+  unsigned capCount = (unsigned)((cap - begin) / 0x18);
+  if (n > capCount) {
+    char* p;
+    if (n)
+      p = (char*)FUN_00f473a0(n * 0x18, (const char*)0x13f09b4, 0, 0, 0x13ebb38, 0xd1);
+    else
+      p = 0;
+    FUN_00720200(begin, end, p);
+    if (begin)
+      FUN_00f47380(begin);
+    unsigned count = (unsigned)((end - begin) / 0x18);
+    begin = p;
+    end = p + count * 0x18;
+    cap = p + n * 0x18;
+  }
+}
+struct AllocHdr { int mOwner; };  // 4-byte allocation header before the element buffer
+
+struct Vec38 {
+  char* begin;   // +0x00
+  char* end;     // +0x04
+  char* cap;     // +0x08
+  void reserve(unsigned n);
+};
 // @ 0x00f28280
-void fn28280(void* a, uint n) { (void)a; (void)n; }
+void Vec38::reserve(unsigned n)
+{
+  unsigned capCount = (unsigned)((cap - begin) / 0x38);
+  if (n > capCount) {
+    char* p;
+    if (n)
+      p = (char*)FUN_00f473a0(n * 0x38, (const char*)0x13f09b4, 0, 0, 0x13ebb38, 0xd1);
+    else
+      p = 0;
+    FUN_00f25ea0(begin, end, p);
+    if (begin && ((AllocHdr*)begin)[-1].mOwner != 0)
+      FUN_00f47380(begin);
+    unsigned count = (unsigned)((end - begin) / 0x38);
+    begin = p;
+    end = p + count * 0x38;
+    cap = p + n * 0x38;
+  }
+}
 // @ 0x00f28380
 char fn28380(void* a, int b, int c) { (void)a; (void)b; (void)c; return 1; }
 // @ 0x00f28480
