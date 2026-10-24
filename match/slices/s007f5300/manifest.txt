@@ -12,3 +12,4 @@ slices/s007f5300/s007f5300.cpp  ?M5BD0@Obj@@QAE_NPAXHH@Z  007f5bd0  /O2 /MD /Gy 
 slices/s007f5300/s007f5300.cpp  ?DestroyRange@@YGXPAX0@Z  007f5f70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s007f5300/s007f5300.cpp  ?CreateTimeRamp@@YAPAXPAXMMM@Z  007f6040  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s007f5300/s007f5300.cpp  ?CreateTimeSmooth@@YAPAXPAXMMMMM@Z  007f60d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?Update@AnimatorS@@QAEXXZ  007f63b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

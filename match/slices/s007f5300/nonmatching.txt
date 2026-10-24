@@ -16,4 +16,3 @@
 007f6210  130  complete; loop strength-reduction/register allocation differs
 007f62c0  111  complete; keeps `this` in ecx (original re-reads mBegin/mEnd each iteration); _ReadWriteBarrier() stops the loop bound being hoisted into ecx; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; equiv PASS (249 valid, 100% cov)
 007f6340  101  complete; loop register allocation differs
-007f63b0  -  complete; float timer/vector loop schedule differs

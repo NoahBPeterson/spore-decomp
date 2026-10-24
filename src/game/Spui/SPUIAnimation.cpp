@@ -431,21 +431,20 @@ void AnimatorS::Update()
         float dt = now - mLast;
         if (dt > g_c01)
             dt = g_c01;
-        uint32_t n = (uint32_t)((mEnd - mBegin) / 0x88);
         bool any = false;
-        for (uint32_t i = 0; i < n; ++i) {
+        for (uint32_t i = 0; i < (uint32_t)((mEnd - mBegin) / 0x88); ++i) {
             char* e = mBegin + i * 0x88;
             if (*(void**)e) {
                 bool r = ((AnimFn2)*(void**)(e + 0xc))(e + 8, now, dt, 2, 0);
-                if (!r) {
+                if (r) {
+                    any = true;
+                } else {
                     ((AnimFn1)*(void**)(e + 0xc))(e + 8, 0.0f, 0.0f, 1, 0);
                     void* p = *(void**)e;
                     if (p) {
                         *(void**)e = 0;
                         ((FV0)VTOBJ(p)[4 / 4])(p);
                     }
-                } else {
-                    any = true;
                 }
             }
         }
