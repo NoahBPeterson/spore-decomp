@@ -14,8 +14,13 @@ extern float kSH_Y_4_4, kSH_Y_4_3, kSH_Y_4_2, kSH_Y_4_1, kSH_Y_40, kSH_Y_41, kSH
 extern float g_153ae10;
 extern char  kBasisTriples3, kBasisTriples4, kBasisTriples5;
 #include <math.h>
+#include <string.h>
 #include <xmmintrin.h>
 #pragma intrinsic(sqrt)
+
+// cl15 does not inline `sqrt` in this TU (the original ends each term with an x87 fsqrt);
+// shSqrt gives the same single-precision result without a CRT call.
+static inline float shSqrt(const float* p) { return _mm_cvtss_f32(_mm_sqrt_ss(_mm_load_ss(p))); }
 
 // ---- items of slice s00783590 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float kSH_Y_00, kSH_Y_1x;
@@ -171,8 +176,8 @@ extern unsigned char DAT_0140eac5;
 extern unsigned char DAT_0140eac6;
 extern float __cdecl AddColourSample(float *, int, float *, int);
 extern void __cdecl RotateZHToSHAddT(float *, int, float *, int);
-extern void __cdecl CalcHGPhaseZH(float, void *, int, void *);
-extern void __cdecl CalcHGPhaseZHAdd(float, void *, int, void *);
+extern float* __cdecl CalcHGPhaseZH(float, void *, int, void *);
+extern float* __cdecl CalcHGPhaseZHAdd(float, void *, int, void *);
 extern void __cdecl MultiplyZH(int, void *, void *, int, void *);
 extern char _kBasisTriples3[];
 extern char _kBasisTriples4[];
@@ -261,60 +266,50 @@ void RemoveNormalizationConstants(int order, float* v)
 #undef MUL4
 }
 
-// @ 0x00783b20
-void ApplyDiffuseReflection(int order, const float* lit, const float* diff, float* out)
+// @ 0x00783b20 -- eax holds the end of the degree-6+ tail run (or the accumulator start)
+float* ApplyDiffuseReflection(int order, const float* lit, const float* diff, float* out)
 {
-    float l1 = lit[1], l2 = lit[2], l3 = lit[3];
-    float d1 = diff[1], d2 = diff[2], d3 = diff[3];
-    out[0] = (lit[0] + diff[0]) * out[0];
-    out[1] = (d1 + l1) * out[1];
-    out[2] = (d2 + l2) * out[2];
-    out[3] = (d3 + l3) * out[3];
-    if (1 < order) {
-        float f1 = lit[0] * 0.6666667f + diff[0];
-        float f2 = lit[1] * 0.6666667f + diff[1];
-        float f3 = lit[2] * 0.6666667f + diff[2];
-        float f4 = lit[3] * 0.6666667f + diff[3];
-        out[4] *= f1; out[5] *= f2; out[6] *= f3; out[7] *= f4;
-        out[8] *= f1; out[9] *= f2; out[0xa] *= f3; out[0xb] *= f4;
-        out[0xc] *= f1; out[0xd] *= f2; out[0xe] *= f3; out[0xf] *= f4;
-        if (2 < order) {
-            float g1 = lit[0] * 0.25f + diff[0];
-            float g2 = lit[1] * 0.25f + diff[1];
-            float g3 = lit[2] * 0.25f + diff[2];
-            float g4 = lit[3] * 0.25f + diff[3];
-            out[0x10] *= g1; out[0x11] *= g2; out[0x12] *= g3; out[0x13] *= g4;
-            out[0x14] *= g1; out[0x15] *= g2; out[0x16] *= g3; out[0x17] *= g4;
-            out[0x18] *= g1; out[0x19] *= g2; out[0x1a] *= g3; out[0x1b] *= g4;
-            out[0x1c] *= g1; out[0x1d] *= g2; out[0x1e] *= g3; out[0x1f] *= g4;
-            out[0x20] *= g1; out[0x21] *= g2; out[0x22] *= g3; out[0x23] *= g4;
-            if (3 < order) {
-                float* p = out + 0x24;
-                for (int k = 0; k < 7; ++k) {
-                    p[0] *= diff[0]; p[1] *= diff[1]; p[2] *= diff[2]; p[3] *= diff[3];
-                    p += 4;
-                }
-                if (4 < order) {
-                    float h1 = lit[0] * -0.041666668f + diff[0];
-                    float h2 = lit[1] * -0.041666668f + diff[1];
-                    float h3 = lit[2] * -0.041666668f + diff[2];
-                    float h4 = lit[3] * -0.041666668f + diff[3];
-                    p = out + 0x40;
-                    for (int k = 0; k < 9; ++k) {
-                        p[0] *= h1; p[1] *= h2; p[2] *= h3; p[3] *= h4;
-                        p += 4;
-                    }
-                    if (5 < order && 0x19 < order * order) {
-                        p = out + 100;
-                        for (int k = order * order - 0x19; k != 0; --k) {
-                            p[0] *= diff[0]; p[1] *= diff[1]; p[2] *= diff[2]; p[3] *= diff[3];
-                            p += 4;
-                        }
-                    }
-                }
-            }
-        }
+    // The original works four lanes at a time: every band factor is a packed
+    // (lit * bandConstant + diff) vector, and bands 3 and 5 just scale by diff.
+    float* p = out;
+    float* end = out;
+    _mm_store_ps(p, _mm_mul_ps(_mm_add_ps(_mm_load_ps(lit), _mm_load_ps(diff)), _mm_load_ps(p)));
+    if (order < 2)
+        return end;
+    __m128 m = _mm_add_ps(_mm_mul_ps(_mm_set1_ps(0.6666667f), _mm_load_ps(lit)), _mm_load_ps(diff));
+    for (int i = 0; i < 3; ++i) {
+        p += 4;
+        _mm_store_ps(p, _mm_mul_ps(_mm_load_ps(p), m));
     }
+    if (order < 3)
+        return end;
+    m = _mm_add_ps(_mm_mul_ps(_mm_set1_ps(0.25f), _mm_load_ps(lit)), _mm_load_ps(diff));
+    for (int i = 0; i < 5; ++i) {
+        p += 4;
+        _mm_store_ps(p, _mm_mul_ps(_mm_load_ps(p), m));
+    }
+    if (order < 4)
+        return end;
+    for (int i = 0; i < 7; ++i) {
+        p += 4;
+        _mm_store_ps(p, _mm_mul_ps(_mm_load_ps(p), _mm_load_ps(diff)));
+    }
+    if (order < 5)
+        return end;
+    m = _mm_add_ps(_mm_mul_ps(_mm_set1_ps(-0.041666668f), _mm_load_ps(lit)), _mm_load_ps(diff));
+    for (int i = 0; i < 9; ++i) {
+        p += 4;
+        _mm_store_ps(p, _mm_mul_ps(_mm_load_ps(p), m));
+    }
+    int n = order * order;
+    if (order < 6 || n <= 0x19)
+        return end;
+    p = out + 100;
+    for (int k = n - 0x19; k != 0; --k) {
+        _mm_store_ps(p, _mm_mul_ps(_mm_load_ps(p), _mm_load_ps(diff)));
+        p += 4;
+    }
+    return p;
 }
 
 // @ 0x00783c90
@@ -333,51 +328,54 @@ void MirrorSHInZ(int n, float* data)
     }
 }
 
+// Shared helpers for the sparse SH product-table multiply below.  One SH projection
+// group (four coefficients) lives at base + index * 16 bytes.
+static inline const float* shp(const void* base, int idx) { return (const float*)((const char*)base + idx * 16); }
+static inline float* shm(void* base, int idx) { return (float*)((char*)base + idx * 16); }
+
+// One entry of the sparse SH product table: basis indices i, j, k plus the weight.
+struct SHTriple { signed char i, j, k; float w; };
+
+// out[acc] += a[i] * b[j] * w  (the two factors share one basis function only when i == j)
+static inline void shAddDiagonal(float* po, const char* pa, const char* pb, int acc, int i, int j, float wt)
+{
+    __m128 v = _mm_mul_ps(_mm_set1_ps(wt), _mm_load_ps(shp(pa, i)));
+    v = _mm_mul_ps(v, _mm_load_ps(shp(pb, j)));
+    v = _mm_add_ps(v, _mm_load_ps(shm(po, acc)));
+    _mm_store_ps(shm(po, acc), v);
+}
+
+// out[acc] += (b[i] * a[j] + a[i] * b[j]) * w
+static inline void shAddCross(float* po, const char* pa, const char* pb, int acc, int i, int j, float wt)
+{
+    __m128 v = _mm_mul_ps(_mm_load_ps(shp(pb, i)), _mm_load_ps(shp(pa, j)));
+    v = _mm_add_ps(v, _mm_mul_ps(_mm_load_ps(shp(pa, i)), _mm_load_ps(shp(pb, j))));
+    v = _mm_mul_ps(v, _mm_set1_ps(wt));
+    v = _mm_add_ps(v, _mm_load_ps(shm(po, acc)));
+    _mm_store_ps(shm(po, acc), v);
+}
+
 // @ 0x00783cf0
 void SP_MultiplySH(int count, int a, int b, void* out, char* triples)
 {
-    float* o = (float*)out;
-    for (int i = 0; i < count; ++i)
-        o[i] = 0.0f;
-    for (char* t = triples; t[0] >= 0; t += 8) {
-        float w = *(float*)(t + 4);
-        int x = t[0], y = t[1], z = t[2];
-        const float* px = (const float*)(x * 16 + a);
-        const float* py = (const float*)(y * 16 + b);
-        float* pz = (float*)(z * 16 + (int)out);
-        if (x == y) {
-            pz[0] += w * px[0] * py[0];
-            pz[1] += w * px[1] * py[1];
-            pz[2] += w * px[2] * py[2];
-            pz[3] += w * px[3] * py[3];
-            if (y != z) {
-                float* pz2 = (float*)(x * 16 + (int)out);
-                const float* q1 = (const float*)(y * 16 + a);
-                const float* q2 = (const float*)(z * 16 + b);
-                pz2[0] += w * q1[0] * q2[0];
-                pz2[1] += w * q1[1] * q2[1];
-                pz2[2] += w * q1[2] * q2[2];
-                pz2[3] += w * q1[3] * q2[3];
-            }
-        } else if (y == z) {
-            pz[0] += w * px[0] * py[0];
-            pz[1] += w * px[1] * py[1];
-            pz[2] += w * px[2] * py[2];
-            pz[3] += w * px[3] * py[3];
-            float* pz2 = (float*)(y * 16 + (int)out);
-            const float* q1 = (const float*)(x * 16 + a);
-            const float* q2 = (const float*)(z * 16 + b);
-            pz2[0] += w * q1[0] * q2[0];
-            pz2[1] += w * q1[1] * q2[1];
-            pz2[2] += w * q1[2] * q2[2];
-            pz2[3] += w * q1[3] * q2[3];
+    const char* pa = (const char*)a;
+    const char* pb = (const char*)b;
+    char* po = (char*)out;
+    memset(po, 0, count * 16);
+    for (const char* e = triples; ((const SHTriple*)e)->i >= 0; e += 8) {
+        const SHTriple* t = (const SHTriple*)e;
+        if (t->i == t->j) {
+            shAddDiagonal((float*)po, pa, pb, t->k, t->i, t->j, t->w);
+            if (t->j == t->k)
+                continue;
+            shAddCross((float*)po, pa, pb, t->i, t->j, t->k, t->w);
+        } else if (t->j == t->k) {
+            shAddDiagonal((float*)po, pa, pb, t->i, t->j, t->j, t->w);
+            shAddCross((float*)po, pa, pb, t->j, t->i, t->k, t->w);
         } else {
-            const float* q1 = (const float*)(y * 16 + a);
-            const float* q2 = (const float*)(z * 16 + b);
-            pz[0] += w * (px[0] * py[0] + q1[0] * q2[0]);
-            pz[1] += w * (px[1] * py[1] + q1[1] * q2[1]);
-            pz[2] += w * (px[2] * py[2] + q1[2] * q2[2]);
-            pz[3] += w * (px[3] * py[3] + q1[3] * q2[3]);
+            shAddCross((float*)po, pa, pb, t->i, t->j, t->k, t->w);
+            shAddCross((float*)po, pa, pb, t->j, t->i, t->k, t->w);
+            shAddCross((float*)po, pa, pb, t->k, t->j, t->i, t->w);
         }
     }
 }
@@ -416,36 +414,52 @@ void FindSHCoeffsFromHemiEnvMap(cImageData32 const * env, int order, rw::math::v
 }
 }  // namespace SP
 
-// @ 0x00784330
-void CalcHGPhaseZH(float a, const float* src, int order, float* dst)
+// @ 0x00784330 -- returns the end of the written range (original leaves it in eax;
+// with an empty range eax is still the source pointer it loaded the seed qword from)
+float* CalcHGPhaseZH(float a, const float* src, int order, float* dst)
 {
-    __m128 x = _mm_load_ps(src);
+    float* p = (float*)src;
+    __m128 x = _mm_load_ps(p);
     if (order > 0) {
+        p = dst;
+        __m128 br = _mm_set1_ps(a);
         int i = 1;
         do {
-            __m128 scale = _mm_set1_ps((float)sqrt((double)((float)i * g_153ae10 * 4.0f)));
-            _mm_store_ps(dst, _mm_mul_ps(scale, x));
-            x = _mm_mul_ps(_mm_set1_ps(a), x);
+            float t = (float)((double)i * g_153ae10 * 4.0f);
+            __m128 scale = _mm_set1_ps(shSqrt(&t));
+            _mm_store_ps(p, _mm_mul_ps(scale, x));
+            x = _mm_mul_ps(br, x);
+            p += 4;
             i += 2;
             order--;
         } while (order != 0);
+        return p;
     }
+    return (float*)src;
 }
 
-// @ 0x007843a0
-void CalcHGPhaseZHAdd(float a, const float* src, int order, float* dst)
+// @ 0x007843a0 -- additive variant, returns the end of the written range (eax keeps the
+// source pointer when the range is empty, as in the non-additive variant)
+float* CalcHGPhaseZHAdd(float a, const float* src, int order, float* dst)
 {
-    __m128 x = _mm_load_ps(src);
+    float* p = (float*)src;
+    __m128 x = _mm_load_ps(p);
     if (order > 0) {
+        p = dst;
+        __m128 br = _mm_set1_ps(a);
         int i = 1;
         do {
-            __m128 scale = _mm_set1_ps((float)sqrt((double)((float)i * g_153ae10 * 4.0f)));
-            _mm_store_ps(dst, _mm_add_ps(_mm_mul_ps(scale, x), _mm_load_ps(dst)));
-            x = _mm_mul_ps(_mm_set1_ps(a), x);
+            float t = (float)((double)i * g_153ae10 * 4.0f);
+            __m128 scale = _mm_set1_ps(shSqrt(&t));
+            _mm_store_ps(p, _mm_add_ps(_mm_mul_ps(scale, x), _mm_load_ps(p)));
+            x = _mm_mul_ps(br, x);
+            p += 4;
             i += 2;
             order--;
         } while (order != 0);
+        return p;
     }
+    return (float*)src;
 }
 
 // @ 0x00784420

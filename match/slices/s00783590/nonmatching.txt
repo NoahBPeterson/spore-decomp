@@ -1,7 +1,8 @@
 # va  diff-bytes  reason
-00784330  84   complete: Henyey-Greenstein phase term loop (SSE broadcast + x87 scale); cl keeps the __m128 values on the stack and emits a sqrt call instead of fsqrt
-007843a0  89   complete: additive variant of the same loop
+00784330  120  complete CalcHGPhaseZH (Henyey-Greenstein phase term loop: seed qword, x87 scale term, SSE broadcast of a, end pointer in eax); cl keeps the __m128 values on the stack and the empty-order path differs; size 111 vs 144; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (replay, first difference None)
+007843a0  129  complete additive variant of the same loop; size 118 vs 151; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (replay, first difference None)
 00783590  568  complete: full SH normalisation apply for degrees 0..4; original vectorises each 4-float group into SIMD
 00783830  745  complete: full SH normalisation remove for degrees 0..4; same vectorisation difference
-00783b20  363  complete: diffuse-reflection application for degrees 0..4 including the 7x and 9x block loops
-00783cf0  577  complete: SH basis multiply; the three basis-triple cases were folded into one loop, which changes the emitted shape
+00783b20  281  complete ApplyDiffuseReflection: packed (lit*band+diff) band factors for degrees 1..5 plus the degree-6+ tail, end pointer returned in eax; size 363 vs 315; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (replay, first difference None)
+00783cf0  613  complete SP_MultiplySH: memset(out,0,count*16) then one pass over the 8-byte sparse triple table (diagonal, shared-index and full cross-term cases); size 585 vs 641; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (replay, first difference None)
+00783fb0  775  complete FindSHCoeffsFromHemiEnvMap: per-texel disc test, solid-angle sinc weight, atan2/acos angles and the per-basis accumulation through FUN_00783130; size 885 vs 769; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast; difftest PASS (replay, first difference None)
