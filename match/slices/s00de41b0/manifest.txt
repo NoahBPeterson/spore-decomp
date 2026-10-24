@@ -1,0 +1,18 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4360@cGalaxyGameEntryImpl@@QAEII@Z  00de4360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4380@@YA_NXZ  00de4380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de43b0@cGalaxyGameEntryImpl@@QAEXI@Z  00de43b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de43d0@cGalaxyGameEntryImpl@@QAE_NII@Z  00de43d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4410@cGalaxyGameEntryImpl@@QAE_NII@Z  00de4410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4450@cGalaxyGameEntryImpl@@QAE_NIMMI@Z  00de4450  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de44a0@cGalaxyGameEntryImpl@@QAE_NIMMI@Z  00de44a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de44f0@cGalaxyGameEntryImpl@@QAE_NMMI@Z  00de44f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4570@cGalaxyGameEntryImpl@@QAEXI@Z  00de4570  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4590@cGalaxyGameEntryImpl@@QAEXPAXI@Z  00de4590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4610@cGalaxyGameEntryImpl@@QAEIXZ  00de4610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de46e0@cGalaxyGameEntryImpl@@QAEHXZ  00de46e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4910@cGalaxyGameEntryImpl@@QAEXXZ  00de4910  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4b00@@YAXXZ  00de4b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4bc0@@YGXD@Z  00de4bc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4c00@@YA_NXZ  00de4c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de41b0/s00de41b0.cpp  ?FUN_00de4c20@cGalaxyGameEntryImpl@@QAEXD@Z  00de4c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
