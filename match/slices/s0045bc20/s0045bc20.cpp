@@ -47,8 +47,8 @@ struct Weights {
 
 struct Skel {
     char   pad0[0x74];
-    Infl*  influences;    // +0x74
-    Infl*  inflEnd;       // +0x78
+    Infl*  infl[2];       // +0x74 begin, +0x78 end (one array, so the loop test
+                          // takes this+0x74 as its base and leaves it in eax)
     char   pad1[0x0c];
     Weights* weights;     // +0x88
     void   Compact();
@@ -56,9 +56,12 @@ struct Skel {
 
 void Skel::Compact()
 {
-    Infl* in = influences;
+    Infl* in = infl[0];
     Weights* wt = weights;
-    for (unsigned int i = 0; i < (unsigned int)(inflEnd - in); i = i + 1) {
+    // The bound is re-derived from this+0x74/+0x78 on every iteration, so the
+    // loop test leaves &infl[0] (this+0x74) in eax exactly as retail does.
+    Infl** inflp = &infl[0];
+    for (unsigned int i = 0; i < (unsigned int)(inflp[1] - inflp[0]); i = i + 1) {
         Infl* r = &in[i];
         Weights* w = &wt[i];
         if (r->j3 == r->j0) {
