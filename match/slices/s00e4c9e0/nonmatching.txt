@@ -6,5 +6,5 @@
 00e4cfc0   37  cCellFactoryBinary::GetSupportedTypes; complete (jbe vs ja layout). difftest: PASS (400 valid, 100% cov)
 00e4d0d0   77  FactoryBinary::WriteResource; complete. difftest: UNSUPPORTED (0/400 valid: fault read + fake-arity)
 00e4d120   96  property-list build + read; complete. difftest: PASS (296 valid, 98.6% cov)
-00e4d600  144  layer leaf emit recursion; complete. difftest: WEAK (158 valid, 100% cov)
+00e4d600  149  layer leaf emit recursion; complete. difftest: PASS (698/2000 inputs seed 3, 100% cov) with flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. The original's leaf midpoint is three SSE single-precision (addss/mulss) pairs, so this function has to be built with /fp:fast: with /arch:SSE alone this cl falls back to x87 80-bit intermediates, and the saved fail input then splits at the overflow ((a+b) in extended precision keeps the value finite where the original's addss overflows to -inf; ours stored -FLT_MAX instead of -inf). Sums now go to named float locals like the original's, which groups the three adds/multiplies; the remaining bytes are the original's stack-temp + integer-store pattern (movss [esp+N]/mov edx,[esp+N]/mov [eax],edx) and its xmm0/xmm1/xmm2 for the three points with xmm3 for the 0.5 constant; size 151 vs 183
 00e4d840  118  LayerLoaderInit; complete. difftest: UNSUPPORTED (0/400 valid: fault write + GetFileAttributesW)
