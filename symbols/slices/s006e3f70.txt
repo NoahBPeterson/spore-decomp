@@ -1,1 +1,1 @@
-006e3f70 ?Multiply@Matrix44_s006e_3f70@@QAEPAU1@PBM0@Z  # Matrix44_s006e_3f70::Multiply migrated from s006e3f70 (verbatim, slice spelling)
+006e3f70 ?Matrix44Multiply@@YAPAMPAMPBM1@Z  # Matrix44Multiply (cdecl, out/lhs/rhs) migrated from s006e3f70

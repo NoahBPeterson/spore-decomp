@@ -304,7 +304,12 @@ static const uint32_t kArray = 0x80000000;
 extern "C" int  DoInsertValue(void* dst, const void* src, int n);           // 0x011e0744
 extern "C" void UninitFillN56(void* dst, int n, const void* value, const void* m);  // 0x0042e680
 extern "C" void UninitFillN16(void* dst, int n, const void* value, const void* m);  // 0x00555b40
-extern "C" void Matrix3Assign(void* dst, const void* src);                  // 0x0041cb40
+struct cSPMatrix3 {
+    float m[9];
+    void Assign(const float* src);                                          // 0x0041cb40
+};
+extern const float   g_01485720;                                            // 0x01485720 (1.0f)
+extern const float   g_01602b10[9];                                         // 0x01602b10 (zero matrix)
 extern "C" void VariantRelease(int* p);                                     // 0x006ad050
 extern "C" void VariantHold(int* p);                                        // 0x006ad010
 struct Variant_s006a_5690 {
@@ -2148,13 +2153,23 @@ Vec10s* Vec10s::Init(unsigned n, const void* value)
 
 
 // @ 0x006a5ea0
+struct Fill38 {
+    uint16_t   mZero0;      // +0x00
+    uint16_t   mZero2;      // +0x02
+    Vector3    mPosition;   // +0x04
+    float      mOne;        // +0x10
+    cSPMatrix3 mMatrix;     // +0x14
+};
 Vec38b* Vec38b::Init(unsigned n, const void* value)
 {
     Alloc(n, value);
-    uint8_t tmp[0x38];
-    uint32_t m[4];
-    Matrix3Assign(m, 0);
-    UninitFillN56(begin, n, tmp, value);
+    Fill38 tmp;
+    tmp.mZero0 = 0;
+    tmp.mZero2 = 0;
+    tmp.mPosition = kDefaultVector3;
+    tmp.mOne = g_01485720;
+    tmp.mMatrix.Assign(g_01602b10);
+    UninitFillN56(begin, n, &tmp, value);
     *(void**)((char*)this + 4) = (char*)begin + n * 0x38;
     return this;
 }

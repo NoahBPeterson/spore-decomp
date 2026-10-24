@@ -4,6 +4,8 @@
 
 void FUN_00423080(int);
 void FUN_00424cf0(int, int);
+typedef void (__thiscall *FnVoidIP)(void*, int);
+typedef void (__thiscall *FnVoidIIP)(void*, int, int);
 void FUN_004751a0(int);
 void FUN_00424f70(int*);
 void FUN_00720070(int*);
@@ -29,11 +31,11 @@ int Vec41::emit(int param_2, int param_3)
     {
         mEnd = (int*)(iVar1 + 0x20);
         if (iVar1 != 0)
-            FUN_00423080(param_3);
+            ((FnVoidIP)FUN_00423080)((void*)iVar1, param_3);
     }
     else
     {
-        FUN_00424cf0(param_2, param_3);
+        ((FnVoidIIP)FUN_00424cf0)(this, param_2, param_3);
     }
     return ((param_2 - iVar2) >> 5) * 0x20 + (int)mBegin;
 }

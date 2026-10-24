@@ -130,7 +130,7 @@ struct cGraphicsSystem {
     void InitBufferTexture(int index);
     void* GetBufferTexture(int index, char param_3);
     void GetBufferRectID(int index, BufferRect* out, char param_4);
-    void* Shutdown();
+    bool  Shutdown();
     ~cGraphicsSystem();
 };
 
@@ -329,7 +329,7 @@ static void ReleaseTexture(cGraphicsSystem* self, void*& field, RectID& rect, in
 }
 
 // @ 0x007a6b40  SP::cGraphicsSystem::Shutdown
-void* cGraphicsSystem::Shutdown()
+bool cGraphicsSystem::Shutdown()
 {
     if (this->mInitialized != false) {
         this->mInitialized = false;
@@ -460,5 +460,5 @@ void* cGraphicsSystem::Shutdown()
         void* rm4 = GetManager();
         ((void (__thiscall*)(void*, int, void*, int))((*(void***)rm4)[0x44 / 4]))(rm4, 0, res2, 0);
     }
-    return (void*)1;
+    return true;
 }

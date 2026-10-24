@@ -132,12 +132,13 @@ struct RefCounted {
     long   mnRefCount;  // +0x4
     int Release()
     {
-        if (_InterlockedExchangeAdd(&mnRefCount, -1) == 1) {
-            mnRefCount = 1;
+        long n = _InterlockedDecrement(&mnRefCount);
+        if (n == 0) {
+            _InterlockedExchange(&mnRefCount, 1);
             ((void (__thiscall*)(RefCounted*, int))mpVtbl[0])(this, 1);
             return 0;
         }
-        return mnRefCount;
+        return n;
     }
 };
 

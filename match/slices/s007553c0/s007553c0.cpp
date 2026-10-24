@@ -21,7 +21,7 @@ void FUN_00755560();
 void FUN_00753fa0();
 void FUN_00429e00(int, unsigned int, int);
 int FUN_006df700(int, int, int);
-void FUN_0059c410(int, int);
+void __stdcall FUN_0059c410(int, int);
 void* FUN_006f43e0(void*, void*, void*);
 void FUN_007140e0(void*, void*, int);
 void* FUN_0067dd60();
@@ -227,9 +227,9 @@ struct V_755570 {
 void V_755570::FUN_00755570(unsigned int param_2, int param_3) {
   int* param_1 = (int*)this;
   int iVar2 = param_1[1];
-  unsigned int uVar3 = (unsigned int)(iVar2 - *param_1) >> 2;
+  unsigned int uVar3 = (unsigned int)((iVar2 - *param_1) >> 2);
   if (uVar3 < param_2) {
-    FUN_00429e00(iVar2, param_2 - uVar3, param_3);
+    ((void (__thiscall*)(void*, int, unsigned int, int))FUN_00429e00)(this, iVar2, param_2 - uVar3, param_3);
     return;
   }
   int iVar1 = *param_1 + param_2 * 4;

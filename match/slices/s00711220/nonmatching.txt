@@ -1,5 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
-00711220 167 vector::resize(uint32_t); inlined resize(n,value_type()) call shape and slot order not reproduced
+00711220 135 vector::resize(uint32_t); equivalent (equiv PASS 261 valid, 100% coverage); remaining byte diff is SEH/frame layout and register allocation; call shape now matches (ecx=vector for VecAtom_Insert, ret 8 DestroyRange, signed element arithmetic)
 007112c0 28 hashtable::DoFreeNodes; only inner-loop register assignment differs (node copy in edi vs esi)
 00711400 120 cMaterialManager::GetTexturesFromMaterial; atomic AutoRefCount assignment dance not reproduced
 00711630 104 cMaterialManager::GetExternalReferenceKeys; Key temp/loop counter live in memory in original (frame 4 bytes larger) [equiv: WEAK]

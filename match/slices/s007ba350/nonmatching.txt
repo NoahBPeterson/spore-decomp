@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-007ba350  3569  complete (all 7 effect types, every filter/AddRef/Release, RTT alloc+naming, viewport/param/clear-colour stores); /O2 /arch:SSE /GS- frame 0x4c vs 0x50 (temp slot sharing), tail-merge of the per-case final Release differs
+007ba350  0  FIXED: class mangled as cThumbnailManager_s007b_a350 so the slice symbol resolves; complete all 7 effect types, every filter/AddRef/Release, RTT alloc+naming, viewport/param/clear-colour stores. Default WEAK (362 valid, 6.2% coverage, no mismatch); replay and hybrid src/game/SPEngine/SPGraphicsThumbnailManager.cpp both first-difference None.

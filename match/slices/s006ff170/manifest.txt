@@ -1,2 +1,2 @@
 # source  symbol  original VA  [cl flags override]
-# (none byte-exact in this slice)
+slices/s006ff170/s006ff170.cpp  ?FUN_006ffc60@@YGXPAH@Z  006ffc60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

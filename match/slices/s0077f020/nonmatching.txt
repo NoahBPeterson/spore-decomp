@@ -1,3 +1,4 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
 0077f020  11  constant-forwarding virtual thunk complete; original is a tail jump (`mov [esp+8],0x12; jmp [vtbl+0xc]`), ours emits push/call/ret
 0077f5a0  59  shadow-proximity update complete; SSE register scheduling and the dx/dy/dz vs r*r evaluation order differ
+0077fbb0  439  shadow gradient builder: manager create/release handle, refcount validation, Raster::Lock/Unlock and the 64x2 sin/cos gradient complete; equiv WEAK (247 valid, 43.1% coverage, 0 mismatches) because random inputs make Lock return 0; remaining byte diff is the SEH frame, x87/SSE schedule and size 416 vs 547

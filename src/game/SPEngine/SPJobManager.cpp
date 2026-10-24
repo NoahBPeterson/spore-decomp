@@ -799,9 +799,10 @@ extern "C" int FUN_68F570(Outer570* p)
 }
 
 // @ 0x0068f5a0
-extern "C" void FUN_68F5A0(void* a, void** b)
+struct Callable68F5A0 { virtual void f(void* a); };
+extern "C" void FUN_68F5A0(void* a, Callable68F5A0* b)
 {
-    ((void (__cdecl*)(void*))((void**)*b)[0])(a);
+    b->f(a);
 }
 
 // @ 0x0068f5b0
@@ -1157,10 +1158,14 @@ void cJobManager::InsertJobByPriority(IntrusiveList* pList, cJobData* job)
 cJobLink* cJobManager::GetFreeLink()
 {
     IntrusiveList* pAnchor = &mFreeLinks;
+    // Nodes are appended at the tail (AppendTail), so the free link comes off the tail: the
+    // anchor's mpPrev is the node, and mpNext of that node's predecessor is relinked to the
+    // anchor (`mov 0x4(%edx),%ecx; mov 0x4(%ecx),%esi; mov %edx,(%esi)` at 0x0069008c).
     if (pAnchor->mpPrev != pAnchor) {
-        IntrusiveList* pNode = pAnchor->mpNext;
-        pNode->mpNext->mpPrev = pAnchor;
-        pAnchor->mpNext = pNode->mpNext;
+        IntrusiveList* pNode = pAnchor->mpPrev;
+        IntrusiveList* pPrev = pNode->mpPrev;
+        pPrev->mpNext = pAnchor;
+        pAnchor->mpPrev = pPrev;
         if (pNode != pAnchor) {
             pNode->mpPrev = 0;
             pNode->mpNext = 0;

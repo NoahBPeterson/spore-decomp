@@ -432,7 +432,7 @@ struct Handler7fc4b0 {
   RefPtr7fc4b0<IRefHost> mpHost;           // +4
   bool OnMessage(int msg, void* arg);
 };
-struct Obj7fc600 { unsigned f_7fc600(int a, int b); };
+struct Obj7fc600 { bool f_7fc600(int a, int b); };
 // ---- items of slice s007fb7b0 end
 
 // ---- items of slice s007fc880 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1500,17 +1500,25 @@ bool Handler7fc4b0::OnMessage(int msg, void* arg)
   return false;
 }
 
+struct Msg7fc600 {
+  char pad30[0x30];
+  void* mArg;                                     // +0x30 (message argument read after the fill call)
+  char pad34[0x18];
+};
+struct ISub7fc600 {
+  virtual void s0();
+  virtual void Notify(void* a, void* b);          // +0x04
+};
 // @ 0x007fc600
-unsigned Obj7fc600::f_7fc600(int a, int b)
+bool Obj7fc600::f_7fc600(int a, int b)
 {
-  void* self = this;
-  char buf[0x50];
-  f_7fc2a0_ctor(buf);
-  void* r = f_7fa4f0(buf, (void*)a, (void*)b);
-  void** vt = *(void***)((char*)self + 0x10);
-  ((void (__thiscall*)(void*, void*, void*))vt[1])((char*)self + 0x10, 0, r);
-  f_7fbce0_dtor(buf);
-  return 0;
+  Msg7fc600 msg;
+  ((C_7fc2a0*)&msg)->Ctor();
+  void* r = f_7fa4f0(&msg, (void*)a, (void*)b);
+  ((ISub7fc600*)((char*)this + 0x10))->Notify(msg.mArg, r);
+  bool ok = false;
+  ((C_7fbce0*)&msg)->Dtor();
+  return ok;
 }
 
 // @ 0x007fc690

@@ -48,7 +48,7 @@ extern "C" extern int DAT_016100f0[];
 extern "C" extern int DAT_016080f0[];
 extern "C" extern int* DAT_01532fc4[];
 extern "C" byte  CRAPI_getcolour(uint col, int a, byte* pal, int flag);
-extern "C" void  CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int stride, int* map);
+extern "C" int   CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int stride, int* map);
 // ---- items of slice s006e1db0 end
 
 // @ 0x006e1150
@@ -522,7 +522,7 @@ void* WU_close(int ctx, int nColors, int* outPal, int* outCount)
 }
 
 // @ 0x006e20f0
-void CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int stride, int* map)
+int CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int stride, int* map)
 {
     byte* p = src;
     byte* pb = src + 2;
@@ -542,7 +542,7 @@ void CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int st
         p = p + iVar2 * 4 + 1;
         do {
             if (h <= y + row)
-                return;
+                return row;
             int col = x + iVar2;
             byte* pp = p;
             int n = iVar3;
@@ -572,6 +572,7 @@ void CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int st
             row = row + 1;
         } while (row < iVar1);
     }
+    return row;
 }
 
 // @ 0x006e22d0

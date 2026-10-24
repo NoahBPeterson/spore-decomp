@@ -3,7 +3,6 @@
 0075d990  49  complete; two d3d9 device calls through [vtbl+0x1d8] + MessageServer vcall, argument/reg layout differs
 0075d9e0  139  complete; monitor/aspect helper (GetMonitorInfoA/CreateDCA/GetDeviceCaps/DeleteDC via dllimport), size/frame differs
 0075da90  5  complete; cdecl callee cleanup emitted as `pop ecx` where the original used `add esp,4`
-0075db70  36  complete; cRenderer::NumLayers rep-movsd copy under mutex, register/allocation differs; equiv: PASS
 0075dbb0  16  complete; cRenderer::LayerAtIndex mutex store, allocation differs; equiv: PASS
 0075dbe0  31  complete; device-ready latch, branch layout differs; equiv: PASS
 0075dc10  12  complete; tail-jmp guard (`if (!flag) ReleaseDevice()`), cl outlined/tail-called differently; equiv: PASS

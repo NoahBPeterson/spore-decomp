@@ -23,6 +23,10 @@ struct TriRegionVec {
     TriRegionEntry* mpBegin;
     TriRegionEntry* mpEnd;
     TriRegionEntry* mpCap;
+    // The grow path of AddRegion: the vector comes in ecx (0x0072b616 leaves this there, which is
+    // the address of mRegions) and the callee pops both stack arguments (`ret $0x8`), so it is a
+    // thiscall member, not a cdecl function.
+    void insert(TriRegionEntry* pos, const TriRegionEntry& value);   // 0x007409d0
 };
 
 struct cTriToRegionMap {
@@ -35,41 +39,37 @@ void cTriToRegionMap::AddRegion(int param_2, int param_3, int param_4)
 {
     if (param_4 != -1) {
     if (param_2 != param_3) {
-        TriRegionEntry* p   = mRegions.mpBegin;
-        TriRegionEntry* end = mRegions.mpEnd;
-        int n = ((int)end - (int)p) / 0xc;
-        int i = 0;
-        if (0 < n) {
-            do {
-                if (p->mRegionId == param_4) {
-                    if (p->mBegin == param_3) {
-                        p->mBegin = param_2;
-                        return;
-                    }
-                    if (p->mEnd == param_2) {
-                        p->mEnd = param_3;
-                        return;
-                    }
+        TriRegionEntry* const pBegin = mRegions.mpBegin;
+        TriRegionEntry* const pEnd   = mRegions.mpEnd;
+        const int n = (int)(pEnd - pBegin);
+        for (int i = 0; i < n; ++i) {
+            TriRegionEntry& e = pBegin[i];
+            if (e.mRegionId == param_4) {
+                if (e.mBegin == param_3) {
+                    e.mBegin = param_2;
+                    return;
                 }
-                i++;
-                p++;
-            } while (i < n);
+                if (e.mEnd == param_2) {
+                    e.mEnd = param_3;
+                    return;
+                }
+            }
         }
 
         TriRegionEntry tmp;
         tmp.mBegin = param_2;
         tmp.mEnd = param_3;
         tmp.mRegionId = param_4;
-        if (end < mRegions.mpCap) {
-            mRegions.mpEnd = end + 1;
-            if (end != 0) {
-                end->mRegionId = param_4;
-                end->mBegin = param_2;
-                end->mEnd = param_3;
+        if (pEnd < mRegions.mpCap) {
+            mRegions.mpEnd = pEnd + 1;
+            if (pEnd != 0) {
+                pEnd->mRegionId = param_4;
+                pEnd->mBegin = param_2;
+                pEnd->mEnd = param_3;
                 return;
             }
         } else {
-            FUN_007409d0(end, &tmp);
+            mRegions.insert(pEnd, tmp);
         }
     }
     }

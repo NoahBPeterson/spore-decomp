@@ -198,7 +198,7 @@ bool __cdecl CreateConvertedResourceAsync(void* a, void* b, void* c, int* d, voi
 // ===========================================================================
 // @ 0x0076ac30  SP::cGraphicsResourceFactory::CreateResourceAsync
 // ===========================================================================
-bool __fastcall CreateResourceAsync(void* self, int, void* out, int* param_4, void* p5, void* p6, int p7) {
+bool __fastcall CreateResourceAsync(void* self, int, void* out, void* unused2, int* param_4, void* p5, void* p6, int p7) {
     int* local = 0;
     if (p7 == 0)
         p7 = ((int(__thiscall**)(int*))*(void***)param_4)[4](param_4);
@@ -210,5 +210,6 @@ bool __fastcall CreateResourceAsync(void* self, int, void* out, int* param_4, vo
     }
     *(int**)out = local;
     (void)p5;
+    (void)unused2;
     return true;
 }

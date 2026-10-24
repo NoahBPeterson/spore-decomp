@@ -24,10 +24,6 @@ typedef float (__thiscall *T5f)(void*, uint32, uint32, int, int, int);
 // Externals (hex-named for the ones only reachable by address)
 // ---------------------------------------------------------------------------
 extern "C" float* FUN_0059aed0(void*, float*, void*);        // 0x0059aed0 Vector3MatrixMul
-extern "C" void   FUN_0059cf00(uint32, float, float, float, int, int);  // 0x0059cf00
-extern "C" void   FUN_0059cea0(uint32, float, int);          // 0x0059cea0
-extern "C" void   FUN_0059cfb0(uint32, float, float, float, int);       // 0x0059cfb0
-extern "C" void   FUN_0059d110(uint32, float*);              // 0x0059d110
 extern "C" float  FUN_0069b760(void*, void*, void*, int);     // 0x0069b760
 extern "C" void   FUN_0059cbd0(void*);                       // 0x0059cbd0
 extern "C" void   FUN_00583900(void);                        // 0x00583900
@@ -105,6 +101,10 @@ struct cAppModeEditorBaseV {
 struct cSPEditorAnimatedCreatureManager {
     void SetCreatureSpeeds(uint32 id, float a, float b);   // 0x0059d0b0
     void SetCreatureIsTurning(uint32 id, int on);          // 0x0059cee0
+    bool GetCreaturePosition(uint32 id, float* out);       // 0x0059d110
+    void SetCreatureTargetPosition(uint32 id, float x, float y, float z, int a, int b); // 0x0059cf00
+    void SetCreatureTargetAngle(uint32 id, float angle, int a);                          // 0x0059cea0
+    void SetCreatureLookAtTarget(uint32 id, float x, float y, float z, int a);           // 0x0059cfb0
 };
 
 // alias spellings used by the PDB for the same layout
@@ -436,29 +436,32 @@ void cSPPlayModeSubModeAction::FUN_00639350()
     uint32 t82c0 = DAT_015f82c0 ^ 0x80000000u;
     uint32 t8268 = DAT_015f8268 ^ 0x80000000u;
     uint32 t826c = DAT_015f826c ^ 0x80000000u;
-    float local_24 = -F(DAT_015f82b8);
-    float local_20 = F(t82bc);
-    float local_1c = F(t82c0);
-    float local_18 = -F(DAT_015f8264);
-    float local_14 = F(t8268);
-    float local_10 = F(t826c);
+    float local_24[3];
+    local_24[0] = -F(DAT_015f82b8);
+    local_24[1] = F(t82bc);
+    local_24[2] = F(t82c0);
+    float local_18[3];
+    local_18[0] = -F(DAT_015f8264);
+    local_18[1] = F(t8268);
+    local_18[2] = F(t826c);
 
     float local_c[3];
-    float* pfVar3 = FUN_0059aed0(local_c, &local_24, iVar2);
+    float* pfVar3 = FUN_0059aed0(local_c, local_24, iVar2);
     float v24 = pfVar3[0], v20 = pfVar3[1], v1c = pfVar3[2];
-    pfVar3 = FUN_0059aed0(local_c, &local_18, iVar2);
+    pfVar3 = FUN_0059aed0(local_c, local_18, iVar2);
     float fVar11 = v24 * 0.25f, fVar12 = v20 * 0.25f, fVar13 = v1c * 0.25f;
     float fVar6 = pfVar3[0] * 0.25f, fVar8 = pfVar3[1] * 0.25f, fVar10 = pfVar3[2] * 0.25f;
 
-    float local_30, local_2c, local_28;
-    FUN_0059d110(mCreatureID, &local_30);
+    float local_30[3];
+    mAnimCreatureMgr->GetCreaturePosition(mCreatureID, local_30);
 
     float fVar7 = fVar13, fVar5 = fVar11, fVar9 = fVar12;
     int uVar14 = 0;
 
     if (mKeyInputButtonState[0] == 0) {
         if (mKeyInputButtonState[2] != 0) {
-            FUN_0059cf00(mCreatureID, -fVar11 + local_30, local_2c + -fVar12, -fVar13 + local_28, 0, 1);
+            float nd0 = -fVar11, nd1 = -fVar12, nd2 = -fVar13;
+            mAnimCreatureMgr->SetCreatureTargetPosition(mCreatureID, nd0 + local_30[0], local_30[1] + nd1, nd2 + local_30[2], 0, 1);
             mAnimCreature->mField154 = 1;
             mAnimCreature->mField164 = DAT_01523e7c;
             mAnimCreature->mField168 = DAT_01523e80;
@@ -475,37 +478,39 @@ void cSPPlayModeSubModeAction::FUN_00639350()
     }
 
 LAB_00639600:
-    FUN_0059cf00(mCreatureID, local_30 + fVar5, local_2c + fVar9, fVar7 + local_28, 0, 1);
+    mAnimCreatureMgr->SetCreatureTargetPosition(mCreatureID, local_30[0] + fVar5, local_30[1] + fVar9, fVar7 + local_30[2], 0, 1);
 
 LAB_00639629:
     uVar14 = 0;
     if (mKeyInputButtonState[1] == 0) {
         if (mKeyInputButtonState[3] != 0) {
-            float n18 = -F(DAT_015f82b8);
-            float n14 = F(t82bc);
-            float n10 = F(t82c0);
-            float n24 = fVar6 + fVar11, n20 = fVar8 + fVar12, n1c = fVar10 + fVar13;
-            float ang = FUN_0069b760(&n24, &n18, &DAT_015f823c, 0);
-            (void)n14; (void)n10; (void)n1c; (void)n20;
-            FUN_0059cea0(mCreatureID, -ang, uVar14);
-            FUN_0059cfb0(mCreatureID, (fVar6 * F(DAT_01523e8c) + fVar11) + local_30,
-                         local_2c + (fVar8 * F(DAT_01523e8c) + fVar12),
+            float n18[3];
+            n18[0] = -F(DAT_015f82b8);
+            n18[1] = F(t82bc);
+            n18[2] = F(t82c0);
+            float n24[3];
+            n24[0] = fVar6 + fVar11; n24[1] = fVar8 + fVar12; n24[2] = fVar10 + fVar13;
+            float ang = FUN_0069b760(n24, n18, &DAT_015f823c, 0);
+            mAnimCreatureMgr->SetCreatureTargetAngle(mCreatureID, -ang, uVar14);
+            mAnimCreatureMgr->SetCreatureLookAtTarget(mCreatureID, (fVar6 * F(DAT_01523e8c) + fVar11) + local_30[0],
+                         local_30[1] + (fVar8 * F(DAT_01523e8c) + fVar12),
                          fVar10 * F(DAT_01523e8c) + fVar13, 0);
             mAnimCreatureMgr->SetCreatureIsTurning(mCreatureID, 1);
             return;
         }
     }
     else {
-        float n18 = -F(DAT_015f82b8);
-        float n14 = F(t82bc);
-        float n10 = F(t82c0);
-        float n24 = fVar11 - fVar6, n20 = fVar12 - fVar8, n1c = fVar13 - fVar10;
-        float ang = FUN_0069b760(&n24, &n18, &DAT_015f823c, 0);
-        (void)n14; (void)n10; (void)n1c; (void)n20;
-        FUN_0059cea0(mCreatureID, -ang, uVar14);
+        float n18[3];
+        n18[0] = -F(DAT_015f82b8);
+        n18[1] = F(t82bc);
+        n18[2] = F(t82c0);
+        float n24[3];
+        n24[0] = fVar11 - fVar6; n24[1] = fVar12 - fVar8; n24[2] = fVar13 - fVar10;
+        float ang = FUN_0069b760(n24, n18, &DAT_015f823c, 0);
+        mAnimCreatureMgr->SetCreatureTargetAngle(mCreatureID, -ang, uVar14);
         float neg = -F(DAT_01523e8c);
-        FUN_0059cfb0(mCreatureID, (fVar6 * neg + fVar11) + local_30,
-                     local_2c + (fVar8 * neg + fVar12), fVar10 * neg + fVar13, 0);
+        mAnimCreatureMgr->SetCreatureLookAtTarget(mCreatureID, (fVar6 * neg + fVar11) + local_30[0],
+                     local_30[1] + (fVar8 * neg + fVar12), fVar10 * neg + fVar13, 0);
         uVar14 = 1;
     }
     mAnimCreatureMgr->SetCreatureIsTurning(mCreatureID, uVar14);

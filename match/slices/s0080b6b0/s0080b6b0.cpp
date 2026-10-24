@@ -107,7 +107,7 @@ RecC* Vec::erase(RecC* first, RecC* last)
     RecC* e = end;
     for (RecC* p = newEnd; p < e; ++p)
         p->Fn(0);
-    end = end + (last - first);
+    end = end - (last - first);
     return first;
 }
 

@@ -5,6 +5,7 @@ extern int (*DAT_01634378)(...);
 extern int DAT_0163437c;
 extern int DAT_01634380;
 extern int FUN_011fda50(...);
+typedef float* (__thiscall* FrameAtProc)(void*, unsigned int);
 
 
 // @ 0x00796910
@@ -182,9 +183,9 @@ FUN_00796910(int *param_1,int *param_2,int param_3,int *param_4,float *param_5,f
     fStack_1148 = 1.0;
     fStack_1144 = 1.0;
     local_11e8 = 0;
-    pfVar6 = local_fd0;
+    pfVar6 = local_fd0 + 75;
     do {
-      pfVar4 = (float *)FUN_011fda50(uVar8);
+      pfVar4 = ((FrameAtProc)FUN_011fda50)((void*)param_3, uVar8);
       fVar9 = local_1090 * *pfVar4;
       fVar10 = fStack_108c * pfVar4[1];
       fVar11 = fStack_1088 * pfVar4[2];

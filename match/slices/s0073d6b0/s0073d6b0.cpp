@@ -140,14 +140,18 @@ int cModelInstance_Pose::GetPoseTransforms(cMDBoneTransform* dst, bool original)
     if (!materials[2] || !materials[2]->mpSkin || !materials[2]->mpSkin->mpMatrices)
         return 0;
 
+    Mat4 uninit;              // never written
+    Mat4 singular = uninit;   // snapshot of the untouched stack slot for singular matrices
     for (unsigned int i = 0; i < materials[2]->mpSkin->mnBones; ++i)
     {
         Mat4 m = materials[2]->mpSkin->mpMatrices[i];
         if (!original)
         {
-            Mat4 inv;   // left untouched (uninitialized) when the matrix is singular
-            AffineInverse(inv, (const float*)&m);
-            m = inv;
+            Mat4 computed;
+            if (AffineInverse(computed, (const float*)&m))
+                m = computed;
+            else
+                m = singular;
         }
         // Transposed 3x4 store.
         for (int c = 0; c < 3; ++c)

@@ -2,6 +2,7 @@
 // routines. Region 0x6ffe00-0x700d80. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-.
 #include "types.h"
 #include <xmmintrin.h>
+#include <math.h>
 
 // ---- external callees -------------------------------------------------------------------
 void* __cdecl FUN_011e073e(void* p, int a, unsigned size);
@@ -123,8 +124,26 @@ unsigned int __cdecl FUN_00700c00(unsigned int a) {
              g_cellTable[mid & 0x1f]) * 2) | g_cellTable[a & 0x1f];
 }
 
-// @ 0x00700c80  -- float cell query (stub, see partial.txt)
-float __cdecl FUN_00700c80(float* a, float* b, float* c, float d) {
-    (void)a; (void)b; (void)c; (void)d;
-    return 0.0f;
+// @ 0x00700c80
+bool __cdecl FUN_00700c80(const float* a, const float* b, const float* c, float r, float* out) {
+    float dx = b[0] - a[0];
+    float dy = b[1] - a[1];
+    float dz = b[2] - a[2];
+    float ex = a[0] - c[0];
+    float ey = a[1] - c[1];
+    float ez = a[2] - c[2];
+    float len2 = dx * dx + dy * dy + dz * dz;
+    float dot  = dx * ex + dy * ey + dz * ez;
+    float elen = ex * ex + ey * ey + ez * ez;
+    float disc = dot * dot - (elen - r * r) * len2;
+    if (0.0f > disc) return false;
+    float root = sqrtf(disc);
+    float t1 = -dot - root;
+    if (0.0f > root - dot) return false;
+    if (t1 > len2) return false;
+    if (out != 0) {
+        if (!(t1 <= 0.0f)) *out = t1 / len2;
+        else               *out = 0.0f;
+    }
+    return true;
 }

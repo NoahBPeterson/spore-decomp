@@ -22,7 +22,7 @@ void __stdcall expand_2_32(uint32_t* dst, int stride, uint32_t src, uint32_t* ta
 // ---------------------------------------------------------------------------
 // @ 0x007c24a0  SP::cBumpMapTable::cBumpMapTable(this, float)
 // ---------------------------------------------------------------------------
-struct F2I { float f; int i; };
+union F2I { float f; int i; };
 
 struct cBumpMapTable {
     float fastnorm[0x4001];

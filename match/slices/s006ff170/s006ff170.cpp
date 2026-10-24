@@ -93,11 +93,12 @@ int VertexCtx::TestClip2(const float* p, float t) {
 }
 
 // @ 0x006ffc60
-void __cdecl FUN_006ffc60(float* p) {
+void __stdcall FUN_006ffc60(int* p) {
+    float* pf = (float*)p;
     unsigned int mask = 0;
-    if (0.0f <= p[0]) mask |= 1;
-    if (0.0f <= p[1]) mask |= 2;
-    if (0.0f <= p[2]) mask |= 4;
+    if (0.0f <= pf[0]) mask |= 1;
+    if (0.0f <= pf[1]) mask |= 2;
+    if (0.0f <= pf[2]) mask |= 4;
     switch (mask) {
     case 0: p[4]=3; p[5]=0; p[6]=4; p[7]=1; p[8]=5; p[9]=2; break;
     case 1: p[4]=0; p[5]=3; p[6]=4; p[7]=1; p[8]=5; p[9]=2; break;

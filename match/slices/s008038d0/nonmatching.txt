@@ -2,7 +2,7 @@
 00803b70  6    Cb::operator=; one callee-saved push (edi) scheduled after the first store instead of before; equiv: PASS
 00803bd0  545  complete Dispose(bool); window teardown + callback reset reconstructed, scheduling diffs
 008040e0  483  complete Sub8040e0 (window creation/init); scheduling + helper inline diffs
-008042f0  378  complete OnEvent switch; jump-table byte-map layout differs
+008042f0  330  complete OnEvent switch; jump-table byte-map layout and branch scheduling differ (~size 428). equiv: WEAK no mismatch 383/400 valid (17 fake-arity discarded), 39.7% cov (48/121 insns; random events never reach every arm). Fix: the retail keeps the return value in a `bool ret = true` local (byte at [esp+0xf], `mov al,[esp+0xf]` on the true paths) and passes the raw `bool flag10` byte to Dispose, which it loads as a full dword (`mov eax,[esp+0x10]; push eax`), so the upper bytes are the harness's 0xcc stack fill (arg cccccc00, eax cccccc01); `Dispose(flag10 != 0)`/`return true` forced a zero-extended 0/1 and diverged
 00804640  18   returns (int)mDuration; original round-trips the float through the stack (cvtss2si asm helper)
 00804730  205  complete SetFrameRange algorithm; materialisation/register order differs
 008048c0  7    complete ~cSPUIFrameSequencer body; variant-dtor branch scheduling only; equiv: PASS

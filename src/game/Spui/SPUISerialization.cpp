@@ -353,7 +353,7 @@ int RangeCheck(int a, int b)
 
 
 // @ 0x0082ab40
-uint32_t TableLookup(Table* t, const unsigned short* key)
+uint32_t __stdcall TableLookup(Table* t, const unsigned short* key)
 {
   if (t->m4 != 1) return 0;
   for (int i = 0; i < t->mCount; ++i) {

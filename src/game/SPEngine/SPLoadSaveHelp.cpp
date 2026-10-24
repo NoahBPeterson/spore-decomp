@@ -299,7 +299,7 @@ struct Big2 {
     void* f3c; void* f40; void* f44; u32 f48;
     void* f4c; void* f50; void* f54; u32 f58;
     u32 f5c, f60, f64, f68, f6c, f70;
-    void init(void* a);
+    Big2* init(void* a);
 };
 // ---- items of slice s00694210 end
 
@@ -910,20 +910,22 @@ extern "C" void __fastcall FUN_00693900(C3* self)
     self->vtbl = g_vtbl_1403970;
     if (self->p8)
     {
-        if (vcall18(self->p8))
-            vcall14(self->p8);
+        void* p = self->p8;
+        if (((VFnB)((*(void***)p)[6]))(p))
+            ((VFn)((*(void***)p)[5]))(p);
     }
     if (self->p8)
     {
         void* t = self->p8;
         self->p8 = 0;
-        vcall4(t);
+        ((VFn)((*(void***)t)[1]))(t);
     }
     if (self->p4)
     {
         void* t = self->p4;
         self->p4 = 0;
-        vcall4(t);
+        ((VFn)((*(void***)t)[1]))(t);
+        *(volatile void**)&self->p4 = 0;
     }
 }
 
@@ -1453,11 +1455,15 @@ extern "C" char* FUN_00694e00(char* first, char* last, char* out)
 }
 
 // @ 0x00694e60
-void Big2::init(void* a)
+Big2* Big2::init(void* a)
 {
     f0 = (u32)a;
-    f4 = f8 = fc = 0;
-    f18 = f1c = f20 = 0;
+    f4 = 0;
+    f8 = 0;
+    fc = 0;
+    f18 = 0;
+    f1c = 0;
+    f20 = 0;
     f2c = gA;
     f30 = gA;
     f34 = gB;
@@ -1467,8 +1473,11 @@ void Big2::init(void* a)
     f4c = gA;
     f50 = gA;
     f54 = gB;
-    f5c = f60 = f64 = 0;
+    f5c = 0;
+    f60 = 0;
+    f64 = 0;
     f70 = 0;
+    return this;
 }
 
 // @ 0x00694ec0

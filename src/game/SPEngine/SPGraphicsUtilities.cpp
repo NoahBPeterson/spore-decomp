@@ -11,7 +11,7 @@
 
 // ---- items of slice s007c1c10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" unsigned char __stdcall gfree(void* p);                           // 0x0087d4c0
-struct F2I { float f; int i; };
+union F2I { float f; int i; };
 struct cBumpMapTable {
     float fastnorm[0x4001];
     cBumpMapTable(float param);

@@ -2,8 +2,52 @@
 // transforms per vertex and writes the transformed position plus optionally two normalised
 // float3 normals (the byte/colour variant is 0x00730240).  Behaviourally equivalent
 // reconstruction, not byte exact.
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
+
+// The retail code keeps the normalisation sum and root on the x87 stack.  cl15
+// has no fsqrt intrinsic (sqrtf/sqrt call __CIsqrt), so reproduce the original
+// fld/fmul/faddp/fadd/fsqrt/fdivr chain without touching any other register.
+static inline float InvSqrtNormal(float a, float b, float c)
+{
+    float eps = 1e-08f;
+    float r;
+    __asm {
+        fld1
+        fld dword ptr [eps]
+        fld dword ptr [a]
+        fmul st(0), st(0)
+        fld dword ptr [b]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fld dword ptr [c]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fadd st(0), st(1)
+        fsqrt
+        fdivr st(0), st(2)
+        fstp dword ptr [r]
+        fstp st(0)
+        fstp st(0)
+    }
+    return r;
+}
+
+// The retail weighted path converts each palette byte on the x87 stack
+// (fild/fmul/fstp), so the product is rounded to float only at the store.
+static inline float ByteWeight(uint32_t v)
+{
+    float scale = 0.003921569f;
+    float r;
+    __asm {
+        fild dword ptr [v]
+        fmul dword ptr [scale]
+        fstp dword ptr [r]
+    }
+    return r;
+}
 
 struct EltArray
 {
@@ -84,11 +128,11 @@ void FUN_00730d10(EltArray* p1, EltArray* p2, uint32_t p3, EltArray* p4, EltArra
         if (weighted)
         {
             uint32_t u = (uint32_t)ElemU32(p2, i);
-            float w[4];
-            w[0] = (float)(u & 0xffu)          * 0.003921569f;
-            w[1] = (float)((u >> 8) & 0xffu)   * 0.003921569f;
-            w[2] = (float)((u >> 16) & 0xffu)  * 0.003921569f;
-            w[3] = (float)((u >> 24) & 0xffu)  * 0.003921569f;
+            float w[6];
+            w[0] = ByteWeight(u & 0xffu);
+            w[1] = ByteWeight((u >> 8) & 0xffu);
+            w[2] = ByteWeight((u >> 16) & 0xffu);
+            w[3] = ByteWeight((u >> 24) & 0xffu);
 
             uint8_t* p = p10 + (uint32_t)idxp[0] * 16u;
             m1  = *(float*)(p + 0x04) * w[0];
@@ -164,7 +208,7 @@ void FUN_00730d10(EltArray* p1, EltArray* p2, uint32_t p3, EltArray* p4, EltArra
             float q0 = ((cy * m1 + cx * m0) + cz * m2) * inv0;
             float q1 = ((cz * m6 + cy * m5) + cx * m4) * inv1;
             float q2 = ((cz * m10 + cy * m9) + cx * m8) * inv2;
-            float r  = 1.0f / sqrtf((q1 * q1 + (q2 * q2 + q0 * q0)) + 1e-08f);
+            float r  = InvSqrtNormal(q0, q2, q1);
             float* out = (float*)(p7->mData + (uint32_t)p7->mEltStride * (uint32_t)i);
             out[0] = r * q0;
             out[1] = q1 * r;
@@ -180,7 +224,7 @@ void FUN_00730d10(EltArray* p1, EltArray* p2, uint32_t p3, EltArray* p4, EltArra
             float q0 = ((cy * m1 + cx * m0) + cz * m2) * inv0;
             float q1 = ((cz * m6 + cy * m5) + cx * m4) * inv1;
             float q2 = ((cz * m10 + cy * m9) + cx * m8) * inv2;
-            float r  = 1.0f / sqrtf((q1 * q1 + (q2 * q2 + q0 * q0)) + 1e-08f);
+            float r  = InvSqrtNormal(q0, q2, q1);
             float* out = (float*)(p9->mData + (uint32_t)p9->mEltStride * (uint32_t)i);
             out[0] = r * q0;
             out[1] = q1 * r;

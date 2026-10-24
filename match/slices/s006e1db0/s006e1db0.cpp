@@ -22,7 +22,7 @@ double FUN_006e1780(int ctx, int* box);
 void  FUN_006e1be0(int* box, unsigned char v, int array);
 int   FUN_006e1480(int* box, int array);
 byte  CRAPI_getcolour(uint col, int a, byte* pal, int flag);
-void  CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int stride, int* map);
+int CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int stride, int* map);
 }
 
 extern "C" {
@@ -156,7 +156,7 @@ void* WU_close(int ctx, int nColors, int* outPal, int* outCount) {
 // ---------------------------------------------------------------------------
 // @ 0x006e20f0  CRAPI_diffuseerror
 // ---------------------------------------------------------------------------
-void CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int stride, int* map) {
+int CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int stride, int* map) {
     byte* p = src;
     byte* pb = src + 2;
     int d0 = (uint)*src - (uint)*pal;
@@ -175,7 +175,7 @@ void CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int st
         p = p + iVar2 * 4 + 1;
         do {
             if (h <= y + row)
-                return;
+                return row;
             int col = x + iVar2;
             byte* pp = p;
             int n = iVar3;
@@ -205,6 +205,7 @@ void CRAPI_diffuseerror(byte* src, byte* pal, int x, int y, int w, int h, int st
             row = row + 1;
         } while (row < iVar1);
     }
+    return row;
 }
 
 // ---------------------------------------------------------------------------

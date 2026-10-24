@@ -5,6 +5,7 @@ slices/s00832790/s00832790.cpp  ?Init@Xform@@QAEXXZ                       00832d
 slices/s00832790/s00832790.cpp  ?GetEventMask@cSPUISwarmEffect@@QAEIXZ    00832e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00832790/s00832790.cpp  ?ApplyVisibility@cSPUISwarmEffect@@QAEXPAXM@Z  00833080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00832790/s00832790.cpp  ??0cSPUISwarmEffect@@QAE@XZ              00833110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ?Cast@ObjCaster@@QAEPAXPAX@Z             00833270  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00832790/s00832790.cpp  ?GetC@RefHolder@@QAEIXZ                  008332a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00832790/s00832790.cpp  ?GetE@RefHolder@@QAEIXZ                  008332d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00832790/s00832790.cpp  ??0UI_Image@@QAE@PAX@Z                   008333b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

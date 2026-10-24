@@ -48,7 +48,7 @@ struct ColourCfg {
 extern int gVt13ef094;   // 0x013ef094
 typedef void  (__thiscall *FnVoidI)(void*, int);
 void  __cdecl EASTL_allocator_deallocate(void* p);   // 0x00f47380
-void  __cdecl FUN_00f47040(void* p);                 // 0x00f47040
+struct Sub70_s0066_bf70 { void FUN_00f47040(); };   // 0x00f47040  (thiscall: pointer in ecx, no stack args)
 void* __cdecl SP_AppSystem();                        // 0x0067dd00
 void  __cdecl FUN_00571db0(void* h, void* a, void* b, void* c, void* d);
 struct RefObj_s0066_bf70 {
@@ -883,12 +883,12 @@ void __fastcall FUN_0066c370(void* self)
     }
     p = *(void**)((char*)self + 0x54);
     if (p) {
-        FUN_00f47040(p);
+        ((Sub70_s0066_bf70*)p)->FUN_00f47040();
         if (p) { *(void**)((char*)self + 0x54) = 0; ((RefObj_s0066_bf70*)p)->Release(); }
     }
     p = *(void**)((char*)self + 0x58);
     if (p) {
-        FUN_00f47040(p);
+        ((Sub70_s0066_bf70*)p)->FUN_00f47040();
         if (p) { *(void**)((char*)self + 0x58) = 0; ((RefObj_s0066_bf70*)p)->Release(); }
     }
     p = *(void**)((char*)self + 0x64);

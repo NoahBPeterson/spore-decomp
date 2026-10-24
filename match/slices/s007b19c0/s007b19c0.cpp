@@ -126,15 +126,15 @@ struct D2890 : B2890 {
 D2890::~D2890() { if (mObj) ((IObj2*)mObj)->Release(); }
 
 // ---------------------------------------------------------------------------
-// @ 0x007b2900  (destructor: release member +0x24, restore base vtable)
-// ---------------------------------------------------------------------------
-struct B2900 { virtual int AddRef(); virtual int Release(); };
+extern void* g_vtblB2900;                           // 0x13ef094
+struct B2900 { virtual int AddRef(); virtual int Release(); ~B2900() { *(void**)this = &g_vtblB2900; } };
 struct D2900 : B2900 {
     char pad[0x20];
     void* mObj;                                     // +0x24
     virtual int AddRef();
     virtual ~D2900();
 };
+// @ 0x007b2900  (destructor: release member +0x24, restore base vtable)
 D2900::~D2900() { if (mObj) ((IObj2*)mObj)->Release(); }
 
 // ---------------------------------------------------------------------------

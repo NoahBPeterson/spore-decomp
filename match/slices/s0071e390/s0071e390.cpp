@@ -126,13 +126,13 @@ void FillInt(int* first, int* last, const int* value)
 // ===========================================================================
 void FillNInt(int* first, unsigned n, const int* value)
 {
-    if (n != 0) {
-        do {
-            if (first)
-                *first = *value;
-            ++first;
-        } while (--n);
-    }
+    int* p = first;
+    if (n == 0) return;
+    do {
+        if (p)
+            *p = *value;
+        ++p;
+    } while (--n);
 }
 
 // ===========================================================================

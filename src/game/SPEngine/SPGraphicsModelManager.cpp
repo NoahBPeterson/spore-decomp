@@ -91,7 +91,7 @@ struct cModelInstance {
     int  GetBoneIDs(void* dst);                          // 0x00740740
     int  GetBoneParents(void* dst);                      // 0x00743030
     bool GetAnimationRange(int a, float& d, int b, float& c);  // 0x0073b6d0
-    void SetActive(int a, int b, int c, float d, int e);
+    bool SetActive(int a, int b, int c, float d, int e);
     void MoveToTime(int a, int b, float c);
     void SetWeight(int a, int b, float c);
 };
@@ -264,7 +264,7 @@ struct cModelInstance_s0074_4ad0 {
     void Method742cf0(void* a);
     void ConstructFromGameModelResource(void* a);  // 0x00742db0 (cModelInstance::ConstructFromGameModelResource)
     int  GetAnimationIDs();  // 0x0073aba0 (cModelInstance::GetAnimationIDs)
-    void SetActive(int a, int b, int c, float d, int e);  // 0x0073ac20 (cModelInstance::SetActive)
+    bool SetActive(int a, int b, int c, float d, int e);  // 0x0073ac20 (cModelInstance::SetActive)
     void MoveToTime(int a, int b, float c);  // 0x0073b190 (cModelInstance::MoveToTime)
     void SetWeight(int a, int b, float c);  // 0x0073b530 (cModelInstance::SetWeight)
 };
@@ -2355,6 +2355,15 @@ class cMWGroup_s0075_1560 {
   cModelInfo_s0075_1560* mObjectsBegin;
   cModelInfo_s0075_1560* mObjectsEnd;
   cModelInfo_s0075_1560* mObjectsCapacity;
+  __forceinline cModelInfo_s0075_1560* erase(cModelInfo_s0075_1560* first,
+                                             cModelInfo_s0075_1560* last) {
+    cModelInfo_s0075_1560* const end = mObjectsEnd;
+    cModelInfo_s0075_1560* d = first;
+    for (cModelInfo_s0075_1560* s = last; s != end; ++s, ++d)
+      *d = *s;
+    mObjectsEnd -= (last - first);
+    return first;
+  }
 };
 }
 namespace SP {
@@ -3063,24 +3072,27 @@ int cModelWorld::GetDeformationAnimationIDs(Model* model, int a, int b)
 // @ 0x00744870
 void cModelWorld::AnimAction(Model* model, int arga, int argb, float argc, int argd)
 {
-    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
-    cModelInstance** p = m->mAnim;
+    cModelInstance** p = static_cast<cMWModelInternal*>(model)->mAnim;
     if (*p) {
         bool b = (argb == 2);
-        if (argb == 2 || argb == 0)
-            argb = 1;
-        else
-            argb = 0;
+        // Retail writes only the bool *byte* back into the argument slots and then pushes the
+        // whole dword, so the upper three bytes are the caller's residue:
+        //   0x007448aa/0x007448b2  `mov BYTE [esp+0x18],al`   (argument 3, bool)
+        //   0x007448a2             `mov BYTE [esp+8],al`      (frame slot, argument 5)
+        // SetActive is `bool(int,int,bool,float,bool)` and reads a single byte from each, so
+        // reproduce the full pushed dwords to keep the call trace identical.
+        int act = (argb & ~0xff) | (argb == 2 || argb == 0 ? 1 : 0);
         int i = 0;
         do {
             cModelInstance* inst = *p;
             if (!inst)
                 break;
-            inst->SetActive(arga, argd, argb, argc, b);
+            inst->SetActive(arga, argd, act, argc,
+                            (int)(((uint32_t)this & ~(uint32_t)0xff) | (uint32_t)b));
             ++i;
             ++p;
         } while (i < 6);
-        m->mFlags138 |= 0x40000000u;
+        ((cMWModelInternal*)((char*)model - 8))->mFlags138 |= 0x40000000u;
     }
 }
 
@@ -6825,15 +6837,16 @@ void MWGroupDtorStub::F()
     cMWObject_s0075_1560* o = self->mGroup.mObjectsBegin[i].mObject;
     if (o) {
       if (o->mRefCount < 2) {
-        typedef void(__thiscall *ReleaseFn)(void*, int);
-        void** vtbl = *(void***)o;
-        ((ReleaseFn)vtbl[0x170 / 4])(o, (o->mFlags >> 31) & 1);
+        typedef void(__thiscall *ReleaseFn)(void*, void*, int);
+        void* world = o->mWorld;
+        void** vtbl = *(void***)world;
+        ((ReleaseFn)vtbl[0x170 / 4])(world, o, (o->mFlags >> 31) & 1);
       } else {
         o->mRefCount = o->mRefCount - 1;
       }
     }
   }
-  self->mGroup.mObjectsEnd = self->mGroup.mObjectsBegin;
+  self->mGroup.erase(self->mGroup.mObjectsBegin, self->mGroup.mObjectsEnd);
 }
 }  // namespace SP
 

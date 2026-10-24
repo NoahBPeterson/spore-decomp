@@ -1,1 +1,1 @@
-00736660    83  COMPLETE in-place emplace into a 0x20-byte slot vector; EH frame absent and branch/regs differ.
+00736660   114  COMPLETE in-place emplace into a 0x20-byte slot vector; fixed the fast-path Elem32 copy-ctor call and the overflow DoInsertValue call to pass `this` in ecx; the original EH frame and its branch/register schedule are still not reproduced; WEAK 127 valid (need 200), 90.9% coverage, replay first difference None

@@ -2,4 +2,4 @@
 00801450 39  local-slot-order-mismatch (complete)
 00801980 2   arg-home-slot-reuse (complete)
 008016e0 268 member-float/SSE-shape (complete)
-008017f0 276 member-vtable-sequence (complete)
+008017f0 276 member-vtable-sequence: restored the success path's `t->v64(0,0)`, `m4c->v7c(1,1)`, `t->v7c(1,1)`, `f_804ed0(&x,&y)`, and `this->v38(x,y)` sequence; replay None, equiv PASS 209 valid/66.1% coverage (default) and PASS 1023 valid/66.1% (--inputs 2000); --src PASS. Not byte-exact (288 vs 292; register allocation/vtable sequence shape).

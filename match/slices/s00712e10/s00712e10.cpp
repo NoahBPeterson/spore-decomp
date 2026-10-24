@@ -511,6 +511,9 @@ uint32_t cMaterialManager::GetIDFromCompiledState(uint32_t state, uint32_t id)
     return result;
 }
 
+// eastl intrusive-pointer copy dispatch (first,last,dest); AddRefs each copied handle.
+void FUN_006f43e0(void** first, void** last, void** dest);   // 0x006f43e0
+
 // @ 0x00712F50
 void cMaterialManager::RegisterMaterial(uint32_t key, int nFlags, const uint32_t* flags,
                                         uint32_t nTex, void** texRes)
@@ -524,9 +527,7 @@ void cMaterialManager::RegisterMaterial(uint32_t key, int nFlags, const uint32_t
     e->mnId = key;
     e->mTextures.resize(nTex);
     // eastl::copy of the texture resources into the (just resized) texture vector
-    for (uint32_t i = 0; i < nTex; i++)
-        e->mTextures.mpBegin[i].SetFromResource(texRes[i]);
-    e->mnRefCount++;
+    FUN_006f43e0((void**)texRes, (void**)(texRes + nTex), (void**)e->mTextures.mpBegin);
     {
         EntryRef ref(e);
         mRegistered.push_back(ref);

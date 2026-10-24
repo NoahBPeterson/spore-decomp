@@ -149,23 +149,25 @@ void fill30(Big30* first, Big30* last, const Big30& value) {
     }
 }
 
-// @ 0x007700e0  uninitialized_fill_n(dest, n, value) for Big30
-void uninit_fill_n30(Big30* dest, unsigned int n, const Big30& value) {
-    while (n != 0) {
+// @ 0x007700e0  uninitialized_fill_n(dest, n, value) for Elem30
+// The float copy runs through a cursor held at dest+0x18 (dest->f6): the original
+// stores the six floats with disp8 -8..+0xc off that base and returns with it in eax.
+void uninit_fill_n30(Elem30* dest, unsigned int n, const Elem30& value) {
+    if (n == 0) return;
+    float* p = (float*)dest + 6;
+    do {
         if (dest) {
             dest->v = value.v;
-            dest->b[0] = value.b[0];
-            dest->b[1] = value.b[1];
-            dest->b[2] = value.b[2];
-            dest->b[3] = value.b[3];
-            dest->b[4] = value.b[4];
-            dest->b[5] = value.b[5];
-            dest->b[6] = value.b[6];
-            dest->b[7] = value.b[7];
+            p[-2] = value.f4;
+            p[-1] = value.f5;
+            p[0] = value.f6;
+            p[1] = value.f7;
+            p[2] = value.f8;
+            p[3] = value.f9;
         }
-        dest = (Big30*)((char*)dest + 0x30);
-        --n;
-    }
+        dest = (Elem30*)((char*)dest + 0x30);
+        p += 12;
+    } while (--n);
 }
 
 // ---------------------------------------------------------------------------

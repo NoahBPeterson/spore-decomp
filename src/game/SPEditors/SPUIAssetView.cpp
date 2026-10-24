@@ -48,7 +48,7 @@ struct cSPUIAssetView {
     float mTargetX;       // 0x0c
     float mTargetY;       // 0x10
     char  b14[0x1];       // 0x14
-    char  mFirstUpdate;   // 0x15
+    unsigned char mFirstUpdate;   // 0x15
     char  b16[0x1];       // 0x16
     bool  mResponds;      // 0x17
     char  b18[0x10];      // 0x18..0x27
@@ -204,7 +204,7 @@ struct cSPUIAssetView_s0065_a070 {
     float mTargetX;                    // 0x0c
     float mTargetY;                    // 0x10
     char  f14;                         // 0x14
-    char  mFirstUpdate;                // 0x15
+    unsigned char mFirstUpdate;                // 0x15
     char  mResponds;                   // 0x16
     char  f17;                         // 0x17
     void* mAnimator;                   // 0x18
@@ -929,7 +929,7 @@ void AssetViewS68::SetPos(float x, float y, char snap)
     if (w) {
         float* p = (float*)(*(void*(__thiscall**)(void*))((char*)*(void**)w + 0x34))(w);
         if (p[0] != *(float*)(s + 0xc) || p[1] != *(float*)(s + 0x10))
-            FUN_00657810(s);
+            ((void(__thiscall*)(void*))FUN_00657810)(s);
     }
 }
 
@@ -1107,13 +1107,11 @@ void cSPUIAssetView_s0065_a070::LoadLayout()
     }
 
     if (fFD) {
-        bool direct;
-        if (mP90 == 0) direct = true;
-        else {
+        bool direct = false;
+        if (mP90 != 0) {
             int a = vci0(mP90, 0x40);
             if (FUN_00552300(a) == 1) direct = true;
             else if (vci0(mP90, 0x38) == 0x7fffffff) direct = true;
-            else direct = false;
         }
         if (direct) {
             ((G*)this)->FUN_00659ec0();

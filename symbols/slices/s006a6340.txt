@@ -1,2 +1,36 @@
 006a6340 ?ParseVariantValue@@YA_NIPAVcFormatParser@ArgScript@EA@@HPAPBDPAUVariant_s006a_6340@@@Z  # ParseVariantValue migrated from s006a6340 (verbatim, slice spelling)
 0093dd80 ?Construct@Variant@EA@@IAE_NGGPBXII@Z  # EA::Variant::Construct (callee of s006a6340, named from the dev publics; slice address comment)
+# EA::Variant::operator=<T> instantiations in the slice object must bind to the retail
+# type-specific assignment helpers (the generic copy assignment is 0x00542b80).
+00422e20 ??$?4_N@Variant@@QAEAAU0@AB_N@Z
+00422eb0 ??$?4H@Variant@@QAEAAU0@ABH@Z
+00427fd0 ??$?4I@Variant@@QAEAAU0@ABI@Z
+00428060 ??$?4M@Variant@@QAEAAU0@ABM@Z
+004b5dd0 ??$?4Ustring8@@@Variant@@QAEAAU0@ABUstring8@@@Z
+004279d0 ??$?4Ustring16@@@Variant@@QAEAAU0@ABUstring16@@@Z
+00422f40 ??$?4UResourceKey@@@Variant@@QAEAAU0@ABUResourceKey@@@Z
+006a34a0 ??$?4UFlags96@@@Variant@@QAEAAU0@ABUFlags96@@@Z
+006a3510 ??$?4UVector2@@@Variant@@QAEAAU0@ABUVector2@@@Z
+006a3570 ??$?4UVector3@@@Variant@@QAEAAU0@ABUVector3@@@Z
+006a35e0 ??$?4UVector4@@@Variant@@QAEAAU0@ABUVector4@@@Z
+006a3610 ??$?4UColorRGB@@@Variant@@QAEAAU0@ABUColorRGB@@@Z
+006a3680 ??$?4UColorRGBA@@@Variant@@QAEAAU0@ABUColorRGBA@@@Z
+006a3fa0 ??$?4UTransform@@@Variant@@QAEAAU0@ABUTransform@@@Z
+00478300 ??$?4UBoundingBox@@@Variant@@QAEAAU0@ABUBoundingBox@@@Z
+# The hybrid-build copy in src/game/SPEngine/SPPropertyManager.cpp uses the renamed
+# local type Variant_s006a_6340; bind its instantiations to the same retail helpers.
+00422e20 ??$?4_N@Variant_s006a_6340@@QAEAAU0@AB_N@Z
+00422eb0 ??$?4H@Variant_s006a_6340@@QAEAAU0@ABH@Z
+00427fd0 ??$?4I@Variant_s006a_6340@@QAEAAU0@ABI@Z
+00428060 ??$?4M@Variant_s006a_6340@@QAEAAU0@ABM@Z
+004b5dd0 ??$?4Ustring8@@@Variant_s006a_6340@@QAEAAU0@ABUstring8@@@Z
+004279d0 ??$?4Ustring16@@@Variant_s006a_6340@@QAEAAU0@ABUstring16@@@Z
+00422f40 ??$?4UResourceKey@@@Variant_s006a_6340@@QAEAAU0@ABUResourceKey@@@Z
+006a34a0 ??$?4UFlags96_s006a_6340@@@Variant_s006a_6340@@QAEAAU0@ABUFlags96_s006a_6340@@@Z
+006a3510 ??$?4UVector2_s006a_6340@@@Variant_s006a_6340@@QAEAAU0@ABUVector2_s006a_6340@@@Z
+006a3570 ??$?4UVector3_s006a_6340@@@Variant_s006a_6340@@QAEAAU0@ABUVector3_s006a_6340@@@Z
+006a35e0 ??$?4UVector4_s006a_6340@@@Variant_s006a_6340@@QAEAAU0@ABUVector4_s006a_6340@@@Z
+006a3610 ??$?4UColorRGB_s006a_6340@@@Variant_s006a_6340@@QAEAAU0@ABUColorRGB_s006a_6340@@@Z
+006a3680 ??$?4UColorRGBA_s006a_6340@@@Variant_s006a_6340@@QAEAAU0@ABUColorRGBA_s006a_6340@@@Z
+006a3fa0 ??$?4UTransform_s006a_6340@@@Variant_s006a_6340@@QAEAAU0@ABUTransform_s006a_6340@@@Z
+00478300 ??$?4UBoundingBox_s006a_6340@@@Variant_s006a_6340@@QAEAAU0@ABUBoundingBox_s006a_6340@@@Z

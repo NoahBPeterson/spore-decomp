@@ -1,5 +1,5 @@
 0073f320  88  complete cSkinBinding::operator=; refcount temp/register scheduling and out-of-line cSPTransform::operator= call encoding differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (1200 valid, 100% coverage) via symbols/slices/s0073f320.txt entry ?4cSkinBinding (cSPTransformS::operator= annotated 0x537dc0)
-0073fe50  16  complete eastl::copy_backward<8-byte POD*>; only the last/result register assignment differs
+0073fe50  43  complete eastl::copy_backward<8-byte POD*>; the destination now stays in eax (source in ecx) via a noinline identity helper; [equiv: PASS (219 valid, 100% coverage)]
 0073f440  10  complete copy_backward for refcounted pairs; only the load of result->p is scheduled before the pointer decrements
 0073f4b0  107  complete SetAnimationGroupTransform; branch layout (translate block first) and hoisted lea differ
 0073f540  825  complete PickLine (box+basis build, lazy global query, query loop); SSE lane build and EH/static-init codegen differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; difftest PASS (263 valid, 70.7% coverage) after giving kRay1/kRay2 their own address comments

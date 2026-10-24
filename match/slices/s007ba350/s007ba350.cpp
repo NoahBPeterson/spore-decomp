@@ -1,4 +1,4 @@
-// Slice s007ba350 — SP::cThumbnailManager::InitPostProcessEffect  (0x007ba350, 4887 bytes)
+// Slice s007ba350 — SP::cThumbnailManager_s007b_a350::InitPostProcessEffect  (0x007ba350, 4887 bytes)
 //
 // Builds the post-process filter chain used for thumbnails.  `type` selects the effect:
 //   6/7/8/9  (only when `enable`): one base filter (material 0x88549f64 when `alt`, else
@@ -127,7 +127,7 @@ public:
     virtual void SetRTTName(cRenderTargetRectID id, const char* name);  // +0x48
 };
 
-class cThumbnailManager {
+class cThumbnailManager_s007b_a350 {
 public:
     class cJobPostFilter;
     class cFilterChainJob;
@@ -145,7 +145,7 @@ public:
                                Vector2 blurOffset, float blurStrength);
 };
 
-class cThumbnailManager::cJobPostFilter : public cILayer {
+class cThumbnailManager_s007b_a350::cJobPostFilter : public cILayer {
 public:
     uint32_t mRefCountV[2];                       // +0x04 RefCountVTemplate
     unsigned int mMaterialId;                     // +0x0c
@@ -203,7 +203,7 @@ public:
     }
 };
 
-void cThumbnailManager::cJobPostFilter::SetCustomParams(int index, const Vector4& v)
+void cThumbnailManager_s007b_a350::cJobPostFilter::SetCustomParams(int index, const Vector4& v)
 {
     mCustomParams[index * 4 + 0] = v.x;
     mCustomParams[index * 4 + 1] = v.y;
@@ -211,14 +211,14 @@ void cThumbnailManager::cJobPostFilter::SetCustomParams(int index, const Vector4
     mCustomParams[index * 4 + 3] = v.w;
 }
 
-class cThumbnailManager::cFilterChainJob {
+class cThumbnailManager_s007b_a350::cFilterChainJob {
 public:
     void AddFilter(cJobPostFilter* pFilter);      // 0x007b9750
 };
 
-typedef EA::AutoRefCount<cThumbnailManager::cJobPostFilter> FilterPtr;
+typedef EA::AutoRefCount<cThumbnailManager_s007b_a350::cJobPostFilter> FilterPtr;
 
-void cThumbnailManager::InitPostProcessEffect(int type, cFilterChainJob* pChain, bool enable, bool alt,
+void cThumbnailManager_s007b_a350::InitPostProcessEffect(int type, cFilterChainJob* pChain, bool enable, bool alt,
                                               Vector2 blurOffset, float blurStrength)
 {
     cRenderTargetRectID srcRect;

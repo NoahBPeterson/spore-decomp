@@ -18,6 +18,11 @@ inline void RcRelease(RC* p) {
     if (r == 0) { _InterlockedExchange((volatile long*)&p->mnRefCount, 1); p->v0(1); }
 }
 
+// The retail loop keeps the destination in eax and the source in ecx; a
+// plain C++ body picks the opposite roles.  Route the initial destination
+// through a tiny noinline identity so cl leaves it in eax.
+__declspec(noinline) static void* __fastcall CopyBackward8KeepResult(void* self) { return self; }
+
 // ---------------------------------------------------------------------------
 // @ 0x0073fe50  eastl::copy_backward<8-byte POD*>
 // ---------------------------------------------------------------------------
@@ -25,8 +30,9 @@ struct T8 { int a, b; };
 
 void __cdecl copy_backward8(T8* first, T8* last, T8* result)
 {
+    T8* r = (T8*)CopyBackward8KeepResult(result);
     while (last != first) {
-        *--result = *--last;
+        *--r = *--last;
     }
 }
 

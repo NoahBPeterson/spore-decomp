@@ -11,5 +11,6 @@ slices/s008124a0/s008124a0.cpp  ?ScaleXY@@YGXMMPAM0@Z  00813040  /O2 /MD /Gy /TP
 slices/s008124a0/s008124a0.cpp  ?GetScaledElapsed@MainWinTimer@@QAEMXZ  00813070  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008124a0/s008124a0.cpp  ?Get@AutoRefPair@@QAE_KXZ  008130a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008124a0/s008124a0.cpp  ?OnMouse@MainWin@@QAEX_N@Z  008130c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?sInitDropShadowQuality@@YAXXZ  00813120  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008124a0/s008124a0.cpp  ?UpdateMouseScale@MainWin@@QAEXXZ  008131b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008124a0/s008124a0.cpp  ?SetFocusObj@MainWin@@QAEXPAUX@@@Z  00813260  /O2 /MD /Gy /TP /arch:SSE /fp:fast

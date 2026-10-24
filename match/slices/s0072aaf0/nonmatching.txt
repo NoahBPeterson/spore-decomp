@@ -1,2 +1,2 @@
-0072b560  157  Complete SP::cTriToRegionMap::AddRegion; register allocation of begin/end/loop counter differs.
+0072b560  92   Complete SP::cTriToRegionMap::AddRegion; the grow path goes through the vector's insert (0x007409d0) as a thiscall member of mRegions -- the callee pops both arguments (`ret $0x8`) and `this` is the map itself, which is the vector at +0 -- not a cdecl function; residual is cl's ordering of the tmp/slot stores; equiv PASS (308 valid, 100% coverage).
 0072ace0  1692  Complete SP::StreamMeshToRw (flags /O2 /MD /Gy /EHsc /TP /GS-); frame/register allocation differs

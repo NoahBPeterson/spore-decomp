@@ -30,7 +30,7 @@ struct cModelInstance {
     int  GetBoneIDs(void* dst);                          // 0x00740740
     int  GetBoneParents(void* dst);                      // 0x00743030
     bool GetAnimationRange(int a, float& d, int b, float& c);  // 0x0073b6d0
-    void SetActive(int a, int b, int c, float d, int e);
+    bool SetActive(int a, int b, int c, float d, int e);
     void MoveToTime(int a, int b, float c);
     void SetWeight(int a, int b, float c);
 };
@@ -451,26 +451,29 @@ Elem28* UninitCopy(const Elem28* first, const Elem28* last, Elem28* dst) {
     return dst;
 }
 
-// 0x00744870
+// @ 0x00744870
 void cModelWorld::AnimAction(Model* model, int arga, int argb, float argc, int argd) {
-    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
-    cModelInstance** p = m->mAnim;
+    cModelInstance** p = static_cast<cMWModelInternal*>(model)->mAnim;
     if (*p) {
         bool b = (argb == 2);
-        if (argb == 2 || argb == 0)
-            argb = 1;
-        else
-            argb = 0;
+        // Retail writes only the bool *byte* back into the argument slots and then pushes the
+        // whole dword, so the upper three bytes are the caller's residue:
+        //   0x007448aa/0x007448b2  `mov BYTE [esp+0x18],al`   (argument 3, bool)
+        //   0x007448a2             `mov BYTE [esp+8],al`      (frame slot, argument 5)
+        // SetActive is `bool(int,int,bool,float,bool)` and reads a single byte from each, so
+        // reproduce the full pushed dwords to keep the call trace identical.
+        int act = (argb & ~0xff) | (argb == 2 || argb == 0 ? 1 : 0);
         int i = 0;
         do {
             cModelInstance* inst = *p;
             if (!inst)
                 break;
-            inst->SetActive(arga, argd, argb, argc, b);
+            inst->SetActive(arga, argd, act, argc,
+                            (int)(((uint32_t)this & ~(uint32_t)0xff) | (uint32_t)b));
             ++i;
             ++p;
         } while (i < 6);
-        m->mFlags138 |= 0x40000000u;
+        ((cMWModelInternal*)((char*)model - 8))->mFlags138 |= 0x40000000u;
     }
 }
 

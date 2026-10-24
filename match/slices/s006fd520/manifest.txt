@@ -13,3 +13,4 @@ slices/s006fd520/s006fd520.cpp  ?GenerateFillOutputStruct@@YAPADPADII@Z  006fe17
 slices/s006fd520/s006fd520.cpp  ?FUN_006fe310@@YAPAUBlock130@@PAU1@00@Z  006fe310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s006fd520/s006fd520.cpp  ?FUN_006fe350@@YA_NPAX@Z  006fe350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s006fd520/s006fd520.cpp  ?FUN_006fe3c0@@YAXHH@Z  006fe3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?Resize@Vec1c@@QAEXI@Z  006fd520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

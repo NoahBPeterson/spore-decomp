@@ -1,15 +1,49 @@
 // Slice s0077f020: shadow/world render state helpers (region 0x77f020-0x77fde0).
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
+#include <intrin.h>
+#include <math.h>
 
 extern void* FUN_0067dd50();
+extern "C" void* __cdecl FUN_0067dd60();   // 0x0067DD60 returns the graphics manager
 
-// Material manager pseudo-object with the two vtable slots used here.
+namespace rw { namespace graphics {
+class Raster {
+public:
+    struct Locked {
+        void* pixelData;             // +0x00
+        Raster* raster;              // +0x04
+        unsigned int level;          // +0x08
+        unsigned int stride;         // +0x0c
+        unsigned int sliceStride;    // +0x10
+        unsigned int lockFlags;      // +0x14
+        unsigned int volumeDepth;    // +0x18
+    };
+    Raster* Lock(unsigned int, unsigned char, Locked&);   // 0x011EF750
+    Raster* Unlock(Locked&);                              // 0x011EF880
+};
+}}
+namespace SP { unsigned int ColorRGBAToU32(const float* c); }   // 0x004580C0
+
+// A reference-counted raster handle.  +0 is the raster, +4 is a flag word and
+// +8 is the intrusively ref-counted long used by the manager's handle type.
+struct RasterRef {
+    rw::graphics::Raster* mRaster;   // +0x00
+    unsigned int mFlags;             // +0x04
+    volatile long mRefCount;         // +0x08
+};
+
+// Material manager pseudo-object.  Only the slots used by this slice are named;
+// 0x34 is a release callback and 0x3c creates a raster handle.
 struct Mgr {
     virtual void p00(); virtual void p01(); virtual void p02(); virtual void p03();
     virtual void p04(); virtual void p05(); virtual void p06(); virtual void p07();
     virtual void p08(); virtual void p09(); virtual void p10(); virtual void p11();
-    virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15();
+    virtual void p12();
+    virtual void release(RasterRef* p);      // slot 13 (0x34)
+    virtual void p14();
+    virtual RasterRef* create(unsigned int name, unsigned int arg,
+                              int w, int a, int b, int c, int d, int e); // slot 15 (0x3c)
     virtual void p16(); virtual void p17(); virtual void p18();
     virtual void f4c(int a, int b, int c);   // slot 19 (0x4c)
     virtual void f50(int a);                 // slot 20 (0x50)
@@ -115,8 +149,65 @@ void __cdecl FUN_0077fa70() {
 void __cdecl FUN_0077fb10() {
 }
 
-// @ 0x0077fbb0  (partial)
+// @ 0x0077fbb0
+// Build the 64x2 RGBA gradient lookup used by the shadow convolution.  The
+// original samples sin/cos at pi*t, 3pi*t, 5pi*t and 7pi*t, where
+// t = (i + 0.5) * 1.9875, and writes two 64-entry colour rows into the locked
+// raster (the second row starts 0x100 bytes into the pixel data).
 void __cdecl FUN_0077fbb0() {
+    static const float kPi = 3.1415927410125732f;   // 0x0153A108
+    static const float kT  = 1.9875000715255737f;   // 0x0140E964
+    static const unsigned int kRasterName = 0x7543c109u;
+    static const unsigned int kRasterArg  = 0x40202100u; // 0x0153A2E8
+
+    Mgr* mgr = (Mgr*)FUN_0067dd60();
+    RasterRef* ref = mgr->create(kRasterName, kRasterArg, 0x40, 2, 1, 8, 0x15, 0);
+
+    if (ref)
+        _InterlockedIncrement(&ref->mRefCount);
+
+    if ((ref->mFlags & 1u) == 0) {
+        Mgr* releaseMgr = (Mgr*)FUN_0067dd60();
+        releaseMgr->release(ref);
+    }
+
+    rw::graphics::Raster::Locked locked;
+    if (ref->mRaster->Lock(2, 0, locked)) {
+        unsigned int* row0 = (unsigned int*)locked.pixelData;
+        unsigned int* row1 = (unsigned int*)((char*)locked.pixelData + 0x100);
+        for (unsigned int i = 0; i < 0x40; ++i) {
+            float t = ((float)i + 0.5f) * kT;
+            float a = kPi * t;
+            float b = a * 3.0f;
+
+            float c0[4];
+            c0[0] = (cosf(a) + 1.0f) * 0.5f;
+            c0[1] = (cosf(b) + 1.0f) * 0.5f;
+            c0[2] = (sinf(a) + 1.0f) * 0.5f;
+            c0[3] = (sinf(b) + 1.0f) * 0.5f;
+            row0[i] = SP::ColorRGBAToU32(c0);
+
+            float d = a * 5.0f;
+            float e = a * 7.0f;
+            float c1[4];
+            c1[0] = (cosf(d) + 1.0f) * 0.5f;
+            c1[1] = (cosf(e) + 1.0f) * 0.5f;
+            c1[2] = (sinf(d) + 1.0f) * 0.5f;
+            c1[3] = (sinf(e) + 1.0f) * 0.5f;
+            row1[i] = SP::ColorRGBAToU32(c1);
+        }
+
+        if ((ref->mFlags & 1u) == 0) {
+            Mgr* releaseMgr = (Mgr*)FUN_0067dd60();
+            releaseMgr->release(ref);
+        }
+        ref->mRaster->Unlock(locked);
+    }
+
+    _InterlockedIncrement(&ref->mRefCount);
+    _InterlockedDecrement(&ref->mRefCount);
+    if (ref->mRefCount < 1)
+        _InterlockedIncrement(&ref->mRefCount);
 }
 
 // @ 0x0077fde0  (partial)

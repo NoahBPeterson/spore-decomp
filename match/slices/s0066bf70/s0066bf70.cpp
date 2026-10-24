@@ -10,7 +10,6 @@ typedef void* (__thiscall *FnPtrV)(void*);
 #define VT(p) (*(void***)(p))
 
 void  __cdecl EASTL_allocator_deallocate(void* p);   // 0x00f47380
-void  __cdecl FUN_00f47040(void* p);                 // 0x00f47040
 void* __cdecl SP_AppSystem();                        // 0x0067dd00
 void  __cdecl FUN_00571db0(void* h, void* a, void* b, void* c, void* d);
 
@@ -42,6 +41,9 @@ class cSPUILayout { public:
 
 struct Sub54 { void FUN_0054eac0(int); };
 struct Sub64 { void FUN_006571e0(int, int, int); };
+// release helper: the original passes the object in ecx and pushes nothing
+// (0x0066c3b8 `mov ecx,[esi+0x54]; call 0xf47040`, no `add esp` afterwards)
+struct Sub70 { void FUN_00f47040(); };               // 0x00f47040
 
 struct Cb70 {
     Cb70* FUN_0066cb70(unsigned flags);
@@ -81,12 +83,12 @@ void __fastcall FUN_0066c370(void* self) {
     }
     p = *(void**)((char*)self + 0x54);
     if (p) {
-        FUN_00f47040(p);
+        ((Sub70*)p)->FUN_00f47040();
         if (p) { *(void**)((char*)self + 0x54) = 0; ((RefObj*)p)->Release(); }
     }
     p = *(void**)((char*)self + 0x58);
     if (p) {
-        FUN_00f47040(p);
+        ((Sub70*)p)->FUN_00f47040();
         if (p) { *(void**)((char*)self + 0x58) = 0; ((RefObj*)p)->Release(); }
     }
     p = *(void**)((char*)self + 0x64);
@@ -610,12 +612,12 @@ void cSPUILargeAssetView::UnloadLayout() {
         if (p) { m70 = 0; p->Release(); }
     }
     if (m60) {
-        FUN_00f47040(m60);
+        ((Sub70*)m60)->FUN_00f47040();
         Ref* p = m60;
         if (p) { m60 = 0; p->Release(); }
     }
     if (m64) {
-        FUN_00f47040(m64);
+        ((Sub70*)m64)->FUN_00f47040();
         Ref* p = m64;
         if (p) { m64 = 0; p->Release(); }
     }

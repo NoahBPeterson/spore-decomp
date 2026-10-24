@@ -1,7 +1,7 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; diff is approximate)
 007168c0  56  resizeV8: cl keeps the value ptr in the loop register instead of the count
 00716930  56  resizeV1c: same loop-register difference
-007167c0  180  pushColor: PackColor inlined but the aligned xmm frame of the original is not reproduced
+007167c0  375  pushColor: PackColor's clamp/convert tail now reproduces the original values (round-to-nearest cvtss2si, NaN -> 255, -0.0 -> 0) without clobbering xmm1-xmm3: the clamp is evaluated in x87 (double compares, the s005a5ec0 precedent) because every C++/intrinsic SSE shape under /O2 hoists 0/255 and the sample into xmm1-xmm3, which the original never writes; only xmm0 is materialised for the final cvtss2si. Also corrected the EAVec<u32>::DoInsertValue annotation from the resolver's aligned twin 0x004558a0 to the callee this region actually calls, 0x00715350. equiv PASS (227 valid, 100.0% cov, 59/59 insns); residual 375 B is the x87 clamp form (338 vs 247 bytes). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 007169a0  200  addColors: color loop frame/register differences propagate
 00716ad0  123  uniqueAdd: cl picks edx/ecx/esi opposite to the original (member access through a reference)
 00716e40  119  addPair120: element pointer register assignment differs
