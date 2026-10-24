@@ -440,10 +440,11 @@ void* cSPUISwarmEffect::Dtor(unsigned flags)
 void* ObjCaster::Cast(void* type)
 {
     ObjCaster* self = this;
-    if ((uint32_t)type != 0xae9cb0fa && (uint32_t)type != 0xee3f516e &&
-        (uint32_t)type != 0x147d84e)
-        return ((void* (__thiscall*)(void*, void*))FUN_00957510)(self, type);
-    return self;
+    uint32_t t = (uint32_t)type;
+    void* r = self;
+    if (t != 0xae9cb0fa && t != 0xee3f516e && t != 0x147d84e)
+        r = ((void* (__thiscall*)(void*, void*))FUN_00957510)(self, type);
+    return r;
 }
 
 // @ 0x008332a0
