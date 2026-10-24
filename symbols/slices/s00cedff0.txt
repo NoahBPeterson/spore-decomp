@@ -49,5 +49,5 @@
 00ceec60  SP::nCityGameFormulas::LoadFormulas() -> void  # 13x LoadArithmeticaFile(hash,0,&formula) for tribe/player recruit/raid/food/attack/lurk/farm/vehicle/wander formulas
 00ceed50  FUN_00ceed50(self,a,out) -> void  # x=bd7d00(a)*0.01; r=RandomDoubleUniform; *out = r < pow(x,0x13f5628)+0x2d (NOT byte-exact; see nonmatching.txt)
 00ceedb0  FUN_00ceedb0(a,out) -> void  # scale a by g30, then *out = RandomDoubleUniform < (double)(v+0.1) (NOT byte-exact; see nonmatching.txt)
-00ceee30  FUN_00ceee30(city,b) -> float  # relationship predicate: occupancy/disabled flags, RelationshipManager queries, civilization scan (NOT byte-exact; see nonmatching.txt)
+00ceee30  FUN_00ceee30(city,b) -> float  # relationship predicate: occupancy/disabled flags, RelationshipManager queries, civilization scan (complete, not byte-exact; equivalence PASS; see nonmatching.txt)
 00ceefd0  FUN_00ceefd0(a,p2,p3) -> void  # quantize a to tens >=100, v=(n*g38)*0.01, *p3=max(v,g34), *p2=max(a-g3c,0)

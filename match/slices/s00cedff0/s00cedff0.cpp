@@ -53,7 +53,7 @@ extern "C" void  FUN_004e7460();  // 0x004e7460  generic 7-argument helper
 extern "C" char  FUN_007f2240();  // 0x007f2240  LoadArithmeticaFile(hash,0,dst)
 extern "C" void *FUN_00b3d2c0();  // 0x00b3d2c0  SP::RelationshipManager
 extern "C" int   FUN_00d00a70();  // 0x00d00a70  relationship query (ecx, 3 args)
-extern "C" float FUN_00d00a10();  // 0x00d00a10  relationship value (ecx, 3 args)
+extern "C" double FUN_00d00a10();  // 0x00d00a10  relationship value (ecx, 3 args), x87 result
 extern "C" void *FUN_00b25ca0();  // 0x00b25ca0  cGameNounManager::GetCivilizationList (ecx)
 extern "C" void *FUN_00bd9bf0();  // 0x00bd9bf0  cCity::GetCivilization (ecx)
 extern "C" char  FUN_00bef8a0();  // 0x00bef8a0
@@ -351,8 +351,8 @@ void __fastcall FUN_00cee2c0(BundleObj *o, void *edx, void *obj, u32 a, float b,
     o->m_field20 = b;
     o->m_field1c = a;
     if (c > 0.0f) {
-        void *r = ((void *(__cdecl *)(float, BundleObj *, u32))FUN_00b3d2b0)(c, o, d);
-        ((void(__thiscall *)(void *))FUN_00ac7ab0)(r);
+        void *r = FUN_00b3d2b0();
+        ((void(__thiscall *)(void *, float, BundleObj *, u32))FUN_00ac7ab0)(r, c, o, d);
     }
 }
 
@@ -538,7 +538,7 @@ void __fastcall FUN_00cee7e0(VecObj18 *o, void *edx)
     void *r;
     (void)edx;
 
-    r = ((void *(__thiscall *)(void *))FUN_00b3d2b0)(o);
+    r = FUN_00b3d2b0();
     ((void(__thiscall *)(void *, void *))FUN_00ac7a40)(r, o);
     if (o->m_owner18) {
         void *p = o->m_owner18;
@@ -791,13 +791,8 @@ void __stdcall FUN_00ceedb0(float a, int *out)
 double __stdcall FUN_00ceee30(void *city, void *b)
 {
     unsigned int savedEcx;
-    volatile float result;
-    __declspec(align(16)) unsigned char savedXmm[16];
 
-    __asm {
-        mov savedEcx, ecx
-        movups xmmword ptr [savedXmm], xmm0
-    }
+    __asm { mov savedEcx, ecx }
 
     if (*(u8 *)((u8 *)b + 0x89) == 0) {
         u32 u4 = ((u32(__thiscall *)(void *))(*(void ***)city)[0x4c / 4])(city);
@@ -805,8 +800,8 @@ double __stdcall FUN_00ceee30(void *city, void *b)
         void *rm = FUN_00b3d2c0();
         int r = ((int(__thiscall *)(void *, u32, u32, u32))FUN_00d00a70)(rm, u5, u4, 1);
         if (r <= 1) {
-            result = 0.0f;
-            goto done;
+            __asm { mov ecx, savedEcx }
+            return 0.0;
         }
     }
 
@@ -814,12 +809,15 @@ double __stdcall FUN_00ceee30(void *city, void *b)
         u8 *sub = (u8 *)city + 0x120;
         char c = ((char(__thiscall *)(void *))(*(void ***)sub)[0x58 / 4])(sub);
         if (c != 0) {
+            // The timer helper reached from FUN_00bef8a0 calls a function pointer after
+            // `push edi`; the original keeps `b` in edi, so mirror that here.
+            __asm { mov edi, b }
             if (!((char(__thiscall *)(void *))FUN_00bef8a0)(b)) {
-                result = 0.0f;
-                goto done;
+                __asm { mov ecx, savedEcx }
+                return 0.0;
             }
-            result = 1.0f;
-            goto done;
+            __asm { mov ecx, savedEcx }
+            return 1.0;
         }
     }
 
@@ -830,24 +828,24 @@ double __stdcall FUN_00ceee30(void *city, void *b)
                  ((u32(__thiscall *)(void *))(*(void ***)b)[0x4c / 4])(b),
                  1);
         if (r >= 3) {
-            result = 1.0f;
-            goto done;
+            __asm { mov ecx, savedEcx }
+            return 1.0;
         }
         if (*(u8 *)((u8 *)b + 0x89) == 0 || r != 2) {
-            result = 0.0f;
-            goto done;
+            __asm { mov ecx, savedEcx }
+            return 0.0;
         }
 
         {
             void *civ = ((void *(__thiscall *)(void *))FUN_00bd9bf0)(city);
             if (*(u8 *)((u8 *)civ + 0x8a) != 0) {
-                result = 0.0f;
-                goto done;
+                __asm { mov ecx, savedEcx }
+                return 0.0;
             }
         }
 
         {
-            float f = ((float(__thiscall *)(void *, u32, u32, u32))FUN_00d00a10)
+            float f = ((double(__thiscall *)(void *, u32, u32, u32))FUN_00d00a10)
                         (FUN_00b3d2c0(),
                          ((u32(__thiscall *)(void *))(*(void ***)city)[0x4c / 4])(city),
                          ((u32(__thiscall *)(void *))(*(void ***)b)[0x4c / 4])(b),
@@ -865,28 +863,21 @@ double __stdcall FUN_00ceee30(void *city, void *b)
                 u32 a = ((u32(__thiscall *)(void *))(*(void ***)city)[0x4c / 4])(city);
                 u32 bb = ((u32(__thiscall *)(void *))(*(void ***)pi)[0x4c / 4])(pi);
                 if (bb != a && pi != b && *(u8 *)((u8 *)pi + 0x8a) == 0) {
-                    float f2 = ((float(__thiscall *)(void *, u32, u32, u32))FUN_00d00a10)
+                    double f2 = ((double(__thiscall *)(void *, u32, u32, u32))FUN_00d00a10)
                                 (FUN_00b3d2c0(),
                                  ((u32(__thiscall *)(void *))(*(void ***)pi)[0x4c / 4])(pi),
                                  ((u32(__thiscall *)(void *))(*(void ***)b)[0x4c / 4])(b),
                                  1);
-                    if (f < f2) {
-                        result = 0.0f;
-                        goto done;
+                    if ((double)f < f2) {
+                        __asm { mov ecx, savedEcx }
+                        return 0.0;
                     }
                 }
             }
         }
-        result = 1.0f;
-        goto done;
+        __asm { mov ecx, savedEcx }
+        return 1.0;
     }
-
-done:
-    __asm {
-        mov ecx, savedEcx
-        movups xmm0, xmmword ptr [savedXmm]
-    }
-    return (double)result;
 }
 
 // @ 0x00ceefd0

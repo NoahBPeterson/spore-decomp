@@ -20,4 +20,4 @@
 00ceead0  pow(int,exp)*0.5 + c*5, *30, floor at 1 -- x87; first multiply loads the float constant before c; return path differs
 00ceed50  random-vs-pow threshold -- bd7d00*0.01, RandomDoubleUniform, pow+0.2 compare; stack frame and float/double temporaries differ
 00ceedb0  random-vs-(v+0.1) threshold -- SSE scaling of input then x87 compare; x87 add loads the constant before v (1 byte)
-00ceee30  city raid/trade relationship predicate -- RelationshipManager queries, occupancy checks, civilization scan; large branchy body, register allocation and block layout differ
+00ceee30  relationship predicate -- occupancy/disabled flags, RelationshipManager queries, civilization scan; complete behavioral implementation, x87 double temporaries and a stack frame differ (513 vs 406 bytes); equivalence PASS
