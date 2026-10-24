@@ -1,0 +1,8 @@
+00fdcd40 39 Init: size 412 vs 412; equiv WEAK (162 valid, coverage 55.2% < 60%)
+00fdcee0 566 PreGameModeTransition: size 794 vs 797; equiv UNSUPPORTED (only 0/400 inputs valid; fake-arity=394, fault(read)=4, fault(write)=2)
+00fdd200 217 FUN_00fdd200: size 277 vs 282; equiv WEAK (275 valid, coverage 49.0% < 60%)
+00fdd320 101 FUN_00fdd320: size 108 vs 114; equiv PASS (281 valid, coverage 71.7%)
+00fdd390 153 TransitionFromPlanetToSolar: size 346 vs 346; equiv UNSUPPORTED (only 0/400 inputs valid; fault(read)=320, fault(write)=51, import:VirtualFree=14)
+00fdd4f0 64 TransitionThroughWormhole: size 162 vs 160; equiv WEAK (387 valid, coverage 29.3% < 60%)
+00fdd5a0 531 TransitionFromGalaxyToSolar: size 1132 vs 1116; equiv UNSUPPORTED (only 0/400 inputs valid; fault(read)=351, fault=39, fault(write)=7)
+00fdda10 295 FUN_00fdda10: size 301 vs 338; equiv WEAK (216 valid, coverage 30.9% < 60%)
