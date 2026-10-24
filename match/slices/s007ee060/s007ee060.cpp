@@ -22,8 +22,11 @@ void ReadTriple(void* r, void* d, int n, int f);   // 0x0093A800
 void WriteUint32(void* w, void* s, int n, int f);
 }  // namespace IO
 namespace ArgScript {
-class cArguments;
-void** MainArguments(cArguments* self, int n);
+// 0x00838320: a cArguments member (ecx=args, one stack arg), not a free function.
+class cArguments {
+ public:
+  void** MainArguments(int n) const;
+};
 }  // namespace ArgScript
 }  // namespace EA
 
@@ -32,9 +35,9 @@ static float ArgToFloat(void* iface, void* arg) {
   typedef float(__thiscall * F0)(void*, void*);
   return ((F0)VSLOT(iface, 0x98))(iface, arg);
 }
-static void ArgToVec3(void* iface, void* dst, void* arg) {
+static void* ArgToVec3(void* iface, void* dst, void* arg) {
   typedef void*(__thiscall * F0)(void*, void*);
-  ((F0)VSLOT(iface, 0xb0))(dst, arg);
+  return ((F0)VSLOT(iface, 0xb0))(dst, arg);
 }
 static void WriteBytes(void* w, void* p, int n) {
   typedef void(__thiscall *F0)(void*, void*, int);
@@ -257,8 +260,22 @@ struct SixFloats {
 extern "C" void CopySix(void* dst, void* src) {
   ((SixFloats*)dst)->Assign((const SixFloats*)src);
 }
+// 0x007EE6D0: the element-copy callback vector() invokes (thiscall, ecx=dst).
+void FUN_007ee6d0();
+
+// The live effect state edited by the volume ArgScript commands (VolumeCmd's +0x0c target).
+struct VolumeEffectParams {
+  uint8_t mUnknown00[0x1c]; // +0x00
+  float mSliceSpacing;      // +0x1c
+  Vec3f mColor;             // +0x20
+  float mAlpha;             // +0x2c
+};
 
 struct VolumeCmd {
+  uint8_t mUnknown00[0x04];    // +0x00
+  void* mArgConverter;         // +0x04  ArgScript value converter (vtable +0x98 float, +0xb0 Vec3)
+  uint8_t mUnknown08[0x04];    // +0x08
+  VolumeEffectParams* mParams; // +0x0c  live effect being edited
   void Alpha(EA::ArgScript::cArguments* args);
   void Color(EA::ArgScript::cArguments* args);
   void SliceSpacing(EA::ArgScript::cArguments* args);
@@ -266,36 +283,27 @@ struct VolumeCmd {
 
 // @ 0x007EE700  "alpha" command
 void VolumeCmd::Alpha(EA::ArgScript::cArguments* args) {
-  int* self = (int*)this;
-  void** p = EA::ArgScript::MainArguments(args, 1);
-  int iface = **(int**)((char*)self + 4);
-  *(float*)(*(char**)((char*)self + 0xc) + 0x2c) = ArgToFloat((void*)iface, *p);
+  void** p = args->MainArguments(1);
+  mParams->mAlpha = ArgToFloat(mArgConverter, *p);
 }
 
 // @ 0x007EE730  "color" command
 void VolumeCmd::Color(EA::ArgScript::cArguments* args) {
-  int* self = (int*)this;
-  void** p = EA::ArgScript::MainArguments(args, 1);
-  int iface = **(int**)((char*)self + 4);
+  void** p = args->MainArguments(1);
   Vec3f tmp;
-  ArgToVec3((void*)iface, &tmp, *p);
-  int dst = *(int*)((char*)self + 0xc);
-  *(float*)(dst + 0x20) = tmp.x;
-  *(float*)(dst + 0x24) = tmp.y;
-  *(float*)(dst + 0x28) = tmp.z;
+  Vec3f* r = (Vec3f*)ArgToVec3(mArgConverter, &tmp, *p);
+  mParams->mColor = *r;
 }
 
 // @ 0x007EE780  "slicespacing" command
 void VolumeCmd::SliceSpacing(EA::ArgScript::cArguments* args) {
-  int* self = (int*)this;
-  void** p = EA::ArgScript::MainArguments(args, 1);
-  int iface = **(int**)((char*)self + 4);
-  *(float*)(*(char**)((char*)self + 0xc) + 0x1c) = ArgToFloat((void*)iface, *p);
+  void** p = args->MainArguments(1);
+  mParams->mSliceSpacing = ArgToFloat(mArgConverter, *p);
 }
 
 // @ 0x007EE7B0  "material" command (resource id)
 extern "C" void VolumeMaterialCommand(int* self, EA::ArgScript::cArguments* args) {
-  void** p = EA::ArgScript::MainArguments(args, 1);
+  void** p = args->MainArguments(1);
   extern uint32_t HashName(const char*, uint32_t, int);   // 0x00932e80 (equiv t3)
   void* arg = *p;
   uint32_t h = HashName((const char*)arg, 0x811c9dc5, 1);
@@ -329,6 +337,7 @@ struct MapDescription {
 void* MapDescription::Copy(int src) {
   MapDescription* self = this;
   self->refcount = 0;
+  self->vt = (void*)0x01453948;
   self->f08 = *(uint32_t*)(src + 8);
   self->f0c = *(uint32_t*)(src + 0xc);
   self->f10 = *(uint32_t*)(src + 0x10);
@@ -339,8 +348,8 @@ void* MapDescription::Copy(int src) {
   self->f24 = *(uint32_t*)(src + 0x24);
   self->f28 = *(uint32_t*)(src + 0x28);
   self->f2c = *(uint32_t*)(src + 0x2c);
-  extern void CopyArray(void*, void*, int, int, void*);
-  CopyArray(&self->corners, (void*)(src + 0x30), 0x18, 8, (void*)&CopySix);
+  extern void __stdcall CopyArray(void*, void*, int, int, void*);
+  CopyArray(&self->corners, (void*)(src + 0x30), 0x18, 8, (void*)&FUN_007ee6d0);
   return self;
 }
 
@@ -421,6 +430,6 @@ void VolumeRegistrar::Register(char flag) {
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 struct EA {
-    void MainArguments(void*, int); // 0x00838020
+    void* MainArguments(int); // 0x00838320
 };
 }

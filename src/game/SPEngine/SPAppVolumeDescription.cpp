@@ -44,9 +44,9 @@ static float ArgToFloat(void* iface, void* arg) {
   typedef float(__thiscall * F0)(void*, void*);
   return ((F0)VSLOT(iface, 0x98))(iface, arg);
 }
-static void ArgToVec3(void* iface, void* dst, void* arg) {
+static void* ArgToVec3(void* iface, void* dst, void* arg) {
   typedef void*(__thiscall * F0)(void*, void*);
-  ((F0)VSLOT(iface, 0xb0))(dst, arg);
+  return ((F0)VSLOT(iface, 0xb0))(dst, arg);
 }
 static void ReadBytes(void* r, void* p, int n) {
   typedef void(__thiscall *F0)(void*, void*, int);
@@ -79,12 +79,22 @@ struct cVolumeDescription : public EA::Swarm::cDescription_s007e_e060 {
   cVolumeDescription();
 };  // namespace SP
 }
+// The live effect state edited by the volume ArgScript commands (VolumeCmd's +0x0c target).
+struct VolumeEffectParams {
+  uint8_t mUnknown00[0x1c]; // +0x00
+  float mSliceSpacing;      // +0x1c
+  Vec3f mColor;             // +0x20
+  float mAlpha;             // +0x2c
+};
 struct VolumeCmd {
+  uint8_t mUnknown00[0x04];    // +0x00
+  void* mArgConverter;         // +0x04  ArgScript value converter (vtable +0x98 float, +0xb0 Vec3)
+  uint8_t mUnknown08[0x04];    // +0x08
+  VolumeEffectParams* mParams; // +0x0c  live effect being edited
   void Alpha(EA::ArgScript::cArguments_s007e_e060* args);
   void Color(EA::ArgScript::cArguments_s007e_e060* args);
   void SliceSpacing(EA::ArgScript::cArguments_s007e_e060* args);
-};
-struct MapDescription {
+};struct MapDescription {
   void* vt;
   int refcount;
   uint32_t f08;
@@ -221,32 +231,25 @@ extern "C" void* VolumeRead(int* reader)
 // @ 0x007ee700
 void VolumeCmd::Alpha(EA::ArgScript::cArguments_s007e_e060* args)
 {
-  int* self = (int*)this;
-  void** p = EA::ArgScript::MainArguments(args, 1);
-  int iface = **(int**)((char*)self + 4);
-  *(float*)(*(char**)((char*)self + 0xc) + 0x2c) = ArgToFloat((void*)iface, *p);
+  char const* const* p = ((EA::ArgScript::cArguments*)args)->MainArguments(1);
+  mParams->mAlpha = ArgToFloat(mArgConverter, (void*)const_cast<char*>(*p));
 }
 
 // @ 0x007ee730
 void VolumeCmd::Color(EA::ArgScript::cArguments_s007e_e060* args)
 {
-  int* self = (int*)this;
-  void** p = EA::ArgScript::MainArguments(args, 1);
-  int iface = **(int**)((char*)self + 4);
+  char const* const* p = ((EA::ArgScript::cArguments*)args)->MainArguments(1);
   Vec3f tmp;
-  ArgToVec3((void*)iface, &tmp, *p);
-  int dst = *(int*)((char*)self + 0xc);
-  *(float*)(dst + 0x20) = tmp.x;
-  *(float*)(dst + 0x24) = tmp.y;
-  *(float*)(dst + 0x28) = tmp.z;
+  Vec3f* r = (Vec3f*)ArgToVec3(mArgConverter, &tmp, (void*)const_cast<char*>(*p));
+  mParams->mColor = *r;
 }
 
 // @ 0x007ee7b0
 extern "C" void VolumeMaterialCommand(int* self, EA::ArgScript::cArguments_s007e_e060* args)
 {
-  void** p = EA::ArgScript::MainArguments(args, 1);
+  char const* const* p = ((EA::ArgScript::cArguments*)args)->MainArguments(1);
   extern uint32_t HashName(const char*, uint32_t, int);   // 0x00932e80 (equiv t3)
-  void* arg = *p;
+  void* arg = (void*)const_cast<char*>(*p);
   uint32_t h = HashName((const char*)arg, 0x811c9dc5, 1);
   int dst = *(int*)((char*)self + 0xc);
   *(uint32_t*)(dst + 0x30) = h;
@@ -260,11 +263,13 @@ extern "C" void CopyVolumeDescription(int dst, int src)
 }
 
 // @ 0x007ee9f0
-extern "C" void CopySix(void*, void*);   // 0x007ee6d0 (stays in the slice)
+// 0x007EE6D0: the element-copy callback vector() invokes (thiscall, ecx=dst).
+void FUN_007ee6d0();
 void* MapDescription::Copy(int src)
 {
   MapDescription* self = this;
   self->refcount = 0;
+  self->vt = (void*)0x01453948;
   self->f08 = *(uint32_t*)(src + 8);
   self->f0c = *(uint32_t*)(src + 0xc);
   self->f10 = *(uint32_t*)(src + 0x10);
@@ -275,8 +280,8 @@ void* MapDescription::Copy(int src)
   self->f24 = *(uint32_t*)(src + 0x24);
   self->f28 = *(uint32_t*)(src + 0x28);
   self->f2c = *(uint32_t*)(src + 0x2c);
-  extern void CopyArray(void*, void*, int, int, void*);
-  CopyArray(&self->corners, (void*)(src + 0x30), 0x18, 8, (void*)&CopySix);
+  extern void __stdcall CopyArray(void*, void*, int, int, void*);
+  CopyArray(&self->corners, (void*)(src + 0x30), 0x18, 8, (void*)&FUN_007ee6d0);
   return self;
 }
 

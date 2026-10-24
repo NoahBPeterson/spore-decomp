@@ -5,10 +5,10 @@
 007ee540 227 SP::cVolumeDescription::cVolumeDescription - field/vtable store schedule differs
 007ee630 111 SP::VolumeRead - read helper shapes differ
 007ee6d0 40 SixFloats::Assign (six-float element copy) - returns this in eax (original fld/fstp, ours integer/loop); flags /O2 /MD /Gy /EHsc /TP; equiv PASS (400 valid, 100% cov)
-007ee700 31 VolumeAlpha command - float-conv vcall differs [equiv FAIL (member fn now testable)]
+007ee700 35 VolumeAlpha command - member MainArguments now called thiscall (ecx=args, one stack arg) and the converter is the +4 object (vtable+0x98); only frame/reg allocation differs [equiv PASS (334 valid, 100% cov); src hybrid PASS]
 007ee730 69 VolumeColor command - vector-conv vcall differs [equiv UNSUPPORTED: 0/1200 valid inputs (_CxxThrowException)]
-007ee780 31 VolumeSliceSpacing command - float-conv vcall differs [equiv FAIL (member fn now testable)]
+007ee780 35 VolumeSliceSpacing command - member MainArguments now called thiscall (ecx=args, one stack arg) and the converter is the +4 object (vtable+0x98); only frame/reg allocation differs [equiv PASS (323 valid, 100% cov)]
 007ee7b0 38 VolumeMaterial command - hash call shape differs
-007ee9f0 107 cVolumeDescription map copy-ctor - array copy callback shape differs [equiv FAIL (member fn now testable)]
+007ee9f0 126 cVolumeDescription map copy-ctor - vector() is __stdcall (callee pops 5 args), the callback resolves to 0x7ee6d0, and the vtable 0x01453948 store is present; only unrolled-store scheduling differs [equiv PASS (400 valid, 100% cov); src hybrid PASS]
 007eec80 108 register volume description - new/construct/register schedule differs [equiv WEAK: 35.9% coverage]
 007ee7f0 512 copy cVolumeDescription - unrolled field copy vs loop
