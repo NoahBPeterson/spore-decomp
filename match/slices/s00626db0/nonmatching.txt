@@ -1,8 +1,8 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00626db0  242  GetCurrentCameraPosition: complete; cTransform member offsets/matrix expression schedule differ
-00626ee0  268  UpdateCamera_StandardControl: complete; the field-copy (newPlatformVelocity/quaternion) schedule differs
+00626db0  292  GetCurrentCameraPosition: complete; uses cSPTransformR view at +0x194 (mFlags/mScale/xAxis/yAxis/zAxis) and the +0x1cc needs-updating flag; calls CalculateCameraToWorldMatrix as a member thiscall  [equiv: PASS 250 valid inputs, 100.0% coverage]
+00626ee0  285  UpdateCamera_StandardControl: complete; the five helper calls are __thiscall (ecx=this) and AimTowardsTarget takes a bool; desired-position temp at +0xdc, velocity source at +0x108  [equiv: PASS 250 valid inputs, 100.0% coverage]
 00627000   40  GetAudioAnchorPosition: complete; the compiler reorders the three up*f products and reloads the up globals
-00627060  257  InitCreatureData: complete; clamp/desired-value expression order and depends offsets differ
-006271a0   47  translateTransform: complete; Matrix3::Assign/Accumulate thiscall shape differs
+00627060  305  InitCreatureData: complete; theta/pitch/distance block at +0xd0/+0xd4/+0xd8, clamp bounds at +0x160/+0x164, desired values +0x124/+0x128/+0x12c, mDepends.mAnimCreature at +0x74; SetLocalExtents is __thiscall on &mDepends (0x628100)  [equiv: PASS 309 valid inputs, 98.2% coverage]
+006271a0   75  translateTransform: complete; Matrix3_Assign (0x41cb40) and Modifier_Accumulate (0x40ccb0) are __thiscall (ecx = dst+0x14 / dst)  [equiv: PASS 223 valid inputs, 100.0% coverage]
 00627660 1287 FUN_00627660: complete (camera ground push-out: 4 clearance queries, two tan(), acos pitch fix, CalculateCameraToWorldMatrix; 10 calls in the original order); not exact: x87/SSE operand scheduling and spill slots differ, `test byte,al` flag test not reproduced
 006271f0  233  cCreatureCameraBase ctor(IShared*): complete (947 vs 1076 bytes before; base vptr stores, Depends ctor, Matrix3::Assign, every field store, AddRef of the shared object); the vec3/quat copy register rotation and the 0x194/0x196 word-store order differ [equiv: UNSUPPORTED - only the vtable-pointer dwords differ, all other stores equal]
