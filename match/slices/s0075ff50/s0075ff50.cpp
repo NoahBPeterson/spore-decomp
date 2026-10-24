@@ -9,8 +9,8 @@ extern "C" void* __cdecl memset(void*, int, size_t);
 #pragma function(memset)
 
 extern "C" {
-void* __cdecl operator_new(unsigned int size, int align, const char* name);
-void  __cdecl operator_delete_(void* p);
+void* __cdecl operator_new(unsigned int size, const char* name, int a, int b, const char* file, int line); // @ 0xf473a0
+void  __cdecl operator_delete_(void* p); // @ 0xf47380
 }
 
 void __cdecl ResetGlobalState();    // @ 0x7618e0
@@ -47,8 +47,8 @@ struct cLayerInfo {                    // size 0x14
     unsigned int mLayerFlags;          // +0x8
     unsigned int mInfoFlags;           // +0xc
     float        mTimeMS;              // +0x10
-    void operator=(const cLayerInfo& o);   // @ 0x75ed50
-    cLayerInfo(const cLayerInfo& o);       // @ 0x75ee90
+    void operator=(const cLayerInfo& o);   // 0x75ed50
+    cLayerInfo(const cLayerInfo& o);       // 0x75ee90
     cLayerInfo() {}
 };
 
@@ -56,17 +56,19 @@ struct LayerVector {                   // `this` points at mpBegin
     cLayerInfo* mpBegin;               // +0x0
     cLayerInfo* mpEnd;                 // +0x4
     cLayerInfo* mpCapacity;            // +0x8
-    void erase(cLayerInfo* first, cLayerInfo* last);                  // @ 0x75fc00
-    void DoInsertValue(cLayerInfo* position, const cLayerInfo& value);// @ 0x75fc70
-    void DoAssignFromIterator(cLayerInfo* first, cLayerInfo* last, unsigned int tag); // @ 0x75fe50
-    cLayerInfo* insert(cLayerInfo* position, const cLayerInfo& value);// @ 0x760030
+    void erase(cLayerInfo* first, cLayerInfo* last);                  // 0x75fc00
+    void DoInsertValue(cLayerInfo* position, const cLayerInfo& value);// 0x75fc70
+    void DoAssignFromIterator(cLayerInfo* first, cLayerInfo* last, unsigned int tag); // 0x75fe50
+    cLayerInfo* insert(cLayerInfo* position, const cLayerInfo& value);// 0x760030
 };
 
 void __cdecl copy_layers(cLayerInfo* first, cLayerInfo* last, cLayerInfo* dest); // @ 0x75f4a0
 
+extern const unsigned int kTimeoutNone;                 // @ 0x140dca0 (EA::Thread::kTimeoutNone, 0xffffffff)
+
 struct MutexLock {
     EA::Thread::Mutex* mMutex;
-    MutexLock(EA::Thread::Mutex* m) : mMutex(m) { mMutex->Lock("Renderer"); }
+    MutexLock(EA::Thread::Mutex* m) : mMutex(m) { mMutex->Lock(&kTimeoutNone); }
     ~MutexLock() { mMutex->Unlock(); }
 };
 
@@ -77,11 +79,11 @@ class cRenderer {
 public:
     char mData[0x660];
 
-    bool ClearLayer(unsigned int layerNumber);             // @ 0x75ff50
-    bool Shutdown();                                       // @ 0x7600d0
-    void SetLayer(cILayer* layer, unsigned int layerNumber, unsigned int flags); // @ 0x7602a0
-    void ClearAllLayers();                                  // @ 0x7603e0
-    void Render(unsigned int flags);                        // @ 0x760450
+    bool ClearLayer(unsigned int layerNumber);             // 0x75ff50
+    bool Shutdown();                                       // 0x7600d0
+    void SetLayer(cILayer* layer, unsigned int layerNumber, unsigned int flags); // 0x7602a0
+    void ClearAllLayers();                                  // 0x7603e0
+    void Render(unsigned int flags);                        // 0x760450
     void ExecuteJob(cRenderJob* job, cRenderStats* stats);  // @ 0x75e3f0
 };
 
@@ -195,11 +197,9 @@ Poly2::Poly2() {}
 
 // ---------------------------------------------------------------- 0x760c40 (erase)
 struct RefCountedAt8 {
-    virtual void r0();
-    int r1;
+    virtual void AddRef();             // +0x0
+    virtual void Release();            // +0x4
     int mRefCount;                     // +0x8
-    void AddRef();
-    void Release();
 };
 struct Elem3 {
     RefCountedAt8* p;                  // +0x0
@@ -207,8 +207,8 @@ struct Elem3 {
     void* b;                           // +0x8
 };
 void __cdecl move_elems(Elem3* dest, Elem3* last, Elem3* src);    // @ 0x6f43e0
-Elem3* __cdecl move_elems2(Elem3* dest, Elem3* last, Elem3* src);  // @ 0x77fb10
-void __cdecl destroy_range(Elem3* first, Elem3* last);            // @ 0x760b10
+Elem3* __cdecl move_elems2(Elem3* first, Elem3* last, Elem3* dest); // @ 0x77fb10
+Elem3* __cdecl destroy_range(Elem3* first, Elem3* last, Elem3* dest); // @ 0x760b10
 void __cdecl uninit_move(Elem3* first, Elem3* last, Elem3* dest); // @ 0x780a50
 void __cdecl move_ptrs(RefCountedAt8** dest, RefCountedAt8** last, RefCountedAt8** src); // @ 0x6f43e0
 
@@ -223,7 +223,7 @@ struct Vec3 {
     Elem3* mpBegin;                    // +0x0
     Elem3* mpEnd;                      // +0x4
     Elem3* mpCapacity;                 // +0x8
-    Elem3* insert(Elem3* position, const Elem3& value); // @ 0x760ca0
+    Elem3* insert(Elem3* position, const Elem3& value); // 0x760ca0
 };
 
 RefCountedAt8** PtrVec::erase(RefCountedAt8** position)
@@ -243,34 +243,47 @@ RefCountedAt8** PtrVec::erase(RefCountedAt8** position)
     return position;
 }
 
+// @ 0x760ca0
 Elem3* Vec3::insert(Elem3* position, const Elem3& value)
 {
     if (mpEnd != mpCapacity) {
         Elem3* end = mpEnd;
-        if (position < end) {
-            Elem3* p = end;
-            while (p != position) {
-                Elem3* prev = p - 1;
-                p->p = prev->p;
-                if (p->p) p->p->AddRef();
-                p->a = prev->a;
-                p->b = prev->b;
-                p = prev;
-            }
+        const Elem3* v = &value;
+        if (v >= position && v < end)
+            v = v + 1;
+        if (end) {
+            end->p = end[-1].p;
+            if (end->p) end->p->AddRef();
+            end->a = end[-1].a;
+            end->b = end[-1].b;
         }
-        *position = value;
-        if (position->p) position->p->AddRef();
+        uninit_move(position, end - 1, end);
+        RefCountedAt8* src = v->p;
+        if (src != position->p) {
+            if (src) src->AddRef();
+            RefCountedAt8* old = position->p;
+            position->p = src;
+            if (old) old->Release();
+        }
+        position->a = v->a;
+        position->b = v->b;
         mpEnd = end + 1;
         return position;
     }
     int count = (int)(mpEnd - mpBegin);
     int cap = (count == 0) ? 1 : count * 2;
-    Elem3* newBuf = cap ? (Elem3*)operator_new(cap * 0xc, 0, "Graphics") : 0;
-    Elem3* newPos = move_elems2(newBuf, position, 0);
-    destroy_range(newBuf, position);
-    if (newPos) { *newPos = value; if (newPos->p) newPos->p->AddRef(); }
+    Elem3* newBuf = cap ? (Elem3*)operator_new(cap * 0xc, "Graphics", 0, 0, "EASTL/allocator.h", 0xd1) : 0;
+    Elem3* newPos = move_elems2(mpBegin, position, newBuf);
+    destroy_range(mpBegin, position, newBuf);
+    if (newPos) {
+        RefCountedAt8* src = value.p;
+        newPos->p = src;
+        if (src) src->AddRef();
+        newPos->a = value.a;
+        newPos->b = value.b;
+    }
     Elem3* newEnd = move_elems2(position, mpEnd, newPos + 1);
-    destroy_range(position, mpEnd);
+    destroy_range(position, mpEnd, newPos + 1);
     if (mpBegin && *(int*)((char*)mpBegin - 4) != 0) operator_delete_(mpBegin);
     mpEnd = newEnd;
     mpBegin = newBuf;
@@ -520,7 +533,7 @@ __forceinline void ResetRenderPassState(void* dbgData)
     ShaderDataSet(0x24e, dbgData, 0);
 }
 
-// @ 0x760450 : SP::cRenderer::Render
+// @ 0x760450
 void cRenderer::Render(unsigned int flags)
 {
     char* self = (char*)this;

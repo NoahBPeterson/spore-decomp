@@ -1,7 +1,8 @@
-0075ff50  131  ClearLayer: layer lower_bound/erase layout differs (load hoist + found-block placement)
-00760030   88  LayerVector::insert: missing EH frame and fast-path store shape (100 vs 145 B)
-007600d0  179  Shutdown: list clears abstracted to a helper (inlined 2-loop release/erase in original)
-007602a0  180  SetLayer: temp cLayerInfo/EH state layout and search shape
-00760c00    8  Poly2 ctor: derived vptr stores scheduled after base field zeroes instead of interleaved; equiv: FAIL (vtable addresses differ, expected for ctor) after marker added
-00760c40   31  PtrVec::erase: interlocked release register allocation (mov ecx,eax / or edx,-1 order)
-00760450 1280 cRenderer::Render (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): complete; register allocation differs (bool in memory, CSE'd +0x648) and the two tail list dtors call clear() out of line instead of inlining
+0075ff50  131  ClearLayer: layer lower_bound/erase layout differs (load hoist + found-block placement); MutexLock used the kTimeout-arg Lock; equiv PASS
+00760030  107  LayerVector::insert: missing EH frame and fast-path store shape (137 vs 145 B); equiv WEAK
+007600d0  365  Shutdown: list clears abstracted to a helper (inlined 2-loop release/erase in original); equiv UNSUPPORTED (unresolved helper decls ClearJobList/DevStop1-3/CloseArena)
+007602a0  252  SetLayer: temp cLayerInfo/EH state layout and search shape; MutexLock used the kTimeout-arg Lock; equiv WEAK (100% coverage)
+00760c00    8  Poly2 ctor: derived vptr stores scheduled after base field zeroes instead of interleaved; equiv UNSUPPORTED (stores its own vtable address, not the image's)
+00760c40   46  PtrVec::erase: interlocked release register allocation (mov ecx,eax / or edx,-1 order); equiv UNSUPPORTED (0/400 valid: original faults on random state)
+00760ca0  442  Vec3::insert (0xc stride): grow path reordered to the original's move/uninitialized-move/destroy callee sequence (move_elems2(first,last,dest), destroy_range(first,last,dest), 6-arg alloc); RefCountedAt8::AddRef is vtable slot 0; equiv UNSUPPORTED (original faults on random vector state, 0/400 valid)
+00760450 1286 cRenderer::Render (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): complete; register allocation differs (bool in memory, CSE'd +0x648) and the two tail list dtors call clear() out of line instead of inlining; equiv WEAK (marker previously bound the wrong symbol)
