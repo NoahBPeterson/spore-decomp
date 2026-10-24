@@ -1,0 +1,6 @@
+# Slice s00be4c00 nonmatching functions (compiled; not byte-exact).
+# Format: <va> <difftest-verdict> <reason>
+00be4c00 UNSUPPORTED size 1259 vs 1322, 1074 bytes differ: full behaviour teardown reconstructed from the Ghidra decompile (block/target/agent pop loops, message broadcasts, universe teardown); 2 unresolved references (?MessageServer, ~MessageBasicRC<5>) so difftest builds no valid inputs
+00be5130 FAIL size 68 vs 65: same switch dispatch, but MSVC folds the tag into an immediate push and compares in eax (5-byte cmp) where the original keeps it in edx (6-byte cmp); the difftest mismatch is only the return value, which is the undefined eax the void callee leaves behind
+00be54c0 UNSUPPORTED size 576 vs 567, 399 bytes differ: stream load reconstructed (IO::ReadInt32, wide-string check/assign, block-vector compaction, 6 timers, cVarListSerializer); unresolved cVarListSerializer ctor/Serialize so difftest builds no valid inputs
+00be5700 PASS size 50 vs 54 (52 code bytes + 2 int3): identical operations, only the third argument is rematerialised from the incoming argument slot (mov edx,[esp+0xc]) instead of the live esi register
