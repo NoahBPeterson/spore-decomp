@@ -113,6 +113,17 @@ GAIT_KEY_COMMAND(MaxYawAngle)
 GAIT_KEY_COMMAND(MaxPitchAngle)
 GAIT_KEY_COMMAND(MaxRollAngle)
 
+// Same block/field-command split for the shorter "steplength" tuning file; only OnRegister is
+// reproduced here.
+struct cStepLengthKeyBlockCommand : EA::ArgScript::cBlockCommandT<cGaitKeyState> {
+    void OnRegister(cIParser* parser, cState* state);
+};
+
+struct cStepLengthCommand : EA::ArgScript::cCommandT<cStepLengthKeyBlockCommand> {
+    cStepLengthCommand() {}
+    virtual void Execute(cArguments& args);
+};
+
 }  // namespace
 
 // Gait file keywords (an alphabetical table of `const char*` at 0x0155152c..0x015515d8).
@@ -142,6 +153,7 @@ extern const char* speedi;                  // 0x01551580
 extern const char* spl;                     // 0x01551584
 extern const char* stepgallop;              // 0x01551588
 extern const char* stepheight;              // 0x0155158c
+extern const char* steplength;              // 0x01551590
 extern const char* stepphasebiash;          // 0x01551594
 extern const char* stepphasebiasv;          // 0x01551598
 extern const char* stepskew;                // 0x0155159c
@@ -216,4 +228,164 @@ void cGaitKeyBlockCommand::OnRegister(cIParser* parser, cState* state)
     REGISTER(MaxRollAngle, maxrollangle);
 
 #undef REGISTER
+}
+
+// The "steplength" variant registers only the field commands it understands.
+// @ 0x009df360
+void cStepLengthKeyBlockCommand::OnRegister(cIParser* parser, cState* state)
+{
+    mState = (cGaitKeyState*)state;
+    cBlockCommandBase::OnRegister(parser, state);
+
+    AddCommand(GaitKeywords::speedi,
+               new ("ArgScript/SpeedI", 0, 0, 0, 0) cSpeedICommand());
+    AddCommand(GaitKeywords::steplength,
+               new ("ArgScript/StepLength", 0, 0, 0, 0) cStepLengthCommand());
+}
+
+// ---------------------------------------------------------------------------------------------
+// Gait-animation vectors (0x009df400 .. 0x009df9b0). `Vec<T>` is a begin / end / capacity-end
+// vector allocated through the EA debug operator new; every element type here is raw storage,
+// with the element copy-construct and range-copy helpers supplied out of line.
+
+struct GaitA     { uint8_t mData[0x44]; };      // 0x44
+struct GaitC     { uint8_t mData[0x1c]; };      // 0x1c
+struct GaitItem  { uint8_t mData[0x0c]; };      // 0x0c
+struct AnalysisInfo { uint32_t mA, mB, mC; };    // 0x0c
+
+void CopyGaitA(GaitA* first, GaitA* last, GaitA* result);           // 0x009dc0f0
+void CopyGaitC(GaitC* first, GaitC* last, GaitC* result);           // 0x009dc1d0
+void CopyGaitItem(GaitItem* first, GaitItem* last, GaitItem* result);   // 0x009dc300
+
+void CopyConstructGaitA(void* outEnd, GaitA* first, GaitA* last, GaitA* dst, int n);   // 0x009dd530
+void CopyConstructInfo(void* outEnd, AnalysisInfo* first, AnalysisInfo* last,
+                       AnalysisInfo* dst, int tag);                 // 0x00898b80
+void CopyInfo(AnalysisInfo* first, AnalysisInfo* last, AnalysisInfo* result);  // 0x00b84c80
+
+void FreeMemory(void* p);                                          // 0x00f47380 (operator delete)
+extern const char kAllocatorFile[];                                // 0x013ebb38
+
+template <typename T> struct Vec {
+    T* mpBegin;          // +0x00
+    T* mpEnd;            // +0x04
+    T* mpEndOfStorage;   // +0x08
+
+    int size() const { return (int)(mpEnd - mpBegin); }
+    unsigned int capacity() const { return (unsigned int)(mpEndOfStorage - mpBegin); }
+
+    void reserve(int n);
+    T* allocate_copy(int n, T* first, T* last);
+    Vec(unsigned int n, const T& value, int unused = 0);
+    Vec& operator=(const Vec& other);
+};
+
+// @ 0x009df400
+template <> void Vec<GaitA>::reserve(int n)
+{
+    if ((unsigned int)n > capacity()) {
+        GaitA* p = n ? (GaitA*)operator new(n * sizeof(GaitA), "Anim/gait/untagged",
+                                             0, 0, kAllocatorFile, 0xd1) : 0;
+        CopyGaitA(mpBegin, mpEnd, p);
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            FreeMemory(mpBegin);
+        int count = size();
+        mpBegin = p;
+        mpEnd = p + count;
+        mpEndOfStorage = p + n;
+    }
+}
+
+// @ 0x009df570
+template <> void Vec<GaitC>::reserve(int n)
+{
+    if ((unsigned int)n > capacity()) {
+        GaitC* p = n ? (GaitC*)operator new(n * sizeof(GaitC), "Anim/gait/untagged",
+                                             0, 0, kAllocatorFile, 0xd1) : 0;
+        CopyGaitC(mpBegin, mpEnd, p);
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            FreeMemory(mpBegin);
+        int count = size();
+        mpBegin = p;
+        mpEnd = p + count;
+        mpEndOfStorage = p + n;
+    }
+}
+
+// @ 0x009df6e0 Vec::allocate_copy
+template <> GaitA* Vec<GaitA>::allocate_copy(int n, GaitA* first, GaitA* last)
+{
+    GaitA* p = n ? (GaitA*)operator new(n * sizeof(GaitA), "Anim/gait/untagged",
+                                        0, 0, kAllocatorFile, 0xd1) : 0;
+    CopyConstructGaitA(&n, first, last, p, n);
+    return p;
+}
+
+// @ 0x009df800 Vec::reserve
+template <> void Vec<GaitItem>::reserve(int n)
+{
+    if ((unsigned int)n > capacity()) {
+        GaitItem* p = n ? (GaitItem*)operator new(n * sizeof(GaitItem), "Anim/gait/untagged",
+                                                   0, 0, kAllocatorFile, 0xd1) : 0;
+        CopyGaitItem(mpBegin, mpEnd, p);
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            FreeMemory(mpBegin);
+        int count = size();
+        mpBegin = p;
+        mpEnd = p + count;
+        mpEndOfStorage = p + n;
+    }
+}
+
+// @ 0x009df8b0 Vec::Vec
+template <> Vec<GaitItem>::Vec(unsigned int n, const GaitItem& value, int unused)
+{
+    GaitItem* p = n ? (GaitItem*)operator new(n * sizeof(GaitItem), "Anim/gait/untagged",
+                                              0, 0, kAllocatorFile, 0xd1) : 0;
+    mpEndOfStorage = p + n;
+    mpBegin = p;
+    mpEnd = p;
+    for (unsigned int i = n; i > 0; --i) {
+        if (p)
+            *p = value;
+        ++p;
+    }
+    mpEnd = mpBegin + n;
+}
+
+template <> AnalysisInfo* Vec<AnalysisInfo>::allocate_copy(int n, AnalysisInfo* first,
+                                                          AnalysisInfo* last)
+{
+    AnalysisInfo* p = n ? (AnalysisInfo*)operator new(n * sizeof(AnalysisInfo),
+                                                     "Anim/gait/untagged", 0, 0,
+                                                     kAllocatorFile, 0xd1) : 0;
+    CopyConstructInfo(&n, first, last, p, n);
+    return p;
+}
+
+// @ 0x009df9b0 Vec::operator=
+template <> Vec<AnalysisInfo>& Vec<AnalysisInfo>::operator=(const Vec<AnalysisInfo>& other)
+{
+    if (this != &other) {
+        int n = other.size();
+        if (capacity() < (unsigned int)n) {
+            AnalysisInfo* p = allocate_copy(n, other.mpBegin, other.mpEnd);
+            if (mpBegin && ((int*)mpBegin)[-1] != 0)
+                FreeMemory(mpBegin);
+            mpEndOfStorage = p + n;
+            mpBegin = p;
+            mpEnd = p + n;
+        } else {
+            int live = size();
+            if (live < n) {
+                CopyInfo(other.mpBegin, other.mpBegin + live, mpBegin);
+                CopyConstructInfo(&n, other.mpBegin + live, other.mpEnd, mpEnd,
+                                  (int)(uint32_t)other.mpEnd);
+                mpEnd = mpBegin + n;
+            } else {
+                CopyInfo(other.mpBegin, other.mpEnd, mpBegin);
+                mpEnd = mpBegin + n;
+            }
+        }
+    }
+    return *this;
 }

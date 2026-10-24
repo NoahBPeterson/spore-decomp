@@ -1,2 +1,5 @@
 # source  symbol  original VA  [flags override]
 slices/s009de8b0/s009de8b0.cpp  ?OnRegister@cGaitKeyBlockCommand@  009de8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009de8b0/s009de8b0.cpp  ?OnRegister@cStepLengthKeyBlockCommand@?A0x7a90c912@@QAEXPAUcIParser@ArgScript@EA@@PAUcState@45@@Z  009df360  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s009de8b0/s009de8b0.cpp  ?reserve@?$Vec@UGaitA@@@@QAEXH@Z  009df400  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s009de8b0/s009de8b0.cpp  ?reserve@?$Vec@UGaitC@@@@QAEXH@Z  009df570  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
