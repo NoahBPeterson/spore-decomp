@@ -6,3 +6,4 @@ slices/s00b90480/s00b90480.cpp  ?CallABB@VtThing@@QAEXHH@Z  00b90900  /O2 /MD /G
 slices/s00b90480/s00b90480.cpp  ?CallAAA@VtThing@@QAEXH@Z   00b90920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00b90480/s00b90480.cpp  ?FUN_00b909f0@@YAXPAH0P6ADHH@Z@Z  00b909f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00b90480/s00b90480.cpp  ?FUN_00b90c50@@YAXH@Z      00b90c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b90480/s00b90480.cpp  ?FUN_00b906f0@@YAXIPAH00@Z  00b906f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

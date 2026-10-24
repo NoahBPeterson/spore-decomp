@@ -4,8 +4,23 @@
 #include <math.h>
 
 #pragma warning(disable: 4100)
+#pragma warning(disable: 4035)
 
 typedef unsigned int uint;
+
+// EA math helper: round with the current MXCSR mode, then bump if it rounded down.
+__forceinline int CeilToInt(float f)
+{
+    __asm {
+        movss   xmm0, f
+        cvtss2si eax, xmm0
+        cvtsi2ss xmm1, eax
+        mov     ecx, eax
+        add     ecx, 1
+        ucomiss xmm1, xmm0
+        cmovb   eax, ecx
+    }
+}
 
 // ---- external helpers -------------------------------------------------------
 void* FUN_00401090();                                               // species manager getter
@@ -15,8 +30,14 @@ void  FUN_00b900a0(int);
 void  operator_delete__(void*);
 int   WrapCubeFace(unsigned face, int* a, int* b, int* c, int d, int e);
 double RandomDoubleUniform(void* rng);                              // 0x00ac?? RNG
+struct cRandomGlobal {
+    double RandomDouble();          // 0x009360d0 (thiscall, ecx = &state)
+};
 char  FUN_00ac0730(int a, const int* b);
-int   FUN_00b88590(int h);
+void* PlanetModel();                                                // 0x00b3d350
+struct PlanetModelObj {
+    int GetContinent(const void* dir);   // 0x00b88590 (thiscall, ret 4)
+};
 struct Obj342 { void Notify(bool b); };
 int   FUN_00685450(int a, int* b, int c, void* out);
 void  VectorBoolDoInsert(void* a, void* b, int c);
@@ -30,37 +51,52 @@ extern int   DAT_016888ec;          // list begin
 extern int   DAT_016888f0;          // list end
 extern const unsigned char kCellBasis[];   // 0x01465948 byte table
 
-struct Obj90480 { void F(); };
+struct Obj90480 {
+    void AddPlant(int handle);      // 0x00b900a0 (thiscall, ecx = the editor object)
+    void F();
+};
+
+// EASTL vector<...> (begin/end/cap) and the species-manager lookup it is fed to.
+struct VecInsert {
+    void* begin; void* end; void* cap;
+    void DoInsertValues(void* pos, int n, const void* value);   // 0x004cea40 (thiscall, ret 0xc)
+};
+struct SpeciesMgr {
+    int GetMatchingPlantProfiles(void* out, int n, unsigned id);   // 0x004dfd50 (thiscall)
+};
+struct BufHolder {
+    int  flag;          // sits immediately before the fixed buffer
+    char buf[1024];
+};
+
 // @ 0x00b90480
 void Obj90480::F()
 {
-    int param_1 = (int)this;
-    if (*(char*)(param_1 + 0x38) == '\0') {
-        *(char*)(param_1 + 0x38) = 1;
-        void* local_428 = FUN_00401090();
-        uint uVar3 = 0;
-        unsigned local_424[4];
-        local_424[0] = 0xbcd73e89;
-        local_424[1] = 0xb8669ec9;
-        local_424[2] = 0x37148141;
-        int local_42c = 0;
-        char local_400[1024];
-        do {
-            unsigned puVar2 = local_424[uVar3];
-            char* buf = local_400;
-            FUN_004cea40(buf, 100, &local_42c);
-            int iVar1 = GetMatchingPlantProfiles(local_428, (void**)&buf, 100, puVar2);
-            int iVar4 = 0;
-            if (0 < iVar1) {
-                do {
-                    if (*(int*)(buf + iVar4 * 4) != 0) {
-                        FUN_00b900a0(*(int*)(buf + iVar4 * 4));
-                    }
-                    iVar4 = iVar4 + 1;
-                } while (iVar4 < iVar1);
+    if (*(char*)((char*)this + 0x38) == '\0') {
+        *(char*)((char*)this + 0x38) = 1;
+        SpeciesMgr* mgr = (SpeciesMgr*)FUN_00401090();
+        unsigned hashes[3];
+        hashes[0] = 0xbcd73e89;
+        hashes[1] = 0xb8669ec9;
+        hashes[2] = 0x37148141;
+        BufHolder holder;
+        VecInsert vec;
+        int zero = 0;
+        for (unsigned i = 0; i < 3; ++i) {
+            holder.flag = 0;
+            vec.begin = holder.buf;
+            vec.end = holder.buf;
+            vec.cap = holder.buf + sizeof(holder.buf);
+            vec.DoInsertValues(vec.begin, 100, &zero);
+            int n = mgr->GetMatchingPlantProfiles(&vec, 100, hashes[i]);
+            for (int j = 0; j < n; ++j) {
+                int handle = ((int*)vec.begin)[j];
+                if (handle != 0)
+                    this->AddPlant(handle);
             }
-            uVar3 = uVar3 + 1;
-        } while (uVar3 < 3);
+            if (vec.begin != 0 && *(int*)((char*)vec.begin - 4) != 0)
+                operator_delete__(vec.begin);
+        }
     }
 }
 
@@ -111,20 +147,22 @@ void FUN_00b90560(int param_1, int param_2, int param_3)
 // @ 0x00b906a0
 float FUN_00b906a0(float param_1, float param_2)
 {
-    float fVar1 = (float)(RandomDoubleUniform(&DAT_016888e8) * ((double)param_2 - (double)param_1) + (double)param_1);
-    if (param_2 <= fVar1)
+    // The retail code keeps the whole lerp in x87 double precision and only
+    // narrows when the value is returned; the two clamps compare doubles.
+    double d = ((double)param_2 - (double)param_1) * ((cRandomGlobal*)&DAT_016888e8)->RandomDouble() + (double)param_1;
+    if ((double)param_2 <= d)
         return param_2;
-    if (param_1 > fVar1)
+    if ((double)param_1 > d)
         return param_1;
-    return fVar1;
+    return (float)d;
 }
 
 // @ 0x00b906f0
-void FUN_00b906f0(unsigned param_1, int param_2, int param_3, int param_4)
+void FUN_00b906f0(unsigned param_1, int* param_2, int* param_3, int* param_4)
 {
     int iVar1;
     do {
-        iVar1 = WrapCubeFace(param_1, &param_2, &param_3, &param_4, 0, 0);
+        iVar1 = WrapCubeFace(param_1, param_2, param_3, param_4, 0, 0);
     } while (iVar1 != 0);
 }
 
@@ -236,7 +274,7 @@ int* FUN_00b90960(int* param_1, int* param_2, int param_3)
         if (param_1 == param_2)
             return param_1;
         int uVar1 = ((int (__thiscall*)(int))(*(void***)(*param_1 + 0x34))[0x2c / 4])(*param_1 + 0x34);
-        int iVar2 = FUN_00b88590(uVar1);
+        int iVar2 = ((PlanetModelObj*)PlanetModel())->GetContinent((const void*)uVar1);
         if (param_3 != iVar2)
             break;
         param_1 = param_1 + 1;
@@ -251,7 +289,7 @@ int* FUN_00b909a0(int* param_1, int* param_2, int* param_3, int param_4)
         return param_3;
     do {
         int uVar1 = ((int (__thiscall*)(int))(*(void***)(*param_1 + 0x34))[0x2c / 4])(*param_1 + 0x34);
-        int iVar2 = FUN_00b88590(uVar1);
+        int iVar2 = ((PlanetModelObj*)PlanetModel())->GetContinent((const void*)uVar1);
         if (param_4 == iVar2) {
             *param_3 = *param_1;
             param_3 = param_3 + 1;
@@ -401,29 +439,29 @@ bool FUN_00b90cb0(float* param_1, float param_2)
 }
 
 // @ 0x00b90d70
-int FUN_00b90d70(int* param_1, int param_2, float param_3)
+bool FUN_00b90d70(int* param_1, int param_2, float param_3)
 {
-    if (1.5258789e-05f <= param_3) {
-        float fVar7 = (((float)param_1[1] + 0.5f) * (1.0f / (float)param_2)) * 2.0f - 1.0f;
-        float fVar6 = (((float)*param_1 + 0.5f) * (1.0f / (float)param_2)) * 2.0f - 1.0f;
-        int iVar1 = (param_1[2] >> 1) * 4;
-        float fVar4 = 1.0f / (float)sqrt((double)((fVar6 * fVar6 + fVar7 * fVar7) + 1.0f));
-        float fVar8 = fVar4;
-        if ((param_1[2] & 1U) != 0)
-            fVar8 = -fVar4;
-        unsigned char bVar2 = kCellBasis[iVar1 + 1];
-        unsigned char bVar3 = kCellBasis[iVar1 + 2];
-        float local_c[3];
-        local_c[kCellBasis[iVar1]] = fVar8 * fVar6;
-        local_c[bVar2] = fVar4 * fVar7;
-        local_c[bVar3] = fVar8;
-        float fVar5 = (float)cos((double)((90.0f - param_3) * 0.017453292f));
-        if (fVar5 <= (float)fabs((double)(((double)local_c[1] + (double)local_c[0]) * 0.0 + (double)local_c[2])))
-            return 0;
-    }
-    return 1;
+    if (param_3 < 1.5258789e-05f)
+        return 1;
+    float fVar7 = (((float)param_1[1] + 0.5f) * (1.0f / (float)param_2)) * 2.0f - 1.0f;
+    float fVar6 = (((float)*param_1 + 0.5f) * (1.0f / (float)param_2)) * 2.0f - 1.0f;
+    int iVar1 = param_1[2] >> 1;
+    float fVar4 = 1.0f / (float)sqrt((double)((fVar6 * fVar6 + fVar7 * fVar7) + 1.0f));
+    float fVar8 = fVar4;
+    if ((param_1[2] & 1U) != 0)
+        fVar8 = -fVar4;
+    unsigned char bVar2 = kCellBasis[iVar1 * 4 + 1];
+    unsigned char bVar3 = kCellBasis[iVar1 * 4 + 2];
+    float local_c[3];
+    local_c[kCellBasis[iVar1 * 4]] = fVar8 * fVar6;
+    local_c[bVar2] = fVar4 * fVar7;
+    local_c[bVar3] = fVar8;
+    float fVar6b = (float)fabs((double)(((double)local_c[1] + (double)local_c[0]) * 0.0 + (double)local_c[2]));
+    float fVar5 = (float)cos((double)((90.0f - param_3) * 0.017453292f));
+    return fVar5 > fVar6b;
 }
 
+struct CellRange { int c0; int bc; int face; };
 struct Model90EA0 { void F(float* param_2, float param_3, float param_4, float param_5); };
 // @ 0x00b90ea0
 void Model90EA0::F(float* param_2, float param_3, float param_4, float param_5)
@@ -452,44 +490,41 @@ void Model90EA0::F(float* param_2, float param_3, float param_4, float param_5)
         float local_94 = (fVar9 * param_4) * (fVar9 * param_4);
         float local_90 = (fVar9 * param_5) * (fVar9 * param_5);
         float fVar10 = (float)iVar6 * 0.5f;
-        int local_c0, local_bc;
-        unsigned local_b8;
+        CellRange rng;
         if ((local_a4 < local_a0) || (local_a4 < fVar12)) {
             if (fVar12 < local_a0) {
-                local_c0 = (int)((local_ac / local_b0 + 1.0f) * fVar10);
-                local_bc = (int)((local_a8 / local_a0 + 1.0f) * fVar10);
-                local_b8 = 2;
+                rng.c0 = (int)((local_ac / local_b0 + 1.0f) * fVar10);
+                rng.bc = (int)((local_a8 / local_a0 + 1.0f) * fVar10);
+                rng.face = 2;
                 if (local_b0 < 0.0f)
-                    local_b8 = 3;
+                    rng.face = 3;
             } else {
-                local_c0 = (int)((local_a8 / local_ac + 1.0f) * fVar10);
-                local_bc = (int)((local_b0 / fVar12 + 1.0f) * fVar10);
+                rng.c0 = (int)((local_a8 / local_ac + 1.0f) * fVar10);
+                rng.bc = (int)((local_b0 / fVar12 + 1.0f) * fVar10);
                 if (local_ac < 0.0f)
-                    local_b8 = 5;
+                    rng.face = 5;
                 else
-                    local_b8 = 4;
+                    rng.face = 4;
             }
         } else {
-            local_c0 = (int)((local_b0 / local_a8 + 1.0f) * fVar10);
-            local_bc = (int)((local_ac / local_a4 + 1.0f) * fVar10);
+            rng.c0 = (int)((local_b0 / local_a8 + 1.0f) * fVar10);
+            rng.bc = (int)((local_ac / local_a4 + 1.0f) * fVar10);
             if (local_a8 < 0.0f)
-                local_b8 = 1;
+                rng.face = 1;
             else
-                local_b8 = 0;
+                rng.face = 0;
         }
-        if (local_c0 == iVar6)
-            local_c0 = local_c0 - 1;
-        if (local_bc == iVar6)
-            local_bc = local_bc - 1;
+        if (rng.c0 == iVar6)
+            rng.c0 = rng.c0 - 1;
+        if (rng.bc == iVar6)
+            rng.bc = rng.bc - 1;
         float local_8c0 = ((float)iVar6 * fVar9) * local_b4;
-        int iVar6b = (int)(local_8c0 + 0.5f);
-        if ((float)iVar6b < local_8c0)
-            iVar6b = iVar6b + 1;
+        int iVar6b = CeilToInt(local_8c0);
         int local_7c = param_1;
         int local_74[28];
-        int local_c4 = FUN_00685450(*(int*)(param_1 + 0x24), &local_c0, iVar6b, local_74);
+        int local_c4 = FUN_00685450(*(int*)(param_1 + 0x24), (int*)&rng, iVar6b, local_74);
         if (0 < local_c4) {
-            int* piVar7 = local_74;
+            int* piVar7 = local_74 + 1;
             do {
                 if (piVar7[1] < piVar7[3]) {
                     int iVar6c = piVar7[1];
