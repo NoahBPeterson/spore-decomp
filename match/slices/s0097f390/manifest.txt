@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0097f390/s0097f390.cpp  ?Clear@HashOwner@UTFWinControls@EA@@QAEXXZ  0097fb40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ??1WinMessageBox@UTFWinControls@EA@@QAE@XZ  0097fb60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?SetMessageText@WinMessageBoxTail@UTFWinControls@EA@@QAEXPB_W@Z  0097fd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ??0WinMessageBox@UTFWinControls@EA@@QAE@XZ  0097fd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?Shutdown@WinMessageBox@UTFWinControls@EA@@QAEXXZ  0097ff10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?InitButton@WinMessageBoxTail@UTFWinControls@EA@@QAE_NHHHH@Z  0097ff70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?RemoveAll@WinMessageBoxTail@UTFWinControls@EA@@QAEXXZ  00980070  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?Update@ModulateEffect@UTFWinControls@EA@@QAEXPAUIColorTarget@23@M@Z  00980120  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?Get@PairHolder@UTFWinControls@EA@@QAEXPAI0@Z  00980150  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?CreateInstance@BasicFactory_ModulateEffect@UTFWinControls@EA@@QAEPAXPAX0@Z  009802b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?Process@IOwner@UTFWinControls@EA@@QAE_NPAUIObj@23@PAUArg2@23@@Z  00980360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ??1Navigator@UTFWinControls@EA@@QAE@XZ  00980420  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?Destroy@CascadeEffect@UTFWinControls@EA@@QAEPAU123@E@Z  00980490  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?Process2@IOwner@UTFWinControls@EA@@QAE_NPAUIObj@23@PAUArg2@23@@Z  00980520  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?Apply@FloatHolder@UTFWinControls@EA@@QAEXPAUFloatSink@23@@Z  00980580  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0097f390/s0097f390.cpp  ?CreateInstance@BasicFactory_PerspectiveEffect@UTFWinControls@EA@@QAEPAXPAX0@Z  00980680  /O2 /MD /Gy /TP /arch:SSE /fp:fast
