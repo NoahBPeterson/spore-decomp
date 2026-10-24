@@ -478,6 +478,17 @@ void* FUN_006bfc20(void* a, void*, void*)
 
 
 // @ 0x006c0120
+// hash-bucket node walked by func24h (bucket chain link at +0x28)
+struct PFHashNode {
+    u32 pad00[4];       // +0x00
+    u32 startLo;        // +0x10
+    u32 startHi;        // +0x14
+    u32 sizeLo;         // +0x18
+    u32 sizeHi;         // +0x1c
+    u32 pad20[2];       // +0x20
+    PFHashNode* next;   // +0x28
+};
+
 bool PFIndexModifiable::func24h(HoleTable* holes, u32 a, u32 b, u32 c, u32 d)
 {
     void** bucket = mpBucketArray;
@@ -494,22 +505,23 @@ bool PFIndexModifiable::func24h(HoleTable* holes, u32 a, u32 b, u32 c, u32 d)
     void** itPtr = bucketPtr;
     if (node != (intptr_t)mpBucketArray[mnBucketCount]) {
         for (;;) {
-            HoleNode* n = (HoleNode*)node;
-            u32 size = n->rec.sizeLo;             // +0x18
+            PFHashNode* n = (PFHashNode*)node;
+            u32 size = n->sizeLo;                 // +0x18
             if (size != 0) {
-                u32 sLo = n->rec.startLo;         // +0x10
-                u32 sHi = n->rec.startHi;         // +0x14
-                if (sHi > b || (sHi == b && sLo >= a)) {
-                    if (sHi < c || (sHi == c && sLo < d)) {
-                        u32 len = d - sLo;
-                        if (len >= size)
-                            return true;
-                        if (!holes->FUN_006bff90(sLo, sHi, size, 0))
-                            return false;
-                    }
-                }
+                u32 sLo = n->startLo;             // +0x10
+                u32 sHi = n->startHi;             // +0x14
+                if (!(sHi >= b && (sHi > b || sLo >= a)))
+                    return false;
+                if (!(sHi <= d && (sHi < d || sLo < c)))
+                    return false;
+                u32 lenLo = c - sLo;
+                u32 lenHi = d - sHi - (c < sLo ? 1u : 0u);
+                if (lenHi == 0 && size > lenLo)
+                    return false;
+                if (!holes->FUN_006bff90(sLo, sHi, size, 0))
+                    return false;
             }
-            node = (intptr_t)n->right;            // +0x28 successor
+            node = (intptr_t)n->next;             // +0x28 successor
             while (node == 0) {
                 bucketPtr = bucketPtr + 1;
                 itPtr = bucketPtr;

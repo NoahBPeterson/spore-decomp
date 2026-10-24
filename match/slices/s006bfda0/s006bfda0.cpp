@@ -16,22 +16,28 @@ typedef int            intptr_t;
 // ---------------------------------------------------------------------------
 // external helpers (masked relocations; only arity/convention matter)
 // ---------------------------------------------------------------------------
-extern void  sub_a057f0(void*, void*, void*);       // rbtree find  (this, out, key)
-extern void* sub_9215c0(void*);                     // RBTreeDecrement
-extern void* sub_921580(void*);                     // RBTreeIncrement
-extern void  sub_921880(void*, void*);              // RBTreeErase
-extern void  sub_f47380(void*);                     // allocator deallocate
+extern void* sub_9215c0(void*);                     // RBTreeDecrement  (cdecl)
+extern void* sub_921580(void*);                     // RBTreeIncrement  (cdecl)
+extern void  sub_921880(void*, void*);              // RBTreeErase      (cdecl)
+extern void  sub_f47380(void*);                     // allocator deallocate (cdecl)
 extern void  sub_9a9600(void*);                     // rbtree nuke subtree
-extern void  sub_6bf8f0(void*, void*, void*, void*, int); // DoInsertValue (this=set)
 extern void  __fastcall sub_6be890(void*, int, void*, const void*); // lowerBound (set, out, key)
 extern void  __fastcall sub_8dae70(void*, int, void*, void*);       // Erase (set, out next, node)
-extern void  sub_11e0744(void*, void*, u32);        // vector<bool> DoInsertValue / copy
-extern void  sub_93bd50(void*, const char*);        // MemoryStream ctor(name)
-extern void  sub_93bde0(void*);                     // MemoryStream dtor
-extern void  sub_93bf70(u32*, u32);                 // set position
+extern void  sub_11e0744(void*, void*, u32);        // memcpy thunk (cdecl)
 extern void* sub_93ba70(u32, u32, u32);             // make scratch
-extern void  sub_93bb40(void*, int, float);         // set stream param
-extern void  sub_931da0(void*, int);                // FileStream ctor
+
+// rbtree set at HoleTable+8; find/insert are __thiscall(ret 8)/__thiscall(ret 0x10)
+struct RBTreeOps;
+RBTreeOps* g_pRBTrees_dummy( void );
+
+// MemoryStream methods (thiscall; declared as members below)
+struct MemoryStream;
+
+// thiscall set helpers (ecx = set)
+struct RBSet {
+    void  Find(void* out, const void* key);                      // 0xa057f0 ret 8
+    void  DoInsertValue(void* a, void* node, void* b, u32 tag);  // 0x6bf8f0 ret 0x10
+};
 
 struct DatabasePackedFile;
 
@@ -50,6 +56,15 @@ struct MemoryStream {
     float mfResizeFactor;      // +0x1c
     int   mnResizeIncrement;   // +0x20
     bool  SetData(const void* p, u32 size, int a, int b, void* alloc); // 0x93be30
+    void  Init(const char* name);                 // 0x93bd50 ret 4
+    void  Destroy();                              // 0x93bde0 ret
+    int   Attach(const void* key, u32 pos);       // 0x93bf70 ret 8
+    void  SetResize(int mode, float factor);      // 0x93bb40 ret 8
+};
+
+// embedded FileStream ctor (thiscall, ret 4)
+struct FileStream {
+    void Init(int flags);                         // 0x931da0 ret 4
 };
 
 // ---------------------------------------------------------------------------
@@ -87,8 +102,10 @@ struct StreamSub {
     u32   mnChunkOffsetHi;     // +0x34
     u32   mnCompressedSize;    // +0x38
     u32   mnSizeDecompressed;  // +0x3c
-    u16   mnCompressionType;   // +0x40
-    u16   pad42;
+    union {
+        u32   mnCompressionInfo; // +0x40 (the ctors copy a whole dword)
+        u16   mnCompressionType; // +0x40 low word: compression type
+    };
     u32   field44;             // +0x44
     u32   mnPosition;          // +0x48
     u32   mnSize;              // +0x4c
@@ -97,7 +114,7 @@ struct StreamSub {
     int   mnOpenCount;         // +0x54
 
     u32  GetSize(int type);          // 0x6c0220
-    int  Seek(int off, int origin);  // 0x6c0840
+    bool Seek(int off, int origin);  // 0x6c0840
     u32  GetRemaining();             // 0x6c0260
     int  Read(void* dst, int n);     // 0x6c0900
 };
@@ -125,6 +142,24 @@ struct PFRecordRead {
 // ---------------------------------------------------------------------------
 // PFRecordWrite (size 0x27c)
 // ---------------------------------------------------------------------------
+// record info the read ctors copy their chunk descriptor from (retail offsets)
+struct PFRecordSource {
+    u32 pad00[0x0b];               // +0x00
+    void* mpStreamVtbl;            // +0x2c (embedded stream's vtable)
+    void* mpStreamData;            // +0x30
+    u32 pad34[7];                  // +0x34
+    u32 mnChunkOffsetLo;           // +0x50
+    u32 mnChunkOffsetHi;           // +0x54
+    u32 mnCompressedSize;          // +0x58
+    u32 mnSizeDecompressed;        // +0x5c
+    u32 mnCompressionInfo;         // +0x60 (compression type + pad)
+    u32 field64;                   // +0x64
+    u32 mnPosition;                // +0x68
+    u32 mnSize;                    // +0x6c
+    u8  mStreamFlags;              // +0x70
+    u8  pad71[3];
+};
+
 struct PFRecordWrite {
     void* vtbl0;               // +0x00
     int   mnRefCount;          // +0x04
@@ -143,13 +178,14 @@ struct PFRecordWrite {
     int   mnOpenCount;         // +0x278
 
     PFRecordWrite(u32 a, u32 b, u32 size, u32* key, DatabasePackedFile* parent); // 0x6c0c40
-    int Release();             // 0x6c0980
+    bool Release();            // 0x6c0980
 };
 
 // ---------------------------------------------------------------------------
 // Hole table (int64 extent at +0, eastl set at +8)
 // ---------------------------------------------------------------------------
 struct HoleRec { u32 startLo, startHi, sizeLo, sizeHi; };
+struct HoleRange { u32 lo, hi; };
 struct HoleNode {
     HoleNode* parent;   // +0x00
     HoleNode* left;     // +0x04
@@ -174,18 +210,22 @@ void HoleTable::FUN_006bfda0(u32 a, u32 b, u32 c, u32 d)
 {
     char* base = data;
     char* set = base + 8;
+    HoleRange start = { a, b };
+    HoleRange size  = { c, d };
     HoleNode* root;
-    sub_a057f0(set, &root, &a);
+    ((RBSet*)set)->Find(&root, &start);
     if (root != *(HoleNode**)(set + 4)) {
         HoleNode* prev = (HoleNode*)sub_9215c0(root);
-        u32 slo = prev->rec.startLo, shi = prev->rec.startHi;
-        u32 szlo = prev->rec.sizeLo, szhi = prev->rec.sizeHi;
-        u32 endLo = slo + szlo;
-        u32 endHi = shi + szhi + (endLo < slo ? 1 : 0);
-        if (endLo == a && endHi == b) {
-            u32 nLo = szlo + c;
-            u32 nHi = szhi + d + (nLo < szlo ? 1 : 0);
-            a = slo; b = shi; c = nLo; d = nHi;
+        u32 endLo = prev->rec.startLo + prev->rec.sizeLo;
+        u32 endHi = prev->rec.startHi + prev->rec.sizeHi
+                  + (endLo < prev->rec.startLo ? 1 : 0);
+        if (endLo == start.lo && endHi == start.hi) {
+            u32 nLo = prev->rec.sizeLo + size.lo;
+            u32 nHi = prev->rec.sizeHi + size.hi + (nLo < prev->rec.sizeLo ? 1 : 0);
+            start.lo = prev->rec.startLo;
+            start.hi = prev->rec.startHi;
+            size.lo = nLo;
+            size.hi = nHi;
             (*(int*)(set + 0x0c))--;
             sub_921580(prev);
             sub_921880(prev, set + 4);
@@ -194,20 +234,22 @@ void HoleTable::FUN_006bfda0(u32 a, u32 b, u32 c, u32 d)
     }
     if (root == *(HoleNode**)(set + 4)) {
         u32 extLo = *(u32*)(base + 0);
-        if (a + c == extLo && b + d + (a + c < a ? 1 : 0) == *(u32*)(base + 4)) {
-            *(u32*)(base + 0) = extLo - c;
-            *(u32*)(base + 4) -= d + (extLo < c ? 1 : 0);
+        if (start.lo + size.lo == extLo &&
+            start.hi + size.hi + (start.lo + size.lo < start.lo ? 1 : 0) == *(u32*)(base + 4)) {
+            *(u32*)(base + 0) = extLo - size.lo;
+            *(u32*)(base + 4) -= size.hi + (extLo < size.lo ? 1 : 0);
             return;
         }
     } else {
         u32 eLo = root->rec.startLo + root->rec.sizeLo;
         u32 eHi = root->rec.startHi + root->rec.sizeHi + (eLo < root->rec.startLo ? 1 : 0);
-        if (a + c == eLo && b + d + (a + c < a ? 1 : 0) == eHi) {
-            u32 carry = (a + root->rec.startLo < a) ? 1 : 0;
-            a = a + root->rec.startLo;
-            b = b + root->rec.startHi + carry;
-            c = root->rec.sizeLo;
-            d = root->rec.sizeHi;
+        if (start.lo + size.lo == eLo &&
+            start.hi + size.hi + (start.lo + size.lo < start.lo ? 1 : 0) == eHi) {
+            u32 carry = (start.lo + root->rec.startLo < start.lo) ? 1 : 0;
+            start.lo = start.lo + root->rec.startLo;
+            start.hi = start.hi + root->rec.startHi + carry;
+            size.lo = root->rec.sizeLo;
+            size.hi = root->rec.sizeHi;
             HoleNode* nxt = (HoleNode*)sub_921580(root);
             (*(int*)(set + 0x0c))--;
             sub_921580(root);
@@ -216,8 +258,7 @@ void HoleTable::FUN_006bfda0(u32 a, u32 b, u32 c, u32 d)
             root = nxt;
         }
     }
-    u8 tag = 0;
-    sub_6bf8f0(set, root, &a, &c, tag);
+    ((RBSet*)set)->DoInsertValue(&size, root, &start, size.lo & 0xffffff00u);
 }
 
 // ---------------------------------------------------------------------------
@@ -325,46 +366,56 @@ struct PFIndexModifiable {
     bool func24h(HoleTable* holes, u32 a, u32 b, u32 c, u32 d);
 };
 
+// eastl hashtable node seen while walking the bucket array
+struct HashNode {
+    u32      pad00[4];         // +0x00
+    u32      startLo;          // +0x10
+    u32      startHi;          // +0x14
+    u32      sizeLo;           // +0x18
+    u32      sizeHi;           // +0x1c
+    u32      pad20[2];         // +0x20
+    HashNode* next;            // +0x28
+};
+
 bool PFIndexModifiable::func24h(HoleTable* holes, u32 a, u32 b, u32 c, u32 d)
 {
-    void** bucket = mpBucketArray;
-    intptr_t node = (intptr_t)*bucket;
-    void** bucketPtr = bucket;
+    HashNode* node = (HashNode*)*mpBucketArray;
+    void** bucketPtr = mpBucketArray;
     if (node == 0) {
-        bucketPtr = bucket + 1;
-        node = (intptr_t)*bucketPtr;
+        bucketPtr = mpBucketArray + 1;
+        node = (HashNode*)*bucketPtr;
         while (node == 0) {
             bucketPtr = bucketPtr + 1;
-            node = (intptr_t)*bucketPtr;
+            node = (HashNode*)*bucketPtr;
         }
     }
-    void** itPtr = bucketPtr;
-    if (node != (intptr_t)mpBucketArray[mnBucketCount]) {
-        for (;;) {
-            HoleNode* n = (HoleNode*)node;
-            u32 size = n->rec.sizeLo;             // +0x18
-            if (size != 0) {
-                u32 sLo = n->rec.startLo;         // +0x10
-                u32 sHi = n->rec.startHi;         // +0x14
-                if (sHi > b || (sHi == b && sLo >= a)) {
-                    if (sHi < c || (sHi == c && sLo < d)) {
-                        u32 len = d - sLo;
-                        if (len >= size)
-                            return true;
-                        if (!holes->FUN_006bff90(sLo, sHi, size, 0))
-                            return false;
-                    }
-                }
-            }
-            node = (intptr_t)n->right;            // +0x28 successor
-            while (node == 0) {
-                bucketPtr = bucketPtr + 1;
-                itPtr = bucketPtr;
-                node = (intptr_t)*bucketPtr;
-            }
-            if (node == (intptr_t)mpBucketArray[mnBucketCount])
-                break;
+    if (node == (HashNode*)mpBucketArray[mnBucketCount])
+        return true;
+    for (;;) {
+        u32 size = node->sizeLo;
+        if (size != 0) {
+            u32 sLo = node->startLo;
+            u32 sHi = node->startHi;
+            if (!(sHi >= b && (sHi > b || sLo >= a)))
+                return false;
+            if (!(sHi <= d && (sHi < d || sLo < c)))
+                return false;
+            u32 lenLo = c - sLo;
+            u32 lenHi = d - sHi - (c < sLo ? 1u : 0u);
+            if (lenHi == 0 && size > lenLo)
+                return false;
+            if (!holes->FUN_006bff90(sLo, sHi, size, 0))
+                return false;
         }
+        node = node->next;
+        if (node == 0) {
+            do {
+                bucketPtr = bucketPtr + 1;
+                node = (HashNode*)*bucketPtr;
+            } while (node == 0);
+        }
+        if (node == (HashNode*)mpBucketArray[mnBucketCount])
+            break;
     }
     return true;
 }
@@ -399,32 +450,33 @@ u32 StreamSub::GetRemaining()
 }
 
 // @ 0x006c0840
-int StreamSub::Seek(int offset, int origin)
+bool StreamSub::Seek(int offset, int origin)
 {
     PFRecordRead* owner = (PFRecordRead*)((char*)this - 0x20);
     if (owner->mnAccessFlags == 0)
-        return 0;
+        return false;
     owner->LoadOnDemand();
     if (mStreamFlags != 0)
-        return ((int(__thiscall*)(void*, int, int))(*(void***)&mStreamMemory)[0x28 / 4])(&mStreamMemory, offset, origin);
+        return ((bool(__thiscall*)(void*, int, int))(*(void***)&mStreamMemory)[0x28 / 4])(&mStreamMemory, offset, origin);
     if (origin == 0) {
-        if (offset < 0) { mnPosition = 0; return 1; }
-        if ((u32)offset > mnSize) { mnPosition = mnSize; return 1; }
+        if (offset < 0) { mnPosition = 0; return true; }
+        if ((u32)offset > mnSize) { mnPosition = mnSize; return true; }
         mnPosition = (u32)offset;
-        return 1;
+        return true;
     }
     if (origin == 1) {
-        if (offset < 0 && (u32)(-offset) > mnPosition) { mnPosition = 0; return 1; }
-        if (offset > 0 && mnPosition + (u32)offset > mnSize) { mnPosition = mnSize; return 1; }
+        if (offset < 0 && (u32)(-offset) > mnPosition) { mnPosition = 0; return true; }
+        if (offset > 0 && mnPosition + (u32)offset > mnSize) { mnPosition = mnSize; return true; }
         mnPosition += (u32)offset;
-        return 1;
+        return true;
     }
     if (origin == 2) {
-        if (offset < 0 && (u32)(-offset) > mnSize) { mnPosition = 0; return 1; }
+        if (offset >= 0) { mnPosition = mnSize; return true; }
+        if ((u32)(-offset) > mnSize) { mnPosition = 0; return true; }
         mnPosition = mnSize + (u32)offset;
-        return 1;
+        return true;
     }
-    return 1;
+    return true;
 }
 
 // @ 0x006c0900
@@ -481,9 +533,10 @@ bool PFRecordRead::ReadAt(void* dst, u32 off, u32 n)
             u32 count = 0x200;
             if (stream.mnSize < off + 0x200)
                 count = stream.mnSize - off;
+            u32 chunkLo = off + stream.mnChunkOffsetLo;
+            u32 chunkHi = stream.mnChunkOffsetHi + (chunkLo < off ? 1u : 0u);
             bool ok = mpParent->ReadFileSpan((u32)stream.mpReadBuffer,
-                                             off + stream.mnChunkOffsetLo,
-                                             stream.mnChunkOffsetHi, count);
+                                             chunkLo, chunkHi, count);
             if (!ok)
                 return false;
             stream.mnBufferOffset = off;
@@ -491,8 +544,9 @@ bool PFRecordRead::ReadAt(void* dst, u32 off, u32 n)
             return true;
         }
     }
-    return mpParent->ReadFileSpan((u32)dst, off + stream.mnChunkOffsetLo,
-                                  stream.mnChunkOffsetHi, n);
+    u32 spanLo = off + stream.mnChunkOffsetLo;
+    u32 spanHi = stream.mnChunkOffsetHi + (spanLo < off ? 1u : 0u);
+    return mpParent->ReadFileSpan((u32)dst, spanLo, spanHi, n);
 }
 
 // ---------------------------------------------------------------------------
@@ -554,8 +608,8 @@ bool PFRecordRead::Release()
 {
     if (_InterlockedExchangeAdd((volatile long*)&stream.mnOpenCount, 0) == 0)
         return false;
-    if (_InterlockedExchangeAdd((volatile long*)&stream.mnOpenCount, -1) == 0 && mnAccessFlags != 0) {
-        return ((bool(__thiscall*)(void*))(*(void***)mpParent)[0x3c / 4])(this);
+    if (_InterlockedExchangeAdd((volatile long*)&stream.mnOpenCount, -1) == 1 && mnAccessFlags != 0) {
+        return ((bool(__thiscall*)(void*, void*))(*(void***)mpParent)[0x3c / 4])(mpParent, this);
     }
     return true;
 }
@@ -579,14 +633,14 @@ int PFRecordRead::Cleanup()
 }
 
 // @ 0x006c0980
-int PFRecordWrite::Release()
+bool PFRecordWrite::Release()
 {
     if (_InterlockedExchangeAdd((volatile long*)&mnOpenCount, 0) == 0)
-        return 0;
-    if (_InterlockedExchangeAdd((volatile long*)&mnOpenCount, -1) == 0 && mnAccessFlags != 0) {
-        return ((int(__thiscall*)(void*))(*(void***)mpParent)[0x3c / 4])(this);
+        return false;
+    if (_InterlockedExchangeAdd((volatile long*)&mnOpenCount, -1) == 1 && mnAccessFlags != 0) {
+        return ((bool(__thiscall*)(void*, void*))(*(void***)mpParent)[0x3c / 4])(mpParent, this);
     }
-    return 1;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -710,7 +764,7 @@ void BackgroundLoading::Cleanup()
     vtbl20 = (void*)0x140a278;
     if (access != 0)
         ((void(__thiscall*)(void*, void*))(*(void***)parent)[0x3c / 4])(parent, this);
-    sub_93bde0(&stream);
+    stream.Destroy();
     vtbl20 = (void*)0x13f3a68;
     vtbl0 = (void*)0x13effb8;
 }
@@ -734,22 +788,22 @@ PFRecordRead::PFRecordRead(int src, u32* key, DatabasePackedFile* parent)
     stream.vtbl = (void*)0x140a278;
     stream.mpReadBuffer = 0;
     stream.mnBufferOffset = -1;
-    sub_93bd50(&stream.mStreamMemory, "ResourceMan/PFRecordRead");
-    stream.mnChunkOffsetLo = *(u32*)(src + 0x50);
-    stream.mnChunkOffsetHi = *(u32*)(src + 0x54);
-    stream.mnCompressedSize = *(u32*)(src + 0x58);
-    stream.mnSizeDecompressed = *(u32*)(src + 0x5c);
-    stream.mnCompressionType = *(u16*)(src + 0x60);
-    stream.field44 = *(u32*)(src + 0x64);
+    stream.mStreamMemory.Init("ResourceMan/PFRecordRead");
+    PFRecordSource* info = (PFRecordSource*)src;
+    stream.mnChunkOffsetLo = info->mnChunkOffsetLo;
+    stream.mnChunkOffsetHi = info->mnChunkOffsetHi;
+    stream.mnCompressedSize = info->mnCompressedSize;
+    stream.mnSizeDecompressed = info->mnSizeDecompressed;
+    stream.mnCompressionInfo = info->mnCompressionInfo;
+    stream.field44 = info->field64;
     stream.mnPosition = 0;
-    stream.mnSize = *(u32*)(src + 0x6c);
-    stream.mStreamFlags = *(u8*)(src + 0x70);
+    stream.mnSize = info->mnSize;
+    stream.mStreamFlags = info->mStreamFlags;
     _InterlockedExchange((volatile long*)&stream.mnOpenCount, 1);
     ((void(__thiscall*)(void*))(*(void***)&stream.mStreamMemory)[4 / 4])(&stream.mStreamMemory);
     if (stream.mStreamFlags & 2) {
-        u32 pos = ((u32(__thiscall*)(void*))(*(void***)((char*)mpParent + 0x2c))[0x1c / 4])
-            ((char*)mpParent + 0x2c);
-        sub_93bf70(key, pos);
+        u32 pos = ((u32(__thiscall*)(void*))(*(void***)&info->mpStreamVtbl)[0x1c / 4])(&info->mpStreamVtbl);
+        stream.mStreamMemory.Attach(info->mpStreamData, pos);
         ((void(__thiscall*)(void*, int, int))(*(void***)&stream.mStreamMemory)[0x28 / 4])
             (&stream.mStreamMemory, 0, 0);
     }
@@ -774,12 +828,12 @@ PFRecordRead* PFRecordRead::InitFromInfo(u32* info, u32* key, DatabasePackedFile
     stream.vtbl = (void*)0x140a278;
     stream.mpReadBuffer = 0;
     stream.mnBufferOffset = -1;
-    sub_93bd50(&stream.mStreamMemory, "ResourceMan/PFRecordRead");
+    stream.mStreamMemory.Init("ResourceMan/PFRecordRead");
     stream.mnChunkOffsetLo = info[0];
     stream.mnChunkOffsetHi = info[1];
     stream.mnCompressedSize = info[2];
     stream.mnSizeDecompressed = info[3];
-    stream.mnCompressionType = (u16)info[4];
+    stream.mnCompressionInfo = info[4];
     stream.field44 = info[5];
     stream.mnPosition = 0;
     stream.mnSize = 0;
@@ -814,15 +868,15 @@ PFRecordWrite::PFRecordWrite(u32 a, u32 b, u32 size, u32* key, DatabasePackedFil
     vtblIStream = (void*)0x13f3a68;
     vtbl0 = (void*)0x140a364;
     vtblIStream = (void*)0x140a328;
-    sub_93bd50(&mStreamMemory, "ResourceMan/PFRecordWrite");
-    sub_931da0(mStreamFile, 0);
+    mStreamMemory.Init("ResourceMan/PFRecordWrite");
+    ((FileStream*)mStreamFile)->Init(0);
     mbTriedToCreateFile = 0;
     _InterlockedExchange((volatile long*)&mnOpenCount, 1);
     ((void(__thiscall*)(void*))(*(void***)&mStreamMemory)[4 / 4])(&mStreamMemory);
     ((void(__thiscall*)(void*))(*(void***)mStreamFile)[4 / 4])(mStreamFile);
-    sub_93bb40(&mStreamMemory, 1, 1.0f);
-    sub_93bb40(&mStreamMemory, 2, 1.5f);
-    sub_93bb40(&mStreamMemory, 3, 4.0f);
+    mStreamMemory.SetResize(1, 1.0f);
+    mStreamMemory.SetResize(2, 1.5f);
+    mStreamMemory.SetResize(3, 4.0f);
     if (size != 0) {
         ICoreAllocator* alloc = DatabasePackedFile_GetAllocator(parent);
         if (mStreamMemory.SetData(0, size, 0, 1, alloc)) {
