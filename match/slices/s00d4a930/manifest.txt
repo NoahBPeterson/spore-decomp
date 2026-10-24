@@ -1,0 +1,9 @@
+slices/s00d4a930/s00d4a930.cpp  ?SetValue@ModeSetter@@QAEXI@Z  00d4af70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4a930/s00d4a930.cpp  ?ClearMate@cSPDramaManager@@QAEXPAUcSPCreatureAnimal@@@Z  00d4b1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4a930/s00d4a930.cpp  ?MatedWith@cSPDramaManager@@QAEXPAUcSPCreatureAnimal@@@Z  00d4b180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4a930/s00d4a930.cpp  ?IsBelowZero@Thresholded@@QAE_NXZ  00d4bbb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4a930/s00d4a930.cpp  ?PostLoad@cSPDramaManager@@QAEXPAX@Z  00d4b410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4a930/s00d4a930.cpp  ?FUN_00d4b390@@YAEPAXPAURefRange@@@Z  00d4b390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4a930/s00d4a930.cpp  ?DestroyMembers@cDramaEventInstanceData@@QAEXXZ  00d4b4b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4a930/s00d4a930.cpp  ?ReloadTuning@TuningOwner@@QAEXH@Z  00d4b3c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4a930/s00d4a930.cpp  ?IsValidBabyTeacher@cSPDramaManager@@QAEHPAUcSPCreatureAnimal@@@Z  00d4b2f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
