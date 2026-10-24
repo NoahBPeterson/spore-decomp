@@ -149,40 +149,41 @@ float* HSVtoRGB(float* out, float param_2, float param_3)
     float local_18 = local_9c;
     float local_14 = local_80;
     float local_8 = local_98;
+    float result[3];
     switch (local_c) {
     case 0: {
         float v[3] = { 1.0f, local_9c, local_98 };
-        float* p = Vector3Scale(out, v, &local_18);
+        float* p = Vector3Scale(result, &param_3 + 1, v);
         out[0] = p[0]; out[1] = p[1]; out[2] = p[2];
         break;
     }
     case 1: {
         float v[3] = { local_80, 1.0f, local_98 };
-        float* p = Vector3Scale(out, v, &local_18);
+        float* p = Vector3Scale(result, &param_3 + 1, v);
         out[0] = p[0]; out[1] = p[1]; out[2] = p[2];
         break;
     }
     case 2: {
         float v[3] = { local_98, 1.0f, local_9c };
-        float* p = Vector3Scale(out, v, &local_18);
+        float* p = Vector3Scale(result, &param_3 + 1, v);
         out[0] = p[0]; out[1] = p[1]; out[2] = p[2];
         break;
     }
     case 3: {
         float v[3] = { local_98, 1.0f, 0.0f };
-        float* p = Vector3Scale(out, v, &local_18);
+        float* p = Vector3Scale(result, &param_3 + 1, v);
         out[0] = p[0]; out[1] = p[1]; out[2] = p[2];
         break;
     }
     case 4: {
         float v[3] = { local_80, local_98, 0.0f };
-        float* p = Vector3Scale(out, v, &local_18);
+        float* p = Vector3Scale(result, &param_3 + 1, v);
         out[0] = p[0]; out[1] = p[1]; out[2] = p[2];
         break;
     }
     default: {
         float v[3] = { 1.0f, local_98, local_80 };
-        float* p = Vector3Scale(out, v, &local_18);
+        float* p = Vector3Scale(result, &param_3 + 1, v);
         out[0] = p[0]; out[1] = p[1]; out[2] = p[2];
     }
     }
