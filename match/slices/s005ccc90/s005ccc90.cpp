@@ -127,8 +127,19 @@ float TimeObjValue(cTimeObj* obj) {
 }
 
 // ---------------------------------------------------------------------------------------------
-inline float FMax(float a, float b) { return a > b ? a : b; }
-inline float FMin(float a, float b) { return a < b ? a : b; }
+// cInterp::Interp clamps through SSE maxss/minss (the ternary form makes cl emit comiss branches
+// and keeps mFloat90 in xmm3, a register the original never writes).  Same idiom as the other
+// editor slices' Clamp helper.
+inline float Clamp(float x, float lo, float hi)
+{
+  __asm {
+    movss xmm0, x
+    maxss xmm0, lo
+    minss xmm0, hi
+    movss x, xmm0
+  }
+  return x;
+}
 
 class cInterp {
  public:
@@ -144,8 +155,8 @@ class cInterp {
 // @ 0x005CD870
 void cInterp::Interp(float a, float b, float* out1, float* out2) {
   float t = ((a + b) * 0.5f) / mFloat98;
-  t = FMax(t, 0.0f);
-  t = FMin(t, 1.0f);
+  // SSE scalar clamp: maxss(t, 0) then minss(., 1), NaN yields the constant (same as the binary).
+  t = Clamp(t, 0.0f, 1.0f);
   t = (mFloat94 - mFloat90) * (1.0f - t) + mFloat90;
   *out1 = mFloat88 * t;
   *out2 = mFloat8c * t;
@@ -160,9 +171,9 @@ class cSpine {
   int mInt74;       // +0x74
   char pad78[0x11c - 0x78];
   float mFloat11c;  // +0x11c
-  unsigned int GetKey(int index);        // 0x005efd70
   unsigned int MakeVertKey(float a, int b);  // 0x005cdb30
 };
+unsigned int GetKey(int index);                // 0x005efd70 (cdecl free function, arg stays on the stack)
 float GetExactSkinRadiusFromVertebra(float a);  // 0x004a5b70
 
 // @ 0x005CDB30
