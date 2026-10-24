@@ -76,6 +76,7 @@ struct Holder {
     }
     ~Holder() { if (obj) obj->Release(); }
     Vector3* ad7b90(Vector3* out);                   // 0x00ad7b90
+    Quat*    getOrientation();                       // 0x00ad7b70
 };
 
 struct Cfg {
@@ -83,14 +84,20 @@ struct Cfg {
     uint32_t id;               // +0x10
     Vector3  ofs;              // +0x14
     Vector3  ofs2;             // +0x20
-    uint8_t  pad2c[3];
+    bool     trackTarget;      // +0x2c
+    bool     sendQuat;         // +0x2d
+    uint8_t  pad2e;            // +0x2e
     bool     scaleXY;          // +0x2f
     bool     useB;             // +0x30
     bool     useC;             // +0x31
     uint8_t  pad32[2];
     uint32_t id2;              // +0x34
     int      mode;             // +0x38
-    uint32_t pad3c[(0x80 - 0x3c) / 4];
+    bool     extraCheck;       // +0x3c
+    bool     useNotifyB;       // +0x3d
+    uint8_t  pad3e[(0x5c - 0x3e)];
+    bool     activeFlag;       // +0x5c
+    uint8_t  pad5d[(0x80 - 0x5d)];
     Vector3  defPos;           // +0x80
 };
 
@@ -119,14 +126,21 @@ bool IsInvalidQuat(const Quat* q);                   // 0x00ad7170 (cdecl)
 Matrix3* QuatToMatrix(Matrix3* out, const Quat* q);  // 0x004a9b40 (cdecl)
 Quat* QuaternionFromMatrix33(Quat* out, const Matrix3* m, float k);     // 0x00472b80 (cdecl)
 
+class INotify;                                       // receiver at Placer+0x13c
+class CamOwnerFields;                                // object at Placer+0x168
+
 class Placer {
 public:
-    uint32_t pad00[0x16c / 4];
+    uint32_t pad00[0x13c / 4];
+    INotify* notify;                                 // +0x13c
+    uint32_t pad140[(0x168 - 0x140) / 4];
+    CamOwnerFields* owner;                           // +0x168
     Cfg*     cfg;                                    // +0x16c
 
     bool Lookup(uint32_t id, Holder* h);             // 0x00adb2a0
     bool LookupSource(uint32_t id, IPoseSource** out);   // 0x00adb1b0
     void GetPose(Vector3* outPos, Quat* outRot, float* outA, float* outB, float* outC);   // 0x00adbca0
+    bool UpdateTarget();                             // 0x00adc490
 };
 
 void Placer::GetPose(Vector3* outPos, Quat* outRot, float* outA, float* outB, float* outC)
@@ -221,4 +235,344 @@ void Placer::GetPose(Vector3* outPos, Quat* outRot, float* outA, float* outB, fl
         outPos->y = outPos->y + oy;
         outPos->z = outPos->z + oz;
     }
+}
+
+// ======================================================================
+// gold7 batch (same slice id, different VAs): the simulator action-target
+// update, the name-table insert, and the eastl hashtable / vector helpers
+// used by that cluster.
+// ======================================================================
+
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int n);
+extern void* __cdecl operator new(unsigned int size, const char* name, int a, int b, const char* file, int line);  // 0x00f473a0
+extern void  __cdecl operator_delete(void* p);                                                                    // 0x00f47380
+
+extern const char g_SimulatorName[];             // 0x013f09b4  "Simulator"
+extern const char g_EastlAllocFile[];            // 0x013ebb38  allocator file name
+extern Vector3    g_UnsetPos;                    // 0x0156649c  (FLT_MAX, FLT_MAX, FLT_MAX)
+extern const unsigned char g_NotifyTargetA[];    // 0x0101b534
+extern const unsigned char g_NotifyTargetB[];    // 0x0101b537
+
+void __cdecl FUN_00ad7400(void** first, void** last, void** dest);              // 0x00ad7400
+void __cdecl Vector3_Normalize(Vector3* out, const Vector3* in);               // 0x00436ce0
+
+// Intrusive reference control block (vtable slot 0 = AddRef, slot 1 = Release).
+// The name-table payloads carry the vptr at +0 and a slot id at +4; the vector
+// elements carry the same block embedded at +8.
+struct IRef {
+    virtual void AddRef();                       // slot 0
+    virtual void Release();                      // slot 1
+    uint32_t mSlot;                              // +0x04
+};
+struct CountedObj {
+    uint32_t f00;                                // +0x00
+    uint32_t f04;                                // +0x04
+    IRef     mRef;                               // +0x08
+};
+
+// ---- eastl hashtable (bucket array +4, bucket count +8, size +0xc) ----
+struct SmallValue {                              // 12-byte payload (kept as scalars: no /GS cookie)
+    uint32_t mA;                                 // +0x00
+    uint32_t mB;                                 // +0x04
+    uint32_t mC;                                 // +0x08
+};
+struct SmallNode {                               // 0x10-byte map node
+    uint32_t   mKey;                             // +0x00
+    SmallValue mValue;                           // +0x04
+};
+// find() writes a 12-byte pair<iterator, bool> through its out pointer.
+struct FindSmallResult {
+    SmallNode* mpNode;                           // +0x00
+    void*      mpBucket;                         // +0x04
+    uint32_t   mInserted;                        // +0x08
+};
+struct SimNode {                                 // name-table node
+    uint32_t mKey;                               // +0x00
+    IRef*    mpValue;                            // +0x04
+    SimNode* mpNext;                             // +0x08
+};
+struct Iter  { SimNode*  mpNode; SimNode**  mpBucket; };
+
+struct BigNode {                                 // 0x3c-byte payload node
+    uint32_t mKey;                               // +0x00
+    void*    mpVptrA;                            // +0x04  (first base vptr)
+    uint32_t f08;                                // +0x08
+    void*    mpVptrB;                            // +0x0c  (second base vptr)
+    IRef*    mpRef;                              // +0x10
+    uint8_t  pad14[0x38 - 0x14];
+    BigNode* mpNext;                             // +0x38
+};
+struct IterA { BigNode* mpNode; BigNode** mpBucket; };
+
+struct HTbl {
+    uint32_t f00;                                // +0x00
+    void*    mpBucketArray;                      // +0x04
+    uint32_t mnBucketCount;                       // +0x08
+    uint32_t mnSize;                             // +0x0c
+
+    void   DoFreeNodes(void* nodes, unsigned count);                        // 0x007611f0
+    void   FindSmall(FindSmallResult* out, const uint32_t* key);            // 0x00db4780
+    void   InsertSmall(SmallNode** pos, const void* value, bool flag);      // 0x00ad9370
+    void   insertEntry(void* out, const void* value, bool flag);            // 0x00ad9090
+    Iter*  erase(Iter* out, SimNode* node, SimNode** bucket);               // 0x00adc970
+    IterA* eraseA(IterA* out, BigNode* node, BigNode** bucket);             // 0x00adc9f0
+
+    void   clear() { DoFreeNodes(mpBucketArray, mnBucketCount); mnSize = 0; }
+};
+
+struct NameKeyValue {
+    uint32_t mpKey;                              // +0x00
+    IRef*    mpValue;                            // +0x04
+};
+struct NameTbl {
+    uint8_t pad00[0x5c];
+    HTbl    mMap;                                // +0x5c
+    void Insert(uint32_t key, IRef* p, uint32_t slot);      // 0x00adc890
+};
+
+struct Sub10 {
+    HTbl      mTable;                            // +0x00
+    uint32_t* GetValue(uint32_t* key);           // 0x00adc900
+};
+
+struct NodeOwner {
+    uint8_t pad00[0x10];
+    HTbl    mTable;                              // +0x10
+    void FreeNodes();                            // 0x00adcc90
+};
+
+struct AutoRefVec {
+    CountedObj** mpBegin;                        // +0x00
+    CountedObj** mpEnd;                          // +0x04
+    CountedObj** mpCapacity;                     // +0x08
+    void DoInsertValue(CountedObj** pos, CountedObj** value);   // 0x00adca90
+};
+
+// ---- receiver/owner interfaces used by Placer::UpdateTarget ----------
+class INotify {
+public:
+    virtual void n00();
+    virtual void send(const void* id, const Vector3* v);    // slot 4
+};
+
+class ICamOwnerBase {
+public:
+    virtual void o00(); virtual void o04(); virtual void o08(); virtual void o0c();
+    virtual void o10(); virtual void o14(); virtual void o18(); virtual void o1c();
+    virtual void o20(); virtual void o24(); virtual void o28(); virtual void o2c();
+    virtual void o30(); virtual void o34(); virtual void o38(); virtual void o3c();
+    virtual void o40(); virtual void o44(); virtual void o48(); virtual void o4c();
+    virtual void o50(); virtual void o54(); virtual void o58();
+    virtual Vector3* getLookPos(Vector3* out);              // 0x5c
+};
+
+struct CamOwnerFields : public ICamOwnerBase {
+    uint8_t pad04[0x10b - 4];
+    bool    flag10b;                             // +0x10b
+    void    setQuat(Quat q);                     // 0x00eb30d0
+    bool    blocked();                           // 0x00eb4040
+};
+
+// @ 0x00adc490
+bool Placer::UpdateTarget()
+{
+    Cfg* c = cfg;
+    if (!c)
+        return true;
+    if (!c->activeFlag)
+        return true;
+
+    Holder h;
+    bool found = Lookup(c->id, &h);
+
+    if (c->trackTarget) {
+        Vector3 p = { 0.0f, 0.0f, 0.0f };
+        if (owner) {
+            Vector3 look;
+            p = *owner->getLookPos(&look);
+        }
+        if (found && h.obj) {
+            p = *h.obj->GetPosition();
+            if (c->mode == 1) {
+                Vector3 tmp;
+                p = *h.ad7b90(&tmp);
+            } else if (c->mode == 2) {
+                Vector3 n;
+                Vector3_Normalize(&n, &p);
+                TerrainMapSet* ts = PlanetModel()->terrain->GetMapSet();
+                float hgt = ts->GetHeightAt(&p);
+                float lim = ts->waterHeight * ts->maxHeight + ts->radius;
+                float m = (hgt > lim) ? hgt : lim;
+                p.x = n.x * m;
+                p.y = n.y * m;
+                p.z = n.z * m;
+            }
+        }
+        if (p.x == g_UnsetPos.x && p.y == g_UnsetPos.y && p.z == g_UnsetPos.z) {
+            c->activeFlag = false;
+            return true;
+        }
+        Quat q(0.0f, 0.0f, 0.0f, 1.0f);
+        if (found && h.obj)
+            q = *h.getOrientation();
+        float mbuf[9];
+        const Matrix3& m = *QuatToMatrix((Matrix3*)mbuf, &q);
+        Vector3 w;
+        w.x = p.x + ((m.m[3] * c->ofs.y + m.m[6] * c->ofs.z) + m.m[0] * c->ofs.x);
+        w.y = p.y + ((m.m[4] * c->ofs.y + m.m[7] * c->ofs.z) + m.m[1] * c->ofs.x);
+        w.z = p.z + ((m.m[5] * c->ofs.y + m.m[8] * c->ofs.z) + m.m[2] * c->ofs.x);
+        owner->flag10b = false;
+        if (c->useNotifyB)
+            notify->send(g_NotifyTargetB, &w);
+        else
+            notify->send(g_NotifyTargetA, &w);
+        if (c->sendQuat)
+            owner->setQuat(q);
+    }
+    if (c->extraCheck && owner->blocked())
+        return false;
+    return true;
+}
+
+// @ 0x00adc890
+void NameTbl::Insert(uint32_t key, IRef* p, uint32_t slot)
+{
+    if (!p)
+        return;
+    p->mSlot = slot;
+    p->AddRef();
+    NameKeyValue kv;
+    kv.mpKey = key;
+    kv.mpValue = p;
+    p->AddRef();
+    Iter it;
+    bool rehash = false;
+    mMap.insertEntry(&it, &kv, rehash);
+    if (kv.mpValue)
+        kv.mpValue->Release();
+    p->Release();
+}
+
+// @ 0x00adc900
+uint32_t* Sub10::GetValue(uint32_t* key)
+{
+    FindSmallResult it;
+    mTable.FindSmall(&it, key);
+    SmallNode** buckets = (SmallNode**)mTable.mpBucketArray;
+    if (it.mpNode == buckets[mTable.mnBucketCount]) {
+        bool rehash = false;
+        SmallNode value = { *key };
+        mTable.InsertSmall(&it.mpNode, &value, rehash);
+    }
+    return &it.mpNode->mValue.mA;
+}
+
+// @ 0x00adc970
+Iter* HTbl::erase(Iter* out, SimNode* node, SimNode** bucket)
+{
+    out->mpBucket = bucket;
+    out->mpNode = node->mpNext;
+    while (!out->mpNode) {
+        ++out->mpBucket;
+        out->mpNode = *out->mpBucket;
+    }
+    if (*bucket == node) {
+        *bucket = node->mpNext;
+    } else {
+        SimNode* prev = *bucket;
+        while (prev->mpNext != node)
+            prev = prev->mpNext;
+        prev->mpNext = node->mpNext;
+    }
+    if (node->mpValue)
+        node->mpValue->Release();
+    operator_delete(node);
+    --mnSize;
+    return out;
+}
+
+// @ 0x00adc9f0
+IterA* HTbl::eraseA(IterA* out, BigNode* node, BigNode** bucket)
+{
+    out->mpBucket = bucket;
+    out->mpNode = node->mpNext;
+    while (!out->mpNode) {
+        ++out->mpBucket;
+        out->mpNode = *out->mpBucket;
+    }
+    if (*bucket == node) {
+        *bucket = node->mpNext;
+    } else {
+        BigNode* prev = *bucket;
+        while (prev->mpNext != node)
+            prev = prev->mpNext;
+        prev->mpNext = node->mpNext;
+    }
+    node->mpVptrA = (void*)0x0145b2f8;
+    node->mpVptrB = (void*)0x0145b2ec;
+    if (node->mpRef)
+        node->mpRef->Release();
+    node->mpVptrB = (void*)0x013eb938;
+    node->mpVptrA = (void*)0x013ef094;
+    operator_delete(node);
+    --mnSize;
+    return out;
+}
+
+// @ 0x00adca90
+void AutoRefVec::DoInsertValue(CountedObj** pos, CountedObj** value)
+{
+    if (mpEnd != mpCapacity) {
+        CountedObj** src = value;
+        if (value >= pos && value < mpEnd)
+            src = value + 1;
+        if (mpEnd) {
+            CountedObj* last = mpEnd[-1];
+            mpEnd[0] = last;
+            if (last)
+                last->mRef.AddRef();
+        }
+        FUN_00ad7400((void**)pos, (void**)(mpEnd - 1), (void**)mpEnd);
+        CountedObj* nv = *src;
+        CountedObj* ov = *pos;
+        if (nv != ov) {
+            if (nv)
+                nv->mRef.AddRef();
+            *pos = nv;
+            if (ov)
+                ov->mRef.Release();
+        }
+        ++mpEnd;
+        return;
+    }
+
+    int n = (int)(mpEnd - mpBegin);
+    unsigned newCap = (n > 0) ? (unsigned)(n * 2) : 1;
+    CountedObj** buf;
+    if (newCap == 0)
+        buf = 0;
+    else
+        buf = (CountedObj**)operator new(newCap * 4, g_SimulatorName, 0, 0, g_EastlAllocFile, 0xd1);
+
+    int off = (int)((char*)pos - (char*)mpBegin);
+    CountedObj** newPos = (CountedObj**)memcpy(buf, mpBegin, off) + (off >> 2);
+    if (newPos) {
+        CountedObj* v = *value;
+        *newPos = v;
+        if (v)
+            v->mRef.AddRef();
+    }
+    int tail = (int)((char*)mpEnd - (char*)pos);
+    CountedObj** newEnd = (CountedObj**)memcpy(newPos + 1, pos, tail) + (tail >> 2);
+    if (mpBegin && ((unsigned*)mpBegin)[-1])
+        operator_delete(mpBegin);
+    mpEnd = newEnd;
+    mpBegin = buf;
+    mpCapacity = buf + newCap;
+}
+
+// @ 0x00adcc90
+void NodeOwner::FreeNodes()
+{
+    mTable.clear();
 }

@@ -1,1 +1,8 @@
 00adbca0 Placer::GetPose  # resolves pose (pos/quat/3 scales) of attached object from holder or config defaults; cfg at +0x16c
+00adc490 Placer::UpdateTarget  # bool; early-out on !cfg/!activeFlag, holder lookup by id, trackTarget pose from getLookPos or holder orientation, mode 1/2 transforms, terrain height clamp, FLT_MAX unset -> clear activeFlag, QuatToMatrix offset add, owner flag10b clear, notify send A/B, optional setQuat, extraCheck+blocked
+00adc890 NameTbl::Insert  # hash key + IRef* into the name table at +0x5c: set slot, AddRef, build 8-byte NameKeyValue, double AddRef, insertEntry, release kv and p
+00adc900 Sub10::GetValue  # find-or-insert into the +0x00 hashtable with the 12-byte pair<iterator,bool> out-record; returns pointer to the mapped value's first dword
+00adc970 HTbl::erase  # erase a small node: out<-bucket/node->next, advance buckets while null, unlink from head or scan prev, Release value, delete node, --size
+00adc9f0 HTbl::eraseA  # erase a big node: same walk plus restoring the two vtables 0x145b2f8/0x145b2ec then the base 0x13eb938/0x13ef094, Release ref, delete, --size
+00adca90 AutoRefVec::DoInsertValue  # eastl vector<AutoRef> insert: in-place shift or grow (n?n*2:1), operator new(newCap*4,"Simulator",0,0,EASTL/allocator.h,0xd1), memcpy prefix/suffix, AddRef/Release element, delete when begin[-1]
+00adcc90 NodeOwner::FreeNodes  # HTbl::clear inlined on the +0x10 subobject: DoFreeNodes(mpBucketArray,mnBucketCount) then size=0
