@@ -535,8 +535,7 @@ void ApplyHints_FFT1HintClass(FFT1HintClass* h, short start, short count, GlyphC
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x008a8ff0
-void FFT1HintClass_releaseMem(FFT1HintClass* h)
+static __declspec(noinline) FFT1HintClass* FFT1HintClass_releaseMem_impl(FFT1HintClass* h)
 {
     h->numSnapV = 0;
     h->numSnapH = 0;
@@ -557,6 +556,13 @@ void FFT1HintClass_releaseMem(FFT1HintClass* h)
     z = (int*)h->ygcount_ptr;  for (int i = 0; i < 10; i++) z[i] = 0;
     z = (int*)h->xgcount_ptr;  for (int i = 0; i < 10; i++) z[i] = 0;
     h->numHintSets = 0;
+    return h;
+}
+
+// @ 0x008a8ff0
+void FFT1HintClass_releaseMem(FFT1HintClass* h)
+{
+    FFT1HintClass_releaseMem_impl(h);
 }
 
 // ---------------------------------------------------------------------------

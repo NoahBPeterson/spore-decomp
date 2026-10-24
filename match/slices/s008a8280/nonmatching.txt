@@ -2,5 +2,5 @@
 008a8590 326 DoExtraStrokes: complete; register-ABI (EAX/ECX/EDX + EDI) prebuilt-module static
 008a8700 213 DoExtraEdges: complete; register-ABI prebuilt-module static
 008a8880 n/a ApplyHints_FFT1HintClass: complete; interpolation loops factored into one helper, original has both inline
-008a8ff0 60 FFT1HintClass_releaseMem: complete; reg assignment (h in eax, zero in ecx) differs in the prebuilt toolset
+008a8ff0 0  FIXED: body moved to a noinline pointer-returning impl tail-called by the void public function, keeping h in eax as the original does; default PASS (400 valid, 100% coverage), replay and hybrid fft1hint.cpp first-difference None
 008a90f0 202 Delete_FFT1HintClass: complete; free order matches, register allocation differs
