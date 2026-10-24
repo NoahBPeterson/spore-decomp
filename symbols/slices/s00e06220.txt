@@ -1,0 +1,24 @@
+00e06220 ?Update@cSPUIGlobalUICiv@@QAEXH@Z  # void cSPUIGlobalUICiv::Update(int32_t) - the per-turn civilization panel update: comm-screen visibility, comm-rel panel slots, rel data binding and the two progress bars
+00e063d0 ?SetCommScreenVisibility@cSPUIGlobalUICiv@@QAEXPAVcCivilization@@_N@Z  # void cSPUIGlobalUICiv::SetCommScreenVisibility(cCivilization*, bool) - shows/hides the relationship panels of one civilization
+00e064f0 ?AssignCommRelPanel@cSPUIGlobalUICiv@@QAEXHPAVcCivilization@@@Z  # void cSPUIGlobalUICiv::AssignCommRelPanel(int32_t, cCivilization*) - binds a civilization to a comm-rel panel slot and activates the panel
+00e06560 ?HandleMessage@cSPUIGlobalUICiv@@QAEXIPAX@Z  # void cSPUIGlobalUICiv::HandleMessage(uint32_t, void*) - reacts to the comm-screen open/close messages, then forwards to the base handler
+00e065c0 ?InitCommRelPanels@cSPUIGlobalUICiv@@QAEXXZ  # void cSPUIGlobalUICiv::InitCommRelPanels() - assigns a panel to every visible non-player civilization
+00e06630 ?AssignFreeCommRelPanel@cSPUIGlobalUICiv@@QAEXPAVcCivilization@@@Z  # void cSPUIGlobalUICiv::AssignFreeCommRelPanel(cCivilization*) - puts a civilization into the first free comm-rel panel
+00e066a0 ?AsInterface@cSPUILoyaltyMeter@@QAEPAV1@I@Z  # cSPUILoyaltyMeter* cSPUILoyaltyMeter::AsInterface(uint32_t) - returns this for the four loyalty-meter interface ids
+00e066d0 ?SetStart@cSPUIMeter@@QAEXI@Z  # void cSPUIMeter::SetStart(uint32_t) - stores the start index and restarts the meter countdown
+00e066e0 ?SetTrackedObject@cSPUIMeter@@QAEXPAUILink@@@Z  # void cSPUIMeter::SetTrackedObject(ILink*) - stores the tracked object, copies its value into the model-extra field and restarts the countdown
+00e06710 ?SetModel@cSPUILoyaltyMeter@@QAEXHH@Z  # void cSPUILoyaltyMeter::SetModel(int32_t, int32_t) - stores the model and its extra value, then notifies the layout change
+00e06730 ?SetRange@cSPUILoyaltyMeter@@QAEXMM@Z  # void cSPUILoyaltyMeter::SetRange(float, float) - stores the loyalty range, latches it and notifies the value change
+00e06790 ??0cSPUIMeter@@QAE@HIPB_WI@Z  # cSPUIMeter::cSPUIMeter(int32_t, uint32_t, const wchar_t*, uint32_t) - creates and initialises the meter layout and attaches the meter to its window
+00e06870 ??1cSPUIMeter@@QAE@XZ  # cSPUIMeter::~cSPUIMeter() - shuts down and releases the layout and the data source
+00e068e0 ?Update@cSPUIMeter@@QAE_NHPAX@Z  # bool cSPUIMeter::Update(int32_t, void*) - the meter tick: countdown, layout visibility test, value/layout notifications and the random retry
+00e06940 ?Shutdown@cSPUIMeter@@QAEXI@Z  # void cSPUIMeter::Shutdown(uint32_t) - shuts down and releases the layout
+00e06970 ?IsVisible@cSPUIMeter@@QAE_NXZ  # bool cSPUIMeter::IsVisible() - true when the layout exists and is visible
+00e06990 ?UpdateFromSource@cSPUIMeter@@QAEXXZ  # void cSPUIMeter::UpdateFromSource() - reads the range from the data source and drives the progress bar of the meter window
+00e06a10 ??0cSPUILoyaltyMeter@@QAE@IHIPB_WI@Z  # cSPUILoyaltyMeter::cSPUILoyaltyMeter(uint32_t, int32_t, uint32_t, const wchar_t*, uint32_t) - builds the meter base with arguments 2..5, keeps the delay and rewires the owner window
+00e06ac0 ??1cSPUILoyaltyMeter@@QAE@XZ  # cSPUILoyaltyMeter::~cSPUILoyaltyMeter() - releases both link slots, then the meter base
+00e06b20 ?Update@cSPUILoyaltyMeter@@QAEXHPAX@Z  # void cSPUILoyaltyMeter::Update(int32_t, void*) - decides whether the loyalty meter window may show, then ticks the meter base
+00e06c50 ?SetLink@cSPUIMeter@@QAEXPAUILink@@@Z  # void cSPUIMeter::SetLink(ILink*) - refcounted store of the first link slot
+00e06ca0 ?SetLinkB@cSPUIMeter@@QAEXPAUILink@@@Z  # void cSPUIMeter::SetLinkB(ILink*) - refcounted store of the second link slot
+00e06cf0 ?SetSource@cSPUIMeter@@QAEXPAUILink@@@Z  # void cSPUIMeter::SetSource(ILink*) - refcounted store of the data source (the +0xbc/+0xc0 reference pair)
+00e06d50 ?PullToFront@cSPUILoyaltyMeter@@QAEXXZ  # void cSPUILoyaltyMeter::PullToFront() - brings the meter window to the front through its decorator

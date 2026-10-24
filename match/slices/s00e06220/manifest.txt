@@ -1,0 +1,14 @@
+slices/s00e06220/s00e06220.cpp  ?HandleMessage@cSPUIGlobalUICiv@@QAEXIPAX@Z  00e06560  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?InitCommRelPanels@cSPUIGlobalUICiv@@QAEXXZ  00e065c0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?AsInterface@cSPUILoyaltyMeter@@QAEPAV1@I@Z  00e066a0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?SetStart@cSPUIMeter@@QAEXI@Z  00e066d0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?SetTrackedObject@cSPUIMeter@@QAEXPAUILink@@@Z  00e066e0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?SetModel@cSPUILoyaltyMeter@@QAEXHH@Z  00e06710  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ??1cSPUIMeter@@QAE@XZ  00e06870  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?Update@cSPUIMeter@@QAE_NHPAX@Z  00e068e0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?Shutdown@cSPUIMeter@@QAEXI@Z  00e06940  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?IsVisible@cSPUIMeter@@QAE_NXZ  00e06970  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?SetLink@cSPUIMeter@@QAEXPAUILink@@@Z  00e06c50  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?SetLinkB@cSPUIMeter@@QAEXPAUILink@@@Z  00e06ca0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?SetSource@cSPUIMeter@@QAEXPAUILink@@@Z  00e06cf0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e06220/s00e06220.cpp  ?PullToFront@cSPUILoyaltyMeter@@QAEXXZ  00e06d50  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
