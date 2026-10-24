@@ -1,0 +1,12 @@
+00e2f6e0 ?Init@cSPUIAssetDiscoveryCard@@QAEXXZ  # void cSPUIAssetDiscoveryCard::Init
+00e2f980 ?ReloadTuning@cSPUIAssetDiscoveryManager@@QAEXXZ  # void cSPUIAssetDiscoveryManager::ReloadTuning
+00e2fc40 ?HandleCardMessage@cSPUIAssetDiscoveryManager@@QAEHHHH@Z  # int cSPUIAssetDiscoveryManager::HandleCardMessage
+00e2fcb0 ?ApplyFrame@cSPUIAssetDiscoveryCard@@QAEXPAH@Z  # void cSPUIAssetDiscoveryCard::ApplyFrame
+00e2fd40 ?ReleaseCurrentCard@cSPUIAssetDiscoveryManager@@QAEXXZ  # void cSPUIAssetDiscoveryManager::ReleaseCurrentCard
+00e2fda0 ?Clone@cSPUIAssetDiscoveryCard@@QAEPAV1@XZ  # cSPUIAssetDiscoveryCard* cSPUIAssetDiscoveryCard::Clone
+00e2fe10 ?Init@cSPUIAssetDiscoveryManager@@QAEXXZ  # void cSPUIAssetDiscoveryManager::Init
+00e2feb0 ?HandleAssetMessage@cSPUIAssetDiscoveryManager@@QAEHHH@Z  # int cSPUIAssetDiscoveryManager::HandleAssetMessage
+00e30010 ?PushCard@cSPUIAssetDiscoveryManager@@QAEXPAPAVcSPUIAssetDiscoveryCard@@H@Z  # void cSPUIAssetDiscoveryManager::PushCard
+00e300f0 ?Shutdown@cSPUIAssetDiscoveryManager@@QAEXXZ  # void cSPUIAssetDiscoveryManager::Shutdown
+00e30230 ?Update@cSPUIAssetDiscoveryManager@@QAEXI@Z  # void cSPUIAssetDiscoveryManager::Update
+00e30680 ?Reset@cSPUIAssetDiscoveryManager@@QAEXXZ  # void cSPUIAssetDiscoveryManager::Reset
