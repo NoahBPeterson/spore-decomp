@@ -826,11 +826,11 @@ void cCitySummary::ResetForward()
     cCityData** bBeg = (cCityData**)mBuildingList.mBegin;
     cCityData** bLast = (cCityData**)mBuildingList.mEnd;
     memcpy(bBeg, bLast, (unsigned)((char*)bEnd - (char*)bLast));
-    mBuildingList.mEnd = (char*)mBuildingList.mEnd - (((int)((char*)bEnd - (char*)bBeg) >> 2) * 4);
+    *(char* volatile*)&mBuildingList.mEnd = (char*)mBuildingList.mEnd - (((int)((char*)bEnd - (char*)bBeg) >> 2) * 4);
     // vector::erase(begin(), end()) on mCityData
     cCityData** cEnd = (cCityData**)mCityData.mEnd;
     cCityData** cLast = (cCityData**)mCityData.mEnd;
-    cCityData** cBeg = (cCityData**)mCityData.mBegin;
+    cCityData** cBeg = *(cCityData** volatile*)&mCityData.mBegin;
     memcpy(cBeg, cLast, (unsigned)((char*)cEnd - (char*)cLast));
     mCityData.mEnd = (char*)mCityData.mEnd - (((int)((char*)cEnd - (char*)cBeg) >> 2) * 4);
 }
