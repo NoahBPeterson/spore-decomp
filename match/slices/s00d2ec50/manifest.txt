@@ -1,0 +1,3 @@
+# source symbol va flags
+slices/s00d2ec50/s00d2ec50.cpp  ?FUN_00d2ede0@@YAEPAX@Z  00d2ede0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2ec50/s00d2ec50.cpp  ?FUN_00d2ee20@@YGEPAPAX@Z  00d2ee20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
