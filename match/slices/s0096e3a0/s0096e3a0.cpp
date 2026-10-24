@@ -134,8 +134,8 @@ two:
     if (dst->f04 > 9) dst->f04 = 9;
     dst->SetMode((int)dst->f04);
     dst->f00 = 0;
-    dst->f14 = (float)(int)((double)(src->f14 * 0.5f));   // floor
-    dst->f18 = (float)(int)((double)(src->f18 * 0.5f));
+    dst->f14 = (float)floor(src->f14 * 0.5f);   // retail calls the CRT floor
+    dst->f18 = (float)floor(src->f18 * 0.5f);
     if (0.0f < src->f14 && dst->f14 <= 1.0f && dst->f14 != 1.0f)
         dst->f14 = 1.0f;
     if (0.0f < src->f18 && dst->f18 <= 1.0f && dst->f18 != 1.0f)
@@ -288,7 +288,7 @@ void DropShadowText::draw(int* sink, void* a, void* glyphs, unsigned count,
                 r.f = t * 255.0f + 12582912.0f;
                 int alpha = r.i - 0x4b400000;
                 (*(void(__thiscall**)(int*, int))((char*)*(void**)sink + 4))(sink, (alpha << 24) + baseColor);
-                (*(void(__thiscall**)(int*, void*, void*, unsigned))((char*)*(void**)sink + 0x30))(sink, g_vec1c0, g_vec1d4[0], count);
+                (*(void(__thiscall**)(int*, void*, void*, unsigned))((char*)*(void**)sink + 0x30))(sink, g_vec1c0[0], g_vec1d4[0], count);
             }
         }
     }

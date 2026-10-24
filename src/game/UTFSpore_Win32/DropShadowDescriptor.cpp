@@ -66,8 +66,8 @@ two:
     if (dst->f04 > 9) dst->f04 = 9;
     dst->SetMode((int)dst->f04);
     dst->f00 = 0;
-    dst->f14 = (float)(int)((double)(src->f14 * 0.5f));   // floor
-    dst->f18 = (float)(int)((double)(src->f18 * 0.5f));
+    dst->f14 = (float)floor(src->f14 * 0.5f);   // retail calls the CRT floor
+    dst->f18 = (float)floor(src->f18 * 0.5f);
     if (0.0f < src->f14 && dst->f14 <= 1.0f && dst->f14 != 1.0f)
         dst->f14 = 1.0f;
     if (0.0f < src->f18 && dst->f18 <= 1.0f && dst->f18 != 1.0f)
