@@ -1,4 +1,4 @@
-0095a580 349 BuildDisplayList complete; original inlines the DLEntry fill at both bit0x10 sites (~260B, no FillDLEntry helper) and uses a 0x3c38 chkstk frame; call/reg layout differs
+0095a580 609 BuildDisplayList complete; the recursive info word must be int (retail uses signed jle before clamping info[1]), which fixed the replay mismatch; original inlines the DLEntry fill at both bit0x10 sites (~260B, no FillDLEntry helper) and uses a 0x3c38 chkstk frame, so call/reg layout still differs. difftest WEAK (204 valid, 14.9% coverage, no mismatch)
 0095a870 60 AssignFrom complete; erase/insert call sites construct Iter temporaries with the MSVC push-ecx aggregate idiom, loop is a do-while with a shared erase epilogue; regs/flow differ
 0095a9a0 195 PostMsg complete; original spills &mxC to a push-ecx stack slot and schedules the two rep-movsd copies differently; difftest PASS (equivalence)
 0095aa80 728 ProcessMessages complete; large register/scheduling differences across the merge, per-context and tickable loops
