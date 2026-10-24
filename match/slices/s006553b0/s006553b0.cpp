@@ -704,21 +704,44 @@ void cSPUIAssetGrid::Update(int arg)
 }
 
 // ---------------------------------------------------------------------------
-// Pre-existing helper externs for 0x00656240 (filter-then-copy_if over 0x10-byte records)
-extern "C" void FUN_00654050(void*, void*, void*);   // 0x00654050 (local vector ctor)
-extern "C" int  FUN_006536e0(void*, void*, void*, void*, void*, void*, void*);  // filter
-extern "C" int  FUN_00653780(int*, void*, int*, void*, void*, void*, int);      // copy_if
+// Temp key list for 0x00656240: eastl::fixed_vector<unsigned int, 30, 1>.
+// Passed by value into the filter/copy_if helpers, which read the key range
+// out of the by-value object on the stack.
+struct IntKeyVecBase { void* mpBegin; IntKeyVecBase() : mpBegin(0) {} };
+struct IntKeyVec : IntKeyVecBase {
+    void*         mpEnd;             // +0x04
+    void*         mpCapacityEnd;     // +0x08
+    void*         mAlloc;            // +0x0c
+    void*         mAllocBuf;         // +0x10 (inline buffer)
+    void*         mAllocSize;        // +0x14
+    unsigned int  mStore[30];        // +0x18..0x8f
+    unsigned char mFlag;             // +0x90
+    IntKeyVec()
+    {
+        mAllocBuf = mStore;
+        mpEnd = mStore;
+        mpBegin = mStore;
+        mpCapacityEnd = (char*)mStore + sizeof(mStore);
+    }
+    IntKeyVec(void* first, void* last, void* extra)
+    {
+        mAllocBuf = mStore;
+        mpEnd = mStore;
+        mpBegin = mStore;
+        mpCapacityEnd = (char*)mStore + sizeof(mStore);
+        Assign(first, last, extra);
+    }
+    void Assign(void* first, void* last, void* extra);   // 0x00654050
+};
+extern "C" void* __cdecl FUN_006536e0(void* first, void* last, IntKeyVec keys);                    // 0x006536e0
+extern "C" void* __cdecl FUN_00653780(void* dst, void* last, void* src, IntKeyVec keys);            // 0x00653780
 
 // @ 0x00656240  filter-then-copy_if over 0x10-byte records
-int FUN_00656240(int* first, int* last, int* keysBegin, int* keysEnd, void* attr) {
-    char local[0x94];
-    FUN_00654050(keysBegin, keysEnd, first);           // build temp key vector
-    int* pos = (int*)FUN_006536e0((void*)first, (void*)last, local, local, 0, 0, 0);
-    if (pos != last) {
-        FUN_00654050(keysBegin, keysEnd, first);
-        pos = (int*)FUN_00653780(pos + 4, last, pos, local, local, 0, 0);
-    }
-    if (keysBegin && keysBegin != (int*)attr)
-        EASTL_allocator_deallocate(keysBegin);
-    return (int)pos;
+void* FUN_00656240(void* first, void* last, IntKeyVec keys) {
+    void* pos = FUN_006536e0(first, last, IntKeyVec(keys.mpBegin, keys.mpEnd, last));
+    if (pos != last)
+        pos = FUN_00653780((char*)pos + 0x10, last, pos, IntKeyVec(keys.mpBegin, keys.mpEnd, last));
+    if (keys.mpBegin && keys.mpBegin != keys.mAllocBuf)
+        EASTL_allocator_deallocate(keys.mpBegin);
+    return pos;
 }
