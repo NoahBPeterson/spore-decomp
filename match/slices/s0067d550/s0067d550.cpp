@@ -9,8 +9,10 @@ extern "C" void* __cdecl memcpy(void*, const void*, unsigned);
 extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 extern "C" long __fastcall _InterlockedExchange(long volatile*, long);
 extern "C" long __fastcall _InterlockedExchangeAdd(long volatile*, long);
+extern "C" long __fastcall _InterlockedDecrement(long volatile*);
 #pragma intrinsic(_InterlockedExchange)
 #pragma intrinsic(_InterlockedExchangeAdd)
+#pragma intrinsic(_InterlockedDecrement)
 
 // lib_zlib (called through local thunks; cdecl)
 extern "C" int __cdecl deflate(z_stream_s*, int);
@@ -133,6 +135,7 @@ struct AtomicIntT {
 };
 class RefCountAtomicBase {
  public:
+  RefCountAtomicBase() {}
   virtual ~RefCountAtomicBase() {}
   AtomicIntT mRefCount;
 };
@@ -261,9 +264,15 @@ bool EA::IO::StreamCompressionZLib::Close() {
 }
 
 // @ 0x0067da60
-EA::IO::StreamCompressionZLib::StreamCompressionZLib(IStream* pOutputStream, int nHint)
-    : mOutputStream(), mbOpen(false), mbInited(false), mpZLibStream(0), mFormat(kCompressedFormatZLib),
-      mHint(nHint), mpOutputBuffer(0), mnOutputBufferSize(0x2000) {
+EA::IO::StreamCompressionZLib::StreamCompressionZLib(IStream* pOutputStream, int nHint) {
+  mOutputStream.mpObject = 0;
+  mbOpen = false;
+  mbInited = false;
+  mpZLibStream = 0;
+  mFormat = kCompressedFormatZLib;
+  mHint = nHint;
+  mpOutputBuffer = 0;
+  mnOutputBufferSize = 0x2000;
   if (pOutputStream) Open(pOutputStream, nHint);
 }
 
@@ -312,10 +321,16 @@ class StreamDecompressionZLib : public IStream, public RefCountAtomicBase {
 }  // namespace EA
 
 // @ 0x0067d800
-EA::IO::StreamDecompressionZLib::StreamDecompressionZLib(int unusedArg)
-    : mInputStream(), mFormat(kCompressedFormatZLib), mbOpen(false), mbEOF(false), mbInited(false),
-      mpZLibStream(0), mpInputBuffer(0), mnInputBufferSize(0x2000) {
+EA::IO::StreamDecompressionZLib::StreamDecompressionZLib(int unusedArg) {
   (void)unusedArg;
+  mInputStream.mpObject = 0;
+  mFormat = kCompressedFormatZLib;
+  mbOpen = false;
+  mbEOF = false;
+  mbInited = false;
+  mpZLibStream = 0;
+  mpInputBuffer = 0;
+  mnInputBufferSize = 0x2000;
 }
 
 // @ 0x0067d890
@@ -410,20 +425,19 @@ namespace Internet {
 class RCAtomicBlock {
  public:
   virtual ~RCAtomicBlock() {}
+  int Release();  // emitted for the RC base sub-object view (this = derived+4)
   volatile long mRefCount;
 };
 
 class HTTPMultipartFormDataPostBodyStream : public IO::IStream, public RCAtomicBlock {
- public:
-  int Release();  // overrides both bases; emitted adjusted for the IStream view
 };
 
 }  // namespace Internet
 }  // namespace EA
 
 // @ 0x0067da30
-int EA::Internet::HTTPMultipartFormDataPostBodyStream::Release() {
-  if (_InterlockedExchangeAdd(&mRefCount, -1) - 1 == 0) {
+int EA::Internet::RCAtomicBlock::Release() {
+  if (_InterlockedDecrement(&mRefCount) == 0) {
     _InterlockedExchange(&mRefCount, 1);
     delete this;
   }
@@ -598,9 +612,13 @@ HistoryCommand::HistoryCommand(cCheatManager* pManager) : mOwner(pManager) {}
 
 // @ 0x0067e370
 const char* HistoryCommand::Description(int idx) {
-  if (idx >= 0 && idx <= 1)
-    return "[<items:int>] Lists the last n commands in the command history";
-  return 0;
+  switch (idx) {
+    case 0:
+    case 1:
+      return "[<items:int>] Lists the last n commands in the command history";
+    default:
+      return 0;
+  }
 }
 
 // @ 0x0067e3f0
@@ -615,9 +633,13 @@ ClearConsoleCommand::ClearConsoleCommand(cCheatManager* pManager) : mOwner(pMana
 
 // @ 0x0067e450
 const char* ClearConsoleCommand::Description(int idx) {
-  if (idx >= 0 && idx <= 1)
-    return "Clears the debug console";
-  return 0;
+  switch (idx) {
+    case 0:
+    case 1:
+      return "Clears the debug console";
+    default:
+      return 0;
+  }
 }
 
 // @ 0x0067e480
@@ -693,14 +715,14 @@ PairB::~PairB() {
 }
 
 // @ 0x0067e610
-PairA* NewPairA(const EA::Arc01& src) {
+PairA* __stdcall NewPairA(const EA::Arc01& src) {
   return new ("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
                            "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
                0xd1) PairA(src);
 }
 
 // @ 0x0067e890
-KeyNode* NewKeyNode(const char* pString) {
+KeyNode* __stdcall NewKeyNode(const char* pString) {
   return new ("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
                            "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
                0xd1) KeyNode(pString);

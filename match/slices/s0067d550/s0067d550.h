@@ -9,7 +9,7 @@ namespace IO {
 class IStream {
  public:
   IStream() {}
-  virtual ~IStream() {}
+  virtual ~IStream();
   virtual int AddRef();
   virtual int Release();
   virtual uint32_t GetType() const;
@@ -41,10 +41,7 @@ class AutoRefT {
     }
     return *this;
   }
-  ~AutoRefT() {
-    T* p = mpObject;
-    if (p) p->Release();
-  }
+  ~AutoRefT();
 };
 
 }  // namespace IO

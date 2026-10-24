@@ -1,0 +1,33 @@
+0067d550 EA::IO::StreamCompressionZLib::Open  # attach output stream, init deflate (zlib or gzip header), reset state
+0067d680 EA::IO::StreamCompressionZLib::WriteData  # IStream::Write: deflate loop, flush output buffer, gzip crc32/input size
+0067d720 EA::IO::StreamCompressionZLib::Close  # finish deflate (Z_FINISH), flush tail, write gzip trailer, release stream
+0067d800 EA::IO::StreamDecompressionZLib::StreamDecompressionZLib  # two-base ctor: vptrs, atomic refcount, 0x2000 input buffer
+0067d890 EA::IO::StreamDecompressionZLib::Open  # attach input stream, init inflate, prime input buffer, set EOF
+0067d960 EA::IO::StreamDecompressionZLib::ReadData  # IStream::Read: refill input, inflate loop, return produced bytes
+0067da10 EA::IO::StreamDecompressionZLib::Close  # clear mOpen and release the input stream
+0067da30 EA::Internet::HTTPMultipartFormDataPostBodyStream::Release  # atomic refcount release (RCAtomicBlock)
+0067da60 EA::IO::StreamCompressionZLib::StreamCompressionZLib  # two-base ctor: vptrs, atomic refcount, members, conditional Open
+0067db10 EA::IO::StreamCompressionZLib::~StreamCompressionZLib  # Close if open, deflateEnd + free stream/output buffer
+0067dbc0 EA::IO::StreamDecompressionZLib::~StreamDecompressionZLib  # release input if open, inflateEnd + free stream/input buffer
+0067e100 CheatReporter::CheatReporter  # LogReporter base ctor + AutoRef target
+0067e160 CheckFlagA  # stdcall thunk: test pObj+8 bit0 -> FlagCheckA, else return 1
+0067e190 CheckFlagB  # stdcall thunk: test (*(pObj+0xc)+8) bit0 -> FlagCheckB, else return 1
+0067e220 HelpCommand::HelpCommand  # cCommandBase base + manager + AutoRef related command
+0067e310 HistoryCommand::HistoryCommand  # cCommandBase base + owning cheat-manager AutoRef
+0067e370 HistoryCommand::Description  # idx 0/1 -> history help text, else 0
+0067e3f0 ClearConsoleCommand::ClearConsoleCommand  # cCommandBase base + owning cheat-manager AutoRef
+0067e450 ClearConsoleCommand::Description  # idx 0/1 -> "Clears the debug console", else 0
+0067e480 SP::cCheatManager::AddBuiltInCheats  # register help/history/clear cheat commands
+0067e5c0 StrNameMap::LowerBound  # eastl map<basic_string> lower_bound by stricmp
+0067e610 NewPairA  # stdcall factory: operator new (EASTL "App") + PairA(Arc01)
+0067e6f0 SP::cCheatManager::BroadcastVisible  # if logging, SetVisible(1,param) over the console set
+0067e730 SP::cCheatManager::BroadcastHidden  # SetVisible(0,param) over the console set
+0067e770 SP::cCheatManager::BroadcastUpdate  # if logging, Update(param) over the console set
+0067e7b0 SP::cCheatManager::BroadcastWrite  # Write(param) over the console set
+0067e7f0 SP::cCheatManager::ActivateConsole  # Activate(param) over the console set
+0067e830 PairB::~PairB  # release command, free string buffer when capacity-begin>1
+0067e890 NewKeyNode  # stdcall factory: operator new (EASTL "App") + KeyNode(basic_string)
+0067e900 PairB::PairB  # copy ctor: RangeInitialize(len+1), memcpy, NUL, AutoRef command
+0067e9a0 ConsoleStream::ConsoleStream  # base ctors, empty inline string buffer, target
+0067ea40 ConsoleStream::~ConsoleStream  # free inline buffer when capacity-begin>1
+0067eab0 ConsoleDispatch::Handle  # service->Process(arg), cheat manager BroadcastWrite(result)
