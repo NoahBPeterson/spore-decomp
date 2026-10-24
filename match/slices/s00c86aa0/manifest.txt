@@ -1,0 +1,16 @@
+# source  symbol  original VA  [flags override]
+slices/s00c86aa0/s00c86aa0.cpp  ?Cast@cSpaceInventoryItem@@UAEPAXI@Z  00c86f10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?GetItemCount@cSpaceInventoryItem@@UAE_NAAI@Z  00c86f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?func40h@cSpaceInventoryItem@@UAE_NXZ  00c86fa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?GetTool@cSpaceInventory@@UAEPAVcSpaceInventoryItem@@ABUResourceKey@@@Z  00c86ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?HasTool@cSpaceInventory@@UAE_NABUResourceKey@@@Z  00c87020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?WriteSingleItem@@YA_NPAXPAPAVcSpaceInventoryItem@@@Z  00c87090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ??4cSpaceInventoryItem@@QAEAAV0@ABV0@@Z  00c870b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?HandleMessage@cSpaceInventoryItem@@UAE_NIPAX@Z  00c87140  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?IndexOf@cSpaceInventory@@UAEHW4SpaceInventoryItemType@@ABUResourceKey@@@Z  00c87270  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?HasItem@cSpaceInventory@@UAE_NW4SpaceInventoryItemType@@ABUResourceKey@@@Z  00c87320  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?GetAvailableCargoSlotsCount@cSpaceInventory@@UAEIXZ  00c873d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?GetFreeCargoSlot@cSpaceInventory@@UAE_NAAPAVcSpaceInventoryItem@@@Z  00c87450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?WriteItemList@@YA_NPAXPAURawPtrVec@@@Z  00c875f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?SetPropList@cSpaceInventoryItem@@QAEXPAVcPropertyList@@@Z  00c877f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c86aa0/s00c86aa0.cpp  ?Duplicate@cSpaceInventoryItem@@UAEXPAPAV1@@Z  00c87880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

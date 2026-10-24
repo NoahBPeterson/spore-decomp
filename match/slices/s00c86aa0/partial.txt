@@ -1,0 +1,14 @@
+00c86aa0 400 cSolarSystem::ActivatePtolemaicHitSpheres: complete source; equiv WEAK (28/160 insns covered), not verified
+00c86c70 243 cSolarSystem::ActivateGraphics: complete source; equiv WEAK (24/165 insns covered), not verified
+00c86e50 53  FUN_00c86e50 (cSpaceInventoryItem::Destroy): size differs, equiv FAIL (execution trace)
+00c86f40 10  cSpaceInventoryItem::IsCargoType: size 47 vs 43, equiv FAIL (eax&0xff)
+00c871d0 2   cSpaceInventoryItem::GetPanelID: size differs by 2; equiv UNSUPPORTED (no valid inputs)
+00c872e0 32  cSpaceInventory::IndexOfNthItem: complete source; equiv WEAK (50% coverage), not verified
+00c87420 34  cSpaceInventory::GetCargoSlotsCount: size 37 vs 38; equiv WEAK (41% coverage), not verified
+00c874f0 131 cSpaceInventory::Write (ISimulatorSerializable::Write): size 156 vs 138; equiv UNSUPPORTED (no valid inputs)
+00c87580 170 cSpaceInventoryItem::Write: size 110 vs 157, serializer argument setup not reconstructed
+00c87660 242 cSpaceInventoryItem::cSpaceInventoryItem: size 266 vs 198, /EHsc unwind frame and vptr store order differ
+00c87770 224 cSpaceInventoryItem::~cSpaceInventoryItem: size 203 vs 128, teardown order differs
+00c878d0 177 CreateMultiDeliveryObject: size 185 vs 208, equiv FAIL (memory pool write)
+00c879a0 280 cSpaceInventoryItem::Read: size 368 vs 348, switch/deserialisation paths not fully reconstructed
+00c87b20 7   cSpaceInventory::cSpaceInventory: vptr stores scheduled after the field stores
