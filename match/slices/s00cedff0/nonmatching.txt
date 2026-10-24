@@ -1,0 +1,23 @@
+# complete behaviorally-equivalent source, not byte-exact (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+# difftest verdicts: PASS = equivalence harness verified it; WEAK = no mismatch seen but coverage
+# below threshold; UNSUPPORTED = harness could not run it (unresolved externals / no valid inputs).
+# FAIL = an observed mismatch (none in this slice).
+# Bounded gate: --budget 200000 --time-limit 60 --min-valid 1 --min-cov 0
+00cee1c0  cCommandMakeTradeRoutes::Execute -- enumerate class-0x18c43e8 sim objects, dispatch vtbl[0x58] on their +0x120 subobject, mark via FUN_00be1340; loop/register layout differs
+00cee2c0  bundle owner/scale setter -- addref/release owner @+0x18, store int/float @+0x1c/@+0x20, spawn via FUN_00b3d2b0; member-store ordering differs
+00cee330  first-element getter -- return *begin or 0; original emits an extra mov ecx,eax deref step
+00cee340  random-element getter -- signed range -> RandomUint32Uniform, index begin[i]; cl CSEs the two begin loads
+00cee380  sum of +0x134 floats over vector -- SSE accumulation + x87 double return; duplicate begin/end checks collapsed
+00cee3d0  serialize signature 0x135b1e8 + cVarListSerializer frame; scheduler reorders the signature store vs the 0x18 vtable call
+00cee4a0  nearest-object search over vector (squared distance); float expression reassociation/register allocation differs
+00cee540  nearest/far-object search with occupancy +0x120 and threshold +0x134; expression order differs
+00cee650  remove-value from vector -- addref value, linear scan, copy_impl tail, release popped element; loop layout and epilogue duplication differ
+00cee7a0  bundle-vector destructor -- reset vtable, erase vector, release owner, destroy vector; cl hoists begin/end loads above the vtable store and swaps edi/esi roles
+00cee820  bundle-vector push -- addref value, grow-or-insert via DoInsertPtr, release temp; parameter register allocation differs
+00cee890  bundle-vector deleting destructor -- same as 00cee7a0 plus operator_delete_array; cl hoists begin/end loads and swaps registers
+00cee920  clamp helper for city-game probability -- x87 bd7d00*0.01-0.5 then SSE combine/clamp; register allocation and branch layout differ
+00cee9c0  sin(pow)-based height blend -- x87 pow/sin with double promotion; first multiply loads the float constant before the argument
+00ceead0  pow(int,exp)*0.5 + c*5, *30, floor at 1 -- x87; first multiply loads the float constant before c; return path differs
+00ceed50  random-vs-pow threshold -- bd7d00*0.01, RandomDoubleUniform, pow+0.2 compare; stack frame and float/double temporaries differ
+00ceedb0  random-vs-(v+0.1) threshold -- SSE scaling of input then x87 compare; x87 add loads the constant before v (1 byte)
+00ceee30  city raid/trade relationship predicate -- RelationshipManager queries, occupancy checks, civilization scan; large branchy body, register allocation and block layout differ

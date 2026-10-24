@@ -1,0 +1,53 @@
+# slice s00cedff0 - city-game cheat commands, bundle/container helpers and city-game formula math
+# Modelled types (retail member offsets):
+#   cCommandToggleShowPaths / cCommandMakeTradeRoutes  command object (vtable @0x00)
+#   cCommandSetVehicleWeapons  vtable @0x00, parser @0x04 (parser vtable @0x00)
+#   cCityGameCheatManager      empty marker object
+#   CommandObj                 vtable @0x00, field @0x04, refcount @0x08
+#   cGameBundleContainer       vtable @0x00 only (AsISpatialObject dispatch)
+#   VecObj                     field @0x00, vector begin @0x04, end @0x08 (anonymous list helpers)
+#   VecObj18                   vtable @0x00, vector {begin @0x04, end @0x08, cap @0x0c},
+#                              fields @0x10/@0x14, owner @0x18 (bundle storage object)
+#   BundleObj                  pad 0x00..0x17, owner @0x18, int @0x1c, float @0x20
+#   Obj290                     pad 0x00..0x1b, int @0x1c, float @0x20
+#   GameDataVec                field @0x00, vector begin @0x04, end @0x08
+#   cVarListSerializer         opaque 0xa14-byte serializer
+#   Frame3d0                   signature @0x0000, cVarListSerializer @0x0004 (exactly 0xa18)
+#   cCivModeStrategy           Simulator::cCivModeStrategy (ctor installs three command objects)
+#   nCityGameFormulas          SP::nCityGameFormulas (LoadFormulas loads 13 Arithmetica files)
+00cedff0  cCommandToggleShowPaths::Execute() -> void  # tail FUN_00e94a00 (cVehicleView::ToggleShowPaths)
+00cee010  cCommandSetVehicleWeapons::Execute(args) -> void  # if NumArguments(args)>1: m_parser->vtbl[0x9c](args[1]) -> FUN_00cac1a0 (DebugChangeWeapons)
+00cee060  cCityGameCheatManager::~cCityGameCheatManager() -> void  # CheatManager()->vtbl[0x1c](makeTradeRoutes/toggleShowPaths/vehicleWeapons)
+00cee130  Simulator::cCivModeStrategy::cCivModeStrategy() -> void  # new 3x CommandObj(size 0x10, file "Simulator"), ctor + vtables 0x14781d4/0x14781bc/0x14781ec
+00cee1c0  cCommandMakeTradeRoutes::Execute(args) -> void  # GetGameDataVector(NounManager, 5 filters + 0x18c43e8); for each obj: obj[0x120]->vtbl[0x58]? else FUN_00be1340(mgr,obj,0) (NOT byte-exact; see nonmatching.txt)
+00cee270  FUN_00cee270(p) -> void  # fn=*(*(p+0x34)+0x84); tail fn((u8*)p+0x34)
+00cee290  FUN_00cee290(o) -> float  # (float)o->m_field1c * o->m_field20 (x87)
+00cee2a0  SP::cGameBundleContainer::AsISpatialObject() -> void*  # this ? vtbl[0x14](this, 0x1186577) : 0
+00cee2c0  FUN_00cee2c0(o,obj,a,b,c,d) -> void  # owner swap addref/release @+0x18, stores +0x1c/+0x20, if c>0 spawn FUN_00b3d2b0(c,o,d)->FUN_00ac7ab0 (NOT byte-exact; see nonmatching.txt)
+00cee330  FUN_00cee330(v) -> void*  # first element or null (NOT byte-exact; see nonmatching.txt)
+00cee340  FUN_00cee340(v) -> void*  # RandomUint32Uniform(&rng, end-begin), return begin[index] (NOT byte-exact; see nonmatching.txt)
+00cee380  FUN_00cee380(v) -> double  # SSE sum of *(float*)(*it+0x134), x87 double return (NOT byte-exact; see nonmatching.txt)
+00cee3d0  FUN_00cee3d0(self, stream) -> void  # WriteUint32(stream2, 0x135b1e8, 1, 0); cVarListSerializer(0x15816b8,0x1a80d26).Serialize(stream) (NOT byte-exact; see nonmatching.txt)
+00cee4a0  FUN_00cee4a0(v, p) -> void*  # nearest element by squared xyz distance to p, threshold FLT_MAX (NOT byte-exact; see nonmatching.txt)
+00cee540  FUN_00cee540(v, p, threshold) -> void*  # nearest unoccupied (+0x120==0) else nearest with +0x134>threshold (NOT byte-exact; see nonmatching.txt)
+00cee630  FUN_00cee630(o) -> void*  # VecObj18 ctor: vtable 0x1478220, vec/owner = 0
+00cee650  FUN_00cee650(v, value) -> void  # addref value (or *begin), linear find, copy_impl shift, release popped element (NOT byte-exact; see nonmatching.txt)
+00cee7a0  FUN_00cee7a0(o) -> void  # VecObj18 dtor: vtable reset, erase vector, owner release, vector dtor (NOT byte-exact; see nonmatching.txt)
+00cee7e0  FUN_00cee7e0(o) -> void  # release owner, erase vector (FUN_00b3d2b0/FUN_00ac7a40 pair)
+00cee820  FUN_00cee820(o, value) -> void  # addref value, push_back or DoInsertPtr, release temp (NOT byte-exact; see nonmatching.txt)
+00cee890  FUN_00cee890(o, flags) -> void*  # deleting VecObj18 dtor; flags&1 -> operator_delete_array (NOT byte-exact; see nonmatching.txt)
+00cee8e0  FUN_00cee8e0(a,b,out) -> void  # *out = (a+1)*g10 + b*g14 + g18
+00cee920  FUN_00cee920(obj,arg2,c,arg4,out) -> void  # x87 bd7d00*0.01-0.5, combine with c, scale by g1c, clamp to +-1 with 0.05 dead-band (NOT byte-exact; see nonmatching.txt)
+00cee9c0  FUN_00cee9c0(a,b,out) -> void  # *out = sin(pow(a<0 ? a*c : a, exp))*0.5 + b (x87) (NOT byte-exact; see nonmatching.txt)
+00ceea20  FUN_00ceea20(a,p2,p3) -> void  # two-weight blend: >0.3 -> (0,1); >-0.3 -> (1-t,t) with t=a+0.7; else (1,0)
+00ceea90  FUN_00ceea90(a,out) -> void  # *out = max(0, -((a-g24)*g28)+g2c)
+00ceead0  FUN_00ceead0(a,b,c) -> double  # pow(b,exp)*0.5 + c*5, *30, floor 1 (x87) (NOT byte-exact; see nonmatching.txt)
+00ceeb20  FUN_00ceeb20(a,b,c) -> float  # ((c+0.5)*600/(b+40))*2+1, floor 1
+00ceeb80  FUN_00ceeb80(a,b,c) -> float  # (g0c*b*(c+3))*0.2, c==1 -> *2/3, subtract clamped a, clamp [2000,16000]
+00ceec10  FUN_00ceec10(a1,a2,a3,a4,a5,a6,a7) -> void  # thunk to FUN_004e7460 preserving float args 2..4
+00ceec50  FUN_00ceec50(unused) -> int  # cvtss2si of g_169cc58 (rounding convert)
+00ceec60  SP::nCityGameFormulas::LoadFormulas() -> void  # 13x LoadArithmeticaFile(hash,0,&formula) for tribe/player recruit/raid/food/attack/lurk/farm/vehicle/wander formulas
+00ceed50  FUN_00ceed50(self,a,out) -> void  # x=bd7d00(a)*0.01; r=RandomDoubleUniform; *out = r < pow(x,0x13f5628)+0x2d (NOT byte-exact; see nonmatching.txt)
+00ceedb0  FUN_00ceedb0(a,out) -> void  # scale a by g30, then *out = RandomDoubleUniform < (double)(v+0.1) (NOT byte-exact; see nonmatching.txt)
+00ceee30  FUN_00ceee30(city,b) -> float  # relationship predicate: occupancy/disabled flags, RelationshipManager queries, civilization scan (NOT byte-exact; see nonmatching.txt)
+00ceefd0  FUN_00ceefd0(a,p2,p3) -> void  # quantize a to tens >=100, v=(n*g38)*0.01, *p3=max(v,g34), *p2=max(a-g3c,0)
