@@ -49,7 +49,9 @@ struct Entity {
     Vec3* FUN_00fa0e00();                      // 0x00fa0e00 (ret 0; position)
     bool FUN_00bdb930(int a, int b);           // 0x00bdb930 (ret 8)
     void GetPoint(Vec3* out, unsigned id);     // 0x00bdca30 (ret 8)
-    void FUN_00bddda0(int specialty, int index, Key key, bool spaceStage);   // 0x00bddda0 (ret 0x18)
+    Entity* FUN_00bddda0(int specialty, int index, Key key, bool spaceStage); // 0x00bddda0 (ret 0x18)
+    int FUN_00bd9b60();                        // 0x00bd9b60 (ret 0)
+    void SetJustEyeCandy(bool eyeCandy);       // 0x00c9ecb0 (ret 4)
 };
 
 struct Rel { float FUN_00ceee30(Entity* a, struct Game* g); };   // 0x00ceee30 (ret 8), object 0x169c254
@@ -71,7 +73,10 @@ struct PlanetMdl {
     float GetRadius();                               // 0x00b7e4d0
     int GetContinent(Vec3* p);                       // 0x00b88590 (ret 4)
 };
-struct Rand { unsigned RandomUint32Uniform(unsigned n); };   // 0x00a68fb0
+struct Rand
+{
+    unsigned RandomUint32Uniform(unsigned n);   // 0x00a68fb0
+};
 extern Rand sMathRandom;               // 0x01601760
 extern Vec3 g_ZeroVec;                 // 0x0168c514
 extern const float kRadiusScale;       // 0x0156f89c
@@ -323,4 +328,160 @@ restart:
             }
         }
     }
+}
+
+// ---------------------------------------------------------------------------
+// Space-tool vehicle purchase. 0x00bfb8f0 builds the constraint sets for both
+// civilization helpers; 0x00bfb930 is the per-tick step that buys a vehicle
+// for a random city while the planet tool mode is 5.
+
+namespace eastl
+{
+template <typename T>
+inline const T& min(const T& a, const T& b) { return b < a ? b : a; }
+}
+
+struct CivHelper
+{
+    uint32_t m_pad[7];                       // +0x00 (size 0x1c)
+    void BuildConstraints(int key);          // 0x00bf9300
+    Key* GetOrCreatePosition(int key);       // 0x00bf9700 (ret 4)
+};
+
+extern CivHelper g_civHelpers[2];            // 0x0168cb0c
+extern const int g_modelTypeToKeyMap[13];    // 0x0146946c
+
+struct PlanetTool
+{
+    int GetToolMode();                       // 0x00c70e00
+};
+PlanetTool* GetActivePlanet();               // 0x01021260
+
+struct Civ
+{
+    char pad00[0x6c];
+    CivHelper mHelper;                       // +0x6c
+    char pad88[0x9c - 0x88];
+    Entity** mCitiesBegin;                   // +0x9c
+    Entity** mCitiesEnd;                     // +0xa0
+    char pada4[0xb0 - 0xa4];
+    Entity** mVehiclesBegin;                 // +0xb0
+    Entity** mVehiclesEnd;                   // +0xb4
+
+    int FUN_00bf2f00(int mode);              // 0x00bf2f00 (ret 4)
+    void SubTick1();                         // 0x00bfb930
+};
+
+// @ 0x00bfb8f0
+void FUN_00bfb8f0()
+{
+    for (CivHelper* h = g_civHelpers; (int)h < (int)(g_civHelpers + 2); ++h)
+    {
+        for (const int* k = g_modelTypeToKeyMap; (int)k < (int)(g_modelTypeToKeyMap + 13); ++k)
+            h->BuildConstraints(*k);
+    }
+}
+
+// @ 0x00bfb930
+void Civ::SubTick1()
+{
+    if (GetActivePlanet()->GetToolMode() != 5)
+        return;
+
+    int n = (int)(mCitiesEnd - mCitiesBegin);
+    if (n == 0)
+        return;
+
+    Entity* city = mCitiesBegin[sMathRandom.RandomUint32Uniform((unsigned)n)];
+
+    // FUN_00bf2f00(this, 2), inlined by the original compiler.
+    int limit;
+    int total = 0;
+    {
+        Entity** it = mCitiesBegin;
+        Entity** end = mCitiesEnd;
+        if (it != end)
+        {
+            limit = 0xf;
+            do
+            {
+                int count = (it[0]->FUN_00bd9b60() + 1) / 2;
+                total += eastl::min(3, count);
+                ++it;
+            } while (it != end);
+        }
+    }
+    int cap = eastl::min(total, limit);
+
+    Entity** v = mVehiclesBegin;
+    Entity** vend = mVehiclesEnd;
+    int used = 0;
+    for (; v != vend; ++v)
+    {
+        Entity* e = *v;
+        if (e->mState == 2 && e->mId == 2)
+            ++used;
+    }
+
+    Key pos;
+    int index;
+    if (cap - used > 0 && city->FUN_00bd9b60() > 0)
+    {
+        pos = *mHelper.GetOrCreatePosition(0x2090a11b);
+        if (pos.a == 0)
+        {
+            mHelper.BuildConstraints(0x2090a11b);
+            pos = *mHelper.GetOrCreatePosition(0x2090a11b);
+        }
+        index = 2;
+    }
+    else
+    {
+        v = mVehiclesBegin;
+        vend = mVehiclesEnd;
+        used = 0;
+        for (; v != vend; ++v)
+        {
+            Entity* e = *v;
+            if (e->mState == 2 && e->mId == 0)
+                ++used;
+        }
+        if (FUN_00bf2f00(0) - used > 0)
+        {
+            pos = *mHelper.GetOrCreatePosition((int)0xbc1041e6u);
+            if (pos.a == 0)
+            {
+                mHelper.BuildConstraints((int)0xbc1041e6u);
+                pos = *mHelper.GetOrCreatePosition((int)0xbc1041e6u);
+            }
+            index = 0;
+        }
+        else
+        {
+            v = mVehiclesBegin;
+            vend = mVehiclesEnd;
+            used = 0;
+            for (; v != vend; ++v)
+            {
+                Entity* e = *v;
+                if (e->mState == 2 && e->mId == 1)
+                    ++used;
+            }
+            int count = FUN_00bf2f00(1);
+            int remaining = count - used;
+            Vec3* p = city->FUN_00fa0e00();
+            bool nonZero = p->x != g_ZeroVec.x || p->y != g_ZeroVec.y
+                        || p->z != g_ZeroVec.z;
+            if (!(remaining > 0 && nonZero))
+                return;
+            pos = *mHelper.GetOrCreatePosition((int)0xc15695dau);
+            if (pos.a == 0)
+            {
+                mHelper.BuildConstraints((int)0xc15695dau);
+                pos = *mHelper.GetOrCreatePosition((int)0xc15695dau);
+            }
+            index = 1;
+        }
+    }
+    city->FUN_00bddda0(2, index, pos, true)->SetJustEyeCandy(true);
 }
