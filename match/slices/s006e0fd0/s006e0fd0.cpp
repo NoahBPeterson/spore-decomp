@@ -299,17 +299,34 @@ int PlaneMoments2(int* box, char axis, int coord, int array) {
 }
 
 // ---------------------------------------------------------------------------
+// 8-term moment over the float array at ctx+0 (the 'weights'/m2 histogram),
+// same index algebra as BoxMoments but accumulated in double; inlined into
+// BoxVariance only.
+// ---------------------------------------------------------------------------
+__forceinline double BoxMoment2(int* b, float* m2) {
+    int iVar2 = b[5];
+    int iVar1 = b[4];
+    int iVar3 = (b[3] + b[1] * 0x41) * 0x41;
+    int iVar4 = (b[1] * 0x41 + b[2]) * 0x41;
+    int iVar5 = (b[0] * 0x41 + b[3]) * 0x41;
+    int iVar6 = (b[0] * 0x41 + b[2]) * 0x41;
+    return (double)m2[iVar2 + iVar3] - (double)m2[iVar1 + iVar3] -
+           (double)m2[iVar2 + iVar4] + (double)m2[iVar1 + iVar4] -
+           (double)m2[iVar2 + iVar5] + (double)m2[iVar1 + iVar5] +
+           (double)m2[iVar2 + iVar6] - (double)m2[iVar1 + iVar6];
+}
+
+// ---------------------------------------------------------------------------
 // @ 0x006e1780  box variance (float distance moment minus colour moments)
 // ---------------------------------------------------------------------------
 double BoxVariance(int ctx, int box) {
-    int w8 = BoxMoments((int*)box, *(int*)(ctx + 8));
-    int wc = BoxMoments((int*)box, *(int*)(ctx + 0xc));
-    int w10 = BoxMoments((int*)box, *(int*)(ctx + 0x10));
-    int w4 = BoxMoments((int*)box, *(int*)(ctx + 4));
-    if (w4 == 0)
-        return 0.0;
-    return (double)w8 - (double)wc / (double)w4;
-    (void)w10;
+    int* b = (int*)box;
+    double dr = (double)BoxMoments(b, *(int*)(ctx + 8));
+    double dg = (double)BoxMoments(b, *(int*)(ctx + 0xc));
+    double db = (double)BoxMoments(b, *(int*)(ctx + 0x10));
+    float* m2 = *(float**)(ctx + 0);
+    double ss = BoxMoment2(b, m2);
+    return ss - (dr * dr + dg * dg + db * db) / (double)BoxMoments(b, *(int*)(ctx + 4));
 }
 
 // ---------------------------------------------------------------------------
