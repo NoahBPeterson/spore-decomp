@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0107b260/s0107b260.cpp  ?PopulateLeft@cToolsPanelLeft@@QAE_NIPAVcToolsEvent@@@Z  0107b6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0107b260/s0107b260.cpp  ??0cUniverseSimulatorTuning@@QAE@XZ  0107bcc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0107b260/s0107b260.cpp  ?UpdateTuning@cUniverseSimulatorTuning@@QAEXXZ  0107bd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0107b260/s0107b260.cpp  ?HandleMessage@cUniverseSimulatorTuning@@UAE_NIPAVcUniverseTuningMessage@@@Z  0107bea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0107b260/s0107b260.cpp  ?Init@cUniverseSimulatorTuning@@QAEXXZ  0107bed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0107b260/s0107b260.cpp  ??0cWalkAroundInputStrategy@@QAE@XZ  0107c0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0107b260/s0107b260.cpp  ??1cWalkAroundInputStrategy@@UAE@XZ  0107c160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

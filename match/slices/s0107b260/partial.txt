@@ -1,0 +1,6 @@
+0107b260  1112  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITools::PopulateSelected: 1125-byte tool panel refresh; reconstructed only the property-manager / GetToolAvailability prologue (135 bytes), the panel-element walk and cString message formatting are omitted.
+0107b760  914  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITools::PopulateRight: 924-byte right panel population; only the property-manager prologue emitted (113 bytes).
+0107bb00  302  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITools::Open: 302-byte editor-tool open path (verb icon tray, MessageServer registration, terrain sphere setup); left as an empty body.
+0107bc30  34  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cToolsMessage::OnMessage: body matches instruction-for-instruction but MSVC colors this=edi/card=esi instead of the original this=esi/card=edi.
+0107be40  39  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cUniverseSimulatorTuning scalar deleting destructor; the ??1 form tail-jumps to Release instead of calling it, so it is 64 bytes vs 90.
+0107bf40  324  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cWalkAroundInputStrategy::HandleMessage: 358-byte handler; only the IsAvailable guard, id filtering and hover-text clear are reconstructed (125 bytes), the card/tooltip distance logic is omitted.
