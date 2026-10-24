@@ -1,0 +1,20 @@
+00c57570 110 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 110 bytes - WriteSTLSequence<tItemInfo> instantiation not reconstructed.
+00c575e0 174 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 174 bytes - multi-delivery helper not reconstructed.
+00c57720 86 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 86 bytes - multi-delivery helper not reconstructed.
+00c57780 76 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 76 bytes - multi-delivery helper not reconstructed.
+00c57810 100 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 100 bytes - multi-delivery helper not reconstructed.
+00c578c0 98 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 98 bytes - eastl::copy_impl<tBuyerInfo*> instantiation not reconstructed.
+00c57930 100 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 100 bytes - multi-delivery helper not reconstructed.
+00c579a0 110 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 110 bytes - eastl::copy_impl<tItemInfo*> instantiation not reconstructed.
+00c57a10 112 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 112 bytes - multi-delivery helper not reconstructed.
+00c57a80 67 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 58 bytes - tItemInfo payload initialiser: field order and the ref-counted target handoff match, but retail bit-copies the three floats with dword moves (inline 12-byte copy) while /fp:fast emits movss (size 79 vs 67).
+00c57ad0 546 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 546 bytes - multi-delivery helper not reconstructed.
+00c57d00 332 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 332 bytes - GetDynamicResponseID not reconstructed.
+00c57e50 156 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 156 bytes - multi-delivery helper not reconstructed.
+00c57ef0 247 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 247 bytes - OnDelivery not reconstructed.
+00c58170 140 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 140 bytes - Simulator::cMissionMultiDelivery constructor not reconstructed.
+00c582a0 101 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 101 bytes - multi-delivery helper not reconstructed.
+00c58310 67 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - multi-delivery helper not reconstructed.
+00c58360 67 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - multi-delivery helper not reconstructed.
+00c58530 90 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 90 bytes - multi-delivery helper not reconstructed.
+00c58600 365 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 365 bytes - multi-delivery helper not reconstructed.

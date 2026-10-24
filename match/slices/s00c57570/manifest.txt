@@ -1,0 +1,5 @@
+slices/s00c57570/s00c57570.cpp  ??4tItemInfo@SP@@QAEPAU01@ABU01@@Z  00c57690  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c57570/s00c57570.cpp  ??4tBuyerInfo@SP@@QAEPAU01@ABU01@@Z  00c576d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c57570/s00c57570.cpp  ?FUN_00c58070@SP@@YA_NPAXPAUcBuyerRange@1@@Z  00c58070  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c57570/s00c57570.cpp  ?FUN_00c580b0@SP@@YA_NPAXPAUcItemRange@1@@Z  00c580b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c57570/s00c57570.cpp  ?GetFetchItemName@cSPMissionMultiDelivery@SP@@QAEXPAVwstring@eastl@@@Z  00c58260  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
