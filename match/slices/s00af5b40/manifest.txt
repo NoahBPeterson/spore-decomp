@@ -1,0 +1,2 @@
+# byte-exact functions for slice s00af5b40
+slices/s00af5b40/s00af5b40.cpp  ??4ShapeCopy@@QAEAAU0@ABU0@@Z  00af6250  /O2 /MD /Gy /TP /arch:SSE /fp:fast
