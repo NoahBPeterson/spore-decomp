@@ -134,11 +134,52 @@ struct cSystem {
     void System_HandleMessage(uint32 msgId, int* pData);  // 0xa21710
 };
 
+// ---- helpers specific to FUN_00a45610 --------------------------------------
+struct DbgObject {
+    virtual void d00();
+    virtual void d04();
+    virtual void d08();
+    virtual bool CreateObject(int* a, void** out, int c, int d, int e, int f); // +0x0c
+};
+
+struct NodeObject {
+    virtual void o00();
+    virtual void Release();                   // +0x04
+    virtual void o08();
+    virtual void o0c();
+    virtual void o10();
+    virtual void o14();
+    virtual void o18();
+    virtual void o1c();
+    virtual void o20();
+    virtual bool GetProperty(uint32 id, void** out);   // +0x24
+};
+
+struct PropertyValue {
+    char   pad00[0x12];
+    uint16 mType;                             // +0x12
+    uint32* GetUInt();                        // 0x41ea00
+    float* GetFloat();                        // 0x41ea70
+};
+
+// node of the mTable15bf38 hash table
+struct Node15bf38 {
+    uint32      mId;                          // +0x00
+    uint32      mPad04;                       // +0x04
+    int         mValue08;                     // +0x08
+    uint32      mPad0c;                       // +0x0c
+    double      mTimestamp10;                 // +0x10
+    float       mField18;                     // +0x18
+    float       mField1c;                     // +0x1c
+    float       mField20;                     // +0x20
+    NodeObject* mpObject;                     // +0x24
+};
+
 // ---- extern helpers --------------------------------------------------------
 extern "C" Server* EA_Messaging_GetServer();                 // 0x883860
 extern "C" void*   SP_MessageServer();                       // 0x67dcc0
 extern "C" void*   EA_ResourceMan_GetManager();              // 0x67dcd0
-extern "C" RefCounted* Eapd_Debug_ObjectError();             // 0x8de1a0
+extern "C" DbgObject* Eapd_Debug_ObjectError();              // 0x8de1a0
 extern "C" IHandler6*  Eapd_ISystem_GetSingletonPtr();       // 0xa67c60
 extern "C" void*   operator_new6(int size, const char* name, int a, int b, int c, int d); // 0xf473a0
 extern "C" void    operator_delete(void* p);                 // 0xf47380
@@ -152,14 +193,14 @@ extern "C" void* SP_ConstructcEmitterModelSound();        // 0xa465b0
 extern "C" void* SP_ConstructcEmitterSndPlayer();         // 0xa398d0
 extern "C" int   FUN_00a68e90(void* p);                   // 0xa68e90
 extern "C" void  FUN_00a466d0(void* p);                   // 0xa466d0
-extern "C" void  FUN_0092b1d0(void* self);                // 0x92b1d0
-extern "C" void  FUN_005d7450(void* self);                // 0x5d7450
+extern "C" void* __fastcall FUN_0092b1d0(void* self);     // 0x92b1d0
+extern "C" void  __fastcall FUN_005d7450(void* self);     // 0x5d7450
 extern "C" void  FUN_00a31f20(void* cmd);                 // 0xa31f20
 extern "C" int   FUN_00a34dc0(void* msg, void* node);     // 0xa34dc0
 extern "C" int   FUN_00fc7e50(void* node);                // 0xfc7e50 (Node::Type)
 extern "C" int   FUN_00a0fab0(void* cmd, uint32 id, uint32* out); // 0xa0fab0 GetUint32
 extern "C" int   FUN_00a43580_helper();                   // 0xa43580
-extern "C" int   FUN_00a41fc0();                          // 0xa41fc0
+extern "C" double FUN_00a41fc0();                         // 0xa41fc0
 extern "C" int   FUN_00a31170(void* self);                // 0xa31170 cSystem::InitAT
 extern "C" long  atol(const char*);                       // msvcr90
 extern "C" char* strchr(const char*, int);                // msvcr90
@@ -246,8 +287,8 @@ void cSystem::HandleMessage(uint32 msgId, int* pData)
         BaseObj* b = base();
         b->v01();
         char tmp[0x34];
-        FUN_0092b1d0(tmp);
-        mObj15bc14.o04(0);
+        void* p = FUN_0092b1d0(tmp);
+        mObj15bc14.o04((int)p);
         FUN_005d7450(tmp);
         Server* srv = (Server*)SP_MessageServer();
         srv->s14(0x578f803, 0, 0);
@@ -371,22 +412,41 @@ void cSystem::FUN_00a45610(int a, int b)
     HashTable& t = mTable15bf38;
     Iterator it;
     t.hashFind(&it, &a);
-    int node = (int)it.mpNode;
-    if (node != (int)t.mpBucketArray[t.mnBucketCount]) {
-        *(int*)(node + 8) = b;
-        double d = (double)FUN_00a41fc0();
-        *(double*)(node + 0x10) = d;
-        node = *(int*)(node + 8);
-        int t1 = 0xb1b104;
-        int t2 = 0x61ad433;
-        RefCounted* dbg = Eapd_Debug_ObjectError();
-        RefCounted* pold = *(RefCounted**)(node + 0x24);
-        if (pold) {
-            *(void**)(node + 0x24) = 0;
-            pold->Release();
+    Node15bf38* node = (Node15bf38*)it.mpNode;
+    if (node != (Node15bf38*)t.mpBucketArray[t.mnBucketCount]) {
+        node->mValue08 = b;
+        node->mTimestamp10 = FUN_00a41fc0();
+        int keybuf[3];
+        keybuf[0] = node->mValue08;
+        keybuf[1] = 0xb1b104;
+        keybuf[2] = 0x61ad433;
+        DbgObject* dbg = Eapd_Debug_ObjectError();
+        NodeObject* old = node->mpObject;
+        if (old) {
+            node->mpObject = 0;
+            old->Release();
         }
-        (void)dbg->v08();
-        (void)t1; (void)t2;
+        bool ok = dbg->CreateObject(keybuf, (void**)&node->mpObject, 0, 0, 0, 0);
+        if (!ok) {
+            FUN_00a44f70(a);
+        } else {
+            uint32 n = 0x46;
+            PropertyValue* prop = 0;
+            if (node->mpObject &&
+                node->mpObject->GetProperty(0x332c289d, (void**)&prop) &&
+                prop->mType == 10)
+                n = *prop->GetUInt();
+            float f = (float)n;
+            node->mField18 = 1.0f / (f * 0.001f);
+            if (node->mpObject &&
+                node->mpObject->GetProperty(0xf61ba344, (void**)&prop) &&
+                prop->mType == 0xd)
+                node->mField1c = *prop->GetFloat();
+            if (node->mpObject &&
+                node->mpObject->GetProperty(0xce5935c5, (void**)&prop) &&
+                prop->mType == 0xd)
+                node->mField20 = *prop->GetFloat();
+        }
     }
 }
 
