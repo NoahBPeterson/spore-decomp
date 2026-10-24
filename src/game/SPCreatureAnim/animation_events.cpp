@@ -13,14 +13,14 @@ namespace EA {
 template <typename T> struct RectT_s009a_4c70 {
     T mLeft, mTop, mRight, mBottom;
     RectT_s009a_4c70& operator=(const RectT_s009a_4c70& o);                 // 0x00572600
-    void RotA(float c, float s);                      // 0x009a4c70 (thiscall, ret 8)
-    void RotB(float c, float s);                      // 0x009a4d60
-    void RotC(float c, float s);                      // 0x009a4e40
+    RectT_s009a_4c70& RotA(float c, float s);         // 0x009a4c70 (thiscall, ret 8)
+    RectT_s009a_4c70& RotB(float c, float s);         // 0x009a4d60
+    RectT_s009a_4c70& RotC(float c, float s);         // 0x009a4e40
 };
 }
-template void EA::RectT_s009a_4c70<float>::RotA(float, float);
-template void EA::RectT_s009a_4c70<float>::RotB(float, float);
-template void EA::RectT_s009a_4c70<float>::RotC(float, float);
+template EA::RectT_s009a_4c70<float>& EA::RectT_s009a_4c70<float>::RotA(float, float);
+template EA::RectT_s009a_4c70<float>& EA::RectT_s009a_4c70<float>::RotB(float, float);
+template EA::RectT_s009a_4c70<float>& EA::RectT_s009a_4c70<float>::RotC(float, float);
 namespace nSPCreatureAnim {
 struct AudioIface {
     virtual void v0();  virtual void v1();  virtual void v2();  virtual void v3();
@@ -270,7 +270,7 @@ void PerpPair(float* n, float* out1, float* out2)
 }
 
 // @ 0x009a4c70
-template <typename T> void EA::RectT_s009a_4c70<T>::RotA(float c, float s)
+template <typename T> EA::RectT_s009a_4c70<T>& EA::RectT_s009a_4c70<T>::RotA(float c, float s)
 {
     T x = mLeft, y = mTop, z = mRight, w = mBottom;
     T r0 = x * c + w * s - z * (T)0.0 + y * (T)0.0;
@@ -278,10 +278,11 @@ template <typename T> void EA::RectT_s009a_4c70<T>::RotA(float c, float s)
     T r2 = z * c - y * s + x * (T)0.0 + w * (T)0.0;
     T r3 = w * c - x * s - y * (T)0.0 - z * (T)0.0;
     mLeft = r0; mTop = r1; mRight = r2; mBottom = r3;
+    return *this;
 }
 
 // @ 0x009a4d60
-template <typename T> void EA::RectT_s009a_4c70<T>::RotB(float c, float s)
+template <typename T> EA::RectT_s009a_4c70<T>& EA::RectT_s009a_4c70<T>::RotB(float c, float s)
 {
     T x = mLeft, y = mTop, z = mRight, w = mBottom;
     T r0 = x * c + w * (T)0.0 - z * s + y * (T)0.0;
@@ -289,10 +290,11 @@ template <typename T> void EA::RectT_s009a_4c70<T>::RotB(float c, float s)
     T r2 = z * c - y * (T)0.0 + x * s + w * (T)0.0;
     T r3 = w * c - x * (T)0.0 - y * s - z * (T)0.0;
     mLeft = r0; mTop = r1; mRight = r2; mBottom = r3;
+    return *this;
 }
 
 // @ 0x009a4e40
-template <typename T> void EA::RectT_s009a_4c70<T>::RotC(float c, float s)
+template <typename T> EA::RectT_s009a_4c70<T>& EA::RectT_s009a_4c70<T>::RotC(float c, float s)
 {
     T x = mLeft, y = mTop, z = mRight, w = mBottom;
     T r0 = x * c + w * (T)0.0 - z * (T)0.0 + y * s;
@@ -300,6 +302,7 @@ template <typename T> void EA::RectT_s009a_4c70<T>::RotC(float c, float s)
     T r2 = z * c - y * (T)0.0 + w * s + x * (T)0.0;
     T r3 = w * c - x * (T)0.0 - y * (T)0.0 - z * s;
     mLeft = r0; mTop = r1; mRight = r2; mBottom = r3;
+    return *this;
 }
 
 // @ 0x009a4f10

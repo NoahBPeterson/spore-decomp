@@ -1,8 +1,8 @@
-009a4c70 226 complete EA::RectT<float>::RotA; quaternion plane rotation (x,w)/(y,z), flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv PASS 400/400; not byte-exact (register allocation)
-009a4d60 224 complete EA::RectT<float>::RotB; plane rotation (x,z)/(y,w); equiv PASS 400/400; not byte-exact (register allocation)
-009a4e40 203 complete EA::RectT<float>::RotC; plane rotation (x,y)/(z,w); equiv PASS 400/400; not byte-exact (register allocation)
+009a4c70 226 complete EA::RectT<float>::RotA; quaternion plane rotation (x,w)/(y,z), flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv PASS 400/400 (return *this fix: original moves ecx->eax at entry); not byte-exact (register allocation)
+009a4d60 224 complete EA::RectT<float>::RotB; plane rotation (x,z)/(y,w); equiv PASS 400/400 (return *this fix); not byte-exact (register allocation)
+009a4e40 203 complete EA::RectT<float>::RotC; plane rotation (x,y)/(z,w); equiv PASS 400/400 (return *this fix); not byte-exact (register allocation)
 009a4f10 380 complete checkerlib::matrix_to_quaternion; trace / largest-diagonal 3x3 -> quaternion; equiv PASS 400/400; not byte-exact
 009a5090 1472 complete nSPCreatureAnim::PlaySound; sets a named audio event through EA::Audio::GetSystemAT vtable (voice/foot/generic paths); equiv WEAK (2.3% coverage: creature/bone-gated branches not reached by default inputs); not byte-exact
 009a5650 516 complete nSPCreatureAnim::ComputeEventLocationData; switch on event flags&0xf producing target loc/vec; equiv PASS 392/392
-009a5860 305 complete nSPCreatureAnim::GetEventDataAs32Bits; selects a table entry / bone pose value by event kind; equiv PASS 339/339
-009a59a0 54 complete nSPCreatureAnim::GetEventDataAsFloat; forwards to GetEventDataAs32Bits, returns the raw float bits; equiv FAIL 1/356 (input passes a garbage table index 0xb3cc3050, an out-of-range read that is UB in the original as well)
+009a5860 305 complete nSPCreatureAnim::GetEventDataAs32Bits; selects a table entry / bone pose value by event kind; equiv FAIL-KEPT register xmm1 (original kind==3 float divide uses x87 fld/fdivp, never writes xmm1; ours uses SSE under /arch:SSE /fp:fast); not byte-exact
+009a59a0 54 complete nSPCreatureAnim::GetEventDataAsFloat; forwards to GetEventDataAs32Bits, returns the raw float bits; equiv FAIL-KEPT register xmm0 (original returns the float in st0 via fld, never writes xmm0; ours returns in xmm0 under /arch:SSE /fp:fast)

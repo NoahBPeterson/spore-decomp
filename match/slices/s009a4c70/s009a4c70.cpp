@@ -14,15 +14,15 @@ namespace EA {
 template <typename T> class RectT { public:
     T mLeft, mTop, mRight, mBottom;
     RectT& operator=(const RectT& o);                 // 0x00572600
-    void RotA(float c, float s);                      // 0x009a4c70 (thiscall, ret 8)
-    void RotB(float c, float s);                      // 0x009a4d60
-    void RotC(float c, float s);                      // 0x009a4e40
+    RectT& RotA(float c, float s);                    // 0x009a4c70 (thiscall, ret 8)
+    RectT& RotB(float c, float s);                    // 0x009a4d60
+    RectT& RotC(float c, float s);                    // 0x009a4e40
 };
 }
 
 // @ 0x009a4c70
 template <typename T>
-void EA::RectT<T>::RotA(float c, float s)
+EA::RectT<T>& EA::RectT<T>::RotA(float c, float s)
 {
     T x = mLeft, y = mTop, z = mRight, w = mBottom;
     T r0 = x * c + w * s - z * (T)0.0 + y * (T)0.0;
@@ -30,12 +30,13 @@ void EA::RectT<T>::RotA(float c, float s)
     T r2 = z * c - y * s + x * (T)0.0 + w * (T)0.0;
     T r3 = w * c - x * s - y * (T)0.0 - z * (T)0.0;
     mLeft = r0; mTop = r1; mRight = r2; mBottom = r3;
+    return *this;
 }
-template void EA::RectT<float>::RotA(float, float);
+template EA::RectT<float>& EA::RectT<float>::RotA(float, float);
 
 // @ 0x009a4d60
 template <typename T>
-void EA::RectT<T>::RotB(float c, float s)
+EA::RectT<T>& EA::RectT<T>::RotB(float c, float s)
 {
     T x = mLeft, y = mTop, z = mRight, w = mBottom;
     T r0 = x * c + w * (T)0.0 - z * s + y * (T)0.0;
@@ -43,12 +44,13 @@ void EA::RectT<T>::RotB(float c, float s)
     T r2 = z * c - y * (T)0.0 + x * s + w * (T)0.0;
     T r3 = w * c - x * (T)0.0 - y * s - z * (T)0.0;
     mLeft = r0; mTop = r1; mRight = r2; mBottom = r3;
+    return *this;
 }
-template void EA::RectT<float>::RotB(float, float);
+template EA::RectT<float>& EA::RectT<float>::RotB(float, float);
 
 // @ 0x009a4e40
 template <typename T>
-void EA::RectT<T>::RotC(float c, float s)
+EA::RectT<T>& EA::RectT<T>::RotC(float c, float s)
 {
     T x = mLeft, y = mTop, z = mRight, w = mBottom;
     T r0 = x * c + w * (T)0.0 - z * (T)0.0 + y * s;
@@ -56,8 +58,9 @@ void EA::RectT<T>::RotC(float c, float s)
     T r2 = z * c - y * (T)0.0 + w * s + x * (T)0.0;
     T r3 = w * c - x * (T)0.0 - y * (T)0.0 - z * s;
     mLeft = r0; mTop = r1; mRight = r2; mBottom = r3;
+    return *this;
 }
-template void EA::RectT<float>::RotC(float, float);
+template EA::RectT<float>& EA::RectT<float>::RotC(float, float);
 
 // @ 0x009a4f10
 void checkerlib_matrix_to_quaternion(float* q, const float* m)
