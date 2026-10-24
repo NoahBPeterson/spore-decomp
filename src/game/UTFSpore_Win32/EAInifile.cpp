@@ -176,7 +176,6 @@ extern "C" long _InterlockedIncrement(volatile long*);
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 extern "C" unsigned __int64 __rdtsc(void);
 extern "C" void __cdecl EASTL_allocator_deallocate(void* p);     // 0x00f47380
-extern "C" void __cdecl IniFile_SetPath(void* self, int path);   // 0x00933040
 extern void* IniFile_vtable;   // 0x0143e7d8
 #pragma intrinsic(_InterlockedExchange, _InterlockedDecrement, _InterlockedIncrement, _InterlockedExchangeAdd)
 #pragma intrinsic(__rdtsc)
@@ -192,6 +191,7 @@ class EA_IO_IniFile_s0093_50f0 {
 public:
     EA_IO_IniFile_s0093_50f0* ctor(int path, uint8_t flag);
     EA_IO_IniFile_s0093_50f0* scalar_deleting_destructor(uint8_t flag);
+    bool     SetPath(const wchar_t* path);   // 0x00933040
     void*    vftable;             // +0x000
     wchar_t  mPath[260];          // +0x004
     char     mFileStream[0x22c];  // +0x20c
@@ -739,7 +739,7 @@ EA_IO_IniFile_s0093_50f0* EA_IO_IniFile_s0093_50f0::ctor(int path, uint8_t flag)
     *(uint8_t*)((char*)this + 0x470) = 0;
     *(uint32_t*)((char*)this + 0x474) = 0;
     this->mPath[0] = 0;
-    IniFile_SetPath(this, path);
+    this->SetPath((const wchar_t*)path);
     return this;
 }
 

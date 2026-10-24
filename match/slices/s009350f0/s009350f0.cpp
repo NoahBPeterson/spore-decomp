@@ -234,12 +234,12 @@ struct RBTreeStub {
     void* mpNodeParent;   // +0x0c
     void DoNukeSubtree(void* root);
 };
-extern "C" void __cdecl IniFile_SetPath(void* self, int path);   // 0x00933040
 
 class EA_IO_IniFile {
 public:
     EA_IO_IniFile* ctor(int path, uint8_t flag);
     EA_IO_IniFile* scalar_deleting_destructor(uint8_t flag);
+    bool     SetPath(const wchar_t* path);   // 0x00933040
     void*    vftable;             // +0x000
     wchar_t  mPath[260];          // +0x004
     char     mFileStream[0x22c];  // +0x20c
@@ -316,7 +316,7 @@ EA_IO_IniFile* EA_IO_IniFile::ctor(int path, uint8_t flag) {
     *(uint8_t*)((char*)this + 0x470) = 0;
     *(uint32_t*)((char*)this + 0x474) = 0;
     this->mPath[0] = 0;
-    IniFile_SetPath(this, path);
+    this->SetPath((const wchar_t*)path);
     return this;
 }
 

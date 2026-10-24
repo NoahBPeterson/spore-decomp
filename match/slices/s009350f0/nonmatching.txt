@@ -1,4 +1,4 @@
-00935450 132 IniFile ctor: complete reconstruction, but EASTL rbtree reset stores and `and al,1` scheduling differ
+00935450 112 IniFile ctor: complete reconstruction; SetPath (0x00933040) is a thiscall member (it was declared cdecl with an explicit `this`, so our call put the object on the stack with ecx=0 and the original faulted) [equiv: PASS 2000/2000 valid, 100% coverage; --src PASS]; remaining diff is the EASTL rbtree reset stores and `and al,1` scheduling (size 165 vs 183)
 00935a70 13  ShutdownOSGlobalSystem: complete, register/load order in the free path differs (compiler reloads vs esi-held)
 00935ad0 109 EA_ReleaseOSGlobal: complete, original uses a double `lock xadd` refcount read that no plain source shape reproduced
 00935b70 145 InitOSGlobalSystem: complete, cl hoists the `gp != 0` early-out block ahead of the one-time-init body
