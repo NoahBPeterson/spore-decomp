@@ -476,6 +476,10 @@ void __cdecl FUN_00a7fd60(void* stream, unsigned int* out)
 // @ 0x00a7fe20
 // thiscall: this in ecx (fields +0x10 interface, +0x70 float), one stack arg.
 struct ObjFE20 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
     virtual char v10(void*, void*, float*, int, int, int);   // slot 0x10
 };
 
@@ -511,43 +515,53 @@ void Owner::FUN_00a7fe20(void* arg)
         *(unsigned int*)(p + 0x7c) = 0;
     } else {
         float fVar3 = this->f70;
-        float buf[3];
-        buf[0] = 0.0f; buf[1] = 0.0f; buf[2] = 0.0f;
+        float buf[3];                     // v10 fills this; the fake-call tests leave it at the stack fill
         int f70bits = *(int*)&fVar3;
         char cVar5 = p10->v10(p + 0xc, pf, buf, 0, f70bits, 0);
         if (cVar5 != 0) {
-            float out[3];
-            float a0 = buf[0];
-            float a1 = fVar3;
-            float a2 = 0.0f;
-            float left  = a0 * *(float*)(p + 0x8c) + (*(float*)(p + 0x94) * a1 + *(float*)(p + 0x90) * a2);
-            float right = (*(float*)(p + 0x88) * a1 + *(float*)(p + 0x84) * a2) + *(float*)(p + 0x80) * a0;
+            float b0 = buf[0];
+            float b1 = buf[1];
+            float b2 = buf[2];
+            float p80 = *(float*)(p + 0x80);
+            float p84 = *(float*)(p + 0x84);
+            float p88 = *(float*)(p + 0x88);
+            float p8c = *(float*)(p + 0x8c);
+            float p90 = *(float*)(p + 0x90);
+            float p94 = *(float*)(p + 0x94);
+            float right = p80 * b0 + p84 * b1 + p88 * b2;
+            float left  = p8c * b0 + p90 * b1 + p94 * b2;
             float fabsL = left < 0.0f ? -left : left;
             float fabsR = right < 0.0f ? -right : right;
+            float cand[3];
+            float out[3];
             float* puVar6;
             if (fabsL <= fabsR) {
-                out[0] = *(float*)(p + 0x90) * a1 - *(float*)(p + 0x94) * a2;
-                puVar6 = (float*)FUN_00539440(buf, out);
+                cand[0] = p90 * b2 - p94 * b1;
+                cand[1] = p94 * b0 - p8c * b2;
+                cand[2] = p8c * b1 - p90 * b0;
+                puVar6 = (float*)FUN_00539440(out, cand);
                 *(float*)(p + 0x80) = puVar6[0];
                 *(float*)(p + 0x84) = puVar6[1];
                 *(float*)(p + 0x88) = puVar6[2];
-                *(float*)(p + 0x8c) = *(float*)(p + 0x88) * a2 - *(float*)(p + 0x84) * a1;
-                *(float*)(p + 0x90) = *(float*)(p + 0x80) * a1 - *(float*)(p + 0x88) * a0;
-                *(float*)(p + 0x94) = *(float*)(p + 0x84) * a0 - *(float*)(p + 0x80) * a2;
+                *(float*)(p + 0x8c) = *(float*)(p + 0x88) * b1 - *(float*)(p + 0x84) * b2;
+                *(float*)(p + 0x90) = *(float*)(p + 0x80) * b2 - *(float*)(p + 0x88) * b0;
+                *(float*)(p + 0x94) = *(float*)(p + 0x84) * b0 - *(float*)(p + 0x80) * b1;
             } else {
-                out[0] = *(float*)(p + 0x88) * a2 - *(float*)(p + 0x84) * a1;
-                puVar6 = (float*)FUN_00539440(buf, out);
+                cand[0] = p88 * b1 - p84 * b2;
+                cand[1] = p80 * b2 - p88 * b0;
+                cand[2] = p84 * b0 - p80 * b1;
+                puVar6 = (float*)FUN_00539440(out, cand);
                 *(float*)(p + 0x8c) = puVar6[0];
                 *(float*)(p + 0x90) = puVar6[1];
                 *(float*)(p + 0x94) = puVar6[2];
-                *(float*)(p + 0x80) = *(float*)(p + 0x90) * a1 - *(float*)(p + 0x94) * a2;
-                *(float*)(p + 0x84) = *(float*)(p + 0x94) * a0 - *(float*)(p + 0x8c) * a1;
-                *(float*)(p + 0x88) = *(float*)(p + 0x8c) * a2 - *(float*)(p + 0x90) * a0;
+                *(float*)(p + 0x80) = *(float*)(p + 0x90) * b2 - *(float*)(p + 0x94) * b1;
+                *(float*)(p + 0x84) = *(float*)(p + 0x94) * b0 - *(float*)(p + 0x8c) * b2;
+                *(float*)(p + 0x88) = *(float*)(p + 0x8c) * b1 - *(float*)(p + 0x90) * b0;
             }
             float fVar2 = *(float*)(p + 0x70);
-            *pf = fVar2 * a0 + *pf;
-            *(float*)(p + 0x78) = fVar2 * a2 + *(float*)(p + 0x78);
-            *(float*)(p + 0x7c) = fVar2 * a1 + *(float*)(p + 0x7c);
+            *pf = fVar2 * b0 + *pf;
+            *(float*)(p + 0x78) = fVar2 * b1 + *(float*)(p + 0x78);
+            *(float*)(p + 0x7c) = fVar2 * b2 + *(float*)(p + 0x7c);
         }
     }
 
