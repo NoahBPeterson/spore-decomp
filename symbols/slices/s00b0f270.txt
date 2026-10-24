@@ -5,9 +5,22 @@
 00b0f930 ?SetEdgeDistance@@YGXPAM@Z  # SetEdgeDistance migrated from s00b0f270 (verbatim, slice spelling)
 00b0f950 ?SetToggle@cTerrainCameraController@SP@@QAEXH@Z  # cTerrainCameraController::SetToggle migrated from s00b0f270 (verbatim, slice spelling)
 00b0f9a0 ?KeysHeld@cTerrainCameraController@SP@@QAE_NXZ  # cTerrainCameraController::KeysHeld migrated from s00b0f270 (verbatim, slice spelling)
-00b0fa70 ?Set@Spring1f@SP@@QAEXM_N@Z  # Spring1f::Set migrated from s00b0f270 (verbatim, slice spelling)
+00b0fa70 ?Set@Spring1f@SP@@QAEXABM_N@Z  # Spring1f::Set migrated from s00b0f270 (verbatim, slice spelling)
 00b0fae0 ?Set@Spring3f@@QAEXPAM_N@Z  # Spring3f::Set migrated from s00b0f270 (verbatim, slice spelling)
 00b0fbe0 ?Reset@Spring1f@SP@@QAEXM@Z  # Spring1f::Reset migrated from s00b0f270 (verbatim, slice spelling)
 00b0fc40 ?BezierEval@@YAMPAM000MM@Z  # BezierEval migrated from s00b0f270 (verbatim, slice spelling)
 00b0fd00 ?RotateTowards@@YAXPAM00M@Z  # RotateTowards migrated from s00b0f270 (verbatim, slice spelling)
 00b0fe90 ?HandleMouse@cTerrainCameraController@SP@@QAE_NMMH@Z  # cTerrainCameraController::HandleMouse migrated from s00b0f270 (verbatim, slice spelling)
+013eb1bc g_zero  # 0.0f
+01485720 g_one  # 1.0f
+01567dc8 g_pi  # pi
+013eb8b0 g_negmask  # xorps sign-flip mask
+013eecd8 g_lim20  # 20.0f
+013fdf18 g_nlim20  # -20.0f
+01567d90 g_fA  # 0.1f
+01567dbc g_cosC  # cos(constant angle)
+0167bc14 g_edgeX
+0167bc18 g_edgeY
+0167bd10 g_kClamp
+0167bd5c g_flagB
+0167bd5d g_flagA

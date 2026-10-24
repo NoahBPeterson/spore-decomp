@@ -1,10 +1,11 @@
 # complete behaviorally-equivalent source, not byte-exact
-00b0f770  260  ClampSpread: min/max clause selection + NaN compare order differs
-00b0f880  152  InterpByAngle: dot product / acos / pi interpolation; x87+SSE mix differs
-00b0f930  20   SetEdgeDistance: complete; constant-global addressing/order differs
-00b0f950  79   SetToggle: complete; call scheduling differs
-00b0f9a0  33   KeysHeld: complete; input-manager vtable call chain scheduling differs
-00b0fa70  81   Spring1f::Set: complete; NaN compare + store order differ
-00b0fae0  157  Spring3f::Set: complete; NaN compare + store order differ
+00b0f770  260  ClampSpread: complete; equiv PASS (400 valid, 100.0% cov); min/max clause selection + register allocation differ
+00b0f880  152  InterpByAngle: complete; equiv PASS (400 valid, 100.0% cov); keeps the extended ST(0) result via the CRT x87 acos helper; instruction/register layout differs
+00b0f950  79   SetToggle: complete; equiv PASS (328 valid, 100.0% cov); call scheduling differs
+00b0f9a0  33   KeysHeld: complete; equiv PASS (400 valid, 64.0% cov); input-manager vtable call chain scheduling differs
+00b0fa70  81   Spring1f::Set: complete; equiv PASS (400 valid, 100.0% cov); NaN compare + store order differ
+00b0fae0  157  Spring3f::Set: complete; equiv PASS (400 valid, 100.0% cov); NaN compare + store order differ
 00b0fbe0  68   Spring1f::Reset: complete; scheduling differs
 00b0fc40  107  BezierEval: complete; x87 evaluation order differs
+00b0fd00  398  RotateTowards: complete; equiv PASS (400 valid, 100.0% cov); x87 extended slerp reproduced via the CRT x87 acos helper; instruction/register layout differs
+00b0fe90  873  cTerrainCameraController::HandleMouse: complete; equiv PASS (391 valid, 100.0% cov); input/zoom damping logic present; register layout differs

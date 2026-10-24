@@ -1,1 +1,2 @@
 slices/s00b0f270/s00b0f270.cpp  ?SetFloats5@cTerrainCameraController@SP@@QAEXMMMMM@Z  00b0f720  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b0f270/s00b0f270.cpp  ?SetEdgeDistance@@YGXPAM@Z  00b0f930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
