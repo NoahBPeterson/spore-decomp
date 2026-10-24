@@ -181,9 +181,13 @@ struct cTransform                   // 0x38
 
     Vector3 Rotate(const Vector3& v) const
     {
-        return Vector3(mRotation[1][0] * v.y + mRotation[2][0] * v.z + v.x * mRotation[0][0],
-                       mRotation[0][1] * v.x + mRotation[1][1] * v.y + mRotation[2][1] * v.z,
-                       mRotation[0][2] * v.x + mRotation[1][2] * v.y + mRotation[2][2] * v.z);
+        float rx = mRotation[1][0] * v.y + mRotation[2][0] * v.z;
+        rx += v.x * mRotation[0][0];
+        float ry = mRotation[0][1] * v.x + mRotation[1][1] * v.y;
+        ry += mRotation[2][1] * v.z;
+        float rz = mRotation[0][2] * v.x + mRotation[1][2] * v.y;
+        rz += mRotation[2][2] * v.z;
+        return Vector3(rx, ry, rz);
     }
 };
 
