@@ -159,8 +159,9 @@ LAB_009a7c23:
                             local_1038 = 0;
                             if (local_1050 != 0) {
                                 do {
+                                    uint32_t uVar5;
                                     if (iVar4 == 2) {
-                                        uint32_t uVar5 = (uint32_t)((int*)&local_D.count)[local_1038];
+                                        uVar5 = (uint32_t)((int*)&local_D.count)[local_1038];
                                         uVar3 = local_1038;
                                         if (local_1068 == 0) uVar3 = param_6;
                                         uVar1 = param_8[7];
@@ -176,7 +177,7 @@ LAB_009a7c23:
                                             goto LAB_009a7cc7;
                                         }
                                     } else {
-                                        uint32_t uVar5 = local_1054;
+                                        uVar5 = local_1054;
                                         if (iVar4 != 1) uVar5 = local_105c;
 LAB_009a7cc7:
                                         FUN_009a6e60(param_1, param_2, local_1044, local_103c, local_104c,
@@ -224,14 +225,13 @@ void FUN_009a7d90(uint32_t* param_1, int param_2, int param_3, uint32_t* param_4
                 bVar1 = (uint8_t)(bVar1 * 2);
                 uVar4 = uVar7;
             }
-            if ((param_12 < (float)(int)param_1[0x12]) || ((param_11 & (1u << (bVar6 & 0x1f))) != 0)) {
+            float eventTime = *(float*)&param_1[0x12];
+            if ((param_12 < eventTime) || ((param_11 & (1u << (bVar6 & 0x1f))) != 0)) {
                 uint32_t uVar9 = param_1[0xd];
                 if (uVar9 != 0) {
                     if (uVar9 == param_4[0xaa]) {
                         bVar2 = true;
-                    } else if ((uVar9 != 0xffffffff) || (param_4[0xaa] == 0)) {
-                        if (!bVar2) goto LAB_009a7ef7;
-                    } else {
+                    } else if ((uVar9 != 0xffffffff) || (param_4[0xaa] == 0) || bVar2) {
                         goto LAB_009a7ef7;
                     }
                 }
