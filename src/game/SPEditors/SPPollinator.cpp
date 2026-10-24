@@ -2496,7 +2496,7 @@ bool FloodHandler::HandleMessage(uint32_t id, void* pMessage)
         }
         FloodHandler* const pCheat = ((uint32_t)this - 0x10) ? this : 0;
         cMessageServer* const pServer = GetMessageServer();
-        pServer->SetHandlerPriority(pCheat, 0x269c832, -10000);
+        pServer->SetHandlerPriority(pCheat, 0x269c832, -9999);
         pPollinator->ProcessTransactionTick();
     }
     return true;
