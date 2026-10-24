@@ -3,12 +3,12 @@
 0113cf20  95   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (377 valid, 100% cov); /LTCG register allocation around the three COM Release calls: the member fptr is read through a volatile local so cl materialises it into a register before the push, keeping ecx = vtable at all three fake calls (matches the original's mov ecx,[obj]; mov edx,[ecx+8]; push obj; call edx)
 0113cf70  112  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (231 valid, 100% cov); same volatile-Release fix as 0113cf20 (the old FAIL on a timer field was a stale pre-fix artifact; timeGetTime is declared __declspec(dllimport))
 0113cff0  519  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (241 valid, 76.5% cov); /LTCG scheduling + the SSE gain-ramp loop
-0113d200  326  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL on 5/171 valid inputs (a spread/limit float field is written on a differently-scheduled branch)
+0113d200  371  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (304 valid, 86.1% cov); reads the COM vtable through *(void***)buf, passes (buf, &dummy, &frames), uses the stack parameter as nBytes (the second COM out is unused), and rounds the rate*0.001*5 limit with cvtss2si; remaining /LTCG scheduling
 0113d3a0  507  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: the DirectSound buffer vtable is a generated fake -> fake-arity/fault)
 0113d5d0  243  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (400 valid, 8.9% cov < 60%): the leading `if (g_16e7b9c == 0) return 0` guard reads an image global the harness never varies, so the buffer-lock/fallback body is unreached; timeGetTime is now a real dllimport and the fallback double->int lowers to the CRT `_ftol2` (the helper the original calls at 0x11e0810)
 0113d710  17   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (393 valid, 96.2% cov); cl hoists the state load/test before the prologue moves
 0113d7b0  226  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: fake DirectSound enumerator vtable)
 0113d930  91   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (unresolved DirectSound/user32 imports)
 0113d9f0  169  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: import:ord9 discarded)
-0113dae0  71   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (387 valid, 82.8% cov); /LTCG scheduling
+0113dae0  69   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (387 valid, 82.8% cov); hoists P(this,4) so both x87 double adds reuse the same pointer and edx is left untouched; remaining scheduling
 0113db70  76   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (400 valid, 18.9% cov < 60%): the state==2 branch is rarely reached from random state
