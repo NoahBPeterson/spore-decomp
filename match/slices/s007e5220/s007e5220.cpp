@@ -121,11 +121,14 @@ void FUN_007e5a30(void* p);
 void* FUN_007e30f0(void* p);
 void* FUN_007e3e20(void* first, void* end, void* last);
 void StringAssign(void* self, const void* s);
+struct EaStringOps {
+    void assign(const char* first, const char* last);  // 0x454cb0
+};
 void MakeCaseInsensitive(void* p);
 
 // @ 0x007E5220  (cAppStateManager constructor: member/subobject initialisation)
-struct cAppStateManagerC { void ctor(); };
-void cAppStateManagerC::ctor() {
+struct cAppStateManagerC { void* ctor(); };
+void* cAppStateManagerC::ctor() {
     char* p = (char*)this;
     *(void**)(p + 4)    = &gVtbl_13eb384;
     *(uint32_t*)(p + 0x10) = 0xceee7649;
@@ -159,7 +162,7 @@ void cAppStateManagerC::ctor() {
         *(uint32_t*)(p + off + 4) = 1;
         *(uint32_t*)(p + off + 8) = 0;
         *(float*)(p + off + 0xc)  = 1.0f;
-        *(float*)(p + off + 0x10) = 0.0f;
+        *(float*)(p + off + 0x10) = 2.0f;
         *(uint32_t*)(p + off + 0x14) = 0;
     }
     *(uint32_t*)(p + 0x118) = 0; *(uint32_t*)(p + 0x11c) = 0; *(uint32_t*)(p + 0x120) = 0;
@@ -169,6 +172,7 @@ void cAppStateManagerC::ctor() {
     *(void**)(p + 0x164) = gEmptyStringData;
     *(void**)(p + 0x168) = gEmptyStringData;
     *(void**)(p + 0x16c) = gEmptyStringData + 1;
+    return p;
 }
 
 // @ 0x007E5430  (cAppStateManager::Init; incomplete reconstruction)
@@ -232,7 +236,7 @@ void cTransitionCommandC::OnEndBlock(char arg) {
         (void)local_4;
         *r = count;
     }
-    StringAssign(gEmptyStringObj, gEmptyStringObj);
+    ((EaStringOps*)(*(char**)(self + 0x30) + 0x18))->assign(gEmptyStringObj, gEmptyStringObj);
 }
 
 // @ 0x007E5C40  (cAppStateManager::Update; incomplete)

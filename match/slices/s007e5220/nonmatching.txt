@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-007e5220  252  constructor reconstructed as member/subobject stores; original inlines EASTL string ctors under an SEH frame, so bytes differ
+007e5220  369  constructor reconstructed as member/subobject stores; original inlines EASTL string ctors under an SEH frame, so bytes differ; equivalence PASS (400 inputs, 400 valid, 100.0% coverage). `cAppStateManagerC::ctor` returns `this` (original starts with `mov eax,ecx` and the harness compares eax), and each 0x20-stride subobject at +0xbc/+0xdc/+0xfc stores 1.0f at +0xc and 2.0f at +0x10 (was 0.0f)
 007e5f60  56  GetAsyncKeyState result materialisation (cwde+sar 15) not reproduced by any of ~6 source spellings; rest identical
-007e5bc0  76  cTransitionCommand::OnEndBlock complete but EASTL basic_string::assign / vector count arithmetic schedule differs
+007e5bc0  106  cTransitionCommand::OnEndBlock complete but EASTL basic_string::assign / vector count arithmetic schedule differs; equivalence WEAK (400 inputs, 184 valid, 32.5% coverage, no mismatch). FUN_00454cb0 is eastl::basic_string::assign, a __thiscall with this=mgr+0x18 and two stack args, so the call now goes through an EaStringOps member rather than passing gEmptyStringObj as self (this also fixes the memcpy arg: 0x4 vs 0x0)
