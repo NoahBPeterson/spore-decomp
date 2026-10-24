@@ -55,7 +55,7 @@ struct BigStr {
 // =====================================================================
 // @ 0x45cd90  formatted write through the sink (varargs)
 // =====================================================================
-int WriterFmtSink(int out, const char* fmt, ...)
+bool WriterFmtSink(int out, const char* fmt, ...)
 {
     BigStr s;
     s.Ctor();
@@ -63,7 +63,9 @@ int WriterFmtSink(int out, const char* fmt, ...)
     s.ResetAndFormat(fmt, args);
     unsigned char r = ((IByteSink*)out)->Write(s.begin, (int)(s.end - s.begin));
     s.ReleaseHeap();
-    return r;
+    // The original stores Write's raw byte and reloads only AL after ReleaseHeap;
+    // a real bool return would normalise any non-zero byte to 1.
+    return *(bool*)&r;
 }
 
 // =====================================================================
