@@ -5,3 +5,6 @@ slices/s00b6f4f0/s00b6f4f0.cpp  ?NotifyAll@MMgr@@QAEXXZ  00b6f7d0  /O2 /MD /Gy /
 slices/s00b6f4f0/s00b6f4f0.cpp  ?FUN_00b6f860@@YA_NIPAPAUARCObj@@@Z  00b6f860  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00b6f4f0/s00b6f4f0.cpp  ?Create@SmallC@@SGPAU1@PAU1@@Z  00b6f890  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00b6f4f0/s00b6f4f0.cpp  ?FUN_00b6f8e0@@YGPAUSmallE@@PAU1@@Z  00b6f8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b6f4f0/s00b6f4f0.cpp  ?RefreshCards@MissionMgr@@QAEXXZ  00b6f760  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b6f4f0/s00b6f4f0.cpp  ?IsTracked@MMgr@@QAE_NPAX@Z  00b6f800  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b6f4f0/s00b6f4f0.cpp  ?LookupStrategy@MissionMgr@@QAEPAUIRefLite@@I@Z  00b6fa60  /O2 /MD /Gy /EHsc /TP /arch:SSE

@@ -1,5 +1,17 @@
 # complete (behaviourally equivalent) but not byte-exact: <va> <diff-bytes> <reason>
-00b6f800   17  mission-tracked test (p == m68 || p == m6c): complete; our side zero-extends the
-          bool via dl before `mov al,dl`; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b6f820    2  clear mission card (panel RemoveMissionCard + release): complete; only the scratch
-          register chosen for the pushed card differs (eax vs ecx); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b6f570   83  serialize the mission-manager state (signature tag + cVarListSerializer): complete; equiv UNSUPPORTED (harness cannot build a valid ISerializer/stream graph: 0/400 inputs valid, fault(read)); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b6f650  223  mission-card panel RefreshAll (scan objects, best time, swap card, notify): complete; equiv WEAK; schedule/register allocation differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b6f820    2  clear mission card (panel RemoveMissionCard + release): complete; only the scratch register chosen for the pushed card differs (eax vs ecx); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b6faa0    8  erase-by-key from a uint hashtable (chain unlink + release + delete): complete; equiv PASS (256 valid, 100% coverage); only loop-top load ordering and the cmp operand order differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b6fb20  290  read <uint,AutoRefCount> map from stream (ReadInt32/ReadObject + insert): complete; equiv WEAK; loop setup / ARC-swap staging differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b6fc90  129  write <uint,AutoRefCount> map to stream (WriteUint32 + vtable +0x2c): complete; equiv UNSUPPORTED (harness cannot build a valid stream: 0/400, fault(read)); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b6fd80   60  notify every strategy in a triple-key hashtable: complete; equiv PASS (213 valid, 100% coverage); eastl bucket-walk setup differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b6ff20   82  find-or-insert a strategy map entry: complete; equiv FAIL-KEPT (see fixlog): the original passes its 3rd Ins() arg from a stack slot whose low byte is zeroed (raw dword 0x40020000); only that low byte is read (cmp byte,0), so behaviour is identical but the harness compares the raw dword; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b6ffa0  151  write the triple-key map to stream: complete; equiv UNSUPPORTED (harness cannot build a valid stream: 0/400, fault(read)); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b70070   94  mission-manager shutdown (free both maps + vector): complete; equiv UNSUPPORTED (destructive; harness cannot build a valid root graph: 0/400, fault(read/write)); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b700f0  169  OnStrategyGone (erase one object + erase strategy + remove noun): complete; equiv WEAK; schedule/register allocation differs (ebp=map/ebx=noun vs ours); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b70290  346  read the triple-key map from stream: complete; equiv WEAK; loop setup / staging differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b70410  335  compare a name object against a triple-key map: complete; equiv WEAK; schedule / register allocation differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b705a0   12  destructor (reset 3 vtables, release cards, free both maps + vector): complete; equiv PASS (221 valid, 100% coverage); only a 2-instruction scheduling swap of the mCard6c load / push edi versus the three vtable stores; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b706a0  230  hint: create a tutorial-mission noun for a tool id and remember it: complete; equiv WEAK; frame/register staging differs (orig ebp=this/ebx=key); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b707a0   99  advance the mission for a tool id (returns value&0xffffff00): complete; equiv WEAK; schedule/register allocation differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
