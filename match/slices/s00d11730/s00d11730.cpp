@@ -114,7 +114,7 @@ struct IEditorObj {
     virtual void   s04();                                   // +0x10
     virtual void   s05();                                   // +0x14
     virtual void   AttachObject(int nSlot, void* pObject);  // +0x18
-    virtual void   GetViewport(void* pRect, void* pPoint);  // +0x1c
+    virtual IEditorObj* GetViewport(void* pRect, void* pPoint);  // +0x1c
     virtual void   s08();                                   // +0x20
     virtual void   s09();                                   // +0x24
     virtual void   s10();                                   // +0x28
@@ -126,7 +126,7 @@ struct IEditorObj {
     virtual void   s16(); virtual void s17(); virtual void s18(); virtual void s19();
     virtual void*  GetUiRoot();                             // +0x50
     virtual void   s21(); virtual void s22();
-    virtual void*  GetColor(void* pOut, int nIndex, void* pArg, float fValue);  // +0x5c
+    virtual void*  GetColor(void* pSelf, void* pOut, int nIndex, void* pArg, float fValue);  // +0x5c
     virtual void   s24(); virtual void s25(); virtual void s26();
     virtual int    GetSlotOffset();                         // +0x6c
     virtual void   s28(); virtual void s29(); virtual void s30(); virtual void s31();
@@ -135,6 +135,9 @@ struct IEditorObj {
     virtual void   s40(); virtual void s41(); virtual void s42(); virtual void s43();
     virtual void   s44(); virtual void s45();
     virtual void*  FindEditorObject(uint32_t nID);          // +0xb8
+
+    void ApplyViewport(void* pRect, void* pPoint);          // 0x007c4900 (thiscall)
+    void DisbandUnit(char bFlag);                           // 0x00caa610 (thiscall)
 };
 struct ILinkAnchor : IEditorObj {                           // editor proxy with per-slot link flags
     uint8_t mPad04[0x274 - 4];
@@ -147,7 +150,7 @@ struct ICreatureProxy : IEditorObj {                        // proxy with the pl
 struct IEffectHost {                                        // manager/audio host (+0x3c/+0x5c)
     virtual void   s00(); virtual void s01(); virtual void s02(); virtual void s03();
     virtual void   s04(); virtual void s05(); virtual void s06(); virtual void s07();
-    virtual void   s08();                                   // +0x20
+    virtual void*  s08();                                   // +0x20
     virtual void   s09(); virtual void s10(); virtual void s11(); virtual void s12();
     virtual void   s13(); virtual void s14();
     virtual void   GetSelectionSlots(void* pOut, int nCount);   // +0x3c
@@ -157,7 +160,8 @@ struct IEffectHost {                                        // manager/audio hos
 };
 struct IWinProc {
     virtual void s0(); virtual void s1();
-    virtual void Hide();                                    // +0x08 (0x005cc690)
+    virtual void Hide();                                    // +0x08
+    void HideWin();                                         // 0x005cc690 (thiscall)
 };
 struct IPalette {
     int GetCurrentCategoryIndex();                          // 0x005ca9c0
@@ -191,24 +195,18 @@ struct VehicleList {
 struct cCommunityEditor;
 
 IEditorObj*  App();                                         // 0x0067dd10
-void         FUN_007c4900(void* a, void* b);                // 0x007c4900
 IEffectHost* FUN_00b3d240();                                // 0x00b3d240
 float        DistancePointSegment(const SVec3* pA, const SVec3* pB,
                                   const SVec3* pC, float fD);   // 0x00698e00
-IEditorObj*  PlanetModel(const SVec3* pDir, const SVec3* pIn);  // 0x00b3d350
+IEditorObj*  PlanetModel(const SVec3* pOut1, const SVec3* pOut2,
+                         const SVec3* pIn);                 // 0x00b3d350
 void         BuildSurfaceOrientation(IEditorObj* pModel);   // 0x00b7f1f0
-IEditorObj*  FUN_00d0a3f0(IEditorObj* pVehicle);            // 0x00d0a3f0
-void         FUN_00d0dea0(cCommunityEditor* pEditor);       // 0x00d0dea0
-void         FUN_00d0a5b0(cCommunityEditor* pEditor);       // 0x00d0a5b0
-void         FUN_005cc690(IWinProc* pWin);                  // 0x005cc690
-void         SetManipulatedObject(cCommunityEditor* pEditor, void* pObject);  // 0x00d09f60
 IActionCircle* FUN_00bd7f40(ICreatureProxy* pCurrent);      // 0x00bd7f40
 LinkPairList*  FUN_00bd8230(ICreatureProxy* pCurrent);      // 0x00bd8230
 bool         FUN_00c3f540(ILinkAnchor* pAnchor);            // 0x00c3f540
 void         FUN_00d0d880(void* pArg, tBuildingLinkEffect* pValue);  // 0x00d0d880
 IEffectHost* GetAudioSystem();                              // 0x00a206f0 (EA::Audio::GetSystemAT)
-void         KillSetiEffects(IEffectHost* pAudio, uint32_t nID);     // 0x00435ed0
-void         DisbandUnit(IEditorObj* pVehicle, char bFlag);          // 0x00caa610
+void         KillSetiEffects(uint32_t nID, void* pAudio);            // 0x00435ed0
 Node*        RBTreeIncrement(Node* pNode);                  // 0x00921580
 void         RBTreeErase(Node* pNode, Node* pHeader);       // 0x00921880
 
@@ -254,6 +252,10 @@ struct cCommunityEditor {
 
     const SVec3* GetCommunityCenter();                                      // 0x00d09960 (thiscall)
     void RefreshOrCreateBuildingLinkEffect(LinkMap* map, int a, int b, SVec3 p1, SVec3 p2, int type);
+    void ResetPlacementVisual();                                            // 0x00d0dea0 (thiscall)
+    void SetManipulatedObject(void* pObject);                               // 0x00d09f60 (thiscall)
+    void UpdatePlacementOverlay();                                          // 0x00d0a5b0 (thiscall)
+    IEditorObj* FadeOutVehicle(IEditorObj* pVehicle);                       // 0x00d0a3f0 (thiscall)
     int  EndVehiclePlacement(int nArg0, int nArg1);                         // 0x00d11730
     void UpdateBuildingLinkEffects(LinkMap* map, int nMode, void* pArg);    // 0x00d11f80
 };
@@ -407,18 +409,20 @@ int cCommunityEditor::EndVehiclePlacement(int nArg0, int nArg1)
         IEditorObj* pUi = (IEditorObj*)App()->GetUiRoot();
         SVec3 rect;
         SVec3 point;
-        pUi->GetViewport(&rect, &point);
-        FUN_007c4900(&rect, &point);
+        IEditorObj* pViewport = pUi->GetViewport(&rect, &point);
+        pViewport->ApplyViewport(&rect, &point);
 
         IEffectHost* pSelection = FUN_00b3d240();
         SVec3 slotPos;
         pSelection->GetSelectionSlots(&slotPos, 1);
 
         SVec3 probe;
-        float fDist = DistancePointSegment(&probe, &slotPos, &mPlanetOffset, 0.0f);
+        SVec3 pickPoint;
+        float fDist = DistancePointSegment(&pickPoint, &mPlanetOffset, &slotPos, 0.0f);
         (void)fDist;
 
-        IEditorObj* pModel = PlanetModel(pVehicle->GetPositionCopy(), &probe);
+        SVec3 surface;
+        IEditorObj* pModel = PlanetModel(&probe, &surface, pVehicle->GetPositionCopy());
         BuildSurfaceOrientation(pModel);
 
         float dx = probe.x - mPlanetOffset.x;
@@ -429,21 +433,23 @@ int cCommunityEditor::EndVehiclePlacement(int nArg0, int nArg1)
             SVec3* pTrail = mTrail.Add(&mPlacementVehicle.p);
             *pTrail = mPlanetOffset;
         } else {
-            IEditorObj* pFaded = FUN_00d0a3f0(pVehicle);
+            IEditorObj* pFaded = FadeOutVehicle(pVehicle);
             mpPlacementServices->AttachObject(0, pFaded);
 
             IEffectHost* pHost = FUN_00b3d240();
             char colorBuf[0x0c];
-            void* pColor = mPlacementVehicle.p->GetColor(colorBuf, -1, pFaded, 1.0f);
+            void* pColor = mPlacementVehicle.p->GetColor(mPlacementVehicle.p, colorBuf,
+                                                        -1, pFaded, 1.0f);
             (void)pColor;
-            pColor = mPlacementVehicle.p->GetPosition();
-            pHost->AddEffect(0x64bf470, (const SVec3*)pColor);
+            SVec3* pPos = mPlacementVehicle.p->GetPosition();
+            pHost->AddEffect(0x64bf470, pPos);
 
             IEffectHost* pAudio = GetAudioSystem();
+            void* pAudioValue = 0;
             if (pAudio)
-                pAudio->s08();
-            KillSetiEffects(pAudio, 0x275cdfce);
-            DisbandUnit(pFaded, 0);
+                pAudioValue = pAudio->s08();
+            KillSetiEffects(0x275cdfce, pAudioValue);
+            pFaded->DisbandUnit(0);
 
             IEditorObj** pFound = mPotentialVehicles.find(pFaded);
             if (pFound != mPotentialVehicles.mpEnd)
@@ -451,13 +457,13 @@ int cCommunityEditor::EndVehiclePlacement(int nArg0, int nArg1)
         }
     }
 
-    FUN_00d0dea0(this);
-    SetManipulatedObject(this, 0);
+    ResetPlacementVisual();
+    SetManipulatedObject(0);
     if (mpEditorWin)
-        FUN_005cc690(mpEditorWin);
+        mpEditorWin->HideWin();
     if (mpSellBackRollover)
         mpSellBackRollover->Hide();
-    FUN_00d0a5b0(this);
+    UpdatePlacementOverlay();
     return 0;
 }
 
