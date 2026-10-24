@@ -1,0 +1,39 @@
+# Slice s00c6f6e0 -- recovered symbols (worker 14, gold7).
+# Format: <va> <Name>  # evidence
+00c6f6e0 SimOrnament::Cast  # retailer class-id 0x175cdc9 returns this; msgmap dispatch
+00c6f770 SimOrnament::SetStyleModel  # writes +0x228/+0x22c style/model, calls vtable slot 0x48
+00c6f7b0 SimSpatial::IsPlayerOwnedOrnament  # lea esi,[ecx-0x70]; NounManager/GetPlayerEmpire; vtable slot 0x4c
+00c6f7f0 SimOrnament::SimOrnament  # ctor: sub-ctors GameData/Spatial/Combatant/IntTarget + vtable stores
+00c6f990 SimOrnament::Write  # cVarListSerializer on stack, class-id 0x175cdc9 written
+00c6fac0 SimOrnament::Destroy  # releases +0x2c refcount, destroys +0x210 and spatial +0x70
+00c6fb80 SimSpatial::LoadModelOrnament  # reads style +0x1b8, calls LoadModel 0xc8a550
+00c6fcd0 SimCursorAttachment::SimCursorAttachment  # ctor with GameData/Spatial sub-ctors, class-id 0x2c5c935
+00c6fd20 SimCursorAttachment::Cast  # class-id 0x2c5c935 returns this; GameData/Spatial fallback
+00c6fdc0 SimCursorAttachment::Destroy  # releases +0x2c refcount, destroys spatial +0x34
+00c6fe00 SP::GetClassFromTypeMaybe  # dense switch 4..12 -> {1,2,0}
+00c6fe50 SimPlanetRec::IsHomePlanetOfPlayerMaybe  # GetWorld->GetType==5, empire home-planet compare
+00c6fec0 VisiblePlanet::Cast  # class-id 0x3275872 returns this; GameData(+0xd4)/Spatial fallback
+00c6ff00 VisiblePlanet::Write  # cVarListSerializer, GameData::Write + Spatial::Write
+00c6ffd0 VisiblePlanet::Cast2  # class-id 0x44462a6 returns this; GameData(+0xd4)/Spatial fallback
+00c70010 VisiblePlanet::Write2  # cVarListSerializer, GameData::Write + Spatial::Write
+00c70090 VisiblePlanet::Read  # cVarListSerializer, GameData::Read + Spatial::Read
+00c70150 SimCivObject::IsHomePlanetOfPlayer  # GetRecordType==5, iterates civs/cities, owner compare
+00c70260 SimCivObject::AnyCityHasBuildings  # iterates city list, cCityData::GetValue >= 1.0
+00c702f0 SimCivObject::CountBuildings  # sums cCityData::GetNumBuildings over all cities
+00c70380 SP::GetTurretAndBuildingCounts  # accumulates building + turret counts per city
+00c70420 SimCivObject::CountCities  # sums city-vector lengths across civs
+00c70470 SimCivObject::GetPercentMaybe  # single-civ case -> cCityData::GetPercent
+00c704a0 SimCivObject::Func704a0  # key match then drains cCityData value by amount
+00c705c0 SimCivObject::Func705c0  # sums city values, clamps/drains against budget
+00c706d0 SimCivObject::SetPlanetTechLevel  # writes +0x194 tech level, rebuilds civs/comm
+00c707f0 SimPlanet::GetNameRow  # returns NameRow pointer from cPlanetRecord name
+00c70860 SimPlanet::Func70860  # record->GetWorld()->Func70860()
+00c70880 SimPlanet::GetPlanetType  # cPlanetRecord type at +0x28
+00c708a0 SimPlanet::GetOrbit  # cPlanetRecord orbit at +0x30
+00c708c0 SimPlanet::SetOrbit  # copies orbit (rep movsd) into +0x30, Recalc
+00c708f0 SimPlanet::IsRotationNull  # cPlanetRecord rotationIsNull at +0x98
+00c70910 SimPlanet::SetRotationNull  # writes cPlanetRecord +0x98
+00c70930 SimPlanet::GetRotationAxis  # cPlanetRecord rotationAxis at +0x9c
+00c70950 SimPlanet::SetRotationAxis  # copies Vec3 into +0x9c
+00c70980 SimPlanet::GetRotationPeriod  # cPlanetRecord rotationPeriod at +0xa8
+00c709b0 SimPlanet::SetRotationPeriod  # writes cPlanetRecord +0xa8

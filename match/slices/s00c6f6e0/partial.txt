@@ -1,0 +1,20 @@
+# Slice s00c6f6e0 -- incomplete/approximate functions (equivalence FAIL,
+# WEAK or UNSUPPORTED).  All 37 targets compile; the 18 non-exact functions
+# are listed here except 00c6f7b0, which passes equivalence.
+00c6f770 UNSUPPORTED ?SetStyleModel@SimOrnament@@QAEXHPAXH@Z  fake-arity=400; vtable-slot load order differs
+00c6f7f0 UNSUPPORTED ??0SimOrnament@@QAE@XZ  base ctors unresolved (GameDataBase/SpatialBase/CombatantBase/IntTargetBase)
+00c6f990 UNSUPPORTED ?Write@SimOrnament@@QAE_NPAX@Z  no valid inputs (fake-arity); 0xa14 serializer local emits GS cookie
+00c6fb80 UNSUPPORTED ?LoadModelOrnament@SimSpatial@@QAE_NPAX@Z  unresolved datum ref; heuristic body
+00c6fe50 FAIL ?Func6fe50@@YA_NPAUWorldObject@@@Z  execution mismatch
+00c6ff00 UNSUPPORTED ?Write@VisiblePlanet@@QAE_NPAX@Z  no valid inputs; 0xa14 serializer local emits GS cookie
+00c70010 UNSUPPORTED ?Write2@VisiblePlanet@@QAE_NPAX@Z  no valid inputs; 0xa14 serializer local emits GS cookie
+00c70090 UNSUPPORTED ?Read@VisiblePlanet@@QAE_NPAX@Z  no valid inputs; 0xa14 serializer local emits GS cookie
+00c70150 FAIL ?IsHomePlanetOfPlayer@SimCivObject@@QAE_NPAUWorldObject@@@Z  esp mismatch
+00c70260 FAIL ?AnyCityHasBuildings@SimCivObject@@QAE_NXZ  execution mismatch
+00c702f0 FAIL ?CountBuildings@SimCivObject@@QAEHXZ  execution mismatch
+00c70380 FAIL ?GetTurretAndBuildingCounts@SimCivObject@@QAEXPAH0@Z  esp mismatch
+00c70420 FAIL ?CountCities@SimCivObject@@QAEHXZ  execution mismatch
+00c70470 FAIL ?GetPercentMaybe@SimCivObject@@QAEHXZ  edx untouched by original
+00c704a0 FAIL ?Func704a0@SimCivObject@@QAE_NHHHM@Z  esp mismatch
+00c705c0 FAIL ?Func705c0@SimCivObject@@QAEHH@Z  execution mismatch
+00c706d0 FAIL ?SetPlanetTechLevel@SimCivObject@@QAEXH@Z  execution mismatch

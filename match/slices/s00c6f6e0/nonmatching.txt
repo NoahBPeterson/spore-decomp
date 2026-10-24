@@ -1,0 +1,4 @@
+# Slice s00c6f6e0 -- non-exact functions that still pass equivalence.
+#  00c6f7b0  ?IsPlayerOwnedOrnament@SimSpatial@@QAE_NXZ  (2-byte diff: vtable
+#            slot loaded into eax vs retail edx; behaviour identical)
+00c6f7b0 2 vtable-slot load uses eax, retail uses edx; equivalence PASS (394 inputs, 100%)

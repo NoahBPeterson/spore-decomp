@@ -1,0 +1,24 @@
+# Slice s00c6f6e0 manifest -- 19 of 37 functions byte-exact.
+#   byte-exact: 00c6f6e0 00c6fac0 00c6fcd0 00c6fd20 00c6fdc0 00c6fe00 00c6fec0
+#               00c6ffd0 00c707f0 00c70860 00c70880 00c708a0 00c708c0 00c708f0
+#               00c70910 00c70930 00c70950 00c70980 00c709b0
+#   non-exact (see nonmatching.txt / partial.txt): the remaining 18.
+slices/s00c6f6e0/s00c6f6e0.cpp  ?Cast@SimOrnament@@QAEPAXI@Z  00c6f6e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?Destroy@SimOrnament@@QAEXXZ  00c6fac0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ??0SimCursorAttachment@@QAE@XZ  00c6fcd0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?Cast@SimCursorAttachment@@QAEPAXI@Z  00c6fd20  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?Destroy@SimCursorAttachment@@QAEXXZ  00c6fdc0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?Func6fe00@@YAHH@Z  00c6fe00  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?Cast@VisiblePlanet@@QAEPAXI@Z  00c6fec0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?Cast2@VisiblePlanet@@QAEPAXI@Z  00c6ffd0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?GetNameRow@SimPlanet@@QBEPAX_N@Z  00c707f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?Func70860@SimPlanet@@QAEXXZ  00c70860  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?GetPlanetType@SimPlanet@@QBEHXZ  00c70880  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?GetOrbit@SimPlanet@@QBEPAXXZ  00c708a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?SetOrbit@SimPlanet@@QAEXPAX@Z  00c708c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?IsRotationNull@SimPlanet@@QBE_NXZ  00c708f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?SetRotationNull@SimPlanet@@QAEX_N@Z  00c70910  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?GetRotationAxis@SimPlanet@@QBEPAXXZ  00c70930  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?SetRotationAxis@SimPlanet@@QAEXPAUVec3@@@Z  00c70950  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?GetRotationPeriod@SimPlanet@@QBEMXZ  00c70980  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?SetRotationPeriod@SimPlanet@@QAEXM@Z  00c709b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
