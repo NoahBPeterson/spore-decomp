@@ -1,2 +1,2 @@
-0042b9e0  635  VecU32::InsertRange (vector<uint32_t> range insert): equivalent source, but the original inlines many nested /Od helper scopes (dozens of param-copy locals, 0x144-byte frame); mine compiles to 699 vs 1280 bytes
-0042bfa0  352  VecU32::Assign (fill-assign): control flow and calls match, but the original frame is 0xd0 bytes with unknown dead inline locals; mine is 0x54
+0042b9e0  1215  VecU32::InsertRange (vector<uint32_t> range insert): equivalent (WEAK, no mismatch); added the trailing by-value Empty tag so the callee pops 0x10 bytes like the original, but the original inlines dozens of /Od helper scopes (0x144-byte frame); mine compiles to 699 vs 1280 bytes
+0042bfa0   491  VecU32::Assign (fill-assign): equivalent (PASS, 230 valid / 92.4%); VecHolder is 0x14 bytes (mBegin/mEnd/mCapEnd + embedded 8-byte Alloc at +0xc) and holder.mEnd is set to begin+n before Adopt; original still has a 0xd0-byte frame of dead inline locals vs mine 0x54

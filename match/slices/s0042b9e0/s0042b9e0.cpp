@@ -16,7 +16,7 @@ typedef unsigned char uint8_t;
 extern "C" void* memmove(void*, const void*, unsigned int);
 extern "C" void* memcpy(void*, const void*, unsigned int);
 
-struct Alloc { int x; };
+struct Alloc { int mPool; int mFlags; };   // 8-byte EASTL allocator header
 struct Empty {};
 
 // ---------------------------------------------------------------------------
@@ -33,14 +33,15 @@ struct VecU32 {
     uint32_t* mCap;
     Alloc mAlloc;
 
-    void InsertRange(uint32_t* pos, const uint32_t* first, const uint32_t* last);
+    void InsertRange(uint32_t* pos, const uint32_t* first, const uint32_t* last, Empty tag);
     void Assign(uint32_t n, const uint32_t* value);
     void Adopt(struct VecHolder* h);                      // 0x004C2100
     void EraseRange(uint32_t* a, uint32_t* b);            // 0x004769B0
 };
 
 // @ 0x0042B9E0
-void VecU32::InsertRange(uint32_t* pos, const uint32_t* first, const uint32_t* last) {
+void VecU32::InsertRange(uint32_t* pos, const uint32_t* first, const uint32_t* last, Empty tag) {
+    (void)tag;
     if (first == last)
         return;
     uint32_t n = last - first;
@@ -121,7 +122,10 @@ void MergeSortBuffered(Elem3* first, Elem3* last, Alloc* alloc, bool flag) {
 // 0x0042BFA0: vector<uint32_t>::assign(n, value) (fill)
 // ---------------------------------------------------------------------------
 struct VecHolder {
-    uint32_t* ptr;
+    uint32_t* mBegin;    // +0x00 storage
+    uint32_t* mEnd;      // +0x04 one past last filled element
+    uint32_t* mCapEnd;   // +0x08 one past allocated storage
+    Alloc mAlloc;        // +0x0C embedded allocator (8 bytes)
     VecHolder(uint32_t n, Alloc* a);   // 0x0042F2E0
     ~VecHolder();                      // 0x004C0B80
 };
@@ -145,10 +149,10 @@ inline void UninitFillNWrap(uint32_t* first, uint32_t n, const uint32_t* v) {
 void VecU32::Assign(uint32_t n, const uint32_t* value) {
     if (n > (uint32_t)(mCap - mBegin)) {
         VecHolder holder(n, &mAlloc);
-        UninitFillNWrap(holder.ptr, n, value);
-        uint32_t* endp = holder.ptr + n;
+        UninitFillNWrap(holder.mBegin, n, value);
+        holder.mEnd = holder.mBegin + n;
         Adopt(&holder);
-        for (uint32_t* q = holder.ptr; q < endp; ++q) {
+        for (uint32_t* q = holder.mBegin; q < holder.mEnd; ++q) {
         }
     } else if (n > (uint32_t)(mEnd - mBegin)) {
         uint32_t* last = mEnd;
