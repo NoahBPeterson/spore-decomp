@@ -315,7 +315,7 @@ struct PaintVector_s004b_33e0 {
 namespace SP {
 struct ModelTree_s004b_33e0 {  // 0x004b5080
     char _[0x1c];
-    void* FUN_004b5080(void* a, void* b = 0);
+    void* FUN_004b5080(void* a);
 };
 }
 namespace SP {
@@ -819,7 +819,7 @@ char SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3a50(int out, int key, int arg3
             return 1;
         i++;
     }
-    return 0;
+    return (char)(i - limit);   // always 0 here; keeps the tail in a full-width eax like the /Od original
 }
 
 // @ 0x004b3b20
@@ -857,10 +857,8 @@ void SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3c20(int model)
     if (model != 0) {
         int local = *(int*)(model + 0x1c);
         int local2 = local;
-        int addr = model + 0x4c8;
-        (void)addr;
-        void* r = mModelTheme.FUN_004b5080(&local2, &addr);
-        ((SP::PaintVector_s004b_33e0*)r)->FUN_004b4fa0(&local2);
+        void* r = mModelTheme.FUN_004b5080(&local2);
+        ((SP::PaintVector_s004b_33e0*)r)->FUN_004b4fa0((void*)(model + 0x4c8));
     }
 }
 
