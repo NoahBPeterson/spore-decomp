@@ -6,6 +6,7 @@
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE (the unsigned->float conversion of dt stays x87).
 
 #include "types.h"
+#include <math.h>
 
 struct Vec3 { float x, y, z; };
 struct Quat4 { float x, y, z, w; };
@@ -73,13 +74,19 @@ struct NounObj3 {      // type 0x1be418e
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
     virtual bool IsRemoved();                // 0x2c
     char pad04[0x84 - 4]; uint8_t mbFlag84;
-    char pad85[0x120 - 0x85]; int mRangeMin; int mRangeMax; uint8_t mbNear;
+    char pad85[0x88 - 0x85]; uint32_t mOwnerSpeciesKey;    // 0x88
+    char pad8c[0xf0 - 0x8c]; uint32_t mUsedFallback;       // 0xf0
+    char padf4[0x108 - 0xf4]; float mSpawnTime;            // 0x108
+    char pad10c[0x120 - 0x10c]; int mRangeMin; int mRangeMax; uint8_t mbNear;
     char pad129[0x160 - 0x129]; LodHelper* mpHelper;
     bool Func_c6a020();
     void Func_c6ace0(bool b);
     const Vec3* Func_c6acc0();
     bool Func_c6a030();
     void Func_c6b540();
+    void UpdateFromArchetype(void* pArchetype, int b);   // 0x00c6e200
+    void AddRef();                                       // +0x00 (IRefCounted slot 0)
+    void Release();                                      // +0x04 (IRefCounted slot 1)
 };
 
 struct Tribe {
@@ -306,6 +313,438 @@ void NounVisibility::Update(int unused, uint32_t dt)
                     ++nCount;
                 }
             }
+        }
+    }
+}
+
+// ============================================================================================
+// Simulator casting manager (cCastingManager).  Sibling functions of the same class:
+//   00acf230 ctor, 00acf0b0 SpVector<cTribeEntry>::DoInsertValue, 00acebd0 / 00acf3e0 members.
+// Field/argument names are descriptive guesses chosen to match the retail offsets.
+// ============================================================================================
+
+// ---- EASTL-style intrusive refcounting -----------------------------------------------------
+struct IRefCounted {
+    virtual int AddRef();      // +0x00
+    virtual int Release();     // +0x04
+};
+
+template <class T> struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount() : mpObject(0) {}
+    AutoRefCount(const AutoRefCount& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+    AutoRefCount& operator=(const AutoRefCount& x)
+    {
+        T* const pObject = x.mpObject;
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject) pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp) pTemp->Release();
+        }
+        return *this;
+    }
+};
+
+struct sp_vector_allocator { const char* mpName; uint32_t mFlags; };
+
+template <class T> struct SpVector {
+    T* mpBegin;                       // +0x00
+    T* mpEnd;                         // +0x04
+    T* mpCapacity;                    // +0x08
+    sp_vector_allocator mAllocator;   // +0x0c
+    void DoInsertValue(T* pos, const T& value);
+    SpVector& operator=(const SpVector& x);
+};
+
+struct cTribeEntry {                                  // 0x18 bytes
+    AutoRefCount<IRefCounted> mpTribe;                // +0x00
+    SpVector<AutoRefCount<IRefCounted> > mMembers;    // +0x04
+};
+
+// out-of-line template instance used by the insertion path
+template <> SpVector<AutoRefCount<IRefCounted> >&
+    SpVector<AutoRefCount<IRefCounted> >::operator=(const SpVector<AutoRefCount<IRefCounted> >& x);   // 0x1011cc0
+
+// ---- record-level relocation helpers (operate on 0x18-byte cTribeEntry records) -------------
+cTribeEntry* __cdecl FUN_00acaab0(cTribeEntry* first, cTribeEntry* last, cTribeEntry* dst);   // 0xacaab0
+void         __cdecl FUN_00acab70(cTribeEntry* first, cTribeEntry* last, cTribeEntry* dst);   // 0xacab70
+int*         __cdecl FUN_00acc330(int* dstEnd, int* srcEnd, int* srcBegin);                   // 0xacc330
+
+// entry assign/construct (ecx = record, one stack arg = source record)
+struct EntryOps { cTribeEntry* FUN_00aca970(cTribeEntry* src); };   // 0xaca970
+
+// ---- allocator -------------------------------------------------------------------------------
+void* __cdecl operator_new(size_t size, const char* name, int a, int b, const char* file, int line);   // 0x00f473a0
+void  __cdecl operator_delete(void* p);                                                                 // 0x00f47380
+
+extern const char kSimulatorName[];      // 0x013f09b4  "Simulator"
+extern const char kAllocatorFile[];      // 0x013ebb38  "allocator.h"
+extern const char kCityVisualizerName[]; // 0x0145a270  "Simulator/cCityVisualizer"
+extern const char kAbandonedName[];      // 0x0145a248  "Simulator/cAbandonedCitizenVisualizer"
+
+// ---- cube/cell map (hash set) embedded at cCastingManager+0xc0 / +0xe0 ------------------------
+struct TileNode {                     // value starts at +0x04
+    uint32_t mKey;                    // +0x00
+    Vec3     mPos;                    // +0x04
+    float    mDist;                   // +0x10
+};
+struct HFind { void* mpNode; void* mpBucket; };
+struct CellMap {                      // 0x20 bytes
+    void*    mpUnused00;              // +0x00
+    void**   mpBucketArray;           // +0x04  (empty -> g_EmptyBuckets)
+    uint32_t mnBucketCount;           // +0x08
+    uint32_t mUnused0c;               // +0x0c
+    float    mLoadFactor;             // +0x10
+    float    mGrowFactor;             // +0x14
+    uint32_t mSize;                   // +0x18
+    uint32_t mUnused1c;               // +0x1c
+    HFind* Find(HFind* out, const uint32_t* key);   // 0x00ac9d30
+    TileNode* TileAt(const uint32_t* key);          // 0x00ace170
+};
+
+extern void* g_EmptyBuckets;          // 0x0154df28  empty bucket array (1 bucket)
+extern const float kOne;              // 0x01485720
+extern const float kTwo;              // 0x01470f1c
+extern const float kHalf;             // 0x01471064
+extern const float kQuarter;          // 0x013eb8a0
+extern const float kZero;             // 0x01485378
+extern const uint32_t kSignFlip[4];   // 0x013eb8b0
+extern uint8_t g_FaceAxes[];          // 0x0145a090  3 axis indices per cube-face pair (stride 4)
+extern const wchar_t kEmptyString16[];// 0x01667bac  eastl empty string
+extern float g_SpawnTime;             // 0x01565cec
+
+struct PlanetModel {
+    float    GetWaterHeight();                          // 0x00b7e390
+    float    GetRadiusAt(const Vec3* dir);              // 0x00b7ef70
+    Vec3*    SnapToSurface(Vec3* out, const Vec3* dir); // 0x00b81630
+};
+PlanetModel* SP_PlanetModel();          // 0x00b3d350
+void*        GetActivePlanet();         // 0x01021260
+
+struct ResourceKey { uint32_t mA; uint32_t mB; };
+struct cSpeciesArchetype { char pad[0x10]; uint32_t mSpeciesKey; };
+struct SpeciesManager {
+    cSpeciesArchetype* GetSpeciesArchetype(uint32_t id, uint32_t level);   // 0x004e0050
+    void*              GetProfile(const ResourceKey* key);                 // 0x004df550
+};
+SpeciesManager* FUN_00401090();         // 0x00401090 (cdecl, returns the editor species manager)
+
+struct cPollOwner { void UpdateProperty(uint32_t id, const Vec3* key); };   // 0x0060d860
+cPollOwner* GetPollinator();                                                // 0x0067cb30
+
+// refcounted handle stored in the tracked list of a cell node
+struct Publication { NounObj3* mpObj; };
+struct PubVector { void Push(NounObj3** ppRef); };     // 0x00e1c7f0 (thiscall, one stack arg)
+struct RawVec3 { uint32_t x, y, z; };
+extern RawVec3 g_NoPosition;                          // 0x0167a39c
+
+// sub-object ctors invoked by the cCastingManager ctor (ecx = sub-object)
+struct CtorNoArg { void FUN_00b5b960(); void FUN_00b95050(); };             // 0x00b5b960 / 0x00b95050
+struct VisCtor   { void* FUN_00d5e730(); void* FUN_00d59580(); };           // 0x00d5e730 / 0x00d59580
+
+class cCastingManager {
+public:
+    void*    mpVtbl0;              // +0x000
+    void*    mpVtbl4;              // +0x004
+    char     pad008[0x14];         // +0x008
+    void*    mpVtbl1c;             // +0x01c
+    void*    mpInlineBegin;        // +0x020
+    void*    mpInlineEnd;          // +0x024
+    void*    mpInlineCap;          // +0x028
+    char     pad02c[0x08];         // +0x02c
+    int      mField34;             // +0x034
+    char     mInlineBuf[0x50];     // +0x038
+    uint32_t mField88;             // +0x088
+    uint32_t mField8c;             // +0x08c
+    uint32_t mField90;             // +0x090
+    char     pad094[0x0c];         // +0x094
+    int      mFieldA0;             // +0x0a0
+    void*    mpCityVisualizer;     // +0x0a4
+    void*    mpTribesBegin;        // +0x0a8
+    void*    mpTribesEnd;          // +0x0ac
+    void*    mpTribesCapacity;     // +0x0b0
+    char     pad0b4[0x08];         // +0x0b4
+    void*    mpAbandonedVisualizer;// +0x0bc
+    CellMap  mCells;               // +0x0c0
+    CellMap  mCells2;              // +0x0e0
+    uint8_t  mField100;            // +0x100
+    uint8_t  mField101;            // +0x101
+    char     pad102[0x02];         // +0x102
+    const wchar_t* mpString104;    // +0x104
+    const wchar_t* mpString108;    // +0x108
+    const wchar_t* mpString10c;    // +0x10c
+    char     pad110[0x04];         // +0x110
+    uint8_t  mField114;            // +0x114
+    char     pad115[0x03];         // +0x115
+    void*    mpField118;           // +0x118
+    void*    mpField11c;           // +0x11c
+    void*    mpField120;           // +0x120
+    char     pad124[0x08];         // +0x124
+    char     mSub12c[0x34];        // +0x12c
+    char     mSub160[0x34];        // +0x160
+
+    cCastingManager* Construct();                                  // 0x00acf230
+    void  InsertTribe(cTribeEntry* pos, const cTribeEntry& value);  // (unused helper slot)
+    void  CastNoun(NounObj3* pNoun, char bFlag);                   // 0x00acebd0
+    void  SpawnHerdFromProfile(Vec3* pPos, void* pMgr);            // 0x00acf3e0
+};
+
+struct NounManagerSpawn {
+    NounObj3* CreateNoun(float* pPos, void* profile, uint32_t a, uint32_t b, uint32_t c, uint32_t d);   // 0x00b23940
+};
+
+// @ 0x00acf0b0  ?DoInsertValue@?$SpVector@UcTribeEntry@@@@
+template <> void SpVector<cTribeEntry>::DoInsertValue(cTribeEntry* pos, const cTribeEntry& value)
+{
+    if (mpEnd != mpCapacity) {
+        cTribeEntry* v = const_cast<cTribeEntry*>(&value);
+        if (v >= pos && v < mpEnd)
+            v += 1;
+
+        if (mpEnd)
+            ((EntryOps*)(void*)mpEnd)->FUN_00aca970(mpEnd - 1);
+
+        FUN_00acc330((int*)pos, (int*)(mpEnd - 1), (int*)mpEnd);
+
+        pos->mpTribe = v->mpTribe;
+        pos->mMembers = v->mMembers;
+
+        mpEnd += 1;
+        return;
+    }
+
+    unsigned n = (unsigned)(mpEnd - mpBegin);
+    cTribeEntry* newBuf;
+    if (n != 0) {
+        n *= 2;
+        if (n == 0) {
+            newBuf = 0;
+            goto L;
+        }
+    } else {
+        n = 1;
+    }
+    newBuf = (cTribeEntry*)operator_new(n * 0x18, kSimulatorName, 0, 0, kAllocatorFile, 0xd1);
+L:
+    {
+        cTribeEntry* p = mpBegin;
+        cTribeEntry* mid = FUN_00acaab0(p, pos, newBuf);
+        FUN_00acab70(p, pos, newBuf);
+
+        if (mid)
+            ((EntryOps*)(void*)mid)->FUN_00aca970(const_cast<cTribeEntry*>(&value));
+
+        cTribeEntry* pLast = mpEnd;
+        cTribeEntry* pNewEnd = FUN_00acaab0(pos, pLast, mid + 1);
+        FUN_00acab70(pos, pLast, mid + 1);
+
+        cTribeEntry* pOld = mpBegin;
+        if (pOld && ((int*)pOld)[-1] != 0)
+            operator_delete(pOld);
+
+        mpEnd = pNewEnd;
+        mpBegin = newBuf;
+        mpCapacity = (cTribeEntry*)((char*)newBuf + n * 0x18);
+    }
+}
+
+// @ 0x00acf230  cCastingManager ctor
+cCastingManager* cCastingManager::Construct()
+{
+    ((CtorNoArg*)this)->FUN_00b5b960();
+    mpVtbl1c = (void*)0x13eb394;
+    mpVtbl0  = (void*)0x145a1c8;
+    mpVtbl4  = (void*)0x145a1c4;
+    mpVtbl1c = (void*)0x145a1bc;
+
+    mField34 = 0;
+    mpInlineBegin = (char*)this + 0x38;
+    mpInlineEnd   = (char*)this + 0x38;
+    mpInlineCap   = (char*)mpInlineBegin + 0x50;
+    mField88 = 0;
+    mField8c = 0;
+    mField90 = 0;
+    mFieldA0 = -1;
+    mpCityVisualizer = 0;
+    mpTribesBegin = 0;
+    mpTribesEnd = 0;
+    mpTribesCapacity = 0;
+    mpAbandonedVisualizer = 0;
+
+    const float kLoad = kOne;
+    const float kGrow = kTwo;
+    void** const pEmptyBuckets = (void**)&g_EmptyBuckets;
+    mCells.mLoadFactor = kLoad;
+    mCells.mGrowFactor = kGrow;
+    mCells.mUnused0c = 0;
+    mCells.mSize = 0;
+    mCells.mnBucketCount = 1;
+    mCells.mpBucketArray = pEmptyBuckets;
+
+    mCells2.mLoadFactor = kLoad;
+    mCells2.mGrowFactor = kGrow;
+    mCells2.mpBucketArray = pEmptyBuckets;
+    mCells2.mnBucketCount = 1;
+    mCells2.mUnused0c = 0;
+    mCells2.mSize = 0;
+
+    mField100 = 0;
+    mField101 = 0;
+    mpString104 = kEmptyString16;
+    mpString108 = kEmptyString16;
+    mpString10c = kEmptyString16 + 1;
+    mField114 = 0;
+    mpField118 = 0;
+    mpField11c = 0;
+    mpField120 = 0;
+
+    ((CtorNoArg*)&mSub12c)->FUN_00b95050();
+    ((CtorNoArg*)&mSub160)->FUN_00b95050();
+
+    void* pVis = operator_new(0xc88, kCityVisualizerName, 0, 0, 0, 0);
+    void* pCity = pVis ? ((VisCtor*)pVis)->FUN_00d5e730() : 0;
+    mpCityVisualizer = pCity;
+
+    void* pAband = operator_new(0x18, kAbandonedName, 0, 0, 0, 0);
+    if (pAband)
+        mpAbandonedVisualizer = ((VisCtor*)pAband)->FUN_00d59580();
+    else
+        mpAbandonedVisualizer = 0;
+
+    return this;
+}
+
+// @ 0x00acebd0  cCastingManager::CastNoun
+void cCastingManager::CastNoun(NounObj3* pNoun, char bFlag)
+{
+    PlanetModel* pModel = SP_PlanetModel();
+    if (pModel == 0)
+        return;
+
+    const Vec3* p = pNoun->Func_c6acc0();
+    float nx = p->x;
+    float ny = p->y;
+    float nz = p->z;
+    float ax = fabsf(nx);
+    float ay = fabsf(ny);
+    float az = fabsf(nz);
+
+    int idxU;
+    int idxV;
+    unsigned face;
+    if (az < ax || az < ay) {
+        if (ay < ax) {
+            idxU = (int)((ny / nx + kOne) * kTwo);
+            idxV = (int)((nz / ax + kOne) * kTwo);
+            face = (nx < kZero) ? 3 : 2;
+        } else {
+            idxU = (int)((nz / ny + kOne) * kTwo);
+            idxV = (int)((nx / ay + kOne) * kTwo);
+            face = (ny < kZero) ? 5 : 4;
+        }
+    } else {
+        idxU = (int)((nx / nz + kOne) * kTwo);
+        idxV = (int)((ny / az + kOne) * kTwo);
+        face = (nz < kZero) ? 1 : 0;
+    }
+    if (idxU == 4)
+        idxU = 3;
+    if (idxV == 4)
+        idxV = 3;
+
+    uint32_t key = (uint32_t)(idxU + (idxV + (int)face * 4) * 4);
+
+    HFind found;
+    CellMap* pCells = &mCells;
+    pCells->Find(&found, &key);
+
+    if (found.mpNode == pCells->mpBucketArray[pCells->mnBucketCount]) {
+        PlanetModel* pModel2 = SP_PlanetModel();
+        float water = pModel2->GetWaterHeight();
+        float fcU = (float)idxU;
+        float fcV = (float)idxV;
+        uint32_t cellKey = (uint32_t)idxU + ((uint32_t)idxV + face * 4) * 4;
+
+        TileNode* pNode = pCells->TileAt(&cellKey);
+
+        float u = (fcU + kHalf) * kHalf - kOne;
+        float v = (fcV + kHalf) * kHalf - kOne;
+        float len = kOne / sqrtf(v * v + u * u + kOne);
+        float sl = len;
+        if (face & 1)
+            sl = -len;
+        const uint8_t* ax3 = &g_FaceAxes[(face >> 1) * 4];
+        float dir[3];
+        dir[ax3[0]] = sl * u;
+        dir[ax3[1]] = len * v;
+        dir[ax3[2]] = sl;
+
+        float rad = pModel2->GetRadiusAt((Vec3*)dir);
+        float r = rad > water ? rad : water;
+
+        float u2 = (fcU * kQuarter) * kTwo - kOne;
+        float v2 = (fcV * kQuarter) * kTwo - kOne;
+        float len2 = kOne / sqrtf(v2 * v2 + u2 * u2 + kOne);
+        float sl2 = len2;
+        if (face & 1)
+            sl2 = -len2;
+        float dir2[3];
+        dir2[ax3[0]] = sl2 * u2;
+        dir2[ax3[1]] = len2 * v2;
+        dir2[ax3[2]] = sl2;
+
+        float other[3];
+        pModel2->SnapToSurface((Vec3*)other, (Vec3*)dir2);
+
+        pNode->mPos.x = dir[0] * r;
+        pNode->mPos.y = dir[1] * r;
+        pNode->mPos.z = dir[2] * r;
+        float dx = pNode->mPos.x - other[0];
+        float dy = pNode->mPos.y - other[1];
+        float dz = pNode->mPos.z - other[2];
+        pNode->mDist = sqrtf(dy * dy + (dz * dz + dx * dx));
+
+        pCells->Find(&found, &key);
+    }
+
+    if (found.mpNode != pCells->mpBucketArray[pCells->mnBucketCount]) {
+        Publication pub;
+        pub.mpObj = pNoun;
+        if (bFlag == 0) {
+            if (pub.mpObj)
+                pub.mpObj->AddRef();
+            ((PubVector*)((char*)found.mpNode + 0x40))->Push(&pub.mpObj);
+        } else {
+            if (pub.mpObj)
+                pub.mpObj->AddRef();
+            ((PubVector*)((char*)found.mpNode + 0x54))->Push(&pub.mpObj);
+        }
+        if (pub.mpObj)
+            pub.mpObj->Release();
+    }
+}
+
+// @ 0x00acf3e0  cCastingManager::SpawnHerdFromProfile
+void cCastingManager::SpawnHerdFromProfile(Vec3* pPos, void* pMgr)
+{
+    GetActivePlanet();
+    cSpeciesArchetype* pArch = FUN_00401090()->GetSpeciesArchetype(0x2615134d, 0);
+
+    const RawVec3* rp = (const RawVec3*)pPos;
+    if (rp->x != g_NoPosition.x || rp->y != g_NoPosition.y || rp->z != g_NoPosition.z) {
+        void* pProfile = FUN_00401090()->GetProfile((const ResourceKey*)pPos);
+        NounObj3* pHerd = ((NounManagerSpawn*)GetNounManager())->CreateNoun(&pPos->x, pProfile, 1, 0, 0, 0);
+        if (pHerd) {
+            pHerd->Func_c6ace0(1);
+            pHerd->mOwnerSpeciesKey = pArch->mSpeciesKey;
+            pHerd->mUsedFallback = 0;
+            pHerd->UpdateFromArchetype(pArch, 1);
+            pHerd->mSpawnTime = g_SpawnTime;
+            pHerd->Func_c6b540();
+            CastNoun(pHerd, 1);
+            GetPollinator()->UpdateProperty(0xef7163ab, pPos);
         }
     }
 }
