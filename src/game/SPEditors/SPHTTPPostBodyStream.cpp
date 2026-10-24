@@ -796,16 +796,18 @@ bool HTTPMultipartRelatedPostBodyStream_s0060_c780::CommitTextSegment()
     pSegment = pSub;
     if (pSegment.mpObject) {
       pSegment.mpObject->SetPosition(0, 0);
-      StreamRef<IO::IStream_s0060_c780> pTemp(pSegment.mpObject);
-      IStreamNode_s0060_c780* const pNode = (IStreamNode_s0060_c780*)EASTL_allocator_allocate(sizeof(IStreamNode_s0060_c780), "Editor", 0, 0, "EASTL/allocator.h", 0xd1);
-      if (&pNode->mpStream) {
-        pNode->mpStream = pTemp.mpObject;
-        if (pTemp.mpObject) pTemp.mpObject->AddRef();
+      {
+        StreamRef<IO::IStream_s0060_c780> pTemp(pSegment.mpObject);
+        IStreamNode_s0060_c780* const pNode = (IStreamNode_s0060_c780*)EASTL_allocator_allocate(sizeof(IStreamNode_s0060_c780), "Editor", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+        if (&pNode->mpStream) {
+          pNode->mpStream = pTemp.mpObject;
+          if (pTemp.mpObject) pTemp.mpObject->AddRef();
+        }
+        pNode->mpNext = &mFormDataList.mNode;
+        pNode->mpPrev = mFormDataList.mNode.mpPrev;
+        mFormDataList.mNode.mpPrev->mpNext = pNode;
+        mFormDataList.mNode.mpPrev = pNode;
       }
-      pNode->mpNext = &mFormDataList.mNode;
-      pNode->mpPrev = mFormDataList.mNode.mpPrev;
-      mFormDataList.mNode.mpPrev->mpNext = pNode;
-      mFormDataList.mNode.mpPrev = pNode;
       mnSize += mpMemStream->GetPosition(0) - mnTextStart;
       mnTextStart = mpMemStream->GetPosition(0);
       return true;
