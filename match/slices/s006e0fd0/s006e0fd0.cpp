@@ -379,15 +379,14 @@ int CutBox(int param_1, int* box, int* out) {
     float s1 = (float)MaximizeVariance(param_1, (int)p, 1, p[2] + 1, p[3], &local_4, w0, w1, w2, w3);
     float s2 = (float)MaximizeVariance(param_1, (int)p, 0, p[4] + 1, p[5], &cutMax, w0, w1, w2, w3);
     int which;
-    if (s1 < s0 || s2 < s0) {
-        if (s1 < s0 && s1 < s2)
-            which = 0;
-        else
-            which = 1;
-    } else {
+    if (s0 >= s1 && s0 >= s2) {
         which = 2;
         if (local_10 < 0)
             return 0;
+    } else if (s1 >= s0 && s1 >= s2) {
+        which = 1;
+    } else {
+        which = 0;
     }
     out[1] = p[1];
     out[3] = p[3];
@@ -499,7 +498,7 @@ WuContext* WU_open() {
 // ---------------------------------------------------------------------------
 // @ 0x006e1d50  WU_read
 // ---------------------------------------------------------------------------
-int WU_read(int ctx, int desc, int pixels, int stride) {
+int __stdcall WU_read(int ctx, int desc, int pixels, int stride) {
     WuData* d = *(WuData**)(ctx + 0xc);
     if (*(int*)(desc + 0x18) != 0x20)
         return 0;
