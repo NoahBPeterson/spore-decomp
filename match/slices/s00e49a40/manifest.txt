@@ -1,0 +1,9 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00e49a40/s00e49a40.cpp  ?FUN_00e49d80@cUnlockPanel@@QAE_NHPAUcMessage@@@Z  00e49d80  /O2 /arch:SSE /fp:fast
+slices/s00e49a40/s00e49a40.cpp  ?FUN_00e49db0@cKeyQueue@@QAEXXZ  00e49db0  /O2 /arch:SSE /fp:fast
+slices/s00e49a40/s00e49a40.cpp  ?FUN_00e49e80@cUnlockPanel@@QAEXXZ  00e49e80  /O2 /arch:SSE /fp:fast
+slices/s00e49a40/s00e49a40.cpp  ?FUN_00e4a790@cUnlockPanel@@QAEXUKey12@@@Z  00e4a790  /O2 /arch:SSE /fp:fast
+slices/s00e49a40/s00e49a40.cpp  ??0cTypeDef@SP@@QAE@PBDPAUcFieldDef@@IIIIPAX222@Z  00e4a7d0  /O2 /arch:SSE /fp:fast
+slices/s00e49a40/s00e49a40.cpp  ?FUN_00e4a860@cRefHolder@@QAEPAXH@Z  00e4a860  /O2 /arch:SSE /fp:fast
+slices/s00e49a40/s00e49a40.cpp  ?sHash@SP@@YAIPBD@Z  00e4a9d0  /O2 /arch:SSE /fp:fast
+slices/s00e49a40/s00e49a40.cpp  ?FUN_00e4a9f0@@YAPAXPB_W@Z  00e4a9f0  /O2 /arch:SSE /fp:fast
