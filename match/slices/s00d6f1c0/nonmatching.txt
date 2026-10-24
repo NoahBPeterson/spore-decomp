@@ -1,0 +1,9 @@
+00d6f1c0 622 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 622 bytes - party behaviour packet body not reconstructed.
+00d6f430 349 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 347 bytes - PATROL_TOOFAR_Decide body not reconstructed.
+00d6f590 453 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 453 bytes - class-dance behaviour packet body not reconstructed.
+00d6f790 110 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 46 bytes - the "go to avatar" helper matches for its first 64 bytes; the remaining bytes of the symbol range belong to the adjacent cancel helper, which is not part of this function.
+00d6f800 263 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 263 bytes - CRY_TO_AVATAR_Tick: direction normalisation mixes SSE moves with x87 fsqrt/fdivrp, which /fp:fast cannot regenerate.
+00d6f910 322 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 322 bytes - AVATAR_PARTY_Tick body not reconstructed.
+00d6fa60 772 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 772 bytes - POSSE_PARTY_Tick body not reconstructed.
+00d6fd70 371 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 371 bytes - party helper body not reconstructed.
+00d6fef0 398 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 398 bytes - party helper body not reconstructed.
