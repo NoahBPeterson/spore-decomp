@@ -1,0 +1,1 @@
+slices/s01008910/s01008910.cpp  ?StartSetiAmbush@cSPSimulatorSpaceGame@SP@@QAEXXZ  010097f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

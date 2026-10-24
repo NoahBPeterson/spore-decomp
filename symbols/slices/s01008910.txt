@@ -1,0 +1,6 @@
+01008910 ?GalaxyTestForIntercept@cSPSimulatorSpaceGame@SP@@QAEXXZ  # void SP::cSPSimulatorSpaceGame::GalaxyTestForIntercept()
+01008e60 ?SpawnNPC_UFOs@cSPSimulatorSpaceGame@SP@@QAEXM@Z  # void SP::cSPSimulatorSpaceGame::SpawnNPC_UFOs(float)
+010091d0 ?SolarSystemSpawnNPC_UFOs@cSPSimulatorSpaceGame@SP@@QAEXM@Z  # void SP::cSPSimulatorSpaceGame::SolarSystemSpawnNPC_UFOs(float)
+01009470 ?DestroyNPC_UFOs@cSPSimulatorSpaceGame@SP@@QAEXDDH@Z  # void SP::cSPSimulatorSpaceGame::DestroyNPC_UFOs(char,char,int)
+010095e0 ?StartAmbush@cSPSimulatorSpaceGame@SP@@QAEXXZ  # void SP::cSPSimulatorSpaceGame::StartAmbush()
+010097f0 ?StartSetiAmbush@cSPSimulatorSpaceGame@SP@@QAEXXZ  # void SP::cSPSimulatorSpaceGame::StartSetiAmbush()
