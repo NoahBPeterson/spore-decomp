@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# (default flags: /O2 /MD /Gy /EHsc /TP; this slice built /arch:SSE /fp:fast
+#  because the original image uses SSE scalar float code, e.g. addss/comiss in 00d6cab0)
+# 15 of 15 functions decompiled: 9 byte-exact, 6 nonmatching
+# (00d6cc30 00d6cd00 00d6ce10 00d6d1d0 00d6d460 00d6d530).
+#  See nonmatching.txt / partial.txt.
+slices/s00d6ca50/s00d6ca50.cpp  ?FUN_00d6ca50@@YAXPAXHHHH0HM@Z  00d6ca50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d6ca50/s00d6ca50.cpp  ?FUN_00d6cab0@@YADPAXHHHH0HM@Z  00d6cab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d6ca50/s00d6ca50.cpp  ?FUN_00d6cbc0@@YADPAXHHHH0HM@Z  00d6cbc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d6ca50/s00d6ca50.cpp  ?FUN_00d6cca0@@YADPAXHHHH0HM@Z  00d6cca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d6ca50/s00d6ca50.cpp  ?FUN_00d6ccd0@@YAXPAXHHHH0HM@Z  00d6ccd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d6ca50/s00d6ca50.cpp  ?FUN_00d6cdb0@@YADPAXHHHH0HM@Z  00d6cdb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d6ca50/s00d6ca50.cpp  ?FUN_00d6cdd0@@YAXPAXHHHH0HM@Z  00d6cdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d6ca50/s00d6ca50.cpp  ?FUN_00d6cdf0@@YADPAXHHHH0HM@Z  00d6cdf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d6ca50/s00d6ca50.cpp  ?FUN_00d6d3c0@@YADPAXHHHH0HM@Z  00d6d3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

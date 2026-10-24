@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+# (no behavioural sketches in this slice: all 15 target functions have complete
+#  source implementations.  The 6 byte-mismatches are instruction-scheduling /
+#  outgoing-argument-slot-reuse / SSE-register-allocation / frame-reconstruction
+#  differences and are recorded with their difftest verdicts in nonmatching.txt.)
