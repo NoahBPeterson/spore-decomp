@@ -1,0 +1,2 @@
+00ebcc80 ?PostUpdate@Effects@@QAEXPAUMover@@M@Z  # Effects::PostUpdate -- tail half of Effects::Update (0x00ebdc20, slice s00ebdc20); called there as PostUpdate(mover, dt)
+00ebd190 ?Append@EntryVec@@QAEXXZ  # EntryVec::Append -- fast path bumps mpEnd and placement-constructs an Entry, slow path hands a frame Entry to grow (0x00ebc1a0); called from Exec1 (slice s00ebd220)
