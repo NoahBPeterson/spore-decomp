@@ -1,0 +1,10 @@
+# va  diff-bytes  reason (skeleton/approximate; not equivalence-proven)
+00b71480  18  Init tail wrapper (ID 0 replaced by 0xf71fa311 then cMotiveTuning::Load) implemented; difftest UNSUPPORTED, 0/400 valid because the original tail-jump leaves the fake-ABI checker without a return frame.  16 vs 22 bytes.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b714a0  102  object varlist serializer skeleton; writer/varlist serializer helper signatures not recovered; difftest UNSUPPORTED, 0/400 valid (fault(read)).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b71510  81  feedback-event map find skeleton (returns false); difftest FAIL 5/5, stack pointer +4 vs +8.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b71570  54  feedback-event map for-each approximated by walking the EASTL tree via RBTreeIncrement and dispatching both node refs through vtable +0x1c; difftest UNSUPPORTED, 0 valid (tree input faults).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b715c0  70  map-node constructor approximated (allocate 0x18, copy two auto-ref-counted refs, AddRef vtable slots +0xbc/+0); difftest FAIL 5/5, stack pointer +4 vs +8.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b71680  174  map serializer skeleton; iterator/WriteUint32 traversal not fully recovered; difftest UNSUPPORTED, 0 valid.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b71730  74  map-node erase approximated (decrement size, RBTreeIncrement/Erase, release both refs, deallocate, write successor); difftest FAIL, one input faults inside the external RBTreeIncrement call.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b71790  68  recursive tree delete approximated (left subtree, save right, release both refs, deallocate, continue right); difftest FAIL, generated mixed tree input faults on an unmapped child.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b71a30  31  map reset approximated (delete root, reinitialize end/leftmost/root/count); difftest FAIL because the generated tree input faults during the recursive delete.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,2 +1,3 @@
 # va  diff-bytes  reason (complete, not byte-exact)
 00b708d0  6  complete (terrain-index group lookup, static PropertyList reload, all 50 float/uint32 property reads); same size, only edi/ebx swapped between terrain index and PropertyManager ptr; flags /O2 /MD /Gy /EHsc /TP
+00b70820  82  motive-tuning constructor complete (base cGonzagoSimulator ctor, three vtable stores, listener/range fields, two 1.0/2.0 speed pairs, initial map state); difftest PASS 400 valid, 100% coverage.  Not byte-exact: 122 vs 129 bytes because cl hoists the independent zero stores and loads the vtable/constant immediates in a different order.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
