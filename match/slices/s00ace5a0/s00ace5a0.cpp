@@ -85,8 +85,6 @@ struct NounObj3 {      // type 0x1be418e
     bool Func_c6a030();
     void Func_c6b540();
     void UpdateFromArchetype(void* pArchetype, int b);   // 0x00c6e200
-    void AddRef();                                       // +0x00 (IRefCounted slot 0)
-    void Release();                                      // +0x04 (IRefCounted slot 1)
 };
 
 struct Tribe {
@@ -435,8 +433,8 @@ struct cPollOwner { void UpdateProperty(uint32_t id, const Vec3* key); };   // 0
 cPollOwner* GetPollinator();                                                // 0x0067cb30
 
 // refcounted handle stored in the tracked list of a cell node
-struct Publication { NounObj3* mpObj; };
-struct PubVector { void Push(NounObj3** ppRef); };     // 0x00e1c7f0 (thiscall, one stack arg)
+struct Publication { IRefCounted* mpObj; };
+void __fastcall FUN_00e1c7f0(void* pVector, void* unused, IRefCounted** ppRef);   // 0x00e1c7f0 (thiscall ret 4)
 struct RawVec3 { uint32_t x, y, z; };
 extern RawVec3 g_NoPosition;                          // 0x0167a39c
 
@@ -495,7 +493,7 @@ struct NounManagerSpawn {
     NounObj3* CreateNoun(float* pPos, void* profile, uint32_t a, uint32_t b, uint32_t c, uint32_t d);   // 0x00b23940
 };
 
-// @ 0x00acf0b0  ?DoInsertValue@?$SpVector@UcTribeEntry@@@@
+// @ 0x00acf0b0  DoInsertValue
 template <> void SpVector<cTribeEntry>::DoInsertValue(cTribeEntry* pos, const cTribeEntry& value)
 {
     if (mpEnd != mpCapacity) {
@@ -711,15 +709,15 @@ void cCastingManager::CastNoun(NounObj3* pNoun, char bFlag)
 
     if (found.mpNode != pCells->mpBucketArray[pCells->mnBucketCount]) {
         Publication pub;
-        pub.mpObj = pNoun;
+        pub.mpObj = (IRefCounted*)(void*)pNoun;
         if (bFlag == 0) {
             if (pub.mpObj)
                 pub.mpObj->AddRef();
-            ((PubVector*)((char*)found.mpNode + 0x40))->Push(&pub.mpObj);
+            FUN_00e1c7f0((char*)found.mpNode + 0x40, 0, &pub.mpObj);
         } else {
             if (pub.mpObj)
                 pub.mpObj->AddRef();
-            ((PubVector*)((char*)found.mpNode + 0x54))->Push(&pub.mpObj);
+            FUN_00e1c7f0((char*)found.mpNode + 0x54, 0, &pub.mpObj);
         }
         if (pub.mpObj)
             pub.mpObj->Release();

@@ -1,1 +1,5 @@
 00ace5a0 NounVisibility::Update  # guessed class name; timer-throttled 3-pass update over cGameNounManager data vectors
+00acebd0 ?CastNoun@cCastingManager@@QAEXPAUNounObj3@@D@Z  # cCastingManager::CastNoun (cell-hash tracking of a cast noun)
+00acf0b0 ?DoInsertValue@?$SpVector@UcTribeEntry@@@@QAEXPAUcTribeEntry@@ABU2@@Z  # SpVector<cTribeEntry>::DoInsertValue
+00acf230 ?Construct@cCastingManager@@QAEPAV1@XZ  # cCastingManager ctor (slice spelling Construct)
+00acf3e0 ?SpawnHerdFromProfile@cCastingManager@@QAEXPAUVec3@@PAX@Z  # cCastingManager::SpawnHerdFromProfile
