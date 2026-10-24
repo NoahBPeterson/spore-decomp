@@ -1,0 +1,1 @@
+00fc7f80 ?GetCost@cBuilding@Simulator@@QAEMXZ  # cBuilding::GetCost migrated from s00fc7430 (verbatim, slice spelling)

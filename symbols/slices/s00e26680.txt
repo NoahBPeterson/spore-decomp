@@ -1,0 +1,6 @@
+00e26a90 ?ToggleSelectedButton@cSPUISpace@@QAEX_N@Z  # cSPUISpace::ToggleSelectedButton migrated from s00e26680 (verbatim, slice spelling)
+00e26ba0 ?resize@EaVec@@QAEXI@Z  # EaVec::resize migrated from s00e26680 (verbatim, slice spelling)
+00e26bf0 ?eraseAt@EaVec8@@QAEPAXPAX@Z  # EaVec8::eraseAt migrated from s00e26680 (verbatim, slice spelling)
+00e27060 ?FUN_00e27060@@YAXPAUEaPair@@0HP6ADABU1@1@Z@Z  # FUN_00e27060 migrated from s00e26680 (verbatim, slice spelling)
+00e27170 ?insertRange@EaVec8@@QAEXPAUEaPair@@0PAX@Z  # EaVec8::insertRange migrated from s00e26680 (verbatim, slice spelling)
+00e27230 ?SetControlValue@cSPUIPosseItem_s00e2_6680@@QAEEIM_N0@Z  # cSPUIPosseItem_s00e2_6680::SetControlValue migrated from s00e26680 (verbatim, slice spelling)
