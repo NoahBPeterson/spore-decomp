@@ -1,1 +1,2 @@
-0103c3a0  276  complete float-vector serializer wrapper; compiled frame is 0x28 vs original 0x38 (local layout and arg offsets differ), so bytes differ throughout
+# Complete ports whose machine code differs (equivalence-checked with tools/difftest/equiv.py).
+# Format: <va>  <differing-bytes>  <reason>

@@ -1,0 +1,3 @@
+slices/s0103c3a0/s0103c3a0.cpp  ?CopyKeyVecRange@@YAPAUKeyVecEntry@@PAU1@00@Z  0103c8a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0103c3a0/s0103c3a0.cpp  ?CopyKeyVecRangeBackward@@YAPAUKeyVecEntry@@PAU1@00@Z  0103c8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0103c3a0/s0103c3a0.cpp  ?ConsiderRareGroupRequest@cSPSpaceTrading@SP@@QAEXI@Z  0103d360  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
