@@ -122,6 +122,7 @@ struct SubSystem {
 struct SpaceGame {
     char pad[0x40];
     Inventory* GetPlayerInventory();                              // 0xa1ad60
+    void* GetAvatar();                                            // noun manager avatar
     SubSystem* GetSubSystem(int v);                                   // 0x1005180 ret 4
 };
 struct TerrainSphere {
@@ -219,12 +220,17 @@ struct cSPBadgeManager {
     StageMap mStage;            // +0x48
     char pad64[0xa4 - 0x64];
     uint32 mCurrentBadgeCard;   // +0xa4
+    uint32 mTickAccum;          // +0x38 area in retail (event timer)
+    uint32 mSuppressUnlock;     // event-map flag
+    void*  mLastEvent;          // last reported event
 
     bool IsMasterBadgePart(uint32 badge);         // 0xfe3df0 ret 4
     int GetMasterBadgeCount();                    // 0xfe42a0
     void ShowBadgeCard(uint32 badge);             // 0xfe3cc0 ret 4
     void AddToBadgeProgress(int ev, int value);   // 0xfe5430 ret 8
     void UnlockBadge(uint32 badge);               // 0xfe5a20
+    long double GetProgressScore(uint32 id, int mode, void* buf, uint32 len);  // 0xfe6210
+    void OnTick(int delta);                       // 0xfe6490
 };
 
 // @ 0x00fe5a20
@@ -381,4 +387,223 @@ void cSPBadgeManager::UnlockBadge(uint32 badge)
             AchievementsController()->IsAwarded(0x7dca8049))
             AchievementsController()->AwardAchievement(0xbc6a0553);
     }
+}
+
+// ==== badge scoring / event map (0x00fe6210 .. 0x00fe6800) ====================
+// Two layouts: the badge requirement map at +0x10 (anchor +0x14) inside
+// cSPBadgeManager, and the event map at +0x2c (anchor +0x30) whose nodes keep the
+// event count at +0x14 and the event id / fired state at +0x14 / +0x18.
+
+extern "C" void TickProbe0();                                                 // 0xb3d4a0
+extern "C" int  TickProbe1();                                                 // 0xae9390
+extern "C" int  TickProbe2();                                                 // 0x1075500
+extern "C" int  TickProbe3();                                                 // 0xb18e40
+extern "C" int  TickProbe4();                                                 // 0xd09660
+extern "C" int  TickProbe5();                                                 // 0xff6550
+extern "C" void* GetWorldMode();                                              // 0xb3d4d0
+extern "C" void* GetGameTimeManager();                                        // SP::GameTimeManager
+extern "C" void* BadgeProps(uint32 event);                                    // 0x642c10
+extern "C" int  RequirementCount(void* props);                                // 0x571ef0
+extern "C" int* RequirementList();                                            // 0x446ff0
+extern "C" void ReportBadgeProgress(uint32 event);                            // 0xe17470
+struct PropsObj { void GetKey(uint32 id); };
+extern "C" void** MapFind(void* tree, void** out, const uint32* key);        // 0xe5c780 (ret 8)
+extern "C" int  GetReplacement(cSPBadgeManager* self, uint32 id);             // 0xfe41c0 (ret 4)
+extern "C" int  TestRequirement(uint32 id);                                   // requirement value lookup
+extern "C" int  EnumRequirements(void* reqs, uint32 key, int* count, int* data);
+extern "C" int  GetPropertyAsInt(void* props, uint32 id, int* out);           // 0x410270 (ret 0xc)
+extern "C" int  GetEventIndex();                                              // 0xfe42a0
+extern "C" void SetNumberString(int v, int pad, wchar_t* buf, int len);       // 0x881ae0
+extern "C" void WStr_Format(void* str, const wchar_t* fmt, ...);              // 0x41e050
+extern "C" void AppendFormatted(void* str, const wchar_t* fmt, ...);          // 0x4e0850
+extern uint32 g_eventSteps[10];                                               // 0x1494214
+
+struct ReqVec {
+    int  Amount(uint32 id);
+    char pad00[0x14];
+};
+
+struct EventNode {
+    uint32 mId;                                        // +0x00
+    char   pad04[0x10];
+    uint32 mCount14;                                   // +0x14
+    uint32 mState18;                                   // +0x18
+};
+
+struct EventMap {
+    char pad00[0x2c];
+    StatusMap mEvents;                                 // +0x2c (anchor +0x30)
+    cSPBadgeManager* mOwner;                           // +0x38
+    long double GetScore(uint32 id);                   // 0xfe6690 (ret 4)
+    int  GetScoreRounded(uint32 id);                   // 0xfe66f0 (ret 4)
+    long double GetWeightedScore();                    // 0xfe67b0
+    void FormatScore(uint32 id, void* text);           // 0xfe6800 (ret 8)
+};
+
+// @ 0x00fe6210
+long double cSPBadgeManager::GetProgressScore(uint32 id, int mode, void* buf, uint32 len)
+{
+    uint32 key = id;
+    void* slot = 0;
+    void** found = MapFind((void*)&mBadges, &slot, &key);
+    ReqVec* reqs = (*found != (void*)&mBadges.anchor) ? (ReqVec*)((uint32*)*found)[5] : 0;
+
+    ReqVec* replReqs = 0;
+    int replacement = GetReplacement(this, id);
+    if (replacement != 0) {
+        uint32 key2 = (uint32)replacement;
+        void* slot2 = 0;
+        void** found2 = MapFind((void*)&mBadges, &slot2, &key2);
+        if (*found2 != (void*)&mBadges.anchor)
+            replReqs = (ReqVec*)((uint32*)*found2)[5];
+    }
+
+    int count = 0;
+    int data = 0;
+    EnumRequirements(reqs, 0x2cc641b, &count, &data);
+    float total = 0.0f;
+    for (int i = 0; i < count; ++i) {
+        uint32 reqId = (uint32)((int*)data)[i * 3];
+        int have = reqs ? reqs->Amount(reqId) : 0;
+        int repl = replReqs ? replReqs->Amount(reqId) : 0;
+        if (have <= 0)
+            continue;
+        if (mode == 0) {
+            int test = TestRequirement(reqId);
+            int span = have - repl;
+            if (span == 0)
+                span = 1;
+            float frac = (float)(test - repl) / (float)span;
+            if (frac <= 1.0f)
+                total += (frac < 0.0f) ? 0.0f : frac;
+            else
+                total += 1.0f;
+        } else if (mode == 1) {
+            int test = TestRequirement(reqId);
+            int amount = (test <= have) ? test : have;
+            total += (float)((amount < 0) ? 0 : amount);
+        } else if (mode == 2) {
+            total += (float)have;
+        }
+    }
+    if (mode == 0 && count != 0)
+        total = total / (float)count;
+    return (long double)total;
+}
+
+// @ 0x00fe6490
+void cSPBadgeManager::OnTick(int delta)
+{
+    TickProbe0();                                         // 0xb3d4a0
+    if (TickProbe1() != 0)                                // 0xae9390
+        return;
+    SpaceGameGet();
+    if (TickProbe2() != 0)                                // 0x1075500
+        return;
+    void* world = GetWorldMode();                         // 0xb3d4d0
+    if (*(int*)((char*)world + 0x2c) == 1 || *(int*)((char*)world + 0x2c) == 2)
+        return;
+    SpaceGameGet();
+    if (TickProbe3() != 0)                                // 0xb18e40
+        return;
+    void* sg = SpaceGameGet();
+    if (*(int*)((char*)sg + 0x20) != 0) {
+        SpaceGameGet();
+        if (TickProbe4() != 0)                            // 0xd09660
+            return;
+    }
+    if ((*(unsigned char*)((char*)GetGameTimeManager() + 0x48) & 1) != 0)
+        return;
+    SpaceGame* game = SpaceGameGet();
+    if (game->GetAvatar() != 0) {
+        SpaceGameGet();
+        game->GetAvatar();
+        if (TickProbe5() != 0)                            // 0xff6550
+            return;
+    }
+
+    mTickAccum += delta;
+
+    EventNode* node = (EventNode*)mStatus.anchor.mpNodeLeft;
+    while (node != (EventNode*)&mStatus.anchor) {
+        if (node->mState18 == 2 || node->mState18 == 3) {
+            bool allDone = true;
+            bool spaceOnly = false;
+            PropsObj* props = (PropsObj*)BadgeProps(node->mId);   // 0x642c10
+            if (props != 0) {
+                props->GetKey(0x2cc641b);                 // requirement list key
+                int left = RequirementCount(props);       // 0x571ef0
+                int* list = RequirementList();            // 0x446ff0
+                if (left < 1) {
+                    if (mSuppressUnlock == 0)
+                        UnlockBadge(node->mId);
+                } else {
+                    for (; left != 0; --left, list += 3) {
+                        int reqId = list[0];
+                        int need = 0;
+                        GetPropertyAsInt(props, (uint32)reqId, &need);
+                        if (TestRequirement((uint32)reqId) < need)
+                            allDone = false;
+                        if (reqId == 0x6f7f0ed || reqId == 0x3dce555d)
+                            spaceOnly = true;
+                    }
+                    if (allDone && mSuppressUnlock == 0)
+                        UnlockBadge(node->mId);
+                }
+                if (spaceOnly && node == (EventNode*)mLastEvent)
+                    ReportBadgeProgress(node->mId);       // 0xe17470
+            }
+        }
+        node = (EventNode*)RBTreeIncrement((RBNode*)node);
+    }
+}
+
+// @ 0x00fe6690
+long double EventMap::GetScore(uint32 id)
+{
+    uint32 key = id;
+    void* slot = 0;
+    void** found = MapFind((void*)&mEvents, &slot, &key);
+    EventNode* node = (EventNode*)*found;
+    if (node != (EventNode*)&mEvents.anchor && node->mCount14 < 2)
+        return 1.0;
+    return mOwner->GetProgressScore(id, 0, 0, 0);
+}
+
+// @ 0x00fe66f0
+int EventMap::GetScoreRounded(uint32 id)
+{
+    uint32 key = id;
+    void* slot = 0;
+    void** found = MapFind((void*)&mEvents, &slot, &key);
+    EventNode* node = (EventNode*)*found;
+    bool counted = node != (EventNode*)&mEvents.anchor && node->mCount14 <= 1;
+    return (int)mOwner->GetProgressScore(id, counted ? 2 : 1, 0, 0);
+}
+
+// @ 0x00fe6770
+int FeedbackScoreForMode2(uint32 id)
+{
+    extern long double BadgeScoreFree(uint32 id, int mode);       // 0xfe6210 (free-call form)
+    return (int)BadgeScoreFree(id, 2);
+}
+
+// @ 0x00fe67b0
+long double EventMap::GetWeightedScore()
+{
+    uint32 step = (uint32)GetEventIndex();
+    float base = (float)step;
+    if (step < 10)
+        return (GetScore(g_eventSteps[step]) + (long double)base) * (long double)0.1f;
+    return (long double)base * (long double)0.1f;
+}
+
+// @ 0x00fe6800
+void EventMap::FormatScore(uint32 id, void* text)
+{
+    wchar_t buf[64];
+    SetNumberString((int)mOwner->GetProgressScore(id, 1, 0, 0), 0, buf, 0x40);
+    WStr_Format(text, (const wchar_t*)0x13f5c04, buf);
+    SetNumberString((int)mOwner->GetProgressScore(id, 2, 0, 0), 0, buf, 0x40);
+    AppendFormatted(text, (const wchar_t*)0x149431c, buf);
 }

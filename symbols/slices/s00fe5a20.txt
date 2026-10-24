@@ -1,1 +1,8 @@
-00fe5a20 SP::cSPBadgeManager::UnlockBadge  # PDB name
+00fe5a20 ?UnlockBadge@cSPBadgeManager@@QAEXI@Z  # nonmatching (1552) - UnlockBadge
+00fe6210 ?GetProgressScore@cSPBadgeManager@@QAEOIHPAXI@Z  # nonmatching (553) - SP::cSPBadgeManager::GetProgressScore (PDB candidate)
+00fe6490 ?OnTick@cSPBadgeManager@@QAEXH@Z  # nonmatching (392) - SP::cSPBadgeManager::OnTick (PDB candidate)
+00fe6690 ?GetScore@EventMap@@QAEOI@Z  # nonmatching (54) - event score (1.0 when the event count is below 2)
+00fe66f0 ?GetScoreRounded@EventMap@@QAEHI@Z  # nonmatching (97) - rounded event score
+00fe6770 ?FeedbackScoreForMode2@@YAHI@Z  # nonmatching (43) - score of an event in mode 2
+00fe67b0 ?GetWeightedScore@EventMap@@QAEOXZ  # nonmatching (55) - per-step weighted score * 0.1
+00fe6800 ?FormatScore@EventMap@@QAEXIPAX@Z  # nonmatching (94) - score as localised text
