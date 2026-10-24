@@ -170,13 +170,17 @@ bool __cdecl WalkTree(float f1, double t, Node* node, int p4, Cursor* cur, int p
 			if (idx == -1)
 				idx = node->defaultIdx;
 			Callbacks* cb = node->cb;
+			bool (__cdecl *fnA)(int, double, int, int, void*, void*) =
+				cb ? cb->fnA : 0;
+			bool (__cdecl *fnB)(int, double, int, int, void*, void*, float) =
+				cb ? cb->fnB : 0;
 			bool ok = true;
 			if (cb)
 			{
 				void* mask = ctx.active ? ctx.bufB : 0;
-				if (wasFirst && cb->fnA && !cb->fnA(p4, t, p7, idx, rec2, mask))
+				if (wasFirst && fnA && !fnA(p4, t, p7, idx, rec2, mask))
 					ok = false;
-				else if (cb->fnB && !cb->fnB(p4, t, p7, idx, rec2, mask, f1))
+				else if (fnB && !fnB(p4, t, p7, idx, rec2, mask, f1))
 					ok = false;
 			}
 			if (ok)
