@@ -98,26 +98,26 @@ struct Vec44 {
     char*    mpEnd;                 // +0x04
     char*    mpCapacity;            // +0x08
     char     mAllocator[4];         // +0x0c
-    void assign(unsigned n, const void* value);  // 0x00f42670
+    void assign(unsigned n, const void* value);                    // 0x00f42670
+    void ctor_assign(unsigned n, const void* value, void* alloc);  // 0x00f3f9a0
+    void swap(Vec44* other);                                       // 0x00f41b30
+    void dtor();                                                   // 0x00dfb380
+    void erase_range(char* first, char* last);                     // 0x00f0b0e0
 };
 
 // out-of-line EASTL helpers (masked).
 void  __cdecl vec_fill(char* first, char* last, const void* value);       // 0xf09800
 void  __cdecl vec_uninit_fill(char* first, unsigned n, const void* value); // 0xf09d70
 void  __cdecl vec_fill_n(char* first, unsigned n, const void* value);      // 0xf3dec0
-void  __cdecl vec_erase_range(char* first, char* last);                    // 0xf0b0e0
-void  __cdecl vec_ctor_assign(Vec44* self, unsigned n, const void* value, void* alloc); // 0xf3f9a0
-void  __cdecl vec_swap(Vec44* self, Vec44* other);                        // 0xf41b30
-void  __cdecl vec_dtor(Vec44* self);                                      // 0xdfb380
 
 // @ 0x00f42670
 void Vec44::assign(unsigned n, const void* value)
 {
     if (n > (unsigned)((mpCapacity - mpBegin) / 0x44)) {
         Vec44 temp;
-        vec_ctor_assign(&temp, n, value, (void*)mAllocator);
-        vec_swap(this, &temp);
-        vec_dtor(&temp);
+        temp.ctor_assign(n, value, (void*)mAllocator);
+        this->swap(&temp);
+        temp.dtor();
     } else if (n > (unsigned)((mpEnd - mpBegin) / 0x44)) {
         unsigned cur = (unsigned)((mpEnd - mpBegin) / 0x44);
         vec_fill(mpBegin, mpEnd, value);
@@ -125,7 +125,7 @@ void Vec44::assign(unsigned n, const void* value)
         mpEnd = mpBegin + (n * 0x44);
     } else {
         vec_fill_n(mpBegin, n, value);
-        vec_erase_range(mpBegin + (n * 0x44), mpEnd);
+        this->erase_range(mpBegin + (n * 0x44), mpEnd);
     }
 }
 
