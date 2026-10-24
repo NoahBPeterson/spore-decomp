@@ -11,7 +11,7 @@
 0112b6c0 85 havok-equivalent
 0112b740 136 havok-equivalent
 0112b7f0 468 havok-equivalent
-0112bb40 91 havok-equivalent
+0112bb40 91 merge fixed (isValid took a bool* out param + ret 8); WEAK 136/200 valid, 100% coverage, no mismatches; chk diff 25 of 113 bytes (cmpb vs mov al/test and 2-byte nop encoding)
 0112bbd0 2 havok-equivalent
 0112bbf0 26 havok-equivalent; now a member (this in ECX); difftest UNSUPPORTED: 0/1200 inputs valid (fake-arity discards)
 0112bc30 26 havok-equivalent; now a member (this in ECX); difftest UNSUPPORTED: 0/1200 inputs valid (fake-arity discards)
