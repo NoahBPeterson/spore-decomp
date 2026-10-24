@@ -17,7 +17,7 @@ extern "C" void* AllocEAL(unsigned size, const char* name, int, int, int, int); 
 
 struct ImgHelper {
     void* UI_Image_Image(void*);                                            // 0x008333b0
-    void* UI_Image_Image2(void*, int, int, float, float, float, float);     // 0x009579f0
+    void* UI_Image_Image2(void*, int, int, float, float, float, float, int); // 0x009579f0 (8th arg = pushed 0)
 };
 struct WindowHelper {
     void* UI_Window_Window();                                               // 0x00962a10
@@ -82,6 +82,8 @@ struct W {
     virtual void  mD8(void*);        // +0xd8
     S(dc) S(e0) S(e4) S(e8) S(ec) S(f0) S(f4) S(f8) S(fc) S(100) S(104) S(108)
     virtual void* m10c(void*);       // +0x10c
+    void* FUN_008332a0();            // 0x008332a0 (thiscall on the image)
+    void* FUN_008332d0();            // 0x008332d0 (thiscall on the image)
 };
 
 // Variant used by 00806610: slot +0x18 takes (void*, int, int).
@@ -207,15 +209,15 @@ void* GetImageFromTexture(int arg1, int arg2, int arg3, int arg4) {
     if (img == 0) return 0;
     ((W*)img)->v00();
     int b = arg3;
-    if (b < 0) b = (int)FUN_008332a0();
+    if (b < 0) b = (int)((W*)img)->FUN_008332a0();
     int c = arg4;
-    if (c < 0) c = (int)FUN_008332d0();
+    if (c < 0) c = (int)((W*)img)->FUN_008332d0();
     void* img2 = AllocEAL(0x2c, (const char*)&DAT_013f6b3c, 0, 0, 0, 0);
     if (img2 == 0) {
         ((W*)img)->v04();
         return 0;
     }
-    void* r = ((ImgHelper*)img2)->UI_Image_Image2(img, b, c, 0.0f, 0.0f, 1.0f, 1.0f);
+    void* r = ((ImgHelper*)img2)->UI_Image_Image2(img, b, c, 0.0f, 0.0f, 1.0f, 1.0f, 0);
     ((W*)img)->v04();
     return r;
 }

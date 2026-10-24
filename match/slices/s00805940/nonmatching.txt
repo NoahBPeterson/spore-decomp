@@ -1,6 +1,6 @@
 00805ea0  2   complete; only the -4 pointer adjust is sub eax,4 vs original add eax,-4
 00805ef0  93  complete; loop layout + merged epilogue (do-while not reproduced exactly)
-008060d0  144 complete; register allocation/argument scheduling differs
+008060d0  143 complete; fixed the UI_Image_Image2 call to pass the missing 8th (0) argument so the callee's ret cleanup matches, and modeled FUN_008332a0/FUN_008332d0 (GetWidth/GetHeight) as thiscall members on the image (ecx=img); replay matches, fresh PASS 239/89.4%; remaining diff is register allocation/argument scheduling/frame (size 215 vs 229). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00806370  244 complete; rect-temp scheduling and frame differs
 008064c0  135 complete; rect-temp scheduling and frame differs
 00806610  294 complete; many vcall argument/order scheduling differences
