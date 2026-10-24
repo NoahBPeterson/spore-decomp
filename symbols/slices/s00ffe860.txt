@@ -1,1 +1,7 @@
 00ffe860 SP::cSPSimulatorPlayerUFO::UpdateUfoKeys  # dev PDB anchor (symbols/pdb_names.json)
+00fff270 cSPSimulatorSpaceGame::PlayerHasStarOf  # walk the +0x70 star ring for the record referenced by arg+0x84
+00fff2a0 SortInsertion  # eastl insertion_sort over AutoRef elements: guarded shift-down with AddRef/Release on every move
+00fff370 SortInsertionUnguarded  # eastl __unguarded_insertion_sort over AutoRef elements: shift-down without the first-element bound
+00fff440 AdjustHeap  # eastl __adjust_heap over AutoRef elements: sift down the hole, then push-heap the saved value at 0x00ffd2e0
+00fff5f0 cSPSimulatorPlayerUFOHandler::HandleMessage  # on msg 0x57f3749 recompute max health/energy on the owner (this-0x10) and clamp current values
+00fff6a0 cSPSimulatorPlayerUFO::OnStarMoveDone  # star-arrival handler: travel-near-core flag, terrain/capture refresh, camera action target at the city
