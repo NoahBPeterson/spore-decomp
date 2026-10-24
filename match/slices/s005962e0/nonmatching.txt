@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 005962e0  519  string temporaries/flag handling and stack layout differ
 005966e0  327  insert-n paths: register allocation and helper inlining differ
-00596900  253  vector clear and filter branch layout differ
+00596900  175  complete; the out-vector clear is sp_vector::clear() -> erase(mpBegin, mpEnd): memcpy(first, last, (char*)mpEnd - (char*)last) with last = the original end, then mpEnd -= (last - first). The old reconstruction set mpEnd = mpBegin before the call, so the memcpy source and the floor-rounded element count were both wrong (retail keeps end=6 for a non-multiple range, not begin=5). Remaining diff is /O2 register allocation and branch layout. Default gate PASS 219 valid inputs / 82% coverage; chk diff 175 (ours 295 vs 300 bytes)
 00596a30  265  visibility test and counter pointer handling differ
 00596be0  320  push_back/unique-erase register allocation differs
 00596e60  97  counting-map iteration register allocation differs

@@ -698,6 +698,13 @@ struct sp_vector {
         else
             DoInsertValue(mpEnd, value);
     }
+    void clear() { erase(mpBegin, mpEnd); }
+    T* erase(T* first, T* last)
+    {
+        T* const position = (T*)memcpy(first, last, (size_t)((char*)mpEnd - (char*)last)) ;
+        mpEnd -= (last - first);
+        return first;
+    }
     size_t size() const { return (size_t)(mpEnd - mpBegin); }
 };
 
@@ -856,8 +863,7 @@ uint64_t* fixed_vector_u64::DoRealloc(size_t n, uint64_t* pBegin, uint64_t* pEnd
 // @ 0x00596900
 int cCollectableItems::GetItems(sp_vector<uint64_t>& out, const bool* pUnlocked, const int* pRowIndex)
 {
-    out.mpEnd = out.mpBegin + 0;
-    { uint64_t* e = out.mpEnd; memcpy(out.mpBegin, e, 0); out.mpEnd -= (e - out.mpBegin); }
+    out.clear();
     for (StaticInfoMap::iterator it = mStaticItemInfos.begin(), itEnd = mStaticItemInfos.end(); it != itEnd; ++it) {
         uint64_t id = it->first;
         if (pUnlocked) {
