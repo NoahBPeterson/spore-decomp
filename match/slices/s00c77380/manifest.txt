@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c77380/s00c77380.cpp  ?GetFlagValue@cPlayer@SP@@QAE_NIPAH@Z  00c77380  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00c77380/s00c77380.cpp  ?HasFlag@cPlayer@SP@@QAE_NI@Z  00c773d0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00c77380/s00c77380.cpp  ?IsSpace@cPlayer@SP@@QAE_NXZ  00c77410  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00c77380/s00c77380.cpp  ?DestroyVec20Range@@YGXPAUcPtrVecEntry@@0@Z  00c77ab0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00c77380/s00c77380.cpp  ?Destroy@cEmbassyList@@QAEXPAU1@@Z  00c77b10  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00c77380/s00c77380.cpp  ?HasEntryInSet@cPlayer@SP@@QAE_NPBI@Z  00c77c50  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-

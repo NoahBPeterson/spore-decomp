@@ -1,0 +1,16 @@
+# bare-8hex-VA  diff-bytes  reason (one line each)
+00c77450  52  cPlayer::RemoveEmbassyFromPlanet (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv WEAK (no mismatch, 32 valid); reg-choice/frame-layout only (this in edi/esi, param slot offset)
+00c774b0  472  cPlayer::UpdateEmbassyEffects (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (0 valid inputs); instruction stream semantically complete
+00c77700  31  cHashtableHeader::Insert3 (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv WEAK (no mismatch, 22 valid); member inlined scheduling differences
+00c777e0  101  Read_00c777e0 (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (0 valid inputs); reads past unset serializer state
+00c77890  133  Write_00c77890 (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (0 valid inputs); vector iteration + tail jmp eax
+00c77a00  113  cVector<cEntry20>::Reserve (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv WEAK (no mismatch, 38 valid); allocator/frame differences
+00c77c90  111  cPlayer::LatchCheatDetected (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv WEAK (no mismatch, 40 valid); global/string constant handling differs
+00c77d30  570  cPlayerCommand::ProcessCommand (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (unresolved global g_nCheatFlagKey); large command switch
+00c78020  166  Read_00c78020 (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (0 valid inputs); bool-store/reload codegen not reproducible
+00c78130  74  Read_00c78130 (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (0 valid inputs); serializer stream state
+00c781e0  44  DestroyPlayerPlanetDataRange (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv WEAK (no mismatch); remaining diffs are call-displacement and loop-shape; frame 143 vs 158
+00c78280  86  cVector<cEntry8>::Insert (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (9/40 valid, pool-limit); element shift memmove schedule
+00c78450  85  cPlayer::NoteWarEndedWithPlayer (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv WEAK (no mismatch, 55 valid); frame layout / reg assignment (this vs tree pointer)
+00c77bf0  37  cPlayer::HasFlagOrInsert (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equivalent; only the bool arg's high 3 stack bytes differ (orig `mov byte[esp],bl` leaves 0xcccccc, ours `push 0`); callee reads only the low byte
+00c78420  31  cPlayer::AddToSet (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equivalent; same bool-arg padding artifact as 00c77bf0 (`mov byte[esp],0; mov eax,[esp]` vs `push 0`); callee reads only the low byte
