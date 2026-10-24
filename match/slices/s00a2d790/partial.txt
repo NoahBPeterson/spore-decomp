@@ -4,4 +4,4 @@
 00a2dc40  -    SetupPropertyAggregationRules: 472-byte EH + EASTL body skipped
 00a2e060  107  eastl::map::operator[]: find reproduced, DoInsertValue insert approximated
 00a2e2f0  -    fixed_pool + fixed_hashtable constructor body approximated
-00a2e4c0  -    Stopwatch/Mutex timing body approximated
+00a2e4c0  -    complete now (see nonmatching.txt): ProfileTimer/Mutex timing wrapper + vector add-or-find body reconstructed

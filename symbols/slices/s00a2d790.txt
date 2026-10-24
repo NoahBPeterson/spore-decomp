@@ -1,5 +1,5 @@
 00a2d790 ?RegisterPrimitive@System@Audio@EA@@UAE_NPAVIPrimitive@23@@Z  # EA::Audio::System::RegisterPrimitive migrated from s00a2d790
-00a2d880 ?FUN_00a2d880@AudioSystem@@QAEPAXIPAX@Z  # AudioSystem::FUN_00a2d880 migrated from s00a2d790 (verbatim, slice spelling)
+00a2d880 ?FUN_00a2d880@AudioSystem@@QAE_NIPAX@Z  # AudioSystem::FUN_00a2d880 migrated from s00a2d790 (verbatim, slice spelling)
 00a2d940 ?FUN_00a2d940@AudioSystem@@QAEPAXPAX@Z  # AudioSystem::FUN_00a2d940 migrated from s00a2d790 (verbatim, slice spelling)
 00a2d990 ?FUN_00a2d990@AudioSystem@@QAEHPAX@Z  # AudioSystem::FUN_00a2d990 migrated from s00a2d790 (verbatim, slice spelling)
 00a2d9d0 ?FUN_00a2d9d0@AudioSystem@@QAEPAXE@Z  # AudioSystem::FUN_00a2d9d0 migrated from s00a2d790 (verbatim, slice spelling)
