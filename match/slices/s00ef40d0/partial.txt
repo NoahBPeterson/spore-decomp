@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00ef40d0 = SPUI.obj.  Every one of the 11 functions has a complete reconstruction, so this
+# file holds only the caveats the equivalence gate could not clear (all rows are also listed in
+# nonmatching.txt; nothing here is a stub or a sketch).
+#
+00ef4620  163  Property loader: complete body, but the gate reports 0/400 valid inputs because the stubbed Layer_Init/PropertyManager/GetProperty entry points read through fake objects, so the body is behaviourally unverified.  The visible byte divergence is the original's reload of the bag pointer from the reused incoming argument slot (ours folds it in a register).
+00ef46f0  521  Message handler: complete body; the gate validates all 400 inputs but only reaches 10.4% of the original instructions (the generated messages rarely hit the 0x287259f6 sub-table, which needs a live sender vtable), so the tail cases stay unverified.
+00ef4940  506  Shutdown: complete body; 316/400 inputs valid at 3.8% coverage (most inputs are rejected by the mC0 guard or fault inside the fake window Release stubs), so only the guard and the first releases are exercised.
+00ef4bd0  430  Thumbnail refresh: complete body; 307/400 valid at 30.8% coverage - the child hashes and the ResourceMan lookup are reached, the inset math is only partly exercised because the fake windows return one fixed area.
+00ef4e40  58   Layout image selection: complete body; 265/400 valid at 13.6% coverage - the noun switch and the F_008068d0 path are reached on the inputs that survive the fake layout lookup, the AutoRefCount release tail is not.
