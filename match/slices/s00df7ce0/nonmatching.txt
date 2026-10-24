@@ -1,0 +1,5 @@
+00df7ce0 628 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 628 bytes - galaxy entry-query helper not reconstructed.
+00df7f60 874 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 874 bytes - cGalaxyGameEntryQuery::GetSavedGames not reconstructed.
+00df82d0 91 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 91 bytes - destructor chain: release of 0x8c through virtual +0x08, eastl vector free of 0x38/0x40/0x48 with the (end-begin)&~1 trick, release of 0x34 through virtual +0x04, sub-object destructor on +0x20, an ITracerBase vtable store at +0x18 and a tail-jumped base destructor; the vtable store and the exact base list cannot be spelled from source.
+00df8330 688 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 688 bytes - SetupRolloverStarEffects not reconstructed.
+00df85e0 327 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 327 bytes - SetGameToEnter not reconstructed.
