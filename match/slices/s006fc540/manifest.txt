@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s006fc540/s006fc540.cpp  ?Write@FragRec@@QAE_NPAUIO@@@Z    006fceb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s006fc540/s006fc540.cpp  ?Read@FragRec@@QAE_NPAUIO@@I@Z    006fcdc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006fc540/s006fc540.cpp  ?Release@cFragmentShader@@QAEHXZ  006fd300  /O2 /MD /Gy /EHsc /TP /arch:SSE2
