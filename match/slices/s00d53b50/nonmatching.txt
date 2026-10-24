@@ -1,2 +1,7 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00d54330 872 complete; cPosseSimulator::AddPosseMember (names Claude-coined): plausible simplified body (three-member cap, enemy/duplicate/avatar checks, sound, herd removal, achievements); heavily entangled with globals, size 91 vs 893
+00d547e0 227 complete; cBehaviorSpaceTurret::UpdateWeaponData: property-set lookup 0xa4c2f6bd then typed reads 0x244ea3d/0x24a0740; float multiply chosen as x87 fmul + __ftol2 helper instead of SSE mulss + inline fistp, unaligned frame, size 234 vs 251
+00d548e0 7 complete; WeaponData ctor (object/source): same instruction sequence, mpObject store scheduled after push edi instead of before, size 87 vs 87
+00d54940 213 complete; UpdateAirRaidSiren: timer/effect globals + effect-params struct; ebx never holds the shared constant 1 (mCount++ and return true), size 363 vs 372
+00d54c10 124 complete; ClearAllTargets: 128-slot bucket iteration + turret effect Stop/FaceAtTarget; mpBuckets reloaded into a register for the end-index subtraction instead of folded as a memory operand, size 198 vs 199
 00d53b50 1552 cRingPlacer::Place (names Claude-coined): complete; 22/23 call sites in order (original duplicates the found->noun release tail), same vtable slots 0x2c/0x5c/0x74, size 0.99x; quaternion-rotate scheduling and register allocation differ

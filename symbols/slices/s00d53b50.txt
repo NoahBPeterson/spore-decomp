@@ -1,0 +1,9 @@
+00d53b50 EA::Swarm::cRingPlacer::Place  # pick/place a noun from the ring slots: score by |1-dot|, sort, window+radius checks, project onto the planet; original duplicates the found->noun release tail (names Claude-coined)
+00d54330 SP::cPosseSimulator::AddPosseMember  # posse membership insert (cap three): avatar/enemy/duplicate checks, sound, herd removal, achievements; heavily global-entangled
+00d54730 SP::CanJoin  # stdcall two-arg predicate over an SPObject's QueryInterface result (name from the original PDB symbol); MATCH
+00d54760 SP::StopAirRaidEffect  # stop the air-raid timer and the cached siren IVisualEffect (vt +0x0c); MATCH
+00d54780 SP::WeaponData::WeaponData  # copy ctor: object ptr, uncopied flags, template ptr, AutoRefCount AddRef (vt +0x18), seven values; MATCH
+00d547e0 SP::cBehaviorSpaceTurret::UpdateWeaponData  # read the weapon property set (0xa4c2f6bd): sdr-beam lifetime (int 0x244ea3d) and weapon timer ms (float 0x24a0740 * 1000)
+00d548e0 SP::WeaponData::WeaponData  # ctor from (void* const*, const WeaponSource&): copies +8..+0x28 from src+0..+0x20, AddRefs the object at +0xc
+00d54940 SP::UpdateAirRaidSiren  # air-raid driver: timer elapsed vs tuning ms, (re)create + start the siren effect, position it at the turret transform, stop effect when elapsed
+00d54c10 SP::ClearAllTargets  # walk a slot vector (128-entry buckets), QueryInterface 0x436f315 -> cTurret, stop its embedded effect (vt +0x50) and clear its target

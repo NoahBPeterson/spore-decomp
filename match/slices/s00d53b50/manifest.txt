@@ -1,1 +1,4 @@
 # source  symbol  original VA  [cl flags override]
+slices/s00d53b50/s00d53b50.cpp  ?CanJoin@SP@@YG_NPAXH@Z  00d54730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d53b50/s00d53b50.cpp  ?StopAirRaidEffect@SP@@YAXXZ  00d54760  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d53b50/s00d53b50.cpp  ??0WeaponData@SP@@QAE@ABU01@@Z  00d54780  /O2 /MD /Gy /TP /arch:SSE /fp:fast
