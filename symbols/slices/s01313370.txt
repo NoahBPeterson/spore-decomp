@@ -1,1 +1,5 @@
 01313ff0 Simulator::InitCityAttributes  # $E231 dynamic initializer of the cCity serializer attribute table (16 records at 0x015665f0)
+01313370 Simulator::InitMainAttributes  # $E245 dynamic initializer of the attribute table at 0x01565d68 (7 records)
+01313880 Simulator::InitTribeAttributes  # $E257 dynamic initializer of the attribute table at 0x015660f0 (2 records)
+01314630 Simulator::InitGlobalAttributes  # $E235 dynamic initializer of the attribute table at 0x015669f0 (5 records)
+01315960 Simulator::InitCommAttributes  # $E236 dynamic initializer of the attribute table at 0x01566cf8 (2 records)

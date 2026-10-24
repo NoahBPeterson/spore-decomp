@@ -1,2 +1,6 @@
 # s01313370 manifest
 slices/s01313370/s01313370.cpp  ?InitCityAttributes@Simulator@@YAXXZ  01313ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01313370/s01313370_g7.cpp  ?InitMainAttributes@Simulator@@YAXXZ  01313370  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s01313370/s01313370_g7.cpp  ?InitTribeAttributes@Simulator@@YAXXZ  01313880  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s01313370/s01313370_g7.cpp  ?InitGlobalAttributes@Simulator@@YAXXZ  01314630  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s01313370/s01313370_g7.cpp  ?InitCommAttributes@Simulator@@YAXXZ  01315960  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
