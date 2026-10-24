@@ -1,0 +1,5 @@
+# va  verdict  notes
+00e9db10  FAIL  5/77 valid inputs mismatched on eax (e.g. 0x13 vs 0x80000010, 100% coverage): the y/x-dominant face branches pick different components for the i/j sample index, so extreme inputs saturate cvttss2si on our side
+00e9de00  WEAK  159 valid (< 200), 35.8% coverage: the cheat body needs a live cArguments/AudioSystem singleton chain, so most fuzzed inputs fault before reaching the calls
+00e9df00  UNSUPPORTED  0/400 valid (fake-arity=398): Startup() is a 0-argument fastcall that the harness only sees through the cAmbienceLayerManager vtable, so it cannot build a call
+00e9dfa0  WEAK  400 valid, 25.2% coverage: the eight message-id paths are reconstructed but the planet/audio-param branches need real interface objects (PlanetModel, GetSystemAT) which the fuzzer cannot synthesize
