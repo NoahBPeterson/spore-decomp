@@ -98,26 +98,34 @@ cGonzagoMode::~cGonzagoMode()
     vt4 = (void**)&g_vt1dummy;
 }
 
+// Intrusive list node used by the cGonzagoMode sample/key list at this+0x20 (EASTL layout).
+struct cGonzagoNode {
+    cGonzagoNode* mpNext;   // +0x00
+    cGonzagoNode* mpPrev;   // +0x04
+    void*         mpValue;  // +0x08 (key compared as an int, then virtual-called)
+};
+
 // @ 0x00b5db40
 bool cGonzagoMode::FUN_00b5db40(int param)
 {
-    char* head = (char*)this + 0x20;
-    char* n = *(char**)head;
+    cGonzagoNode* head = (cGonzagoNode*)((char*)this + 0x20);
+    cGonzagoNode* n = head->mpNext;
     while (n != head)
     {
-        if (*(int*)(n + 8) == param)
+        if (*(int*)&n->mpValue == param)
         {
-            char* prev = *(char**)(n + 0);
-            char* next = *(char**)(n + 4);
-            *(char**)next = prev;
-            *(char**)(prev + 4) = next;
-            void* data = *(void**)(n + 8);
+            // The original advances to n->mpNext before the key test and recovers the
+            // unlinked node as mpNext->mpPrev (the list invariant) instead of reusing n.
+            cGonzagoNode* node = n->mpNext->mpPrev;
+            node->mpPrev->mpNext = node->mpNext;
+            node->mpNext->mpPrev = node->mpPrev;
+            void* data = node->mpValue;
             if (data)
                 ((void(__thiscall*)(void*))g_vfn(data, 8))(data);
-            operator_delete_00f47380(n);
+            operator_delete_00f47380(node);
             return true;
         }
-        n = *(char**)n;
+        n = n->mpNext;
     }
     return false;
 }
