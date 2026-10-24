@@ -155,7 +155,9 @@ struct FixedBuf {
 struct LocView { wchar_t* mpBegin; wchar_t* mpEnd; };
 struct LocInfo { uint32_t lcid; uint16_t base; uint16_t script; };
 struct LocField {
-    uint8_t  pad00[0x34 - 0x00];  // 0x00
+    wchar_t* viewBegin;           // 0x00  digits view (read by 0x0087deb0 Locale_FormatGrouped)
+    wchar_t* viewEnd;             // 0x04
+    uint8_t  pad08[0x34 - 0x08];  // 0x08
     uint32_t flags;               // 0x34
     uint32_t type;                // 0x38
     uint32_t width;               // 0x3c
@@ -246,6 +248,7 @@ struct Loc {
     void append(const wchar_t* b, const wchar_t* e);          // 0x42f9d0
     void Assign(const wchar_t** key);                         // 0x87e0d0
     void FUN_0087fab0(int c);                                 // 0x87fab0
+    void RepeatChar(int n, int c);                            // 0x68c8c0 (thiscall: ecx = formatter)
 
     void* FUN_0087f550(const Loc* src);                       // 0x87f550 (defined out of line below, for the @ marker)
 
@@ -378,13 +381,16 @@ int FUN_0087d690(int limit, const wchar_t* str, wchar_t sep)
 }
 
 // @ 0x0087d6d0
-uint8_t Locale_ParseFormat(wchar_t* s, LocField* fields, int* pCount, wchar_t** pOut)
+// `ret` is a one-byte flag handed back with `mov %dl,%al` (0x87d841), i.e. the function returns bool.
+// `last` starts one element before the string: retail keeps s-2 (bytes) there (0x87d6de) and the
+// trailer test then reads s[-1]/s[0], storing s into *pOut when no '%' was found.
+bool Locale_ParseFormat(wchar_t* s, LocField* fields, int* pCount, wchar_t** pOut)
 {
     int       count = 0;
-    uint8_t   ret = 1;
+    bool      ret = true;
     wchar_t*  p = s;
     LocField* f = fields;
-    wchar_t*  last = 0;
+    wchar_t*  last = s - 1;
     if (*pCount > 0) {
         for (;;) {
             bool bWidth = false;
@@ -402,7 +408,7 @@ uint8_t Locale_ParseFormat(wchar_t* s, LocField* fields, int* pCount, wchar_t** 
             f->prec  = (uint32_t)-1;
             for (;;) {
                 wchar_t c = *p;
-                if (c == 0) { f->type = 0; ret = 0; break; }
+                if (c == 0) { f->type = 0; ret = false; break; }
                 switch (c) {
                 case L'#': f->flags |= 0x40; break;
                 case L'$': f->type = 0xc; goto done;
@@ -1209,7 +1215,7 @@ char FUN_0087ff90(Loc<16>* param_1, NumFmt* param_2)
         return 1;
     }
     if (*psVar5 == 0x2d) {
-        e_repchar(1, 0x2d);
+        param_1->RepeatChar(1, 0x2d);
         psVar5 += 1;
     }
     unsigned uVar2 = (unsigned)param_2->f3c;
@@ -1222,7 +1228,7 @@ char FUN_0087ff90(Loc<16>* param_1, NumFmt* param_2)
         if (iVar4 == 0 && uVar2 < uVar3)
             end = psVar5 + uVar2;
     } else {
-        e_repchar((int)(uVar2 - uVar3), 0x30);
+        param_1->RepeatChar((int)(uVar2 - uVar3), 0x30);
         end = psVar1;
     }
     param_1->AppendElement(psVar5, end);

@@ -68,9 +68,14 @@ struct LocView { wchar_t* mpBegin; wchar_t* mpEnd; };
 // locale-info record (LCID + script)
 struct LocInfo { uint32_t lcid; uint16_t base; uint16_t script; };
 
-// field descriptor parsed out of a format string (size 0x4c)
+// field descriptor parsed out of a format string (size 0x4c).
+// Locale_FormatGrouped reads the digit view straight from +0x00/+0x04 (`mov (%edx),%ebp` /
+// `mov 0x4(%edx),%eax` at 0x87deb4/0x87debf), while Locale_ParseFormat fills the separate
+// begin/end pair at +0x44/+0x48, so the record carries both.
 struct LocField {
-    uint8_t  pad00[0x34 - 0x00];  // 0x00
+    wchar_t* viewBegin;           // 0x00  digits view (FormatGrouped)
+    wchar_t* viewEnd;             // 0x04
+    uint8_t  pad08[0x34 - 0x08];  // 0x08
     uint32_t flags;               // 0x34
     uint32_t type;                // 0x38
     uint32_t width;               // 0x3c
@@ -96,13 +101,20 @@ struct LocaleData {
 extern LocView g_unk15490e4;  // 0x015490e4
 
 // @ 0x0087d6d0
-uint8_t Locale_ParseFormat(wchar_t* s, LocField* fields, int* pCount, wchar_t** pOut)
+// The status is a one-byte flag (retail keeps it in a byte local, `mov $0x1,%dl` / `movb $0x0,...`,
+// and hands it back with `mov %dl,%al` at 0x87d841), so the declaration is bool: only al is part of
+// the result. Declared wider, the harness compares the dead high half of eax as well, where retail
+// leaves the residue of the scan pointer (0x4001ff00) and ours leaves 0.
+bool Locale_ParseFormat(wchar_t* s, LocField* fields, int* pCount, wchar_t** pOut)
 {
     int       count = 0;
-    uint8_t   ret = 1;
+    bool      ret = true;
     wchar_t*  p = s;
     LocField* f = fields;
-    wchar_t*  last = 0;
+    // Retail starts `last` one element BEFORE the string (0x87d6de add $0xfffffffe,%eax leaves
+    // s-2 bytes in the register that the tail uses), so when no '%' is found the trailer test reads
+    // s[-1]/s[0] and stores s into *pOut instead of leaving 0.
+    wchar_t*  last = s - 1;
     if (*pCount > 0) {
         for (;;) {
             bool bWidth = false;
@@ -120,7 +132,7 @@ uint8_t Locale_ParseFormat(wchar_t* s, LocField* fields, int* pCount, wchar_t** 
             f->prec  = (uint32_t)-1;
             for (;;) {
                 wchar_t c = *p;
-                if (c == 0) { f->type = 0; ret = 0; break; }
+                if (c == 0) { f->type = 0; ret = false; break; }
                 switch (c) {
                 case L'#': f->flags |= 0x40; break;
                 case L'$': f->type = 0xc; goto done;
@@ -341,7 +353,7 @@ bool Locale_SplitField(int index, wchar_t* s, LocBuf* out, wchar_t sep)
 // @ 0x0087deb0
 void Locale_FormatGrouped(LocBuf* out, LocField* spec, char noSign)
 {
-    const wchar_t* digits = spec->begin;
+    const wchar_t* digits = spec->viewBegin;
     wchar_t  buf[0x40];
     wchar_t* dst = buf;
     const wchar_t* p = digits;
@@ -349,7 +361,7 @@ void Locale_FormatGrouped(LocBuf* out, LocField* spec, char noSign)
         if (noSign == 0) { buf[0] = L'-'; dst = buf + 1; }
         ++p;
     }
-    unsigned len = (unsigned)(spec->end - p);
+    unsigned len = (unsigned)(spec->viewEnd - p);
     uint32_t width = spec->width;
     unsigned pad = 0, pad2 = 0;
     unsigned v = pad;
