@@ -1,0 +1,2 @@
+slices/s0101bd10/s0101bd10.cpp  ?snapToHome@cSPCameraControllerSolarSystem@SP@@QAEXXZ  0101bd10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0101bd10/s0101bd10.cpp  ?snapToSystem@cSPCameraControllerSolarSystem@SP@@QAEXXZ  0101be60  /O2 /MD /Gy /TP /arch:SSE /fp:fast

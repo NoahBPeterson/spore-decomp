@@ -1,1 +1,4 @@
 0101c080 SP::cSPCameraControllerSolarSystem::Update  # PDB candidate (caller-single); (int ms, cViewer*) ret 8, builds the camera-to-world matrix and calls cViewer_SetCameraToWorld
+0101bd10 SP::cSPCameraControllerSolarSystem::snapToHome  # unnamed in PDB; resets zero zoom to 100 and pitch to pi/4, saves the view vector, focuses the camera origin (or mState=4 outside range), drops the stage attachment
+0101be60 SP::cSPCameraControllerSolarSystem::snapToSystem  # unnamed in PDB; focuses the camera origin, distance from civ context 2 ? 0x15b6dd0-0x4 : ... ; drops the stage attachment
+0101bf40 SP::cSPCameraControllerSolarSystem::restoreSavedView  # unnamed in PDB; refocuses on the UFO position + ComputeUFOOffsetPos offset and restores the saved view zoom
