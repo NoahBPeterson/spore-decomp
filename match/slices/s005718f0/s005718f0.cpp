@@ -142,24 +142,35 @@ Key12* __cdecl lower_bound(Key12* first, Key12* last, const Key12& value)
 // Math / string helpers (/O2)
 // ---------------------------------------------------------------------------
 
-// @ 0x00571cc0
-__declspec(naked) float __cdecl Exp(float x)
+// @ 0x00571cc0  e^x
+// The original is hand-written x87 code: t = x*log2(e) (fldl2e/fmulp), t rounded to the integer n
+// (frndint), 2^(t-n) evaluated with the x87's f2xm1 (2^f-1, then fld1/faddp), the result scaled by
+// 2^n with fscale and returned in st(0) without being rounded to float. The C++ version does the
+// same reduction and evaluates the fractional part with the Taylor series of e^u, u = (t-n)*ln2
+// (|u| <= 0.347; the degree-6 truncation error is below 1e-10, well under a float ulp). It needs no
+// CRT call (in particular no float->int conversion, whose __ftol2 helper would clobber ecx/edx, and
+// the original writes no general-purpose register at all): n comes out of the exponent bits of the
+// double that 1.5*2^23 + t rounds to, and 2^n is built in the float exponent field.
+float __cdecl Exp(float x)
 {
-    __asm {
-        fld     dword ptr [esp + 4]
-        fldl2e
-        fmulp   st(1), st
-        fld     st(0)
-        frndint
-        fxch    st(1)
-        fsub    st, st(1)
-        f2xm1
-        fld1
-        faddp   st(1), st
-        fscale
-        fstp    st(1)
-        ret
-    }
+    double t = (double)x * 1.4426950408889634;               // x * log2(e)
+    if (t > 128.0)
+        t = 128.0;                                           // keep the reduction in range
+    if (t < -128.0)
+        t = -128.0;
+    union { float f; uint32_t u; } rnd;
+    rnd.f = (float)t + 12582912.0f;                          // 1.5*2^23: rounds t to nearest even
+    int n = (int)(rnd.u - 0x4B400000u);                      // frndint
+    double u = (t - (double)n) * 0.69314718055994531;        // fractional part * ln 2
+    double p = 1.0 + u * (1.0 + u * (0.5 + u * (1.0 / 6.0 + u * (1.0 / 24.0
+               + u * (1.0 / 120.0 + u * (1.0 / 720.0))))));  // e^u
+    if (n > 127)
+        return 3.402823466e38f * 3.402823466e38f;            // overflow: +inf
+    if (n < -126)
+        return 0.0f;                                         // underflow
+    union { float f; uint32_t u; } scale;
+    scale.u = (uint32_t)(n + 127) << 23;                     // 2^n
+    return (float)(p * (double)scale.f);
 }
 
 // @ 0x00571ce0  (/fp:fast)
