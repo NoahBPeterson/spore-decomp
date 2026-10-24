@@ -6,3 +6,4 @@ slices/s0111c7f0/s0111c7f0.cpp  ?releaseBuffers@MoppContextOwner@@QAEXPAX@Z  011
 slices/s0111c7f0/s0111c7f0.cpp  ?markChainVisited@@YGXPAX@Z  0111cea0  /vc71 /O2 /MD /Gy /TP
 slices/s0111c7f0/s0111c7f0.cpp  ?addProperty@MoppAssembler@@QAEXHH@Z  0111cf70  /vc71 /O2 /MD /Gy /TP
 slices/s0111c7f0/s0111c7f0.cpp  ?addTerminalReoffset@MoppAssembler@@QAEXI@Z  0111d020  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?needsExtraProperty@MoppAssembler@@QBE?AVhkBool@@PBXPBH@Z  0111ced0  /vc71 /O2 /MD /Gy /TP

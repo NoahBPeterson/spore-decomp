@@ -1,16 +1,16 @@
 # va  diff-bytes  reason
-0111c7f0 0 havok-equivalent
+0111c7f0 1058 FAIL-KEPT initializeWithTriangle: behaviorally equivalent except the uninitialised pad half of each copied hkGeomEdge (the binary builds six 8-byte temps and copies all 8 bytes; the pad holds stack residue -- 0xcccc fill for five edges, the high half of a dead float for the edge that reuses [esp+0x24]). Our frame is a portable x87 port (qword vs float locals) so the residue differs (orig cccc0002/cccc0005/4f2f0001 vs ours 3fe80002/41e50005/cccc0001); the pad is never read. equiv FAIL 5/5 valid inputs (pad dwords only; 19/24 inputs fault in both), 75.2% coverage
 0111cc90 0 havok-equivalent
 0111cd10 0 havok-equivalent
 0111cdb0 0 havok-equivalent
 0111ce00 0 havok-equivalent
-0111ced0 0 havok-equivalent
+0111ced0 0 FIXED needsExtraProperty: split into separate `return hkBool(true)` branches so cl branches and stores 0/1 instead of `setg cl` (which clobbered the this pointer); byte-exact MATCH (41 B, 0 diff), moved to manifest.txt; equiv PASS 400/400 valid, 100% coverage
 0111cf00 0 havok-equivalent
 0111d060 0 havok-equivalent
 0111d140 0 havok-equivalent
 0111d190 0 havok-equivalent
 0111d2b0 0 havok-equivalent
 0111d340 0 havok-equivalent
-0111d3c0 0 havok-equivalent
+0111d3c0 90 FIXED initFromParent: the call reaches the binary's out-of-line copyFrom, which leaves ecx advanced; cl's same-TU analysis assumed our body (which preserves ecx) and skipped reloading `this`, so setFromFloatBox ran with ecx=box+0x34 and wrote the cell ranges into the box. Keeping the object pointer in a `MoppChunk* volatile` slot forces `mov ecx,[esp+..]` before both calls; equiv PASS 324 valid, 100% coverage; chk size 88 vs 72 (extra reloads)
 0111d410 0 havok-equivalent
 0111d450 0 havok-equivalent

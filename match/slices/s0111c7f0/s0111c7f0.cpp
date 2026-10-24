@@ -19,7 +19,7 @@ struct hkGeomEdge
 	uint16_t m_vertex;
 	uint16_t m_twin;
 	uint16_t m_next;
-	uint16_t m_pad;      // never written by the code in this slice (stack garbage in the binary); 0 here
+	uint16_t m_pad;      // never written by the binary (uninitialized stack garbage copied through); left unset here
 };
 
 struct hkGeomHull
@@ -37,7 +37,6 @@ static inline hkGeomEdge makeEdge(int vertex, int twin, int next)
 	e.m_vertex = (uint16_t)vertex;
 	e.m_twin = (uint16_t)twin;
 	e.m_next = (uint16_t)next;
-	e.m_pad = 0;
 	return e;
 }
 
@@ -93,12 +92,20 @@ void hkGeomHull::initializeWithTriangle(int a, int b, int c)
 	// 1e-6f (0x358637bd): fcomp / test ah,5 / jp: the edges are built unless the compare is an ordered "less".
 	if (!(vlen2 < 9.99999997e-07f))
 	{
-		m_edges.pushBack(makeEdge(a, 1, 2));
-		m_edges.pushBack(makeEdge(b, 0, 5));
-		m_edges.pushBack(makeEdge(b, 3, 4));
-		m_edges.pushBack(makeEdge(c, 2, 1));
-		m_edges.pushBack(makeEdge(c, 5, 0));
-		m_edges.pushBack(makeEdge(a, 4, 3));
+		// All six edges are built before any is pushed (the binary keeps six separate 8-byte
+		// temps alive at once), so the uninitialised pad half of each comes from a distinct slot.
+		hkGeomEdge e0 = makeEdge(a, 1, 2);
+		hkGeomEdge e1 = makeEdge(b, 0, 5);
+		hkGeomEdge e2 = makeEdge(b, 3, 4);
+		hkGeomEdge e3 = makeEdge(c, 2, 1);
+		hkGeomEdge e4 = makeEdge(c, 5, 0);
+		hkGeomEdge e5 = makeEdge(a, 4, 3);
+		m_edges.pushBack(e0);
+		m_edges.pushBack(e1);
+		m_edges.pushBack(e2);
+		m_edges.pushBack(e3);
+		m_edges.pushBack(e4);
+		m_edges.pushBack(e5);
 	}
 	else
 	{
@@ -317,7 +324,9 @@ hkBool MoppAssembler::needsExtraProperty(const void* a, const int* b) const
 	// signed compares (jge / jg)
 	if (at<int>(a, 8) < 0x16)
 		return hkBool(true);
-	return hkBool(*b > at<int>(this, 0x14));
+	if (*b > at<int>(this, 0x14))
+		return hkBool(true);
+	return hkBool(false);
 }
 
 // @ 0x0111cf00
@@ -524,8 +533,12 @@ MoppChunk* MoppChunk::initFromParent(const MoppChunk* parent, const void* box, c
 {
 	for (int i = 0; i < 0x12; ++i)      // rep movsd, 0x48 bytes
 		m_w[i] = parent->m_w[i];
-	copyFrom(box);
-	setFromFloatBox(box, xform);
+	// The call goes to the binary's out-of-line copyFrom, which leaves ecx advanced; a plain
+	// same-TU call lets cl assume ecx survives and skip reloading `this` for the next call, so
+	// keep the object pointer in a volatile slot to force the reload.
+	MoppChunk* volatile self = this;
+	self->copyFrom(box);
+	self->setFromFloatBox(box, xform);
 	m_w[0] = parent->m_w[0] + 1;
 	at<uint8_t>(this, 4) = 0;
 	computeShift();
