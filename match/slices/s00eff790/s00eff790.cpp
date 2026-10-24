@@ -1,8 +1,11 @@
 // slice s00eff790 -- scenario checklist construction / surface and noun lookup helpers.
-// 0x00eff790 and 0x00f002d0 are complete (nonmatching.txt); the rest are partial (partial.txt).
+// All five targets are complete and recorded in nonmatching.txt (partial.txt is empty).
+// 0x00f001b0 walks the 0x238-stride surface array for the nearest node with a given key;
+// 0x00f00380 is the surface query that aims the selected target; 0x00f004f0 the object query.
 //
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
+#include <math.h>
 
 
 typedef int  (__thiscall *FN0_i)(void*);
@@ -316,13 +319,113 @@ void ScenarioTutorials_BuildChecklist()
     ScenarioTutorials_PlacePlanetCamera();
 }
 
+// =============================================================================================
+// Surface / noun query helpers: 0x00f001b0 (nearest surface point), 0x00f00380 (surface query)
+// and 0x00f004f0 (object query).
+// =============================================================================================
+
+extern uint8_t g_016065f8;                                  // 0x016065f8 tutorial queries enabled
+extern void*   g_015ad298;                                  // 0x015ad298
+extern uint8_t g_015ad35c;                                  // 0x015ad35c
+extern float   g_015ad2ac;                                  // 0x015ad2ac
+extern float   g_01471064;                                  // 0x01471064
+extern float   g_01485720;                                  // 0x01485720 _HK_REAL_ONE
+extern float   g_0148b6e0;                                  // 0x0148b6e0 FLT_MAX
+extern char    g_015ad328;                                  // 0x015ad328 tutorial window set (passed in ecx)
+
+// Out-of-slice callees.  The originals behind FUN_00b10200/FUN_00b0f210/FUN_00b10340/
+// FUN_00b16270/FUN_00efe930/FUN_00f45970/FUN_00f445c0/FUN_00f3c0b0/FUN_00f3e2b0/
+// FUN_00f3ec90/FUN_00f42a00/FUN_00f414b0/FUN_00f45a80/FUN_00efeae0 are thiscall members
+// (ecx = self, callee pops its stack args); the __fastcall self slot reproduces that.  The three
+// helpers whose original reads a register at entry (a same-TU MSVC register convention with no C
+// signature) are reached from inline asm only: FUN_00efccd0 takes its argument in eax,
+// FUN_00efcb40 in esi and returns a float in xmm0, FUN_00efc930 writes three floats through esi.
+void* __cdecl FUN_00eec0d0(void* p);                                    // 0x00eec0d0
+void* __cdecl FUN_00eec0b0(void* p);                                    // 0x00eec0b0
+void* __cdecl FUN_0067dd10();                                           // 0x0067dd10 SP::App
+void* __cdecl FUN_0067dcc0();                                           // 0x0067dcc0 MessageServer
+float* __fastcall FUN_00b10200(void* self, int dummy);                  // 0x00b10200
+void __fastcall FUN_00b0f210(void* self, int dummy, float* a, float* b, float* c);  // 0x00b0f210
+void __fastcall FUN_00b10340(void* self, int dummy, float a, float b, float c);     // 0x00b10340
+void __fastcall FUN_00b16270(void* self, int dummy);                    // 0x00b16270
+void __fastcall FUN_00efe930(void* self, int dummy, void* p);           // 0x00efe930
+void __fastcall FUN_00f45970(void* self, int dummy);                    // 0x00f45970
+void* __fastcall FUN_00f445c0(void* self, int dummy, void* p);          // 0x00f445c0
+void __fastcall FUN_00f3c0b0(void* self, int dummy);                    // 0x00f3c0b0 KillThing
+void __fastcall FUN_00f3e2b0(void* self, int dummy, void* a, void* b, void* c);     // 0x00f3e2b0
+bool __fastcall FUN_00f3ec90(void* self, int dummy, int p);             // 0x00f3ec90
+void __fastcall FUN_00f42a00(void* self, int dummy, void* p);           // 0x00f42a00
+void __fastcall FUN_00f414b0(void* self, int dummy);                    // 0x00f414b0
+void __fastcall FUN_00f45a80(void* self, int dummy);                    // 0x00f45a80
+bool __fastcall FUN_00efeae0(void* self, int dummy, void* p);           // 0x00efeae0
+float __cdecl FUN_00efcb40();                                           // 0x00efcb40 argument in esi
+void  __cdecl FUN_00efccd0();                                           // 0x00efccd0 argument in eax
+bool  __cdecl FUN_00efc930();                                           // 0x00efc930 out pointer in esi
+
+// slot of an interface pointer's vtable, by byte offset
+inline void* VSlot(void* p, int byteOffset)
+{
+    return ((void**)*(void***)p)[byteOffset / 4];
+}
+
+// A surface node of the 0x238-stride array 0x00f001b0 walks.  mFlags bit 0x40000000 marks the end
+// of a run; a negative next key ends it too.  mKey is the selector the caller passes.
+struct cSurfacePoint {
+    uint32_t mFlags;                                    // +0x00
+    uint32_t mKey;                                      // +0x04
+    float    mX;                                        // +0x08 unit normal / direction
+    float    mY;                                        // +0x0c
+    float    mZ;                                        // +0x10
+    uint8_t  mRest[0x238 - 0x14];
+};
+
 // @ 0x00f001b0
 void* __cdecl FUN_00f001b0(int a, void* b)
 {
-    void* mgr = *(void**)((char*)gSimulator + 0x74);
+    char* mgr = (char*)*(void**)((char*)gSimulator + 0x74);
     if (a == -2)
         return FUN_00ff3f00(mgr);
-    return (void*)FUN_00ff3f00(mgr);
+    // The original keeps its element pointer in ecx and restores ecx from the 4-byte scratch slot
+    // it reserves at entry (push ecx / pop ecx; LTCG callers may keep a live value there and the
+    // gate requires it untouched: docs/codegen.md 11.3.2).  Save and restore ours the same way.
+    __asm { push ecx }
+    char* base = *(char**)(mgr + 0x10);
+    const float* pos = (const float*)b;
+    float best = g_0148b6e0;
+    void* result = 0;
+    cSurfacePoint* e;
+    if (*(uint32_t*)(base + 0x2c24) < 0x3fffffff)
+        e = (cSurfacePoint*)(*(uint32_t*)(base + 0x2c24) * 0x238 + *(int*)(base + 0x2c10));
+    else
+        e = *(cSurfacePoint**)(base + 0x2c14);
+    cSurfacePoint* end = *(cSurfacePoint**)(base + 0x2c14);
+    if (end != e) {
+        do {
+            if (e->mKey == (uint32_t)a) {
+                // 80-bit x87: the whole chain stays in extended precision, one rounding on store
+                float inv = (float)(1.0 / sqrt((double)e->mX * e->mX +
+                                               (double)e->mY * e->mY +
+                                               (double)e->mZ * e->mZ));
+                float dx = e->mX * inv - pos[0];
+                float dy = e->mY * inv - pos[1];
+                float dz = e->mZ * inv - pos[2];
+                float d = (dz * dz + dy * dy) + dx * dx;
+                if (d < best) {
+                    best = d;
+                    result = &e->mKey;
+                }
+            }
+            uint32_t v;
+            do {
+                v = e->mFlags;
+                ++e;
+                if ((v >> 0x1e) & 1)
+                    break;
+            } while ((int)e->mFlags < 0);
+        } while (end != e);
+    }
+    __asm { pop ecx }
+    return result;
 }
 
 // @ 0x00f002d0
@@ -368,14 +471,119 @@ uint32_t* __cdecl FUN_00f002d0(uint32_t* p)
     return p;
 }
 
-// @ 0x00f00380
-int __cdecl FUN_00f00380()
+// @ 0x00f00380  surface query: (re)select and aim the tutorial target for `key`
+void __stdcall FUN_00f00380(int key)
 {
-    return 0;
+    if (g_016065f8 == 0)
+        return;
+    void* p = g_015ad298;
+    if (((bool (__thiscall*)(void*))VSlot(p, 0x38))(p))
+        return;
+    void* app = FUN_0067dd10();
+    void* a = ((void* (__thiscall*)(void*))VSlot(app, 0x50))(app);
+    void* b = ((void* (__thiscall*)(void*))VSlot(a, 0x38))(a);
+    if (b == 0)
+        return;
+    void* cam = ((void* (__thiscall*)(void*, int))VSlot(b, 0xc))(b, 0x11966ed);
+    if (cam == 0)
+        return;
+
+    float* pos = FUN_00b10200(cam, 0);
+    uint32_t* node = (uint32_t*)FUN_00f001b0(key, pos);
+    if (node == 0)
+        return;
+
+    float dx = *(float*)((char*)node + 4) - pos[0];
+    float dy = *(float*)((char*)node + 8) - pos[1];
+    float dz = *(float*)((char*)node + 0xc) - pos[2];
+    float d = (dz * dz + dy * dy) + dx * dx;
+    if (d < g_01485720)
+        node = FUN_00f002d0(node);
+
+    void* sel = FUN_00eec0d0(node);
+    FUN_00efe930(&g_015ad328, 0, sel);
+    void* props = (void*)GetHandleProps((cArrowMorphHandle*)sel);
+    __asm {
+        mov     eax, props
+        call    FUN_00efccd0
+    }
+
+    float pitch, yaw, roll;
+    FUN_00b0f210(cam, 0, &pitch, &yaw, &roll);
+    if (g_015ad35c != 0)
+        yaw = g_015ad2ac * g_01471064;
+    float f = 0.0f;
+    __asm {
+        push    esi
+        mov     esi, node
+        call    FUN_00efcb40
+        movss   dword ptr [f], xmm0
+        pop     esi
+    }
+    FUN_00b10340(cam, 0, pitch, yaw, f);
+    FUN_00b16270(cam, 0);
 }
 
-// @ 0x00f004f0
-int __cdecl FUN_00f004f0()
+// receiver of 0x00f004f0: ecx = this
+struct cTutorialQuery {
+    uint32_t mPad0;                                     // +0x00
+    uint32_t mPad4;                                     // +0x04
+    void*    mpWorld;                                   // +0x08 used as `this` for the world helpers
+    void*    mpSelected;                                // +0x0c pointer whose first dword is the selected id
+    void Query();                                       // 0x00f004f0
+};
+
+// @ 0x00f004f0  object query: refresh the selected tutorial object
+void cTutorialQuery::Query()
 {
-    return 0;
+    cTutorialQuery* const self = this;
+    int id = *(int*)self->mpSelected;
+    if (id == -1)
+        return;
+    void* world = self->mpWorld;
+    if (!FUN_00f3ec90(world, 0, id)) {
+        void* ms = FUN_0067dcc0();
+        ((void (__thiscall*)(void*, int, int, int))VSlot(ms, 0x14))(ms, 0x78c406b, 0, 0);
+        return;
+    }
+
+    float buf[3];
+    bool ok;
+    __asm {
+        push    esi
+        lea     esi, buf
+        call    FUN_00efc930
+        mov     ok, al
+        pop     esi
+    }
+    if (!ok)
+        return;
+
+    FUN_00f45970(world, 0);
+    uint32_t* node = (uint32_t*)FUN_00f445c0(world, 0, self->mpSelected);
+    if (node == 0) {
+        FUN_00f3c0b0(world, 0);
+        return;
+    }
+
+    void* sel = FUN_00eec0d0(node);
+    *(float*)((char*)node + 4) = buf[0];
+    *(float*)((char*)node + 8) = buf[1];
+    *(float*)((char*)node + 0xc) = buf[2];
+    FUN_00f3e2b0(world, 0, node, 0, 0);
+    if (FUN_00efeae0(self, 0, sel)) {
+        FUN_00f42a00(world, 0, node);
+        FUN_00f414b0(world, 0);
+        FUN_00f3c0b0(world, 0);
+        return;
+    }
+    ((void (__thiscall*)(void*, void*))VSlot(self, 0x20))(self, sel);
+    FUN_00f45a80(world, 0);
+    void* props = FUN_00eec0b0(sel);
+    if (props != 0) {
+        *(uint8_t*)((char*)props + 0x12b) = 1;
+        *(uint8_t*)((char*)props + 0x128) = 0;
+        void* vp = (char*)props + 0x34;
+        ((void (__thiscall*)(void*, void*))VSlot(vp, 0x3c))(vp, (char*)props + 0x44);
+    }
 }
