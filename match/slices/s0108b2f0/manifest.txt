@@ -1,1 +1,11 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0108b2f0/s0108b2f0.cpp  ?getConstraintInfo@hkBallSocketChainData@@UBEXAAUhkConstraintInfo@@@Z  0108b9f0  /vc71 /O2 /MD /Gy /TP
+slices/s0108b2f0/s0108b2f0.cpp  ?getRuntimeInfo@hkBallSocketChainData@@UBEX_NAAUhkConstraintRuntimeInfo@@@Z  0108ba30  /vc71 /O2 /MD /Gy /TP
+slices/s0108b2f0/s0108b2f0.cpp  ?addConstraint@hkBallSocketChainData@@QAEXABVhkVector4@@0@Z  0108ba70  /vc71 /O2 /MD /Gy /TP
+slices/s0108b2f0/s0108b2f0.cpp  ??1hkConstraintInstance@@UAE@XZ  0108bec0  /vc71 /O2 /MD /Gy /TP
+slices/s0108b2f0/s0108b2f0.cpp  ??0hkConstraintInstance@@QAE@W4ConstraintPriority@0@@Z  0108bf80  /vc71 /O2 /MD /Gy /TP
+slices/s0108b2f0/s0108b2f0.cpp  ?setPriority@hkConstraintInstance@@QAEXW4ConstraintPriority@1@@Z  0108bfb0  /vc71 /O2 /MD /Gy /TP
+slices/s0108b2f0/s0108b2f0.cpp  ?entityRemovedCallback@hkConstraintInstance@@UAEXPAVhkEntity@@@Z  0108bfd0  /vc71 /O2 /MD /Gy /TP
+slices/s0108b2f0/s0108b2f0.cpp  ?fireCollidableAdded@hkPhantom@@QAEHPBUhkCollidable@@@Z  0108c0b0  /vc71 /O2 /MD /Gy /TP
+slices/s0108b2f0/s0108b2f0.cpp  ?fireCollidableRemoved@hkPhantom@@QAEXPBUhkCollidable@@_N@Z  0108c100  /vc71 /O2 /MD /Gy /TP
+slices/s0108b2f0/s0108b2f0.cpp  ??0hkBallSocketChainData@@QAE@XZ  0108bb00  /vc71 /O2 /MD /Gy /TP

@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0108b2f0  1700  hkLimitedHingeConstraintData::buildJacobian; all 7 calls in retail order, older-cl x87/stack scheduling differs
+0108bb40     4  deleting dtor; vptr store sunk past the capacity test, js vs jl; equiv UNSUPPORTED (symbol is compiler-generated, marker binds only the class operator delete)
+0108bba0   729  chain buildJacobian; structurally reconstructed, cl13 loop/register/stack layout differs
+0108bf10    25  4-arg ctor; store scheduling only; equiv PASS 326 inputs, 100% coverage
+0108bff0    39  fixNullEntities; cl13 flattens the `x ^ 0` recovery flag; equiv PASS 393 inputs, 100% coverage

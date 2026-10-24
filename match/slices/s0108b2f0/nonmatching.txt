@@ -1,2 +1,6 @@
 # va  diff-bytes  reason
 0108b2f0 1700 complete (flags /O2 /MD /Gy /TP /fp:fast): all 7 calls in original order; 1509 vs 1763 B; older-cl x87 scheduling differs
+0108bb40    4 ??_GhkBallSocketChainData@@UAEPAXI@Z; retail keeps the derived vptr store before the capacity test (mine sinks it after) and tests with js where cl13.10.3052 emits jl; body (chunk free + operator delete) identical; equiv UNSUPPORTED (compiler-generated symbol)
+0108bba0  729 ?buildJacobian@hkBallSocketChainData@@...; 787-byte chain solver; reconstruction keeps every call (hkBeginConstraints, stabilized ball-socket row builder, hkConstraintBuildJacobianAndSetData) and the pivot transforms but cl13 picks a different loop/register/stack layout throughout
+0108bf10   25 ??0hkConstraintInstance@@QAE@PAVhkEntity@@0PAVhkConstraintData@@W4ConstraintPriority@0@@Z; 4-arg ctor; same instructions, retail stores m_world/m_constraintData one slot earlier (store scheduling only); equiv PASS 326 inputs 100% coverage
+0108bff0   39 ?fixNullEntities@hkConstraintInstance@@QAEXXZ; cl13.10.3052 folds `x ^ 0` (retail's VC7.1 build keeps the xor), so the recovery flag path is 3 bytes shorter; equiv PASS 393 inputs 100% coverage
