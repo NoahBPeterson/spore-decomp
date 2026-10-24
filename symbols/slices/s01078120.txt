@@ -1,1 +1,9 @@
-01078120 SP::cSPEditorDevUI::Init  # Ghidra PDB candidate (caller-scored), unverified; source calls it cSPPropLayoutPanel::Init: reads layout properties, measures a layout window, centres a text child
+01078120 SP::cSPPropLayoutPanel::Init  # Ghidra PDB candidate (caller-scored), unverified
+01078820 PropPanelAnim::FUN_01078820  # panel set-up: swap the layout ref, seed the resource key, subscribe to the message server
+010788d0 PropPanelAnim::FUN_010788d0  # per-frame tick: interpolate the window between two layout cells, refresh entry children
+01078b80 PropPanelAnim::FUN_01078b80  # move the window to (x,z) instantly or with the stopwatch running (BYTE-EXACT)
+01078bf0 List::FUN_01078bf0  # std::list<...>::erase / node-unlink helper (out-of-line)
+01078d30 FUN_01078d30  # std::vector<LayoutEntry>::_Fill / assign helper (BYTE-EXACT)
+01078ec0 PropPanelAnim::FUN_01078ec0  # snap the window to the nearer cell boundary
+01078fa0 PropPanelAnim::FUN_01078fa0  # clamp the window position for the wrapping layout mode (BYTE-EXACT)
+01079040 PropPanelAnim::FUN_01079040  # scroll so that page `n` becomes visible

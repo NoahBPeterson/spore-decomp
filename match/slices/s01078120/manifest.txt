@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01078120/panel_anim.cpp  FUN_01078b80@PropPanelAnim@@QAEXMM@Z  01078b80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01078120/panel_anim.cpp  FUN_01078d30@@YAXPAULayoutEntry@@0PBU1@@Z  01078d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01078120/panel_anim.cpp  FUN_01078fa0@PropPanelAnim@@QAEXXZ  01078fa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
