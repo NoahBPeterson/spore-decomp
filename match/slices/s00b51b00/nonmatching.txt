@@ -9,7 +9,7 @@
 00b51ee0  313  FUN_00b51ee0 intrusive-ptr release; complete behavior (refcount==1 gate, recursive +0x70 release, conditional map unlink via 0xb51e30/0xb4f8a0); equiv=WEAK 353 valid, 50.4% cov
 00b52020  120  FUN_00b52020 map erase-by-key; complete behavior (find, release value, erase); equiv=PASS 400/400 (68.6% cov)
 00b520a0  115  FUN_00b520a0 free-all-nodes; complete behavior (walk buckets, release each, DoFreeNodes 0x7611f0, clear count); equiv=PASS 400/400 (60.5% cov)
-00b52120  207  FUN_00b52120 insert; complete behavior (mod-hash, rehash policy 0x921440, node alloc 0xb576d0, bucket splice); equiv=PASS 222/222 (90.2% cov)
+00b52120  163  FUN_00b52120 insert; complete behavior (mod-hash, rehash policy 0x921440, node alloc 0xb576d0, bucket splice); the return type is int** and both paths `return out` -- the original ends each path with out in eax (`mov 0x1c(%esp),%eax` then the three out stores); equiv=PASS 222/222 (90.2% cov, 74/82 insns); chk 197 vs 207
 00b521f0  64  FUN_00b521f0 text-style lookup; complete behavior (hashtable 0x16852e8 find); equiv=UNSUPPORTED (global table unmapped in harness, 0/400 valid)
 00b52230  430  FUN_00b52230 apply rigid-body transform to style object; complete behavior; equiv=UNSUPPORTED (virtual target faults under synthetic input, 0/400 valid)
 00b523e0  679  FUN_00b523e0 sync body position/rotation quaternion; complete behavior (0.001 epsilon compare + setPosition/setRotation + condition-gated AABB update); equiv=UNSUPPORTED (virtual target faults under synthetic input, 0/400 valid)

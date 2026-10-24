@@ -122,7 +122,7 @@ struct Big {
     void  M_b51df0(unsigned a, unsigned b);
     void  M_b51ee0();
     void  M_b52020(int* p);
-    void  M_b52120(int** out, int* key, int* extra);
+    int** M_b52120(int** out, int* key, int* extra);   // returns `out` in eax (both paths)
     u32   FUN_00c763d0(u32);
 };
 
@@ -494,7 +494,7 @@ void __cdecl FUN_00b520a0()
 // ---------------------------------------------------------------------------
 // @ 0x00B52120
 // ---------------------------------------------------------------------------
-void Big::M_b52120(int** out, int* key, int* extra)
+int** Big::M_b52120(int** out, int* key, int* extra)
 {
     (void)extra;
     char* self = (char*)this;
@@ -513,7 +513,7 @@ void Big::M_b52120(int** out, int* key, int* extra)
             out[0] = node;
             *((char*)out + 8) = 0;
             out[1] = (int*)slot;
-            return;
+            return out;
         }
         node = *(int**)((char*)node + 0xc);
     }
@@ -533,6 +533,7 @@ void Big::M_b52120(int** out, int* key, int* extra)
     out[0] = nn;
     out[1] = (int*)&buckets[idx];
     *((char*)out + 8) = 1;
+    return out;
 }
 
 // ---------------------------------------------------------------------------
