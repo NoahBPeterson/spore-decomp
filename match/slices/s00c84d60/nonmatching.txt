@@ -1,0 +1,3 @@
+00c84d60 1020 UpdatePlanet: structural approximation only (634 vs 1146 bytes); the orbital/interpolation math and the x87 float path were not reproduced. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-, equiv not run (nonmatching).
+00c85200 158 InitBinarySystem: 375 vs 374 bytes, diff is register allocation only (suffix id materialised in ecx/edx instead of eax, cString `this` lea scheduled after the arg pushes). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-, equiv not run (nonmatching).
+00c85540 1036 GetBinarySuffix: structural approximation only (917 vs 1249 bytes); random/tilt/radius blend and AutoRefCount create+insert paths simplified. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-, equiv not run (nonmatching).

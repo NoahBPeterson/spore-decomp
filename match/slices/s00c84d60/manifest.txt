@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s00c84d60/s00c84d60.cpp  ?UpdatePlanets@cSolarSystem@SP@@QAEXM@Z  00c85380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
