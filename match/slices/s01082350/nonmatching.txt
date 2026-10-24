@@ -1,21 +1,20 @@
-01082350 229 havok-equivalent; equiv FAIL: only esp after return differs (original caller-cleans, ours ret 4; custom ABI), ECX receiver fixed
+01082350 248 complete; caller-clean custom ABI reproduced by an argument-less member that reads its stack argument via _AddressOfReturnAddress; returns the q[2] bits in eax; equiv PASS (400/400 valid, 100% coverage)
 01082490 11 flags /vc71 /O2 /MD /Gy /TP; complete, equiv PASS (400/400 valid, 100% coverage, tolerated inline-calls). The original wrapper calls the custom-ABI hkRotation::toQuat (0x01082350; ecx=rotation, out pushed, caller-pop), which cl 15.00 cannot express: a direct thiscall call left the pushed out on the stack (`ret 4` returned into it). set now converts through a __thiscall member hkQuaternion::toQuatImpl (same body as toQuat); it pops its argument and returns with ecx==this, so the wrapper's esp, ecx and eax (the q[2] bits) all match the original.
 010824a0 181 havok-equivalent
-010825a0 83 havok-equivalent
+010825a0 93 complete; inline capacity check and field-only property write leave m_alignmentPadding (+4) untouched; equiv PASS (373/400 valid, 89.7% coverage)
 01082600 60 havok-equivalent
 01082660 78 havok-equivalent
 010826e0 79 havok-equivalent
 01082770 103 havok-equivalent
 01082800 129 havok-equivalent
-01082890 77 havok-equivalent
+01082890 31 complete; pad10 corrected to 8 floats so the velocity vectors and damp factors land at +0x30/+0x40/+0x50; 1/damping is rounded to float through a volatile store like the original's fst [esp+8]; equiv PASS (400/400 valid, 100% coverage)
 01082990 43 havok-equivalent
-01082a00 3 havok-equivalent
 01082a90 149 havok-equivalent
 01082b90 59 havok-equivalent
 01082bf0 99 havok-equivalent
-01082cf0 22 havok-equivalent; equiv FAIL: ours faults at input 0 where the original returns (deleting-dtor path differs)
+01082cf0 4 complete; scalar deleting destructor installs the original vtables at +0/+8 and frees through g_hkMemory::deallocateObject(this, memSize, 4), returning this; equiv PASS (400/400 valid, 100% coverage)
 01082df0 182 havok-equivalent
 01082ee0 0 havok-equivalent
 01083110 0 havok-equivalent
-01083320 123 havok-equivalent
+01083320 122 complete; pending path queues an 8-byte type/object prefix at entry-8 so queueOperation's 0x14-byte copy matches the original stale stack tail; equiv WEAK (181 valid, 24.3% coverage, no mismatch)
 01082910 0 havok-equivalent

@@ -17,12 +17,14 @@ typedef float hkReal;
 // ------------------------------------------------------------ base types
 class hkVector4 { public: float x, y, z, w; };
 class hkQuaternion { public: float m_vec[4]; uint32_t set(const class hkRotation& r); void toQuatImpl(const class hkRotation& r); };    // x y z w
-class hkRotation { public: float m_el[12]; void set(const hkQuaternion& q); void toQuat(hkQuaternion* out) const; };          // 3 columns of 4 floats (col*4+row)
+class hkRotation { public: float m_el[12]; void set(const hkQuaternion& q); uint32_t toQuat() const; };   // 3 columns of 4 floats (col*4+row)
 
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 extern "C" __declspec(dllimport) int __stdcall TlsSetValue(unsigned long, void*);
 extern "C" unsigned __int64 __rdtsc();
 #pragma intrinsic(__rdtsc)
+extern "C" void* _AddressOfReturnAddress(void);
+#pragma intrinsic(_AddressOfReturnAddress)
 
 enum { HK_ARRAY_FLAG_MASK = 0x3fffffff, HK_ARRAY_DONT_DEALLOCATE = (int)0x80000000 };
 struct hkArrayUtil { static void _reserveMore(void* arr, int elemSize); };
@@ -85,8 +87,11 @@ class hkReferencedObject { public:
 // @ 0x01082350
 // Original uses a private register convention (rotation in ECX, output quaternion on the stack,
 // caller cleans). Largest-diagonal / trace method; every temporary stays in 80-bit x87 registers.
-void hkRotation::toQuat(hkQuaternion* out) const
+uint32_t hkRotation::toQuat() const
 {
+    // Custom ABI: the original takes `out` on the stack but the callee does not pop it (`ret`),
+    // so the declaration is argument-less and the first stack slot is read explicitly.
+    hkQuaternion* out = *(hkQuaternion**)((char*)_AddressOfReturnAddress() + 4);
     const float* m = m_el;
     float q[4];
     // X87-PRECISION: trace sum, sqrt and 0.5/root are kept unrounded on the FPU stack.
@@ -117,6 +122,7 @@ void hkRotation::toQuat(hkQuaternion* out) const
     out->m_vec[1] = q[1];
     out->m_vec[2] = q[2];
     out->m_vec[3] = q[3];
+    return *(const uint32_t*)&q[2];
 }
 
 // Conversion helper for hkQuaternion::set. An ordinary __thiscall callee (pops its argument) that
@@ -251,10 +257,12 @@ void hkWorldObject::addProperty(uint32_t key, hkPropertyValue value)
 {
     for (int i = 0; i < m_properties.m_size; ++i)
         if (m_properties.m_data[i].m_key == key) return;       // already present: nothing is added
-    hkProperty p;
-    p.m_key = key;
-    p.m_value = value;
-    m_properties.pushBack(p);                                  // m_alignmentPadding is not written
+    if (m_properties.m_size == (m_properties.m_capacityAndFlags & HK_ARRAY_FLAG_MASK))
+        hkArrayUtil::_reserveMore(&m_properties, sizeof(hkProperty));
+    hkProperty* e = &m_properties.m_data[m_properties.m_size];
+    ++m_properties.m_size;
+    e->m_value = value;                                         // m_alignmentPadding is not written
+    e->m_key = key;
 }
 
 // @ 0x01082600
@@ -346,7 +354,7 @@ struct hkSolverInfo {
     float m_tau;                       // +0x04
     float m_damping;                   // +0x08
     float m_frictionTau;               // +0x0c
-    float pad10[16];                   // +0x10 .. +0x2f
+    float pad10[8];                    // +0x10 .. +0x2f
     hkVector4 m_integrateVelocityFactor;      // +0x30
     hkVector4 m_invIntegrateVelocityFactor;   // +0x40
     float m_dampDivTau;                // +0x50
@@ -368,7 +376,7 @@ void hkSolverInfo::setTauAndDamping(hkReal tau, hkReal damping)
     m_dampDivTau = (float)((hkX87Real)damping / tau);
     m_dampDivFrictionTau = (float)((hkX87Real)damping / frictionTauExt);
     hkX87Real invDampExt = 1.0f / (hkX87Real)damping;
-    float invDamp = (float)invDampExt;                          // stored back into the argument slot
+    volatile float invDamp = (float)invDampExt;                // rounded store, as the original's fst [esp+8]
     hkX87Real tauDivDampExt = invDampExt * tau;
     m_tauDivDamp = (float)tauDivDampExt;
     m_frictionTauDivDamp = (float)((hkX87Real)invDamp * frictionTauExt);
@@ -438,6 +446,9 @@ struct hkSimulation { virtual void s0(); virtual void s1(); virtual int stepDelt
 
 enum hkEntityActivation { HK_ENTITY_ACTIVATION_DO_NOT_ACTIVATE = 0, HK_ENTITY_ACTIVATION_DO_ACTIVATE = 1 };
 struct hkWorldOperationBase { uint8_t m_type; void* m_object; int m_arg; };   // queued op record
+// The pending-addPhantom path only fills the 8-byte head of the 0x14-byte queue record; the queue
+// copies 0x14 bytes, so the tail deliberately comes from the caller frame (return address/args).
+struct hkWorldOperationPrefix { uint8_t m_type; void* m_object; };
 
 class hkWorld : public hkReferencedObject { public:
     hkSimulation* m_simulation;                        // +0x08
@@ -515,6 +526,7 @@ struct hkEntityCallbackUtil {
 };
 struct hkWorldOperationQueue {
     void queueOperation(const hkWorldOperationBase& op);                // 0x109afe0
+    void queuePhantomOperation(const hkWorldOperationPrefix& op);       // 0x109afe0
     void executeAllPending();                                           // 0x109b490
 };
 void hkSimulation_removeEntity(hkSimulation* sim, hkEntity* e);         // 0x10a08b0
@@ -542,12 +554,12 @@ void hkWorld::castRay(const hkWorldRayCastInput& input, hkRayHitCollector& outpu
 struct hkNullContactMgr {
     virtual void s0(); virtual void s1();
     virtual uint16_t addContactPoint(int a, int b, int c, int d);       // 0x010829e0
-    virtual uint8_t processRequest(int a, int b, int c, int d, int e, int f, int g);   // 0x01082a00
+    virtual uint32_t processRequest(int a, int b, int c, int d, int e, int f, int g);  // 0x01082a00
 };
 uint16_t hkNullContactMgr::addContactPoint(int, int, int, int) { return 0; }
 
 // @ 0x01082a00
-uint8_t hkNullContactMgr::processRequest(int, int, int, int, int, int, int) { return 1; }
+uint32_t hkNullContactMgr::processRequest(int, int, int, int, int, int, int) { return 1; }
 
 // @ 0x01082a40
 // hkWorld::removeWorldDeletionListener: the original (assert compiled out) writes data[-1] when
@@ -634,7 +646,7 @@ struct hkNullContactMgrFactory : hkContactMgrFactory {
     HK_CLASS_ALLOC(4)
     virtual hkNullContactMgr* createContactMgr(int a, int b, int c);   // 0x01082ce0 returns this+8
     virtual ~hkNullContactMgrFactory() {}
-    void deletingDtor(unsigned flags);                      // 0x01082cf0 (scalar deleting destructor body)
+    void* deletingDtor(unsigned flags);                     // 0x01082cf0 (scalar deleting destructor body)
 };
 // @ 0x01082ce0
 hkNullContactMgr* hkNullContactMgrFactory::createContactMgr(int, int, int)
@@ -643,12 +655,15 @@ hkNullContactMgr* hkNullContactMgrFactory::createContactMgr(int, int, int)
 }
 
 // @ 0x01082cf0
-void hkNullContactMgrFactory::deletingDtor(unsigned flags)
+void* hkNullContactMgrFactory::deletingDtor(unsigned flags)
 {
+    // The scalar deleting destructor first installs the two original vtables (this object and
+    // the embedded null contact manager at +8), then frees through g_hkMemory when bit 0 is set.
+    *(void**)this = (void*)0x013ef094u;
+    *(void**)&m_nullContactMgr_slot = (void*)0x013ef094u;
     if (flags & 1)
-        delete this;
-    else
-        this->hkNullContactMgrFactory::~hkNullContactMgrFactory();
+        hkNullContactMgrFactory::operator delete(this);
+    return this;
 }
 
 // @ 0x01082d20
@@ -803,10 +818,10 @@ uint8_t hkWorld::removeEntity(hkEntity* entity)
 hkPhantom* hkWorld::addPhantom(hkPhantom* phantom)
 {
     if (m_lockCountForPhantoms + m_lockCount != 0) {
-        hkWorldOperationBase op;
+        hkWorldOperationPrefix op;
         op.m_type = 0xd;
         op.m_object = phantom;
-        m_pendingOperations->queueOperation(op);
+        m_pendingOperations->queuePhantomOperation(op);
         return 0;
     }
     m_lockCount = m_lockCount + 1;
