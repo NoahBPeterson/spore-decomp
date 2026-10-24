@@ -1,3 +1,11 @@
 # va diff reason
-007f1820 67 cArithmeticaFactory::WriteResource - register allocation (size kept in edi, writer in esi) differs
-007f1890 61 eastl uninitialized_copy (16-byte) - returns result pointer (original loads it into eax); register assignment differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv PASS (312 valid, 100% cov)
+007f1630 476 cArithmeticaProgram::CompileToByteCode - bytecode emitter fully modelled; ours 446B vs orig 489B (the new[] size overflow-check idiom and the strcpy-pool loop shape differ); equiv PASS (208 valid, 88.4% cov)
+007f1820 67 cArithmeticaFactory::WriteResource - register allocation (size in edi, writer in esi) differs; equiv UNSUPPORTED (unresolved ?CompileToByteCode@ProgStub@@ and the writer vcall)
+007f1890 58 eastl uninitialized_copy (16-byte) - returns the result pointer (original reloads it into eax); register assignment differs; equiv PASS (312 valid, 100% cov)
+007f1ac0 118 eastl::vector<tLabel>::operator= - ours 198B vs orig 208B; the grow path recomputes p+n*8 into separate registers; equiv WEAK (158 valid, 40.9% cov)
+007f1bf0 320 eastl::vector<16-byte>::insert - ours 385B vs orig 412B; the original's out-of-line 4-arg UninitCopy16 call shape is not reproducible from source; equiv WEAK (153 valid, 12.9% cov)
+007f1d90 9 cArithmeticaProgram destructor - identical instruction stream apart from MSVC scheduling the `push edi` prologue save after the first load (original) instead of at entry (ours); equiv WEAK (180 valid, 100% cov)
+007f1f60 52 eastl::vector<16-byte>::resize - ours 120B vs orig 117B; the shrink path picks edi/edx where the original keeps this in edi and uses ebx/esi; equiv PASS (360 valid, 100% cov)
+007f1fe0 128 eastl::vector<16-byte>::operator= - ours 225B vs orig 240B; copy paths reuse different registers (orig ebx/ebp); equiv WEAK (99 valid, 40.2% cov)
+007f20d0 220 cArithmeticaProgram::LookupRun - ours 189B vs orig 247B; the original carries an SEH/__CxxFrameHandler frame with a trylevel-0 protected region around the two stack assign calls that our source does not emit; equiv PASS (252 valid, 90.0% cov)
+007f2240 216 LoadArithmeticaFile - ours 220B vs orig 242B; our TU emits a /GS stack cookie the original build does not; equiv UNSUPPORTED (0/400 valid - the original discards every generated input, fault(read)=400)
