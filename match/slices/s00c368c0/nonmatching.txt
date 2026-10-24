@@ -1,0 +1,11 @@
+# Slice s00c368c0 nonmatching functions (compiled; behaviourally faithful but not byte-exact).
+# Format: <va> <difftest-verdict> <reason>
+00c368c0 UNSUPPORTED 0/400 valid inputs (fake EASTL hashtable globals fault on read/write); 387/530 bytes differ: inline hash-bucket walk and WStr format/pick paths rebuilt from decompile, different inlining and register choices
+00c36ae0 UNSUPPORTED 1 unresolved reference (?GetGameDataVector@NounMgr is declaration-only); 727/918 bytes differ: attractor scan loop body rebuilt from partial decompile
+00c36e80 PASS 400 valid inputs, 100% coverage; only 13/63 bytes differ: MSVC puts the key in esi and this in edi, original uses key=edi/this=esi; identical instruction sequence otherwise
+00c36ee0 UNSUPPORTED 0/400 valid inputs (fake stream object faults on the serializer write path); 238/317 bytes differ
+00c37040 FAIL only the upper 16 bits of eax differ on the case-0/case-3 returns (stale eax bits vs mov eax,1); al-value equivalent; 55/130 bytes differ, int compare emitted as setcc+mov al where the original branches to mov eax,1
+00c37180 FAIL faked vtable callee address differs: original fetches [vt]+0x18 in two steps, ours folds to [vt+0x18]; same slot/args, semantics identical; 95/135 bytes differ
+00c375d0 PASS 212 valid inputs, 100% coverage; 154/211 bytes differ: x87/SSE scheduling and register allocation of the radius/water blend
+00c37740 WEAK 89 valid inputs, 10.2% coverage; 295/328 bytes differ: gate predicates and vtable-slot fetches rebuilt from decompile
+00c37890 FAIL only the upper bits of eax differ on return (0xffffff00 vs 0, al=0 in both); al-value equivalent; 236/260 bytes differ
