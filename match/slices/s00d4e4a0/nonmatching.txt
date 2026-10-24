@@ -1,0 +1,10 @@
+00d4e4a0 1080 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1080 bytes - drama manager helper not reconstructed.
+00d4e8e0 111 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 111 bytes - drama slot-holder clear helper not reconstructed.
+00d4e950 320 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 320 bytes - cMeteorStrikeEvent::Clear not reconstructed.
+00d4ea90 116 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 116 bytes - Simulator::cDramaManager constructor not reconstructed.
+00d4eb30 170 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 170 bytes - drama slot-holder lock helper not reconstructed.
+00d4ebe0 493 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 493 bytes - allocator-based vector template instantiation not reconstructed.
+00d4edd0 75 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 61 bytes - drama event slot assignment: ref-count handoff, the null path (out-parameter address passed to the slot holder) and both call shapes match, but retail hoists the this+0x5c adjustment to the entry block (add ecx,0x5c before the null test) while MSVC folds it into the call sequence.
+00d4ee20 629 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 629 bytes - cTribeFoodRaidEvent::TriggerEvent not reconstructed.
+00d4f0a0 444 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 444 bytes - cTribeFoodRaidEvent::ShouldActivate not reconstructed.
+00d4f260 117 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 117 bytes - cTribeFoodRaidEvent::TickInactiveEvent not reconstructed.
