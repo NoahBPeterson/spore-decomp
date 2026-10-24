@@ -1,4 +1,4 @@
-00472b80 737 complete source; sqrt in x87 but result temps / branch store order differ (x87-optimized RW math); FAIL (first mismatch import call #0: ours inlines sqrt, orig calls _CIsqrt)
+00472b80 859 complete source; flags /Od /Ob1 /MD /Gy /TP /Oi. The extra /Oi is required: retail lowers float sqrt to the x87 _CIsqrt import, while /Od without /Oi inlines sqrt and produces a different import trace. Equiv PASS 600 valid, 100% coverage; residual diff is the /Od temp/slot and branch store order. flags /Od /Ob1 /MD /Gy /TP /Oi
 00472f50 84 complete source; inlined strlen intrinsic loop shape / local order differ; equiv PASS (1115 inputs)
 00473140 96 complete source; char copy-ctor inline uninitialized_copy scratch-slot frame differs; equiv WEAK (456 valid, 78% cov)
 00473300 11 complete source; vector<Elem29c> dtor, only /Od frame holes differ; equiv WEAK (771 valid, 49% cov)
