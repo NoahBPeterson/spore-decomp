@@ -1,4 +1,5 @@
 0067c960 cUIHints::Update  # PDB name (symbols/pdb_names.json)
+0067cf20 FUN_0067cf20  # D3D9 register-table callback used by FUN_0067d0c0 at key 0x241
 0067bc30 cUIHints::SetVisibility  # PDB name, called from this slice
 0067ad00 cUIHints::UpdateVisibleHint  # PDB name, called from UpdateHintTimers
 0067d230 zlib zalloc shim  # stored into z_stream_s::zalloc at 0x0067d390

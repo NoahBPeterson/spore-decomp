@@ -7,4 +7,3 @@
 0067cc70  n/a  D3D9 register helper (unguarded variant); complete, 11-byte register-allocation diff (device/vtable in eax/ecx vs ecx/edx).
 0067ce00  n/a  D3D9 constant-upload helper; complete for this VA (first of two merged blocks), 12-float copy loop shape differs.
 0067d020  n/a  D3D9 float4 upload helper; complete, aggregate/temporary copy shape differs.
-0067d0c0  n/a  D3D9 register-table registration; complete, global-store/register-reuse scheduling differs.

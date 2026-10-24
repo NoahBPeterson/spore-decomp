@@ -20,3 +20,4 @@ slices/s0067c450/s0067c450.cpp  GetState@StreamDecompressionZLib  0067d470  /O2 
 slices/s0067c450/s0067c450.cpp  InitPointers@StreamDecompressionZLib  0067d490  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s0067c450/s0067c450.cpp  GetPosition@StreamDecompressionZLib  0067d530  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s0067c450/s0067c450.cpp  ?FUN_0067ca40@@YIXPAUcUIHintsThunkTarget@@@Z  0067ca40  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0067c450/s0067c450.cpp  ?FUN_0067d0c0@@YAXXZ  0067d0c0  /O2 /MD /Gy /EHsc /TP /arch:SSE

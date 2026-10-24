@@ -440,6 +440,7 @@ void FUN_0067d020(void* a, void* b, int c) {
 
 // @ 0x0067d0c0
 extern "C" void FUN_011f4270(int, void*, void*, void*, void*);
+extern "C" void FUN_0067cf20();
 void FUN_0067d0c0() {
   FUN_011f4270(0x236, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067d020);
   *(unsigned int*)0x16327c8 = 4;
@@ -451,7 +452,7 @@ void FUN_0067d0c0() {
   *(unsigned int*)0x16327c4 = 4;
   FUN_011f4270(0x23c, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067ce00);
   *(unsigned int*)0x16327e0 = 0x30;
-  FUN_011f4270(0x241, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0);
+  FUN_011f4270(0x241, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067cf20);
   *(unsigned int*)0x16327f4 = 0x40;
   FUN_011f4270(0x242, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067cca0);
   *(unsigned int*)0x16327f8 = 0x40;
