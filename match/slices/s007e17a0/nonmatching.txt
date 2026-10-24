@@ -1,12 +1,11 @@
-007e17a0  113  eastl uninitialized_copy<AutoRef>; helper-call/EH frame schedule differs
-007e1830  120  eastl uninitialized_move/copy<AutoRef>; helper-call/EH frame schedule differs
+007e17a0  138  eastl uninitialized_copy<AutoRef>: real signature is (AutoRef** out, first, last, dst) - it writes the advanced dst back through the out pointer; SEH frame + helper schedule differ. equiv: WEAK (89 valid, 39.6% coverage, no mismatch)
+007e1830  145  eastl uninitialized_move/copy<AutoRef>; helper-call/EH frame schedule differs
 007e1950  138  hashtable rehash; bucket-walk codegen differs
-007e1a80  100  description dtor; member-destroy schedule differs
+007e1a80  105  description dtor; member-destroy schedule differs (p20 at +0x20 released through vtable slot 1); equiv: PASS (363 valid, 100% coverage)
 007e1b00  75   eastl copy<AutoRef>; release/AddRef inlining differs
-007e2ce0  374  cTransitionCommand instance dispatch; vtable/loop codegen differs; equiv: WEAK (40% coverage, member fix)
-007e2fb0  72   cTransitionListCommand::Execute; int parse (v39) register schedule differs
+007e2ce0  390  cTransitionCommand instance dispatch; vtable/loop codegen differs; equiv: WEAK (40% coverage, member fix)
+007e2fb0  56   cTransitionListCommand::Execute: the element is filled by materialising an AutoRef temp (p = parsed int, field4's low byte = parsed char) and copying its 8 bytes; equiv: WEAK (100 valid, 82.0% coverage, no mismatch)
 007e3030  91   cAppStateManager::StateIDFromName; hashtable find call/inline differs
-007e30a0  68   hashtable lookup + FUN_007e2ce0; find call schedule differs; equiv: FAIL (fake-arity/callee, member fix)
-007e3160  191  eastl::vector<cActionMessage>::operator=; branch layout differs; equiv: FAIL (member fix)
+007e3160  190  AVec::assign: grow/destroy are thiscall members, the split path calls 007e17a0 with the out temp, and every non-self path returns this (eax=esi); equiv: WEAK (160 valid, 69.2% coverage, no mismatch)
 007e29d0  197  hashtable insert (lookup + grow + relink + rehash); cl keeps key in ebp and reloads key->p/field4 in the walk while mine caches them (ebx/edi); h0 spill slot differs; equiv: PASS (91.6% coverage)
-007e2ae0  208  cAppStateManager copy ctor (2 vector copies + string copy + trailing int); MSVC EH/SEH frame (states 0/1/2) and register schedule differ; equiv: UNSUPPORTED (0 valid inputs; original SEH prologue faults under the harness)
+007e2ae0  216  cAppStateManager copy ctor (2 vector copies + string copy + trailing int); MSVC EH/SEH frame (states 0/1/2) and register schedule differ; equiv: UNSUPPORTED (0 valid inputs; original SEH prologue faults under the harness)

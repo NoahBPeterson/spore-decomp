@@ -3,3 +3,4 @@ slices/s007e17a0/s007e17a0.cpp  ?Execute@cStateFlagCommand@@QAEXAAVcArguments@Ar
 slices/s007e17a0/s007e17a0.cpp  ?Execute@cStateFlag2Command@@QAEXAAVcArguments@ArgScript@EA@@@Z  007e1930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s007e17a0/s007e17a0.cpp  ?Execute@cSetStateCommand@@QAEXAAVcArguments@ArgScript@EA@@@Z  007e1a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s007e17a0/s007e17a0.cpp  ?OnRegister@cTransitionCommand@@QAEXPAX0@Z  007e1b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007e17a0/s007e17a0.cpp  ?FUN_007e30a0@cTransitionMgr@@QAEXHH@Z  007e30a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

@@ -108,7 +108,8 @@ static inline void ReleaseRef(RefObj* p) {
 
 // =============================================================== 0x007e17a0
 // @ 0x007e17a0
-AutoRef* FUN_007e17a0(AutoRef* dst, const AutoRef* first, const AutoRef* last) {
+AutoRef* FUN_007e17a0(AutoRef** out, const AutoRef* first, const AutoRef* last, AutoRef* dst) {
+    *out = dst;
     for (; first != last; ++first) {
         if (dst) {
             dst->p = first->p;
@@ -116,8 +117,9 @@ AutoRef* FUN_007e17a0(AutoRef* dst, const AutoRef* first, const AutoRef* last) {
             dst->field4 = first->field4;
         }
         ++dst;
+        *out = dst;
     }
-    return dst;
+    return (AutoRef*)out;
 }
 
 // =============================================================== 0x007e1830
@@ -211,15 +213,18 @@ struct SomeDesc {
     char*  a0;  char* a1;    // +0x0  string1 (begin/end)
     char*  a8;  char* ac;    // +0x8  string2
     int    a10; void* a14; void* a18;   // +0x10 vector
+    void*  a1c;              // +0x1c (alignment hole)
     void*  p20;              // +0x20
     ~SomeDesc();
 };
 // @ 0x007e1a80
 SomeDesc::~SomeDesc() {
-    ReleaseRef((RefObj*)p20);
-    if (a10 && a18 && (int)((char*)a18 - (char*)a10) > 1)
+    RefObj* p = (RefObj*)p20;
+    if (p)
+        ((void(__thiscall*)(RefObj*))(*(void***)p)[1])(p);
+    if ((int)((char*)a18 - (char*)a10) > 1 && a10)
         EFree((void*)a10);
-    if (a0 && a8 && (int)((char*)a8 - (char*)a0) > 1)
+    if ((int)((char*)a8 - (char*)a0) > 1 && a0)
         EFree((void*)a0);
 }
 
@@ -383,18 +388,18 @@ void cTransitionListCommand::Execute(EA::ArgScript::cArguments& args) {
     const char** av = args.MainArguments(2);
     int a = mParser->v39(av[0]);
     char b = mParser->v37(av[1]);
+    AutoRef tmp;
+    tmp.p = (RefObj*)a;
+    ((char*)&tmp.field4)[0] = b;
     char* vec = (char*)mpState + 0x54;
     AutoRef* end = *(AutoRef**)(vec + 4);
     if (end < *(AutoRef**)(vec + 8)) {
         *(AutoRef**)(vec + 4) = end + 1;
         if (end) {
-            *(uint32_t*)end = (uint32_t)a;
-            *(uint32_t*)((char*)end + 4) = (uint32_t)(uint8_t)b;
+            *(uint32_t*)end = *(uint32_t*)&tmp.p;
+            *(uint32_t*)((char*)end + 4) = *(uint32_t*)&tmp.field4;
         }
     } else {
-        AutoRef tmp;
-        tmp.p = (RefObj*)a;
-        tmp.field4 = (uint8_t)b;
         ((AutoRefVal*)vec)->DoInsertValue(end, &tmp);
     }
 }
@@ -415,6 +420,12 @@ struct cAppStateManagerX {
     cAppStateManagerX* CopyCtor(char* src);      // 0x007e2ae0
 };
 void hashtablefind(void* out, void* table, eastl::EString* key);  // 0x007e2ea0
+struct cStateNameTable {
+    char  pad0[4];
+    int*  mpBuckets;      // +0x4
+    int   mnBucketCount;  // +0x8
+    void  find(void* out, const void* key);   // 0x007e2960 (thiscall)
+};
 // @ 0x007e3030
 int cAppStateManagerX::StateIDFromName(const char* name) {
     const char* e = name;
@@ -441,9 +452,9 @@ void cTransitionMgr::FUN_007e30a0(int a, int b) {
     key[0] = a;
     key[1] = b;
     int it[2];
-    char* tbl = (char*)self + 0xd8;
-    hashfind2(it, tbl, key);
-    if (it[0] != *(int*)(tbl + 4 + *(int*)(tbl + 8) * 4))
+    cStateNameTable* tbl = (cStateNameTable*)((char*)self + 0xd8);
+    tbl->find(it, key);
+    if (it[0] != tbl->mpBuckets[tbl->mnBucketCount])
         self->FUN_007e2ce0(*(int*)((char*)it[0] + 8));
 }
 
@@ -553,6 +564,8 @@ struct AVec {
     AutoRef* mpBegin;
     AutoRef* mpEnd;
     AutoRef* mpCapacity;
+    AutoRef* grow(unsigned n, const AutoRef* first, const AutoRef* last);  // 0x007e25a0
+    void     destroy(AutoRef* first, AutoRef* last);                       // 0x007e1a50
     AutoRef* assign(const AVec* o);
 };
 extern "C" void* FUN_007e25a0(unsigned n, void* a, void* b); // 0x007e25a0
@@ -565,24 +578,25 @@ AutoRef* AVec::assign(const AVec* o) {
     unsigned n = (unsigned)((o->mpEnd - o->mpBegin));
     unsigned cap = (unsigned)((self->mpCapacity - self->mpBegin));
     if (cap < n) {
-        AutoRef* p = (AutoRef*)FUN_007e25a0(n, o->mpBegin, o->mpEnd);
-        FUN_007e1a50(self->mpBegin, self->mpEnd);
+        AutoRef* p = self->grow(n, o->mpBegin, o->mpEnd);
+        self->destroy(self->mpBegin, self->mpEnd);
         if (self->mpBegin && *(int*)((char*)self->mpBegin - 4))
             EFree(self->mpBegin);
         self->mpCapacity = p + n;
         self->mpEnd = p + n;
         self->mpBegin = p;
-        return p;
+        return (AutoRef*)self;
     }
     unsigned have = (unsigned)(self->mpEnd - self->mpBegin);
     if (have < n) {
         FUN_007e1b00(o->mpBegin, o->mpBegin + have, self->mpBegin);
-        FUN_007e17a0(self->mpBegin + have, o->mpBegin + have, o->mpEnd);
+        AutoRef* out = self->mpEnd;
+        FUN_007e17a0(&out, o->mpBegin + have, o->mpEnd, self->mpEnd);
         self->mpEnd = self->mpBegin + n;
-        return self->mpBegin;
+        return (AutoRef*)self;
     }
     AutoRef* e = FUN_007e1b00(o->mpBegin, o->mpEnd, self->mpBegin);
-    FUN_007e1a50(e, self->mpEnd);
+    self->destroy(e, self->mpEnd);
     self->mpEnd = self->mpBegin + n;
-    return self->mpBegin;
+    return (AutoRef*)self;
 }
