@@ -1,0 +1,2 @@
+# byte-exact functions for slice s00bcece0
+slices/s00bcece0/s00bcece0.cpp  ?FUN_00bcf490@cBuilding@@QAE_NPAX@Z  00bcf490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
