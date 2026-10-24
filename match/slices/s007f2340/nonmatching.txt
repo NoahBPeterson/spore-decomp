@@ -1,2 +1,9 @@
 # va diff reason
-007f2590 25 VarMap::GetVar - size() computed as end-minus-begin; compiler loads begin into the subtract register first
+007f2340 391 VarMap::GetTokenIndex - token interning/lookup; reconstruction matches the semantics (always-run memcpy + grow/shrink) but the original inlines the eastl string/vector paths, so instruction selection differs
+007f2500 114 ArithReset - reconstruction omits the original's SEH frame around the two vector clears; those two clears plus the VM Execute call are reproduced
+007f2590 25 VarMap::GetVar - size computed as end-minus-begin; the compiler keeps begin in the subtract register first (register allocation only)
+007f2600 874 VarMap::LoadProgram - blob deserialization reconstructed from the decompile's field permutation and cursor logic; instruction selection differs
+007f2960 92 ArithReadThing - read length-prefixed blob; reconstruction matches the original's calls and arguments but register allocation differs
+007f2a70 1296 VMContext::Execute - 0x21-op bytecode VM; the original uses a jump table (0x7f3048) with per-op inlined push/pop, ours is a switch
+007f31e0 286 IMEProxy::SetupDefaultFonts - style-manager / font setup reconstructed from the decompile; temporary layout differs
+007f3320 92 IMEProxy::Shutdown - secondary-object release through virtual calls; ours is a few bytes larger
