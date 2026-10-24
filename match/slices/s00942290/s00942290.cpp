@@ -30,6 +30,9 @@ typedef void (__thiscall *VFV)(void*);
 typedef void (__thiscall *VFV2)(void*, void*, unsigned);
 typedef int  (__thiscall *VFI)(void*);
 typedef int  (__thiscall *VFI1)(void*, int);
+typedef int  (__thiscall *VFI0)(void*);
+typedef char (__thiscall *VFC1)(void*, int);
+typedef char (__thiscall *VFC2)(void*, void*, int);
 typedef int  (__thiscall *VFI3)(void*, void*, unsigned, int);
 #define VSLOT(p, off) ((*(void***)(p))[(off) / 4])
 #define VC0(p, off)   ((VFI)VSLOT(p, off))(p)
@@ -96,7 +99,10 @@ struct Job {
     unsigned int mnTryCount;              // +0x10
     unsigned int mPercentComplete;        // +0x14
     unsigned int mnRedirectionCount;      // +0x18
-    char  pad1c[0x30 - 0x1c];
+    void* mpRequest;                      // +0x1c
+    char  pad20[0x24 - 0x20];
+    void* mpResponse;                     // +0x24
+    char  pad28[0x30 - 0x28];
     unsigned __int64 mnLastNotifySize;    // +0x30
 };
 
@@ -120,16 +126,14 @@ public:
     char* mpWriteBuffer;                  // +0x148
     unsigned int mnWriteBufferSize;       // +0x14c
 
-    int   ReadRawBody(WorkerThreadInfo* wti, char* pBuf);                          // 00942290
+    bool  ReadRawBody(WorkerThreadInfo* wti, char* pBuf);                          // 00942290
     int   ReadResponseLine(WorkerThreadInfo* wti, char* pBuf, int nMax, char tr);  // 009423D0
-    int   DoJobUpdate(int job, unsigned doneLo, unsigned doneHi,
+    bool  DoJobUpdate(int job, unsigned doneLo, unsigned doneHi,
                       unsigned totalLo, int totalHi, unsigned* progress);          // 00942530
-    int   ReadResponseData(WorkerThreadInfo* wti, unsigned totalLo,
-                           unsigned totalHi, char notify);                          // 00942690
+    __int64 ReadResponseData(WorkerThreadInfo* wti, unsigned totalLo,
+                             unsigned totalHi, char notify);                        // 00942690
     __int64 ReadChunkedResponseData(WorkerThreadInfo* wti);                         // 009428B0
-    int   ReadResponseBody(WorkerThreadInfo* wti);                                 // 00942B40
-    bool  FindHeader(const char* name, void** out, int index);                     // 00942050
-    bool  FindHeaderByField(int field, void** out, int index);                     // 009420E0
+    bool  ReadResponseBody(WorkerThreadInfo* wti);                                 // 00942B40
     void  __declspec(noinline) SetUserAgent(const char* p);                        // 00942FB0
 };
 
@@ -203,46 +207,45 @@ Cookie40::~Cookie40() {}
 
 static int StrLen(const char* s) {
     const char* p = s;
-    while (*p) ++p;
+    char c = *p;
+    while (c) { ++p; c = *p; }
     return (int)(p - s);
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x00942290  HTTPClient::ReadRawBody
 // ---------------------------------------------------------------------------
-int HTTPClient::ReadRawBody(WorkerThreadInfo* wti, char* pBuf) {
+bool HTTPClient::ReadRawBody(WorkerThreadInfo* wti, char* pBuf) {
     int remaining = StrLen(pBuf);
     unsigned consumed = 0;
     while (remaining != 0 && wti->mbCancelCurrent == 0 && wti->mbShouldQuit == 0) {
         Job* job = (Job*)wti->mpCurrentJob;
         if (job->mTimeoutTimeSeconds > 0) {
             int now = GetTime64();
-            if (job->mTimeoutTimeSeconds < now) { job->mResult = 6; return 0; }
-            if ((int)consumed > 0) {
+            if (job->mTimeoutTimeSeconds < now) { job->mResult = 6; return false; }
+            if (consumed > 0) {
                 job->mTimeoutTimeSeconds = job->mStartTimeSeconds + now;
                 consumed = 0;
             }
         }
         void* sock = wti->mpSocket;
         void* s2 = (void*)((VFI)VSLOT(sock, 0x10))(sock);
-        int r = ((VFI1)VSLOT(s2, 0x68))(s2, 1000);
+        char r = ((VFC1)VSLOT(s2, 0x68))(s2, 1000);
         if (r != 0 || (VC0(sock, 0x2c) != 2)) {
             char* dst = pBuf + consumed;
-            unsigned n = (unsigned)VC3(sock, 0x48, dst, remaining, 0);
-            if ((int)n < 0) { job->mResult = 7; return 0; }
-            unsigned nWrite = n;
-            if (n == 0xffffffffu)
+            int n = VC3(sock, 0x48, dst, remaining, 0);
+            if (n < 0) { job->mResult = 7; return false; }
+            unsigned nWrite = (unsigned)n;
+            if (n == -1)
                 nWrite = (unsigned)StrLen(dst);
             if (mnLoggingEnabled > 0)
                 ((VFV2)VSLOT(mpWriteLogStream, 0x38))(mpWriteLogStream, dst, nWrite);
-            consumed += n;
-            remaining -= (int)n;
-            unsigned old = (unsigned)mnBytesReceived;
-            mnBytesReceived += n;
-            *(unsigned*)((char*)&mnBytesReceived + 4) += ((int)n >> 31) + (old > 0xffffffffu - n);
+            consumed += (unsigned)n;
+            remaining -= n;
+            mnBytesSent += (unsigned __int64)(__int64)n;
         }
     }
-    return 1;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -292,113 +295,129 @@ int HTTPClient::ReadResponseLine(WorkerThreadInfo* wti, char* pBuf, int nMax, ch
 // ---------------------------------------------------------------------------
 // @ 0x00942530  HTTPClient::DoJobUpdate
 // ---------------------------------------------------------------------------
-int HTTPClient::DoJobUpdate(int job, unsigned doneLo, unsigned doneHi,
-                            unsigned totalLo, int totalHi, unsigned* progress) {
+bool HTTPClient::DoJobUpdate(int job, unsigned doneLo, unsigned doneHi,
+                             unsigned totalLo, int totalHi, unsigned* progress) {
     void (*notify)(void*, void*, unsigned, void*, void*) =
         (void (*)(void*, void*, unsigned, void*, void*))mpNotify;
-    if (notify == 0) return 0;
-    if (totalHi < 0) return 0;
-    if (totalHi < 1 && totalLo < 0x801) return 0;
+    if (notify == 0) return false;
+    if (totalHi < 0) return false;
+    if (totalHi < 1 && totalLo < 0x801) return false;
 
-    unsigned newLo;
-    unsigned newHi = 0;
+    unsigned __int64 newVal;
     if (totalLo == 0xffffffffu && totalHi == 0x7fffffff) {
-        newLo = 0;
+        newVal = 0;
     } else if (totalLo == 0 && totalHi == 0) {
-        newLo = 0x32;
+        newVal = 0x32;
     } else {
         unsigned __int64 done  = (unsigned __int64)doneLo | ((unsigned __int64)doneHi << 32);
         unsigned __int64 total = (unsigned __int64)totalLo | ((unsigned __int64)(unsigned)totalHi << 32);
         unsigned __int64 q = (done * 100) / total;
-        newLo = (unsigned)q;
-        if ((q >> 32) != 0 || newLo > 100) newLo = 100;
+        newVal = q;
+        if ((q >> 32) != 0 || (unsigned)q > 100) newVal = 100;
     }
-    unsigned sub = newLo - progress[0];
-    bool noLess = !(progress[1] == 0 && newLo < progress[0]);
-    if (noLess && (sub < 10)) return 0;
+    unsigned __int64 prev = (unsigned __int64)progress[0] |
+                            ((unsigned __int64)progress[1] << 32);
+    unsigned __int64 sub = newVal - prev;
+    if ((unsigned)(sub >> 32) == 0 && (unsigned)sub < 10) return false;
 
     (void)job;
     notify(mpNotifyCtx, this, 0x700af300, &doneHi, progress);
-    progress[0] = newLo;
-    progress[1] = newHi;
-    return 1;
+    progress[0] = (unsigned)newVal;
+    progress[1] = (unsigned)(newVal >> 32);
+    return true;
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x00942690  HTTPClient::ReadResponseData
 // ---------------------------------------------------------------------------
-int HTTPClient::ReadResponseData(WorkerThreadInfo* wti, unsigned totalLo,
-                                 unsigned totalHi, char notify) {
-    unsigned remainLo = totalLo, remainHi = totalHi;
-    int   doneLo = 0, doneHi = 0;
+__int64 HTTPClient::ReadResponseData(WorkerThreadInfo* wti, unsigned totalLo,
+                                     unsigned totalHi, char notify) {
+    __int64 remain = ((__int64)(int)totalHi << 32) | (unsigned)totalLo;
+    __int64 done = 0;
     unsigned prog = 0;
+    int prevN = 0;
     for (;;) {
-        if ((remainLo == 0 && remainHi == 0) ||
+        if (remain == 0 ||
             wti->mbCancelCurrent != 0 || wti->mbShouldQuit != 0)
             break;
         Job* job = (Job*)wti->mpCurrentJob;
         if (job->mTimeoutTimeSeconds > 0) {
             int now = GetTime64();
-            if (job->mTimeoutTimeSeconds < now) { job->mResult = 6; doneLo = -1; doneHi = -1; break; }
+            if (job->mTimeoutTimeSeconds < now) { job->mResult = 6; done = -1; break; }
+            // Rolling deadline: a read that produced data restarts the timeout window.
+            if (prevN > 0) { job->mTimeoutTimeSeconds = job->mStartTimeSeconds + now; prevN = 0; }
         }
         bool doRead = (wti->mCurrentProtocol == 2);
         if (!doRead) {
             void* s2 = (void*)((VFI)VSLOT(wti->mpSocket, 0x10))(wti->mpSocket);
-            if (((VFI1)VSLOT(s2, 100))(s2, 1000) != 0) {
+            if (((VFC1)VSLOT(s2, 100))(s2, 1000) != 0) {
                 doRead = true;
             } else {
-                if (VC0(wti->mpSocket, 0x2c) != 2) { job->mResult = 7; doneLo = -1; doneHi = -1; break; }
+                if (VC0(wti->mpSocket, 0x2c) != 2) { job->mResult = 7; done = -1; break; }
                 continue;
             }
         }
-        unsigned n = (unsigned)VC3(wti->mpSocket, 0x44, mpReadBuffer, mnReadBufferSize, 0);
+        // Never ask for more than is still outstanding; `remain` may be negative for an
+        // unbounded request, in which case the whole read buffer is requested.
+        unsigned size = mnReadBufferSize;
+        if (remain < (__int64)size) size = (unsigned)remain;
+        unsigned n = (unsigned)VC3(wti->mpSocket, 0x44, mpReadBuffer, size, 0);
+        prevN = (int)n;
         if ((int)n < 1) {
+            done = (__int64)(int)n;
             if (!(totalLo == 0xffffffffu && totalHi == 0x7fffffff)) {
-                job->mResult = 2; doneLo = (int)n; doneHi = (int)n >> 31;
+                job->mResult = 2;
+                Job* jb = (Job*)wti->mpCurrentJob;
+                jb->mnLastNotifySize = (unsigned __int64)done;
             }
             break;
         }
-        unsigned old = (unsigned)mnBytesReceived;
         mnBytesReceived += n;
-        *(unsigned*)((char*)&mnBytesReceived + 4) += ((int)n >> 31) + (old > 0xffffffffu - n);
+        // When the socket returned -1 the log line is the partial buffer contents, so its
+        // length is strlen(mpReadBuffer); otherwise it is the raw byte count.
+        unsigned logLen = n;
+        if ((int)n == -1) logLen = (unsigned)StrLen(mpReadBuffer);
         if (mnLoggingEnabled > 0)
-            ((VFV2)VSLOT(mpReadLogStream, 0x38))(mpReadLogStream, mpReadBuffer, n);
-        void* req = *(void**)((char*)wti + 0x24);
-        void* filt = *(void**)((char*)req + 0xf3c);
-        if (filt != 0) {
-            if (!((VFI3)VSLOT(filt, 0x38))(filt, mpReadBuffer, n, 0)) {
-                job->mResult = 0xb; doneLo = -1; doneHi = -1; break;
-            }
+            ((VFV2)VSLOT(mpReadLogStream, 0x38))(mpReadLogStream, mpReadBuffer, logLen);
+        void* filt = *(void**)((char*)job->mpResponse + 0xf3c);
+        if (!((VFC2)VSLOT(filt, 0x38))(filt, mpReadBuffer, (int)n)) {
+            job->mResult = 0xb; done = -1; break;
         }
-        unsigned addLo = (unsigned)doneLo + n;
-        doneHi += ((int)n >> 31) + (addLo < n);
-        doneLo = addLo;
-        remainLo -= n;
-        remainHi -= (unsigned)(remainLo + n < n);
+        done += (__int64)(int)n;
+        remain -= (__int64)(int)n;
         if (notify != 0)
-            DoJobUpdate((int)job, (unsigned)doneLo, (unsigned)doneHi, totalLo, totalHi, &prog);
+            DoJobUpdate((int)job, (unsigned)done, (unsigned)((unsigned __int64)done >> 32),
+                        totalLo, totalHi, &prog);
     }
     Job* jb = (Job*)wti->mpCurrentJob;
-    jb->mnLastNotifySize = ((unsigned __int64)(unsigned)doneHi << 32) | (unsigned)doneLo;
-    return doneLo;
+    jb->mnLastNotifySize = (unsigned __int64)done;
+    return done;
 }
+
+// 0x00942050 / 0x009420E0 are members of the *response* object that the HTTPClient
+// job holds; ReadResponseBody calls them with `this = job->mpResponse + 0x4a4`.
+struct HTTPResponseHdr {
+    bool FindHeader(const char* name, void** out, int index);       // 00942050
+    bool FindHeaderByField(int field, void** out, int index);       // 009420E0
+};
 
 // ---------------------------------------------------------------------------
 // @ 0x00942B40  HTTPClient::ReadResponseBody
 // ---------------------------------------------------------------------------
-int HTTPClient::ReadResponseBody(WorkerThreadInfo* wti) {
+bool HTTPClient::ReadResponseBody(WorkerThreadInfo* wti) {
     Job* job = (Job*)wti->mpCurrentJob;
-    if (*(int*)(*(int*)((char*)wti + 0x1c) + 0x2c) == 3) return 1;
-    if (*(int*)(*(int*)((char*)wti + 0x24) + 0xf3c) == 0) { job->mResult = 0xb; return 0; }
+    if (*(int*)((char*)job->mpRequest + 0x2c) == 3) return true;
+    if (*(int*)((char*)job->mpResponse + 0xf3c) == 0) { job->mResult = 0xb; return false; }
 
     __int64 len = 0;
     bool chunked = false;
     void* outptr[2];
+    HTTPResponseHdr* hdr = (HTTPResponseHdr*)((char*)job->mpResponse + 0x4a4);
     const char* f = HeaderFieldToFieldString(0x26);
-    char found = (char)FindHeader(f, (void**)outptr, 0);
+    char found = (char)hdr->FindHeader(f, (void**)outptr, 0);
     if (found == 0 || (len = ParseInt64((const char*)outptr[0], 0, 10), len != 0)) {
         const char* f2 = HeaderFieldToFieldString(5);
-        char found2 = (char)FindHeader(f2, (void**)outptr, 0);
+        char found2 = (char)hdr->FindHeader(f2, (void**)outptr, 0);
         if (found2 != 0) {
             const char* a = (const char*)outptr[0];
             const char* b = "chunked";
@@ -406,34 +425,28 @@ int HTTPClient::ReadResponseBody(WorkerThreadInfo* wti) {
             if (*a == *b) chunked = true;
         }
         if (len == 0 && !chunked) {
-            void* s1 = *(void**)((char*)wti + 0x1c);
-            int code = *(int*)(*(int*)((char*)wti + 0x24) + 0x43c);
-            char found3 = (char)FindHeaderByField(2, (void**)outptr, 0);
-            if (found3 != 0 && strncmp((const char*)outptr[0], "close", 5) != 0) return 1;
-            int proto = *(int*)((char*)s1 + 0x2c);
-            if (proto != 2 && proto != 4) return 1;
-            if ((unsigned)(code - 200) > 99) return 1;
+            void* req = job->mpRequest;
+            int code = *(int*)((char*)job->mpResponse + 0x43c);
+            char found3 = (char)hdr->FindHeaderByField(2, (void**)outptr, 0);
+            if (found3 != 0 && strncmp((const char*)outptr[0], "close", 5) != 0) return true;
+            int proto = *(int*)((char*)req + 0x2c);
+            if (proto != 2 && proto != 4) return true;
+            if ((unsigned)(code - 200) > 99) return true;
             len = 0x7fffffffffffffffLL;
         }
         job = (Job*)wti->mpCurrentJob;
         job->mnLastNotifySize = 0;
-        int r;
-        if (chunked) r = (int)ReadChunkedResponseData(wti);
+        __int64 r;
+        if (chunked) r = ReadChunkedResponseData(wti);
         else        r = ReadResponseData(wti, (unsigned)len, (unsigned)(len >> 32), 1);
-        if (wti->mbCancelCurrent == 0 && wti->mbShouldQuit == 0 && r < 0) return 0;
+        if (wti->mbCancelCurrent == 0 && wti->mbShouldQuit == 0 && r < 0) return false;
     }
-    return 1;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x009428B0  HTTPClient::ReadChunkedResponseData
 // ---------------------------------------------------------------------------
-// 0x00942690 returns its byte count as a 64-bit value in edx:eax; the class declaration above
-// keeps the older 32-bit view, so the chunked reader calls it through this view.
-struct HTTPClientRd64 {
-    __int64 ReadResponseData64(WorkerThreadInfo* wti, unsigned totalLo, unsigned totalHi, char notify); // 0x00942690
-};
-
 __int64 HTTPClient::ReadChunkedResponseData(WorkerThreadInfo* wti) {
     __int64 total = 0;
     for (;;) {
@@ -457,7 +470,7 @@ __int64 HTTPClient::ReadChunkedResponseData(WorkerThreadInfo* wti) {
                 if (r != (__int64)(int)mnReadBufferSize) break;
             }
         }
-        __int64 got = ((HTTPClientRd64*)this)->ReadResponseData64(wti, (unsigned)chunk, (unsigned)(chunk >> 32), 0);
+        __int64 got = ReadResponseData(wti, (unsigned)chunk, (unsigned)(chunk >> 32), 0);
         if (got < chunk) { total = got; break; }
         total += got;
         if (chunk == 0) {

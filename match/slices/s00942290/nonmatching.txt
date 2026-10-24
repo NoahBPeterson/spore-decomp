@@ -1,9 +1,9 @@
 # va  diff-bytes  reason
-00942290  334  HTTPClient::ReadRawBody: complete; register/loop schedule differs; difftest FAIL (3/363 valid inputs, 70.4% coverage)
-009423d0  385  HTTPClient::ReadResponseLine: complete; line-scan register schedule differs; difftest PASS (237 valid inputs, 60.3% coverage)
-00942530  241  HTTPClient::DoJobUpdate: complete; timeout/notify branch layout differs; difftest FAIL (5/22 valid inputs, 20.9% coverage)
+00942290  290  HTTPClient::ReadRawBody: complete; register/loop schedule differs; equiv PASS (2640 valid at --inputs 3000, 70.4% coverage)
+009423d0  385  HTTPClient::ReadResponseLine: complete; line-scan register schedule differs; equiv FAIL-KEPT (ecx: ours clobbers it, the original's push ecx frame preserves it; asm-only fix, not permitted)
+00942530  244  HTTPClient::DoJobUpdate: complete; timeout/notify branch layout differs; equiv PASS (554 valid, 65.1% coverage)
 00942630   56  Cookie40::~Cookie40: complete; one redundant null-check/test around the second refcount release differs
-00942690  495  HTTPClient::ReadResponseData: complete; 64-bit accumulation + buffer growth call sequence differs; difftest FAIL (1/325 valid, 38.0% coverage)
-00942b40  333  HTTPClient::ReadResponseBody: complete; content-length/chunked dispatch schedule differs; difftest FAIL (5/5 valid, 50.6% coverage)
+00942690  510  HTTPClient::ReadResponseData: complete; read-size clamp to remaining + signed 64-bit done; equiv PASS (617 valid, 83.0% coverage)
+00942b40  280  HTTPClient::ReadResponseBody: complete; FindHeader/FindHeaderByField are response-object members (this=mpResponse+0x4a4); dispatch schedule differs; equiv WEAK no mismatch (546 valid, 52.6% coverage)
 00942e50  244  eastl::StrStub::assignRange: complete; growth/memmove sequence differs; difftest UNSUPPORTED (0/400 valid inputs, all faulted)
 009428b0  703  HTTPClient::ReadChunkedResponseData: complete (int64 return, all paths); loop/branch layout and register allocation differ [equiv: WEAK 304 valid, 31.8% coverage]
