@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s008a0b50/s008a0b50.cpp  ?Insert@CWordVector@@QAEXPAGABG@Z  008a1900  /O2 /MD /Gy /TP /arch:SSE /fp:fast
