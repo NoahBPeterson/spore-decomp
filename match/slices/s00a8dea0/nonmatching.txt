@@ -1,1 +1,1 @@
-00a8dea0 1910 equivalent behavior; frame 0x1a8 vs 0x194 and instruction scheduling differ
+00a8dea0  1836  CreateClusteredSamples2D: complete/behaviourally equivalent in structure; extra XMM6 write fixed via volatile c0, but fresh 600 FAIL 5/75 valid at call #8: orig calls ProjectSample(3,69), ours calls an extra Halton2D::Next; both slice and src/game/Swarm/DistributeEffect.cpp fail identically; saved replay now shows the same. Frame/scheduling differ (ours 2151 vs 2333). FAIL-KEPT. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

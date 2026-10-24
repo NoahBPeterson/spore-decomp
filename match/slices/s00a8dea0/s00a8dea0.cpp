@@ -48,7 +48,7 @@ static inline void FastSinCos(float a, float& s, float& c) {
   float r = a - (float)(bits - 0x4b400000) * gSinCosStep;
   int i = (bits & 0xf) * 2;
   float s0 = gSinCosTable[i];
-  float c0 = gSinCosTable[i + 1];
+  volatile float c0 = gSinCosTable[i + 1];
   c = c0 - (r * c0 * 0.5f + s0) * r;
   s = (c0 - r * s0 * 0.5f) * r + s0;
 }
@@ -63,10 +63,8 @@ static inline Vector3 Rotate(const Vector3& v, const Matrix3& m) {
 namespace EA { namespace Swarm {
 Vector2 SquareToCircle(Vector2 p);                    // 0x00a7c630 (cdecl, by value)
 }}
-namespace {
-Vector2 SquareToRing(Vector2 p, float innerRadius);   // 0x00a88490 (cdecl, by value)
-Vector3 CubeToSphereSurface(const Vector3& v);        // 0x00a88400
-}
+extern "C" Vector2 SquareToRing(Vector2 p, float innerRadius);   // 0x00a88490 (cdecl, by value)
+extern "C" Vector3 CubeToSphereSurface(const Vector3& v);        // 0x00a88400
 
 // ---------------------------------------------------------------- EA::Swarm types
 namespace EA { namespace Swarm {
