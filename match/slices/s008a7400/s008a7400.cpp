@@ -1,6 +1,7 @@
 // Slice s008a7400 (bfs2 #20), 32-bit MSVC 2008.
 // Bitstream FontFusion Type-1 hinting engine (prebuilt module; different codegen from cl 15.00).
 // No function here reached byte-exact except the trivial memory-hook setter.
+// Flags: /O2 /MD /Gy /EHsc /TP
 #include <intrin.h>
 #include <string.h>
 
@@ -301,7 +302,7 @@ void FlipContourDirection(GlyphClass* g, short dir)
 
 // ---------------------------------------------------------------------------
 // @ 0x008a7c90
-void SetupStemWeights(FFT1HintClass* h, int scale, int* src, int count, int refWidth,
+int* SetupStemWeights(FFT1HintClass* h, int scale, int* src, int count, int refWidth,
                       int* out, int* pNum)
 {
     int n = count;
@@ -326,7 +327,7 @@ void SetupStemWeights(FFT1HintClass* h, int scale, int* src, int count, int refW
     }
     if (refWidth < 1) {
         *pNum = count;
-        return;
+        return pNum;
     }
     i = util_FixMul(refWidth, scale);
     unsigned u2 = (unsigned)h->onepix;
@@ -380,6 +381,7 @@ void SetupStemWeights(FFT1HintClass* h, int scale, int* src, int count, int refW
     r[1] = b;
     r[0] = a;
     *pNum = count + 1;
+    return pNum;
 }
 
 // ---------------------------------------------------------------------------

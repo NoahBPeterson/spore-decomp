@@ -1,6 +1,7 @@
 // src/game/UTFSpore_Win32/fft1hint.cpp -- migrated from slice(s) s008a8280, s008a7400 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/fft1hint.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// Flags: /O2 /MD /Gy /EHsc /TP
 
 #include "game/types.h"
 
@@ -341,7 +342,7 @@ FFT1HintClass* New_FFT1HintClass(tsiMemObject* mem, short upem)
 }
 
 // @ 0x008a7c90
-void SetupStemWeights(FFT1HintClass* h, int scale, int* src, int count, int refWidth, int* out, int* pNum)
+int* SetupStemWeights(FFT1HintClass* h, int scale, int* src, int count, int refWidth, int* out, int* pNum)
 {
     int n = count;
     int i = 0;
@@ -365,7 +366,7 @@ void SetupStemWeights(FFT1HintClass* h, int scale, int* src, int count, int refW
     }
     if (refWidth < 1) {
         *pNum = count;
-        return;
+        return pNum;
     }
     i = util_FixMul(refWidth, scale);
     unsigned u2 = (unsigned)h->onepix;
@@ -419,6 +420,7 @@ void SetupStemWeights(FFT1HintClass* h, int scale, int* src, int count, int refW
     r[1] = b;
     r[0] = a;
     *pNum = count + 1;
+    return pNum;
 }
 
 // @ 0x008a7e30
@@ -732,8 +734,7 @@ void ApplyHints_FFT1HintClass(FFT1HintClass* h, short start, short count, GlyphC
     FlipContourDirection(g, 1);
 }
 
-// @ 0x008a8ff0
-void FFT1HintClass_releaseMem(FFT1HintClass* h)
+static __declspec(noinline) FFT1HintClass* FFT1HintClass_releaseMem_impl(FFT1HintClass* h)
 {
     h->numSnapV = 0;
     h->numSnapH = 0;
@@ -754,6 +755,13 @@ void FFT1HintClass_releaseMem(FFT1HintClass* h)
     z = (int*)h->ygcount_ptr;  for (int i = 0; i < 10; i++) z[i] = 0;
     z = (int*)h->xgcount_ptr;  for (int i = 0; i < 10; i++) z[i] = 0;
     h->numHintSets = 0;
+    return h;
+}
+
+// @ 0x008a8ff0
+void FFT1HintClass_releaseMem(FFT1HintClass* h)
+{
+    FFT1HintClass_releaseMem_impl(h);
 }
 
 // @ 0x008a90f0
