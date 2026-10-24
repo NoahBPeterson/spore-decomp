@@ -1,10 +1,10 @@
 # va  diff-bytes  reason
 00950eb0  12  complete; CustomWinProc::AsInterface; cl duplicates the null-test block instead of sharing the tail
 00951240  12  complete; CustomWinProc::AsInterface (second id); same branch-layout delta
-009512d0  40  complete; aligned pool alloc with allocator-vtable fallback
+009512d0  60  complete; aligned pool alloc with allocator-vtable fallback; the no-allocator path loads ECX from g_pMemPool16c8b44 (0x016c8b44) via the annotated 8-stack-arg fastcall shim, and the vtable path passes all five stack args (base+8, extra, 0, n, 8); equiv PASS 402 valid, 100%
 009513d0  45  complete; vertex-elem array init stride 8 (count via vtable +0x18, alloc +0x28)
 009514d0  30  complete; vtable forwarder (this = [a+4], call slot +0x24 with two args)
 009514f0  45  complete; vertex-elem array init stride 0xc; equiv: UNSUPPORTED (0/1200 valid inputs, fake-arity/faults)
-00951d60  69  complete; MemPool::Alloc - local cur pointer vs direct field decrement
+00951d60  65  complete; MemPool::Alloc - local cur pointer vs direct field decrement; fallback loads ECX from g_pMemPool16c8b44 via the annotated 6-stack-arg fastcall shim; equiv PASS 444 valid, 100% (slice and src/game/UTFSpore_Win32/Draw2D.cpp)
 00951dc0  41  complete; IterCopy::Set - src[5]/src[6] register assignment differs
 00952160  n/a  complete; Bounds::UnionBounds virtual merge tree (vtable slots 0x144045c/0x144080c); hidden eax return = r (the arg), so it returns const float*; the merge must reload mMinX/mMinY/mMaxX/mMaxY: without a fence cl 15.00 hoists all four bounds into xmm1-xmm4 across the early-out test, where the LTCG original folds the early-out reads into comiss memory operands and uses only xmm0-xmm2 (callerdeps register-UNKNOWN - no direct call site, vtable-only refs); _ReadWriteBarrier() (compiler fence, emits no code) stops the hoist; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv PASS 400 valid inputs, 100.0% coverage (all 54 insns)

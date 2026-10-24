@@ -15,6 +15,9 @@ extern "C" void* FUN_009289f0(unsigned, int, int, int, int, int);   // cSPMemPoo
 
 // ---- items of slice s00950bb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* FUN_009289f0(unsigned, int, int, int, int, int);   // cSPMemPool::LockedAlloc
+void* __fastcall LockedAllocCall(void* self, int reserved, unsigned size,
+                                 int, int, int, int, int);  // 0x009289f0
+extern void* g_pMemPool16c8b44;  // 0x016c8b44
 struct MemPool {
     char pad0[0x40];
     int  free0;     // +0x40
@@ -316,7 +319,7 @@ void* MemPool::Alloc(unsigned size)
         cur1 -= 4;
         return v;
     }
-    return FUN_009289f0(size, 0, 0, 0, 0, 0);
+    return LockedAllocCall(g_pMemPool16c8b44, 0, size, 0, 0, 0, 0, 0);
 }
 
 // @ 0x00951dc0

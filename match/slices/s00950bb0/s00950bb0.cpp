@@ -4,10 +4,13 @@
 #include <intrin.h>
 
 extern "C" void  FUN_960410(void*, void*);                          // UTFWin::Window::DoMessage
-extern "C" void* FUN_009289f0(unsigned, int, int, int, int, int);   // cSPMemPool::LockedAlloc
-extern "C" void* FUN_00928a30(int, unsigned, int, int, int, int, int, int); // cSPMemPool::LockedAligned
+void* __fastcall LockedAllocCall(void* self, int reserved, unsigned size,
+                                 int, int, int, int, int);  // 0x009289f0
+void* __fastcall LockedAlignedCall(void* self, int reserved, int ptr,
+                                   unsigned n, int align, int, int, int,
+                                   int, int);  // 0x00928a30
 extern "C" void  FUN_009276c0(void*, void*);
-extern void* g_pMemPool16c8b44;
+extern void* g_pMemPool16c8b44;  // 0x016c8b44
 
 namespace EA { namespace UTFWin {
 
@@ -99,19 +102,20 @@ void* MemPool::Alloc(unsigned size) {
         cur1 -= 4;
         return v;
     }
-    return FUN_009289f0(size, 0, 0, 0, 0, 0);
+    return LockedAllocCall(g_pMemPool16c8b44, 0, size, 0, 0, 0, 0, 0);
 }
 
 // ---------------------------------------------------------------------------------------------
 // @ 0x009512D0  aligned pool alloc with vtable-allocator fallback
 // ---------------------------------------------------------------------------------------------
-void* AllocAligned(int base, int size, int, int* allocator) {
+void* AllocAligned(int base, int size, int extra, int* allocator) {
     unsigned n = (size - 1U | 7) + 1;
     void* p;
     if (allocator == 0) {
-        p = FUN_00928a30(base + 8, n, 8, 0, 0, 0, 0, 0);
+        p = LockedAlignedCall(g_pMemPool16c8b44, 0, base + 8, n, 8,
+                              0, 0, 0, 0, 0);
     } else {
-        p = ((void*(__thiscall*)(void*, int, int, unsigned, int))((void**)*(void**)allocator)[1])(allocator, base + 8, 0, n, 8);
+        p = ((void*(__thiscall*)(void*, int, int, int, unsigned, int))((void**)*(void**)allocator)[1])(allocator, base + 8, extra, 0, n, 8);
     }
     if (p == 0) return 0;
     *(void**)p = allocator;
