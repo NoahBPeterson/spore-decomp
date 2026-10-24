@@ -1,3 +1,4 @@
+007aabb0  778  COMPLETE texture-raster factory; bool return, the async instance/refcount/manager dispatch, and the synchronous DXT1/3/5, RGBA8 (0x15/0x16) and A8 (0x1c) format switch are implemented; the remaining diff is EH/register layout and the unrolled constructor sequences. [equiv: WEAK 45.1% default / 59.0% with --layout 0 --inputs 800, 0 mismatches; replay PASS; src WEAK 59.0% coverage]
 007ab0d0  206  COMPLETE hash_map DoInsertValue; frame 0xc vs 0x8 (original reuses the value param home slot for the bucket index) and the rehash/allocate scheduling differs.
 007ab5f0  108  COMPLETE HasTexture; no /EHsc prologue (the original keeps unwind state around the mutex) and the find argument/stack layout differs.
-007ab6c0   59  COMPLETE ReloadTexture; the return-0 block is laid out inline instead of cold and the vtable loads are hoisted out of the pInstance test.
+007ab6c0    0  byte-exact now (see manifest.txt); bool return plus the shared vtable call and cold `return false` layout. [equiv: PASS 289 valid, 100% coverage; src PASS]

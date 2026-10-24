@@ -1,4 +1,4 @@
-007aabb0  978  PARTIAL texture-raster factory: format switch + async job dispatch skeleton only.
+007aabb0  978  PARTIAL texture-raster factory: sync format switch (DXT1/3/5, RGBA8, A8) + async instance/manager dispatch implemented; not byte-exact (778 diff bytes).
 007aafc0  206  PARTIAL StallFinishBackgroundLoad: EH job-wait path skeleton only.
 007ab2f0  341  PARTIAL ~cTextureManager: EH + refcount teardown skeleton only.
 007ab460  390  PARTIAL Shutdown: full teardown path skeleton only.

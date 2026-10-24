@@ -74,8 +74,65 @@ struct TextureNode {
     TextureNode* pNext;     // +0x10
 };
 
+// Raster view used by the synchronous path of CreateTextureRaster.
+struct Raster {
+    uint32_t mFormat;       // +0x00
+    char     mPad04[8];
+    uint16_t mWidth;        // +0x0c
+    uint16_t mHeight;       // +0x0e
+    uint32_t D3D9GetMipLevelSize(unsigned char level);                          // 0x011f0000
+    void     FillSpriteTexture(void* pBuffer, unsigned int size, int zero);     // 0x011f0440
+};
+
+// Common texture-instance layout built by the three texture constructors.
+struct TextureObject {
+    void*    mpVtable;      // +0x00
+    uint32_t mRefCount;     // +0x04
+    uint32_t mField08;      // +0x08
+    uint32_t mField0c;      // +0x0c
+    uint32_t mField10;      // +0x10
+    uint32_t mField14;      // +0x14
+    void*    mpVtable18;    // +0x18
+    uint32_t mWidth;        // +0x1c
+    uint32_t mHeight;       // +0x20
+    uint32_t mFormat;       // +0x24
+    void*    mpBuffer;      // +0x28
+    void* InitBase(int width, int height);      // 0x00432960
+    void* InitRGBA8(int width, int height);     // 0x004328d0
+    void* InitA8(int width, int height);        // 0x007a9e10
+};
+
+// Single-pointer smart slot used by the synchronous path.
+struct PointerSlot {
+    void* mpObject;         // +0x00
+    PointerSlot* Assign(void* pObject);         // 0x004535d0
+};
+
+// Instance object and its temporary smart-pointer wrapper built by the async path.
+struct AsyncTextureInstance {
+    void*    mpVtable;      // +0x00
+    uint32_t mRefCount;     // +0x04
+    char     mPad08[8];     // +0x08
+    uint32_t mField10;      // +0x10
+    uint32_t mField14;      // +0x14
+    uint32_t mField18;      // +0x18
+    char     mPad1c[0x14];  // +0x1c
+    uint32_t mId;           // +0x30
+    uint32_t mField34;      // +0x34
+    uint32_t mField38;      // +0x38
+    uint32_t mField3c;      // +0x3c
+};
+
+struct RefWrapper {
+    void*    mpVtable;      // +0x00
+    uint32_t mRefCount;     // +0x04
+    void*    mpRef8;        // +0x08
+    void*    mpRaster;      // +0x0c
+    void*    mpInstance;    // +0x10
+};
+
 void* gTextureAllocPtr;     // placeholder for the operator new declaration below
-void* __cdecl TextureAlloc(unsigned int n, const char* pName, int flags, int align, const char* pFile, int line);
+void* __cdecl TextureAlloc(unsigned int n, const char* pName, int flags, int align, const char* pFile, int line); // 0x00f473a0
 extern const char gTextureAllocFile[];
 
 class ResourceManager {
@@ -84,8 +141,9 @@ public:
     void* vfn0c(void* a, int, int, int, int, int);   // vtable slot 3
 };
 ResourceManager* GetResourceManager();               // 0x0067dcd0
+void* FUN_0067dd50();                                // 0x0067dd50
 
-typedef uint32_t (__thiscall* TextureManagerVfn68)(void* self, void* arg);
+typedef bool (__thiscall* TextureManagerVfn68)(void* self, void* arg);
 
 class ArenaSet {
 public:
@@ -144,10 +202,10 @@ public:
     void UnregisterArena(void* pArena);             // 0x007aaf90
     bool StallFinishBackgroundLoad(ResourceKey* pKey); // 0x007aafc0
     bool HasTexture(ResourceKey key);               // 0x007ab5f0
-    uint32_t ReloadTexture(ResourceKey key);        // 0x007ab6c0
+    bool ReloadTexture(ResourceKey key);            // 0x007ab6c0
     void RegisterArenaContents(void* pArena);       // 0x007ab730
     bool Shutdown();                                // 0x007ab460
-    int  CreateTextureRaster(void* a, int b, bool c, int d); // 0x007aabb0
+    bool CreateTextureRaster(Raster* a, void** b, bool c, int d); // 0x007aabb0
 
     // +0x00..+0x0b : vtables / base (cITextureManager, RefCountTemplate<int>)
     char            mPad00[0x0c];   // +0x00
@@ -201,12 +259,115 @@ void cLoadQueue::ClearEntries()
 
 // ---------------------------------------------------------------------------
 // @ 0x007aabb0
-int cTextureManager::CreateTextureRaster(void* a, int b, bool c, int d)
+bool cTextureManager::CreateTextureRaster(Raster* a, void** b, bool c, int d)
 {
-    // PARTIAL: 978-byte EH raster factory with a format switch and a job
-    // dispatch; only the control skeleton is recovered here.
-    (void)a; (void)b; (void)c; (void)d;
-    return 0;
+    if (c) {
+        uint32_t id = (d != 0) ? (uint32_t)d : 0x522264du;
+        AsyncTextureInstance* inst = (AsyncTextureInstance*)TextureAlloc(0x40, "Graphics", 0, 0, 0, 0);
+        if (inst != 0) {
+            inst->mId = id;
+            inst->mpVtable = (void*)0x13eb90c;
+            inst->mRefCount = 0;
+            inst->mpVtable = (void*)0x13eb844;
+            inst->mField38 = 0;
+            inst->mField10 = 0xffffffffu;
+            inst->mField18 = 0xffffffffu;
+        }
+        RefWrapper* ref = (RefWrapper*)TextureAlloc(0x14, "Graphics", 0, 0, 0, 0);
+        if (ref != 0) {
+            ref->mpVtable = (void*)0x140faa8;
+            ref->mRefCount = 0;
+            ref->mpVtable = (void*)0x140fab8;
+            ref->mpRef8 = 0;
+            ref->mpRaster = 0;
+            ref->mpInstance = 0;
+            ((void (__thiscall*)(void*))((void**)(*(void**)ref))[0])(ref);
+        }
+        void* old = ref->mpInstance;
+        if (inst != old) {
+            ((void (__thiscall*)(void*))((void**)(*(void**)inst))[1])(inst);
+            ref->mpInstance = inst;
+            if (old != 0)
+                ((void (__thiscall*)(void*))((void**)(*(void**)old))[2])(old);
+        }
+        ref->mpRaster = a;
+        struct RequestDesc {
+            uint32_t f00, f04;
+            uint8_t  f08;
+            uint8_t  pad09[3];
+            uint32_t f0c, f10, f14, f18, f1c, f20, f24, f28;
+        } desc;
+        desc.f00 = 4; desc.f04 = 0; desc.f08 = 1;
+        desc.f0c = desc.f10 = desc.f14 = desc.f18 = 0;
+        desc.f1c = desc.f20 = desc.f24 = desc.f28 = 0;
+        void* mgr = FUN_0067dd50();
+        typedef void (__thiscall* MgrVfn)(void*, void*, int, void*);
+        ((MgrVfn)((void**)(*(void**)mgr))[0x78 / 4])(mgr, ref, 0, &desc);
+        ((void (__thiscall*)(void*))((void**)(*(void**)ref))[1])(ref);
+        return true;
+    }
+
+    Raster* raster = a;
+    const int width = raster->mWidth;
+    const int height = raster->mHeight;
+    const uint32_t mipSize = raster->D3D9GetMipLevelSize(0);
+
+    PointerSlot slot;
+    slot.mpObject = 0;
+    TextureObject* texture = 0;
+
+    switch (raster->mFormat) {
+    case 0x31545844:    // DXT1
+        texture = (TextureObject*)TextureAlloc(0x2c, "Graphics", 0, 0, 0, 0);
+        if (texture != 0)
+            texture = (TextureObject*)texture->InitBase(width, height);
+        slot.Assign(texture);
+        texture = (TextureObject*)slot.mpObject;
+        texture->mpBuffer = TextureAlloc(mipSize, "Graphics", 0, 0, 0, 0);
+        texture->mFormat = 4;
+        break;
+    case 0x33545844:    // DXT3
+        texture = (TextureObject*)TextureAlloc(0x2c, "Graphics", 0, 0, 0, 0);
+        if (texture != 0)
+            texture = (TextureObject*)texture->InitBase(width, height);
+        slot.Assign(texture);
+        texture = (TextureObject*)slot.mpObject;
+        texture->mpBuffer = TextureAlloc(mipSize, "Graphics", 0, 0, 0, 0);
+        texture->mFormat = 5;
+        break;
+    case 0x35545844:    // DXT5
+        texture = (TextureObject*)TextureAlloc(0x2c, "Graphics", 0, 0, 0, 0);
+        if (texture != 0)
+            texture = (TextureObject*)texture->InitBase(width, height);
+        slot.Assign(texture);
+        texture = (TextureObject*)slot.mpObject;
+        texture->mpBuffer = TextureAlloc(mipSize, "Graphics", 0, 0, 0, 0);
+        texture->mFormat = 6;
+        break;
+    case 0x15:
+    case 0x16:
+        texture = (TextureObject*)TextureAlloc(0x2c, "Graphics", 0, 0, 0, 0);
+        if (texture != 0)
+            texture = (TextureObject*)texture->InitRGBA8(width, height);
+        slot.Assign(texture);
+        texture = (TextureObject*)slot.mpObject;
+        break;
+    case 0x1c:
+        texture = (TextureObject*)TextureAlloc(0x2c, "Graphics", 0, 0, 0, 0);
+        if (texture != 0)
+            texture = (TextureObject*)texture->InitA8(width, height);
+        slot.Assign(texture);
+        texture = (TextureObject*)slot.mpObject;
+        break;
+    default:
+        return false;
+    }
+
+    if (texture == 0)
+        return false;
+    raster->FillSpriteTexture(texture->mpBuffer, mipSize, 0);
+    *b = texture;
+    return true;
 }
 
 // @ 0x007aafc0
@@ -271,17 +432,17 @@ TextureInstanceMap::InsertResult TextureInstanceMap::DoInsertValue(const Texture
 }
 
 // @ 0x007ab6c0
-uint32_t cTextureManager::ReloadTexture(ResourceKey key)
+bool cTextureManager::ReloadTexture(ResourceKey key)
 {
     TextureInstanceMap& map = mTextureInstanceMap;
     key.mType = 0;
     HashIterator it = map.find(key);
-    if (it.mpNode == map.mpBucketArray[map.mnBucketCount])
-        return 0;
-    void* pInstance = *(void**)((char*)it.mpNode + 0x0c);
-    if (pInstance != 0)
-        return ((TextureManagerVfn68)(*(void***)this)[0x68 / 4])(this, (char*)pInstance + 8);
-    return ((TextureManagerVfn68)(*(void***)this)[0x68 / 4])(this, 0);
+    if (it.mpNode != map.mpBucketArray[map.mnBucketCount]) {
+        void* pInstance = ((TextureNode*)it.mpNode)->pInstance;
+        void* pArg = pInstance != 0 ? (char*)pInstance + 8 : 0;
+        return ((TextureManagerVfn68)(*(void***)this)[0x68 / 4])(this, pArg);
+    }
+    return false;
 }
 
 // @ 0x007ab5f0
