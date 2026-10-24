@@ -1,0 +1,2 @@
+slices/s00c1c9f0/s00c1c9f0.cpp  ?FUN_00c1d400@cSPCreatureBase@@QAEPAVcVObj@@II@Z  00c1d400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c1c9f0/s00c1c9f0.cpp  ?FUN_00c1d430@cSPCreatureBase@@QAEPAVcVObj@@I@Z  00c1d430  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,38 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00c1c9f0 = SP::cSPCreatureBase (0x00c1c9f0..0x00c1d5e0): the creature
+# "effects / ability" cluster -- the FLEE deactivate reset, the ability-list
+# rebuild, the per-tool slow-effect strength update, the effect-spawn wrappers
+# around the EffectsManager, and the two-element teardown of the creature's
+# hash tables and red/black tree.  Interesting fields: +0x0c28 eastl vector of
+# 0x10-byte ability records (begin/end/capacity), +0x0cc8 / +0x0d68 PHTable hash
+# tables (bucket array / bucket count / size / element count), +0x0e08 the
+# rbtree (anchor at +0x04, size at +0x14), +0x0e24 / +0x0e98 two-pointer
+# ranges, +0x0b20 species profile (sequence +0x53c, max-energy +0x644),
+# +0x0b54 current cEffect (field +0x80), +0x0b48 order manager.  2/10
+# byte-exact.  The remaining 8 are complete C++ reconstructions of the original
+# control flow; the byte-exact budget is missed because of MSVC register
+# scheduling / block layout (the small wrappers), an unreproducible shrink-wrap
+# of a callee-saved push, and three large functions (the effect-spawn helpers
+# and the table/rbtree teardown) whose original bodies could only be recovered
+# in outline.  Per-row verdicts are the equivalence-gate results measured with
+# the flags above.
+#
+# MATCHes (2/10): FUN_00c1d400(00c1d400), FUN_00c1d430(00c1d430).
+
+00c1c9f0  589 cSPCreatureBase::FUN_00c1c9f0(char): the FLEE deactivate reset.  The full reset sequence is reproduced -- the optional +0x5a8 slot call and +0x0bbc/+0x0b84 float seed when the flag is clear, SetStealthed/SetSprinting(0), the +0x0bec..+0x0c0c and +0x0bf8/+0x0bfc/+0x0c00 clears, the 3-element scan that stamps 1.0f into each ability record's +4, the +0x110/+0x0b58 mask updates, the +0x0e7c detach release (vtable +0x64), the +0x0b48 order-manager reset, the two +0x0e98 clears, the +0x0c0 callback, the InterruptAnimation(0x02481de5,-1,0) and the closing sub-object vtable +0xec dispatch.  The original is 656 bytes of back-to-back field stores; ours is a 468-byte partial (the scalar stores are laid out differently and the ability-record loop is a counted `for` instead of the original 4x-unrolled store).  equiv FAIL 5/5 valid inputs mismatched; first: execution (ours fault: Invalid memory read at eip=00bc97dd from the fake-call-repaired +0x0b4c vtable).
+
+00c1cc80  252 cSPCreatureBase::FUN_00c1cc80(char): bool ability-list rebuild.  Every load and branch matches -- bail when +0x0b20 is null, bail when the arg is clear and the profile sequence (+0x53c) equals +0x0b24, call +0xb0 slot, erase the +0x0c28 vector (copy_705250(end,end,begin) then end=begin), +0x0c53690(count), zero +0x0bec..+0x0c00 and +0x0bf8/+0x0bfc/+0x0c00, push `count` fresh ability records with weight 1.0f, then +0x0c0d9b0 and copy the profile sequence/energy into +0x0b24/+0x0e58/+0x0e5c.  The original is 336 bytes; ours 329.  Differences are the false-return epilogue placement (the original shares one `xor al,al` epilogue at the tail, ours keeps it inline), the vector element register allocation (original pEnd/pBegin in edi/ebp, ours in ecx/edi/ebp) and the unrolled store count.  equiv WEAK 263 valid inputs (need 200), 13.7% coverage (need 60%)
+
+00c1cdd0  206 cSPCreatureBase::FUN_00c1cdd0(int): slow-effect strength update.  The structure is recovered -- the +0x0b54 null guard, FindIndex(0x0d) falling back to FindIndex(0x52), the +0xb4 slot lookup, the `t = dt * 0.001 * effect(+0x104)` scaling forwarded to +0xc15dc0 with a SetStealthed(0,0) when +0x0e58 is exactly zero, and the pow(base,+0x644-derived) interpolation against 0.2f/1.0f clamped at 0.95f and written to cEffect+0x80.  The original is 324 bytes of x87; ours is 339.  The remaining differences are the x87 materialisation itself -- the original loads the exponent with `fild`, conditionally `fadd` the 2^32 correction, `fmul` the global factor and calls the CRT `_CIpow`; MSVC /fp:fast emits a different sse/x87 mix for `pow()` and the `1.0 - x` combine.  equiv WEAK 261 valid inputs (need 200), 7.5% coverage (need 60%)
+
+00c1cf20  467 cSPCreatureBase::FUN_00c1cf20(void): hash-table + rbtree teardown, with the tail jmp to +0xc151b0.  We reproduce the +0xc19940(0) call, both PHTable walks (release the +0x04 object at +0xc slot, addref the +0x08 chain object, FreeBuckets(buckets,count)) and the +0x0d68 table, the +0x0e08 rbtree clear and the two +0xbfcae0 sub-object resets.  The original is 511 bytes; ours 405.  The bucket-array first-entry scan, the rbtree successor walk and the per-node refcount scheduling differ, and our clear uses the plain begin=end form rather than the original memcpy(end,end,0).  equiv UNSUPPORTED only 0/400 inputs valid (discards: fault(read)=356, fake-arity=20)
+
+00c1d120  294 cSPCreatureBase::FUN_00c1d120(uint,uint): effect spawn + transform.  The skeleton matches -- EffectsManagerPtr(), the +0x2c slot gate with a released local, the +0xb76460(+0xcc8) slot lookup, Matrix33::Assign(+0x168d964), the quaternion built from the +0x0c0 sub-object (+0x2c getter then Matrix3FromQuaternion), and the pooled key returned to +0x18 while the +0x04 slot is released.  The original is 357 bytes; ours 225.  We dropped the exact refcount addref/release sequencing (`v0(0)`/`v4()` around the slot assignment) and the block that mixes the quaternion into the parameter structure, so the reconstruction is outline-only.  equiv WEAK 277 valid inputs (need 200), 28.9% coverage (need 60%)
+
+00c1d290  302 cSPCreatureBase::FUN_00c1d290(uint): same effect-spawn body as FUN_00c1d120 but single-argument (ret 4) and without the detach addref path.  The skeleton matches (+0x2c slot, +0xb76460(+0xcc8), Matrix33::Assign, key returned to +0x18, +0x04 release).  The original is 357 bytes; ours 176 -- the same parameter-matrix block is missing.  equiv WEAK 244 valid inputs (need 200), 28.9% coverage (need 60%)
+
+00c1d460  311 cSPCreatureBase::FUN_00c1d460(uint,uint): effect spawn using the +0x0d68 table instead of +0x0cc8, ending by calling the +0x08 slot(0) then +0x04.  The skeleton matches; the same parameter-matrix block is missing.  Original 374 bytes, ours 189.  equiv WEAK 263 valid inputs (need 200), 28.9% coverage (need 60%)
+
+00c1d5e0  54 cSPCreatureBase::FUN_00c1d5e0(char,uint,uint): tool/effect gate.  Logic matches exactly -- when the flag is clear call +0xc17350(c,0) and return 0; otherwise look up +0xc14e70(c) and return 0 when the +0x10 slot is set, else +0xc17350(c,0) then tail-forward to FUN_00c1d460(b,c).  100% instruction coverage and zero value mismatches.  The original is 85 bytes, ours 91.  The only differences are MSVC dropping the unified prologue: the original pushes esi then edi unconditionally and keeps the shared `xor eax,eax` return-0 epilogue at the tail, whereas ours shrink-wraps the edi push into the flag-clear path and lays the return-0 block before the continuation.  equiv WEAK 157 valid inputs (need 200), 100.0% coverage (need 60%)
