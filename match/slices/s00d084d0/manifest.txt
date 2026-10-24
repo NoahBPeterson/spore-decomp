@@ -1,0 +1,5 @@
+slices/s00d084d0/s00d084d0.cpp  ?FUN_00d08930@@YAXXZ  00d08930  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00d084d0/s00d084d0.cpp  ?Do@Obj8A70@@QAEIII@Z  00d08a70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00d084d0/s00d084d0.cpp  ?FUN_00d08aa0@@YGXIIII@Z  00d08aa0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00d084d0/s00d084d0.cpp  ?Setup@Editor8B50@@QAEXIIIIE@Z  00d08b50  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00d084d0/s00d084d0.cpp  ?FUN_00d08f60@@YAXXZ  00d08f60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
