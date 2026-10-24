@@ -1,4 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s009da640/s009da640.cpp  ?FUN_009da6c0@@YAXPAUElem@@0UCompare@@@Z  009da6c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009da640/s009da640.cpp  ?FUN_009da790@@YAXPAUElem@@0UCompare@@@Z  009da790  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009da640/s009da640.cpp  ?A1d0@Anim@@QAEXXZ  009db1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009da640/s009da640.cpp  ?A630@Anim@@QAEHPAPAUSolver@@PAPAUBone@@1H@Z  009db630  /O2 /MD /Gy /TP /arch:SSE /fp:fast

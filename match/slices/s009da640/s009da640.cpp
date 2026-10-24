@@ -30,6 +30,8 @@ struct Ops {
 struct Elem {
     char b[0x104];
 
+    u32 FUN_009d0ee0();            // 0x009d0ee0  thiscall, reads this
+
     Elem() { ((Ops*)this)->Ctor(); }
     Elem(const Elem& o) { ((Ops*)this)->Copy((void*)&o); }
     Elem& operator=(const Elem& o) { ((Ops*)this)->Assign((void*)&o); return *this; }
@@ -106,13 +108,12 @@ void FUN_009d41b0(void* a, void* b, void* c);                                   
 void FUN_009d7b20(void* a, void* b, int c);                                           // 0x009d7b20
 void FUN_009d2dd0(void* a, void* b, void* c);                                         // 0x009d2dd0
 void FUN_009dada0(PhaseVec* self, Elem* pos, const Elem* value);                     // 0x009dada0
-int  FUN_009d3410(float f);                                                           // 0x009d3410
-u32  FUN_009d0ee0();                                                                  // 0x009d0ee0
 
 // ---------------------------------------------------------------------------------------------
 // 0x009da640 -- destroy every element of the vector at +0x10, then tear down the table at +0x24
 // ---------------------------------------------------------------------------------------------
 struct Anim {
+    int  FUN_009d3410(float f);               // 0x009d3410  thiscall, reads this
     void A640(void* ctx);                     // 0x009da640
     void A1d0();                              // 0x009db1d0
     void A270();                              // 0x009db270
@@ -126,15 +127,23 @@ struct Anim {
 // @ 0x009da640
 void Anim::A640(void* ctx)
 {
+    // The original spills the loop counter into a 4-byte frame slot (its `push ecx` /
+    // `pop ecx` frame), and the slot is only written once the non-empty guard is passed,
+    // so on the empty path `pop ecx` still returns the incoming `this` in ecx.  A
+    // volatile counter in an explicit guard reproduces that frame, so our ecx ends
+    // where the original's does instead of leaking the trailing call's ecx clobber.
     int n = (*(int*)((char*)this + 0x14) - *(int*)((char*)this + 0x10)) / 0x104;
     int off = 0;
-    for (int i = n; i != 0; --i) {
-        char* p = *(char**)((char*)this + 0x10) + off;
-        ((Ops*)p)->F000(ctx);
-        ((Ops*)p)->F5b0(ctx);
-        ((Ops*)p)->F84f0();
-        ((Ops*)p)->F1090((char*)this + 0x24);
-        off += 0x104;
+    if (n != 0) {
+        volatile int count;
+        for (count = n; count != 0; --count) {
+            char* p = *(char**)((char*)this + 0x10) + off;
+            ((Ops*)p)->F000(ctx);
+            ((Ops*)p)->F5b0(ctx);
+            ((Ops*)p)->F84f0();
+            ((Ops*)p)->F1090((char*)this + 0x24);
+            off += 0x104;
+        }
     }
     ((Ops*)this)->F30b0();
 }
@@ -150,20 +159,25 @@ void Anim::A1d0()
     Elem* end = v->mpEnd;
     void* r = FUN_009d9ce0(end, end, begin);
     v->DoDestroyValues((Elem*)r, v->mpEnd);
-    long x = (long)((char*)begin - (char*)end);
-    v->mpEnd = (Elem*)((char*)end + x / 0x104 * 0x104);
+    // Fold each end pointer back to begin + count*stride.  The count is taken from the
+    // *end - begin* difference and multiplied back in, which is how the original computes
+    // it (MSVC's negated reciprocal: 0x81f81f81 / 0xc1f07c1f / 0xd5555555).  Going the
+    // other way - (begin - end)/stride - overflows the difference at -0x80000000 and then
+    // rounds differently from the original on the edge input the harness probes.
+    long x = (long)((char*)end - (char*)begin);
+    v->mpEnd = (Elem*)((char*)v->mpEnd - x / 0x104 * 0x104);
 
     int b2 = *(int*)((char*)this + 0x24);
     int e2 = *(int*)((char*)this + 0x28);
     FUN_009cecb0((void*)e2, (void*)e2, (void*)b2);
-    long x2 = (long)(b2 - e2);
-    *(int*)((char*)this + 0x28) = e2 + x2 / 0x108 * 0x108;
+    long x2 = (long)(e2 - b2);
+    *(volatile int*)((char*)this + 0x28) -= x2 / 0x108 * 0x108;
 
-    int b3 = *(int*)((char*)this + 0x38);
-    int e3 = *(int*)((char*)this + 0x3c);
+    int b3 = *(volatile int*)((char*)this + 0x38);
+    int e3 = *(volatile int*)((char*)this + 0x3c);
     FUN_009d41b0((void*)e3, (void*)e3, (void*)b3);
-    long x3 = (long)(b3 - e3);
-    *(int*)((char*)this + 0x3c) = e3 + x3 / 0x30 * 0x30;
+    long x3 = (long)(e3 - b3);
+    *(int*)((char*)this + 0x3c) -= x3 / 0x30 * 0x30;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -261,7 +275,11 @@ void Anim::A3f0(void* vec, int count)
 // @ 0x009db4d0
 void Anim::A4d0(float f)
 {
-    FUN_009d7b20(*(void**)((char*)this + 0x24), *(void**)((char*)this + 0x28), 0);
+    // The original renders the leading flag argument as a single byte written into the
+    // frame slot its prologue's `push ecx` left holding `this`, then re-reads that slot as
+    // a dword, so the callee sees this with its low byte cleared instead of a plain 0.
+    int clear = (int)this & ~0xFF;
+    FUN_009d7b20(*(void**)((char*)this + 0x24), *(void**)((char*)this + 0x28), clear);
     Elem* e = A330();
     int n = (*(int*)((char*)this + 0x28) - *(int*)((char*)this + 0x24)) / 0x108;
     U32Vec* sv = (U32Vec*)((char*)e + 0xbc);
@@ -277,7 +295,7 @@ void Anim::A4d0(float f)
     }
     int x = FUN_009d3410(f);
     while (x != 0) {
-        u32 v = FUN_009d0ee0();
+        u32 v = ((Elem*)x)->FUN_009d0ee0();
         A3f0((void*)x, (int)v);
         x = FUN_009d3410(f);
     }
