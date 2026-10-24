@@ -1,0 +1,21 @@
+00c0eae0 ?SteerTowards@Simulator_cCreatureBase@@QAEXPBUVec3@@H@Z  # void Simulator::cCreatureBase::SteerTowards
+00c0ed60 ?SetCreatureTarget@Simulator_cCreatureBase@@QAEXPAVcCombatant@@_NH@Z  # void Simulator::cCreatureBase::SetCreatureTarget
+00c0ee70 ?GetTargetAsCreature@Simulator_cCreatureBase@@QAEPAXXZ  # void* Simulator::cCreatureBase::GetTargetAsCreature
+00c0ee90 ?ApplyCombatTarget@Simulator_cCreatureBase@@QAEXXZ  # void Simulator::cCreatureBase::ApplyCombatTarget
+00c0eec0 ?UpdateSteering@Simulator_cCreatureBase@@QAEXHM@Z  # void Simulator::cCreatureBase::UpdateSteering
+00c0f280 ?Hide@Simulator_cCreatureBase@@QAEXXZ  # void Simulator::cCreatureBase::Hide
+00c0f2b0 ?Show@Simulator_cCreatureBase@@QAEXXZ  # void Simulator::cCreatureBase::Show
+00c0f2e0 ?TraceTo@Simulator_cCreatureBase@@QAE_NPBUVec3@@0PAU2@@Z  # bool Simulator::cCreatureBase::TraceTo
+00c0f490 ?ResetCombatants@Simulator_cCreatureBase@@QAEXXZ  # void Simulator::cCreatureBase::ResetCombatants
+00c0f510 ?IsSlotEmpty@Simulator_cCreatureBase@@QAE_NI@Z  # bool Simulator::cCreatureBase::IsSlotEmpty
+00c0f570 ?CountValid@Simulator_cCreatureBase@@QAEHXZ  # int Simulator::cCreatureBase::CountValid
+00c0f5f0 ?IsFull@Simulator_cCreatureBase@@QAE_NXZ  # bool Simulator::cCreatureBase::IsFull
+00c0f620 ?FindFirstEmpty@Simulator_cCreatureBase@@QAEIXZ  # uint32_t Simulator::cCreatureBase::FindFirstEmpty
+00c0f6b0 ?FindRandomEmpty@Simulator_cCreatureBase@@QAEIXZ  # uint32_t Simulator::cCreatureBase::FindRandomEmpty
+00c0f780 ?FindFirstValid@Simulator_cCreatureBase@@QAEIXZ  # uint32_t Simulator::cCreatureBase::FindFirstValid (PDB: Count)
+00c0f810 ?FindNextValid@Simulator_cCreatureBase@@QAEIH@Z  # uint32_t Simulator::cCreatureBase::FindNextValid
+00c0f8a0 ?GetAt@Simulator_cCreatureBase@@QAEPAVcCombatant@@I@Z  # cCombatant* Simulator::cCreatureBase::GetAt (PDB: At)
+00c0f8f0 ?FindByCombatant@Simulator_cCreatureBase@@QAEIH@Z  # uint32_t Simulator::cCreatureBase::FindByCombatant
+00c0f960 ?FindByKey@Simulator_cCreatureBase@@QAEIH@Z  # uint32_t Simulator::cCreatureBase::FindByKey
+00c0f9b0 ?FindSlotByKey@Simulator_cCreatureBase@@QAEPAUcCombatantSlot@@HPAI@Z  # cCombatantSlot* Simulator::cCreatureBase::FindSlotByKey
+00c0fa10 ?FindSlotByCombatant@Simulator_cCreatureBase@@QAEPAUcCombatantSlot@@HPAI@Z  # cCombatantSlot* Simulator::cCreatureBase::FindSlotByCombatant
