@@ -42,6 +42,8 @@ void   __cdecl  FUN_00f26330();                                // 0x00f26330
 void*  __stdcall FUN_00f32790(void*);                          // 0x00f32790
 void   __cdecl  FUN_00f97660();                                // 0x00f97660
 void*  __cdecl  FUN_00ecc100(u32);                             // 0x00ecc100
+void*  __cdecl  FUN_011e0744(void*, const void*, unsigned);    // 0x011e0744 memcpy
+void*  __cdecl  FUN_007c8b70(void*, void*, void*);             // 0x007c8b70 Move(first,last,dest)
 void*  __cdecl  FUN_010212a0();                                // GetActivePlanetRecord
 void*  __cdecl  FUN_01021260();                                // GetActivePlanet
 void   __cdecl  FUN_0068d840(int*, const wchar_t*, int, int);  // SPKeyFromName
@@ -96,6 +98,8 @@ struct Ext {
     void FUN_00f339d0(void*, void*, void*);                    // 0x00f339d0 copy<0x38>
     void FUN_0057edf0(void*);                                  // 0x0057edf0 erase<bool>
     void FUN_00553d60(void*);                                  // 0x00553d60 erase<string>
+    void* FUN_0050f740(void*, void*);                          // 0x0050f740 vector erase<12B>(first,last)
+    void FUN_006a4950(void*, void*);                           // 0x006a4950 Destroy(string*,string*)
     void* FUN_00ecff90(void*);                                 // 0x00ecff90 ctor helper
     void FUN_00c70910(int);                                    // 0x00c70910 cPlanet::SetRotationNull
     void FUN_00b225d0(void*);                                  // 0x00b225d0 RemoveNoun
@@ -438,54 +442,56 @@ void SPObj::f37b60() {
 // @ 0x00f37be0
 char SPObj::f37be0() {
     char local = 0;
-    int n1 = (*(int*)(raw + 0x18) - *(int*)(raw + 0x14)) / 12;
-    if (n1 != 0) {
-        int* base = (int*)(raw + 0x14);
-        for (int i = 0; i < n1; ++i) {
-            if (FUN_00ecc100((u32)base[0] + i * 12) != 0) {
-                int* v14 = (int*)(raw + 0x14);
-                E(v14)->FUN_00eeee40((void*)(v14[0] + i * 12));
-                int nt = (*(int*)(raw + 0x2c) - (*(int*)(raw + 0x28) + i * 0x38)) / 0x38;
-                *(int*)(raw + 0x2c) += nt * -0x38;
-                int j = i * 4;
-                int* v50 = (int*)(raw + 0x50);
-                E(v50)->FUN_0057edf0((void*)(v50[0] + j));
-                *(int*)(raw + 0x54) -= 4;
-                if (*(int*)(raw + 0x64) != *(int*)(raw + 0x68)) {
-                    int* v64 = (int*)(raw + 0x64);
-                    E(v64)->FUN_00f339d0((void*)(v64[0] + j + 4), (void*)v64[1], (void*)(v64[0] + j));
-                }
-                *(int*)(raw + 0x68) -= 4;
-                int* v3c = (int*)(raw + 0x3c);
-                E(v3c)->FUN_0057edf0((void*)(v3c[0] + j));
-                *(int*)(raw + 0x40) -= 4;
-                if (*(int*)(raw + 0x78) != *(int*)(raw + 0x7c)) {
-                    E((void*)(raw + 0x78))->FUN_00553d60((void*)(*(int*)(raw + 0x78) + i * 16));
-                }
-                int* v8c = (int*)(raw + 0x8c);
-                E(v8c)->FUN_0057edf0((void*)(v8c[0] + j));
-                *(int*)(raw + 0x90) -= 4;
-                local = 1;
-                break;
+
+    // Parallel arrays trimmed at the first slot whose key no longer resolves:
+    // vec14 (+0x14, 12B), vec28 (+0x28, 0x38B transforms), vec50 (+0x50, 4B),
+    // vec64 (+0x64, 4B), vec3c (+0x3c, 4B), vec78 (+0x78, 16B strings), vec8c (+0x8c, 4B).
+    int* v14 = (int*)(raw + 0x14);
+    for (int i = 0; i < (v14[1] - v14[0]) / 12; ++i) {
+        if (FUN_00ecc100(*(u32*)((char*)v14[0] + i * 12)) != 0) {
+            E(v14)->FUN_0050f740((void*)(v14[0] + i * 12), (void*)v14[1]);
+            int* v28 = (int*)(raw + 0x28);
+            v28[1] -= ((v28[1] - (v28[0] + i * 0x38)) / 0x38) * 0x38;
+            int j = i * 4;
+            int* v50 = (int*)(raw + 0x50);
+            FUN_011e0744((void*)(v50[0] + j), (void*)v50[1], 0);
+            v50[1] -= v50[1] - (v50[0] + j);
+            int* v64 = (int*)(raw + 0x64);
+            if (v64[0] != v64[1]) {
+                FUN_011e0744((void*)(v64[0] + j), (void*)v64[1], 0);
+                v64[1] -= v64[1] - (v64[0] + j);
             }
+            int* v3c = (int*)(raw + 0x3c);
+            FUN_011e0744((void*)(v3c[0] + j), (void*)v3c[1], 0);
+            v3c[1] -= v3c[1] - (v3c[0] + j);
+            int* v78 = (int*)(raw + 0x78);
+            if (v78[0] != v78[1]) {
+                void* ne = FUN_007c8b70((void*)v78[1], (void*)v78[1], (void*)(v78[0] + i * 16));
+                E(v78)->FUN_006a4950(ne, (void*)v78[1]);
+                v78[1] -= ((v78[1] - (v78[0] + i * 16)) / 16) * 16;
+            }
+            int* v8c = (int*)(raw + 0x8c);
+            FUN_011e0744((void*)(v8c[0] + j), (void*)v8c[1], 0);
+            v8c[1] -= v8c[1] - (v8c[0] + j);
+            local = 1;
+            break;
         }
     }
-    char found2 = 0;
-    int n2 = (*(int*)(raw + 0xa4) - *(int*)(raw + 0xa0)) / 12;
-    if (n2 != 0) {
-        int* base = (int*)(raw + 0xa0);
-        for (int i = 0; i < n2; ++i) {
-            if (FUN_00ecc100((u32)base[0] + i * 12) != 0) {
-                int nt = (*(int*)(raw + 0xa4) - (*(int*)(raw + 0xa0) + i * 12)) / 12;
-                *(int*)(raw + 0xa4) += nt * -12;
-                int m = (*(int*)(raw + 0xb8) - (*(int*)(raw + 0xb4) + i * 0x38)) / 0x38;
-                *(int*)(raw + 0xb8) += m * -0x38;
-                found2 = 1;
-                break;
-            }
+
+    // The parallel pair at +0xa0 (12B) / +0xb4 (0x38B).
+    int* vA0 = (int*)(raw + 0xa0);
+    for (int i = 0; i < (vA0[1] - vA0[0]) / 12; ++i) {
+        if (FUN_00ecc100(*(u32*)((char*)vA0[0] + i * 12)) != 0) {
+            vA0[1] -= ((vA0[1] - (vA0[0] + i * 12)) / 12) * 12;
+            int* vB4 = (int*)(raw + 0xb4);
+            int* vB8 = (int*)(raw + 0xb8);
+            vB8[0] -= ((vB8[0] - (vB4[0] + i * 0x38)) / 0x38) * 0x38;
+            local = 1;
+            break;
         }
     }
-    if (local || found2) {
+
+    if (local) {
         E(this)->FUN_00f35f70();
         E(this)->FUN_00f32d10();
         *(u8*)(raw + 0x1ba) = 1;
