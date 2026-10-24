@@ -28,16 +28,39 @@
 
 // x87 fistp dword with the default rounding mode (round to nearest even). Out of range or
 // NaN yields the "integer indefinite" value 0x80000000 as the hardware does.
+// Emulated with integer ops instead of _mm_cvtss_si32: the SSE conversion writes xmm0, and the
+// retail functions that use this helper never touch any xmm register (equiv clobber check).
 static inline int32_t hkFistp(float f)
 {
-#if defined(_M_IX86) || defined(_M_X64) || defined(__SSE__)
-    // cvtss2si rounds with the current mode (nearest even) and returns 0x80000000 for
-    // NaN/out-of-range, exactly like fistp.
-    return _mm_cvtss_si32(_mm_set_ss(f));
-#else
-    if (!(f >= -2147483648.0f && f < 2147483648.0f)) return (int32_t)0x80000000;
-    return (int32_t)lrintf(f);
-#endif
+    union { float f; uint32_t u; } bits;
+    bits.f = f;
+    uint32_t u = bits.u;
+    uint32_t biased = (u >> 23) & 0xff;
+    if (biased == 0xff)
+        return (int32_t)0x80000000;                 // Inf/NaN -> integer indefinite
+    int32_t exp = (int32_t)biased - 127;
+    if (exp < -1)
+        return 0;                                   // |f| < 0.5 (including zero and denormals)
+    uint32_t m = (u & 0x7fffffu) | 0x800000u;       // normalized 24-bit significand
+    int32_t shift = 23 - exp;
+    uint32_t val;
+    if (shift > 0) {
+        val = m >> shift;
+        uint32_t frac = m & ((1u << shift) - 1u);
+        uint32_t half = 1u << (shift - 1);
+        if (frac > half || (frac == half && (val & 1u)))
+            ++val;                                  // nearest, ties to even
+    } else {
+        if (exp > 30)
+            return (int32_t)0x80000000;             // |f| >= 2^31 -> indefinite
+        val = m << (-shift);
+    }
+    if (u & 0x80000000u) {
+        if (val > 0x80000000u)
+            return (int32_t)0x80000000;
+        return (int32_t)(0u - val);
+    }
+    return (int32_t)val;
 }
 
 // float -> (fld a; fmul b; fsqrt; fmul scale; fstp float).
@@ -627,6 +650,16 @@ class hkMotionState { public:
     void setTransform(const hkTransform& t);
 };
 
+// Havok's 1-byte bool wrapper: a non-POD class, so MSVC returns it through a hidden pointer.
+// The original writes the byte through the first argument and returns that pointer in eax.
+class hkBool {
+public:
+    hkBool(bool b) : m_bool(b ? 1 : 0) {}
+    operator bool() const { return m_bool != 0; }
+private:
+    char m_bool;
+};
+
 class hkPhantom;
 extern void __cdecl hkWorldOperationUtil_removePhantomBP(hkWorld*, hkPhantom*);   // @ 0x010a0f20
 extern void __cdecl hkWorldOperationUtil_addPhantomBP(hkWorld*, hkPhantom*);      // @ 0x010a0d10
@@ -654,7 +687,7 @@ class hkPhantom : public hkReferencedObject { public:
     void firePhantomShapeSet();
     // @ 0x0108c0b0 / 0x0108c100
     int fireCollidableAdded(const void* collidable);
-    void fireCollidableRemoved(const void* collidable, bool);
+    void fireCollidableRemoved(const void* collidable, hkBool);
     // @ 0x0108e4e0
     void calcContentStatistics(hkStatisticsCollector* c) const;
 };
@@ -759,7 +792,7 @@ class hkAabbPhantom : public hkPhantom { public:
     hkAabbPhantom(int finishLoaded);
     virtual hkAabb& calcAabb(hkAabb& out);
     void setAabb(const hkAabb& aabb);
-    virtual bool isOverlappingCollidableAdded(const void* c);
+    virtual hkBool isOverlappingCollidableAdded(const void* c);
     virtual void removeOverlappingCollidable(void* c);
     virtual void addOverlappingCollidable(void* c);
     virtual void calcStatistics(hkStatisticsCollector* c) const;
@@ -777,11 +810,11 @@ void hkAabbPhantom::setAabb(const hkAabb& aabb)
 }
 
 // @ 0x0108de30
-bool hkAabbPhantom::isOverlappingCollidableAdded(const void* c)
+hkBool hkAabbPhantom::isOverlappingCollidableAdded(const void* c)
 {
     for (int i = 0; i < m_overlappingCollidables.m_size; ++i)
-        if (m_overlappingCollidables.m_data[i] == c) return true;
-    return false;
+        if (m_overlappingCollidables.m_data[i] == c) return hkBool(true);
+    return hkBool(false);
 }
 
 // @ 0x0108de70
@@ -792,7 +825,7 @@ void hkAabbPhantom::removeOverlappingCollidable(void* c)
     for (int i = 0; i < n; ++i) {
         if (m_overlappingCollidables.m_data[i] == c) { idx = i; break; }
     }
-    fireCollidableRemoved(c, idx >= 0);
+    fireCollidableRemoved(c, hkBool(idx >= 0));
     if (idx >= 0) {
         // remove-swap-last
         int last = --m_overlappingCollidables.m_size;
@@ -823,18 +856,41 @@ void hkAabbPhantom::calcStatistics(hkStatisticsCollector* c) const
     c->endObject();
 }
 
-// @ 0x0108df90
-// finish-loaded style constructor taking the object as an argument (null tolerant)
-void hkAabbPhantom_constructFinishLoaded(hkAabbPhantom* self)
-{
-    if (self) new (self) hkAabbPhantom(1);
-}
 hkAabbPhantom::hkAabbPhantom(int finishLoaded) : hkPhantom(1)
 {
     m_overlapListeners.m_data = 0; m_overlapListeners.m_size = 0; m_overlapListeners.m_capacityAndFlags = (int32_t)0x80000000;
     m_phantomListeners.m_data = 0; m_phantomListeners.m_size = 0; m_phantomListeners.m_capacityAndFlags = (int32_t)0x80000000;
     m_overlappingCollidables.m_data = 0; m_overlappingCollidables.m_size = 0;
     m_overlappingCollidables.m_capacityAndFlags = (int32_t)0x80000000;
+}
+
+// Retail callees that take `this` in ecx, modelled as members so the call site leaves edx alone.
+struct hkWorldObjectFinishLoadedView {
+    void FinishLoaded(int flag);        // 0x010826e0
+};
+struct hkAabbPhantomVtblView {
+    void* m_vtbl;                       // +0x00
+};
+
+// @ 0x0108df90
+// finish-loaded constructor taking the object as an argument (null tolerant).  The retail body
+// is the (inlined) constructor itself: base finish-loaded ctor at 0x010826e0, listener arrays at
+// +0x58/+0x64, the hkAabbPhantom vtable, then the overlapping-collidables array at +0x90.
+void hkAabbPhantom_constructFinishLoaded(hkAabbPhantom* self)
+{
+    if (self == 0)
+        return;
+    ((hkWorldObjectFinishLoadedView*)self)->FinishLoaded(1);
+    self->m_overlapListeners.m_data = 0;
+    self->m_overlapListeners.m_size = 0;
+    self->m_overlapListeners.m_capacityAndFlags = (int32_t)0x80000000;
+    self->m_phantomListeners.m_data = 0;
+    self->m_phantomListeners.m_size = 0;
+    self->m_phantomListeners.m_capacityAndFlags = (int32_t)0x80000000;
+    ((hkAabbPhantomVtblView*)self)->m_vtbl = (void*)0x0149e51c;
+    self->m_overlappingCollidables.m_data = 0;
+    self->m_overlappingCollidables.m_size = 0;
+    self->m_overlappingCollidables.m_capacityAndFlags = (int32_t)0x80000000;
 }
 
 // @ 0x0108dfe0
