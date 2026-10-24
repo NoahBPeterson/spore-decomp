@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c982a0/s00c982a0.cpp  ?ReserveToolSlot@cTribe@SP@@QAEPAXHPAHPAUcGameData@2@@Z  00c986d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
