@@ -72,8 +72,9 @@ public:
 // ---- items of slice s0093b9e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 class memorystream {
 public:
-    int   WriteBuffer(const void* pData, size_type nSize);
+    bool  WriteBuffer(const void* pData, size_type nSize);
     memorystream* Init(char* pData, size_type nSize);
+    void* mpVtbl;         // +00
     char* mpData;         // +04
     int   mnField08;      // +08
     size_type mnSize;     // +0c
@@ -146,18 +147,20 @@ int FixedMemoryStream::Read(void* pData, size_t nSize)
 }}  // namespace EA::IO
 
 // @ 0x0093b9e0
-int __thiscall memorystream::WriteBuffer(const void* pData, size_type nSize)
+bool __thiscall memorystream::WriteBuffer(const void* pData, size_type nSize)
 {
-    if (nSize == 0)
-        return 1;
-    size_type pos = mnPosition;
-    size_type end = pos + nSize;
-    size_type take = nSize;
-    if (end > mnCapacity)
-        take = mnSize - pos;
-    else if (end > mnSize)
-        mnSize = end;
-    MemCpyThunk(mpData + pos, pData, take);
-    mnPosition += take;
-    return take == nSize;
+    if (nSize > 0) {
+        size_type pos = mnPosition;
+        size_type end = pos + nSize;
+        size_type take = nSize;
+        if (end > mnCapacity) {
+            take = mnSize - pos;
+        } else if (mnSize < end) {
+            mnSize = end;
+        }
+        MemCpyThunk(mpData + pos, pData, take);
+        mnPosition += take;
+        return take == nSize;
+    }
+    return true;
 }

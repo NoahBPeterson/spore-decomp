@@ -10,5 +10,5 @@
 #include <new>
 
 // @ 0x0093c420
-int FUN_0093c420(int a, int b)
+int __stdcall FUN_0093c420(int a, int b)
 { return b; }

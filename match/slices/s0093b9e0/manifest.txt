@@ -5,3 +5,9 @@ slices/s0093b9e0/s0093b9e0.cpp  ?FUN_0093c3f0@@YIHPAPAX@Z            0093c3f0  /
 slices/s0093b9e0/s0093b9e0.cpp  ?FUN_0093c430@@YIPAXPAPAX@Z          0093c430  /O2 /MD /Gy /TP
 slices/s0093b9e0/s0093b9e0.cpp  ?ConvertToString8@EA@@YAPAXPAXPBH@Z   0093c570  /O2 /MD /Gy /TP
 slices/s0093b9e0/s0093b9e0.cpp  ?ConvertToString16@EA@@YAPAXPAXPBH@Z  0093c6d0  /O2 /MD /Gy /TP
+slices/s0093b9e0/s0093b9e0.cpp  ?Init@memorystream@@QAEPAV1@PADI@Z 0093ba40  /O2 /MD /Gy /TP
+slices/s0093b9e0/s0093b9e0.cpp  ?FUN_0093c420@@YGHHH@Z  0093c420  /O2 /MD /Gy /TP
+slices/s0093b9e0/s0093b9e0.cpp  ?WriteBuffer@memorystream@@QAE_NPBXI@Z  0093b9e0  /O2 /MD /Gy /TP
+slices/s0093b9e0/s0093b9e0.cpp  ?GetProperty@GraphicsFactoryAsyncRequest@IO@EA@@QAEMH@Z  0093bab0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s0093b9e0/s0093b9e0.cpp  ?SetProperty@GraphicsFactoryAsyncRequest@IO@EA@@QAEXHM@Z  0093bb40  /O2 /MD /Gy /TP /arch:SSE2
+slices/s0093b9e0/s0093b9e0.cpp  ?FUN_0093bd50@@YIPAXPAXHH@Z  0093bd50  /O2 /MD /Gy /TP /arch:SSE2

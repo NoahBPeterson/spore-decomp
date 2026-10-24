@@ -1,4 +1,4 @@
-0093b9e0 ?WriteBuffer@memorystream@@QAEHPBXI@Z  # memorystream::WriteBuffer migrated from s0093b9e0 (verbatim, slice spelling)
+0093b9e0 ?WriteBuffer@memorystream@@QAE_NPBXI@Z  # memorystream::WriteBuffer (bool)
 0093ba40 App::memorystream::memorystream  # dev-PDB App::memorystream::memorystream
 0093ba90 FUN_0093ba90  # no PDB name
 0093bab0 GraphicsFactoryAsyncRequest::GetProperty  # no PDB name
@@ -7,7 +7,7 @@
 0093bc40 ??0SharedPointer_s0093_b9e0@IO@EA@@QAE@PAX0E@Z  # SharedPointer_s0093_b9e0::SharedPointer migrated from s0093b9e0 (verbatim, slice spelling)
 0093bca0 ?FUN_0093bca0@@YAPAXPAX0I0@Z  # FUN_0093bca0 migrated from s0093b9e0 (verbatim, slice spelling)
 0093bcf0 ?FUN_0093bcf0@@YAPAPAXPAPAXPAX11@Z  # FUN_0093bcf0 migrated from s0093b9e0 (verbatim, slice spelling)
-0093bd50 ?FUN_0093bd50@@YIXPAXH@Z  # FUN_0093bd50 migrated from s0093b9e0 (verbatim, slice spelling)
+0093bd50 ?FUN_0093bd50@@YIPAXPAXHH@Z  # FUN_0093bd50 migrated from s0093b9e0 (fastcall, ret 4)
 0093bd90 ?FUN_0093bd90@@YAPAXPAXE@Z  # FUN_0093bd90 migrated from s0093b9e0 (verbatim, slice spelling)
 0093bde0 ?FUN_0093bde0@@YIXPAX@Z  # FUN_0093bde0 migrated from s0093b9e0 (verbatim, slice spelling)
 0093be30 ?SetData@MemoryStream_s0093_b9e0@IO@EA@@QAE_NPAXIE000@Z  # MemoryStream_s0093_b9e0::SetData migrated from s0093b9e0 (verbatim, slice spelling)
@@ -22,7 +22,7 @@
 0093c320 EA::IO::MemoryStream::Clear  # no PDB name
 0093c370 EA::IO::MemoryStream::SetSize  # no PDB name
 0093c3f0 EA::IO::MemoryStream::Release  # no PDB name
-0093c420 ?FUN_0093c420@@YAHHH@Z  # FUN_0093c420 migrated from s0093b9e0 (verbatim, slice spelling)
+0093c420 ?FUN_0093c420@@YGHHH@Z  # FUN_0093c420 migrated from s0093b9e0 (stdcall: ret 8)
 0093c430 small ctor  # no PDB name
 0093c440 ?ConvertToString8Impl@EA@@YAXPAXPB_WI@Z  # ConvertToString8Impl migrated from s0093b9e0 (verbatim, slice spelling)
 0093c570 ?ConvertToString8@EA@@YAPAXPAXPBH@Z  # ConvertToString8 migrated from s0093b9e0 (verbatim, slice spelling)

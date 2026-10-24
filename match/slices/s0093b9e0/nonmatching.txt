@@ -1,18 +1,12 @@
 # va  diff-bytes  reason
-0093b9e0  65   complete: App::memorystream append, capacity/size schedule differs
-0093ba40  25   complete: memorystream ctor, field-store order differs; equiv FAIL after ecx fix (this-ptr member Init; class lacks vptr so field offsets +4.. are shifted vs original)
-0093bab0  120  complete: GetProperty switch/float materialisation differs
-0093bb40  117  complete: SetProperty switch/float materialisation differs
 0093bbf0  45   complete: MemoryStream reads via shared data pointer, schedule differs
-0093bd50  39   complete: GraphicsFactoryAsyncRequest ctor, field order differs
-0093be30  298  complete: MemoryStream::SetData, intrusive_ptr/alloc schedule differs
-0093c000  151  complete: MemoryStream grow/copy, refcount schedule differs
+0093be30  295  complete: MemoryStream::SetData; equiv PASS (5-param ABI restored, allocator vtable slot 2 / DefaultAllocator() call fixed)
+0093c000  249  complete: MemoryStream grow/copy; equiv PASS (helper takes this in ecx, allocator vtable slot 2 / DefaultAllocator() fixed)
 0093c0c0  99   complete: MemoryStream position arithmetic, branch layout differs
-0093c150  149  complete: MemoryStream resize-on-write, float path scheduling differs
+0093c150  219  complete: MemoryStream resize-on-write; equiv PASS (explicit round-to-nearest reproduces retail's x87 fistp)
 0093c210  62   complete: scalar deleting dtor, refcount schedule differs
-0093c320  55   complete: MemoryStream clear, refcount schedule differs; fixed 2026-10-12: SharedRelease passes this = p+4 (second base subobject), was the vptr value (hybrid crash 0x93bd97)
+0093c320  68   complete: MemoryStream clear; equiv FAIL-KEPT register ecx (a non-null path writes ecx where the original leaves the entry value)
 0093c370  61   complete: MemoryStream SetSize, branch layout differs
-0093c420  3    complete: trivial 'return b' thunk, 3 bytes of frame differ
 0093c6f0  12   complete: fputs-to-stderr wrapper, call setup differs
 0093c710  4    complete: Strlen32 do/while, loop register order differs
 0093c920  40   complete: GetCharacterSize if-chain, compare order differs

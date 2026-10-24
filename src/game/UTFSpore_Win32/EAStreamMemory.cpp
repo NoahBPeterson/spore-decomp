@@ -35,7 +35,7 @@ struct SharedPointer_s0093_b9e0 {
     void* mpAllocator;       // +0c
     long  field_10;          // +10
     unsigned char field_14;  // +14
-    SharedPointer_s0093_b9e0(void* pData, void* alloc, unsigned char freeData);
+    SharedPointer_s0093_b9e0(void* pData, void* freeDataArg, void* alloc);
 };
 }
 }
@@ -87,10 +87,10 @@ public:
     MemoryStream_s0093_b9e0(void* pData, size_type nSize, unsigned char copy, int a, void* alloc);
     ~MemoryStream_s0093_b9e0();
 
-    bool SetData(void* pData, size_type nSize, unsigned char copy, void* a, void* b, void* alloc);  // 0x0093be30 (EA::IO::MemoryStream::SetData)
+    bool SetData(void* pData, size_type nSize, unsigned char copy, void* a, void* alloc);  // 0x0093be30 (EA::IO::MemoryStream::SetData)
     bool Clear();
     bool Grow(size_type size);
-    int  WriteBuffer(const void* pData, size_type nSize);
+    bool WriteBuffer(const void* pData, size_type nSize);
     int  ReadBuffer(void* pData, size_type nSize);
     bool SetSizeEx(size_type size);
     virtual bool SetSize(size_type size);
@@ -136,20 +136,21 @@ extern void* g_vtbl_bgloading;
 extern void* g_vtbl_bgloading_a;
 extern void* g_vtbl_bgloading_b;
 extern void* g_vtbl_gfar;   // 0x013f3a68 (equiv t3)
+extern void* g_vtbl_gfar_b; // 0x0143eb78 (GraphicsFactoryAsyncRequest vtable)
 // ---- items of slice s0093b9e0 end
 
 // @ 0x0093bc40
 namespace EA { namespace IO {
-SharedPointer_s0093_b9e0::SharedPointer_s0093_b9e0(void* pData, void* alloc, unsigned char freeData)
+SharedPointer_s0093_b9e0::SharedPointer_s0093_b9e0(void* pData, void* freeDataArg, void* alloc)
 {
     vtable = 0;
     vtable2 = 0;
     mnRefCount = 0;
     mpAllocator = alloc;
-    field_14 = freeData;
+    field_14 = (unsigned char)(size_t)freeDataArg;
     field_10 = (long)pData;
     if (mpAllocator == 0)
-        mpAllocator = (void*)&DefaultAllocator;
+        mpAllocator = DefaultAllocator();
 }
 }}  // namespace EA::IO
 
@@ -167,22 +168,24 @@ void* FUN_0093bca0(void* self, void* pData, size_type nSize, void* a)
 }
 
 // @ 0x0093bcf0
-void** FUN_0093bcf0(void** self, void* pData, void* allocArg, void* a)
+void** __fastcall FUN_0093bcf0(void** self, void* unused, void* pData, void* allocArg, void* a)
 {
     *self = (void*)&g_vtbl_bgloading;
     self[1] = 0;
     self[2] = 0;
-    self[3] = allocArg ? allocArg : (void*)&DefaultAllocator;
-    void* r = ((void*(__thiscall*)(void*, void*, void*, int))((void**)self[3])[2])(self[3], pData, a, 0);
+    void* alloc = allocArg ? allocArg : DefaultAllocator();
+    self[3] = alloc;
+    // slot 2 of the allocator's own vtable allocates the data buffer
+    void* r = ((void*(__thiscall*)(void*, void*, void*, int))(*(void***)alloc)[2])(alloc, pData, a, 0);
     self[4] = r;
     *((char*)self + 0x14) = 1;
     return self;
 }
 
 // @ 0x0093bd50
-void __fastcall FUN_0093bd50(void* self, int unused)
+void* __fastcall FUN_0093bd50(void* self, int unused, int unused2)
 {
-    *(void**)self = (void*)&g_vtbl_gfar;
+    *(void**)self = (void*)&g_vtbl_gfar_b;
     ((long*)self)[1] = 0;
     ((long*)self)[2] = 0;
     ((long*)self)[3] = 0;
@@ -192,6 +195,7 @@ void __fastcall FUN_0093bd50(void* self, int unused)
     *((char*)self + 0x19) = 0;
     *(float*)((char*)self + 0x1c) = 1.5f;
     ((long*)self)[8] = 0;
+    return self;
 }
 
 // @ 0x0093bd90
@@ -221,7 +225,7 @@ void __fastcall FUN_0093bde0(void* self)
 }
 
 // @ 0x0093be30
-bool __thiscall EA::IO::MemoryStream_s0093_b9e0::SetData(void* pData, size_type nSize, unsigned char copy, void* a, void* b, void* alloc)
+bool __thiscall EA::IO::MemoryStream_s0093_b9e0::SetData(void* pData, size_type nSize, unsigned char copy, void* a, void* alloc)
 {
     bool result = false;
     if (pData == 0 && nSize == 0) {
@@ -229,17 +233,17 @@ bool __thiscall EA::IO::MemoryStream_s0093_b9e0::SetData(void* pData, size_type 
         mpSharedPointer = 0;
     } else {
         if (alloc == 0)
-            alloc = (void*)&DefaultAllocator;
+            alloc = DefaultAllocator();
         void* data = pData;
         if (copy == 0)
-            data = ((void*(__thiscall*)(void*, size_type, int, int))((void**)alloc)[2])(alloc, nSize, 0, 0);
+            data = ((void*(__thiscall*)(void*, size_type, int, int))(*(void***)alloc)[2])(alloc, nSize, 0, 0);
         if (data == 0)
             goto done;
         SharedRelease(mpSharedPointer);
         {
             SharedPointer_s0093_b9e0* sp = (SharedPointer_s0093_b9e0*)AllocNamed(0x18, alloc, 0);
             if (sp != 0)
-                sp = new ((void*)sp) SharedPointer_s0093_b9e0(data, alloc, 0);
+                sp = new ((void*)sp) SharedPointer_s0093_b9e0(data, a, alloc);
             mpSharedPointer = sp;
             if (sp == 0)
                 goto done;
@@ -285,7 +289,7 @@ int __thiscall EA::IO::GraphicsFactoryAsyncRequest::Attach(void* pData, size_typ
 // @ 0x0093c000
 bool __thiscall EA::IO::MemoryStream_s0093_b9e0::Grow(size_type nSize)
 {
-    void* alloc = (void*)&DefaultAllocator;
+    void* alloc = DefaultAllocator();
     if (mpSharedPointer != 0 && mpSharedPointer->mpAllocator != 0)
         alloc = mpSharedPointer->mpAllocator;
     SharedPointer_s0093_b9e0* sp = 0;
@@ -293,7 +297,7 @@ bool __thiscall EA::IO::MemoryStream_s0093_b9e0::Grow(size_type nSize)
         sp = (SharedPointer_s0093_b9e0*)AllocNamed(0x18, alloc, 0);
         if (sp == 0)
             return false;
-        sp = new ((void*)sp) SharedPointer_s0093_b9e0((void*)nSize, alloc, 0);
+        sp = (SharedPointer_s0093_b9e0*)FUN_0093bcf0((void**)sp, 0, (void*)nSize, alloc, 0);
         if (sp == 0)
             return false;
         _InterlockedIncrement(&sp->mnRefCount);
@@ -345,7 +349,7 @@ bool __thiscall EA::IO::MemoryStream_s0093_b9e0::SetSizeEx(size_type size)
 }
 
 // @ 0x0093c150
-int __thiscall EA::IO::MemoryStream_s0093_b9e0::WriteBuffer(const void* pData, size_type nSize)
+bool __thiscall EA::IO::MemoryStream_s0093_b9e0::WriteBuffer(const void* pData, size_type nSize)
 {
     if (mbLocked)
         return false;
@@ -359,7 +363,9 @@ int __thiscall EA::IO::MemoryStream_s0093_b9e0::WriteBuffer(const void* pData, s
             take = mnSize - mnPosition;
             goto copy;
         }
-        size_type need = (size_type)((float)cap * mfResizeFactor + (float)mnResizeIncrement);
+        float want = (float)cap * mfResizeFactor + (float)mnResizeIncrement;
+        // retail object built without SSE: float->unsigned is an x87 fistp (round-to-nearest)
+        size_type need = (size_type)(want < 0.0f ? want - 0.5f : want + 0.5f);
         if (need < end)
             need = end;
         if (!Grow(need))
@@ -417,5 +423,5 @@ EA::IO::MemoryStream_s0093_b9e0::MemoryStream_s0093_b9e0(void* pData, size_type 
     mfResizeFactor = 1.5f;
     mnResizeIncrement = 0;
     if (pData != 0 && nSize != 0)
-        SetData(pData, nSize, copy, (void*)a, alloc, alloc);
+        SetData(pData, nSize, copy, (void*)a, alloc);
 }
