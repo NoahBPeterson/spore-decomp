@@ -55,11 +55,21 @@ namespace SP {
 class cContentValidationSummarizer;
 }
 namespace SP {
+// The object reached through LinkRec::field4 is released through the second
+// vtable slot (0x00438C9B loads [old+0x04] before the call at 0x00438C9E);
+// cContentValidationSummarizer keeps Release at +0x08, so the field gets its
+// own two-slot interface.
+struct LinkTarget {
+    virtual void AddRef();               // vtable +0x00
+    virtual void Release();              // vtable +0x04
+};
+}
+namespace SP {
 struct LinkRec {
-    void*  field0;                       // +0x00
-    cContentValidationSummarizer* field4;// +0x04
-    char   pad8[0x3C];
-    int32_t field44;                     // +0x44
+    void*       field0;                  // +0x00
+    LinkTarget* field4;                  // +0x04
+    char        pad8[0x3C];
+    int32_t     field44;                 // +0x44
 };
 }
 namespace SP {
@@ -2740,19 +2750,18 @@ struct cSPEditorBlock {
 // ---- items of slice s0044e460 end
 
 // ---- items of slice s0044f420 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern bool FUN_004adc40(void* p);
-extern char FUN_004a7e60(void* p);
 extern const float g_negOne;   // 0x013eb1bc = -1.0f
-struct AutoRefBlockVec { unsigned int w[15]; };   // 0x3c-byte local
+struct Vec3f_s0044_f420 { float v[3]; };
+struct AutoRefBlockVec {
+    unsigned int w[15];            // 0x3c-byte local
+    void Ctor(const char* name);   // 0x00540470
+    void Func();                   // 0x00453770
+    void Dtor();                   // 0x00453eb0
+};
 struct cSPEditorBlock_s0044_f420;
-extern void VecCtor(AutoRefBlockVec* v, const char* name);   // 0x00540470
-extern void VecFunc(AutoRefBlockVec* v);                     // 0x00453770
-extern void VecDtor(AutoRefBlockVec* v);                     // 0x00453eb0
-extern void FUN_0043f230(cSPEditorBlock_s0044_f420* block, cSPEditorBlock_s0044_f420* self);
-extern void FUN_004388b0(void* p, cSPEditorBlock_s0044_f420* block);
-extern void TrackerGetOffsetA(cSPEditorBlock_s0044_f420* self, float* out, int one);  // 0x00438120
-extern void TrackerGetOffsetB(cSPEditorBlock_s0044_f420* self, float* out, int one);  // 0x004381e0
-extern void TrackerPlace(cSPEditorBlock_s0044_f420* self, float* a, float* b);        // 0x00437b00
+struct ModelObj_s0044_f420 {
+    bool FUN_004adc40();           // 0x004adc40
+};
 struct cSPEditorBlock_s0044_f420 {
     char   pad0[0x28];
     void*  mModel;        // +0x28
@@ -2777,7 +2786,13 @@ struct cSPEditorBlock_s0044_f420 {
 
     int  CalculateSymmetrySign();                 // 0x0044f240
     void SetFlag(int id, int value);              // 0x00435a10
-    cSPEditorBlock_s0044_f420* BuildBlock(int type, AutoRefBlockVec& a, AutoRefBlockVec& b); // 0x0044f7c0
+    void FUN_0043f230(cSPEditorBlock_s0044_f420* self);      // 0x0043f230
+    void FUN_004388b0(cSPEditorBlock_s0044_f420* block);     // 0x004388b0
+    char FUN_004a7e60(cSPEditorBlock_s0044_f420* self);      // 0x004a7e60
+    void TrackerGetOffsetA(float* out, int one);  // 0x00438120
+    void TrackerGetOffsetB(float* out, int one);  // 0x004381e0
+    void TrackerPlace(Vec3f_s0044_f420 a, Vec3f_s0044_f420 b); // 0x00437b00
+    cSPEditorBlock_s0044_f420* BuildBlock(int type, void* root, AutoRefBlockVec& a, AutoRefBlockVec& b); // 0x0044f7c0
     void FUN_00448e90(void* p, int a);            // 0x00448e90
     void FUN_00449420(void* p, int a);            // 0x00449420
 
@@ -3047,7 +3062,7 @@ struct Block2 {
     void   SetF(void* a, unsigned char b);// 0x00451240
     void   SetRef(RCObj* p);              // 0x00451280
     Vec3_s0045_0f70*  GetVec14(Vec3_s0045_0f70* out);           // 0x004512e0
-    void   SetVec194(int x, int y, int z);// 0x00451330
+    Vec3_s0045_0f70*  SetVec194(int x, int y, int z);// 0x00451330
     void   ResetVec194();                 // 0x00451360
     Vec3_s0045_0f70*  GetVec194(Vec3_s0045_0f70* out);          // 0x004513a0
     void   SetPtr188(void* p);            // 0x00451e20
@@ -3817,7 +3832,7 @@ void cContentValidationSummarizer::Detach(cContentValidationSummarizer* e)
         if (e->linkRec != 0) {
             e->linkRec->field0 = 0;
             if (e->linkRec->field4 != 0) {
-                cContentValidationSummarizer* old = e->linkRec->field4;
+                LinkTarget* old = e->linkRec->field4;
                 e->linkRec->field4 = 0;
                 old->Release();
             }
@@ -6472,15 +6487,15 @@ cSPEditorBlock_s0044_f420* cSPEditorBlock_s0044_f420::Split(int type)
     nameB[0] = 0;
 
     AutoRefBlockVec vA;
-    VecCtor(&vA, nameA);
-    VecFunc(&vA);
+    vA.Ctor(nameA);
+    vA.Func();
     AutoRefBlockVec vB;
-    VecCtor(&vB, nameB);
-    VecFunc(&vB);
+    vB.Ctor(nameB);
+    vB.Func();
 
-    cSPEditorBlock_s0044_f420* nb = BuildBlock(type, vA, vB);
+    cSPEditorBlock_s0044_f420* nb = BuildBlock(type, this, vA, vB);
     if (nb != 0) {
-        FUN_0043f230(nb, this);
+        nb->FUN_0043f230(this);
         if (type == 2 || type == 3) {
             FUN_00448e90((char*)this + 0x48, 0);
             FUN_00449420((char*)this + 0xa8, 0);
@@ -6489,37 +6504,37 @@ cSPEditorBlock_s0044_f420* cSPEditorBlock_s0044_f420::Split(int type)
                 cSPEditorBlock_s0044_f420* sc = mSocket;
                 if (sc != 0) {
                     cSPEditorBlock_s0044_f420* linked = sc->mLinked;
-                    if (linked != 0 && FUN_004adc40(mModel)) {
-                        FUN_004388b0(sc->mLinked, nb);
+                    if (linked != 0 && ((ModelObj_s0044_f420*)mModel)->FUN_004adc40()) {
+                        sc->mLinked->FUN_004388b0(nb);
                     } else {
-                        if (FUN_004a7e60(mSocket))
-                            FUN_004388b0(mSocket, nb);
+                        if (mSocket->FUN_004a7e60(mSocket))
+                            mSocket->FUN_004388b0(nb);
                         else
-                            FUN_004388b0(mSocket, nb);
+                            mSocket->FUN_004388b0(nb);
                     }
                 }
             }
             bool f = GetFlag(0xc);
             nb->SetFlag(0xc, f ? 1 : 0);
             if (type == 3) {
-                float a[3];
-                float b[3];
-                TrackerGetOffsetA(this, a, 1);
-                a[0] = a[0] * g_negOne;
-                TrackerGetOffsetB(this, b, 1);
-                b[0] = b[0] * g_negOne;
-                TrackerPlace(nb, b, a);
+                Vec3f_s0044_f420 a;
+                Vec3f_s0044_f420 b;
+                this->TrackerGetOffsetA(a.v, 1);
+                a.v[0] = a.v[0] * g_negOne;
+                this->TrackerGetOffsetB(b.v, 1);
+                b.v[0] = b.v[0] * g_negOne;
+                nb->TrackerPlace(b, a);
             } else {
-                float b[3];
-                float a[3];
-                TrackerGetOffsetB(this, b, 1);
-                TrackerGetOffsetA(this, a, 1);
-                TrackerPlace(nb, a, b);
+                Vec3f_s0044_f420 b;
+                Vec3f_s0044_f420 a;
+                this->TrackerGetOffsetB(b.v, 1);
+                this->TrackerGetOffsetA(a.v, 1);
+                nb->TrackerPlace(a, b);
             }
         }
     }
-    VecDtor(&vB);
-    VecDtor(&vA);
+    vB.Dtor();
+    vA.Dtor();
     return nb;
 }
 
@@ -6774,12 +6789,18 @@ Vec3_s0045_0f70* Block2::GetVec14(Vec3_s0045_0f70* out)
 }
 
 // @ 0x00451330
-void Block2::SetVec194(int x, int y, int z)
+// The original leaves eax = &mVec194: it materialises the address once
+// (mov eax,[ebp-4]; add eax,0x194), stores all three words through it and never
+// overwrites eax again, so the setter returns the vector (its result is unused by
+// the callers).  The integer stores keep the compiler from using SSE moves.
+Vec3_s0045_0f70* Block2::SetVec194(int x, int y, int z)
 {
-    *(int*)&mVec194.x = x;
-    *(int*)&mVec194.y = y;
-    *(int*)&mVec194.z = z;
+    Vec3_s0045_0f70* p = &mVec194;
+    *(int*)&p->x = x;
+    *(int*)&p->y = y;
+    *(int*)&p->z = z;
     mFlag1a0 = true;
+    return p;
 }
 
 // @ 0x00451360
