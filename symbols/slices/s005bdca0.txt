@@ -1,2 +1,6 @@
-005bde60 ?FUN_005bde60@@YAXXZ  # FUN_005bde60 migrated from s005bdca0 (verbatim, slice spelling)
-005be500 ?FUN_005be500@@YAXXZ  # FUN_005be500 migrated from s005bdca0 (verbatim, slice spelling)
+# Slice s005bdca0 names (Spore creature-editor manipulation classes).
+005bdca0 ?init@CSpEditorManip@@QAEPAU1@XZ  # SP::cSPEditorManipulation* constructor (two vtables + field init)
+005bde60 ?fn5de60@cSPEditorManipulationTranslateCreature@@QAEXXZ  # eastl::vector<SP::cSPEditorLimbStructure*>::clear (Release/Destroy + memcpy tail)
+005bded0 ?fn5ded0@cSPEditorManipulationTranslateCreature@@QAEPAMPAM@Z  # std::map<float,cSPVector3> find-or-insert, returns &value
+005bdf70 ?CalcBoundsForMovement@cSPEditorManipulationTranslateCreature@@QAEXPAM00PAX@Z  # SP::cSPEditorManipulationTranslateCreature::CalcBoundsForMovement (from PDB)
+005be500 ?fn5e500@cSPEditorManipulationTranslateCreature@@QAEIMM@Z  # SP::cSPEditorManipulationTranslateCreature planar-symmetry apply/repin
