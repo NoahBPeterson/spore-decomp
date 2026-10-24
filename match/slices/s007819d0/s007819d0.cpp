@@ -281,7 +281,7 @@ E36* Func_00781CB0(E36* first, E36* last, E36* dst)
 // 0x00781CF0 : destroy an E36 vector (elements + block)
 // ============================================================================
 // @ 0x00781cf0
-__declspec(noinline) void __fastcall FUN_00781CF0(void* v)
+void __fastcall FUN_00781CF0(void* v)
 {
     char* begin = *(char**)v;
     char* end = *(char**)((char*)v + 4);
