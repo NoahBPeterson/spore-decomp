@@ -233,11 +233,14 @@ extern int gVtA, gVtB, gVtC, gVtD, gVtE, gVtF, gVtG, gVtH;
 extern "C" void  FUN_00665000(void*, void*, void*);
 extern "C" void  FUN_00665050(void*, void*, void*);
 extern "C" void  FUN_00664ad0(void*, int, int, int);
-extern "C" void  FUN_006b5060(void* self);
-extern "C" void  FUN_006b5240(void* self);
-extern "C" void  FUN_006b55c0(void* self);
+struct cStringLocal_s0066_4c90 {         // SP::cString (0x14 bytes), used as a stack buffer
+    void* p00; void* p04; void* p08; void* p0c; unsigned int p10;
+    void        FUN_006b5060();         // @ 0x006b5060  ctor
+    void        FUN_006b5240();         // @ 0x006b5240  dtor
+    const char* FUN_006b55c0();         // @ 0x006b55c0  c_str
+};
 extern "C" char  FUN_006a1360(void* obj, int k, void* out);
-extern "C" char  FUN_006a0ae0(void* obj, int k, int* count, void** ptr);
+extern "C" char  FUN_006a0ae0(void* obj, int k, void** ptr, int* count);
 typedef void(__thiscall* FnP)(void*);
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
 struct Vec8 {
@@ -268,7 +271,8 @@ struct cSPUIFeedListCategory_s0066_4c90 {
     char  m9c;                         // 0x9c
     char  pad9d[3];
     void* pA0; void* pA4; void* pA8;   // vector<pair8>
-    void* padAc;
+    void* padAc;                       // 0xac
+    char  padB0[4];                    // 0xb0 (padding: pB4 really starts at 0xb4)
     void* pB4;
     void* pB8; void* pBc; void* pC0;
     void* pC4; void* pC8; void* pCc;
@@ -415,18 +419,18 @@ struct CFull {
 // ---- items of slice s00665d30 end
 
 // @ 0x00663b80
-char FUN_00663b80(int a, int b)
+bool __stdcall FUN_00663b80(int a, int b)
 {
-    if (!a || !b) return 0;
+    if (!a || !b) return false;
     int x = *(int*)(a + 0xc4);
     int y = *(int*)(b + 0xc4);
-    if (x != y) return (char)(x < y);
+    if (x != y) return x < y;
     const wchar_t* sa = *(const wchar_t**)(a + 0x18);
     const wchar_t* sb = *(const wchar_t**)(b + 0x18);
     if (sa && sb) {
-        if (_wcsicmp(sa, sb) < 0) return 1;
+        if (_wcsicmp(sa, sb) < 0) return true;
     }
-    return 0;
+    return false;
 }
 
 
@@ -1044,20 +1048,23 @@ void cSPUIFeedListCategory_s0066_4c90::Populate()
 {
     char* p = (char*)this;
     if (!*(void**)(p + 0x7c) || !*(void**)(p + 0xb8)) return;
-    char str[0x14];
-    FUN_006b5060(str);
+    cStringLocal_s0066_4c90 str;
+    str.FUN_006b5060();
     if (*(void**)(p + 0x78)) {
-        if (FUN_006a1360(*(void**)(p + 0xb8), 0x744717c2, str))
-            FUN_006b55c0(str);
+        if (FUN_006a1360(*(void**)(p + 0xb8), 0x744717c2, &str)) {
+            void* obj = *(void**)(p + 0x78);
+            const char* s = str.FUN_006b55c0();
+            ((void(__thiscall*)(void*, const char*))Vslot(obj, 0x80))(obj, s);
+        }
     }
-    int a = 0;
-    void* b = 0;
-    if (FUN_006a0ae0(*(void**)(p + 0xb8), 0x744717c1, &a, &b)) {
-        for (int i = 0; i < a; ++i)
-            Refresh(*(int*)((char*)b + i * 0xc), 0);
+    void* ptr = 0;
+    int count = 0;
+    if (FUN_006a0ae0(*(void**)(p + 0xb8), 0x744717c1, &ptr, &count)) {
+        for (int i = 0; i < count; ++i)
+            Refresh(*(int*)((char*)ptr + i * 0xc), 0);
     }
-    FUN_006657f0(*(void**)(p + 0x8c), *(void**)(p + 0x88), b);
-    FUN_006b5240(str);
+    FUN_006657f0(*(void**)(p + 0x88), *(void**)(p + 0x8c), ptr);
+    str.FUN_006b5240();
 }
 
 // @ 0x00665d30
