@@ -1,6 +1,7 @@
 // slice s0058ba60 -- SP::cAppModeEditorBase::OnMouseMoveUpdate (998 B).
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+// Flags: /O2 /MD /Gy /TP /arch:IA32 /fp:fast
 #include "types.h"
+#include <math.h>
 
 namespace SP {
 
@@ -52,7 +53,7 @@ void  FUN_004a6640(void* p, void* q);      // 0x004a6640
 class cAppModeEditorBase {
 public:
     char pad0[0x600];
-    int OnMouseMoveUpdate(float x, float y, unsigned a, unsigned b); // 0x0058ba60
+    bool OnMouseMoveUpdate(float x, float y, unsigned a, unsigned b); // 0x0058ba60
     PickResult Pick(float x, float y, bool blocksOnly);              // 0x0057af00
 };
 
@@ -60,20 +61,19 @@ public:
 
 using namespace SP;
 
-inline float SqrtF(float v) { return __builtin_sqrtf(v); }
+inline float SqrtF(float v) { return sqrtf(v); }
 
 // @ 0x0058ba60
-int cAppModeEditorBase::OnMouseMoveUpdate(float x, float y, unsigned a, unsigned b)
+bool cAppModeEditorBase::OnMouseMoveUpdate(float x, float y, unsigned a, unsigned b)
 {
     (void)a;
     char* self = (char*)this;
     unsigned char local_1d = 0;
-
     if (self[0x472] != 0) {
-        float fb = (float)(int)b;
+        double fb = (double)(int)b;
         if ((int)b < 0)
-            fb += 4294967296.0f;
-        float deadline = fb * 0.001f + *(float*)(self + 0x474);
+            fb += 4294967296.0;
+        float deadline = (float)(fb * (double)0.001f + (double)*(float*)(self + 0x474));
         *(float*)(self + 0x474) = deadline;
 
         bool expired = deadline >= *(float*)(self + 0x478);
@@ -88,7 +88,7 @@ int cAppModeEditorBase::OnMouseMoveUpdate(float x, float y, unsigned a, unsigned
     }
 
     if (self[0x38] == 0)
-        return 1;
+        return true;
 
     unsigned char cVar5 = (unsigned char)self[0x385];
     self[0x38] = 0;
@@ -114,12 +114,11 @@ int cAppModeEditorBase::OnMouseMoveUpdate(float x, float y, unsigned a, unsigned
 
     {
         unsigned state = *(unsigned*)(self + 0x31c);
-        unsigned ret_high = state;
         if (state == 0)
             goto Lbc87;
         if (state == 1) {
             if (self[0x2f1] != 0)
-                return 1;
+                return true;
 
             ((Helper*)(self + 0x39c))->h5810a0();
 
@@ -136,9 +135,9 @@ int cAppModeEditorBase::OnMouseMoveUpdate(float x, float y, unsigned a, unsigned
             *(unsigned*)(self + 0x3c) &= ~1u;
 
             if (*(void**)(self + 0x3c4) == 0)
-                return 1;
+                return true;
             if (!((Helper*)(*(void**)(self + 0x3c4)))->h5ca920())
-                return 1;
+                return true;
 
             ++*(unsigned*)(self + 0x3c);
 
@@ -147,14 +146,13 @@ int cAppModeEditorBase::OnMouseMoveUpdate(float x, float y, unsigned a, unsigned
                 ((Helper*)self)->h573c00(pick.block, pick.region);
                 if (*(unsigned*)(self + 0xcc) != 0) {
                     ((Helper*)self)->h5820a0();
-                    return 1;
+                    return true;
                 }
             }
 
             ((Helper*)self)->h573c00(0, -1);
-            return 1;
+            return true;
         }
-        (void)ret_high;
     }
     goto Lbdcc;
 
@@ -206,7 +204,7 @@ Lbc87:
 
 Lbdcc:
     if (*(unsigned*)(self + 0x14c) == 0)
-        return 1;
+        return true;
 
     {
         void* block = *(void**)(self + 0xcc);
@@ -227,5 +225,5 @@ Lbdcc:
             self[0xe8] = (char)u;
     }
 
-    return 1;
+    return true;
 }

@@ -1,0 +1,1 @@
+0058ba60  841  complete OnMouseMoveUpdate (bool; full block/state/selection paths, Pick helpers and stubs)  ; difftest WEAK (600 inputs: 441 valid, 52.4% coverage, no mismatches, needs 60%; original 998B vs ours 902B; deadline uses x87-compatible 0.001f rounding and sqrtf avoids XMM4 clobber)  flags /O2 /MD /Gy /TP /arch:IA32 /fp:fast
