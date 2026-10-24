@@ -4,8 +4,8 @@
 006a1880  66   SP::cDirectPropertyList::SetIntProperty - complete; Variant ctor call returns this in original
 006a1910  48   SP::cDirectPropertyList::SetFloatProperty - complete; Variant ctor call returns this in original
 006a1a70  124  eastl pair uninitialized-move-start helper - complete loop; EH frame and argument spill differ
-006a1b00  59   eastl fill_n helper - complete loop (71 vs 130 bytes; original carries an EH frame)
+006a1b00  120  eastl fill_n helper - complete; copies via the annotated EA::Variant copy assignment at 0x00542b80 and returns the last assignment result (0xffffffff for n==0); equiv PASS 484 valid, 100% coverage (slice and src/game/SPEngine/SPPropertyList.cpp)
 006a1bd0  41   SP::cDirectPropertyList::~cDirectPropertyList - complete; EH state numbering differs
 006a1de0  57   SP::cPropertyList::GetPropertyA - complete; cl folds it=end then if(it!=end) that the original keeps; equiv: PASS (lower_bound annotated 0x612db0, 2026-10-11)
-006a1e80  67   eastl::vector<pair<unsigned int,EA::Variant> >::operator= - complete reimplementation (383 vs 316 bytes); equiv FAIL (fake-arity: no call site before 460e0000; ours failed where original succeeded)
+006a1e80  264  eastl::vector<pair<unsigned int,EA::Variant> >::operator= - complete; uses annotated PairsRealloc (0x006a1d80), PairsDestroy (0x00685a30), UninitializedCopyPairs (0x00612b20) and PairsUninitMoveStart; equiv WEAK 221 valid, 45% coverage, no mismatches (slice and src/game/SPEngine/SPPropertyList.cpp)
 006a2010  411  eastl::vector<pair<unsigned int,EA::Variant> >::DoInsertValues - complete reimplementation (235 vs 646 bytes)
