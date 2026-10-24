@@ -1,5 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-0061f3a0  400  OnPoll: complete; temporary/register layout around the 0x214 request and job out-param differs
+0061f3a0  274  OnPoll: complete; request vftable/refcount construction and the local 0x104 fallback buffer are modeled, but temporary/register layout around the 0x214 request and job out-param still differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; WEAK 142 valid (need 200), 66.9% coverage, replay first difference None; run_all 2/2
 0061f530  264  Pump: complete; prologue register allocation and the mpStream==0 block layout differ
 0061f9f0   73  StartJob: complete; original reloads the job pointer around the virtual get-job call
 0061fb50    7  HandleMessage: complete; epilogue orders pop esi before mov al,1

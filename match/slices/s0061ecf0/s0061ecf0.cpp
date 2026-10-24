@@ -37,6 +37,20 @@ void  __cdecl Job_Queue(void* item);                                            
 void  __cdecl Job_Release(void* job);                                               // 0x690120 (SP::cJob::GetStatus)
 void* __cdecl Pollinator();                                                         // 0x67cb30
 
+// The 0x214-byte Pollinator request is constructed in place; these are its
+// base/derived vftables.
+extern void* kVtbl13f1ab0[];   // 0x013f1ab0
+extern void* kVtbl13ef094[];   // 0x013ef094
+extern void* kVtbl13fca84[];   // 0x013fca84
+extern void* kVtbl14188c0[];   // 0x014188c0
+
+struct PollinatorRequest {
+  void*    mpVtbl0;     // +0x00
+  void*    mpVtbl1;     // +0x04
+  uint32_t mRefCount;   // +0x08
+  char     mPayload[0x214 - 0x0c];  // +0x0c
+};
+
 void* __cdecl MessageServer();                                                      // 0x67dcc0
 
 // vtable-slot call helpers (thiscall through an explicit function pointer).
@@ -311,11 +325,18 @@ typedef void (__thiscall *FReq_V)(void*);
 void cFeedManager::OnPoll(void* pFeed) {
   if (pFeed != 0) {
     ((FBool_V)Vt(pFeed)[6])(pFeed);         // +0x18
-    void* req = EA_Allocate(0x214, "Pollinator", 0, 0, 0, 0);
+    PollinatorRequest* reqObj = (PollinatorRequest*)EA_Allocate(0x214, "Pollinator", 0, 0, 0, 0);
+    void* req = reqObj;
     if (req == 0) {
       req = 0;
     } else {
-      // construct the Pollinator request (its ctor is vtable slot 0)
+      // The inlined base and derived constructors install their vftables and
+      // zero the refcount before the virtual slot-0 call.
+      reqObj->mpVtbl0 = kVtbl13f1ab0;
+      reqObj->mpVtbl1 = kVtbl13ef094;
+      reqObj->mRefCount = 0;
+      reqObj->mpVtbl0 = kVtbl13fca84;
+      reqObj->mpVtbl1 = kVtbl14188c0;
       ((void(__thiscall*)(void*))Vt(req)[0])(req);
       Job* job = 0;
       void* mgr = JobManager();
@@ -323,7 +344,7 @@ void cFeedManager::OnPoll(void* pFeed) {
       bool ok = ((FBool_VP)Vt(mgr)[4])(mgr, &job);   // +0x10
       if (ok) {
         job->AddRequest(req);
-        int n = ((FInt_VPV)Vt(pFeed)[17])(pFeed, (char*)req + 0xc, 0x104);  // +0x44
+        int n = ((FInt_VPV)Vt(pFeed)[17])(pFeed, reqObj->mPayload, 0x104);  // +0x44
         if ((unsigned)n > 0) {
           job->mpCallback = (void*)FUN_0061eca0;
           job->mpData = this;
@@ -337,11 +358,12 @@ void cFeedManager::OnPoll(void* pFeed) {
       }
       if (job) job->GetStatus();
     }
-    int r = ((FInt_VPV)Vt(pFeed)[18])(pFeed, (char*)this + 0x70, 0x104);  // +0x48
+    char buf[0x104];
+    int r = ((FInt_VPV)Vt(pFeed)[18])(pFeed, buf, 0x104);  // +0x48
     if (r == 0) {
-      *(uint32_t*)((char*)this + 0x70) = 0x4c554e3c;  // "<NUL"
-      *(uint16_t*)((char*)this + 0x74) = 0x3e4c;      // "L>"
-      *((uint8_t*)this + 0x76) = 0;
+      *(uint32_t*)buf = 0x4c554e3c;        // "<NUL"
+      *(uint16_t*)(buf + 4) = 0x3e4c;      // "L>"
+      buf[6] = 0;
     }
     if (req) ((FReq_V)Vt(req)[1])(req);
   }
