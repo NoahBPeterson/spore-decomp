@@ -160,7 +160,7 @@ bool Owner::Insert15C(uint32_t a, IRef* b) {
 // @ 0x00646d10  map find (template instantiation)
 // ---------------------------------------------------------------------------
 struct Elem20 {
-    uint32_t f00, f04, f08, f0c, f10, f14, f18, f1c;
+    uint32_t f00, f04, f08, f0c, f10;          // sizeof == 0x14
 };
 struct OutPair { void* first; void* second; };
 struct MapFindSelf {
@@ -181,8 +181,12 @@ void MapFindSelf::Find(OutPair* out, const OutPair* key) {
     Elem20* p = lower_bound20(mBegin, last, key, mFlag14);
     if (p != last) {
         const uint32_t* k = (const uint32_t*)key;
-        bool less = k[0] < p->f00;
-        if ((k[0] == p->f00) && (less = k[2] < p->f08, k[2] == p->f08))
+        bool less;
+        if (k[0] != p->f00)
+            less = k[0] < p->f00;
+        else if (k[2] != p->f08)
+            less = k[2] < p->f08;
+        else
             less = k[1] < p->f04;
         if (!less) {
             out->first = p;
