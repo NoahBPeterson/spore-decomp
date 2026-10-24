@@ -1,334 +1,324 @@
-// @ 0x00f1d5d0  scenario-play interaction handler: switch over cmd->mType (1..11); each case
-// looks up the target object(s), scores/reputation-boosts through AddScore (0xf19270) and
-// reports through three out pointers (handled flag, and the two objects' cast pointers).
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
-
-#include "types.h"
+// Slice s00f1d430 - scenario/feedback bookkeeping of the cSPUILayoutManager family.
+// /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+// The time formatter (00f1dc50) comes from a VC7.1-built translation unit - it divides by 60
+// with `idiv` where cl15 always uses a magic multiply - so its manifest row carries /vc71.
+//
+// The manager (PB) owns an array of 0x1ac-byte scenario entries (PBEl).  Each entry keeps a
+// map of already-fired feedback events (eastl::rbtree<unsigned, AutoRefCount<cFeedbackEvent>>),
+// a list of "worlds" and a weight.  Events arriving from a script packet either get added to
+// the running scenario (types 4/5) or handled through the per-index path (type 3).
 
 typedef unsigned int uint;
 
-struct StatObj                                                  // sub-object at +0x5a8/+0x508/+0x120
-{
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14();
-    virtual void SetValue(float v);                            // +0x18
-    virtual void v1c(); virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c(); virtual void v40();
-    virtual void v44(); virtual void v48(); virtual void v4c(); virtual void v50(); virtual void v54();
-    virtual float GetValue(int empire, int mode, const void* key, StatObj* avatarStat);   // +0x58
+#if _MSC_VER < 1400
+typedef unsigned short wchar_t;        // VC7.1 has no native wchar_t
+#endif
+
+struct WStr;
+WStr* __cdecl WStr_Format(WStr* pOut, const wchar_t* pFormat, ...);   // 0x0041e050
+void __cdecl EASTL_allocator_deallocate(void* p);                       // 0x00f47380
+
+struct CString {
+    uint mPad[5];
+    const wchar_t* GetText();        // 0x006b55c0
+    void Release();                  // 0x006b5240 (out-of-line destructor body)
 };
 
-struct Entity
-{
-    virtual void v00(); virtual void v04(); virtual void v08();
-    virtual uint Cast(uint iid);                               // +0x0c
-    uint32_t pad1[8];
-    int  mID;                                                  // +0x24
-    uint32_t pad2[4];
-    int  mKind;                                                // +0x38
+void __cdecl InitTimeString(CString* pOut);   // 0x00f39110
+
+// ---- feedback event map ----------------------------------------------------
+// Iterator returned by value (8 bytes, returned through a hidden pointer).
+struct EvIter {
+    void* mpNode;                    // +0x00
+    void* mpOwner;                   // +0x04
 };
 
-struct Info { uint32_t pad[0x14]; uint mFlags; };              // +0x50 & 0x100
-
-struct Creature : Entity
-{
-    uint32_t pad3[(0x5a8 - 0x3c) / 4];
-    StatObj  stat;                                             // +0x5a8
-    uint32_t pad4[(0xb58 - 0x5a8 - 4) / 4];
-    uint     mFlags;                                           // +0xb58
-    bool M_c15d50(Info* i, int a, int b);                      // 0xc15d50 (ret 0xc)
-    bool M_c159c0(Info* i, int a, int b);                      // 0xc159c0 (ret 0xc)
-};
-struct Other : Entity                                          // FUN_00ae6760 result
-{
-    uint32_t pad3[(0x508 - 0x3c) / 4];
-    StatObj  stat;                                             // +0x508
-    bool M_ca4320(Entity* e);                                  // 0xca4320 (ret 4)
-};
-struct Building : Entity                                       // icast<cBuilding>
-{
-    uint32_t pad3[(0x120 - 0x3c) / 4];
-    StatObj  stat;                                             // +0x120
-    bool M_bcf490(Entity* e);                                  // 0xbcf490 (ret 4)
-};
-struct Holder { uint32_t pad[0x108 / 4]; Creature* mOwner; };  // FUN_00ad7380 result, +0x108
-
-struct Iter8 { uint a, b; };
-struct Map
-{
-    void Insert(Iter8* out, uint* key);                        // 0x00a18440 (ret 8)
+// The map's insert helper takes (and ignores) a small tag object; only its first byte is
+// ever initialised by the caller, so it is modelled as a 4-byte pass-by-value aggregate.
+struct InsertTag {
+    bool mbAtEnd;                    // +0x00
+    char mPad[3];                    // +0x01
 };
 
-struct Cmd
-{
-    uint32_t pad[2];
-    Map  mMap;                                                 // +0x08
-    uint32_t pad2[(0x24 - 0x08 - 4) / 4];
-    int  mType;                                                // +0x24
-    int  mTarget;                                              // +0x28
-    int  mTarget2;                                             // +0x2c
+struct EvNode {                      // rbtree node
+    EvNode* mpLeft;                  // +0x00
+    EvNode* mpNext;                  // +0x04
 };
 
-struct NounMgr
-{
-    Creature* GetAvatar();                                     // 0x00b1fdb0
-    int GetPlayerEmpireOrMinus1();                             // 0x00b1f9d0
-};
-NounMgr* NounManager();                                        // 0xb3d300
+struct EventMap {                    // eastl::rbtree<unsigned, AutoRefCount<cFeedbackEvent>>
+    uint    mSize;                   // +0x00
+    void*   mAnchor;                 // +0x04 (its address is end())
+    uint    mPad08;                  // +0x08
+    EvNode* mpRoot;                  // +0x0c
 
-struct PosseSim
-{
-    int GetItemCount();                                        // 0x00d52df0
-    bool AddPosseMember(Creature* c);                          // 0x00d54330
-};
-PosseSim* PosseInstance();                                     // 0xd539d0
-struct Limit
-{
-    int GetMax();                                              // 0x00f3bf60
-};
-struct Root { uint32_t pad[0x74 / 4]; Limit* mLimit; };
-extern Root* g_root;                                           // [0x16c7aa4]
-
-extern const uint g_statKey;                                   // 0x016c826c
-extern float g_015ad93c;
-extern float g_015ad944;
-
-Info*      GetInfo(Entity* e);                                 // 0xb18e00 (cdecl)
-Entity*    FUN_00bd8460(Entity* e);                            // cdecl
-Entity*    FUN_00f20d20(Entity* e);                            // cdecl
-Creature*  icast_Animal(Entity* e);                            // 0xac8960 (cdecl)
-Other*     FUN_00ae6760(Entity* e);                            // cdecl
-Building*  icast_Building(Entity* e);                          // 0xb67720 (cdecl)
-void       AddScore(Entity* a, Entity* b, float f);            // 0xf19270 (cdecl)
-void       FUN_00f195a0(Entity* e, Info* i);                   // cdecl
-Holder*    FUN_00ad7380(Entity* e);                            // cdecl
-Creature*  FUN_00f19200(Entity* avatar);                       // 0xf19200 (cdecl, casts by IID 0xce9f6639)
-
-struct Mgr
-{
-    uint32_t pad[0xec / 4];
-    bool     mFlag;                                            // +0xec
-    Entity* Lookup(Cmd* c, int id, Entity* ctx);               // 0xf1b820 (ret 0xc)
-    float   Calc(bool b, Info* i);                             // 0xf1aa10 (ret 8)
-    void    FUN_f1a120(Cmd* c, Entity* e);                     // 0xf1a120 (ret 8)
-    bool    Handle(Cmd* cmd, bool* pHandled, uint* pA, uint* pB);   // 0xf1d5d0
+    EvIter find(const uint& key);                        // 0x00e5c780
+    void   insert(EvIter* pResult, uint key, InsertTag tag);   // 0x00a17a70
+    void   DoNukeSubtree(EvNode* pNode);                 // 0x009a9600
 };
 
-static __forceinline void ApplyStat(StatObj* s, int mode, StatObj* avStat)
-{
-    s->SetValue(s->GetValue(NounManager()->GetPlayerEmpireOrMinus1(), mode, &g_statKey, avStat));
-}
+// ---- scenario entry --------------------------------------------------------
+struct WorldPart {                   // body of a world record
+    void Free();                     // 0x00f280f0
+};
 
-static __forceinline StatObj* AvatarStat()
-{
-    Creature* av = NounManager()->GetAvatar();
-    return av ? &av->stat : 0;
-}
+struct World {                       // 0x44-byte element of an entry's world list
+    uint      mId;                   // +0x00
+    WorldPart mPart;                 // +0x04
+    char      mPad08[0x3c];          // +0x08
+};
 
-bool Mgr::Handle(Cmd* cmd, bool* pHandled, uint* pA, uint* pB)
-{
-    *pHandled = true;
-    *pA = 0;
-    *pB = 0;
-    Limit* lim = g_root->mLimit;
-    bool ok = false;
-    Entity* obj;
-    Entity* other = 0;
+struct PB;
 
-    switch (cmd->mType - 1)
-    {
-    case 0:
-    case 6:
-    {
-        obj = Lookup(cmd, cmd->mTarget, 0);
-        if (!obj) return false;
-        bool isSeven = cmd->mType == 7;
-        AddScore(NounManager()->GetAvatar(), obj, Calc(isSeven, GetInfo(obj)));
-        if (isSeven)
-            FUN_00f195a0(obj, GetInfo(obj));
-        uint key = obj->mID;
-        Iter8 it;
-        cmd->mMap.Insert(&it, &key);
-        ok = true;
-        break;
-    }
-    case 1:
-    {
-        obj = Lookup(cmd, cmd->mTarget, 0);
-        if (!obj) return false;
-        AddScore(NounManager()->GetAvatar(), obj, g_015ad93c * 0.75f);
-        if (mFlag)
-        {
-            ok = true;
-            *pHandled = true;
-        }
-        else
-        {
-            FUN_f1a120(cmd, obj);
-            ok = false;
-            *pHandled = false;
-        }
-        break;
-    }
-    case 2:
-    {
-        obj = Lookup(cmd, cmd->mTarget, 0);
-        if (!obj) return false;
-        AddScore(NounManager()->GetAvatar(), obj, 4.0f);
-        Entity* w = FUN_00bd8460(obj);
-        if (w && w->mKind == 9)
-            obj = FUN_00f20d20(w);
-        Creature* animal = icast_Animal(obj);
-        Other* oth = FUN_00ae6760(obj);
-        Building* bld = icast_Building(obj);
-        if (animal)
-        {
-            ApplyStat(&animal->stat, 2, AvatarStat());
-            ok = true;
-        }
-        else if (oth)
-        {
-            ApplyStat(&oth->stat, 0, AvatarStat());
-            ok = true;
-        }
-        else if (bld)
-        {
-            ApplyStat(&bld->stat, 0, AvatarStat());
-            ok = true;
-        }
-        *pHandled = false;
-        break;
-    }
-    case 3:
-    {
-        obj = Lookup(cmd, cmd->mTarget, 0);
-        if (!obj) return false;
-        AddScore(NounManager()->GetAvatar(), obj, 2.0f);
-        Creature* animal = icast_Animal(obj);
-        if (animal)
-        {
-            animal->mFlags |= 0x80;
-            uint key = obj->mID;
-            Iter8 it;
-            cmd->mMap.Insert(&it, &key);
-            ok = true;
-            *pHandled = true;
-        }
-        break;
-    }
-    case 4:
-    {
-        int cur = PosseInstance()->GetItemCount();
-        if (cur >= lim->GetMax())
-        {
-            *pHandled = false;
-            return false;
-        }
-        obj = Lookup(cmd, cmd->mTarget, 0);
-        if (!obj) return false;
-        AddScore(NounManager()->GetAvatar(), obj, 2.0f);
-        Creature* animal = icast_Animal(obj);
-        if (animal)
-        {
-            ok = PosseInstance()->AddPosseMember(animal);
-            *pHandled = false;
-        }
-        break;
-    }
-    case 5:
-    {
-        other = Lookup(cmd, cmd->mTarget2, 0);
-        if (!other) return false;
-        obj = Lookup(cmd, cmd->mTarget, other);
-        if (!obj) goto tail2;
-        Entity* a = obj;
-        if (icast_Building(obj))
-        {
-            a = other;
-            other = obj;
-        }
-        if (icast_Building(a))
-        {
-            *pHandled = false;
-        }
-        else
-        {
-            AddScore(NounManager()->GetAvatar(), other, 3.0f);
-            AddScore(a, other, g_015ad944 * 0.75f);
-            ok = true;
-            *pHandled = true;
-        }
-        obj = a;
-        break;
-    }
-    case 7:
-    {
-        obj = Lookup(cmd, cmd->mTarget, 0);
-        if (!obj) return false;
-        AddScore(NounManager()->GetAvatar(), obj, 1.0f);
-        Creature* c = FUN_00f19200(NounManager()->GetAvatar());
-        if (c)
-        {
-            Info* info = GetInfo(obj);
-            if (info->mFlags & 0x100)
-            {
-                Holder* h = FUN_00ad7380(obj);
-                if (h && h->mOwner)
-                    h->mOwner->M_c15d50(info, 1, 0);
+struct PBEl {                        // 0x1ac-byte scenario entry
+    bool      mbDisabled;            // +0x00
+    char      mPad01[7];             // +0x01
+    EventMap  mEvents;               // +0x08
+    char      mPad18[0x0c];          // +0x18
+    int       mnType;                // +0x24
+    int       mnId;                  // +0x28
+    char      mPad2c[0x10];          // +0x2c
+    World*    mpWorldBegin;          // +0x3c
+    World*    mpWorldEnd;            // +0x40
+    char      mPad44[0x1ac - 0x44];  // +0x44
+
+    void Destroy();                  // 0x00f1dec0
+};
+
+// ---- 16-byte string vector --------------------------------------------------
+// The scenario keeps its strings (feedback text) in an eastl vector of 16-byte elements.
+struct Elem16 {
+    char mData[16];
+};
+
+void* __cdecl CopyStrings(void* pFirst, void* pLast, void* pDest);   // 0x007c8b70
+void* __cdecl UninitializedCopy(void* pOut, void* pFirst, void* pLast, void* pDest,
+                                void* pExtra);                       // 0x00555aa0
+
+struct ElemVector {
+    Elem16* mpBegin;      // +0x00
+    Elem16* mpEnd;        // +0x04
+    Elem16* mpCapacity;   // +0x08
+
+    Elem16* Grow(int nCount, Elem16* pFirst, Elem16* pLast);        // 0x007f1b90
+    void    DestroyRange(Elem16* pFirst, Elem16* pLast);            // 0x006a4950
+    void    Assign(Elem16* pFirst, Elem16* pLast, int nUnused);     // 0x00f1dcc0
+};
+
+// Event descriptor carried by the script packet; the lookup of the referenced event object is
+// the fourth virtual of the packet class.
+struct PBPacket {
+    virtual void* mSlot0();
+    virtual void* mSlot1();
+    virtual void* mSlot2();
+    virtual void* GetEventRef(uint nId, int nArg);
+    char     mPad04[0x18];           // +0x04
+    int      mnId;                   // +0x1c
+    char     mPad20[4];              // +0x20
+    uint     mnKey;                  // +0x24
+};
+
+// one-shot event reference id handed to the packet's virtual lookup
+enum { kPacketRef = 0x1186577 };
+
+struct GBlock {                      // *0x016c7aa4
+    char  mPad00[0x6c];
+    void* mpf_6c;                    // +0x6c
+};
+extern GBlock* g_16c7aa4;
+void FUN_00f0e6c0(void* p);          // 0x00f0e6c0
+
+struct PB {                          // scenario manager
+    char   mPad00[0x1c];             // +0x00
+    int    mCount;                   // +0x1c
+    char   mPad20[0x64 - 0x20];      // +0x20
+    PBEl*  mpBegin;                  // +0x64
+    PBEl*  mpEnd;                    // +0x68
+    char   mPad6c[0x90 - 0x6c];      // +0x6c
+    int    mState;                   // +0x90
+    char   mPad94[0xbc - 0x94];      // +0x94
+    int    mTime;                    // +0xbc
+    char   mPadc0[0xec - 0xc0];      // +0xc0
+    char   mf_ec;                    // +0xec
+
+    void Add(PBEl* e, void* a, void* b);                             // 0x00f1ae10
+    bool FireType3(PBEl* e, bool* pFlag, void** ppA, void** ppB);    // 0x00f1d5d0
+    void FireType4(PBPacket* pPacket);                               // 0x00f1d430
+    void FireType5(PBPacket* pPacket);                               // 0x00f1d500
+    void FormatTime(WStr* pOut);                                     // 0x00f1dc50
+    bool Handle(int nIndex);                                         // 0x00f1dd90
+    bool Run(int nIndex);                                            // 0x00f1de30
+};
+
+// @ 0x00f1d430
+// Fires the type-4 feedback events of a scenario: every armed entry with a matching id that
+// has not seen this event yet gets it added, then the event is recorded in the entry's map.
+void PB::FireType4(PBPacket* pPacket)
+{
+    if (mState != 3)
+        return;
+    ++mCount;
+    int id = pPacket->mnId;
+    if (id == -1)
+        return;
+    for (PBEl* e = mpBegin; e != mpEnd; ++e) {
+        if (!e->mbDisabled && e->mnId == id && e->mnType == 4) {
+            if (e->mEvents.find(pPacket->mnKey).mpNode == (void*)&e->mEvents.mAnchor) {
+                void* pEvent = pPacket->GetEventRef(kPacketRef, 0);
+                Add(e, pEvent, 0);
+                InsertTag tag;
+                tag.mbAtEnd = false;
+                int it[2];
+                e->mEvents.insert((EvIter*)it, pPacket->mnKey, tag);
             }
-            c->M_c159c0(info, 0, 1);
-            ok = true;
         }
-        break;
     }
-    case 8:
-    {
-        other = Lookup(cmd, cmd->mTarget2, 0);
-        if (!other) return false;
-        obj = Lookup(cmd, cmd->mTarget, 0);
-        if (!obj) goto tail2;
-        AddScore(NounManager()->GetAvatar(), other, 3.0f);
-        Creature* animal = icast_Animal(other);
-        Other* oth = FUN_00ae6760(other);
-        Building* bld = icast_Building(other);
-        Info* info = GetInfo(obj);
-        Creature* av = NounManager()->GetAvatar();
-        if (bld)
-        {
-            av->M_c15d50(info, 1, 0);
-            ok = bld->M_bcf490(obj);
-            *pHandled = ok;
-        }
-        else if (oth)
-        {
-            av->M_c15d50(info, 1, 0);
-            ok = oth->M_ca4320(obj);
-            *pHandled = ok;
-        }
-        else if (animal)
-        {
-            av->M_c15d50(info, 1, 0);
-            ok = animal->M_c159c0(info, 0, 1);
-            *pHandled = ok;
-        }
-        else
-        {
-            *pHandled = false;
-        }
-        break;
-    }
-    case 9:
-    case 10:
-        *pHandled = false;
-        return false;
-    default:
-        return false;
-    }
+}
 
-    if (obj)
-        *pA = obj->Cast(0x1186577);
-tail2:
-    if (other)
-        *pB = other->Cast(0x1186577);
-    return ok;
+// @ 0x00f1d500
+// Same as the type-4 pass, for type-5 entries; it does not bump the scenario's counter.
+void PB::FireType5(PBPacket* pPacket)
+{
+    if (mState != 3)
+        return;
+    int id = pPacket->mnId;
+    if (id == -1)
+        return;
+    for (PBEl* e = mpBegin; e != mpEnd; ++e) {
+        if (!e->mbDisabled && e->mnId == id && e->mnType == 5) {
+            if (e->mEvents.find(pPacket->mnKey).mpNode == (void*)&e->mEvents.mAnchor) {
+                void* pEvent = pPacket->GetEventRef(kPacketRef, 0);
+                Add(e, pEvent, 0);
+                InsertTag tag;
+                tag.mbAtEnd = false;
+                EvIter it;
+                e->mEvents.insert(&it, pPacket->mnKey, tag);
+            }
+        }
+    }
+}
+
+// @ 0x00f1dc50
+// Formats the scenario's running time as "mm:ss" into a fresh string.
+void PB::FormatTime(WStr* pOut)
+{
+    CString text;
+    InitTimeString(&text);
+    int nMs = mTime / 1000;
+    int nMin = nMs / 60;
+    int nSec = nMs % 60;
+    WStr_Format(pOut, L"%02d%s%02d", nMin, text.GetText(), nSec);
+    text.Release();
+}
+
+// @ 0x00f1dd90
+// Handles the type-3 event of the entry at the given index; returns true when the entry
+// produced something, in which case the produced object is added to the scenario.
+bool PB::Handle(int nIndex)
+{
+    bool bHandled = false;
+    if (mState == 3) {
+        if (nIndex < mpEnd - mpBegin) {
+            PBEl* e = &mpBegin[nIndex];
+            if (!e->mbDisabled) {
+                bool bAdd = false;
+                void* pA = 0;
+                void* pB = 0;
+                if (FireType3(e, &bAdd, &pA, &pB)) {
+                    bHandled = true;
+                    if (bAdd)
+                        Add(e, pA, pB);
+                }
+            }
+        }
+    }
+    return bHandled;
+}
+
+// @ 0x00f1de30
+// Runs the scenario entry at the given index until it is armed or nothing is left to do.
+bool PB::Run(int nIndex)
+{
+    bool bDisabled = false;
+    if (mState == 3) {
+        if (nIndex < mpEnd - mpBegin) {
+            PBEl* e = &mpBegin[nIndex];
+            if (!e->mbDisabled) {
+                while (Handle(nIndex) && !e->mbDisabled)
+                    ;
+            }
+            bDisabled = e->mbDisabled != 0;
+            if (!mf_ec)
+                FUN_00f0e6c0(g_16c7aa4->mpf_6c);
+        }
+    }
+    return bDisabled;
+}
+
+// @ 0x00f1dec0
+// Tears an entry down: destroys its worlds, releases the world list and nukes its event map.
+void PBEl::Destroy()
+{
+    World* pEnd = mpWorldEnd;
+    for (World* p = mpWorldBegin; p < pEnd; ++p)
+        p->mPart.Free();
+    if (mpWorldBegin != 0 && ((uint*)mpWorldBegin)[-1] != 0)
+        EASTL_allocator_deallocate(mpWorldBegin);
+    EventMap* pEvents = &mEvents;
+    EvNode* pRoot = pEvents->mpRoot;
+    pEvents->DoNukeSubtree(pRoot);
+}
+
+// @ 0x00f1df10
+// Same teardown for a whole range of entries; returns the advanced end pointer.
+PBEl* FreeEntries(PBEl* pFirst, PBEl* pLast, PBEl* pOut)
+{
+    for (; pFirst != pLast; ++pFirst, ++pOut) {
+        World* pEnd = pFirst->mpWorldEnd;
+        for (World* p = pFirst->mpWorldBegin; p < pEnd; ++p)
+            p->mPart.Free();
+        if (pFirst->mpWorldBegin != 0 && ((uint*)pFirst->mpWorldBegin)[-1] != 0)
+            EASTL_allocator_deallocate(pFirst->mpWorldBegin);
+        EventMap& events = pFirst->mEvents;
+        EvNode* pNode = events.mpRoot;
+        while (pNode != 0) {
+            events.DoNukeSubtree(pNode->mpLeft);
+            EvNode* pNext = pNode->mpNext;
+            EASTL_allocator_deallocate(pNode);
+            pNode = pNext;
+        }
+    }
+    return pOut;
+}
+
+// @ 0x00f1dcc0
+// Replaces the vector's contents with [pFirst, pLast): reuses the buffer when it is large
+// enough, otherwise grows it and releases the old storage.  The third argument is part of
+// the caller's signature but is not used by the body.
+void ElemVector::Assign(Elem16* pFirst, Elem16* pLast, int nUnused)
+{
+    (void)nUnused;
+    uint nCapacity = (uint)(mpCapacity - mpBegin);
+    uint nCount = (uint)(pLast - pFirst);
+    if (nCount > nCapacity) {
+        Elem16* pNew = Grow(nCount, pFirst, pLast);
+        DestroyRange(mpBegin, mpEnd);
+        if (mpBegin != 0 && ((uint*)mpBegin)[-1] != 0)
+            EASTL_allocator_deallocate(mpBegin);
+        mpBegin = pNew;
+        mpCapacity = pNew + nCount;
+        mpEnd = mpCapacity;
+        return;
+    }
+    uint nCur = (uint)(mpEnd - mpBegin);
+    if (nCount <= nCur) {
+        Elem16* pNewEnd = (Elem16*)CopyStrings(pFirst, pLast, mpBegin);
+        DestroyRange(pNewEnd, mpEnd);
+        mpEnd = pNewEnd;
+        return;
+    }
+    Elem16* pMid = mpBegin + nCur;
+    CopyStrings(pFirst, pMid, mpBegin);
+    void* pNewEnd;
+    UninitializedCopy(&pNewEnd, pMid, pLast, mpEnd, pLast);
+    mpEnd = (Elem16*)pNewEnd;
 }
