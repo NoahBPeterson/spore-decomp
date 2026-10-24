@@ -1,16 +1,15 @@
 # va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
-00e008e0  115  manager ctor: stopwatch init order differs; equiv FAIL (callee FUN_0093a560 is free fn, ecx not passed)
-00e00970  75  manager dtor: vector resize/teardown scheduling differs; equiv FAIL (callee ecx args are free fns)
+00e008e0  10  manager ctor: Stopwatch ctors are __thiscall member calls now; store scheduling differs. equiv PASS
+00e00970  16  manager dtor: vector dtor/destroy-range are __thiscall member calls now; scheduling differs. equiv PASS
 00e00ac0  50  window lookup: virtual dispatch scheduling differs
 00e00bf0  46  message dispatch / settings-window call differs
-00e00d90  7  bool->mask idiom (neg/sbb vs setne) differs
+00e00d90  20  bool->mask idiom (neg/sbb vs setne) differs; raw uint8_t test. equiv PASS
 00e00ec0  66  options ctor: cString ctor arg order differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
-00e00f40  125  options dtor: refcount release order differs; equiv FAIL (callee ecx free fn)
-00e01090  21  deleting dtor: vtable slot stores differ; equiv PASS
-00e010c0  152  winproc ctor: vtable/stopwatch/message registration differs; equiv FAIL (callee ecx free fns)
-00e011a0  96  winproc dtor: RemoveHandler args/order differ; equiv FAIL (global stores/RemoveHandler)
+00e00f40  12  options dtor: refcount releases/cString dtors now modelled as member/virtual calls. equiv PASS
+00e010c0  128  winproc ctor: vtable/stopwatch/message registration differs; Stopwatch calls are member calls now. equiv PASS
+00e011a0  11  winproc dtor: RemoveHandler args/order differ; global +0x15a4878 store removed, old handler passed. equiv PASS
 00e01250  12  two reset calls: receiver register differs
-00e01270  41  gametime property set: call/arg scheduling differs
+00e01270  25  gametime property set: call/arg scheduling differs; member calls now. equiv PASS
 00e01570  174  POD copy with refcounted members: field order differs; equiv PASS
 00e01620  50  pause-gate inc/dec path differs
 00e01690  60  NetworkActivityProc ctor: vtable stores differ; equiv PASS

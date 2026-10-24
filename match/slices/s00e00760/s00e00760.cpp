@@ -79,6 +79,31 @@ struct SPUILayout {
     void  SetVisibility(void* v);
     char  IsVisible();
 };
+// EA::Stopwatch / EA::LimitStopwatch layout (member functions give the shipped __thiscall ABI).
+struct StopwatchObj {
+    void  FUN_0093a560(int units, int start);   // EA::Stopwatch::Stopwatch
+    void  FUN_0093a1a0(int units);              // EA::Stopwatch::SetUnits
+    uint64_t mnStartTime;                       // +0x00
+    uint64_t mnTotalElapsedTime;                // +0x08
+    int      mnUnits;                           // +0x10
+    float    mfCyclesToUnitsCoefficient;        // +0x14
+};
+struct LimitStopwatchObj : StopwatchObj {
+    uint64_t mnEndTime;                         // +0x18
+    void  FUN_0093a480(unsigned int limit, int start);   // EA::LimitStopwatch::SetTimeLimit
+};
+struct RefVecObj {
+    void  FUN_004b5440();                       // vector-of-refcounted destructor
+    void  FUN_00de5ee0(void* begin, void* end); // destroy range (this = vector)
+    void* mpBegin;                              // +0x00
+    void* mpEnd;                                // +0x04
+    void* mpEndCap;                             // +0x08
+};
+struct RefObj1 { virtual void v0(); virtual void Release(); };                 // Release = vtable+4
+struct RefObj2 { virtual void v0(); virtual void v1(); virtual void Release(); }; // Release = vtable+8
+struct CStringObj { void FUN_006b5240(); };                                    // cString destructor
+struct DirectPropListObj { void FUN_006a17e0(unsigned int key, int value); };   // SetBoolProperty (thiscall)
+struct GameTimeMgrObj { void FUN_00b32280(void* arg); };                        // TogglePauseGate (thiscall)
 struct GUIRootObj {
     void  resetA();   // 0x0093a2e0 (equiv t3)
     void  resetB();   // 0x0093a2e0 (equiv t3)
@@ -119,13 +144,13 @@ void* MgrObj::Ctor() {
     *(void**)((char*)self + 8) = 0;
     *(void**)((char*)self + 0xc) = 0;
     *(void**)((char*)self + 0x10) = 0;
-    FUN_0093a560();
-    FUN_0093a560();
+    ((StopwatchObj*)((char*)self + 0x20))->FUN_0093a560(0, 0);
+    ((StopwatchObj*)((char*)self + 0x38))->FUN_0093a560(0, 0);
     *(void**)((char*)self + 0x54) = 0;
     *(void**)((char*)self + 0x58) = 0;
     *(void**)((char*)self + 0x5c) = 0;
-    FUN_0093a560();
-    FUN_0093a480();
+    ((LimitStopwatchObj*)((char*)self + 0x70))->FUN_0093a560(0, 0);
+    ((LimitStopwatchObj*)((char*)self + 0x70))->FUN_0093a480(0, 0);
     *(void**)((char*)self + 0x90) = 0;
     *(void**)((char*)self + 0x94) = 0;
     *(void**)((char*)self + 0x98) = 0;
@@ -138,12 +163,13 @@ void* MgrObj::Ctor() {
 // @ 0x00e00970
 void MgrObj::Dtor() {
     void* self = this;
-    FUN_004b5440();
+    ((RefVecObj*)((char*)self + 0x90))->FUN_004b5440();
     void* p = *(void**)((char*)self + 0x54);
     if (p != 0 && *((int*)p - 1) != 0) {
         EA_Free(p);
     }
-    FUN_00de5ee0();
+    ((RefVecObj*)((char*)self + 8))->FUN_00de5ee0(*(void**)((char*)self + 8),
+                                                  *(void**)((char*)self + 0xc));
     p = *(void**)((char*)self + 8);
     if (p != 0 && *((int*)p - 1) != 0) {
         EA_Free(p);
@@ -233,7 +259,10 @@ char FUN_00e00d20_impl() {
 
 // @ 0x00e00d90
 uint32_t __fastcall FUN_00e00d90_impl(int self) {
-    return (-(int)(*(bool*)(self + 0x28)) & 2) | 0x410;
+    // The binary's `movzx/neg/sbb` is a "byte != 0" test; reading the byte through a bool*
+    // is undefined for values other than 0/1, so test the raw byte instead.
+    uint8_t b = *(uint8_t*)(self + 0x28);
+    return ((uint32_t)-(int)(b != 0) & 2) | 0x410;
 }
 
 // @ 0x00e00db0
@@ -275,8 +304,24 @@ void OptObj::Dtor() {
     void* self = this;
     *(void**)self = (void*)0x147f17c;
     *(void**)((char*)self + 4) = (void*)0x147f16c;
-    FUN_006b5240();
-    FUN_006b5240();
+    void* p54 = *(void**)((char*)self + 0x54);
+    if (p54 != 0) ((RefObj1*)p54)->Release();
+    ((CStringObj*)((char*)self + 0x40))->FUN_006b5240();
+    void* p3c = *(void**)((char*)self + 0x3c);
+    if (p3c != 0) ((RefObj1*)p3c)->Release();
+    ((CStringObj*)((char*)self + 0x28))->FUN_006b5240();
+    void* p24 = *(void**)((char*)self + 0x24);
+    if (p24 != 0) ((RefObj1*)p24)->Release();
+    void* p20 = *(void**)((char*)self + 0x20);
+    if (p20 != 0) ((RefObj1*)p20)->Release();
+    void* p1c = *(void**)((char*)self + 0x1c);
+    if (p1c != 0) ((RefObj1*)p1c)->Release();
+    void* p18 = *(void**)((char*)self + 0x18);
+    if (p18 != 0) ((RefObj1*)p18)->Release();
+    void* p14 = *(void**)((char*)self + 0x14);
+    if (p14 != 0) ((RefObj1*)p14)->Release();
+    void* p10 = *(void**)((char*)self + 0x10);
+    if (p10 != 0) ((RefObj2*)p10)->Release();
     *(void**)self = (void*)0x13eb938;
     *(void**)((char*)self + 4) = (void*)0x13ec458;
 }
@@ -313,13 +358,13 @@ void* WinObj::Ctor(void* arg) {
     *(void**)((char*)self + 0x1c) = 0;
     *(void**)((char*)self + 0x20) = 0;
     *(void**)((char*)self + 0x24) = 0;
-    FUN_0093a560();
-    FUN_0093a560();
+    ((StopwatchObj*)((char*)self + 0x28))->FUN_0093a560(0, 0);
+    ((StopwatchObj*)((char*)self + 0x40))->FUN_0093a560(0, 0);
     *(void**)((char*)self + 0x58) = 0;
     *(void**)((char*)self + 0x5c) = arg;
     g_15a487c = self;
-    FUN_0093a1a0();
-    FUN_0093a1a0();
+    ((StopwatchObj*)((char*)self + 0x28))->FUN_0093a1a0(4);
+    ((StopwatchObj*)((char*)self + 0x40))->FUN_0093a1a0(4);
     void* ms = SP_MessageServer();
     *(void**)((char*)self + 0x10) = ms;
     *(void**)((char*)self + 0x14) = (char*)self + 4;
@@ -340,12 +385,25 @@ void WinObj::Dtor() {
     *(void**)((char*)self + 8) = (void*)0x147f1a8;
     void* h = *(void**)((char*)self + 0x10);
     if (h != 0) {
-        h = 0;
-        FUN_00571db0(h, *(void**)((char*)self + 0x14), *(void**)((char*)self + 0x18),
-                     *(void**)((char*)self + 0x1c), *(void**)((char*)self + 0x20));
+        void* a1 = *(void**)((char*)self + 0x14);
+        void* a2 = *(void**)((char*)self + 0x18);
+        void* a3 = *(void**)((char*)self + 0x1c);
+        void* a4 = *(void**)((char*)self + 0x20);
+        *(void**)((char*)self + 0x10) = 0;
+        FUN_00571db0(h, a1, a2, a3, a4);
     }
     g_15a487c = 0;
-    g_15a4878 = 0;
+    // The compiler could not prove the callee leaves +0x10 zeroed, so the original has a
+    // second identical teardown block; keep it so a callee that writes +0x10 behaves alike.
+    h = *(void**)((char*)self + 0x10);
+    if (h != 0) {
+        void* a1 = *(void**)((char*)self + 0x14);
+        void* a2 = *(void**)((char*)self + 0x18);
+        void* a3 = *(void**)((char*)self + 0x1c);
+        void* a4 = *(void**)((char*)self + 0x20);
+        *(void**)((char*)self + 0x10) = 0;
+        FUN_00571db0(h, a1, a2, a3, a4);
+    }
     *(void**)((char*)self + 8) = (void*)0x13ec458;
     *(void**)((char*)self + 4) = (void*)0x13eb394;
     *(void**)self = (void*)0x13eb938;
@@ -364,10 +422,12 @@ void GlobalUI::FUN_1250(void* x) {
 // @ 0x00e01270
 void FUN_00e01270_impl() {
     void* g = SP_GameTimeManager();
-    FUN_006a17e0();
+    uint8_t b = *(uint8_t*)((char*)g + 0x48);
+    int v = (~(int)b) & 1;                       // `not al; and al,1`
+    void* propList = (void*)(uint32_t)g_15fd918;
+    ((DirectPropListObj*)propList)->FUN_006a17e0(0x387d0a8u, v);
     g = SP_GameTimeManager();
-    FUN_00b32280();
-    (void)g;
+    ((GameTimeMgrObj*)g)->FUN_00b32280((void*)0x4bf38a8);
 }
 
 // @ 0x00e012b0

@@ -6,3 +6,4 @@ slices/s00e00760/s00e00760.cpp  ?FUN_00e00bd0_impl@@YAXXZ  00e00bd0  /O2 /MD /Gy
 slices/s00e00760/s00e00760.cpp  ?FindWindowByID@GlobalUI@@QAEPAXPAX@Z  00e012b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00e00760/s00e00760.cpp  ?SetVisibility@GlobalUI@@QAEXPAX@Z  00e01350  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00e00760/s00e00760.cpp  ?IsVisible@GlobalUI@@QAEDXZ  00e01380  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e00760/s00e00760.cpp  ?DelDtor@OptObj@@QAEPAXI@Z  00e01090  /O2 /MD /Gy /EHsc /TP /arch:SSE
