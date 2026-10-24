@@ -1,9 +1,8 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00630750   60  basic_string<wchar_t> range ctor: complete; memcpy/AllocateSelf scheduling and end-pointer write
 006307a0  113  rbtree insert helper: complete; operator-new line-info args and node field copy schedule
 006308d0   58  cJob-holder deleting dtor: complete; GetStatus calls via +0x34/+0x30 and buffer free
 006309e0   49  eastl::operator+<wchar_t>: complete; strlen/append call setup order
-00630a50  142  cSPPlayModePhotoBrowser ctor: complete; 0x63-entry loop body store order
+00630a50   87  cSPPlayModePhotoBrowser ctor: complete; retail keeps the object base in eax and reuses one register for the 0x6c/0x84 sub-pointers (`mov eax,ecx` prologue, `lea ecx,[eax+...]`); building the 0x6c pointer from self first and recovering the base from it also leaves our eax = self on the void return; remaining diff is the zero/pointer register choice (ecx/edx swapped), size 174 vs 186; difftest PASS (400 valid, 100.0% cov)
 00630b30  207  vector<cSettingsTab*>::DoInsertValue: complete; reallocation path memmove/DoInsertValue shape
 00630930  117  ~cSPPlayModePhotoBrowser: complete; release/free loops re-addressed (lea self+0xea0/[esi] instead of self+0xea4/[esi-4], extra nop in the 0x63-entry loop -> +1 byte, size 163 vs 162); difftest UNSUPPORTED (0/400 valid, original live-object faults)
 00630d10  202  UpdatePhotoCountText: complete; CString16 temp spill slot (0x18 vs 0x1c), g_015f7cf4 reload order and an extra ebx save, size 499 vs 514; difftest FAIL-KEPT (5/5 valid, identical call trace, needs the live UI singleton)

@@ -1,4 +1,4 @@
-00630750 ?FUN_00630750@@YIPAXPAXPAF1H@Z  # FUN_00630750 migrated from s00630750 (verbatim, slice spelling)
+00630750 ?FUN_00630750@@YIPAXPAXPAF11H@Z  # FUN_00630750 migrated from s00630750 (5-param range ctor: self, skipped edx arg, first, last, unused)
 006307a0 ?FUN_006307a0@@YIXPAXPAH1PAID@Z  # FUN_006307a0 migrated from s00630750 (verbatim, slice spelling)
 006308d0 ?FUN_006308d0@@YIPAXPAXD@Z  # FUN_006308d0 migrated from s00630750 (verbatim, slice spelling)
 00630930 ?FUN_00630930@@YIXPAX@Z  # FUN_00630930 migrated from s00630750 (verbatim, slice spelling)

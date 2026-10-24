@@ -21,7 +21,9 @@ struct WStr {
   void AllocateSelf(int n);
   void Append(const short* first, const short* last);
 };
-void* __fastcall FUN_00630750(void* self, short* first, short* last, int) {
+void* __fastcall FUN_00630750(void* self, short* /*unused edx arg*/, short* first, short* last, int /*unused*/) {
+  // Retail ignores the edx argument and reads its [first,last) pair from the
+  // two stack parameters ([esp+4] and [esp+8]), popping three stack dwords.
   WStr* s = (WStr*)self;
   s->begin = 0; s->end = 0; s->cap = 0;
   int n = ((char*)last - (char*)first) >> 1;
@@ -99,7 +101,12 @@ void* __cdecl FUN_006309e0(void* out, const short* lhs, const WStr* rhs) {
 // @ 0x00630a50
 struct Ent24 { int f0, f4, f8, fc, f10, f14, f18, f1c, f20; };
 void __fastcall FUN_00630a50(void* self) {
-  char* a = (char*)self;
+  // Build the reusable sub-object pointer first and recover the base from it;
+  // this keeps the object base in eax, so the void return still leaves eax =
+  // self like the retail function does.
+  char* p = (char*)self;
+  p += 0x6c;
+  char* a = p - 0x6c;
   *(void**)a = (void*)&gVt13fe528;
   *(int*)(a + 4) = 0;
   *(int*)(a + 8) = 0;
@@ -111,18 +118,24 @@ void __fastcall FUN_00630a50(void* self) {
   *(int*)(a + 0x30) = 0;
   *(int*)(a + 0x50) = 0;
   *(int*)(a + 0x54) = 0;
-  *(int*)(a + 0x6c + 4) = 0;
-  *(int*)(a + 0x6c + 8) = 0;
-  *(int*)(a + 0x6c + 0xc) = 0;
-  *(void**)(a + 0x6c) = (void*)(a + 0x6c);
-  *(int*)(a + 0x70) = (int)(a + 0x6c);
+  *(int*)(p + 4) = 0;
+  *(int*)(p + 8) = 0;
+  *(int*)(p + 0xc) = 0;
+  *(void**)p = (void*)p;
+  *(int*)(a + 0x70) = (int)p;
   *(int*)(a + 0x74) = 0;
   *(unsigned char*)(a + 0x78) = 0;
   *(int*)(a + 0x7c) = 0;
-  Ent24* e = (Ent24*)(a + 0x84);
+  p = a + 0x84;
   for (int i = 0x62; i >= 0; --i) {
-    e->f0 = 0; e->f4 = 0; e->f8 = 0; e->f14 = 0; e->f18 = 0; e->f1c = 0; e->f20 = 0;
-    e = (Ent24*)((char*)e + 0x24);
+    *(int*)(p + 0x00) = 0;
+    *(int*)(p + 0x04) = 0;
+    *(int*)(p + 0x08) = 0;
+    *(int*)(p + 0x14) = 0;
+    *(int*)(p + 0x18) = 0;
+    *(int*)(p + 0x1c) = 0;
+    *(int*)(p + 0x20) = 0;
+    p += 0x24;
   }
   *(int*)(a + 0xe70) = 0;
   *(int*)(a + 0xe74) = 4;

@@ -1,1 +1,2 @@
 # source  symbol  original VA  [cl flags override]
+slices/s00630750/s00630750.cpp  ?FUN_00630750@@YIPAXPAXPAF11H@Z  00630750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
