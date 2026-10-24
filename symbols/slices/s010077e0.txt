@@ -1,0 +1,61 @@
+# slice s010077e0 - cSPSimulatorSpaceGame chase transitions, inferred from the
+# cards/disassembly only (the dev-PDB headers under src/game/include/SP do NOT
+# describe this build; every offset below is taken from the observed code).
+#
+# Modelled types (retail member offsets):
+#   Vector3    {float x@0x00, y@0x04, z@0x08}
+#   Quaternion {float x@0x00, y@0x04, z@0x08, w@0x0c}
+#   cSpatialObject  single vptr, virtual slots land at
+#               +0x2c GetPosition() -> const Vector3*
+#               +0x38 SetPosition(const Vector3*)
+#               +0x40 Notify()
+#               +0x5c GetPositionOut(Vector3*)
+#               +0xac GetTarget() -> void*
+#   cSPGameDataUFO  vptr@0x00, virtuals:
+#               +0x00 AddRef(), +0x04 Release(), +0x2c IsDestroyed()
+#             non-virtual (direct calls): SetDestination 0x00c3bfe0,
+#               SetDestinationOffset 0x00c381e0, PopToDestination 0x00c37e60,
+#               FlyTowards 0x00c3dae0, OnContextChange 0x00c3a2b0,
+#               FUN_00c370e0 0x00c370e0 (thiscall, post-flag retask test)
+#             data: mSpatial(cSpatialObject)@0x34, mpCached68c@0x68c,
+#               mDir694(Vector3)@0x694, mAngleSeed6b0(int)@0x6b0,
+#               mVec6bc(Vector3)@0x6bc, mState(uint)@0x714,
+#               mPos718(Vector3)@0x718, mOrientation(Quaternion)@0x730,
+#               mOffset740(Vector3)@0x740, mTargetPos750(Vector3)@0x750,
+#               mp75c(void*)@0x75c, mb77e(bool)@0x77e,
+#               mp7b0@0x7b0 (record whose dword at +0x70 is a star-map handle)
+#   cSPSimulatorSpaceGame  mpVtbl (not used here), mpSpaceUI@0x14,
+#               mUFOsBegin(cSPGameDataUFO**)@0x78, mUFOsEnd@0x7c
+#             methods: GetPlayerInventory 0x00a1ad60, BeginChase 0x00ffe3a0,
+#               UpdatePosseUFO 0x01006a40 (ufo,id,f,f,f; ret 0x14),
+#               UpdateInterceptorUFO 0x01003df0 (ufo,bool; ret 8)
+#   cStar      FUN_00c8b800 0x00c8b800 (bool), GetSolarSystem 0x00c8b770,
+#               FUN_00c84d40 0x00c84d40 (float in st(0), one stack arg, ret 4)
+#   cStarMap   RemoveVisual 0x01045ae0 (handle,visual,0,1)
+#   cActivePlanet  vptr, +0x2c GetPosition() -> const Vector3*
+#   cCivData   GetCities 0x005c65e0 (lea eax,[ecx+0x3c]; ret)
+#   cSPUIMinimapWin  RemoveIcon 0x00e0f9c0 (ufo,1,0; ret 0xc)
+#   cSpaceUI   GetMinimap 0x01067e60 (returns [this+0x31c])
+#   helpers    GetUFOSimulator 0x00ffbe50, GetBackgroundSim 0x01021230,
+#               GetStarMap 0x01046fc0, GetCurrentStar 0x01021240,
+#               GetActivePlanet 0x01021260, DestroyCreature 0x0102c340 cdecl,
+#               CreateMinimapIcon 0x01042080, QuaternionFromFacingAndUp
+#               0x0069b600, QuatRotateAxis 0x0059aed0, RandomDirection3 0x00b7e560
+#   constants  0x015b64c4 kYAxis(0,1,0), 0x015b64d0 kZAxis(0,0,1),
+#               0x015b6888 100.0f, 0x015b688c 1000.0f, 0x015b6890 500.0f,
+#               0x015b6894 5.0f, 0x015b6898 state-6 approach threshold,
+#               0x01477fc0 300.0f, 0x015b64b4 20.0f, 0x0149535c 0.4117647f,
+#               0x01471064 0.5f, 0x01470f1c 2.0f, 0x01485720 1.0f,
+#               0x016dc720 gOrbitSpeed (float), 0x016dc100 kChaseOffset(Vector3),
+#               0x01495390 1.5258789e-05f (dead store), 0x013eb8b0 sign mask
+#   UFOElem (eastl list element, 0x14 bytes) vptr@0x00 with Destroy at +0x08,
+#               mpLink0c@0x0c, mpLink10@0x10; UFOArray {begin@0, end@4, cap@8}
+#
+010077e0  cSPSimulatorSpaceGame::ChaseFromGalaxyToSolar() -> void  # BeginChase(1); per UFO: erase if destroyed, else if state==8 remove the star-map visual, rotate the heading on the orbit seed and flag erase when the background sim is busy; always normalise the heading to a destination 100.0f ahead of the player, face it, then run the shared erase/release tail
+01007bf0  cSPSimulatorSpaceGame::ChaseFromSolarToPlanet() -> void  # BeginChase(0); build the up basis from the player position; per UFO: erase if destroyed, else advance, refresh the heading from RandomDirection3 when state==8, aim FlyTowards at a renormalised 1000.0f point, face it, fire OnContextChange(0) and drop a minimap icon
+01007ed0  cSPSimulatorSpaceGame::ChaseFromPlanetToSolar() -> void  # BeginChase(1); per UFO: erase if destroyed, else advance, on state 3 cache the player (AddRef/Release), on state 8 rotate the heading about the y-axis by the orbit quaternion, then SetDestination/PopToDestination at the planet, face the player and remove the minimap icon
+01008100  cSPSimulatorSpaceGame::ChaseFromSolarToGalaxy() -> void  # BeginChase(2); per UFO: erase if destroyed, else advance, aim at the current star's city position, apply the chase offset, aim at city + z-axis, face the player, Notify the spatial and fire OnContextChange(2)
+01008270  cSPSimulatorSpaceGame::UpdateChasingUFOs(unsigned int) -> void  # state machine over states 3..9 with two independent orbit-seed counters: state 3 posse dispatch, state 6 approach-distance block, state 8 interceptor dispatch, state 9 close-range retask; the erase tail sets mb77e, consults FUN_00c370e0 and destroys the craft
+01008820  TCopyForward(UFOElem* first, UFOElem* last, UFOElem* dst) -> void  # eastl copy_impl body over the two link words; strong offset delta + register shift prevent byte-exactness
+01008850  UFOArray::erase(UFOElem* first, UFOElem* last) -> UFOElem*  # shift [last, mpEnd) down to first, Destroy(0) each removed element through the vtable, advance mpEnd and return first
+010088e0  TCopyBackward(UFOElem* first, UFOElem* last, UFOElem* dst) -> void  # eastl copy_backward_impl body over the two link words; strong offset delta + register shift prevent byte-exactness
