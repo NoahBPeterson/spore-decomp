@@ -282,7 +282,7 @@ extern float kFSlow;      // 0x013f5698
 extern float kFNegOne_;   // 0x013eb1bc
 extern float kF2Pi;       // 0x0150dff4
 extern float kFPi;        // 0x013f64d4
-extern float kFMinDelta;  // 0x013ec480
+extern float kFMaxDelta;  // 0x013ec480  (0.2f; caps one time step)
 extern const double kD2To32;      // 0x013f6050
 extern const double kDMilli;      // 0x013f6560
 extern float kFMilli;             // 0x013f9428
@@ -387,7 +387,7 @@ void SP::cSPEditorAnimatedCreatureManager::Update(unsigned int msec)
     // Two independent msec->seconds conversions (float and double) as emitted.
     float step = (float)msec * SP::kFMilli;
     float dt   = (float)((double)msec * SP::kDMilli);
-    if (dt < SP::kFMinDelta) dt = SP::kFMinDelta;
+    if (dt > SP::kFMaxDelta) dt = SP::kFMaxDelta;
 
     if (*(void**)((char*)this + 0x38) == 0) return;
 
@@ -520,7 +520,6 @@ void cSPEditorAnimationManager::Init()
     }
 }
 
-// @ 0x0059dc70
 // ---------------------------------------------------------------------------
 // GetAnimation support types (retail layouts, checked against the asm).
 namespace SP {
@@ -654,6 +653,7 @@ struct AnimMgrView { char pad[0xc]; AnimListVec mAnimations; };   // +0xc
 static const uint32_t kForcedAnimID = 0x248dca26;
 }  // namespace SP
 
+// @ 0x0059dc70
 bool SP::cSPEditorAnimationManager::GetAnimation(AnimRequest* req, AnimResult* out, AnimContext* ctx)
 {
     AnimListVec& anims = ((AnimMgrView*)this)->mAnimations;
