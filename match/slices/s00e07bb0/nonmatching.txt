@@ -1,0 +1,1 @@
+00e07bb0 511 cSPUIMineralBar::UpdateMeter: flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (306 valid, 6.7% cov); size 633 vs 640, retail clamps with SSE maxss/minss and converts the phase with fstp+cvttss2si, while legal C++/intrinsics give comiss branches and a _ftol2 call; the cString temporary and phase string also do not share a slot (frame 0x8c vs 0x7c)
