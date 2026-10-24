@@ -1,3 +1,14 @@
-011e2b30 RwHashMap::Find  # rw::core::arena pointer hash map lookup (linear probing, 0xffffffff = empty); called from UnfixContextImpl::Serialize
-011e3a60 RwHashMap::FindEntry  # find(): {entry or end, end}
-011e2b90 RwHashMap::EraseAt  # backward-shift deletion; map has mCount at +8
+011e2b30 rw::core::arena::Arena::AddResourceToArena<...>  # not in this slice; appended arena resource entry
+011e2c60 rw::core::arena::UnfixContextImpl::AddSubref     # byte-exact; arena subreference + dict entry for a 0x800000|index id
+011e2cd0 rw::core::arena::RefixContextImpl::RefixContextImpl  # ctor: descriptors {0,1}, callbacks, base resources, sizes, atom callback 0x015d034c
+011e2d50 rw::core::arena::RefixContextImpl::Init          # clear base resources, request the four descriptors through AtomSingleton::Allocate
+011e2e40 rw::core::arena::RefixContextImpl::Serialize     # type-id lookup, 0x10030..0x1003f descriptor copy, else write + refix callback
+011e2fe0 rw::core::arena::ArenaIterator::ArenaIterator    # ctor: embedded RefixContextImpl, self-pointers, dict cursors, atom table
+011e3100 rw::core::arena::AtomTableSingleton              # lazy 0x400-entry atom table + root at 0x016f2984
+011e3190 rw::core::arena::Arena::GetResourceDescriptor    # descriptor accumulate over the section list + count*0x18 dict descriptor
+011e3300 rw::core::arena::Arena::AddObject                # append one resource via AddResourceToArena<Adder>
+011e3350 rw::core::arena::Arena::UnfixStart               # arena header unfix: 0x98 header, manifest Unfix, extra size
+011e34d0 rw::core::arena::Arena::UnfixNext                # per-entry unfix; end of dict writes the dictionary and subreferences
+011e3780 rw::core::arena::Arena::RefixStart               # refix: patch the 0x98 header copy, write it, walk the manifest
+011e3940 rw::core::arena::Arena::RefixNext                # per-entry refix; end of dict writes dictionary + subreferences
+011e39e0 rw::core::arena::Arena::FixupNext                # per-entry fixup callback walk over the dict
