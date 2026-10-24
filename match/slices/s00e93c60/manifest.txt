@@ -1,0 +1,6 @@
+slices/s00e93c60/s00e93c60.cpp  ?SetupTribeView@cSpatialObjectView@SP@@QAEXPAX000@Z  00e93d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e93c60/s00e93c60.cpp  ?FUN_00e948b0@SP@@YGXPAVcEmitter@1@PAVcEffectTarget@1@@Z  00e948b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e93c60/s00e93c60.cpp  ?FUN_00e94900@SP@@YGXPAVcEmitter@1@PAVcEffectTarget@1@@Z  00e94900  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e93c60/s00e93c60.cpp  ?Init@cTribeView@SP@@QAEXPAX000@Z  00e94970  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e93c60/s00e93c60.cpp  ?Init@cVehicleView@SP@@QAEXPAX@Z  00e949c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e93c60/s00e93c60.cpp  ?ToggleShowPaths@cVehicleView@SP@@QAEXXZ  00e94a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
