@@ -1,1 +1,2 @@
 00db86a0  2197  complete group-follow update (repath, formation placement, per-member steering); frame layout/scheduling differ (0xbc vs 0x9c frame); equiv WEAK (13.5% coverage, 995 valid inputs)
+00db90c0  35  group-record tick trampoline; size 95 vs 98 (retail keeps an extra mov eax,esi copy and tests the second flags bit via ecx/test cl,1); equiv WEAK (38.2% coverage, 400 valid inputs)
