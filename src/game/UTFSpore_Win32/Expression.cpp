@@ -120,7 +120,7 @@ struct string8_s0083_d3d0 {
 };
 }
 void  __cdecl DiscardWhiteSpace(const char** p);            // 0x0083ce90
-void  __cdecl DoFreeNodesExpr(void* bucketArray, int n);    // 0x0083dd00
+void  __stdcall DoFreeNodesExpr(void* bucketArray, int n);  // 0x0083dd00
 int   __cdecl EvalIntExpression(void* self, const char** p); // 0x0083eb00
 void  __cdecl EvalExpectChar(const char** p, char c);       // 0x0083d240
 namespace EA {
@@ -540,7 +540,7 @@ void EA::ArgScript::cExpression::EvalString(char const *& p, eastl::basic_string
 }
 
 // @ 0x0083dd00
-void __cdecl DoFreeNodesExpr(void* bucketArray, int bucketCount)
+void __stdcall DoFreeNodesExpr(void* bucketArray, int bucketCount)
 {
     for (int i = 0; i < bucketCount; ++i) {
         char* node = *(char**)((char*)bucketArray + i * 4);
