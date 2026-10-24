@@ -562,7 +562,7 @@ void Manager::FUN_00bac620(int)
 // @ 0x00bac7d0
 void* Manager::FUN_00bac7d0()
 {
-    void* pObj = EAAlloc(0x50, "Simulator", 0, 0, 0, 0);
+    void* pObj = EAAlloc(0x50, "Simulator/cStar", 0, 0, 0, 0);
     if (pObj)
         ((AllocObj*)pObj)->FUN_00c8b640();
     else
