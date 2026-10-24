@@ -4,7 +4,9 @@
 extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int a, int b,
                                                   const char* file, int line);
-extern "C" void __stdcall VectorAppend8(void* dstEnd, void* val);      // 00722410
+struct VecAppend8 {                                 // thiscall target: vector in ECX, ret 8 (cleans e,val)
+    void Append(void* e, void* val);                // 0x00722410
+};
 extern "C" void* __cdecl AllocConstruct38(int n, const void* a, const void* b); // 00722990
 
 struct Vec8 { float x, y; };
@@ -98,7 +100,7 @@ void __thiscall VecAny::Push8(Vec8* val)
             return;
         }
     } else {
-        VectorAppend8(e, val);
+        ((VecAppend8*)this)->Append(e, val);
     }
 }
 

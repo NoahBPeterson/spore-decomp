@@ -1,2 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00722410/s00722410.cpp  ?Assign@VecAny@@QAEXHHH@Z  00722520  /O2 /MD /Gy /TP /fp:fast
+slices/s00722410/s00722410.cpp  ?Push8@VecAny@@QAEXPAUVec8@@@Z  00722c60  /O2 /MD /Gy /TP /fp:fast
