@@ -153,7 +153,9 @@ struct RegList {
 };
 struct IFilter { virtual void S0(); virtual bool Accept(RegNode* n); };
 struct ListNode { ListNode* next; ListNode* prev; IObj* value; };
-ListNode* AllocListNode(void* list, IObj** tmp);      // 0x006ac3c0 (thiscall on list)
+struct ListNodeList {
+    ListNode* allocListNode(IObj** tmp);   // 0x006ac3c0 (thiscall on the list sentinel)
+};
 struct Elem8 { uint32_t a, b; };
 struct Vec8 {
     Elem8* mpBegin; Elem8* mpEnd; Elem8* mpCapEnd; int pad; Elem8* mpFixed;
@@ -458,7 +460,7 @@ int Registry::Enumerate(void* list, IFilter* f)
             if (list) {
                 IObj* tmp = 0;
                 ListNode* head = (ListNode*)list;
-                ListNode* nn = AllocListNode(list, &tmp);
+                ListNode* nn = ((ListNodeList*)list)->allocListNode(&tmp);
                 nn->next = head;
                 nn->prev = head->prev;
                 head->prev->next = nn;
