@@ -321,7 +321,7 @@ void __cdecl FUN_006fea30(int a1, int a2)
 }
 
 // @ 0x006fec40
-int __cdecl FUN_006fec40(void* a1, void* a2)
+__declspec(noinline) int __cdecl FUN_006fec40(void* a1, void* a2)
 {
     (void)a1; (void)a2;
     return 0;

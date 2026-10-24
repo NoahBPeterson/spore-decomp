@@ -1,4 +1,5 @@
 006fe430  FUN_006fe430  # serializes the 0x162477c..0x1628b38 cVertexFragmentInfo table to an EA::IO stream
+006fe600  ?Insert@Vec130@@QAEXPADIPAX@Z  # vector<0x130-block>::insert called by Resize (slice spelling, partial stub)
 006fe7f0  cVertexFragmentInfo_Init  # __fastcall empty-state initializer (0x1667bac/0x1667bad sentinels)
 006fe830  cVertexFragmentInfo_Destroy  # releases +0x24 vector and the +0x04/+0x14 fixed_vector buffers
 006fe890  FUN_006fe890  # two-vector DoInsertValue + end rollback

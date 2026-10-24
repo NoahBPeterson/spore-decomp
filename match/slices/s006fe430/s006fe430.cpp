@@ -93,7 +93,7 @@ struct Vec130 {                // 0x130-byte-element vector
     char* begin;   // +0x00
     char* end;     // +0x04
     char* cap;     // +0x08
-    void Insert(char* pos, unsigned n, void* value);  // 0x6fe600 (not byte-exact)
+    __declspec(noinline) void Insert(char* pos, unsigned n, void* value);  // 0x6fe600 (not byte-exact)
     void Destroy(char* first, char* last);            // 0x6fae30
     void Reserve(unsigned n);                         // 0x6faae0
     void Resize(unsigned n);                          // 0x6ff060
@@ -146,7 +146,7 @@ void __cdecl FUN_006fe430(void* stream) {
 }
 
 // @ 0x006fe600  -- vector<0x130-block>::insert (stub, see partial.txt)
-void Vec130::Insert(char* pos, unsigned n, void* value) {
+__declspec(noinline) void Vec130::Insert(char* pos, unsigned n, void* value) {
     (void)pos; (void)n; (void)value;
 }
 
@@ -289,7 +289,7 @@ void __cdecl FUN_006fea30(int a1, int a2) {
 }
 
 // @ 0x006fec40  -- GetGeneratedVertexShader (stub, see partial.txt)
-int __cdecl FUN_006fec40(void* a1, void* a2) {
+__declspec(noinline) int __cdecl FUN_006fec40(void* a1, void* a2) {
     (void)a1; (void)a2;
     return 0;
 }
@@ -358,7 +358,10 @@ void Vec130::Resize(unsigned n) {
     if ((unsigned)Size() < n) {
         char temp[0x130];
         FUN_011e073e(temp, 0, 0x130);
-        Insert(end, n - Size(), temp);
+        // out-of-line call: keeping the member pointer volatile stops cl from
+        // deleting the call to the partial Insert stub (it must reach 0x6fe600)
+        void (Vec130::*volatile ins)(char*, unsigned, void*) = &Vec130::Insert;
+        (this->*ins)(end, n - Size(), temp);
     } else {
         Destroy(begin + n * 0x130, end);
     }
