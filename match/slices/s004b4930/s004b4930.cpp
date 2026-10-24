@@ -8,17 +8,17 @@ extern void* g_static1;   // 0x01667bac
 
 extern "C" {
     void  FUN_00425990(void* vec);
-    void  FUN_00455290(void* vec);
     void  FUN_0042dee0();
     void  FUN_004b6340();
     void  FUN_004b69d0();
-    void  FUN_004b6450();
     void  FUN_004b64b0();
     void  FUN_004b66b0();
     void  FUN_004b6bf0();
     void  FUN_004b5a60(void* node);
     void  operator_delete_(void* p);
 }
+void __fastcall FUN_00455290(void* self);   // thiscall: ecx = outer element
+void __fastcall FUN_004b6450(void* self);   // thiscall: ecx = outer vector
 
 // --- intrusive ref object / linked node -------------------------------------
 struct RefObj { virtual void v0(); virtual void v1(); virtual void v2(); };
@@ -98,7 +98,6 @@ struct Vec20 {
     Blk20* mpEnd;
     Blk20* mpCap;
     Blk20* Erase(Blk20* first, Blk20* last);   // 0x4b5570
-    void   PushBack(const Blk20& v);           // 0x4b54b0
 };
 // @ 0x4b5570
 Blk20* Vec20::Erase(Blk20* first, Blk20* last)
@@ -108,18 +107,6 @@ Blk20* Vec20::Erase(Blk20* first, Blk20* last)
         *dest = *src;
     mpEnd = (Blk20*)((char*)mpEnd + (((char*)last - (char*)first) >> 5) * -0x20);
     return first;
-}
-
-// @ 0x4b54b0
-void Vec20::PushBack(const Blk20& v)
-{
-    if (mpEnd < mpCap) {
-        *mpEnd = v;
-        ++mpEnd;
-    } else {
-        extern void vec20_DoInsertValue(Vec20*, const Blk20&);
-        vec20_DoInsertValue(this, v);
-    }
 }
 
 struct Rec11c {
@@ -156,7 +143,7 @@ void __fastcall FUN_004b5610(int* p)
         }
         FUN_00455290(it);
     }
-    FUN_004b6450();
+    FUN_004b6450(p);
 }
 
 struct Float3Cmp {
@@ -228,7 +215,24 @@ struct PropListVec
     void DestroyRange(PropListRef** f, PropListRef** l);   // 0x4b5fb0
     void Free();                            // 0x425990
     void push_back(const PropListRef& r);   // 0x4b54b0
+    void DoInsertValue(PropListRef** end, const PropListRef& r);   // 0x4b6000
 };
+
+// @ 0x4b54b0
+void PropListVec::push_back(const PropListRef& r)
+{
+    if (mpEnd < mpCap) {
+        PropListRef* slot = (PropListRef*)mpEnd;
+        mpEnd = (PropListRef**)((char*)mpEnd + 4);
+        if (slot != 0) {
+            slot->mp = r.mp;
+            if (slot->mp != 0)
+                slot->mp->AddRef();
+        }
+    } else {
+        DoInsertValue(mpEnd, r);
+    }
+}
 
 struct PropReqBits
 {
