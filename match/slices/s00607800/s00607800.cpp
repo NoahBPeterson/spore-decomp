@@ -6,7 +6,7 @@
 #define PV(n) virtual void pv##n();
 
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
-extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
 extern "C" unsigned int __cdecl strlen(const char*);
 #pragma intrinsic(strlen)
 
@@ -70,7 +70,7 @@ struct basic_string {
     *mpEnd = 0;
   }
   static T* CharStringUninitializedCopy(const T* pSource, const T* pSourceEnd, T* pDestination) {
-    memmove(pDestination, pSource, (size_t)(pSourceEnd - pSource) * sizeof(T));
+    memcpy(pDestination, pSource, (size_t)(pSourceEnd - pSource) * sizeof(T));
     return pDestination + (pSourceEnd - pSource);
   }
   size_type length() const { return (size_type)(mpEnd - mpBegin); }
