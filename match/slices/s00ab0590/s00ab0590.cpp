@@ -177,7 +177,7 @@ void cParticlesEffect::Update(float dt)
     float dz = mLocation.z - mLastEmitLocation.z;
     float speedScale = mDesc->mRateSpeedScale;
     if (speedScale > 0.0f)
-        emitRate = ((sqrtf(dx * dx + (dy * dy + dz * dz)) / dt) * speedScale + 1.0f) * emitRate;
+        emitRate = ((sqrtf(dz * dz + (dy * dy + dx * dx)) / dt) * speedScale + 1.0f) * emitRate;
 
     bool emitted = false;
     const float totalDt = dt;
