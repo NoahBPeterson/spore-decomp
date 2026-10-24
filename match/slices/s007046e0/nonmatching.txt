@@ -1,6 +1,6 @@
 00704730  107  complete dispatcher; local dead-store and switch layout differ
 00704950  101  complete eh-raii dispatch; EH frame/register allocation differs
-00704dc0  344  complete factory; EH/RAII frame and ctor inlining differ
+00704dc0  259  complete factory; retail is a stdcall-style callee (3 stack args, `add esp,0x10; ret 0xc`), so the free function is declared __stdcall now; EH/RAII frame and ctor inlining still differ; equiv WEAK (400 valid, 15.6% coverage: random type ids rarely hit the 7-case switch, including the saved failing input)
 00704f60  157  complete factory thunk; EH/RAII frame differs [equiv: UNSUPPORTED, 0/1200 valid inputs (faults)]
-007052e0  265  complete cubemap packer; x87 fabs/max inline helpers differ
-00705470  323  complete cubemap packer; x87 fabs/max inline helpers differ
+007052e0  297  complete cubemap packer; equiv PASS (400 valid, 100% cov, including the saved failing input); the two texel conversions are the inlined EA SIMD round helper (`cvtss2si`, round-to-nearest) and not a C cast (`cvttss2si`, truncate): `_mm_cvtss_si32(_mm_set_ss(r * 32.0f))`; register/scheduling codegen still differs
+00705470  419  complete cubemap packer; equiv PASS (400 valid, 100% cov, including the saved failing input); same inlined round-to-nearest conversion (`_mm_cvtss_si32`) instead of a truncating cast, on a 16-wide face; register/scheduling codegen still differs

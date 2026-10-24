@@ -412,7 +412,7 @@ bool FUN_00704950(int param_1, Factory4950* param_2, int param_3, int param_4)
 // ==========================================================================
 // @ 0x00704dc0  property-bitmap factory (alloc + construct by format id)
 // ==========================================================================
-bool FUN_00704dc0(void** out, int type, int param_3)
+bool __stdcall FUN_00704dc0(void** out, int type, int param_3)
 {
     (void)param_3;
     void* p = 0;
@@ -522,8 +522,8 @@ int FUN_007052e0(float* v, float param)
         r8 = (y / az + 1.0f) * 0.5f;
         face = (z < 0.0f) ? 1 : 0;
     }
-    int A = (int)(r8 * 32.0f);
-    int B = (int)(r7 * 32.0f);
+    int A = _mm_cvtss_si32(_mm_set_ss(r8 * 32.0f));
+    int B = _mm_cvtss_si32(_mm_set_ss(r7 * 32.0f));
     return ((face * 32 - (A >> 5)) + A) * 32 - (B >> 5) + B;
 }
 
@@ -557,7 +557,7 @@ int FUN_00705470(float* v, float param)
         r8 = (y / az + 1.0f) * 0.5f;
         face = (z < 0.0f) ? 1 : 0;
     }
-    int A = (int)(r8 * 16.0f);
-    int B = (int)(r7 * 16.0f);
+    int A = _mm_cvtss_si32(_mm_set_ss(r8 * 16.0f));
+    int B = _mm_cvtss_si32(_mm_set_ss(r7 * 16.0f));
     return ((face * 16 - (A >> 4)) + A) * 16 - (B >> 4) + B;
 }
