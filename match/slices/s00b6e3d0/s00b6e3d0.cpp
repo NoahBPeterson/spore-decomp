@@ -66,7 +66,7 @@ struct ColorMap {
   unsigned int mnSize;       // +0x14
   void DoNukeSubtree(ColorNode* p);                                        // @ 0x9a9600
   Vec3& Index(const unsigned int& key);   // original 0xb6ee40 map::operator[] (named so the checker can find it)
-  void DoInsertValueImpl(ColorNode** out, ColorNode* parent, const void* v, bool left);  // @ 0xb6eb30
+  ColorNode** DoInsertValueImpl(ColorNode** out, ColorNode* parent, const void* v, bool left);  // @ 0xb6eb30
   void DoInsertValue(ColorNode** out, ColorIter parent, const void* v, bool left);       // @ 0xb6ed20
   void reset() {
     mAnchor.mpNodeRight = &mAnchor;
@@ -338,7 +338,7 @@ bool ColorTranslator::Translate(const wchar_t* token, wstr* out) {
 }
 
 // @ 0x00B6EB30  ColorMap::DoInsertValueImpl
-void ColorMap::DoInsertValueImpl(ColorNode** out, ColorNode* parent, const void* v, bool bForceToLeft) {
+ColorNode** ColorMap::DoInsertValueImpl(ColorNode** out, ColorNode* parent, const void* v, bool bForceToLeft) {
   struct Pair { unsigned int first; Vec3 second; };
   const Pair& value = *(const Pair*)v;
   int side;
@@ -356,6 +356,7 @@ void ColorMap::DoInsertValueImpl(ColorNode** out, ColorNode* parent, const void*
   RBTreeInsert(n, parent, &mAnchor, side);
   mnSize++;
   *out = n;
+  return out;
 }
 
 // @ 0x00B6EC50  load localized color/entity names into the translator
