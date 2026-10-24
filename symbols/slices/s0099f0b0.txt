@@ -1,1 +1,4 @@
 0099f110 ?CloneAnim@@YAPAUAnimHeader_s0099_f0b0@@PAU1@_N@Z  # CloneAnim migrated from s0099f0b0 (verbatim, slice spelling)
+0099f0b0 RefBlock::Release  # refcount decrement; frees buffer/header and block at zero, returns count or 0
+0099f8b0 FUN_0099f8b0  # paint destination reset; custom eax=dest, edi=source ABI
+0099f900 FUN_0099f900  # paint record copy loop via kAnimChunkTable/kAnimElemSize and memcpy
