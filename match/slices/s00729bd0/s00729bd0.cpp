@@ -6,11 +6,32 @@ void operator_delete(void* p);   // 0x00f47380
 
 extern "C" {
     void* FUN_00f473a0(unsigned size, const char* name, int f, int df, const char* file, int line);
-    int   FUN_011f4f20(int a, void* b);
-    void  FUN_011f4fd0(void* a);
-    void  FUN_00720010(unsigned size);
-    void  FUN_0042f0a0(int a, int b, int c, int d);
-    void  FUN_0071ddc0(void* p, int a, int b, int c, int d);
+    void  FUN_0042f0a0(void* p, int n, void* local, int m);                 // 0x0042f0a0
+    int   FUN_0071ddc0(void* p, int a, int b, int c, int d);                // 0x0071ddc0
+    double sqrt(double x);                                                  // CRT: inlined as fsqrt
+    void* FUN_00720010(int size);                                           // 0x00720010  AllocEltBuffer
+    void* MemCopy(void* dst, const void* src, unsigned n);                  // 0x011e0744
+}
+
+// The index/vertex buffer the pipeline locks segments of.
+struct IBuf {
+    uint8_t  pad00[8];                                                      // +0x00
+    int      mCount;                                                        // +0x08
+    uint8_t  pad0c[0x0c];                                                   // +0x0c .. +0x17
+    void*    mpData;                                                        // +0x18
+
+    unsigned Lock(unsigned n, void* pOut);                                  // 0x011f4f20
+    void*    Unlock(void** pIn);                                            // 0x011f4fd0
+};
+
+// The buffer hands back bare vtable-bearing pointers; only slot 0 (a no-argument
+// refresh) is ever invoked on them.
+typedef void (__thiscall *VSlot0)(void*);
+
+static inline void CallSlot0(void* p)
+{
+    VSlot0* vt = *(VSlot0**)p;
+    vt[0](p);
 }
 
 struct Box { float mn[3]; float mx[3]; };
@@ -104,17 +125,136 @@ __declspec(noinline) void __fastcall FUN_0072a080(SplitNode* self)
 // large functions (partial)
 // ---------------------------------------------------------------------------
 
-// @ 0x00729bd0  (PARTIAL)
-void* FUN_00729bd0(int a, void* b, void* c)
+// The lock token the buffer fills in: three words, only the first of which is
+// ever read back.
+struct LockHandle {
+    void* mpPtr;                                                            // +0x00
+    void* mpPad1;                                                           // +0x04
+    void* mpPad2;                                                           // +0x08
+};
+
+// @ 0x00729bd0  returns the locked segment, copying the buffer through it when
+// the buffer has not been materialised yet
+void* FUN_00729bd0(IBuf* p1, void* p2, void** p3)
 {
-    (void)a; (void)b; (void)c;
-    return 0;
+    void* rb = p1->mpData;
+    if (rb != 0) {
+        if (p2 != 0) {
+            *p3 = p2;
+            CallSlot0(p2);
+        }
+        return rb;
+    }
+
+    LockHandle lh;
+    if (p1->Lock(1, &lh)) {
+        int   size = p1->mCount * 2;
+        void* seg  = FUN_00720010(size);
+        if (seg != 0) {
+            rb = (char*)seg + 0xc;
+            MemCopy(rb, lh.mpPtr, (unsigned)size);
+            *p3 = seg;
+            CallSlot0(seg);
+        }
+        p1->Unlock(&lh.mpPtr);
+    }
+    return rb;
 }
 
-// @ 0x00729c60  (PARTIAL)
-void FUN_00729c60(void* p, float* a, float* b)
+// A refcounted stream owner held by the vertex table (vtable slots 0/1 are
+// AddRef and Release).
+struct RefObj {
+    void** vptr;                                                            // +0x00
+
+    void AddRef()  { ((void (__thiscall*)(RefObj*))vptr[0])(this); }
+    void Release() { ((void (__thiscall*)(RefObj*))vptr[1])(this); }
+};
+
+// The model header: only the stream-table pointer is needed here.
+struct MeshModel {
+    uint8_t pad00[8];                                                       // +0x00 .. +0x07
+    void*   mpStreams;                                                      // +0x08
+};
+
+// A vertex-stream record (0x20 bytes; the usable fields start at +0x10).
+struct MeshStream {
+    int            nCount;                                                  // +0x10
+    const float*   mpVerts;                                                 // +0x14
+    uint16_t       mUnk18;                                                  // +0x18
+    uint16_t       mStride;                                                 // +0x1a  byte stride between vertices
+    RefObj*        mpOwner;                                                 // +0x1c
+};
+
+struct StreamRecord {
+    uint8_t    pad00[0x10];                                                 // +0x00 .. +0x0f
+    MeshStream entry;                                                       // +0x10
+};
+
+// A vertex/point triple. The stream's box is the same 6-float layout as Box,
+// spelled with named members so its copies can be struct assignments.
+struct Vec3 { float x, y, z; };
+
+struct Box6 {
+    Vec3 mn;                                                                // +0x00
+    Vec3 mx;                                                                // +0x0c
+};
+
+// Grow a box with one vertex, which counts as a degenerate (point) box.
+static inline void ExpandPoint(Box6& cur, const float* v)
 {
-    (void)p; (void)a; (void)b;
+    if (cur.mn.x > cur.mx.x) {
+        cur.mn = *(const Vec3*)v;
+        cur.mx = *(const Vec3*)v;
+    } else {
+        if (cur.mn.x > v[0]) cur.mn.x = v[0];
+        else if (v[0] > cur.mx.x) cur.mx.x = v[0];
+        if (cur.mn.y > v[1]) cur.mn.y = v[1];
+        else if (v[1] > cur.mx.y) cur.mx.y = v[1];
+        if (cur.mn.z > v[2]) cur.mn.z = v[2];
+        else if (v[2] > cur.mx.z) cur.mx.z = v[2];
+    }
+}
+
+// @ 0x00729c60  grow a box over one vertex stream and track the largest radius
+void FUN_00729c60(MeshModel* model, Box6* box, float* radius)
+{
+    int idx = FUN_0071ddc0(model, 1, 0, 3, 0xe);
+    if (idx < 0)
+        return;
+
+    StreamRecord* rec    = (StreamRecord*)((char*)model->mpStreams + (idx << 5));
+    MeshStream*   entry  = &rec->entry;
+    int           count  = entry->nCount;
+    uint16_t      stride = entry->mStride;
+    RefObj*       obj    = entry->mpOwner;
+    const float*  v      = entry->mpVerts;
+
+    if (obj != 0)
+        obj->AddRef();
+
+    float len2 = 0.0f;
+    if (count > 0) {
+        const float* p = v + 1;
+        do {
+            if (box != 0)
+                ExpandPoint(*box, p - 1);
+            float d = (p[-1] * p[-1] + p[1] * p[1]) + p[0] * p[0];
+            if (len2 < d)
+                len2 = d;
+            p = (const float*)((const char*)p + stride);
+            --count;
+        } while (count != 0);
+    }
+
+    if (radius != 0) {
+        double s = sqrt(len2);
+        len2 = (float)s;
+        const float* q = (s > *radius) ? &len2 : radius;
+        *radius = *q;
+    }
+
+    if (obj != 0)
+        obj->Release();
 }
 
 static inline void ExpandBox(Box& cur, const Box& e)
@@ -290,16 +430,96 @@ bool FUN_0072a200(SplitNode* out, const Box* box, Box* const* items, unsigned* i
     return true;
 }
 
-// @ 0x0072a8c0  (PARTIAL)
-int FUN_0072a8c0(void* a, int b, int c, unsigned d, int e)
+// A 48-byte scratch block handed to the element constructor (kept free of any
+// array member so /GS does not add a stack cookie).
+struct Scratch48 {
+    int w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11;
+};
+
+// An array of 0x30-byte elements allocated through the game allocator (the
+// EASTL vector form used by the UV pipeline).
+struct EAArray {
+    void* mpBegin;                                                          // +0x00
+    void* mpEnd;                                                            // +0x04
+    void* mpCap;                                                            // +0x08
+
+    EAArray* Init(int n, int reserved);
+};
+
+// @ 0x0072aa80  allocate n elements of 0x30 bytes and default-construct them
+EAArray* EAArray::Init(int n, int reserved)
 {
-    (void)a; (void)b; (void)c; (void)d; (void)e;
-    return 0;
+    (void)reserved;
+    Scratch48 local_30;
+    void* buf;
+    if (n != 0)
+        buf = FUN_00f473a0(n * 0x30, "Graphics", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+            0xd1);
+    else
+        buf = 0;
+    mpBegin = buf;
+    mpEnd   = buf;
+    mpCap   = (char*)buf + n * 0x30;
+    FUN_0042f0a0(buf, n, &local_30, n);
+    mpEnd = (char*)mpBegin + n * 0x30;
+    return this;
 }
 
-// @ 0x0072aa80  (PARTIAL)
-void* FUN_0072aa80(void* self, int n, int a, int b)
+// The EA fixed allocator singleton the kd-tree node pool is carved from.
+struct NodeAllocator {
+    void* Malloc();                                                         // 0x004fde40
+};
+extern NodeAllocator gNodeAllocator;                                        // 0x0162b1e0
+
+// A kd-tree node: the box it covers, the slice of the shared index array it owns,
+// the axis the parent split on and the two children that split produced (0x34 bytes).
+struct BspNode {
+    void*    mpOwner;                                                       // +0x00  tree this node lives in
+    int      mLevel;                                                        // +0x04  level in the tree (parent + 1)
+    Box      mBox;                                                          // +0x08  bounds of this node's slice
+    unsigned mFirst;                                                        // +0x20  offset of the slice's first index
+    unsigned mCount;                                                        // +0x24  number of indices in the slice
+    int      mAxis;                                                         // +0x28  axis the parent split on
+    BspNode* mpLeft;                                                        // +0x2c  below-plane child (0 if unsplit)
+    BspNode* mpRight;                                                       // +0x30  above-plane child (0 if unsplit)
+
+    // 0x00729820
+    BspNode* Init(void* owner, float* box, int first, int count);
+    int      Build(Box* const* items, unsigned* idx, unsigned n, int depth);
+};
+
+// @ 0x0072a8c0  split this node's index slice once and recurse into both children
+int BspNode::Build(Box* const* items, unsigned* idx, unsigned n, int depth)
 {
-    (void)self; (void)n; (void)a; (void)b;
-    return self;
+    SplitNode split;
+    FUN_0072a080(&split);
+
+    if (depth != 0 && mCount > n) {
+        if (FUN_0072a200(&split, &mBox, items, idx + mFirst, mCount)) {
+            int axis = split.axis;
+            mAxis = axis;
+
+            Box left = mBox;
+            left.mx[axis] = split.left.mx[axis];
+
+            Box right = mBox;
+            right.mn[axis] = split.right.mn[axis];
+
+            BspNode* node = (BspNode*)gNodeAllocator.Malloc();
+            node = (node != 0) ? node->Init(this, (float*)&left, (int)mFirst, (int)split.nLeft) : 0;
+            mpLeft = node;
+
+            node = (BspNode*)gNodeAllocator.Malloc();
+            node = (node != 0) ? node->Init(this, (float*)&right, (int)(mFirst + split.nLeft), (int)split.nRight) : 0;
+            mpRight = node;
+
+            mpLeft->mLevel = mLevel + 1;
+            int c1 = mpLeft->Build(items, idx, n, depth - 1);
+            mpRight->mLevel = mpLeft->mLevel + c1 + 1;
+            int c2 = mpRight->Build(items, idx, n, depth - 1);
+            return c2 + c1 + 2;
+        }
+    }
+    return 0;
 }
