@@ -186,7 +186,7 @@ virtual void q7();
 virtual void q8();
 virtual void q9();
 virtual void q10();
-    virtual V4Ret Query(const Vec3f* pos);                                       // +0x2c
+    virtual float* Query(float* scratch, const Vec3f* pos);                      // +0x2c
 };
 struct LightCfg {
     char pad00[0xbc];
@@ -1110,6 +1110,7 @@ struct FixedCellVector {
     CellInfo* mpCapacity;   // +0x08
     char pad_c[4];
     CellInfo* mpInline;     // +0x10
+    FixedCellVector(const FixedCellVector& x);                           // 0x70c3a0
     void assign(const CellInfo* first, const CellInfo* last, int tag);   // 0x708340
 };
 struct cLocalLightInfo {
@@ -1121,6 +1122,16 @@ struct cLocalLightInfo {
     bool mGlobal;           // +0x24
     FixedCellVector mCells; // +0x28
     cLocalLightInfo(const cLocalLightInfo& x);
+};
+struct cLocalLightCellInit {
+    bool mGlobal;            // +0x00
+    bool mInUse;             // +0x01
+    short mType;             // +0x02
+    cSPVector3_s0070_c040 mColour; // +0x04
+    float mSize;             // +0x10
+    uint8_t mPad14[0x0c];    // +0x14 (alignment padding before the 16-byte member)
+    uint32_t mExtra[4];      // +0x20
+    uint8_t mCells[0x1a0];   // +0x30
 };
 struct SlotVecCell {
     int* mpBlocks;          // +0x00
@@ -1700,8 +1711,9 @@ void EnvLW::UpdateEnvLightSample(EnvSample* out)
             d2.y = m.m[3] * dir->x + m.m[4] * dir->y + m.m[5] * dir->z;
             d2.z = m.m[6] * dir->x + m.m[7] * dir->y + m.m[8] * dir->z;
             SH_Accumulate(&d2.x, nBands, tmp, buf490);
-            V4Ret g = ground->Query(&out->pos);
-            __m128 P = _mm_set_ps(g.f(3), g.f(2), g.f(1), g.f(0));
+            float q[4];
+            float* g = ground->Query(q, &out->pos);
+            __m128 P = _mm_set_ps(g[3], g[2], g[1], g[0]);
             __m128 va = _mm_mul_ps(_mm_set1_ps(cfg->groundScaleA), P);
             __m128 vb = _mm_mul_ps(_mm_set1_ps(cfg->groundScaleB), P);
             SH_AddGroundBounce(nBands, buf490, &vb, &va);
@@ -1862,7 +1874,7 @@ void FUN_00706b50(void* self, void* a)
 { (void)self; (void)a; }
 
 // @ 0x00706c80
-void FUN_00706c80(E9** out, E9* first, E9* last, E9* dst)
+E9** FUN_00706c80(E9** out, E9* first, E9* last, E9* dst)
 {
     *out = dst;
     if (first != last) {
@@ -1883,6 +1895,7 @@ void FUN_00706c80(E9** out, E9* first, E9* last, E9* dst)
         } while (first != last);
         *out = dst;
     }
+    return out;
 }
 
 // @ 0x00706d00
@@ -3266,9 +3279,19 @@ void FixedCellVectorCtor(void* self)
 // @ 0x0070c410
 void cLightingWorld_s0070_c040::CreateLocalLightSample(int info)
 {
-    char local[0x1d0];
-    memset(local, 0, sizeof(local));
-    uint32_t id = ((SlotVecCell*)((char*)this + 0x608))->create(local);
+    cLocalLightCellInit init;
+    init.mGlobal = false;
+    init.mInUse = false;
+    init.mType = 0;
+    init.mColour.x = 0.0f;
+    init.mColour.y = 0.0f;
+    init.mColour.z = 0.0f;
+    init.mSize = 0.0f;
+    init.mExtra[0] = 0;
+    init.mExtra[1] = 0;
+    init.mExtra[2] = 0;
+    init.mExtra[3] = 0;
+    uint32_t id = ((SlotVecCell*)((char*)this + 0x608))->create(&init);
     *(uint32_t*)((char*)info + 0x24) = id;
     int base = *(int*)(*(int*)((char*)this + 0x608) + ((uint32_t)id >> 7) * 4);
     *(int*)(base + 0x1d0 + (id & 0x7f) * 0x1e0) = info;
@@ -3290,9 +3313,8 @@ void SlotVectorHelperB(void* self)
 // @ 0x0070c7c0
 cLocalLightInfo::cLocalLightInfo(const cLocalLightInfo& x)
 : mColour(x.mColour), mSize(x.mSize), mPosition(x.mPosition), mStrength(x.mStrength),
-      mDecal(x.mDecal), mGlobal(x.mGlobal)
+      mDecal(x.mDecal), mGlobal(x.mGlobal), mCells(x.mCells)
 {
-    mCells.assign(x.mCells.mpBegin, x.mCells.mpEnd, 0);
 }
 
 // @ 0x0070c830
