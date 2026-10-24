@@ -28,6 +28,7 @@ typedef uint16_t hkUint16;
 typedef uint8_t hkUint8;
 
 #define HK_REAL_MAX 3.40282e+38f
+#define HK_NULL 0
 
 // ---- monitor stream timers (TLS 0x016e42a4 = write pointer, 0x016e42a8 = end) ----------------------
 extern volatile unsigned long g_hkMonitorStreamCurrentTls;   // 0x016e42a4
@@ -125,7 +126,8 @@ class hkTypedBroadPhaseHandle { public:                                   // siz
     hkUint32 m_collisionFilterInfo;                                // +0x08
 };
 class hkCollidable { public:                                              // size 0x24
-    hkUint8 pad00[0x14];
+    hkUint8 pad00[0x10];
+    int m_ownerOffset;                                             // +0x10
     hkTypedBroadPhaseHandle m_broadPhaseHandle;                    // +0x14
     hkReal m_allowedPenetrationDepth;                              // +0x20
 };
@@ -165,6 +167,8 @@ struct hkWorldOperationQueue {
     hkUint8 pad1d[0x2c - 0x1d];
 };
 
+class hkCriticalSection;
+
 class hkWorld {
 public:
     hkUint8 pad00[0x0c];
@@ -188,7 +192,10 @@ public:
     hkUint8 m_blockExecutingPendingOperations;                     // +0x94
     hkUint8 pad95[0xa8 - 0x95];
     hkUint8 m_processActionsInSingleThread;                        // +0xa8
-    hkUint8 pada9[0x120 - 0xa9];
+    hkUint8 pada9[0xac - 0xa9];
+    hkCriticalSection* m_modifyConstraintCriticalSection;          // +0xac
+    hkCriticalSection* m_worldLock;                                // +0xb0
+    hkUint8 padb4[0x120 - 0xb4];
     hkArray<void*> m_worldPostSimulationListeners;                 // +0x120
     hkUint8 pad12c[0x170 - 0x12c];
     hkWorldDynamicsStepInfo m_dynamicsStepInfo;                    // +0x170
@@ -235,9 +242,9 @@ public:
     void addJob(hkJobQueueEntry& job, int priority, int b);        // 0x010a5ba0
 };
 
-struct hkMtThreadStructure {                                       // size 0x60
+struct hkMtThreadStructure {                                       // size 0x80
     hkMtThreadStructure(hkWorld* world, class hkMultiThreadedSimulation* sim, int threadType);   // 0x0109c730
-    hkUint32 pad[0x18];
+    hkUint32 pad[0x20];
 };
 
 class hkToiResourceMgr {
@@ -276,6 +283,8 @@ public:
 
     void processJobs(hkMtThreadStructure& tl);                     // 0x0109cba0
     void masterThreadFunc(hkWorld* world, hkReal frameDeltaTime, hkReal physicsDeltaTime);
+    void processJobsForPsi(hkWorld* world);
+    int simulateLocked(hkWorld* world, hkReal frameDeltaTime, hkReal physicsDeltaTime);
 };
 
 #include <math.h>
@@ -457,5 +466,479 @@ void hkMultiThreadedSimulation::masterThreadFunc(hkWorld* world, hkReal frameDel
         hkStepInfo stepInfo(world->m_timeOfLastPsi, world->m_timeOfNextPsi);
         hkWorldCallbackUtil::firePostSimulationCallback(world, stepInfo);
         HK_TIMER_END();
+    }
+}
+
+// ---- contact / collision callbacks (Havok 3.1.0, hkDynamicsContactMgr and friends) -----------------
+//
+// The 0x14a20c0 class is the per-pair contact manager.  Its virtuals at +0x08/+0x10/+0x14/+0x1c are
+// the contact point added / removed / process / confirmed callbacks; each one builds the matching
+// Havok event and fires the world collision listeners plus the two entities' collision listeners.
+// 0x14a20f8 is a small factory that creates the pair manager via hkMemory.
+
+class hkEntity;
+
+class hkCollisionListener {
+public:
+    virtual void collisionAddedCallback(void* event) {}
+    virtual void collisionRemovedCallback(void* event) {}
+};
+
+class hkEntityListener {
+public:
+    virtual void entityListener00() {}
+    virtual void entityRemovedCallback(hkEntity* entity) {}
+    virtual void entityListener08() {}
+    virtual void entityActivatedCallback(hkEntity* entity) {}
+    virtual void entityDeactivatedCallback(hkEntity* entity) {}
+};
+
+class hkEntity {                                                   // size 0xd0
+public:
+    hkUint8 pad00[0x96];
+    hkUint16 m_processContactCallbackDelay;                        // +0x96
+    hkUint8 pad98[0x9c - 0x98];
+    hkArray<hkCollisionListener*> m_collisionListeners;            // +0x9c
+    hkUint8 padA8[0xb4 - 0xa8];
+    hkArray<hkEntityListener*> m_entityListeners;                  // +0xb4
+    hkUint8 padC0[0xd0 - 0xc0];
+
+    void getContactPointPosition(const void* contactPoint, hkVector4& out);   // 0x0108cf90
+};
+
+struct hkContactPoint {                                            // size 0x20
+    hkVector4 m_position;                                          // +0x00
+    hkVector4 m_separatingNormal;                                  // +0x10
+};
+
+struct hkContactPointMaterial {                                    // size 0x08
+    void* m_userData;                                              // +0x00
+    hkUint16 m_friction;                                           // +0x04
+    hkUint8 m_restitution;                                         // +0x06
+    hkUint8 m_flags;                                               // +0x07
+};
+
+enum hkContactPointAccept {
+    HK_CONTACT_POINT_ACCEPT = 0,
+    HK_CONTACT_POINT_REJECT = 1,
+};
+
+// Retail extends the 3.1.0 PDB layout of the added event by one dword: the two 16-bit counts live
+// at +0x24/+0x26, so the event is 0x28 bytes in this build.
+struct hkContactPointAddedEvent {                                  // retail size 0x28
+    hkCollidable* m_bodyA;                                         // +0x00
+    hkCollidable* m_bodyB;                                         // +0x04
+    hkUint32 m_type;                                               // +0x08
+    hkEntity* m_callbackFiredFrom;                                 // +0x0c
+    hkContactPoint* m_contactPoint;                                // +0x10
+    hkContactPointMaterial* m_contactPointMaterial;                // +0x14
+    hkReal m_projectedVelocity;                                    // +0x18
+    hkContactPointAccept m_status;                                 // +0x1c
+    void* m_internalContactMgr;                                    // +0x20
+    hkUint16 m_numContactPoints;                                   // +0x24
+    hkUint16 m_numBodyPairs;                                       // +0x26
+};
+
+// Same prefix as the added event, but the retail confirmed event stores a 32-bit user value at +0x24
+// and puts the callback origin at +0x08 (PDB order).
+struct hkContactPointConfirmedEvent {                              // retail size 0x28
+    hkCollidable* m_collidableA;                                   // +0x00
+    hkCollidable* m_collidableB;                                   // +0x04
+    hkEntity* m_callbackFiredFrom;                                 // +0x08
+    hkContactPoint* m_contactPoint;                                // +0x0c
+    hkContactPoint* m_contactPoint2;                               // +0x10 (name coined)
+    hkContactPointMaterial* m_contactPointMaterial;                // +0x14
+    hkReal m_projectedVelocity;                                    // +0x18
+    hkContactPointAccept m_status;                                 // +0x1c
+    void* m_contactData;                                           // +0x20
+    hkUint32 m_userValue;                                          // +0x24
+};
+
+struct hkContactPointRemovedEvent {                                // size 0x18
+    hkUint16 m_contactPointId;                                     // +0x00
+    hkContactPointMaterial* m_contactPointMaterial;                // +0x04
+    hkEntity* m_entityA;                                           // +0x08
+    hkEntity* m_entityB;                                           // +0x0c
+    hkEntity* m_callbackFiredFrom;                                 // +0x10
+    void* m_internalContactMgr;                                    // +0x14
+};
+
+struct hkProcessCdPoint { hkUint8 m_data[0x30]; };
+struct hkProcessCollisionData {                                    // size 0x3038 (only prefix used)
+    hkProcessCdPoint* m_firstFreeContactPoint;                     // +0x00
+    hkUint8 pad04[0x30 - 0x04];
+    hkProcessCdPoint m_contactPoints[256];                         // +0x30
+};
+
+// Retail stores 256 contact point property pointers starting at +0x10.
+struct hkContactProcessEvent {                                     // size 0x414
+    hkCollidable* m_collidableA;                                   // +0x000
+    hkCollidable* m_collidableB;                                   // +0x004
+    hkEntity* m_callbackFiredFrom;                                 // +0x008
+    hkProcessCollisionData* m_collisionData;                       // +0x00c
+    void* m_contactPointProperties[256];                           // +0x010 .. +0x40f
+    void* m_internalContactMgr;                                    // +0x410
+};
+
+// helpers that notify the world / entity listener lists (external to this slice)
+void hkWorldFireContactPointAdded(hkWorld* world, void* event);    // 0x0109f040
+void hkWorldFireContactPointRemoved(hkWorld* world, void* event);  // 0x0109f160
+void hkWorldFireContactProcess(hkWorld* world, void* event);       // 0x0109f1f0
+void hkEntityFireCollisionAdded(hkEntity* entity, void* event);    // 0x0109e7c0
+void hkEntityFireCollisionRemoved(hkEntity* entity, void* event);  // 0x0109e8e0
+void hkEntityFireCollisionProcess(hkEntity* entity, void* event);  // 0x0109e970
+
+class hkContactEventMgr {                                          // size 0x18 (vtable 0x014a20c0)
+public:
+    virtual ~hkContactEventMgr() {}
+    virtual void vdeletingDtor() {}                                                             // +0x04 (dtor slot pair)
+    virtual hkUint16 processContactPointAdded(hkCollidable* a, hkCollidable* b, void* unused,
+                                              hkContactPoint* contactPoint);                   // +0x08
+    virtual void vslot0c() {}                                                                   // +0x0c
+    virtual void processContactPointRemoved(hkUint32 contactPointId);                           // +0x10
+    virtual void processContact(hkCollidable* a, hkCollidable* b, void* unused,
+                                hkProcessCollisionData* data);                                  // +0x14
+    virtual void vslot18() {}                                                                   // +0x18
+    virtual int processContactPointConfirmed(hkCollidable* a, hkCollidable* b, void* unused,
+                                             hkContactPoint* contactPoint, hkUint32 userValue,
+                                             hkReal projectedVelocity,
+                                             hkContactPointMaterial* material);                 // +0x1c
+    virtual void* getContactPointProperties(hkUint32 contactPointId);                           // +0x20
+    hkUint8 pad04[4];                                              // +0x04
+    hkWorld* m_world;                                              // +0x08
+    hkEntity* m_entityA;                                           // +0x0c
+    hkEntity* m_entityB;                                           // +0x10
+    hkUint16 m_delay;                                              // +0x14
+    hkUint8 pad16[2];
+};
+
+struct hkContactEventMgrRaw {                                      // ABI view of the object above
+    void** m_vptr;                                                 // +0x00
+    hkUint16 m_memSizeAndFlags;                                    // +0x04
+    short m_refCount;                                              // +0x06
+    hkWorld* m_world;                                              // +0x08
+    hkEntity* m_entityA;                                           // +0x0c
+    hkEntity* m_entityB;                                           // +0x10
+    hkUint16 m_delay;                                              // +0x14
+    hkUint8 pad16[2];
+};
+
+class hkMemory {
+public:
+    virtual void vslot00() {}
+    virtual void vslot04() {}
+    virtual void vslot08() {}
+    virtual void vslot0c() {}
+    virtual void* allocate(int size, int align);                   // +0x10
+};
+extern hkMemory* g_hkMemory;                                       // 0x016e4178
+
+class hkContactEventFactory {                                      // size 0x0c (vtable 0x014a20f8)
+public:
+    hkContactEventFactory(void* world);
+    hkContactEventMgr* create(hkCollidable* a, hkCollidable* b, void* unused);
+    void** m_vptr;                                                 // +0x00
+    hkUint16 m_pad4;                                               // +0x04
+    short m_refCount;                                              // +0x06
+    void* m_world;                                                 // +0x08
+};
+
+// @ 0x0109e1e0
+void hkMultiThreadedSimulation::processJobsForPsi(hkWorld* world)
+{
+    HK_TIMER_BEGIN("Simulate");
+
+    m_jobQueue.m_criticalSection.enter();
+    m_jobQueue.m_criticalSection.leave();
+
+    hkMtThreadStructure tl(world, this, 1);
+    while (m_morePsiSteps)
+    {
+        m_jobQueue.m_criticalSection.enter();
+        m_jobQueue.m_criticalSection.leave();
+        processJobs(tl);
+    }
+
+    HK_TIMER_END();
+}
+
+// @ 0x0109e300
+int hkMultiThreadedSimulation::simulateLocked(hkWorld* world, hkReal frameDeltaTime, hkReal physicsDeltaTime)
+{
+    world->m_worldLock->enter();
+    masterThreadFunc(world, frameDeltaTime, physicsDeltaTime);
+    world->m_worldLock->leave();
+    return 0;
+}
+
+// @ 0x0109e350
+hkUint16 hkContactEventMgr::processContactPointAdded(hkCollidable* a, hkCollidable* b, void* /*unused*/,
+                                                    hkContactPoint* contactPoint)
+{
+    hkEntity* entityA = m_entityA;
+    hkEntity* entityB = m_entityB;
+
+    hkVector4 pointA;
+    hkVector4 pointB;
+    entityA->getContactPointPosition(contactPoint, pointA);
+    entityB->getContactPointPosition(contactPoint, pointB);
+
+    hkReal dx = pointB.x - pointA.x;
+    hkReal dy = pointB.y - pointA.y;
+    hkReal dz = pointB.z - pointA.z;
+
+    hkContactPointAddedEvent event;
+    event.m_bodyA = a;
+    event.m_bodyB = b;
+    event.m_type = 1;
+    event.m_callbackFiredFrom = HK_NULL;
+    event.m_contactPoint = contactPoint;
+    event.m_contactPointMaterial = HK_NULL;
+    event.m_projectedVelocity = dx * contactPoint->m_separatingNormal.x
+                              + dy * contactPoint->m_separatingNormal.y
+                              + dz * contactPoint->m_separatingNormal.z;
+    event.m_status = HK_CONTACT_POINT_ACCEPT;
+    event.m_internalContactMgr = this;
+    event.m_numContactPoints = 0;
+    event.m_numBodyPairs = 0;
+
+    hkWorldFireContactPointAdded(m_world, &event);
+    if (entityA->m_collisionListeners.m_size != 0)
+        hkEntityFireCollisionAdded(entityA, &event);
+    if (entityB->m_collisionListeners.m_size != 0)
+        hkEntityFireCollisionAdded(entityB, &event);
+
+    if (event.m_status == HK_CONTACT_POINT_ACCEPT)
+    {
+        m_delay = event.m_numBodyPairs;
+        return 0;
+    }
+    return 0xffff;
+}
+
+// @ 0x0109e460
+int hkContactEventMgr::processContactPointConfirmed(hkCollidable* a, hkCollidable* b, void* /*unused*/,
+                                                    hkContactPoint* contactPoint, hkUint32 userValue,
+                                                    hkReal projectedVelocity,
+                                                    hkContactPointMaterial* material)
+{
+    material->m_friction = 0;
+    material->m_restitution = 0;
+    material->m_flags = 1;
+
+    hkContactPointConfirmedEvent event;
+    event.m_collidableA = a;
+    event.m_collidableB = b;
+    event.m_callbackFiredFrom = HK_NULL;
+    event.m_contactPoint2 = contactPoint;
+    event.m_contactPointMaterial = material;
+    event.m_projectedVelocity = projectedVelocity;
+    event.m_contactData = this;
+    event.m_status = HK_CONTACT_POINT_ACCEPT;
+    event.m_userValue = userValue;
+
+    hkWorldFireContactPointAdded(m_world, &event);
+
+    if (m_entityA->m_collisionListeners.m_size != 0)
+        hkEntityFireCollisionAdded(m_entityA, &event);
+    if (m_entityB->m_collisionListeners.m_size != 0)
+        hkEntityFireCollisionAdded(m_entityB, &event);
+
+    return event.m_status;
+}
+
+// @ 0x0109e510
+void hkContactEventMgr::processContactPointRemoved(hkUint32 contactPointId)
+{
+    hkEntity* entityA = m_entityA;
+    hkEntity* entityB = m_entityB;
+
+    hkContactPointRemovedEvent event;
+    event.m_contactPointId = (hkUint16)contactPointId;
+    event.m_contactPointMaterial = HK_NULL;
+    event.m_entityA = entityA;
+    event.m_entityB = entityB;
+    event.m_internalContactMgr = this;
+
+    if ((hkUint16)contactPointId != 0xffff)
+    {
+        void* properties = getContactPointProperties(contactPointId);
+        event.m_contactPointMaterial = properties
+            ? (hkContactPointMaterial*)((char*)properties + 8) : HK_NULL;
+    }
+
+    hkWorldFireContactPointRemoved(m_world, &event);
+    if (entityA->m_collisionListeners.m_size != 0)
+        hkEntityFireCollisionRemoved(entityA, &event);
+    if (entityB->m_collisionListeners.m_size != 0)
+        hkEntityFireCollisionRemoved(entityB, &event);
+}
+
+// @ 0x0109e5b0
+void hkContactEventMgr::processContact(hkCollidable* a, hkCollidable* b, void* /*unused*/,
+                                       hkProcessCollisionData* data)
+{
+    hkUint16 delay = m_delay;
+    m_delay = delay - 1;
+    if (delay != 0)
+        return;
+
+    hkEntity* entityA = (hkEntity*)((char*)a + a->m_ownerOffset);
+    hkEntity* entityB = (hkEntity*)((char*)b + b->m_ownerOffset);
+    hkUint16 nextDelay = entityB->m_processContactCallbackDelay;
+    if (entityA->m_processContactCallbackDelay < nextDelay)
+        nextDelay = entityA->m_processContactCallbackDelay;
+
+    hkContactProcessEvent event;
+    event.m_collidableA = a;
+    event.m_collidableB = b;
+    m_delay = nextDelay;
+    event.m_collisionData = data;
+    event.m_internalContactMgr = this;
+
+    int numContactPoints = (int)(data->m_firstFreeContactPoint - data->m_contactPoints);
+    for (int i = numContactPoints - 1; i >= 0; --i)
+        event.m_contactPointProperties[i] = HK_NULL;
+
+    hkWorldFireContactProcess(m_world, &event);
+
+    if (entityA->m_collisionListeners.m_size != 0)
+        hkEntityFireCollisionProcess(entityA, &event);
+    if (entityB->m_collisionListeners.m_size != 0)
+        hkEntityFireCollisionProcess(entityB, &event);
+}
+
+// @ 0x0109e6a0
+hkContactEventFactory::hkContactEventFactory(void* world)
+{
+    m_refCount = 1;
+    m_vptr = (void**)0x014a20f8;
+    m_world = world;
+}
+
+// @ 0x0109e6c0
+hkContactEventMgr* hkContactEventFactory::create(hkCollidable* a, hkCollidable* b, void* /*unused*/)
+{
+    hkEntity* entityA = (hkEntity*)((char*)a + a->m_ownerOffset);
+    hkEntity* entityB = (hkEntity*)((char*)b + b->m_ownerOffset);
+
+    hkContactEventMgr* mgr = (hkContactEventMgr*)g_hkMemory->allocate(0x18, 0x1f);
+    hkContactEventMgrRaw* raw = (hkContactEventMgrRaw*)mgr;
+    raw->m_memSizeAndFlags = 0x18;
+    void* world = m_world;
+    raw->m_refCount = 1;
+    raw->m_vptr = (void**)0x014a20c0;
+    hkUint16 delayB = entityB->m_processContactCallbackDelay;
+    hkUint16 delayA = entityA->m_processContactCallbackDelay;
+    hkUint16 delay = delayA < delayB ? delayA : delayB;
+    raw->m_entityB = entityB;
+    raw->m_entityA = entityA;
+    raw->m_world = (hkWorld*)world;
+    raw->m_delay = delay;
+    return mgr;
+}
+
+// @ 0x0109e730
+void hkEntityFireEntityRemoved(hkEntity* entity)
+{
+    int i = entity->m_entityListeners.m_size - 1;
+    while (i >= 0)
+    {
+        hkEntityListener* listener = entity->m_entityListeners.m_data[i];
+        if (listener)
+            listener->entityRemovedCallback(entity);
+        --i;
+    }
+}
+
+// @ 0x0109e760
+void hkEntityFireEntityActivated(hkEntity* entity)
+{
+    int i = entity->m_entityListeners.m_size - 1;
+    while (i >= 0)
+    {
+        hkEntityListener* listener = entity->m_entityListeners.m_data[i];
+        if (listener)
+            listener->entityActivatedCallback(entity);
+        --i;
+    }
+}
+
+// @ 0x0109e790
+void hkEntityFireEntityDeactivated(hkEntity* entity)
+{
+    int i = entity->m_entityListeners.m_size - 1;
+    while (i >= 0)
+    {
+        hkEntityListener* listener = entity->m_entityListeners.m_data[i];
+        if (listener)
+            listener->entityDeactivatedCallback(entity);
+        --i;
+    }
+}
+
+// @ 0x0109e7c0
+void hkEntityFireCollisionAdded(hkEntity* entity, void* event)
+{
+    ((hkContactPointAddedEvent*)event)->m_callbackFiredFrom = entity;
+
+    int i = entity->m_collisionListeners.m_size - 1;
+    while (i >= 0)
+    {
+        hkCollisionListener* listener = entity->m_collisionListeners.m_data[i];
+        if (listener)
+            listener->collisionAddedCallback(event);
+        --i;
+    }
+
+    for (int k = entity->m_collisionListeners.m_size - 1; k >= 0; --k)
+    {
+        if (entity->m_collisionListeners.m_data[k] == HK_NULL)
+        {
+            int newSize = entity->m_collisionListeners.m_size - 1;
+            entity->m_collisionListeners.m_size = newSize;
+            int j = k;
+            if (j < entity->m_collisionListeners.m_size)
+            {
+                do
+                {
+                    entity->m_collisionListeners.m_data[j] = entity->m_collisionListeners.m_data[j + 1];
+                    ++j;
+                } while (j < entity->m_collisionListeners.m_size);
+            }
+        }
+    }
+}
+
+// @ 0x0109e850
+void hkEntityFireCollisionConfirmed(hkEntity* entity, void* event)
+{
+    ((hkContactPointConfirmedEvent*)event)->m_callbackFiredFrom = entity;
+
+    int i = entity->m_collisionListeners.m_size - 1;
+    while (i >= 0)
+    {
+        hkCollisionListener* listener = entity->m_collisionListeners.m_data[i];
+        if (listener)
+            listener->collisionRemovedCallback(event);
+        --i;
+    }
+
+    for (int k = entity->m_collisionListeners.m_size - 1; k >= 0; --k)
+    {
+        if (entity->m_collisionListeners.m_data[k] == HK_NULL)
+        {
+            int newSize = entity->m_collisionListeners.m_size - 1;
+            entity->m_collisionListeners.m_size = newSize;
+            int j = k;
+            if (j < entity->m_collisionListeners.m_size)
+            {
+                do
+                {
+                    entity->m_collisionListeners.m_data[j] = entity->m_collisionListeners.m_data[j + 1];
+                    ++j;
+                } while (j < entity->m_collisionListeners.m_size);
+            }
+        }
     }
 }

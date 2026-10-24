@@ -1,1 +1,14 @@
 0109d9c0 hkMultiThreadedSimulation::masterThreadFunc  # havok_names mangled; multi-threaded continuous simulation step (TtSimulate timers, processJobs, TtPostSimulateCb)
+0109e1e0 hkMultiThreadedSimulation::processJobsForPsi  # Simulate timer + job-queue enter/leave + hkMtThreadStructure + processJobs loop
+0109e300 hkMultiThreadedSimulation::simulateLocked  # world lock, masterThreadFunc, unlock
+0109e350 hkContactEventMgr::processContactPointAdded  # vtable 0x14a20c0 +0x08; fires hkContactPointAddedEvent
+0109e460 hkContactEventMgr::processContactPointConfirmed  # vtable +0x1c; fires the confirmed/added variant with a user dword
+0109e510 hkContactEventMgr::processContactPointRemoved  # vtable +0x10; fires hkContactPointRemovedEvent
+0109e5b0 hkContactEventMgr::processContact  # vtable +0x14; fires hkContactProcessEvent with 256 property slots
+0109e6a0 hkContactEventFactory::hkContactEventFactory  # vtable 0x14a20f8; refcount 1 + world
+0109e6c0 hkContactEventFactory::create  # allocates the 0x18 pair manager via hkMemory
+0109e730 hkEntityFireEntityRemoved  # entity listener slot +0x04
+0109e760 hkEntityFireEntityActivated  # entity listener slot +0x0c
+0109e790 hkEntityFireEntityDeactivated  # entity listener slot +0x10
+0109e7c0 hkEntityFireCollisionAdded  # sets callback origin +0x0c, collision listener slot 0, compacts nulls
+0109e850 hkEntityFireCollisionConfirmed  # sets callback origin +0x08, collision listener slot +0x04, compacts nulls

@@ -1,3 +1,13 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-# (no byte-exact functions in this slice yet)
 # flags: /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ?processJobsForPsi@hkMultiThreadedSimulation@@QAEXPAVhkWorld@@@Z  0109e1e0  /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ?simulateLocked@hkMultiThreadedSimulation@@QAEHPAVhkWorld@@MM@Z  0109e300  /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ?processContactPointConfirmed@hkContactEventMgr@@UAEHPAVhkCollidable@@0PAXPAUhkContactPoint@@IMPAUhkContactPointMaterial@@@Z  0109e460  /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ?processContactPointRemoved@hkContactEventMgr@@UAEXI@Z  0109e510  /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ??0hkContactEventFactory@@QAE@PAX@Z  0109e6a0  /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ?create@hkContactEventFactory@@QAEPAVhkContactEventMgr@@PAVhkCollidable@@0PAX@Z  0109e6c0  /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ?hkEntityFireEntityRemoved@@YAXPAVhkEntity@@@Z  0109e730  /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ?hkEntityFireEntityActivated@@YAXPAVhkEntity@@@Z  0109e760  /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ?hkEntityFireEntityDeactivated@@YAXPAVhkEntity@@@Z  0109e790  /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ?hkEntityFireCollisionAdded@@YAXPAVhkEntity@@PAX@Z  0109e7c0  /O2 /MD /Gy /TP /GS- /vc71
+slices/s0109d9c0/s0109d9c0.cpp  ?hkEntityFireCollisionConfirmed@@YAXPAVhkEntity@@PAX@Z  0109e850  /O2 /MD /Gy /TP /GS- /vc71
