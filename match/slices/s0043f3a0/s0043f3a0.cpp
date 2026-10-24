@@ -4,7 +4,16 @@
 namespace SP {
 
 struct Vec3 { float x, y, z; };
-struct Matrix3 { float m[9]; Matrix3() {} Matrix3(const Matrix3&); };
+struct Matrix3 {
+    float m[9];
+    Matrix3() {}
+    Matrix3(const Matrix3&);                  // 0041CB40
+};
+
+struct cSPBoundingBox {                       // 24 bytes: mMin, mMax
+    Vec3 mMin, mMax;
+    Vec3 GetCorner(uint32_t mask) const;      // 0043F290
+};
 
 struct Node { bool Check(); };                 // 004ADC40
 struct DefaultRefCounted { void Release(); };
@@ -38,9 +47,8 @@ class cSPEditorBlock { public:
 
     float F3eed0();                            // 0043EED0
     float F3f250();                            // 0043F250
-    void  F3eef0(Vec3* out);                   // 0043EEF0
-    void* F3f290(Vec3* out, int flag);         // 0043F290
-    void  F404f0();                            // 004404F0
+    cSPBoundingBox F3eef0();                   // 0043EEF0
+    void  F404f0(Matrix3 m);                    // 004404F0
     void  F40420(float v, uint8_t b);          // 00440420
     void  F40520(float v, uint8_t b, int c);   // 00440520
     void  F3a5e0(int type, uint8_t a, uint8_t b, char c);  // 0043A5E0
@@ -60,7 +68,7 @@ class cSPEditorBlock { public:
 void  Matrix3_Assign(Matrix3* dst, const Matrix3* src);       // 0041CB40
 void  GetBBox(cSPEditorBlock* self, void* out, int, int, int); // from SetValid
 void* Sub_41DB10(void* out, void* a, void* b);
-void  Sub_4A8E10(Matrix3* out, const void* a, int b);
+Matrix3 Sub_4A8E10(const void* a, int b);                     // 004A8E10
 int   Sub_493640(void* v, float f);
 void  Sub_4ADC20(int v);
 void  Sub_4ADC40_is_NodeCheck(void);
@@ -100,19 +108,18 @@ float cSPEditorBlock::F4d0()
 // @ 0x0043F5B0
 void cSPEditorBlock::F5b0(Vec3* out, float a, float b, float c, int flag)
 {
-    Vec3 base;
-    F3eef0(&base);
+    cSPBoundingBox base = F3eef0();
     if (flag > 0) {
-        Vec3* p = (Vec3*)F3f290(&base, 0);
-        if (0.0f > a + p->x) {
-            Vec3* q = (Vec3*)F3f290(&base, 0);
-            a = -q->x;
+        Vec3 p = base.GetCorner(0);
+        if (0.0f > a + p.x) {
+            Vec3 q = base.GetCorner(0);
+            a = -q.x;
         }
     } else {
-        Vec3* p = (Vec3*)F3f290(&base, 1);
-        if (a + p->x >= 0.0f) {
-            Vec3* q = (Vec3*)F3f290(&base, 1);
-            a = -q->x;
+        Vec3 p = base.GetCorner(1);
+        if (a + p.x >= 0.0f) {
+            Vec3 q = base.GetCorner(1);
+            a = -q.x;
         }
     }
     out->x = a;
@@ -123,13 +130,9 @@ void cSPEditorBlock::F5b0(Vec3* out, float a, float b, float c, int flag)
 // @ 0x0043FFA0
 void cSPEditorBlock::FFa0(Matrix3 m)
 {
-    Matrix3 tmp;
-    Matrix3_Assign(&tmp, &m);
-    F404f0();
+    F404f0(m);
     if (node != 0 && node->Check() && link3e0 != 0) {
-        Matrix3 tmp2;
-        Sub_4A8E10(&tmp2, &m, 0);
-        link3e0->F404f0();
+        link3e0->F404f0(Sub_4A8E10(&m, 0));
     }
 }
 
