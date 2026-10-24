@@ -135,8 +135,8 @@ struct Ext {
     void  r7764c0(int, int, float, float);
     void  r776520(int, int, float, float);
     void  r776a60(int, void*, void*);
-    char  r7773c0(unsigned char, int, int, int);
-    char  r7775a0(unsigned char, int, int, int);
+    char  r7773c0(unsigned int, int, int, int);
+    char  r7775a0(unsigned int, int, int, int);
 };
 #define VFN(p, off)  (*(void***)(p))[((off) >> 2)]
 struct CCreature {
