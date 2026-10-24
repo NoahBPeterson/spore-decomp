@@ -229,21 +229,7 @@ public:
 
 } // namespace SP
 
-namespace EA { namespace Audio {
-struct IAudioSystem {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7();
-    virtual uint32_t GetState();    // +0x20
-};
-IAudioSystem* GetSystemAT();        // 0x00A206F0
-} }
-
-// 0x00435E90 (an out-of-line /Od copy is what the linker kept)
-inline uint32_t GetRecorderState()
-{
-    EA::Audio::IAudioSystem* s = EA::Audio::GetSystemAT();
-    return s ? s->GetState() : 0;
-}
+uint32_t GetRecorderState();                                              // 0x00435E90 (cdecl, out of line)
 void PlayAudio(uint32_t soundID, uint32_t state);                         // 0x00435ED0 (cdecl)
 bool TryGetUIntProperty(void* propList, uint32_t id, uint32_t* out);      // 0x00410370 (cdecl)
 extern void* g_PhotoPropList;                                             // 0x015FD918
@@ -364,7 +350,7 @@ bool cSPPlayModeSubModePhoto::HandleButton(int id)
         PlayAudio(0xa03e74b2, GetRecorderState());
         {
             uint32_t babyEvent = mBabyEventIDs[0];
-            mAnim->PlayPose(mEditorBaseMode->mShadowViewer, mPoseAnimIDs[0], 0, 1, 0);
+            volatile float pose = mAnim->PlayPose(mEditorBaseMode->mShadowViewer, mPoseAnimIDs[0], 0, 1, 0);
             mEditorBaseMode->FUN_00b267f0(2, 0);
             if (babyEvent != 0xffffffff)
                 mEditorBaseMode->FUN_00574110(babyEvent, -1, 1.0f, 0.0f);

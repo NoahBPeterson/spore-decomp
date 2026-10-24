@@ -743,11 +743,7 @@ namespace Audio {
 IAudioSystem* GetSystemAT_s0064_04f0();        // 0x00A206F0
 }
 }
-inline uint32_t GetRecorderState()
-{
-    EA::Audio::IAudioSystem* s = EA::Audio::GetSystemAT_s0064_04f0();
-    return s ? s->GetState() : 0;
-}
+uint32_t GetRecorderState();                                              // 0x00435E90 (cdecl, out of line)
 void PlayAudio(uint32_t soundID, uint32_t state);                         // 0x00435ED0 (cdecl)
 bool TryGetUIntProperty(void* propList, uint32_t id, uint32_t* out);      // 0x00410370 (cdecl)
 class cUIHints { public: void SetEnabled(bool on, bool b); };                    // 0x0067C420
@@ -1199,7 +1195,7 @@ bool cSPPlayModeSubModePhoto_s0064_04f0::HandleButton(int id)
         PlayAudio(0xa03e74b2, GetRecorderState());
         {
             uint32_t babyEvent = mBabyEventIDs[0];
-            mAnim->PlayPose(mEditorBaseMode->mShadowViewer, mPoseAnimIDs[0], 0, 1, 0);
+            volatile float pose = mAnim->PlayPose(mEditorBaseMode->mShadowViewer, mPoseAnimIDs[0], 0, 1, 0);
             mEditorBaseMode->FUN_00b267f0(2, 0);
             if (babyEvent != 0xffffffff)
                 mEditorBaseMode->FUN_00574110(babyEvent, -1, 1.0f, 0.0f);
