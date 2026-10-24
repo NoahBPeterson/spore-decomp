@@ -10,7 +10,7 @@ void* EAAlloc(unsigned size, const char* area, int a, int b, const char* file, i
 void  EAFree(void* p); // 0x00f47380
 void* ZoneNew(unsigned size, const char* area, int a, int b, int c, int d);
 extern "C" void* GetManager();                       // 0x0067dcd0
-extern "C" int   EA_IO_IsSubdirectory(void*, int, int);  // 0x00930ab0
+extern "C" bool  EA_IO_IsSubdirectory(void*, int, int);  // 0x00930ab0
 extern "C" __declspec(dllimport) long __cdecl atol(const char*);
 extern "C" __declspec(dllimport) int __cdecl _wcsnicmp(const wchar_t*, const wchar_t*, unsigned);
 extern "C" long __fastcall _InterlockedExchangeAdd(long volatile*, long);
@@ -44,7 +44,16 @@ struct S2 {
   void FUN_006855a0(cArguments* pArgs);
   void FUN_006855f0();
   int* FUN_006859b0(int* pOut, int* pNode, int** pBucket);
-  void FUN_00685a60(void* src);
+  void* FUN_00685a60(void* src);
+};
+
+// eastl::wstring (wchar_t specialization): three pointers, AllocateSelf is a
+// __thiscall member with `this` at the object base.
+struct WString {
+  void* mpBegin;    // +0
+  void* mpEnd;      // +4
+  void* mpCapacity; // +8
+  void  AllocateSelf(int n);  // 0x00429760
 };
 
 // @ 0x006854b0
@@ -79,18 +88,22 @@ void S2::FUN_006855a0(cArguments* pArgs) {
   }
 }
 
+// A refcounted target whose vtable slot 0 is called with one int argument.
+struct IRefTarget {
+  virtual void Release(int n);  // vtable slot 0
+};
+
 // @ 0x006855f0
 void S2::FUN_006855f0() {
   int* pObj = *(int**)this;
   if (pObj != 0) {
+    int* pHolder = pObj + 1;
     int* pRef = pObj + 2;
     long old = _InterlockedExchangeAdd((volatile long*)pRef, -1);
-    if (old - 1 == 0) {
+    if (--old == 0) {
       _InterlockedExchange((volatile long*)pRef, 1);
-      int* pHolder = pObj + 1;
       if (pHolder != 0) {
-        typedef void (__thiscall *Fn)(int*, int);
-        (*(Fn*)(*(void**)pHolder))(pHolder, 1);
+        ((IRefTarget*)pHolder)->Release(1);
       }
     }
   }
@@ -128,7 +141,7 @@ void FUN_00685540() {
 // @ 0x00685620
 void* FUN_00685620(void* first, void* last, const wchar_t* pName) {
   while (first != last) {
-    unsigned n = (unsigned)(*(int*)((char*)first + 4) - *(int*)first) >> 1;
+    int n = (*(int*)((char*)first + 4) - *(int*)first) >> 1;
     if (_wcsnicmp(pName, *(const wchar_t**)first, n) == 0) break;
     first = (char*)first + 0x10;
   }
@@ -228,8 +241,8 @@ void FUN_00685450(int param1, int* param2, int param3, void* param4) {
   int local[5];
   local[0] = param2[2];
   local[1] = *param2 - param3;
-  local[2] = *param2 + 1 + param3;
-  local[3] = param2[1] - param3;
+  local[2] = param2[1] - param3;
+  local[3] = *param2 + 1 + param3;
   local[4] = param2[1] + 1 + param3;
   FUN_006850b0(param1, local, param4);
 }
@@ -244,7 +257,7 @@ int FUN_00684ee0(int param1, unsigned* param2) {
   if ((int)uVar6 < 0) {
     param2[3] = param2[3] + param1;
     param2[1] = uVar6 + param1;
-    *param2 = (uVar5 ^ 1) + (unsigned)(unsigned char)(&((unsigned char*)0x1402d55)[iVar1*4]) * 2;
+    *param2 = (uVar5 ^ 1) + (unsigned)(unsigned char)(((unsigned char*)0x1402d55)[iVar1*4]) * 2;
     unsigned a = param2[2], b = param2[3], c = param2[1], d = param2[4];
     if (uVar5 == 0) {
       param2[1] = param1 - d;
@@ -264,7 +277,7 @@ int FUN_00684ee0(int param1, unsigned* param2) {
       param2[4] = param2[4] + param1;
       uVar6 += param1;
       param2[2] = uVar6;
-      *param2 = (unsigned)(unsigned char)(&((unsigned char*)0x1402d56)[iVar1*4]) * 2 + 1;
+      *param2 = (unsigned)(unsigned char)(((unsigned char*)0x1402d56)[iVar1*4]) * 2 + 1;
       unsigned b = param2[3], c = param2[4], a = param2[1];
       if (uVar5 != 0) {
         param2[1] = uVar6;
@@ -283,7 +296,7 @@ int FUN_00684ee0(int param1, unsigned* param2) {
       param2[4] = param2[4] - param1;
       uVar6 -= param1;
       param2[2] = uVar6;
-      *param2 = (unsigned)(unsigned char)(&((unsigned char*)0x1402d56)[iVar1*4]) * 2;
+      *param2 = (unsigned)(unsigned char)(((unsigned char*)0x1402d56)[iVar1*4]) * 2;
       unsigned b = param2[3], c = param2[4], a = param2[1];
       if (uVar5 != 0) {
         param2[1] = uVar6;
@@ -303,7 +316,7 @@ int FUN_00684ee0(int param1, unsigned* param2) {
     param2[3] = param2[3] - param1;
     uVar6 -= param1;
     param2[1] = uVar6;
-    *param2 = uVar5 + (unsigned)(unsigned char)(&((unsigned char*)0x1402d55)[iVar1*4]) * 2;
+    *param2 = uVar5 + (unsigned)(unsigned char)(((unsigned char*)0x1402d55)[iVar1*4]) * 2;
     unsigned b = param2[3], a = param2[2];
     if (uVar5 == 0) {
       param2[2] = param1 - b;
@@ -382,7 +395,7 @@ int FUN_00685200(unsigned* param1, float* param2, float* param3, float* param4,
         float f2 = *param2;
         *param2 = (fVar1 - 1.0f) * fVar5 + fVar8;
         *param3 = f2 * fVar6 + fVar7;
-        *param1 = (unsigned)(unsigned char)(&((unsigned char*)0x1402d56)[((int)*param1 >> 1)*4]) * 2;
+        *param1 = (unsigned)(unsigned char)(((unsigned char*)0x1402d56)[((int)*param1 >> 1)*4]) * 2;
         if (param4 != 0) {
           float f = *param4;
           *param4 = *param5 * fVar5;
@@ -393,7 +406,7 @@ int FUN_00685200(unsigned* param1, float* param2, float* param3, float* param4,
         float f2 = *param2;
         *param2 = (fVar1 + 1.0f) * fVar5 + fVar8;
         *param3 = f2 * fVar6 + fVar7;
-        *param1 = (unsigned)(unsigned char)(&((unsigned char*)0x1402d56)[((int)*param1 >> 1)*4]) * 2 + 1;
+        *param1 = (unsigned)(unsigned char)(((unsigned char*)0x1402d56)[((int)*param1 >> 1)*4]) * 2 + 1;
         if (param4 != 0) {
           float f = *param4;
           *param4 = *param5 * fVar5;
@@ -405,7 +418,7 @@ int FUN_00685200(unsigned* param1, float* param2, float* param3, float* param4,
       *param2 = fVar1 - 1.0f;
       *param2 = *param3 * fVar6 + fVar7;
       *param3 = (fVar1 - 1.0f) * fVar5 + fVar8;
-      *param1 = uVar4 + (unsigned)(unsigned char)(&((unsigned char*)0x1402d55)[((int)*param1 >> 1)*4]) * 2;
+      *param1 = uVar4 + (unsigned)(unsigned char)(((unsigned char*)0x1402d55)[((int)*param1 >> 1)*4]) * 2;
       if (param4 != 0) {
         float f = *param4;
         *param4 = *param5 * fVar6;
@@ -420,7 +433,7 @@ int FUN_00685200(unsigned* param1, float* param2, float* param3, float* param4,
     *param2 = fVar1 + 1.0f;
     *param2 = *param3 * fVar5 + fVar8;
     *param3 = (fVar1 + 1.0f) * fVar6 + fVar7;
-    *param1 = (uVar4 ^ 1) + (unsigned)(unsigned char)(&((unsigned char*)0x1402d55)[((int)*param1 >> 1)*4]) * 2;
+    *param1 = (uVar4 ^ 1) + (unsigned)(unsigned char)(((unsigned char*)0x1402d55)[((int)*param1 >> 1)*4]) * 2;
     if (param4 != 0) {
       float f = *param4;
       *param4 = *param5 * fVar5;
@@ -435,11 +448,10 @@ int FUN_00685200(unsigned* param1, float* param2, float* param3, float* param4,
 }
 
 // @ 0x00685a60  two-wstring copy constructor
-extern "C" int WStr_AllocateSelf(void*, int);       // 0x00429760
 extern "C" void* WStr_DoInsertValue(void*, const void*, unsigned);  // 0x011e0744
-void* __fastcall FUN_00685a60(void* pDst, void* pSrc) {
-  char* d = (char*)pDst;
-  char* s = (char*)pSrc;
+void* S2::FUN_00685a60(void* src) {
+  char* d = (char*)this;
+  char* s = (char*)src;
   d[0] = s[0];
   *(unsigned*)(d + 4) = *(unsigned*)(s + 4);
   *(unsigned*)(d + 8) = 0;
@@ -447,7 +459,7 @@ void* __fastcall FUN_00685a60(void* pDst, void* pSrc) {
   *(unsigned*)(d + 0x10) = 0;
   const void* p1 = *(void**)(s + 8);
   int n1 = (*(int*)(s + 0xc) - (int)p1) >> 1;
-  WStr_AllocateSelf(d + 8, n1 + 1);
+  ((WString*)(d + 8))->AllocateSelf(n1 + 1);
   void* b1 = *(void**)(d + 8);
   unsigned sz1 = (unsigned)(n1 * 2);
   WStr_DoInsertValue(b1, p1, sz1);
@@ -459,7 +471,7 @@ void* __fastcall FUN_00685a60(void* pDst, void* pSrc) {
   *(unsigned*)(d + 0x20) = 0;
   const void* p2 = *(void**)(s + 0x18);
   int n2 = (*(int*)(s + 0x1c) - (int)p2) >> 1;
-  WStr_AllocateSelf(d + 0x18, n2 + 1);
+  ((WString*)(d + 0x18))->AllocateSelf(n2 + 1);
   void* b2 = *(void**)(d + 0x18);
   unsigned sz2 = (unsigned)(n2 * 2);
   WStr_DoInsertValue(b2, p2, sz2);

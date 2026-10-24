@@ -8,3 +8,4 @@ slices/s00684ee0/s00684ee0.cpp  FUN_006855a0@S2@@  006855a0  /O2 /MD /Gy /EHsc /
 slices/s00684ee0/s00684ee0.cpp  FUN_00685a30@@  00685a30  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00684ee0/s00684ee0.cpp  FUN_00685cd0@@  00685cd0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00684ee0/s00684ee0.cpp  FUN_00686080@@  00686080  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00684ee0/s00684ee0.cpp  ?FUN_00685450@@YAXHPAHHPAX@Z  00685450  /O2 /MD /Gy /EHsc /TP /arch:SSE
