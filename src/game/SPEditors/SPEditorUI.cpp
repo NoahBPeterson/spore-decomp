@@ -2537,6 +2537,8 @@ bool HandlerSub::HandleMessage(uint32_t msg, int data)
 // @ 0x005def30
 void EUI::FUN_005def30(uint32_t param)
 {
+    void* volatile self = this;
+    (void)self;
     AudioSys* au = GetSystemAT();
     uint32_t v = au ? au->GetValue() : 0;
     au = GetSystemAT();
