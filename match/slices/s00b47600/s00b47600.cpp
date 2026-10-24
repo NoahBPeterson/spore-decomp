@@ -237,10 +237,13 @@ static inline void CopyBackward44(Elem44* first, Elem44* last, Elem44* result)
         *--result = *--last;
 }
 
+static const char kAllocFile[] =
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
+
 static Elem44* DoAllocate44(unsigned n)
 {
     return n ? (Elem44*)F_f473a0(n * sizeof(Elem44), "Simulator", 0, 0,
-                                 "eastl/allocator.h", 0xd1) : 0;
+                                 kAllocFile, 0xd1) : 0;
 }
 
 // @ 0x00b47600
