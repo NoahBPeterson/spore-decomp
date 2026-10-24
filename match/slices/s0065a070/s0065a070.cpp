@@ -92,7 +92,7 @@ struct cSPUIAssetView {
     float mTargetX;                    // 0x0c
     float mTargetY;                    // 0x10
     char  f14;                         // 0x14
-    char  mFirstUpdate;                // 0x15
+    unsigned char mFirstUpdate;        // 0x15
     char  mResponds;                   // 0x16
     char  f17;                         // 0x17
     void* mAnimator;                   // 0x18
@@ -277,13 +277,11 @@ void cSPUIAssetView::LoadLayout() {
     }
 
     if (fFD) {
-        bool direct;
-        if (mP90 == 0) direct = true;
-        else {
+        bool direct = false;
+        if (mP90 != 0) {
             int a = vci0(mP90, 0x40);
             if (FUN_00552300(a) == 1) direct = true;
             else if (vci0(mP90, 0x38) == 0x7fffffff) direct = true;
-            else direct = false;
         }
         if (direct) {
             ((G*)this)->FUN_00659ec0();
