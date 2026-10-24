@@ -1,0 +1,2 @@
+slices/s00ffe130/s00ffe130.cpp  ?OnContextChange@cSPSimulatorPlayerUFO@SP@@QAEXH@Z  00ffe130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ffe130/s00ffe130.cpp  ?FUN_00ffe3a0@cSPSimulatorPlayerUFO@SP@@QAEXH@Z  00ffe3a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
