@@ -1,0 +1,4 @@
+# va  verdict  notes
+01127680  UNSUPPORTED  0/400 valid inputs (orig-abi-broken(fake)=344, fault(read)=55): the retail body calls an out-of-line ctor on the stack props slot that the harness models as a fake symbol, so no input completes
+01127970  PASS  400/400 valid, 100% coverage: same allocate(0x50,0x26)+memSize+placement-ctor+field-copy sequence, only the failed-gate block layout differs
+01127a10  FAIL  5/5 valid inputs mismatched at call #0 (coverage 94%): hkVector4::setTransformedPos is called with the same transform and source but our destination temp sits at a different stack slot (0x20 vs 0x10), i.e. the reconstructed locals do not reuse slots the way the retail frame does

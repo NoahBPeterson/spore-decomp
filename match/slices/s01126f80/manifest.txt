@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01126f80/s01126f80.cpp  ?constructMouseSpringAction@@YAXPAVhkMouseSpringAction@@@Z  01127830  /vc71 /O2 /MD /Gy /TP
+slices/s01126f80/s01126f80.cpp  ??0hkMouseSpringAction@@QAE@PAVhkEntity@@@Z  01127850  /vc71 /O2 /MD /Gy /TP
+slices/s01126f80/s01126f80.cpp  ??0hkMouseSpringAction@@QAE@ABVhkVector4@@0MMMPAVhkEntity@@@Z  011278b0  /vc71 /O2 /MD /Gy /TP
+slices/s01126f80/s01126f80.cpp  ?entityRemovedCallback@hkMouseSpringAction@@UAEXPAVhkEntity@@@Z  01127920  /vc71 /O2 /MD /Gy /TP
+slices/s01126f80/s01126f80.cpp  ?getAxis@hkQuaternion@@QBEXAAVhkVector4@@@Z  01127dc0  /vc71 /O2 /MD /Gy /TP
+slices/s01126f80/s01126f80.cpp  ??0AccelerationInfo@hkKeyFrameUtility@@QAE@XZ  01127e90  /vc71 /O2 /MD /Gy /TP
