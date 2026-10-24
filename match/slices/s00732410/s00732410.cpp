@@ -3,6 +3,7 @@
 // copy/fill loops.  0x00732410 itself is a large skinning applier left as a skeleton.
 #include "types.h"
 #include <math.h>
+#include <string.h>
 
 struct EltArray
 {
@@ -255,7 +256,7 @@ void FUN_00732cb0(float* param_1, float* param_2, float* param_3, float* param_4
     float fVar2 = param_6[1] - param_4[1];
     float local_24, local_20, local_1c;
     local_1c = fVar2 * (*param_5 - *param_4) - fVar3 * (*param_6 - *param_4);
-    if (local_1c <= 1e-06f)
+    if ((double)local_1c <= 1e-06)
     {
         local_24 = 1.0f;
         local_20 = 0.0f;
@@ -277,31 +278,33 @@ void FUN_00732cb0(float* param_1, float* param_2, float* param_3, float* param_4
 }
 
 // @ 0x00732eb0
-void FUN_00732eb0(float* m, float* out)
+struct Mat4 { float m[16]; };
+unsigned FUN_00732eb0(const float* src, Mat4* out)
 {
     float tmp[16];
-    tmp[0] = m[0];
-    tmp[1] = m[4];
-    tmp[2] = m[8];
+    tmp[0] = src[0];
+    tmp[1] = src[4];
+    tmp[2] = src[8];
     tmp[3] = 0.0f;
-    tmp[4] = m[1];
-    tmp[5] = m[5];
-    tmp[6] = m[9];
+    tmp[4] = src[1];
+    tmp[5] = src[5];
+    tmp[6] = src[9];
     tmp[7] = 0.0f;
-    tmp[8] = m[2];
-    tmp[9] = m[6];
-    tmp[10] = m[10];
+    tmp[8] = src[2];
+    tmp[9] = src[6];
+    tmp[10] = src[10];
     tmp[11] = 0.0f;
     tmp[12] = 0.0f;
     tmp[13] = 0.0f;
     tmp[14] = 0.0f;
     tmp[15] = 1.0f;
-    for (int i = 0; i < 16; ++i)
-        out[i] = tmp[i];
-    out[0xc] = m[3];
-    out[0xd] = m[7];
-    out[0xe] = m[0xb];
-    out[0xf] = 1.0f;
+    memcpy(out->m, tmp, sizeof(tmp));
+    out->m[0xc] = src[3];
+    out->m[0xd] = src[7];
+    out->m[0xe] = src[0xb];
+    out->m[0xf] = 1.0f;
+    // retail leaves src[0xb] in eax (the last dword it stores into the matrix)
+    return *(const unsigned*)&src[0xb];
 }
 
 // @ 0x00732fb0
@@ -393,7 +396,7 @@ void FUN_00733140(int* param_1, float* param_2, float* param_3, float* param_4)
 }
 
 // @ 0x00733230
-void FUN_00733230(float* param_1, int param_2, float* param_3)
+float* FUN_00733230(float* param_1, int param_2, float* param_3)
 {
     for (; param_2 != 0; param_2 = param_2 + -1)
     {
@@ -411,6 +414,7 @@ void FUN_00733230(float* param_1, int param_2, float* param_3)
         }
         param_1 += 9;
     }
+    return param_1;
 }
 
 // @ 0x00733310
