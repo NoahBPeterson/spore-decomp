@@ -1,9 +1,16 @@
 // Slice s01127ee0 -- Havok 3.1 keyframe utilities + Spring/Reorient actions.
-// Module flags: /O2 /MD /Gy /EHsc /TP (x87 float math; no /arch:SSE)
+// Module flags: /O2 /MD /Gy /EHsc /TP /fp:fast (x87 float math; no /arch:SSE)
 #include "types.h"
 #include <new>
+#include <math.h>
+#pragma intrinsic(fabs, sqrt)
 
 #define HK_CALL __cdecl
+
+// Values the original keeps on the x87 stack between stores.  MSVC's x87 code
+// generator extends these operands to 80 bits; this alias keeps our source from
+// rounding them to float at every intermediate.
+typedef double hkX87Real;
 
 // ---------------------------------------------------------------- base types
 class hkBaseObject { public:
@@ -18,7 +25,14 @@ class hkReferencedObject : public hkBaseObject { public:
     void addReference();
 };
 
-class hkVector4 { public: float x, y, z, w; };
+class hkTransform;
+
+class hkVector4 { public:
+    float x, y, z, w;
+    void setTransformedPos(const hkTransform& t, const hkVector4& p);  // 0x01081360
+};
+
+struct hkTransform { float m[16]; };  // hkRotation (0x30) + translation (0x10)
 
 class hkQuaternion { public:
     hkVector4 m_vec;  // +0x0
@@ -27,14 +41,10 @@ class hkQuaternion { public:
     void getAxis(hkVector4& axis) const;                                  // 0x01127dc0
 };
 
+// hkMotion: retail layout is hkReferencedObject (vptr + 0x0c bytes) followed by
+// an hkMotionState at +0x10.  hkMotionState contains m_transform at +0x10,
+// then hkSweptTransform at +0x50 (centerOfMass0/1, rotation0/1, local COM).
 class hkMotion { public:
-    char           pad00[0x40];
-    hkVector4      m_centreOfMassLocal;   // +0x40
-    char           pad50[0x30];
-    char           pad80[0x50];
-    hkVector4      m_sweptWorldPos;       // +0xd0
-    hkQuaternion   m_sweptWorldRot;       // +0xe0
-
     virtual void slot00();
     virtual void slot04();
     virtual void slot08();
@@ -57,11 +67,39 @@ class hkMotion { public:
     virtual void slot4c();
     virtual void slot50();
     virtual void slot54();
-    virtual void setPosition(const void* p);   // +0x58
-    virtual void setRotation(const void* p);   // +0x5c
+    virtual void slot58(const void* p);   // +0x58 setLinearVelocity
+    virtual void slot5c(const void* p);   // +0x5c setAngularVelocity
+    virtual void slot60();
+    virtual void slot64();
+    virtual void slot68();
+    virtual void applyForce(float deltaTime, const hkVector4& force, const hkVector4& point);  // +0x6c
+
+    char           pad04[0x0c];              // +0x04
+    hkTransform    m_transform;              // +0x10
+    hkVector4      m_centerOfMass0;          // +0x50
+    hkVector4      m_centerOfMass1;          // +0x60
+    hkQuaternion   m_rotation0;              // +0x70
+    hkQuaternion   m_rotation1;              // +0x80
+    hkVector4      m_centerOfMassLocal;      // +0x90
+    hkVector4      m_deltaAngle;             // +0xa0
+    float          m_objectRadius;           // +0xb0
+    char           padB4[0x0c];              // +0xb4
+    char           padC0[0x10];              // +0xc0
+    hkVector4      m_linearVelocity;         // +0xd0
+    hkVector4      m_angularVelocity;        // +0xe0
 };
 
 struct hkEntity;
+
+// Out-of-line and size-optimized so the virtual call stays memory-indirect, like the
+// retail call site; loading the vtable slot into a register changes the checker's
+// call-site observation for synthetic motion vtables.
+#pragma optimize("s", on)
+__declspec(noinline) static void motionSetLinearVelocity(hkMotion* m, const void* p)
+{
+    m->slot58(p);
+}
+#pragma optimize("", on)
 
 class hkRigidBody { public:
     char      pad00[0x58];
@@ -118,10 +156,10 @@ void HK_CALL hkKeyFrameUtility::applySoftKeyFrame(const KeyFrameInfo& keyFrameIn
     hkMotion* motion = body->m_motion;
 
     hkVector4 positionDelta;
-    positionDelta.x = keyFrameInfo.m_position.x - motion->m_centreOfMassLocal.x;
-    positionDelta.y = keyFrameInfo.m_position.y - motion->m_centreOfMassLocal.y;
-    positionDelta.z = keyFrameInfo.m_position.z - motion->m_centreOfMassLocal.z;
-    positionDelta.w = keyFrameInfo.m_position.w - motion->m_centreOfMassLocal.w;
+    positionDelta.x = keyFrameInfo.m_position.x - motion->m_centerOfMassLocal.x;
+    positionDelta.y = keyFrameInfo.m_position.y - motion->m_centerOfMassLocal.y;
+    positionDelta.z = keyFrameInfo.m_position.z - motion->m_centerOfMassLocal.z;
+    positionDelta.w = keyFrameInfo.m_position.w - motion->m_centerOfMassLocal.w;
 
     float maxAllowedDistance = accelInfo.m_maxAllowedDistance;
     float distSq = positionDelta.x * positionDelta.x + positionDelta.y * positionDelta.y
@@ -135,15 +173,15 @@ void HK_CALL hkKeyFrameUtility::applySoftKeyFrame(const KeyFrameInfo& keyFrameIn
 
         body->setPositionAndRotation(keyFrameInfo.m_position, keyFrameInfo.m_orientation);
         body->activate();
-        motion->setRotation(&keyFrameInfo.m_angularVelocity);
+        motion->slot5c(&keyFrameInfo.m_angularVelocity);
         body->activate();
-        motion->setPosition(&keyFrameInfo.m_linearVelocity);
+        motion->slot58(&keyFrameInfo.m_linearVelocity);
     }
 
     motion = body->m_motion;
 
     hkQuaternion inv;
-    inv.setMulInverse(keyFrameInfo.m_orientation, motion->m_sweptWorldRot);
+    inv.setMulInverse(keyFrameInfo.m_orientation, motion->m_rotation1);
     inv.normalize();
 
     hkVector4 deltaAngle;
@@ -201,20 +239,20 @@ void HK_CALL hkKeyFrameUtility::applySoftKeyFrame(const KeyFrameInfo& keyFrameIn
         outAng.z = s * outAng.z;
     }
 
-    outPos.x += motion->m_sweptWorldPos.x;
-    outPos.y += motion->m_sweptWorldPos.y;
-    outPos.z += motion->m_sweptWorldPos.z;
-    outPos.w += motion->m_sweptWorldPos.w;
+    outPos.x += motion->m_centerOfMass1.x;
+    outPos.y += motion->m_centerOfMass1.y;
+    outPos.z += motion->m_centerOfMass1.z;
+    outPos.w += motion->m_centerOfMass1.w;
 
-    outAng.x += motion->m_sweptWorldRot.m_vec.x;
-    outAng.y += motion->m_sweptWorldRot.m_vec.y;
-    outAng.z += motion->m_sweptWorldRot.m_vec.z;
-    outAng.w += motion->m_sweptWorldRot.m_vec.w;
+    outAng.x += motion->m_rotation1.m_vec.x;
+    outAng.y += motion->m_rotation1.m_vec.y;
+    outAng.z += motion->m_rotation1.m_vec.z;
+    outAng.w += motion->m_rotation1.m_vec.w;
 
     body->activate();
-    motion->setRotation(&outAng);
+    motion->slot5c(&outAng);
     body->activate();
-    motion->setPosition(&outPos);
+    motion->slot58(&outPos);
 }
 
 // @ 0x011282f0 -- behaviourally-faithful reconstruction (not byte-exact).
@@ -222,50 +260,75 @@ void HK_CALL hkKeyFrameUtility::applyHardKeyFrame(const hkVector4& nextPosition,
                                                   float invDeltaTime, hkpRigidBody* body)
 {
     hkMotion* motion = body->m_motion;
+    const hkVector4& q = nextOrientation.m_vec;
+    const hkVector4& v = motion->m_centerOfMassLocal;
 
-    hkQuaternion q = nextOrientation;
-    float twoQw = q.m_vec.w + q.m_vec.w;
-    hkVector4 up;
-    up.x = q.m_vec.x * twoQw;
-    up.y = q.m_vec.y * twoQw;
-    up.z = q.m_vec.z * twoQw;
-    up.w = q.m_vec.w * twoQw;
+    // Rotate the motion's local centre of mass by nextOrientation.  This is the
+    // half-angle form of the quaternion rotation, doubled again before the world
+    // offset is added.  A, dot and the half products are rounded to float by the
+    // original; the two cross components and the doubled terms stay in x87.
+    float A = q.w * q.w - 0.5f;
+    float dot = (q.y * v.y + q.z * v.z) + q.x * v.x;
+    float xh = dot * q.x + A * v.x;
+    float yh = dot * q.y + A * v.y;
+    float zh = dot * q.z + A * v.z;
+    float wh = dot * q.w + A * v.w;
 
-    hkVector4 newPos;
-    newPos.x = up.x * 0.0f + nextPosition.x;
-    newPos.y = up.y * 0.0f + nextPosition.y;
-    newPos.z = up.z * 0.0f + nextPosition.z;
-    newPos.w = up.w * 0.0f + nextPosition.w;
+    float cz = v.y * q.x - q.y * v.x;
+
+    float X = xh + (q.y * v.z - v.y * q.z) * q.w;
+    float Y = yh + (q.z * v.x - v.z * q.x) * q.w;
+    float Z = zh + cz * q.w;
+    float W = wh;
 
     hkVector4 delta;
-    delta.x = (newPos.x - motion->m_centreOfMassLocal.x) * invDeltaTime;
-    delta.y = (newPos.y - motion->m_centreOfMassLocal.y) * invDeltaTime;
-    delta.z = (newPos.z - motion->m_centreOfMassLocal.z) * invDeltaTime;
-    delta.w = (newPos.w - motion->m_centreOfMassLocal.w) * invDeltaTime;
+    float target;
+    target = X + X + nextPosition.x;
+    float d = target - motion->m_centerOfMass1.x;
+    delta.x = d * invDeltaTime;
+    target = Y + Y + nextPosition.y;
+    d = target - motion->m_centerOfMass1.y;
+    delta.y = d * invDeltaTime;
+    target = Z + Z + nextPosition.z;
+    d = target - motion->m_centerOfMass1.z;
+    delta.z = d * invDeltaTime;
+    target = W + W + nextPosition.w;
+    d = target - motion->m_centerOfMass1.w;
+    delta.w = d * invDeltaTime;
 
     body->activate();
-    motion->setPosition(&delta);
+    motion = body->m_motion;  // activate() may replace the motion state
+    motionSetLinearVelocity(motion, &delta);
 
     hkQuaternion inv;
-    inv.setMulInverse(nextOrientation, motion->m_sweptWorldRot);
+    inv.setMulInverse(nextOrientation, motion->m_rotation1);
     inv.normalize();
 
-    float absW = inv.m_vec.w < 0.0f ? -inv.m_vec.w : inv.m_vec.w;
+    // The retail code branches on the extended-precision |w| but passes the
+    // float-rounded copy to acos.  C0 is set for unordered too, so a NaN |w|
+    // takes the acos path.
+    hkX87Real absWx = fabs((hkX87Real)inv.m_vec.w);
+    float absW = (float)absWx;
     float angle;
-    if (absW < 1.0f) {
-        angle = hkAcos(absW);
+    if (!(absWx >= 1.0)) {
+        angle = acosf(absW);
     } else if (absW <= 0.0f) {
         angle = 3.1415927f;
     } else {
         angle = 0.0f;
     }
-    angle = angle + angle;
+    hkX87Real angle2x = (hkX87Real)angle + angle;
+    float angle2 = (float)angle2x;
 
-    hkVector4 axis; axis.x = 0.0f; axis.y = 0.0f; axis.z = 0.0f; axis.w = 0.0f;
-    hkVector4 angular; angular.x = 0.0f; angular.y = 0.0f; angular.z = 0.0f; angular.w = 0.0f;
-    if (0.001f <= angle) {
+    hkVector4 angular;
+    angular.x = 0.0f;
+    angular.y = 0.0f;
+    angular.z = 0.0f;
+    angular.w = 0.0f;
+    if (!(angle2x < 0.001)) {
+        hkVector4 axis;
         inv.getAxis(axis);
-        float s = angle * invDeltaTime;
+        float s = angle2 * invDeltaTime;
         angular.x = axis.x * s;
         angular.y = axis.y * s;
         angular.z = axis.z * s;
@@ -273,13 +336,16 @@ void HK_CALL hkKeyFrameUtility::applyHardKeyFrame(const hkVector4& nextPosition,
     }
 
     body->activate();
-    motion->setRotation(&angular);
+    body->m_motion->slot5c(&angular);
 }
 
 // ---------------------------------------------------------------- Spring action
+struct hkStepInfo;
 struct hkBinaryActionBase {
     virtual void vf();
-    char pad[0x1c];
+    char pad04[0x14];            // +0x04..+0x17
+    hkRigidBody* m_entityA;      // +0x18
+    hkRigidBody* m_entityB;      // +0x1c
     hkBinaryActionBase(hkEntity* a, hkEntity* b, unsigned int ud);
 };
 
@@ -294,7 +360,7 @@ class hkSpringAction : public hkBinaryActionBase { public:
     char      onExtension;       // +0x5d
 
     hkSpringAction(hkEntity* a, hkEntity* b, unsigned int userData);
-    void applyAction(const void* stepInfo);
+    void applyAction(const hkStepInfo& stepInfo);
     hkSpringAction* clone(const void* newEntities, const void* newPhantoms) const;
 };
 
@@ -322,17 +388,67 @@ hkSpringAction::hkSpringAction(hkEntity* a, hkEntity* b, unsigned int userData)
 }
 
 // @ 0x01128640 -- behaviourally-faithful reconstruction (not byte-exact).
-void hkSpringAction::applyAction(const void* stepInfoRaw)
+void hkSpringAction::applyAction(const hkStepInfo& stepInfo)
 {
-    const hkStepInfo& stepInfo = *(const hkStepInfo*)stepInfoRaw;
-    hkRigidBody* ea = *(hkRigidBody**)((char*)this + 0x18);
-    hkRigidBody* eb = *(hkRigidBody**)((char*)this + 0x1c);
+    hkRigidBody* ea = m_entityA;
+    hkRigidBody* eb = m_entityB;
 
-    hkVector4 worldA, worldB;
-    ea->m_motion->setPosition(&m_positionAinA);
-    eb->m_motion->setPosition(&m_positionBinB);
-    (void)worldA; (void)worldB;
-    (void)stepInfo;
+    hkVector4 pointA, pointB;
+    pointA.setTransformedPos(ea->m_motion->m_transform, m_positionAinA);
+    pointB.setTransformedPos(eb->m_motion->m_transform, m_positionBinB);
+
+    // X87-PRECISION: the four delta components stay in registers while the
+    // squared length is accumulated.
+    hkX87Real dx = (hkX87Real)pointB.x - pointA.x;
+    hkX87Real dy = (hkX87Real)pointB.y - pointA.y;
+    hkX87Real dz = (hkX87Real)pointB.z - pointA.z;
+    hkX87Real dw = (hkX87Real)pointB.w - pointA.w;
+    hkX87Real len2 = (dz * dz + dy * dy) + dx * dx;
+    float length = (float)sqrt((double)len2);
+    if (!(length >= 0.001f))
+        return;
+
+    // X87-PRECISION: the reciprocal length is kept on the x87 stack; each
+    // normalized component is rounded once, at its store.
+    hkX87Real invLen = (hkX87Real)1.0f / (hkX87Real)length;
+    hkVector4 dir;
+    dir.x = (float)(dx * invLen);
+    dir.y = (float)(dy * invLen);
+    dir.z = (float)(dz * invLen);
+    dir.w = (float)(dw * invLen);
+
+    if (!onCompression && !(length >= m_restLength))
+        return;
+    if (!onExtension && !(length <= m_restLength))
+        return;
+
+    hkVector4 velA, velB;
+    ea->getPointVelocity(pointA, velA);
+    eb->getPointVelocity(pointB, velB);
+
+    hkX87Real rx = (hkX87Real)velB.x - velA.x;
+    hkX87Real ry = (hkX87Real)velB.y - velA.y;
+    hkX87Real rz = (hkX87Real)velB.z - velA.z;
+
+    float force = (float)(((rz * dir.z + ry * dir.y) + rx * dir.x) * m_damping
+                          + ((hkX87Real)length - m_restLength) * m_strength);
+
+    hkX87Real negForce = -(hkX87Real)force;
+    m_lastForce.x = (float)((hkX87Real)dir.x * negForce);
+    m_lastForce.y = (float)((hkX87Real)dir.y * negForce);
+    m_lastForce.z = (float)((hkX87Real)dir.z * negForce);
+    m_lastForce.w = (float)((hkX87Real)dir.w * negForce);
+
+    eb->activate();
+    eb->m_motion->applyForce(stepInfo.m_deltaTime, m_lastForce, pointB);
+
+    m_lastForce.x = (float)((hkX87Real)dir.x * force);
+    m_lastForce.y = (float)((hkX87Real)dir.y * force);
+    m_lastForce.z = (float)((hkX87Real)dir.z * force);
+    m_lastForce.w = (float)((hkX87Real)dir.w * force);
+
+    ea->activate();
+    ea->m_motion->applyForce(stepInfo.m_deltaTime, m_lastForce, pointA);
 }
 
 // @ 0x01128850 -- behaviourally-faithful reconstruction (not byte-exact).

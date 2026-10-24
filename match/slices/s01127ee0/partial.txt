@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-01128640  464  hkpSpringAction::applyAction: spring force/impulse path approximated, stepInfo not consumed
+01128640  464  hkpSpringAction::applyAction: spring force/impulse path approximated, stepInfo not consumed; [equiv: PASS (280 valid, 98.9% coverage)]
