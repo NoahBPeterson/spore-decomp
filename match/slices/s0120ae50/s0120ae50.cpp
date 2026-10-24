@@ -13,7 +13,6 @@ __declspec(dllimport) int __cdecl _vsnprintf(char*, unsigned int, const char*, v
 __declspec(dllimport) void __stdcall OutputDebugStringA(const char*);
 }
 
-void FUN_01086030(void*);          // hkWorld::removeActionImmediately
 void* hkReferencedObject_addReference(void*);   // 0x01082590
 void  hkWorldObject_removeReference(void*);     // 0x0109ae60
 void FUN_01081c30(float*, int, int);   // hkMatrix6 4x4 block multiply-accumulate
@@ -53,12 +52,18 @@ class hkReferencedObject
     hkReferencedObject() { m_referenceCount = 1; }
 };
 
+class hkWorld;
+
 class hkAction : public hkReferencedObject { public:
-    int m_pad8;                // +8
+    hkWorld*  m_world;         // +8
     int m_padc;                // +0xc
     unsigned int m_userData;   // +0x10
     int m_pad14;               // +0x14
     virtual void getEntities(hkArray<hkEntity*>&) {}
+};
+
+class hkWorld { public:
+    void removeActionImmediately(hkAction* action);   // 0x01086030
 };
 
 class hkUnaryAction : public hkAction { public:
@@ -66,7 +71,7 @@ class hkUnaryAction : public hkAction { public:
     hkUnaryAction(hkEntity* e, unsigned int u);
     ~hkUnaryAction();
     void getEntities(hkArray<hkEntity*>& out);
-    void removeFromWorld();
+    void removeFromWorld(hkAction* action);
 };
 
 class hkBinaryAction : public hkAction { public:
@@ -80,7 +85,7 @@ class hkBinaryAction : public hkAction { public:
 // @ 0x0120b890
 hkUnaryAction::hkUnaryAction(hkEntity* e, unsigned int u)
 {
-    m_pad8 = 0;
+    m_world = 0;
     m_padc = 0;
     m_userData = u;
     m_pad14 = 0;
@@ -90,10 +95,10 @@ hkUnaryAction::hkUnaryAction(hkEntity* e, unsigned int u)
 }
 
 // @ 0x0120b8d0
-void hkUnaryAction::removeFromWorld()
+void hkUnaryAction::removeFromWorld(hkAction* action)
 {
-    if (m_pad8 != 0)
-        FUN_01086030(this);
+    if (m_world != 0)
+        m_world->removeActionImmediately(this);
 }
 
 // @ 0x0120b8f0
@@ -115,7 +120,7 @@ void hkUnaryAction::getEntities(hkArray<hkEntity*>& out)
 // @ 0x0120b960
 hkBinaryAction::hkBinaryAction(hkEntity* a, hkEntity* b, unsigned int u)
 {
-    m_pad8 = 0;
+    m_world = 0;
     m_padc = 0;
     m_userData = u;
     m_pad14 = 0;
