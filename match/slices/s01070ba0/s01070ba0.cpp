@@ -6,6 +6,12 @@
 // Six-argument operator new (0x00f473a0, cdecl): size, tag, four zero flags; caller pops 0x18.
 void* operator new(unsigned int size, const char* tag, int a, int b, int c, int d);
 
+namespace EA {
+namespace Messaging {
+void RemoveHandler(uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e);  // 0x00571db0
+}
+}  // namespace EA
+
 namespace SP {
 
 inline float ConstOne() { return *reinterpret_cast<const float*>(0x01485720); }  // 1.0f
@@ -57,14 +63,212 @@ class IVSlots {
 };
 IVSlots* GetVSlotsSingleton();                                // 0x0067de40 (cdecl, no args)
 
+// --- Interfaces touched by cSPUISpace::Shutdown (0x01071570) -------------------------------
+// A window/global-UI object; only the vtable slots this path calls are interesting.
+class IWindow {
+ public:
+  virtual void V000();          // +0x000
+  virtual void V004();          // +0x004  Release()
+  virtual void V008();          // +0x008
+  virtual void V00c();          // +0x00c
+  virtual void V010();  virtual void V014();  virtual void V018();  virtual void V01c();
+  virtual void V020();  virtual void V024();  virtual int V028();
+  virtual void V02c();  virtual void V030();  virtual void V034();  virtual void V038();
+  virtual void V03c();  virtual void V040();  virtual void V044();  virtual void V048();
+  virtual void V04c();  virtual void V050();  virtual void V054();  virtual void V058();
+  virtual void V05c();  virtual void V060();  virtual void V064();  virtual void V068();
+  virtual void V06c();  virtual void V070();  virtual void V074();  virtual void V078();
+  virtual void V07c();  virtual void V080();  virtual void V084();  virtual void V088();
+  virtual void V08c();  virtual void V090();  virtual void V094();  virtual void V098();
+  virtual void V09c();  virtual void V0a0();  virtual void V0a4();  virtual void V0a8();
+  virtual void V0ac();  virtual void V0b0();  virtual void V0b4();  virtual void V0b8();
+  virtual void V0bc();  virtual void V0c0();  virtual void V0c4();  virtual void V0c8();
+  virtual void V0cc();  virtual void V0d0();  virtual void V0d4();  virtual void V0d8();
+  virtual void V0dc(void* p);
+  virtual void V0e0();  virtual void V0e4();  virtual void V0e8();  virtual void V0ec();
+  virtual void V0f0();  virtual void V0f4();  virtual void V0f8();  virtual void V0fc();
+  virtual void V100();  virtual void V104();
+  virtual void V108(void* p);   // +0x108
+  void F_fe7e10();              // 0x00fe7e10
+};
+
+class ILayout : public IWindow {
+ public:
+  IWindow* FindWindowByID(uint32_t id, int flag);  // 0x008105b0
+  void Shutdown(uint32_t flag);                    // 0x00811ad0
+};
+
+class IGlobalUI : public IWindow {
+ public:
+  IWindow* FindWindowByID(uint32_t id);            // 0x00e012b0
+};
+
+// Only the vtable slot at +0x8 takes an argument here.
+class IObj8Arg {
+ public:
+  virtual void V000();
+  virtual void V004();
+  virtual void V008(int flag);
+};
+
+// Only the vtable slot at +0xc takes an argument here.
+class IObjCArg {
+ public:
+  virtual void V000();
+  virtual void V004();
+  virtual void V008();
+  virtual void V00c(int flag);
+};
+
+// Cheat manager: slot +0x1c takes one argument.
+class ICheatMgr {
+ public:
+  virtual void V000();  virtual void V004();  virtual void V008();  virtual void V00c();
+  virtual void V010();  virtual void V014();  virtual void V018();
+  virtual void V01c(uint32_t arg);
+};
+
+class IObj31c : public IWindow {
+ public:
+  void* mpField4;   // +0x4
+};
+
+// Refcounted helper: Release() is inlined as --mRef with a virtual slot-0 callback.
+class IRefObj {
+ public:
+  virtual void OnRelease(int flag);  // +0x0
+  volatile int32_t mRef;             // +0x4
+  void F_e28a80();                   // 0x00e28a80
+  int Release() {
+    const int32_t ref = --mRef;
+    if (ref == 0) {
+      mRef = 1;
+      OnRelease(1);
+    }
+    return ref;
+  }
+};
+
+class CTooltip {
+ public:
+  virtual void OnRelease(int flag);  // +0x0
+  volatile int32_t mRef;             // +0x4
+  void Shutdown();                   // 0x00e36500
+  int Release() {
+    const int32_t ref = --mRef;
+    if (ref == 0) {
+      mRef = 1;
+      OnRelease(1);
+    }
+    return ref;
+  }
+};
+
+class Deque5ec {                     // eastl::deque<SP::cStarRecord*>
+ public:
+  void clear();                      // 0x00996460
+ private:
+  char mBytes[0x2c];
+};
+
+class Blk28Vec {                     // 0x28-byte element vector at +0x530
+ public:
+  uint32_t* mpBegin;                 // +0x0
+  uint32_t* mpEnd;                   // +0x4
+  uint32_t* mpCapacity;              // +0x8
+  void erase(uint32_t* first, uint32_t* last);  // 0x0106eb40
+};
+
+// Inline sub-object at +0x2a0.
+struct Space2a0 {
+  void* mp0;                         // +0x2a0
+  void* mp4;                         // +0x2a4
+  uint32_t m8;                       // +0x2a8
+  uint32_t mc;                       // +0x2ac
+  float mf10;                        // +0x2b0
+  float mf14;                        // +0x2b4
+  char mRest[0x40];                  // +0x2b8 .. +0x2f7
+  void F(void* a, uint32_t b);       // 0x01068400
+};
+
+class IGlobal0810 {
+ public:
+  void SetParent(void* p);           // 0x00dd2800
+};
+
+IGlobal0810* GetGlobal0810();        // 0x00dd1ca0
+
+class CurMgr {
+ public:
+  bool FindLocal(uint32_t id);       // 0x00801bb0
+};
+CurMgr* GetCurMgr();                 // 0x0067cab0
+
+bool IsWorldLayoutFlagSet(int flag); // 0x00685520
+IWindow* FUN_00b3d230();             // 0x00b3d230
+ICheatMgr* CheatManager();           // 0x0067de20
+
+extern uint32_t g15b7330;            // 0x015b7330
+extern IWindow* g16e2234;            // 0x016e2234
+
 class cSPUISpace {
  public:
   cSPUISpace();                                               // 0x01070ba0
+  void Shutdown();                                            // 0x01071570
+  void FUN_0106f540();                                        // 0x0106f540
+  void FUN_0106ef30();                                        // 0x0106ef30
+  void FUN_01068230();                                        // 0x01068230
+  void FUN_010673f0(int flag);                                // 0x010673f0
+  void FUN_01067510(int flag);                                // 0x01067510
 
  private:
   template <class T>
   T& At(uint32_t off) { return *reinterpret_cast<T*>(reinterpret_cast<char*>(this) + off); }
   cString* Str(uint32_t off) { return reinterpret_cast<cString*>(reinterpret_cast<char*>(this) + off); }
+
+ public:
+  char mPad000[0x10];               // +0x000 (three vtable pointers + id)
+  IObj8Arg* mp10;                   // +0x010
+  char mPad014[0x210];              // +0x014 .. +0x223
+  IGlobalUI* mpGlobalUI;            // +0x224
+  IRefObj* mpRef228;                // +0x228
+  ILayout* mpLayout22c;             // +0x22c
+  ILayout* mpLayout230;             // +0x230
+  ILayout* mpLayout234;             // +0x234
+  char mPad238[0x20];               // +0x238 .. +0x257
+  ILayout* mpLayout258;             // +0x258
+  char mPad25c[0x44];               // +0x25c .. +0x29f
+  Space2a0 m2a0;                    // +0x2a0
+  int32_t m2f8;                     // +0x2f8
+  IObjCArg* mp2fc;                  // +0x2fc
+  IObjCArg* mp300;                  // +0x300
+  IObjCArg* mp304;                  // +0x304
+  char mPad308[0x14];               // +0x308 .. +0x31b
+  IObj31c* mp31c;                   // +0x31c
+  char mPad320[0x210];              // +0x320 .. +0x52f
+  Blk28Vec mVec530;                 // +0x530
+  char mPad53c[0x30];               // +0x53c .. +0x56b
+  uint32_t m56c;                    // +0x56c
+  uint32_t m570;                    // +0x570
+  uint32_t m574;                    // +0x574
+  uint32_t m578;                    // +0x578
+  uint32_t m57c;                    // +0x57c
+  IWindow* mp580;                   // +0x580
+  IWindow* mp584;                   // +0x584
+  IWindow* mp588;                   // +0x588
+  char mPad58c[0xc];                // +0x58c .. +0x597
+  IWindow* mp598;                   // +0x598
+  IWindow* mp59c;                   // +0x59c
+  IWindow* mp5a0;                   // +0x5a0
+  IWindow* mp5a4;                   // +0x5a4
+  CTooltip* mp5a8;                  // +0x5a8
+  char mPad5ac[0x18];               // +0x5ac .. +0x5c3
+  IWindow* mp5c4;                   // +0x5c4
+  char mPad5c8[0x24];               // +0x5c8 .. +0x5eb
+  Deque5ec mDeque5ec;               // +0x5ec
+  char mPad618[0x8];                // +0x618, +0x61c
+  char mPad620[0x74];               // +0x620 .. +0x693
+  IWindow* mp694;                   // +0x694
 };
 
 // @ 0x01070ba0
@@ -294,6 +498,248 @@ cSPUISpace::cSPUISpace()
   Str(0x210)->Load(0xc0152a6d, 0x615ffa8, 0);
   Str(0x4dc)->Load(0x2db6dad3, 0x678eecf, 0);
   Str(0x4f0)->Load(0x2db6dad3, 0x678eed0, 0);
+}
+
+// @ 0x01071570
+void cSPUISpace::Shutdown() {
+  GetCurMgr()->FindLocal(0x1002);
+
+  m2a0.F(m2a0.mp4, m2a0.m8);
+  m2a0.mc = 0;
+
+  if (IsWorldLayoutFlagSet(2)) {
+    if (mp694) {
+      if (mpLayout258) {
+        IWindow* pWnd = mpLayout258->FindWindowByID(0x755f180, 1);
+        if (pWnd->V028() & 1) mp694->F_fe7e10();
+      }
+      if (mp694) {
+        IWindow* p = mp694;
+        if (p) {
+          mp694 = 0;
+          p->V004();
+        }
+      }
+    }
+    ILayout* pLayout = mpLayout258;
+    if (pLayout) {
+      pLayout->Shutdown(1);
+      ILayout* p = mpLayout258;
+      if (p) {
+        mpLayout258 = 0;
+        p->V008();
+      }
+    }
+  }
+
+  FUN_0106f540();
+  mDeque5ec.clear();
+  IGlobal0810* pGlobal = GetGlobal0810();
+  if (pGlobal) pGlobal->SetParent(0);
+  mVec530.erase(mVec530.mpBegin, mVec530.mpEnd);
+  FUN_0106ef30();
+  FUN_01068230();
+
+  {
+    CTooltip* p = mp5a8;
+    if (p) {
+      p->Shutdown();
+      CTooltip* q = mp5a8;
+      if (q) {
+        mp5a8 = 0;
+        q->Release();
+      }
+    }
+  }
+  {
+    IWindow* p = mp59c;
+    if (p) {
+      mp59c = 0;
+      p->V004();
+    }
+  }
+  {
+    IWindow* p = mp598;
+    if (p) {
+      mp598 = 0;
+      p->V004();
+    }
+  }
+  {
+    IWindow* p = mp5a0;
+    if (p) {
+      mp5a0 = 0;
+      p->V004();
+    }
+  }
+
+  mpRef228->F_e28a80();
+  {
+    IRefObj* p = mpRef228;
+    if (p) {
+      mpRef228 = 0;
+      p->Release();
+    }
+  }
+
+  {
+    IWindow* p = mp580;
+    if (p) {
+      mp580 = 0;
+      p->V004();
+    }
+  }
+
+  mp5a4->V024();
+  {
+    IWindow* p = mp5a4;
+    if (p) {
+      mp5a4 = 0;
+      p->V004();
+    }
+  }
+
+  m2f8 = -1;
+  if (mp10) {
+    mp10->V008(1);
+    mp10 = 0;
+  }
+
+  IWindow* pWindow = mpGlobalUI->FindWindowByID(0xffffffff);
+  if (pWindow) {
+    pWindow->V000();
+    pWindow->V108(this);
+  }
+
+  FUN_00b3d230()->V044();
+
+  if (g16e2234) {
+    g16e2234->V008();
+    g16e2234 = 0;
+  }
+
+  {
+    ILayout* p = mpLayout22c;
+    if (p) {
+      p->Shutdown(1);
+      ILayout* q = mpLayout22c;
+      if (q) {
+        mpLayout22c = 0;
+        q->V008();
+      }
+    }
+  }
+  {
+    ILayout* p = mpLayout230;
+    if (p) {
+      p->Shutdown(1);
+      ILayout* q = mpLayout230;
+      if (q) {
+        mpLayout230 = 0;
+        q->V008();
+      }
+    }
+  }
+  {
+    ILayout* p = mpLayout234;
+    if (p) {
+      p->Shutdown(1);
+      ILayout* q = mpLayout234;
+      if (q) {
+        mpLayout234 = 0;
+        q->V008();
+      }
+    }
+  }
+
+  if (mp31c) {
+    IWindow* pWnd = mpGlobalUI->FindWindowByID(0x190722e);
+    if (pWnd) pWnd->V0dc(mp31c ? &mp31c->mpField4 : 0);
+    mp31c->V01c();
+    IObj31c* p = mp31c;
+    if (p) {
+      mp31c = 0;
+      p->V004();
+    }
+  }
+
+  {
+    IObjCArg* p = mp2fc;
+    if (p) {
+      p->V00c(1);
+      IObjCArg* q = mp2fc;
+      if (q) {
+        mp2fc = 0;
+        q->V004();
+      }
+    }
+  }
+  {
+    IObjCArg* p = mp300;
+    if (p) {
+      p->V00c(1);
+      IObjCArg* q = mp300;
+      if (q) {
+        mp300 = 0;
+        q->V004();
+      }
+    }
+  }
+  {
+    IObjCArg* p = mp304;
+    if (p) {
+      p->V00c(1);
+      IObjCArg* q = mp304;
+      if (q) {
+        mp304 = 0;
+        q->V004();
+      }
+    }
+  }
+
+  if (mpGlobalUI) {
+    mpGlobalUI->V00c();
+    mpGlobalUI = 0;
+  }
+
+  if (m56c) {
+    EA::Messaging::RemoveHandler(m56c, m570, m574, m578, m57c);
+    m56c = 0;
+  }
+
+  CheatManager()->V01c(g15b7330);
+
+  {
+    IWindow* p = mp5c4;
+    if (p) {
+      p->V088();
+      IWindow* q = mp5c4;
+      if (q) {
+        mp5c4 = 0;
+        q->V004();
+      }
+    }
+  }
+
+  FUN_010673f0(0);
+  FUN_01067510(0);
+
+  {
+    IWindow* p = mp588;
+    if (p) {
+      mp588 = 0;
+      p->V004();
+    }
+  }
+  {
+    IWindow* p = mp584;
+    if (p) {
+      mp584 = 0;
+      p->V0c0();
+    }
+  }
+
+  if (pWindow) pWindow->V004();
 }
 
 }  // namespace SP
