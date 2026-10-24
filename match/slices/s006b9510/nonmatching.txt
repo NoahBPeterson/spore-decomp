@@ -1,1 +1,3 @@
-006b9510 2092 complete array transform (flag-bit matrix/scale/translate, 4x-unrolled by cl); FP schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+# va  diff-bytes  reason
+006b9510  2030  complete: in-place array transform (optional 3x3 rotation * uniform scale, plus translation), cl 4x-unrolled with a remainder loop; FP register allotment/schedule differs (2243 vs 2210 bytes)
+006b9dc0  1192  complete: the same kernel without the translation step (rotation-if-flagged * uniform scale, plus the scale-only path); FP register allotment and mulss operand selection differ (1347 vs 1314 bytes)

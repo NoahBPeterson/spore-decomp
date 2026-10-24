@@ -1,7 +1,9 @@
 // Slice s006b9510: array transform kernels.
 // 0x006b9510: apply a (optional 3x3 matrix) * scale + translation transform in place to `count`
 // 3-float points spaced `stride` bytes apart (manually 4x unrolled, remainder loop).
-// 0x006b9dc0 is still a skeleton (partial).
+// 0x006b9dc0: the same kernel without the translation step (rotation-if-flagged + uniform
+// scale, and the scale-only path).  Both kernels are complete; the FP schedule does not
+// reproduce byte-for-byte (see nonmatching.txt).
 #include "types.h"
 
 struct XformKernel
@@ -18,9 +20,12 @@ static inline void RotElem(const XformKernel* xf, float* p)
     float x = p[0];
     float y = p[1];
     float z = p[2];
-    p[0] = (xf->m[3] * y + xf->m[6] * z) + x * xf->m[0];
-    p[1] = (xf->m[1] * x + xf->m[4] * y) + xf->m[7] * z;
-    p[2] = (xf->m[2] * x + xf->m[5] * y) + xf->m[8] * z;
+    float rx = (xf->m[3] * y + xf->m[6] * z) + x * xf->m[0];
+    float ry = (xf->m[1] * x + xf->m[4] * y) + xf->m[7] * z;
+    float rz = (xf->m[2] * x + xf->m[5] * y) + xf->m[8] * z;
+    p[0] = rx;
+    p[1] = ry;
+    p[2] = rz;
 }
 
 static inline void FullElem(const XformKernel* xf, float* p)
@@ -39,7 +44,7 @@ static inline void FullElem(const XformKernel* xf, float* p)
     p[2] = t2 + s * z;
 }
 
-static inline uint8_t Bit(uint16_t f, int n) { uint8_t b = (uint8_t)f; b >>= n; return b; }
+static inline uint8_t Bit(uint16_t f, int n) { uint8_t b = (uint8_t)(f >> n); return b; }
 
 static inline float* Adv(float* p, int stride) { return (float*)((char*)p + stride); }
 
@@ -91,9 +96,38 @@ void __cdecl FUN_006b9510(const XformKernel* xf, int count, float* p, int stride
     }
 }
 
-// @ 0x006b9dc0
-int __cdecl FUN_006b9dc0(const void* xform, float* dst, const float* src, int count, int stride)
+static inline void RotScaleElem(const XformKernel* xf, float* p)
 {
-    (void)xform; (void)dst; (void)src; (void)count; (void)stride;
-    return 0;
+    if (xf->flags & 2)
+        RotElem(xf, p);
+    float s = xf->s;
+    float z = p[2];
+    p[0] = s * p[0];
+    p[1] = s * p[1];
+    p[2] = s * z;
+}
+
+// @ 0x006b9dc0
+void __cdecl FUN_006b9dc0(const XformKernel* xf, int count, float* p, int stride)
+{
+    if (Bit(xf->flags, 1) & 1)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            RotScaleElem(xf, p);
+            p = Adv(p, stride);
+        }
+        return;
+    }
+    float s = xf->s;
+    if (s != 1.0f)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            p[0] = p[0] * s;
+            p[1] = p[1] * s;
+            p[2] = s * p[2];
+            p = Adv(p, stride);
+        }
+    }
 }
