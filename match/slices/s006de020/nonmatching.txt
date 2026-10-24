@@ -11,7 +11,7 @@
 006de8f0 71  fill run of 0x10-byte refcounted elements; EH/frame differs; equiv PASS
 006de980 88  heap sift-down wrapper (unsigned); call/argument shape differs; equiv PASS
 006de9f0 86  heap sift-down wrapper (signed); call/argument shape differs; equiv PASS
-006dea60 159  heap sift-down wrapper for 0x34-byte elements; block copy schedule differs; equiv FAIL (memory/stack mismatch)
-006deb70 69  make-heap push for 0x34-byte element; block copy schedule differs
-006dec60 366  mesh position/uv scale by sqrt; x87/SSE schedule + unroll differ; equiv FAIL (esp after return differs)
+006dea60 247  heap sift-down wrapper for 0x34-byte elements; takes the 0x34-byte record by value and forwards it to the sift-up helper; equiv: PASS 333/600 valid, 100% cov
+006deb70 217  make-heap push for 0x34-byte element; saves the old element into a 0x34-byte record before copying the new element; equiv: PASS 537/600 valid, 100% cov
+006dec60 420  mesh position/uv scale by sqrt; thiscall (ECX=mesh, two stack args) with a named mVertexBase field, BakeSqrtSS root and float stores; equiv: WEAK 523 valid, 46.9% cov
 006dede0 280  insertion sort of 0x34-byte records; block copy schedule differs; equiv WEAK (20.9% cov)

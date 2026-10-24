@@ -561,7 +561,8 @@ void FUN_006de9f0(int param_1, int param_2, int param_3, int param_4, int param_
 
 // 0x006dea60: heap sift-down for 0x34-byte elements.
 // @ 0x006dea60
-void FUN_006dea60(int param_1, int param_2, int param_3, int param_4, ...)
+typedef void (__cdecl* SiftUpRecFn)(int, int, int, Rec13);
+void FUN_006dea60(int param_1, int param_2, int param_3, int param_4, Rec13 record)
 {
     int iVar1, iVar2;
     while (true)
@@ -585,28 +586,41 @@ void FUN_006dea60(int param_1, int param_2, int param_3, int param_4, ...)
             *pu5++ = *pu4++;
         param_4 = iVar2 + 1;
     }
-    FUN_006de580(param_1, param_2, param_4, 0, 0, 0, 0);
+    ((SiftUpRecFn)FUN_006de580)(param_1, param_2, param_4, record);
 }
 
 // 0x006deb70: make-heap on a newly pushed 0x34-byte element.
 void FUN_006deb70(uint32_t* param_1, int param_2, uint32_t param_3)   // @ 0x006deb70
 {
+    uint32_t* old = (uint32_t*)(param_2 - 0x34);
+    Rec13 record;
+    uint32_t* rd = (uint32_t*)&record;
+    for (int i = 0xd; i != 0; --i)
+        *rd++ = *old++;
+    old = (uint32_t*)(param_2 - 0x34);
     uint32_t* pu15 = param_1;
-    uint32_t* pu16 = (uint32_t*)(param_2 - 0x34);
+    uint32_t* pu16 = old;
     for (int i = 0xd; i != 0; --i)
         *pu16++ = *pu15++;
-    FUN_006dea60((int)param_1, 0, ((param_2 - (int)param_1) / 0x34) - 1, 0);
+    FUN_006dea60((int)param_1, 0, ((param_2 - (int)param_1) / 0x34) - 1, 0, record);
+    (void)param_3;
 }
 
 // ---------------------------------------------------------------------------
 // 0x006dec60: scale a mesh's position/uv data by sqrt(scale).
+struct MeshScaleData
+{
+    char pad00[0x18];
+    uint32_t mVertexBase;      // +0x18
+    void Scale(int* param_2, float param_3);   // 0x006dec60
+};
 // @ 0x006dec60
-void FUN_006dec60(int param_1, int* param_2, float param_3)
+void MeshScaleData::Scale(int* param_2, float param_3)
 {
     if ((char)param_2[0xc] == '\0')
     {
-        float f = (float)sqrt(param_3);
-        int iVar4 = *param_2 * 0x10 + *(int*)(param_1 + 0x18);
+        float f = BakeSqrtSS(param_3);
+        int iVar4 = *param_2 * 0x10 + mVertexBase;
         int iVar3 = param_2[3];
         if (iVar3 < param_2[4])
         {
@@ -647,9 +661,11 @@ void FUN_006dec60(int param_1, int* param_2, float param_3)
             pf[0] = *(float*)(param_2[5] + iVar3 * 8) * f;
             pf[1] = pf[1] * f;
         }
-        param_2[0xb] = (int)(f * (float)param_2[0xb]);
-        param_2[10] = (int)((float)param_2[10] * f);
-        param_2[1] = (int)(param_3 * (float)param_2[1]);
+        float f28 = *(float*)&param_2[10] * f;
+        float f2c = f * *(float*)&param_2[0xb];
+        *(float*)&param_2[0xb] = f2c;
+        *(float*)&param_2[10] = f28;
+        *(float*)&param_2[1] = param_3 * *(float*)&param_2[1];
     }
 }
 
