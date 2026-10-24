@@ -1,1 +1,7 @@
-00df3be0 SP::cGalaxyGameEntryUIStateMachine::HandleEvent  # PDB candidate (caller-scored); big event-ID switch ending in UpdateNavigationControls
+# slice s00df3be0 - galaxy game-entry UI state machine (VC9 /O2, SSE)
+# 00df3be0  bool/void HandleEvent(uint32_t id): big event-ID switch (non-matching, see nonmatching.txt)
+# 00df43d0  bool BeginNewGameFlow(uint32_t unused, GalaxyEvent* e): event dispatch on e->type
+# 00df46d0  void cGalaxyGameEntryUIHost::HandleUIEvent(uint32_t id, uint32_t arg): forwards UI events
+00df3be0 ?HandleEvent@cGalaxyGameEntryUIStateMachine@@QAEXI@Z  # void SP::cGalaxyGameEntryUIStateMachine::HandleEvent(uint32_t)
+00df43d0 ?BeginNewGameFlow@cGalaxyGameEntryUIStateMachine@@QAE_NIPAUGalaxyEvent@@@Z  # bool SP::cGalaxyGameEntryUIStateMachine::BeginNewGameFlow(uint32_t, GalaxyEvent*)
+00df46d0 ?HandleUIEvent@cGalaxyGameEntryUIHost@@QAEXII@Z  # void cGalaxyGameEntryUIHost::HandleUIEvent(uint32_t, uint32_t)

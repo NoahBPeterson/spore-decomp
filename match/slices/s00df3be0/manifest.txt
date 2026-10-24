@@ -1,0 +1,3 @@
+# byte-exact functions for slice s00df3be0 (galaxy game-entry UI state machine, VC9 /O2)
+slices/s00df3be0/s00df3be0.cpp  ?BeginNewGameFlow@cGalaxyGameEntryUIStateMachine@@QAE_NIPAUGalaxyEvent@@@Z  00df43d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00df3be0/s00df3be0.cpp  ?HandleUIEvent@cGalaxyGameEntryUIHost@@QAEXII@Z  00df46d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
