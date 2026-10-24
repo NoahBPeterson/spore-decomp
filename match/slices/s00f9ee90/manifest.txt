@@ -1,0 +1,4 @@
+slices/s00f9ee90/s00f9ee90.cpp  ?ResetTransformBlock@cTerrainSphere@@QAEPAXXZ  00f9f100  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f9ee90/s00f9ee90.cpp  ?ReleaseTransformBlock@cTerrainSphere@@QAEXXZ  00f9f1a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f9ee90/s00f9ee90.cpp  ?FUN_00f9f7b0@@YAXPAUElem16@@0I@Z  00f9f7b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f9ee90/s00f9ee90.cpp  ?RenderColorMap@cTerrainSphere@@QAEXPAXI@Z  00f9fe70  /O2 /MD /Gy /TP /arch:SSE /fp:fast

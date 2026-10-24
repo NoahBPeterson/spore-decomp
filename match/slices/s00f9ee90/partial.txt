@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Approximate / incomplete reconstructions (not behaviourally verified).  These three large
+# cTerrainSphere effect functions depend on callees and effect-id constants that could not
+# be fully resolved, so the reconstructed bodies are not guaranteed behaviour-preserving.
+#
+00f9ee90  233  cTerrainSphere effect-surface pass: incomplete approximation.  Distinct-VA stop test, the cDirectPropertyList Vec4 read, the effect-id 0x2e892928 RunEffect, the 0x1c-byte event-modifier allocate/init and the offline-world RunEffect(vtbl+0x18) at G_15b1174.  Manager/property call signatures and effect-id constants are inferred, not resolved.  equiv.py: UNSUPPORTED (0/400 valid).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f9ef70  305  cTerrainSphere::RefreshModelEffects: incomplete approximation.  Model-ref resolve through 0x6a0ae0, FUN_006f24a0 and the effect refresh block; the callee argument layout is inferred.  equiv.py: UNSUPPORTED (0/400 valid).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f9f9f0  868  SP::cTerrainSphere::UpdateEffectSurfaces: incomplete approximation.  Reconstructs the surface/effects update but omits several branches and callee details (ours 1063 vs 1147 bytes).  equiv.py: UNSUPPORTED.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

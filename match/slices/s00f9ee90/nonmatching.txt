@@ -1,1 +1,21 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00f9ee90 = SPTerrainSphere.obj: cTerrainSphere's transform-block Reset/Release,
+# the effect/texture update paths, the rect blits, the sort/copy helpers, SphereBlock::Init
+# and RenderColorMap.  4/13 byte-exact (00f9f100, 00f9f1a0, 00f9f7b0, 00f9fe70).  The six
+# rows below are complete C++ reconstructions that reproduce the original control flow and
+# field layout but miss byte-exactness on MSVC /O2 register allocation / instruction
+# scheduling; the three remaining (00f9ee90, 00f9ef70, 00f9f9f0) are approximate and live in
+# partial.txt.  Equivalence verdicts (equiv.py, default inputs) are noted per row: PASS =
+# behaviour matches; WEAK = too little coverage to confirm but no mismatch seen; FAIL = a
+# live-register/return difference only, body otherwise faithful; UNSUPPORTED = harness could
+# not drive the function.
+#
 00f9f200  324  complete; diff is register allocation (ebx/edx vs ebp/edi roles) and bool ok folding, frame size matches
+00f9f360  335  FUN_00f9f360() 32-bit rect blit: complete.  cSurfaceDecalManager Surface lock at level 2 (0x11ef750), the cvtsi2ss/floor of transform-scale*rect corners, the w*w*face source base, and the (destRow-destBase)+srcRow wrapped inner copy loop closing with the 0x11ef880 unlock.  Diff is the wrapped-offset inner loop shape and register allocation (ours 327 vs 351 bytes).  equiv.py: WEAK (388 valid, 13.6% coverage, no mismatch).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f9f4c0  311  FUN_00f9f4c0() 8-bit rect blit: complete; twin of 00f9f360 over byte-sized pixels with the same lock/floor/w*w*face setup and wrapped inner copy loop.  Diff is the wrapped-offset inner loop shape and register allocation (ours 323 vs 343 bytes).  equiv.py: WEAK (385 valid, 13.9% coverage, no mismatch).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f9f620  230  BigXform::CopyFrom(): complete.  cSPTransform operator= plus the 24-float block and the 5 trailing int fields.  Reproduces the unrolled fld/fstp float copy but MSVC keeps our 24-iteration counter in ebx (extra push ebx) instead of fully-unrolled constant offsets (ours 159 vs 261 bytes).  equiv.py: PASS (100% coverage).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f9f810  130  FUN_00f9f810() heap-pop sort driver: complete; identical algorithm (save last element, overwrite with first, sift-down through FUN_00f9af30, shrink the range).  Diff is MSVC recomputing the remaining count from a saved 0x10-first byte bias instead of our saved pointer, plus register allocation (ours 146 vs 152 bytes).  equiv.py: PASS (100% coverage).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f9f8f0  57  FUN_00f9f8f0() Rec5 copy loop: complete.  *out=dst, the guarded per-record 5-float fld/fstp copy, advance to srcEnd and store the final dst to *out.  Diff is only the eax live register (return value) and src held in edx vs our eax (ours 69 vs 75 bytes).  equiv.py: FAIL on the return register (eax) only; body faithful.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f9f950  56  SphereBlock::Init(): complete.  Flags/modcount zero, the four 1.0f scale stores, mRotation.Assign(0x16c9eb4), the eight 1.0f stores and the two-float/two-int zero tail.  Equal size (152 vs 152); diff is only the tail store order (original interleaves [0x60],[0x58],[0x5c],[0x64] and keeps xor eax late; ours groups the int stores).  equiv.py: PASS (100% coverage).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
