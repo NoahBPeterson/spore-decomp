@@ -31,24 +31,29 @@ struct TimeBudget {
 struct Transform { uint32_t pad[0x17]; void __thiscall Construct(); };   // 0x5C bytes with 4-byte header
 struct SceneObj { uint32_t pad0; uint32_t state; uint16_t flags; uint16_t refCount; uint32_t f0c[3]; uint32_t f18; uint32_t f1c[9]; int refs; };
 struct Engine {
-    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual void v0(); virtual void v1(); virtual void v2();          // +0x00
     virtual SceneObj* Lookup(uint32_t a, uint32_t b, int c);          // +0x0C
-    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-    virtual void v20(); virtual void v21(); virtual void v22();
-    virtual void Prepare(SceneObj* o);                                 // +0x58
-    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28();
-    virtual void v29(); virtual void v30(); virtual void v31(); virtual void v32();
-    virtual void v33(); virtual void v34(); virtual void v35();
-    virtual void SetA(SceneObj* o, int idx, float v, int z, int w);    // +0x70
-    virtual void SetB(SceneObj* o, int idx, float v, int z);           // +0x74
-    virtual void SetC(SceneObj* o, int idx, float v, int z);           // +0x78
-    virtual void v40();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();   // +0x10
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();   // +0x20
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();   // +0x30
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();   // +0x40
+    virtual void v20(); virtual void v21();                           // +0x50
+    virtual void Prepare(SceneObj* o);                                // +0x58
+    virtual void v23();                                               // +0x5C
+    virtual Engine* Module();                                         // +0x60
+    virtual void v25(); virtual void v26(); virtual void v27();       // +0x64
+    virtual void SetA(SceneObj* o, int idx, float v, int z, int w);   // +0x70
+    virtual void SetB(SceneObj* o, int idx, float v, int z);          // +0x74
+    virtual void SetC(SceneObj* o, int idx, float v, int z);          // +0x78
+    virtual void v31();                                               // +0x7C
     virtual char Query(SceneObj* o, int idx, float* lo, float* hi, int z); // +0x80
-    virtual void v42(); virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
-    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51(); virtual void v52(); virtual void v53();
-    virtual void v54(); virtual void v55(); virtual void v56(); virtual void v57();
+    virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36();   // +0x84
+    virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40();   // +0x94
+    virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44();   // +0xA4
+    virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48();   // +0xB4
+    virtual void v49(); virtual void v50(); virtual void v51(); virtual void v52();   // +0xC4
+    virtual void v53(); virtual void v54(); virtual void v55(); virtual void v56();   // +0xD4
+    virtual void v57();                                               // +0xE4
     virtual int Enumerate(SceneObj* o, Transform* out, int max);       // +0xE8
 };
 Engine* GetEngine();                                  // 0x00401010
@@ -59,7 +64,7 @@ extern uint32_t g_DefaultKey;                         // 0x015d126c
 struct LoadTask {
     uint32_t pad[9];
     Owner* owner;          // +0x24
-    uint32_t pad2[0x0a];
+    uint32_t pad2[0x25];
     SceneObj** objs;       // +0xBC
     SceneObj** objsEnd;    // +0xC0
     char Run(Finisher* fin);
@@ -67,13 +72,14 @@ struct LoadTask {
 // @ 0x00419000
 char LoadTask::Run(Finisher* fin)
 {
-    Engine* eng = GetEngine();
+    Engine* eng = GetEngine()->Module();
     ModelData* md = owner->data;
     int count = md->items.size();
     TimeBudget budget;
     budget.Init(4, 0);
     budget.Arm(1, 1);
-    for (int i = (int)(objsEnd - objs); i < count; ++i) {
+    SceneObj*** objsP = &objs;
+    for (int i = (int)(objsP[1] - objsP[0]); i < count; ++i) {
         int64_t now;
         QueryPerformanceCounter(&now);
         if (budget.deadline - now < 0)
