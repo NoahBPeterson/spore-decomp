@@ -1,0 +1,6 @@
+00c18b40 1202 complete best-effort translation; difftest FAIL (return-register high bits / ABI artefact); flags +/GS-
+00c190e0 1249 complete best-effort translation; difftest WEAK (4.0% coverage, no mismatch observed); flags +/GS-
+00c196a0 176 complete; register allocation differs (index/result regs); difftest WEAK (36.9% coverage, no mismatch); flags +/GS-
+00c197a0 146 complete; ebx/ebp swap (index vs ability bit) in the allocator; difftest WEAK (42.0% coverage, no mismatch); flags +/GS-
+00c19870 161 complete; stack slot/register allocation differs (frame size now equal); difftest WEAK (44.1% coverage, no mismatch); flags +/GS-
+00c19940 154 complete; `this` held in a different callee-saved register + unsigned loop compare; difftest WEAK (32.7% coverage, no mismatch); flags +/GS-
