@@ -416,7 +416,7 @@ using namespace EA::UTFWin;
 namespace SP {
 namespace Pollen {
 struct DomHookX : DomHook {
-  void GetNode(DomNode** ppNode);
+  DomNode** GetNode(DomNode** ppNode);
 };
 }
 }
@@ -678,7 +678,9 @@ extern const float kDelayLong;  // 0x15f627c
 extern const wchar_t gEmptyCaption[];   // L"" (0x13ec468)
 struct Vector3 { float x, y, z; Vector3() {} Vector3(float a, float b, float c) : x(a), y(b), z(c) {} };
 static inline Vector3 operator*(const Vector3& v, float s) { return Vector3(v.x * s, v.y * s, v.z * s); }
-struct WString { wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; };   // eastl::basic_string<wchar_t>
+struct WString { wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity;   // eastl::basic_string<wchar_t>
+    void assign(const wchar_t* b, const wchar_t* e);   // 0x00423650
+};
 struct LinkNode { LinkNode* mpNext; LinkNode* mpPrev; };
 struct WStringLocal {   // eastl::basic_string<wchar_t> local with an inline default ctor
     const wchar_t* mpBegin;
@@ -975,8 +977,6 @@ struct cPopupTimer {
     void Refresh();       // 0x623830
     void Create();        // 0x6239c0
 };
-void __fastcall FUN_00995ea0(void* self, void* pOut);   // base-class GetFormControlValue (ecx=this, edx=out)
-void __fastcall WString_Assign(WString* self, const wchar_t* b, const wchar_t* e);   // eastl::basic_string::assign (0x423650)
 struct IFontRef { virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3(); virtual void* GetFont(); };
 struct IBaseObj { virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual unsigned GetHandle(); };
 struct TabStopNode { TabStopNode* mpNext; TabStopNode* mpPrev; FormControl* mpValue; };
@@ -993,6 +993,7 @@ struct cXHTMLWin_s0062_3f90 {   // the WinXHTML sub-object at +0x20c of the real
     TabStopNode mTabStops;        // +0xa6dc list anchor (value unused)
     void CreateFormControl(FormControl* pCtl);                       // 0x00624080
     void GetFormControlValue(FormControl* pCtl, WString* pOut);      // 0x006248d0
+    void GetFormControlValueBase(FormControl* pCtl, WString* pOut);  // 0x00995ea0
 };
 void __fastcall LinkListBegin(LinkNode* anchor, LinkNode** pOut);   // FUN_00623260 (thiscall in orig; helper)
 // ---- items of slice s00623f90 end
@@ -1078,12 +1079,11 @@ bool cFloatPropWatch::Refresh(IPropertyListV* pProps)
 
 // @ 0x00623260
 namespace SP { namespace Pollen {
-void DomHookX::GetNode(DomNode** ppNode)
+DomNode** DomHookX::GetNode(DomNode** ppNode)
 {
-  if (this)
-    *ppNode = (DomNode*)((char*)this - 4);
-  else
-    *ppNode = 0;
+  DomNode* node = this ? (DomNode*)((char*)this - 4) : 0;
+  *ppNode = node;
+  return ppNode;
 }
 }}  // namespace SP::Pollen
 
@@ -1610,7 +1610,7 @@ void cXHTMLWin_s0062_3f90::GetFormControlValue(FormControl* pCtl, WString* pOut)
     IQuery* q = pCtl->mpControl;
     char* pSel;
     if (!q || !(pSel = (char*)q->Query(0x4c058d5))) {
-        FUN_00995ea0(this, pOut);
+        GetFormControlValueBase(pCtl, pOut);
         return;
     }
     int idx = 0;
@@ -1631,7 +1631,7 @@ void cXHTMLWin_s0062_3f90::GetFormControlValue(FormControl* pCtl, WString* pOut)
                 const wchar_t* e = v;
                 while (*e)
                     ++e;
-                WString_Assign(pOut, v, v + (e - v));
+                pOut->assign(v, v + (e - v));
                 return;
             }
         }

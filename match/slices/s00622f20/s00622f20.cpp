@@ -112,13 +112,12 @@ bool __stdcall IsSubmittableControl(DomElement* e) {
 // ---- intrusive-list hook helper ---------------------------------------------------------------
 // @ 0x00623260
 struct DomHookX : DomHook {
-  void GetNode(DomNode** ppNode);
+  DomNode** GetNode(DomNode** ppNode);
 };
-void DomHookX::GetNode(DomNode** ppNode) {
-  if (this)
-    *ppNode = (DomNode*)((char*)this - 4);
-  else
-    *ppNode = 0;
+DomNode** DomHookX::GetNode(DomNode** ppNode) {
+  DomNode* node = this ? (DomNode*)((char*)this - 4) : 0;
+  *ppNode = node;
+  return ppNode;
 }
 
 // ---- ref-counted object release ------------------------------------------------------------------

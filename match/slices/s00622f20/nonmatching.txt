@@ -1,6 +1,5 @@
 00622f40  4    HandleLinkMessage: complete; register choice for the inline wcslen loop (ecx/edx swapped)
 00623070  16   RefCounted release (ref-- ; delete via vslot 2): complete; sub vs add -1 and store order around the virtual delete call
-00623260  26   DomHook -> Node conversion helper: complete; original stores via the pre-loaded out pointer, zero via ecx
 00623370  13   cXHTMLWin::DestroyFormControl: complete; list clear is not CSE'd in the original (separate empty test and loop-entry test)
 006233f0  275  cXHTMLWin::FocusNextControl (tab order via the tabindex attribute): complete; block layout of the first scan loop
 00623570  96   FindSubmitChild: complete; original keeps a top-tested loop with two back-jumps (no loop inversion)
