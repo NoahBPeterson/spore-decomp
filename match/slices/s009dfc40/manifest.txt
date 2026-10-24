@@ -6,3 +6,4 @@ slices/s009dfc40/s009dfc40.cpp  ?clear@Vec1C@@QAEXXZ                  009e09c0  
 slices/s009dfc40/s009dfc40.cpp  ?resize@Vec0C@@QAEXIABUElem0C@@@Z     009e0a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009dfc40/s009dfc40.cpp  ?Copy40@@YAPAUElem40@@PAU1@00@Z       009e0cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009dfc40/s009dfc40.cpp  ?CopyBack40@@YAPAUElem40@@PAU1@00@Z   009e0d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009dfc40/s009dfc40.cpp  ??1AnimC@@QAE@XZ                      009dfd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
