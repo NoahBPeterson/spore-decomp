@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00d932e0  186  complex multi-call state function; register allocation and scheduling diverge
+00d933d0  22  SetSprinting bool arg emitted as push imm; original sets al then pushes eax
+00d934f0  89  vector loop pointer/index register allocation and shared epilogue diverge
+00d93560  93  vector loop pointer/index register allocation diverges (ebx/esi/edi/ebp assignment)
+00d935d0  13  esi/edi swapped between spatial pointer and first position pointer
+00d93670  219  large complex function; register allocation and scheduling diverge throughout
+00d93880  1135  large complex function; register allocation and scheduling diverge throughout
+00d93df0  330  slice size window spans an unclaimed adjacent function; 48-byte body cannot fill 377-byte window
+00d93f70  54  original keeps sub in esi and folds m220 to memory operands; local CSE uses a register

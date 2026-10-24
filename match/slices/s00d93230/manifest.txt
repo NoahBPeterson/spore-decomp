@@ -1,0 +1,3 @@
+slices/s00d93230/s00d93230.cpp  ?FUN_00d93230@@YAEPAUcObj@@PAX111PAI@Z  00d93230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d93230/s00d93230.cpp  ?FUN_00d93430@@YAEPAUcObj@@@Z  00d93430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d93230/s00d93230.cpp  ?FUN_00d937b0@@YAMPAUcObj@@@Z  00d937b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
