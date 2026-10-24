@@ -169,7 +169,7 @@ bool StreamBuffer::SetPosition(int distance, int type)
     if (type == 1)
         newPos = distance + mnPositionExternal;
     else if (type == 2) {
-        newPos = distance + GetPosition(2);
+        newPos = distance + GetSize();
     } else
         newPos = distance;
 

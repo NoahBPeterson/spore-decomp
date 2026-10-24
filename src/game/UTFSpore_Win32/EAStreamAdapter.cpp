@@ -58,7 +58,7 @@ public:
     virtual int         GetAvailable() const;        // +2c
     virtual int         Read(void* pData, size_t nSize);     // +30
     virtual bool        Flush();                     // +34
-    virtual int         Write(const void* pData, size_t nSize); // +38
+    virtual bool        Write(const void* pData, size_t nSize); // +38
 };
 }
 }
@@ -177,21 +177,20 @@ bool WriteUint16(IStream_s0093_a9d0* pStream, const uint16_t* pData, uint32 coun
         pStream->GetAccessFlags();
     if (pStream->GetState() != 0)
         return false;
-    if (endian == 1)
-        return pStream->Write(pData, count * 2) != 0;
-    bool ok = true;
-    if (count != 0) {
-        for (;;) {
+    bool ok;
+    if (endian == 1) {
+        ok = pStream->Write(pData, count * 2);
+    } else {
+        ok = true;
+        while (count != 0) {
             uint16_t v = *pData;
-            pData++;
             count--;
+            pData++;
             uint32 tmp = _byteswap_ushort(v);
             if (!pStream->Write(&tmp, 2)) {
                 ok = false;
                 break;
             }
-            if (count == 0)
-                return true;
         }
     }
     return ok;

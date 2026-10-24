@@ -10,6 +10,7 @@ typedef unsigned short uint16;
 typedef unsigned int size_type;
 
 extern "C" void* MemCpyThunk(void* dst, const void* src, size_t n);   // 0x011e0744 (memcpy thunk)
+extern "C" uint64_t ByteSwap64(uint32_t lo, uint32_t hi);              // 0x008de020
 
 namespace EA {
 namespace Text {
@@ -160,21 +161,20 @@ bool WriteUint16(IStream* pStream, const uint16_t* pData, uint32 count, int endi
         pStream->GetAccessFlags();
     if (pStream->GetState() != 0)
         return false;
-    if (endian == 1)
-        return pStream->Write(pData, count * 2) != 0;
-    bool ok = true;
-    if (count != 0) {
-        for (;;) {
+    bool ok;
+    if (endian == 1) {
+        ok = pStream->Write(pData, count * 2);
+    } else {
+        ok = true;
+        while (count != 0) {
             uint16_t v = *pData;
-            pData++;
             count--;
+            pData++;
             uint32 tmp = _byteswap_ushort(v);
             if (!pStream->Write(&tmp, 2)) {
                 ok = false;
                 break;
             }
-            if (count == 0)
-                return true;
         }
     }
     return ok;
@@ -214,21 +214,20 @@ bool WriteUint64(IStream* pStream, const uint64_t* pData, uint32 count, int endi
         pStream->GetAccessFlags();
     if (pStream->GetState() != 0)
         return false;
-    if (endian == 1)
-        return pStream->Write(pData, count * 8) != 0;
-    bool ok = true;
-    if (count != 0) {
-        for (;;) {
+    bool ok;
+    if (endian == 1) {
+        ok = pStream->Write(pData, count * 8);
+    } else {
+        ok = true;
+        while (count != 0) {
             uint64_t v = *pData;
-            pData++;
             count--;
-            uint64_t tmp = ((uint64_t)_byteswap_ulong((uint32)v) << 32) | _byteswap_ulong((uint32)(v >> 32));
+            uint64_t tmp = ByteSwap64((uint32)v, (uint32)(v >> 32));
+            pData++;
             if (!pStream->Write(&tmp, 8)) {
                 ok = false;
                 break;
             }
-            if (count == 0)
-                return true;
         }
     }
     return ok;
@@ -320,13 +319,16 @@ bool WriteCString(IStream* pStream, const char* pStr, int count, int endian)
         return false;
     if (count == -1) {
         count = 0;
-        while (pStr[count] != 0)
+        const char* pCurrent = pStr;
+        while (*pCurrent != 0) {
+            pCurrent++;
             count++;
+        }
     }
     uint32 len = count;
     bool ok = WriteUint32(pStream, &len, 1, endian);
     if (ok && count != 0)
-        ok = pStream->Write(pStr, count) != 0;
+        ok = pStream->Write(pStr, count);
     return ok;
 }
 
@@ -468,32 +470,38 @@ bool StreamBuffer::SetSize(size_type size)
 // @ 0x0093b0a0
 bool StreamBuffer::SetPosition(int distance, int type)
 {
-    if (mpStream == 0)
-        return false;
-    int newPos;
-    if (type == 1)
-        newPos = distance + mnPositionExternal;
-    else if (type == 2) {
-        newPos = distance + GetPosition(2);
-    } else
-        newPos = distance;
+    bool ok = false;
+    if (mpStream != 0) {
+        int base = distance;
+        int newPos;
+        if (type == 1)
+            newPos = base + mnPositionExternal;
+        else if (type == 2)
+            newPos = base + GetSize();
+        else
+            newPos = base;
 
-    if (mnReadBufferUsed == 0 || newPos < 0) {
-        if (newPos != (size_type)mnPositionExternal) {
-            FlushWriteBuffer();
-            if (!mpStream->SetPosition(newPos, 0)) {
-                size_type pos = mpStream->GetPosition(0);
-                mnPositionInternal = pos;
-                mnPositionExternal = pos;
-                return false;
+        if (mnReadBufferUsed == 0 || newPos < 0) {
+            if (newPos != (size_type)mnPositionExternal) {
+                FlushWriteBuffer();
+                if (mpStream->SetPosition(newPos, 0)) {
+                    mnPositionInternal = newPos;
+                    mnPositionExternal = newPos;
+                    ok = true;
+                } else {
+                    newPos = mpStream->GetPosition(0);
+                    mnPositionInternal = newPos;
+                    mnPositionExternal = newPos;
+                }
+            } else {
+                ok = true;
             }
-            mnPositionInternal = newPos;
+        } else {
             mnPositionExternal = newPos;
+            ok = true;
         }
-    } else {
-        mnPositionExternal = newPos;
     }
-    return true;
+    return ok;
 }
 
 // @ 0x0093b140
@@ -800,14 +808,13 @@ int StreamChild::Read(void* pData, size_t nSize)
     if (mnAccessFlags != 0) {
         if (!mpStreamParent->SetPosition(mnPositionParent + mnPosition, 0))
             return -1;
-        int avail = GetAvailable();
-        int take = (int)nSize;
-        if (avail < take)
-            take = avail;
+        size_type avail = (size_type)GetAvailable();
+        size_type take = nSize;
+        take = (avail < take) ? avail : take;
         int n = mpStreamParent->Read(pData, take);
-        if (n == take) {
+        if (n == (int)take) {
             mnPosition += take;
-            return take;
+            return (int)take;
         }
     }
     return -1;
@@ -893,14 +900,18 @@ int FixedMemoryStream::GetPosition(int type) const
 // @ 0x0093b950
 bool FixedMemoryStream::SetPosition(int distance, int type)
 {
-    if (type == 0) {
+    switch (type) {
+    case 0:
         mnPosition = distance;
-    } else if (type == 1) {
+        break;
+    case 1:
         mnPosition += distance;
-    } else if (type == 2) {
+        break;
+    case 2:
         mnPosition = distance + mnSize;
+        break;
     }
-    if ((int)mnPosition > (int)mnSize) {
+    if (mnPosition > mnSize) {
         mnPosition = mnSize;
         return false;
     }

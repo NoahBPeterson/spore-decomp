@@ -19,3 +19,7 @@ slices/s0093a9d0/s0093a9d0.cpp  ?Release@FixedMemoryStream@IO@EA@@UAEHXZ        
 slices/s0093a9d0/s0093a9d0.cpp  ?SetData@FixedMemoryStream@IO@EA@@QAE_NPBXI@Z        0093b8e0  /O2 /MD /Gy /TP
 slices/s0093a9d0/s0093a9d0.cpp  ?SetSize@FixedMemoryStream@IO@EA@@UAE_NI@Z           0093b900  /O2 /MD /Gy /TP
 slices/s0093a9d0/s0093a9d0.cpp  ?GetPosition@FixedMemoryStream@IO@EA@@UBEHH@Z        0093b920  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?WriteUint16@IO@EA@@YA_NPAVIStream@12@PBGIH@Z         0093a9d0  /O2 /MD /Gy /EHsc /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?WriteUint64@IO@EA@@YA_NPAVIStream@12@PB_KIH@Z         0093ab10  /O2 /MD /Gy /EHsc /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?WriteCString@IO@EA@@YA_NPAVIStream@12@PBDHH@Z        0093adb0  /O2 /MD /Gy /EHsc /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?SetPosition@FixedMemoryStream@IO@EA@@UAE_NHH@Z       0093b950  /O2 /MD /Gy /EHsc /TP
