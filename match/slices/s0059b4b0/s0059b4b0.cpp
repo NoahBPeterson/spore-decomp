@@ -225,7 +225,9 @@ struct cSPVector3 {
     __forceinline cSPVector3 Normalize() const
     {
         float ax = x, ay = y, az = z;
-        float inv = 1.0f / (float)sqrt(ax * ax + ay * ay + az * az);
+        // The original's Normalize groups the squares as z*z + (y*y + x*x);
+        // matching that order removes the 1-ulp difference at the clamped position.
+        float inv = 1.0f / (float)sqrt(az * az + (ay * ay + ax * ax));
         return cSPVector3(ax * inv, ay * inv, az * inv);
     }
     cSPVector3& operator*=(float s) { x *= s; y *= s; z *= s; return *this; }
@@ -345,6 +347,11 @@ class cSPEditorAnimationManager : public EA::RefCountTemplate<int> {
 public:
     cSPEditorAnimationManager();   // 0x0059dac0 (out of line)
     void Init();                   // 0x0059db40
+    // The original class's vtable is destructor / AddRef / Release (slots 0/4/8);
+    // making these virtual here makes AutoRefCount dispatch through that vtable
+    // (0x00804910 for AddRef, the original Release for the old object).
+    virtual int AddRef() { return EA::RefCountTemplate<int>::AddRef(); }
+    virtual int Release() { return EA::RefCountTemplate<int>::Release(); }
     char pad_8[0x20 - 0x8];
 };
 
@@ -461,7 +468,6 @@ void SP::cSPEditorAnimatedCreatureManager::Init(cIModelWorld* pModelWorld, bool 
 }
 
 // ===========================================================================
-// @ 0x0059c190
 struct Vector3M { float x, y, z; Vector3M() {} Vector3M(float a, float b, float c) : x(a), y(b), z(c) {} };
 struct Matrix33T {
     Vector3M xAxis, yAxis, zAxis;                 // 9 floats
@@ -470,6 +476,7 @@ struct Matrix33T {
 };
 struct Quaternion { float x, y, z, w; };
 
+// @ 0x0059c190
 Matrix33T& Matrix3FromQuaternion(Matrix33T& result, const Quaternion& q)
 {
     float x = q.x, y = q.y, z = q.z, w = q.w;
@@ -627,7 +634,7 @@ void SP::cSPEditorAnimatedCreatureData::Update(unsigned int milliseconds)
         FilterSettings settings;
         settings.SetRequiredGroup(ModelManager()->GetGroupFlag(0x26f3933, 0));
         cSPVector3 end(start.x, start.y, start.z - 1000.0f);
-        cSPVector3 hit;
+        cSPVector3 hit(0.0f, 0.0f, 0.0f);
         if (mModelWorld->FindFirstModelAlongLine(start, end, 0, &hit, 0, settings, 0, 0)) {
             if (mHeightDropWaitTime > 0.0f) {
                 mHeightDropWaitTime -= dt;

@@ -357,6 +357,9 @@ class cSPEditorAnimationManager_s0059_b4b0 : public EA::RefCountTemplate_s0059_b
 public:
     cSPEditorAnimationManager_s0059_b4b0();   // 0x0059dac0 (out of line)
     void Init();                   // 0x0059db40
+    // Original vtable order: destructor / AddRef / Release at slots 0/4/8.
+    virtual int AddRef() { return EA::RefCountTemplate_s0059_b4b0<int>::AddRef(); }
+    virtual int Release() { return EA::RefCountTemplate_s0059_b4b0<int>::Release(); }
     char pad_8[0x20 - 0x8];
 };
 }

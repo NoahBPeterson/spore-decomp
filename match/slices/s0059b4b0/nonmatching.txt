@@ -1,3 +1,3 @@
-0059c060  158  manager::Init: complete; callee-saved register assignment swapped (param in ebp vs original ebx) and AutoRefCount operator= scheduling
+0059c060  223  manager::Init: complete; manager AddRef/Release made virtual to match original vtable slots 0/4/8 (emits 00804910 AddRef + virtual old-object Release); remaining diff is register/scheduling only [equiv: PASS 253/253, 99.2% cov]
 0059c190  284  Matrix3FromQuaternion: complete; original fills the stack temp with a different float-op schedule / register allocation [equiv: PASS 1200/1200, 100% cov]
-0059b4b0  2395  cSPEditorAnimatedCreatureData::Update: complete (all 24 calls/vslots in original order); frame 0xb4 vs 0x84 and this in ebx vs esi, vector temps/int-copy shapes differ
+0059b4b0  2439  cSPEditorAnimatedCreatureData::Update: complete (all 24 calls/vslots in original order); Normalize grouping z*z+(y*y+x*x) and zero-init hit (fake FindFirstModelAlongLine output) fixed; frame 0xb4 vs 0x84 and this in ebx vs esi, vector temps/int-copy shapes differ [equiv: PASS 317/317, 74.2% cov]
