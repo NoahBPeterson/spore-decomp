@@ -9,6 +9,7 @@
 // Class/member names are Claude-coined from usage.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc, same module as s00ad4b60 / s00ad2ae0).
 #include "types.h"
+#include <intrin.h>
 
 struct Vector3 {
     float x, y, z;
@@ -258,4 +259,289 @@ bool UpdateMoveAction(cAction* pAction, bool bArrive)
     }
     data->mResult = pos1;
     return data->mbDontWait != 0;
+}
+
+// ---- editor/model helper functions in this slice -------------------------------------------------
+void* operator new(unsigned int size, const char* name, int flags, unsigned int debugFlags,
+                  const char* file, int line);                         // 0x00F473A0
+
+struct EditorAction {
+    V(00); V(04); V(08);
+    virtual void* Cast(uint32_t typeId);                               // +0x0c
+};
+
+struct EditorFrame {
+    void* volatile mpVtable0;  // +0x00
+    uint32_t mField04;         // +0x04
+    uint32_t mField08;         // +0x08
+    uint32_t mField0c;         // +0x0c
+    uint32_t mField10;         // +0x10
+    uint32_t mField14;         // +0x14
+    uint32_t mField18;         // +0x18
+};
+
+struct WorldManager {
+    void*    mpVtable0;        // +0x00
+};
+
+void* GetWorldManager();                                           // 0x0067DDB0
+void* __stdcall GonzagoModelWorld(EditorFrame* frame);             // 0x00B3D520
+
+// @ 0x00ad3b70
+int FUN_00ad3b70(EditorAction* action, bool enabled)
+{
+    if (action == 0)
+        return 1;
+    if (action->Cast(0x491fa87) == 0)
+        return 1;
+    if (!enabled)
+        return 0;
+
+    EditorFrame* frame = (EditorFrame*)operator new(0x1c, "Editor", 0, 0, 0, 0);
+    if (frame != 0) {
+        frame->mField04 = 0;
+        frame->mpVtable0 = (void*)0x145a69c;
+        ((void (__thiscall*)(void*))((void**)frame->mpVtable0)[1])(frame);
+    }
+    frame->mField08 = 0x200;
+    frame->mField14 = 0x490cec8;
+    frame->mField0c = 0x490e141;
+    frame->mField10 = 0x490e140;
+    frame->mField18 = 0;
+    WorldManager* world = (WorldManager*)GetWorldManager();
+    void* managerVtbl = world->mpVtable0;
+    void* gonzago = GonzagoModelWorld(frame);
+    ((void (__thiscall*)(void*, void*))((void**)managerVtbl)[0x28 / 4])(world, gonzago);
+    ((void (__thiscall*)(void*))((void**)frame->mpVtable0)[2])(frame);
+    return 0;
+}
+
+struct ContentValidationSummarizer {
+    void* volatile mpVtable0;  // +0x00
+    void* volatile mpVtable4;  // +0x04
+    uint32_t mField08;         // +0x08
+};
+
+struct BehaviorMessage {
+    void* volatile mpVtable0;  // +0x00
+    void* volatile mpVtable4;  // +0x04
+    void*    mpField08;        // +0x08
+    uint32_t mField0c;         // +0x0c
+    uint32_t mField10;         // +0x10
+    uint32_t mField14;         // +0x14
+    uint32_t mField18;         // +0x18
+    uint32_t mField1c;         // +0x1c
+    uint32_t mField20;         // +0x20
+    uint32_t mField24;         // +0x24
+    uint32_t mField28;         // +0x28
+    uint32_t mField2c;         // +0x2c
+    uint32_t mField30;         // +0x30
+    uint32_t mField34;         // +0x34
+    uint32_t mField38;         // +0x38
+    uint32_t mField3c;         // +0x3c
+};
+
+struct EditorRes {
+    uint32_t mPad00[2];        // +0x00
+    void*    mpField08;        // +0x08 (sub-object whose first virtual slot is called)
+    void*    mpField0c;        // +0x0c
+    void*    mpHandler;        // +0x10
+    EditorRes* Init();         // 0x00AD7C30
+};
+
+struct AppState {
+    void AddMessage(void* arg, void* message, int mode);              // 0x007E4190 (thiscall, ret 0xc)
+};
+
+struct BehaviorOwner {
+    uint32_t mPad00[3];        // +0x00
+    AppState* mpAppState;      // +0x0c
+    void FUN_00ad3c30(void* arg); // 0x00AD3C30
+};
+
+// @ 0x00ad3c30
+void BehaviorOwner::FUN_00ad3c30(void* arg)
+{
+    ContentValidationSummarizer* summarizer =
+        (ContentValidationSummarizer*)operator new(0xc, "Simulator", 0, 0, 0, 0);
+    if (summarizer != 0) {
+        summarizer->mpVtable4 = (void*)0x13ec458;
+        summarizer->mField08 = 0;
+        summarizer->mpVtable0 = (void*)0x145a6c0;
+        summarizer->mpVtable4 = (void*)0x149bad8;
+        ((void (__thiscall*)(void*))((void**)summarizer->mpVtable0)[0])(summarizer);
+    }
+
+    BehaviorMessage* message = (BehaviorMessage*)operator new(0x40, "Simulator", 0, 0, 0, 0);
+    if (message != 0) {
+        message->mField30 = 0;
+        message->mpVtable0 = (void*)0x13eb90c;
+        message->mpVtable4 = 0;
+        message->mpVtable0 = (void*)0x13eb844;
+        message->mField38 = 0;
+        ((void (__thiscall*)(void*))((void**)message->mpVtable0)[1])(message);
+    }
+    message->mField30 = 0x4470a41;
+
+    EditorRes* resource = (EditorRes*)operator new(0x14, "Simulator", 0, 0, 0, 0);
+    if (resource != 0) {
+        resource = resource->Init();
+        if (resource != 0) {
+            void* sub = &resource->mpField08;
+            void* subVtbl = *(void**)sub;
+            ((void (__thiscall*)(void*))((void**)subVtbl)[0])(sub);
+        }
+    }
+
+    void* sub = &resource->mpField08;
+    void* previous = resource->mpField0c;
+    if (summarizer != previous) {
+        if (summarizer != 0) {
+            void* sv = summarizer->mpVtable0;
+            ((void (__thiscall*)(void*))((void**)sv)[0])(summarizer);
+        }
+        resource->mpField0c = summarizer;
+        if (previous != 0) {
+            void* pv = *(void**)previous;
+            ((void (__thiscall*)(void*))((void**)pv)[1])(previous);
+        }
+    }
+    resource->mpHandler = (void*)&FUN_00ad3b70;
+
+    if ((message->mField38 & 1) != 0 && message->mpField08 != 0) {
+        void* old = message->mpField08;
+        void* ov = *(void**)old;
+        ((void (__thiscall*)(void*))((void**)ov)[1])(old);
+    }
+    message->mpField08 = sub;
+    if (sub != 0) {
+        void* sv = *(void**)sub;
+        ((void (__thiscall*)(void*))((void**)sv)[0])(sub);
+    }
+    message->mField38 |= 1;
+
+    mpAppState->AddMessage(arg, message, 0);
+
+    {
+        void* sv = *(void**)sub;
+        ((void (__thiscall*)(void*))((void**)sv)[1])(sub);
+    }
+    {
+        void* mv = message->mpVtable0;
+        ((void (__thiscall*)(void*))((void**)mv)[2])(message);
+    }
+
+    if (summarizer != 0) {
+        void* sv = summarizer->mpVtable0;
+        ((void (__thiscall*)(void*))((void**)sv)[1])(summarizer);
+    }
+}
+
+namespace Simulator {
+
+struct ContentValidationBase {
+    void*    mpVtable0;        // +0x00
+    void*    mpVtable4;        // +0x04
+};
+
+class cVignetteContext {
+public:
+    void*    mpVtable0;        // +0x00
+    uint32_t mPad04;           // +0x04
+    void* volatile mpVtable8;  // +0x08
+    volatile uint32_t mField0c; // +0x0c
+    uint32_t mField10;         // +0x10
+    uint32_t mField14;         // +0x14
+    uint32_t mField18;         // +0x18
+    uint32_t mField1c;         // +0x1c
+    volatile float mField20;   // +0x20
+    float    mField24;         // +0x24
+    uint32_t mField28;         // +0x28
+    cVignetteContext();        // 0x00AD3E00
+};
+
+// @ 0x00ad3e00
+cVignetteContext::cVignetteContext()
+{
+    mpVtable8 = (void*)0x13ec458;
+    mField0c = 0;
+    mpVtable0 = (void*)0x145a6e0;
+    mpVtable8 = (void*)0x145a6d0;
+    mField20 = 1.0f;
+    mField24 = 2.0f;
+    mField18 = 1;
+    mField14 = 0x154df28;
+    mField1c = 0;
+    mField28 = 0;
+}
+
+}  // namespace Simulator
+
+struct ForwardBase {
+    void* FUN_00ad72c0(uint32_t typeId);                               // 0x00AD72C0
+};
+
+struct CastInterface : public ForwardBase {
+    void* FUN_00ad3e50(uint32_t typeId);                               // 0x00AD3E50
+};
+
+// @ 0x00ad3e50
+void* CastInterface::FUN_00ad3e50(uint32_t typeId)
+{
+    void* self = this;
+    if (typeId == 0xee3f516e)
+        return self;
+    if (typeId == 0x055116da)
+        return self;
+    return FUN_00ad72c0(typeId);
+}
+
+struct HashNode {
+    uint32_t mPad00;           // +0x00
+    void*    mpValue;          // +0x04
+    HashNode* mpNext;          // +0x08
+};
+
+struct NodeReleaser {
+    void ReleaseValue(void* value);                                   // 0x00BC5040
+};
+
+struct HashFreeStub {
+    uint32_t mField00;         // +0x00
+    void**   mpBuckets;        // +0x04
+    uint32_t mBucketCount;     // +0x08
+    uint32_t mElementCount;    // +0x0c
+    void DoFreeNodes(void** buckets, uint32_t count);                 // 0x005687D0
+};
+
+struct HashOwner {
+    uint32_t mPad00[4];        // +0x00
+    HashFreeStub mTable;       // +0x10
+    NodeReleaser* PrepareClear();                                     // 0x00B3D4E0
+    void FUN_00ad3e90();                                              // 0x00AD3E90
+};
+
+// @ 0x00ad3e90
+void HashOwner::FUN_00ad3e90()
+{
+    NodeReleaser* releaser = PrepareClear();
+    void** bucket = &mTable.mpBuckets[0];
+    HashNode* node = (HashNode*)*bucket;
+    if (node == 0) {
+        do {
+            bucket++;
+            node = (HashNode*)*bucket;
+        } while (node == 0);
+    }
+    HashNode* end = (HashNode*)mTable.mpBuckets[mTable.mBucketCount];
+    while (node != end) {
+        releaser->ReleaseValue(node->mpValue);
+        node = node->mpNext;
+        while (node == 0) {
+            bucket++;
+            node = (HashNode*)*bucket;
+        }
+    }
+    mTable.DoFreeNodes(mTable.mpBuckets, mTable.mBucketCount);
+    mTable.mElementCount = 0;
 }
