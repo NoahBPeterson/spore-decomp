@@ -142,15 +142,15 @@ void hkMatrix3::setCrossSkewSymmetric(const hkVector4& v)
 // Shared by invert / invertSymmetric: cofactors of the 3x3 part and the determinant.
 // The first element of the second cofactor row stays on the x87 stack unstored.
 #define HK_MATRIX3_COFACTORS \
-	float c0 = m_el[5] * m_el[10] - m_el[6] * m_el[9];     /* [esp] */ \
-	float c1 = m_el[8] * m_el[6] - m_el[4] * m_el[10];     /* [esp+4] */ \
-	float c2 = m_el[4] * m_el[9] - m_el[5] * m_el[8];      /* [esp+8] */ \
+	volatile float c0 = m_el[5] * m_el[10] - m_el[6] * m_el[9];     /* [esp] */ \
+	volatile float c1 = m_el[8] * m_el[6] - m_el[4] * m_el[10];     /* [esp+4] */ \
+	volatile float c2 = m_el[4] * m_el[9] - m_el[5] * m_el[8];      /* [esp+8] */ \
 	hkX87Real r10 = (hkX87Real)m_el[9] * m_el[2] - (hkX87Real)m_el[10] * m_el[1];   /* X87-PRECISION: not stored */ \
-	float r11 = m_el[10] * m_el[0] - m_el[8] * m_el[2];    /* [esp+0x24] */ \
-	float r12 = m_el[8] * m_el[1] - m_el[9] * m_el[0];     /* [esp+0x28] */ \
-	float r20 = m_el[6] * m_el[1] - m_el[5] * m_el[2];     /* [esp+0x10] */ \
-	float r21 = m_el[4] * m_el[2] - m_el[6] * m_el[0];     /* [esp+0x14] */ \
-	float r22 = m_el[5] * m_el[0] - m_el[4] * m_el[1];     /* [esp+0x18] */ \
+	volatile float r11 = m_el[10] * m_el[0] - m_el[8] * m_el[2];    /* [esp+0x24] */ \
+	volatile float r12 = m_el[8] * m_el[1] - m_el[9] * m_el[0];     /* [esp+0x28]; the original stores it as float */ \
+	volatile float r20 = m_el[6] * m_el[1] - m_el[5] * m_el[2];     /* [esp+0x10] */ \
+	volatile float r21 = m_el[4] * m_el[2] - m_el[6] * m_el[0];     /* [esp+0x14] */ \
+	volatile float r22 = m_el[5] * m_el[0] - m_el[4] * m_el[1];     /* [esp+0x18] */ \
 	hkX87Real det = ((hkX87Real)c1 * m_el[1] + (hkX87Real)c2 * m_el[2]) + (hkX87Real)c0 * m_el[0];   /* X87-PRECISION */
 
 #define HK_MATRIX3_WRITE_INVERSE \
@@ -199,22 +199,53 @@ void hkMatrix3::invertSymmetric()
 // @ 0x01081ad0
 void hkMatrix3::add(const hkMatrix3& m)
 {
-	for (int i = 0; i < 12; ++i)
-		m_el[i] = m.m_el[i] + m_el[i];
+	// Unrolled so the argument pointer stays in eax, as the original leaves it (void hides eax).
+	m_el[0] = m.m_el[0] + m_el[0];
+	m_el[1] = m.m_el[1] + m_el[1];
+	m_el[2] = m.m_el[2] + m_el[2];
+	m_el[3] = m.m_el[3] + m_el[3];
+	m_el[4] = m.m_el[4] + m_el[4];
+	m_el[5] = m.m_el[5] + m_el[5];
+	m_el[6] = m.m_el[6] + m_el[6];
+	m_el[7] = m.m_el[7] + m_el[7];
+	m_el[8] = m_el[8] + m.m_el[8];
+	m_el[9] = m.m_el[9] + m_el[9];
+	m_el[10] = m.m_el[10] + m_el[10];
+	m_el[11] = m.m_el[11] + m_el[11];
 }
 
 // @ 0x01081b40
 void hkMatrix3::sub(const hkMatrix3& m)
 {
-	for (int i = 0; i < 12; ++i)
-		m_el[i] = m_el[i] - m.m_el[i];
+	m_el[0] = m_el[0] - m.m_el[0];
+	m_el[1] = m_el[1] - m.m_el[1];
+	m_el[2] = m_el[2] - m.m_el[2];
+	m_el[3] = m_el[3] - m.m_el[3];
+	m_el[4] = m_el[4] - m.m_el[4];
+	m_el[5] = m_el[5] - m.m_el[5];
+	m_el[6] = m_el[6] - m.m_el[6];
+	m_el[7] = m_el[7] - m.m_el[7];
+	m_el[8] = m_el[8] - m.m_el[8];
+	m_el[9] = m_el[9] - m.m_el[9];
+	m_el[10] = m_el[10] - m.m_el[10];
+	m_el[11] = m_el[11] - m.m_el[11];
 }
 
 // @ 0x01081bb0
 void hkMatrix3::mul(hkReal scale)
 {
-	for (int i = 0; i < 12; ++i)
-		m_el[i] = scale * m_el[i];
+	m_el[0] = scale * m_el[0];
+	m_el[1] = scale * m_el[1];
+	m_el[2] = scale * m_el[2];
+	m_el[3] = scale * m_el[3];
+	m_el[4] = scale * m_el[4];
+	m_el[5] = scale * m_el[5];
+	m_el[6] = scale * m_el[6];
+	m_el[7] = scale * m_el[7];
+	m_el[8] = scale * m_el[8];
+	m_el[9] = scale * m_el[9];
+	m_el[10] = scale * m_el[10];
+	m_el[11] = scale * m_el[11];
 }
 
 // @ 0x01081c30
@@ -335,24 +366,28 @@ void hkQuaternion::normalize()
 // @ 0x01082210
 void hkQuaternion::setMul(const hkQuaternion& a, const hkQuaternion& b)
 {
-	// All inputs are read before any output is written, so this may alias a or b.
-	// X87-PRECISION: the x/y cross terms (X1, Y1) and the z sum stay on the x87 stack.
+	// X87-PRECISION: the x/y cross terms (X1, Y1) and the z sum stay on the x87 stack. The original is not
+	// alias-safe: it stores m_vec[2]/m_vec[3] before it re-reads a/b for w, which the store order below keeps.
 	hkX87Real X1 = (hkX87Real)b.m_vec[2] * a.m_vec[1] - (hkX87Real)a.m_vec[2] * b.m_vec[1];
 	hkX87Real Y1 = (hkX87Real)a.m_vec[2] * b.m_vec[0] - (hkX87Real)b.m_vec[2] * a.m_vec[0];
-	float Z1 = (float)((hkX87Real)b.m_vec[1] * a.m_vec[0] - (hkX87Real)b.m_vec[0] * a.m_vec[1]);   // [esp+0x18]
+	// These three are stored to 32-bit stack slots by the original, so force the same rounding.
+	volatile float Z1 = (float)((hkX87Real)b.m_vec[1] * a.m_vec[0] - (hkX87Real)b.m_vec[0] * a.m_vec[1]);   // [esp+0x18]
 	float aw = a.m_vec[3];
-	float tx = (float)((hkX87Real)aw * b.m_vec[0] + X1);       // [esp+0x10]
-	float ty = (float)((hkX87Real)aw * b.m_vec[1] + Y1);       // [esp+0x14]
-	hkX87Real tz = (hkX87Real)aw * b.m_vec[2] + Z1;            // kept on the x87 stack
+	volatile float tx = (float)((hkX87Real)aw * b.m_vec[0] + X1);       // [esp+0x10]
+	volatile float ty = (float)((hkX87Real)aw * b.m_vec[1] + Y1);       // [esp+0x14]
+	volatile hkX87Real tz = (hkX87Real)aw * b.m_vec[2] + Z1;   // 24-bit x87 result; a double store is exact
 	float bw = b.m_vec[3];
 	float rx = (float)((hkX87Real)bw * a.m_vec[0] + tx);
 	float ry = (float)((hkX87Real)bw * a.m_vec[1] + ty);
 	float rz = (float)((hkX87Real)bw * a.m_vec[2] + tz);
-	float rw = (float)((hkX87Real)a.m_vec[3] * b.m_vec[3]
-	                   - (((hkX87Real)a.m_vec[0] * b.m_vec[0] + (hkX87Real)b.m_vec[1] * a.m_vec[1]) + (hkX87Real)a.m_vec[2] * b.m_vec[2]));
 	m_vec[2] = rz;
+	// The original also stores this sum, then overwrites it after re-reading a/b: keep the store (the
+	// re-reads follow it, so the compiler may not sink the reads past it either).
+	m_vec[3] = (float)((hkX87Real)bw * a.m_vec[3] + (hkX87Real)aw * b.m_vec[3]);
 	m_vec[0] = rx;
 	m_vec[1] = ry;
+	volatile float rw = (float)((hkX87Real)a.m_vec[3] * b.m_vec[3]
+	                   - (((hkX87Real)a.m_vec[0] * b.m_vec[0] + (hkX87Real)b.m_vec[1] * a.m_vec[1]) + (hkX87Real)a.m_vec[2] * b.m_vec[2]));
 	m_vec[3] = rw;
 }
 

@@ -5,11 +5,11 @@
 01081520 0 havok-equivalent
 010815a0 0 havok-equivalent
 010817c0 0 havok-equivalent
-01081810 0 havok-equivalent
-01081990 0 havok-equivalent
-01081ad0 0 havok-equivalent
-01081b40 0 havok-equivalent
-01081bb0 0 havok-equivalent
+01081810 332 FIXED invert: all float cofactor locals are volatile float (r10 stays hkX87Real) so the x87 keeps the original's 32-bit stores/rounding; acceptance is eps^3 < |det| strictly (NaN/equal rejected); equiv PASS (400 valid, 100% coverage).  chk diff is cl 15.00 codegen (/Gy COMDAT sizing; 335 vs 374 bytes), not behavior.  flags /vc71 /O2 /MD /Gy /TP
+01081990 256 FIXED invertSymmetric: same volatile-float cofactors; det is clamped up to 2^-69 (constant at 0x149d644) when const > det, NaN det kept; equiv PASS (400 valid, 100% coverage).  chk diff is codegen/COMDAT sizing (318 vs 316 bytes).  flags /vc71 /O2 /MD /Gy /TP
+01081ad0   2 FIXED add: unrolled 16 scalar adds (not a loop) so eax is left as the argument pointer like the original; equiv PASS (400 valid, 100% coverage).  Residual 2 bytes are register scheduling.  flags /vc71 /O2 /MD /Gy /TP
+01081b40   0 FIXED sub: unrolled 16 scalar subtracts, eax = argument pointer; byte-exact MATCH, moved to manifest.txt; equiv PASS (400 valid, 100% coverage).  flags /vc71 /O2 /MD /Gy /TP
+01081bb0   0 FIXED mul(scale): unrolled 16 scalar multiplies (eax is not written, as in the original); byte-exact MATCH, moved to manifest.txt; equiv PASS (400 valid, 100% coverage).  flags /vc71 /O2 /MD /Gy /TP
 01081c30 0 havok-equivalent
 01081db0 0 havok-equivalent
 01081f20 0 havok-equivalent
@@ -17,5 +17,5 @@
 01082130 0 havok-equivalent
 01082160 0 havok-equivalent
 010821a0 0 havok-equivalent
-01082210 0 havok-equivalent
+01082210 224 FIXED setMul: Z1/tx/ty round through volatile float stack slots (Z1 is re-read for tz, so a tiny negative Z1 must round to -0.0 before the tz add), tz stays x87-extended in a volatile hkX87Real (also gives the original's aligned frame and preserves ecx), the redundant `m_vec[3] = a.w*b.w + b.w*a.w` store is kept (the original stores it, then re-reads a/b for w), and w is computed last through a volatile float so eax = w on return; equiv PASS (400 valid, 100% coverage).  chk diff is codegen (207 vs 241 bytes).  flags /vc71 /O2 /MD /Gy /TP
 01082310 0 havok-equivalent
