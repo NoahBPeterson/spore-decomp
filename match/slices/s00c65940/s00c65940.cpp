@@ -100,7 +100,9 @@ extern void* vtbl_cMorphHandleSub[];   // 0x14711a4
 // ===========================================================================
 void cMorphHandle::SetFacing(const cSPVector3& dir)
 {
-    float v = 1.0f / sqrtf(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z + g_13EC4B8);
+    double dx = dir.x, dy = dir.y, dz = dir.z;
+    double lenSq = dx * dx + dy * dy + dz * dz + (double)g_13EC4B8;
+    float v = (float)(1.0 / sqrt(lenSq));
     cSPVector3 n;
     n.x = dir.x * v;
     n.y = dir.y * v;
@@ -253,14 +255,16 @@ void cMorphHandle::UpdateMatrix()
 // ===========================================================================
 void cMorphHandle::SetRange(float lo, float hi)
 {
-    mLo = lo;
-    mHi = hi;
+    *(volatile float*)&mLo = lo;
+    *(volatile float*)&mHi = hi;
     float t = mT;
     float* pf = &mHi;
     if (mHi > t)
         pf = &t;
-    float* pg = pf;
-    if (*pf <= mLo)
+    float* pg;
+    if (*pf > mLo)
+        pg = pf;
+    else
         pg = &mLo;
     if (mT != *pg) {
         mT = *pg;

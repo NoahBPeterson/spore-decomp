@@ -1,4 +1,4 @@
-00c65940  412  Behaviorally complete SetFacing (normalise + frame pick + UpdatePos/UpdateQuat); x87 sqrt/fdivrp in the original vs sqrtf here, and the two mirror-axis branches were folded.
+00c65940  412  Behaviorally complete SetFacing (normalise + frame pick + UpdatePos/UpdateQuat); equiv: PASS (369 valid, 100% cov) with flags /O2 /MD /Gy /TP /arch:SSE /fp:fast -- the reciprocal length is computed in double (x87 under /arch:SSE) so large dir components no longer overflow to zero as they did with the float sqrtf under /arch:SSE2; residual diff is register numbering/product scheduling (not byte-exact)
 00c65af0  40  Complete SetT clamp; residual diff is operand order of the first comiss plus a cmov cl the original emitted as a branch.
 00c65b50  36  Complete SetTLerp interpolation/clamp; residual is the pointer-select codegen (cmov vs branch).
-00c666f0  86  Complete SetRange clamp; residual is the pointer-select codegen (cmov vs branch).
+00c666f0  0  Complete SetRange clamp; byte-exact; moved to manifest.txt (row kept) -- the volatile mLo/mHi stores force the original store schedule (dropping the stray xmm2) and `if (*pf > mLo) pg = pf; else pg = &mLo;` gives the original's comiss/ja/mov pointer select; flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
