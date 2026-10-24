@@ -1107,7 +1107,7 @@ typedef unsigned char uchar;
 struct XF;           // generic stub for external __thiscall callees
 struct AudioSystem;
 struct XF {
-    void* hashtable_find(void* key, void* out);      // 0x645ed0
+    void* hashtable_find(void* out, void* key);      // 0x645ed0 (arg1 = out iterator, arg2 = key)
     void* rbtree_find(void* out, void* key);         // 0xe5c780
     void* FUN_00a2a150(void* out);
     void* FUN_00a2a510(void* out);
@@ -1128,17 +1128,18 @@ struct XF {
     void  StopwatchCtor(void* a, void* b);
     void  Noop();
 };
-void* __cdecl operator_new(size_t, const char*, int, int, const char*, int);
+void* __cdecl operator_new(uint, const char*, int, int, const char*, int);   // 0x00f473a0
 void  __cdecl operator_delete(void*);
 void* __cdecl FUN_00a17090(uint size);
 void* __cdecl FUN_00a17100(void* p);
+void* __cdecl copy_impl(void* first, void* last, void* dst);   // 0x006782c0
 struct AudioSystem {
     uchar pad[0x140000];
 
     // 00a2d790
     bool RegisterPrimitive(void* p);
     // 00a2d880
-    void* FUN_00a2d880(uint key, void* out);
+    bool  FUN_00a2d880(uint key, void* out);
     // 00a2d940 : ctor
     void* FUN_00a2d940(void* arg);
     // 00a2d990
@@ -1151,8 +1152,8 @@ struct AudioSystem {
     void SetupPropertyAggregationRules();
     // 00a2de20
     bool DestroySubmixes();
-    // 00a2dfe0
-    void FUN_00a2dfe0(void* p);
+    // 00a2dfe0  (retail call site 0x00a2e5b5 keeps this out of line)
+    __declspec(noinline) void FUN_00a2dfe0(void* p);
     // 00a2e060
     uint& FUN_00a2e060(const uint& k);
     // 00a2e0e0
@@ -5258,19 +5259,19 @@ bool EA::Audio::System::RegisterPrimitive(EA::Audio::IPrimitive * p)
 }
 
 // @ 0x00a2d880
-void* AudioSystem::FUN_00a2d880(uint key, void* out)
+bool AudioSystem::FUN_00a2d880(uint key, void* out)
 {
-    void* it;
-    ((XF*)((uchar*)this + 0x23e4))->hashtable_find(&key, &it);
-    if (*(uint*)it != *(uint*)(*(uint*)((uchar*)this + 0x23e8) +
-                              *(int*)((uchar*)this + 0x23ec) * 4))
-        return 0;
+    void* it[2];   // returned iterator (node + bucket count)
+    ((XF*)((uchar*)this + 0x23e4))->hashtable_find(it, &key);
+    if (it[0] != *(void**)(*(uint*)((uchar*)this + 0x23e8) +
+                           *(int*)((uchar*)this + 0x23ec) * 4))
+        return false;
     void* node = FUN_00a17090(0x1c);
-    if (node) node = FUN_00a17100(this);
+    if (node) node = ((void* (__thiscall*)(void*, void*))FUN_00a17100)(node, this);
     ((void (__thiscall*)(void*))vc_s00a2_d790(node, 0))(node);
-    void* slot = ((XF*)((uchar*)this + 0x23e4))->FUN_00a2a510(out);
+    void* slot = ((XF*)((uchar*)this + 0x23e4))->FUN_00a2a510(&key);
     *(void**)slot = node;
-    return (void*)1;
+    return true;
 }
 
 // @ 0x00a2d940
@@ -5329,22 +5330,23 @@ bool EA::Audio::System::DestroySubmixes()
         ((void (__thiscall*)(void*, void*))vc_s00a2_d790(this, 0x170))(this, o);
         if (o) ((void (__thiscall*)(void*))vc_s00a2_d790(o, 4))(o);
     }
-    for (uint* it = begin; it != end; ++it) {
+    for (uint* it = *(uint**)((uchar*)this + 0x119ba4),
+             * ie = *(uint**)((uchar*)this + 0x119ba8); it != ie; ++it) {
         void* o = (void*)*it;
         if (o) ((void (__thiscall*)(void*))vc_s00a2_d790(o, 0))(o);
         ((XF*)o)->FUN_00a2bb30();
         if (o) ((void (__thiscall*)(void*))vc_s00a2_d790(o, 4))(o);
     }
-    // compact the vector
-    uint* p = begin;
-    for (; p != end; ++p) {
-        if (*p) {
-            void* o = (void*)*p;
-            ((void (__thiscall*)(void*))vc_s00a2_d790(o, 4))(o);
-        }
+    // vector::erase(begin(), end()): move nothing, destroy the tail, drop the size
+    uint* first = *(uint**)((uchar*)this + 0x119ba4);
+    uint* last = *(uint**)((uchar*)this + 0x119ba8);
+    uint* newEnd = (uint*)copy_impl(last, last, first);
+    uint* tail = *(uint**)((uchar*)this + 0x119ba8);
+    for (uint* p = newEnd; p < tail; ++p) {
+        void* o = (void*)*p;
+        if (o) ((void (__thiscall*)(void*))vc_s00a2_d790(o, 4))(o);
     }
-    uint count = (uint)(end - begin);
-    *(uint**)((uchar*)this + 0x119ba8) = begin - count;
+    *(uint**)((uchar*)this + 0x119ba8) = first;
     if (DAT_016e61a8) FUN_0112c620();
     return true;
 }
@@ -5474,7 +5476,7 @@ void* AudioSystem::FUN_00a2e420(void* p)
     if (node) {
         *(void**)((uchar*)this + 0x1c) = *(void**)node;
     } else {
-        node = operator_new(0x28, "EASTL", 0, 0,
+        node = operator_new(*(uint*)((uchar*)this + 0x2c), "EASTL", 0, 0,
             "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     }
     if (node) {
@@ -5489,7 +5491,33 @@ void* AudioSystem::FUN_00a2e420(void* p)
 // @ 0x00a2e4c0
 void* AudioSystem::FUN_00a2e4c0(void* p)
 {
-    (void)p;
+    RDD* self = (RDD*)this;
+    ProfileTimer local((void*)((char*)this + 0x5c));
+    self->mMutex.Lock((void*)0x1452970);
+    {
+        long long e = local.sw.GetElapsedTimeFloat();
+        self->mfAccum = (float)e * local.sw.mfCyclesToUnitsCoefficient + self->mfAccum;
+    }
+    for (void** it = self->mpBegin; it != self->mpEnd; ++it) {
+        void* elem = *it;
+        if (elem == p) {
+            self->mMutex.Unlock();
+            long long e = local.sw.GetElapsedTimeFloat();
+            float* acc = (float*)local.mpAccumulator;
+            *acc = (float)e * local.sw.mfCyclesToUnitsCoefficient + *acc;
+            return elem;
+        }
+    }
+    void* tmp = p;
+    if (tmp) ((void (__thiscall*)(void*))vc_s00a2_d790(tmp, 4))(tmp);
+    ((AudioSystem*)((char*)this + 0x14))->FUN_00a2dfe0(&tmp);
+    if (tmp) ((void (__thiscall*)(void*))vc_s00a2_d790(tmp, 8))(tmp);
+    self->mMutex.Unlock();
+    {
+        long long e = local.sw.GetElapsedTimeFloat();
+        float* acc = (float*)local.mpAccumulator;
+        *acc = (float)e * local.sw.mfCyclesToUnitsCoefficient + *acc;
+    }
     return p;
 }
 
