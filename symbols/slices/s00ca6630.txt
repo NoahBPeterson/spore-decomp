@@ -1,0 +1,8 @@
+00ca6db0 FUN_00ca6db0  # cVehicle-like status update: HUD notify, status byte, shared flag word +0x5fc, control-mode switch, vtable +0x2c/+0xf4; Claude-coined
+00ca6f20 FUN_00ca6f20  # exact; lazily initialised global list A (flags 0x01699adc, data 0x01699ac8, alt 0x0169a104, atexit 0x013c4400)
+00ca6f70 FUN_00ca6f70  # block-list pop-front: cur/block/end/block-ptr/limit at +0xb34..+0xb44, 0x100-dword blocks
+00ca6ff0 cVehicle_UpdateCombatStatus  # timed HUD message (0x354b9e8) + game-mode UI-effect timers at +0xc88/+0xca8; Claude-coined
+00ca71d0 FUN_00ca71d0  # lazily initialised global list B (flags 0x01699af8, cell 0x01699ae0, zero 0x01699af0, result 0x01699af4, atexit 0x013c4420)
+00ca7250 EastlString_AssignCString  # assign [text, text+strlen(text)) into eastl string at +0xd14; Claude-coined
+00ca72a0 cPathAndTurnLocomotion_Execute  # partial path/turn locomotion update (path sample, region filter, action circle +0xb1c); Claude-coined
+00ca7520 SpatialObject_SetModelKeyByMagic  # exact; magic 0x24682294/0x476a98c7 clear key, 0x2b978c46 profile lookup + reset; Claude-coined

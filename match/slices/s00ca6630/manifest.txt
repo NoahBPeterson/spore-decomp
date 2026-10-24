@@ -1,0 +1,2 @@
+slices/s00ca6630/s00ca6630.cpp  ?FUN_00ca6f20@@YIPAHPAD@Z  00ca6f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ca6630/s00ca6630.cpp  ?FUN_00ca7520@SpatialObject@@QAEXPAUModelKey@@@Z  00ca7520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
