@@ -10,6 +10,11 @@ typedef unsigned char  u8;
 
 struct Key16 { u32 k0, k1, k2, k3; };
 
+// 16-byte key less-than, inlined (same predicate as KeyLess @ 0x006c26f0)
+#define KEY_LESS(x, y) ((x)[1] < (y)[1] || ((x)[1] == (y)[1] && ((x)[0] < (y)[0] || ((x)[0] == (y)[0] && ((x)[3] < (y)[3] || ((x)[3] == (y)[3] && (x)[2] < (y)[2]))))))
+// same predicate with the left key held in scalars (a0..a3), right key as a pointer
+#define LESS6(a0, a1, a2, a3, b) ((a1) < (b)[1] || ((a1) == (b)[1] && ((a0) < (b)[0] || ((a0) == (b)[0] && ((a3) < (b)[3] || ((a3) == (b)[3] && (a2) < (b)[2]))))))
+
 // ---------------------------------------------------------------------------
 // external helpers (masked relocations)
 // ---------------------------------------------------------------------------
@@ -20,7 +25,9 @@ extern void* g_lightManager;                                  // 0x16c8b44
 
 struct LightMgr { void Destroy(u32 p); };
 extern void  sub_11fb220(u32);                                // free
-extern void  sub_11e40a0(void*);                              // arena::Arena::Release
+struct Arena {
+    void Release();                                           // 0x011e40a0 (rw::core::arena::Arena::Release)
+};
 extern u32   sub_6c24b0(void*, void*, void*, int, int, int, const char*);
 extern u32   sub_6acfe0(u32, u32);
 extern u32   sub_6b1f90(u32, int, int);
@@ -143,20 +150,20 @@ Rec16* Rec16::CopyFrom(const Rec16* src)
 // ---------------------------------------------------------------------------
 // @ 0x006c27b0  insertion sort (6-dword records, 0x18 stride) [first,last)
 // ---------------------------------------------------------------------------
-void InsertionSort6(u32* first, u32* last)
+u32* InsertionSort6(u32* first, u32* last)
 {
     if (first == last)
-        return;
+        return last;
     u32* cur = first + 6;
     if (cur == last)
-        return;
-    while (true) {
+        return last;
+    u32* hole;
+    do {
         u32 k0 = cur[0], k1 = cur[1], k2 = cur[2], k3 = cur[3], k4 = cur[4], k5 = cur[5];
-        u32* hole = cur;
+        hole = cur;
         while (hole != first) {
             u32* prev = hole - 6;
-            if (KeyLess(prev, cur) == false && !(cur[0] == prev[0] && cur[1] == prev[1] &&
-                (cur[3] > prev[3] || (cur[3] == prev[3] && cur[2] >= prev[2]))))
+            if (!LESS6(k0, k1, k2, k3, prev))
                 break;
             hole[0] = prev[0]; hole[1] = prev[1]; hole[2] = prev[2];
             hole[3] = prev[3]; hole[4] = prev[4]; hole[5] = prev[5];
@@ -165,9 +172,8 @@ void InsertionSort6(u32* first, u32* last)
         hole[0] = k0; hole[1] = k1; hole[2] = k2;
         hole[3] = k3; hole[4] = k4; hole[5] = k5;
         cur += 6;
-        if (cur == last)
-            break;
-    }
+    } while (cur != last);
+    return hole;
 }
 
 // ---------------------------------------------------------------------------
@@ -198,69 +204,69 @@ void InsertionSortOne(u32* first, u32* last)
 // ---------------------------------------------------------------------------
 u32* Median3(u32* a, u32* b, u32* c)
 {
-    if (KeyLess(a, b) || (a[0] == b[0] && a[1] == b[1] &&
-        ((a[3] < b[3]) || (a[3] == b[3] && a[2] < b[2])))) {
-        if (!KeyLess(b, c)) {
-            if (!KeyLess(a, c))
-                return a;
+    bool (*const volatile keyLess)(const u32*, const u32*) = KeyLess;
+    if (KEY_LESS(a, b)) {
+        if (keyLess(b, c))
+            return b;
+        if (keyLess(a, c))
             return c;
-        }
-    } else {
-        if (KeyLess(a, c))
-            return a;
-        if (KeyLess(b, c))
-            return c;
+        return a;
     }
+    if (keyLess(a, c))
+        return a;
+    if (keyLess(b, c))
+        return c;
     return b;
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x006c2a00  sift-up insert of one 6-dword record
 // ---------------------------------------------------------------------------
-void SiftUp(u32* base, u32* pos, u32* key)
+u32* SiftUp(u32* base, int lower, int pos, u32 k0, u32 k1, u32 k2, u32 k3, u32 k4, u32 k5)
 {
-    u32 k0 = key[0], k1 = key[1], k2 = key[2], k3 = key[3], k4 = key[4], k5 = key[5];
-    int i = (int)((pos - base) / 6);
-    while (i > 0) {
-        int parent = (i - 1) >> 1;
+    u32 kk[6] = { k0, k1, k2, k3, k4, k5 };
+    int i = pos;
+    int parent = (i - 1) >> 1;
+    while (i > lower) {
         u32* p = base + parent * 6;
-        if ((p[0] == k0 && p[1] == k1) &&
-            (p[3] > k3 || (p[3] == k3 && p[2] >= k2)))
+        if (!KEY_LESS(p, kk))
             break;
         u32* d = base + i * 6;
         d[0] = p[0]; d[1] = p[1]; d[2] = p[2];
         d[3] = p[3]; d[4] = p[4]; d[5] = p[5];
         i = parent;
+        parent = (i - 1) >> 1;
     }
     u32* d = base + i * 6;
-    d[0] = k0; d[1] = k1; d[2] = k2; d[3] = k3; d[4] = k4; d[5] = k5;
+    d[0] = kk[0]; d[1] = kk[1]; d[2] = kk[2];
+    d[3] = kk[3]; d[4] = kk[4]; d[5] = kk[5];
+    return d;
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x006c2bc0  sift-down then insert
 // ---------------------------------------------------------------------------
-void SiftDown(u32* base, u32* key, int pos, int count)
+u32* SiftDown(u32* base, int lower, int count, int pos, u32 k0, u32 k1, u32 k2, u32 k3, u32 k4, u32 k5)
 {
-    u32 k0 = key[0], k1 = key[1], k2 = key[2], k3 = key[3], k4 = key[4], k5 = key[5];
-    while (pos * 2 + 2 < count) {
-        int child = pos * 2 + 2;
+    int child = pos * 2 + 2;
+    while (child < count) {
         u32* c = base + child * 6;
         u32* p = base + (child - 1) * 6;
-        if (!KeyLess(c, p) && !(c[0] == p[0] && c[1] == p[1] &&
-            (c[3] > p[3] || (c[3] == p[3] && c[2] >= p[2]))))
-            child = pos * 2 + 1;
-        u32* d = base + pos * 6;
+        if (KEY_LESS(c, p))
+            --child;
         u32* s = base + child * 6;
+        u32* d = base + pos * 6;
         d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4]; d[5] = s[5];
         pos = child;
+        child = pos * 2 + 2;
     }
-    if (pos * 2 + 2 == count) {
-        u32* s = base + (pos * 2 + 1) * 6;
+    if (child == count) {
+        u32* s = base + (child - 1) * 6;
         u32* d = base + pos * 6;
         d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4]; d[5] = s[5];
-        pos = pos * 2 + 1;
+        pos = child - 1;
     }
-    SiftUp(base, base + pos * 6, key);
+    return SiftUp(base, lower, pos, k0, k1, k2, k3, k4, k5);
 }
 
 // ---------------------------------------------------------------------------
@@ -320,8 +326,9 @@ struct EditorResource2 {
 void EditorResource2::Destroy()
 {
     vtbl = (void*)0x140a5a8;
-    if (field18 != 0)
-        sub_11e40a0(field18);
+    if (field18 != 0) {
+        ((Arena*)field18)->Release();
+    }
     DestroyRenderObjects(arr24);
     if (field20 != 0)
         sub_11fb220((u32)field20);
