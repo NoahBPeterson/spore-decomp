@@ -71,7 +71,7 @@ Vector3* RotHandle::GetHandlePos(Vector3* out, float t)
 Vector3* RotHandle::GetDir(Vector3* out, bool useParent)
 {
     Vector3 d;
-    VSub(&d, &this->mP0, &this->mP1);
+    VSub(&d, &this->mP1, &this->mP0);
     Vector3 n;
     VNorm(&n, &d);
     if (useParent) {
@@ -119,17 +119,24 @@ Vector3* RotHandle::GetP1(Vector3* out, bool transform)
     return out;
 }
 
+// 3x3 basis (cSPMatrix3 rotation part); a struct, not a char buffer, so no /GS cookie
+struct Mat3 { float m[9]; };
+
+// cSPMatrix3 is assigned into via __thiscall (this = destination)
+struct MatOut {
+    void Assign(const Mat3* src);   // @ 0x0041cb40
+};
+
 // @ 0x004822d0
 void* RotHandle::GetOrientation(void* out)
 {
-    Vector3 d, n, t;
-    char basis[0x24];
-    VSub(&d, &this->mP0, &this->mP1);
+    Vector3 d, t;
+    Mat3 basis;
+    VSub(&d, &this->mP1, &this->mP0);
     VMul(&t, &d, (const Vector3*)(*(char**)((char*)this->mBlock + 0x10) + 0x1c));
-    void BuildMatrix(void*, const Vector3*, void*);   // @ 0x004a89e0
-    BuildMatrix(basis, &t, (void*)0x15d4e28);
-    void Matrix3Assign(void*, const void*);           // @ 0x0041cb40
-    Matrix3Assign(out, basis);
+    void BuildMatrix(Mat3*, const Vector3*, void*);   // @ 0x004a89e0
+    BuildMatrix(&basis, &t, (void*)0x15d4e28);
+    ((MatOut*)out)->Assign(&basis);
     return out;
 }
 
