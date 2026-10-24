@@ -1,0 +1,50 @@
+00bfbbf0 ?Update@Civ@@QAEXXZ  # cCivilization per-update tick (pre-existing body in this slice)
+00bfc3a0 ?NodePresent@VtObj@@QAE_NXZ          # MATCH; bool, thiscall, no stack args
+00bfc3d0 ?NodePresentArg@VtObj@@QAE_NH@Z      # MATCH; bool(this, int unused), ret 4
+00bfc400 ?NodeValue@VtObj@@QAEMXZ             # MATCH; float, x87 st0 return
+00bfc430 ?NodeApply@Sim@@QAEXH@Z              # nonmatching (slot-3 calls are caller-cleanup)
+00bfc490 ?NodeRatio@Sim@@QAEMXZ               # MATCH; +0x38 / slot22()
+00bfc4a0 ?CombatantWrite@Sim@@QAEXPAUVtObj@@@Z # nonmatching (serializer frame size)
+00bfc540 ?CombatantRead@Sim@@QAEXPAUVtObj@@@Z  # nonmatching (serializer frame size)
+00bfc600 ?TimedExpired@Sim@@QAEHXZ            # MATCH; int, timer +0x98 vs +0xb8 (64-bit unsigned compare)
+00bfc640 ?TimedAdd@Sim@@QAEXI@Z               # MATCH
+00bfc6a0 ?TimedStop@Sim@@QAEXXZ               # MATCH
+00bfc720 ?ReleaseSlots@Sim@@QAEXXZ            # MATCH; releases +0x28 (slot25) +0x30 (slot1) +0x44 (slot25) +0x48 (slot25) + arr_bc[3] (slot1)
+00bfc7a0 ?GateCheck@VtObj@@QAE_NPAU1@@Z       # nonmatching; 0x00bfc7a0 reach gate
+00bfc8a0 ?GameDataCenter@VtObj@@QAEXPAUVec3@@@Z # nonmatching; 33 diff
+00bfc900 ?TrikeCheck@VtObj@@QAE_NH@Z          # nonmatching; original takes the object in ESI
+00bfca80 ?TrikeNotify@@YAXPAX0H@Z             # nonmatching; original takes the object in ESI
+00bfcac0 ?DetachSlot@Sim@@QAEXXZ              # nonmatching; 9 diff (load scheduled above the store)
+00bfcae0 ?DetachOther@Sim@@QAEXXZ             # MATCH
+00bfcb10 ?SimValue@Sim@@QAENXZ                # nonmatching; returns double
+00bfcb90 ?TakeDefaultPoint@Sim@@QAE_NPAUVec3@@@Z # nonmatching; def-point compare/reset
+00bfcc00 ?TickSlotArray@Sim@@QAEXXZ           # MATCH
+00bfcc40 ?EntryAvailable@Sim@@QAE_NH@Z        # MATCH; 64-bit timer compare against 0x4e20 (20000 ms)
+
+# Invented views (only retail offsets / slots are meaningful).
+#   VtObj           : +0x000 vtable
+#   Sim             : +0x028/+0x030/+0x044/+0x048 object slots, +0x02c/+0x038 floats,
+#                     +0x034 int, +0x03c int, +0x074/+0x078/+0x07c float def point (reset to
+#                     g_defPoint 0x0168cb6c/0x0168cb70/0x0168cb74), +0x084/+0x088 begin/end of
+#                     0x28-byte timer entries keyed at +0x20, +0x098 SP::cSPTimer, +0x0b8 uint ms,
+#                     +0x0bc three object slots ticked by slot4()/released by slot1()
+#   AnimObj         : +0xb4c animation object (Play is called on +0xb4c+8), +0xb58 flags
+#                     (0x100 / 0x200 tested after the slot-3 lookups)
+#   Node0x14        : the object returned by vtable slot +0x14; 0x0104fff0 (bool) and
+#                     0x0104be30 (float, x87 st0) are its only two callees here
+#   VarListSerializer: 0x00692f90 ctor(owner, 0x01570858, 0x01a80d26), 0x00692900 Serialize,
+#                     0x00693e10 Read (both ret 4, stream in ECX/stack)
+#   Timer           : 0x00feba90 IsRunning (char), 0x00bc3190 GetElapsedTime (edx:eax),
+#                     0x00bc3130 Restart, 0x00bc3110 Stop
+#   Opaque          : 0x00b18530 int(), 0x00f25330 bool(), 0x00f3f950 int(void*) ret 4, 0x00bddd10 void*()
+
+# Other externs: 0x00b69930 void(Obj*, float, int) cdecl; 0x00b685e0 float(Obj*) cdecl (x87);
+#   0x0093aa70 EA::IO::WriteUint32, 0x0093a780 EA::IO::ReadInt32 (stream, data, count, flags);
+#   0x00b673c0 bool(void*), 0x00b18850/0x00b187b0/0x00b18810/0x00b187d0/0x00b18830/0x00b18760/
+#   0x00b18870 bool(void*) cdecl; 0x00bc96a0 void*(self, 0x400, 0) ret 8; 0x00d999d0 void*(void*);
+#   0x01021090 GetPlayerEmpireID; 0x00ffbe50 GetUFOSimulator; 0x00eec5c0 double(void*) cdecl;
+#   0x016c7aa4 global object pointer (+0x74 manager, +0xcc mode int); 0x1654c10/0x1654c01..05 game modes.
+
+# Flags: the 11 byte-exact functions compile with /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; the x87
+#   functions (0x00bfc430, 0x00bfc7a0 and the FUN_0104be30 / FUN_00b685e0 callers) come from the
+#   same file only without /arch:SSE (float results in st0).
