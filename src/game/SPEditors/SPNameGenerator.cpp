@@ -531,10 +531,10 @@ struct WStr {
     void rtrim();                                               // 005541e0
     void make_lower();                                          // 005e8e80
     void CopyCtor(const WStr* o);                               // 0056e2d0
-    void Fixup();                                               // 005e9320
     void clear() { if (b != e) { *b = 0; e = b; } }
     void ltrim(const wchar_t* set, const wchar_t* setEnd);
 };
+void Fixup(WStr* s);                                            // 005e9320
 struct NStr {                                                   // eastl::string (char)
     char* b; char* e; char* c; int alloc;
     NStr() { b = e = (char*)gEmptyW; c = (char*)gEmptyW + 1; }
@@ -1347,7 +1347,7 @@ WStr* cSPNameGenerator::CreateRandomName(WStr* ret, WStrVec* names, bool allowDu
             WStr tmp;
             tmp.b = tmp.e = tmp.c = 0;
             tmp.RangeInitialize(elem->b);
-            tmp.Fixup();
+            Fixup(&tmp);
             ret->CopyCtor(&tmp);
             return ret;
         }
@@ -1358,7 +1358,7 @@ WStr* cSPNameGenerator::CreateRandomName(WStr* ret, WStrVec* names, bool allowDu
             WStr tmp;
             tmp.b = tmp.e = tmp.c = 0;
             tmp.RangeInitialize(elem->b);
-            tmp.Fixup();
+            Fixup(&tmp);
             ret->CopyCtor(&tmp);
             return ret;
         }
@@ -1374,7 +1374,7 @@ WStr* cSPNameGenerator::CreateRandomName(WStr* ret, WStrVec* names, bool allowDu
         it.node->value = n + 1;
         WStr_Format2(&tmp, L"%c%d", 0x2d, n + 1);
     }
-    tmp.Fixup();
+    Fixup(&tmp);
     ret->b = ret->e = ret->c = 0;
     ret->RangeInitialize(tmp.b);
     return ret;
