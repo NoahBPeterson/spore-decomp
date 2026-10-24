@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00d9b840  239 min-of-{a,b,c} under the loco comparator: the loop runs through the comparator functor but the body is abbreviated relative to the original (size 162 vs 267); difftest UNSUPPORTED (0/400 valid, fault(read))
+00d9b950  301 heap sift-up (push_heap) over a 0x20-stride array with a 0x20-byte element temp and the comparator functor reached at [esp+0x48]; only an approximate placeholder expansion is present (size 205 vs 92); difftest FAIL (5/5, edx clobber)
+00d9ba60  389 cSocialProgressValues::Update (thiscall ret 0x10): widget busy/timer/fail gates, anim-progress reads through the animating-creature vtable [0x5c], min(progress,1) and widget Set(0/1) plus SetGlobalProperty; the 4-dword argument layout (two Creature* at arg3/arg4) is inferred and the body is approximate (size 488 vs 517); difftest FAIL (5/23, execution: ours faults inside the animating-creature virtual call where the original succeeds)

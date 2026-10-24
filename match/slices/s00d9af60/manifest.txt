@@ -1,0 +1,9 @@
+# source  symbol  original VA  [flags override]
+slices/s00d9af60/s00d9af60.cpp  ?FUN_00d9afe0@@YAXPAUCreature@@@Z  00d9afe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d9af60/s00d9af60.cpp  ?AnyActive@SocialValues@@QAE_NXZ  00d9b010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d9af60/s00d9af60.cpp  ?SetDrainDelay@SocialValues@@QAEX_N@Z  00d9b040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d9af60/s00d9af60.cpp  ?StartFillRight@SocialValues@@QAEXMM@Z  00d9b090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d9af60/s00d9af60.cpp  ?StartFillLeft@SocialValues@@QAEXMM@Z  00d9b0d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d9af60/s00d9af60.cpp  ?FUN_00d9b510@@YAXPAUCreature@@HHHHPAX@Z  00d9b510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d9af60/s00d9af60.cpp  ?FUN_00d9b560@@YA_NPAUCreature@@HHHHPAX@Z  00d9b560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d9af60/s00d9af60.cpp  ?FUN_00d9ba30@@YA_NPAUBehaviorMgr@@I@Z  00d9ba30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
