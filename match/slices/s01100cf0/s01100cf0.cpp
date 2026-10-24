@@ -296,3 +296,144 @@ void hkMoppObbVirtualMachine::queryObb(const hkMoppObbState* st, const unsigned 
         return;
     }
 }
+
+// ========================================================================================================
+// 0x01100CF0  hkPredGskAgent3 registration
+//
+// Builds an Agent3Funcs block on the stack (all function-operand fields hold the addresses of the
+// eight hkPredGskAgent3 entry points) and hands it to the collision dispatcher.  The whole body is
+// inlined into the caller, so the two live register arguments arrive as (typeA=ecx, typeB=edx) and
+// the funcs block is the only stack object, passed as &funcs in ecx to registerAgent3.
+//
+// The eight hkPredGskAgent3 entry points.  The original stores their raw addresses as immediates
+// straight into the funcs block; declared here as objects at the exact image addresses so the
+// source stays plain C++ (no raw-offset casts, no operand reads).  They are never called.
+extern void* g_hkPredGskAgent3_createFunc;            // 0x010FF820
+extern void* g_hkPredGskAgent3_destroyFunc;           // 0x010FF800
+extern void* g_hkPredGskAgent3_cleanupFunc;           // 0x010FF880
+extern void* g_hkPredGskAgent3_removePointFunc;       // 0x010FF760
+extern void* g_hkPredGskAgent3_commitPotentialFunc;   // 0x010FF7A0
+extern void* g_hkPredGskAgent3_createZombieFunc;      // 0x010FF7D0
+extern void* g_hkPredGskAgent3_sepNormalFunc;         // 0x010FF8C0
+extern void* g_hkPredGskAgent3_processFunc;           // 0x010FF9E0
+
+// Agent3 function table, 0x30 bytes (11 slots + 2 flags).  The three middle slots
+// (updateFilter / invalidateTim / warpTime) are left null for the predictive GSK agent.
+struct Agent3Funcs {
+    void* m_createFunc;                               // +0x00  0x010FF820
+    void* m_destroyFunc;                              // +0x04  0x010FF800
+    void* m_cleanupFunc;                              // +0x08  0x010FF880
+    void* m_removePointFunc;                          // +0x0c  0x010FF760
+    void* m_commitPotentialFunc;                      // +0x10  0x010FF7A0
+    void* m_createZombieFunc;                         // +0x14  0x010FF7D0
+    void* m_updateFilterFunc;                         // +0x18  null
+    void* m_invalidateTimFunc;                        // +0x1c  null
+    void* m_warpTimeFunc;                             // +0x20  null
+    void* m_sepNormalFunc;                            // +0x24  0x010FF8C0
+    void* m_processFunc;                              // +0x28  0x010FF9E0
+    char  m_isPredictive;                             // +0x2c  1
+    char  m_ignoreSymmetricVersion;                   // +0x2d  0
+};
+
+class hkCollisionDispatcher {
+public:
+    // 0x010CD4C0: thiscall, &funcs / typeA / typeB on the stack, ret 0xc
+    int registerAgent3(Agent3Funcs& funcs, int typeA, int typeB);
+};
+
+// @ 0x01100cf0
+int __cdecl FUN_01100cf0(hkCollisionDispatcher* dispatcher, int typeA, int typeB)
+{
+    Agent3Funcs funcs;
+    funcs.m_updateFilterFunc       = 0;
+    funcs.m_invalidateTimFunc      = 0;
+    funcs.m_warpTimeFunc           = 0;
+    funcs.m_ignoreSymmetricVersion = 0;
+    funcs.m_createFunc             = &g_hkPredGskAgent3_createFunc;
+    funcs.m_processFunc            = &g_hkPredGskAgent3_processFunc;
+    funcs.m_sepNormalFunc          = &g_hkPredGskAgent3_sepNormalFunc;
+    funcs.m_cleanupFunc            = &g_hkPredGskAgent3_cleanupFunc;
+    funcs.m_removePointFunc        = &g_hkPredGskAgent3_removePointFunc;
+    funcs.m_commitPotentialFunc    = &g_hkPredGskAgent3_commitPotentialFunc;
+    funcs.m_createZombieFunc       = &g_hkPredGskAgent3_createZombieFunc;
+    funcs.m_destroyFunc            = &g_hkPredGskAgent3_destroyFunc;
+    funcs.m_isPredictive           = 1;
+    return dispatcher->registerAgent3(funcs, typeA, typeB);
+}
+
+// ========================================================================================================
+// 0x011013F0  hkMoppSphereVirtualMachine::querySphere
+//
+// Converts the query sphere into MOPP cell coordinates (offset/scale from the code object), then hands
+// the packed 0x28-byte integer state plus the bytecode to the recursive walker at 0x01100d70.
+struct hkMoppCode {
+    char  pad00[0x10];
+    float m_offsetX;                    // +0x10
+    float m_offsetY;                    // +0x14
+    float m_offsetZ;                    // +0x18
+    float m_scale;                      // +0x1c
+    const unsigned char* m_data;        // +0x20
+};
+
+struct hkSphere {
+    float x;                            // +0x00
+    float y;                            // +0x04
+    float z;                            // +0x08
+    float radius;                       // +0x0c
+};
+
+// Integer query state handed to the walker: three cell minima (only the high halves survive), the
+// cell span, four scratch slots, the starting shift and a zero slot.
+struct hkMoppSphereState {
+    int m_minHi0;                       // +0x00  high half of m_lo[0]
+    int m_minHi1;                       // +0x04  high half of m_lo[1]
+    int m_minHi2;                       // +0x08  high half of m_lo[2]
+    int m_spanHi;                       // +0x0c  high half of the cell span, +1
+    int m_scratch0;                     // +0x10
+    int m_scratch1;                     // +0x14
+    int m_scratch2;                     // +0x18
+    int m_scratch3;                     // +0x1c
+    int m_shift;                        // +0x20
+    int m_zero;                         // +0x24
+};
+
+struct hkMoppSphereVirtualMachine {
+    void* m_primitives;                 // +0x00  destination hkArray<hkMoppPrimitiveInfo>
+    char  pad04[0x0c];
+    int   m_lo[3];                      // +0x10  query minima in cell coordinates
+    int   m_hi0;                        // +0x1c  query span
+    void querySphereRec(hkMoppSphereState* st, const unsigned char* p);   // 0x01100d70
+    void querySphere(const hkMoppCode* code, const hkSphere& sphere, void* primitives);
+};
+
+// @ 0x011013f0
+void hkMoppSphereVirtualMachine::querySphere(const hkMoppCode* code, const hkSphere& sphere,
+                                             void* primitives)
+{
+    const unsigned char* data = code->m_data;
+    m_primitives = primitives;
+
+    float f = (sphere.x - code->m_offsetX) * code->m_scale;
+    m_lo[0] = (int)f - 1;
+    f = (sphere.y - code->m_offsetY) * code->m_scale;
+    m_lo[1] = (int)f - 1;
+    f = (sphere.z - code->m_offsetZ) * code->m_scale;
+    m_lo[2] = (int)f - 1;
+    f = sphere.radius * code->m_scale;
+    int span = (int)f + 2;
+    m_hi0 = span;
+
+    hkMoppSphereState st;
+    st.m_minHi0    = (int16_t)(m_lo[0] >> 16);
+    st.m_minHi1    = (int16_t)(m_lo[1] >> 16);
+    st.m_minHi2    = (int16_t)(m_lo[2] >> 16);
+    st.m_spanHi    = (span >> 16) + 1;
+    st.m_scratch0  = 0;
+    st.m_scratch1  = 0;
+    st.m_scratch2  = 0;
+    st.m_scratch3  = 0;
+    st.m_shift     = 0x10;
+    st.m_zero      = 0;
+
+    querySphereRec(&st, data);
+}
