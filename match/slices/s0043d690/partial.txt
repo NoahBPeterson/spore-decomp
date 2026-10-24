@@ -1,3 +1,1 @@
-0043e080  98   F3e080 - keyed offset lookup approximated
-0043e0f0  60   F3e0f0 - child-bone scan stubbed
-0043e2b0  150  F3e2b0 - symmetry/limb loop approximated
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
