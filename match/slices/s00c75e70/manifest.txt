@@ -1,0 +1,5 @@
+slices/s00c75e70/s00c75e70.cpp  ?AddWarCaptureIncrement@cPlayer@@QAEXII@Z  00c76790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c75e70/s00c75e70.cpp  ?GetPlayerWarCaptureDelta@cPlayer@@QAEHPAU1@@Z  00c76a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c75e70/s00c75e70.cpp  ?Erase@cHashTableB@@QAEHPBI@Z  00c76be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c75e70/s00c75e70.cpp  ?FixupWarData@@YA_NPAXAAUcWarMap@@@Z  00c76e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c75e70/s00c75e70.cpp  ?Contains@cHashTableD@@QAE_NI@Z  00c772c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00c75e70 = SPGameData.obj.  Every one of the 27 functions has a complete reconstruction, so this
+# file holds only the caveats the equivalence gate could not clear (all three rows are also listed in
+# nonmatching.txt; nothing here is a stub or a sketch).
+#
+00c76440  140  hashtable::rehash(U32): the replay input makes the node walk read past the modelled bucket array.  The body is complete (AllocBucketArray + xor-hash relink + old-array reclaim), but the terminating sentinel at +0x30 of the retail hashtable is only modelled as an opaque word, so the equivalence gate reports "execution" on 5/5 valid inputs and cannot arbitrate the loop.
+00c77020  140  FUN_00c77020 (eastl sub-vector copy): complete body, but the equivalence gate reports a divergence of the allocator pool address (orig 0x0040050000 vs ours 0x0040060000 on the first allocation) because the stub operator_new model and the original's "Simulator"-tagged allocation do not agree on the pool top; only 5/64 inputs are valid, so the body is behaviourally unverified.
+00c770d0  70   FUN_00c770d0 (eastl fill-copy): complete body; the gate reports a fault in our FUN_00bdaa40 call on one deep input (the fifth argument is the outer count, matching the observed push of [esp+0x18], but the callee stub reads that slot as a source list), so the loop tail is unverified (21/45 inputs valid).
