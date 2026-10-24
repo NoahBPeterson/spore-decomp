@@ -1,6 +1,7 @@
 slices/s00af9aa0/s00af9aa0.cpp  ?Detach@cListenerHolder@SP@@QAEXH@Z  00af9aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00af9aa0/s00af9aa0.cpp  ?AddId@cEntityListener@SP@@QAEXI@Z  00af9ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00af9aa0/s00af9aa0.cpp  ?Destroy@cEntityListener@SP@@QAEXXZ  00af9ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00af9aa0/s00af9aa0.cpp  ?SetRelative@cActionCircle@SP@@QAEXPBUcSPVector3@2@PBUcSPQuaternion@2@M@Z  00af9d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00af9aa0/s00af9aa0.cpp  ?IsNonDefault@cActionCircle@SP@@QBEHXZ  00af9ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00af9aa0/s00af9aa0.cpp  ?FindFreeSlot@cActionCircle@SP@@QAEPAVtSlot@12@XZ  00af9f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00af9aa0/s00af9aa0.cpp  ?Reserve@tSlot@cActionCircle@SP@@QAEXPAVcGameData@3@@Z  00afa030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

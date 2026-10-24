@@ -320,9 +320,7 @@ void SP::cActionCircle::SetRelative(const cSPVector3* center, const cSPQuaternio
   mOrientation = *orient;
   mCenter = *center;
   mRadius = radius;
-  mFacing.mX = g_defFacing[0];
-  mFacing.mY = g_defFacing[1];
-  mFacing.mZ = g_defFacing[2];
+  mFacing = *(SP::cSPVector3*)g_defFacing;
   mAltitude = 0.0f;
 }
 
@@ -348,10 +346,11 @@ long double FUN_00af9dd0(float param_1, int param_2) {
 // ===========================================================================
 long double FUN_00af9e20(float param_1, int param_2) {
   param_2 = param_2 - 1;
-  float f = param_1 * 2.0f;
+  float step = param_1 * 2.0f;
+  float f = step;
   int i = 2;
   while (0 < param_2) {
-    f = f + param_1 * 2.0f;
+    f = f + step;
     param_2 = param_2 - i;
     i = i + 1;
   }
