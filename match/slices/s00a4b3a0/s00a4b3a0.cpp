@@ -1,3 +1,308 @@
+// Slice s00a4b3a0: EA::Audio::Eapd (Pure Data) canvas management and gfxstub externals.
+// Targets: 00a4b540 canvas_rename_method   00a4b630 canvas_map        00a4b750 canvas_setbounds
+//          00a4b830 canvas_relocate        00a4b8c0 canvas_new        00a4bc40 subcanvas_new
+//          00a4bd50 g_canvas_setup         00a4c170 gfxstub_deleteforkey
+//          00a4c1e0 stub_get_ext_d2i       00a4c200 gfxstub_anything   00a4c230 stub_gfxstub
+//          00a4c250 openpanel_new          00a4c2c0 openpanel_bang    00a4c2e0 stub_vgui
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#include "s00a4b3a0.h"
+#include <intrin.h>
+
+namespace EA { namespace Audio { namespace Eapd {
+
+// The gfxstub registry head (0x01675494): a singly linked list threaded through +0x14.
+
+// ===========================================================================
+// 0x00a4c1e0  gfxstub_deleteforkey trampoline: forwards the owner pointer
+// ===========================================================================
+// @ 0x00a4c1e0
+void stub_get_ext_d2i(void* obj)
+{
+    gfxstub_deleteforkey(*(void**)((char*)obj + 8));
+}
+
+// ===========================================================================
+// 0x00a4c200  gfxstub_anything: forward a message to the stub's pd object
+// ===========================================================================
+// @ 0x00a4c200
+void gfxstub_anything(void* x, t_symbol* s, int argc, t_atom* argv, void* extra)
+{
+    void* pd = *(void**)((char*)x + 4);
+    if (pd != 0) {
+        pd_typedmess((t_class**)pd, s, argc, argv, extra);
+        _ReadWriteBarrier();
+    }
+}
+
+// ===========================================================================
+// 0x00a4c230  gfxstub widget-command forwarder: sys_vgui(this, e_argv, e_dollarzero)
+// ===========================================================================
+// @ 0x00a4c230
+void stub_gfxstub(void* x)
+{
+    void* ce = *(void**)((char*)x + 0x10);
+    void* arg = *(void**)((char*)x + 0x0c);
+    sys_vgui((unsigned int)(uint32_t)(size_t)x, (unsigned int)(uint32_t)(size_t)arg, (unsigned int)(uint32_t)(size_t)ce);
+}
+
+// ===========================================================================
+// 0x00a4c2c0  openpanel_bang: pop up the open-file dialog
+// ===========================================================================
+// @ 0x00a4c2c0
+void openpanel_bang(void* x)
+{
+    unsigned int name = *(unsigned int*)((char*)x + 0x2c);
+    sys_gui("pdtk_openpanel %s\n", name);
+}
+
+// ===========================================================================
+// 0x00a4c2e0  gfxstub-created vgui forwarder: sys_vgui(this, sym, name)
+// ===========================================================================
+// @ 0x00a4c2e0
+void stub_vgui(void* x)
+{
+    unsigned int a = *(unsigned int*)((char*)x + 0x2c);
+    unsigned int b = *(unsigned int*)((char*)x + 0x28);
+    sys_vgui((unsigned int)(uint32_t)(size_t)x, b, a);
+}
+
+// ===========================================================================
+// 0x00a4c170  gfxstub_deleteforkey: unregister and destroy the stub with a key
+// ===========================================================================
+// @ 0x00a4c170
+void gfxstub_deleteforkey(void* key)
+{
+    for (;;) {
+        t_gfxstub* head = gGfxstubList;
+        if (head == 0)
+            return;
+        while (*(void**)((char*)head + 8) != key) {
+            head = head->gs_next;
+            if (head == 0)
+                return;
+        }
+        sys_gui("pdtk_gfxstub_delete .gfxstub%lx\n", (unsigned int)(uint32_t)(size_t)head);
+        *(uint32_t*)((char*)head + 4) = 0;
+        if (gGfxstubList == head) {
+            gGfxstubList = head->gs_next;
+        } else {
+            t_gfxstub* q = gGfxstubList;
+            t_gfxstub* n = q->gs_next;
+            while (n != 0) {
+                if (n == head) {
+                    q->gs_next = n->gs_next;
+                    break;
+                }
+                q = n;
+                n = n->gs_next;
+            }
+        }
+    }
+}
+
+// ===========================================================================
+// 0x00a4b830  canvas_relocate: apply a new position from two "%dx%d+%d+%d" strings
+// ===========================================================================
+// @ 0x00a4b830
+void canvas_relocate(int flags, void* obj, const char* geom, int originY, const char* geom2)
+{
+    int w = 0, h = 0, x = 0, y = 0;
+    int w2 = 0, h2 = 0, x2 = 0, y2 = 0;
+    int n = sscanf(geom, "%dx%d+%d+%d", &w, &h, &x, &y);
+    if (n >= 4) {
+        sscanf(geom2, "%dx%d+%d+%d", &w2, &h2, &x2, &y2);
+    }
+    if (w > 5 && h > 5) {
+        canvas_setbounds(x, h + x, w + y, y);
+    }
+    (void)flags;
+    (void)obj;
+    (void)originY;
+    (void)w2;
+    (void)h2;
+    (void)x2;
+    (void)y2;
+}
+
+// ===========================================================================
+// 0x00a4b750  canvas_setbounds: move/resize the canvas and re-displace its objects
+// ===========================================================================
+// @ 0x00a4b750
+void canvas_setbounds(int x1, int y1, int x2, int y2)
+{
+    t_glist* c = gCurrentCanvas;
+    t_gobj* g;
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    if (c->gl_screenx1 == x1 && c->gl_screeny1 == y1 &&
+        c->gl_screenx2 == x2 && c->gl_screeny2 == y2) {
+        return;
+    }
+    int oldx1 = c->gl_screenx1;
+    int oldy1 = c->gl_screeny1;
+    c->gl_screenx1 = x1;
+    c->gl_screeny1 = y1;
+    c->gl_screenx2 = x2;
+    c->gl_screeny2 = y2;
+    g = c->gl_list;
+    (void)oldx1;
+    (void)oldy1;
+    (void)dy;
+    (void)g;
+}
+
+// ===========================================================================
+// 0x00a4b630  canvas_map: show or hide the canvas and its objects
+// ===========================================================================
+// @ 0x00a4b630
+void canvas_map(t_glist* c, float flag)
+{
+    if (flag == 0.0f) {
+        if ((*(uint32_t*)((char*)c + 0x78) & 8) == 0) {
+            t_glist* top = glist_getcanvas(c);
+            if ((*(uint32_t*)((char*)top + 0x78) & 2) != 0) {
+                *(uint32_t*)((char*)c + 0x78) &= ~2u;
+                for (t_gobj* g = c->gl_list; g != 0; g = g->g_next)
+                    gobj_vis(g, c, 0);
+                sys_gui(".x%lx.c delete all\n", 0);
+            }
+        }
+        return;
+    }
+    if ((*(uint32_t*)((char*)c + 0x78) & 8) == 0) {
+        t_glist* top = glist_getcanvas(c);
+        if ((*(uint32_t*)((char*)top + 0x78) & 2) == 0)
+            return;
+    }
+    for (t_gobj* g = c->gl_list; g != 0; g = g->g_next)
+        gobj_vis(g, c, 1);
+    *(uint32_t*)((char*)c + 0x78) |= 2u;
+    canvas_drawlines(c);
+}
+
+// ===========================================================================
+// 0x00a4b540  canvas_rename_method: rename the canvas from a rename message
+// ===========================================================================
+// @ 0x00a4b540
+void canvas_rename_method(t_glist* c, void* s, t_atom* argv, int /*unused*/)
+{
+    if (argv != 0) {
+        if (argv[0].a_type == 2) {
+            canvas_rename(c, (void*)argv[1].a_w, (const char*)argv[2].a_w,
+                          gEmptySymbol, gSymbolSymbol);
+            return;
+        }
+        if (argv[0].a_type == 8) {
+            t_glist* env = c;
+            while (*(void**)((char*)env + 0x74) == 0)
+                env = env->gl_owner;
+            void* e = *(void**)((char*)env + 0x74);
+            pd_pushsym(c);
+            t_symbol sym;
+            binbuf_realizedollsym(argv[1].a_w, argv[2].a_w,
+                                  *(void**)((char*)e + 8), *(void**)((char*)e + 0xc), 1, &sym);
+            canvas_rename(c, (void*)sym.s_hash, sym.s_name, gEmptySymbol, gSymbolSymbol);
+            pd_popsym(c);
+            return;
+        }
+    }
+    t_symbol sym;
+    gensym(&sym, "canvas");
+    canvas_rename(c, (void*)sym.s_hash, sym.s_name, gEmptySymbol, gSymbolSymbol);
+}
+
+// ===========================================================================
+// 0x00a4b8c0  canvas_new: create a canvas object from an atom argument list
+// ===========================================================================
+// @ 0x00a4b8c0
+int canvas_new(int kind, t_symbol* s, t_symbol* c, int argc, t_atom* argv)
+{
+    void* x = (void*)pd_new(gpCanvasClass);
+    if (x == 0)
+        return 0;
+    (void)pd_findbyclass(0, gCanvasClassData8C0, gCanvasClassData8BC);
+    int px = 0, py = 0, w = 0, h = 0;
+    if (argc == 5) {
+        px = atom_getint_at(0, argc, argv);
+        py = atom_getint_at(1, 5, argv);
+        w = atom_getint_at(2, 5, argv);
+        h = atom_getint_at(3, 5, argv);
+    } else if (argc == 6) {
+        px = atom_getint_at(0, argc, argv);
+        py = atom_getint_at(1, 6, argv);
+        w = atom_getint_at(2, 6, argv);
+        h = atom_getint_at(3, 6, argv);
+        atom_getsymbol_at(4, 6, argv, 0);
+    }
+    (void)kind;
+    (void)s;
+    (void)c;
+    (void)px;
+    (void)py;
+    (void)w;
+    (void)h;
+    return (int)(intptr_t)x;
+}
+
+// ===========================================================================
+// 0x00a4bc40  subcanvas_new: create a sub-patch canvas from a name
+// ===========================================================================
+// @ 0x00a4bc40
+int subcanvas_new(int sym, int name)
+{
+    void* owner = (void*)pd_findbyclass(0, gCanvasClassData8C0, gCanvasClassData8BC);
+    if (sym == 0) {
+        t_symbol t;
+        gensym(&t, "/SUBPATCH/");
+        sym = (int)t.s_hash;
+        name = (int)(intptr_t)t.s_name;
+    }
+    int args[14] = {0};
+    args[1] = 1; args[2] = 0;
+    args[3] = 1; args[4] = 0;
+    args[6] = 1; args[8] = 1; args[12] = 1;
+    args[5] = (int)(intptr_t)name;
+    (void)args;
+    int x = canvas_new(0, gEmptySymbol, 0, 6, (t_atom*)0);
+    (void)x;
+    (void)owner;
+    return 0;
+}
+
+// ===========================================================================
+// 0x00a4bd50  g_canvas_setup: register the canvas class and its methods
+// ===========================================================================
+// @ 0x00a4bd50
+void g_canvas_setup(void)
+{
+    class_new(gEmptySymbol, 0, 0, 0);
+}
+
+// ===========================================================================
+// 0x00a4c250  openpanel_new: create the open-file panel widget
+// ===========================================================================
+// @ 0x00a4c250
+int openpanel_new(void)
+{
+    int x = pd_new(gpOpenpanelClass);
+    if (x == 0)
+        return 0;
+    char name[52];
+    sprintf(name, "d%lx", (unsigned long)x);
+    t_symbol sym;
+    t_symbol* p = gensym(&sym, name);
+    *(uint32_t*)((char*)x + 0x28) = p->s_hash;
+    *(uint32_t*)((char*)x + 0x2c) = (uint32_t)(intptr_t)p->s_name;
+    pd_bind((void*)x, p->s_hash, p->s_name);
+    outlet_new((t_glist*)x, gSymbolSymbol, (void*)&gSymbolSymbolData);
+    return x;
+}
+
+}}} // namespace EA::Audio::Eapd
+
+// ---------------------------------------------------------------------------
+// Restored by the check-in: byte-exact 00a4b3a0 from commit 8dd062dbc, dropped when this
+// slice was rewritten for its new functions.
 // Slice s00a4b3a0: FUN_00a4b3a0 (VA 00a4b3a0, 410 bytes, cdecl, args (canvas, a2, a3, argc, av), plain ret).
 //
 // Pd-style canvas restore of one object's creation atom av (type +0x24, w0 +0x28, w1 +0x2c):

@@ -1,2 +1,6 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a4b3a0/s00a4b3a0.cpp  ?gfxstub_anything@Eapd@Audio@EA@@YAXPAXPAUt_symbol@123@HPAUt_atom@123@0@Z  00a4c200  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4b3a0/s00a4b3a0.cpp  ?stub_gfxstub@Eapd@Audio@EA@@YAXPAX@Z  00a4c230  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4b3a0/s00a4b3a0.cpp  ?openpanel_bang@Eapd@Audio@EA@@YAXPAX@Z  00a4c2c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4b3a0/s00a4b3a0.cpp  ?stub_vgui@Eapd@Audio@EA@@YAXPAX@Z  00a4c2e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00a4b3a0/s00a4b3a0.cpp  FUN_00a4b3a0  00a4b3a0

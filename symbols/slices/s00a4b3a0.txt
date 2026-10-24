@@ -1,1 +1,14 @@
-00a4b3a0 ?FUN_00a4b3a0@@YAXPAUcCanvas@@HHHPAUcAtom@@@Z  # FUN_00a4b3a0 migrated from s00a4b3a0 (verbatim, slice spelling)
+00a4b540 ?canvas_rename_method@Eapd@Audio@EA@@YAXPAUt_glist@123@PAXPAUt_atom@123@H@Z  # EA::Audio::Eapd::canvas_rename_method
+00a4b630 ?canvas_map@Eapd@Audio@EA@@YAXPAUt_glist@123@M@Z  # EA::Audio::Eapd::canvas_map
+00a4b750 ?canvas_setbounds@Eapd@Audio@EA@@YAXHHHH@Z  # EA::Audio::Eapd::canvas_setbounds
+00a4b830 ?canvas_relocate@Eapd@Audio@EA@@YAXHPAXPBDH1@Z  # EA::Audio::Eapd::canvas_relocate
+00a4b8c0 ?canvas_new@Eapd@Audio@EA@@YAHHPAUt_symbol@123@0HPAUt_atom@123@@Z  # EA::Audio::Eapd::canvas_new
+00a4bc40 ?subcanvas_new@Eapd@Audio@EA@@YAHHH@Z  # EA::Audio::Eapd::subcanvas_new
+00a4bd50 ?g_canvas_setup@Eapd@Audio@EA@@YAXXZ  # EA::Audio::Eapd::g_canvas_setup
+00a4c170 ?gfxstub_deleteforkey@Eapd@Audio@EA@@YAXPAX@Z  # EA::Audio::Eapd::gfxstub_deleteforkey
+00a4c1e0 ?stub_get_ext_d2i@Eapd@Audio@EA@@YAXPAX@Z  # EA::Audio::Eapd::stub_get_ext_d2i
+00a4c200 ?gfxstub_anything@Eapd@Audio@EA@@YAXPAXPAUt_symbol@123@HPAUt_atom@123@0@Z  # EA::Audio::Eapd::gfxstub_anything
+00a4c230 ?stub_gfxstub@Eapd@Audio@EA@@YAXPAX@Z  # EA::Audio::Eapd::stub_gfxstub
+00a4c250 ?openpanel_new@Eapd@Audio@EA@@YAHXZ  # EA::Audio::Eapd::openpanel_new
+00a4c2c0 ?openpanel_bang@Eapd@Audio@EA@@YAXPAX@Z  # EA::Audio::Eapd::openpanel_bang
+00a4c2e0 ?stub_vgui@Eapd@Audio@EA@@YAXPAX@Z  # EA::Audio::Eapd::stub_vgui
