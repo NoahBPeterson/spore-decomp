@@ -302,21 +302,75 @@ void FUN_009a7f10(int param_1, int param_2, int* param_3, int param_4, int param
 }
 
 // ===========================================================================
-// 0x009a80e0  hashtable equal_range walk
+// 0x009a80e0  eastl hashtable equal_range walk (per-entry RefreshWorldState)
 // ===========================================================================
-extern "C" void FUN_009c8900();
+struct creature_mesh_instance_data;                       // ?RefreshWorldState@... 0x009c8900
+
+// eastl hashtable node: the stored pair lives first, the chain link after it.
+struct ht_node_s009a7810 {
+    uint32_t                      mKey;    // +0x0  (pair<...>::first)
+    creature_mesh_instance_data*  mValue;  // +0x4  (pair<...>::second)
+    ht_node_s009a7810*            mpNext;  // +0x8
+};
+
+// eastl hashtable iterator: current node plus its bucket slot in the bucket array.
+struct ht_iter_s009a7810 {
+    ht_node_s009a7810*  mpNode;            // +0x0
+    ht_node_s009a7810** mpBucket;          // +0x4
+    ht_iter_s009a7810& operator++() {
+        mpNode = mpNode->mpNext;
+        while (!mpNode) {
+            ++mpBucket;
+            mpNode = *mpBucket;
+        }
+        return *this;
+    }
+};
+
+// eastl::pair<iterator,iterator>, returned by equal_range through a hidden pointer.
+struct ht_pair_s009a7810 {
+    ht_iter_s009a7810 first;               // +0x0
+    ht_iter_s009a7810 last;                // +0x8
+};
+
+// eastl::hashtable<unsigned int, eastl::pair<unsigned int const, T*> ...> stored at
+// holder + 0x17a0 (mpBucketArray = +0x4, mnBucketCount = +0x8).
+struct ht_s009a7810 {
+    uint32_t             mHash;            // +0x0
+    ht_node_s009a7810**  mpBucketArray;    // +0x4
+    uint32_t             mnBucketCount;    // +0x8
+    ht_pair_s009a7810 equal_range(const uint32_t& key);   // 0x009a6dd0
+};
+
+// creature_mesh_instance_data as used by RefreshWorldState (its own flags word at +0x34).
+struct creature_mesh_instance_data {
+    uint8_t  pad_0[0x34];                  // +0x0 .. +0x33
+    uint32_t mFlags;                       // +0x34
+    void RefreshWorldState();              // ?RefreshWorldState@creature_mesh_instance_data@@QAEXXZ
+};
+
+// `holder` = *(param_1 + 4); its hashtable sits at holder + 0x17a0.
+inline ht_s009a7810* ht_table_s009a7810(int p)
+{
+    return (ht_s009a7810*)(*(char**)(p + 4) + 0x17a0);
+}
 
 // @ 0x009a80e0
 void FUN_009a80e0(int param_1)
 {
-    if (*(int*)(param_1 + 4) != 0) {
-        int local_10;
-        int local_c;
-        int local_8;
-        int param = *(int*)(param_1 + 0x10);
-        // eastl hashtable equal_range(&local_10, &param)  -- not reproduced, unresolved helper.
-        FUN_009c8900();
-        (void)local_10; (void)local_c; (void)local_8;
+    if (*(int**)(param_1 + 4) != 0) {
+        uint32_t key = *(uint32_t*)(param_1 + 0x10);
+        ht_pair_s009a7810 range = ht_table_s009a7810(param_1)->equal_range(key);
+        ht_iter_s009a7810 it = range.first;
+        if (it.mpNode !=
+            ht_table_s009a7810(param_1)->mpBucketArray[ht_table_s009a7810(param_1)->mnBucketCount]) {
+            ht_node_s009a7810* lastNode = range.last.mpNode;
+            for (; it.mpNode != lastNode; ++it) {
+                creature_mesh_instance_data* p = it.mpNode->mValue;
+                if ((p->mFlags & 0x800020) == 0)
+                    p->RefreshWorldState();
+            }
+        }
     }
 }
 
