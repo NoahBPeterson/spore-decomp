@@ -1,1 +1,7 @@
-00fa5610 ?UpdateQuadsPostCamera@cTerrainSphere_s00fa_5610@@QAEXPAX@Z  # cTerrainSphere_s00fa_5610::UpdateQuadsPostCamera migrated from s00fa5610 (verbatim, slice spelling)
+00fa5610 cTerrainSphere::UpdateQuadsPostCamera  # rebuild post-camera quads from the +0x770 / +0x784 record arrays and the +0x7c4 xform array
+00fa5cc0 cTerrainSphere::DrawLayerRTT  # RTT layer draw; property keys 0x201a4e50 / 0xf1a9135a / 0x797fcd8c, clears *g_16f6ee0 bit 1
+00fa5e40 cTerrainSphere::ClearModels  # empties the key / xform / pointer vectors (byte-exact)
+00fa5ee0 cTerrainSphere::RequestModelFootprint  # resolves 3 property keys (0x3b28c1d + 0x442151e, 0x3b28c1b, 0x3abc381) into a PtrRefVec
+00fa6130 cTerrainSphere::AddPaintDecalsFromModels  # 3 passes calling ApplyModelFootprint(rec, list, param, rec+0x38, true); third pass clears bit 0x27
+00fa6320 cTerrainSphere::AddEntry8b0  # append {obj,param} to the +0x8b0 list, taking one reference
+00fa63d0 cTerrainSphere::AddEntry8c4  # append {obj,param} to the +0x8c4 list, taking one reference
