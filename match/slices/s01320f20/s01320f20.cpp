@@ -197,4 +197,155 @@ void InitPlanetAttributes()
     ADD(22, "mTerrainStampsToRemove", 0x04164f9e, 0x148, Read_00b04e00, Write_00c761c0, ReadText_00c2e4e0, WriteText_00692fb0, Valid<TStamps>, ToXmlT<TStamps>)
 }
 
+// =====================================================================================
+// Slice s01320f20 -- three more static attribute-table initialisers of the same family:
+// the cIDColor table (0x0156b0d8, 2 records), the creature/species mission table
+// (0x0156b198, 5 records) and the model/appearance table (0x0156bd78, 8 records).
+// Every record is built in one reused 0x3c-byte Attribute temporary and copied into the
+// static table with a 15-dword rep movsd, exactly like InitPlanetAttributes above.
+// =====================================================================================
+
+// --- callbacks that are not declared above, by original address -----------------------
+void FUN_00b6e230(Attribute* pAttr);                 // 0x00b6e230  setDefault of mIDColorID
+bool Read_00572810(ISerializerReadStream* pStream, void* pData);      // 0x00572810
+bool Write_00572840(ISerializerWriteStream* pStream, void* pData);     // 0x00572840
+
+bool Read_00b701b0(ISerializerReadStream* pStream, void* pData);       // 0x00b701b0
+bool Write_00aca730(ISerializerWriteStream* pStream, void* pData);     // 0x00aca730
+bool Valid_00b6f860();                                                 // 0x00b6f860
+bool ToXml_00c6c390(void* pData, const char* pName, int depth);        // 0x00c6c390
+
+bool Read_00b6fb20(ISerializerReadStream* pStream, void* pData);       // 0x00b6fb20
+bool Write_00b6fc90(ISerializerWriteStream* pStream, void* pData);     // 0x00b6fc90
+bool Valid_00cd36f0();                                                 // 0x00cd36f0
+bool ToXml_00cd3920(void* pData, const char* pName, int depth);        // 0x00cd3920
+
+bool Read_00b70290(ISerializerReadStream* pStream, void* pData);       // 0x00b70290
+bool Write_00b6ffa0(ISerializerWriteStream* pStream, void* pData);     // 0x00b6ffa0
+bool Valid_00b6fd80();                                                 // 0x00b6fd80
+bool ToXml_00b70410(void* pData, const char* pName, int depth);        // 0x00b70410
+
+bool Read_00b6fa00(ISerializerReadStream* pStream, void* pData);       // 0x00b6fa00
+bool Write_00bca960(ISerializerWriteStream* pStream, void* pData);     // 0x00bca960
+bool Valid_00b6f550();                                                 // 0x00b6f550
+
+bool Read_00b6fa30(ISerializerReadStream* pStream, void* pData);       // 0x00b6fa30
+
+void FUN_00b8f8b0(Attribute* pAttr);                                   // 0x00b8f8b0  setDefault of mAlphaModel
+void FUN_00b8f8d0(Attribute* pAttr);                                   // 0x00b8f8d0  setDefault of mBaseRadius
+void FUN_00b8f8f0(Attribute* pAttr);                                   // 0x00b8f8f0  setDefault of mCanopyRadius
+void FUN_00b8f910(Attribute* pAttr);                                   // 0x00b8f910  setDefault of mHeight
+
+// --- the attribute tables these initialisers fill ------------------------------------
+extern Attribute sColorAttributes[2];      // 0x0156b0d8  cIDColor records
+extern Attribute sMissionAttributes[5];    // 0x0156b198  creature / species mission records
+extern Attribute sModelAttributes[8];      // 0x0156bd78  model + appearance records
+
+// --- globals written by the initialisers ---------------------------------------------
+extern int   g_1687980;                    // 0x01687980  cached colour attribute id
+extern int   g_16882ec;                    // 0x016882ec  model info key
+extern float g_16882f0;                    // 0x016882f0  model base radius
+extern float g_16882f4;                    // 0x016882f4  model canopy radius
+extern float g_16882f8;                    // 0x016882f8  model height
+
+// @ 0x01320f20
+void InitIDColorAttributes()
+{
+    {
+        Attribute a("mIDColorID", 0x5594700, 4, Read4<uint64_t>, Write4<uint64_t>,
+                    ReadText_00693090, WriteText_00694f00, Valid<TU64>, ToXml_00675ca0,
+                    FUN_00b6e230);
+        sColorAttributes[0] = a;
+    }
+    {
+        Attribute a("mCachedColor", 0x6cf7f50, 0x24, Read_00b6e3a0, Write_00ac88c0,
+                    ReadText_00c2e4e0, WriteText_00692fb0, Valid<TRotAxis>, ToXml_00ac8050);
+        sColorAttributes[1] = a;
+    }
+    g_1687980 = 0x53dbcf2;
+}
+
+// @ 0x01321080
+void InitMissionAttributes()
+{
+    {
+        Attribute a("mCreatureMissionList", 0x940fd9b5, 0x14, Read_00b701b0, Write_00aca730,
+                    ReadText_00c2e4e0, WriteText_00692fb0, Valid_00b6f860, ToXml_00c6c390);
+        sMissionAttributes[0] = a;
+    }
+    {
+        Attribute a("mCreatureMissionMap", 0x53540b3, 0x28, Read_00b6fb20, Write_00b6fc90,
+                    ReadText_00c2e4e0, WriteText_00692fb0, Valid_00cd36f0, ToXml_00cd3920);
+        sMissionAttributes[1] = a;
+    }
+    {
+        Attribute a("mSpeciesMissionMap", 0xf40fd9b4, 0x48, Read_00b70290, Write_00b6ffa0,
+                    ReadText_00c2e4e0, WriteText_00692fb0, Valid_00b6fd80, ToXml_00b70410);
+        sMissionAttributes[2] = a;
+    }
+    {
+        Attribute a("mpDisplayedSpeciesMission", 0xb40fd9ab, 0x68, Read_00b6fa00, Write_00bca960,
+                    ReadText_00c2e4e0, WriteText_00692fb0, Valid_00b6f550, ToXml_00ac8050);
+        sMissionAttributes[3] = a;
+    }
+    {
+        Attribute a("mpDisplayedTutorialMission", 0xb40fd9ac, 0x6c, Read_00b6fa30, Write_00bca960,
+                    ReadText_00c2e4e0, WriteText_00692fb0, Valid_00b6f550, ToXml_00ac8050);
+        sMissionAttributes[4] = a;
+    }
+}
+
+// @ 0x01324260
+void InitModelAttributes()
+{
+    {
+        Attribute a("mModelIDLOD0", 0x384448b, 0x7c, Read4<uint64_t>, Write4<uint64_t>,
+                    ReadText_00693090, WriteText_00694f00, Valid<TU64>, ToXml_00675ca0);
+        sModelAttributes[0] = a;
+    }
+    {
+        Attribute a("mModelIDLOD1", 0x384448c, 0x80, Read4<uint64_t>, Write4<uint64_t>,
+                    ReadText_00693090, WriteText_00694f00, Valid<TU64>, ToXml_00675ca0);
+        sModelAttributes[1] = a;
+    }
+    {
+        Attribute a("mModelIDLOD2", 0x384448f, 0x84, Read4<uint64_t>, Write4<uint64_t>,
+                    ReadText_00693090, WriteText_00694f00, Valid<TU64>, ToXml_00675ca0);
+        sModelAttributes[2] = a;
+    }
+    {
+        Attribute a("mModelIDLOD3", 0x3844491, 0x88, Read4<uint64_t>, Write4<uint64_t>,
+                    ReadText_00693090, WriteText_00694f00, Valid<TU64>, ToXml_00675ca0);
+        sModelAttributes[3] = a;
+    }
+    {
+        Attribute a("mAlphaModel", 0x5ada0bb, 0x8c, Read4<uint64_t>, Write4<uint64_t>,
+                    ReadText_00693090, WriteText_00694f00, Valid<TU64>, ToXml_00675ca0,
+                    FUN_00b8f8b0);
+        sModelAttributes[4] = a;
+    }
+    {
+        Attribute a("mBaseRadius", 0x5ad9efa, 0x94, Read4<double>, Write_00ac88f0,
+                    ReadText_006930b0, WriteText_00694fc0, Valid<TDouble>, ToXml_00acbb80,
+                    FUN_00b8f8d0);
+        sModelAttributes[5] = a;
+    }
+    {
+        Attribute a("mCanopyRadius", 0x5ad9f00, 0x98, Read4<double>, Write_00ac88f0,
+                    ReadText_006930b0, WriteText_00694fc0, Valid<TDouble>, ToXml_00acbb80,
+                    FUN_00b8f8f0);
+        sModelAttributes[6] = a;
+    }
+    {
+        Attribute a("mHeight", 0x5ad9f03, 0x9c, Read4<double>, Write_00ac88f0,
+                    ReadText_006930b0, WriteText_00694fc0, Valid<TDouble>, ToXml_00acbb80,
+                    FUN_00b8f910);
+        sModelAttributes[7] = a;
+    }
+    g_16882ec = 0;
+    g_16882f0 = 0.0f;
+    g_16882f4 = 0.0f;
+    g_16882f8 = 0.0f;
+}
+
 }  // namespace Simulator

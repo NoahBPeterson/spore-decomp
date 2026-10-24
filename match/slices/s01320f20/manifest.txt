@@ -1,2 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s01320f20/s01320f20.cpp  ?InitPlanetAttributes@Simulator@@YAXXZ  01322a30
+slices/s01320f20/s01320f20.cpp  ?InitIDColorAttributes@Simulator@@YAXXZ  01320f20  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01320f20/s01320f20.cpp  ?InitMissionAttributes@Simulator@@YAXXZ  01321080  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01320f20/s01320f20.cpp  ?InitModelAttributes@Simulator@@YAXXZ  01324260  /O2 /MD /Gy /EHsc /TP /arch:SSE
