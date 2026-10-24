@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0103fe90  382  reconstruct 24 inlined verbatim string literals; MSVC pooling/alignment differs (513 vs 502); equiv UNSUPPORTED (unresolved ?DAT_018c43e8@@3IA)
+01040090  290  SpVec24::insert resize/copy path not inlined identically (408 vs 398); equiv UNSUPPORTED (0/400 inputs valid)
+01040220  948  heavy eastl inline (DoInsertKey/DoResize) collapsed (743 vs 1005); semantics now match (equiv WEAK, no mismatch), codegen not reproducible byte-exact
+01040610  126  eastl vector resize/move inlined as calls (179 vs 184); equiv PASS
+01040730  2  only first two xmm loads swapped (xmm0=xmm1 order); equiv PASS (return this)

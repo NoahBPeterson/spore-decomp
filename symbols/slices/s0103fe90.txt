@@ -1,0 +1,2 @@
+01499cac ??_7cSpaceRelationshipTuning@@6B@  # SP::cSpaceRelationshipTuning vtable
+013eb394 ??_7PaintSystem@@6B@               # SP::PaintSystem (base) vtable
