@@ -20,8 +20,8 @@ struct Compare18 {
 };
 
 // Out-of-line heap primitives (0x004c2460 / 0x004c2520).
-void make_heap(Elem18* first, Elem18* middle, Compare18 compare);
-void adjust_heap(Elem18* first, int topIndex, int size, int valueIndex, Elem18 value, Compare18 compare);
+void make_heap(Elem18* first, Elem18* middle, Compare18 compare);       // 0x004c2460
+void adjust_heap(Elem18* first, int topIndex, int size, int valueIndex, Elem18 value, Compare18 compare); // 0x004c2520
 void partial_sort(Elem18* first, Elem18* middle, Elem18* last, Compare18 compare);
 
 // ---------------------------------------------------------------------------
