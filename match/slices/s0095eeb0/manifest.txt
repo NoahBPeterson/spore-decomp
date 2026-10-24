@@ -2,3 +2,5 @@
 slices/s0095eeb0/s0095eeb0.cpp  ?GetAt34@Window@@QAEHXZ  0095f9d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s0095eeb0/s0095eeb0.cpp  ?AllDescendants@Window@@QAE_ND@Z  0095fbb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s0095eeb0/s0095eeb0.cpp  ?AllDescendantsAll@Window@@QAEH_N@Z  0095fc00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0095eeb0/s0095eeb0.cpp  ?Multiply@CM@@QAEXPBM@Z  0095f860  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0095eeb0/s0095eeb0.cpp  ?Set1D4@Window@@QAEXH@Z  0095fdc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

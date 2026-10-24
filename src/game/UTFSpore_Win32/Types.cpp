@@ -52,9 +52,12 @@ CM* CM::SetAxes(float* a, float* b, float* c)
 // @ 0x0095f0f0
 void* CM::BuildMat33(const float* src)
 {
-    m[0] = src[0]; m[1] = src[1]; m[2] = src[2];
-    m[4] = src[4]; m[5] = src[5]; m[6] = src[6];
-    m[8] = src[8]; m[9] = src[9]; m[10] = src[10];
+    int pad = (int)0xcccccccc;
+    int* mi = (int*)m;
+    const int* si = (const int*)src;
+    mi[0] = si[0]; mi[1] = si[1]; mi[2] = si[2]; mi[3] = pad;
+    mi[4] = si[4]; mi[5] = si[5]; mi[6] = si[6]; mi[7] = pad;
+    mi[8] = si[8]; mi[9] = si[9]; mi[10] = si[10]; mi[11] = pad;
     return this;
 }
 
@@ -85,17 +88,18 @@ void BuildRotation(float* out, float* axis, float angle)
     float c = (float)cos(angle);
     float t = 1.0f - c;
     float x = axis[0], y = axis[1], z = axis[2];
+    float xs = x * s, ys = y * s, zs = z * s;
     out[0] = x * (x * t) + c;
-    out[1] = y * (x * t) + z * s;
-    out[2] = z * (x * t) - y * s;
+    out[1] = y * (x * t) + zs;
+    out[2] = z * (x * t) - ys;
     out[3] = 0.0f;
     out[5] = y * (y * t) + c;
     out[7] = 0.0f;
-    out[4] = x * (y * t) - z * s;
-    out[6] = z * (y * t) + x * s;
+    out[4] = x * (y * t) - zs;
+    out[6] = z * (y * t) + xs;
     out[11] = 0.0f;
-    out[8] = x * (z * t) + y * s;
-    out[9] = y * (z * t) - x * s;
+    out[8] = x * (z * t) + ys;
+    out[9] = y * (z * t) - xs;
     out[10] = z * (z * t) + c;
     out[12] = 0.0f;
     out[13] = 0.0f;
@@ -131,8 +135,8 @@ extern "C" CM* __cdecl Inv3(CM* out, const float* in, float* det)
 // @ 0x0095f5c0
 void CM::SetRotationAtLeast2(float* axis, float angle)
 {
-    if (m[16] < 2.0f)
-        m[16] = 2.0f;
+    if (((int*)m)[16] < 2)
+        ((int*)m)[16] = 2;
     float rot[16];
     BuildRotation(rot, axis, angle);
     float tmp[16];

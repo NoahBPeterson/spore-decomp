@@ -2,13 +2,12 @@
 0095eeb0  235  CM::TransformPoint3: complete; SSE register schedule differs
 0095efb0  205  CM::TransformPoint3B: complete; SSE register schedule differs
 0095f090  84   CM::SetAxes: complete; thiscall member form still scheduled differently; equiv: PASS (1200 inputs, 100% coverage)
-0095f0f0  181  CM::BuildMat33: complete; aligned frame and movss copy order differ
+0095f0f0  193  CM::BuildMat33: complete; the original copies a 16-byte row temp whose padding dword is never written (0xcccccccc, the difftest stack fill) with dword moves; our int-copy form and movss order differ; equiv: PASS (400 inputs, 100% coverage)
 0095f1c0  289  CM::TransformPoint4: complete; reciprocal branch and SSE schedule differ
-0095f320  318  BuildRotation: complete; sin/cos x87 interleave with SSE differs
-0095f5c0  84   CM::SetRotationAtLeast2: complete; frame/register schedule differs
+0095f320  319  BuildRotation: complete; sin/cos x87 interleave with SSE differs (xs/ys/zs products spilled by the original); equiv: PASS (400 inputs, 100% coverage)
+0095f5c0  262  CM::SetRotationAtLeast2: complete; type is an int field (cmp dword, not a float compare), FUN_0045EAC0 returns the destination pointer; frame/register schedule differs; equiv: PASS (400 inputs, 100% coverage)
 0095f620  501  CM::Invert: complete; type-1/2/3 paths rebuilt, type-2 feeds SetAxes three stack row copies (as the original does) then Inv3; equiv PASS (400 inputs, 100% coverage); remaining diff is SSE/allocator schedule
-0095f860  84   CM::Multiply: complete; 17-dword copy / multiply branch layout differs
-0095f8c0  133  ModulateARGB32: complete; channel packing arithmetic schedule differs
+0095f8c0  147  ModulateARGB32: complete; all three colour terms are OR-ed then shifted right by 8 (alpha term packed separately); arithmetic schedule differs; equiv: PASS (400 inputs, 100% coverage)
 0095f960  14   Window::AsInterface: complete; shared tail branch layout differs
 0095f9a0  36   Window::Release: complete; lock xadd / vtable call schedule differs
 0095fa60  56   Window::Set1D8: complete; vtable slot 0x90/0x10 call layout differs
@@ -18,7 +17,6 @@
 0095fc50  2    Window::FindChild: complete; only encoding differs (original `add eax,-4`, cl 15 normalises every -4 form to `sub eax,4`); equiv WEAK (231 valid, 18% coverage)
 0095fcc0  19   Window::WalkChildren: complete; original homes the iterator on the arg-1 slot and caches the pre-call value in esi, cl15 routes the copy through ecx
 0095fd60  26   Window::SetA8: complete; event arg block order differs
-0095fdc0  26   Window::Set1D4: complete; this-4 arguments differ
 0095fe40  33   Window::SetArea: complete; float compare/set order differs
 0095fec0  54   Window::ResizeBy: complete; area composition order differs
 0095f490  268  rw::math::fpu::Inverse (Inv3) complete; scheduling hoists SSE loads (uses xmm3-7, original xmm0-2) and folds the %3 into imul where the original keeps idiv [equiv: FAIL xmm3 clobber only]

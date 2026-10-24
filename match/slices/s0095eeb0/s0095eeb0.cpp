@@ -10,9 +10,13 @@ __declspec(dllimport) double __cdecl cos(double);
 }
 extern "C" void __cdecl FUN_00958860(void*);
 extern "C" void __cdecl FUN_009580E0(void*);
+struct W {
+    void m860(char* p);   // 0x00958860
+    void x0e0(char* p);   // 0x009580E0
+};
 extern "C" void __cdecl MatMulVec(void*, const void*, const void*);     // 0x0095E040
 extern "C" char __cdecl MatInvertFull(void*, void*);                    // 0x0095E0B0
-extern "C" void __cdecl FUN_0045EAC0(void* out, const void* a, const void* b); // 0x0045EAC0
+extern "C" void* __cdecl FUN_0045EAC0(void* out, const void* a, const void* b); // 0x0045EAC0
 struct CM;
 struct CMV { void BuildMat33V(const float* src); };  // 0x0095F0F0 (callee result unused by Inv3)
 extern "C" double __cdecl Det33(const float* m);                          // 0x0095E040
@@ -24,8 +28,11 @@ extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 // ---------------------------------------------------------------------------
 // 4x4 float matrix
 // ---------------------------------------------------------------------------
+struct Mat44 { float f[16]; };
+
 struct CM {
     float m[16];
+    int   type;               // +0x40: matrix kind (0 = identity-ish, 1..4)
 
     void  TransformPoint3(float* out, const float* v);
     void  TransformPoint3B(float* out, const float* v);
@@ -64,9 +71,15 @@ CM* CM::SetAxes(float* a, float* b, float* c) {
 
 // @ 0x0095F0F0
 void* CM::BuildMat33(const float* src) {
-    m[0] = src[0]; m[1] = src[1]; m[2] = src[2];
-    m[4] = src[4]; m[5] = src[5]; m[6] = src[6];
-    m[8] = src[8]; m[9] = src[9]; m[10] = src[10];
+    // The original copies a 16-byte row temp whose fourth dword is never
+    // written (an uninitialised PaddingForAlignment copy); the padding keeps
+    // the difftest stack fill value.
+    int pad = (int)0xcccccccc;
+    int* mi = (int*)m;
+    const int* si = (const int*)src;
+    mi[0] = si[0]; mi[1] = si[1]; mi[2] = si[2]; mi[3] = pad;
+    mi[4] = si[4]; mi[5] = si[5]; mi[6] = si[6]; mi[7] = pad;
+    mi[8] = si[8]; mi[9] = si[9]; mi[10] = si[10]; mi[11] = pad;
     return this;
 }
 
@@ -119,17 +132,18 @@ void BuildRotation(float* out, float* axis, float angle) {
     float c = (float)cos(angle);
     float t = 1.0f - c;
     float x = axis[0], y = axis[1], z = axis[2];
+    float xs = x * s, ys = y * s, zs = z * s;
     out[0] = x * (x * t) + c;
-    out[1] = y * (x * t) + z * s;
-    out[2] = z * (x * t) - y * s;
+    out[1] = y * (x * t) + zs;
+    out[2] = z * (x * t) - ys;
     out[3] = 0.0f;
     out[5] = y * (y * t) + c;
     out[7] = 0.0f;
-    out[4] = x * (y * t) - z * s;
-    out[6] = z * (y * t) + x * s;
+    out[4] = x * (y * t) - zs;
+    out[6] = z * (y * t) + xs;
     out[11] = 0.0f;
-    out[8] = x * (z * t) + y * s;
-    out[9] = y * (z * t) - x * s;
+    out[8] = x * (z * t) + ys;
+    out[9] = y * (z * t) - xs;
     out[10] = z * (z * t) + c;
     out[12] = 0.0f;
     out[13] = 0.0f;
@@ -139,8 +153,8 @@ void BuildRotation(float* out, float* axis, float angle) {
 
 // @ 0x0095F5C0
 void CM::SetRotationAtLeast2(float* axis, float angle) {
-    if (m[16] < 2.0f)
-        m[16] = 2.0f;
+    if (type < 2)
+        type = 2;
     float rot[16];
     BuildRotation(rot, axis, angle);
     float tmp[16];
@@ -151,8 +165,8 @@ void CM::SetRotationAtLeast2(float* axis, float angle) {
 
 // @ 0x0095F620
 void CM::Invert() {
-    int type = *(int*)&m[16];
-    if (type == 1) {
+    int t = type;
+    if (t == 1) {
         // scale + translation only: reciprocate the three diagonal terms, then negate the offset
         m[5]  = 1.0f / m[5];
         m[10] = 1.0f / m[10];
@@ -192,8 +206,9 @@ uint32_t ModulateARGB32(uint32_t c1, uint32_t c2) {
     uint32_t r = (c1 >> 0x10 & 0xff) * (c2 & 0xff0000) + 0x10000;
     uint32_t b = (c1 & 0xff) * (c2 & 0xff) + 1;
     uint32_t a = (c1 >> 0x18) * (c2 >> 0x18) + 1;
-    return (((g >> 8) + g) & 0xff0000) | (((r >> 8) + r) & 0xff0000ff) |
-           (((b >> 8) + b)) | ((((a & 0xffffff00) + a * 0x100) & 0xff0000) << 8);
+    return (((((g >> 8) + g) & 0xff0000) | (((r >> 8) + r) & 0xff0000ff) |
+             (((b >> 8) + b))) >> 8) |
+           (((((a & 0xffffff00) + a * 0x100) & 0xff0000) << 8));
 }
 
 // ---------------------------------------------------------------------------
@@ -401,8 +416,9 @@ void Window::Set1D4(int v) {
     if (m1d4 != v) {
         m1d4 = v;
         if (m30 != 0) {
-            FUN_00958860((char*)this - 4);
-            FUN_009580E0((char*)this - 4);
+            W* w = (W*)m30;
+            w->m860((char*)this - 4);
+            w->x0e0((char*)this - 4);
         }
     }
 }
@@ -434,17 +450,15 @@ void Window::ResizeBy(float dx, float dy) {
 
 // @ 0x0095F860
 void CM::Multiply(const float* o) {
-    if (m[16] == 0.0f) {
-        for (int i = 0; i < 0x11; i++)
-            m[i] = o[i];
+    if (type == 0) {
+        *(CM*)this = *(const CM*)o;
         return;
     }
-    if (((int*)o)[0x10] != 0) {
+    if (((const int*)o)[0x10] != 0) {
         float tmp[16];
-        FUN_0045EAC0(tmp, this, o);
-        for (int i = 0; i < 16; i++)
-            m[i] = tmp[i];
-        if (((int*)m)[0x10] < ((int*)o)[0x10])
-            ((int*)m)[0x10] = ((int*)o)[0x10];
+        float* r = (float*)FUN_0045EAC0(tmp, this, o);
+        *(Mat44*)m = *(Mat44*)r;
+        if (((int*)m)[0x10] < ((const int*)o)[0x10])
+            ((int*)m)[0x10] = ((const int*)o)[0x10];
     }
 }
