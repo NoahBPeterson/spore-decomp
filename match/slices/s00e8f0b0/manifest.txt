@@ -1,2 +1,9 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e8f0b0/s00e8f0b0.cpp  ?GetIsInWorld@cTotemPoleView@@UAEEXZ  00e8f260  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e8f0b0/s00e8f0b0.cpp  ?SetIsVisible@cTotemPoleView@@UAEX_N@Z  00e8f2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e8f0b0/s00e8f0b0.cpp  ?GetIsVisible@cTotemPoleView@@UAEEXZ  00e8f330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e8f0b0/s00e8f0b0.cpp  ?Update@cMineralView@@QAEXPAX0@Z  00e8f490  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e8f0b0/s00e8f0b0.cpp  ?Update@cTribeFoodMatView@@QAEXPAX0@Z  00e8f6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e8f0b0/s00e8f0b0.cpp  ?MakeView@cInteractableObjectView@@QAEPAV1@PAX@Z  00e8fe80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e8f0b0/s00e8f0b0.cpp  ?Update@cInteractableObjectView@@QAEXPAX0@Z  00e8ff10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e8f0b0/s00e8f0b0.cpp  ?UpdateLoyaltyBar@cMineralView_e8f0@@QAEPAUcSPUIMeter_e8f0@@PAU2@DI@Z  00e8f120
