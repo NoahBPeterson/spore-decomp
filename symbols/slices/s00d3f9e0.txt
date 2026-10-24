@@ -1,0 +1,30 @@
+# slice s00d3f9e0 - names/offsets inferred from the cards and observed behaviour
+# Modelled types (retail member offsets):
+#   Node       pooled list node: mpFirst@0x00, mpRef@0x04 (refcounted, vtable slot 1 = Release),
+#              mBuf@0x08 {mpData@0x08, miCount@0x0c}, mpNext@0x184
+#   NodeBuf    mpData@0x00 (new[] array; element count at mpData[-1]), miCount@0x04;
+#              Reset@0xd3b320 (this in ecx, data+count on the stack)
+#   NodePool   mpFreeList@0x1c, mpPoolBegin@0x24, mpPoolEnd@0x28, mpSentinel@0x30
+#   Vec20B     0x14-byte cSPVector3 list body: mBegin@0x00, mEnd@0x04, mCap@0x08,
+#              pool words@0x0c/0x10; Ctor@0x473460, Assign@0x473500
+#   Vec18      0x18-byte vector element: mWeight@0x00, mVectors@0x04 (Vec20B)
+#   Vec18Vec   EASTL vector<Vec18>: mpBegin@0x00, mpEnd@0x04, mpCap@0x08;
+#              InsertN@0xd3fa90, grow via op_new(0x13ebb38 "Simulator", line 0xd1)
+#   TransformMsg  0x38-byte transform message: flags0@0x00, count0@0x02, translation@0x04,
+#                 flags1@0x10, count1@0x12, rotation 3x3@0x14
+#   cSPTransform  0x3c-byte transform: TransformMsg@0x00 + scale@0x38; Assign@0x537dc0
+#   Scenario   SP::cAvatarDeathScenario: vtable@0x00, miState@0x08, mfTimer@0x0c,
+#              mpEffect (AutoRef)@0x10, miTag@0x14; StartDeathCutScreen@0xd38e60
+#   NounMgr    GetAvatar@0xb1fdb0, GetCurrentTerrainSphere@0xf67d90,
+#              GetGameDataVector@0xb21340; singleton@0xb3d300
+#   TriggerMgr miState@0x2c; singleton getter@0xb3d4d0, PostTrigger@0xae0930 (this in ecx)
+#   helpers    0xc0bbe0/0xc0b9d0/0xc03190 (avatar), 0xc79f00 (sphere property),
+#              0xad7db0 (trigger value), 0xac84d0/0xbc0710 (thiscall object getters),
+#              0xc6aa50/0xc6a020/0xc6acc0 (noun predicates/position),
+#              0x434040/0x41cb40/0xd3b0c0/0x59c190/0xb7f190 (transform build)
+00d3f9e0  NodePool::FreeLists(Node** arr, unsigned count) -> void  # walk each node chain: release its buffer + ref, then unlink into the free list or delete when outside [mpPoolBegin,mpPoolEnd)
+00d3fa90  Vec18Vec::InsertN(Vec18* pos, unsigned n, const Vec18* val) -> void  # EASTL vector<Vec18>::insert(pos,n,val): grow to max(2*size,1)/size+n then shift, fill with a weight/list temp
+00d3fcf0  FUN_00d3fcf0() -> void  # avatar-death cinematic: freeze sim, nearest-creature camera, then PostTrigger("CRG_BrainUpgradeN") by creature level
+00d400e0  Scenario::EvalTrigger(int event, int* ctx) -> bool  # events 0x053f0369 / 0x055a7128 / 0x533535dd gate on avatar state, trigger value and level, then set sphere property 0x03a8d77c
+00d40230  Scenario::EvaluateEvent(float dt) -> int  # state 1 starts the death cut, state 3 finishes when the trigger manager leaves 1/2; in avatar states 4/5 re-target the effect to the nearest creature
+00d40640  Scenario::Finish() -> int  # release the effect, and in state 3 rebuild each subobject transform (BuildSurfaceOrientation + QuaternionFromMatrix33) before finishing
