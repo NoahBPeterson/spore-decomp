@@ -113,7 +113,7 @@ have:;
     u32 nPre = (u32)((char*)position - (char*)oldBegin);
     void** pos = (void**)((char*)eastl_uninit_copy(pNewData, oldBegin, nPre) + nPre);
     if (pos) {
-      void* v = *position;
+      void* v = value;   // the inserted reference, not *position (position may be past the end)
       *pos = v;
       addref(v);
     }
@@ -212,8 +212,7 @@ E12* Vec12::erase(E12* first, E12* last) {
       q += 0xc;
     }
   }
-  int n = (int)((char*)last - (char*)first) / 0xc;
-  mpEnd = (E12*)((char*)mpEnd + n * 0xc);
+  mpEnd -= last - first;
   return first;
 }
 
@@ -263,7 +262,7 @@ struct SpaceTool {
   void RemoveMatching(int a, int b, int c);      // 0xaea720
   void RemoveByPtr(void* p);                     // 0xaea7f0
   void ReleaseSelected(void* p);                 // 0xaea850
-  void Advance(int delta);                       // 0xaea8e0
+  void Advance(int delta, int a2);               // 0xaea8e0
   void RemoveByPtrAndUpdate(void* p);            // 0xaea9e0
   void RemoveMatching2(int a, int b, int c, int d);  // 0xaeaa80
   void RemoveByKey(int key);                     // 0xaeab40
@@ -340,12 +339,12 @@ void SpaceTool::ReleaseSelected(void* p) {
 }
 
 // @ 0x00aea8e0
-void SpaceTool::Advance(int param) {
-  void** it = mVec.mpBegin;
-  if (it == mVec.mpEnd) {
+void SpaceTool::Advance(int param, int a2) {
+  if (mVec.mpBegin == mVec.mpEnd) {
     mb60 = 0;
     return;
   }
+  void** it = mVec.mpBegin;
   void** next = it + 1;
   do {
     void* e = *it;
