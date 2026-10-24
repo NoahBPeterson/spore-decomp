@@ -1,0 +1,7 @@
+00ac0180 208 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/136, fake call #2); slot-map update path approximate, out-param local placement and begin/end block loads differ, size 222 vs 228
+00ac0270 142 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 execution); "Interaction History" deque walk and string append/push-back call shapes not faithful, size 153 vs 175
+00ac0340 132 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 esp); vtable-slot erase path pops a different stack amount than the original, size 123 vs 136
+00ac03f0 95 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 execution); slot-vector iterator advance left as an unresolved SlotIter_inc stub, size 107 vs 95
+00ac0570 79 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/24 execution); Object::Cast insert path (FUN_00aea5d0 argument order) not faithful
+00ac08f0 875 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/15 execution); nearest-point scan loop shape/register pressure not reproduced, size 729 vs 515
+00ac0cb0 102 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 execution); species-to-inventory-item factory call sequence not faithful, size 173 vs 182

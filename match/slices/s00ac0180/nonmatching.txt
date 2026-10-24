@@ -1,0 +1,10 @@
+00ac06c0 56 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; ctor call and pos/scale stores identical, but cl eliminates the two dead base-vtable stores at +0x18/+0x1c and interleaves the x87 float3 copy differently
+00ac0810 22 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; only the SSE subtract/square scheduling order of the two distance accumulations differs
+00ac0bb0 60 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; clone path complete, vtable temp register (eax vs edx) and the profile load register differ
+00ac0e50 61 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; int3 table copies correct, but the type compare is scheduled after the zero stores and the 0x608 test compiles to `ja` instead of seta/cmp
+00ac0450 170 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest WEAK (233/400 valid, 23.8% coverage; entries need live vtables); slot-vector release loop complete but iterator/deque frame shape differs
+00ac0730 22 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs, fake-arity); only the SSE subtract/square scheduling order differs
+00ac0f40 85 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (unresolved cVarListSerializer::Serialize, annotation-ambiguous 00692900/00693e10); serializer frame size and call shape differ
+00ac0fd0 91 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); serializer read path plus profile refresh not reproduced faithfully
+00ac10a0 188 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); key-vector construction and object-template lookup call shape not reproduced
+00ac1190 290 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); category-to-key switch and template lookup not reproduced, size 178 vs 347
