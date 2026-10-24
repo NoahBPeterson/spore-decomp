@@ -326,12 +326,13 @@ struct cSPUIFeedEdit_s0065_d050 {
   void UpdateGrid();         // 0065d260 0x0065d260
   void FUN_0065d490();       // 0065d490 0x0065d490
   bool SetPage(unsigned int page);  // 0065d4e0 0x0065d4e0
-  void ShowAsset(int a, int b);     // 0065d570 0x0065d570
+  bool ShowAsset(int a, int b);     // 0065d570 0x0065d570
   bool TranslateToken(const wchar_t* token, void* out);  // 0065dc60 0x0065dc60
   void SetActive(bool b);    // 0065d9f0 0x0065d9f0
   bool FUN_0065dd30(unsigned int id);  // 0065dd30 wrapper
 };
 struct HashtableU64 {
+  char pad[0xc];
   int count;  // +0x0c
   int* erase(int* out, int* node, int* bucket);
 };
@@ -1593,13 +1594,13 @@ bool cSPUIFeedEdit_s0065_d050::SetPage(unsigned int page)
 }
 
 // @ 0x0065d570
-void cSPUIFeedEdit_s0065_d050::ShowAsset(int a, int b)
+bool cSPUIFeedEdit_s0065_d050::ShowAsset(int a, int b)
 {
   char* p = (char*)this;
   int idx = GetAssetIndex(a, b);
   unsigned int count = (*(int*)(p + 0xc8) - *(int*)(p + 0xc4)) >> 4;
   if ((unsigned int)idx >= count)
-    return;
+    return false;
   *(int*)(p + 0xac) = -1;
   unsigned int per = (*(int*)(p + 0xb4) - *(int*)(p + 0xb0)) >> 2;
   SetPage((unsigned int)idx / per);
@@ -1629,6 +1630,7 @@ void cSPUIFeedEdit_s0065_d050::ShowAsset(int a, int b)
       *(int*)(view + 0x30) = 2;
     }
   }
+  return true;
 }
 
 // @ 0x0065d6a0
@@ -1869,7 +1871,11 @@ __declspec(noinline) AssetInfo_s0065_df30* AssetVec::DoInsertValue(AssetInfo_s00
         AssetInfo_s0065_df30* p = UninitCopy(begin, position, buf);
         AssignRange(begin, position, buf);
         if (p) {
-            *p = *value;
+            // Field-wise copy (four dword moves at 0x0065e016-0x0065e02d): `*p = *value` makes cl emit
+            // a movq pair through xmm0, a register the original never writes.
+            p->mnAssetID = value->mnAssetID;
+            p->mnType = value->mnType;
+            p->mpImage = value->mpImage;
             if (p->mpImage) (*(FnP)Vslot(p->mpImage, 0))(p->mpImage);
         }
         AssetInfo_s0065_df30* p2 = UninitCopy(position, end, p + 1);
@@ -1879,7 +1885,9 @@ __declspec(noinline) AssetInfo_s0065_df30* AssetVec::DoInsertValue(AssetInfo_s00
         end = p2;
         cap = buf + nc;
     }
-    return position;
+    // The retail tail (0x0065e06f) forms buf + nNewCapacity once and leaves it in eax while storing
+    // begin/end/cap, so this grow path returns the capacity pointer, not the stale position.
+    return cap;
 }
 
 // @ 0x0065e0a0
@@ -1911,7 +1919,7 @@ bool cSPUIFeedEdit_s0065_df30::Populate()
         view->mpButtonWin = 0; view->mpAssetWin = 0; view->mpBackdropWin = 0;
         view->mpGlowWin = 0; view->mpEmptyWin = 0; view->mpImage = 0;
         view->mnMode = 0; view->mnAssetID = (uint64_t)-1;
-        view->mnIndex = 0xffffffff; view->mTickMask = 0xffffffff; view->mfBlinkStart = 0.0f;
+        view->mnIndex = 0xffffffff; view->mTickMask = 0; view->mfBlinkStart = 0.0f;
     }
     if (!view) return false;
 
@@ -1943,7 +1951,7 @@ bool cSPUIFeedEdit_s0065_df30::Populate()
         for (int col = 0; col < cols; ++col) {
             cSPUIFeedEditAssetView_s0065_df30* v =
                 (cSPUIFeedEditAssetView_s0065_df30*)EASTL_allocator_allocate(0x50, "Sporepedia", 0, 0, 0, 0);
-            if (v) { v->mpImage = 0; v->mnAssetID = (uint64_t)-1; v->mnIndex = 0xffffffff; v->mTickMask = 0xffffffff; v->mfBlinkStart = 0.0f; }
+            if (v) { v->mpImage = 0; v->mnAssetID = (uint64_t)-1; v->mnIndex = 0xffffffff; v->mTickMask = 0; v->mfBlinkStart = 0.0f; }
             if (idx != 0 && v == 0) {
                 ((VecPtr*)(p + 0xb0))->erase(*(void**)(p + 0xb0), *(void**)(p + 0xb4));
                 return false;
