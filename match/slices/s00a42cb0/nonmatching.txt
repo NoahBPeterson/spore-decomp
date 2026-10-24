@@ -1,1 +1,7 @@
 # va  diff-bytes  reason
+00a42e90 133 Erase(EastlHashTable): byte-diff vs retail (equivalent WEAK: 85/400 valid, 100% coverage)
+00a43190 301 SelectAudioObject: byte-diff vs retail (equivalent WEAK: 122/400 valid, 4.4% coverage)
+00a43300 385 DoCommand: byte-diff vs retail; equiv UNSUPPORTED (0/400 valid, 396 fake-arity discards through a generated vtable call - harness limitation)
+00a43580 225 AddSymbolList: byte-diff vs retail (equivalent WEAK: 400/400 valid, 45.5% coverage)
+00a43790 127 CopyNode30: byte-diff vs retail (equivalent PASS: 314/400 valid, 100% coverage); unreproduced 48-byte MSVC SEH frame
+00a439b0 144 ApplyPolyphonySettings: byte-diff vs retail (equivalent WEAK: 400/400 valid, 16.9% coverage)

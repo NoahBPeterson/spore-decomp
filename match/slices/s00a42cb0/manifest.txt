@@ -1,1 +1,6 @@
-slices/s00a42cb0/s00a42cb0.cpp  ReadTuningValues@cSystemTuning  00a43a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a42cb0/s00a42cb0.cpp  ?ReadPolyphonyCounters@cSystemTuning@SP@@QAEXXZ  00a42cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a42cb0/s00a42cb0.cpp  ?ShutdownAudio@cSystemTuning@SP@@QAE_NXZ  00a43050  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a42cb0/s00a42cb0.cpp  ?NotifyTimeChange@cSystemTuning@SP@@QAEXMM@Z  00a43120  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a42cb0/s00a42cb0.cpp  ?AllocNode@EastlNodeAlloc@SP@@QAEPAXPAX@Z  00a43740  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a42cb0/s00a42cb0.cpp  ?SetProperty@cSystemTuning@SP@@QAEXIM@Z  00a43830  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a42cb0/s00a42cb0.cpp  ?ReadTuningValues@cSystemTuning@SP@@QAE_NPBUResourceKey@2@@Z  00a43a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
