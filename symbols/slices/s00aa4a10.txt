@@ -1,1 +1,7 @@
 00aa4e50 cParticleEffectCommand::OnRegister  # byte-exact; mState(+0x30)=state-0xc, base OnRegister, SetChildState(+0x38), 38 ArgScript keyword AddCommands (cParticleCmdT<N> per vtable), RegisterPathCommand at +0x29c/+0x2c8/+0x2c9
+00aa4a10 ?Execute@cParticleModelCommand@?A0x1ac1ae14@@UAEXAAUcArguments@ArgScript@EA@@@Z  # byte-exact; ParticleModel "<mapid>": mState->mMapID(+0x200) = parser->EffectsMapID(argv[0])
+00aa4a50 ?Execute@cParticleSourceCommand@?A0x1ac1ae14@@UAEXAAUcArguments@ArgScript@EA@@@Z  # nonmatching (162) - ParticleSource [mapid] [bounce=] [death=]: pinToMap 0x40000 + bounce=0, killOutsideMap 0x20000
+00aa4b60 ?Execute@cParticleEmitCommand@?A0x1ac1ae14@@UAEXAAUcArguments@ArgScript@EA@@@Z  # nonmatching (99) - ParticleEmit <a0> <a1> <a2>: flags 0x2000|0x4000, scout/vertical/killHeight
+00aa4cc0 ?Execute@cParticleForceCommand@?A0x1ac1ae14@@UAEXAAUcArguments@ArgScript@EA@@@Z  # nonmatching (31) - ParticleForce <mapid> [strength=1]; flags 0x2000|0x8000
+00aa4d70 ?Execute@cParticleWarpCommand@?A0x1ac1ae14@@UAEXAAUcArguments@ArgScript@EA@@@Z  # nonmatching (31) - ParticleWarp <mapid> [strength=1]; flags 0x2000|0x10000
+00aa5810 ?Execute@cParticleAlphaCommand@?A0x1ac1ae14@@UAEXAAUcArguments@ArgScript@EA@@@Z  # nonmatching (165) - ParticleAlpha <curve>... [vary=]: clears + refills the curve vector at +0xdc, "255" scales by 1/255

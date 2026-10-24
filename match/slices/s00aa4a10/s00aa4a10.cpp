@@ -157,3 +157,256 @@ void cParticleEffectCommand::OnRegister(EA::ArgScript::cIParser* parser, EA::Arg
     EA::Swarm::RegisterPathCommand(this, (char*)this + 0x2c8, (char*)this + 0x2c9, (char*)this + 0x29c);
 }
 }  // namespace
+
+extern const float HK_REAL_ONE;     // 0x01485720 Havok hkReal 1.0, the default option value
+
+// ---------------------------------------------------------------------------------------------
+// Execute bodies of the particle commands (0x00aa4a10 .. 0x00aa5810).
+//
+// Every Execute unpacks its positional arguments with cArguments::MainArguments, stores the
+// effects-map id resolved for the first argument into the command state (mState, located at
+// +0x0c for these non-block commands), turns on the feature bits for the command and reads its
+// optional arguments, converting them with the parser's float/vector parsers (vtable +0x98 and
+// +0xb0).
+namespace EA { namespace ArgScript {
+
+// Argument list handed to an Execute.
+struct cArguments {
+    const char** MainArguments(int count);                                  // 0x00838320
+    const char** MainArguments(int* outCount, int minArgs, int maxArgs);    // 0x00838020
+    bool HasFlag(const char* name);                                         // 0x008380b0
+    const char** OptionArguments(const char* name, int minArgs);            // 0x00838330
+    const char* operator[](int index);                                      // 0x00837f20
+};
+
+#define PARSER_CAT2(a, b) a##b
+#define PARSER_CAT(a, b) PARSER_CAT2(a, b)
+#define PARSER_SLOT() virtual void PARSER_CAT(slot, __COUNTER__)();
+
+// The parser interface as seen by the particle commands: only the string-to-float slot (+0x98)
+// and the string-to-vector slot (+0xb0) are used here.
+struct cIParser {
+    PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT()
+    PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT()
+    PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT()
+    PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT()
+    PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT()
+    PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT()
+    PARSER_SLOT() PARSER_SLOT()
+    virtual float ParseFloat(const char* text);                     // +0x98
+    PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT() PARSER_SLOT()
+    virtual float* ParseVector(float* out, const char* text);       // +0xb0
+};
+#undef PARSER_SLOT
+#undef PARSER_CAT
+#undef PARSER_CAT2
+
+}}  // namespace EA::ArgScript
+
+namespace EA { namespace Swarm {
+
+// Minimal view of the eastl vector that stores the particle curves (erase / push_back).
+struct Vec0C {
+    void* mBegin;            // +0x00
+    void* mEnd;              // +0x04
+    void* mEndCapacity;      // +0x08
+    void* erase(void* first, void* last);    // 0x009e0480
+};
+
+// The effect state the particle commands configure (the command's mState).
+struct cEffectsParser {
+    char     pad000[0x10];
+    uint32_t mFlags;             // +0x10  feature bits
+    char     pad014[0xc8];
+    Vec0C    mCurves;            // +0xdc  alpha/colour curves
+    char     pad0e8[0x08];
+    float    mVary[3];           // +0xf0  "vary" range
+    char     pad0fc[0xcc];
+    float    mBounce;            // +0x1c8 "bounce"
+    float    mInterval;          // +0x1cc emit interval
+    float    mStrength;          // +0x1d0 force/warp strength
+    float    mScout;             // +0x1d4 "scout"
+    float    mVertical;          // +0x1d8 "vertical"
+    float    mKillHeight;        // +0x1dc "killHeight"
+    float    mDeath;             // +0x1e0 "death"
+    char     pad1e4[0x0c];
+    int64_t  mPinToMapID;        // +0x1f0 effects map id the effect is pinned to
+    char     pad1f8[0x08];
+    int64_t  mMapID;             // +0x200 effects map id of the effect
+    char     pad208[0x70];
+    cEffectsParser* mpParser;    // +0x278 owning parser
+    int64_t EffectsMapID(const char* name);     // 0x00a6e600
+};
+
+}}  // namespace EA::Swarm
+
+extern "C" float __cdecl ParseRangedFloat(void* parser, const char* text, float lo, float hi);      // 0x00840d50
+extern "C" float* __cdecl ParseRangedVector3(float* out, void* parser, const char* text, float lo,
+                                             float hi);                                            // 0x00840e10
+void __stdcall ScaleCurve(void* dst, const void* src);                                             // 0x007ed1b0
+void __cdecl FUN_007ecc30(EA::Swarm::Vec0C* curves, float scale);                                  // 0x007ecc30
+extern "C" char* __cdecl strstr(const char* text, const char* find);
+
+namespace {
+struct cParticleModelCommand : EA::ArgScript::cCommandT<EA::Swarm::cEffectsParser> {
+    virtual void Execute(EA::ArgScript::cArguments& args);
+};
+struct cParticleSourceCommand : EA::ArgScript::cCommandT<EA::Swarm::cEffectsParser> {
+    virtual void Execute(EA::ArgScript::cArguments& args);
+};
+struct cParticleEmitCommand : EA::ArgScript::cCommandT<EA::Swarm::cEffectsParser> {
+    virtual void Execute(EA::ArgScript::cArguments& args);
+};
+struct cParticleForceCommand : EA::ArgScript::cCommandT<EA::Swarm::cEffectsParser> {
+    virtual void Execute(EA::ArgScript::cArguments& args);
+};
+struct cParticleWarpCommand : EA::ArgScript::cCommandT<EA::Swarm::cEffectsParser> {
+    virtual void Execute(EA::ArgScript::cArguments& args);
+};
+struct cParticleAlphaCommand : EA::ArgScript::cCommandT<EA::Swarm::cEffectsParser> {
+    virtual void Execute(EA::ArgScript::cArguments& args);
+};
+}  // namespace
+
+// @ 0x00aa4a10 cParticleModelCommand::Execute: "ParticleModel <mapid>"
+namespace {
+void cParticleModelCommand::Execute(EA::ArgScript::cArguments& args)
+{
+    const char** argv = args.MainArguments(1);
+    mState->mMapID = mState->mpParser->EffectsMapID(argv[0]);
+}
+}  // namespace
+
+// @ 0x00aa4a50 cParticleSourceCommand::Execute: "ParticleSource [mapid] [bounce=..] [death=..]"
+namespace {
+void cParticleSourceCommand::Execute(EA::ArgScript::cArguments& args)
+{
+    int count;
+    const char** argv = args.MainArguments(&count, 0, 1);
+    if (count < 1)
+        mState->mPinToMapID = 0;
+    else
+        mState->mPinToMapID = mState->mpParser->EffectsMapID(argv[0]);
+    mState->mFlags |= 0x2000;
+    if (args.HasFlag("pinToMap")) {
+        mState->mFlags |= 0x40000;
+        mState->mBounce = 0.0f;
+    } else {
+        const char** bounce = args.OptionArguments("bounce", 1);
+        if (bounce)
+            mState->mBounce = (float)mParser->ParseFloat(bounce[0]);
+    }
+    if (args.HasFlag("killOutsideMap"))
+        mState->mFlags |= 0x20000;
+    const char** death = args.OptionArguments("death", 1);
+    if (death)
+        mState->mDeath = (float)ParseRangedFloat(mParser, death[0], 0.0f, 1.0f);
+}
+}  // namespace
+
+// @ 0x00aa4b60 cParticleEmitCommand::Execute: "ParticleEmit <mapid> <interval> <strength> ..."
+namespace {
+void cParticleEmitCommand::Execute(EA::ArgScript::cArguments& args)
+{
+    int count;
+    const char** argv = args.MainArguments(&count, 2, 3);
+    const char* strength;
+    if (count < 3) {
+        mState->mPinToMapID = 0;
+        mState->mInterval = (float)mParser->ParseFloat(argv[0]);
+        strength = argv[1];
+    } else {
+        mState->mPinToMapID = mState->mpParser->EffectsMapID(argv[0]);
+        mState->mInterval = (float)mParser->ParseFloat(argv[1]);
+        strength = argv[2];
+    }
+    mState->mStrength = (float)mParser->ParseFloat(strength);
+    mState->mFlags |= 0x2000;
+    mState->mFlags |= 0x4000;
+    const char** scout = args.OptionArguments("scout", 1);
+    if (scout)
+        mState->mScout = (float)mParser->ParseFloat(scout[0]);
+    const char** vertical = args.OptionArguments("vertical", 1);
+    if (vertical)
+        mState->mVertical = (float)mParser->ParseFloat(vertical[0]);
+    const char** killHeight = args.OptionArguments("killHeight", 1);
+    if (killHeight)
+        mState->mKillHeight = (float)mParser->ParseFloat(killHeight[0]);
+    if (args.HasFlag("killOutsideMap"))
+        mState->mFlags |= 0x20000;
+}
+}  // namespace
+
+// @ 0x00aa4cc0 cParticleForceCommand::Execute: "ParticleForce <mapid> [strength=..]"
+namespace {
+void cParticleForceCommand::Execute(EA::ArgScript::cArguments& args)
+{
+    int count;
+    const char** argv = args.MainArguments(&count, 1, 0x7fffffff);
+    mState->mPinToMapID = mState->mpParser->EffectsMapID(argv[0]);
+    mState->mFlags |= 0x2000;
+    mState->mFlags |= 0x8000;
+    const char** strength = args.OptionArguments("strength", 1);
+    if (strength)
+        mState->mStrength = mParser->ParseFloat(strength[0]);
+    else
+        mState->mStrength = HK_REAL_ONE;
+    if (args.HasFlag("killOutsideMap"))
+        mState->mFlags |= 0x20000;
+}
+}  // namespace
+
+// @ 0x00aa4d70 cParticleWarpCommand::Execute: "ParticleWarp <mapid> [strength=..]"
+namespace {
+void cParticleWarpCommand::Execute(EA::ArgScript::cArguments& args)
+{
+    int count;
+    const char** argv = args.MainArguments(&count, 1, 0x7fffffff);
+    mState->mPinToMapID = mState->mpParser->EffectsMapID(argv[0]);
+    mState->mFlags |= 0x2000;
+    mState->mFlags |= 0x10000;
+    const char** strength = args.OptionArguments("strength", 1);
+    if (strength)
+        mState->mStrength = mParser->ParseFloat(strength[0]);
+    else
+        mState->mStrength = HK_REAL_ONE;
+    if (args.HasFlag("killOutsideMap"))
+        mState->mFlags |= 0x20000;
+}
+}  // namespace
+
+// @ 0x00aa5810 cParticleAlphaCommand::Execute: "ParticleAlpha <curve>... [vary=..]"
+namespace {
+void cParticleAlphaCommand::Execute(EA::ArgScript::cArguments& args)
+{
+    int count;
+    const char** argv = args.MainArguments(&count, 1, 0x7fffffff);
+    mState->mCurves.erase(mState->mCurves.mBegin, mState->mCurves.mEnd);
+    for (int i = 0; i < count; ++i) {
+        float curve[3];
+        float* src = mParser->ParseVector(curve, argv[i]);
+        float* end = (float*)mState->mCurves.mEnd;
+        if (end < (float*)mState->mCurves.mEndCapacity) {
+            mState->mCurves.mEnd = end + 3;
+            if (end) {
+                end[0] = src[0];
+                end[1] = src[1];
+                end[2] = src[2];
+            }
+        } else {
+            ScaleCurve(end, src);
+        }
+    }
+    const char** vary = args.OptionArguments("vary", 1);
+    if (vary) {
+        float range[3];
+        float* src = ParseRangedVector3(range, mParser, vary[0], 0.0f, 1.0f);
+        mState->mVary[0] = src[0];
+        mState->mVary[1] = src[1];
+        mState->mVary[2] = src[2];
+    }
+    const char* name = args[0];
+    if (strstr(name, "255"))
+        FUN_007ecc30(&mState->mCurves, 0.0039215689f);
+}
+}  // namespace

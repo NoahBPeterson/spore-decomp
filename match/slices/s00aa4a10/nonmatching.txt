@@ -1,1 +1,5 @@
-# va  diff-bytes  reason (none: every function below is byte-exact)
+00aa4a50  162  complete: ParticleSource Execute (pinToMap/bounce/death); cl15 258 vs 270 bytes, mState cached in esi vs retail reload and x87/SSE choice for the 0.0f bounce store
+00aa4b60  99  complete: ParticleEmit Execute (scout/vertical/killHeight); same size, cl15 keeps mState in a register where retail reloads [esi+0xc] per store
+00aa4cc0  31  complete: ParticleForce Execute; /O2 /MD /Gy /TP; only the default `strength` store differs (cl15 fld/fstp of the HK_REAL_ONE float vs retail movss from the constant)
+00aa4d70  31  complete: ParticleWarp Execute; /O2 /MD /Gy /TP; only the default `strength` store differs (cl15 fld/fstp of the HK_REAL_ONE float vs retail movss from the constant)
+00aa5810  165  complete: ParticleAlpha Execute (curve vector erase/push_back, vary range, /255 scaling); cl15 302 vs 297 bytes, vector element copy via SSE vs retail fld/fstp
