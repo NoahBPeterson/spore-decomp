@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00d4f2e0: incomplete / approximate reconstruction.  These functions are
+# present in the slice source for completeness of the object model, but do not
+# yet reproduce the original body instruction-for-instruction.
+00d50040  465  FUN_00d50040: incomplete.  Creates a visual effect holder through the effects manager (slot 0x2c), samples a random world position near the strike point (SP_PlanetModel + FUN_00b81780), builds the surface orientation (FUN_00b7f190) and the quaternion->matrix basis (SP_Matrix3FromQuaternion), scales the surface normal by (1/len + the caller's radius), and assembles the holder transform (flags `or 4` / `or 2`, a revision counter) before applying it through the holder slots 0x18 then 0x08 and releasing.  The reconstruction covers the behaviour but MSVC sizes the frame differently (426 vs 532 bytes) and the original's `Matrix33Template` value-completion, the `rep movsd` basis copy and the word-flag arithmetic are not reproduced instruction-for-instruction, so this is recorded as incomplete rather than merely non-byte-exact.  equiv.py: UNSUPPORTED (0/400 valid inputs; the fake effects-manager object faults on the first read).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

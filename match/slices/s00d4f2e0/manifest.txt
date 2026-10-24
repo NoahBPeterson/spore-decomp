@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d4f2e0/s00d4f2e0.cpp  ?PostLoad@cMeteorStrikeEvent@SP@@QAEXI@Z  00d4fef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4f2e0/s00d4f2e0.cpp  @FUN_00d502f0@4  00d502f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

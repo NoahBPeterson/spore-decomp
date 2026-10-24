@@ -1,1 +1,79 @@
-00d4f2e0 SP::cNightPredatorEvent::TriggerEvent  # PDB name; finds/creates the predator herd, positions it near the creature/water, spawns members at a surface transform
+# Slice s00d4f2e0 -- Spore Simulator drama-event cluster (cUFOAbductionEvent +
+# cMeteorStrikeEvent methods and the two free helpers)
+#
+#   VA          symbol                                        disposition
+#   00d4f8f0  cUFOAbductionEvent::TriggerEvent                nonmatching  463 diff
+#   00d4fb20  cUFOAbductionEvent::ShutdownEvent               nonmatching   94 diff
+#   00d4fbf0  cUFOAbductionEvent::TickEvent                   nonmatching  208 diff
+#   00d4fcf0  cMeteorStrikeEvent::cMeteorStrikeEvent          nonmatching  118 diff
+#   00d4fea0  cMeteorStrikeEvent::ShouldDeactivate            nonmatching    6 diff
+#   00d4fef0  cMeteorStrikeEvent::PostLoad                    MATCH          (byte-exact)
+#   00d4ff50  cMeteorStrikeEvent::ShouldActivate              nonmatching  182 diff
+#   00d50040  FUN_00d50040                                    partial      465 diff
+#   00d50260  cMeteorStrikeEvent::Write                       nonmatching   15 diff
+#   00d502f0  FUN_00d502f0                                    MATCH          (byte-exact)
+#
+# Build flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+# Source: match/slices/s00d4f2e0/s00d4f2e0.cpp
+#
+# Layout convention: the dev PDB reports SP::cMeteorStrikeEvent (size 0x4f8) and
+# SP::cUFOAbductionEvent (size 0x7c) deriving from SP::cDramaEventInstanceData,
+# but the retail object is 0x10 below that layout, so the classes in the slice
+# model the members at the offsets read from the disassembly (same convention as
+# the sibling slices s00d4a930 / s00d4d5c0 / s00d50380).
+#
+# cDramaEventInstanceData (retail offsets used here):
+#   +0x00/+0x04  the two base vtable words (cISerializableObject + RefCountVTemplate<int>)
+#   +0x08        ref count
+#   +0x0c        debugName begin byte / non-empty flag
+#   +0x14..+0x1c debugName vector tail
+#   +0x20        mActivationThreshold (cSPVector2)
+#   +0x28/+0x2c  float fields (check-time / activation type)
+#   +0x30        bool flag
+#   +0x34/+0x38/+0x3c  float fields (threshold padding / check-time / duration)
+#   +0x40        mPropList40 (cPropertyList*)
+#   +0x44        m_data44 (eastl::vector_map<u32,u32>)
+#   +0x5c        m_gd5c game-data map (begin/end/cap/alloc at +0x5c..+0x6c)
+#   +0x70        game-data sorted flag byte
+#
+# cMeteorStrikeEvent extras:
+#   +0x74        bActive byte
+#   +0x78/+0x80  meteorCount[2][2] (current/target per stream)
+#   +0x88/+0x90  strike centre / range (float[2])
+#   +0x98        meteorEffect[2] keys
+#   +0xa0        meteorSpawnDelayRange[2]
+#   +0xb0        currentMeteorSpawnDelay[2]
+#   +0xb8/+0xbc/+0xc0/+0xc4  meteor impact scalars
+#   +0xc8        meteors[0] fixed effect vector (begin/end/cap/0x200 pad) -> begins at +0xe0
+#   +0x2e0       meteors[1] fixed effect vector -> begins at +0x2f8
+#
+# Key callees / constants:
+#   GetCurrentGameMode 0x00b5b800 (vs the mode globals 0x01654c01 / 0x01654c02)
+#   NounManager 0x00b3d300, cGameNounManager::GetAvatar 0x00b1fdb0,
+#     cGameNounManager::GetPlayerTribe 0x00b1fe90
+#   PropertyManager 0x0067de30, Property::GetFloat 0x0041ea70, GetUInt 0x0041ea00
+#   cRandomGlobal::RandomDouble 0x009360d0, RandomUint32Uniform 0x00a68fb0
+#   eastl::vector_map::operator[] 0x00564a10, MapLowerBound 0x00d01260
+#   WriteData/FUN_00d4da10, Clear/FUN_00d4e950, FUN_00d4e8e0 (map erase),
+#     FUN_00d4edd0, FUN_00d4c1b0 (spawn UFO), FUN_00bc97f0, FUN_00bc96a0,
+#     FUN_00d50040 / FUN_00d502f0 (defined in this slice)
+#   SP_EffectsManager 0x0067ddd0, SP_PlanetModel 0x00b3d350,
+#     FUN_00b81780 / FUN_00b7f190 / Matrix3FromQuaternion 0x0059c190,
+#     FUN_00b3d440, FUN_00b09340, operator delete[] 0x00f47380
+#   ea::Audio::GetSystemAT 0x00a206f0 (slots 0x38/0x3c/0x40/0x58)
+#   DestroyCreature 0x0102c340, GameTimeManager 0x00b3d380, FUN_00b316c0
+#   vtables: cMeteorStrikeEvent 0x0147b640 / 0x0147b62c,
+#     cDramaEventInstanceData::RefCountVTemplate 0x013ec458
+#   Property hashes: 0x51be5fae, 0x9b0ef346, 0x60be63b8, 0xb753f503, 0xb033b403
+#   Write key 0x05599ef6, field-name string 0x01583998, signature 0x1a80d26
+#
+# Equivalence (tools/difftest/equiv.py, default inputs, run once):
+#   00d4f8f0  UNSUPPORTED  unresolved ?GetPlayerTribe@cGameNounManager@@QAEPAXXZ
+#   00d4fb20  PASS  368/400 valid, 88.3% coverage
+#   00d4fbf0  FAIL  5/63 valid, 81.9% coverage (fake `this` faults early)
+#   00d4fcf0  PASS  400/400 valid, 100% coverage
+#   00d4fea0  PASS  400/400 valid, 100% coverage
+#   00d4ff50  WEAK  264/400 valid, 20.5% coverage, no mismatch
+#   00d50040  UNSUPPORTED  0/400 valid (fake effects-manager faults on first read)
+#   00d50260  UNSUPPORTED  0/400 valid (fake stream faults on first read)
+#   (00d4fef0, 00d502f0 are byte-exact and not run through equiv)
