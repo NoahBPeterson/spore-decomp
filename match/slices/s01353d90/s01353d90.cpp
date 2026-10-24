@@ -1,3 +1,187 @@
+// Slice s01353d90: 0x013547b0 - dynamic initializer for the simulator's static attribute
+// descriptor table (MSVC emits this as $E213 for a namespace-scope array whose element type has a
+// non-trivial constructor).
+//
+// Each descriptor is 0x3c bytes (15 dwords):
+//   +0x00  const char* mName           attribute name ("mPrimaryType", ...)
+//   +0x04  const char* mKey            secondary name/key string
+//   +0x08  int         mOffset         byte offset inside the simulated object
+//   +0x0c  (not initialised by the element constructor)
+//   +0x10  (not initialised)
+//   +0x14  (not initialised)
+//   +0x18  int         0
+//   +0x1c  int         0
+//   +0x20  DefaultOffsetFn
+//   +0x24  ReadFn
+//   +0x28  WriteFn
+//   +0x2c  ParseFn
+//   +0x30  TextWriteFn
+//   +0x34  ValidFn
+//   +0x38  ToXmlFn
+// The constructor never touches +0x0c..+0x14, so those three dwords reach the table as whatever
+// was on the stack; retail copies the whole 0x3c-byte temporary with rep movsd.
+#include "types.h"
+#include <stddef.h>
+
+#define CHK(cls, name, off) typedef char chk_##cls##_##name[(offsetof(cls, name) == (off)) ? 1 : -1]
+
+typedef void (*AttrFn)();
+
+struct cAttributeDesc {
+    const char* mpName;                 // +0x00
+    const char* mpKey;                  // +0x04
+    int mOffset;                        // +0x08
+    int mUnk0c;                         // +0x0c  (left indeterminate by the constructor)
+    int mUnk10;                         // +0x10
+    int mUnk14;                         // +0x14
+    int mUnk18;                         // +0x18
+    int mUnk1c;                         // +0x1c
+    AttrFn mpDefaultOffset;             // +0x20  Simulator::Attribute::DefaultOffset
+    AttrFn mpRead;                      // +0x24
+    AttrFn mpWrite;                     // +0x28
+    AttrFn mpParse;                     // +0x2c
+    AttrFn mpTextWrite;                 // +0x30
+    AttrFn mpValid;                     // +0x34
+    AttrFn mpToXml;                     // +0x38
+};
+CHK(cAttributeDesc, mpName, 0x00);
+CHK(cAttributeDesc, mpKey, 0x04);
+CHK(cAttributeDesc, mOffset, 0x08);
+CHK(cAttributeDesc, mUnk18, 0x18);
+CHK(cAttributeDesc, mUnk1c, 0x1c);
+CHK(cAttributeDesc, mpDefaultOffset, 0x20);
+CHK(cAttributeDesc, mpRead, 0x24);
+CHK(cAttributeDesc, mpWrite, 0x28);
+CHK(cAttributeDesc, mpParse, 0x2c);
+CHK(cAttributeDesc, mpTextWrite, 0x30);
+CHK(cAttributeDesc, mpValid, 0x34);
+CHK(cAttributeDesc, mpToXml, 0x38);
+typedef char chk_cAttributeDesc_size[(sizeof(cAttributeDesc) == 0x3c) ? 1 : -1];
+
+// The static table itself (six descriptors, 0x3c bytes apart).
+cAttributeDesc gAttributeTable[6];      // 0x0157a828
+
+// ---------------------------------------------------------------------------
+// Descriptor callbacks. Only their addresses are stored; nothing here calls them.
+// ---------------------------------------------------------------------------
+extern void DefaultOffset();            // 0x00692ca0  Simulator::Attribute::DefaultOffset
+extern void Read4Int();                 // 0x00572810  Simulator::Read4<int>
+extern void Write4();                   // 0x00572840  Simulator::Write4
+extern void ParseLong();                // 0x00692ff0
+extern void WriteTextLong();            // 0x00694ee0
+extern void AlwaysValid();              // 0x00b1fbf0
+extern void ToXmlInt();                 // 0x0057cde0
+extern void ReadULong();                // 0x00ac8750
+extern void WriteULong();               // 0x00ac8780
+extern void ParseULong();               // 0x00693090
+extern void WriteTextULong();           // 0x00694fa0
+extern void ToXmlULong();               // 0x0057ce00
+extern void WriteTextKey();             // 0x00694f00
+extern void ToXmlKey();                 // 0x00675ca0
+extern void ReadSolarSystem();          // 0x00c8bfa0
+extern void WriteSolarSystem();         // 0x01006600
+extern void ReadTextSolarSystem();      // 0x00c2e4e0
+extern void WriteTextSolarSystem();     // 0x00692fb0
+extern void ValidSolarSystem();         // 0x00fd9e80
+extern void ToXmlSolarSystem();         // 0x00ac8050
+
+// ---------------------------------------------------------------------------
+// Each table entry is built in a stack temporary and then copied into the array; retail copies
+// all 0x3c bytes (including the three never-initialised dwords) with rep movsd.
+// ---------------------------------------------------------------------------
+// @ 0x013547b0
+void InitAttributeTable()
+{
+    cAttributeDesc d;
+
+    d.mpName = (const char*)0x01473a38;
+    d.mpKey = (const char*)0x041f80ad;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &Read4Int;
+    d.mpWrite = &Write4;
+    d.mpParse = &ParseLong;
+    d.mpTextWrite = &WriteTextLong;
+    d.mpValid = &AlwaysValid;
+    d.mpToXml = &ToXmlInt;
+    d.mOffset = 0x34;
+    gAttributeTable[0] = d;
+
+    d.mpName = (const char*)0x01473a28;
+    d.mpKey = (const char*)0x041f80b0;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &Read4Int;
+    d.mpWrite = &Write4;
+    d.mpParse = &ParseLong;
+    d.mpTextWrite = &WriteTextLong;
+    d.mpValid = &AlwaysValid;
+    d.mpToXml = &ToXmlInt;
+    d.mOffset = 0x38;
+    gAttributeTable[1] = d;
+
+    d.mpName = (const char*)0x01473a14;
+    d.mpKey = (const char*)0x03755020;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &ReadULong;
+    d.mpWrite = &WriteULong;
+    d.mpParse = &ParseULong;
+    d.mpTextWrite = &WriteTextULong;
+    d.mpValid = &AlwaysValid;
+    d.mpToXml = &ToXmlULong;
+    d.mOffset = 0x3c;
+    gAttributeTable[2] = d;
+
+    d.mpName = (const char*)0x01465750;
+    d.mpKey = (const char*)0x0355fa98;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &Read4Int;
+    d.mpWrite = &Write4;
+    d.mpParse = &ParseULong;
+    d.mpTextWrite = &WriteTextKey;
+    d.mpValid = &AlwaysValid;
+    d.mpToXml = &ToXmlKey;
+    d.mOffset = 0x4c;
+    gAttributeTable[3] = d;
+
+    d.mpName = (const char*)0x01473a04;
+    d.mpKey = (const char*)0x039d4a3f;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &ReadSolarSystem;
+    d.mpWrite = &WriteSolarSystem;
+    d.mpParse = &ReadTextSolarSystem;
+    d.mpTextWrite = &WriteTextSolarSystem;
+    d.mpValid = &ValidSolarSystem;
+    d.mpToXml = &ToXmlSolarSystem;
+    d.mOffset = 0x40;
+    gAttributeTable[4] = d;
+
+    d.mpName = (const char*)0x014739f0;
+    d.mpKey = (const char*)0x056cfe97;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &ReadULong;
+    d.mpWrite = &WriteULong;
+    d.mpParse = &ParseULong;
+    d.mpTextWrite = &WriteTextULong;
+    d.mpValid = &AlwaysValid;
+    d.mpToXml = &ToXmlULong;
+    d.mOffset = 0x44;
+    gAttributeTable[5] = d;
+}
+
+// ---------------------------------------------------------------------------
+// Restored by the check-in: byte-exact 01353d90 from commit 6d8e3408a, dropped when this
+// slice was rewritten for its new functions.
 // Slice s01353d90: initializer of the Simulator::cSpatialObject attribute table (0x01353d90, 2420 bytes).
 //
 // Builds 25 Simulator::Attribute records (60 bytes each, globals 0x157a1f8..0x157a7d4) through the inline

@@ -1,1 +1,1 @@
-01353d90 SP::InitSpatialObjectAttributes  # dynamic initializer $E220: fills 25 Simulator::Attribute records (globals 0x157a1f8..) for cSpatialObject (ModAPI member offsets); name Claude-coined
+013547b0 SP::Simulator::sAttributeTable$E  # MSVC dynamic initializer ($E213) for the static 6-entry attribute-descriptor array at 0x0157a828; builds each 0x3c-byte descriptor in a stack temporary (name, key string, offset, two zero dwords, DefaultOffset + read/write/parse/text/valid/toxml callbacks) and copies it with rep movsd
