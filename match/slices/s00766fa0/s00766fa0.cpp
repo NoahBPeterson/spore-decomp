@@ -40,8 +40,7 @@ void  __cdecl RemoveRC(void* p);                                            // 0
 bool  __cdecl FUN_0071f8f0(void* stream, void* out);
 int   __cdecl FUN_0071ddc0(void* obj, int a, int b, int c, int d);
 void  __cdecl RefVecPush(void* vec, void* p);                               // 0x41ef20
-void* __cdecl FUN_00764320(void* a, void* b, void* c);
-void  __cdecl FUN_00765ac0(void* p);
+bool  __stdcall FUN_00764320(void* a, void* b, void* c);
 void  __cdecl Reserve765a10(void* vec, uint32_t n);                         // 0x765a10
 void  __cdecl VPtrPush(void* vec, const void* v);                           // 0x766910
 void  __cdecl VBigInsert(void* vec, void* pos, uint32_t n, void* value);    // 0x7662d0
@@ -65,6 +64,7 @@ struct PaintObj {
     uint32_t mCount;          // +0x1c
     char mVec0[0x58];         // +0x20
     char mVec1[0x24];         // +0x78
+    void Destroy();           // 0x765ac0
 };
 bool __stdcall ReadPaintStuff(PaintObj* obj, void* stream, void* p3) {
     (void)p3;
@@ -123,21 +123,19 @@ struct PaintHolder {
 };
 // @ 0x00767170
 bool PaintHolder::FUN_00767170(void* a, void* b, void* c) {
-    char* stackObj = (char*)this;
-    char tmp[0xd0];
-    (void)tmp;
-    if (ReadPaintStuff((PaintObj*)stackObj, a, b)) {
-        if (FUN_00764320(stackObj, a, b)) {
+    PaintObj stackObj;
+    if (ReadPaintStuff(&stackObj, a, b)) {
+        if (FUN_00764320(&stackObj, a, b)) {
             uint32_t* s = (uint32_t*)c;
             char* d = (char*)b;
             *(uint32_t*)(d + 8) = s[0];
             *(uint32_t*)(d + 0xc) = s[1];
             *(uint32_t*)(d + 0x10) = s[2];
-            FUN_00765ac0(stackObj);
+            stackObj.Destroy();
             return true;
         }
     }
-    FUN_00765ac0(stackObj);
+    stackObj.Destroy();
     return false;
 }
 
@@ -162,16 +160,25 @@ void F67270::Method(int, int unused) {
 // ===========================================================================
 // @ 0x00767290  vector<stride 0xa0>::resize(n)
 // ===========================================================================
-struct VBig2 { char* b; char* e; char* c; void Resize(int, uint32_t n); };
-void VBig2::Resize(int, uint32_t n) {
+struct VBig2 {
+    char* b;
+    char* e;
+    char* c;
+    void Resize(uint32_t n);
+    void InsertGrow(char* pos, uint32_t n, void* value);  // 0x7662d0
+};
+void VBig2::Resize(uint32_t n) {
     uint32_t size = (uint32_t)((e - b) / 0xa0);
     if (size < n) {
-        VBigInsert(this, e, n - size, 0);
+        char temp[0xa0];
+        InsertGrow(e, n - size, temp);
         return;
     }
     char* dst = b + n * 0xa0;
-    FUN_00763f50(e, e, dst);
-    e = e + (uint32_t)((e - dst) / 0xa0) * 0xa0;
+    char* oldEnd = e;
+    FUN_00763f50(oldEnd, oldEnd, dst);
+    uint32_t count = (uint32_t)((oldEnd - dst) / 0xa0);
+    e = e - count * 0xa0;
 }
 
 // ===========================================================================

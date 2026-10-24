@@ -1,6 +1,6 @@
 00766fa0  340  paint-model loader: register/schedule differs across a 451-byte parser
-00767170  n/a  stack-container setup: local layout and helper call shapes differ | equiv FAIL (ours faults reading unmapped at 765ad7; callee model not matching)
+00767170  203  stack-container setup: local layout and helper call shapes differ | equiv PASS (505/600 valid, 72.7% coverage; default /O2 /MD /Gy /EHsc /TP; security-cookie inline call tolerated)
 00767270   22  member chunk forwarder: prologue/param schedule differs
-00767290  121  vector<0xa0>::resize: grow path helper shapes differ
+00767290  160  vector<0xa0>::resize: grow path helper shapes differ | equiv PASS (480/600 valid, 100.0% coverage; default /O2 /MD /Gy /EHsc /TP; security-cookie inline call tolerated)
 00767350  452  vector<0x7c>::insert: relocation helper call schedule differs
 00767590  n/a  job builder: refcount/job-continuation sequence differs | equiv UNSUPPORTED (0/994 inputs valid; faults on writes)

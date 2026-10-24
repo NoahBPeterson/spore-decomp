@@ -895,9 +895,7 @@ bool __stdcall CreateByType(void** out, uint32_t type, int sub);  // 0x007666a0 
 
 // ---- items of slice s00766fa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  __cdecl FUN_00763f50(void* a, void* b, void* c);
-extern "C" void* __cdecl FUN_00764320(void* a, void* b, void* c);
-extern "C" void  __cdecl FUN_00765ac0(void* p);
-extern "C" void  __cdecl VBigInsert(void* vec, void* pos, uint32_t n, void* value);    // 0x7662d0
+bool __stdcall FUN_00764320(void* a, void* b, void* c);
 struct PaintObj {
     uint32_t mVersion;        // +0
     uint32_t mA;              // +4
@@ -909,12 +907,19 @@ struct PaintObj {
     uint32_t mCount;          // +0x1c
     char mVec0[0x58];         // +0x20
     char mVec1[0x24];         // +0x78
+    void Destroy();           // 0x765ac0
 };
 struct PaintHolder {
     char pad[0x20];
     bool FUN_00767170(void* a, void* b, void* c);
 };
-struct VBig2 { char* b; char* e; char* c; void Resize(int, uint32_t n); };
+struct VBig2 {
+    char* b;
+    char* e;
+    char* c;
+    void Resize(uint32_t n);
+    void InsertGrow(char* pos, uint32_t n, void* value);  // 0x7662d0
+};
 // ---- items of slice s00766fa0 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
@@ -940,9 +945,21 @@ struct C68200 {
     int mD0;                  // +0xd0
     void Release();
 };
+// The 0x7c-byte element temp Resize builds on the stack: both helpers take the buffer in ecx
+// (0x764760 reads/writes (%esi).., 0x41f2d0 touches +0x74/+0x78), so they are members of the temp
+// type and are called through the object.
+struct Tmp7c {
+    char raw[0x7c];
+    void Init(int v);          // 0x00764760
+    void Destroy();            // 0x0041F2D0
+};
 struct V7cB {
     char* b; char* e; char* c;
     void Resize(uint32_t n);
+    // Both helpers take the vector in ecx and all their arguments on the stack:
+    // 0x7682ea pushes value (the stack temp), count and e, then sets %ecx before calling 0x767350.
+    void InsertFill(char* pos, uint32_t n, void* value);       // 0x00767350
+    void DestroyRange(char* first, char* last);                // 0x00700670
 };
 struct C68370 {
     void* m0; void* m4; void* m8; void* mc; void* m10; void* m14;
@@ -2036,35 +2053,36 @@ bool Factory::CreateResource(int* src, void** out, int a, int b)
 // @ 0x00767170
 bool PaintHolder::FUN_00767170(void* a, void* b, void* c)
 {
-    char* stackObj = (char*)this;
-    char tmp[0xd0];
-    (void)tmp;
-    if (ReadPaintStuff((PaintObj*)stackObj, a, b)) {
-        if (FUN_00764320(stackObj, a, b)) {
+    PaintObj stackObj;
+    if (ReadPaintStuff(&stackObj, a, b)) {
+        if (FUN_00764320(&stackObj, a, b)) {
             uint32_t* s = (uint32_t*)c;
             char* d = (char*)b;
             *(uint32_t*)(d + 8) = s[0];
             *(uint32_t*)(d + 0xc) = s[1];
             *(uint32_t*)(d + 0x10) = s[2];
-            FUN_00765ac0(stackObj);
+            stackObj.Destroy();
             return true;
         }
     }
-    FUN_00765ac0(stackObj);
+    stackObj.Destroy();
     return false;
 }
 
 // @ 0x00767290
-void VBig2::Resize(int, uint32_t n)
+void VBig2::Resize(uint32_t n)
 {
     uint32_t size = (uint32_t)((e - b) / 0xa0);
     if (size < n) {
-        VBigInsert(this, e, n - size, 0);
+        char temp[0xa0];
+        InsertGrow(e, n - size, temp);
         return;
     }
     char* dst = b + n * 0xa0;
-    FUN_00763f50(e, e, dst);
-    e = e + (uint32_t)((e - dst) / 0xa0) * 0xa0;
+    char* oldEnd = e;
+    FUN_00763f50(oldEnd, oldEnd, dst);
+    uint32_t count = (uint32_t)((oldEnd - dst) / 0xa0);
+    e = e - count * 0xa0;
 }
 
 // @ 0x00767ee0
@@ -2096,12 +2114,12 @@ void V7cB::Resize(uint32_t n)
 {
     uint32_t count = (uint32_t)((e - b) / 0x7c);
     if (count < n) {
-        char tmp[0x7c];
-        FUN_00764760(&tmp, 0);
-        FUN_00767350(this, e, n - count, tmp);
-        FUN_0041f2d0(&tmp);
+        Tmp7c tmp;
+        tmp.Init(0);
+        InsertFill(e, n - count, &tmp);
+        tmp.Destroy();
     } else {
-        FUN_00700670(b + n * 0x7c, e);
+        DestroyRange(b + n * 0x7c, e);
     }
 }
 
