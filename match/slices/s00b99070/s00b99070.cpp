@@ -104,6 +104,7 @@ struct cPlanetModel {
     char pad[0x24];
     cTerrainSphereObj* mpTerrain;
     Quat BuildSurfaceOrientation(const Vec3& pos, const Quat& q);       // 0x00b7f1f0
+    uint32_t GetContinent(const Vec3* pPos);                            // 0x00b88590
 };
 cPlanetModel* GetPlanetModel();   // 0x00b3d350
 
@@ -139,6 +140,10 @@ struct FeedbackTree {
 struct cSpeciesProfile {
     void GetUiName(String16* pOut);            // 0x004da330 (ret 4)
 };
+struct cSpeciesMgr {
+    cSpeciesProfile* GetAvatarProfile();       // 0x004df420
+};
+cSpeciesMgr* FUN_00401090();                   // 0x00401090
 struct NameSlot { uint32_t d; void Set(const String16* pName); };   // 0x00b6f380 (ret 4)
 struct cCivilization {
     char pad0[0x34];
@@ -159,14 +164,131 @@ struct cCivilization {
     cSpeciesProfile* GetSpeciesProfile();                         // 0x00bef950
 };
 
+// ---- shared noun data used by the city-spawn helpers (gold7 slice) ----
+// The allocator field occupies +0x00; the vector fields live in a member at +0x04 (hence the
+// `add eax,4` MSVC emits when the code takes the address of that member).
+struct GameDataVectorCore {
+    void**  mpBegin;            // +0x00 (object +0x04)
+    void**  mpEnd;              // +0x04 (object +0x08)
+    void**  mpEndCap;           // +0x08 (object +0x0c)
+};
+struct GameDataVec {
+    void*                mpAllocator;   // +0x00
+    GameDataVectorCore   mVec;          // +0x04
+    void*                mpField10;     // +0x10
+};
+
+struct SubObj34 {
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+    virtual const Vec3* GetPosition();   // +0x2c
+    virtual const Quat* GetRotation();   // +0x30
+};
+
+struct NounData {
+    char     pad00[0x24];
+    uint32_t mId24;              // +0x024
+    char     pad28[0x34 - 0x28];
+    SubObj34 mSub34;             // +0x034
+    char     pad38[0xa9 - 0x38];
+    uint8_t  mbFlagA9;           // +0x0a9
+    char     padAA[0x108 - 0xaa];
+    uint32_t mType108;           // +0x108
+    void*    mpField10c;         // +0x10c
+    uint32_t mSubtype110;        // +0x110
+    Vec3     mVec114;            // +0x114
+    char     pad120[0x1a4 - 0x120];
+    void*    mpNoun1a4;          // +0x1a4
+    Vec3     mVec1a8;            // +0x1a8
+    Quat     mQuat1b4;           // +0x1b4
+    uint8_t  mbFlag1c4;          // +0x1c4
+};
+
+struct cHerd {
+    char  pad00[0xa4];
+    void* mpProfileKeyA4;        // +0x0a4
+    void* mpBeginA8;             // +0x0a8
+    void* mpEndAc;               // +0x0ac
+    void* GetProfileForGeneration(uint32_t gen);   // 0x00c6abf0
+};
+
+struct ProfileHolder {
+    char     pad00[0x504];
+    uint32_t mKey;               // +0x504
+};
+
+struct ObjectTemplateDB {
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+    PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21)
+    virtual void* RegisterProfile(uint32_t* pKey, int zero);   // +0x58
+};
+ObjectTemplateDB* GetObjectTemplateDB();   // 0x0067cb40
+
+struct cNearNoun {
+    const Vec3* GetPosition();   // 0x00c6acc0
+};
+
+struct SimAllocHeader { uint32_t mSize; };
+inline void FreeBuffer(uint32_t* p)
+{
+    if (p && ((SimAllocHeader*)p)[-1].mSize)
+        operator delete[](p);
+}
+
+struct SPVectorU {
+    uint32_t* mpBegin;           // +0x00
+    uint32_t* mpEnd;             // +0x04
+    uint32_t* mpEndCap;          // +0x08
+    uint32_t  mField0c;          // +0x0c
+    uint32_t  mField10;          // +0x10
+    uint32_t  mField14;          // +0x14
+    uint32_t  mBuffer[32];       // +0x18
+    void DoInsertKey4(uint32_t* pos, const uint32_t* pValue);   // 0x00b96600
+};
+
+struct cDirectPropertyList {
+    int GetIntProperty(uint32_t id);   // 0x006a2660
+};
+extern cDirectPropertyList* gAppProperties;   // 0x015fd918
+
+struct PtrRange { void** mpBegin; void** mpEnd; };
+void FUN_00b93c60(PtrRange* self, int count, void* pAlloc);                                   // 0x00b93c60
+void FUN_00829110(PtrRange* pOut, void** first, void** last, void** a, void** b);             // 0x00829110
+uint32_t* FUN_00b90960(uint32_t* begin, uint32_t* end, uint32_t key);                         // 0x00b90960
+uint32_t* FUN_00b909a0(uint32_t* p, uint32_t* end, uint32_t* q, uint32_t key);                // 0x00b909a0
+void FUN_00d1bef0(int idx);                                                                   // 0x00d1bef0
+void* FUN_00b94150(const Vec3* pPos, uint32_t a, uint8_t b, int c);                           // 0x00b94150
+void FUN_00ae38f0(void* pEntry);                                                              // 0x00ae38f0
+void FUN_00cd7d10();
+void FUN_00d3d420();
+void FUN_00ace070();
+void FUN_00b1e500();
+
+struct CityEntry {
+    uint32_t mID;                // +0x00
+    char     pad04[0x24 - 0x04];
+    uint8_t  mbFlag24;           // +0x24
+    uint8_t  mbFlag25;           // +0x25
+    char     pad26[0x28 - 0x26];
+    uint32_t mField28;           // +0x28
+    char     pad2c[0x31 - 0x2c];
+    uint8_t  mByte31;            // +0x31
+    char     pad32[0x44 - 0x32];
+    uint32_t mField44;           // +0x44
+};
+
 struct Noun {
     PV(0) PV(1) PV(2)
     virtual void* Cast(uint32_t typeID);   // slot 3
 };
+typedef void (*GameDataFilter)();
+
 struct cGameNounManager {
     Noun* CreateNoun(uint32_t typeID);           // 0x00b20c60
     cCivilization* GetPlayerCivilization();          // 0x00b25fb0
     void RemoveNoun(void* pNoun);                    // 0x00b225d0
+    GameDataVec* GetGameDataVector(GameDataFilter f0, GameDataFilter f1, GameDataFilter f2, GameDataFilter f3, uint32_t id);  // 0x00b21340
+    void* FUN_00989360();                            // 0x00989360
+    void* FUN_00b23650(uint32_t a, uint32_t b, const Vec3* pPos, const Vec3* pPos2, const Quat* pRot);   // 0x00b23650
 };
 cGameNounManager* GetNounManager();   // 0x00b3d300
 
@@ -189,6 +311,7 @@ struct Random {
     double RandomDoubleUniform();               // 0x009360d0
 };
 extern Random gRandom;           // 0x01601760
+extern Random gRandom2;          // 0x016888e8
 extern int gRandMax;             // 0x01688884
 extern int gRandMin;             // 0x01688888
 extern float gRadiusHi;          // 0x0168887c
@@ -203,8 +326,13 @@ IPropertyManager* GetPropertyManager();   // 0x0067de30
 struct SimSingleton {
     SimSingleton();                 // 0x00ae5c30
     void Restart(bool b);           // 0x00ae3230 (ret 4)
-    char data[0xc8];
+    char  pad00[0x14];
+    char* mpEntries;                // +0x14
+    char  pad18[0xac - 0x18];
+    int   mCountAC;                 // +0xac
+    char  padB0[0xc8 - 0xb0];
 };
+struct SpawnedObj { char pad00[0x234]; uint32_t mField234; };
 extern SimSingleton* gSimSingleton;   // 0x0167a60c
 
 void* FindPlaceholder(uint32_t id);   // 0x00b993c0 (cdecl)
@@ -327,4 +455,249 @@ cCity* CreateCity(CityDesc* d)
             pRef->Release();
     }
     return pCity;
+}
+
+// ---------------------------------------------------------------------------
+// gold7 slice: city spawn / placeholder bookkeeping helpers
+// ---------------------------------------------------------------------------
+
+// @ 0x00b99070
+bool FUN_00b99070(Vec3* pOut, uint8_t* pFlag)
+{
+    cGameNounManager* pMgr = GetNounManager();
+    cNearNoun* pNear = (cNearNoun*)pMgr->FUN_00989360();
+    if (pNear) {
+        *pOut = *pNear->GetPosition();
+        if (pFlag)
+            *pFlag = 1;
+        return true;
+    }
+
+    cPlanetModel* pPlanet = GetPlanetModel();
+    SPVectorU v;
+    v.mpBegin = v.mBuffer;
+    v.mpEnd = v.mBuffer;
+    v.mpEndCap = v.mBuffer + 32;
+    uint32_t continent = 0xffffffff;
+
+    GameDataVec* pData = pMgr->GetGameDataVector(&FUN_00cd7d10, &FUN_00d3d420,
+                                                 &FUN_00ace070, &FUN_00b1e500, 0x36be27e);
+    GameDataVectorCore* pVec = &pData->mVec;
+    void** p = pVec->mpBegin;
+    void** pEnd = pVec->mpEnd;
+    for (; p != pEnd; ++p) {
+        NounData* pObj = (NounData*)*p;
+        uint32_t value = (uint32_t)pObj;
+        if (pObj->mType108 == 0x91fe517b) {
+            if (pObj->mSubtype110 == 0xd8c67022) {
+                continent = pPlanet->GetContinent(pObj->mSub34.GetPosition());
+                if (v.mpEnd < v.mpEndCap) {
+                    *v.mpEnd = value;
+                    ++v.mpEnd;
+                } else {
+                    v.DoInsertKey4(v.mpEnd, &value);
+                }
+            } else if (pObj->mSubtype110 == 0xaed08dd4) {
+                if (v.mpEnd < v.mpEndCap) {
+                    *v.mpEnd = value;
+                    ++v.mpEnd;
+                } else {
+                    v.DoInsertKey4(v.mpEnd, &value);
+                }
+            }
+        }
+    }
+
+    uint32_t* pMatch = FUN_00b90960(v.mpBegin, v.mpEnd, continent);
+    if (pMatch != v.mpEnd)
+        pMatch = FUN_00b909a0(pMatch + 1, v.mpEnd, pMatch, continent);
+    v.mpEnd = pMatch;
+
+    if (v.mpBegin == v.mpEnd) {
+        FreeBuffer(v.mpBegin);
+        return false;
+    }
+
+    int index = gAppProperties->GetIntProperty(0x508662a);
+    int count = (int)(v.mpEnd - v.mpBegin);
+    if (index < 0 || count <= index)
+        index = (int)gRandom2.RandomUint32Uniform((uint32_t)count);
+    FUN_00d1bef0(index);
+    NounData* pCity = (NounData*)v.mpBegin[index];
+    *pOut = *pCity->mSub34.GetPosition();
+    FreeBuffer(v.mpBegin);
+    return true;
+}
+
+// @ 0x00b992c0
+void FUN_00b992c0()
+{
+    cGameNounManager* pMgr = GetNounManager();
+    GameDataVec* pData = pMgr->GetGameDataVector(&FUN_00cd7d10, &FUN_00d3d420,
+                                                 &FUN_00ace070, &FUN_00b1e500, 0x36be27e);
+    GameDataVectorCore* pVec = &pData->mVec;
+    PtrRange range;
+    range.mpBegin = 0;
+    range.mpEnd = 0;
+    FUN_00b93c60(&range, (int)(pVec->mpEnd - pVec->mpBegin), pData->mpField10);
+    FUN_00829110(&range, pVec->mpBegin, pVec->mpEnd, range.mpBegin, range.mpEnd);
+
+    for (void** p = range.mpBegin; p != range.mpEnd; ++p) {
+        NounData* pObj = (NounData*)*p;
+        if (pObj->mpNoun1a4)
+            pMgr->RemoveNoun(pObj->mpNoun1a4);
+        if (pObj->mType108 == 0x91fe517b &&
+            (pObj->mSubtype110 == 0xd8c67022 || pObj->mSubtype110 == 0xaed08dd4))
+            pObj->mbFlag1c4 = 1;
+        else
+            pMgr->RemoveNoun(pObj);
+    }
+    for (void** p = range.mpBegin; p != range.mpEnd; ++p) {
+        if (*p)
+            ((Ref*)*p)->s0();
+    }
+    FreeBuffer((uint32_t*)range.mpBegin);
+}
+
+// @ 0x00b993c0
+void* FindPlaceholder(uint32_t id)
+{
+    cGameNounManager* pMgr = GetNounManager();
+    GameDataVec* pData = pMgr->GetGameDataVector(&FUN_00cd7d10, &FUN_00d3d420,
+                                                 &FUN_00ace070, &FUN_00b1e500, 0x36be27e);
+    GameDataVectorCore* pVec = &pData->mVec;
+    void** p = pVec->mpBegin;
+    void** pEnd = pVec->mpEnd;
+    for (; p != pEnd; ++p) {
+        NounData* pObj = (NounData*)*p;
+        if (pObj->mType108 == 0xd18d25cd && pObj->mId24 == id)
+            return pObj;
+    }
+    return 0;
+}
+
+// @ 0x00b99420
+void* FUN_00b99420()
+{
+    cSpeciesProfile* pAvatar = FUN_00401090()->GetAvatarProfile();
+    ObjectTemplateDB* pDB = GetObjectTemplateDB();
+    cGameNounManager* pMgr = GetNounManager();
+    GameDataVec* pData = pMgr->GetGameDataVector(&FUN_00cd7d10, &FUN_00d3d420,
+                                                 &FUN_00ace070, &FUN_00b1e500, 0x36be27e);
+    GameDataVectorCore* pVec = &pData->mVec;
+    void* pLast = 0;
+    for (void** p = pVec->mpBegin; p != pVec->mpEnd; ++p) {
+        NounData* pObj = (NounData*)*p;
+        void* pNoun = pObj->mpNoun1a4;
+        if (!pNoun)
+            continue;
+        cHerd* pHerd = (cHerd*)((Noun*)pNoun)->Cast(0x52aa6117);
+        if (!pHerd)
+            continue;
+        void* pKey = pHerd->mpProfileKeyA4;
+        if (!pKey || pKey == pAvatar)
+            continue;
+        pDB->RegisterProfile(&((ProfileHolder*)pKey)->mKey, 0);
+        int count = (int)((char*)pHerd->mpEndAc - (char*)pHerd->mpBeginA8) / 0xc;
+        for (int i = 0; i < count; ++i) {
+            void* pProfile = pHerd->GetProfileForGeneration((uint32_t)i);
+            if (pProfile)
+                pDB->RegisterProfile(&((ProfileHolder*)pProfile)->mKey, 0);
+        }
+    }
+    return pLast;
+}
+
+// @ 0x00b99530
+void FUN_00b99530(uint8_t bFilter, uint32_t* pIDs, uint32_t count)
+{
+    cGameNounManager* pMgr = GetNounManager();
+    GameDataVec* pData = pMgr->GetGameDataVector(&FUN_00cd7d10, &FUN_00d3d420,
+                                                 &FUN_00ace070, &FUN_00b1e500, 0x36be27e);
+    GameDataVectorCore* pVec = &pData->mVec;
+    void** p = pVec->mpBegin;
+    void** pEnd = pVec->mpEnd;
+    for (; p != pEnd; ++p) {
+        NounData* pObj = (NounData*)*p;
+        uint32_t key = (uint32_t)pObj->mpField10c;
+        if (!key)
+            continue;
+        uint32_t sub = pObj->mSubtype110;
+        if (!sub)
+            continue;
+        if (bFilter && (pObj->mpNoun1a4 || pObj->mbFlag1c4))
+            continue;
+        if (pIDs && count) {
+            bool found = false;
+            for (uint32_t i = 0; i < count; ++i) {
+                found = (pIDs[i] == key);
+                if (found)
+                    break;
+            }
+            if (!found)
+                continue;
+        }
+        void* pNew = pMgr->FUN_00b23650(key, sub, &pObj->mVec114, &pObj->mVec1a8, &pObj->mQuat1b4);
+        if (pObj->mpNoun1a4)
+            pMgr->RemoveNoun(pObj->mpNoun1a4);
+        void* pOld = pObj->mpNoun1a4;
+        if (pNew != pOld) {
+            if (pNew)
+                ((Ref*)pNew)->s0();
+            pObj->mpNoun1a4 = pNew;
+            if (pOld)
+                ((Ref*)pOld)->Release();
+        }
+    }
+}
+
+// @ 0x00b99670
+void FUN_00b99670()
+{
+    cGameNounManager* pMgr = GetNounManager();
+    GameDataVec* pData = pMgr->GetGameDataVector(&FUN_00cd7d10, &FUN_00d3d420,
+                                                 &FUN_00ace070, &FUN_00b1e500, 0x36be27e);
+    GameDataVectorCore* pVec = &pData->mVec;
+    void** p = pVec->mpBegin;
+    void** pEnd = pVec->mpEnd;
+    for (; p != pEnd; ++p) {
+        NounData* pObj = (NounData*)*p;
+        if (pObj->mpNoun1a4) {
+            pMgr->RemoveNoun(pObj->mpNoun1a4);
+            Ref* pRef = (Ref*)pObj->mpNoun1a4;
+            if (pRef) {
+                pObj->mpNoun1a4 = 0;
+                pRef->Release();
+            }
+        }
+        pObj->mVec1a8 = *pObj->mSub34.GetPosition();
+        pObj->mQuat1b4 = *pObj->mSub34.GetRotation();
+        pObj->mbFlag1c4 = 0;
+        pObj->mbFlagA9 = 1;
+    }
+}
+
+// @ 0x00b99760
+void FUN_00b99760()
+{
+    for (int pass = 0; pass < 2; ++pass) {
+        if (!gSimSingleton)
+            gSimSingleton = new ("Simulator/SimSingleton", 0, 0, 0, 0) SimSingleton();
+        int count = gSimSingleton->mCountAC;
+        int offset = 0;
+        while (count > 0) {
+            if (!gSimSingleton)
+                gSimSingleton = new ("Simulator/SimSingleton", 0, 0, 0, 0) SimSingleton();
+            CityEntry* pEntry = (CityEntry*)(gSimSingleton->mpEntries + offset);
+            if (pEntry->mbFlag24 == 0 && pEntry->mbFlag25 == (pass == 1)) {
+                NounData* pCity = (NounData*)FindPlaceholder(pEntry->mID);
+                Vec3 pos = *pCity->mSub34.GetPosition();
+                void* pObj = FUN_00b94150(&pos, pEntry->mField28, pEntry->mByte31, 1);
+                FUN_00ae38f0(pEntry);
+                pEntry->mField44 = ((SpawnedObj*)pObj)->mField234;
+            }
+            offset += 0x64;
+            --count;
+        }
+    }
 }

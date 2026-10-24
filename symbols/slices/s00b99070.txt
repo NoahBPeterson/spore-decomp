@@ -1,1 +1,8 @@
 00b998a0 CreateCity  # creates a cCity + cCivilization from a spawn descriptor (guessed name)
+00b99070 FUN_00b99070  # nonmatching: pick a spawn position from the first near noun, else a city noun on the selected continent (SPVector scan + random/property index)
+00b992c0 FUN_00b992c0  # nonmatching: copy the game-data noun vector, remove/release each noun, keep city nouns (flag +0x1c4), free the copy
+00b993c0 FindPlaceholder  # finds the placeholder noun (type d18d25cd) with matching id in the game-data vector
+00b99420 FUN_00b99420  # nonmatching: register herd avatar/generation species profiles with ObjectTemplateDB (vt[0x58])
+00b99530 FUN_00b99530  # nonmatching: rebuild nouns from city entries via FUN_00b23650 with an optional id filter, swap vt[0]/Release
+00b99670 FUN_00b99670  # resets a noun: remove+release its object, copy the sub-object position/rotation into +0x1a8/+0x1b4, clear +0x1c4 and set +0xa9
+00b99760 FUN_00b99760  # nonmatching: two-pass scan of SimSingleton city entries, spawn object at the placeholder position, store the new object id at entry+0x44
