@@ -4,3 +4,8 @@
 00feda00 RecentListRead  # no PDB name; eastl list<tRecentMission> read helper
 00fedb50 SP::cSPMissionManager::InitForGame  # PDB card
 00fedca0 SP::cSPMissionManager::RemoveMission  # PDB card
+00b96600 ?DoInsertKey4@?$SPVector@I@@QAEXPAIABI@Z  # vector<uint32_t>::DoInsertKey4 (call target in 00fed430)
+004e0880 ?reserve@?$SPVector@I@@QAEXI@Z  # vector<uint32_t>::reserve
+004558a0 ?DoInsertValueI@?$SPVector@I@@QAEXPAIABI@Z  # vector<uint32_t>::DoInsertValueI
+004e3e10 ?DoInsertKey@?$SPVector@UKey@@@@QAEXPAUKey@@ABU2@@Z  # vector<Key>::DoInsertKey
+00aea5d0 ?DoInsertPtr@?$SPVector@UAutoRefCount@@@@QAEXPAUAutoRefCount@@ABU2@@Z  # vector<AutoRefCount>::DoInsertPtr
