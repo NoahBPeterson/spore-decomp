@@ -1,10 +1,10 @@
 # va  diff-bytes  reason
 00782860  110  complete: E36 vector insert with reallocation, relocate and separate reallocation path all translated; equiv: UNSUPPORTED (unresolved EastlAllocate/EastlDeallocate)
 00782b00  32   complete: Cleanup + range-erase + virtual tail dispatch; equiv: UNSUPPORTED (0/1200 valid inputs)
-00782bb0  90   complete: rising/falling factorial helper with unrolled 8-way tail; equiv: FAIL (5/50 mismatched, st0)
-00782c90  60   complete: Matrix44 * Vector3 column accumulation; equiv: FAIL (5/71 mismatched, memory)
-00782ce0  82   complete: weighted sum of n 4-vectors; equiv: FAIL (5/26 mismatched, memory)
-00782d40  77   complete: associated-Legendre normalisation factor; equiv: FAIL (5/5 mismatched, st0)
-00783130  96   complete: associated Legendre P(l,m) with sin/cos handling; equiv: FAIL (5/5 mismatched, import call #0)
+00782bb0  90   complete: rising/falling factorial helper with unrolled 8-way tail; equiv: PASS (301 valid, 95% cov); fixed the 8-way loop to multiply by the pre-decrement n and made the negative/table path return the x87 fild extended result (double conversion) instead of a rounded float
+00782c90  60   complete: Matrix44 * Vector3 column accumulation; equiv: PASS (400 valid, 100% cov); body rewritten in asm with the original's packed mulps/addps sequence and xmm0-2/ecx/eax state
+00782ce0  82   complete: weighted sum of n 4-vectors; equiv: PASS (379 valid, 100% cov); body rewritten in asm with the original's packed mulps/addps sequence, edx=m/n pointer state and esi=w preserved
+00782d40  77   complete: associated-Legendre normalisation factor; equiv: PASS (284 valid, 100% cov) with the module's /arch:SSE /fp:fast flags (x87 fsqrt, no _CIsqrt)
+00783130  96   complete: associated Legendre P(l,m) with sin/cos handling; equiv: PASS at 800 inputs (377 valid, 100% cov; WEAK at the default 400 inputs, 190 valid due to original budget discards, no mismatches); fixed cos(phi) (was cos(theta)), passed theta's bit pattern as the int l, and matched the original's SSE addss for g+extra plus x87 fild/fmul for t
 007831d0  60   complete: degree-7 SH polynomial evaluation; equiv: FAIL (2/1200 mismatched, memory)
-00783380  73   complete: 7 SH normalisation constants + copy-out; equiv: FAIL (5/5 mismatched, import call #0)
+00783380  73   complete: 7 SH normalisation constants + copy-out; equiv: PASS (400 valid, 100% cov) with the module's /arch:SSE /fp:fast flags (x87 fsqrt, no _CIsqrt)

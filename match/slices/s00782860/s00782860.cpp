@@ -1,6 +1,6 @@
 // Slice s00782860: E36 vector insert/push_back/temp-construction, spherical
 // harmonic Legendre helpers and three SSE matrix rotations (0x782860..0x783585).
-// /O2 /MD /Gy /EHsc /TP module (SSE mixed with x87).
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- module (SSE mixed with x87).
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -59,10 +59,10 @@ float FUN_00782bb0(int n)
     float f;
     if (n < 0xd) {
         int v = g_153a2fc[n];
-        f = (float)v;
+        double d = (double)v;                 // x87 fild keeps the extended result the original returns
         if (v < 0)
-            f = (float)v + g_13f4fd0;
-        return f;
+            d += (double)g_13f4fd0;
+        return (float)d;
     }
     f = (float)g_153a32c;
     if (g_153a32c < 0)
@@ -71,9 +71,9 @@ float FUN_00782bb0(int n)
         int i = n - 2;
         do {
             int a = i + 1, b = i, c = i - 1, d = i - 2, e = i - 3, gg = i - 4, h = i - 5;
+            f = (float)n * f;
             n -= 8;
             i -= 8;
-            f = (float)n * f;
             f = f * (float)a; f = f * (float)b; f = f * (float)c; f = f * (float)d;
             f = f * (float)e; f = f * (float)gg; f = f * (float)h;
         } while (0x13 < n);
@@ -189,16 +189,19 @@ float FUN_00783130(float theta, unsigned m, float phi, float extra)
         g_1633e48 |= 1;
         g_1633e44 = 1.4142135f;
     }
-    float c = (float)cos((double)theta);
+    float c = (float)cos((double)phi);
     int mm = (int)((m ^ ((int)m >> 31)) - ((int)m >> 31));
     float a = (float)FUN_00782db0(theta, mm, c);
-    float b = FUN_00782d40((int)theta, mm);
+    union { float f; int i; } tb;
+    tb.f = theta;
+    float b = FUN_00782d40(tb.i, mm);   // the original passes the float's bit pattern as the int l
     b = b * a;
     if (m != 0) {
-        float t = (float)((int)mm * (g_153ae10 + extra));
+        float ge = g_153ae10 + extra;       // SSE addss rounds g+extra to float, as the original does
+        double t = (double)mm * (double)ge; // x87 fild/fmul keeps the extended product
         if (0 < (int)m)
-            return ((float)cos((double)t) * g_1633e44) * b;
-        return (((float)sin((double)t) * g_1633e44) * b);
+            return cos(t) * g_1633e44 * b;
+        return sin(t) * g_1633e44 * b;
     }
     return b;
 }
