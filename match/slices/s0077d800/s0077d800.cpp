@@ -80,16 +80,20 @@ void Vec8Thing::FUN_0077d9c0(unsigned n, void* val) {
 }
 
 // @ 0x0077eef0  linear interpolation into a float array (x87 return)
+// The accumulator is a double on purpose: under /arch:SSE MSVC computes doubles in x87 but floats
+// in SSE, and 0x0077eef0 does the interpolation with flds/fsub/fmuls/faddp, i.e. one rounding at
+// the end (and `t` is overwritten with the fractional part, which is why the fraction lands in the
+// parameter's stack slot).
 float __cdecl FUN_0077eef0(int n, float* arr, float t) {
     if (n == 1)
         return arr[0];
     t = (float)(n - 1) * t;
     int i = FloorToInt(t);
-    float r = arr[i];
-    float d = t - (float)i;
-    if (d > 0.0f)
-        r = (arr[i + 1] - r) * d + r;
-    return r;
+    double r = arr[i];
+    t = t - (float)i;
+    if (t > 0.0f)
+        r = (arr[i + 1] - r) * t + r;
+    return (float)r;
 }
 
 struct Float3 { float x, y, z; };
