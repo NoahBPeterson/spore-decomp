@@ -1,0 +1,1 @@
+009b8760 incomplete nSPCreatureAnim::creature_instance_data::FUN_009b8760; 1103 bytes emitted vs 1519 retail - a large SSE style-weight/limit blend block is still missing; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; not byte-exact (1354 bytes differ)

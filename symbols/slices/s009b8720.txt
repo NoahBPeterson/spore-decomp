@@ -1,0 +1,9 @@
+009b8720 ?FUN_009b8720@creature_instance_data@nSPCreatureAnim@@QAEXM@Z  # nSPCreatureAnim::creature_instance_data::FUN_009b8720
+009b8760 ?FUN_009b8760@creature_instance_data@nSPCreatureAnim@@QAEXM@Z  # nSPCreatureAnim::creature_instance_data::FUN_009b8760
+009b8d50 ?FUN_009b8d50@creature_instance_data@nSPCreatureAnim@@QAEXM@Z  # nSPCreatureAnim::creature_instance_data::FUN_009b8d50
+009b8e40 ?FUN_009b8e40@creature_instance_data@nSPCreatureAnim@@QAEXM@Z  # nSPCreatureAnim::creature_instance_data::FUN_009b8e40
+009b8f40 ?FUN_009b8f40@creature_instance_data@nSPCreatureAnim@@QAEXM@Z  # nSPCreatureAnim::creature_instance_data::FUN_009b8f40
+009b8fd0 ?FUN_009b8fd0@creature_instance_data@nSPCreatureAnim@@QAEXPAM0@Z  # nSPCreatureAnim::creature_instance_data::FUN_009b8fd0
+009b9090 ?FUN_009b9090@creature_instance_data@nSPCreatureAnim@@QAEXXZ  # nSPCreatureAnim::creature_instance_data::FUN_009b9090
+009b9250 ?FUN_009b9250@creature_instance_data@nSPCreatureAnim@@QAEPAMPAM0@Z  # nSPCreatureAnim::creature_instance_data::FUN_009b9250 (retail: register ABI edi/esi->esi)
+009b9340 ?FUN_009b9340@AniDyn@nSPCreatureAnim@@QAEPAMPAMPAPAHPAUSpatialObject@2@M@Z  # nSPCreatureAnim::AniDyn::FUN_009b9340 (CalcRootGoalPosDelta)
