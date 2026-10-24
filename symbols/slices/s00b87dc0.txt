@@ -1,1 +1,4 @@
-00b87dc0  SP::cPlanetModel::ComputeContinents  # land/water continent labelling over the 6x128x128 cell map; union-find (0xb7e6f0/0xb7e790), WrapCubeFace seams
+00b87dc0  SP::cPlanetModel::ComputeContinents  # preserved; land/water continent labelling over the 6x128x128 cell map; union-find (0xb7e6f0/0xb7e790), WrapCubeFace seams
+00b88420  SP::cPlanetModel::Refresh  # newly claimed; byte-exact dirty-flag refresh wrapper
+00b88430  SP::Vector20::insert  # newly claimed; partial 0x14-byte vector insert/reallocation
+00b88590  SP::cPlanetModel::GetCellValue  # newly claimed; partial cube-map cell lookup

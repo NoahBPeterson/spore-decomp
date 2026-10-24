@@ -95,9 +95,29 @@ class cTerrainSphere { public:
   virtual cTerrainMap* GetMap();   // slot 3
 };
 
+struct Vector3 {
+  float x, y, z;
+};
+
+struct Element20 {
+  uint32_t mData[5];
+};
+
+struct Vector20 {
+  Element20* mpBegin;
+  Element20* mpEnd;
+  Element20* mpCapacity;
+  void insert(Element20* pos, const Element20* value);   // 0x00b88430, ret 8
+};
+
+void* operator new[](unsigned int size, const char* name, int flags,
+                     unsigned int debugFlags, const char* file, int line); // 0x00f473a0
+
 class cPlanetModel {
  public:
   void ComputeContinents();
+  void Refresh();                                       // 0x00b88420
+  uint32_t GetCellValue(const Vector3* dir);            // 0x00b88590
 
   char pad00[0x24];
   cTerrainSphere* mpISphere;              // +0x24
@@ -111,6 +131,81 @@ class cPlanetModel {
   char pad79[3];
   uint8_t* mCellNibbles;                  // +0x7c  (one nibble per cell)
 };
+
+// @ 0x00b88420
+void cPlanetModel::Refresh()
+{
+  if (mContinentMapDirty) {
+    mContinentMapDirty = false;
+    ComputeContinents();
+  }
+}
+
+// @ 0x00b88430
+void Vector20::insert(Element20* pos, const Element20* value)
+{
+  if (mpEnd == mpCapacity) {
+    unsigned int count = (unsigned int)(mpEnd - mpBegin);
+    unsigned int newCapacity = count ? count * 2 : 1;
+    Element20* buffer = (Element20*)operator new[](newCapacity * sizeof(Element20),
+        (const char*)0x13f09b4, 0, 0, (const char*)0x13ebb38, 0xd1);
+    unsigned int index = (unsigned int)(pos - mpBegin);
+    for (unsigned int i = 0; i < index; ++i)
+      buffer[i] = mpBegin[i];
+    buffer[index] = *value;
+    for (unsigned int i = index; i < count; ++i)
+      buffer[i + 1] = mpBegin[i];
+    if (mpBegin && ((int*)mpBegin)[-1] != 0)
+      operator_delete__(mpBegin);
+    mpBegin = buffer;
+    mpEnd = buffer + count + 1;
+    mpCapacity = buffer + newCapacity;
+  } else {
+    for (Element20* p = mpEnd; p > pos; --p)
+      *p = *(p - 1);
+    *pos = *value;
+    ++mpEnd;
+  }
+}
+
+// @ 0x00b88590
+uint32_t cPlanetModel::GetCellValue(const Vector3* dir)
+{
+  if (mContinentMapDirty) {
+    mContinentMapDirty = false;
+    ComputeContinents();
+  }
+
+  float x = dir->x;
+  float y = dir->y;
+  float z = dir->z;
+  float ax = x < 0.0f ? -x : x;
+  float ay = y < 0.0f ? -y : y;
+  float az = z < 0.0f ? -z : z;
+
+  int u;
+  int v;
+  int face;
+  if (az >= ax && az >= ay) {
+    u = (int)((x / az + 1.0f) * 64.0f);
+    v = (int)((y / az + 1.0f) * 64.0f);
+    face = z < 0.0f ? 1 : 0;
+  } else if (ay >= ax) {
+    u = (int)((z / ay + 1.0f) * 64.0f);
+    v = (int)((x / ay + 1.0f) * 64.0f);
+    face = y < 0.0f ? 5 : 4;
+  } else {
+    u = (int)((y / ax + 1.0f) * 64.0f);
+    v = (int)((z / ax + 1.0f) * 64.0f);
+    face = x < 0.0f ? 3 : 2;
+  }
+
+  if (u == 0x80) u = 0x7f;
+  if (v == 0x80) v = 0x7f;
+  unsigned int index = (unsigned int)(((face << 7) + v) << 7) + (unsigned int)u;
+  const uint16_t* cellWords = (const uint16_t*)mContinentMap;
+  return cellWords[index * 2 + 1] & 0x3ff;
+}
 
 // @ 0x00b87dc0
 void cPlanetModel::ComputeContinents()
