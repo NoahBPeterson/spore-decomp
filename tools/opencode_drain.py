@@ -3,7 +3,7 @@
 interrupt sessions whose current model call has hung.
 
 usage: opencode_drain.py <group> [--interval S=60] [--cooldown S=300] [--hang S=900] [--max-nudges N=3]
-                         [--stall S=7200] [--once]
+                         [--stall S=7200] [--revive K,K,...] [--once]
 
 Each pass:
   * a range is DONE when its manifest+nonmatching+partial count >= its function count (fix batches, whose
@@ -26,7 +26,10 @@ Each pass:
     not a stuck session).
 Exits 0 ("DRAIN_COMPLETE") once every range is done or abandoned. Safe to kill and restart: its only
 state is work/opencode/drain_<group>.log, from which a restart re-reads the nudge counts and the
-abandoned ranges.
+abandoned ranges. --revive K,... logs "REVIVED r<k>" for those ranges: a restart then treats them as never
+abandoned and with no nudges sent (gold6 on the Runpod pod, 2026-10-24: the stall check abandoned 18 workers at
+once, two hours after the drain started, because a supervisor bug had interrupted them every 20 minutes until
+then; their claimed slices would otherwise stay held for the rest of the wave).
 """
 import argparse, base64, glob, json, os, re, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
 
@@ -69,6 +72,7 @@ ap.add_argument("--hang", type=int, default=900, help="seconds an open model cal
 ap.add_argument("--max-nudges", type=int, default=3, help="nudges per range before it is ABANDONED and counted as done")
 ap.add_argument("--stall", type=int, default=7200,
                 help="seconds an unfinished range may go without settling another function before it is ABANDONED (0 = off)")
+ap.add_argument("--revive", default="", help="comma-separated ranges to un-abandon (nudge count reset), logged REVIVED")
 ap.add_argument("--once", action="store_true")
 a = ap.parse_args()
 
@@ -224,11 +228,18 @@ nudges = {}      # range -> nudges sent (re-read from the log on restart)
 abandoned = set()
 if os.path.exists(LOG):
     for l in open(LOG):
-        m = re.search(r" (nudge|ABANDONED) r(\d+) ", l)
+        m = re.search(r" (nudge|ABANDONED|REVIVED) r(\d+)\b", l)
         if m and m.group(1) == "nudge":
             nudges[int(m.group(2))] = nudges.get(int(m.group(2)), 0) + 1
+        elif m and m.group(1) == "REVIVED":
+            abandoned.discard(int(m.group(2)))
+            nudges.pop(int(m.group(2)), None)
         elif m:
             abandoned.add(int(m.group(2)))
+for k in (int(x.strip().lstrip("r")) for x in a.revive.split(",") if x.strip()):
+    abandoned.discard(k)
+    nudges.pop(k, None)
+    log("REVIVED r%d" % k)
 loops = 0
 while True:
     loops += 1
