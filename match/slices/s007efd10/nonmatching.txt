@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+007efd10  5010  VolState::BuildSlices view-aligned volume slicing complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-); register allocation, stack-slot layout and loop scheduling differ; /fp:fast reassociated the depth/base sums and widened the floor() quotient to x87, so SSE intrinsics force the original ((x*dx)+(z*dz))+(y*dy) order and the single-precision divss; difftest WEAK (0 mismatch, 143 valid, 35.4% cov)

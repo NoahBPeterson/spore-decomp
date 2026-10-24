@@ -18,6 +18,7 @@
 #include "types.h"
 #include <math.h>
 #include <new>
+#include <xmmintrin.h>
 
 // ---------------------------------------------------------------------------
 // Heap of 16-byte events (helpers matched in slice s007eed10).
@@ -182,8 +183,14 @@ void VolState::BuildSlices(float dx, float dy, float dz, SliceVertexVector& vert
   };
 
   float depth[8];
-  for (int i = 0; i < 8; ++i)
-    depth[i] = mCorners[i].x * dx + mCorners[i].z * dz + mCorners[i].y * dy;
+  for (int i = 0; i < 8; ++i) {
+    const SliceVertex& c = mCorners[i];
+    // Original order: ((x*dx) + (z*dz)) + (y*dy).  /fp:fast would otherwise
+    // reassociate to (x*dx + y*dy) + z*dz, a one-ULP difference.
+    __m128 xz = _mm_add_ss(_mm_mul_ss(_mm_set_ss(c.x), _mm_set_ss(dx)),
+                           _mm_mul_ss(_mm_set_ss(c.z), _mm_set_ss(dz)));
+    depth[i] = _mm_cvtss_f32(_mm_add_ss(xz, _mm_mul_ss(_mm_set_ss(c.y), _mm_set_ss(dy))));
+  }
 
   float maxD = depth[0];
   float minD = depth[0];
@@ -200,8 +207,15 @@ void VolState::BuildSlices(float dx, float dy, float dz, SliceVertexVector& vert
 
   SliceCamera* cam = mpCamera;
   float spacing = cam->mSliceSpacing;
-  float base = cam->px * dx + cam->pz * dz + cam->py * dy;
-  float n = (float)floor((double)((maxD - base) / spacing));
+  // Original order: ((px*dx) + (pz*dz)) + (py*dy).
+  __m128 b_xz = _mm_add_ss(_mm_mul_ss(_mm_set_ss(cam->px), _mm_set_ss(dx)),
+                           _mm_mul_ss(_mm_set_ss(cam->pz), _mm_set_ss(dz)));
+  float base = _mm_cvtss_f32(_mm_add_ss(b_xz, _mm_mul_ss(_mm_set_ss(cam->py), _mm_set_ss(dy))));
+  // The original divides in single precision (SSE divss) before widening the
+  // quotient to double for floor(); /fp:fast would otherwise contract the whole
+  // expression into an extended-precision x87 fsub/fdiv chain.
+  __m128 ratio = _mm_div_ss(_mm_sub_ss(_mm_set_ss(maxD), _mm_set_ss(base)), _mm_set_ss(spacing));
+  float n = (float)floor((double)_mm_cvtss_f32(ratio));
   float sliceD = spacing * n + base;
 
   Edge edges[12];
