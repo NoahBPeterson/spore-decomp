@@ -1,0 +1,5 @@
+slices/s00d213b0/s00d213b0.cpp  ?HandleMessage@cCreatureCameraIGB1@@QAE_NIPAX@Z  00d213b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d213b0/s00d213b0.cpp  ?OnMouseDown@cCreatureCamera@@QAE_NIMMI@Z  00d217e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d213b0/s00d213b0.cpp  ?GetAudioAnchorPosition@cCreatureCamera@@QAEPAUVec3@@PAU2@@Z  00d21c50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d213b0/s00d213b0.cpp  ?FUN_00d21ca0@@YAHPBUVec3@@0M@Z  00d21ca0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d213b0/s00d213b0.cpp  ?FUN_00d21d10@@YAPAUVec3@@PAU1@PBU1@1M@Z  00d21d10  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
