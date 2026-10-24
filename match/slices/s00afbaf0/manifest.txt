@@ -1,1 +1,4 @@
+slices/s00afbaf0/s00afbaf0.cpp  ?FUN_00afbf40@@YAXPAH0UtFloat4@@@Z  00afbf40  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00afbaf0/s00afbaf0.cpp  ?PushBack@cPtrVec@@QAEXPAPAX@Z  00afc470  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00afbaf0/s00afbaf0.cpp  ?FUN_00afc4b0@@YA_NPAPAX0@Z  00afc4b0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00afbaf0/s00afbaf0.cpp  ?Teardown@SpatialTeardown@@  00afbde0

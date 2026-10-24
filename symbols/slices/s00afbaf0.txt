@@ -1,1 +1,11 @@
-00afbde0 SpatialTeardown::Teardown  # teardown order and vtable slot 48 (Dispose) verified byte-exact
+00afbaf0 ??0cActionCircle@@QAE@XZ  # cActionCircle::cActionCircle(void): construct the action circle, slot vectors and float tuning block (complete)
+00afbf40 ?FUN_00afbf40@@YAXPAH0UtFloat4@@@Z  # FUN_00afbf40(int*,int*,tFloat4): make-heap pass over the slot array (byte-exact)
+00afbfb0 ?FUN_00afbfb0@@YAXPAH0UtFloat4@@@Z  # FUN_00afbfb0(int*,int*,tFloat4): sift-down sort-heap pass over the slot array (complete)
+00afc030 ?FindAndInsert@cSearchHost@@QAEPAHPBX@Z  # cSearchHost::FindAndInsert(void const*): find a key in the host table and insert its neighbour when it is the head slot (complete)
+00afc0d0 ?EraseRange@cSlotVec@@QAEPAVtSlot@@PAV2@0@Z  # cSlotVec::EraseRange(tSlot*,tSlot*): destroy the [first,last) slot range and move the tail down (complete)
+00afc150 ?InsertOne@cSlotVec@@QAEXPAVtSlot@@0@Z  # cSlotVec::InsertOne(tSlot*,tSlot*): insert one slot, growing the buffer when full (complete)
+00afc2a0 ?FUN_00afc2a0@@YAXPAPAX00UtFloat4@@@Z  # FUN_00afc2a0(void**,void**,void**,tFloat4): sort the pointer range and move the farthest slot to the front (complete)
+00afc410 ?EraseOne@cActionCircle@@QAE_NPAVtSlot@@@Z  # cActionCircle::EraseOne(tSlot*): find, destroy and compact one slot in the +0x50 range (complete)
+00afc470 ?PushBack@cPtrVec@@QAEXPAPAX@Z  # cPtrVec::PushBack(void**): append one object pointer, growing when full (byte-exact)
+00afc4b0 ?FUN_00afc4b0@@YA_NPAPAX0@Z  # FUN_00afc4b0(void**,void**): find and erase one object pointer from a cPtrVec (byte-exact)
+00afc500 ?FUN_00afc500@@YAXPAH0HUtFloat4@@@Z  # FUN_00afc500(int*,int*,int,tFloat4): recursive median-of-three quicksort over the slot array (complete)
