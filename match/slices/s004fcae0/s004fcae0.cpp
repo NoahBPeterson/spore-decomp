@@ -7,12 +7,9 @@ struct Vector3 { float x, y, z; };
 
 extern int vtbl_Simulator_cCreatureAbility[];
 extern int PTR_FUN_013f11b8[];
+extern int g_013f11b8[];    // 0x013f11b8
+extern int g_013ef094[];    // 0x013ef094
 
-void FUN_004fd9a0(void* end, const void* val);   // 0x004fd9a0
-void FUN_004fd940(void* p);                      // 0x004fd940
-void FUN_0050e690(int a, int b);                 // 0x0050e690
-void FUN_00548690(int a, int b);                 // 0x00548690
-void FUN_00554b10(void* p);                      // 0x00554b10
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
 
 struct Pod16 { void* p0; void* p1; float f; void* p2; };
@@ -21,16 +18,21 @@ struct Vec24 {
     char* mpBegin;
     char* mpEnd;
     char* mpCapacity;
-    void push_back(const void* val);     // 0x004fd570
+    void push_back(const void* val);                                      // 0x004fd570
     int  size() const { return (int)(mpEnd - mpBegin) / 0x18; }
+    void f_004fd940();                                                    // 0x004fd940 (ecx = this)
+    void f_0050e690(void* begin, void* end);                              // 0x0050e690 (ecx = this)
 };
 
 struct Vec16 {
     char* mpBegin;
     char* mpEnd;
     char* mpCapacity;
-    void push_back(const void* val);     // 0x004fd5e0
-    int  size() const { return (int)(mpEnd - mpBegin) / 0x10; }
+    void push_back(const void* val);                                      // 0x004fd5e0
+    int  size() const { return (int)(mpEnd - mpBegin) >> 4; }
+    void f_00554b10();                                                    // 0x00554b10 (ecx = this)
+    void f_00548690(void* begin, void* end);                              // 0x00548690 (ecx = this)
+    void f_004fd9a0(void* pos, const void* val);                          // 0x004fd9a0 (ecx = this)
 };
 
 struct Ability {
@@ -67,14 +69,16 @@ Ability::Ability()
 // @ 0x004fcb90
 Ability::~Ability()
 {
-    *(int**)this = PTR_FUN_013f11b8;
-    for (uint32_t i = *(uint32_t*)((char*)this + 8); i < *(uint32_t*)((char*)this + 0xc); i += 0x18) {
+    *(int**)this = g_013f11b8;
+    Vec16* pTail = &mVec1c;
+    for (uint32_t i = (uint32_t)pTail->mpBegin; i < (uint32_t)pTail->mpEnd; i += 0x10) {
     }
-    FUN_004fd940((char*)this + 8);
-    for (uint32_t j = *(uint32_t*)((char*)this + 0x1c); j < *(uint32_t*)((char*)this + 0x20); j += 0x10) {
+    pTail->f_00554b10();
+    Vec24* pBody = &mVec8;
+    for (uint32_t j = (uint32_t)pBody->mpBegin; j < (uint32_t)pBody->mpEnd; j += 0x18) {
     }
-    FUN_00554b10((char*)this + 0x1c);
-    *(int**)this = vtbl_Simulator_cCreatureAbility;
+    pBody->f_004fd940();
+    *(int**)this = g_013ef094;
 }
 
 // @ 0x004fcc20
@@ -107,8 +111,8 @@ int Ability::Add2(void* a, void* b, float c, void* d)
 // @ 0x004fd520
 void Ability::Dispose()
 {
-    FUN_0050e690(*(int*)((char*)this + 8), *(int*)((char*)this + 0xc));
-    FUN_00548690(*(int*)((char*)this + 0x1c), *(int*)((char*)this + 0x20));
+    mVec8.f_0050e690(mVec8.mpBegin, mVec8.mpEnd);
+    mVec1c.f_00548690(mVec1c.mpBegin, mVec1c.mpEnd);
 }
 
 // @ 0x004fd5e0
@@ -124,7 +128,7 @@ void Vec16::push_back(const void* val)
             *(uint32_t*)(p + 0xc) = *(const uint32_t*)((const char*)val + 0xc);
         }
     } else {
-        FUN_004fd9a0(mpEnd, val);
+        f_004fd9a0(mpEnd, val);
     }
 }
 

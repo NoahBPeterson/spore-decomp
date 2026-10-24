@@ -1,8 +1,8 @@
 # va  diff-bytes  reason
 004fcae0 8 constructor; only the two vtable-store relocations differ (stored as literal 0 instead of a relocated address)
-004fcb90 95 destructor; /Od frame, inlined vector-destructor slots not reproduced
-004fcca0 56 Add2; frame size and 16-byte push_back argument schedule not reproduced
-004fd520 69 Dispose; /Od frame slots not reproduced
-004fd5e0 74 Vec16::push_back; cdecl/thiscall frame and slot order not reproduced
+004fcb90 22 destructor; complete now - destruction order is vptr 0x13f11b8, then the +0x1c vector (unsigned stride-0x10 element walk, then 0x00554b10 with ecx = vector), then the +8 vector (stride-0x18 walk, then 0x004fd940), then vptr 0x13ef094; only /Od frame slot numbers differ (29 vs 20 frame bytes); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (replay, first difference None)
+004fcca0 31 Add2; complete now - Pod16{begin,end,float,value} pushed through Vec16::push_back and `size() - 1` (sar by 4); the vector calls are thiscall with ecx = the vector; only /Od slot numbers and statement order differ (frame 0x18 vs 0x20); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (replay, first difference None)
+004fd520 59 Dispose; complete now - two member calls, 0x0050e690 on the +8 vector and 0x00548690 on the +0x1c vector, each with ecx = vector and (begin, end) on the stack; only /Od frame slots differ (size 61 vs 73); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (replay, first difference None)
+004fd5e0 74 Vec16::push_back; complete now - thiscall with one stack arg (ret 4): fast path bumps mpEnd by 0x10 then copies the four dwords, slow path calls 0x004fd9a0 with ecx = this and (mpEnd, val); only /Od slot numbers and the original's kept base pointers differ (size 126 vs 129); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (replay, first difference None)
 004fd670 90 pod copy; /Od frame slots not reproduced; equiv PASS (member Pod24::Copy; hidden void return fixed - original leaves `this` in eax, now `return this;`)
 004fcd00 527 complete Stepper::Run (9 stack args); flags /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE /fp:fast ; instruction stream identical modulo /Od frame slot order (frame 0x164 vs 0x168)
