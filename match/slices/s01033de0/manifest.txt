@@ -1,0 +1,9 @@
+slices/s01033de0/s01033de0.cpp  ?FUN_01033de0@@YAPAXXZ  01033de0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01033de0/s01033de0.cpp  ?FUN_01033e60@SlowDeathCore@@QAEPAXE@Z  01033e60  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01033de0/s01033de0.cpp  ?FUN_01033ea0@Behavior@@QAE_NH@Z  01033ea0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01033de0/s01033de0.cpp  ?FUN_01034680@@YAHPAUView@@@Z  01034680  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01033de0/s01033de0.cpp  ?FUN_010346b0@@YGXMMM@Z  010346b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01033de0/s01033de0.cpp  ?FUN_010347a0@BigThing@@QAEPAXE@Z  010347a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01033de0/s01033de0.cpp  ?FUN_01034840@Behavior@@QAEXXZ  01034840  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01033de0/s01033de0.cpp  ?FUN_01034880@Behavior@@QAEXXZ  01034880  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01033de0/s01033de0.cpp  ?FUN_01034950@Behavior@@QAEXHH@Z  01034950  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

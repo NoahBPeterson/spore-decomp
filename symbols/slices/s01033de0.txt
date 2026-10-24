@@ -1,0 +1,17 @@
+01033de0 FUN_01033de0  # Ghidra FUN; allocate and construct the 0xa0-byte slow-death behaviour (operator_new + cInteraction base ctor + cGonzagoTimer at +0x78); byte-exact
+01033e60 SP::cSpaceGameBehaviorSlowDeath::`scalar deleting destructor'  # PDB name (card); base dtor + conditional operator delete[]; byte-exact
+01033ea0 FUN_01033ea0  # Ghidra FUN; per-mode query helper returning bool/0/1; byte-exact
+01033f50 SP::cSpaceGameBehaviorSlowDeath::Action  # PDB name (card); eight-way mode dispatcher; partial - inline jump table at 0x01034238, modes 3/6/7/8 not recovered
+01034260 SP::cSpaceGameBehaviorSlowDeath::SetDeathType  # PDB name (card); animation script per death type; partial - inline jump table at 0x01034590, bound spans unlisted FUN_01034340, trailing block not recovered
+010345b0 SP::cSpaceGameBehaviorSlowDeath::RemoveAgent  # PDB name (card); 24-byte RemoveAgent argument block forward + agent detach; not byte-exact
+01034630 FUN_01034630  # Ghidra FUN; cached tuning factor lookup with 0x01043150 recompute fallback; not byte-exact
+01034680 FUN_01034680  # Ghidra FUN; viewer/terraform query helper; byte-exact
+010346b0 FUN_010346b0  # Ghidra FUN; three-float stdcall interpolation helper; byte-exact
+010346e0 FUN_010346e0  # Ghidra FUN; refresh the four tuning factors/variants; not byte-exact (inline jump table at 0x0103478c)
+010347a0 FUN_010347a0  # Ghidra FUN; cITracerBase teardown of the +0x178/+0x2ec/+0x4 viewer sub-objects + conditional delete[]; byte-exact
+010347e0 FUN_010347e0  # Ghidra FUN; App()->slot 0x50 -> +0xa0 object slot 0x84 under 0x015b79b8; not byte-exact
+01034810 FUN_01034810  # Ghidra FUN; as 0x010347e0 under the 0x015b7844 name string; not byte-exact
+01034840 FUN_01034840  # Ghidra FUN; release/recreate the +0x90 interface and re-arm through it; byte-exact
+01034880 FUN_01034880  # Ghidra FUN; terraform/game-mode gate that switches the +0x60/+0x64/+0x68 interface set on or off; byte-exact
+01034950 FUN_01034950  # Ghidra FUN; interface-bank arm/disarm per death mode (2 stack args, the second unused); byte-exact
+01034b90 FUN_01034b90  # Ghidra FUN (PDB hint SP::cSPSpaceGfx::PrerollParticles); solar-system graphics preroll; partial - planet-present branch not reconstructed
