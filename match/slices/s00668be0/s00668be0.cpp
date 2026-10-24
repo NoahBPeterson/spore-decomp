@@ -373,7 +373,7 @@ __declspec(noinline) void FeedItem::FUN_00668d90(Vec* out) {
 // -----------------------------------------------------------------------------
 // @ 0x00669360  vector-copy constructor helper
 // -----------------------------------------------------------------------------
-struct Vec4 { void* begin; void* end; void* cap; };
+struct Vec4 { void* begin; void* end; void* cap; void reserve(int count, void* p); };
 
 struct Obj9360 {
     void* vt;        // +0x00
@@ -381,13 +381,12 @@ struct Obj9360 {
     char  pad10[8];  // +0x10
     void* m18;       // +0x18
     Obj9360* init(int p2, Vec* p3);
-    void reserve(int count, void* p);   // 0x004aa350
 };
 
 Obj9360* Obj9360::init(int p2, Vec* p3) {
     vt = &gVt14002a8;
     int count = (int)((char*)p3->end - (char*)p3->begin) >> 2;
-    reserve(count, (char*)p3 + 0xc);
+    v.reserve(count, (char*)p3 + 0xc);
     int nbytes = (int)((char*)p3->end - (char*)p3->begin);
     void* r = DoInsertValue0066(v.begin, p3->begin, nbytes);
     v.end = (char*)r + (nbytes >> 2) * 4;

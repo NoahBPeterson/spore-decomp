@@ -4,3 +4,4 @@
 00669360 ?init@Obj9360@@QAEPAU1@HPAUVec@@@Z  # Obj9360::init migrated from s00668be0 (verbatim, slice spelling)
 006693c0 ?FUN_006693c0@FeedItem_s0066_8be0@@QAEHXZ  # FeedItem_s0066_8be0::FUN_006693c0 migrated from s00668be0 (verbatim, slice spelling)
 00669410 ?FUN_00669410@@YIXPAX@Z  # FUN_00669410 migrated from s00668be0 (verbatim, slice spelling)
+014002a8 ?gVt14002a8@@3HA  # vtable stored by Obj9360::init
