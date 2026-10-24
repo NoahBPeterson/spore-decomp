@@ -1,0 +1,5 @@
+slices/s00c69300/s00c69300.cpp  ?Activate@cGameData@@QAEDH@Z  00c697e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00c69300/s00c69300.cpp  ?SP_CreatePlanetAndSnap@@YGIII@Z  00c69bc0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00c69300/s00c69300.cpp  ?Cast@cObject@@QAEPAXH@Z  00c69db0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00c69300/s00c69300.cpp  ?SP_ObjectCheck@@YAHPAX@Z  00c69e30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00c69300/s00c69300.cpp  ?SetTarget@cHerd@@QAEXPBUcVec3@@@Z  00c69ff0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
