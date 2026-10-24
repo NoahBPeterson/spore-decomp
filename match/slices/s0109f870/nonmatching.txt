@@ -1,7 +1,7 @@
 0109f930 0 havok-equivalent
 0109f9c0 0 havok-equivalent
 0109fa10 0 havok-equivalent
-0109fb70 0 havok-equivalent
+0109fb70 0 havok-equivalent; internalAddEntity/construct are now member (thiscall) calls so ecx=island, matching the original; replay first difference None; equiv WEAK 30.2% coverage (0 mismatches).
 0109fc70 0 havok-equivalent
 0109fd50 0 havok-equivalent
 0109fdd0 0 havok-equivalent
@@ -11,4 +11,4 @@
 010a0130 0 havok-equivalent
 010a0190 0 havok-equivalent
 010a03c0 0 havok-equivalent
-010a0410 0 havok-equivalent; callerdeps preserve DEPENDS ecx, not reproducible in C++ flags /vc71 /O2 /MD /Gy /TP; equiv FAIL (5/5 valid, 50.1% cov, first mismatch ecx): original restores the entry ECX through its `push ecx`/`pop ecx` frame slot (the slot holds a timer temporary written only on the skipped branch), and the LTCG caller 01085e60 reads ecx after the call at 01085f8c; our cl 13.10 build allocates its frame in eax (`push eax`) and uses ecx as a scratch throughout, so the final ECX differs. No C++ shape makes cl 13.10 save/restore ECX on a function this size (caller-saved; only ebx/esi/edi are auto-saved).
+010a0410 0 havok-equivalent; callerdeps preserve DEPENDS ecx, not reproducible in C++ flags /vc71 /O2 /MD /Gy /TP; equiv FAIL-KEPT register ecx (5/5 valid, 50.1% cov, first mismatch ecx): original restores the entry ECX through its `push ecx`/`pop ecx` frame slot (the slot holds a timer temporary written only on the skipped branch), and the LTCG caller 01085e60 reads ecx after the call at 01085f8c; our cl 13.10 build allocates its frame in eax (`push eax`) and uses ecx as a scratch throughout, so the final ECX differs. No C++ shape makes cl 13.10 save/restore ECX on a function this size (caller-saved; only ebx/esi/edi are auto-saved).

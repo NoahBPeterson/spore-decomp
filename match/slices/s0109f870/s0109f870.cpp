@@ -152,6 +152,8 @@ class hkAction
 };
 
 class hkSimulationIsland : public hkSimpleConstraintOwner { public:
+	void internalAddEntity(hkEntity* e);                 // 0x010A2250
+	void construct(hkWorld* world);                      // 0x010A2810 (placement ctor)
 	hkWorld* m_world;                                   // +0x1c
 	hkUint16 m_storageIndex;                            // +0x20
 	hkUint16 m_dirtyListIndex;                          // +0x22 (0xffff = not on the dirty list)
@@ -406,7 +408,7 @@ void hkWorldOperationUtil::addEntitySI(hkWorld* world, hkEntity* entity, int ini
 	entity->m_world = world;
 	if (entity->m_isFixed)
 	{
-		hkSimulationIsland_internalAddEntity(world->m_fixedIsland, entity);
+		world->m_fixedIsland->internalAddEntity(entity);
 		return;
 	}
 	if (world->m_wantSimulationIslands)
@@ -415,7 +417,7 @@ void hkWorldOperationUtil::addEntitySI(hkWorld* world, hkEntity* entity, int ini
 		void* mem = hkMemory::s_instance->allocateChunk(0x74, 0x2f);
 		((hkReferencedObject*)mem)->m_memSizeAndFlags = 0x74;
 		hkSimulationIsland* island = (hkSimulationIsland*)mem;
-		hkSimulationIsland_construct(island, world);
+		island->construct(world);
 		if (initialActivationState == 1)
 		{
 			island->m_activeMark = 1;
@@ -430,11 +432,11 @@ void hkWorldOperationUtil::addEntitySI(hkWorld* world, hkEntity* entity, int ini
 			island->m_storageIndex = (hkUint16)world->m_inactiveSimulationIslands.m_size;
 			hkWorldOperationUtil_pushIsland(world->m_inactiveSimulationIslands, island);
 		}
-		hkSimulationIsland_internalAddEntity(island, entity);
+		island->internalAddEntity(entity);
 		return;
 	}
 	if (initialActivationState == 1)
-		hkSimulationIsland_internalAddEntity(world->m_activeSimulationIslands.m_data[0], entity);
+		world->m_activeSimulationIslands.m_data[0]->internalAddEntity(entity);
 }
 
 // @ 0x0109fc70
