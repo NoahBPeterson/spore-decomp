@@ -20,7 +20,7 @@ void  __cdecl FUN_00805fe0(void*, void*);                 // 0x805fe0
 void  __cdecl SPUI_UpdateMouseFocus(int);                 // 0x804f50
 float __cdecl SPUI_GetElapsedSeconds();                   // 0x805080
 void  __cdecl FUN_008352c0();                             // get manager (returns in eax)
-void  __cdecl SPKeyFromName(void*, const wchar_t*, int, int); // 0x68d840
+uint32_t __cdecl SPKeyFromName(void*, const wchar_t*, int, int); // 0x68d840
 void  __cdecl VectorBool_DoInsertValue(void*, const void*, uint32_t); // 0x11e0744
 
 extern char  g_eastlTag[];     // 0x13f6b3c
@@ -318,6 +318,8 @@ uint32_t cSPUITooltipWinProc::DoMessage(void* pWindow, int* msg) {
                                   (float*)&mTooltipOffsetPosition, 0, 0xffffffff, 0, 0);
         mgr->mbTooltipDisplayed = false;
         return result & 0xffffff00u;
+    case 7: case 8: case 9: case 11: case 13: case 14: case 15: case 16:
+        break;
     case 10:
         if (mpMyWindow) {
             if (msg[3] != 1) goto L_af5;
@@ -373,7 +375,7 @@ uint32_t cSPUITooltipWinProc::DoMessage(void* pWindow, int* msg) {
         }
         break;
     case 17:
-        SPKeyFromName(&mKeyInstance, mLayoutName.mpBegin, 0x510a95b, 0x40464100);
+        result = SPKeyFromName(&mKeyInstance, mLayoutName.mpBegin, 0x510a95b, 0x40464100);
         mpMyWindow = pWindow;
         return result & 0xffffff00u;
     case 18:
@@ -388,7 +390,7 @@ uint32_t cSPUITooltipWinProc::DoMessage(void* pWindow, int* msg) {
         }
         break;
     default:
-        break;
+        return ((uint32_t)msg[2] - 6u) & 0xffffff00u;
     }
     return result & 0xffffff00u;
 }
@@ -531,7 +533,7 @@ struct BoolVec {
     uint32_t mPad;          // +0xc
     uint32_t mAllocator;    // +0x10
     void ReserveBuffer(uint32_t n);
-    void Init(const BoolVec& other);
+    BoolVec* Init(const BoolVec& other);
 };
 
 // @ 0x00836620
@@ -551,7 +553,7 @@ void BoolVec::ReserveBuffer(uint32_t n) {
 }
 
 // @ 0x00836850
-void BoolVec::Init(const BoolVec& other) {
+BoolVec* BoolVec::Init(const BoolVec& other) {
     mpBegin = 0;
     mpEnd = 0;
     mpCapacity = 0;
@@ -564,6 +566,7 @@ void BoolVec::Init(const BoolVec& other) {
     VectorBool_DoInsertValue(dst, pSrc, size);
     mpEnd = dst + (pEnd - pSrc);
     *mpEnd = 0;
+    return this;
 }
 
 // ---------------------------------------------------------------------------
