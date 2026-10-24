@@ -6,19 +6,32 @@ typedef unsigned int uint;
 void* EASTL_Allocate(void* alloc, uint bytes, uint align, uint flags);   // @ 0x0042dee0
 void  EASTL_allocator_deallocate(void* p);                               // @ 0x00f47380
 void  memmove(void* dst, const void* src, uint n);
+extern "C" void* __cdecl memcpy(void* dst, const void* src, uint n);
 #pragma intrinsic(memmove)
 
 struct Variant {
-    uint32_t mFlags;
+    uint32_t mValue0;
+    uint32_t mValue1;
+    uint32_t mValue2;
+    uint32_t mData;
+    uint16_t mFlags;
+    uint16_t mType;
+    uint32_t mSize;
     Variant* Ctor(uint32_t arg);
 };
 namespace EA { struct V { void Destruct(Variant*, int); }; }
-void VariantDestruct(Variant* v, int n);                 // @ 0x00f... (EA::Variant::Destruct)
-void VariantInit(int a, int b, void* c, int d, int e);   // @ 0x0093dd80
+void __fastcall VariantDestruct(Variant* v, int reserved, int n);  // @ 0x0093db80 (EA::Variant::Destruct)
+bool __fastcall VariantInit(Variant* v, int reserved, uint16_t a, uint16_t b,
+                            const void* c, uint d, uint e);        // @ 0x0093dd80
 
 // ---- 8-byte pair element ----------------------------------------------------------------
 struct P8 { uint a, b; };
-template<class T> T* UninitCopyRange(T* first, T* last, T* dest);   // out of line
+template<class T> T* UninitCopyRange(T* first, T* last, T* dest)
+{
+    uint bytes = (uint)((char*)last - (char*)first);
+    memcpy(dest, first, bytes);
+    return (T*)((char*)dest + bytes);
+}
 
 // ---- types for the editor handle-update loop (0x00477930) --------------------------------
 struct RefObj {
@@ -267,9 +280,9 @@ Variant* Variant::Ctor(uint32_t arg)
 {
     Variant* v = this;
     if ((v->mFlags & 4) != 0) {
-        VariantDestruct(v, 1);
+        VariantDestruct(v, 0, 1);
     }
-    VariantInit(0x39, 0, (void*)arg, 0x18, 1);
+    VariantInit(v, 0, 0x39, 0, (void*)arg, 0x18, 1);
     return v;
 }
 
@@ -314,8 +327,13 @@ void IntrosortRange(char* first, char* last, char pred)
     }
 }
 
+struct AllocHeader {
+    int mRefCount;
+};
+
 struct VecP8Fixed {
     P8* mpBegin; P8* mpEnd; P8* mpCapacity;
+    uint8_t mAllocator;
     P8* InsertP8Fixed(P8* position, const P8& value);
 };
 
@@ -327,18 +345,22 @@ P8* VecP8Fixed::InsertP8Fixed(P8* position, const P8& value)
         if (position <= v && v < mpEnd)
             v = (P8*)((char*)v + 8);
         if (mpEnd) *mpEnd = *(mpEnd - 1);
-        char* dst = (char*)mpEnd + (((char*)(mpEnd - 1) - (char*)position) >> 3) * -8;
-        memmove(dst, position, (uint)((char*)(mpEnd - 1) - (char*)position));
+        memmove(position + 1, position, (uint)((char*)(mpEnd - 1) - (char*)position));
         *position = *v;
         ++mpEnd;
-    } else {
-        uint oldSize = (uint)(mpEnd - mpBegin);
-        uint newSize = oldSize ? oldSize * 2 : 1;
-        P8* pNew = newSize ? (P8*)EASTL_Allocate((char*)mpCapacity + 0xc - 0xc, newSize * 8, 8, 0) : 0;
-        P8* p = pNew;
-        (void)p;
-        mpBegin = pNew;
-        mpCapacity = pNew + newSize;
+        return mpEnd;
     }
-    return position;
+
+    uint oldSize = (uint)(mpEnd - mpBegin);
+    uint newSize = oldSize ? oldSize * 2 : 1;
+    P8* pNew = newSize ? (P8*)EASTL_Allocate(&mAllocator, newSize * 8, 8, 0) : 0;
+    P8* p = UninitCopyRange(mpBegin, position, pNew);
+    if (p) *p = value;
+    P8* pNewEnd = UninitCopyRange(position, mpEnd, p + 1);
+    if (mpBegin && ((AllocHeader*)mpBegin)[-1].mRefCount != 0)
+        EASTL_allocator_deallocate(mpBegin);
+    mpBegin = pNew;
+    mpEnd = pNewEnd;
+    mpCapacity = pNew + newSize;
+    return pNew;
 }
