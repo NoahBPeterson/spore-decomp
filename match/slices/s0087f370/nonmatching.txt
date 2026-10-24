@@ -6,9 +6,9 @@
 0087f5e0  197  register allocation / instruction selection in IsLocaleAvailable (274B); equiv WEAK 316 valid 48.5% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
 0087f700  271  register allocation in CRTFindAliasDataByLocaleId (497B); equiv WEAK 329 valid 22.8% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
 0087f900  226  register/format-schedule difference (420B); equiv UNSUPPORTED (_setlocale unresolved); flags /O2 /MD /Gy /EHsc /TP /GS-
-0087fb40  110  eastl rbtree InsertNew (146B) size/schedule mismatch (mine 143B); equiv WEAK 108 valid 68.4% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087fb40  109  eastl rbtree InsertNew (146B) size/schedule mismatch (mine 143B); declared `void**` and returns the out pointer because retail reloads it into eax for the final store (mov eax,[esp+0x24]; mov [eax],edi) and equiv compares eax; equiv WEAK 108 valid 68.4% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
 0087fbe0  415  eastl rbtree FindOrInsert (295B, mine 387B) size/schedule mismatch; character-for-character semantics match; equiv PASS 219 valid 81.5% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
 0087fd10  357  locale-availability compare (248B, mine 324B) size/schedule mismatch; semantics match; equiv WEAK 305 valid 33.7% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
 0087fe90  147  double-branch formatter (251B) schedule/register mismatch; equiv WEAK 149 valid 72.4% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
-0087ff90  149  numeric formatter (173B, mine 144B) size/schedule mismatch; equiv PASS 262 valid 71% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087ff90  136  numeric formatter (173B, mine 162B) size/schedule mismatch; the two 0x68c8c0 calls are thiscalls on the formatter (retail loads ecx from param_1 before both), so they are modelled as Loc::RepeatChar instead of a free e_repchar(int,int) - with the free call ecx was the caller's garbage and the in-image callee faulted; equiv PASS 262 valid 71% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
 00880040  245  eastl rbtree AddOrFind (292B, mine 287B) register/schedule mismatch; semantics match; equiv WEAK 194 valid 63.4% cov; flags /O2 /MD /Gy /EHsc /TP /GS-

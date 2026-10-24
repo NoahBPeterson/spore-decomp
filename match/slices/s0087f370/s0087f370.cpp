@@ -44,6 +44,7 @@ struct Loc {
     void append(const wchar_t* b, const wchar_t* e);          // 0x42f9d0
     void Assign(const wchar_t** key);                         // 0x87e0d0
     void FUN_0087fab0(int c);                                 // 0x87fab0
+    void RepeatChar(int n, int c);                            // 0x68c8c0 (thiscall: ecx = formatter)
 
     void Release() {
         int d = (int)((char*)f08 - (char*)f00);
@@ -141,7 +142,7 @@ struct LocaleTree {
     int   count;           // +0x14
 
     void  Clear(RbtNode* n);                                       // 0087fe10
-    void  InsertNew(void** out, RbtNode* hint, const wchar_t** key, char flag);  // 0087fb40
+    void** InsertNew(void** out, RbtNode* hint, const wchar_t** key, char flag);  // 0087fb40
     void  FindOrInsert(void** out, const wchar_t** key, unsigned flag);         // 0087fbe0
     void* AddOrFind(void** out, RbtNode* hint, const wchar_t** key, char flag); // 00880040
     RbtIter find(const Loc<16>* key);                                          // 0x5e96f0
@@ -166,7 +167,9 @@ void LocaleTree::Clear(RbtNode* n) {
 }
 
 // @ 0x0087fb40 : insert a fresh node
-void LocaleTree::InsertNew(void** out, RbtNode* hint, const wchar_t** key, char flag) {
+// Returns the out pointer: retail reloads it into eax for the final store (mov eax,[esp+0x24];
+// mov [eax],edi) and leaves it there, and equiv compares eax because the original writes it.
+void** LocaleTree::InsertNew(void** out, RbtNode* hint, const wchar_t** key, char flag) {
     int cmp = 0;
     if (flag == 0 && hint != (RbtNode*)((char*)this + 4)) {
         if (e_compare(key[0], key[1], hint->key.f00, hint->key.f04) >= 0)
@@ -179,6 +182,7 @@ void LocaleTree::InsertNew(void** out, RbtNode* hint, const wchar_t** key, char 
     e_insert(n, hint, (char*)this + 4, cmp);
     count++;
     *out = n;
+    return out;
 }
 
 // @ 0x0087fbe0 : find position, inserting when needed
@@ -529,7 +533,7 @@ char FUN_0087ff90(Loc<16>* param_1, NumFmt* param_2) {
         return 1;
     }
     if (*psVar5 == 0x2d) {
-        e_repchar(1, 0x2d);
+        param_1->RepeatChar(1, 0x2d);
         psVar5 += 1;
     }
     unsigned uVar2 = (unsigned)param_2->f3c;
@@ -542,7 +546,7 @@ char FUN_0087ff90(Loc<16>* param_1, NumFmt* param_2) {
         if (iVar4 == 0 && uVar2 < uVar3)
             end = psVar5 + uVar2;
     } else {
-        e_repchar((int)(uVar2 - uVar3), 0x30);
+        param_1->RepeatChar((int)(uVar2 - uVar3), 0x30);
         end = psVar1;
     }
     param_1->AppendElement(psVar5, end);
