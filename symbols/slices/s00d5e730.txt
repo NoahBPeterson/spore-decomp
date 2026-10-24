@@ -1,0 +1,6 @@
+00d5e730 ?FUN_00d5e730@@YGXXZ  # SP::cCityVisualizer::cCityVisualizer (pdb_candidates.json, caller-scored) - no source (partial)
+00d5ea70 ?FUN_00d5ea70@@YGXXZ  # SP::cCityVisualizer::~cCityVisualizer (pdb_candidates.json, caller-single) - no source (partial)
+00d5ed70 ?push_back@Elem1CVec@@QAEXXZ  # eastl::vector<Elem1C>::push_back (unnamed in PDB; modelled) - byte-exact
+00d5edc0 ?erase@ActionCircleVec@@QAEPAUcActionCircle@@PAU2@0@Z  # eastl::vector<SP::cActionCircle>::erase (unnamed in PDB; modelled) - nonmatching/equivalent
+00d5ef80 ?FUN_00d5ef80@@YGXXZ  # SP::cCityVisualizer::VignetteCheat (pdb_candidates.json, caller-single) - no source (partial)
+00d5f4d0 ?FUN_00d5f4d0@@YGXXZ  # SP::cCityVisualizer::StartSpecialVignette (pdb_candidates.json, caller-scored) - no source (partial)

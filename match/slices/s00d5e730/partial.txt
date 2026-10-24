@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00d5e730  824  SP::cCityVisualizer::cCityVisualizer - no source: full member-by-member default construction; retail layout (fields through +0xc68) not recovered (dev-build PDB layout is only 0xb80 and shifts with a larger retail cActionCircle). flags /O2 /MD /Gy /TP /arch:SSE
+00d5ea70  754  SP::cCityVisualizer::~cCityVisualizer - no source: mirrored teardown with the same unresolved retail-layout dependency. flags /O2 /MD /Gy /TP /arch:SSE
+00d5ef80  1349  SP::cCityVisualizer::VignetteCheat - no source: large float/x87 vignette-selection algorithm not reproduced. flags /O2 /MD /Gy /TP /arch:SSE
+00d5f4d0  687  SP::cCityVisualizer::StartSpecialVignette - no source: large vector/float vignette-setup algorithm not reproduced. flags /O2 /MD /Gy /TP /arch:SSE
