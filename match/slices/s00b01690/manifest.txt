@@ -1,0 +1,5 @@
+slices/s00b01690/s00b01690.cpp  ?Enable@cFruitOps1@@QAEXPAX@Z  00b019d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b01690/s00b01690.cpp  ?Disable@cFruitOps2@@QAEXPAX@Z  00b01a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b01690/s00b01690.cpp  ?Wrap@WrapperOps@@QAEPAXPAIPAX@Z  00b02480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b01690/s00b01690.cpp  ?FUN_00b02520@@YAXPAX@Z  00b02520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b01690/s00b01690.cpp  ?FUN_00b02610@@YAXPAX@Z  00b02610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
