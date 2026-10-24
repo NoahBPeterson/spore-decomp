@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+00e19dd0  400  comparator/helper taking a stack comparator object (this = lea [esp+0x28]) plus 2 stack args; not emitted
+00e19f60  218  SP::SortMissionsByEmpire::operator() (owner-empire id compare + civ city u16 string compare, sbb/setl tail); not emitted
+00e1a040  352  not emitted
+00e1a1d0  202  eastl insertion sort over 4-byte AutoRefCount elements (AddRef/Release + comparator call); not emitted
+00e1a2a0  205  eastl insertion sort (4-byte AutoRefCount elements, variant); not emitted
+00e1a370  202  eastl insertion sort (4-byte AutoRefCount elements, variant); not emitted
+00e1a440  205  eastl insertion sort (4-byte AutoRefCount elements, variant); not emitted
+00e1a510  202  eastl insertion sort (4-byte AutoRefCount elements, variant); not emitted
+00e1a5e0  205  eastl insertion sort (4-byte AutoRefCount elements, variant); not emitted
+00e1a6b0  202  eastl insertion sort (4-byte AutoRefCount elements, variant); not emitted
+00e1a780  205  eastl insertion sort (4-byte AutoRefCount elements, variant); not emitted
+00e1b2d0  124  constructor: base ctor 0x00e18bb0 then 4 table/vftable stores at +0x00/+0x08/+0x0c/+0x40 and field zeroing; base subobject layout unknown; not emitted
