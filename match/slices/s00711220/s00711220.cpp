@@ -7,8 +7,6 @@
 void* __cdecl EastlNew(uint32_t n, const char* name, int flags, int dbg, const char* file, int line);  // 0xF473A0
 void  __cdecl EastlFree(void* p) throw();                                                                     // 0xF47380
 void* __cdecl AssignCopyRef(void* first, void* last, void* dst);                                        // 0x006F43E0
-void  __cdecl DestroyRange(void* first, void* last);                                                    // 0x0070F520
-void  __cdecl DoInsertValuesRef(void* position, uint32_t n, const void* value);                         // 0x0070FFA0
 void  __cdecl ReleaseObject(void* p);                                                                   // 0x00761170
 
 // ---------------------------------------------------------------------------------------------
@@ -19,8 +17,12 @@ struct VecResize {
     void* mpEnd;         // +0x04
     void* mpCapacity;    // +0x08
     uint32_t mAllocator[2];
-    uint32_t size() const { return (uint32_t)((char*)mpEnd - (char*)mpBegin) >> 2; }
+    uint32_t size() const {
+        return (uint32_t)(((int32_t)((char*)mpEnd - (char*)mpBegin)) >> 2);
+    }
     void resize(uint32_t n);
+    void DestroyRange(void** first, void** last);   // 0x0070F520 (thiscall, ret 8)
+    void DoInsertValuesRef(void* position, uint32_t n, const void* value); // 0x0070FFA0 (ecx=vector, ret 0xc)
 };
 
 // @ 0x00711220
@@ -32,8 +34,10 @@ void VecResize::resize(uint32_t n)
     } else {
         void* first = (char*)mpBegin + n * 4;
         void* pNewEnd = AssignCopyRef(mpEnd, mpEnd, first);
-        DestroyRange(pNewEnd, mpEnd);
-        mpEnd = (char*)mpEnd - (uint32_t)((char*)mpEnd - (char*)first);
+        DestroyRange((void**)pNewEnd, (void**)mpEnd);
+        void** pEnd = (void**)mpEnd;
+        void** pFirst = (void**)first;
+        mpEnd = (void*)(pEnd - (pEnd - pFirst));
     }
 }
 
