@@ -408,7 +408,10 @@ void cSPEditorRigblockModel::UpdateModelTransforms()
 // @ 0x005a8e10
 void* cSPEditorHandBadnessCalculator::AsInterface(uint32_t typeID)
 {
-    return (typeID == 0xee3f516e || typeID == 0x212d6eb) ? this : 0;
+    void* result = this;
+    if (typeID != 0xee3f516e && typeID != 0x212d6eb)
+        result = 0;
+    return result;
 }
 
 // @ 0x005a8ea0

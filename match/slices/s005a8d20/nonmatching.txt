@@ -1,4 +1,3 @@
-005a8e10  7  AsInterface: original loads the type id into ecx after mov eax,ecx; mine uses edx
 005a8ed0  85  GetPropertyListForResource: original caches the resource pointer in esi across PropertyManager(); mine re-reads the AutoRefCount
 005a8f80  42  GetEditorConfigForModel (static, key pointer passed in eax by cl's register convention): default case reloads the AutoRefCount slot in the original
 005a9200  425  Editor::Launch(cEditorLaunchData*): message ID is reloaded from the message before PostMessage in the original; register choices; switch block layout shifts
