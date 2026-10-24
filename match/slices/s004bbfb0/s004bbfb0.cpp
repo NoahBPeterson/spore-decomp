@@ -30,7 +30,7 @@ struct cSPEditorResourceFactory {
     bool CreateResource(StreamObject* obj, int* out, uint32_t param_4, int typeHash);   // 004bc300
     bool ReadResource(StreamObject* stream, uint32_t param_2, uint32_t param_3, int typeHash);   // 004bc540
     bool WriteResource(StreamObject* stream, uint32_t param_1, uint32_t param_2, int typeHash);  // 004bc620
-    bool ReadResourceFromStream(StreamObject* stream, uint32_t key, int typeHash);               // 004bc6d0
+    static bool ReadResourceFromStream(StreamObject* stream, uint32_t key, int typeHash);               // 004bc6d0
 };
 
 struct TypeEntry {
@@ -84,6 +84,8 @@ int cSPEditorResourceFactory::Init() {
 struct RefCounted {
     virtual void v0();       // +0
     virtual void Release();  // +4
+    RefCounted* FUN_004b9c70();  // 0x4b9c70 (thiscall ctor, ecx = raw allocation)
+    RefCounted* FUN_004b9da0();  // 0x4b9da0 (thiscall ctor, ecx = raw allocation)
 };
 struct StreamObject {
     virtual void v0(); virtual void v4(); virtual void v8(); virtual void vC();
@@ -94,29 +96,30 @@ struct StreamObject {
     virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2C();
     virtual int v30(int* buf, int n);                    // +0x30
 };
+// Argument object of WriteResource: only vtable slot +0x18 is used.  It is a
+// caller-cleanup (variadic) member, so the original leaves its arguments on the
+// stack for the following callee.
+struct WriteTarget {
+    virtual void w0(); virtual void w4(); virtual void w8(); virtual void wC();
+    virtual void w10(); virtual void w14();
+    virtual int v18(int a, ...);                         // +0x18
+};
 struct EditorCreature : RefCounted {
     uint32_t pad4;
     uint32_t f8, fC, f10;
 };
 
-extern RefCounted* FUN_004b9c70(void* self);                       // 0x4b9c70
-extern RefCounted* FUN_004b9da0(void* self);                       // 0x4b9da0
 extern int* FUN_004c0500(uint32_t key);                            // 0x4c0500
 extern void FUN_006ac0a0(int type, uint32_t key);                  // 0x6ac0a0
 extern RefCounted* InterfaceCast2(RefCounted** p);                 // 0x421eb0
-extern bool FUN_004bdc00(int n);                                   // 0x4bdc00
-extern bool FUN_004bdae0();                                        // 0x4bdae0
-extern int FUN_004bd9f0(int);                                      // 0x4bd9f0
-extern bool FUN_004bdc60(int a, int b, bool c);                    // 0x4bdc60
-extern bool FUN_004be5d0();                                        // 0x4be5d0
 extern bool ReadRuntimeCreatureData(int data, uint32_t handle);    // 0x4bf430
-extern bool WriteRuntimeCreatureData(int* data);                   // 0x4bf770
+extern bool WriteRuntimeCreatureData(int* data, int handle);       // 0x4bf770
 extern int WriteBinaryEditorModel(int data);                       // 0x4b0010
-extern bool ReadBinaryEditorModel(int* a, int b);                  // 0x4bf9f0
+extern bool ReadBinaryEditorModel(StreamObject* stream, uint32_t key); // 0x4bf9f0
+extern bool WriteResourceToStream(int* data, int stream, int typeHash); // 0x4bcc50
 extern bool SetAssetData(uint32_t type, uint8_t flag);             // 0x4bbe20
 extern void SetCachingType2(int, void*);                           // 0x6ac040
 extern void FUN_006ad010(void*);                                   // 0x6ad010
-extern void DestroyFixedBufferShared(void*);                       // 0x4bca10
 
 static inline void ReleaseRef(RefCounted* p) {
     if (p)
@@ -133,14 +136,14 @@ bool cSPEditorResourceFactory::CreateResource(StreamObject* obj, int* out, uint3
             return false;
         EditorCreature* c = (EditorCreature*)EditorAlloc(0x128, "Editor", 0, 0, 0, 0);
         if (c)
-            c = (EditorCreature*)FUN_004b9da0(c);
+            c = (EditorCreature*)c->FUN_004b9da0();
         if (c)
             c->v0();
         local_8 = c;
     } else {
         RefCounted* local_28 = (RefCounted*)EditorAlloc(0xac, "Editor", 0, 0, 0, 0);
         if (local_28)
-            local_28 = FUN_004b9c70(local_28);
+            local_28 = local_28->FUN_004b9c70();
         if (local_28)
             local_28->v0();
         SetCachingType2(10, local_28);
@@ -186,20 +189,23 @@ bool cSPEditorResourceFactory::ReadResource(StreamObject* stream, uint32_t param
 
 // 004bc620  SP::cSPEditorResourceFactory::WriteResource
 bool cSPEditorResourceFactory::WriteResource(StreamObject* stream, uint32_t param_1, uint32_t param_2, int typeHash) {
-    if (typeHash != 0xf43029a) {
-        bool bakeable = SetAssetData((uint32_t)typeHash, 0);
-        if (!bakeable && typeHash != 0x1a99b06b)
-            return false;
-        int data = stream->v18((int)param_1, typeHash);
-        return WriteRuntimeCreatureData((int*)data) != 0;
+    (void)param_2;
+    WriteTarget* target = (WriteTarget*)(uint32_t)param_1;
+    if (typeHash == 0xf43029a) {
+        int handle = (int)FUN_004c0500((uint32_t)stream);
+        bool ok = false;
+        if (handle != 0) {
+            int data = target->v18(handle);
+            if (WriteRuntimeCreatureData((int*)data, handle))
+                ok = true;
+        }
+        return ok;
     }
-    int handle = (int)FUN_004c0500(param_1);
-    if (handle != 0) {
-        int data = stream->v18(handle, 0);
-        if (WriteRuntimeCreatureData((int*)data))
-            return true;
-    }
-    return false;
+    bool bakeable = SetAssetData((uint32_t)typeHash, 0);
+    if (!bakeable && typeHash != 0x1a99b06b)
+        return false;
+    int data = target->v18((int)stream, typeHash);
+    return WriteResourceToStream((int*)data, (int)stream, typeHash) != 0;
 }
 
 
@@ -353,36 +359,57 @@ void FixedBufferAllocator::Free(void* p) {
 
 }}  // namespace EA::Allocator
 
+// The editor-model parser owns a FixedBufferAllocator at offset 0 and the
+// allocator's storage immediately after it; the remaining member state follows
+// the storage.
+struct cEditorModelParser : EA::Allocator::FixedBufferAllocator {
+    char mBuffer[0x3a98];       // +0x04 .. +0x3a9b
+    void* mpXMLParser;          // +0x3a9c
+    int m3aa0;                  // +0x3aa0
+    int m3aa4;                  // +0x3aa4
+    int m3aa8;                  // +0x3aa8
+    int m3aac;                  // +0x3aac
+    uint16_t mBuffer2[0x400];   // +0x3ab0
+    int mLength;                // +0x42b0
+    int mCursor;                // +0x42b4
+
+    void FUN_004bd9f0(int data);                 // 0x4bd9f0
+    int  FUN_004bdc00(int n);                    // 0x4bdc00
+    bool FUN_004bdc60(int* buf, int n, int done); // 0x4bdc60
+    bool FUN_004be5d0();                         // 0x4be5d0
+    void FUN_004bdae0();                         // 0x4bdae0
+};
+
 // 004bc6d0  SP::cSPEditorResourceFactory::ReadResourceFromStream
 bool cSPEditorResourceFactory::ReadResourceFromStream(StreamObject* stream, uint32_t key, int typeHash) {
     int data = WriteBinaryEditorModel(key);
     if (data == 0)
         return false;
     if (typeHash == 0x1a99b06b)
-        return ReadBinaryEditorModel((int*)data, key);
-    char buffer[17076];
-    EA::Allocator::FixedBufferAllocator fba;
-    fba.mpBufferInfo = 0;
-    fba.Create(((EA::Allocator::FixedBufferAllocator::buffer_info*)buffer), 15000, 0);
-    FUN_004bd9f0(data);
+        return ReadBinaryEditorModel(stream, key);
+    cEditorModelParser parser;
+    parser.mpBufferInfo = 0;
+    parser.Create(parser.mBuffer, 15000, 0);
+    parser.FUN_004bd9f0(data);
     bool ok = true;
     bool done = false;
     while (ok && !done) {
-        int n = FUN_004bdc00(0x200);
+        int n = parser.FUN_004bdc00(0x200);
         if (n == 0) {
             ok = false;
         } else {
             int got = stream->v30((int*)n, 0x200);
             done = got != 0x200;
-            if (got == -1 || !FUN_004bdc60(n, got, done))
+            if (got == -1 || !parser.FUN_004bdc60((int*)n, got, done))
                 ok = false;
         }
     }
     if (ok)
-        ok = FUN_004be5d0();
-    FUN_004bdae0();
-    if (fba.mpBufferInfo != 0 && (fba.mpBufferInfo[1].mSignature & 0x40000000) != 0)
-        DestroyFixedBufferShared(&fba);
+        ok = parser.FUN_004be5d0();
+    parser.FUN_004bdae0();
+    if (parser.mpBufferInfo != 0 && (parser.mpBufferInfo[1].mSignature & 0x40000000) != 0)
+        parser.destroy_shared();
+    parser.mpBufferInfo = 0;
     return ok;
 }
 

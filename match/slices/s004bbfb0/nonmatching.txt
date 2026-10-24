@@ -1,7 +1,7 @@
 004bc080  263  SP::cSPEditorResourceFactory::Init: complete (static hash-table init + 6 manager vcalls + 2 FUN_006adc60); our manager/table stubs change the frame
-004bc300  305  SP::cSPEditorResourceFactory::CreateResource: complete (bakeable -> 0xac ctor, resource -> 0x128 ctor, vcall +0x24, field copy); stub object model diverges
+004bc300  305  SP::cSPEditorResourceFactory::CreateResource: complete (SetAssetData gate -> 0xac ctor / 0x128 ctor, both ctors are thiscall on the raw allocation, v24(stream, obj, param4, typeHash), v10 field copy to +8/+0xc/+0x10, *out = obj); equivalence replay identical (WEAK: 11.9% coverage)
 004bc540  244  SP::cSPEditorResourceFactory::ReadResource: complete (0x4c0500 -> v18 -> 0x4bf430 with handle, or v10/v18 -> ReadResourceFromStream(0x4bc6d0); 0x6ac0a0 takes 2 args); equiv WEAK (379 valid, no mismatch, 54% cov) flags /Od /Ob1 /MD /Gy /TP; v18 called with 2 args where the original passes 1 (fake-method arity -> those inputs discarded)
-004bc620  147  SP::cSPEditorResourceFactory::WriteResource: complete; stream vtable slot types guessed
-004bc6d0  308  SP::cSPEditorResourceFactory::ReadResourceFromStream: complete (chkstk frame + FixedBufferAllocator + read loop); our allocator/frame differs
+004bc620  225  SP::cSPEditorResourceFactory::WriteResource: complete (typeHash==0xf43029a -> FUN_004c0500(stream) + argobj->v18(handle) + WriteRuntimeCreatureData(data, handle); else SetAssetData / 0x1a99b06b gate + argobj->v18(stream, typeHash) + WriteResourceToStream(data, stream, typeHash)); equivalence replay identical (WEAK: 51.7% coverage)
+004bc6d0  368  SP::cSPEditorResourceFactory::ReadResourceFromStream: complete (static/cdecl; chkstk frame + real cEditorModelParser stack object + FBA Create on parser+4 + 0x200 read loop + destroy_shared); equiv PASS 81.7% coverage; not byte-exact
 004bca10  118  EA::Allocator::FixedBufferAllocator::destroy_shared: complete transcription; original frame keeps 3 extra reserved slots and orders locals differently
 004bcab0  364  EA::Allocator::FixedBufferAllocator::Free: complete transcription; original frame/locals differ
