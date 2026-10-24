@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00e939c0  347  SP::cBabySackView::HandleSimulationUpdate: complete - every path and helper/virtual call of the original reproduced (438 vs 441 B, register allocation); equiv UNSUPPORTED: 0/400 inputs valid (harness cannot synthesise the object/vtables)
+00e93b80  95  Simulator::cTribeView::cTribeView: complete - every store of the original (base ctor, vptr, +0x34/+0x35 bytes, timer ctor, mColor, +0x24/+0x28/+0x2c/+0x60); 112 vs 118 B, cl shares one zero in ebx across the timer call where the original uses byte/immediate stores and a fresh xor; equiv UNSUPPORTED (our object stores its own copy of vtbl_Simulator::cTribeView)
