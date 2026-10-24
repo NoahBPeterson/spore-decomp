@@ -139,12 +139,54 @@ void __cdecl FUN_006b8ea0(const wchar_t* a, const wchar_t* b, uint32_t flags)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006b8f40  LCMapStringW-based case mapping appended to a wide string
+// EASTL wide-string / wide-vector helpers used by the case-mapping routine
+// ---------------------------------------------------------------------------
+struct WString {                                                  // eastl::basic_string<wchar_t>
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    WString& assign(const wchar_t* first, const wchar_t* last);    // 0x00423650
+};
+struct WVector {                                                  // eastl::vector<wchar_t>
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    void insert(wchar_t* pos, uint32_t n, const wchar_t& value);   // 0x006b6f80 (see s006b6920)
+};
+void __cdecl EASTL_allocator_deallocate(void* p);                 // 0x00f47380
+
+// ---------------------------------------------------------------------------
+// @ 0x006b8f40  LCMapStringW-based case mapping of a wide string
 // ---------------------------------------------------------------------------
 void __cdecl FUN_006b8f40(void* str)
 {
-    // EH-heavy original; behavioural rewrite (partial)
-    (void)str;
+    WString& dst = *(WString*)str;
+    __try {
+        LCID locale = 0x400;
+        LCID local[2];
+        if (FUN_0087da90(local, &DAT_015311fc)) locale = local[0];
+
+        const wchar_t* src = dst.mpBegin;
+        int cchSrc = (int)(dst.mpEnd - dst.mpBegin);
+        int cchDest = LCMapStringW(locale, 0x100, src, cchSrc, 0, 0);
+
+        // A zero-length result still allocates one element: LCMapStringW reports
+        // failure as 0 and never as -1, so the original's cchDest + 1 == 0 guard
+        // branch (a degenerate copy) is unreachable.
+        WVector tmp = {0, 0, 0};
+        wchar_t zero = 0;
+        tmp.insert(tmp.mpBegin, (uint32_t)(cchDest + 1), zero);
+
+        LCMapStringW(locale, 0x100, src, cchSrc, tmp.mpBegin, cchDest);
+
+        wchar_t* end = tmp.mpBegin;
+        while (*end) ++end;
+        dst.assign(tmp.mpBegin, end);
+
+        if (tmp.mpBegin != 0 && *(int*)((char*)tmp.mpBegin - 4) != 0)
+            EASTL_allocator_deallocate(tmp.mpBegin);
+    } __except (1) {
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -348,23 +390,14 @@ extern "C" void __cdecl FUN_006b8680(CBig* out)
         SetStr(out->mStrings[4], host);
     }
 
-    struct Vendor { char s[13]; };
-    unsigned int regs[4] = {0, 0, 0, 0};
-    __asm {
-        push ebx
-        push ecx
-        push edx
-        xor eax, eax
-        cpuid
-        mov dword ptr [regs], ebx
-        mov dword ptr [regs + 4], edx
-        mov dword ptr [regs + 8], ecx
-        pop ecx
-        pop ebx
-        pop edx
-    }
+    // CPUID leaf 0: the 12 vendor bytes come back in EBX, EDX, ECX (in that order).
     char vendor[64];
-    *(Vendor*)vendor = *(Vendor*)regs;
+    int cpuidRegs[4];
+    __cpuid(cpuidRegs, 0);
+    *(int*)(vendor + 0) = cpuidRegs[1];        // EBX
+    *(int*)(vendor + 4) = cpuidRegs[3];        // EDX
+    *(int*)(vendor + 8) = cpuidRegs[2];        // ECX
+    vendor[12] = 0;
     bool isAmd = StrIStr(vendor, "AMD") != 0;
     bool isIntel;
     if (!isAmd) isIntel = StrIStr(vendor, "INTEL") != 0;

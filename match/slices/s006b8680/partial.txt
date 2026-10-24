@@ -1,2 +1,1 @@
-006b8f40 265 LCMapStringW case-mapping - EH-heavy, stubbed
-006b8680  0  asm transcription (__asm block of 11 instructions), not decompiled C++; was a nonmatching row, moved by the 2026-10-18 asm audit
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE)
