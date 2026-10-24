@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00bb7510 94 UNRECOVERED-EQUIV: body recovered (activate planet, get/activate planet by id, setup planet list, copy triple, register if unregistered, release each entry, delete buffer, release local); 261 vs 262 bytes: triple does not reuse the dead vector stack slots and callee-saved roles (ebp/ebx/edi) differ; difftest UNSUPPORTED (0/400 valid inputs)
+00bb7620 441 UNRECOVERED-EQUIV: body recovered (two identical passes over mPlanetsA and mPlanetsB: activate, get/activate by id, setup, register first entry, release each entry, delete buffer, release local); 524 vs 503 bytes: loop index/count are kept in registers instead of stack slots and this/planet register roles differ; difftest WEAK low coverage 16.9% (need 60%)

@@ -5,6 +5,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc)
 #include "types.h"
 #include <intrin.h>
+#include <string.h>
 
 #define CAT2(a, b) a##b
 #define CAT(a, b) CAT2(a, b)
@@ -121,6 +122,8 @@ struct MessageServer {
     VP4 VP4 VP
     virtual void AddListener(IMessageListener* h, uint32_t id);                                  // +0x24
     virtual void AddCallback(void (*fn)(), int n, uint32_t id, int a, int b);                    // +0x28
+    virtual void sv2c();                                                                         // +0x2c
+    virtual void RegisterCb(void (*fn)(), uint32_t id, int arg);                                 // +0x30
 };
 MessageServer* GetMessageServer();                             // 0x0067dcc0 (SP::MessageServer)
 void RemoveHandler(MessageServer* srv, IMessageListener* h, uint32_t* ids, int count, int arg);   // 0x00571db0 (cdecl)
@@ -146,9 +149,109 @@ struct IRC { virtual void v0(); virtual void v1(); virtual void AddRef(); virtua
 struct cSimObj {                                               // 0x100 bytes, ctor 0x00d05010
     virtual void v0();
     virtual void Init();                                       // +4 (slot 1)
+    virtual void v2();                                         // +8 (slot 2)
     int pad4;
     IRC rc;                                                    // +8
     cSimObj();
+};
+
+// ---- ref-counted helpers for the planet / effects objects ------------------------------------
+void __cdecl OpDelete(void* p);                                  // 0x00f47380
+void* __cdecl Fun_00baa8b0(void* a, void* b, void* c);           // 0x00baa8b0
+void* EffectsManagerPtr();                                       // 0x0067ddd0
+extern uint32_t g_FxFlag;                                        // 0x01689650
+
+struct RefCounted {                      // Release is the vtable slot at +0xc0
+    VP VP VP VP VP VP VP VP VP VP VP VP
+    VP VP VP VP VP VP VP VP VP VP VP VP
+    VP VP VP VP VP VP VP VP VP VP VP VP
+    VP VP VP VP VP VP VP VP VP VP VP VP
+    virtual void ReleaseObj();           // +0xc0
+};
+
+struct PtrHeader { int32_t mnCapacity; };    // allocation header before a vector's data
+
+struct PtrVec {                          // eastl vector of object pointers
+    void** mpBegin;                      // +0x00
+    void** mpEnd;                        // +0x04
+    void** mpCap;                        // +0x08
+    void erase(void* first, void* last); // 0x00e25bd0 (thiscall, 2 stack args)
+};
+
+struct RefTriple { void* a; void* b; void* c; };
+
+struct PlanetObj : RefCounted {
+    char pad04[0xac - 4];
+    char mbAC;                           // +0xac
+    uint32_t GetId(int a);               // 0x00bbaa60
+    RefTriple* GetTriple();              // 0x00c713e0
+};
+
+struct StarCtx {                         // returned by 0x00b3d360
+    bool IsRegistered(RefTriple* t);     // 0x00b7d4f0
+    void Register(PlanetObj* p);         // 0x00b7daf0
+};
+
+struct VecRows {                         // 0x14 bytes at StarSystem+0xc8
+    char* mpBegin;                       // +0x00
+    char* mpEnd;                         // +0x04
+    char* mpCap;                         // +0x08
+    uint32_t m0C;                        // +0x0c
+    uint32_t m10;                        // +0x10
+    void resize(uint32_t n);             // 0x00bb6740
+    void Fixup(void* it, char* end);     // 0x00ba8340
+};
+
+struct ISimpleRef { virtual void a0(); virtual void ReleaseRef(); };   // Release at +4
+struct BgSimManager {
+    char pad0[8];
+    ISimpleRef* mpRef;                   // +0x08
+};
+extern BgSimManager* gspBackgroundSimManager;    // 0x016dda8c
+
+struct GlobalTree { void Dtor(void* node); };    // 0x00d0c930
+extern GlobalTree g_treeCtx;                     // 0x0156c61c
+extern void* g_treeHead;                         // 0x0156c620
+extern void* g_treeTail;                         // 0x0156c624
+extern void* g_treeRoot;                         // 0x0156c628
+extern uint8_t g_treeFlag;                       // 0x0156c62c
+extern void* g_treeSize;                         // 0x0156c630
+
+struct EffectData {
+    char pad0[0x10];
+    uint32_t m10;                        // +0x10
+    uint32_t m14;                        // +0x14
+    uint32_t m18;                        // +0x18
+};
+struct EffectNode {
+    virtual void n00();                  // +0x00
+    virtual void n01();                  // +0x04
+    virtual void n02(int n);             // +0x08
+    virtual void n03(int n);             // +0x0c
+    virtual bool n04();                  // +0x10
+};
+struct EffectEmit {
+    virtual void v00();                  // +0x00
+    virtual void v01();                  // +0x04
+    virtual void v02(uint32_t id, int a, EffectNode** out);  // +0x08
+    virtual void v03(int n);             // +0x0c
+    virtual void v04();                  // +0x10
+    virtual void v05();                  // +0x14
+    virtual void v06();                  // +0x18
+    virtual void v07();                  // +0x1c
+    virtual void v08();                  // +0x20
+    virtual void v09(int n);             // +0x24
+    virtual void v10();                  // +0x28
+    virtual EffectData* v11();           // +0x2c
+    virtual void v12();                  // +0x30
+    virtual void v13();                  // +0x34
+    virtual void v14();                  // +0x38
+    virtual void v15(float x, float y, void* buf);  // +0x3c
+};
+struct EffectsMgr {
+    VP VP VP VP VP VP VP VP VP VP VP VP VP VP VP VP VP VP VP
+    virtual EffectEmit* v19(uint32_t id, int a);   // +0x4c
+    virtual void v20(uint32_t id);                 // +0x50
 };
 
 struct Base0 {
@@ -162,7 +265,11 @@ struct StarSystem : Base0, IMessageListener {
     uint32_t*           mpIds;          // +0xbc
     int                 mnIds;          // +0xc0
     int                 mArg;           // +0xc4
-    char                pad2[0x1a0 - 0xc8];
+    VecRows             mVrows;         // +0xc8 (0x14)
+    PtrVec              mPlanetsA;      // +0xdc (0x0c)
+    char                padE8[8];       // +0xe8
+    PtrVec              mPlanetsB;      // +0xf0 (0x0c)
+    char                padFC[0x1a0 - 0xfc];   // +0xfc
     PropertyList*       mpListA;        // +0x1a0
     PropertyList*       mpListB;        // +0x1a4
     uint32_t            mA8, mAC, mB0, mB4, mB8;   // +0x1a8..
@@ -172,6 +279,15 @@ struct StarSystem : Base0, IMessageListener {
     Vec2                mCC;            // +0x1cc
     char                pad3[0x204 - 0x1d4];
     cSimObj*            mpSim;          // +0x204
+    StarCtx* GetCtx();                                  // 0x00b3d360
+    void Reset();                                       // 0x00bad810
+    void ActivateOne(PlanetObj* p);                     // 0x00ba8830
+    void GetOrActivatePlanet(uint32_t id, PlanetObj** out);   // 0x00bb59b0
+    void SetupPlanet(PlanetObj* p, PtrVec* out);        // 0x00bb5b70
+    void Shutdown();                                    // 0x00bb7250
+    void ActivatePlanet(PlanetObj* p);                  // 0x00bb7510
+    void ActivateAllPlanets();                          // 0x00bb7620
+    void InitEffects();                                 // 0x00bb7820
     void Init();
 };
 
@@ -271,4 +387,192 @@ void StarSystem::Init()
     }
     if (list)
         list->Release();
+}
+
+// @ 0x00bb7250
+void StarSystem::Shutdown()
+{
+    Reset();
+    if (mpListA) {
+        PropertyList* l = mpListA;
+        mpListA = 0;
+        l->Release();
+    }
+    if (mpListB) {
+        PropertyList* l = mpListB;
+        mpListB = 0;
+        l->Release();
+    }
+    GetMessageServer()->RegisterCb(MsgCallback, 0x35b2b15, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x36998ae, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x3757942, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x36ad255, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x36ad784, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x3d1deba, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x3dff99f, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x3dff9a9, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x3dff9b1, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x3dff9ba, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x3dff9c1, -9999);
+    GetMessageServer()->RegisterCb(MsgCallback, 0x3dff9c6, -9999);
+    if (mpServer) {
+        MessageServer* srv = mpServer;
+        IMessageListener* h = mpHandler;
+        uint32_t* ids = mpIds;
+        int n = mnIds;
+        int arg = mArg;
+        mpServer = 0;
+        RemoveHandler(srv, h, ids, n, arg);
+    }
+    if (gspBackgroundSimManager) {
+        ISimpleRef* r = gspBackgroundSimManager->mpRef;
+        if (r) {
+            gspBackgroundSimManager->mpRef = 0;
+            r->ReleaseRef();
+        }
+    }
+    VecRows* rows = &mVrows;
+    char* begin = rows->mpBegin;
+    char* end = rows->mpEnd;
+    void* it = Fun_00baa8b0(end, end, begin);
+    rows->Fixup(it, rows->mpEnd);
+    int iBegin = (int)(uint32_t)begin;
+    int iEnd = (int)(uint32_t)end;
+    int n = (iEnd - iBegin) / -0x14;   // negative: shrink back towards the base
+    rows->mpEnd = rows->mpEnd + n * 0x14;
+    mPlanetsA.erase(mPlanetsA.mpBegin, mPlanetsA.mpEnd);
+    mPlanetsB.erase(mPlanetsB.mpBegin, mPlanetsB.mpEnd);
+    mpSim->v2();
+    if (mpSim) {
+        cSimObj* old = mpSim;
+        mpSim = 0;
+        old->rc.Release();
+    }
+    g_treeCtx.Dtor(g_treeRoot);
+    g_treeHead = &g_treeHead;
+    g_treeTail = &g_treeHead;
+    g_treeRoot = 0;
+    g_treeSize = 0;
+    g_treeFlag = 0;
+}
+
+// @ 0x00bb7510
+void StarSystem::ActivatePlanet(PlanetObj* p)
+{
+    StarCtx* ctx = GetCtx();
+    PlanetObj* local = 0;
+    if (p->mbAC == 0)
+        ActivateOne(p);
+    uint32_t id = p->GetId(0);
+    GetOrActivatePlanet(id, &local);
+    PtrVec vec;
+    vec.mpBegin = 0;
+    vec.mpEnd = 0;
+    vec.mpCap = 0;
+    SetupPlanet(p, &vec);
+    void** begin = vec.mpBegin;
+    void** end = vec.mpEnd;
+    int count = (int)(end - begin);
+    for (int i = 0; i < count; ++i) {
+        RefTriple* t = ((PlanetObj*)begin[i])->GetTriple();
+        RefTriple tmp;
+        tmp.a = t->a;
+        tmp.b = t->b;
+        tmp.c = t->c;
+        if (tmp.a != 0 && !ctx->IsRegistered(&tmp))
+            ctx->Register((PlanetObj*)begin[i]);
+    }
+    for (void** r = begin; r < end; ++r) {
+        if (*r)
+            ((RefCounted*)*r)->ReleaseObj();
+    }
+    if (begin && ((PtrHeader*)begin - 1)->mnCapacity != 0)
+        OpDelete(begin);
+    if (local)
+        local->ReleaseObj();
+}
+
+// @ 0x00bb7620
+void StarSystem::ActivateAllPlanets()
+{
+    int count = (int)(mPlanetsA.mpEnd - mPlanetsA.mpBegin);
+    for (int i = 0; i < count; ++i) {
+        PlanetObj* p = (PlanetObj*)mPlanetsA.mpBegin[i];
+        StarCtx* ctx = GetCtx();
+        PlanetObj* local = 0;
+        if (p->mbAC == 0)
+            ActivateOne(p);
+        uint32_t id = p->GetId(0);
+        GetOrActivatePlanet(id, &local);
+        PtrVec vec;
+        vec.mpBegin = 0;
+        vec.mpEnd = 0;
+        vec.mpCap = 0;
+        SetupPlanet(p, &vec);
+        if (vec.mpBegin != vec.mpEnd)
+            ctx->Register((PlanetObj*)vec.mpBegin[0]);
+        for (void** r = vec.mpBegin; r < vec.mpEnd; ++r) {
+            if (*r)
+                ((RefCounted*)*r)->ReleaseObj();
+        }
+        if (vec.mpBegin && ((PtrHeader*)vec.mpBegin - 1)->mnCapacity != 0)
+            OpDelete(vec.mpBegin);
+        if (local)
+            local->ReleaseObj();
+    }
+    int count2 = (int)(mPlanetsB.mpEnd - mPlanetsB.mpBegin);
+    for (int i = 0; i < count2; ++i) {
+        PlanetObj* p = (PlanetObj*)mPlanetsB.mpBegin[i];
+        StarCtx* ctx = GetCtx();
+        PlanetObj* local = 0;
+        if (p->mbAC == 0)
+            ActivateOne(p);
+        uint32_t id = p->GetId(0);
+        GetOrActivatePlanet(id, &local);
+        PtrVec vec;
+        vec.mpBegin = 0;
+        vec.mpEnd = 0;
+        vec.mpCap = 0;
+        SetupPlanet(p, &vec);
+        if (vec.mpBegin != vec.mpEnd)
+            ctx->Register((PlanetObj*)vec.mpBegin[0]);
+        for (void** r = vec.mpBegin; r < vec.mpEnd; ++r) {
+            if (*r)
+                ((RefCounted*)*r)->ReleaseObj();
+        }
+        if (vec.mpBegin && ((PtrHeader*)vec.mpBegin - 1)->mnCapacity != 0)
+            OpDelete(vec.mpBegin);
+        if (local)
+            local->ReleaseObj();
+    }
+}
+
+// @ 0x00bb7820
+void StarSystem::InitEffects()
+{
+    mVrows.resize(0x1000);
+    EffectsMgr* mgr = (EffectsMgr*)EffectsManagerPtr();
+    EffectEmit* emit = mgr->v19(0x3605494, 0);
+    EffectNode* node = 0;
+    emit->v02(0x35dd6e7, 0, &node);
+    node->n02(1);
+    emit->v03(4);
+    emit->v09(3);
+    EffectData* data = emit->v11();
+    data->m18 = 0;
+    data->m14 = 0;
+    data->m10 = 0;
+    char buf[0x4c];
+    memset(buf, 0, 0x4c);
+    g_FxFlag = 0;
+    bool more = node->n04();
+    int i = 10;
+    while (more && i-- > 0) {
+        emit->v15(0.5f, 0.5f, buf);
+        more = node->n04();
+    }
+    node->n03(1);
+    ((EffectsMgr*)EffectsManagerPtr())->v20(0x3605494);
+    if (node)
+        node->n01();
 }
