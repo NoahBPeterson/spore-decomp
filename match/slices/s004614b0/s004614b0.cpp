@@ -28,10 +28,13 @@ unsigned char GetGlobalFlag()
 // @ 0x461520  table lower_bound lookup returning a name (or "unknown")
 // =====================================================================
 struct TableEntry {
-    int         key;
+    unsigned    key;
     const char* name;
     char        pad[4];
 };
+
+// the image's "unknown" literal (returned when the key is absent)
+extern const char g_strUnknown_13eecec[];
 
 const char* LookupName(int key)
 {
@@ -39,11 +42,11 @@ const char* LookupName(int key)
     TableEntry* end = (TableEntry*)((char*)&g_table_150c050 + g_count_13ec430 * 0xc);
     TableEntry* it = (TableEntry*)LowerBound12(start, end, &key, 0);
     TableEntry* found = end;
-    if (it != end && !(key < it->key)) {
+    if (it != end && !((unsigned)key < it->key)) {
         found = it;
     }
     if (found == end) {
-        return "unknown";
+        return g_strUnknown_13eecec;
     }
     return found->name;
 }
@@ -66,12 +69,22 @@ struct IRefObj {
     virtual void Release();   // +0x04
 };
 
+// Raw thiscall helpers used by the destructor (ecx carries the argument).
+struct CountedObject {
+    void Release();      // 0x0040f360 (thiscall, ret 0)
+};
+struct SubObject {
+    void Destroy();      // 0x00473300 (thiscall, ret 0)
+};
+struct WStringBuffer {
+    void Free();         // 0x004237d0 (thiscall, ret 0)
+};
+
 struct Holder {
     char  pad0[4];
     char  str[0x24];     // +0x04  (string buffer)
     char  sub[0x14];     // +0x28
     void* p3c;           // +0x3c
-    char  pad40[4];
     IRefObj* p44;        // +0x40
     void Dtor();
 };
@@ -82,10 +95,10 @@ void Holder::Dtor()
         p44->Release();
     }
     if (p3c != 0) {
-        Counted_Release(p3c);
+        ((CountedObject*)p3c)->Release();
     }
-    FUN_00473300(sub);
-    WString_FreeBuffer(str);
+    ((SubObject*)sub)->Destroy();
+    ((WStringBuffer*)str)->Free();
     return;
 }
 
