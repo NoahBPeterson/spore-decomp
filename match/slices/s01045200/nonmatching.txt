@@ -1,0 +1,15 @@
+01045200 324 BuildVisual: aux call signatures/layout reconstructed from disasm; 392 vs 365 bytes
+01045370 81 deque block-map growth inlined differently; 115 bytes
+010453f0 133 ReadSTLSequence: serializer vtable slots reconstructed; 144 vs 148 bytes
+01045490 90 rbtree DoInsertValueImpl search/insert codegen differs; 90 vs 104 bytes
+01045500 48 SetInitialVisuals: register allocation and branch layout differ; 149 vs 144 bytes
+01045590 52 multimap erase call sequence differs; 68 bytes
+010455e0 334 debug list dump: wstring/build path approximated; 184 vs 352 bytes
+01045740 384 CreateVisual: effect arg setup and map insert differ; 251 vs 423 bytes
+01045910 301 CreatePlanetRecordVisual: effect arg setup differs; 165 vs 324 bytes
+01045a60 103 RemoveVisual(ptr): iteration/erase block differs; 110 vs 121 bytes
+01045ae0 137 RemoveVisual(key): equal_range erase block differs; 167 vs 171 bytes
+01045b90 89 RemoveVisualGroup: register allocation differs; 113 vs 121 bytes
+01045c30 58 FilterHelperRemove: condition strength-reduction (sub vs test/cmp); 72 vs 75 bytes
+01045c80 717 FilterHelperTravelTrail: trail filter loop partially reconstructed; 488 vs 771 bytes
+01045f90 404 FilterHelperVisited: visited filter vector iteration partially reconstructed; 388 vs 454 bytes
