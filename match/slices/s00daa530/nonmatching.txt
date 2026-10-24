@@ -8,4 +8,4 @@
 00daadf0 36 xmm register numbering/emission order on the distance sum reversed vs original (195 vs 198)
 00daaec0 24 xmm register numbering reversed vs original on the distance sum (142 vs 146)
 00daaf60 61 x87 stack discipline: duplicate fld st(0) + fcomip vs fcomi not reproducible (80 vs 69)
-00daafb0 295 large tick: frame size, spill offsets and branch polarity differ (576 vs 570)
+00daafb0 266 large tick: branch layout/polarity + integer register roles differ; distance math now stack-spilled as in original (576 vs 570)
