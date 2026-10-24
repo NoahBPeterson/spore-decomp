@@ -1,1 +1,1 @@
-00ad0510  60   complete transliteration; register allocation (this->ebx vs ->edi) differs
+00ad0510  63   complete; FUN_00b23940 is __thiscall (NounManager result arrives in ecx, no stack args) - fixed from __cdecl; difftest WEAK (107 valid, 62.3% coverage, no mismatch); register allocation (this->ebx vs edi) differs

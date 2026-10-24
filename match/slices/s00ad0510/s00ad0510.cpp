@@ -7,7 +7,7 @@ struct NounThing;
 extern "C" {
     void* __stdcall PlanetModel(void* out, int a, int b, int c, int d, int e, int f); // 0xb3d350
     void* __stdcall AudioNounManager(int x);                                        // 0xb3d300
-    int   __cdecl FUN_b23940(void* x);                                              // 0xb23940
+    int   __fastcall FUN_b23940(void* self);                                       // 0xb23940
     int   __cdecl FUN_c099e0(int a, int b, int c, int d, int e, int f);             // 0xc099e0
 }
 
