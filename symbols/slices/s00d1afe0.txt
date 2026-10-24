@@ -1,1 +1,5 @@
-00d1afe0 SP::cGameEditInputStrategy::HandleMessage  # card/xmatch name; ret 8 via the +0x3c handler base, dispatches level-editor messages
+00d1afe0 SP::cGameEditInputStrategy::HandleMessage  # preserved from s00d1afe0; nonmatching
+00d1bb60 SP::cGameEditInputStrategy::ConstructFields  # newly claimed; partial
+00d1bcc0 SP::cGameEditInputStrategy::DestroyFields  # newly claimed; partial
+00d1bf10 SP::cGameEditInputStrategy::MarkEditorActive  # newly claimed; byte-exact
+00d1bf20 SP::cGameEditInputStrategy::ActivateEditor  # newly claimed; nonmatching

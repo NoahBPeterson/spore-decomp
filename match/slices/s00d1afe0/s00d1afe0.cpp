@@ -12,6 +12,8 @@
 // Retail layout of cGameEditInputStrategy is the 2008 PDB's shifted by +4 from 0xa4 on.
 #include "types.h"
 
+void* operator new[](unsigned int size, const char* name, int flags, unsigned int debugFlags, const char* file, int line); // 0x00f473a0
+
 #define VS1(n) virtual void n();
 #define VS4(n) VS1(n##0) VS1(n##1) VS1(n##2) VS1(n##3)
 
@@ -100,6 +102,9 @@ public:
 
 class cSPUILayout {
 public:
+    uint8_t mData[0x18];
+    void Construct();                                          // 0x00810000
+    void Destroy();                                            // 0x00811fe0
     IObject* FindWindowByID(uint32_t controlID, bool recursive); // 0x008105b0
 };
 
@@ -163,6 +168,9 @@ public:
 
 class cTerrainCameraController {
 public:
+    uint8_t mData[0x384];
+    uint32_t mMode;                                                // +0x384
+    void SetMode(uint32_t mode);                                  // 0x00b11870
     void SetFloats5(float a, float b, float c, float d, float e); // 0x00b0f720
     void SetEnabled(bool b);                                       // 0x00b10c40
     void MoveTo(const Vector3* pPos, int arg);                    // 0x00b13bb0
@@ -271,7 +279,21 @@ public:
 class cInputStrategyBase {
 public:
     virtual void v00();
-    uint32_t pad04[(0x3c - 4) / 4];
+    void SetVtable(void* p) { *reinterpret_cast<void**>(this) = p; }
+    uint32_t mField04;
+    uint32_t mListHead08;
+    uint32_t mListTail0c;
+    uint32_t mListCount10;
+    uint32_t mListAlloc14;
+    uint32_t mListAux18;
+    uint32_t mField1c;
+    uint32_t mField20;
+    IObject* mpEditorMode24;
+    IObject* mpEditorAux28;
+    uint32_t mField2c;
+    uint32_t mField30;
+    uint32_t mField34;
+    uint32_t mField38;
 };
 
 class IMessageHandler {
@@ -280,19 +302,72 @@ public:
     virtual void h04();
     virtual void h08();
     virtual bool HandleMessage(uint32_t messageID, void* pMessage);
+    void SetVtable(void* p) { *reinterpret_cast<void**>(this) = p; }
 };
+
+struct cEditSubobject58 {
+    uint8_t mData[0x20];
+    void Construct();                         // 0x00b63890
+    void Destroy();                           // 0x00b638b0
+};
+
+struct IEditorMode {
+    virtual int v00();
+    virtual int v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    void Open();                                            // 0x00b5cde0
+};
+
+struct IEditorUI {
+    virtual void u00(); virtual void u04(); virtual void u08(); virtual void u0c();
+    virtual void ShowPanel(uint32_t id, int a, int b);       // +0x10
+    virtual void u14(); virtual void u18(); virtual void u1c();
+    virtual void u20(); virtual void u24(); virtual void u28(); virtual void u2c();
+    virtual void u30(); virtual void u34(); virtual void u38();
+    virtual void SetPanel(uint32_t id);                     // +0x3c
+};
+
+struct IEditorController {
+    void Activate(uint32_t id);                             // 0x00b32220
+};
+
+IEditorMode* GetEditorMode(uint32_t id);                    // 0x00b3d230
+IEditorUI* GetEditorUI();                                   // 0x00b3d250
+IEditorController* GetEditorController();                   // 0x00b3d380
+void DestroyTransitionHandle(uint32_t handle, uint32_t a, uint32_t b,
+                             uint32_t c, uint32_t d);       // 0x00571db0
+void ConstructEditorAux(void* p);                           // 0x00d15040
+void FreeAllocation(void* p);                               // 0x00f47380
 
 extern uint8_t gGameplayMarkerPlacing;   // 0x0167ade8
 extern int gLevelEditorHotloadCount;     // 0x0169dc24
+extern int gLevelEditorActive;           // 0x0169dca4
 extern Vector3 gCursorScreenPos;         // 0x0169dc28
 extern Vector3 gMarkerDragStart;         // 0x0167ae08
 extern Vector3 gMarkerDragCurrent;       // 0x0167ae14
 
 class cGameEditInputStrategy : public cInputStrategyBase, public IMessageHandler {
 public:
-    uint32_t pad40[(0x4c - 0x40) / 4];
+    void* mpVtable40;                      // +0x40
+    void* mpVtable44;                      // +0x44
+    uint32_t mField48;                     // +0x48
     SelectedRef mpSelectedObject;          // +0x4c
-    uint32_t pad50[(0xa4 - 0x50) / 4];
+    IObject* mpField50;                    // +0x50
+    uint32_t mField54;                     // +0x54
+    cEditSubobject58 mSubobject58;         // +0x58
+    IObject* mpField78;                    // +0x78
+    IObject* mpField7c;                    // +0x7c
+    IObject* mpField80;                    // +0x80
+    IObject* mpField84;                    // +0x84
+    IObject* mpField88;                    // +0x88
+    IObject* mpField8c;                    // +0x8c
+    IObject* mpField90;                    // +0x90
+    IObject* mpField94;                    // +0x94
+    IObject* mpField98;                    // +0x98
+    uint32_t mField9c;                     // +0x9c
+    uint32_t mFieldA0;                     // +0xa0
     IWindow* mGameplayMarkerRoot;          // +0xa4
     IWindow* mGameplayMarkerArea;          // +0xa8
     IWindow* mGameplayMarkerScrollbar;     // +0xac
@@ -301,8 +376,19 @@ public:
     IWindow* mTemplateOptions;             // +0xb8
     IWindow* mTemplateOptionsList;         // +0xbc
     IWindow* mPlanetNameEdit;              // +0xc0
-    uint32_t padc4[(0xe0 - 0xc4) / 4];
+    uint32_t mFieldC4;                     // +0xc4
+    uint32_t mFieldC8;                     // +0xc8
+    uint32_t mFieldCC;                     // +0xcc
+    uint32_t mFieldD0;                     // +0xd0
+    uint32_t mFieldD4;                     // +0xd4
+    uint32_t mFieldD8;                     // +0xd8
+    uint32_t mFieldDC;                     // +0xdc
     cSPUILayout mLayout;                   // +0xe0
+    uint32_t mTransitionHandle;            // +0x104
+    uint32_t mTransition108;               // +0x108
+    uint32_t mTransition10c;               // +0x10c
+    uint32_t mTransition110;               // +0x110
+    uint32_t mTransition114;               // +0x114
 
     bool HandleMessage(uint32_t messageID, void* pMessage);
 
@@ -319,9 +405,157 @@ public:
     void LoadLevel(bool b);                                                             // 0x00d15c00
     void Copy();                                                                        // 0x00d19460
     void SetButtonHighlight(HighlightArg arg);                                          // 0x00d18860
+    cGameEditInputStrategy* ConstructFields();                                          // 0x00d1bb60
+    void DestroyFields();                                                               // 0x00d1bcc0
+    void MarkEditorActive();                                                            // 0x00d1bf10
+    bool ActivateEditor();                                                              // 0x00d1bf20
 
     static cCommandGameplayMarker* RotateObject(SelectedRef* pSelected);                // 0x00d15330
 };
+
+// @ 0x00d1bb60
+cGameEditInputStrategy* cGameEditInputStrategy::ConstructFields()
+{
+    const uint32_t base = reinterpret_cast<uint32_t>(this);
+
+    mListCount10 = 0;
+    mListAlloc14 = 0;
+    mListAux18 = 0;
+    mListHead08 = base + 8;
+    mListTail0c = mListHead08;
+    mListCount10 = 0;
+    mListAux18 = 0;
+
+    mpEditorMode24 = (IObject*)(base + 0x24);
+    mpEditorAux28 = (IObject*)(base + 0x24);
+    mField2c = 0;
+    mField30 = 0;
+    mField34 = 0;
+
+    // Provisional base/subobject vtables, then the final cGameEditInputStrategy ones.
+    IMessageHandler::SetVtable((void*)0x13eb384);
+    mpVtable40 = (void*)0x14426a0;
+    mpVtable44 = (void*)0x13ec458;
+    mField48 = 0;
+    cInputStrategyBase::SetVtable((void*)0x1479e0c);
+    IMessageHandler::SetVtable((void*)0x1479dfc);
+    mpVtable40 = (void*)0x1479de0;
+    mpVtable44 = (void*)0x1479dd0;
+
+    mpSelectedObject.mpObject = 0;
+    mpField50 = 0;
+    mField54 = 0;
+    mSubobject58.Construct();
+
+    mpField78 = 0;
+    mpField7c = 0;
+    mpField80 = 0;
+    mpField84 = 0;
+    mpField88 = 0;
+    mpField8c = 0;
+    mpField90 = 0;
+    mpField94 = 0;
+    mpField98 = 0;
+
+    mGameplayMarkerRoot = 0;
+    mGameplayMarkerArea = 0;
+    mGameplayMarkerScrollbar = 0;
+    padb0 = 0;
+    mRuleOptionsList = 0;
+    mTemplateOptions = 0;
+    mTemplateOptionsList = 0;
+    mPlanetNameEdit = 0;
+
+    mLayout.Construct();
+    mTransitionHandle = 0;
+    mTransition108 = 0;
+    mTransition10c = 0;
+    mTransition110 = 0;
+    mTransition114 = 0;
+    return this;
+}
+
+// @ 0x00d1bcc0
+void cGameEditInputStrategy::DestroyFields()
+{
+    cInputStrategyBase::SetVtable((void*)0x1479e0c);
+    IMessageHandler::SetVtable((void*)0x1479dfc);
+    mpVtable40 = (void*)0x1479de0;
+    mpVtable44 = (void*)0x1479dd0;
+
+    if (mTransitionHandle != 0) {
+        uint32_t handle = mTransitionHandle;
+        mTransitionHandle = 0;
+        DestroyTransitionHandle(handle, mTransition108, mTransition10c,
+                                mTransition110, mTransition114);
+    }
+    mLayout.Destroy();
+
+    if (mPlanetNameEdit) mPlanetNameEdit->a1();
+    if (mTemplateOptionsList) mTemplateOptionsList->a1();
+    if (mTemplateOptions) mTemplateOptions->a1();
+    if (mRuleOptionsList) mRuleOptionsList->a1();
+    if (mGameplayMarkerScrollbar) mGameplayMarkerScrollbar->a1();
+    if (mGameplayMarkerArea) mGameplayMarkerArea->a1();
+    if (mGameplayMarkerRoot) mGameplayMarkerRoot->a1();
+    if (mpField8c) mpField8c->Release();
+    if (mpField88) mpField88->Release();
+    if (mpField84) mpField84->Release();
+    if (mpField80) mpField80->Release();
+    if (mpField7c) mpField7c->Release();
+    if (mpField78) mpField78->Release();
+    mSubobject58.Destroy();
+    if (mpField50) mpField50->Release();
+    if (mpSelectedObject.mpObject) ((IObject*)mpSelectedObject.mpObject)->Release();
+
+    mpVtable44 = (void*)0x13ec458;
+    mpVtable40 = (void*)0x13eb938;
+    IMessageHandler::SetVtable((void*)0x13eb394);
+    cInputStrategyBase::SetVtable((void*)0x14771e0);
+}
+
+// @ 0x00d1bf10
+void cGameEditInputStrategy::MarkEditorActive()
+{
+    gLevelEditorActive = 1;
+}
+
+// @ 0x00d1bf20
+bool cGameEditInputStrategy::ActivateEditor()
+{
+    IEditorMode* mode = GetEditorMode(0xebb801);
+    mode->Open();
+
+    cTerrainCameraController* camera = GetTerrainCamera();
+    camera->SetMode(0x5c1c6351);
+    camera->mMode = 0x3e9;
+
+    if (mpEditorMode24 == 0) {
+        void* mem = operator new[](0x118, (const char*)0x1479e94, 0, 0, 0, 0);
+        cGameEditInputStrategy* object = mem
+            ? ((cGameEditInputStrategy*)mem)->ConstructFields()
+            : 0;
+        mpEditorMode24 = (IObject*)object;
+        if (object) {
+            ((IEditorMode*)object)->v04();
+            ((IEditorMode*)object)->v10();
+        }
+    }
+
+    IEditorUI* ui = GetEditorUI();
+    ui->ShowPanel(0x1479e78, 0, 1);
+    ui->SetPanel(0x1479e60);
+
+    if (mpEditorAux28 == 0) {
+        void* mem = operator new[](0x38, (const char*)0x1479e3c, 0, 0, 0, 0);
+        if (mem)
+            ConstructEditorAux(mem);
+        mpEditorAux28 = (IObject*)mem;
+    }
+
+    GetEditorController()->Activate(0x4bf38a7);
+    return true;
+}
 
 // @ 0x00d1afe0
 bool cGameEditInputStrategy::HandleMessage(uint32_t messageID, void* pMessage)
