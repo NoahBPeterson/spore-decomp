@@ -1,0 +1,10 @@
+slices/s00c47a10/s00c47a10.cpp  ?OnAccept@cSPMission@@QAEXXZ  00c47a10  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c47a10/s00c47a10.cpp  ?SetState@cSPMission@@QAEXI@Z  00c47cc0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c47a10/s00c47a10.cpp  ?TriggerUIUpdate@cSPMission@@QAEXXZ  00c47d80  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c47a10/s00c47a10.cpp  ?DataExportOnInit@cSPMission@@QAEXXZ  00c483d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c47a10/s00c47a10.cpp  ?PickPlanetClue@cSPMission@@QAE_NXZ  00c48600  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c47a10/s00c47a10.cpp  ?FUN_00c486f0@cSPMission@@QAEXPAUWString@@@Z  00c486f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c47a10/s00c47a10.cpp  ?FUN_00c48740@cSPMission@@QAEXPAUWString@@@Z  00c48740  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c47a10/s00c47a10.cpp  ?FUN_00c48790@cSPMission@@QAEXPAUWString@@@Z  00c48790  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c47a10/s00c47a10.cpp  ?FUN_00c48900@cSPMission@@QAEXPAUWString@@@Z  00c48900  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c47a10/s00c47a10.cpp  ?FUN_00c48940@cSPMission@@QAEXPAUWString@@@Z  00c48940  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
