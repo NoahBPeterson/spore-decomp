@@ -78,6 +78,7 @@ struct OrderMgr {
     void* __thiscall Create(int kind, int n, int p, const char* name); // 0x00bcb0b0
     void  __thiscall FUN_00bcb480(void* order, Citizen* c, int a, int b);// 0x00bcb480
     void* __thiscall FirstPending();                                   // 0x00bca2c0
+    uint32_t pad0[2];
     Stimuli mStimuli;                                  // +8
 };
 
@@ -100,7 +101,7 @@ struct Citizen {
     virtual void Release();
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13)
     PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26)
-    PV(27) PV(28) PV(29) PV(30) PV(31) PV(32)
+    PV(27) PV(28) PV(29) PV(30)
     virtual void vf84(void* part, int a, int b);       // +0x84
     virtual void vf88();
     virtual void vf8c();
@@ -108,8 +109,8 @@ struct Citizen {
     uint32_t pad04[(0x34 - 4) / 4];
     Bundle   mBundle;                                  // +0x34
     uint32_t pad38[(0xc0 - 0x38) / 4];
-    VLoco    mLoco;                                    // +0xc0
-    uint32_t padc4[(0xb48 - 0xc4) / 4];
+    VLoco    mLoco;                                    // +0xc0 (0xc0 bytes, locomotive object)
+    uint32_t pad180[(0xb48 - 0x180) / 4];
     void*    mpB48;                                    // +0xb48
     OrderMgr* mpOrderMgr;                              // +0xb4c
     Citizen* mpb50;                                    // +0xb50
@@ -153,7 +154,7 @@ struct Tribe {
     PV(14) PV(15)
     void* __thiscall GetToolOfType(int type);          // 0x00c8f6e0
     void  __thiscall FindSpot(int type, int id);       // 0x00c98750
-    void  __thiscall ReleaseSpot(void* ref, int type);// 0x00c97d40
+    void  __thiscall ReleaseSpot(int type, void* ref);// 0x00c97d40
 };
 
 // ---------------------------------------------------------------- behaviour state blocks
@@ -178,7 +179,7 @@ struct StEatD {
     int      m00;      // +0x00
     Citizen* mp04;     // +0x04
     int      m08;      // +0x08
-    IRef*    mp0c;     // +0x0c
+    Citizen* mp0c;     // +0x0c
     IRef*    mp10;     // +0x10
     IRef*    mp14;     // +0x14
     IRef*    mp18;     // +0x18
@@ -210,7 +211,7 @@ struct StDom {
     int      m00;      // +0x00
     void*    mp04;     // +0x04
     int      m08;      // +0x08
-    IRef*    mp0c;     // +0x0c
+    Citizen* mp0c;     // +0x0c
 };
 
 // Parameter object passed to the TRIBE_* activate functions (7th cdecl argument).
@@ -390,7 +391,7 @@ lab142d:
     if (st->mp18 != 0 && st->m30 != -1)
         c->GetTribe()->FindSpot(0xd, st->m30);
     if (c->GetTribe() != 0)
-        c->GetTribe()->ReleaseSpot(c, 0xd);
+        c->GetTribe()->ReleaseSpot(0xd, c);
     c->FUN_00c25f80();
     {
         VAny* o = (VAny*)st->mp14;
@@ -480,31 +481,40 @@ int __cdecl FUN_00db1520(Citizen* c, int, int, int, int, StOrders* st, ParamObj*
 }
 
 // ===========================================================================
+// Object hanging off StEatD::mp10; keeps the spot claim back-pointer at +0x21c.
+struct StEatSub {
+    char     pad00[0x21c];
+    Citizen* mp21c;    // +0x21c
+};
 // @ 0x00db16d0
 // ===========================================================================
 void __cdecl FUN_00db16d0(Citizen* c, int, int, int, int, StEatD* st)
 {
-    {
-        Citizen* o = (Citizen*)st->mp0c;
-        if (o != 0 && o->mpb50 == c && o->mpb50 != 0) {
-            Citizen* p = o->mpb50;
-            o->mpb50 = 0;
+    Citizen* owner = st->mp0c;
+    if (owner != 0 && owner->mpb50 == c) {
+        Citizen* p = owner->mpb50;
+        if (p != 0) {
+            owner->mpb50 = 0;
             p->Release();
         }
     }
-    {
-        char* o = (char*)st->mp10;
-        if (o != 0 && *(Citizen**)(o + 0x21c) == c && *(Citizen**)(o + 0x21c) != 0) {
-            Citizen* p = *(Citizen**)(o + 0x21c);
-            *(void**)(o + 0x21c) = 0;
+    StEatSub* sub = (StEatSub*)st->mp10;
+    if (sub != 0 && sub->mp21c == c) {
+        Citizen* p = sub->mp21c;
+        if (p != 0) {
+            sub->mp21c = 0;
             p->Release();
         }
     }
     c->GetTribe()->FindSpot(0xd, st->m20);
-    c->GetTribe()->ReleaseSpot(c, 0xd);
+    c->GetTribe()->ReleaseSpot(0xd, c);
     c->vf84(0, 0, 0);
-    if (st->mp10) st->mp10->Release();
-    if (st->mp0c) st->mp0c->Release();
+    IRef* p10 = st->mp10;
+    if (p10 != 0)
+        p10->Release();
+    Citizen* p0c = st->mp0c;
+    if (p0c != 0)
+        p0c->Release();
 }
 
 // ===========================================================================
@@ -583,9 +593,7 @@ int __cdecl FUN_00db1790(Citizen* c, float lim, int, int, int, StEat* st)
 }
 
 // ===========================================================================
-// @ 0x00db1c10
-// SP::TRIBE_HELD_PANIC_Activate
-// ===========================================================================
+// Held-panic location record (0x74 bytes) and its default state.
 struct Loc74 {
     int   m00, m04, m08;
     uint32_t pad0c;
@@ -610,6 +618,10 @@ static void InitLoc74(Loc74* loc)
     loc->f60 = k1470f1c; loc->f64 = k13ec4b4; loc->f68 = k147c218; loc->f6c = 0.0f; loc->i70 = 0;
 }
 
+// ===========================================================================
+// @ 0x00db1c10
+// SP::TRIBE_HELD_PANIC_Activate
+// ===========================================================================
 int __cdecl FUN_00db1c10(Citizen* c, int, int, int, int, StEat* st)
 {
     c->InterruptAnimation(0x48601c0, -1, 0);
@@ -671,10 +683,10 @@ char __cdecl FUN_00db1e70(Citizen* c, int, int, int, int, StDom* st)
     if (task != 0)
         return (char)FUN_00da6270(c, 0x19);
     {
-        IRef* old = st->mp0c;
-        if ((IRef*)animal != old) {
-            ((IRef*)animal)->AddRef();
-            st->mp0c = (IRef*)animal;
+        Citizen* old = st->mp0c;
+        if ((Citizen*)animal != old) {
+            ((Citizen*)animal)->AddRef();
+            st->mp0c = (Citizen*)animal;
             if (old) old->Release();
         }
     }
@@ -700,10 +712,9 @@ char __cdecl FUN_00db1e70(Citizen* c, int, int, int, int, StDom* st)
 // ===========================================================================
 void __cdecl FUN_00db1fb0(Citizen* c, int, int, int, int, StDom* st)
 {
-    Citizen* o = (Citizen*)st->mp0c;
-    if (FUN_00d99500(o) != 0) {
-        ((OrderMgr*)o->mpOrderMgr)->mStimuli.ClearAll(4, 0);
-        o->FUN_00c0d0c0(6, 0);
+    if (FUN_00d99500(st->mp0c) != 0) {
+        st->mp0c->mpOrderMgr->mStimuli.ClearAll(4, 0);
+        st->mp0c->FUN_00c0d0c0(6, 0);
     }
     c->mpOrderMgr->FUN_00bcb430();
     if (c->mb5e == 0) {
@@ -714,5 +725,7 @@ void __cdecl FUN_00db1fb0(Citizen* c, int, int, int, int, StDom* st)
         }
     }
     c->vf84(0, 0, 0);
-    if (st->mp0c) st->mp0c->Release();
+    Citizen* pRef = st->mp0c;
+    if (pRef)
+        pRef->Release();
 }
