@@ -169,8 +169,9 @@ UIImage* UIImage::Image(void* obj, int a, int b, float c, float d, float e, floa
 // ===========================================================================
 void** __cdecl Fn00957a60(int a, int b)
 {
-    if ((*(unsigned*)0x166b138 & 1) == 0) {
-        *(unsigned*)0x166b138 |= 1;
+    unsigned* g = (unsigned*)0x166b138;
+    if ((*g & 1) == 0) {
+        *g |= 1;
         *(int*)0x154edfc = a;
         *(int*)0x154ee00 = b;
         *(int*)0x154ee04 = 0;

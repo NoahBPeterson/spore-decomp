@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00957a60  25  Fn00957a60: complete (lazy-init global table 0x154edf0, guard flag 0x166b138); guard test/RMW uses immediate vs eax; difftest PASS (400 valid, 100.0% coverage)
+00957a60  31  Fn00957a60: complete (lazy-init global table 0x154edf0, guard flag 0x166b138); changed the guard access to a local `unsigned* g` pointer so the guarded initialization's argument registers match the original (a->eax, b->ecx, edx untouched); guard test/RMW still uses immediate vs eax [equiv: PASS 400 valid/100.0% cov, PASS 2000 valid/100.0% --inputs 2000; replay None]
 00957d40  3  WindowMgr::PostAPC: complete (APC record {tag 0x74d2e9, a, b}, call slot 0x18); fixed 2026-10-12: tag at +8 of the record (was +0x10; the "off by 8" was the bug, hybrid crash 0x959bd7); difftest PASS
 00957dd0  118  Fn00957dd0: complete (window proc: walk window tree, resolve target, dispatch); regalloc/jump layout differ; difftest PASS (394 valid, 100.0% coverage)
 00957e90  41  Fn00957e90: complete (set/clear slot idx if stored==arg-4, notify slot 0x58); regalloc differ; difftest PASS (322 valid, 72.2% coverage)
