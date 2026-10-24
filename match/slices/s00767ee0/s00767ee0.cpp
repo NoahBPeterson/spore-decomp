@@ -79,6 +79,9 @@ struct C68240 {
     int   m14;                // +0x14
     char  m18[0x7c];          // +0x18 inline storage
     C68240(void* arg);
+    // 0x00767760 takes this in ecx (0x767762 mov %ecx,%edi; reads 0x0/0x4(%edi)) and the count as
+    // its single stack argument, so it must be called as a member, not as a cdecl free function.
+    void RegisterJob(void* arg);                               // 0x00767760
 };
 C68240::C68240(void* arg) {
     char* base = m18;
@@ -86,25 +89,38 @@ C68240::C68240(void* arg) {
     m4 = base;
     m0 = base;
     m8 = base + 0x80;
-    FUN_00767760(arg);
+    RegisterJob(arg);
 }
 
 // ===========================================================================
 // @ 0x007682a0  vector<0x7c>::resize(n)
 // ===========================================================================
+// The 0x7c-byte element temp that Resize constructs on the stack: both helpers take the buffer in
+// ecx (0x764760 reads/writes (%esi).., 0x41f2d0 touches +0x74/+0x78), so they are spelled as
+// members of the temp type and called through the object.
+struct Tmp7c {
+    char raw[0x7c];
+    void Init(int v);          // 0x00764760
+    void Destroy();            // 0x0041F2D0
+};
+
 struct V7cB {
     char* b; char* e; char* c;
     void Resize(uint32_t n);
+    // Both helpers take the vector in ecx and all their arguments on the stack:
+    // 0x7682ea pushes value (the stack temp), count and e, then sets %ecx before calling 0x767350.
+    void InsertFill(char* pos, uint32_t n, void* value);       // 0x00767350
+    void DestroyRange(char* first, char* last);                // 0x00700670
 };
 void V7cB::Resize(uint32_t n) {
     uint32_t count = (uint32_t)((e - b) / 0x7c);
     if (count < n) {
-        char tmp[0x7c];
-        FUN_00764760(&tmp, 0);
-        FUN_00767350(this, e, n - count, tmp);
-        FUN_0041f2d0(&tmp);
+        Tmp7c tmp;
+        tmp.Init(0);
+        InsertFill(e, n - count, &tmp);
+        tmp.Destroy();
     } else {
-        FUN_00700670(b + n * 0x7c, e);
+        DestroyRange(b + n * 0x7c, e);
     }
 }
 
