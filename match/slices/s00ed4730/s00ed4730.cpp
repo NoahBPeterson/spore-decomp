@@ -4,6 +4,10 @@
 
 // ---------------------------------------------------------------- globals
 extern char* g_16c7aa4;   // 0x016c7aa4
+extern int   g_15da7c4;   // 0x015da7c4
+extern int   g_15da7c8;   // 0x015da7c8
+extern int   g_15da7cc;   // 0x015da7cc
+extern int   g_15da7d0;   // 0x015da7d0
 
 // ---------------------------------------------------------------- thiscall callee stubs
 struct S_ef72b0 { void f(); };
@@ -13,8 +17,12 @@ struct S_f45a80 { void f(); };
 struct S_f46450 { int  f(void*); };
 struct S_ed38a0 { void f(int); };
 struct S_ed3b20 { void f(void*, void*); };
-struct S_644b10 { void f(); };
-struct S_644b60 { void f(); };
+struct S_644b10 {
+    void f();   // 0x00644b10
+};
+struct S_644b60 {
+    void f();   // 0x00644b60
+};
 struct S_ef00b0 { void f(); };
 struct S_ef0b80 { void f(); };
 struct S_f46630 { char f(void*); };
@@ -23,14 +31,21 @@ struct S_b3d310 { void* f(); };
 struct S_8105b0 { void* f(int, int); };
 struct S_e281a0 { void f(int); };
 struct S_e22700 { void f(int); };
-struct S_f3bfa0 { void* f(unsigned); };
+struct S_f3bfa0 {
+    void* f(unsigned);   // 0x00f3bfa0
+};
 struct S_f3bf60 { int  f(); };
-struct S_f3bf70 { unsigned f(); };
+struct S_f3bf70 {
+    unsigned f();   // 0x00f3bf70
+};
 struct S_f3bde0 { char f(int); };
 struct S_f3bd90 { void f(void*, unsigned char); };
 struct S_e02e80 { void f(); };
 struct S_e226c0 { char f(); };
 struct S_ed4c70 { void f(int); };
+struct S_5508a0 {
+    unsigned long long f();   // 0x005508a0
+};
 
 // ---------------------------------------------------------------- cdecl free callees
 void  __cdecl operator_delete(void*);
@@ -58,6 +73,11 @@ void* __cdecl FUN_00d539d0(void);                               // 0xd539d0
 unsigned __cdecl FUN_00f3bf70_v(void);
 char  __cdecl cSPUIPosseItem_init(void*, int);                  // 0xe277b0
 void  __cdecl FUN_00571db0(int, int, int, int, int);            // EA::Messaging::RemoveHandler
+void  __cdecl FUN_006447c0(char flag, void** out);              // 0x006447c0
+void  __cdecl FUN_0064a990(void* launch);                       // 0x0064a990
+int   __cdecl FUN_00b5b800(void);                               // 0x00b5b800
+void* __cdecl FUN_008de1a0(void);                               // 0x008de1a0
+void* __cdecl FUN_00607a60(void);                               // 0x00607a60
 
 // ---------------------------------------------------------------- typedefs
 typedef void  (__thiscall *FV_v)(void*);
@@ -70,6 +90,7 @@ typedef void* (__thiscall *FV_iir)(void*, int, int);
 typedef int   (__thiscall *FV_ipr)(void*, int);
 typedef unsigned long long (__thiscall *FV_q)(void*);
 typedef void  (__thiscall *FV_ff)(void*, float, float);
+typedef char  (__thiscall *FV_ppiiii)(void*, void*, void*, int, int, int, int);
 
 // ================================================================ 0x00ed4730
 struct Obj4730 { char pad[0x38]; int f(int* list); };
@@ -371,25 +392,98 @@ int Obj4f90::f(int a, int b)
 }
 
 // ================================================================ 0x00ed5020
-struct Obj5020 { int f(void*, void*, void*, void*, void*); };
-int Obj5020::f(void* a1, void* a2, void* a3, void* a4, void* a5)
+// SP::cSPUIAssetBrowserLaunch: stack descriptor handed to the asset-browser launcher.
+struct AssetBrowserLaunch {
+    void* m_pVtbl;        // +0x00
+    int   m_gameMode;     // +0x04
+    int   m_pad08;        // +0x08
+    void* m_pEntry;       // +0x0c
+    char  m_pad10;        // +0x10
+    char  m_flag11;       // +0x11
+    char  m_pad12[6];     // +0x12
+    int   m_v18;          // +0x18
+    int   m_v1c;          // +0x1c
+    int   m_v20;          // +0x20
+    char  m_flag24;       // +0x24
+    char  m_pad25[0xb];   // +0x25
+    void* m_pFn30;        // +0x30
+    int   m_pad34;        // +0x34
+    void* m_pOwner38;     // +0x38
+    int   m_pad3c;        // +0x3c
+    void* m_p40;          // +0x40
+    void* m_pData44;      // +0x44
+};
+// SP::Editor::cEditorLaunchData fields filled in right after construction.
+struct EditorLaunchData {
+    void* m_pad00[9];     // +0x00
+    void* m_pRole0;       // +0x24
+    void* m_pRole1;       // +0x28
+    void* m_pRole2;       // +0x2c
+    void* m_pRole3;       // +0x30
+    char  m_flag34;       // +0x34
+};
+// Posse-index lookup result; +0x08 carries the index.
+struct PosseEntry {
+    void* m_pVtbl;        // +0x00
+    void* m_p04;          // +0x04
+    int   m_index;        // +0x08
+};
+struct Obj5020 {
+    char  m_pad000[0x50]; // +0x000
+    void* m_pPosse;       // +0x050
+    char  m_pad054[0xe8]; // +0x054
+    void* m_pOwner;       // +0x13c
+    char  m_pad140[0xc];  // +0x140
+    void* m_pLaunchArg;   // +0x14c
+    char  f(void*, void*, void*, void*, void*);
+};
+// @ 0x00ed5020
+char Obj5020::f(void* a1, void* a2, void* a3, void* a4, void* a5)
 {
     (void)a2; (void)a3; (void)a4; (void)a5;
-    char* s = (char*)this;
-    if (*(void**)(s + 0x13c) == a1) {
-        int* q = *(int**)(s + 0x50);
-        int* r = q ? (int*)((FV_ip)(*(void***)q)[0xc / 4])(q, 0x774c96f) : 0;
-        unsigned idx = *(unsigned*)((char*)r + 8);
-        unsigned n = ((S_f3bf70*)(*(int*)(g_16c7aa4 + 0x74)))->f();
-        int v0 = 0, v1 = 0, v2 = 0;
-        if (idx < n) {
-            int* v = (int*)((S_f3bfa0*)(*(int*)(g_16c7aa4 + 0x74)))->f(idx);
-            v0 = v[0]; v1 = v[1]; v2 = v[2];
-        }
-        (void)v0; (void)v1; (void)v2;
-        return 1;
+    if (m_pOwner != a1) return 0;
+
+    int v0 = 0, v1 = 0, v2 = 0;
+    void* q = m_pPosse;
+    void* r = q ? (void*)((FV_ip)(*(void***)q)[0xc / 4])(q, 0x774c96f) : 0;
+    unsigned idx = (unsigned)((PosseEntry*)r)->m_index;
+    unsigned n = ((S_f3bf70*)(*(int*)(g_16c7aa4 + 0x74)))->f();
+    if (idx < n) {
+        int* v = (int*)((S_f3bfa0*)(*(int*)(g_16c7aa4 + 0x74)))->f(idx);
+        v0 = v[0]; v1 = v[1]; v2 = v[2];
     }
-    return 0;
+
+    void* launch = 0;
+    FUN_006447c0(0, &launch);
+    ((EditorLaunchData*)launch)->m_pRole0 = (void*)g_15da7c4;
+    ((EditorLaunchData*)launch)->m_pRole1 = (void*)g_15da7c8;
+    ((EditorLaunchData*)launch)->m_pRole2 = (void*)g_15da7cc;
+    ((EditorLaunchData*)launch)->m_pRole3 = (void*)g_15da7d0;
+    ((EditorLaunchData*)launch)->m_flag34 = 0;
+
+    AssetBrowserLaunch b;
+    ((S_644b10*)&b)->f();
+    b.m_pVtbl = (void*)0xf25aef31;
+    b.m_gameMode = FUN_00b5b800();
+    b.m_flag11 = 1;
+    b.m_pEntry = r;
+    b.m_v18 = v0;
+    b.m_v1c = v1;
+    b.m_v20 = v2;
+    b.m_flag24 = 0;
+    b.m_pFn30 = (void*)0xad0e52;
+    b.m_pOwner38 = (void*)&m_pLaunchArg;
+    if (b.m_pData44 != launch) {
+        if (launch != 0) ((FV_v)(*(void***)launch)[4 / 4])(launch);
+        void* old = b.m_pData44;
+        b.m_pData44 = launch;
+        if (old != 0) ((FV_v)(*(void***)old)[8 / 4])(old);
+    }
+
+    FUN_0064a990(&b);
+    ((S_644b60*)&b)->f();
+    if (launch != 0) ((FV_v)(*(void***)launch)[8 / 4])(launch);
+    return 1;
 }
 
 // ================================================================ 0x00ed5190
@@ -530,10 +624,54 @@ void Obj54b0::f(int a)
 }
 
 // ================================================================ 0x00ed5580
-bool __stdcall FUN_00ed5580(void* a, void* b, void* c)
+// 8-byte descriptor the launcher lookup fills in; the second dword is the panel type id.
+struct PanelMatchDesc {
+    int m_field0;         // +0x00
+    int m_typeId;         // +0x04
+};
+// @ 0x00ed5580
+bool __stdcall Panel_Match(int a1, int a2, int a3)
 {
-    (void)a; (void)b; (void)c;
-    return false;
+    (void)a3;
+    PanelMatchDesc* desc = (PanelMatchDesc*)&a1;
+    desc->m_typeId = 0x30bdee3;
+
+    void* local = 0;
+    if (local != 0) {
+        void* t = local; local = 0;
+        ((FV_v)(*(void***)t)[4 / 4])(t);
+    }
+    void* factory = FUN_008de1a0();
+
+    char ok = ((FV_ppiiii)(*(void***)factory)[0xc / 4])(factory, (void*)desc, (void*)&local, 0, 0, 0, 0);
+    if (!ok) {
+        if (local != 0) {
+            void* t = local; local = 0;
+            ((FV_v)(*(void***)t)[4 / 4])(t);
+        }
+        return false;
+    }
+    if (local == 0) return false;
+
+    void* meta = (void*)((FV_ip)(*(void***)local)[0xc / 4])(local, 0x30bdee3);
+    if (meta == 0) {
+        if (local != 0) {
+            void* t = local; local = 0;
+            ((FV_v)(*(void***)t)[4 / 4])(t);
+        }
+        return false;
+    }
+
+    void* auth = FUN_00607a60();
+    unsigned long long a = ((FV_q)(*(void***)auth)[0x40 / 4])(auth);
+    unsigned long long c = ((S_5508a0*)meta)->f();
+    bool r = (a == c);
+
+    if (local != 0) {
+        void* t = local; local = 0;
+        ((FV_v)(*(void***)t)[4 / 4])(t);
+    }
+    return r;
 }
 
 // ================================================================ 0x00ed5640
