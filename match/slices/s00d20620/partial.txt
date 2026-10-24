@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00d20700  372  dual-band clamped interpolation: stub only; 1 vs 372 B - two-band x87/SSE blend with the same endpoint globals not reconstructed
+00d209b0  691  camera blend against a target point: stub only; 1 vs 691 B - large float vector blend not reconstructed
+00d20c70  505  orbit damping tick: stub only; 1 vs 505 B - large float damping update not reconstructed
+00d20e70  133  property-flag query: stub only; 1 vs 133 B - virtual +0xb8/+0xac probes, GetBool and GetPropertyAsKeyArray path not reconstructed
+00d20f00  1186  camera focus update: stub only; 1 vs 1186 B - large camera focus update not reconstructed
