@@ -1,1 +1,2 @@
-# va  diff-bytes  reason   (none)
+# va  diff-bytes  reason
+006fafe0  2  cPixelFragmentInfo ctor: complete (difftest PASS 400/400 valid, 100% coverage 26/26); cl hoists the g_emptyStr load (`mov edx,<addr>`) to before the mf00 store instead of after the str1 cap store (position-only 2-byte swap, semantics identical). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2

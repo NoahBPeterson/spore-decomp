@@ -5,7 +5,6 @@
 006fad40  134  skeleton: vector<cFragmentDecl> range constructor (DoAllocate + uninitialized_copy) omitted.
 006fae30  104  skeleton: 0x130-byte element forward copy (rep movsd) omitted.
 006faea0  307  skeleton: 0x130-byte element insert/grow omitted.
-006fafe0   83  skeleton: cPixelFragmentInfo constructor field stores omitted.
 006fb040  145  skeleton: cPixelFragmentInfo destructor (refcount release + buffers) omitted.
 006fb0e0   98  skeleton: cPixelFragmentInfo push_back omitted.
 006fb150   94  skeleton: global shader-table registration omitted.

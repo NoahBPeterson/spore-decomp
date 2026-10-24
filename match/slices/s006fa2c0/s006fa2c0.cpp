@@ -113,8 +113,35 @@ void Vec28::InsertGrow(const void* a, const void* b) { (void)a; (void)b; }
 
 // ==========================================================================================
 // cPixelFragmentInfo: pixel-fragment declaration container (0x64 bytes).
+extern char g_emptyStr[];     // 0x01667bac  empty-string sentinel buffer
+extern char g_emptyStrCap[];  // 0x01667bad  (sentinel begin + 1)
+
+struct Str3 { char* mpBegin; char* mpEnd; char* mpCap; };
+
 struct PixelFrag {
-  char pad[0x64];
+  uint32_t mf00;   // +0x00
+  Str3     mStr1;  // +0x04
+  uint32_t mf10;   // +0x10
+  Str3     mStr2;  // +0x14
+  uint32_t mf20;   // +0x20
+  uint32_t mf24;   // +0x24
+  uint32_t mf28;   // +0x28
+  uint32_t mf2c;   // +0x2c
+  uint32_t mf30;   // +0x30
+  uint32_t mf34;   // +0x34
+  uint32_t mf38;   // +0x38
+  uint32_t mf3c;   // +0x3c
+  uint8_t  mf40;   // +0x40
+  uint8_t  mf41;   // +0x41
+  uint16_t mf42;   // +0x42
+  uint32_t mf44;   // +0x44
+  uint32_t mf48;   // +0x48
+  uint32_t mf4c;   // +0x4c
+  uint32_t mf50;   // +0x50
+  uint32_t mf54;   // +0x54
+  uint32_t mf58;   // +0x58
+  uint32_t mf5c;   // +0x5c
+  uint32_t mf60;   // +0x60
   PixelFrag();                   // 0x006fafe0
   ~PixelFrag();                  // 0x006fb040
   void AssignA();                // 0x006fa2c0
@@ -123,7 +150,18 @@ struct PixelFrag {
 };
 
 // @ 0x006fafe0
-PixelFrag::PixelFrag() { pad[0] = 0; }
+PixelFrag::PixelFrag() : mf00(0) {
+  mStr1.mpCap = g_emptyStrCap;
+  char* e = g_emptyStr;
+  mStr1.mpEnd = mStr1.mpBegin = e;
+  mStr2.mpEnd = mStr2.mpBegin = e;
+  mStr2.mpCap = g_emptyStrCap;
+  mf24 = 0; mf28 = 0; mf2c = 0;
+  mf38 = 0; mf3c = 0;
+  mf40 = 0; mf41 = 0;
+  mf44 = 0; mf48 = 0; mf4c = 0; mf50 = 0;
+  mf54 = 0; mf58 = 0; mf5c = 0; mf60 = 0;
+}
 
 // @ 0x006fb040
 PixelFrag::~PixelFrag() {}
