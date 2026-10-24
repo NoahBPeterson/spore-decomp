@@ -1,0 +1,1 @@
+slices/s00fe4be0/s00fe4be0.cpp  ?FUN_00fe54d0@cSPBadgeManager@SP@@QAEIPAVProperty@@@Z  00fe54d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

@@ -1,0 +1,7 @@
+00fe4be0 342 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 342 bytes - badge manager helper not reconstructed.
+00fe4d60 283 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 283 bytes - badge manager helper not reconstructed.
+00fe4e80 283 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 283 bytes - badge manager helper not reconstructed.
+00fe4fa0 1167 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1167 bytes - cSPBadgeManager constructor not reconstructed.
+00fe5430 149 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 149 bytes - badge manager helper not reconstructed.
+00fe5520 144 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 144 bytes - GetBadgeImageKey not reconstructed.
+00fe55b0 1133 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1133 bytes - TestRequirement not reconstructed.
