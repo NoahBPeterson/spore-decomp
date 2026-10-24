@@ -18,7 +18,9 @@ struct cSPTransform {
     cSPTransform& operator=(const cSPTransform& x);
     void Compound(const cSPTransform& x);   // @ 0x00537f40
 };
-void Matrix3Assign(float* dst, const float* src);   // 0x0041cb40
+struct cSPMatrix3 {
+    void Assign(const float* src);      // 0x0041cb40 (thiscall, ret 4)
+};
 
 // @ 0x00538000
 cSPTransform::cSPTransform(const cSPTransform& x)
@@ -29,7 +31,7 @@ cSPTransform::cSPTransform(const cSPTransform& x)
     mTranslation[1] = x.mTranslation[1];
     mTranslation[2] = x.mTranslation[2];
     mScale = x.mScale;
-    Matrix3Assign(mRotation, x.mRotation);
+    ((cSPMatrix3*)mRotation)->Assign(x.mRotation);
 }
 
 // ---------------------------------------------------------------- @ 0x00538420
@@ -45,7 +47,9 @@ struct RefCountBase {
     virtual int Release();
     int mRefCount;
 };
-void RefCountBase_Release(RefCountBase* p);   // 0x00453540
+struct RefCountPrimary {
+    int Release();      // 0x00453540 (thiscall, ret 0)
+};
 
 struct Host538380 {
     int AddRef();
@@ -60,12 +64,12 @@ int Host538380::AddRef()
 }
 
 struct Host5383c0 {
-    void Release();
+    int Release();
 };
 // @ 0x005383c0
-void Host5383c0::Release()
+int Host5383c0::Release()
 {
-    RefCountBase_Release((RefCountBase*)((char*)this - 8));
+    return ((RefCountPrimary*)((char*)this - 8))->Release();
 }
 
 // ---------------------------------------------------------------- stubs (partial)
