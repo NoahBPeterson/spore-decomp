@@ -1,9 +1,8 @@
-006e8f90  292  complete; SSE register/schedule differences over the 4 vtable-driving branches
+006e8f90  289  complete; SSE register/schedule differences over the 4 vtable-driving branches; equiv: PASS 366 valid inputs, 100% coverage
 006e9150  87  complete; cl hoists the -1-store branch and picks different registers (sar 2 constant-fold)
 006e94a0  2  complete; only `add eax,-1` vs `sub eax,1` on the refcount decrement
-006e9530  80  complete; Vector3 splat via MakeV3 gives direct movss instead of the stack temp copy [equiv: PASS 1200 inputs, 100% coverage]
-006e95a0  749  complete; big matrix/bounds transform, SSE schedule + call layout differ
+006e95a0  764  complete; bounds transform: half extents use the f6e6e90 |m| copy, the centre offset the signed matrix, guard is the FLT_MAX sentinel; SSE/x87 schedule differs; equiv: PASS 400/400, 100% coverage
 006e9b00  121  ctor-style field init (0x00..0x6c); declared to return this (S5*) so eax matches the original's `mov eax,ecx`; equiv: PASS 400/400, 100% coverage (original's C++ EH prolog not reproduced)
 006e9bf0  123  ctor-style field init (other layout, 0x00..0x68); declared to return this (S5*) so eax matches the original; equiv: PASS 400/400, 100% coverage
 006e9cc0  91  complete; field-init order/schedule differ
-006e9d50  692  complete; projection math schedule differs
+006e9d50  650  complete; per-frame block copy + clip->screen direction (rect denominators per axis, x87 sqrt grouping); register/frame schedule differs; equiv: PASS 394/400 (6 fault-read), 100% coverage
