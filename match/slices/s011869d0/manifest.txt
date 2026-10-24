@@ -3,3 +3,4 @@ slices/s011869d0/s011869d0.cpp  ?lib_cblock_BN_mod_mul_wrap@@YAHHHPAHH@Z  011875
 slices/s011869d0/s011869d0.cpp  ?lib_cblock_BN_mod_mul_wrap2@@YAHPAHH@Z  011877a0  /O2 /MD /Gy /TP
 slices/s011869d0/s011869d0.cpp  ?lib_cblock_BN_CTX_new@@YAPAHXZ  01187a80  /O2 /MD /Gy /TP
 slices/s011869d0/s011869d0.cpp  ?lib_cblock_BN_POOL_get@@YAHH@Z  01187b90  /O2 /MD /Gy /TP
+slices/s011869d0/s011869d0.cpp  ?lib_cblock_BN_STACK_push@@YAXH@Z  01187b00  /O2 /MD /Gy /TP
