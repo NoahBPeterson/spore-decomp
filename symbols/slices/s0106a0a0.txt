@@ -1,0 +1,9 @@
+0106a0a0  UpdateMissionRollover  # rebuild the 3 mission-rollover banner slots for the active planet
+0106a280  FUN_0106a280          # draw the two-species percent bar (home vs active planet)
+0106a4e0  UpdateActivePlanetInfo  # refresh the active-planet info panel (name, icon, tooltip)
+0106a7b0  UpdateCommButtons      # compute the comm-button state/colour and camera-tool gate
+0106a970  FUN_0106a970          # refresh the three comm-button windows from the dial state [MATCH]
+0106aa10  FUN_0106aa10          # show/hide the minimap+slots toggles for the given state
+0106aab0  FUN_0106aab0          # re-apply the slots-window enabled bit when untouched [MATCH]
+0106ab20  FUN_0106ab20          # apply a comm-button state to the slots/minimap windows
+0106ac90  FUN_0106ac90          # emit the UFO/space effect for the selected city (cCivData)
