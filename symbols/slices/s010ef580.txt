@@ -1,2 +1,6 @@
-010ef580 hkPoweredRagdollConstraintData::buildJacobian  # symbols/havok_names.txt (havok identical-code)
-010aa080 hkBeginConstraints  # guessed: (in, out, solverResults, stride=8) matches Havok 6 hkBeginConstraints; called first by every buildJacobian path
+010ef580 hkPoweredRagdollConstraintData::buildJacobian  # builds the powered-ragdoll Jacobian (pre-existing)
+010f0120 hkChunkDestructor  # frees one hkThreadMemory chunk and restores the hkReferencedObject vtable
+010f01d0 hkConvexPieceStreamData::~hkConvexPieceStreamData  # frees three element-stream chunks
+010f0260 hkSolverInfo::operator=  # memberwise 0x134-byte solver-info copy assignment
+010f03a0 hkContinuousSimulation::warpTime  # adds the warped dt to every 0x40-byte simulation entry
+010f03d0 hkLs_doSimpleCollisionResponse  # runs solveSingleContact and records the responding bodies

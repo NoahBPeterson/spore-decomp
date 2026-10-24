@@ -16,6 +16,7 @@
 #include "types.h"
 #include <math.h>
 #include <stddef.h>
+#include <intrin.h>
 
 typedef float hkReal;
 
@@ -419,4 +420,271 @@ void hkPoweredRagdollConstraintData::buildJacobian(const hkConstraintQueryIn& in
 
 	buildLimits(twistAxisAinWorld, twistAxisBinWorld, planeAxisBinWorld, in, out);
 	hkBallSocketBuildJacobian(pivotAinWorld, pivotBinWorld, in, out);
+}
+
+// ---------------------------------------------------------------- Havok 3.1 chunk/thread-memory and simulation helpers
+struct hkChunk
+{
+    void*    mpVtable;      // +0x00
+    uint32_t mPad04;
+    uint32_t mPad08;
+    uint32_t mPad0c;
+    uint32_t mPad10;
+    uint32_t mPad14;
+    uint32_t mPad18;
+    uint32_t mPad1c;
+    void*    mpData;        // +0x20
+    uint32_t mPad24;
+    int      mSize;         // +0x28
+};
+
+class hkThreadMemory
+{
+public:
+    void deallocateChunk(void* chunk, uint32_t size, uint32_t alignment);
+};
+
+extern uint32_t g_hkThreadMemoryTls;                    // 0x016e4174
+extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(uint32_t index);
+
+// @ 0x010f0120
+void __fastcall hkChunkDestructor(hkChunk* self)
+{
+    self->mpVtable = (void*)0x14a59b4;
+    _ReadWriteBarrier();
+    int size = *(volatile int*)&self->mSize;
+    if (size >= 0) {
+        hkThreadMemory* memory = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+        memory->deallocateChunk(self->mpData, (uint32_t)self->mSize & 0x3fffffff, 0x14);
+    }
+    self->mpVtable = (void*)0x13ef094;
+}
+
+struct hkConvexPieceStreamData
+{
+    void*    mpVtable;      // +0x00
+    uint32_t mPad04;
+    void*    mpStream0;     // +0x08
+    uint32_t mPad0c;
+    int      mCount0;       // +0x10
+    void*    mpStream1;     // +0x14
+    uint32_t mPad18;
+    int      mCount1;       // +0x1c
+    void*    mpStream2;     // +0x20
+    uint32_t mPad24;
+    int      mCount2;       // +0x28
+};
+
+// @ 0x010f01d0
+void __fastcall hkConvexPieceStreamDataDestructor(hkConvexPieceStreamData* self)
+{
+    int count2 = *(volatile int*)&self->mCount2;
+    if (count2 >= 0) {
+        hkThreadMemory* memory = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+        memory->deallocateChunk(self->mpStream2, ((uint32_t)self->mCount2 & 0x3fffffff) << 2, 0x14);
+    }
+    int count1 = *(volatile int*)&self->mCount1;
+    if (count1 >= 0) {
+        hkThreadMemory* memory = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+        memory->deallocateChunk(self->mpStream1, ((uint32_t)self->mCount1 & 0x3fffffff) << 2, 0x14);
+    }
+    int count0 = *(volatile int*)&self->mCount0;
+    if (count0 >= 0) {
+        hkThreadMemory* memory = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+        memory->deallocateChunk(self->mpStream0, ((uint32_t)self->mCount0 & 0x3fffffff) << 2, 0x14);
+    }
+    self->mpVtable = (void*)0x13ef094;
+}
+
+struct hkSolverInfo
+{
+    struct Block8 { uint32_t mValue[8]; };
+
+    uint32_t m00, m04, m08, m0c, m10;
+    uint32_t m14, m18, m1c, m20, m24;
+    uint32_t m28, m2c, m30, m34, m38;
+    uint32_t m3c, m40, m44, m48, m4c;
+    uint32_t m50, m54, m58, m5c, m60;
+    Block8   m64, m84, ma4, mc4, me4, m104;
+    uint32_t m124, m128, m12c, m130;
+
+    hkSolverInfo& operator=(const hkSolverInfo& other);
+};
+
+// @ 0x010f0260
+hkSolverInfo& hkSolverInfo::operator=(const hkSolverInfo& other)
+{
+    m00 = other.m00; m04 = other.m04; m08 = other.m08; m0c = other.m0c; m10 = other.m10;
+    m14 = other.m14; m18 = other.m18; m1c = other.m1c; m20 = other.m20; m24 = other.m24;
+    m28 = other.m28; m2c = other.m2c; m30 = other.m30; m34 = other.m34; m38 = other.m38;
+    m3c = other.m3c; m40 = other.m40; m44 = other.m44; m48 = other.m48; m4c = other.m4c;
+    m50 = other.m50; m54 = other.m54; m58 = other.m58; m5c = other.m5c; m60 = other.m60;
+    m64 = other.m64;
+    m84 = other.m84;
+    ma4 = other.ma4;
+    mc4 = other.mc4;
+    me4 = other.me4;
+    m104 = other.m104;
+    m124 = other.m124; m128 = other.m128; m12c = other.m12c; m130 = other.m130;
+    return *this;
+}
+
+class hkWorld;
+struct hkSimulationEntry
+{
+    float    mTime;         // +0x00
+    uint8_t  mPad04[0x3c];
+};
+
+struct hkSimulation
+{
+    uint8_t  mPad00[0x18];
+    hkSimulationEntry* mpEntries;   // +0x18
+    int      mCount;                // +0x1c
+};
+
+class hkWorld
+{
+public:
+    uint8_t mPad00[8];
+    hkSimulation* mpSimulation;     // +0x08
+};
+
+class hkContinuousSimulation
+{
+public:
+    virtual void warpTime(hkWorld* world, float deltaTime);
+};
+
+// @ 0x010f03a0
+void hkContinuousSimulation::warpTime(hkWorld* world, float deltaTime)
+{
+    hkSimulation* simulation = world->mpSimulation;
+    int count = *(volatile int*)&simulation->mCount;
+    int index = 0;
+    if (count > 0) {
+        int offset = 0;
+        do {
+            hkSimulationEntry* entry = (hkSimulationEntry*)((uint8_t*)simulation->mpEntries + offset);
+            entry->mTime = *(volatile float*)&deltaTime + entry->mTime;
+            index++;
+            offset += 0x40;
+            count = *(volatile int*)&simulation->mCount;
+        } while (count > index);
+    }
+}
+
+class hkEntity
+{
+public:
+    uint8_t  mPad00[0x58];
+    void*    mpField58;     // +0x58
+    uint8_t  mPad5c[0x9a - 0x5c];
+    bool     mField9a;      // +0x9a
+};
+
+struct hkContactPoint
+{
+    uint8_t  mPad00[0x10];
+    uint32_t mField10, mField14, mField18, mField1c; // +0x10..+0x1c
+};
+
+struct hkToiEvent
+{
+    float    mTime;         // +0x00
+    hkEntity* mpBodyA;      // +0x04
+    hkEntity* mpBodyB;      // +0x08
+    uint32_t mField0c;      // +0x0c
+    uint32_t mField10;      // +0x10
+    uint16_t mField14;      // +0x14
+    uint8_t  mField16;      // +0x16
+    uint16_t mPad17;        // +0x17
+    uint32_t mField18;      // +0x18
+    uint32_t mField1c;      // +0x1c
+    hkContactPoint mContactPoint; // +0x20
+    uint32_t mField30, mField34, mField38, mField3c; // +0x30..+0x3c
+};
+
+struct hkArrayEntity
+{
+    hkEntity** mpData;      // +0x00
+    int        mSize;       // +0x04
+};
+
+struct hkSolveParams
+{
+    uint32_t mField00, mField04, mField08, mField0c;
+    float    mField10;
+    float    mField14;
+    uint32_t mField18;
+    float    mField1c;
+    float    mField20;
+};
+
+struct hkSolveOutput
+{
+    uint32_t mField0;       // +0x00
+    float    mField4;       // +0x04
+    float    mField8;       // +0x08
+};
+
+extern "C" void hkSolveSingleContact(const hkContactPoint* cp, float time, const hkSolveParams* params,
+                                     void* bodyA, void* bodyB, void* contactMgr, hkSolveOutput* output);
+
+static void hkArrayAppend(hkArrayEntity& array, hkEntity* entity)
+{
+    array.mpData[array.mSize] = entity;
+    array.mSize++;
+}
+
+// @ 0x010f03d0
+void hkLs_doSimpleCollisionResponse(hkWorld* world, const hkToiEvent& event, float time,
+                                    hkArrayEntity& bodies)
+{
+    (void)world;
+    hkEntity* bodyA = event.mpBodyA;
+    hkEntity* bodyB = event.mpBodyB;
+
+    hkSolveParams params;
+    params.mField00 = event.mField30;
+    params.mField04 = event.mField34;
+    params.mField08 = event.mField38;
+    params.mField0c = event.mField3c;
+    params.mField10 = (float)event.mField14 * (1.0f / 256.0f);
+    params.mField14 = (float)event.mField16 * (1.0f / 128.0f);
+    params.mField18 = event.mField0c;
+    params.mField1c = 0.1f;
+    params.mField20 = time;
+
+    hkSolveOutput output;
+    hkSolveSingleContact(&event.mContactPoint, event.mTime, &params,
+                         bodyA->mpField58, bodyB->mpField58, (void*)event.mField18, &output);
+
+    if (output.mField4 >= 0.0f) {
+        if (output.mField4 >= 0.0f && output.mField8 < 0.0f) {
+            if (bodyB->mField9a)
+                hkArrayAppend(bodies, bodyA);
+            else
+                hkArrayAppend(bodies, bodyB);
+            return;
+        }
+        if (!bodyA->mField9a && (bodyB->mField9a || output.mField4 <= output.mField8))
+            hkArrayAppend(bodies, bodyA);
+        hkArrayAppend(bodies, bodyB);
+        return;
+    }
+
+    if (output.mField8 >= 0.0f) {
+        if (!bodyA->mField9a)
+            hkArrayAppend(bodies, bodyA);
+        else
+            hkArrayAppend(bodies, bodyB);
+        return;
+    }
+
+    if (!bodyA->mField9a)
+        hkArrayAppend(bodies, bodyA);
+    if (bodyB->mField9a)
+        return;
+    hkArrayAppend(bodies, bodyB);
 }
