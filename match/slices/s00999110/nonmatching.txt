@@ -1,7 +1,7 @@
 00999590 141 complete add-plugin/bind path (thiscall member; fast path AddRefs the stored copy); register allocation (this in edi vs ebx) and casted-temp slot differ; difftest PASS (fixed: was a cdecl free function with cdecl DoInsertValue calls and a missing AddRef on the fast path)
 00999820 6 complete UI::StringMan ctor; only vptr-store scheduling order differs; difftest PASS
 00999850 22 complete UI::StringMan deleting dtor; base-vptr store position differs
-00999b20 81 complete StringTableXml::StrDup; length loop and allocator branch shape differ
+00999b20 80 complete StringTableXml::StrDup; the allocator path now calls the correct StackAllocator_s0092_8b00::AllocateNewBlock at 0x928ba0 and advances begin/end inline, matching the original; equiv PASS (285 valid, 95.8% coverage); src mirror verified
 00999c50 25 complete StringTableXml ctor; member-init/argument scheduling differs; difftest PASS
 0099a010 17 complete StringTableXml::SetString; this/vector register allocation differs
 00999110 107 complete SerCollection dtor; only prologue register-save (push edi) placement differs

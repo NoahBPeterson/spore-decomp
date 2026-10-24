@@ -56,6 +56,15 @@ struct IUnknown32 {
   virtual void v2c();
 };
 
+// The 0x928ba0 implementation is a differently-spelled slice of the same
+// stack allocator (class name carries the owning-slice suffix).
+namespace EA { namespace Allocator {
+class StackAllocator_s0092_8b00 {
+public:
+  bool __thiscall AllocateNewBlock(unsigned int) throw();
+};
+}}
+
 // EA::Allocator::StackAllocator
 struct StackAllocator {
   uint   mnDefaultBlockSize;         // +0x00
@@ -462,11 +471,17 @@ wchar_t* StringTableXml::StrDup(const wchar_t* src) {
   const wchar_t* p = src;
   do { } while (*p++);
   uint bytes = ((uint)(p - (src + 1)) * 2 + 9) & 0xfffffff8;
-  void* obj = mAllocator.AllocInline(bytes);
-  if (obj == 0) return 0;
-  wchar_t* d = (wchar_t*)obj;
+  StackAllocator* a = &mAllocator;
+  if ((int)(a->mpCurrentBlockEnd - a->mpCurrentObjectBegin) - (int)bytes < 0) {
+    if (!((EA::Allocator::StackAllocator_s0092_8b00*)a)->AllocateNewBlock(bytes))
+      return 0;
+  }
+  wchar_t* d = (wchar_t*)a->mpCurrentObjectBegin;
+  a->mpCurrentObjectBegin = (char*)d + bytes;
+  a->mpCurrentObjectEnd = (char*)d + bytes;
+  wchar_t* result = d;
   while ((*d++ = *src++) != 0) {}
-  return (wchar_t*)obj;
+  return result;
 }
 
 // @ 0x00999ba0  FactoryStringTableXml::GetSupportedTypes
