@@ -1,1 +1,4 @@
-00d626d0 SP::BABY_FLEE_Tick  # PDB candidate (caller-scored); 3-state flee tick of a baby creature (parent = FUN_00d99500(FUN_00c04590()->m164))
+00d626d0 FUN_00d626d0  # nonmatching (pre-existing) - SP::BABY_FLEE_Tick states 0-2, flags /arch:SSE /fp:fast /GS-
+00d62d90 ?FUN_00d62d90@SP@@YA_NPAVcSPCreatureBase@1@HHHHPAUBehaviourState@1@@Z  # nonmatching (347) - walk to a point in front of the avatar, flag the loco, reset the behaviour state, update UI hints
+00d62f60 ?LEARN_ABILITIES_Activate@SP@@YA_NPAVcSPCreatureBase@1@HHHPAUBehaviourState@1@@Z  # nonmatching (202) - face the learn focus creature, play the listen animation when mB58 bit 8 is set
+00d630c0 ?BABY_IDLE_Tick@SP@@YA_NPAVcSPCreatureBase@1@HHHHPAUBehaviourState@1@@Z  # nonmatching (1013) - hands the avatar to the creature, then wanders near/far and resets the state
