@@ -1,0 +1,13 @@
+# source  symbol  original VA  [flags override]
+# cSPMissionExplore: the visited-city mission. 8 of the 19 functions reproduce byte-for-byte; the other
+# 11 are listed in nonmatching.txt.
+# 00c50f50 Construct, 00c51010 Init, 00c512f0/00c51440/00c51630 visited-city vector, 00c51740/00c51900/
+# 00c519a0/00c51a10 city effects, 00c51b10 HandleMessage, 00c51bb0 Update
+slices/s00c50f00/s00c50f00.cpp  ?GetVisitCountProperty@cSPMissionExplore@SP@@QAEIXZ            00c50f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c50f00/s00c50f00.cpp  ?GetProgressString@cSPMissionExplore@SP@@QAEPAUWString@2@PAU32@@Z  00c51590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c50f00/s00c50f00.cpp  ?GetTagString@cSPMissionExplore@SP@@QAE_NHPAUWString@2@@Z        00c515c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c50f00/s00c50f00.cpp  ?ShutdownSystems@cSPMissionExplore@SP@@QAEXXZ                   00c51aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c50f00/s00c50f00.cpp  ?ReturnForRewards@cSPMissionExplore@SP@@QAEXXZ                 00c51ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c50f00/s00c50f00.cpp  ?AbortToRewardState@cSPMissionExplore@SP@@QAEXXZ               00c51e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c50f00/s00c50f00.cpp  ?AddMessageHandlers@cSPMissionExplore@SP@@QAEXXZ               00c51f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c50f00/s00c50f00.cpp  ?RemoveMessageHandlers@cSPMissionExplore@SP@@QAEXXZ            00c52000  /O2 /MD /Gy /TP /arch:SSE /fp:fast
