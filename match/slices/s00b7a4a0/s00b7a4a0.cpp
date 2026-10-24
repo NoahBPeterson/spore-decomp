@@ -1,5 +1,6 @@
 // Slice s00b7a4a0 -- 0x00b7a880: per-frame update of the paired "beam" light objects that
 // are attached to the nearby interactable objects around the current aim point.
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
 
@@ -310,4 +311,238 @@ done:
     }
     if (v.begin && v.begin[-1])
         operator_delete_array(v.begin);
+}
+
+// ---------------------------------------------------------------------------
+// Slice additions: 0x00b7a4a0 (gather the nearby light sources for a segment and
+// store their ids in a caller vector) and 0x00b7a710 (rebuild the light buffer:
+// make sure every entry has a light object and reset it).  Both run on the same
+// Spawner-derived object as UpdateBeams: the light vector at +0x5508, the gather
+// mask at +0x55a0 and the hier grid at +0x55a4.
+//
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+// ---------------------------------------------------------------------------
+#include <string.h>
+
+struct SPVectorUint;    // SPVector<unsigned int>, the engine's intrusive vector
+struct cBeamLight;
+struct cHierGrid;
+
+// --- 0x00b7a4a0: objects handed back by cHierGrid::Query3Result ---
+struct cQueryAux {
+    uint32_t mPad000;        // +0x000
+    uint32_t mFlags;         // +0x004
+};
+
+struct cQueryObj {
+    uint32_t mPad000[0x38 / 4];   // +0x000
+    Vec3 mPosition;               // +0x038
+    float mRadius;                // +0x044
+    uint32_t mPad048[0x28 / 4];   // +0x048
+    cQueryAux* mAux;              // +0x070
+};
+
+// --- SPVector<unsigned int>: three pointers, engine allocation/insert helpers ---
+struct IntVector {
+    uint32_t* mpBegin;       // +0x000
+    uint32_t* mpEnd;         // +0x004
+    uint32_t* mpCapacity;    // +0x008
+
+    int count() const { return (int)(mpEnd - mpBegin); }
+    void insert(uint32_t* pos, int n, const uint32_t* value);      // 0x00b97280
+    void resize(int n);                                            // 0x00b98ea0
+    void DoInsertKey4(uint32_t* pos, const uint32_t& value);       // 0x00b96600
+    IntVector& operator=(const IntVector& other);                  // 0x00ebf480
+    void push_back(uint32_t value)
+    {
+        if (mpEnd < mpCapacity) {
+            *mpEnd++ = value;
+        } else {
+            DoInsertKey4(mpEnd, value);
+        }
+    }
+    // eastl's erase: shift the tail down over [first,last) and drop it.  The only
+    // call site is clear(), where the shifted range is empty.
+    void erase(uint32_t* first, uint32_t* last)
+    {
+        memcpy(first, last, (size_t)(mpEnd - last) * sizeof(uint32_t));
+        mpEnd -= last - first;
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+};
+
+// An IntVector whose storage is a 256-entry array inside the object itself; the
+// engine allocator keeps its "this block is not heap" cookie right before the
+// storage, so the destructor never frees the inline buffer.
+struct cFixedIntVector : IntVector {
+    uint32_t mPad00c[2];             // +0x00c
+    uint32_t mStorageCookie;         // +0x014 (also mBuffer[-1]: 0 = inline storage)
+    uint32_t mBuffer[0x100];         // +0x018
+
+    cFixedIntVector()
+    {
+        mpBegin = mBuffer;
+        mpEnd = mBuffer;
+        mpCapacity = mBuffer + 0x100;
+        mStorageCookie = 0;
+    }
+    ~cFixedIntVector()
+    {
+        if (mpBegin != 0 && mpBegin[-1] != 0)
+            operator_delete_array(mpBegin);
+    }
+};
+
+struct cHierGrid {
+    uint32_t mPad000[0x24 / 4];      // +0x000
+    IntVector mEntities;             // +0x024
+    int Query3Result(float* from, float* to, float radius, int maxResults, void** results);  // 0x00702860
+};
+
+// --- 0x00b7a710: the light objects themselves ---
+struct cLightOwner {
+    VPAD10(b0) VPAD10(b1) VPAD10(b2) VPAD10(b3) VPAD10(b4) VPAD10(b5) VPAD10(b6)
+    VPAD10(b7) VPAD10(b8)
+    virtual void pad90();
+    virtual void Update(cBeamLight* pLight, int flag);       // +0x16c
+    virtual void Destroy(cBeamLight* pLight, int flag);      // +0x170
+};
+
+struct cBeamLight {
+    cLightOwner* mOwner;     // +0x000
+    uint32_t mFlags;         // +0x004
+    uint16_t mDirty;         // +0x008
+    uint16_t mDirtyCount;    // +0x00a
+    Vec3 mPosition;          // +0x00c
+    float mScale;            // +0x018
+    Mat3 mMatrix;            // +0x01c
+    int mRefCount;           // +0x040
+    uint32_t mPad044[8];     // +0x044
+
+    void Release() { mOwner->Destroy(this, (mFlags >> 31) & 1); }
+};
+
+struct cModelFactory {
+    virtual void AddRef();                   // +0x00
+    virtual void Release();                  // +0x04
+    virtual void pad08();                    // +0x08
+    virtual cBeamLight* CreateInstance(const void* typeId, uint32_t modelId, int size);   // +0x0c
+};
+
+struct cModelManager {
+    virtual void pad00(); virtual void pad04(); virtual void pad08(); virtual void pad0c();
+    virtual void pad10(); virtual void pad14(); virtual void pad18();
+    virtual cModelFactory* GetModel(uint32_t modelId);       // +0x1c
+};
+
+struct cLightVector {            // eastl vector of light pointers
+    cBeamLight** mpBegin;        // +0x00
+    cBeamLight** mpEnd;          // +0x04
+    cBeamLight** mpCapacity;     // +0x08
+    void resize(uint32_t n);     // 0x00473270
+};
+
+cModelManager* ModelManager();   // 0x0067dd80
+extern uint32_t g_lightModel;    // 0x01687b30
+
+struct cSpawner {
+    uint32_t mPad000[0x5508 / 4];                       // +0x000
+    cLightVector mLights;                               // +0x5508
+    uint32_t mPad514[(0x55a0 - 0x5514) / 4];            // +0x5514
+    uint32_t mObjMask;                                  // +0x55a0
+    cHierGrid* mpGrid;                                  // +0x55a4
+
+    void ClearModels();                                 // 0x00b77aa0
+    int CollectLights(float* from, float* to, float radius, IntVector* out, char mode);  // 0x00b7a4a0
+    void ResetLights();                                 // 0x00b7a710
+};
+
+// Gathers every light source whose bounds intersect the segment from->to into `out`
+// (mode != 0) or replaces `out` with the raw query result (mode == 0).
+// @ 0x00B7A4A0
+int cSpawner::CollectLights(float* from, float* to, float radius, IntVector* out, char mode)
+{
+    if (mpGrid->mEntities.mpBegin == mpGrid->mEntities.mpEnd)
+        return out->count();
+
+    uint32_t empty = 0;
+    cFixedIntVector results;
+    results.insert(results.mpBegin, 0x100, &empty);
+    int count = mpGrid->Query3Result(from, to, radius, 0x100, (void**)results.mpBegin);
+    if (mode == 0) {
+        results.resize(count);
+        *out = results;
+    } else {
+        out->clear();
+        for (int i = 0; i < count; ++i) {
+            cQueryObj* pObj = (cQueryObj*)results.mpBegin[i];
+            // an object that has an aux record is only visible while bit 15 of its
+            // flags is set (00b7a586..00b7a58c jumps to the skip block when it is clear)
+            if (pObj->mAux != 0 && (pObj->mAux->mFlags & 0x8000) == 0)
+                continue;
+            float r = pObj->mRadius + radius;
+            Vec3 dir(to[0] - from[0], to[1] - from[1], to[2] - from[2]);
+            Vec3 off(from[0] - pObj->mPosition.x, from[1] - pObj->mPosition.y,
+                     from[2] - pObj->mPosition.z);
+            float aa = dir.z * dir.z + dir.y * dir.y + dir.x * dir.x;
+            float bb = dir.z * off.z + dir.x * off.x + dir.y * off.y;
+            float cc = off.z * off.z + off.x * off.x + off.y * off.y - r * r;
+            float disc = bb * bb - aa * cc;
+            if (disc < 0.0f)
+                continue;
+            float t = sqrtf(disc);
+            if (t - bb < 0.0f)          // entry point beyond the segment start
+                continue;
+            if (-bb - t > aa)           // exit point beyond the segment end
+                continue;
+            out->push_back((uint32_t)pObj);
+        }
+    }
+    return out->count();
+}
+
+// Makes sure every slot of the light buffer holds a light object, then resets it.
+// @ 0x00B7A710
+void cSpawner::ResetLights()
+{
+    cLightVector& lights = mLights;
+    uint32_t count = (uint32_t)(lights.mpEnd - lights.mpBegin);
+    if (count != 0)
+        ClearModels();
+
+    cModelFactory* pModel = ModelManager()->GetModel(0x00EB9968);
+    if (pModel)
+        pModel->AddRef();
+
+    lights.resize(0x14);
+
+    count = (uint32_t)(lights.mpEnd - lights.mpBegin);
+    for (uint32_t i = 0; i < count; ++i) {
+        cBeamLight** pSlot = &lights.mpBegin[i];
+        if (*pSlot == 0) {
+            cBeamLight* pNew = pModel->CreateInstance((const void*)0x02E81370, g_lightModel, 0x10);
+            cBeamLight* pOld = *pSlot;
+            if (pNew != pOld) {
+                if (pNew)
+                    ++pNew->mRefCount;
+                *pSlot = pNew;
+                if (pOld != 0) {
+                    if (pOld->mRefCount > 1)
+                        --pOld->mRefCount;
+                    else
+                        pOld->Release();
+                }
+            }
+            cBeamLight* pLight = *pSlot;
+            pLight->mMatrix = g_identity;
+            pLight->mScale = 1.0f;
+            pLight->mPosition = g_zeroVec;
+            pLight->mDirty = 0;
+            pLight->mDirtyCount = 0;
+            pLight->mFlags &= ~1u;
+            pLight->mOwner->Update(pLight, 0);
+        }
+    }
+    if (pModel)
+        pModel->Release();
 }
