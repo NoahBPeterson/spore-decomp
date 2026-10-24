@@ -1,1 +1,23 @@
-009ba990 ?UpdateGoalSpring@creature_instance_data_s009b_a4c0@nSPCreatureAnim@@QAEXPAUgoal_state@2@HMMM@Z  # creature_instance_data_s009b_a4c0::UpdateGoalSpring migrated from s009ba4c0 (verbatim, slice spelling)
+# slice s009ba4c0 (gold7) - nSPCreatureAnim wiggle/procedural animation helpers
+# Modelled types:
+#   creature_anim        nSPCreatureAnim data: anim_bodies_begin +0x384,
+#                        anim_bodies_end +0x388; elements are anim_body_data
+#   anim_body_data       stride 0x468: rest_center__SCALABLE +0x10c (vector_3),
+#                        rest_orientation_q +0x118 (vector_4)
+#   wiggle_data          0x39 bytes (padded 0x3c): body_a +0x00, body_b +0x04,
+#                        body_c +0x08, body_d +0x0c, weight +0x10, length +0x14,
+#                        angle +0x18, pos +0x1c (vector_3), rot +0x28 (vector_4),
+#                        flag_038 +0x38; CopyFrom (0x9b3ab0) is a 0x39-byte copy
+#   creature_body_static_data  rest_center__SCALABLE +0x10c, rest_orientation_q
+#                        +0x118, flags_150 +0x150, flags_154 +0x154, bidx +0x1f8,
+#                        parent_bidx +0x1fc
+#   goal_state           def +0x00, reset +0x05, vel +0x08, pos +0x14, prev +0x20
+#   goal_def             bidx +0x00, parent_bidx +0x04
+#   g_GoalUseAltFlags    byte at 0x1550c2c: select flags_150 instead of flags_154
+#   QuaternionVectorTransform  0x0099c1a0 (sret: out, q, v)
+#   CalcWiggle 0x009ba180, wiggle_data::CopyFrom 0x009b3ab0
+009ba4c0 ?CreateWiggle@nSPCreatureAnim@@YA_NPAUcreature_anim@1@IPAUwiggle_data@1@HHHHHH@Z  # (anim,index,out,a4..a9)->bool: bounds-check anim_bodies, init pos/rot{0,0,0,1}, CalcWiggle 0x9ba180, on success CopyFrom 0x9b3ab0 else out->body_a/b/c = -1
+009ba590 ?ComputeWiggle@nSPCreatureAnim@@YAXPAUcreature_anim@1@PAUwiggle_data@1@@Z  # (anim,wiggle): delta = a.rest - b.rest, conj(b) = {-bx,-by,-bz,bw}; pos = QuaternionVectorTransform(conj(b),delta); rot = conj(b)*a.rotation
+009ba7d0 ?GoalStateInit@nSPCreatureAnim@@YAXPAUcreature_instance_data@1@PAUgoal_state@1@D@Z  # (c,st,char flag): body = Bodies[st->def->bidx]; local = flag ? rest_center*requested_scale : body->pos; st->vel = 0; st->pos = QuaternionVectorTransform(local,c->orientation) + c->position; st->prev = st->pos
+009ba8d0 ?GoalStateIsActive@nSPCreatureAnim@@YA_NPAUcreature_instance_data@1@PAUgoal_state@1@M@Z  # (c,st,float t)->bool: reject recent goal (t<=goal_time or flags_154 bit2); then walk parent_bidx: bit3 of flags_150/flags_154 (g_GoalUseAltFlags), goal_blend>0, goal_time>0&&!reset decide the result
+009ba990 ?UpdateGoalSpring@creature_instance_data@nSPCreatureAnim@@QAEXPAUgoal_state@2@HMMM@Z  # thiscall goal spring update (pre-existing anchor; row lives in nonmatching.txt)

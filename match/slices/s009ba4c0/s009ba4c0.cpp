@@ -73,8 +73,12 @@ struct creature_body_static_data {
     uint32_t pad_000[0x10c / 4];
     vector_3 rest_center__SCALABLE;      // +0x10c
     vector_4 rest_orientation_q;         // +0x118
-    uint32_t pad_128[(0x1f8 - 0x128) / 4];
+    uint32_t pad_128[(0x150 - 0x128) / 4];
+    uint32_t flags_150;                  // +0x150 (alternate flag word)
+    uint32_t flags_154;                  // +0x154
+    uint32_t pad_158[(0x1f8 - 0x158) / 4];
     unsigned long bidx;                  // +0x1f8 (body index in the creature)
+    int      parent_bidx;                // +0x1fc (parent body index, -1: root)
 };
 
 struct creature_instance_data;
@@ -138,7 +142,7 @@ struct goal_state {
 };
 
 bool GoalStateIsActive(creature_instance_data* c, goal_state* st, float t);  // 0x009ba8d0 (cdecl)
-void GoalStateInit(creature_instance_data* c, goal_state* st, int flag);       // 0x009ba7d0 (cdecl)
+void GoalStateInit(creature_instance_data* c, goal_state* st, char flag);      // 0x009ba7d0 (cdecl)
 
 extern float g_GoalSpringMaxDist;        // 0x01550ab8 (1.0)
 extern float g_GoalSpringK;              // 0x01550abc (100.0)
@@ -149,11 +153,180 @@ extern const float kGoalMaxDistScale;    // 0x013ec434 (0.4)
 extern const float kOne;                 // 0x01485720
 extern const float kZero;                // 0x01485378
 extern const float kMinSpeed2;           // 0x013ebca0 (1e-4)
+extern char  g_GoalUseAltFlags;          // 0x01550c2c (use flags_150 instead of flags_154)
 
 static __forceinline void MarkBodyGoal(creature_body_instance_data* body)
 {
     unsigned long bit = body->static_data->bidx * 2;
     body->creature->body_goal_bits[bit >> 3] |= (uint8_t)(1 << (bit & 7));
+}
+
+// ---------------------------------------------------------------------------
+// Wiggle (secondary animation) support.  The animation object owns a vector of
+// 0x468-byte per-body records whose rest pose sits at the same offsets as
+// creature_body_static_data; a wiggle names two of those records and stores the
+// relative transform that the runtime blends on top of the normal animation.
+// ---------------------------------------------------------------------------
+struct anim_body_data {                    // stride 0x468
+    uint32_t pad_000[0x10c / 4];
+    vector_3 rest_center__SCALABLE;        // +0x10c
+    vector_4 rest_orientation_q;           // +0x118
+    uint32_t pad_128[(0x468 - 0x128) / 4];
+};
+
+struct creature_anim {                     // nSPCreatureAnim data
+    uint32_t        pad_000[0x384 / 4];
+    anim_body_data* anim_bodies_begin;     // +0x384
+    anim_body_data* anim_bodies_end;       // +0x388
+};
+
+struct wiggle_data {                       // size 0x39 (padded to 0x3c)
+    int      body_a;                       // +0x00
+    int      body_b;                       // +0x04
+    int      body_c;                       // +0x08
+    int      body_d;                       // +0x0c
+    float    weight;                       // +0x10
+    float    length;                       // +0x14
+    float    angle;                        // +0x18
+    vector_3 pos;                          // +0x1c
+    vector_4 rot;                          // +0x28
+    uint8_t  flag_038;                     // +0x38
+    void CopyFrom(const wiggle_data* w);   // 0x009b3ab0 (0x39-byte copy)
+};
+
+bool CalcWiggle(creature_anim* anim, anim_body_data* body, wiggle_data* w,
+                int a4, int a5, int a6, int a7, int a8, int a9);   // 0x009ba180
+
+// @ 0x009ba4c0
+bool CreateWiggle(creature_anim* anim, unsigned index, wiggle_data* out,
+                  int a4, int a5, int a6, int a7, int a8, int a9)
+{
+    if (index < (unsigned)(anim->anim_bodies_end - anim->anim_bodies_begin)) {
+        wiggle_data w;
+        w.pos.x = w.pos.y = w.pos.z = 0.0f;
+        w.rot.x = w.rot.y = w.rot.z = 0.0f;
+        w.rot.w = 1.0f;
+        anim_body_data* body = &anim->anim_bodies_begin[index];
+        if (CalcWiggle(anim, body, &w, a4, a5, a6, a7, a8, a9)) {
+            out->CopyFrom(&w);
+            return true;
+        }
+        out->body_a = -1;
+        out->body_b = -1;
+        out->body_c = -1;
+    }
+    return false;
+}
+
+// @ 0x009ba590
+void ComputeWiggle(creature_anim* anim, wiggle_data* w)
+{
+    if (w->body_a == -1 || w->body_b == -1)
+        return;
+
+    anim_body_data* a = &anim->anim_bodies_begin[w->body_a];
+    anim_body_data* b = &anim->anim_bodies_begin[w->body_b];
+
+    vector_3 delta;
+    delta.x = a->rest_center__SCALABLE.x - b->rest_center__SCALABLE.x;
+    delta.y = a->rest_center__SCALABLE.y - b->rest_center__SCALABLE.y;
+    delta.z = a->rest_center__SCALABLE.z - b->rest_center__SCALABLE.z;
+
+    vector_4 conj_b;
+    conj_b.x = -b->rest_orientation_q.x;
+    conj_b.y = -b->rest_orientation_q.y;
+    conj_b.z = -b->rest_orientation_q.z;
+    conj_b.w = b->rest_orientation_q.w;
+
+    vector_4 rot_a = a->rest_orientation_q;
+
+    vector_3 v;
+    QuaternionVectorTransform(&v, &conj_b, &delta);
+    w->pos = v;
+
+    vector_4 q;
+    q.x = ((conj_b.w * rot_a.x + rot_a.w * conj_b.x) - rot_a.y * conj_b.z)
+        + rot_a.z * conj_b.y;
+    q.y = ((conj_b.w * rot_a.y + conj_b.z * rot_a.x) + conj_b.y * rot_a.w)
+        - rot_a.z * conj_b.x;
+    q.z = ((conj_b.z * rot_a.w - conj_b.y * rot_a.x) + conj_b.w * rot_a.z)
+        + rot_a.y * conj_b.x;
+    q.w = ((conj_b.w * rot_a.w - rot_a.x * conj_b.x) - conj_b.y * rot_a.y)
+        - conj_b.z * rot_a.z;
+    w->rot = q;
+}
+
+// @ 0x009ba7d0
+void GoalStateInit(creature_instance_data* c, goal_state* st, char flag)
+{
+    creature_body_instance_data* body = &c->Bodies.mpBegin[st->def->bidx];
+
+    vector_3 local;
+    const vector_3* src;
+    if (flag != 0) {
+        float s = c->requested_scale;
+        const vector_3& rc = body->static_data->rest_center__SCALABLE;
+        local.x = rc.x * s;
+        local.y = rc.y * s;
+        local.z = rc.z * s;
+        src = &local;
+    } else {
+        src = &body->pos;
+    }
+
+    vector_3 v;
+    v.x = src->x;
+    v.y = src->y;
+    v.z = src->z;
+
+    st->vel.x = 0.0f;
+    st->vel.y = 0.0f;
+    st->vel.z = 0.0f;
+
+    vector_3* r = QuaternionVectorTransform(&local, &c->orientation, &v);
+
+    st->pos.x = r->x + c->position.x;
+    st->pos.y = r->y + c->position.y;
+    st->pos.z = r->z + c->position.z;
+    st->prev = st->pos;
+}
+
+// @ 0x009ba8d0
+bool GoalStateIsActive(creature_instance_data* c, goal_state* st, float t)
+{
+    goal_def* def = st->def;
+    unsigned bidx = def->bidx;
+    creature_body_instance_data* body = &c->Bodies.mpBegin[(int)bidx];
+
+    if (!st->reset) {
+        if (body->goal_time >= t)
+            return false;
+        if ((body->static_data->flags_154 >> 2) & 1)
+            return false;
+    }
+
+    int parent = def->parent_bidx;
+    if (parent == -1)
+        return true;
+    if ((int)bidx == -1)
+        return true;
+    if ((int)bidx == parent)
+        return true;
+
+    for (;;) {
+        uint32_t flags = g_GoalUseAltFlags ? body->static_data->flags_150
+                                           : body->static_data->flags_154;
+        if ((flags >> 3) & 1)
+            return true;
+        if (body->goal_blend > 0.0f)
+            return false;
+        if (body->goal_time > 0.0f && !st->reset)
+            return false;
+        bidx = (unsigned)body->static_data->parent_bidx;
+        body = &c->Bodies.mpBegin[(int)bidx];
+        if ((int)bidx == -1)
+            return true;
+    }
 }
 
 // @ 0x009ba990
