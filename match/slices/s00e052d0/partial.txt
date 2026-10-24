@@ -1,0 +1,9 @@
+00e052d0  192  (/O2 /MD /Gy /TP /arch:SSE /fp:fast) rbtree find/erase member model correct but register allocation and pNode spill differ; equiv UNSUPPORTED fault(read) null-this
+00e053c0  317  (/O2 /MD /Gy /TP /arch:SSE /fp:fast) nKind kept in ebp by original, spilled to stack here; switch bodies otherwise same; equiv UNSUPPORTED fault(read)
+00e05590  427  (/O2 /MD /Gy /TP /arch:SSE /fp:fast) draw path frames/register allocation differ (DSub pair unpack + arc args); equiv UNSUPPORTED fault(read)
+00e057a0  83  (/O2 /MD /Gy /TP /arch:SSE /fp:fast) store order: derived vptr group scheduled after scalar member inits; rbtree anchor duplicate stores collapsed; equiv UNSUPPORTED vtable/constant address mapping
+00e05870  159  (/O2 /MD /Gy /TP /arch:SSE /fp:fast) SimpleVector local frame 0xc vs 0x14 and nStance register ebx vs edi; equiv UNSUPPORTED fault(read/write)
+00e05930  315  (/O2 /MD /Gy /TP /arch:SSE /fp:fast) two-pass selection loop modelled but bool/register allocation differs; equiv UNSUPPORTED fault(read/write)
+00e05ab0  146  (/O2 /MD /Gy /TP /arch:SSE /fp:fast) cString now 12 bytes (tableId/key/string); frame 0x18 vs 0x24 and pWindow register edi vs esi remain; equiv UNSUPPORTED fault(read/write)
+00e05bb0  444  (/O2 /MD /Gy /TP /arch:SSE /fp:fast) DoMessage override of cIWinProc modelled with this-0x70 folding; command switch shape differs; equiv WEAK (400 valid, 10.9% coverage)
+00e05de0  533  (/O2 /MD /Gy /TP /arch:SSE /fp:fast) tooltip assembly: cString(0x9a5acf10/key/0), money format and level switch modelled; wcslen inline loop + stack frame differ; equiv UNSUPPORTED unresolved SetTooltipText reference

@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e052d0/s00e052d0.cpp  ?SuperweaponClick@cSPUIGlobalUICiv@@QAEXI@Z  00e05530  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e052d0/s00e052d0.cpp  ?SyncSuperweaponButton@cSPUIGlobalUICiv@@QAEXIPAHH@Z  00e060c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
