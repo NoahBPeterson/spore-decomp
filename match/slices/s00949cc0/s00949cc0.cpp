@@ -94,7 +94,7 @@ public:
     unsigned int GetPort();
     bool ParseUsernameAndPassword(string* pstr);
     bool ParseURLFILE(string* pstr);
-    static void CanonicalizePath(const char* pszPath, string* pstr);
+    static bool CanonicalizePath(const char* pszPath, string* pstr);
 };
 
 URL::URL()
@@ -152,7 +152,7 @@ unsigned int URL::GetPort() {
 } // namespace EA
 
 // Force emission of the unreferenced static member in this translation unit.
-void (*g_urlCanonicalizePath)(const char*, eastl::string*) =
+bool (*g_urlCanonicalizePath)(const char*, eastl::string*) =
     &EA::Internet::URL::CanonicalizePath;
 
 // ---------------------------------------------------------------------------
@@ -408,8 +408,8 @@ found:
     }
 }
 
-// @ 0x0094a7a0
-void URL::CanonicalizePath(const char* pszPath, string* pstr) {
+// @ 0x0094a7a0  (bool: retail ends with `mov al,1` right before the epilogue, i.e. it always returns true)
+bool URL::CanonicalizePath(const char* pszPath, string* pstr) {
     if (pstr->mpBegin != pszPath)
         pstr->assign(pszPath, pszPath + strlen(pszPath));
 
@@ -513,6 +513,7 @@ void URL::CanonicalizePath(const char* pszPath, string* pstr) {
             }
         }
     }
+    return true;
 }
 
 // @ 0x0094a9f0

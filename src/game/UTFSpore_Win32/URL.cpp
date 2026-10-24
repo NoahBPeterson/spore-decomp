@@ -85,7 +85,7 @@ public:
     unsigned int GetPort();
     bool ParseUsernameAndPassword(string* pstr);  // 0x0094a9f0 (EA::Internet::URL::ParseUsernameAndPassword)
     bool ParseURLFILE(string* pstr);  // 0x0094aae0 (EA::Internet::URL::ParseURLFILE)
-    static void CanonicalizePath(const char* pszPath, string* pstr);  // 0x0094a7a0 (EA::Internet::URL::CanonicalizePath)
+    static bool CanonicalizePath(const char* pszPath, string* pstr);  // 0x0094a7a0 (EA::Internet::URL::CanonicalizePath)
 };
 }
 }
@@ -155,7 +155,7 @@ void EA::Internet::URL::SetPort(unsigned int port)
 
 // @ 0x0094a7a0
 namespace EA { namespace Internet {
-void URL_s0094_9cc0::CanonicalizePath(const char* pszPath, string* pstr)
+bool URL_s0094_9cc0::CanonicalizePath(const char* pszPath, string* pstr)
 {
     if (pstr->mpBegin != pszPath)
         pstr->assign(pszPath, pszPath + strlen(pszPath));
@@ -260,6 +260,7 @@ void URL_s0094_9cc0::CanonicalizePath(const char* pszPath, string* pstr)
             }
         }
     }
+    return true;
 }
 }}  // namespace EA::Internet
 
