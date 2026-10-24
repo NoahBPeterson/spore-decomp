@@ -97,6 +97,14 @@ struct VectorEC
 };
 
 // ---------------------------------------------------------------------------------------------
+// eastl heap node: the bookkeeping word that precedes an allocation payload.
+// ---------------------------------------------------------------------------------------------
+struct HeapNode
+{
+    int mSizeOrCookie;                  // +0x00 (payload starts at +0x04)
+};
+
+// ---------------------------------------------------------------------------------------------
 // SP::cOrnamentData -- 13 floats (0x34 bytes), read/written by ReadSTLSequenceT.
 // ---------------------------------------------------------------------------------------------
 struct cOrnamentData
@@ -195,6 +203,18 @@ struct cCityData
     u32   uB8;                      // 0xb8
     u32   uBC;                      // 0xbc
     u32   uC0;                      // 0xc0
+};
+
+// ---------------------------------------------------------------------------------------------
+// SP::cVehicleData -- the 0x14-byte vehicle record built inline by ReadCivDataSummary.
+// ---------------------------------------------------------------------------------------------
+struct cVehicleData
+{
+    u32 m00;                        // +0x00
+    u32 m04;                        // +0x04
+    u32 m08;                        // +0x08
+    u32 m0c;                        // +0x0c
+    u32 m10;                        // +0x10
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -824,15 +844,15 @@ void __fastcall FUN_00ff2e30(cCitySummary* ecx_this, void* edx)
     ecx_this->ResetForward();
 
     void* v = ecx_this->mBuildingList.mBegin;
-    if (v != 0 && *(int*)((char*)v - 4) != 0) {
+    if (v != 0 && ((HeapNode*)v - 1)->mSizeOrCookie != 0) {
         FUN_00f47380(v);
     }
     void* w = ecx_this->mCityData.mBegin;
-    if (w != 0 && *(int*)((char*)w - 4) != 0) {
+    if (w != 0 && ((HeapNode*)w - 1)->mSizeOrCookie != 0) {
         FUN_00f47380(w);
     }
     void* u = ecx_this->mPacked.mBegin;
-    if (u != 0 && *(int*)((char*)u - 4) != 0) {
+    if (u != 0 && ((HeapNode*)u - 1)->mSizeOrCookie != 0) {
         FUN_00f47380(u);
     }
 }
@@ -877,14 +897,14 @@ void __fastcall FUN_00ff2e80(cCitySummary* ecx_this, void* edx, void* stream)
     FUN_0093a780(str2, &count2, 1, 0);
 
     for (u32 i = 0; i < count2; ++i) {
-        void* rec = FUN_00f473a0(0x14, "Simulator/cVehicleData", 0, 0, 0, 0);
+        cVehicleData* rec = (cVehicleData*)FUN_00f473a0(0x14, "Simulator/cVehicleData", 0, 0, 0, 0);
         void* pv = 0;
         if (rec != 0) {
-            *(u32*)((char*)rec + 0x00) = g_16dad08;
-            *(u32*)((char*)rec + 0x04) = g_16dad0c;
-            *(u32*)((char*)rec + 0x08) = g_16dad10;
-            *(u32*)((char*)rec + 0x0c) = 0;
-            *(u32*)((char*)rec + 0x10) = 0xffffffff;
+            rec->m00 = g_16dad08;
+            rec->m04 = g_16dad0c;
+            rec->m08 = g_16dad10;
+            rec->m0c = 0;
+            rec->m10 = 0xffffffff;
             pv = rec;
         }
         cVarListSerializer ser2;
@@ -902,8 +922,8 @@ void __fastcall FUN_00ff2e80(cCitySummary* ecx_this, void* edx, void* stream)
         }
     }
 
-    int n = (int)(((long long)(*(int*)((char*)ecx_this + 4) - *(int*)((char*)ecx_this + 0)) * -0x2aaaaaab) >> 32);
-    *(int*)((char*)ecx_this + 4) += ((n >> 1) - (n >> 31)) * 0xc;
+    int n = (int)(((long long)((int)ecx_this->mPacked.mEnd - (int)ecx_this->mPacked.mBegin) * -0x2aaaaaab) >> 32);
+    ecx_this->mPacked.mEnd = (void*)((int)ecx_this->mPacked.mEnd + ((n >> 1) - (n >> 31)) * 0xc);
 
     ser.Serialize(stream);
 }
