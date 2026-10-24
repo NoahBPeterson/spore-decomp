@@ -1,0 +1,3 @@
+00e44200 SP::cSPUITimeline::Show  # ?Show@cSPUITimeline@@QAEXH@Z
+00e449b0 SP::cSPUITimeline::HandleTimelineMessage  # ?HandleTimelineMessage@cSPUITimeline@@QAE_NIPAX@Z (MATCH)
+00e44a30 SP::cSPUITimelineShutdown::Destroy  # ?Destroy@cSPUITimelineShutdown@@QAEXXZ
