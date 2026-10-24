@@ -1,0 +1,25 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00dd0230/s00dd0230.cpp  ?VehicleTree_AttackCityOrder_Activate@@YA_NPAVcVehicle@@IIIIPAPAVcMilitaryAttackCityOrder@@@Z  00dd0230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?GetCityBannerId@cMilitaryAttackCityOrder@@QAEIXZ  00dd0550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?QueryInterface@cMilitaryAttackCityOrder@@QAEPAXI@Z  00dd0590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?IsInSimulatorContext@cMilitaryAttackCityOrder@@QAE_NXZ  00dd05e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?IsActive@cMilitaryAttackCityOrder@@QAE_NXZ  00dd0600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?QueryInterface2@cMilitaryAttackCityOrder@@QAEPAXI@Z  00dd0610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?GetIconKey@cMilitaryAttackCityOrder@@QAEIXZ  00dd0650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?GetMissionKey@cMilitaryAttackCityOrder@@QAEIXZ  00dd06a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?AssignFromScenario@AssetDiscovery_Data@@QAEXPAXI@Z  00dd0710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?GetAvatarName@AssetDiscovery_Data@@QAEIXZ  00dd0940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?GetCreatureName@AssetDiscovery_Data@@QAEIXZ  00dd0960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?GetSceneKey@AssetDiscovery_Data@@QAEXPAI@Z  00dd0990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?GetSceneKeyOut@AssetDiscovery_Data@@QAEPAIPAI@Z  00dd0a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?GetStatKeyOut@AssetDiscovery_Data@@QAEPAIPAI@Z  00dd0ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?GetField78@AssetDiscovery_Data@@QAE_KXZ  00dd0b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?ConstructBase@AssetDiscovery_Data@@QAEPAXXZ  00dd0b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?AssignCityName@AssetDiscovery_DataCStr@@QAEXPAUeastl_wstring@@@Z  00dd0c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?CreateAssetDiscoveryDataTag@@YAPAXXZ  00dd0c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?ConstructString@AssetDiscovery_DataCStr@@QAEPAXXZ  00dd0ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?Delete@AssetDiscovery_DataCStr@@QAEPAXE@Z  00dd0cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?CreateAssetDiscoveryData@@YAPAXXZ  00dd0d50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?CollectTerrainKeys@AssetDiscovery_Data@@QAE_NPAUeastl_u32vec@@@Z  00dd1070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?SetKeyAgain@SomeObj@@QAEXI@Z  00dd1240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00dd0230/s00dd0230.cpp  ?SomeObj_DoMessage@@YG_NPAXPAUSomeMessage@@@Z  00dd1250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

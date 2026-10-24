@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00dd0e10  436  approximate; switch on mField_84-1 (1..5, case 3 = default) reconstructed with the case-1/2/4/5 paths and the wstring/cString calls, but the entry virtual dispatch (slot 3, not 2), the shared `return pText->mpBegin` default path and several local-wstring lifetimes are still wrong, so several branches are stubbed/omitted

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00dd0380  374  complete; body matches instruction-for-instruction except VS2008 assigned `this` to ebp (spilled across the loop) where the original kept it in ebx, and evaluates the x87 distance temporaries in z,y,x order instead of x,y,z; dist-compare direction (`stat > d`, edx+0x50 on &mCombatant) and the `mDisplay.mFlags |= 0x800` tail are recovered but the emit differs (original folds as `add eax,0x120; or [eax+0x50]`)
+00dd07f0  110  complete; every switch path/call reconstructed, but the original tail-merges the identical `mEnumValue = 0/1/3/4; return` blocks across the two nested switches and orders the blocks differently; `add esp,4` is also split differently
+00dd0da0  68   complete ConstructPlain body (byte-identical 32-byte run); the VA's chk range spans 100 bytes because it also covers the factory at 0xdd0dc0, which is not a slice VA, so this VA cannot be a single symbol
