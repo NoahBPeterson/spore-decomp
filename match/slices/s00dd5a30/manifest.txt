@@ -1,0 +1,10 @@
+slices/s00dd5a30/s00dd5a30.cpp  ?GetEventInstanceID@cSPUIEventLog@@QAEPAVcFeedbackEvent@@II@Z  00dd5d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd5a30/s00dd5a30.cpp  ?find_in_history@cSPUIEventLog@@QAEPAVcFeedbackEvent@@PAV2@@Z  00dd5dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd5a30/s00dd5a30.cpp  ?Update@BytePropertyCache@@QAE_NPAX@Z  00dd5e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd5a30/s00dd5a30.cpp  ?find_event@cSPUIEventLog@@QAEPAVcFeedbackEvent@@I@Z  00dd6710  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd5a30/s00dd5a30.cpp  ?EventDoNotAddToHistory@cSPUIEventLog@@QAE_NII@Z  00dd67d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd5a30/s00dd5a30.cpp  ?GetPositionOfLastEvent@cSPUIEventLog@@QAE_NPAM@Z  00dd6810  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd5a30/s00dd5a30.cpp  ?GetEventText@cSPUIEventLog@@QAEPAXH@Z  00dd68e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd5a30/s00dd5a30.cpp  ?ModifyData@cSPUIEventLog@@QAE_NII@Z  00dd6930  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd5a30/s00dd5a30.cpp  ?ModifyUserData@cSPUIEventLog@@QAE_NIPAUIUnknown32@@@Z  00dd6980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd5a30/s00dd5a30.cpp  ?GetEventData@cSPUIEventLog@@QAE_NIPAI00PAPAUIUnknown32@@@Z  00dd69f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,4 @@
+00dd5a30 294 complete; FAIL equiv (5 valid inputs, ours faults on a garbage-vtable path) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00dd5bb0 561 complete; WEAK equiv (259 valid, 8.8% coverage, no mismatch) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00dd5e90 399 complete; UNSUPPORTED equiv (import:iswctype) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00dd6570 307 complete; UNSUPPORTED equiv (0/400 valid inputs) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
