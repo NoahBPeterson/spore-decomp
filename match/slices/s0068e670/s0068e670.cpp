@@ -621,8 +621,9 @@ extern "C" int FUN_68F570(Outer570* p) {
 // =====================================================================
 // @ 0x0068f5a0  invoke slot 0 of *b with a
 // =====================================================================
-extern "C" void FUN_68F5A0(void* a, void** b) {
-    ((void (__cdecl*)(void*))((void**)*b)[0])(a);
+struct Callable68F5A0 { virtual void f(void* a); };
+extern "C" void FUN_68F5A0(void* a, Callable68F5A0* b) {
+    b->f(a);
 }
 
 // =====================================================================

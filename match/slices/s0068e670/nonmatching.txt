@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 0068f570  3    complete: notify callback + virtual teardown call; only the vtable/function register choice (eax/edx) differs [equiv: PASS]
-0068f5a0  6    complete: indirect call through *b slot 0; vtable/base registers and stack balance differ [equiv: FAIL]
+0068f5a0  0    complete: virtual call b->f(a) through vtable slot 0; the old raw __cdecl function-pointer form missed the this/ecx setup and the callee's ret-4 stack cleanup. Byte-exact reconstructed; moved to manifest.txt (row kept).
 0068e670  441  complete: range-coder/graphic-header parse; both branches + magic compare + InitMask/Read calls present; memcmp loop register/pointer allocation and frame-slot order differ [equiv: WEAK]
 0068e8f0  146  complete: bitmap alloc/reset (stride/width/height/flag, vector assign/erase); expression evaluation order + reused-arg slot for the zero fill differ [equiv: PASS]
 0068e9a0  332  complete: serialised-stream deserialize (Seek/Read header, magic/size checks, resize, CRC32 verify, eraseAll on failure); frame-slot/register allocation differs [equiv: WEAK]

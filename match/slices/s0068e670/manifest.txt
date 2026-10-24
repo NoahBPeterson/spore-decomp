@@ -7,3 +7,4 @@ slices/s0068e670/s0068e670.cpp  ?Set@ClsF5B0@@QAEXPAUVObj@@@Z            0068f5b
 slices/s0068e670/s0068e670.cpp  ?AssignFill@VecU8@@QAEXIPBX@Z            0068e8a0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0068e670/s0068e670.cpp  ??0RefObj@@QAE@XZ                       0068eff0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0068e670/s0068e670.cpp  ??1RefObj@@UAE@XZ                       0068f050  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0068e670/s0068e670.cpp  _FUN_68F5A0                              0068f5a0  /O2 /MD /Gy /EHsc /TP /GS-
