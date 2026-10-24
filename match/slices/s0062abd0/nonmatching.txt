@@ -2,3 +2,9 @@
 0062ace0  126  FUN_0062ace0: complete; original copies the two Vec3 corners into stack slots before the SSE subtractions
 0062b000  189  FUN_0062b000: complete; virtual-call register scheduling / loop shape differs (no similar-size symbol)
 0062b980   86  FUN_0062b980: complete; vector erase/copy helper form differs
+0062abd0  189  SP::cSPPlayMode::MakeCreaturesFaceCamera: complete; retail uses x87 for the dot/length math and a packed normalisation schedule; equiv: FAIL (5/5 valid inputs mismatched, first: execution — ours faults writing where original returns normally)
+0062ad70  573  cSPPlayMode::ad70 (ret 0x1c): complete; in-place rotation toward the creature reference point; equiv: UNSUPPORTED (harness error: 'I' format requires 0 <= number <= 4294967295)
+0062b1c0  317  SP::cSPPlayMode::cSPPlayMode: complete; retail layout offsets differ from the 2008 PDB; equiv: FAIL (5/5 valid inputs mismatched, first: eax return value 0x40010000 vs 0)
+0062b3a0  384  SP::cSPPlayMode::~cSPPlayMode: complete; string-table teardown + subobject chain dtors; equiv: UNSUPPORTED (0/400 valid inputs; discards fault(read)=310 fault(write)=70 import:VirtualFree=16)
+0062b5c0  645  SP::cSPPlayMode::HandleMessage (ret 8): complete; big string/UI dispatch switch; equiv: FAIL (5/8 valid inputs mismatched, first: eax return value 0x24c37600 vs 0)
+0062ba10  210  cSPPlayMode::IsEventForBaby (ret 4): complete; baby-index bookkeeping + UI group hide; equiv: FAIL (5/27 valid inputs mismatched, first: execution — ours faults reading where original returns normally)
