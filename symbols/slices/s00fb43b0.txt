@@ -1,1 +1,14 @@
-00fb43b0 RebuildIndices  # SP::cTerrainSphereQuad::RebuildIndices (PDB candidate), retail layout
+# slice s00fb43b0 (gold7) - terrain sphere quads, decals and index rebuild
+# Modelled types:
+#   SphQuad        mFace @0x1c; floats @0x20/@0x24/@0x28/@0x2c; uint @0x68; ptr @0x70;
+#                  decal vector begin/end @0x80/@0x84; insert vector begin/end @0x154/@0x158;
+#                  quad index mask @0x168/@0x16c; dirty byte @0x91; children @+8 (stride 4)
+#   TerrainSphereQuad  full initialiser layout +0x00..+0x1a8: float m20..m3c, int-pattern
+#                  pairs m70[3]/m7c[3], ints m88/m8c, counters DAT_016d664c/DAT_016d6650
+#   DecalRec       0x14-byte record: AABB test fields, face index
+00fb43b0 ?RebuildIndices@Quad@@QAEXXZ  # thiscall: quad index rebuild (pre-existing anchor; row lives in nonmatching.txt)
+00fb4a50 ?FUN_00fb4a50@SphQuad@@QAEXPAH@Z  # thiscall(arg): scan 0x14-stride decal records for mFace, AABB test, insert @+0x154 (stride 0x10), OR masks into +0x168/+0x16c, set +0x91, recurse 4 children (PDB: SP::cTerrainSphereQuad::AddDecal)
+00fb4c10 ?FUN_00fb4c10@SphQuad@@QAEXI@Z  # thiscall(n): if n exceeds (end-begin)/200 grow with a 200-byte stack buffer via FUN_00fb39b0, else shrink to self[0]+n*200 via FUN_00fb3240
+00fb4c90 ?FUN_00fb4c90@@YIPAUTerrainSphereQuad@@PAU1@@Z  # free __cdecl(self,src)->ptr: copy/initialise the whole TerrainSphereQuad (floats, pattern ints, counters) and return self
+00fb4e10 ?FUN_00fb4e10@SphQuad@@QAEXPAHHI00H@Z  # thiscall(owner,arg3,flag,float*,float*,int): 1/sqrt normalisation + DAT_01491094 permutation + owner vtbl +0xc/+0x10, then recurse the four children through FUN_00fb4a50
+00fb5090 ?FUN_00fb5090@@YIXPAH@Z  # free __fastcall(int** p)->uint: loop 4x over p+8 stride 4, destroy FUN_00fb3e20 object, optional FUN_00fb4340 + operator delete, then zero the slot unconditionally
