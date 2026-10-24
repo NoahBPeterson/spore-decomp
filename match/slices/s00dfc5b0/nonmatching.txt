@@ -1,6 +1,6 @@
 # va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
 00dfc5b0  49  member pointer kept in edi vs esi; vector-base reload schedule differs
 00dfc600  65  cl lowered the pointer loop to a magic-multiply trip count
-00dfcc40  61  vector-base reload/register schedule differs
+00dfcc40  64  complete equivalent; early-out tests the sign bit of this+0 like retail, then frees this+0x210 and runs the +0x2c vector cleanup/FreeRawBlock; difftest PASS (251 valid, 100% coverage); remaining byte diff is vector-base reload/register schedule (size 76/78)
 00dfd300  114 nested 0x238-record destructor loop; register allocation differs
 00dfca50  2  complete; original keeps the byte copy mOwner in bl (source base reg) vs cl; /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (no object symbol match)

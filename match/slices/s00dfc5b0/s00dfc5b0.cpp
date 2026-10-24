@@ -236,7 +236,8 @@ void BlobAC0::dtor() {
 //  0x00dfcc40  conditional destructor (uses this+0x210, +0x2c, +0x30)
 // ===========================================================================
 struct BlobC40 {
-    char pad_00[0x2c];
+    int   mField00;          // +0x00 sign flag
+    char  pad_04[0x2c - 0x04];
     void* mp2c;              // +0x2c
     void* mp30;              // +0x30
     char pad_34[0x210 - 0x34];
@@ -245,7 +246,7 @@ struct BlobC40 {
 };
 // @ 0x00dfcc40
 void BlobC40::dtor() {
-    if (mField210 < 0) return;
+    if (mField00 < 0) return;
     int a = mField210;
     if (a && *(int*)(a - 4) != 0) operator_delete((void*)a);
     ((Sub28Vec*)((char*)this + 0x2c))->sub_dfb850(mp2c, mp30);
