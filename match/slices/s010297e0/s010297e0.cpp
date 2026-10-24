@@ -262,6 +262,8 @@ bool FUN_01029a60(Planet* p, bool b) {
     if (r == 0) {
         int cur = (int)p->f544;
         if (cur == inv->f508.v10()) r = 1;
+    } else {
+        r = 1;
     }
     Creature* c = p->f6c8;
     if (c && c->base.PlayIdleAnimation(0x10, 0)) return false;
