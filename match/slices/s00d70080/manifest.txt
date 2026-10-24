@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d70080/s00d70080.cpp  ?WARN_AVATAR_Tick@SP@@YA_NPAVcSPCreatureBase@1@HHHHPAH@Z  00d70280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d70080/s00d70080.cpp  ?AVATAR_PARTY_Activate@SP@@YA_NPAVcSPCreatureBase@1@HHHHPAH@Z  00d70310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d70080/s00d70080.cpp  ?FUN_00d70340@@YAXPAVcSPCreatureBase@SP@@HHHHPAH@Z  00d70340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d70080/s00d70080.cpp  ?FUN_00d704f0@@YAMPAVcSPCreatureBase@SP@@@Z  00d704f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d70080/s00d70080.cpp  ?FUN_00d70510@@YA_NPAVcSPCreatureBase@SP@@HHHHPAH@Z  00d70510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d70080/s00d70080.cpp  ?SLEEP_Deactivate@SP@@YAXPAVcSPCreatureBase@1@HHHHPAH@Z  00d70560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d70080/s00d70080.cpp  ?WAIT_FOR_CARCASS_Activate@SP@@YA_NPAVcSPCreatureBase@1@HHHHHPAUTargetHolder@1@@Z  00d70bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

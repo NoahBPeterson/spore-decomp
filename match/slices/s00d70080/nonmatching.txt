@@ -1,0 +1,9 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00d70080  361  complete SP::WARN_AVATAR_memory_block::FindAnimTargetPosition; size 510 vs 502; call sequence/slots match (incl. the two avatar Loco::GetPosition calls), x87/SSE float scheduling and Vec3 temp slots differ; equiv WEAK (no mismatch)
+00d703a0  157  complete SP::WARN_AVATAR_Activate; size 325 vs 329; same calls/slots, stack frame and constant-pool/float codegen scheduling differ; equiv WEAK (no mismatch)
+00d705b0   41  complete SP::FUN_00d705b0; size 55 vs 56; only diff is home->m164 load: orig `add eax,0x164; mov eax,[eax]` vs folded `mov eax,[eax+0x164]`; equiv PASS
+00d705f0  967  complete SP::SLEEP_Tick; size 940 vs 1210; same calls/slots, switch layout / stack frame / float materialization differ substantially; equiv WEAK (no mismatch)
+00d70ab0   24  complete SP::PUKE_Activate; size 92 vs 94; flags bit 9 orig materializes `mov edx,[b58]; shr edx,9; test dl,1` vs folded `test dword [b58],0x200`; tail call differs; equiv WEAK (no mismatch)
+00d70b10  161  complete SP::FUN_00d70b10; size 223 vs 210; same calls/slots, float codegen scheduling and stack frame differ; equiv PASS
+00d70c70  413  complete SP::WAIT_FOR_CARCASS_BABY_Tick; size 609 vs 606; same calls/slots, switch layout and float/Vec3 temp slots differ; equiv WEAK (no mismatch)
+00d70ed0  116  complete SP::FUN_00d70ed0; size 269 vs 267; same calls/slots, stack frame and AssignInteractor/vtable scheduling differ; equiv PASS
