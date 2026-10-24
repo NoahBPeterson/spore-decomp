@@ -135,7 +135,7 @@ struct C {
     void    FUN_00f3fd90(int* p);
     char    FUN_00f3ff70(Noun* n);
     char    FUN_00f40090(Noun* n);
-    uint8_t FUN_00f401a0();
+    bool    FUN_00f401a0();
     uint8_t FUN_00f40240(Noun* n, uint32_t* pstart);
     uint8_t FUN_00f40370();
     uint8_t FUN_00f40500(int idx, int* p, char flag);
@@ -305,11 +305,13 @@ char C::FUN_00f40090(Noun* n)
 // ---------------------------------------------------------------------------
 // @ 0x00f401a0
 // ---------------------------------------------------------------------------
-uint8_t C::FUN_00f401a0()
+// returns an all-refreshed flag: the original only ever writes al (`mov al,bl`), so the
+// return type is bool (a uint8_t return made the harness compare the stale ah byte too).
+bool C::FUN_00f401a0()
 {
-    uint8_t b = 1;
+    bool b = true;
     if (m8c != 0)
-        b = (uint8_t)(FUN_00f40090(m8c) != 0);
+        b = (FUN_00f40090(m8c) != 0);
 
     World* w = world;
     Entry* e = (w->n2c24 < 0x3fffffff)
@@ -317,8 +319,8 @@ uint8_t C::FUN_00f401a0()
              : (Entry*)w->v238.end;
     Entry* end = (Entry*)w->v238.end;
     while (end != e) {
-        uint8_t r = (uint8_t)(FUN_00f40090(&e->node) != 0);
-        b = (b && r) ? 1 : 0;
+        bool r = (FUN_00f40090(&e->node) != 0);
+        b = (b && r);
         for (;;) {
             uint32_t f = e->hdr.b30;
             e = (Entry*)((char*)e + 0x238);
@@ -642,9 +644,11 @@ int C::FUN_00f40ae0(void* e)
         if (slot)
             slot->ctor();
     } else {
-        char tmp[0x10];
-        Entry38* t = (Entry38*)tmp;
-        void* v = t->ctor();
+        // grow-path temp: the original's frame (sub esp,0x38) holds the temp at [esp+0x10]
+        // and FUN_00f257b0 writes the full 0x38-byte Entry38, so the buffer is sizeof(Entry38).
+        // A shorter buffer overflowed the cookie, the return address and the argument slot.
+        Entry38 tmp;
+        void* v = tmp.ctor();
         w->v38.grow(w->v38.end, v);
     }
     World* w2 = world;
