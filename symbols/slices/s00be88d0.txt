@@ -1,1 +1,3 @@
-00be88d0 SP::cCity::ChangeCivilization  # retail cCity layout (this+0x29c city type, +0x33c player city, +0x590 civ); name guess from dev PDB ReallyChangeCivilization (different signature)
+00be88d0 SP::cCity::ChangeCivilization  # pre-existing committed function (complete, nonmatching)
+00be9250 SP::cCity::F_be9250  # rbtree<int,pair<int,wstring>> find at +0x570; miss -> -1.0f, hit -> civ->F_bf01e0 float through 0xbe6d90 and 0xceeb80
+00be92e0 SP::cCity::F_be92e0  # change this city's civilization: swap civ, fire tutorial/achievement/audio hooks, post CVG_Capture(_Nuked) trigger + message
