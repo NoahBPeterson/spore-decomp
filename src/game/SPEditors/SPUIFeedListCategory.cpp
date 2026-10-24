@@ -149,7 +149,8 @@ struct WindowManager {
 };
 void  __cdecl EA_RemoveHandler(void* h, uint32_t a, uint32_t b, uint32_t c, uint32_t d); // 0x00571db0
 struct D4Obj { void FUN_00829d30(); };
-void  __stdcall FUN_008294c0(void* p, int v);                 // 0x008294c0
+struct FeedD4 { char pad0[9]; bool f9; bool fa; void FUN_008294c0(void* p, int v); }; // 0x008294c0 thiscall
+struct FeedNotify { void FUN_00662b00(void* p); };            // 0x00662b00 thiscall on m60
 bool  __cdecl FUN_00805150(void* a, void* b);                 // 0x00805150
 bool  __cdecl StartBanMode(uint32_t id);                      // 0x008d2fb0
 struct PredObj { bool FUN_00a98020(); };
@@ -570,10 +571,9 @@ void cSPUIFeedListCategory::FUN_00663ef0(int param)
 // @ 0x00664390
 void cSPUIFeedListCategory::FUN_00664390(float a, float b, float c, float d)
 {
-    struct D4 { char pad0[9]; bool f9; bool fa; };
-    D4* d4 = (D4*)md4;
+    FeedD4* d4 = (FeedD4*)md4;
     if (d4 && (d4->f9 || d4->fa)) {
-        FUN_008294c0((char*)this + 0x48, 1);
+        d4->FUN_008294c0((char*)this + 0x48, 1);
     } else if (m74) {
         float r[4] = {0.0f, 0.0f, 0.0f, 0.0f};
         m74->SetArea(r);
@@ -606,9 +606,11 @@ void cSPUIFeedListCategory::FUN_00664480(bool expanded)
 {
     if (expanded == m9c) return;
     m9c = expanded;
-    IWindow* btn = m80 ? m80->FindWindow(0x8ed27e7a) : 0;
-    ((IWindow*)btn)->SetStateFlag(4, m9c);
-    if (m60) FUN_00662b00(this);
+    if (m80) {
+        IWindow* btn = m80 ? m80->FindWindow(0x8ed27e7a) : 0;
+        ((IWindow*)btn)->SetStateFlag(4, m9c);
+    }
+    if (m60) ((FeedNotify*)m60)->FUN_00662b00(this);
 }
 
 

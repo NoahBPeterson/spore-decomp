@@ -1,17 +1,17 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
 00663be0  456  FeedListCategory message dispatch (548-byte switch on msg+8); behavior complete, but MSVC block ordering (def block placement), sub_b4/sub_b3 body order and register assignment differ; equiv: WEAK (29% coverage, no mismatch)
-00663ef0  869  layout sweep; byte-exact-size match (1173) is only reached with /fp:fast (SSE lerp), the recorded /arch:SSE-no-/fp:fast build bloats it to 1407 (no symbol of similar size); residual diffs are frame size 0x30 vs 0x24 and value-spill layout; equiv: WEAK (5.9% coverage, no mismatch)
+00663ef0  869  layout sweep; byte-exact-size match (1173) is only reached with /fp:fast (SSE lerp), the recorded /arch:SSE-no-/fp:fast build bloats it to 1407 (no symbol of similar size); residual diffs are frame size 0x30 vs 0x24 and value-spill layout; equiv: WEAK (180 valid inputs < 200, 5.9% coverage, no mismatch) - m7c->GetRect() returns a fake pointer, so 216/400 inputs fault inside the ORIGINAL and are discarded, leaving only the m7c/m70/m74 == 0 early exits covered
 00663e50  11   Shutdown; AttachProc receiver/arg register (eax vs edx) and vtable-load order differ
-00664390  4    area/height update; md4 temp held in eax instead of ecx
-00664480  67   Expand; ternary null-check/merge schedule differs
+00664390  4    area/height update; FUN_008294c0 is a thiscall member of the md4 object (dummy FeedD4), so md4 reaches ecx as in the original; only the area-pointer temp (eax vs ecx) rendering differs; equiv: PASS (223 valid inputs, 100% coverage)
+00664480  67   Expand; the whole FindWindow/SetStateFlag block is guarded by `if (m80)` (matching the original's merge), and 0x00662b00 is a thiscall member on m60 (dummy FeedNotify) instead of a cdecl free call; ternary null-check/merge schedule differs; equiv: PASS (269 valid inputs, 96.8% coverage)
 006644e0  57   visibility toggle; float join goes x87 instead of the original's shared xmm0 store
 00664550  38   predicate; return-value materialisation (setcc vs shared xor eax,eax / mov eax,1)
-00664610  34   element-at; original loads the index into edx first, cl hoists the header loads
+00664610  34   element-at; original loads the index into edx first, cl hoists the header loads; a `_ReadWriteBarrier()` inside the bounds check pins the header reload after it, matching the original's order; equiv: PASS (382 valid inputs, 100% coverage)
 00664640  54   find-by-0x17c; cl assigns esi=begin/edx=index, original esi=index/ecx=begin
 00664680  54   find-by-0x134; same register-assignment divergence; equiv: PASS (100% coverage)
 006646c0  54   find-by-0x188; same register-assignment divergence; equiv: PASS (100% coverage)
 00664700  231  intrusive insertion-sort primitive; allocation/compare schedule differs
 00664800  195  intrusive insertion-sort primitive; allocation/compare schedule differs
-00664960  32   eastl::promote_heap<AutoRefCount,AlphabeticalFeedSort>; comparator inlining/register order differs; equiv: FAIL (5/5 valid inputs mismatched)
+00664960  32   eastl::promote_heap<AutoRefCount,AlphabeticalFeedSort>; the value is taken BY VALUE (copy ctor AddRef / dtor Release), as the original does - a `T&` parameter changed the whole loop and the tail; written as a plain concrete function over (AutoRefCountT*, int, int, AutoRefCountT, AlphabeticalFeedSort); comparator inlining/register order differs; equiv: WEAK (254 valid inputs, 43.2% coverage, no mismatch)
 00664a60  36   HandleMessage; branch inversion and find-loop tail schedule differ
-00664ad0  32   eastl::adjust_heap<AutoRefCount,AlphabeticalFeedSort>; comparator/heap schedule differs; equiv: FAIL (5/5 valid inputs mismatched)
+00664ad0  32   eastl::adjust_heap<AutoRefCount,AlphabeticalFeedSort>; same by-value value parameter and plain concrete function as 00664960, so the inner promote_heap call resolves to 0x00664960 through the annotation; comparator/heap schedule differs; equiv: PASS (268 valid inputs, 80.3% coverage)

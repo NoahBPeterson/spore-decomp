@@ -3,6 +3,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /GS-.
 #include "types.h"
 #include <math.h>
+#include <intrin.h>
 
 struct IWindow;
 
@@ -74,12 +75,16 @@ struct AlphabeticalFeedSort {
 };
 
 // =============================================================================
-// EASTL heap primitives (out-of-line so adjust_heap emits a real call)
+// EASTL heap primitives (out-of-line so adjust_heap emits a real call).  The retail VAs are the
+// AutoRefCountT / AlphabeticalFeedSort instantiations, so they are written as plain functions here
+// (the value is taken by value: the original copies it, AddRef/Release included).
 // =============================================================================
 // @ 0x00664960
-template <typename T, typename Compare>
-__declspec(noinline) void promote_heap(T* first, int topPosition, int position, const T& value) {
-    Compare compare;
+__declspec(noinline)
+void promote_heap(AutoRefCountT* first, int topPosition, int position,
+                  AutoRefCountT value, AlphabeticalFeedSort compare);   // 0x00664960
+void promote_heap(AutoRefCountT* first, int topPosition, int position,
+                  AutoRefCountT value, AlphabeticalFeedSort compare) {
     for (int parentPosition = (position - 1) >> 1;
          (position > topPosition) && compare(first[parentPosition], value);
          parentPosition = (position - 1) >> 1) {
@@ -90,9 +95,8 @@ __declspec(noinline) void promote_heap(T* first, int topPosition, int position, 
 }
 
 // @ 0x00664ad0
-template <typename T, typename Compare>
-void adjust_heap(T* first, int topPosition, int heapSize, int position, const T& value) {
-    Compare compare;
+void adjust_heap(AutoRefCountT* first, int topPosition, int heapSize, int position,
+                 AutoRefCountT value, AlphabeticalFeedSort compare) {
     int childPosition = (2 * position) + 2;
     for (; childPosition < heapSize; childPosition = (2 * childPosition) + 2) {
         if (compare(first[childPosition], first[childPosition - 1]))
@@ -104,7 +108,7 @@ void adjust_heap(T* first, int topPosition, int heapSize, int position, const T&
         first[position] = first[childPosition - 1];
         position = childPosition - 1;
     }
-    promote_heap<T, Compare>(first, topPosition, position, value);
+    promote_heap(first, topPosition, position, value, compare);
 }
 
 // =============================================================================
@@ -209,7 +213,8 @@ struct WindowManager {
 // -----------------------------------------------------------------------------
 void  __cdecl EA_RemoveHandler(void* h, uint32_t a, uint32_t b, uint32_t c, uint32_t d); // 0x00571db0
 struct D4Obj { void FUN_00829d30(); void FUN_008297b0(); };    // +0x00c; 0x008297b0
-void  __stdcall FUN_008294c0(void* p, int v);                 // 0x008294c0
+struct FeedD4 { char pad0[9]; bool f9; bool fa; void FUN_008294c0(void* p, int v); }; // 0x008294c0 thiscall
+
 bool  __cdecl FUN_00805150(void* a, void* b);                 // 0x00805150
 bool  __cdecl StartBanMode(uint32_t id);                      // 0x008d2fb0
 struct PredObj { bool FUN_00a98020(); };
@@ -217,7 +222,7 @@ void* __cdecl SP_WindowManager();                             // 0x0067caa0
 void* __cdecl SP_GetSystemAT();                               // 0x00a206f0
 void  __cdecl SP_KillSetiEffects(uint32_t id, void* at);      // 0x00435ed0
 void* __cdecl FUN_005c2570(void* p);                          // 0x005c2570 interface_cast
-void  __cdecl FUN_00662b00(void* p);                          // 0x00662b00
+struct FeedNotify { void FUN_00662b00(void* p); };  // 0x00662b00 thiscall on m60
 void  __cdecl FUN_00805ef0(void* out, void* w);               // 0x00805ef0
 
 extern uint32_t g_fp1;   // 0x01486110
@@ -342,7 +347,7 @@ bool cSPUIFeedListCategory::FUN_00663be0(void* sender, void* msg) {
                 return false;
             }
         }
-        if (*(int*)&m5c) FUN_00662b00((char*)this - 4);
+        if (*(int*)&m5c) ((FeedNotify*)*(int*)&m5c)->FUN_00662b00((char*)this - 4);
         return true;
     }
     return false;
@@ -460,10 +465,9 @@ void cSPUIFeedListCategory::FUN_00663ef0(int param) {
 // @ 0x00664390
 // =============================================================================
 void cSPUIFeedListCategory::FUN_00664390(float a, float b, float c, float d) {
-    struct D4 { char pad0[9]; bool f9; bool fa; };
-    D4* d4 = (D4*)md4;
+    FeedD4* d4 = (FeedD4*)md4;
     if (d4 && (d4->f9 || d4->fa)) {
-        FUN_008294c0((char*)this + 0x48, 1);
+        d4->FUN_008294c0((char*)this + 0x48, 1);
     } else if (m74) {
         float r[4] = {0.0f, 0.0f, 0.0f, 0.0f};
         m74->SetArea(r);
@@ -494,9 +498,11 @@ void cSPUIFeedListCategory::FUN_00664440() {
 void cSPUIFeedListCategory::FUN_00664480(bool expanded) {
     if (expanded == m9c) return;
     m9c = expanded;
-    IWindow* btn = m80 ? m80->FindWindow(0x8ed27e7a) : 0;
-    ((IWindow*)btn)->SetStateFlag(4, m9c);
-    if (m60) FUN_00662b00(this);
+    if (m80) {
+        IWindow* btn = m80 ? m80->FindWindow(0x8ed27e7a) : 0;
+        ((IWindow*)btn)->SetStateFlag(4, m9c);
+    }
+    if (m60) ((FeedNotify*)m60)->FUN_00662b00(this);
 }
 
 // =============================================================================
@@ -544,8 +550,10 @@ void cSPUIFeedListCategory::FUN_00664580(bool b) {
 // =============================================================================
 FeedItem* cSPUIFeedListCategory::FUN_00664610(uint32_t idx) {
     FeedItem* result = 0;
-    if (idx < (uint32_t)((m8c - m88)))
+    if (idx < (uint32_t)(m8c - m88)) {
+        _ReadWriteBarrier();                    // original loads the index (edx) before the header
         result = m88[idx];
+    }
     return result;
 }
 
@@ -684,9 +692,5 @@ void __cdecl FUN_00664800(AutoRefCountT* first, AutoRefCountT* last) {
 }
 
 // =============================================================================
-// explicit instantiations: promote_heap / adjust_heap
+// explicit instantiations: none (the VAs above are the concrete instantiations)
 // =============================================================================
-template void promote_heap<AutoRefCountT, AlphabeticalFeedSort>(
-    AutoRefCountT*, int, int, const AutoRefCountT&);
-template void adjust_heap<AutoRefCountT, AlphabeticalFeedSort>(
-    AutoRefCountT*, int, int, int, const AutoRefCountT&);
