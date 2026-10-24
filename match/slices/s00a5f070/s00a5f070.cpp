@@ -3,15 +3,17 @@
 // pipe object), 0xa5f070-0xa5ff36.
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 //
-// 16/25 VAs are byte-exact (manifest.txt).  The remaining 9 are in
-// partial.txt (decompiled, semantically faithful, cl-schedule residue) and
-// nonmatching.txt (the analyser's 216-byte metro_free+metro_new merge at
-// 0xa5f460).
+// 16/25 VAs are byte-exact (manifest.txt).  The remaining 9 are complete,
+// behaviourally-faithful reconstructions in nonmatching.txt: the 8 setup/tick
+// functions below (cl 19.x temp-slot / register-allocation residue) and the
+// analyser's 216-byte metro_free+metro_new merge at 0xa5f460.
 //
-// Equivalence gate (default inputs): PASS for every scored VA except the two
-// allocators line_new (0xa5f9f0) and timer_new (0xa5fce0), which read their
-// class global (spLineClass/spTimerClass) -- null in the harness, so all
-// inputs fault(read) and are reported UNSUPPORTED.
+// Equivalence gate (default inputs): PASS for line_tick (0xa5f630), line_float
+// (0xa5f750) and pipe_tick (0xa5ff10); UNSUPPORTED for the four setup
+// functions, for pipe_list (0xa5fe20, one unresolved memcpy reference) and for
+// the two allocators line_new (0xa5f9f0) and timer_new (0xa5fce0), which read
+// their class global (spLineClass/spTimerClass) -- not live in the harness, so
+// all inputs fault(read).
 #include "types.h"
 
 namespace EA { namespace Audio { namespace Eapd {
@@ -158,24 +160,15 @@ void* delay_new(float f)
 bool delay_setup()
 {
     t_symbol sym;
-    t_symbol* s = gensym(&sym, "delay");
-    spDelayClass = class_new6(*s, (void*)delay_new, (void*)metro_new,
+    spDelayClass = class_new6(*gensym(&sym, "delay"), (void*)delay_new, (void*)metro_new,
                               0x30, 0, 5);
     bool ok = spDelayClass != 0;
-    t_symbol sym2;
-    t_symbol* s2 = gensym(&sym2, "del");
-    ok &= class_addcreator((void*)delay_new, *s2, 5, 0);
+    ok &= class_addcreator((void*)delay_new, *gensym(&sym, "del"), 5, 0);
     ok &= class_addbang(spDelayClass, (void*)spin_bang);
-    t_symbol sym3;
-    t_symbol* s3 = gensym(&sym3, "stop");
-    ok &= class_addmethod1(spDelayClass, (void*)spin_stop, *s3, 0);
-    t_symbol sym4;
-    t_symbol* s4 = gensym(&sym4, "ft1");
-    ok &= class_addmethod2(spDelayClass, (void*)spin_float, *s4, 1, 0);
+    ok &= class_addmethod1(spDelayClass, (void*)spin_stop, *gensym(&sym, "stop"), 0);
+    ok &= class_addmethod2(spDelayClass, (void*)spin_float, *gensym(&sym, "ft1"), 1, 0);
     ok &= class_doaddfloat(spDelayClass, (void*)delay_doaddfloat);
-    t_symbol sym5;
-    t_symbol* s5 = gensym(&sym5, "pause");
-    ok &= class_addmethod2(spDelayClass, (void*)delay_pause, *s5, 1, 0);
+    ok &= class_addmethod2(spDelayClass, (void*)delay_pause, *gensym(&sym, "pause"), 1, 0);
     return ok;
 }
 
@@ -264,21 +257,14 @@ void* metro_new(float f)
 bool metro_setup()
 {
     t_symbol sym;
-    t_symbol* s = gensym(&sym, "metro");
-    spMetroClass = class_new7(*s, (void*)metro_new, (void*)metro_stop,
+    spMetroClass = class_new7(*gensym(&sym, "metro"), (void*)metro_new, (void*)metro_stop,
                               0x34, 0, 5, 0);
     bool ok = spMetroClass != 0;
     ok &= class_addbang(spMetroClass, (void*)metro_bang);
-    t_symbol sym2;
-    t_symbol* s2 = gensym(&sym2, "stop");
-    ok &= class_addmethod1(spMetroClass, (void*)metro_stop, *s2, 0);
-    t_symbol sym3;
-    t_symbol* s3 = gensym(&sym3, "ft1");
-    ok &= class_addmethod2(spMetroClass, (void*)metro_ft1, *s3, 1, 0);
+    ok &= class_addmethod1(spMetroClass, (void*)metro_stop, *gensym(&sym, "stop"), 0);
+    ok &= class_addmethod2(spMetroClass, (void*)metro_ft1, *gensym(&sym, "ft1"), 1, 0);
     ok &= class_doaddfloat(spMetroClass, (void*)metro_float);
-    t_symbol sym4;
-    t_symbol* s4 = gensym(&sym4, "pause");
-    ok &= class_addmethod2(spMetroClass, (void*)delay_pause, *s4, 1, 0);
+    ok &= class_addmethod2(spMetroClass, (void*)delay_pause, *gensym(&sym, "pause"), 1, 0);
     return ok;
 }
 
@@ -328,7 +314,7 @@ void line_float(char* x, float f)
     double now = clock_getlogicaltime();
     if (*(int*)(x + 0x54) != 0 && *(float*)(x + 0x68) > 0.0f) {
         float v;
-        if (now <= *(double*)(x + 0x38))
+        if (now > *(double*)(x + 0x38))
             v = *(float*)(x + 0x40);
         else
             v = (*(float*)(x + 0x40) - *(float*)(x + 0x50)) *
@@ -444,23 +430,14 @@ void* line_new(float f0, float f1)
 bool line_setup()
 {
     t_symbol sym;
-    t_symbol* s = gensym(&sym, "line");
-    spLineClass = class_new8(*s, (void*)line_new, (void*)metro_new,
+    spLineClass = class_new8(*gensym(&sym, "line"), (void*)line_new, (void*)metro_new,
                              0x70, 0, 5, 5, 0);
     bool ok = spLineClass != 0;
-    t_symbol sym2;
-    t_symbol* s2 = gensym(&sym2, "ft1");
-    ok &= class_addmethod2(spLineClass, (void*)line_ft1, *s2, 1, 0);
-    t_symbol sym3;
-    t_symbol* s3 = gensym(&sym3, "stop");
-    ok &= class_addmethod1(spLineClass, (void*)line_stop, *s3, 0);
-    t_symbol sym4;
-    t_symbol* s4 = gensym(&sym4, "set");
-    ok &= class_addmethod2(spLineClass, (void*)line_set, *s4, 1, 0);
+    ok &= class_addmethod2(spLineClass, (void*)line_ft1, *gensym(&sym, "ft1"), 1, 0);
+    ok &= class_addmethod1(spLineClass, (void*)line_stop, *gensym(&sym, "stop"), 0);
+    ok &= class_addmethod2(spLineClass, (void*)line_set, *gensym(&sym, "set"), 1, 0);
     ok &= class_doaddfloat(spLineClass, (void*)line_float);
-    t_symbol sym5;
-    t_symbol* s5 = gensym(&sym5, "pause");
-    ok &= class_addmethod2(spLineClass, (void*)line_pause, *s5, 1, 0);
+    ok &= class_addmethod2(spLineClass, (void*)line_pause, *gensym(&sym, "pause"), 1, 0);
     return ok;
 }
 
@@ -522,16 +499,11 @@ void* timer_new()
 bool timer_setup()
 {
     t_symbol sym;
-    t_symbol* s = gensym(&sym, "timer");
-    spTimerClass = class_new7(*s, (void*)timer_new, (void*)0, 0x38, 0, 5, 0);
+    spTimerClass = class_new7(*gensym(&sym, "timer"), (void*)timer_new, (void*)0, 0x38, 0, 5, 0);
     bool ok = spTimerClass != 0;
     ok &= class_addbang(spTimerClass, (void*)timer_bang);
-    t_symbol sym2;
-    t_symbol* s2 = gensym(&sym2, "bang2");
-    ok &= class_addmethod1(spTimerClass, (void*)timer_start, *s2, 0);
-    t_symbol sym3;
-    t_symbol* s3 = gensym(&sym3, "pause");
-    ok &= class_addmethod2(spTimerClass, (void*)timer_pause, *s3, 1, 0);
+    ok &= class_addmethod1(spTimerClass, (void*)timer_start, *gensym(&sym, "bang2"), 0);
+    ok &= class_addmethod2(spTimerClass, (void*)timer_pause, *gensym(&sym, "pause"), 1, 0);
     return ok;
 }
 

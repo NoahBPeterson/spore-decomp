@@ -1,8 +1,17 @@
-# Slice s00a5f070 -- metadata merges and structurally-homeless VAs.
-# Rows: bare 8-hex VA, one per line.
+# Slice s00a5f070 -- complete, behaviourally-correct reconstructions that are not
+# byte-exact, plus the analyser's metro_free+metro_new merge at 0xa5f460.
+# Rows: bare 8-hex VA at column 0, then the target size and a one-line reason.
 
 # 00a5f460: the analysis merges metro_free (6 bytes, 0xa5f460:
 #   mov eax,[esp+4]; mov ecx,[eax+0x28]; mov [esp+4],ecx; jmp clock_free)
 #   with metro_new (starts 0xa5f470) into one 216-byte region.  chk.py compares
 #   that whole region against a single symbol, so no single symbol can match.
 00a5f460
+00a5f1e0  282  EA::Audio::Eapd::delay_setup: complete (class_new6("delay") + class_addcreator("del",A_GIMME) + addbang/addmethod/addfloat/pause); the original materialises each gensym out-param in a distinct outgoing-argument temp slot (frame 8) that MSVC will not reproduce from a named t_symbol
+00a5f540  236  EA::Audio::Eapd::metro_setup: complete (class_new7("metro") + addbang/stop/ft1/addfloat/pause); same gensym temp-slot residue as delay_setup
+00a5f630  285  EA::Audio::Eapd::line_tick: complete (logical-time compare, outlet_float ramp over the outconnect list, clock_delay clamped to x_58); original reuses the arg scratch for linediff (frame 0x10) and keeps x in esi, so every frame displacement differs
+00a5f750  338  EA::Audio::Eapd::line_float: complete (pause check, target interpolation, clock reschedule, outlet fan-out); same frame/register residue as line_tick
+00a5fae0  293  EA::Audio::Eapd::line_setup: complete (class_new8("line") + ft1/stop/set/addfloat/pause); same gensym temp-slot residue as delay_setup
+00a5fd70  170  EA::Audio::Eapd::timer_setup: complete (class_new7("timer") + addbang/bang2/pause); same gensym temp-slot residue as delay_setup
+00a5fe20  230  EA::Audio::Eapd::pipe_list: complete (walks the atom list building the pipe point list); the original keeps x in esi with a byte-offset loop induction variable, the compiler picks a different callee-saved order (edi/esi + ebp)
+00a5ff10  215  EA::Audio::Eapd::pipe_tick: complete (scheduled tick draining the pipe queue and re-arming the clock); same callee-saved register-order residue as pipe_list
