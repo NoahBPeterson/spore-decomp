@@ -73,7 +73,7 @@ struct XmlParser {
     // +0x438 flag
 
     void  Fn8e5600(short* p, int n);                 // 0x008e5600
-    int   Fn8e5a20(const char* s, int len, int fin); // 0x008e5a20
+    int   Fn8e5a20(const char* s, int len, unsigned char fin); // 0x008e5a20
     int   Fn8e5730(void* parser, void* uri);         // 0x008e5730
     void  Fn8e59a0(char param2);                     // 0x008e59a0
     void  Fn8e5ca0();                                // 0x008e5ca0
@@ -124,15 +124,14 @@ __declspec(noinline) void XmlParser::Fn8e59a0(char param2)
 }
 
 // @ 0x008e5a20
-int XmlParser::Fn8e5a20(const char* s, int len, int fin)
+int XmlParser::Fn8e5a20(const char* s, int len, unsigned char fin)
 {
     char* c = (char*)this;
     int rc = 0;
     if (XML_Parse(*(void**)(c + 0x220), s, len, fin) == 0) {
         void* doc = *(void**)(c + 4);
         void* uri = *(void**)((char*)doc + 0x48);
-        Fn8e5730(*(void**)(c + 0x220), uri);
-        rc = 0;
+        rc = Fn8e5730(*(void**)(c + 0x220), uri);
     }
     *(int*)(c + 0x228) = *(int*)(c + 0x228) + len;
     return rc;

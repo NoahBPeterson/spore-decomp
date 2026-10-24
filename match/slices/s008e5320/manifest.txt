@@ -7,3 +7,4 @@ slices/s008e5320/s008e5320.cpp  Fn8e5da0  008e5da0  /O2 /MD /Gy /EHsc /TP /arch:
 slices/s008e5320/s008e5320.cpp  Fn8e5e20  008e5e20  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s008e5320/s008e5320.cpp  Fn8e6130  008e6130  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s008e5320/s008e5320.cpp  Fn8e6180  008e6180  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008e5320/s008e5320.cpp  ?Fn8e5a20@XmlParser@@QAEHPBDHE@Z  008e5a20  /O2 /MD /Gy /EHsc /TP /arch:SSE
