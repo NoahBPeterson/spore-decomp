@@ -253,29 +253,28 @@ void FUN_49d1f0(cSPEditorBlock* block, float scale, bool a, bool b)
 }
 
 // @ 0x49d390
-void FUN_49d390(cSPEditorBlock* block, cSPVector3 v0, cSPMatrix3 m0, cSPVector3 v1, cSPMatrix3 m1, bool flag)
+void FUN_49d390(cSPEditorBlock* block, cSPTransform t0, cSPTransform t1, bool flag)
 {
     (void)flag;
     cSPMatrix3 mc;
-    cSPMatrix3* pm = Matrix33_Convert(&mc, &m0);
-    cSPVector3 d = block->mPosition - v0;
+    cSPMatrix3* pm = Matrix33_Convert(&mc, &t0.mRotation);
+    cSPVector3 d = block->mPosition - t0.mTranslation;
     cSPVector3 r = d * (*pm);
     r.x = r.x * kMirrorScale;
-    cSPVector3 r2 = r * m1;
-    cSPVector3 res = r2 + v1;
+    cSPVector3 r2 = r * t1.mRotation;
+    cSPVector3 res = r2 + t1.mTranslation;
     block->SetPosition(res, true);
 }
 
 // @ 0x49d550
-void FUN_49d550(cSPEditorBlock* block, cSPMatrix3 m0, cSPMatrix3 m1)
+void FUN_49d550(cSPEditorBlock* block, cSPTransform t0, cSPTransform t1, bool flag)
 {
-    cSPMatrix3 t;
-    cSPMatrix3* pt = Matrix33_Convert(&t, &m0);
-    cSPMatrix3 a = block->mBaseOrientation * (*pt);
-    cSPMatrix3 fb;
-    BuildFacingMatrix(&fb, &a, 0);
-    a = fb;
-    cSPMatrix3 c = a * m1;
+    (void)flag;
+    cSPMatrix3 m;
+    cSPMatrix3* pm = Matrix33_Convert(&m, &t0.mRotation);
+    cSPMatrix3 a = block->mBaseOrientation * (*pm);
+    BuildFacingMatrix(&a, &a, 0);
+    cSPMatrix3 c = a * t1.mRotation;
     cSPMatrix3 d;
     BuildFacingMatrix(&d, &block->mUserOrientation, 0);
     block->SetUserOrientation(d);
