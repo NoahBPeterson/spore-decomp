@@ -15,7 +15,6 @@
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast (x87 fsqrt/fdiv for 1/sqrt, SSE for the rest).
 //
-// @ 0x00b872c0
 
 #include <string.h>
 #include <math.h>
