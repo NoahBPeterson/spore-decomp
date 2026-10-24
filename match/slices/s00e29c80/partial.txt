@@ -1,0 +1,8 @@
+# va  verdict  notes
+00e29da0  WEAK  209 valid inputs (need 200), 14.1% coverage (need 60%): the caption/currency animation sequence runs identically up to the first engine vcall that reads a real window; 79/560 insns execute before the fake callees fault
+00e2a5b0  WEAK  319 valid inputs (need 200), 29.2% coverage (need 60%): the mFlag44 guard, the GetParent query and the RemoveChild call agree; coverage stops at the out-of-slice vtable slots (7/24 insns)
+00e2a760  WEAK  95 valid inputs (need 200), 92.9% coverage (need 60%): 26/28 insns execute and the row scan agrees; only 95 inputs stay valid because 303 discard on a fake FindWindowByID2 result that faults when dereferenced
+00e2a7b0  UNSUPPORTED  0/400 valid inputs (discards: fault(read)=397, fault=3): every input dereferences one of the six fake layout windows (the three specialty rows are always hidden first), so neither build reaches the area copy
+00e2a920  UNSUPPORTED  0/400 valid inputs (discards: fault(read)=399, fault(write)=1): the header/bar/root windows come from fake FindWindowByID slots, so the layout arithmetic is never reached
+00e2ab10  FAIL  5/5 valid inputs mismatched (47.4% coverage): mCounter94 ends one higher than the original; the iterator is an uninitialized out-parameter of the faked rbtree find, so the two builds walk different stack garbage rather than different logic
+00e2abc0  WEAK  400 valid inputs (need 200), 10.2% coverage (need 60%): the game-mode guard and the two SetVisible calls match; coverage ends at the first fake window dereference (9/88 insns)

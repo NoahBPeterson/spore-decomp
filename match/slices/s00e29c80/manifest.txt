@@ -1,1 +1,10 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e29c80/s00e29c80.cpp  ?GetEventFlags@cSPUIRolloverPropertyFlags@@QAEIXZ  00e2a5f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e29c80/s00e29c80.cpp  ?GetEventFlags@cSPUIRolloverVehicleFlags@@QAEIXZ  00e2a690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e29c80/s00e29c80.cpp  ?GetEventFlags@cSPUIRolloverCityFlags@@QAEIXZ  00e2a6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e29c80/s00e29c80.cpp  ?SetShown@cSPUICursorLayoutWidget@@QAEX_N@Z  00e2a600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e29c80/s00e29c80.cpp  ?Initialize@cSPUIRolloverCivCityVehicleCtor@@QAEPAU1@XZ  00e2a640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e29c80/s00e29c80.cpp  ?HideRelationshipRollover@cSPUIRolloverRelationship@@QAEXXZ  00e2a6c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e29c80/s00e29c80.cpp  ?read_properties@cSPUIRolloverCivCityHall@@QAEXXZ  00e2acc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e29c80/s00e29c80.cpp  ?Init@cSPUINewProgressBar@SP@@QAEXXZ  00e29c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e29c80/s00e29c80.cpp  ?Init@cSPUIRolloverCivCityVehicle@@QAE_NI@Z  00e2a550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
