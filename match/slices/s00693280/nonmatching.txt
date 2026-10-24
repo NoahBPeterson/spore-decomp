@@ -1,4 +1,4 @@
-00693900  158  binder destructor: vtable store, +0x18/+0x14 probe, two smart-ref releases present; cl EH frame/state layout differs
+00693900  156  binder destructor: vtable store, +0x18/+0x14 probe, two smart-ref releases present; direct vtable calls + volatile post-call store prevent tail-call fake-arity; difftest PASS 574/600 valid, 89.3% coverage (also src/game/SPEngine/SPLoadSaveHelp.cpp --src PASS 574/600); cl EH frame/state layout differs; flags /O2 /MD /Gy /EHsc /TP
 006939b0  219  binder bind A: virtual +0x18 probe, +0x1c release, AutoRef assignment all present; EH frame and this-arg reordering differ
 00693aa0  221  binder bind B: virtual +0x24/+0x28 probe/release paths present; EH frame and this-arg reordering differ
 00693cd0  83  binder ctor A: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ

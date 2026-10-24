@@ -221,20 +221,22 @@ extern "C" void __fastcall FUN_00693900(C3* self)
     self->vtbl = g_vtbl_1403970;
     if (self->p8)
     {
-        if (vcall18(self->p8))
-            vcall14(self->p8);
+        void* p = self->p8;
+        if (((VFnB)((*(void***)p)[6]))(p))
+            ((VFn)((*(void***)p)[5]))(p);
     }
     if (self->p8)
     {
         void* t = self->p8;
         self->p8 = 0;
-        vcall4(t);
+        ((VFn)((*(void***)t)[1]))(t);
     }
     if (self->p4)
     {
         void* t = self->p4;
         self->p4 = 0;
-        vcall4(t);
+        ((VFn)((*(void***)t)[1]))(t);
+        *(volatile void**)&self->p4 = 0;
     }
 }
 
