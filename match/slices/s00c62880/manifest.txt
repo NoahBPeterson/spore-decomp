@@ -8,3 +8,4 @@ slices/s00c62880/s00c62880.cpp  ?FUN_00c63a10@@YAXXZ  00c63a10  /O2 /MD /Gy /TP 
 slices/s00c62880/s00c62880.cpp  ?M_FailureCityDestroyed@@YIXPAXH@Z  00c63130  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c62880/s00c62880.cpp  ?M_OnTimerExpire@@YIXPAXH@Z  00c63170  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c62880/s00c62880.cpp  ?M_ReturnForRewards@@YIXPAXH@Z  00c631b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c62880/s00c62880.cpp  ?M_C63330@@YIXPAXH@Z  00c63330  /O2 /MD /Gy /TP /arch:SSE /fp:fast

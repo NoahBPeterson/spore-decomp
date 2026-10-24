@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00c62880   44  cMissionUseTool ctor: complete; base-ctor call and vptr store schedule
-00c63330   48  mission-war state setter: complete; first stub-call convention (SetSerializer) differs
-00c639a0   41  interface adjustor (QueryInterface): complete; branch order. difftest FAIL (ours: fake-arity: no call site before 413b0000; ours failed where original succeeded)
-00c639d0   49  interface adjustor: complete; argument/register order
-00c63a20   49  interface adjustor: complete; argument/register order. difftest FAIL (ours: fake-arity: no call site; ours failed where original succeeded)
+00c62880   44  cMissionUseTool ctor: complete (vptr 0x1470970/0x1470960/0x1470950, state/fields zeroed); base-ctor call and vptr store schedule. difftest PASS (351 valid, 100% coverage)
+00c639a0   47  interface adjustor (this in ecx, id at [esp+4], ret 4): complete; branch order 0x1186577/0x7a309fb, fallback tail-calls 0xb18460 with this still in ecx. difftest PASS (400 valid, 60.0% coverage)
+00c639d0   54  interface adjustor: complete; identity cases 0x76c67df/0x7a309fb grouped, 0x1186577 returns this+0x34 (null-guarded), fallback tail-calls 0xb18460. difftest PASS (400 valid, 64.7% coverage)
+00c63a20   54  interface adjustor: complete; identity cases 0x771ad6a/0x7a309fb grouped, 0x1186577 returns this+0x34, fallback tail-calls 0xb18460. difftest PASS (400 valid, 64.7% coverage)

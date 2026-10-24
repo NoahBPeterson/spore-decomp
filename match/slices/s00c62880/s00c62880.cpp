@@ -6,7 +6,7 @@ void* __cdecl operator_new(unsigned, const char*, int, int, const char*, int);
 void  __cdecl operator_delete__(void*);
 void  __cdecl WStr_Format(void*, const wchar_t*, ...);          // 0x41e050
 void  __cdecl FUN_00ebb720(int, int);                           // 0xebb720
-void* __cdecl FUN_00b18460();                                   // 0xb18460
+struct NounIdHelper { void* Dispatch(void* id); };                // 0xb18460
 void* __cdecl SP_NounManager();                                 // 0xb3d300
 void* __cdecl SP_GetUniverseContext();                          // 0x1021080
 void* __cdecl SP_GetActivePlanet();                             // 0x1021260
@@ -29,6 +29,7 @@ struct MissionBase {
   void TriggerUIUpdate();             // 0xc47d80
   void FUN_00c472e0();               // 0xc472e0
   void FUN_00c471c0();               // 0xc471c0
+  void SetSerializer();              // 0xc2e4e0
 };
 
 struct M {
@@ -112,7 +113,7 @@ void __fastcall M_ReturnForRewards(void* self, int _e) {
 
 // @ 0x00c63330
 void __fastcall M_C63330(void* self, int _e) {
-  (*(void(__thiscall*)(void*))((*(void***)self)[0]))(self);  // 0xc2e4e0
+  ((MissionBase*)self)->SetSerializer();  // 0xc2e4e0
   if (*(int*)((char*)self + 0x1f0) != 0) return;
   (*(void(__thiscall*)(void*))((*(void***)self)[0x6c/4]))(self);
   if (*(int*)((char*)self + 0x1f0) != 1) {
@@ -145,32 +146,37 @@ uint32_t __fastcall M_GetTagString(void* self, int _e, int key, void* out) {
 // @ 0x00c63a10
 void FUN_00c63a10() { FUN_00ebb720(0, 0); }
 
+// interface adjustors (`ret 4`, id at [esp+4], this in ecx) — member functions are __thiscall
+struct Adj {
+  void* Adjust0(void* id);
+  void* Adjust1(void* id);
+  void* Adjust2(void* id);
+};
+
 // @ 0x00c639d0 interface adjustor
-void* __fastcall M_C639d0(void* self, int _e, void* id) {
-  if (id == (void*)0x76c67df) return self;
-  if (id == (void*)0x1186577) return self ? (char*)self + 0x34 : 0;
-  if (id == (void*)0x7a309fb) return self;
-  return (void*)FUN_00b18460();
+void* Adj::Adjust1(void* id) {
+  if (id == (void*)0x76c67df || id == (void*)0x7a309fb) return this;
+  if (id == (void*)0x1186577) return this ? (char*)this + 0x34 : 0;
+  return ((NounIdHelper*)this)->Dispatch(id);
 }
 // @ 0x00c63a20 interface adjustor
-void* __fastcall M_C63a20(void* self, int _e, void* id) {
-  if (id == (void*)0x771ad6a) return self;
-  if (id == (void*)0x1186577) return self ? (char*)self + 0x34 : 0;
-  if (id == (void*)0x7a309fb) return self;
-  return (void*)FUN_00b18460();
+void* Adj::Adjust2(void* id) {
+  if (id == (void*)0x771ad6a || id == (void*)0x7a309fb) return this;
+  if (id == (void*)0x1186577) return this ? (char*)this + 0x34 : 0;
+  return ((NounIdHelper*)this)->Dispatch(id);
 }
 // @ 0x00c639a0 interface adjustor
-void* __fastcall M_C639a0(void* self, int _e, void* id) {
-  if (id == (void*)0x1186577) return self ? (char*)self + 0x34 : 0;
-  if (id != (void*)0x7a309fb) return (void*)FUN_00b18460();
-  return self;
+void* Adj::Adjust0(void* id) {
+  if (id == (void*)0x1186577) return this ? (char*)this + 0x34 : 0;
+  if (id == (void*)0x7a309fb) return this;
+  return ((NounIdHelper*)this)->Dispatch(id);
 }
 
 // @ 0x00c62880
 void* __fastcall cMissionUseTool_ctor(void* self, int _e) {
   ((MissionBase*)self)->BaseCtor();
   *(int*)((char*)self + 0x1f0) = 0;
-  *(void**)self = (void*)0x14709a0;
+  *(void**)self = (void*)0x1470970;
   *(void**)((char*)self + 4) = (void*)0x1470960;
   *(void**)((char*)self + 0x34) = (void*)0x1470950;
   *(int*)((char*)self + 0x1f4) = 0;
