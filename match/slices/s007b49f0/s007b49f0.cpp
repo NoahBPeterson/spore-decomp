@@ -89,6 +89,10 @@ void partial_007b4ee0(void) {}
 // @ 0x007b5090  (partial - ~cThumbnailManager; not reconstructed)
 void partial_007b5090(void) {}
 
-// @ 0x007b5320  (partial - FrameBoundingBoxPalette; not reconstructed)
-void partial_007b5320(void) {}
+// @ 0x007b5320  (partial - FrameBoundingBoxPalette; ABI + null early-out only)
+void __stdcall partial_007b5320(void* a, int b, int c, int d, int e, float f)
+{
+    if (b == 0)
+        return;
+}
 

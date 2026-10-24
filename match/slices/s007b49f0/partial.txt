@@ -6,4 +6,4 @@
 007b4e10  186  EH constructor (Editor::cPropertyList-style) with vector<bool> allocate; skeleton only
 007b4ee0  398  cThumbnailManager constructor (two _eh_vector_constructor_iterator calls + Stopwatch); skeleton only
 007b5090  650  ~cThumbnailManager (long refcount teardown); skeleton only
-007b5320  719  cThumbnailManager::FrameBoundingBoxPalette (x87 FP framing math); skeleton only
+007b5320  719  cThumbnailManager::FrameBoundingBoxPalette (x87 FP framing math); skeleton only - ABI fixed (`__stdcall` 6 stack args, ret 0x18, [E+8]==0 early-out), replay clean but fresh 5/122 mismatch on pool writes the body still omits

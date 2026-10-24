@@ -7,4 +7,4 @@
 007b4e10 ?partial_007b4e10@@YAXXZ  # partial_007b4e10 migrated from s007b49f0 (verbatim, slice spelling)
 007b4ee0 ?partial_007b4ee0@@YAXXZ  # partial_007b4ee0 migrated from s007b49f0 (verbatim, slice spelling)
 007b5090 ?partial_007b5090@@YAXXZ  # partial_007b5090 migrated from s007b49f0 (verbatim, slice spelling)
-007b5320 ?partial_007b5320@@YAXXZ  # partial_007b5320 migrated from s007b49f0 (verbatim, slice spelling)
+007b5320 ?partial_007b5320@@YGXPAXHHHHM@Z  # partial_007b5320 migrated from s007b49f0 (verbatim, slice spelling)
