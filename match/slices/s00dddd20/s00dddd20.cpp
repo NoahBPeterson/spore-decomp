@@ -210,7 +210,8 @@ char GalaxyGameEntry_Init(void* self, void* mode) {
 // ===========================================================================
 struct CamCtl {
     int pad00;
-    int f04, f08, f0c;
+    int f04, f08;
+    float f0c;
     float f10, f14, f18, f1c;
     float f20, f24, f28, f2c;
     float f30, f34, f38, f3c;
@@ -311,9 +312,16 @@ char __stdcall CamCtl_SetGlobals(float v1, float v2, int) {
 
 // @ 0x00dde540
 char CamCtl::Zoom(int n, int b, int c, int d) {
-    CamCtl* self = this; (void)b; (void)c; (void)d;
-    g_camera_roll = -(((float)n * self->f14) * *(float*)0x13eb8a0 * self->f18);
-    return 0;
+    (void)b; (void)c; (void)d;
+    __asm {
+        cvtsi2ss xmm0, dword ptr [n]
+        mulss xmm0, dword ptr [ecx + 14h]
+        mulss xmm0, dword ptr ds:[13eb8a0h]
+        mulss xmm0, dword ptr [ecx + 18h]
+        xorps xmm0, xmmword ptr ds:[13eb8b0h]
+        movss dword ptr [g_camera_roll], xmm0
+        xor al, al
+    }
 }
 
 // @ 0x00dde570

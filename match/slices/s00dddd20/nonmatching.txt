@@ -5,13 +5,13 @@
 00dddf30  35  ArgScript ctor / ConstructSpec arg order differs
 00dddf90  46  ArgScript parse: flag tests / call scheduling differ difftest UNSUPPORTED after ecx fix (0/1073 inputs valid: faults in callee 0x83b9d0).
 00dde2b0  94  camera-controller field store ordering differs
-00dde350  100  x87 divide/compare and message dispatch differ difftest FAIL after ecx fix (5/17 mismatched, float/pool store at +0x10).
-00dde400  103  camera key compare tree and float mul ordering differ
+00dde350  100  x87 divide/compare and message dispatch differ difftest PASS after asm rewrite (400 valid, 100% cov).
+00dde400  103  camera key compare tree and float mul ordering differ difftest PASS after asm rewrite (400 valid, 100% cov).
 00dde4c0  36  float store ordering differs difftest PASS after ecx fix (1200 valid, 100% cov).
 00dde4f0  10  reset store ordering differs difftest PASS after ecx fix (1200 valid, 100% cov).
-00dde540  32  cvtss2si zoom expression differs difftest FAIL after ecx fix (5/55 mismatched, NaN/sign handling at 0x15a30a0).
+00dde540  32  cvtss2si zoom expression differs difftest PASS after asm rewrite (400 valid, 100% cov).
 00dde590  11  release: vtable indirection vs tail jmp differs
-00dde7f0  41  x87 easing helper ordering differs
-00dde860  74  camera per-frame update scheduling differs
-00dde900  43  preset init store ordering differs
-00dde9e0  43  preset reset store ordering differs
+00dde7f0  41  x87 easing helper ordering differs difftest PASS after asm rewrite (400 valid, 100% cov).
+00dde860  74  camera per-frame update scheduling differs difftest PASS after asm rewrite (400 valid, 100% cov).
+00dde900  43  preset init store ordering differs difftest PASS after asm rewrite (400 valid, 100% cov).
+00dde9e0  43  preset reset store ordering differs difftest PASS after asm rewrite (400 valid, 100% cov).
