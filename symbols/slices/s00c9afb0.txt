@@ -2,3 +2,18 @@
 00c9aa10 SP::HotSpotMap::operator[]  # Claude-coined; thiscall(ecx=0x157abb0 map, key*) returns the value slot (elem+8), inserting a default hot spot
 00c92d50 SP::HotSpotMap::lower_bound  # Claude-coined; 0x60-byte elements, key at +0
 00c95010 SP::cFishingHotSpot::operator=  # Claude-coined; copies pos/food/rate/cube index and AddRefs the effect refs
+00c9b6d0 SP::cTribe::FishingRegister  # PDB name; if the fish timer runs and the closest water point moved, retargets the hot spot
+00c9b740 SP::cTribe::HotSpotsUpdate  # PDB name; per-frame fishing hot-spot scan/spawn/resupply/effect update
+00c9ba80 SP::cTribeFoodMat::cTribeFoodMat  # PDB name; food-material ctor (model instance/group hashes, flag at +0x108)
+00c9bb80 SP::cTribeFoodMat::SetOwner  # PDB name; AddRef/Release ref-counted owner at +0x10c
+00c9bc00 SP::cTribeFoodMat::Write  # PDB name (Simulator::ISimulatorSerializable::Write); serialises tag 0x629baec, game data, spatial data and the tribe-food property list
+00c9bd30 SP::cTribe::IsPlayerTribe  # Claude-coined; compares the noun manager's player tribe with cTribe+0xd8
+00c9bd50 SP::cTribe::HandleEvent  # Claude-coined; forwards an event to the cCommunity vtable-0xc987b0 handler
+00c9bda0 SP::cTribeFoodMat::~cTribeFoodMat  # scalar deleting destructor (??_G): vtable stores, owner Release, base dtors, conditional delete
+00c9bdf0 SP::cTribeHut::Cast  # PDB name (Object::Cast); type 0xee02c7 returns this, else tries cGameData/combatant/interaction/spatial casts
+00c9be50 SP::cSpatialObject::OnExtentsChanged  # Claude-coined; forwards to SetLocalExtents then notifies the owner's handler
+00c9be90 SP::cGameData::TribalEvent  # Claude-coined; posts a 0x498ef27 event carrying the outer position and a serialised blob
+00c9bef0 SP::cTribeHut::SetRefCountDelta  # Claude-coined; +/-1 on the hut ref count at +0x238
+00c9bf30 SP::cTribeHut::UpdateEmpireColor  # Claude-coined; on water, pushes the player empire id and the hut float +0x124 into the spatial sub-object
+00c9bf90 SP::cTribeHut::cTribeHut  # PDB name; zeroes +0x1e8..+0x23c, builds the Gonzago timer, culls against 0x157c3b4
+00c9c120 SP::cTribeHut::~cTribeHut  # PDB name; vtable stores, timer/member releases, combatant/interaction/spatial/game-data dtors

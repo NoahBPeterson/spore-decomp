@@ -1,0 +1,10 @@
+slices/s00c9afb0/s00c9afb0.cpp  ?FUN_00c9b6d0@@YAXPAVcTribe@SP@@@Z  00c9b6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c9afb0/s00c9afb0.cpp  ?SetOwner@cTribeFoodMat@@QAEXPAX@Z  00c9bb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c9afb0/s00c9afb0.cpp  ?IsPlayerTribe@cTribe@SP@@QAE_NXZ  00c9bd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c9afb0/s00c9afb0.cpp  ?HandleEvent@cTribe@SP@@QAEXPAX@Z  00c9bd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c9afb0/s00c9afb0.cpp  ??_GcTribeFoodMat@@UAEPAXI@Z  00c9bda0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c9afb0/s00c9afb0.cpp  ?OnExtentsChanged@cSpatialObject@@QAEXPAXM@Z  00c9be50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c9afb0/s00c9afb0.cpp  ?TribalEvent@cGameData@@QAEXH@Z  00c9be90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c9afb0/s00c9afb0.cpp  ?SetRefCountDelta@cTribeHut@@QAEXD@Z  00c9bef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c9afb0/s00c9afb0.cpp  ??0cTribeHut@@QAE@XZ  00c9bf90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c9afb0/s00c9afb0.cpp  ??1cTribeHut@@UAE@XZ  00c9c120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -99,9 +99,14 @@ struct HotSpotMapRef {
 };
 
 // ---------------------------------------------------------------- planet / time / timer
+struct Quaternion { float x, y, z, w; };
+struct Matrix33   { float m[9]; };
+
 struct PlanetModelT {
     int     ClassifyPoint(const Vector3* dir);                               // 0x00b82fc0 (ret 4)
     Vector3 SurfacePoint(const Vector3& dir);                                // 0x00b81630 (ret 8, sret)
+    bool    IsWaterPoint(const Vector3* pos);                                // 0x00b7e3e0 (ret 4)
+    Quaternion BuildSurfaceOrientation(const Vector3& pos);                  // 0x00b7f190 (ret 4, sret)
 };
 PlanetModelT* __cdecl PlanetModel();                                         // 0x00b3d350
 struct GameTimeMgr { uint64_t GetTime(); };                                  // 0x00b316c0
@@ -109,10 +114,12 @@ GameTimeMgr* __cdecl GameTimeManager();                                      // 
 struct cSPTimer {
     bool     IsRunning();                                                    // 0x00feba90
     void     Start();                                                        // 0x00bc30f0
+    void     Restart();                                                      // 0x00bc3130
     uint64_t GetElapsedTime();                                               // 0x00bc3190
 };
 extern cSPTimer g_FishTimer;                                                 // 0x016953f8
 extern uint64_t g_NextFishTime;                                              // 0x01695368
+extern Vector3  g_FishTarget;                                                // 0x01695374 (last water test point)
 
 inline float ReadFloatProperty(uint32_t id, float def)
 {
@@ -129,15 +136,296 @@ inline float ReadFloatProperty(uint32_t id, float def)
     return def;
 }
 
+// =====================================================================================
+// Engine layout shared by the tribe-hut / food-material cluster.  Offsets are taken from
+// the retail disassembly; the base classes are modelled so MSVC emits the same base
+// constructor calls and vtable-pointer stores as the original.
+// =====================================================================================
+
+// ---- primary ref-counted base -------------------------------------------------------
+struct RefCounted {
+    virtual int   AddRef();                 // +0x00
+    virtual void  Release();                // +0x04
+    virtual void  r08();                    // +0x08
+    virtual void  r0c();                    // +0x0c
+    virtual void  r10();                    // +0x10
+    virtual void  r14();                    // +0x14
+    virtual void  r18();                    // +0x18
+    virtual void  r1c();                    // +0x1c
+    virtual void  r20();                    // +0x20
+    virtual void  r24();                    // +0x24
+    virtual void  r28();                    // +0x28
+    virtual void* GetPosition();            // +0x2c
+    virtual void  r30();                    // +0x30
+    virtual void  r34();                    // +0x34
+    virtual void  r38();                    // +0x38
+    virtual void  r3c();                    // +0x3c
+    virtual void  r40();                    // +0x40
+    virtual void  r44();                    // +0x44
+    virtual void  r48();                    // +0x48
+    virtual void  r4c();                    // +0x4c
+    virtual void  r50();                    // +0x50
+    virtual void  r54();                    // +0x54
+    virtual void* v58();                    // +0x58
+    virtual void* v5c(void* out);           // +0x5c
+    virtual void  v60();                    // +0x60
+};
+
+// Secondary polymorphic base carried at cGameData+4.
+struct SimSerializable {
+    virtual void  w00();
+    virtual void  w04();
+    virtual void  w08();
+    virtual void  w0c();
+};
+
+// ---- game data (0x34 bytes: two vtables + 0x2c payload) -----------------------------
+struct cGameData : RefCounted, SimSerializable {
+    cGameData();                                        // 0x00b18660
+    ~cGameData();                                       // 0x00b184c0
+    bool  IsDestroyed(void* ctx);                       // 0x00bfd0d0
+    bool  Write(void* io);                              // 0x00b18590
+    void  SetGameDataOwner2(void* owner);               // 0x00b18550
+    void* Cast(int type);                               // 0x00b18460
+    void  Func80();                                     // 0x00c88510
+    void  TribalEvent(int arg);                         // 0x00c9be90
+    char  mData[0x34 - 8];
+};
+
+// ---- small in-place vtable object (spatial sub-object at +0xec) ---------------------
+struct CompactObj {
+    virtual void  k00();                    // +0x00
+    virtual void  k04();                    // +0x04
+    virtual void  k08();                    // +0x08
+    virtual void  k0c();                    // +0x0c
+    virtual void  k10();                    // +0x10
+    virtual void  k14();                    // +0x14
+    virtual void  k18(float value, int id); // +0x18
+    virtual void  k1c();                    // +0x1c
+    virtual void  k20();                    // +0x20
+    virtual void  k24();                    // +0x24
+    virtual void  k28();                    // +0x28
+    virtual void* k2c();                    // +0x2c
+    char mTail[0x18];                       // total 0x1c
+};
+
+// ---- spatial object (0xd4 bytes standalone; embedded at outer+0x34) -----------------
+struct cSpatialObject {
+    virtual void s00();
+    cSpatialObject();                                   // 0x00c89630
+    ~cSpatialObject();                                  // 0x00c8a420
+    void  SetLocalExtents(void* ext, float radius);     // 0x00c89160
+    void* Cast(int type);                               // 0x00c884f0
+    bool  Write(void* io);                              // 0x00c88a90
+    void  func80h();                                    // 0x00c88510
+    void  func54h(void* a);                             // 0x00c88670
+    void  func58h(void* a);                             // 0x00c886d0
+    void  OnExtentsChanged(void* a, float b);           // 0x00c9be50
+
+    char      mPad004[0x50];                            // +0x004
+    int       mMaterialType;                            // +0x054 (abs +0x088)
+    char      mPad058[0x38];                            // +0x058
+    uint32_t  mModelInstance;                           // +0x090 (abs +0x0c4)
+    uint32_t  mPad094;                                  // +0x094
+    uint32_t  mModelGroup;                              // +0x098 (abs +0x0cc)
+    char      mPad09c[8];                               // +0x09c
+    void*     mpTribe;                                  // +0x0a4 (abs +0x0d8)
+    char      mPad0a8[0x10];                            // +0x0a8
+    CompactObj mSub;                                    // +0x0b8 (abs +0x0ec)
+};
+
+// ---- interaction target (0x18 bytes) ------------------------------------------------
+struct cInteractionTarget {
+    virtual void i00();
+    cInteractionTarget();                               // 0x00ac03d0
+    ~cInteractionTarget();                              // 0x00ac0520
+    void* Cast(int type);                               // 0x00ac0320
+    char  mData[0x14];
+};
+
+// ---- combatant (0xc8 bytes) ---------------------------------------------------------
+struct cCombatant {
+    virtual void c00();
+    cCombatant();                                       // 0x00bfd4e0
+    ~cCombatant();                                      // 0x00bfcd00
+    void* Cast(int type);                               // 0x00bfc380
+    float mf04;                                         // +0x004 (abs +0x124)
+    char  mData[0xc0];
+};
+
+// ---- ref-counted smart pointer used for the two hut fields at +0x230/+0x234 --------
+template <class T>
+struct RefPtr {
+    T* p;
+    RefPtr() : p(0) {}
+    ~RefPtr() { if (p) ((RefCounted*)p)->Release(); }
+};
+
+// ---- food material -----------------------------------------------------------------
+struct cTribeFoodMat : cGameData, cSpatialObject {
+    cTribeFoodMat();                                    // 0x00c9ba80
+    virtual ~cTribeFoodMat();                           // 0x00c9bda0 (scalar deleting)
+    void SetOwner(void* owner);                         // 0x00c9bb80
+    bool Write(void* io);                               // 0x00c9bc00
+    bool IsPlayerTribe();                               // 0x00c9bd30
+    void Func54h(void* a);                              // 0x00c9bd50
+    bool  mFlag108;                                     // +0x108
+    char  mPad109[3];
+    RefPtr<RefCounted> mpOwner10c;                      // +0x10c
+};
+
+struct cGonzagoTimer {
+    cGonzagoTimer();                                    // 0x00b63890
+    ~cGonzagoTimer();                                   // 0x00b638b0
+    char mData[0x10];
+};
+
+// ---- tribe hut ---------------------------------------------------------------------
+struct cTribeHut : cGameData, cSpatialObject, cInteractionTarget, cCombatant {
+    cTribeHut();                                        // 0x00c9bf90
+    virtual ~cTribeHut();                               // 0x00c9c120
+    void* Cast(int type);                               // 0x00c9bdf0
+    void  SetRefCountDelta(char on);                    // 0x00c9bef0
+    void  UpdateEmpireColor();                          // 0x00c9bf30
+
+    void* mpModel1e8;                                   // +0x1e8
+    void* mpModel1ec;                                   // +0x1ec
+    void* mpModel1f0;                                   // +0x1f0
+    void* mpModel1f4;                                   // +0x1f4
+    void* mpModel1f8;                                   // +0x1f8
+    void* mpModel1fc;                                   // +0x1fc
+    void* mpModel200;                                   // +0x200
+    void* mpModel204;                                   // +0x204
+    void* mpModel208;                                   // +0x208
+    void* mpModel20c;                                   // +0x20c
+    void* mpModel210;                                   // +0x210
+    void* mpModel214;                                   // +0x214
+    bool  mFlag218;                                     // +0x218
+    char  mPad219[3];
+    void* mp218;                                        // +0x21c
+    bool  mFlag220;                                     // +0x220
+    bool  mFlag221;                                     // +0x221
+    char  mPad222[2];
+    char  mPad224[4];
+    void* mp228;                                        // +0x228
+    void* mp22c;                                        // +0x22c
+    RefPtr<RefCounted> mpTribe230;                      // +0x230
+    RefPtr<RefCounted> mpHitSphere234;                  // +0x234
+    int   mRef238;                                      // +0x238
+    char  mPad23c[4];
+    cGonzagoTimer mTimer;                               // +0x240
+};
+
+// ---- effect / manager interfaces ---------------------------------------------------
+struct XformMsg {
+    uint16_t mFlags;            // +0x00
+    uint16_t mCount;            // +0x02
+    float    mX, mY, mZ;        // +0x04
+    char     mPad10[0xc];       // +0x10
+    float    mMatrix[9];        // +0x1c
+    XformMsg();                                         // 0x00434040
+};
+
+struct EffectObj {
+    virtual void  f00();                    // +0x00
+    virtual void  f04();                    // +0x04
+    virtual void  f08(int on);              // +0x08
+    virtual void  f0c();                    // +0x0c
+    virtual void  f10();                    // +0x10
+    virtual void  f14();                    // +0x14
+    virtual void  f18(XformMsg* msg);       // +0x18
+    virtual void  f1c();                    // +0x1c
+    virtual void  f20();                    // +0x20
+    virtual void  f24();                    // +0x24
+    virtual void  f28();                    // +0x28
+    virtual void  f2c();                    // +0x2c
+    virtual void  f30(int on);              // +0x30
+    virtual void  f34();                    // +0x34
+    virtual bool  f38();                    // +0x38
+    virtual void  f3c();                    // +0x3c
+    virtual void  f40();                    // +0x40
+    virtual void  f44(int type, float* value, int flag);   // +0x44
+};
+
+struct EffectsMgr {
+    virtual void g00(); virtual void g04(); virtual void g08(); virtual void g0c();
+    virtual void g10(); virtual void g14(); virtual void g18(); virtual void g1c();
+    virtual void g20(); virtual void g24(); virtual void g28();
+    virtual bool CreateEffect(int id, int a, EffectObj** out);   // +0x2c
+};
+
+struct EventMgr {
+    virtual void h00(); virtual void h04(); virtual void h08(); virtual void h0c();
+    virtual void h10(); virtual void h14(); virtual void h18(); virtual void h1c();
+    virtual void h20(); virtual void h24(); virtual void h28(); virtual void h2c();
+    virtual void h30(); virtual void h34(); virtual void h38(); virtual void h3c();
+    virtual void h40(); virtual void h44(); virtual void h48(); virtual void h4c();
+    virtual void h50(); virtual void h54(); virtual void h58(); virtual void h5c();
+    virtual void h60(int id, void* a, void* b);                   // +0x60
+};
+
+struct NounMgr {
+    void* GetGameDataVector(int a, int b, int c, int d, int e);  // 0x00b21340
+    void* GetPlayerTribe();                                      // 0x00bfc5f0
+};
+
+struct IOStream {
+    virtual void s00(); virtual void s04(); virtual void s08();
+    virtual void s0c(); virtual void s10(); virtual void s14();
+    virtual void* GetBuffer();                                   // +0x18
+};
+
+struct IODevice {
+    virtual void d00(); virtual void d04(); virtual void d08(); virtual void d0c();
+    virtual void d10(); virtual void d14(); virtual void d18(); virtual void d1c();
+    virtual void* GetStream();                                   // +0x20
+};
+
+struct cVarListSerializer {
+    cVarListSerializer(void* owner, void* props, int id);        // 0x00692f90
+    bool Serialize(void* io);                                    // 0x00692900
+    char mData[0xa14];
+};
+
+struct TribeVector {
+    void*  mPad0;           // +0
+    void** mpBegin;         // +4
+    void** mpEnd;           // +8
+};
+
+// ---- free functions used by the cluster --------------------------------------------
+void  __cdecl FUN_00c9ae30(uint32_t key, float amount);          // 0x00c9ae30
+void* __cdecl GetCurrentGameMode();                              // 0x00b5b800
+extern uint8_t g_TribeGameMode;                                  // 0x01654c02
+NounMgr* __cdecl NounManager();                                  // 0x00b3d300
+EffectsMgr* __cdecl EffectsManagerPtr();                         // 0x0067ddd0
+EventMgr* __cdecl FUN_00b3d240();                                // 0x00b3d240
+int   __stdcall GetPlayerEmpireID(int a, void* b, int c);       // 0x01021090
+uint32_t __cdecl FNVHash(const char* str, uint32_t basis, int mode);   // 0x00932e80
+Matrix33& __cdecl Matrix3FromQuaternion(Matrix33& out, const Quaternion& q);  // 0x0059c190
+void  __cdecl WriteUint32(void* stream, uint32_t* value, int count, int flag);  // 0x0093aa70
+extern void* g_01699998;                                         // 0x01699998
+extern void* g_TribeCullExtents;                                 // 0x0157c3b4
+extern void* g_TribeFoodProps;                                   // 0x0157c320
+
 namespace SP {
 
 class cTribe { public:
-    static uint32_t SetupHotSpot(const Vector3& dir);
+    static uint32_t SetupHotSpot(const Vector3& dir, int force = 0);
+    const Vector3* GetClosestWater();                            // 0x00c8fe20
+    void func54h(void* a);                                       // 0x00c88670
+    bool IsPlayerTribe();                                        // 0x00c9bd30
+    void HandleEvent(void* a);                                   // 0x00c9bd50
+    char mPad000[0xd8];
+    void* mpTribeD8;                                             // +0x0d8
+    char mPad0dc[0x120 - 0x0dc];
+    CompactObj mSub120;                                          // +0x120
 };
 
 // @ 0x00C9AFB0
-uint32_t cTribe::SetupHotSpot(const Vector3& dir)
+uint32_t cTribe::SetupHotSpot(const Vector3& dir, int force)
 {
+    (void)force;
     float x = dir.x, y = dir.y, z = dir.z;
     float ax = (float)fabs(x), ay = (float)fabs(y), az = (float)fabs(z);
     CubeCoord coord;
@@ -231,3 +519,239 @@ done:
 }
 
 }  // namespace SP
+
+// =====================================================================================
+// Functions added for slice s00c9afb0: tribe fishing, hut and food-material cluster.
+// =====================================================================================
+
+struct TribeObj { void Notify(int id); };                                // 0x00c987b0
+
+// @ 0x00c9b6d0
+void __cdecl FUN_00c9b6d0(SP::cTribe* self)
+{
+    if (!self)
+        return;
+    if (!g_FishTimer.IsRunning())
+        return;
+    const Vector3* p = self->GetClosestWater();
+    if (p->x != g_FishTarget.x || p->y != g_FishTarget.y || p->z != g_FishTarget.z)
+        SP::cTribe::SetupHotSpot(*p, 1);
+}
+
+// @ 0x00c9b740
+void __cdecl FUN_00c9b740(float dt)
+{
+    if (!g_FishTimer.IsRunning()) {
+        uint32_t found = 0xffffffff;
+        if (PlanetModel()) {
+            NounMgr* nm = NounManager();
+            TribeVector* v = (TribeVector*)nm->GetGameDataVector(
+                0x00cd7d10, 0x00d3d420, 0x00accbb0, 0x00b1e500, 0x018c6d19);
+            void** it = v->mpBegin;
+            if (it != v->mpEnd) {
+                do {
+                    SP::cTribe* t = (SP::cTribe*)*it;
+                    t->mSub120.k2c();
+                    const Vector3* p = t->GetClosestWater();
+                    if (p->x != g_FishTarget.x || p->y != g_FishTarget.y ||
+                        p->z != g_FishTarget.z)
+                        found = SP::cTribe::SetupHotSpot(*p, 1);
+                    ++it;
+                } while (it != v->mpEnd);
+                if (found != 0xffffffff)
+                    return;
+            }
+        }
+        g_FishTimer.Restart();
+        g_NextFishTime = g_FishTimer.GetElapsedTime() + 10000;
+        return;
+    }
+
+    uint64_t now = g_FishTimer.GetElapsedTime();
+    if (now > g_NextFishTime) {
+        g_NextFishTime = g_FishTimer.GetElapsedTime() + 240000;
+        return;
+    }
+
+    HotSpotElem* it = g_HotSpots.mpBegin;
+    HotSpotElem* const end = g_HotSpots.mpEnd;
+    if (it == end)
+        return;
+    for (; it != end; ++it) {
+        HotSpot& s = it->value;
+        if (!s.mbActive)
+            continue;
+        FUN_00c9ae30(it->key, s.mResupply * dt);
+        if (GetCurrentGameMode() != &g_TribeGameMode)
+            continue;
+        if (!s.mpOrnament) {
+            Vector3 surface = PlanetModel()->SurfacePoint(s.mPos);
+            EffectsMgr* em = EffectsManagerPtr();
+            if (s.mpOrnament) {                 // always null here; kept for fidelity
+                IRef* old = s.mpOrnament;
+                s.mpOrnament = 0;
+                old->Release();
+            }
+            if (em->CreateEffect(0x89c75e7f, 0, (EffectObj**)&s.mpOrnament)) {
+                XformMsg msg;
+                msg.mFlags |= 4;
+                ++msg.mCount;
+                msg.mX = surface.x;
+                msg.mY = surface.y;
+                msg.mZ = surface.z;
+                Matrix33 mat;
+                Matrix3FromQuaternion(mat, PlanetModel()->BuildSurfaceOrientation(surface));
+                for (int i = 0; i < 9; ++i)
+                    msg.mMatrix[i] = mat.m[i];
+                msg.mFlags |= 2;
+                ++msg.mCount;
+                ((EffectObj*)s.mpOrnament)->f18(&msg);
+                ((EffectObj*)s.mpOrnament)->f08(0);
+            }
+        }
+        if (s.mpOrnament) {
+            float ratio = s.mFood / s.mMaxFood;
+            float value = (ratio > 0.0f) ? ratio : 0.0f;
+            ((EffectObj*)s.mpOrnament)->f44(3, &value, 1);
+        }
+        if (!s.mbRemove) {
+            if (((EffectObj*)s.mpOrnament)->f38())
+                ((EffectObj*)s.mpOrnament)->f30(0);
+        } else {
+            if (!((EffectObj*)s.mpOrnament)->f38())
+                ((EffectObj*)s.mpOrnament)->f30(1);
+        }
+    }
+}
+
+// @ 0x00c9ba80
+cTribeFoodMat::cTribeFoodMat()
+{
+    mFlag108 = true;
+    mMaterialType = 2;
+    mModelInstance = FNVHash("trg_sacrifice_altar1", 0x811c9dc5, 1);
+    mModelGroup = FNVHash("TribalTools", 0x811c9dc5, 1);
+}
+
+// @ 0x00c9bb80
+void cTribeFoodMat::SetOwner(void* owner)
+{
+    SetGameDataOwner2(owner);
+    void* old = mpOwner10c.p;
+    if (owner != old) {
+        if (owner)
+            ((RefCounted*)owner)->AddRef();
+        mpOwner10c.p = (RefCounted*)owner;
+        if (old)
+            ((RefCounted*)old)->Release();
+    }
+}
+
+// @ 0x00c9bc00
+bool cTribeFoodMat::Write(void* io)
+{
+    void* buf = ((IOStream*)((IODevice*)io)->GetStream())->GetBuffer();
+    uint32_t value = 0x0629baec;
+    WriteUint32(buf, &value, 1, 0);
+    bool ok;
+    if (cGameData::Write(io) && ((cSpatialObject*)((char*)this + 0x34))->Write(io))
+        ok = true;
+    else
+        ok = false;
+    cVarListSerializer ser(this, &g_TribeFoodProps, 0x1a80d26);
+    bool result = ok && ser.Serialize(io);
+    return result;
+}
+
+// @ 0x00c9bd30
+bool SP::cTribe::IsPlayerTribe()
+{
+    void* tribe = mpTribeD8;
+    return NounManager()->GetPlayerTribe() == tribe;
+}
+
+// @ 0x00c9bd50
+void SP::cTribe::HandleEvent(void* a)
+{
+    func54h(a);
+    ((TribeObj*)mpTribeD8)->Notify(0xd);
+}
+
+// @ 0x00c9bda0
+cTribeFoodMat::~cTribeFoodMat()
+{
+}
+
+// @ 0x00c9bdf0
+void* cTribeHut::Cast(int type)
+{
+    if (type == 0x00ee02c7)
+        return this;
+    void* r = cGameData::Cast(type);
+    if (r)
+        return r;
+    r = ((cCombatant*)((char*)this + 0x120))->Cast(type);
+    if (r)
+        return r;
+    r = ((cInteractionTarget*)((char*)this + 0x108))->Cast(type);
+    if (r)
+        return r;
+    return ((cSpatialObject*)((char*)this + 0x34))->Cast(type);
+}
+
+// @ 0x00c9be50
+void cSpatialObject::OnExtentsChanged(void* a, float b)
+{
+    SetLocalExtents(a, b);
+    RefCounted* outer = (RefCounted*)((char*)this - 0x34);
+    void* r = outer->v58();
+    if (r)
+        ((TribeObj*)r)->Notify(0xc);
+}
+
+// @ 0x00c9be90
+void cGameData::TribalEvent(int arg)
+{
+    IsDestroyed((void*)arg);
+    char local[12];
+    FUN_00b3d240()->h60(0x498ef27,
+        ((RefCounted*)((char*)this - 0xec))->GetPosition(),
+        ((RefCounted*)((char*)this - 0xec))->v5c(local));
+}
+
+// @ 0x00c9bef0
+void cTribeHut::SetRefCountDelta(char on)
+{
+    if (on)
+        ++mRef238;
+    else
+        --mRef238;
+}
+
+// @ 0x00c9bf30
+void cTribeHut::UpdateEmpireColor()
+{
+    cGameData::Func80();
+    if (GetCurrentGameMode() == &g_TribeGameMode)
+        return;
+    const Vector3* pos = (const Vector3*)GetPosition();
+    if (!PlanetModel()->IsWaterPoint(pos))
+        return;
+    mSub.k18(mf04, GetPlayerEmpireID(0, &g_01699998, 0));
+}
+
+// @ 0x00c9bf90
+cTribeHut::cTribeHut()
+    : mpModel1e8(0), mpModel1ec(0), mpModel1f0(0), mpModel1f4(0),
+      mpModel1f8(0), mpModel1fc(0), mpModel200(0), mpModel204(0),
+      mpModel208(0), mpModel20c(0), mpModel210(0), mpModel214(0),
+      mFlag218(false), mp218(0), mFlag220(false), mFlag221(false),
+      mp228(0), mp22c(0), mRef238(0)
+{
+    ((cSpatialObject*)this)->func58h(&g_TribeCullExtents);
+}
+
+// @ 0x00c9c120
+cTribeHut::~cTribeHut()
+{
+}

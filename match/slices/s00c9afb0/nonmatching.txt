@@ -1,2 +1,7 @@
 # va  diff-bytes  reason
 00c9afb0  1335  complete (all 25 calls in order, same loops/branches); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; frame layout, hoisted zero compares and some x87/SSE scheduling differ
+00c9b740  656  complete (fishing hot-spot update); same calls/loops/branches, but timer-branch hoisting, register allocation and a 62-byte size difference remain
+00c9ba80  15  complete ctor; FNVHash argument pushes are hoisted ahead of the compiler-emitted vtable stores, field order otherwise identical
+00c9bc00  20  complete Write; only the scheduling of the local `value` store differs (emitted after the argument pushes instead of before the GetBuffer call)
+00c9bdf0  44  complete Cast; the `return this` case is emitted inline instead of the retail shared tail, base offsets/null checks otherwise identical
+00c9bf30  11  complete; only callee-saved register naming differs (`this` in esi vs retail edi, `&mSub` in edi vs retail esi)
