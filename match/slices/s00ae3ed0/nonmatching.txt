@@ -1,0 +1,12 @@
+00ae3ed0 645 HandleSimulationUpdate: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (fault: invalid read at eip=30000113, bad stack/control flow under emulation); size 360 vs 688
+00ae41b0 110 FindMarkerNear: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (130 valid, 97% cov); size 126 vs 123, SSE scheduling + end/node register allocation differ
+00ae42a0 50 ReleaseMarkerNode: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (241 valid, 88.5% cov); size 60 vs 66, IntrusiveRelease branch layout differs
+00ae4430 40 AssignMarkerNode: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (277 valid, 100% cov); one independent load hoisted and call-target rendering differ
+00ae4520 105 DestroyMarkerNodeRange: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid; fault(read)=398, import:memmove); size 111 vs 105
+00ae4610 195 RemoveMarker: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (306 valid, 90.2% cov); size 169 vs 216, temp ImageRef path/codegen differs
+00ae46f0 200 UpdateMarkerTransform: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (192 valid, 100% cov); size 272 vs 277, global-constant refs and inlined Matrix3::Assign differ
+00ae4810 222 StartEffect: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid; ABI/arg handling + fault(read)); size 252 vs 285
+00ae4930 41 FreeMarkerNodeRange: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (215 valid, 25% cov); size 89 vs 91, __stdcall ABI now correct but body under-covered
+00ae49d0 771 AddMarker: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (memory pool @4ff90014 differs); size 308 vs 824, body substantially incomplete
+00ae4d10 409 AddMarkerSimple: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (247 valid, 36.8% cov); size 119 vs 417, body substantially incomplete
+00ae4ec0 251 UpdateMinimapCityIcon: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (first mismatch ecx, untouched by original); size 258 vs 268, register allocation/prologue differ
