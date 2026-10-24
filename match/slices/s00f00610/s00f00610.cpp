@@ -244,10 +244,10 @@ void UI::f01030(void* p, float f)
 
 // @ 0x00f01140 -- copy [begin,end) of 0x20-byte records into dst, *out = dst.
 struct Rec { int f0; float f1, f2, f3, f4, f5, f6, f7; };
-void __cdecl f01140(void** out, const Rec* begin, const Rec* end, Rec* dst)
+void** __cdecl f01140(void** out, const Rec* begin, const Rec* end, Rec* dst)
 {
     *out = dst;
-    if (begin == end) return;
+    if (begin == end) return out;
     do {
         if (dst) {
             dst->f0 = begin->f0;
@@ -263,6 +263,7 @@ void __cdecl f01140(void** out, const Rec* begin, const Rec* end, Rec* dst)
         dst = (Rec*)((char*)dst + 0x20);
     } while (begin != end);
     *out = dst;
+    return out;
 }
 
 // ---------------------------------------------------------------------------
