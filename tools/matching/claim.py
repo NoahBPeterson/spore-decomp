@@ -32,10 +32,10 @@ def unrecorded(entry):
     A rework entry ("rework": true, batch part1 on: functions that are already partial) is settled per VA once the
     VA is in manifest.txt or nonmatching.txt, or the session logged "<va> <verdict> <reason>" in
     work/match/scratch_<id>_fixlog.txt (it could not be completed); a partial.txt row alone does not count.
-    VAs in the entry's "fail" list (equivalence FAILs folded into a rework batch, 2026-10-24) already have a
+    VAs in the entry's "fail" list (or "asm": a nonmatching row whose source is an __asm transcription) (equivalence FAILs folded into a rework batch, 2026-10-24) already have a
     nonmatching.txt row, so they settle only by a manifest row or a fixlog line."""
     want = {v.lower().lstrip("0") for v in entry["vas"]}
-    fail = {v.lower().lstrip("0") for v in entry.get("fail", [])}
+    fail = {v.lower().lstrip("0") for v in entry.get("fail", []) + entry.get("asm", [])}
     seen = set()
     files = (("manifest.txt", 2), ("nonmatching.txt", 0)) if entry.get("rework") else \
         (("manifest.txt", 2), ("nonmatching.txt", 0), ("partial.txt", 0))
@@ -80,6 +80,9 @@ def worker_progress(batch, recs, worker, unsettled=None):
 
 def print_fails(e):
     """Equivalence FAILs folded into a rework entry: the replay command, and the src/game unit holding a migrated copy."""
+    for v in e.get("asm", []):
+        print("inline assembly %s: its source is an __asm/_emit transcription, which is forbidden. Rewrite it as plain "
+              "C++ (check it with chk.py and equiv.py), or log \"%s FAIL-KEPT <why>\" if you cannot" % (v, v))
     for v in e.get("fail", []):
         print("equivalence FAIL %s: replay with .venv/bin/python tools/difftest/equiv.py %s %s --replay "
               "work/difftest/fail_inputs/%s_%s.pkl -v" % (v, e["id"], v, e["id"], v))
