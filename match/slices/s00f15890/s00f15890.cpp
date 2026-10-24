@@ -1,126 +1,202 @@
-// Slice s00f15890: SP UI refresh (thiscall, no args). Two branches on this+0xb8 and a
-// shared tail; window lookups by hashed id, vcalls on IWindow (see notes in partial.txt).
-// Flags: /O2 /MD /Gy /EHsc /TP.
-#include "types.h"
+// Slice s00f15890 -- eastl container helpers (Simulator module).
+//  00f16260  tiny cleanup: release the object's parts, then destroy the member at +0x08
+//  00f16280  fixed_vector<__int64,32>::assign over a linked-list iterator range
+//  00f16330  vector<Element>::erase over 0x70-byte elements with virtual destructors
+//  00f16390  vector<Element>::insert (grow path / in-place path)
+// Flags: /O2 /MD /Gy /EHsc /TP /arch=SSE /fp:fast.  Callees are masked relocations.
+typedef unsigned int uint;
+typedef long long int64;
 
-struct Rect4 { float l, t, r, b; };
-struct cString {
-    cString(uint32_t table, uint32_t key, int flags);  // 0x006b5770 thiscall, ret 0xc
-    ~cString();                                        // 0x006b5240 thiscall
-    const wchar_t* GetText();                          // 0x006b55c0 thiscall
-};
-class cSPUILayout { public:
-    void* FindWindowByID(uint32_t id, int recurse);    // 0x008105b0 thiscall, ret 8
-};
-struct Property {
-    int* GetInt();                                     // 0x0041e990 thiscall
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int size);
+
+// ---------------------------------------------------------------------------------------------
+// 00f16260: release parts, then destroy the member object at +0x08 (tail call)
+// ---------------------------------------------------------------------------------------------
+struct PartHolder {
+    char pad00[8];
+    struct Part { void Destroy(); } mPart;                  // +0x08, 0x00e0a5c0
+    void ReleaseParts();                                    // 0x00f14980
+    void Cleanup();                                         // 0x00f16260
 };
 
-#define VFN(obj, off) (*(void***)(obj))[(off) / 4]
-typedef int  (__thiscall* FnRef)(void*);
-typedef void (__thiscall* FnSetFlag)(void*, int, int);
-typedef void (__thiscall* FnSetCaption)(void*, const wchar_t*);
-typedef void (__thiscall* FnSetArea)(void*, const Rect4*);
-typedef void* (__thiscall* FnGetArea)(void*);
-typedef void* (__thiscall* FnFindVirt)(void*, uint32_t, int);
-typedef void (__thiscall* FnVoid)(void*);
+// ---------------------------------------------------------------------------------------------
+// fixed_vector<int64,32>: three pointers, list iterators are singly linked nodes with the value
+// at +0x08 (next at +0x00)
+// ---------------------------------------------------------------------------------------------
+struct ListNode {
+    ListNode* mpNext;                                       // +0x00
+    int       mPad;                                         // +0x04
+    int64     mValue;                                       // +0x08
+};
 
-extern "C" {
-void  __cdecl FUN_00f14120(void* out, const wchar_t* fmt, ...);        // 0x00f14120
-int   __cdecl FUN_00eec540(int);                                       // 0x00eec540
-int   __cdecl FUN_00eec580(int);                                       // 0x00eec580
-int   __cdecl FUN_00eec570(void);                                      // 0x00eec570
-float __cdecl FUN_00eec5b0(void);                                      // 0x00eec5b0 (st0)
-void* __cdecl FUN_0067cb30(void);                                      // 0x0067cb30
-void  __cdecl SetNumberString(int64_t v, wchar_t* buf, int n);         // 0x00881ae0
-void* __cdecl SP_WindowManager(void);                                  // 0x0067caa0
-void  __cdecl SP_SetImageFromLayout(void* w, void* layout, uint32_t id, int n); // 0x00806a60
-bool  __cdecl FUN_00f19640(void);                                      // 0x00f19640
-void* __cdecl AchievementsController(uint32_t key, int flag);          // 0x00675250
+// singly linked list iterator: the object stays in its stack slot (its member is updated in place
+// by operator++), which is why the retail loop reloads and stores the parameter slot each step
+struct ListIterator {
+    ListNode* mpNode;
+    ListIterator& operator++()      { mpNode = mpNode->mpNext; return *this; }
+    int64&        operator*() const { return mpNode->mValue; }
+    bool operator==(const ListIterator& other) const { return mpNode == other.mpNode; }
+};
+
+inline int64* CopyRange64(const int64* first, const int64* last, int64* dst)
+{
+    memcpy(dst, first, (uint)((const char*)last - (const char*)first));
+    return dst + (last - first);
 }
 
-struct Obj10 {
-    int   GetA();                 // 0x00f191a0 thiscall
-    int   GetElapsed();           // 0x00f19190 thiscall
-    float GetScale();             // 0x00f19d10 thiscall
-    int   GetKey();               // 0x008dc790 thiscall (hkGenericConstraintData::getScheme)
-};
-struct Obj20 {
-    void Set(int a, int b, int c, int d);  // 0x00f46cf0 thiscall, ret 0x10
-};
-struct Obj28 {
-    void Init(int a);                      // 0x00f14d90 thiscall, ret 4
-};
-struct GMgr {
-    void* Timers();               // 0x00f3bcb0 thiscall (ecx = G+0x74)
-};
-struct AchCtl {
-    void AutoTest();              // 0x00676e90 thiscall
-};
-struct AssetMgr {
-    void* ServerDir();            // 0x0067cb30 is free; 0x0060e600 thiscall follow-up
+struct Int64ListVector {
+    int64* mpBegin;                                         // +0x00
+    int64* mpEnd;                                           // +0x04
+    int64* mpCapacity;                                      // +0x08
+
+    void InsertList(int64* pos, ListIterator first, ListIterator last, ListIterator first2); // 0x00f143c0
+    void AssignFromList(ListIterator first, ListIterator last, int tag);   // 0x00f16280
 };
 
-struct PanelStub {
-    void Refresh();
+// ---------------------------------------------------------------------------------------------
+// vector of 0x70-byte elements with a virtual destructor
+// ---------------------------------------------------------------------------------------------
+const int kElementSize = 0x70;
+
+struct Element {
+    Element(const Element* other);                          // 0x00f14690
+    virtual void Destroy(int flags);                        // +0x00
+    void DestroySelf();                                     // 0x00e0a400
+    int mData[0x1b];
 };
 
-extern "C" {
-// Globals: DAT_016c7aa4 holds a pointer to the global game object (+0x74 sub-object).
-extern void* g_pGlobal_016c7aa4;
+// allocation header the SD node allocator keeps in front of the payload; a zero size means the
+// block was not heap allocated and must not be released
+struct BlockHeader {
+    unsigned int mSize;
+};
+
+Element* MoveElements(Element* first, Element* last, Element* dst);          // 0x00f14900
+Element* CopyConstructRange(Element* first, Element* last, Element* dst);    // 0x00f148c0
+Element* DestroyRange(Element* first, Element* last, Element* dst);          // 0x00f120e0
+Element* CopyConstructBackward(Element* first, Element* last, Element* dstEnd); // 0x00f14940
+Element** CopyConstructSaved(Element** result, Element* first, Element* last,
+                             Element* dst);                                  // 0x00f147a0
+void     FillUninitialized(Element* dst, unsigned int n, const Element* value); // 0x00f16230
+void     FillAssigned(Element* first, Element* last, const Element* value);  // 0x00f16300
+void     FreeRawBlock(void* block);                                          // 0x00f47380
+
+void* operator new(unsigned int size, const char* name, int flags, int align,
+                   const char* file, int line);
+
+inline void* AllocElementBlock(unsigned int size, int line)
+{
+    return ::operator new(size, "Simulator", 0, 0, "EASTL/allocator.h", line);
 }
 
-void PanelStub::Refresh() {
-    char* s = (char*)this;
-    wchar_t buf[26];
-    buf[0] = 0;
-    wchar_t* pTxt = buf;
-    Obj10* m10 = *(Obj10**)(s + 0x10);
-    bool isFive = (*(int*)((char*)m10 + 0x90) == 5);
+struct ElementVector {
+    Element* mpBegin;                                       // +0x00
+    Element* mpEnd;                                         // +0x04
+    Element* mpCapacity;                                    // +0x08
 
-    int a = m10->GetA();   // kept in its frame slot; used below as (float)a and as int64
+    Element* EraseRange(Element* last, Element* pos);       // 0x00f16330
+    void     InsertN(Element* position, unsigned int n, const Element* value); // 0x00f16390
+};
 
-    if (*(int*)(s + 0xb8) == 0) {
-        // Branch A (f15d21): swap window at +0xdc with the id 0x7c79820, then SetFlag on 0x7c796d0.
-        cSPUILayout* layout = *(cSPUILayout**)(s + 0x18);
-        void* w = layout->FindWindowByID(0x7c79820, 1);
-        void* old = *(void**)(s + 0xdc);
-        if (w != old) {
-            if (w) ((FnRef)VFN(w, 0))(w);
-            *(void**)(s + 0xdc) = w;
-            if (old) ((FnVoid)VFN(old, 4))(old);
-        }
-        w = layout->FindWindowByID(0x7c796d0, 1);
-        if (w) ((FnSetFlag)VFN(w, 0x7c))(w, 1, 0);
+// ---------------------------------------------------------------------------------------------
+// @ 0x00f16260
+void PartHolder::Cleanup()
+{
+    ReleaseParts();
+    mPart.Destroy();
+}
+
+// @ 0x00f16280
+void Int64ListVector::AssignFromList(ListIterator first, ListIterator last, int tag)
+{
+    int64* p = mpBegin;
+    if (p != mpEnd) {
+        do {
+            if (first == last)
+                break;
+            *p = *first;
+            ++first;
+            ++p;
+        } while (p != mpEnd);
+    }
+    if (first == last) {
+        int64* lastPos = mpEnd;
+        CopyRange64(lastPos, mpEnd, p);
+        mpEnd -= lastPos - p;
     } else {
-        // Branch B (f158f8..f15d1f): swap window at +0xdc with the id 0x7c796d0, then SetFlag on 0x7c79820.
-        cSPUILayout* layout = *(cSPUILayout**)(s + 0x18);
-        void* w = layout->FindWindowByID(0x7c796d0, 1);
-        void* old = *(void**)(s + 0xdc);
-        if (w != old) {
-            if (w) ((FnRef)VFN(w, 0))(w);
-            *(void**)(s + 0xdc) = w;
-            if (old) ((FnVoid)VFN(old, 4))(old);
-        }
-        w = layout->FindWindowByID(0x7c79820, 1);
-        if (w) ((FnSetFlag)VFN(w, 0x7c))(w, 1, 0);
+        InsertList(mpEnd, first, last, first);
+    }
+}
 
-        int idx = 0;
-        void* p = *(void**)(s + 0xb8);
-        if (p) {
-            void* prop = 0;
-            // f1596a: vcall +0x24(hash 0xcf837237, &prop)
-            if (((bool (__thiscall*)(void*, uint32_t, void**))VFN(p, 0x24))(p, 0xcf837237, &prop)
-                && *(short*)((char*)prop + 0x12) == 9) {
-                idx = *((Property*)prop)->GetInt();
-            }
+// @ 0x00f16330
+Element* ElementVector::EraseRange(Element* last, Element* pos)
+{
+    Element* p = MoveElements(pos, mpEnd, last);
+    Element* end = mpEnd;
+    for (; p < end; ++p)
+        p->Destroy(0);
+    mpEnd -= pos - last;
+    return last;
+}
+
+// @ 0x00f16390
+void ElementVector::InsertN(Element* position, unsigned int n, const Element* value)
+{
+    unsigned int freeCount = (unsigned int)(mpCapacity - mpEnd);
+    if (n <= freeCount) {
+        if (n == 0)
+            return;
+
+        Element temp(value);
+
+        Element* oldEnd = mpEnd;
+        unsigned int tail = (unsigned int)(oldEnd - position);
+        if (n < tail) {
+            // the new elements fit before the end: move the last n elements into the unused space,
+            // then shift the middle part right
+            Element* src = oldEnd - n;
+            Element* dst = oldEnd;
+            CopyConstructSaved(&dst, src, oldEnd, oldEnd);
+            mpEnd = mpEnd + n;
+            CopyConstructBackward(position, src, mpEnd);
+            FillAssigned(position, position + n, &temp);
+        } else {
+            // the tail is shorter than the insert: fill the unused space, then move the tail behind
+            // the inserted block
+            FillUninitialized(oldEnd, n - tail, &temp);
+            mpEnd = mpEnd + (n - tail);
+            Element* dst = oldEnd;
+            CopyConstructSaved(&dst, position, oldEnd, mpEnd);
+            mpEnd = mpEnd + tail;
+            FillAssigned(position, oldEnd, &temp);
         }
-        (void)idx;
-        // Remaining body of Branch B is not decoded yet; see partial.txt.
+        temp.DestroySelf();
+        return;
     }
 
-    // Common tail (f15d77).
-    if (*(void**)(s + 0xdc))
-        ((FnSetFlag)VFN(*(void**)(s + 0xdc), 0x7c))(*(void**)(s + 0xdc), 1, 1);
-    (void)pTxt; (void)a; (void)isFive;
+    int oldSize = (int)(mpEnd - mpBegin);
+    int newCapacity = oldSize * 2;
+    if (oldSize == 0)
+        newCapacity = 1;
+    int total = oldSize + (int)n;
+    if (total < newCapacity)
+        total = newCapacity;
+
+    Element* newData = 0;
+    if (total != 0)
+        newData = (Element*)AllocElementBlock((unsigned int)(total * (int)sizeof(Element)), 0xd1);
+
+    Element* p = CopyConstructRange(mpBegin, position, newData);
+    DestroyRange(mpBegin, position, newData);
+    FillUninitialized(p, n, value);
+    p += n;
+    Element* newEnd = CopyConstructRange(position, mpEnd, p);
+    DestroyRange(position, mpEnd, p);
+
+    if (mpBegin != 0 && ((BlockHeader*)mpBegin)[-1].mSize != 0)
+        FreeRawBlock(mpBegin);
+
+    mpBegin = newData;
+    mpEnd = newEnd;
+    mpCapacity = newData + total;
 }

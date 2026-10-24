@@ -1,1 +1,4 @@
-# source (relative to match/)   symbol   original VA   [cl flags override]
+# slice s00f15890: one of the four gold7 functions is byte-exact; the other three are logged in
+# nonmatching.txt (they are complete, compiling source, but template-generated code shapes that the
+# compiler will not reproduce instruction for instruction).
+slices/s00f15890/s00f15890.cpp  ?Cleanup@PartHolder@@QAEXXZ  00f16260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
