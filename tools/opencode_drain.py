@@ -254,6 +254,7 @@ nudge_done = {}  # range -> done-count at its last nudge (queue groups reset the
 moved = {}       # range -> (time the settled count last changed, that count)
 nudges = {}      # range -> nudges sent (re-read from the log on restart)
 toolfixed = set()  # message ids already re-prompted for a tool call written as text
+toolfix_n = {}     # range -> text tool calls seen
 TOOL_TEXT = re.compile(r"DSML|<parameter name=|<invoke name=|<tool_call>")
 abandoned = set()
 if os.path.exists(LOG):
@@ -336,6 +337,17 @@ while True:
         txt = " ".join(c.get("text", "") for c in ((last or {}).get("content") or []) if isinstance(c, dict))
         if last and last.get("id") not in toolfixed and TOOL_TEXT.search(txt):
             toolfixed.add(last.get("id"))
+            toolfix_n[k] = toolfix_n.get(k, 0) + 1
+            if toolfix_n[k] > 2 and model_of(k).get("providerID") == "cheaperinference":
+                # the session keeps copying the leaked markup from its own history: move it to OpenRouter (0 leaks
+                # in 2,079 responses of the same model), via the group's worker_model override
+                Gm = json.load(open(GF))
+                Gm.setdefault("worker_model", {})[str(k)] = {"providerID": "openrouter", "id": "dsv41-cheapest"}
+                json.dump(Gm, open(GF + ".tmp", "w"), indent=1)
+                os.replace(GF + ".tmp", GF)
+                G = Gm
+                api("POST", "/api/session/%s/model" % sid, {"model": model_of(k)})
+                log("toolfix r%d %s: third text tool call, moved to openrouter" % (k, sid))
             log("toolfix r%d %s (tool call came back as text)" % (k, sid))
             api("POST", "/api/session/%s/prompt" % sid, {"text": "Your last tool call came back as plain text, so it "
                 "was not executed. Call the tool again through the tool interface (no markup in your reply text), "
