@@ -1,10 +1,21 @@
-// Slice s00be7bf0: the single function in this slice is
+// Slice s00be7bf0: two cCity methods
 //   0x00BE7BF0  Simulator::cCity::Initialize  (2696 bytes, __thiscall, 4 args, ret 0x10)
+//   0x00BE8680  Simulator::cCity::Setup       (583 bytes, __thiscall, 10 args, ret 0x28; name ours)
 //   (class from the ModAPI cCity layout: cCommunity base at 0, cSpatialObject at +0x120,
 //    mpCityHall +0x320, mpCityWalls +0x324, mpCityTerritory +0x328, mCultureTargetInfo +0x618,
-//    mCulturalTargets +0x62c; the method name is Claude-coined.)
+//    mCulturalTargets +0x62c; the method names are Claude-coined.)
 //
-// What it does (civ-stage city set-up):
+// 0x00BE8680 places a city and seeds its population/buildings:
+//   stores field_33C (+0x33c), snaps the position/orientation through the planet model and
+//   cSpatialObject slots 0x38/0x3c (explicit orientation vector wins, else build it from
+//   DirectionFromPosition), calls Initialize(arg7, arg8, mode != 0x1654c04, arg10), then
+//   (if there is a civilization) spends the civ's money, adjusts its radius, adds citizens,
+//   tells the city hall it belongs to this city, sets the city-hall model key (the terrain
+//   sphere's key at +0x1150 when non-null, else the civilization's 0x99e92f05 key with a
+//   BuildConstraints call when absent), stores field_670, updates the terrain average, and
+//   spawns buildings until GetWantedBuildingCount is reached, finally set field_761.
+//
+// 0x00BE7BF0 civ-stage city set-up:
 //   1. clears the game-data owner, sets a global "dirty" flag, sets field_519 (not space stage and
 //      the civilization's byte +0x8a);
 //   2. creates the four cCulturalTarget nouns, initialises each (index, city), appends them to
@@ -190,7 +201,9 @@ public:
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual void v20(); virtual void v24(); virtual void v28();
     virtual const Vector3& GetPosition();                                // 0x2c
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v30(); virtual void v34();
+    virtual void v38(const Vector3& v);                                  // 0x38 (SetSurfacePosition)
+    virtual void v3c(const Vector3& v);                                  // 0x3c (SetSurfaceOrientation)
     virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
     virtual void v50(); virtual void v54();
     virtual bool IsPlayerOwned();                                        // 0x58
@@ -198,7 +211,9 @@ public:
     virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
     virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
     virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
-    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
+    virtual void v90();
+    virtual void v94(const ResourceKey& key);                            // 0x94 (SetModelKey)
+    virtual void v98(); virtual void v9c();
     virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
     virtual void vb0(); virtual void vb4(); virtual void vb8();
     virtual int SpAddRef();                                              // 0xbc
@@ -261,15 +276,33 @@ public:
     virtual void SetCity(cSpatialObject* city);                          // 0x54
 };
 
-class cBuilding : public cGameData {};
+class cBuilding : public cGameData {
+public:
+    virtual void b08(); virtual void b0c(); virtual void b10(); virtual void b14();
+    virtual void b18(); virtual void b1c(); virtual void b20(); virtual void b24();
+    virtual void b28(); virtual void b2c(); virtual void b30(); virtual void b34();
+    virtual void b38(); virtual void b3c(); virtual void b40(); virtual void b44();
+    virtual void b48(); virtual void b4c(); virtual void b50();
+    virtual void SetOwnerCity(cCity* city);                              // 0x54
+
+    cSpatialObject mSpatial;                                             // +0x34
+};
+
+class cTerrainSphere {
+public:
+    uint32_t pad0[0x1150 / 4];
+    ResourceKey mModelKey;                                               // +0x1150
+};
 
 class cGameNounManager {
 public:
     cGameData* CreateNoun(uint32_t nounID);                              // 0x00b20c60
+    cTerrainSphere* GetCurrentTerrainSphere();                           // 0x00f67d90
 };
 cGameNounManager* NounManager();                                         // 0x00b3d300
 
 uint32_t GetCurrentGameMode();                                           // 0x00b5b800
+static const uint32_t kGameCiv = 0x1654c04;
 static const uint32_t kGameSpace = 0x1654c05;
 
 class cTerrainModifier {
@@ -289,6 +322,8 @@ public:
     cTerrainModifier* mpTerrain;                                         // +0x24
     bool FindClosestWater(const Vector3& pos, float radius, Vector3* dst);   // 0x00b8bb70
     Vector3 ToSurface(const Vector3& pos);                               // 0x00b81630
+    Vector3 DirectionToSurfacePosition(const Vector3& pos);              // 0x00b815a0
+    Vector3 BuildSurfaceOrientation2(const Vector3& pos, const Vector3& dir);   // 0x00b7f250
     int GetCellIndex(const Vector3& pos, int arg);                       // 0x00b7ea80
     void UpdateCell(int cell);                                           // 0x00b841a0
 };
@@ -296,6 +331,7 @@ cPlanetModel* PlanetModel();                                             // 0x00
 
 bool IsPointBlocked(int kind, const Vector3* pos);                       // 0x00c9e8e0
 uint32_t GetWallsModificationID(int level);                              // 0x00bebd00
+Vector3 DirectionFromPosition(const Vector3& pos);                       // 0x00bd8750
 
 class cPlanetRecord { public: bool IsValid(); };                        // 0x00c308b0
 class cPlanet { public: cPlanetRecord* GetRecord(); };                  // 0x00c71e30
@@ -329,6 +365,13 @@ public:
     uint32_t pad0[0x88 / 4];
     uint8_t pad88[2];
     bool field_8A;
+    uint8_t pad8B;
+    uint32_t pad8C[(0x98 - 0x8C) / 4];
+    float mfMoney;                                                       // +0x98
+    ResourceKey* GetModelTypeKey(uint32_t typeID);                       // 0x00bf9770
+    void BuildConstraints(uint32_t typeID);                              // 0x00bf9780
+    void SpendMoney(float amount);                                       // 0x00bef710
+    void AdjustRadius(float radius, bool immediate);                     // 0x00befd80
 };
 
 struct tCultureTargetInfo {
@@ -364,10 +407,17 @@ public:
 
     __forceinline cSpatialObject* Spatial() { return this; }
     void Initialize(int arg1, int arg2, int arg3, bool arg4);
+    void Setup(const Vector3& pos, float radius, int citizens, int value670,
+               bool flag33C, int buildingCount, int initArg1, int initArg2,
+               const Vector3* orientation, bool initArg4);
     void InitCulturalTarget();
     int GetCulturePointCount();                                          // 0x00bd8a00
+    void AddCitizens(int count);                                         // 0x00be32f0
     void AddBuilding(cBuilding* building, bool b);                       // 0x00be1ef0
     void UpdateBuildings();                                              // 0x00be5180
+    void UpdateTerrainAverage();                                         // 0x00bdbbb0
+    int GetWantedBuildingCount();                                        // 0x00bd8b10
+    void SpawnBuilding();                                                // 0x00be3850
     void UpdateLayout();                                                 // 0x00c00490
     void SetVisible(int b);                                              // 0x00be6900
     void UpdatePopulation();                                             // 0x00bd8000
@@ -381,7 +431,13 @@ public:
     intrusive_ptr<cCityWalls> mpCityWalls;                               // +0x324
     intrusive_ptr<cCityTerritory> mpCityTerritory;                       // +0x328
     Vector3 field_32C;                                                   // +0x32c
-    uint32_t pad338[(0x3ec - 0x338) / 4];
+    uint32_t field_338;                                                  // +0x338
+    bool field_33C;                                                      // +0x33c
+    uint8_t pad33D[3];
+    uint32_t pad340[(0x354 - 0x340) / 4];
+    int* field_354;                                                      // +0x354
+    int* field_358;                                                      // +0x358
+    uint32_t pad35c[(0x3ec - 0x35c) / 4];
     cCommunityLayout mBuildingsLayout;                                   // +0x3ec
     cCommunityLayout mDecorationsLayout;                                 // +0x450
     uint32_t pad4b4[(0x518 - 0x4b4) / 4];
@@ -394,6 +450,10 @@ public:
     uint32_t pad594[(0x618 - 0x594) / 4];
     SpVector<tCultureTargetInfo> mCultureTargetInfo;                     // +0x618
     SpVector<intrusive_ptr<cCulturalTarget> > mCulturalTargets;          // +0x62c
+    uint32_t pad638[(0x670 - 0x638) / 4];
+    int field_670;                                                       // +0x670
+    uint8_t pad674[0x761 - 0x674];
+    bool field_761;                                                      // +0x761
 };
 
 __forceinline void intrusive_ptr_add_ref(cGameData* p) { p->AddRef(); }
@@ -407,6 +467,7 @@ __forceinline void intrusive_ptr_release(PropertyList* p) { p->Release(); }
 
 // ---------------------------------------------------------------------------------------
 // 0x00BE7BF0
+// @ 0x00be7bf0
 void cCity::Initialize(int arg1, int arg2, int arg3, bool arg4)
 {
     SetOwner(0);
@@ -515,3 +576,59 @@ void cCity::Initialize(int arg1, int arg2, int arg3, bool arg4)
     PlanetModel()->UpdateCell(PlanetModel()->GetCellIndex(Spatial()->GetPosition(), GetCellArg(this)));
     UpdatePopulation();
 }
+
+// ---------------------------------------------------------------------------------------
+// 0x00BE8680  cCity::Setup (name ours): city placement + initial population/building set-up.
+// @ 0x00be8680
+void cCity::Setup(const Vector3& pos, float radius, int citizens, int value670,
+                  bool flag33C, int buildingCount, int initArg1, int initArg2,
+                  const Vector3* orientation, bool initArg4)
+{
+    field_33C = flag33C;
+
+    Spatial()->v38(PlanetModel()->DirectionToSurfacePosition(pos));
+    if (orientation)
+        Spatial()->v3c(*orientation);
+    else {
+        Vector3 dir = DirectionFromPosition(Spatial()->GetPosition());
+        Spatial()->v3c(PlanetModel()->BuildSurfaceOrientation2(Spatial()->GetPosition(), dir));
+    }
+
+    Initialize(initArg1, initArg2, GetCurrentGameMode() != kGameCiv, initArg4);
+    if (!mpCivilization)
+        return;
+
+    cCivilization* civ = mpCivilization;
+    civ->SpendMoney(civ->mfMoney);
+    civ->AdjustRadius(radius, false);
+    AddCitizens(citizens);
+    mpCityHall->SetOwnerCity(this);
+
+    if (flag33C) {
+        ResourceKey key = NounManager()->GetCurrentTerrainSphere()->mModelKey;
+        if (key.instanceID != 0) {
+            mpCityHall->mSpatial.v94(key);
+        } else if (mpCivilization) {
+            cCivilization* civKey = mpCivilization;
+            ResourceKey* pKey = civKey->GetModelTypeKey(0x99e92f05);
+            if (pKey->instanceID == 0)
+                civKey->BuildConstraints(0x99e92f05);
+            mpCityHall->mSpatial.v94(*civKey->GetModelTypeKey(0x99e92f05));
+        }
+    } else if (mpCivilization) {
+        cCivilization* civKey = mpCivilization;
+        ResourceKey* pKey = civKey->GetModelTypeKey(0x99e92f05);
+        if (pKey->instanceID == 0)
+            civKey->BuildConstraints(0x99e92f05);
+        mpCityHall->mSpatial.v94(*civKey->GetModelTypeKey(0x99e92f05));
+    }
+
+    field_670 = value670;
+    UpdateTerrainAverage();
+    for (int i = 0; i < buildingCount; i++) {
+        if ((field_358 - field_354) < GetWantedBuildingCount())
+            SpawnBuilding();
+    }
+    field_761 = true;
+}
+
