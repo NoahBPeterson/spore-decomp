@@ -1,0 +1,4 @@
+slices/s00d922f0/s00d922f0.cpp  ?FUN_00d92f60@@YA_NPAUCreature@@@Z  00d92f60  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d922f0/s00d922f0.cpp  ?WildPanic_Tick@@YA_NPAUCreature@@HHI@Z  00d92fb0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d922f0/s00d922f0.cpp  ?FUN_00d930b0@@YA_NPAUCreature@@HHHHPAUTimedPoint@@@Z  00d930b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d922f0/s00d922f0.cpp  ?FUN_00d93160@@YA_NPAUCreature@@HHHHPAUTimedPoint@@HM@Z  00d93160  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
