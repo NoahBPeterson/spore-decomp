@@ -1,0 +1,6 @@
+00d5bfa0 ?FUN_00d5bfa0@cCityVisualizer@@QAEXD@Z  # cCityVisualizer::MajorUpdate(char) -- population grow/shrink + species refresh + per-creature slot flags, 1211 bytes (index name FUN_00d5bfa0)
+00d5c470 ?FUN_00d5c470@cCityVisualizer@@QAEDPAX0@Z  # cCityVisualizer remove-and-record helper, char(void*,void*), 262 bytes (index name FUN_00d5c470)
+00d5c580 ?FUN_00d5c580@cCityVisualizer@@QAEXPAX@Z  # devirtualized SP::ProfEnterZone(void* citizen), 153 bytes (PDB anchor SP::ProfEnterZone via 00df7580, callee-single)
+00d5c620 ?FUN_00d5c620@cCityVisualizer@@QAEXPAXH@Z  # cCityVisualizer per-creature stimulus emission over the citizen list, void(void*,int), 249 bytes (index name FUN_00d5c620)
+00d5c720 ?FUN_00d5c720@cCityVisualizer@@QAEXXZ  # cCityVisualizer::OnTick -- seed the four vignette slots, 415 bytes (index name FUN_00d5c720)
+00d5c8c0 ?FUN_00d5c8c0@cCityVisualizer@@QAEXXZ  # cCityVisualizer slot-circle layout update around the city hall, 1072 bytes (index name FUN_00d5c8c0)
