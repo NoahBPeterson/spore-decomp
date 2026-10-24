@@ -35,6 +35,35 @@ extern void cSPEditorNaming_Init();        // 0x005bfd40
 extern void cSPEditorNaming_SetPrompt();   // 0x005c0320
 extern void cSPEditorNaming_DoMessage();   // 0x005c0100
 
+// thiscall members (the free externs above mis-declare the convention)
+struct cSPEditorNamingBase {
+    void Shutdown();                       // 0x005bfb90
+    void SetExpanded(int on);              // 0x005c0380
+    bool HandleUIMessage(void* window, void* msg); // 0x005c0100
+    void Init();                           // 0x005bfd40
+    void ctor();                           // 0x005bfff0
+};
+struct cSPUILayout {
+    bool Init(void* key, int a, int b);              // 0x008120d0
+    bool SetParentWin(void* parent, int a, int b);   // 0x008121b0
+    void SetVisibility(int on);                      // 0x00810590
+    void Shutdown(int a);                            // 0x00811ad0
+    void* FindWindowByID(int id, int b);             // 0x008105b0
+};
+struct cConnectionDialog { cConnectionDialog* ctor(); }; // 0x00810000
+struct cSPGuardMgr {
+    int  FUN_00f066c0(int* a, void* b);              // 0x00f066c0
+    void FUN_00f03ff0(int a, void* b, int c);        // 0x00f03ff0
+    void FUN_00f3bfc0(void* a, void* b, int c, int d); // 0x00f3bfc0
+    int  FUN_00f3be60(int a);                        // 0x00f3be60
+};
+struct cSPDialogHolder { void FUN_00f47630(void* p); }; // 0x00f47630
+struct cSPDialogMem    { void* FUN_00f38c70(); };       // 0x00f38c70
+struct cSPHintHolder  { void FUN_00efbbe0(int a, int b); }; // 0x00efbbe0
+struct cSPActsBarOps  { void FUN_00edadd0(); };          // 0x00edadd0
+struct cSPRecorder    { int  FUN_006c0200(); };          // 0x006c0200
+struct cSPRecording   { int  FUN_00ee31d0(); };          // 0x00ee31d0
+
 // various helpers (thiscall unless noted)
 extern int   FUN_00edabf0(int);            // 0x00edabf0
 extern void  FUN_00f04060();               // 0x00f04060
@@ -59,7 +88,7 @@ extern int   FUN_00f066c0(int*, void*);    // 0x00f066c0
 extern void  FUN_00f03ff0();               // 0x00f03ff0
 extern void  FUN_00efbbe0(int, int);       // 0x00efbbe0
 extern int   EA_Messaging_MessageServer(); // 0x0067dcc0
-extern void  EA_Messaging_RemoveHandler(); // 0x00571db0
+extern void  EA_Messaging_RemoveHandler(void* h, void* a, void* b, void* c, void* d); // 0x00571db0
 extern int   ScenarioTutorials_GetActive();// 0x00efc520
 extern int   EA_Audio_GetSystemAT();       // 0x00a206f0
 extern void  SP_cSPUISpace_KillSetiEffects(int, int); // 0x00435ed0
@@ -99,7 +128,7 @@ struct ActsBarUI {
     void FUN_00edb4c0(int* level);
     void FUN_00edb6c0();
     void FUN_00edb730();
-    int  FUN_00edb750(void* msg, int arg);
+    bool FUN_00edb750(void* window, void* msg);
     void FUN_00edb9b0(int on);
     void FUN_00edbef0_();   // placeholder (unused)
 };
@@ -110,7 +139,7 @@ struct cScenarioEditModeScriptActsBarUI {
     cScenarioEditModeScriptActsBarUI* ctor();
     void dtor();
     void FUN_00edbdd0(int a);
-    int  FUN_00edbac0(void* parent);
+    bool FUN_00edbac0(void* parent);
     void FUN_00edbd30(int on);
     void FUN_00edbe60();
 };
@@ -271,9 +300,10 @@ void ActsBarUI::FUN_00edb6c0()
     int h = *(int*)(self + 0xcc);
     if (h) {
         *(int*)(self + 0xcc) = 0;
-        EA_Messaging_RemoveHandler();
+        EA_Messaging_RemoveHandler((void*)h, *(void**)(self + 0xd0), *(void**)(self + 0xd4),
+                                   *(void**)(self + 0xd8), *(void**)(self + 0xdc));
     }
-    cSPEditorNaming_Shutdown();
+    ((cSPEditorNamingBase*)self)->Shutdown();
 }
 
 // ---------------------------------------------------------------------------
@@ -290,31 +320,34 @@ void ActsBarUI::FUN_00edb730()
 // 0x00edb750  message handler
 // ---------------------------------------------------------------------------
 // @ 0x00edb750
-int ActsBarUI::FUN_00edb750(void* msg, int arg)
+bool ActsBarUI::FUN_00edb750(void* window, void* msg)
 {
     char* self = (char*)this;
-    uint32_t id = *(uint32_t*)((char*)msg + 8);
+    char* m = (char*)msg;
+    uint32_t id = *(uint32_t*)(m + 8);
     if (id == 0x4cab02d) {
-        uint32_t n = *(uint32_t*)((char*)msg + 0x10);
+        uint32_t n = *(uint32_t*)(m + 0x10);
         if (n < 10) {
             char* gd = *(char**)(g_pMagic + 0x74);
             (*(FnI)(*(void**)(*(char**)gd + 0xc)))(gd, (int)g_acts[n].a);
         }
         char* snd = (char*)EA_Audio_GetSystemAT();
+        void* ar = 0;
         if (snd)
-            (*(FnP)(*(void**)(*(char**)snd + 0x20)))(snd);
-        SP_cSPUISpace_KillSetiEffects(0xe76c9b4f, 0);
-        return 1;
+            ar = (*(FnP)(*(void**)(*(char**)snd + 0x20)))(snd);
+        SP_cSPUISpace_KillSetiEffects(0xe76c9b4f, (int)ar);
+        return true;
     }
     if (id == 0x685a2b9) {
         char* snd = (char*)EA_Audio_GetSystemAT();
+        void* ar = 0;
         if (snd)
-            (*(FnP)(*(void**)(*(char**)snd + 0x20)))(snd);
-        SP_cSPUISpace_KillSetiEffects(0xe76c9b4f, 0);
+            ar = (*(FnP)(*(void**)(*(char**)snd + 0x20)))(snd);
+        SP_cSPUISpace_KillSetiEffects(0xe76c9b4f, (int)ar);
     } else if (id == 0x287259f6) {
-        char* obj = *(char**)((char*)msg + 4);
+        char* obj = *(char**)(m + 4);
         int idx = (int)(*(FnP)(*(void**)(*(char**)obj + 0x1c)))(obj) - 0x7c7a720;
-        int which = *(int*)((char*)msg + 0xc);
+        int which = *(int*)(m + 0xc);
         if (which == 0x447b968) {
             int v = FUN_00edac70(idx);
             int cur = *(int*)(self + 0x7c + idx * 4);
@@ -337,8 +370,9 @@ int ActsBarUI::FUN_00edb750(void* msg, int arg)
             }
         } else if (which == 0x447c040) {
             int* cell = (int*)(self + 0x7c + idx * 4);
-            if (!FUN_00f066c0(cell, self + 0x8c + idx * 0xc))
-                *cell = (idx != 0) ? -1 : -2;
+            cSPGuardMgr* g1 = (cSPGuardMgr*)*(void**)(g_pMagic + 0xd8);
+            if (!g1->FUN_00f066c0(cell, self + 0x8c + idx * 0xc))
+                *cell = (idx != 0) - 2;
             for (int i = 0; i < 4; ++i) {
                 if (i != idx) {
                     int* other = (int*)(self + 0x7c + i * 4);
@@ -347,29 +381,32 @@ int ActsBarUI::FUN_00edb750(void* msg, int arg)
                         if (i == 0 && *(int*)(self + 0x7c) == -1)
                             *(int*)(self + 0x7c) = -2;
                     }
-                    FUN_00f03ff0();
+                    cSPGuardMgr* g2 = (cSPGuardMgr*)*(void**)(g_pMagic + 0xd8);
+                    g2->FUN_00f03ff0(*other, self + 0x8c + i * 0xc, 0);
                 }
             }
             char* snd2 = (char*)EA_Audio_GetSystemAT();
+            void* ar2 = 0;
             if (snd2)
-                (*(FnP)(*(void**)(*(char**)snd2 + 0x20)))(snd2);
-            SP_cSPUISpace_KillSetiEffects(0xe76c9b4f, 0);
+                ar2 = (*(FnP)(*(void**)(*(char**)snd2 + 0x20)))(snd2);
+            SP_cSPUISpace_KillSetiEffects(0x29a5412f, (int)ar2);
             for (int i = 0; i < 4; ++i)
                 FUN_00edb120(i);
-            return 1;
+            return true;
         } else {
-            cSPEditorNaming_DoMessage();
-            return 1;
+            return ((cSPEditorNamingBase*)self)->HandleUIMessage(window, msg);
         }
-        if (*(int*)(self + 0x7c + idx * 4) >= 0)
-            FUN_00f03ff0();
-        GetRecorderState();
-        SP_cSPUISpace_KillSetiEffects(0xe10deda0, 0);
+        int v = *(int*)(self + 0x7c + idx * 4);
+        if (v >= 0) {
+            cSPGuardMgr* g3 = (cSPGuardMgr*)*(void**)(g_pMagic + 0xd8);
+            g3->FUN_00f03ff0(v, self + 0x8c + idx * 0xc, 0);
+        }
+        int rs = GetRecorderState();
+        SP_cSPUISpace_KillSetiEffects(0xe10deda0, rs);
         FUN_00edb730();
-        return 1;
+        return true;
     }
-    cSPEditorNaming_DoMessage();
-    return 1;
+    return ((cSPEditorNamingBase*)self)->HandleUIMessage(window, msg);
 }
 
 // ---------------------------------------------------------------------------
@@ -379,20 +416,22 @@ int ActsBarUI::FUN_00edb750(void* msg, int arg)
 void ActsBarUI::FUN_00edb9b0(int on)
 {
     char* self = (char*)this;
-    cSPEditorNaming_SetExpanded();
-    if (on) {
-        FUN_00edadd0();
+    ((cSPEditorNamingBase*)self)->SetExpanded(on);
+    if ((char)on) {
+        ((cSPActsBarOps*)self)->FUN_00edadd0();
         for (int i = 0; i < 4; ++i)
             FUN_00edb120(i);
         return;
     }
-    FUN_00f3bfc0();
+    void* mgr = *(void**)(g_pMagic + 0x74);
+    ((cSPGuardMgr*)mgr)->FUN_00f3bfc0(*(void**)(self + 0xbc), self + 0x8c, 0, 0);
     for (int i = 0; i < 4; ++i) {
-        FUN_00f03ff0();
-        FUN_00f3bfc0();
+        int tmp[3] = {0, 0, 0};
+        cSPGuardMgr* g1 = (cSPGuardMgr*)*(void**)(g_pMagic + 0xd8);
+        g1->FUN_00f03ff0(*(int*)(self + 0x7c + i * 4), tmp, 1);
+        ((cSPGuardMgr*)mgr)->FUN_00f3bfc0(*(void**)(self + 0xbc + i * 4), tmp, 1, i);
     }
-    FUN_00efbbe0(0x16, 0x17);
-    (void)self;
+    ((cSPHintHolder*)*(void**)(g_pMagic + 0xd4))->FUN_00efbbe0(0x16, 0x17);
 }
 
 // ---------------------------------------------------------------------------
@@ -415,13 +454,13 @@ RunInfo* do_copy(RunInfo* first, RunInfo* last, RunInfo* result)
 // 0x00edbac0  UI init
 // ---------------------------------------------------------------------------
 // @ 0x00edbac0
-int cScenarioEditModeScriptActsBarUI::FUN_00edbac0(void* parent)
+bool cScenarioEditModeScriptActsBarUI::FUN_00edbac0(void* parent)
 {
     char* s = (char*)this;
     char* dlg = 0;
     void* buf = operator_new(0x18, (const char*)0x013f6b3c, 0, 0, 0, 0);
     if (buf)
-        dlg = (char*)cConnectionDialog_ctor();
+        dlg = (char*)((cConnectionDialog*)buf)->ctor();
     char* old = *(char**)(s + 0xc);
     if (dlg != old) {
         if (dlg)
@@ -430,8 +469,8 @@ int cScenarioEditModeScriptActsBarUI::FUN_00edbac0(void* parent)
         if (old)
             (*(FnV)(*(void**)(*(char**)old + 8)))(old);
     }
-    if (!cSPUILayout_Init_(*(void**)(s + 0xc), (int)0x015ac580, 0, 0x5b598fa))
-        return 0;
+    if (!((cSPUILayout*)*(void**)(s + 0xc))->Init((void*)0x015ac580, 0, 0x5b598fa))
+        return false;
     char* old2 = *(char**)(s + 0x10);
     if (parent != old2) {
         if (parent)
@@ -440,9 +479,9 @@ int cScenarioEditModeScriptActsBarUI::FUN_00edbac0(void* parent)
         if (old2)
             (*(FnV)(*(void**)(*(char**)old2 + 4)))(old2);
     }
-    cSPUILayout_SetParentWin(*(void**)(s + 0xc), *(void**)(s + 0x10), 1, 0x5b598fa);
-    cSPUILayout_SetVisibility(*(void**)(s + 0xc), 0);
-    char* w = (char*)cSPUILayout_FindWindowByID(*(void**)(s + 0xc), 0x743b980, 1);
+    ((cSPUILayout*)*(void**)(s + 0xc))->SetParentWin(*(void**)(s + 0x10), 1, 0x5b598fa);
+    ((cSPUILayout*)*(void**)(s + 0xc))->SetVisibility(0);
+    char* w = (char*)((cSPUILayout*)*(void**)(s + 0xc))->FindWindowByID(0x743b980, 1);
     char* old3 = *(char**)(s + 0x14);
     if (w != old3) {
         if (w)
@@ -452,27 +491,29 @@ int cScenarioEditModeScriptActsBarUI::FUN_00edbac0(void* parent)
             (*(FnV)(*(void**)(*(char**)old3 + 4)))(old3);
     }
     if (!*(void**)(s + 0x14))
-        return 0;
+        return false;
     float* r = (float*)(*(FnP)(*(void**)(*(char**)(s + 0x10) + 0x38)))(*(void**)(s + 0x10));
-    float f1 = r[0];
+    float x0 = r[0];
+    float x2 = r[2];
     (*(FnII)(*(void**)(*(char**)(s + 0x14) + 0x70)))(*(void**)(s + 0x14), 0, 0);
     char* q = *(char**)(s + 0x14);
     float* r2 = (float*)(*(FnP)(*(void**)(*(char**)q + 0x38)))(q);
-    float f2 = r2[3] - r2[1];
-    (*(FnII)(*(void**)(*(char**)q + 0x74)))(q, *(int*)&f1, *(int*)&f2);
-    void* found = cSPUILayout_FindWindowByID(*(void**)(s + 0xc), 0x7c3fbfe, 1);
+    float h = r2[3] - r2[1];
+    float wd = x2 - x0;
+    (*(FnII)(*(void**)(*(char**)q + 0x74)))(q, *(int*)&wd, *(int*)&h);
+    void* found = ((cSPUILayout*)*(void**)(s + 0xc))->FindWindowByID(0x7c3fbfe, 1);
     if (found) {
         void* obj = operator_new(0x44, (const char*)0x013f6b3c, 0, 0, 0, 0);
         if (obj)
-            obj = (void*)FUN_00f38c70();
+            obj = ((cSPDialogMem*)obj)->FUN_00f38c70();
         else
             obj = 0;
-        FUN_00f47630(obj);
+        ((cSPDialogHolder*)(s + 0x4c))->FUN_00f47630(obj);
         char* slot = *(char**)(s + 0x4c);
-        void* f2w = cSPUILayout_FindWindowByID(*(void**)(s + 0xc), 0x7c3fbfe, 1);
+        void* f2w = ((cSPUILayout*)*(void**)(s + 0xc))->FindWindowByID(0x7c3fbfe, 1);
         (*(FnI)(*(void**)(*(char**)slot + 0x10)))(slot, (int)f2w);
     }
-    return 1;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -489,10 +530,11 @@ void cScenarioEditModeScriptActsBarUI::dtor()
     int h = *(int*)(s + 0x18);
     if (h) {
         *(int*)(s + 0x18) = 0;
-        EA_Messaging_RemoveHandler();
+        EA_Messaging_RemoveHandler((void*)h, *(void**)(s + 0x1c), *(void**)(s + 0x20),
+                                   *(void**)(s + 0x24), *(void**)(s + 0x28));
     }
     if (*(void**)(s + 0xc))
-        cSPUILayout_Shutdown(*(void**)(s + 0xc), 1);
+        ((cSPUILayout*)*(void**)(s + 0xc))->Shutdown(1);
     char* p = *(char**)(s + 0x10);
     if (p) {
         *(void**)(s + 0x10) = 0;
@@ -512,7 +554,7 @@ void cScenarioEditModeScriptActsBarUI::dtor()
 void cScenarioEditModeScriptActsBarUI::FUN_00edbd30(int on)
 {
     char* s = (char*)this;
-    if (on) {
+    if ((char)on) {
         char* h = (char*)EA_Messaging_MessageServer();
         char* sub = s ? s + 8 : 0;
         *(char**)(s + 0x18) = h;
@@ -521,17 +563,18 @@ void cScenarioEditModeScriptActsBarUI::FUN_00edbd30(int on)
         *(int*)(s + 0x24) = 1;
         *(int*)(s + 0x28) = 0;
         if (h && sub)
-            (*(FnII)(*(void**)(*(char**)h + 0x24)))(h, 0x7c41ae9, (int)sub);
+            (*(FnII)(*(void**)(*(char**)h + 0x24)))(h, (int)sub, 0x7c41ae9);
     } else {
         int h = *(int*)(s + 0x18);
         if (h) {
             *(int*)(s + 0x18) = 0;
-            EA_Messaging_RemoveHandler();
+            EA_Messaging_RemoveHandler((void*)h, *(void**)(s + 0x1c), *(void**)(s + 0x20),
+                                       *(void**)(s + 0x24), *(void**)(s + 0x28));
         }
     }
     char* w = *(char**)(s + 0x10);
     (*(FnII)(*(void**)(*(char**)w + 0x7c)))(w, 1, on);
-    cSPUILayout_SetVisibility(*(void**)(s + 0xc), 1);
+    ((cSPUILayout*)*(void**)(s + 0xc))->SetVisibility(1);
 }
 
 // ---------------------------------------------------------------------------
@@ -588,7 +631,8 @@ void cScenarioEditModeScriptActsBarUI::FUN_00edbe60()
     int h = *(int*)(s + 0x18);
     if (h) {
         *(int*)(s + 0x18) = 0;
-        EA_Messaging_RemoveHandler();
+        EA_Messaging_RemoveHandler((void*)h, *(void**)(s + 0x1c), *(void**)(s + 0x20),
+                                   *(void**)(s + 0x24), *(void**)(s + 0x28));
     }
     char* p = *(char**)(s + 0x14);
     if (p)
@@ -607,26 +651,27 @@ void cScenarioEditModeScriptActsBarUI::FUN_00edbe60()
 // 0x00edbef0  message handler
 // ---------------------------------------------------------------------------
 // @ 0x00edbef0
-int FUN_00edbef0(char* self, int id, int* p)
+bool __fastcall FUN_00edbef0(char* self, int, int id, int* p)
 {
     if (id != 0x7c41ae9)
-        return 0;
+        return false;
     int a = *(int*)((char*)p + 8);
     if (*(void**)(g_pMagic + 0x74) != 0) {
         int cmp = *(int*)(self + 0x44) ? (*(int*)(self + 0x44) + 4) : 0;
         if (*(int*)((char*)p + 0x10) == cmp) {
             int idx = ScenarioTutorials_GetActive();
-            int r = FUN_00f3be60(idx);
+            int r = ((cSPGuardMgr*)*(void**)(g_pMagic + 0x74))->FUN_00f3be60(idx);
             if (r) {
                 FUN_00edfda0(r + 0x78, &a);
                 char* snd = (char*)EA_Audio_GetSystemAT();
+                void* ar = 0;
                 if (snd)
-                    (*(FnP)(*(void**)(*(char**)snd + 0x20)))(snd);
-                SP_cSPUISpace_KillSetiEffects(0xe76c9b4f, 0);
-                FUN_006c0200();
-                return FUN_00ee31d0();
+                    ar = (*(FnP)(*(void**)(*(char**)snd + 0x20)))(snd);
+                SP_cSPUISpace_KillSetiEffects(0xe76c9b4f, (int)ar);
+                int rec = ((cSPRecorder*)*(void**)(g_pMagic + 0x14))->FUN_006c0200();
+                ((cSPRecording*)rec)->FUN_00ee31d0();
             }
         }
     }
-    return 0;
+    return false;
 }
