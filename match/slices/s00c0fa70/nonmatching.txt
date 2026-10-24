@@ -1,16 +1,16 @@
 # va  diff-bytes  equiv-verdict  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00c0fa70   93  FAIL         find animation entry by mask bit; complete; equiv eax mismatch
-00c0fae0   38  FAIL         clear animation binding + release; complete; equiv execution fault (vtable/stub)
-00c0fb40    8  FAIL         release animation binding handle; complete; equiv call-depth-1 mismatch (stub callee)
+00c0fa70  102  PASS         find animation entry by mask bit; complete; equiv PASS (400/600 inputs); not byte-exact
+00c0fae0   17  PASS         clear animation binding + release; complete; equiv PASS
+00c0fb40    0  PASS         release animation binding handle; complete; byte-exact (in manifest.txt)
 00c0fba0   89  UNSUPPORTED  serialize vector via IO stream; complete; 0 valid inputs (read fault/fake-arity)
-00c0fc10   42  FAIL         dispatch element callback to +0x20 object; complete; equiv eax&0xffff mismatch
+00c0fc10    0  PASS         dispatch element callback to +0x20 object; complete; byte-exact (in manifest.txt)
 00c0fc40  128  UNSUPPORTED  uniquify pointer array (release dups); complete; 0 valid inputs (read fault)
 00c0fcf0  151  UNSUPPORTED  read bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity)
 00c0fda0  126  UNSUPPORTED  write bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity)
-00c0fe30   78  FAIL         copy animation binding (addref/release +0x20); complete; equiv execution fault
-00c0fea0   96  WEAK         swap two animation bindings; complete
-00c0ffc0  129  WEAK         reverse-copy array of 0x24-byte bindings; complete
-00c10050   -   FAIL         play animation by id/name predicate; complete; equiv execution fault (vtable callee)
+00c0fe30   40  PASS         copy animation binding (addref/release +0x20); complete; equiv PASS; not byte-exact
+00c0fea0   96  PASS         swap two animation bindings; complete
+00c0ffc0  146  WEAK         reverse-copy array of 0x24-byte bindings; complete
+00c10050  493  PASS         play animation by id/name predicate; complete; equiv PASS; not byte-exact
 00c10250  129  PASS         resolve + apply animation remap ids; complete
 00c10330  172  PASS         pack byte array -> remap id and apply; complete
 00c103f0  141  UNSUPPORTED  build cAnimationRemapping singleton; complete; 0 valid inputs (write fault)
