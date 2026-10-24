@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00dd6a70/s00dd6a70.cpp  ?RestartTimer@cSPUIEventLog@@QAE_NI@Z         00dd6a70  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00dd6a70/s00dd6a70.cpp  ?RegisterCallback@cSPUIEventLog@@QAEHI@Z      00dd6b20  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00dd6a70/s00dd6a70.cpp  ?RegisterCloseCallback@cSPUIEventLog@@QAE_NIH@Z 00dd6b70  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00dd6a70/s00dd6a70.cpp  ?clear_events@cSPUIEventLog@@QAEXXZ           00dd6d70  /O2 /MD /Gy /TP /arch:SSE /GS-

@@ -1,0 +1,17 @@
+00dd6a70  ?RestartTimer@cSPUIEventLog@@QAE_NI@Z  # SP::cSPUIEventLog::RestartTimer (find event, restart when the +0x0c text-dirty bit is clear and duration has elapsed) - byte-exact
+00dd6ac0  ?SetEventDuration@cSPUIEventLog@@QAEXIM@Z  # SP::cSPUIEventLog::SetEventDuration (find event, store duration, set +0x0c bit11 when dur<0) - nonmatching/equivalent
+00dd6b20  ?RegisterCallback@cSPUIEventLog@@QAEHI@Z  # SP::cSPUIEventLog::RegisterCallback (store callback when the +0x0c bit9 history flag is clear) - byte-exact
+00dd6b70  ?RegisterCloseCallback@cSPUIEventLog@@QAE_NIH@Z  # SP::cSPUIEventLog::RegisterCloseCallback (store close callback, refresh UI) - byte-exact
+00dd6bc0  ?remove_event@cSPUIEventLog@@QAEXI@Z  # SP::cSPUIEventLog::remove_event (unlink event, fire callback, hide the four UI windows, erase rbtree node, release value) - nonmatching/equivalent
+00dd6d10  ?RemoveEvent@cSPUIEventLog@@QAEXID@Z  # SP::cSPUIEventLog::RemoveEvent (immediate -> remove_event; else flag for removal and zero duration) - nonmatching/equivalent
+00dd6d70  ?clear_events@cSPUIEventLog@@QAEXXZ  # SP::cSPUIEventLog::clear_events (drain the +0x28 EventTree via remove_event) - byte-exact
+00dd6da0  ?FUN_00dd6da0@@YGXXZ  # base-subobject method (ecx = log+4): drain EventTree, Shutdown global DAT_016a095c, tail-call FUN_00dd5950 - no source (partial)
+00dd6df0  ?ModifyEventText@cSPUIEventLog@@QAE_NIPB_W@Z  # SP::cSPUIEventLog::ModifyEventText (assign event text, set +0x0c bit0, refresh UI, drop from history) - nonmatching/equivalent
+00dd6ec0  ?add_to_history@cSPUIEventLog@@QAEXPAUcFeedbackEvent@@@Z  # SP::cSPUIEventLog::add_to_history (bump mHistorySize, set flags bit9/bit10, duration=-1, m1c from DAT_016a0a0c*255) - nonmatching/equivalent
+00dd7020  ?FUN_00dd7020@@YGXXZ  # Simulator::cSPUIEventLog::cSPUIEventLog (225-byte ctor: base vftables, EventTree init, global alpha/visibility, cPropertyList + animator) - no source (partial)
+00dd7160  ?FUN_00dd7160@@YGXXZ  # SP::cSPUIEventLog destructor (drain tree, restore base vftables, release members, operator delete) - no source (partial)
+00dd71e0  ?FUN_00dd71e0@@YGXXZ  # $E209 scalar deleting destructor / adjustor for cSPUIEventLog (1081 bytes) - no source (partial)
+00dd7620  ?FUN_00dd7620@@YGXXZ  # SP::cSPUIEventLog::RemoveAllEventsOfSameType (remove_event every node sharing the probe event's type) - no source (partial)
+00dd7770  ?FUN_00dd7770@@YGXXZ  # cFeedbackEvent sub-object destructor (vtable 0x147ce34, release EventString + callbacks) - no source (partial)
+00dd7820  ?FUN_00dd7820@@YGXXZ  # cFeedbackEvent-related helper (vtable 0x147ce34 family) - no source (partial)
+00dd78b0  ?FUN_00dd78b0@@YGXXZ  # event-layout helper using FNVHash (0x932e80) and the +0x6c property list - no source (partial)
