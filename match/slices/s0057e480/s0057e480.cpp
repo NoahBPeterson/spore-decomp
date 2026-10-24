@@ -1,4 +1,5 @@
 // slice s0057e480 — editor helpers (mix of implemented small helpers and oversized stubs).
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 #include "types.h"
 
 typedef unsigned int size_t;
