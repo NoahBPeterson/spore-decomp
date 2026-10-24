@@ -8,3 +8,4 @@ slices/s007b19c0/s007b19c0.cpp  ?set@W2820@@QAEXPAUPair@@000M@Z  007b2820  /O2 /
 slices/s007b19c0/s007b19c0.cpp  ?FUN_007b2970@@YGXPAUP2970@@@Z  007b2970  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s007b19c0/s007b19c0.cpp  ?PreloadTextureList@TexPreload@@QAEXPAX@Z  007b1de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s007b19c0/s007b19c0.cpp  ?PreloadTextureList@TexPreload@@QAEXPAUPropKey@@@Z  007b1e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s007b19c0/s007b19c0.cpp  ??1D2900@@UAE@XZ  007b2900  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

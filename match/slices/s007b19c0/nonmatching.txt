@@ -9,4 +9,3 @@
 007b2600  107  complete; spherical angles + length. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast (inline x87 fsqrt, _CIacos/_CIasin).
 007b26a0  320  SP::cThumbnailManager::SetupThumbnailRTTs - complete; vtable/RTT setup; equiv WEAK (104 valid inputs)
 007b2890   61  destructor: original has an EH frame (vptr-restore protection); our body compiles without it
-007b2900   61  destructor: original has an EH frame (vptr-restore protection); our body compiles without it
