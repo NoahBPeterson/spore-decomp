@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d990a0/s00d990a0.cpp  ?ExtinguishTarget@@YAPAVcSPCreatureBase@@PAV1@@Z  00d99470  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?FireTarget@@YAPAVcSPCreatureBase@@PAV1@@Z  00d994c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?BuildingTarget@@YAPAVcSPCreatureBase@@PAV1@@Z  00d99500  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?IsAnimRunning@@YAHPAVcAnimState@@@Z  00d99550  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?RingNodeMatches@@YA_NPAUcTreeRing@@PBI@Z  00d995c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?ForwardWalkTree@@YAXMNPAX00000@Z  00d995f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?MakeStimulusDesc@@YAXIIPBUVector3@@PAUsStimulusDesc@@@Z  00d996b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?CopyStimulusFlat@@YAXPBUsStimulusFlat@@PAUsStimulusRotated@@@Z  00d996e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?AssignStimulus@@YAXPBUsStimulusRecord@@PAUsStimulusAssignment@@@Z  00d99730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?GetAny@behavior_stimuli@@QAEAAU1@XZ  00d997e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?QueryStimulus@@YAHPAUcStimulusContext@@I@Z  00d998d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?GetAnimalFromStimulus@@YAPAVcSPCreatureBase@@PAUcStimulusContext@@@Z  00d99980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?WatchMemoryBlock@@YAPAVcSPCreatureBase@@PAUcStimulusContext@@@Z  00d999d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d990a0/s00d990a0.cpp  ?GetStimulusCreature@@YAPAVcSPCreatureBase@@PAUcStimulusContext@@@Z  00d99a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
