@@ -83,7 +83,7 @@ struct cCellUI {
 // ---------------------------------------------------------------- callees
 // Static cell-TU helpers with custom register conventions in the original; declared as ordinary
 // free functions here (the byte diff does not check register conventions).
-void  FUN_00e6d790(cCell* cell, Vector3* center, float* radius);      // 0x00e6d790
+void  FUN_00e6d790(float* radius);                                    // 0x00e6d790
 void  FUN_00e6ad80(int, cCell*, cCell*, cCell*, cCell*);              // 0x00e6ad80
 int   FUN_00e573e0(cCell* cell, cCell* other);                        // 0x00e573e0
 cPartSet* FUN_00e679e0(ResourceKey key);                              // 0x00e679e0
@@ -95,7 +95,22 @@ int   FUN_00e50a10(float* cur, float* vel, float target, float speed, float dt);
 // a1/a2 are the contact point and contact normal.
 void sResolvePartCollision(int a0, const Vector3* a1, const Vector3* a2, float a3, void* a4,
                            int a5, int a6, int a7, void* a8, int a9, int a10, int a11,
-                           int a12, int a13);
+                           int a12, int a13);  // 0x00e6a3f0
+
+// FUN_00e6d790 uses a custom register ABI: cell in esi, center in edi, radius pointer on the
+// stack.  Hand off through a tiny asm helper (esi/edi are saved and restored around the call).
+static __declspec(noinline) void CallCollCenter(cCell* cell, Vector3* center, float* radius)
+{
+    __asm {
+        xchg esi, cell
+        xchg edi, center
+        push radius
+        call FUN_00e6d790
+        add  esp, 4
+        xchg edi, center
+        xchg esi, cell
+    }
+}
 
 // Transform a part's local position by the cell transform; returns the world-space part radius.
 static float PartWorldPos(cCell* cell, cCollPart* part, float* px, float* py, float* pz)
@@ -124,7 +139,7 @@ void FUN_00e73390(int a0, cCell* cell, int a2, int count, cCollPart* parts, cCel
 {
     Vector3 center;
     float radius;
-    FUN_00e6d790(boundsCell, &center, &radius);
+    CallCollCenter(boundsCell, &center, &radius);
     for (int i = 0; i < count; i++) {
         cCollPart* part = &parts[i];
         if (part->kind == 1 || part->kind == 0xc)
@@ -135,10 +150,12 @@ void FUN_00e73390(int a0, cCell* cell, int a2, int count, cCollPart* parts, cCel
         float d2 = dx * dx + dy * dy + dz * dz;
         float penetration;
         Vector3 contact, normal;
-        if (d2 >= 1.5258789e-05f) {
+        if (1.5258789e-05f > d2) {
+            penetration = partRadius + radius;
+        } else {
             float dist = (float)sqrt(d2);
             penetration = (partRadius + radius) - dist;
-            if (penetration < 0.0f)
+            if (0.0f > penetration)
                 continue;
             float inv = 1.0f / dist;
             float d = partRadius - radius;
@@ -146,8 +163,6 @@ void FUN_00e73390(int a0, cCell* cell, int a2, int count, cCollPart* parts, cCel
             contact = Vector3((center.x + wx + normal.x * d) * 0.5f,
                               (center.y + wy + normal.y * d) * 0.5f,
                               (center.z + wz + normal.z * d) * 0.5f);
-        } else {
-            penetration = partRadius + radius;
         }
         sResolvePartCollision(a0, &contact, &normal, penetration, cell, a2, part->kind, i,
                               boundsCell, a6, a7, a8, 0xc, -1);
@@ -161,7 +176,7 @@ void FUN_00e73620(int a0, cCell* a1, cCell* cell, cCell* a3, cCell* a4)
     cPartSet* set = FUN_00e679e0(cell->mModelKey);
     Vector3 center;
     float radius;
-    FUN_00e6d790(cell, &center, &radius);
+    CallCollCenter(cell, &center, &radius);
     for (int i = 0; i < set->count; i++) {
         cCollPart* part = &set->parts[i];
         if (part->kind == 1)
@@ -200,7 +215,7 @@ void FUN_00e738f0(int a0, cCell* cell, cCell* a2, cCell* a3, cCell* a4)
     cPartSet* set = FUN_00e679e0(cell->mModelKey);
     Vector3 center;
     float radius;
-    FUN_00e6d790(cell, &center, &radius);
+    CallCollCenter(a2, &center, &radius);
     for (int i = 0; i < set->count; i++) {
         cCollPart* part = &set->parts[i];
         if (part->kind == 1)
@@ -211,10 +226,12 @@ void FUN_00e738f0(int a0, cCell* cell, cCell* a2, cCell* a3, cCell* a4)
         float d2 = dx * dx + dy * dy + dz * dz;
         float penetration;
         Vector3 contact, normal;
-        if (d2 >= 1.5258789e-05f) {
+        if (1.5258789e-05f > d2) {
+            penetration = partRadius + radius;
+        } else {
             float dist = (float)sqrt(d2);
             penetration = (partRadius + radius) - dist;
-            if (penetration < 0.0f)
+            if (0.0f > penetration)
                 continue;
             float inv = 1.0f / dist;
             float d = partRadius - radius;
@@ -222,8 +239,6 @@ void FUN_00e738f0(int a0, cCell* cell, cCell* a2, cCell* a3, cCell* a4)
             contact = Vector3((center.x + wx + normal.x * d) * 0.5f,
                               (center.y + wy + normal.y * d) * 0.5f,
                               (center.z + wz + normal.z * d) * 0.5f);
-        } else {
-            penetration = partRadius + radius;
         }
         sResolvePartCollision(a0, &contact, &normal, penetration, cell,
                               *(int*)((char*)a3 + 0xb4), part->kind, i, a2,
@@ -238,19 +253,23 @@ void FUN_00e73bb0(int p1, cCell* cellA, cCell* p3, cCell* arg3, cCell* p5)
     float radiusA;
     Vector3 centerB;
     float radiusB;
-    FUN_00e6d790(cellA, &centerA, &radiusA);
-    FUN_00e6d790(arg3, &centerB, &radiusB);
+    CallCollCenter(cellA, &centerA, &radiusA);
+    CallCollCenter(p3, &centerB, &radiusB);
 
-    float dx = centerA.x - centerB.x;
-    float dy = centerA.y - centerB.y;
-    float dz = centerA.z - centerB.z;
+    float dx = centerB.x - centerA.x;
+    float dy = centerB.y - centerA.y;
+    float dz = centerB.z - centerA.z;
     float d2 = dx * dx + dy * dy + dz * dz;
     float penetration;
-    Vector3 contact, normal;
-    if (d2 >= 1.5258789e-05f) {
+    Vector3 contact = centerB;
+    Vector3 normal = centerA;
+    normal.z = dz;
+    if (1.5258789e-05f > d2) {
+        penetration = radiusA + radiusB;
+    } else {
         float dist = (float)sqrt(d2);
         penetration = (radiusA + radiusB) - dist;
-        if (penetration < 0.0f)
+        if (0.0f > penetration)
             return;
         float inv = 1.0f / dist;
         float d = radiusA - radiusB;
@@ -258,8 +277,6 @@ void FUN_00e73bb0(int p1, cCell* cellA, cCell* p3, cCell* arg3, cCell* p5)
         contact = Vector3((centerB.x + centerA.x + normal.x * d) * 0.5f,
                           (centerB.y + centerA.y + normal.y * d) * 0.5f,
                           (centerB.z + centerA.z + normal.z * d) * 0.5f);
-    } else {
-        penetration = radiusA + radiusB;
     }
 
     int uVar4 = FUN_00e573e0(cellA, p3);

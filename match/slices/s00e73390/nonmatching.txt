@@ -1,5 +1,5 @@
-00e73390  579  calls FUN_00e6d790, a static helper with a custom register ABI (cell in esi, center in edi, radius on stack); the call site cannot be reproduced from C++
+00e73390  630  calls FUN_00e6d790, a static helper with a custom register ABI (cell in esi, center in edi, radius on stack); reproduced with a 7-insn inline-asm CallCollCenter wrapper that preserves esi/edi. [equiv: PASS 242 valid, 100% coverage]
 00e73620  618  calls FUN_00e6d790 (custom esi/edi register ABI)
-00e738f0  611  calls FUN_00e6d790 (custom esi/edi register ABI)
-00e73bb0  527  calls FUN_00e6d790 (custom esi/edi register ABI)
+00e738f0  650  calls FUN_00e6d790 (custom esi/edi register ABI) via CallCollCenter; the centre is computed from the third argument (a2, the original's esi), not the primary cell. [equiv: PASS at 800 inputs, 395 valid, 98.3% coverage; default 400 is WEAK only by valid-count 198<200, replay PASS]
+00e73bb0  656  calls FUN_00e6d790 (custom esi/edi register ABI) via CallCollCenter; radius written to the cellA arg slot; the touching branch sets normal.z = dz (the original reuses the centreA.z slot). [equiv: PASS at 800 inputs, 383 valid, 81.6% coverage; default 400 is WEAK only by valid-count 182<200, replay PASS]
 00e73e50  212  calls FUN_00e6db70, a static helper with a custom eax register ABI (vector in eax, float on stack)
