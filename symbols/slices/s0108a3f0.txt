@@ -1,0 +1,12 @@
+0108a3f0 hkGenericConstraintData::buildJacobianInternal  # 26-case scheme command walker, six-arg handler calls, modifier vtbl dispatch
+0108a980 hkGenericConstraintDataScheme::~hkGenericConstraintDataScheme  # four hkArray frees (deallocateChunk per array)
+0108aa40 hkGenericConstraintData::hkGenericConstraintData  # zero-init then m_scheme.m_info.m_sizeOfSchemas = 0x18
+0108aaa0 hkGenericConstraintData::~hkGenericConstraintData  # motor reference release loop then scheme dtor
+0108aaf0 hkGenericConstraintData::buildJacobian  # copies query, hkBeginConstraints(in,out,results,8), calls walker
+0108aba0 hkConstraintChainInstance::entityRemovedCallback  # drops an entity from m_chainedEntities
+0108ac30 hkConstraintChainInstance::addEntity  # append + addReference on the chained entity
+0108acb0 hkConstraintChainInstance::hkConstraintChainInstance  # base ctor(1), addReference, hkMemory allocate of the action
+0108ad30 hkConstraintChainInstance::~hkConstraintChainInstance  # release chained entities, release m_action, base dtor
+0108ae30 hkLimitedHingeConstraintData::hkLimitedHingeConstraintData  # -pi/+pi, zeroed A/B basis
+0108aec0 hkLimitedHingeConstraintData::setInBodySpace  # pivots/axles, normalize, referenceA cross, referenceB
+0108b150 hkLimitedHingeConstraintData::isValid  # six dot/length tests then pivot-span check
