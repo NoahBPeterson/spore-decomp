@@ -342,8 +342,8 @@ void* DestructRange_7cede0(PropPair* begin, PropPair* end, char* out)
     return out;
 }
 
-// @ 0x007cee40  CopyRange(begin,end,dst)
-void CopyRange_7cee40(PropPair* begin, PropPair* end, PropPair* dst)
+// @ 0x007cee40  CopyRange(begin,end,dst) -- returns the end of the destination range
+PropPair* CopyRange_7cee40(PropPair* begin, PropPair* end, PropPair* dst)
 {
     for (; begin != end; begin = (PropPair*)((char*)begin + 0x10), dst = (PropPair*)((char*)dst + 0x10)) {
         dst->first = begin->first;
@@ -355,10 +355,11 @@ void CopyRange_7cee40(PropPair* begin, PropPair* end, PropPair* dst)
             if (ov) ReleaseProp(ov);
         }
     }
+    return dst;
 }
 
-// @ 0x007ceec0  CopyBackward(first,last,dst)
-void CopyBackward_7ceec0(PropPair* first, PropPair* last, PropPair* dst)
+// @ 0x007ceec0  CopyBackward(first,last,dst) -- returns the start of the destination range
+PropPair* CopyBackward_7ceec0(PropPair* first, PropPair* last, PropPair* dst)
 {
     while (last != first) {
         last = (PropPair*)((char*)last - 0x10);
@@ -372,6 +373,7 @@ void CopyBackward_7ceec0(PropPair* first, PropPair* last, PropPair* dst)
             if (ov) ReleaseProp(ov);
         }
     }
+    return dst;
 }
 
 // @ 0x007cefd0  DestructRange2(begin,end) __stdcall
