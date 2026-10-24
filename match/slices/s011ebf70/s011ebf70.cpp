@@ -217,18 +217,22 @@ void Mutex::Destroy()
 // @ 0x011ec110
 bool Mutex::Init(const char* name)
 {
-    if (!name) return false;
-    mnLockCount = 0;
-    mbIntraProcess = *name != 0;
-    if (*name)
+    if (name)
     {
-        InitializeCriticalSection(this);
-        return true;
+        mnLockCount = 0;
+        mbIntraProcess = *name;
+        if (mbIntraProcess)
+        {
+            InitializeCriticalSection(this);
+            return true;
+        }
+        char tail = name[1];
+        const char* p = tail ? name + 1 : 0;
+        void* h = CreateMutexA(0, 0, p);
+        mData0 = h;
+        return h != 0;
     }
-    const char* p = name[1] ? name + 1 : 0;
-    void* h = CreateMutexA(0, 0, p);
-    mData0 = h;
-    return h != 0;
+    return false;
 }
 
 // @ 0x011ec170
