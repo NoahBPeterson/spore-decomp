@@ -385,20 +385,23 @@ void FUN_008cceb0(u8* o, u8* src)
 void FUN_008cd0f0(u8* p)
 {
     if (p == 0) return;
-    void* mem = *(void**)p;
-    tsi_DeAllocMem(mem, *(void**)(p + 0x18));
-    tsi_DeAllocMem(mem, *(void**)(p + 0x1c));
-    tsi_DeAllocMem(mem, *(void**)(p + 0x20));
-    tsi_DeAllocMem(mem, *(void**)(p + 0xa8));
-    tsi_DeAllocMem(mem, *(void**)(p + 0xac));
+    tsi_DeAllocMem(*(void**)p, *(void**)(p + 0x18));
+    tsi_DeAllocMem(*(void**)p, *(void**)(p + 0x1c));
+    tsi_DeAllocMem(*(void**)p, *(void**)(p + 0x20));
+    tsi_DeAllocMem(*(void**)p, *(void**)(p + 0xa8));
+    tsi_DeAllocMem(*(void**)p, *(void**)(p + 0xac));
     if (*(u8*)(p + 0xf8) != 0) {
         void** q = (void**)(p + 0xb4);
-        for (i32 i = 0; i < 2; ++i) tsi_DeAllocMem(mem, q[i]);
+        i32 n = 2;
+        do {
+            tsi_DeAllocMem(*(void**)p, *q);
+            q++;
+        } while (--n != 0);
     }
-    tsi_DeAllocMem(mem, *(void**)(p + 0x14));
-    tsi_DeAllocMem(mem, *(void**)(p + 0x0c));
-    tsi_DeAllocMem(mem, *(void**)(p + 0x100));
-    tsi_DeAllocMem(mem, p);
+    tsi_DeAllocMem(*(void**)p, *(void**)(p + 0x14));
+    tsi_DeAllocMem(*(void**)p, *(void**)(p + 0x0c));
+    tsi_DeAllocMem(*(void**)p, *(void**)(p + 0x100));
+    tsi_DeAllocMem(*(void**)p, p);
 }
 
 // @ 0x008cd1b0

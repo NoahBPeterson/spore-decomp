@@ -1,3 +1,4 @@
 slices/s008cc770/s008cc770.cpp  ?FUN_008ccb20@@YAHPAEH@Z  008ccb20  /O2 /MD /Gy /TP /arch:SSE
 slices/s008cc770/s008cc770.cpp  ?FUN_008ccb40@@YAHPAEH@Z  008ccb40  /O2 /MD /Gy /TP /arch:SSE
 slices/s008cc770/s008cc770.cpp  ?fnt_FixRound@@YAXPAEH@Z  008ccb90  /O2 /MD /Gy /TP /arch:SSE
+slices/s008cc770/s008cc770.cpp  ?FUN_008cd0f0@@YAXPAE@Z  008cd0f0  /O2 /MD /Gy /TP /arch:SSE
