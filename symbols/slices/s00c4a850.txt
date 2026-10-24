@@ -1,0 +1,1 @@
+00c4b760 ?ReturnForRewards@cSPMissionMultiDelivery@@QAEXXZ  # cSPMissionMultiDelivery::ReturnForRewards migrated from s00c4a850 (verbatim, slice spelling)

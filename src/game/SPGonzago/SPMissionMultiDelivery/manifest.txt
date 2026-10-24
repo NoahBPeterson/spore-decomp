@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?ReturnForRewards@cSPMissionMultiDelivery@@QAEXXZ  00c4b760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ??5SP@@YAAAUIArchiver@0@AAU10@AAUtItemInfo@0@@Z  00c56de0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?IsItemTargetPlanet@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAE_NPAX@Z  00c57070  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?DeliveredToAllBuyers@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAE_NXZ  00c57270  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?GetTotalTravelCost@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAEHXZ  00c57320  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?GetTotalTravelDistance@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAEMXZ  00c57420  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?SetItemPropertyList@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAEXXZ  00c57520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ??4tItemInfo_s00c5_7570@SP@@QAEPAU01@ABU01@@Z  00c57690  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ??4tBuyerInfo@SP@@QAEPAU01@ABU01@@Z  00c576d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c58070@SP@@YA_NPAXPAUcBuyerRange@1@@Z  00c58070  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c580b0@SP@@YA_NPAXPAUcItemRange@1@@Z  00c580b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?GetFetchItemName@cSPMissionMultiDelivery_s00c5_7570@SP@@QAEXPAVwstring@eastl@@@Z  00c58260  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?GetTagString@cSPMissionMultiDelivery_s00c5_8920@@QAEEIPAUcWString@@@Z  00c58ad0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

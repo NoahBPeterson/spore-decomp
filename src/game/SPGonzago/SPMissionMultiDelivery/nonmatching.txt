@@ -1,0 +1,27 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00c570e0 48 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 48 bytes - the runner-item count leaves `this` in ecx in retail so the loop reloads mpRunnerItems from ecx; this build loads the base into esi and uses ecx as the subtraction destination, so the count, the sign fix-up and the index scaling all use different registers
+00c57130 77 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 76 bytes - same base-pointer/`this` split as IsInBuyerPlanetList: retail subtracts the buyer base as a memory operand and reloads it inside the loop, this build materialises the base in edi first and keeps the index in esi
+00c57180 56 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 58 bytes - retail never spills to a callee-saved register (it keeps `this` in ecx and reuses ecx as the item cursor), this build pushes esi for the buyer base, adding a push/pop pair around both return paths
+00c571d0 112 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 134 bytes - the delivery amount uses the `min(requested-delivered, count)` address-select idiom in retail (lea eax,[esp+0x1c] / jl / lea eax,[esp+0x10]); this build emits a compare-and-branch, which shortens the function by 22 bytes and re-registers the whole loop
+00c572c0 42 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 42 bytes - the runner count is `sub edx,[ecx+0x1f4]` in retail and reuses `this`; this build loads the base into esi before the subtraction so the accumulator and loop registers differ
+00c57570 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 110 bytes - WriteSTLSequence<tItemInfo> instantiation not reconstructed.
+00c575e0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 174 bytes - multi-delivery helper not reconstructed.
+00c57720 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 86 bytes - multi-delivery helper not reconstructed.
+00c57780 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 76 bytes - multi-delivery helper not reconstructed.
+00c57810 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 100 bytes - multi-delivery helper not reconstructed.
+00c578c0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 98 bytes - eastl::copy_impl<tBuyerInfo*> instantiation not reconstructed.
+00c57930 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 100 bytes - multi-delivery helper not reconstructed.
+00c579a0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 110 bytes - eastl::copy_impl<tItemInfo*> instantiation not reconstructed.
+00c57a10 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 112 bytes - multi-delivery helper not reconstructed.
+00c57a80 46 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 58 bytes - tItemInfo payload initialiser: field order and the ref-counted target handoff match, but retail bit-copies the three floats with dword moves (inline 12-byte copy) while /fp:fast emits movss (size 79 vs 67).
+00c57ad0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 546 bytes - multi-delivery helper not reconstructed.
+00c57d00 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 332 bytes - GetDynamicResponseID not reconstructed.
+00c57e50 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 156 bytes - multi-delivery helper not reconstructed.
+00c57ef0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 247 bytes - OnDelivery not reconstructed.
+00c58170 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 140 bytes - Simulator::cMissionMultiDelivery constructor not reconstructed.
+00c582a0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 101 bytes - multi-delivery helper not reconstructed.
+00c58310 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - multi-delivery helper not reconstructed.
+00c58360 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - multi-delivery helper not reconstructed.
+00c58530 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 90 bytes - multi-delivery helper not reconstructed.
+00c58600 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 365 bytes - multi-delivery helper not reconstructed.
+00c59b50 76 SP::cMissionMultiStep::Init: two hash-keyed int properties (0x6c319752/0xd2fc2218), FUN_00c59540(b,a), GetMin/MaxNumItems + FUN_00c59240/FUN_00c56fe0/FUN_00c4a0c0, then the item-distribution loop ((0x20c-0x208)/0x14 over (0x1f8-0x1f4)/0xc, cvtsi2ss/divss/cvttss2si, per-record +4 add). Body is exact; the remaining diff is register allocation: original keeps nB in edi and the loop base reload in ebx, mine uses eax/edi. 335 vs 351 bytes. equiv: UNSUPPORTED (0/400 valid, fault(read))
