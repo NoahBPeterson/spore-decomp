@@ -5,8 +5,8 @@
 extern "C" double __cdecl sqrt(double);
 extern "C" double __cdecl fabs(double);
 #pragma intrinsic(sqrt, fabs)
-#define sqrtf(x) ((float)sqrt((double)(x)))
-#define fabsf(x) ((float)fabs((double)(x)))
+#define sqrtf(x) sqrt(x)
+#define fabsf(x) fabs(x)
 
 void* operator new(size_t n, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
 
@@ -266,46 +266,60 @@ struct Vector3 {
 };
 struct Quaternion {
   float x, y, z, w;
+  float& operator[](int i) { return (&x)[i]; }
 };
 struct Matrix3 {
   float m[9];
 };
 
+static inline Vector3 Normalized(const Vector3& v) {
+  float inv = 1.0f / (float)sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+  Vector3 r;
+  r.x = v.x * inv;
+  r.y = v.y * inv;
+  r.z = v.z * inv;
+  return r;
+}
+
 // @ 0x00698180
-void QuaternionFromDirections(Quaternion* out, const Vector3* a, const Vector3* b) {
-  float la = 1.0f / sqrtf(a->x * a->x + a->y * a->y + a->z * a->z);
-  float ax = a->x * la;
-  float ay = a->y * la;
-  float az = a->z * la;
-  float lb = 1.0f / sqrtf(b->x * b->x + b->y * b->y + b->z * b->z);
-  float x = b->x * lb + ax;
-  float y = b->y * lb + ay;
-  float z = b->z * lb + az;
-  float d = x * x + y * y + z * z;
-  if (d > 0.0001f) {
-    float s = 1.0f / sqrtf(d);
-    x *= s;
-    y *= s;
-    z *= s;
-    out->x = z * ay - y * az;
-    out->y = az * x - z * ax;
-    out->z = y * ax - ay * x;
-    out->w = y * ay + z * az + x * ax;
-    return;
+Quaternion* QuaternionFromDirections(Quaternion* out, const Vector3* a, const Vector3* b) {
+  float a0 = a->x;
+  float a1 = a->y;
+  float a2 = a->z;
+  double inv = 1.0 / sqrt(((double)a0 * a0 + (double)a1 * a1) + (double)a2 * a2);
+  volatile float invf = (float)inv;
+  float p = a0 * invf;
+  float l = (float)((double)a1 * inv);
+  float n = (float)((double)a2 * inv);
+  float binv = 1.0f / sqrtf(b->x * b->x + b->y * b->y + b->z * b->z);
+  float q = b->x * binv + p;
+  float m = b->y * binv + l;
+  float o = b->z * binv + n;
+  if ((q * q + o * o) + m * m > 1e-4f) {
+    volatile float s = 1.0f / sqrtf((q * q + o * o) + m * m);
+    float ms = m * s;
+    float os = o * s;
+    float qs = q * s;
+    out->x = os * l - ms * n;
+    out->y = n * qs - os * p;
+    out->z = ms * p - l * qs;
+    out->w = (ms * l + os * n) + qs * p;
+    return out;
   }
-  if (fabsf(ay) <= fabsf(ax)) {
-    float s = 1.0f / sqrtf(az * az + ax * ax);
-    out->x = -(az * s);
-    out->y = 0.0f;
-    out->z = ax * s;
+  if (!(fabsf(p) > fabsf(l))) {
+    volatile float s = 1.0f / sqrtf(n * n + l * l);
+    out->x = 0.0f;
+    out->y = s * -n;
+    out->z = s * l;
     out->w = 0.0f;
-    return;
+    return out;
   }
-  float s = 1.0f / sqrtf(az * az + ay * ay);
-  out->x = 0.0f;
-  out->y = -(az * s);
-  out->z = ay * s;
+  volatile float s = 1.0f / sqrtf(n * n + p * p);
+  out->y = 0.0f;
+  out->x = s * -n;
+  out->z = s * p;
   out->w = 0.0f;
+  return out;
 }
 
 // @ 0x006983a0
@@ -317,48 +331,51 @@ void MatrixFromDirection(const Vector3* dir, Matrix3* out) {
   out->m[6] = x;
   out->m[7] = y;
   out->m[8] = z;
-  float f1;
-  float f4;
-  float c;  // local_14
-  float e;  // local_18
-  float g;  // local_10
-  if (0.999f <= fabsf(z)) {
-    float k = 1.0f / sqrtf((-z) * (-z) + (-x) * (-x) + 1e-8f);
-    f1 = k * (-z);
-    c = k * -0.0f;
-    f4 = (-x) * k;
-    e = f4 * y - c * z;
-    out->m[0] = f1;
-    g = c * x - f1 * y;
+  float v0, v1, v2, v3, v4, v5;
+  if (!(fabsf(z) < 0.999)) {
+    float k = 1.0f / sqrtf(x * x + z * z + 1e-8f);
+    v0 = k * z;
+    v1 = k * -0.0f;
+    v2 = -x * k;
+    v3 = v2 * y - v1 * z;
+    v4 = v0 * z - v2 * x;
+    v5 = v1 * x - v0 * y;
   } else {
-    float k = 1.0f / sqrtf((-y) * (-y) + (-x) * (-x) + 1e-8f);
-    c = (-x) * k;
-    f4 = k * -0.0f;
-    f1 = k * (-y);
-    e = f4 * y - c * z;
-    out->m[0] = f1;
-    g = c * x - f1 * y;
+    float k = 1.0f / sqrtf(x * x + y * y + 1e-8f);
+    v0 = -y * k;
+    v1 = x * k;
+    v2 = k * -0.0f;
+    v3 = v2 * y - v1 * z;
+    v4 = v0 * z - v2 * x;
+    v5 = v1 * x - v0 * y;
   }
-  out->m[1] = c;
-  out->m[3] = e;
-  out->m[2] = f4;
-  out->m[4] = f1 * z - f4 * x;
-  out->m[5] = g;
+  out->m[0] = v0;
+  out->m[1] = v1;
+  out->m[2] = v2;
+  out->m[3] = v3;
+  out->m[4] = v4;
+  out->m[5] = v5;
+  (void)*(volatile unsigned int*)&out->m[5];
 }
 
 // @ 0x006985b0
 void OrthogonalVector(Vector3* out, const Vector3* v) {
-  if (fabsf(v->y) <= fabsf(v->x)) {
-    if (fabsf(v->y) < fabsf(v->z)) {
-      out->x = -v->z;
-      out->y = 0.0f;
-      out->z = v->x;
+  if (fabsf(v->x) < fabsf(v->y)) {
+    if (fabsf(v->x) < fabsf(v->z)) {
+      out->x = 0.0f;
+      out->y = v->z;
+      out->z = -v->y;
       return;
     }
-  } else if (fabsf(v->x) < fabsf(v->z)) {
-    out->x = 0.0f;
-    out->y = v->z;
-    out->z = -v->y;
+    out->x = v->y;
+    out->y = -v->x;
+    out->z = 0.0f;
+    return;
+  }
+  if (fabsf(v->y) < fabsf(v->z)) {
+    out->x = -v->z;
+    out->y = 0.0f;
+    out->z = v->x;
     return;
   }
   out->x = v->y;
@@ -368,43 +385,58 @@ void OrthogonalVector(Vector3* out, const Vector3* v) {
 
 // @ 0x00698650 — orthonormalise a 3x3 (row1 = normal, row2 orthogonalised against row1).
 void MatrixFromQuaternion(Matrix3* m) {
-  float a = m->m[3];
-  float b = m->m[4];
-  float c = m->m[5];
-  float inv = 1.0f / (sqrtf(a * a + b * b + c * c) + 1e-8f);
-  a *= inv;
-  b *= inv;
-  c *= inv;
-  m->m[3] = a;
-  m->m[4] = b;
-  m->m[5] = c;
-  float d = (b * m->m[7] + c * m->m[8]) + a * m->m[6];
-  m->m[6] = m->m[6] - a * d;
-  m->m[7] = m->m[7] - b * d;
-  m->m[8] = m->m[8] - c * d;
-  float inv2 = 1.0f / (sqrtf(m->m[6] * m->m[6] + m->m[7] * m->m[7] + m->m[8] * m->m[8]) + 1e-8f);
-  m->m[6] = m->m[6] * inv2;
-  m->m[7] = m->m[7] * inv2;
-  m->m[8] = inv2 * m->m[8];
-  float lc = m->m[8] * m->m[4] - m->m[7] * m->m[5];
-  m->m[0] = lc;
-  float l4 = a * m->m[7] - m->m[6] * m->m[4];
-  float l8 = m->m[6] * m->m[5] - a * m->m[8];
-  m->m[1] = l8;
-  m->m[2] = l4;
-  if (m->m[0] * m->m[0] + m->m[1] * m->m[1] + m->m[2] * m->m[2] < 0.95f) {
+  double inv = 1.0 / (sqrt((double)m->m[3] * m->m[3] + (double)m->m[4] * m->m[4] + (double)m->m[5] * m->m[5]) + 1e-8);
+  volatile float t3 = (float)((double)m->m[3] * inv);
+  volatile float t4 = (float)((double)m->m[4] * inv);
+  volatile float t5 = (float)((double)m->m[5] * inv);
+  m->m[3] = t3;
+  m->m[4] = t4;
+  m->m[5] = t5;
+  volatile float p1 = m->m[5] * m->m[8];
+  volatile float p2 = m->m[4] * m->m[7];
+  volatile float p3 = m->m[3] * m->m[6];
+  volatile float s12 = p1 + p2;
+  volatile float d = s12 + p3;
+  volatile float q3 = m->m[3] * d;
+  volatile float q4 = m->m[4] * d;
+  volatile float q5 = m->m[5] * d;
+  m->m[6] = m->m[6] - q3;
+  m->m[7] = m->m[7] - q4;
+  m->m[8] = m->m[8] - q5;
+  double inv2 = 1.0 / (sqrt((double)m->m[6] * m->m[6] + (double)m->m[7] * m->m[7] + (double)m->m[8] * m->m[8]) + 1e-8);
+  m->m[6] = (float)((double)m->m[6] * inv2);
+  m->m[7] = (float)((double)m->m[7] * inv2);
+  m->m[8] = (float)((double)m->m[8] * inv2);
+  volatile float u0 = m->m[8] * m->m[4];
+  volatile float v0 = m->m[7] * m->m[5];
+  m->m[0] = u0 - v0;
+  volatile float u1 = m->m[6] * m->m[5];
+  volatile float v1 = m->m[3] * m->m[8];
+  m->m[1] = u1 - v1;
+  volatile float u2 = m->m[3] * m->m[7];
+  volatile float v2 = m->m[6] * m->m[4];
+  m->m[2] = u2 - v2;
+  volatile float s0 = m->m[0] * m->m[0];
+  volatile float s1 = m->m[1] * m->m[1];
+  volatile float s2 = m->m[2] * m->m[2];
+  volatile float t01 = s0 + s1;
+  volatile float len = t01 + s2;
+  if (len < 0.95f) {
     Vector3 tmp;
     typedef Vector3* (*OrthoPtr)(Vector3*, const Vector3*);
     Vector3* r = ((OrthoPtr)OrthogonalVector)(&tmp, (const Vector3*)&m->m[3]);
     m->m[6] = r->x;
     m->m[7] = r->y;
     m->m[8] = r->z;
-    float p4 = m->m[4];
-    float p5 = m->m[5];
-    float p3 = a;
-    m->m[0] = m->m[8] * p4 - m->m[7] * p5;
-    m->m[1] = m->m[6] * p5 - p3 * m->m[8];
-    m->m[2] = p3 * m->m[7] - m->m[6] * p4;
+    volatile float w0 = m->m[8] * m->m[4];
+    volatile float w1 = m->m[7] * m->m[5];
+    m->m[0] = w0 - w1;
+    volatile float w2 = m->m[6] * m->m[5];
+    volatile float w3 = m->m[3] * m->m[8];
+    m->m[1] = w2 - w3;
+    volatile float w4 = m->m[3] * m->m[7];
+    volatile float w5 = m->m[6] * m->m[4];
+    m->m[2] = w4 - w5;
   }
 }
 
@@ -418,23 +450,26 @@ bool RayBoxIntersect(const float* origin, const float* dir, const float* box, fl
   float t2 = (box[3 - nx * 3] - origin[0]) * invX;
   float t3 = (box[4 - ny * 3] - origin[1]) * invY;
   float t4 = (box[ny * 3 + 1] - origin[1]) * invY;
-  if (t1 <= t3 && t4 <= t2) {
-    if (t1 < t4) t1 = t4;
-    if (t3 < t2) t2 = t3;
-    unsigned int nz = (dir[2] < 0.0f);
-    float invZ = 1.0f / dir[2];
-    float t5 = (box[5 - nz * 3] - origin[2]) * invZ;
-    float t6 = (box[nz * 3 + 2] - origin[2]) * invZ;
-    if (t1 <= t5 && t6 <= t2) {
-      if (t1 < t6) t1 = t6;
-      if (t5 < t2) t2 = t5;
-      if (0.0f <= t2) {
-        if (outT) *outT = (0.0f <= t1) ? t1 : 0.0f;
-        return true;
-      }
-    }
+  if (t1 > t3) return false;
+  if (t4 > t2) return false;
+  if (t1 < t4) t1 = t4;
+  if (t3 < t2) t2 = t3;
+  unsigned int nz = (dir[2] < 0.0f);
+  float invZ = 1.0f / dir[2];
+  float t5 = (box[5 - nz * 3] - origin[2]) * invZ;
+  float t6 = (box[nz * 3 + 2] - origin[2]) * invZ;
+  if (t1 > t5) return false;
+  if (t6 > t2) return false;
+  if (t1 < t6) t1 = t6;
+  if (t5 < t2) t2 = t5;
+  if (0.0f > t2) return false;
+  if (outT) {
+    if (t1 >= 0.0f)
+      *outT = t1;
+    else
+      *outT = 0.0f;
   }
-  return false;
+  return true;
 }
 
 // @ 0x006989d0 — segment/AABB slab test; parameters are the two segment endpoints.
@@ -452,21 +487,25 @@ bool SegmentBoxIntersect(const float* p1, const float* p2, const float* box, flo
   float t2 = (box[3 - nx * 3] - p1[0]) * invX;
   float t3 = (box[4 - ny * 3] - p1[1]) * invY;
   float t4 = (box[ny * 3 + 1] - p1[1]) * invY;
-  if (t1 <= t3 && t4 <= t2) {
-    if (t1 < t4) t1 = t4;
-    if (t3 < t2) t2 = t3;
-    float t5 = (box[5 - nz * 3] - p1[2]) * invZ;
-    float t6 = (box[nz * 3 + 2] - p1[2]) * invZ;
-    if (t1 <= t5 && t6 <= t2) {
-      if (t1 < t6) t1 = t6;
-      if (t5 < t2) t2 = t5;
-      if (0.0f <= t2 && t1 < 1.0f) {
-        if (outT) *outT = (0.0f <= t1) ? t1 : 0.0f;
-        return true;
-      }
-    }
+  if (t1 > t3) return false;
+  if (t4 > t2) return false;
+  if (t1 < t4) t1 = t4;
+  if (t3 < t2) t2 = t3;
+  float t5 = (box[5 - nz * 3] - p1[2]) * invZ;
+  float t6 = (box[nz * 3 + 2] - p1[2]) * invZ;
+  if (t1 > t5) return false;
+  if (t6 > t2) return false;
+  if (t1 < t6) t1 = t6;
+  if (t5 < t2) t2 = t5;
+  if (0.0f > t2) return false;
+  if (t1 >= 1.0f) return false;
+  if (outT) {
+    if (t1 >= 0.0f)
+      *outT = t1;
+    else
+      *outT = 0.0f;
   }
-  return false;
+  return true;
 }
 
 // @ 0x00698b30 — closest distance from point `p` to segment [a, b].

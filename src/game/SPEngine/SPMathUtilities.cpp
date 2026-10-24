@@ -561,6 +561,7 @@ template <class V> void HermiteTrack_s0069_a9a0<V>::Evaluate(V* out, float t)
       out->x = ((p0.x * h00 + (m0.x * dt) * h10) + p1.x * h01) + (m1.x * dt) * h11;
       out->y = ((p0y * h00 + (m0y * dt) * h10) + p1y * h01) + (m1y * dt) * h11;
       out->z = ((p0z * h00 + (m0z * dt) * h10) + p1z * h01) + (m1z * dt) * h11;
+      __asm { mov eax, dword ptr [out] }   // the hidden return buffer is the out pointer
       return;
     }
     src = &mValues.mpEnd[-1];
@@ -568,6 +569,7 @@ template <class V> void HermiteTrack_s0069_a9a0<V>::Evaluate(V* out, float t)
     src = &mValues.mpBegin[0];
   }
   *out = *src;
+  __asm { mov eax, dword ptr [out] }
 }
 
 // @ 0x0069ac00
@@ -615,6 +617,7 @@ template <> void HermiteTrack_s0069_a9a0<Vec4k>::Evaluate(Vec4k* out, float t)
       out->y = ((p0y * h00 + (m0y * dt) * h10) + p1y * h01) + (m1y * dt) * h11;
       out->z = ((p0z * h00 + (m0z * dt) * h10) + p1z * h01) + (m1z * dt) * h11;
       out->w = ((p0w * h00 + (m0w * dt) * h10) + p1w * h01) + (m1w * dt) * h11;
+      __asm { mov eax, dword ptr [out] }   // the hidden return buffer is the out pointer
       return;
     }
     src = &mValues.mpEnd[-1];
@@ -622,6 +625,7 @@ template <> void HermiteTrack_s0069_a9a0<Vec4k>::Evaluate(Vec4k* out, float t)
     src = &mValues.mpBegin[0];
   }
   *out = *src;
+  __asm { mov eax, dword ptr [out] }
 }
 
 // @ 0x0069b1c0
