@@ -1,9 +1,9 @@
 007a9ae0  248  deque map InsertAt: EASTL deque growth schedule differs
-007a9d70  145  deque reverse range copy: iterator register schedule differs
+007a9d70  145  eastl deque copy_backward: three iterator args by value (4 dwords each) + result out; chk diff 50; equiv PASS 1110/2000 valid (66.7% cov); src PASS
 007a9e10  155  property-list ctor: vtable/EH schedule
 007a9eb0  96   hashtable DoFreeNodes: EH frame + refcount schedule
-007aa320  104  clear value: refcount release + virtual-release scheduling; equiv: FAIL 5/6 mismatched (member of JobSlots, ECX fixed)
-007aa3a0  122  job-info transfer: virtual call/register schedule; equiv: FAIL 5/23 mismatched, eax (member of JobSlots, ECX fixed)
+007aa320  104  JobSlots::Clear: 0x690120 is thiscall cJob::Release (ecx=this), vtable slots need *(void***) deref; chk diff 75; equiv PASS 280/500 valid (88.1% cov)
+007aa3a0  122  JobSlots::Transfer: returns char in al; vtable slots deref via *(void***); chk diff 127; equiv PASS 481/500 valid (92.7% cov); src PASS
 007aa620  52   empty 16-byte ctor: EH frame shape; equiv: PASS (now Empty16 ctor, ECX fixed)
-007aa800  76   cNodeAllocator::Create: loop rotation differs
+007aa800  76   cNodeAllocator::Create: retail does xchg [chunk+0x10],1 not add; chk diff 73; equiv PASS 460/500 valid (100% cov); src PASS
 007aa850  76   deque push_back with block alloc: map-growth schedule; equiv: PASS (now DequeMap::PushBack, ECX fixed)
