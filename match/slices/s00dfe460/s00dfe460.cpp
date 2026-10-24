@@ -7,8 +7,8 @@
 extern "C" void* __cdecl EA_Allocate(uint32_t size, const char* name, int a, int b,
                                      int c, int d);              // 0xf473a0
 extern "C" void  __cdecl EA_Free(void* p);                       // 0xf47380
-extern "C" void  __cdecl FUN_00f280f0(void*);
-extern "C" void  __cdecl FUN_00dfbba0(void*);
+extern "C" void  __fastcall FUN_00f280f0(void* self, int dummy);
+extern "C" void  __fastcall FUN_00dfbba0(void* self, int dummy);
 extern "C" void  __cdecl FUN_00dfdfe0(void*);
 extern "C" void  __cdecl FUN_00dfdf70(void*, void*);
 extern "C" void  __cdecl FUN_00dfd300(void*, void*);
@@ -44,7 +44,7 @@ struct ElemB {                                       // 0x27e8-class
 struct Buf3c {
     void Copy(void* o);                              // 0x00dfb280 thiscall ret 4
 };
-extern "C" void __stdcall WStr_Assign(void*, void*); // 0x00423650 ret 8
+extern "C" void __fastcall WStr_Assign(void* self, int dummy, void* begin, void* end); // 0x00423650 thiscall ret 8
 extern "C" void  __cdecl FUN_00df9990();
 extern "C" void  __cdecl FUN_00df9ef0();
 extern "C" void  __cdecl FUN_00df9e60();
@@ -70,21 +70,24 @@ char UISpace_Handle(void* self, void* msg, int arg2) {
 // ===========================================================================
 struct Elem27e8 { char pad[0x78]; void* mp; };   // vector member at +0x78
 // @ 0x00dfe910
-void DestroyRange27e8(Elem27e8* first, Elem27e8* last) {
+Elem27e8* __stdcall DestroyRange27e8(Elem27e8* first, Elem27e8* last) {
+    Elem27e8* result = first;
     while (first < last) {
-        FUN_00f280f0((char*)first + 0x2718);
+        FUN_00f280f0((char*)first + 0x78 + 0x2718, 0);
         void** begin = *(void***)((char*)first + 0x78);
         void** end = *(void***)((char*)first + 0x7c);
         while (begin < end) {
-            FUN_00dfbba0(begin);
+            FUN_00dfbba0(begin, 0);
             begin = (void**)((char*)begin + 0x4e0);
         }
         void* p = *(void**)((char*)first + 0x78);
+        result = (Elem27e8*)p;
         if (p != 0 && *((int*)p - 1) != 0) {
             EA_Free(p);
         }
         first = (Elem27e8*)((char*)first + 0x27e8);
     }
+    return result;
 }
 
 // ===========================================================================
@@ -202,21 +205,21 @@ void* ElemA::CopyAssign(void* o) {
     void* s = this;
     ((CStr*)s)->Assign(o);
     if ((void*)((char*)o + 0x14) != (void*)((char*)s + 0x14)) {
-        WStr_Assign(*(void**)((char*)o + 0x14), *(void**)((char*)o + 0x18));
+        WStr_Assign((char*)s + 0x14, 0, *(void**)((char*)o + 0x14), *(void**)((char*)o + 0x18));
     }
     *(uint32_t*)((char*)s + 0x24) = *(uint32_t*)((char*)o + 0x24);
     *(uint32_t*)((char*)s + 0x28) = *(uint32_t*)((char*)o + 0x28);
     if ((void*)((char*)o + 0x2c) != (void*)((char*)s + 0x2c)) {
-        WStr_Assign(*(void**)((char*)o + 0x2c), *(void**)((char*)o + 0x30));
+        WStr_Assign((char*)s + 0x2c, 0, *(void**)((char*)o + 0x2c), *(void**)((char*)o + 0x30));
     }
     ((CStr*)((char*)s + 0x3c))->Assign((char*)o + 0x3c);
     if ((void*)((char*)o + 0x50) != (void*)((char*)s + 0x50)) {
-        WStr_Assign(*(void**)((char*)o + 0x50), *(void**)((char*)o + 0x54));
+        WStr_Assign((char*)s + 0x50, 0, *(void**)((char*)o + 0x50), *(void**)((char*)o + 0x54));
     }
     *(uint32_t*)((char*)s + 0x60) = *(uint32_t*)((char*)o + 0x60);
     *(uint32_t*)((char*)s + 0x64) = *(uint32_t*)((char*)o + 0x64);
     if ((void*)((char*)o + 0x68) != (void*)((char*)s + 0x68)) {
-        WStr_Assign(*(void**)((char*)o + 0x68), *(void**)((char*)o + 0x6c));
+        WStr_Assign((char*)s + 0x68, 0, *(void**)((char*)o + 0x68), *(void**)((char*)o + 0x6c));
     }
     *(uint32_t*)((char*)s + 0x78) = *(uint32_t*)((char*)o + 0x78);
     *(uint8_t*)((char*)s + 0x7c) = *(uint8_t*)((char*)o + 0x7c);
@@ -240,15 +243,19 @@ void* ElemB::CopyCtor(void* o) {
     ((V4e0*)((char*)s + 0x70))->Assign((V4e0*)((char*)o + 0x70));
     ((CStr*)((char*)s + 0x2788))->Assign((char*)o + 0x2788);
     if ((void*)((char*)o + 0x2788 + 0x14) != (void*)((char*)s + 0x2788 + 0x14)) {
-        WStr_Assign(*(void**)((char*)o + 0x2788 + 0x14), *(void**)((char*)o + 0x2788 + 0x18));
+        WStr_Assign((char*)s + 0x2788 + 0x14, 0, *(void**)((char*)o + 0x2788 + 0x14), *(void**)((char*)o + 0x2788 + 0x18));
+    }
+    *(uint32_t*)((char*)s + 0x27ac) = *(uint32_t*)((char*)o + 0x27ac);
+    *(uint32_t*)((char*)s + 0x27b0) = *(uint32_t*)((char*)o + 0x27b0);
+    if ((void*)((char*)o + 0x2788 + 0x2c) != (void*)((char*)s + 0x2788 + 0x2c)) {
+        WStr_Assign((char*)s + 0x2788 + 0x2c, 0, *(void**)((char*)o + 0x2788 + 0x2c), *(void**)((char*)o + 0x2788 + 0x30));
     }
     *(uint32_t*)((char*)s + 0x27c4) = *(uint32_t*)((char*)o + 0x27c4);
     *(uint32_t*)((char*)s + 0x27c8) = *(uint32_t*)((char*)o + 0x27c8);
-    if ((void*)((char*)o + 0x27d0) != (void*)((char*)s + 0x27d0)) {
-        WStr_Assign(*(void**)((char*)o + 0x27d0), *(void**)((char*)o + 0x27d4));
-    }
-    *(uint32_t*)((char*)s + 0x27e0) = *(uint32_t*)((char*)o + 0x27e0);
-    *(uint32_t*)((char*)s + 0x27e4) = *(uint32_t*)((char*)o + 0x27e4);
+    *(uint32_t*)((char*)s + 0x27cc) = *(uint32_t*)((char*)o + 0x27cc);
+    *(uint32_t*)((char*)s + 0x27d0) = *(uint32_t*)((char*)o + 0x27d0);
+    *(uint32_t*)((char*)s + 0x27d8) = *(uint32_t*)((char*)o + 0x27d8);
+    *(uint32_t*)((char*)s + 0x27dc) = *(uint32_t*)((char*)o + 0x27dc);
     return s;
 }
 
