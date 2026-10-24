@@ -194,7 +194,7 @@ struct cSPPlayMode {
   unsigned   mPhoto1e8[0xfc8 / 4];  // 0x01e8  sub-mode Photo
   unsigned   mDance11b0[0x78 / 4];  // 0x11b0  sub-mode Dance
   unsigned   mMovie1228[0x2360 / 4];// 0x1228  sub-mode Movie
-  unsigned   mAnim3588[0x90 / 4];   // 0x3588  cSPPlayModeAnimation
+  unsigned   mAnim3588[0x88 / 4];   // 0x3588  cSPPlayModeAnimation (retail size 0x88, not the dev PDB's 0x90)
   unsigned   m3610;                 // 0x3610
   void*      m3614;                 // 0x3614  SPPlayMode_MgrSlot*
   unsigned   mLib3618[0x48 / 4];    // 0x3618  SharedLibList
@@ -238,6 +238,7 @@ struct cSPPlayMode {
                 float p5, float p6, float p7, float p8);
   unsigned HandleMessage(unsigned param_2, int param_3);
   void     IsEventForBaby(int param_2);
+  void     FUN_0062b980(int id);    // 0x0062b980  thiscall, ret 4
 };
 
 // ------------------------------------------------------------------ data
@@ -383,9 +384,14 @@ void cSPPlayMode::ad70(float* param_2, unsigned param_3, unsigned param_4,
   float len = sqrtf(local_58 * local_58 + local_5c * local_5c + local_60 * local_60);
   if (5.0f < len) {
     float inv = g_1485720 / len;
-    local_60 = inv * local_60 * g_13fe0c0;
-    local_5c = inv * local_5c * g_13fe0c0;
-    local_58 = local_58 * inv * g_13fe0c0;
+    // Retail order: (inv * x) * 5.0f, three 32-bit multiplies. /fp:fast would reassociate to
+    // (5.0f * inv) * x, which rounds differently for denormals; the volatile stores pin the order.
+    volatile float s0 = inv * local_60;
+    volatile float s1 = inv * local_5c;
+    volatile float s2 = local_58 * inv;
+    local_60 = s0 * g_13fe0c0;
+    local_5c = s1 * g_13fe0c0;
+    local_58 = s2 * g_13fe0c0;
   }
   SPPlayMode_MgrSlot* w = (SPPlayMode_MgrSlot*)m3614;
   SPPlayMode_Creature* c =
@@ -720,15 +726,17 @@ unsigned cSPPlayMode::HandleMessage(unsigned param_2, int param_3) {
 
 // @ 0x0062b980
 // Erase the shared-library entry whose id (field +0x1c) equals `id`.
-void __fastcall FUN_0062b980(void* self, int id) {
-  char* s = (char*)self;
+// Retail ABI: __thiscall (ecx = the SPPlayMode vector owner, one stack argument, ret 4); the
+// slice-era free `__fastcall(self, id)` spelled the same mangled name but emitted ret 0.
+void cSPPlayMode::FUN_0062b980(int id) {
+  char* s = (char*)this;
   char** end = *(char***)(s + 0x80);
   char** it  = *(char***)(s + 0x7c);
   while (it != end) {
     char* o = *it;
     if (o != 0) {
-      char* v = *(char**)o;
-      ((TF0)(*(void**)(v + 4)))(v);
+      char* vt = *(char**)o;
+      ((TF0)(*(void**)(vt + 4)))(o);      // this is the element itself, not its vtable pointer
     }
     if (*(int*)(o + 0x1c) == id) {
       if ((char**)(it + 1) < *(char***)(s + 0x80)) {
@@ -738,15 +746,15 @@ void __fastcall FUN_0062b980(void* self, int id) {
       char* last = **(char***)(s + 0x80);
       if (last != 0) {
         char* lv = *(char**)last;
-        ((TF0)(*(void**)(lv + 8)))(lv);
+        ((TF0)(*(void**)(lv + 8)))(last);
       }
       char* ov = *(char**)o;
-      ((TF0)(*(void**)(ov + 8)))(ov);
+      ((TF0)(*(void**)(ov + 8)))(o);
       return;
     }
     it = (char**)((char*)it + 4);
     char* ov = *(char**)o;
-    ((TF0)(*(void**)(ov + 8)))(ov);
+    ((TF0)(*(void**)(ov + 8)))(o);
   }
 }
 
@@ -774,7 +782,7 @@ void cSPPlayMode::IsEventForBaby(int param_2) {
     ((char*)w->mAnimCreatures)[idx * 0x30 + 0x19] = 0;
   }
   m40[idx] = 0.0f;
-  FUN_0062b980(this, (int)baby);
+  FUN_0062b980((int)baby);
   m36d0 = (unsigned char)(m36d0 - 1);
   if (m36d0 != 0) return;
   ((TC_635760*)mUI2)->FUN_00635760(0x4066678u, 0);
