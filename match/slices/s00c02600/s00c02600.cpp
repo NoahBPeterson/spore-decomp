@@ -1,5 +1,5 @@
 // Slice s00c02600: Simulator::cCreatureBase helpers / near-list predicates (retail).
-// Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast (SSE scalar moves; MinF/MaxF/round helpers are __asm).
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast (SSE scalar moves; MinF/MaxF/round helpers are __asm).
 // Retail layout differs from the 2008 PDB; offsets below come from the disassembly.
 #include "types.h"
 #include <math.h>
