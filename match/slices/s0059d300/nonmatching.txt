@@ -1,7 +1,7 @@
 0059d840  20  MessagePost: complete; register selection/scheduling of the 9 member stores differs
 0059d8b0  20  MessageSend: complete; register selection/scheduling of the 9 member stores differs
 0059d960  51  cSPEditorAnimatedEventInfo ctor: complete; two-phase vptr stores + atomic refcount init layout
-0059da80  21  RandomRange: complete; float/double conversion schedule differs
+0059da80  21  RandomRange: complete; test result < dRange first so unordered/NaN returns dRange like the original x87 branch; equiv PASS (400 valid, 85.0% coverage), hybrid PASS, replay PASS
 0059dc70  1625  GetAnimation: complete; register allocation/frame (0x70 vs 0x90) differs, all 36 calls/vtable slots in order, size 1801 vs 1763; equiv WEAK (313 valid, 22.4% cov, 0 mismatches)
 0059d300  782  cSPEditorAnimatedCreatureManager::HandleAnimatedEvent (706): complete; rbtree find/index inlined shapes and the 4-byte bool slot reuse ([esp+0x28]) differ, size 706 vs 782; equiv WEAK (366 valid, 43.8% cov, 0 mismatches)
 0059d610  553  cSPEditorAnimatedCreatureManager::Update (406): complete; /O2 FP schedule (x87 vs SSE for the two msec->seconds conversions) and the vector erase-copy idiom differ, size 406 vs 553; equiv WEAK (313 valid, 55.8% cov, 0 mismatches)

@@ -193,11 +193,12 @@ double RandomRange(float range)
 {
     double dRange = range;
     double result = sMathRandom.RandomDoubleUniform() * dRange;
-    if (result >= dRange)
-        return dRange;
-    if (result > 0.0)
-        return result;
-    return 0.0;
+    if (result < dRange) {
+        if (result > 0.0)
+            return result;
+        return 0.0;
+    }
+    return dRange;
 }
 
 // ===========================================================================
