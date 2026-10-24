@@ -17,9 +17,6 @@ extern "C" char    gIdentPred[];        // 0x01439ac4
 // comparison predicates used by the static-definition binary searches
 extern "C" char Fn8f2e10(void* key, void* elem);   // 0x008f2e10
 extern "C" char Fn8f2e90(void* elem, void* key);   // 0x008f2e90
-// whitespace predicates used by the skip helpers
-extern "C" char Fn8f34d0(void* pred);              // 0x008f34d0
-extern "C" char Fn8f3480(void* pred);              // 0x008f3480
 // CRT wide ctype test
 extern "C" int  iswctype(unsigned short c, int t);
 
@@ -39,8 +36,10 @@ struct CharStream {
     int   Fn8f35d0(void* pred);  // skip to ';' or '}'
     void  Fn8f36c0();            // consume one EOL
     char  Fn8f3830();            // skip whitespace
-    int   Fn8f3640(void* pred);  // skip until pred matches
-    int   Fn8f3710(void* pred);  // skip until pred matches
+    char  Fn8f3640(void* pred);  // 0x008f3640
+    char  Fn8f3710(void* pred);  // 0x008f3710
+    char  Fn8f34d0(void* pred);  // MatchWide, 0x008f34d0
+    char  Fn8f3480(void* pred);  // MatchAscii, 0x008f3480
     char  Fn8f39e0(int c);       // match a single wchar
     char  Fn8f3a10(int);         // match a digit
     void  Fn8f3a40(int);         // match digits while in range
@@ -51,11 +50,11 @@ struct CharStream {
 struct CSSParser {
     void* Fn8f3900(int p1, wchar16* begin, wchar16* end);
     void* Fn8f3970(int p1, wchar16* begin, int count);
-    char  Fn8f4290();
+    __declspec(noinline) char Fn8f4290();
     void  Fn8f42d0();
     void  Fn8f4320();
-    int   Fn8f4360(int tok);
-    int   Fn8f43a0(wchar16* str);
+    char  Fn8f4360(int tok);
+    char  Fn8f43a0(wchar16* str);
     void  Fn8f3d90();            // Advance (stub)
 };
 
@@ -196,7 +195,7 @@ char CharStream::Fn8f3830()
 // 0x008f3640  CharStream::Fn8f3640
 // ---------------------------------------------------------------------------
 // @ 0x008f3640
-int CharStream::Fn8f3640(void* pred)
+char CharStream::Fn8f3640(void* pred)
 {
     for (;;) {
         if (Fn8f34d0(pred) != 0) return 1;
@@ -210,11 +209,13 @@ int CharStream::Fn8f3640(void* pred)
             lineCount = lineCount + 1;
             lineBegin = scanPos;
         } else {
+            if (e <= p) return 0;
             if (*p == 10) {
                 lineCount = lineCount + 1;
                 scanPos = p + 1;
                 lineBegin = p + 1;
             } else {
+                if (e <= p) return 0;
                 scanPos = p + 1;
             }
         }
@@ -225,7 +226,7 @@ int CharStream::Fn8f3640(void* pred)
 // 0x008f3710  CharStream::Fn8f3710
 // ---------------------------------------------------------------------------
 // @ 0x008f3710
-int CharStream::Fn8f3710(void* pred)
+char CharStream::Fn8f3710(void* pred)
 {
     for (;;) {
         if (Fn8f3480(pred) != 0) return 1;
@@ -239,11 +240,13 @@ int CharStream::Fn8f3710(void* pred)
             lineCount = lineCount + 1;
             lineBegin = scanPos;
         } else {
+            if (e <= p) return 0;
             if (*p == 10) {
                 lineCount = lineCount + 1;
                 scanPos = p + 1;
                 lineBegin = p + 1;
             } else {
+                if (e <= p) return 0;
                 scanPos = p + 1;
             }
         }
@@ -427,7 +430,7 @@ void* CSSParser::Fn8f3970(int p1, wchar16* begin, int count)
 // 0x008f3d90  CSSParser::Advance -- stub
 // ---------------------------------------------------------------------------
 // @ 0x008f3d90
-void CSSParser::Fn8f3d90()
+__declspec(noinline) void CSSParser::Fn8f3d90()
 {
     *(volatile int*)((char*)this + 0x28) = *(volatile int*)((char*)this + 0x28);
 }
@@ -486,7 +489,7 @@ void CSSParser::Fn8f4320()
 // 0x008f4360  CSSParser::Fn8f4360 -- exchange string triples if token matches
 // ---------------------------------------------------------------------------
 // @ 0x008f4360
-int CSSParser::Fn8f4360(int tok)
+char CSSParser::Fn8f4360(int tok)
 {
     char* c = (char*)this;
     if (*(int*)(c + 0x28) != tok) return 0;
@@ -502,7 +505,7 @@ int CSSParser::Fn8f4360(int tok)
 // 0x008f43a0  CSSParser::Fn8f43a0 -- compare with mIdent, then advance
 // ---------------------------------------------------------------------------
 // @ 0x008f43a0
-int CSSParser::Fn8f43a0(wchar16* str)
+char CSSParser::Fn8f43a0(wchar16* str)
 {
     char* c = (char*)this;
     if (*(int*)(c + 0x28) != 3) return 0;

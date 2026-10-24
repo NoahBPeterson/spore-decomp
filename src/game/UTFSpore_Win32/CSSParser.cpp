@@ -51,12 +51,12 @@ struct CharStream {
 struct CSSParser {
     void* Fn8f3900(int p1, wchar16* begin, wchar16* end);
     void* Fn8f3970(int p1, wchar16* begin, int count);
-    char  Fn8f4290();
+    __declspec(noinline) char Fn8f4290();
     void  Fn8f42d0();
     void  Fn8f4320();
-    int   Fn8f4360(int tok);
-    int   Fn8f43a0(wchar16* str);
-    void  Fn8f3d90();            // Advance (stub)
+    char  Fn8f4360(int tok);
+    char  Fn8f43a0(wchar16* str);
+    __declspec(noinline) void Fn8f3d90();            // Advance (stub)
 };
 // ---- items of slice s008f3530 end
 
@@ -729,11 +729,13 @@ int CharStream::Fn8f3640(void* pred)
             lineCount = lineCount + 1;
             lineBegin = scanPos;
         } else {
+            if (e <= p) return 0;
             if (*p == 10) {
                 lineCount = lineCount + 1;
                 scanPos = p + 1;
                 lineBegin = p + 1;
             } else {
+                if (e <= p) return 0;
                 scanPos = p + 1;
             }
         }
@@ -779,11 +781,13 @@ int CharStream::Fn8f3710(void* pred)
             lineCount = lineCount + 1;
             lineBegin = scanPos;
         } else {
+            if (e <= p) return 0;
             if (*p == 10) {
                 lineCount = lineCount + 1;
                 scanPos = p + 1;
                 lineBegin = p + 1;
             } else {
+                if (e <= p) return 0;
                 scanPos = p + 1;
             }
         }
@@ -1030,7 +1034,7 @@ void CSSParser::Fn8f4320()
 }
 
 // @ 0x008f4360
-int CSSParser::Fn8f4360(int tok)
+char CSSParser::Fn8f4360(int tok)
 {
     char* c = (char*)this;
     if (*(int*)(c + 0x28) != tok) return 0;
@@ -1043,7 +1047,7 @@ int CSSParser::Fn8f4360(int tok)
 }
 
 // @ 0x008f43a0
-int CSSParser::Fn8f43a0(wchar16* str)
+char CSSParser::Fn8f43a0(wchar16* str)
 {
     char* c = (char*)this;
     if (*(int*)(c + 0x28) != 3) return 0;
