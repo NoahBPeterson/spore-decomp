@@ -15,3 +15,4 @@ slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cb60  00b5cb60  /O2 /MD /Gy /EHsc /TP /
 slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cb80  00b5cb80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cbe0  00b5cbe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cc00  00b5cc00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ?FUN_00b5b5d0_adjust@AdjustThunk_00b5b5d0@@QAEPAXI@Z  00b5b5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -9,7 +9,7 @@ extern "C" void* FUN_00b3d3a0();
 extern "C" void* SP_App_67dd10();
 extern "C" void* SP_MessageServer_67dcc0();
 extern "C" void* SP_GameTimeManager_00b3d380();
-extern "C" void  FUN_00b96600(void*, void*);
+struct SPVector_00b96600 { void FUN_00b96600(void* pos, const void* key); };  // 0x00B96600
 extern "C" void  FUN_004cd3c0(void*);
 extern "C" void  FUN_00586800(void*, int);
 extern "C" void  FUN_005724e0(void*, int);
@@ -91,7 +91,7 @@ void FUN_00b5b6f0(int v)
     }
     else
     {
-        FUN_00b96600(g_1686a1c, &v);
+        ((SPVector_00b96600*)0x1686a18)->FUN_00b96600(g_1686a1c, &v);
     }
 }
 
@@ -284,10 +284,14 @@ bool FUN_00b5b540(int* a, int* b, int, int p4)
     return q != -1;
 }
 
+struct AdjustThunk_00b5b5d0 {
+    void* FUN_00b5b5d0_adjust(unsigned id);
+};
+
 // @ 0x00b5b5d0
-void* __fastcall FUN_00b5b5d0_adjust(void* self_, unsigned id)
+void* AdjustThunk_00b5b5d0::FUN_00b5b5d0_adjust(unsigned id)
 {
-    char* self = (char*)self_;
+    char* self = (char*)this;
     if (id == 0x11416b8) return self - 8;
     if (id == 0x179c807) return (self - 8) ? self : 0;
     return 0;
@@ -376,16 +380,26 @@ bool FUN_00b5bf80(void* self, void*)
 int FUN_00b5c9d0(void* p)
 {
     unsigned v = (unsigned)p;
-    if (v == 0x2ccd1d2 || v == 0x8916f92d || v == 0xfffffffe) return (int)p;
-    if (v > 0x1654c10) return -1;
-    if (v == 0x1654c10) return (int)p;
-    if (v >= 0x1654c04) return (int)p;
-    if (v == 0xdbdba1) return 0xdbdba1;
-    if (v <= 0x1654bff) return -1;
-    if (v <= 0x1654c02) return (int)p;
-    if (v <= 0x1654c06) return -1;
-    if (v == 0x1654c08) return (int)p;
-    return -1;
+    if (v > 0x1654c10)
+    {
+        if (v == 0x2ccd1d2) return (int)p;
+        if (v == 0x8916f92d) return 0x1654c11;
+        if (v != 0xfffffffe) return -1;
+    }
+    else
+    {
+        if (v == 0x1654c10) return (int)p;
+        if (v <= 0x1654c06)
+        {
+            if (v >= 0x1654c04) return (int)p;
+            if (v == 0xdbdba1) return 0xdbdba1;
+            if (v <= 0x1654bff) return -1;
+            if (v <= 0x1654c02) return (int)p;
+            return -1;
+        }
+        if (v != 0x1654c08) return -1;
+    }
+    return (int)p;
 }
 
 // @ 0x00b5ca70

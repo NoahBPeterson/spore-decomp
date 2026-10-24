@@ -1,15 +1,15 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
 00b5b540   82  multi-vtable serialization bridge; vcall argument order/obj layout differs
-00b5b5d0   26  interface adjustor thunk; neg/sbb pattern not reproduced by ?: form
+00b5b5d0   0  interface adjustor thunk; __thiscall member form puts self in ecx and emits ret 4 with the original neg/sbb/and branch (byte-exact). [equiv: PASS]
 00b5b690   17  free-list erase-first-equal; loop/branch layout differs
 00b5b6c0   16  cGonzagoSimulator ctor; double vtable store schedule differs
-00b5b6f0   19  free-list push_back; capacity check schedule differs
+00b5b6f0   26  free-list push_back; grow path now calls SPVector::DoInsertKey4 as __thiscall (ecx=0x1686a18, args end/&v) instead of cdecl; remaining diff is the capacity-check/add register schedule. [equiv: WEAK 52.9% coverage (grow path); replay PASS]
 00b5b840   22  CheckGonzagoSubsystemInitState; virtual call schedule differs
 00b5b960   23  cGonzagoSubsystem ctor; base-ctor vtable store order differs
 00b5be10   49  serializer wrapper; cVarListSerializer arg schedule differs; equiv=UNSUPPORTED (now member S5be10::f, ecx fixed; 0/1200 inputs valid, fault(read))
 00b5bf30   48  message-server registration; vcall arg/order differs; equiv=UNSUPPORTED (now member S5bf30::f, ecx fixed, no stack arg; 0/1067 inputs valid, write faults)
 00b5bf80   71  multi-message registration loop; loop body schedule differs
-00b5c9d0   74  game-mode id remap compare tree; compare ordering differs
+00b5c9d0   88  game-mode id remap; restored the original compare-tree shape and fixed 0x8916f92d to return 0x1654c11 (was returning the input); remaining diff is branch layout (the c10 arm constant-folds its return). [equiv: PASS]
 00b5ca60    8  IsSomething: cdecl/fastcall mangling and compare form differ
 00b5ca70  n/a  current-game-mode predicate; switch/jump-table layout differs
 00b5cb20   29  game-mode guard; call/branch layout differs
