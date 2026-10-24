@@ -204,11 +204,10 @@ void C_7fb2e0::f(SerItem* p) {
   p->extra = vf();
 }
 
-extern char g_sc_7fb440[];
 struct C_7fb440 : VSer { void f(SerItem* p); };
 // @ 0x007fb440   (complete; not byte-exact: +4 base forces a different vcall schedule)
 void C_7fb440::f(SerItem* p) {
-  p->type = (void*)g_sc_7fb440;
+  p->type = (void*)0x01415598;   // .rdata serialization class descriptor
   p->base = (char*)this - 4;
   p->count = 1;
   p->extra = vf();
@@ -306,7 +305,7 @@ struct C_TF : VT_TF {
   float easein;        // +0x18
   float easeout;       // +0x1c
   char pad2[0x19];     // +0x20 .. +0x39
-  bool negated;        // +0x39
+  unsigned char negated; // +0x39  (raw byte: SetNegated stores the argument unchanged)
   bool dirty;          // +0x3a
   char pad3[1];
   float mtime;         // +0x3c
@@ -473,9 +472,14 @@ struct EvtAction {
   virtual void a7(unsigned char);                                     // +0x1c
 };
 // base of the enclosing object (event object); this method is a sub-object at +0x18
-void* f_7f93d0(void* base, int i);
-void* f_7fa750(void* p);
-void* f_65c480(int n);
+struct EvtBase {
+  void* f_7f93d0(int i);                       // 0x007f93d0  (thiscall)
+};
+void* f_7fa750(void* p);                       // 0x007fa750  (cdecl)
+struct Temp12 {
+  char pad[0xc];
+  void* f_65c480(int n, int z);                // 0x0065c480  (thiscall, stack temp)
+};
 
 // @ 0x007fb480   (complete; not byte-exact — multiple-inheritance sub-object method)
 struct Sub7fb480 { bool f_7fb480(unsigned char b); };
@@ -488,7 +492,7 @@ bool Sub7fb480::f_7fb480(unsigned char b) {
   else active = false;
   self[0x44] = active ? 1 : 0;
   for (int i = 0; i < 4; i++) {
-    EvtAction* a = *(EvtAction**)f_7f93d0(base, i);
+    EvtAction* a = *(EvtAction**)((EvtBase*)base)->f_7f93d0(i);
     if (a && a->a6() == 0 && self[0x44] != 0)
       a->a7(self[0x44]);
   }
@@ -504,7 +508,8 @@ bool Sub7fb480::f_7fb480(unsigned char b) {
     ((void (__thiscall*)(void*, void*))vt[0x104 / 4])(srcp, a0);
     void* child = ((void* (__thiscall*)(void*))vt[0x14 / 4])(srcp);
     if (child != 0) {
-      void* d = f_65c480(0xc);
+      Temp12 tmp;
+      void* d = tmp.f_65c480(0xc, 0);
       void** cvt = *(void***)child;
       ((void (__thiscall*)(void*, int, void*, void*, int))cvt[0x10 / 4])(child, 0, *(void**)(self - 4), d, 0);
     }
