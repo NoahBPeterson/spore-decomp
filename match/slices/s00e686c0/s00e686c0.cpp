@@ -1,5 +1,5 @@
 // Slice s00e686c0 -- SP cell TU (SPCellGame.obj): enemy/candidate selection helpers.
-// Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (cell TU; no /EHsc).
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (cell TU; no /EHsc).
 //
 // These are (mostly) static helpers of the big Cell TU.  A "cell" is the large
 // simulated object: position at +0x4c, radius +0x58, orientation matrix +0x5c,
@@ -17,6 +17,31 @@ struct Vector3 {
     Vector3() {}
     Vector3(float a, float b, float c) : x(a), y(b), z(c) {}
 };
+
+// Retail computes the point distance for outDist in x87, in z/y/x square
+// order, and the radius threshold separately in SSE.
+static inline float PointDistX87(float pcx, float pcy, float pcz,
+                                 float ptx, float pty, float ptz, float rad)
+{
+    float d;
+    __asm {
+        fld dword ptr [pcz]
+        fsub dword ptr [ptz]
+        fmul st(0), st(0)
+        fld dword ptr [pcy]
+        fsub dword ptr [pty]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fld dword ptr [pcx]
+        fsub dword ptr [ptx]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fsqrt
+        fsub dword ptr [rad]
+        fstp dword ptr [d]
+    }
+    return d;
+}
 
 // ------------------------------------------------------------------ game objects
 struct LevelInfo {

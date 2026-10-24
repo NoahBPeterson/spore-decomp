@@ -1,7 +1,7 @@
 00e686c0 249 complete: candidate/reference size ratio; GetLevelHandle inlined via out-of-line 0xe52910 + x87 division shape differ
 00e68990 344 complete: nearest-candidate scan over a filter record; stack buffer + x87/SSE + loop scheduling differ
 00e68b30 94 complete: fills the two-float/six-byte cell filter from GetLevelHandle bytes; cl duplicates the last inlined block (tail merge)
-00e68d20 565 complete: per-record sphere test; original recomputes the point distance in x87 for outDist and again in SSE for the radius threshold
+00e68d20 683 complete: per-record sphere test; outDist now uses the retail x87 z^2+y^2+x^2 sequence and the radius threshold recomputes the same point distance in SSE from the x/y/z differences; difftest WEAK 310 valid / 34.9% coverage. Register/stack scheduling still differs.
 00e69000 321 complete: nearest-cell scan with exclusion list; x87 operand order + load scheduling differ
 00e69190 561 complete: shape-6 record scan driving a nested nearest search; heavy inlining/scheduling differences
 00e693f0 103 complete: greedy chain search (PoolGet + 0xe69000, exclude = accumulated chain); prologue/loop scheduling differ
