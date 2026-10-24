@@ -782,7 +782,7 @@ char cUIMissionCardPanel::HandleMessage(u32 msg, void *arg)
                 SetupMissionCard(mission, 1, 1, 0);
             } else {
                 u8 r = ((u8 (__thiscall *)(void *))(*(void ***)mission)[0x180 / 4])(mission);
-                SetupMissionCard(mission, 1, r, 0);
+                SetupMissionCard(mission, r, 1, 0);
             }
             return 0;
         }
@@ -831,10 +831,11 @@ void cUIMissionCardPanel::RefreshFromMissionList()
         }
         if ((mission != 0 && ((bool (__thiscall *)(void *, void *, u32))FUN_00febe50)(GetMissionManager(), mission, 0))
             || ((void *(__thiscall *)(void *))FUN_00febc70)(GetMissionManager()) == mission) {
-            SetupMissionCard(mission, 1, 0, 0);
+            SetupMissionCard(mission, 0, 1, 0);
         }
     }
-    void *o = FUN_00575ea0(FUN_00bfc5f0(SP_SpaceGameGet()));
+    void *o = ((void *(__thiscall *)(void *))FUN_00575ea0)(
+        ((void *(__thiscall *)(void *))FUN_00bfc5f0)(SP_SpaceGameGet()));
     if (o != 0) {
         AddMissionCard((u32)o);
     }
