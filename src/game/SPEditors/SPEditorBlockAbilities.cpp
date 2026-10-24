@@ -427,15 +427,13 @@ cSPUILayout_s0059_f510* UninitMove(cSPUILayout_s0059_f510** out, cSPUILayout_s00
                         cSPUILayout_s0059_f510* dest, const cSPUILayout_s0059_f510* tag);                      // 0x0059ef30
 cSPUILayout_s0059_f510* UninitFillN(cSPUILayout_s0059_f510* first, uint32_t n, const cSPUILayout_s0059_f510* value);      // 0x0059ef70
 AbilityRec* FindAbilitySlot(AbilityRec* a, AbilityRec* b, AbilityRec* c);  // 0x0059f740
-struct VehicleAbilities {
-    void* vptr0;      // +0x0
-    void* vptr1;      // +0x4
-    char  pad[0x61 - 0x8];
-    unsigned char b61, b62, b63;
+// 0x70-byte vehicle ability record: the 0x64-byte cSPEditorVehicleAbilities base plus three
+// dwords of its own
+struct VehicleAbilities : SP::cSPEditorVehicleAbilities {
     int   m64;        // +0x64
     int   m68;        // +0x68
     int   m6c;        // +0x6c
-    VehicleAbilities();
+    VehicleAbilities(int ability);
 };
 namespace EA {
 namespace COM {
@@ -1008,24 +1006,26 @@ void cSPEditorBlockAbilities_s0059_f510::ShutdownLayouts()
 // @ 0x0059f950
 void UILayoutVector::resize(uint32_t newSize)
 {
-    uint32_t cur = (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18);
-    if (cur < newSize) {
-        char tmp[0x18];
-        ConstructLayout((cSPUILayout_s0059_f510*)tmp, 0);
-        insert(mpEnd, newSize - cur, *(cSPUILayout_s0059_f510*)tmp);
-        ((cSPUILayout_s0059_f510*)tmp)->~cSPUILayout_s0059_f510();
-    } else {
-        erase(mpBegin + newSize, mpEnd);
+    if (newSize > (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18)) {
+        // the default-constructed temporary lives in the caller's frame and is destroyed
+        // right after the insert
+        insert(mpEnd, newSize - (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18),
+               cSPUILayout_s0059_f510());
+        return;
     }
+    erase(mpBegin + newSize, mpEnd);
 }
 
 // @ 0x0059f9e0
-VehicleAbilities::VehicleAbilities()
+VehicleAbilities::VehicleAbilities(int ability)
+    : SP::cSPEditorVehicleAbilities(ResourceKey(), (uint32_t)ability, 0, 0, true)
 {
+    *(void**)this = vtbl_BlockAbilities0;
+    *(void**)((char*)this + 4) = vtbl_BlockAbilities1;
     m64 = 2;
-    b61 = 1;
-    b62 = 0;
-    b63 = 1;
+    mb61 = true;
+    mb62 = false;
+    mb63 = true;
     m68 = 0xf56d252d;
     m6c = 0x3c02fae0;
 }
@@ -1048,14 +1048,15 @@ void* cSPEditorBlockAbilities_s0059_f510::ScalarDeletingDtor(unsigned char flags
 // @ 0x0059faa0
 int AbilityVector::EraseRange(AbilityRec* first, AbilityRec* last)
 {
-    AbilityRec* p = FindAbilitySlot(first, mpEnd, last);
+    AbilityRec* p = FindAbilitySlot(last, mpEnd, first);   // (range end, old end, range start)
     AbilityRec* end = mpEnd;
+    // the record itself is the ability object: its first dword is the vtable and the
+    // record pointer is the `this` handed to the teardown slot (vtable slot 2)
     for (; p < end; p = (AbilityRec*)((char*)p + 0xc4)) {
-        void** vtbl = *(void***)p->mpObject;
-        void* fn = *(void**)((char*)vtbl + 8);
-        (*(void(__thiscall**)(void*, int))fn)(p->mpObject, 0);
+        void** vtbl = *(void***)p;
+        (*(void(__thiscall**)(void*, int))(vtbl + 2))(p, 0);
     }
-    mpEnd = (AbilityRec*)((char*)mpEnd + (((char*)last - (char*)first) / 0xc4) * 0xc4);
+    mpEnd = (AbilityRec*)((char*)mpEnd + (((char*)first - (char*)last) / 0xc4) * 0xc4);
     return (int)first;
 }
 

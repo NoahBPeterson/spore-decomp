@@ -104,32 +104,45 @@ void cSPEditorBlockAbilities::ShutdownLayouts()
 // @ 0x0059f950
 void UILayoutVector::resize(uint32_t newSize)
 {
-    uint32_t cur = (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18);
-    if (cur < newSize) {
-        char tmp[0x18];
-        ConstructLayout((cSPUILayout*)tmp, 0);
-        insert(mpEnd, newSize - cur, *(cSPUILayout*)tmp);
-        ((cSPUILayout*)tmp)->~cSPUILayout();
-    } else {
-        erase(mpBegin + newSize, mpEnd);
+    if (newSize > (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18)) {
+        // the default-constructed temporary lives in the caller's frame and is destroyed
+        // right after the insert
+        insert(mpEnd, newSize - (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18), cSPUILayout());
+        return;
     }
+    erase(mpBegin + newSize, mpEnd);
 }
 
 // ===========================================================================
 // @ 0x0059f9e0
-struct VehicleAbilities {
+extern char vtbl_BlockAbilities0[];   // 0x013f6914
+extern char vtbl_BlockAbilities1[];   // 0x013f6910
+
+// 12-byte resource key passed by value to the ability base constructor
+struct Key3 { uint32_t instanceID, typeID, groupID; };
+
+// 0x60-byte ability base with two vtable words (the base ctor also fills the byte at +0x60,
+// which is the first flag byte of the derived record)
+struct AbilityBase {
     void* vptr0;      // +0x0
     void* vptr1;      // +0x4
-    char  pad[0x61 - 0x8];
-    unsigned char b61, b62, b63;
+    char  pad[0x60 - 0x8];
+    AbilityBase(Key3 key, int ability, int flag0, int flag1, int flag2);   // 0x0059f030
+};
+
+struct VehicleAbilities : AbilityBase {
+    unsigned char b60, b61, b62, b63;   // +0x60..+0x63
     int   m64;        // +0x64
     int   m68;        // +0x68
     int   m6c;        // +0x6c
-    VehicleAbilities();
+    VehicleAbilities(int ability);
 };
 
-VehicleAbilities::VehicleAbilities()
+VehicleAbilities::VehicleAbilities(int ability)
+    : AbilityBase(Key3(), ability, 0, 0, 1)
 {
+    *(void**)this = vtbl_BlockAbilities0;
+    *(void**)((char*)this + 4) = vtbl_BlockAbilities1;
     m64 = 2;
     b61 = 1;
     b62 = 0;
@@ -142,14 +155,15 @@ VehicleAbilities::VehicleAbilities()
 // @ 0x0059faa0
 int AbilityVector::EraseRange(AbilityRec* first, AbilityRec* last)
 {
-    AbilityRec* p = FindAbilitySlot(first, mpEnd, last);
+    AbilityRec* p = FindAbilitySlot(last, mpEnd, first);   // (range end, old end, range start)
     AbilityRec* end = mpEnd;
+    // the record itself is the ability object: its first dword is the vtable and the
+    // record pointer is the `this` handed to the teardown slot (vtable slot 2)
     for (; p < end; p = (AbilityRec*)((char*)p + 0xc4)) {
-        void** vtbl = *(void***)p->mpObject;
-        void* fn = *(void**)((char*)vtbl + 8);
-        (*(void(__thiscall**)(void*, int))fn)(p->mpObject, 0);
+        void** vtbl = *(void***)p;
+        (*(void(__thiscall**)(void*, int))(vtbl + 2))(p, 0);
     }
-    mpEnd = (AbilityRec*)((char*)mpEnd + (((char*)last - (char*)first) / 0xc4) * 0xc4);
+    mpEnd = (AbilityRec*)((char*)mpEnd + (((char*)first - (char*)last) / 0xc4) * 0xc4);
     return (int)first;
 }
 
