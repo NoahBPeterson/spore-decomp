@@ -1,1 +1,3 @@
 00fc5f80 SP::cWeatherManager::UpdateEffects  # name guessed; per-frame weather effect update (ModAPI retail layout cWeatherManager, PDB field names)
+00fc5900 SP::cWeatherManager::Init  # PDB candidate; one-time weather set-up: terrain map set, temperature, cheat keywords, state/effects managers, jet-stream/pressure/cloud-emit maps, message subscription
+00fc5de0 SP::cWeatherManager::FUN_00fc5de0  # release the five cached effect refs (keys 0x38/0x3c/0x40/0x48/0x4c) and stop them
