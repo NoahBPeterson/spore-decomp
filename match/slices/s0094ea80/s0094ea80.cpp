@@ -828,17 +828,17 @@ int __thiscall SSLManager::RemoveSession()
 }
 
 // @ 0x0094FA60
-void __fastcall Fn0094fa60(int param_1, int, void** out, void* parent, unsigned* key, char flag)
+void** __fastcall Fn0094fa60(int param_1, int, void** out, void* parent, unsigned* key, char flag)
 {
-    int lt = (flag == 0 && parent != (void*)(param_1 + 4) && *(unsigned*)((char*)parent + 0x10) <= *key) ? 1 : 0;
+    int lt = (flag == 0 && parent != (void*)(param_1 + 4) && *key >= *(unsigned*)((char*)parent + 0x10)) ? 1 : 0;
     void* node = *(void**)(param_1 + 0x18);
-    if (node == 0)
+    if (node != 0)
+        *(void**)(param_1 + 0x18) = *(void**)node;
+    else
         node = operator new(*(unsigned*)(param_1 + 0x28),
                            "EASTL", 0, 0,
                            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
                            0xd1);
-    else
-        *(void**)(param_1 + 0x18) = *(void**)node;
     if ((char*)node + 0x10 != 0) {
         *(unsigned*)((char*)node + 0x10) = key[0];
         *(unsigned*)((char*)node + 0x14) = key[1];
@@ -846,4 +846,5 @@ void __fastcall Fn0094fa60(int param_1, int, void** out, void* parent, unsigned*
     RBTreeInsert(node, parent, (void*)(param_1 + 4), lt);
     *(int*)(param_1 + 0x14) = *(int*)(param_1 + 0x14) + 1;
     *out = node;
+    return out;
 }
