@@ -1,1 +1,4 @@
 00cbea20 cAttackTick::Update  # Claude-coined class name; PDB candidate SP::cDefaultAoEArea::Update (caller-scored); launches cCulturalProjectile via 0x00cbda10 every 3000 ms
+00cbe640 cPathArcBuilder::Start  # Claude-coined; builds a 32-point arc from the locomotion object's position and starts Simulator::cPathFollowingLocomotion (ctor 0x00cbaf00), attaches it via 0x00c421b0 and sets desired speed
+00c421b0 LocoObject::SetLocomotion  # thiscall (loco object, locomotion pointer); attaches a locomotion object
+00cbaf00 Simulator::cPathFollowingLocomotion::cPathFollowingLocomotion  # thiscall ctor(SpVector<Vector3>* points, u32 id), 0x50 bytes

@@ -305,3 +305,194 @@ bool cAttackTick::Update()
     }
     return active;
 }
+
+// ---------------------------------------------------------------------------
+// 0x00cbe640 -- sample a 32-point arc from the locomotion object's current
+// position along a normalized direction, store the last sample, and start a
+// cPathFollowingLocomotion that follows the sampled path.
+// ---------------------------------------------------------------------------
+#include <math.h>
+#pragma intrinsic(sqrt)
+
+void* __cdecl operator new(unsigned size, const char* name, int, int, int, int);  // 0x00f473a0
+
+class RefObject
+{
+public:
+    virtual void AddRef();                                 // 0x00
+    virtual void Release();                                // 0x04
+};
+
+struct Vec3f
+{
+    float x, y, z;
+};
+
+struct RefSlot
+{
+    RefObject* mpObject;                                   // +0x00
+
+    void operator=(RefObject* p)
+    {
+        if (p != mpObject)
+        {
+            RefObject* old = mpObject;
+            if (p != 0)
+                p->AddRef();
+            mpObject = p;
+            if (old != 0)
+                old->Release();
+        }
+    }
+};
+
+// Embedded locomotion object (vtable slots used here: GetPosition 0x2c,
+// SetDesiredSpeed 0xc4).
+class LocoObject
+{
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v0a();
+    virtual const Vec3f* GetPosition();                    // 0x2c
+    virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+    virtual void v14(); virtual void v15(); virtual void v16();
+    virtual void v17();
+    virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b();
+    virtual void v1c(); virtual void v1d(); virtual void v1e(); virtual void v1f();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v2a(); virtual void v2b();
+    virtual void v2c(); virtual void v2d(); virtual void v2e(); virtual void v2f();
+    virtual void v30();
+    virtual void SetDesiredSpeed(float speed, int flag);   // 0xc4
+
+    void SetLocomotion(RefObject* locomotion);             // 0x00c421b0
+
+    char  pad04[0x1e8 - 4];
+    float mTurnRate;                                       // 0x1e8
+};
+
+struct SpVector3
+{
+    Vec3f* mpBegin;                                        // +0x00
+    Vec3f* mpEnd;                                          // +0x04
+    Vec3f* mpCapacity;                                     // +0x08
+
+    Vec3f* erase(Vec3f* first, Vec3f* last);               // 0x0050f740
+    void DoInsertValue(Vec3f* pos, const Vec3f* value);    // 0x004b5ad0
+
+    void push_back(const Vec3f& value)
+    {
+        Vec3f* end = mpEnd;
+        if (end < mpCapacity)
+        {
+            mpEnd = end + 1;
+            if (end != 0)
+            {
+                end->x = value.x;
+                end->y = value.y;
+                end->z = value.z;
+            }
+        }
+        else
+        {
+            DoInsertValue(end, &value);
+        }
+    }
+};
+
+class cPathFollowingLocomotion : public RefObject
+{
+public:
+    cPathFollowingLocomotion(SpVector3* points, uint32_t id);   // 0x00cbaf00
+    char pad04[0x50 - 4];
+};
+
+// Object owning the four locomotion fields touched by 0x00cbe640.
+class cPathArcBuilder
+{
+public:
+    char pad00[0x34];                                      // +0x000
+    LocoObject mObject;                                    // +0x034
+    char pad220[0x224 - 0x220];                            // +0x220
+    int  mMode;                                            // +0x224
+    char pad228[0x518 - 0x228];                            // +0x228
+    RefSlot mLocomotion;                                   // +0x518
+    RefSlot mPrevious;                                     // +0x51c
+    Vec3f   mArcPoint;                                     // +0x520
+    char pad52c[0x550 - 0x52c];                            // +0x52c
+    uint32_t mOwnerId;                                     // +0x550
+    uint8_t  mFlag;                                        // +0x554
+
+    void Start(Tribe* owner, RefObject* previous, const Vec3f* dir,
+               float speed, uint8_t flag);                 // 0x00cbe640
+};
+
+// @ 0x00cbe640
+void cPathArcBuilder::Start(Tribe* owner, RefObject* previous, const Vec3f* dir,
+                            float speed, uint8_t flag)
+{
+    mOwnerId = (uint32_t)owner->GetOwnerId();
+    mPrevious = previous;
+    mFlag = flag;
+    mMode = 5;
+
+    SpVector3 points;
+    points.mpBegin = 0;
+    points.mpEnd = 0;
+    points.mpCapacity = 0;
+    points.erase(points.mpBegin, points.mpEnd);
+
+    Vec3f d = *dir;
+    float inv = 1.0f / (float)sqrt(d.x * d.x + d.z * d.z + d.y * d.y + 1e-8f);
+    d.x += d.x * inv;
+    d.y += d.y * inv;
+    d.z += d.z * inv;
+
+    Vec3f base = *mObject.GetPosition();
+    const Vec3f* pos = mObject.GetPosition();
+    float dx = d.x - pos->x;
+    float dy = d.y - pos->y;
+    float dz = d.z - pos->z;
+
+    float len = (float)sqrt(dx * dx + dz * dz + dy * dy);
+    float invLen = 1.0f / len;
+    float scale = len * 0.030303031f;
+    float sx = dx * invLen * scale;
+    float sy = dy * invLen * scale;
+    float sz = dz * invLen * scale;
+
+    float offset = 0.0f;
+    for (int i = 0, n = 16; n > -16; ++i, --n)
+    {
+        if (i < 16)
+            offset += (float)n * 0.05f;
+        else
+            offset -= (float)(i - 16) * 0.05f;
+
+        float bInv = 1.0f / (float)sqrt(base.x * base.x + base.z * base.z + base.y * base.y + 1e-8f);
+        Vec3f v;
+        v.x = bInv * base.x * offset + base.x;
+        v.y = base.y * bInv * offset + base.y;
+        v.z = base.z * bInv * offset + base.z;
+
+        points.push_back(v);
+
+        base.x += sx;
+        base.y += sy;
+        base.z += sz;
+        mArcPoint = v;
+    }
+
+    cPathFollowingLocomotion* loco = new ("Simulator/cPathFollowingLocomotion", 0, 0, 0, 0)
+        cPathFollowingLocomotion(&points, 0x82ce6992u);
+    mLocomotion = loco;
+
+    mObject.SetLocomotion(mLocomotion.mpObject);
+    mObject.SetDesiredSpeed(speed, 0);
+
+    if (points.mpBegin != 0 && ((int*)points.mpBegin)[-1] != 0)
+        operator delete[](points.mpBegin);
+}
