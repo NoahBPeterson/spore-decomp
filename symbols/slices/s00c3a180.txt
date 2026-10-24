@@ -1,0 +1,50 @@
+# Slice s00c3a180 -- SPGameDataUFO.obj
+#
+#   VA          symbol                                                   disposition
+#   00c3a180  ?HandleMessage@cUFOKinestheticsTuning@@QAEDHH@Z            MATCH (33 B)
+#   00c3a1b0  ?GetGalaxyWarpTime@cUFOKinestheticsTuning@@QAEMHMM@Z       MATCH (109 B)
+#   00c3a220  ?enableWeapon@?A0x...@@YAXHHPAPAUIRefObject@@@Z            nonmatching  79 diff
+#   00c3a2b0  ?OnContextChange@cSPGameDataUFO@@QAEXH@Z                  nonmatching 631 diff
+#   00c3a5a0  ?ShutdownInternal@cSPGameDataUFO@@QAEXXZ                   nonmatching 555 diff
+#   00c3a830  ?SetNPCTool@cSPGameDataUFO@@QAEXPAX@Z                     nonmatching 215 diff
+#   00c3a930  ?SetNPCToolIndexed@cSPGameDataUFO@@QAEXPAXH@Z              nonmatching 136 diff
+#   00c3a9f0  ?Initialize@cSPGameDataUFO@@QAEDXZ                         MATCH (17 B)
+#   00c3aa10  ?vtableSlot40Wrapper@cSPGameDataUFO@@QAEDH@Z               MATCH (34 B)
+#   00c3aa40  ?SetFacing@cSPGameDataUFO@@QAEXPBUVector3@@@Z              nonmatching 690 diff
+#   00c3ad40  ?GetContextScale@cSPGameDataUFO@@QAEMXZ                     nonmatching 225 diff
+#
+# Build flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+# Source: match/slices/s00c3a180/s00c3a180.cpp
+#
+# Classes / layouts (from pdb_type.py --exact):
+#   SP::cUFOKinestheticsTuning : public EA::Messaging::IHandler   size 0x14c  mPropList @+0x4
+#   SP::cSPGameDataUFO         : cGameData, cLocomotiveObject, cCombatant, cInteractionTarget
+#                                                               size 0x6c8
+#   SP::cSPSpaceCombatTuning   : public EA::COM::RefCountVTemplate<int>
+#                                                                size 0xc   prop list @+0x8
+#
+# Notes
+#   * 00c3a830 / 00c3a930 are invoked on the cCombatant subobject at ufo+0x508, so their
+#     incoming `this` (ecx) points at ufo+0x508; the base object is recovered by
+#     subtracting 0x508.  Their fields are the same cSPGameDataUFO members seen from
+#     that offset: +0x288 = ufo+0x790, +0x28c = ufo+0x794, +0x29c = ufo+0x7a4,
+#     +0x20c = ufo+0x714 (mUFOType), +0xb1c = ufo+0x1624.
+#   * 00c3a180 dispatches to ReadProps() when messageID == 0xf62def and
+#     *(int*)(arg+0x18) == 0x99fb6f5b.
+#   * 00c3a1b0 reads the GalaxyWarpTime float array (property 0x5c8077c) through
+#     cUFOKinestheticsTuning::mPropList (+0x4); cases warpMode 2 and 4 index the array.
+#   * 00c3ad40's jump table lives at 0xc3ae44; entry i corresponds to mUFOType i+1.  The
+#     table was read back byte-for-byte and the mapping above is exact.
+#   * 00c3aa40 stores the normalised direction into mDestination (+0x750/54/58), the raw
+#     facing into +0x718/71c/720, and the orthogonal components (z,x,y) into
+#     +0x5f4/+0x5f8/+0x5fc.  The +0x730 quaternion is built from the normalised direction
+#     and the previously-read basis, not the raw facing.
+#
+# Equivalence (tools/difftest/equiv.py, default inputs, run once):
+#   00c3a220  FAIL         2/343 valid, 97.8% coverage
+#   00c3a2b0  UNSUPPORTED  0/400 valid (fault(read))
+#   00c3a5a0  UNSUPPORTED  0/400 valid (budget + fault(read))
+#   00c3a830  WEAK         117/400 valid, 44.0% coverage
+#   00c3a930  PASS         338/400 valid, 94.4% coverage
+#   00c3aa40  FAIL         5/5 valid
+#   00c3ad40  PASS         400/400 valid, 66.2% coverage
