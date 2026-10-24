@@ -140,7 +140,7 @@ struct cSPEditorBlock {
 cSPVector3 operator*(const cSPVector3& v, const cSPMatrix3& m);   // @ 0x41daf0
 cSPVector3 operator-(const cSPVector3& a, const cSPVector3& b);   // @ 0x41db10
 cSPVector3 operator+(const cSPVector3& a, const cSPVector3& b);   // @ 0x41dc10
-cSPMatrix3 operator*(const cSPMatrix3& a, const cSPMatrix3& b);   // @ 0x41de20
+cSPMatrix3 Mat3Mul(const cSPMatrix3& a, const cSPMatrix3& b);   // @ 0x41de20
 cSPMatrix3* Matrix33_Convert(cSPMatrix3* out, const cSPMatrix3* in);  // @ 0x41ded0
 void ScaleVector(cSPVector3* v, const float& s);                  // @ 0x41dba0
 void Vector3_Normalize(cSPVector3* out, const cSPVector3* in);    // @ 0x436ce0
@@ -272,9 +272,9 @@ void FUN_49d550(cSPEditorBlock* block, cSPTransform t0, cSPTransform t1, bool fl
     (void)flag;
     cSPMatrix3 m;
     cSPMatrix3* pm = Matrix33_Convert(&m, &t0.mRotation);
-    cSPMatrix3 a = block->mBaseOrientation * (*pm);
+    cSPMatrix3 a = Mat3Mul(block->mBaseOrientation, *pm);
     BuildFacingMatrix(&a, &a, 0);
-    cSPMatrix3 c = a * t1.mRotation;
+    cSPMatrix3 c = Mat3Mul(a, t1.mRotation);
     cSPMatrix3 d;
     BuildFacingMatrix(&d, &block->mUserOrientation, 0);
     block->SetUserOrientation(d);
