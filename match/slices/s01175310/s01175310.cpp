@@ -173,3 +173,241 @@ void DecodeFrame(LpcVoice* v)
     LpcSynthesize(v, 36, 0x21);
 }
 } // namespace SpeechCodec
+
+// ---------------------------------------------------------------------------------------------
+// The voice stream around the codec (0x01175ca0 .. 0x011761f0): packet framing for the framed mode
+// and the sample feeder that pulls decoded granules of 28 samples. Both roles describe the same
+// state the codec reads through LpcVoice above. Names are Claude-coined from usage.
+// ---------------------------------------------------------------------------------------------
+
+// Big-endian 16-bit field of a packet header: the parser stores the two network-order bytes and
+// later reads the pair back as a signed sample count / slot index.
+struct Be16 {
+    union {
+        short mValue;                   // +0x00 signed value
+        unsigned char mBytes[2];        // +0x00 network order, mBytes[0] is the low byte
+    };
+};
+
+// Packet-mode view of the stream: a bit reader over the packet payload, the 432-sample buffer the
+// codec fills, and the framing state of the packet being parsed.
+struct VoiceStream {
+    const unsigned char* mpRead;        // +0x0000 bit reader position
+    unsigned int mBitBuf;               // +0x0004 bit buffer
+    int mBitCnt;                        // +0x0008 valid bit count
+    unsigned char mCodec[0x684 - 0x0c]; // +0x000c codec state (see LpcVoice)
+    float mSamples[432];                // +0x0684 decoded block / the packet's samples
+    int mBuffered;                      // +0x0d44 samples held in mSamples
+    const unsigned char* mpPacket;      // +0x0d48 read position inside the packet
+    unsigned char* mpOut;               // +0x0d4c caller's destination
+    Be16 mPacketSamples;                // +0x0d50 sample count of the current packet
+    Be16 mPacketOffset;                 // +0x0d52 first sample slot the packet fills
+    int mBytesLeft;                     // +0x0d54 packet bytes still to produce
+    int mBytesTotal;                    // +0x0d58 size of the packet that was started
+    int mCodecMode;                     // +0x0d5c codec sub-mode handed to the frame decoder
+    int mSyncPending;                   // +0x0d60 a 0xee marker opened the current packet
+    int mStreaming;                     // +0x0d64 1: packets are framed and sampled
+
+    VoiceStream* ResetPacket();                             // 0x01175ca0
+    int StartPacket(const unsigned char* pData, int nTotal, int nBytes);     // 0x01175ce0
+    void SetPositions(int* pState, int nFlags);             // 0x01175d70
+    int Read(int* ppOut, int nSamples);                     // 0x01175da0
+};
+
+// Frame decoder of the codec (0x01175170): arms the bit reader with a payload and a codec mode.
+extern void __stdcall FUN_01175170(const unsigned char* pData, void* pStream, int mode);
+
+// Feeder view of the stream: a fill callback that produces granules of 28 samples, handed out in
+// arbitrary chunk sizes.
+struct SampleFeeder {
+    void (__cdecl *mpfnFill)(int* pCount);  // +0x0000 granule producer
+    int mPending;                       // +0x0004 samples of the last granule not handed out yet
+    int mAvailable;                     // +0x0008 samples the source can still produce
+    int mMode;                          // +0x000c source mode
+    const float* mpSrc;                 // +0x0010 read position inside the pending samples
+    unsigned char mPad14[0x24 - 0x14];  // +0x0014
+    float mGranule[28];                 // +0x0024 granule the fill callback decodes into
+    int mFillCount;                     // +0x0094 samples asked from / produced by the callback
+    float mCoefA;                       // +0x0098
+    float mCoefB;                       // +0x009c
+    void* mpSource;                     // +0x00a0
+    float* mpDst;                       // +0x00a4 write position in the caller's buffer
+
+    int SetSource(void* pSource, int nMode, int nAvailable);   // 0x01175f50
+    int Read(float** ppDst, int nSamples);                     // 0x01175f80
+    void SetCoefs(const float* pCoefs);                        // 0x011761f0
+};
+
+// @ 0x01175ca0
+// Drops any packet in flight and puts the stream back into framed (sampled) mode.
+VoiceStream* VoiceStream::ResetPacket()
+{
+    mBuffered = 0;
+    mBytesLeft = 0;
+    mBytesTotal = 0;
+    mPacketSamples.mValue = 0;
+    mPacketOffset.mValue = 0;
+    mCodecMode = 0;
+    mSyncPending = 0;
+    mStreaming = 1;
+    return this;
+}
+
+// @ 0x01175ce0
+// Starts a packet: hands the payload to the frame decoder. Fails while a packet is still running.
+int VoiceStream::StartPacket(const unsigned char* pData, int nTotal, int nBytes)
+{
+    if (pData == 0)
+        return -1;
+    if (mBytesLeft != 0)
+        return -1;
+    mBytesLeft = nBytes;
+    mBytesTotal = nTotal;
+    mBuffered = 0;
+    mpPacket = pData;
+    if (mStreaming == 1) {
+        mSyncPending = (*pData == 0xee);
+        pData++;
+    }
+    FUN_01175170(pData, this, mCodecMode);
+    return 0;
+}
+
+// @ 0x01175d70
+// Continues a packet from a three-word state block: bit buffer, slot count and codec mode.
+void VoiceStream::SetPositions(int* pState, int nFlags)
+{
+    mBitBuf = pState[0];
+    mCodecMode = pState[2];
+    mBuffered = pState[1];
+}
+
+// @ 0x01175da0
+// Produces up to nSamples samples of the running packet: it drains what the codec already decoded,
+// decoding another frames' worth whenever the request is not satisfied yet. In framed mode every
+// decoded block is followed by a new packet header and its 16-bit samples.
+int VoiceStream::Read(int* ppOut, int nSamples)
+{
+    int left = mBytesLeft;
+    int buffered = mBuffered;
+    if (left == 0)
+        return 0;
+    mpOut = (unsigned char*)*ppOut;
+    if (nSamples < left)
+        left = nSamples;
+    int done = left;
+    if (done > 0) {
+        for (;;) {
+            if (done < buffered)
+                buffered = done;
+            _imp__memcpy(mpOut, &mSamples[432 - mBuffered], buffered * 4);
+            mBuffered -= buffered;
+            mpOut += buffered * 4;
+            done -= buffered;
+            if (done < 1)
+                break;
+            SpeechCodec::DecodeFrame((LpcVoice*)this);
+            buffered = 432;
+            mBuffered = buffered;
+            if (mStreaming != 1)
+                continue;
+            mpPacket = mpRead - 1;
+            if (mSyncPending != 0) {
+                const unsigned char* p = mpPacket;
+                mPacketOffset.mBytes[0] = p[1];
+                mPacketOffset.mBytes[1] = p[0];
+                mPacketSamples.mBytes[0] = p[3];
+                mPacketSamples.mBytes[1] = p[2];
+                mpPacket += 4 + (short)mPacketSamples.mValue * 2;
+                mpRead = mpPacket + 1;
+                float* pSlot = &mSamples[(short)mPacketOffset.mValue];
+                const unsigned char* q = p + 4;
+                Be16 sample;
+                for (short i = 0; i < (short)mPacketSamples.mValue; i++) {
+                    sample.mBytes[0] = q[1];
+                    sample.mBytes[1] = q[0];
+                    *pSlot++ = (float)(short)sample.mValue;
+                    q += 2;
+                }
+                mSyncPending = 0;
+            }
+            if (*mpPacket == 0xee)
+                mSyncPending = 1;
+            mBitCnt = 8;
+            mBitBuf = *mpRead;
+            mpRead++;
+        }
+    }
+    mBytesLeft -= left;
+    return left;
+}
+
+// @ 0x01175f50
+// Arms the feeder with a sample source; only accepted while nothing is left over.
+int SampleFeeder::SetSource(void* pSource, int nMode, int nAvailable)
+{
+    if (pSource == 0)
+        return -1;
+    if (mAvailable != 0)
+        return -1;
+    mAvailable = nAvailable;
+    mMode = nMode;
+    mpSource = pSource;
+    return 0;
+}
+
+// @ 0x01175f80
+// Hands out up to nSamples samples: first the leftovers of the previous granule, then whole granules
+// straight from the fill callback, and finally a partial granule that is buffered for the next call.
+int SampleFeeder::Read(float** ppDst, int nSamples)
+{
+    int done = 0;
+    mpDst = *ppDst;
+    if (mAvailable == 0)
+        return 0;
+    if (nSamples > mAvailable)
+        nSamples = mAvailable;
+    if (mPending != 0) {
+        int n = mPending;
+        if (n > nSamples)
+            n = nSamples;
+        for (int i = 0; i < n; i++) {
+            *mpDst++ = *mpSrc++;
+        }
+        mAvailable -= n;
+        mPending -= n;
+        nSamples -= n;
+        done = n;
+    }
+    int whole = nSamples / 28 * 28;
+    int rest = nSamples - whole;
+    mFillCount = whole;
+    if (whole > 0) {
+        mpfnFill(&mFillCount);
+        mAvailable -= whole;
+        done += whole;
+    }
+    if (rest > 0) {
+        float* pOld = mpDst;
+        mFillCount = rest;
+        mpDst = mGranule;
+        mpfnFill(&mFillCount);
+        mAvailable -= rest;
+        mpSrc = mpDst + mFillCount;
+        mPending = -mFillCount;
+        mpDst -= 28;                    // the callback leaves mpDst one past the granule
+        for (int k = 0; k < rest; k++)
+            pOld[k] = mpDst[k];
+        done += rest;
+    }
+    if (mAvailable <= 0)
+        mPending = 0;
+    return done;
+}
+
+// @ 0x011761f0
+void SampleFeeder::SetCoefs(const float* pCoefs)
+{
+    mCoefA = pCoefs[0];
+    mCoefB = pCoefs[1];
+}

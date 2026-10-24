@@ -1,0 +1,5 @@
+slices/s01175310/s01175310.cpp  ?ResetPacket@VoiceStream@@QAEPAU1@XZ  01175ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01175310/s01175310.cpp  ?StartPacket@VoiceStream@@QAEHPBEHH@Z  01175ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01175310/s01175310.cpp  ?SetPositions@VoiceStream@@QAEXPAHH@Z  01175d70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01175310/s01175310.cpp  ?SetSource@SampleFeeder@@QAEHPAXHH@Z  01175f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s01175310/s01175310.cpp  ?SetCoefs@SampleFeeder@@QAEXPBM@Z  011761f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
