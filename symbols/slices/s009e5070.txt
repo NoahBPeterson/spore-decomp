@@ -12,3 +12,43 @@
 009e4700 ?reserve@?$Vec@UEntry@@@@QAEXH@Z  # vector<Entry>::reserve (0xa4-byte elements)
 009e4a00 ?Insert@EntryArr@@QAEXPBUEntry@@@Z  # sorted-by-key insert-or-assign of an Entry
 009e5070 ?Load@Table@@QAEXPBUSrc@@@Z  # Table::Load migrated from s009e5070 (verbatim, slice spelling)
+
+# ------------------------------------------------------------------ gold7 batch id "s009e5070"
+009e56a0 ??0Gcmdst@@QAE@XZ  # Gcmdst ctor: zero count/v/arr.count, VecEntry::Construct, ResetDefault
+009e56d0 ?GcmdstBuild@@YAPAXPAXPBX@Z  # sample the walk table into a fresh Gcmdst (RNG + iat_floor)
+009e59b0 ?ReadGaitRecordStaticDataFromStreamWrapper@@YAPAXPAH@Z  # register-ABI stream wrapper (GAIT/vers)
+009e5b40 ?GaitRecordLookupOrBuild@@YAHHIPAX@Z  # name-hash lookup in g_name_map, else GcmdstBuild
+009e5c00 ?FastInvSqrt@@YAMM@Z  # Quake fast inverse-sqrt (magic 0x5f375a86)
+009e5c30 ?Matrix33_Multiply@@YAXPAMPBM1@Z  # 3x3 basis product (SSE scalar)
+
+# ------------------------------------------------------------------ callees / globals (gold7)
+009e4630 VecEntry::Construct  # thiscall (count, const Entry*), ret 8
+009e4aa0 ?ResetDefault@Gcmdst@@QAEXXZ  # thiscall
+009e4a00 ?Insert@EntryArr@@QAEXPBUEntry@@@Z  # thiscall sorted-key insert
+009e1610 ?AddElem@Vec0C@@QAEXPBUElem0C@@@Z  # thiscall push 0x0c element
+009e2490 BuildGaits  # thiscall (self, g)
+009e17d0 find_or_insert  # rbtree insert-by-key (this = map)
+00e5c780 eastl::rbtree<unsigned,...>::find  # thiscall (out, key), sentinel at map+4
+009ce420 GameData_AnimItem vec accessor  # returns &items
+00c370d0 Simulator::cGameData::WriteAsText  # sample range scalar
+00ff3ba0 GetAnimWalkTable  # returns begin/end/cap of 0x38-byte motion records
+00936050 RandomBytes  # C++ mangled, 4-byte {min,max} request -> int
+00936090 EA::Random::RandomLinearCongruential::SetSeed  # thiscall (lcg, seed)
+009360d0 EA::Random::RandomLinearCongruential::RandomDoubleUniform  # thiscall (lcg)
+00932e80 FNVHash  # (name, 0x811c9dc5, 1) -> unsigned
+011e0906 iat_floor  # double floor
+00f473a0 operator new  # EAAllocate(size, tag, ...)
+00f47380 operator delete[]
+009e1760 StreamReset  # stream rewind helper
+009e4e30 gait_record_static_data::ReadFromText  # (buf, n)
+009a95e0 FUN_009a95e0  # Gcmdst teardown (flag 1)
+009e5070 ?Load@Table@@QAEXPBUSrc@@@Z  # called by the GAIT branch
+
+# ------------------------------------------------------------------ object model (gold7 retail offsets)
+# Gcmdst  +0x00 count;  +0x04 Vec0C v (b/e/cap/alloc);  +0x18 EntryArr arr (count, VecEntry)
+# Entry   0xa4 bytes: +0x00 float key; +0x04 Inner in
+# VecEntry 0x14: +0x00 b, +0x04 e, +0x08 cap, +0x0c alloc[2]
+# MtRecord 0x38: +0x00 MtSlot a (vec-of-int), +0x14 MtSlot b, +0x28 pad[4]
+# tags "Anim/grsd" @0x14485b8, "Anim/bingr" @0x1448138, "GAIT" 0x54494147,
+#      "vers" 0x73726576, "verS" 0x76657273;  g_name_map @0x0166c06c; g_AssignGaits @0x015515dc
+
