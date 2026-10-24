@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+010175b0  346  table lookup/interpolation source shape; x87 vs SSE math and lookup loop layout differ
+01017790  228  stack-local high/low selection and clamp lowering differ; cl15 branches instead of maxss/minss
+01017910  381  aggregate identity/zero initialization stack temporaries omitted; store scheduling differs
+01017bb0  206  sqrtf lowered to external call/SSE while original uses x87 fsqrt; clamp lowering differs
+01017e80  89  b+1.0f lowered via x87 instead of SSE addss; result spill/tail-copy differs

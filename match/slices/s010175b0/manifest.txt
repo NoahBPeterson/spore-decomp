@@ -1,0 +1,8 @@
+slices/s010175b0/s010175b0.cpp  ?FUN_010178e0@@YGPAUcSPVector3@@PAU1@@Z  010178e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s010175b0/s010175b0.cpp  ?FUN_01017b70@cSPSpacePlanetCameraController@@QAEPAXXZ  01017b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s010175b0/s010175b0.cpp  ?FUN_01017ce0@@YGXIPAUcSPVector3@@@Z  01017ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s010175b0/s010175b0.cpp  ?FUN_01017d30@cSPSpacePlanetCameraController@@QAEMXZ  01017d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s010175b0/s010175b0.cpp  ?FUN_01017dd0@@YGPAUcSPVector3@@PAU1@@Z  01017dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s010175b0/s010175b0.cpp  ?FUN_01017f20@cSPSpacePlanetCameraController@@QAE_NXZ  01017f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s010175b0/s010175b0.cpp  ?FUN_01017fe0@@YAXXZ  01017fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s010175b0/s010175b0.cpp  ?FUN_01018060@cEditorTraceObject@@QAEXXZ  01018060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
