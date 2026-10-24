@@ -1,0 +1,6 @@
+slices/s00c48970/s00c48970.cpp  ?FUN_00c48970@SPObject@@QAEXHPAUWStr@@@Z  00c48970  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c48970/s00c48970.cpp  ?FUN_00c48ae0@SPObject@@QAEXPAUWStr@@@Z  00c48ae0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c48970/s00c48970.cpp  ?FUN_00c48db0@SPObject@@QAEXPAUWStr@@@Z  00c48db0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c48970/s00c48970.cpp  ?FUN_00c48e00@SPObject@@QAEXPAUWStr@@@Z  00c48e00  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c48970/s00c48970.cpp  ?FUN_00c49140@SPObject@@QAEXPAUWStr@@@Z  00c49140  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c48970/s00c48970.cpp  ?FUN_00c49180@SPObject@@QAEXPAUWStr@@@Z  00c49180  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
