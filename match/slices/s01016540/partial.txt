@@ -1,0 +1,1 @@
+01016e50  339  SP::cSPSimulatorWalkAround FUN_01016e50: approximate; body reconstructed (beaming-tick vcall, avatar trait/audio block) but the original ends `ret 8` (2 stack arguments) while the one-argument symbol @QAEXPAX@Z can only emit `ret 4`, so the calling convention cannot be reproduced

@@ -1,0 +1,24 @@
+# va  name  # evidence
+01016540  ?RemoveHighLODPlant@cSPSimulatorWalkAround@@QAEXPAXD@Z  # noun removal, vector erase (0x006782c0) + obstacle vtable slots 0xb/0x2c
+01016630  ?ClearOldestPlant@cSPSimulatorWalkAround@@QAEEXZ  # front-erase of plant + obstacle vectors, returns whether non-empty
+010166c0  ?SetHighLODPlant@cSPSimulatorWalkAround@@QAEXPAX@Z  # 8-plant cap, Plant::GetDesc copy, species lookup (0x00b90410/0x004df440), obstacle relink
+010168c0  ?ShutdownForGame@cSPSimulatorWalkAround@@QAEXXZ  # SimTicker tick, ClearOldestPlant drain, avatar/strategy refrelease
+01016950  ?FUN_01016950@cSPSimulatorWalkAround@@QAEXXZ  # walk-around teardown: hint/config/effects managers, ClearOldestPlant drain
+01016ad0  ?FUN_01016ad0@cSPSimulatorWalkAround@@QAEXXZ  # beaming state machine driven by cSPTimer::GetElapsedTime
+01016e50  ?FUN_01016e50@cSPSimulatorWalkAround@@QAEXPAX@Z  # beaming-tick vcall, avatar trait + AudioSetListener3 (original is ret 8, symbol one-arg)
+01017010  ?FUN_01017010@@YAMH@Z  # g_15b6dd8 * 0.75f unless mode==2
+01017030  ?FUN_01017030@@YAMH@Z  # speed getter (mode 1/2)
+01017070  ?FUN_01017070@@YAMH@Z  # speed getter (mode 1/2, second pair)
+010170e0  ?FUN_010170e0@cSPCameraControllerSolarSystem@@QAEXXZ  # save current camera position into mVec_68
+01017150  ?FUN_01017150@@YAXXZ  # global solar-system camera getter
+01017170  ?FUN_01017170@cSPCameraControllerSolarSystem@@QAEXM@Z  # add f to mFloat_90 + set flag bit 1
+010171b0  ?FUN_010171b0@cSPCameraControllerSolarSystem@@QAEXM@Z  # add f to mVec_74.y + set flag bit 0
+01017200  ?FUN_01017200@cSPCameraControllerSolarSystem@@QAEXPAX@Z  # copy mBlk_f8 (64 bytes) to out
+01017220  ?FUN_01017220@@YAMXZ  # planet model scalar + g_16dd3e8
+01017240  ?FUN_01017240@@YAMXZ  # planet model scalar + g_16dd3ec
+01017260  ?FUN_01017260@cSPCameraControllerSolarSystem@@QAEIXZ  # (mFlags_198 >> 1) inverted bit
+01017270  ?FUN_01017270@cSPCameraControllerSolarSystem@@QAEXD@Z  # store mFlag_13c, set flag bit 1 when cleared
+01017290  ?Write@cSPCameraControllerSolarSystem@@QAEXPAX@Z  # cVarListSerializer serialize via stream slots 0x20/0x18 + EA::IO::WriteUint32
+01017300  ?Read@cSPCameraControllerSolarSystem@@QAEEPAX@Z  # deserialize mirror of Write + version gate (slot 0x3c)
+01017390  ?FUN_01017390@@YAXXZ  # camera-controller registrant hook
+01017410  ?FUN_01017410@cSPCameraControllerSolarSystem@@QAEMH@Z  # property-driven float ramp (props 0x195e020..0x195e023) with SSE clamp

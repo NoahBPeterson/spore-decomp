@@ -32,7 +32,7 @@ float* __cdecl  SP_GetPropertyAsFloat(void* prop);      // 0x0041ea70 (ret 4)
 void   __cdecl  FUN_00572020(void* p, int a);           // 0x00572020 (ret 8)
 void   __cdecl  copy_impl(void* first, void* last, void* dst); // 0x006782c0 (ret 0xc)
 void   __cdecl  AudioSetListener3(void* a, float x, float y, float z); // 0x009fbc50 (ret 0x10)
-float  __cdecl  FUN_01041cd0(float a, float b, int c);  // 0x01041cd0 (ret 0xc)
+float  __cdecl  FUN_01041cd0(float a, float b, float c);  // 0x01041cd0 (ret 0xc)
 void*  __cdecl  FUN_00c0ee60_dummy();
 void*  __cdecl  SP_SpaceGameGet(int a);                 // 0x01002bd0 (ret 4)
 void   __cdecl  FUN_00b76d20(void* a, float f, int b, int c, int d); // 0x00b76d20 (ret 0x14)
@@ -98,6 +98,18 @@ struct AvatarHandle {
 };
 
 static inline char* vpt(void* o) { return *(char**)o; }
+
+// SSE clamp helper; cl reproduces the original's inline maxss/minss sequence.
+static __forceinline float Clamp(float value, float minValue, float maxValue)
+{
+    __asm {
+        movss xmm0, value
+        maxss xmm0, minValue
+        minss xmm0, maxValue
+        movss value, xmm0
+    }
+    return value;
+}
 
 struct Blk64 { u32 w[16]; };
 
@@ -518,11 +530,8 @@ float cSPCameraControllerSolarSystem::FUN_01017410(int a)
             out->mType_12 == 0xd)
             f3 = *out->GetFloat();
     }
-    float r = FUN_01041cd0(f0, f1, a);
-    if (r <= 0.0f)
-        r = 0.0f;
-    if (1.0f <= r)
-        r = 1.0f;
+    float r = FUN_01041cd0(f0, f1, *(float*)&a);
+    r = Clamp(r, 0.0f, 1.0f);
     return ((f3 - f2) * r + f2) * g_13ebca0;
 }
 
