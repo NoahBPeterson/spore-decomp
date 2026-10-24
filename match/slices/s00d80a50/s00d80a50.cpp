@@ -128,6 +128,17 @@ struct Creature {
     void MoveToPointAndFacingAtSpeed(int mode, const Vec3* pos, const Vec3* facing, float speed, float speed2);  // 0x00c1c5c0
     void FUN_00c03190(int a, int b, float f, int c, int d, void* e, int g);   // 0x00c03190
     void FUN_00c03c20(uint32_t idx);                              // 0x00c03c20
+    int  PlayAnimation(int id, int a, int b);                     // 0x00c12190
+    bool AnimationFinished(int handle);                           // 0x00c12400
+    bool AnimationFinishedZero(int handle);                       // 0x00c123f0
+    void InterruptAnimation(int id, int a, int b);                // 0x00c12310
+    void* CreateBodyEffectByIndex(int idx, int a, int b);         // 0x00c14f70
+    bool DetachBodyEffectById(int id, int a);                     // 0x00c15150
+    bool FUN_00c0d560(void* target, float a, float b);            // 0x00c0d560
+    bool MoveToPointAtSpeed(int mode, Vec3* point, float a, float b); // 0x00c1c1d0
+    bool FUN_00c0e0c0(int id);                                    // 0x00c0e0c0
+    int  FUN_00c149c0(int id, void* target, int a, int b);        // 0x00c149c0
+    void* GetHerd();                                              // 0x00c04590
 };
 
 struct PlanetModelT {
@@ -281,4 +292,268 @@ bool MOVE_WITHIN_RANGE_Tick(void* pSelf, double, uint32_t flags, uint32_t, behav
     }
     ((BehaviorTree*)(c->mpBehavior + 8))->ClearAll(0x100000, 0);
     return false;
+}
+
+// ===========================================================================
+// Behavior ticks around the creature alert/move states.
+// ===========================================================================
+
+#define VTFN(p, slot)  ((*(void***)(p))[slot])
+typedef int  (__thiscall* TCI)(void*);
+typedef unsigned char (__thiscall* TCU8)(void*);
+typedef void (__thiscall* TCV)(void*);
+
+struct MoveMem
+{
+    int    state;                  // +0x00
+    void*  target;                 // +0x04
+    int    animHandle;             // +0x08
+    int    animId;                 // +0x0c
+    float  speed;                  // +0x10
+};
+
+struct AlertMem
+{
+    int    state;                  // +0x00
+    int    effectIndex;            // +0x04
+    int    pad08;                  // +0x08
+    int    effectArg;              // +0x0c
+    void*  effect;                 // +0x10 AutoRefCount payload
+    int    pad14;                  // +0x14
+    int    pad18;                  // +0x18
+    uint8_t spawnEffect;           // +0x1c
+    char   pad1d[3];
+    float  timer;                  // +0x20
+};
+
+namespace nSPBehaviorTree
+{
+struct behavior_stimuli
+{
+    void GetAny();                 // 0x00d997e0
+};
+}
+typedef nSPBehaviorTree::behavior_stimuli Stimuli;
+
+struct StateObj
+{
+    int FUN_00ba3f90();            // 0x00ba3f90
+};
+
+struct EffectRef
+{
+    void* mpObject;
+    void Assign(void* p);          // 0x00b5f950
+};
+
+void* FUN_00d99420(void* behavior, int id);       // 0x00d99420
+void  FUN_00d996e0(void* a, void* stimuli);       // 0x00d996e0
+int   FUN_00d99470(void* p);                      // 0x00d99470
+void* __stdcall FUN_00b3d4c0(void* container, void* self, int id); // 0x00b3d4c0
+
+// @ 0x00d81220
+bool FUN_00d81220(void* pSelf, int, int, int, int, MoveMem* m, int, float)
+{
+    Creature* c = (Creature*)pSelf;
+    if (m->target == 0 || *(uint8_t*)((char*)m->target + 0xa9) == 0)
+        return false;
+    if (((TCU8)VTFN(m->target, 0x2c / 4))(m->target) != 0)
+        return false;
+
+    if (m->state == 2)
+        return false;
+
+    if (m->state == 1) {
+        if (m->animHandle == 0) {
+            m->animHandle = c->PlayAnimation(m->animId, 1, -1);
+            return true;
+        }
+        if (c->AnimationFinished(m->animHandle)) {
+            m->state = 2;
+            return true;
+        }
+        return true;
+    }
+
+    if (m->state == 0) {
+        const Vec3* a = (const Vec3*)((TCI)VTFN((char*)m->target + 0x34, 0x2c / 4))((char*)m->target + 0x34);
+        const Vec3* b = c->mLoco.GetPosition();
+        Vec3 delta;
+        delta.x = a->x - b->x;
+        delta.y = a->y - b->y;
+        delta.z = a->z - b->z;
+
+        Vec3 face;
+        normalized_safe(&face, &delta);
+        c->MoveToPointAndFacingAtSpeed(2, a, &face, m->speed, 2.0f);
+        if (c->mLoco.IsNearGoal())
+            m->state = 1;
+        return true;
+    }
+
+    return true;
+}
+
+// @ 0x00d81340
+bool ALERT_Tick(void* pSelf, int, int, int, int, AlertMem* m, int, float dt)
+{
+    Creature* c = (Creature*)pSelf;
+
+    switch (m->state) {
+    case 0:
+        if (((c->mFlagsB58 >> 9) & 1) == 0)
+            c->mLoco.StopMoving();
+
+        c->InterruptAnimation(0x265d18b, -1, 0);
+        c->PlayAnimation(0x265d18c, 1, -1);
+
+        if (m->spawnEffect != 0) {
+            void* effect = c->CreateBodyEffectByIndex(m->effectIndex, m->effectArg, m->effectArg);
+            ((EffectRef*)&m->effect)->Assign(effect);
+        }
+        m->state = 1;
+        break;
+
+    case 1:
+        if (((BehaviorTree*)(c->mpBehavior + 8))->PlayIdleAnimation(0x800, 0) == 0) {
+            m->timer -= dt;
+            if (m->timer < 0.0f) {
+                m->state = 2;
+                return true;
+            }
+        }
+        break;
+
+    case 2:
+        if (m->effect != 0) {
+            c->DetachBodyEffectById(m->effectArg, 0);
+            void* effect = m->effect;
+            if (effect != 0) {
+                m->effect = 0;
+                ((TCV)VTFN(effect, 0x04 / 4))(effect);
+            }
+        }
+        c->PlayAnimation(0x265d18d, 1, -1);
+        m->state = 3;
+        return true;
+
+    case 3:
+        if (c->AnimationFinishedZero(0))
+            return false;
+        break;
+    }
+    return true;
+}
+
+// Common prologue for the five stimulus-query conditions.
+static void* StimulusObject(void* stimuli)
+{
+    void* obj = *(void**)((char*)stimuli + 4);
+    if (obj != 0)
+        return ((void* (__thiscall*)(void*, int))VTFN(obj, 0x5c / 4))(obj, 0xce9f6639);
+    return 0;
+}
+
+// @ 0x00d81670
+float FUN_00d81670(void* pSelf, int, int, int, void* stimuli, bool* out, int, void* data)
+{
+    Creature* c = (Creature*)pSelf;
+    if (stimuli != 0)
+        ((Stimuli*)stimuli)->GetAny();
+    *out = true;
+
+    void* a = FUN_00d99420(c->mpBehavior + 0x1d0, *(int*)((char*)data + 0x2d));
+    FUN_00d996e0(a, stimuli);
+    void* id = StimulusObject(stimuli);
+    int result = FUN_00d99470(id);
+    if (result == 0)
+        return 0.0f;
+
+    StateObj* state = (StateObj*)FUN_00b3d4c0((char*)c + 0xb28, c, result);
+    int r = state->FUN_00ba3f90();
+    if (r == 4 || r == 6)
+        return 1.0f;
+    return 0.0f;
+}
+
+// @ 0x00d81700
+float FUN_00d81700(void* pSelf, int, int, int, void* stimuli, bool* out, int, void* data)
+{
+    Creature* c = (Creature*)pSelf;
+    if (stimuli != 0)
+        ((Stimuli*)stimuli)->GetAny();
+    *out = true;
+
+    void* a = FUN_00d99420(c->mpBehavior + 0x1d0, *(int*)((char*)data + 0x2d));
+    FUN_00d996e0(a, stimuli);
+    void* id = StimulusObject(stimuli);
+    int result = FUN_00d99470(id);
+    if (result != 0) {
+        void* herd = c->GetHerd();
+        int herdState = herd ? *(int*)((char*)herd + 0x15c) : 0;
+        if (herd == 0 || (herdState != 10 && herdState != 1)) {
+            StateObj* state = (StateObj*)FUN_00b3d4c0((char*)c + 0xb28, c, result);
+            if (state->FUN_00ba3f90() == 3)
+                return 1.0f;
+        }
+    }
+    return 0.0f;
+}
+
+// @ 0x00d817b0
+float FUN_00d817b0(void* pSelf, int, int, int, void* stimuli, bool* out, int, void* data)
+{
+    Creature* c = (Creature*)pSelf;
+    if (stimuli != 0)
+        ((Stimuli*)stimuli)->GetAny();
+    *out = true;
+
+    void* a = FUN_00d99420(c->mpBehavior + 0x1d0, *(int*)((char*)data + 0x2d));
+    FUN_00d996e0(a, stimuli);
+    void* id = StimulusObject(stimuli);
+    if (FUN_00d99470(id) == 0)
+        return 0.0f;
+    return 1.0f;
+}
+
+// @ 0x00d81820
+float FUN_00d81820(void* pSelf, int, int, int, void* stimuli, bool* out, int, void* data)
+{
+    Creature* c = (Creature*)pSelf;
+    if (stimuli != 0)
+        ((Stimuli*)stimuli)->GetAny();
+    *out = true;
+
+    void* a = FUN_00d99420(c->mpBehavior + 0x1d0, *(int*)((char*)data + 0x2d));
+    FUN_00d996e0(a, stimuli);
+    void* id = StimulusObject(stimuli);
+    int result = FUN_00d99470(id);
+    if (result != 0) {
+        StateObj* state = (StateObj*)FUN_00b3d4c0((char*)c + 0xb28, c, result);
+        if (state->FUN_00ba3f90() == 1)
+            return 1.0f;
+    }
+    return 0.0f;
+}
+
+// @ 0x00d818b0
+float FUN_00d818b0(void* pSelf, int, int, int, void* stimuli, bool* out, int, void* data)
+{
+    Creature* c = (Creature*)pSelf;
+    if (stimuli != 0)
+        ((Stimuli*)stimuli)->GetAny();
+    *out = true;
+
+    void* a = FUN_00d99420(c->mpBehavior + 0x1d0, *(int*)((char*)data + 0x2d));
+    FUN_00d996e0(a, stimuli);
+    void* id = StimulusObject(stimuli);
+    int result = FUN_00d99470(id);
+    if (result == 0)
+        return 0.0f;
+
+    StateObj* state = (StateObj*)FUN_00b3d4c0((char*)c + 0xb28, c, result);
+    int r = state->FUN_00ba3f90();
+    if (r == 2 || r == 5)
+        return 1.0f;
+    return 0.0f;
 }

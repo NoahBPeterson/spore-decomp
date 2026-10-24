@@ -1,0 +1,6 @@
+# byte-exact functions for slice s00d80a50
+slices/s00d80a50/s00d80a50.cpp  ?FUN_00d81670@@YAMPAXHHH0PA_NH0@Z  00d81670  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d80a50/s00d80a50.cpp  ?FUN_00d81700@@YAMPAXHHH0PA_NH0@Z  00d81700  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d80a50/s00d80a50.cpp  ?FUN_00d817b0@@YAMPAXHHH0PA_NH0@Z  00d817b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d80a50/s00d80a50.cpp  ?FUN_00d81820@@YAMPAXHHH0PA_NH0@Z  00d81820  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d80a50/s00d80a50.cpp  ?FUN_00d818b0@@YAMPAXHHH0PA_NH0@Z  00d818b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

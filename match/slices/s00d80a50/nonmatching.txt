@@ -1,2 +1,3 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
 00d80a50  1710  MOVE_WITHIN_RANGE_Tick complete (all paths/calls, ordered vtable slots identical); frame/register allocation and block layout differ
+00d81340  717  SP::ALERT_Tick complete by inspection (four-state alert sequence: interrupt/play alert animation and optional body effect, idle animation with timer countdown, detach/release effect and play next animation, wait for animation completion); difftest PASS 333 valid, 82.3% coverage.  Not byte-exact: our function is 308 bytes while the 813-byte retail range includes the separate 0x00d81480 helper after the int3 padding, and cl15 uses a different frame/register assignment for the switch.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
