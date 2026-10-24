@@ -26,18 +26,28 @@ void* __cdecl SP_ConfigManager();
 void* __cdecl FUN_00b18e00(void*);
 void* __cdecl FUN_00b3d280();
 void* __cdecl FUN_00eebf80(void*);
-void __cdecl FUN_00f35f70(void*);
+void __fastcall FUN_00f35f70(void* self, int dummy);            // __thiscall in retail (tail jmp)
 void* __cdecl FUN_00f40ea0(void*, int);
-void* __cdecl FUN_00f326d0(void*, int);
+void* __fastcall FUN_00f326d0(void* self, int dummy, int b);    // __thiscall
 void* __cdecl FUN_00f46410(void*, void*, void*);
-void* __cdecl FUN_00f38330(void*, int);
-void* __cdecl FUN_00f34560(void*);
+void* __fastcall FUN_00f38330(void* self, int dummy, int arg);  // __thiscall
+void* __fastcall FUN_00f34560(void* self, int dummy);           // __thiscall
 void* __cdecl FUN_00b0f950(void*, int);
 void* __cdecl FUN_00b10c40(void*, int);
+
+// Retail callees that take `this` in ecx (__thiscall).  Declaring them as members keeps the
+// call site from writing edx (a dummy __fastcall argument did); the original leaves edx alone.
+struct TutorialsTarget {
+    void Update();        // 0x00f35f70  (tail-jumped from 0x00efc850)
+    void SetFlag(int on); // 0x00f38330
+    void Release();       // 0x00f34560
+    bool Add(int id);     // 0x00f326d0
+};
 
 typedef int   (__thiscall *FN0_i)(void*);
 typedef float (__thiscall *FN0_f)(void*);
 typedef void  (__thiscall *FN2_ii)(void*, int, int);
+typedef void  (__thiscall *FN3_iii)(void*, int, int, int);
 typedef void* (__thiscall *FN1_i)(void*, int);
 typedef void  (__thiscall *TF_ii)(void*, int, int);
 typedef void  (__thiscall *TF_i)(void*, int);
@@ -89,7 +99,7 @@ bool __cdecl FUN_00efc530(int* p)
 }
 
 // @ 0x00efc6c0
-void __fastcall FUN_00efc6c0(char* p, int v)
+void __fastcall FUN_00efc6c0(char* p, int pad, int v)
 {
     int* q = *(int**)(p + 0xc);
     if (q != 0 && *q == v)
@@ -101,7 +111,7 @@ void __cdecl FUN_00efc850()
 {
     char* sim = (char*)gSimulator;
     char* o = *(char**)(sim + 0x18);
-    FUN_00f35f70(o);
+    ((TutorialsTarget*)o)->Update();
 }
 // 0x00efc860
 void __cdecl FUN_00efc860()
@@ -157,8 +167,8 @@ int __cdecl FUN_00efc910()
 bool __fastcall FUN_00efc7a0(char* p)
 {
     if (*(char*)(p + 5) != 0) {
-        FUN_00f38330(*(void**)(p + 8), 1);
-        FUN_00f34560(*(void**)(p + 8));
+        ((TutorialsTarget*)*(void**)(p + 8))->SetFlag(1);
+        ((TutorialsTarget*)*(void**)(p + 8))->Release();
         *(char*)(p + 5) = 0;
     }
     return true;
@@ -186,12 +196,12 @@ bool __fastcall FUN_00efc7d0(char* p, int pad, int a, int b)
     char* o = (char*)FUN_00b18e00((void*)a);
     if (o != 0 && *(char*)(o + 0x6e) != 0)
         return false;
-    char r = (char)FUN_00f326d0(*(void**)(p + 8), b);
-    if (r == 0) {
+    bool r = ((TutorialsTarget*)*(void**)(p + 8))->Add(b);
+    if (!r) {
         void* ms = SP_MessageServer();
-        ((FN2_ii)((*(void***)ms)[5]))(ms, 0x78c406b, 0);
+        ((FN3_iii)((*(void***)ms)[5]))(ms, 0x78c406b, 0, 0);
     }
-    return r != 0;
+    return r;
 }
 
 // @ 0x00efcd90
@@ -287,12 +297,12 @@ void* __cdecl SP_ConfigManager();
 void* __cdecl FUN_00b18e00(void*);
 void* __cdecl FUN_00b3d280();
 void* __cdecl FUN_00eebf80(void*);
-void __cdecl FUN_00f35f70(void*);
+void __fastcall FUN_00f35f70(void* self, int dummy);            // __thiscall in retail (tail jmp)
 void* __cdecl FUN_00f40ea0(void*, int);
-void* __cdecl FUN_00f326d0(void*, int);
+void* __fastcall FUN_00f326d0(void* self, int dummy, int b);    // __thiscall
 void* __cdecl FUN_00f46410(void*, void*, void*);
-void* __cdecl FUN_00f38330(void*, int);
-void* __cdecl FUN_00f34560(void*);
+void* __fastcall FUN_00f38330(void* self, int dummy, int arg);  // __thiscall
+void* __fastcall FUN_00f34560(void* self, int dummy);           // __thiscall
 void* __cdecl FUN_00b0f950(void*, int);
 void* __cdecl FUN_00b10c40(void*, int);
 
