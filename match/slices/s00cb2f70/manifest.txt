@@ -1,0 +1,6 @@
+slices/s00cb2f70/s00cb2f70.cpp  ?SP_PathPrefsForTool@@YAHPAUcSPSpaceToolData@@@Z  00cb36e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cb2f70/s00cb2f70.cpp  ?Cast@CObj3760@@QAEPAXH@Z  00cb3760  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cb2f70/s00cb2f70.cpp  ?Read@CArtilleryProjectileR@@QAE_NPAUIStream@@@Z  00cb3850  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cb2f70/s00cb2f70.cpp  ?Cast@CObj3ad0@@QAEPAXH@Z  00cb3ad0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cb2f70/s00cb2f70.cpp  ?Cast@CObj3c80@@QAEPAXH@Z  00cb3c80  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cb2f70/s00cb2f70.cpp  ?Cast@CObj3e20@@QAEPAXH@Z  00cb3e20  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
