@@ -2,6 +2,7 @@
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include <string.h>
 #include <math.h>
+#include <xmmintrin.h>
 #pragma intrinsic(sqrt)
 #include "types.h"
 
@@ -398,6 +399,7 @@ void cSPEditorColorPicker::Clear() {
 inline float Maxf(float a, float b) { return a > b ? a : b; }
 inline float Minf(float a, float b) { return a < b ? a : b; }
 
+
 // Reads one typed property of the swatch's config list into `out` when present.
 #define SWATCH_PROP_INT(id, out) \
     if (mColorPickerConfig) { \
@@ -434,10 +436,30 @@ void cSPColorSwatch::Update(int deltaTime, bool selected) {
     SWATCH_PROP_FLOAT(0xd29675ef, ownerFadeScale)
     SWATCH_PROP_FLOAT(0x4120847, expansionGap)
 
-    mSelectedTimer = Minf(Maxf((selected ? 1.0f : -1.0f) * dt + mSelectedTimer, 0.0f), selectedTime);
-    mRollOverTimer = Minf(Maxf((mRolledOver ? 1.0f : -1.0f) * dt + mRollOverTimer, 0.0f), rollOverTime);
-    mMouseDownTimer = Minf(Maxf((mMouseDown ? 1.0f : -1.0f) * dt + mMouseDownTimer, 0.0f), mouseDownTime);
-    mFadeTimer = Minf(Maxf((mExpanded ? 1.0f : -1.0f) * dt + mFadeTimer, 0.0f), fadeMax);
+    mSelectedTimer += (selected ? 1.0f : -1.0f) * dt;
+    {
+        __m128 v = _mm_max_ss(_mm_set_ss(mSelectedTimer), _mm_setzero_ps());
+        v = _mm_min_ss(v, _mm_set_ss(selectedTime));
+        mSelectedTimer = _mm_cvtss_f32(v);
+    }
+    mRollOverTimer += (mRolledOver ? 1.0f : -1.0f) * dt;
+    {
+        __m128 v = _mm_max_ss(_mm_set_ss(mRollOverTimer), _mm_setzero_ps());
+        v = _mm_min_ss(v, _mm_set_ss(rollOverTime));
+        mRollOverTimer = _mm_cvtss_f32(v);
+    }
+    mMouseDownTimer += (mMouseDown ? 1.0f : -1.0f) * dt;
+    {
+        __m128 v = _mm_max_ss(_mm_set_ss(mMouseDownTimer), _mm_setzero_ps());
+        v = _mm_min_ss(v, _mm_set_ss(mouseDownTime));
+        mMouseDownTimer = _mm_cvtss_f32(v);
+    }
+    mFadeTimer += (mExpanded ? 1.0f : -1.0f) * dt;
+    {
+        __m128 v = _mm_max_ss(_mm_set_ss(mFadeTimer), _mm_setzero_ps());
+        v = _mm_min_ss(v, _mm_set_ss(fadeMax));
+        mFadeTimer = _mm_cvtss_f32(v);
+    }
 
     if (mWinRoot && mRespondToInput) {
         float grow = (rollOverGrow / rollOverTime) * mRollOverTimer;
