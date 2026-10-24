@@ -1,0 +1,11 @@
+00ea4330 485 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 485; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ea4520 240 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 240; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ea4610 1010 not reconstructed in this pass (SP::Audio::cCityMusicViewer::Redraw); not byte-exact; size 0 vs 1010; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ea4a10 202 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 202; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ea4af0 75 not reconstructed in this pass (SP::Audio::cCityMusicViewer::SetMusic); not byte-exact; size 0 vs 75; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ea4b40 133 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 133; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ea4bd0 221 not reconstructed in this pass (SP::Audio::cCityMusicViewer::~cCityMusicViewer); not byte-exact; size 0 vs 221; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ea4cb0 418 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 418; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ea4e60 114 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 114; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ea4f00 200 not reconstructed in this pass (SP::Audio::cCityMusicViewer::Init); not byte-exact; size 0 vs 200; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ea4fd0 30 reconstructed as SP::Audio::IEventModifier ctor (store secondary vtable 0x013ef094 at +0x04, clear +0x08, then primary vtable 0x0148734c at +0x00 and final vtable 0x01487348 at +0x04); not byte-exact: MSVC 15.00 dead-store-eliminates the first +0x04 vtable store even when the member is volatile, giving 23 vs 30 bytes; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
