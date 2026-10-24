@@ -1,2 +1,7 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00fbce30/s00fbce30.cpp  ??4RenderState@@QAEAAU0@ABU0@@Z  00fbce30
+slices/s00fbce30/s00fbce30.cpp  ?ReleaseAuxObjects@cPlanet@@QAEXXZ  00fbd650  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00fbce30/s00fbce30.cpp  ?SetRampEnabled@cPlanet@@QAEX_N@Z  00fbd6b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00fbce30/s00fbce30.cpp  ?SetExtent@cPlanet@@QAEXMM@Z  00fbd880  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00fbce30/s00fbce30.cpp  ?CurrentRatio@cPlanet@@QAEOXZ  00fbda80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00fbce30/s00fbce30.cpp  ?ResetRenderState@cPlanet@@QAEXXZ  00fbdb10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

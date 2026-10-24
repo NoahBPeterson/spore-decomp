@@ -1,1 +1,42 @@
-00fbce30 ??4RenderState@@QAEAAU0@ABU0@@Z  # RenderState::operator= migrated from s00fbce30 (verbatim, slice spelling)
+00fbce30 ??4RenderState@@QAEAAU0@ABU0@@Z          # MATCH (pre-existing body in this slice); 0x2b8-byte copy-assign
+00fbd650 ?ReleaseAuxObjects@cPlanet@@QAEXXZ        # MATCH; releases +0x5fc/+0x5f8/+0x5b8/+0x5b0, renderState.ReleaseImages(), tail-jumps to cTerrainStateMgr::DestroySubObjects on +0x008
+00fbd6b0 ?SetRampEnabled@cPlanet@@QAEX_N@Z         # MATCH; bool; stores +0x264, then ExportRampTexture() + mpGame->Dirty()
+00fbd6e0 ?SetPointA@cPlanet@@QAEXMMM@Z             # nonmatching (189; retail materialises the float args through movss/fld/fstp, cl 15 puts all five through x87)
+00fbd7b0 ?SetPointB@cPlanet@@QAEXMMM@Z             # nonmatching (189; same as SetPointA with the B fields)
+00fbd880 ?SetExtent@cPlanet@@QAEXMM@Z              # MATCH; stores +0x008/+0x00c, ExportRampTexture() + mpGame->Dirty()
+00fbd8b0 ?HeightToRatio@cPlanet@@QAEOM@Z           # nonmatching (154; logic complete, binary-search branch polarity/register roles swapped; returns the x87 float in ST(0))
+00fbd9d0 ?RatioToHeight@cPlanet@@QAEOM@Z           # nonmatching (140; logic complete, retail clamps with xorps/maxss/minss, ternaries become comiss+branches)
+00fbda80 ?CurrentRatio@cPlanet@@QAEOXZ             # MATCH; +0x7bc gate, returns HeightToRatio(+0x018) or 0 (fldz), x87 ST(0) float
+00fbdaa0 ?ApplyHeightRatio@cPlanet@@QAEXM@Z        # nonmatching (69; logic complete; retail uses fabs + float 0.001f constant, ours compares against zero and does h*2-1 in x87)
+00fbdb10 ?ResetRenderState@cPlanet@@QAEXXZ         # MATCH; preset copy at 0x016d6a78, render-target request via vtable +0x3c, image 13, then the 5 ref assignments
+00fbdc60 ?UpdateEffects@cPlanet@@QAEXXZ            # nonmatching (286; logic complete; retail keeps this in edi and the effect position in ebx/ebp/ecx across the vtable call and compares the float ratio with comiss)
+
+# Invented views (only retail offsets / slots are meaningful).
+#   RenderState     : 0x2b8 bytes: ImageRef images[14] (+0x00, 4 bytes each, image 13 = +0x34),
+#                     RefPtr refs[8] (+0x38), then dword scalars w058..w2a4, Quad tail (+0x2a8).
+#                     images[13] maps to cPlanet+0x328; scalars w158..w174 map to +0x44c..+0x48c;
+#                     w168 (+0x45c) is the scatter state handed to 0x00fc2ab0.
+#   cPlanetState    : sub-object at cPlanet+0x008 (offsets below are cPlanet offsets).
+#                     +0x008/+0x00c extent, +0x018 current height, +0x02c view height,
+#                     +0x034/+0x038/+0x03c effect position, +0x088/+0x08c/+0x090 LOD thresholds,
+#                     +0x1f4/+0x20c/+0x210/+0x214/+0x218 RefPtr (terrain layers), +0x264 ramps flag,
+#                     +0x268/+0x274 Vec3 point A/B, +0x2c4/+0x2c8/+0x2dc/+0x2e0 point params.
+#   cPlanet         : +0x000 mpGame, +0x004 mpHeightField, +0x008 cPlanetState, +0x2f4 renderState,
+#                     +0x5b0/+0x5b8/+0x5f8/+0x5fc RefPtr, +0x5c0 layer index, +0x628 float heights[101]
+#                     (sorted histogram; code uses heights[i], heights[i+1] and heights[i-1]),
+#                     +0x7bc histogram-valid byte.
+#   EffectTarget    : object from effects-manager vtable +0xa0; +0xf4 Vec3 effect position.
+
+# Other externs: 0x016d6d30 RefCounted* layer table; 0x016d6990/0x016d6994/0x016d6998/0x016d6974 layered
+#   refs; 0x016d6a78 RenderState preset; 0x015b1600 render device (arg of the render-target request);
+#   0x0067dd60 scene render manager, 0x0067ddd0 effects manager (both void*());
+#   0x00fb8fc0 Vec3*(Vec3* out, float, float, float, float, float) cdecl (point projection);
+#   0x00fc2ab0 x87 float(void* scatter) cdecl; 0x00fbb1a0 BuildHeightHistogram, 0x00fbbc00 ExportRampTexture
+#   (both thiscall on cPlanet); 0x00fb8a10 Dirty (thiscall on mpGame); 0x00fa43e0 Relevel(int, int) ret 8;
+#   0x00ff03c0 SetValueTable(float) ret 4 on mpHeightField; 0x00fb9fc0 renderState image release;
+#   0x00fbcd80 DestroySubObjects on the +0x008 sub-object; vtable slots +0x48 (int) and +0x3c (8 args) on mpGame /
+#   render manager, +0x98 (int, int) and +0xa0 () on the effects manager.
+
+# Flags: all verified functions use /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast (0x00fbce30 matches without a
+#   flags override in manifest.txt). float10 == long double reproduces the x87 ST(0) float returns of
+#   0x00fbd8b0 / 0x00fbd9d0 / 0x00fbda80 and the wide interpolation math.
