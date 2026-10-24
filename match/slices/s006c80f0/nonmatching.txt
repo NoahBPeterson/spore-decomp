@@ -1,4 +1,4 @@
-006c80f0  744  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006c83e0  816  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006c8710  839  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006c8a60  785  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
+006c80f0  744  complete source via shared BakeCore; equiv WEAK (176 valid, 100% cov); XF_POINT reads (1-cos,dy,dz) = outA[1,2,0]; remaining bytes are codegen/EH-frame differences (ours 749 vs 744)
+006c83e0  816  complete source via shared BakeCore; equiv WEAK (156 valid, 100% cov); same XF_POINT component mapping; remaining bytes are codegen/EH-frame differences (ours 783 vs 816)
+006c8710  839  complete source via shared BakeCore; equiv PASS (201 valid, 100% cov); XF_OFFSET reads (1-cos,dy,dz) = outA[1,2,0]; remaining bytes are codegen/EH-frame differences (ours 822 vs 839)
+006c8a60  785  complete source via shared BakeCore; equiv WEAK (105 valid, 100% cov); same XF_OFFSET component mapping (fixes the out[1] float-rounding mismatch); remaining bytes are codegen/EH-frame differences (ours 788 vs 785)

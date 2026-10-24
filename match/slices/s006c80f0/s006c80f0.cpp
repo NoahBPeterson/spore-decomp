@@ -1,4 +1,8 @@
 // Slice s006c80f0: per-vertex bake helpers (see ../s006c5940/bake.h).
+// BakeCore is __forceinline so each helper is self-contained (the original inlined it);
+// it copies the colour block and the assign block into BakeRange locals, which is what
+// the original does before calling Handle_Assign, and keeps the colour / attribute
+// math in scalar SSE like the original (shared header, per-transform component order).
 #include "../s006c5940/bake.h"
 
 // @ 0x006c80f0
