@@ -241,7 +241,7 @@ struct World {
     virtual void w2(); virtual void w3(); virtual void w4(); virtual void w5(); virtual void w6();
     virtual void w7(); virtual void w8(); virtual void w9(); virtual void w10(); virtual void w11();
     virtual void w12(); virtual void w13();
-    virtual void Query(Vec3* pos, float radius, PtrVec* out, Filter* filter);   // slot 14 (+0x38)
+    virtual bool Query(Vec3* pos, float radius, PtrVec* out, Filter* filter);   // slot 14 (+0x38)
 };
 World* __cdecl GonzagoModelWorld();   // 0x00b3d520
 
@@ -420,4 +420,370 @@ void VisMgr::UpdateVisible()
         if (world)
             world->Release();
     }
+}
+
+// ---------------------------------------------------------------------------------------------------
+// Priority-entry sort/merge plumbing.
+
+// Comparator functor. The original calls it as a __thiscall member whose dummy `this` is the
+// address of one of the caller's stack arguments; nothing reads it.
+struct EntryLess {
+    bool Less(Entry* a, Entry* b);                                   // 0x00b385d0
+};
+
+void __cdecl SeqBegin(Entry* pivot, Entry* first, void* ctx);        // 0x00b3ab70
+void __cdecl SeqEnd(Entry* pivot, Entry* first, void* ctx);          // 0x00b3abd0
+Entry* __cdecl Partition(Entry* first, Entry* last, Entry pivot, void* ctx); // 0x00b38b40
+void __cdecl InsertRun(Entry* pivot, int, int, int, Entry e, void* ctx);    // 0x00b39970
+void __cdecl SmallSort(Entry* pivot, Entry* first, Entry* last, void* ctx);
+
+// @ 0x00b3bef0
+void __cdecl SmallSort(Entry* pivot, Entry* first, Entry* last, void* ctx)
+{
+    SeqBegin(pivot, first, ctx);
+    for (Entry* p = first; p < last; ++p) {
+        if (((EntryLess*)&ctx)->Less(p, pivot)) {
+            Model* obj = p->ref;
+            if (obj)
+                obj->refCount++;
+            Model* cur = pivot->ref;
+            Model* old = p->ref;
+            float value = p->f;
+            if (cur != old) {
+                if (cur)
+                    cur->refCount++;
+                p->ref = cur;
+                ReleaseModel(old);
+            }
+            p->f = pivot->f;
+            if (obj)
+                obj->refCount++;
+            Entry saved;
+            saved.ref = obj;
+            saved.f = value;
+            InsertRun(pivot, 0, ((int)first - (int)pivot) >> 3, 0, saved, ctx);
+            if (obj)
+                ReleaseModel(obj);
+        }
+    }
+    SeqEnd(pivot, first, ctx);
+}
+
+// @ 0x00b3c020
+void __cdecl QuickSort(Entry* first, Entry* last, int depth, void* ctx)
+{
+    for (;;) {
+        int span = (int)last - (int)first;
+        if ((span & -8) <= 0xe0 || depth <= 0) {
+            if (depth == 0)
+                SmallSort(first, last, last, ctx);
+            return;
+        }
+        int count = span >> 3;
+        Entry* mid = first + count / 2;
+        Entry* final = last - 1;
+        Entry* pivot;
+        if (((EntryLess*)&depth)->Less(first, mid)) {
+            if (((EntryLess*)&depth)->Less(mid, final))
+                pivot = mid;
+            else if (((EntryLess*)&depth)->Less(first, final))
+                pivot = final;
+            else
+                pivot = first;
+        } else {
+            if (((EntryLess*)&depth)->Less(first, final))
+                pivot = first;
+            else if (((EntryLess*)&depth)->Less(mid, final))
+                pivot = final;
+            else
+                pivot = mid;
+        }
+        Entry copy = *pivot;
+        if (copy.ref)
+            copy.ref->refCount++;
+        Entry* cut = Partition(first, last, copy, ctx);
+        depth--;
+        QuickSort(cut, last, depth, ctx);
+        last = cut;
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------
+// Game-mode dependent scalar selection.
+
+// @ 0x00b3ce80
+float __fastcall ModeValue(const float* self)
+{
+    unsigned mode = GetCurrentGameMode();
+    if (mode == 0x01654c01)
+        return self[0];
+    if (mode == 0x01654c02)
+        return self[1];
+    if (mode == 0x01654c04)
+        return self[2];
+    if (mode == 0x01654c05)
+        return self[3];
+    return 1.0f;
+}
+
+struct ModeValues {
+    uint8_t pad00[0x10];
+    float a;        // +0x10
+    uint8_t pad14[4];
+    float b;        // +0x18
+    uint8_t pad1c[4];
+    float c;        // +0x20
+    uint8_t pad24[4];
+    float d;        // +0x28
+};
+
+extern float g_01465544;                                             // 0x01465544
+
+// @ 0x00b3cec0
+float __fastcall ModeValueAlt(const ModeValues* self)
+{
+    unsigned mode = GetCurrentGameMode();
+    if (mode == 0x01654c01)
+        return self->a;
+    if (mode == 0x01654c02)
+        return self->b;
+    if (mode == 0x01654c04)
+        return self->c;
+    if (mode == 0x01654c05)
+        return self->d;
+    return g_01465544;
+}
+
+// ---------------------------------------------------------------------------------------------------
+// Per-frame visible-object update.
+
+struct Effect {
+    virtual void e00(); virtual void e04(); virtual void e08(); virtual void e0c();
+    virtual void SetCallback(int32_t which, void* fn, int32_t arg);   // +0x10
+    virtual void e14(); virtual void e18(); virtual void e1c(); virtual void e20();
+    virtual void SetTime(float t, int32_t flags);                     // +0x24
+};
+
+struct ModelMgr {
+    void** vtbl;
+    uint32_t Capacity() { return ((uint32_t (__thiscall*)(ModelMgr*))vtbl[0x100 / 4])(this); }
+    void Flush() { ((void (__thiscall*)(ModelMgr*))vtbl[0x104 / 4])(this); }
+    void* Models() { return ((void* (__thiscall*)(ModelMgr*))vtbl[0xfc / 4])(this); }
+};
+
+struct PlanetModelObj {
+    uint8_t pad00[0x24];
+    ModelMgr* mgr;          // +0x24
+    bool Active();          // 0x00b7ec40
+};
+
+struct ModeState {
+    uint8_t pad00[0x20];
+    int32_t field20;        // +0x20
+};
+
+struct Property {
+    uint8_t pad00[0x12];
+    uint16_t type;          // +0x12
+    uint32_t* GetUInt();    // 0x0041ea00
+    float* GetFloat();      // 0x0041ea70
+};
+
+struct DirectPropList {
+    virtual void p00(); virtual void p04(); virtual void p08(); virtual void p0c();
+    virtual void p10(); virtual void p14(); virtual void p18(); virtual void p1c();
+    virtual void p20();
+    virtual bool GetProperty(uint32_t key, Property** out);           // +0x24
+};
+
+// game-data view used by the visibility filter below
+struct GD2 {
+    virtual void g00(); virtual void g01(); virtual void g02(); virtual void g03();
+    virtual void g04(); virtual void g05(); virtual void g06(); virtual void g07();
+    virtual void g08(); virtual void g09(); virtual void g10(); virtual void g11();
+    virtual void g12(); virtual void g13(); virtual void g14(); virtual void g15();
+    virtual void g16(); virtual void g17();
+    virtual bool Ready();                                             // +0x48
+    uint8_t pad04[0x4c];
+    uint32_t flags50;       // +0x50
+    uint8_t pad54[0x1d];
+    uint8_t flag71;         // +0x71
+    uint8_t pad72[3];
+    uint8_t flag75;         // +0x75
+};
+
+struct ModelRec { float x, y, z, w; };
+
+struct Model2 {
+    void** vtbl;
+    Vec3* GetPos() { return ((Vec3* (__thiscall*)(Model2*))vtbl[0x2c / 4])(this); }
+    float GetScale() { return ((float (__thiscall*)(Model2*))vtbl[0x74 / 4])(this); }
+};
+
+struct PtrVec2 {
+    void** begin;
+    void** end;
+    void** cap;
+    void push_back(void** value);                                     // 0x00c072f0
+};
+
+struct VisNode {
+    void** vtbl;   // +0x00
+    VisNode* next; // +0x04
+};
+
+struct FrameVis {
+    uint8_t pad00[0x20];
+    VisNode sentinel;      // +0x20
+    uint32_t pad28;
+    ModelVec nearby;       // +0x2c
+    uint8_t pad38[0xc2 - 0x38];
+    uint8_t enabled;       // +0xc2
+    uint8_t padc3[0x108 - 0xc3];
+    Effect* effect;        // +0x108
+    void Update(uint32_t param2, uint32_t param3);                    // 0x00b3c990
+};
+
+extern Vec3 g_0167ea30;                                             // 0x0167ea30
+extern Effect* g_0167ea58;                                          // 0x0167ea58
+
+PlanetModelObj* __cdecl SP_PlanetModel();                            // 0x00b3d350
+ModeState* __cdecl GetModeState();                                   // 0x00b3d310
+void __cdecl Fn_b36820();                                            // 0x00b36820
+void __cdecl Fn_b34280();                                            // 0x00b34280
+void __cdecl Fn_b34380(Effect* e, float t);                          // 0x00b34380
+int __cdecl Fn_b33e80(GD2* gd);                                      // 0x00b33e80
+void __cdecl Fn_b81630(Vec3* dst, Vec3* src);                        // 0x00b81630
+void __cdecl Fn_b370f0(void** first, void** stop, void** last, uint32_t count); // 0x00b370f0
+
+struct InlineBuf {
+    uint32_t owner;        // +0x00 (original's vec.begin[-1])
+    Model* items[128];
+};
+
+// @ 0x00b3c990
+void FrameVis::Update(uint32_t param2, uint32_t param3)
+{
+    AppSub* app = App();
+    ViewerHolder* holder = app->GetHolder();
+    Viewer* viewer = holder->GetViewer();
+    viewer->GetCameraLocationInfo(&g_0167ea30, 0, 0, 0);
+
+    if (!enabled)
+        return;
+
+    PlanetModelObj* pm = SP_PlanetModel();
+    if (g_0167ea58 && pm && pm->mgr) {
+        ModeState* mode = GetModeState();
+        void* callback;
+        if (mode->field20 == 0)
+            callback = (void*)Fn_b36820;
+        else
+            callback = (void*)Fn_b34280;
+        g_0167ea58->SetCallback(1, callback, 0);
+    }
+    if (effect && pm && pm->mgr)
+        effect->SetCallback(1, (void*)Fn_b34280, 0);
+
+    VisNode* node = sentinel.next ? (VisNode*)((uint8_t*)sentinel.next - 4) : 0;
+    VisNode* stop = &sentinel;
+    while (node != stop) {
+        ((void (__thiscall*)(VisNode*, uint32_t, uint32_t))node->vtbl[1])(node, param2, param3);
+        node = node->next ? (VisNode*)((uint8_t*)node->next - 4) : 0;
+    }
+
+    if (g_0167ea58) {
+        float t = (float)(param3 * 0.001);
+        float f = 0.2f;
+        if (t <= 0.2f)
+            f = t;
+        g_0167ea58->SetTime(f, 0);
+        Fn_b34380(g_0167ea58, f);
+    }
+    if (effect) {
+        float t = (float)(param3 * 0.001);
+        float f = 0.2f;
+        if (t <= 0.2f)
+            f = t;
+        effect->SetTime(f, 0);
+        Fn_b34380(effect, f);
+    }
+
+    if (pm && pm->Active()) {
+        uint32_t u1 = 0;
+        uint32_t u2 = 0;
+        float radius = 25.0f;
+        float scale = 1.0f;
+        DirectPropList* props = (DirectPropList*)g_AppProps;
+        if (props) {
+            Property* prop;
+            if (props->GetProperty(0x5b5575e, &prop) && prop->type == 10) {
+                u1 = *prop->GetUInt();
+                u2 = u1;
+            }
+            if (props) {
+                if (props->GetProperty(0x5b56cc8, &prop) && prop->type == 0xd)
+                    radius = *prop->GetFloat();
+                if (props && props->GetProperty(0x5b58961, &prop) && prop->type == 0xd)
+                    scale = *prop->GetFloat();
+            }
+        }
+        ModelMgr* mgr = pm->mgr;
+        uint32_t cap = mgr->Capacity();
+        uint32_t take = (u1 < cap) ? u1 : cap;
+        if (take != 0 && radius > 0.0f) {
+            InlineBuf buf;
+            buf.owner = 0;
+            PtrVec2 vec;
+            vec.begin = (void**)buf.items;
+            vec.end = (void**)buf.items;
+            vec.cap = (void**)(buf.items + 128);
+
+            World* world = GonzagoModelWorld();
+            if (world) {
+                world->AddRef();
+                Vec3 camCopy;
+                Fn_b81630(&camCopy, &g_0167ea30);
+                Filter filter;
+                memset(&filter, 0, sizeof(filter));
+                bool ok = world->Query(&camCopy, radius, (PtrVec*)&nearby, &filter);
+                if (ok) {
+                    Model** end = nearby.mpEnd;
+                    for (Model** it = nearby.mpBegin; it != end; ++it) {
+                        Model* m = *it;
+                        Holder* h = m->holder;
+                        if (!h)
+                            continue;
+                        GD2* gd = (GD2*)h->Cast(0x1186577);
+                        if (!gd)
+                            continue;
+                        if (gd->Ready() && gd->flag75 && !gd->flag71 &&
+                            (gd->flags50 & 0x110) == 0 && Fn_b33e80(gd) == 0) {
+                            vec.push_back((void**)&gd);
+                        }
+                    }
+                }
+                world->Release();
+            }
+
+            uint32_t used = (uint32_t)(vec.end - vec.begin);
+            uint32_t n = (take < used) ? take : used;
+            take = n;
+            Fn_b370f0(vec.begin, vec.begin + n, vec.end, used);
+            mgr->Flush();
+            ModelRec* recs = (ModelRec*)mgr->Models();
+            for (uint32_t i = 0; i < n; i++) {
+                Model2* m = (Model2*)vec.begin[i];
+                Vec3* pos = m->GetPos();
+                recs[i].x = pos->x;
+                recs[i].y = pos->y;
+                recs[i].z = pos->z;
+                float v = m->GetScale() + scale;
+                recs[i].w = v * v;
+            }
+            if (vec.begin && ((uint32_t*)vec.begin)[-1] != 0)
+                FreeMem(vec.begin);
+        }
+    }
+    ((VisMgr*)this)->UpdateVisible();
 }

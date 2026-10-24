@@ -1,1 +1,2 @@
 00b3c1a0 1218 complete; register allocation, tree zero-init and cold-block placement differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b3c020 205 complete; register allocation and prologue/shrink-wrap ordering differ; by-value pivot built with two pushes instead of an outgoing stack slot; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (no mismatch; 262 valid inputs, 21.0% coverage)
