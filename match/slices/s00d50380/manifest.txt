@@ -1,0 +1,2 @@
+slices/s00d50380/s00d50380.cpp  ?ShutdownEvent@cMeteorStrikeEvent@SP@@QAEXXZ  00d50960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d50380/s00d50380.cpp  ?TickEvent@cMeteorStrikeEvent@SP@@QAEXM@Z  00d509c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
