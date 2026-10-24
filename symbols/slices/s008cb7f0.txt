@@ -1,1 +1,24 @@
-008cb7f0 BuildGlyphT2KS  # name guessed; recursive T2K compact-glyph builder (components, shifted/scaled components, contours, delta points, 4 phantom points, hinting/stroking at depth 0)
+s008cb7f0 _New_T2KMemHeader  # model name; cdecl (tsiMemObject* mem, InputStream* in, int32 count) -> 0x14-byte header; reads a version/size pair plus up to five (tag,value) pairs when version == 1, value0a/value0c scaled by 8
+s008cb7f0 _Delete_T2KMemHeader  # model name; cdecl (T2KMemHeader*) -> tsi_DeAllocMem(h->mem, h)
+s008cb7f0 _PreLoadT2KInputStream  # cdecl (InputStream*, int32 length); primes up to 0x200 bytes through in->ReadToRamFunc into the byte cache at in+0x00d
+s008cb7f0 _PrimeT2KInputStream  # cdecl (InputStream*) -> 0; clamps the next preload size to [pendingCount, 8] and <= streamEnd - pos
+s008cb7f0 _ReadInt32  # cdecl (InputStream*) -> uint32, big endian; no stack frame (cl reuses the dead arg1 home for the 4-byte bounce buffer)
+s008cb7f0 _ReadInt16  # cdecl (InputStream*) -> uint16, big endian; 16-bit ax/dx arithmetic in the original
+s008cb7f0 _PeekInt16  # model name; cdecl (InputStream*, void* dest, int32 count); bulk read (memcpy from the RAM block, or the callback), errors with 0x2729 when it runs past streamEnd
+s008cb7f0 _GetStreamLength  # model name; cdecl (InputStream*) -> streamEnd - baseOffset
+s008cb7f0 _GetEntireStreamIntoMemory  # cdecl (InputStream*) -> baseOffset + privateBase; pulls the whole stream through the callback (kind 1) when it is not RAM backed
+s008cb7f0 _New_InputStream2  # cdecl (tsiMemObject*, InputStream* src, uint32 offset, uint32 length, int32 fastAlloc, int* errCode)
+s008cb7f0 _New_InputStream4  # cdecl (tsiMemObject*, void* base, uint32 end, int* errCode); kind 4 RAM window, no callback
+s008cb7f0 _New_NonRamInputStream  # cdecl (tsiMemObject*, PF_READ_TO_RAM, void* id, uint32 end, int* errCode); kind 4, callback driven
+s008cb7f0 _Rewind_InputStream  # cdecl (InputStream*); pos = baseOffset, drops the primed cache when it would start before posZero
+s008cb7f0 _Seek_InputStream  # cdecl (InputStream*, uint32 offset); same as Rewind after baseOffset + offset
+s008cb7f0 _Tell_InputStream  # cdecl (InputStream*) -> pos - baseOffset
+s008cb7f0 _Delete_InputStream  # cdecl (InputStream*, int* errCode); kind 1 frees the private copy, the memory object's own stream (mem+0x58) only sets mem+0x90
+s008cb7f0 _ReadUnsignedNumber  # cdecl (InputStream*) -> uint32; 7 bits per byte, high bit continues, 1-byte bounce buffer at +0x00c
+s008cb7f0 InputStream  # +0x000 privateBase, +0x004 ReadToRamFunc, +0x008 nonRamID, +0x00c byte cache/tmp (cache proper starts at +0x00d, 0x200 bytes), +0x210 pendingCount, +0x214 cacheCount, +0x218 posZero, +0x21c pos, +0x220 streamEnd, +0x224 baseOffset, +0x228 kind (1 pulled to RAM, 2 window on a parent stream, 4 RAM/callback), +0x22c mem, +0x230/+0x234 zeroed, +0x238 byte; 0x23c bytes
+s008cb7f0 tsiMemObject  # +0x54 base54, +0x58 current stream, +0x8c flag8c, +0x90 flag90
+s008cb7f0 T2KMemHeader  # +0x00 mem, +0x04 flags04, +0x06 flags06, +0x08 value08, +0x0a value0a (x8), +0x0c value0c (x8), +0x0e value0e, +0x10 value10; 0x14 bytes
+s008cb7f0 tsi helpers  # tsi_AllocMem(mem, size) 0x008d1260, tsi_DeAllocMem(mem, p) 0x008d1440, tsi_FastAllocN(mem, size, align) 0x008d14d0, tsi_EmergencyShutDown(mem) 0x008d1210, tsi_Error(mem, code) 0x008d10c0
+s008cb7f0 crt  # setjmp3(void* cblock, int) 0x011e0cac, memcpy 0x011e0744 (static CRT: direct calls, no __declspec(dllimport))
+s008cb7f0 error codes  # 0x2728 = T2K_ERR_TRANS_FAIL (10024) read callback failure, 0x2729 read past streamEnd
+s008cb7f0 flags  # /O2 /MD /Gy /TP /GS- /arch:SSE: /GS- because the glyph builder has char/short buffers and the retail build has no cookie, /arch:SSE so cl 15 emits the cmov min/max idiom
