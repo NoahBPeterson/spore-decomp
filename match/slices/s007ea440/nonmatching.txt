@@ -5,3 +5,6 @@
 007eb360  38  vector assign-from-other complete; FUN_007eb000 call arg/register schedule differs
 007eb3b0  47  copyDown complete; register allocation (edi/esi/eax) differs
 007eb3f0  27  freeNodes complete; node/next register swap (edi/esi)
+007eb140  478  complete serializer write (cTelemetry::Write: magic + per-key item dumps + session); EASTL iterator/loop-tail scheduling differs; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; difftest UNSUPPORTED (original faults 391/400 random inputs, 0 valid)
+007eaa10  856  complete cAppSystem::InitGraphics (switch chain, viewer, materials, effects manager, message handlers, cheat+command allocs); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; difftest UNSUPPORTED (0/400 valid: fault(read)=305, fault(pool-limit)=52, fault(write)=41)
+007ea440  1211 complete ArgScript property-dump handler (help/parse, world flags, add-on keys, property list dump with [signed]/[bless]/[entitle], AppSystem/MessageServer replay bits); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; difftest UNSUPPORTED (0/400 valid: fault(pool-limit)=332, fault=58, budget=9)
