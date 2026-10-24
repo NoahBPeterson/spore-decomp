@@ -1,2 +1,2 @@
 # va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
-0101ed80  2811  complete planet-camera orbit update (all paths/calls: snap-Update, zoom clamp, distance blend, yaw/pitch/orbit-angle quaternions, water clearance, viewer/listener); frame 0x274 vs 0x21c (local slot sharing), x87/SSE scheduling differs
+0101ed80  2811  complete planet-camera orbit update (all paths/calls: snap-Update, zoom clamp, distance blend, yaw/pitch/orbit-angle quaternions, water clearance, viewer/listener); frame 0x274 vs 0x21c (local slot sharing), x87/SSE scheduling differs; difftest PASS 332 valid inputs, 77.0% coverage (the saved replay input faults identically in both at 0x00b7e4f1 and is fault-discarded)
