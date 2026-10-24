@@ -160,7 +160,12 @@ struct cReservationGrid {
     float ComputeGridResolution(float res, float zero);    // 0x00cc7830
 };
 struct cTimer {
+    uint32_t mData;
     void Restart();                                        // 0x00bc3130
+    bool IsRunning();                                      // 0x00feba90
+    void Stop();                                           // 0x00bc3110
+    void FUN_00bc3170();                                   // 0x00bc3170
+    uint64_t GetElapsedTime();                             // 0x00bc3190
 };
 
 struct IMsgServer {
@@ -234,7 +239,9 @@ struct cTribe {
     AutoRef<cTribeHut> mpHut;                                                  // +0x368
     uint32_t pad36c[(0x510 - 0x36c) / 4];
     cTimer mPopulationTimer;                                                   // +0x510
-    uint32_t pad511[(0x550 - 0x514) / 4];
+    uint32_t pad514[(0x530 - 0x514) / 4];
+    cTimer mToolsTimer;                                                        // +0x530
+    uint32_t pad534[(0x550 - 0x534) / 4];
     uint32_t mTribeArchetype;                                                  // +0x550
     uint32_t pad554;
     cReservationGrid mRGrid;                                                   // +0x558
@@ -257,6 +264,7 @@ struct cTribe {
     void FUN_00c91700();                                                       // 0x00c91700
     void AddExistingCreatureInternal(cCitizen* c, int flag);                   // 0x00c95d70
     void FUN_00ff03b0(int v);                                                  // 0x00ff03b0
+    bool CheckToolsTimeout();                                                  // 0x00c9a960
 
     void Init(const Vector3* pos, int numMembers, int foodAmount, bool flag);
 };
@@ -390,4 +398,85 @@ void cTribe::Init(const Vector3* pos, int numMembers, int foodAmount, bool flag)
     BundleManager()->Add(f * 0.15f, &mBundle, 4);
     MsgTribe msg(this);
     MessageServer()->Post(msg.mID, &msg, 0);
+}
+
+// --------------------------------------------------------------------- hot spots
+extern cTimer g_hotSpotTimer;               // 0x016953f8
+
+// One 0x60-byte hot-spot node. The grid slot the shutdown pass releases sits at +0x08.
+struct cHotSpotNode {
+    Vector3 mPosition;                                             // +0x00
+    float   mField0c;                                              // +0x0c
+    float   mField10;                                              // +0x10
+    uint8_t pad14[0x39 - 0x14];
+    uint8_t mField39;                                              // +0x39
+    uint8_t pad3a[0x60 - 0x3a];
+};
+void __fastcall HotSpotGridRelease(void* slot);                    // 0x00c8efc0 (ecx = slot)
+
+struct HotSpotMap {
+    cHotSpotNode* mpBegin;                                         // +0x00
+    union {
+        cHotSpotNode* mpEnd;                                       // +0x04
+        uint32_t      mpEndRaw;
+    };
+    uint8_t pad08[0xc18 - 0x08];
+    uint8_t mField0c18;                                            // +0xc18
+    void FreeRange(cHotSpotNode* begin, cHotSpotNode* end);        // 0x00c93690 (ret 8)
+    cHotSpotNode* operator[](const Vector3** key);                 // 0x00c9aa10 (ret 4)
+};
+extern HotSpotMap g_hotSpots;               // 0x0157abb0
+
+// @ 0x00c9a080  SP::cTribe::HotSpotsShutdown
+void HotSpotsShutdown()
+{
+    if (g_hotSpotTimer.IsRunning())
+    {
+        g_hotSpotTimer.FUN_00bc3170();
+        g_hotSpotTimer.Stop();
+    }
+    cHotSpotNode* begin = g_hotSpots.mpBegin;
+    cHotSpotNode* end = g_hotSpots.mpEnd;
+    while (begin != end)
+    {
+        HotSpotGridRelease(&begin->mPosition.z);
+        ++begin;
+    }
+    begin = g_hotSpots.mpBegin;
+    end = g_hotSpots.mpEnd;
+    g_hotSpots.FreeRange(begin, end);
+    g_hotSpots.mpEndRaw += ((char*)end - (char*)begin) / 0x60 * 0x60;
+}
+
+// @ 0x00c9a960
+bool cTribe::CheckToolsTimeout()
+{
+    if (mToolsTimer.IsRunning())
+    {
+        if (mToolsTimer.GetElapsedTime() > 1000)
+        {
+            ReserveToolsSlots(false);
+            mToolsTimer.FUN_00bc3170();
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00c9af80
+Vector3* GetHotSpotPosition(Vector3* out, const Vector3* pos)
+{
+    cHotSpotNode* node = g_hotSpots[&pos];
+    out->x = node->mPosition.x;
+    out->y = node->mPosition.y;
+    out->z = node->mPosition.z;
+    return out;
+}
+
+// @ 0x00c9af30
+void GetHotSpotValues(const Vector3* pos, float* out0c, float* out10, uint8_t* outFlag)
+{
+    *out0c = g_hotSpots[&pos]->mField0c;
+    *out10 = g_hotSpots[&pos]->mField10;
+    *outFlag = g_hotSpots[&pos]->mField39;
 }

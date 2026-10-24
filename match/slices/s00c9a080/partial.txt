@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00c9a080    9  SP::cTribe::HotSpotsShutdown; equiv PASS 400 inputs, 71% coverage; only the callee-saved roles of the begin/end pointers differ
