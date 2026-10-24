@@ -1,191 +1,453 @@
-// 0x00add1a0 (unnamed) walks two hash tables of attached objects and re-places each one.
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+// Simulator ArgScript message commands, the editor-resource attachment they carry,
+// and the game-state fade walker of the same module.
 //
-// For every entry of table 1 (+0xb0) and then table 2 (+0x90): copy the entry (a weak handle with
-// a local offset), and
-//   - handle gone or no longer alive          -> erase the entry from the table;
-//   - entry has no flag or no target id       -> skip it;
-//   - otherwise ask the owner (0x00adb2a0) for the target's placement, take its position and
-//     rotation (from the placement's parent object when it has one), and
-//       * position == the "nowhere" constant  -> detach the handle (vslot 0xc) and erase the entry,
-//       * else build a Transform (offset = position + rotation * entry offset, rotation) and hand
-//         it to the object (vslot 0x18).
-// Returns whether table 2 is empty.
+// Retail layouts recovered from the neighbouring PDB-name slices:
+//   Msg (0x40)  vptr +0, refcount +4, four 8-byte message arguments +8..+0x27,
+//               tag +0x30, flags +0x38
+//   EditorRes (0x34) two vtables at +0 and +8, source resource at +0xc,
+//               offset/extraOffset +0x10..+0x24, flag bytes +0x28..+0x2e,
+//               target/owner id +0x30
+//   HTbl (0x10)  bucket array +4, bucket count +8, element count +0xc
+//
+// Flags: /O2 /MD /Gy /TP /arch:SSE
 #include "types.h"
+#include <intrin.h>
 
-#define VFUNC(obj, off) ((*(void***)(obj))[(off) / 4])
+#pragma intrinsic(_InterlockedExchange)
 
-struct Vec3 {
-  float x, y, z;
-  Vec3() {}
-  Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {}
-};
-struct M33 {
-  float m[9];
-  M33() {}
-  M33(const M33& o);                           // 0x0041cb40
-};
+// ---------------------------------------------------------------- allocator / externs
+void* operator new(unsigned int size, const char* name, int a, int b,
+                   const char* file, int line);              // 0x00f473a0
+void __cdecl operator_delete(void* p);                       // 0x00f47380
 
-// Transform (ModAPI layout, 0x38 bytes)
-struct Transform {
-  int16_t flags;
-  int16_t count;
-  Vec3 offset;
-  float scale;
-  M33 rot;
-  Transform();
-  void SetOffset(const Vec3& v) { offset = v; flags |= 4; ++count; }
-  void SetRotation(const M33& r) { rot = r; flags |= 2; ++count; }
-};
+extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
 
-extern Vec3 g_TransformOffset;    // 0x0167a5a4
-extern M33 g_TransformRot;        // 0x0167a5b0
-extern Vec3 g_PlacementPos;       // 0x0167a548
-extern Vec3 g_Nowhere;            // 0x0156649c
-extern float g_One;               // 0x01485720
+extern char g_emptyString[];                                 // 0x013ec47c
+extern char g_simulatorName[];                               // 0x013f09b4 "Simulator"
 
-inline Transform::Transform() : rot(g_TransformRot)
+void __cdecl SetMessageString8(void* msg, int index, const char* text);  // 0x00618bd0
+
+// ---------------------------------------------------------------- argument parser
+namespace EA { namespace ArgScript {
+class cArguments
 {
-  flags = 0;
-  count = 0;
-  offset = g_TransformOffset;
-  scale = g_One;
+public:
+    const char** MainArguments(int count);                       // 0x00838320
+    const char** MainArguments(int* count, int min, int max);    // 0x00838020
+    const char** OptionArguments(const char* name, int count);   // 0x00838330
+    bool HasFlag(const char* name);                              // 0x008380b0
+};
+} }
+
+struct Vector3
+{
+    float x, y;
+    union
+    {
+        float z;
+        struct
+        {
+            uint8_t za, zb, fadeOn, zd;   // +0x08..+0x0b, alias z
+        };
+    };
+};
+
+// ArgScript value parser reached through a command's +4 field.
+class IArgParser
+{
+public:
+    virtual void p00(); virtual void p01(); virtual void p02(); virtual void p03();
+    virtual void p04(); virtual void p05(); virtual void p06(); virtual void p07();
+    virtual void p08(); virtual void p09(); virtual void p10(); virtual void p11();
+    virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15();
+    virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19();
+    virtual void p20(); virtual void p21(); virtual void p22(); virtual void p23();
+    virtual void p24(); virtual void p25(); virtual void p26(); virtual void p27();
+    virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31();
+    virtual void p32(); virtual void p33(); virtual void p34(); virtual void p35();
+    virtual void p36(); virtual void p37();
+    virtual float ParseF(const char* text);                       // 0x98
+    virtual void  p39();
+    virtual int   ParseI(const char* text);                       // 0xa0
+    virtual void  p41();
+    virtual Vector3* ParseV(Vector3* out, const char* text);      // 0xa8
+};
+
+// ---------------------------------------------------------------- message object
+struct MsgData
+{
+    int m_arg0a, m_arg0b;      // +0x08
+    int m_arg1a, m_arg1b;      // +0x10
+    int m_arg2a, m_arg2b;      // +0x18
+    int m_arg3a, m_arg3b;      // +0x20
+    int m_f28, m_f2c;          // +0x28
+    int m_tag;                 // +0x30
+    MsgData() : m_tag(0) {}
+};
+
+struct RefBase
+{
+    virtual void v00();
+    virtual void AddRef();      // slot 1
+    virtual void Release();     // slot 2
+    long m_refCount;            // +0x04
+    RefBase() { _InterlockedExchange(&m_refCount, 0); }
+};
+
+struct Msg : MsgData, RefBase
+{
+    int m_f34;                  // +0x34
+    int m_flags;                // +0x38
+    int m_f3c;                  // +0x3c
+    Msg() : MsgData(), m_flags(0) {}
+};
+
+// ---------------------------------------------------------------- editor-resource payload
+class IEditorRef
+{
+public:
+    virtual void AddRef();                       // +0
+    virtual void Release();                      // +4
+    virtual void v08();                          // +0x8
+    virtual void SetSomething(bool on);          // +0xc
+    virtual bool IsValid();                      // +0x10
+};
+
+struct EditorRes
+{
+    void* m_vptr;                // +0x00
+    int   m_refCount;            // +0x04
+    void* m_editorVptr;          // +0x08 (IRef sub-object vtable)
+    void* m_resource;            // +0x0c
+    Vector3 m_offset;            // +0x10
+    Vector3 m_extra;             // +0x1c
+    uint8_t m_attached;          // +0x28
+    uint8_t m_noWait;            // +0x29
+    uint8_t m_softStop;          // +0x2a
+    uint8_t m_pinToSurface;      // +0x2b
+    uint8_t m_persist;           // +0x2c
+    uint8_t m_useRadius;         // +0x2d
+    uint8_t m_useHeight;         // +0x2e
+    uint8_t m_pad2f;             // +0x2f
+    int   m_target;              // +0x30
+
+    EditorRes();
+    EditorRes* copyCtor(EditorRes* src);                     // 0x00ad7ca0
+    IEditorRef* EditorRef() { return (IEditorRef*)&m_editorVptr; }
+    void AddRef() { EditorRef()->AddRef(); }
+    void Release() { EditorRef()->Release(); }
+};
+
+// ---------------------------------------------------------------- eastl hash table
+struct BigNode;
+struct HTbl
+{
+    uint32_t m_f00;              // +0x00
+    BigNode** m_bucketArray;     // +0x04
+    uint32_t m_bucketCount;      // +0x08
+    uint32_t m_size;             // +0x0c
+
+    void DoFreeNodes(void* nodes, unsigned count);           // 0x007611f0
+};
+
+struct BigNode
+{
+    uint32_t m_key;              // +0x00
+    EditorRes m_value;           // +0x04 (0x34 bytes)
+    BigNode* m_next;             // +0x38
+};
+
+// POD mirror of EditorRes used for stack locals: retail copy-constructs into
+// uninitialised storage, so this type deliberately has no constructor.
+struct EditorValue
+{
+    void* m_vptr;                // +0x00
+    int   m_refCount;            // +0x04
+    void* m_editorVptr;          // +0x08
+    void* m_resource;            // +0x0c
+    Vector3 m_offset;            // +0x10
+    Vector3 m_extra;             // +0x1c
+    uint8_t m_attached;          // +0x28
+    uint8_t m_noWait;            // +0x29
+    uint8_t m_softStop;          // +0x2a
+    uint8_t m_pinToSurface;      // +0x2b
+    uint8_t m_persist;           // +0x2c
+    uint8_t m_useRadius;         // +0x2d
+    uint8_t m_useHeight;         // +0x2e
+    uint8_t m_pad2f;             // +0x2f
+    int   m_target;              // +0x30
+
+    EditorValue* copyCtor(void* src);                          // 0x00ad7ca0
+};
+
+struct IterA { BigNode* m_node; BigNode** m_bucket; };
+
+struct GameEventTable : HTbl
+{
+    IterA* eraseA(IterA* out, IterA pos);                        // 0x00adc9f0
+    BigNode* head() { return m_bucketArray[0]; }
+    BigNode* end() { return m_bucketArray[m_bucketCount]; }
+};
+
+// ---------------------------------------------------------------- command objects
+class cAppState
+{
+public:
+    void AddMessage(EA::ArgScript::cArguments* args, Msg* msg, char flag); // 0x007e4190
+};
+
+struct SimCommand
+{
+    void* m_vptr;                // +0x00
+    IArgParser* m_parser;        // +0x04
+    uint32_t m_pad08;            // +0x08
+    cAppState* m_appState;       // +0x0c
+
+    void ExecAttached(EA::ArgScript::cArguments* args);          // 0x00adcd10
+    void ExecSoftFlag(EA::ArgScript::cArguments* args);          // 0x00adcfc0
+    void ExecPlain(EA::ArgScript::cArguments* args);             // 0x00add060
+    void ExecList(EA::ArgScript::cArguments* args);              // 0x00add0f0
+};
+
+struct cGameState
+{
+    uint8_t m_pad00[0xd0];
+    GameEventTable m_events;     // +0xd0
+    void FadeFromBlack();        // 0x00adda70
+};
+
+// ---------------------------------------------------------------- globals
+extern void* g_vtbl_145b81c;     // 0x0145b81c
+extern void* g_vtbl_145b80c;     // 0x0145b80c
+extern void* g_vtbl_13ec458;     // 0x013ec458
+extern void* g_vtbl_13eb938;     // 0x013eb938
+extern void* g_vtbl_13eb90c;     // 0x013eb90c
+extern void* g_vtbl_13eb844;     // 0x013eb844
+extern void* g_vtbl_145b2f8;     // 0x0145b2f8
+extern void* g_vtbl_145b2ec;     // 0x0145b2ec
+
+EditorRes::EditorRes()
+{
+    m_refCount = 0;
+    *(void* volatile*)&m_editorVptr = &g_vtbl_13eb938;
+    m_vptr = &g_vtbl_145b2f8;
+    m_editorVptr = &g_vtbl_145b2ec;
+    m_resource = 0;
 }
 
-struct Obj {
-  virtual void v0();
-  virtual int Release();
-  virtual void v8();
-  virtual void Detach(int n);                  // 0x0c
-  virtual bool IsAlive();                      // 0x10
-  virtual void v14();
-  virtual void SetTransform(const Transform* t);   // 0x18
-};
-
-// what the owner tells us about a target
-struct Placement {
-  Vec3 pos;                // +0x00
-  float rot[4];            // +0x0c
-  float scl[4];            // +0x1c
-  void* parent;            // +0x2c
-  Placement() {
-    pos.x = g_PlacementPos.x;
-    pos.y = g_PlacementPos.y;
-    pos.z = g_PlacementPos.z;
-    rot[0] = rot[1] = rot[2] = rot[3] = 0.0f;
-    scl[0] = scl[1] = scl[2] = scl[3] = g_One;
-    parent = 0;
-  }
-};
-inline const Vec3* ParentPos(void* p) { return ((const Vec3*(__thiscall*)(void*))VFUNC(p, 0x2c))(p); }
-inline const float* ParentRot(void* p) { return ((const float*(__thiscall*)(void*))VFUNC(p, 0x30))(p); }
-
-M33* __cdecl QuatToMatrix(M33* out, const float* q);   // 0x004a9b40
-
-struct Entry {
-  uint32_t a, b;
-  Obj* obj;                // +8
-  Vec3 local;              // +0xc
-  uint32_t pad[5];
-  bool flag;               // +0x24
-  uint32_t pad2;
-  int targetId;            // +0x2c
-  uint32_t pad3[1];
-  Entry(const Entry& src);                       // 0x00ad7ca0
-  ~Entry() { if (obj) obj->Release(); }
-};
-
-struct Node {
-  uint32_t key;
-  Entry value;
-  Node* next;              // +0x38
-};
-
-struct Iter {
-  Node* node;
-  Node** bucket;
-  Iter(Node* n, Node** b) : node(n), bucket(b) {}
-  Iter(const Iter& o) : node(o.node), bucket(o.bucket) {}
-};
-
-struct Table {
-  uint32_t alloc;
-  Node** buckets;          // +4
-  uint32_t nBuckets;       // +8
-  uint32_t nElements;      // +0xc
-  Iter erase(Iter pos);                          // 0x00adc9f0
-};
-
-struct Owner {
-  char pad[0x90];
-  Table t2;                // +0x90
-  char pad2[0x10];
-  Table t1;                // +0xb0
-  void GetPlacement(int id, Placement* out);     // 0x00adb2a0
-  bool Update();
-};
-
-template<bool kRelease> static __forceinline void Pass(Owner* owner, Table* tbl)
+// ---------------------------------------------------------------- 0x00adccb0
+struct NodeOwner
 {
-  Node** bucket = tbl->buckets;
-  Node* node = *bucket;
-  if (!node) {
-    do { ++bucket; } while (!*bucket);
-    node = *bucket;
-  }
-  while (node != tbl->buckets[tbl->nBuckets]) {
-    Entry e(node->value);
-    if (!e.obj || !e.obj->IsAlive()) {
-      Iter r = tbl->erase(Iter(node, bucket));
-      node = r.node;
-      bucket = r.bucket;
-    } else if (!e.flag || !e.targetId) {
-      node = node->next;
-      while (!node) { ++bucket; node = *bucket; }
-    } else {
-      Placement pl;
-      owner->GetPlacement(e.targetId, &pl);
-      const Vec3* pos = pl.parent ? ParentPos(pl.parent) : &pl.pos;
-      const float* q = pl.parent ? ParentRot(pl.parent) : pl.rot;
-      M33 R;
-      M33 tmpM;
-      R = *QuatToMatrix(&tmpM, q);
-      if (kRelease && pl.parent) {
-        ((float(__thiscall*)(void*))VFUNC(pl.parent, 0x70))(pl.parent);
-        if (pl.parent)
-          ((void(__thiscall*)(void*))VFUNC(pl.parent, 0x68))(pl.parent);
-      }
-      if (pos->x == g_Nowhere.x && pos->y == g_Nowhere.y && pos->z == g_Nowhere.z) {
-        Obj* o = e.obj;
-        o->Detach(1);
-        e.obj = 0;
-        o->Release();
-        Iter r = tbl->erase(Iter(node, bucket));
-        node = r.node;
-        bucket = r.bucket;
-      } else {
-        Transform t;
-        const float ox = e.local.x, oy = e.local.y, oz = e.local.z;
-        Vec3 np;
-        np.x = pos->x + ((R.m[0] * ox + R.m[6] * oz) + R.m[3] * oy);
-        np.y = pos->y + ((R.m[7] * oz + R.m[4] * oy) + R.m[1] * ox);
-        np.z = pos->z + ((R.m[8] * oz + R.m[5] * oy) + R.m[2] * ox);
-        t.SetOffset(np);
-        t.SetRotation(R);
-        e.obj->SetTransform(&t);
-        node = node->next;
-        while (!node) { ++bucket; node = *bucket; }
-      }
-      if (pl.parent)
-        ((void(__thiscall*)(void*))VFUNC(pl.parent, 0xc0))(pl.parent);
+    void* m_vptrA;               // +0x00
+    uint32_t m_pad04;            // +0x04
+    void* m_vptrB;               // +0x08
+    uint32_t m_pad0c;            // +0x0c
+    HTbl m_table;                // +0x10
+
+    void* Destroy(uint8_t flags); // 0x00adccb0
+};
+
+// @ 0x00adccb0
+void* NodeOwner::Destroy(uint8_t flags)
+{
+    HTbl* table = &m_table;
+
+    m_vptrA = &g_vtbl_145b81c;
+    m_vptrB = &g_vtbl_145b80c;
+
+    table->DoFreeNodes(table->m_bucketArray, table->m_bucketCount);
+
+    uint32_t bucketCount = table->m_bucketCount;
+    table->m_size = 0;
+    if (bucketCount > 1)
+        operator_delete(table->m_bucketArray);
+
+    m_vptrB = &g_vtbl_13ec458;
+    m_vptrA = &g_vtbl_13eb938;
+
+    if (flags & 1)
+        operator_delete(this);
+    return this;
+}
+
+// ---------------------------------------------------------------- 0x00adcd10
+// @ 0x00adcd10
+void SimCommand::ExecAttached(EA::ArgScript::cArguments* args)
+{
+    const char** av = args->MainArguments(2);
+
+    Msg* msg = new (g_simulatorName, 0, 0, 0, 0) Msg();
+    if (msg)
+        msg->AddRef();
+    msg->m_tag = 0x0440377c;
+    SetMessageString8(msg, 0, av[0]);
+    SetMessageString8(msg, 1, av[1]);
+
+    EditorRes* res = new (g_simulatorName, 0, 0, 0, 0) EditorRes();
+    if (res)
+        res->AddRef();
+
+    res->m_useRadius = 0;
+    res->m_useHeight = 0;
+    res->m_noWait = !args->HasFlag("noWait");
+    if (args->HasFlag("useRadius"))
+        res->m_useRadius = 1;
+    if (args->HasFlag("useHeight"))
+        res->m_useHeight = 1;
+    res->m_attached = args->HasFlag("attached") != 0;
+    res->m_softStop = !args->HasFlag("softStop");
+    res->m_persist = args->HasFlag("persist") != 0;
+    res->m_pinToSurface = args->HasFlag("pinToSurface") != 0;
+
+    Vector3 value = { 0.0f, 0.0f, 0.0f };
+    res->m_offset = value;
+
+    const char** opt = args->OptionArguments("offset", 1);
+    if (opt)
+    {
+        Vector3* v = m_parser->ParseV(&value, opt[0]);
+        res->m_offset.x = v->x;
+        res->m_offset.y = v->y;
+        res->m_offset.z = v->z;
     }
-  }
+
+    value.x = 0.0f;
+    value.y = 0.0f;
+    value.z = 0.0f;
+    res->m_extra = value;
+
+    opt = args->OptionArguments("extraOffset", 1);
+    if (opt)
+    {
+        Vector3* v = m_parser->ParseV(&value, opt[0]);
+        res->m_extra.x = v->x;
+        res->m_extra.y = v->y;
+        res->m_extra.z = v->z;
+    }
+
+    IEditorRef* attachment = res->EditorRef();
+    if ((msg->m_flags & 4) != 0 && msg->m_arg2a != 0)
+        ((IEditorRef*)msg->m_arg2a)->Release();
+
+    msg->m_arg2a = (int)attachment;
+    if (attachment)
+        attachment->AddRef();
+    msg->m_flags |= 4;
+
+    opt = args->OptionArguments("target", 1);
+    SetMessageString8(msg, 3, opt ? opt[0] : g_emptyString);
+
+    m_appState->AddMessage(args, msg, 0);
+    attachment->Release();
+    msg->Release();
 }
 
-// @ 0x00add1a0
-bool Owner::Update()
+// ---------------------------------------------------------------- 0x00adcfc0
+// @ 0x00adcfc0
+void SimCommand::ExecSoftFlag(EA::ArgScript::cArguments* args)
 {
-  Pass<true>(this, &t1);
-  Pass<false>(this, &t2);
-  return t2.nElements == 0;
+    const char** av = args->MainArguments(1);
+
+    Msg* msg = new (g_simulatorName, 0, 0, 0, 0) Msg();
+    if (msg)
+        msg->AddRef();
+    msg->m_tag = 0x0449c44e;
+    SetMessageString8(msg, 0, av[0]);
+
+    msg->m_arg1a = args->HasFlag("soft") ? 1 : 0;
+
+    m_appState->AddMessage(args, msg, 0);
+    msg->Release();
+}
+
+// ---------------------------------------------------------------- 0x00add060
+// @ 0x00add060
+void SimCommand::ExecPlain(EA::ArgScript::cArguments* args)
+{
+    const char** av = args->MainArguments(1);
+
+    Msg* msg = new (g_simulatorName, 0, 0, 0, 0) Msg();
+    if (msg)
+        msg->AddRef();
+    msg->m_tag = 0x04485c77;
+    SetMessageString8(msg, 0, av[0]);
+
+    m_appState->AddMessage(args, msg, 0);
+    msg->Release();
+}
+
+// ---------------------------------------------------------------- 0x00add0f0
+// @ 0x00add0f0
+void SimCommand::ExecList(EA::ArgScript::cArguments* args)
+{
+    int count = 0;
+    const char** av = args->MainArguments(&count, 1, 5);
+
+    Msg* msg = new (g_simulatorName, 0, 0, 0, 0) Msg();
+    if (msg)
+        msg->AddRef();
+    msg->m_tag = 0x0750d599;
+
+    for (int i = 0; i < count; ++i)
+        SetMessageString8(msg, i, av[i]);
+
+    m_appState->AddMessage(args, msg, 0);
+    msg->Release();
+}
+
+// ---------------------------------------------------------------- 0x00adda70
+// @ 0x00adda70
+void cGameState::FadeFromBlack()
+{
+    BigNode** bucket = m_events.m_bucketArray;
+    BigNode* node = *bucket;
+    if (node == 0)
+    {
+        ++bucket;
+        node = *bucket;
+        while (node == 0)
+        {
+            ++bucket;
+            node = *bucket;
+        }
+        node = *bucket;
+    }
+
+    BigNode* end = m_events.end();
+    IEditorRef* ref;
+    while (node != end)
+    {
+        EditorValue value;
+        value.copyCtor(&node->m_value);
+
+        ref = (IEditorRef*)value.m_resource;
+        if (ref == 0 || !ref->IsValid())
+        {
+            node = node->m_next;
+            while (node == 0)
+            {
+                ++bucket;
+                node = *bucket;
+            }
+            if (ref != 0)
+                ref->Release();
+        }
+        else
+        {
+            if (value.m_softStop)
+                ref->SetSomething(true);
+            else
+                ref->SetSomething(false);
+            if (ref != 0)
+                ref->Release();
+
+            IterA pos;
+            pos.m_node = node;
+            pos.m_bucket = bucket;
+            IterA out;
+            IterA* next = m_events.eraseA(&out, pos);
+            node = next->m_node;
+            bucket = next->m_bucket;
+        }
+    }
 }

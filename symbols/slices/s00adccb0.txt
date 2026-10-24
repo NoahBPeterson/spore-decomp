@@ -1,0 +1,6 @@
+00adccb0  NodeOwner::Destroy  # neighbouring eqtest slice s00adbca0 defines NodeOwner with HTbl at +0x10; body sets the two base vtables, frees the table and conditionally deletes
+00adcd10  SimCommand::ExecAttached  # builds a 0x40 RefObj plus a 0x34 EditorRes attachment, reads noWait/useRadius/useHeight/attached/softStop/persist/pinToSurface and offset/extraOffset/target, then AddMessage
+00adcfc0  SimCommand::ExecSoftFlag  # one-argument command builder; tag 0x0449c44e and the "soft" flag in message argument 1
+00add060  SimCommand::ExecPlain  # one-argument command builder; tag 0x04485c77, no extra flags
+00add0f0  SimCommand::ExecList  # 1..5-argument command builder; tag 0x0750d599, loops SetMessageString8 over the argument list
+00adda70  cGameState::FadeFromBlack  # exact name/VA from eqtest slice s00d42ea0; iterates the +0xd0 event table, copy-constructing EditorRes values and erasing valid entries
