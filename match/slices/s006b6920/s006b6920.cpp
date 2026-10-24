@@ -226,8 +226,11 @@ void SPVector<uint8_t>::insert(uint8_t* pos, uint32_t n, const uint8_t& val)
         uint32_t nBefore = pos - mpBegin;
         uint8_t* p = (uint8_t*)memcpy(pNew, mpBegin, nBefore) + nBefore;
         uint8_t v = val;
+        // The original /O2 build reuses the val-pointer stack slot for the byte fill value and reloads the
+        // full 32-bit slot for memset (only the low byte matters to memset). Reproduce that exact argument.
+        uint32_t mval = ((uint32_t)&val & 0xFFFFFF00u) | v;
         if (n)
-            memset(p, v, n);
+            memset(p, mval, n);
         uint32_t nAfter = mpEnd - pos;
         uint8_t* pEndNew = (uint8_t*)memcpy(p + n, pos, nAfter) + nAfter;
         Free(mpBegin);
