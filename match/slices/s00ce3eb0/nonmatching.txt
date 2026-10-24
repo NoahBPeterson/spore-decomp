@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00ce3eb0  1114  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) nearby citizen ordering; the tribe plan lookup, the citizen list walk and the order variant construction are unresolved so the two distance passes collapse; equiv UNSUPPORTED (unresolved tribe and citizen services)
+00ce4380  1040  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) equip-workers planner action; the step array read, tool lookups and order calls are unresolved so most of the two loops collapse; equiv UNSUPPORTED (unresolved planner services)
+00ce4810  193  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) planner worker check; the plan group walk is modelled but the simulator context and plan lookup are unresolved; equiv UNSUPPORTED (unresolved plan services)
+00ce48f0  751  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gonzago simulator update; the game time, context and plan lookups are unresolved so the timer accumulation and the step decrement loop are simplified; equiv UNSUPPORTED (unresolved simulator services)
+00ce4c40  72  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) planner vector copy; both helpers are unresolved and the destination cursor advance is modelled as an assignment; equiv UNSUPPORTED (unresolved copy helpers)
+00ce4ca0  149  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) planner group copy; the step allocation and range copy are unresolved and the group stride advance differs; equiv UNSUPPORTED (unresolved allocation and copy helpers)
+00ce4d60  135  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) planner group fill; the step allocation and range copy are unresolved and the field store order differs; equiv UNSUPPORTED (unresolved allocation and copy helpers)
