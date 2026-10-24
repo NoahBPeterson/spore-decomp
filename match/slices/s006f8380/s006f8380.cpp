@@ -1,7 +1,7 @@
 // SP::cFilterChain (retail layout, ~0x228 bytes): screen-filter application / creation.
 // Member offsets are taken from the constructor at 0x006f8d40.  The class has three vtables
 // (multiple inheritance), modelled here as three explicit pointer fields so the compiler does
-// not emit its own vtable stores.  Flags: /O2 /MD /Gy /EHsc /TP.
+// not emit its own vtable stores.  Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2.
 #include "types.h"
 
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
@@ -14,9 +14,6 @@ extern "C" void _ReadWriteBarrier(void);
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags,
                    const char* file, int line);
 
-class cViewer;
-class cIGraphicsSystem;
-
 // +0x10 : 0x100-byte custom shader-data block.
 class cShaderDataCustom {
 public:
@@ -24,7 +21,7 @@ public:
   void Init();  // 0x0077d170
 };
 
-// 0x28-byte filter element (the range-copy helper at 0x006f8710 clones it).
+// 0x28-byte filter operation element (the range-copy helper at 0x006f8710 clones it).
 struct FilterElem28 {
   uint8_t  mFlags;      // +0x00
   uint8_t  mDest;       // +0x01
@@ -37,16 +34,98 @@ struct FilterElem28 {
   uint32_t mTail[4];    // +0x1c
 };
 
-struct FilterVec28 {
-  FilterElem28* begin;
-  FilterElem28* end;
-  FilterElem28* cap;
+// The bytes a FilterElem28::mBufBegin points at; the filter switch reads texture ids here.
+struct cTexIndexBlock {
+  uint8_t mIdx0;   // +0x00
+  uint8_t mIdx1;   // +0x01
+  uint8_t mIdx2;   // +0x02
+  uint8_t mIdx3;   // +0x03
+  uint8_t mIdx4;   // +0x04
+  uint8_t pad05;   // +0x05
+  uint8_t mIdx6;   // +0x06
 };
 
-// 0x78-byte filter descriptor (destroyed element-wise by ~cFilterChain).
+// 0x78-byte filter descriptor (rebuilt by CreateScreenFilterInternal, destroyed by ~cFilterChain).
 struct FilterDesc78 {
-  char pad[0x78];
-  void Destroy();  // 0x006f66d0
+  FilterElem28* mBegin;     // +0x00
+  FilterElem28* mEnd;       // +0x04
+  uint8_t  pad08[0xc];      // +0x08
+  int32_t* mScaleTable;     // +0x14  (8-byte entries, biased backward by 0x100)
+  uint8_t  pad18[0x10];     // +0x18
+  float*   mStrengthTable;  // +0x28
+  uint8_t  pad2c[0x38];     // +0x2c
+  int32_t* mTextureTable;   // +0x64  (8-byte entries)
+  uint8_t  pad68[0x10];     // +0x68
+  void Destroy();           // va 006f66d0
+};
+
+// A screen filter held in cFilterChain::mTexBegin.
+struct cSlotNode {          // one slot->texture hash node
+  uint16_t  mKey;           // +0x00
+  uint8_t   pad02[6];       // +0x02
+  cSlotNode* mNext;         // +0x08
+};
+
+// The 16-bit-keyed hash table embedded in a screen filter at +0x0c.
+struct cSlotHash {
+  uint8_t   pad00[4];       // +0x0c
+  cSlotNode** mArray;       // +0x10
+  int32_t   mCount;         // +0x14
+  int32_t   mField18;       // +0x18
+  int32_t*  FindOrInsert(uint16_t* key);           // va 006f65d0
+  void      ReleaseBuckets(void* array, int n);    // va 00693230
+};
+
+class cScreenFilter {
+public:
+  float      mStrength;     // +0x00
+  int32_t    mField04;      // +0x04
+  uint16_t   mSlot;         // +0x08
+  uint16_t   pad0a;         // +0x0a
+  cSlotHash  mHash;         // +0x0c
+  uint8_t    pad1c[0x58];   // +0x1c
+  int32_t    mField74;      // +0x74
+
+  void RemoveCameraTextures();                        // va 006f6910
+  bool AddCameraTexture(unsigned a, unsigned b, int* out); // va 006f6830
+  void Apply(int a, int b, int c, void* d);           // va 006f5260
+  void Resolve(uint32_t a, int b);                    // va 006f8260
+  bool CreateScreenFilterInternal(FilterDesc78* d);   // va 006f87f0
+};
+
+class cViewer;
+
+// Singleton returned by 0x0067dd50; only the two vtable slots used below are named.
+class cRenderSystem {
+public:
+  virtual void v00();
+  virtual void v04();
+  virtual void v08();
+  virtual void v0c();
+  virtual void v10();
+  virtual void v14();
+  virtual void v18();
+  virtual uint16_t* GetViewportInfo();       // +0x1c
+  virtual void v20();
+  virtual void v24();
+  virtual void v28();
+  virtual void v2c();
+  virtual void v30();
+  virtual void v34();
+  virtual void v38();
+  virtual void v3c();
+  virtual void v40();
+  virtual void v44();
+  virtual void v48();
+  virtual void AttachRenderTarget(void* obj, int a, int b);   // +0x4c
+};
+extern "C" cRenderSystem* GetRenderSystem(); // va 0067dd50
+
+// The camera view used by the chain (methods live elsewhere in the binary).
+class cViewer {
+public:
+  bool Copy(cViewer* src, bool a, bool b);  // va 007c50b0
+  void ApplyFrustum(float a, float b);      // va 007c4ad0
 };
 
 class cFilterChain {
@@ -97,31 +176,23 @@ public:
   ~cFilterChain();
 
   // thiscall callees (bodies live elsewhere in the binary).
-  bool AddCameraTexture(int a, int b, int* out);          // 0x006f6830
-  void* FindSlot(uint16_t id);                            // 0x006f65d0
-  void Sub0(FilterElem28*, int, int, int, int, int, int); // 0x006f6c30
-  void Sub1(FilterElem28*, int, int, int, int, int, int); // 0x006f5f80
-  void Sub2(FilterElem28*, int, int, int, int, int, int); // 0x006f6f40
-  void Sub3(FilterElem28*, int, int, int, int, int, int); // 0x006f71f0
-  void Sub4(FilterElem28*, int, int, int, int, int, int); // 0x006f6060
-  void Sub5(FilterElem28*, int, int, int, int, int, int); // 0x006f60f0
-  void Sub6(FilterElem28*, int, int, int, int, int, int); // 0x006f6180
-  void Sub7(FilterElem28*, int, int, int, int, int, int); // 0x006f6270
-  void Sub8(FilterElem28*, int, int, int, int, int, int); // 0x006f6430
-  void Sub9(FilterElem28*, int, int, int, int, int, int); // 0x006f6500
-  void Sub10(FilterElem28*, int, int, int, int, int, int);// 0x006f7680
-  void Sub11(FilterElem28*, int, int, int, int, int, int);// 0x006f79a0
-  void Sub12(FilterElem28*, int, int, int, int, int, int);// 0x006f7430
-  void Sub13(FilterElem28*, int, int, int, int, int, int);// 0x006f7f70 ApplyStrengthFilter
-  void Sub14(FilterElem28*, int, int, int, int, int, int);// 0x006f71f0 slot used twice
-  void BigCreate(int, int, int, int, int, int, int, int);// 0x006f54a0
-  void AddRect(int a, int b);                             // 0x006f8260
-  void ResetHashed();                                     // 0x006f6910
-  void InitBuckets(int, int);                             // hashtable DoAllocateBuckets
-  bool CreateScreenFilterInternal(FilterVec28* v);        // 0x006f87f0
-  void RemoveAt(int idx);                                 // 0x006f9020
-  void ApplyFilters(FilterVec28* v, uint16_t count, void* p4, int p5);  // 0x006f8380
-  int p5_unused();
+  void Op0(void* d, void* e, int a, int b, int c, int viewer, int p5);   // va 006f6c30
+  void Op1(void* d, void* e, int a, int b, int c, int viewer, int p5);   // va 006f5f80
+  void Op2(void* d, void* e, int a, int b, int c, int viewer, int p5);   // va 006f6f40
+  void Op3(void* d, void* e, int a, int b, int c, int viewer, int p5);   // va 006f71f0
+  void Op4(void* d, void* e, int a, int b, int c, int viewer, int p5);   // va 006f6060
+  void Op5(void* d, void* e, int a, int b, int c, int viewer, int p5);   // va 006f60f0
+  void Op6(void* d, void* e, int a, int b, int c, int viewer, int p5);   // va 006f6180
+  void Op7(void* d, void* e, int a, int b, int c, int viewer, int p5);   // va 006f6270
+  void Op8(void* d, void* e, int a, int b, int c, int viewer, int p5);   // va 006f7430
+  void Op12(void* d, void* e, int a, int b, int c, int viewer, int p5);  // va 006f6430
+  void Op13(void* d, void* e, int a, int b, int c, int viewer, int p5);  // va 006f7680
+  void Op15(void* d, void* e, int a, int b, int c, int viewer, int p5);  // va 006f6500
+  void Op16(void* d, void* e, int a, int b, int c, int viewer, int p5);  // va 006f79a0
+  void Op17(void* d, void* e, int a, int b, int c, int viewer, int p5);  // va 006f7f70
+  void OpBig(int a0, int a1, int a, int b, int c, int a5, int a6, int viewer, int p5); // va 006f54a0
+  void RemoveAt(int idx);
+  void ApplyFilters(FilterDesc78* d, uint16_t count, int* p4, int p5);
 };
 
 // ---- external globals referenced by the constructor --------------------------------------
@@ -249,12 +320,12 @@ extern "C" FilterElem28** __cdecl CopyFilterRange(FilterElem28** dst, const Filt
 void cFilterChain::RemoveAt(int idx) {
   int n = (int)((mDescEnd - mDescBegin) / 0x78) + 0xc;
   if (idx == n) {
-    uint16_t slot = ((uint16_t*)mArrEnd)[-1];
-    FilterElem28* d = (FilterElem28*)mTexBegin[slot];
+    int slot = (int)*(int16_t*)(mArrEnd - 1);
+    cScreenFilter* f = (cScreenFilter*)mTexBegin[slot];
     mIndex[slot] = -1;
-    ResetHashed();
-    InitBuckets(0, 0);
-    *(int*)((char*)d + 0x18) = 0;
+    f->RemoveCameraTextures();
+    f->mHash.ReleaseBuckets(f->mHash.mArray, f->mHash.mCount);
+    f->mHash.mField18 = 0;
     if (mDescBegin != mDescEnd) {
       mDescEnd -= 0x78;
       ((FilterDesc78*)mDescEnd)->Destroy();
@@ -265,15 +336,15 @@ void cFilterChain::RemoveAt(int idx) {
     void* p = operator new(0xc, "Graphics", 0, 0, 0, 0);
     void* obj = 0;
     if (p != 0) {
-      ((void**)p)[2] = 0;
-      ((void**)p)[1] = (void*)0x13ef094;
-      ((void**)p)[0] = (void*)0x140b778;
-      ((void**)p)[1] = (void*)0x14188c0;
+      ((int*)p)[2] = 0;
+      ((int*)p)[1] = 0x13ef094;
+      ((int*)p)[0] = 0x140b778;
+      ((int*)p)[1] = 0x14188c0;
       obj = p;
     }
-    ((void(__thiscall*)(void*, void*, int, int))(*(void***)obj)[0x13])(obj, 0, 0, 0);
-    FilterElem28* f = (FilterElem28*)mTexBegin[slot];
-    if (0.0f < *(float*)f) *(float*)f = 0.0f;
+    GetRenderSystem()->AttachRenderTarget(obj, 0, 0);
+    cScreenFilter* f2 = (cScreenFilter*)mTexBegin[slot];
+    if (0.0f < f2->mStrength) f2->mStrength = 0.0f;
     while (mBitsBegin != mBitsEnd && mBitsEnd[-1] == 0) {
       mDescEnd -= 0x78;
       ((FilterDesc78*)mDescEnd)->Destroy();
@@ -282,16 +353,16 @@ void cFilterChain::RemoveAt(int idx) {
     }
     if (mDescBegin != mDescEnd) {
       int i = (int)((mDescEnd - mDescBegin) / 0x78) - 1;
-      int off = i * 0x78;
-      for (; i >= 0; i--, off -= 0x78) {
-        if (mArrBegin[i] == slot) {
-          CreateScreenFilterInternal((FilterVec28*)(mDescBegin + off));
+      for (; i >= 0; --i) {
+        if (mArrBegin[i] == (uint16_t)slot) {
+          ((cScreenFilter*)mTexBegin[slot])
+              ->CreateScreenFilterInternal((FilterDesc78*)(mDescBegin + i * 0x78));
           mIndex[slot] = i;
         }
       }
     }
   } else {
-    uint32_t s = idx - 0xd;
+    uint32_t s = (uint32_t)(idx - 0xd);
     if (s < (uint32_t)((mDescEnd - mDescBegin) / 0x78) && s < (uint32_t)(mBitsEnd - mBitsBegin)) {
       mBitsBegin[s] = 0;
     }
@@ -299,51 +370,50 @@ void cFilterChain::RemoveAt(int idx) {
 }
 
 // ==========================================================================================
-// @ 0x006f8380  (apply the filters of a cFilterChainDesc to this chain; ret 0x10)
-void cFilterChain::ApplyFilters(FilterVec28* v, uint16_t count, void* p4, int p5) {
+// @ 0x006f8380  (apply the filters of a descriptor to this chain; ret 0x10)
+void cFilterChain::ApplyFilters(FilterDesc78* d, uint16_t count, int* p4, int p5) {
   if (count == 0) return;
   int last = (int)count - 1;
-  int off = 0;
-  for (uint32_t i = 0; i < count; ++i, off += 0x28) {
-    FilterElem28* e = (FilterElem28*)((char*)v->begin + off);
+  for (int i = 0; i < (int)count; ++i) {
+    FilterElem28* e = (FilterElem28*)((char*)d->mBegin + i * 0x28);
     uint8_t dest = e->mDest;
-    uint32_t src = e->mSourceLo;
-    uint32_t srcHi = e->mSourceHi;
+    int srcLo = (int)e->mSourceLo;
+    int srcHi = (int)e->mSourceHi;
     if (m134) {
-      Sub0(e, (int)src, (int)srcHi, dest, 0, 0, 0);
+      ((cScreenFilter*)mTexBegin[(int)(int16_t)p5])->Apply(srcLo, srcHi, dest, p4);
     }
-    AddCameraTexture(0, 0, 0);
-    AddRect(0, 0);
-    if (off < last * 0x28) {
-      FilterElem28* nxt = (FilterElem28*)((char*)v->begin + off + 0x28);
+    mViewer->Copy((cViewer*)*p4, false, false);
+    mViewer->ApplyFrustum(0.0f, 0.0f);
+    if (i < last) {
+      FilterElem28* nxt = (FilterElem28*)((char*)d->mBegin + i * 0x28 + 0x28);
       if (nxt->mFlags == 0x11) {
-        FilterElem28* tex = (FilterElem28*)mTexBegin[(int)(short)src];
-        if (!(0.0f < *(float*)tex) && *(int*)((char*)tex + 4) == 0) {
+        cScreenFilter* f = (cScreenFilter*)mTexBegin[(int)(int16_t)p5];
+        if (!(0.0f < f->mStrength) && f->mField04 == 0) {
           dest = nxt->mDest;
         }
       }
     }
     switch (e->mFlags) {
-      case 0:  Sub0(e, 0, 0, 0, 0, 0, 0); break;
-      case 1:  Sub1(e, 0, 0, 0, 0, 0, 0); break;
-      case 2:  Sub2(e, 0, 0, 0, 0, 0, 0); break;
-      case 3:  Sub3(e, 0, 0, 0, 0, 0, 0); break;
-      case 4:  Sub4(e, 0, 0, 0, 0, 0, 0); break;
-      case 5:  Sub5(e, 0, 0, 0, 0, 0, 0); break;
-      case 6:  Sub6(e, 0, 0, 0, 0, 0, 0); break;
-      case 7:  Sub7(e, 0, 0, 0, 0, 0, 0); break;
-      case 8:  BigCreate(0, 0, 0, 0, 0, 0, 0, 0); break;
-      case 9:  BigCreate(0, 0, 0, 0, 0, 0, 0, 0); break;
-      case 10: Sub12(e, 0, 0, 0, 0, 0, 0); break;
-      case 11: Sub8(e, 0, 0, 0, 0, 0, 0); break;
-      case 12: Sub10(e, 0, 0, 0, 0, 0, 0); break;
-      case 13: BigCreate(0, 0, 0, 0, 0, 0, 0, 0); break;
-      case 14: Sub9(e, 0, 0, 0, 0, 0, 0); break;
-      case 15: Sub11(e, 0, 0, 0, 0, 0, 0); break;
-      case 16: Sub2(e, 0, 0, 0, 0, 0, 0); break;
+      case 0:  Op0(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 1:  Op1(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 2:  Op2(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 3:  Op3(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 4:  Op4(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 5:  Op5(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 6:  Op6(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 7:  Op7(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 8:  OpBig(0x78, 0, srcLo, srcHi, dest, 0, 0, (int)mViewer, p5); break;
+      case 9:  OpBig(0x82, 0, srcLo, srcHi, dest, 0, 0, (int)mViewer, p5); break;
+      case 10: Op8(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 12: Op12(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 13: Op13(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 14: OpBig(0xd2, 0, srcLo, srcHi, dest, 0, 0, (int)mViewer, p5); break;
+      case 15: Op15(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
+      case 16: Op16(d, e, srcLo, srcHi, dest, (int)mViewer, p5); break;
       case 17: {
-        float f = *(float*)mTexBegin[(int)(short)src];
-        if (f > 0.0f) Sub13(e, 0, 0, 0, 0, 0, 0);
+        cScreenFilter* f = (cScreenFilter*)mTexBegin[(int)(int16_t)p5];
+        if (0.0f < f->mStrength)
+          Op17(d, e, srcLo, srcHi, dest, (int)mViewer, p5);
         break;
       }
       default: break;
@@ -352,26 +422,157 @@ void cFilterChain::ApplyFilters(FilterVec28* v, uint16_t count, void* p4, int p5
 }
 
 // ==========================================================================================
-// @ 0x006f87f0  (create screen filters from a descriptor; ret 4)
-bool cFilterChain::CreateScreenFilterInternal(FilterVec28* v) {
-  ResetHashed();
-  InitBuckets(0, 0);
-  *(float*)((char*)&mCustomSD + 0x0c) = 0.0f;
-  *(float*)((char*)&mCustomSD + 0x6c) = 0.0f;
+// @ 0x006f87f0  (create/refresh the screen filters described by a descriptor; ret 4)
+bool cScreenFilter::CreateScreenFilterInternal(FilterDesc78* d) {
+  RemoveCameraTextures();
+  mHash.ReleaseBuckets(mHash.mArray, mHash.mCount);
+  mHash.mField18 = 0;
+  mField74 = 0;
 
-  void* mgr = 0;  // FUN_0067dd50()
-  void* info = 0;
-  int t0 = 0, t1 = 0;
-  int rectid = 0;
-  if (!AddCameraTexture(t0, t1, &rectid)) {
-    mIndex[0] = 0xffff;
+  uint16_t* info = GetRenderSystem()->GetViewportInfo();
+  uint16_t uVar2 = info[0];
+  uint16_t uVar3 = info[2];
+
+  int out = 0;
+  if (!AddCameraTexture(uVar2, uVar3, &out)) {
+    mSlot = 0xffff;
   } else {
-    *(int*)((char*)this + 0x1f8) = rectid;
+    mSlot = (uint16_t)out;
   }
-  (void)info;
-  (void)mgr;
-  (void)p5_unused();
+
+  char* base = (char*)d->mBegin;
+  if (d->mBegin == d->mEnd)
+    return true;
+  uint16_t counter = (uint16_t)(uint32_t)(((char*)d->mEnd - (char*)d->mBegin) / 0x28);
+  if (counter == 0)
+    return true;
+
+  int off = 0;
+  do {
+    FilterElem28* e = (FilterElem28*)(base + off);
+    uint8_t dest = e->mDest;
+    uint32_t srcLo = e->mSourceLo;
+    int srcHi = (int)e->mSourceHi;
+    cTexIndexBlock* tb = (cTexIndexBlock*)e->mBufBegin;
+
+    // ---- look the source slot up in this filter's hash table.
+    cSlotNode* node = mHash.mArray[(srcLo & 0xffff) % (uint32_t)mHash.mCount];
+    cSlotNode* endNode = mHash.mArray[mHash.mCount];
+    while (node != 0) {
+      if ((uint16_t)srcLo == node->mKey) break;
+      node = node->mNext;
+    }
+    bool sourceKnown = ((node ? node : endNode) != endNode);
+
+    // ---- and the destination slot too.
+    cSlotNode* dnode = mHash.mArray[((uint32_t)dest) % (uint32_t)mHash.mCount];
+    while (dnode != 0) {
+      if ((uint16_t)dest == dnode->mKey) break;
+      dnode = dnode->mNext;
+    }
+    bool destKnown = ((dnode ? dnode : endNode) != endNode);
+
+    if (!sourceKnown) {
+      uint64_t v = ((uint64_t)(uint32_t)srcHi << 32) | (uint32_t)srcLo;
+      if ((v - 0x20) < 0x20) {
+        int* entry = (int*)((char*)d->mScaleTable + (srcLo & 0xffff) * 8 - 0x100);
+        int scale = entry[0];
+        int tex = entry[1];
+        int created = 0;
+        if (scale != 0) {
+          if (AddCameraTexture((int)(uVar2 / scale), (int)(uVar3 / scale), &created)) {
+            uint16_t key = (uint16_t)srcLo;
+            *mHash.FindOrInsert(&key) = created;
+          }
+        } else {
+          if (AddCameraTexture((unsigned)tex, (unsigned)tex, &created)) {
+            uint16_t key = (uint16_t)srcLo;
+            *mHash.FindOrInsert(&key) = created;
+          }
+        }
+      } else {
+        if (srcHi > 0 || srcLo >= 0x40) {
+          Resolve(srcLo, srcHi);
+        }
+      }
+    }
+
+    if (!destKnown && (uint8_t)(dest - 0x20) < 0x20) {
+      int* entry = (int*)((char*)d->mScaleTable + (uint32_t)dest * 8 - 0x100);
+      int scale = entry[0];
+      int tex = entry[1];
+      int created = 0;
+      if (scale != 0) {
+        if (AddCameraTexture((int)(uVar2 / scale), (int)(uVar3 / scale), &created)) {
+          uint16_t key = dest;
+          *mHash.FindOrInsert(&key) = created;
+        }
+      } else {
+        if (AddCameraTexture((unsigned)tex, (unsigned)tex, &created)) {
+          uint16_t key = dest;
+          *mHash.FindOrInsert(&key) = created;
+        }
+      }
+    }
+
+    // ---- per-filter-type fixups.
+    int32_t* texTable = d->mTextureTable;
+    switch (e->mFlags) {
+      case 0: {
+        int idx = tb->mIdx6;
+        if (idx != 0xff) {
+          int a = texTable[idx * 2];
+          int b = texTable[idx * 2 + 1];
+          if (!(b == 0 && a <= 5)) Resolve((uint32_t)a, b);
+        }
+        break;
+      }
+      case 2: {
+        int idx = tb->mIdx0;
+        if (idx != 0xff) Resolve((uint32_t)texTable[idx * 2], texTable[idx * 2 + 1]);
+        idx = tb->mIdx6;
+        if (idx != 0xff) Resolve((uint32_t)texTable[idx * 2], texTable[idx * 2 + 1]);
+        break;
+      }
+      case 3: {
+        int idx = tb->mIdx2;
+        if (idx != 0xff) Resolve((uint32_t)texTable[idx * 2], texTable[idx * 2 + 1]);
+        break;
+      }
+      case 10:
+      case 13: {
+        int idx = tb->mIdx0;
+        if (idx != 0xff) Resolve((uint32_t)texTable[idx * 2], texTable[idx * 2 + 1]);
+        break;
+      }
+      case 16: {
+        int idx = tb->mIdx1;
+        if (idx != 0xff) Resolve((uint32_t)texTable[idx * 2], texTable[idx * 2 + 1]);
+        idx = tb->mIdx2;
+        if (idx != 0xff) Resolve((uint32_t)texTable[idx * 2], texTable[idx * 2 + 1]);
+        idx = tb->mIdx3;
+        if (idx != 0xff) Resolve((uint32_t)texTable[idx * 2], texTable[idx * 2 + 1]);
+        idx = tb->mIdx4;
+        if (idx != 0xff) Resolve((uint32_t)texTable[idx * 2], texTable[idx * 2 + 1]);
+        break;
+      }
+      case 17: {
+        int idx = tb->mIdx0;
+        if (idx != 0xff) mStrength = d->mStrengthTable[idx];
+        if (tb->mIdx1 != 0) {
+          mField04 = 0;
+        } else if (tb->mIdx2 != 0) {
+          mField04 = 1;
+        }
+        idx = tb->mIdx3;
+        if (idx != 0xff) Resolve((uint32_t)texTable[idx * 2], texTable[idx * 2 + 1]);
+        break;
+      }
+      default: break;
+    }
+
+    off += 0x28;
+  } while (--counter != 0);
+
   return true;
 }
-
-int cFilterChain::p5_unused() { return 0; }
