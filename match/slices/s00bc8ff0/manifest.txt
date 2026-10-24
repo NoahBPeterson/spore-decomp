@@ -1,0 +1,19 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00bc8ff0/s00bc8ff0.cpp  ?ResetStimuli@Stimuli@@QAEXXZ  00bc97b0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?Has@State1c@@QAE_NI@Z  00bc9a00  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?Set@IntArray@@QAEXHI@Z  00bc9a30  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?Find@State44@@QAEPAURec44@@I@Z  00bc9a50  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?CurrentId@EntryState@@QAEIXZ  00bc9b10  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?SetCurrent@EntryState@@QAE_NI@Z  00bc9b20  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?At@FloatArray@@QAEPAMH@Z  00bc9b70  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?Set3@FloatArray@@QAEXHPBM@Z  00bc9b80  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?Get@FloatArray@@QAEMH@Z  00bc9bb0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?Set@FloatArray@@QAEXHM@Z  00bc9bc0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?SetWord@FloatArray@@QAEXHI@Z  00bc9bf0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?Reset@State1c@@QAEPAU1@XZ  00bc9c10  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?Update@State1c@@QAEXM@Z  00bc9cc0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?Add@State1c@@QAEPAURec1c@@IMPAUIRefCounted@@I@Z  00bc9d40  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?ClearMask@State1c@@QAEXI@Z  00bc9de0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?SetupAction@State44@@QAEPAURec44@@MIP6AXPAX@ZII@Z  00bc9e30  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?ReleaseAction@State44@@QAEXXZ  00bc9e70  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00bc8ff0/s00bc8ff0.cpp  ?ClearAll@State44@@QAEXXZ  00bc9fe0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
