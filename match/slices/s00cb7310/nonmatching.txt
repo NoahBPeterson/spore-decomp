@@ -1,0 +1,7 @@
+00cb7310 991 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 991 bytes - flak projectile helper not reconstructed.
+00cb76f0 762 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 762 bytes - flak projectile helper not reconstructed.
+00cb79f0 122 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 122 bytes - cFlakProjectile constructor: chain is known (cGameData base ctor, sub-object ctor on +0x34, float fields 0x508/0x50c/0x510 plus 0x51c zeroed, byte 0x514 cleared, pointer 0x518 nulled and five vtable stores for the MI bases), but the vtable store sequence only comes out of the real class hierarchy.
+00cb7b50 67 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - scalar deleting destructor: release of 0x518 through virtual +0x08, sub-object destructor on +0x34, cGameData destructor, then operator_delete_array when bit 0 of the flag is set; MSVC emits this shape only for a compiler-generated deleting destructor, which cannot be spelled from source.
+00cb7ba0 128 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 128 bytes - locomotion-install helper: operator_new(0x10) for "Simulator/cVerticalRocketLocomotion", inlined object construction with two vtables, install through FUN_00c421b0 on +0x34, then a 3-dword copy to 0x1fc and a float to 0x51c.
+00cb7c20 182 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 182 bytes - flak projectile helper not reconstructed.
+00cb7ce0 358 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 358 bytes - ISimulatorSerializable::Read not reconstructed.
