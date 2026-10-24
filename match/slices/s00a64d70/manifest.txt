@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a64d70/s00a64d70.cpp  ?FreeGroup@Instance@Eapd@Audio@EA@@QAEXIIPAX@Z  00a65470  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a64d70/s00a64d70.cpp  ?DispatchSlot2@VtblOwner@Eapd@Audio@EA@@QAEPAXPAX0@Z  00a657f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a64d70/s00a64d70.cpp  ?FreeNode@PoolFreeView@Eapd@Audio@EA@@QAEXPAX@Z  00a65800  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a64d70/s00a64d70.cpp  ?CopyCtor@Copyable38@Eapd@Audio@EA@@QAEPAU1234@PBU1234@@Z  00a65ab0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a64d70/s00a64d70.cpp  ?AllocNode@HashtableBig@Eapd@Audio@EA@@QAEPAXPBX@Z  00a65c70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
