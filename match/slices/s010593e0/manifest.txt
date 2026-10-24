@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s010593e0/s010593e0.cpp  ?DoToolAction@cSPDefaultAoETool@SP@@QAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  0105a100  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -78,6 +78,7 @@ public:
 class cPlanet;
 class cPlanetRecord;
 class cStarRecord;
+class cBeamProjectile;
 
 class cSpaceToolData {
 public:
@@ -92,7 +93,12 @@ public:
     int mbEnabled;                                                  // +0x30
     uint32_t pad34[(0x114 - 0x34) / 4];
     class cGameObject* mpToolOwner;                                 // +0x114
+    uint32_t pad118[(0x124 - 0x118) / 4];
+    cBeamProjectile* mpBeamProjectile;                              // +0x124
 
+    float GetEffectRadius();                                        // 0x0104bdb0
+    bool HasFlag8();                                                // 0x0104cd40
+    bool HasFlag10();                                               // 0x0104cd50
     int GetTerrainColorIndex();                                     // 0x0104bf70
     int GetWaterColorIndex();                                       // 0x0104bf80
     int GetAtmosphereColorIndex();                                  // 0x0104bf90
@@ -113,6 +119,15 @@ public:
     float GetHitAirWaterVelocity();                                 // 0x0104c0e0
     float GetHitAirTemperatureVelocity();                           // 0x0104c0f0
     float GetDamageRadius();                                        // 0x00ce6930
+};
+
+class cBeamProjectile {
+public:
+    uint32_t pad00[0x16c / 4];
+    uint8_t mb16c;                                                  // +0x16c
+    uint8_t mb16d;                                                  // +0x16d
+    bool HasTarget();                                               // 0x00cb5ba0
+    void GetEndPoints(Vector3* start, Vector3* end);                // 0x00cb8ba0
 };
 
 class cSpaceShip {                                                  // owner cast target 0xb033b403
@@ -183,6 +198,7 @@ public:
     void AddAtmosphere(cPlanet* planet, float amount);              // 0x00bbc340
     void AddWater(cPlanet* planet, float amount);                   // 0x00bbc370
     void AddTemperature(cPlanet* planet, float amount);             // 0x00bbc3c0
+    void ApplyAt(Vector3* position, float radius);                  // 0x00bbec40
 };
 cTerraformingManager* TerraformingManager();                        // 0x00b3d430
 
@@ -375,10 +391,98 @@ cSpaceGame* SpaceGameGet();                                         // 0x01002bd
 
 namespace SP {
 
+class cBeamTarget {
+public:
+    virtual void AddRef();                                          // +0x00
+    virtual void Release();                                         // +0x04
+    virtual void v08(); virtual void v0c(); virtual void v10();
+    virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual bool IsValid();                                         // +0x2c
+    uint8_t pad04[0x154 - 0x04];
+    uint8_t mb154;                                                  // +0x154
+};
+
+template<class T>
+class AutoRefCount {
+public:
+    T* mpObject;
+    AutoRefCount() : mpObject(0) {}
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+    __forceinline AutoRefCount& operator=(T* pObject) {
+        if (mpObject != pObject) {
+            if (pObject) pObject->AddRef();
+            T* pOld = mpObject;
+            mpObject = pObject;
+            if (pOld) pOld->Release();
+        }
+        return *this;
+    }
+    __forceinline operator T*() const { return mpObject; }
+    __forceinline T* operator->() const { return mpObject; }
+};
+
+class IRefCounted {
+public:
+    virtual void v00();
+    virtual void AddRef();                                          // +0x04
+    virtual void Release();                                         // +0x08
+    virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void v18(); virtual void v1c(); virtual void v20();
+    virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38();
+    virtual void v3c(); virtual void v40(); virtual void v44();
+    virtual void v48(); virtual void v4c(); virtual void v50();
+    virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68();
+    virtual void v6c(); virtual void v70(); virtual void v74();
+    virtual void v78(); virtual void v7c(); virtual void v80();
+    virtual void v84(); virtual void v88(); virtual void v8c();
+    virtual void v90(); virtual void v94(); virtual void v98();
+    virtual void v9c(); virtual void va0(); virtual void va4();
+    virtual void va8(); virtual void vac(); virtual void vb0();
+    virtual void vb4();
+    virtual void* vb8(const void* pType);                           // +0xb8
+};
+
 class cSPToolStrategy {
 public:
     bool OnHit(cSpaceToolData* pTool, const Vector3& position, int hitType, int);
+    uint32_t pad00[0x114 / 4];
+    IRefCounted* mpTargetItem;                                      // +0x114
+    uint32_t pad118[(0x124 - 0x118) / 4];
+    cBeamTarget* mBeamTarget;                                       // +0x124
+    bool FUN_0104cd50();                                            // 0x0104cd50
 };
+
+class cSPDefaultBeamTool {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44();
+    virtual void v48(cSPToolStrategy* self, const Vector3* position);   // +0x48
+    bool StartTool(cSPToolStrategy* self, const Vector3& position, int flags);
+};
+
+bool __stdcall StartTool_568b0(cSPToolStrategy* self, const Vector3& position, int flags);  // 0x010568b0
+void __stdcall CreatePanicBubbleForTool(cSPToolStrategy* self, Vector3 position);           // 0x01059170
+
+class cGlobalManager {
+public:
+    void FUN_00b7c160(int value);                                   // 0x00b7c160
+};
+cGlobalManager* FUN_00b3d3c0();                                     // 0x00b3d3c0
+
+// The default area-effect tool forwards its action straight into the shared
+// strategy hit handler with the extra hit flag cleared.
+class cSPDefaultAoETool : public cSPToolStrategy {
+public:
+    bool DoToolAction(cSpaceToolData* pTool, const Vector3& position, int hitType, int);
+};
+
+bool __stdcall OnHitTool(cSpaceToolData* pTool, const Vector3& position, int hitType, int);  // 0x010593e0
 
 __forceinline bool IsWithinToolRadius(cSpaceToolData* pTool, cLocatable& target, const Vector3& position) {
     Vector3 diff = target.GetPosition() - position;
@@ -560,6 +664,59 @@ bool cSPToolStrategy::OnHit(cSpaceToolData* pTool, const Vector3& position, int 
             pPlayer->ShowHint(position, 0x638207a);
         }
     }
+    return true;
+}
+
+// @ 0x0105a100
+bool cSPDefaultAoETool::DoToolAction(cSpaceToolData* pTool, const Vector3& position, int hitType, int) {
+    return OnHit(pTool, position, hitType, 0);
+}
+
+// @ 0x0105a050
+bool __stdcall DefaultAoEOnHit(cSpaceToolData* pTool, const Vector3* position, int hitType, int) {
+    if (OnHitTool(pTool, *position, hitType, 0)) {
+        if (pTool->GetEffectRadius() > 0.0f) {
+            if (pTool->mpBeamProjectile
+                && (pTool->mpBeamProjectile->HasTarget()
+                    || pTool->mpBeamProjectile->mb16c
+                    || pTool->mpBeamProjectile->mb16d)
+                && pTool->HasFlag8()) {
+                Vector3 start;
+                Vector3 end;
+                cBeamProjectile* pBeam = pTool->mpBeamProjectile;
+                pBeam->GetEndPoints(&end, &start);
+                TerraformingManager()->ApplyAt(&start, pTool->GetEffectRadius());
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+// @ 0x01059f20
+bool cSPDefaultBeamTool::StartTool(cSPToolStrategy* self, const Vector3& position, int flags) {
+    if (!StartTool_568b0(self, position, flags))
+        return true;
+
+    IRefCounted* pItem = self->mpTargetItem;
+    IRefCounted* pCasted = pItem ? (IRefCounted*)pItem->vb8((const void*)0x13f94d4) : 0;
+    if (!pCasted)
+        return true;
+
+    Vector3 positionCopy = position;
+    AutoRefCount<cBeamTarget> pTarget;
+    pTarget = self->mBeamTarget;
+    if (pTarget) {
+        if (pTarget->IsValid()) {
+            v48(self, &positionCopy);
+            pTarget = self->mBeamTarget;
+            if (self->FUN_0104cd50())
+                FUN_00b3d3c0()->FUN_00b7c160(7);
+        }
+        pTarget->mb154 = 1;
+    }
+
+    CreatePanicBubbleForTool(self, position);
     return true;
 }
 
