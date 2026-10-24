@@ -1,0 +1,25 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00c3bfe0 = SPGameDataUFO.obj.  One of the seven functions is only an approximate
+# reconstruction and is therefore not counted as decompiled (see the row below); the other six are
+# manifest.txt (1 byte-exact) + nonmatching.txt (5 complete reconstructions).
+#
+00c3c520  503  cSPGameDataUFO::StartPlayerDeathSequence(): INCOMPLETE.  The reconstruction covers the
+#                full control flow - NounManager -> cTerrainEditor::GetCurrentTerrainSphere; the
+#                cSPSimulatorSpaceGame::GetPlayerInventory handle parked in the global at 0x16e0d08
+#                (+0x30); the cActionTarget / camera-init local built from two player-inventory
+#                sub-object virtual calls; cTriggerMgr::PostAction(0x14a4c5f5,&local,0); the
+#                GetUFOSimulator/FUN_0108db30 emptiness test choosing between the three
+#                "SPG_PlayerDestroyed_*" trigger strings fed to cTriggerMgr::PostTrigger; releasing
+#                mRef7f0 and letting the EffectsManager call (0x4d42643, 0, &mRef7f0) re-fill it;
+#                FUN_010666a0/FUN_01066d60; the mb77c -> mb77d hand-off; the SpaceGameGet ->
+#                GetPlayerInventory -> FUN_00ff3f00 tool fetch with its FUN_0104bd50 test,
+#                eastl-vector erase and cSPToolManager::UseToolStop; and the final cActionTarget
+#                destructor.  The shortfall is the effect-payload encoding inside the mRef7f0 block
+#                (the 2-word handle pair from mp780/mp788 via vtbl+0x48, the locomotive translation
+#                via vtbl+0x34/vtbl+0x44, and the Matrix33/QuaternionToMatrix transform copied into a
+#                locally-modelled {flags,count,v0,v1,v2,float} argument passed to vtbl+0x18 before
+#                vtbl+8(0)): the exact bit layout of that transformation argument is not recovered
+#                from the disassembly, so that region is approximate rather than exact.
+#                equiv UNSUPPORTED (two unresolved stub references).

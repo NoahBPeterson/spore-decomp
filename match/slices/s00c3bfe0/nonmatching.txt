@@ -1,0 +1,60 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00c3bfe0 = SPGameDataUFO.obj: cSPGameDataUFO's destination setters, the collision-list
+# consume helper, the player-death sequence and the constructor.  1/7 byte-exact (00c3c810).
+# The remaining six are complete C++ reconstructions that reproduce the original control flow,
+# ref-counted handle semantics, the shared "destination parameter block" vtable call and the
+# constructor's field-by-field initialisation; the byte-exact budget is missed because cl
+# 15.00.30729.01 allocates the callee-saved registers (ebp/edi/ebx) of the `this`-relative subobject
+# temporaries in a different order than the original build (see the note below) and folds two of the
+# address computations into the addressing mode.  The per-row verdict is the equivalence-gate result
+# measured with default inputs (tools/difftest/equiv.py s00c3bfe0 <va>).
+#
+00c3bfe0  360  SetDestination(const Vector3*): ref-swaps mRef760 from mRef75C (AddRef/Release), clears
+#                mRef75C, stores mInt764 = 0 / mDestination = *pDest / mByte74c = 0, stops mTimer648
+#                when mUFOType == 0, then builds the 0x74-byte destination parameter block (mDestination
+#                xyz, 1.0, 2.0, FLT_MAX, 0.9), calls locomotive vtbl+0xdc and frees the block's backing
+#                array.  Complete reconstruction (394 vs 427 bytes); the two SetDestination overloads
+#                share the inlined tail and the original build keeps the subobject address in ebp
+#                where ours keeps it in edi.  equiv PASS: 366/400 inputs valid, 92.5% coverage.
+00c3c190  399  SetDestination(cPlanet*): same mRef760 swap, then mRef75C = pPlanet, mInt764 = 0,
+#                mDestination = *pPlanet->vtbl[0x2c](), mByte74c = 0, unconditional Stop(mTimer648)
+#                and the shared parameter-block tail.  Complete reconstruction (394 vs 454 bytes);
+#                differs only in callee-saved register allocation and the folded member offsets.
+#                equiv WEAK: 154/400 inputs valid, 93.2% coverage.
+00c3c360  277  SetDestinationFromCities(int): releases mRef75C, sets mRef760 = mRef75C (now null),
+#                mInt764 = param, mDestination = *cCivData::GetCities(), mByte74c = 0, unconditional
+#                Stop(mTimer648) and the shared parameter-block tail.  Complete reconstruction
+#                (356 vs 367 bytes); the destination vector copy is scheduled slightly differently
+#                (the original materialises the source vector before the static model assignment).
+#                equiv WEAK: 98/400 inputs valid, 89.9% coverage.
+00c3c4d0   71  GetNextCollision(Vector3*): while the collision list is non-empty, take the front node's
+#                (mNounID, mPosition), unlink it (prev->next = next, next->prev = prev) and delete it,
+#                returning mNounID; otherwise return 0.  Complete reconstruction (80 vs 78 bytes).
+#                The original tests emptiness with `add ecx,0x770; cmp [ecx],ecx` and reads the node
+#                back out of the sentinel, and it forms the payload address with an explicit
+#                `add eax,8`; ours loads the head pointer once and folds the +8 into the member
+#                offsets, and it keeps the sentinel address in edx instead of ecx.  No source shape
+#                tried (the body re-uses the loaded head value, which forces the load form) reproduces
+#                the original's split load.  equiv PASS: 214/400 inputs valid, 93.5% coverage.
+00c3c870  814  cSPGameDataUFO::cSPGameDataUFO(): runs the four base/sub-object constructors
+#                (cGameData, cLocomotiveObject @0x34, cCombatant @0x508, cInteractionTarget @0x5d0),
+#                installs the eight vtable pointers, initialises every scalar/float/byte field
+#                (0x5ec..0x814), constructs the six cGonzagoTimers, sets the empty list sentinel and
+#                the eastl empty-wstring, allocates the 0x10-byte "Simulator" object, installs it at
+#                +0x34, sets mInt224 = 5 and assigns the L"UNINITIALIZED UFO NAME" name.  Complete
+#                reconstruction (1228 vs 1217 bytes); every store matches in offset and value, but the
+#                original keeps the &+0x34 sub-object in ebp, &+0x508 in edi and &+0x5d0 in ebx where
+#                ours rotates those three registers, which shifts most of the function.
+#                equiv UNSUPPORTED: the sub-object constructors are declared stub methods.
+#
+# Register allocation note (rows 00c3bfe0, 00c3c190, 00c3c360, 00c3c870): the sub-object addresses
+# (&+0x34, &+0x508, &+0x5d0) all live across the vtable-pointer store block, so cl must park them in
+# three callee-saved registers.  The original parks &+0x34 (which survives to the very end, used by
+# the +0x34 constructor call after operator_new) in ebp, &+0x508 in edi and &+0x5d0 in ebx; with the
+# same source shape our run parks the same three values in edi/ebx/ebp instead.  Declaring the locals
+# in every order, moving the p34 use into the trailing call, and marking the shared tail
+# __forceinline (which the original also did - the tail is duplicated, not shared) all reproduce the
+# stable rotation but not the original assignment, so the difference is an allocator heuristic rather
+# than a source property.

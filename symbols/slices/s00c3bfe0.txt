@@ -1,0 +1,10 @@
+# slice s00c3bfe0 = 0x00c3bfe0..0x00c3cd31 (SPGameDataUFO.obj: cSPGameDataUFO destination
+# setters, the collision-list consume helper, the player-death sequence and the ctor)
+# Exact decorated names so the overloaded SetDestination set resolves unambiguously.
+00c3bfe0 ?SetDestination@cSPGameDataUFO@@QAEXPBUVector3@@@Z      # cSPGameDataUFO::SetDestination(const Vector3*)
+00c3c190 ?SetDestination@cSPGameDataUFO@@QAEXPAUcPlanet@@@Z      # cSPGameDataUFO::SetDestination(cPlanet*)
+00c3c360 ?SetDestinationFromCities@cSPGameDataUFO@@QAEXH@Z       # cSPGameDataUFO::SetDestinationFromCities(int)
+00c3c4d0 ?GetNextCollision@cSPGameDataUFO@@QAEHPAUVector3@@@Z   # cSPGameDataUFO::GetNextCollision(Vector3*)
+00c3c520 ?StartPlayerDeathSequence@cSPGameDataUFO@@QAEXXZ       # cSPGameDataUFO::StartPlayerDeathSequence()
+00c3c810 ?FUN_00c3c810@@YGXPAUListNodeBase@@PBUCollisionInfo@@@Z # eastl list push_back helper
+00c3c870 ??0cSPGameDataUFO@@QAE@XZ                              # cSPGameDataUFO::cSPGameDataUFO()
