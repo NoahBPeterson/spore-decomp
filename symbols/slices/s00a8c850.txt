@@ -1,1 +1,7 @@
 00a8cb00 ??1cDistributeEffect_s00a8_c850@@QAE@XZ  # cDistributeEffect_s00a8_c850::~cDistributeEffect migrated from s00a8c850 (verbatim, slice spelling)
+00a8c850 ??0cDistributeEffect@@QAE@PAXH@Z  # cDistributeEffect::cDistributeEffect(desc, collectionIndex)
+00a8ce30 ?insert@SampleVector@@QAEXPAUcDistributeSample@@ABU2@@Z  # SampleVector::insert(pos, value): EASTL vector insert with the doubling growth path
+00a8cfe0 ?erase_all@SampleVector@@QAEXXZ  # SampleVector::erase_all: shrink-to-empty via CopySamples + mpEnd -=
+00a8d020 ?erase@EffectVector@@QAEPAUcEffectRef@@PAU2@0@Z  # EffectVector::erase(first, last): CopyEffectRefs + run the cEffectRef destructors
+00a8d090 ?Init@cDistributeEffect@@QAEXPAUcIEffectsWorld@@PAUcIEffectsManager@@H@Z  # cDistributeEffect::Init(world, mgr, unused): bind maps, flag bits, surface records
+00a8d350 ?ClearSamples@cDistributeEffect@@QAEXD@Z  # cDistributeEffect::ClearSamples(force): notify the streamer, then drop the samples
