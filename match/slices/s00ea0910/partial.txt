@@ -1,0 +1,1 @@
+00ea1710 178 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (stale upper return bits: orig eax&0xffff=0x9600 vs ours 0; logic returns Reload result correctly)

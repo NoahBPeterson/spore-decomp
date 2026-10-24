@@ -1,0 +1,9 @@
+00ea0910 1085 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (unresolved PlayEditorSound/RemoveNote/PlayNote/RedrawMelody)
+00ea0ea0 309 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS
+00ea1060 352 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid inputs, read faults)
+00ea1220 398 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (unresolved operator_new/operator_delete_array)
+00ea13e0 14 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (100% coverage, 59 valid inputs)
+00ea1470 14 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (unresolved operator_delete_array/vtable symbols)
+00ea1570 327 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid inputs, read faults)
+00ea17b0 141 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid inputs, read faults)
+00ea18c0 28 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (no mismatch, 41.2% coverage)

@@ -1,0 +1,12 @@
+00ea0910 SP::Audio::cCityMusicEditor::DoMessage  # msg dispatch on type/id (+0x08/+0x0c)
+00ea0e60 eastl::vector<EA::AutoRefCount<cWindowPulse>>::~vector  # release each, delete[] begin
+00ea0ea0 cCityMusicEditor::cCityMusicEditor  # ctor; vtables 0x14871f8/f0/e0; creates layout/loadsave/note editor
+00ea1060 cCityMusicEditor::ReloadLayout  # rebuild images for window ids 0x41914e9/f0/f3
+00ea1200 cCityMusicEditor::ReloadCallback  # flag-gated tail calls FUN_00ea1060
+00ea1220 eastl::vector<cWindowPulse*>::insert  # grow/shift then fill
+00ea13e0 cCityMusicEditor::Shutdown  # SetVisibility(0), remove handler, erase pulses, release helpers
+00ea1470 cCityMusicEditor::~cCityMusicEditor  # Shutdown + release members + delete[] arrays
+00ea1570 cCityMusicEditor::RebuildPulseReporters  # recreate (mNumLogReporters+2) pulse reporters
+00ea1710 SP::Audio::cCityMusicEditor::HandleMessage  # config reload / redraw token (this = editor+4)
+00ea17b0 cCityMusicEditor::Init  # player-music lookup, layout init, handler install
+00ea18c0 SP::Audio::cCityMusicLargeAssetView::DoMessage  # msg 0x287259f6/0x74174c59 -> server s14
