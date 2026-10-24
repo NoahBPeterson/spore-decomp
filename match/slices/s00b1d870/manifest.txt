@@ -12,3 +12,6 @@ slices/s00b1d870/s00b1d870.cpp  New_cTribePlanner@@YAPAXXZ  00b1f790  /O2 /MD /G
 slices/s00b1d870/s00b1d870.cpp  GetPlayerEmpireOrMinus1@@YAHXZ  00b1f9d0  /O2 /MD /Gy /EHsc /TP
 slices/s00b1d870/s00b1d870.cpp  Initialize@Window@UTFWin@@QAE_NXZ  00b1fbf0  /O2 /MD /Gy /EHsc /TP
 slices/s00b1d870/s00b1d870.cpp  New_cMissionHappinessEvent@@YAPAXXZ  00b1fc30  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  ?Fn1@TerrainMgr@@QAEHH_N@Z  00b1daf0  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  ?Fn2@TerrainMgr@@QAEHXZ  00b1de80  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  ?Reset@RefHolder@@QAEXXZ  00b1dfc0  /O2 /MD /Gy /EHsc /TP

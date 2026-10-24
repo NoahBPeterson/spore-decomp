@@ -214,9 +214,13 @@ void Host::Fn2() {
 }
 
 // ------------------------------------------------------------ terrain accessors
-struct cTerrainEditor { int GetCurrentTerrainSphere(); };
+// The sphere accessor returns a pointer and 0x00c75420 is a THISCALL on it (the
+// original reloads ecx with the returned eax before the call).
+struct TerrainSphere {
+    int FUN_00C75420();
+};
+struct cTerrainEditor { TerrainSphere* GetCurrentTerrainSphere(); };
 cTerrainEditor* SP_NounManager();   // 0x00b3d300
-int FUN_00c75420();                 // 0x00c75420
 
 struct TerrainMgr {
     char pad00[0x20];
@@ -231,14 +235,15 @@ int TerrainMgr::Fn1(int id, bool flag) {
     int idx = 1;
     if (flag) {
         cTerrainEditor* te = SP_NounManager();
-        if (te->GetCurrentTerrainSphere())
-            idx = FUN_00c75420();
+        TerrainSphere* s = te->GetCurrentTerrainSphere();
+        if (s)
+            idx = s->FUN_00C75420();
     }
     if ((unsigned)(id - 0x1654c00) <= 6)
         return ((int*)this)[idx + (id - 0x1654bfb) * 3];
-    if (id == 0x1654c10)
-        return *(int*)((char*)this + 0x90 + idx * 4);
-    return 0;
+    if (id != 0x1654c10)
+        return 0;
+    return *(int*)((char*)this + 0x90 + idx * 4);
 }
 
 // @ 0x00b1de80  (complete, near miss)
@@ -246,8 +251,9 @@ int TerrainMgr::Fn2() {
     void* id = mId;
     int idx = 1;
     cTerrainEditor* te = SP_NounManager();
-    if (te->GetCurrentTerrainSphere())
-        idx = FUN_00c75420();
+    TerrainSphere* s = te->GetCurrentTerrainSphere();
+    if (s)
+        idx = s->FUN_00C75420();
     if ((unsigned)((int)id - 0x1654c00) <= 6)
         return ((int*)this)[idx + ((int)id - 0x1654bfb) * 3];
     if (id != (void*)0x1654c10)
@@ -256,26 +262,37 @@ int TerrainMgr::Fn2() {
 }
 
 // @ 0x00b1dfc0  (complete, near miss: refcounted member reset)
+struct RObj {
+    virtual void v00();
+    virtual void v04();          // slot 1: release
+    virtual char v08(int a);     // slot 2: query, 1 arg
+};
+struct RefMgr {
+    virtual void v00();
+    virtual void v04();
+    virtual char v08(int key, int a, void* out);   // slot 2: query by key
+};
 struct RefHolder {
     char pad00[0x30];
-    int* mpMgr;   // 0x30
-    int* mpObj;   // 0x34
+    RefMgr* mpMgr;   // 0x30
+    RObj*   mpObj;   // 0x34
     void Reset();
 };
 void RefHolder::Reset() {
-    int* p = mpObj;
+    RObj** slot = &mpObj;
+    RefMgr* mg = mpMgr;
+    RObj* p = *slot;
     if (p) {
-        mpObj = 0;
-        (*(void(**)(void))(*(int*)p + 4))();
+        *slot = 0;
+        p->v04();
     }
-    char r = (*(char(**)(int, int, void*))(*(int*)mpMgr + 8))(0xf08ce134, 0, &mpObj);
-    if (r) {
-        int* q = mpObj;
-        (*(void(**)(int))(*(int*)q + 8))(0);
-        q = mpObj;
+    if (mg->v08(0xf08ce134, 0, slot)) {
+        RObj* q = *slot;
+        q->v08(0);
+        q = *slot;
         if (q) {
-            mpObj = 0;
-            (*(void(**)(void))(*(int*)q + 4))();
+            *slot = 0;
+            q->v04();
         }
     }
 }
