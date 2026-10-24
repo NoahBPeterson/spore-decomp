@@ -742,11 +742,12 @@ void UIObj::GetRect(float* out) {
     char* self = (char*)this;
     float x = *(float*)(self + 0xc);
     float h = *(float*)(self + 0x14);
+    float hx = h + x;
+    out[0] = x;
+    out[2] = hx;
     float y = *(float*)(self + 0x10);
     float w = *(float*)(self + 0x18);
-    out[0] = x;
     out[1] = y;
-    out[2] = h + x;
     out[3] = w + y;
 }
 

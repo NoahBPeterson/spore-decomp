@@ -7,5 +7,5 @@
 00957300 148 HitMask::BuildFromAlpha: complete; compiler strength-reduces data[x*4+3] where orig indexes; difftest FAIL is a checker artifact: the push_back value's address is a reused incoming-argument slot (orig the dims slot at entry+4, ours the stride slot at entry+8), which the checker compares raw instead of as STK; with argument-slot pointers normalised: PASS, 273 valid, 100% coverage
 009573e0 23 UShortVec::swap: complete; extra 8-byte frame slots and ternary shape differ
 00957710 68 Int2 property getter copy: complete; register allocation/load order differs
-009577b0 22 UIObj::GetRect: complete; load/store scheduling differs
+009577b0 33 UIObj::GetRect: complete/behaviourally equivalent; computing/storing h+x before y and w are loaded keeps the temporary count at two and avoids the extra XMM3 write; fresh PASS 600/600, 100% coverage
 009578c0 97 Float4 property getter copy: complete; register allocation/load order differs
