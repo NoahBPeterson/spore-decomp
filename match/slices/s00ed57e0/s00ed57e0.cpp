@@ -1,288 +1,523 @@
-// Slice s00ed57e0: scenario play-mode HUD (cScenarioPlayModeUI-like): InitForLoad builds the layout and
-// its sub-UIs. Module flags: /O2 /MD /Gy /TP (no /EHsc).
+// Slice s00ed57e0 : stage/panel callout + mode-update helpers (UI panel).
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 
-typedef unsigned int uint;
+typedef unsigned char  u8;
+typedef unsigned short u16;
+typedef unsigned int   u32;
+typedef          int   s32;
 
-// ---------------------------------------------------------------------------
-// Allocation (EA operator new with a name tag)
-// ---------------------------------------------------------------------------
-void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
-void* operator new(unsigned int size, int align, const char* name, void* alloc);       // 0x009512d0
-void* GetUIAllocator();                                                                // 0x009512c0
+// ------------------------------------------------------------------ retail data
+#define G16C7AA4       (*(void**)0x016c7aa4)          // app / scenario global
+#define G16065F8       (*(const u8*)0x016065f8)
+#define G16065D8       (*(const u32*)0x016065d8)
+#define G16065DC       (*(const u32*)0x016065dc)
+#define G16065EC       (*(const u32*)0x016065ec)
+#define F16C76FC       (*(const float*)0x016c76fc)
+#define F16C7700       (*(const float*)0x016c7700)
+#define F16C7704       (*(const float*)0x016c7704)
+#define F1485720       (*(const float*)0x01485720)     // _HK_REAL_ONE
+#define MAT_DEFAULT    ((void*)0x016c76d8)
+#define VTBL_13EB90C   ((void*)0x013eb90c)
+#define VTBL_13EB844   ((void*)0x013eb844)
 
-// ---------------------------------------------------------------------------
-// Reference-counted pointer: AddRef the new value, store, Release the old one
-// ---------------------------------------------------------------------------
-template <class T> struct ARC {
-    T* p;
-    ARC& operator=(T* n)
-    {
-        T* o = p;
-        if (n != o) {
-            if (n) n->AddRef();
-            p = n;
-            if (o) o->Release();
-        }
-        return *this;
-    }
-};
+// ------------------------------------------------------------------ indirect-call shapes
+typedef void  (__thiscall* FnV0)(void*);
+typedef void  (__thiscall* FnV1)(void*, void*);
+typedef void  (__thiscall* FnV2)(void*, u32, void*);
+typedef void  (__thiscall* FnPost)(void*, u32, void*, int);
+typedef void* (__thiscall* FnP0)(void*);
+typedef void* (__thiscall* FnP1)(void*, u32);
+typedef float (__thiscall* FnF0)(void*);
+typedef u32   (__thiscall* FnU0)(void*);
+typedef void  (__thiscall* FnVis)(void*, int, int);
 
-// Two flavours of intrusive refcount interface (by vtable slot of AddRef / Release)
-struct RC01 { virtual void AddRef(); virtual void Release(); };
-struct RC12 { virtual void s0(); virtual void AddRef(); virtual void Release(); };
-
-struct ResKey { uint instance; uint type; uint group; };
-
-struct IWindow {
-    virtual void w0(); virtual void w1(); virtual void w2(); virtual void w3(); virtual void w4();
-    virtual void w5(); virtual void w6(); virtual void w7(); virtual void w8(); virtual void w9();
-    virtual void w10(); virtual void w11(); virtual void w12(); virtual void w13(); virtual void w14();
-    virtual void w15(); virtual void w16(); virtual void w17(); virtual void w18(); virtual void w19();
-    virtual void w20(); virtual void w21(); virtual void w22(); virtual void w23(); virtual void w24();
-    virtual void w25(); virtual void w26(); virtual void w27(); virtual void w28(); virtual void w29();
-    virtual void w30(); virtual void w31(); virtual void w32(); virtual void w33(); virtual void w34();
-    virtual void w35(); virtual void w36(); virtual void w37(); virtual void w38(); virtual void w39();
-    virtual void w40(); virtual void w41(); virtual void w42(); virtual void w43(); virtual void w44();
-    virtual void w45(); virtual void w46(); virtual void w47(); virtual void w48(); virtual void w49();
-    virtual void w50(); virtual void w51(); virtual void w52(); virtual void w53(); virtual void w54();
-    virtual void w55(); virtual void w56(); virtual void w57(); virtual void w58(); virtual void w59();
-    virtual void w60(); virtual void w61(); virtual void w62(); virtual void w63(); virtual void w64();
-    virtual void AddWinProc(void* proc);                                  // slot 65 (+0x104)
-};
-
-// SP::cString (size 0x1c)
-struct cString {
-    char data[0x1c];
-    cString(uint tableId, uint instanceId, uint placeholder);             // 0x006b5770 (ret 0xc)
-    ~cString();                                                           // 0x006b5240
-    const wchar_t* GetText();                                             // 0x006b55c0
-};
-
-class cSPUILayout : public RC12 { public:
-    char pad[0x14];                                                       // size 0x18
-    cSPUILayout();                                                        // 0x00810000
-    bool Init(const ResKey* key, bool b, uint instance);                  // 0x008120d0 (ret 0xc)
-    void Shutdown(bool b);                                                // 0x00811ad0 (ret 4)
-    IWindow* FindWindowByID(uint id, bool b);                             // 0x008105b0 (ret 8)
-    void SetVisibility(bool b);                                           // 0x00810590 (ret 4)
-};
-
-struct ComplexityMeter : RC01 {                                           // size 0x58
-    char pad[0x54];
-    ComplexityMeter();                                                    // 0x00ed02c0
-    void Setup(IWindow* win, uint v);                                     // 0x00ed0400 (ret 8)
-};
-struct ChecklistUI : RC01 {                                               // size 0x38
-    char pad[0x34];
-    ChecklistUI();                                                        // 0x00ef7900
-    void SelectCategory(IWindow* win, int cat);                           // 0x00efb9c0 (ret 8)
-};
-struct PanelA : RC12 {                                                    // size 0xa0
-    char pad[0x9c];
-    PanelA();                                                             // 0x00ed2e40
-    bool Init();                                                          // 0x00ed3c00
-};
-struct PanelB : RC12 {                                                    // size 0x40
-    char pad[0x3c];
-    PanelB();                                                             // 0x00ee9180
-    virtual void s3();
-    virtual bool Init(int a);                                             // slot 4 (+0x10)
-};
-struct EditModeScriptUI : RC12 {                                          // size 0x10c
-    char pad[0x108];
-    EditModeScriptUI();                                                   // 0x00edd580
-    bool Init();                                                          // 0x00ee3940
-};
-struct PanelC : RC01 {                                                    // size 0xe0
-    char pad[0xdc];
-    PanelC();                                                             // 0x00edaf10
-    void Setup(IWindow* win);                                             // 0x00edb4c0 (ret 4)
-};
-struct GlobalOptions : RC01 {                                             // size 0x58
-    char pad[0x54];
-    GlobalOptions();                                                      // 0x00e00ec0
-};
-struct Posse : RC01 {                                                     // size 0x20c
-    char pad[0x208];
-    Posse();                                                              // 0x00e25710
-    virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6();
-    virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11();
-    virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16();
-    virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void p21();
-    virtual void p22(); virtual void p23(); virtual void p24(); virtual void p25(); virtual void p26();
-    virtual void p27(); virtual void p28(); virtual void p29(); virtual void p30(); virtual void p31();
-    virtual void p32();
-    virtual bool Load(const void* key);                                   // slot 33 (+0x84)
-    virtual void q34(); virtual void q35();
-    virtual void SetPos(float x, float y, int a, int b);                  // slot 36 (+0x90)
-    virtual void r37(); virtual void r38(); virtual void r39(); virtual void r40(); virtual void r41();
-    virtual void r42(); virtual void r43(); virtual void r44(); virtual void r45();
-    virtual void SetCaption(const wchar_t* text);                         // slot 46 (+0xb8)
-    virtual void s47();
-    virtual void SetVisible(int v);                                       // slot 48 (+0xc0)
-    void F00e21950(int v);                                                // 0x00e21950 (ret 4)
-};
-
-struct WinMgrInner {
-    virtual void s0();
-    virtual void m1(); virtual void m2(); virtual void m3(); virtual void m4(); virtual void m5();
-    virtual void m6(); virtual void m7(); virtual void m8(); virtual void m9(); virtual void m10();
-    virtual void m11(); virtual void m12(); virtual void m13(); virtual void m14(); virtual void m15();
-    virtual void m16(); virtual void m17(); virtual void m18(); virtual void m19(); virtual void m20();
-    virtual void m21(); virtual void m22(); virtual void m23(); virtual void m24(); virtual void m25();
-    virtual void m26(); virtual void m27(); virtual void m28(); virtual void m29(); virtual void m30();
-    virtual void m31(); virtual void m32(); virtual void m33(); virtual void m34(); virtual void m35();
-    virtual void m36(); virtual void m37(); virtual void m38(); virtual void m39(); virtual void m40();
-    virtual void m41(); virtual void m42(); virtual void m43(); virtual void m44(); virtual void m45();
-    virtual void m46(); virtual void m47(); virtual void m48(); virtual void m49(); virtual void m50();
-    virtual void m51(); virtual void m52(); virtual void m53(); virtual void m54(); virtual void m55();
-    virtual void m56(); virtual void m57(); virtual void m58(); virtual void m59();
-    virtual IWindow* FindWindowByID(uint id, bool b);                     // slot 60 (+0xf0)
-};
-struct WinMgr {
-    virtual void s0();
-    virtual WinMgrInner* GetInner();                                      // slot 1 (+4)
-};
-WinMgr* WindowManager();                                                  // 0x0067caa0
-
-struct MsgServer {
-    virtual void s0();
-    virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
-    virtual void v6(); virtual void v7(); virtual void v8();
-    virtual void RegisterHandler(void* handler, uint msg);                // slot 9 (+0x24)
-};
-MsgServer* MessageServer();                                               // 0x0067dcc0
-
-struct AutoHandler {
-    MsgServer* mpServer;
-    void* mpHandler;
-    const uint* mpIds;
-    uint mnIds;
-    uint mField;
-};
-extern uint gMsgIds[];                                                    // 0x01489d38
-
-struct UIGlobals { char pad[0x74]; struct { char pad[0xd0]; uint value; }* p; };
-extern struct UIGlobals* gUIGlobals;                                      // 0x016c7aa4
-
-extern char gPosseKey[];                                                  // 0x015ac28c
-
-struct ScenarioHUD {
-    int pad0[2];                            // +0
-    char mProc[8];                          // +8   IWinProc sub-object
-    char mHandler[4];                       // +0x10 IHandler sub-object
-    ARC<PanelA> mPanelA;                    // +0x14
-    ARC<EditModeScriptUI> mScriptUI;        // +0x18
-    int pad1c;
-    int mCurrentIndex;                      // +0x20
-    ARC<cSPUILayout> mLayout;               // +0x24
-    ARC<PanelB> mPanelB;                    // +0x28
-    ARC<PanelC> mPanelC;                    // +0x2c
-    ARC<ComplexityMeter> mMeterWorld;       // +0x30
-    ARC<ComplexityMeter> mMeterTerra;       // +0x34
-    ARC<ChecklistUI> mChecklist0;           // +0x38
-    ARC<ChecklistUI> mChecklist1;           // +0x3c
-    ARC<Posse> mPosse;                      // +0x40
-    ARC<GlobalOptions> mGlobalOptions;      // +0x44
-    char pad48[0x28];
-    AutoHandler mAutoHandler;               // +0x70
-    char pad84[0x10];
-    bool mFlag94;                           // +0x94
-
-    void F00ed5890(int v);                  // 0x00ed5890 (ret 4)
-    bool InitForLoad();                     // 0x00ed5d70
-};
-
-// @ 0x00ed5d70
-bool ScenarioHUD::InitForLoad()
+struct ObjV                            // generic view: thiscall callees as members
 {
+    // panel / page plumbing
+    void  FUN_00ed5330(u32);             // 0x00ed5330  Panel::SetMode
+    void  FUN_00ed4c70(int);             // 0x00ed4c70  Panel::Select
+    void  FUN_00ed5890(u32);             // 0x00ed5890  page (set page id)
+    void  FUN_00ed59e0(u32);             // 0x00ed59e0
+    void  FUN_00ed2f30();                // 0x00ed2f30
+    void  FUN_00edb6c0();                // 0x00edb6c0
+    void  FUN_00ed0660();                // 0x00ed0660  cEditorPage::Shutdown
+    void  FUN_00ed0030(u32);             // 0x00ed0030  cEditorPage::Update
+    void  FUN_00e02e10();                // 0x00e02e10
+    void  FUN_00ee12c0();                // 0x00ee12c0
+    void  FUN_00ee3f20(u32);             // 0x00ee3f20
+    void  FUN_00ef79d0();                // 0x00ef79d0
+    void  FUN_00ef72b0();                // 0x00ef72b0  ScenarioTutorials_ClearPending
+    void  FUN_00f190a0();                // 0x00f190a0  cScenarioPlayProgressBar::Reset
+    void  FUN_00f44dd0();                // 0x00f44dd0
+    // scenario / tutorial glue
+    char  FUN_00ec5a60(void*, int, int); // 0x00ec5a60
+    char  FUN_00ec4320();                // 0x00ec4320
+    int   FUN_00a42730();                // 0x00a42730  GetCurrentGameMode
+    void* FUN_00f3d780(void*);           // 0x00f3d780
+    float FUN_00f3e910();                // 0x00f3e910
+    float FUN_00f325b0();                // 0x00f325b0
+    char  FUN_00f41270(int*);            // 0x00f41270  sim (mode out)
+    char  FUN_00f3b920();                // 0x00f3b920
+    void  FUN_005a7410(float);           // 0x005a7410
+    void* FUN_008105b0(u32, int);        // 0x008105b0  cSPUILayout::FindWindowByID
+    void  FUN_00811ad0(int);             // 0x00811ad0  cSPUILayout::Shutdown
+    void  FUN_005fdf40();                // 0x005fdf40  UI::AchievementNotifier::Update
+    // geometry
+    void* FUN_00b81630(void*, void*);            // 0x00b81630
+    void* FUN_00b7f1f0(void*, void*, void*);     // 0x00b7f1f0  BuildSurfaceOrientation_2
+    void  FUN_0041cb40(void*);                   // 0x0041cb40  Matrix3::Assign
+};
+
+extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
+#pragma intrinsic(_InterlockedExchange)
+
+extern void* __cdecl MessageServer();                    // 0x0067dcc0
+extern void  __cdecl FUN_00efc8c0(int);                  // 0x00efc8c0  ScenarioTutorials_SetActive
+extern void  __cdecl FUN_00571db0(void*, void*, void*, void*, void*);   // 0x00571db0  EA::Messaging::RemoveHandler
+extern void* __cdecl FUN_0067cae0();                     // 0x0067cae0
+extern void* __cdecl FUN_0059c190(void*, void*);         // 0x0059c190  Matrix3FromQuaternion
+extern void* __cdecl PlanetModel();                      // 0x00b3d350  SP::PlanetModel
+
+// MessageBasicRC<5>/SlotMessage posted through the message server (0x40 bytes).
+// mData[5] is 5 eight-byte slots: only the low dword of each is used here, and they are
+// named scalars so cl does not emit a /GS cookie for the stack object.
+struct SlotMsg
+{
+    void*         mVtbl;        // +0x00
+    volatile long mRefCount;    // +0x04
+    u32           mD0;          // +0x08  Data[0].lo
+    u32           mD0h;         // +0x0c
+    u32           mD1;          // +0x10  Data[1].lo
+    u32           mD1h;         // +0x14
+    u32           mD2;          // +0x18  Data[2].lo
+    u32           mD2h;         // +0x1c
+    u32           mD3;          // +0x20  Data[3].lo
+    u32           mD3h;         // +0x24
+    u32           mD4;          // +0x28  Data[4].lo
+    u32           mD4h;         // +0x2c
+    u32           mId;          // +0x30
+    u32           mField34;     // +0x34
+    u32           mRCFlags;     // +0x38
+    u32           mField3c;     // +0x3c
+
+    SlotMsg(u32 id) : mId(id)
     {
-        ResKey key = { 0x396f69f5, 0x510a95b, 0x40464100 };
-        mLayout = new ("UI", 0, 0, 0, 0) cSPUILayout();
-        if (!mLayout.p->Init(&key, true, 0x2edd95ca)) {
-            mLayout.p->Shutdown(true);
-            mLayout = 0;
-            return false;
+        mVtbl = VTBL_13EB90C;
+        _InterlockedExchange(&mRefCount, 0);
+        mVtbl = VTBL_13EB844;
+        mRCFlags = 0;
+    }
+    void FUN_00421cf0();        // 0x00421cf0  SlotMessage::Destruct
+};
+
+// ------------------------------------------------------------------ geometry locals
+struct XV3 { float x, y, z; };
+struct XV4 { float x, y, z, w; };
+struct XMat33 { float m00, m01, m02, m10, m11, m12, m20, m21, m22; };
+
+struct XLocal                          // block handed to the vtbl+0x18 update call
+{
+    u16    mFlags;                     // +0x00
+    u16    mCount;                     // +0x02
+    float  mPosX;                      // +0x04
+    float  mPosY;                      // +0x08
+    float  mPosZ;                      // +0x0c
+    float  mW;                         // +0x10
+    XMat33 mRot;                       // +0x14
+};
+
+
+
+// ------------------------------------------------------------------ functions
+
+// @ 0x00ed57e0
+void __fastcall FUN_00ed57e0(void* self_, int dummy, u32* param_2)
+{
+    char* self = (char*)self_;
+
+    if (*param_2 != 0)
+    {
+        void* holder = *(void**)(self - 0xfc);
+        void* src = holder
+                  ? (void*)((FnP1)(*(void***)holder)[0xc / 4])(holder, 0x774c96f)
+                  : 0;
+        u32 d0 = *(u32*)((char*)src + 8);
+
+        SlotMsg msg(0);
+        msg.mD0 = d0;
+        msg.mD1 = param_2[1];
+        msg.mD2 = param_2[2];
+        msg.mD3 = param_2[0];
+
+        void* srv = MessageServer();
+        ((FnPost)(*(void***)srv)[0x14 / 4])(srv, 0x774e2dc, &msg, 0);
+
+        msg.FUN_00421cf0();
+    }
+
+    ((ObjV*)*(void**)((char*)G16C7AA4 + 0xd4))->FUN_00ef72b0();
+}
+
+// @ 0x00ed5890
+void __fastcall FUN_00ed5890(void* self_, int dummy, u32 param_2)
+{
+    char* self = (char*)self_;
+
+    if (param_2 == *(u32*)(self + 0x1c))
+        return;
+
+    SlotMsg msg(0x74baf67);
+    msg.mD0 = param_2;
+    msg.mD1 = *(u32*)(self + 0x1c);
+
+    void* srv = MessageServer();
+    ((FnPost)(*(void***)srv)[0x14 / 4])(srv, msg.mId, &msg, 0);
+
+    *(u32*)(self + 0x1c) = param_2;
+
+    msg.FUN_00421cf0();
+}
+
+// @ 0x00ed5910
+void __fastcall FUN_00ed5910(void* self_)
+{
+    char* self = (char*)self_;
+
+    switch (*(u32*)(self + 0x58))
+    {
+    case 2:
+        *(u32*)(self + 0x58) = 0;
+        return;
+
+    case 5:
+        FUN_00efc8c0(0);
+        ((ObjV*)*(void**)((char*)G16C7AA4 + 0x78))->FUN_00f190a0();
+        ((ObjV*)*(void**)((char*)G16C7AA4 + 0x74))->FUN_00f44dd0();
+        *(u32*)(self + 0x58) = 0;
+        return;
+
+    case 1:
+    case 3:
+    case 6:
+    case 7:
+        ((ObjV*)self)->FUN_00ed5330(0x7eaf738);
+        return;
+
+    case 4:
+        break;
+
+    default:
+        *(u32*)(self + 0x58) = 0;
+        return;
+    }
+
+    void* owner = *(void**)((char*)G16C7AA4 + 0x1c);
+    if (owner != 0 && ((ObjV*)owner)->FUN_00ec5a60(self + 0x48, 1, 0) != 0)
+    {
+        if (((ObjV*)owner)->FUN_00ec4320() != 0)
+            return;
+        if (((ObjV*)owner)->FUN_00a42730() == 2)
+        {
+            ((ObjV*)self)->FUN_00ed5330(0x7eaf738);
+            return;
         }
     }
-    IWindow* w = mLayout.p->FindWindowByID(0xffffffff, true);
-    if (w)
-        w->AddWinProc(&mProc);
 
-    w = mLayout.p->FindWindowByID(0x73bd748, true);
-    if (w) {
-        mMeterWorld = new ("UI/cScenarioComplexityMeter/World", 0, 0, 0, 0) ComplexityMeter();
-        mMeterWorld.p->Setup(w, gUIGlobals->p->value);
+    *(u32*)(self + 0x58) = 0;
+}
+
+// @ 0x00ed59e0
+void __fastcall FUN_00ed59e0(void* self_, int dummy, u32 mode)
+{
+    char* self = (char*)self_;
+    (void)mode;
+
+    if (*(void**)(self + 0x88) == 0)
+        return;
+
+    void* obj = ((ObjV*)*(void**)((char*)G16C7AA4 + 0x74))->FUN_00f3d780(*(void**)(self + 0x90));
+
+    char* src;
+    if (obj == 0)
+        src = 0;
+    else
+        src = (char*)((FnP1)(*(void***)obj)[0xc / 4])(obj, 0x1186577);
+
+    float fHeight = ((FnF0)(*(void***)src)[0x74 / 4])(src);
+
+    if (*(void**)(self + 0x88) != 0)
+    {
+        XLocal local;
+        XV3    pos;
+        XV4    orient;
+        XV4    dirOut;
+
+        XV3* v = (XV3*)((FnP0)(*(void***)src)[0x2c / 4])(src);
+        pos.x = v->x; pos.y = v->y; pos.z = v->z;
+
+        XV4* q = (XV4*)((FnP0)(*(void***)src)[0x30 / 4])(src);
+        orient = *q;
+
+        void* r = ((ObjV*)PlanetModel())->FUN_00b81630(&dirOut, &pos);
+        pos = *(XV3*)r;
+
+        local.mPosX = pos.x;
+        local.mPosY = pos.y;
+        local.mPosZ = pos.z;
+        local.mW = F1485720;
+        ((ObjV*)&local.mRot)->FUN_0041cb40(MAT_DEFAULT);
+        local.mRot = *(const XMat33*)MAT_DEFAULT;
+        local.mFlags = 4;
+        local.mCount = 1;
+
+        void* qo = ((ObjV*)PlanetModel())->FUN_00b7f1f0(&dirOut, &pos, &orient);
+
+        XMat33 mat;
+        FUN_0059c190(&mat, qo);
+        local.mRot = mat;
+
+        local.mFlags = (u16)(local.mFlags | 2);
+        local.mCount = (u16)(local.mCount + 2);
+        local.mW = fHeight;
+
+        void* target = *(void**)(self + 0x88);
+        ((FnV1)(*(void***)target)[0x18 / 4])(target, &local);
     }
-    w = mLayout.p->FindWindowByID(0x74b85c8, true);
-    if (w) {
-        mMeterTerra = new ("UI/cScenarioComplexityMeter/Terra", 0, 0, 0, 0) ComplexityMeter();
-        mMeterTerra.p->Setup(w, gUIGlobals->p->value);
+
+    if (*(void**)(self + 0x8c) != 0)
+    {
+        XLocal local;
+        XV3    pos;
+        XV4    orient;
+        XV4    dirOut;
+
+        XV3* v = (XV3*)((FnP0)(*(void***)src)[0x2c / 4])(src);
+        pos.x = v->x; pos.y = v->y; pos.z = v->z;
+
+        XV4* q = (XV4*)((FnP0)(*(void***)src)[0x30 / 4])(src);
+        orient = *q;
+
+        void* r = ((ObjV*)PlanetModel())->FUN_00b81630(&dirOut, &pos);
+        pos = *(XV3*)r;
+
+        local.mPosX = pos.x;
+        local.mPosY = pos.y;
+        local.mPosZ = pos.z;
+        local.mW = F1485720;
+        ((ObjV*)&local.mRot)->FUN_0041cb40(MAT_DEFAULT);
+        local.mRot = *(const XMat33*)MAT_DEFAULT;
+        local.mFlags = 4;
+        local.mCount = 1;
+
+        void* qo = ((ObjV*)PlanetModel())->FUN_00b7f1f0(&dirOut, &pos, &orient);
+
+        XMat33 mat;
+        FUN_0059c190(&mat, qo);
+        local.mRot = mat;
+
+        local.mFlags = (u16)(local.mFlags | 2);
+        local.mCount = (u16)(local.mCount + 2);
+        local.mW = fHeight;
+
+        void* target = *(void**)(self + 0x8c);
+        ((FnV1)(*(void***)target)[0x18 / 4])(target, &local);
     }
-    w = mLayout.p->FindWindowByID(0x771f0a0, true);
-    if (w) {
-        mChecklist0 = new ("UI/cScenarioTutorialsChecklistUI", 0, 0, 0, 0) ChecklistUI();
-        mChecklist0.p->SelectCategory(w, 0);
-    }
-    w = mLayout.p->FindWindowByID(0x7736c78, true);
-    if (w) {
-        mChecklist1 = new ("UI/cScenarioTutorialsChecklistUI", 0, 0, 0, 0) ChecklistUI();
-        mChecklist1.p->SelectCategory(w, 1);
-    }
+}
 
-    mPanelA = new ("UI", 0, 0, 0, 0) PanelA();
-    if (!mPanelA.p->Init())
-        mPanelA = 0;
+// @ 0x00ed63a0
+void __fastcall FUN_00ed63a0(void* self_)
+{
+    char* self = (char*)self_;
 
-    mPanelB = new ("UI", 0, 0, 0, 0) PanelB();
-    if (!mPanelB.p->Init(0))
-        mPanelB = 0;
+    if (*(void**)(self + 0x84) != 0)
+        ((FnV1)(*(void***)*(void**)(self + 0x84))[0xc / 4])(*(void**)(self + 0x84), 0);
 
-    if (mLayout.p->FindWindowByID(0x7108388, true)) {
-        mScriptUI = new ("UI/cScenarioEditModeScriptUI", 0, 0, 0, 0) EditModeScriptUI();
-        if (!mScriptUI.p->Init())
-            mScriptUI = 0;
+    ((ObjV*)self)->FUN_00ed4c70(1);
+
+    void* h = *(void**)(self + 0x70);
+    if (h != 0)
+    {
+        *(u32*)(self + 0x70) = 0;
+        FUN_00571db0(h, *(void**)(self + 0x74), *(void**)(self + 0x78),
+                     *(void**)(self + 0x7c), *(void**)(self + 0x80));
     }
 
-    w = mLayout.p->FindWindowByID(0x272eb68e, true);
-    if (w) {
-        mPanelC = new ("UI", 0, 0, 0, 0) PanelC();
-        mPanelC.p->Setup(w);
+    if (*(void**)(self + 0x44) != 0)
+    {
+        ((ObjV*)*(void**)(self + 0x44))->FUN_00e02e10();
+        void* p = *(void**)(self + 0x44);
+        if (p != 0)
+        {
+            *(u32*)(self + 0x44) = 0;
+            ((FnV0)(*(void***)p)[4 / 4])(p);
+        }
     }
 
-    if (!mGlobalOptions.p)
-        mGlobalOptions = new ("Simulator/cSPUIGlobalOptions", 0, 0, 0, 0) GlobalOptions();
-
-    mPosse = new (4, "UI/Posse", GetUIAllocator()) Posse();
-    if (mPosse.p->Load(gPosseKey)) {
-        cString title(0xefdb68ec, 0x760b242, 0);
-        Posse* po = mPosse.p;
-        po->SetCaption(title.GetText());
-        mPosse.p->SetPos(0.0f, 250.0f, 0, 0);
-        mPosse.p->SetVisible(0);
-        mPosse.p->F00e21950(1);
-    } else {
-        mPosse = 0;
+    if (*(void**)(self + 0x14) != 0)
+    {
+        ((ObjV*)*(void**)(self + 0x14))->FUN_00ed2f30();
+        void* p = *(void**)(self + 0x14);
+        if (p != 0)
+        {
+            *(u32*)(self + 0x14) = 0;
+            ((FnV0)(*(void***)p)[8 / 4])(p);
+        }
     }
 
-    w = WindowManager()->GetInner()->FindWindowByID(0x774b060, true);
-    if (w)
-        w->AddWinProc(&mProc);
+    if (*(void**)(self + 0x28) != 0)
+    {
+        ((FnV0)(*(void***)*(void**)(self + 0x28))[0x14 / 4])(*(void**)(self + 0x28));
+        void* p = *(void**)(self + 0x28);
+        if (p != 0)
+        {
+            *(u32*)(self + 0x28) = 0;
+            ((FnV0)(*(void***)p)[8 / 4])(p);
+        }
+    }
 
-    void* h = &mHandler;
-    mAutoHandler.mpServer = MessageServer();
-    mAutoHandler.mpHandler = h;
-    mAutoHandler.mpIds = gMsgIds;
-    mAutoHandler.mnIds = 1;
-    mAutoHandler.mField = 0;
-    if (mAutoHandler.mpServer && h)
-        mAutoHandler.mpServer->RegisterHandler(h, 0x30c11c7);
+    if (*(void**)(self + 0x18) != 0)
+    {
+        ((ObjV*)*(void**)(self + 0x18))->FUN_00ee12c0();
+        void* p = *(void**)(self + 0x18);
+        if (p != 0)
+        {
+            *(u32*)(self + 0x18) = 0;
+            ((FnV0)(*(void***)p)[8 / 4])(p);
+        }
+    }
 
-    if (mLayout.p)
-        mLayout.p->SetVisibility(false);
-    mFlag94 = false;
-    F00ed5890(-1);
-    mCurrentIndex = -1;
-    return true;
+    if (*(void**)(self + 0x2c) != 0)
+    {
+        ((ObjV*)*(void**)(self + 0x2c))->FUN_00edb6c0();
+        void* p = *(void**)(self + 0x2c);
+        if (p != 0)
+        {
+            *(u32*)(self + 0x2c) = 0;
+            ((FnV0)(*(void***)p)[4 / 4])(p);
+        }
+    }
+
+    if (*(void**)(self + 0x30) != 0)
+    {
+        ((ObjV*)*(void**)(self + 0x30))->FUN_00ed0660();
+        void* p = *(void**)(self + 0x30);
+        if (p != 0)
+        {
+            *(u32*)(self + 0x30) = 0;
+            ((FnV0)(*(void***)p)[4 / 4])(p);
+        }
+    }
+
+    if (*(void**)(self + 0x34) != 0)
+    {
+        ((ObjV*)*(void**)(self + 0x34))->FUN_00ed0660();
+        void* p = *(void**)(self + 0x34);
+        if (p != 0)
+        {
+            *(u32*)(self + 0x34) = 0;
+            ((FnV0)(*(void***)p)[4 / 4])(p);
+        }
+    }
+
+    {
+        char* slot = self + 0x38;
+        for (int i = 0; i < 2; ++i, slot += 4)
+        {
+            if (*(void**)slot != 0)
+            {
+                ((ObjV*)*(void**)slot)->FUN_00ef79d0();
+                void* p = *(void**)slot;
+                if (p != 0)
+                {
+                    *(u32*)slot = 0;
+                    ((FnV0)(*(void***)p)[4 / 4])(p);
+                }
+            }
+        }
+    }
+
+    if (*(void**)(self + 0x40) != 0)
+    {
+        ((FnV0)(*(void***)*(void**)(self + 0x40))[0x88 / 4])(*(void**)(self + 0x40));
+        void* p = *(void**)(self + 0x40);
+        if (p != 0)
+        {
+            *(u32*)(self + 0x40) = 0;
+            ((FnV0)(*(void***)p)[4 / 4])(p);
+        }
+    }
+
+    if (*(void**)(self + 0x24) != 0)
+    {
+        ((ObjV*)*(void**)(self + 0x24))->FUN_00811ad0(1);
+        void* p = *(void**)(self + 0x24);
+        if (p != 0)
+        {
+            *(u32*)(self + 0x24) = 0;
+            ((FnV0)(*(void***)p)[8 / 4])(p);
+        }
+    }
+
+    ((ObjV*)self)->FUN_00ed5890(0xffffffff);
+    *(u32*)(self + 0x20) = 0xffffffff;
+}
+
+// @ 0x00ed6540
+void __fastcall FUN_00ed6540(void* self_, int dummy, int param_2)
+{
+    char* self = (char*)self_;
+    void* sim = *(void**)((char*)G16C7AA4 + 0x74);
+
+    if (*(void**)(self + 0x28) != 0)
+        ((FnV1)(*(void***)*(void**)(self + 0x28))[0x1c / 4])(*(void**)(self + 0x28), (void*)param_2);
+
+    if (*(void**)(self + 0x18) != 0)
+        ((ObjV*)*(void**)(self + 0x18))->FUN_00ee3f20((u32)param_2);
+
+    if (*(void**)(self + 0x30) != 0)
+    {
+        float f = ((ObjV*)sim)->FUN_00f3e910();
+        ((ObjV*)*(void**)(self + 0x30))->FUN_005a7410(f);
+        ((ObjV*)*(void**)(self + 0x30))->FUN_00ed0030((u32)param_2);
+    }
+
+    if (*(void**)(self + 0x34) != 0)
+    {
+        float f = ((ObjV*)*(void**)((char*)G16C7AA4 + 0x18))->FUN_00f325b0();
+        ((ObjV*)*(void**)(self + 0x34))->FUN_005a7410(f);
+        ((ObjV*)*(void**)(self + 0x34))->FUN_00ed0030((u32)param_2);
+    }
+
+    ((ObjV*)self)->FUN_00ed59e0((u32)param_2);
+
+    int mode = 0;
+    char haveSim = ((ObjV*)sim)->FUN_00f41270(&mode);
+    char simOk = ((ObjV*)sim)->FUN_00f3b920();
+
+    bool visA = ((haveSim != 0) || mode == 4 || mode == 2 || mode == 3) && (simOk != 0);
+
+    void* wnd = ((ObjV*)*(void**)(self + 0x24))->FUN_008105b0(0x6fcb638, 1);
+    u32 stateA = ((FnU0)(*(void***)wnd)[0x28 / 4])(wnd);
+    if ((u32)((stateA >> 1) & 1) != (u32)visA)
+        ((FnVis)(*(void***)wnd)[0x7c / 4])(wnd, 2, visA);
+
+    bool visB = (haveSim != 0) || mode == 4 || mode == 2 || mode == 3 || mode == 5;
+
+    void* wnd2 = ((ObjV*)*(void**)(self + 0x24))->FUN_008105b0(0xbbbb1001, 1);
+    u32 stateB = ((FnU0)(*(void***)wnd2)[0x28 / 4])(wnd2);
+    if ((u32)((stateB >> 1) & 1) != (u32)visB)
+        ((FnVis)(*(void***)wnd2)[0x7c / 4])(wnd2, 2, visB);
+
+    int showA = (G16065F8 != 0 && G16065EC != 0) ? 1 : 0;
+    void* wnd3 = ((ObjV*)*(void**)(self + 0x24))->FUN_008105b0(0xb006ef6e, 1);
+    if (wnd3 != 0)
+        ((FnVis)(*(void***)wnd3)[0x7c / 4])(wnd3, 2, showA);
+
+    int showB = (G16065F8 != 0 && (u32)((G16065DC - G16065D8) >> 2) > G16065EC) ? 1 : 0;
+    void* wnd4 = ((ObjV*)*(void**)(self + 0x24))->FUN_008105b0(0xf006efa5, 1);
+    if (wnd4 != 0)
+        ((FnVis)(*(void***)wnd4)[0x7c / 4])(wnd4, 2, showB);
+
+    ((ObjV*)FUN_0067cae0())->FUN_005fdf40();
 }

@@ -1,0 +1,7 @@
+# Stage/panel callout + mode-update helpers (names inferred; no PDB candidates for this slice).
+00ed57e0  Panel::PostStageMessage (inferred)  # message build (mId 0x774e2dc payload from the -0xfc owner's vtbl[0xc](0x774c96f) + 8) then ScenarioTutorials_ClearPending via 0x16c7aa4+0xd4
+00ed5890  page (PDB name)  # posts 0x74baf67 {mData0=param, mData1=old +0x1c} when the page changes, then stores +0x1c
+00ed5910  Panel::ShowCallout (PDB name)  # switch on +0x58: 1/3/6/7 -> SetMode(0x7eaf738); 5 -> SetActive(0)/cScenarioPlayProgressBar::Reset/FUN_00f44dd0; 4 -> owner gate + game-mode==2 -> SetMode; default/2 -> clear
+00ed59e0  Panel::BuildModeMeshes (inferred)  # height + two XLocal transforms (pos/orient from the scenario object, Matrix3FromQuaternion of BuildSurfaceOrientation) pushed into +0x88/+0x8c
+00ed63a0  Panel::UpdateModes (PDB name)  # releases +0x84, Panel::Select(1), RemoveHandler at +0x70, the +0x44/+0x14/+0x28/+0x18/+0x2c/+0x30/+0x34/+0x38/+0x3c/+0x40/+0x24 teardown chain, then page(-1) and +0x20=-1
+00ed6540  Panel::Update (inferred)  # forwards the mode to the sub-pages, then the two sim-visibility window toggles and the two global-gated window toggles, then the achievement notifier update
