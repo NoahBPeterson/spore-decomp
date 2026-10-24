@@ -379,10 +379,14 @@ void cRenderInstanceSet::GetRange(int* out) {
 
 // @ 0x006f41e0
 cViewer* cRenderInstanceSet::RenderRange(void* src) {
-    int i = 0;
-    while (i < 2 && mArr1b4[i] < 0) i++;
-    if (i >= 2) return 0;
-    int* m = (int*)((void**)mModelArray)[i];
+    int uVar2 = 0;
+    int* piVar3 = mArr1b4;
+    for (; *piVar3 < 0; ++piVar3) {
+        ++uVar2;
+        if (1 < (unsigned int)uVar2) return 0;
+    }
+    if (uVar2 < 0) return 0;
+    int* m = (int*)((void**)mModelArray)[uVar2];
     if (*(unsigned short*)((char*)m + 8) == 0xffff) return 0;
     mViewer174->Copy(src, 0, 0);
     unsigned short idx = *(unsigned short*)((char*)m + 8);

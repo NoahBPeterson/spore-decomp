@@ -6,7 +6,7 @@
 006f3f20  3  Setup178: only the vptr/vfn register choice for the mRenderer168 vcall differs (edx/eax swapped).
 006f4020  32  Tick154: x87 compare emits fld1/fcompi/ja instead of the original fld1/fxch/fcompi/jb (same relation).
 006f4190  63  GetRange: loop/found-path structure close; the not-found (-1,-1) store and the unsigned loop compare still differ.
-006f41e0  105  RenderRange: same loop shape as GetRange plus viewer calls; register allocation differs.
+006f41e0  105  RenderRange: complete; two-slot negative sentinel scan, model lookup, 0xffff index rejection, viewer Copy, raster array + index*8, SetRaster, SetClearColor(0x1619530), Clear(7), return viewer. Equivalence FAILs only on memory .data 016f91a4: a generated viewport-cache callee stores the low 16 bits of its caller return address (orig 0x4238 from 6f4238, ours 0x5b from our relocated address); the same value is copied into pool memory. Call trace/args/registers/return match; harness noise (same observable as s006f54a0), not a source difference.
 006f4280  100  UpdateEffects: algorithm complete; x87 fild/fsubr and loop addressing differ.
 006f4330  105  cGraphicsHash::Resize: behavior complete; this/bytes/hash pointers are allocated to different registers (esi/ebx/edi).
 006f3410  1800  v0 (vertex expansion): complete, compiler unrolls by 4 like the original (45 mulss each); register allocation differs (remaining/src live in different places)
