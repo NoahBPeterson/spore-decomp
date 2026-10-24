@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a721a0/s00a721a0.cpp  ?OpenEffectsFile@Swarm@EA@@YA_NPBD0@Z  00a72cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a721a0/s00a721a0.cpp  ?resize@IntVector@@QAEXI@Z  00a730c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

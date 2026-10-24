@@ -280,3 +280,136 @@ void cEffectsWorld::Update(float t1, float t2, int* count) {
     FinishUpdate();
     *count += mUpdatedCount;
 }
+
+// ---------------------------------------------------------------------------------------------
+// Added for the s00a721a0 batch: 0x00a72bf0, 0x00a72cd0, 0x00a730c0.
+
+namespace EA { namespace Swarm {
+
+struct cTransform {                 // 0x38 bytes
+    uint16_t mFlags;                // 0x00
+    uint16_t mModificationCount;    // 0x02
+    float mTranslationX;            // 0x04
+    float mTranslationY;            // 0x08
+    float mTranslationZ;            // 0x0c
+    float mScale;                   // 0x10
+    float mRow0X;                   // 0x14
+    float mRow0Y;                   // 0x18
+    float mRow0Z;                   // 0x1c
+    float mRow1X;                   // 0x20
+    float mRow1Y;                   // 0x24
+    float mRow1Z;                   // 0x28
+    float mRow2X;                   // 0x2c
+    float mRow2Y;                   // 0x30
+    float mRow2Z;                   // 0x34
+    void FixPoint(float* p);
+};
+
+bool __cdecl OpenEffectsFile(const char* file, const char* subName);
+
+}}
+
+// @ 0x00a72bf0
+// offset += p - (p * scale) * rotation; sets kHasTranslation and bumps the modification count.
+void EA::Swarm::cTransform::FixPoint(float* p)
+{
+    float s = mScale;
+    float x = p[0];
+    float y = p[1];
+    float z = p[2];
+    float a = x * s;
+    float b = y * s;
+    float c = z * s;
+    float rz = mRow2Z * c + mRow0Z * a + mRow1Z * b;
+    float ry = mRow2Y * c + mRow0Y * a + mRow1Y * b;
+    float rx = mRow2X * c + mRow1X * b + mRow0X * a;
+    mTranslationX += x - rx;
+    mTranslationY += y - ry;
+    mTranslationZ += z - rz;
+    mFlags |= 4;
+    ++mModificationCount;
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x00a72cd0: spawn the effect editor (SciTE/Sc1) on a file, or just open the file when no
+// editor is installed.  The eastl string8 keeps the "-goto:<subName>" argument.
+
+extern char gEmptyString[];                                    // 0x01667bac
+
+namespace eastl {
+
+struct allocator_s0084_0250 { unsigned char pad[4]; };
+
+struct string8_s0084_0250 {
+    char* mpBegin;                 // 0x00
+    char* mpEnd;                   // 0x04
+    char* mpCapacity;              // 0x08
+    allocator_s0084_0250 mAllocator;   // 0x0c
+    string8_s0084_0250()
+    {
+        mpBegin = gEmptyString;
+        mpEnd = mpBegin;
+        mpCapacity = mpBegin + 1;
+    }
+    ~string8_s0084_0250()
+    {
+        if ((mpCapacity - mpBegin) > 1 && mpBegin)
+            operator delete[](mpBegin);
+    }
+};
+
+}
+
+void __cdecl Sprintf(eastl::string8_s0084_0250* out, const char* fmt, ...);   // 0x00840c20
+
+namespace EA { namespace Process {
+bool __cdecl SearchEnvironmentPath(const char* pName, char* pPath, const char* pExt);   // 0x00935e30
+int  __cdecl Spawn(const char* pExe, const char* const* pArgv, bool bWait);             // 0x00935db0
+}}
+
+bool __cdecl Process_OpenFileA(const char* pPath);                                        // 0x00935f80
+
+// @ 0x00a72cd0
+bool __cdecl EA::Swarm::OpenEffectsFile(const char* file, const char* subName)
+{
+    char path[260];
+    bool found = EA::Process::SearchEnvironmentPath("SciTE.exe", path, 0);
+    if (!found)
+        found = EA::Process::SearchEnvironmentPath("Sc1.exe", path, 0);
+    if (found) {
+        eastl::string8_s0084_0250 gotoArg;
+        Sprintf(&gotoArg, "-goto:%s", subName);
+        const char* argv[5];
+        argv[0] = path;
+        argv[1] = file;
+        argv[2] = gotoArg.mpBegin;
+        argv[3] = 0;
+        return EA::Process::Spawn(path, argv, false) == 0;
+    }
+    return Process_OpenFileA(file);
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x00a730c0: vector<int>::resize -- grow through insert(end(), n-size, 0), else destroy the tail.
+
+struct IntVector {
+    int* mpBegin;                  // 0x00
+    int* mpEnd;                    // 0x04
+    int* mpCapacity;               // 0x08
+    unsigned int mAllocator;       // 0x0c
+    unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
+    int* insert(int* pos, unsigned int n, const int& value);   // 0x00a72db0
+    void resize(unsigned int n);
+};
+
+void __stdcall DestroyIntRange(int* first, int* last);          // 0x00533500
+
+// @ 0x00a730c0
+void IntVector::resize(unsigned int n)
+{
+    if (n > size()) {
+        insert(mpEnd, n - size(), 0);
+    } else {
+        DestroyIntRange(mpBegin + n, mpEnd);
+    }
+}
