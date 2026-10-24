@@ -1,1 +1,6 @@
-00751d00  n/a  complete behaviourally: destroys each cModelInfo then resets the fixed_vector; the release thunk is called through a fabricated vtable slot so bytes differ; equiv: FAIL 5/5 mismatch (memory pool @40010050)
+00751560  1386  cModelWorld::FinishBackgroundLoad: complete source, inlined job/refcount/EH code; equiv WEAK 49.9% cov (133 valid) [/O2 /MD /Gy /EHsc /TP]
+00751b30   456  cModelWorld::UpdateHighlightProps: complete source, inlined vector<bool>/AutoRefCount highlight-property code; equiv PASS 61.4% cov (225 valid) [/O2 /MD /Gy /EHsc /TP]
+00751de0   235  cLoadQueue::Update: complete source, intrusive job-queue update loop; equiv WEAK 39.2% cov (141 valid) [/O2 /MD /Gy /EHsc /TP]
+00751ed0   184  VecModelInfo::resize: complete source, fixed_vector grow/relocate with inlined cSPTransform ctor; equiv PASS 100.0% cov (271 valid) [/O2 /MD /Gy /EHsc /TP]
+00751ff0   225  cModelWorld::Init: complete source, MessageServer handler registration + draw-set reset; equiv WEAK 82.9% cov (197 valid) [/O2 /MD /Gy /EHsc /TP]
+007520e0   605  cModelWorld::Shutdown: complete source, large object teardown (16 group vectors, 3 intrusive lists, queue drain); equiv UNSUPPORTED 0/400 valid (discards: fault-read=340, fault-pool-limit=56, fault-write=2, fault-write-prot=1, fault=1) [/O2 /MD /Gy /EHsc /TP]
