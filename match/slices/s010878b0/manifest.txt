@@ -3,3 +3,7 @@ slices/s010878b0/s010878b0.cpp  ?finishLoadedObject_hkRigidBody@@YAXPAX@Z  01087
 slices/s010878b0/s010878b0.cpp  ?setPositionAndRotation@hkRigidMotion@@UAEXABVhkVector4@@ABVhkQuaternion@@@Z  01088310  /vc71 /O2 /MD /Gy /TP
 slices/s010878b0/s010878b0.cpp  ?setDeactivationClass@hkRigidMotion@@QAEXG@Z  01088350  /vc71 /O2 /MD /Gy /TP
 slices/s010878b0/s010878b0.cpp  ?setMass@hkRigidMotion@@UAEXM@Z  01088230  /vc71 /O2 /MD /Gy /TP
+slices/s010878b0/s010878b0.cpp  ?clone@hkRigidBody@@UBEPAVhkEntity@@XZ  01087e40  /vc71 /O2 /MD /Gy /TP
+slices/s010878b0/s010878b0.cpp  ?setSolverType@hkWorldCinfo@@QAEXW4SolverType@1@@Z  01087fd0  /vc71 /O2 /MD /Gy /TP
+slices/s010878b0/s010878b0.cpp  ?setBroadPhaseWorldSize@hkWorldCinfo@@QAEXM@Z  010881d0  /vc71 /O2 /MD /Gy /TP
+slices/s010878b0/s010878b0.cpp  ??4hkSweptTransform@@QAEAAV0@ABV0@@Z  01088480  /vc71 /O2 /MD /Gy /TP

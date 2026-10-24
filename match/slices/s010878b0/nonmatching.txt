@@ -1,17 +1,13 @@
 # va  diff-bytes  reason
-010878b0 0 havok-equivalent
-01087b00 0 havok-equivalent
+010878b0 472 havok-equivalent; equiv WEAK (185 valid, 92% cov, no mismatch)
+01087b00 364 havok-equivalent; equiv PASS (356 valid, 100% cov)
 01087ca0 0 havok-equivalent
-01087e40 0 havok-equivalent
-01087ed0 0 havok-equivalent
-01087fd0 0 havok-equivalent
-010880e0 0 havok-equivalent
-010881d0 0 havok-equivalent
+01087ed0 291 havok-equivalent; equiv PASS (400 valid, 100% cov)
+010880e0 157 havok-equivalent; equiv PASS (400 valid, 100% cov)
 01088200 0 havok-equivalent
 01088270 0 havok-equivalent
 010883c0 0 havok-equivalent
 01088410 0 havok-equivalent; equiv.py PASS (1200 inputs, 100% cov)
-01088480 0 havok-equivalent; equiv.py PASS (1200 inputs, 100% cov)
-01088500 0 havok-equivalent
-01088570 0 havok-equivalent
+01088500 37 havok-equivalent; equiv PASS (400 valid, 100% cov)
+01088570 750 havok-equivalent; equiv PASS (400 valid, 100% cov)
 010888c0 0 havok-equivalent; equiv.py PASS (1200 inputs, 100% cov)

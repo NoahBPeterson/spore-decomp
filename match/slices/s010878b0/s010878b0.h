@@ -28,7 +28,7 @@ class hkQuaternion
     void normalize();                                              // 0x010821A0 (x*invLen, 0 for zero length)
 };
 class hkMatrix3 { public: hkVector4 m_col[3]; };      // 0x30 bytes
-class hkStepInfo { public: float m_startTime; float m_endTime; float m_deltaTime; float m_invDeltaTime; };   // deltaTime @+8
+class hkStepInfo { public: float m_startTime; float m_invDeltaTime; float m_deltaTime; float m_endTime; };   // start @+0, delta @+8, end @+0xc
 
 // hkSweptTransform (0x50 bytes) and hkMotionState (0xb0 bytes)
 class hkSweptTransform
@@ -51,10 +51,9 @@ class hkMotionState
     hkUint16 m_deactivationClass;   // +0xac
     hkUint16 m_deactivationCounter; // +0xae
     hkMotionState& operator=(const hkMotionState& o);          // 0x010888C0
+    void initMotionState(const hkVector4& pos, const hkQuaternion& rot);   // 0x0120AC30
 };
-void hkRotation_set(hkTransform* t, const hkQuaternion& q);    // hkRotation::set (0x010824A0) on the leading 3x4 of a transform
 struct hkSweptTransformUtil { static void warpTo(const hkVector4& pos, const hkQuaternion& rot, hkMotionState& ms); };   // 0x0120A880
-void hkMotionState_initMotionState(hkMotionState* ms, const hkVector4& pos, const hkQuaternion& rot);                      // 0x0120AC30
 
 // ---- motions (vtable slots from the retail vtables) -------------------------------------------------------
 class hkMotion : public hkReferencedObject
@@ -117,6 +116,7 @@ public:
 class hkFixedRigidMotion : public hkRigidMotion
 {
 public:
+    HK_DECLARE_CLASS_ALLOCATOR_B(0x2b)
     hkFixedRigidMotion(const hkVector4& position, const hkQuaternion& rotation);   // 0x01097110
     uint32_t m_pad[4];                                                       // +0xf0 (size 0x100)
 };

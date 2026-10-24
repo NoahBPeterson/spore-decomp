@@ -99,7 +99,7 @@ class hkRigidBodyCinfo
     hkShape* m_shape;                    // +0x04
     int8_t m_collisionResponse;          // +0x08
     hkUint16 m_processContactCallbackDelay;   // +0x0a
-    hkVector4 m_position;                // +0x10
+    __declspec(align(16)) hkVector4 m_position;    // +0x10 (the binary 16-byte-aligns hkVector4)
     hkQuaternion m_rotation;             // +0x20
     hkVector4 m_linearVelocity;          // +0x30
     hkVector4 m_angularVelocity;         // +0x40
@@ -154,7 +154,7 @@ public:
     void setSolverType(SolverType t);                // 0x01087FD0
     void setBroadPhaseWorldSize(float size);         // 0x010881D0
 
-    hkVector4 m_gravity;                             // +0x10
+    __declspec(align(16)) hkVector4 m_gravity;       // +0x10 (the binary 16-byte-aligns hkVector4)
     int32_t m_broadPhaseQuerySize;                   // +0x20
     float m_contactRestingVelocity;                  // +0x24
     int8_t m_broadPhaseBorderBehaviour;              // +0x28 (the ctor writes one byte)
@@ -554,7 +554,7 @@ hkRigidMotion::hkRigidMotion(const hkVector4& position, const hkQuaternion& rota
     m_solverData = 0;
     m_linearVelocity.x = 0.0f; m_linearVelocity.y = 0.0f; m_linearVelocity.z = 0.0f; m_linearVelocity.w = 0.0f;
     m_angularVelocity.x = 0.0f; m_angularVelocity.y = 0.0f; m_angularVelocity.z = 0.0f; m_angularVelocity.w = 0.0f;
-    hkMotionState_initMotionState(&m_motionState, position, rotation);
+    m_motionState.initMotionState(position, rotation);
     m_linearDamping = 0.0f;
     m_angularDamping = 0.0f;
     // m_massInv / m_particleMinInertiaDiagInv are left to the derived class
@@ -653,15 +653,17 @@ void hkRigidMotion::step(const hkStepInfo& stepInfo)
     ms.m_deltaAngle.w = (float)(hkX87Sqrt((hkX87Real)len2) * 3.1415927410125732f);   // 0x149e058 = pi
 
     memcpy(&st.m_rotation1, &q, sizeof(hkQuaternion));
-    hkRotation_set(&ms.m_transform, st.m_rotation1);
+    reinterpret_cast<hkRotation*>(&ms.m_transform)->set(st.m_rotation1);
 
     // translation = com1 - R * centerOfMassLocal
     hkX87Real cx = st.m_centerOfMassLocal.x;
     hkX87Real cy = st.m_centerOfMassLocal.y;
     hkX87Real cz = st.m_centerOfMassLocal.z;
     const float* m = ms.m_transform.m;
-    float r0 = (float)((cz * m[8] + cy * m[4]) + cx * m[0]);     // stored to a float slot
-    float r1 = (float)((cz * m[9] + cy * m[5]) + cx * m[1]);
+    // The shipped code spills both dot products to float slots before subtracting, so they are
+    // rounded to float32 (not kept in x87 extended precision); volatile forces the same rounding.
+    volatile float r0 = (float)((cz * m[8] + cy * m[4]) + cx * m[0]);     // stored to a float slot
+    volatile float r1 = (float)((cz * m[9] + cy * m[5]) + cx * m[1]);
     hkX87Real r2 = (cz * m[10] + cy * m[6]) + cx * m[2];         // X87-PRECISION: not stored
     ms.m_transform.m[12] = st.m_centerOfMass1.x - r0;
     ms.m_transform.m[13] = st.m_centerOfMass1.y - r1;
