@@ -3,17 +3,16 @@
 0108c430 0 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (272 valid, 95.9% cov): agent2 m_getClosestPointFunc is __thiscall with this=bodyB (original sets ECX=other), now called through a member-function pointer on other instead of a cdecl call
 0108c4c0 0 havok-equivalent
 0108c590 0 havok-equivalent
-0108c620 0 havok-equivalent
 0108c670 0 havok-equivalent
-0108c700 0 havok-equivalent
+0108c700 0 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov)
 0108c750 0 havok-equivalent
 0108c790 0 havok-equivalent
 0108c7e0 0 havok-equivalent
 0108c950 0 havok-equivalent
 0108c9d0 0 havok-equivalent; equiv.py WEAK (449 valid, 62.5% cov)
-0108ca40 0 havok-equivalent
+0108ca40 0 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (399 valid, 100% cov)
 0108cb20 0 havok-equivalent
-0108cbe0 0 havok-equivalent
-0108ccc0 0 havok-equivalent
+0108cbe0 0 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov)
+0108ccc0 0 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov)
 0108cdb0 0 havok-equivalent
-0108cf90 0 havok-equivalent
+0108cf90 0 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov)

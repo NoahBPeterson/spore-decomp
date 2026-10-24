@@ -74,7 +74,7 @@ class hkPhantom : public hkWorldObject { public:  // size 0x70
 	hkArray<hkPhantomOverlapListener*> m_overlapListeners;   // +0x58
 	hkArray<void*> m_phantomListeners;                       // +0x64
 	hkPhantom() {}
-	hkPhantom(hkFinishLoadedObjectFlag f) : hkWorldObject(f)
+	__forceinline hkPhantom(hkFinishLoadedObjectFlag f) : hkWorldObject(f)
 	{
 		m_overlapListeners.m_data = 0; m_overlapListeners.m_size = 0; m_overlapListeners.m_capacityAndFlags = (int)0x80000000;
 		m_phantomListeners.m_data = 0; m_phantomListeners.m_size = 0; m_phantomListeners.m_capacityAndFlags = (int)0x80000000;
@@ -89,7 +89,7 @@ class hkShapePhantom : public hkPhantom { public:  // size 0x120
 
 	hkMotionState m_motionState;            // +0x70
 	hkShapePhantom(const hkShape* shape, const hkTransform& transform);   // 0x0108DD40
-	hkShapePhantom(hkFinishLoadedObjectFlag f) : hkPhantom(f) {}
+	__forceinline hkShapePhantom(hkFinishLoadedObjectFlag f) : hkPhantom(f) {}
 	virtual void deallocateInternalArrays();                              // 0x0108DB40 (base implementation)
 };
 struct hkLinearCastInput
@@ -104,6 +104,8 @@ class hkCriticalSection
 	char m_cs[24];            // CRITICAL_SECTION
 	hkUint64 m_owner;         // +0x18: thread id while locked, -1 otherwise
 	void enter();             // 0x0107F820
+	// same body; declared void so callers do not keep the hkResult, noinline so the as-if branch stays a call
+	__declspec(noinline) void enterVoid();
 	void leave()
 	{
 #ifdef _WIN32
@@ -130,7 +132,7 @@ class hkSimpleShapePhantom : public hkShapePhantom { public:  // size 0x130
 	hkArray<hkCollisionDetail> m_collisionDetails;   // +0x120
 
 	hkSimpleShapePhantom(const hkShape* shape, const hkTransform& transform, hkUint32 collisionFilterInfo);   // 0x0108C750
-	hkSimpleShapePhantom(hkFinishLoadedObjectFlag f) : hkShapePhantom(f)
+	__forceinline hkSimpleShapePhantom(hkFinishLoadedObjectFlag f) : hkShapePhantom(f)
 	{
 		m_collisionDetails.m_data = 0; m_collisionDetails.m_size = 0; m_collisionDetails.m_capacityAndFlags = (int)0x80000000;
 	}
@@ -313,7 +315,12 @@ void hkSimpleShapePhantom::addOverlappingCollidable(hkCollidable* c)
 		{
 			hkCollisionDetail detail;
 			detail.m_collidable = c;
-			m_collisionDetails.pushBack(detail);
+			hkArray<hkCollisionDetail>& a = m_collisionDetails;
+			if (a.m_size == (a.m_capacityAndFlags & hkArray<hkCollisionDetail>::CAPACITY_MASK))
+				hkArrayUtil::_reserveMore(&a, sizeof(hkCollisionDetail));
+			hkCollisionDetail* slot = &a.m_data[a.m_size];
+			++a.m_size;
+			*slot = detail;
 		}
 	}
 }
@@ -447,7 +454,7 @@ class hkConstraintOwner
 { public:
 	virtual void co0(); virtual void co1(); virtual void co2();
 	virtual void addConstraintInfo(hkConstraintInstance* c, hkConstraintInfo& delta);   // 3 (0xc) (name guessed)
-	char m_pad[0x1c - 2 * sizeof(void*)];
+	char m_pad[0x18];            // +4..+0x1b
 	hkWorld* m_world;            // +0x1c (32-bit offset)
 };
 class hkConstraintInstance : public hkReferencedObject { public:  // size 0x28
@@ -464,8 +471,17 @@ class hkDynamicsContactMgr : public hkReferencedObject { public:  // size 0xc (h
 // the second once its inverse-mass scaling is overridden.
 extern int g_contactMgrTypeNormal;       // 0x016E4518
 extern int g_contactMgrTypeScaled;       // 0x016E43E0
-struct hkSimpleConstraintContactMgr : hkDynamicsContactMgr
-{
+class hkContactMgrInfoHolder
+{ public:
+	virtual void ih0(); virtual void ih1();
+	virtual void rxUnused0(); virtual void rxUnused1();
+	virtual void rxUnused2(); virtual void rxUnused3();
+	virtual void getInfoBuf(hkConstraintInstance* ci, hkConstraintInfo& delta);   // 7 (+0x1c) (name guessed)
+};
+class hkSimpleConstraintContactMgr : public hkDynamicsContactMgr
+{ public:
+	// 16-bit, at +0xc: reserveContactPoints (0x0108D070) reads and writes word [this+0xc]; the dev PDB puts
+	// hkDynamicsContactMgr::m_world at +8 (base size 0xc), so this is the derived class's first field
 	uint16_t m_reservedContactPoints;     // +0xc
 	uint16_t m_pad0e;
 	int m_type;                           // +0x10
@@ -492,35 +508,35 @@ void hkResponseModifier::setInvMassScalingForContact(hkDynamicsContactMgr* manag
 	hkSimpleConstraintContactMgr* mgr = static_cast<hkSimpleConstraintContactMgr*>(manager);
 	if (mgr->m_type == g_contactMgrTypeNormal)
 	{
-		if ((hkEntity*)bodyA == mgr->m_constraint.m_entities[0])
+		hkConstraintInstance* ci = &mgr->m_constraint;
+		// The two scale factors are stored swapped when bodyA is not the constraint's first entity.
+		hkReal scaleA = factorA;
+		hkReal scaleB = factorB;
+		if ((hkEntity*)bodyA != ci->m_entities[0])
 		{
-			mgr->m_invMassScaleA = factorA;
-			mgr->m_invMassScaleB = factorB;
+			hkReal t = scaleA;
+			scaleA = scaleB;
+			scaleB = t;
 		}
-		else
-		{
-			mgr->m_invMassScaleA = factorB;
-			mgr->m_invMassScaleB = factorA;
-		}
-		hkConstraintOwner* owner = mgr->m_constraint.m_owner;
+		mgr->m_invMassScaleB = scaleB;
+		mgr->m_invMassScaleA = scaleA;
+		hkConstraintOwner* owner = ci->m_owner;
 		if (owner != 0)
 		{
-			// The expanded manager needs two more jacobians and schema blocks.
+			// The owner's critical section guards the info-block append; absent one, the append runs bare.
+			hkCriticalSection* cs = owner->m_world->m_modifyConstraintCriticalSection;
 			hkConstraintInfo delta;
-			delta.m_maxSizeOfJacobians = 0;
 			delta.m_sizeOfJacobians = 0x40;
 			delta.m_sizeOfSchemas = 0x20;
-			delta.m_numSolverResults = 0;
-			hkCriticalSection* cs = owner->m_world->m_modifyConstraintCriticalSection;
 			if (cs != 0)
 			{
-				cs->enter();
-				owner->addConstraintInfo(&mgr->m_constraint, delta);
+				cs->enterVoid();
+				owner->addConstraintInfo(ci, delta);
 				cs->leave();
 			}
 			else
 			{
-				owner->addConstraintInfo(&mgr->m_constraint, delta);
+				owner->addConstraintInfo(ci, delta);
 			}
 		}
 		mgr->m_type = g_contactMgrTypeScaled;
@@ -617,19 +633,19 @@ void hkMovingSurfaceConstraintData::getConstraintInfo(hkConstraintInfo& info) co
 // two TOI callbacks. xs, ys, d and d*xs stay on the x87 stack in the binary.
 #define HK_MOVING_SURFACE_TANGENT \
 	const hkVector4* V = m_pointer2c; \
-	hkReal s = m_float30; \
-	hkX87Real xs = (hkX87Real)V->x * s;                                  /* X87-PRECISION */ \
-	hkX87Real ys = (hkX87Real)V->y * s;                                  /* X87-PRECISION */ \
-	float zs = (float)((hkX87Real)V->z * s);                            /* [esp+0x18] */ \
-	float ws = (float)((hkX87Real)V->w * s);                            /* [esp+0x1c] */ \
+	float s = m_float30; \
+	hkX87Real xs = (hkX87Real)V->x * s;                                  /* kept in x87 */ \
+	hkX87Real ys = (hkX87Real)V->y * s;                                  /* kept in x87 */ \
+	volatile float zs = (float)((hkX87Real)V->z * s);                   /* [esp+0x18] rounded to float */ \
+	volatile float ws = (float)((hkX87Real)V->w * s);                   /* [esp+0x1c] rounded to float */ \
 	hkX87Real d = ((hkX87Real)zs * cp.m_separatingNormal.z + ys * cp.m_separatingNormal.y) + xs * cp.m_separatingNormal.x; \
-	float Ty = (float)(d * ys);                                          /* [esp+0x24] */ \
-	float Tz = (float)((hkX87Real)zs * d);                               /* [esp+0x28] */ \
-	float Tw = (float)((hkX87Real)ws * d);                               /* [esp+0x2c] */ \
-	float Rx = (float)(xs - d * xs);                                     /* [esp+0x10] */ \
-	hkX87Real Ry = ys - Ty;                                              /* X87-PRECISION: not stored */ \
-	hkX87Real Rz = (hkX87Real)zs - Tz;                                   /* X87-PRECISION: not stored */ \
-	float Rw = (float)((hkX87Real)ws - Tw);                              /* [esp+0x1c] */
+	volatile float Ty = (float)(d * ys);                                 /* [esp+0x24] rounded to float */ \
+	volatile float Tz = (float)((hkX87Real)zs * d);                      /* [esp+0x28] rounded to float */ \
+	volatile float Tw = (float)((hkX87Real)ws * d);                      /* [esp+0x2c] rounded to float */ \
+	volatile float Rx = (float)(xs - d * xs);                            /* [esp+0x10] rounded to float */ \
+	hkX87Real Ry = ys - (float)Ty;                                       /* kept in x87 */ \
+	hkX87Real Rz = (hkX87Real)zs - (float)Tz;                            /* kept in x87 */ \
+	volatile float Rw = (float)((hkX87Real)ws - (float)Tw);              /* [esp+0x1c] rounded to float */
 
 // @ 0x0108cbe0
 void hkMovingSurfaceConstraintData::toiCollisionResponseBeginCallback(const hkContactPoint& cp, hkSimpleConstraintInfoInitInput& inA, hkBodyVelocity& velA,
@@ -720,21 +736,22 @@ void hkRigidBody::getPointVelocity(const hkVector4& p, hkVector4& out) const
 	const hkRigidMotion* motion = static_cast<const hkRigidMotion*>(m_motion);
 	const hkVector4& com = motion->m_motionState.m_centerOfMass1;
 	const hkVector4& w = motion->m_angularVelocity;
-	// X87-PRECISION: the three differences stay on the x87 stack.
+	// X87-PRECISION: the three differences stay on the x87 stack; the cross-product results are
+	// rounded to float exactly where the binary stores them.
 	hkX87Real dx = (hkX87Real)p.x - com.x;
 	hkX87Real dy = (hkX87Real)p.y - com.y;
 	hkX87Real dz = (hkX87Real)p.z - com.z;
-	float oy = (float)(dx * w.z - dz * w.x);     // [esp+8]
-	float oz = (float)(dy * w.x - dx * w.y);     // [esp+0xc]
-	float ox = (float)(dz * w.y - dy * w.z);
+	volatile float oy = (float)(dx * w.z - dz * w.x);     // [esp+8]
+	volatile float oz = (float)(dy * w.x - dx * w.y);     // [esp+0xc]
+	volatile float ox = (float)(dz * w.y - dy * w.z);
 	out.y = oy;
 	out.z = oz;
 	out.w = 0.0f;
 	out.x = ox;
 	const hkVector4& v = motion->m_linearVelocity;
-	out.x = (float)((hkX87Real)v.x + out.x);
-	out.y = (float)((hkX87Real)oy + v.y);
-	out.z = (float)((hkX87Real)oz + v.z);
+	out.x = v.x + ox;
+	out.y = oy + v.y;
+	out.z = oz + v.z;
 	out.w = v.w;
 }
 
