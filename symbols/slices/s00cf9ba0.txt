@@ -1,0 +1,25 @@
+# slice s00cf9ba0 - names inferred from the cards, the PDB candidates and behaviour
+# Modelled types (retail member offsets):
+#   Strat   SP::cCivModeStrategy (retail is larger than the dev PDB single-player variant):
+#           mCityInput@0x68, miState@0xe0, mpEditor@0xe4, mpHintTarget@0xe8, mpSomething@0xec,
+#           mpMode@0xf4, mpUndo@0x104, mpEditable@0x108, mpPreloadA/B@0x10c/0x110,
+#           mbHintC/B/A/0@0x122..0x125, mbFirstCivEvent@0x148
+#   Civ     civilization: miField_0x40@0x40 (id copied to an empire), miNumCityLevels@0x298,
+#           mpCity@0x44c, miHintThreshold@0x4bc; methods RefAtB0@0xbefab0, HasFlag@0xbef970,
+#           KeyLookup@0xbef980
+#   City    cCity: miState@0x29c, mpCity-owned turret allocator pool begin @0x29c (same slot),
+#           GetVehicleSpecialty@0xbd81d0, Rebuild@0xbd91e0
+#   GTM     cGameTimeManager: IncPauseGate/DecPauseGate@0xb32250 (this in ecx, gate id on stack)
+#   Others  UIHints (Show@0x67c830, Show2@0x67c8c0), ActionTarget (ctor 0xad7a30, dtor 0xad7ad0),
+#           CamCtl, EditObj, PropMgr, Universe, PlanetObj, StarMgr, BehaviorMgr, TerrainCursor,
+#           SpeciesProfile, ModeSub, CommunityEditor, InputState, HintTarget, Preload, RTree,
+#           VehicleTree, Msg5 (vtables 0x13eb90c/0x13eb844), MsgServer, DayStats, V3
+00cf9ba0  Strat::CheckEvents() -> void  # civ-mode tutorial state machine: mode gate, then per-event Show/Show2 + MarkCivEventAsOccurred + pause gates
+00cfa0c0  Strat::StartTechLevelUpgradeHintIfAppropriate() -> char  # if civ tech level >= 3 and the terrain cursor has no 0x50a2e65 hint, StartTechHint(); returns 1 on success
+00cfa120  Strat::UpdateHintFlags() -> int  # early out while RefAtB0() <= threshold; effects query 0x9abfe031 then sets the per-specialty hint bytes +0x122..+0x125
+00cfa360  FUN_00cfa360() -> void  # DecPauseGate(0x4bf38a7); if ConfigManager().GetFlag(0x4ea96cb) then CheckEvents() else release FUN_00b3d4f0(0)
+00cfa3b0  FUN_00cfa3b0() -> void  # DecPauseGate(0x4bf38a7); keep = state/spec agree for state 0/1/2; else city->Rebuild(), otherwise UpdateHintFlags()
+00cfa410  FUN_00cfa410() -> void  # launch-screen city-mode init: camera reset, DAT_0169d2bc = 1, property 0xe01c9c03 marker -> SetPlanet/Erase/Find
+00cfa610  Strat::PreGameModeTransition(int oldMode, int newMode) -> void  # mode tag switch (0x01654c04/05/06/08, 0x00dbdba1, 0x02ccd1d2, -1), field fixups +0xe0..+0x110
+00cfa990  Strat::DoNext(int id, char rerun) -> void  # event-tag jump table 0x64e666f/73/76/79/7d: Show2 + DecPauseGate, shared Show2 tail, then MarkCivEventAsOccurred and rerun -> CheckEvents
+00cfaab0  Strat::SignalCivEvent(int id, float x, float y, int flags) -> void  # input wheel forward; first-civ-event handling for tags 0x64e6674/76, then GameInput signal
