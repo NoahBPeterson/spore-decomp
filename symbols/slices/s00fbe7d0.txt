@@ -1,1 +1,5 @@
 00fbe7d0 ?Initialize@cTerrainStateMgr@@QAEXXZ  # cTerrainStateMgr::Initialize migrated from s00fbe7d0 (verbatim, slice spelling)
+00fbee30 ?FUN_00fbee30@cTerrainStateMgr@@QAEXXZ  # ramp regeneration: 32-phase sweep keeping points farther than the +0x2f0 threshold
+00fbf1c0 ?FUN_00fbf1c0@cTerrainStateMgr@@QAEXPAUVector3Vector@@H@Z  # ramp export: transform the point vector, refresh the owner's 24 colour floats
+00fbf3d0 ?FUN_00fbf3d0@cTerrainStateMgr@@QAEPAUFloatVector@@PAU2@@Z  # copy the ramp float vector into an out vector and return it
+00fbf430 ?FUN_00fbf430@cTerrainStateMgr@@QAEPAUVector3Vector@@PAU2@D@Z  # build the transformed point vector (or copy it) into an out vector
