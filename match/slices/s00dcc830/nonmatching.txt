@@ -1,0 +1,9 @@
+00dcc830 1626 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1626 bytes - VehicleTree::TradeWithCityOrder_Tick not reconstructed.
+00dcce90 312 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 312 bytes - VehicleTree::OfferToBuyCityOrder_Activate not reconstructed.
+00dccfd0 123 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 123 bytes - VehicleTree::MoveToPointOrder_Activate not reconstructed.
+00dcd050 293 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 293 bytes - vehicle order helper not reconstructed.
+00dcd180 152 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 152 bytes - vehicle order helper not reconstructed.
+00dcd220 522 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 522 bytes - vehicle order helper not reconstructed.
+00dcd430 248 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 248 bytes - cVehicleTicker::GetGroupOrder not reconstructed.
+00dcd530 90 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 5 bytes - cCulturalConvertCityOrder destructor is instruction-for-instruction identical (same size) except that MSVC schedules the mFieldA4 load ahead of the two vtable-pointer stores, which retail emits first.
+00dcd590 336 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 336 bytes - vehicle order helper not reconstructed.
