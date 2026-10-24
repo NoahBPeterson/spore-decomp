@@ -1,1 +1,4 @@
 00ade8b0 SP::cCinematicManager::Initialize  # 33 cinematic ArgScript commands (letterbox..switchToExitState); ModAPI cCinematicManager layout; vtable 0x145b880 slot 2 (cGonzagoSubsystem at +4)
+00adf390 SP::cCinematicManager::SetEnabled  # secondary vtable 0x145b8d0 slot; drains cinematic queue and calls RemoveAction 0xadde00
+00adf420 SP::cCinematicManager::cCinematicManager  # base ctor 0xb5b960; retail full-object layout 0x3c8 (callback +0x20 .. mStateNameParam +0x3c4)
+00adf690 SP::cCinematicManager::Shutdown  # secondary-base virtual override; this enters at +4 (secondary vtable 0x145b8d0)
