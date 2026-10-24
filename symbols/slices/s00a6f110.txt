@@ -1,1 +1,9 @@
 00a6f110 ?ParseDescRecOptions@cEffectsParser@@QAEXPAUcArguments@@PAUDescRec@@@Z  # cEffectsParser::ParseDescRecOptions migrated from s00a6f110 (verbatim, slice spelling)
+00a6f930 ?FindOrInsert@HashTable@@QAEPAPAXABUEString@@@Z  # HashTable::FindOrInsert: find a key, else insert a defaulted pair
+00a6f9c0 ?InstallA@DescInstaller@@QAEXPBDHH@Z  # DescInstaller::InstallA: bind factory hook +0x1c into table +0x44
+00a6fa50 ?InstallB@DescInstaller@@QAEXPBDHH@Z  # DescInstaller::InstallB: bind factory hook +0x24 into table +0x78
+00a6fc30 ?AddDescription@cEffectsParser@@QAEXPAUcArguments@@PBDH_N@Z  # cEffectsParser::AddDescription: build a description record and push it
+00a6fd40 ?AddAnonDescription@cEffectsParser@@QAEXPAUcArguments@@HH_N@Z  # cEffectsParser::AddAnonDescription: build an anonymous description record
+00a6fe20 ?Advance@cSmoothTrail@@QAEXMH@Z  # cSmoothTrail::Advance: step the smoothed index toward a new position
+00a6fee0 ?Forward@cEmitter@@QAEXMMH@Z  # cEmitter::Forward: raise state bits around the virtual step hook
+00a6ff20 ?Reset@cSmoothTrail@@QAEXXZ  # cSmoothTrail::Reset: restart the smoothed index at 1

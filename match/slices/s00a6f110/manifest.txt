@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a6f110/s00a6f110_g7.cpp  ?AddAnonDescription@cEffectsParser@@QAEXPAUcArguments@@HH_N@Z  00a6fd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a6f110/s00a6f110_g7.cpp  ?Advance@cSmoothTrail@@QAEXMH@Z  00a6fe20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a6f110/s00a6f110_g7.cpp  ?Reset@cSmoothTrail@@QAEXXZ  00a6ff20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a6f110/s00a6f110_g7b.cpp  ?Forward@cEmitter@@QAEXMMH@Z  00a6fee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
