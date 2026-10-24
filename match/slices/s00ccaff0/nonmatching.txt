@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+
+00ccaff0  173  cTDS::SendSelectMessage (/O2 /MD /Gy /EHsc /TP): register allocation and block ordering differ; equiv WEAK (363 valid inputs, 36% coverage)
+00ccb0f0  128  cTDS::MaintainSelectionState (/O2 /MD /Gy /EHsc /TP): register allocation and block ordering differ; equiv WEAK (361 valid inputs, 54% coverage)
+00ccb2c0  61  cTDS::FUN_00ccb2c0 (/O2 /MD /Gy /EHsc /TP): instruction stream nearly identical; equiv UNSUPPORTED (0/400 valid inputs: fault(read)=153 fault(fetch)=137 budget=92)
+00ccb420  686  cTDS::HandleMessage (/O2 /MD /Gy /EHsc /TP): large switch/layout differences (982 vs 1006); equiv WEAK (381 valid inputs, 21% coverage)
+00ccb810  247  Vec3D::Assign (/O2 /MD /Gy /EHsc /TP): grow/copy structure matches but register allocation differs (212 vs 288); equiv WEAK (182 valid inputs, 45% coverage)
+00ccba20  240  Vec3D::InsertAt (/O2 /MD /Gy /EHsc /TP): value spills/no-security-cookie differences; equiv WEAK (55 valid inputs, 40% coverage)
+00ccbb60  134  cTDS::FUN_00ccbb60 (/O2 /MD /Gy /EHsc /TP): register allocation differs (156 vs 152); equiv PASS (225 valid inputs, 65% coverage)
+00ccbc00  118  Hashtable::FUN_00ccbc00 (/O2 /MD /Gy /EHsc /TP): Find/InsertNode out-iterator modelling matches callable shape but callee chain diverges; equiv FAIL (fault read at eip 00ccad5f inside callee 0ccad10 from InsertNode; 83% coverage)
+00ccbd10  720  cTDS::FUN_00ccbd10 (/O2 /MD /Gy /EHsc /TP): body largely mis-modelled (640 vs 860, extra /GS cookie) and one 4-byte stack arg missing; equiv FAIL (arity: esp after return orig +0x1c vs ours +0x18; 6.5% coverage)
+00ccc070  154  EffectTree::FindOrInsert (/O2 /MD /Gy /EHsc /TP): lower_bound + insert semantics reproduced; compiler slot-reuse of the key arg produces a residual stack-frame difference (171 vs 168); equiv PASS (298 valid inputs, 100% coverage)
+00ccc120  83  EffectTree::InsertHint2 (/O2 /MD /Gy /EHsc /TP): register allocation differs (102 vs 99); equiv PASS (270 valid inputs, 100% coverage)
