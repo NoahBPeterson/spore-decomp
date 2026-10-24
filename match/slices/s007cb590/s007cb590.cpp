@@ -3,6 +3,16 @@
 
 #include "../s007ca950/s007ca950.h"
 
+// ---------------------------------------------------------------- callee annotations
+// The header only declares vector's special members; the retail instantiations for the
+// vector_map payload (PropVec) are unnamed helpers, so bind our references by annotation.
+namespace __equiv_ann1 {
+struct vector {
+    ~vector();                          // 0x007cef60
+    vector& operator=(const vector&);   // 0x007ca060
+};
+}
+
 // ---------------------------------------------------------------- masked callees
 namespace EA { namespace ArgScript {
 class cArguments { public:
@@ -48,13 +58,44 @@ typedef eastl::vector_map<uint64, EA::AutoRefCount<SP::cPropertyList>,
                           eastl::less<uint64>, eastl::allocator, PropVec> PropMap;
 typedef eastl::vector<PropMap, eastl::fixed_vector_allocator<sizeof(PropMap), 4, 4, 0, 1> > MapFixVec;
 
+// The retail resize (0x7cc3c0) calls the out-of-line insert/erase instantiations. Route through
+// masked declarations so the calls land on the image functions instead of this TU's copies (the
+// call trace and all helper effects then match retail exactly).
+struct MapFixVecView {
+    void insert(PropMap* position, unsigned int n, const PropMap& value);   // 0x007cbdc0
+    PropMap* erase(PropMap* first, PropMap* last);                          // 0x007cbd60
+};
+
 namespace eastl {
+// Retail's element construction (0x7c9830: vector copy ctor 0x7c8af0 + a 1-byte compare copy)
+// leaves the destination allocator field untouched; the implicit copy constructor would copy it.
 template <typename T>
 T* uninitialized_fill_n_ptr(T* first, unsigned int n, const T& value) {
     T* d = first;
-    for (unsigned int i = 0; i < n; ++i, ++d)
-        ::new ((void*)d) T(value);
+    for (unsigned int i = 0; i < n; ++i, ++d) {
+        ::new ((void*)d) T;
+        *d = value;
+    }
     return d;
+}
+}  // namespace eastl
+
+// Dispatch resize's out-of-line calls: the MapFixVec instantiation must land on the image
+// functions (call trace + helper effects), other instantiations keep their local copies.
+namespace eastl {
+inline void resize_insert(MapFixVec* v, PropMap* position, unsigned int n, const PropMap& value) {
+    ((MapFixVecView*)v)->insert(position, n, value);
+}
+inline PropMap* resize_erase(MapFixVec* v, PropMap* first, PropMap* last) {
+    return ((MapFixVecView*)v)->erase(first, last);
+}
+template <typename T, typename A>
+inline void resize_insert(vector<T, A>* v, T* position, unsigned int n, const T& value) {
+    v->insert(position, n, value);
+}
+template <typename T, typename A>
+inline T* resize_erase(vector<T, A>* v, T* first, T* last) {
+    return v->erase(first, last);
 }
 }  // namespace eastl
 
@@ -75,9 +116,9 @@ template <typename T, typename A>
 void vector<T, A>::resize(size_type n) {
     if (n > (size_type)(this->mpEnd - this->mpBegin)) {
         T value;
-        insert(this->mpEnd, n - (size_type)(this->mpEnd - this->mpBegin), value);
+        resize_insert(this, this->mpEnd, n - (size_type)(this->mpEnd - this->mpBegin), value);
     } else {
-        erase(this->mpBegin + n, this->mpEnd);
+        resize_erase(this, this->mpBegin + n, this->mpEnd);
     }
 }
 
@@ -105,7 +146,7 @@ void vector<T, A>::insert(T* position, size_type n, const T& value) {
         T* const pNewData = DoAllocate(nNewSize);
         T* pNewEnd = uninitialized_copy_ptr(this->mpBegin, position, pNewData);
         pNewEnd = uninitialized_fill_n_ptr(pNewEnd, n, value);
-        pNewEnd = uninitialized_copy_ptr(position, this->mpEnd, pNewEnd + n);
+        pNewEnd = uninitialized_copy_ptr(position, this->mpEnd, pNewEnd);
         DoDestroyValues(this->mpBegin, this->mpEnd);
         DoFree(this->mpBegin, capacity());
         this->mpBegin = pNewData;
@@ -139,14 +180,10 @@ void vector<T, A>::DoAssignFromIterator(It first, It last, std::random_access_it
 }  // namespace eastl
 
 // ---------------------------------------------------------------- explicit instantiations
-// @ 0x007cbd60
-template PropMap* MapFixVec::erase(PropMap*, PropMap*);
-// @ 0x007cbdc0
-template void MapFixVec::insert(PropMap*, MapFixVec::size_type, const PropMap&);
-// @ 0x007cc000
-template void MapFixVec::DoAssignFromIterator<const PropMap*>(const PropMap*, const PropMap*, std::random_access_iterator_tag);
-// @ 0x007cc3c0
-template void MapFixVec::resize(MapFixVec::size_type);
+template PropMap* MapFixVec::erase(PropMap*, PropMap*);  // @ 0x007cbd60 vector_map::erase
+template void MapFixVec::insert(PropMap*, MapFixVec::size_type, const PropMap&);  // @ 0x007cbdc0 vector_map::insert
+template void MapFixVec::DoAssignFromIterator<const PropMap*>(const PropMap*, const PropMap*, std::random_access_iterator_tag);  // @ 0x007cc000 DoAssignFromIterator
+template void MapFixVec::resize(MapFixVec::size_type);  // @ 0x007cc3c0 vector_map::resize
 // @ 0x007cc580
 template eastl::fixed_vector<PropMap, 4, 1>::fixed_vector(const eastl::fixed_vector<PropMap, 4, 1>&);
 

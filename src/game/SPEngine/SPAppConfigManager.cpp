@@ -1373,14 +1373,56 @@ typedef eastl::vector_s007c_b590<PropPair_s007c_b590, eastl::allocator_s007c_b59
 typedef eastl::vector_map_s007c_b590<uint64, EA::AutoRefCount_s007c_b590<SP::cPropertyList_s007c_b590>,
                           eastl::less_s007c_b590<uint64>, eastl::allocator_s007c_b590, PropVec_s007c_b590> PropMap_s007c_b590;
 typedef eastl::vector_s007c_b590<PropMap_s007c_b590, eastl::fixed_vector_allocator<sizeof(PropMap_s007c_b590), 4, 4, 0, 1> > MapFixVec;
+
+// Retail's element construction (0x7c9830: vector copy ctor 0x7c8af0 + a 1-byte compare copy)
+// leaves the destination allocator field untouched; the implicit copy constructor would copy it.
 namespace eastl {
 template <typename T>
 T* uninitialized_fill_n_ptr(T* first, unsigned int n, const T& value) {
     T* d = first;
-    for (unsigned int i = 0; i < n; ++i, ++d)
-        ::new ((void*)d) T(value);
+    for (unsigned int i = 0; i < n; ++i, ++d) {
+        ::new ((void*)d) T;
+        *d = value;
+    }
     return d;
-}  // namespace eastl
+}
+}
+
+// The retail resize (0x7cc3c0) calls the out-of-line insert/erase instantiations. Route through
+// masked declarations so the calls land on the image functions instead of this TU's copies (the
+// call trace and all helper effects then match retail exactly).
+struct MapFixVecView_s007c_b590 {
+    void insert(PropMap_s007c_b590* position, unsigned int n, const PropMap_s007c_b590& value);  // 0x007cbdc0
+    PropMap_s007c_b590* erase(PropMap_s007c_b590* first, PropMap_s007c_b590* last);              // 0x007cbd60
+};
+
+// The header only declares the vector special members; bind our references to the retail helpers.
+namespace __equiv_ann1 {
+struct vector_s007c_b590 {
+    ~vector_s007c_b590();                                    // 0x007cef60
+    vector_s007c_b590& operator=(const vector_s007c_b590&);  // 0x007ca060
+};
+}
+
+// Dispatch resize's out-of-line calls: the MapFixVec instantiation must land on the image
+// functions (call trace + helper effects), other instantiations keep their local copies.
+namespace eastl {
+inline void resize_insert(MapFixVec* v, PropMap_s007c_b590* position, unsigned int n,
+                          const PropMap_s007c_b590& value) {
+    ((MapFixVecView_s007c_b590*)v)->insert(position, n, value);
+}
+inline PropMap_s007c_b590* resize_erase(MapFixVec* v, PropMap_s007c_b590* first,
+                                        PropMap_s007c_b590* last) {
+    return ((MapFixVecView_s007c_b590*)v)->erase(first, last);
+}
+template <typename T, typename A>
+inline void resize_insert(vector_s007c_b590<T, A>* v, T* position, unsigned int n, const T& value) {
+    v->insert(position, n, value);
+}
+template <typename T, typename A>
+inline T* resize_erase(vector_s007c_b590<T, A>* v, T* first, T* last) {
+    return v->erase(first, last);
+}
 }
 namespace eastl {
 template <typename T, typename A>
@@ -1398,9 +1440,9 @@ template <typename T, typename A>
 void vector_s007c_b590<T, A>::resize(size_type n) {
     if (n > (size_type)(this->mpEnd - this->mpBegin)) {
         T value;
-        insert(this->mpEnd, n - (size_type)(this->mpEnd - this->mpBegin), value);
+        resize_insert(this, this->mpEnd, n - (size_type)(this->mpEnd - this->mpBegin), value);
     } else {
-        erase(this->mpBegin + n, this->mpEnd);
+        resize_erase(this, this->mpBegin + n, this->mpEnd);
     }
 }
 }
@@ -1429,7 +1471,7 @@ void vector_s007c_b590<T, A>::insert(T* position, size_type n, const T& value) {
         T* const pNewData = DoAllocate(nNewSize);
         T* pNewEnd = uninitialized_copy_ptr(this->mpBegin, position, pNewData);
         pNewEnd = uninitialized_fill_n_ptr(pNewEnd, n, value);
-        pNewEnd = uninitialized_copy_ptr(position, this->mpEnd, pNewEnd + n);
+        pNewEnd = uninitialized_copy_ptr(position, this->mpEnd, pNewEnd);
         DoDestroyValues(this->mpBegin, this->mpEnd);
         DoFree(this->mpBegin, capacity());
         this->mpBegin = pNewData;
