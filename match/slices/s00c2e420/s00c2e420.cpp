@@ -32,6 +32,13 @@ struct cVarListSerializer { char mPad[0xa14]; };   // 2580-byte stack serializer
 
 typedef void (__fastcall *VFn)(void*);
 
+struct SP_cSPTimer {
+    bool IsRunning();        // 0x00feba90
+};
+struct C45140Dtor {
+    void FUN_00c45140();    // 0x00c45140
+};
+
 class MissionStub {
 public:
     void  SetSerializer();
@@ -103,7 +110,7 @@ void MissionStub::FUN_00c2e980()
 float MissionStub::FUN_00c2e9b0()
 {
     char* self = (char*)this;
-    if (!SP_cSPTimer_IsRunning(self + 0x38) && *(int*)(self + 0x7c) == 5)
+    if (!((SP_cSPTimer*)(self + 0x38))->IsRunning() && *(int*)(self + 0x7c) == 5)
         return 0.0f;
     return *(float*)(self + 0x88);
 }
@@ -183,12 +190,12 @@ void __fastcall FUN_00c2f3e0(int* self)
     int* p = (int*)self[0x20];
     if (p != 0) {
         typedef void (__fastcall *Fn)(void*);
-        (*(Fn*)p[0])(p);
+        ((Fn*)p[0])[1](p);
     }
     self[0] = 0x146aff0;
     self[1] = 0x146afdc;
     self[0xd] = 0x146afcc;
-    FUN_00c45140(self);
+    ((C45140Dtor*)self)->FUN_00c45140();
 }
 
 // ===========================================================================
