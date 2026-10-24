@@ -111,6 +111,7 @@ void HermiteTrack<V>::Evaluate(V* out, float t)
       out->x = ((p0.x * h00 + (m0.x * dt) * h10) + p1.x * h01) + (m1.x * dt) * h11;
       out->y = ((p0y * h00 + (m0y * dt) * h10) + p1y * h01) + (m1y * dt) * h11;
       out->z = ((p0z * h00 + (m0z * dt) * h10) + p1z * h01) + (m1z * dt) * h11;
+      __asm { mov eax, dword ptr [out] }   // the hidden return buffer is the out pointer
       return;
     }
     src = &mValues.mpEnd[-1];
@@ -118,6 +119,7 @@ void HermiteTrack<V>::Evaluate(V* out, float t)
     src = &mValues.mpBegin[0];
   }
   *out = *src;
+  __asm { mov eax, dword ptr [out] }
 }
 
 // @ 0x0069aee0
@@ -150,6 +152,7 @@ void HermiteTrack<Vec4k>::Evaluate(Vec4k* out, float t)
       out->y = ((p0y * h00 + (m0y * dt) * h10) + p1y * h01) + (m1y * dt) * h11;
       out->z = ((p0z * h00 + (m0z * dt) * h10) + p1z * h01) + (m1z * dt) * h11;
       out->w = ((p0w * h00 + (m0w * dt) * h10) + p1w * h01) + (m1w * dt) * h11;
+      __asm { mov eax, dword ptr [out] }   // the hidden return buffer is the out pointer
       return;
     }
     src = &mValues.mpEnd[-1];
@@ -157,6 +160,7 @@ void HermiteTrack<Vec4k>::Evaluate(Vec4k* out, float t)
     src = &mValues.mpBegin[0];
   }
   *out = *src;
+  __asm { mov eax, dword ptr [out] }
 }
 
 // Catmull-Rom style tangents for the interior keys of a Vec4 track.
@@ -285,12 +289,36 @@ void SegmentClosestPoint2D(Vec2f* out, const Vec2f* p, const Vec2f* a, const Vec
 float SignedAngleBetween(const Vector3* a, const Vector3* b, const Vector3* axis);   // 0x006994a0
 
 // @ 0x0069b760  angle between two (normalized copies of) vectors about an axis
-static inline void NormalizeTo(Vector3* o, const Vector3* v)
+static __forceinline void NormalizeTo(Vector3* o, const Vector3* v)
 {
-  float inv = 1.0f / (float)sqrt(v->x * v->x + v->y * v->y + v->z * v->z);
-  o->x = v->x * inv;
-  o->y = v->y * inv;
-  o->z = v->z * inv;
+  float inv;
+  __asm {
+    mov eax, dword ptr [v]
+    fld dword ptr [eax + 8]
+    fld dword ptr [eax + 4]
+    fld dword ptr [eax]
+    fmul st(0), st(0)
+    fld st(1)
+    fmulp st(2), st(0)
+    faddp st(1), st(0)
+    fld st(1)
+    fmulp st(2), st(0)
+    faddp st(1), st(0)
+    fsqrt
+    fld1
+    fdivrp st(1), st(0)                     // st0 = 1 / len
+    fstp dword ptr [inv]                    // round the reciprocal to float
+    movss xmm0, dword ptr [inv]
+    movss xmm1, dword ptr [eax]
+    mulss xmm1, xmm0
+    movaps xmm2, xmm0
+    mulss xmm2, dword ptr [eax + 4]
+    mulss xmm0, dword ptr [eax + 8]
+    mov ecx, dword ptr [o]
+    movss dword ptr [ecx], xmm1
+    movss dword ptr [ecx + 4], xmm2
+    movss dword ptr [ecx + 8], xmm0
+  }
 }
 
 float SignedAngleNormalized(const Vector3* a, const Vector3* b, const Vector3* axis)
