@@ -226,7 +226,7 @@ void __cdecl FUN_00b65710(float* out, float* in)
     float w = in[3];
     if (0.001f < (x * x + y * y) + z * z) {
         float len2 = (x * x + y * y) + z * z;
-        float r = 0.0f;
+        __declspec(align(16)) float r = 0.0f;   // retail frame is 16-aligned; keeps r out of the push-ecx scratch slot
         if (len2 != 0.0f) {
             __asm {
                 fld    len2
