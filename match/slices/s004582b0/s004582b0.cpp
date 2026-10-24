@@ -2,24 +2,32 @@
 // /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast module.
 #include "types.h"
 
+#include <xmmintrin.h>
+
 struct Float3 { float x, y, z; };
 struct Float4 { float x, y, z, w; };
 
+static float g_cMaxColor = 255.0f;
+
+static __forceinline int SatToByte(float v) {
+    int r;
+    __asm {
+        xorps       xmm0, xmm0
+        maxss       xmm0, DWORD PTR v
+        mulss       xmm0, DWORD PTR g_cMaxColor
+        minss       xmm0, DWORD PTR g_cMaxColor
+        cvtss2si    eax, xmm0
+        mov         r, eax
+    }
+    return r;
+}
+
 // @ 0x00458a40 -- RGB -> U32 with opaque alpha
 unsigned int ColorRGBToU32(const float* c) {
-    float r = c[0] > 0.0f ? c[0] : 0.0f;
-    r = r * 255.0f;
-    if (r > 255.0f) r = 255.0f;
-    float g = c[1] > 0.0f ? c[1] : 0.0f;
-    g = g * 255.0f;
-    if (g > 255.0f) g = 255.0f;
-    float b = c[2] > 0.0f ? c[2] : 0.0f;
-    b = b * 255.0f;
-    if (b > 255.0f) b = 255.0f;
-    unsigned char ri = (unsigned char)(int)r;
-    unsigned char gi = (unsigned char)(int)g;
-    unsigned char bi = (unsigned char)(int)b;
-    return ((unsigned int)ri << 0x10) | ((unsigned int)gi << 8) | (unsigned int)bi | 0xff000000u;
+    unsigned int ri = (unsigned char)SatToByte(c[0]);
+    unsigned int gi = (unsigned char)SatToByte(c[1]);
+    unsigned int bi = (unsigned char)SatToByte(c[2]);
+    return (ri << 0x10) | (gi << 8) | bi | 0xff000000u;
 }
 
 class cSPUITooltipWinProc { public:
@@ -45,11 +53,12 @@ void Budget2::SetTooltip(void* p) {
 extern void* g_layout;   // 0x015d2dbc
 
 // @ 0x00458c00
-extern void FUN_00422c80(void* out);
+typedef void (__thiscall* Fn_00422c80)(void* self, void* out);
+extern void FUN_00422c80();
 void* Budget2::InitLayoutWidget() {
     int* p = (int*)((char*)this + 0x14);
     char local[4];
-    FUN_00422c80(local);
+    ((Fn_00422c80)FUN_00422c80)(this, local);
     ((int*)this)[1] = (int)p;
     ((int*)this)[0] = ((int*)this)[1];
     ((int*)this)[2] = ((int*)this)[0] + 0x20;

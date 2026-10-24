@@ -1,4 +1,4 @@
-00458a40  271  ColorRGBToU32: opaque-alpha variant; compact maxss/minss/mulss sequence not reproduced
-00458c00  51   InitLayoutWidget: /Od local frame (p, local_c) and this-relative store scheduling not exact
+00458a40  230  ColorRGBToU32: /Od stack-temp scheduling of the saturate block differs (original spills each channel then packs byte locals); value sequence reproduced with an asm saturate helper. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv: PASS (400 valid, 100% cov)
+00458c00  80   InitLayoutWidget: original keeps a /Od frame with a saved-this slot and a 4-byte local passed by address (ecx=this + push &local); ours is shorter. equiv: PASS (400 valid, 100% cov)
 00458d80  31   FUN_00458d80: AutoRefCount operator= shape (unreachable AddRef path) not reproduced
 004582b0  1490  cSPEditorBudget::Update: complete; /Od frame is 0x84 bytes smaller (three inline-callee holes between the window temps not reproduced), so slots shift
