@@ -403,14 +403,21 @@ string8N::string8N(const string8N& x) : mpBegin(0), mpEnd(0), mpCapacity(0), mAl
 }
 
 // ---- Message strings -------------------------------------------------------------------------
+// cMsgString8 is an IMsgBaseA + IMsgBaseB + eastl string (0x1c bytes).  The two base interfaces
+// only contribute a vftable pointer (and the B subobject's refcount); their pure slots have no
+// image implementation reachable by name (IMsgBaseA::a0 lanes to the same CRT stub in the
+// image), so they are empty stubs here - the base vftables are overwritten by the cMsgString8
+// ones at the end of the constructor anyway.
 struct IMsgBaseA {
   virtual void a0();
 };
+void IMsgBaseA::a0() {}
 struct IMsgBaseB {
   IMsgBaseB() { _InterlockedExchange(&mRefCount, 0); }
   virtual void b0();
   long mRefCount;
 };
+void IMsgBaseB::b0() {}
 struct cMsgString8 : IMsgBaseA, IMsgBaseB {
   string8 mString;  // +0xc
   virtual int AddRef();
@@ -439,7 +446,26 @@ cMsgString8::~cMsgString8() {}
 
 // @ 0x00618bd0
 void SetMessageString8(MsgHolder* holder, int idx, const char* str) {
-  cMsgString8* msg = new ("App", 0, 0, 0, 0) cMsgString8(str);
+  cMsgString8* msg = (cMsgString8*)operator new(sizeof(cMsgString8), "App", 0, 0, 0, 0);
+  if (msg) {
+    // The inlined cMsgString8(const char*) ctor: zero the string, RangeInitialize it, then install
+    // the vftables in retail's order - first the two base interface tables, then (after the B
+    // subobject's refcount is cleared) the cMsgString8 tables.  The tables are the image's, and
+    // storing them directly keeps cl from writing its own copies of the base ones (our IMsgBaseA /
+    // IMsgBaseB tables hold stubs, so they could never be mapped back to the image).
+    string8* s = &msg->mString;
+    s->mpBegin = 0;
+    s->mpEnd = 0;
+    s->mpCapacity = 0;
+    s->RangeInit(str);
+    *(void**)msg = (void*)0x13EB938;        // IMsgBaseA vftable
+    *((void**)msg + 1) = (void*)0x13EF094;  // IMsgBaseB vftable
+    _InterlockedExchange(&msg->mRefCount, 0);
+    *(void**)msg = (void*)0x13FC748;        // cMsgString8 vftable, IMsgBaseA subobject
+    *((void**)msg + 1) = (void*)0x13FC744;  // cMsgString8 vftable, IMsgBaseB subobject
+  } else {
+    msg = 0;
+  }
   uint32_t bit = 1u << idx;
   if (holder->mMask & bit) {
     if (holder->mSlots[idx].mpObject) holder->mSlots[idx].mpObject->Release();
