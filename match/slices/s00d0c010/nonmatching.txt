@@ -1,0 +1,11 @@
+00d0c010 341 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 341 bytes - community editor entry routine, body not reconstructed.
+00d0c170 1079 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1079 bytes - cTribeToolView::UpdateRotationSound (tribe animation/sound dispatch), body not reconstructed.
+00d0c5b0 426 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 426 bytes - community editor helper, body not reconstructed.
+00d0c760 178 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 178 bytes - eastl tree walk over layout nodes plus tree reset; node payload virtuals and RBTreeIncrement sequence not reproduced.
+00d0c820 190 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 190 bytes - swatch message post; the retail MessageBasicRC<5> payload with message id 0x4a344e9 is not available in the slice headers.
+00d0c970 141 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 102 bytes - tree insert with eastl allocator; retail copies the 16-byte value with fld/fstp while /fp:fast vectorises my copy, and register allocation of the key/parent differs.
+00d0ca00 151 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 147 bytes - tree insert for the second key type; body not reconstructed.
+00d0cb30 194 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 194 bytes - eastl lower_bound + insert; body not reconstructed.
+00d0cc00 157 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 132 bytes - OnAssetBrowserSelection; retail tests the selection's leading dword and passes this-4 to the editor methods, which the class layout I can express does not reproduce.
+00d0cca0 507 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 507 bytes - cTribeToolView routine, body not reconstructed.
+00d0cec0 322 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 322 bytes - cTribeToolView routine, body not reconstructed.
