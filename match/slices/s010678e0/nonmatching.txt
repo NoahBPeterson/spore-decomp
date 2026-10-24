@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+010678e0  244  cSPUISpace per-frame space-UI refresh (charge bar, minimap, tooltip): complete; the whole body is reconstructed but the retail build calls SSE helper paths and schedules the many window/cString operations differently (316 vs 265 bytes).
+01067aa0  160  UpdateToolChargeBar(float): complete; the target keeps the charge fraction in an SSE register (movss/comiss/mulss) while our x87 build reloads the globals per operation.
+01067b60  73  FUN_01067b60: complete; byte-identical except the target materialises the address of the m18 sub-object (`add eax,0x18`) before the FUN_01075500 call; that dead instruction cannot be reproduced from source.
+01067c50  438  SetToolTip(window,text,key,param,param): complete; the layout/animation setup uses SSE float moves and a different argument-evaluation schedule throughout (454 vs 515 bytes).
+01067e70  11  FUN_01067e70: complete; the target schedules `lea edx,&local` one slot before the `local.m1 = 0x2f7d0004` store; our build emits the store first.
+01067ef0  101  FUN_01067ef0 (list scan for a Blk28 id): complete; the target keeps the index in edi and the byte offset in ebp, we spill the index to the stack (112 vs 110 bytes).
+01067f60  27  FUN_01067f60: complete; the target preloads the argument into ebx before the GameInputManager call and strength-reduces the second compare to `lea ecx,[eax-4]; test`; we load the argument late and emit `add eax,-4; je`.
+01067fb0  178  ToggleSlotsUI: complete; the bool-argument home (`mov byte [esp+N],bl; mov eax,[esp+N]`) and the window vtable-call register order differ from the target (179 vs 197 bytes).
+01068080  158  ToggleMinimapUI: complete; same bool-argument home and vtable-call scheduling divergence as ToggleSlotsUI (174 vs 179 bytes).
+01068140  133  UpdateStarMapFilters: complete; same bool-argument home and vtable-call scheduling divergence (149 vs 154 bytes).
+01068230  69  FUN_01068230: complete; byte-identical except the target zero-extends the virtual slot-0x28 result (`movzx eax,al`) before testing it, which MSVC does not emit for this source under /O2.
+01068380  60  eastl::deque<Message,allocator,8>::clear: complete; the target's node-destroy walk uses a slightly different register/loop layout (118 vs 121 bytes).
+010684b0  107  Blk28 range copy-construct (out,first,last,dst): complete; the target keeps the begin cursor in the parameter stack slot across the loop and we keep it in a register.
+01068530  80  Blk28 fill/copy over `count` elements: complete; the target pre-biases the destination pointer by +0x10 and reuses esi-relative displacements (103 vs 109 bytes).
+01068610  114  Blk28 range copy-construct (first,last,dst): complete; the target makes the equal-range early return the out-of-line block at the function end, we emit it inline (120 vs 114 bytes).
+01068710  140  Blk28 range assign (first,last,src,srcEnd): complete; same out-of-line early-return layout difference plus `sub` vs `add -,0x28` strength reduction (143 vs 135 bytes).
+010687a0  10  FUN_010687a0: complete; the target materialises the sim pointer through eax (`mov eax,[eax+0x14]; mov ecx,eax` / `xor eax,eax; mov ecx,eax`) before the tail jump; we fold it directly into ecx.
