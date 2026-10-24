@@ -308,21 +308,23 @@ cGrid* __thiscall cGrid::CopyConstruct(const cGrid& src)
 }
 
 // @ 0x007030a0
-cGrid* __cdecl grid_uninit_copy(cGrid* first, cGrid* last, cGrid* dst)
+cGrid* __cdecl grid_uninit_copy(cGrid** out, cGrid* first, cGrid* last, cGrid* dst)
 {
-    cGrid* out = dst;
+    *out = dst;
     for (; first != last; first += 1) {
-        out->CopyConstruct(*first);
-        out += 1;
+        if (*out)
+            (*out)->CopyConstruct(*first);
+        *out += 1;
     }
-    return out;
+    return (cGrid*)out;
 }
 
 // @ 0x00703160
-void __cdecl grid_fill_n(unsigned n, cGrid* dst, const cGrid* value)
+void __cdecl grid_fill_n(cGrid* dst, unsigned n, const cGrid* value)
 {
     for (; n != 0; n--) {
-        dst->CopyConstruct(*value);
+        if (dst)
+            dst->CopyConstruct(*value);
         dst += 1;
     }
 }
