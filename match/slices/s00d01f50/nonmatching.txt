@@ -1,0 +1,6 @@
+00d01f50 WEAK 6-byte diff: FUN_00d01ab0 argument setup loads the first empire id into eax instead of ecx (pure register-allocation swap, semantics identical); 183 valid inputs, 78.8% coverage
+00d01ff0 WEAK 6-byte diff: same FUN_00d01ab0 argument-setup register swap as 00d01f50; 190 valid inputs, 76.5% coverage
+00d02050 FAIL personality calculation: byte layout differs (483 vs 500) and ecx is clobbered where the original leaves it untouched on malformed relationship records; 42 valid inputs, 60.6% coverage
+00d022e0 WEAK world writer: eastl::wstring temporaries are emitted as real calls instead of the inlined SSO copies (268 vs 337 bytes); 256 valid inputs, 11.6% coverage
+00d02440 UNSUPPORTED world reader: stream vtable calls and the thiscall tree insert cannot be resolved by the harness (302 vs 291 bytes, 0 valid inputs)
+00d02570 WEAK script-side world writer: eastl::wstring temporaries are emitted as real calls instead of the inlined SSO copies (271 vs 342 bytes); 243 valid inputs, 11.5% coverage
