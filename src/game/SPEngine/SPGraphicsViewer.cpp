@@ -148,6 +148,12 @@ struct cViewer_s007c_4be0 {
     void SetViewAngle(float a);
     void SetViewAngleY(float a);
     void SetViewWindow(float x, float y);
+    void FUN_007c4010(u32* out);     // 0x007c4010 (cViewer method: this->mCamera->m_viewport rect)
+};
+// 0x011f38f0 is a __thiscall member of VBi (`?FUN_011f38f0@VBi@@QAEXHI@Z`): the original sets ecx
+// to the destination camera before releasing the source raster.
+struct VBi {
+    void FUN_011f38f0(int a, u32 b);
 };
 struct Renderer {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
@@ -769,10 +775,10 @@ __declspec(noinline) bool cViewer_s007c_4be0::Copy(cViewer_s007c_4be0* src, bool
     if (!copyZBuffer)
         mCamera->m_zbuffer = sc->m_zbuffer;
     if (!keepRaster && sc->m_raster[1] != 0)
-        FUN_011f38f0(1, sc->m_raster[1]);
+        ((VBi*)mCamera)->FUN_011f38f0(1, (u32)sc->m_raster[1]);
 
     int r[4];
-    sc->GetViewport(r);
+    src->FUN_007c4010((u32*)r);
     mCamera->SetSize(r[0], r[1], r[2] - r[0], r[3] - r[1]);
 
     float vx = sc->m_viewWindow[0];
