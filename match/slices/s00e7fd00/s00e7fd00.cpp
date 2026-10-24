@@ -24,6 +24,17 @@ struct ResourceKey {
     ResourceKey() {}
 };
 
+// Three ints, copied as a unit by the cell message path (00e809a0) and the intro-key
+// resource (the same 12 bytes are a ResourceKey in sLoadLevel).
+struct Int3 {
+    int x, y, z;
+    Int3() {}
+    Int3(int x_, int y_, int z_) : x(x_), y(y_), z(z_) {}
+};
+
+// cvtss2si with the current MXCSR rounding mode, as the original's inlined ROUND helper.
+__forceinline int RoundToInt(float f) { __asm cvtss2si eax, f }
+
 struct cBoundingBox { Vector3 lower; Vector3 upper; };
 
 struct cIVisualEffect {                       // EA::Swarm::cIVisualEffect
@@ -126,8 +137,17 @@ struct cCbVector {                            // eastl::vector<pair<bool(*)(...)
 
 struct cSerializableData {
     uint32 pad[0x10 / 4];
-    ResourceKey mIntroKey;                    // +0x10
-    int mLevel;                               // +0x1c  (overlaps mIntroKey.groupID? no: key is 0xc bytes, +0x1c follows)
+    ResourceKey mIntroKey;                    // +0x10 (also the Int3 written by 00e809a0)
+    int mLevel;                               // +0x1c
+    uint32 field_20;                          // +0x20
+    uint32 field_24;                          // +0x24
+    uint32 field_28;                          // +0x28
+    int field_2c;                             // +0x2c
+    int field_30;                             // +0x30
+    unsigned char pad34[0x74 - 0x34];
+    int field_74;                             // +0x74 (accumulated millisecond clock)
+    unsigned char pad78[0xe2 - 0x78];
+    bool field_e2;                            // +0xe2
 };
 
 struct cCellGame {
@@ -158,11 +178,16 @@ struct cCellGame {
     float mfExtentHalf2;                      // +0x5150
     uint32 pad5154;
     int field_5158;                           // +0x5158
-    uint32 pad515c[(0x5190 - 0x515c) / 4];
+    int field_515c;                           // +0x515c (paused / no time step)
+    int field_5160;                           // +0x5160 (updated frame counter)
+    uint32 pad5164[(0x5190 - 0x5164) / 4];
     cSerializableData* mpSerializableData;    // +0x5190
     uint32 pad5194[(0x51d4 - 0x5194) / 4];
     int field_51d4;                           // +0x51d4
     bool field_51d8;                          // +0x51d8
+    bool field_51d9;                          // +0x51d9 (reload level after the step)
+    unsigned char pad51da[0x51e0 - 0x51da];
+    int field_51e0;                           // +0x51e0 (update state: 0 normal, 1 win, 2 quit)
 };
 
 struct cGfxObjVec {                           // vector of 0x74-byte gfx objects
@@ -263,6 +288,76 @@ uint32 GetCellKey(uint32 value, cHandleRef* tmp);                              /
 void FUN_00e78c00(cCell* cell, uint32 key);                                    // 0x00e78c00
 void sHatchFromIce_Start();                                                    // 0x00e6ecb0
 void FUN_00e6eb60();                                                           // 0x00e6eb60
+
+// ---------------------------------------------------------------- cell update / message handlers (00e806b0, 00e809a0)
+struct cTriggerTarget {                       // vtable-bearing object embedded at cTriggerMgr+0x04
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v10();
+    virtual void v11();
+    virtual void v12();
+    virtual void v13();
+    virtual void SetTime(int timeMs, int dtMs);   // +0x38
+};
+struct cTriggerMgr {
+    uint32 field_0;                           // +0x00
+    cTriggerTarget mTarget;                   // +0x04
+};
+
+struct cResource {                            // resource object returned by the cursor provider
+    uint32 field_0;                           // +0x00
+    uint32 field_4;                           // +0x04
+    uint32 field_8;                           // +0x08
+    int* mpBegin;                             // +0x0c (IntVector data)
+    int* mpEnd;                               // +0x10
+    int* mpCapacity;                          // +0x14
+    void resize(unsigned count);              // 0x007eb820
+};
+
+struct cResourceProvider {                    // DAT_015fd910
+    cResource* Find(int group, int index);    // 0x00ba5410
+    cResource* Create(int group, int index);  // 0x007ec160
+};
+
+struct cIntroState {                          // object at 0x016b3cb8
+    void Load(void* data);                    // 0x006ffe00
+};
+
+cTriggerMgr* GetTriggerMgr();                                                  // 0x00b3d4d0
+cTriggerMgr* FUN_00b3d3f0();                                                   // 0x00b3d3f0
+void FUN_00e84bf0();                                                           // 0x00e84bf0
+void FUN_00e82de0(int timeMs, int dtMs);                                       // 0x00e82de0
+bool FUN_00e82c70();                                                           // 0x00e82c70
+void* FUN_0067de20();                                                          // 0x0067de20 (SP::CheatManager)
+void* FUN_0067dd20();                                                          // 0x0067dd20
+void FUN_00e5b790(float t);                                                    // 0x00e5b790
+void FUN_00e7f3a0(float t);                                                    // 0x00e7f3a0 (SP::sUpdateGame)
+void FUN_00e73f60();                                                           // 0x00e73f60 (SP::sUpdateGfx)
+void FUN_00e53b00(float t);                                                    // 0x00e53b00
+void FUN_00e600a0(float t, char mode);                                         // 0x00e600a0 (CellCamera_Update)
+void FUN_00e6c9f0(float t);                                                    // 0x00e6c9f0 (SP::sUpdateUI)
+bool FUN_00e7f550();                                                           // 0x00e7f550
+void FUN_00e82c80(int msg, int* out0, char* outByte, int* outInt, Int3* outVec); // 0x00e82c80
+int  FUN_00e394f0(int id, Int3* a, Int3* b, Int3* c, Int3* d);                 // 0x00e394f0
+void FUN_00e624b0(Int3 key);                                                   // 0x00e624b0 (12 bytes by value)
+void FUN_00e4fbb0();                                                           // 0x00e4fbb0 (vector pointer in EAX)
+int  __fastcall FUN_00e51430(int level);                                       // 0x00e51430 (level in ECX)
+void* FUN_0067de90();                                                          // 0x0067de90
+void* FUN_0067dcc0();                                                          // 0x0067dcc0 (SP::MessageServer)
+
+// Trigger targets receive the millisecond clock through their virtual slot at +0x38.
+static inline void TriggerSetTime(cTriggerMgr* mgr, int timeMs, int dtMs)
+{
+    mgr->mTarget.SetTime(timeMs, dtMs);
+}
 
 // Re-derive the playfield extents around the camera position (the retail code inlines this body here and
 // calls the out-of-line copy at 0x00e50810 once before).
@@ -430,4 +525,132 @@ void sLoadLevel(int level, int param2, int param3, int param4, bool bGameMode, u
         FUN_00e6eb60();
 }
 
+// @ 0x00e806b0
+void sUpdate(float dt, float time)
+{
+    FUN_00e84bf0();
+    int state = gspCellGame->field_51e0;
+
+    if (state != 0) {
+        if (dt == 0.0f)
+            return;
+        switch (state) {
+        case 1:
+            if (FUN_00e82c70()) {
+                void* obj = FUN_0067dd20();
+                ((void (__thiscall*)(void*))(*(void***)obj)[0x40 / 4])(obj);
+            }
+            break;
+        case 2:
+            if (FUN_00e82c70()) {
+                void* obj = FUN_0067de20();
+                ((void (__thiscall*)(void*, const char*))(*(void***)obj)[0x20 / 4])(obj, "quit");
+            }
+            break;
+        }
+        return;
+    }
+
+    if (gspCellGame->field_515c == 0 && dt != 0.0f) {
+        gspCellGame->field_5160++;
+        FUN_00e82de0(RoundToInt(time * 1000.0f), RoundToInt(dt * 1000.0f));
+
+        cTriggerMgr* mgr = GetTriggerMgr();
+        TriggerSetTime(mgr, RoundToInt(time * 1000.0f), RoundToInt(dt * 1000.0f));
+        mgr = FUN_00b3d3f0();
+        TriggerSetTime(mgr, RoundToInt(time * 1000.0f), RoundToInt(dt * 1000.0f));
+
+        int* pClock = &gspCellGame->mpSerializableData->field_74;
+        *pClock += RoundToInt(dt * 1000.0f);
+        FUN_00e5b790(dt);
+        FUN_00e7f3a0(dt);
+        if (gspCellGame->field_51d8) {
+            cSerializableData* ser = gspCellGame->mpSerializableData;
+            bool bHatch = gspCellGame->field_51d9;
+            sLoadLevel(ser->mLevel, ser->field_20, ser->field_24, ser->field_28,
+                       gspCellGame->mbEditor, gspCellGame->field_4110, false);
+            if (bHatch)
+                FUN_00e7f550();
+            FUN_00e7f3a0(dt);
+        }
+        FUN_00e73f60();
+        FUN_00e53b00(dt);
+        FUN_00e600a0(dt, 0);
+        FUN_00e6c9f0(dt);
+        return;
+    }
+
+    cTriggerMgr* mgr = GetTriggerMgr();
+    TriggerSetTime(mgr, RoundToInt(time * 1000.0f), 0);
+    mgr = FUN_00b3d3f0();
+    TriggerSetTime(mgr, RoundToInt(time * 1000.0f), 0);
+    ((cIntroState*)0x016b3cb8)->Load((void*)0x016b4378);
+    FUN_00e600a0(time, 1);
+    FUN_00e6c9f0(time);
+}
+
 }   // namespace SP
+
+// @ 0x00e809a0
+bool FUN_00e809a0(int param_1, void* msg)
+{
+    (void)param_1;
+    char outByte;
+    int out0;
+    int outInt;
+    Int3 v(0, 0, 0);
+    FUN_00e82c80((int)msg, &out0, &outByte, &outInt, &v);
+    if (out0 != 0x1100000)
+        return true;
+
+    if (outByte == 0) {
+        gspCellGame->mpSerializableData->field_2c =
+            FUN_00e51430(gspCellGame->mpSerializableData->mLevel) - outInt;
+        gspCellGame->mpSerializableData->field_e2 = false;
+        Int3 a(0, 0, 0);
+        Int3 b(0, 0, 0);
+        Int3 c(0, 0, 0);
+        FUN_00e394f0(0xdbd1b537, &v, &c, &b, &a);
+
+        cResource* res = ((cResourceProvider*)FUN_0067de90())->Find(7, 7);
+        if (!res) {
+            res = ((cResourceProvider*)FUN_0067de90())->Create(7, 0);
+            if (!res)
+                goto skip;
+            res->resize(0xc);
+            res->mpBegin[4] = 7;
+        }
+        res->mpBegin[1] = v.y;
+        res->mpBegin[2] = v.x;
+        res->mpBegin[3] = v.z;
+    }
+
+skip:
+    FUN_00e624b0(v);
+    // normalize() reads its vector pointer from EAX (register-convention helper).
+    __asm {
+        mov eax, dword ptr [gspCellGame]
+        mov eax, dword ptr [eax + 0x5190]
+        add eax, 0x34
+    }
+    FUN_00e4fbb0();
+    {
+        cSerializableData* ser = gspCellGame->mpSerializableData;
+        ser->mIntroKey.instanceID = (uint32)v.x;
+        ser->mIntroKey.typeID = (uint32)v.y;
+        ser->mIntroKey.groupID = (uint32)v.z;
+    }
+    gspCellGame->mpSerializableData->field_30 =
+        FUN_00e51430(gspCellGame->mpSerializableData->mLevel);
+    SP::sLoadLevel(gspCellGame->mpSerializableData->mLevel,
+                   gspCellGame->mpSerializableData->field_20,
+                   gspCellGame->mpSerializableData->field_24,
+                   gspCellGame->mpSerializableData->field_28,
+                   gspCellGame->mbEditor, gspCellGame->field_4110, false);
+    {
+        void* server = FUN_0067dcc0();
+        ((void (__thiscall*)(void*, int, int, int))(*(void***)server)[0x14 / 4])(
+            server, 0x6579712, 0x26b05664, 0);
+    }
+    return true;
+}
