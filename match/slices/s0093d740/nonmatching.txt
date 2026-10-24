@@ -1,12 +1,12 @@
 # va  diff-bytes  reason
-0093dbc0  132  complete; Variant 8-byte/string-header setter; register assignment (ax vs dx) differs; equiv FAIL after ecx fix (Variant member)
+0093dbc0  72  complete; SetVariant8 wrote a full dword into value0 (zeroing the high half); now writes only the low word via value0w; the Construct call is now emitted; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
 0093dcc0  137  complete; EASTL hashtable bucket rebuild (rehash); node re-linking schedule differs
-0093df20  104  complete; Variant::SetBool (type 2); cl shares ebx=2 for mask+type in the original
-0093dfa0  132  complete; Variant::SetUInt16 (type 3); flags-mask local kept in ax vs dx
-0093e020  63  complete; Variant::SetUInt8 (type 5); flags-mask local kept in ax vs dx
-0093e0a0  63  complete; Variant::SetInt8 (type 6); flags-mask local kept in ax vs dx
-0093e120  132  complete; Variant::SetUInt16b (type 7); flags-mask local kept in ax vs dx
-0093e1a0  127  complete; Variant::SetU64/pointer (type 0xb, 8-byte copy); flags-mask local differs
-0093e220  63  complete; Variant::SetDouble (type 0xe, fld/fstp copy); flags-mask local kept in ax vs dx
-0093e3f0  108  complete; EASTL hashtable find (hash + bucket walk, sret iterator)
+0093df20  65  complete; SetBool (type 2): the EA::Variant::Construct call was dropped because the helper was an empty inline stub; now a real out-of-line member at 0x0093dd80; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx/movzx scheduling differs
+0093dfa0  73  complete; SetUInt16 (type 3): Construct call restored (was an empty inline stub); equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093e020  71  complete; SetUInt8 (type 5): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093e0a0  71  complete; SetInt8 (type 6): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093e120  73  complete; SetUInt16b (type 7): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093e1a0  77  complete; SetPtr (type 0xb, 8-byte copy): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; store/register scheduling differs
+0093e220  71  complete; SetDouble (type 0xe, fld/fstp copy): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093e3f0  110  complete; EASTL hashtable find: original returns the out pointer in eax, the void declaration dropped it; now void* returning out; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; bucket-walk scheduling differs
 0093e470  n/a  complete; EASTL hashtable insert (rehash on grow + node alloc)

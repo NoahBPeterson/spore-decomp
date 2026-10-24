@@ -12,7 +12,10 @@ extern "C" void  FUN_004228e0(void*, unsigned);
 namespace EA {
 
 struct Variant {
-    unsigned int   value0;      // +0x00
+    union {
+        unsigned int   value0;  // +0x00
+        unsigned short value0w; // +0x00 low word (SetVariant8 writes only the low word)
+    };
     unsigned int   value1;      // +0x04
     unsigned int   value2;      // +0x08
     unsigned int   value3;      // +0x0c
@@ -20,8 +23,9 @@ struct Variant {
     unsigned short mTypeId;     // +0x12
 
     void Destruct(char bFree);
-    void Assign(int, int, const void*, int, int);
-    bool AssignEx(int type, unsigned flags, const void* src, int width, int isAtomic);
+    // Real retail symbol at 0x0093dd80 (?Construct@Variant@EA@@IAE_NGGPBXII@Z). Declared only:
+    // the setters must emit a real out-of-line call, so the byte diff and the call trace match.
+    bool Construct(unsigned short type, unsigned short flags, const void* src, unsigned int width, unsigned int isAtomic); // 0x0093dd80
     Variant* SetBool(const unsigned char* p);
     Variant* SetUInt16(const unsigned short* p);
     Variant* SetUInt8(const unsigned char* p);
@@ -33,45 +37,62 @@ struct Variant {
     Variant* SetVariant8(const unsigned short* p);
 };
 
-void Variant::Assign(int, int, const void*, int, int) {}
-bool Variant::AssignEx(int, unsigned, const void*, int, int) { return true; }
-#define VAR_PRELUDE(N, W, KIND)                                                  \
+// The real 0x0093dd80 body (EA::Variant::Construct) is reconstructed further below.
+#define VAR_PRELUDE(N, W)                                                        \
     if (mFlags & 4) {                                                            \
         ((void(__cdecl*)(int, Variant*, int, int, int, int))g_fn154eb48)(1, this, 0, 0, 0, 0); \
         if ((mFlags & 2) == 0) { mTypeId = 0; mFlags = 0; }                      \
     }                                                                            \
     unsigned short f = mFlags & 2;                                               \
-    if (f != 0 && mTypeId != (N)) { Assign((N), 0, p, (W), 1); return this; }    \
-    *(KIND*)&value0 = *p;
+    if (f != 0 && mTypeId != (N)) { Construct((N), 0, p, (W), 1); return this; }
 
 // @ 0x0093DF20
 Variant* Variant::SetBool(const unsigned char* p) {
-    VAR_PRELUDE(2, 1, unsigned char)
-    mFlags = f; mTypeId = 2; return this;
+    VAR_PRELUDE(2, 1)
+    unsigned char v = *p;
+    mFlags = f; mTypeId = 2;
+    *(unsigned char*)&value0 = v;
+    return this;
 }
 
 // @ 0x0093DFA0
 Variant* Variant::SetUInt16(const unsigned short* p) {
-    VAR_PRELUDE(3, 2, unsigned short)
-    mFlags = f; mTypeId = 3; return this;
+    VAR_PRELUDE(3, 2)
+    unsigned short v = *p;
+    mFlags = f;
+    *(unsigned short*)&value0 = v;
+    mTypeId = 3;
+    return this;
 }
 
 // @ 0x0093E020
 Variant* Variant::SetUInt8(const unsigned char* p) {
-    VAR_PRELUDE(5, 1, unsigned char)
-    mFlags = f; mTypeId = 5; return this;
+    VAR_PRELUDE(5, 1)
+    unsigned char v = *p;
+    mFlags = f;
+    *(unsigned char*)&value0 = v;
+    mTypeId = 5;
+    return this;
 }
 
 // @ 0x0093E0A0
 Variant* Variant::SetInt8(const unsigned char* p) {
-    VAR_PRELUDE(6, 1, unsigned char)
-    mFlags = f; mTypeId = 6; return this;
+    VAR_PRELUDE(6, 1)
+    unsigned char v = *p;
+    mFlags = f;
+    *(unsigned char*)&value0 = v;
+    mTypeId = 6;
+    return this;
 }
 
 // @ 0x0093E120
 Variant* Variant::SetUInt16b(const unsigned short* p) {
-    VAR_PRELUDE(7, 2, unsigned short)
-    mFlags = f; mTypeId = 7; return this;
+    VAR_PRELUDE(7, 2)
+    unsigned short v = *p;
+    mFlags = f;
+    *(unsigned short*)&value0 = v;
+    mTypeId = 7;
+    return this;
 }
 
 // @ 0x0093E1A0
@@ -81,17 +102,25 @@ Variant* Variant::SetPtr(const unsigned short* p) {
         if ((mFlags & 2) == 0) { mTypeId = 0; mFlags = 0; }
     }
     unsigned short f = mFlags & 2;
-    if (f != 0 && mTypeId != 0xb) { Assign(0xb, 0, p, 8, 1); return this; }
-    value0 = *(const unsigned int*)p;
-    value1 = *((const unsigned int*)p + 1);
-    mFlags = f; mTypeId = 0xb;
+    if (f != 0 && mTypeId != 0xb) { Construct(0xb, 0, p, 8, 1); return this; }
+    const unsigned int* q = (const unsigned int*)p;
+    unsigned int a = q[0];
+    unsigned int b = q[1];
+    value0 = a;
+    mFlags = f;
+    value1 = b;
+    mTypeId = 0xb;
     return this;
 }
 
 // @ 0x0093E220
 Variant* Variant::SetDouble(const double* p) {
-    VAR_PRELUDE(0xe, 8, double)
-    mFlags = f; mTypeId = 0xe; return this;
+    VAR_PRELUDE(0xe, 8)
+    double v = *p;
+    mFlags = f;
+    *(double*)&value0 = v;
+    mTypeId = 0xe;
+    return this;
 }
 
 // @ 0x0093DBC0  (8-size value / string header copy)
@@ -102,8 +131,8 @@ Variant* Variant::SetVariant8(const unsigned short* p) {
         if ((v->mFlags & 2) == 0) { v->mTypeId = 0; v->mFlags = 0; }
     }
     unsigned short f = v->mFlags & 2;
-    if (f != 0 && v->mTypeId != 8) { v->Assign(8, 0, p, 2, 1); return v; }
-    v->value0 = *(const unsigned short*)p;
+    if (f != 0 && v->mTypeId != 8) { v->Construct(8, 0, p, 2, 1); return v; }
+    v->value0w = *p;
     v->mFlags = f; v->mTypeId = 8;
     return v;
 }
@@ -134,7 +163,7 @@ struct HashTable {
     void*         mpAlloc;      // +0x10
 
     void Rehash(unsigned n);                       // 0x0093DCC0
-    void Find(void** out, const void* key);        // 0x0093E3F0
+    void* Find(void** out, const void* key);       // 0x0093E3F0
     void Insert(void** out, int* key);             // 0x0093E470
 };
 
@@ -160,7 +189,7 @@ void HashTable::Rehash(unsigned n) {
 }
 
 // @ 0x0093E3F0
-void HashTable::Find(void** out, const void* key) {
+void* HashTable::Find(void** out, const void* key) {
     const int* k = (const int*)key;
     unsigned u = ((unsigned)*(const unsigned short*)((const char*)key + 4) + (unsigned)k[0]) % mnBucketCount;
     int* node = (int*)mpBuckets[u];
@@ -175,6 +204,7 @@ void HashTable::Find(void** out, const void* key) {
 found:
     out[0] = node;
     out[1] = slot;
+    return out;
 }
 
 // @ 0x0093E470
@@ -220,29 +250,31 @@ int VariantToString(const unsigned short* src, int len, unsigned short term, voi
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x0093DD80  Variant conversion/assign helper (414 bytes)
+// @ 0x0093DD80  EA::Variant::Construct (414 bytes) -- conversion/construct helper.
+// Declared-only callers above resolve here (real retail symbol ?Construct@Variant@EA@@IAE_NGGPBXII@Z).
+// Body reconstructed; the full conversion/EH control flow is still approximate (see partial.txt).
 // ---------------------------------------------------------------------------------------------
-bool Variant_Assign(int* self, short type, unsigned flags, void* src, int width, int isAtomic) {
-    unsigned f = flags & 0xffff;
-    if ((self[4] & 2) != 0) {
+bool EA::Variant::Construct(unsigned short type, unsigned short flags, const void* src, unsigned int width, unsigned int isAtomic) {
+    unsigned int f = flags & 0xffff;
+    if ((mFlags & 2) != 0) {
         f |= 2;
-        if ((short)*(short*)((char*)self + 0x12) != type) goto convert;
+        if (mTypeId != type) goto convert;
     }
     if ((f & 8) != 0) goto convert;
     if ((f & 0x20) != 0) {
-        *(short*)((char*)self + 0x12) = type;
-        self[1] = (int)(size_t)src;
-        *(short*)((char*)self + 0x10) = (short)f;
-        self[2] = width;
-        self[0] = isAtomic;
+        mTypeId = type;
+        value0 = (unsigned int)(size_t)src;
+        mFlags = (unsigned short)f;
+        value1 = width;
+        value2 = isAtomic;
         return true;
     }
     if ((f & 0x10) == 0) {
-        int n = width * isAtomic;
+        unsigned int n = width * isAtomic;
         if (n <= 0x10) {
-            memmove_f(self, src, n);
-            *(short*)((char*)self + 0x12) = type;
-            *(short*)((char*)self + 0x10) = (short)f;
+            memmove_f(this, src, n);
+            mTypeId = type;
+            mFlags = (unsigned short)f;
             return true;
         }
         f |= 0x10;

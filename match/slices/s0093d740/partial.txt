@@ -1,3 +1,3 @@
 # va  diff-bytes  reason
 0093d740  n/a  partial; Variant tokenizer/string splitter (1074B) - control flow skeleton, token walk incomplete
-0093dd80  n/a  partial; Variant conversion/assign helper (414B) - conversion branches approximated
+0093dd80  407  partial; EA::Variant::Construct (414B) - body still approximate; renamed from the free stub to the real protected member so the setters' calls resolve to the retail symbol
