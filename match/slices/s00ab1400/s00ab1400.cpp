@@ -118,10 +118,13 @@ struct cParticlesDescription
     bitset<34> mFlags;                                            // +0x08
     Vector2 mParticleLifetime;                                    // +0x10
     float mPrerollTime;                                           // +0x18
-    uint32_t pad_1c[(0x68 - 0x1C) / 4];
+    uint32_t pad_1c[(0x24 - 0x1C) / 4];
+    Vector2 mEmitInterval;                                        // +0x24 (random interval, in cycles)
+    uint32_t pad_2c[(0x68 - 0x2C) / 4];
     vector<float> mRateCurve;                                     // +0x68
     float mRateCurveTime;                                         // +0x7C
-    uint32_t pad_80[(0x130 - 0x80) / 4];
+    uint16_t mMaxCycles;                                          // +0x80 (0 = unlimited)
+    uint8_t pad_82[0x130 - 0x82];
     uint8_t mPhysicsType;                                         // +0x130
     uint8_t pad_131[0x13C - 0x131];
     Vector3 mDirectionalForcesSum;                                // +0x13C
@@ -174,6 +177,49 @@ struct intrusive_list
         return pNext;
     }
 };
+
+// Free-list allocator the effect draws its cParticle nodes from
+// (dev: EA::Allocator::FixedAllocatorBase_s0092_6410, global pool + free-list head).
+struct cParticlePool
+{
+    uint32_t pad_00[4];                                           // +0x00
+    cParticle* mpFreeList;                                        // +0x10
+    bool AddCore(void* pCore, uint32_t count);                    // 0x00926650
+    cParticle* Allocate()
+    {
+        cParticle* p;
+        while ((p = mpFreeList) == 0) {
+            if (!AddCore(0, 0))
+                return 0;
+        }
+        mpFreeList = p->mpNext;
+        p->mpPrev = 0;
+        p->mpNext = 0;
+        return p;
+    }
+};
+#define g_ParticlePool (*(cParticlePool*)0x01679480)
+
+// Global random stream the effect schedules its next emission with.
+struct cRandomGlobal
+{
+    double RandomDouble();                                        // 0x009360D0
+};
+#define g_Random (*(cRandomGlobal*)0x016778DC)
+
+// Havok constants the compiler shared with its own literal pool (1.0f, 0.0f, 0.5f)
+// and the effect's own link-time constants.
+#define HK_ONE            (*(const float*)0x01485720)
+#define HK_ZERO           (*(const float*)0x01485378)
+#define HK_HALF           (*(const float*)0x01471064)
+#define K_DRAG_TIME_LIMIT (*(const float*)0x013EC478)             // 0.05f
+#define K_EMIT_TIME_EPS   (*(const float*)0x013EB960)             // 0.01f
+
+// Debug operator new[] the effect object is allocated with.
+void* __cdecl SwarmAllocDebug(size_t size, const char* pName, int flags, int debugFlags,
+                              const char* file, int line);        // 0x00F473A0
+#define K_SWARM_ALLOC_NAME ((const char*)0x013F1FDC)              // "Swarm"
+#define K_PARTICLES_EFFECT_SIZE 0x240
 
 class cIRenderer
 { public:
@@ -303,6 +349,12 @@ public:
         --mParticleCount;
         DestroyParticle(p);
     }
+    bool InitParticle(cParticle* p);                              // 0x00AAEB90
+    void StepFrame();                                             // 0x00AB0720
+    void Emit(float deltaTime);                                   // 0x00AB0590
+    void Update(float deltaTime);                                 // 0x00AB0D90
+    void AddRateCurveParticles(float deltaTime);                  // 0x00AB1400
+    cParticlesEffect* ConstructInPlace(uint32_t a, uint32_t b);   // 0x00AB0790
     void GenerateNewParticles(float deltaTime);                   // 0x00AB1840
     virtual void ApplyEffect(float deltaTime, float lodFactor, cStats* stats);
 };
@@ -468,6 +520,138 @@ void cParticlesEffect::ApplyEffect(float deltaTime, float lodFactor, cStats* sta
         stats->mModelParticles += mParticleCount;
     else
         stats->mTextureParticles += mParticleCount;
+}
+
+// Rate-curve emission (dev: EA::Swarm::cParticlesEffect::AddRateCurveParticles): advances the
+// system time, then walks whole emission cycles up to the current time, spawning
+// mRateCurve[0] * mCurrentEmitRateScale particles per cycle and re-scheduling the system time
+// backwards by a random interval drawn from mEmitInterval.
+// @ 0x00AB1400
+void cParticlesEffect::AddRateCurveParticles(float deltaTime)
+{
+    mParticleSystemTime = deltaTime * mInverseRateCurveTime + mParticleSystemTime;
+    if ((double)mCurrentCycle > mParticleSystemTime)
+        return;
+
+    // The 2008 build inlines ceilf here (cvtss2si + cvtsi2ss + ucomiss + cmovb).
+    float rate = mDesc->mRateCurve[0] * mCurrentEmitRateScale;
+    int whole = (int)rate;
+    int count = ((float)whole < rate) ? whole + 1 : whole;
+
+    while (mParticleSystemTime >= (double)mCurrentCycle) {
+        if (mDesc->mFlags.test(27))
+            StepFrame();
+
+        float frameTime = (float)(mParticleSystemTime - (double)mCurrentCycle) * mDesc->mRateCurveTime;
+        if (frameTime < mDesc->mParticleLifetime.y && count > 0) {
+            int n = count;
+            do {
+                cParticle* p = g_ParticlePool.Allocate();
+                if (!InitParticle(p)) {
+                    DestroyParticle(p);
+                } else {
+                    PhysicsUpdateFn fn = sPhysicsUpdate[mDesc->mPhysicsType];
+                    bool alive;
+                    if (fn) {
+                        alive = fn(p, frameTime, mDesc, this);
+                    } else if (mDesc->mDrag * frameTime > K_DRAG_TIME_LIMIT) {
+                        alive = UpdatePhysicsTimeStep(p, frameTime, mDesc, this);
+                    } else {
+                        // dev: EA::Swarm::UpdatePhysicsSimple, inlined.
+                        p->mAge += frameTime;
+                        if (p->mAge >= p->mLifeTime) {
+                            alive = false;
+                        } else {
+                            Vector3 oldVelocity = p->mVelocity;
+                            p->mVelocity += mDirectionalForcesSum * frameTime;
+                            p->mVelocity *= HK_ONE - mDesc->mDrag * frameTime;
+                            p->mPosition += (p->mVelocity + oldVelocity) * (frameTime * HK_HALF);
+                            alive = true;
+                        }
+                    }
+                    if (!alive) {
+                        DestroyParticle(p);
+                    } else {
+                        p->mpPrev = mParticles.mpPrev;
+                        p->mpNext = (cParticle*)&mParticles;
+                        mParticles.mpPrev = p;
+                        p->mpPrev->mpNext = p;
+                        ++mParticleCount;
+                        mBoundingBox.AddPoint(p->mPosition);
+                    }
+                }
+            } while (--n != 0);
+        }
+
+        ++mCurrentCycle;
+        if (mDesc->mMaxCycles != 0 && mCurrentCycle >= (int)mDesc->mMaxCycles) {
+            if (mDesc->mFlags.test(kParticleFlagSingleCycle))
+                return;
+            static_cast<cIComponent*>(this)->Stop(false);
+            return;
+        }
+
+        if (mDesc->mEmitInterval.x >= HK_ZERO) {
+            // The 2008 build does this lerp in double (x87) precision, not in float.
+            double lo = mDesc->mEmitInterval.x;
+            double hi = mDesc->mEmitInterval.y;
+            double interval = g_Random.RandomDouble() * (hi - lo) + lo;
+            if (interval > hi)
+                interval = hi;
+            else if (interval < lo)
+                interval = lo;
+            mParticleSystemTime -= interval * mInverseRateCurveTime;
+            if (mParticleSystemTime < (double)mCurrentCycle) {
+                mRetriggerTime = mDesc->mRateCurveTime *
+                                 (float)((double)mCurrentCycle - mParticleSystemTime);
+                mParticleSystemTime = (double)mCurrentCycle;
+                return;
+            }
+        }
+    }
+}
+
+// Component factory: allocate a cParticlesEffect out of the Swarm bucket, construct it in
+// place and hand back its cComponentBase subobject (the CDB-visible component).
+// @ 0x00AB17E0
+cComponentBase* __cdecl CreateParticlesEffect(uint32_t a, uint32_t b)
+{
+    cParticlesEffect* pEffect =
+        (cParticlesEffect*)SwarmAllocDebug(K_PARTICLES_EFFECT_SIZE, K_SWARM_ALLOC_NAME, 0, 0, 0, 0);
+    if (pEffect != 0) {
+        pEffect = pEffect->ConstructInPlace(a, b);
+        if (pEffect != 0)
+            return static_cast<cComponentBase*>(pEffect);
+    }
+    return 0;
+}
+
+// dev: EA::Swarm::cParticlesEffect::GenerateNewParticles -- picks the emission routine from the
+// LOD flags (Emit / AddRateCurveParticles / Update) after honouring the retrigger delay.
+// @ 0x00AB1840
+void cParticlesEffect::GenerateNewParticles(float deltaTime)
+{
+    if (mRetriggerTime > 0.0f) {
+        mRetriggerTime -= deltaTime;
+        if (mRetriggerTime > 0.0f)
+            return;
+        deltaTime = -mRetriggerTime;
+    }
+
+    if (mDesc->mPrerollTime > K_EMIT_TIME_EPS) {
+        float preroll = mDesc->mPrerollTime - K_EMIT_TIME_EPS;
+        if (preroll < deltaTime)
+            deltaTime = preroll;
+    }
+
+    uint32_t flags = mDesc->mFlags.mWord[0];
+    int lodEmit = (flags >> 1) & 1;
+    if (lodEmit)
+        Emit(deltaTime);
+    else if (flags & 1)
+        AddRateCurveParticles(deltaTime);
+    else
+        Update(deltaTime);
 }
 
 } }

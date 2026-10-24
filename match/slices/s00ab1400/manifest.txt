@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ab1400/s00ab1400.cpp  ?CreateParticlesEffect@Swarm@EA@@YAPAVcComponentBase@12@II@Z  00ab17e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
