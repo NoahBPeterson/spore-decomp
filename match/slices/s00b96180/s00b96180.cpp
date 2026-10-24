@@ -142,8 +142,8 @@ int* FUN_00b96220(int* param_1, int param_2, int param_3, uint* param_4, undefin
 }
 
 // @ 0x00b96360
-struct S96360 { void fn(int param_2, int param_3, int param_4); };
-void S96360::fn(int param_2, int param_3, int param_4)
+struct S96360 { void fn(int param_2, int param_3, int param_4, int allocator); };
+void S96360::fn(int param_2, int param_3, int param_4, int allocator)
 {
     int* param_1 = (int*)this;
     int local_4;

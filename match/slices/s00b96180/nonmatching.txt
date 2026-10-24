@@ -1,7 +1,7 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
 00b96180    20  S96180::fn (rbtree insert-with-dup): complete; ecx(*this) allocated to ebx vs edi register-colour swap
 00b96220    75  FUN_00b96220 (lower_bound on 0x10-stride records): complete; register allocation + branch scaffolding differ
-00b96360   319  S96360::fn (vector<0x3c>::insert fill): complete; memmove/alloc refcount path scheduling differs
+00b96360   353  S96360::fn (vector<0x3c>::insert fill): complete; restored the fourth stack argument (the allocator, unused by the non-allocating paths) so the member emits `ret 0x10` like the original; the old 3-arg signature emitted `ret 0xc` and the replay returned with esp+0x10 instead of esp+0x14. memmove/alloc refcount path scheduling still differs (504 vs 506 bytes); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-. Replay None. Default equiv WEAK (165 valid < 200; generator cannot satisfy the raw vector-pointer invariants, 5% coverage); --inputs 2000 WEAK (806 valid, 5% coverage)
 00b96600   192  S96600::fn (vector<int>::insert): complete; relocation-fixup memmove path register allocation differs
 00b96710   152  S96710::fn (vector<0x10>::insert): complete; relocation-fixup copy path register allocation differs
 00b96820    74  S96820::fn (rbtree node-pool insert): complete; comparison operand order + freelist branch layout differ
