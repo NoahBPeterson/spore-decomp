@@ -96,7 +96,7 @@ bool ClosestPointsOnSegments(const Vector3* p1, const Vector3* d1, const Vector3
   float c3 = d2->z * d1->y - d2->y * d1->z;
   float c4 = bx * d1->z - ax * d2->z;
   float c10 = ax * d2->y - bx * d1->y;
-  float n = (float)sqrt((double)c3 * c3 + ((double)c4 * c4 + (double)c10 * c10));
+  float n = sqrtf(c3 * c3 + (c4 * c4 + c10 * c10));
 
   if (!(1.5258789e-05f > n)) {
     float inv = 1.0f / n;
@@ -104,7 +104,7 @@ bool ClosestPointsOnSegments(const Vector3* p1, const Vector3* d1, const Vector3
     float a4 = c4 * inv;
     float a10 = c10 * inv;
     float dist = fabsf(a3 * ux + (a10 * uz + a4 * uy));
-    if (!(dist > radius)) {
+    if (radius >= dist) {
       float z2 = d2->z;
       float y2 = d2->y;
       float t = -(((uy * z2 - uz * y2) * a3 + (y2 * ux - uy * bx) * a10) +
@@ -113,10 +113,10 @@ bool ClosestPointsOnSegments(const Vector3* p1, const Vector3* d1, const Vector3
       float g6 = a4 * z2 - a10 * y2;
       float g11 = y2 * a3 - a4 * bx;
       float g14 = a10 * bx - z2 * a3;
-      float inv2 = 1.0f / (float)sqrt((double)g14 * g14 + ((double)g11 * g11 + (double)g6 * g6));
+      float inv2 = 1.0f / sqrtf(g14 * g14 + (g11 * g11 + g6 * g6));
       float f10 = (y2 * d1->y + z2 * d1->z) + ax * bx;
       float f8 = (uy * y2 + uz * z2) + bx * ux;
-      float span = fabsf((float)sqrt((double)radius * radius - (double)dist * dist) /
+      float span = fabsf(sqrtf(radius * radius - dist * dist) /
                          ((inv2 * g6) * ax +
                           ((g11 * inv2) * d1->z + (g14 * inv2) * d1->y)));
       float lo = t - span;
@@ -140,7 +140,7 @@ bool ClosestPointsOnSegments(const Vector3* p1, const Vector3* d1, const Vector3
         if (outB) *outB = v2;
         return true;
       }
-      if (f8 < 0.0f || len < f8) return false;
+      if (!(f8 >= 0.0f) || !(len >= f8)) return false;
       if (outA) *outA = lo;
       if (outB) *outB = hi;
       return true;
@@ -152,7 +152,13 @@ bool ClosestPointsOnSegments(const Vector3* p1, const Vector3* d1, const Vector3
   float px = ux - bx * s;
   float py = uy - d2->y * s;
   float pz = uz - d2->z * s;
-  if (!((float)sqrt((double)px * px + ((double)py * py + (double)pz * pz)) > radius)) {
+  float d = sqrtf(px * px + (py * py + pz * pz));
+  union { float f; unsigned u; } db;
+  db.f = d;
+  // the original tests radius < d with a single jb, so an unordered (NaN) d returns 0
+  if ((db.u & 0x7fffffffu) > 0x7f800000u) return false;
+  if (radius < d) return false;
+  {
     float v1, v2;
     if ((d1->z * d2->z + ax * bx) + d1->y * d2->y <= 0.0f) {
       v1 = s - len;
@@ -189,7 +195,7 @@ float SignedAngleBetween(const Vector3* a, const Vector3* b, const Vector3* axis
 }
 
 // @ 0x00699600
-void MoveToward(Vector3* out, const Vector3* from, const Vector3* to, float maxStep) {
+Vector3* MoveToward(Vector3* out, const Vector3* from, const Vector3* to, float maxStep) {
   float dx = to->x - from->x;
   float dy = to->y - from->y;
   float dz = to->z - from->z;
@@ -197,12 +203,13 @@ void MoveToward(Vector3* out, const Vector3* from, const Vector3* to, float maxS
     out->x = to->x;
     out->y = to->y;
     out->z = to->z;
-    return;
+    return out;
   }
   float inv = 1.0f / sqrtf(dx * dx + (dy * dy + dz * dz));
   out->x = from->x + (inv * dx) * maxStep;
   out->y = from->y + (dy * inv) * maxStep;
   out->z = from->z + (dz * inv) * maxStep;
+  return out;
 }
 
 // wraps an angle into (-pi, pi].
@@ -250,8 +257,8 @@ Vector3 CircleTangentPoint(const Vector3& center, float radius, const Vector3& f
     perp.y = dir.y - d.y * t;
     perp.z = dir.z - d.z * t;
     float rem = radiusSq - (a.x * a.x + a.y * a.y + a.z * a.z);
-    if (0.0f <= rem && 1e-06 <= perp.x * perp.x + perp.y * perp.y + perp.z * perp.z) {
-      float s = (float)sqrt(rem / (perp.x * perp.x + perp.y * perp.y + perp.z * perp.z));
+    if (0.0f <= rem && 1e-06 <= perp.z * perp.z + perp.y * perp.y + perp.x * perp.x) {
+      float s = (float)sqrt(rem / (perp.z * perp.z + perp.y * perp.y + perp.x * perp.x));
       p.x = center.x + (perp.x * s + a.x);
       p.y = center.y + (perp.y * s + a.y);
       p.z = center.z + (perp.z * s + a.z);
