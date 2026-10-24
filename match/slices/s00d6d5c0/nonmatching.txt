@@ -1,0 +1,12 @@
+00d6d5c0 1790 not reconstructed in this pass (SP::MATE_LEAD_Tick, 1790-byte mate-AI tick; out of budget); not byte-exact; size 0 vs 1790; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6dcc0 12 not reconstructed in this pass (tiny accessor/thunk; out of budget); not byte-exact; size 0 vs 12; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6dcd0 19 not reconstructed in this pass (tiny accessor/thunk; out of budget); not byte-exact; size 0 vs 19; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6dcf0 219 not reconstructed in this pass (SP::PLAY_FIGHT_Activate); not byte-exact; size 0 vs 219; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6ddd0 35 not reconstructed in this pass (small helper; out of budget); not byte-exact; size 0 vs 35; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6de00 72 not reconstructed in this pass (small helper; out of budget); not byte-exact; size 0 vs 72; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6de50 66 not reconstructed in this pass (small helper; out of budget); not byte-exact; size 0 vs 66; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6dea0 34 not reconstructed in this pass (small helper; out of budget); not byte-exact; size 0 vs 34; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6ded0 147 not reconstructed in this pass (helper; out of budget); not byte-exact; size 0 vs 147; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6df70 548 not reconstructed in this pass (548-byte AI helper); not byte-exact; size 0 vs 548; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6e1a0 315 not reconstructed in this pass (315-byte AI helper); not byte-exact; size 0 vs 315; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d6e2e0 182 not reconstructed in this pass (SP::PLAY_FIGHT_Decide); not byte-exact; size 0 vs 182; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
