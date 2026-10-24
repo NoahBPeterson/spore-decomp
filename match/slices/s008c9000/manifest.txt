@@ -1,0 +1,6 @@
+# slice s008c9000 - Type 2000 scan converter teardown + stroker point helpers (gold7 worker 10)
+slices/s008c9000/s008c9000.cpp  ?tsi_DeleteScanConv@@YAXPAUtsiScanConv@@@Z  008c9a70  /O2 /MD /Gy /TP /arch:SSE
+slices/s008c9000/s008c9000.cpp  ?addPointA@@YAXPAUStrokeState@@FFF@Z  008c9b10  /O2 /MD /Gy /TP /arch:SSE
+slices/s008c9000/s008c9000.cpp  ?FUN_008c9b70@@YAXPAUStrokeState@@FFFFFF@Z  008c9b70  /O2 /MD /Gy /TP /arch:SSE
+slices/s008c9000/s008c9000.cpp  ?addPointB@@YAXPAUStrokeState@@FFF@Z  008c9be0  /O2 /MD /Gy /TP /arch:SSE
+slices/s008c9000/s008c9000.cpp  ?FUN_008c9c40@@YAHHH@Z  008c9c40  /O2 /MD /Gy /TP /arch:SSE

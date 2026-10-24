@@ -510,3 +510,194 @@ void MakeBits(tsiScanConv* t, char xWeightIsOne, char omitBitMap, FF_GetCacheMem
         t->weDidYDropouts |= weDidDropouts;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Type 2000 scan converter teardown and stroker point-list helpers.
+// The memory-manager fields used by the teardown are the scan-converter cache
+// slots (+0x60) and their "still cached" flags (+0x98/+0x9c).
+// ---------------------------------------------------------------------------
+struct tsiMemObject {
+    uint32_t pad00[0x18];           // +0x00
+    tsiScanConv* currentScanConv;   // +0x60 scan converter owning the cached bitmap
+    void* cachedBitmap;             // +0x64
+    uint32_t pad18[0x0c];           // +0x68
+    int scanConvKept;               // +0x98 scan converter was cached, do not free it
+    int bitmapKept;                 // +0x9c bitmap was cached, do not free it
+};
+
+struct StrokeState {
+    tsiMemObject* mem;              // +0x00
+    int nA;                         // +0x04 number of shorts in list A
+    int capA;                       // +0x08
+    short* ptsA;                    // +0x0c
+    int nB;                         // +0x10 number of shorts in list B
+    int capB;                       // +0x14
+    short* ptsB;                    // +0x18
+};
+
+extern "C" {
+void* tsi_ReAllocMem(tsiMemObject* mem, void* p, int bytes);      // 0x008d1330
+void tsi_DeAllocMem(tsiMemObject* mem, void* p);                  // 0x008d1440
+int util_FixMul(int a, int b);                                    // 0x008d1590
+int util_FixDiv(int a, int b);                                    // 0x008d16d0
+}
+
+// Releases the per-row and per-column intersection block buffers; the scan
+// converter is passed in ESI (cl's convention for a TU-local helper).
+static __declspec(noinline) void FreeAllNodes(tsiScanConv* t)
+{
+    for (int i = 1; i <= t->freeMemBlockN; i++)
+        tsi_DeAllocMem(t->mem, t->freeMemBlocks[i]);
+    if (t->freeMemBlocks != t->freeMemBlocksBuffer)
+        tsi_DeAllocMem(t->mem, t->freeMemBlocks);
+    t->freeMemBlockMaxCount = 0;
+}
+
+// @ 0x008c9a70
+void tsi_DeleteScanConv(tsiScanConv* t)
+{
+    if (t == 0)
+        return;
+    if (t->baseAddr != 0) {
+        if ((void*)t->baseAddr == t->mem->cachedBitmap)
+            t->mem->bitmapKept = 1;
+        else
+            tsi_DeAllocMem(t->mem, t->baseAddr);
+    }
+    FreeAllNodes(t);
+    if (t->xBase != t->xBaseBuffer)
+        tsi_DeAllocMem(t->mem, t->xBase);
+    if (t->yBase != t->yBaseBuffer)
+        tsi_DeAllocMem(t->mem, t->yBase);
+    tsiMemObject* mem = t->mem;
+    if (t == mem->currentScanConv)
+        mem->scanConvKept = 1;
+    else
+        tsi_DeAllocMem(mem, t);
+}
+
+// Appends one point (x, y, onCurve) to the stroker's outline list A.
+// @ 0x008c9b10
+void addPointA(StrokeState* st, short x, short y, short on)
+{
+    int n = st->nA;
+    st->nA = n + 3;
+    if (st->nA > st->capA) {
+        st->capA = (n >> 1) + n + 0x10;
+        st->ptsA = (short*)tsi_ReAllocMem(st->mem, st->ptsA, st->capA * 2);
+    }
+    short* p = st->ptsA + n;
+    p[0] = x;
+    p[1] = y;
+    p[2] = on;
+}
+
+// Appends one point (x, y, onCurve) to the stroker's outline list B.
+// @ 0x008c9be0
+void addPointB(StrokeState* st, short x, short y, short on)
+{
+    int n = st->nB;
+    st->nB = n + 3;
+    if (st->nB > st->capB) {
+        st->capB = (n >> 1) + n + 0x10;
+        st->ptsB = (short*)tsi_ReAllocMem(st->mem, st->ptsB, st->capB * 2);
+    }
+    short* p = st->ptsB + n;
+    p[0] = x;
+    p[1] = y;
+    p[2] = on;
+}
+
+// Appends two points to list A; the stroker is passed in ESI.
+static __declspec(noinline) void FUN_008c9b70(StrokeState* st, short x1, short y1, short on1,
+                                              short x2, short y2, short on2);
+// @ 0x008c9b70
+static void FUN_008c9b70(StrokeState* st, short x1, short y1, short on1,
+                         short x2, short y2, short on2)
+{
+    int n = st->nA;
+    st->nA = n + 6;
+    if (st->nA > st->capA) {
+        st->capA = (n >> 1) + n + 0x10;
+        st->ptsA = (short*)tsi_ReAllocMem(st->mem, st->ptsA, st->capA * 2);
+    }
+    short* p = st->ptsA + n;
+    p[0] = x1;
+    p[1] = y1;
+    p[2] = on1;
+    p[3] = x2;
+    p[4] = y2;
+    p[5] = on2;
+}
+
+// Approximate length of (dy, dx), refined with two Newton steps.
+static __declspec(noinline) int FUN_008c9c40(int dy, int dx);
+// @ 0x008c9c40
+static int FUN_008c9c40(int dy, int dx)
+{
+    if (dx == 0) {
+        if (dy < 0)
+            dy = -dy;
+        return dy;
+    }
+    if (dy == 0) {
+        if (dx < 0)
+            dx = -dx;
+        return dx;
+    }
+    if (dy < 0)
+        dy = -dy;
+    if (dx < 0)
+        dx = -dx;
+    int est;
+    if (dy > dx)
+        est = (dx >> 1) + dy;
+    else
+        est = (dy >> 1) + dx;
+    int sq = dy * dy + dx * dx;
+    est = (sq / est + est + 1) >> 1;
+    return (sq / est + est + 1) >> 1;
+}
+
+// Keeps the static helpers above (cl drops unreferenced statics); the original
+// callers are in the stroker, which is another translation unit here.
+static __declspec(noinline) int IsIntersection(short x1, short y1, short x2, short y2,
+                                               short x3, short y3, short x4, short y4,
+                                               short* ox, short* oy);
+void KeepStrokeHelpers(StrokeState* st, short* ox, short* oy)
+{
+    FUN_008c9b70(st, 0, 0, 0, 0, 0, 0);
+    FUN_008c9c40(0, 0);
+    IsIntersection(0, 0, 0, 0, 0, 0, 0, 0, ox, oy);
+}
+
+// Intersection of the segments (x1,y1)-(x2,y2) and (x3,y3)-(x4,y4). Returns 1
+// when both parameters lie in [0,1]; writes the intersection (or, for parallel
+// lines, the midpoint of the middle points) to *ox, *oy.
+// @ 0x008c9ca0
+static int IsIntersection(short x1, short y1, short x2, short y2,
+                          short x3, short y3, short x4, short y4,
+                          short* ox, short* oy)
+{
+    int result = 0;
+    int dx34 = x4 - x3;
+    int dy34 = y4 - y3;
+    int dx12 = x2 - x1;
+    int dy12 = y2 - y1;
+    int p1 = dx34 * dy12;
+    int p2 = dy34 * dx12;
+    int det = p1 - p2;
+    if (det == 0) {
+        *ox = (short)((x2 + x3) / 2);
+        *oy = (short)((y2 + y3) / 2);
+        return result;
+    }
+    unsigned t = util_FixDiv((y3 - y1) * dx12 - (x3 - x1) * dy12, det);
+    if (t <= 0x10000 && p2 - p1 != 0) {
+        unsigned u = util_FixDiv((y1 - y3) * dx34 - (x1 - x3) * dy34, p2 - p1);
+        result = u <= 0x10000 ? 1 : 0;
+    }
+    *ox = (short)(x3 + ((util_FixMul(dx34 * 4, t) + 2) >> 2));
+    *oy = (short)(y3 + ((util_FixMul(dy34 * 4, t) + 2) >> 2));
+    return result;
+}
