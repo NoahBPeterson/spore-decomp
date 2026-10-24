@@ -115,8 +115,8 @@ int FUN_00926140(void* p) {
 void FUN_00926340(void* p) { DeleteCriticalSection((CRITICAL_SECTION*)p); }
 
 // @ 0x00925F30
-struct C25f30 { void F(int a2, int a3, int a4); };
-void C25f30::F(int a2, int a3, int a4) {
+struct C25f30 { C25f30* F(int a2, int a3, int a4); };
+C25f30* C25f30::F(int a2, int a3, int a4) {
     int* p = (int*)this;
     p[1] = a2;
     p[5] = a4;
@@ -124,6 +124,7 @@ void C25f30::F(int a2, int a3, int a4) {
     p[6] = a3;
     *p = 0x0143e104;
     p[7] = 0;
+    return this;
 }
 
 }} // namespace EA::Trace

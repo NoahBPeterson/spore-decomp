@@ -10,7 +10,7 @@
 00925b50 ?RegisterHelper@TraceHelperTable_s0092_5770@Trace@EA@@QAEXPAUTraceHelper_s0092_5770@23@@Z  # TraceHelperTable_s0092_5770::RegisterHelper migrated from s00925770 (verbatim, slice spelling)
 00925cb0 ?GetDefaultAllocatorX@Trace@EA@@YAPAXXZ  # GetDefaultAllocatorX migrated from s00925770 (verbatim, slice spelling)
 00925e60 ?FUN_00925e60@HashHolder@Trace@EA@@QAEXXZ  # FUN_00925e60_hash migrated from s00925770 (verbatim, slice spelling)
-00925f30 ?F@C25f30@Trace@EA@@QAEXHHH@Z  # C25f30::F migrated from s00925770 (verbatim, slice spelling)
+00925f30 ?F@C25f30@Trace@EA@@QAEPAU123@HHH@Z  # C25f30::F migrated from s00925770 (returns this: the original is a ctor-style init, mov eax,ecx)
 00925f90 ?Alloc@ZoneAllocWrap@Trace@EA@@QAEPAXIHH@Z  # ZoneAllocWrap::Alloc migrated from s00925770 (verbatim, slice spelling)
 00925fe0 ?ZoneAlloc_Named@Trace@EA@@YAPAXHPAUICoreAlloc@12@H@Z  # ZoneAlloc_Named migrated from s00925770 (verbatim, slice spelling)
 00926020 ?ZoneObject_new@Trace@EA@@YAPAXHHH@Z  # ZoneObject_new migrated from s00925770 (verbatim, slice spelling)

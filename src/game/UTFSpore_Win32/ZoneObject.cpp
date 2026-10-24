@@ -14,7 +14,7 @@
 // ---- items of slice s00925770 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
 namespace Trace {
-struct C25f30 { void F(int a2, int a3, int a4); };
+struct C25f30 { C25f30* F(int a2, int a3, int a4); };
 }
 }
 namespace EA {
@@ -46,7 +46,7 @@ namespace EA { namespace Trace { __declspec(noinline) void* GetDefaultAllocatorX
 
 // @ 0x00925f30
 namespace EA { namespace Trace {
-void C25f30::F(int a2, int a3, int a4)
+C25f30* C25f30::F(int a2, int a3, int a4)
 {
     int* p = (int*)this;
     p[1] = a2;
@@ -55,6 +55,7 @@ void C25f30::F(int a2, int a3, int a4)
     p[6] = a3;
     *p = 0x0143e104;
     p[7] = 0;
+    return this;
 }
 }}  // namespace EA::Trace
 
