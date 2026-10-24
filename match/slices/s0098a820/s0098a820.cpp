@@ -429,6 +429,10 @@ void IWinTextEdit::SetScrollbarEnabled(int idx, int v) {
 // @ 0x98ad40
 bool WinTextEdit::OnKeyDown(int a1, int key, unsigned mods) {
     bool shift = (mods & 1) != 0;
+    // retail keeps `shift` in a byte slot and pushes the whole dword over it, so the upper
+    // three bytes are the harness stack fill (0xcc) rather than a zero-extended 1
+    uint32_t extend;
+    *(uint8_t*)&extend = (uint8_t)shift;
     bool ctrl = ((mods >> 1) & 1) != 0;
     bool alt = ((mods >> 2) & 1) != 0;
     bool readOnly = (flags & 1) != 0;
@@ -485,12 +489,12 @@ bool WinTextEdit::OnKeyDown(int a1, int key, unsigned mods) {
     case 0x26: // up
         if (lineMode == 0) return true;
         if (!selectable) return true;
-        if (!MoveCursor(2, -1, shift)) { Error(4); return true; }
+        if (!MoveCursor(2, -1, (int)extend)) { Error(4); return true; }
         return true;
     case 0x28: // down
         if (lineMode == 0) return true;
         if (!selectable) return true;
-        if (!MoveCursor(2, 1, shift)) { Error(4); return true; }
+        if (!MoveCursor(2, 1, (int)extend)) { Error(4); return true; }
         return true;
     case 0x25: // left
     case 0x27: { // right
@@ -498,7 +502,7 @@ bool WinTextEdit::OnKeyDown(int a1, int key, unsigned mods) {
         int type = 0;
         if (ctrl) type = (alt ? 1 : 0) * 2 + 1;
         else if (alt) type = 4;
-        if (!MoveCursor(type, key == 0x25 ? -1 : 1, shift)) {
+        if (!MoveCursor(type, key == 0x25 ? -1 : 1, (int)extend)) {
             Error(4);
             return true;
         }
@@ -506,25 +510,25 @@ bool WinTextEdit::OnKeyDown(int a1, int key, unsigned mods) {
     }
     case 0x24: // home
         if (!alt && !ctrl) {
-            MoveCursor(6, 0, shift);
+            MoveCursor(6, 0, (int)extend);
             return true;
         }
-        MoveCursor(8, 0, shift);
+        MoveCursor(8, 0, (int)extend);
         return true;
     case 0x23: // end
         if (!alt && !ctrl) {
-            MoveCursor(7, 0, shift);
+            MoveCursor(7, 0, (int)extend);
             return true;
         }
-        MoveCursor(9, 0, shift);
+        MoveCursor(9, 0, (int)extend);
         return true;
     case 0x21: // page up
         if (!selectable) return true;
-        if (!MoveCursor(5, -1, shift)) { Error(4); return true; }
+        if (!MoveCursor(5, -1, (int)extend)) { Error(4); return true; }
         return true;
     case 0x22: // page down
         if (!selectable) return true;
-        if (!MoveCursor(5, 1, shift)) { Error(4); return true; }
+        if (!MoveCursor(5, 1, (int)extend)) { Error(4); return true; }
         return true;
     case 0x1b:  // escape
         if (cursor == anchor) return false;
