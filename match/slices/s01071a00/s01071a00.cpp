@@ -14,13 +14,23 @@ extern bool gDebugFlag6ec;                             // 0x016e06ec
 extern bool gDebugFlag6ed;                             // 0x016e06ed
 extern bool gDebugFlag6ee;                             // 0x016e06ee
 
-struct Elem {
-    Key GetKey();                                      // 0x00c3e1e0 (sret, ret 4)
-};
+struct Elem;
 struct ElemVector {
     uint32_t mUnused;
     Elem** mpBegin;                                    // +4
     Elem** mpEnd;                                      // +8
+};
+
+struct Sim {                                            // Sim sub-object at Elem+0x508
+    char pad[0x20c];
+    float NodeRatio();                                 // 0x00bfc490
+};
+
+struct Elem {
+    char pad0[0x508];
+    Sim mSim;                                          // +0x508
+    int mType;                                         // +0x714
+    Key GetKey();                                      // 0x00c3e1e0 (sret, ret 4)
 };
 
 struct PlanetRecord {
@@ -46,6 +56,22 @@ struct TerraformMgr {
     Key F870(int index, uint32_t id, PlanetRecord* rec);   // 0x00bbc870 (sret, ret 0x10)
     Key F950(int index, int which, PlanetRecord* rec);     // 0x00bbc950 (sret, ret 0x10)
     Key Fa30(int index, PlanetRecord* rec);                // 0x00bbca30 (sret, ret 0xc)
+};
+
+// Fixed-slot vtable calls (retail classes have no matching header in this slice).
+#define VT1(R, o, off, a) \
+    ((R (__thiscall*)(void*, void*))(*(void***)(o))[(off) / 4])((o), (void*)(a))
+#define VT4F(R, o, off, k, v, a, b) \
+    ((R (__thiscall*)(void*, uint32_t, float, int, int))(*(void***)(o))[(off) / 4])((o), (k), (v), (a), (b))
+
+extern void* __cdecl rt_memcpy(void* dst, const void* src, unsigned size);   // 0x011e0744
+extern const float kRatioScale;                        // 0x013ec4d0
+
+namespace SP { class cSPUISpace; }
+
+struct UIWindow;
+struct UILayout {                                      // cSPUILayout (windows owned by a layout)
+    UIWindow* FindWindowByID(uint32_t id, int flag);   // 0x008105b0 (ret 8)
 };
 
 struct UIWindow {
@@ -76,9 +102,90 @@ struct PropertyHolder {
     virtual bool GetProperty(uint32_t id, Property** out);   // slot 9 (+0x24)
 };
 
+struct TerrainEditor;
 struct NounManager {
     ElemVector* GetGameDataVector(void* a, void* b, void* c, void* d, uint32_t e);   // 0x00b21340 (ret 0x14)
+    TerrainEditor* GetCurrentTerrainSphere();          // 0x00f67d90
 };
+
+struct TerrainEditor {
+    char pad0[0x124c];
+    int mField;                                        // +0x124c
+};
+
+// ---- foodweb slot table (vector at cSPUISpace+0x530, element 0x28) ----
+struct FoodwebSlotInfo {                               // SP::cSPUISpace::cFoodwebSlotInfo
+    UIWindow* mpWindow;                                // +0x00 (refcounted: v00 add, v01 release)
+    char pad04[0xc];
+    int mKind;                                         // +0x10
+    uint32_t mKey;                                     // +0x14
+    char pad18[8];
+    int mIndex;                                        // +0x20
+    int mFlag;                                         // +0x24
+};
+struct FoodwebSlotVector {                             // eastl::vector<cFoodwebSlotInfo> at +0x530
+    FoodwebSlotInfo* mpBegin;                          // +0x00
+    FoodwebSlotInfo* mpEnd;                            // +0x04
+    FoodwebSlotInfo* mpCapacity;                       // +0x08
+    void resize(int n);                                // 0x01070af0 (ret 4)
+};
+
+struct Key12 { uint32_t a, b, c; };
+
+struct WindowSet {                                     // UI window set at cSPUISpace+0x620
+    void F0a5c0();                                     // 0x00e0a5c0
+    void F0a4c0(UIWindow* w, const Key12* desc);       // 0x00e0a4c0 (ret 8)
+    void F0a780(const Key12* key, int count);          // 0x00e0a780 (ret 8)
+    void* F09c90(int i);                               // 0x00e09c90 (ret 4)
+};
+
+struct FlagVector {                                    // vector<uint32_t> at cSPUISpace+0x5d8
+    uint32_t* mpBegin;                                 // +0x00
+    uint32_t* mpEnd;                                   // +0x04
+    void F4746c0(int arg, const int* value);           // 0x004746c0 (ret 8)
+    void erase(uint32_t* first, uint32_t* last) {
+        // The retail inline counts the moved tail in elements (the only caller passes an empty range).
+        rt_memcpy(first, last, (unsigned)((char*)mpEnd - (char*)last));
+        mpEnd -= last - first;
+    }
+};
+
+struct PosseEntry { uint32_t a, b; };
+
+struct Posse {                                         // cSPUIPosse (at cSPUISpace+0x5c4)
+    char pad0[0xa4];
+    PosseEntry* mpBegin;                               // +0xa4
+    PosseEntry* mpEnd;                                 // +0xa8
+    Elem* FindItem(Elem* noun);                        // 0x00e24c90 (ret 4)
+};
+
+struct UfoItem {                                       // item returned by cSPUIPosse::FindItem
+    void V80(uint32_t key, float ratio, int a, int b); // slot 0x80 (ret 0x10)
+};
+
+struct UfoNode {
+    UfoNode* mpNext;                                   // +0x00
+    char pad04[4];
+    int mValue;                                        // +0x08
+};
+struct UfoList : UfoNode {                             // sentinel node embedded at +0x00
+    char pad0c[0x10];
+};
+
+struct Ufo {
+    UfoList* F0108db30();                              // 0x0108db30
+};
+
+struct PosseItemSpace {
+    void* Construct(int a);                            // 0x00e259d0 (ctor-shaped, ret 4)
+};
+
+Ufo* GetUFOSimulator();                                // 0x00ffbe50
+int GetPlayerEmpireID();                               // 0x01021090 (cdecl)
+int FUN_0106b860(int arg);                             // 0x0106b860 (cdecl, 1 arg)
+void* FUN_009512c0();                                  // 0x009512c0 (cdecl)
+void* FUN_009512d0(int size, int align, const char* name, void* src);   // 0x009512d0 (cdecl, ret 0x10)
+extern void FUN_00ad48b0();                            // 0x00ad48b0 (game-data vector filter)
 
 // Minimal wchar_t fixed_string<16> (retail layout: begin, end, capacity, allocator, pool, buffer).
 extern void __cdecl operator_delete__(void* p);        // 0x00f47380
@@ -146,9 +253,23 @@ namespace SP {
 class cSPUISpace {
 public:
     void UpdateTerraformingSlots();
+    void InitFoodwebInfo();                            // 0x01071a00
+    void SetupFoodwebWindows(int arg);                 // 0x01071c20 (ret 4)
+    void RefreshPosseItems();                          // 0x01072680
     void SetSlot(uint32_t id, bool locked, const Key* key, bool scanned, bool flagA, bool same);   // 0x01068d30 (ret 0x18)
+    void F0106dd10(int index, uint32_t value);         // 0x0106dd10 (ret 8)
     char pad[0x224];
     GlobalUI* mGlobalLayout;                           // +0x224
+    char pad228[0x258 - 0x228];
+    UILayout* mpLayout;                                // +0x258
+    char pad25c[0x530 - 0x25c];
+    FoodwebSlotVector mFoodwebSlots;                   // +0x530
+    char pad53c[0x5c4 - 0x53c];
+    Posse* mpPosse;                                    // +0x5c4
+    char pad5c8[0x5d8 - 0x5c8];
+    FlagVector mFlags;                                 // +0x5d8
+    char pad5e0[0x620 - 0x5e0];
+    WindowSet mWindowSet;                              // +0x620
 };
 }
 
@@ -273,5 +394,139 @@ void SP::cSPUISpace::UpdateTerraformingSlots()
         int n = (int)(dataVec->mpEnd - dataVec->mpBegin);
         for (int i = 0; i < n; ++i)
             set.insert(dataVec->mpBegin[i]->GetKey());
+    }
+}
+
+// @ 0x01071a00
+void SP::cSPUISpace::InitFoodwebInfo()
+{
+    mFoodwebSlots.resize(0x12);
+    for (int i = 0; i < 9; i++) {
+        FoodwebSlotInfo& slot = mFoodwebSlots.mpBegin[i];
+        UIWindow* w = mGlobalLayout->FindWindowByID((uint32_t)(i + 0x37e89d0));
+        UIWindow* old = slot.mpWindow;
+        if (w != old) {
+            if (w != 0)
+                w->v00();
+            slot.mpWindow = w;
+            if (old != 0)
+                old->v01();
+        }
+        slot.mKind = 0;
+        if (i == 0 || i == 3 || i == 6)
+            slot.mKey = 0x6d60a1cc;
+        else if (i == 1 || i == 4 || i == 7)
+            slot.mKey = 0x29c388a;
+        else
+            slot.mKey = 0x3a8be428;
+        slot.mIndex = (int)((unsigned)i / 3) + 1;
+        VT1(void, slot.mpWindow, 0x104, this);
+    }
+    for (int i = 0; i < 6; i++) {
+        FoodwebSlotInfo& slot = mFoodwebSlots.mpBegin[9 + i];
+        UIWindow* w = mGlobalLayout->FindWindowByID((uint32_t)(i + 0x37e89d9));
+        UIWindow* old = slot.mpWindow;
+        if (w != old) {
+            if (w != 0)
+                w->v00();
+            slot.mpWindow = w;
+            if (old != 0)
+                old->v01();
+        }
+        slot.mIndex = (int)((unsigned)i >> 1) + 1;
+        slot.mFlag = i & 1;
+        slot.mKind = 1;
+        VT1(void, slot.mpWindow, 0x104, this);
+    }
+    // Rows 15..17 hold the three crop slots; the retail build counts them down.
+    int row = 1;
+    for (int remaining = 3; remaining != 0; --remaining) {
+        FoodwebSlotInfo& slot = mFoodwebSlots.mpBegin[14 + row];
+        UIWindow* w = mGlobalLayout->FindWindowByID((uint32_t)(row + 0x37e89de));
+        UIWindow* old = slot.mpWindow;
+        if (w != old) {
+            if (w != 0)
+                w->v00();
+            slot.mpWindow = w;
+            if (old != 0)
+                old->v01();
+        }
+        slot.mKind = 2;
+        slot.mIndex = row;
+        VT1(void, slot.mpWindow, 0x104, this);
+        ++row;
+    }
+    for (int i = 0; i < 3; i++) {
+        UIWindow* w = mGlobalLayout->FindWindowByID((uint32_t)(i + 0x535cbd8));
+        VT1(void, w, 0x104, this);
+    }
+}
+
+// @ 0x01071c20
+void SP::cSPUISpace::SetupFoodwebWindows(int arg)
+{
+    int count = FUN_0106b860(arg);
+    mFlags.erase(mFlags.mpBegin, mFlags.mpEnd);
+    int empire = GetPlayerEmpireID();
+    mFlags.F4746c0(count, &empire);
+    mWindowSet.F0a5c0();
+    UIWindow* w = mpLayout->FindWindowByID(0x755f9b8, 1);
+    Key12 desc;
+    desc.a = 0;
+    desc.b = 0;
+    desc.c = 0;
+    mWindowSet.F0a4c0(w, &desc);
+    Key12 key;
+    key.a = 0x1879822f;
+    key.b = 0x510a95b;
+    key.c = 0x40464100;
+    mWindowSet.F0a780(&key, 3);
+    Ufo* ufo = GetUFOSimulator();
+    UfoList* list = ufo->F0108db30();
+    UfoNode* it = list->mpNext;
+    for (int i = 0; i < 3; i++) {
+        if (i < count) {
+            if (it != list) {
+                mFlags.mpBegin[i] = (uint32_t)it->mValue;
+                it = it->mpNext;
+            }
+            F0106dd10(i, mFlags.mpBegin[i]);
+        } else {
+            void* p = mWindowSet.F09c90(i);
+            if (p == 0)
+                return;
+            UIWindow* w2 = ((UILayout*)p)->FindWindowByID(0x7eb2ea0, 1);
+            if (w2 != 0)
+                w2->SetFlag(1, 1);
+        }
+    }
+}
+
+// @ 0x01072680
+void SP::cSPUISpace::RefreshPosseItems()
+{
+    if (mpPosse == 0)
+        return;
+    ElemVector* v = GetNounManager()->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                                        (void*)FUN_00ad48b0, (void*)FUN_00b1e500,
+                                                        0x18ebadc);
+    Elem** it = v->mpBegin;
+    Elem** end = v->mpEnd;
+    while (it != end) {
+        Elem* noun = *it;
+        if (noun->mType == 3) {
+            UfoItem* item = (UfoItem*)mpPosse->FindItem(noun);
+            if (item != 0)
+                VT4F(void, item, 0x80, 0x3d99162, noun->mSim.NodeRatio() * kRatioScale, 1, 1);
+        }
+        ++it;
+    }
+    TerrainEditor* te = GetNounManager()->GetCurrentTerrainSphere();
+    int n = te->mField;
+    while ((int)(mpPosse->mpEnd - mpPosse->mpBegin) < n) {
+        void* raw = FUN_009512d0(0x14c, 4, "UI/PosseItem", FUN_009512c0());
+        void* item = raw != 0 ? ((PosseItemSpace*)raw)->Construct(0) : 0;
+        VT1(void, mpPosse, 0xa4, item);
+        VT1(void, mpPosse, 0xc0, 1);
     }
 }

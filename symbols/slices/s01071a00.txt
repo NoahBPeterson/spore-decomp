@@ -2,3 +2,13 @@
 01068d30 SP::cSPUISpace::SetTerraformingSlot  # thiscall(id, locked, key*, scanned, flagA, same) ret 0x18; called 18 times by UpdateTerraformingSlots
 00bbc670 SP::TerraformingManager::F670  # thiscall(rec) ret 4; returns -1 to abort the refresh
 00bbe470 SP::TerraformingManager::GetUnlockedCount  # thiscall(rec) ret 4; second slot threshold compared against the row index
+01071a00 SP::cSPUISpace::InitFoodwebInfo  # PDB name; resizes and fills the 18 foodweb slot rows (9 kind-0, 6 kind-1, 3 kind-2) then 3 hard-coded rows
+01071c20 SP::cSPUISpace::SetupFoodwebWindows  # coined; thiscall(int) ret 4: clears the foodweb flag vector, refreshes the window set and shows/hides up to 3 slot windows
+01072680 SP::cSPUISpace::RefreshPosseItems  # coined; syncs the posse item list with the selected nouns, then tops the list up to the terrain-sphere count
+01070af0 eastl::vector<SP::cSPUISpace::cFoodwebSlotInfo,eastl::sp_vector_allocator>::resize  # thiscall(0x12) ret 4
+0106b860 FUN_0106b860  # cdecl(int) -> int; number of foodweb slots to fill (caller cleans the argument)
+0106dd10 SP::cSPUISpace::F0106dd10  # thiscall(index, value) ret 8; pushes one flag value into a slot window
+00e24c90 SP::cSPUIPosse::FindItem  # thiscall(noun) ret 4; returns the posse item for a noun, 0 when absent
+00f67d90 SP::cGameNounManager::GetCurrentTerrainSphere  # thiscall; +0x124c is the wanted posse item count
+00e259d0 SP::cSPUIPosseItemSpace::cSPUIPosseItemSpace  # thiscall(0) ret 4; ctor-shaped, returns the object
+011e0744 memcpy  # static CRT, direct calls
