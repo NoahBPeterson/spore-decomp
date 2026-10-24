@@ -1,0 +1,3 @@
+slices/s00e0b350/s00e0b350.cpp  ?FUN_00e0b970@cSPUIMinimapWin@@QAEXXZ  00e0b970  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00e0b350/s00e0b350.cpp  ?FUN_00e0bd70@ObjB@@QAEPAU1@ABU1@@Z  00e0bd70  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00e0b350/s00e0b350.cpp  ?FUN_00e0be50@cSPUIMinimapWin@@QAEXXZ  00e0be50  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
