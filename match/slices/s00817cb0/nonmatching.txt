@@ -2,7 +2,7 @@
 008181e0  94  item loop colour set: register allocation / pointer increment differs
 00818250  96  item loop text-colour set: register allocation / pointer increment differs
 008182c0  96  item loop position assign: register allocation / pointer increment differs
-008188d0  129 cSPUIPieMenuItem::SetId: branch/flag schedule differs
+008188d0  0  FIXED: id store uses the +0x30 object (f30) instead of mpWinProc; default PASS (237 valid, 72.9% coverage), replay and hybrid SPUIPieMenu.cpp first-difference None
 00817ee0  142 cSPUIPieMenuItem::SetTextColor: nested window/property vtable sequence differs
 00818000  90  cSPUIPieMenuItem::SetIcon: complete; SSE operand folding/schedule in rect centring differs (fast-math pragma) [equiv: WEAK 6.9% coverage]
 008183a0  284 FUN_008183a0 (pie ray quad/tri draw): complete; xmm allocation differs around inline fsqrt [equiv: UNSUPPORTED fake-arity]

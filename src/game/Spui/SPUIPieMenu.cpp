@@ -59,6 +59,7 @@ class cSPUIPieMenuItem { public:
     void*     mpIconWindow;     // +0x24
     void*     mpParentWin;      // +0x28
     void*     mpWinProc;        // +0x2c
+    void*     f30;              // +0x30
 
     void SetIcon(int);          // 00818000
     void SetTextColor(int);     // 00817ee0
@@ -849,7 +850,7 @@ PieItemFull::PieItemFull()
 void cSPUIPieMenuItem::SetId(u32 id)
 {
     IWindow* p = mpCurrentWindow;
-    *(u32*)((char*)mpWinProc + 0x10) = id;
+    *(u32*)((char*)f30 + 0x10) = id;
     if (id == mID) return;
     SetIcon(0);
     mID = id;
