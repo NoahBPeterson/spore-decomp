@@ -1,0 +1,2 @@
+00fc03c0  SP::cTerrainStateMgr::cStateParms::operator=  # MATCH; deep value copy of the 0x2ec state block (0x118-byte POD head, refcounted pointer at +0x1ec, PlanarDef at +0x13c, 0x6c record at +0x1f0, 0x90 output parms at +0x25c). Retail call site 00fc0fe0 uses it copy-ctor-style to construct global 0x016d6788 from a Reset() temporary.
+00fc0fe0  ResetTerrainGlobals  # reset of global state block 0x016d6788, RenderState 0x016d6a78 and the two 16-entry terrain-layer tables 0x016d6d30/0x016d6d70; nonmatching (scheduling only), equivalence PASS.
