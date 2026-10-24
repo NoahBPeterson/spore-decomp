@@ -1,4 +1,4 @@
-00ad4b60 ResolveActionTarget  # cdecl callback stored at 0xad587f (struct+0x10); casts its arg to type 0x0447FF9B, switch on +0xC (9 kinds), always returns 1 (Claude-coined name)
-00ad7940 cActionTarget::cActionTarget  # 0x30-byte target ctor (position, scale 1.0, object ptr +0x2C = 0)
-00ad7ad0 cActionTarget::~cActionTarget  # releases +0x2C through vtable slot 0xC0
-00c70110 cGameObjectPtr::operator=  # intrusive ptr assign, AddRef slot 0xBC / Release slot 0xC0
+00ad5590 ??0CmdAddActor@@QAE@XZ  # CmdAddActor::CmdAddActor -- cCommandBase base ctor (0x0083c800), own vtable 0x0145a87c, cArgumentSpec ctor (0x0083a9f0), then the 30-argument BuildArgumentSpec (0x0083bcd0) call describing "Adds a controllable actor" (:actorType, :positionType, -highLOD, <actorName>, <type>, -tribe, -archetype, -initialRelativePosition)
+00ad5670 ?Execute@CmdAddActor@@QAEXPAX@Z  # CmdAddActor::Execute -- parses the arguments (ParseThrowing 0x0083b9d0) and posts an "add actor" simulator command + behaviour message + editor resource, callback 0x00ad4b60, through cAppState::AddMessage (0x007e4190)
+00ad5900 ??0CmdMoveActor@@QAE@XZ  # CmdMoveActor::CmdMoveActor -- same base/spec preamble with vtable 0x0145ab74, then the 38-argument BuildArgumentSpec call describing "Creates a move actor command to be processed later" (position, stopDistance, -relative, -face, -noWait, -snap, -useFootprintRadius/TargetWidth/TargetHeight)
+00ad59e0 ??0ActorInfo@@QAE@XZ  # ActorInfo::ActorInfo -- 0x50-byte refcounted actor descriptor: two vtables (0x0145ab8c primary, 0x013ec458 base -> 0x0149bad8 derived secondary), two basis triples from g_0167a4bc/c0/c4, mode 3/1 and zeroed pointers

@@ -1,520 +1,344 @@
-// Slice s00ad4b60: cdecl callback @ 0x00AD4B60 (2568 bytes), stored as a function pointer at
-// 0x00AD587F. It resolves the game object a scripted (cinematic) action targets, by target kind
-// (switch on data->mTargetKind, 9 cases), then places the object at the action's position.
-//   0 avatar (tribe mode: the player chieftain, else the first idle tribe member)
-//   1 creature mode: first free member of the player's herd, else spawn one; tribe mode: first
-//     free tribe member
-//   2 a member of the herd of species mSpeciesID (the herd is created when missing)
-//   3 the space-tool object of kind 4 whose property list 0x034D97FA names 0x7ECBE6F5
-//   4 the player's UFO inventory, 5 FUN_00AD4A10's object, 6 a new 0xDC-byte camera object at
-//     the player empire's home star
-//   7 creature mode: the avatar's vehicle/creature; tribe mode: the chieftain of tribe mTribeID
-//     (or a free member); scenario mode: the avatar's creature or its fallback object
-//   8 creature mode: the last creature of NounManager's list at +0x5C
-// Then (when a target was found): registers it under mTargetID with the cinematic manager,
-// computes the destination, moves/orients the object on the planet surface, snaps/locomotes it
-// and wakes creatures up. Always returns 1.
-// Class, member and function names are Claude-coined from usage (ModAPI ids: kGameCreature
-// 0x1654C01, kGameTribe 0x1654C02, kScenarioMode 0x1654C10).
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc: the locals with dtors have no EH frame).
+// Slice s00ad4b60: the SP::Simulator ArgScript "actor" command family from
+// SPAppStateManager.obj -- the addActor / moveActor command constructors, the
+// addActor execution path (simulator command + behaviour message + editor
+// resource graph) and the 0x50-byte actor-info object constructor.
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 
-void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line); // 0x00F473A0
-void operator delete(void* p, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+typedef unsigned char byte;
 
-struct Vector3
-{
-    float x, y, z;
-    Vector3() {}
-    Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
-    bool operator!=(const Vector3& v) const { return x != v.x || y != v.y || z != v.z; }
+// ------------------------------------------------------------------ externs
+void* EAAllocate(unsigned int size, const char* tag, int a, int b, int c, int d);  // 0x00f473a0
+unsigned __cdecl FNV1_String8(const char* s, unsigned seed, int x);                // 0x00932e80
+void* __fastcall EditorResourceCtor(void* p);                                      // 0x00ad7c30
+void FUN_00ad4b60();                                                               // 0x00ad4b60
+extern "C" long _InterlockedExchange(long volatile*, long);
+#pragma intrinsic(_InterlockedExchange)
+
+// placement new (the EA allocator supplies the storage)
+inline void* operator new(unsigned int, void* p) { return p; }
+
+// vtable symbols that are stored as plain data fields
+extern char vtbl_CmdAddActor[];    // 0x0145a87c
+extern char vtbl_CmdMoveActor[];   // 0x0145ab74
+
+// default basis triples
+extern float g_v4bc;   // 0x0167a4bc
+extern float g_v4c0;   // 0x0167a4c0
+extern float g_v4c4;   // 0x0167a4c4
+
+// argument-type defaults (":actorType" / ":positionType" enumerations)
+extern const char* const g_pstrAvatar;   // 0x01566338
+extern const char* const g_pstrEffect;   // 0x015662e0
+
+// vtable-slot call helpers (AddRef = slot 0, Release = slot 1)
+#define VCALL0(p, off) \
+    ((void (__thiscall*)(void*))(*(void***)(p))[(off) / 4])(p)
+
+struct Vec3 { float x, y, z; };
+
+// ------------------------------------------------------------- base classes
+struct CmdBase {
+    void* mpVt;       // +0x00
+    void* mParser;    // +0x04
+    int   mRef;       // +0x08
+    CmdBase();        // 0x0083c800
 };
-struct Quaternion { float x, y, z, w; };
-extern Vector3 kInvalidPosition;                                   // 0x0167A4BC
 
-struct RefCounted
-{
-    virtual int AddRef();
-    virtual int Release();
+struct ArgumentSpec {                 // 0xc8 bytes of parsed-argument state
+    byte  pad[0x70];
+    unsigned mPosUsed       : 1;      // +0x70 bit 0  (-initialRelativePosition / position)
+    unsigned mArchetypeUsed : 1;      // +0x70 bit 1  (-archetype)
+    unsigned mHighLODUsed   : 1;      // +0x70 bit 2  (-highLOD)
+    unsigned mTribeUsed     : 1;      // +0x70 bit 3  (-tribe)
+    unsigned mRest          : 28;     // +0x70 bits 4..31
+    byte  pad74[0xc8 - 0x74];
+    void Init(int respectHelp);                            // 0x0083a9f0 thiscall ret 4
+    void ParseThrowing(void* args, void* parser);          // 0x0083b9d0 thiscall ret 8
+};
+void BuildArgumentSpec(ArgumentSpec* pSpec, const char* name, ...);   // 0x0083bcd0 cdecl
+
+// Secondary polymorphic base: vptr first, then the reference count. Its inline
+// constructor is what puts the base vtable into the object before the derived
+// class overwrites it (mirrors the original's two consecutive vptr stores).
+struct RefCountBaseV {
+    int mRef;                          // +0x04 (relative to this base)
+    RefCountBaseV() : mRef(0) {}
+    virtual int AddRef();              // slot 0
+    virtual int Release();             // slot 1
 };
 
-template<class T> struct AutoRefCount
-{
-    T* mpObject;
-    AutoRefCount() : mpObject(0) {}
-    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
-    AutoRefCount& operator=(T* p);                                  // out of line (0x00B5F950 for cHerd)
-    T* operator->() const { return mpObject; }
-    operator T*() const { return mpObject; }
-    __forceinline T*& AsOutParam()
+// ------------------------------------------------------- addActor command
+struct CmdAddActor : CmdBase {
+    void* mpAppState;      // +0x0c
+    ArgumentSpec mSpec;    // +0x10
+    char* mActorType;      // +0xd8  "<type:actorType>"
+    char* mActorName;      // +0xdc  "<actorName:cstring>"
+    char* mArchetype;      // +0xe0  "-archetype"
+    char* mTribe;          // +0xe4  "-tribe"
+    char* mPosType;        // +0xe8  "-initialRelativePosition" posType
+    char* mPosName;        // +0xec  "-initialRelativePosition" posName
+    Vec3  mInitialPos;     // +0xf0  "-initialRelativePosition" position
+    CmdAddActor();         // @ 0x00ad5590
+    void Execute(void* args);   // @ 0x00ad5670
+};
+
+// ------------------------------------------------------ moveActor command
+struct CmdMoveActor : CmdBase {
+    void* mpAppState;      // +0x0c
+    ArgumentSpec mSpec;    // +0x10
+    char* mActorName;      // +0xd8  "<actorName:cstring>"
+    Vec3  mPosition;       // +0xdc  "<position:vector3>"
+    float mStopDistance;   // +0xe8  "[stopDistance:float]"
+    char* mPosType;        // +0xec  "-relative" posType
+    char* mPosName;        // +0xf0  "-relative" posName
+    char* mFacingType;     // +0xf4  "-face" facingType
+    char* mFacingName;     // +0xf8  "-face" facingName
+    Vec3  mFacingOffset;   // +0xfc  "-face" facingOffset
+    CmdMoveActor();        // @ 0x00ad5900
+};
+
+// ------------------------------------------------- actor info (0x50 bytes)
+struct ActorInfoBase {                 // primary polymorphic base, no data
+    virtual int v0();
+};
+
+struct ActorInfo : ActorInfoBase, RefCountBaseV {
+    int   mHash;       // +0x0c
+    Vec3  mPos;        // +0x10
+    Vec3  mPos2;       // +0x1c
+    float mZero;       // +0x28
+    int   mMode;       // +0x2c
+    void* mP30;        // +0x30
+    void* mP34;        // +0x34
+    void* mP38;        // +0x38
+    byte  mB3c;        // +0x3c
+    byte  mB3d;        // +0x3d
+    int   mKind;       // +0x40
+    Vec3  mBasis;      // +0x44
+    ActorInfo();       // @ 0x00ad59e0
+};
+
+// ------------------------------------------- simulator command (0x38 bytes)
+struct SimCommandBase {                // primary polymorphic base, no data
+    virtual int v0();
+    virtual int v1();
+    virtual int v2();
+};
+
+struct SimCommand : SimCommandBase, RefCountBaseV {
+    int   mActorType;      // +0x0c
+    int   mNameHash;       // +0x10
+    int   mArchetypeHash;  // +0x14
+    int   mTribeHash;      // +0x18
+    int   mPosType;        // +0x1c
+    int   mPosNameHash;    // +0x20
+    int   mKind;           // +0x24
+    Vec3  mPosition;       // +0x28
+    byte  mHighLOD;        // +0x34
+    __forceinline SimCommand()
     {
-        if (mpObject) {
-            T* const pTemp = mpObject;
-            mpObject = 0;
-            pTemp->Release();
-        }
-        return mpObject;
+        mActorType     = 0;
+        mNameHash      = 0;
+        mArchetypeHash = 0;
+        mTribeHash     = 0;
+        mPosType       = 0;
+        mKind          = 3;
+        mPosition.x    = g_v4bc;
+        mPosition.y    = g_v4c0;
+        mPosition.z    = g_v4c4;
+        mHighLOD       = 0;
     }
 };
 
-// ---------------------------------------------------------------------------------------------
-// The game-object interface the target points at (AddRef/Release at slots 0xBC/0xC0).
-#define V(n) virtual void v##n()
-struct cGameObject
-{
-    V(00); V(04); V(08); V(0c); V(10); V(14); V(18); V(1c); V(20); V(24); V(28);
-    virtual const Vector3& GetPosition();                                         // +0x2C
-    V(30); V(34);
-    virtual void SetPosition(const Vector3& pos);                                 // +0x38
-    V(3c); V(40);
-    virtual void SetPositionAndOrientation(const Vector3& pos, const Quaternion& q); // +0x44
-    V(48); V(4c); V(50); V(54);
-    virtual bool IsBusy();                                                         // +0x58
-    virtual cGameObject* CastObject(uint32_t typeID);                              // +0x5C
-    V(60); V(64); V(68); V(6c); V(70); V(74); V(78); V(7c); V(80); V(84); V(88); V(8c);
-    V(90); V(94); V(98); V(9c); V(a0); V(a4); V(a8); V(ac); V(b0); V(b4);
-    virtual void* Cast(uint32_t typeID);                                           // +0xB8
-    virtual int AddRef();                                                          // +0xBC
-    virtual int Release();                                                         // +0xC0
-    uint32_t pad_04[(0x50 - 0x04) / 4];
-    uint32_t mFlags;                                                               // +0x50
-};
-
-struct cGameObjectPtr
-{
-    cGameObject* mpObject;
-    cGameObjectPtr& operator=(cGameObject* p);                      // 0x00C70110
-};
-
-// Target of the action (0x30 bytes): placement data plus the object.
-struct cActionTarget
-{
-    Vector3 mPosition;
-    uint32_t pad_0c[(0x2C - 0x0C) / 4];
-    cGameObjectPtr mpObject;                                        // +0x2C
-    cActionTarget();                                                // 0x00AD7940
-    ~cActionTarget();                                               // 0x00AD7AD0
-};
-
-// Animation/behaviour controller hanging off a creature (+0xB54).
-struct cBehaviorRule
-{
-    V(00); V(04); V(08); V(0c); V(10); V(14); V(18); V(1c); V(20); V(24); V(28); V(2c);
-    V(30); V(34); V(38); V(3c);
-    virtual void SetState(void* owner, int state, int arg);                        // +0x40
-};
-struct cBehaviorOwner
-{
-    V(00); V(04); V(08); V(0c); V(10); V(14); V(18); V(1c); V(20); V(24); V(28); V(2c);
-    V(30); V(34); V(38); V(3c); V(40); V(44); V(48); V(4c); V(50); V(54); V(58); V(5c);
-    V(60); V(64); V(68); V(6c);
-    virtual cBehaviorRule* GetRule();                                              // +0x70
-};
-
-// Locomotion interface (cast id 0x0116DD1B).
-struct cLocomotionRequest
-{
-    uint32_t* mpData;                                               // eastl vector storage
-    uint32_t pad_04[(0x74 - 0x04) / 4];
-    cLocomotionRequest();                                           // 0x00AC9850
-    ~cLocomotionRequest()
+// ----------------------------------------- behaviour message (0x40 bytes)
+struct BehaviorMessageBase {           // primary polymorphic base
+    volatile long mRef;                // +0x04
+    void*         mRefSlot;            // +0x08  (owned RefHandle, released on replace)
+    int           mF0c;                // +0x0c
+    int           mF10;                // +0x10
+    int           mF14;                // +0x14
+    int           mF18;                // +0x18
+    int           mF1c;                // +0x1c
+    int           mF20;                // +0x20
+    int           mF24;                // +0x24
+    int           mF28;                // +0x28
+    int           mF2c;                // +0x2c
+    int           mKind30;             // +0x30
+    __forceinline BehaviorMessageBase() : mKind30(0)
     {
-        if (mpData && mpData[-1])
-            operator delete[](mpData);
+        _InterlockedExchange(&mRef, 0);
     }
-};
-struct cLocomotion
-{
-    V(00); V(04); V(08); V(0c); V(10); V(14); V(18); V(1c); V(20); V(24); V(28); V(2c);
-    V(30); V(34); V(38); V(3c); V(40); V(44); V(48); V(4c); V(50); V(54); V(58); V(5c);
-    V(60); V(64); V(68); V(6c); V(70); V(74); V(78); V(7c); V(80); V(84); V(88); V(8c);
-    V(90); V(94); V(98); V(9c); V(a0); V(a4); V(a8); V(ac); V(b0); V(b4); V(b8); V(bc);
-    V(c0); V(c4); V(c8); V(cc); V(d0); V(d4); V(d8);
-    virtual void Request(const cLocomotionRequest& request);                      // +0xDC
-    V(e0); V(e4); V(e8);
-    virtual void SnapToGround();                                                   // +0xEC
+    virtual int v0();
+    virtual int v1();
+    virtual int v2();
 };
 
-struct cCreatureBase0 { virtual void v00(); uint32_t pad_04[(0xC0 - 0x04) / 4]; };
-
-struct cCreature : cCreatureBase0, cGameObject
-{
-    // cGameObject occupies +0xC0..+0x114 (its mFlags is creature +0x110)
-    uint8_t pad_114[0x137 - 0x114];
-    bool mbCanSwim;                                                 // +0x137
-    uint8_t pad_138[0x2B0 - 0x138];
-    int mMovementMode;                                              // +0x2B0
-    uint8_t pad_2b4[0xB54 - 0x2B4];
-    cBehaviorOwner* mpBehavior;                                     // +0xB54
-    uint8_t pad_b58[0xB5E - 0xB58];
-    bool mbIsDead;                                                  // +0xB5E
-
-    bool IsIdle();                                                  // 0x00C0B770
-    void SetAwake(int v);                                           // 0x00C0CFF0
-    void WakeUp(int v);                                             // 0x00C14750
-    cCreature* GetCreature();                                       // 0x00C0EE90
-    cGameObject* GetFallbackObject();                               // 0x00C0EE60
-
-    __forceinline void AlertBehavior()
-    {
-        mpBehavior->GetRule()->SetState((cBehaviorRule*)mpBehavior, 2, 1);
-    }
+struct BehaviorMessage : BehaviorMessageBase {
+    int      mF34;                     // +0x34
+    uint32_t mFlags;                   // +0x38
+    int      mF3c;                     // +0x3c
+    __forceinline BehaviorMessage() : mFlags(0) {}
 };
 
-struct CreatureVector { cCreature** mpBegin; cCreature** mpEnd; };
-
-struct cHerd : RefCounted
-{
-    uint32_t pad_04[(0x40 - 0x04) / 4];
-    CreatureVector mMembers;                                        // +0x40
-    uint32_t pad_48[(0x88 - 0x48) / 4];
-    uint32_t mSpeciesID;                                            // +0x88
-    uint32_t field_8c;                                              // +0x8C
-    uint32_t pad_90[(0xA4 - 0x90) / 4];
-    uint32_t mSpeciesKey;                                           // +0xA4
-    uint32_t pad_a8[(0xF0 - 0xA8) / 4];
-    uint32_t field_f0;                                              // +0xF0
-    const Vector3& GetPosition();                                   // 0x00C6ACC0
-    void UpdateFromArchetype(int archetype, bool b);                // 0x00C6E200
-};
-struct HerdVector { cHerd** mpBegin; cHerd** mpEnd; };
-
-struct cTribe
-{
-    V(00); V(04); V(08); V(0c); V(10); V(14); V(18); V(1c); V(20); V(24); V(28); V(2c);
-    V(30); V(34); V(38); V(3c); V(40); V(44); V(48); V(4c); V(50); V(54); V(58); V(5c);
-    V(60); V(64); V(68); V(6c); V(70); V(74); V(78); V(7c); V(80); V(84); V(88); V(8c);
-    virtual const CreatureVector& GetMembers();                                    // +0x90
-    cCreature* GetChieftain();                                      // 0x00C8FD30
-};
-#undef V
-
-struct cObjectBase34 { virtual void v00(); uint32_t pad_04[(0x34 - 0x04) / 4]; };
-struct ResourceKey
-{
-    uint32_t instanceID, typeID, groupID;
-    ResourceKey() : instanceID(0), typeID(0), groupID(0) {}
-};
-struct cToolObject : cObjectBase34, cGameObject
-{
-    uint8_t pad_88[0x64C - 0x88];
-    ResourceKey mModelKey;                                          // +0x64C
-    int mKind;                                                      // +0x658
-    __forceinline ResourceKey GetModelKey() const { return mModelKey; }
-};
-struct ToolVector { cToolObject** mpBegin; cToolObject** mpEnd; };
-struct cSpaceInventory : cObjectBase34, cGameObject {};
-
-// 0xDC-byte placeholder object used as a camera target.
-struct cCameraObject : cGameObject
-{
-    uint32_t pad_54[(0xDC - 0x54) / 4];
-    cCameraObject();                                                // 0x00AD2750
+// --------------------------------------------------- editor resource graph
+struct RefHandle {                     // refcounted handle embedded at +0x08
+    void* mpObject;                    // +0x04 (relative to the handle)
+    virtual int AddRef();              // slot 0
+    virtual int Release();             // slot 1
 };
 
-struct cStarRecord { const Vector3& GetPosition(); };           // 0x005C65E0
-struct cEmpire { cStarRecord* GetHomeStar(); };                 // 0x00C30C60
-cEmpire* GetPlayerEmpire();                                         // 0x01021300
-struct cSPSimulatorSpaceGame { cSpaceInventory* GetPlayerInventory(); }; // 0x00A1AD60
-cSPSimulatorSpaceGame* GetUFOSimulator();                           // 0x00FFBE50
-
-struct cGameNounManager
-{
-    cCreature* GetAvatar();                                         // 0x00B1FDB0
-    cTribe* GetPlayerTribe();                                       // 0x00BFC5F0
-    cHerd* GetPlayerHerd();                                         // 0x00989360
-    HerdVector* GetHerds();                                         // 0x00ACDA00
-    ToolVector* GetToolObjects();                                   // 0x00AD49E0
-    CreatureVector* GetCreatures();                                 // 0x00B1F9C0
-    cHerd* CreateHerd(const Vector3& pos, void* pSpecies, int a, int b, int c, int d); // 0x00B23940
-};
-cGameNounManager* NounManager();                                    // 0x00B3D300
-
-struct cPlanetModel
-{
-    Vector3 GetRandomSurfacePosition();                             // 0x00B81720
-    Quaternion BuildSurfaceOrientation(const Vector3& pos);         // 0x00B7F190
-    bool IsInWater(const Vector3& pos);                             // 0x00B7E3E0
-    float GetRadiusAt(const Vector3& pos);                          // 0x00B7EF70
-    float GetWaterHeight();                                         // 0x00B7E390
-};
-cPlanetModel* PlanetModel();                                        // 0x00B3D350
-
-struct cCinematicManager
-{
-    uint32_t pad_00[0x148 / 4];
-    uint32_t mCurrentScene;                                         // +0x148
-    bool IsObjectReserved(cGameObject* pObject);                    // 0x00ADB360
-    void RegisterTarget(uint32_t id, cActionTarget& target, uint32_t scene); // 0x00AE09B0
-    void AddObject(void* pObject, uint32_t scene);                  // 0x00AE0A80
-};
-cCinematicManager* CinematicManager();                              // 0x00B3D4D0
-
-struct cSpeciesManager { int GetSpeciesArchetype(uint32_t speciesID, int arg); }; // 0x004E0050
-cSpeciesManager* SpeciesManager();                                  // 0x00401090
-void* GetSpeciesProfile(int a, uint32_t speciesID, int b, int c, bool* pOut); // 0x00B9A750
-cCreature* CreateCreature(const Vector3& pos, uint32_t speciesKey, bool a, cHerd* herd, int b, bool c); // 0x00C099E0
-
-struct cPropertyList : RefCounted {};
-struct IPropertyManager
-{
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
-    virtual void v20(); virtual void v24(); virtual void v28();
-    virtual bool GetPropertyList(uint32_t instance, uint32_t group, cPropertyList*& pList); // +0x2C
-};
-IPropertyManager* PropertyManager();                                // 0x0067DE30
-bool GetPropertyAsKey(cPropertyList* pList, uint32_t id, ResourceKey& dst); // 0x006A1250
-
-uint32_t GetCurrentGameMode();                                      // 0x00B5B800
-enum { kGameCreature = 0x1654C01, kGameTribe = 0x1654C02, kScenarioMode = 0x1654C10 };
-
-// Small out-of-line helpers of this file.
-bool GetNamedTarget(uint32_t id, cActionTarget* pTarget);           // 0x00AD2650
-cCreature* GetTargetCreature(cGameObjectPtr* p);                    // 0x00AD2690 (Cast 0xD0036E08)
-cTribe* GetTargetTribe(cGameObjectPtr* p);                          // 0x00AD26B0 (Cast 0x4F396A66)
-cGameObject* GetScenarioObject(cGameObject* p);                     // 0x00AD26D0 (CastObject 0x01186577)
-cSpaceInventory* GetActionInventory();                              // 0x00AD4A10
-
-struct cActionData
-{
-    uint32_t pad_00[3];
-    int mTargetKind;                                                // +0x0C
-    uint32_t mTargetID;                                             // +0x10
-    uint32_t mSpeciesID;                                            // +0x14
-    uint32_t mTribeID;                                              // +0x18
-    int mPlacement;                                                 // +0x1C
-    int mPlacementArg1;                                             // +0x20
-    int mPlacementArg2;                                             // +0x24
-    Vector3 mOffset;                                                // +0x28
-    bool mbAlert;                                                   // +0x34
-};
-struct cAction
-{
-    virtual void v00(); virtual void v04(); virtual void v08();
-    virtual cActionData* Cast(uint32_t typeID);                     // +0x0C
+struct EditorResource {                // 0x14 bytes
+    void*     mVt;                     // +0x00
+    void*     mVt2;                    // +0x04
+    RefHandle mHandle;                 // +0x08
+    void*     mCallback;               // +0x10
 };
 
-void ComputeTargetPosition(Vector3& dst, cActionTarget& target, int placement, int arg1, int arg2,
-                           const Vector3& offset);                  // 0x00AD2AE0
+// App state that receives the built message (0x007e4190).
+struct cAppState {
+    void AddMessage(void* args, BehaviorMessage* msg, char flag);
+};
 
-// @ 0x00AD4B60
-int ResolveActionTarget(cAction* pAction)
+// ===========================================================================
+// @ 0x00ad5590
+// ===========================================================================
+CmdAddActor::CmdAddActor()
 {
-    if (!pAction)
-        return 1;
-    cActionData* data = pAction->Cast(0x0447FF9B);
-    if (!data)
-        return 1;
+    mpVt = vtbl_CmdAddActor;
+    mSpec.Init(1);
+    BuildArgumentSpec(&mSpec,
+        "Adds a controllable actor",
+        ":actorType", &g_pstrAvatar,
+        ":positionType", &g_pstrEffect,
+        "-highLOD^", 2, "makes the actor highLOD",
+        "<actorName:cstring>", &mActorName, "actor identifier (name)",
+        "<type:actorType>", &mActorType, "the type of actor to add",
+        "-tribe^ <tribe:cstring>", 3, &mTribe, "tribe",
+        "-archetype^ <archetype:cstring>", 1, &mArchetype, "archetype file",
+        "-initialRelativePosition^ <posType:positionType> <posName:cstring> <position:vector3>",
+        0, &mPosType, &mPosName, &mInitialPos, "initial position",
+        0);
+}
 
-    cActionTarget target;
-    switch (data->mTargetKind) {
-    case 0:
-        target.mpObject = NounManager()->GetAvatar();
-        if (GetCurrentGameMode() == kGameTribe) {
-            cTribe* tribe = NounManager()->GetPlayerTribe();
-            target.mpObject = tribe->GetChieftain();
-            if (!target.mpObject.mpObject) {
-                const CreatureVector& members = tribe->GetMembers();
-                for (cCreature** it = members.mpBegin, **end = members.mpEnd; it != end; ++it) {
-                    cCreature* member = *it;
-                    if (!CinematicManager()->IsObjectReserved(member) && member->IsIdle() && !member->mbIsDead) {
-                        target.mpObject = member;
-                        break;
-                    }
-                }
-            }
-        }
-        break;
+// ===========================================================================
+// @ 0x00ad5670
+// ===========================================================================
+void CmdAddActor::Execute(void* pArgs)
+{
+    mActorName  = 0;
+    mArchetype  = 0;
+    mActorType  = 0;
+    mSpec.ParseThrowing(pArgs, mParser);
 
-    case 1:
-        switch (GetCurrentGameMode()) {
-        case kGameCreature: {
-            cHerd* herd = NounManager()->GetPlayerHerd();
-            cGameObject* found = 0;
-            for (cCreature** it = herd->mMembers.mpBegin, **end = herd->mMembers.mpEnd; it != end; ++it) {
-                cCreature* member = *it;
-                if (!member->IsBusy() && !CinematicManager()->IsObjectReserved(member) && !member->mbIsDead) {
-                    found = member;
-                    break;
-                }
-            }
-            if (!found) {
-                cCreature* creature = CreateCreature(herd->GetPosition(), herd->mSpeciesKey, true, herd, 0, true);
-                CinematicManager()->AddObject(creature, CinematicManager()->mCurrentScene);
-                found = creature;
-            }
-            target.mpObject = found;
-            if (data->mbAlert)
-                GetTargetCreature(&target.mpObject)->AlertBehavior();
-            break;
-        }
-        case kGameTribe: {
-            cTribe* tribe = NounManager()->GetPlayerTribe();
-            const CreatureVector& members = tribe->GetMembers();
-            for (cCreature** it = members.mpBegin, **end = members.mpEnd; it != end; ++it) {
-                cCreature* member = *it;
-                if (!CinematicManager()->IsObjectReserved(member) && !member->mbIsDead) {
-                    target.mpObject = member;
-                    break;
-                }
-            }
-            break;
-        }
-        }
-        break;
-
-    case 2:
-        if (data->mSpeciesID) {
-            AutoRefCount<cHerd> herd;
-            HerdVector* herds = NounManager()->GetHerds();
-            int count = (int)(herds->mpEnd - herds->mpBegin);
-            for (int i = 0; i < count; ++i) {
-                if (herds->mpBegin[i]->mSpeciesID == data->mSpeciesID)
-                    herd = herds->mpBegin[i];
-            }
-            if (!herd) {
-                bool created = false;
-                void* pSpecies = GetSpeciesProfile(0, data->mSpeciesID, 0, 0, &created);
-                if (!pSpecies)
-                    break;
-                herd = NounManager()->CreateHerd(PlanetModel()->GetRandomSurfacePosition(), pSpecies, 0, 0, 0, 0);
-                if (!herd)
-                    break;
-                herd->mSpeciesID = data->mSpeciesID;
-                herd->field_8c = 0;
-                herd->field_f0 = 0;
-                herd->UpdateFromArchetype(SpeciesManager()->GetSpeciesArchetype(herd->mSpeciesID, 0), true);
-                CinematicManager()->AddObject(herd, CinematicManager()->mCurrentScene);
-            }
-            cCreature* creature = CreateCreature(PlanetModel()->GetRandomSurfacePosition(), herd->mSpeciesKey, true, herd, 0, true);
-            if (data->mbAlert)
-                creature->AlertBehavior();
-            CinematicManager()->AddObject(creature, CinematicManager()->mCurrentScene);
-            target.mpObject = creature;
-        }
-        break;
-
-    case 7:
-        switch (GetCurrentGameMode()) {
-        case kGameCreature: {
-            cCreature* creature = NounManager()->GetAvatar()->GetCreature();
-            if (data->mbAlert)
-                creature->AlertBehavior();
-            target.mpObject = creature;
-            break;
-        }
-        case kGameTribe: {
-            cActionTarget tribeTarget;
-            if (!GetNamedTarget(data->mTribeID, &tribeTarget))
-                return 1;
-            GetNamedTarget(data->mTribeID, &tribeTarget);
-            cTribe* tribe = GetTargetTribe(&tribeTarget.mpObject);
-            target.mpObject = tribe->GetChieftain();
-            if (!target.mpObject.mpObject) {
-                const CreatureVector& members = tribe->GetMembers();
-                for (cCreature** it = members.mpBegin, **end = members.mpEnd; it != end; ++it) {
-                    cCreature* member = *it;
-                    if (!CinematicManager()->IsObjectReserved(member) && member->IsIdle() && !member->mbIsDead) {
-                        target.mpObject = member;
-                        break;
-                    }
-                }
-            }
-            break;
-        }
-        case kScenarioMode: {
-            cCreature* avatar = NounManager()->GetAvatar();
-            cCreature* creature = avatar->GetCreature();
-            if (creature) {
-                if (data->mbAlert)
-                    creature->AlertBehavior();
-                target.mpObject = creature;
-            } else
-                target.mpObject = GetScenarioObject(avatar->GetFallbackObject());
-            break;
-        }
-        }
-        break;
-
-    case 8:
-        if (GetCurrentGameMode() == kGameCreature) {
-            CreatureVector* creatures = NounManager()->GetCreatures();
-            if (creatures->mpBegin != creatures->mpEnd)
-                target.mpObject = creatures->mpEnd[-1];
-        }
-        break;
-
-    case 4:
-        target.mpObject = GetUFOSimulator()->GetPlayerInventory();
-        break;
-
-    case 5:
-        target.mpObject = GetActionInventory();
-        break;
-
-    case 6: {
-        target.mpObject = new("Simulator", 0, 0, 0, 0) cCameraObject();
-        Vector3 position = GetPlayerEmpire()->GetHomeStar()->GetPosition();
-        target.mpObject.mpObject->SetPosition(position);
-        break;
+    SimCommand* pCmd = (SimCommand*)EAAllocate(sizeof(SimCommand), "Simulator", 0, 0, 0, 0);
+    if (pCmd) {
+        new (pCmd) SimCommand();
+        VCALL0(pCmd, 0x00);
     }
 
-    case 3: {
-        ToolVector* tools = NounManager()->GetToolObjects();
-        int count = (int)(tools->mpEnd - tools->mpBegin);
-        for (int i = 0; i < count; ++i) {
-            if (tools->mpBegin[i]->mKind == 4) {
-                AutoRefCount<cPropertyList> pPropList;
-                ResourceKey key;
-                PropertyManager()->GetPropertyList(tools->mpBegin[i]->GetModelKey().instanceID, 0x034D97FA, pPropList.AsOutParam());
-                GetPropertyAsKey(pPropList, 0x034F1A4F, key);
-                if (key.instanceID == 0x7ECBE6F5)
-                    target.mpObject = tools->mpBegin[i];
-            }
-        }
-        break;
+    pCmd->mNameHash  = (int)FNV1_String8(mActorName, 0x811c9dc5, 1);
+    pCmd->mActorType = (int)mActorType;
+
+    if (mSpec.mArchetypeUsed) {
+        if (mArchetype)
+            pCmd->mArchetypeHash = (int)FNV1_String8(mArchetype, 0x811c9dc5, 1);
     }
+    if (mSpec.mTribeUsed) {
+        if (mTribe)
+            pCmd->mTribeHash = (int)FNV1_String8(mTribe, 0x811c9dc5, 1);
+    }
+    if (mSpec.mHighLODUsed)
+        pCmd->mHighLOD = 1;
+    if (mSpec.mPosUsed) {
+        pCmd->mPosition    = mInitialPos;
+        pCmd->mPosType     = (int)mPosType;
+        pCmd->mPosNameHash = (int)FNV1_String8(mPosName, 0x811c9dc5, 1);
     }
 
-    if (target.mpObject.mpObject) {
-        CinematicManager()->RegisterTarget(data->mTargetID, target, CinematicManager()->mCurrentScene);
-        Vector3 position;
-        ComputeTargetPosition(position, target, data->mPlacement, data->mPlacementArg1, data->mPlacementArg2, data->mOffset);
-        if (position != kInvalidPosition) {
-            cGameObject* object = target.mpObject.mpObject;
-            object->SetPositionAndOrientation(position, PlanetModel()->BuildSurfaceOrientation(position));
-            if (target.mpObject.mpObject) {
-                cLocomotion* locomotion = (cLocomotion*)target.mpObject.mpObject->Cast(0x0116DD1B);
-                if (locomotion)
-                    locomotion->SnapToGround();
-            }
-            if (PlanetModel()->IsInWater(position))
-                target.mpObject.mpObject->mFlags |= 0x1000;
-            if (target.mpObject.mpObject) {
-                cCreature* creature = (cCreature*)target.mpObject.mpObject->Cast(0xCE9F6639);
-                if (creature && (creature->mFlags & 0x1000)) {
-                    float radius = PlanetModel()->GetRadiusAt(creature->GetPosition());
-                    if (PlanetModel()->GetWaterHeight() > radius) {
-                        creature->mbCanSwim = false;
-                        creature->mMovementMode = 3;
-                    }
-                }
-            }
-        }
-        if (target.mpObject.mpObject) {
-            cLocomotion* locomotion = (cLocomotion*)target.mpObject.mpObject->Cast(0x0116DD1B);
-            if (locomotion)
-                locomotion->Request(cLocomotionRequest());
-            if (target.mpObject.mpObject) {
-                cCreature* creature = (cCreature*)target.mpObject.mpObject->Cast(0xD0036E08);
-                if (creature) {
-                    creature->SetAwake(0);
-                    if (!creature->mbIsDead)
-                        creature->WakeUp(1);
-                }
-            }
-        }
+    BehaviorMessage* pMsg = (BehaviorMessage*)EAAllocate(0x40, "Simulator", 0, 0, 0, 0);
+    if (pMsg) {
+        new (pMsg) BehaviorMessage();
+        VCALL0(pMsg, 0x04);
     }
-    return 1;
+    pMsg->mKind30 = 0x4470a41;
+
+    EditorResource* pRes = (EditorResource*)EAAllocate(0x14, "Simulator", 0, 0, 0, 0);
+    if (pRes) {
+        pRes = (EditorResource*)EditorResourceCtor(pRes);
+        if (pRes) VCALL0(&pRes->mHandle, 0x00);
+    }
+
+    void* pOld = pRes->mHandle.mpObject;
+    if (pCmd != pOld) {
+        VCALL0(pCmd, 0x00);
+        pRes->mHandle.mpObject = pCmd;
+        if (pOld) VCALL0(pOld, 0x04);
+    }
+    pRes->mCallback = (void*)&FUN_00ad4b60;
+
+    RefHandle* pHandle = &pRes->mHandle;
+    if (pMsg->mFlags & 1) {
+        void* pPrev = pMsg->mRefSlot;
+        if (pPrev) VCALL0(pPrev, 0x04);
+    }
+    pMsg->mRefSlot = pHandle;
+    if (pHandle) VCALL0(pHandle, 0x00);
+    pMsg->mFlags |= 1;
+
+    ((cAppState*)mpAppState)->AddMessage(pArgs, pMsg, 0);
+
+    VCALL0(pHandle, 0x04);
+    VCALL0(pMsg, 0x08);
+    VCALL0(pCmd, 0x04);
+}
+
+// ===========================================================================
+// @ 0x00ad5900
+// ===========================================================================
+CmdMoveActor::CmdMoveActor()
+{
+    mpVt = vtbl_CmdMoveActor;
+    mSpec.Init(1);
+    BuildArgumentSpec(&mSpec,
+        "Creates a move actor command to be processed later",
+        ":positionType", &g_pstrEffect,
+        "<actorName:cstring>", &mActorName, "actor identifier (name)",
+        "<position:vector3> [stopDistance:float]", &mPosition, &mStopDistance,
+        "relative position and optional stop distance (if no options specified, then relative to the actor)",
+        "-relative^ <posType:positionType> <posName:cstring>", 0, &mPosType, &mPosName,
+        "relative to a position",
+        "-face^ <facingType:positionType> <facingName:cstring> [facingOffset:vector3]", 1,
+        &mFacingType, &mFacingName, &mFacingOffset, "face a position with an optional offset",
+        "-noWait^", 2, "state does not wait for routing to finish",
+        "-snap^", 3, "warps the actor into position",
+        "-useFootprintRadius^", 4, "uses the foot radius of the actor as an offset multiplier",
+        "-useTargetWidth^", 5, "uses the max width of the target object as an offset multiplier",
+        "-useTargetHeight^", 6, "uses the height of the target object as an offset multiplier",
+        0);
+}
+
+// ===========================================================================
+// @ 0x00ad59e0
+// ===========================================================================
+ActorInfo::ActorInfo()
+{
+    mHash   = 0;
+    mPos.x  = g_v4bc;
+    mPos.y  = g_v4c0;
+    mPos.z  = g_v4c4;
+    mPos2.x = g_v4bc;
+    mPos2.y = g_v4c0;
+    mPos2.z = g_v4c4;
+    mZero   = 0.0f;
+    mMode   = 1;
+    mP30    = 0;
+    mP34    = 0;
+    mP38    = 0;
+    mB3c    = 0;
+    mB3d    = 0;
+    mKind   = 3;
+    mBasis.x = g_v4bc;
+    mBasis.y = g_v4c0;
+    mBasis.z = g_v4c4;
 }
