@@ -901,3 +901,48 @@ AtomTableRoot* AtomTableSingleton()
     }
     return &gAtomTableRoot;
 }
+
+// --------------------------------------------------------------- atom-table lookup result
+// The hash lookup at 0x011e2b30 writes the found slot index and the table size.  The
+// iterator helper then turns that into the {entry,end} pointer pair used by the callers.
+struct AtomLookupResult
+{
+    unsigned int mnIndex;               // +0x00
+    unsigned int mnCount;               // +0x04
+};
+
+struct AtomLookupPair
+{
+    AtomTableEntry* mpEntry;            // +0x00  matching entry, or end
+    AtomTableEntry* mpEnd;              // +0x04  one past the table
+};
+
+struct ArenaAtomField
+{
+    AtomTableEntry* mpEntries;          // +0x00
+    unsigned int mnCount;               // +0x04
+
+    void Lookup(AtomLookupResult* pResult, const unsigned int* pKey);   // 0x011e2b30
+    AtomLookupPair* Find(AtomLookupPair* pPair, const unsigned int* pKey);   // 0x011e3a60
+};
+
+// @ 0x011e3a60  rw::core::arena::ArenaAtomField::Find
+AtomLookupPair* ArenaAtomField::Find(AtomLookupPair* pPair, const unsigned int* pKey)
+{
+    AtomLookupResult result;
+    Lookup(&result, pKey);
+
+    AtomTableEntry* pEntry = mpEntries + result.mnIndex;
+    AtomTableEntry* pEnd = mpEntries + mnCount;
+    if (*pKey == pEntry->mnKey)
+    {
+        pPair->mpEntry = pEntry;
+        pPair->mpEnd = pEnd;
+    }
+    else
+    {
+        pPair->mpEntry = pEnd;
+        pPair->mpEnd = pEnd;
+    }
+    return pPair;
+}

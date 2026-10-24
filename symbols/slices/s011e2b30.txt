@@ -12,3 +12,5 @@
 011e3780 rw::core::arena::Arena::RefixStart               # refix: patch the 0x98 header copy, write it, walk the manifest
 011e3940 rw::core::arena::Arena::RefixNext                # per-entry refix; end of dict writes dictionary + subreferences
 011e39e0 rw::core::arena::Arena::FixupNext                # per-entry fixup callback walk over the dict
+011e3a60 rw::core::arena::ArenaAtomField::Find            # pair lookup: {entry,end} from 011e2b30's index/count
+?Lookup@ArenaAtomField@@QAEXPAUAtomLookupResult@@PBI@Z 011e2b30
