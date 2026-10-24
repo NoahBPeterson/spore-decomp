@@ -67,7 +67,9 @@ struct VectorIF {
     PairIF* DoAllocateCopy(uint32_t n, const PairIF* first, const PairIF* last); // @ 0x00530d20
     void DoInsertValues(PairIF* position, uint32_t n, const PairIF& value);      // @ 0x00530db0
 };
-PairIF* uninitialized_copy(const PairIF* first, const PairIF* last, PairIF* dest, bool tag); // @ 0x005311a0
+// The original instantiation returns its output iterator through a hidden return slot: the first
+// (last-pushed) argument is the address of the slot, which receives the advanced dest pointer.
+void uninitialized_copy(PairIF** out, const PairIF* first, const PairIF* last, PairIF* dest, bool tag); // @ 0x005311a0
 
 // ---------------------------------------------------------------- description
 struct cDescription {
@@ -235,7 +237,9 @@ PairIF* VectorIF::DoAllocateCopy(uint32_t n, const PairIF* first, const PairIF* 
     else
         p = (PairIF*)EASTL_Allocate(mAlloc, n * 8, 4, 0);
     PairIF* result = p;
-    uninitialized_copy(first, last, p, false);
+    PairIF* pos;
+    bool tag;                       // the original's dispatch tag is read uninitialized (0xcc stack fill)
+    uninitialized_copy(&pos, first, last, p, tag);
     return result;
 }
 
@@ -251,7 +255,10 @@ VectorIF::VectorIF(const VectorIF& x)
     mpBegin = p;
     mpEnd = p;
     mpCapacity = p + n;
-    mpEnd = uninitialized_copy(x.mpBegin, x.mpEnd, mpBegin, false);
+    PairIF* pos;
+    bool tag;                       // the original's dispatch tag is read uninitialized (0xcc stack fill)
+    uninitialized_copy(&pos, x.mpBegin, x.mpEnd, mpBegin, tag);
+    mpEnd = pos;
 }
 
 // ---------------------------------------------------------------- @ 0x00530870
@@ -274,7 +281,9 @@ VectorIF& VectorIF::operator=(const VectorIF& x)
             PairIF* pDst = mpBegin;
             for (PairIF* q = pSrcEnd; q != pSrc; ++q, ++pDst)
                 *pDst = *q;
-            uninitialized_copy(pSrc, x.mpEnd, mpEnd, false);
+            PairIF* pos;
+            bool tag;               // the original's dispatch tag is read uninitialized (0xcc stack fill)
+            uninitialized_copy(&pos, pSrc, x.mpEnd, mpEnd, tag);
         } else {
             PairIF* pDst = mpBegin;
             for (PairIF* q = x.mpBegin; q != x.mpEnd; ++q, ++pDst)

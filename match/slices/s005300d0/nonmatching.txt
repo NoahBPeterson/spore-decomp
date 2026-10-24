@@ -2,8 +2,8 @@
 005302b0  82   ReadString: helper frame (orig 0x14 vs 0x4) and loop shape differ
 00530310  221  Write description: /Od write-helper temp schedule differs
 005306c0  67   push_back: /Od local slot order (this/nRequired/nCapacity) differs
-00530770  127  vector copy ctor: EH frame + uninitialized_copy shape (mine 146 vs orig 241)
+00530770  223  vector copy ctor: complete; the uninitialized_copy instantiation takes its output iterator through a hidden return slot, so the call now pushes slot/out first (push tag, dest, last, first, slot) and stores the slot's advanced dest into mpEnd; residual diff is the /Od EH frame and local copies (156 vs 241). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc. [equiv: PASS 201 valid, 85.2% cov, seed 3; hybrid copy src/game/SPBake/SPSkinPaintDistributeDescription.cpp also PASS]
 00530870  407  vector operator=: eastl::copy tag locals / branch shapes (mine 456 vs orig 757); equiv: WEAK (369 valid, 33.5% cov)
 00530b70  70   vector resize: DoInsertValues reserved frame differs
 00530c80  127  vector erase: missing eastl::copy three tag locals
-00530d20  62   vector DoAllocateCopy: uninitialized_copy frame differs
+00530d20  108  vector DoAllocateCopy: complete; same hidden-return-slot call shape for uninitialized_copy (a slot pointer, the two source iterators, the allocate result as dest, and the uninitialized bool tag pushed as the 0xcc byte); residual diff is the /Od frame layout (97 vs 133). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc. [equiv: PASS 285 valid, 98.0% cov, seed 3]
