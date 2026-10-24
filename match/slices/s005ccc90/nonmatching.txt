@@ -1,3 +1,9 @@
 # va  diff-bytes  reason
 005cd870  105  cInterp::Interp: original clamps with inline-asm Min/Max (maxss/minss with stack spills); C++ ternaries give comiss branches
 005cdb30  96   cSpine::MakeVertKey: x87 skin-radius result/SSE schedule and the member calling shape differ
+005ccc90  1062  cSPEditorShoppingTokenTranslator::TranslateToken: hash-dispatch reconstructed as a switch (original uses a sparse decision tree); per-case SetNumberString/append inlining and the fixed-allocator string differ
+005cd190  283   SP::GetDayOfWeekString: locale path assigns the GetLocaleInfoString buffer and the cString::Load resource path matches, but cl orders the cString ctor/switch and GetText scan differently
+005cd340  694   cSPEditorShoppingTokenTranslator::GetTimeString: DateTime/local-time-bias arithmetic, _alldiv week comparisons and the *Seconds/Minutes/Hours Ago* locale branches reconstructed; x87 _alldiv frame and sprintf(WStr_Format) call sequence differ
+005cd670  365   editor-spine helper (basis rebuild): hkVector4-aligned local matches the original exactly under equivalence; x87 sqrt + fdivrp reciprocal and the cross-product register schedule still differ
+005cd9a0  242   cSPEditorSpine::CreateVertebraShape: hkCapsuleShape(vertexA,vertexB,radius) + hkConvexTranslateShape(capsule,offset) built via hkMemory::allocate(0x30,0x24); retail endpoint/offset vectors and the shape release sequence differ
+005cdbf0  265   cSPEditorSpine::CreateWallBoxAndAddToWorld: hkRigidBodyCinfo filled by offset (shape +4, position +0x10, +0xb0=0.0f, +0xc0=7), hkBoxShape halfExt/0.04, rigid body +0x64 solverTau/+0x38=1, world addEntity; cinfo/box/body construction order differs
