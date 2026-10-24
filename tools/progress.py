@@ -48,8 +48,10 @@ for _t in ("gold0", "gold1", "gold2", "gold3", "gold4", "gold5", "gold6", "gold7
 for _w in ("w1g", "w2g", "w3g"):
     for _k in range(8):
         TAG_MODEL.setdefault("%s%d" % (_w, _k), "cheaperinference/deepseek-v4.1-flash")
-for _k in range(7, 30):
-    TAG_MODEL.setdefault("mig%d" % _k, "cheaperinference/deepseek-v4.1-flash")      # module landings by opencode sessions
+for _k in range(7, 19):
+    TAG_MODEL.setdefault("mig%d" % _k, "sonnet-5.5")      # module landings mig7-mig18: Sonnet subagents (work/claude/mig*_prompts)
+for _k in range(19, 30):
+    TAG_MODEL.setdefault("mig%d" % _k, "cheaperinference/deepseek-v4.1-flash")      # mig19 on: opencode sessions
 try:   # slices written by Claude subagents (scan of the surviving transcripts: work/claude/agent_slice_models.json)
     AGENT_SLICES = json.load(open(W("work/claude/agent_slice_models.json")))
 except (OSError, ValueError):
