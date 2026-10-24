@@ -532,3 +532,341 @@ void cCommandTerraform::Execute(cArguments* args)
 		}
 	}
 }
+
+// =================================================================================================
+// cTerraformTuning: the terraforming tunables read out of a property list (keys hashed by
+// FNV-1 of "cTerraformTuning.xml" style names).  The four accessors return 0 when the property
+// list or the key is missing; the T3 colony count is floored at 20.
+//
+// cSpaceTokenTranslator: the Simulator token translator of the space stage (vtable 0x0149a724,
+// six slots: deleting dtor, three overrides, TranslateToken at +0x10, one more override).  It
+// keeps four string vectors (tech level / terraforming level / animal type / plant type names,
+// 7/4/4/3 entries) plus two format strings, all loaded from the "ui_space" text table.
+// =================================================================================================
+
+// ---------------------------------------------------------------- property objects
+struct Property
+{
+	uint8_t pad[0x12];
+	uint16_t mType;                                            // +0x12
+	int* GetInt();                                             // 0x0041e990
+};
+
+struct cPropertyList
+{
+	virtual int AddRef();                                      // +0x00
+	virtual int Release();                                     // +0x04
+	virtual void v08(); virtual void v0c();
+	virtual void v10(); virtual void v14();
+	virtual void v18(); virtual void v1c(); virtual void v20();
+	virtual bool GetProperty(uint32_t hash, Property** out);   // +0x24
+};
+
+namespace EA {
+template <typename T>
+class AutoRefCount
+{
+public:
+	T* mpObject;
+	AutoRefCount() : mpObject(0) {}
+	~AutoRefCount() { if (mpObject) mpObject->Release(); }
+	T* operator->() const { return mpObject; }
+	operator T*() const { return mpObject; }
+	AutoRefCount& operator=(T* p)
+	{
+		if (p != mpObject)
+		{
+			T* const old = mpObject;
+			if (p)
+				p->AddRef();
+			mpObject = p;
+			if (old)
+				old->Release();
+		}
+		return *this;
+	}
+};
+}  // namespace EA
+
+class cPropertyManager
+{
+public:
+	virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+	virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+	virtual void v20(); virtual void v24(); virtual void v28();
+	virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID,
+	                             EA::AutoRefCount<cPropertyList>& out);   // +0x2c
+};
+cPropertyManager* PropertyManager();                          // 0x0067de30
+
+struct cTerraformTuning
+{
+	EA::AutoRefCount<cPropertyList> mPropList;                 // +0x00
+	void Init();                                               // 0x01049a20
+	int GetMaxBuildingsForT1Colony();                          // 0x01049e70
+	int GetMaxBuildingsForT2Colony();                          // 0x01049eb0
+	int GetMaxBuildingsForT3Colony();                          // 0x01049ef0
+};
+
+template <typename T> inline const T& MinInt(const T& a, const T& b) { return (b < a) ? b : a; }
+
+// @ 0x01049a20
+void cTerraformTuning::Init()
+{
+	PropertyManager()->GetPropertyList(0xa6d1bc70, 0x2ae0c7e, mPropList = 0);
+}
+
+// @ 0x01049e70
+int cTerraformTuning::GetMaxBuildingsForT1Colony()
+{
+	int result = 0;
+	cPropertyList* list = mPropList;
+	if (list)
+	{
+		Property* prop;
+		if (list->GetProperty(0x04a5d473, &prop) && prop->mType == 9)
+			result = *prop->GetInt();
+	}
+	return result;
+}
+
+// @ 0x01049eb0
+int cTerraformTuning::GetMaxBuildingsForT2Colony()
+{
+	int result = 0;
+	cPropertyList* list = mPropList;
+	if (list)
+	{
+		Property* prop;
+		if (list->GetProperty(0x04a5d46d, &prop) && prop->mType == 9)
+			result = *prop->GetInt();
+	}
+	return result;
+}
+
+// @ 0x01049ef0
+int cTerraformTuning::GetMaxBuildingsForT3Colony()
+{
+	int value = 0;
+	cPropertyList* list = mPropList;
+	if (list)
+	{
+		Property* prop;
+		if (list->GetProperty(0x052f046e, &prop) && prop->mType == 9)
+			value = *prop->GetInt();
+	}
+	return MinInt(value, 20);
+}
+
+// ---------------------------------------------------------------- strings used by the translator
+struct WString
+{
+	wchar_t* mpBegin;
+	wchar_t* mpEnd;
+	wchar_t* mpCapacity;
+	WString& Assign(const wchar_t* first, const wchar_t* last);   // 0x00423650
+	WString& operator=(const WString& other);                     // 0x0057cb60
+};
+
+extern const wchar_t kEmptyString16[];                          // 0x013ec468 (L"")
+
+struct cString
+{
+	uint32_t data[5];
+	cString();                                                  // 0x006b5060
+	~cString();                                                 // 0x006b5240
+	bool Load(uint32_t tableID, uint32_t instanceID, int flags);// 0x006b54b0
+	const wchar_t* GetText();                                   // 0x006b55c0
+};
+
+void operator delete(void* p);                                  // 0x00f47380
+
+// 0x14-byte string array (stride 0x14 per element); only the three container pointers are
+// initialised by the constructor, the trailing two words are set by whoever resizes it.
+struct cStringVector
+{
+	cString* mpBegin;                                           // +0x00
+	cString* mpEnd;                                             // +0x04
+	cString* mpCapacity;                                        // +0x08
+	uint32_t mField0C;                                          // +0x0c
+	uint32_t mField10;                                          // +0x10
+
+	cStringVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+	~cStringVector()
+	{
+		cString* end = mpEnd;
+		for (cString* p = mpBegin; p < end; ++p)
+			p->~cString();
+		if (mpBegin && ((int*)mpBegin)[-1] != 0)
+			operator delete(mpBegin);
+	}
+	int Size() const { return (int)(mpEnd - mpBegin); }
+	void Index(uint32_t count);                                 // 0x00e2ca70
+};
+
+uint32_t FNVHash(const char* text, uint32_t seed, int mode);    // 0x00932e80
+
+// text-table instance ids (the "ui_space" table)
+extern const uint32_t kTechLevelStringIds[];                    // 0x015b86d4, 7 entries
+extern const uint32_t kTerraformingLevelStringIds[];            // 0x015b86f0, 4 entries
+extern const uint32_t kAnimalTypeStringIds[];                   // 0x015b8700, 4 entries
+extern const uint32_t kPlantTypeStringIds[];                    // 0x015b8710, 3 entries
+extern const uint32_t kMoneyFormatInstanceId;                   // 0x015b871c
+extern const uint32_t kUiSpaceNameInstanceId;                   // 0x015b8720
+
+// ---------------------------------------------------------------- game nouns
+struct cKey3
+{
+	uint32_t m0, m4, m8;
+};
+
+struct cGameNounManager
+{
+	void* GetAvatar();                                          // 0x00b1fdb0
+};
+
+// The active planet record the translator keeps at +0x0c.
+struct cPlanetRecord
+{
+	int GetCategory();                                          // 0x00b8dab0
+	cGameNounManager* GetNounManager();                         // 0x00b8de30
+	cKey3* GetBannerKey();                                      // 0x00b8e090
+};
+
+struct cStarManager
+{
+	void* GetEmpireByID(int id);                                // 0x00ba9370
+};
+cStarManager* StarManager();                                    // 0x00b3d2a0
+
+struct cCivData
+{
+	WString* GetCities();                                       // 0x005c65e0 (returns &this->mCities)
+};
+
+struct cSpeciesProfile
+{
+	void GetUiName(WString* out);                               // 0x004da330
+};
+struct cSPEditorSpeciesManager
+{
+	cSpeciesProfile* GetProfile(cKey3* key);                    // 0x004df550
+};
+cSPEditorSpeciesManager* GetEditorSpeciesManager();             // 0x00401090
+
+// ---------------------------------------------------------------- the translator object
+namespace Simulator {
+class cCivTokenTranslator
+{
+public:
+	cCivTokenTranslator();                                      // 0x00b32470
+	virtual ~cCivTokenTranslator();                             // 0x00b32490
+	virtual void v04();                                         // slot 1
+	virtual void v08();                                         // slot 2
+	virtual void v0c();                                         // slot 3
+	virtual bool TranslateToken(const wchar_t* token, WString* out);   // slot 4
+	uint32_t mField04;                                          // +0x04
+	uint32_t mField08;                                          // +0x08
+};
+}  // namespace Simulator
+
+class cSpaceTokenTranslator : public Simulator::cCivTokenTranslator
+{
+public:
+	virtual void v14();                                         // slot 5 (0x010829f0)
+
+	void* mpPlanet;                                             // +0x0c
+	void* mpStar;                                               // +0x10
+	void* mpItem;                                               // +0x14
+	void* mpMission;                                            // +0x18
+	void* mpEmpire;                                             // +0x1c
+	void* mpEmpire2;                                            // +0x20
+	void* mpSpeciesProfile;                                     // +0x24
+	void* mpBuilding;                                           // +0x28
+	void* mpVehicle;                                            // +0x2c
+	void* mpUFO;                                                // +0x30
+	void* mpGenericName;                                        // +0x34
+	int mCount;                                                 // +0x38
+	int mField3C;                                               // +0x3c
+	float mField40;                                             // +0x40
+	uint32_t mField44;                                          // +0x44
+	int mField48;                                               // +0x48
+	cStringVector mTechLevelString;                             // +0x4c
+	cStringVector mTerraformingLevelString;                     // +0x60
+	cStringVector mAnimalTypeString;                            // +0x74
+	cStringVector mPlantTypeString;                             // +0x88
+	cString mMoneyFormatString;                                 // +0x9c
+	cString mUiSpaceName;                                       // +0xb0
+
+	cSpaceTokenTranslator();                                    // 0x0104a020
+	virtual ~cSpaceTokenTranslator();                           // 0x0104a210
+
+	const wchar_t* FUN_01049f50(int index);                     // 0x01049f50
+	void FUN_01049f90(WString* out);                            // 0x01049f90
+};
+
+// @ 0x01049f50
+const wchar_t* cSpaceTokenTranslator::FUN_01049f50(int index)
+{
+	if (index < mTerraformingLevelString.Size())
+		return mTerraformingLevelString.mpBegin[index].GetText();
+	return kEmptyString16;
+}
+
+// @ 0x01049f90
+void cSpaceTokenTranslator::FUN_01049f90(WString* out)
+{
+	out->Assign(kEmptyString16, kEmptyString16);
+	if (mpPlanet)
+	{
+		if (((cPlanetRecord*)mpPlanet)->GetCategory() > 1)
+		{
+			if (((cPlanetRecord*)mpPlanet)->GetCategory() == 5)
+			{
+				cCivData* civ = (cCivData*)StarManager()->GetEmpireByID(
+				                    (int)((cPlanetRecord*)mpPlanet)->GetNounManager()->GetAvatar());
+				if (civ)
+					*out = *civ->GetCities();
+			}
+			else
+			{
+				cSpeciesProfile* profile =
+				    GetEditorSpeciesManager()->GetProfile(((cPlanetRecord*)mpPlanet)->GetBannerKey());
+				if (profile)
+					profile->GetUiName(out);
+			}
+		}
+	}
+}
+
+// @ 0x0104a020
+cSpaceTokenTranslator::cSpaceTokenTranslator()
+	: mpPlanet(0), mpStar(0), mpItem(0), mpMission(0), mpEmpire(0),
+	  mpSpeciesProfile(0), mpBuilding(0), mpVehicle(0), mpUFO(0), mpGenericName(0),
+	  mField3C(0), mField40(0.0f), mField48(0)
+{
+	mTechLevelString.Index(7);
+	for (int i = 0; i < 7; ++i)
+		mTechLevelString.mpBegin[i].Load(0x2db6dad3, kTechLevelStringIds[i], 0);
+
+	mTerraformingLevelString.Index(4);
+	for (int i = 0; i < mTerraformingLevelString.Size(); ++i)
+		mTerraformingLevelString.mpBegin[i].Load(0x2db6dad3, kTerraformingLevelStringIds[i], 0);
+
+	mAnimalTypeString.Index(4);
+	for (uint32_t i = 0; i < 4; ++i)
+		mAnimalTypeString.mpBegin[i].Load(0x2db6dad3, kAnimalTypeStringIds[i], 0);
+
+	mPlantTypeString.Index(3);
+	for (uint32_t i = 0; i < 3; ++i)
+		mPlantTypeString.mpBegin[i].Load(0x2db6dad3, kPlantTypeStringIds[i], 0);
+
+	uint32_t tableId = FNVHash("ui_space", 0x811c9dc5u, 1);
+	mMoneyFormatString.Load(tableId, kMoneyFormatInstanceId, 0);
+	mUiSpaceName.Load(0x2db6dad3, kUiSpaceNameInstanceId, 0);
+}
+
+// @ 0x0104a210
+cSpaceTokenTranslator::~cSpaceTokenTranslator()
+{
+}

@@ -1,1 +1,9 @@
 01049040 SP::cCommandTerraform::Execute  # thiscall ret 4 (cArguments*): terraform cheat command flags (abduct, biomecolors, atmosphere, temperature, water, cubemap, ufo, eradicate, freeze...)
+01049a20 SP::cTerraformTuning::Init  # thiscall: default terraform tuning values
+01049e70 SP::cTerraformTuning::GetMaxBuildingsForT1Colony  # thiscall: max buildings (T1 colony)
+01049eb0 SP::cTerraformTuning::GetMaxBuildingsForT2Colony  # thiscall: max buildings (T2 colony)
+01049ef0 SP::cTerraformTuning::GetMaxBuildingsForT3Colony  # thiscall: min(value, 20) (T3 colony)
+01049f50 SP::cSpaceTokenTranslator::GetTerraformingLevelName  # thiscall (int index): table lookup, empty string fallback
+01049f90 SP::cSpaceTokenTranslator::GetPlanetName  # thiscall (WString* out): city list or species UI name
+0104a020 SP::cSpaceTokenTranslator::cSpaceTokenTranslator  # thiscall: builds ui_space string tables
+0104a210 SP::cSpaceTokenTranslator::~cSpaceTokenTranslator  # thiscall: scalar deleting destructor body

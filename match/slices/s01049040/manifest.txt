@@ -1,2 +1,10 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 # (no byte-exact functions; see nonmatching.txt)
+slices/s01049040/s01049040.cpp  ?Init@cTerraformTuning@@QAEXXZ  01049a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01049040/s01049040.cpp  ?GetMaxBuildingsForT1Colony@cTerraformTuning@@QAEHXZ  01049e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01049040/s01049040.cpp  ?GetMaxBuildingsForT2Colony@cTerraformTuning@@QAEHXZ  01049eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01049040/s01049040.cpp  ?GetMaxBuildingsForT3Colony@cTerraformTuning@@QAEHXZ  01049ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01049040/s01049040.cpp  ?FUN_01049f50@cSpaceTokenTranslator@@QAEPB_WH@Z  01049f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01049040/s01049040.cpp  ?FUN_01049f90@cSpaceTokenTranslator@@QAEXPAUWString@@@Z  01049f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01049040/s01049040.cpp  ??0cSpaceTokenTranslator@@QAE@XZ  0104a020  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01049040/s01049040.cpp  ??1cSpaceTokenTranslator@@UAE@XZ  0104a210  /O2 /MD /Gy /TP /arch:SSE /fp:fast
