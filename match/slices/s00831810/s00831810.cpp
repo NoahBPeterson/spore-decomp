@@ -98,7 +98,7 @@ void DebugConsole::ResetImages()
                 ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
         }
     }
-    ((ImageInfo2 *)mImageInfos[0])->CopyFrom((const ImageInfo2 *)def);
+    ((ImageInfo2 *)def)->CopyFrom((const ImageInfo2 *)mImageInfos[0]);
 }
 
 // ---------------------------------------------------------------- 0x008320d0
@@ -126,7 +126,7 @@ DebugConsole *DebugConsole::Ctor()
         r = self->mpAlloc;
         *(int *)((char *)r + 8) = *(int *)((char *)r + 4) - 8;
         r = self->mpAlloc;
-        *(void **)((char *)r + 0xc) = e;
+        *(void **)((char *)r + 0xc) = (char *)e + 8;
     } else {
         self->mpAlloc = 0;
     }
