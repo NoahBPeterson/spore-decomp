@@ -1,0 +1,2 @@
+# No byte-exact functions in s00d73090; all 7 VAs are recorded in nonmatching.txt.
+# Common compilation flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

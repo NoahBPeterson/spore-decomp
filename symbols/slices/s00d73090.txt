@@ -1,0 +1,7 @@
+00d73090 CellVector::erase  # eastl::vector<Cell>::erase(first,last), thiscall ret 8; body matches [last,mpEnd) shift + mpEnd shrink
+00d73100 CellVector::DoInsertValue  # eastl::vector<Cell>::DoInsertValue(pos,value), thiscall ret 8; caller 0x00d7393c (push_back) passes (mpEnd, &value)
+00d73350 PlaceSurfaceSamples  # free cdecl; obj+0x40 is eastl::vector<Cell>, calls 0x00685450/0x00d72520/0x00b88f60
+00d739c0 SP::cTribeGameBehaviorFish::PreAction_A  # vtbl0 override, thiscall; tail-calls 0x00c2e4e0
+00d73bc0 SP::cAgentInfoMap::FindOrAdd  # eastl::map<agent*,cAgentInfo> insert_unique; calls 0x00d73280 DoInsertValue
+00d73ca0 SP::cTribeGameBehaviorFish::PreAction_B  # vtbl0 override taking the agent; calls 0x00d73bc0 twice
+00d73ec0 SP::cTribeGameBehaviorFish::RemoveAgent  # agent-map teardown; calls 0x00d73bc0, 0x00d726e0 ClearSamplerCell
