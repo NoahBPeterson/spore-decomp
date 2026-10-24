@@ -296,3 +296,244 @@ extern "C" void __cdecl hkAgent1nMachine_Weld(hkAgent3Input& input, const hkShap
         }
     }
 }
+
+// ---------------------------------------------------------------------------------------------------
+// hkAgent1nMachine sector rebuild / destroy helpers (hkArray<hkAgent1nSector*>)
+// ---------------------------------------------------------------------------------------------------
+class hkString { public: static void __cdecl memCpy(void* dst, const void* src, int n); };   // 0x0107f440
+
+struct hkAgent1nSector {
+    uint32_t m_bytesAllocated;                // +0
+    uint32_t m_pad[3];
+    uint8_t m_data[512 - 16];                 // +0x10
+};
+struct hkAgent1nTrack {
+    hkAgent1nSector** m_sectorsData;          // +0   hkArray<hkAgent1nSector*>
+    int m_sectorsSize;                        // +4
+    int m_sectorsCapacityAndFlags;            // +8
+};
+struct hkArrayUtil { static void __cdecl _reserveExactly(void* array, int numElem, int elemSize); };   // 0x0107f4a0
+
+class hkMemory { public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void* allocateChunkFromSizeClass(int sizeIndex, int memClass);           // +0x18
+    virtual void deallocateChunkToSizeClass(void* p, int sizeIndex, int memClass);  // +0x1c
+    static hkMemory* s_instance;                                                      // 0x016e4178
+};
+class hkThreadMemory { public:
+    uint8_t m_pad0[0x34];
+    int m_maxNumElemsOnFreeList;              // +0x34
+    uint8_t m_pad1[0x68 - 0x38];
+    void** m_freeListHead;                    // +0x68 (size class 12)
+    uint8_t m_pad2[0xac - 0x6c];
+    int m_numFreeElements;                    // +0xac
+    void deallocateChunk(void* p, int size, int memClass);   // 0x0107db10
+};
+extern unsigned long g_hkThreadMemoryTls;     // 0x016e4174
+
+inline hkAgent1nSector* allocateSectorSafe()
+{
+    hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+    void** p = mem->m_freeListHead;
+    if (p == 0) {
+        p = (void**)hkMemory::s_instance->allocateChunkFromSizeClass(0xc, 0x1c);
+    } else {
+        mem->m_numFreeElements--;
+        mem->m_freeListHead = (void**)*p;
+    }
+    if (p != 0)
+        *(uint32_t*)p = 0;
+    return (hkAgent1nSector*)p;
+}
+
+inline void deallocateSector(hkAgent1nSector* sector)
+{
+    hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+    if (mem->m_numFreeElements < mem->m_maxNumElemsOnFreeList) {
+        mem->m_numFreeElements++;
+        *(void***)sector = mem->m_freeListHead;
+        mem->m_freeListHead = (void**)sector;
+    } else {
+        hkMemory::s_instance->deallocateChunkToSizeClass(sector, 0xc, 0x1c);
+    }
+}
+
+struct hkAgent1nMachine_VisitorInput {
+    const void* m_bodyA;                      // +0x00
+    const void* m_collectionBodyB;            // +0x04
+    const void* m_containerShapeB;            // +0x08
+    const void* m_input;                      // +0x0c
+    void* m_constraintOwner;                  // +0x10
+    void* m_unused;                           // +0x14
+};
+typedef void* (__cdecl *hkAgent1nVisitorFunc)(hkAgent1nMachine_VisitorInput& vin,
+                                              hkAgent1nMachineEntry* entry, void* agentData);
+
+typedef void (__cdecl *hkAgent3DestroyFunc)(hkAgent1nMachineEntry* entry, void* agentData,
+                                            void* constraintOwner);
+struct hkAgent3FuncsExact {                    // 0x34 bytes (table base 0x1698)
+    hkAgent3DestroyFunc m_destroyFunc;        // +0x00
+    void* m_other0[5];                        // +0x04
+    void* m_invalidateTimFunc;                // +0x18
+    void* m_warpTimeFunc;                     // +0x1c
+    void* m_other1[5];                        // +0x20
+};
+class hkCollisionDispatcherExact {
+public:
+    uint8_t m_pad[0x1698];
+    hkAgent3FuncsExact m_agent3Func[1];       // +0x1698, indexed by agent type
+};
+
+// @ 0x01104420  hkAgent1nMachine_UpdateShapeCollectionFilter walker
+extern "C" void __cdecl hkAgent1nMachine_UpdateShapeCollectionFilterWalker(
+    hkAgent1nTrack* track, const hkAgent1nMachine_VisitorInput* visitorInput, hkAgent1nVisitorFunc visitor)
+{
+    hkAgent1nSector* sector = track->m_sectorsData[0];
+    uint8_t* end = (uint8_t*)sector + sector->m_bytesAllocated + 0x10;
+    uint8_t* p = (uint8_t*)sector + 0x10;
+    int sectorIndex = 1;
+    int outCount = 0;
+    hkAgent1nSector* prevSector = 0;
+
+    hkAgent1nSector* newSector = allocateSectorSafe();
+    uint8_t* q = (uint8_t*)newSector + 0x10;
+
+    for (;;) {
+        unsigned int size = p[3];
+        hkString::memCpy(q, p, (int)size);
+        p += size;
+
+        hkAgent1nMachine_VisitorInput vin = *visitorInput;
+        int dataOffset = 0x10;
+        switch (q[0]) {
+        case 1:
+            q += 0x10;
+            break;
+        case 4:
+        case 5:
+            dataOffset = 0x20;
+            // fall through
+        case 2:
+        case 3:
+        case 6:
+            q = (uint8_t*)visitor(vin, (hkAgent1nMachineEntry*)q, q + dataOffset);
+            break;
+        }
+
+        if (p == end) {
+            if (prevSector != 0)
+                deallocateSector(prevSector);
+            prevSector = sector;
+            if (track->m_sectorsSize <= sectorIndex) {
+                // last source sector: publish the current write sector
+                newSector->m_bytesAllocated = (uint32_t)(q - 0x10 - (uint8_t*)newSector);
+                int newSize = outCount + 1;
+                int cap = track->m_sectorsCapacityAndFlags & 0x3fffffff;
+                if (cap < newSize) {
+                    int c2 = cap + cap;
+                    hkArrayUtil::_reserveExactly(track, (newSize < c2) ? c2 : newSize, 4);
+                }
+                track->m_sectorsSize = newSize;
+                track->m_sectorsData[outCount] = newSector;
+                if (sector != 0)
+                    deallocateSector(sector);
+                return;
+            }
+            sector = track->m_sectorsData[sectorIndex];
+            p = (uint8_t*)sector + 0x10;
+            end = (uint8_t*)sector + sector->m_bytesAllocated + 0x10;
+            sectorIndex++;
+        }
+
+        hkAgent1nSector* savedPrev = prevSector;
+        int used = (int)(q - 0x10 - (uint8_t*)newSector);
+        if (0x1a0 < (int)(p[3] + used)) {
+            // the write sector cannot take the next entry: seal it
+            newSector->m_bytesAllocated = (uint32_t)used;
+            if (sectorIndex <= outCount) {
+                // the writer caught up with the reader: make room in the track array
+                int newSize = track->m_sectorsSize + 1;
+                int numToMove = track->m_sectorsSize - sectorIndex;
+                int cap = track->m_sectorsCapacityAndFlags & 0x3fffffff;
+                if (cap < newSize) {
+                    int c2 = cap + cap;
+                    hkArrayUtil::_reserveExactly(track, (newSize < c2) ? c2 : newSize, 4);
+                }
+                hkAgent1nSector** src = &track->m_sectorsData[sectorIndex];
+                hkAgent1nSector** dst = src + 1;
+                for (int i = numToMove - 1; i >= 0; i--)
+                    dst[i] = src[i];
+                sectorIndex++;
+                track->m_sectorsSize = newSize;
+            }
+            track->m_sectorsData[outCount] = newSector;
+            outCount++;
+
+            newSector = savedPrev;
+            if (savedPrev == 0) {
+                newSector = allocateSectorSafe();
+                q = (uint8_t*)newSector + 0x10;
+            } else {
+                prevSector = 0;
+                q = (uint8_t*)savedPrev + 0x10;
+            }
+        }
+    }
+}
+
+// @ 0x01104760  hkAgent1nMachine_Destroy walker
+extern "C" void __cdecl hkAgent1nMachine_DestroyWalker(
+    hkAgent1nTrack* track, const hkCollisionDispatcherExact* disp, void* constraintOwner)
+{
+    hkAgent1nSector* sector = track->m_sectorsData[0];
+    uint8_t* end = (uint8_t*)sector + sector->m_bytesAllocated + 0x10;
+    uint8_t* p = (uint8_t*)sector + 0x10;
+    int sectorIndex = 1;
+
+    for (;;) {
+        hkAgent1nMachineEntry* entry = (hkAgent1nMachineEntry*)p;
+        switch (entry->m_streamCommand) {
+        case 2:
+        case 3:
+        case 6: {
+            void* agentData = p + 0x10;
+            p += entry->m_size;
+            disp->m_agent3Func[entry->m_agentType].m_destroyFunc(entry, agentData, constraintOwner);
+            break;
+        }
+
+        case 4:
+        case 5: {
+            void* agentData = p + 0x20;
+            p += entry->m_size;
+            disp->m_agent3Func[entry->m_agentType].m_destroyFunc(entry, agentData, constraintOwner);
+            break;
+        }
+
+        case 0:
+            p += entry->m_size;
+            break;
+
+        case 1:
+            deallocateSector(sector);
+            if (track->m_sectorsCapacityAndFlags >= 0) {
+                hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+                mem->deallocateChunk(track->m_sectorsData,
+                                     (track->m_sectorsCapacityAndFlags & 0x3fffffff) << 2, 0x14);
+            }
+            track->m_sectorsData = 0;
+            track->m_sectorsSize = 0;
+            track->m_sectorsCapacityAndFlags =
+                (track->m_sectorsCapacityAndFlags & 0xc0000000) | 0x80000000;
+            return;
+        }
+
+        if (p < end)
+            continue;
+        deallocateSector(sector);
+        sector = track->m_sectorsData[sectorIndex];
+        sectorIndex++;
+        end = (uint8_t*)sector + sector->m_bytesAllocated + 0x10;
+        p = (uint8_t*)sector + 0x10;
+    }
+}
