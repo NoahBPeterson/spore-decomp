@@ -234,10 +234,16 @@ bool FUN_004bf9f0(StreamReader* r, int data) {
 // 004c0250 / 004c0350  grow fixed-stride arrays (PARTIAL skeletons).
 extern void* FUN_0042dee0(void* alloc, int n, int align, int zero);  // 0x42dee0
 extern void FUN_004b03f0(void* first, void* last, void* dst);          // 0x4b03f0
-extern void FUN_004c0bd0(void* dst, int n, void* out);                 // 0x4c0bd0
-extern void FUN_004c0680(void* dst, void* srcEnd);                     // 0x4c0680
+// Both helpers are thiscall entries on the array owner (ecx = this).
+struct GrowOps {
+    void FUN_004c0bd0(void* end, uint32_t n, void* out);   // 0x4c0bd0
+    void FUN_004c0680(void* newBegin, void* end);          // 0x4c0680
+};
 struct Vec1d8 { int m[4]; void FUN_004c0250(uint32_t count); };
 struct Vec8c { int m[4]; void FUN_004c0350(uint32_t count); };
+// One 0x8c-byte element worth of scratch (a struct, not a char buffer: retail
+// has no /GS cookie here).
+struct Elem8cSpare { float f[0x8c / 4]; };
 // @ 0x004c0250
 void Vec1d8::FUN_004c0250(uint32_t count) {
     int* self = (int*)this;
@@ -254,11 +260,15 @@ void Vec1d8::FUN_004c0250(uint32_t count) {
 // @ 0x004c0350
 void Vec8c::FUN_004c0350(uint32_t count) {
     int* self = (int*)this;
-    if ((uint32_t)((self[1] - self[0]) / 0x8c) >= count)
-        return;
-    char local_90[140];
-    FUN_004c0bd0((void*)self[1], count - (self[1] - self[0]) / 0x8c, local_90);
-    FUN_004c0680((void*)(count * 0x8c + self[0]), (void*)self[1]);
+    uint32_t size = (uint32_t)((self[1] - self[0]) / 0x8c);
+    if (count > size) {
+        // Not enough room: grow into a scratch element first.
+        Elem8cSpare spare;
+        ((GrowOps*)this)->FUN_004c0bd0((void*)self[1], count - size, &spare);
+    } else {
+        // Already big enough: only relocate the new tail into place.
+        ((GrowOps*)this)->FUN_004c0680((void*)(count * 0x8c + self[0]), (void*)self[1]);
+    }
 }
 
 // ---------------------------------------------------------------------------

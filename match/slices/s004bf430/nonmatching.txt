@@ -3,4 +3,4 @@
 004bfc10   27  LocalExpatMalloc wrapper: complete; original reserves a 0x34-byte frame (inlined helper slots) vs our push ecx; equiv: UNSUPPORTED __tls_index/__tls_array
 004c0020  108  LocalExpatRealloc: complete (in-range Malloc/memcpy/Free or global realloc); frame and slot order differ; equiv: UNSUPPORTED __tls_index/__tls_array
 004c0250  162  grow array<0x1d8-stride>: complete; original /Od slot layout differs; equiv: WEAK 88.5% cov
-004c0350  104  grow array<0x8c-stride>: complete; original /Od slot layout differs; equiv: FAIL mem pool @40010004
+004c0350  104  grow array<0x8c-stride>: complete; both helpers are thiscall entries on the owner (ecx = this) and the branches are exclusive - grow (count > size) calls only FUN_004c0bd0 with a scratch element, otherwise only FUN_004c0680 runs; original /Od slot layout differs; flags /Od /Ob1 /MD /Gy /TP; equiv: PASS 295/400 100% cov.
