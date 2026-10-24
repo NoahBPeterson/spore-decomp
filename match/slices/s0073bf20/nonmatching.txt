@@ -1,2 +1,6 @@
+0073bf20  246   SampleA (model channel sampler): complete lookup (key match a/b/c/d, head+frame channel chain, float out); MSVC register allocation differs (original restores the modified argument and the element base from its frame slot, ours keeps them in registers, so encodings/sizes differ)
+0073c040  260   Sample4 (four-dword variant of the same lookup); register allocation differs as 0073bf20
+0073c170  250   Sample2 (two-dword variant of the same lookup); register allocation differs as 0073bf20
+0073c290  254   Sample3 (three-dword variant of the same lookup); register allocation differs as 0073bf20
 0073c410  25   CopyPairs: complete; loop register assignment (first/dst) swapped
 0073c450  38   ReleasePairs: complete; atomic decrement/test sequence differs slightly

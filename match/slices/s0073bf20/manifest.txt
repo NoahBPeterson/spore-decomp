@@ -1,3 +1,4 @@
 # source (relative to match/)  symbol  original VA  [cl flags override]
 slices/s0073bf20/s0073bf20.cpp  ?DestroyElems@@YAPAUBigElem@@PAU1@00@Z  0073c3b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0073bf20/s0073bf20.cpp  ??0AbilityC@@QAE@PAURefObjV@@H@Z  0073cac0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s0073bf20/s0073bf20.cpp  ??0AbilityD@@QAE@PAURefObjV@@HH@Z  0073cb40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

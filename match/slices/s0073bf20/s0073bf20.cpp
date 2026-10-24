@@ -15,6 +15,58 @@ struct RefObjV {
 };
 
 // ---------------------------------------------------------------------------
+// Model/render channel tables shared by the four ModelPass* samplers
+// (0073bf20 / 0073c040 / 0073c170 / 0073c290).
+//   this  : ModelSet (+8 slot index, +0x10 base offset, +0x14 entry count); *this : Doc.
+//   A Doc holds the 0x20-byte element array (+8) and the 0x8c-byte record array (+0x1c).
+// ---------------------------------------------------------------------------
+struct Chan {                       // channel value descriptor (0x0c)
+    int      pad00;                 // +0x00
+    int*     data;                  // +0x04
+    uint16_t idx;                   // +0x08   mask-table index
+    uint16_t stride;                // +0x0a
+};
+struct Element {                    // 0x20-byte keyed element
+    int  k0;                        // +0x00
+    int  k1;                        // +0x04
+    int  k2;                        // +0x08
+    int  pad0c;                     // +0x0c
+    Chan val;                       // +0x10
+    int  pad1c;                     // +0x1c
+};
+struct Rec {                        // 0x8c-byte record
+    Chan     head;                  // +0x00
+    int      pad0c;                 // +0x0c
+    int      pad10;                 // +0x10
+    int16_t* list;                  // +0x14
+    int16_t* listEnd;               // +0x18
+    char     pad1c[0x44 - 0x1c];    // +0x1c
+    int*     frames;                // +0x44
+    int*     framesEnd;             // +0x48
+    char     pad4c[0x8c - 0x4c];    // +0x4c
+};
+struct Doc {
+    char     pad0[0x08];
+    Element* elems;                 // +0x08
+    char     pad0c[0x1c - 0x0c];
+    Rec*     recs;                  // +0x1c
+};
+extern unsigned g_0140d5ac[];       // 0x0140d5ac channel mask table
+
+struct ModelSet {
+    Doc* pDoc;                      // +0x00
+    int  pad04;                     // +0x04
+    int  idx;                       // +0x08
+    int  pad0c;                     // +0x0c
+    int  base;                      // +0x10
+    int  count;                     // +0x14
+    bool SampleA(float* out, int a, int b, int c, int d);   // 0x0073bf20
+    bool Sample4(int*   out, int a, int b, int c, int d);   // 0x0073c040
+    bool Sample2(int*   out, int a, int b, int c, int d);   // 0x0073c170
+    bool Sample3(int*   out, int a, int b, int c, int d);   // 0x0073c290
+};
+
+// ---------------------------------------------------------------------------
 // @ 0x0073C410 — copy a range of 8-byte {int, RefObj*} pairs, AddRef'ing the object.
 // ---------------------------------------------------------------------------
 struct PairPtr {
@@ -91,22 +143,149 @@ BigElem* DestroyElems(BigElem* first, BigElem* last, BigElem* dst)
 // ---------------------------------------------------------------------------
 // Remaining slice functions (large drivers / Simulator ability ctors).
 // ---------------------------------------------------------------------------
-// @ 0x0073BF20 — model update pass (277 bytes)
-void ModelPassA() {}
-// @ 0x0073C040 — model update pass (294 bytes)
-void ModelPassB() {}
-// @ 0x0073C170 — model update pass (284 bytes)
-void ModelPassC() {}
-// @ 0x0073C290 — model update pass (288 bytes)
-void ModelPassD() {}
+// @ 0x0073BF20 — model update pass (277 bytes): sample channel (a,b,c,d) into *out as float.
+bool ModelSet::SampleA(float* out, int a, int b, int c, int d)
+{
+    if (b < 0 || count <= b)
+        return 0;
+    b = b + base;
+    Rec* rec = (Rec*)((char*)pDoc->recs + idx * 0x8c);
+    int n = (int)(((char*)rec->listEnd - (char*)rec->list) >> 2);
+    if (0 < n) {
+        Element* elems = pDoc->elems;
+        int16_t* p = rec->list;
+        int i = 0;
+        do {
+            Element* e = (Element*)((char*)elems + (*p) * 0x20);
+            if ((c == 0 || e->k0 == c) && (d == -1 || e->k1 == d) && e->k2 == a) {
+                Chan* v = &e->val;
+                if (rec->head.data != 0)
+                    b = *(unsigned*)((char*)rec->head.data + rec->head.stride * b) & g_0140d5ac[rec->head.idx];
+                if (rec->frames != rec->framesEnd) {
+                    Rec* f = (Rec*)((char*)rec->frames + p[1] * 0x10);
+                    if (f->head.data != 0)
+                        b = *(unsigned*)((char*)f->head.data + f->head.stride * b) & g_0140d5ac[f->head.idx];
+                }
+                *out = *(float*)((char*)v->data + v->stride * b);
+                return 1;
+            }
+            ++i;
+            p += 2;
+        } while (i < n);
+    }
+    return 0;
+}
+// @ 0x0073C040 — model update pass (294 bytes): copy channel (a,b,c,d) as four dwords.
+bool ModelSet::Sample4(int* out, int a, int b, int c, int d)
+{
+    if (b < 0 || count <= b)
+        return 0;
+    b = b + base;
+    Rec* rec = (Rec*)((char*)pDoc->recs + idx * 0x8c);
+    int n = (int)(((char*)rec->listEnd - (char*)rec->list) >> 2);
+    if (0 < n) {
+        Element* elems = pDoc->elems;
+        int16_t* p = rec->list;
+        int i = 0;
+        do {
+            Element* e = (Element*)((char*)elems + (*p) * 0x20);
+            if ((c == 0 || e->k0 == c) && (d == -1 || e->k1 == d) && e->k2 == a) {
+                Chan* v = &e->val;
+                if (rec->head.data != 0)
+                    b = *(unsigned*)((char*)rec->head.data + rec->head.stride * b) & g_0140d5ac[rec->head.idx];
+                if (rec->frames != rec->framesEnd) {
+                    Rec* f = (Rec*)((char*)rec->frames + p[1] * 0x10);
+                    if (f->head.data != 0)
+                        b = *(unsigned*)((char*)f->head.data + f->head.stride * b) & g_0140d5ac[f->head.idx];
+                }
+                int* w = (int*)((char*)v->data + v->stride * b);
+                out[0] = w[0];
+                out[1] = w[1];
+                out[2] = w[2];
+                out[3] = w[3];
+                return 1;
+            }
+            ++i;
+            p += 2;
+        } while (i < n);
+    }
+    return 0;
+}
+// @ 0x0073C170 — model update pass (284 bytes): copy channel (a,b,c,d) as two dwords.
+bool ModelSet::Sample2(int* out, int a, int b, int c, int d)
+{
+    if (b < 0 || count <= b)
+        return 0;
+    b = b + base;
+    Rec* rec = (Rec*)((char*)pDoc->recs + idx * 0x8c);
+    int n = (int)(((char*)rec->listEnd - (char*)rec->list) >> 2);
+    if (0 < n) {
+        Element* elems = pDoc->elems;
+        int16_t* p = rec->list;
+        int i = 0;
+        do {
+            Element* e = (Element*)((char*)elems + (*p) * 0x20);
+            if ((c == 0 || e->k0 == c) && (d == -1 || e->k1 == d) && e->k2 == a) {
+                Chan* v = &e->val;
+                if (rec->head.data != 0)
+                    b = *(unsigned*)((char*)rec->head.data + rec->head.stride * b) & g_0140d5ac[rec->head.idx];
+                if (rec->frames != rec->framesEnd) {
+                    Rec* f = (Rec*)((char*)rec->frames + p[1] * 0x10);
+                    if (f->head.data != 0)
+                        b = *(unsigned*)((char*)f->head.data + f->head.stride * b) & g_0140d5ac[f->head.idx];
+                }
+                int* w = (int*)((char*)v->data + v->stride * b);
+                out[0] = w[0];
+                out[1] = w[1];
+                return 1;
+            }
+            ++i;
+            p += 2;
+        } while (i < n);
+    }
+    return 0;
+}
+// @ 0x0073C290 — model update pass (288 bytes): copy channel (a,b,c,d) as three dwords.
+bool ModelSet::Sample3(int* out, int a, int b, int c, int d)
+{
+    if (b < 0 || count <= b)
+        return 0;
+    b = b + base;
+    Rec* rec = (Rec*)((char*)pDoc->recs + idx * 0x8c);
+    int n = (int)(((char*)rec->listEnd - (char*)rec->list) >> 2);
+    if (0 < n) {
+        Element* elems = pDoc->elems;
+        int16_t* p = rec->list;
+        int i = 0;
+        do {
+            Element* e = (Element*)((char*)elems + (*p) * 0x20);
+            if ((c == 0 || e->k0 == c) && (d == -1 || e->k1 == d) && e->k2 == a) {
+                Chan* v = &e->val;
+                if (rec->head.data != 0)
+                    b = *(unsigned*)((char*)rec->head.data + rec->head.stride * b) & g_0140d5ac[rec->head.idx];
+                if (rec->frames != rec->framesEnd) {
+                    Rec* f = (Rec*)((char*)rec->frames + p[1] * 0x10);
+                    if (f->head.data != 0)
+                        b = *(unsigned*)((char*)f->head.data + f->head.stride * b) & g_0140d5ac[f->head.idx];
+                }
+                int* w = (int*)((char*)v->data + v->stride * b);
+                out[0] = w[0];
+                out[1] = w[1];
+                out[2] = w[2];
+                return 1;
+            }
+            ++i;
+            p += 2;
+        } while (i < n);
+    }
+    return 0;
+}
 // @ 0x0073C4B0 — large skinning/collect pass (674 bytes)
 void SkinCollect() {}
 // @ 0x0073C780 — large animation/collect pass (822 bytes)
 void AnimCollect() {}
-// @ 0x0073CAC0 — Simulator ability constructor (66 bytes)
-void AbilityCtorC() {}
-// Ctor 0x0073CB40: Simulator ability constructor (76 bytes): multiple-inheritance chain
-// (GmeRefCount sub-object at +4, refcount at +8; ability base holds a counted ref at +0xc).
+// Simulator ability ctors: multiple-inheritance chain (GmeRefCount sub-object at +4, refcount at
+// +8; ability base holds a counted ref at +0xc).
 struct AbilityP0 { virtual void p0(); };
 struct AbilityGmeRC { virtual void g0(); int rc; AbilityGmeRC() : rc(0) {} };
 struct AbilityBase : AbilityP0, AbilityGmeRC {
@@ -120,6 +299,12 @@ struct AbilityD : AbilityBase {
     AbilityD(RefObjV* a, int b, int c);
     virtual void p0(); virtual void g0();
 };
+struct AbilityC : AbilityBase {
+    AbilityC(RefObjV* a, int b);
+    virtual void p0(); virtual void g0();
+};
+// @ 0x0073CAC0 — Simulator ability constructor (66 bytes): same chain as AbilityD, two arguments.
+AbilityC::AbilityC(RefObjV* a, int b) : AbilityBase(a, b) {}
 // @ 0x0073CB40
 AbilityD::AbilityD(RefObjV* a, int b, int c) : AbilityBase(a, b), y(c) {}
 // @ 0x0073CBC0 — large ability method (515 bytes)
