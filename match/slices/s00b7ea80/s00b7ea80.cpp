@@ -108,30 +108,48 @@ void FUN_00b7f780(S24b** out, const S24b* first, const S24b* last, S24b* dst)
 // =======================================================================================
 // 00b7f800 -- fill_n of 0x24-byte elements (layout B)
 // =======================================================================================
-void FUN_00b7f800(S24b* dst, unsigned count, const S24b* src)
+// @ 0x00b7f800
+void* FUN_00b7f800(S24b* dst, unsigned count, const S24b* src)
 {
-    for (; count > 0; count--) {
-        if (dst) {
-            dst->a = src->a; dst->b = src->b; dst->c = src->c; dst->d = src->d;
-            dst->e = src->e; dst->f = src->f; dst->g = src->g; dst->h = src->h;
-            dst->i = src->i;
+    // The original only computes eax after the count>0 test, so a count==0 call
+    // returns the caller's incoming eax unchanged.
+    unsigned entryEax;
+    __asm { mov entryEax, eax }
+    if (count == 0)
+        return (void*)entryEax;
+    S24b* d = dst;
+    for (; count != 0; --count, ++d) {
+        if (d) {
+            d->a = src->a; d->b = src->b; d->c = src->c; d->d = src->d;
+            d->e = src->e; d->f = src->f; d->g = src->g; d->h = src->h;
+            d->i = src->i;
         }
-        dst++;
     }
+    // The retail loop keeps its cursor biased to the `f` member (+0x14) in eax.
+    return (char*)d + 0x14;
 }
 
 // =======================================================================================
 // 00b7f860 -- fill_n of 0x18-byte elements
 // =======================================================================================
-void FUN_00b7f860(S18* dst, unsigned count, const S18* src)
+// @ 0x00b7f860
+void* FUN_00b7f860(S18* dst, unsigned count, const S18* src)
 {
-    for (; count > 0; count--) {
-        if (dst) {
-            dst->a = src->a; dst->b = src->b; dst->c = src->c; dst->d = src->d;
-            dst->e = src->e; dst->f = src->f; dst->g = src->g;
+    // The original only computes eax after the count>0 test, so a count==0 call
+    // returns the caller's incoming eax unchanged.
+    unsigned entryEax;
+    __asm { mov entryEax, eax }
+    if (count == 0)
+        return (void*)entryEax;
+    S18* d = dst;
+    for (; count != 0; --count, ++d) {
+        if (d) {
+            d->a = src->a; d->b = src->b; d->c = src->c; d->d = src->d;
+            d->e = src->e; d->f = src->f; d->g = src->g;
         }
-        dst++;
     }
+    // The retail loop keeps its cursor biased to the `d` member (+0xc) in eax.
+    return (char*)d + 0x0c;
 }
 
 // =======================================================================================
@@ -194,6 +212,8 @@ struct cPlanetModel {
 // =======================================================================================
 // 00b7ea80 -- planet cube-face / vertex index lookup for a direction
 // =======================================================================================
+// @ 0x00b7ea80
+#pragma optimize("s", on)
 int cPlanetModel::FUN_ea80(const Vec3* v)
 {
     float x = v->x, ax = fabsf(x);
@@ -219,6 +239,7 @@ int cPlanetModel::FUN_ea80(const Vec3* v)
     if (i8 == 0x40) i8 = 0x3f;
     return (int)*(char*)((i9 * 0x40 + i8) * 0x40 + f94 + i7);
 }
+#pragma optimize("t", on)
 
 // =======================================================================================
 // 00b7ec50 -- closest-surface radius for a direction (cached in +0x28)

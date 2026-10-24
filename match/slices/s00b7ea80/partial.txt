@@ -1,12 +1,5 @@
 # slice s00b7ea80 partial functions (semantics NOT fully reconstructed)
 # format: <va>  <reason>
-00b7ecc0  cPlanetModel::FUN_ecc0 closest-surface-point query. The vtable +0xc probe, the
-          GetFloat((float*)uv) call with the 3-float (u,v,face) temporaries, the branch on the
-          returned height and the returned radius are reconstructed, but the exact arithmetic and
-          temp lifetimes are uncertain (our body is 202 bytes vs the original 426).
-00b7ee70  cPlanetModel::FUN_ee70 tangent-frame construction. The cross/dot sequence writes out[0]
-          and out[1], but the intermediate vector roles and the exact normalisation are not fully
-          resolved (our body 245 vs 248).
-00b7f060  cPlanetModel::FUN_f060 surface normal/height interpolation. The DAT_016881f0/f4/f8
-          fallback, the vtable +0xc probe and the frac write are reproduced, but the blend maths
-          and the u/v argument construction are uncertain (our body 261 vs 300).
+00b7ecc0  cPlanetModel::FUN_ecc0 closest-surface-point query. The vtable +0xc probe, the GetFloat((float*)uv) call with the 3-float (u,v,face) temporaries, the branch on the returned height and the returned radius are reconstructed, but the exact arithmetic and temp lifetimes are uncertain (our body is 202 bytes vs the original 426).
+00b7ee70  cPlanetModel::FUN_ee70 tangent-frame construction. The cross/dot sequence writes out[0] and out[1], but the intermediate vector roles and the exact normalisation are not fully resolved (our body 245 vs 248).
+00b7f060  cPlanetModel::FUN_f060 surface normal/height interpolation. The DAT_016881f0/f4/f8 fallback, the vtable +0xc probe and the frac write are reproduced, but the blend maths and the u/v argument construction are uncertain (our body 261 vs 300).
