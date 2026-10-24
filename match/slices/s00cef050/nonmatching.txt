@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00cef050  6477  cCityGameTuning::Init: complete (all 124 property reads, scalings and conversions checked one-for-one vs asm); diff is the original's 8-byte-aligned frame (`and esp,-8`) shifting every esp slot, not reproduced; difftest WEAK but clean: 400 valid inputs, 0 mismatches, 6.5% coverage (the harness fakes GetPropertyList, so the read body is never entered; the two uninitialised-float stores now match — single shared stale slot); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

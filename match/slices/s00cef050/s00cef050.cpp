@@ -8,10 +8,12 @@
 // inlined helpers GetPropertyAsFloat/Int/UInt (PropertyList::GetProperty at
 // slot +0x24, type tag at Property::mnType(+0x12)); a few use the free helpers
 // GetPropertyAsVector3 (0x6A1110) and GetPropertyAsKeyInstance (0x6A12A0).
-// Ten members are scaled by 1000.0f in place; two are read into an
-// UNINITIALISED local float (the original falls back to stale stack on a failed
-// lookup), scaled by 1000 and converted: +0x80 to unsigned (fistp qword) and
-// +0x180 to int (cvttss2si).
+// Ten members are scaled by 1000.0f in place; two are read through ONE
+// function-scope UNINITIALISED local float (the original falls back to the stale
+// stack slot when a lookup fails; the same slot is reused by the second read so
+// a failed second lookup sees the first read's raw value, or stack fill when
+// neither ran), scaled by 1000 and converted: +0x80 to unsigned (fistp qword)
+// and +0x180 to int (cvttss2si).
 //
 // Complete: the read order, property ids, member offsets and helper kinds were
 // checked against the disassembly one-for-one.  Not byte-exact: the original
@@ -242,6 +244,7 @@ void cCityGameTuning::Init()
     AutoRefCount<App::PropertyList> pList;
     if (!PropertyManager()->GetPropertyList(0xb6a5c63d, pList.AsPointerRef()))
         return;
+    float v;            // single stale stack slot the original reuses for both scaled reads below
     {
         GetPropertyAsVector3(pList, 0x3f6af12, &kInitialCameraPolarCoords);
 
@@ -327,7 +330,6 @@ void cCityGameTuning::Init()
         GetPropertyAsFloat(pList, 0x1fb2b4d, kCityHappinessForHousing);
 
         {
-            float v;                                         // original leaves it uninitialised
             GetPropertyAsFloat(pList, 0x1abc838, v);
             kProductivityThreshold = (uint32_t)(v * 1000.0f);
         }
@@ -357,7 +359,6 @@ void cCityGameTuning::Init()
         GetPropertyAsFloat(pList, 0x2b0c642, kHappinessForHousing);
 
         {
-            float v;
             GetPropertyAsFloat(pList, 0x3f13617, v);
             kConvertVehicleRelationshipDelta = (int)(v * 1000.0f);
         }
