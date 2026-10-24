@@ -1,0 +1,5 @@
+# VA   reason
+00f6b0e0  complete source; not byte-exact (141 B vs 462 B, 447 diff): original fully inlines a 2x0xe0-byte elementwise per-float (x87 fld/fstp) copy-ctor copy; compiler emits an out-of-line/rep-movsd element copy instead. equiv UNSUPPORTED (0/400 valid inputs, fault(pool-limit)).
+00f6b4b0  complete source; not byte-exact (126 B vs 130 B, 52 diff): register-allocation coin flip, original keeps &o (owner) in edx and reuses ebx for o.mpBegin, mine swaps edx/ebx. equiv WEAK (142/400 valid, 77.6% coverage).
+00f6b670  complete source; not byte-exact (195 B vs 184 B, 138 diff): placement-new copy-ctor codegen differs; equiv FAIL fake-arity "no call site before cccccccc" although depth-1 call trace matches exactly (00f6b000, 00406540, 00f6b4b0).
+00f6b840  complete source; not byte-exact (342 B vs 349 B, 63 diff): pure callee-saved-register swap (original uses register ebx for the zero constant / edi for the viewer; mine uses edi/ebx). Not source-controllable. equiv FAIL fake-arity.

@@ -1,2 +1,6 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s00f6a960/s00f6a960.cpp  ?Draw@Compositor@@QAE_N  00f6a960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f6a960/s00f6a960.cpp  ?Draw@Compositor@@QAE_NPAUSource@@PBIHURect@@MMMHPAX@Z  00f6a960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f6a960/s00f6a960.cpp  ??0ImgDesc@@QAE@ABU0@@Z  00f6b000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f6a960/s00f6a960.cpp  ?Release@QuadSource@@QAEXXZ  00f6b2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f6a960/s00f6a960.cpp  ?Assign@ImgDesc@@QAEAAU1@PBD@Z  00f6b330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f6a960/s00f6a960.cpp  ?FreeAll@QuadNode@@QAEXXZ  00f6b7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -1,1 +1,9 @@
 00f6a960 ?Draw@Compositor@@QAE_NPAUSource@@PBIHURect@@MMMHPAX@Z  # Compositor::Draw migrated from s00f6a960 (verbatim, slice spelling)
+00f6b000 ??0ImgDesc@@QAE@ABU0@@Z  # ImgDesc::ImgDesc(copy) from s00f6a960
+00f6b0e0 ?CopyTexRange@@YAPAPAUTexDesc@@PAPAU1@PAU1@11PBX@Z  # CopyTexRange (free) from s00f6a960
+00f6b2d0 ?Release@QuadSource@@QAEXXZ  # QuadSource::Release from s00f6a960
+00f6b330 ?Assign@ImgDesc@@QAEAAU1@PBD@Z  # ImgDesc::Assign from s00f6a960
+00f6b4b0 ??0TexVector@@QAE@ABU0@@Z  # TexVector::TexVector(copy) from s00f6a960
+00f6b670 ?CopyFrom@QuadSource@@QAEAAU1@ABU1@@Z  # QuadSource::CopyFrom from s00f6a960
+00f6b7c0 ?FreeAll@QuadNode@@QAEXXZ  # QuadNode::FreeAll from s00f6a960
+00f6b840 ?Destroy@QuadMgr@@QAEXXZ  # QuadMgr::Destroy from s00f6a960
