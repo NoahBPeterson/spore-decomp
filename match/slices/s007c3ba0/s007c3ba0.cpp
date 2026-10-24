@@ -7,6 +7,7 @@
 // types
 // ---------------------------------------------------------------------------
 struct Vec4 { float x, y, z, w; };
+struct Vec3f { float x, y, z; };
 struct Matrix44 {
     Vec4 xAxis, yAxis, zAxis, wAxis;    // +0x00,+0x10,+0x20,+0x30
     void FUN_007c3da0(float* dst);
@@ -161,12 +162,21 @@ void cViewer::GetCameraLocationInfo(float* w, float* y, float* z, float* x)
 // ---------------------------------------------------------------------------
 void Matrix44::FUN_007c3da0(float* dst)
 {
-    int* d = (int*)dst;
+    // Three 12-byte row copies out of the 16-byte rows (xAxis/yAxis/zAxis -> dst[0..8]).
+    // Retail keeps the first two rows relative to the original bases and then advances both
+    // (`add $0x20,%ecx; add $0x18,%eax` at 0x7c3dc9), which also leaves eax = dst+0x18; cl folds
+    // the advances into displacements here because the bumped pointers are dead afterwards.
     const int* s = (const int*)this;
-    d[0] = s[0]; d[1] = s[1]; d[2] = s[2];
-    d[3] = s[4]; d[4] = s[5]; d[5] = s[6];
-    d += 6; s += 8;
-    d[0] = s[0]; d[1] = s[1]; d[2] = s[2];
+    int* d = (int*)dst;
+    d[0] = s[0];
+    d[1] = s[1];
+    d[2] = s[2];
+    d[3] = s[4];
+    d[4] = s[5];
+    d[5] = s[6];
+    d[6] = s[8];
+    d[7] = s[9];
+    d[8] = s[10];
 }
 
 // ---------------------------------------------------------------------------
