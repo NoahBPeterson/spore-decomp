@@ -1,4 +1,4 @@
 00478990 - complete source; vector<int>::insert(n,value), NOT byte-exact; equiv WEAK (now member IntVec::IntVectorInsert, ECX=this): 548 valid inputs, 6.4% coverage
 00478e00 - complete source; vector<0x29c>::insert(n,value), NOT byte-exact; equiv WEAK (now member Vec29c::Elem29Insert, ECX=this): 541 valid inputs, 6.2% coverage
-00479330 - complete source; vector<12-byte>::insert(n,value), NOT byte-exact; equiv FAIL (now member Vec12::Elem12Insert, ECX=this): 5/149 valid inputs mismatched, call #0 (depth 1)
+00479330 - complete source; vector<12-byte>::insert(n,value), NOT byte-exact; equiv WEAK (now member Vec12::Elem12Insert, ECX=this): 174 valid inputs, 41.6% coverage, no mismatches; the vector is the 4-dword eastl layout (embedded allocator instance at +0xc, its address is the allocate entry point's first argument) and the debug header in front of the old block gates the release; flags /Od /Ob1 /MD /Gy /TP.
 004797a0 - complete source; uninitialized_copy<12-byte 3-float> wrapper, loop rotation/frame differs
