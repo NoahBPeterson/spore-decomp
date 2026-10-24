@@ -1,1 +1,4 @@
-00c545f0 SP::cSPMissionFetch::HandleMessage  # IHandler-subobject HandleMessage (this=mission+0x34), tail-calls cSPMission::HandleMessage 0xc4a6b0
+00c54110 FetchMission::ValidateSpecies  # cSPMissionFetch species validation: gate on +0x1f0, signed dispatch on the species type; for 0x23da98ff walk the +0x234 species vector (stride 0x10) resolving each key via the editor/plant species managers, else validate the +0x210/+0x21c keys (names Claude-coined)
+00c54380 FetchMission::Init  # cSPMissionFetch mission setup: base Init, vtable 0x16c, read +0x1f4 from property 0xac10e58a, ReadDropOffFields, read the target type, pick a planet via PickPlanet with a per-type cost/flag table
+00c545f0 SP::cSPMissionFetch::HandleMessage  # IHandler-subobject HandleMessage (this=mission+0x34), tail-calls cSPMission::HandleMessage 0xc4a6b0 (pre-existing)
+00c54e50 FindNearestNoun  # nearest-noun search: scan the noun vector for the given +0x504 key and keep the closest to the player inventory position at +0x718
