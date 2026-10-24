@@ -1,17 +1,15 @@
-01102fc0 300 havok-equivalent
+01102fc0 338 hkBool is a class (returned via a hidden pointer), so the signature/symbol now matches; the container is loaded only after the n>0 check [equiv: PASS 332 valid inputs, 100.0% coverage]
 01103140 281 havok-equivalent
 01103330 25 havok-equivalent
-01103360 9 havok-equivalent
-01103370 197 havok-equivalent; difftest FAIL 5/787 valid mismatched (helper now __forceinline so symbol size is plausible)
-01103470 194 havok-equivalent; difftest FAIL 3/822 valid mismatched (helper now __forceinline so symbol size is plausible)
-01103560 20 havok-equivalent
+01103360 4  initializer is a plain __fastcall function (a C++ ctor emits mov eax,ecx); writes vtable 0x13ef094 and m_ptr with no eax clobber [equiv: PASS 400 valid inputs, 100.0% coverage]
+01103370 252 min/max are set before the n<=0 early-out and the container is loaded only inside the loop (fixes the negative-n fault) [equiv: WEAK 277 valid inputs, 23.9% coverage]
+01103470 214 min/max are set before the n<=0 early-out and the container is loaded only inside the loop (fixes the negative-n fault) [equiv: WEAK 288 valid inputs, 25.0% coverage]
 01103590 31 havok-equivalent
 011035c0 33 havok-equivalent
 011035f0 22 havok-equivalent
-01103610 78 havok-equivalent
+01103610 80  inits are called through opaque indirect calls so `this` stays in esi and edx is never written; call/register schedule differs [equiv: PASS 389 valid inputs, 100.0% coverage]
 01103670 271 havok-equivalent
 011037e0 49 havok-equivalent, returns this in eax (hidden return read by caller); equiv PASS flags /vc71 /O2 /MD /Gy /TP
-01103830 27 havok-equivalent
 01103850 171 havok-equivalent
 01103930 180 havok-equivalent
 01103a10 117 havok-equivalent

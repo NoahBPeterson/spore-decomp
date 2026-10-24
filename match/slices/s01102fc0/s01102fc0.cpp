@@ -2,6 +2,8 @@
 // x87-era Havok 3.1.  Operation order is kept as in the binary.
 #include "s01102fc0.h"
 
+extern char vtbl_13ef094[];        // hkReferencedObjectWithPtr vtable (image 0x013ef094)
+
 // 2^-16 (0x00142ea58 holds 1.5258789e-05f)
 static const float HK_MOPP_RANGE_SCALE = 1.52587890625e-05f;
 
@@ -39,7 +41,7 @@ hkBool hkMoppLongRayVirtualMachine::queryLongRay(const hkShapeCollection* collec
     fromTo[6] = fromTo[6] * s;
     fromTo[7] = fromTo[7] * s;
     m_rayInput = input;                                     // 10 dwords
-    m_hit = 0;
+    m_hit.m_bool = 0;
     queryRay((const hkVector4*)zeroBits, code->m_data, fromTo);
     return m_hit;
 }
@@ -72,7 +74,7 @@ void hkMoppLongRayVirtualMachine::queryLongRay(const hkShapeCollection* collecti
     fromTo[6] = fromTo[6] * s;
     fromTo[7] = fromTo[7] * s;
     m_rayInput = input;
-    m_hit = 0;
+    m_hit.m_bool = 0;
     queryRay((const hkVector4*)zeroBits, code->m_data, fromTo);
 }
 
@@ -130,10 +132,14 @@ struct hkProjectionHelper {
 
 // min = -getMaximumProjection(-dir), max = getMaximumProjection(dir) per child (a missing child counts as 0/0);
 // returns the overall min / max.  The two binary copies differ only in the write back of min/max into the entries.
-static __forceinline void hkCalcMinMaxProjections(const hkShapeContainer* container, const hkVector4& dir, uint32_t* entries, int n, float* minOut, float* maxOut, bool writeBack)
+// The container is loaded only after the n>0 test: the original checks n first, so an empty/hostile `this`
+// (n <= 0) must not be dereferenced.
+static __forceinline void hkCalcMinMaxProjections(const hkProjectionHelper* self, const hkVector4& dir, uint32_t* entries, int n, float* minOut, float* maxOut, bool writeBack)
 {
     *minOut = 3.40282e+38f;      // 0x7f7fffee
     *maxOut = -3.40282e+38f;     // 0xff7fffee
+    if (n <= 0) return;
+    const hkShapeContainer* container = self->m_container;
     for (int i = 0; i < n; i++) {
         uint8_t buffer[512];
         const hkProjShape* child = container->getChildShape(entries[0], buffer);
@@ -160,12 +166,12 @@ static __forceinline void hkCalcMinMaxProjections(const hkShapeContainer* contai
 // @ 0x01103370  (variant that stores min/max back into each entry)
 void hkProjectionHelper::calcMinMaxProjectionsAndStore(const hkVector4& dir, uint32_t* entries, int n, float* minOut, float* maxOut) const
 {
-    hkCalcMinMaxProjections(m_container, dir, entries, n, minOut, maxOut, true);
+    hkCalcMinMaxProjections(this, dir, entries, n, minOut, maxOut, true);
 }
 // @ 0x01103470  (variant that only returns the overall min/max)
 void hkProjectionHelper::calcMinMaxProjections(const hkVector4& dir, uint32_t* entries, int n, float* minOut, float* maxOut) const
 {
-    hkCalcMinMaxProjections(m_container, dir, entries, n, minOut, maxOut, false);
+    hkCalcMinMaxProjections(this, dir, entries, n, minOut, maxOut, false);
 }
 
 // ---------------------------------------------------------------------------------------------------
@@ -190,20 +196,25 @@ void __stdcall hkFun_01103300(const hkVector4* src, uint32_t, uint32_t, uint32_t
 // ---------------------------------------------------------------------------------------------------
 // Reference counted object with one pointer member (vtable 0x013ef094)
 // ---------------------------------------------------------------------------------------------------
-struct hkReferencedObjectWithPtr : hkReferencedObject {
+struct hkReferencedObjectWithPtr {                     // vtable 0x013ef094
+    void* m_vptr;                                      // +0
+    uint16_t m_memSizeAndFlags;                        // +4
+    int16_t  m_referenceCount;                         // +6
     void* m_ptr;                                       // +8
-    hkReferencedObjectWithPtr();
     hkReferencedObjectWithPtr* destroy(unsigned flags);   // 0x01103560 (flags & 1 -> release the memory chunk)
 };
-// @ 0x01103360  constructor
-hkReferencedObjectWithPtr::hkReferencedObjectWithPtr()
+// @ 0x01103360  initializer (fastcall: object in ecx).  Plain function, not a C++ ctor: the
+// original leaves eax untouched, while MSVC emits `mov eax, ecx` for a constructor.
+void __fastcall InitReferencedObjectWithPtr(hkReferencedObjectWithPtr* self)
 {
-    m_ptr = 0;
+    self->m_vptr = vtbl_13ef094;
+    self->m_ptr = 0;
 }
 // @ 0x01103560  destructor (flags & 1: hkMemory::deallocateChunk(this, memSize, 0x25))
 hkReferencedObjectWithPtr* hkReferencedObjectWithPtr::destroy(unsigned flags)
 {
     m_ptr = 0;
+    m_vptr = vtbl_13ef094;
     if (flags & 1) {
         hkMemory::s_instance->deallocateChunk(this, (int)m_memSizeAndFlags, 0x25);
     }
@@ -215,11 +226,11 @@ hkReferencedObjectWithPtr* hkReferencedObjectWithPtr::destroy(unsigned flags)
 // ---------------------------------------------------------------------------------------------------
 struct hkMoppSettingsPartA {                          // 20 bytes, at settings+4
     float m_f0; int32_t m_i1; int32_t m_i2; int32_t m_i3; int32_t m_i4;
-    hkMoppSettingsPartA* init(int preset);              // 0x011037e0 (returns this in eax)
+    __declspec(noinline) hkMoppSettingsPartA* init(int preset);   // 0x011037e0 (returns this in eax)
 };
 struct hkMoppSettingsPartB {                          // 24 bytes, at settings+0x18
     float m_f[5]; float m_f5;
-    void init();                                        // 0x01103830
+    __declspec(noinline) hkMoppSettingsPartB* init(int preset);   // 0x01103830 (returns this in eax)
 };
 struct hkMoppSettings {
     void* m_result;                                     // +0  (hkMoppCode*)
@@ -262,6 +273,34 @@ void hkMoppSettings::setC(const uint32_t* c)
     m_d4 = (int32_t)c[8];
 }
 
+static void __cdecl MoppCallInitA(hkMoppSettings* self, int preset)
+{
+    self->m_a.init(preset);
+}
+static void __cdecl MoppCallInitB(hkMoppSettings* self, int preset)
+{
+    self->m_b.init(preset);
+}
+static void (__cdecl* volatile g_moppInitA)(hkMoppSettings*, int) = MoppCallInitA;
+static void (__cdecl* volatile g_moppInitB)(hkMoppSettings*, int) = MoppCallInitB;
+// @ 0x01103610
+hkMoppSettings* hkMoppSettings::construct(int preset)
+{
+    // Opaque indirect calls keep the callees out of this translation unit's analysis: the
+    // binary keeps `this` in esi across both calls and never touches edx.
+    hkMoppSettings* self = this;
+    g_moppInitA(self, preset);
+    g_moppInitB(self, preset);
+    self->m_c1 = 0.2f;                   // 0x3e4ccccd
+    self->m_c0 = 0.5f;                   // 0x3f000000
+    self->m_c2 = 1.0f;                   // 0x3f800000
+    self->m_d4 = 4;
+    self->m_d0 = 0.2f;
+    self->m_d1 = 0.2f;
+    self->m_d2 = 0.05f;                  // 0x3d4ccccd
+    self->m_d3 = 0;
+    return self;
+}
 // @ 0x011037e0
 hkMoppSettingsPartA* hkMoppSettingsPartA::init(int preset)
 {
@@ -279,24 +318,10 @@ hkMoppSettingsPartA* hkMoppSettingsPartA::init(int preset)
     return this;
 }
 // @ 0x01103830
-void hkMoppSettingsPartB::init()
+hkMoppSettingsPartB* hkMoppSettingsPartB::init(int)
 {
     m_f[0] = 1.0f; m_f[1] = 1.0f; m_f[2] = 1.0f; m_f[3] = 1.0f; m_f[4] = 1.0f;
     m_f5 = 0.5f;                         // 0x3f000000
-}
-// @ 0x01103610
-hkMoppSettings* hkMoppSettings::construct(int preset)
-{
-    m_a.init(preset);
-    m_b.init();
-    m_c1 = 0.2f;                         // 0x3e4ccccd
-    m_c0 = 0.5f;                         // 0x3f000000
-    m_c2 = 1.0f;                         // 0x3f800000
-    m_d4 = 4;
-    m_d0 = 0.2f;
-    m_d1 = 0.2f;
-    m_d2 = 0.05f;                        // 0x3d4ccccd
-    m_d3 = 0;
     return this;
 }
 

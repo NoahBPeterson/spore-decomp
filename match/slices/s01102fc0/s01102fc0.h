@@ -6,7 +6,15 @@
 
 typedef float hkReal;
 typedef float hkTime;
-typedef uint8_t hkBool;
+// hkBool is a class in the binary: returned by value through a hidden pointer (the ABI the
+// MOPP raycast entry points use), so it cannot stay a plain typedef.
+class hkBool {
+public:
+    hkBool() {}
+    hkBool(int v) : m_bool((unsigned char)v) {}
+    operator unsigned char() const { return m_bool; }
+    unsigned char m_bool;
+};
 
 class hkVector4 { public: float x, y, z, w; };
 class hkTransform { public:
@@ -36,7 +44,7 @@ class hkMemory { public:
     virtual void* allocateChunk(int nbytes, int memClass);                   // slot 4
     virtual void  deallocateChunk(void* p, int nbytes, int memClass);        // slot 5
     virtual void* allocateChunkFromSizeClass(int sizeIndex, int memClass);   // slot 6
-    static hkMemory* s_instance;
+    static hkMemory* s_instance;                                             // 0x016e4178
 };
 
 class hkCdBody { public:
