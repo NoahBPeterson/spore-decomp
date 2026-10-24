@@ -1,0 +1,10 @@
+# source  symbol  original VA  [flags override]
+# the space-mode tool strategies: 5 of the 11 functions reproduce byte-for-byte; the other 6 are listed
+# in nonmatching.txt.
+# 0105ba00 CanUseToolAtLocation, 0105bd20 mind-erase DoToolAction, 0105bfb0 rally-call StartTool,
+# 0105c3d0/0105c5d0 tool-radius curves, 0105c7e0 ship-radius growth
+slices/s0105b960/s0105b960.cpp  ?DoToolAction@cSPCityMarkerStrategy@@UAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  0105b960  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0105b960/s0105b960.cpp  ?DoToolAction@cSPPlaceObjectStrategy@@UAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  0105bc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0105b960/s0105b960.cpp  ?DoToolAction@cSPArtilleryWeaponStrategy@@UAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  0105bd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0105b960/s0105b960.cpp  ?DoToolAction@cCropCirclesToolStrategy@@UAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  0105bde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0105b960/s0105b960.cpp  ?DoToolAction@cSPGenesisDeviceToolStrategy@@UAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  0105bf50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
