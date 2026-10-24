@@ -9,6 +9,27 @@
 #define C3(p, off, a, b, c) ((void(__thiscall*)(void*, int, int, int))(((void**)(p))[(off) / 4]))(p, a, b, c)
 #define K0(p, off)      ((int(__thiscall*)(void*))(((void**)(p))[(off) / 4]))(p)
 #define K1(p, off, a)   ((int(__thiscall*)(void*, int))(((void**)(p))[(off) / 4]))(p, a)
+// object -> vtable -> slot (the macros above index the object itself)
+#define VTB(p, off)     (*(void***)(p))[(off) / 4]
+
+// ---- stub types for thiscall callees / manager globals (fix pass)
+struct FindWindowStub { void* FindWindowByID(int id, int flags); };  // 0x008105b0
+struct LookupOwner    { int* Lookup(int id); };                      // 0x00f3e8a0
+struct PropObj        { int* GetFloat(); };                          // 0x0041ea70
+struct PaletteStore   { void Set(int obj, float v); };               // 0x005f0c60
+struct CastObj        { int Cast(int id); };                         // 0x00ecde00
+struct SelObj_ecdb50  { void Set(int v); };                          // __thiscall, 1 stack arg
+struct WinObj_ece110  { void Activate(int arg); };                   // __thiscall, 1 stack arg
+struct CastObj_ece370 { int Cast(int id); };                         // __thiscall, 1 stack arg
+struct ColorStore     { void Set(float v); };                        // 0x005f22f0
+struct Mgr167eaec     { int* Fn_b1de80(); };                         // 0x00b1de80
+struct GameMgr_16c7aa4 { char pad0[0x74]; LookupOwner* pOwner_74; };
+extern GameMgr_16c7aa4* g_pGameMgr_16c7aa4;   // 0x016c7aa4
+extern PaletteStore* g_pPaletteStore_15d0c08; // 0x015d0c08
+int* __cdecl FUN_00401020_get();              // 0x00401020
+int* __cdecl FUN_00b3d320_get();              // 0x00b3d320
+void __fastcall FUN_00834e30_tc(void* self);  // 0x00834e30
+void __fastcall FUN_00ecde60_tc(void* self);  // 0x00ecde60
 
 // ---- globals
 extern int* g_15ad298;       // PTR_PTR_015ad298
@@ -58,8 +79,8 @@ void __cdecl FUN_00ecd9c0();
 int  __cdecl FUN_00f3e8a0(int a);
 int  __cdecl FUN_00ecda00();
 void __cdecl FUN_005f0c60(int a, int b);
-int* __cdecl FUN_01137690();
-void __cdecl FUN_005f33f0();
+int* __fastcall FUN_01137690(void* self);   // 0x01137690
+void* __fastcall FUN_005f33f0(void* self);  // 0x005f33f0
 int  __cdecl FUN_005ff1c0();
 void __cdecl FUN_00ecda80(int a);
 void __cdecl EA_LimitStopwatch_SetTimeLimit(void* self, int a, int b);
@@ -108,14 +129,15 @@ void __fastcall FUN_00ecdb30(int* p)
 
 // ============================================================ 0x00ecdb50
 // @ 0x00ecdb50
-void FUN_00ecdb50(int* p, int param_2)
+void SelObj_ecdb50::Set(int param_2)
 {
+    int* p = (int*)this;
     if (param_2 == -1) {
         p[4] = -1;
-        C0(p, 0x18);
+        ((void(__thiscall*)(void*))VTB(p, 0x18))(p);
     } else {
         p[4] = param_2;
-        C0(p, 0x14);
+        ((void(__thiscall*)(void*))VTB(p, 0x14))(p);
     }
 }
 
@@ -290,16 +312,14 @@ void FUN_00ecdf60_fn(void)
 // @ 0x00ecdfc0
 void __fastcall FUN_00ecdfc0(int param_1)
 {
-    if (*(int*)(param_1 + 0x4c) != 0) {
-        float f = *(float*)(param_1 + 100);
-        if (*(float*)(param_1 + 100) < 0.0f)
+    void* obj = *(void**)(param_1 + 0x4c);
+    if (obj != 0) {
+        float f = *(float*)(param_1 + 0x64);
+        if (f < 0.0f)
             f = g_15abee4;
-        if (*(int**)(param_1 + 0x4c)) {
-            int r = K1(*(int**)(param_1 + 0x4c), 0xc, 0x3349c94);
-            (void)f;
-            if (r != 0)
-                FUN_005f22f0(0x3349c94);
-        }
+        ColorStore* u = (ColorStore*)((int(__thiscall*)(void*, int))VTB(obj, 0xc))(obj, 0x3349c94);
+        if (u != 0)
+            u->Set(f);
     }
 }
 
@@ -340,13 +360,15 @@ tail:
 
 // ============================================================ 0x00ece110
 // @ 0x00ece110
-void __fastcall FUN_00ece110(int param_1)
+void WinObj_ece110::Activate(int param_2)
 {
-    if (*(int**)(param_1 + 0x50) != 0) {
-        int* w = (int*)cSPUILayout_FindWindowByID2(*(void**)(param_1 + 0x50), 0x79591e0);
-        if (w)
-            C0(w, 0x80);
-    }
+    int param_1 = (int)this;
+    if (*(int**)(param_1 + 0x50) == 0)
+        return;
+    int* w = (int*)((FindWindowStub*)*(void**)(param_1 + 0x50))->FindWindowByID(0x79591e0, 1);
+    if (w == 0)
+        return;
+    ((void(__thiscall*)(void*, int))VTB(w, 0x80))(w, param_2);
 }
 
 // ============================================================ 0x00ece140
@@ -401,8 +423,8 @@ void __fastcall FUN_00ece270(int* p)
 void __fastcall FUN_00ece300(int param_1)
 {
     int v = *(int*)(param_1 + 0x4c);
-    FUN_00401020();
-    FUN_005f0c60(v, 0x40a00000);
+    PaletteStore* s = (PaletteStore*)FUN_00401020_get();
+    s->Set(v, 5.0f);
 }
 
 // ============================================================ 0x00ece320
@@ -410,29 +432,30 @@ void __fastcall FUN_00ece300(int param_1)
 void __fastcall FUN_00ece320(int param_1)
 {
     if (*(int*)(param_1 + 0x58) != 0) {
-        FUN_00834e30();
+        FUN_00834e30_tc(*(void**)(param_1 + 0x58));
         int* p = *(int**)(param_1 + 0x58);
-        if (p) { *(int*)(param_1 + 0x58) = 0; C1(p, 8, 0); }
+        if (p) { *(int*)(param_1 + 0x58) = 0; ((void(__thiscall*)(void*))VTB(p, 8))(p); }
     }
     if (*(int*)(param_1 + 0x1c) != 0) {
         int iVar2 = (param_1 == 0x24) ? 0 : param_1 + 0x48;
         SPUIHelpers_VisitWindowTreeDepthFirst(*(int*)(param_1 + 0x1c), (void*)&FUN_00ecd9c0, iVar2);
     }
-    FUN_00ecde60();
+    FUN_00ecde60_tc((void*)param_1);
 }
 
 // ============================================================ 0x00ece370
 // @ 0x00ece370
-int FUN_00ece370(int param_1, int param_2)
+int CastObj_ece370::Cast(int param_2)
 {
+    int param_1 = (int)this;
     if (param_2 == 0x722de63)
         return param_1 - 8;
     if (param_2 == 0x2f009dd0) {
         if (param_1 != 8)
-            return param_1 + 100;
+            return param_1 + 0x64;
         return 0;
     }
-    return FUN_00ecde00(param_1, param_2);
+    return ((CastObj*)param_1)->Cast(param_2);
 }
 
 // ============================================================ 0x00ece3b0
@@ -440,12 +463,11 @@ int FUN_00ece370(int param_1, int param_2)
 int FUN_00ece3b0(int* param_1)
 {
     if (param_1 != 0) {
-        int i = K1(param_1, 0xc, 0x3349c94);
+        int i = ((int(__thiscall*)(void*, int))VTB(param_1, 0xc))(param_1, 0x3349c94);
         if (i != 0) {
-            FUN_005f33f0();
-            int* p = (int*)FUN_01137690();
+            int* p = (int*)FUN_01137690(FUN_005f33f0((void*)i));
             if (p != 0) {
-                int j = K1(p, 0xc, 0x722de52);
+                int j = ((int(__thiscall*)(void*, int))VTB(p, 0xc))(p, 0x722de52);
                 if (j != 0)
                     return j;
             }
@@ -529,27 +551,27 @@ bool Obj_ece730::FUN_00ece730(int* param_2, int param_3, int param_4, int param_
 void __fastcall FUN_00ece790(int* p)
 {
     if (p[4] != -1 && p[0x17] != 0) {
-        char c = K0(p, 0x44) ? 1 : 0;
-        if (c) {
-            int u = K0((int*)p[0x17], 0x30);
-            C1((int*)p[0x17], 0x5c, (u & 0xff000000) + 0xaa2222);
+        if (((char(__thiscall*)(void*))VTB(p, 0x44))(p) != 0) {
+            int u = ((int(__thiscall*)(void*))VTB((void*)p[0x17], 0x30))((void*)p[0x17]);
+            ((void(__thiscall*)(void*, int))VTB((void*)p[0x17], 0x5c))((void*)p[0x17], (u & 0xff000000) + 0xaa2222);
             return;
         }
-        int u = K0((int*)p[0x17], 0x30);
-        C1((int*)p[0x17], 0x5c, (u & 0xff000000) + 0xffffff);
+        int u = ((int(__thiscall*)(void*))VTB((void*)p[0x17], 0x30))((void*)p[0x17]);
+        ((void(__thiscall*)(void*, int))VTB((void*)p[0x17], 0x5c))((void*)p[0x17], (u & 0xff000000) + 0xffffff);
     }
 }
 
 // ============================================================ 0x00ece7f0
 // @ 0x00ece7f0
-int __fastcall FUN_00ece7f0(int param_1)
+bool __fastcall FUN_00ece7f0(int param_1)
 {
-    int i = FUN_00f3e8a0(*(int*)(param_1 + 0x10));
+    int* i = g_pGameMgr_16c7aa4->pOwner_74->Lookup(*(int*)(param_1 + 0x10));
     if (i == 0)
+        return false;
+    char* b = (char*)i;
+    if (b[0x1c] == 0 && b[0x44] == 0 && b[0x6c] == 0)
         return 0;
-    if (*(char*)(i + 0x1c) == 0 && *(char*)(i + 0x44) == 0 && *(char*)(i + 0x6c) == 0)
-        return 0;
-    return 1;
+    return true;
 }
 
 // ============================================================ 0x00ece870
@@ -574,8 +596,8 @@ int* FUN_00ece870(int* param_1, int param_2)
 void __fastcall FUN_00ece8c0(int* p)
 {
     if (p[4] != -1) {
-        int u = FUN_00f3e8a0(p[4]);
-        C1(p, 0x30, u);
+        int* u = g_pGameMgr_16c7aa4->pOwner_74->Lookup(p[4]);
+        ((void(__thiscall*)(void*, int*))VTB(p, 0x30))(p, u);
     }
 }
 
@@ -584,9 +606,9 @@ void __fastcall FUN_00ece8c0(int* p)
 int __fastcall FUN_00ece8f0(int param_1)
 {
     if (*(int*)(param_1 + 0x10) != -1) {
-        int i = FUN_00f3e8a0(*(int*)(param_1 + 0x10));
+        int* i = g_pGameMgr_16c7aa4->pOwner_74->Lookup(*(int*)(param_1 + 0x10));
         if (i != 0)
-            return FUN_00eece20(i);
+            return FUN_00eece20((int)i);
     }
     return *(int*)(param_1 + 0x14);
 }
@@ -595,13 +617,12 @@ int __fastcall FUN_00ece8f0(int param_1)
 // @ 0x00ece920
 void FUN_00ece920(void)
 {
-    FUN_00b3d320();
-    int* p = FUN_00b1de80();
+    int* p = ((Mgr167eaec*)FUN_00b3d320_get())->Fn_b1de80();
     if (p != 0) {
         int local = 0;
-        char c = K1(p, 0x24, (int)&local) ? 1 : 0;
-        if (c && *(short*)(local + 0x12) == 0xd) {
-            int* v = SP_GetPropertyAsFloat();
+        char c = ((char(__thiscall*)(void*, int, int*))VTB(p, 0x24))(p, 0xa143f717, &local);
+        if (c != 0 && *(short*)((char*)local + 0x12) == 0xd) {
+            int* v = ((PropObj*)local)->GetFloat();
             g_15abee4 = *(float*)v;
         }
     }

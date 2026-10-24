@@ -2,3 +2,7 @@
 slices/s00ecda80/s00ecda80.cpp  ?FUN_00ecdb80@@YI_NH@Z   00ecdb80  /O2 /MD /Gy /EHsc /TP
 slices/s00ecda80/s00ecda80.cpp  ?FUN_00ece3f0@@YGPAXD@Z  00ece3f0  /O2 /MD /Gy /EHsc /TP
 slices/s00ecda80/s00ecda80.cpp  ?FUN_00ecdb90@@YIXPAH@Z  00ecdb90  /O2 /MD /Gy /EHsc /TP
+slices/s00ecda80/s00ecda80.cpp  ?Set@SelObj_ecdb50@@QAEXH@Z  00ecdb50  /O2 /MD /Gy /EHsc /TP
+slices/s00ecda80/s00ecda80.cpp  ?Activate@WinObj_ece110@@QAEXH@Z  00ece110  /O2 /MD /Gy /EHsc /TP
+slices/s00ecda80/s00ecda80.cpp  ?FUN_00ece3b0@@YAHPAH@Z  00ece3b0  /O2 /MD /Gy /EHsc /TP
+slices/s00ecda80/s00ecda80.cpp  ?FUN_00ece790@@YIXPAH@Z  00ece790  /O2 /MD /Gy /EHsc /TP
