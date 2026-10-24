@@ -23,6 +23,27 @@ template <class T> inline const T& Min(const T& a, const T& b) { return (b > a) 
 
 extern const cSPVector3 kDirA;   // 0x0167bd44 (rotated by the camera basis when flag 2 is set)
 extern const cSPVector3 kDirB;   // 0x0167bd50
+extern const cSPVector3 kDirC;   // 0x0167bd38 (kDirA - 0xc)
+extern const cSPVector3 kOrientDir; // 0x0167bbf8 (default target orientation direction)
+
+extern cSPVector3 gScaledForward;    // 0x0167bd60 (forwardDir * current)
+extern uint32_t   gScaledForwardInit; // 0x0167bd6c (lazy-init flag, bit 0)
+
+extern const float kMinDirLengthSq;  // 0x0145cd14 (1.5258789e-05)
+extern const float kAngleScale;      // 0x01567da8
+extern const float kForwardStep;     // 0x01567dac
+extern const float kOne;             // 0x01485720 (1.0f)
+
+struct cSPQuaternion {   // 12 bytes: only x/y/z are used by the orientation helpers
+    float x, y, z;
+};
+
+struct cSPSlerpQuaternion {   // 16 bytes: the slerp also returns the blend weight
+    float x, y, z, w;
+};
+
+void SlerpOrientation(cSPSlerpQuaternion* out, const cSPVector3* a, const cSPQuaternion* b,
+                      const cSPVector3* c, const cSPQuaternion* d);   // 0x00b12f90
 
 namespace SP {
 
@@ -50,6 +71,25 @@ struct CameraObj {
     void SetNearClip(float n);                    // 0x007c4ba0 (ret 4)
     void SetFarClip(float f);                     // 0x007c4bc0 (ret 4)
 };
+
+// App -> simulator -> camera chain used by the camera push.
+class cCameraHost {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6();
+    virtual CameraObj* GetCamera();               // slot 7 (+0x1c)
+};
+
+class cApp {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual cCameraHost* GetSimulator();          // slot 20 (+0x50)
+};
+cApp* App();                                      // 0x0067dd10
 
 // 5-slot message: vtable 0x13eb90c (base) then 0x13eb844 (derived), dtor 0x00421cf0.
 struct SlotMessage {
@@ -108,12 +148,31 @@ struct cTerrainCameraController {
     float target;             // +0x30
     float velocity;           // +0x34
     float targetVelocity;     // +0x38
-    uint32_t pad_3c[(0x10c - 0x3c) / 4];
+    bool  angleInitialized;   // +0x3c (cleared after an angle change)
+    bool  clampAngle;         // +0x3d (limit the angle step to the target delta)
+    uint16_t pad_3e;
+    float angleStart;         // +0x40
+    float angleTarget;        // +0x44
+    uint32_t pad_48[(0x54 - 0x48) / 4];
+    cSPVector3 forwardDir;    // +0x54 (scaled by `current` into gScaledForward)
+    cSPVector3 prevCenter;    // +0x60
+    cSPVector3 currCenter;    // +0x6c
+    uint32_t pad_78[(0x84 - 0x78) / 4];
+    cSPVector3 centerVelocity; // +0x84
+    uint8_t pad_90;           // +0x90
+    bool  flag91;             // +0x91
+    uint8_t pad_92[(0xac - 0x92)];
+    cSPVector3 cameraDir;     // +0xac
+    uint32_t pad_b8[(0x10c - 0xb8) / 4];
     float distCurrent;        // +0x10c
-    uint32_t pad_110[(0x180 - 0x110) / 4];
+    uint32_t pad_110[(0x168 - 0x110) / 4];
+    bool  noOrientUpdate;     // +0x168 (skip the orientation update)
+    uint8_t pad_169[(0x180 - 0x169)];
     float* keysBegin;         // +0x180
     float* keysEnd;           // +0x184
-    uint32_t pad_188[(0x274 - 0x188) / 4];
+    uint32_t pad_188[(0x25c - 0x188) / 4];
+    float dt;                 // +0x25c (inverse frame time)
+    uint32_t pad_260[(0x274 - 0x260) / 4];
     float heightAboveWater;   // +0x274
     uint32_t pad_278[(0x2b4 - 0x278) / 4];
     float minHeight;          // +0x2b4
@@ -126,7 +185,8 @@ struct cTerrainCameraController {
     cSPVector3 pos;           // +0x2d0
     float scale;              // +0x2dc
     float basis[9];           // +0x2e0 (three columns)
-    uint32_t pad_304[2];
+    bool  basisDirty;         // +0x304 (refreshed by FUN_00b134a0)
+    uint8_t pad_305[(0x30c - 0x305)];
     void* config;             // +0x30c
     float nearClip;           // +0x310
     float farClip;            // +0x314
@@ -141,6 +201,14 @@ struct cTerrainCameraController {
     void ClampSpread();                      // 0x00b0f770
     void UpdateInterpolation(float dt);      // 0x00b119f0
     void FUN_00b134a0();                     // 0x00b134a0
+    void GetTargetOrientation(cSPQuaternion* out);   // 0x00b137d0
+    void GetOrientationDirA(cSPQuaternion* out);     // 0x00b13900 (kDirA, no translation)
+    void GetOrientationDirC(cSPQuaternion* out);     // 0x00b13a10 (kDirC, no translation)
+    void PushToCamera();                     // 0x00b13b50
+    void FUN_00b13bb0(cSPQuaternion* out, int blend);   // 0x00b13bb0
+    void BlendOrientation(cSPQuaternion* out, const cSPSlerpQuaternion* slerped, int w);   // 0x00b12dd0
+    float InterpByAngle();                   // 0x00b0f880
+    void FUN_00b14520(const cSPVector3* dir, const cSPVector3* delta);   // 0x00b14520
     void Update(uint32_t ms, CameraObj* cam);   // 0x00b13c50
 
     __forceinline cSPVector3 Rotate(const cSPVector3& v) const
@@ -274,4 +342,212 @@ void cTerrainCameraController::Update(uint32_t ms, CameraObj* cam)
         SlotMessageBasic msg(distCurrent, kOnePointFive);
         ms2->Send(0x60e4e46e, &msg, 0);
     }
+}
+
+// ---------------------------------------------------------------------------
+// Orientation helpers (kOrientDir / kDirA / kDirC rotated by the camera basis),
+// the camera push and the angle/centre-velocity update.
+// ---------------------------------------------------------------------------
+
+// @ 0x00b137d0
+void cTerrainCameraController::GetTargetOrientation(cSPQuaternion* out)
+{
+    if (basisDirty)
+        FUN_00b134a0();
+
+    cSPVector3 dir = kOrientDir;
+    out->x = dir.x;
+    out->y = dir.y;
+    out->z = dir.z;
+    if (xflagsLo & 2) {
+        out->x = (basis[6] * dir.z + basis[3] * dir.y) + basis[0] * dir.x;
+        out->y = (basis[7] * dir.z + basis[4] * dir.y) + basis[1] * dir.x;
+        out->z = (basis[8] * dir.z + basis[5] * dir.y) + basis[2] * dir.x;
+    }
+    float s = scale;
+    out->x = s * out->x + pos.x;
+    out->y = s * out->y + pos.y;
+    out->z = out->z * s + pos.z;
+}
+
+// @ 0x00b13900
+void cTerrainCameraController::GetOrientationDirA(cSPQuaternion* out)
+{
+    if (basisDirty)
+        FUN_00b134a0();
+
+    cSPVector3 dir = kDirA;
+    out->x = dir.x;
+    out->y = dir.y;
+    out->z = dir.z;
+    if (xflagsLo & 2) {
+        out->x = (basis[6] * dir.z + basis[3] * dir.y) + basis[0] * dir.x;
+        out->y = (basis[7] * dir.z + basis[4] * dir.y) + basis[1] * dir.x;
+        out->z = (basis[8] * dir.z + basis[5] * dir.y) + basis[2] * dir.x;
+    }
+    float s = scale;
+    out->x = s * out->x;
+    out->y = s * out->y;
+    out->z = out->z * s;
+}
+
+// @ 0x00b13a10
+void cTerrainCameraController::GetOrientationDirC(cSPQuaternion* out)
+{
+    if (basisDirty)
+        FUN_00b134a0();
+
+    cSPVector3 dir = kDirC;
+    out->x = dir.x;
+    out->y = dir.y;
+    out->z = dir.z;
+    if (xflagsLo & 2) {
+        out->x = (basis[6] * dir.z + basis[3] * dir.y) + basis[0] * dir.x;
+        out->y = (basis[7] * dir.z + basis[4] * dir.y) + basis[1] * dir.x;
+        out->z = (basis[8] * dir.z + basis[5] * dir.y) + basis[2] * dir.x;
+    }
+    float s = scale;
+    out->x = s * out->x;
+    out->y = s * out->y;
+    out->z = out->z * s;
+}
+
+// @ 0x00b13b50
+void cTerrainCameraController::PushToCamera()
+{
+    FUN_00b134a0();
+    CameraObj* cam = App()->GetSimulator()->GetCamera();
+    cam->SetTransform(&xflags);
+    cam->SetNearClip(nearClip);
+    cam->SetFarClip(farClip);
+}
+
+// @ 0x00b13bb0
+void cTerrainCameraController::FUN_00b13bb0(cSPQuaternion* out, int blend)
+{
+    if (!(gScaledForwardInit & 1))
+        gScaledForwardInit |= 1;
+
+    float s = current;
+    float sx = forwardDir.x * s;
+    float sy = forwardDir.y * s;
+    float sz = forwardDir.z * s;
+    gScaledForward.x = sx;
+    gScaledForward.y = sy;
+    gScaledForward.z = sz;
+
+    cSPQuaternion target;
+    GetTargetOrientation(&target);
+
+    cSPSlerpQuaternion slerped;
+    SlerpOrientation(&slerped, &gScaledForward, out, &cameraDir, &target);
+    BlendOrientation(out, &slerped, blend);
+}
+
+// @ 0x00b14520
+void cTerrainCameraController::FUN_00b14520(const cSPVector3* dir, const cSPVector3* delta)
+{
+    if (dir->x * dir->x + dir->y * dir->y + dir->z * dir->z > kMinDirLengthSq &&
+        !noOrientUpdate) {
+        float lx = dir->x + delta->x * kForwardStep;
+        float ly = delta->y * kForwardStep + dir->y;
+        float lz = delta->z * kForwardStep + dir->z;
+        cSPQuaternion local = { lx, ly, lz };
+        FUN_00b13bb0(&local, 0);
+
+        float angle = InterpByAngle();
+        float scaled = angle * kAngleScale;
+        float prev = angleTarget - angleStart;
+        if (clampAngle)
+            angle = Max(prev, scaled);
+        float inv = kOne / dt;
+        angleTarget = angle;
+        centerVelocity.y = (currCenter.y - prevCenter.y) * inv;
+        centerVelocity.x = inv * (currCenter.x - prevCenter.x);
+        centerVelocity.z = (currCenter.z - prevCenter.z) * inv;
+        prevCenter = currCenter;
+        angleStart = 0.0f;
+        angleInitialized = false;
+        clampAngle = true;
+        targetMoving = true;
+        flag91 = true;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// EASTL vector<Typesetter::Text::EA::RunInfo>::insert(position, n, value)
+// (the 16-byte run record, so every element pointer difference is a count >> 4)
+// ---------------------------------------------------------------------------
+
+struct RunInfo {          // Typesetter::Text::EA::RunInfo
+    float mSlot[4];       // 16 bytes
+};
+
+RunInfo FUN_00b11530(RunInfo* a, RunInfo* b, RunInfo* c, RunInfo* d);            // 0x00b11530
+RunInfo* FUN_00b115c0(RunInfo* first, RunInfo* last, RunInfo* dest);             // 0x00b115c0
+void FUN_00b11580(RunInfo* first, uint32_t count, const RunInfo* value, RunInfo* pos);  // 0x00b11580
+RunInfo* FUN_00edba80(RunInfo* first, RunInfo* last, RunInfo* dest);             // 0x00edba80 copy_backward
+void FUN_00898580(RunInfo* first, RunInfo* last, const RunInfo* value);          // 0x00898580 fill
+void* FUN_00f473a0(uint32_t size, const char* tag, int a, int b, const char* file, int line);  // 0x00f473a0
+void FUN_00f47380(void* p);                                                      // 0x00f47380
+
+struct RunInfoVector {
+    RunInfo* mpBegin;     // +0x0
+    RunInfo* mpEnd;       // +0x4
+    RunInfo* mpCapacity;  // +0x8
+
+    void Insert(RunInfo* pos, uint32_t n, const RunInfo& value);   // 0x00b14370
+};
+
+// @ 0x00b14370
+void RunInfoVector::Insert(RunInfo* pos, uint32_t n, const RunInfo& value)
+{
+    if ((uint32_t)(mpCapacity - mpEnd) / 16 < n) {
+        uint32_t oldSize = (uint32_t)(mpEnd - mpBegin) / 16;
+        uint32_t newCapacity = oldSize * 2;
+        if (oldSize == 0)
+            newCapacity = 1;
+        uint32_t newSize = oldSize + n;
+        if (newCapacity < newSize)
+            newCapacity = newSize;
+
+        RunInfo* newBegin = 0;
+        if (newCapacity != 0)
+            newBegin = (RunInfo*)FUN_00f473a0(newCapacity * 16, "Simulator", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                0xd1);
+
+        RunInfo* newPos = FUN_00b115c0(mpBegin, pos, newBegin);
+        FUN_00b11580(newPos, n, &value, pos);
+        RunInfo* newEnd = FUN_00b115c0(pos, mpEnd, newPos + n);
+        if (mpBegin != 0 && *(int*)((char*)mpBegin - 4) != 0)
+            FUN_00f47380(mpBegin);
+        mpBegin = newBegin;
+        mpEnd = newEnd;
+        mpCapacity = newBegin + newCapacity;
+        return;
+    }
+
+    if (n == 0)
+        return;
+
+    RunInfo valueCopy = value;
+    uint32_t available = (uint32_t)(mpEnd - pos) / 16;
+    if (available <= n) {
+        uint32_t extra = n - available;
+        FUN_00b11580(mpEnd, extra, &valueCopy, pos);
+        RunInfo* oldEnd = mpEnd;
+        mpEnd = oldEnd + extra;
+        FUN_00b11530(pos, oldEnd, mpEnd, pos);
+        mpEnd = mpEnd + available;
+        FUN_00898580(pos, oldEnd, &valueCopy);
+        return;
+    }
+
+    RunInfo* oldEnd = mpEnd;
+    RunInfo* dest = oldEnd - n;
+    FUN_00b11530(dest, oldEnd, oldEnd, pos);
+    mpEnd = oldEnd + n;
+    FUN_00edba80(pos, dest, oldEnd);
+    FUN_00898580(pos, pos + n, &valueCopy);
 }
