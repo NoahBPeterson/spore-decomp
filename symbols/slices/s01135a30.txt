@@ -1,2 +1,18 @@
-01135ba0 Layer3Decoder::HuffmanDecode  # ISO dist10 III_huffman_decode: region0/1/2 table selects, linbits, |x|^(4/3) via 0x1143e70, count1 quads, rewind
-01134af0 BitReader::ReadBits  # thiscall(this=bitreader at +0x2710, n) reads n bits MSB-first
+# slice s01135a30 (gold7) - MP3 layer-III / EALayer3 decoder
+# Modelled types:
+#   Layer3DecObj   vtable @0; sample-rate index @0x2e; granule count (0x480/0x240) @0x48;
+#                  started byte @0x4b; channel count @0x4c; stream ptrs @0x54/@0x58; flags @0x6c/@0x6d/@0x6f;
+#                  granule count (1/2) @0x71; mid-side flag @0x72; reservoir index @0x2710; bit counts
+#                  @0x2714/@0x2718; reservoir shift @0x271c; reservoir bytes @0x2720[0x800];
+#                  ran-out counter @0x308; CMpegLayer3Base sub-object @0x34
+#   MpegLayer3Base at +0x34: vtable @0x34 of the outer object
+#   GrInfo 0x18 bytes @0x188 + (ch + gr*2)*0x18: window_switching_flag @7, block_type @8, mixed @9
+#   band table 0x7c bytes @0x1e8 + ch*0x7c (62 uint16)
+01135a30 ?FUN_01135a30@Layer3DecObj@@QAEXHH@Z  # thiscall(ch,gr): fill gr/ch scalefactor-band table from FUN_011357f0 out-params
+01135ba0 ?HuffmanDecode@Layer3Decoder@@QAEXHHPAHM@Z  # thiscall(gr,ch,xr,extraBits): dist10 III_huffman_decode
+01136460 ?FUN_01136460@Layer3DecObj@@QAEHH@Z  # thiscall(arg): EALayer3Core::Decode (PDB candidate) - full layer-III decode loop
+01136860 ?FUN_01136860@@YIHPAULayer3DecObj@@@Z  # free __cdecl(obj)->int: reset decoder state (granule count, flags, counters)
+011368b0 ?FUN_011368b0@Layer3DecObj@@QAEPAU1@H@Z  # thiscall(arg): Layer3Dec constructor (PDB: rw::audio::core::Layer3Dec::Layer3Dec)
+01136910 ?FUN_01136910@Layer3DecObj@@QAEPAU1@I@Z  # thiscall(flags): Layer3Dec destructor (base vtable restore + optional operator delete)
+01136960 ?FUN_01136960@@YADPAULayer3DecObj@@@Z  # free __cdecl(obj)->char: CreateInstanceEvent (PDB) - re-init then return 1
+01136980 ?FUN_01136980@Layer3DecObj@@QAEHHH@Z  # thiscall(arg,a2)->int: open stream, reset, prepare, finish; -1 on failure
