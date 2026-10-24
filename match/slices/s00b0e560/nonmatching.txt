@@ -3,7 +3,7 @@
 00b0e610   97  reader-chain + slot_vector clear; helper call schedule differs
 00b0e6a0  174  two slot_vector resets + EASTL list clear; container templates not reproduced
 00b0e780  106  spstl bit-range slot relocation; iterator/bit-index schedule differs
-00b0e810   94  refcount + slot_vector swap; AutoRefCount template not reproduced
+00b0e810  132  refcount + slot_vector swap rebuilt over two member stubs (SlotVectorStore::FUN_00b0e490 on +0x60, FUN_00b0d500 on +0x44) so the vector lands in ecx and only the AutoRefCount value is pushed; behaviour is complete (242 valid inputs, 100% coverage) but cl 15 keeps the found slot in a register where retail re-reads it, so the body is 14 bytes longer than retail's 120; AutoRefCount template not reproduced; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv: PASS]
 00b0e890  118  EASTL list job sweep; intrusive-list node erasure schedule differs
 00b0f0c0    1  angle-wrap branch block placement one branch displacement off
 00b0e920  231  slot_vector trim/erase rebuilt over named fields; register/branch schedule differs

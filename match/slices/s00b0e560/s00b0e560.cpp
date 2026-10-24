@@ -39,6 +39,14 @@ extern float g_2pi;                                           // +0x167bd10
 static inline void* g_vt(void* p) { return *(void**)p; }
 static inline void* g_vfn(void* p, int off) { return *(void**)((char*)g_vt(p) + off); }
 
+// slot_vector_base<...> method shape: the vector itself is `this` (ECX) and the
+// value to store is the only stack argument (0x00b0e490 calls end with `ret 4`).
+struct SlotVectorStore
+{
+    void FUN_00b0e490(void* src);                  // 0x00b0e490
+    void FUN_00b0d500(void** out, void* from);     // 0x00b0d500
+};
+
 template<class R> static inline R vcall0(void* p, int off)
 { return ((R(__thiscall*)(void*))g_vfn(p, off))(p); }
 template<class R, class A1> static inline R vcall1(void* p, int off, A1 a1)
@@ -271,7 +279,9 @@ void cRenderQueue::FUN_00b0e810(int p_)
     void* p = (void*)p_;
     if (p)
         vcall0<void>(p, 0x0);
-    FUN_00b0e490(&p);
+    // 0x00b0e490 is a slot_vector_base method: the vector (+0x60) is `this`, the
+    // AutoRefCount to store arrives on the stack.
+    ((SlotVectorStore*)(self + 0x60))->FUN_00b0e490(&p);
     if (p)
         vcall0<void>(p, 0x4);
 
@@ -280,9 +290,12 @@ void cRenderQueue::FUN_00b0e810(int p_)
     void* cur = (idx < 0x3fffffffu)
         ? (void*)(*(uint32_t*)v + idx * 8)
         : *(void**)(v + 4);
-    uint32_t out = 0;
-    FUN_00b0cf80(&p, cur, *(void**)(v + 4), &out);
-    FUN_00b0d500(&out, p);
+    // 0x00b0cf80 writes the slot holding `p` to its out pointer and 0x00b0d500
+    // (a slot_vector method) then finds room for it, writing the slot back out.
+    void* slot = p;                  // 0x00b0cf80 overwrites it with the found slot
+    void* ref  = p;                  // the value it searches for
+    FUN_00b0cf80(&slot, cur, *(void**)(v + 4), &ref);
+    ((SlotVectorStore*)v)->FUN_00b0d500(&p, slot);
 }
 
 // @ 0x00b0e890
