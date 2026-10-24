@@ -1,0 +1,25 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00afef10/s00afef10.cpp  ?SmearBits@@YAII@Z  00aff160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?GetFruitHeight@cTreeData@SP@@QBEMXZ  00aff240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?GetValue@cKeyedValue@@QAEII@Z  00aff250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?Initialize@cFruit@Simulator@@QAEXXZ  00aff280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?Cast@cFruit@Simulator@@QAEPAXI@Z  00aff330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?Reset@cFruit@Simulator@@QAEXXZ  00aff370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?CastOther@cFruit@Simulator@@QAEPAXI@Z  00aff520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?GetObstacleValue@cFruit@Simulator@@QAEMXZ  00aff550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?AddTime@cFruit@Simulator@@QAEXHH@Z  00aff700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?LoadRotation@@YA_NPAVcOutStream@@PAVRotSerial@@@Z  00aff7e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?SaveRotation@@YA_NPAVcOutStream@@PAVRotSerial@@@Z  00aff810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?WriteVector2Value@@YAXPAVcValueHost@@@Z  00aff8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?WriteVector3Value@@YAXPAVcValueHost@@@Z  00aff930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?WriteByteValue@@YAXPAVcValueHost@@@Z  00aff9e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?WriteVector3Value2@@YAXPAVcValueHost@@@Z  00affae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?WriteVector3Value3@@YAXPAVcValueHost@@@Z  00affb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?WriteVector3Value4@@YAXPAVcValueHost@@@Z  00affb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?DestroyItemRange@@YGXPAVcSerializeItem@@0@Z  00affc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?DestroyItemRangeInto@@YAPAVcSerializeItem@@PAV1@00@Z  00affcc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?SetPosition@cTransform@@QAEXPBVcVector3@@@Z  00affde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?VectorAt@@YAPAXPBVcPtrVector@@I@Z  00afff30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?Update@cSpatialObjectView@SP@@QAEXII@Z  00afffa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?WriteVector3Value5@@YAXPAVcValueHost@@@Z  00b00350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?ReadItemList@@YA_NPAVcSerializeMgr@@PBVcSerializeItemList@@@Z  00b00400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
