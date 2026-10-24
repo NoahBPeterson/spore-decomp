@@ -144,12 +144,64 @@ void  __cdecl FUN_00c10050(uint32_t, int, int, int, char); // 0x00c10050
 void  __cdecl FUN_00c10230(int, int, int, int);      // 0x00c10230
 struct F_a047d0 { void  __thiscall f(int); };        // 0x00a047d0
 struct F_f9b0   { char* __thiscall f(int, void*); }; // 0x00c0f9b0
+// One binding slot of the cAnimatable binding array (0x24 bytes).
+struct AnimBinding {
+    uint32_t id;        // +0x00
+    int32_t  maskBit;   // +0x04  bit index into the lookup mask (0 = empty slot)
+    uint32_t f08;       // +0x08
+    uint32_t f0c;       // +0x0c
+    uint32_t f10;       // +0x10
+    float    weight;    // +0x14
+    char     flags;     // +0x18
+    int32_t  handle;    // +0x1c
+    void*    target;    // +0x20
+};
 struct CAN {
+    char         _pad0[0xb48];
+    void*        playCtx;    // +0xb48  animation play context (thiscall receiver)
+    char         _pad2[8];
+    void*        animCtx;    // +0xb54  animation subsystem context
+    char         _pad1[0xe40 - 0xb58];
+    AnimBinding* bindBegin;  // +0xe40
+    AnimBinding* bindEnd;    // +0xe44
     void* __thiscall fa70(uint32_t, uint32_t*);
     void  __thiscall fae0(int);
     void  __thiscall fb40(int);
     void  __thiscall fb80(int, int);
-    void* __thiscall fe30(void*);
+    __declspec(noinline) void* __thiscall fe30(void*);
+};
+// Binding-cleanup receiver reached through CAN::animCtx at +0x184.
+struct CANCtx {
+    char  _pad0[0x17c];
+    void* remapTable;   // +0x17c
+    char  _pad1[4];
+    void* bindingDst;   // +0x184  -> F_a01f10 receiver
+};
+// Play context at CAN+0xb48: starts a named animation.
+struct AnimPlayCtx {
+    void __thiscall Play(int, int, void*, float, void*, int);   // 0x00bca810
+};
+// One animation-remap descriptor (0x2bc bytes) with a duration/weight at +0x10c.
+struct AnimSlotSrc {
+    char  _pad0[0x10c];
+    float weight;       // +0x10c
+};
+// Pointer chain walked by FUN_00c10050 from its object argument.
+struct AnimParamObj {   // the caller's animation-object argument
+    char  _pad0[0xfbc];
+    void* sub;          // +0xfbc
+};
+struct AnimFbcObj {     // *(AnimParamObj+0xfbc)
+    char  _pad0[0x2c0];
+    void* sub;          // +0x2c0
+};
+struct Anim2c0Obj {     // *(AnimFbcObj+0x2c0)
+    char  _pad0[8];
+    void* sub;          // +0x08
+};
+struct Anim08Obj {      // *(Anim2c0Obj+0x08)
+    char  _pad0[0x64];
+    void* finder;       // +0x64  object with the +0xc lookup method
 };
 // ---- items of slice s00c0fa70 end
 
@@ -1655,19 +1707,19 @@ int __thiscall CCM::e680(int param_2)
 // @ 0x00c0fa70
 void* __thiscall CAN::fa70(uint32_t mask, uint32_t* pIndex)
 {
-    char* base = (char*)this;
-    int count = (*(int*)(base + 0xe44) - *(int*)(base + 0xe40)) / 0x24;
+    int n = (int)((char*)this->bindEnd - (char*)this->bindBegin);
+    unsigned count = (unsigned)(n / 0x24);
     if (count == 0) return 0;
-    char* e = *(char**)(base + 0xe40);
-    int i = 0;
+    AnimBinding* e = this->bindBegin;
+    unsigned i = 0;
     do {
-        int b = *(int*)(e + 4);
-        if (b != 0 && (mask & (1u << (b & 0x1f))) != 0) {
-            if (pIndex != 0) *pIndex = (uint32_t)i;
+        int b = e->maskBit;
+        if (b != 0 && (mask & (1u << b)) != 0) {
+            if (pIndex != 0) *pIndex = i;
             return e;
         }
         ++i;
-        e += 0x24;
+        ++e;
     } while (i < count);
     return 0;
 }
@@ -1713,11 +1765,16 @@ void __cdecl FUN_00c0fba0(int* self, int* vec)
 // @ 0x00c0fc10
 char __cdecl FUN_00c0fc10(int param_1, int* param_2)
 {
-    for (int i = param_2[0]; i != param_2[1]; i += 0x24) {
-        if (i != 0) {
-            int* q = *(int**)(i + 0x20);
-            (*(void(__thiscall**)(void*, int))((*(int**)q)[0x1c / 4]))((void*)q, param_1);
+    AnimBinding* p = (AnimBinding*)param_2[0];
+    AnimBinding* end = (AnimBinding*)param_2[1];
+    while (p != end) {
+        if (p != 0) {
+            void* q = p->target;
+            void (__thiscall *fn)(void*, int) =
+                (void (__thiscall *)(void*, int))(*(int**)q)[0x1c / 4];
+            fn(q, param_1);
         }
+        ++p;
     }
     return 1;
 }
@@ -1815,22 +1872,22 @@ int* __cdecl FUN_00c0fda0(int* iface, int param_2)
 // @ 0x00c0fe30
 void* __thiscall CAN::fe30(void* src)
 {
-    char* s = (char*)src;
-    char* d = (char*)this;
-    *(int*)(d + 0x00) = *(int*)(s + 0x00);
-    *(int*)(d + 0x04) = *(int*)(s + 0x04);
-    *(int*)(d + 0x08) = *(int*)(s + 0x08);
-    *(int*)(d + 0x0c) = *(int*)(s + 0x0c);
-    *(int*)(d + 0x10) = *(int*)(s + 0x10);
-    GF(d + 0x14) = GF(s + 0x14);
-    *(char*)(d + 0x18) = *(char*)(s + 0x18);
-    *(int*)(d + 0x1c) = *(int*)(s + 0x1c);
-    void* old = *(void**)(d + 0x20);
-    void* nw = *(void**)(s + 0x20);
+    AnimBinding* d = (AnimBinding*)this;
+    AnimBinding* s = (AnimBinding*)src;
+    d->id = s->id;
+    d->maskBit = s->maskBit;
+    d->f08 = s->f08;
+    d->f0c = s->f0c;
+    d->f10 = s->f10;
+    d->weight = s->weight;
+    d->flags = s->flags;
+    d->handle = s->handle;
+    void* old = d->target;
+    void* nw = s->target;
     if (nw != old) {
-        if (nw != 0) (*(void(__thiscall**)(void*))((*(void***)nw)[0xbc / 4]))(nw);
-        *(void**)(d + 0x20) = nw;
-        if (old != 0) (*(void(__thiscall**)(void*))((*(void***)old)[0xc0 / 4]))(old);
+        if (nw != 0) ((void (__thiscall *)(void*))(*(int**)nw)[0xbc / 4])(nw);
+        d->target = nw;
+        if (old != 0) ((void (__thiscall *)(void*))(*(int**)old)[0xc0 / 4])(old);
     }
     return this;
 }
@@ -1894,16 +1951,16 @@ void* __cdecl FUN_00c0ffc0(int param_1, int param_2, int* param_3)
 void __cdecl FUN_00c10050(uint32_t param_1, int param_2, int param_3, int param_4, char param_5)
 {
     if (param_3 == 0) return;
-    int e1 = *(int*)(param_3 + 0xfbc);
-    if (e1 == 0) return;
-    int e2 = *(int*)(e1 + 0x2c0);
-    if (e2 == 0) return;
-    int e3 = *(int*)(e2 + 8);
-    if (e3 == 0) return;
-    int* pi = *(int**)(e3 + 0x64);
-    int iVar2;
-    if (pi == 0) iVar2 = 0;
-    else iVar2 = (*(int(__thiscall**)(void*, int))((*(void***)pi)[0xc / 4]))((void*)pi, 0xce9f6639);
+    AnimFbcObj* a = (AnimFbcObj*)((AnimParamObj*)param_3)->sub;
+    if (a == 0) return;
+    Anim2c0Obj* b = (Anim2c0Obj*)a->sub;
+    if (b == 0) return;
+    Anim08Obj* c = (Anim08Obj*)b->sub;
+    if (c == 0) return;
+    void* finder = c->finder;
+    CAN* ctx;
+    if (finder == 0) ctx = 0;
+    else ctx = (CAN*)((int (__thiscall *)(void*, int))(*(int**)finder)[0xc / 4])(finder, 0xce9f6639);
 
     uint32_t local_40[16];
     local_40[0] = 0; local_40[1] = 1;
@@ -1929,36 +1986,35 @@ void __cdecl FUN_00c10050(uint32_t param_1, int param_2, int param_3, int param_
         if (iVar5 != 0 && uVar7 != 0) {
             if (*(uint32_t*)(iVar5 + 0x18) < 2) {
                 if (*(int*)(iVar5 + 0x14) == 2) {
-                    char* base = *(char**)((char*)iVar2 + 0xb54);
-                    int v = *(int*)(base + 0x17c);
-                    int arr = *(int*)(v + 0x2e4);
-                    int elem = *(int*)(arr + local_40[0] * 700);
-                    if (0.0f < GF(elem + 0x10c)) uVar6 = 1;
+                    CANCtx* cc = (CANCtx*)ctx->animCtx;
+                    int remap = (int)cc->remapTable;
+                    int arr = *(int*)(remap + 0x2e4);
+                    AnimSlotSrc* elem = (AnimSlotSrc*)*(void**)(arr + local_40[0] * 700);
+                    if (0.0f < elem->weight) uVar6 = 1;
                 } else {
                     uVar6 = 0;
                 }
             } else {
-                void* c = *(void**)((char*)iVar2 + 0xb54);
-                void* vt = *(void**)c;
+                void* c2 = ctx->animCtx;
                 char* extra = 0;
-                uint32_t rr = (*(uint32_t(__thiscall**)(void*, int, uint32_t*, uint32_t, void*))((char*)vt + 0x68))(
-                    c, param_4, local_40, uVar7, &extra);
+                uint32_t rr = ((uint32_t (__thiscall *)(void*, int, uint32_t*, uint32_t, void*))
+                               (*(int**)c2)[0x68 / 4])(c2, param_4, local_40, uVar7, &extra);
                 if (rr < *(uint32_t*)(*(int*)(*piVar3 + 8) + 0x14)) uVar6 = rr;
             }
         }
     }
-    void* c2 = *(void**)((char*)iVar2 + 0xb54);
-    (*(void(__thiscall**)(void*, int, uint32_t))((char*)*(void**)c2 + 0x3c))(c2, param_4, uVar6);
+    void* c3 = ctx->animCtx;
+    ((void (__thiscall *)(void*, int, uint32_t))(*(int**)c3)[0x3c / 4])(c3, param_4, uVar6);
     if (param_5 == 0 && param_2 != -1) {
         uint32_t val = (uint32_t)param_2;
         for (int i = 0; i < 4; ++i) {
             uint32_t local = 0;
-            char* e = ((F_f9b0*)iVar2)->f((int)(val & 0xff), &local);
+            char* e = ((F_f9b0*)ctx)->f((int)(val & 0xff), &local);
             if (e != 0 && *(int*)(e + 4) != 0) {
                 local_40[6] = local;
                 local_40[7] = (uint32_t)param_4;
                 local_40[8] = 0;
-                FUN_00bca810(5, 0, (void*)iVar2, GF(0x146a32c), &local_40[6], 0);
+                ((AnimPlayCtx*)ctx->playCtx)->Play(5, 0, (void*)ctx, GF(0x146a32c), &local_40[6], 0);
             }
             uint32_t t = val >> 8;
             val = val >> 8;
