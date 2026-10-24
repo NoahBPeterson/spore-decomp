@@ -1,0 +1,1 @@
+00a7d6b0 ?Apply@VecXform@@QAEXPAM@Z  # VecXform::Apply -> SP::cSPTransform::RotateVector (thiscall, ret 4)
