@@ -1,0 +1,10 @@
+# source  symbol  original VA  [flags override]
+slices/s00e15c00/cards.cpp  ?CollapseMissionCard@cUIMissionCardPanel@@QAEXPAVIMission@@@Z  00e15c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e15c00/cards.cpp  ?CollapseOtherMissionCards@cUIMissionCardPanel@@QAEXPAVIMission@@@Z  00e15c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e15c00/cards.cpp  ?HasMissionCard@cUIMissionCardPanel@@QAE_NPAVIMission@@@Z  00e15cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e15c00/cards.cpp  ?RemoveBadgeCard@cUIMissionCardPanel@@QAE_NI@Z  00e15d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e15c00/cards.cpp  ?FUN_00e15de0@cUIMissionCardPanel@@QAEXM@Z  00e15de0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e15c00/cards.cpp  ?FUN_00e15e40@cUIMissionCardPanel@@QAEXIH@Z  00e15e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e15c00/cards.cpp  ?FUN_00e15e70@cUIMissionCardPanel@@QAEXM@Z  00e15e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e15c00/cards.cpp  ?FUN_00e16800@cUIBadgeCard@@QAEXXZ  00e16800  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e15c00/cards.cpp  ?FUN_00e168d0@cUIBadgeCard@@QAEXI_N@Z  00e168d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

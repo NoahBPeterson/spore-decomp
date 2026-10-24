@@ -1,1 +1,10 @@
 00e16090 SP::cMissionTracker::UpdateFromMission  # tentative: refreshes the tracker panel (status/count/title windows, image, relationship strip, progress-icon layout) from the IMission argument; PDB caller-scored label cFeedbackEvent::~cFeedbackEvent is a mislabel
+00e15c00 SP::cUIMissionCardPanel::CollapseMissionCard  # hides (vtable +0x2c) the one card whose +0x9c mission matches
+00e15c70 SP::cUIMissionCardPanel::CollapseOtherMissionCards  # hides every card whose +0x9c mission differs
+00e15cd0 SP::cUIMissionCardPanel::HasMissionCard  # true if any card's +0x9c mission matches
+00e15d30 SP::cUIMissionCardPanel::RemoveBadgeCard  # finds the card with +0x98 badge id, vcall +0x1c, swap-removes it from the vector (refcount release) and repositions
+00e15de0 SP::cUIMissionCardPanel::RefreshCards  # clears the +0x11 dirty byte on every card, ticks the mission panel (+0x3c) with the float time, repositions when dirty
+00e15e40 SP::cUIMissionCardPanel::RefreshCardsFromMilliseconds  # (unused arg, int ms) -> RefreshCards(ms/1000.0f)
+00e15e70 SP::cUIMissionCardPanel::RefreshCardLayouts  # updates progress icons, ResizeToContent/InitForCreature(1,1) by +0x10, UpdateButtonStateA, then RefreshCards
+00e16800 SP::cUIBadgeCard::RefreshBadgeName  # badge name from cSPBadgeManager into windows 0x5235140 / 0x74cb0c14 captions
+00e168d0 SP::cUIBadgeCard::InitBadgeCard  # cUICard::Init(true), caption/icon/count window layout, badge id store, name refresh, then +0x28 or +0x2c vcall with 0
