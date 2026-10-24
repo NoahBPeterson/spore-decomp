@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+00d04750  325  325-byte eastl rbtree insert (RBTreeIncrement, node alloc/copy, DoNukeSubtree); not emitted (heavy eastl template)
+00d04910  191  SP::cRelationshipManager::HandleMessage message dispatch (vtable slot 0x4c calls, SP::StarManager, FUN_00d04290/FUN_00d03c40); not emitted
+00d04aa0  560  560-byte cSPUILayoutManager world serializer (EA::IO::ReadInt32, cVarListSerializer, DoNukeSubtree); not emitted
+00d04d10  242  cSPUILayoutManager destructor (three vtable literals, RemoveHandler, DoNukeSubtree, vector/array frees); not emitted
+00d04e90  254  eastl rbtree find-or-insert on the world map (FUN_00d01a40, FUN_00d04750, DoNukeSubtree); not emitted
+00d05010  258  cSPUILayoutManager constructor (five vtable literals, ~50 field zero inits and two embedded list heads); not emitted
+00d05140  145  SP::cRelationshipManager::RemoveRelationshipsInvolvingID (operator_new/delete_array, FUN_00d04cd0/FUN_00d041d0); not emitted
+00d05240  319  vector insert/grow helper (operator_new_eastl, element move/copy, FUN_00d04f90); not emitted
+00d053e0  383  383-byte eastl vector/insert path (element constructors and moves); not emitted
+00d055d0  231  eastl rbtree find on the world map; not emitted
+00d056c0  105  embassy-data lookup (GetActivePlanetRecord, cStarRecordRef::GetCommContext, FUN_00d05560/00d055d0/00d049d0, FUN_00f41aa0); not emitted
+00d05730  256  256-byte map node insert path; not emitted
+00d05830  107  map erase/reset (FUN_00d009a0/FUN_00d01ab0/FUN_00d01410/FUN_00d05730, DoNukeSubtree); not emitted

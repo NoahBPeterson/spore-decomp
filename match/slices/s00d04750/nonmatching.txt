@@ -1,0 +1,2 @@
+00d051e0 26 vector erase-range; MSVC assigns this to ebx and arg2 to edi (original keeps this in edi, arg2 in ebx) and reorders the loop setup, same 93 bytes
+00d05560 72 map-key erase; MSVC assigns this to esi and end to edi (original keeps this in edi, end in esi); block layout of the p==end||key<p->key test differs, 100 vs 109 bytes
