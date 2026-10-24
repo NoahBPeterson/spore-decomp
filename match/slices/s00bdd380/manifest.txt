@@ -1,0 +1,6 @@
+slices/s00bdd380/s00bdd380.cpp  ?CopyConstructFrom@CElement@@QAEPAU1@ABU1@@Z  00bdd380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00bdd380/s00bdd380.cpp  ?CopyAssignFrom@CElement@@QAEPAU1@ABU1@@Z  00bdd470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00bdd380/s00bdd380.cpp  ?FUN_00bdd5c0@@YAPAUCElement@@PAU1@00@Z  00bdd5c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00bdd380/s00bdd380.cpp  ?FUN_00bdd600@@YAPAUCElement@@PAU1@00@Z  00bdd600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00bdd380/s00bdd380.cpp  ?FUN_00bdd640@@YAPAUCElement@@PAU1@00@Z  00bdd640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00bdd380/s00bdd380.cpp  ?FUN_00bdd680@@YIXPAUCDerivedGameData@@@Z  00bdd680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

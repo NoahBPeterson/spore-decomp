@@ -1,0 +1,8 @@
+# complete behaviorally-equivalent source, not byte-exact (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+# difftest verdicts: PASS = equivalence harness verified it; WEAK = no mismatch seen but coverage
+# below threshold; UNSUPPORTED = harness could not run it (unresolved externals / no valid inputs).
+# FAIL = an observed mismatch (none in this slice).
+# Bounded gate: --budget 200000 --time-limit 60 --min-valid 1 --min-cov 0
+00bdd580  range copy-construct -- writes *cursor=dest then copy-constructs each source into *cursor, increments cursor and first; original keeps first/last in their incoming home slots (only esi saved), this build promotes them to ebx/edi (60 vs 57 bytes), behavior identical
+00bdd780  SP::cCity destructor -- six vtable installs, object/array/timer/RB-tree/vector teardown in retail order, PaintSystem+cSpatialObject sub-destructors, tail-jump to CDerivedGameData dtor; 1257 vs 1240 bytes (scheduler hoists first member load across vtable stores)
+00bddda0  cCity building placement epilogue -- FUN_00bdca30 local setup, FUN_00bf57b0(7 args) result, m_p324 vtable[0x70] buffer, PlanetModel global + BuildSurfaceOrientation2, sub-object vtable[0x3c]/[0x40] and FUN_00c88530(1.0f); 200 vs 203 bytes (explicit this reload for the __thiscall externs, local frame layout)
