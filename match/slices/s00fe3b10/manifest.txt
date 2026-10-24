@@ -1,0 +1,10 @@
+slices/s00fe3b10/s00fe3b10.cpp  ?FUN_00fe3b10@@YA_NPAVcGalaxyPlanet@@@Z  00fe3b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fe3b10/s00fe3b10.cpp  ?FUN_00fe3b30@@YA_NPAVcGalaxyPlanet@@@Z  00fe3b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fe3b10/s00fe3b10.cpp  ?FUN_00fe3cc0@cSPBadgeManager@@QAEXPAX@Z  00fe3cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fe3b10/s00fe3b10.cpp  ?FUN_00fe3df0@@YGHI@Z  00fe3df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fe3b10/s00fe3b10.cpp  ?FUN_00fe3e50@@YGHI@Z  00fe3e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fe3b10/s00fe3b10.cpp  ?FUN_00fe3f50@cSPBadgeManager@@QBEHI@Z  00fe3f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fe3b10/s00fe3b10.cpp  ?FUN_00fe3f80@cSPBadgeManager@@QBEIII@Z  00fe3f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fe3b10/s00fe3b10.cpp  ?FUN_00fe4150@cSPBadgeManager@@QBEII@Z  00fe4150  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fe3b10/s00fe3b10.cpp  ?GetReplacement@cSPBadgeManager@@QBEII@Z  00fe41c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fe3b10/s00fe3b10.cpp  ?FUN_00fe49a0@cSPBadgeManager@@QBEXIAAVeastlWString@@@Z  00fe49a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
