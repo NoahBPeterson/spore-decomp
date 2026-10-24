@@ -110,8 +110,8 @@ struct CCM {
     void* __thiscall dfd0(int);
     char  __thiscall e000(int, int);
     void* __thiscall e040();
-    char  __thiscall e070(int);
-    char  __thiscall e0c0(int);
+    bool  __thiscall e070(int);
+    bool  __thiscall e0c0(int);
     char  __thiscall e120(int);
     char  __thiscall e170(int);
     char  __thiscall e2c0(int);
@@ -1235,7 +1235,7 @@ void __thiscall CCB::d0c0(uint32_t param_2, char param_3)
         if (param_3 == 0) G32((char*)this + 0xfa4) &= ~bit;
         else G32((char*)this + 0xfa4) |= bit;
     } else bVar3 = false;
-    if ((bool)param_3 == bVar3) return;
+    if (param_3 == bVar3) return;
     int iVar1 = (param_3 == 0 || bVar3) ? -1 : 1;
     int* pfa0 = (int*)((char*)this + 0xfa0);
     switch (param_2) {
@@ -1299,7 +1299,7 @@ void __thiscall CCB::d240()
     void* p = *(void**)((char*)this + 0xb54);
     if (p != 0) {
         float local_14 = *(float*)((char*)p + 0x3c) * GF(0x1473c70);
-        float r = (*(float(__thiscall**)(void*))((*(void***)((char*)this + 0xc0))[0x74 / 4]))((char*)this + 0xc0);
+        float r = (*(float(__thiscall*)(void*))((*(void***)((char*)this + 0xc0))[0x74 / 4]))((char*)this + 0xc0);
         float af[2]; af[0] = r;
         float* pf = &local_14;
         if (local_14 <= r) pf = af;
@@ -1311,8 +1311,9 @@ void __thiscall CCB::d240()
         *(uint32_t*)((char*)q + 0x16c) = 0;
         void* r2 = *(void**)((char*)this + 0xb54);
         if (*(int*)((char*)r2 + 0x15c) != 0) {
+            void* contained = *(void**)((char*)r2 + 0x15c);
             *(uint32_t*)((char*)r2 + 0x15c) = 0;
-            ((F_a05270*)r2)->Release();
+            ((F_a05270*)contained)->Release();
         }
     }
     *(uint8_t*)((char*)this + 0xb66) = 0;
@@ -1393,7 +1394,7 @@ void* __thiscall CCM::e040()
     uint32_t local_4 = 0;
     if (c == 0) return (void*)local_4;
     void* vt = *(void**)c;
-    (*(void(__thiscall**)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+    ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
         c, &local_4, 0, 0, 0);
     return (void*)local_4;
 }
@@ -1405,7 +1406,7 @@ void* __thiscall CCM::e040()
 
 
 // @ 0x00c0e070
-char __thiscall CCM::e070(int param_2)
+bool __thiscall CCM::e070(int param_2)
 {
     char* c = *(char**)((char*)this + 0xb54);
     if (c != 0 && *(int*)(c + 0x184) != 0) {
@@ -1423,16 +1424,16 @@ char __thiscall CCM::e070(int param_2)
 
 
 // @ 0x00c0e0c0
-char __thiscall CCM::e0c0(int param_2)
+bool __thiscall CCM::e0c0(int param_2)
 {
     char* c = *(char**)((char*)this + 0xb54);
     if (c == 0) return 0;
     uint32_t local_4 = 0;
     void* vt = *(void**)c;
-    (*(void(__thiscall**)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+    ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
         c, &local_4, 0, 0, 0);
     if ((int)local_4 == param_2) return 1;
-    if (!((F_a02b40*)c)->f((int)local_4)) return 0;
+    if (!((F_a02b40*)c)->f(param_2)) return 0;
     return 1;
 }
 
@@ -1468,7 +1469,7 @@ void* __thiscall CCM::e370()
     if (c == 0) return 0;
     uint32_t local_4 = 0;
     void* vt = *(void**)c;
-    (*(void(__thiscall**)(void*, int, int, void*, int))(*(void**)((char*)vt + 0x58)))(
+    ((void(__thiscall*)(void*, int, int, void*, int))(*(void**)((char*)vt + 0x58)))(
         c, 0, 0, &local_4, 0);
     return (void*)local_4;
 }
@@ -1486,7 +1487,7 @@ float __thiscall CCM::e3a0()
     float local_4 = 0.0f;
     if (c != 0) {
         void* vt = *(void**)c;
-        (*(void(__thiscall**)(void*, void*, void*, int, int))(*(void**)((char*)vt + 0x58)))(
+        ((void(__thiscall*)(void*, void*, void*, int, int))(*(void**)((char*)vt + 0x58)))(
             c, 0, &local_4, 0, 0);
     }
     return local_4;
@@ -1505,11 +1506,11 @@ char __thiscall CCM::e3d0()
     if (c != 0) {
         uint32_t local_4 = 0;
         void* vt = *(void**)c;
-        (*(void(__thiscall**)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+        ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
             c, &local_4, 0, 0, 0);
         if (local_4 != 0) {
             void* lm = FUN_0067cb20();
-            char* r = (char*)(*(void*(__thiscall**)(void*, uint32_t))(*(void**)((char*)lm + 0x40)))(
+            char* r = (char*)((void*(__thiscall*)(void*, uint32_t))(*(void**)((char*)*(void**)lm + 0x40)))(
                 lm, local_4);
             if (r != 0) return *(char*)(r + 0x1d);
         }
@@ -1531,10 +1532,10 @@ char __thiscall CCM::e420()
     uint32_t local_4 = 0;
     if (c != 0) {
         void* vt = *(void**)c;
-        (*(void(__thiscall**)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+        ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
             c, &local_4, 0, 0, 0);
     }
-    char* r = (char*)(*(void*(__thiscall**)(void*, uint32_t))(*(void**)((char*)lm + 0x40)))(
+    char* r = (char*)((void*(__thiscall*)(void*, uint32_t))(*(void**)((char*)*(void**)lm + 0x40)))(
         lm, local_4);
     if (r != 0 && *(char*)(r + 0x1c) != 0) return 1;
     return 0;
