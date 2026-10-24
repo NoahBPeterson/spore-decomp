@@ -1,1 +1,7 @@
 00e8c120 SP::cCreatureView::HandleSimulationUpdate  # PDB name (symbols/pdb_names.json); vtable slot 1 of vtbl_Simulator::cCreatureView at 0x014863cc
+00e8c9a0 ?SetTrackedEffect@cEffectView@SP@@QAEXPAVcAnimatingCreature@@@Z  # SP::cEffectView::SetTrackedEffect
+00e8ca10 ?HandleUpdate@cCreatureView@SP@@QAEXHH@Z  # SP::cCreatureView::HandleUpdate
+00e8cc90 ?Initialize@cEffectView@SP@@QAEPAV12@XZ  # SP::cEffectView::Initialize
+00e8cd30 ?ComputeFade@cEffectView@SP@@QAEPAUVec3@@PAU3@AAHPAX@Z  # SP::cEffectView::ComputeFade
+00e8cec0 ?CreateFor@cEffectView@SP@@QAEPAV12@PAVcAnimatingCreature@@@Z  # SP::cEffectView::CreateFor
+00e8cf50 ?HandleMessage@cEffectView@SP@@QAEXHH@Z  # SP::cEffectView::HandleMessage
