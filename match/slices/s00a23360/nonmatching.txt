@@ -9,5 +9,7 @@
 00a247f0  65  EA::Audio::ResourceDeviceDriver::ResourceDeviceDriver: difftest PASS (400 valid inputs, 100.0% coverage); equivalent, non-exact codegen
 00a24850  35  ParseResman: difftest UNSUPPORTED (0/400 valid, read faults); complete implementation
 00a248a0  40  ProfileTimer::ProfileTimer(void*): difftest PASS (400 valid inputs, 85.2% coverage); equivalent, non-exact
-00a24900  19  ProfileTimer::Accumulate: difftest FAIL (zeroish-clobber: ours writes eax where the original leaves it untouched); complete implementation
+00a24900  28  ProfileTimer::Accumulate: complete; writes through mpAccumulator directly so eax keeps GetElapsedTimeFloat's return; x87 fild/fmul/fadd/fstp reproduced; difftest PASS (400 valid inputs, 100.0% coverage); frame differs (edi saved)
 00a24bf0  15  RDD::FindAndCall3: complete behaviour; extra 8-byte frame reservation (fild temp placed in-frame vs original arg area); body byte-identical otherwise
+00a24cb0  122 RDD::FindAndCall4: complete; ScopedTimer at +0x5c (ctor/dtor accumulate), FindById plus the two vtable calls reproduced; difftest WEAK (182 valid inputs, 71.9% coverage, no mismatch; rest discarded on the harness WaitForSingleObject import / pool-limit faults); non-exact codegen
+00a24d60  96  RDD::FindAndCall5: complete; ScopedTimer at +0x5c (ctor/dtor accumulate), FindById plus the vtable call reproduced; difftest WEAK (193 valid inputs, 72.9% coverage, no mismatch; rest discarded on the harness WaitForSingleObject import / pool-limit faults); non-exact codegen

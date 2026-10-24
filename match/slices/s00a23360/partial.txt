@@ -1,4 +1,2 @@
 # va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a24210  -   RBTree::Assign stub (opaque inlined EASTL slist/tree copy-merge template); body not implemented
-00a24cb0  -   RDD::FindAndCall4 approximated; difftest FAIL (execution)
-00a24d60  -   RDD::FindAndCall5 approximated; difftest FAIL (execution)

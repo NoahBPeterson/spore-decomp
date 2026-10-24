@@ -596,9 +596,7 @@ u32 __cdecl ParseResman(const char* param_1, u8* param_2)
 // @ 0x00a24900
 void ProfileTimer::Accumulate()
 {
-    long long e = sw.GetElapsedTimeFloat();
-    float* acc = (float*)mpAccumulator;
-    *acc = (float)e * sw.mfCyclesToUnitsCoefficient + *acc;
+    *(float*)mpAccumulator = (float)sw.GetElapsedTimeFloat() * sw.mfCyclesToUnitsCoefficient + *(float*)mpAccumulator;
 }
 
 // @ 0x00a24930
@@ -672,8 +670,7 @@ long long __thiscall RDD::FindAndCall3(void* id, void* a, void* b, void* c, void
 // @ 0x00a24cb0
 void* __thiscall RDD::FindAndCall4(void* id)
 {
-    ProfileTimer local((void*)&this->mTimer);
-    (void)local;
+    ScopedTimer timer((float*)((char*)this + 0x5c));
     void* p = FindById(id);
     void* r = 0;
     if (p) {
@@ -687,8 +684,7 @@ void* __thiscall RDD::FindAndCall4(void* id)
 // @ 0x00a24d60
 long long __thiscall RDD::FindAndCall5(void* id)
 {
-    ProfileTimer local((void*)&this->mTimer);
-    (void)local;
+    ScopedTimer timer((float*)((char*)this + 0x5c));
     void* p = FindById(id);
     int r = 0;
     if (p) {
