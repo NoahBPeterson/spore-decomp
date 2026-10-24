@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+# (no /EHsc: the region has no EH prologues, matching the sibling slices)
+slices/s00d26790/s00d26790.cpp  ?FUN_00d272e0@cCamView@@QAEXXZ  00d272e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
