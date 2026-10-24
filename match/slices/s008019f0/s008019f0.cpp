@@ -25,7 +25,7 @@ bool __stdcall Sub_8026e0(void* info);
 
 // the cursor map's rbtree interface (external instantiations)
 struct MapBase {
-  void Find(uint32_t* key, void** outIter);   // 0x00E5C780
+  void Find(void** outIter, const uint32_t* key);   // 0x00E5C780
   void Erase(void** outIter, void* node);     // 0x00801E90
   void NukeSubtree(void* node);               // 0x00801EF0
 };
@@ -33,8 +33,8 @@ struct MapBase {
 // the wide-string allocator used by the node value
 struct WStr {
   void AllocateSelf(int n);                              // 0x00429760
-  void DoInsertValue(void* dst, const void* src, unsigned n);  // 0x011E0744
 };
+void __cdecl DoInsertValue(void* dst, const void* src, unsigned n);  // 0x011E0744
 
 // node construction (this = destination node)
 struct RbtreeNode { void* DoCreateNode(void* value); };  // 0x00801C80
@@ -68,7 +68,7 @@ struct CurMgr {
   bool FindCanvasAdj(uint32_t k);  // 0x00801c70
   bool Remove(uint32_t k);         // 0x008024e0
   void Refresh();                  // 0x008027e0
-  bool DestroyEntry(void* it);     // 0x008027a0
+  __declspec(noinline) bool DestroyEntry(void* it);     // 0x008027a0
   bool CheckEntry(void* it);       // 0x00802850
 };
 
@@ -112,24 +112,23 @@ bool CurMgr::FindCanvasAdj(uint32_t k) {
 
 // @ 0x00801c10
 bool CurMgr::FindCanvas(uint32_t k) {
-  void* it = 0;
-  ((MapBase*)((char*)this + 0xc))->Find(&k, &it);
-  void* found = (it == (char*)this + 0x10) ? 0 : (char*)it + 0x14;
-  if (found != *(void**)((char*)this + 0x34)) {
+  uint32_t key = k;
+  void* it;
+  ((MapBase*)((char*)this + 0xc))->Find(&it, &key);
+  void* found = (it != (void*)((char*)this + 0x10)) ? (void*)((char*)it + 0x14) : 0;
+  if (found && found != *(void**)((char*)this + 0x34)) {
     *(void**)((char*)this + 0x34) = found;
-    if (found)
-      this->Refresh();
+    this->Refresh();
   }
   return found != 0;
 }
 
 // @ 0x00801bb0
 bool CurMgr::FindLocal(uint32_t k) {
-  void* it = 0;
-  ((MapBase*)((char*)this + 0xc))->Find(&k, &it);
-  if (it == (char*)this + 0x10)
-    return false;
-  void* found = (char*)it + 0x14;
+  uint32_t key = k;
+  void* it;
+  ((MapBase*)((char*)this + 0xc))->Find(&it, &key);
+  void* found = (it != (void*)((char*)this + 0x10)) ? (void*)((char*)it + 0x14) : 0;
   if (found && found != *(void**)((char*)this + 0x2c)) {
     *(void**)((char*)this + 0x2c) = found;
     this->Refresh();
@@ -139,13 +138,13 @@ bool CurMgr::FindLocal(uint32_t k) {
 
 // @ 0x00801b60
 bool CurMgr::FindGlobal(uint32_t k) {
-  void* it = 0;
-  ((MapBase*)((char*)this + 0xc))->Find(&k, &it);
-  void* found = (it == (char*)this + 0x10) ? 0 : (char*)it + 0x14;
+  uint32_t key = k;
+  void* it;
+  ((MapBase*)((char*)this + 0xc))->Find(&it, &key);
+  void* found = (it != (void*)((char*)this + 0x10)) ? (void*)((char*)it + 0x14) : 0;
   if (found != *(void**)((char*)this + 0x30)) {
     *(void**)((char*)this + 0x30) = found;
-    if (found)
-      this->Refresh();
+    this->Refresh();
   }
   return found != 0;
 }
@@ -179,20 +178,22 @@ set:
 
 // @ 0x008024e0
 bool CurMgr::Remove(uint32_t k) {
-  void* it = 0;
-  ((MapBase*)((char*)this + 0xc))->Find(&k, &it);
-  if (it == (char*)this + 0x10)
-    return false;
-  void* info = (char*)it + 0x14;
-  if (info == *(void**)((char*)this + 0x30)) *(void**)((char*)this + 0x30) = 0;
-  if (info == *(void**)((char*)this + 0x2c)) *(void**)((char*)this + 0x2c) = 0;
-  if (info == *(void**)((char*)this + 0x38)) *(void**)((char*)this + 0x38) = 0;
-  if (info == *(void**)((char*)this + 0x34)) *(void**)((char*)this + 0x34) = 0;
-  bool r = this->DestroyEntry(it);
-  void* out = 0;
-  ((MapBase*)((char*)this + 0xc))->Erase(&out, it);
-  if (*(uint8_t*)((char*)this + 0x40) && *(void**)((char*)this + 0x38) != 0)
-    this->Refresh();
+  uint32_t key = k;
+  void* it;
+  ((MapBase*)((char*)this + 0xc))->Find(&it, &key);
+  bool r = false;
+  if (it != (void*)((char*)this + 0x10)) {
+    void* info = (char*)it + 0x14;
+    if (info == *(void**)((char*)this + 0x30)) *(void**)((char*)this + 0x30) = 0;
+    if (info == *(void**)((char*)this + 0x2c)) *(void**)((char*)this + 0x2c) = 0;
+    if (info == *(void**)((char*)this + 0x38)) *(void**)((char*)this + 0x38) = 0;
+    if (info == *(void**)((char*)this + 0x34)) *(void**)((char*)this + 0x34) = 0;
+    r = this->DestroyEntry(it);
+    void* out = 0;
+    ((MapBase*)((char*)this + 0xc))->Erase(&out, it);
+    if (*(uint8_t*)((char*)this + 0x40) && *(void**)((char*)this + 0x38) != 0)
+      this->Refresh();
+  }
   return r;
 }
 
@@ -208,11 +209,14 @@ bool CurMgr::DestroyEntry(void* it) {
   return r;
 }
 
-// @ 0x00802850
+// @ 0x00802850  ecx carries the cursor manager into 0x008026e0 (thiscall form)
+struct CurMgrStub { bool chk_008026e0(void* info); };
 bool CurMgr::CheckEntry(void* it) {
-  if (it == (char*)this + 0x10)
+  if (it == (void*)((char*)this + 0x10))
     return false;
-  return Sub_8026e0((char*)it + 0x14);
+  bool r = ((CurMgrStub*)(void*)this)->chk_008026e0((char*)it + 0x14);
+  _ReadWriteBarrier();
+  return r;
 }
 
 // ---------------------------------------------------------------------------
@@ -479,11 +483,11 @@ void* RbtreeNode::DoCreateNode(void* arg) {
   *(void**)node = 0;
   *(void**)((char*)node + 4) = 0;
   *(void**)((char*)node + 8) = 0;
-  const void* src = *(void**)arg;
-  int n = (*(int*)((char*)arg + 4) - (int)src) >> 1;
+  const wchar_t* src = *(const wchar_t**)arg;
+  int n = (int)(*(const wchar_t**)((char*)arg + 4) - src);
   ((WStr*)node)->AllocateSelf(n + 1);
   void* dst = *(void**)node;
-  ((WStr*)node)->DoInsertValue(dst, src, n * 2);
+  DoInsertValue(dst, (const void*)src, n * 2);
   void* end = (char*)dst + n * 2;
   *(void**)((char*)node + 4) = end;
   *(uint16_t*)end = 0;
@@ -536,7 +540,7 @@ struct CursorTable {
 uint32_t CursorTable::AddCursor(void* self, uint32_t id, const wchar_t* name, char load, int a, int b) {
   void* it = 0;
   uint32_t key = id;
-  ((MapBase*)((char*)self + 0xc))->Find(&key, &it);
+  ((MapBase*)((char*)self + 0xc))->Find(&it, &key);
   if (it != (char*)self + 0x10)
     return 0;
   (void)name; (void)load; (void)a; (void)b;

@@ -4,3 +4,7 @@ slices/s008019f0/s008019f0.cpp  ?NukeSubtree@MapBase@@QAEXPAX@Z  00801ef0  /O2 /
 slices/s008019f0/s008019f0.cpp  ?Shutdown@CurMgr@@QAE_NXZ        00802680  /O2 /MD /Gy /TP /arch:SSE2
 slices/s008019f0/s008019f0.cpp  ?f@C_802870@@QAEII@Z             00802870  /O2 /MD /Gy /TP /arch:SSE2
 slices/s008019f0/s008019f0.cpp  ?Sub_8028e0@@YI_NPAX@Z           008028e0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s008019f0/s008019f0.cpp  ?FindGlobal@CurMgr@@QAE_NI@Z     00801b60  /O2 /MD /Gy /TP /arch:SSE2
+slices/s008019f0/s008019f0.cpp  ?FindLocal@CurMgr@@QAE_NI@Z      00801bb0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s008019f0/s008019f0.cpp  ?FindCanvas@CurMgr@@QAE_NI@Z     00801c10  /O2 /MD /Gy /TP /arch:SSE2
+slices/s008019f0/s008019f0.cpp  ?CheckEntry@CurMgr@@QAE_NPAX@Z   00802850  /O2 /MD /Gy /TP /arch:SSE2
