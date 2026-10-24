@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s009d46d0: 0/2 new functions byte-exact (the pre-existing 009d49b0 row is unchanged).
+009d46d0  525  Cam::UpdateOrbit; complete reconstruction (enable-flag block with sub_9cede0 + sin/cos(fec) rotation, EasePhase on f94/f90, the cos/sin lift of ((f88+1)*0.5*pi), max(|161c|*g_15514e0, |1604..160c|) extent through sub_9cf740, then f98 blend and 1/(f104-f100)*fa4 scaling into fb4); cl spills the spin locals differently and picks other xmm registers
+009d52f0  539  Cam::UpdateSpin; complete reconstruction (obj->1638*step*driveX spin rotation of px/py, drive offsets, g_166c6b0/g_166c6b1 damp flags with the Bias 0.349/1.395 curve on ff0, sub_9cede0/sub_9d3530/sub_9cf740 blend with the 1e-6 sign of f7c); retail keeps the whole function in xmm4-xmm7 with an unmaterialised spin product, the reconstruction spills it to the stack
+009d46d0  equiv  FAIL: 65.4% coverage, 5/32 valid inputs (the enable-flag block reads two handles that the harness leaves unmapped); first diff in the fb4 orbit-velocity output
+009d52f0  equiv  FAIL: 55.7% coverage; the function-local statics (0x349/1.395 at 0x0166c6a4/0x0166c6a8) are never initialised in the reconstruction because their init guard lives in a different TU order

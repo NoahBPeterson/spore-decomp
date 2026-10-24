@@ -61,13 +61,17 @@ struct Obj {
     float f1604, f1608, f160c;
     char pad1610[0x161c - 0x1610];
     float f161c;
+    char pad1620[0x1638 - 0x1620];
+    float f1638;
 };
 struct Params {
     char pad00[0x7c];
     float f7c, f80, f84, f88;
     char pad8c[4];
     float f90, f94, f98;
-    char pad9c[0xf8 - 0x9c];
+    char pad9c[0xa4 - 0x9c];
+    float fa4;                     // 0xa4 zoom scale
+    char padA8[0xf8 - 0xa8];
     float ff8;
 };
 
@@ -81,15 +85,20 @@ struct Cam {
     void* p64; void* p68;          // 0x64
     char pad6c[0x78 - 0x6c];
     float f78, f7c, f80, f84;      // 0x78
-    char pad88[0xc0 - 0x88];
+    char pad88[0xb4 - 0x88];
+    Vec3 fb4;                      // 0xb4  orbit velocity result
     float fc0; float pad_c4; Obj* obj; float pad_cc;   // 0xc0
     Vec3 d;                        // 0xd0
     Vec3 off;                      // 0xdc
     float fe8, fec, ff0, ff4, ff8, ffc;                // 0xe8
+    float f100, f104;              // 0x100 zoom range
 
     Vec3* sub_9cede0(Vec3* out, float t);            // thiscall, ret 8
     float sub_9cf740(Params* p, float ext);          // thiscall, ret 8, st0
     void Update(Params* p, int unused, float t);     // @ 0x009d49b0, ret 0xc
+    void UpdateOrbit(Params* p);                     // @ 0x009d46d0, ret 4
+    void UpdateSpin(Params* p, float step, float blend, float spinRate,
+                    float driveX, float driveY, float driveZ);        // @ 0x009d52f0
 };
 
 // @ 0x009d49b0
@@ -226,5 +235,125 @@ void Cam::Update(Params* p, int unused, float t) {
         y = Y * t + y * it;
         z = oz + z * it;
         ff0 = ff0 * it + vt;
+    }
+}
+
+// ---- 009d46d0: orbit-velocity update driven by the target's phase parameters ----------------
+// The "ease" of a phase parameter: values inside [-1,1) are shifted to [0,2), negative values
+// past -1 clamp to 0 and positive values past 1 are squared.
+static __forceinline float EasePhase(float x)
+{
+    if (fabs(x) < 1.0f)
+        return x + 1.0f;
+    if (0.0f <= x)
+        return (float)pow((double)x, 2.0);
+    return 0.0f;
+}
+
+// @ 0x009d46d0
+void Cam::UpdateOrbit(Params* p)
+{
+    if (g_15515dc && p64 && p68) {
+        Vec3 out;
+        sub_9cede0(&out, (1.0f - f78) * g_155125c);
+        float ex = d.x * out.x;
+        float ey = d.y * (out.y - -1.0f);
+        py = ey;
+        pz = d.z * out.z;
+        px = ex;
+        float s = sin(fec);
+        float c = cos(fec);
+        px = ex * c + ey * s;
+        py = ey * c - ex * s;
+        pz = pz;
+    }
+
+    float phaseA = EasePhase(p->f94);
+    float phaseB = EasePhase(p->f90);
+
+    double ang = ((p->f88 + 1.0f) * 0.5f) * 3.1415927;
+    float lift = (float)(cos(ang) * p->f88) * phaseA;
+    float swerve = -((float)(sin(ang) * p->f88) * phaseB);
+
+    float extFlag = fabs(obj->f161c) * g_15514e0;
+    float extPos = sqrt(obj->f1604 * obj->f1604 + obj->f1608 * obj->f1608 +
+                        obj->f160c * obj->f160c);
+    float extent = (extFlag <= extPos) ? extPos : extFlag;
+    float radius = sub_9cf740(p, extent);
+    ff4 = radius;
+
+    swerve = p->f98 * lift + swerve;
+
+    float halfTurn = cos(p->f88 * 1.5707964f);
+    float scale = (1.0f / (f104 - f100)) * p->fa4;
+    fb4.x = (d.x * swerve) * scale;
+    fb4.y = (d.y * swerve) * scale;
+    fb4.z = (d.z * swerve + (radius / (1.0f - halfTurn)) * lift) * scale;
+}
+
+// ---- 009d52f0: spin/dead-stop update --------------------------------------------------------
+// Global tuning flags shared with the camera driver.
+extern char g_166c6b0;       // force full damping
+extern char g_166c6b1;       // freeze the spin
+
+// @ 0x009d52f0
+void Cam::UpdateSpin(Params* p, float step, float blend, float spinRate,
+                     float driveX, float driveY, float driveZ)
+{
+    float scale = obj->f1638;
+    float spin = (scale * step) * spinRate;
+    float s = sin(spin);
+    float c = cos(spin);
+
+    float ox = px;
+    float oy = py;
+    px = (py * s + px * c) - (driveX * step) * scale;
+    py = (py * c - ox * s) - (driveY * step) * scale;
+    pz = f84 - (driveZ * step) * scale;
+
+    float damp = 1.0f;
+    if (g_166c6b1)
+        damp = 0.0f;
+    if (g_166c6b0)
+        damp = 1.0f;
+    if (!g_166c6b1 && !g_166c6b0) {
+        static const float s_spinMin = 0.349f;
+        static const float s_spinMax = 1.395f;
+        damp = FUN_009cdbe0(fabs(ff0), s_spinMin, s_spinMax, 1.0f, 0.0f);
+    }
+    ff0 = ff0 - damp * spin;
+
+    if (g_15515dc && p64 && p68) {
+        Vec3 out;
+        float one = 1.0f;
+        sub_9cede0(&out, (one - (one - blend) * f78) * g_155125c);
+
+        float ext = ((ExtentSrc*)obj->ext)->sub_9d3530();
+        float radius = sub_9cf740(p, ext);
+        ff4 = radius;
+
+        x = x - px;
+        y = y - py;
+        z = z - pz;
+
+        float sign;
+        if (1e-6f <= f7c) {
+            if (f7c <= 1e-6f)
+                sign = 0.0f;
+            else
+                sign = 1.0f;
+        } else {
+            sign = -1.0f;
+        }
+        out.x = (radius * sign) * out.x;
+
+        float fy = ((out.y - blend * 2.0f) + 1.0f) * d.y;
+        py = fy * c - out.x * s;
+        pz = pz;
+        float fx = out.x * c + fy * s;
+        px = fx;
+        x = fx + x;
+        y = py + y;
+        z = (out.z * ff4 + pz) + z;
     }
 }
