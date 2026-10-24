@@ -7,7 +7,7 @@
 // stubs
 // ---------------------------------------------------------------------------
 struct S99d060 { void f(); };
-extern void FUN_009a1d90(int, float, int, int);
+extern float FUN_009a1d90(int, float, int, int);
 extern int  FUN_009a1c20(int, int, int);
 extern int  FUN_0067cb20();
 extern int  FUN_921580(int);
@@ -17,18 +17,22 @@ extern void FUN_f47380(void*);
 
 struct S9a1b00 { int f(int, int); };
 struct S9a2f80 { int f(int, int); };
-struct S9a3760 { void f(int*, unsigned*); };
-struct S9a3820 { void f(int*, unsigned*); };
+struct S9a3760 { int* f(int*, unsigned*); };
+struct S9a3820 { int* f(int*, unsigned*); };
 struct S9a3c40 { void f(void*); };
 struct Rbtree99 { int find(int*, int*); };
 struct S9a1770 { void f(int); };
+// Not defined in this TU: the call is left to the original 009a3080 image.
+// (009a3080 is still a partial skeleton here, so its caller cannot be
+// validated against our approximation.)
+struct S9a3080Call { void f(int); };
 struct S9a2d50 { void f(int, int, int); };
 struct S9a3080 { void f(int); };
 struct S99f0b0 { void f(); };
 struct S9c4cc0 { void f(); };
 struct S9a35b0 { void f(); };
 struct S9a3630 { int f(); };
-struct S9a2cc0 { bool f(int); };
+extern bool FUN_009a2cc0(void*, int);
 struct S9a2fd0 { void f(unsigned); };
 extern void FUN_009a80e0(void*);
 extern int  FUN_009a1530();
@@ -46,6 +50,26 @@ struct S9a3980 { void f(int*, char*, unsigned*, char); };
 struct S9a3a10 { void f(int*, int, unsigned*, char); };
 struct S9a38f0 { bool f(int, int, int*); };
 struct S9a34a0 { S9a34a0* f(); };
+
+// rbtree node (EASTL rbtree_node layout)
+struct RbNode {
+  RbNode*  left;    // +0x00
+  RbNode*  right;   // +0x04
+  RbNode*  parent;  // +0x08
+  int      color;   // +0x0c
+  unsigned key0;    // +0x10
+  unsigned key1;    // +0x14
+};
+// rbtree container header; anchor occupies +0x04 (anchor.parent == root)
+struct RbTree {
+  int      field0;  // +0x00
+  RbNode   anchor;  // +0x04
+};
+// animation object as seen by FUN_009a2c90
+struct S9a2c90Obj {
+  unsigned char unknown[0xb0];
+  double        fieldB0;  // +0xb0
+};
 
 // ---------------------------------------------------------------------------
 // @ 0x009a3890
@@ -123,7 +147,7 @@ __declspec(noinline) void S9a3a10::f(int* out, int node, unsigned* key, char par
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x009a34a0  animation-object init
+// @ 0x009a34a0  S9a34a0::f: animation-object init
 // ---------------------------------------------------------------------------
 __declspec(noinline) S9a34a0* S9a34a0::f() {
   char* self = (char*)this;
@@ -140,29 +164,48 @@ __declspec(noinline) S9a34a0* S9a34a0::f() {
   *(float*)(self + 0xa8) = 1.0f;
   *(int*)(self + 0xc8) = 0; *(int*)(self + 0xcc) = 0; *(int*)(self + 0xd0) = 0;
   *(int*)(self + 0xdc) = 0;
-  ((S9a3080*)self)->f(1);
+  ((S9a3080Call*)self)->f(1);
   return this;
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x009a2cc0
+// @ 0x009a2cc0  FUN_009a2cc0: animation object init
 // ---------------------------------------------------------------------------
-__declspec(noinline) bool S9a2cc0::f(int p2) {
-  char* self = (char*)this;
-  *(unsigned char*)(self + 0xac) = 0;
-  ((S9a1770*)(self + 0xc8))->f(0);
+// animation object; only the fields touched here are named.
+struct S9a2cc0Obj {
+  void*    field00;      // +0x00  (pointer checked for null)
+  int      pad04[2];     // +0x04
+  int      field0c;      // +0x0c
+  int      field10;      // +0x10
+  int      field14;      // +0x14
+  int      pad18[0x25];  // +0x18
+  unsigned char fieldAc; // +0xac
+  unsigned char fieldAd; // +0xad
+  unsigned char padAe[2];// +0xae
+  double   fieldB0;      // +0xb0
+  double   fieldB8;      // +0xb8
+  int      fieldC0;      // +0xc0
+  int      fieldC4;      // +0xc4
+  S9a1770  fieldC8;      // +0xc8
+};
+extern int g_15504e0;
+extern int g_166b260;
+__declspec(noinline) bool FUN_009a2cc0(void* self_, int p2) {
+  S9a2cc0Obj* self = (S9a2cc0Obj*)self_;
+  self->fieldAc = 0;
+  self->fieldC8.f(0);
   FUN_009a80e0(self);
-  if (*(int*)self == 0) return false;
-  *(int*)(self + 0xc) = p2;
-  *(int*)(self + 0x10) = g_15504e0;
+  if (self->field00 == 0) return false;
+  self->field0c = p2;
+  self->field10 = g_15504e0;
   g_15504e0 += 1;
-  *(int*)(*(int*)self + 0x12c) = g_166b260;
+  *(int*)((char*)self->field00 + 0x12c) = g_166b260;
   g_166b260 += 1;
-  *(double*)(self + 0xb0) = 0.0;
-  *(int*)(self + 0xc0) += 1;
-  *(unsigned char*)(self + 0xac) = 1;
-  *(int*)(self + 0xc4) = 0;
-  FUN_009a1d90((int)(size_t)self, 0.0f, 1, 1);
+  self->fieldB0 = 0.0;
+  self->fieldC0 += 1;
+  self->fieldAc = 1;
+  self->fieldC4 = 0;
+  (void)FUN_009a1d90((int)(size_t)self, 0.0f, 1, 1);
   return true;
 }
 
@@ -257,10 +300,11 @@ __declspec(noinline) void FUN_009a36f0(int* arr, int start, int end, int pos, in
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x009a2c90  add a double field and forward to FUN_009a1d90
+// @ 0x009a2c90  FUN_009a2c90: add a double field and forward to FUN_009a1d90
 // ---------------------------------------------------------------------------
-__declspec(noinline) void FUN_009a2c90(int a, float b, int c, int d) {
-  FUN_009a1d90(a, b + (float)*(double*)(a + 0xb0), c, d);
+__declspec(noinline) float FUN_009a2c90(int a, float b, int c, int d) {
+  S9a2c90Obj* obj = (S9a2c90Obj*)a;
+  return FUN_009a1d90(a, (float)((double)b + obj->fieldB0), c, d);
 }
 
 // ---------------------------------------------------------------------------
@@ -291,20 +335,22 @@ __declspec(noinline) bool FUN_009a3680(int a, int b) {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x009a3760
+// @ 0x009a3760  S9a3760::f: rbtree lower_bound
 // ---------------------------------------------------------------------------
-__declspec(noinline) void S9a3760::f(int* out, unsigned* key) {
-  unsigned k0 = key[0], k1 = key[1];
-  char* head = (char*)this + 4;
-  char* parent = head;
-  char* node = *(char**)((char*)this + 0xc);
-  while (node) {
-    unsigned n0 = *(unsigned*)(node + 0x10);
-    unsigned n1 = *(unsigned*)(node + 0x14);
-    if (k0 > n0 || (k0 == n0 && k1 < n1)) node = *(char**)node;
-    else { parent = node; node = *(char**)(node + 4); }
+__declspec(noinline) int* S9a3760::f(int* out, unsigned* key) {
+  RbTree* t = (RbTree*)this;
+  RbNode* head = &t->anchor;
+  RbNode* parent = head;
+  RbNode* node = head->parent;
+  if (node) {
+    unsigned k0 = key[0], k1 = key[1];
+    do {
+      if (k0 > node->key0 || (k0 == node->key0 && k1 > node->key1)) node = node->left;
+      else { parent = node; node = node->right; }
+    } while (node);
   }
   *out = (int)(size_t)parent;
+  return out;
 }
 
 // ---------------------------------------------------------------------------
@@ -332,24 +378,26 @@ __declspec(noinline) int FUN_009a37e0(int key) {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x009a3820
+// @ 0x009a3820  S9a3820::f: rbtree lower_bound (<=)
 // ---------------------------------------------------------------------------
-__declspec(noinline) void S9a3820::f(int* out, unsigned* key) {
-  unsigned k0 = key[0], k1 = key[1];
-  char* head = (char*)this + 4;
-  char* parent = head;
-  char* node = *(char**)((char*)this + 0xc);
-  while (node) {
-    unsigned n0 = *(unsigned*)(node + 0x10);
-    unsigned n1 = *(unsigned*)(node + 0x14);
-    if (k0 > n0 || (k0 == n0 && k1 < n1)) node = *(char**)node;
-    else { parent = node; node = *(char**)(node + 4); }
+__declspec(noinline) int* S9a3820::f(int* out, unsigned* key) {
+  RbTree* t = (RbTree*)this;
+  RbNode* head = &t->anchor;
+  RbNode* parent = head;
+  RbNode* node = head->parent;
+  if (node) {
+    unsigned k0 = key[0], k1 = key[1];
+    do {
+      if (k0 > node->key0 || (k0 == node->key0 && k1 > node->key1)) node = node->left;
+      else { parent = node; node = node->right; }
+    } while (node);
+    if (parent != head && parent->key0 <= k0 && (parent->key0 < k0 || parent->key1 <= k1)) {
+      *out = (int)(size_t)parent;
+      return out;
+    }
   }
-  if (parent != head && *(unsigned*)(parent + 0x10) <= k0 &&
-      (*(unsigned*)(parent + 0x10) < k0 || *(unsigned*)(parent + 0x14) <= k1))
-    *out = (int)(size_t)parent;
-  else
-    *out = (int)(size_t)head;
+  *out = (int)(size_t)head;
+  return out;
 }
 
 // ---------------------------------------------------------------------------
@@ -360,8 +408,20 @@ __declspec(noinline) void S9a2d50::f(int a, int b, int c) { (void)a; (void)b; (v
 // ---------------------------------------------------------------------------
 // @ 0x009a3080  (413 bytes; skeleton)
 // ---------------------------------------------------------------------------
-volatile int g_op_9a3080;
-__declspec(noinline) void S9a3080::f(int a) { g_op_9a3080 = a; }
+__declspec(noinline) void S9a3080::f(int a) {
+  (void)a;
+  S9a2cc0Obj* self = (S9a2cc0Obj*)this;
+  self->fieldAc = 0;
+  self->fieldAd = 0;
+  self->fieldB0 = 0.0;
+  self->fieldB8 = 0.0;
+  self->fieldC0 = 1;
+  self->fieldC4 = 0;
+  self->field0c = -1;
+  self->field10 = g_15504e0;
+  g_15504e0 = self->field10 + 1;
+  self->field14 = 0;
+}
 
 // ---------------------------------------------------------------------------
 // @ 0x009a3220  (631 bytes; skeleton)
