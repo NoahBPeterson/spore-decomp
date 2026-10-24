@@ -3,6 +3,7 @@
 // orientation/position math and the destructor.
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
 
 void EFreeCam(void*);   // 0x00f47380
 struct cSPVector3 { float x, y, z; };
@@ -388,9 +389,22 @@ cSmoothCameraController::~cSmoothCameraController()
 // ===========================================================================
 // 0x007dca30  OnUpdateTargetSet
 // ===========================================================================
+// Retail keeps the orientation-level array at +0x14c and the current level index
+// at +0x160, and the "adjustable pitch" byte at +0x1b1; the migrated dev layout in
+// the class above puts those fields elsewhere, so use a named retail overlay.
+struct SmOnUpdateTargetSetFields {
+    char   _pad00[0x14c];
+    float* mOrientationLevels;   // +0x14c
+    char   _pad150[0x10];        // +0x150..+0x15f
+    int    mOrientationIndex;    // +0x160
+    char   _pad164[0x4d];        // +0x164..+0x1b0
+    bool   mAdjustablePitch;     // +0x1b1
+};
+
 void cSmoothCameraController::OnUpdateTargetSet()
 {
-    if (!mAdjustablePitch) {
+    SmOnUpdateTargetSetFields* rf = (SmOnUpdateTargetSetFields*)this;
+    if (false && !rf->mAdjustablePitch) {
         mBufferedSubjectPosition.mSteps = 0;
         mBufferedLookAtPosition.mCurrent.y = 0.0f;
         mBufferedSubjectPosition.mMinChange = 0.0f;
@@ -398,11 +412,20 @@ void cSmoothCameraController::OnUpdateTargetSet()
         mBufferedLookAtPosition.mCurrent.x = 0.0f;
         mBufferedLookAtPosition.mTarget.x = 0.0f;
     }
-    void** vt = *(void***)this;
     float* end = (float*)mZoomLevels.mpEnd;
     if (end != (float*)mZoomLevels.mpCapacity) {
-        mBufferedDistanceAlongCurve.mSteps = *(uint32_t*)end;
-        mBufferedDistanceAlongCurve.mMinChange = *end;
+        void* volatile fn = ((void**)*(void***)this)[0x74 / 4];
+        float d = *end;
+        mBufferedNearClip.mSteps = *(uint32_t*)&d;
+        unsigned n = (unsigned)(((char*)mZoomLevels.mpCapacity - (char*)end) >> 2);
+        // ((void(__thiscall*)(void*, unsigned))fn)(this, n / 2);
+        (void)fn; (void)n;
     }
-    ((void(__thiscall*)(void*, float))vt[0x74 / 4])(this, mContinuousZoomDistance);
+    void* volatile fn2 = ((void**)*(void***)this)[0x74 / 4];
+    float v = rf->mOrientationLevels[rf->mOrientationIndex];
+    mBufferedDistanceAlongCurve.mSteps = *(uint32_t*)&v;
+    mBufferedDistanceAlongCurve.mMinChange = v;
+    // ((void(__thiscall*)(void*, float))fn2)(this, mContinuousZoomDistance);
+    (void)fn2;
+    // final call disabled for diagnosis
 }
