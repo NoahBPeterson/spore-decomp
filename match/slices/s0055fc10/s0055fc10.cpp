@@ -6,11 +6,13 @@ namespace SP {
 
 // --------------------------------------------------------------------------
 // Helper call targets still used by the pre-existing sibling functions below.
+// The reworked slots call these exactly like the retail thiscall helpers: the
+// receiver goes in ecx, so they are spelled __fastcall(this, dummy, ...).
 void FUN_00564960(void* out, void* val);
-void FUN_005631e0(void* self, void* out);
-void FUN_00562280(void* self, void* c);
-void FUN_004769b0(void* a, void* b);
-void FUN_00561cc0(void* self);
+int __fastcall FUN_005631e0(void* self, int dummy, void* key);   // thiscall: FindAssetIndex(key) -> int
+void __fastcall FUN_00562280(void* self, int dummy, void* vec, void* c); // thiscall: FindMatching(&vec, c)
+void __fastcall FUN_004769b0(void* self, int dummy, void* first, void* last); // thiscall: SimpleVector::erase
+void __fastcall FUN_00561cc0(void* self, int dummy);              // thiscall: no args
 
 struct EcxStubFc {
     void FUN_0055fed0();
@@ -322,15 +324,14 @@ void FUN_0055fe60(void* this_, unsigned key, unsigned value) {
 // @ 0x0055fed0
 void EcxStubFc::FUN_0055fed0() {
     void* this_ = this;
-    FUN_004769b0(*(void**)((char*)this_ + 0x64), *(void**)((char*)this_ + 0x68));
-    FUN_00561cc0(this_);
+    FUN_004769b0((char*)this_ + 0x64, 0, *(void**)((char*)this_ + 0x64), *(void**)((char*)this_ + 0x68));
+    FUN_00561cc0(this_, 0);
 }
 
 // @ 0x00560880
 bool EcxStubFc::FUN_00560880(void* key, unsigned* out) {
     void* this_ = this;
-    int index = 0;
-    FUN_005631e0(this_, &index);
+    int index = FUN_005631e0(this_, 0, key);
     if (index == -1)
         return false;
     char* asset = (char*)(index * 0x50 + *(int*)((char*)this_ + 0x14));
@@ -341,8 +342,8 @@ bool EcxStubFc::FUN_00560880(void* key, unsigned* out) {
 // @ 0x005608d0
 bool EcxStubFc::FUN_005608d0(uint32_t* key, void* c) {
     void* this_ = this;
-    FUN_004769b0(*(void**)((char*)this_ + 0x144), *(void**)((char*)this_ + 0x148));
-    FUN_00562280((char*)this_ + 0x144, c);
+    FUN_004769b0((char*)this_ + 0x144, 0, *(void**)((char*)this_ + 0x144), *(void**)((char*)this_ + 0x148));
+    FUN_00562280(this_, 0, (char*)this_ + 0x144, c);
     uint32_t* it = *(uint32_t**)((char*)this_ + 0x144);
     uint32_t* end = *(uint32_t**)((char*)this_ + 0x148);
     for (; it != end; ++it) {
