@@ -1,0 +1,2 @@
+00c34140 ?Reset_34140@cEmpire@SP@@QAEXXZ  # SP::cEmpire star-registry reset (erases mStars +0x88 and mNextStarTowardsHome +0x9c, releases mpCityMusic +0x104 through vtable slot 4); byte-exact MATCH (unnamed in pdb_names)
+00c34710 ?Resize_34710@EVec@@QAEXIPAX@Z  # eastl vector resize(n, value): grow via DoInsertValueN (0xbabb70) when n > size(), else erase (0xe25bd0); byte-exact MATCH (unnamed in pdb_names)
