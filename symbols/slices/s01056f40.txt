@@ -1,0 +1,5 @@
+01056f40 ?DefaultProjectile_StartTool@@YG_NPAVcSPToolStrategy@@PBUVector3@@PAX@Z  # bool DefaultProjectile_StartTool(cSPToolStrategy*, const Vector3*, void*)  (SP::cSPDefaultProjectileWeapon::StartTool)
+01057210 ?TurretDefenseMissile_StartTool@@YG_NPAVcSPToolStrategy@@PBUVector3@@PAX@Z  # bool TurretDefenseMissile_StartTool(cSPToolStrategy*, const Vector3*, void*)  (SP::cSPTurretDefenseMissileWeapon::StartTool)
+01057460 ?TurretFlak_StartTool@@YG_NPAVcSPToolStrategy@@PBUVector3@@PAX@Z  # bool TurretFlak_StartTool(cSPToolStrategy*, const Vector3*, void*)  (SP::cSPTurretFlakWeapon::StartTool)
+01057990 ?DragInputProjectile_StartTool@@YG_NPAVcSPToolStrategy@@PBUVector3@@PAX@Z  # bool DragInputProjectile_StartTool(cSPToolStrategy*, const Vector3*, void*)  (SP::cSPDragInputProjectileToolStrategy::StartTool)
+01057bd0 ?PlaceObject_CanUseTool@@YG_NPAVcSPPlaceObjectToolStrategy@@_NPAH@Z  # bool PlaceObject_CanUseTool(cSPPlaceObjectToolStrategy*, bool, int*)  (SP::cSPPlaceObjectToolStrategy::CanUseTool)
