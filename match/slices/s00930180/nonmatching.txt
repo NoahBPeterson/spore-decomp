@@ -5,6 +5,6 @@
 00930a30  105  complete: separator normalizer now returns dst (arg1) in eax like the original (was void); redundant ':' test not reproduced; equiv PASS (400 valid, 100% cov); flags /O2 /MD /Gy /EHsc /TP
 00930ab0  212  complete: IsSubdirectory logic reproduced, register layout differs
 00930ba0  61   complete: first-not-in-set scan; loop shape differs
-00930cb0  92   complete: extension copy; indexing form differs
-00930fc0  215  complete: ReplacePathComponent; SafeReplace arg register order differs
+00930cb0  92   Complete: GetFileName copies the name component. Equivalence PASS (245/400 valid, 100% cov; the src/game/UTFSpore_Win32/EAFilePath.cpp mirror also PASSes). The body was reading the splitter's extension out-pointer; retail reads the pointer stored in the third out-argument slot (the name, same component AppendDirectory/GetDriveAndDirectory use). The instruction schedule still differs from the original (mine 104B vs 97B).
+00930fc0  246  Complete: ReplacePathComponent reproduces the shared component array and retail's argument-slot reuse. Equivalence PASS (212/400 valid, 100% cov; the src/game/UTFSpore_Win32/EAFilePath.cpp mirror also PASSes). Three defects were fixed: the destination components are looked up by param_2/param_3 in the {path,dir,name,ext,null} array instead of being hardcoded to dir/name; the source side defaults to src/0 (not null/null) when flag is false; and retail's second SplitPathPtrs passes the three dead argument slots (param_3, src, flag) as out-pointers, so the array's out-of-range neighbours 7, 8 and 9 alias ext, name and dir -- modelled explicitly for the unvalidated component indices. Mine 247B vs 217B.
 00931250  287  complete: filename sanitizer reproduces behavior, string class differs

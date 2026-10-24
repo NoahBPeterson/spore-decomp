@@ -793,9 +793,11 @@ uint32 FilePath_s0093_0180::GetFileName(wchar_t* buffer, uint32 maxLen)
     const wchar_t* b;
     const wchar_t* c;
     SplitPathPtrs(mPath, &a, &b, &c);
-    uint32 n = (uint32)wcslen(c);
+    // The name component, not the extension: retail reads the pointer that the
+    // splitter stored for its third out-parameter (the name) at [esp+0xc].
+    uint32 n = (uint32)wcslen(b);
     if (n < maxLen) {
-        VectorDoInsertValue(buffer, c, n * 2);
+        VectorDoInsertValue(buffer, b, n * 2);
         *(wchar_t*)(n * 2 + (int)buffer) = 0;
     }
     return n;
@@ -871,9 +873,16 @@ void FilePath_s0093_0180::AppendDirectory()
 namespace EA { namespace IO {
 void FilePath_s0093_0180::ReplacePathComponent(int param_2, int param_3, const wchar_t* src, bool flag)
 {
-    const wchar_t* comp[4];
-    comp[0] = 0; comp[1] = 0; comp[2] = 0; comp[3] = 0;
-    const wchar_t* pFVar4 = 0;
+    // comp[] = { whole path, directory, name, extension, null }.  Both the source
+    // and the destination side are addressed by the requested component index
+    // (index 4 is a permanent null, which is how FUN_00931100 strips a component:
+    // ReplacePathComponent(2, 4, ...)).  The source components are read before the
+    // destination split overwrites the same array.
+    const wchar_t* comp[5];
+    comp[0] = 0; comp[1] = 0; comp[2] = 0; comp[3] = 0; comp[4] = 0;
+    // When flag is false the source side of the replace is the path itself and
+    // its end is a null (retail keeps src in esi and zero in edi across the call).
+    const wchar_t* pFVar4 = src;
     const wchar_t* pFVar5 = 0;
 
     if (flag) {
@@ -883,9 +892,9 @@ void FilePath_s0093_0180::ReplacePathComponent(int param_2, int param_3, const w
         pFVar5 = comp[param_3];
     }
 
-    const wchar_t* q0 = 0, *q1 = 0, *q2 = 0, *q3 = 0;
-    SplitPathPtrs(mPath, &q0, &q1, &q2);
-    q3 = mPath;
+    comp[0] = mPath;
+    comp[1] = 0; comp[2] = 0; comp[3] = 0; comp[4] = 0;
+    SplitPathPtrs(mPath, &comp[1], &comp[2], &comp[3]);
     wchar_t uVar3 = 0;
     wchar_t uVar2 = 0;
     if (pFVar5 != pFVar4) {
@@ -894,7 +903,15 @@ void FilePath_s0093_0180::ReplacePathComponent(int param_2, int param_3, const w
         if (param_3 == 2)
             uVar2 = L'\\';
     }
-    SafeReplace((wchar_t*)q0, (wchar_t*)q1, pFVar4, pFVar5, uVar3, uVar2);
+    // Retail hands the second split the three dead argument slots (param_3, src,
+    // flag) as its out-pointers, in reverse: arg4 = param_3 slot gets the extension,
+    // arg3 = src slot gets the name and arg2 = flag slot gets the directory.  So the
+    // array's out-of-range neighbours 7, 8 and 9 hold ext, name and dir.  Component
+    // indices come from the caller unvalidated, so reproduce that aliasing here;
+    // every other index reads the plain array entry.
+    SafeReplace((wchar_t*)((param_2 >= 7 && param_2 <= 9) ? comp[10 - param_2] : comp[param_2]),
+                (wchar_t*)((param_3 >= 7 && param_3 <= 9) ? comp[10 - param_3] : comp[param_3]),
+                pFVar4, pFVar5, uVar3, uVar2);
 }
 }}  // namespace EA::IO
 
