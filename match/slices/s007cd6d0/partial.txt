@@ -1,7 +1,7 @@
-007cdbe0  231  unnamed config helper: stub.
+007cdbe0  10  implemented (see nonmatching.txt): three inline [lo,hi] clamps; equivalence PASS 400/400, 95.6% cov.
 007cdcd0  172  `anonymous namespace'::UpdateFromGroundCoverConfig: stub.
 007cdd80  49  unnamed config helper: stub.
 007cddc0  48  unnamed config helper: stub.
 007cde30  67  unnamed config helper: stub.
 007cdee0  262  vector/matrix transform helper: stub; original scales a 3-vector by a matrix row block and adds a translation when bit 2 of the object flags is set.
-007cdff0  1288 float animation update helper: stub; original integrates a float over time against a limit and steps an animation state machine.
+007cdff0  1169  implemented (see nonmatching.txt): time accumulator + trilinear grid interpolation + element/iface blocks; equivalence PASS 375 valid, 99.7% cov.

@@ -7,7 +7,9 @@
 007cd9c0 unnamed config helper  # not identified
 007cd9d0 eastl uninitialized copy range for pair<u64,AutoRefCount<cPropertyList>>  # copy-constructs 0x10-byte elements and AddRefs slot 0
 007cda70 unnamed config helper  # not identified
-007cdb90 ?cConfigManagerUnnamedB90@@YAXPAX@Z  # cConfigManagerUnnamedB90 migrated from s007cd6d0 (verbatim, slice spelling)
+007cdb90 ?cConfigManagerUnnamedB90@@YANPAM@Z  # random float in [lo,hi], called by UpdateFloatAnim
+007cda70 ?Apply@cAnimXformA@@QAEXPAM@Z  # thiscall transform used by UpdateFloatAnim (slice spelling)
+007cdee0 ?Apply@cAnimXformB@@QAEXPAM@Z  # thiscall transform used by UpdateFloatAnim (slice spelling)
 007cdbe0 unnamed config helper  # not identified
 007cdcd0 ?UpdateFromGroundCoverConfig@@YAXPAX@Z  # UpdateFromGroundCoverConfig migrated from s007cd6d0 (verbatim, slice spelling)
 007cdd80 ?cConfigManagerUnnamedD80@@YAXPAX@Z  # cConfigManagerUnnamedD80 migrated from s007cd6d0 (verbatim, slice spelling)

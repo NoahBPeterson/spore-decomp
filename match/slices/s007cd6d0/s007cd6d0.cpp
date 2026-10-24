@@ -66,7 +66,9 @@ struct ExtConfig {
 };
 struct ExtCommandBase { void Ctor(); };                              // 0x0083c800
 struct ExtCheatManager { void Register(const char*, void*, int); };  // vtable slot 0x18
-struct ExtRandom { double RandomDoubleUniform(); };                  // 0x009360d0
+struct ExtRandom {
+    double RandomDoubleUniform();                                    // 0x009360d0
+};
 
 // The "option" cheat object built by SetupParser: allocated with the EA
 // allocator, base-constructed, then the derived vtable/owner are stored.
@@ -237,15 +239,41 @@ void cConfigManagerS::UnnamedA70(float* v)
 }
 
 // @ 0x007cdb90
-float __cdecl cConfigManagerUnnamedB90(float* param_1)
+__declspec(noinline) double __cdecl cConfigManagerUnnamedB90(float* param_1)
 {
     double lo = param_1[0];
     double hi = param_1[1];
     double v = ((ExtRandom*)0x16778dc)->RandomDoubleUniform() * (hi - lo) + lo;
-    return (float)v;
+    if (v >= hi) return hi;
+    if (v < lo) return lo;
+    return v;
 }
 // @ 0x007cdbe0
-void cConfigManagerUnnamedBE0(void*) {}
+float* __cdecl cConfigManagerUnnamedBE0(float* param_1, void* param_2)
+{
+    float* dst = param_1;
+    float* src = (float*)param_2;
+    double lo, hi, v;
+
+    lo = src[0]; hi = src[3];
+    v = ((ExtRandom*)0x16778dc)->RandomDoubleUniform() * (hi - lo) + lo;
+    if (v >= hi) v = hi;
+    else if (v < lo) v = lo;
+    dst[0] = (float)v;
+
+    lo = src[1]; hi = src[4];
+    v = ((ExtRandom*)0x16778dc)->RandomDoubleUniform() * (hi - lo) + lo;
+    if (v >= hi) v = hi;
+    else if (v < lo) v = lo;
+    dst[1] = (float)v;
+
+    lo = src[2]; hi = src[5];
+    v = ((ExtRandom*)0x16778dc)->RandomDoubleUniform() * (hi - lo) + lo;
+    if (v >= hi) v = hi;
+    else if (v < lo) v = lo;
+    dst[2] = (float)v;
+    return dst;
+}
 // @ 0x007cdcd0
 void UpdateFromGroundCoverConfig(void*) {}
 // @ 0x007cdd80
@@ -256,5 +284,182 @@ void cConfigManagerUnnamedDC0(void*) {}
 void cConfigManagerUnnamedE30(void*) {}
 // @ 0x007cdee0
 void TransformVectorByMatrix(void*, float*) {}
+// ---------------------------------------------------------------- draw/animation
+struct Vec3f { float x, y, z; };
+
+struct cAnimElemData {              // element payload
+    unsigned int mask;              // +0x00
+    char         pad04[0x20 - 4];
+    float        scale;             // +0x20
+};
+
+struct cAnimElem {                  // 0x18-byte entry in the +0x1e4 vector
+    void*         obj;              // +0x00
+    cAnimElemData* data;            // +0x04
+    int           flag;             // +0x08
+    int           offset;           // +0x0c
+    int           pad10[2];         // +0x10
+};
+
+// Grid/volume the animation position is interpolated in.
+struct cAnimGrid {
+    char          pad00[0xcc];
+    Vec3f         base;             // +0xcc
+    char          padD8[0x1b4 - 0xd8];
+    void*         iface1;           // +0x1b4
+    void*         iface2;           // +0x1b8
+    char          pad1BC[1];        // +0x1bc
+    unsigned char b1bd;             // +0x1bd
+    unsigned char b1be;             // +0x1be
+    char          pad1BF[1];        // +0x1bf
+    Vec3f         lo;               // +0x1c0
+    Vec3f         hi;               // +0x1cc
+    char          pad1D8[0x1e4 - 0x1d8];
+    cAnimElem*    vecBegin;         // +0x1e4
+    cAnimElem*    vecEnd;           // +0x1e8
+    char          pad1EC[0x1fc - 0x1ec];
+    int           f1fc;             // +0x1fc
+    char          pad200[0x210 - 0x200];
+    unsigned char b210;             // +0x210
+};
+
+// Third argument: per-call flags/parameters.
+struct cAnimInput {
+    char          pad00[0x08];
+    unsigned int  flags8;           // +0x08
+    char          pad0C[0x64 - 0x0c];
+    float         f64;              // +0x64
+};
+
+// The state object updated by UpdateFloatAnim.
+struct cFloatAnim {
+    char   pad00[0x08];
+    float  time;                    // +0x08
+    float  duration;                // +0x0c
+    Vec3f  pos;                     // +0x10
+    char   pad1C[0x18];             // +0x1c .. +0x33
+    float  f34;                     // +0x34
+    float  f38;                     // +0x38
+    float  f3c;                     // +0x3c
+    float  f40;                     // +0x40
+};
+
+// Out-of-line thiscall transforms on the two subobjects of cAnimGrid.
+struct cAnimXformA { void Apply(float* v); };   // 0x007cda70
+struct cAnimXformB { void Apply(float* v); };   // 0x007cdee0
+
+typedef bool  (__thiscall* FnElem)(void*, void*, void*, void*, int, int, int);
+typedef bool  (__thiscall* FnCheck)(void*, void*);
+typedef float (__thiscall* FnGet)(void*, void*);
+typedef void  (__thiscall* FnOut)(void*, void*, void*);
+
 // @ 0x007cdff0
-void UpdateFloatAnim(void*, void*, float) {}
+bool __cdecl UpdateFloatAnim(cFloatAnim* self, float dt, cAnimInput* in, cAnimGrid* grid)
+{
+    float t = self->time + dt;
+    self->time = t;
+    if (t >= self->duration)
+        return false;
+
+    Vec3f& pos = self->pos;
+    float nx = (pos.x - grid->base.x - grid->lo.x) / (grid->hi.x - grid->lo.x);
+    float ny = (pos.y - grid->base.y - grid->lo.y) / (grid->hi.y - grid->lo.y);
+    float nz = (pos.z - grid->base.z - grid->lo.z) / (grid->hi.z - grid->lo.z);
+
+    int ix = (int)nx; if (nx < (float)ix) --ix;
+    int iy = (int)ny; if (ny < (float)iy) --iy;
+    int iz = (int)nz; if (nz < (float)iz) --iz;
+
+    if (ix != 0 || iy != 0 || iz != 0) {
+        float fx = nx - (float)ix;
+        float fy = ny - (float)iy;
+        float fz = nz - (float)iz;
+
+        float lx = grid->lo.x + (grid->hi.x - grid->lo.x) * fx;
+        float ly = grid->lo.y + (grid->hi.y - grid->lo.y) * fy;
+        float lz = grid->lo.z + (grid->hi.z - grid->lo.z) * fz;
+
+        pos.x = grid->base.x + lx;
+        pos.y = grid->base.y + ly;
+        pos.z = grid->base.z + lz;
+        // The original reuses this stack slot as the iface2 output buffer, so
+        // its contents survive until that call.
+        Vec3f interp = pos;
+        bool  rangeStored = false;
+        self->f34 = *(float*)0x1485720;
+
+        if (grid->b210 != 0) {
+            cAnimElem* e = grid->vecBegin;
+            cAnimElem* end = grid->vecEnd;
+            int base = grid->f1fc;
+            while (e != end) {
+                if ((e->data->mask & *(unsigned int*)0x153d634) != 0) {
+                    int arg = (e->flag == 0) ? 0 : e->offset + base;
+                    FnElem fn = (FnElem)(*(void***)e->obj)[0x10 / 4];
+                    if (fn(e->obj, &pos, &pos, &lx, 0, arg, 0)) {
+                        float scale = e->data->scale;
+                        if (scale != *(float*)0x1485378) {
+                            pos.x += scale * lx;
+                            pos.y += scale * ly;
+                            pos.z += scale * lz;
+                        }
+                        break;
+                    }
+                }
+                ++e;
+            }
+        }
+
+        if (((in->flags8 >> 5) & 1) != 0 && grid->iface1 != 0) {
+            Vec3f v = pos;
+            if (grid->b1bd != 0)
+                ((cAnimXformB*)((char*)grid + 0x100))->Apply((float*)&v);
+            else
+                ((cAnimXformA*)((char*)grid + 0xc8))->Apply((float*)&v);
+
+            FnCheck chk = (FnCheck)(*(void***)grid->iface1)[0x18 / 4];
+            if (chk(grid->iface1, &v)) {
+                FnGet get = (FnGet)(*(void***)grid->iface1)[0x20 / 4];
+                v.z = get(grid->iface1, &v);
+                float range[2] = { grid->lo.z, grid->hi.z };
+                double r = cConfigManagerUnnamedB90(range);
+                v.z = (float)(r + v.z);
+                rangeStored = true;
+                if (grid->b1bd != 0)
+                    ((cAnimXformA*)((char*)grid + 0x100))->Apply((float*)&v);
+                else
+                    ((cAnimXformB*)((char*)grid + 0xc8))->Apply((float*)&v);
+                pos = v;
+            }
+        }
+
+        if (grid->iface2 != 0) {
+            Vec3f v = pos;
+            if (grid->b1be != 0)
+                ((cAnimXformB*)((char*)grid + 0x100))->Apply((float*)&v);
+            else
+                ((cAnimXformA*)((char*)grid + 0xc8))->Apply((float*)&v);
+
+            FnCheck chk = (FnCheck)(*(void***)grid->iface2)[0x18 / 4];
+            if (chk(grid->iface2, &v)) {
+                float out[4];
+                if (rangeStored) {
+                    out[0] = grid->lo.z;
+                    out[1] = grid->hi.z;
+                    out[2] = interp.z;
+                } else {
+                    out[0] = interp.x;
+                    out[1] = interp.y;
+                    out[2] = interp.z;
+                }
+                FnOut outfn = (FnOut)(*(void***)grid->iface2)[0x2c / 4];
+                outfn(grid->iface2, out, &v);
+                self->f38 = out[0];
+                self->f3c = out[1];
+                self->f40 = out[2];
+                self->f34 = out[3] * self->f34;
+            }
+        }
+    }
+    return true;
+}

@@ -5,3 +5,4 @@ slices/s007cd6d0/s007cd6d0.cpp  ?Configure@cConfigManagerS@@QAE_NXZ      007cd8d
 slices/s007cd6d0/s007cd6d0.cpp  ?Unnamed960@cConfigManagerS@@QAEXXZ     007cd960  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s007cd6d0/s007cd6d0.cpp  ?Unnamed990@cConfigManagerS@@QAEXXZ     007cd990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s007cd6d0/s007cd6d0.cpp  ?Unnamed9C0@cConfigManagerS@@QAE_NXZ    007cd9c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s007cd6d0/s007cd6d0.cpp  ?cConfigManagerUnnamedB90@@YANPAM@Z  007cdb90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
