@@ -1,1 +1,3 @@
 00f691d0 SP::cTerrainEditor::SynthesizeAboveTextureDecal  # PDB name; thiscall ret 0x24: (layer, DecalInfo*, raster pair, face, u0, v0, u1, v1, arg); quad vertices 0x70 bytes, shader const 0x242
+00f699a0 SP::cTerrainEditor::QuadQueueEmpty  # PDB candidate; thiscall, no args: transient quad queue head at 0x015b0e48 is empty (mpNext == &head)
+00f699b0 SP::cTerrainEditor::IsAllWorkDone  # PDB candidate; thiscall, no args: queue empty && !mCapturingPlanetToImpostor && no GPU-dirty face and no non-empty CPU/brush dirty rect for all 6 faces

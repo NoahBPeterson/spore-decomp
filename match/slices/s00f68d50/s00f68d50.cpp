@@ -4,6 +4,7 @@
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 #include "types.h"
 #include <string.h>
+#include <math.h>
 #include <xmmintrin.h>
 
 struct Vec3 { float x, y, z; };
@@ -87,6 +88,7 @@ __declspec(align(16)) struct Matrix44Affine { __m128 r[4]; };
 extern __m128 g_transformLocal[4];              // 0x016fa4f0
 
 #pragma warning(disable:4035)
+#pragma warning(disable:4700)
 __forceinline int FloorToInt(float f)
 {
     __asm {
@@ -109,14 +111,64 @@ static inline int ToByte(float v)
     return FloorToInt(v * 127.5f);
 }
 
+struct cBrushHeightInfo;   // opaque
+
+// Brush texture description (retail offsets, confirmed against every read in the asm).
+struct cBrushTextureInfo {
+    char pad00[0x2c];
+    Vec4 mTexturePlane;         // +0x2c
+    char pad3c[4];              // +0x3c
+    Vec3 mZeroUVLoc;            // +0x40
+    Vec3 mDirectionU;           // +0x4c
+    float mScaleU;              // +0x58
+    Vec3 mDirectionV;           // +0x5c
+    float mScaleV;              // +0x68
+};
+
+// Transient quad-buffer allocator reached through cTerrainEditor+0x204.
+struct IQuadBufferAllocator {
+    virtual void v0();
+    virtual bool AllocBuffers(void** vbuf, int stride, int nv, void** ibuf, int ni, int flag);  // +0x04
+};
+
+struct QuadVertex {             // 0x2c bytes
+    float mX, mY;               // +0x00 (positions, written by TessellateBrush)
+    char pad08[8];
+    float mA, mB, mC, mD;       // +0x10 (brush vertex data)
+    uint32_t mColor;            // +0x20
+    float mU, mV;               // +0x24
+};
+
+struct RectF {
+    float mLeft, mTop, mRight, mBottom;
+};
+
 struct TerrainEditorStub {
     char pad00[0x1c];
     Viewer* mViewer;            // +0x1c
-    char pad20[0x208 - 0x20];
+    char pad20[0x78 - 0x20];
+    bool mGPUDirtyFace[6];      // +0x78
+    char pad7e[0x80 - 0x7e];
+    RectF mCPUDirtyRect[6];     // +0x80
+    RectF mBrushDirtyRect[6];   // +0xe0
+    char pad140[0x1cd - 0x140];
+    bool mCapturingImpostor;            // +0x1cd
+    bool mCapturingPlanetToImpostor;    // +0x1ce
+    char pad1cf[0x204 - 0x1cf];
+    IQuadBufferAllocator* mQuadBufferAllocator;   // +0x204
     IBatch* mBatch;             // +0x208
 
     bool SynthesizeAboveTextureDecal(ILayer* layer, DecalInfo* info, const uint32_t* raster, int face,
                                      float u0, float v0, float u1, float v1, void* arg);   // 0x00f691d0
+    bool LoadBuffersForQuadBrush(const Vec3* verts, int numVerts, int face,
+                                 const cBrushHeightInfo& heightInfo, const cBrushTextureInfo& texInfo,
+                                 int numSubdiv);                                       // 0x00f68d50
+    bool QuadQueueEmpty();                                                         // 0x00f699a0
+    bool IsAllWorkDone();                                                          // 0x00f699b0
+    void TessellateBrush(void* vbuf, void* ibuf, const Vec3* verts, int numVerts, int numSubdiv,
+                         int nv, int ni);                                          // 0x00f687f0
+    void GetBrushVertexData(const cBrushHeightInfo& heightInfo, const cBrushTextureInfo& texInfo,
+                            float* out);                                           // 0x00f675b0
 };
 
 static inline uint32_t ResolveHandle(Handle* h)
@@ -212,5 +264,119 @@ bool TerrainEditorStub::SynthesizeAboveTextureDecal(ILayer* layer, DecalInfo* in
         mViewer->Finish();
     }
     SetShaderConst(0x242, 0, 0);
+    return true;
+}
+
+// ---------------------------------------------------------------------------------------------------
+// Quad-buffer tessellation support (0x00f68d50 / 0x00f699a0 / 0x00f699b0).
+
+struct QuadQueue {              // intrusive list head
+    QuadQueue* mpNext;          // +0x00
+    QuadQueue* mpPrev;          // +0x04
+};
+extern QuadQueue g_quadQueue;   // 0x015b0e48
+
+uint32_t __cdecl ColorRGBToU32(const Vec3* color);   // 0x00458a40
+
+// @ 0x00f699a0
+bool TerrainEditorStub::QuadQueueEmpty()
+{
+    return g_quadQueue.mpNext == &g_quadQueue;
+}
+
+// @ 0x00f699b0
+bool TerrainEditorStub::IsAllWorkDone()
+{
+    if (!QuadQueueEmpty())
+        return false;
+    if (mCapturingPlanetToImpostor)
+        return false;
+    for (int i = 0; i < 6; ++i) {
+        if (mGPUDirtyFace[i])
+            return false;
+        const RectF& cpu = mCPUDirtyRect[i];
+        if (cpu.mLeft != cpu.mRight && cpu.mTop != cpu.mBottom)
+            return false;
+        const RectF& brush = mBrushDirtyRect[i];
+        if (brush.mLeft != brush.mRight && brush.mTop != brush.mBottom)
+            return false;
+    }
+    return true;
+}
+
+// @ 0x00f68d50
+bool TerrainEditorStub::LoadBuffersForQuadBrush(const Vec3* verts, int numVerts, int face,
+                                                const cBrushHeightInfo& heightInfo,
+                                                const cBrushTextureInfo& texInfo, int numSubdiv)
+{
+    int n = numVerts - 2;
+    int ni = 3 * n;
+    int nv = numVerts;
+    for (int i = 0; i < numSubdiv; ++i) {
+        nv += 3 * n;
+        ni = 12 * n;
+        n *= 4;
+    }
+
+    QuadVertex* vbuf = 0;
+    void* ibuf = 0;
+    if (!mQuadBufferAllocator->AllocBuffers((void**)&vbuf, 0x2c, nv, &ibuf, ni, 1))
+        return false;
+
+    TessellateBrush(vbuf, ibuf, verts, numVerts, numSubdiv, nv, ni);
+
+    float a[3];
+    float sign = (face & 1) ? -1.0f : 1.0f;
+    a[0] = sign;
+    a[1] = 1.0f;
+    a[2] = sign;
+    const unsigned char* axes = g_faceAxes[face >> 1];
+    unsigned char ia = axes[0];
+    unsigned char ib = axes[1];
+    unsigned char ic = axes[2];
+    float f0 = a[ia];
+    float f1 = a[ib];
+    float f2 = a[ic];
+    a[2] = 1.0f;
+
+    float axisOut[4];
+    GetBrushVertexData(heightInfo, texInfo, axisOut);
+
+    Vec4 plane = texInfo.mTexturePlane;
+    Vec3 zeroUV = texInfo.mZeroUVLoc;
+    Vec3 dirU = texInfo.mDirectionU;
+    Vec3 dirV = texInfo.mDirectionV;
+
+    float t;    // deliberately left uninitialized, as in the original
+    for (int i = 0; i < nv; ++i) {
+        QuadVertex* v = &vbuf[i];
+        a[0] = v->mX;
+        a[1] = 1.0f - v->mY;
+        float nx = (a[ia] * 2.0f - 1.0f) * f0;
+        float ny = (a[ib] * 2.0f - 1.0f) * f1;
+        float nz = (a[ic] * 2.0f - 1.0f) * f2;
+        float inv = (float)(1.0 / sqrt((double)nx * (double)nx
+                                       + ((double)nz * (double)nz + (double)ny * (double)ny)));
+        nx *= inv;
+        ny *= inv;
+        nz *= inv;
+        float denom = nx * plane.x + nz * plane.z + ny * plane.y;
+        if (denom != 0.0f)
+            t = -((plane.x * 0.0f + plane.y * 0.0f + plane.z * 0.0f + plane.w) / denom);
+        float dx = nx * t - zeroUV.x;
+        float dy = ny * t - zeroUV.y;
+        float dz = nz * t - zeroUV.z;
+        v->mU = (dx * dirU.x + dz * dirU.z + dy * dirU.y) / texInfo.mScaleU;
+        v->mV = 1.0f - (dx * dirV.x + dz * dirV.z + dy * dirV.y) / texInfo.mScaleV;
+        v->mA = axisOut[0];
+        v->mB = axisOut[1];
+        v->mC = axisOut[2];
+        v->mD = axisOut[3];
+        Vec3 color;
+        color.x = nx * 0.5f + 0.5f;
+        color.y = ny * 0.5f + 0.5f;
+        color.z = nz * 0.5f + 0.5f;
+        v->mColor = ColorRGBToU32(&color);
+    }
     return true;
 }

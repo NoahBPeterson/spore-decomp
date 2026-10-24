@@ -1,1 +1,2 @@
 00f691d0 1500 complete behavioural source; ident-matrix temp copies and redundant Vec4 stack temps differ (frame 0xb4 vs 0x124); call sequence identical (18 calls, 0.86x size)
+00f68d50 1144 complete behavioural source; count loop strength-reduced into a closed form and texinfo vector copies done as integer word copies (frame 0x94 vs 0x9c), body otherwise instruction-for-instruction identical
