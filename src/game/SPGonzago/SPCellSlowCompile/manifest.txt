@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82690@@YAXHM@Z  00e82690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e826b0@@YAXHHM@Z  00e826b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e826e0@@YAXH@Z  00e826e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82700@@YAXHPAM@Z  00e82700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82730@@YAPAHH@Z  00e82730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82760@@YAXXZ  00e82760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e829c0@SP@@YAXI_N@Z  00e829c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82c70@SP@@YAXXZ  00e82c70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82cc0@SP@@YAEXZ  00e82cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82cd0@SP@@YAEXZ  00e82cd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82d10@SP@@YAXI@Z  00e82d10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82d30@SP@@YAXXZ  00e82d30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e84470@@YAXXZ  00e84470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

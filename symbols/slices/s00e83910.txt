@@ -1,0 +1,8 @@
+00e83910 ?FUN_00e83910@@YAXIII@Z  # FUN_00e83910 migrated from s00e83910 (verbatim, slice spelling)
+00e83e30 ?FUN_00e83e30@@YAXPAHPAEPAI@Z  # FUN_00e83e30 migrated from s00e83910 (verbatim, slice spelling)
+00e84150 ?FUN_00e84150@@YAXPAEHPAG@Z  # FUN_00e84150 migrated from s00e83910 (verbatim, slice spelling)
+00e84470 ?FUN_00e84470@@YAXXZ  # FUN_00e84470 migrated from s00e83910 (verbatim, slice spelling)
+00e84490 ?FUN_00e84490@@YAHII@Z  # FUN_00e84490 migrated from s00e83910 (verbatim, slice spelling)
+00e84510 ?FUN_00e84510@@YAIPAI@Z  # FUN_00e84510 migrated from s00e83910 (verbatim, slice spelling)
+00e84600 ?FUN_00e84600@@YAXEHEPAIMEPAXII@Z  # FUN_00e84600 migrated from s00e83910 (verbatim, slice spelling)
+00e847f0 ?FUN_00e847f0@cString8@@QAEPAU1@PAI0@Z  # cString8::FUN_00e847f0 migrated from s00e83910 (verbatim, slice spelling)
