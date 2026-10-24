@@ -136,7 +136,7 @@ struct RecMap {
     RbNode* Anchor() { return (RbNode*)&mAnchor; }
     RbNode** find(RbNode** out, const Key* k);  // 0xa21dc0 (returns pointer to iterator)
     RbIter erase(RbIter it);                    // 0x8d93a0
-    __declspec(noinline) void DoInsertValue(RbNode** out, RbNode* parent, const PFPair* v, bool bForceToLeft);   // 0x8d98f0
+    __declspec(noinline) RbNode** DoInsertValue(RbNode** out, RbNode* parent, const PFPair* v, bool bForceToLeft);   // 0x8d98f0
     RbNode** insert(RbNode** out, const PFPair* v, int unused);                             // 0x8d9f20
     void DoNuke(RbNode* root);                  // 0x8de4f0
     RecMap(IAlloc* a) : mpAlloc(a), mnFlags(0) {
@@ -552,7 +552,7 @@ bool DatabasePackedFile::TryCompress(const void* src, unsigned size, void** ppOu
 }
 
 // @ 0x008d98f0
-void RecMap::DoInsertValue(RbNode** out, RbNode* parent, const PFPair* v, bool bForceToLeft)
+RbNode** RecMap::DoInsertValue(RbNode** out, RbNode* parent, const PFPair* v, bool bForceToLeft)
 {
     int side = (bForceToLeft || parent == Anchor() || KeyLess(v->key, parent->key)) ? 0 : 1;
     RbNode* node = (RbNode*)mpAlloc->Alloc(0x20, 0, mnFlags);
@@ -562,6 +562,7 @@ void RecMap::DoInsertValue(RbNode** out, RbNode* parent, const PFPair* v, bool b
     RBTreeInsert(node, parent, Anchor(), side);
     ++mnSize;
     *out = node;
+    return out;
 }
 
 // @ 0x008d99c0

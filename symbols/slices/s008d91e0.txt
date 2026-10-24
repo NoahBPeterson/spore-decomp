@@ -7,7 +7,7 @@
 008d95f0 ?WriteIndexRecord@DatabasePackedFile@@QAE_NXZ  # DatabasePackedFile::WriteIndexRecord migrated from s008d91e0 (verbatim, slice spelling)
 008d9770 ?InitializeHoleTable@DatabasePackedFile@@QAEXXZ  # DatabasePackedFile::InitializeHoleTable migrated from s008d91e0 (verbatim, slice spelling)
 008d9850 ?ShouldRecordBeCompressed@DatabasePackedFile@ResourceMan@EA@@QAE_NPAEIAAPAXAAIAAG@Z  # EA::ResourceMan::DatabasePackedFile::ShouldRecordBeCompressed migrated from s008d91e0
-008d98f0 ?DoInsertValue@RecMap@@QAEXPAPAURbNode@@PAU2@PBUPFPair@@_N@Z  # RecMap::DoInsertValue migrated from s008d91e0 (verbatim, slice spelling)
+008d98f0 ?DoInsertValue@RecMap@@QAEPAPAURbNode@@PAPAU2@PAU2@PBUPFPair@@_N@Z  # RecMap::DoInsertValue migrated from s008d91e0 (returns the out slot so eax matches retail)
 008d99c0 ?SetLocation@DatabasePackedFile@ResourceMan@EA@@UAE_NPB_W@Z  # EA::ResourceMan::DatabasePackedFile::SetLocation migrated from s008d91e0
 008d9a10 ?CloseRecord@DatabasePackedFile@@QAE_NPAURecord@@@Z  # DatabasePackedFile::CloseRecord migrated from s008d91e0 (verbatim, slice spelling)
 008d9f20 ?insert@RecMap@@QAEPAPAURbNode@@PAPAU2@PBUPFPair@@H@Z  # RecMap::insert migrated from s008d91e0 (verbatim, slice spelling)
