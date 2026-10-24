@@ -1,1 +1,5 @@
-00f52df0 WriteSettings  # byte-exact; serializer of a large description object: IStream +0x38 Write, EA::IO::WriteUint32/16/64, WriteBool8, nested writers
+00f53420 ??1cCloudDescription@@QAE@XZ  # cCloudDescription::~cCloudDescription (byte-exact)
+00f53590 ??0cCloudDescription@@QAE@XZ  # cCloudDescription::cCloudDescription default ctor (nonmatching)
+016c9234 g_16c9234  # float constant table read by the ctor (zero in the analysis image)
+016c9238 g_16c9238  # float constant table read by the ctor
+016c923c g_16c923c  # float constant table read by the ctor
