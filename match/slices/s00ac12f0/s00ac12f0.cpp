@@ -190,6 +190,10 @@ void __cdecl FUN_00ac1510(uint32_t face, int x, int y, float* out) {
 int __fastcall FUN_00ac15e0(char* self) { return (*(int*)(self + 0x48))++; }
 
 // @ 0x00ac1610   true if two directions are in the same terrain cell (or farther than 7.04)
+// The original never writes xmm4/xmm5; /O2 colours two of our live cube-face floats to
+// them, which the LTCG untouched-register contract forbids. The body is integer-valued
+// after the float->int truncations, so /Od is bit-exact here.
+#pragma optimize("", off)
 bool __cdecl FUN_00ac1610(const float* a, const float* b, int unused, float dist) {
   if (dist > 7.04f) return true;
   SP::cPlanetModel* pm = SP::PlanetModel();
@@ -201,6 +205,7 @@ bool __cdecl FUN_00ac1610(const float* a, const float* b, int unused, float dist
   uint32_t ca = pm->mpCubeCells[((af * 0x80 + av) * 0x80) + au];
   return ((cb ^ ca) & 0x3ff0000) == 0;
 }
+#pragma optimize("", on)
 
 // @ 0x00ac1970   water-aware distance from a to b (FLT_MAX when b is below the water surface)
 float __cdecl FUN_00ac1970(const float* a, const float* b) {
@@ -244,6 +249,10 @@ int __cdecl FUN_00ac1a70(PosObj* obj, const float* a, const float* b) {
 struct Entity {
   bool __thiscall Stands(const float* pos);  // 0xbec0f0
 };
+// The original never writes xmm4; /O2 colours one of our live cube-face floats to it,
+// which the LTCG untouched-register contract forbids. The body is calls plus a couple of
+// float multiplies (bit-exact under /Od), so /Od is safe here.
+#pragma optimize("", off)
 float __cdecl FUN_00ac1b30(const float* a, const float* b) {
   SP::cPlanetModel* pm = SP::PlanetModel();
   int u, v;
@@ -268,8 +277,13 @@ float __cdecl FUN_00ac1b30(const float* a, const float* b) {
   }
   return 0.0f;
 }
+#pragma optimize("", on)
 
 // @ 0x00ac1dc0   0 if direction b lies in the same cell as packed cell word a, else 1
+// The original never writes xmm4; /O2 colours one of our live cube-face floats to it,
+// which the LTCG untouched-register contract forbids. This body is integer-only apart
+// from the 0.0f/1.0f returns, so /Od is float-bit exact here.
+#pragma optimize("", off)
 float __cdecl FUN_00ac1dc0(uint32_t cell, const float* b) {
   SP::cPlanetModel* pm = SP::PlanetModel();
   uint32_t* cells = pm->mpCubeCells;
@@ -280,6 +294,7 @@ float __cdecl FUN_00ac1dc0(uint32_t cell, const float* b) {
   if (((cb ^ ca) & 0x3ff0000) == 0) return 0.0f;
   return 1.0f;
 }
+#pragma optimize("", on)
 
 // @ 0x00ac1fc0
 struct Msg {
@@ -389,14 +404,16 @@ float __cdecl FUN_00ac2200(uint32_t cell, const float* v, float lo, float hi) {
   SphereInfo* si = pm->mpISphere->GetInfo();
   float c[3];
   FUN_00ac1510(cell >> 17, cell & 0xff, (cell >> 8) & 0xff, c);
-  Vec3f w;
-  w.x = v[0];
-  w.y = v[1];
-  w.z = v[2];
-  float inv = 1.0f / (float)sqrt((double)((w.x * w.x + w.y * w.y) + w.z * w.z));
-  float dz = w.z * inv - c[2];
-  float dy = w.y * inv - c[1];
-  float dx = w.x * inv - c[0];
+  const float* w = v;
+  float inv = (float)(1.0 / sqrt((double)((w[0] * w[0] + w[1] * w[1]) + w[2] * w[2])));
+  // retail: dz = w2*inv - c2 ; dy = w1*inv - c1 ; dx = w0*inv - c0, each a single-precision
+  // mulss/subss. The spilled `vinv` keeps `inv` as a memory operand so the allocator stays
+  // inside xmm0-3 (the original never writes xmm4) while the multiplies stay single-precision.
+  volatile float vinv = inv;
+  __m128 vi = _mm_set_ss(vinv);
+  float dz = _mm_cvtss_f32(_mm_sub_ss(_mm_mul_ss(_mm_set_ss(w[2]), vi), _mm_set_ss(c[2])));
+  float dy = _mm_cvtss_f32(_mm_sub_ss(_mm_mul_ss(_mm_set_ss(w[1]), vi), _mm_set_ss(c[1])));
+  float dx = _mm_cvtss_f32(_mm_sub_ss(_mm_mul_ss(_mm_set_ss(w[0]), vi), _mm_set_ss(c[0])));
   float d = (si->outerRadius - si->innerRadius) * (float)sqrt((double)((dz * dz + dy * dy) + dx * dx));
   if (d < lo) {
     float t = lo - d;
