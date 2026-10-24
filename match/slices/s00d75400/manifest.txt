@@ -1,0 +1,3 @@
+slices/s00d75400/s00d75400.cpp  ?CalledByStimulus@cTribeGameBehaviorFish@@QAEXPAVcGameObject@@PAVcStimulus@@@Z  00d75400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d75400/s00d75400.cpp  ??1FruitState@@QAE@XZ  00d75450  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d75400/s00d75400.cpp  ?SP_DropFruitTarget@@YAXPAXPAUFruitState@@@Z  00d75700  /O2 /MD /Gy /TP /arch:SSE /fp:fast
