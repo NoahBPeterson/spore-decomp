@@ -8,3 +8,6 @@ slices/s01088960/s01088960.cpp  ?constrainLinearDof@hkConstraintConstructionKit@
 slices/s01088960/s01088960.cpp  ?setAngularBasisABodyFrame@hkConstraintConstructionKit@@QAEXXZ  01089420  /vc71 /O2 /MD /Gy /TP
 slices/s01088960/s01088960.cpp  ?setAngularBasisBBodyFrame@hkConstraintConstructionKit@@QAEXXZ  01089460  /vc71 /O2 /MD /Gy /TP
 slices/s01088960/s01088960.cpp  ?end@hkConstraintConstructionKit@@QAEXXZ  01089670  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?getMotionStateAndVelocities@hkRigidMotion@@UAEXPAVhkMotion@@@Z  01088960  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?hkEntity_delete@@YAPAVhkEntity@@PAV1@@Z  01088d00  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?getRuntimeInfo@hkGenericConstraintData@@UBEXVhkBool@@AAURuntimeInfo@1@@Z  010896e0  /vc71 /O2 /MD /Gy /TP

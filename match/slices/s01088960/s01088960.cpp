@@ -3,6 +3,7 @@
 // linear-DOF command handlers (including the atan2 angle helper).
 // Equivalent portable source, not byte-exact.
 #include <stddef.h>
+#include <new>
 #include "types.h"
 
 // Value kept on the x87 stack in 80-bit precision in the original (never stored to memory).
@@ -68,8 +69,12 @@ class hkStatisticsCollector { public:
 };
 
 // ------------------------------------------------------------ motion
-class hkMotionState { public: char m_data[0xb0]; };
-void hkMotionState_assign(hkMotionState* dst, const hkMotionState* src);    // FUN_010888c0: hkMotionState::operator=
+// hkMotionState is 16-byte aligned in Havok (it holds hkTransform/hkVector4), so as a
+// member it starts at +0x10 inside hkRigidMotion.
+class __declspec(align(16)) hkMotionState { public:
+    char m_data[0xb0];
+    hkMotionState& operator=(const hkMotionState& other);   // 0x010888C0
+};
 class hkMotion : public hkReferencedObject { public: int m_solverData; };
 class hkRigidMotion : public hkMotion { public:
     hkMotionState m_motionState;          // +0x10
@@ -86,7 +91,7 @@ class hkRigidMotion : public hkMotion { public:
 void hkRigidMotion::getMotionStateAndVelocities(hkMotion* motionOut)
 {
     hkRigidMotion* out = static_cast<hkRigidMotion*>(motionOut);
-    hkMotionState_assign(&out->m_motionState, &m_motionState);
+    out->m_motionState = m_motionState;
     out->m_linearVelocity[0] = m_linearVelocity[0];
     out->m_linearVelocity[1] = m_linearVelocity[1];
     out->m_linearVelocity[2] = m_linearVelocity[2];
@@ -131,6 +136,11 @@ struct hkConstraintInstance;
 struct hkWorld;
 class hkBool { public: uint8_t b; };
 struct hkMotionBase;
+// hkFinishLoadedObjectFlag is passed by value to the "finish-loading" constructors.
+struct hkFinishLoadedObjectFlag {
+    int m_finishing;
+    hkFinishLoadedObjectFlag(int f) : m_finishing(f) {}
+};
 
 struct hkWorldOperationUtil {
     static void markIslandActive(hkWorld* w, hkSimulationIsland* i);     // 0x010a0130
@@ -159,7 +169,10 @@ class hkEntity : public hkWorldObject { public:
     uint32_t m_uid;                                      // +0xcc
 
     explicit hkEntity(const hkShape* shape);
+    hkEntity(hkFinishLoadedObjectFlag flag);              // 0x01087D50
     ~hkEntity();
+    virtual void* getMotionState() { return 0; }
+    virtual void slot4() {}
     virtual void calcStatistics(hkStatisticsCollector* c) const;
     virtual void deallocateInternalArrays();
     void setDeactivator(hkEntityDeactivator* d);
@@ -275,10 +288,13 @@ void hkEntity::addCollisionListener(hkCollisionListener* l)
 }
 
 // @ 0x01088d00
-// Deletes an entity through its scalar deleting destructor (no-op for null).
-void hkEntity_delete(hkEntity* e)
+// Finishes loading an already-allocated hkEntity: if the pointer is non-null the
+// hkEntity(hkFinishLoadedObjectFlag) constructor is run in place (this = e, flag = 1).
+hkEntity* hkEntity_delete(hkEntity* e)
 {
-    if (e != 0) delete e;
+    if (e != 0)
+        return new (e) hkEntity(hkFinishLoadedObjectFlag(1));
+    return (hkEntity*)1;
 }
 
 // @ 0x01088d20
@@ -353,9 +369,10 @@ class hkGenericConstraintDataScheme { public:
     void* m_modifiers[3];                    // +0x28
     void* m_motors[3];                       // +0x34
 };
-class hkConstraintData : public hkReferencedObject { public: };
+class hkConstraintData : public hkReferencedObject { public: uint32_t m_userData; };  // +0x08
 class hkGenericConstraintData : public hkConstraintData { public:
     hkGenericConstraintDataScheme m_scheme;  // +0x0c
+    hkGenericConstraintDataScheme* getScheme();                          // 0x008DC790
     virtual void getConstraintInfo(hkConstraintInfo& out) const;
     struct RuntimeInfo { int m_sizeOfExternalRuntime; int m_numSolverResults; };
     virtual void getRuntimeInfo(hkBool wantRuntime, RuntimeInfo& infoOut) const;
@@ -397,7 +414,7 @@ class hkConstraintConstructionKit { public:
 // @ 0x01089280
 void hkConstraintConstructionKit::begin(hkGenericConstraintData* data)
 {
-    m_scheme = &data->m_scheme;                  // FUN_008dc790: lea eax,[ecx+0xc]
+    m_scheme = data->getScheme();                // FUN_008dc790: lea eax,[ecx+0xc]
     m_constraint = data;
     m_stiffnessReference = 0;
     m_dampingReference = 0;
