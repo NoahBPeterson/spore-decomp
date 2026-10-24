@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00ca2210  345  cVehicle terrain-occupancy scan over a candidate position: stub only; 5 vs 345 B - float globals (0x140f7ac, 0x1470f1c), CanOccupyTerrain / PlanetModel / GetAverageRadius / GetContinent calls and an x87 float step loop are not reconstructed
+00ca2370  1316  cVehicle navigation candidate search (large): stub only; 3 vs 1316 B - nested float candidate loops, virtual ray probes and a recursive call to 0x00ca2210 are not reconstructed
+00ca28a0  573  cVehicle ray / sphere probe against the planet model: stub only; 3 vs 573 B - virtual +0xc8/+0x74 ray probes and x87 float math are not reconstructed
+00ca2ae0  928  SP::cVehicle::CreateDefaultTool: stub only; 1 vs 928 B - virtual +0x2c/+0x8 calls, GetCurrentGameMode / eastl::vector::erase / cSPToolManager::CreateToolFromToolID and the tool-id tables are not reconstructed

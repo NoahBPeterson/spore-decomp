@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ca2e80  286  locomotion-select / tool install: complete reconstruction - equiv WEAK (341 valid, 0 mismatch, 54.5% coverage); 416 vs 427 B.  Same switch dispatch (sub eax,1 / je chain over cases 1 and 2), same callees and same operator_new arg order; the remaining size is schedule/layout only: cl hoists the +0xaf0 flag OR out of the case-2 flag test (the original duplicates it in each arm) and orders the flag / !flag / driving basic blocks differently
