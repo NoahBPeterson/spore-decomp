@@ -107,18 +107,49 @@ void IntrusiveHolder::SetIntrusive18(void* p) {
 // ---------------------------------------------------------------------------------------------
 // @ 0x0097D170  EA::UTFWinControls::ImageDrawable::GetNaturalSize
 // ---------------------------------------------------------------------------------------------
-struct NaturalSizeHolder { bool GetNaturalSize(int* outW, int* outH, int unused); };
+struct NaturalSizeImage { char pad[0x1c]; int mWidth; int mHeight; };   // image w/h at +0x1c/+0x20
+struct NaturalSizeHolder {
+    char pad[0x24];
+    NaturalSizeImage* mpImage;      // +0x24
+    bool GetNaturalSize(int* outW, int* outH, int unused);
+};
 bool NaturalSizeHolder::GetNaturalSize(int* outW, int* outH, int unused) {
-    void* self = this; (void)unused;
-    if (*(void**)((char*)self + 0x24) == 0) return false;
-    (void)outW; (void)outH;
-    return true;   // approximated
+    (void)unused;
+    (void)outH;
+    if (mpImage != 0) {
+        ((float*)outW)[0] = (float)mpImage->mWidth;
+        ((float*)outW)[1] = (float)mpImage->mHeight;
+        return true;
+    }
+    return false;
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x0097D1A0  ImageDrawable helper (approximated)
+// @ 0x0097D1A0  ImageDrawable shadow-mode refresh (free helper over the +0x28 descriptor)
 // ---------------------------------------------------------------------------------------------
-int  ImageDrawable_GetWidth(void* self) { return self ? *(int*)((char*)self + 0x14) : 0; }
+void FUN_00c2e4e0(void);            // 0x00c2e4e0  empty retail stub (ILayoutElement::SetSerializer)
+void FUN_00830280(void);            // 0x00830280  cDropShadowDescriptor::SetSize
+void FUN_00830150(void);            // 0x00830150  cDropShadowDescriptor::SetStrength
+typedef void (__thiscall* EmptyThunkFn)(void* self);
+typedef int  (__thiscall* ShadowSetSizeFn)(void* self, unsigned value);
+typedef int  (__thiscall* ShadowSetStrengthFn)(void* self, unsigned value);
+
+struct ShadowDescriptor {
+    unsigned mSize;         // +0x00
+    unsigned mStrength;     // +0x04
+    char pad[0x20];         // +0x08 .. +0x27
+};
+struct ImageDrawableShadow {
+    ImageDrawable base;             // 0x28 bytes up to mpImage
+    ShadowDescriptor mDropShadow;   // +0x28
+};
+
+int ImageDrawable_GetWidth(void* self) {
+    ImageDrawableShadow* d = (ImageDrawableShadow*)self;
+    ((EmptyThunkFn)FUN_00c2e4e0)(self);
+    ((ShadowSetSizeFn)FUN_00830280)(&d->mDropShadow, d->mDropShadow.mSize);
+    return ((ShadowSetStrengthFn)FUN_00830150)(&d->mDropShadow, d->mDropShadow.mStrength);
+}
 
 
 // ---------------------------------------------------------------------------------------------

@@ -31,7 +31,18 @@ struct ImageDrawable {
     ImageDrawable* DestroyScalar(unsigned char flags);
 };
 struct IntrusiveHolder { void SetIntrusive18(void* p); };
-struct NaturalSizeHolder { bool GetNaturalSize(int* outW, int* outH, int unused); };
+struct NaturalSizeImage { char pad[0x1c]; int mWidth; int mHeight; };   // image w/h at +0x1c/+0x20
+struct NaturalSizeHolder {
+    char pad[0x24];
+    NaturalSizeImage* mpImage;      // +0x24
+    bool GetNaturalSize(int* outW, int* outH, int unused);
+};
+extern "C" void FUN_00c2e4e0(void);   // 0x00c2e4e0  empty retail stub (ILayoutElement::SetSerializer)
+extern "C" void FUN_00830280(void);   // 0x00830280  cDropShadowDescriptor::SetSize
+extern "C" void FUN_00830150(void);   // 0x00830150  cDropShadowDescriptor::SetStrength
+typedef void (__thiscall* EmptyThunkFn)(void* self);
+typedef int  (__thiscall* ShadowSetSizeFn)(void* self, unsigned value);
+typedef int  (__thiscall* ShadowSetStrengthFn)(void* self, unsigned value);
 namespace Cr {
 struct Image { char pad[0x1c]; int mW; int mH; };
 }
@@ -152,15 +163,24 @@ void IntrusiveHolder::SetIntrusive18(void* p)
 // @ 0x0097d170
 bool NaturalSizeHolder::GetNaturalSize(int* outW, int* outH, int unused)
 {
-    void* self = this; (void)unused;
-    if (*(void**)((char*)self + 0x24) == 0) return false;
-    (void)outW; (void)outH;
-    return true;   // approximated
+    (void)unused;
+    (void)outH;
+    if (mpImage != 0) {
+        ((float*)outW)[0] = (float)mpImage->mWidth;
+        ((float*)outW)[1] = (float)mpImage->mHeight;
+        return true;
+    }
+    return false;
 }
 
 // @ 0x0097d1a0
 int ImageDrawable_GetWidth(void* self)
-{ return self ? *(int*)((char*)self + 0x14) : 0; }
+{
+    EA::UTFWinControls::ImageDrawable* d = (EA::UTFWinControls::ImageDrawable*)self;
+    ((EmptyThunkFn)FUN_00c2e4e0)(self);
+    ((ShadowSetSizeFn)FUN_00830280)(&d->mDropShadow, d->mDropShadow.mSize);
+    return ((ShadowSetStrengthFn)FUN_00830150)(&d->mDropShadow, d->mDropShadow.mStrength);
+}
 
 // @ 0x0097d270
 void Cr::ImageDrawable::CreateRenderables(Cr::RenderContext* ctx, const float* rc, int unused)
