@@ -14,7 +14,7 @@ extern void     *g_pShaderProxy;              // 0x164ea4c
 extern void     *g_pAllocCore;                // 0x15474a4
 extern void     *g_pField154724c;             // 0x154724c
 extern void     *g_pField164e8fc;             // 0x164e8fc
-extern wchar_t   g_defaultMat[];              // 0x1547250
+extern wchar_t  *g_defaultMat;                // 0x1547250 (pointer to the default material name)
 extern char      g_allocTag;                  // 0x13f6b3c
 extern char      g_allocFile[];               // 0x13ebb38
 extern char      g_fixedAlloc[];              // 0x164e990
@@ -414,14 +414,13 @@ cSPUIShaderProxy::~cSPUIShaderProxy()
     for (int i = 1; i >= 0; --i) {
         void *p = *(void **)(t + 0x180 + i * 4);
         if (p) {
-            volatile long *rc8 = (volatile long *)((char *)p + 8);
-            _InterlockedExchangeAdd(rc8, -1);
-            volatile long *rc0 = (volatile long *)p;
-            long v = _InterlockedExchangeAdd(rc0, 0);
+            volatile long *rc = (volatile long *)((char *)p + 8);
+            _InterlockedExchangeAdd(rc, -1);
+            long v = _InterlockedExchangeAdd(rc, 0);
             if (v >= 1)
-                _InterlockedExchangeAdd(rc0, 0);
+                _InterlockedExchangeAdd(rc, 0);
             else
-                _InterlockedExchangeAdd(rc0, 1);
+                _InterlockedExchangeAdd(rc, 1);
         }
     }
     void *beg  = *(void **)(t + 0x120);
@@ -442,13 +441,14 @@ bool cSPUIShaderProxy::GetParam(uint32_t key, uint32_t *out4, uint32_t *outc, ui
     uint32_t *end = *(uint32_t **)((char *)this + 8);
     uint32_t *it = (uint32_t *)FUN_00e23ee0(*(void **)((char *)this + 4), end, &key,
                                             *(uint8_t *)((char *)this + 0x11c));
-    if (it == end || key < it[0] || it == it + 4)
+    if (it == end || key < it[0])
         it = end;
     if (it == end)
         return false;
+    // Store order follows the original's argument slots: out4 <- it[1], out8 <- it[2], outc <- it[3].
     if (out4) *out4 = it[1];
-    if (outc) *outc = it[2];
-    if (out8) *out8 = it[3];
+    if (out8) *out8 = it[2];
+    if (outc) *outc = it[3];
     return true;
 }
 
@@ -458,13 +458,13 @@ void u32vector::insert(uint32_t *pos, const uint32_t &val)
 {
     uint32_t *end = mpEnd;
     if (end != mpCap) {
-        const uint32_t *v = &val;
-        if (pos >= mpBegin && pos < end)
-            v = (const uint32_t *)((char *)pos + 4);
+        uint32_t *v = (uint32_t *)&val;
+        if ((char *)v >= (char *)pos && (char *)v < (char *)end)
+            v = (uint32_t *)((char *)v + 4);
         if (end)
             *end = end[-1];
-        uint32_t n = (uint32_t)((char *)(end - 1) - (char *)pos);
-        msvc_memmove((char *)end - ((n >> 2) * 4), pos, n);
+        int n = (int)((char *)(end - 1) - (char *)pos);
+        msvc_memmove((char *)end - ((n >> 2) * 4), pos, (uint32_t)n);
         *pos = *v;
         mpEnd = end + 1;
         return;
@@ -485,13 +485,13 @@ void u32vector::insert(uint32_t *pos, const uint32_t &val)
     nbuf = (uint32_t *)EA_Alloc((uint32_t)(newcap * 4), &g_allocTag, 0, 0, g_allocFile, 0xd1);
 haveBuffer:
     {
-        int prefix = (int)((char *)&val - (char *)mpBegin);
+        int prefix = (int)((char *)pos - (char *)mpBegin);
         uint32_t *p = (uint32_t *)msvc_memcpy(nbuf, mpBegin, (uint32_t)prefix);
         p = (uint32_t *)((char *)p + (size_t)(prefix >> 2) * 4);
         if (p)
             *p = val;
-        int suffix = (int)((char *)mpEnd - (char *)&val);
-        p = (uint32_t *)msvc_memcpy((char *)p + 4, &val, (uint32_t)suffix);
+        int suffix = (int)((char *)mpEnd - (char *)pos);
+        p = (uint32_t *)msvc_memcpy((char *)p + 4, pos, (uint32_t)suffix);
         uint32_t *newend = (uint32_t *)((char *)p + (size_t)(suffix >> 2) * 4);
         if (mpBegin && mpBegin != mpPool)
             EA_Free(mpBegin);
@@ -501,26 +501,29 @@ haveBuffer:
     }
 }
 
+extern "C" void *__cdecl FUN_00c7ea30(void *src, void *srcEnd, void *dst);   // 0xc7ea30 (memcpy(src, srcEnd, dst))
+extern "C" void  __cdecl FUN_00edba80(void *pos, void *last, void *end);     // 0xedba80 (copy_backward)
+
 // ---------------------------------------------------------------- 0x0082f280
 // @ 0x0082f280
 void Vec4vector::insert(Vec4 *pos, const Vec4 &val)
 {
     Vec4 *end = mpEnd;
     if (end != mpCap) {
-        const Vec4 *v = &val;
-        if (pos >= mpBegin && pos < end)
-            v = pos + 1;
-        if (end)
-            *end = end[-1];
-        for (Vec4 *p = end - 1; p != pos; --p)
-            *p = p[-1];
+        Vec4 *v = (Vec4 *)&val;
+        if ((char *)v >= (char *)pos && (char *)v < (char *)end)
+            v = (Vec4 *)((char *)v + 0x10);
+        if (end) {
+            end[0] = end[-1];
+        }
+        FUN_00edba80(pos, end - 1, end);
         *pos = *v;
         mpEnd = end + 1;
         return;
     }
 
-    size_t nelem = (size_t)(end - mpBegin);
-    size_t newcap;
+    int nelem = (int)((char *)end - (char *)mpBegin) >> 4;
+    int newcap;
     Vec4 *nbuf;
     if (nelem == 0) {
         newcap = 1;
@@ -531,22 +534,18 @@ void Vec4vector::insert(Vec4 *pos, const Vec4 &val)
             goto haveBuffer;
         }
     }
-    nbuf = (Vec4 *)EA_Alloc((uint32_t)(newcap * 0x10), &g_allocTag, 0, 0, g_allocFile, 0xd1);
+    nbuf = (Vec4 *)EA_Alloc((uint32_t)(newcap << 4), &g_allocTag, 0, 0, g_allocFile, 0xd1);
 haveBuffer:
     {
-        int prefix = (int)((char *)&val - (char *)mpBegin);
-        char *p = (char *)msvc_memcpy(nbuf, mpBegin, (uint32_t)prefix);
-        p += prefix;
+        Vec4 *p = (Vec4 *)FUN_00c7ea30(mpBegin, pos, nbuf);
         if (p)
-            *(Vec4 *)p = val;
-        int suffix = (int)((char *)mpEnd - (char *)&val);
-        p = (char *)msvc_memcpy(p + 0x10, &val, (uint32_t)suffix);
-        Vec4 *newend = (Vec4 *)(p + suffix);
+            *p = val;
+        Vec4 *q = (Vec4 *)FUN_00c7ea30(pos, mpEnd, (char *)p + 0x10);
         if (mpBegin && mpBegin != mpPool)
             EA_Free(mpBegin);
-        mpBegin = nbuf;
-        mpEnd   = newend;
+        mpEnd   = q;
         mpCap   = (Vec4 *)((char *)nbuf + newcap * 0x10);
+        mpBegin = nbuf;
     }
 }
 

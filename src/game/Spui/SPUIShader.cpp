@@ -43,7 +43,7 @@ extern void* g_layerPool;      // 0x164e910
 // ---- items of slice s0082ec70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void     *g_pShaderProxy;              // 0x164ea4c
 extern void     *g_pAllocCore;                // 0x15474a4
-extern wchar_t   g_defaultMat[];              // 0x1547250
+extern wchar_t  *g_defaultMat;                // 0x1547250 (pointer to the default material name)
 extern char      g_vtblProxy141a668;          // 0x141a668
 extern char      g_vtblEditorResource;        // 0x13eb938
 extern "C" void  __cdecl EA_Free(void *);                                        // 0xf47380
@@ -214,13 +214,14 @@ bool cSPUIShaderProxy_s0082_ec70::GetParam(uint32_t key, uint32_t *out4, uint32_
     uint32_t *end = *(uint32_t **)((char *)this + 8);
     uint32_t *it = (uint32_t *)FUN_00e23ee0(*(void **)((char *)this + 4), end, &key,
                                             *(uint8_t *)((char *)this + 0x11c));
-    if (it == end || key < it[0] || it == it + 4)
+    if (it == end || key < it[0])
         it = end;
     if (it == end)
         return false;
+    // Store order follows the original's argument slots: out4 <- it[1], out8 <- it[2], outc <- it[3].
     if (out4) *out4 = it[1];
-    if (outc) *outc = it[2];
-    if (out8) *out8 = it[3];
+    if (out8) *out8 = it[2];
+    if (outc) *outc = it[3];
     return true;
 }
 
