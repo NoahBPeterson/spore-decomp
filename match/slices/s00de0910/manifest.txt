@@ -1,0 +1,4 @@
+slices/s00de0910/s00de0910.cpp  ?FUN_00de0a30@cGalaxyGameEntryImpl@@QAEXIPAX@Z  00de0a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de0910/s00de0910.cpp  ?FUN_00de11a0@cGalaxyGameEntryImpl@@QAEXXZ  00de11a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de0910/s00de0910.cpp  ?FUN_00de1320@cGalaxyGameEntryImpl@@QAEXXZ  00de1320  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de0910/s00de0910.cpp  ?FUN_00de1330@cGalaxyGameEntryImpl@@QAEXI@Z  00de1330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
