@@ -269,7 +269,9 @@ struct ModelPtrVector {                       // eastl::vector<AutoRefCount<cMWM
     }
 };
 
-struct cLoadQueue { void Update(); };        // 0x751de0
+struct cLoadQueue_SP {
+    void Update();  // 0x751de0
+};
 
 struct cDirectPropertyList { char pad[0x3c]; char* mpData; };
 extern cDirectPropertyList* sAppProperties;  // 0x15fd918
@@ -301,7 +303,7 @@ public:
     char pad1d0[0x2b8 - 0x1d0];
     float mLODScale;                          // +0x2b8
     char pad2bc[0x314 - 0x2bc];
-    cLoadQueue mLoadQueue;                    // +0x314
+    cLoadQueue_SP mLoadQueue;                 // +0x314
     char pad315[0x5cc - 0x315];
     bool mPreloadsDirty;                      // +0x5cc
     ModelPtrVector mPreloadModels[16];        // +0x5d0
