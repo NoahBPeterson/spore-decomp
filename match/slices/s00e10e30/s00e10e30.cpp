@@ -72,6 +72,13 @@ public:
     virtual void DrawImage(const Math::Rectangle& area, Image* image,
                            const Math::Rectangle& uv);                         // +0x58
 };
+
+class RenderContext {
+public:
+    Draw2D* Begin2D(int unk);                                   // 0x0095bc10
+    void End2D();                                               // 0x0095bb20
+    void AddRenderable(void* p);                                // 0x0095bbc0
+};
 } }
 
 // A trade route on the planet: a polyline of 0x24-byte points.
@@ -158,20 +165,47 @@ struct cDotStyle {
     float mSpacing;
 };
 
+// The minimap window's IWindow base subobject (the vtable-bearing window part).
+class IWindow {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+};
+
+// Object returned by the minimap's border renderable slot (+0x980); only its
+// virtual key getter at +0x4c is used here.
+class cHashable {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48();
+    virtual uint32_t GetID();                                   // +0x4c
+};
+
 class cSPUIMinimapWin {
 public:
-    uint32_t pad0[0x92];
+    uint32_t mVtable;                       // +0x000
+    IWindow mWindow;                        // +0x004
+    uint32_t pad008[0x8d];                  // +0x008 .. +0x23b
+    int mStopwatchField0;                   // +0x23c
+    int mStopwatchField1;                   // +0x240
+    uint32_t pad244;                        // +0x244
     EA::UTFWin::Image* mpRoadIconImage;     // +0x248
-    uint32_t pad24c[0x3b];
+    EA::UTFWin::Image* mpTexture;           // +0x24c
+    uint32_t pad250[0x3a];                  // +0x250 .. +0x337
     Vector3 mWorldCameraPos;                // +0x338
     Vector3 mWorldCameraDir;                // +0x344
     float mCameraParam;                     // +0x350
-    uint32_t pad354[4];
+    uint32_t pad354[4];                     // +0x354 .. +0x363
     bool mbTradeRoutesDirty;                // +0x364
-    Vector3Vector mTradeRouteDots;          // +0x368
+    Vector3Vector mTradeRouteDots;          // +0x368 .. +0x37b
+    uint32_t pad37c[0x181];                 // +0x37c .. +0x97f
+    cHashable* mpBorderRenderable;          // +0x980
 
     bool WorldXYZToMinimapXY(const Vector3& pos, Vector2& out, bool clamp);   // 0x00e0bcb0
     void draw_trade_routes(EA::UTFWin::Draw2D& draw);
+    bool OnRebuild(EA::UTFWin::RenderContext* ctx);                        // 0x00e119c0
 };
 
 // @ 0x00e10e30 ?draw_trade_routes@cSPUIMinimapWin@@IAEXAAVDraw2D@UTFWin@EA@@@Z
@@ -305,4 +339,124 @@ void cSPUIMinimapWin::draw_trade_routes(EA::UTFWin::Draw2D& draw)
         draw.DrawImage(Math::Rectangle(dot.x - r, dot.y - r, dot.x + r, dot.y + r),
                        mpRoadIconImage, uv);
     }
+}
+
+// ===========================================================================
+// Sorted vector of SP::cDataSerializationInfo records (0x14 bytes each) and
+// the two template helpers instantiated for it.
+// ===========================================================================
+
+struct IRefCounted {
+    virtual void AddRef();                                      // vtable +0x00
+    virtual void Release();                                     // vtable +0x04
+};
+
+struct cRefPtr {
+    IRefCounted* mpObject;                                      // +0x00
+    cRefPtr() : mpObject(0) {}
+    cRefPtr(const cRefPtr& other) : mpObject(other.mpObject) {
+        if (mpObject)
+            mpObject->AddRef();
+    }
+    ~cRefPtr() { if (mpObject) mpObject->Release(); }
+};
+
+struct cDataValue {
+    uint32_t mId;                                               // +0x00
+    bool mbDirty;                                               // +0x04
+    unsigned char mPad05[3];                                    // +0x05
+    cRefPtr mPtr0;                                              // +0x08
+    cRefPtr mPtr1;                                              // +0x0c
+    cDataValue() : mId(0), mbDirty(true), mPtr0(), mPtr1() {}
+    void draw_civilization_borders(EA::UTFWin::RenderContext* ctx,
+                                   cSPUIMinimapWin* win);        // 0x00e0f2c0
+};
+
+struct cDataInfo {
+    uint32_t mKey;                                              // +0x00
+    cDataValue mValue;                                          // +0x04
+    cDataInfo(uint32_t key) : mKey(key), mValue() {}
+};
+
+struct cInsertResult {
+    cDataInfo* mpNode;                                          // +0x00
+    bool mbInserted;                                            // +0x04
+    cInsertResult(cDataInfo* node, bool inserted)
+        : mpNode(node), mbInserted(inserted) {}
+};
+
+struct cDataArray {
+    cDataInfo* mpBegin;                                         // +0x00
+    cDataInfo* mpEnd;                                           // +0x04
+    cDataInfo* mpCapacity;                                      // +0x08
+    uint32_t mPad0c[2];                                         // +0x0c
+    unsigned char mCompare;                                     // +0x14
+
+    cInsertResult insert(const cDataInfo& value);               // 0x00e118b0
+    cDataValue& FindOrInsert(uint32_t key);                     // 0x00e11910
+    cDataInfo* insert_at(cDataInfo* pos, const cDataInfo& value);  // 0x00e10c10
+};
+
+cDataInfo* lower_bound_DataInfo(cDataInfo* first, cDataInfo* last,
+                                const uint32_t& value, unsigned char cmp);  // 0x00e0e9f0
+void RebuildBaseWindow(IWindow* window);                        // 0x00e0af90
+extern cDataArray gDataMap;                                     // 0x016a204c
+
+// @ 0x00e118b0
+cInsertResult cDataArray::insert(const cDataInfo& value)
+{
+    cDataInfo* end = mpEnd;
+    cDataInfo* it = lower_bound_DataInfo(mpBegin, end, value.mKey, mCompare);
+    if (it != end && !(value.mKey < it->mKey))
+        return cInsertResult(it, false);
+    return cInsertResult(insert_at(it, value), true);
+}
+
+// Lower-bound lookup mirroring the container's original find(): the shipping
+// build kept a legacy "past the end" guard in the source, so reproduce it here.
+static __forceinline cDataInfo* find_DataInfo(cDataArray& map, const uint32_t& key)
+{
+    cDataInfo* end = map.mpEnd;
+    cDataInfo* it = lower_bound_DataInfo(map.mpBegin, end, key, map.mCompare);
+    if (it == end || key < it->mKey || it == it + 1)
+        it = end;
+    return it;
+}
+
+// @ 0x00e11910
+cDataValue& cDataArray::FindOrInsert(uint32_t key)
+{
+    cDataInfo* end = mpEnd;
+    cDataInfo* it = find_DataInfo(*this, key);
+    if (it == end) {
+        it = insert(cDataInfo(key)).mpNode;
+        it->mValue.mId = key;
+        it->mValue.mbDirty = true;
+    }
+    return it->mValue;
+}
+
+// @ 0x00e119c0
+bool cSPUIMinimapWin::OnRebuild(EA::UTFWin::RenderContext* ctx)
+{
+    RebuildBaseWindow(this ? &mWindow : 0);
+    EA::UTFWin::Draw2D* draw = ctx->Begin2D(0);
+    if (mpTexture) {
+        draw->DrawImage(Math::Rectangle(0.0f, 0.0f,
+                                        (float)mStopwatchField0, (float)mStopwatchField1),
+                        mpTexture,
+                        Math::Rectangle(0.0f, 0.0f, 1.0f, 1.0f));
+    }
+    draw_trade_routes(*draw);
+    ctx->End2D();
+    cHashable* border = mpBorderRenderable;
+    if (border) {
+        cDataValue& value = gDataMap.FindOrInsert(border->GetID());
+        if (value.mbDirty) {
+            value.draw_civilization_borders(ctx, this);
+            value.mbDirty = false;
+        }
+        ctx->AddRenderable(value.mPtr0.mpObject);
+    }
+    return true;
 }
