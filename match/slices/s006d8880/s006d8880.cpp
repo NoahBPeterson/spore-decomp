@@ -1,15 +1,139 @@
 // Slice s006d8880: bake evaluators (core 6c4200, acos-len tail) plus two
 // container helpers used by the bake pipeline (RB-tree lookup/insert, vector insert).
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 #include "../s006ccf50/s006ccf50.h"
 
+// The four evaluators share one body shape, written out per VA (the DEFINE_BAKE template in
+// ../s006ccf50/s006ccf50.h is instantiated by many sibling slices, so it stays untouched):
+//   - the uv channels are fetched by pointer (u16/u8) and kept as uint32_t elements,
+//   - the colour is built as floats in xmm,
+//   - the acos tail computes the weight from |res.xy - axis.zw| and scales by a double constant.
+//
 // uv4u16 / colour4u8 / core FUN_006c4200 / acos weight (axis.y * len)
-DEFINE_BAKE(Bake_6d8880, 0, 4, 1, 0, 2)
+#define BAKE_PROLOG()                                                                                 \
+    Elem32* base = table->mBegin;                                                                     \
+    Handle hA = base[index].handle;                                                                   \
+    Handle hB;                                                                                        \
+    if (handleIndex >= 0)                                                                             \
+        hB.Assign(&base[handleIndex].handle);                                                         \
+    if (count == 0)                                                                                   \
+        return true;                                                                                  \
+    {                                                                                                 \
+        float axisDir[3] = { 1.0f, 0.0f, 0.0f };                                                      \
+        float white[4] = { 1.0f, 0.0f, 0.0f, 0.0f };                                                  \
+        float* o = out;                                                                               \
+        BakeEntry* e = entries;                                                                       \
+        int n = count;                                                                                \
+        do                                                                                            \
+        {                                                                                             \
+            float color[4];                                                                           \
+            float p3[3];                                                                              \
+            float res[3];                                                                             \
+            float scratch[3];                                                                         \
+            (void)white;                                                                              \
+            (void)color; (void)p3; (void)res; (void)scratch;
+
+#define BAKE_EPILOG()                                                                                 \
+            o += 2;                                                                                   \
+            e += 1;                                                                                   \
+        } while (--n);                                                                                \
+    }                                                                                                 \
+    return true;
+
+#define BAKE_TAIL_ACOS()                                                                              \
+            float scale = scaleInfo->scale;                                                           \
+            float dx = res[0] - axis[2];                                                              \
+            float dy = res[1] - axis[3];                                                              \
+            float sq = dx * dx + dy * dy;                                                             \
+            float len = (float)sqrt((double)sq);                                                      \
+            float angle = (float)acos((double)(dx / len));                                            \
+            o[0] = ((axis[0] * angle) * 1.2732406f) * scale;                                          \
+            o[1] = (1.0f - axis[1] * len) * scale;
+
+// @ 0x006d8880
+bool Bake_6d8880(float* out, int count, ElemTable* table, BakeEntry* entries, StreamDesc* pos,
+                 float* axis, ScaleInfo* scaleInfo, int index, int handleIndex, int param10)
+{
+    BAKE_PROLOG()
+    uint16_t* s = (uint16_t*)(hA.b + hA.d * e->fc);
+    uint32_t uv[4];
+    uv[0] = s[0] / 3; uv[1] = s[1] / 3; uv[2] = s[2] / 3; uv[3] = s[3] / 3;
+    (void)uv;
+    {
+        uint8_t* c = (uint8_t*)(hB.b + hB.d * e->f8);
+        color[0] = (float)c[0] * (1.0f / 255.0f); color[1] = (float)c[1] * (1.0f / 255.0f);
+        color[2] = (float)c[2] * (1.0f / 255.0f); color[3] = (float)c[3] * (1.0f / 255.0f);
+    }
+    float* ps = (float*)(pos->base + pos->stride * e->f0);
+    p3[0] = ps[0]; p3[1] = ps[1]; p3[2] = ps[2];
+    FUN_006c4200(res, scratch, p3, axisDir, color, uv, param10);
+    BAKE_TAIL_ACOS()
+    BAKE_EPILOG()
+}
+
 // uv4u8  / colour4f  / core FUN_006c4200 / acos weight (axis.y * len)
-DEFINE_BAKE(Bake_6d8c00, 0, 4, 0, 1, 2)
+// @ 0x006d8c00
+bool Bake_6d8c00(float* out, int count, ElemTable* table, BakeEntry* entries, StreamDesc* pos,
+                 float* axis, ScaleInfo* scaleInfo, int index, int handleIndex, int param10)
+{
+    BAKE_PROLOG()
+    uint8_t* s = (uint8_t*)(hA.b + hA.d * e->fc);
+    uint32_t uv[4];
+    uv[0] = s[0] / 3; uv[1] = s[1] / 3; uv[2] = s[2] / 3; uv[3] = s[3] / 3;
+    (void)uv;
+    {
+        float* c = (float*)(hB.b + hB.d * e->f8);
+        color[0] = c[0]; color[1] = c[1]; color[2] = c[2]; color[3] = c[3];
+    }
+    float* ps = (float*)(pos->base + pos->stride * e->f0);
+    p3[0] = ps[0]; p3[1] = ps[1]; p3[2] = ps[2];
+    FUN_006c4200(res, scratch, p3, axisDir, color, uv, param10);
+    BAKE_TAIL_ACOS()
+    BAKE_EPILOG()
+}
+
 // uv2u16 / colour4f  / core FUN_006c4200 / acos weight (axis.y * len)
-DEFINE_BAKE(Bake_6d8f60, 0, 2, 1, 1, 2)
+// @ 0x006d8f60
+bool Bake_6d8f60(float* out, int count, ElemTable* table, BakeEntry* entries, StreamDesc* pos,
+                 float* axis, ScaleInfo* scaleInfo, int index, int handleIndex, int param10)
+{
+    BAKE_PROLOG()
+    uint16_t* s = (uint16_t*)(hA.b + hA.d * e->fc);
+    uint32_t uv[4];
+    uv[0] = s[0] / 3; uv[1] = s[1] / 3;
+    uv[2] = 0; uv[3] = 0;
+    (void)uv;
+    {
+        float* c = (float*)(hB.b + hB.d * e->f8);
+        color[0] = c[0]; color[1] = c[1]; color[2] = c[2]; color[3] = c[3];
+    }
+    float* ps = (float*)(pos->base + pos->stride * e->f0);
+    p3[0] = ps[0]; p3[1] = ps[1]; p3[2] = ps[2];
+    FUN_006c4200(res, scratch, p3, axisDir, color, uv, param10);
+    BAKE_TAIL_ACOS()
+    BAKE_EPILOG()
+}
+
 // uv4u16 / colour4f  / core FUN_006c4200 / acos weight (axis.y * len)
-DEFINE_BAKE(Bake_6d9280, 0, 4, 1, 1, 2)
+// @ 0x006d9280
+bool Bake_6d9280(float* out, int count, ElemTable* table, BakeEntry* entries, StreamDesc* pos,
+                 float* axis, ScaleInfo* scaleInfo, int index, int handleIndex, int param10)
+{
+    BAKE_PROLOG()
+    uint16_t* s = (uint16_t*)(hA.b + hA.d * e->fc);
+    uint32_t uv[4];
+    uv[0] = s[0] / 3; uv[1] = s[1] / 3; uv[2] = s[2] / 3; uv[3] = s[3] / 3;
+    (void)uv;
+    {
+        float* c = (float*)(hB.b + hB.d * e->f8);
+        color[0] = c[0]; color[1] = c[1]; color[2] = c[2]; color[3] = c[3];
+    }
+    float* ps = (float*)(pos->base + pos->stride * e->f0);
+    p3[0] = ps[0]; p3[1] = ps[1]; p3[2] = ps[2];
+    FUN_006c4200(res, scratch, p3, axisDir, color, uv, param10);
+    BAKE_TAIL_ACOS()
+    BAKE_EPILOG()
+}
 
 // ---------------------------------------------------------------------------
 // 0x006d95e0: eastl::rbtree lookup, inserting the key when absent.
@@ -31,8 +155,23 @@ struct RBTree
     void* FindOrInsert(const int* pKey);   // 0x006d95e0
 };
 
-// tree insert helper (real name unknown; 0x006c4b50)
-void __cdecl FUN_006c4b50(void* self, void** out, RBNode* lower, const void* value, int flag);
+// The EASTL insert tag: a bool in a 1-byte struct, passed as one stack dword.
+struct TrueTypeTag { bool b; };
+
+// The inserted element is a (key, mapped value) pair; the node constructor copies both words
+// into the node's payload (key then mapped value).
+struct MapEntry
+{
+    int mKey;       // stored at node +0x10
+    int mMapped;    // stored at node +0x14
+};
+
+// 0x006c4b50: eastl rbtree DoInsertValue(hint-iterator, value, true_type); `this` arrives in
+// ecx and the four remaining dwords are (out, position, &value, tag), popped by the callee.
+struct TreeInsert
+{
+    void* DoInsertValue(void** out, RBNode* position, const MapEntry* value, TrueTypeTag tag);
+};
 
 // @ 0x006d95e0
 void* RBTree::FindOrInsert(const int* pKey)
@@ -53,15 +192,16 @@ void* RBTree::FindOrInsert(const int* pKey)
             }
         } while (node != 0);
     }
-    if (lower != endNode && lower->mKey <= *pKey)
-        return (char*)lower + 0x14;
-
-    int pair[2];
-    pair[0] = *pKey;
-    pair[1] = 0;
-    void* result = 0;
-    FUN_006c4b50(this, &result, lower, pair, 0);
-    return (char*)result + 0x14;
+    if (lower == endNode || *pKey < lower->mKey)
+    {
+        MapEntry entry = { *pKey, 0 };
+        void* result = 0;
+        TrueTypeTag tag;
+        tag.b = false;
+        ((TreeInsert*)this)->DoInsertValue(&result, lower, &entry, tag);
+        return (char*)result + 0x14;
+    }
+    return (char*)lower + 0x14;
 }
 
 // ---------------------------------------------------------------------------

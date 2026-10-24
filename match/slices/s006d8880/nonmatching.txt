@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
-006d8880 781  bake evaluator (uv4x16/colour4x8/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ; equiv: FAIL 5/6 mismatched (memory pool)
-006d8c00 738  bake evaluator (uv4x8/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ; equiv: FAIL 5/5 mismatched (memory pool)
-006d8f60 683  bake evaluator (uv2x16/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ; equiv: FAIL 5/12 mismatched (memory pool)
-006d9280 738  bake evaluator (uv4x16/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ; equiv: FAIL 5/42 mismatched (memory pool)
-006d95e0 95  rbtree lower_bound + insert (node stride 0x14, key at +0x10); branch/register layout differs, insert call shape not reproduced; equiv: FAIL 5/6 mismatched (execution)
-006d9660 240  eastl vector<Handle> insert (stride 0x10); reallocation/copy helper schedule differs; equiv: WEAK 356 valid inputs, 66.2% coverage
+006d8880 762  bake evaluator (uv4x16/colour4x8/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ (865 vs 886 bytes); equiv PASS 486/1200 valid (100% cov)
+006d8c00 740  bake evaluator (uv4x8/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ (829 vs 850 bytes); equiv PASS 491/1200 valid (100% cov)
+006d8f60 657  bake evaluator (uv2x16/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ (795 vs 799 bytes); equiv PASS 555/1200 valid (100% cov)
+006d9280 740  bake evaluator (uv4x16/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ (829 vs 850 bytes); equiv PASS 515/1200 valid (100% cov)
+006d95e0 125  rbtree lower_bound + insert (node stride 0x14, key at +0x10); insert call shape + frame differ (136 vs 125 bytes); equiv PASS 290 valid (100% cov)
+006d9660 335  eastl vector<Handle> insert (stride 0x10); EH frame + reallocation-branch schedule differ (304 vs 395 bytes); equiv PASS 356 valid, 66.2% coverage (realloc branch unexercised)
