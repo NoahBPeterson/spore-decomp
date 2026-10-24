@@ -374,9 +374,10 @@ E_aee0* C_aee0::find(int id)
 // @ 0x0067af10
 bool C_af::All(VecU* v)
 {
-    unsigned n = (unsigned)(v->end - v->begin) >> 2;
+    unsigned n = (unsigned)(v->end - v->begin);   // pointer difference is already in elements
     for (unsigned i = 0; i < n; ++i) {
-        if (pend == pbegin)
+        int cnt = (int)(pend - pbegin);
+        if (cnt == 0)
             return false;
         Proc* p = *(pend - 1);
         if (!p->Evaluate(v->begin[i]))

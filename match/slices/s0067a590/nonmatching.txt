@@ -1,10 +1,10 @@
 # va  diff-bytes  reason
 0067a590  122  complete: register/frame scheduling and temp-slot placement differ (cl used a different loop/temp layout)
 0067ac80  35  complete: cl emits movzx byte loads for the masked args where the original uses and eax,0xff on dword loads
-0067af10  66  complete: predicate loop uses different loop shape/register allocation (this in ebp, counter in edi) than original
+0067af10  79  complete: predicate loop; element count is (end-begin) and the empty test is the pointer difference (not pointer equality); equiv PASS 577/600, 100% cov; register allocation (this in ebp, counter in edi) still differs
 0067af70  66  complete: same predicate loop; register allocation differs
 0067afd0  61  complete: three-way predicate composition; register/call scheduling differs
 0067b150  76  complete: store scheduling and 0.0f register reuse differ; cl hoists the cString construct differently
 0067b270  55  complete: cl CSEs the first secondary-vtable store (base ctor vptr) that the original keeps
-0067b2f0  54  complete: vtable-store scheduling vs member loads differs; duplicate vtable stores
+0067b2f0  55  complete: vtable stores/clear-arg load order differs; the deallocate callee (0x00f47380) needed the full 8-digit annotation, with a 6-digit one it resolved elsewhere; equiv PASS 369/600, 100% cov
 0067a6e0  174  HintManager::HandleHintMessage complete; branch layout (End block out of line, redundant cur!=win test) and ebx/esi/edi allocation differ [equiv: WEAK 22% coverage]

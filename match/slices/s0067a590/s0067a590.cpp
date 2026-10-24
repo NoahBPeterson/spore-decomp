@@ -195,9 +195,10 @@ struct C_af {
 
 bool C_af::All(VecU* v)
 {
-    unsigned n = (unsigned)(v->end - v->begin) >> 2;
+    unsigned n = (unsigned)(v->end - v->begin);   // pointer difference is already in elements
     for (unsigned i = 0; i < n; ++i) {
-        if (pend == pbegin)
+        int cnt = (int)(pend - pbegin);
+        if (cnt == 0)
             return false;
         Proc* p = *(pend - 1);
         if (!p->Evaluate(v->begin[i]))
@@ -238,7 +239,7 @@ bool C_af::Check(void* a)
 // ===========================================================================
 extern char g_vtbl_cHint[];          // 0x14014ec
 extern char g_vtbl_cHint_base[];     // 0x13ef094
-extern "C" void* __cdecl EASTL_deallocate(void*);   // f47380
+extern "C" void* __cdecl EASTL_deallocate(void*);   // 0x00f47380
 
 struct cString14 {
     char d[0x14];
