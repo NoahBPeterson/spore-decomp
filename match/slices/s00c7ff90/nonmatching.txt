@@ -1,0 +1,8 @@
+00c7ff90 346 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 346 bytes - Simulator::cSimPlanetLowLOD constructor not reconstructed.
+00c80110 104 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 104 bytes - key-table find-or-insert: the eastl hash find/Insert call shapes and the value slot at +0xc are known, but the InsertRes scratch layout (key copy, zero dword and zero byte reusing the dead argument slot) could not be reproduced from a legal source shape.
+00c80180 1067 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1067 bytes - low-LOD planet helper not reconstructed.
+00c805b0 201 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 201 bytes - low-LOD planet helper not reconstructed.
+00c80680 246 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 246 bytes - low-LOD planet helper not reconstructed.
+00c80780 592 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 592 bytes - low-LOD planet helper not reconstructed.
+00c809d0 171 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 60 bytes - AddPlantSpecies: size 171 matches and the duplicate scan (stride 12, /12 magic, hoisted key dword), the species lookup, the 9-entry limit, PushKeyBC and the table slot zeroing are instruction-for-instruction, but MSVC picks this=ebx/key=ebp and reads the list fields before pushing edi where retail has this=ebp/key=ebx (register-allocation-only difference).
+00c80a80 604 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 604 bytes - low-LOD planet helper not reconstructed.
