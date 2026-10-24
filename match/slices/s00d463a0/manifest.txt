@@ -1,0 +1,5 @@
+slices/s00d463a0/s00d463a0.cpp  ?FUN_00d466f0@@YIEPAX00@Z  00d466f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d463a0/s00d463a0.cpp  ?FUN_00d46900@@YIPAUTrigInfo@@PAU1@PAX0@Z  00d46900  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d463a0/s00d463a0.cpp  ?FUN_00d46a90@@YAPAXPAX00@Z  00d46a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d463a0/s00d463a0.cpp  ?FUN_00d47320@@YIPAUBigC@@PAU1@PAX0@Z  00d47320  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d463a0/s00d463a0.cpp  ?FUN_00d47380@@YIPAUBigC@@PAU1@PAX11@Z  00d47380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
