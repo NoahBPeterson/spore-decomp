@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00594260  8  value halves loaded after the destination pointers (original loads value first)
+00594260  8  complete; the equivalence FAIL was the marker placement, not the loop: the marker sat on fill_imp, the 8-byte-item inline helper that takes the value by value, so the checker fed the ItemId as two stack dwords while the original (eastl::fill taking ItemId const&) reads it through a pointer and the two sides wrote different data. The marker now sits on fill, which takes the reference and forwards it by value to fill_imp (the same hoisted two-register copy the original makes), so both read the item through the pointer. Replay clean, equiv PASS (956 valid inputs, 100% coverage). The remaining 8 bytes are scheduling only: the original loads the item dwords before touching the destination (edx=value, eax=first, then ecx/edx=*value), ours loads the value pointer into eax first and first into eax afterwards
 00593ba0  69  register assignment of first/last swapped in adjacent_find/unique
 005948d0  2  node size loaded into eax instead of ecx before the overflow allocation; equiv PASS (811 valid inputs)
 00594920  2  node size loaded into eax instead of ecx before the overflow allocation; equiv PASS (1104 valid inputs)
