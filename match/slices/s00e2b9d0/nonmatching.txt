@@ -1,1 +1,9 @@
 # va  diff-bytes  reason
+00e2c290 39 Erase: esi/edi and eax/ecx allocation swapped around the ~cString loop; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; equiv FAIL (pool pointer @40010004)
+00e2c2f0 387 Insert: 494 vs 481 bytes, structural eastl vector Insert codegen mismatch; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; equiv WEAK (194/200 valid, 14.1% cov)
+00e2c4f0 98 ~cSPUIRolloverCivRelationship: 142 vs 139 bytes, vptr store and implicit member-destroy ordering differ; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; equiv WEAK (190/200 valid, 87.5% cov)
+00e2c590 21 SetValueTextForRollover: frame 0xac vs 0xa4, block-local WStr tmp not stack-coloured onto the Variant var slot; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; equiv WEAK (143/200 valid, 12.6% cov)
+00e2c840 190 cSPUIRolloverFeedbackGrid::FUN_00e2c840: 230 vs 210 bytes, tree-walk condition/branch codegen differs; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; equiv FAIL (5/5 mismatched, value @4001008c)
+00e2c920 107 cSPUIRolloverCivRelationship ctor: 159 vs 165 bytes, vptr stores emitted after implicit member ctors; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, iswctype import)
+00e2c9f0 101 Shutdown: 140 vs 124 bytes, this in edi vs esi and mpEnd load hoisted; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; equiv PASS (246/400, 65.0% cov)
+00e2ca70 74 Index: 137 vs 133 bytes, push eax vs lea/push after ctor; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; equiv PASS (268/400, 100.0% cov)
