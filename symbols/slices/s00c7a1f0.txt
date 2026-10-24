@@ -1,0 +1,15 @@
+00c7a1f0 UnlockAssociatedParts  # PDB name SP::cPlayer::UnlockAssociatedParts; unlock cascade that tests the flag map and walks the related-part tables for each associated part; not reconstructed
+00c7a6c0 GetFlag0  # 0x00c7a6c0 Ghidra FUN; SP::cPlayer map flag bit 0: lower-bound the flag map for the key and return bit 0 of the element value; not byte-exact
+00c7a710 GetFlag1  # 0x00c7a710 Ghidra FUN; SP::cPlayer map flag bit 1 (same shape as GetFlag0); not byte-exact
+00c7a770 GetFlag2  # 0x00c7a770 Ghidra FUN; SP::cPlayer map flag bit 2; not byte-exact
+00c7a7d0 GetFlag3  # 0x00c7a7d0 Ghidra FUN; SP::cPlayer map flag bit 3; not byte-exact
+00c7a830 GetFlag4  # 0x00c7a830 Ghidra FUN; SP::cPlayer map flag bit 4; not byte-exact
+00c7a890 GetFlag5  # 0x00c7a890 Ghidra FUN; SP::cPlayer map flag bit 5; not byte-exact
+00c7a8f0 MapEntry  # Ghidra FUN_00c7a8f0; eastl::map<unsigned,unsigned>::operator[]-style find-or-insert returning the value slot at node+0x14; not byte-exact
+00c7a970 FUN_00c7a970  # Ghidra FUN; ReadSTLVector-style deserialiser: read a count through EA::IO::ReadInt32 and grow a stride-0x28 vector with the count-preserving path; not reconstructed
+00c7aa40 FUN_00c7aa40  # Ghidra FUN; vector<0x28>::insert: range insert into the stride-0x28 timer vector growing the storage when needed; not reconstructed
+00c7ad00 NatOp  # Ghidra FUN_00c7ad00; SP::cPlayer nat-table element dispatch: index below 10 frees the table element, otherwise erases the caller's booking pair; not byte-exact
+00c7ad40 RemoveStarFromPlayerCaptureProgressList  # Ghidra FUN_00c7ad40; SP::cPlayer: scan the 0x28-stride capture progress list for the star id at +0x70 and erase the matching entry, else discard the star; not byte-exact
+00c7ada0 UpdatePlayerCaptureProgressDecay  # Ghidra FUN_00c7ada0; SP::cPlayer: decay each capture progress timer (elapsed seconds vs the capture-decay setting) and erase expired entries; not byte-exact
+00c7ae80 FUN_00c7ae80  # Ghidra FUN; SP::cPlayer: ensure the embassy map entry for a star, storing the avatar handle of its banner list; not byte-exact
+00c7aef0 ReadSTLMapT  # PDB name SP::ReadSTLMapT<eastl::map<unsigned,SP::cSpacePlayerWarData>,unsigned>; read a count through EA::IO::ReadInt32 and insert that many pairs into an eastl::map; not reconstructed
