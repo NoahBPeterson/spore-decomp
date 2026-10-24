@@ -190,11 +190,8 @@ int __cdecl FUN_01196a90(int param_1, void* param_2, int param_3)
         int s = FUN_01176fc0(*(void**)(param_1 + 0x24), param_2, param_3);
         if (s < 1) {
             BIO_copy_next_retry((void*)param_1);
-            if (s < 0) {
-                if (total < 1)
-                    total = s;
-                return total;
-            }
+            if (s < 0)
+                return (total > 0) ? total : s;
             if (s == 0)
                 return total;
         }
