@@ -1,9 +1,9 @@
 0044e460  58  Cross: this cl build evaluates the left product first; original computes the subtrahend first (same result, mirrored instruction order)
 0044e720  160  GetBounds: inlined Bounds construct/destroy and snap-axis (0x234 base, stride 0x20) handling not reproduced
 0044e830  237  GetBlockType: /Od property-list virtual calls, per-branch ResourceKey frames and hash-ordered locals not reproduced
-0044e980  231  SetBaseJointScale: NaN sentinel bit-compare and linked-block scale offsets not exact
-0044ea80  555  RefreshLinkedFlag: inlined AutoRefCount release/assign chains and /Od frames not reproduced (size mismatch)
-0044ede0  117  RecursiveFlagA: inlined FUN_0044c050 condition and /Od frame layout not reproduced
-0044eea0  98   RecursiveFlagB: inlined recursive branch shape and /Od frame layout not reproduced
+0044e980  208  SetBaseJointScale: sentinel/base-uniform scales are raw int bit patterns (arg compared as *(int*)&-2, mUniformScale stores 0xffffffff); FUN_0044f220 returns int; linked scale negated as an integer. Equivalence WEAK: 400 valid inputs, 0 mismatches, 56.1% coverage -- the uncovered block is only the scale==-2 sentinel path, which the corpus never generates (still 56.1% at 1999 inputs).
+0044ea80  778  RefreshLinkedFlag: AutoRefCount reset/assign chains (vtable+4 AddRef, vtable+8 Release) now modelled; the flag test reads mpSocketConnector, not this. Equivalence PASS (317 valid, 90.6% coverage). Not byte-exact: the twice-inlined reset chain and /Od frames differ.
+0044ede0  155  RecursiveFlagA: predicate is mpSocketConnector->FUN_00435c80() (out-of-line GetFlag(0x39)), not FUN_0044c050(this). Equivalence PASS (355 valid, 76.7% coverage).
+0044eea0  176  RecursiveFlagB: inlined recursive branch shape and /Od frame layout not reproduced
 0044efb0  153  RecursiveFlagC: inlined release chain and /Od frame layout not reproduced
-0044f240  311  CalculateSymmetrySign: inlined property/bool lookups and /Od frames not reproduced (size mismatch)
+0044f240  417  CalculateSymmetrySign: result is a ? a : b (the old code returned 0 when a==0 && b!=0); -1 only when both are 0 and the 0x7bd0ca3e bool property is set. The socket-connector flag prelude is dead code. Equivalence PASS (392 valid, 92.1% coverage).

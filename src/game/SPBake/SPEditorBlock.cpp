@@ -6431,29 +6431,32 @@ int cSPEditorBlock::CalculateSymmetrySign()
         return 0;
     char flag = 0;
     if (mpSocketConnector != 0) {
-        cSPEditorBlock* s = mpSocketConnector;
-        flag = (((*(unsigned int*)&s->mBaseJointScale) & 0x80000000u) != 0) ? 1 : 0;
+        flag = mpSocketConnector->GetFlag(7) ? 1 : 0;
         if (!flag) {
-            cSPEditorBlock* s2 = mpSocketConnector;
-            flag = (((*(unsigned int*)&s2->mBaseJointScale) & 1u) == 0) ? 1 : 0;
+            flag = mpSocketConnector->GetFlag(0) ? 0 : 1;
         }
     }
     int a = FUN_0044c050();
     int b = FUN_0044c450();
     int result = a;
-    if (a == 0 && b == 0) {
-        char pb = 0;
-        cPropertyList* p = mpPropList;
-        if (p != 0) {
-            void* prop = 0;
-            if (p->GetProperty(0x7bd0ca3e, &prop)) {
-                if (*(unsigned short*)((char*)prop + 0x12) == 1)
-                    pb = *(char*)PropertyGetBool(prop);
+    if (result == 0) {
+        result = b;
+        if (result == 0) {
+            char pb = 0;
+            cPropertyList* p = mpPropList;
+            if (p != 0) {
+                void* prop = 0;
+                if (p->GetProperty(0x7bd0ca3e, &prop)) {
+                    if (*(unsigned short*)((char*)prop + 0x12) == 1)
+                        pb = *(char*)PropertyGetBool(prop);
+                }
             }
+            if (pb)
+                result = -1;
         }
-        if (pb)
-            result = -1;
     }
+    (void)flag;
+    (void)*(void**)((char*)this + 0x33c);
     return result;
 }
 

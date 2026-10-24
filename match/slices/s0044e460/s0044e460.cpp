@@ -82,12 +82,34 @@ struct Bounds {
     void Set(const void* src);      // 0x0044d960: this = dst, arg = src
 };
 
+struct cSPEditorBlock;
+
 // Virtual Release through the object's second vtable slot (vtable+8).
 static void ReleaseBlock(void* p)
 {
     if (p) {
         void** vtbl = *(void***)p;
         ((void(__thiscall*)(void*))vtbl[2])(p);
+    }
+}
+
+// Virtual AddRef through the object's first vtable slot (vtable+4).
+static void AddRefBlock(void* p)
+{
+    if (p) {
+        void** vtbl = *(void***)p;
+        ((void(__thiscall*)(void*))vtbl[1])(p);
+    }
+}
+
+// AutoRefCount<T>::operator=(T*): addref the new value, store, release the old.
+static void AssignRef(cSPEditorBlock** slot, cSPEditorBlock* nv)
+{
+    if (nv != *slot) {
+        cSPEditorBlock* old = *slot;
+        AddRefBlock(nv);
+        *slot = nv;
+        ReleaseBlock(old);
     }
 }
 
@@ -124,8 +146,10 @@ struct cSPEditorBlock {
         return t14;
     }
 
+    bool FUN_00435c80() const;                 // 0x00435c80 (out-of-line GetFlag(0x39))
+
     void  SetFlag(int id, int value);          // 0x00435a10
-    float FUN_0044f220();                      // 0x0044f220 (receiver = socket connector)
+    int   FUN_0044f220();                      // 0x0044f220 (receiver = socket connector)
     int   CalculateSymmetrySign();             // 0x0044f240
     int   FindSnapAxis(Vec3 v, float w);       // 0x0044d9e0
     int   FUN_0044c050();                      // 0x0044c050
@@ -187,23 +211,22 @@ int cSPEditorBlock::GetBlockType(unsigned int key)
 void cSPEditorBlock::SetBaseJointScale(float scale)
 {
     if (*(int*)&scale == -2) {
-        float s = (float)CalculateSymmetrySign();
-        mBaseJointScale = s;
+        *(int*)&mBaseJointScale = CalculateSymmetrySign();
         if (mpSocketConnector != 0) {
-            float s2 = mpSocketConnector->FUN_0044f220();
-            if (s2 != 0.0f && *(int*)&s2 != -2 && s2 != mBaseJointScale) {
-                mUniformScale = -2;
-                mBaseJointScale = s2;
+            int s2 = mpSocketConnector->FUN_0044f220();
+            if (s2 != 0 && s2 != -2 && s2 != *(int*)&mBaseJointScale) {
+                *(int*)&mUniformScale = -1;
+                *(int*)&mBaseJointScale = s2;
             }
         }
     } else {
-        mBaseJointScale = scale;
+        *(int*)&mBaseJointScale = *(int*)&scale;
     }
     if (mpLinked != 0) {
-        if (mBaseJointScale == 0.0f)
-            mpLinked->mBaseJointScale = 0.0f;
+        if (*(int*)&mBaseJointScale == 0)
+            *(int*)&mpLinked->mBaseJointScale = 0;
         else
-            mpLinked->mBaseJointScale = -mBaseJointScale;
+            *(int*)&mpLinked->mBaseJointScale = -*(int*)&mBaseJointScale;
     }
 }
 
@@ -212,38 +235,22 @@ void cSPEditorBlock::RefreshLinkedFlag()
 {
     bool b = false;
     if (mpSocketConnector != 0) {
-        if (GetFlag(0x39) || GetFlag(0x3a))
+        if (mpSocketConnector->GetFlag(0x39) || mpSocketConnector->GetFlag(0x3a))
             b = true;
     }
     if (b) {
         SetFlag(0x3a, 1);
-        cSPEditorBlock* p = mpLinked;
-        mpLinked = 0;
-        ReleaseBlock(p);
-        if (p != 0) {
-            cSPEditorBlock* q = p->mpLinked;
-            p->mpLinked = 0;
-            ReleaseBlock(q);
-        }
+        cSPEditorBlock* saved = mpLinked;
+        AssignRef(&mpLinked, (cSPEditorBlock*)0);
+        if (saved != 0)
+            AssignRef(&saved->mpLinked, (cSPEditorBlock*)0);
     } else {
         SetFlag(0x3a, 0);
         if (!GetFlag(0x39)) {
-            cSPEditorBlock* q = mpLinkedAlt;
-            if (q != mpLinked) {
-                cSPEditorBlock* old = mpLinked;
-                if (q) ReleaseBlock(q);
-                mpLinked = q;
-                ReleaseBlock(old);
-            }
+            AssignRef(&mpLinked, mpLinkedAlt);
             if (mpLinked != 0) {
                 cSPEditorBlock* r = mpLinked;
-                cSPEditorBlock* q2 = r->mpLinkedAlt;
-                if (q2 != r->mpLinked) {
-                    cSPEditorBlock* old2 = r->mpLinked;
-                    if (q2) ReleaseBlock(q2);
-                    r->mpLinked = q2;
-                    ReleaseBlock(old2);
-                }
+                AssignRef(&r->mpLinked, r->mpLinkedAlt);
             }
         }
     }
@@ -257,7 +264,7 @@ void cSPEditorBlock::RecursiveFlagA()
 {
     bool b = false;
     if (mpSocketConnector != 0 && mpLinked != 0) {
-        if (FUN_0044c050())
+        if (mpSocketConnector->FUN_00435c80())
             b = true;
     }
     SetFlag(0x3a, b ? 1 : 0);
@@ -324,29 +331,32 @@ int cSPEditorBlock::CalculateSymmetrySign()
         return 0;
     char flag = 0;
     if (mpSocketConnector != 0) {
-        cSPEditorBlock* s = mpSocketConnector;
-        flag = (((*(unsigned int*)&s->mBaseJointScale) & 0x80000000u) != 0) ? 1 : 0;
+        flag = mpSocketConnector->GetFlag(7) ? 1 : 0;
         if (!flag) {
-            cSPEditorBlock* s2 = mpSocketConnector;
-            flag = (((*(unsigned int*)&s2->mBaseJointScale) & 1u) == 0) ? 1 : 0;
+            flag = mpSocketConnector->GetFlag(0) ? 0 : 1;
         }
     }
     int a = FUN_0044c050();
     int b = FUN_0044c450();
     int result = a;
-    if (a == 0 && b == 0) {
-        char pb = 0;
-        cPropertyList* p = mpPropList;
-        if (p != 0) {
-            void* prop = 0;
-            if (p->GetProperty(0x7bd0ca3e, &prop)) {
-                if (*(unsigned short*)((char*)prop + 0x12) == 1)
-                    pb = *(char*)PropertyGetBool(prop);
+    if (result == 0) {
+        result = b;
+        if (result == 0) {
+            char pb = 0;
+            cPropertyList* p = mpPropList;
+            if (p != 0) {
+                void* prop = 0;
+                if (p->GetProperty(0x7bd0ca3e, &prop)) {
+                    if (*(unsigned short*)((char*)prop + 0x12) == 1)
+                        pb = *(char*)PropertyGetBool(prop);
+                }
             }
+            if (pb)
+                result = -1;
         }
-        if (pb)
-            result = -1;
     }
+    (void)flag;
+    (void)*(void**)((char*)this + 0x33c);
     return result;
 }
 // --- equivalence checker address annotations
