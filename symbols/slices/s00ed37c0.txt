@@ -1,0 +1,8 @@
+00ed37c0 RecordMap::Find  # record-map find-or-insert (lower_bound over 0x27e8 elements keyed at +0x20); returns &record->f8
+00ed38a0 ScnRecBody::RemoveIcon  # listener callback: look the icon key up in palVecA / insert via FUN_00ed1f70 / virtual hand-off / select
+00ed3920 ScnRecBody::ClearTwo  # listener callback: clear the key from palVecA and palVecB (virtual clear + reselect)
+00ed39a0 ScnRecBody::DeselectTwo  # listener callback: resolve the key in palVecA and palVecB and run each entry's virtual deselect
+00ed3a00 ScnRecBody::Finish  # listener callback: refresh the record container, walk every record (remove-icon) and the 0x238-stride second container (reselect live)
+00ed3b20 ScnRecBody::ChooseSubCategory  # listener callback: sub-category chosen; register/erase the icon by allocator id (-1/-2/other) and refresh the node
+00ed3c00 Scn::Setup  # scenario cast-palette panel setup (pre-existing function in this slice)
+00ed4200 ScnRec::ProcessMessage  # listener ProcessMessage handler (32-bit message-id switch, jump table at 0x00ed4714)
