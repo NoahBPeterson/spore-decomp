@@ -1,0 +1,15 @@
+# Slice s00da9600 nonmatching functions (compiled; behaviourally faithful but not byte-exact).
+# Format: <va> <difftest-verdict> <reason>
+00da9600 FAIL 5/5 valid inputs mismatched (execution); SP::TRIBE_AREA_INTRUDERS_Decide; vtable-walk intruder scan, speculative FUN_00c8f470 SetStimuli arg ABI + register tie (self/iterator regs) (463 vs 500 bytes)
+00da9800 FAIL 5/5 valid inputs mismatched (execution); citizen proximity predicate; x87 vs SSE float-compare ordering (fcompi) and thiscall GetTribe position getter reconstruction (302 vs 246 bytes)
+00da9900 FAIL 5/5 valid inputs mismatched (execution, fault in LookupB fake); tribe layout-mgr lookup; thiscall CreateLayoutManager/LookupB arg plumbing + float compare (88 vs 80 bytes; card size includes next function at 0xda9950)
+00da9a00 FAIL 5/5 valid inputs mismatched (execution); SP::TRIBE_SCHEDULED_FORAGE_Decide; stim layout offsets + fake-arity on behavior_stimuli::GetAny path (218 vs 199 bytes)
+00da9ad0 FAIL 5/5 valid inputs mismatched (execution); tribe water-tool decision; GetClosestWater/GetToolOfType thiscall + x87 float-compare + Play/ClearAll ABI (321 vs 317 bytes)
+00da9c10 FAIL 5/5 valid inputs mismatched (execution); SP::TRIBE_SCHEDULED_HUNT_Decide; frame-layout (extra 1-dword local) and sete-vs-je boolean form for FUN_00c22dd0()==1 (145 vs 139 bytes)
+00da9ca0 FAIL 5/5 valid inputs mismatched (execution); idle-animation reissue; sqrtf distance + thiscall vtable [0x2c]/[0x74] getters, register tie on iVar9/self (374 vs 269 bytes)
+00da9db0 UNSUPPORTED 0/400 valid inputs (fault(read) 359, fake-arity 39, import:_fcvt 1); SP::TRIBE_STEAL_BABY_Activate; double-timebase/0xac-stride and PlayIdleAnimation/WatchMemoryBlock reconstruction (366 vs 388 bytes)
+00da9f40 UNSUPPORTED 0/400 valid inputs (fault(read) 317, fake-arity 80, fault(write) 2); relationship-scan bystander animation; thiscall FUN_00c420d0/FUN_00d00a70 (ecx=relmgr) and tail FUN_00bc97f0 float-arg ABI (292 vs 293 bytes)
+00daa070 WEAK 304 valid inputs but only 8.3% coverage; proximity tool-interaction update; SSE distance/radius compare + [+0x5fc] flag clear, vtable [0xac]/[0x70] reconstruction (312 vs 249 bytes)
+00daa170 FAIL 5/5 valid inputs mismatched (execution); idle-animation target stimulus fill; stim layout offsets and FUN_00d00a70/FUN_00bc98f0 ABI (372 vs 381 bytes)
+00daa2f0 WEAK 400 valid inputs but only 8.4% coverage; UFO abduction range check; GetSpaceRelationshipTuning/GetUFOSimulator/GetPlayerInventory chain + stim fill (324 vs 291 bytes)
+00daa420 UNSUPPORTED 0/400 valid inputs (fault(read) 394, fault(write) 6); SP::cUFOAbductionEvent::ShouldDeactivate; x87 u32->float via fild/fadd 2^32/fmul, stim Pointers[3] offset and FUN_00d99420/FUN_00d996e0 ABI (277 vs 268 bytes)

@@ -1,0 +1,1 @@
+# Slice s00da9600: no byte-exact functions (see nonmatching.txt).
