@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00fea240/s00fea240.cpp  ?resize@RuleVector@@QAEXI@Z  00fea460  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fea240/s00fea240.cpp  ?FUN_00fea840@@YA_NPAUcPropertyList@@IGPAUVec@@@Z  00fea840  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fea240/s00fea240.cpp  ?FUN_00fea8d0@@YA_NPAUcPropertyList@@IGPAUStringVector@@@Z  00fea8d0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fea240/s00fea240.cpp  ??0BehaviorRule@@QAE@XZ  00fea960  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fea240/s00fea240.cpp  ?Execute@BehaviorRule@@UAEXPAX@Z  00feaa70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fea240/s00fea240.cpp  ?FUN_00feb050@@YIPAXPAUVtableHolder@@@Z  00feb050  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fea240/s00fea240.cpp  ?FUN_00feb060@@YIXPAUViewerHolder@@@Z  00feb060  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fea240/s00fea240.cpp  ?FUN_00feb0b0@@YG_NI@Z  00feb0b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fea240/s00fea240.cpp  ?FUN_00feb0f0@@YIXPAUViewerHolder@@@Z  00feb0f0  /O2 /MD /Gy /EHsc /TP /arch:SSE

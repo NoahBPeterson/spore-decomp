@@ -1,0 +1,5 @@
+00fea240 84 RuleVector::erase: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest FAIL (5/5 valid inputs mismatched; memory pool @40010004); size 94 vs 96, compiler folds dst into src+delta instead of keeping the retail dst register; tail uses add (vector grows)
+00fea2a0 358 RuleVector::insert: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest FAIL (5/105 valid, execution fault at 00fe8dbd); size 428 vs 433, reallocation/copy helper call sequence incomplete
+00fea510 658 cEmpireGrowthSim::OnTick: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (400 valid, 3.5% cov); size 779 vs 808, timer/threshold and star-pass bodies reduced
+00feab10 382 cEmpireGrowthSim::FillOutBehaviorRules: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid; write faults); size 304 vs 442, parser vtable slots and string-list iteration incomplete
+00feacd0 780 cEmpireGrowthSim::cEmpireGrowthSim: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid; read faults); size 727 vs 894, property/rule-set construction incomplete
