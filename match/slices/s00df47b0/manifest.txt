@@ -1,0 +1,9 @@
+# byte-exact functions for slice s00df47b0
+slices/s00df47b0/s00df47b0.cpp  ?FUN_00df5330@cGalaxyGameEntryUIStateMachine@@QAEXXZ  00df5330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00df47b0/s00df47b0.cpp  ?FUN_00df53d0@cGalaxyGameEntryUIStateMachine@@QAEX_N@Z  00df53d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00df47b0/s00df47b0.cpp  ?FUN_00df5430@cGalaxyGameEntryUIStateMachine@@QAEXH@Z  00df5430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00df47b0/s00df47b0.cpp  ?FUN_00df54f0@cGalaxyGameEntryUIStateMachine@@QAEOM@Z  00df54f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00df47b0/s00df47b0.cpp  ?FUN_00df5540@cGalaxyGameEntryUIStateMachine@@QAEXXZ  00df5540  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00df47b0/s00df47b0.cpp  ?FUN_00df5570@@YG_NPAX0@Z  00df5570  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00df47b0/s00df47b0.cpp  ?FUN_00df55b0@cGalaxyGameEntryUIStateMachine@@QAEXH@Z  00df55b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00df47b0/s00df47b0.cpp  ?FUN_00df5610@cGalaxyGameEntryUIStateMachine@@QAEXM@Z  00df5610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
