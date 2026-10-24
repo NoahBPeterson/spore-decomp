@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s00f60f00/effect.cpp  ?FUN_00f61a30@@YAHII@Z  00f61a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f60f00/effect.cpp  ?FUN_00f61a70@@YAXXZ  00f61a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f60f00/effect.cpp  ?TickRetrigger@cParticlesEffect@Swarm@EA@@QAEXM@Z  00f61ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

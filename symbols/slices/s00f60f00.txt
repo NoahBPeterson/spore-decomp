@@ -1,1 +1,5 @@
 00f60f00 EA::Swarm::cParticlesEffect::Update  # Claude-coined method name on the PDB class: emit + age particles for dt (calls InitParticle 00f5ebf0, particle update table 015b0c00)
+00f61600 EA::Swarm::cParticlesEffect::UpdateByFrames  # Claude-coined: per-frame emitter variant selected by desc flag bit 0 (ceil(curve[0]*mCurrentEmitRateScale) particles per frame, no back-dating)
+00f61a30 EA::Swarm::CreateEffectFromAllocator  # Claude-coined free factory: operator new(0x248,"Swarm") then 00f608c0(a,b), returns result+8 or 0
+00f61a70 EA::Swarm::RegisterEffectFactory  # Claude-coined: stores 00f61a30 into 0x01676418 and 00f5eb30 into 0x01676410
+00f61ab0 EA::Swarm::cParticlesEffect::TickRetrigger  # Claude-coined: decays mRetriggerTime (+0xa4), clamps dt to desc+0x14-0.01f, then dispatches to 00f60630 (flag bit 1) / 00f61600 (bit 0) / Update
