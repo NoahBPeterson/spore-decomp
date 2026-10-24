@@ -1,1 +1,8 @@
 01035900 SP::cSPSpaceGfx::InitForGame  # PDB name; creates effects worlds/renderers once (mInitedForGame flag)
+010361c0 SP::cSPSpaceGfx::ApplyUniverseContext  # free function; switch on GetUniverseContext: setup render manager for planet / space / toggle objects
+010362e0 SP::cSPSpaceGfx::ToggleGfxObjectsA  # free function; byte-exact
+010363a0 SP::cSPSpaceGfx::EnterSpaceMode  # register window slots, deactivate objects, SetPair -> tail call ApplyUniverseContext
+010364b0 SP::cSPSpaceGfx::InitForSpaceMode  # byte-exact; unregister slots, Act(2) objects, release mpEffect90
+01036590 SP::cSPSpaceGfx::AttachEffect  # attach a named effect into the +0x90 slot and SetActive(0)
+01036610 SP::sCalcTiltAlpha  # free function; x87 float, property ids 0x195a040/1/2, 90deg/deg2rad
+010367e0 SP::cSPSpaceGfx::PropagateFlagToObjects  # cache char at +0x58, walk RB tree, vcall vtbl+0x16c

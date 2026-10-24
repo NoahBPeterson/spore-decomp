@@ -1,0 +1,3 @@
+# source  symbol  original VA  [flags override]
+slices/s01035900/spacegfx.cpp  ?FUN_010362e0@@YAXXZ  010362e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01035900/spacegfx.cpp  ?FUN_010364b0@cSPSpaceGfx@@QAEXXZ  010364b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
