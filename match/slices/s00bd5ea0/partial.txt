@@ -1,0 +1,2 @@
+00bd5ea0 614 partial: FUN_00bd5ea0 source incomplete (~179 instructions missing; ours 556 insns vs 735 bytes retail); equivalence UNSUPPORTED (2 unresolved references ?GetNounKey@cGameData@SP@@QBEIXZ, ?GetNounID@cGameData@SP@@QBEIXZ); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00bd6230 15 partial: cGameData::WriteTagged; equivalence UNSUPPORTED (0/400 valid; vtable-call target unreadable under harness, fault(read)=399); code complete, remaining diff is a one-slot store-vs-load scheduling swap; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

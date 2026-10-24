@@ -1,0 +1,4 @@
+00bd6300 223 nonmatching: UpdateOrbit x87 fld/fchs/fcomi/fcos/fsin; remaining diff is register/scheduling noise (258 vs 260 insns); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict PASS (400 valid, 95.5% coverage)
+00bd6590 11 nonmatching: UpdatePosition; uniform stack-frame-size difference only (frame 0x64 vs 0x68, all insns identical otherwise); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict PASS (359 valid, 81.1% coverage)
+00bd6c10 10 nonmatching: cCheatObject dtor; lea ebx,[esi+0x108] scheduled one slot late vs original (lea edi already early); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (193 valid, 100% coverage)
+00bd6eb0 230 nonmatching: switch(amount)+switch(command) rewrite; remaining is loop/register layout; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (191 valid, 36.3% coverage)
