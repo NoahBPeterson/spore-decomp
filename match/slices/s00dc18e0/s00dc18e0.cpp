@@ -25,6 +25,8 @@ float* Fun_59aed0(void* out, const void* a, const void* b);    // 0x0059aed0: cd
 float* Fun_b0fd00(void* out, const void* a, const void* b, float t);  // 0x00b0fd00 RotateTowards: cdecl, 4 args
 void   QuaternionFromFacingAndUp(void* out, const void* facing, const void* up);  // 0x0069b600: cdecl
 float* Fun_5b2500(const void* a, const void* b, const void* c, float t);          // 0x005b2500 Slerp: cdecl
+void   Fun_dc00a0(float* out, int arg, void* self);            // 0x00dc00a0: cdecl, 3 args
+float  Fun_c37120();                                           // 0x00c37120: cdecl, no args
 
 // Vtable access. Slot offsets are byte offsets into the vtable.
 typedef void  (__thiscall* FnV0)(void*);
@@ -40,6 +42,7 @@ inline void** VT(void* o) { return *reinterpret_cast<void***>(o); }
 class cSpace {
  public:
   bool __cdecl Update(int p2, unsigned int p3, int p4, int p5, float* p6, float p7, float p8);
+  bool __cdecl UpdateTarget(int p2, unsigned int p3, int p4, int p5, float* p6, float p7, float p8);
 
   void* Fun_c38b00();                                          // 0x00c38b00: thiscall, returns [this+0x7a8]
   void* Fun_c38b80();                                          // 0x00c38b80: thiscall, returns [this+0x7ac]
@@ -51,7 +54,141 @@ class cSpace {
   template <typename T> T& At(unsigned int off) {
     return *reinterpret_cast<T*>(reinterpret_cast<char*>(this) + off);
   }
+  float* Vec(unsigned int off) {
+    return reinterpret_cast<float*>(reinterpret_cast<char*>(this) + off);
+  }
+  const float* Vec(unsigned int off) const {
+    return reinterpret_cast<const float*>(reinterpret_cast<const char*>(this) + off);
+  }
 };
+
+// @ 0x00dc18e0
+bool __cdecl cSpace::UpdateTarget(int p2, unsigned int p3, int p4, int p5,
+                                  float* p6, float p7, float p8) {
+  (void)p2; (void)p3; (void)p5; (void)p7;
+
+  enum : unsigned int {
+    kHeldObject     = 0x68c,
+    kHeldOffsetX    = 0x694,
+    kHeldOffsetY    = 0x698,
+    kHeldOffsetZ    = 0x69c,
+    kPositionX      = 0x718,
+    kPositionY      = 0x71c,
+    kPositionZ      = 0x720,
+    kOrientation    = 0x730,
+    kFlag691        = 0x691,
+    kFlag624        = 0x624
+  };
+
+  void* held = At<void*>(kHeldObject);
+  if (held == 0)
+    return false;
+
+  float local[3];
+  Fun_dc00a0(local, p4, this);
+
+  void* heldSub = reinterpret_cast<char*>(held) + 0x34;
+  void** heldVt = *reinterpret_cast<void***>(heldSub);
+  const float kPositionScale = *reinterpret_cast<const float*>(0x014007f4);
+  float scalar = reinterpret_cast<FnF0>(heldVt[0x34 / 4])(heldSub);
+
+  local[0] = (local[0] + At<float>(kHeldOffsetX) * kPositionScale) * scalar;
+  local[1] = (local[1] + At<float>(kHeldOffsetY) * kPositionScale) * scalar;
+  local[2] = (local[2] + At<float>(kHeldOffsetZ) * kPositionScale) * scalar;
+
+  void* basis = reinterpret_cast<FnP0>(heldVt[0x30 / 4])(heldSub);
+  float rotated[3];
+  Fun_59aed0(rotated, local, basis);
+
+  float candidate[3];
+  candidate[0] = Vec(kPositionX)[0] + rotated[0];
+  candidate[1] = Vec(kPositionY)[0] + rotated[1];
+  candidate[2] = Vec(kPositionZ)[0] + rotated[2];
+
+  const float kUnsetX = *reinterpret_cast<const float*>(0x0169f444);
+  const float kUnsetY = *reinterpret_cast<const float*>(0x0169f448);
+  const float kUnsetZ = *reinterpret_cast<const float*>(0x0169f44c);
+  const float kOne = *reinterpret_cast<const float*>(0x01485720);
+  const bool targetUnset = p6[0] == kUnsetX && p6[1] == kUnsetY && p6[2] == kUnsetZ;
+
+  if (targetUnset) {
+    const float dx = candidate[0] - Vec(kPositionX)[0];
+    const float dy = candidate[1] - Vec(kPositionY)[0];
+    const float dz = candidate[2] - Vec(kPositionZ)[0];
+    const float distance = (float)sqrt((double)(dz * dz + dy * dy) + (double)(dx * dx));
+
+    if (distance > *reinterpret_cast<const float*>(0x01486110)) {
+      const float blend = Fun_c37120();
+      Fun_c3be70(candidate);
+      Fun_c3daa0(blend);
+      At<unsigned char>(kFlag624) = 1;
+      return true;
+    }
+
+    At<unsigned char>(kFlag691) = 1;
+    p6[0] = candidate[0];
+    p6[1] = candidate[1];
+    p6[2] = candidate[2];
+  } else {
+    At<unsigned char>(kFlag691) = 1;
+
+    float rate = (p6[3] + *reinterpret_cast<const float*>(0x0159d5f0)) * p8;
+    if (rate > kOne)
+      rate = kOne;
+
+    const float dirLength = (float)sqrt((double)(candidate[2] * candidate[2] +
+                                                candidate[1] * candidate[1]) +
+                                        (double)(candidate[0] * candidate[0]));
+    float dir[3];
+    dir[0] = candidate[0] / dirLength;
+    dir[1] = candidate[1] / dirLength;
+    dir[2] = candidate[2] / dirLength;
+
+    const float targetLength = (float)sqrt((double)(p6[2] * p6[2] +
+                                                    p6[1] * p6[1]) +
+                                           (double)(p6[0] * p6[0]));
+    const float invTargetLength = kOne / targetLength;
+    float normal[3];
+    normal[0] = p6[0] * invTargetLength;
+    normal[1] = p6[1] * invTargetLength;
+    normal[2] = p6[2] * invTargetLength;
+
+    float steer[3];
+    Fun_b0fd00(steer, normal, dir, rate);
+    p6[0] = steer[0] * targetLength;
+    p6[1] = steer[1] * targetLength;
+    p6[2] = steer[2] * targetLength;
+  }
+
+  void* finalHeld = At<void*>(kHeldObject);
+  void* finalSub = reinterpret_cast<char*>(finalHeld) + 0x34;
+  void** finalVt = *reinterpret_cast<void***>(finalSub);
+  void* extra = reinterpret_cast<FnP0>(finalVt[0x2c / 4])(finalSub);
+  const float* extraVec = static_cast<const float*>(extra);
+  float combined[3];
+  combined[0] = extraVec[0] + p6[0];
+  combined[1] = extraVec[1] + p6[1];
+  combined[2] = extraVec[2] + p6[2];
+
+  float facing[3];
+  Fun_b0fd00(facing, Vec(kPositionX),
+             combined, *reinterpret_cast<const float*>(0x013ec4b4));
+  Fun_c3dae0(facing);
+
+  float orientRate = (p6[3] + *reinterpret_cast<const float*>(0x0159d5f4)) * p8;
+  if (orientRate > kOne)
+    orientRate = kOne;
+
+  float slerpResult[4];
+  float* quat = Fun_5b2500(slerpResult, Vec(kOrientation),
+                           reinterpret_cast<char*>(finalHeld) + kOrientation,
+                           orientRate);
+  At<float>(kOrientation + 0) = quat[0];
+  At<float>(kOrientation + 4) = quat[1];
+  At<float>(kOrientation + 8) = quat[2];
+  At<float>(kOrientation + 12) = quat[3];
+  return true;
+}
 
 // @ 0x00dc1d70
 bool __cdecl cSpace::Update(int p2, unsigned int p3, int p4, int p5, float* p6, float p7, float p8) {
