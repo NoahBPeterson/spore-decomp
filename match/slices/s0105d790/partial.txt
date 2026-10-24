@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s0105d790.  0/3 byte-exact.  All three functions are complete reconstructions (no stubs, no
+# naked/asm bodies) but the retail float/matrix order and stack-slot reuse are not reproduced.
+#
+0105dc60  CollideWithObject: capsule push-out for the UFO against a query-object segment (radius/extend at +0x44/+0x48/+0x4c, push mode +0x88); every call and constant is present in order, but the stack-slot order of v/t/end/mid and the ufo/object register assignment differ.
+0105d790  KeepInsideObject: inflate the object's box by the body radius, build the identity inverted local-to-world transform, reject positions outside the box, then push the body back along normalize(pos-anchor) limited by a RayBoxHit against the box; the local Vector3 temporaries are not coalesced into the retail fixed slots (frame 0xa0 vs 0x94) and the extent uses a plain length instead of the interleaved x87 sequence.
+0105e290  FUN_0105e290: reseat the steered body on the radius from the 0x303154cc property, blend its up vector, spin its facing and rebuild the aim quaternion; complete but the x87/SSE evaluation order, the two clamp shapes and the FUN_0059aed0 argument roles are approximated.
