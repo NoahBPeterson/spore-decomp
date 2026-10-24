@@ -1,0 +1,8 @@
+# va diff flags difftest
+00c6e710 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK 13.3% coverage, equivalence-only (unresolved imports)
+00c6e8f0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution (external callee ABI 0x00b7ef9e)
+00c6ee40 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK 10.9% coverage, equivalence-only
+00c6f470 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED no valid inputs (import:memcpy)
+00c6f590 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact (schedule)
+00c6f5e0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL different generated callee (register-ABI external)
+00c6f660 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL different generated callee (register-ABI external)
