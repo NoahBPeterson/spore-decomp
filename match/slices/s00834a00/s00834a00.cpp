@@ -152,10 +152,10 @@ void TooltipManager::Dtor()
 // @ 0x008353a0
 bool TooltipManager::ReleaseRefs()
 {
-    if (layout) { layout = 0; ((VFv)VT(layout)[8 / 4])(layout); }
-    if (window) { window = 0; ((VFv)VT(window)[4 / 4])(window); }
-    if (parent) { parent = 0; ((VFv)VT(parent)[4 / 4])(parent); }
-    if (props)  { props = 0;  ((VFv)VT(props)[4 / 4])(props); }
+    if (void* p = layout) { layout = 0; ((VFv)VT(p)[8 / 4])(p); }
+    if (void* p = window) { window = 0; ((VFv)VT(p)[4 / 4])(p); }
+    if (void* p = parent) { parent = 0; ((VFv)VT(p)[4 / 4])(p); }
+    if (void* p = props)  { props = 0;  ((VFv)VT(p)[4 / 4])(p); }
     return true;
 }
 
@@ -231,7 +231,7 @@ void TooltipManager::MakeFullyVisibleInMainWindow(int dummy)
 bool TooltipManager::LoadProps()
 {
     void* pm = FUN_0067de30();
-    if (props) { props = 0; ((VFv)VT(props)[4 / 4])(props); }
+    if (void* p = props) { props = 0; ((VFv)VT(p)[4 / 4])(p); }
     char c = ((char (__thiscall*)(void*, int, void**))VT(pm)[0x30 / 4])(pm, 0x5c770db7, &props);
     if (c)
         ((void (__thiscall*)(void*, void*))FUN_006237d0)(&g_1548560, props);
