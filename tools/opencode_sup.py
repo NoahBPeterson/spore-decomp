@@ -56,6 +56,23 @@ sys.path.insert(0, W("tools/matching"))
 import claim  # noqa: E402
 
 
+_DB = os.path.expanduser("~/.local/share/opencode/opencode.db")
+
+
+def last_activity(sid):
+    """Seconds-since-epoch of the session's newest message write in opencode's database, None if unreadable."""
+    if not os.path.exists(_DB):
+        return None
+    try:
+        import sqlite3
+        db = sqlite3.connect("file:%s?mode=ro" % _DB, uri=True, timeout=5)
+        r = db.execute("select max(time_updated) from session_message where session_id = ?", (sid,)).fetchone()
+        db.close()
+        return r[0] / 1000 if r and r[0] else None
+    except Exception:
+        return None
+
+
 def save():
     json.dump(G, open(GF, "w"), indent=1)
     open(W("work/opencode", "sessions_%s.txt" % group), "w").write("".join(s + "\n" for s in SESS.values()))
@@ -254,7 +271,13 @@ elif cmd == "unhang":
             continue
         m = api("GET", "/api/session/%s/message?limit=2" % sid).get("data", [])
         a = [x for x in m if x.get("type") == "assistant" or x.get("role") == "assistant"]
-        if a and not a[0].get("time", {}).get("completed") and time.time() - a[0]["time"]["created"] / 1000 > lim:
+        # opencode 2.1 messages have no "completed" and "created" is the turn's start, so judge a hang by the
+        # session's newest database write (as opencode_drain.py does); the old test interrupted every session whose
+        # turn had run SECS, and the Runpod check-in's "unhang 900" aborted healthy sessions every 20 min (2026-10-23)
+        act = last_activity(sid)
+        if act is None and a and not a[0].get("time", {}).get("completed"):
+            act = a[0]["time"]["created"] / 1000
+        if a and act is not None and time.time() - act > lim:
             api("POST", "/api/session/%s/interrupt" % sid, {})
             api("POST", "/api/session/%s/prompt" % sid, {"text": "Your previous model call hung and was interrupted. "
                 "Continue your task from the files already written in your slices.", "model": model(int(k))})
