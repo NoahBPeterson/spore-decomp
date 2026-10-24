@@ -150,28 +150,28 @@ void QueuedBlender::ClearQueued() {
 
 // @ 0x00a009e0
 uint FUN_00a009e0(QueuedBlender* b) {
-    uint best = 0xffffffffu;
+    int best = -1;
     int it = 0;
     for (;;) {
-        if ((int)best >= 0 && best < 0x10 && best != b->mDefault) {
+        if (best >= 0 && (uint)best != b->mDefault) {
             AnimCommand* c = &b->mCommands[best];
             if (c->mAnim == 0 &&
-                ((uint)c->mDeferredIdx >= 8 || c->mDeferred[c->mDeferredIdx][0] == 0))
-                return best;
+                (c->mDeferredIdx >= 8 || c->mDeferred[c->mDeferredIdx][0] == 0))
+                return (uint)best;
         }
-        if (best <= 0x10) {
+        if ((uint)best <= 0x10) {
             AnimCommand* c = &b->mCommands[best];
             if (c->mAnim == 0) {
                 uint h = c->mHandle;
-                if (h == 0) { ((XC*)c)->FUN_00a00490(); return best; }
+                if (h == 0) { ((XC*)c)->FUN_00a00490(); return (uint)best; }
                 AnimCommand* s = &b->mCommands[(h & 0xff) - 1];
-                if (s->mSeqGen != (h >> 8)) { ((XC*)c)->FUN_00a00490(); return best; }
+                if (s->mSeqGen != (h >> 8)) { ((XC*)c)->FUN_00a00490(); return (uint)best; }
                 if (s->mAnim == 0) {
                     uint h2 = s->mLinkedHandle;
-                    if (h2 == 0) { ((XC*)c)->FUN_00a00490(); return best; }
+                    if (h2 == 0) { ((XC*)c)->FUN_00a00490(); return (uint)best; }
                     AnimCommand* s2 = &b->mCommands[(h2 & 0xff) - 1];
-                    if (s2->mSeqGen != (h2 >> 8)) { ((XC*)c)->FUN_00a00490(); return best; }
-                    if (s2->mAnim == 0) { ((XC*)c)->FUN_00a00490(); return best; }
+                    if (s2->mSeqGen != (h2 >> 8)) { ((XC*)c)->FUN_00a00490(); return (uint)best; }
+                    if (s2->mAnim == 0) { ((XC*)c)->FUN_00a00490(); return (uint)best; }
                 }
             }
         }
@@ -180,8 +180,8 @@ uint FUN_00a009e0(QueuedBlender* b) {
         if (nx < 0) {
             uint m = (uint)(-nx) & 0x8000000fu;
             if ((int)m < 0) m = ((m - 1) | 0xfffffff0u) + 1;
-            nx = 0;
-            if (m != 0) nx = (int)(0x10 - m);
+            if (m != 0) m = 0x10 - m;
+            nx = (int)m;
         } else {
             nx = (int)((uint)nx & 0x8000000fu);
             if (nx < 0) nx = (int)((((uint)nx - 1) | 0xfffffff0u) + 1);
@@ -190,7 +190,7 @@ uint FUN_00a009e0(QueuedBlender* b) {
         it++;
         b->mCommandsTail = (uint)nx;
         if (it >= 0x10) return 0xffffffffu;
-        best = (uint)nx;
+        best = nx;
     }
 }
 
