@@ -269,3 +269,681 @@ void Combatant::Hit(float dmg, int attacker, int type, uint32_t extra, HitSource
     Spawner* spw = GetSpawnMgr()->mpSpawner;
     spw->Spawn(lo, hi, self->GetOwnerEmpire(), pos, g168b66c);
 }
+
+// ============================================================================
+// Simulator building class family: the shared cBuilding destructor body, the
+// cBuildingCityHall / cBuildingHouse destructors, and their helpers.
+// ============================================================================
+namespace SP_BLD {
+
+typedef unsigned char  u8b;
+typedef unsigned short u16b;
+typedef unsigned int   u32b;
+
+// A 0x20-byte cGonzagoTimer (POD, constructed / destroyed by its ctor / dtor).
+struct Timer { u32b mData[8]; };
+
+// eastl::basic_string<wchar_t> as stored inside a building (16 bytes).
+struct WString16 {
+    wchar_t* mpBegin;      // +0x00
+    wchar_t* mpEnd;        // +0x04
+    wchar_t* mpCapacity;   // +0x08
+    void*    mpPool;       // +0x0c
+};
+
+// The growable coordinate array kept at +0x1f8 (11 dwords = 0x2c bytes).
+struct CoordArray {
+    u32b  mInline[6];      // +0x00 .. +0x17
+    u32b* mpCurrent;       // +0x18
+    u32b* mpUnused1c;      // +0x1c
+    u32b* mpCapacity;      // +0x20
+    u32b* mpUnused24;      // +0x24
+    u32b* mpUnused28;      // +0x28
+};
+
+// rw::math::fpu::Matrix33 (nine floats).
+struct Matrix3f { float m[9]; };
+
+// Non-primary base subobject view: only the vtable pointer matters here.
+struct VtblView { void* mpVtbl; };   // +0x00
+
+// ---------------------------------------------------------------------------
+// cBuilding: one flat layout covering the six base subobjects and the tail.
+// (Same offsets as the cBuilding in slice s00bd1820.)
+// ---------------------------------------------------------------------------
+struct cBuilding {
+    void* mpVtbl0;           // +0x000  cBuilding vtable
+    void* mpVtbl1;           // +0x004  DefaultRefCounted half vtable
+    char  mData08[0x34 - 0x08];      // +0x008 .. +0x033
+    void* mpVtblSpatial;     // +0x034  cSpatialObject subobject vtable
+    char  mData38[0x108 - 0x38];     // +0x038 .. +0x107
+    void* mpVtblInteraction; // +0x108  cInteractionTarget subobject vtable
+    char  mData10c[0x120 - 0x10c];   // +0x10c .. +0x11f
+    void* mpVtblCombatant;   // +0x120  cCombatant subobject vtable
+    char  mData124[0x1e8 - 0x124];   // +0x124 .. +0x1e7
+    void* mpVtblPlaceable;   // +0x1e8  cPlaceableStructure subobject vtable
+    u32b  mF1ec;             // +0x1ec
+    u32b  mF1f0;             // +0x1f0
+    u8b   mF1f4;             // +0x1f4
+    char  mF1f5[3];          // +0x1f5 .. +0x1f7
+    CoordArray mCoords;      // +0x1f8
+    u32b  mF224;             // +0x224
+    u32b  mF228;             // +0x228
+    u32b  mF22c;             // +0x22c
+    u8b   mF230;             // +0x230
+    char  mF231[0x238 - 0x231];      // +0x231 .. +0x237
+    Timer mTimer1;           // +0x238
+    Timer mTimer2;           // +0x258
+    WString16 mName;         // +0x278 (begin / end / capacity / pool)
+    u8b   mF288;             // +0x288
+    u8b   mF289;             // +0x289
+    char  mF28a[2];          // +0x28a .. +0x28b
+    u32b  mF28c;             // +0x28c
+    u32b  mF290;             // +0x290
+    u32b  mF294;             // +0x294
+    u32b  mF298;             // +0x298
+    u32b  mF29c;             // +0x29c
+    u32b  mF2a0;             // +0x2a0  array allocation (refcount at -4)
+    u32b  mF2a4;             // +0x2a4
+    u32b  mF2a8;             // +0x2a8
+    char  mF2ac[8];          // +0x2ac .. +0x2b3
+    u32b  mF2b4;             // +0x2b4  array allocation
+    u32b  mF2b8;             // +0x2b8
+    u32b  mF2bc;             // +0x2bc
+    char  mF2c0[8];          // +0x2c0 .. +0x2c7
+    u32b  mF2c8;             // +0x2c8  array allocation
+    u32b  mF2cc;             // +0x2cc
+    u32b  mF2d0;             // +0x2d0
+    char  mF2d4[8];          // +0x2d4 .. +0x2db
+    u32b  mF2dc;             // +0x2dc  array allocation
+    u32b  mF2e0;             // +0x2e0
+    u32b  mF2e4;             // +0x2e4
+    char  mF2e8[8];          // +0x2e8 .. +0x2ef
+    u8b   mF2f0;             // +0x2f0
+    char  mF2f1[3];          // +0x2f1 .. +0x2f3
+    u32b  mF2f4;             // +0x2f4  array allocation
+    u32b  mF2f8;             // +0x2f8
+    u32b  mF2fc;             // +0x2fc
+    char  mF300[8];          // +0x300 .. +0x307
+    u32b  mF308;             // +0x308  array allocation
+    u32b  mF30c;             // +0x30c
+    u32b  mF310;             // +0x310
+    char  mF314[0x320 - 0x314];      // +0x314 .. +0x31f
+    Timer mTimer3;           // +0x320
+    u8b   mF340;             // +0x340
+    char  mF341[0x344 - 0x341];      // +0x341 .. +0x343
+    char  mTail344[8];       // +0x344
+    char  mF34c[0x358 - 0x34c];      // +0x34c .. +0x357
+    Timer mTimerHit;         // +0x358
+    char  mF378[0x388 - 0x378];      // +0x378 .. +0x387
+    u16b  mF388;             // +0x388
+    u16b  mF38a;             // +0x38a
+    float mF38c;             // +0x38c
+    float mF390;             // +0x390
+    float mF394;             // +0x394
+    float mF398;             // +0x398
+    Matrix3f mMatrix;        // +0x39c
+    char  mF3c0[0x3d8 - 0x3c0];      // +0x3c0 .. +0x3d7
+    u32b  mF3d8;             // +0x3d8  pointer whose -4 dword is a refcount
+
+    void Dtor();             // 0x00bd0dd0  ~cBuilding body
+};
+
+// Derived buildings share the flat layout; only the vtable pointers differ.
+struct cBuildingCityHall : cBuilding {
+    void Dtor();             // 0x00bd1100  ~cBuildingCityHall body
+};
+struct cBuildingHouse : cBuilding {
+    void* Delete(u8b flags); // 0x00bd1450  scalar deleting destructor
+};
+
+// vtable storage placeholders (relocation-masked by chk).
+extern char cBuilding_vtable0[];              // 0x014670b8
+extern char cBuilding_vtable1[];              // 0x014670a4
+extern char cBuilding_vtable2[];              // 0x01466fe0
+extern char cBuilding_vtable3[];              // 0x01466fc0
+extern char cBuilding_vtable4[];              // 0x01466f58
+extern char cBuilding_vtable5[];              // 0x01466f30
+extern char cPlaceableStructure_baseVtable[]; // 0x01466c14
+extern char cBuildingCityHall_vtable0[];      // 0x014672f0
+extern char cBuildingCityHall_vtable1[];      // 0x014672dc
+extern char cBuildingCityHall_vtable2[];      // 0x01467218
+extern char cBuildingCityHall_vtable3[];      // 0x014671f8
+extern char cBuildingCityHall_vtable4[];      // 0x01467190
+extern char cBuildingCityHall_vtable5[];      // 0x01467168
+extern char cBuildingHouse_vtable0[];         // 0x01467768
+extern char cBuildingHouse_vtable1[];         // 0x01467754
+extern char cBuildingHouse_vtable2[];         // 0x01467690
+extern char cBuildingHouse_vtable3[];         // 0x01467670
+extern char cBuildingHouse_vtable4[];         // 0x01467608
+extern char cBuildingHouse_vtable5[];         // 0x014675e0
+
+// Destructor / sub-destructor helpers.
+void dtor_cGonzagoTimer(void* p);                 // 0x00b638b0
+void Func_004aa120(void* p);                      // 0x004aa120  deque<T>::~deque
+void dtor_cCombatant(void* p);                    // 0x00bfcd00
+void dtor_cInteractionTarget(void* p);            // 0x00ac0520
+void dtor_cSpatialObject(void* p);                // 0x00c8a420
+void dtor_cGameData(void* p);                     // 0x00b184c0
+void operator_delete__(void* p);                  // 0x00f47380
+void Func_00bcddc0(void* p);                      // 0x00bcddc0  cGameData::RemoveOwner
+
+// Release an array allocation whose count is stored in its preceding dword.
+static void FreeArray(void* p)
+{
+    if (p != 0 && ((int*)p)[-1] != 0)
+        operator_delete__(p);
+}
+
+// @ 0x00bd0dd0
+// Simulator::cBuilding::~cBuilding (blanket destructor body).
+void cBuilding::Dtor()
+{
+    cBuilding* self = this;
+    self->mpVtbl0 = (void*)&cBuilding_vtable0;
+    self->mpVtbl1 = (void*)&cBuilding_vtable1;
+    self->mpVtblSpatial = (void*)&cBuilding_vtable2;
+    self->mpVtblInteraction = (void*)&cBuilding_vtable3;
+    self->mpVtblCombatant = (void*)&cBuilding_vtable4;
+    self->mpVtblPlaceable = (void*)&cBuilding_vtable5;
+
+    dtor_cGonzagoTimer(&self->mTimer3);
+
+    FreeArray((void*)self->mF308);
+    FreeArray((void*)self->mF2f4);
+    FreeArray((void*)self->mF2dc);
+    FreeArray((void*)self->mF2c8);
+    FreeArray((void*)self->mF2b4);
+    FreeArray((void*)self->mF2a0);
+
+    {
+        wchar_t* pBegin = self->mName.mpBegin;
+        int nBytes = (int)((char*)self->mName.mpCapacity - (char*)pBegin);
+        if ((nBytes & ~1) > 2 && pBegin != 0)
+            operator_delete__(pBegin);
+    }
+
+    dtor_cGonzagoTimer(&self->mTimer2);
+    dtor_cGonzagoTimer(&self->mTimer1);
+    Func_004aa120(&self->mCoords);
+
+    if (self->mF1f0 != 0) {
+        void* p = (void*)self->mF1f0;
+        (*(void (__thiscall**)(void*))(*(void***)p)[1])(p);
+    }
+    if (self->mF1ec != 0) {
+        void* p = (void*)self->mF1ec;
+        (*(void (__thiscall**)(void*))(*(void***)p)[1])(p);
+    }
+
+    self->mpVtblPlaceable = (void*)&cPlaceableStructure_baseVtable;
+    dtor_cCombatant(&self->mpVtblCombatant);
+    dtor_cInteractionTarget(&self->mpVtblInteraction);
+    dtor_cSpatialObject(&self->mpVtblSpatial);
+    dtor_cGameData(self);
+}
+
+// @ 0x00bd1100
+// Simulator::cBuildingCityHall::~cBuildingCityHall (blanket destructor body).
+void cBuildingCityHall::Dtor()
+{
+    cBuildingCityHall* self = this;
+    self->mpVtbl0 = (void*)&cBuildingCityHall_vtable0;
+    self->mpVtbl1 = (void*)&cBuildingCityHall_vtable1;
+    self->mpVtblSpatial = (void*)&cBuildingCityHall_vtable2;
+    self->mpVtblInteraction = (void*)&cBuildingCityHall_vtable3;
+    self->mpVtblCombatant = (void*)&cBuildingCityHall_vtable4;
+    self->mpVtblPlaceable = (void*)&cBuildingCityHall_vtable5;
+
+    Func_00bcddc0(self);
+
+    dtor_cGonzagoTimer(&self->mTimerHit);
+
+    if (self->mTail344 != 0) {
+        void* p = self->mTail344;
+        (*(void (__thiscall**)(void*))(*(void***)p)[1])(p);
+    }
+
+    cBuilding* self2 = this;
+    self2->Dtor();
+}
+
+// @ 0x00bd1450
+// Simulator::cBuildingHouse scalar deleting destructor.
+void* cBuildingHouse::Delete(u8b flags)
+{
+    cBuildingHouse* self = this;
+    self->mpVtbl0 = (void*)&cBuildingHouse_vtable0;    self->mpVtbl1 = (void*)&cBuildingHouse_vtable1;
+    self->mpVtblSpatial = (void*)&cBuildingHouse_vtable2;
+    self->mpVtblInteraction = (void*)&cBuildingHouse_vtable3;
+    self->mpVtblCombatant = (void*)&cBuildingHouse_vtable4;
+    self->mpVtblPlaceable = (void*)&cBuildingHouse_vtable5;
+
+    cBuildingHouse* base = self;
+    base->Dtor();
+
+    if ((flags & 1) != 0)
+        operator_delete__(self);
+    return self;
+}
+
+// ============================================================================
+// cPropertyInfo<float>: a live property binding (value + owning property list).
+// ============================================================================
+struct PropertyList;   // SP::cPropertyList
+
+// vtable view of a property list: only the GetPropertyOwner slot at +0x2c is used.
+struct PropertyListVtbl {
+    char mSlots00[0x2c];
+    bool (__thiscall* GetPropertyOwner)(void* pSelf, int a, PropertyList** pOut);  // +0x2c
+};
+
+struct PropertyInfoF {
+    float   mValue;        // +0x00  the property value
+    void*   mpObject;      // +0x04  AutoRefCount<SP::cPropertyList>::mpObject
+    uint32_t mPropertyID;  // +0x08
+    uint32_t mModCount;    // +0x0c
+
+    PropertyInfoF* Ctor(void* pOwner, uint32_t id, float value);  // 0x00bd0ce0
+    void Set(PropertyList* pList);                                // 0x0075e6d0
+};
+
+struct PropertyManagerObj {
+    char mSlots00[0x2c];
+    bool (__thiscall* GetPropertyOwner2)(void* pSelf, int a, int b, PropertyList** pOut);  // +0x2c
+};
+
+void* SP_PropertyManager();                                   // 0x0067de30
+
+// @ 0x00bd0ce0
+// SP::cPropertyInfo<float>::cPropertyInfo - bind the value to a named property.
+PropertyInfoF* PropertyInfoF::Ctor(void* pOwner, uint32_t id, float value)
+{
+    mValue = value;
+    mpObject = 0;
+    mPropertyID = id;
+    mModCount = 0;
+
+    PropertyManagerObj* mgr = (PropertyManagerObj*)SP_PropertyManager();
+    if (mpObject != 0) {
+        void* p = mpObject;
+        mpObject = 0;
+        (*(void (__thiscall**)(void*))(*(void***)p)[1])(p);
+    }
+    if (((bool (__thiscall*)(void*, void*, int, PropertyList**))
+         (*(void***)mgr)[0x2c / 4])(mgr, pOwner, 0, (PropertyList**)&mpObject))
+        Set(*(PropertyList**)&mpObject);
+    return this;
+}
+
+// ============================================================================
+// eastl::vector<SP::cStarRecord_*> / deque helpers used by the building save code.
+// The storage is a begin/end pair of element pointers at +0x18 / +0x20.
+// ============================================================================
+typedef unsigned int cStarRecordPtr;   // a cStarRecord_* slot, held as a word
+
+struct StarRecordVec {
+    char     mData00[0x18];     // +0x00 .. +0x17
+    cStarRecordPtr* mpBegin;    // +0x18
+    cStarRecordPtr* mpCapacity; // +0x1c
+    cStarRecordPtr* mpEnd;      // +0x20
+    void Clear();                                   // 0x00996460 (deque clear)
+    cStarRecordPtr* PushBack(const cStarRecordPtr& value);   // 0x00502dd0
+};
+
+// An eastl::deque<T, allocator, 64> view: two 12-byte iterators (begin at +0x08,
+// end at +0x14) followed by the node map {begin, end, capacity} at +0x20.
+struct Deque64 {
+    char mData00[0x08];
+    cStarRecordPtr* mBeginCurrent;   // +0x08
+    cStarRecordPtr** mBeginNode;     // +0x0c
+    cStarRecordPtr* mBeginNodeEnd;   // +0x10
+    cStarRecordPtr* mEndCurrent;     // +0x14
+    cStarRecordPtr** mEndNode;       // +0x18
+    cStarRecordPtr* mEndNodeEnd;     // +0x1c
+    cStarRecordPtr** mMapBegin;      // +0x20
+    cStarRecordPtr** mMapEnd;        // +0x24
+    cStarRecordPtr** mMapCapacity;   // +0x28
+};
+
+// A byte-stream writer/reader view (EA::IO); the object's vtable provides the
+// GetWriter (+0x20) / GetReader (+0x20) accessors and the Read/Write slots.
+struct IOSerial {
+    void* mpVtbl;   // +0x00
+};
+
+// eastl::basic_string<char> (16 bytes).
+struct Str8 {
+    char* mpBegin;      // +0x00
+    char* mpEnd;        // +0x04
+    char* mpCapacity;   // +0x08
+    void* mpPool;       // +0x0c
+    Str8& assign(const char* pFirst, const char* pLast);   // 0x00454cb0
+};
+
+// The lazy-initialised three-dword singleton at 0x0168b64c.
+extern unsigned int gSingletonFlag;     // 0x0168b660 (byte flag)
+extern unsigned int gSingleton[3];      // 0x0168b64c
+extern "C" void Fn_013c3180();          // 0x013c3180 (atexit handler)
+extern "C" int __cdecl atexit(void (__cdecl*)());
+
+// The property name table (built once, using Str8::assign).
+extern const char gBuildingNameStr[];   // 0x0146715c "Building"
+extern const char gBuildingNameStrEnd[]; // 0x01467164
+
+// Globals used by the turret-weapon configuration.
+extern void* gAppNameTag;               // 0x01654c05 (compared value)
+extern float gTurretHealthDefault;      // 0x013ec5b4
+extern char  gTurretWeaponA[];          // 0x057e291e
+extern char  gTurretWeaponB[];          // 0x057e2933
+extern char  gTurretWeaponC[];          // 0x057e293d
+char gTurretWeaponA[21] = "space_turret_weaponA";  // placeholder name, VA is authoritative
+char gTurretWeaponB[16] = "space_turret_b";
+char gTurretWeaponC[16] = "space_turret_c";
+
+void* GetCurrentGameMode();                              // 0x00b5b800
+void  StarManager(void* pEmpireId);                      // 0x00b3d2a0
+void* GetEmpireByID(void* pEmpireId);                    // 0x00ba9370
+struct cSPSpaceCombatTuning;
+cSPSpaceCombatTuning* GetSpaceCombatTuning(void* pTuning); // 0x01029940
+bool  FUN_0075e620(void* pProp);                         // 0x0075e620
+PropertyInfoF* FUN_00bd0ce0(void* a, uint32_t id, float v); // 0x00bd0ce0
+void  enableWeapon(char* pName, void* pTuning, void* pOut); // 0x00c3a220
+
+// A ref-counted object accessor used by the property getters.
+struct PropObject {
+    void* mpVtbl;       // +0x00
+};
+
+// The two-argument property-getter trampolines.
+struct PropBinder {
+    void* mpVtbl;       // +0x00
+};
+
+// The deque<...,64> at +0x200 of the building: begin/end iterators plus the
+// node-map walker and the currently-owned node block.
+struct StarRecordDequeOwner {
+    char  mData00[0x200];
+    cStarRecordPtr*  mpCurrent;   // +0x200  iterator current
+    cStarRecordPtr*  mpNodeBase;  // +0x204  allocation of the current node
+    cStarRecordPtr*  mpNodeEnd;   // +0x208  end of the current node
+    char  mData20c[4];            // +0x20c
+    cStarRecordPtr** mpNodeMap;   // +0x210  node-map cursor (end marker)
+    cStarRecordPtr*  mpEnd;       // end-of-deque iterator (compared against)
+};
+
+// The turret-owning building subobject (cBuildingHouse tail region).
+struct TurretOwner {
+    char  mData00[0x5b4];
+    float mF5b4;                  // +0x5b4  turret health
+    char  mF5b8[0x5c0 - 0x5b8];
+    float mF5c0;                  // +0x5c0  turret health (mirror)
+    char  mF5c4[0x688 - 0x5c4];
+    void* mF688;                  // +0x688  owning empire object
+    char  mF68c[0x694 - 0x68c];
+    char  mF694;                  // +0x694  weapon-enable slot C
+    char  mF695[0x698 - 0x695];
+    char  mF698;                  // +0x698  weapon-enable slot A
+    char  mF699[0x69c - 0x699];
+    char  mF69c;                  // +0x69c  weapon-enable slot B
+    char  mF69d[0x6a8 - 0x69d];
+    void* mpTurretTuning;         // +0x6a8
+
+    void ConfigureTurretWeapons(void* pTuning);   // 0x00bd15a0
+};
+
+// Space-combat tuning object (turret health source).
+struct cSPSpaceCombatTuning {
+    float GetTurretHealth();      // 0x0102a780
+};
+
+// @ 0x00bd0ce0 repeated note: done above.
+
+// @ 0x00bd1060
+// Assign the literal "Building" to a byte string.
+void __stdcall SetBuildingName(Str8* pStr)
+{
+    pStr->assign(gBuildingNameStr, gBuildingNameStrEnd);
+}
+
+// @ 0x00bd1690
+// Lazy initialiser returning the three-dword singleton.
+unsigned int* __cdecl GetBuildingSingleton()
+{
+    if ((gSingletonFlag & 1) == 0) {
+        gSingletonFlag |= 1;
+        gSingleton[0] = 0;
+        gSingleton[1] = 0;
+        gSingleton[2] = 0;
+        atexit(Fn_013c3180);
+    }
+    return gSingleton;
+}
+
+// @ 0x00bd1780
+// Trampoline: query a nested object's +0xc vtable slot, then bind it via arg1.
+bool __cdecl PropGetA(PropBinder* pBinder, PropObject** ppObj)
+{
+    unsigned int value = 0;
+    if (*ppObj != 0) {
+        void* p = (char*)*ppObj + 0xc;
+        value = ((unsigned int (__thiscall*)(void*, unsigned int))
+                 (*(void***)p)[0xc / 4])(p, 0x179c807);
+    }
+    ((void (__thiscall*)(void*, unsigned int))
+     (*(void***)pBinder)[0x2c / 4])(pBinder, value);
+    return true;
+}
+
+// @ 0x00bd17b0
+// Trampoline: query a nested object's +0x5c vtable slot, then bind it via arg1.
+bool __cdecl PropGetB(PropBinder* pBinder, PropObject** ppObj)
+{
+    unsigned int value = 0;
+    if (*ppObj != 0) {
+        value = ((unsigned int (__thiscall*)(void*, unsigned int))
+                 (*(void***)*ppObj)[0x5c / 4])(*ppObj, 0x179c807);
+    }
+    ((void (__thiscall*)(void*, unsigned int))
+     (*(void***)pBinder)[0x2c / 4])(pBinder, value);
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// The save/load helpers operate on the deque of cStarRecord_* held by the
+// cBuilding tail.  The object layout is the eastl deque<...,64> view below.
+// ---------------------------------------------------------------------------
+
+// The save writer passed to the stream owner: vtable +0x20 returns the byte
+// writer, +0x1c flushes, +0x18 returns the underlying IO stream.
+struct SaveWriter {
+    void* mpVtbl;   // +0x00
+};
+
+// The IO object returned by the writer's +0x18 slot (a raw byte stream).
+struct ByteStream {
+    void* mpVtbl;   // +0x00
+};
+
+extern "C" void EA_IO_WriteUint32(void* pStream, const void* pValue,
+                                  int nCount, int a4);        // 0x0093aa70
+extern "C" void EA_IO_ReadInt32(void* pStream, void* pOut,
+                                int nCount, int a4);          // 0x0093a780
+void deque7027PushBack(Deque64* pDeque, cStarRecordPtr* pValue);  // 0x00502dd0
+void deque7027Clear(Deque64* pDeque);                         // 0x00996460
+
+// Total element count of the deque<...,64> (the (nodes-1)*64 + partial sums).
+static int Deque64Size(Deque64* pDeque)
+{
+    int nHeadSlots = (int)((char*)pDeque->mBeginNodeEnd - (char*)pDeque->mBeginCurrent) >> 2;
+    int nTailNodes = ((int)((char*)pDeque->mMapEnd - (char*)pDeque->mEndCurrent) >> 2) - 1;
+    int nMidSlots = (int)((char*)pDeque->mEndNode - (char*)pDeque->mBeginNode) >> 2;
+    return nTailNodes * 64 + nHeadSlots + nMidSlots;
+}
+
+// @ 0x00bd0bb0
+// Write the deque of cStarRecord_* to the save stream (count then elements).
+void __fastcall WriteStarRecordDeque(SaveWriter* pWriter, void* /*edx*/,
+                                     Deque64* pDeque)
+{
+    int nCount = Deque64Size(pDeque);
+
+    ByteStream* (__thiscall* getWriter)(void*) =
+        (ByteStream* (__thiscall*)(void*))(*(void***)pWriter)[0x20 / 4];
+    ByteStream* pStream = getWriter(pWriter);
+    void* pRaw = ((void* (__thiscall*)(ByteStream*))
+                  (*(void***)pStream)[0x18 / 4])(pStream);
+    EA_IO_WriteUint32(pRaw, &nCount, 1, 0);
+
+    cStarRecordPtr* pCur = pDeque->mBeginCurrent;
+    cStarRecordPtr** pNode = pDeque->mBeginNode;
+    cStarRecordPtr* pNodeEnd = pDeque->mBeginNodeEnd;
+    cStarRecordPtr* pEnd = pDeque->mEndCurrent;
+
+    while (pCur != pEnd) {
+        ByteStream* pStream2 = getWriter(pWriter);
+        void* pRaw2 = ((void* (__thiscall*)(ByteStream*))
+                       (*(void***)pStream2)[0x18 / 4])(pStream2);
+        cStarRecordPtr value = *pCur;
+        EA_IO_WriteUint32(pRaw2, &value, 1, 0);
+
+        ++pCur;
+        if (pCur == pNodeEnd) {
+            pCur = (cStarRecordPtr*)pNode[1];
+            ++pNode;
+            pNodeEnd = pCur + 64;
+        }
+    }
+
+    ((void (__thiscall*)(SaveWriter*))
+     (*(void***)pWriter)[0x1c / 4])(pWriter);
+}
+
+// @ 0x00bd0c80
+// Walk the deque<...,64> iterator (no-op body) and report success.
+bool __fastcall IsStarRecordDequeEmpty(void* /*ecx*/, void* /*edx*/,
+                                       Deque64* pDeque)
+{
+    cStarRecordPtr* pCur = pDeque->mBeginCurrent;
+    cStarRecordPtr** pNode = pDeque->mBeginNode;
+    cStarRecordPtr* pNodeEnd = pDeque->mBeginNodeEnd;
+
+    while (pCur != pDeque->mEndCurrent) {
+        ++pCur;
+        if (pCur == pNodeEnd) {
+            pCur = (cStarRecordPtr*)pNode[1];
+            ++pNode;
+            pNodeEnd = pCur + 64;
+        }
+    }
+    return true;
+}
+
+// @ 0x00bd1080
+// Pop the front element of the deque<...,64> at +0x200 of the object, freeing
+// the old node block when the iterator has run off the end of the node.
+cStarRecordPtr __fastcall PopStarRecord(StarRecordDequeOwner* self)
+{
+    cStarRecordPtr* pCur = self->mpCurrent;
+    if (pCur == self->mpEnd)
+        return 0;
+
+    cStarRecordPtr value = *pCur;
+    if (pCur + 1 != self->mpNodeEnd) {
+        self->mpCurrent = pCur + 1;
+        return value;
+    }
+
+    if (self->mpNodeBase != 0)
+        operator_delete__(self->mpNodeBase);
+
+    cStarRecordPtr** pNode = self->mpNodeMap;
+    ++pNode;
+    self->mpNodeMap = pNode;
+    cStarRecordPtr* pNodeBase = *pNode;
+    self->mpNodeBase = pNodeBase;
+    self->mpNodeEnd = pNodeBase + 64;
+    self->mpCurrent = self->mpNodeBase;
+    return value;
+}
+
+// @ 0x00bd15a0
+// Configure the space-stage turret weapons of this building and pick the turret
+// health for the given tuning parameter.
+void TurretOwner::ConfigureTurretWeapons(void* pTuning)
+{
+    bool bOwnsTemp = false;
+    PropertyInfoF* pTemp = 0;
+
+    mpTurretTuning = pTuning;
+    enableWeapon(gTurretWeaponA, pTuning, &mF698);
+    enableWeapon(gTurretWeaponB, pTuning, &mF69c);
+    enableWeapon(gTurretWeaponC, pTuning, &mF694);
+
+    float value;
+    if (GetCurrentGameMode() == gAppNameTag) {
+        void* pEmpireId = ((void* (__thiscall*)(void*))
+                           (*(void***)mF688)[0x4c / 4])(mF688);
+        StarManager(pEmpireId);
+        if (GetEmpireByID(pEmpireId) != 0) {
+            cSPSpaceCombatTuning* pTune = GetSpaceCombatTuning(pTuning);
+            value = pTune->GetTurretHealth();
+            goto store;
+        }
+    }
+
+    bOwnsTemp = true;
+    pTemp = FUN_00bd0ce0((void*)0xa4c2f6bd, 0xc5291fee, gTurretHealthDefault);
+    FUN_0075e620((void*)pTemp);
+    value = pTemp->mValue;
+
+store:
+    mF5b4 = value;
+    mF5c0 = value;
+    if (bOwnsTemp && pTemp != 0) {
+        void* pObj = pTemp->mpObject;
+        if (pObj != 0)
+            (*(void (__thiscall**)(void*))(*(void***)pObj)[1])(pObj);
+    }
+}
+
+// @ 0x00bd16d0
+// Read the deque of cStarRecord_* out of the save stream (clear, count, then
+// elements pushed back through the deque grow helper).
+void __fastcall ReadStarRecordDeque(SaveWriter* pWriter, void* /*edx*/,
+                                    Deque64* pDeque)
+{
+    deque7027Clear(pDeque);
+
+    unsigned int nCount = 0;
+    ByteStream* pStream = ((ByteStream* (__thiscall*)(void*))
+                           (*(void***)pWriter)[0x20 / 4])(pWriter);
+    void* pRaw = ((void* (__thiscall*)(ByteStream*))
+                  (*(void***)pStream)[0x18 / 4])(pStream);
+    EA_IO_ReadInt32(pRaw, &nCount, 1, 0);
+
+    for (unsigned int i = 0; i < nCount; ++i) {
+        ByteStream* pStream2 = ((ByteStream* (__thiscall*)(void*))
+                                (*(void***)pWriter)[0x20 / 4])(pWriter);
+        void* pRaw2 = ((void* (__thiscall*)(ByteStream*))
+                       (*(void***)pStream2)[0x18 / 4])(pStream2);
+        cStarRecordPtr value = 0;
+        EA_IO_ReadInt32(pRaw2, &value, 1, 0);
+
+        cStarRecordPtr* pCur = pDeque->mEndCurrent;
+        cStarRecordPtr* pNext = pCur + 1;
+        if (pNext != pDeque->mEndNodeEnd) {
+            pDeque->mEndCurrent = pNext;
+            if (pCur != 0)
+                *pCur = value;
+        } else {
+            deque7027PushBack(pDeque, &value);
+        }
+    }
+
+    ((void (__thiscall*)(SaveWriter*))
+     (*(void***)pWriter)[0x1c / 4])(pWriter);
+}
+
+}  // namespace SP_BLD
+
