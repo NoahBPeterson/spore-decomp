@@ -102,14 +102,14 @@ struct EditorCreature : RefCounted {
 extern RefCounted* FUN_004b9c70(void* self);                       // 0x4b9c70
 extern RefCounted* FUN_004b9da0(void* self);                       // 0x4b9da0
 extern int* FUN_004c0500(uint32_t key);                            // 0x4c0500
-extern void FUN_006ac0a0(int type, uint32_t key, char flag, int);  // 0x6ac0a0
+extern void FUN_006ac0a0(int type, uint32_t key);                  // 0x6ac0a0
 extern RefCounted* InterfaceCast2(RefCounted** p);                 // 0x421eb0
 extern bool FUN_004bdc00(int n);                                   // 0x4bdc00
 extern bool FUN_004bdae0();                                        // 0x4bdae0
 extern int FUN_004bd9f0(int);                                      // 0x4bd9f0
 extern bool FUN_004bdc60(int a, int b, bool c);                    // 0x4bdc60
 extern bool FUN_004be5d0();                                        // 0x4be5d0
-extern int ReadRuntimeCreatureData(int data);                      // 0x4bf430
+extern bool ReadRuntimeCreatureData(int data, uint32_t handle);    // 0x4bf430
 extern bool WriteRuntimeCreatureData(int* data);                   // 0x4bf770
 extern int WriteBinaryEditorModel(int data);                       // 0x4b0010
 extern bool ReadBinaryEditorModel(int* a, int b);                  // 0x4bf9f0
@@ -169,18 +169,18 @@ bool cSPEditorResourceFactory::ReadResource(StreamObject* stream, uint32_t param
             typeHash != 0x24682294 && typeHash != 0x476a98c7 && typeHash != 0x438f6347)
             return false;
         int* p = stream->v10();
-        int data = stream->v18(p[1], 0);
-        bool ok = ReadBinaryEditorModel((int*)data, typeHash);
+        int data = stream->v18(param_2, p[1]);
+        bool ok = ReadResourceFromStream((StreamObject*)data, param_2, p[1]);
         return ok;
     }
     int handle = (int)FUN_004c0500(param_2);
     bool ok = false;
     if (handle != 0) {
         int data = stream->v18(handle, 0);
-        if (ReadRuntimeCreatureData(data))
+        if (ReadRuntimeCreatureData(data, handle))
             ok = true;
     }
-    FUN_006ac0a0(0xb, param_2, ok, 0);
+    FUN_006ac0a0(0xb, param_2);
     return ok;
 }
 
