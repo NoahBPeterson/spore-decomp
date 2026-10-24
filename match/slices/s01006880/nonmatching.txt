@@ -1,0 +1,5 @@
+# va diff flags difftest
+01006880 sched/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL 5/5 inputs mismatched; 70.4% coverage; prologue vtable-store scheduling + thiscall helper ABI
+01006a40 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL 5/163 inputs mismatched; vector-math reconstruction diverges (fault at 0x0059afd0)
+01006ef0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (unresolved-import faults)
+01007430 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (unresolved-import faults)
