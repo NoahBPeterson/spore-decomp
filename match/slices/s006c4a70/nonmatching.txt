@@ -1,5 +1,5 @@
 006c4c20    7  complete source; only Log2's counter/flag scheduling differs (near-miss)
-006c4ca0  472  complete source (byte colours); original is SSE-scalar prebuilt codegen, cl15 emits x87
-006c4fd0  434  complete source (16-bit colours, 2 lanes); SSE-scalar prebuilt codegen
-006c52c0  472  complete source (16-bit colours, 4 lanes); SSE-scalar prebuilt codegen
-006c55f0  505  complete source (byte colours, offset transform); SSE-scalar prebuilt codegen
+006c4ca0  770  complete source (byte colours, point transform); prebuilt SSE-scalar vs cl15 x87 plus SEH frames; fixed the thiscall block-handle assign (0x424f70) and its ref-counted release, SSE sqrt, and read the dy/dz offsets from the scale struct; equiv WEAK 180/400 valid, 100% cov, 0 mismatches
+006c4fd0  697  complete source (16-bit colours, 2 lanes, point transform); prebuilt SSE-scalar vs cl15 x87 plus SEH frames; same handle-assign and parameter-layout fixes; equiv WEAK 177/400 valid, 100% cov, 0 mismatches
+006c52c0  770  complete source (16-bit colours, 4 lanes, point transform); prebuilt SSE-scalar vs cl15 x87 plus SEH frames; same handle-assign and parameter-layout fixes; equiv WEAK 163/400 valid, 100% cov, 0 mismatches
+006c55f0  780  complete source (byte colours, offset transform); prebuilt SSE-scalar vs cl15 x87 plus SEH frames; offset vector is the assigned retail block's first two floats (temp.m4 + temp.ma*data[2]), plus the handle-assign and parameter fixes; equiv WEAK 89/400 valid (most probes fault in the retail block), 100% cov, 0 mismatches
