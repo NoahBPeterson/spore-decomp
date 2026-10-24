@@ -1,0 +1,7 @@
+slices/s00b2a8d0/s00b2a8d0.cpp  ?ConstructFill@@YGXPAUcAbilityRecord@@0@Z  00b2a8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b2a8d0/s00b2a8d0.cpp  ?SwapRefs@@YAXPAUAutoRef@@0@Z  00b2af00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b2a8d0/s00b2a8d0.cpp  ??0cAbilityRecord@@QAE@ABU0@@Z  00b2aff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b2a8d0/s00b2a8d0.cpp  ??4cAbilityRecord@@QAEAAU0@ABU0@@Z  00b2b040  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b2a8d0/s00b2a8d0.cpp  ??4cTypeInfo@@QAEAAU0@ABU0@@Z  00b2b150  /O2 /MD /Gy /EHsc /TP
+slices/s00b2a8d0/s00b2a8d0.cpp  ?CopyConstructRange@@YAPAUcAbilityRecord@@PBU1@0PAU1@@Z  00b2b7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b2a8d0/s00b2a8d0.cpp  ?AssignRange@@YAPAUcAbilityRecord@@PAU1@00@Z  00b2b830  /O2 /MD /Gy /TP /arch:SSE /fp:fast
