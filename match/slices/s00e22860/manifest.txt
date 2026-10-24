@@ -1,0 +1,9 @@
+slices/s00e22860/s00e22860.cpp  ?SetVisibility@cSPUIPosse@@QAE_NPAX@Z  00e231a0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e22860/s00e22860.cpp  ?SetScale@cSPUIPosse@@QAEXH@Z  00e23200  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e22860/s00e22860.cpp  ?GetAudioCount@cSPUIPosse@@QAEHXZ  00e23250  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e22860/s00e22860.cpp  ?sGetWindowImage@@YAPAXPAX@Z  00e232b0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e22860/s00e22860.cpp  ?SetWindowImages@cSPUIPosse@@QAEXPAX@Z  00e235e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e22860/s00e22860.cpp  ?GetWindowImageCount@cSPUIPosse@@QAEHXZ  00e23670  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e22860/s00e22860.cpp  ?GetWindowImageRange@cSPUIPosse@@QAEXPAH@Z  00e23680  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e22860/s00e22860.cpp  ?ClearToolWindow@cSPUIPosse@@QAEXHH@Z  00e236a0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e22860/s00e22860.cpp  ?ClearToolWindowOne@cSPUIPosse@@QAEXH@Z  00e236b0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
