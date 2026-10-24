@@ -1,0 +1,4 @@
+00f17870 ?StartNextAnimation@cSPUIProgress@@QAEXXZ  # nonmatching (64; complete)
+00f17a70 ?Resize@cItemVector@@QAEXI@Z  # MATCH
+00f17b00 ?Init@cSimScreen@@QAE_NPAUIUiEffect@@ABUKey@ResourceMan@EA@@@Z  # nonmatching (729; complete)
+00f17ea0 ?Shutdown@cSPUIProgress@@QAEXXZ  # MATCH

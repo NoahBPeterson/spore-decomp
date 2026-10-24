@@ -1,1 +1,3 @@
-# source  symbol  original VA  [cl flags override]
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f170c0/s00f170c0.cpp  ?Resize@cItemVector@@QAEXI@Z  00f17a70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00f170c0/s00f170c0.cpp  ?Shutdown@cSPUIProgress@@QAEXXZ  00f17ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE
