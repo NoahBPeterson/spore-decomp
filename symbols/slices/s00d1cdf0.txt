@@ -1,0 +1,34 @@
+; slice s00d1cdf0 = 0x00d1cdf0..0x00d1df00 (SP Simulator rotation-mode game-data objects + editor strategy hooks)
+00d1cdf0 SP::cGameEditModeStrategy::HandleSimulationUpdate(float)   ; 0x00d1cdf0  thiscall: per-tick rotation/prune pass, edit-state machine, planet up-vector cache
+00d1d2e0 SP::cGameEditModeStrategy::HandleMessage(int, void*)        ; 0x00d1d2e0  cdecl: handle the 0x03d7106a planet-switch message, reset editor, pick avatar species
+00d1d4d0 cRotationBall::Cast(int)                                   ; 0x00d1d4d0  thiscall: tag cast - self for 0x7292112, spatial (+0x34) for 0x1186577, else helper 0x00b18460
+00d1d540 cRotationBall::Write(void*)                                ; 0x00d1d540  thiscall: emit tag 0x7292112, base fields, model reference (returns 1)
+00d1d5c0 cRotationBall::GetWorldPos(float*)                          ; 0x00d1d5c0  thiscall: world position from model axis + projected up-vector + radius scale
+00d1d740 cRotationBall::Read(void*)                                 ; 0x00d1d740  thiscall: read tag, base fields, re-bind the model reference (returns 1)
+00d1d810 cRotationBall::InitBall(void)                              ; 0x00d1d810  ball ctor: base+spatial ctors, ball vptrs 0x147a0a8/0x147a094/0x1479fd0, +0x120=0x0ca40c72, +0x124=0x2f4e681b, +0x128=0x40606000
+00d1d930 cRotationBall::GetDefaultVec(void)                          ; 0x00d1d930  runtime (+0xd4) slot 0x2c, else default vector 0x0169dd88  byte-exact (MATCH)
+00d1d950 cRotationBall::SetThing5c(void*)                            ; 0x00d1d950  runtime slot 0x5c, returns the argument  byte-exact (MATCH)
+00d1d990 cRotationBall::IsFlagSet(void)                             ; 0x00d1d990  model present and +0x6f flag non-zero  byte-exact (MATCH)
+00d1d9b0 cRotationBall::SetFlag(unsigned char)                       ; 0x00d1d9b0  store the flag at model+0x6f  byte-exact (MATCH)
+00d1d9e0 cRotationBall::SetThing64(void*, float)                      ; 0x00d1d9e0  runtime slot 0x64(pointer,float)  byte-exact (MATCH)
+00d1da10 cRotationRing::SetThing6c(void*)                             ; 0x00d1da10  runtime slot 0x6c, returns the argument  byte-exact (MATCH)
+00d1da60 cRotationBall::FiniBall(void)                               ; 0x00d1da60  ball dtor: reset vptrs, free name, release model, spatial dtor, chain base dtor
+00d1dac0 cRotationRing::SetNameFromCStr(const char*)                 ; 0x00d1dac0  assign a C string into the +0x110 name  byte-exact (MATCH)
+00d1db10 cRotationRing::Cast(int)                                   ; 0x00d1db10  thiscall: tag cast - self for 0x2ee8eeb, spatial (+0x34) for 0x1186577, else helper 0x00b18460
+00d1db40 cRotationBall::SetModel(cGameModel*, void*)                 ; 0x00d1db40  adopt a model reference (AddRef/Release) and forward to self slot 0x6c  byte-exact (MATCH)
+00d1dba0 cRotationRing::Write(void*)                                ; 0x00d1dba0  thiscall: emit tag 0x2ee8eeb, base fields, model reference (returns 1)
+00d1dc20 cRotationRing::InitRing(void)                              ; 0x00d1dc20  ring ctor: base+spatial ctors, ring vptrs 0x147a200/0x147a1ec/0x147a128, +0x12c=0, +0x130=0, +0x120=0x0c1ef506, +0x124=0x2f4e681b, +0x128=0x40606000
+00d1dd30 cRotationBall::IsCurrent(void)                             ; 0x00d1dd30  this == 0x0169dda0  byte-exact (MATCH)
+00d1dd70 cRotationBall::GetRadius(void)                             ; 0x00d1dd70  model slot 0x74 (+5.0) or 1.0
+00d1ddb0 cRotationRing::GetDefaultVec2(void)                         ; 0x00d1ddb0  runtime (+0xd4) slot 0x2c, else 0x0169dda4  byte-exact (MATCH)
+00d1dde0 cRotationRing::GetFlagR(void)                              ; 0x00d1dde0  model+0x6f flag  byte-exact (MATCH)
+00d1de10 cRotationRing::FiniRing(void)                               ; 0x00d1de10  ring dtor: reset vptrs, free name, release model, spatial dtor, chain base dtor
+00d1de70 cRotationRing::CopyTo(EaString*)                            ; 0x00d1de70  assign this's +0xdc/+0xe0 string into the target  byte-exact (MATCH)
+00d1deb0 cRefObj::Init(void*)                                       ; 0x00d1deb0  smart-ptr init: vptr 0x147a2b0, clear +4/+8, AddRef/adopt the incoming object
+00d1df00 cRefObj::Destroy(void)                                     ; 0x00d1df00  shutdown the layout (+4) then release the adopted object (+8)  byte-exact (MATCH)
+; helpers: cGameData_ctor 0x00b18660, cGameData_dtor 0x00b184c0, cGameData::Write 0x00b18590, cGameData::Read 0x00b18600
+;          cSpatialObject_ctor 0x00c89630, cSpatialObject_dtor 0x00c8a420, FUN_00b18460 0x00b18460
+;          EaString::assign 0x00454cb0, operator_delete_array 0x00f47380, WriteUint32 0x0093aa70, ReadInt32 0x0093a780
+;          cSPUILayout::Shutdown 0x00811ad0, FUN_0059aed0 0x0059aed0, FUN_00dc6640 0x00dc6640
+;          globals: empty-string 0x01667bac/0x01667bad, current-rot 0x0169dda0/0x0169dda4, default vec 0x0169dd88..0x0169dd94
+;          floats: 0x01486110 (5.0), 0x01485720 (1.0), 0x01473c70 (10.0); edit state 0x0169dca4

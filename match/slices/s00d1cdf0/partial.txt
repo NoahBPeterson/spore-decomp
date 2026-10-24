@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+# No incomplete functions: every target in this slice is a complete C++
+# reconstruction.  See nonmatching.txt for the 14 non-byte-exact rows.

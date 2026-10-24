@@ -1,0 +1,13 @@
+slices/s00d1cdf0/s00d1cdf0.cpp  ?GetDefaultVec@cRotationBall@@QAEPAXXZ  00d1d930  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?SetThing5c@cRotationBall@@QAEPAXPAX@Z  00d1d950  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?IsFlagSet@cRotationBall@@QAEHXZ  00d1d990  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?SetFlag@cRotationBall@@QAEXE@Z  00d1d9b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?SetThing64@cRotationBall@@QAEXPAXM@Z  00d1d9e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?SetThing6c@cRotationRing@@QAEPAXPAX@Z  00d1da10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?SetNameFromCStr@cRotationRing@@QAEXPBD@Z  00d1dac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?SetModel@cRotationBall@@QAEXPAUcGameModel@@PAX@Z  00d1db40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?IsCurrent@cRotationBall@@QAE_NXZ  00d1dd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?GetDefaultVec2@cRotationRing@@QAEPAXXZ  00d1ddb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?GetFlagR@cRotationRing@@QAEDXZ  00d1dde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?CopyTo@cRotationRing@@QAEXPAUEaString@@@Z  00d1de70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d1cdf0/s00d1cdf0.cpp  ?Destroy@cRefObj@@QAEXXZ  00d1df00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
