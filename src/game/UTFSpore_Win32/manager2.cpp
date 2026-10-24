@@ -497,7 +497,7 @@ static void Splice(Node* pos, Node* first, Node* last)
     last->prev = first->prev;
     first->prev = old;
 }
-static void FillDLEntry(WindowMgr* self, DLEntry* e, Win* w, u32* info, u8 b0c)
+static void FillDLEntry(WindowMgr* self, DLEntry* e, Win* w, int* info, u8 b0c)
 {
     e->prevEntry = (DLEntry*)w->f78;
     e->b0c = b0c;
@@ -1307,7 +1307,7 @@ WM::WM()
 }
 
 // @ 0x00958fa0
-bool __thiscall WM::SendModifiedMsg(IWin* w, IWin* src, Msg* m)
+bool __thiscall WM::SendModifiedMsg(IWin* src, IWin* w, Msg* m)
 {
     WM* self = this;
     Win* t = static_cast<Win*>(w);
@@ -1780,7 +1780,7 @@ void W_s0095_9780::RenderWindow(int win, void* ctx)
 // @ 0x0095a580
 void __thiscall WindowMgr::BuildDisplayList(Node* out, Win* w, void* info_)
 {
-    u32* info = (u32*)info_;
+    int* info = (int*)info_;
     bool go = !(w->b30 & 4) && ((w->b30 & 1) != 0 || (w->flags & 1) != 0);
     if (info[1] > info[0]) info[1] = info[0];
     if (!go) {

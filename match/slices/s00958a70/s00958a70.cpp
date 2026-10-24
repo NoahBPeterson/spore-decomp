@@ -171,7 +171,7 @@ WM::WM()
 }
 
 // @ 0x958fa0
-bool __thiscall WM::SendModifiedMsg(IWin* w, IWin* src, Msg* m)
+bool __thiscall WM::SendModifiedMsg(IWin* src, IWin* w, Msg* m)
 {
     WM* self = this;
     Win* t = static_cast<Win*>(w);
