@@ -1,2 +1,18 @@
 # va  diff-bytes  reason
 01200010 1500 complete (flags /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast): key-pair track sampler (raw and quantised, slerp/nlerp/lerp); 10 calls in original order, 1626 vs 2027 B; register allocation and duplicated spills differ
+01200800   10  FindObjectByKey written (walk g_regCount entries of the g_regList pointer array, compare mKey); cl folds the match test into `test ecx,ecx; jle` ordering and returns the already loaded register instead of retail's second `mov eax,[eax*4+g_regList]` reload
+01200860   34  vector copy written (*dst = *src on __m128 pointers); cl emits the same movaps pair but wraps the function in an `and esp,-16` realigned frame (27 vs 20 bytes) because of the __m128 parameter types
+01200880   29  vector copy written without a result; same realigned-frame difference as 01200860 (22 vs 15 bytes)
+01200890   19  three self-relative int members unbased by (p - ctx->mpBase); cl folds the base load into the sub memory operand instead of retail's `mov esi,[eax+0x20]` + `sub edx,esi`
+012008b0   14  three self-relative int members rebased by (p - from); identical instruction sequence except cl folds the second parameter into the sub memory operand where retail loads it into edx first
+012008d0   28  rebase variant that also re-reads member 2; cl uses `add [eax+8],ecx` for all three members where retail keeps the base in esi and member 2 in edx
+01200940   28  fixup wrapper destructor written (release through the secondary table when mRefs == 0, then the recorded cdecl callback); cl tests `cmp [ecx+0x18],0` instead of loading into eax, and turns both `call dword ptr [reg+off]` calls into load-then-`call reg`
+01200960   40  id conversion of the four slots through [ctx+0x1c]+0x78 written; same call sequence, cl hoists each next slot load above the previous store and uses edx/ecx where retail reloads the arena pointer into ecx and keeps the value in eax
+012009c0   15  pointer conversion of the four slots written (3-argument form: rec, unused, ctx); only the hoisted slot loads differ
+01200a10   15  slot pointer conversion plus the 0x01200F80 handler store written; only the hoisted slot loads differ
+01200ee0   96  table fixup written (handler 0x01200AB0, two slot conversions, self-relative entry table rebased by rec - ctx->mpBase, per-entry id conversion loop); cl hoists loads and keeps the loop base in ebp instead of reloading [esi+8]
+01200f80   29  callback thunk written (arg ? arg : rec->mpData8, then 0x012010E0(rec[4], rec[3], rec[0], value)); cl keeps the value in ecx and skips the push esi retail uses
+01200fb0   20  single-slot rebase written (*p = base + (*p - p) as two statements); cl emits `sub [eax],eax` and reuses the ctx register instead of retail's edx/esi pair
+01201050   17  single-slot rebase through the +0x20 base written; cl emits `add [eax],ecx` where retail loads the slot into esi first
+01201070   10  single-slot rebase by (p - from) written; cl folds the second parameter into the sub memory operand where retail loads it into edx first
+01200ab0 1070  not reconstructed: the SSE2 key-pair sampler (chkstk'd 0x50c4 stack frame, Ctl::FrameAt 0x011FDA50, EmbeddedState::GetMaterialColor 0x011EDA90, constants 0x01485720/0x014F87A8/0x01471064)

@@ -163,3 +163,274 @@ void SampleTrackKeys(float* out, const char* const* keys, int timeOffset, float 
 		out[2] = info->scaleZ * (az + (bz - az) * u) + info->biasZ;
 	}
 }
+
+// ---------------------------------------------------------------------------------------------
+// Small fixup helpers of the animation-track serializer (0x01200800 .. 0x01201070).
+// Records dumped to disk keep object ids; the Init* entry points turn them back into pointers
+// through the rw::core arena, and the rebase helpers fix up the self-relative members.
+
+struct Arena
+{
+	int   ObjectToId(void* obj);     // 0x011e3c30 (thiscall, ret 4)
+	void* IdToObject(int id);        // 0x011e2300 (thiscall, ret 4)
+};
+
+// Context carrying the arena pointer directly at +0x78 (and a relocation base at +0x7c).
+struct ArenaCtx
+{
+	unsigned char pad00[0x78];
+	Arena* mpArena;                  // +0x78
+	int*   mpBase;                   // +0x7c
+};
+
+// Context carrying an arena-owning object at +0x1c; that object holds the arena at its +0x78.
+struct ArenaHost
+{
+	unsigned char pad00[0x78];
+	Arena* mpArena;                  // +0x78
+};
+struct WorldCtx
+{
+	unsigned char pad00[0x1c];
+	ArenaHost* mpHost;               // +0x1c
+};
+
+// Contexts that only provide the relocation base.
+struct Base20Ctx
+{
+	unsigned char pad00[0x20];
+	int* mpBase;                     // +0x20
+};
+
+// Keyed object of the global registry.
+struct RegObj
+{
+	int mKey;                        // +0x00
+};
+extern int    g_regCount;            // 0x015d09e0
+extern RegObj* g_regList[];          // 0x015d09e8
+
+// Three int members holding self-relative values.
+struct Rel3
+{
+	int mV0;                         // +0x00
+	int mV1;                         // +0x04
+	int mV2;                         // +0x08
+};
+
+// Fixup record with four serialized object slots; mpFn is the sample/callback handler.
+struct Fixup4
+{
+	void* mpLink;                    // +0x00
+	void* mpFn;                      // +0x04
+	void* mpData8;                   // +0x08
+	void* mpDataC;                   // +0x0c
+	void* mpData10;                  // +0x10
+};
+
+// Fixup record with an inline table of 8-byte id/aux entries.
+struct FixupTable
+{
+	void* mpLink;                    // +0x00
+	void* mpFn;                      // +0x04
+	int*  mpEntries;                 // +0x08 (self-relative)
+	void* mpDataC;                   // +0x0c
+	void* mpData10;                  // +0x10
+	unsigned int mCount;             // +0x14
+};
+
+int FUN_012010e0(int* a, int* b, int c, int* d);        // 0x012010e0
+int FixupCallback(int arg, Fixup4* rec);                 // 0x01200f80
+int SampleTrackPairs(FixupTable* rec, ArenaCtx* ctx);    // 0x01200ab0
+
+// @ 0x01200800
+RegObj* FindObjectByKey(int key)
+{
+	for (int i = 0; i < g_regCount; i++)
+		if (g_regList[i]->mKey == key)
+			return g_regList[i];
+	return 0;
+}
+
+// @ 0x01200830
+int SetFloatValue(float* dst, float v)
+{
+	*dst = v;
+	return 1;
+}
+
+// @ 0x01200850
+void CopyDword(unsigned int* dst, const unsigned int* src)
+{
+	*dst = *src;
+}
+
+struct __declspec(align(16)) AlignedVec4
+{
+	float x, y, z, w;
+};
+
+// @ 0x01200860
+int CopyVec4(__m128* dst, const __m128* src)
+{
+	*dst = *src;
+	return 1;
+}
+
+// @ 0x01200880
+void CopyVec4Void(__m128* dst, const __m128* src)
+{
+	*dst = *src;
+}
+
+// @ 0x01200890
+void Unbase3(Rel3* p, Base20Ctx* ctx)
+{
+	int d = (int)p - (int)ctx->mpBase;
+	p->mV2 -= d;
+	p->mV0 -= d;
+	p->mV1 -= d;
+}
+
+// @ 0x012008b0
+void Rebase3(Rel3* p, void* from)
+{
+	int d = (int)p - (int)from;
+	p->mV2 += d;
+	p->mV0 += d;
+	p->mV1 += d;
+}
+
+// @ 0x012008d0
+int Rebase3FromBase(Rel3* p, ArenaCtx* ctx)
+{
+	int d = (int)p - (int)ctx->mpBase;
+	p->mV2 += d;
+	p->mV0 += d;
+	p->mV1 += d;
+	return 1;
+}
+
+// @ 0x01200960
+WorldCtx* FixupToIds(Fixup4* rec, WorldCtx* ctx)
+{
+	rec->mpLink = (void*)ctx->mpHost->mpArena->ObjectToId(rec->mpLink);
+	rec->mpData8 = (void*)ctx->mpHost->mpArena->ObjectToId(rec->mpData8);
+	rec->mpDataC = (void*)ctx->mpHost->mpArena->ObjectToId(rec->mpDataC);
+	rec->mpData10 = (void*)ctx->mpHost->mpArena->ObjectToId(rec->mpData10);
+	return ctx;
+}
+
+// @ 0x012009c0
+void FixupToPointers(Fixup4* rec, int unknown, ArenaCtx* ctx)
+{
+	rec->mpLink = ctx->mpArena->IdToObject((int)rec->mpLink);
+	rec->mpData8 = ctx->mpArena->IdToObject((int)rec->mpData8);
+	rec->mpDataC = ctx->mpArena->IdToObject((int)rec->mpDataC);
+	rec->mpData10 = ctx->mpArena->IdToObject((int)rec->mpData10);
+}
+
+// @ 0x01200a10
+int InitFixup4(Fixup4* rec, ArenaCtx* ctx)
+{
+	rec->mpFn = (void*)FixupCallback;
+	rec->mpLink = ctx->mpArena->IdToObject((int)rec->mpLink);
+	rec->mpData8 = ctx->mpArena->IdToObject((int)rec->mpData8);
+	rec->mpDataC = ctx->mpArena->IdToObject((int)rec->mpDataC);
+	rec->mpData10 = ctx->mpArena->IdToObject((int)rec->mpData10);
+	return 1;
+}
+
+// @ 0x01200ee0
+int InitFixupTable(FixupTable* rec, ArenaCtx* ctx)
+{
+	rec->mpFn = (void*)SampleTrackPairs;
+	rec->mpLink = ctx->mpArena->IdToObject((int)rec->mpLink);
+	rec->mpData10 = ctx->mpArena->IdToObject((int)rec->mpData10);
+	rec->mpEntries = (int*)((char*)rec->mpEntries + ((char*)rec - (char*)ctx->mpBase));
+	int** entries = (int**)rec->mpEntries;
+	for (unsigned int i = 0; i < rec->mCount; i++)
+		entries[i * 2] = (int*)ctx->mpArena->IdToObject((int)entries[i * 2]);
+	rec->mpDataC = ctx->mpArena->IdToObject((int)rec->mpDataC);
+	return 1;
+}
+
+// @ 0x01200f80
+int FixupCallback(int arg, Fixup4* rec)
+{
+	if (!arg)
+		arg = (int)rec->mpData8;
+	return FUN_012010e0((int*)rec->mpData10, (int*)rec->mpDataC, (int)rec->mpLink, (int*)arg);
+}
+
+// @ 0x01200fb0
+void RebaseOneReversed(int* p, Base20Ctx* ctx)
+{
+	if (p != ctx->mpBase)
+	{
+		*p = *p - (int)p;
+		*p = (int)ctx->mpBase + *p;
+	}
+}
+
+// @ 0x01200fd0
+void RebaseDeltaFrom(int* p, int* from)
+{
+	if (p != from)
+		*p += (int)p - (int)from;
+}
+
+// @ 0x01200ff0
+int RebaseDeltaFromBase(int* p, ArenaCtx* ctx)
+{
+	if (p != ctx->mpBase)
+		*p += (int)p - (int)ctx->mpBase;
+	return 1;
+}
+
+// @ 0x01201050
+void RebaseToBase20(int* p, Base20Ctx* ctx)
+{
+	int d = (int)ctx->mpBase - (int)p;
+	*p = *p + d;
+}
+
+// @ 0x01201070
+void RebaseTranslated(int* p, int* from)
+{
+	int d = (int)p - (int)from;
+	*p += d;
+}
+
+// @ 0x01200940
+// Fixup wrapper destructor: releases the wrapped object through its secondary operator table and
+// then runs the recorded callback slot.
+struct RelVt
+{
+	void* s00;                       // +0x00
+	void* s04;                       // +0x04
+	void* s08;                       // +0x08
+	void (__thiscall* s0c)(void*);   // +0x0c
+};
+struct RelObj
+{
+	void*         pad00;             // +0x00
+	RelVt*        mpVt;              // +0x04
+	unsigned char pad08[0x18 - 8];
+	int           mRefs;             // +0x18
+};
+struct FixupHolder
+{
+	RelObj* mpObj;                                   // +0x00
+	void (__cdecl* mpFn)(int, FixupHolder*);         // +0x04
+	void Finish();
+};
+
+void FixupHolder::Finish()
+{
+	RelObj* obj = mpObj;
+	int refs = obj->mRefs;
+	if (!refs)
+		obj->mpVt->s0c(obj);
+	mpFn(0, this);
+}

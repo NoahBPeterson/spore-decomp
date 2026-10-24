@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+01200010  1500  key-pair track sampler; not re-checked with equiv in this pass (documented complete in nonmatching.txt)
+01200800    10  equiv PASS 400 inputs, 100% coverage; only the scheduling of the loop entry and the reload of the matched element differ
+01200860    34  equiv PASS 400 inputs, 100% coverage; identical movaps copy, cl adds an `and esp,-16` frame
+01200880    29  equiv PASS 400 inputs, 100% coverage; identical movaps copy, cl adds an `and esp,-16` frame
+01200890    19  equiv FAIL 5/5 valid inputs, first mismatch on eax only (void function, memory effects identical); diff is the folded base load
+012008b0    14  equiv PASS 400 inputs, 100% coverage; only the folded second-parameter load differs
+012008d0    28  equiv PASS 400 inputs, 100% coverage; register choice for the rebased members differs
+01200940    28  not re-checked with equiv (only reachable through the fixup wrapper's callback slot); call-through-memory operands became load-then-call
+01200960    40  equiv PASS 283 inputs, 100% coverage; only hoisted slot loads differ
+012009c0    15  equiv PASS 367 inputs, 100% coverage; only hoisted slot loads differ
+01200a10    15  equiv PASS 361 inputs, 100% coverage; only hoisted slot loads differ
+01200ee0    96  equiv FAIL 5/151 valid inputs, first mismatch memory pool @40020010; loop-base register and hoisted loads differ
+01200f80    29  equiv PASS 226 inputs, 100% coverage; only the value register (ecx vs esi) differs
+01200fb0    20  equiv FAIL 5/5 valid inputs, first mismatch on eax only (void function, memory effects identical); first store uses the memory form
+01201050    17  equiv FAIL 5/5 valid inputs, first mismatch on eax only (void function, memory effects identical); slot add uses the memory form
+01201070    10  equiv PASS 400 inputs, 100% coverage; only the folded second-parameter load differs
+01200ab0  1070  not reconstructed (SSE2 sampler); equiv not run (no symbol)
