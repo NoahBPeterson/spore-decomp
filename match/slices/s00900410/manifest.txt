@@ -8,3 +8,4 @@ slices/s00900410/s00900410.cpp  ?FUN_00900b10@@  00900b10
 slices/s00900410/s00900410.cpp  ??0XmlTextReader@@  00900b30
 slices/s00900410/s00900410.cpp  ?MapError@XmlTextReader@@  00900ba0
 slices/s00900410/s00900410.cpp  ?IsAtEnd@XmlReader@@  00900d90
+slices/s00900410/s00900410.cpp  ??1XmlReader@@QAE@XZ  009009e0  /O2 /MD /Gy /EHsc /TP

@@ -26,8 +26,9 @@ public:
     StackAllocator(void* pBlock = 0, uint32 blockSize = 0xffffffff, void* alloc = 0,
                    void* free = 0, void* ctx = 0);                 // 0x00928cd0
     bool AllocateNewBlock(uint32 size);                            // 0x00928ba0
+    void Reset();                                                  // 0x00928dc0
     void* Allocate(uint32 size) {
-        if ((uint32)(mpCurrentObjectEnd - mpCurrentObjectBegin) < size) {
+        if ((int)(mpCurrentBlockEnd - mpCurrentObjectBegin) - (int)size < 0) {
             if (!AllocateNewBlock(size))
                 return 0;
         }
@@ -93,6 +94,7 @@ public:
     void FUN_009007b0();
     __declspec(noinline) int ReadString(int unused, uint32* pOut);
     void FUN_009008f0();
+    void* FUN_00900970(const void* v);
 
     XmlReader(void* pAllocator);
     ~XmlReader();
@@ -112,18 +114,20 @@ public:
 
     int  MapError(int err);
     int  Read();
-    void OnStartElement2(void* a2, void* a3, void* a4);
-    void OnStartElement(void* a2, int* a3);
-    void OnEndElement(void* a2);
-    void OnCharacterData(void* a2, int a3);
-    void OnComment(void* a2);
-    void OnPI(void* a2, void* a3);
 
     XmlTextReader(void* pAllocator);
     ~XmlTextReader();
     XmlTextReader* DeletingDtor(char flags);
     char InitParser();
 };
+
+// expat callback thunks: __cdecl free functions with an explicit reader parameter
+void OnStartElement2(XmlTextReader* t, void* a2, void* a3, void* a4);   // 0x00900db0
+void OnStartElement(XmlTextReader* t, void* a2, int* a3);               // 0x00900e60
+void OnEndElement(XmlTextReader* t, void* a2);                          // 0x00900f70
+void OnCharacterData(XmlTextReader* t, void* a2, int a3);               // 0x00900ff0
+void OnComment(XmlTextReader* t, void* a2);                             // 0x009010c0
+void OnPI(XmlTextReader* t, void* a2, void* a3);                        // 0x00901150
 
 extern void* g_vtblXmlReader;      // 0x0143a094
 extern void* g_vtblXmlTextReader;  // 0x0143a0b0
@@ -143,8 +147,8 @@ void FUN_00903340(void* parser, void* comment);
 void FUN_00903370(void* parser, void* a, void* b);
 void FUN_00903390(void* parser, void* a, void* b);
 void FUN_00903b40(void* parser);
-void* FUN_00900970(XmlReader* r, const void* v);            // 0x00900970
-void FUN_00900900(short* s, EA::Allocator::StackAllocator* a); // 0x00900900
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int n); // 0x011e0744
+void* FUN_00900900(short* s, EA::Allocator::StackAllocator* a); // 0x00900900
 extern "C" void g_use_ptr(uint32*);
 
 #define VFN0(p, off) (*(void (__thiscall**)(void*))((char*)(*(void**)(p)) + (off)))
@@ -262,21 +266,28 @@ void XmlReader::FUN_009008f0()
 }
 
 // @ 0x00900900
-void FUN_00900900(short* s, EA::Allocator::StackAllocator* a)
+void* FUN_00900900(short* s, EA::Allocator::StackAllocator* a)
 {
     short* p = s;
     do { } while (*p++ != 0);
     uint32 n = ((uint32)((p - (s + 1)) * 2) + 9) & ~7u;
     char* dst;
-    if ((int)((a->mpCurrentObjectEnd - a->mpCurrentObjectBegin) - n) < 0) {
+    if ((int)((a->mpCurrentBlockEnd - a->mpCurrentObjectBegin) - n) < 0) {
         if (!a->AllocateNewBlock(n))
-            return;
+            return 0;
     }
     dst = a->mpCurrentObjectBegin;
     a->mpCurrentObjectBegin = dst + n;
     a->mpCurrentObjectEnd = dst + n;
     short* d = (short*)dst;
     while ((*d++ = *s++) != 0) { }
+    return dst;
+}
+
+// @ 0x00900970
+void* XmlReader::FUN_00900970(const void* v)
+{
+    return FUN_00900900((short*)v, (EA::Allocator::StackAllocator*)((char*)this + 0x10));
 }
 
 // @ 0x00900990
@@ -303,18 +314,18 @@ XmlReader::~XmlReader()
 {
     XmlReader* t = this;
     t->vftable = (void**)&g_vtblXmlReader;
-    ((EA::Allocator::StackAllocator*)(t->mAllocator))->~StackAllocator();
+    ((EA::Allocator::StackAllocator*)(t->mAllocator))->Reset();
     if (t->r34 != 0) {
         int* p = (int*)t->r34;
         t->r34 = 0;
         (*(void(__thiscall**)(int*))((char*)*p + 8))(p);
     }
-    ((MemoryStream*)(t->mMemoryStream))->~MemoryStream();
+    ((MemoryStream*)(t->mMemoryStream))->Reset();
     if (t->r34 != 0) {
         int* p = (int*)t->r34;
         (*(void(__thiscall**)(int*))((char*)*p + 8))(p);
     }
-    ((EA::Allocator::StackAllocator*)(t->mAllocator))->~StackAllocator();
+    ((EA::Allocator::StackAllocator*)(t->mAllocator))->Reset();
 }
 
 // @ 0x00900a30
@@ -407,29 +418,33 @@ static void AppendTok(XmlTextReader* t, Token* p)
 }
 
 // @ 0x00900db0
-void XmlTextReader::OnStartElement2(void* a2, void* a3, void* a4)
+void OnStartElement2(XmlTextReader* t, void* a2, void* a3, void* a4)
 {
-    XmlTextReader* t = this;
     if ((t->mnFlags & 8) == 0)
         return;
     Token* p = AllocToken(t, 0x20);
-    if (p) {
+    if (p != 0)
         p->mToken = 6;
-        p->field8 = (int)FUN_00900970(t, a2);
-        p->fieldc = 0;
-        p->field10 = 0;
-        p->mpEntries = 0;
-        p->mnEntryCount = (int)FUN_00900970(t, a3);
-        p->mpNext = 0;
-        p->field10 = t->mnDepth;
-        AppendTok(t, p);
+    else
+        p = 0;
+    p->field8 = (int)t->FUN_00900970(a2);
+    p->fieldc = 0;
+    p->mpEntries = (int*)t->FUN_00900970(a3);
+    p->mnEntryCount = (int)t->FUN_00900970(a4);
+    p->mpNext = 0;
+    p->field10 = t->mnDepth;
+    if (t->mpLastToken != 0) {
+        t->mpLastToken->mpNext = p;
+        t->mpLastToken = p;
+    } else {
+        t->mpFirstToken = p;
+        t->mpLastToken = p;
     }
 }
 
 // @ 0x00900e60
-void XmlTextReader::OnStartElement(void* a2, int* a3)
+void OnStartElement(XmlTextReader* t, void* a2, int* a3)
 {
-    XmlTextReader* t = this;
     Token* p = AllocToken(t, 0x20);
     if (!p)
         return;
@@ -438,13 +453,13 @@ void XmlTextReader::OnStartElement(void* a2, int* a3)
     while (a3[n] != 0)
         n++;
     p->mnEntryCount = n / 2;
-    p->field8 = (int)FUN_00900970(t, a2);
+    p->field8 = (int)t->FUN_00900970(a2);
     p->fieldc = 0;
     int* arr = (int*)((EA::Allocator::StackAllocator*)(t->mAllocator))
                    ->Allocate((uint32)(n * 4 + 7) & ~7u);
     p->mpEntries = arr;
     for (int i = 0; i < n; i++)
-        arr[i] = (int)FUN_00900970(t, (void*)a3[i]);
+        arr[i] = (int)t->FUN_00900970((void*)a3[i]);
     p->mpNext = 0;
     p->field10 = t->mnDepth;
     if (t->mpLastToken != 0) {
@@ -459,14 +474,13 @@ void XmlTextReader::OnStartElement(void* a2, int* a3)
 }
 
 // @ 0x00900f70
-void XmlTextReader::OnEndElement(void* a2)
+void OnEndElement(XmlTextReader* t, void* a2)
 {
-    XmlTextReader* t = this;
     Token* p = AllocToken(t, 0x18);
     if (!p)
         return;
     p->mToken = 2;
-    p->field8 = (int)FUN_00900970(t, a2);
+    p->field8 = (int)t->FUN_00900970(a2);
     p->fieldc = 0;
     t->mnDepth--;
     p->mpNext = 0;
@@ -475,33 +489,29 @@ void XmlTextReader::OnEndElement(void* a2)
 }
 
 // @ 0x00900ff0
-void XmlTextReader::OnCharacterData(void* a2, int a3)
+void OnCharacterData(XmlTextReader* t, void* a2, int a3)
 {
-    XmlTextReader* t = this;
     Token* p = AllocToken(t, 0x18);
-    if (!p)
-        return;
-    p->mToken = 4;
+    if (p != 0)
+        p->mToken = 4;
+    else
+        p = 0;
     p->field8 = 0;
     uint32 size = (uint32)(a3 * 2);
     uint32 n = (size + 9) & ~7u;
     char* dst = (char*)((EA::Allocator::StackAllocator*)(t->mAllocator))->Allocate(n);
-    p->mpEntries = (int*)dst;
-    // copy a3 wchar_t (a2 is the parser's buffer)
-    short* d = (short*)dst;
-    short* s = (short*)a2;
-    for (int i = 0; i < a3; i++) d[i] = s[i];
-    d[a3] = 0;
-    p->field10 = a3;
+    p->fieldc = (int)dst;
+    memcpy(dst, a2, size);
+    *(short*)(dst + size) = 0;
+    p->mpEntries = (int*)a3;
     p->mpNext = 0;
-    p->mnEntryCount = t->mnDepth;
+    p->field10 = t->mnDepth;
     AppendTok(t, p);
 }
 
 // @ 0x009010c0
-void XmlTextReader::OnComment(void* a2)
+void OnComment(XmlTextReader* t, void* a2)
 {
-    XmlTextReader* t = this;
     if ((t->mnFlags & 1) == 0)
         return;
     Token* p = AllocToken(t, 0x18);
@@ -509,24 +519,23 @@ void XmlTextReader::OnComment(void* a2)
         return;
     p->mToken = 3;
     p->field8 = 0;
-    p->fieldc = (int)FUN_00900970(t, a2);
+    p->fieldc = (int)t->FUN_00900970(a2);
     p->mpNext = 0;
     p->field10 = t->mnDepth;
     AppendTok(t, p);
 }
 
 // @ 0x00901150
-void XmlTextReader::OnPI(void* a2, void* a3)
+void OnPI(XmlTextReader* t, void* a2, void* a3)
 {
-    XmlTextReader* t = this;
     if ((t->mnFlags & 2) == 0)
         return;
     Token* p = AllocToken(t, 0x18);
     if (!p)
         return;
     p->mToken = 5;
-    p->field8 = (int)FUN_00900970(t, a2);
-    p->fieldc = (int)FUN_00900970(t, a3);
+    p->field8 = (int)t->FUN_00900970(a2);
+    p->fieldc = (int)t->FUN_00900970(a3);
     p->mpNext = 0;
     p->field10 = t->mnDepth;
     AppendTok(t, p);
