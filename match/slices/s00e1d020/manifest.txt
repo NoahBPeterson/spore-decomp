@@ -1,0 +1,4 @@
+slices/s00e1d020/s00e1d020.cpp  ?Deactivate@cUITradingActivity@@QAEXI@Z  00e1db60  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e1d020/s00e1d020.cpp  ?FUN_00e1dbd0@@YAXXZ  00e1dbd0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e1d020/s00e1d020.cpp  ?Destroy@cTradeUI@@QAEPAXI@Z  00e1dc20  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e1d020/s00e1d020.cpp  ?FUN_00e1dc70@@YAXXZ  00e1dc70  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
