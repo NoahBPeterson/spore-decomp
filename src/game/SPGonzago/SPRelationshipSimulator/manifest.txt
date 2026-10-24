@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  _Fd01210  00d01210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?A1db0@RelBook@@QAE?AUString@@PAUNoun@@0@Z  00d01db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?A1e30@RelBook@@QAEXPAUNoun@@0@Z  00d01e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?A1f20@RelBook@@QAE_NII@Z  00d01f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_00d01fb0@@YIEPAUcRelationshipManager@@PAXPAUcEmpire@@2@Z  00d01fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?GetRelationshipEvents@@YAPAUIdVec@@XZ  00d026d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?AddRef@@YIHPAURefCountHeader@@@Z  00d04e60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_00d05380@Vec20@@QAEPAUElem20@@PAU2@PAUPair@@@Z  00d05380  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_00d06c30@cCountedSlot@SP@@QAEXHH@Z  00d06c30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_013621a0@@YAXXZ  013621a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

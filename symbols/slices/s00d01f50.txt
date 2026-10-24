@@ -1,0 +1,7 @@
+00d01f50 ?FUN_00d01f50@@YIEPAUcRelationshipManager@@PAXPAUcEmpire@@2@Z  # FUN_00d01f50 migrated from s00d01f50 (verbatim, slice spelling)
+00d01fb0 ?FUN_00d01fb0@@YIEPAUcRelationshipManager@@PAXPAUcEmpire@@2@Z  # FUN_00d01fb0 migrated from s00d01f50 (verbatim, slice spelling)
+00d01ff0 ?FUN_00d01ff0@@YIEPAUcRelationshipManager@@PAXPAUcEmpire@@2@Z  # FUN_00d01ff0 migrated from s00d01f50 (verbatim, slice spelling)
+00d02050 ?FUN_00d02050@@YIMPAUcRelationshipManager@@PAXPAUcRel@@2@Z  # FUN_00d02050 migrated from s00d01f50 (verbatim, slice spelling)
+00d022e0 ?FUN_00d022e0@@YAEPAUcCmdCtx@@IPAUcTree@@@Z  # FUN_00d022e0 migrated from s00d01f50 (verbatim, slice spelling)
+00d02440 ?FUN_00d02440@@YAXPAUcStream@@PAUcTree@@@Z  # FUN_00d02440 migrated from s00d01f50 (verbatim, slice spelling)
+00d02570 ?FUN_00d02570@@YAEPAUcCmdCtx@@IPAUcTree@@@Z  # FUN_00d02570 migrated from s00d01f50 (verbatim, slice spelling)

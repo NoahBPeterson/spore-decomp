@@ -3,13 +3,13 @@
 00d00ff0  FUN_00d00ff0  # container update
 00d01110  FUN_00d01110  # container update
 00d011e0  FUN_00d011e0  # tree destruction loop until sentinel (call 0x921580)
-00d01210  FUN_00d01210  # lower_bound, 0x20-byte elements, unsigned key
+00d01210 _Fd01210  # Fd01210 migrated from s00d00ee0 (verbatim, slice spelling)
 00d01260  FUN_00d01260  # lower_bound, 8-byte elements, unsigned key
 00d012a0  FUN_00d012a0  # container update
 00d01340  FUN_00d01340  # container operation
-00d01410  FUN_00d01410  # set/comparator operation
+00d01410 ?FindRel@RelBook@@QAEPAURelData@@PAURelTree@@II@Z  # RelBook::FindRel migrated from s00d00ee0 (verbatim, slice spelling)
 00d01470  FUN_00d01470  # set/comparator operation
-00d014e0  FUN_00d014e0  # container operation
+00d014e0 ?A14e0@RelWriter@@QAEXPAUISerializer@@@Z  # RelWriter::A14e0 migrated from s00d00ee0 (verbatim, slice spelling)
 00d015d0  FUN_00d015d0  # container operation
 00d01820  FUN_00d01820  # container operation
 00d018d0  FUN_00d018d0  # erase range over 8-byte elements (shrink end)
@@ -17,7 +17,7 @@
 00d01ab0  FUN_00d01ab0  # compare helper
 00d01b50  FUN_00d01b50  # compare wrapper (2 args)
 00d01b80  FUN_00d01b80  # compare wrapper (3 args)
-00d01bb0  SP::cRelationshipManager::GetDebugString  # PDB name
-00d01db0  FUN_00d01db0  # relationship helper
-00d01e30  SP::cRelationshipManager::EndAlliance  # PDB name
-00d01f20  FUN_00d01f20  # relationship helper
+00d01bb0 ?A1bb0@RelBook@@QAE?AUString@@II@Z  # RelBook::A1bb0 migrated from s00d00ee0 (verbatim, slice spelling)
+00d01db0 ?A1db0@RelBook@@QAE?AUString@@PAUNoun@@0@Z  # RelBook::A1db0 migrated from s00d00ee0 (verbatim, slice spelling)
+00d01e30 ?A1e30@RelBook@@QAEXPAUNoun@@0@Z  # RelBook::A1e30 migrated from s00d00ee0 (verbatim, slice spelling)
+00d01f20 ?A1f20@RelBook@@QAE_NII@Z  # RelBook::A1f20 migrated from s00d00ee0 (verbatim, slice spelling)

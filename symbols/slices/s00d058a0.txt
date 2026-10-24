@@ -1,0 +1,8 @@
+00d058a0 ?FUN_00d058a0@cRelationshipManager_s00d0_58a0@SP@@QAEXXZ  # cRelationshipManager_s00d0_58a0::FUN_00d058a0 migrated from s00d058a0 (verbatim, slice spelling)
+00d05a20 ?CalculateRelationshipAbsolute@cRelationshipManager@SP@@QAEMII@Z  # SP::cRelationshipManager::CalculateRelationshipAbsolute migrated from s00d058a0
+00d05d90 ?RecordEvent@cRelationshipManager@SP@@QAEMIIW4eRelationshipEvents@2@M@Z  # SP::cRelationshipManager::RecordEvent migrated from s00d058a0
+00d06030 ?FUN_00d06030@cRelationshipManager_s00d0_58a0@SP@@QAEXXZ  # cRelationshipManager_s00d0_58a0::FUN_00d06030 migrated from s00d058a0 (verbatim, slice spelling)
+00d06270 ?RecordFoughtEnemyEvent@cRelationshipManager_s00d0_58a0@SP@@QAEXXZ  # cRelationshipManager_s00d0_58a0::RecordFoughtEnemyEvent migrated from s00d058a0 (verbatim, slice spelling)
+00d06400 ?FUN_00d06400@cRelationshipManager_s00d0_58a0@SP@@QAEXXZ  # cRelationshipManager_s00d0_58a0::FUN_00d06400 migrated from s00d058a0 (verbatim, slice spelling)
+00d064b0 ?FUN_00d064b0@cRelationshipManager_s00d0_58a0@SP@@QAEXXZ  # cRelationshipManager_s00d0_58a0::FUN_00d064b0 migrated from s00d058a0 (verbatim, slice spelling)
+00d065a0 ?FUN_00d065a0@cRelationshipManager_s00d0_58a0@SP@@QAEXXZ  # cRelationshipManager_s00d0_58a0::FUN_00d065a0 migrated from s00d058a0 (verbatim, slice spelling)

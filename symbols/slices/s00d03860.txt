@@ -1,0 +1,4 @@
+00d038e0 ?StartPeace@cRelationshipManager@SP@@QAEXPAVcEmpire@2@0@Z  # SP::cRelationshipManager::StartPeace migrated from s00d03860
+00d03b10 ?FUN_00d03b10@tRelSub@SP@@QAEXPAUtRelNode@2@@Z  # tRelSub::FUN_00d03b10 migrated from s00d03860 (verbatim, slice spelling)
+00d03b80 ?GetPropertyListForPersonality@SP@@YAXIPAX@Z  # GetPropertyListForPersonality migrated from s00d03860 (verbatim, slice spelling)
+00d041d0 ?FUN_00d041d0@SP@@YAPAUtRelEntry@1@PAU21@00@Z  # FUN_00d041d0 migrated from s00d03860 (verbatim, slice spelling)

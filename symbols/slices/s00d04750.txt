@@ -1,0 +1,4 @@
+00d04e60 ?AddRef@@YIHPAURefCountHeader@@@Z  # AddRef migrated from s00d04750 (verbatim, slice spelling)
+00d051e0 ?FUN_00d051e0@Vec20@@QAEHPAX0@Z  # Vec20::FUN_00d051e0 migrated from s00d04750 (verbatim, slice spelling)
+00d05380 ?FUN_00d05380@Vec20@@QAEPAUElem20@@PAU2@PAUPair@@@Z  # Vec20::FUN_00d05380 migrated from s00d04750 (verbatim, slice spelling)
+00d05560 ?FUN_00d05560@Vec20@@QAEHPAUPair@@@Z  # Vec20::FUN_00d05560 migrated from s00d04750 (verbatim, slice spelling)

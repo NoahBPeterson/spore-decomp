@@ -1,0 +1,27 @@
+# va  diff-bytes  reason
+00d01410 69 Complete relationship lookup; original keeps the null result in edi across NormalizePair; difftest FAIL is a checker artifact: the find out-pointer is a dead parameter slot on both sides (original reuses a's slot, ours t's), so only the pointer value differs; same calls, result and memory
+00d014e0 225 Complete cRelationshipManager::Write; residual is register assignment around the inlined PutU32 helper
+00d01bb0 414 Complete cRelationshipManager::GetDebugString; residual is String temp/EH layout and register assignment
+00d01f50 6 6-byte diff: FUN_00d01ab0 argument setup loads the first empire id into eax instead of ecx (pure register-allocation swap, semantics identical); 183 valid inputs, 78.8% coverage
+00d01ff0 6 6-byte diff: same FUN_00d01ab0 argument-setup register swap as 00d01f50; 190 valid inputs, 76.5% coverage
+00d02050 353 personality calculation: byte layout differs (483 vs 500) and ecx is clobbered where the original leaves it untouched on malformed relationship records; 42 valid inputs, 60.6% coverage
+00d022e0 222 world writer: eastl::wstring temporaries are emitted as real calls instead of the inlined SSO copies (268 vs 337 bytes); 256 valid inputs, 11.6% coverage
+00d02440 259 world reader: stream vtable calls and the thiscall tree insert cannot be resolved by the harness (302 vs 291 bytes, 0 valid inputs)
+00d02570 217 script-side world writer: eastl::wstring temporaries are emitted as real calls instead of the inlined SSO copies (271 vs 342 bytes); 243 valid inputs, 11.5% coverage
+00d038e0 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 186 bytes - cRelationshipManager::StartPeace body not reconstructed.
+00d03b10 11 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 11 bytes - subtree release; only the hoisting of the node's sub-object address (lea before the child test instead of inside the loop) differs.
+00d03b80 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 186 bytes - GetPropertyListForPersonality body not reconstructed.
+00d041d0 44 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 50 bytes - element-wise subtree release copy; retail places the equal-range return after the loop, MSVC hoists it before.
+00d051e0 26 vector erase-range; MSVC assigns this to ebx and arg2 to edi (original keeps this in edi, arg2 in ebx) and reorders the loop setup, same 93 bytes
+00d05560 63 map-key erase; MSVC assigns this to esi and end to edi (original keeps this in edi, end in esi); block layout of the p==end||key<p->key test differs, 100 vs 109 bytes
+00d058a0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 376 bytes - relationship helper not reconstructed.
+00d05a20 5 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 876 bytes - CalculateRelationshipAbsolute not reconstructed.
+00d05d90 5 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 656 bytes - RecordEvent sink not reconstructed.
+00d06030 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 517 bytes - relationship helper not reconstructed.
+00d06270 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 394 bytes - RecordFoughtEnemyEvent not reconstructed.
+00d06400 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 175 bytes - relationship helper not reconstructed.
+00d064b0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 234 bytes - relationship helper not reconstructed.
+00d065a0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 354 bytes - relationship helper not reconstructed.
+00d06710 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 419 bytes - helper not reconstructed.
+00d068c0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 90 bytes - helper not reconstructed.
+00d06920 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 289 bytes - cRelationshipManager::StartAlliance not reconstructed.
