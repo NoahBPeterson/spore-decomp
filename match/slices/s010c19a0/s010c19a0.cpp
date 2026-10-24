@@ -13,7 +13,7 @@ typedef short hkInt16;
 
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long, void*);
-extern "C" __declspec(dllimport) unsigned long long __cdecl __rdtsc();
+#include <intrin.h>
 
 extern unsigned long g_hkThreadMemoryTls;    // 0x016e4174
 extern unsigned long g_hkMonitorCurrentTls;  // 0x016e42a4
@@ -120,7 +120,8 @@ class hkConvexVerticesShape : public hkConvexShape { public:
     void copyVertexData(const float* data, int stride, int numVertices);
     void f1fe0(const void* a, int stride, int numVertices, const hkArray<hkVector4>* src);
     void getAabb(const hkTransform& t, float tol, hkAabb& out) const;
-    void castRay(const void* input, void* output) const;
+    // (hkBool ret = hidden first pointer, hkShapeRayCastInput const&, hkShapeRayCastOutput&): ret 0xc
+    void castRay(unsigned char* hitOut, const void* input, void* output) const;
     void calcStatistics(hkStatisticsCollector* c) const;
     ~hkConvexVerticesShape();
 };
@@ -172,36 +173,44 @@ struct hkAlgorithm
 void FUN_0107f4a0(void*, int, int);
 void FUN_0107f530(void*, int);
 void FUN_010cd8e0(const void*, int, int, void*);
-void FUN_010ccbc0(void*, char);
-void FUN_010e7d70(void*);
-void FUN_010e7ce0(void*);
-void FUN_010e6a70(void*);
-void FUN_010e5540(void*);
-void FUN_010e1c70(void*);
-void FUN_010ceee0(void*);
-void FUN_010e1720(void*);
-void FUN_010e1510(void*);
-void FUN_010e0500(void*);
-void FUN_010df500(void*);
-void FUN_010df2c0(void*);
-void FUN_010de080(void*);
-void FUN_010cef70(void*);
-void FUN_010dcfc0(void*);
-void FUN_010d9f10(void*);
-void FUN_01100cf0(void*, int, int);
-void FUN_010ff6d0(void*);
-void FUN_010d9e50(void*);
-void FUN_010fdec0(void*);
-void FUN_010d92a0(void*);
-void FUN_010d8940(void*);
-void FUN_010d75f0(void*);
-void FUN_010d64a0(void*);
-void FUN_010d5320(void*);
-void FUN_010d41f0(void*);
-void FUN_010fda70(void*);
-void FUN_010d2730(void*);
-void FUN_010cff70(void*);
-void FUN_010cf000(void*);
+
+// hkAgentRegisterUtil::registerAllAgents fan-out.  Every helper takes the dispatcher
+// in ecx (__thiscall) and pops only its real stack arguments -- the ones that forward
+// the dispatcher to hkCollisionDispatcher::registerAgentFuncs do it straight from ecx,
+// so they are declared as (unused) members instead of one-argument cdecl functions.
+struct hkCollisionDispatcherOps
+{
+    void setFlag(char v);                       // 0x010ccbc0
+    void registerAlternateShapeTypes();         // 0x010e7d70
+    void reg010e7ce0();                         // 0x010e7ce0
+    void reg010e6a70();                         // 0x010e6a70
+    void reg010e5540();                         // 0x010e5540
+    void reg010e1c70();                         // 0x010e1c70
+    void reg010ceee0();                         // 0x010ceee0
+    void reg010e1720();                         // 0x010e1720
+    void reg010e1510();                         // 0x010e1510
+    void reg010e0500();                         // 0x010e0500
+    void reg010df500();                         // 0x010df500
+    void reg010df2c0();                         // 0x010df2c0
+    void reg010de080();                         // 0x010de080
+    void reg010cef70();                         // 0x010cef70
+    void reg010dcfc0();                         // 0x010dcfc0
+    void reg010d9f10();                         // 0x010d9f10
+    void registerAgentFuncs(int, int);          // 0x01100cf0
+    void reg010ff6d0();                         // 0x010ff6d0
+    void reg010d9e50();                         // 0x010d9e50
+    void reg010fdec0();                         // 0x010fdec0
+    void reg010d92a0();                         // 0x010d92a0
+    void reg010d8940();                         // 0x010d8940
+    void reg010d75f0();                         // 0x010d75f0
+    void reg010d64a0();                         // 0x010d64a0
+    void reg010d5320();                         // 0x010d5320
+    void reg010d41f0();                         // 0x010d41f0
+    void reg010fda70();                         // 0x010fda70
+    void reg010d2730();                         // 0x010d2730
+    void reg010cff70();                         // 0x010cff70
+    void reg010cf000();                         // 0x010cf000
+};
 
 // ===========================================================================
 // @ 0x010c19a0  hkConvexVerticesShape::copyVertexData
@@ -209,7 +218,7 @@ void hkConvexVerticesShape::copyVertexData(const float* data, int stride, int nu
 {
     m_numVertices = numVertices;
     int n4 = (numVertices + 3) & ~3;
-    int blocks = n4 >> 2;
+    int blocks = n4 / 4;               // signed division truncates toward zero, like the original
     if (m_rotatedVertices.getCapacity() < blocks)
     {
         int c = m_rotatedVertices.getCapacity() * 2;
@@ -218,7 +227,9 @@ void hkConvexVerticesShape::copyVertexData(const float* data, int stride, int nu
     }
     FourVectors* fv = m_rotatedVertices.m_data;
     const char* p = (const char*)data;
-    for (int i = 0; i < numVertices; ++i)
+    m_rotatedVertices.m_size = blocks;
+    int i = 0;
+    for (; i < numVertices; ++i)
     {
         int b = i >> 2;
         int l = i & 3;
@@ -229,7 +240,7 @@ void hkConvexVerticesShape::copyVertexData(const float* data, int stride, int nu
         p += stride;
     }
     const char* last = p - stride;
-    for (int i = numVertices; i < n4; ++i)
+    for (; i < n4; ++i)
     {
         int b = i >> 2;
         int l = i & 3;
@@ -238,18 +249,20 @@ void hkConvexVerticesShape::copyVertexData(const float* data, int stride, int nu
         base[4 + l] = *(const float*)(last + 4);
         base[8 + l] = *(const float*)(last + 8);
     }
-    m_rotatedVertices.m_size = n4 >> 2;
 
     hkAabb aabb;
     hkAabbUtil::calcAabb(data, numVertices, stride, aabb);
-    m_aabbCenter.x = (aabb.m_min.x + aabb.m_max.x) * 0.5f;
-    m_aabbCenter.y = (aabb.m_min.y + aabb.m_max.y) * 0.5f;
-    m_aabbCenter.z = (aabb.m_min.z + aabb.m_max.z) * 0.5f;
-    m_aabbCenter.w = (aabb.m_min.w + aabb.m_max.w) * 0.5f;
-    m_aabbHalfExtents.x = (aabb.m_max.x - aabb.m_min.x) * 0.5f;
-    m_aabbHalfExtents.y = (aabb.m_max.y - aabb.m_min.y) * 0.5f;
-    m_aabbHalfExtents.z = (aabb.m_max.z - aabb.m_min.z) * 0.5f;
-    m_aabbHalfExtents.w = (aabb.m_max.w - aabb.m_min.w) * 0.5f;
+    // the original rounds each sum/difference to float (a member store) before scaling by 0.5f;
+    // cl71 keeps x87 intermediates otherwise, so the temp is volatile to force the float store
+    volatile float s;
+    s = aabb.m_min.x + aabb.m_max.x;  m_aabbCenter.x = s * 0.5f;
+    s = aabb.m_min.y + aabb.m_max.y;  m_aabbCenter.y = s * 0.5f;
+    s = aabb.m_min.z + aabb.m_max.z;  m_aabbCenter.z = s * 0.5f;
+    s = aabb.m_min.w + aabb.m_max.w;  m_aabbCenter.w = s * 0.5f;
+    s = aabb.m_max.x - aabb.m_min.x;  m_aabbHalfExtents.x = s * 0.5f;
+    s = aabb.m_max.y - aabb.m_min.y;  m_aabbHalfExtents.y = s * 0.5f;
+    s = aabb.m_max.z - aabb.m_min.z;  m_aabbHalfExtents.z = s * 0.5f;
+    s = aabb.m_max.w - aabb.m_min.w;  m_aabbHalfExtents.w = s * 0.5f;
 }
 
 // @ 0x010c1c60  hkConvexVerticesShape::getAabb
@@ -258,48 +271,79 @@ void hkConvexVerticesShape::getAabb(const hkTransform& t, float tol, hkAabb& out
     hkAabbUtil::calcAabb(t, m_aabbHalfExtents, m_aabbCenter, tol + m_radius, out);
 }
 
-// @ 0x010c1c90  hkConvexVerticesShape::castRay (monitor-stream timers omitted)
-void hkConvexVerticesShape::castRay(const void* input_, void* output_) const
+// shape ray cast output: point/normal (0x00), material (0x10), fraction (0x14)
+struct hkShapeRayCastOut { hkVector4 m_vec; hkUint32 m_material; float m_fraction; };
+
+// hkMonitorStream timer split (12-byte entry: name, time; the third dword is left untouched)
+struct hkTimerEntry { const char* m_name; hkUint32 m_time; hkUint32 m_pad; };
+static inline void hkTimerSplit(const char* name)
 {
-    const hkVector4& input = *(const hkVector4*)input_;
-    hkVector4* output = (hkVector4*)output_;
-    float bestFraction = output->w;
-    float bestProjected = -1.0f;
-    hkVector4 bestPoint(*(hkVector4*)output);
-    int i = m_numVertices - 1;
+    void* end = TlsGetValue(g_hkMonitorEndTls);
+    void* cur = TlsGetValue(g_hkMonitorCurrentTls);
+    if ((unsigned)cur < (unsigned)end)
+    {
+        hkTimerEntry* p = (hkTimerEntry*)TlsGetValue(g_hkMonitorCurrentTls);
+        p->m_name = name;
+        p->m_time = (hkUint32)__rdtsc();
+        TlsSetValue(g_hkMonitorCurrentTls, p + 1);
+    }
+}
+
+// @ 0x010c1c90  hkConvexVerticesShape::castRay (monitor-stream timers omitted)
+void hkConvexVerticesShape::castRay(unsigned char* hitOut, const void* input_, void* output_) const
+{
+    hkTimerSplit((const char*)0x14a27e0);      // "TtrcConvexVert"
+    const hkVector4& origin = *(const hkVector4*)input_;
+    const hkVector4& dir = *((const hkVector4*)input_ + 1);
+    hkShapeRayCastOut* out = (hkShapeRayCastOut*)output_;
+    float reference = out->m_fraction;         // local_28: the caller's fraction, never written back
+    float fraction = -1.0f;                    // local_2c
+    hkVector4 point;                           // local_20..0x2c
+    int i = m_planeEquations.m_size - 1;
     const hkVector4* planes = m_planeEquations.m_data;
-    if (i >= 0)
+    for (; i >= 0; --i)
     {
-        do
+        const hkVector4& pl = planes[i];
+        float d0 = pl.x * origin.x + pl.y * origin.y + pl.z * origin.z + pl.w;
+        float d1 = pl.x * dir.x + pl.y * dir.y + pl.z * dir.z + pl.w;
+        if (d0 < 0.0f)
         {
-            const hkVector4& pl = planes[i];
-            float d0 = pl.x * input.x + pl.y * input.y + pl.z * input.z + pl.w;
-            float d1 = pl.x * ((const float*)input_)[4] + pl.y * ((const float*)input_)[5]
-                     + pl.z * ((const float*)input_)[6] + pl.w;
-            if (d0 < 0.0f)
+            if (d1 < 0.0f)
             {
-                if (d1 >= 0.0f)
-                {
-                    float f = d0 / (d0 - d1);
-                    if (bestFraction < f) { bestProjected = bestPoint.w; }
-                    else { bestPoint = pl; bestProjected = f; }
-                }
+                continue;                      // both ends inside: no crossing on this plane
             }
-            else if (d1 < 0.0f)
+            float f = d0 / (d0 - d1);
+            if (!(reference < f)) reference = f;
+        }
+        else
+        {
+            if (d1 >= 0.0f)
             {
-                float f = d0 / (d0 - d1);
-                if (bestProjected < f) { bestProjected = f; }
-                else { bestPoint = pl; bestProjected = f; }
+                hkTimerSplit((const char*)0x149cc34);   // "Et"
+                *hitOut = 0;
+                return;
             }
-            --i;
-        } while (i >= 0);
+            float f = d0 / (d0 - d1);
+            if (fraction < f) { fraction = f; point = pl; }
+        }
+        if (reference < fraction)
+        {
+            hkTimerSplit((const char*)0x149cc34);       // "Et"
+            *hitOut = 0;
+            return;
+        }
     }
-    if (bestProjected >= 0.0f)
+    if (!(fraction < 0.0f))
     {
-        output->x = bestPoint.x; output->y = bestPoint.y; output->z = bestPoint.z;
-        output->w = bestProjected;
-        *((hkUint32*)output + 4) = 0xffffffff;
+        out->m_vec = point;
+        out->m_material = 0xffffffff;
+        out->m_fraction = fraction;
+        hkTimerSplit((const char*)0x149cc34);           // "Et"
+        *hitOut = 1;
+        return;
     }
+    hkTimerSplit((const char*)0x149cc34);               // "Et"
+    *hitOut = 0;
 }
 
 // @ 0x010c1f40  hkConvexVerticesShape::calcStatistics
@@ -437,45 +481,46 @@ void hkAllCdPointCollector::sortPoints()
 }
 
 // @ 0x010c25a0  register all collision agents
-void FUN_010c25a0(void* mgr)
+void FUN_010c25a0(void* mgr_)
 {
-    FUN_010e7d70(mgr);
-    FUN_010e7ce0(mgr);
-    FUN_010e6a70(mgr);
-    FUN_010ccbc0(mgr, 0);
-    FUN_010e5540(mgr);
-    FUN_010e1c70(mgr);
-    FUN_010ceee0(mgr);
-    FUN_010e1720(mgr);
-    FUN_010ccbc0(mgr, 1);
-    FUN_010ccbc0(mgr, 0);
-    FUN_010e1510(mgr);
-    FUN_010ccbc0(mgr, 1);
-    FUN_010e0500(mgr);
-    FUN_010df500(mgr);
-    FUN_010ccbc0(mgr, 0);
-    FUN_010df2c0(mgr);
-    FUN_010ccbc0(mgr, 1);
-    FUN_010de080(mgr);
-    FUN_010cef70(mgr);
-    FUN_010dcfc0(mgr);
-    FUN_010d9f10(mgr);
-    FUN_01100cf0(mgr, 1, 1);
-    FUN_010ff6d0(mgr);
-    FUN_010d9e50(mgr);
-    FUN_010fdec0(mgr);
-    FUN_010d92a0(mgr);
-    FUN_010d8940(mgr);
-    FUN_010d75f0(mgr);
-    FUN_01100cf0(mgr, 6, 4);
-    FUN_01100cf0(mgr, 4, 6);
-    FUN_010d64a0(mgr);
-    FUN_010d5320(mgr);
-    FUN_010d41f0(mgr);
-    FUN_010fda70(mgr);
-    FUN_010d2730(mgr);
-    FUN_010cff70(mgr);
-    FUN_010cf000(mgr);
+    hkCollisionDispatcherOps* mgr = (hkCollisionDispatcherOps*)mgr_;
+    mgr->registerAlternateShapeTypes();
+    mgr->reg010e7ce0();
+    mgr->reg010e6a70();
+    mgr->setFlag(0);
+    mgr->reg010e5540();
+    mgr->reg010e1c70();
+    mgr->reg010ceee0();
+    mgr->reg010e1720();
+    mgr->setFlag(1);
+    mgr->setFlag(0);
+    mgr->reg010e1510();
+    mgr->setFlag(1);
+    mgr->reg010e0500();
+    mgr->reg010df500();
+    mgr->setFlag(0);
+    mgr->reg010df2c0();
+    mgr->setFlag(1);
+    mgr->reg010de080();
+    mgr->reg010cef70();
+    mgr->reg010dcfc0();
+    mgr->reg010d9f10();
+    mgr->registerAgentFuncs(1, 1);
+    mgr->reg010ff6d0();
+    mgr->reg010d9e50();
+    mgr->reg010fdec0();
+    mgr->reg010d92a0();
+    mgr->reg010d8940();
+    mgr->reg010d75f0();
+    mgr->registerAgentFuncs(6, 4);
+    mgr->registerAgentFuncs(4, 6);
+    mgr->reg010d64a0();
+    mgr->reg010d5320();
+    mgr->reg010d41f0();
+    mgr->reg010fda70();
+    mgr->reg010d2730();
+    mgr->reg010cff70();
+    mgr->reg010cf000();
 }
 
 // @ 0x010c26f0  hkCapsuleShape::calcStatistics
@@ -488,8 +533,9 @@ void hkCapsuleShape::calcStatistics(hkStatisticsCollector* c) const
 // @ 0x010c2730  hkCapsuleShape::hkCapsuleShape
 hkCapsuleShape::hkCapsuleShape(const hkVector4& a, const hkVector4& b, float radius)
 {
+    // the original only writes the reference-count halfword at +6 (memSizeAndFlags at +4 is left alone)
     m_radius = radius;
-    m_memSizeAndFlags = 1;
+    m_referenceCount = 1;
     m_userData = 0;
     *(void**)this = (void*)0x14a2888;
     m_vertexA = a;
@@ -501,19 +547,20 @@ hkCapsuleShape::hkCapsuleShape(const hkVector4& a, const hkVector4& b, float rad
 // @ 0x010c27a0  hkCapsuleShape::getSupportingVertex
 void hkCapsuleShape::getSupportingVertex(const hkVector4& dir, hkCdVertex& out) const
 {
+    // the original groups the y/z products inside the x term (x87 evaluation order)
     float d = (m_vertexB.x - m_vertexA.x) * dir.x
-            + (m_vertexB.y - m_vertexA.y) * dir.y
-            + (m_vertexB.z - m_vertexA.z) * dir.z;
+            + ((m_vertexB.y - m_vertexA.y) * dir.y
+             + (m_vertexB.z - m_vertexA.z) * dir.z);
+    // both branches copy a vertex and then store the raw w word (0.5f, and 0.5f | 0x10 for B)
     if (d < 0.0f)
     {
         out.m_pos = m_vertexA;
-        out.m_pos.w = 0.5f;
+        *(hkUint32*)&out.m_pos.w = 0x3f000000;
     }
     else
     {
         out.m_pos = m_vertexB;
-        out.m_pos.w = 0.5f;
-        *(hkUint32*)&out.m_pos.w |= 0x10;
+        *(hkUint32*)&out.m_pos.w = 0x3f000010;
     }
 }
 

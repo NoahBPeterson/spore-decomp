@@ -6,7 +6,7 @@
 010c2310  140  complete hkAllCdPointCollector::addCdPoint; hkArray pushBack inlining / chain walk differs
 010c23c0  269  complete hkAlgorithm::quickSortRecursive<hkRootCdPoint>; swap block register allocation differs
 010c2570  24   complete hkAllCdPointCollector::sortPoints; tag temporary / loop entry differs
-010c25a0  122  complete collision-agent registration sequence; call scheduling differs
-010c2730  88   complete hkCapsuleShape constructor; radius store via x87 instead of raw dword
-010c27a0  122  complete hkCapsuleShape::getSupportingVertex; x87 branch/frame differs
+010c25a0  122  complete collision-agent registration sequence; helpers are __thiscall (dispatcher in ecx) and the 37-call order matches, instruction scheduling differs
+010c2730  88   complete hkCapsuleShape constructor; m_referenceCount (+6) is the initialised halfword, store scheduling differs
+010c27a0  122  complete hkCapsuleShape::getSupportingVertex; vertex/memory results match, only the leftover eax (out+0xc) differs
 010c2850  32   complete hkCapsuleShape::getCollisionSpheres; cl increments ecx instead of using [ecx+0x20]
