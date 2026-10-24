@@ -6,8 +6,6 @@
 int   GetPaintSystem();                                   // 0x00401080
 void  FUN_005173a0(void* p);                              // 0x005173a0
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
-void* BakeSprites_ctor(void* p);                          // 0x007b00f0
-void  FUN_004039f0(void* p);                              // 0x004039f0
 void  EASTL_allocator_deallocate(void* p);                // 0x00f47380
 void  VectorAutoRef_erase(void* first, void* last, void* out); // 0x0042f530
 
@@ -35,6 +33,11 @@ struct PaintSystem {
     void dtor();
 };
 
+// PendingBatch subobject at PaintSystem+0x34; Flush is __thiscall with no stack args.
+struct PendingBatch {
+    bool Flush();                          // 0x004039f0
+};
+
 struct DList { void adv(); };
 struct EditorResource { void* deleting_dtor(unsigned flags); };
 struct AutoRefVector {
@@ -45,6 +48,18 @@ struct AutoRefVector {
 };
 
 struct ListIter { int* p; };
+
+struct IRefObj {                       // vtable slot 0 = AddRef, slot 1 = Release
+    virtual void AddRef();
+    virtual void Release();
+};
+
+struct BakeSprites : IRefObj {
+    uint32_t pad04, pad08;
+    AutoRefVector mImages;             // +0x0c
+    char pad18[8];
+    BakeSprites* Construct();          // 0x007b00f0 (thiscall ctor)
+};
 
 
 // @ 0x0051c620 int RefCounted::AddRef()
@@ -77,21 +92,20 @@ PaintSystem::PaintSystem(int kind, void* a, void* b, char c, void* d, char e, ch
     *(int*)((char*)this + 0x3c) = 0;
     *(int*)((char*)this + 0x40) = 0;
     *(int*)((char*)this + 0x44) = 0;
-    *(int*)((char*)this + 0x48) = 0;
     int ps = GetPaintSystem();
     int mat = *(int*)(ps + 0xc);
     void* mem = EA_alloc(0x20, "Skinner", 0, 0, 0, 0);
     void* bs = 0;
     if (mem != 0)
-        bs = BakeSprites_ctor(mem);
+        bs = ((BakeSprites*)mem)->Construct();
     void** slot = (void**)((char*)this + 0x30);
     if (bs != *slot) {
         void* old = *slot;
         if (bs != 0)
-            (*(void(__thiscall**)(void*))(((void**)*(void**)bs)[0]))(bs);
+            ((void(__thiscall*)(void*))(*(void***)bs)[0])(bs);
         *slot = bs;
         if (old != 0)
-            (*(void(__thiscall**)(void*))((*(void***)old)[1]))(old);
+            ((void(__thiscall*)(void*))(*(void***)old)[1])(old);
     }
     if (mat != 0 && *(int*)(mat + 0x10 + kind * 4) != 0)
         *(void**)((char*)this + 0x20) = *(void**)(*(int*)(mat + 0x10 + kind * 4) + 0x60);
@@ -101,9 +115,9 @@ PaintSystem::PaintSystem(int kind, void* a, void* b, char c, void* d, char e, ch
 void PaintSystem::dtor()
 {
     if (*(int*)((char*)this + 0x34) != 0)
-        FUN_004039f0(*(void**)((char*)this + 0x34));
+        ((PendingBatch*)((char*)this + 0x34))->Flush();
     if (*(int*)((char*)this + 0x30) != 0)
-        (*(void(__thiscall**)(void*))((*(void***)*(void**)((char*)this + 0x30))[1]))(*(void**)((char*)this + 0x30));
+        ((void(__thiscall*)(void*))(*(void***)*(void**)((char*)this + 0x30))[1])(*(void**)((char*)this + 0x30));
     *(void**)((char*)this + 0x0c) = &g_vtblSimCreatureAbility;
     *(void**)((char*)this + 0x08) = &g_vtblEditorResource;
     *(void**)((char*)this + 0x04) = &g_vtblLocaleChange;
@@ -142,7 +156,7 @@ void* AutoRefVector::erase(void* pos)
     *(char**)((char*)this + 4) = end;
     void** node = (void**)end;
     if (*node != 0)
-        (*(void(__thiscall**)(void*))((*(void***)*node)[1]))(*node);
+        ((void(__thiscall*)(void*))(*(void***)*node)[1])(*node);
     return pos;
 }
 
@@ -150,11 +164,6 @@ void* AutoRefVector::erase(void* pos)
 // 0x0051c640 / 0x0051c6a0: cSkinpaintTextureExtractor (one merged 2462-byte extent: a small
 // secondary-base init function followed by the real HandleMessage, ret 8).
 // ===========================================================================
-struct IRefObj {                       // vtable slot 0 = AddRef, slot 1 = Release
-    virtual void AddRef();
-    virtual void Release();
-};
-
 struct AtomicRefCounted { int Release(); };            // 0x00402420 (thiscall)
 
 // AutoRefCount<T> with the inline assign the /Od original expands.
@@ -172,13 +181,6 @@ template<class T> struct ARC {
         }
         return *this;
     }
-};
-
-struct BakeSprites : IRefObj {
-    uint32_t pad04, pad08;
-    AutoRefVector mImages;             // +0x0c
-    char pad18[8];
-    BakeSprites* Construct();          // 0x007b00f0 (thiscall ctor)
 };
 
 // atomic refcounted texture handle (RefCount at +8, lock xadd on AddRef)
