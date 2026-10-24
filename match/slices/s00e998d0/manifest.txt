@@ -1,0 +1,7 @@
+slices/s00e998d0/s00e998d0.cpp  ?UpdateAOERepairEffect@cSPUFOGfx@@QAEXPAUcSpatialObj@@@Z  00e99f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e998d0/s00e998d0.cpp  ?UpdateRallyCallEffect@cSPUFOGfx@@QAEXPAUcSpatialObj@@@Z  00e9a0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e998d0/s00e998d0.cpp  ?UpdateE9A1F0@cSPUFOGfx@@QAEXPAUcSpatialObj@@@Z  00e9a1f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e998d0/s00e998d0.cpp  ?UpdateShieldEffect@cSPUFOGfx@@QAEXPAUcSpatialObj@@@Z  00e9a360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e998d0/s00e998d0.cpp  ?UpdateE9A470@cSPUFOGfx@@QAEXPAUcSpatialObj@@@Z  00e9a470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e998d0/s00e998d0.cpp  ?UpdateCloakEffect@cSPUFOGfx@@QAEXPAUcSpatialObj@@@Z  00e9a590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e998d0/s00e998d0.cpp  ?UpdateE9A6A0@cSPUFOGfx@@QAEXPAUcSpatialObj@@@Z  00e9a6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
