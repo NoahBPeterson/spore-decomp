@@ -568,7 +568,9 @@ void __cdecl FUN_01133290(void)
 // ---------------------------------------------------------------------------
 void __cdecl FUN_011332c0(void)
 {
-	g_frame++;
+	// Keep the increment in memory: the original uses `add [g_frame], ebx` and therefore does not
+	// clobber ecx on the early-out path (the /GL caller keeps a live value in ecx across the call).
+	++*(volatile int*)&g_frame;
 	for (int i = 0; i < (int)g_numTimers; i++)
 		g_timers[i]();
 
