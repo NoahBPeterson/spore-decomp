@@ -1,8 +1,9 @@
-00e2ade0 cSPUIRolloverCivCityHall::DoMessage  # PDB candidate; IWinProc::HandleUIMessage slot, ret 8, ends in cSPUIPropertyLayout::DoMessage (0x00828080)
-00e2a7b0 cSPUIRolloverCivCityHall::SetSpecialtyIcon  # PDB name; thiscall (int), ret 4
-00bd81d0 SP::cCity::GetVehicleSpecialty  # getter: mov eax,[ecx+0x540]; takes NO stack args (pushed index belongs to the next callee)
-00bd9b40 SP::cCity::GetCityHall  # mov eax,[ecx+0x320]
-00cf74f0 SP::cCivModeStrategy::GetState  # mov eax,[ecx+0xe8]; caller stores the selected city hall at state+0x110
-00bddda0 SP::cCity::FUN_00bddda0  # thiscall(int specialty, int index, ResourceKey key by value, bool spaceStage) ret 0x18; returns the new vehicle or null
-00bf2170 SP::cCivilization::FUN_00bf2170  # thiscall(int specialty, int index) ret 8; returns float cost in st0
-00bef6d0 SP::cCivilization::GetMoney  # returns float money (st0)
+00e2ade0 cSPUIRolloverCivCityHall::DoMessage  # civ city-hall rollover message handler (pre-existing)
+00e2adb0 FUN_00e2adb0  # clears the eastl rbtree embedded at +0x78
+00e2b4f0 cSPUIRolloverCivCityVehicle::SetPurposeIcon  # selects the purpose icon in window 0x3058a88
+00e2b580 cSPUIRolloverCivCityVehicle::DoMessage  # city-vehicle rollover message handler
+00e2b680 eastl::rbtree<...SP::cString...>::DoNukeSubtree  # recursive cString-node destruction
+00e2b6c0 FUN_00e2b6c0  # eastl rbtree node allocation and insertion
+00e2b7f0 FUN_00e2b7f0  # allocates a 0x18-byte rbtree node and copies its key/value
+00e2b8e0 UI::CursorAttachment::CursorAttachment  # CPL base plus rbtree/UI defaults and property key setup
+00e2b990 Object::_virtual_dtor  # destroys the embedded rbtree and CPL base, optionally deallocating

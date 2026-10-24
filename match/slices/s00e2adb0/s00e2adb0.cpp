@@ -15,6 +15,7 @@
 // argument lists, and vtable slots / field offsets used here.
 #include "types.h"
 #include <stdlib.h>
+#include <intrin.h>
 
 #define CAT2_(a, b) a##b
 #define CAT_(a, b) CAT2_(a, b)
@@ -293,4 +294,309 @@ bool cSPUIRolloverCivCityHall::DoMessage(IWindow* window, const Message& message
     }
 done:
     return cSPUIPropertyLayout::DoMessage(window, message);
+}
+
+// ---------------------------------------------------------------- eastl rbtree / UI cursor attachment helpers
+extern "C" void EASTL_allocator_deallocate(void* p);
+
+class cString
+{
+public:
+    ~cString();
+    char mData[0x10];
+};
+
+struct CStringNode
+{
+    CStringNode* mpLeft;        // +0x00
+    CStringNode* mpRight;       // +0x04
+    uint8_t      mPad08[0x0c];  // +0x08
+    cString      mValue;        // +0x14
+};
+
+struct CStringTree
+{
+    void DoNukeSubtree(CStringNode* node);
+};
+
+// @ 0x00e2b680
+void CStringTree::DoNukeSubtree(CStringNode* node)
+{
+    while (node != 0) {
+        DoNukeSubtree(node->mpLeft);
+        CStringNode* right = node->mpRight;
+        node->mValue.~cString();
+        EASTL_allocator_deallocate(node);
+        node = right;
+    }
+}
+
+struct WorldNode
+{
+    WorldNode* mpLeft;          // +0x00
+    WorldNode* mpRight;         // +0x04
+    uint32_t   mPad08;          // +0x08
+    uint32_t   mPad0c;          // +0x0c
+    uint32_t   mKey[5];         // +0x10
+};
+
+struct WorldTree
+{
+    uint32_t mField00;          // +0x00
+    WorldNode* mpLeft;          // +0x04 (header/sentinel link)
+    WorldNode* mpRight;         // +0x08
+    WorldNode* mpRoot;          // +0x0c
+    uint8_t  mColor;            // +0x10
+    uint8_t  mPad11[3];
+    uint32_t mSize;             // +0x14
+
+    void NukeSubtree(void* node);
+    void Clear();
+    void InsertNode(WorldNode** out, WorldNode* parent, const uint32_t* key, bool left);
+};
+
+extern "C" void eastl_RBTreeInsert(WorldNode* node, WorldNode* parent, WorldNode* header, bool side);
+
+// @ 0x00e2adb0
+void __fastcall FUN_00e2adb0(void* self)
+{
+    WorldTree* tree = (WorldTree*)((uint8_t*)self + 0x78);
+    void* root = tree->mpRoot;
+    tree->NukeSubtree(root);
+    WorldNode* sentinel = (WorldNode*)&tree->mpLeft;
+    tree->mpRight = sentinel;
+    sentinel->mpLeft = sentinel;
+    tree->mpRoot = 0;
+    tree->mColor = 0;
+    tree->mSize = 0;
+}
+
+void WorldTree::Clear()
+{
+    NukeSubtree(mpRoot);
+    mpRight = mpLeft;
+    mpLeft->mpLeft = mpLeft;
+    mpRoot = 0;
+    mColor = 0;
+    mSize = 0;
+}
+
+// @ 0x00e2b6c0
+void WorldTree::InsertNode(WorldNode** out, WorldNode* parent, const uint32_t* key, bool left)
+{
+    int side;
+    if (!left && parent != (WorldNode*)&mpLeft && key[0] >= parent->mKey[0])
+        side = 1;
+    else
+        side = 0;
+
+    WorldNode* node = (WorldNode*)operator new(0x24, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1);
+    if (&node->mKey[0]) {
+        node->mKey[0] = key[0];
+        node->mKey[1] = key[1];
+        node->mKey[2] = key[2];
+        node->mKey[3] = key[3];
+        node->mKey[4] = key[4];
+    }
+    eastl_RBTreeInsert(node, parent, (WorldNode*)&mpLeft, side);
+    mSize++;
+    *out = node;
+}
+
+struct SmallNode
+{
+    SmallNode* mpLeft;          // +0x00
+    SmallNode* mpRight;         // +0x04
+    void*      mpValue;         // +0x08
+    uint8_t    mByte0c;         // +0x0c
+    uint8_t    mPad0d[3];
+    uint32_t   mKey0;           // +0x10
+    uint32_t   mKey1;           // +0x14
+};
+
+// @ 0x00e2b7f0
+void __stdcall FUN_00e2b7f0(SmallNode* source, void* value)
+{
+    SmallNode* node = (SmallNode*)operator new(0x18, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1);
+    uint32_t* key = &node->mKey0;
+    if (key != 0) {
+        key[0] = source->mKey0;
+        key[1] = source->mKey1;
+    }
+    node->mpLeft = 0;
+    node->mpRight = 0;
+    node->mpValue = value;
+    node->mByte0c = source->mByte0c;
+}
+
+class CPL
+{
+public:
+    CPL();
+    ~CPL();
+    void*       mpVtable0;      // +0x00
+    void*       mpVtable1;      // +0x04
+    uint32_t    mPad08;         // +0x08
+    struct CursorLayout
+    {
+        char mData[0x6c];
+        IWindow* FindWindowByID(uint32_t id, bool recursive);
+    } mLayout;                  // +0x0c .. +0x77
+};
+
+struct CursorLayoutAt0c
+{
+    char mData[0x6c];
+    IWindow* FindWindowByID(uint32_t id, bool recursive);
+};
+
+class CursorAttachment : public CPL
+{
+public:
+    CursorAttachment();
+
+    WorldTree mTree;            // +0x78
+    uint32_t  mPad90;           // +0x90
+    int32_t   mField94;         // +0x94
+    uint32_t  mField98;         // +0x98
+    uint32_t  mField9c;         // +0x9c
+    uint32_t  mFielda0;         // +0xa0
+    uint8_t   mFielda4;         // +0xa4
+    uint8_t   mFielda5;         // +0xa5
+    uint8_t   mFielda6;         // +0xa6
+    uint8_t   mPada7;           // +0xa7
+    uint32_t  mFielda8;         // +0xa8
+
+    void read_properties();
+    void SetKey(const wchar_t* key, uint32_t value);
+    void SetRootWindowId(uint32_t id);
+    void SetPurposeIcon(int purpose);
+    bool HandleUIMessage(IWindow* window, const Message& message);
+};
+
+// @ 0x00e2b8e0
+CursorAttachment::CursorAttachment()
+{
+    uint32_t zero = 0;
+    mpVtable0 = (void*)0x1481700;
+    mpVtable1 = (void*)0x14816f0;
+    _ReadWriteBarrier();
+
+    mTree.mpRight = (WorldNode*)zero;
+    mTree.mpRoot = (WorldNode*)zero;
+    mTree.mColor = (uint8_t)zero;
+
+    WorldNode* sentinel = (WorldNode*)&mTree.mpLeft;
+    sentinel->mpLeft = sentinel;
+    mTree.mpRight = sentinel;
+    mTree.mpRoot = (WorldNode*)zero;
+    mTree.mColor = (uint8_t)zero;
+    mTree.mSize = zero;
+
+    mField98 = zero;
+    mField9c = zero;
+    mFielda4 = (uint8_t)zero;
+    mFielda5 = (uint8_t)zero;
+    mFielda8 = zero;
+    mField94 = -1;
+    mFielda0 = 1;
+    mFielda6 = 1;
+
+    read_properties();
+    SetKey(L"RolloverCivCity", 0x40464100);
+    SetRootWindowId(0x199a7de);
+}
+
+class Object : public CPL
+{
+public:
+    WorldTree mTree;            // +0x78
+    Object* _virtual_dtor(unsigned flags);
+};
+
+// @ 0x00e2b990
+Object* Object::_virtual_dtor(unsigned flags)
+{
+    WorldTree* tree = &mTree;
+    mpVtable0 = (void*)0x1481700;
+    mpVtable1 = (void*)0x14816f0;
+    void* root = tree->mpRoot;
+    tree->NukeSubtree(root);
+    this->CPL::~CPL();
+    if (flags & 1)
+        EASTL_allocator_deallocate(this);
+    return this;
+}
+
+struct CursorNode
+{
+    PV2 PV2 PV2 PV                 // slots 0..6
+    virtual int GetControlID();    // +0x1c (slot 7)
+    PV4 PV PV                     // slots 8..13
+    virtual float* GetVector();    // +0x38 (slot 14)
+    PV16                          // slots 15..30
+    virtual void SetSelected(int mode, bool selected); // +0x7c (slot 31)
+    PV16 PV2 PV                   // slots 32..50
+    virtual void GetBegin(void** out);   // +0xcc (slot 51)
+    virtual void GetEnd(void** out);     // +0xd0 (slot 52)
+};
+
+extern int32_t g_cursorListOffset;      // 0x01440aec
+extern "C" void Pollinator(void* node, float* value); // 0x00806d10
+
+// @ 0x00e2b4f0
+void CursorAttachment::SetPurposeIcon(int purpose)
+{
+    IWindow* found = mLayout.FindWindowByID(0x3058a88, true);
+    if (found != 0) {
+        CursorNode* window = (CursorNode*)found;
+        void* begin;
+        void* end;
+        window->GetBegin(&begin);
+        window->GetEnd(&end);
+        while (begin != end) {
+            void* next = *(void**)begin;
+            CursorNode* node = (CursorNode*)((uint8_t*)begin + g_cursorListOffset);
+            int control = node->GetControlID();
+            node->SetSelected(1, control == purpose);
+            begin = next;
+        }
+    }
+}
+
+// @ 0x00e2b580
+bool CursorAttachment::HandleUIMessage(IWindow* window, const Message& message)
+{
+    if (message.eventType == 0x11) {
+        if (window->GetControlID() == 0x199a7de) {
+            IWindow* found = mLayout.FindWindowByID(0x3058a88, true);
+            if (found != 0) {
+                CursorNode* cursorWindow = (CursorNode*)found;
+                float* vector = cursorWindow->GetVector();
+                float value[4];
+                value[0] = vector[0];
+                value[1] = vector[1];
+                value[2] = vector[2];
+                value[3] = vector[3];
+
+                void* begin;
+                void* end;
+                cursorWindow->GetBegin(&begin);
+                cursorWindow->GetEnd(&end);
+                while (begin != end) {
+                    void* next = *(void**)begin;
+                    CursorNode* node = (CursorNode*)((uint8_t*)begin + g_cursorListOffset);
+                    int control = node->GetControlID();
+                    node->SetSelected(1, control == 0x338babf);
+                    Pollinator(node, value);
+                    begin = next;
+                }
+            }
+        }
+    }
+    return false;
 }
