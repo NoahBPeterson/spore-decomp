@@ -3,6 +3,7 @@
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
+#include <xmmintrin.h>
 
 // ---- D3D9 device -------------------------------------------------------------------------
 extern void* g_pDevice;   // 0x16f89d0
@@ -14,8 +15,11 @@ typedef void (__stdcall *PFN_SetConstF)(void* self, unsigned reg, const float* d
 extern void* FUN_011f1120();
 extern float  g_one;                        // 0x1485720
 
-// 0x00777ae0  shader-constant dirty/notify helper
-void __cdecl FUN_00777ae0(int code, void* obj, int changed);
+// 0x00777ae0  shader-constant dirty/notify helper. The last argument is a by-value 1-byte tag
+// (only its low byte is read): retail passes the flag dword straight off its stack slot, so the
+// upper three bytes are leftovers, and they must not be part of the compare.
+struct ChangedFlag { unsigned char value; };
+void __cdecl FUN_00777ae0(int code, void* obj, ChangedFlag changed);
 
 // @ 0x0077c970
 struct GfxConst {
@@ -36,7 +40,9 @@ void GfxConst::FUN_0077c970(float a, float b, float c, float d) {
     p[1] = b;
     p[2] = c;
     p[3] = d;
-    FUN_00777ae0(0x20c, this, changed ? 1 : 0);
+    ChangedFlag cf;
+    cf.value = changed ? 1 : 0;
+    FUN_00777ae0(0x20c, this, cf);
 }
 
 // @ 0x0077ca20
@@ -49,7 +55,9 @@ void GfxConst::FUN_0077ca20(unsigned idx, float a, float b, float c, float d) {
     q[1] = b;
     q[2] = c;
     q[3] = d;
-    FUN_00777ae0(0x206, this, changed ? 1 : 0);
+    ChangedFlag cf;
+    cf.value = changed ? 1 : 0;
+    FUN_00777ae0(0x206, this, cf);
 }
 
 // @ 0x0077cad0
@@ -121,8 +129,23 @@ float* __fastcall FUN_0077d130(float* p) {
 
 // @ 0x0077d170
 float* __fastcall FUN_0077d170(float* p) {
-    for (int i = 0; i < 16; ++i)
-        p[i] = 0.0f;
+    __m128 z = _mm_setzero_ps();
+    _mm_store_ss(p + 0, z);
+    _mm_store_ss(p + 4, z);
+    _mm_store_ss(p + 1, z);
+    _mm_store_ss(p + 2, z);
+    _mm_store_ss(p + 3, z);
+    _mm_store_ss(p + 5, z);
+    _mm_store_ss(p + 6, z);
+    _mm_store_ss(p + 7, z);
+    _mm_store_ss(p + 8, z);
+    _mm_store_ss(p + 9, z);
+    _mm_store_ss(p + 10, z);
+    _mm_store_ss(p + 11, z);
+    _mm_store_ss(p + 12, z);
+    _mm_store_ss(p + 13, z);
+    _mm_store_ss(p + 14, z);
+    _mm_store_ss(p + 15, z);
     return p;
 }
 
