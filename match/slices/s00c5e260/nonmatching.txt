@@ -1,0 +1,5 @@
+00c5ea60 136 cSPMissionScan::Init; bitfield test emitted as test byte [esi+0x130],8 instead of mov eax,[esi+0x130]; shr eax,3; test al,1 (226 vs 230 bytes)
+00c5edb0 11 message-handler registration; MSVC schedules add esi,0x34 after the MessageServer call instead of before it (same 135 bytes)
+00c5ee40 16 message-handler removal; MSVC schedules add esi,0x34 after the MessageServer call instead of before it (same 140 bytes)
+00c5f190 2 tail-jumps FUN_00fe5430 instead of emitting call + ret (28 vs 29 bytes)
+00c5f2c0 107 reward-item handout; MSVC CSEs the inline-vector count test and uses ebp as a zero register, block layout differs (145 bytes)

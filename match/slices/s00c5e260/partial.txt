@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00c5e260  1236  1236-byte mission Update/state helper; not emitted (large game-logic function with many opaque externs)
+00c5e8b0  426  426-byte mission Update wrapper (scanned-species loops, imul/sar vector counts, cPlanet::SetSpeciesAsScanned); not emitted
+00c5eb50  337  337-byte species-vector collector (nested SpVector loops, Vector3 float copies, DoInsertValue, operator_delete_array); not emitted
