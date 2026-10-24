@@ -1,0 +1,3 @@
+slices/s00b1c8d0/s00b1c8d0.cpp  ?SetTransitions@cStateMachineHost@@QAEXPBUTransitions@@HH@Z  00b1cc00  /O2 /MD /Gy /TP /GS-
+slices/s00b1c8d0/s00b1c8d0.cpp  ?IsHandledType@cTransferState@@QBE_NPAUcTransferType@@@Z  00b1d770  /O2 /MD /Gy /TP /GS-
+slices/s00b1c8d0/s00b1c8d0.cpp  ?Load@cTransferState@@QAE_NPAVcTransferMessage@@@Z  00b1d7f0  /O2 /MD /Gy /TP /GS-

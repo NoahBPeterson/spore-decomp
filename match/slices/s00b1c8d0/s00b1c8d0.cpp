@@ -3,7 +3,7 @@
 // "DeclareMessage", "AddTransition" and "IncludeMachine").
 // The image names 0x00b1cca0 "$E259" (a compiler-generated symbol); it is a __thiscall taking the
 // parsed line (EA::ArgScript::cArguments, ModAPI ArgScript::Line).
-// Flags: /O2 /MD /Gy /TP (no /EHsc: string locals get no EH frame).
+// Flags: /O2 /MD /Gy /TP /GS- (no /EHsc: string locals get no EH frame; no /GS: no stack cookie).
 #include "types.h"
 #include <string.h>
 
@@ -50,6 +50,18 @@ public:
 
   string& assign(const char* pBegin, const char* pEnd);  // 0x00454cb0
   string& assign(const char* p) { return assign(p, p + strlen(p)); }
+
+  string& operator=(const string& x) {
+    if (this != &x) assign(x.mpBegin, x.mpEnd);
+    return *this;
+  }
+  size_type length() const { return (size_type)(mpEnd - mpBegin); }
+  void clear() {
+    if (mpBegin != mpEnd) {
+      *mpBegin = 0;
+      mpEnd = mpBegin;
+    }
+  }
 
   void RangeInitialize(const char* pBegin, const char* pEnd) {
     const size_type n = (size_type)(pEnd - pBegin);
@@ -182,9 +194,145 @@ int __cdecl GetKeyModifier(const eastl::string& s);           // 0x00b19a50
 int __cdecl GetObjectType(const eastl::string& s);            // 0x00b1a290
 int __cdecl GetObjectFlag(const eastl::string& s);            // 0x00b19ad0
 
+inline void* operator new(unsigned int, void* p) { return p; }
+
+extern "C" RBNodeBase* __cdecl RBTreeIncrement(RBNodeBase* p);  // 0x00921580
+
+// One "AddTransition" script record; the value type of the per-state vector.
+struct Transition {          // 0x38 bytes
+  eastl::string mComment;    // +0x00
+  int mToState;              // +0x10
+  int mObjectFlags;          // +0x14
+  int mMessageParam;         // +0x18
+  int mEventValue;           // +0x1c
+  int mObject;               // +0x20
+  char mStackOp;             // +0x24
+  char mPad25[3];            // +0x25
+  int mEventType;            // +0x28
+  int mKeyMod;               // +0x2c
+  int mObjectFlagsCopy;      // +0x30 (the original stores the object flags twice)
+  int mLongMouseMove;        // +0x34
+
+  Transition() {}
+  Transition(const Transition& x);  // 0x00b1a0f0
+};
+
+struct TransitionVector {  // eastl::vector<Transition> (12 bytes)
+  Transition* mpBegin;     // +0x00
+  Transition* mpEnd;       // +0x04
+  Transition* mpCapacity;  // +0x08
+
+  void push_back(const Transition& v) {
+    if (mpEnd < mpCapacity) {
+      Transition* p = mpEnd;
+      mpEnd = p + 1;
+      if (p) new (p) Transition(v);
+    } else
+      Insert(mpEnd, &v);  // 0x00b1a900
+  }
+  TransitionVector& operator=(const TransitionVector& x);  // 0x00b1a7b0
+  void Insert(Transition* pPos, const Transition* pValue);  // 0x00b1a900
+};
+
+struct TransitionMapNode : RBNodeBase {
+  int mKey;                          // +0x10
+  TransitionVector mTransitions;     // +0x14
+};
+
+// eastl::map<int, eastl::vector<Transition> > (rbtree: dummy +0, anchor +4, size +0x14).
+struct TransitionMap {
+  int mDummy;            // +0x00
+  RBNodeBase mAnchor;    // +0x04
+  unsigned int mnSize;   // +0x14
+  int mPad18;            // +0x18
+
+  TransitionMapNode* Begin() { return (TransitionMapNode*)mAnchor.mpNodeRight; }
+  TransitionMapNode* End() { return (TransitionMapNode*)&mAnchor; }
+
+  void Find(void** pOut, const int* pKey);                  // 0x00e5c780
+  TransitionMapNode* FindNode(const int& key) {
+    void* pNode;
+    Find(&pNode, &key);
+    return (TransitionMapNode*)pNode;
+  }
+  TransitionVector& operator[](const int& key);             // 0x00b1c150
+};
+
+// The two state tables held by a cStateMachineHost (each an eastl::map copy).
+struct StateMapA {       // 0x1c bytes
+  int mDummy;            // +0x00
+  RBNodeBase mAnchor;    // +0x04
+  unsigned int mnSize;   // +0x14
+  int mPad18;            // +0x18
+
+  StateMapA() {
+    mAnchor = RBNodeBase();
+    mAnchor.mpNodeRight = &mAnchor;
+    mAnchor.mpNodeLeft = &mAnchor;
+    mAnchor.mpNodeParent = 0;
+    mAnchor.mColor = 0;
+    mnSize = 0;
+  }
+  StateMapA& operator=(const StateMapA& x);  // 0x00b1c0c0
+  void FreeTree(void* pNode);                // 0x00b1b830
+  ~StateMapA() { FreeTree(mAnchor.mpNodeParent); }
+};
+
+struct StateMapB {       // 0x1c bytes
+  int mDummy;            // +0x00
+  RBNodeBase mAnchor;    // +0x04
+  unsigned int mnSize;   // +0x14
+  int mPad18;            // +0x18
+
+  StateMapB() {
+    mAnchor = RBNodeBase();
+    mAnchor.mpNodeRight = &mAnchor;
+    mAnchor.mpNodeLeft = &mAnchor;
+    mAnchor.mpNodeParent = 0;
+    mAnchor.mColor = 0;
+    mnSize = 0;
+  }
+  StateMapB& operator=(const StateMapB& x);  // 0x00b1b630
+  void FreeTree(void* pNode);                // 0x00e4b990
+  ~StateMapB() { FreeTree(mAnchor.mpNodeParent); }
+};
+
+struct Transitions {     // 0x38 bytes
+  StateMapA mPrimary;    // +0x00
+  StateMapB mSecondary;  // +0x1c
+};
+
+class cMessageServer {
+public:
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04();
+  virtual void v05(int a, int b, int c);  // +0x14
+};
+cMessageServer* MessageServer();  // 0x0067dcc0
+
+class cStateMachineHost;
+
+class cCommandBase {
+public:
+  cCommandBase();                             // 0x0083c800
+  ~cCommandBase();                            // 0x0083c750
+  virtual void Execute(int a, int b, int c);  // slot 0
+  uint32_t m04;                               // +0x04
+  uint32_t m08;                               // +0x08
+  uint32_t m0c;                               // +0x0c
+};
+
+class cLoadMachineCmd : public cCommandBase {
+public:
+  cLoadMachineCmd(Transitions* pTransitions) : mpTransitions(pTransitions) {}
+  void LoadStateMachine(const char* name);  // 0x00b1b410
+  Transitions* mpTransitions;               // +0x10
+};
+
 struct cStateMachineInfo {
-  uint32_t pad[7];
-  StateTable mStates;  // +0x1c
+  TransitionMap mTransitions;  // +0x00
+  uint32_t mPad18;             // +0x18
+  StateTable mStates;          // +0x1c
 };
 
 class cStateMachineHost {
@@ -195,10 +343,49 @@ public:
   void AddTransition(int fromState, int eventType, int keyMod, int eventValue, int object, int objectFlags,
                      int messageId, int messageParam, int toState, int longMouseMove,
                      const eastl::string& comment, int stackOp);  // 0x00b1c8d0
+  void ResetAndLoad(const char* name);               // 0x00b1caa0
+  void SetTransitions(const Transitions* pTransitions, int a, int b);  // 0x00b1cc00
 
-  uint32_t pad[4];
-  cStateMachineInfo* mpInfo;  // +0x10
+  uint32_t pad[4];              // +0x00
+  cStateMachineInfo* mpInfo;    // +0x10
+  uint32_t pad14[5];            // +0x14
+  Transitions mTransitions;     // +0x28
+  int m60;                      // +0x60
+  int m64;                      // +0x64
+  uint32_t pad68[0x1d];         // +0x68
+  eastl::string mName;          // +0xdc
+  uint32_t padEc[4];            // +0xec
+  uint32_t* mPendingBegin;      // +0xfc
+  uint32_t* mPendingEnd;        // +0x100
 };
+
+// The script-object side of the state-machine hand-off (0x00b1d770..0x00b1d7f0).
+class cTransferMessage {
+public:
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05();
+  virtual cTransferMessage* v06();  // +0x18
+  virtual void v07();
+  virtual cTransferMessage* v08();  // +0x20
+};
+
+struct cTransferType {
+  int m00;   // +0x00
+  int m04;   // +0x04
+  int mType; // +0x08
+};
+
+struct cTransferState {
+  uint32_t mPad[8];  // +0x00
+  uint32_t m20;      // +0x20
+
+  bool IsHandledType(cTransferType* p) const;  // 0x00b1d770
+  bool Save(cTransferMessage* p) const;        // 0x00b1d7b0
+  bool Load(cTransferMessage* p);              // 0x00b1d7f0
+};
+
+extern "C" bool __cdecl FUN_0093aa70(void* pStream, void* pValue, int a, int b);  // 0x0093aa70
+extern "C" bool __cdecl FUN_0093a780(void* pStream, void* pValue, int a, int b);  // 0x0093a780
 
 // @ 0x00b1cca0
 void cStateMachineHost::ParseLine(cArguments& args) {
@@ -318,4 +505,100 @@ void cStateMachineHost::ParseLine(cArguments& args) {
     }
   done:;
   }
+}
+
+// @ 0x00b1c8d0
+void cStateMachineHost::AddTransition(int fromState, int eventType, int keyMod, int eventValue, int object,
+                                      int objectFlags, int messageId, int messageParam, int toState,
+                                      int longMouseMove, const eastl::string& comment, int stackOp) {
+  Transition t;
+  t.mComment = comment;
+  t.mObjectFlags = objectFlags;
+  t.mMessageParam = messageParam;
+  t.mEventType = eventType;
+  t.mKeyMod = keyMod;
+  t.mEventValue = eventValue;
+  t.mObject = object;
+  t.mToState = toState;
+  t.mObjectFlagsCopy = objectFlags;
+  t.mLongMouseMove = longMouseMove;
+  t.mStackOp = (char)stackOp;
+
+  if (fromState == -1) {
+    for (TransitionMapNode* pNode = mpInfo->mTransitions.Begin(); pNode != mpInfo->mTransitions.End();
+         pNode = (TransitionMapNode*)RBTreeIncrement(pNode))
+      pNode->mTransitions.push_back(t);
+  } else {
+    TransitionMapNode* pNode = mpInfo->mTransitions.FindNode(fromState);
+    if (pNode == mpInfo->mTransitions.End() || pNode->mTransitions.mpBegin == pNode->mTransitions.mpEnd) {
+      TransitionMapNode* pAny = mpInfo->mTransitions.FindNode(-1);
+      if (pAny != mpInfo->mTransitions.End() && pAny->mTransitions.mpBegin != pAny->mTransitions.mpEnd)
+        mpInfo->mTransitions[fromState] = pAny->mTransitions;
+    }
+  }
+  mpInfo->mTransitions[fromState].push_back(t);
+}
+
+// @ 0x00b1caa0
+void cStateMachineHost::ResetAndLoad(const char* name) {
+  mTransitions = Transitions();
+
+  cLoadMachineCmd cmd(&mTransitions);
+  if (name == 0) {
+    if (mName.length() != 0) cmd.LoadStateMachine(mName.mpBegin);
+  } else {
+    mName.assign(name, name + strlen(name));
+    cmd.LoadStateMachine(mName.mpBegin);
+  }
+
+  while (mPendingBegin != mPendingEnd) --mPendingEnd;
+  m60 = 0;
+  m64 = 0;
+  MessageServer()->v05(0x7561116, 0, 0);
+}
+
+// @ 0x00b1cc00
+void cStateMachineHost::SetTransitions(const Transitions* pTransitions, int a, int b) {
+  mName.clear();
+  m60 = a;
+  m64 = b;
+  mTransitions = *pTransitions;
+  while (mPendingBegin != mPendingEnd) --mPendingEnd;
+  return MessageServer()->v05(0x7561116, 0, 0);
+}
+
+// @ 0x00b1d770
+bool cTransferState::IsHandledType(cTransferType* p) const {
+  switch (p->mType - 1) {
+    case 0:
+    case 1:
+      return false;
+    case 2:
+    case 3:
+      return true;
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      return false;
+    default:
+      return false;
+  }
+}
+
+// @ 0x00b1d7b0
+bool cTransferState::Save(cTransferMessage* p) const {
+  uint32_t value = m20;
+  FUN_0093aa70(p->v08()->v06(), &value, 1, 0);
+  return true;
+}
+
+// @ 0x00b1d7f0
+bool cTransferState::Load(cTransferMessage* p) {
+  uint32_t value;
+  cTransferMessage* pStream = p->v08()->v06();
+  FUN_0093a780(pStream, &value, 1, 0);
+  m20 = value;
+  return true;
 }
