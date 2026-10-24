@@ -1,1 +1,2 @@
 0064bc50  48  cSPUIAssetBrowser::Launch: complete (cdecl form + /GS-), one register-alloc + arg-load-hoist diff
+0064c400  680  cSPUIAssetBrowser::Update: complete; model full body with named offsets, keep the sub_64c280 call non-inlined, and use a volatile float timer with a float 0.001 scale so x87 keeps fmul dword; equiv WEAK (285 valid, 39.0% coverage), --inputs 2000 WEAK (1425 valid, no mismatch), replay PASS
