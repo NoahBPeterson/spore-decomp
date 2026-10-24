@@ -1,0 +1,4 @@
+slices/s00de9a00/s00de9a00.cpp  ?FUN_00dea420@cGalaxyGameEntryImpl@@QAEXXZ  00dea420  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de9a00/s00de9a00.cpp  ?FUN_00dea560@cPaintSystem@@QAEXXZ  00dea560  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de9a00/s00de9a00.cpp  ?FUN_00dea730@cWatcherBase@@QAE_NXZ  00dea730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00de9a00/s00de9a00.cpp  ?FUN_00dea7b0@cWatcherBase@@QAEXPAVcProperty@@@Z  00dea7b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
