@@ -1,0 +1,7 @@
+# source  symbol  original VA
+slices/s00ea28f0/s00ea28f0.cpp  ?Destroy@cCityMusicLoadSave@@QAEXXZ  00ea29b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ea28f0/s00ea28f0.cpp  ?LoadKeyAndClear@LoadSaveIface8@@QAEXPAULoadSaveKey@@@Z  00ea2a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ea28f0/s00ea28f0.cpp  ?SetMusic@cCityMusicNoteEditor@@QAEXPAUcPlayerCityMusic@@@Z  00ea2d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ea28f0/s00ea28f0.cpp  ?SetTempo@cCityMusicNoteEditor@@QAEXI@Z  00ea2f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ea28f0/s00ea28f0.cpp  ?SetSoundProperty@cCityMusicNoteEditor@@QAEX_N@Z  00ea3040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ea28f0/s00ea28f0.cpp  ?SetActiveNoteId@cCityMusicNoteEditor@@QAEXI@Z  00ea3390  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
