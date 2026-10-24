@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00df2ea0  1068  SP::cGalaxyGameEntryUIStateMachine::SetLevel - no source (1068-byte level/flow setup: reads the game-entry pointer +0x628 and writes its mode words +0xa4/+0xa8, rebuilds the flow; not attempted). flags /O2 /MD /Gy /TP /arch:SSE /GS-
+00df32d0  1940  SP::cGalaxyGameEntryUIStateMachine::Init - no source (1940-byte state-machine initialiser keyed on the flow id 0x6775e23/0x6775e20; not attempted). flags /O2 /MD /Gy /TP /arch:SSE /GS-

@@ -1,0 +1,6 @@
+00df2d80  ?PickRandomVehicle@StateMachine@@QAEXXZ  # StateMachine::PickRandomVehicle = SP::cGalaxyGameEntryUIStateMachine::PickRandomVehicle (mode-dispatched random pick) - nonmatching/equivalent
+00df2e20  ?TestEditorToGame@Impl@@QAEXPAH@Z  # Impl::TestEditorToGame = SP::cGalaxyGameEntryImpl::TestEditorToGame (editor->game transition; reveals the mode window, sets the panel byte, forwards to OnAssetBrowserSelection/SelectNextState) - byte-exact
+00df2ea0  ?FUN_00df2ea0@@YGXXZ  # SP::cGalaxyGameEntryUIStateMachine::SetLevel - no source (partial)
+00df32d0  ?FUN_00df32d0@@YGXXZ  # SP::cGalaxyGameEntryUIStateMachine::Init - no source (partial)
+00df3a70  ?FUN_00df3a70@@YIXPAUHolder@@@Z  # FUN_00df3a70 (Simulator factory: operator_new(0x630, "Simulator"), ctor 0xdf0c00, store at +8, tail-call 0xdf3410) - byte-exact
+00df3ab0  ?PickRandomAssets@StateMachine@@QAEXD@Z  # StateMachine::PickRandomAssets = SP::cGalaxyGameEntryUIStateMachine::PickRandomAssets (per-mode random asset picker) - nonmatching/equivalent
