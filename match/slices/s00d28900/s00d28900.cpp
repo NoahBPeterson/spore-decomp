@@ -47,20 +47,45 @@ extern const SPQuaternion kIdentityQuat; // 0x01582838
 
 struct IRefObject {
     virtual int AddRef();
+    virtual int Release();
 };
+
+// eastl::rbtree node base (used by the message-registration map helpers)
+struct RbNode {
+    RbNode* mpLeft;                      // +0x00
+    RbNode* mpRight;                     // +0x04
+    RbNode* mpParent;                    // +0x08
+    uint32_t mColor;                     // +0x0c
+    uint32_t mKey;                       // +0x10
+    void* mpValue;                       // +0x14
+};
+RbNode* __cdecl RBTreeIncrement(RbNode* node);            // 0x00921580
+RbNode* __cdecl RBTreeDecrement(const RbNode* node);      // 0x009215c0
+// tree-map helpers live as thiscall members of RbTreeAnchor (declared below)
+
+struct Vec3f { float x, y, z; };
+void RemoveHandler(void* a, void* b, void* c, void* d, void* e); // 0x00571db0
+void __cdecl OpDelete(void* p);                                  // 0x00f47380
 
 struct cLocalInputState {
     char data[0x48];
     cLocalInputState();                  // 0x00697960
 };
 
-// eastl::rbtree anchor (right, left, parent, color) + size, default-constructed inline
+// eastl::rbtree anchor (right, left, parent, root) + size, default-constructed inline
 struct RbTreeAnchor {
-    RbTreeAnchor* mpRight;
-    RbTreeAnchor* mpLeft;
-    RbTreeAnchor* mpParent;
-    uint32_t mColor;
-    uint32_t mnSize;
+    RbTreeAnchor* mpRight;               // +0x00
+    RbTreeAnchor* mpLeft;                // +0x04
+    RbTreeAnchor* mpParent;              // +0x08
+    union {
+        uint32_t mColor;                 // +0x0c (constructor init)
+        RbNode* mpRoot;                  // +0x0c (tree root)
+    };
+    uint32_t mnSize;                     // +0x10
+
+    void Insert(void* out, const void* key, int color);  // 0x00cbae70 (thiscall, ret 0xc)
+    void DestroyAll(void* node);                         // 0x00cbae20 (thiscall, ret 4)
+    void MapIterateErase(RbNode* first, RbNode* last);   // 0x00d28e10
 };
 
 inline SPVector3 MakeVec(float x, float y, float z)
@@ -72,11 +97,72 @@ inline SPVector3 MakeVec(float x, float y, float z)
     return v;
 }
 
+// ---- message-handler collection (0x00d29610) ----
+
+// eastl vector header whose allocation sits 4 bytes before mpBegin
+struct SpVecAllocHeader {
+    int32_t mnCapacity;                  // [[mpBegin - 1]]
+};
+
+struct AutoRefVec {                      // eastl::vector<EA::AutoRefCount<...> >
+    void** mpBegin;                      // +0x00
+    void** mpEnd;                        // +0x04
+    void** mpCap;                        // +0x08
+};
+
+// ref-counted handler object; AddRef/Release are the vtable slots at +0xbc / +0xc0
+struct HandlerObj {
+    virtual void h000(); virtual void h001(); virtual void h002(); virtual void h003();
+    virtual void h004(); virtual void h005(); virtual void h006(); virtual void h007();
+    virtual void h008(); virtual void h009(); virtual void h010(); virtual void h011();
+    virtual void h012(); virtual void h013(); virtual void h014(); virtual void h015();
+    virtual void h016(); virtual void h017(); virtual void h018(); virtual void h019();
+    virtual void h020(); virtual void h021(); virtual void h022(); virtual void h023();
+    virtual void h024(); virtual void h025(); virtual void h026(); virtual void h027();
+    virtual void h028(); virtual void h029(); virtual void h030(); virtual void h031();
+    virtual void h032(); virtual void h033(); virtual void h034(); virtual void h035();
+    virtual void h036(); virtual void h037(); virtual void h038(); virtual void h039();
+    virtual void h040(); virtual void h041(); virtual void h042(); virtual void h043();
+    virtual void h044(); virtual void h045(); virtual void h046();
+    virtual void AddRefHandler();        // +0xbc
+    virtual void ReleaseHandler();       // +0xc0
+};
+
+// singleton that vends handlers; its vtable slot at +0x4c fills the vector
+struct HandlerProvider {
+    virtual void g00(); virtual void g01(); virtual void g02(); virtual void g03();
+    virtual void g04(); virtual void g05(); virtual void g06(); virtual void g07();
+    virtual void g08(); virtual void g09(); virtual void g10(); virtual void g11();
+    virtual void g12(); virtual void g13(); virtual void g14(); virtual void g15();
+    virtual void g16(); virtual void g17(); virtual void g18();
+    virtual bool GetHandlers(void* src, void* list, AutoRefVec* out, int count); // +0x4c
+};
+
+// source of handlers (param1)
+struct MsgSource {
+    void SetHandlers(int mode);          // 0x00b17790 (thiscall, 1 stack arg)
+    char pad0[0x48];
+    char* mHandlerTable;                 // +0x48
+};
+
+// destination map (param2)
+struct MsgMap {
+    char pad0[0x14];
+    int32_t mSize;                       // +0x14
+    void Insert(void* out, const void* key, int color);  // 0x00cbae70
+};
+
+bool IsLiveHandler(void* h);                       // 0x00d20e70
+HandlerProvider* GetHandlerProvider();             // 0x00b3d240
+
 extern void* g_vtblGB1;                  // 0x013eb384
 extern void* g_vtblRefCount;             // 0x013ec458
 extern void* g_vtblCam0;                 // 0x0147a3a8
 extern void* g_vtblCam1;                 // 0x0147a398
 extern void* g_vtblCam2;                 // 0x0147a388
+extern uint8_t g_vtblBase0[];            // 0x013eb938 (destructor base vptr, this+0x00)
+extern uint8_t g_vtblBase1[];            // 0x013eb394 (destructor base vptr, this+0x04)
+extern uint8_t g_vtblBase2[];            // 0x013ec458 (destructor base vptr, this+0x08)
 
 struct ICamBase { void* mVptr; };                     // vptr +0x00 (abstract interface, no ctor stores)
 struct IGB1 {                                         // vptr +0x04
@@ -165,10 +251,11 @@ public:
     IRefObject* mConfig;                                        // +0x308
     char pad30c[0x314 - 0x30c];
     bool mb314, mb315;                                          // +0x314
-    uint32_t pad318;
-    RbTreeAnchor mTree;                                         // +0x31c
+    RbTreeAnchor mTree;                                         // +0x318
 
     cCreatureCamera(IRefObject* pConfig);
+    void UpdateDesiredLookAt();
+    ~cCreatureCamera();
 };
 
 // @ 0x00d28e60
@@ -299,4 +386,98 @@ cCreatureCamera::cCreatureCamera(IRefObject* pConfig)
     mF1A4 = 0.0f;
     mF1A8 = 0.0f;
     mF1E4 = 0.0f;
+}
+
+// @ 0x00d28e10
+void RbTreeAnchor::MapIterateErase(RbNode* first, RbNode* last)
+{
+    while (first != last) {
+        uint32_t color = 0;
+        void* out[2];
+        Insert(out, &first->mKey, color);
+        first = RBTreeIncrement(first);
+    }
+}
+
+// @ 0x00d29610
+// @ 0x00d29610
+bool CollectMessageHandlers(MsgSource* src, MsgMap* map)
+{
+    src->SetHandlers(0);
+    HandlerProvider* provider = GetHandlerProvider();
+    AutoRefVec vec;
+    vec.mpBegin = 0;
+    vec.mpEnd = 0;
+    vec.mpCap = 0;
+    int offset = 0x60;
+    do {
+        bool got = provider->GetHandlers(src, src->mHandlerTable + offset, &vec, 4);
+        if (got && vec.mpBegin != vec.mpEnd) {
+            for (void** it = vec.mpBegin; it != vec.mpEnd; ++it) {
+                HandlerObj* h = (HandlerObj*)*it;
+                if (!IsLiveHandler(h))
+                    continue;
+                if (map == 0) {
+                    for (void** r = vec.mpBegin; r < vec.mpEnd; ++r) {
+                        if (*r)
+                            (*(HandlerObj**)r)->ReleaseHandler();
+                    }
+                    if (vec.mpBegin && ((SpVecAllocHeader*)vec.mpBegin - 1)->mnCapacity != 0)
+                        OpDelete(vec.mpBegin);
+                    return true;
+                }
+                void* key = h;
+                if (h)
+                    h->AddRefHandler();
+                void* out[2];
+                int32_t color = 0;
+                map->Insert(out, &key, color);
+                if (h)
+                    h->ReleaseHandler();
+            }
+        }
+        offset -= 0xc;
+    } while (offset >= 0);
+
+    bool result = false;
+    if (map != 0)
+        result = map->mSize != 0;
+    for (void** r = vec.mpBegin; r < vec.mpEnd; ++r) {
+        if (*r)
+            (*(HandlerObj**)r)->ReleaseHandler();
+    }
+    if (vec.mpBegin && ((SpVecAllocHeader*)vec.mpBegin - 1)->mnCapacity != 0)
+        OpDelete(vec.mpBegin);
+    return result;
+}
+
+// @ 0x00d28900
+void cCreatureCamera::UpdateDesiredLookAt()
+{
+    // SKELETON (booked partial): the 1292-byte body was not recovered from the analysis image.
+    // Recovered shape: it initialises a transient CameraData block through 0x00b16dc0, forms the
+    // look-at delta mV114 - mV13C, normalises it, then drives the aim-interpolation helpers
+    // 0x00b17c10 / 0x00b17810 / 0x00b16450 / 0x00b16e50 / 0x00b17790 and finally stores the
+    // result into mV168, flagging mb164 when the target changed.
+}
+
+// @ 0x00d29570
+cCreatureCamera::~cCreatureCamera()
+{
+    RbTreeAnchor* t = &mTree;
+    t->DestroyAll(t->mpRoot);
+    if (mConfig)
+        mConfig->Release();
+    if (mMsgReg[0]) {
+        uint32_t e = mMsgReg[4];
+        uint32_t d = mMsgReg[3];
+        uint32_t c = mMsgReg[2];
+        uint32_t b = mMsgReg[1];
+        uint32_t a = mMsgReg[0];
+        mMsgReg[0] = 0;
+        RemoveHandler((void*)a, (void*)b, (void*)c, (void*)d, (void*)e);
+    }
+    RefCountV::mVptr = g_vtblBase2;
+    IGB1::mVptr = g_vtblBase1;
+    ICamBase::mVptr = g_vtblBase0;
 }

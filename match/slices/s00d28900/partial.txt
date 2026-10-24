@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00d28900 1292 UNRECOVERED: 1292-byte x87/SSE aim-interpolation body not recovered (skeleton kept in source); difftest FAIL (5/84 valid mismatched, 56.5% cov)
+00d28e10 64 UNRECOVERED-EQUIV: body recovered (iterate [first,last), insert key into tree, RBTreeIncrement); 62 vs 72 bytes: prologue/register allocation differs; difftest UNSUPPORTED (0/400 valid inputs)
+00d29610 287 UNRECOVERED-EQUIV: body recovered (scan handler tables 0x60..0x00 in 0xc steps, filter, insert into map, release vector); 366 vs 365 bytes: prologue/frame differs; difftest WEAK low coverage 42.0% (need 60%)
