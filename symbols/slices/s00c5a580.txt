@@ -1,0 +1,29 @@
+00c5a580 ?UpdateActiveStep@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::UpdateActiveStep
+00c5a610 ?CompleteStep@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::CompleteStep
+00c5a790 ?OnAccept@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::OnAccept
+00c5a7d0 ?DestroyStepLists@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::~vector steps
+00c5a990 ?Init@cMissionMultiStep@@QAE_NXZ  # bool cMissionMultiStep::Init
+00c5ab80 ?Shutdown@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::Shutdown
+00c5ac60 ?GetUILongDescriptionSoFar@cMissionMultiStep@@QAEXPAX@Z  # void cMissionMultiStep::GetUILongDescriptionSoFar
+00c5ad40 ??0cMissionMultiStep@@QAE@XZ  # cMissionMultiStep::cMissionMultiStep
+00c5ae30 ?Write@cMissionMultiStep@@QAE_NPAX@Z  # bool cMissionMultiStep::Write
+00c5aea0 ?Read@cMissionMultiStep@@QAE_NPAX@Z  # bool cMissionMultiStep::Read
+00c5b020 ?UpdateFromTerrainSphereA@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::UpdateFromTerrainSphereA
+00c5b0b0 ?UpdateFromTerrainSphereB@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::UpdateFromTerrainSphereB
+00c5b130 ?RefreshTargetPlanet@@YAXXZ  # void RefreshTargetPlanet
+00c5b150 ?RefreshTargetPlanetConditional@@YAXPAVcSPMission@@@Z  # void RefreshTargetPlanetConditional
+00c5b210 ?Read@cPlanetMission@@QAE_NPAX@Z  # bool cPlanetMission::Read
+00c5b280 ?UpdateFromPlanet@cPlanetMission@@QAEXXZ  # void cPlanetMission::UpdateFromPlanet
+00c5b340 ?GetOwnerEmpireId@cPlanetMission@@QAEIXZ  # uint32_t cPlanetMission::GetOwnerEmpireId
+00c5b370 ?SetTarget@cPlanetMission@@QAEXH@Z  # void cPlanetMission::SetTarget
+00c5b3a0 ?SetPlanetPosition@cPlanetMission@@QAEXHHH@Z  # void cPlanetMission::SetPlanetPosition
+00c5b3d0 ?WriteMissionElementList@@YAXPAVISerializer@@PAPAUMissionElement@@@Z  # void WriteMissionElementList
+00c5b450 ?CopyMissionElementsForward@@YAPAUMissionElement@@PAU1@00@Z  # MissionElement* CopyMissionElementsForward
+00c5b4b0 ?CopyMissionElementsBackward@@YAPAUMissionElement@@PAU1@00@Z  # MissionElement* CopyMissionElementsBackward
+00c5b510 ?GeneratePirateCount@cSPRaidPlunderEvent@@QAEXXZ  # void cSPRaidPlunderEvent::GeneratePirateCount
+00c5b530 ?GenerateBomberCount@cSPRaidEvent@@QAEXXZ  # void cSPRaidEvent::GenerateBomberCount
+00c5b550 ?BackgroundUpdate@cSPRaidPlunderEvent@@QAEXXZ  # void cSPRaidPlunderEvent::BackgroundUpdate
+00c5b600 ?Init@cSPRaidEvent@@QAE_NHHH@Z  # bool cSPRaidEvent::Init
+00c5b660 ?Shutdown@cSPRaidEvent@@QAEXXZ  # void cSPRaidEvent::Shutdown
+00c5b6c0 ?CheckDistanceCondition@cSPRaidEvent@@QAEIXZ  # uint32_t cSPRaidEvent::CheckDistanceCondition
+00c5b860 ?Update@cSPRaidEvent@@QAEXXZ  # void cSPRaidEvent::Update
