@@ -107,7 +107,7 @@ struct IntStringMap {
 struct StrTree {  // map<string8, V>
   int mDummy;
   RBNodeBase mAnchor;  // +4: right, +8: left, +0xc: parent
-  void __thiscall LowerBound(RBNodeBase** out, const string8* key);  // 0x00b19cb0
+  RBNodeBase** __thiscall LowerBound(RBNodeBase** out, const string8* key);  // 0x00b19cb0
 };
 
 // ------------------------------------------------------------------ variant / map-instance helpers
@@ -460,12 +460,12 @@ Variant* Variant::SetInt(int arg) {
 }
 
 // ================================================================== @ 0x00b19cb0
-void StrTree::LowerBound(RBNodeBase** out, const string8* key) {
+RBNodeBase** StrTree::LowerBound(RBNodeBase** out, const string8* key) {
   RBNodeBase* anchor = &mAnchor;
   RBNodeBase* x = mAnchor.mpNodeParent;
   if (x == 0) {
     *out = anchor;
-    return;
+    return out;
   }
   const char* kBegin = key->mpBegin;
   int kLen = (int)(key->mpEnd - kBegin);
@@ -486,6 +486,7 @@ void StrTree::LowerBound(RBNodeBase** out, const string8* key) {
     }
   } while (x != 0);
   *out = y;
+  return out;
 }
 
 // ================================================================== @ 0x00b19d40
