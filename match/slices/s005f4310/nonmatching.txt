@@ -1,3 +1,8 @@
 005f46f0  48  cSPOLDPaletteItemUIDragAndBuy::HandleMessage (IHandler subobject view): complete (test-then-reload message key compare + ReloadModel vcall); compiler folds outer-pointer arithmetic instead of [ecx+0x40] form
 005f4f80  91  cSPSwatch::Init (7-arg): complete (mScaleParam store, InitInternal call, Key copy, Vt24); bool/arg scheduling differs
 005f5000  94  cSPSwatch::Init (8-arg): complete (two non-null guards, mScaleParam store, InitInternal call, Key copy, Vt24); bool/arg scheduling differs
+005f4310  935  cSPOLDPaletteItemUIDragAndBuy::Init: complete reconstruction (InitInternal, viewport sizing, isNew/economy availability gate, 3D-model fields, left/right label creation, stopwatch, MessageServer AddHandler); /O2 register/arg scheduling and AutoRefCount inline form differ
+005f4750  591  cSPOLDPaletteItemUIDragAndBuy::OnLeftMouseDown: complete (availability + allow-rotation + scale factor, rollover update-or-create with Editor vehicle-abilities object, bounding boxes, swatch MessageSend); /O2 scheduling differs
+005f49f0  395  cSPOLDPaletteItemUIDragAndBuy::OnMouseDown: complete (locked/model guards, economy GetItemStatus switch, audio, TakeCapture, mouse position capture, rollover hide, pv24); /O2 scheduling differs
+005f4b80  372  cSPOLDPaletteItemUIDragAndBuy::OnMouseUp: complete (capture dispose, drag message with AddRef'd subobject ref, MessageSend, viewport recenter, guarded releases); /O2 scheduling differs
+005f4d00  265  0x38-byte record copy loop (cSPTransform-shaped element): complete (field-wise copy behind a null-destination guard, returns the advanced end pointer); block-move and x87-vs-SSE field scheduling not reproduced

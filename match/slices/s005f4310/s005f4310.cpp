@@ -4,6 +4,7 @@
 // Retail cSPSwatch is 0x17c bytes (mID at +0x178); fields after it belong to the subclass.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include <math.h>
+#include <new>
 #include "types.h"
 
 extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
@@ -117,7 +118,8 @@ class IWindow : public COM::IUnknown32 {
   virtual IWindow* GetParent();                     // +0x10
   PV(5) PV(6) PV(7) PV(8) PV(9)
   virtual uint32_t GetFlags();                      // +0x28
-  PV(11) PV(12) PV(13)
+  PV(11) PV(12)
+  virtual const RectT& GetWindowArea();             // +0x34
   virtual const RectT& GetRealArea();               // +0x38
   PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22)
   virtual void SetShadeColor(uint32_t color);       // +0x5c
@@ -132,7 +134,8 @@ class IWindow : public COM::IUnknown32 {
   PV(43) PV(44) PV(45) PV(46) PV(47)
   virtual Point2D GlobalToLocal(Point2D p);         // +0xc0
   PV(49) PV(50) PV(51) PV(52) PV(53) PV(54) PV(55) PV(56) PV(57) PV(58)
-  PV(59) PV(60) PV(61) PV(62) PV(63) PV(64)
+  virtual void AddChild(IWindow* child);            // +0xec
+  PV(60) PV(61) PV(62) PV(63) PV(64)
   virtual void AddWinProc(IWinProc* proc);     // +0x104
   virtual void RemoveWinProc(IWinProc* proc);  // +0x108
 };
@@ -218,11 +221,48 @@ class cSPUILayout : public EA::RefCountVTemplate<int> {
 namespace SPUIHelpers {
 void SetWindowAreaToParent(IWindow* window);                    // 0x00806bf0
 void SetWindowImage(IWindow* window, const Key* key, int index);  // 0x00807bb0
+void SetWindowAlpha(IWindow* window, float alpha);                // 0x00804fc0
 }  // namespace SPUIHelpers
 
 
 using EA::Point2D;
 using EA::RectT;
+
+namespace SW {
+class cUIViewport;
+void SizeViewportToWindowAndRemainOnScreen(cUIViewport* viewport, IWindow* window, float scale,
+                                           float x, float y);  // 0x005f2390
+}  // namespace SW
+namespace UTFWinControls { class IWinText; }
+namespace SP { class cRenderManager; }
+class cCollectableItems;
+IWindow* FUN_00807880(float* key, float x, float y, void* parent);  // 0x00807880
+SP::cRenderManager* AddBoundingBox(IWindow* window, int a, int b);  // 0x0067cad0
+
+// A ref-counted interface subobject living inside cSPPaletteItem at +0x8.
+class cSPPaletteItemRef {
+ public:
+  virtual int AddRef();   // +0x0
+  virtual int Release();  // +0x4
+};
+
+class cSPPaletteItem {
+ public:
+  virtual int AddRef();                        // vtable pointer at +0x0
+  virtual int Release();
+  uint32_t pad4;                               // +0x4
+  cSPPaletteItemRef mRef;                      // +0x8
+  Key mKey;                                    // +0xc
+  bool IsNew(cCollectableItems* items) const;  // 0x005c6670
+};
+
+namespace EA {
+class Stopwatch {
+ public:
+  void SetUnits(int units);  // 0x0093a1a0
+  uint32_t pad[6];
+};
+}  // namespace EA
 
 namespace SP {
 class cString {
@@ -239,6 +279,7 @@ class cSPEditorEconomy {
   virtual bool IsItemAvailable(const Key* key);                   // +0x8
   virtual bool CanAfford(int currency, int cost);                 // +0xc
   virtual int GetItemStatus(const Key* key, struct cItemCostInfo* info);  // +0x10
+  virtual bool FUN_v5(const Key* key);                                    // +0x14
 };
 
 class cSPPaletteItemRollover;
@@ -247,13 +288,23 @@ struct cSPPaletteInfo : public EA::RefCountTemplate<int> {
   void* mTheme;                             // +0xc
   void* mCollectableItems;                  // +0x10
   cSPPaletteItemRollover* mRollover;        // +0x14
-  uint32_t pad18[6];
+  uint32_t mUnk18;                          // +0x18
+  uint32_t mUnk1c;                          // +0x1c
+  uint32_t mUnk20;                          // +0x20
+  uint32_t mUnk24;                          // +0x24
+  uint32_t mUnk28;                          // +0x28
+  uint32_t mUnk2c;                          // +0x2c
   bool mUseModelKey;                        // +0x30 (padding byte)
   bool mUseModelKeyForCost;                 // +0x31
 };
 
 class cSPPaletteItemRollover { public:
-  void Hide();  // 0x005ed6c0
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+  virtual void Update(void* layout, const Key* key, void* info);  // +0x28
+  void Hide();                     // 0x005ed6c0
+  void FUN_005ed320(int a);        // 0x005ed320
+  void FUN_005ee480(void* layout, void* info, void* obj, int a);  // 0x005ee480
+  void FUN_008283a0(float x, float y, float ox, float oy);        // 0x008283a0
 };
 class cSPSwatchManager {
  public:
@@ -289,7 +340,7 @@ class IWindowManager {
   PV(0)
   virtual IWindow* GetMainWindow();                    // +0x4
   PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14)
-  virtual Point2D GetMousePosition();                  // +0x3c
+  virtual void GetMousePosition(Point2D* out);         // +0x3c
   PV(16) PV(17) PV(18)
   virtual void SetFocus(int which, IWindow* window);   // +0x4c
   PV(20)
@@ -304,12 +355,13 @@ class cInputManager {
   bool IsCapturing();                                // 0x006c1100
   void* GetCaptured();                               // 0x006c10e0
   bool SetCapture(IWindow* window, void* object);    // 0x008045a0
+  void Dispose(bool force);                          // 0x00803bd0
 };
 cInputManager* InputManager();  // 0x00804500
 
 class cRenderManager {
  public:
-  void SetHighlight(IWindow* window, bool a, bool b);  // 0x0080d710
+  void FUN_0080d710();  // 0x0080d710
 };
 cRenderManager* RenderManager();  // 0x0067cad0
 
@@ -387,8 +439,13 @@ class cUILayeredObject {
  public:
   void SetVisible(bool visible);   // 0x0080d7c0
   void RemoveModel(void* model);   // 0x0080e980
+  SW::cUIViewport* FUN_0093b6c0(); // 0x0093b6c0
 };
-class cSwatchTexture { public: void* GetTexture(); };                // 0x0080d610
+class cSwatchTexture {
+ public:
+  void* GetTexture();                                            // 0x0080d610
+  SW::cUIViewport* FUN_0080d5f0();                               // 0x0080d5f0
+};
 
 namespace eastl {
 template <typename T>
@@ -526,7 +583,8 @@ class cSPSwatch : public IWinProc, public EA::RefCountVTemplate<int>, public EA:
   uint32_t mImageID;                      // +0xf8
   bool mImageOverlay;                     // +0xfc
   bool mImageSet;                         // +0xfd
-  uint32_t pad100[6];
+  uint32_t mInterfaceID;                  // +0x100
+  uint32_t pad104[5];
   AutoRefCount<cMWModel> mModel;          // +0x118
   uint32_t pad11c[17];
   bool mHasBeenFramed;                    // +0x160
@@ -571,13 +629,13 @@ class cSPPaletteSwatch : public cSPSwatch {
   void SetShowCost(bool show);      // 0x005f49a0
   void EndDrag();                   // 0x005f46c0
 
-  AutoRefCount<cSPPaletteInfo> mInfo;     // +0x17c
-  uint32_t pad180;
-  bool mIsLocked;                         // +0x184
-  uint32_t pad188;
-  IWindow* mDragWindow;                   // +0x18c
-  uint32_t pad190;
-  AutoRefCount<IWindow> mCostWindow;      // +0x194
+  AutoRefCount<cSPPaletteInfo> mInfo;      // +0x17c
+  AutoRefCount<cSPPaletteItem> mPaletteItem;  // +0x180
+  bool mIsLocked;                          // +0x184
+  float mBaseScale;                        // +0x188
+  AutoRefCount<IWindow> mDragWindow;       // +0x18c
+  uint32_t mUnk190;                        // +0x190
+  AutoRefCount<IWindow> mCostWindow;       // +0x194
   bool mShowCost;                         // +0x198
   bool mDraggable;                        // +0x199
 };
@@ -672,13 +730,48 @@ void cSPSwatch::Init(Key* key, void* a, void* b, uint32_t c, uint32_t d, uint32_
 // ---------------------------------------------------------------------------
 // cSPOLDPaletteItemUIDragAndBuy -- a palette-swatch subclass with drag/buy UI.
 // ---------------------------------------------------------------------------
+// Short-lived "vehicle abilities" drag object built by OnLeftMouseDown.
+class cSPEditorVehicleAbilities {
+ public:
+  cSPEditorVehicleAbilities(const Key& key, uint32_t a, uint32_t b, uint32_t c, bool d);
+  virtual void FUN_0059f060();  // +0x0
+  virtual void FUN_0059f064();  // +0x4
+  virtual void FUN_0059f068();  // +0x8
+};
+
+namespace Audio {
+class ISystemAT {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7)
+  virtual int FUN_00a206f0();  // +0x20
+};
+ISystemAT* GetSystemAT();  // 0x00a206f0
+}  // namespace Audio
+
+// Payload message built on the stack by OnMouseUp.
+struct cSPPaletteDragMessage {
+  uint32_t mUnk0;              // +0x00 (0x013f7e34)
+  uint32_t mUnk4;              // +0x04 (0x013f7e30)
+  uint32_t mUnk8;              // +0x08
+  uint32_t mUnkC;              // +0x0c
+  uint32_t mUnk10;             // +0x10
+  Key mModelKey;               // +0x14
+  cSPPaletteItemRef* mpRef;    // +0x20
+  cSPPaletteItemRef* mpUnk24;  // +0x24
+};
+
 class cSPOLDPaletteItemUIDragAndBuy : public cSPPaletteSwatch {
  public:
-  void Init(Key* key, void* a, void* b, uint32_t c, uint32_t d, void* e, void* f, bool g);  // 005f4310
+  void Init(Key* key, void* a, void* b, uint32_t c, void* d, void* e, bool f);  // 005f4310
   void OnLeftMouseDown();   // 005f4750
   void OnMouseDown();       // 005f49f0
   void OnMouseUp();         // 005f4b80
-  uint32_t mUnk19c[8];
+
+  uint32_t pad19c;                  // +0x19c
+  EA::Stopwatch mStopwatch;         // +0x1a0
+  AutoRefCount<IWindow> mLeftText;  // +0x1b8
+  AutoRefCount<IWindow> mRightText; // +0x1bc
+  Point2D mOriginalMousePosition;   // +0x1c0
 };
 
 // The HandleMessage override's vtable slot lives on the IHandler subobject (+0xc).
@@ -688,24 +781,79 @@ class cHandlerView {
 };
 
 // @ 0x005F4310
-void cSPOLDPaletteItemUIDragAndBuy::Init(Key* key, void* a, void* b, uint32_t c, uint32_t d,
-                                         void* e, void* f, bool g) {
-  InitInternal((IWindow*)b, (IWindow*)b, 0, 0, 0, 1, 0, false);
+void cSPOLDPaletteItemUIDragAndBuy::Init(Key* key, void* a, void* b, uint32_t c, void* d, void* e,
+                                         bool f) {
+  InitInternal((IWindow*)a, (IWindow*)a, 0, 0, 0, 1, 0, 1);
   mOriginalItemKey = *key;
   if (key->mInstance != 0)
     Vt24(key);
-  if ((IWindow*)a != (IWindow*)mBaseWindow)
-    mBaseWindow = (IWindow*)a;
-  if (m3DView.mLayeredObject == 0 && mOriginalItemKey.mType != 0) {
-    void* buf = 0;
-    (void)buf;
+  mDragWindow = (IWindow*)b;
+  mUnk190 = c;
+  mPaletteItem = (cSPPaletteItem*)d;
+  mDraggable = f;
+  mInfo = (cSPPaletteInfo*)e;
+
+  SW::cUIViewport* viewport = 0;
+  if (m3DView.mLayeredObject != 0)
+    viewport = m3DView.mLayeredObject->FUN_0093b6c0();
+  else if (m3DView.mTexture != 0)
+    viewport = m3DView.mTexture->FUN_0080d5f0();
+  if (viewport != 0)
+    SW::SizeViewportToWindowAndRemainOnScreen(viewport, mModelWindow, mTargetViewportScale,
+                                              mActualViewportCenter.x, mActualViewportCenter.y);
+
+  if (mInfo != 0) {
+    mDisplay3DModel = mInfo->mUseModelKey;
+    if (mInfo->mUnk1c != 0) {
+      mCamera = mInfo->mUnk1c;
+      mHasBeenFramed = false;
+    }
+
+    bool isNew = false;
+    if (mInfo->mCollectableItems != 0)
+      isNew = ((cSPPaletteItem*)mPaletteItem)
+                  ->IsNew((cCollectableItems*)mInfo->mCollectableItems);
+    bool available = isNew;
+    if (mInfo->mEconomy != 0 && !available)
+      available = mInfo->mEconomy->FUN_v5(&((cSPPaletteItem*)mPaletteItem)->mKey);
+
+    if (mPaletteItem != 0 && available && mBaseWindow != 0) {
+      uint32_t leftKey[3];
+      leftKey[0] = 0x1249ff0f;
+      leftKey[1] = 0x2f7d0004;
+      leftKey[2] = 0x100d976e;
+      mLeftText = FUN_00807880((float*)leftKey, 0.0f, 0.0f, mBaseWindow->GetParent());
+      if (mLeftText != 0) {
+        uint32_t rightKey[3];
+        rightKey[0] = 0x3cf13a01;
+        rightKey[1] = 0x2f7d0004;
+        rightKey[2] = 0x11c0bde;
+        mRightText = FUN_00807880((float*)rightKey, 0.0f, 0.0f, mBaseWindow->GetParent());
+        if (mRightText != 0) {
+          IWindow* parent = mBaseWindow->GetParent();
+          mLeftText->SetFlag(2, false);
+          mLeftText->SetFlag(0x10, true);
+          parent->AddChild(mLeftText);
+          mRightText->SetFlag(2, false);
+          mRightText->SetFlag(0x10, true);
+          parent->AddChild(mRightText);
+          RectT area = mBaseWindow->GetRealArea();
+          mLeftText->SetArea(area);
+          mRightText->SetArea(area);
+          SPUIHelpers::SetWindowAlpha(mBaseWindow, 0.0f);
+          SPUIHelpers::SetWindowAlpha(mLeftText, 0.0f);
+          mStopwatch.SetUnits(4);
+          mIsLocked = true;
+        }
+      }
+    }
   }
-  mUnk19c[0] = 0;
-  if (e != 0)
-    mDragWindow = (IWindow*)e;
-  mShowCost = g;
+
   UpdateCostDisplay();
   UpdateCursor();
+  EA::Messaging::Server* server = MessageServer();
+  if (server != 0)
+    server->AddHandler((EA::Messaging::IHandler*)((char*)this + 0xc), 0x3150c27);
 }
 
 // @ 0x005F46F0 (this is the IHandler subobject at +0xc)
@@ -728,28 +876,178 @@ bool cHandlerView::HandleMessage(uint32_t id, void* msg) {
 
 // @ 0x005F4750
 void cSPOLDPaletteItemUIDragAndBuy::OnLeftMouseDown() {
-  UpdateCursor();
+  bool available;
+  cSPPaletteInfo* info = mInfo;
+  if (info != 0 && info->mEconomy != 0)
+    available = info->mEconomy->IsItemAvailable(
+        info->mUseModelKeyForCost ? &mModelKey : &mOriginalItemKey);
+  else
+    available = true;
+
+  mAllowRotation = available && mShowCost && mInterfaceID == 0x71fa7d3f;
+  mMaxViewportScaleFactor = mBaseScale * (available ? 1.0f : 0.75f);
+  if (!mIsLocked && available)
+    mWantToRenderModel = true;
+
+  cSPPaletteItemRollover* rollover = SwatchManager()->GetSwatchRollover();
+  if (rollover != 0 && mAllowTooltip) {
+    cSPPaletteItemRollover* rollover2 = mInfo->mRollover;
+    if (rollover2 != 0 && mInfo->mUseModelKeyForCost) {
+      rollover2->Update(mPaletteItem, &mModelKey, mInfo);
+      rollover = rollover2;
+    } else {
+      void* mem = operator new(0x64, "Editor", 0, 0, 0, 0);
+      cSPEditorVehicleAbilities* obj = 0;
+      if (mem != 0) {
+        obj = new (mem) cSPEditorVehicleAbilities(mPaletteItem->mKey, mInfo->mUnk2c, 0x14880158,
+                                                  0, true);
+        if (obj != 0)
+          obj->FUN_0059f064();
+      }
+      rollover->FUN_005ee480(mPaletteItem, mInfo, obj, 1);
+      if (obj != 0)
+        obj->FUN_0059f068();
+    }
+    rollover->FUN_005ed320(2);
+    RectT area = WindowManager()->GetMainWindow()->GetWindowArea();
+    rollover->FUN_008283a0(mActualViewportCenter.x, mActualViewportCenter.y,
+                           (area.right - area.left) * 0.05f, (area.bottom - area.top) * 0.0f);
+  }
+
+  AddBoundingBox(GetWindow(), 1, 1)->FUN_0080d710();
+  if (mCostWindow != 0)
+    AddBoundingBox(mCostWindow, 1, 1)->FUN_0080d710();
+
+  cSwatchMessage msg;
+  msg.mpSwatch = this;
+  msg.mID = 0x522f9cd;
+  MessageServer()->MessageSend(0x522f9cd, &msg, 0);
 }
 
 // @ 0x005F49F0
 void cSPOLDPaletteItemUIDragAndBuy::OnMouseDown() {
-  UpdateCursor();
+  if (mIsLocked)
+    return;
+  if (mModelKey.mInstance == 0 && mModel == 0)
+    return;
+
+  bool take = false;
+  cSPPaletteInfo* info = mInfo;
+  if (info != 0 && info->mEconomy != 0) {
+    int status = info->mEconomy->GetItemStatus(
+        info->mUseModelKeyForCost ? &mModelKey : &mOriginalItemKey, 0);
+    if (status == 2) {
+      if (!mShowCost)
+        return;
+      if (mIsLocked)
+        return;
+      PlayAudio(0x4fc39619, GetAudioSystem());
+      return;
+    }
+    if (status == 3) {
+      PlayAudio(0xdc91625a, GetAudioSystem());
+      return;
+    }
+    if (status != 1)
+      return;
+    take = true;
+  } else {
+    take = true;
+  }
+  if (!take)
+    return;
+
+  TakeCapture();
+
+  if (mShowCost && mInterfaceID == 0x71fa7d3f) {
+    Audio::ISystemAT* audio = Audio::GetSystemAT();
+    int sound = 0;
+    if (audio != 0)
+      sound = audio->FUN_00a206f0();
+    PlayAudio(0xe5469985, sound);
+    UpdateCursor();
+    Point2D mousePos;
+    WindowManager()->GetMousePosition(&mousePos);
+    mOriginalMousePosition = mousePos;
+    cSPPaletteItemRollover* rollover = SwatchManager()->GetSwatchRollover();
+    if (rollover != 0) {
+      cSPPaletteItemRollover* rollover2 = mInfo->mRollover;
+      if (rollover2 != 0)
+        rollover = rollover2;
+      rollover->Hide();
+    }
+    AddBoundingBox(GetWindow(), 0, 1)->FUN_0080d710();
+    if (mCostWindow != 0)
+      AddBoundingBox(mCostWindow, 0, 1)->FUN_0080d710();
+    return;
+  }
+
+  if (mInterfaceID == 0x5e71ab9b)
+    pv24();
 }
 
 // @ 0x005F4B80
 void cSPOLDPaletteItemUIDragAndBuy::OnMouseUp() {
-  UpdateCursor();
+  if (IsCapturedBySelf())
+    InputManager()->Dispose(0);
+
+  cSPPaletteDragMessage msg;
+  msg.mUnk0 = 0x13f7e34;
+  msg.mUnk4 = 0x13f7e30;
+  msg.mUnk8 = 0;
+  msg.mUnkC = mUnk190;
+  msg.mUnk10 = 0;
+  msg.mModelKey = mModelKey;
+  msg.mpRef = 0;
+  msg.mpUnk24 = 0;
+  if (mPaletteItem != 0) {
+    cSPPaletteItemRef* ref = &mPaletteItem->mRef;
+    if (ref != 0) {
+      ref->AddRef();
+      msg.mpRef = ref;
+    }
+  }
+  MessageServer()->MessageSend(mUnk190, &msg, 0);
+  mWantToRenderModel = false;
+  RectT area = mModelWindow->GetRealArea();
+  Point2D center = mModelWindow->GlobalToLocal(
+      Point2D((area.right - area.left) * 0.5f, (area.bottom - area.top) * 0.5f));
+  mActualViewportCenter = center;
+  mTargetViewportCenter = center;
+  if (msg.mpUnk24 != 0)
+    msg.mpUnk24->Release();
+  if (msg.mpRef != 0)
+    msg.mpRef->Release();
 }
 
-// @ 0x005F4D00 -- copy loop over 0x38-byte records
+// The 0x38-byte record is a cSPTransform-shaped type; its memberwise copy assignment keeps
+// MSVC from collapsing the loop into a block move.
 struct Blob38 {
-  uint16_t a;
-  uint16_t b;
-  float f[13];
+  unsigned short mFlags;             // +0x00
+  unsigned short mModificationCount; // +0x02
+  float mTranslation[3];             // +0x04
+  float mScale;                      // +0x10
+  float mRotation[9];                // +0x14
+  Blob38& operator=(const Blob38& o);
 };
-void copy_blob38(Blob38* first, Blob38* last, Blob38* out) {
+
+inline Blob38& Blob38::operator=(const Blob38& o) {
+  mFlags = o.mFlags;
+  mModificationCount = o.mModificationCount;
+  for (int i = 0; i < 3; ++i)
+    mTranslation[i] = o.mTranslation[i];
+  mScale = o.mScale;
+  for (int i = 0; i < 9; ++i)
+    mRotation[i] = o.mRotation[i];
+  return *this;
+}
+
+// @ 0x005F4D00 -- element-wise copy of 0x38-byte records (returns the end pointer).
+Blob38* copy_blob38(Blob38* first, Blob38* last, Blob38* out) {
   for (; first != last; ++first, ++out)
-    *out = *first;
+    if (out != 0)
+      *out = *first;
+  return out;
 }
 
 }  // namespace SP
