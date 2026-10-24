@@ -62,7 +62,7 @@ public:
 	virtual void* allocateChunk(int nbytes, int cl);                     // 4
 	virtual void deallocateChunk(void* p, int nbytes, int cl);           // 5
 	virtual void* allocateChunkByRow(int row, int cl);                   // 6
-	virtual void deallocateChunkByRow(void* p, int row);                 // 7
+	virtual void deallocateChunkByRow(void* p, int row, int cl);         // 7
 	virtual void slot8();                                                // 8 (0x00B1FBF0)
 	virtual void printStatistics(hkOstream* o);                          // 9
 	virtual int getAllocatedSize(int nbytes);                            // 10
@@ -112,7 +112,7 @@ public:
 		}
 	}
 
-	hkInt16 m_memSizeAndFlags;  // 0x04
+	hkUint16 m_memSizeAndFlags; // 0x04
 	hkInt16 m_referenceCount;   // 0x06
 
 protected:
@@ -176,7 +176,8 @@ public:
 	virtual int tell() const;
 
 	FILE* m_file;                                                 // 0x0c
-	bool m_ok;                                                    // 0x10
+	hkBool m_ok;                                                  // 0x10
+	void* scalar_deleting_dtor(unsigned char flags);              // 0x0107E7E0
 };
 
 class hkStdioStreamWriter : public hkStreamWriter
@@ -193,6 +194,7 @@ public:
 
 	FILE* m_file;                                                 // 0x08
 	bool m_ownsFile;                                              // 0x0c
+	void* scalar_deleting_dtor(unsigned char flags);              // 0x0107E9A0
 };
 
 class hkBufferedStreamReader : public hkStreamReader
@@ -497,10 +499,12 @@ class hkVector4
 	void setTransformedPos(const class hkTransform& t, const hkVector4& p);   // 0x01081360
 };
 
+class hkQuaternion;
 class hkRotation
 { public:
 	float m[12];   // three hkVector4 columns
 	void setTranspose(const hkRotation& r);   // 0x01081550 (not in these slices)
+	void set(const hkQuaternion& q);          // 0x010824A0
 };
 
 class hkTransform
@@ -538,7 +542,7 @@ public:
 	virtual void* allocateChunk(int nbytes, int cl);                 // 0x0107FBE0
 	virtual void deallocateChunk(void* p, int nbytes, int cl);       // 0x0107FF60
 	virtual void* allocateChunkByRow(int row, int cl);               // 0x0107FDD0
-	virtual void deallocateChunkByRow(void* p, int row);             // 0x0107FFF0
+	virtual void deallocateChunkByRow(void* p, int row, int cl);     // 0x0107FFF0
 	virtual void printStatistics(hkOstream* o);                      // 0x0107F700
 	virtual int getAllocatedSize(int nbytes);                        // 0x0107F670
 	virtual void getStatSynopsis(hkMemoryStatistics* s);             // 0x0107F800

@@ -37,7 +37,7 @@ hkStreamReader* hkDefaultStreambufFactory::openReader(const char* name)
 }
 
 // @ 0x0107e700
-hkStdioStreamReader::hkStdioStreamReader(const char* name)
+hkStdioStreamReader::hkStdioStreamReader(const char* name) : m_ok(false)
 {
 	m_ok = true;
 	m_file = fopen(name, "rb");
@@ -84,11 +84,22 @@ int hkStdioStreamReader::tell() const
 	return ftell(m_file);
 }
 
-// @ 0x0107e7e0
 hkStdioStreamReader::~hkStdioStreamReader()
 {
 	if (m_file)
 		fclose(m_file);
+}
+
+// @ 0x0107e7e0
+void* hkStdioStreamReader::scalar_deleting_dtor(unsigned char flags)
+{
+	*(void**)this = (void*)0x0149c8b0;
+	if (m_file)
+		fclose(m_file);
+	*(void**)this = (void*)0x013ef094;
+	if (flags & 1)
+		hkReferencedObject::operator delete(this);
+	return this;
 }
 
 // ---- stdio writers ------------------------------------------------------------------------------------
@@ -157,10 +168,20 @@ int hkStdioStreamWriter::tell() const
 	return ftell(m_file);
 }
 
-// @ 0x0107e9a0
 hkStdioStreamWriter::~hkStdioStreamWriter()
 {
 	close();
+}
+
+// @ 0x0107e9a0
+void* hkStdioStreamWriter::scalar_deleting_dtor(unsigned char flags)
+{
+	*(void**)this = (void*)0x0149c8dc;
+	close();
+	*(void**)this = (void*)0x013ef094;
+	if (flags & 1)
+		hkReferencedObject::operator delete(this);
+	return this;
 }
 
 // ---- hkBaseSystem -------------------------------------------------------------------------------------
