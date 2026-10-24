@@ -87,7 +87,7 @@ typedef void*    (__thiscall *vt_p_i)(void*, int);
 struct SL71
 {
     void     v099e0(void* pos, unsigned count, void* val);
-    void     v09cf0(void** out, void* where, unsigned* key, char flag);
+    void**   v09cf0(void** out, void* where, unsigned* key, char flag);
     void*    v09e70(void* a2, void* a3);
     void     v09f90();
     void     v0a020();
@@ -139,9 +139,11 @@ void SL71::v099e0(void* pos, unsigned count, void* val)
     }
     else if (count != 0)
     {
-        unsigned local_c = ((unsigned*)val)[0];
-        unsigned local_8 = ((unsigned*)val)[1];
-        unsigned local_4 = ((unsigned*)val)[2];
+        struct FillValue { unsigned x, y, z; };
+        FillValue local;
+        local.x = ((unsigned*)val)[0];
+        local.y = ((unsigned*)val)[1];
+        local.z = ((unsigned*)val)[2];
         unsigned avail = (unsigned)((end - (char*)pos) / 0xc);
         if (count < avail)
         {
@@ -149,21 +151,21 @@ void SL71::v099e0(void* pos, unsigned count, void* val)
             FUN_00898b80(&val, src, end, end, pos);
             *(char**)(self + 4) = end + count * 0xc;
             FUN_00abced0(pos, src, end);
-            FUN_00a177f0(pos, (char*)pos + count * 0xc, &local_c);
+            FUN_00a177f0(pos, (char*)pos + count * 0xc, &local);
             return;
         }
         unsigned extra = count - avail;
-        FUN_006e5760(end, extra, &local_c);
+        FUN_006e5760(end, extra, &local);
         *(char**)(self + 4) = end + extra * 0xc;
         FUN_00898b80(&pos, pos, end, *(char**)(self + 4), pos);
         *(char**)(self + 4) = *(char**)(self + 4) + avail * 0xc;
-        FUN_00a177f0((char*)pos, end, &local_c);
+        FUN_00a177f0((char*)pos, end, &local);
     }
 }
 
 // 00a09cf0 - rbtree::DoInsertValue; the node key {dword,dword} is built at +0x10
 // @ 0x00a09cf0
-void SL71::v09cf0(void** out, void* where, unsigned* key, char flag)
+void** SL71::v09cf0(void** out, void* where, unsigned* key, char flag)
 {
     char* self = (char*)this;
     int b;
@@ -185,6 +187,7 @@ void SL71::v09cf0(void** out, void* where, unsigned* key, char flag)
     FUN_009216a0(node, where, self + 4, b);
     *(int*)(self + 0x14) += 1;
     *out = node;
+    return out;
 }
 
 // 00a09e70 - constructor of an animation-resource object
