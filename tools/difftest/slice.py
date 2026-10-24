@@ -348,15 +348,21 @@ def marker_names(src, va):
     """Candidate qualified names for the function at va: the definition right after a
     '// ... @ 0x<va>' marker, and names written next to the address in comments."""
     lines = open(src, encoding="utf-8", errors="replace").read().split("\n")
-    # only a marker that starts its line binds (2026-10-24): `void Layer(unsigned id);  // @ 0x0075e090` inside a class
-    # body bound 0075e090 and five siblings to the inline helper defined after the class (LayerBegin), and
-    # `void Init();  // @ 0x005ec7c0` bound 005ec7c0 to the next function; the playbook puts markers at column 0
-    marker = re.compile(r"^\s*//.*@\s*0x0*%x\b" % va, re.I)
+    # A marker that starts its line binds to the definition after it. A marker after code on the same line binds to
+    # the function DECLARED on that line, not to whatever is defined next (2026-10-24): `void* Layer(unsigned id);
+    # // @ 0x0075e090` inside a class body bound 0075e090 and five siblings to the inline helper defined after the
+    # class (LayerBegin), and `void Init();  // @ 0x005ec7c0` bound 005ec7c0 to the next function.
+    marker = re.compile(r"//.*@\s*0x0*%x\b" % va, re.I)
     named = re.compile(r"//\s*(?:@\s*)?(?:0x)?0*%x\b[\s:,-]*((?:[A-Za-z_]\w*::)*~?[A-Za-z_]\w*)" % va, re.I)
     out = []
     for i, line in enumerate(lines):
         if marker.search(line):
-            nm = _def_name_after(lines, i)
+            code = line.split("//")[0]
+            if code.strip():
+                d = re.search(r"((?:[A-Za-z_]\w*\s*::\s*)*~?(?:operator\s*\S+?|[A-Za-z_]\w*))\s*\(", code)
+                nm = re.sub(r"\s+", "", d.group(1)) if d else None
+            else:
+                nm = _def_name_after(lines, i)
             if nm and nm not in out:
                 out.append(nm)
         m = named.search(line)

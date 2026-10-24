@@ -153,13 +153,13 @@ Writing matchable source:
   member (declare a local stub class with fields at the right offsets, `char pad[N]` gaps);
   `ret N` without ECX = `__stdcall`; ECX+EDX args = `__fastcall`; plain `ret` = `__cdecl`.
 - **A marker binds the VA to the next function definition** (2026-10-24). chk.py and equiv.py take the first
-  definition after `// @ 0x<va>` (and they match the marker anywhere on a line), so put it at column 0 directly above
-  the function's own definition: never after a declaration (`void Init();  // @ 0x005ec7c0` bound 005ec7c0 to
-  whatever was defined next), never above helper types or inline methods (0059dc70 bound to an inline
-  `Property::GetItemCount`). Either turns the equivalence check into a test of the wrong function: in part1 both
-  showed up as false FAILs, and the same mistake can make a buggy function look equivalent. Write a callee's address
-  as `// 0x<va>` (no `@`). `tools/matching/marker_check.py <source>` lists markers that bind to a different name
-  than the slice's symbols file; the commit check prints the count before and after.
+  definition after a column-0 `// @ 0x<va>`, so put it directly above the function's own definition, never above
+  helper types or inline methods (0059dc70 bound to an inline `Property::GetItemCount`, a false FAIL in part1; the
+  same mistake can make a buggy function look equivalent). A marker after code on the same line binds to the name
+  declared on that line (until 2026-10-24 it bound to whatever was defined next: `void* Layer(unsigned id);
+  // @ 0x0075e090` in a class body bound six cRenderer methods to an inline helper); still, keep one column-0 marker
+  per function and write a callee's address as `// 0x<va>` (no `@`). `tools/matching/marker_check.py <source>`
+  lists markers whose bound name differs from the slice's symbols file; the commit check prints the count.
 - **Name every field you touch; no raw-offset casts** (2026-10-23). Declare the members you read or write at their
   offsets in the class (gaps as `uint32_t padN[...]`) and access them by name: `herd->mpLeader->mFlags &= ~0x400000`,
   never `*(u32*)((char*)(*(void**)((char*)p + 0xb4c)) + 0x5fc) &= 0xffbfffff`. Same bytes, but the cast chain hides
