@@ -1,6 +1,6 @@
 00969e30 FUN_00969e30 # unnamed ConsoleWindow scroll/extent refresh helper
 00969ed0 ?ResetLayout@CW@@QAEXXZ  # CW::ResetLayout migrated from s00969e30 (verbatim, slice spelling)
-00969f00 ?DoMessageProc@CW@@QAEHH@Z  # CW::DoMessageProc migrated from s00969e30 (verbatim, slice spelling)
+00969f00 ?DoMessageProc@CW@@QAE_NH@Z  # CW::DoMessageProc migrated from s00969e30 (retail returns bool in al; slice spelling said int)
 00969f80 ?Scroll@CW@@QAEHHHDH@Z  # CW::Scroll migrated from s00969e30 (verbatim, slice spelling)
 0096a0a0 ?FUN_0096a0a0@@YAHHHHH@Z  # FUN_0096a0a0 migrated from s00969e30 (verbatim, slice spelling)
 0096a620 ?DoFindNode@@YAPAXPAXPAPAXI@Z  # DoFindNode migrated from s00969e30 (verbatim, slice spelling)

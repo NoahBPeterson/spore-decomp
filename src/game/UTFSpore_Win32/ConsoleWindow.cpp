@@ -26,10 +26,10 @@ struct Sub {                                   // sub-objects inside ConsoleWind
 struct CW {
     void InvalidateLayout();                   // 0x9609b0  Window::InvalidateLayout
     void m_969d40();                           // 0x969d40
-    int  BaseDoMessage(int);                   // 0x950bb0  Window::DoMessage
+    bool BaseDoMessage(int);                   // 0x950bb0  Window::DoMessage
     __declspec(noinline) void Refresh(char);   // 0x969e30
     void ResetLayout();                        // 0x969ed0
-    int  DoMessageProc(int);                   // 0x969f00
+    bool DoMessageProc(int);                   // 0x969f00 (retail returns via al, upper eax preserved)
     int  Scroll(int, int, char, int);          // 0x969f80
     int  Init();                               // 0x96a670
     void Clear();                              // 0x96ab30
@@ -174,7 +174,7 @@ void CW::ResetLayout()
 }
 
 // @ 0x00969f00
-int CW::DoMessageProc(int msg)
+bool CW::DoMessageProc(int msg)
 {
     if (*(int*)(msg + 8) != (int)0x8ef0c8dd)
         return BaseDoMessage(msg);

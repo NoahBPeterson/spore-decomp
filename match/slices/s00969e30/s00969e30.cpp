@@ -18,10 +18,10 @@ struct Alloc {                                 // allocator sub-object at CW+0x2
 struct CW {
     void InvalidateLayout();                   // 0x9609b0  Window::InvalidateLayout
     void m_969d40();                           // 0x969d40
-    int  BaseDoMessage(int);                   // 0x950bb0  Window::DoMessage
+    bool BaseDoMessage(int);                   // 0x950bb0  Window::DoMessage
     __declspec(noinline) void Refresh(char);   // 0x969e30
     void ResetLayout();                        // 0x969ed0
-    int  DoMessageProc(int);                   // 0x969f00
+    bool DoMessageProc(int);                   // 0x969f00 (retail returns via al, upper eax preserved)
     int  Scroll(int, int, char, int);          // 0x969f80
     int  Init();                               // 0x96a670
     void LayoutLines();                        // 0x96a790
@@ -74,7 +74,7 @@ void* __cdecl DoFindNode(void* node, void** pkey, uint32_t)
 void CW::Refresh(char force)
 {
     if (*(int*)((char*)this + 0x864) != 0) {
-        float dx = ((*(float*)((char*)this + 0x94) - *(float*)((char*)this + 0x8c))
+        volatile float dx = ((*(float*)((char*)this + 0x94) - *(float*)((char*)this + 0x8c))
                   - *(float*)((char*)this + 0x850)) - *(float*)((char*)this + 0x858);
         int iVar2 = (int)dx;
         int iVar1 = *(int*)((char*)this + 0x228);
@@ -100,7 +100,7 @@ void CW::ResetLayout()
 }
 
 // @ 0x969f00
-int CW::DoMessageProc(int msg)
+bool CW::DoMessageProc(int msg)
 {
     if (*(int*)(msg + 8) != (int)0x8ef0c8dd)
         return BaseDoMessage(msg);

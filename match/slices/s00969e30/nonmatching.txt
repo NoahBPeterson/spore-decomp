@@ -2,8 +2,8 @@
 # but not byte-exact. Format: <va> <diff-count> COMPLETE <reason incl. equiv verdict>
 #
 # Pre-existing rows (migrated from the earlier partial pass):
-00969e30 120 COMPLETE ConsoleWindow scroll/extent refresh (FUN_00969e30); faithful; register allocation/scheduling differ (equiv WEAK 274 valid, 29.8% cov).
-00969f00 44  COMPLETE ConsoleWindow::DoMessageProc override; faithful; call-result accumulation scheduling differs (equiv WEAK 398 valid, 20.5% cov).
+00969e30 129 COMPLETE ConsoleWindow scroll/extent refresh (FUN_00969e30); faithful; register allocation/scheduling differ (equiv WEAK 274 valid, 29.8% cov, replay exact). Void-return ecx fix: retail reserves its 4-byte float spill slot with `push ecx` and restores it with `pop ecx`, so ecx at return is still the entry `this`; our first version ended with ecx = this+4 from the final vtable receiver `lea ecx,[esi+4]`. Declaring `dx` volatile forces the float through that stack slot and makes MSVC emit the same push/pop pair.
+00969f00 34  COMPLETE ConsoleWindow::DoMessageProc override; faithful; call-result accumulation scheduling differs (equiv WEAK 399 valid, 20.5% cov, replay exact). Return-width fix: retail ends the match path with `mov al,1`, preserving the upper eax bits (the entry `msg`), so the return type is bool, and the fallback `BaseDoMessage` is bool too (retail returns its eax with no int->bool normalization). Our `int` declarations forced `mov eax,1` / a setne conversion and returned 1 instead of 0x42440001; changing both to bool makes eax exact.
 00969f80 200 COMPLETE ConsoleWindow scroll-by; faithful; extended-precision float conversion / 4-arg thiscall layout differs (equiv UNSUPPORTED: 4-arg thiscall ABI).
 #
 # Batch rows (dec2 slice 19), all re-implemented to completeness this pass:
