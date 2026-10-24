@@ -188,7 +188,10 @@ void creature_body_instance_data::GroundGoal(vector_3* outPos, vector_4* outRot,
     float ex = ext.x * c->requested_scale;
     float ey = ext.y * c->requested_scale;
     float ez = ext.z * c->requested_scale;
-    float size = sqrtf(ex * ex + ey * ey + ez * ez) * 1.3f;
+    double sum = (double)ex * (double)ex;
+    sum = sum + (double)ey * (double)ey;
+    sum = sum + (double)ez * (double)ez;
+    float size = (float)((float)sqrt(sum) * 1.3f);
 
     vector_4 grot;
     if (size > local.z) {

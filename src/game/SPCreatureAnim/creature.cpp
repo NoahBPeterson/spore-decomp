@@ -2607,7 +2607,10 @@ void creature_body_instance_data_s009b_fc20::GroundGoal(checkerlib::vector_3_s00
     float ex = ext.x * c->requested_scale;
     float ey = ext.y * c->requested_scale;
     float ez = ext.z * c->requested_scale;
-    float size = sqrtf(ex * ex + ey * ey + ez * ez) * 1.3f;
+    double sum = (double)ex * (double)ex;
+    sum = sum + (double)ey * (double)ey;
+    sum = sum + (double)ez * (double)ez;
+    float size = (float)((float)sqrt(sum) * 1.3f);
 
     checkerlib::vector_4_s009b_fc20 grot;
     if (size > local.z) {
