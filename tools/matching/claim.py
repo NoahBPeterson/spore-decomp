@@ -11,7 +11,7 @@ sessions busy at 23:00, 5 at 03:00); with a shared queue a session that finishes
 stopping. Claims live in work/opencode/claims_<batch>.json (not work/batches/, which holds batches only), guarded by
 a lock file; `claim.py <batch> --status` prints them.
 """
-import fcntl, json, os, re, sys
+import fcntl, glob, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 W = lambda *p: os.path.join(ROOT, *p)
@@ -56,6 +56,22 @@ def unrecorded(entry):
                 va = (lambda v: (v[2:] if v.startswith("0x") else v).lstrip("0"))(parts[col].lower())
                 if f == "manifest.txt" or va not in fail:
                     seen.add(va)
+    asm = {v.lower().lstrip("0") for v in entry.get("asm", [])}
+    if asm:
+        # an "asm" VA is settled once its source is no longer a transcription (asm_audit) or the session logged
+        # "<va> ASM-KEPT <why>"; older fixlog lines for the VA do not count
+        import asm_audit
+        still = set()
+        for src in glob.glob(W("match/slices", entry["id"], "*.c*")):
+            still |= {v.lstrip("0") for v in asm_audit.transcribed(src)}
+        kept = set()
+        fl = W("work/match", "scratch_%s_fixlog.txt" % entry["id"])
+        if os.path.exists(fl):
+            for l in open(fl, errors="replace"):
+                p = l.split()
+                if len(p) >= 2 and p[1].upper().startswith("ASM-KEPT"):
+                    kept.add((p[0][2:] if p[0].lower().startswith("0x") else p[0]).lower().lstrip("0"))
+        seen = (seen - asm) | {v for v in asm if v not in still or v in kept}
     return sorted(want - seen)
 
 
@@ -82,7 +98,8 @@ def print_fails(e):
     """Equivalence FAILs folded into a rework entry: the replay command, and the src/game unit holding a migrated copy."""
     for v in e.get("asm", []):
         print("inline assembly %s: its source is an __asm/_emit transcription, which is forbidden. Rewrite it as plain "
-              "C++ (check it with chk.py and equiv.py), or log \"%s FAIL-KEPT <why>\" if you cannot" % (v, v))
+              "C++ (check it with chk.py and equiv.py), or log \"%s ASM-KEPT <why>\" in work/match/scratch_%s_fixlog.txt if you "
+              "cannot" % (v, v, e["id"]))
     for v in e.get("fail", []):
         print("equivalence FAIL %s: replay with .venv/bin/python tools/difftest/equiv.py %s %s --replay "
               "work/difftest/fail_inputs/%s_%s.pkl -v" % (v, e["id"], v, e["id"], v))
