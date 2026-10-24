@@ -1,4 +1,4 @@
-// slice s005ef440 -- SP::cSPPaletteItemUIPlannerEdit (planner palette item: ctor/dtor, Init,
+// slice s005ef440 -- SP::cSPPaletteItemUIPlannerEdit_s005e_f440 (planner palette item: ctor/dtor, Init,
 // SetLocked, HandleMessage, DoMessage, OffRollover), SP::SPSpineCollisionFilter (a copy of
 // Havok's hkpGroupFilter: ctor/dtor, isCollisionEnabled overloads, layer helpers),
 // SP::cSPSwatchManager::Init and three eastl::map<> helpers instantiated in the same TU.
@@ -285,17 +285,17 @@ class cPlannerEditMessage : public EA::Messaging::IHandler, public EA::RefCountV
   uint32_t mSlotID;                    // +0x1c
 };
 
-class cSPPaletteItemUIPlannerEdit : public cSPPaletteItemUI, public EA::Messaging::IHandlerRC {
+class cSPPaletteItemUIPlannerEdit_s005e_f440 : public cSPPaletteItemUI, public EA::Messaging::IHandlerRC {
  public:
-  cSPPaletteItemUIPlannerEdit();
-  ~cSPPaletteItemUIPlannerEdit();
+  cSPPaletteItemUIPlannerEdit_s005e_f440();
+  ~cSPPaletteItemUIPlannerEdit_s005e_f440();
   virtual void Init(cSPPaletteItem* item, IWindow* window, int a, cSPPaletteInfo* info);
   virtual void OffRollover();
   virtual bool DoMessage(IWindow* window, const Message& message);
   virtual bool HandleMessage(uint32_t messageID, void* message);
   virtual int AddRef();
   virtual int Release();
-  void SetLocked(bool locked);
+  void SetLocked(bool locked);  // 0x005ef470
 
   AutoRefCount<IWindow> mWinSwatch;          // +0x24
   AutoRefCount<IWindow> mWinRoot;            // +0x28
@@ -767,14 +767,14 @@ void* cSPSwatchManager::LoadCreature(uint32_t a, uint32_t b) {
 // ---------------------------------------------------------------------------------------------
 namespace SP {
 // @ 0x005EF440
-void cSPPaletteItemUIPlannerEdit::OffRollover() {
+void cSPPaletteItemUIPlannerEdit_s005e_f440::OffRollover() {
   if (cSPPaletteItemRollover* rollover = SwatchManager()->GetSwatchRollover())
     rollover->Hide();
   cSPPaletteItemUI::OffRollover();
 }
 
 // @ 0x005EF470
-void cSPPaletteItemUIPlannerEdit::SetLocked(bool locked) {
+void cSPPaletteItemUIPlannerEdit_s005e_f440::SetLocked(bool locked) {
   if (locked) {
     if (mWinLockedIcon)
       mWinLockedIcon->SetFlag(1, true);
@@ -806,7 +806,7 @@ void cSPPaletteItemUIPlannerEdit::SetLocked(bool locked) {
 }
 
 // @ 0x005EF590
-bool cSPPaletteItemUIPlannerEdit::HandleMessage(uint32_t messageID, void* message) {
+bool cSPPaletteItemUIPlannerEdit_s005e_f440::HandleMessage(uint32_t messageID, void* message) {
   if (messageID == 0x53850baf && mSwatch) {
     cPlannerEditMessage* msg = (cPlannerEditMessage*)message;
     if (msg->mSlotID == mSlotID) {
@@ -830,18 +830,18 @@ bool cSPPaletteItemUIPlannerEdit::HandleMessage(uint32_t messageID, void* messag
 }
 
 // @ 0x005EF6B0
-cSPPaletteItemUIPlannerEdit::cSPPaletteItemUIPlannerEdit()
+cSPPaletteItemUIPlannerEdit_s005e_f440::cSPPaletteItemUIPlannerEdit_s005e_f440()
     : mInfo(), mID(0xffffffff), mSlotID(0) {
   mInterfaceID = (eItemUIInterfaceID)0xb4e4f69b;
 }
 
 // @ 0x005EF760
-cSPPaletteItemUIPlannerEdit::~cSPPaletteItemUIPlannerEdit() {}
+cSPPaletteItemUIPlannerEdit_s005e_f440::~cSPPaletteItemUIPlannerEdit_s005e_f440() {}
 
 static const uint32_t kPlannerEditMessages[] = {0x53850baf};
 
 // @ 0x005EF850
-void cSPPaletteItemUIPlannerEdit::Init(cSPPaletteItem* item, IWindow* window, int a,
+void cSPPaletteItemUIPlannerEdit_s005e_f440::Init(cSPPaletteItem* item, IWindow* window, int a,
                                        cSPPaletteInfo* info) {
   if (!item || !window)
     return;
@@ -916,7 +916,7 @@ done:
 }
 
 // @ 0x005EFCB0
-bool cSPPaletteItemUIPlannerEdit::DoMessage(IWindow* window, const Message& message) {
+bool cSPPaletteItemUIPlannerEdit_s005e_f440::DoMessage(IWindow* window, const Message& message) {
   if (message.mEventType == 0x287259f6 && message.mControlID == 0x5384f7b5 && mSwatch) {
     cPlannerEditMessage msg;
     msg.mModelKey = mModelKey;

@@ -1,1 +1,1 @@
-005ef850  6  virtual SetCaption slot address computed early (sub ebp,-0x80) vs [ebp+0x80]; all else exact
+005ef850  6  virtual SetCaption slot address computed early (sub ebp,-0x80) vs [ebp+0x80]; all else exact; renamed class to cSPPaletteItemUIPlannerEdit_s005e_f440 so the SetLocked call binds to 005ef470 (was resolving to s005ee480's 005ef250); equiv WEAK, no mismatch (193 valid inputs, 46.1% coverage); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

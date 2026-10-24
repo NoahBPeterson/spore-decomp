@@ -12,9 +12,9 @@ slices/s005ef440/s005ef440.cpp  ?DoInsertValueImpl@?$rbtree@V?$AutoRefCount@VcSP
 slices/s005ef440/s005ef440.cpp  ?erase@?$rbtree@V?$AutoRefCount@VcSPSwatch@SP@@@EA@@M@eastl@@QAEIABV?$AutoRefCount@VcSPSwatch@SP@@@EA@@@Z  005f05e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005ef440/s005ef440.cpp  ?Init@cSPSwatchManager@SP@@QAEXXZ  005f0140  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005ef440/s005ef440.cpp  ?LoadCreature@cSPSwatchManager@SP@@QAEPAXII@Z  005f0330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005ef440/s005ef440.cpp  ?OffRollover@cSPPaletteItemUIPlannerEdit@SP@@UAEXXZ  005ef440  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005ef440/s005ef440.cpp  ?SetLocked@cSPPaletteItemUIPlannerEdit@SP@@QAEX_N@Z  005ef470  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005ef440/s005ef440.cpp  ?HandleMessage@cSPPaletteItemUIPlannerEdit@SP@@UAE_NIPAX@Z  005ef590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005ef440/s005ef440.cpp  ??0cSPPaletteItemUIPlannerEdit@SP@@QAE@XZ  005ef6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005ef440/s005ef440.cpp  ??1cSPPaletteItemUIPlannerEdit@SP@@UAE@XZ  005ef760  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005ef440/s005ef440.cpp  ?DoMessage@cSPPaletteItemUIPlannerEdit@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABVMessage@45@@Z  005efcb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ef440/s005ef440.cpp  ?OffRollover@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAEXXZ  005ef440  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ef440/s005ef440.cpp  ?SetLocked@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@QAEX_N@Z  005ef470  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ef440/s005ef440.cpp  ?HandleMessage@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE_NIPAX@Z  005ef590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ef440/s005ef440.cpp  ??0cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@QAE@XZ  005ef6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ef440/s005ef440.cpp  ??1cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE@XZ  005ef760  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ef440/s005ef440.cpp  ?DoMessage@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABVMessage@45@@Z  005efcb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
