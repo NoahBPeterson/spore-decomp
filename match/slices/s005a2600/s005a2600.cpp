@@ -22,9 +22,16 @@ struct cLocalInputState {
 };
 
 extern void* sAppProperties;   // 0x015fd918
+extern float g_0150f2c8;       // 0x0150f2c8  0.1f  (pan/zoom step scale)
+extern float g_014853e0;       // 0x014853e0  4.0f
+extern float g_01485720;       // 0x01485720  1.0f  (_HK_REAL_ONE)
+extern float g_013f6a28;       // 0x013f6a28  -4.0f
+extern float g_015e6a6c[];     // 0x015e6a6c  fixed reference point handed to the viewer transform
+void __fastcall FUN_007c4180(void* viewer, int dummy, void* out, void* src);  // 0x007c4180 thiscall, ret 8
+void __fastcall FUN_007c4010(void* viewer, int dummy, unsigned* out);         // 0x007c4010 thiscall, ret 4
 struct cTerrainUI {
     char pad[0xe8 + 4];
-    __declspec(noinline) void FUN_005a2b30(int flag);       // 0x005a2b30
+    __declspec(noinline) void FUN_005a2b30(char flag);       // 0x005a2b30
     void ZoomBy(float factor);                              // 0x005a2200
     bool OnMouseDown(int a, float x, float y, int b);       // 0x005a2f20
     bool OnMouseWheel(float x, float y, int delta);         // 0x005a2f80
@@ -84,9 +91,9 @@ void cTerrainUI::Command(int cmd, float x, float y)
             FUN_005a2b30(0);
             return;
         }
-        *(float*)((char*)this + 0x30) = 0.1f * x + *(float*)((char*)this + 0x30);
+        *(float*)((char*)this + 0x30) = x * g_0150f2c8 + *(float*)((char*)this + 0x30);
         {
-            float v = *(float*)((char*)this + 0x34) - 0.1f * y;
+            float v = *(float*)((char*)this + 0x34) - y * g_0150f2c8;
             *(float*)((char*)this + 0x34) = v;
             if (v < *(float*)((char*)this + 0x60))
                 *(float*)((char*)this + 0x34) = *(float*)((char*)this + 0x60);
@@ -95,11 +102,11 @@ void cTerrainUI::Command(int cmd, float x, float y)
         }
         break;
     case 1:
-        *(float*)((char*)this + 0x3c) = x * 4.0f + *(float*)((char*)this + 0x3c);
-        *(float*)((char*)this + 0x40) = y * 4.0f + *(float*)((char*)this + 0x40);
+        *(float*)((char*)this + 0x3c) = x * g_014853e0 + *(float*)((char*)this + 0x3c);
+        *(float*)((char*)this + 0x40) = y * g_014853e0 + *(float*)((char*)this + 0x40);
         break;
     case 2: {
-        float f = (x * 4.0f + 1.0f) * *(float*)((char*)this + 0x38);
+        float f = (x * g_014853e0 + g_01485720) * *(float*)((char*)this + 0x38);
         float t = *(float*)((char*)this + 0x5c);
         *(float*)((char*)this + 0x38) = f;
         if (t < f || (t = *(float*)((char*)this + 0x58), f < t))
@@ -108,7 +115,7 @@ void cTerrainUI::Command(int cmd, float x, float y)
         break;
     }
     case 3: {
-        float f = (1.0f - y * 4.0f) * *(float*)((char*)this + 0x38);
+        float f = (g_01485720 - y * g_014853e0) * *(float*)((char*)this + 0x38);
         float t = *(float*)((char*)this + 0x5c);
         *(float*)((char*)this + 0x38) = f;
         if (t < f || (t = *(float*)((char*)this + 0x58), f < t))
@@ -119,7 +126,7 @@ void cTerrainUI::Command(int cmd, float x, float y)
     case 4:
         if (Abs(x) < Abs(y))
             x = y;
-        ZoomBy(x * -4.0f);
+        ZoomBy(x * g_013f6a28);
         break;
     default:
         break;
@@ -157,8 +164,15 @@ void cTransform::PreRotateX(float angle)
     mFlags |= 2;
     mModificationCount++;
     zAxis[0] = f3 * s + f4 * c;
-    zAxis[1] = f5 * s + f1 * c;
-    zAxis[2] = f6 * s + f2 * c;
+    {
+        // The original stages the last two stores through integer registers (it ends with
+        // zAxis[1]'s bits in eax and zAxis[2]'s in edx, which its LTCG callers observe).
+        union FI { float f; int i; } u1, u2;
+        u1.f = f5 * s + f1 * c;
+        u2.f = f6 * s + f2 * c;
+        *(int*)((char*)this + 0x30) = u1.i;
+        *(int*)((char*)this + 0x34) = u2.i;
+    }
 }
 
 }}  // namespace EA::Swarm
@@ -171,9 +185,28 @@ void FUN_005a2600(void* self)
 }
 
 // @ 0x005a2b30
-void cTerrainUI::FUN_005a2b30(int flag)
+void cTerrainUI::FUN_005a2b30(char flag)
 {
-    *(int volatile*)&flag = flag;
+    void* viewer = *(void**)((char*)this + 0xe8);
+    if (!viewer)
+        return;
+    float pt[4];
+    unsigned v[4];
+    FUN_007c4180(viewer, 0, pt, g_015e6a6c);
+    FUN_007c4010(viewer, 0, v);
+    int da = (int)v[2] - (int)v[0];
+    int db = (int)v[3] - (int)v[1];
+    // The original evaluates both atan2 operands in x87 extended precision and rounds once,
+    // when the float result is stored; use doubles (x87 under /arch:SSE) to match that rounding.
+    double ax = ((double)pt[0] + 1.0) * (double)da * 0.5 - (double)*(float*)((char*)this + 0xcc);
+    double ay = (1.0 - (double)pt[1]) * (double)db * 0.5 - (double)*(float*)((char*)this + 0xd0);
+    float r = (float)atan2(ax, ay);
+    if (flag != 0) {
+        *(float*)((char*)this + 0x94) = r;
+        *(float*)((char*)this + 0x98) = *(float*)((char*)this + 0x44);
+    } else {
+        *(float*)((char*)this + 0x30) = (r - *(float*)((char*)this + 0x94)) + *(float*)((char*)this + 0x98);
+    }
 }
 
 // @ 0x005a2ed0
