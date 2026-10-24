@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+00fa1650  369  complete; cTerrainSphere::GenerateImpostor, lazy RTT creation, four face-texture assignments and AddGeometryChangeMessage(0,0) reconstructed; descriptor array materialization/register allocation differs (ours 412 / orig 481); equiv PASS (201 valid, 80.4%); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00fa1840  311  complete; Rec20Vector::insert(pos,n,value), grow/tail-shift/fill paths reconstructed with the original external helpers; register allocation and helper spill slots differ (ours 492 / orig 489); equiv WEAK (187 valid, 42.9%); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

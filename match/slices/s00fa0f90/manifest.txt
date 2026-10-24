@@ -1,2 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00fa0f90/s00fa0f90.cpp  ?Initialize@cTerrainSphere@@QAE_N_N@Z  00fa0f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fa0f90/s00fa0f90.cpp  ?QuickSort16@@YAXPAUSortRec16@@0HUSortLess16@@@Z  00fa1a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fa0f90/s00fa0f90.cpp  ?DestroyImpostorRange@@YAPAXPAUImpostorRecord110@@00@Z  00fa1b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast

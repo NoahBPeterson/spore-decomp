@@ -11,7 +11,8 @@ extern "C" long __cdecl _InterlockedExchangeAdd(long volatile*, long);
 extern "C" long __cdecl _InterlockedIncrement(long volatile*);
 #pragma intrinsic(_InterlockedExchange, _InterlockedExchangeAdd, _InterlockedIncrement)
 
-void* __cdecl operator new(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+void* __cdecl operator new(unsigned size, const char* name, int a, int b,
+                           const char* file, int line);                  // 0x00f473a0
 
 // ---- small helper types ----------------------------------------------------------------
 
@@ -167,8 +168,32 @@ struct cResourceSource {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
     virtual AtomicRefCounted* Get(uint32_t id, int a, int b);     // slot 8 (+0x20)
+    virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void* CreateTexture(void* source, uint32_t flags, int width, int height,
+                                int mip, int format, int a, int b); // slot 15 (+0x3c)
 };
 cResourceSource* GetResourceSource();   // 0x0067dd60
+
+struct cRenderTargetHandle {
+    uint32_t mRaster;                       // +0x00
+    uint32_t mRectId;                       // +0x04
+};
+
+struct cRenderManager {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual cRenderTargetHandle* CreateRenderTarget(cRenderTargetHandle* out,
+                                                    int width, int height,
+                                                    int format, int mip,
+                                                    int flags, int zero); // slot 4 (+0x10)
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+    virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12();
+    virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16();
+    virtual void v17();
+    virtual void InitializeRenderTarget(uint32_t raster, uint32_t rectId,
+                                        const char* name);            // slot 18 (+0x48)
+};
+cRenderManager* RenderManager();        // 0x0067dda0
 
 struct cDirectPropertyList {
     int GetIntProperty(uint32_t id);        // 0x006a2660
@@ -183,6 +208,7 @@ extern bool g_TerrainStaticsReady;              // 0x016c9e60
 extern uint32_t g_TerrainPoolParam;             // 0x016c9e74
 extern cDirectPropertyList* g_AppProperties;    // 0x015fd918
 extern uint32_t g_SharedResourceID;             // 0x015b1120
+extern const char kImpostorRenderTargetName[];  // 0x01490dfc
 
 // Intrusive-pointer fields assigned with the usual AddRef-new / Release-old protocol.
 template<class T> struct JobPtr {
@@ -231,10 +257,19 @@ struct SharedPtr {
     }
 };
 
+struct TextureRef {                        // 4-byte intrusive texture handle
+    void* mp;
+    void Set(void* texture);                // 0x00576650
+};
+
 struct cTerrainSphere {
     uint32_t pad0[2];
     uint32_t mHandlerBase;                  // +0x008 (IHandler subobject)
-    uint32_t pad0c[(0x2c - 0x0c) / 4];
+    uint32_t pad0c[(0x18 - 0x0c) / 4];
+    uint32_t mImpostorSource18;             // +0x018
+    uint32_t mImpostorSource1C;             // +0x01c
+    uint32_t mImpostorFlags20;              // +0x020
+    uint32_t pad24[(0x2c - 0x24) / 4];
     cTerrainPlanetData* mpPlanet;           // +0x02c
     uint32_t pad30[(0x118 - 0x30) / 4];
     cTerrainSphereQuad* mQuadsA[6];         // +0x118
@@ -258,10 +293,18 @@ struct cTerrainSphere {
     bool mFlag4F4;                          // +0x4f4
     uint32_t pad4f8[(0x820 - 0x4f8) / 4];
     Vec4 mVecC[6];                          // +0x820
-    uint32_t pad880[(0x8a0 - 0x880) / 4];
+    uint32_t pad880;                        // +0x880
+    TextureRef mpImpostorDiffuseTexture;    // +0x884
+    TextureRef mpImpostorSpecTexture;       // +0x888
+    TextureRef mpImpostorNormalTexture;     // +0x88c
+    TextureRef mpImpostorScatterTexture;    // +0x890
+    uint32_t pad894;                        // +0x894
+    void* mpImpostorRaster;                 // +0x898
+    uint32_t mImpostorRectId;               // +0x89c
     JobPtr<cITerrainGenerationStep> mpImpostorJob;   // +0x8a0
     int mImpostorJobState;                  // +0x8a4
-    uint32_t pad8a8[(0x8e4 - 0x8a8) / 4];
+    uint32_t mImpostorFace;                 // +0x8a8
+    uint32_t pad8ac[(0x8e4 - 0x8ac) / 4];
     cViewer* mpViewer;                      // +0x8e4
     uint32_t pad8e8[(0x924 - 0x8e8) / 4];
     cDecalManagerImpl* mpDecalManager;      // +0x924
@@ -274,7 +317,54 @@ struct cTerrainSphere {
     void InitializeVBInfoArray();           // 0x00f99680
     void InitFace(int face);                // 0x00f9c010
     void InitStatics();                     // 0x00fa0400
+    void AddGeometryChangeMessage(int a, int b);    // 0x00fa0560
+    void GenerateImpostor(unsigned int face);       // 0x00fa1650
 };
+
+struct ImpostorTextureDesc {
+    uint32_t mSource;                       // +0x00
+    uint32_t mProperty;                     // +0x04
+    uint32_t mFlags;                        // +0x08
+};
+
+// @ 0x00fa1650
+void cTerrainSphere::GenerateImpostor(unsigned int face)
+{
+    if (mImpostorRectId == 0xffffffffu) {
+        cRenderTargetHandle target;
+        RenderManager()->CreateRenderTarget(&target, 0x80, 0x80, 0x15, 1, -1, 0);
+        mpImpostorRaster = (void*)target.mRaster;
+        mImpostorRectId = target.mRectId;
+        RenderManager()->InitializeRenderTarget(target.mRaster, target.mRectId,
+                                                kImpostorRenderTargetName);
+        if (mImpostorRectId == 0xffffffffu)
+            return;
+    }
+
+    mImpostorFace = face;
+
+    ImpostorTextureDesc desc[4] = {
+        { mImpostorSource18, 0x2f4e681c, (mImpostorFlags20 & 0xe6ff28ff) | 0x6002800 },
+        { mImpostorSource18, 0x2f4e681c, (mImpostorFlags20 & 0xe0ff28ff) | 0x2800 },
+        { mImpostorSource18, 0x2f4e681c, (mImpostorFlags20 & 0xe4ff28ff) | 0x4002800 },
+        { mImpostorSource18, 0x2f4e681c, (mImpostorFlags20 & 0xe5ff28ff) | 0x5002800 },
+    };
+
+    cResourceSource* source = GetResourceSource();
+    mpImpostorDiffuseTexture.Set(source->CreateTexture((void*)desc[1].mSource, desc[1].mFlags,
+                                                       0x80, 0x80, 1, 0x1008, 0x15, 0));
+    source = GetResourceSource();
+    mpImpostorSpecTexture.Set(source->CreateTexture((void*)desc[2].mSource, desc[2].mFlags,
+                                                    0x80, 0x80, 1, 0x1008, 0x15, 0));
+    source = GetResourceSource();
+    mpImpostorNormalTexture.Set(source->CreateTexture((void*)desc[3].mSource, desc[3].mFlags,
+                                                      0x80, 0x80, 1, 0x1008, 0x15, 0));
+    source = GetResourceSource();
+    mpImpostorScatterTexture.Set(source->CreateTexture((void*)desc[0].mSource, desc[0].mFlags,
+                                                       0x20, 0x20, 1, 0x1008, 0x15, 0));
+
+    AddGeometryChangeMessage(0, 0);
+}
 
 // ---- the function ----------------------------------------------------------------------
 
@@ -358,4 +448,164 @@ bool cTerrainSphere::Initialize(bool createWeather)
 
     mpShared = GetResourceSource()->Get(g_SharedResourceID, 0, 0);
     return true;
+}
+
+// ---- shared helpers used by the terrain sphere's impostor scratch data ------------------------
+
+void __cdecl EastlDeallocate(void* p);          // 0x00f47380
+
+// A 0x110-byte record with its primary allocation at +0 and an embedded alternative buffer at +0x10.
+struct ImpostorRecord110 {
+    void* mpData;                               // +0x000
+    uint32_t mPad04[3];                         // +0x004
+    void* mpInline;                             // +0x010
+    uint32_t mPad14[(0x110 - 0x014) / 4];       // +0x014
+};
+
+// @ 0x00fa1b10
+void* __cdecl DestroyImpostorRange(ImpostorRecord110* first, ImpostorRecord110* last,
+                                   ImpostorRecord110* out)
+{
+    if (first != last) {
+        do {
+            void* p = first->mpData;
+            if (p != 0 && p != first->mpInline)
+                EastlDeallocate(p);
+            ++first;
+            ++out;
+        } while (first != last);
+    }
+    return out;
+}
+
+// ---- vector<Rec20> insert(count) --------------------------------------------------------------
+struct Rec20 {
+    float w0;                                   // +0x00
+    float w1;                                   // +0x04
+    float w2;                                   // +0x08
+    float w3;                                   // +0x0c
+    float w4;                                   // +0x10
+    Rec20() {}
+    Rec20(const Rec20& other)
+    {
+        w0 = other.w0;
+        w1 = other.w1;
+        w2 = other.w2;
+        w3 = other.w3;
+        w4 = other.w4;
+    }
+};
+
+extern const char kAllocTagSimulator[];         // 0x013f09b4
+extern const char kEastlAllocFile[];            // 0x013ebb38
+
+void __cdecl CopyUninitialized20(Rec20*& out, Rec20* first, Rec20* last,
+                                 Rec20* dest, Rec20* position);                          // 0x00f9f8f0
+void __cdecl FillCount20(Rec20* dest, unsigned count, const Rec20* value);               // 0x00f9aee0
+void __cdecl CopyBackward20(Rec20* first, Rec20* last, Rec20* dest);                     // 0x00c50ad0
+void __cdecl FillRange20(Rec20* first, Rec20* last, const Rec20* value);                 // 0x00f96e70
+Rec20* __cdecl Copy20(Rec20* first, Rec20* last, Rec20* dest);                           // 0x00f9b050
+
+struct Rec20Vector {
+    Rec20* begin;                               // +0x00
+    Rec20* end;                                 // +0x04
+    Rec20* cap;                                 // +0x08
+    uint32_t mPad0C;                            // +0x0c
+    Rec20 mInline;                              // +0x10
+    void insert(Rec20* pos, unsigned count, Rec20* value);
+};
+
+// @ 0x00fa1840
+void Rec20Vector::insert(Rec20* pos, unsigned count, Rec20* value)
+{
+    if (count <= (unsigned)(cap - end)) {
+        if (count > 0) {
+            const Rec20 temp(*value);
+            const unsigned after = (unsigned)(end - pos);
+            Rec20* const oldEnd = end;
+            if (count < after) {
+                CopyUninitialized20(value, oldEnd - count, oldEnd, oldEnd, pos);
+                end += count;
+                CopyBackward20(pos, oldEnd - count, oldEnd);
+                FillRange20(pos, pos + count, &temp);
+            } else {
+                FillCount20(oldEnd, count - after, &temp);
+                end += count - after;
+                CopyUninitialized20(pos, pos, oldEnd, end, pos);
+                end += after;
+                FillRange20(pos, oldEnd, &temp);
+            }
+        }
+    } else {
+        const unsigned oldSize = (unsigned)(end - begin);
+        const unsigned grow = oldSize > 0 ? 2 * oldSize : 1;
+        const unsigned newCap = grow > oldSize + count ? grow : oldSize + count;
+
+        Rec20* const newBegin = newCap != 0
+            ? (Rec20*)operator new(newCap * sizeof(Rec20), kAllocTagSimulator,
+                                   0, 0, kEastlAllocFile, 0xd1)
+            : 0;
+        Rec20* newEnd = Copy20(begin, pos, newBegin);
+        FillCount20(newEnd, count, value);
+        newEnd = Copy20(pos, end, newEnd + count);
+
+        if (begin != 0 && begin != &mInline)
+            EastlDeallocate(begin);
+        begin = newBegin;
+        end = newEnd;
+        cap = newBegin + newCap;
+    }
+}
+
+// ---- 16-byte sort records and the eastl introsort helpers ------------------------------------
+struct SortRec16 {
+    uint32_t w0;                                // +0x00
+    uint32_t w1;                                // +0x04
+    uint32_t key;                               // +0x08
+    uint32_t w3;                                // +0x0c
+};
+
+struct SortLess16 {
+    uint32_t mPad;
+    bool operator()(const SortRec16& a, const SortRec16& b) const
+    {
+        return a.key < b.key;
+    }
+};
+
+SortRec16* __cdecl PartitionElem16(SortRec16* first, SortRec16* last, SortRec16 pivot,
+                                   SortLess16 compare);          // 0x00fa0670
+void __cdecl SortElem16Pass(SortRec16* first, SortRec16* last, SortRec16* end,
+                            SortLess16 compare);                 // 0x00fa06e0
+
+template <typename It, typename Compare>
+inline It MedianElem16(It a, It b, It c, Compare compare)
+{
+    if (compare(*a, *b)) {
+        if (compare(*b, *c))
+            return b;
+        if (compare(*a, *c))
+            return c;
+        return a;
+    }
+    if (compare(*a, *c))
+        return a;
+    if (compare(*b, *c))
+        return c;
+    return b;
+}
+
+// @ 0x00fa1a30
+void __cdecl QuickSort16(SortRec16* first, SortRec16* last, int depth, SortLess16 compare)
+{
+    while ((last - first) > 28 && depth > 0) {
+        SortRec16* const cut = PartitionElem16(
+            first, last,
+            *MedianElem16(first, first + (last - first) / 2, last - 1, compare),
+            compare);
+        QuickSort16(cut, last, --depth, compare);
+        last = cut;
+    }
+    if (depth == 0)
+        SortElem16Pass(first, last, last, compare);
 }
