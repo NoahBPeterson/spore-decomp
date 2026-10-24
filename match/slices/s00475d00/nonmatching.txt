@@ -1,12 +1,12 @@
 00475d00 - complete source; vector<AutoRefCount,4>::erase, NOT byte-exact (loop/frame differs)
 00475da0 - complete source; vector<Elem29c,4>::erase, NOT byte-exact (move helper inline shape differs)
 00475ef0 - complete source; uninitialized_copy<12-byte>, element float fld/fstp shape not reproduced
-00476000 - complete source; vector<8-byte,4>::DoInsertValue, NOT byte-exact; equiv FAIL (memory mismatch)
+00476000 351 complete source; vector<8-byte,4>::DoInsertValue; behavior equivalent (WEAK, 131 valid, 91.5% cov, no mismatch at /Od /MD /Gy /EHsc /TP; coverage limited: the DoInsertValue 3-arg signature leaves the value pointer unparsed, so grown-buffer inputs fault; the fast path only re-derives the 2-byte head tail at some alignments); four out-of-line Copy specialisations replaced by hex-named copies (FUN_004763a0/004554f0/00476950/0047c1c0/0047a9a0); NOT byte-exact
 00476290 - complete source; uninitialized_copy<8-byte 2-float>, eastl::copy inline shape not reproduced
 004763a0 - complete source; uninitialized_copy+destruct<8-byte>, NOT byte-exact
 00476440 - complete source; vector<8-byte,2>::DoInsertValue, NOT byte-exact; equiv UNSUPPORTED (0/114 valid inputs)
-00476680 - complete source; vector<16-byte,4>::DoInsertValue, NOT byte-exact; equiv FAIL (extra depth-1 call)
-00476950 - complete source; relocate+destruct<16-byte>, NOT byte-exact
+00476680 387 complete source; vector<16-byte,4>::DoInsertValue; fixed - the second range copy is a distinct helper 0x47c1c0 (the first is 0x476950, which is itself a wrapper that calls 0x47c1c0); worth flag - now WEAK 138 valid, 90.2% cov, no mismatch at /Od /MD /Gy /EHsc /TP; NOT byte-exact
+00476950 48 complete source; relocate+destruct<16-byte>; fixed - the copy half is the raw 16-byte loop 0x47c1c0 (the destructor sweep is non-writing); equiv PASS 311 valid, 100% cov at /Od /MD /Gy /EHsc /TP; NOT byte-exact
 004769b0 - complete source; fixed vector erase, NOT byte-exact
 00476a40 - complete source; vector<64-byte>::erase, NOT byte-exact; equiv WEAK (111 valid, 100% cov)
-00476ae0 - complete source; vector<Matrix44,4>::DoInsertValue, NOT byte-exact; equiv FAIL (memory mismatch)
+00476ae0 341 complete source; vector<Matrix44,4>::DoInsertValue; fixed - the element's out-of-line copy ctor 0x45dca0 (?Ctor@Matrix44@@QAEXPBX@Z) is called for placement-new at both sites, and the aliasing guard walks value back past position; WEAK 128 valid, 45.3% cov, no mismatch at /Od /MD /Gy /EHsc /TP (coverage limited: grown-buffer inputs need a valid allocator the pool parser does not synthesise); NOT byte-exact
