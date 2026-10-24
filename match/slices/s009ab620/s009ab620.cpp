@@ -8,6 +8,8 @@ extern "C" float sqrtf(float);
 extern float g_colorScale;      // 0x0166c0d8
 // Baked-animation id generator.
 extern uint32_t g_bakedAnimIdCounter;   // 0x0166c0c8
+// Non-zero selects the random frame-sampling eviction cursor (see FUN_009abbb0).
+extern int g_bakedAnimEvictSampling;    // 0x01550a98
 
 namespace nSPCreatureAnim {
 
@@ -192,7 +194,7 @@ extern "C" void __fastcall FUN_009ae1c0(void* p);   // release baked_animation
 extern "C" void __fastcall FUN_009c4cc0(void* p);   // creature_instance_data::Release
 extern "C" void __fastcall FUN_009c4d10(void* p);   // creature_instance_data::Clear-ish
 extern "C" void __fastcall FUN_009a3080(void* p);   // animation_instance_data teardown
-extern "C" void* RBTreeIncrement(const nSPCreatureAnim::rbtree_node_base* pNode);
+extern "C" void* RBTreeIncrement(const nSPCreatureAnim::rbtree_node_base* pNode);   // 0x00921580
 extern "C" void RBTreeErase(nSPCreatureAnim::rbtree_node_base* pNode,
                             nSPCreatureAnim::rbtree_node_base* pAnchor);
 struct MgrHelper {
@@ -274,8 +276,14 @@ void __fastcall DestroyBakedAnimManager(nSPCreatureAnim::baked_anim_manager* sel
 // @ 0x009AB710  PARTIAL
 // Removes one entry from mSpeciesInstances keyed by the node inside *param_2, and (when the
 // per-species instance list becomes empty) drops the species' baked-animation cache entries.
-void __fastcall RemoveSpeciesEntry(void* self, void* ppNode, uint32_t id) {
-  (void)self; (void)ppNode; (void)id;
+// __thiscall (ecx = the manager) with two stack arguments, callee-clean (ret 8): modelled as
+// __fastcall with an unused EDX filler.  Its eax is whatever the body last computed, so callers
+// that leak eax hand it through.
+void* __fastcall RemoveSpeciesEntry(void* self, void* edxUnused, void* ppNode, uint32_t id);
+
+__declspec(noinline) void* __fastcall RemoveSpeciesEntry(void* self, void* edxUnused, void* ppNode, uint32_t id) {
+  (void)self; (void)edxUnused; (void)ppNode; (void)id;
+  return 0;
 }
 
 // @ 0x009AB7C0  PARTIAL
@@ -300,9 +308,58 @@ uint32_t __fastcall FUN_009aba80(void* self, void* key, uint32_t count) {
   return 0;
 }
 
-// @ 0x009ABBB0  PARTIAL
-// Advances an eviction cursor on a baked cache node and evicts it when it becomes dirty/exhausted.
-void __fastcall FUN_009abbb0(void* self) { (void)self; }
+// @ 0x009ABBB0
+// Eviction-cursor advance for one mBakedAnimCache node.  Retail first bails out when the node's
+// animation is already at the sampled end (val.mpBaked->field_04 == mpData->field_10).  With the
+// sampling global off it simply bumps the node cursor (wrapping at the frame range) and hands the
+// cursor value to RemoveSpeciesEntry; with it on it derives a frame index from a van-der-Corput
+// style radical inverse of the cursor, scaled to [0, frameRange-1], then retries while the picked
+// frame's first byte has bit 0 set.  __thiscall with one stack argument (ret 4); eax is left at
+// whatever the last step produced, so the routine is declared to return it.
+void* __fastcall FUN_009abbb0(void* self, void* edxUnused, void** ppNode) {
+    using namespace nSPCreatureAnim;
+    baked_cache_node* node = (baked_cache_node*)*ppNode;
+    baked_animation* anim = (baked_animation*)node->val.mpBaked;
+    uint32_t end = anim->mpData ? *(uint32_t*)((char*)anim->mpData + 0x10) : 0;
+    if (anim->field_04 == end)
+        return *ppNode;
+    if (g_bakedAnimEvictSampling == 0) {
+        uint32_t cur = node->val.mField8;
+        node->val.mField8 = cur + 1;
+        uint32_t e = anim->mpData ? *(uint32_t*)((char*)anim->mpData + 0x10) : 0;
+        if (node->val.mField8 >= e)
+            node->val.mField8 = 0;
+        return RemoveSpeciesEntry(self, 0, ppNode, cur);
+    }
+    for (;;) {
+        node = (baked_cache_node*)*ppNode;
+        uint32_t cur = node->val.mField8;
+        int bits = 0;
+        for (uint32_t x = cur; x != 0; x >>= 1)
+            bits++;
+        uint32_t rem = cur % (1u << ((bits - 1) & 31));
+        anim = (baked_animation*)node->val.mpBaked;
+        uint32_t cnt = anim->mpData ? *(uint32_t*)((char*)anim->mpData + 0x10) : 0;
+        long double v = (long double)(uint32_t)(2 * rem + 1) / (long double)(int)(1u << (bits & 31));
+        v = v * (long double)(uint32_t)(cnt - 1) + 0.5L;
+        float f = (float)v;
+        // Retail takes (int)floor(f), compiled inline as cvtss2si + "if (f < (float)r) r--";
+        // values >= 2^31 keep cvtss2si's 0x80000000 result (MSVC's x87 __ftol2 helper would
+        // instead return the low dword of a 64-bit result).
+        int idx;
+        if (f >= 2147483648.0f) {
+            idx = (int)0x80000000u;
+        } else {
+            idx = (int)f;
+            if ((float)idx > f)
+                idx--;
+        }
+        node->val.mField8 = node->val.mField8 + 1;
+        void* frame = anim->GetFrame(idx);
+        if ((*(unsigned char*)frame & 1) == 0)
+            return RemoveSpeciesEntry(self, 0, ppNode, (uint32_t)idx);
+    }
+}
 
 // @ 0x009ABD10  PARTIAL
 // Creates (or fetches) the creature_instance_data (0x1930 bytes, "Anim/bam/new_cid") for the
@@ -318,10 +375,97 @@ void __fastcall FUN_009abe90(void* self, void* key, void* p3, void* p4, void* p5
   (void)self; (void)key; (void)p3; (void)p4; (void)p5;
 }
 
-// @ 0x009AC130  PARTIAL
-// RestartTimer: walks mSpeciesInstances under an EA::LimitStopwatch, advancing each entry's
-// eviction cursor (FUN_009abbb0) until the time budget expires.
-bool __fastcall RestartTimer(void* self, float seconds) {
-  (void)self; (void)seconds;
-  return false;
+// --- EA::LimitStopwatch and the eastl map key helpers used by RestartTimer ---
+namespace EA {
+struct Stopwatch {
+  int64_t mnStartTime;      // +0x00
+  int64_t mnElapsedTime;    // +0x08
+  int32_t mnUnits;          // +0x10
+  float mfUnitsToSeconds;   // +0x14
+};
+struct LimitStopwatch : Stopwatch {
+  int64_t mnEndTime;        // +0x18  QPC tick deadline
+};
+}  // namespace EA
+
+union LARGE_INTEGER_ {
+  struct { uint32_t LowPart; int32_t HighPart; };
+  int64_t QuadPart;
+};
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(LARGE_INTEGER_* t);
+
+// EA::Stopwatch::Stopwatch(int units, bool start) - __thiscall (ecx = this, ret 8).
+extern "C" void __fastcall FUN_0093a560(void* self, void* edxUnused, int units, int start);
+// EA::LimitStopwatch::SetTimeLimit(unsigned limit, bool restart) - __thiscall (ret 8).
+extern "C" void __fastcall FUN_0093a480(void* self, void* edxUnused, uint32_t limit, int restart);
+// eastl::map::lower_bound(key): writes the first node >= key into *out (ecx = map, ret 8).
+extern "C" void __fastcall FUN_009aa500(void* map, void* edxUnused, void** out, const void* key);
+// baked_anim_cache_key::operator=(const key&) (ecx = destination, ret 4).
+extern "C" void __fastcall FUN_009aa770(void* lhs, void* edxUnused, const void* rhs);
+
+// @ 0x009AC130
+// RestartTimer: walks mBakedAnimCache from mLastUpdatedKey under an EA::LimitStopwatch,
+// advancing each entry's eviction cursor (FUN_009abbb0) until the time budget expires or a
+// full pass makes no change.  __thiscall with one float stack argument (ret 4): modelled as
+// __fastcall with an unused EDX filler.
+bool __fastcall RestartTimer(void* self, void* edxUnused, float seconds) {
+  (void)edxUnused;
+  using namespace nSPCreatureAnim;
+  baked_anim_manager* mgr = (baked_anim_manager*)self;
+
+  // The budget is rounded (fistp, round-half-to-even) to whole microseconds; SetTimeLimit only
+  // keeps the low 32 bits.
+  float usec = seconds * 1000000.0;
+  long double usecD = (long double)usec;
+  int64_t ticks = (int64_t)usecD;
+  long double frac = usecD - (long double)ticks;
+  if (frac >= 0.5)
+    ticks += (frac > 0.5 || (ticks & 1));
+  else if (frac <= -0.5)
+    ticks -= (frac < -0.5 || (ticks & 1));
+
+  EA::LimitStopwatch sw;
+  FUN_0093a560(&sw, 0, 3, 0);
+  FUN_0093a480(&sw, 0, (uint32_t)ticks, 1);
+
+  void* it;
+  FUN_009aa500(&mgr->mBakedAnimCache, 0, &it, &mgr->mLastUpdatedKey);
+  baked_cache_node* end = (baked_cache_node*)&mgr->mBakedAnimCache.mAnchor;
+  if (it == end)
+    it = mgr->mBakedAnimCache.mAnchor.mpNodeLeft;
+
+  char flag = 0;
+  void* first = it;
+  bool updated = false;
+  for (;;) {
+    if (it == end) {
+      flag = 1;
+      break;
+    }
+    baked_cache_node* node = (baked_cache_node*)it;
+    baked_animation* anim = (baked_animation*)node->val.mpBaked;
+    uint32_t endFrame = anim->mpData ? *(uint32_t*)((char*)anim->mpData + 0x10) : 0;
+    if (anim->field_04 != endFrame) {
+      FUN_009abbb0(self, 0, &it);
+      updated = true;
+    }
+    it = RBTreeIncrement((rbtree_node_base*)it);
+    if (it == end)
+      it = mgr->mBakedAnimCache.mAnchor.mpNodeLeft;
+    if (it == first && !updated) {
+      flag = 0;
+      break;
+    }
+    LARGE_INTEGER_ now;
+    QueryPerformanceCounter(&now);
+    updated = false;
+    int64_t left = sw.mnEndTime - now.QuadPart;
+    if (left < 0) {
+      flag = 1;
+      break;
+    }
+  }
+  if (it != end)
+    FUN_009aa770(&mgr->mLastUpdatedKey, 0, (char*)it + 0x10);
+  return flag != 0;
 }
