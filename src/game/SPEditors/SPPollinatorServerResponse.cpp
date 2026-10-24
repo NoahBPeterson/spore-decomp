@@ -860,19 +860,19 @@ void SP::Pollen::cServerResponse_s0061_4f20::SetupDict()
     HandlerPair_s0061_4f20 p;
     gStartHandlers.clear();
     gStartHandlers.reserve(2);
-    SetHandler(p, L"AssetIdList", &SP::Pollen::cServerResponse_s0061_4f20::Noop);
+    SetHandler(p, (const wchar_t*)0x013fc0ec, &SP::Pollen::cServerResponse_s0061_4f20::Noop);             // L"AssetIdList"
     gStartHandlers.insert(p);
-    SetHandler(p, L"PollinatorResponse", &SP::Pollen::cServerResponse_s0061_4f20::StartPollinatorResponse);
+    SetHandler(p, (const wchar_t*)0x013fc114, &SP::Pollen::cServerResponse_s0061_4f20::StartPollinatorResponse);   // L"PollinatorResponse"
     gStartHandlers.insert(p);
     gEndHandlers.clear();
     gEndHandlers.reserve(4);
-    SetHandler(p, L"Id", &SP::Pollen::cServerResponse_s0061_4f20::IDListElement);
+    SetHandler(p, (const wchar_t*)0x013fc0e4, &SP::Pollen::cServerResponse_s0061_4f20::IDListElement);    // L"Id"
     gEndHandlers.insert(p);
-    SetHandler(p, L"AssetIdList", &SP::Pollen::cServerResponse_s0061_4f20::Noop);
+    SetHandler(p, (const wchar_t*)0x013fc0ec, &SP::Pollen::cServerResponse_s0061_4f20::Noop);             // L"AssetIdList"
     gEndHandlers.insert(p);
-    SetHandler(p, L"PollinatorResponse", &SP::Pollen::cServerResponse_s0061_4f20::EndPollinatorResponse);
+    SetHandler(p, (const wchar_t*)0x013fc114, &SP::Pollen::cServerResponse_s0061_4f20::EndPollinatorResponse);   // L"PollinatorResponse"
     gEndHandlers.insert(p);
-    SetHandler(p, L"Status", &SP::Pollen::cServerResponse_s0061_4f20::GetStatus);
+    SetHandler(p, (const wchar_t*)0x013fc104, &SP::Pollen::cServerResponse_s0061_4f20::GetStatus);        // L"Status"
     gEndHandlers.insert(p);
     gXMLMemorySuite.malloc_fcn = (void* (*)(size_t))0x6abeb0;
     gXMLMemorySuite.realloc_fcn = (void* (*)(void*, size_t))0x900b10;
