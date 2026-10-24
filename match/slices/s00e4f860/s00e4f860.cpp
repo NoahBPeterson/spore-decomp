@@ -22,7 +22,7 @@ extern "C" {
   void      __cdecl FUN_007c4180(void*, void*);
   void      __cdecl FUN_00e82d50(void*, void*);
   void      __cdecl FUN_00809db0(void*, void*);
-  void*     __cdecl SP_ConfigManager();
+  void*     __cdecl SP_ConfigManager();   // 0x0067dd30
   void*     __cdecl SP_App();
   void*     __cdecl SP_MessageServer(); // 0x0067dcc0
   void*     __cdecl SP_CheatManager();
@@ -101,9 +101,9 @@ float FUN_00e503a0(int which) {
 // @ 0x00e507d0
 unsigned FUN_00e507d0(float a, float b) {
   float f = (a / b) * 2.0f;
-  int i = (int)f;
-  if (f < (float)i) i--;
-  return (unsigned)i & 1;
+  int i = _mm_cvt_ss2si(_mm_set_ss(f));
+  if (!(f >= (float)i)) i--;
+  return (unsigned)i & 0xffffff01u;
 }
 
 // @ 0x00e4fde0
@@ -158,13 +158,18 @@ bool FUN_00e50730() {
 }
 
 // ---------------------------------------------------------------- loops / tables
-struct cState16 { int f90; int level(); };
+struct cState16 { char mUnk00[0x90]; int mnLevel; int level(); };
 
 // @ 0x00e4fd80  (this in ECX)
 int cState16::level() {
-  switch (f90) {
-    default: return 5;
+  switch (mnLevel) {
+    case 0:  return 5;
     case 1:  return 6;
+    case 2:  return 5;
+    case 3:  return 5;
+    case 4:  return 5;
+    case 5:  return 5;
+    default: return 5;
   }
 }
 
@@ -223,14 +228,15 @@ void FUN_00e50750(int a, float* outx, float* outy) {
 // @ 0x00e50590
 void FUN_00e50590(int* list1, int* count, int* list2, int n2) {
   for (int i = 0; i < *count; ++i) {
-    int j = 0;
-    for (; j < n2; ++j)
-      if (list1[i] == list2[j]) break;
-    if (j == n2) {
-      list1[i] = list1[*count - 1];
-      --*count;
-      --i;
+    for (int j = 0; j < n2; ++j) {
+      if (list1[i] == list2[j])
+        goto next;
     }
+    list1[i] = list1[*count - 1];
+    --*count;
+    --i;
+next:
+    ;
   }
 }
 
@@ -360,17 +366,27 @@ void FUN_00e4fac0(char* self, int* state) {
   }
 }
 
+struct cUIMissionCardPanel16 {
+  bool HasMissionCard(void* mission);       // 0x00e15cd0
+  void RemoveMissionCard(void* mission);    // 0x00e17fb0
+  void SetupMissionCard(int, int, bool);    // 0x00e18200
+};
+
 // @ 0x00e4fe90  mission-card show/hide
 void FUN_00e4fe90(int idx, int mode) {
   char* p = (char*)0x16b3de8 + idx * 0x98;
   if (mode == 1 || (mode == 2 && idx != 3)) {
-    void* panel = FUN_00b3d400(p);
-    if (!(*(bool(__thiscall**)(void*, char*))((char*)Vt(panel) + 0x0))(panel, p))
-      FUN_00e18200(p, 1, 1, idx == 1);
+    cUIMissionCardPanel16* panel = (cUIMissionCardPanel16*)FUN_00b3d400(p);
+    if (!panel->HasMissionCard(p)) {
+      panel = (cUIMissionCardPanel16*)FUN_00b3d400(p);
+      panel->SetupMissionCard(1, 1, idx == 1);
+    }
   } else {
-    void* panel = FUN_00b3d400(p);
-    if ((*(bool(__thiscall**)(void*, char*))((char*)Vt(panel) + 0x0))(panel, p))
-      (*(void(__thiscall**)(void*, char*))((char*)Vt(panel) + 4))(panel, p);
+    cUIMissionCardPanel16* panel = (cUIMissionCardPanel16*)FUN_00b3d400(p);
+    if (panel->HasMissionCard(p)) {
+      panel = (cUIMissionCardPanel16*)FUN_00b3d400(p);
+      panel->RemoveMissionCard(p);
+    }
   }
 }
 
@@ -422,15 +438,19 @@ void FUN_00e501f0() {
 }
 
 // @ 0x00e50450
-void FUN_00e50450(int* param) {
-  int local[3];
-  local[0] = (int)param;
-  local[1] = 0xb1b104;
-  local[2] = 0x3629f036;
+void FUN_00e50450(int* param, void* value) {
+  struct LookupKey {
+    void* mpParam;   // +0x00
+    int   mnTag1;    // +0x04
+    int   mnTag2;    // +0x08
+  } local;
+  local.mpParam = param;
+  local.mnTag1 = 0xb1b104;
+  local.mnTag2 = 0x3629f036;
   void* cfg = SP_ConfigManager();
   int r = (*(int(__thiscall**)(void*, int))((char*)Vt(cfg) + 0x30))(cfg, 0x4ea96cb);
-  FUN_00e82d50(local, param);
-  if (r == 0 && param != 0) (*(void(__thiscall**)(int*))((char*)Vt(param) + 0))(param);
+  FUN_00e82d50(&local, value);
+  if (r == 0 && value != 0) (*(void(__thiscall**)(void*))((char*)Vt(value) + 0))(value);
 }
 
 // @ 0x00e504b0
@@ -453,7 +473,7 @@ float FUN_00e50220(float t, float* cp) {
   float a = cp[0];
   if (a == -1.0f) {
     if (cp[3] == -1.0f) return 1.0f;
-    float r = FUN_01041cd0(a, cp[3], t);
+    float r = FUN_01041cd0(cp[2], cp[3], t);
     if (r < 0.0f) r = 0.0f;
     if (r > 1.0f) r = 1.0f;
     return 1.0f - r;
