@@ -1,9 +1,2 @@
-0075eed0  0  large elem-array copy/construct wrapper with EH; not reconstructed
-0075ef80  0  large range construct (allocator aware) with EH; not reconstructed
-0075f030  0  very large (946 B) render-property registration; not reconstructed
-0075f510  0  large AddPostRenderJob (EH, list insert); not reconstructed
-0075f640  0  large AddPreRenderJob (EH, list insert); not reconstructed
-0075f7e0  0  render-job-list destructor (EH); not reconstructed
-0075f960  0  large render-job-list constructor (EH); not reconstructed
-0075fc70  0  large EASTL insert-n/erase with EH; not reconstructed
-0075fe50  0  large EASTL resize/erase with EH; not reconstructed
+0075f030  946  PARTIAL: SP::cRenderer::Start reconstructed only to a stub; the property-block reads (cDirectPropertyList vtable +0x1c/+0x14, EA::Variant<bool> set/destruct, cPropertyList::GetDescription over 6 packed flag bytes), the rw::graphics::Device startup handshake (FUN_011f8110/340/240/250/260, Device::StartInternal over the 0x3c-byte parameter block) and the shader/stat setup are unresolved -- needs the SP::cDirectPropertyList, EA::Variant and rw::graphics::Device APIs plus ~10 globals (DAT_015d07c0/c4, the _m_parameters_Device_graphics param block)
+0075f960  527  PARTIAL: SP::cRenderer::cRenderer reconstructed only to a stub; a full-retail-layout reconstruction is needed (vtables at +0/+4, mMutex ctor at +0x28, mScreenInfo, mViewers[4], mLayers/mFrameLayers eastl::fixed_vector<20,32,4,0,1> inline-buffer setup, mFrameViewers[4], EA::Stopwatch at mLastFrameMS, mRenderStats, mGamma, mShaderDataAppFlags, cShaderDataDebugPS + cPropertyInfo<float> ctor with _sAppProperties_SP_..., and the second-object fields) with exact member sizes/offsets that the ad-hoc structs here do not carry
