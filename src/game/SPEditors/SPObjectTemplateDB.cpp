@@ -3472,7 +3472,7 @@ namespace SP {
 void FUN_00564960(void* out, void* val);
 }
 namespace SP {
-void FUN_00562280(void* self, void* c);
+void __fastcall FUN_00562280(void* self, int dummy, void* vec, void* c);  // thiscall: FindMatching(&vec, c)
 }
 namespace SP {
 void FUN_0041e4d0(int n);
@@ -3481,7 +3481,12 @@ namespace SP {
 void FUN_00564fd0(void* p);
 }
 namespace SP {
-void FUN_00561cc0(void* self);
+void __fastcall FUN_00561cc0(void* self, int dummy);  // thiscall: no stack args
+}
+namespace SP {
+// thiscall form of the SimpleVector::erase helper used by the reworked s0055fc10 slots; the
+// cdecl stub declared for the s005628d0 block stays untouched for that slice's functions.
+void __fastcall eraseVec_004769b0(void* self, int dummy, void* first, void* last);  // 0x004769b0
 }
 // ---- items of slice s0055fc10 end
 
@@ -4365,8 +4370,9 @@ void FUN_0055fe60(void* this_, unsigned key, unsigned value)
 void SP::cSPObjectTemplateDB::slot_26()
 {
     void* this_ = this;
-    FUN_004769b0(*(void**)((char*)this_ + 0x64), *(void**)((char*)this_ + 0x68));
-    FUN_00561cc0(this_);
+    void* vec = (char*)this_ + 0x64;
+    eraseVec_004769b0(vec, 0, *(void**)vec, *((void**)vec + 1));
+    FUN_00561cc0(this_, 0);
 }
 
 // @ 0x00560880
@@ -4388,8 +4394,9 @@ namespace SP {
 bool EcxStubFc::FUN_005608d0(uint32_t* key, void* c)
 {
     void* this_ = this;
-    FUN_004769b0(*(void**)((char*)this_ + 0x144), *(void**)((char*)this_ + 0x148));
-    FUN_00562280((char*)this_ + 0x144, c);
+    void* vec = (char*)this_ + 0x144;
+    eraseVec_004769b0(vec, 0, *(void**)vec, *((void**)vec + 1));
+    FUN_00562280(this_, 0, vec, c);
     uint32_t* it = *(uint32_t**)((char*)this_ + 0x144);
     uint32_t* end = *(uint32_t**)((char*)this_ + 0x148);
     for (; it != end; ++it) {
