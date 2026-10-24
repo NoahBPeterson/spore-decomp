@@ -26,6 +26,17 @@ struct Map5 {
     void F4020(void* out, int* key);   // 0x554020
     void F40d0(int* key);              // 0x5540d0
 };
+struct HashFreeStub {
+    void DoFreeNodes(void** pArr, unsigned n);   // 0x5687d0
+};
+struct VectorSetU32 {
+    void equal_range(void* out, void* key);      // 0x555980
+};
+struct HashIteratorStub {
+    void* mpNode;
+    void* mpBucket;
+    void increment_bucket();                     // 0x552750
+};
 void  FUN_00555980(void* out, void* k);
 void  FUN_00552af0(void* v, void* k);
 void  FUN_005531b0(void* v, void* k);
@@ -183,9 +194,10 @@ unsigned Meta::FUN_00550a60(unsigned idx)
 bool Meta::FUN_00550aa0(void* key)
 {
     char* s = (char*)this;
-    int local_c;
-    int local_8;
-    FUN_00555980(&local_c, &key);
+    int range[2];
+    ((VectorSetU32*)(s + 0xc0))->equal_range(&range[0], &key);
+    int local_c = range[0];
+    int local_8 = range[1];
     int local_2c;
     if (local_c == local_8) {
         local_2c = *(int*)(s + 0xc4);
@@ -329,13 +341,16 @@ void CD::PurgePendingAssets()
     char* self = (char*)this;
     int* piVar3 = *(int**)(self + 0x80);
     int* puVar1 = (int*)*piVar3;
-    if (puVar1 == 0) {
-        FUN_00552750();
+    HashIteratorStub it;
+    it.mpNode = puVar1;
+    it.mpBucket = piVar3;
+    if (it.mpNode == 0) {
+        it.increment_bucket();
     }
     int* local_10 = (int*)(*(int*)(self + 0x80) + *(int*)(self + 0x84) * 4);
     int* local_14 = (int*)*local_10;
-    int* local_c = puVar1;
-    int* local_8 = piVar3;
+    int* local_c = (int*)it.mpNode;
+    int* local_8 = (int*)it.mpBucket;
     while (local_c != local_14) {
         int local_20 = 0, local_1c = 0, local_18 = 0;
         char cVar2 = FUN_0054e460(local_c[0], local_c[1], &local_20);
@@ -354,7 +369,7 @@ void CD::PurgePendingAssets()
             local_c = (int*)*local_8;
         }
     }
-    DoFreeNodes(*(void**)(self + 0x80), *(void**)(self + 0x84));
+    ((HashFreeStub*)(self + 0x7c))->DoFreeNodes((void**)*(void**)(self + 0x80), *(unsigned*)(self + 0x84));
     *(int*)(self + 0x88) = 0;
 }
 // --- equivalence checker address annotations
