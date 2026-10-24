@@ -1,1 +1,4 @@
-00dcdac0 SP::VehicleTree::ConvertCityOrder_Tick  # PDB anchor name; error strings "(6.5) Convert city order complete" ... "(10) orders mismatch"
+00dcdac0 SP::VehicleTree::ConvertCityOrder_Tick  # pre-existing committed function (nonmatching); behavior-tree tick choosing the next conversion target
+00dcd720 SP::FindNearestReachableCommodity  # $E207: two-pass scan of the game-data vehicle vector, continent + political-id filter, phase-ratio weighted distance
+00dcd930 SP::VehicleTree::ConvertCityOrder_Activate  # validate cultural target / city and reissue the culture-convert group order into the state
+00dce330 FUN_00dce330  # near-goal handler: repark, nearest reachable commodity, or random community member

@@ -1,1 +1,2 @@
 # byte-exact functions for slice s00dcd720 (none)
+slices/s00dcd720/s00dcd720_g7.cpp  ?FUN_00dce330@@YA_NPAUcVehicle@@@Z  00dce330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

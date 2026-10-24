@@ -1,1 +1,3 @@
 00dcdac0 1515 complete (98 vs 94 calls, 2157 vs 2085 bytes); register allocation (eax/edx for vcall temps), loop-variable homes and stack slots differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; equiv: UNSUPPORTED (0/400 inputs valid: _decode_pointer import, read faults)
+00dcd930 274 complete (388 vs 389 bytes); register allocation (self/info/other/ct held in ebp/ebx/edi/esi vs original edi/ebp/esi/ebx) and the second-cast null-check/else-if layout differ; equiv: UNSUPPORTED (0/400 inputs valid: _decode_pointer import)
+00dcd720 347 complete (528 vs 527 bytes); 4-byte larger frame (sub esp,0x2c vs 0x28) because selfPos and the game-data vector both need homes; register rotation for selfPos/vec/loop index; equiv: WEAK (142/400 valid, 5.7% coverage, no mismatch)
