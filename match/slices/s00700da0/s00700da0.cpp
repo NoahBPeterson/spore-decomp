@@ -13,8 +13,9 @@ void* __cdecl EA_new(unsigned size, const char* name, int flags, int debugFlags,
 // ---- masked external callees ----
 unsigned __cdecl CellMaskHash(unsigned cellID);                              // 0x00700c00
 void     __cdecl ChildCellIDs(unsigned cellID, unsigned* out8);              // 0x00700bb0
-void     __cdecl HashFind_Cell(void* out, const unsigned* key);              // 0x00a3b2c0 (eastl hashtable<...>::find)
-struct cFrustumCullStub { unsigned TestSphere(const float* a, const float* b, unsigned flags); }; // 0x00700120
+// eastl hashtable<unsigned, cCellInfo>::find (0x00a3b2c0) is a member: ECX = the table, the two-word
+// iterator comes back through a hidden return slot, the key by reference; `ret 8`.
+struct cFrustumCullStub { unsigned TestSphere(const float* minCorner, const float* maxCorner, unsigned flags); }; // 0x00700120
 
 #pragma warning(disable:4035)
 __forceinline int FloorToInt(float f)
@@ -81,12 +82,21 @@ struct cHierGrid {                       // size 0x78
 
     unsigned CellFromPos(float px, float py, float pz, unsigned char level);
     bool     CullCellList(void* frustum, unsigned clipFlags, unsigned cellID, int level);
-    void     QueryCells(float radius, float* pos);
+    float*   QueryCells(float radius, float* pos);
 };
 
 extern const uint16_t g_mortonTable[32]; // 0x015352a8
 
-struct HashTable { int _m0; void** mpBuckets; unsigned mnBucketCount; unsigned mnSize; };
+struct HashTable;
+struct HashIterator { CellNode* mpNode; void** mpBucket; };
+
+struct HashTable {                  // the eastl hashtable embedded in cGrid::mCells
+    int _m0;                        // +0x00
+    void** mpBuckets;               // +0x04 (mpBuckets[mnBucketCount] is the end node)
+    unsigned mnBucketCount;         // +0x08
+    unsigned mnSize;                // +0x0c (checked as "table empty" before a lookup)
+    HashIterator Find(const unsigned& key) const;                // 0x00a3b2c0
+};
 
 static CellNode* FindCellNode(HashTable* t, unsigned key)
 {
@@ -225,14 +235,21 @@ void __stdcall list_insert_range(ListNode* pos, ListIterator first, ListIterator
 }
 
 // @ 0x00701110  (eastl hashtable: is the bucket for *key non-empty)
-bool __fastcall hashtable_bucket_nonempty(HashTable* t, const unsigned* key)
+bool __cdecl hashtable_bucket_nonempty(HashTable* t, const unsigned* key)
 {
-    void* end  = t->mpBuckets[t->mnBucketCount];
-    void* head = t->mpBuckets[*key % t->mnBucketCount];
-    void* node = end;
-    if (head != 0)
-        node = head;
-    return node != end;
+    unsigned bucket = *key % t->mnBucketCount;
+    CellNode* head  = (CellNode*)t->mpBuckets[bucket];
+    CellNode* end   = (CellNode*)t->mpBuckets[t->mnBucketCount];
+    // the original materialises the begin() iterator -- {node, &bucket} -- and compares it with end()
+    HashIterator it;
+    if (head != 0) {
+        it.mpNode   = head;
+        it.mpBucket = &t->mpBuckets[bucket];
+    } else {
+        it.mpNode   = end;
+        it.mpBucket = &t->mpBuckets[t->mnBucketCount];
+    }
+    return it.mpNode != end;
 }
 
 // @ 0x00701170  (copy-construct a circular object list from `other`)
@@ -254,15 +271,18 @@ bool __thiscall cHierGrid::CullCellList(void* frustum, unsigned clipFlags, unsig
     unsigned flags = clipFlags;
 
     if (clipFlags & 0x100) {
+        // the original passes two float[3] corners (min at +0x24, max at +0x18 of its frame); the callee
+        // reads three floats through each pointer, so the corners must be real arrays here as well
         float cs = grid->mCellSize;
-        float cx = (float)(cellID & 0x3ff) * cs + mOriginX - cs;
-        float cy = (float)((cellID >> 10) & 0x3ff) * cs + mOriginY - cs;
-        float cz = (float)((cellID >> 20) & 0x3ff) * cs + mOriginZ - cs;
-        float r  = cs * 3.0f;
-        float ex = cx + r;
-        float ey = cy + r;
-        float ez = cz + r;
-        flags = ((cFrustumCullStub*)frustum)->TestSphere(&cx, &ex, flags);
+        float minCorner[3], maxCorner[3];
+        minCorner[0] = (float)(cellID & 0x3ff) * cs + mOriginX - cs;
+        minCorner[1] = (float)((cellID >> 10) & 0x3ff) * cs + mOriginY - cs;
+        minCorner[2] = (float)((cellID >> 20) & 0x3ff) * cs + mOriginZ - cs;
+        float r = cs * 3.0f;
+        maxCorner[0] = minCorner[0] + r;
+        maxCorner[1] = minCorner[1] + r;
+        maxCorner[2] = minCorner[2] + r;
+        flags = ((cFrustumCullStub*)frustum)->TestSphere(minCorner, maxCorner, flags);
     }
 
     if ((flags & 0x40) != 0 && level != 0)
@@ -281,12 +301,11 @@ bool __thiscall cHierGrid::CullCellList(void* frustum, unsigned clipFlags, unsig
     }
 
     if (inCell) {
-        void* found[2];
-        HashFind_Cell(found, &cellID);
         HashTable* ht = (HashTable*)g->mCells;
-        void* end = ht->mpBuckets[ht->mnBucketCount];
-        if (found[0] != end) {
-            CellInfo* ci = (CellInfo*)((char*)found[0] + 4);
+        HashIterator found = ht->Find(cellID);
+        CellNode* end = (CellNode*)ht->mpBuckets[ht->mnBucketCount];
+        if (found.mpNode != end) {
+            CellInfo* ci = &found.mpNode->mInfo;
             ObjListNode* a = &ci->mHead;
             for (ObjListNode* it = a->pNext; it != a; it = it->pNext) {
                 if (mQueryListIt == mQueryListEnd)
@@ -344,79 +363,93 @@ bool __thiscall cHierGrid::CullCellList(void* frustum, unsigned clipFlags, unsig
 }
 
 // @ 0x007014c0
-void __thiscall cHierGrid::QueryCells(float radius, float* pos)
+// The retail symbol declares this void, but EAX is live at every exit and the caller sees it as the
+// return value, so each exit below returns what the original's EAX holds there (verified against
+// the disassembly; equiv reports these as eax differences):
+//   level > mLeafLevel at entry            -> the pos argument (0x00701510 jumps out with EAX = pos)
+//   grid without mnSize/mMask, loop level over -> the address of that grid (EAX = &grid)
+//   minz >= maxz (empty z range)           -> minz (the z pre-test jumps out with EAX = minz)
+//   range walked, any == 0 / next level over -> maxz (EAX = the z counter, which ends at maxz)
+//   query list full                        -> the current list node
+float* __thiscall cHierGrid::QueryCells(float radius, float* pos)
 {
     int level = mTopLevel;
     if (level > mLeafLevel)
-        return;
+        return pos;
     float cx = pos[0], cy = pos[1], cz = pos[2];
-    int off = level * 0x44;
     for (;;) {
-        cGrid* grid = (cGrid*)((char*)mGridBegin + off);
-        if (*(int*)((char*)grid + 0x28) != 0 && *(int*)((char*)grid + 0x3c) != 0) {
-            float inv = grid->mInvCellSize;
-            unsigned n = 1u << level;
-            float r2 = (grid->mCellRadius + radius) * inv;
-            float dx = (cx - mOriginX) * inv;
-            float dy = (cy - mOriginY) * inv;
-            float dz = (cz - mOriginZ) * inv;
-            int minx = FloorToInt(dx - r2);
-            int maxx = CeilToInt(dx + r2);
-            int miny = FloorToInt(dy - r2);
-            int maxy = CeilToInt(dy + r2);
-            int minz = FloorToInt(dz - r2);
-            int maxz = CeilToInt(dz + r2);
-            unsigned umask = ~(n - 1);
-            if ((umask & ((unsigned)maxz | (unsigned)minz | (unsigned)maxy | (unsigned)miny | (unsigned)maxx | (unsigned)minx)) != 0) {
-                if (((unsigned)minx & umask) != 0) minx = 0;
-                if (((unsigned)maxx & umask) != 0) maxx = (int)n;
-                if (((unsigned)miny & umask) != 0) miny = 0;
-                if (((unsigned)maxy & umask) != 0) maxy = (int)n;
-                if (((unsigned)minz & umask) != 0) minz = 0;
-                if (((unsigned)maxz & umask) != 0) maxz = (int)n;
-            }
+        int maxz = 0;
+        cGrid* grid = mGridBegin + level;
+        HashTable* cells = (HashTable*)grid->mCells;
+        if (cells->mnSize == 0 || grid->mMask == 0) {
+            level++;
+            if (level > mLeafLevel)
+                return (float*)grid;
+            continue;
+        }
+        float inv = grid->mInvCellSize;
+        unsigned n = 1u << level;
+        float r2 = (grid->mCellRadius + radius) * inv;
+        float dx = (cx - mOriginX) * inv;
+        float dy = (cy - mOriginY) * inv;
+        float dz = (cz - mOriginZ) * inv;
+        int minx = FloorToInt(dx - r2);
+        int maxx = CeilToInt(dx + r2);
+        int miny = FloorToInt(dy - r2);
+        int maxy = CeilToInt(dy + r2);
+        int minz = FloorToInt(dz - r2);
+        maxz = CeilToInt(dz + r2);
+        unsigned umask = ~(n - 1);
+        if ((umask & ((unsigned)maxz | (unsigned)minz | (unsigned)maxy | (unsigned)miny | (unsigned)maxx | (unsigned)minx)) != 0) {
+            if (((unsigned)minx & umask) != 0) minx = 0;
+            if (((unsigned)maxx & umask) != 0) maxx = (int)n;
+            if (((unsigned)miny & umask) != 0) miny = 0;
+            if (((unsigned)maxy & umask) != 0) maxy = (int)n;
+            if (((unsigned)minz & umask) != 0) minz = 0;
+            if (((unsigned)maxz & umask) != 0) maxz = (int)n;
+        }
 
-            unsigned any = 0;
-            for (int z = minz; z < maxz; z++) {
-                for (int y = miny; y < maxy; y++) {
-                    for (int x = minx; x < maxx; x++) {
-                        unsigned cellID = BuildCellID((unsigned)x, (unsigned)y, (unsigned)z);
-                        unsigned h = cellID >> 3;
-                        unsigned bit = 1u << (cellID & 7);
-                        unsigned char* cm = grid->mChildMask;
-                        if ((grid->mMask[h] & bit) != 0) {
-                            HashTable* ht = (HashTable*)grid->mCells;
-                            unsigned key = ((unsigned)z << 10 | (unsigned)y) << 10 | (unsigned)x;
-                            CellNode* node = FindCellNode(ht, key);
-                            if (node != 0) {
-                                float ox = grid->mCellSize;
-                                float sx = (float)(key & 0x3ff) * ox + grid->mCentreOriginX;
-                                float sy = (float)((key >> 10) & 0x3ff) * ox + grid->mCentreOriginY;
-                                float sz = (float)((key >> 20) & 0x3ff) * ox + grid->mCentreOriginZ;
-                                float ddx = cx - sx, ddy = cy - sy, ddz = cz - sz;
-                                float rr = grid->mCellRadius + radius;
-                                if (rr * rr > ddz * ddz + ddy * ddy + ddx * ddx) {
-                                    CellInfo* ci = &node->mInfo;
-                                    ObjListNode* a = &ci->mHead;
-                                    for (ObjListNode* it = a->pNext; it != a; it = it->pNext) {
-                                        if (mQueryListIt == mQueryListEnd)
-                                            return;
-                                        *mQueryListIt = it->mObj;
-                                        mQueryListIt++;
-                                    }
+        unsigned any = 0;
+        int z = minz;
+        if (z >= maxz)
+            return (float*)minz;
+        for (; z < maxz; z++) {
+            for (int y = miny; y < maxy; y++) {
+                for (int x = minx; x < maxx; x++) {
+                    unsigned cellID = BuildCellID((unsigned)x, (unsigned)y, (unsigned)z);
+                    unsigned h = cellID >> 3;
+                    unsigned bit = 1u << (cellID & 7);
+                    unsigned char* cm = grid->mChildMask;
+                    if ((grid->mMask[h] & bit) != 0) {
+                        unsigned key = ((unsigned)z << 10 | (unsigned)y) << 10 | (unsigned)x;
+                        CellNode* node = FindCellNode(cells, key);
+                        if (node != 0) {
+                            float ox = grid->mCellSize;
+                            float sx = (float)(key & 0x3ff) * ox + grid->mCentreOriginX;
+                            float sy = (float)((key >> 10) & 0x3ff) * ox + grid->mCentreOriginY;
+                            float sz = (float)((key >> 20) & 0x3ff) * ox + grid->mCentreOriginZ;
+                            float ddx = cx - sx, ddy = cy - sy, ddz = cz - sz;
+                            float rr = grid->mCellRadius + radius;
+                            if (rr * rr > ddz * ddz + ddy * ddy + ddx * ddx) {
+                                CellInfo* ci = &node->mInfo;
+                                ObjListNode* a = &ci->mHead;
+                                for (ObjListNode* it = a->pNext; it != a; it = it->pNext) {
+                                    if (mQueryListIt == mQueryListEnd)
+                                        return (float*)it;
+                                    *mQueryListIt = it->mObj;
+                                    mQueryListIt++;
                                 }
                             }
                         }
-                        any |= (unsigned char)cm[h] & (unsigned char)bit;
                     }
+                    any |= (unsigned char)cm[h] & (unsigned char)bit;
                 }
             }
-            if (any == 0)
-                break;
         }
+        if (any == 0)
+            return (float*)maxz;
         level++;
-        off += 0x44;
         if (level > mLeafLevel)
-            break;
+            return (float*)maxz;
     }
 }

@@ -3,7 +3,7 @@
 00700ff0  75  slot_vector_base::destroy, complete; register allocation (blocks in edx vs the original's esi) and loop-entry load order differ
 00701050  4  list node insert-before, complete; only the final two operand loads are swapped (out vs position)
 007010b0  61  list::insert(pos, first, last, tag) range copy, complete; callee-saved register use differs (original keeps pos in edi and value temp in esi)
-00701110  71  eastl hashtable bucket-nonempty / find, complete; the original materialises a two-word iterator local that is not reproduced
+00701110  76  eastl hashtable bucket-nonempty helper, complete (cdecl (table, key): bucket = *key % count, begin() iterator {node, &bucket} compared with the end node); /O2 register allocation of the bucket test differs; equiv PASS 953 valid, 100.0% coverage
 00701170  68  object-list copy constructor, complete; EH frame and call-argument register setup differ
-007011d0  685  SP::cHierGrid::CullCellList, complete recursive reconstruction; register scheduling throughout differs
-007014c0  1239  SP::cHierGrid::QueryCells, complete cell-range/mask query reconstruction; inlined hashtable lookup and morton build differ
+007011d0  797  SP::cHierGrid::CullCellList, complete recursive reconstruction (eastl find member for the cell lookup, two float[3] corners for the frustum test, child mask walk); register scheduling differs (807 vs 745 bytes); equiv PASS 862 valid, 67.8% coverage
+007014c0  1248  SP::cHierGrid::QueryCells, complete cell-range/mask query reconstruction; returns the value the original leaves in EAX at each exit (void symbol; equiv's void-hides-eax), named grid/hashtable members instead of raw +0x28/+0x3c offsets; inlined hashtable lookup and morton build differ; equiv PASS 1387 valid, 95.9% coverage
