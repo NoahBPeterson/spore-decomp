@@ -98,11 +98,42 @@ float* GetProperty(void* prop);                     // 0x0041ea70 (float accesso
 // ---------------------------------------------------------------------------
 // layout
 // ---------------------------------------------------------------------------
+struct MapNode                                      // node of the list owned by GoalMap
+{
+    MapNode* child;                                 // +0x00 subtree / payload destroyed by 0x009a9600
+    MapNode* next;                                  // +0x04
+};
+
 struct GoalMap                                      // eastl container at goal+0x08 (0x1c bytes)
 {
-    char raw[0x1c];
+    void*    f00; void* f04; void* f08;             // +0x00 .. +0x0b
+    MapNode* head;                                  // +0x0c first node of the list
+    void*    f10; void* f14; void* f18;             // +0x10 .. +0x1b
     void      Construct(const GoalMap&);            // 0x00b96560  copy-ctor body
     GoalMap&  operator=(const GoalMap&);            // 0x00b962d0  operator=
+    void      destroyNode(MapNode* n);              // 0x009a9600  recursive node/subtree release
+    void      destroy()                             // release the whole node list
+    {
+        MapNode* n = head;
+        while (n) {
+            destroyNode(n->child);
+            MapNode* next = n->next;
+            operator_delete__(n);
+            n = next;
+        }
+    }
+};
+
+struct StepBody                                     // +0x04 of a 0x44-byte step element
+{
+    char raw[0x40];                                 // payload (two eastl string/vector members)
+    void destroy();                                 // 0x00f280f0  element payload destructor
+};
+
+struct StepElem                                     // 0x44-byte element stored by Vec44
+{
+    int      key;                                   // +0x00
+    StepBody body;                                  // +0x04 (0x40 bytes)
 };
 
 struct Vec44                                        // inline-buffer vector at goal+0x3c
@@ -118,6 +149,17 @@ struct Vec44                                        // inline-buffer vector at g
         e = buf;
         c = buf + 0x154;
         assignFrom(x);
+    }
+    void  destroy()                                 // element teardown + heap-buffer release
+    {
+        StepElem* qEnd = (StepElem*)e;
+        StepElem* q = (StepElem*)b;
+        while (q < qEnd) {
+            q->body.destroy();
+            q++;
+        }
+        if (b && ((int*)b)[-1] != 0)
+            operator_delete__(b);
     }
 };
 
@@ -150,9 +192,7 @@ struct GoalVec                                      // eastl::vector<Goal, ...>
 };
 
 // destroy helpers shared by the range algorithms
-void  DestroyActElem(ActStep* p);                   // 0x00f280f0
 void* DestroyActRange(ActStep* first, ActStep* last);   // 0x00f1df10
-void  DestroyMapList(GoalMap* map, int a);          // 0x009a9600
 
 // ---------------------------------------------------------------------------
 // @ 0x00f2bd10  default construction of the act-step record
@@ -381,11 +421,13 @@ Goal::Goal()
 // @ 0x00f1dfa0  GoalVec::destroyRange
 void GoalVec::destroyRange(Goal* first, Goal* last)
 {
-    Goal* p = first;
-    while (p < last) {
-        DestroyActElem((ActStep*)p);
-        p += 1;
-    }
+    if (first >= last)
+        return;
+    do {
+        first->act.vec.destroy();
+        first->map.destroy();
+        first += 1;
+    } while (first < last);
 }
 
 // ===========================================================================

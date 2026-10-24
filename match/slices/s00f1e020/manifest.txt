@@ -1,5 +1,6 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 # VS2008-era (cl 15) UI code, /GS- /arch:SSE /fp:fast.
+slices/s00f1e020/s00f1e020.cpp  ?destroyRange@GoalVec@@QAEXPAUGoal@@0@Z  00f1dfa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00f1e020/s00f1e020.cpp  ?Init@Bar@@QAEXXZ  00f1e620  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00f1e020/s00f1e020.cpp  ??1Bar@@QAE@XZ  00f1e580  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00f1e020/s00f1e020.cpp  ??4Goal@@QAEAAU0@ABU0@@Z  00f1e810  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
