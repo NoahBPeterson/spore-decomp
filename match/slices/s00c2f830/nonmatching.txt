@@ -1,0 +1,12 @@
+00c2f9c0 91 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; destructor, ReleaseRef inlined with lea instead of add (register form only)
+00c2fa50 143 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs, uninitialised this); frame/reg-alloc differs (no ebx for PropertyManager across Release)
+00c2fb30 172 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; GetPropListToUse, ebx zero-constant scheduling + tail-jmp release differ
+00c2fc10 91 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); frame uses push ecx vs sub esp,0x10; this not kept in ebp
+00c2fc80 43 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; refcount reset, lea vs add on refcount address
+00c2fde0 56 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs, fake-arity); member/global load order swapped
+00c2fea0 268 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (unresolved _SP_RelationshipManager); call-via-absolute-address not inlined to direct calls
+00c2ffb0 234 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (unresolved _SP_RelationshipManager); GameMode checks not shared, size 233 vs 203
+00c301c0 11 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); src parameter allocated to eax instead of ecx
+00c30630 242 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); ResKey build and resource-manager path differ, size 307 vs 328
+00c30860 26 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; member/param pushed after NounManager instead of before
+00c30890 13 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; member value kept in esi instead of pushed early as stack arg
