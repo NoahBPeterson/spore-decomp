@@ -1,1 +1,1 @@
-# va  diff-bytes  reason
+0040aeb0  6963  7667-byte /Od function; complete behaviour port (4229 bytes): every branch and callee of the original is present, inline EASTL/resource helpers are modelled through named stubs so no byte-exact attempt was made; equiv UNSUPPORTED: 0/400 inputs valid (faults reading/writing unmodelled editor/model state)
