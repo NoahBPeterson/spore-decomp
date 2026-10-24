@@ -1,0 +1,19 @@
+00c46ab0 208 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 208 bytes - mission setup body not reconstructed.
+00c46b80 671 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 671 bytes - mission bookkeeping body not reconstructed.
+00c46e20 532 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 532 bytes - GiveOnAcceptItems body not reconstructed.
+00c47040 88 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 88 bytes - GetConversationFileID walks the planet record's property table (virtual +0xa4 tail call, GetPropertyAsKey); body not reconstructed.
+00c470a0 67 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - flag-gated virtual checks; vtable slots past +0x12c not declared.
+00c470f0 70 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 70 bytes - SetMissionID; the property-key release at +0x180 (virtual +4) is not modelled.
+00c47140 51 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 51 bytes - releases the planet ref (+0x9c, virtual +0xc0) then asks the star manager for the planet; ref-release vtable slot not declared.
+00c47180 51 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 51 bytes - same as 00c47140 for the +0x1e8 ref.
+00c471c0 118 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 118 bytes - star-map rebuild with flag bits and virtuals +0xf8/+0xfc/+0x198/+0x19c; not reconstructed.
+00c47240 114 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 114 bytes - planet visual creation via virtuals +0xe4/+0xe8 and the star map; not reconstructed.
+00c472c0 26 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 2 bytes - MSVC tail-jumps to the manager call while retail emits call+ret; only that instruction differs.
+00c472e0 98 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 98 bytes - comm-manager conversation start; virtuals +0x10c/+0xa4 not declared.
+00c47350 149 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 149 bytes - ExportPlanet body not reconstructed.
+00c473f0 76 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 72 bytes - ExportSpecies: retail derives the payload from the incoming argument slot while my version needs a callee-saved this; register/frame shape differs.
+00c47440 112 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 15 bytes - StartCompletedFeedbackTimer matches except the null device argument, which retail materialises as xor eax,eax / push eax while MSVC emits push 0.
+00c474b0 350 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 350 bytes - GetPlanetRecordFromTargetType body not reconstructed.
+00c47610 67 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - GetAnimalSpeciesFromType copies the +0x504 species key; not reconstructed.
+00c47680 491 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 486 bytes - destructor body not reconstructed.
+00c478b0 349 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 349 bytes - Update body not reconstructed.
