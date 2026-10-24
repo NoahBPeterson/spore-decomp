@@ -1,4 +1,4 @@
 005ce060  8  AddVertebraBody: cl schedules `push 1` before loading mpWorld into ecx; original loads ecx first
 005ce250  6  ReleaseE8: uses eax + pop ecx; original uses ecx + add esp,4
-005ce2a0  66  NormalizeVector2: original splits sqrt (x87) from reciprocal (SSE divss); cl fuses 1/sqrt into fdivrp
-005ce680  269  CalcVertebraPhysicsBoundingBox: original has an aligned frame (and esp,-16) and differs in SSE scheduling of the center/offset terms
+005ce2a0  64  NormalizeVector2: x87 sum/sqrt as in the original, but the reciprocal and both scaled components go through a volatile float so cl emits the x87 fdivrp/fmul pair instead of fusing 1/sqrt; leaves ecx/edx/xmm* untouched. | difftest: PASS - 400 valid inputs, 100.0% coverage (21/21), 0 mismatches
+005ce680  226  CalcVertebraPhysicsBoundingBox: `__declspec(align(16))` on offset reproduces the original's `and esp,-16` frame so cl stops using push ecx/pop ecx as a scratch slot; SSE term scheduling still differs. | difftest: PASS - 400 valid inputs, 100.0% coverage (79/79), 0 mismatches

@@ -189,11 +189,10 @@ void* cSpineHelper::GetHandle(int id) {
 // @ 0x005CE2A0
 void NormalizeVector2(float* out, const float* in) {
   float x = in[0];
-  float y = in[1];
-  float len = sqrtf(x * x + y * y + 1e-8f);
-  float scale = 1.0f / len;
-  out[0] = scale * x;
-  out[1] = scale * y;
+  float len = sqrtf(x * x + in[1] * in[1] + 1e-8f);
+  volatile float scale = 1.0f / len;
+  out[1] = in[1] * scale;
+  out[0] = x * scale;
 }
 
 // placeholders for the remaining (large) functions
@@ -239,23 +238,43 @@ hkRigidBody* cSPEditorSpine::CreateVertebraBody(float scale, hkTransform* transf
 // PARTIAL: the DynamicTuning property lookups (PropertyManager + Property virtual calls and the
 // mirrored tuning globals) are not reconstructed; see partial.txt.
 void cSPEditorSpine::LoadDynamicTuning() {}
+// Layout of the vertebra shape buffer passed in as `shape` by the caller.
+struct cVertebraShape {
+  unsigned char mFlags;   // +0x00
+  unsigned char mPad[3];  // +0x01
+  float mCenterX;         // +0x04
+  float mCenterY;         // +0x08
+  float mCenterZ;         // +0x0c
+  float mScale;           // +0x10
+  float mRow0X;           // +0x14
+  float mRow0Y;           // +0x18
+  float mRow0Z;           // +0x1c
+  float mRow1X;           // +0x20
+  float mRow1Y;           // +0x24
+  float mRow1Z;           // +0x28
+  float mRow2X;           // +0x2c
+  float mRow2Y;           // +0x30
+  float mRow2Z;           // +0x34
+};
+
 // @ 0x005CE680
 void cSPEditorSpine::CalcVertebraPhysicsBoundingBox(float scale, unsigned char* shape, float* out) {
-  float offset = SP::EditorUtils::GetExactSkinRadiusFromVertebra(scale) +
+  cVertebraShape* vs = (cVertebraShape*)shape;
+  __declspec(align(16)) float offset = SP::EditorUtils::GetExactSkinRadiusFromVertebra(scale) +
                  (mVertebraHalfWidth + mVertebraHalfWidth) * mSpineVertebraMaxMassProportion * 0.25f;
   float dx = scale * -0.15993178f;
   float x = 0.0f;
   float y = 0.0f;
   float z = dx;
-  if (shape[0] & 2) {
-    x = (*(float*)(shape + 0x20) + *(float*)(shape + 0x14)) * 0.0f + *(float*)(shape + 0x2c) * dx;
-    y = (*(float*)(shape + 0x24) + *(float*)(shape + 0x18)) * 0.0f + *(float*)(shape + 0x30) * dx;
-    z = (*(float*)(shape + 0x28) + *(float*)(shape + 0x1c)) * 0.0f + *(float*)(shape + 0x34) * dx;
+  if (vs->mFlags & 2) {
+    x = (vs->mRow1X + vs->mRow0X) * 0.0f + vs->mRow2X * dx;
+    y = (vs->mRow1Y + vs->mRow0Y) * 0.0f + vs->mRow2Y * dx;
+    z = (vs->mRow1Z + vs->mRow0Z) * 0.0f + vs->mRow2Z * dx;
   }
-  float m01 = *(float*)(shape + 0x10);
-  float cx = *(float*)(shape + 4) + m01 * x;
-  float cy = *(float*)(shape + 8) + m01 * y;
-  float cz = *(float*)(shape + 0xc) + m01 * z;
+  float m01 = vs->mScale;
+  float cx = vs->mCenterX + m01 * x;
+  float cy = vs->mCenterY + m01 * y;
+  float cz = vs->mCenterZ + m01 * z;
   out[0] = cx - offset;
   out[1] = cy - offset;
   out[2] = cz - offset;
