@@ -10,8 +10,7 @@ void* operator new(size_t size, const char* pName, int flags, unsigned debugFlag
 inline void* operator new(size_t, void* p) { return p; }
 
 struct Property {
-    char pad[0x10];
-    uint32_t mFlags;             // +0x10
+    char pad[0x12];
     unsigned short mType;        // +0x12
     int* GetInt();               // 0x0041e990
     uint32_t* GetUInt();         // 0x0041ea00
@@ -386,14 +385,15 @@ void cSPEditorColorPicker::GetSwatchArea(cSPColorRGB* out, int index, int) {
             scale = *p;
         }
     }
-    float n = (float)mNumColors;
-    float step = (mRootWidth / n) * scale;
-    float w = (mRootWidth - (float)(mNumColors - 1) * step) / n;
+    EA::RectT* area = (EA::RectT*)out;
+    float step = (mRootWidth / (float)mNumColors) * scale;
+    float remaining = mRootWidth - (float)(mNumColors - 1) * step;
+    area->bottom = mRootHeight;
+    float w = remaining / (float)mNumColors;
     float x = (float)index * (w + step);
-    out->r = x;
-    out->g = 0.0f;
-    out->b = x + w;
-    /* 4th float written by caller convention: mRootHeight */
+    area->left = x;
+    area->right = x + w;
+    area->top = 0.0f;
 }
 
 // @ 0x005a4800

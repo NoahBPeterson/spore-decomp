@@ -293,8 +293,7 @@ extern cSPColorRGB_s005a_5ec0 gWhiteColor;               // 0x0150F470 {1,1,1}
 
 // ---- items of slice s005a4250 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Property_s005a_4250 {
-    char pad[0x10];
-    uint32_t mFlags;             // +0x10
+    char pad[0x12];
     unsigned short mType;        // +0x12
     int* GetInt();               // 0x0041e990
     uint32_t* GetUInt();         // 0x0041ea00
@@ -1033,14 +1032,15 @@ void cSPEditorColorPicker_s005a_4250::GetSwatchArea(cSPColorRGB_s005a_4250* out,
             scale = *p;
         }
     }
-    float n = (float)mNumColors;
-    float step = (mRootWidth / n) * scale;
-    float w = (mRootWidth - (float)(mNumColors - 1) * step) / n;
+    EA::RectT_s005a_4250* area = (EA::RectT_s005a_4250*)out;
+    float step = (mRootWidth / (float)mNumColors) * scale;
+    float remaining = mRootWidth - (float)(mNumColors - 1) * step;
+    area->bottom = mRootHeight;
+    float w = remaining / (float)mNumColors;
     float x = (float)index * (w + step);
-    out->r = x;
-    out->g = 0.0f;
-    out->b = x + w;
-    /* 4th float written by caller convention: mRootHeight */
+    area->left = x;
+    area->right = x + w;
+    area->top = 0.0f;
 }
 
 // @ 0x005a4800
