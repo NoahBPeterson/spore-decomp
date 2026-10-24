@@ -57,8 +57,34 @@ extern cDirectPropertyList* g_AppProperties;    // 0x015fd918
 void __cdecl GetFloatProp(cDirectPropertyList* list, unsigned id, float* out);   // 0x0040cf10
 extern char g_016d66aa;                         // 0x016d66aa
 
+extern const float kOne;                        // 0x01485720 (1.0f)
+extern const float kNegOne;                     // 0x013eb1bc (-1.0f)
+// Axis order of the opposite hemisphere: three 4-byte entries holding the 0/1/2 permutations
+// {012}, {201}, {120}; the first entry of the {012,120,201} table lives 0xc bytes earlier.
+extern const unsigned char g_faceAxisOrderNeg[][4];   // 0x014910a0
+
 // wraps a cube-face coordinate that left [0,1] onto the neighbouring face
 void __cdecl WrapCubeCoord(int* face, float* u, float* v, int a, int b, int c);   // 0x00685200
+
+struct Vec4 {
+    union {
+        struct { float x, y, z, w; };
+        float v[4];
+    };
+};
+
+// rw::math::fpu::Matrix44Template<float,0>; the only member the quad needs is the 4x4 block
+struct Matrix44 {
+    Vec4 r[4];                                  // 4 x 16 bytes
+    Matrix44(const float* src);                 // 0x0045dca0 (real call, never inlined)
+};
+float* __cdecl Transpose(float* dst, const float* src);            // 0x006ffdc0, returns dst
+void   __cdecl SetShaderParam(int id, const void* value, int n);   // 0x00777ae0
+
+extern const float kTwo;                        // 0x01470f1c (2.0f)
+// Tail of the sprite/terrain info block reachable through cTerrainSphere::GetInfo(); only the
+// morph-target pointer at +0x2f4+0x54 is of interest here.
+struct cInfoTail { unsigned pad54[0x54 / 4]; void* mpTarget; };
 
 class cTerrainSphereQuad { public:
     cTerrainSphere* mSphere;        // +0x00
@@ -66,20 +92,35 @@ class cTerrainSphereQuad { public:
     unsigned pad08[4];
     int   mChunkRes;                // +0x18
     int   mFace;                    // +0x1c
-    unsigned pad20[4];
+    float mOriginX;                 // +0x20
+    float mOriginY;                 // +0x24
+    unsigned pad28[2];
     float mFaceScale;               // +0x30
-    unsigned pad34[(0x58 - 0x34) / 4];
+    unsigned pad34[3];
+    int   mAxisX;                   // +0x40
+    int   mAxisY;                   // +0x44
+    int   mAxisZ;                   // +0x48
+    float mScaleX;                  // +0x4c
+    float mScaleY;                  // +0x50
+    float mScaleZ;                  // +0x54
     float mUVOffX;                  // +0x58
     float mUVOffY;                  // +0x5c
     float mUVScale;                 // +0x60
-    unsigned pad64[(0x88 - 0x64) / 4];
+    float mFaceParam;               // +0x64
+    unsigned pad68[(0x88 - 0x68) / 4];
     float mMinH;                    // +0x88
     float mMaxH;                    // +0x8c
     unsigned pad90[1];
     rw::graphics::VertexBuffer** mHeightVB;   // +0x94
+    unsigned pad98[3];
+    Matrix44 mWorld;                // +0xa4  world transform handed to the shader
+    Vec4 mFaceTransform[4];         // +0xe4  uv offset/scale, face parameter, axis indices, sign scales
+    Vec4 mFaceAxes[3];              // +0x124 cube-face basis rows (permuted, then sign-scaled)
 
     void  SetupVertexScale(int flag);           // 0x00fb0bd0
     bool  RebuildHeightVB();                    // 0x00fb0e00
+    void  BuildFaceTransform(void* pParent);    // 0x00fb1780
+    void  ApplyFaceAxes();                      // 0x00fb1b80
 };
 
 // minss/maxss clamp helper of the /arch:SSE module
@@ -253,6 +294,99 @@ bool cTerrainSphereQuad::RebuildHeightVB()
     }
     (*mHeightVB)->Unlock();
     return true;
+}
+
+// @ 0x00fb1780
+void cTerrainSphereQuad::BuildFaceTransform(void* pParent)
+{
+    void* info = mSphere->GetInfo();
+    cInfoTail* tail = (cInfoTail*)((char*)info + 0x2f4);
+
+    Matrix44 mat((const float*)((const char*)pParent + 0xc0));
+    float scratch[16];
+    mWorld = *(Matrix44*)Transpose(scratch, (const float*)&mat);
+
+    Vec4 v;
+    v.x = mUVOffX;
+    v.y = mUVOffY;
+    v.z = mUVScale;
+    v.w = 0.0f;
+    mFaceTransform[0] = v;
+    v.x = mFaceParam;
+    v.y = 0.0f;
+    v.z = 0.0f;
+    v.w = 0.0f;
+    mFaceTransform[1] = v;
+    v.x = (float)mAxisX;
+    v.y = (float)mAxisY;
+    v.z = (float)mAxisZ;
+    v.w = 0.0f;
+    mFaceTransform[2] = v;
+    v.x = mScaleX;
+    v.y = mScaleY;
+    v.z = mScaleZ;
+    v.w = 0.0f;
+    mFaceTransform[3] = v;
+
+    // the same 16-byte-stride store is reused for the (2,0,0,-1) cube-face basis
+    v.x = kTwo;
+    v.y = 0.0f;
+    v.z = 0.0f;
+    v.w = kNegOne;
+    mat.r[0] = v;
+    v.x = 0.0f;
+    v.y = kTwo;
+    v.z = 0.0f;
+    v.w = kNegOne;
+    mat.r[1] = v;
+    v.x = 0.0f;
+    v.y = 0.0f;
+    v.z = kTwo;
+    v.w = kNegOne;
+    mat.r[2] = v;
+
+    mFaceAxes[0] = mat.r[mAxisX];
+    mFaceAxes[1] = mat.r[mAxisY];
+    mFaceAxes[2] = mat.r[mAxisZ];
+
+    float s0 = mScaleX;
+    mFaceAxes[0].x = s0 * mFaceAxes[0].x;
+    mFaceAxes[0].y = s0 * mFaceAxes[0].y;
+    mFaceAxes[0].z = s0 * mFaceAxes[0].z;
+    mFaceAxes[0].w = s0 * mFaceAxes[0].w;
+    float s1 = mScaleY;
+    mFaceAxes[1].x = s1 * mFaceAxes[1].x;
+    mFaceAxes[1].y = s1 * mFaceAxes[1].y;
+    mFaceAxes[1].z = s1 * mFaceAxes[1].z;
+    mFaceAxes[1].w = s1 * mFaceAxes[1].w;
+    float s2 = mScaleZ;
+    mFaceAxes[2].x = s2 * mFaceAxes[2].x;
+    mFaceAxes[2].y = s2 * mFaceAxes[2].y;
+    mFaceAxes[2].z = s2 * mFaceAxes[2].z;
+    mFaceAxes[2].w = s2 * mFaceAxes[2].w;
+
+    SetShaderParam(0x301, &mWorld, 0);
+    void* pTarget = tail->mpTarget;
+    SetShaderParam(0x22f, pTarget ? (void*)((char*)pTarget + 0x18) : 0, 0);
+}
+
+// @ 0x00fb1b80
+void cTerrainSphereQuad::ApplyFaceAxes()
+{
+    int idx = mFace;
+    const unsigned char* p = g_faceAxisOrderNeg[idx >> 1];
+    float one = kOne;
+    float s = (idx & 1) ? kNegOne : one;
+    mAxisX = p[0];
+    mAxisY = p[1];
+    mAxisZ = p[2];
+    float f[3] = { s, one, s };
+    mScaleX = f[p[0]];
+    mScaleY = f[p[1]];
+    mScaleZ = f[p[2]];
+    mUVOffX = mOriginX;
+    mUVOffY = mOriginY;
+    mUVScale = mFaceScale;
 }
 
 } // namespace SP
