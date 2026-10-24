@@ -1,0 +1,2 @@
+slices/s00d97420/s00d97420.cpp  ?RemoveFromCultureStageGroup@@YAXPAVCitizenTree@SP@@HPAVcSPCreatureCitizen@@@Z  00d97d40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00d97420/s00d97420.cpp  ?CultureAttack_Deactivate@@YAXPAVcSPCreatureCitizen@@HHHHPAUtCultureAttackInfo@@@Z  00d980e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
