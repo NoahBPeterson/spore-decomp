@@ -2,7 +2,7 @@
 0084dcd0  344  PNG_read_gimex complete; equiv UNSUPPORTED (import _setjmp3 cannot be simulated). Only register/scheduling allocation differs (loop index/row pointer kept in memory vs regs); identical call sequence and control flow.
 0084df40  26  PNG_check_sig complete; equiv PASS (399 valid, 87.9% cov). The second png_check_sig(...)!=0 test is folded to neg/sbb/and (branchless) instead of the original branch/`mov eax,0x32`.
 0084dfa0  219  PNG_ropen complete; equiv UNSUPPORTED (import _setjmp3). Original reuses esi for h and pair and keeps edi as the constant zero; ours pins pair in edi and the zero in ebx (extra callee-saved reg).
-0084e0d0  653  PNG_read complete; equiv PASS (226 valid, 66.8% cov). Switch/jump-table prologue, grayscale ramp and BGRA palette loops differ in register allocation only.
+0084e0d0  638  PNG_read complete; flags /O2 /MD /Gy /EHsc /TP /arch:IA32 /fp:fast /GS-; equiv PASS (447 valid, 91.3% cov). The dpi conversion is x87 in the original (fild/fadd/fmul/fstp) and must not be compiled to SSE, whose cvtsi2ss/movss would zero xmm0; switch/jump-table prologue, grayscale ramp and BGRA palette loops differ in register allocation only.
 0084e560  486  PNG_write_gimex complete; equiv UNSUPPORTED (import _setjmp3). Identical structure; register/scheduling allocation differs.
 0084e7a0  38  PNG_wopen complete; equiv PASS (356 valid, 86.4% cov). Original materialises the 0 constant in esi across galloc (push esi; lea eax,[esi+1]); ours rematerialises 0/1 after the call.
 0084e7e0  723  PNG_write complete; equiv WEAK (316 valid inputs but 6% coverage - the setjmp error path dominates; no mismatch observed). Identical structure/logic; register/scheduling allocation differs.
