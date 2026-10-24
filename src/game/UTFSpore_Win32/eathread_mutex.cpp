@@ -30,10 +30,10 @@ void ThreadSleep(unsigned* pMilliseconds);
 namespace EA {
 namespace Thread {
 struct EAMutexData {
-    unsigned __int64 mData[4];   // +0x00
-    int              mnLockCount;    // +0x20
-    bool             mbIntraProcess; // +0x24
-    void*            mThreadId;      // +0x28
+    unsigned __int64 mData[4];        // +0x00
+    int              mnLockCount;     // +0x20
+    unsigned char    mbIntraProcess;  // +0x24
+    void*            mThreadId;       // +0x28
 };
 }
 }
@@ -65,13 +65,16 @@ Mutex_s0092_15c0::~Mutex_s0092_15c0()
 namespace EA { namespace Thread {
 bool Mutex_s0092_15c0::Init(char* pName)
 {
-    if (!pName) return false;
-    mMutexData.mnLockCount = 0;
-    mMutexData.mbIntraProcess = (*pName != 0);
-    if (mMutexData.mbIntraProcess) { InitializeCriticalSection((CRITICAL_SECTION*)this); return true; }
-    HANDLE h = CreateMutexA(0, 0, pName[1] ? (pName + 1) : 0);
-    *(HANDLE*)mMutexData.mData = h;
-    return h != 0;
+    if (pName) {
+        mMutexData.mnLockCount = 0;
+        unsigned char intra = (unsigned char)*pName;
+        mMutexData.mbIntraProcess = intra;
+        if (intra) { InitializeCriticalSection((CRITICAL_SECTION*)this); return true; }
+        HANDLE h = CreateMutexA(0, 0, pName[1] ? (pName + 1) : 0);
+        *(HANDLE*)mMutexData.mData = h;
+        return h != 0;
+    }
+    return false;
 }
 }}  // namespace EA::Thread
 

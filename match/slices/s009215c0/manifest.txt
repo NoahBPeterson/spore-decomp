@@ -6,6 +6,9 @@ slices/s009215c0/s009215c0.cpp  ?ClearThreads@ThreadGroup@Thread@EA@@QAEX_N@Z  0
 slices/s009215c0/s009215c0.cpp  ?SetCurrentThreadHandle@Thread@EA@@YAXPAXD@Z  00921c50
 slices/s009215c0/s009215c0.cpp  ?GetCurrentThreadPriority@Thread@EA@@YAXXZ  00921d70
 slices/s009215c0/s009215c0.cpp  ?ThreadSleep@Thread@EA@@YAXPAI@Z  00921df0
-slices/s009215c0/s009215c0.cpp  ?Dtor21e40@ThreadBlob@Thread@EA@@QAEXXZ  00921e40
+slices/s009215c0/s009215c0.cpp  ??1Condition@Thread@EA@@QAE@XZ  00921e40
 slices/s009215c0/s009215c0.cpp  ??1Mutex@Thread@EA@@QAE@XZ  00922130
 slices/s009215c0/s009215c0.cpp  ?Unlock@Mutex@Thread@EA@@QAEHXZ  00922270
+slices/s009215c0/s009215c0.cpp  ?Set@ThreadName@Thread@EA@@QAEPADEPBD@Z  00921e00
+slices/s009215c0/s009215c0.cpp  ?Init@Mutex@Thread@EA@@QAE_NPBUMutexParameters@23@@Z  00922150
+slices/s009215c0/s009215c0.cpp  ??1RWMutex@Thread@EA@@QAE@XZ  00922310

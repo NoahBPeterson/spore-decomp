@@ -6,6 +6,7 @@
 #define EASTL_API
 #include <stddef.h>
 #include <string.h>
+#include <new>
 
 // ================================================================== EASTL rbtree
 struct rbtree_node_base {
@@ -381,33 +382,150 @@ extern "C" __declspec(dllimport) BOOL __stdcall SetThreadPriority(HANDLE, int);
 extern "C" __declspec(dllimport) DWORD __stdcall SleepEx(DWORD, BOOL);
 extern "C" __declspec(dllimport) HANDLE __stdcall GetCurrentProcess();
 
-unsigned GetThreadTime();
+unsigned GetThreadTime();              // 0x0094d340 (jmp GetTickCount)
 void ThreadSleep(unsigned* pMilliseconds);
 
+extern "C" long _InterlockedIncrement(volatile long*);
+extern "C" long _InterlockedExchangeAdd(volatile long*, long);
+extern "C" long _InterlockedExchange(volatile long*, long);
+#pragma intrinsic(_InterlockedIncrement, _InterlockedExchangeAdd, _InterlockedExchange)
+
+// EA::Thread::AtomicInt<T> -- one value, ctor stores via interlocked exchange (xchg [this],reg).
+template <typename T>
+class AtomicInt {
+public:
+    volatile T mValue;                                  // +0x00
+    AtomicInt(T n = 0) { SetValue(n); }
+    void SetValue(T n) { _InterlockedExchange((long*)&mValue, n); }
+};
+
+// EA::Thread::ThreadName -- 0x11-byte name holder (flag byte at 0, "name" string at +1).  PDB: ThreadName.
+struct ThreadName {
+    unsigned char mFlag;  // +0x00
+    char    mName[0x10];  // +0x01
+    char* Set(unsigned char flag, const char* pName);   // 0x00921e00
+};
+
+// EA::Thread::MutexParameters -- { bool mbIntraProcess; char mName[...] }.  PDB shape.
+struct MutexParameters {
+    unsigned char mbIntraProcess;  // +0x00
+    char          mName[0x10];     // +0x01
+    MutexParameters() {}
+    MutexParameters(int count, bool intra, const char* name);  // 0x009225d0-style, unused
+};
+
+// EA::Thread::ConditionParameters -- { bool mbIntraProcess; char mName[...] }.
+struct ConditionParameters {
+    unsigned char mbIntraProcess;  // +0x00
+    char          mName[0x10];     // +0x01
+};
+
+// EA::Thread::RWMutexParameters -- { bool mbIntraProcess; char mName[...] }.
+struct RWMutexParameters {
+    unsigned char mbIntraProcess;  // +0x00
+    char          mName[0x10];     // +0x01
+};
+
+// EA::Thread::SemaphoreParameters -- { int mnCount; bool mbIntraProcess; char mName[...] }.
+struct SemaphoreParameters {
+    int           mnCount;         // +0x00
+    bool          mbIntraProcess;  // +0x04
+    char          mName[0x10];     // +0x05
+    SemaphoreParameters() {}
+    SemaphoreParameters(int count, bool intra, const char* name);  // 0x009225d0
+};
+
 struct EAMutexData {
-    unsigned __int64 mData[4];   // +0x00
-    int              mnLockCount;    // +0x20
-    bool             mbIntraProcess; // +0x24
-    void*            mThreadId;      // +0x28
+    unsigned __int64 mData[4];        // +0x00
+    int              mnLockCount;     // +0x20
+    unsigned char    mbIntraProcess;  // +0x24
+    void*            mThreadId;       // +0x28
+};
+struct EASemaphoreData {
+    void* mhSemaphore;       // +0x00
+    int   mnCount;           // +0x04
+    int   mnCancelCount;     // +0x08
+    bool  mbIntraProcess;    // +0x0c
+    __declspec(noinline) ~EASemaphoreData();   // 0x00922610
+};
+class Semaphore {
+public:
+    EASemaphoreData mSemaphoreData;                     // +0x00, size 0x10
+    Semaphore(const SemaphoreParameters* p, bool bDefault);  // 0x00922820
+    bool Init(const SemaphoreParameters* p);            // 0x00922620
+    int  Wait(unsigned const& timeout);                 // 0x00922690
+    int  Post(int n);                                   // 0x00922740
 };
 class Mutex {
 public:
     EAMutexData mMutexData;      // +0x00, size 0x30
-    Mutex(int name, char intraProcess);
-    ~Mutex();
-    bool Init(char* pName);
-    int  Lock(unsigned* pTimeout);
-    int  Unlock();
+    Mutex(const MutexParameters* p = 0, bool bDefault = true);   // 0x009222a0
+    __declspec(noinline) ~Mutex();                              // 0x00922130
+    bool Init(const MutexParameters* p);                        // 0x00922150
+    int  Lock(unsigned const& timeout);                         // 0x009221b0
+    int  Unlock();                                              // 0x00922270
+};
+// EA::Thread::EAConditionData at +0x00, size 0x60.
+struct EAConditionData {
+    AtomicInt<int> mnWaitersBlocked;    // +0x00
+    int            mnWaitersToUnblock;  // +0x04
+    int            mnWaitersDone;       // +0x08
+    Semaphore      mSemaphoreBlockQueue;// +0x0c
+    Semaphore      mSemaphoreBlockLock; // +0x1c
+    Mutex          mUnblockLock;        // +0x30
+    __forceinline EAConditionData()
+        : mnWaitersBlocked(0), mnWaitersToUnblock(0), mnWaitersDone(0),
+          mSemaphoreBlockQueue((const SemaphoreParameters*)0, false),
+          mSemaphoreBlockLock((const SemaphoreParameters*)0, false),
+          mUnblockLock((const MutexParameters*)0, false) {}
+};
+class Condition {
+public:
+    EAConditionData mConditionData;                      // +0x00, size 0x60
+    Condition(const ConditionParameters* p = 0, bool bInit = true);  // 0x00921f00
+    __declspec(noinline) ~Condition();                    // 0x00921e40
+    bool Init(const ConditionParameters* pParameters);   // 0x00921e60
+    int  Wait(Mutex* pMutex, unsigned const& timeout);   // 0x00921f80
+    bool Signal(bool bAll);                              // 0x00922050
+};
+// unblockLock timeout constant used by Condition/Mutex calls (DAT_0143dc58 / _64)
+extern unsigned g_mutexTimeout;   // 0x0143dc58
+extern unsigned g_rwTimeout;      // 0x0143dc64
+
+// EA::Thread::RWMutex -- PDB EARWMutexData, size 0x100.
+struct EARWMutexData {
+    int       mnReadWaiters;    // +0x00
+    int       mnWriteWaiters;   // +0x04
+    int       mnReaders;        // +0x08
+    void*     mThreadIdWriter;  // +0x0c
+    Mutex     mMutex;           // +0x10
+    Condition mReadCondition;   // +0x40
+    Condition mWriteCondition;  // +0xa0
+};
+class RWMutex {
+public:
+    enum LockType { kLockTypeNone = 0, kLockTypeRead = 1, kLockTypeWrite = 2 };
+    EARWMutexData mRWMutexData;         // +0x00, size 0x100
+    ~RWMutex();                         // 0x00922310
+    bool Init(const RWMutexParameters* pParameters);  // 0x00922330
+    int  Lock(LockType lockType, unsigned const& timeout);   // 0x009223a0
+    int  Unlock();                      // 0x00922480
 };
 
 // @ 0x009222A0
-Mutex::Mutex(int name, char intraProcess) {
+Mutex::Mutex(const MutexParameters* p, bool bDefault) {
     mMutexData.mnLockCount = 0;
     mMutexData.mThreadId = 0;
     mMutexData.mbIntraProcess = true;
     memset(mMutexData.mData, 0, sizeof(mMutexData.mData));
-    if (name == 0 && intraProcess != 0) { char n[2]; n[0] = 1; n[1] = 0; Init(n); return; }
-    Init((char*)name);
+    if (p == 0 && bDefault) {
+        MutexParameters d;
+        d.mbIntraProcess = 1;
+        d.mName[0] = 0;
+        Init(&d);
+        return;
+    }
+    Init(p);
 }
 // @ 0x00922130
 Mutex::~Mutex() {
@@ -415,19 +533,22 @@ Mutex::~Mutex() {
     CloseHandle(*(HANDLE*)mMutexData.mData);
 }
 // @ 0x00922150
-bool Mutex::Init(char* pName) {
-    if (!pName) return false;
-    mMutexData.mnLockCount = 0;
-    mMutexData.mbIntraProcess = (*pName != 0);
-    if (mMutexData.mbIntraProcess) { InitializeCriticalSection((CRITICAL_SECTION*)this); return true; }
-    HANDLE h = CreateMutexA(0, 0, pName[1] ? (pName + 1) : 0);
-    *(HANDLE*)mMutexData.mData = h;
-    return h != 0;
+bool Mutex::Init(const MutexParameters* p) {
+    if (p) {
+        mMutexData.mnLockCount = 0;
+        unsigned char intra = p->mbIntraProcess;
+        mMutexData.mbIntraProcess = intra;
+        if (intra) { InitializeCriticalSection((CRITICAL_SECTION*)this); return true; }
+        HANDLE h = CreateMutexA(0, 0, p->mName[0] ? p->mName : 0);
+        *(HANDLE*)mMutexData.mData = h;
+        return h != 0;
+    }
+    return false;
 }
 // @ 0x009221B0
-int Mutex::Lock(unsigned* pTimeout) {
+int Mutex::Lock(unsigned const& timeout) {
     if (!mMutexData.mbIntraProcess) {
-        unsigned t = *pTimeout;
+        unsigned t = timeout;
         if (t != 0xffffffffu && t != 0) {
             unsigned now = GetThreadTime();
             t = (now < t) ? (t - now) : 0;
@@ -435,12 +556,12 @@ int Mutex::Lock(unsigned* pTimeout) {
         DWORD r = WaitForSingleObject(*(HANDLE*)mMutexData.mData, t);
         if (r == 0x102) return -2;
         if (r != 0) return -1;
-    } else if (*pTimeout == 0xffffffffu) {
+    } else if (timeout == 0xffffffffu) {
         EnterCriticalSection((CRITICAL_SECTION*)this);
     } else if (!TryEnterCriticalSection((CRITICAL_SECTION*)this)) {
         for (;;) {
             unsigned now = GetThreadTime();
-            if (*pTimeout <= now) return -2;
+            if (timeout <= now) return -2;
             unsigned one = 1;
             ThreadSleep(&one);
             if (TryEnterCriticalSection((CRITICAL_SECTION*)this)) break;
@@ -561,14 +682,10 @@ HANDLE GetThreadId() {
     return dup;
 }
 
-// @ 0x00921E00  (name setter: first byte flag, then a 15-char string)
-struct ThreadName {
-    char mData[0x11];
-    char* Set(const char* src);
-};
-char* ThreadName::Set(const char* src) {
-    char* dst = mData;
-    dst[0] = 0;
+// @ 0x00921E00
+char* ThreadName::Set(unsigned char flag, const char* src) {
+    char* dst = (char*)&mFlag;
+    dst[0] = (char)flag;
     if (src) { strncpy(dst + 1, src, 0xf); dst[0x10] = 0; return dst; }
     dst[1] = 0;
     return dst;
@@ -576,205 +693,208 @@ char* ThreadName::Set(const char* src) {
 
 }} // namespace EA::Thread
 
-// (00922310 is ThreadBlob::Dtor22310 below)
-void FUN_00922310();   // declared to keep ordering; bodies below.
-
-// ---- remaining EA::Thread internals (best-effort source; declared after use above)
+// ================================================================== Condition / Semaphore / RWMutex bodies
 namespace EA { namespace Thread {
 
-struct EASemaphoreData { void* mhSemaphore; int mnCount; int mnCancelCount; bool mbIntraProcess; };
-class Semaphore {
-public:
-    EASemaphoreData mSemaphoreData;
-    bool Init(char* pName);
-    int  Wait(unsigned* pTimeout);
-    bool Post(int n);
-};
+// EASemaphoreData destroy (0x00922610): close the handle if set.
+__declspec(noinline) EASemaphoreData::~EASemaphoreData() { if (mhSemaphore) CloseHandle(mhSemaphore); }
 
-struct EAConditionData {
-    volatile int mnWaitersBlocked;   // +0x00
-    int          mnWaitersToUnblock; // +0x04
-    int          mnWaitersDone;      // +0x08
-    Semaphore    mSemaphoreBlockQueue; // +0x0c
-    Semaphore    mSemaphoreBlockLock;  // +0x1c
-    Mutex        mUnblockLock;         // +0x30
-};
-class Condition {
-public:
-    EAConditionData mConditionData;
-    int  Wait(Mutex* pMutex, unsigned timeout);
-    int  Signal(bool bAll);
-};
+// @ 0x00921E40
+Condition::~Condition() {
+    // member destructors run automatically after this (empty) body: unblock mutex, then
+    // the two semaphores -- exactly the original's 0x30 / 0x1c / 0x0c sequence.
+}
 
-unsigned g_condTimeoutPlaceholder;
-void  FUN_009225d0(int, char, char*);
-void  FUN_00922610();
-int   WaitSemaphoreBlockQueue(EAConditionData*, unsigned);
 
 // @ 0x00921F80
-int Condition::Wait(Mutex* pMutex, unsigned timeout) {
-    ++mConditionData.mnWaitersBlocked;
+int Condition::Wait(Mutex* pMutex, unsigned const& timeout) {
+    _InterlockedIncrement((volatile long*)&mConditionData.mnWaitersBlocked);
     int r = pMutex->Unlock();
     if (r < 0) return r;
-    r = mConditionData.mSemaphoreBlockQueue.Wait(&timeout);
-    mConditionData.mUnblockLock.Lock((unsigned*)&g_condTimeoutPlaceholder);
+    r = mConditionData.mSemaphoreBlockQueue.Wait(timeout);
+    mConditionData.mUnblockLock.Lock(g_mutexTimeout);
     int n = mConditionData.mnWaitersToUnblock;
-    if (n == 0) {
+    if (n != 0) {
+        mConditionData.mnWaitersToUnblock = n - 1;
+    } else {
         ++mConditionData.mnWaitersDone;
         if (mConditionData.mnWaitersDone == 0x3fffffff) {
-            mConditionData.mSemaphoreBlockLock.Wait((unsigned*)&g_condTimeoutPlaceholder);
-            mConditionData.mnWaitersBlocked -= mConditionData.mnWaitersDone;
+            mConditionData.mSemaphoreBlockLock.Wait(g_mutexTimeout);
+            _InterlockedExchangeAdd((volatile long*)&mConditionData.mnWaitersBlocked,
+                                    -mConditionData.mnWaitersDone);
             mConditionData.mSemaphoreBlockLock.Post(1);
             mConditionData.mnWaitersDone = 0;
         }
-    } else {
-        mConditionData.mnWaitersToUnblock = n - 1;
     }
     mConditionData.mUnblockLock.Unlock();
     if (n == 1) mConditionData.mSemaphoreBlockLock.Post(1);
-    if (pMutex->Lock((unsigned*)&g_condTimeoutPlaceholder) == -1) return -1;
+    if (pMutex->Lock(g_mutexTimeout) == -1) return -1;
     return r;
 }
 // @ 0x00922050
-int Condition::Signal(bool bAll) {
-    if (mConditionData.mUnblockLock.Lock((unsigned*)&g_condTimeoutPlaceholder) < 0) return 0;
-    if (mConditionData.mnWaitersToUnblock == 0) {
-        if (mConditionData.mnWaitersBlocked <= mConditionData.mnWaitersDone) {
+bool Condition::Signal(bool bBroadcast) {
+    if (mConditionData.mUnblockLock.Lock(g_mutexTimeout) < 0) return false;
+    int n;
+    if (mConditionData.mnWaitersToUnblock != 0) {
+        if (_InterlockedExchangeAdd((volatile long*)&mConditionData.mnWaitersBlocked, 0) == 0) {
             mConditionData.mUnblockLock.Unlock();
-            return 1;
+            return true;
         }
-        if (mConditionData.mSemaphoreBlockQueue.Wait((unsigned*)&g_condTimeoutPlaceholder) == -1) {
+        if (bBroadcast) {
+            n = _InterlockedExchange((volatile long*)&mConditionData.mnWaitersBlocked, 0);
+            mConditionData.mnWaitersToUnblock += n;
             mConditionData.mUnblockLock.Unlock();
-            return 0;
+            mConditionData.mSemaphoreBlockQueue.Post(n);
+            return true;
         }
-        if (mConditionData.mnWaitersDone) {
-            mConditionData.mnWaitersBlocked -= mConditionData.mnWaitersDone;
+        ++mConditionData.mnWaitersToUnblock;
+        n = 1;
+    } else {
+        if (_InterlockedExchangeAdd((volatile long*)&mConditionData.mnWaitersBlocked, 0)
+                <= mConditionData.mnWaitersDone) {
+            mConditionData.mUnblockLock.Unlock();
+            return true;
+        }
+        if (mConditionData.mSemaphoreBlockLock.Wait(g_mutexTimeout) == -1) {
+            mConditionData.mUnblockLock.Unlock();
+            return false;
+        }
+        if (mConditionData.mnWaitersDone != 0) {
+            _InterlockedExchangeAdd((volatile long*)&mConditionData.mnWaitersBlocked,
+                                    -mConditionData.mnWaitersDone);
             mConditionData.mnWaitersDone = 0;
         }
-        if (bAll) { mConditionData.mnWaitersToUnblock = mConditionData.mnWaitersBlocked; mConditionData.mnWaitersBlocked = 0; }
-        else mConditionData.mnWaitersToUnblock = 1;
-    } else {
-        if (mConditionData.mnWaitersBlocked == 0) { mConditionData.mUnblockLock.Unlock(); return 1; }
-        if (bAll) { mConditionData.mnWaitersToUnblock += mConditionData.mnWaitersBlocked; mConditionData.mnWaitersBlocked = 0; }
-        else ++mConditionData.mnWaitersToUnblock;
+        if (bBroadcast) {
+            n = _InterlockedExchange((volatile long*)&mConditionData.mnWaitersBlocked, 0);
+            mConditionData.mnWaitersToUnblock = n;
+            mConditionData.mUnblockLock.Unlock();
+            mConditionData.mSemaphoreBlockQueue.Post(n);
+            return true;
+        }
+        mConditionData.mnWaitersToUnblock = 1;
+        n = 1;
     }
+    _InterlockedExchangeAdd((volatile long*)&mConditionData.mnWaitersBlocked, -1);
     mConditionData.mUnblockLock.Unlock();
-    for (int i = 0, n = bAll ? mConditionData.mnWaitersToUnblock : 1; i < n; ++i)
-        mConditionData.mSemaphoreBlockQueue.Post(1);
-    return 1;
+    mConditionData.mSemaphoreBlockQueue.Post(n);
+    return true;
 }
 
-}} // namespace
-extern "C" int g_condTimeoutPlaceholder;
-
-// ---- remaining EA::Thread internal objects (generic offset-based stubs; behaviourally complete)
-namespace EA { namespace Thread {
-void FUN_009225d0(int, char, char*);
-void FUN_00922820(int, int);
-struct SemInit { int Init(void* pName); };  // 0x00922620 (Semaphore::Init, thiscall)
-
-struct OutOfLineDtor { ~OutOfLineDtor(); };  // ~OutOfLineDtor 0x00922610
-struct ThreadBlob {
-    char data[0x200];
-    void Dtor21e40();
-    int  Init21e60(char* p);
-    ThreadBlob* Ctor21f00(int p, char c);
-    void Dtor22310();
-    int  Init22330(char* p);
-    int  Lock223a0(int mode, unsigned timeout);
-    int  Unlock22480();
-};
-void ThreadBlob::Dtor21e40() {
-    ((OutOfLineDtor*)(data + 0x30))->~OutOfLineDtor();
-    ((OutOfLineDtor*)(data + 0x1c))->~OutOfLineDtor();
-    ((OutOfLineDtor*)(data + 0x0c))->~OutOfLineDtor();
-}
 // @ 0x00921E60
-int ThreadBlob::Init21e60(char* p) {
-    if (!p) return 0;
-    char* name = (p[1] != 0) ? (p + 1) : 0;
-    char first = *p;
-    FUN_009225d0(0, first, name);
-    FUN_009225d0(1, first, name);
-    ((ThreadName*)data)->Set(name);
-    if (!((SemInit*)(data + 0x0c))->Init(0)) return 0;
-    if (!((SemInit*)(data + 0x1c))->Init(0)) return 0;
-    if (!((Mutex*)(data + 0x30))->Init(0)) return 0;
-    return 1;
+bool Condition::Init(const ConditionParameters* pParameters) {
+    if (!pParameters) return false;
+    const char* name = (pParameters->mName[0] != 0) ? pParameters->mName : 0;
+    unsigned char flag = pParameters->mbIntraProcess;
+    SemaphoreParameters q(0, flag, name);
+    SemaphoreParameters r(1, flag, name);
+    ThreadName tn;
+    tn.Set(flag, name);
+    if (!mConditionData.mSemaphoreBlockQueue.Init(&q)) return false;
+    if (!mConditionData.mSemaphoreBlockLock.Init(&r)) return false;
+    if (!mConditionData.mUnblockLock.Init((const MutexParameters*)&tn)) return false;
+    return true;
+}
+// @ 0x009225D0
+SemaphoreParameters::SemaphoreParameters(int count, bool intra, const char* name) {
+    mnCount = count;
+    mbIntraProcess = intra;
+    if (name) { strncpy(mName, name, 0xf); mName[0xf] = 0; }
+    else mName[0] = 0;
+}
+// @ 0x00922820
+Semaphore::Semaphore(const SemaphoreParameters* p, bool bDefault) {
+    mSemaphoreData.mhSemaphore = 0;
+    mSemaphoreData.mnCount = 0;
+    mSemaphoreData.mnCancelCount = 0;
+    mSemaphoreData.mbIntraProcess = true;
+    if (p == 0 && bDefault) {
+        SemaphoreParameters d;
+        d.mnCount = 0;
+        d.mbIntraProcess = false;
+        d.mName[0] = 0;
+        Init(&d);
+        return;
+    }
+    Init(p);
 }
 // @ 0x00921F00
-ThreadBlob* ThreadBlob::Ctor21f00(int p, char c) {
-    *(volatile int*)data = 0;
-    *(int*)(data + 4) = 0;
-    *(int*)(data + 8) = 0;
-    FUN_00922820(0, 0);
-    FUN_00922820(0, 0);
-    ((Mutex*)(data + 0x30))->Mutex::Mutex(0, 0);
-    if (p == 0 && c != 0) { char n[2]; n[0] = 1; n[1] = 0; Init21e60(n); return this; }
-    Init21e60((char*)p);
-    return this;
+Condition::Condition(const ConditionParameters* pParameters, bool bInitialize)
+    : mConditionData() {
+    ConditionParameters lDefault;
+    if (pParameters == 0 && bInitialize) {
+        lDefault.mbIntraProcess = true;
+        lDefault.mName[0] = 0;
+        pParameters = &lDefault;
+    }
+    Init(pParameters);
 }
+
 // @ 0x00922310
-void ThreadBlob::Dtor22310() {
-    Dtor21e40();
-    Dtor21e40();
-    ((Mutex*)(data + 0x10))->~Mutex();
+RWMutex::~RWMutex() {
+    // member destructors run automatically after this (empty) body: write condition,
+    // read condition, then the mutex -- the original's 0xa0 / 0x40 / 0x10 sequence.
 }
 // @ 0x00922330
-int ThreadBlob::Init22330(char* p) {
-    if (!p) return 0;
-    ((ThreadName*)0)->Set(0);
-    ((Mutex*)(data + 0x10))->Init(0);
-    ((ThreadName*)0)->Set(0);
-    Init21e60(0);
-    Init21e60(0);
-    return 1;
+bool RWMutex::Init(const RWMutexParameters* pParameters) {
+    if (!pParameters) return false;
+    unsigned char flag = pParameters->mbIntraProcess;
+    ThreadName tn;
+    tn.Set(flag, 0);
+    mRWMutexData.mMutex.Init((const MutexParameters*)&tn);
+    ThreadName tn2;
+    tn2.Set(flag, 0);
+    mRWMutexData.mReadCondition.Init((const ConditionParameters*)&tn2);
+    mRWMutexData.mWriteCondition.Init((const ConditionParameters*)&tn2);
+    return true;
 }
 // @ 0x009223A0
-int ThreadBlob::Lock223a0(int mode, unsigned timeout) {
-    Mutex* m = (Mutex*)(data + 0x10);
+int RWMutex::Lock(LockType lockType, unsigned const& timeout) {
+    Mutex* m = &mRWMutexData.mMutex;
     int r = 0;
-    m->Lock(&timeout);
-    if (mode == 1) {
-        while (*(int*)(data + 0x0c) != 0) {
-            ++*(int*)data;
-            r = ((Condition*)(data + 0x28))->Wait(m, timeout);
-            --*(int*)data;
+    m->Lock(g_rwTimeout);
+    if (lockType == kLockTypeRead) {
+        while (mRWMutexData.mThreadIdWriter != 0) {
+            ++mRWMutexData.mnReadWaiters;
+            r = mRWMutexData.mReadCondition.Wait(m, timeout);
+            --mRWMutexData.mnReadWaiters;
             if (r == -2) { m->Unlock(); return -2; }
         }
-        ++*(int*)(data + 8);
-        r = *(int*)(data + 8);
+        r = ++mRWMutexData.mnReaders;
         m->Unlock();
         return r;
     }
-    if (mode == 2) {
-        while (*(int*)(data + 8) > 0 || *(int*)(data + 0x0c) != 0) {
-            ++*(int*)(data + 4);
-            r = ((Condition*)(data + 0x28))->Wait(m, timeout);
-            --*(int*)(data + 4);
+    if (lockType == kLockTypeWrite) {
+        while (mRWMutexData.mnReaders > 0 || mRWMutexData.mThreadIdWriter != 0) {
+            ++mRWMutexData.mnWriteWaiters;
+            r = mRWMutexData.mWriteCondition.Wait(m, timeout);
+            --mRWMutexData.mnWriteWaiters;
             if (r == -2) { m->Unlock(); return -2; }
         }
         r = 1;
-        *(int*)(data + 0x0c) = (int)(intptr_t)GetThreadId();
+        mRWMutexData.mThreadIdWriter = GetThreadId();
     }
     m->Unlock();
     return r;
 }
 // @ 0x00922480
-int ThreadBlob::Unlock22480() {
-    Mutex* m = (Mutex*)(data + 0x10);
+int RWMutex::Unlock() {
+    Mutex* m = &mRWMutexData.mMutex;
     int r;
-    m->Lock(&g_condTimeoutPlaceholder);
-    if (*(int*)(data + 0x0c) == 0) {
-        --*(int*)(data + 8);
-        r = *(int*)(data + 8);
-        if (r > 0) { m->Unlock(); return r; }
+    m->Lock(g_rwTimeout);
+    if (mRWMutexData.mThreadIdWriter != 0) {
+        mRWMutexData.mThreadIdWriter = 0;
     } else {
-        *(int*)(data + 0x0c) = 0;
+        r = --mRWMutexData.mnReaders;
+        if (r > 0) { m->Unlock(); return r; }
     }
-    if (*(int*)(data + 4) > 0) { ((Condition*)(data + 0x28))->Signal(false); m->Unlock(); return 0; }
-    if (*(int*)data > 0) ((Condition*)(data + 0x28))->Signal(true);
+    if (mRWMutexData.mnWriteWaiters > 0) {
+        mRWMutexData.mWriteCondition.Signal(false);
+        m->Unlock();
+        return 0;
+    }
+    if (mRWMutexData.mnReadWaiters > 0) mRWMutexData.mReadCondition.Signal(true);
     m->Unlock();
     return 0;
 }
-}} // namespace
+}} // namespace EA::Thread
+
