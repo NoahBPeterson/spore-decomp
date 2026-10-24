@@ -4,3 +4,4 @@ slices/s005709b0/s005709b0.cpp  ??8Key12@@QBE_NABU0@@Z                     00571
 slices/s005709b0/s005709b0.cpp  ?begin@cFeatureVector@@QAEPAUKey12@@XZ    005716c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 slices/s005709b0/s005709b0.cpp  ?end@cFeatureVector@@QAEPAUKey12@@XZ      005716e0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 slices/s005709b0/s005709b0.cpp  ?ResetResourceType@cFeatureVector@@QAEXXZ 00571700  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s005709b0/s005709b0_g7.cpp  ?IntersectWeights@@YA_NPBUcFeatureVector@@PBUWeightVector@@@Z  00571530  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
