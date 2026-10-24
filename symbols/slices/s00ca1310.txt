@@ -1,2 +1,4 @@
 00ca1310 PathSolver::Solve  # turn/straight/turn path solver: 2 SignedAngle (006994a0), acos, 7 WrapAngle
 00ca11c0 PathSolver::WrapAngle  # 2pi wrap, byte-exact thiscall
+00ca1c60 ?FUN_00ca1c60@PathSolver@@QAEXPAUPathSplineData@@@Z  # spline control-point projection: center/height normalization, then each 0x3c-byte node (nonmatching)
+00ca1dc0 ?FUN_00ca1dc0@PathSolver@@QAEXPAUPathSegment@@MPAUVec3@@1@Z  # path segment sample: straight/mid/pre-turn branches, surface orientation, basis combine (nonmatching)

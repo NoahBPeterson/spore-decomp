@@ -54,9 +54,63 @@ static inline void WrapInline(float& x)
     while (x < 0.0f) x += gTwoPi;
 }
 
+struct cPlanetModel {
+    void  FUN_00c9ff40(const void* pos, float* height, float* offset);
+    void* FUN_00b7f190(void* out, const Vec3* pos);
+};
+
+struct SurfaceFrame {
+    float m[4];
+};
+
+struct PathNode {
+    Vec3  mPos;                 // +0x00
+    char  mPad[0x30];           // +0x0c
+};
+
+struct PathSplineData {
+    PathNode* mpBegin;          // +0x00
+    PathNode* mpEnd;            // +0x04
+    char      mPad08[0x0c];     // +0x08
+    Vec3      mCenter;          // +0x14
+    char      mPad20[0x24];     // +0x20
+};
+
+struct PathSegment {
+    Vec3  mStartPos;            // +0x00
+    char  mPad0c[0x24];         // +0x0c
+    bool  mStartCW;             // +0x30
+    bool  mEndCW;               // +0x31
+    char  mPad32[2];            // +0x32
+    float mRadius;              // +0x34
+    char  mPad38[8];            // +0x38
+    float mCenter40x;           // +0x40
+    float mCenter40y;           // +0x44
+    float mCenter48x;           // +0x48
+    float mCenter48y;           // +0x4c
+    float mCenter50x;           // +0x50
+    float mCenter50y;           // +0x54
+    char  mPad58[8];            // +0x58
+    float mStartTime;           // +0x60
+    float mMidFlag;             // +0x64
+    float mMidDuration;         // +0x68
+    float mEndTime;             // +0x6c
+    float mPrePhase;            // +0x70
+    char  mPad74[4];            // +0x74
+    float mStraightAngle;       // +0x78
+    float mMidPhase;            // +0x7c
+    Vec3  mBasisU;              // +0x80
+    Vec3  mBasisV;              // +0x8c
+};
+
 struct PathSolver {
+    char mPad[0x10];                   // +0x00
+    cPlanetModel* mPlanet;             // +0x10
     float WrapAngle(float a);          // 0x00ca11c0
     bool  Solve(PathRequest* p);       // 0x00ca1310
+    void  FUN_00ca1c60(PathSplineData* p);                         // 0x00ca1c60
+    void  FUN_00ca1dc0(PathSegment* seg, float t, Vec3* pos, Vec3* out); // 0x00ca1dc0
+    Vec3* FUN_00ca1210(Vec3* out, const PathSegment* seg, float angle); // 0x00ca1210
 };
 
 // @ 0x00ca11c0
@@ -206,4 +260,138 @@ bool PathSolver::Solve(PathRequest* p)
     p->lineAng = ang;
     p->lineAng2 = h;
     return true;
+}
+
+cPlanetModel* FUN_00b3d350();                                                   // 0x00b3d350
+void FUN_00a78ce0(float angle, float* outSin, float* outCos);                  // 0x00a78ce0
+Vec3* FUN_0059aed0(Vec3* out, const Vec3* v, const void* orient);              // 0x0059aed0
+bool FUN_0059ab70(const Vec3* v);                                              // 0x0059ab70
+
+extern Vec3 kDefaultDir;   // 0x0169a28c
+
+// @ 0x00ca1c60
+void PathSolver::FUN_00ca1c60(PathSplineData* p)
+{
+    PathSolver* self = this;
+    FUN_00b3d350();
+    Vec3* center = &p->mCenter;
+    float height;
+    float offset;
+    self->mPlanet->FUN_00c9ff40(center, &height, &offset);
+
+    float inv = 1.0f / sqrtf(((center->x * center->x + center->y * center->y) +
+                              center->z * center->z) + 1e-8f);
+    volatile float vinv = inv;
+    volatile float tx = center->x * vinv;
+    volatile float ty = center->y * vinv;
+    volatile float tz = center->z * vinv;
+    center->x = tx * height;
+    center->y = ty * height;
+    center->z = tz * height;
+
+    int n = p->mpEnd - p->mpBegin;
+    for (int i = 0; i < n; i++) {
+        Vec3* node = (Vec3*)((char*)p->mpBegin + i * 0x3c);
+        self->mPlanet->FUN_00c9ff40(node, &height, &offset);
+        float ninv = 1.0f / sqrtf(((node->x * node->x + node->y * node->y) +
+                                   node->z * node->z) + 1e-8f);
+        node->x = (node->x * ninv) * height * offset;
+        node->y = (node->y * ninv) * height * offset;
+        node->z = (node->z * ninv) * height * offset;
+    }
+}
+
+// @ 0x00ca1dc0
+void PathSolver::FUN_00ca1dc0(PathSegment* seg, float t, Vec3* pos, Vec3* out)
+{
+    if (seg->mEndTime == 0.0f) {
+        *pos = seg->mStartPos;
+        SurfaceFrame frame;
+        void* orient = FUN_00b3d350()->FUN_00b7f190(&frame, pos);
+        Vec3 tmp;
+        Vec3* v = FUN_0059aed0(&tmp, &kDefaultDir, orient);
+        *out = *v;
+        if (!FUN_0059ab70(out)) {
+            *out = kDefaultDir;
+        }
+        return;
+    }
+
+    float tt = t;
+    if (seg->mEndTime < tt)
+        tt = seg->mEndTime;
+    float start = seg->mStartTime;
+
+    float cosv;
+    float sinv;
+
+    if (start <= tt) {
+        if (tt < seg->mMidDuration + start || seg->mMidFlag == 0.0f) {
+            float ang = seg->mStraightAngle;
+            float dt = tt - start;
+            FUN_00a78ce0(ang, &sinv, &cosv);
+            float x = cosv * dt + seg->mCenter50x;
+            float y = sinv * dt + seg->mCenter50y;
+            cosv = x;
+            sinv = y;
+            t = ang;
+        } else {
+            bool cw = seg->mEndCW;
+            float sign = cw ? -1.0f : 1.0f;
+            float ang = WrapAngle((sign / seg->mRadius) *
+                                  (tt - (seg->mMidDuration + start)) + seg->mMidPhase);
+            FUN_00a78ce0(ang, &sinv, &cosv);
+            float x = seg->mRadius * cosv + seg->mCenter48x;
+            float y = seg->mRadius * sinv + seg->mCenter48y;
+            cosv = x;
+            sinv = y;
+            if (!cw)
+                ang = kHalfPi + ang;
+            else
+                ang = ang - kHalfPi;
+            ang = WrapAngle(ang);
+            t = ang;
+        }
+    } else {
+        bool cw = seg->mStartCW;
+        float sign = cw ? -1.0f : 1.0f;
+        float ang = (sign / seg->mRadius) * tt + seg->mPrePhase;
+        while (gTwoPi < ang)
+            ang -= gTwoPi;
+        while (ang < 0.0f)
+            ang += gTwoPi;
+        FUN_00a78ce0(ang, &sinv, &cosv);
+        float x = seg->mRadius * cosv + seg->mCenter40x;
+        float y = seg->mRadius * sinv + seg->mCenter40y;
+        cosv = x;
+        sinv = y;
+        if (!cw)
+            ang = kHalfPi + ang;
+        else
+            ang = ang - kHalfPi;
+        while (gTwoPi < ang)
+            ang -= gTwoPi;
+        while (ang < 0.0f)
+            ang += gTwoPi;
+        t = ang;
+    }
+
+    Vec3 p;
+    p.x = seg->mStartPos.x + seg->mBasisU.x * cosv + seg->mBasisV.x * sinv;
+    p.y = seg->mStartPos.y + seg->mBasisU.y * cosv + seg->mBasisV.y * sinv;
+    p.z = seg->mStartPos.z + seg->mBasisU.z * cosv + seg->mBasisV.z * sinv;
+    *pos = p;
+
+    float height;
+    float offset;
+    mPlanet->FUN_00c9ff40(pos, &height, &offset);
+    float inv = 1.0f / sqrtf(((pos->x * pos->x + pos->y * pos->y) +
+                              pos->z * pos->z) + 1e-8f);
+    pos->x = (pos->x * inv) * height;
+    pos->y = (pos->y * inv) * height;
+    pos->z = (pos->z * inv) * height;
+
+    Vec3 tmp;
+    Vec3* v = FUN_00ca1210(&tmp, seg, t);
+    *out = *v;
 }
