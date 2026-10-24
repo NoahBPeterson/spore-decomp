@@ -87,19 +87,23 @@ public:
     uint32_t f50, f54;           // 0x50, 0x54
     uint32_t f58, f5c, f60;      // 0x58, 0x5c, 0x60
 
-    void SwapWith(cFieldSwap* o);   // 0x00518b00
+    // returns the swapped-out f0: retail leaves it in eax
+    uint32_t SwapWith(cFieldSwap* o);   // 0x00518b00
 };
 
 template <class T> inline void swapv(T& a, T& b) { T t = a; a = b; b = t; }
 
 // @ 0x00518b00
-void cFieldSwap::SwapWith(cFieldSwap* o)
+uint32_t cFieldSwap::SwapWith(cFieldSwap* o)
 {
-    swapv(*(uint64_t*)((char*)this + 0x50), *(uint64_t*)((char*)o + 0x50));
-    swapv(*(uint32_t*)((char*)this + 0x60), *(uint32_t*)((char*)o + 0x60));
-    swapv(*(uint32_t*)((char*)this + 0x58), *(uint32_t*)((char*)o + 0x58));
-    swapv(*(uint32_t*)((char*)this + 0x5c), *(uint32_t*)((char*)o + 0x5c));
-    swapv(*(uint32_t*)this, *(uint32_t*)o);
+    swapv(*(uint64_t*)((char*)o + 0x50), *(uint64_t*)((char*)this + 0x50));
+    swapv(*(uint32_t*)((char*)o + 0x60), *(uint32_t*)((char*)this + 0x60));
+    swapv(*(uint32_t*)((char*)o + 0x58), *(uint32_t*)((char*)this + 0x58));
+    swapv(*(uint32_t*)((char*)o + 0x5c), *(uint32_t*)((char*)this + 0x5c));
+    uint32_t t = *(uint32_t*)o;
+    *(uint32_t*)o = *(uint32_t*)this;
+    *(uint32_t*)this = t;
+    return t;
 }
 
 // ---------------------------------------------------------------------------

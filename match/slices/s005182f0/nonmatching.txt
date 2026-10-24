@@ -1,6 +1,6 @@
 # Complete behavioral ports; differences are /Od stack-slot ordering and helper inlining.
 005182f0   137  cPaintRenderJob::Render: complete (stage dispatch + spin loop); this/app slot order differs
-00518b00    92  cFieldSwap::SwapWith: complete 5-field swap via inlined swap(); pointer/temp slot order differs
+00518b00   123  cFieldSwap::SwapWith: complete 5-field swap (0x50 qword, 0x60, 0x58, 0x5c, then f0); returns the swapped-out f0 like retail's eax. /Od register rotation of the same instruction sequence (frame slots identical) and the 3-byte `mov eax,[f0 temp]` return differ (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast); difftest PASS (302 valid, 100% coverage, no mismatch)
 00518bf0   165  cPaintCopyIdentityJob::Render: complete (buffer setup, material, vertex, BeginDraw); slots differ
 00518cf0   405  cPaintDifferentiateJob::Render: complete (property read, reciprocal scale, vertex, BeginDraw); slots differ
 005183c0  1468  nSPSkinner::cPaintDilateJob::Render: complete (stage 0 quad+mesh triangles, stage>0 multipass ping-pong); /Od frame/inline-temp slots differ
