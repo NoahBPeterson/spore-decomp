@@ -314,11 +314,11 @@ struct cMat33 {
   void Assign(const void* src);   // 0x41cb40
 };
 struct cTransform {
-  cMat33 mRotation;             // +0x00
-  cVec3  mTranslation;          // +0x24
-  uint32_t mModificationCount;  // +0x30
-  uint32_t mFlags;              // +0x34
-  float  mScale;                // +0x38
+  uint16_t mFlags;              // +0x00
+  uint16_t mModificationCount;  // +0x02
+  cVec3  mTranslation;          // +0x04
+  float  mScale;                // +0x10
+  cMat33 mRotation;             // +0x14
   void RotateY(float a);        // 0x4099b0
   void PreRotateX(float a);     // 0x5a2d90
   cTransform& operator=(const cTransform& x);  // 0x537dc0
@@ -353,7 +353,11 @@ class IRef2_s0062_5e70 {
     public: virtual void r0();
     virtual void r1();
 };
-struct Depends { char pad[0x78]; cVec3 mActualCameraPositionOffset; };  // +0x78 within depends
+struct Depends {
+  char pad00[0x5c];
+  cVec3 mTargetCameraPositionOffset;   // +0x5c (this+0x6c)
+  cVec3 mActualCameraPositionOffset;   // +0x68 (this+0x78)
+};
 class cCreatureCameraBase : public cICameraController, public IRef2_s0062_5e70 {
 public:
   int padA[2];                 // +0x08
@@ -380,7 +384,8 @@ public:
   float mFieldOfViewX;         // +0x18c
   float mFieldOfViewY;         // +0x190
   char mCameraToWorld[0x38];   // +0x194
-  char padTail[0x200 - 0x1cc];
+  bool mTransformNeedsUpdating; // +0x1cc
+  char padTail[0x200 - 0x1cd];
   App::PropertyList* mpTuningProps;  // +0x200
 
   void AimTowardsTarget(int unused);              // 00625e70
@@ -388,6 +393,7 @@ public:
   void ReloadTuning();                            // 00626290
   void CalculateCameraToWorldMatrix();            // 006268a0
   void SetInitialCameraValues(uint32_t a, uint32_t b, uint32_t c, const float* v);  // 00626b50
+  void SetCurrentPolarCoords(float theta, float phi, float distance);  // 0x00625560
 };
 void* __cdecl QuaternionFromFacingAndUp(void* out, const float* facing, const float* up);  // 0x69b600
 float __cdecl FUN_00625560(uint32_t a, uint32_t b, uint32_t c);                  // 0x625560
@@ -408,8 +414,11 @@ struct cTransform_s0062_6db0 {
   uint32_t mFlags;              // +0x34
 };                              // size 0x38
 void* __cdecl MessageServer();                       // 0x67dcc0
-void  __cdecl Matrix3_Assign(void* dst, const void* src);   // 0x41cb40
-void  __cdecl Modifier_Accumulate(void* t, const void* src); // 0x40ccb0
+void  __cdecl Matrix3_Assign(void* dst, const void* src);   // 0x41cb40 (__thiscall shape)
+void  __cdecl Modifier_Accumulate(void* t, const void* src); // 0x40ccb0 (__thiscall shape)
+typedef void (__thiscall *Thiscall1)(void*);
+typedef void (__thiscall *Thiscall2)(void*, const void*);
+typedef void (__thiscall *ThiscallBool)(void*, bool);
 struct cCreatureCameraBase_s0062_6db0 {
   char  pad00[0x04];
   char  pad04[0x0c];
@@ -418,7 +427,9 @@ struct cCreatureCameraBase_s0062_6db0 {
   float avatarZ;               // +0x18
   char  pad1c[0x18];
   float mAvatarMinZ;           // +0x34
-  char  pad38[0x50];
+  char  pad38[(0x74 - 0x38)];
+  void* mAnimCreature;         // +0x74
+  char  pad78[0x88 - 0x78];
   int   mCameraInputState;     // +0x88
   char  pad8c[0x98-0x8c];
   float currentPlayerTheta;    // +0x98
@@ -432,7 +443,8 @@ struct cCreatureCameraBase_s0062_6db0 {
   cQuat newOri2;               // +0x114
   char  pad124[0x194-0x124];
   cTransform_s0062_6db0 mCameraToWorld;   // +0x194
-  char  pad1cc[0x1d0-0x1cc];
+  bool  mTransformNeedsUpdating; // +0x1cc
+  char  pad1cd[0x1d0-0x1cd];
   void* mpServer;              // +0x1d0
   void* mpHandler;             // +0x1d4
   void* mpIdArray;             // +0x1d8
@@ -448,6 +460,7 @@ struct cCreatureCameraBase_s0062_6db0 {
 
   void GetAudioAnchorPosition(float* out);     // 0x627000
   void GetCurrentCameraPosition(float* out);   // 0x626db0
+  void CalculateCameraToWorldMatrix();         // 0x6268a0
   void UpdateCamera_StandardControl(float dt); // 0x626ee0
   void Activate();                             // 0x627ca0
   void ReloadTuning();                         // 0x626290
@@ -462,9 +475,13 @@ static inline cVec3& platformPosition(cCreatureCameraBase_s0062_6db0* c) { retur
 static inline cVec3& platformVelocity(cCreatureCameraBase_s0062_6db0* c) { return *(cVec3*)((char*)c + 0xa8); }
 static inline cQuat& platformOrientation(cCreatureCameraBase_s0062_6db0* c) { return *(cQuat*)((char*)c + 0xb4); }
 static inline cQuat& newPlatformOrientation(cCreatureCameraBase_s0062_6db0* c) { return *(cQuat*)((char*)c + 0x114); }
+static inline cVec3& desiredPositionTmp(cCreatureCameraBase_s0062_6db0* c) { return *(cVec3*)((char*)c + 0xdc); }
+static inline cVec3& newPlatformVelSource(cCreatureCameraBase_s0062_6db0* c) { return *(cVec3*)((char*)c + 0x108); }
 void  __cdecl FUN_00625a90_proxy(cCreatureCameraBase_s0062_6db0* c);   // 0x625a90
 void  __cdecl FUN_00625bf0_proxy(cCreatureCameraBase_s0062_6db0* c);   // 0x625bf0
-void  __cdecl cCreatureCameraDepends_SetLocalExtents(void* d);  // 0x6252c0-ish
+void  __cdecl FUN_00625f70_proxy(cCreatureCameraBase_s0062_6db0* c);   // 0x625f70
+void  __cdecl AimProxy(cCreatureCameraBase_s0062_6db0* c);             // 0x625e70
+void  __cdecl cCreatureCameraDepends_SetLocalExtents(void* d);  // 0x628100 (__thiscall: ecx = this)
 extern cVec3 gCamLocalPos;  // 0x15f65fc
 extern cVec3 gCamForward;   // 0x15f6774
 extern cVec3 gCamRight;     // 0x15f6720
@@ -521,6 +538,8 @@ extern float gA2;    // 0x152189c
 
 // ---- items of slice s00627d50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float gCameraTurnRate;   // 0x15219dc
+extern float sRotateRateCache;          // 0x15f65cc
+extern unsigned int sRotateRateGuard;   // 0x15f65d0
 extern float kZoomRate;   // 0x13fdfb4 = 30.30303
 extern float kZoomScale;  // 0x13f9324 = 0.015
 struct cSPVector3_s0062_7d50 {
@@ -979,17 +998,21 @@ void SP::cCreatureCameraBase::AimTowardsTarget(bool unused)
   float dy = mCameraData.desiredLookAt.y - mCameraData.newPlatformPosition.y;
   float dz = mCameraData.desiredLookAt.z - mCameraData.newPlatformPosition.z;
   float dx = mCameraData.desiredLookAt.x - mCameraData.newPlatformPosition.x;
-  float f0 = dx;
-  float f1 = dy;
-  float f2 = dz;
-  float u0 = gUpX;
-  float u1 = gUpY;
-  float u2 = gUpZ;
-  float inv = 1.0f / sqrt(dy * dy + dz * dz + dx * dx);
-  u0 = inv * dx;
-  u1 = inv * dy;
-  u2 = inv * dz;
-  QuaternionFromFacingAndUp(&mCameraData.newPlatformOrientation, &f0, &u0);
+  float facing[3];
+  float up[3];
+  float out[4];
+  up[0] = gUpX;
+  up[1] = gUpY;
+  up[2] = gUpZ;
+  float inv = 1.0f / sqrt(dx * dx + dy * dy + dz * dz);
+  facing[0] = inv * dx;
+  facing[1] = inv * dy;
+  facing[2] = inv * dz;
+  QuaternionFromFacingAndUp(out, facing, up);
+  mCameraData.newPlatformOrientation.x = out[0];
+  mCameraData.newPlatformOrientation.y = out[1];
+  mCameraData.newPlatformOrientation.z = out[2];
+  mCameraData.newPlatformOrientation.w = out[3];
   (void)unused;
 }
 
@@ -1032,16 +1055,31 @@ void cCreatureCameraBase::FUN_00625f70()
   float vx = r.x - d * up.x;
   float vy = r.y - up.y * d;
   float vz = r.z - up.z * d;
-  float inv = (float)(1.0 / sqrt((double)vx * vx + ((double)vy * vy + (double)vz * vz)));
+  // The original rounds each of these to float in memory before the final
+  // single-precision SSE combination; keep that round-trip so the compiler
+  // does not carry x87 extended values into the expression.
+  volatile float invf = (float)(1.0 / sqrt((double)vx * vx + ((double)vy * vy + (double)vz * vz)));
   double k3 = exp((double)(dt / mTuning184) * -0.30103f);
   double pitch = (double)mCameraData.currentPlayerPitch
                  + ((double)mCameraData.desiredPlayerPitch - (double)mCameraData.currentPlayerPitch) * (1.0 - k3);
   mCameraData.currentPlayerPitch = (float)pitch;
-  float sy = (float)(sin(pitch) * dist);
-  float cy = (float)(cos(pitch) * dist);
-  mCameraData.desiredPosition.x = (mCameraData.desiredLookAt.x - (inv * vx) * cy) + up.x * sy;
-  mCameraData.desiredPosition.y = (mCameraData.desiredLookAt.y - (vy * inv) * cy) + up.y * sy;
-  mCameraData.desiredPosition.z = (mCameraData.desiredLookAt.z - (vz * inv) * cy) + up.z * sy;
+  volatile float syf = (float)(sin(pitch) * dist);
+  volatile float cyf = (float)(cos(pitch) * dist);
+  volatile float px = invf * vx;
+  volatile float py = vy * invf;
+  volatile float pz = vz * invf;
+  volatile float cx = px * cyf;
+  volatile float cyy = py * cyf;
+  volatile float cz = pz * cyf;
+  volatile float ox = mCameraData.desiredLookAt.x - cx;
+  volatile float oy = mCameraData.desiredLookAt.y - cyy;
+  volatile float oz = mCameraData.desiredLookAt.z - cz;
+  volatile float ux = up.x * syf;
+  volatile float uy = up.y * syf;
+  volatile float uz = up.z * syf;
+  mCameraData.desiredPosition.x = ox + ux;
+  mCameraData.desiredPosition.y = oy + uy;
+  mCameraData.desiredPosition.z = oz + uz;
 }
 
 // @ 0x00626290
@@ -1136,7 +1174,14 @@ void cCreatureCameraBase::CalculateCameraToWorldMatrix()
 // @ 0x00626b50
 void cCreatureCameraBase::SetInitialCameraValues(uint32_t a, uint32_t b, uint32_t c, const float* v)
 {
-  FUN_00625560(a ^ 0x80000000u, b, c);
+  // The original sets ecx = this and passes the first parameter with its sign bit flipped:
+  // SetCurrentPolarCoords(-a, b, c) -- a, b, c are float bit patterns.
+  union BitsToFloat { uint32_t u; float f; };
+  BitsToFloat negA, fb, fc;
+  negA.u = a ^ 0x80000000u;
+  fb.u = b;
+  fc.u = c;
+  SetCurrentPolarCoords(negA.f, fb.f, fc.f);
   cTransform t;
   t.mTranslation.x = gT0;
   t.mTranslation.y = gT1;
@@ -1148,6 +1193,9 @@ void cCreatureCameraBase::SetInitialCameraValues(uint32_t a, uint32_t b, uint32_
   ((Depends*)((char*)this + 0x10))->mActualCameraPositionOffset.x = gT0;
   ((Depends*)((char*)this + 0x10))->mActualCameraPositionOffset.y = gT1;
   ((Depends*)((char*)this + 0x10))->mActualCameraPositionOffset.z = gT2;
+  ((Depends*)((char*)this + 0x10))->mTargetCameraPositionOffset.x = gT0;
+  ((Depends*)((char*)this + 0x10))->mTargetCameraPositionOffset.y = gT1;
+  ((Depends*)((char*)this + 0x10))->mTargetCameraPositionOffset.z = gT2;
   mCameraData.currentPreTranslate.x = v[0];
   mCameraData.currentPreTranslate.y = v[1];
   mCameraData.currentPreTranslate.z = v[2];
@@ -1178,51 +1226,51 @@ void cCreatureCameraBase::SetInitialCameraValues(uint32_t a, uint32_t b, uint32_
 // @ 0x00626db0
 void cCreatureCameraBase_s0062_6db0::GetCurrentCameraPosition(float* out)
 {
-  if (*(uint8_t*)((char*)this + 0x150) != 0) {
-    // CalculateCameraToWorldMatrix(this)
-    extern void CalcCam(cCreatureCameraBase_s0062_6db0*);
-    CalcCam(this);
+  cSPTransformR& xf = *(cSPTransformR*)((char*)this + 0x194);
+  if (*(uint8_t*)((char*)this + 0x1cc) != 0) {
+    CalculateCameraToWorldMatrix();
   }
   float x = gT0, y = gT1, z = gT2;
   out[0] = x;
   out[1] = y;
   out[2] = z;
-  if ((mCameraToWorld.mFlags & 2) != 0) {
-    cMat33_s0062_6db0& m = mCameraToWorld.mRotation;
-    out[0] = (m.zAxis.x * z + m.yAxis.x * y) + m.xAxis.x * x;
-    out[1] = (m.zAxis.y * z + m.yAxis.y * y) + m.xAxis.y * x;
-    out[2] = (m.zAxis.z * z + m.yAxis.z * y) + m.xAxis.z * x;
+  if ((xf.mFlags & 2) != 0) {
+    out[0] = (xf.zAxis.x * z + xf.yAxis.x * y) + xf.xAxis.x * x;
+    out[1] = (xf.zAxis.y * z + xf.yAxis.y * y) + xf.xAxis.y * x;
+    out[2] = (xf.zAxis.z * z + xf.yAxis.z * y) + xf.xAxis.z * x;
   }
-  float s = mCameraToWorld.mScale;
-  out[0] = s * out[0] + mCameraToWorld.mTranslation.x;
-  out[1] = s * out[1] + mCameraToWorld.mTranslation.y;
-  out[2] = out[2] * s + mCameraToWorld.mTranslation.z;
+  float s = xf.mScale;
+  out[0] = s * out[0] + xf.mTranslation.x;
+  out[1] = s * out[1] + xf.mTranslation.y;
+  out[2] = out[2] * s + xf.mTranslation.z;
 }
 
 // @ 0x00626ee0
 void cCreatureCameraBase_s0062_6db0::UpdateCamera_StandardControl(float dt)
 {
   currentPlayerTheta = dt;                 // +0x98 (mCameraData.dt)
-  FUN_00625a90_proxy(this);
-  desiredLookAtV.x = avatarX;
-  desiredLookAtV.y = avatarY;
-  desiredLookAtV.z = avatarZ;
-  desiredPositionV.x = desiredLookAtV.x - gOffX;
-  desiredPositionV.y = desiredLookAtV.y - gOffY;
-  desiredPositionV.z = desiredLookAtV.z - gOffZ;
-  extern void FUN_00625f70_proxy(cCreatureCameraBase_s0062_6db0*);
-  FUN_00625f70_proxy(this);
-  FUN_00625bf0_proxy(this);
-  float x = desiredPositionV.x, y = desiredPositionV.y, z = desiredPositionV.z;
-  newPlatformPos.x = x; platformPosition(this).x = x;
-  newPlatformPos.y = y; platformPosition(this).y = y;
-  newPlatformPos.z = z; platformPosition(this).z = z;
-  cVec3 v = newPlatformVel;
+  ((Thiscall1)FUN_00625a90_proxy)(this);
+  float x = desiredLookAtV.x, y = desiredLookAtV.y, z = desiredLookAtV.z;
+  desiredLookAt(this).x = x;
+  desiredLookAt(this).y = y;
+  desiredLookAt(this).z = z;
+  desiredPositionTmp(this).x = x - gOffX;
+  desiredPositionTmp(this).y = y - gOffY;
+  desiredPositionTmp(this).z = z - gOffZ;
+  ((Thiscall1)FUN_00625f70_proxy)(this);
+  ((Thiscall1)FUN_00625bf0_proxy)(this);
+  float px = desiredPositionTmp(this).x, py = desiredPositionTmp(this).y, pz = desiredPositionTmp(this).z;
+  {
+    cVec3& npp = *(cVec3*)((char*)this + 0xfc);
+    npp.x = px; platformPosition(this).x = px;
+    npp.y = py; platformPosition(this).y = py;
+    npp.z = pz; platformPosition(this).z = pz;
+  }
+  cVec3 v = newPlatformVelSource(this);
   platformVelocity(this).x = v.x;
   platformVelocity(this).y = v.y;
   platformVelocity(this).z = v.z;
-  extern void AimProxy(cCreatureCameraBase_s0062_6db0*);
-  AimProxy(this);
+  ((ThiscallBool)AimProxy)(this, false);
   platformOrientation(this) = newPlatformOrientation(this);
 }
 
@@ -1239,27 +1287,27 @@ void cCreatureCameraBase_s0062_6db0::GetAudioAnchorPosition(float* out)
 // @ 0x00627060
 void SP::cCreatureCameraBase::InitCreatureData(SP::cAnimatingCreature * pCreature)
 {
-  float f0 = gA0;
-  float f1 = gA1 * 0.017453292f;
-  float f2 = gA2 * 0.017453292f;
-  mCameraData.dt = 0.0f;
+  float radius = gA2;
+  float theta0 = gA0 * 0.017453292f;
+  float pitch = gA1 * 0.017453292f;
+  mCameraData.currentPlayerTheta = 0.0f;
   float a = 0.0f;
-  if (0.0f <= *(float*)((char*)this + 0x160)) a = *(float*)((char*)this + 0x160);
-  if (*(float*)((char*)this + 0x164) <= a) a = *(float*)((char*)this + 0x164);
-  *(float*)((char*)this + 0x9c) = a;       // currentPlayerPitch
-  *(float*)((char*)this + 0xa0) = 2.0f;    // currentPlayerDistance
-  float lo = *(float*)((char*)this + 0x160);
-  float hi = *(float*)((char*)this + 0x164);
-  *(uint8_t*)((char*)this + 0x1cc) = 1;    // mTransformNeedsUpdating
-  *(float*)((char*)this + 0x124) = f1;     // desiredPlayerTheta
-  if (f2 <= lo) f2 = lo;
-  if (hi <= f2) f2 = hi;
-  *(float*)((char*)this + 0x128) = f2;     // desiredPlayerPitch
+  if (0.0f <= mMinCameraPhi) a = mMinCameraPhi;
+  if (mMaxCameraPhi <= a) a = mMaxCameraPhi;
+  mCameraData.currentPlayerPitch = a;
+  mCameraData.currentPlayerDistance = 2.0f;
+  float lo = mMinCameraPhi;
+  float hi = mMaxCameraPhi;
+  mTransformNeedsUpdating = 1;
+  mCameraData.desiredPlayerTheta = theta0;
+  if (pitch <= lo) pitch = lo;
+  if (hi <= pitch) pitch = hi;
+  mCameraData.desiredPlayerPitch = pitch;
   float dist = 0.1f;
-  if (f0 > 0.1f) dist = f0;
-  *(float*)((char*)this + 0x12c) = dist;   // desiredPlayerDistance
-  *(void**)((char*)this + 0x1b0) = pCreature;  // mDepends.mAnimCreature
-  cCreatureCameraDepends_SetLocalExtents((char*)this + 0x10);
+  if (radius > 0.1f) dist = radius;
+  mCameraData.desiredPlayerDistance = dist;
+  *(SP::cAnimatingCreature**)((char*)this + 0x74) = pCreature;  // mDepends.mAnimCreature
+  ((Thiscall1)cCreatureCameraDepends_SetLocalExtents)((char*)this + 0x10);
   InitCameraData();
 }
 
@@ -1272,8 +1320,8 @@ void* __cdecl translateTransform(void* dst, void* src, void* outDst)
   *(uint32_t*)((char*)dst + 8) = *(uint32_t*)((char*)outDst + 8);
   *(uint32_t*)((char*)dst + 0xc) = *(uint32_t*)((char*)outDst + 0xc);
   *(uint32_t*)((char*)dst + 0x10) = *(uint32_t*)((char*)outDst + 0x10);
-  Matrix3_Assign((char*)dst + 0x14, (char*)outDst + 0x14);
-  Modifier_Accumulate(dst, src);
+  ((Thiscall2)Matrix3_Assign)((char*)dst + 0x14, (char*)outDst + 0x14);
+  ((Thiscall2)Modifier_Accumulate)(dst, src);
   return dst;
 }
 
@@ -1381,7 +1429,14 @@ void cCreatureCameraBase_s0062_6db0::Activate()
 namespace SP {
 void cCreatureCameraBase_s0062_7d50::UpdateCamera(float dt)
 {
-    static float sRotateRate = gCameraTurnRate;
+    float sRotateRate;
+    if ((sRotateRateGuard & 1) == 0) {
+        sRotateRate = gCameraTurnRate;
+        sRotateRateGuard |= 1;
+        sRotateRateCache = sRotateRate;
+    } else {
+        sRotateRate = sRotateRateCache;
+    }
     switch (mCameraInputState) {
     case 1:
         mCameraData.desiredPlayerTheta = mCameraData.desiredPlayerTheta - sRotateRate * dt;
@@ -1391,14 +1446,16 @@ void cCreatureCameraBase_s0062_7d50::UpdateCamera(float dt)
         break;
     case 4:
         {
-            float z = dt * kZoomRate;
+            float d = dt;
+            float z = d * kZoomRate;
             z = z * kZoomScale;
             mCameraData.desiredPlayerDistance = (1.0f - z) * mCameraData.desiredPlayerDistance;
         }
         break;
     case 5:
         {
-            float z = dt * kZoomRate;
+            float d = dt;
+            float z = d * kZoomRate;
             z = z * kZoomScale;
             mCameraData.desiredPlayerDistance = (z + 1.0f) * mCameraData.desiredPlayerDistance;
         }
@@ -1427,9 +1484,13 @@ void cCreatureCameraBase_s0062_7d50::Update(unsigned ticks, ICameraHelper* pHelp
         pDep->mAvatar.mPosition = pDep->mAnimCreature->mPos;
     if (mCameraData.bTransitioning) {
         float t = Clamp(dt, 0.01f, 0.1f);
-        mCameraData.currentPreTranslate.y = (mCameraData.desiredPreTranslate.y - mCameraData.currentPreTranslate.y) * t * 3.0f + mCameraData.currentPreTranslate.y;
-        mCameraData.currentPreTranslate.z = (mCameraData.desiredPreTranslate.z - mCameraData.currentPreTranslate.z) * t * 3.0f + mCameraData.currentPreTranslate.z;
-        mCameraData.currentPreTranslate.x = mCameraData.currentPreTranslate.x + (mCameraData.desiredPreTranslate.x - mCameraData.currentPreTranslate.x) * t * 3.0f;
+        cSPVector3_s0062_7d50 delta;
+        delta.x = mCameraData.desiredPreTranslate.x - mCameraData.currentPreTranslate.x;
+        delta.y = mCameraData.desiredPreTranslate.y - mCameraData.currentPreTranslate.y;
+        delta.z = mCameraData.desiredPreTranslate.z - mCameraData.currentPreTranslate.z;
+        mCameraData.currentPreTranslate.y = delta.y * t * 3.0f + mCameraData.currentPreTranslate.y;
+        mCameraData.currentPreTranslate.z = delta.z * t * 3.0f + mCameraData.currentPreTranslate.z;
+        mCameraData.currentPreTranslate.x = delta.x * t * 3.0f + mCameraData.currentPreTranslate.x;
         float dx = mCameraData.desiredPreTranslate.x - mCameraData.currentPreTranslate.x;
         float dy = mCameraData.desiredPreTranslate.y - mCameraData.currentPreTranslate.y;
         float dz = mCameraData.desiredPreTranslate.z - mCameraData.currentPreTranslate.z;
