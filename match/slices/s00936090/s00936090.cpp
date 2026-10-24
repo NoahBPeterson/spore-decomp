@@ -59,7 +59,7 @@ float RandomLinearCongruential::RandomDoubleUniform() {
 // ---------------------------------------------------------------------------
 class RandomMersenneTwister {
 public:
-    void Reload();                              // 0x00936110
+    uint32_t Reload();                          // 0x00936110 (eax = mState[0] on return)
     void InitState(uint32_t seed);              // 0x009361F0
     uint32_t Generate();                        // 0x00936250
     uint32_t GenerateUInt32(uint32_t max);      // 0x009362B0
@@ -72,7 +72,7 @@ public:
 };
 
 // @ 0x00936110
-void RandomMersenneTwister::Reload() {
+uint32_t RandomMersenneTwister::Reload() {
     uint32_t* p = mState;
     for (int i = 0; i < 227; i++) {
         uint32_t y = (p[i] & 0x80000000) | (p[i + 1] & 0x7fffffff);
@@ -86,6 +86,11 @@ void RandomMersenneTwister::Reload() {
     p[623] = p[396] ^ (y >> 1) ^ (-(int32_t)(y & 1) & 0x9908b0df);
     mnCount = 0x270;
     mpNext = p;
+    // The retail tail leaves a leftover in eax: mState[0] (the first operand of the wrap-around y,
+    // `mov eax,[mState]`) with its low byte masked by the scalar `and al,1` of that computation,
+    // never reloaded before `ret`. Dead for the game, but LTCG callers can observe it, so hand
+    // the same value back. The volatile read keeps cl from folding it into the earlier y code.
+    return *(volatile uint32_t*)mState & 0xffffff01u;
 }
 
 // @ 0x009361F0
@@ -299,7 +304,9 @@ bool __cdecl EA_generic_command_function(const char* name, void* self, void** ou
         Entry* end = *(Entry**)((char*)self + 0x20);
         for (; it < end; it++) {
             typedef bool (__cdecl *Fn)(const char*, void*, void**, int, int, int);
-            if (((Fn)it->fn)(name, it->user, out, a, b, c))
+            Fn fn = (Fn)it->fn;
+            void* user = it->user;
+            if (fn(name, user, out, a, b, c))
                 return true;
         }
     }
@@ -340,6 +347,7 @@ struct ObjectVector {
     void erase(void* first, void* last);   // 0x00d018d0 (equiv t2)
     void Destruct();   // 0x005c7f10 (equiv t3)
     void push_back_impl(void* value);
+    void insert_pair(void* pos, void* value);   // 0x009a0c50 (8-byte elements)
 };
 
 extern void* gpRegistryMutexName;   // 0x0143e98c
@@ -634,16 +642,18 @@ bool EA::SharedLibrary::Register(void* fn, void* user) {
             return true;
         it += 2;
     }
+    struct HandlerPair { void* fn; void* user; };
+    HandlerPair pair;
+    pair.fn = fn;
+    pair.user = user;
     if (mHandlerEnd < mHandlerCap) {
-        char** slot = (char**)mHandlerEnd;
-        mHandlerEnd = slot + 2;
-        if (slot != 0) {
-            slot[1] = (char*)user;
-            slot[0] = (char*)fn;
-        }
+        HandlerPair* slot = (HandlerPair*)mHandlerEnd;
+        mHandlerEnd = (char*)(slot + 1);
+        if (slot != 0)
+            *slot = pair;                 // one 8-byte entry: {fn, user}
         return true;
     }
-    ((ObjectVector*)&mHandlerBegin)->push_back_impl(&fn);
+    ((ObjectVector*)&mHandlerBegin)->insert_pair(mHandlerEnd, &pair);
     return true;
 }
 

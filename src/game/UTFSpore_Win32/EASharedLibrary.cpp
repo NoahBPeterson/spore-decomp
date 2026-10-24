@@ -231,6 +231,7 @@ struct ObjectVector {
     void erase(void* first, void* last);   // 0x00d018d0 (equiv t2)
     void Destruct();   // 0x005c7f10 (equiv t3)
     void push_back_impl(void* value);
+    void insert_pair(void* pos, void* value);   // 0x009a0c50 (8-byte elements)
 };
 }
 namespace EA {
@@ -306,7 +307,9 @@ bool __cdecl EA_generic_command_function(const char* name, void* self, void** ou
         Entry* end = *(Entry**)((char*)self + 0x20);
         for (; it < end; it++) {
             typedef bool (__cdecl *Fn)(const char*, void*, void**, int, int, int);
-            if (((Fn)it->fn)(name, it->user, out, a, b, c))
+            Fn fn = (Fn)it->fn;
+            void* user = it->user;
+            if (fn(name, user, out, a, b, c))
                 return true;
         }
     }
@@ -498,16 +501,18 @@ bool EA::SharedLibrary_s0093_6090::Register(void* fn, void* user)
             return true;
         it += 2;
     }
+    struct HandlerPair { void* fn; void* user; };
+    HandlerPair pair;
+    pair.fn = fn;
+    pair.user = user;
     if (mHandlerEnd < mHandlerCap) {
-        char** slot = (char**)mHandlerEnd;
-        mHandlerEnd = slot + 2;
-        if (slot != 0) {
-            slot[1] = (char*)user;
-            slot[0] = (char*)fn;
-        }
+        HandlerPair* slot = (HandlerPair*)mHandlerEnd;
+        mHandlerEnd = (char*)(slot + 1);
+        if (slot != 0)
+            *slot = pair;                 // one 8-byte entry: {fn, user}
         return true;
     }
-    ((ObjectVector*)&mHandlerBegin)->push_back_impl(&fn);
+    ((ObjectVector*)&mHandlerBegin)->insert_pair(mHandlerEnd, &pair);
     return true;
 }
 
