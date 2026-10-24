@@ -101,7 +101,10 @@ namespace EA
 EA::IO::FileStream::FileStream(const char16_t* pPath16); // 0x00931e10
 void operator delete[](void* p); // 0x00f47380
 #endif
-#include "../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextFontServer.cpp"
+// Retail FontServer::GetFontDescriptionScore and the EASTL hashtable tweaks live in this
+// per-slice copy so the shared vendor tree stays untouched. The FaceMap DoRehash uses the
+// retail node-next/bucket-buffer offsets from the local EASTL header.
+#include "EATextFontServer.cpp"
 
 // Original addresses for the equivalence checker (redeclarations of the upstream declarations).
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line); // 0x00f473a0
