@@ -1,1 +1,6 @@
 # source  symbol  original VA  [cl flags override]
+slices/s00cb7e50/s00cb7e50.cpp  ?FUN_00cb84b0@cContentValidationSummarizer@@QAEPAXH@Z  00cb84b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cb7e50/s00cb7e50.cpp  ?FUN_00cb86a0@cSpaceDefenseMissile@@QAEXXZ  00cb86a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cb7e50/s00cb7e50.cpp  ?FUN_00cb8b20@cDefaultBeamProjectile@@QAEXXZ  00cb8b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cb7e50/s00cb7e50.cpp  ?FUN_00cb8f50@cCulturalProjectile@@QAEXXZ  00cb8f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cb7e50/s00cb7e50.cpp  ?FUN_00cb9170@cResourceProjectile@@QAEPAXH@Z  00cb9170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
