@@ -1,0 +1,8 @@
+slices/s00eef810/s00eef810.cpp  ?Disable@CToolState@@QAEXXZ  00eeff80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eef810/s00eef810.cpp  ?Reset@CToolState@@QAEXXZ  00ef0060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eef810/s00eef810.cpp  ?FUN_00ef00b0@@YAXXZ  00ef00b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eef810/s00eef810.cpp  ?FUN_00ef00d0@@YA_NXZ  00ef00d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eef810/s00eef810.cpp  ?CheckAll@CUpdater@@QAE_NXZ  00ef02a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eef810/s00eef810.cpp  ?Destroy@CEditor@@QAEXXZ  00ef0400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eef810/s00eef810.cpp  ?OnMouseDown@CEditor@@QAE_NIMMI@Z  00ef0670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eef810/s00eef810.cpp  ?OnMouseUp@CEditor@@QAE_NIMMI@Z  00ef0730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

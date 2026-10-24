@@ -9,6 +9,7 @@
 //    and the first one that the resource manager (vtable +0x0c) accepts is returned.
 // Flags: /O2 /MD /Gy /TP (no /EHsc: the original has no EH frame).
 #include "types.h"
+#include <math.h>
 
 void* operator new(unsigned int size, void* p) { return p; }
 void operator delete[](void* p);        // 0x00F47380
@@ -288,4 +289,516 @@ fail:
     out->mType = 0;
     out->mGroup = 0;
     return out;
+}
+
+// ---------------------------------------------------------------- editor tool module (0x00EEFF40..)
+typedef unsigned int uint;
+// The small tool-state object lives at 0x016C7B34; the big editor object at 0x016C7AA4.
+#define ED_CAT2(a, b) a##b
+#define ED_CAT(a, b) ED_CAT2(a, b)
+#define V virtual void ED_CAT(ed_v, __COUNTER__)();
+#define V2 V V
+#define V3 V2 V
+#define V4 V2 V2
+#define V8 V4 V4
+
+struct IObj {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+};
+struct IObj4  { uint pad0; IObj m; };                 // IObj's vptr at +0x04
+struct IObj8  { uint pad0[2]; IObj m; };              // +0x08
+struct IObj38 { uint pad0[0x38 / 4]; IObj m; };       // +0x38
+struct IObj3c { uint pad0[0x3c / 4]; IObj m; };       // +0x3c
+
+struct LocalInputState {
+    uint mData[0x48 / 4];                              // 0x20..0x67 of the editor
+    void OnMouseDown(uint id, float x, float y, uint flags);   // 0x00697AB0
+    void OnMouseUp(uint id, float x, float y, uint flags);     // 0x00697AF0
+};
+void __fastcall InitLocalInputState(LocalInputState* p);       // 0x00697960
+
+class CEditor {
+public:
+    const void* volatile mpVtbl0;                      // +0x00
+    const void* volatile mpVtbl1;                      // +0x04
+    const void* volatile mpVtbl2;                      // +0x08
+    uint volatile mField0c;                            // +0x0c
+    IObj3c* mpField10;                                 // +0x10
+    IObj* mpField14;                                   // +0x14
+    IObj* mpField18;                                   // +0x18
+    IObj* mpField1c;                                   // +0x1c
+    LocalInputState mInput;                            // +0x20
+    IObj3c* mpField68;                                 // +0x68
+    IObj38* mpField6c;                                 // +0x6c
+    IObj* mpField70;                                   // +0x70
+    IObj8* mpField74;                                  // +0x74
+    IObj4* mpField78;                                  // +0x78
+    IObj* mpField7c;                                   // +0x7c
+    void* mpServer80;                                  // +0x80
+    uint mHandler84;                                   // +0x84
+    uint mMsg88;                                       // +0x88
+    uint mPrio8c;                                      // +0x8c
+    uint mFlags90;                                     // +0x90
+    void* mpServer94;                                  // +0x94
+    uint mHandler98;                                   // +0x98
+    uint mMsg9c;                                       // +0x9c
+    uint mPrioA0;                                      // +0xa0
+    uint mFlagsA4;                                     // +0xa4
+    uint8_t mFlagA8;                                   // +0xa8
+    uint mFieldAc;                                     // +0xac
+    uint mFieldB0;                                     // +0xb0
+    uint mFieldB4;                                     // +0xb4
+    uint mFieldB8;                                     // +0xb8
+    uint mFieldBc;                                     // +0xbc
+    uint mFieldC0;                                     // +0xc0
+    int  mFieldC4;                                     // +0xc4
+    uint mFieldC8;                                     // +0xc8
+    uint mFieldCc;                                     // +0xcc
+    uint mFieldD0;                                     // +0xd0
+    IObj4* mpFieldD4;                                  // +0xd4
+    IObj* mpFieldD8;                                   // +0xd8
+    uint8_t mFlagDc;                                   // +0xdc
+
+    CEditor* Construct();                              // 0x00EF02F0
+    void Destroy();                                    // 0x00EF0400
+    bool OnMouseDown(uint id, float x, float y, uint flags);   // 0x00EF0670
+    bool OnMouseUp(uint id, float x, float y, uint flags);     // 0x00EF0730
+};
+
+// Touch/contact list owner: separate class from CEditor (its own +0x4c/+0x60 vectors).
+struct Entry12 { uint m0, m4, m8; };
+struct ItemFlags { uint pad0; uint mFlags; };          // flags at +0x04
+struct InputItem {
+    V8 V8 V8 V8 V8 V2 V
+    virtual ItemFlags* v0xac();                        // +0xac
+};
+class CUpdater {
+public:
+    uint8_t pad00[0x4c];
+    Entry12* mpBegin;                                  // +0x4c
+    Entry12* mpEnd;                                    // +0x50
+    uint8_t pad54[0x0c];
+    InputItem** mpItems;                               // +0x60
+    InputItem** mpItemsEnd;                            // +0x64
+    void UpdateTransforms();                           // 0x00EF0220
+    bool CheckAll();                                   // 0x00EF02A0
+};
+
+class CToolState {
+public:
+    uint8_t mFlag0;                                    // +0x00
+    uint8_t mActive;                                   // +0x01
+    uint8_t mRelative;                                 // +0x02
+    uint8_t pad03;
+    uint pad04;
+    float mX;                                          // +0x08
+    float mY;                                          // +0x0c
+    union { float f; uint u; } mDX;                    // +0x10
+    union { float f; uint u; } mDY;                    // +0x14
+    __declspec(noinline) void Enable();                // 0x00EEFF40
+    __declspec(noinline) void Disable();               // 0x00EEFF80
+    void Drag(float x, float y);                       // 0x00EEFFC0
+    __declspec(noinline) void Reset();                 // 0x00EF0060
+};
+
+struct IWindowManager {
+    V
+    virtual void* GetActive();                         // +0x04
+    V8 V8 V2 V
+    virtual void* QueryPanel(int a);                   // +0x54
+    virtual void SetPanel(int a, void* v);             // +0x58
+    virtual void SetPanel2(int a, void* v);            // +0x5c
+};
+IWindowManager* WindowManager();                       // 0x0067CAA0
+
+struct C_SomethingCtl {
+    void Set40(bool b);                                // 0x008013D0
+    void Set(bool b);                                  // 0x00801980
+};
+C_SomethingCtl* GetSomethingCtl();                     // 0x0067CAB0
+
+struct ObjDD20 {
+    V8 V2
+    virtual void v28(uint id);                         // +0x28
+};
+ObjDD20* FUN_0067dd20();                               // 0x0067DD20
+
+struct ObjDD50 {
+    V8 V4 V2 V
+    virtual void v38();                                // +0x38
+};
+ObjDD50* FUN_0067dd50();                               // 0x0067DD50
+
+void FUN_00804f10(float x, float y);                   // 0x00804F10
+
+struct IProp {
+    uint8_t pad[0x12];
+    uint16_t mType;                                    // +0x12
+    bool*  GetBool();                                  // 0x0041E920
+    float* GetFloat();                                 // 0x0041EA70
+};
+struct DirectPropertyList {
+    V8 V
+    virtual bool Get(uint id, IProp** out);            // +0x24
+};
+extern DirectPropertyList* g_15fd918;                  // 0x015FD918
+extern uint8_t g_15acb40;                              // 0x015ACB40
+extern uint8_t g_1569ab8;                              // 0x01569AB8
+extern float g_1688270;                                // 0x01688270
+extern float g_156b5d4;                                // 0x0156B5D4
+extern float g_156b5d8;                                // 0x0156B5D8
+void FUN_00eed090();                                   // 0x00EED090
+
+struct Obj401010 {
+    V4 V2
+    virtual bool v18(void* entry);                     // +0x18
+    V8 V4
+    virtual void v4c(void* entry, const void* data);   // +0x4c
+};
+Obj401010* FUN_00401010();                             // 0x00401010
+
+struct IInputHost {
+    V8 V2
+    virtual void v28();                                // +0x28
+    V4
+    virtual bool v3c();                                // +0x3c
+    V4
+    virtual void v50(uint id, float x, float y, uint flags);  // +0x50
+    virtual bool v54(uint id, float x, float y, uint flags);  // +0x54
+};
+struct IInputMgr {
+    V8 V8 V4 V
+    virtual bool v54(uint id, float x, float y, uint flags);  // +0x54
+    virtual bool v58(uint id, float x, float y, uint flags);  // +0x58
+};
+IInputMgr* GameInputManager();                         // 0x00B3D250
+extern IInputHost* g_15ad298;                          // 0x015AD298
+extern int g_15acc34;                                  // 0x015ACC34
+extern CToolState g_16c7b34;                           // 0x016C7B34
+extern CEditor* g_16c7aa4;                             // 0x016C7AA4
+extern uint g_16c7aa8;                                 // 0x016C7AA8
+extern uint g_16c7aac;                                 // 0x016C7AAC
+
+struct RayB;
+struct RayA {
+    uint pad00[0x60 / 4];
+    uint mField60;                                     // +0x60
+    uint pad64;
+    RayB* mpB;                                         // +0x64
+};
+struct RayOwner {
+    uint pad00[0x17c / 4];
+    void* mpField17c;                                  // +0x17c
+};
+struct RayObj;
+struct RayB {
+    V3
+    virtual RayObj* v0c(uint id);                      // +0x0c
+    V4
+    virtual void* v20();                               // +0x20
+};
+struct RayObj {
+    uint pad04[(0xb54 - 4) / 4];
+    RayOwner* mpOwner;                                 // +0xb54
+    uint mFlags;                                       // +0xb58
+    V8
+    virtual uint v20();                                // +0x20
+};
+struct RaySource {
+    RayA* mpA;                                         // +0x00
+    uint pad04;
+    float m08, m0c, m10, m14, m18, m1c;
+};
+struct Vec3 { float x, y, z; };
+extern "C" Vec3* normalized_safe(Vec3* pOut, const Vec3* pIn);   // 0x00449C20
+bool RayCastParts(const float* org, const float* dir, RayOwner* owner,
+                  uint* pIndex, float* pT, float* pHit, float* pNormal, int extra); // 0x009B6450
+void RemoveHandler(void* server, uint handler, uint msg, uint prio, uint flags); // 0x00571DB0
+
+// @ 0x00EEFF40
+void CToolState::Enable()
+{
+    if (mFlag0)
+        return;
+    IWindowManager* wm = WindowManager();
+    if (wm->QueryPanel(1) == 0) {
+        mFlag0 = 1;
+        wm->SetPanel(1, wm->GetActive());
+    }
+}
+
+// @ 0x00EEFF80
+void CToolState::Disable()
+{
+    if (!mFlag0)
+        return;
+    IWindowManager* wm = WindowManager();
+    void* active = wm->GetActive();
+    if (wm->QueryPanel(1) == active)
+        wm->SetPanel2(1, active);
+    mFlag0 = 0;
+}
+
+// @ 0x00EEFFC0
+void CToolState::Drag(float x, float y)
+{
+    if (!mActive)
+        return;
+    float dx = x - mX;
+    float dy = y - mY;
+    bool moved = (dx != 0.0f) || (dy != 0.0f);
+    if (!mRelative) {
+        mDX.f = dx;
+        mDY.f = dy;
+    } else if (moved) {
+        mDX.f = mDX.f + dx;
+        mDY.f = mDY.f + dy;
+        FUN_00804f10(mX, mY);
+        FUN_0067dd50()->v38();
+    }
+}
+
+// @ 0x00EF0060
+void CToolState::Reset()
+{
+    if (!mActive)
+        return;
+    if (mRelative)
+        GetSomethingCtl()->Set40(true);
+    GetSomethingCtl()->Set(false);
+    mDX.u = g_16c7aa8;
+    mDY.u = g_16c7aac;
+    mActive = 0;
+}
+
+// @ 0x00EF00B0
+void FUN_00ef00b0()
+{
+    FUN_0067dd20()->v28(0x2ccda9c);
+}
+
+// @ 0x00EF00D0
+bool FUN_00ef00d0()
+{
+    return g_15acc34 != 4;
+}
+
+// @ 0x00EF0220
+void CUpdater::UpdateTransforms()
+{
+    Obj401010* obj = FUN_00401010();
+    Entry12* begin = mpBegin;
+    int count = (int)(mpEnd - begin);
+    if (count == 0)
+        return;
+    int off = 0;
+    do {
+        char* e = (char*)begin + off;
+        if (!obj->v18(e)) {
+            struct { uint volatile id; uint16_t volatile a; uint16_t volatile b; } data;
+            data.a = 0;
+            data.b = 1;
+            data.id = 0x2ea8fb98;
+            obj->v4c(e, &data);
+        }
+        off += 12;
+        --count;
+    } while (count != 0);
+}
+
+// @ 0x00EF02A0
+bool CUpdater::CheckAll()
+{
+    uint count = (uint)(mpItemsEnd - mpItems);
+    for (uint i = 0; i < count; ++i) {
+        ItemFlags* p = mpItems[i]->v0xac();
+        if (!p)
+            return false;
+        uint f = p->mFlags;
+        uint8_t a = (uint8_t)(f >> 0xe);
+        if ((a & 1) == 0)
+            return false;
+        uint8_t b = (uint8_t)(f >> 0x12);
+        if ((b & 1) != 0)
+            return false;
+    }
+    return true;
+}
+
+// @ 0x00EF02F0
+CEditor* CEditor::Construct()
+{
+    mpVtbl1 = (const void*)0x13eb394;
+    mpVtbl2 = (const void*)0x13ec458;
+    mField0c = 0;
+    mpVtbl0 = (const void*)0x148b058;
+    mpVtbl1 = (const void*)0x148b050;
+    mpVtbl2 = (const void*)0x148b040;
+    mpField10 = 0;
+    mpField14 = 0;
+    mpField18 = 0;
+    mpField1c = 0;
+    InitLocalInputState(&mInput);
+    mpField68 = 0;
+    mpField6c = 0;
+    mpField70 = 0;
+    mpField74 = 0;
+    mpField78 = 0;
+    mpField7c = 0;
+    mpServer80 = 0;
+    mHandler84 = 0;
+    mMsg88 = 0;
+    mPrio8c = 0;
+    mFlags90 = 0;
+    mpServer94 = 0;
+    mHandler98 = 0;
+    mMsg9c = 0;
+    mPrioA0 = 0;
+    mFlagsA4 = 0;
+    mFlagA8 = 0;
+    mFieldAc = 0;
+    mFieldB0 = 0;
+    mFieldB4 = 0;
+    mFieldB8 = 0;
+    mFieldBc = 0;
+    mFieldC0 = 0;
+    mFieldC4 = 2;
+    mFieldCc = 0;
+    mpFieldD4 = 0;
+    mpFieldD8 = 0;
+    mFlagDc = 0;
+    g_16c7aa4 = this;
+    return this;
+}
+
+// @ 0x00EF0400
+void CEditor::Destroy()
+{
+    mpVtbl0 = (const void*)0x148b058;
+    mpVtbl1 = (const void*)0x148b050;
+    mpVtbl2 = (const void*)0x148b040;
+    g_16c7aa4 = 0;
+    if (mpFieldD8)
+        mpFieldD8->v1();
+    if (mpFieldD4)
+        mpFieldD4->m.v2();
+    if (mpServer94) {
+        void* s = mpServer94;
+        mpServer94 = 0;
+        RemoveHandler(s, mHandler98, mMsg9c, mPrioA0, mFlagsA4);
+    }
+    if (mpServer80) {
+        void* s = mpServer80;
+        mpServer80 = 0;
+        RemoveHandler(s, mHandler84, mMsg88, mPrio8c, mFlags90);
+    }
+    if (mpField7c)
+        mpField7c->v2();
+    if (mpField78)
+        mpField78->m.v2();
+    if (mpField74)
+        mpField74->m.v2();
+    if (mpField70)
+        mpField70->v2();
+    if (mpField6c)
+        mpField6c->m.v1();
+    if (mpField68)
+        mpField68->m.v2();
+    if (mpField1c)
+        mpField1c->v2();
+    if (mpField18)
+        mpField18->v3();
+    if (mpField14)
+        mpField14->v2();
+    if (mpField10)
+        mpField10->m.v2();
+    mpVtbl2 = (const void*)0x13ec458;
+    mpVtbl1 = (const void*)0x13eb394;
+    mpVtbl0 = (const void*)0x13eb938;
+}
+
+// @ 0x00EF0570
+void FUN_00ef0570()
+{
+    union { IProp* p; float f; } u;
+    if (g_15fd918 && g_15fd918->Get(0x7f2231b, &u.p) && u.p->mType == 1)
+        g_15acb40 = *u.p->GetBool();
+    g_1569ab8 = (g_15acb40 == 0);
+    if (g_15fd918 && g_15fd918->Get(0xe2598dcf, &u.p) && u.p->mType == 0xd)
+        g_1688270 = *u.p->GetFloat();
+    u.f = 1.0f;
+    IProp* prop;
+    if (g_15fd918 && g_15fd918->Get(0x5908481, &prop) && prop->mType == 0xd)
+        u.f = *prop->GetFloat();
+    float cur = g_1688270;
+    if (cur != g_156b5d4)
+        g_156b5d8 = sqrtf(g_1688270 / g_156b5d4) * u.f;
+    return FUN_00eed090();
+}
+
+// @ 0x00EF00E0
+bool FUN_00ef00e0(RaySource* s)
+{
+    RayA* a = s->mpA;
+    if (!a->mpB)
+        return true;
+    RayObj* obj = a->mpB->v0c(0x17f243b);
+    if (!obj)
+        return true;
+    if (obj->v20() != 0x18eb45e)
+        return true;
+    if (a->mField60 == 0x2e72cae)
+        return true;
+    RayOwner* owner = obj->mpOwner;
+    if (!owner)
+        return true;
+    if (!owner->mpField17c)
+        return true;
+    if (obj->mFlags & 0x200)
+        return false;
+    Vec3 origin;
+    origin.x = s->m08;
+    origin.y = s->m0c;
+    origin.z = s->m10;
+    Vec3 dir;
+    dir.x = s->m14 - s->m08;
+    dir.y = s->m18 - s->m0c;
+    dir.z = s->m1c - s->m10;
+    Vec3 norm;
+    normalized_safe(&norm, &dir);
+    uint index = 0;
+    return RayCastParts(&origin.x, &norm.x, owner, &index, 0, 0, 0, 0);
+}
+
+// @ 0x00EF0670
+bool CEditor::OnMouseDown(uint id, float x, float y, uint flags)
+{
+    if (g_15acc34 != 4)
+        return 1;
+    if (g_15ad298->v3c())
+        g_15ad298->v28();
+    mInput.OnMouseDown(id, x, y, flags);
+    g_15ad298->v50(id, x, y, flags);
+    bool r = GameInputManager()->v54(id, x, y, flags);
+    if (flags & 0x38)
+        g_16c7b34.Enable();
+    return r;
+}
+
+// @ 0x00EF0730
+bool CEditor::OnMouseUp(uint id, float x, float y, uint flags)
+{
+    if (g_15acc34 != 4)
+        return 1;
+    mInput.OnMouseUp(id, x, y, flags);
+    g_15ad298->v54(id, x, y, flags);
+    bool r = GameInputManager()->v58(id, x, y, flags);
+    if ((flags & 0x38) == 0) {
+        g_16c7b34.Disable();
+        g_16c7b34.Reset();
+    }
+    return r;
 }

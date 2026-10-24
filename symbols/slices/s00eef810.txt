@@ -1,0 +1,19 @@
+# Slice s00eef810 — editor tool/input module (0x00EEF810 constructor helper plus the
+# 0x00EEFF40..0x00EF0730 tool-state, updater and editor mouse handlers). Names are
+# Claude-coined from the disassembly; mangled names were emitted by our own compile.
+# [MATCH] = byte-exact under /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-.
+00eef810  ?FUN_00eef810@@YAPAUKey3@@PAU1@IHPAUTypedObject@@@Z  FUN_00eef810(Key3*, Key3*, int, int, TypedObject*)  # pre-existing reconstruction, nonmatching
+00eeff40  ?Enable@CToolState@@QAEXXZ  void CToolState::Enable()  # nonmatching (vptr hoist)
+00eeff80  ?Disable@CToolState@@QAEXXZ  void CToolState::Disable()  [MATCH]
+00eeffc0  ?Drag@CToolState@@QAEXMM@Z  void CToolState::Drag(float, float)  # nonmatching (frame/float scheduling)
+00ef0060  ?Reset@CToolState@@QAEXXZ  void CToolState::Reset()  [MATCH]
+00ef00b0  ?FUN_00ef00b0@@YAXXZ  void FUN_00ef00b0()  [MATCH]  # toolbar/object v28(0x2ccda9c)
+00ef00d0  ?FUN_00ef00d0@@YA_NXZ  bool FUN_00ef00d0()  [MATCH]  # mode != 4
+00ef00e0  ?FUN_00ef00e0@@YA_NPAURaySource@@@Z  bool FUN_00ef00e0(RaySource*)  # nonmatching (RayCastParts call shape)
+00ef0220  ?UpdateTransforms@CUpdater@@QAEXXZ  void CUpdater::UpdateTransforms()  # nonmatching (loop/register allocation)
+00ef02a0  ?CheckAll@CUpdater@@QAE_NXZ  bool CUpdater::CheckAll()  [MATCH]  # 0x4000 set and 0x40000 clear
+00ef02f0  ?Construct@CEditor@@QAEPAV1@XZ  CEditor* CEditor::Construct()  # nonmatching (three store orders)
+00ef0400  ?Destroy@CEditor@@QAEXXZ  void CEditor::Destroy()  [MATCH]
+00ef0570  ?FUN_00ef0570@@YAXXZ  void FUN_00ef0570()  # nonmatching (tail call refused)
+00ef0670  ?OnMouseDown@CEditor@@QAE_NIMMI@Z  bool CEditor::OnMouseDown(uint, float, float, uint)  [MATCH]
+00ef0730  ?OnMouseUp@CEditor@@QAE_NIMMI@Z  bool CEditor::OnMouseUp(uint, float, float, uint)  [MATCH]
