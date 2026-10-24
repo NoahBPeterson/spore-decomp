@@ -11,3 +11,8 @@ slices/s00760ea0/s00760ea0.cpp  ?FUN_00761340@@YA?AUD4@@XZ  00761340  /O2 /MD /G
 slices/s00760ea0/s00760ea0.cpp  ?FUN_00761c00@@YAPAXXZ  00761c00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00760ea0/s00760ea0.cpp  ?FUN_00761cc0@@YGXPAPAX@Z  00761cc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00760ea0/s00760ea0.cpp  ?FUN_00761cf0@@YAXH@Z  00761cf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00760ea0/s00760ea0.cpp  ?FUN_00761380@@YAIXZ  00761380  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00760ea0/s00760ea0.cpp  ?FUN_00761650@@YAPAXH@Z  00761650  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00760ea0/s00760ea0.cpp  ?FUN_007616f0@@YAPAXHH@Z  007616f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00760ea0/s00760ea0.cpp  ?FUN_007617a0@@YAPAXH@Z  007617a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00760ea0/s00760ea0.cpp  ?FUN_00761840@@YAPAXH@Z  00761840  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

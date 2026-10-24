@@ -5,8 +5,11 @@
 #include "game/types.h"
 #include "rw/graphics/Raster.h"
 
-// unnamed retail callees and globals (address in the comment)
-extern "C" void* __cdecl FUN_00928a30(void* a, void* b, int c, int d, int e, int f, int g, int h); // @ 0x928a30
+// SP::cSPMemPool global allocator (0x016c8b44); LockedAligned is __thiscall (this = the pool).
+struct SPMemPoolStub {
+    void* LockedAligned(unsigned int size, unsigned int align, int a, int b, int c, int d, int e, int f); // @ 0x928a30
+};
+extern SPMemPoolStub* g_pSPMemPool;                            // 0x016c8b44
 extern "C" void* __cdecl FUN_011f34a0(void* p, int a, int b);             // @ 0x11f34a0
 extern "C" void* __cdecl FUN_011f9a90(void* p, int a);                    // @ 0x11f9a90
 extern "C" void* __cdecl FUN_011f9eb0(void* p, int a, int b);             // @ 0x11f9eb0
@@ -20,8 +23,7 @@ extern "C" void* __cdecl GetD3DCAPS9();                                   // @ 0
 struct E8 { int a, b; E8() {} E8(int x, int y) : a(x), b(y) {} ~E8(); };
 struct D1 { E8 v[4]; };
 struct D2 { E8 v[4]; };
-E8::~E8() {}
-extern "C" void* __cdecl FUN_00928a30(void* a, void* b, int c, int d, int e, int f, int g, int h); // @ 0x928a30
+E8::~E8() {}   // 0xc2e4e0
 extern "C" void* __cdecl FUN_011f34a0(void* p, int a, int b);             // @ 0x11f34a0
 extern "C" void* __cdecl FUN_011f9a90(void* p, int a);                    // @ 0x11f9a90
 extern "C" void* __cdecl FUN_011f9eb0(void* p, int a, int b);             // @ 0x11f9eb0
@@ -57,10 +59,10 @@ void* __cdecl SP_CreateRaster(int w, int h, int levels, int fmt, int flags)
 {
     void* caps = GetD3DCAPS9();
     if (!(*(unsigned int*)((char*)caps + 0xc) & 0x40000000))
-        flags &= 0xfffffdff;
+        fmt &= 0xfffffdff;
     D1 d = FUN_011f0220(w, h, levels, fmt, flags);
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return Raster_Initialize(local, w, h, levels, fmt, flags);
 }
@@ -71,7 +73,7 @@ void* __cdecl FUN_00761500(int a, int b, int c, int d, void** out)
     char desc[0x50];
     FUN_012055f0(desc, a, b, c, d, (void*)0x15d0a7c, 0x50);
     int local[4];
-    local[0] = (int)FUN_00928a30(*(void**)desc, *(void**)(desc + 4), 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(*(unsigned int*)desc, *(unsigned int*)(desc + 4), 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     void* r = FUN_012046f0(local, a, b, c, d, (void*)0x15d0a7c, 0x50);
     if (out) {
@@ -89,7 +91,7 @@ void* __cdecl FUN_00761650(int n)
 {
     D1 d = FUN_00761280(n);
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return FUN_011f34a0(local, n, 0);
 }
@@ -99,7 +101,7 @@ void* __cdecl FUN_007616f0(int a, int b)
 {
     D1 d = FUN_011f9e50(a, b);
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return FUN_011f9eb0(local, a, b);
 }
@@ -109,7 +111,7 @@ void* __cdecl FUN_007617a0(int a)
 {
     D1 d = FUN_011eec00(a, a);
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return FUN_011eef30(local, a, a);
 }
@@ -119,7 +121,7 @@ void* __cdecl FUN_00761840(int a)
 {
     D2 d = FUN_007612c0(a);
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return FUN_011f9a90(local, a);
 }

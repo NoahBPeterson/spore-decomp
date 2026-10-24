@@ -12,15 +12,13 @@ struct D2 { E8 v[4]; };
 struct D3 { E8 v[4]; };
 struct D4 { E8 v[4]; };
 
-E8::~E8() {}
+E8::~E8() {}   // 0xc2e4e0
 
 extern "C" {
 void* __cdecl operator_new(unsigned int size, const char* name, int a, int b, int c, int d);
 void  __cdecl operator_delete_(void* p);
 void  __cdecl opnew3(void* p, int a, unsigned int n);           // @ 0x11e073e
 void  __cdecl FUN_00777ae0(int a, void* p, int b);             // @ 0x777ae0
-void  __cdecl FUN_007823b0(void* a, void* b);                  // @ 0x7823b0
-void  __cdecl FUN_00781b10();                                  // @ 0x781b10
 // SP::cSPMemPool global allocator (0x016c8b44); LockedAligned is __thiscall (this = the pool).
 struct SPMemPoolStub {
     void* LockedAligned(unsigned int size, unsigned int align, int a, int b, int c, int d, int e, int f); // @ 0x928a30
@@ -82,11 +80,20 @@ Elem3* Vec3::insert(Elem3* position, const Elem3& value)
 }
 
 // ------------------------------------------------------------------- 0x760f50 (dtor)
-extern void* g_vt140ddf4, *g_vt140ddf0, *g_vt13ef094, *g_vt13eb938;
+extern char g_vt140ddf4[];   // 0x0140ddf4
+extern char g_vt140ddf0[];   // 0x0140ddf0
+extern char g_vt13ef094[];   // 0x013ef094
+extern char g_vt13eb938[];   // 0x013eb938
+struct Vec12 {
+    Elem3* mpBegin;                    // +0x0
+    Elem3* mpEnd;                      // +0x4
+    void   EraseRange(Elem3* first, Elem3* last);   // 0x7823b0
+    void   Destroy();                              // 0x781b10
+};
 struct D_760f50 {
     void* p0; void* p1;
     char pad8[4];
-    void* vfirst; void* vlast;   // +0xc / +0x10
+    Vec12 vec;                   // +0xc / +0x10
     ~D_760f50();
 };
 // @ 0x760f50
@@ -94,11 +101,11 @@ D_760f50::~D_760f50()
 {
     p0 = g_vt140ddf4;
     p1 = g_vt140ddf0;
-    if (vfirst != vlast)
-        FUN_007823b0(vfirst, vlast);
-    FUN_00781b10();
-    p0 = g_vt13eb938;
+    if (vec.mpBegin != vec.mpEnd)
+        vec.EraseRange(vec.mpBegin, vec.mpEnd);
+    vec.Destroy();
     p1 = g_vt13ef094;
+    p0 = g_vt13eb938;
 }
 
 // ------------------------------------------------ 0x760fd0 (set by layer number)
@@ -249,7 +256,7 @@ void* __cdecl SP_CreateRaster(int w, int h, int levels, int fmt, int flags)
 {
     void* caps = GetD3DCAPS9();
     if (!(*(unsigned int*)((char*)caps + 0xc) & 0x40000000))
-        flags &= 0xfffffdff;
+        fmt &= 0xfffffdff;
     D1 d = FUN_011f0220(w, h, levels, fmt, flags);
     int local[4];
     local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
