@@ -7,7 +7,6 @@
 // +0x14, size 0x38), behaviour_stimuli size 0x28.
 #include "types.h"
 #include <math.h>
-#include <xmmintrin.h>
 
 #define VSLOT(n) virtual void _v##n();
 
@@ -837,8 +836,12 @@ float DistanceBetweenBodies(const Vector3* pA, float fRadiusA, const Vector3* pB
 
     float fDist = sqrtf(d.x * d.x + d.y * d.y + d.z * d.z) - (fRadiusA + fRadiusB);
     if (bClamp) {
-        float fRounded = fDist;
-        fDist = _mm_cvtss_f32(_mm_max_ss(_mm_setzero_ps(), _mm_load_ss(&fRounded)));
+        // The clamp runs in the float domain (the original stores the distance, then
+        // maxes it against zero), so the result is rounded to float before the compare.
+        volatile float fStore = fDist;
+        if (fStore < 0.0f)
+            fStore = 0.0f;
+        return fStore;
     }
     return fDist;
 }
