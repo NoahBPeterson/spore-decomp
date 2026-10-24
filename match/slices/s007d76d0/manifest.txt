@@ -5,3 +5,7 @@ slices/s007d76d0/s007d76d0.cpp  ?Deactivate@cAbilityCmd@@QAEXH@Z  007d7e80  /O2 
 slices/s007d76d0/s007d76d0.cpp  ?AbilityRegister@@YAXXZ  007d7f40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 slices/s007d76d0/s007d76d0.cpp  ?SetMainViewer@cApp@SP@@QAEXPAX@Z  007d8450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 slices/s007d76d0/s007d76d0.cpp  ?VectorOwnerDestroy@@YIXPAPAX@Z  007d8580  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007d76d0/s007d76d0.cpp  ?AppMode@cApp@SP@@QAEPAXXZ  007d82c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007d76d0/s007d76d0.cpp  ?AppModeID@cApp@SP@@QAEIXZ  007d8300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007d76d0/s007d76d0.cpp  ?AppModeID@cApp@SP@@QAEPAXH@Z  007d83d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007d76d0/s007d76d0.cpp  ?AppModeName@cApp@SP@@QAEIH@Z  007d8410  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

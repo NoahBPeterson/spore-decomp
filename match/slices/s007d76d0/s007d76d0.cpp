@@ -3,6 +3,7 @@
 // Retail module flags: /O2 /MD /Gy /EHsc /TP /GS-
 #include "types.h"
 #include <string.h>
+#include <intrin.h>
 
 typedef unsigned int size_type;
 typedef int ptrdiff_t;
@@ -35,13 +36,22 @@ void  Sub_4e0e80(void* vec, void* value);  // vector<AutoRefCount>::push_back
 void* RBTreeIncrement(void* node);         // eastl::RBTreeIncrement   // 0x00921580 (equiv t2)
 void  Sub_538000(void* out, const void* src); // cSPTransform copy ctor
 void  Sub_5387f40();
-void  Sub_537f40(void* dst);
-void  Matrix3_Assign(void* dst, const void* src);
+// thiscall targets are exposed as member functions so the ABI and the address
+// annotation both resolve; the structs carry no storage.
+struct TransformHelper {
+    void __thiscall Sub_537f40(void* xform);              // 0x00537f40  cTransform::PreTransformBy
+};
+struct Matrix3Helper {
+    void __thiscall Matrix3_Assign(const void* src);      // 0x0041cb40  cSPMatrix3::Assign
+};
+struct EffectParamsHelper {
+    bool __thiscall GetIntParam(int n, void** outPtr, int* outCount); // 0x00a826c0  cEffectParams::GetIntParam
+};
 void* ModelManager();
 void* GetMessageServer();   // 0x0067dcc0 (equiv t2)
 void* CheatManager();   // 0x0067de20 (equiv t2)
 void* CreateCameraManager();   // 0x007c7700 (equiv t2)
-int   Sub_a826c0(int n, void** outPtr, int* outCount);
+
 void* GetServer883860();
 void  SlotMessageDestruct(void* msg);   // 0x00421cf0 (equiv t2)
 void  AddSplitInstanceRaw(void* mgr, void* xform, int id, int flag); // 0x007d7640 (slice s007d67e0)
@@ -96,6 +106,7 @@ class cApp { public:
     bool SetAppModeByName(const char* name);
     void* AppModeID(int index);
     unsigned AppModeName(int index);
+    cAppModeInfo* ModeAt(int i) { return mAppModesBegin + i; }
     void SetMainViewer(void* v);
     bool SwitchMode();
 };
@@ -145,18 +156,26 @@ void* cApp::AppMode(unsigned id) {
 
 // @ 0x007d82c0
 void* cApp::AppMode() {
-    if (mModeIndex >= 0) {
-        if (mModeIndex < (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18)
-            return mAppModesBegin[mModeIndex].mpMode;
+    int idx = mModeIndex;
+    if (idx >= 0) {
+        int n = (int)(mAppModesEnd - mAppModesBegin);
+        if (idx < n) {
+            _ReadWriteBarrier();         // original reloads mpBegin for the index
+            return mAppModesBegin[idx].mpMode;
+        }
     }
     return 0;
 }
 
 // @ 0x007d8300
 unsigned cApp::AppModeID() {
-    if (mModeIndex >= 0) {
-        if (mModeIndex < (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18)
-            return mAppModesBegin[mModeIndex].mID;
+    int idx = mModeIndex;
+    if (idx >= 0) {
+        int n = (int)(mAppModesEnd - mAppModesBegin);
+        if (idx < n) {
+            _ReadWriteBarrier();         // original reloads mpBegin for the index
+            return mAppModesBegin[idx].mID;
+        }
     }
     return 0;
 }
@@ -179,20 +198,26 @@ bool cApp::SetAppModeByName(const char* name) {
 
 // @ 0x007d83d0
 void* cApp::AppModeID(int index) {
-    if (index < 0)
-        return 0;
-    if (index >= (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18)
-        return 0;
-    return mAppModesBegin[index].mpMode;
+    if (index >= 0) {
+        int n = (int)(mAppModesEnd - mAppModesBegin);
+        if (index < n) {
+            _ReadWriteBarrier();         // original reloads mpBegin for the index
+            return mAppModesBegin[index].mpMode;
+        }
+    }
+    return 0;
 }
 
 // @ 0x007d8410
 unsigned cApp::AppModeName(int index) {
-    if (index < 0)
-        return 0;
-    if (index >= (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18)
-        return 0;
-    return mAppModesBegin[index].mID;
+    if (index >= 0) {
+        int n = (int)(mAppModesEnd - mAppModesBegin);
+        if (index < n) {
+            _ReadWriteBarrier();         // original reloads mpBegin for the index
+            return mAppModesBegin[index].mID;
+        }
+    }
+    return 0;
 }
 
 // @ 0x007d8450
@@ -203,23 +228,31 @@ void cApp::SetMainViewer(void* v) {
     ((void(__thiscall*)(void*, void*))vt[0x18 / 4])(viewer, v);
 }
 
+// Message payloads handled by IHandlerRC.
+struct HandlerMsg   { char pad00[8]; void* mpParam; };       // +0x08
+struct HandlerParam { char pad00[0x0c]; int mValue; };       // +0x0c
+
 // @ 0x007d8180  (this is the IHandlerRC subobject of a cApp, so this = cApp + 4)
 bool IHandlerRC::HandleMessage(int msg, void* data) {
-    cApp* app = (cApp*)((char*)this - 4);
-    void** vt = app->mIAppVtbl;
     if (msg == 0xd3c602) {
-        ((void(__thiscall*)(void*, void*))vt[0x40 / 4])(app, *(void**)((char*)data + 8));
+        cApp* app = (cApp*)((char*)this - 4);
+        void** vt = app->mIAppVtbl;
+        ((void(__thiscall*)(void*, void*))vt[0x40 / 4])(app, ((HandlerMsg*)data)->mpParam);
         return true;
     }
     if (msg == 0xe11332) {
-        ((void(__thiscall*)(void*, void*))vt[0x28 / 4])(app, *(void**)((char*)data + 8));
+        cApp* app = (cApp*)((char*)this - 4);
+        void** vt = app->mIAppVtbl;
+        ((void(__thiscall*)(void*, void*))vt[0x28 / 4])(app, ((HandlerMsg*)data)->mpParam);
         return true;
     }
     if (msg == 0xe11333) {
-        void* p = *(void**)((char*)data + 8);
-        int v = *(int*)((char*)p + 0xc);
-        if (v != 0)
+        int v = ((HandlerParam*)((HandlerMsg*)data)->mpParam)->mValue;
+        if (v != 0) {
+            cApp* app = (cApp*)((char*)this - 4);
+            void** vt = app->mIAppVtbl;
             ((void(__thiscall*)(void*, int))vt[0x4c / 4])(app, v);
+        }
         return true;
     }
     return false;
@@ -287,6 +320,31 @@ bool cApp::SwitchMode() {
 // ---------------------------------------------------------------------------
 // Small creature-ability command class (factory at 0x007d7ed0, size 0x28)
 // ---------------------------------------------------------------------------
+// Descriptor referenced by cAbilityCmd::mDesc (fields used by Activate).
+struct AbilityDesc {
+    char           pad00[0x0c];
+    unsigned char  mKind;      // +0x0c
+    char           pad0d[3];
+    char           pad10[8];
+    float*         mPosition;  // +0x18
+    char           pad1c[0x10];
+    float*         mRadius;    // +0x2c
+    char           pad30[0x10];
+    float*         mScale;     // +0x40
+};
+
+// Temporary transform built from the SetTransform descriptor; mirrors the
+// retail EA::Swarm::cTransform layout (0x38 bytes).
+struct Vec3f { float x, y, z; };
+struct Mat3f { float m[9]; };
+struct TransformTemp {
+    unsigned short mFlags;              // +0x00
+    unsigned short mModificationCount;  // +0x02
+    Vec3f          mTranslation;        // +0x04
+    float          mScale;              // +0x10
+    Mat3f          mRotation;           // +0x14
+};
+
 struct cAbilityCmd {
     void** mBaseVtbl;     // +0x00
     void** mAbilityVtbl;  // +0x04
@@ -302,7 +360,7 @@ struct cAbilityCmd {
     void SetIface(int, int, int);
     void Activate(int);
     void Deactivate(int);
-    void SetTransform(void* xformA, const unsigned char* desc);
+    void SetTransform(void* xformA, const TransformTemp* desc);
 };
 
 // @ 0x007d7ce0
@@ -344,21 +402,23 @@ void cAbilityCmd::SetIface(int, int, int) {
 // @ 0x007d7dc0
 void cAbilityCmd::Activate(int arg) {
     if (mActive == 0 && mIface != 0) {
-        void* desc = mDesc;
+        AbilityDesc* desc = (AbilityDesc*)mDesc;
         mActive = 1;
         float scale = *(float*)0x01488874;
-        if (*(char*)((char*)desc + 0xc) == 4)
-            scale = **(float**)((char*)desc + 0x40);
-        void* v = *(void**)((char*)desc + 0x18);
-        float ax = *(float*)v;
-        float ay = *(float*)((char*)v + 4);
-        float az = *(float*)((char*)v + 8);
-        float px = mx;
-        float py = my;
-        float pz = mz;
+        if (desc->mKind == 4)
+            scale = *desc->mScale;
+        float pos[3];
+        pos[0] = desc->mPosition[0];
+        pos[1] = desc->mPosition[1];
+        pos[2] = desc->mPosition[2];
+        float p[3];
+        p[0] = mx;
+        p[1] = my;
+        p[2] = mz;
+        float radius = *desc->mRadius;
         void** vt = *(void***)mIface;
-        int r = ((int(__thiscall*)(void*, float*, float*, void*, float))
-                 vt[0xc / 4])(mIface, &px, &ax, *(void**)((char*)desc + 0x2c), scale);
+        int r = ((int(__thiscall*)(void*, float*, float*, float, float))
+                 vt[0xc / 4])(mIface, p, pos, radius, scale);
         mId = r;
     }
 }
@@ -402,17 +462,17 @@ void AbilityRegister() {
 }
 
 // @ 0x007d7f60
-void cAbilityCmd::SetTransform(void* xformA, const unsigned char* desc) {
-    unsigned short flags = *(unsigned short*)desc;
-    unsigned short modCount = *(unsigned short*)(desc + 2);
-    float tx = *(float*)(desc + 4);
-    float ty = *(float*)(desc + 8);
-    float tz = *(float*)(desc + 0xc);
-    float scale = *(float*)(desc + 0x10);
-    float rot[9];
-    Matrix3_Assign(rot, desc + 0x14);
-    Sub_537f40(xformA);
-    (void)flags; (void)modCount; (void)scale;
+void cAbilityCmd::SetTransform(void* xformA, const TransformTemp* desc) {
+    TransformTemp t;
+    t.mFlags = desc->mFlags;
+    t.mModificationCount = desc->mModificationCount;
+    t.mTranslation = desc->mTranslation;
+    t.mScale = desc->mScale;
+    ((Matrix3Helper*)&t.mRotation)->Matrix3_Assign(&desc->mRotation);
+    ((TransformHelper*)&t)->Sub_537f40(xformA);
+    float tx = t.mTranslation.x;
+    float ty = t.mTranslation.y;
+    float tz = t.mTranslation.z;
     if (mx != tx || my != ty || mz != tz) {
         mx = tx;
         my = ty;
@@ -463,6 +523,7 @@ struct cGameModelEffect {
     void*  mSplitManager;    // +0xa8
     char*  mVecB0;           // +0xac
     char*  mVecB4;           // +0xb0
+    char   padB4[0xc];       // +0xb4
     void*  mModelManager;    // +0xc0
     void*  mUnkC4;           // +0xc4
 
@@ -551,7 +612,7 @@ void cGameModelEffect::Init(int a, void* desc, int value) {
     int* vecBegin = (int*)((char*)base + 0x44);
     int* vecEnd = (int*)((char*)base + 0x48);
     if (vecBegin[0] != vecEnd[0]) {
-        void* holder = operator new[](0x20, ALLOC_NAME, 0, 0, ALLOC_FILE, 0xd1);
+        void* holder = operator new[](0x20, ALLOC_NAME, 0, 0, 0, 0);
         if (holder != 0) {
             *(int*)((char*)holder + 4) = 0;
             *(int*)((char*)holder + 8) = 4;
@@ -613,7 +674,7 @@ void cGameModelEffect::Init(int a, void* desc, int value) {
     if (value != 0) {
         void* outPtr;
         int outCount;
-        if (Sub_a826c0(6, &outPtr, &outCount)) {
+        if (((EffectParamsHelper*)(void*)value)->GetIntParam(6, &outPtr, &outCount)) {
             mUnk18 = *(int*)outPtr;
             if (outCount > 1)
                 mUnk1c = *(int*)((char*)outPtr + 4);

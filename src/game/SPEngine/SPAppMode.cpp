@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include <string.h>
+#include <intrin.h>
 
 // ---- items of slice s007d76d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
@@ -237,17 +238,21 @@ bool SP::cApp::Init()
 // @ 0x007d8180
 bool SP::IHandlerRC::HandleMessage(int msg, void* data)
 {
-    SP::cApp* app = (SP::cApp*)((char*)this - 4);
-    void** vt = app->mIAppVtbl;
     if (msg == 0xd3c602) {
+        SP::cApp* app = (SP::cApp*)((char*)this - 4);
+        void** vt = app->mIAppVtbl;
         ((void(__thiscall*)(void*, void*))vt[0x40 / 4])(app, *(void**)((char*)data + 8));
         return true;
     }
     if (msg == 0xe11332) {
+        SP::cApp* app = (SP::cApp*)((char*)this - 4);
+        void** vt = app->mIAppVtbl;
         ((void(__thiscall*)(void*, void*))vt[0x28 / 4])(app, *(void**)((char*)data + 8));
         return true;
     }
     if (msg == 0xe11333) {
+        SP::cApp* app = (SP::cApp*)((char*)this - 4);
+        void** vt = app->mIAppVtbl;
         void* p = *(void**)((char*)data + 8);
         int v = *(int*)((char*)p + 0xc);
         if (v != 0)
@@ -302,9 +307,13 @@ void* SP::cApp::AppMode(unsigned id)
 // @ 0x007d82c0
 void* SP::cApp::AppMode()
 {
-    if (mModeIndex >= 0) {
-        if (mModeIndex < (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18)
-            return mAppModesBegin[mModeIndex].mpMode;
+    int idx = mModeIndex;
+    if (idx >= 0) {
+        int n = (int)(mAppModesEnd - mAppModesBegin);
+        if (idx < n) {
+            _ReadWriteBarrier();         // original reloads mpBegin for the index
+            return mAppModesBegin[idx].mpMode;
+        }
     }
     return 0;
 }
@@ -312,9 +321,13 @@ void* SP::cApp::AppMode()
 // @ 0x007d8300
 unsigned SP::cApp::AppModeID()
 {
-    if (mModeIndex >= 0) {
-        if (mModeIndex < (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18)
-            return mAppModesBegin[mModeIndex].mID;
+    int idx = mModeIndex;
+    if (idx >= 0) {
+        int n = (int)(mAppModesEnd - mAppModesBegin);
+        if (idx < n) {
+            _ReadWriteBarrier();         // original reloads mpBegin for the index
+            return mAppModesBegin[idx].mID;
+        }
     }
     return 0;
 }
@@ -339,21 +352,27 @@ bool SP::cApp::SetAppModeByName(const char* name)
 // @ 0x007d83d0
 void* SP::cApp::AppModeID(int index)
 {
-    if (index < 0)
-        return 0;
-    if (index >= (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18)
-        return 0;
-    return mAppModesBegin[index].mpMode;
+    if (index >= 0) {
+        int n = (int)(mAppModesEnd - mAppModesBegin);
+        if (index < n) {
+            _ReadWriteBarrier();         // original reloads mpBegin for the index
+            return mAppModesBegin[index].mpMode;
+        }
+    }
+    return 0;
 }
 
 // @ 0x007d8410
 unsigned SP::cApp::AppModeName(int index)
 {
-    if (index < 0)
-        return 0;
-    if (index >= (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18)
-        return 0;
-    return mAppModesBegin[index].mID;
+    if (index >= 0) {
+        int n = (int)(mAppModesEnd - mAppModesBegin);
+        if (index < n) {
+            _ReadWriteBarrier();         // original reloads mpBegin for the index
+            return mAppModesBegin[index].mID;
+        }
+    }
+    return 0;
 }
 
 // @ 0x007d8450
