@@ -1,0 +1,3 @@
+slices/s00db2fd0/s00db2fd0.cpp  ?FUN_00db3390@@YAXPAVcSPCreatureBase@@PAX111PAUSimuState@@@Z  00db3390  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00db2fd0/s00db2fd0.cpp  ?GetObject@cResizableObjectPoolT@@QAEPAVcGroupMovement@@I@Z  00db3c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00db2fd0/s00db2fd0.cpp  ?AllocNode@cResizableObjectPoolT@@QAEXPAUcPoolNode@@@Z  00db3e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
