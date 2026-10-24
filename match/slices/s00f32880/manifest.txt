@@ -1,2 +1,11 @@
 # source  symbol  va  flags
 slices/s00f32880/s00f32880.cpp  ?Publish@cSphere@@  00f32d10  /O2 /MD /Gy /TP
+slices/s00f32880/s00f32880.cpp  ?OnPlanetEvent@cSphere@@QAEXPAUcPlanetInfo@@@Z  00f32880  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f32880/s00f32880.cpp  ?CopyChildElems@@YAPAUcChildElem@@PBU1@0PAU1@@Z  00f32ac0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f32880/s00f32880.cpp  ?FreeResources@cSphere@@QAEXXZ  00f32b90  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f32880/s00f32880.cpp  ?SetSourceObject@cSphere@@QAEXPAUcSphereSource@@@Z  00f32bf0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f32880/s00f32880.cpp  ?DestroyEffect@cSphere@@QAEXXZ  00f32cb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f32880/s00f32880.cpp  ?SetEnabled@cSphere@@QAEX_N@Z  00f335e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f32880/s00f32880.cpp  ?HasSomething@@YG_NH@Z  00f33620  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f32880/s00f32880.cpp  ?CreateToolObject@@YGPAUcToolObject@@H@Z  00f33640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00f32880/s00f32880.cpp  ?RefreshScenario@cSphere@@QAEXXZ  00f33710  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
