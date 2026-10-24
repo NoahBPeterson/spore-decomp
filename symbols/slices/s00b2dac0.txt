@@ -1,1 +1,3 @@
-00b2e010 SpawnMgr::Spawn  # (type,perRec,key64,recs[0x4c],n,scale) ret 0x1c; trees at +0x1b0 (active) and +0x1cc (pool)
+00b2dac0 ?DrawLayer@cCityDisplayStrategy@@QAEXXZ  # nonmatching (1058) - SP::cCityDisplayStrategy::DrawLayer (PDB candidate): pick the city anchor point, rebuild the id list, prune the record list, draw every remaining noun
+00b2e010 ?Spawn@SpawnMgr@@QAEXPAVcSpatialObject@@@Z  # nonmatching (1804) - SpawnMgr::Spawn
+00b2e830 ?FUN_00b2e830@cCityDisplayStrategy@@QAEXXZ  # nonmatching (239) - tear the record list and the noun list down
