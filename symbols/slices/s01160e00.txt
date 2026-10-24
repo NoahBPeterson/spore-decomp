@@ -1,1 +1,2 @@
-01160e00 cIIRFilter::Process  # direct-form-I 4th-order IIR filter over 256 samples per channel
+01160e00 cIIRFilter::Process  # fourth-order IIR filtering of 256 samples per channel (pre-existing)
+01161540 FUN_01161540  # eight-lane vector exponential approximation used by the particle/audio math

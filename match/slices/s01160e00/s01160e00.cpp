@@ -97,3 +97,69 @@ void cIIRFilter::Process(cIIRBuffers* io)
     io->mIn = out;
     io->mOut = in;
 }
+
+// ---------------------------------------------------------------- vector exponential approximation
+union cFloatBits
+{
+    float    mFloat;
+    uint32_t mBits;
+};
+
+static inline float FloatFromBits(uint32_t bits)
+{
+    cFloatBits value;
+    value.mBits = bits;
+    return value.mFloat;
+}
+
+static inline uint32_t BitsFromFloat(float value)
+{
+    cFloatBits cast;
+    cast.mFloat = value;
+    return cast.mBits;
+}
+
+static inline float ExpPoly(float m)
+{
+    return ((m * m) * (m * m)) *
+               ((((m * -0.009310496f + 0.05206469f) * m + -0.13753124f) * m + 0.2418737f) * m +
+                -0.34730548f) +
+           ((m * 0.4786848f + -0.7211659f) * m + 1.4426899f) * m;
+}
+
+static inline float ExpCore(float value, float scale)
+{
+    uint32_t bits = BitsFromFloat(value) & 0x7fffffffu;
+    float mantissa = FloatFromBits((bits & 0x7fffffu) | 0x3f800000u) - 1.0f;
+    int exponent = (int)(bits >> 23) - 0x7f;
+    float biased = ((float)exponent + ExpPoly(mantissa)) * scale;
+    float rounded = biased + (biased < 0.0f ? 0.99999994f : 0.0f);
+    int whole = (int)rounded;
+    float fraction = ((float)whole - biased) * 0.6931472f;
+    float curve = (fraction * fraction) * (fraction * fraction) *
+                      (((fraction * -0.0001413161f + 0.001329882f) * fraction + -0.00830136f) *
+                           fraction + 0.041657347f) +
+                  (((fraction * -0.1666653f + 0.4999999f) * fraction + -1.0f) * fraction + 1.0f);
+    float biasedExponent = (float)((uint32_t)(whole + 0x7f) * 0x800000u);
+    return curve * biasedExponent;
+}
+
+// @ 0x01161540
+void FUN_01161540(float* input, float scale, float* laneScale, uint32_t* output, int count)
+{
+    do {
+        for (int lane = 0; lane < 8; lane++) {
+            float value = input[lane] * scale;
+            uint32_t result = (uint32_t)ExpCore(value, laneScale[lane]);
+            if (value < 0.0f)
+                result |= 0x80000000u;
+            if (value == 0.0f)
+                result = 0;
+            output[lane] = result;
+        }
+        input += 8;
+        laneScale += 8;
+        output += 8;
+        count -= 8;
+    } while (count != 0);
+}
