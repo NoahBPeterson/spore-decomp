@@ -33,6 +33,7 @@ Vector3 operator-(const Vector3& a, const Vector3& b);         // 0x41db10
 Vector3 operator+(const Vector3& a, const Vector3& b);         // 0x41dc10
 Vector3 operator*(const Vector3& v, const Matrix3& m);         // 0x41daf0
 Vector3 operator*(const Vector3& v, const float& s);           // 0x41dca0
+Vector3* Vector3_Scale(Vector3* out, const float* s, const Vector3* v);   // 0x41de40 (plane-hit path)
 Vector3 operator-(const Vector3& v);                           // 0x422020
 Vector3 Normalize(const Vector3& v);                           // 0x436ce0
 Vector3 Cross(const Vector3& a, const Vector3& b);             // 0x44e460
@@ -273,9 +274,11 @@ void FUN_0049bcc0(cSPEditorBlock* block, Vector3 origin, Vector3 dir, Vector3 a,
 
     float t;
     Vector3 planeHit;
-    if (IntersectRayPlane(&origin, &dir, &plane, &t))
-        planeHit = origin + dir * t;
-    else
+    if (IntersectRayPlane(&origin, &dir, &plane, &t)) {
+        Vector3 scaled;
+        Vector3_Scale(&scaled, &t, &dir);
+        planeHit = origin + scaled;
+    } else
         planeHit = block->mPosition;
 
     block->mIsOnGround = false;
