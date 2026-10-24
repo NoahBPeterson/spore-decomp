@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01019f50/s01019f50.cpp  ?SetSourceInterpolation@cSPSpacePlanetCameraController@@QAEXPAUcViewer@@M@Z  01019f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01019f50/s01019f50.cpp  ??0cCameraControllerBase@@QAE@PAUIRefCounted@@@Z  0101a070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01019f50/s01019f50.cpp  ??0cSPSpaceCameraController@@QAE@PAUIRefCounted@@@Z  0101a130  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

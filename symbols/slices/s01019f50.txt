@@ -1,0 +1,5 @@
+01019f50 SP::cSPSpacePlanetCameraController::SetSourceInterpolation  # matches: stores viewer eye/orientation into the interpolation source pair
+0101a070 SP::cCameraControllerBase::cCameraControllerBase  # matches: shared camera-controller base ctor (target ref at +0x10)
+0101a130 SP::cSPSpaceCameraController::cSPSpaceCameraController  # matches: space-camera derived ctor
+0101a9d0 SP::cSPSpacePlanetCameraController::cSPSpacePlanetCameraController  # nonmatching (complete): planet-camera ctor, exact size, register allocation only
+0101ad50 SP::cSPSpacePlanetCameraController::UpdateEffects  # nonmatching (complete): posts the distance-to-surface effect message (0x60e4e46e)
