@@ -4,4 +4,4 @@
 0057a6d0  3     complete ctor; only mov ecx,<addr> scheduling differs  ; difftest PASS (marker moved onto the ctor; RefObj base vtable mapped via novtable + explicit store)
 0057a710  384   complete SendBehaviorMessage; this/msg register roles swapped vs original  ; difftest PASS at --inputs 1000 (fixes: 0x5942e0 callee was mis-annotated as 0xae6970; vtable+0xc call double-dereferenced; AddRef is a virtual call after new, not in the ctor)
 0057a9e0  110   complete GetDefaultMask (returns Bits128 by value); original keeps the zero stores  ; difftest PASS (mapped g_d4*/g_mf* globals)
-0057ac00  366   complete BuildPartMask (masks | defaults + ability/property bits); schedule differs
+0057ac00  366   complete BuildPartMask (masks | defaults + ability/property bits); difftest PASS 393/600 valid, 69.9% coverage (saved replay is a fault-only register-state artifact at the expected invalid read 0x004f4fa1; fresh has no value mismatches). Also verified the hybrid copy src/game/SPEditors/SPAppModeEditorBase.cpp: PASS 413/600, 69.9%. Remaining diff is /O2 scheduling. flags /O2 /MD /Gy /EHsc /TP /arch:SSE

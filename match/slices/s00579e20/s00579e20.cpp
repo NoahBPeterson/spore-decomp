@@ -1,5 +1,6 @@
 // slice s00579e20
-// cAppModeEditorBase destructor + effects-mask helpers, optimized module (/O2 /arch:SSE).
+// cAppModeEditorBase destructor + effects-mask helpers, optimized module.
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
 
 extern "C" long _InterlockedExchange(long volatile*, long);
