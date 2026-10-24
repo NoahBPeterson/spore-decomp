@@ -9,7 +9,8 @@ usage: opencode_sup.py <group> <command> [args]
   launch [N]              start sessions for the next N unlaunched ranges (default 1)
   unhang [SECS]           interrupt + re-prompt sessions whose current model call has run > SECS (default 600)
   nudge <sid>             re-prompt one idle, unfinished session to continue
-  switch                  interrupt every launched session and re-prompt it on the group's current provider/model
+  switch [K,K,...]        interrupt every launched session (or those workers) and re-prompt it on its current
+                          model: the group's provider/model, or the group's "worker_model" entry for that worker
   ns [N]                  set per-session cache namespaces: range k uses model "<model>-c<k%N:02d>" (0 disables;
                           aliases are created by tools/opencode_cache_ns.py). Re-prompt to apply to live sessions.
 Group file: work/opencode/groups/<group>.json = {"batch", "provider", "model", "ranges": [[a, b], ...],
@@ -81,6 +82,9 @@ def save():
 def model(k=None):
     """Range k's model. With "cache_ns": N set, range k uses the alias "<model>-c<k%N:02d>", which maps to the
     same real model but a distinct cheaperinference prompt-cache namespace (see tools/opencode_cache_ns.py)."""
+    wm = G.get("worker_model", {}).get(str(k)) if k is not None else None
+    if wm:  # per-worker override, e.g. {"providerID": "openrouter", "id": "dsv41-cheapest"} (gold6, 2026-10-24)
+        return wm
     mid = G["model"]
     if k is not None and G.get("cache_ns") and G.get("provider") == "cheaperinference":
         mid = "%s-c%02d" % (mid, int(k) % int(G["cache_ns"]))
@@ -283,8 +287,11 @@ elif cmd == "unhang":
                 "Continue your task from the files already written in your slices.", "model": model(int(k))})
             print("unhung r%s %s" % (k, sid))
 
-elif cmd == "switch":  # move every launched session to the group's current provider/model (and cache namespace)
+elif cmd == "switch":  # move launched sessions (all, or the comma-separated workers in args[0]) to their current model
+    only = {x.strip() for x in args[0].split(",")} if args else None
     for k, sid in SESS.items():
+        if only is not None and str(k) not in only:
+            continue
         api("POST", "/api/session/%s/model" % sid, {"model": model(int(k))})  # prompt's "model" field doesn't change it
         api("POST", "/api/session/%s/interrupt" % sid, {})
         r = api("POST", "/api/session/%s/prompt" % sid, {"text": "You were interrupted to switch model provider. "

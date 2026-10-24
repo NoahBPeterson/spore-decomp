@@ -103,6 +103,9 @@ def log(msg):
 
 
 def model_of(k):
+    wm = G.get("worker_model", {}).get(str(k)) if k is not None else None
+    if wm:  # per-worker override, e.g. {"providerID": "openrouter", "id": "dsv41-cheapest"} (gold6, 2026-10-24)
+        return wm
     mid = G["model"]
     if G.get("cache_ns") and G.get("provider") == "cheaperinference":
         mid = "%s-c%02d" % (mid, int(k) % int(G["cache_ns"]))
