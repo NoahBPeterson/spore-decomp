@@ -1,4 +1,4 @@
 00623f90  7  popup timer OnMessage; complete, only the fstp/mov al scheduling in the 0x51a1a2e path differs
 00624080  1624  cXHTMLWin::CreateFormControl; complete behaviour, structure/regalloc differ (jump-table switch, duplicated inlined tails)
-006248d0  131  cXHTMLWin::GetFormControlValue; complete; WString assign is a usercall (eax=begin) and list anchor null-test shape differs
+006248d0  107  cXHTMLWin::GetFormControlValue; fixed base fallback (0x995ea0) and WString::assign to thiscall with stack args; replay matches, fresh WEAK 224 valid/no mismatch 19.1% cov; remaining diff is prologue register roles (orig esi=pCtl/edi=this) and the list anchor null-test shape
 00624ec0  8  cCreatureCameraBase::Deactivate; complete; pServer load is hoisted above the three bool stores in mine

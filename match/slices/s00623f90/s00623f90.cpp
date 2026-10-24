@@ -301,7 +301,9 @@ void cCreatureCameraBase::W624f90(bool v)
 // ===========================================================================
 // Pollen XHTML window pieces
 // ===========================================================================
-struct WString { wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; };   // eastl::basic_string<wchar_t>
+struct WString { wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity;   // eastl::basic_string<wchar_t>
+    void assign(const wchar_t* b, const wchar_t* e);   // 0x00423650
+};
 struct LinkNode { LinkNode* mpNext; LinkNode* mpPrev; };
 extern wchar_t gEmptyWString[];   // shared empty-string storage (0x1667bac)
 
@@ -663,9 +665,6 @@ bool cPopupTimer::OnMessage(void* unused, SMessage* m)
     return false;
 }
 
-void __fastcall FUN_00995ea0(void* self, void* pOut);   // base-class GetFormControlValue (ecx=this, edx=out)
-void __fastcall WString_Assign(WString* self, const wchar_t* b, const wchar_t* e);   // eastl::basic_string::assign (0x423650)
-
 struct IFontRef { virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3(); virtual void* GetFont(); };
 struct IBaseObj { virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual unsigned GetHandle(); };
 struct TabStopNode { TabStopNode* mpNext; TabStopNode* mpPrev; FormControl* mpValue; };
@@ -682,6 +681,7 @@ struct cXHTMLWin {   // the WinXHTML sub-object at +0x20c of the real window; of
     TabStopNode mTabStops;        // +0xa6dc list anchor (value unused)
     void CreateFormControl(FormControl* pCtl);                       // 0x00624080
     void GetFormControlValue(FormControl* pCtl, WString* pOut);      // 0x006248d0
+    void GetFormControlValueBase(FormControl* pCtl, WString* pOut);  // 0x00995ea0
 };
 
 // @ 0x006248d0
@@ -690,7 +690,7 @@ void cXHTMLWin::GetFormControlValue(FormControl* pCtl, WString* pOut)
     IQuery* q = pCtl->mpControl;
     char* pSel;
     if (!q || !(pSel = (char*)q->Query(0x4c058d5))) {
-        FUN_00995ea0(this, pOut);
+        GetFormControlValueBase(pCtl, pOut);
         return;
     }
     int idx = 0;
@@ -711,7 +711,7 @@ void cXHTMLWin::GetFormControlValue(FormControl* pCtl, WString* pOut)
                 const wchar_t* e = v;
                 while (*e)
                     ++e;
-                WString_Assign(pOut, v, v + (e - v));
+                pOut->assign(v, v + (e - v));
                 return;
             }
         }
