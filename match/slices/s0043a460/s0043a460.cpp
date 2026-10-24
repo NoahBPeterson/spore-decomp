@@ -61,7 +61,11 @@ struct BitSet60 {
 };
 
 // A 12-byte key element vector (begin/end at the head of the field).
-struct KeyVec { void* begin; void* end; };
+struct KeyVec {
+    void* begin;
+    void* end;
+    bool empty() const;   // 0x00526430
+};
 
 class cSPEditorBlock { public:
     char     pad00[0x10];
@@ -101,7 +105,7 @@ class cSPEditorBlock { public:
     void F9a0(uint8_t a, uint8_t b);                      // 0043A9A0
     bool F9e0(uint8_t a, uint8_t b);                      // 0043A9E0
     bool Fb90(uint8_t p);                                 // 0043AB90
-    void F3cfc0(uint8_t a, int b);                        // 0043CFC0
+    void F3cfc0(int a, uint8_t b);                        // 0043CFC0
     void F448a80();                                       // 00448A80
     void F448690(Vec4 v);                                 // 00448690
     void F3cad0();                                        // 0043CAD0
@@ -211,7 +215,7 @@ int cSPEditorBlock::GetSkinIdentifierForPicking()
     if ((char*)&keys == 0) {
         useParent = true;
     } else {
-        if (!ModelKey_HasResourceType(&keys)) {
+        if (!keys.empty()) {
             int count = (int)(((char*)keys.end - (char*)keys.begin) / 12);
             for (int i = 0; i < count; i++) {
                 uint32_t id = *(uint32_t*)((char*)keys.begin + i * 12);
@@ -245,7 +249,7 @@ bool cSPEditorBlock::F9e0(uint8_t a, uint8_t b)
     f40 = *(uint32_t*)&f38;
     f44 = f3c;
     if (f39 != 0) {
-        F3cfc0(b, 0);
+        F3cfc0(0, b);
         F448a80();
     } else {
         void* model = mModel;
