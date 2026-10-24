@@ -218,10 +218,10 @@ void* cSPEditorHandle::GetOverdrawHandleColorForState(void* out, int state)
 // @ 0x0047ebe0
 void* cSPEditorHandle::GetZeroVector(void* out)
 {
-    Vector3 v = { 0.0f, 0.0f, 0.0f };
-    ((float*)out)[0] = v.x;
-    ((float*)out)[1] = v.y;
-    ((float*)out)[2] = v.z;
+    int v[3] = { 0, 0, 0 };
+    ((int*)out)[0] = v[0];
+    ((int*)out)[1] = v[1];
+    ((int*)out)[2] = v[2];
     return out;
 }
 
