@@ -1,0 +1,5 @@
+00fef3b0 ?OnTick@cSPMissionManager_s00fe_f140@@QAEXPAX@Z  # cSPMissionManager_s00fe_f140::OnTick migrated from s00fef140 (verbatim, slice spelling)
+00fef570 ?FUN_00fef570@spVecF@@QAEPAXPAX0@Z  # spVecF::FUN_00fef570 migrated from s00fef140 (verbatim, slice spelling)
+00fef5d0 ?ShutdownForGame@cSPMissionManager_s00fe_f140@@QAEXXZ  # cSPMissionManager_s00fe_f140::ShutdownForGame migrated from s00fef140 (verbatim, slice spelling)
+00fef670 ?FUN_00fef670@@YAPAXXZ  # FUN_00fef670 migrated from s00fef140 (verbatim, slice spelling)
+00fef6b0 ?FUN_00fef6b0@@YAXXZ  # FUN_00fef6b0 migrated from s00fef140 (verbatim, slice spelling)

@@ -1,0 +1,4 @@
+00fec590 ?CreateMissionFromID@cSPMissionManager_s00fe_c590@@QAEPAVcSPMission@@IIII@Z  # cSPMissionManager_s00fe_c590::CreateMissionFromID migrated from s00fec590 (verbatim, slice spelling)
+00fec8a0 ?FUN_00fec8a0@cSPMissionManager_s00fe_c590@@QAE_NPAX@Z  # cSPMissionManager_s00fe_c590::FUN_00fec8a0 migrated from s00fec590 (verbatim, slice spelling)
+00fec900 ?FUN_00fec900@cSPMissionManager_s00fe_c590@@QAE_NPAX@Z  # cSPMissionManager_s00fe_c590::FUN_00fec900 migrated from s00fec590 (verbatim, slice spelling)
+00fecfc0 ?FUN_00fecfc0@cTimerList@@QAEXABUtTimerValue@@@Z  # cTimerList::FUN_00fecfc0 migrated from s00fec590 (verbatim, slice spelling)

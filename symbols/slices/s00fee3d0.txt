@@ -1,36 +1,14 @@
-# slice s00fee3d0 - SP::cSPMissionManager (mission selection/query block 0x00fee3d0..0x00fef10e)
-# cSPMissionManager member offsets (observed): mDebugDraw@0x014, mForcedMission@0x01c,
-#   mTutBegin@0x020 / mTutEnd@0x024 (element stride 0x38), mNpcBegin@0x034 / mNpcEnd@0x038,
-#   mColBegin@0x048 / mColEnd@0x04c, mStates (eastl rbtree)@0x05c, mMaxMissions@0x0e0,
-#   mWeaponryThreshold@0x0ec, mVec108/10c@0x108/0x10c, mVec11c/120@0x11c/0x120, mVec130/134@0x130/0x134.
-# The rbtree node is {right@0x00,left@0x04,parent@0x08,colour@0x0c,mKey@0x10,mValue@0x14}, end
-#   sentinel at mStates+0x04 (null node), anchor at mStates+0x08.
-# VA        name                                          note
-00fee3d0    ?FUN_00fee3d0@cSPMissionManager@@QAEDPAX0@Z    player-empire mission gate + relationship-tuning float compare; nonmatching (tail-block placement only)
-00fee480    ?GetMissionByID@cSPMissionManager@@QAEPAUcSPMission@@H@Z  mStates lookup + vtable +0x134 call; byte-exact MATCH
-00fee4f0    ?GetActiveMissionForEmpireAndPlanet@cSPMissionManager@@QAEPAUcSPMission@@PAX0@Z  GetMissionByID(0x87ca091e) then vec130/134 sweep; byte-exact MATCH
-00fee590    ?IsPlanetARaidTarget@cSPMissionManager@@QAEDPAXPAI@Z  raid-target scan over vec108/10c; byte-exact MATCH
-00fee6b0    ?HasMissionConversationWithEmpireAndPlanet@cSPMissionManager@@QAEHPAX0@Z  active-mission presence; byte-exact MATCH
-00fee730    ?FUN_00fee730@cSPMissionManager@@QAEDPAX0@Z    archetype-compatibility switch (9..16); nonmatching (MSVC tail-merge of the return blocks)
-00fee820    ?FUN_00fee820@cSPMissionManager@@QAEDXZ        forced-mission gate; byte-exact MATCH
-00fee8d0    ?DebugDraw@cSPMissionManager@@QAEXXZ           mDebugDraw vtable draw; byte-exact MATCH
-00fee930    ?FUN_00fee930@cSPMissionManager@@QAEDH@Z       mission-id key chain; nonmatching (id live in eax vs edi)
-00feea60    ?GetNextAvailableTutorialMission@cSPMissionManager@@QAEIXZ  tutorial-slot sweep; nonmatching (equiv PASS)
-00feebb0    ?FUN_00feebb0@cSPMissionManager@@QAEDXZ       mVec11c/120 non-empty test; byte-exact MATCH
-00feec30    ?FUN_00feec30@cSPMissionManager@@QAEDXZ       mVec108/10c non-empty test; byte-exact MATCH
-00feecb0    ?FUN_00feecb0@cSPMissionManager@@QAEDXZ       mVec130/134 non-empty test; byte-exact MATCH
-00feed30    ?FUN_00feed30@cSPMissionManager@@QAEIPAX0@Z   candidate-mission selection driver returning the chosen id (or 0xffffffff); nonmatching
-#
-# External helpers referenced (VAs carried as // 0x annotations in the slice source):
-#   NounManager 0x00b3d300, FUN_01021300 0x01021300, SpaceGameGet 0x01002bd0,
-#   RelationshipManager 0x00b3d2c0, GetSpaceRelationshipTuning 0x010407c0, FUN_00b3d2a0 0x00b3d2a0,
-#   FUN_00fec010 0x00fec010, operator_delete_array 0x00f47380,
-#   cGameData::SetGameDataOwner2 0x00bfc5f0, cGameNounManager::GetGameDataVector 0x00b21340,
-#   cTerrainEditor::GetCurrentTerrainSphere 0x00f67d90, RelMgr::calc 0x00d00a10, RelTuning::get 0x01040860,
-#   StarMgr::PickRandomAsset 0x00bb7940, InsertVec::FUN_00fe4180 0x00fe4180,
-#   cMissionHelper::FUN_00c4b240 0x00c4b240, TerrainSphere::FUN_00c75d70 0x00c75d70,
-#   TerrainSphere::FUN_00c772c0 0x00c772c0, cEmpire::GetHomePlanet 0x00c31730,
-#   cEmpire::GetWeaponryLevel 0x00c317a0, cEmpire::FUN_00c31bc0 0x00c31bc0,
-#   cSPMission::GetMissionID 0x01030e10, cSPMission::GetOwnerEmpire 0x00c451e0,
-#   cSPMission::GetModel 0x00c45ce0, cSPMission::GetTargetPlanet 0x00970b30, cSPMission::IsActive 0x00c44c80,
-#   MissionStateMap::find 0x00e5c780, SpVectorF::resize 0x004afc80.
+00fee3d0 ?FUN_00fee3d0@cSPMissionManager_s00fe_e3d0@@QAEDPAX0@Z  # cSPMissionManager_s00fe_e3d0::FUN_00fee3d0 migrated from s00fee3d0 (verbatim, slice spelling)
+00fee480 ?GetMissionByID@cSPMissionManager_s00fe_e3d0@@QAEPAUcSPMission_s00fe_e3d0@@H@Z  # cSPMissionManager_s00fe_e3d0::GetMissionByID migrated from s00fee3d0 (verbatim, slice spelling)
+00fee4f0 ?GetActiveMissionForEmpireAndPlanet@cSPMissionManager_s00fe_e3d0@@QAEPAUcSPMission_s00fe_e3d0@@PAX0@Z  # cSPMissionManager_s00fe_e3d0::GetActiveMissionForEmpireAndPlanet migrated from s00fee3d0 (verbatim, slice spelling)
+00fee590 ?IsPlanetARaidTarget@cSPMissionManager_s00fe_e3d0@@QAEDPAXPAI@Z  # cSPMissionManager_s00fe_e3d0::IsPlanetARaidTarget migrated from s00fee3d0 (verbatim, slice spelling)
+00fee6b0 ?HasMissionConversationWithEmpireAndPlanet@cSPMissionManager_s00fe_e3d0@@QAEHPAX0@Z  # cSPMissionManager_s00fe_e3d0::HasMissionConversationWithEmpireAndPlanet migrated from s00fee3d0 (verbatim, slice spelling)
+00fee730 ?FUN_00fee730@cSPMissionManager_s00fe_e3d0@@QAEDPAX0@Z  # cSPMissionManager_s00fe_e3d0::FUN_00fee730 migrated from s00fee3d0 (verbatim, slice spelling)
+00fee820 ?FUN_00fee820@cSPMissionManager_s00fe_e3d0@@QAEDXZ  # cSPMissionManager_s00fe_e3d0::FUN_00fee820 migrated from s00fee3d0 (verbatim, slice spelling)
+00fee8d0 ?DebugDraw@cSPMissionManager_s00fe_e3d0@@QAEXXZ  # cSPMissionManager_s00fe_e3d0::DebugDraw migrated from s00fee3d0 (verbatim, slice spelling)
+00fee930 ?FUN_00fee930@cSPMissionManager_s00fe_e3d0@@QAEDH@Z  # cSPMissionManager_s00fe_e3d0::FUN_00fee930 migrated from s00fee3d0 (verbatim, slice spelling)
+00feea60 ?GetNextAvailableTutorialMission@cSPMissionManager_s00fe_e3d0@@QAEIXZ  # cSPMissionManager_s00fe_e3d0::GetNextAvailableTutorialMission migrated from s00fee3d0 (verbatim, slice spelling)
+00feebb0 ?FUN_00feebb0@cSPMissionManager_s00fe_e3d0@@QAEDXZ  # cSPMissionManager_s00fe_e3d0::FUN_00feebb0 migrated from s00fee3d0 (verbatim, slice spelling)
+00feec30 ?FUN_00feec30@cSPMissionManager_s00fe_e3d0@@QAEDXZ  # cSPMissionManager_s00fe_e3d0::FUN_00feec30 migrated from s00fee3d0 (verbatim, slice spelling)
+00feecb0 ?FUN_00feecb0@cSPMissionManager_s00fe_e3d0@@QAEDXZ  # cSPMissionManager_s00fe_e3d0::FUN_00feecb0 migrated from s00fee3d0 (verbatim, slice spelling)
+00feed30 ?FUN_00feed30@cSPMissionManager_s00fe_e3d0@@QAEIPAX0@Z  # cSPMissionManager_s00fe_e3d0::FUN_00feed30 migrated from s00fee3d0 (verbatim, slice spelling)

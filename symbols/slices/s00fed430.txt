@@ -1,11 +1,26 @@
-00fed430 SP::cSPMissionManager::GetMissionWeightForColony  # PDB card
-00fed640 SP::cSPMissionManager::GetMissionWeightForEmpire  # PDB card
-00fed890 SP::cSPMissionManager::AddRecentMissionA  # PDB card
-00feda00 RecentListRead  # no PDB name; eastl list<tRecentMission> read helper
-00fedb50 SP::cSPMissionManager::InitForGame  # PDB card
-00fedca0 SP::cSPMissionManager::RemoveMission  # PDB card
-00b96600 ?DoInsertKey4@?$SPVector@I@@QAEXPAIABI@Z  # vector<uint32_t>::DoInsertKey4 (call target in 00fed430)
-004e0880 ?reserve@?$SPVector@I@@QAEXI@Z  # vector<uint32_t>::reserve
 004558a0 ?DoInsertValueI@?$SPVector@I@@QAEXPAIABI@Z  # vector<uint32_t>::DoInsertValueI
+004e0880 ?reserve@?$SPVector@I@@QAEXI@Z  # vector<uint32_t>::reserve
 004e3e10 ?DoInsertKey@?$SPVector@UKey@@@@QAEXPAUKey@@ABU2@@Z  # vector<Key>::DoInsertKey
 00aea5d0 ?DoInsertPtr@?$SPVector@UAutoRefCount@@@@QAEXPAUAutoRefCount@@ABU2@@Z  # vector<AutoRefCount>::DoInsertPtr
+00b96600 ?DoInsertKey4@?$SPVector@I@@QAEXPAIABI@Z  # vector<uint32_t>::DoInsertKey4 (call target in 00fed430)
+00fed430 ?GetMissionWeightForColony@cSPMissionManager_s00fe_d430@@QAEII@Z  # cSPMissionManager_s00fe_d430::GetMissionWeightForColony migrated from s00fed430 (verbatim, slice spelling)
+00fed640 ?GetMissionWeightForEmpire@cSPMissionManager_s00fe_d430@@QAEIPAXI@Z  # cSPMissionManager_s00fe_d430::GetMissionWeightForEmpire migrated from s00fed430 (verbatim, slice spelling)
+00fed890 ?AddRecentMissionA@cSPMissionManager_s00fe_d430@@QAEXPAUcSPMission_s00fe_d430@@_N@Z  # cSPMissionManager_s00fe_d430::AddRecentMissionA migrated from s00fed430 (verbatim, slice spelling)
+00feda00 ?RecentListRead@@YAXPAXPAUListAnchor@@@Z  # RecentListRead migrated from s00fed430 (verbatim, slice spelling)
+00fedb50 ?InitForGame@cSPMissionManager_s00fe_d430@@QAEXXZ  # cSPMissionManager_s00fe_d430::InitForGame migrated from s00fed430 (verbatim, slice spelling)
+00fedca0 ?RemoveMission@cSPMissionManager_s00fe_d430@@QAE_NPAUcSPMission_s00fe_d430@@@Z  # cSPMissionManager_s00fe_d430::RemoveMission migrated from s00fed430 (verbatim, slice spelling)
+00fedd50 ?GetMissionList@cSPMissionManager_s00fe_d430@@QAEPAXXZ  # cSPMissionManager_s00fe_d430::GetMissionList migrated from s00fed430 (verbatim, slice spelling)
+00fedd80 ?GetNumNonEventMissions@cSPMissionManager_s00fe_d430@@QAEHD@Z  # cSPMissionManager_s00fe_d430::GetNumNonEventMissions migrated from s00fed430 (verbatim, slice spelling)
+00feddf0 ?GetNumEventMissions@cSPMissionManager_s00fe_d430@@QAEHXZ  # cSPMissionManager_s00fe_d430::GetNumEventMissions migrated from s00fed430 (verbatim, slice spelling)
+00fede40 ?SetTutorialMissionState1@cSPMissionManager_s00fe_d430@@QAEXI@Z  # cSPMissionManager_s00fe_d430::SetTutorialMissionState1 migrated from s00fed430 (verbatim, slice spelling)
+00fede60 ?SetTutorialMissionState2@cSPMissionManager_s00fe_d430@@QAEXI@Z  # cSPMissionManager_s00fe_d430::SetTutorialMissionState2 migrated from s00fed430 (verbatim, slice spelling)
+00fede80 ?SetTutorialMissionState3@cSPMissionManager_s00fe_d430@@QAEXI@Z  # cSPMissionManager_s00fe_d430::SetTutorialMissionState3 migrated from s00fed430 (verbatim, slice spelling)
+00fedea0 ?DoMissionsPreventHostility@cSPMissionManager_s00fe_d430@@QAE_NPAX0@Z  # cSPMissionManager_s00fe_d430::DoMissionsPreventHostility migrated from s00fed430 (verbatim, slice spelling)
+00fedf20 ?FindListWeightA@cSPMissionManager_s00fe_d430@@QAEMI@Z  # cSPMissionManager_s00fe_d430::FindListWeightA migrated from s00fed430 (verbatim, slice spelling)
+00fedfe0 ?FindListWeightB@cSPMissionManager_s00fe_d430@@QAEMI@Z  # cSPMissionManager_s00fe_d430::FindListWeightB migrated from s00fed430 (verbatim, slice spelling)
+00fee0a0 ?ForEachActiveSetTargetPlanet@cSPMissionManager_s00fe_d430@@QAEXPAX@Z  # cSPMissionManager_s00fe_d430::ForEachActiveSetTargetPlanet migrated from s00fed430 (verbatim, slice spelling)
+00fee110 ?AnyActiveMatchA@cSPMissionManager_s00fe_d430@@QAE_NPAX@Z  # cSPMissionManager_s00fe_d430::AnyActiveMatchA migrated from s00fed430 (verbatim, slice spelling)
+00fee190 ?AnyActiveMatchB@cSPMissionManager_s00fe_d430@@QAE_NPAX@Z  # cSPMissionManager_s00fe_d430::AnyActiveMatchB migrated from s00fed430 (verbatim, slice spelling)
+00fee220 ?FindMissionByTargetPlanet@cSPMissionManager_s00fe_d430@@QAEPAUcSPMission_s00fe_d430@@PAX@Z  # cSPMissionManager_s00fe_d430::FindMissionByTargetPlanet migrated from s00fed430 (verbatim, slice spelling)
+00fee2b0 ?CopyRecords@@YAPAURecord38@@PAU1@00@Z  # CopyRecords migrated from s00fed430 (verbatim, slice spelling)
+00fee310 ?PostLoad@cSPMissionManager_s00fe_d430@@QAEXXZ  # cSPMissionManager_s00fe_d430::PostLoad migrated from s00fed430 (verbatim, slice spelling)
