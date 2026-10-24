@@ -1,0 +1,12 @@
+00def400 484 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 484 bytes - cGalaxyGameEntryUIStateMachine name-slot update not reconstructed.
+00def5f0 151 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 116 bytes - eastl hash-table find: the UTF-16 FNV-1a loop, the modulo bucket probe and the (node,bucket) iterator return are all reconstructed correctly, but MSVC 2008 allocates the string pointer to edx/ebp and this to edi instead of retail's esi/eax/ecx and folds the iterator temp into the hidden return slot (size 139 vs 151).
+00def690 177 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 177 bytes - state-machine helper not reconstructed.
+00def750 102 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 102 bytes - combo-row window update (element array at +0x84 with 0xc0-byte stride, FindWindowByID on the layout at +0x28) not reconstructed.
+00def7c0 254 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 254 bytes - state-machine helper not reconstructed.
+00def8c0 823 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 823 bytes - UpdateNavigationControls not reconstructed.
+00defc00 127 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 127 bytes - random-name retry loop (eastl wstring assign plus FUN_00def400 validation) not reconstructed.
+00defc80 140 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 140 bytes - MakeRandomName not reconstructed.
+00defd10 188 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 188 bytes - SetStateSummaryText not reconstructed.
+00defdd0 723 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 723 bytes - SelectTheme not reconstructed.
+00df00b0 212 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 212 bytes - FillComboBoxes not reconstructed.
+00df0190 231 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 231 bytes - UpdateSpecialitySummaryText not reconstructed.
