@@ -36,8 +36,12 @@ if MODULES:
                               % (re.escape(ROOT), MODS, IDS, IDS, IDS, IDS, IDS))
     MIGRATE_TOOL = r"tools/migrate/rewrite\.py|"
 else:
-    ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:match/slices/%s/[^/]+|symbols/slices/%s\.txt|work/match/.*)$"
-                              % (re.escape(ROOT), IDS, IDS))
+    # rework batches with equivalence FAILs (claim.py "fail_src"): the migrated src/game copy of each FAIL function
+    # is the hybrid build's, so its session may edit that one unit (part1, 2026-10-24)
+    FAILSRC = sorted({f for s in _recs for f in s.get("fail_src", {}).values()})
+    EXTRA = "|" + "|".join(map(re.escape, FAILSRC)) if FAILSRC else ""
+    ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:match/slices/%s/[^/]+|symbols/slices/%s\.txt|work/match/.*%s)$"
+                              % (re.escape(ROOT), IDS, IDS, EXTRA))
     MIGRATE_TOOL = ""
 PY_TOOLS = re.compile(r"^(?:\.venv/bin/python3?\s+)?(?:" + MIGRATE_TOOL + r"tools/matching/(?:slice_info|claim|card|chk|cmpdis|try_variants|run_all|od_names|"
                       r"disasm|pattern_info|cmpobj|patterns|libmatch|asm_audit)\.py|tools/pdb_type\.py|"
