@@ -1,0 +1,6 @@
+00a7d5e0 SP::CopyRefElements  # cdecl(first,last,dst) -> dst_end; copies 0x18-byte RefElement, AddRef through vtable+0x04; byte-exact
+00a7d640 SP::CopyRefElementsBackward  # cdecl(first,last,dst_end) -> dst_begin; releases old ref, AddRefs new; byte-exact
+00a7d6b0 SP::cSPTransform::RotateVector  # thiscall(Vector3*); rotates only when mFlags bit 0x2; diff 10
+00a7df80 SP::BuildQuadOutput  # stdcall(source, xf, alt_xf, out); picks inverse/alternate/identity transform and quad normal+offset; diff 163
+00a7e080 SP::ProjectPoint  # stdcall(offset, unused, point, normal, plane, unused) -> bool; plane-distance projection; diff 584
+00a7d8a0 SP::BuildQuadPlane  # preserved earlier Swarm quad collider setup; cSPTransform at QuadPlane+0x40, axis at +0x78
