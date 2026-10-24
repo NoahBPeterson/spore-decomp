@@ -255,13 +255,13 @@ bool SetCachingType(int type, void* obj)
 
 
 // @ 0x006ac0a0
-uint32_t FUN_006ac0a0(uint32_t type, CacheHolder* obj)
+bool FUN_006ac0a0(uint32_t type, CacheHolder* obj)
 {
     if (!obj)
-        return 0;
+        return false;
     int v = CacheHolder_Find(obj, 0x355d6f5);
     if (!v)
-        return 0;
+        return false;
     return SetCachingType(type, (void*)v);
 }
 
@@ -325,16 +325,18 @@ void FUN_006ac3c0(void* self)
 
 
 // @ 0x006ac440
-void FUN_006ac440(uint32_t* dst, uint32_t count, const uint32_t* src)
+uint32_t* FUN_006ac440(uint32_t* dst, uint32_t count, const uint32_t* src)
 {
+    uint32_t* p = dst;
     while (count != 0) {
-        if (dst) {
-            dst[0] = src[0];
-            dst[1] = src[1];
+        if (p) {
+            p[0] = src[0];
+            p[1] = src[1];
         }
-        dst += 2;
+        p += 2;
         --count;
     }
+    return p;
 }
 
 
