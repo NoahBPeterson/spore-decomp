@@ -1,1 +1,4 @@
 00f1faa0 353 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast : complete; float and table-iterator register choices, case 5/6 register assignment differ
+00f200c0 124 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast : complete; identical switch values/tables but VC2008 lays the 4 case groups out in a different order (ja/jbe vs ja/je block placement)
+00f20620 624 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast : complete; VC2008 uses SSE for the normalize sums where retail built them in x87 (fld/fmul/faddp) so size and schedule differ
+00f20900 71 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast : complete; body matches but retail's recorded span (135 B) also covers the next function 00f20940, so the unclaimable 71-byte tail keeps the size penalty

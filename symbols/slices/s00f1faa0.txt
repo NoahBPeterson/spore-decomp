@@ -1,1 +1,15 @@
 00f1faa0 IntroSequenceController_Update  # thiscall(uint dtMs): state machine on +0x90 (1 fade, 3 countdown, 5/6 stopwatch-driven trigger posting); name is a guess
+00f200c0 FUN_00f200c0  # float(unsigned id, int index): per-creature-id animation-speed table, default 1.0
+00f20260 FUN_00f20260  # void(int,int,float): queue scenario progress reveal via g_UIRoot+0x78 sub (+0xb8)
+00f202b0 FUN_00f202b0  # void(IVObj*,void*): bind scenario progress bar (ByIndex/Attach), tick gfx subobjects
+00f20350 FUN_00f20350  # bool(IVObj*,float,cb): replace/create timed win-proc entry
+00f203c0 FUN_00f203c0  # bool(IVObj*,float,cb): update existing timed entry else create
+00f20440 FUN_00f20440  # void(): fire all timed entries, release their objects, clear list
+00f204c0 FUN_00f204c0  # void(float dt): advance timers and fire expired entries
+00f20550 FUN_00f20550  # void(UIEntry*): clear component +0xb18 unless entry object active
+00f20590 FUN_00f20590  # void(UIEntry*): clear component +0xb10 unless entry object active
+00f205d0 FUN_00f205d0  # void(UIEntry*): component SetFlags(7,0) unless entry object active
+00f20620 FUN_00f20620  # void(SpatialObj* parent,SpatialObj* target,float,float): aim target along dir and post positional event
+00f20900 FUN_00f20900  # void(CtlBase*,void*): post positional event from controller target interface
+00f20990 FUN_00f20990  # void(Ctl2*,IVObj*): lazily post positional event when controller armed
+00f20a20 FUN_00f20a20  # void(Ctl2*,IVObj*): arm controller with target, reset timer
