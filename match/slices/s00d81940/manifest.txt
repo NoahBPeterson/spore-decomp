@@ -1,0 +1,2 @@
+slices/s00d81940/s00d81940.cpp  ?FUN_00d823b0@@YAXPAUcSPCreatureBase@@@Z  00d823b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d81940/s00d81940.cpp  ?FUN_00d82410@@YA_NPAUcSPCreatureBase@@IIIIIIM@Z  00d82410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
