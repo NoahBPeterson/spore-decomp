@@ -18,7 +18,7 @@ struct ListHdr {
         mpPrev = this;
         mpNext = this;
     }
-    __declspec(noinline) void Find(void** out, void* limit);
+    __declspec(noinline) void** Find(void** out, void* limit);
 };
 
 struct LNode {
@@ -59,10 +59,21 @@ static __forceinline void SpliceInl(void* pos_, void* node_)
     node->mpNext = pos;
 }
 
-// @ 0x008fe6a0
-void ListHdr::Find(void** out, void* limit)
+// @ 0x008fe6a0 — the original leaves eax = out at every ret (equiv void_hides_eax), so the function
+// is declared to return the out slot and hands it back on both exits.
+void** ListHdr::Find(void** out, void* limit)
 {
-    FindInl(this, out, limit);
+    LNode* h = (LNode*)this;
+    LNode* p = h->mpNext;
+    while (p != h) {
+        if (p == (LNode*)limit) {
+            *out = p;
+            return out;
+        }
+        p = p->mpNext;
+    }
+    *out = h;
+    return out;
 }
 
 __declspec(noinline) void __stdcall Splice(void* pos, void* x, void* node);
@@ -439,7 +450,7 @@ struct SMap {
     unsigned mBucketCount; // +8
     unsigned mCount;       // +0xc
     SNode* DoFindNode(SNode* head, const uint16_t* const* key, uint32_t hash);  // 0x008fe7e0
-    void find(SIter* out, const uint16_t* const* key);
+    SIter* find(SIter* out, const uint16_t* const* key);
     SIter* erase(SIter* out, SNode* n, SNode** slot);
 };
 
@@ -461,8 +472,8 @@ SNode* SMap::DoFindNode(SNode* node, const uint16_t* const* key, uint32_t hash)
     return 0;
 }
 
-// @ 0x008fe9a0
-void SMap::find(SIter* out, const uint16_t* const* key)
+// @ 0x008fe9a0 — the original leaves eax = out at the ret (void_hides_eax): return the out slot.
+SIter* SMap::find(SIter* out, const uint16_t* const* key)
 {
     uint32_t h = HashStr(*key);
     unsigned n = mBucketCount;
@@ -478,6 +489,7 @@ void SMap::find(SIter* out, const uint16_t* const* key)
         it.slot = &b[n];
     }
     *out = it;
+    return out;
 }
 
 // @ 0x008ff3c0

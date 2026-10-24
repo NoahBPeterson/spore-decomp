@@ -4,3 +4,4 @@ slices/s008fe610/s008fe610.cpp  ?DoFindNode@SMap@@QAEPAUSNode@@PAU2@PBQBGI@Z  00
 slices/s008fe610/s008fe610.cpp  ?Remove@ResourceCache@@QAEXPAUCacheEntry@@@Z  008fe8b0  /O2 /MD /Gy /TP /GS- /arch:SSE2
 slices/s008fe610/s008fe610.cpp  ?erase@RCVec@@QAEPAPAURCObjN@@PAPAU2@@Z  008ff370  /O2 /MD /Gy /TP /GS- /arch:SSE2
 slices/s008fe610/s008fe610.cpp  ?InsertValue@RCVec@@QAEXPAPAURCObjN@@0@Z  008ff4c0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s008fe610/s008fe610.cpp  ?Find@ListHdr@@QAEPAPAXPAPAXPAX@Z  008fe6a0  /O2 /MD /Gy /TP /GS- /arch:SSE2

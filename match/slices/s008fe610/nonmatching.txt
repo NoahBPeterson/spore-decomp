@@ -1,10 +1,9 @@
-008fe6a0  10  list Find: cl keeps the cursor in eax, original in edx (register-only diff); difftest PASS with --inputs 800 (after moving __declspec(noinline) off the definition line so the "// @" marker resolves)
 008fe6d0  54  list splice: original keeps the node copy in edi and reloads args; scheduling differs; difftest PASS (after moving __declspec(noinline) off the definition line so the "// @" marker resolves)
 008fe930  58  global provider assign: refcount inc/dec addressed-mode fold differs (no separate load)
 008ff110  1   bucket free: original copies node to edi before loading p8 (first two insns swapped); difftest PASS with --inputs 800 (operator_delete__ annotated 0x00f47380)
 008fe610  52  intrusive_hashtable DoInsertValue: original keeps &key in ebp and reloads node from the arg slot; ours keeps node in ebp
 008fe830  16  ResourceCache ctor: store order/register use differs (edi=this+0x14 inline memset arg)
-008fe9a0  72  string hashtable find: register allocation and iterator copy differ
+008fe9a0  72  string hashtable find: behaviour fixed - the original leaves eax = the out slot at the ret (equiv void_hides_eax), so the function now returns out on its single exit; remaining diff is codegen of the hash loop/iterator copy (uses ebx/ebp/esi/edi, size 128 vs 136, original materialises the SIter on the stack and copies it with mov edx/ecx) [equiv PASS 320 valid, 100% cov]
 008feae0  137  ResourceCache::Clear: complete; list pop and release order scheduling differ
 008feba0  22  ResourceCache::Find: complete; edi (node) reloaded after inlined splice stores
 008fec20  323  ResourceCache::Insert: complete; original keeps the bool result in a reused param slot
