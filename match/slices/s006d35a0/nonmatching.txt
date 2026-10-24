@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-006d35a0 693  bake evaluator (uv4x16/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d38b0 641  bake evaluator (uv4x8/const colour/pos3f, core FUN_006c3550, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d3b90 598  bake evaluator (uv2x16/const colour/pos3f, core FUN_006c3550, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d3e30 641  bake evaluator (uv4x16/const colour/pos3f, core FUN_006c3550, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
-006d4110 685  bake evaluator (uv4x8/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ; equiv FAIL (mem-pool mismatch, now testable)
+006d35a0 711  bake evaluator (uv4u16/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (1/166 valid, mem-pool @40020004). Fixed the observed consequence: the shared DEFINE_BAKE tail used TAIL==1 as "4-component uv", which is only valid in s006ccf50's (core,TAIL) cross-product; in this slice the dot-tail header offsets are 4 bytes/element and res[0]/res[1] are colour4f, so the retail dot is res0*axis0+axis2 / 1-(res1*axis1+axis3) (per-VA, verified from the exports: e.g. 006d38b0 / 006d3b90 / 006d3e30 all read [ebx], [ebx+4], [ebx+8], [ebx+0xc] of the axis and both core outputs). The remaining mismatch is the axis-length guard whose zero-axis (SVG arcto conic) arm is unreachable from the oracle, so no counterexample can pin it.
+006d38b0 664  bake evaluator (uv4u8/const colour/pos3f, core FUN_006c3550, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/6 valid, mem-pool @40020000)
+006d3b90 607  bake evaluator (uv2u16/const colour/pos3f, core FUN_006c3550, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/5 valid, mem-pool @40020000)
+006d3e30 664  bake evaluator (uv4u16/const colour/pos3f, core FUN_006c3550, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/5 valid, mem-pool @40020004)
+006d4110 -   bake evaluator (uv4u8/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/5 valid, mem-pool @40020000)
