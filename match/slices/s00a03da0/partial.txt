@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a04bb0 185 complete instance-bits + child-part update (ours 206B, orig 203B); both loops, bit words and flag clear reproduced; compiler uses a register loop counter and different register assignments; difftest WEAK (316 valid inputs, 54.1% coverage, no mismatch; success path faults deeper so below the coverage threshold)

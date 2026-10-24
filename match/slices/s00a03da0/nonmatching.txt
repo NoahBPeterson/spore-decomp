@@ -1,1 +1,9 @@
+# va  diff-bytes  reason
 00a03f50 1300 complete debug-draw of body boxes (matrix from quaternion, bulk lock + per-entry fallback); SSE schedule/register allocation and frame (0x60 vs 0x54; original puts the lock out-pointer in the dead param slot) differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a03da0 297 complete debug target transform/blend setup (ours 281B, orig 221B); SSE schedule and frame differ; equiv PASS (400 valid inputs, 100% coverage)
+00a04590 112 complete blend-vector builder (ours 138B, orig 150B); extra true/false tail materialisation and register allocation differ; equiv PASS (400 valid inputs, 100% coverage)
+00a04630 423 complete parts/instance transform apply (ours 434B, orig 416B); quat build, rep-movsd basis copy and blend recompute reproduced; indirect blend call forces an extra frame slot; equiv PASS (371 valid inputs, 100% coverage)
+00a047d0 182 complete animation frame/pose update plus transform apply (ours 207B, orig 198B); vtable dispatch and FUN_00a04630 variants reproduced; frame/register allocation differ; equiv PASS (251 valid inputs, 65.7% coverage)
+00a04900 19 complete animation-state predicate (ours 49B, orig 57B); original materialises the interior true as 32-bit eax and the e==0 true as 8-bit al, ours uses al for both; equiv PASS (400 valid inputs, 100% coverage)
+00a049f0 51 complete lookup-entry frame fraction query (ours 162B, orig 160B); uses modf's return value with ipart scratch and x87 whole+fraction sum; equivalent PASS (273 valid inputs, 100% coverage)
+00a04af0 148 complete IUnknown callback/notify update (ours 208B, orig 192B); calls, vtable slots and guards reproduced; register allocation/scheduling differ; equiv PASS (293 valid inputs, 61.3% coverage)

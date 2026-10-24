@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a03da0/s00a03da0.cpp  ?FUN_00a03e80@@YAXPAUDebugTarget@@PBM1M11IH@Z  00a03e80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a03da0/s00a03da0.cpp  ?FUN_00a04550@cAnimatingCreature@@QAEXHPBM@Z  00a04550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a03da0/s00a03da0.cpp  ?FUN_00a048b0@cAnimatingCreature@@QAEHHHHH@Z  00a048b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a03da0/s00a03da0.cpp  ?FUN_00a04940@cAnimatingCreature@@QAE_NH@Z  00a04940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a03da0/s00a03da0.cpp  ?FUN_00a04990@cAnimatingCreature@@QAE_NH@Z  00a04990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a03da0/s00a03da0.cpp  ?FUN_00a04ab0@cAnimatingCreature@@QAEXE@Z  00a04ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a03da0/s00a03da0.cpp  ?FUN_00a04ad0@cAnimatingCreature@@QAEXH@Z  00a04ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a03da0/s00a03da0.cpp  ?FUN_00a04ca0@cAnimatingCreature@@QAEXE@Z  00a04ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a03da0/s00a03da0.cpp  ?FUN_00a04cc0@cAnimatingCreature@@QAEXE@Z  00a04cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
