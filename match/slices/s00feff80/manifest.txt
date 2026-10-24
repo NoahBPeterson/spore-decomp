@@ -1,0 +1,15 @@
+slices/s00feff80/s00feff80.cpp  ?TestNameBit@cCityData@SP@@QBE_NHI@Z  00ff0330  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?AddValue@cCityData@SP@@QAEXM@Z  00ff0350  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?sGetIndexFromModelType@SP@@YA_NIPAI@Z  00ff03d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?GetPercent@cCityData@SP@@QBEHXZ  00ff0400  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?SetKey@cCityData@SP@@QAEXPBUcInt3@2@@Z  00ff0430  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?WriteRaw@cCityData@SP@@QAEXPAVcOutStream@2@@Z  00ff04d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?sWriteUint16@SP@@YA_NPAVcOutStream@1@PBG@Z  00ff05d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ??0cTribeData@SP@@QAE@PAVcTribe@1@@Z  00ff0610  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ??0cTribeData@SP@@QAE@HH@Z  00ff06a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ??0cTribeData@SP@@QAE@XZ  00ff0700  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?GetNumTurrets@cCityData@SP@@QBEHXZ  00ff0760  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?RemoveTurret@cCityData@SP@@QAEXXZ  00ff07e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?GetNumBuildings@cCityData@SP@@QBEHXZ  00ff0870  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?Init@cSpatialSnapshot@SP@@QAEPAV12@PAVcNoun@2@@Z  00ff0db0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00feff80/s00feff80.cpp  ?Set@cSpatialSnapshot@SP@@QAEAAV12@PBUcVector3@2@HH@Z  00ff0df0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
