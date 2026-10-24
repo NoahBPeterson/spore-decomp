@@ -1,1 +1,7 @@
 00fe8f70  -  complete; stack slot layout and float temp order differ; flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+00fe8630  29  Brush::f8630 complete (normalise self+addend, ray-sphere test): size exact 146, only the evaluation order of the three independent d[] adds differs; equiv UNSUPPORTED (LTCG register ABI: self in eax, addend in ecx)
+00fe86d0  162  Brush::f86d0 complete (unit direction from angle): 164 vs 168 bytes, x87/xmm register-assignment and frame-slot order differ; equiv UNSUPPORTED (LTCG register ABI: self in ecx, out in eax)
+00fe8780  205  Brush::f8780 complete (sector ray-march step): 253 vs 251 bytes; entry ABI is cdecl but it calls the LTCG register-ABI helpers 0x00fe8380 (edx/esi + stack floats) and 0x00fe8630/0x00fe86d0; equiv FAIL (0x00fe8380 cannot be declared from C, the faked call diverges, NaN vs hit)
+00fe88d0  163  Brush::f88d0 complete (fill SpVector of V3 from f14/f18/f1c): 164 vs 180 bytes, dword copy + loop shape differ; equiv PASS (233 valid, 100% cov)
+00fe8990  11  GrowthState::ShouldGrow complete: size exact 91, identical body/instructions, only the placement of the mode==1||mode==2 return-true block differs; equiv PASS (400 valid, 74.4% cov)
+00fe8b90  76  cEmpireGrowthSim::ExpandRules complete: 179 vs 190 bytes, original materialises the switch case constants via mov eax,N/push eax instead of push imm; equiv PASS (207 valid, 71.1% cov)

@@ -1,1 +1,7 @@
 # source  symbol  original VA  [flags override]
+slices/s00fe8630/s00fe8630.cpp  ?ReadBrush@Brush@@QAEDPAX@Z  00fe8880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00fe8630/s00fe8630.cpp  ?sIndexFromAction@@YAII@Z  00fe8aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00fe8630/s00fe8630.cpp  ?SetWeightsForAction@cEmpireGrowthSim@@QAEXHHHPBUBrush@@@Z  00fe8b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00fe8630/s00fe8630.cpp  ?FUN_00fe8c50@@YAXPAXHH@Z  00fe8c50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00fe8630/s00fe8630.cpp  ?Contribute@Scorer@@QAEXHHHPAM0PAH@Z  00fe8cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00fe8630/s00fe8630.cpp  ??1cEmpireGrowthSim@@QAE@XZ  00fe8e20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
