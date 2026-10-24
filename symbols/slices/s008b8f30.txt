@@ -1,2 +1,4 @@
-008b9390 FindString  # static helper, eax = start offset (always 0), returns pointer past the needle
-008b9400 ?New_T1kernSubTable0Data@@YAPAUkernSubTable0Data@@PAUT1Class_s008b_8f30@@PAUtsiMemObject@@PAEH@Z  # New_T1kernSubTable0Data migrated from s008b8f30 (verbatim, slice spelling)
+008b8f30 ParseT1CharStrings  # Type1 charstring table parser; /Encoding + /CharStrings + RD payload scanner; diff 1019
+008b9390 FindString  # static helper, eax = start offset, returns pointer past the needle; diff 96
+008b9400 ?New_T1kernSubTable0Data@@YAPAUkernSubTable0Data@@PAUT1Class_s008b_8f30@@PAUtsiMemObject@@PAEH@Z  # New_T1kernSubTable0Data migrated from s008b8f30 (verbatim, slice spelling); diff 2086
+008b9d90 New_T1kernSubTable  # allocates format-1 kern subtable container and calls New_T1kernSubTable0Data; diff 56

@@ -16,17 +16,47 @@ typedef uint8_t uint8; typedef int16_t int16; typedef uint16_t uint16;
 typedef uint32_t uint32; typedef int32_t int32;
 
 struct tsiMemObject;
+struct T1Class;
+struct T1CharStrings;
 
 extern "C" void* tsi_AllocMem(tsiMemObject* mem, uint32 size);                                      // 0x008d1260
 extern "C" uint32 tsi_PSNameToAppleCode(uint8* name, uint16* code, uint16* a, uint16* b);           // 0x008b6f90
 extern "C" void  FUN_008cfac0(void* pairs, int n);                                                  // 0x008cfac0
+extern "C" void  T1Error(tsiMemObject* mem, int code);                                              // 0x008d10c0
+extern "C" T1CharStrings* T1NewCharStrings(tsiMemObject* mem, int count, void* callback, T1Class* owner); // 0x008d1a00
+extern "C" void  T1AddCharString(T1CharStrings* table, uint32 name, uint16 code, uint16 length);     // 0x008d1c50
+
+struct T1CharStringEntry {
+    uint32 name;                 // 0x00
+    uint16 code;                 // 0x04
+    uint16 length;               // 0x06
+};
+
+struct T1CharStrings {
+    char   pad00[0x24];
+    T1CharStringEntry* entries;  // 0x24
+    uint32 capacity;             // 0x28
+    uint32 count;                // 0x2c
+};
 
 struct T1Class {
     tsiMemObject* mem;           // 0x00
-    char   pad04[0x30 - 4];
+    char   pad04[4];
+    uint8* base;                 // 0x08
+    uint32 size;                 // 0x0c
+    uint32 field10;              // 0x10
+    uint32 field14;              // 0x14
+    char   pad18[0x14];
+    uint8* encoding;             // 0x2c
     int16  numGlyphs;            // 0x30
-    char   pad32[6];
+    int16* glyphMap;             // 0x34
     int16* adobeCodes;           // 0x38
+    uint32* charStringOffsets;   // 0x3c
+    char   pad40[0x214 - 0x40];
+    uint32 field214;             // 0x214
+    uint16 field218;             // 0x218
+    uint16 field21a;             // 0x21a
+    T1CharStrings* charStrings;  // 0x21c
 };
 
 struct KernPair {
@@ -71,6 +101,7 @@ static int ATOI(const uint8* p)
 }
 
 // FindString (0x008b9390): offset of needle inside hay[start .. n), returns pointer past the match.
+// @ 0x008b9390
 static uint8* FindString(uint8* hay, const char* needle, int n, int start)
 {
     int len = 0;
@@ -325,5 +356,161 @@ kernSubTable0Data* New_T1kernSubTable0Data(T1Class* t, tsiMemObject* mem, uint8*
             return result;
         }
     }
+    return result;
+}
+
+// @ 0x008b8f30
+void ParseT1CharStrings(T1Class* t)
+{
+    uint8* base = t->base;
+    uint32 size = t->size;
+    uint8* encoding = FindString(base, "/Encoding ", (int)size, 0);
+    if (!encoding)
+        return;
+    t->encoding = encoding;
+
+    uint8 first = *encoding;
+    uint8 decimal = (first >= '0' && first <= '9') ? 1 : 0;
+    uint8 encodingKind = 0;
+    if (!decimal) {
+        if (first == 'S')
+            encodingKind = 0;
+        else if (first == 'I')
+            encodingKind = 1;
+    }
+
+    uint8* charStrings = FindString(base, "/CharStrings ", (int)size, (int)t->field10);
+    if (!charStrings) {
+        T1Error(t->mem, 0x2729);
+        return;
+    }
+    t->field14 = (uint32)(charStrings - base);
+
+    int16 count = (int16)ATOI(charStrings);
+    t->numGlyphs = count;
+    int glyphCount = (uint16)count;
+    uint32 encodingCount = decimal ? (uint16)ATOI(t->encoding) : 0x100;
+
+    t->glyphMap = (int16*)tsi_AllocMem(t->mem, (uint32)glyphCount * 2);
+    t->adobeCodes = (int16*)tsi_AllocMem(t->mem, (uint32)glyphCount * 2);
+    t->charStringOffsets = (uint32*)tsi_AllocMem(t->mem, (uint32)glyphCount * 4);
+    t->charStrings = T1NewCharStrings(t->mem, glyphCount, (void*)0x8b8e20, t);
+
+    for (int i = 0; i < glyphCount; ++i) {
+        t->glyphMap[i] = -1;
+        t->adobeCodes[i] = -1;
+        t->charStringOffsets[i] = 0;
+    }
+
+    t->field218 = 0;
+    t->field21a = 0x00ff;
+    t->field214 = 0;
+    if (t->charStrings) {
+        t->charStrings->capacity = encodingCount;
+        t->charStrings->count = 0;
+    }
+
+    uint8* limit = base + size;
+    uint8* p = charStrings;
+    int glyph = 0;
+    while (p < limit && glyph < glyphCount) {
+        uint8* slash = p;
+        while (slash < limit && *slash != '/')
+            ++slash;
+        if (slash >= limit)
+            break;
+
+        uint8* name = slash + 1;
+        uint8* q = name;
+        int nameLen = 0;
+        while (q < limit && *q > ' ' && nameLen < 0x3f) {
+            ++q;
+            ++nameLen;
+        }
+
+        uint8 nameBuf[64];
+        for (int i = 0; i < nameLen; ++i)
+            nameBuf[i] = name[i];
+        nameBuf[nameLen] = 0;
+
+        uint8* num = q;
+        while (num < limit && (*num == ' ' || *num == '\t' || *num == '\r' || *num == '\n'))
+            ++num;
+        int dataLen = ATOI(num);
+
+        uint8* rd = num;
+        while (rd + 1 < limit &&
+               !(rd[0] == 'R' && rd[1] == 'D') &&
+               !(rd[0] == '-' && rd[1] == '|'))
+            ++rd;
+        if (rd + 1 >= limit)
+            break;
+
+        uint8* data = rd + 2;
+        while (data < limit && (*data == ' ' || *data == '\r' || *data == '\n'))
+            ++data;
+
+        t->charStringOffsets[glyph] = (uint32)(data - base);
+
+        uint16 code = 0xffff;
+        uint16 codeA = 0;
+        uint16 codeB = 0;
+        tsi_PSNameToAppleCode(nameBuf, &code, &codeA, &codeB);
+        t->adobeCodes[glyph] = (int16)code;
+        t->glyphMap[glyph] = (int16)glyph;
+
+        if (t->charStrings)
+            T1AddCharString(t->charStrings, (uint32)(name - base), (uint16)glyph, (uint16)dataLen);
+
+        data += (uint16)dataLen;
+        p = data;
+        while (p + 1 < limit &&
+               !(p[0] == 'N' && p[1] == 'D') &&
+               !(p[0] == '|' && p[1] == '-'))
+            ++p;
+        if (p + 1 >= limit)
+            break;
+        p += 2;
+        ++glyph;
+    }
+
+    (void)encodingKind;
+}
+
+struct kernSubTable0 {
+    tsiMemObject* mem;           // 0x00
+    uint16 flags4;               // 0x04
+    uint16 pad6;                 // 0x06
+    uint32 length;               // 0x08
+    uint16 format;               // 0x0c
+    uint16 padE;                 // 0x0e
+    kernSubTable0Data* data;     // 0x10
+};
+
+struct kernSubTable {
+    tsiMemObject* mem;           // 0x00
+    uint16 flags4;               // 0x04
+    uint16 pad6;                 // 0x06
+    uint32 numTables;            // 0x08
+    kernSubTable0** tables;      // 0x0c
+};
+
+// @ 0x008b9d90
+kernSubTable* New_T1kernSubTable(T1Class* t, tsiMemObject* mem, uint8* p, int length)
+{
+    kernSubTable0* table;
+    kernSubTable* result = (kernSubTable*)tsi_AllocMem(mem, 0x10);
+    result->mem = mem;
+    result->flags4 = 0;
+    result->numTables = 1;
+    result->tables = (kernSubTable0**)tsi_AllocMem(mem, 4);
+
+    table = (kernSubTable0*)tsi_AllocMem(mem, 0x14);
+    table->mem = mem;
+    table->flags4 = 0;
+    table->length = 0x14;
+    table->format = 1;
+    table->data = New_T1kernSubTable0Data(t, mem, p, length);
+    result->tables[0] = table;
     return result;
 }
