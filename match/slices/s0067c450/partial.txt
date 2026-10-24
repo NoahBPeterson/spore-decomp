@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-0067ca40  0  asm transcription (naked), not decompiled C++; was a manifest row, moved by the 2026-10-18 asm audit

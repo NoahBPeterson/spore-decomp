@@ -101,14 +101,13 @@ extern "C" void cUIHintsRefreshTarget();
 
 // @ 0x0067c450
 void cUIHints::UpdateHintTimers(float dt) {
+  unsigned int bestType = 0xffffffff;
   unsigned int uBest = 0;
   cHint* pBest = 0;
-  unsigned int bestType = 0xffffffff;
   cHint** pCurrent = mHintList.mpBegin;
   cHint** pRangeEnd = mHintList.mpEnd;
-  if (pCurrent != pRangeEnd) {
-    do {
-      cHint* pHint = *pCurrent;
+  for (; pCurrent != pRangeEnd; ++pCurrent) {
+    cHint* pHint = *pCurrent;
       switch (pHint->mState) {
         case 1:
           pHint->mTimer += dt;
@@ -116,19 +115,20 @@ void cUIHints::UpdateHintTimers(float dt) {
             if (CheckConditions(pHint)) pHint->mState = 2;
             pHint->mTimer = 0;
           }
-          break;
+          continue;
         case 2:
           pHint->mTimer += dt;
           if (pHint->mTimer > pHint->mWait && pHint->mTimer != pHint->mWait) {
             pHint->mState = CheckConditions(pHint) ? 3 : 1;
             pHint->mTimer = 0;
           }
-          break;
+          continue;
         case 3:
           if (((pHint->mCancelList[1] - pHint->mCancelList[0]) & 0xfffffffcU) != 0 &&
               CheckCancelList(pHint->mCancelList)) {
             pHint->mState = (pHint->mIcon != 0x1f9e21e8);
             pHint->mTimer = 0;
+            continue;
           }
           break;
         case 4:
@@ -138,12 +138,13 @@ void cUIHints::UpdateHintTimers(float dt) {
             pHint->mTimer = 0;
           }
           break;
-        case 5:
+        case 7:
           pHint->mTimer += dt;
           if (pHint->mTimer > pHint->mFlash && pHint->mTimer != pHint->mFlash) {
             pHint->mState = (pHint->mIcon != 0x1f9e21e8);
             SetVisibility(0, pHint);
             pHint->mTimer = 0;
+            continue;
           }
           break;
         case 6:
@@ -152,9 +153,10 @@ void cUIHints::UpdateHintTimers(float dt) {
             pHint->mState = (pHint->mIcon == 0x4527c498);
             SetVisibility(0, pHint);
             pHint->mTimer = 0;
+            continue;
           }
           break;
-        case 7:
+        case 5:
           pHint->mTimer += dt;
           {
             float threshold = pHint->mLife;
@@ -193,8 +195,7 @@ void cUIHints::UpdateHintTimers(float dt) {
           }
         }
       }
-      ++pCurrent;
-    } while (pCurrent != pRangeEnd);
+    }
 
     if (pBest != 0) {
       if (pBest->mIcon == 0x1f9e21e8 || mLastUpdateTime - 20.0f > mLastHintTime) {
@@ -212,7 +213,6 @@ void cUIHints::UpdateHintTimers(float dt) {
       }
       UpdateVisibleHint(pBest, dt);
     }
-  }
 }
 
 // @ 0x0067c790
@@ -319,12 +319,16 @@ void cUIHints::Refresh() {
   } while (true);
 }
 
-// @ 0x0067ca40 (MI adjustor thunk to Refresh at this-0x10)
-__declspec(naked) void FUN_0067ca40() {
-  __asm {
-    add dword ptr [ecx + 0x10], -4
-    jmp cUIHintsRefreshTarget
-  }
+// @ 0x0067ca40
+// Release-style thunk: adjusts the counter at this+0x10, then refreshes the hint list on the same object.
+struct cUIHintsThunkTarget {
+  unsigned int mGap00[4];   // +0x00
+  int mValue;               // +0x10
+};
+
+void __fastcall FUN_0067ca40(cUIHintsThunkTarget* self) {
+  self->mValue -= 4;
+  reinterpret_cast<cUIHints*>(self)->Refresh();
 }
 
 // @ 0x0067ca50
