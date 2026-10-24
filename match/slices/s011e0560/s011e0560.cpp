@@ -28,6 +28,26 @@ extern void  FUN_011eaaa0(void);
 extern void  FUN_011eaad0(void);
 extern void  FUN_011eaef0(void*);
 
+// RenderWare arena objects reached through these pointers are called as members (ecx = object):
+// the accessors/updaters never take a stack 'self' and never pop one.
+struct ArenaManifestApi {
+    void* FUN_011e4600();          // 0x011e4600 ArenaSectionManifest::Types
+    void* FUN_011e4610();          // 0x011e4610 ArenaSectionManifest::ExternalArenas
+    void* FUN_011e4620();          // 0x011e4620 ArenaSectionManifest::ExternalArenaList
+};
+struct SubRefApi {
+    void* FUN_011eb150();          // 0x011eb150
+    void* FUN_011eb160();          // 0x011eb160
+    void* FUN_011eb170();          // 0x011eb170
+};
+struct CleanupBlockApi {
+    void FUN_011eab70();           // 0x011eab70
+    void FUN_011eb180();           // 0x011eb180
+};
+struct ArenaTypeRegistryApi {
+    void* FUN_011eb0a0(int type);  // 0x011eb0a0 ArenaTypeRegistry::Find
+};
+
 // ---------------------------------------------------------------------------
 // @ 0x011e0560  OpenSSL DSO_merge(dso, filespec1, filespec2)
 // PARTIAL: only the two strdup arms are reproduced exactly.
@@ -231,7 +251,7 @@ void* __fastcall rw_ArenaTypeRegGetType(int type)
 }
 
 // @ 0x011e2330
-int __stdcall rw_Arena_DestructNext(void* arena)
+int __cdecl rw_Arena_DestructNext(void* arena)
 {
     for (;;) {
         int n = *(int*)((char*)arena + 0xa8);
@@ -245,7 +265,7 @@ int __stdcall rw_Arena_DestructNext(void* arena)
             mgr.vftable = &PTR_FUN_0140a578;
             void** data = (void**)((void*(__cdecl*)(ArenaManager*))FUN_0140a57c)(&mgr);
             mgr.vftable = &PTR_FUN_0140a578;
-            int reg = (int)(intptr_t)rw_ArenaTypeRegistry_Find(*data, type);
+            int reg = (int)(intptr_t)((ArenaTypeRegistryApi*)*data)->FUN_011eb0a0(type);
             void (*dtor)(int) = *(void(**)(int))(reg + 0x10);
             if (dtor)
                 dtor(*entry);
@@ -312,11 +332,8 @@ void __fastcall rw_free_block_30(void* self)
     int* p = (int*)((char*)self + 0x30);
     for (int i = 0; i < 4; ++i) {
         if (p[i] != 0) {
-            if (self != 0) {
-                void* owner = *(void**)((char*)self + 0xd4);
-                ((void(__cdecl*)(void*))*(void**)owner)(p);
-                return;
-            }
+            void* owner = *(void**)((char*)self + 0xd4);
+            ((void(__thiscall*)(void*, void*))((*(void***)owner)[2]))(owner, p);
             return;
         }
     }
@@ -329,12 +346,12 @@ void __fastcall rw_cleanup_2690(void* self)
     for (int i = 0; i < 4; ++i) {
         if (p[i] != 0) {
             void* owner = *(void**)((char*)self + 0xe0);
-            ((void(__cdecl*)(void*))*(void**)owner)(p);
+            ((void(__thiscall*)(void*, void*))((*(void***)owner)[2]))(owner, p);
             break;
         }
     }
-    FUN_011eab70((char*)self + 0xb0);
-    FUN_011eb180((char*)self + 0xe4);
+    ((CleanupBlockApi*)((char*)self + 0xb0))->FUN_011eab70();
+    ((CleanupBlockApi*)((char*)self + 0xe4))->FUN_011eb180();
     if (self == 0)
         rw_free_block_30(0);
     else
@@ -345,14 +362,19 @@ void __fastcall rw_cleanup_2690(void* self)
 void __fastcall rw_UpdateSubreferencesData(void* self)
 {
     int m = *(int*)((char*)self + 0x78);
-    int n = (int)(intptr_t)FUN_011e4620(*(void**)(m + 0x34));
-    *(int*)(n + 0x18) = (int)(intptr_t)FUN_011eb170((char*)self + 0xe4);
-    n = (int)(intptr_t)FUN_011e4620(*(void**)(*(int*)((char*)self + 0x78) + 0x34));
-    *(int*)(n + 0x10) = (int)(intptr_t)FUN_011eb160((char*)self + 0xe4);
-    n = (int)(intptr_t)FUN_011e4620(*(void**)(*(int*)((char*)self + 0x78) + 0x34));
-    *(int*)(n + 0x14) = (int)(intptr_t)FUN_011eb150((char*)self + 0xe4);
-    n = (int)(intptr_t)ArenaSectionManifest_ExternalArenas(*(void**)(*(int*)((char*)self + 0x78) + 0x34));
-    *(int*)(*(int*)(n + 8) + 8) = (int)(intptr_t)FUN_011eb160((char*)self + 0xe4);
+    SubRefApi* sub = (SubRefApi*)((char*)self + 0xe4);
+    ArenaManifestApi* man = (ArenaManifestApi*)*(void**)((char*)m + 0x34);
+    int n = (int)(intptr_t)man->FUN_011e4620();
+    *(int*)(n + 0x18) = (int)(intptr_t)sub->FUN_011eb170();
+    man = (ArenaManifestApi*)*(void**)((char*)m + 0x34);
+    n = (int)(intptr_t)man->FUN_011e4620();
+    *(int*)(n + 0x10) = (int)(intptr_t)sub->FUN_011eb160();
+    man = (ArenaManifestApi*)*(void**)((char*)m + 0x34);
+    n = (int)(intptr_t)man->FUN_011e4620();
+    *(int*)(n + 0x14) = (int)(intptr_t)sub->FUN_011eb150();
+    man = (ArenaManifestApi*)*(void**)((char*)m + 0x34);
+    n = (int)(intptr_t)man->FUN_011e4610();
+    *(int*)(*(int*)(n + 8) + 8) = (int)(intptr_t)sub->FUN_011eb160();
 }
 
 // ---------------------------------------------------------------------------
@@ -393,10 +415,9 @@ void ArenaSelf::callSubref(uint16_t idx)
 // @ 0x011e2300
 void* ArenaSelf::idToObject(uint32_t id)
 {
-    void* m = *(void**)((char*)this + 0x34);
-    int n = (int)(intptr_t)ArenaSectionManifest_ExternalArenas(m);
-    int* table = *(int**)(n + 8);
-    int* chunk = (int*)table[id >> 0x16];
+    ArenaManifestApi* m = (ArenaManifestApi*)*(void**)((char*)this + 0x34);
+    void** table = *(void***)((char*)m->FUN_011e4610() + 8);
+    void* chunk = table[id >> 0x16];
     return *(void**)((char*)chunk + (id & 0x3fffff) * 0x18);
 }
 

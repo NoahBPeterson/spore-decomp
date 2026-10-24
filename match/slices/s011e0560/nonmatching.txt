@@ -8,15 +8,15 @@
 011e2240  n/a  copy4: complete; struct-copy codegen diff
 011e2270  n/a  callSubref: complete; load scheduling diff
 011e22c0  n/a  ArenaTypeRegGetType: complete
-011e2300  n/a  Arena::IdToObject: complete; address scaling diff
-011e2330  n/a  Arena::DestructNext: complete; register allocation diff
+011e2300   2   Arena::IdToObject: complete; manifest accessor is a thiscall member, table/chunk register choice
+011e2330   86  Arena::DestructNext: complete; cdecl (no stack args), registry Find is a thiscall member
 011e23b0  n/a  AlignInfo4::Advance4: complete; loop vs unrolled cmov diff
 011e2470  n/a  grow: complete; dead-store shape diff
 011e24b0  n/a  alignTo: complete
 011e2500  n/a  UnfixContext::FindBaseObject: complete; /0x18 magic diff
 011e2560  n/a  UnfixContext::FindNewSubObject: complete; 12-byte near miss
 011e25d0  n/a  UnfixContext::FindExistingSubObject: complete
-011e2630  n/a  rw_free_block_30: complete
-011e2690  n/a  rw_cleanup_2690: complete
-011e26f0  n/a  UpdateSubreferencesData: complete
+011e2630   33  rw_free_block_30: complete; vtable[2] thiscall call, kept out of line
+011e2690   105 rw_cleanup_2690: complete; thiscall block funcs + tail call to rw_free_block_30
+011e26f0   61  UpdateSubreferencesData: complete; manifest/subref accessors are thiscall members
 011e29c0  n/a  initRange: complete; unrolled store diff; equiv: PASS (now returns this in eax as the original does; void clobbered eax: hybrid div-by-zero 2026-10-12)
