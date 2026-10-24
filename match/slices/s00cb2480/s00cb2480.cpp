@@ -334,3 +334,108 @@ unsigned __cdecl UpdatePathAhead(Creature* self, const Vec3* fallbackDir, Waypoi
     }
     return state;
 }
+
+// ---- path-ahead clear test -----------------------------------------------------------------
+class cCacheObjectResult {
+public:
+    virtual void p00(); virtual void p04(); virtual void p08(); virtual void p0c();
+    virtual void p10(); virtual void p14(); virtual void p18(); virtual void p1c();
+    virtual void p20(); virtual void p24(); virtual void p28();
+    virtual const Vec3* GetPosition();                 // +0x2c
+};
+
+class cCacheObject {
+public:
+    virtual void p00(); virtual void p04(); virtual void p08();
+    virtual cCacheObjectResult* Resolve(unsigned int type);   // +0x0c
+};
+
+struct CacheHit {                      // 0x100-byte cached trace hit
+    char     pad00[4];
+    int      f04;                      // +0x04
+    float    f08;                      // +0x08
+    int      f0c;                      // +0x0c
+    char     pad10[0x20 - 0x10];
+    unsigned id;                       // +0x20
+    char     pad24[4];
+    Vec3     pos28;                    // +0x28
+    char     pad34[0x40 - 0x34];
+    bool     flag;                     // +0x40
+    char     pad41[0x100 - 0x41];
+};
+
+struct TraceCache {
+    CacheHit      hits[8];             // +0x000
+    cCacheObject* objects[8];          // +0x800
+};
+
+// @ 0x00cb2480
+bool __cdecl IsPathAheadClear(Creature* self, WaypointPath* path, const Vec3* fallbackDir,
+                              float* pScale, int* pKind)
+{
+    TraceCache* cache = (TraceCache*)GetTraceCache(self);
+    if (cache->hits[0].f04 != 0)
+        return true;
+
+    for (int i = 0; i < 8; i++) {
+        CacheHit& hit = cache->hits[i];
+        if (hit.id == 0)
+            continue;
+        cCacheObject* object = cache->objects[i];
+        if (object == 0)
+            continue;
+        if (!hit.flag)
+            continue;
+        cCacheObjectResult* result = object->Resolve(0x1186577);
+        const Vec3* p = result->GetPosition();
+        float dx = p->x - hit.pos28.x;
+        float dy = p->y - hit.pos28.y;
+        float dz = p->z - hit.pos28.z;
+        if ((dz * dz + dy * dy) + dx * dx > 0.1f)
+            return true;
+    }
+
+    unsigned state = 0;
+    float outLen = 0.0f;
+    Hit hits[8];
+
+    SpatialPart* loco = (SpatialPart*)((char*)self + 0x34);
+    const Vec3* pos = loco->GetPosition();
+    const Vec3* vel = loco->GetVelocity();
+    Vec3 velDir;
+    const Vec3* dirp;
+    if (vel->x != kZeroVector.x || vel->y != kZeroVector.y || vel->z != kZeroVector.z) {
+        const Vec3* v = loco->GetVelocity();
+        float k = 1.0f / sqrtf((v->x * v->x + v->y * v->y) + v->z * v->z + 1e-08f);
+        velDir.x = v->x * k;
+        velDir.y = v->y * k;
+        velDir.z = v->z * k;
+        dirp = &velDir;
+    } else {
+        dirp = fallbackDir;
+    }
+
+    Vec3 initDir;
+    initDir.x = dirp->x;
+    initDir.y = dirp->y;
+    initDir.z = dirp->z;
+    TraceCtx ctx;
+    ctx.radius = loco->GetRadius();
+    ctx.self = self;
+    ctx.pos.x = pos->x; ctx.pos.y = pos->y; ctx.pos.z = pos->z;
+    ctx.goal.x = path->cur.pos.x; ctx.goal.y = path->cur.pos.y; ctx.goal.z = path->cur.pos.z;
+
+    int n = TracePlanetPath(&ctx, &initDir, 0.25f, SweepTick, pos, &path->cur.pos, hits, 1,
+                            &state, &outLen, (const Hit*)cache, 1);
+
+    bool clear = true;
+    if (n == 1 && state == 3) {
+        if (hits[0].f04 != 0 && *pScale > hits[0].f08) {
+            *pScale = hits[0].f08;
+            *pKind = hits[0].f0c;
+        }
+        self->flags &= 0xfffffff4;
+        clear = false;
+    }
+    return clear;
+}
