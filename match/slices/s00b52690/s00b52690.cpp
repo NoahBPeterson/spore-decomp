@@ -29,6 +29,7 @@ typedef float hkReal;
 #define PV2 PV PV
 #define PV4 PV2 PV2
 #define PV8 PV4 PV4
+#define VFN(p, off) ((*(void***)(p))[(off) / 4])
 
 // ---- math -----------------------------------------------------------------------------------------
 struct Vector3 { float x, y, z; };
@@ -60,6 +61,7 @@ class hkMemory {
 public:
     PV4
     virtual void* allocateChunk(int nbytes, int cl);                         // 0x10
+    virtual void freeChunk(void* p, int align, int nbytes);                  // 0x14
     static hkMemory* s_instance;                                             // 0x016e4178
     static hkMemory& getInstance() { return *s_instance; }
 };
@@ -69,6 +71,11 @@ public:
     virtual ~hkReferencedObject();                                           // 0x00
     u16 m_memSizeAndFlags;                                                   // 0x04
     u16 m_referenceCount;                                                    // 0x06
+    void removeReference()
+    {
+        if (m_memSizeAndFlags != 0 && --m_referenceCount == 0)
+            ((void (__thiscall*)(hkReferencedObject*, int))VFN(this, 0))(this, 1);
+    }
 };
 
 class hkShape : public hkReferencedObject {
@@ -169,6 +176,10 @@ public:
     virtual void setPositionAndLinearCast(const hkVector4& position, const hkLinearCastInput& input,
                                           hkCdPointCollector& castCollector,
                                           hkCdPointCollector* startCollector);   // 0x30
+    PV                                                                       // slot 13 (0x34)
+    virtual void collect(void* out);                                         // slot 14 (0x38)
+    void setPosition(const hkVector4* position, float tolerance);            // 0x0108dbb0
+    void* construct(const hkShape* shape, const hkTransform& transform, u32 collisionFilterInfo);
     u8 pad[0x130 - 0x10];
 };
 
@@ -321,4 +332,356 @@ sync:
         body->setAngularVelocity(hkVector4_zero);
     }
     ((hkWorld*)phantom->m_world)->removePhantom(phantom);
+}
+
+// ===================================================================================================
+// eastl hashtables: bucket array at +4, bucket count at +8 (the end iterator is buckets[count]).
+// ===================================================================================================
+struct HNode {
+    HNode* mpNext;          // +0x00
+    u32    mValue;          // +0x04
+};
+
+struct HIter {              // 8-byte iterator used by the u32 -> T tables
+    HNode* mpNode;          // +0x00
+    void*  mpBucket;        // +0x04
+};
+
+struct KeyIter {            // 12-byte iterator used by the Key -> T table
+    HNode* mpNode;          // +0x00
+    void*  mpBucket;        // +0x04
+    u8     mbInserted;      // +0x08
+    u8     mPad[3];
+};
+
+struct HashTable {
+    u32     mf0;            // +0x00
+    HNode** mpBuckets;      // +0x04
+    u32     mnBucket;       // +0x08
+    void   find(HIter* out, const u32* key);              // 0x00645ed0
+    HIter* find2(HIter* out, const u32* key);             // 0x00b41b30
+    void   erase(HIter* out, HIter it);                   // 0x00b51640
+    int    GetValue14c8(u32 key);                         // 0x00b532f0
+};
+
+struct Key4 { u32 a, b, c, d; };
+
+struct KeyTable {
+    u32     mf0;            // +0x00
+    HNode** mpBuckets;      // +0x04
+    u32     mnBucket;       // +0x08
+    void find(KeyIter* out, const void* key);             // 0x00833840
+    void insert(KeyIter* out, const void* key, u32 tag);  // 0x00b51930
+    int  GetTextureInstance(const Key4* key);             // 0x00b533a0
+};
+
+struct RBTree {
+    void InsertNode(void** out, void* parent, const u32* key, u8 flag);   // 0x00b53700
+};
+struct CollectorOps {
+    void*  mpVtable;        // +0x00
+    void*  mf4;             // +0x04
+    void*  mpBegin;         // +0x08
+    u32    mnSize;          // +0x0c
+    int    mnCapacity;      // +0x10
+    u32 capacity() const { return (u32)mnCapacity & 0x3fffffffu; }
+    void* Destroy(u8 flags);                                             // 0x00b53790
+};
+
+struct ObjLike {
+    void dtorA();           // 0x00aef2f0
+    void dtorB();           // 0x00aefae0
+};
+void __cdecl FreeMem(void* p);                                           // 0x00f47380
+void* __cdecl AllocMem(int size, const char* name, int a, int b, const char* file, int line);
+                                                                         // 0x00f473a0
+void __cdecl PairCleanup(void* key, void* value);                        // 0x00b4f6d0
+void __cdecl RBTreeInsert(void* node, void* parent, void* header, int right);   // 0x009216a0
+
+struct HKThreadMemory {
+    void deallocateBlock(void* p, int nbytes, int align);                // 0x0107db10
+};
+extern u32 g_tlsIndex;                                                   // 0x016e4174
+extern void* (__stdcall* g_TlsGetValue)(u32);                            // 0x013cc2bc
+
+// @ 0x00b532b0
+void* GetTableValue(void* key)
+{
+    HashTable* t = (HashTable*)0x0167ed58;
+    HIter it;
+    u32 k = (u32)key;
+    t->find(&it, &k);
+    HNode* end = t->mpBuckets[t->mnBucket];
+    if (it.mpNode != end)
+        return (void*)it.mpNode->mValue;
+    return 0;
+}
+
+// @ 0x00b532f0
+int HashTable::GetValue14c8(u32 key)
+{
+    HashTable* t = (HashTable*)((char*)this + 0x14c8);
+    HIter it;
+    u32 k = key;
+    HIter* p = t->find2(&it, &k);
+    if (p->mpNode != t->mpBuckets[t->mnBucket])
+        return (int)((char*)p->mpNode + 4);
+    return 0;
+}
+
+// @ 0x00b533a0
+int KeyTable::GetTextureInstance(const Key4* key)
+{
+    KeyIter it;
+    find(&it, key);
+    if (it.mpNode == mpBuckets[mnBucket]) {
+        Key4 pair = { key->a, key->b, key->c, 0 };
+        ((u8*)&key)[0] = 0;
+        insert(&it, &pair, (u32)key);
+    }
+    return (int)((char*)it.mpNode + 0xc);
+}
+
+// @ 0x00b530e0
+void UnregisterCell(void* key, int kind)
+{
+    HIter it;
+
+    ((HashTable*)0x01682a48)->find(&it, (const u32*)&key);
+    if (it.mpNode != ((HashTable*)0x01682a48)->mpBuckets[((HashTable*)0x01682a48)->mnBucket]) {
+        void* v = (void*)it.mpNode->mValue;
+        ((u8*)v)[0x130] = 1;
+        ((HashTable*)0x01682a48)->erase(&it, it);
+        ((hkWorld*)*(void**)((char*)v + 8))->removePhantom((hkPhantom*)v);
+    }
+
+    ((HashTable*)0x016852e8)->find(&it, (const u32*)&key);
+    if (it.mpNode != ((HashTable*)0x016852e8)->mpBuckets[((HashTable*)0x016852e8)->mnBucket]) {
+        void* v = (void*)it.mpNode->mValue;
+        ((HashTable*)0x016852e8)->erase(&it, it);
+        if (v)
+            ((hkWorld*)*(void**)((char*)v + 8))->removePhantom((hkPhantom*)v);
+    }
+
+    if (kind == 0) {
+        ((HashTable*)0x016801a8)->find(&it, (const u32*)&key);
+        if (it.mpNode != ((HashTable*)0x016801a8)->mpBuckets[((HashTable*)0x016801a8)->mnBucket]) {
+            void* v = (void*)it.mpNode->mValue;
+            ((HashTable*)0x016801a8)->erase(&it, it);
+            PairCleanup(key, v);
+        }
+    }
+    else {
+        ((HashTable*)0x0167ed58)->find(&it, (const u32*)&key);
+        if (it.mpNode != ((HashTable*)0x0167ed58)->mpBuckets[((HashTable*)0x0167ed58)->mnBucket]) {
+            void* v = (void*)it.mpNode->mValue;
+            ((HashTable*)0x0167ed58)->erase(&it, it);
+            if (v) {
+                ((ObjLike*)v)->dtorA();
+                ((ObjLike*)v)->dtorB();
+                FreeMem(v);
+            }
+        }
+    }
+
+    ((HashTable*)0x016815f8)->find(&it, (const u32*)&key);
+    if (it.mpNode != ((HashTable*)0x016815f8)->mpBuckets[((HashTable*)0x016815f8)->mnBucket]) {
+        void* v = (void*)it.mpNode->mValue;
+        ((HashTable*)0x016815f8)->erase(&it, it);
+        if (v)
+            ((hkWorld*)*(void**)((char*)v + 8))->removePhantom((hkPhantom*)v);
+    }
+}
+
+// @ 0x00b535d0
+struct Item12 { u32 a, b, c; };
+struct Vec12 {
+    void* mpBegin;          // +0x00
+    void* mpEnd;            // +0x04
+    void* mpCap;            // +0x08
+    void Insert(Item12* pos, const Item12* value);                        // 0x00b535d0
+};
+Item12* __cdecl Copy12(Item12* first, Item12* last, Item12* dest);       // 0x00a11310
+
+void Vec12::Insert(Item12* pos, const Item12* value)
+{
+    Item12* end = (Item12*)mpEnd;
+    if (end != (Item12*)mpCap) {
+        const Item12* val = value;
+        if (pos <= value && value < end)
+            val = value + 1;
+        end->a = end[-1].a;
+        end->b = end[-1].b;
+        end->c = end[-1].c;
+        Item12* dst = (Item12*)mpEnd;
+        Item12* last = dst - 1;
+        while (last != pos)
+            *--dst = *--last;
+        *pos = *val;
+        mpEnd = (char*)mpEnd + 0xc;
+        return;
+    }
+
+    int n = (int)((char*)end - (char*)mpBegin) / 0xc;
+    n = (n == 0) ? 1 : n * 2;
+    Item12* mem;
+    if (n != 0)
+        mem = (Item12*)AllocMem(n * 0xc, "Simulator", 0, 0,
+                                 "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                                 0xd1);
+    else
+        mem = 0;
+    Item12* at = Copy12((Item12*)mpBegin, pos, mem);
+    if (at != 0) {
+        at->a = value->a;
+        at->b = value->b;
+        at->c = value->c;
+    }
+    Item12* newEnd = Copy12(pos, (Item12*)mpEnd, at + 1);
+    void* old = mpBegin;
+    if (old != 0 && *(int*)((char*)old - 4) != 0)
+        FreeMem(old);
+    mpBegin = mem;
+    mpEnd = newEnd;
+    mpCap = (char*)mem + n * 0xc;
+}
+
+// @ 0x00b53700
+void RBTree::InsertNode(void** out, void* parent, const u32* key, u8 flag)
+{
+    void** outp = out;
+    int right = (flag == 0 && parent != (char*)this + 4 &&
+                 *(const int*)key >= *(int*)((char*)parent + 0x10)) ? 1 : 0;
+    void* node = *(void**)((char*)this + 0x18);
+    if (node != 0)
+        *(void**)((char*)this + 0x18) = *(void**)node;
+    else {
+        int size = *(int*)((char*)this + 0x28);
+        node = AllocMem(size, "Simulator", 0, 0,
+                        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                        0xd1);
+    }
+    if ((char*)node + 0x10 != 0)
+        *(u32*)((char*)node + 0x10) = *key;
+    RBTreeInsert(node, parent, (char*)this + 4, right);
+    ++*(u32*)((char*)this + 0x14);
+    *outp = node;
+}
+
+// @ 0x00b53790
+void* CollectorOps::Destroy(u8 flags)
+{
+    *(void**)this = (void*)0x0146144c;
+    if (mnCapacity >= 0) {
+        void* tls = g_TlsGetValue(g_tlsIndex);
+        ((HKThreadMemory*)tls)->deallocateBlock(mpBegin, capacity() << 4, 0x14);
+    }
+    *(void**)this = (void*)0x013ef534;
+    if (flags & 1) {
+        hkMemory* mem = hkMemory::s_instance;
+        mem->freeChunk(this, 8, 0x1c);
+    }
+    return this;
+}
+
+// ===================================================================================================
+// Contact collector used by the sweep below (0x14-byte header followed by 16 inline 16-byte points).
+// ===================================================================================================
+class HkContactCollector {
+public:
+    void* mpVtable;         // +0x00
+    u8    mbFlag;           // +0x04
+    u8    mPad[3];
+    u8*   mpBegin;          // +0x08
+    u32   mnSize;           // +0x0c
+    u32   mnCapacity;       // +0x10
+    u8    mInline[0x100];   // +0x14
+
+    HkContactCollector()
+    {
+        mpBegin = mInline;
+        mpVtable = (void*)0x0146144c;
+        mnCapacity = 0x80000010;
+        mnSize = 0;
+        mbFlag = 0;
+    }
+    ~HkContactCollector()
+    {
+        int c = (int)mnCapacity;
+        mpVtable = (void*)0x0146144c;
+        if (c >= 0) {
+            void* tls = g_TlsGetValue(g_tlsIndex);
+            ((HKThreadMemory*)tls)->deallocateBlock(mpBegin, (c & 0x3fffffff) << 4, 0x14);
+        }
+    }
+    void reset()
+    {
+        mnSize = 0;
+        mbFlag = 0;
+    }
+};
+
+struct HkShapeObj : public hkReferencedObject {
+    u32   mf8;              // +0x08
+    float mConvexRadius;    // +0x0c
+    hkVector4 mHalfExtents; // +0x10
+    void* construct(const hkVector4* half, float radius);                // 0x010c05d0
+};
+
+extern float g_convexRadius;                                             // 0x015ba104
+
+// @ 0x00b52e00
+void SweepShapeOnSurface(const Vector3* extents, const hkQuaternion* orientation, void* physObj,
+                         const Vector3* positions, u32* results, int count)
+{
+    hkVector4 half(extents->x * 0.5f, extents->y * 0.5f, extents->z * 0.5f, 0.0f);
+
+    HkShapeObj* shape = (HkShapeObj*)hkMemory::getInstance().allocateChunk(0x20, 0x24);
+    shape->m_memSizeAndFlags = 0x20;
+    float convexRadius = g_convexRadius;
+    shape->construct(&half, convexRadius);
+
+    hkTransform transform;
+    transform.m_translation = hkVector4(positions[0].x, positions[0].y, positions[0].z, 0.0f);
+    hkQuaternion q = *orientation;
+    transform.m_rotation.set(q);
+
+    hkSimpleShapePhantom* phantom =
+        (hkSimpleShapePhantom*)hkMemory::getInstance().allocateChunk(0x130, 0x2e);
+    phantom->m_memSizeAndFlags = 0x130;
+    phantom->construct((hkShape*)shape, transform, 6);
+    shape->removeReference();
+    g_hkWorld->addPhantom(phantom);
+    phantom->removeReference();
+
+    ((void (__thiscall*)(void*))VFN(physObj, 0xac))(physObj);
+    int id = ((int (__thiscall*)(void*, int))VFN(physObj, 0xb8))(physObj, 0x17f243b);
+
+    HkContactCollector collector;
+    if (count > 0) {
+        for (int i = 0; i < count; ++i) {
+            hkVector4 v(positions[i].x, positions[i].y, positions[i].z, 0.0f);
+            phantom->setPosition(&v, 0.0f);
+            results[i] = 0;
+            collector.reset();
+            phantom->collect(&collector);
+            u8* e = collector.mpBegin;
+            u8* eEnd = collector.mpBegin + collector.mnSize * 0x10;
+            for (; e != eEnd; e += 0x10) {
+                int* o = *(int**)(e + 8);
+                if (*(char*)((char*)o + 0x18) == 1) {
+                    int* t = (int*)((char*)o + *(int*)((char*)o + 0x10));
+                    if (t != 0) {
+                        int v2 = *(int*)((char*)t + 0xc);
+                        if (v2 != 0 && v2 == id) {
+                            results[i] = 1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (phantom)
+        ((hkWorld*)*(void**)((char*)phantom + 8))->removePhantom(phantom);
 }

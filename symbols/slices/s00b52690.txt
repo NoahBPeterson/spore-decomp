@@ -1,1 +1,21 @@
-00b52690 PlaceObjectOnSurface  # Claude-coined: re-orient a spatial object on the planet, then linear-cast a phantom radially to drop its Havok body onto the terrain
+# slice s00b52690 (gold7) - names inferred from the cards, call sites and behaviour
+# Modelled types (retail member offsets):
+#   HashTable      eastl hashtable over u32 keys: mpBuckets @4, mnBucket @8; the end iterator is
+#                  mpBuckets[mnBucket]; find writes an 8-byte {node,bucket} iterator; erase takes the
+#                  iterator by value (ret 0xc); nodes are {next @0, value @4}
+#   KeyTable       eastl hashtable over the 16-byte EA::ResourceMan::Key: find writes a 12-byte
+#                  {node,bucket,inserted} iterator; insert(out,key,tag) returns the value at node+0xc
+#   Vec12          three-dword element vector {begin @0, end @4, capacity @8}; grows via AllocMem and
+#                  splices with Copy12 (0x00a11310)
+#   RBTree         intrusive rb-tree: header @4, count @0x14, free list @0x18, element size @0x28
+#   CollectorOps   contact collector: vtable @0, point array begin @8, size @0xc, capacity @0x10
+#                  (top two bits are flags, low 30 bits are the capacity)
+00b52690  ?PlaceObjectOnSurface@@YAXPAVcSpatialObject@@PAVhkRigidBody@@_NHHHH@Z  # free: re-orient a spatial object on the surface, then sweep its body back onto it
+00b52e00  ?SweepShapeOnSurface@@YAXPBUVector3@@PBVhkQuaternion@@PAX0PAIH@Z  # free: sweep a convex-shape phantom between two radial points, flag matching contacts
+00b530e0  ?UnregisterCell@@YAXPAXH@Z  # free: remove a cell key from the four global tables, releasing the value
+00b532b0  ?GetTableValue@@YAPAXPAX@Z  # free: u32-keyed table lookup, returns the node value or 0
+00b532f0  ?GetValue14c8@HashTable@@QAEHI@Z  # thiscall: lookup in the table embedded at this+0x14c8, returns node+4 or 0
+00b533a0  ?GetTextureInstance@KeyTable@@QAEHPBUKey4@@@Z  # thiscall: texture-table lookup with insert-on-miss, returns node+0xc
+00b535d0  ?Insert@Vec12@@QAEXPAUItem12@@PBU2@@Z  # thiscall: insert a three-dword element, shifting or growing the buffer
+00b53700  ?InsertNode@RBTree@@QAEXPAPAXPAXPBIE@Z  # thiscall: allocate/recycle a node, store the key, link it and bump the count
+00b53790  ?Destroy@CollectorOps@@QAEPAXE@Z  # thiscall: collector destructor, frees the point array and optionally the object
