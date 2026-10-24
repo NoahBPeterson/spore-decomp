@@ -1,9 +1,8 @@
-007a82d0  63  SetStyleScale: float->int conversion emitted as x87 instead of cvtss2si
-007a8390  159  cTextRenderer ctor: allocation/EH schedule and string-copy loop differ; equiv FAIL (5/5 mismatched, memory pool @4a060000)
-007a85e0  149  SetColor: repeated mTextStyle reloads / float->int conversion differ
-007a8660  69  AllocDevice: critical-section RAII EH frame not reproduced
-007a8700  51  FreeDevice: critical-section RAII EH frame not reproduced
-007a8790  74  ~cTextRenderer: member teardown order/register allocation differ
-007a8810  84  render-object factory: EH/new schedule differs
-007a88b0  49  render-object scalar deleting dtor; equiv FAIL (ours faults where original succeeds)
-007a8910  286  vector<Glyph,stride 0x14>::insert schedule
+007a82d0  70  SetStyleScale: retail inlined the CRT ftol helper (`_ftol2_sse`, SSE1 `cvtss2si` = round-to-nearest) after spilling the product back into the argument slot; we get the same rounding from `_mm_cvtss_si32` on a volatile temp, which cl wraps in an SSE frame (and cl drops the now-redundant `mov byte [s+0x227],0`)  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv: PASS 400 valid, 100% cov]
+007a8390  242  cTextRenderer ctor: thiscall stub call sites fixed (Layout ctor 0x890f50 on impl+0xa000 and on layout, style ctor 0x8941d0, `EASTL_allocator_allocate` bound to 0xf473a0); retail's EH funclets/state slots around the three allocations and the `mov ecx,imm` string copy are not reproduced  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv: PASS 250 valid, 96.8% cov]
+007a85e0  148  SetColor: `Scale255` (mulss + `_mm_cvtss_si32`) reproduces retail's rounded channel values and touches only xmm0/xmm1; retail's inlined ftol spill to the arg slot and interleaved loads differ  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv: PASS 400 valid, 100% cov]
+007a8660  135  AllocDevice: `EnterCriticalSection`/`LeaveCriticalSection` are dllimport stdcall (was cdecl, so a bogus `add esp,4`); the device acquire is thiscall on `[obj+0x34]` with args (2,0,obj+8); critical-section EH frame not reproduced  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv: PASS 395 valid, 68.6% cov]
+007a8700  114  FreeDevice: same stdcall imports and thiscall device release on `[obj+0x34]`; critical-section EH frame not reproduced  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv: PASS 392 valid, 100% cov]
+007a8790  74  ~cTextRenderer: the Layout dtor 0x890560 takes only `this` (was passed on the stack); member teardown via thiscall; prologue/branch schedule differs  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv: PASS 207 valid, 100% cov]
+007a8810  123  render-object factory: glyph-cache init 0x88ae10 is thiscall on the new object, vtable slots are called with (2,1) and (1,0); retail's EH funclets/state slots around the allocation are not reproduced  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv: PASS 343 valid, 98.1% cov]
+007a8910  321  vector<Glyph,stride 0x14>::insert schedule (not part of this fix list)

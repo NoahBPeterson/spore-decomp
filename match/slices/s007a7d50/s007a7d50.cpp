@@ -1,14 +1,24 @@
 // slice s007a7d50  --  SP::cTextRenderer (retail layout).
 // Reconstructed C++ (MSVC x86, cl 15.00 /O2 /MD /Gy /EHsc /TP).
 #include "types.h"
+#include <xmmintrin.h>
+
+// retail inlined the CRT ftol helper (`_ftol2_sse`), which converts with the SSE1 rounding
+// `cvtss2si` instead of the truncating `cvttss2si` cl emits for a plain cast; round the same way.
+static const float kScale255 = 255.0f;
+static __forceinline int Scale255(const float* p)
+{
+    __m128 v = _mm_mul_ss(_mm_load_ss(p), _mm_load_ss(&kScale255));
+    return _mm_cvtss_si32(v);
+}
 
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
-                                          unsigned debugFlags, const char* file, int line);
+                                          unsigned debugFlags, const char* file, int line); // 0x00f473a0
 extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
 __declspec(dllimport) int wcsncmp(const wchar_t*, const wchar_t*, unsigned int);
 __declspec(dllimport) wchar_t* wcsncpy(wchar_t*, const wchar_t*, unsigned int);
-extern "C" void  EnterCriticalSection(void*);
-extern "C" void  LeaveCriticalSection(void*);
+extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(void*);
+extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void*);
 
 // ---- helpers referenced only by address ---------------------------------------
 extern "C" void* FUN_007658f0();               // (unused here)
@@ -38,6 +48,26 @@ extern "C" void  FUN_00926020_zone_new();      // (unused)
 
 // ---- stub types ---------------------------------------------------------------
 struct Layout; struct TextStyle; struct TextRenderWare;
+
+// thiscall callees (this in ecx, `ret N`); the name carries the VA for the harness.
+struct LayoutObj {                              // Layout / cLayout (0x37c) and the +0xa000 sub-object
+    void init_00890f50();                       // ctor body
+    void dtor_00890560();                       // dtor
+};
+struct TextStyleObj {                           // TextStyle (0x278)
+    void ctor_008941d0();
+};
+struct ObjDevice {                              // the object behind obj+0x34
+    bool acquire_011ef750(int mode, int unused, void* data);
+    bool release_011ef880(void* data);
+};
+struct PtrPair {                                // 0x190/0x194 pair owner (eastl vector-like)
+    void free_0070f520(void* begin, void* end);
+};
+struct GlyphCacheObj {                          // the 0x1a8-byte object the factory allocates
+    void init_0088ae10(void* arg);
+    void dtor_0088b450();
+};
 
 // 0xa384-byte render backend; members used at +0xa000 (Layout), +0xa37c, +0xa380.
 struct TextRenderWare {
@@ -104,8 +134,11 @@ void cTextRenderer::SetStyle(int style)
 // @ 0x007a82d0
 void cTextRenderer::SetStyleScale(float f)
 {
-    ((unsigned char*)&this->mTextStyle->mColor)[3] = 0;
-    this->mTextStyle->mColor |= (int)(f * 255.0f) << 0x18;
+    volatile float t = f * kScale255;
+    unsigned int alpha = (unsigned int)_mm_cvtss_si32(_mm_load_ss((const float*)&t)) << 0x18;
+    TextStyleStub* s = this->mTextStyle;
+    ((unsigned char*)&s->mColor)[3] = 0;
+    s->mColor |= alpha;
 }
 
 // @ 0x007a8310
@@ -135,15 +168,15 @@ void cTextRenderer::CtorBody()
     self->mInitialized = false;
     void* impl = EASTL_allocator_allocate(0xa384, "Graphics", 0, 0, 0, 0);
     if (impl)
-        FUN_00890f50(impl);
+        ((LayoutObj*)((char*)impl + 0xa000))->init_00890f50();
     self->mRenderImpl = (TextRenderWare*)impl;
     void* layout = EASTL_allocator_allocate(0x37c, "Graphics", 0, 0, 0, 0);
     if (layout)
-        FUN_00890f50(layout);
+        ((LayoutObj*)layout)->init_00890f50();
     self->mLayout = (Layout*)layout;
     void* style = EASTL_allocator_allocate(0x278, "Graphics", 0, 0, 0, 0);
     if (style)
-        FUN_00894_TextStyle_ctor(style);
+        ((TextStyleObj*)style)->ctor_008941d0();
     self->mTextStyle = (TextStyleStub*)style;
     self->mStyleChanged = true;
 
@@ -213,9 +246,9 @@ void cTextRenderer::SetFontSize(float size)
 void cTextRenderer::SetColor(const float* rgb)
 {
     this->mTextStyle->mColor &= 0xff000000;
-    this->mTextStyle->mColor |= (int)(rgb[0] * 255.0f) << 0x10;
-    this->mTextStyle->mColor |= (int)(rgb[1] * 255.0f) << 0x08;
-    this->mTextStyle->mColor |= (int)(rgb[2] * 255.0f);
+    this->mTextStyle->mColor |= Scale255(rgb + 0) << 0x10;
+    this->mTextStyle->mColor |= Scale255(rgb + 1) << 0x08;
+    this->mTextStyle->mColor |= Scale255(rgb + 2);
 }
 
 // @ 0x007a8660
@@ -223,7 +256,7 @@ bool cTextRenderer::AllocDevice(void* obj)
 {
     EnterCriticalSection(this->mCriticalSection);
     if (*(int*)((char*)obj + 0x38) == 0) {
-        if (FUN_011ef750(2, 0, (char*)obj + 8)) {
+        if (((ObjDevice*)*(void**)((char*)obj + 0x34))->acquire_011ef750(2, 0, (char*)obj + 8)) {
             *(void**)((char*)obj + 0x38) = *(void**)((char*)obj + 8);
             *(void**)((char*)obj + 0x3c) = *(void**)((char*)obj + 0x14);
             EnterCriticalSection(this->mCriticalSection);
@@ -240,7 +273,7 @@ bool cTextRenderer::FreeDevice(void* obj)
 {
     EnterCriticalSection(this->mCriticalSection);
     if (*(int*)((char*)obj + 0x38) != 0) {
-        FUN_011ef880((char*)obj + 8);
+        ((ObjDevice*)*(void**)((char*)obj + 0x34))->release_011ef880((char*)obj + 8);
         *(void**)((char*)obj + 0x38) = 0;
         LeaveCriticalSection(this->mCriticalSection);
         LeaveCriticalSection(this->mCriticalSection);
@@ -261,11 +294,11 @@ cTextRenderer::~cTextRenderer()
     EASTL_allocator_deallocate(this->mBuffer0);
     EASTL_allocator_deallocate(this->mBuffer1);
     if (this->mRenderImpl) {
-        FUN_00890560_Layout_dtor((char*)this->mRenderImpl + 0xa000);
+        ((LayoutObj*)((char*)this->mRenderImpl + 0xa000))->dtor_00890560();
         EASTL_allocator_deallocate(this->mRenderImpl);
     }
     if (this->mLayout) {
-        FUN_00890560_Layout_dtor(this->mLayout);
+        ((LayoutObj*)this->mLayout)->dtor_00890560();
         EASTL_allocator_deallocate(this->mLayout);
     }
     EASTL_allocator_deallocate(this->mTextStyle);
@@ -276,7 +309,7 @@ void FUN_007a8810()
 {
     void* p = EASTL_allocator_allocate(0x1a8, "Graphics", 0, 0, 0, 0);
     if (p) {
-        FUN_0088ae10(0);
+        ((GlyphCacheObj*)p)->init_0088ae10(0);
         *(void**)p = (void*)&VT_TextRenderWareObject;
         *(void**)((char*)p + 0x190) = 0;
         *(void**)((char*)p + 0x194) = 0;
@@ -285,7 +318,7 @@ void FUN_007a8810()
     else {
         p = 0;
     }
-    ((void(__thiscall*)(void*, int))((*(void***)p)[0x10 / 4]))(p, 2);
+    ((void(__thiscall*)(void*, int, int))((*(void***)p)[0x10 / 4]))(p, 2, 1);
     ((void(__thiscall*)(void*, int, int))((*(void***)p)[0x08 / 4]))(p, 1, 0);
     FUN_0067dfe0(p);
 }
@@ -294,11 +327,12 @@ void FUN_007a8810()
 void* TextRenderWare::ScalarDelete(unsigned char flags)
 {
     TextRenderWare* self = this;
-    FUN_0070f520(*(void**)((char*)self + 0x190), *(void**)((char*)self + 0x194));
+    PtrPair* pair = (PtrPair*)((char*)self + 0x190);
+    pair->free_0070f520(*(void**)((char*)self + 0x190), *(void**)((char*)self + 0x194));
     void* p = *(void**)((char*)self + 0x190);
     if (p && *(int*)((char*)p - 4) != 0)
         EASTL_allocator_deallocate(p);
-    FUN_0088b450(self);
+    ((GlyphCacheObj*)self)->dtor_0088b450();
     if (flags & 1)
         EASTL_allocator_deallocate(self);
     return self;
