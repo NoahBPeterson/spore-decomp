@@ -1,0 +1,3 @@
+00da4f00 ??0cSocialBand@@QAE@XZ  # cSocialBand default ctor (retail class unnamed; slice spelling CommunityApproach); FUN_00da4f00, callee of CreateObject
+00da52e0 ??0cSocialBand@@QAE@ABU0@@Z  # cSocialBand copy ctor; FUN_00da52e0, callee of create
+00d9f010 ??1cSocialBand@@QAE@XZ  # cSocialBand destructor; FUN_00d9f010, callee of create/CreateObject

@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00da5900/s00da5900.cpp  ?FUN_00da5c80@@YA_NPAX@Z  00da5c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da5ca0@@YAMPAUcSPCreatureCitizen@@@Z  00da5ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da6090@@YA_KI@Z  00da6090  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da61e0@@YAXPAUcSPCreatureCitizen@@H@Z  00da61e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da6240@@YA_NPAUcSPCreatureCitizen@@II@Z  00da6240  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da6270@@YA_NPAUcSPCreatureCitizen@@H@Z  00da6270  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da63e0@@YAXPAUcSPCreatureCitizen@@PAUcTribe@@@Z  00da63e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da6470@@YAMPAUcSPCreatureCitizen@@@Z  00da6470  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da64b0@@YAMPAUcSPCreatureCitizen@@@Z  00da64b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da6570@@YAMPAUcSPCreatureCitizen@@@Z  00da6570  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da65b0@@YAMPAUcSPCreatureCitizen@@@Z  00da65b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da65f0@@YAMPAUcSPCreatureCitizen@@@Z  00da65f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da6630@@YAMPAUcSPCreatureCitizen@@PAX11PAUbehavior_stimuli@@PAE@Z  00da6630  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da66c0@@YAMPAUcSPCreatureCitizen@@PAX11PAUbehavior_stimuli@@PAE@Z  00da66c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00da5900/s00da5900.cpp  ?FUN_00da6750@@YAMPAUcSPCreatureCitizen@@PAX11PAUbehavior_stimuli@@PAE@Z  00da6750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
