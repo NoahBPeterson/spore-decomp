@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-008dd0d0 167 complete: PFRecordWrite ctor; field/vtable init sequence close but differs
+008dd0d0 209 complete: PFRecordWrite ctor; constructors now thiscall on mMemStream/mFileStream, AddRef calls use their vtables, SetOption/SetData pass mMemStream in ECX; equiv PASS 218/600 valid, 100% cov
 008dd1c0 31 complete: EA::SharedLibrary::Release; interlocked refcount + virtual destroy; register/scheduling differs
 008dd1f0 34 complete: PFRecordWrite::_virtual_dtor; vtable store order differs
 008dd510 298 complete: Resource::FindEmbeddedPackageHeader; parse/scan flow reconstructed; buffer handling differs
@@ -8,5 +8,5 @@
 008ddb00 122 complete: FUN_008ddb00; body/register allocation differs
 008ddb90 29 complete: FUN_008ddb90; vtable fn load vs io-zero scheduling differs
 008ddc10 68 complete: GetNameFromDatabaseKey; single-vs-early epilogue layout + buffer offset differ
-008dde50 231 complete: FUN_008dde50; body/register allocation differs
-008ddff0 29 complete: Editor::cPropertyList ctor; base reg ecx vs retail eax (register coin-flip)
+008dde50 260 complete: FUN_008dde50; retail entry is stdcall with four stack args (ret 0x10), trailing arg unused; equiv WEAK 337 valid, 14.9% coverage
+

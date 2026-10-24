@@ -105,17 +105,19 @@ void* PFRecordWrite::ctor(int a2, int a3, int a4, void* a5, int a6)
     vtbl20 = (void**)0x13f3a68;
     vtbl = (void**)0x1436968;
     vtbl20 = (void**)0x143692c;
-    FUN_0093bd50("ResourceMan/PFRecordWrite");
-    FUN_00931da0(mMemStream, 0);
-    FUN_00931da0(mFileStream, 0);
+    vtbl = (void**)0x1436968;
+    vtbl20 = (void**)0x143692c;
+    ((void* (__thiscall*)(void*, void*))FUN_0093bd50)(mMemStream, (void*)0x140a390);
+    ((void* (__thiscall*)(void*, int))FUN_00931da0)(mFileStream, 0);
     *((char*)this + 0x274) = 0;
     _InterlockedExchange((volatile long*)((char*)this + 0x278), 1);
-    ((void (__thiscall*)(void*))(((void**)vtbl)[1]))(this + 1);
-    ((void (__thiscall*)(void*))(((void**)vtbl20)[1]))(this + 2);
-    FUN_0093bb40(1, 1.0f);
+    ((void (__thiscall*)(void*))(((void**)*(void**)mMemStream)[1]))(mMemStream);
+    ((void (__thiscall*)(void*))(((void**)*(void**)mFileStream)[1]))(mFileStream);
+    ((void (__thiscall*)(void*, int, float))FUN_0093bb40)(mMemStream, 1, 1.0f);
     void* db = mpDatabase;
     int u = ((int (__thiscall*)(void*))(((void**)*(void**)db)[0x48 / 4]))(db);
-    FUN_0093be30(mMemStream, (void*)a2, (void*)a3, a4, 1, (void*)u);
+    ((void (__thiscall*)(void*, void*, void*, int, int, void*))FUN_0093be30)(
+        mMemStream, (void*)a2, (void*)a3, a4, 1, (void*)u);
     return this;
 }
 
@@ -414,7 +416,7 @@ void EditorResource::dtor()
 // 0x8dde50  load editor resource
 // ---------------------------------------------------------------------------
 // @ 0x008dde50
-extern "C" char FUN_008dde50(void* self, EditorResource* dst, char* a3)
+extern "C" char __stdcall FUN_008dde50(void* self, EditorResource* dst, char* a3, int unused)
 {
     char result = 0;
     if (self == 0 || dst == 0)
@@ -485,11 +487,11 @@ void* EditorResource::deleting_dtor(int flags)
 // 0x8ddff0  Editor::cPropertyList ctor
 // ---------------------------------------------------------------------------
 struct PropertyList {
-    void ctor();      // 0x8ddff0
+    PropertyList* ctor();      // 0x8ddff0
 };
 
 // @ 0x008ddff0
-void PropertyList::ctor()
+PropertyList* PropertyList::ctor()
 {
     char* p = (char*)this;
     *(void**)p = (void*)0x13ebcdc;
@@ -500,4 +502,5 @@ void PropertyList::ctor()
     *(void**)p = (void*)0x1436a00;
     *(int*)(p + 0x14) = 0;
     *(int*)(p + 0x18) = 0;
+    return this;
 }
