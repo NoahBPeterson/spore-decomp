@@ -116,9 +116,9 @@ struct SpatialObjVector {                                         // eastl::fixe
     cSpatialObject** mpEnd;
     cSpatialObject** mpCapacity;
     uint32_t pad0c[2];
-    uint32_t mnFlags;                                             // +0x14
+    volatile uint32_t mnFlags;                                    // +0x14
     cSpatialObject* mBuffer[8];                                   // +0x18
-    SpatialObjVector() : mpBegin(mBuffer), mpEnd(mBuffer), mpCapacity(mBuffer + 8), mnFlags(0) {}
+    SpatialObjVector() { mnFlags = 0; mpBegin = mBuffer; mpEnd = mBuffer; mpCapacity = mBuffer + 8; }
     ~SpatialObjVector();                                          // 0xad92d0
     unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
 };
@@ -169,6 +169,8 @@ class cSPCreatureCitizen { public:
     void InterruptAnimation(uint32_t id, int a, int b);           // 0xc12310
     void FUN_00c14750(int a);                                     // 0xc14750
     bool FUN_00c0e0c0(uint32_t id);                               // 0xc0e0c0
+    bool FUN_00c0b770();                                          // 0xc0b770 (returns a bool in al)
+    void PlayAnimation(uint32_t id, int a, int b);                // 0xc12190
 };
 #undef PV
 
@@ -349,6 +351,282 @@ bool TRIBE_TAKE_OUT_TOOL_Tick(void* pSelf, double, uint32_t flags, uint32_t, beh
         }
     }
     return false;
+}
+
+// =====================================================================
+// @ 0x00db4f60  SP::TRIBE_DEATH_Tick
+// =====================================================================
+struct DEATH_memory_block {
+    float mTimer0;         // +0x00
+    float mTimer1;         // +0x04
+    float mTimer2;         // +0x08
+    float mBlend;          // +0x0c
+    bool  mbDying;         // +0x10
+    bool  mbAnimStarted;   // +0x11
+};
+
+bool TRIBE_DEATH_Tick(cSPCreatureCitizen* creature, double, uint32_t flags,
+                      unsigned char flags2, DEATH_memory_block* mem, void*, float dt)
+{
+    if (mem->mbDying) {
+        if (creature->mpAnim) {
+            mem->mTimer1 = mem->mTimer1 - dt;
+            if (mem->mTimer1 <= 0.0f) {
+                creature->vfc8(0);
+                return true;
+            }
+            float p = pow((double)0.1f, (double)(dt * 0.33333334f));
+            AnimState* anim = creature->mpAnim;
+            anim->mWeight = anim->mWeight * p + (1.0f - p) * 0.01f;
+        }
+        return true;
+    }
+
+    if (creature->mbFlagB5e) {
+    uint32_t animId = creature->FUN_00c0b770() ? 0x2481db4 : 0x2481dc5;
+    if (flags2 & 2)
+        animId = 0x5f0eaa9;
+    if (!mem->mbAnimStarted || !creature->FUN_00c0e0c0(animId)) {
+        mem->mbAnimStarted = true;
+        creature->PlayAnimation(animId, 1, -1);
+        SubObj34* o = &creature->mObj34;
+        int v = o->FUN_00cee330();
+        if (v)
+            FUN_00b3d2b0()->FUN_00ac7de0(v, FUN_00b3d2b0()->FUN_00ac79d0());
+    }
+
+    mem->mTimer0 = mem->mTimer0 - dt;
+    if (mem->mTimer0 <= 0.0f) {
+        if (creature->mLoco.IsOnGround()) {
+            mem->mbDying = true;
+        } else {
+            creature->vfc8(0);
+        }
+    }
+
+    if (GetCurrentGameMode() == (void*)0x1654c02 && creature->mLoco.IsOnGround()
+        && (flags & 0x1000) && creature->mpAnim) {
+        float radius;
+        mem->mTimer2 = mem->mTimer2 - dt;
+        if (creature->mField50) {
+            mem->mBlend = 1.0f;
+        } else if (mem->mTimer2 < 0.0f) {
+            mem->mTimer2 = 1.0f;
+            mem->mBlend = 1.0f;
+            const Vec3* pos = creature->mLoco.GetPosition();
+            radius = creature->mLoco.GetFootprintRadius();
+            SpatialObjVector v;
+            if (FUN_00b3d240()->QueryRadius(pos, radius + radius, &v, 0, 0, 0)) {
+                unsigned n = v.size();
+                for (unsigned i = 0; i < n; ++i) {
+                    cSPCreatureCitizen* other = FUN_00ae66f0(v.mpBegin[i]);
+                    if (other && other != creature && !other->mbFlagB5e) {
+                        const Vec3* op = other->mLoco.GetPosition();
+                        Vec3 d = *op - *pos;
+                        float r = other->mLoco.GetFootprintRadius() + radius;
+                        if (d.z * d.z + d.y * d.y + d.x * d.x < r * r) {
+                            mem->mBlend = GetPropertyT_float(g_DebugProps, 0xfd4fd8dc, 0.4f);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        float p = pow((double)0.1f, (double)dt);
+        AnimState* anim = creature->mpAnim;
+        anim->mWeight = anim->mWeight * p + (1.0f - p) * mem->mBlend;
+    }
+    return true;
+    }
+    return false;
+}
+
+// =====================================================================
+// 0x00db5b30  eastl vector copy-assignment (AutoRefCount<cSpatialObject>)
+// =====================================================================
+struct RefVec {
+    cSpatialObject** mpBegin;      // +0x00
+    cSpatialObject** mpEnd;        // +0x04
+    cSpatialObject** mpCapacity;   // +0x08
+    cSpatialObject** FUN_00db48a0(unsigned n, cSpatialObject** first, cSpatialObject** last); // 0xdb48a0
+    void FUN_00ad80d0(cSpatialObject** first, cSpatialObject** last);                         // 0xad80d0
+    RefVec* FUN_00db5b30(RefVec* other);                                                      // 0xdb5b30
+};
+
+// EASTL allocator bookkeeping word stored just before the buffer.
+struct AllocHeader { int mSize; };
+
+extern "C" cSpatialObject** FUN_00c83c90(cSpatialObject** first, cSpatialObject** last,
+                                         cSpatialObject** dst);                       // 0xc83c90
+extern "C" void FUN_00bdaa40(RefVec** pother, cSpatialObject** first, cSpatialObject** last,
+                             cSpatialObject** dst, RefVec* other);                    // 0xbdaa40
+extern "C" void operator_delete__(void* p);                                           // 0xf47380
+
+// @ 0x00db5b30
+RefVec* RefVec::FUN_00db5b30(RefVec* other)
+{
+    if (this != other) {
+        unsigned otherCount = (unsigned)(other->mpEnd - other->mpBegin);
+        unsigned thisCap = (unsigned)(mpCapacity - mpBegin);
+        if (otherCount > thisCap) {
+            cSpatialObject** newBegin = FUN_00db48a0(otherCount, other->mpBegin, other->mpEnd);
+            FUN_00ad80d0(mpBegin, mpEnd);
+            if (mpBegin != 0 && ((AllocHeader*)mpBegin)[-1].mSize != 0)
+                operator_delete__(mpBegin);
+            mpCapacity = newBegin + otherCount;
+            mpEnd = newBegin + otherCount;
+            mpBegin = newBegin;
+            return this;
+        }
+        unsigned thisCount = (unsigned)(mpEnd - mpBegin);
+        if (otherCount > thisCount) {
+            FUN_00c83c90(other->mpBegin, other->mpBegin + thisCount, mpBegin);
+            FUN_00bdaa40(&other, other->mpBegin + thisCount, other->mpEnd, mpEnd, other);
+            mpEnd = mpBegin + otherCount;
+            return this;
+        }
+        cSpatialObject** newEnd = FUN_00c83c90(other->mpBegin, other->mpEnd, mpBegin);
+        FUN_00ad80d0(newEnd, mpEnd);
+        mpEnd = mpBegin + otherCount;
+    }
+    return this;
+}
+
+// =====================================================================
+// 0x00db5e20  eastl hashtable copy-assignment (ImageCursorProvider table)
+// =====================================================================
+struct ImageCursor {
+    unsigned mField00;             // +0x00
+    unsigned mField04;             // +0x04
+    int      mField08;             // +0x08
+};
+
+struct HashNode {
+    unsigned    mKey;              // +0x00
+    ImageCursor mValue;            // +0x04
+    HashNode*   mpNext;            // +0x10
+};
+
+struct HashResult {
+    HashNode* mpNode;              // +0x00
+    void*     mpBucket;            // +0x04
+    unsigned char mbInserted;      // +0x08
+    char      mPad[3];             // +0x09
+};
+
+struct HashValue {
+    unsigned    mKey;              // +0x00
+    ImageCursor mCursor;           // +0x04
+};
+
+struct FixedPoolBase {
+    void* mpHead;                  // +0x00  free-list head
+    void init(void* arena, unsigned size, unsigned count, unsigned align, unsigned a5);   // 0x921260
+};
+
+struct PrimeRehashPolicy {
+    float    mLoadFactor;          // +0x00
+    float    mGrowthFactor;        // +0x04
+    unsigned mnNextResize;         // +0x08
+    unsigned get_next_bucket_count(unsigned n);                                            // 0x9213c0
+};
+
+// Temporary allocator built on the constructor's stack and copied into mPool by
+// FUN_00db3cf0 (fixed_hashtable_allocator: pool + arena begin/end + item count + control).
+struct TempAlloc {
+    FixedPoolBase mPool;           // +0x00
+    void*         mUnk04;          // +0x04
+    void*         mBegin;          // +0x08
+    void*         mEnd;            // +0x0c
+    unsigned      mCount;          // +0x10
+    void*         mExtra;          // +0x14
+};
+
+struct HashTable {
+    void* mUnk00;                  // +0x00
+    HashNode** mpBucketArray;      // +0x04
+    unsigned mnBucketCount;        // +0x08
+    unsigned mnElementCount;       // +0x0c
+    PrimeRehashPolicy mRehashPolicy; // +0x10
+    FixedPoolBase mPool;           // +0x1c
+    char     mPoolPad[0x14];       // +0x20..+0x34
+    void*    mPoolControl;         // +0x34
+    char     mPad38[0x24];         // +0x38..+0x5c
+    char     mTempArena[0xa0];     // +0x5c..+0xfc
+    void FUN_005941f0(HashNode** buckets, unsigned count);                                   // 0x5941f0
+    void FUN_00db5d70(HashNode* node, HashNode** bucket, HashNode* endNode, HashNode** endBucket); // 0xdb5d70
+    HashTable* FUN_00db5e20(HashTable* other);                                               // 0xdb5e20
+    void FUN_00db4780(HashResult* out, const unsigned* key);                                 // 0xdb4780
+    void FUN_00db47e0(HashResult* out, const HashValue* value, const void* keyArg);          // 0xdb47e0
+    ImageCursor* FUN_00db5cf0(unsigned* key);                                                // 0xdb5cf0
+    HashTable* FUN_00db5c20(void* p2, void* p3);                                             // 0xdb5c20
+    HashTable* FUN_00db3cf0(unsigned bucketCount, void* p2, void* r3, void* r4, void* v5,
+                            void* r6, void* temp);                                           // 0xdb3cf0
+    void FUN_00daee00(unsigned n);                                                           // 0xdaee00
+};
+
+extern "C" unsigned FUN_00921340(unsigned n);                                                // 0x921340
+
+// @ 0x00db5e20
+HashTable* HashTable::FUN_00db5e20(HashTable* other)
+{
+    if (this != other) {
+        FUN_005941f0(mpBucketArray, mnBucketCount);
+        mnElementCount = 0;
+        HashNode** bucket = other->mpBucketArray;
+        HashNode** endBucket = bucket + other->mnBucketCount;
+        HashNode* node = *bucket;
+        HashNode* endNode = *endBucket;
+        if (node == 0) {
+            ++bucket;
+            while (*bucket == 0)
+                ++bucket;
+            node = *bucket;
+        }
+        FUN_00db5d70(node, bucket, endNode, endBucket);
+    }
+    return this;
+}
+
+// @ 0x00db5c20
+HashTable* HashTable::FUN_00db5c20(void* p2, void* p3)
+{
+    TempAlloc temp;
+    temp.mPool.mpHead = 0;
+    temp.mPool.init(mTempArena, 0xa0, 0x14, 4, 0);
+    temp.mBegin = mTempArena;
+    temp.mEnd = (char*)temp.mBegin + 0xa0;
+    temp.mCount = 0x14;
+    temp.mExtra = &mPoolControl;
+    unsigned buckets = FUN_00921340(9);
+    FUN_00db3cf0(buckets, p2, (void*)&p3, (void*)&p3, p3, (void*)&p3, &temp);
+    PrimeRehashPolicy* policy = (PrimeRehashPolicy*)&temp;
+    policy->mLoadFactor = 10000.0f;
+    policy->mGrowthFactor = 2.0f;
+    policy->mnNextResize = 0;
+    mRehashPolicy = *policy;
+    unsigned n = policy->get_next_bucket_count(mnElementCount);
+    if (n > mnBucketCount)
+        FUN_00daee00(n);
+    return this;
+}
+
+// @ 0x00db5cf0
+ImageCursor* HashTable::FUN_00db5cf0(unsigned* key)
+{
+    HashResult result;
+    FUN_00db4780(&result, key);
+    if (result.mpNode == mpBucketArray[mnBucketCount]) {
+        result.mpNode = 0;
+        result.mpBucket = 0;
+        HashValue value;
+        value.mKey = *key;
+        value.mCursor.mField00 = 0;
+        value.mCursor.mField04 = 0;
+        value.mCursor.mField08 = -1;
+        FUN_00db47e0(&result, &value, key);
+    }
+    return &result.mpNode->mValue;
 }
 
 } // namespace SP
