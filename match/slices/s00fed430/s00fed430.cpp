@@ -265,8 +265,8 @@ void*             StarManager();               // 0x00b3d2a0
 void*             GetPlayerEmpire();           // 0x01021300
 void*             GetPlayerHomePlanet();       // 0x01021370
 
-// mapper / vector helpers
-void  VectorMapperAssign(void* dest, uint32_t n);       // 0x00d01790
+// 0x00d01790 is a __thiscall on the vector (ecx), taking the desired size on the stack
+struct cVectorMapper { void Assign(uint32_t n); };
 void* MapPlanetRecordToKey(void* planetRecord);         // 0x00b8d8e0
 
 // 0x00b8d8e0 is a __thiscall on the planet record (ecx), no stack arguments.
@@ -526,7 +526,7 @@ uint32_t cSPMissionManager::GetMissionWeightForColony(uint32_t key)
 
     uint32_t* keysBegin = 0; uint32_t* keysEnd = 0; uint32_t* keysCap = 0;
     Property* prop = localProps->GetProperty(0x3f3fa37);
-    VectorMapperAssign(&keysBegin, prop->mnFlags & 0x30 ? prop->mnCount
+    ((cVectorMapper*)&keysBegin)->Assign(prop->mnFlags & 0x30 ? prop->mnCount
                                                        : (uint32_t)(prop->mnType != 0));
     uint32_t* keys = (uint32_t*)prop->GetValuePtr();
     uint32_t count = prop->mnFlags & 0x30 ? prop->mnCount
