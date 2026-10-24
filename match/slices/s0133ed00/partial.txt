@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+# (no approximate/partial bodies in this slice; all five registrars are behaviourally complete — see nonmatching.txt)
