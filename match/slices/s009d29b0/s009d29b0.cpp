@@ -391,18 +391,19 @@ void Locomotion::ClassifyLimbs()
 // @ 0x9d3200
 void Locomotion::Integrate(Vec3* vel, float speed)
 {
-    mPrevVelocity = mVelocity;
-    float keep = 1.0f - kSmooth;
+    mPrevVelocity.x = mVelocity.x;
+    mPrevVelocity.y = mVelocity.y;
+    mPrevVelocity.z = mVelocity.z;
     mVelocity.x = vel->x;
     mVelocity.y = vel->y;
     mVelocity.z = vel->z;
     mVelocity.z = 0.0f;
-    mSmoothedTurn = mSmoothedTurn * kSmooth + keep * speed;
+    mSmoothedTurn = mSmoothedTurn * kSmooth + (1.0f - kSmooth) * speed;
     mSmoothedSpeed = mSmoothedSpeed * kSmooth +
-        Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z) * keep;
+        Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z) * (1.0f - kSmooth);
     mPrevSpeed = mSpeed;
     mSpeed = speed;
-    if (mSmoothedSpeed <= kTiny && mSmoothedSpeed != kTiny)
+    if (mSmoothedSpeed < kTiny)
         mSmoothedSpeed = 0.0f;
     if (Fabs(mSmoothedTurn) < kTiny)
         mSmoothedTurn = 0.0f;
@@ -499,12 +500,13 @@ float Locomotion::GetAmplitude(MoveObj* o, float angle)
         Vec2* v = (Vec2*)&o->info->vx;
         float vx = v->x * scale;
         float vy = v->y * scale;
-        float speed = Sqrt(vy * vy + vx * vx);
         static const float sMax = kMaxAngle;   // 0x166c694 (guard bit 1 of 0x166c698)
         float a = Fabs(angle);
         float t = g_RampLow < a ? a : g_RampLow;
         if (sMax < t)
             t = sMax;
+        // vx/vy are live across the static guard (frame is materialised, so ecx stays untouched)
+        float speed = Sqrt(vy * vy + vx * vx);
         return (((kAmpA - g_RampLowOut) / (sMax - g_RampLow)) * g_RampScale * t) * speed + 1.0f;
     }
     return 1.0f;
@@ -553,8 +555,11 @@ float Locomotion::GetTurnFactor(Vec3* v)
     float k = kFactorA;
     if ((slen * vlen) * 0.5f < (mVelocity.y * v->y + mVelocity.z * v->z) + v->x * mVelocity.x)
         k = kFactorB;
+    // read the two components before the call so `this` (ecx) need not survive the call
+    float vx = mVelocity.x;
+    float vy = mVelocity.y;
     float f = FUN_009cdbe0(slen, 0.0f, kFactorD, kFactorC * k, 0.0f) * vlen;
-    float ang = Atan2(mVelocity.x, mVelocity.y);
+    float ang = Atan2(vx, vy);
     float c = Cos(ang) * (f + 1.0f);
     float s = (f * 1.2f + 1.0f) * Sin(ang);
     return Sqrt(c * c + s * s);
