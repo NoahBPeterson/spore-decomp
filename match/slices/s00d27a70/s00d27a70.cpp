@@ -150,10 +150,11 @@ void cCreatureCamera::ApplyPlayerDeltas(bool flag)
 {
     if (mb2b0) {
         Vec3 d = mP1 - mA0;
-        float lenSq = d.x * d.x + d.z * d.z + d.y * d.y;
+        float dxz = d.x * d.x + d.z * d.z;
+        float lenSq = dxz + d.y * d.y;
         HitVec hits;
         float len = (float)sqrt((double)lenSq);
-        float inv = 1.0f / (float)sqrt((double)(lenSq + 1e-8f));
+        float inv = (float)(1.0 / sqrt((double)lenSq + 1e-8f));
         Vec3 dir;
         dir.x = d.x * inv;
         dir.y = d.y * inv;
