@@ -641,9 +641,8 @@ void __fastcall FUN_00bd85c0(cCity* ecx_this, void* edx, float* out, int* count)
     int i = 0;
     *count = n;
     if (n > 0) {
-        float& o = *out;
         for (cElem1f4** p = ecx_this->mBeg1f4; i < *count; ++i, ++p) {
-            o += ((*p)->f0c50 + 0.5f) * 0.6666667f;
+            *out += ((*p)->f0c50 + 0.5f) * 0.6666667f;
         }
     }
 }
