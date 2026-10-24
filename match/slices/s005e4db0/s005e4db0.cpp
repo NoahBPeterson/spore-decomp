@@ -1,6 +1,7 @@
 // Slice s005e4db0: mostly SP::cSPEditorVerbIconData / cSPCreatureVerbIconData.
 // Retail layout recovered from the constructor at 0x005e5a70 (PDB offsets differ).
 #include "types.h"
+#include <intrin.h>
 
 #define PV(n) virtual void _pv##n();
 
@@ -139,6 +140,7 @@ class cSPCreatureVerbIconData : public cSPEditorVerbIconData {
  public:
   cSPCreatureVerbIconData();
   virtual ~cSPCreatureVerbIconData();
+  static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
   cRefObj* mData;  // +0xc4
   int mFieldC8;    // +0xc8
   void Init(uint32_t type, cSPCreatureVerbIconData* data);
@@ -162,10 +164,14 @@ cSPCreatureVerbIconData::cSPCreatureVerbIconData() : mData(0), mFieldC8(-1) {}
 
 // @ 0x005e5ba0
 cSPCreatureVerbIconData::~cSPCreatureVerbIconData() {
+  _ReadWriteBarrier();
   cRefObj* object = mData;
   if (object) {
-    if ((object->mRefCount += -1) == 0) {
+    int count = object->mRefCount - 1;
+    object->mRefCount = count;
+    if (count == 0) {
       object->mRefCount = 1;
+      _ReadWriteBarrier();
       object->Release(1);
     }
   }

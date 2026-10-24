@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "SP/cSPEditorVerbIconData.h"
 #include "SP/cString.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
@@ -137,6 +138,7 @@ class cSPCreatureVerbIconData : public cSPEditorVerbIconData_s005e_4db0 {
  public:
   cSPCreatureVerbIconData();
   virtual ~cSPCreatureVerbIconData();
+  static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
   cRefObj* mData;  // +0xc4
   int mFieldC8;    // +0xc8
   void Init(uint32_t type, cSPCreatureVerbIconData* data);
@@ -292,10 +294,14 @@ cSPCreatureVerbIconData::cSPCreatureVerbIconData()
 namespace SP {
 cSPCreatureVerbIconData::~cSPCreatureVerbIconData()
 {
+  _ReadWriteBarrier();
   cRefObj* object = mData;
   if (object) {
-    if ((object->mRefCount += -1) == 0) {
+    int count = object->mRefCount - 1;
+    object->mRefCount = count;
+    if (count == 0) {
       object->mRefCount = 1;
+      _ReadWriteBarrier();
       object->Release(1);
     }
   }
