@@ -1,4 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009413d0/s009413d0.cpp  ?GetVariantOp@@YAPAXHG@Z  009413d0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s009413d0/s009413d0.cpp  ?SetVariantOp@@YAPAXHGPAX@Z  00941440  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s009413d0/s009413d0.cpp  ?InvokeVariantOp@@YAXHPAX0000@Z  009414b0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s009413d0/s009413d0.cpp  ?GetVariantOpChecked@@YAPAXHG@Z  00941560  /O2 /MD /Gy /EHsc /TP /GS-

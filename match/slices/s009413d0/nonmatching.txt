@@ -1,15 +1,14 @@
 # va  diff-bytes  reason
-009413d0  1  GetVariantOp: complete; one residual byte in the map-lookup tail after relocation masking
-009414f0  20  InitVariantTable: complete; `mov al,1` and the hook-pointer store order differ
+009414f0  19  InitVariantTable: complete; `mov al,1` and the hook-pointer store order differ; equiv PASS (400 valid, 91.3% cov)
 009415f0  321  EncodeBase64: complete; group/line-wrap loop register schedule and tail-padding branches differ
 00941790  467  DecodeBase64Core: complete; loop index/bound registers swapped (original keeps bound in esi, index in edx); equiv PASS (95.4% cov, 380 inputs)
-00941a10  175  Base64EncodeString: complete; eastl resize/memmove growth sequence differs
+00941a10  188  Base64EncodeString: complete; eastl resize/memmove growth sequence differs; equiv UNSUPPORTED (0/400 valid: original faults on random string pointers, saved replay passes)
 00941af0  161  Base64DecodeString: complete; eastl resize/memmove growth sequence differs
-00941e80  113  EncodeFormURL: complete; isspace/isalnum ordering and sprintf+append path differ
+00941e80  151  EncodeFormURL: complete; isspace/isalnum ordering and sprintf+append path differ; equiv PASS (316 valid, 68.3% cov)
 00941f20  44  HTTPClientAllocBuffer: complete; operator-new arg/register schedule differs; equiv PASS (ecx fix, bool return)
-00941f90  127  HTTPClientAllocateSocket: complete; SSL / non-SSL socket creation branches differ in scheduling
-00942010  48  HTTPClientCheckTimeout: complete; branch layout differs
+00941f90  71  HTTPClientAllocateSocket: complete; SSL / non-SSL socket creation branches differ in scheduling; equiv WEAK (239 valid, 36.7% cov: SSL branch not controllable)
+00942010  87  HTTPClientCheckTimeout: complete; branch layout differs; equiv WEAK (272 valid, 35.0% cov: reaching GetTime64 hits unmodelled import:_time64)
 00942050  48  HTTPClientFindHeader: complete; stride division and loop register schedule differ; equiv WEAK (44.6% coverage, 776 valid inputs)
 009420e0  27  FindHeaderByField: complete; this-pointer save elided (callee HeaderFieldToFieldString provably preserves ecx within the TU); equiv PASS (100% cov)
-00942110  41  HTTPClientSendCallback: complete; length/strlen and callback reload differ
+00942110  48  HTTPClientSendCallback: complete; length/strlen and callback reload differ; equiv PASS (365 valid, 62.5% cov)
 00942150  81  HTTPClientSetNotificationTarget: complete; notification callback layout differs; equiv PASS

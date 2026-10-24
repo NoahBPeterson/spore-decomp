@@ -10,15 +10,15 @@
 extern "C" __declspec(dllimport) int __cdecl sprintf(char*, const char*, ...);
 extern "C" __declspec(dllimport) int __cdecl isspace(int);
 extern "C" __declspec(dllimport) int __cdecl isalnum(int);
-extern "C" void EastlStringPushBack(void* str, char c);          // 0x005306C0
-extern "C" void EastlStringAppend(void* str, const char* s, const char* e); // 0x00455D60
+// EASTL basic_string used by the form-URL wrapper (begin/end at +0/+4).
+struct EAString {
+    char* begin;                                                  // +0x00
+    char* end;                                                    // +0x04
+    void FUN_005306C0(char c);                                    // 0x005306C0 push_back
+    void FUN_00455D60(const char* first, const char* last);       // 0x00455D60 append
+};
 
 // ---- items of slice s009413d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" __declspec(dllimport) int __cdecl sprintf(char*, const char*, ...);
-extern "C" __declspec(dllimport) int __cdecl isspace(int);
-extern "C" __declspec(dllimport) int __cdecl isalnum(int);
-extern "C" void EastlStringPushBack(void* str, char c);          // 0x005306C0
-extern "C" void EastlStringAppend(void* str, const char* s, const char* e); // 0x00455D60
 // ---- items of slice s009413d0 end
 
 // @ 0x00941bc0
@@ -111,18 +111,19 @@ char const * HeaderFieldToFieldString(HTTPHeaderField field)
 // @ 0x00941e80
 void EncodeFormURL(const char* s, void* out)
 {
+    EAString* str = (EAString*)out;
     for (const uint8_t* p = (const uint8_t*)s; *p != 0; p++) {
         if (isspace(*p)) {
-            EastlStringPushBack(out, '+');
+            str->FUN_005306C0('+');
         } else if (isalnum(*p)) {
-            EastlStringPushBack(out, (char)*p);
+            str->FUN_005306C0((char)*p);
         } else {
             char buf[8];
             sprintf(buf, "%%%2X", *p);
             const char* q = buf;
             while (*q)
                 q++;
-            EastlStringAppend(out, buf, q);
+            str->FUN_00455D60(buf, q);
         }
     }
 }

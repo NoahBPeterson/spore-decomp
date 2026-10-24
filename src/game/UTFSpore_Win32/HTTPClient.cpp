@@ -26,6 +26,7 @@ struct HTTPClient {
     bool AllocBuffer();
     bool FindHeader(char* name, void* out, int index);
     void SetNotificationTarget(void* target, void* ctx);
+    int  SendCallback(const char* data, int len);
     void Pump(int* stream);
 };
 // ---- items of slice s009413d0 end
@@ -1066,10 +1067,10 @@ bool HTTPClient::AllocBuffer()
 }
 
 // @ 0x00942010
-bool HTTPClientCheckTimeout(int self, int* timeout)
+bool __stdcall HTTPClientCheckTimeout(int self, int* timeout)
 {
     if (*(int*)(self + 0xc) > 0) {
-        __int64 now = _time64(0);
+        __int64 now = GetTime64();
         if (*(int*)(self + 0xc) < (int)now)
             return true;
         if (*timeout > 0) {
@@ -1100,8 +1101,9 @@ bool HTTPClient::FindHeader(char* name, void* out, int index)
 }
 
 // @ 0x00942110
-void HTTPClientSendCallback(int self, const char* data, int len)
+int HTTPClient::SendCallback(const char* data, int len)
 {
+    int self = (int)this;
     if (len == -1) {
         const char* p = data;
         do {
@@ -1109,9 +1111,12 @@ void HTTPClientSendCallback(int self, const char* data, int len)
         len = (int)(p - (data + 1));
     }
     if (*(int*)(self + 0x30) > 0) {
-        (*(void(__thiscall**)(void*, const char*, int))((char*)*(void**)(self + 0x58) + 0x38))(
-            *(void**)(self + 0x58), data, len);
+        void* obj = *(void**)(self + 0x58);
+        void** vtbl = *(void***)obj;
+        volatile int cb = ((int(__thiscall*)(void*, const char*, int))vtbl[0x38 / 4])(obj, data, len);
+        return cb;
     }
+    return len;
 }
 
 // @ 0x00942150

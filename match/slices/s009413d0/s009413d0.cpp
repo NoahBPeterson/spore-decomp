@@ -19,7 +19,7 @@ void* __cdecl operator_new_6(unsigned int, const char*, int, int, int, int);
 // ===========================================================================
 extern "C" void* g_variantOps[0x400];        // 0x016699C0
 extern "C" char  g_variantTableInit;         // 0x0166A9C0
-extern "C" void* g_variantDefaultOp;         // 0x0093E5F0 function
+extern "C" void  FUN_0093E5F0();             // 0x0093E5F0 default variant op
 extern "C" void  RegisterVariantTable(void*, int);
 void* GetVariantOp(int a, uint16_t b);       // 0x009413D0
 void* SetVariantOp(int a, uint16_t b, void* op);  // 0x00941440
@@ -54,7 +54,7 @@ void* GetVariantOp(int a, uint16_t b) {
     g_variantMap.Find(out, key);
     if (out[0] != g_variantMap.mpBegin[g_variantMap.mnCount])
         return *(void**)(out[0] + 8);
-    return g_variantDefaultOp;
+    return (void*)FUN_0093E5F0;
 }
 
 // @ 0x00941440
@@ -82,7 +82,7 @@ void InvokeVariantOp(int a, void* b, void* c, void* d, void* e, void* f) {
 int InitVariantTable() {
     if (g_variantTableInit == 0) {
         for (int i = 0; i < 0x400; i++)
-            g_variantOps[i] = g_variantDefaultOp;
+            g_variantOps[i] = (void*)FUN_0093E5F0;
         g_variantMap.Clear(g_variantMap.mpBegin, g_variantMap.mnCount);
         g_opField = 0;
         g_opSetFn = (void*)SetVariantOp;
@@ -173,13 +173,21 @@ bool EncodeBase64(const uint8_t* src, int len, char* dst, int* outLen) {
     return true;
 }
 
-// @ 0x00941A10
-extern "C" void EastlStringResize(void* str, unsigned int n, char c);   // 0x0047BF30
+// EASTL basic_string used by the Base64/form wrappers (begin/end at +0/+4).
+struct EAString {
+    char* begin;                                                  // +0x00
+    char* end;                                                    // +0x04
+    void FUN_0047BF30(unsigned n, char c);                        // 0x0047BF30 resize
+    void FUN_005306C0(char c);                                    // 0x005306C0 push_back
+    void FUN_00455D60(const char* first, const char* last);       // 0x00455D60 append
+};
 
+// @ 0x00941A10
 bool Base64EncodeString(int* srcStr, int* dstStr) {
     const uint8_t* src = (const uint8_t*)srcStr[0];
     int len = srcStr[1] - srcStr[0];
-    unsigned int units = ((unsigned int)(((unsigned long long)(len + 2) * 0xaaaaaaab) >> 32) & 0xfffffffe) * 2;
+    unsigned int n2 = (unsigned int)(len + 2);
+    unsigned int units = (unsigned int)(((unsigned __int64)n2 * 0xaaaaaaabu) >> 33) * 4;
     unsigned int need = units + 0x42 + units / 0x48;
     int* pneed = (int*)&need;
     (void)pneed;
@@ -191,7 +199,7 @@ bool Base64EncodeString(int* srcStr, int* dstStr) {
             dstStr[1] = (int)(to + (dstStr[1] - (int)dstStr[1]));
         }
     } else if (dlen < (int)need) {
-        EastlStringResize(dstStr, need - dlen, 0);
+        ((EAString*)dstStr)->FUN_0047BF30(need - (unsigned)dlen, 0);
     }
     int written = 0;
     EncodeBase64(src, len, (char*)dstStr[0], &written);
@@ -203,7 +211,7 @@ bool Base64EncodeString(int* srcStr, int* dstStr) {
             dstStr[1] = (int)(to + (dstStr[1] - (int)dstStr[1]));
         }
     } else if (dlen2 < written) {
-        EastlStringResize(dstStr, written - dlen2, 0);
+        ((EAString*)dstStr)->FUN_0047BF30((unsigned)(written - dlen2), 0);
     }
     return true;
 }
@@ -221,7 +229,7 @@ bool Base64DecodeString(int* srcStr, int* dstStr) {
             dstStr[1] = (int)(to + (dstStr[1] - (int)dstStr[1]));
         }
     } else if (dlen < need) {
-        EastlStringResize(dstStr, need - dlen, 0);
+        ((EAString*)dstStr)->FUN_0047BF30((unsigned)(need - dlen), 0);
     }
     extern bool DecodeBase64Core(const uint8_t*, int, char*, int*);
     int written = 0;
@@ -234,7 +242,7 @@ bool Base64DecodeString(int* srcStr, int* dstStr) {
             dstStr[1] = (int)(to + (dstStr[1] - (int)dstStr[1]));
         }
     } else if (dlen2 < written) {
-        EastlStringResize(dstStr, written - dlen2, 0);
+        ((EAString*)dstStr)->FUN_0047BF30((unsigned)(written - dlen2), 0);
     }
     return true;
 }
@@ -395,22 +403,20 @@ const char* HeaderFieldToFieldString(int field) {
 }
 
 // @ 0x00941E80
-extern "C" void EastlStringPushBack(void* str, char c);          // 0x005306C0
-extern "C" void EastlStringAppend(void* str, const char* s, const char* e); // 0x00455D60
-
 void EncodeFormURL(const char* s, void* out) {
+    EAString* str = (EAString*)out;
     for (const uint8_t* p = (const uint8_t*)s; *p != 0; p++) {
         if (isspace(*p)) {
-            EastlStringPushBack(out, '+');
+            str->FUN_005306C0('+');
         } else if (isalnum(*p)) {
-            EastlStringPushBack(out, (char)*p);
+            str->FUN_005306C0((char)*p);
         } else {
             char buf[8];
             sprintf(buf, "%%%2X", *p);
             const char* q = buf;
             while (*q)
                 q++;
-            EastlStringAppend(out, buf, q);
+            str->FUN_00455D60(buf, q);
         }
     }
 }
@@ -424,6 +430,7 @@ struct HTTPClient {
     bool FindHeader(char* name, void* out, int index);
     bool FindHeaderByField(int field, void* out, int index);
     void SetNotificationTarget(void* target, void* ctx);
+    int  SendCallback(const char* data, int len);
     void Pump(int* stream);
 };
 
@@ -440,17 +447,20 @@ bool HTTPClient::AllocBuffer() {
 }
 
 // @ 0x00941F90
-extern "C" int   FUN_0094BAA0();      // 0x0094BAA0
 extern "C" void* FUN_0094F0D0();      // 0x0094F0D0
 extern "C" void* FUN_0094CD40();      // 0x0094CD40
-extern "C" void* SSLManager_CreateStreamSocket(void*);   // 0x0094F030
 
-bool HTTPClientAllocateSocket(int unused, void** out) {
+struct SockMgr {
+    int   __thiscall FUN_0094BAA0();  // 0x0094BAA0 (this = caller's first dword)
+    void* __thiscall FUN_0094F030();  // 0x0094F030 SSLManager::CreateStreamSocket
+};
+
+bool __stdcall HTTPClientAllocateSocket(int obj, void** out) {
     *out = 0;
-    if (FUN_0094BAA0() == 3) {
+    if (((SockMgr*)obj)->FUN_0094BAA0() == 3) {
         void* mgr = FUN_0094F0D0();
         if (mgr != 0) {
-            void* sock = SSLManager_CreateStreamSocket(mgr);
+            void* sock = ((SockMgr*)mgr)->FUN_0094F030();
             if (sock != 0) {
                 void* r = (*(void*(__thiscall**)(void*))((char*)*(void**)sock + 4))(sock);
                 *out = r;
@@ -473,9 +483,9 @@ bool HTTPClientAllocateSocket(int unused, void** out) {
 }
 
 // @ 0x00942010
-bool HTTPClientCheckTimeout(int self, int* timeout) {
+bool __stdcall HTTPClientCheckTimeout(int self, int* timeout) {
     if (*(int*)(self + 0xc) > 0) {
-        __int64 now = _time64(0);
+        __int64 now = GetTime64();
         if (*(int*)(self + 0xc) < (int)now)
             return true;
         if (*timeout > 0) {
@@ -511,7 +521,8 @@ bool HTTPClient::FindHeaderByField(int field, void* out, int index) {
 }
 
 // @ 0x00942110
-void HTTPClientSendCallback(int self, const char* data, int len) {
+int HTTPClient::SendCallback(const char* data, int len) {
+    int self = (int)this;
     if (len == -1) {
         const char* p = data;
         do {
@@ -519,9 +530,12 @@ void HTTPClientSendCallback(int self, const char* data, int len) {
         len = (int)(p - (data + 1));
     }
     if (*(int*)(self + 0x30) > 0) {
-        (*(void(__thiscall**)(void*, const char*, int))((char*)*(void**)(self + 0x58) + 0x38))(
-            *(void**)(self + 0x58), data, len);
+        void* obj = *(void**)(self + 0x58);
+        void** vtbl = *(void***)obj;
+        volatile int cb = ((int(__thiscall*)(void*, const char*, int))vtbl[0x38 / 4])(obj, data, len);
+        return cb;
     }
+    return len;
 }
 
 // @ 0x00942150
