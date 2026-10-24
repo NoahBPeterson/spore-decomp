@@ -1,1 +1,6 @@
-00e1bbc0 SP::cUIMissionButton::SetTracked  # header name; pdb_names.json has callee-scored SetTracked; pdb_candidates.json caller-scored SP::cSPUIMissions::InitForCreature conflicts (unresolved)
+00e1bbc0 ?SetTracked@cUIMissionButton@SP@@QAEXXZ  # nonmatching (pre-existing) - rebuilds the mission button, flags it as tracked through the layout window and its item window
+00e1ca30 ?Shutdown@cUIMissionButton@SP@@QAEXXZ  # nonmatching (11) - remove the message handler, shut down the feed list/categories/scroll frame and the 0x58-0x68 objects, hand the layout handler back, then ShutdownCard
+00e1cb80 ?FUN_00e1cb80@SP@@YAXPAX00@Z  # nonmatching (20) - three-argument forwarder to FUN_00e1c8b0 (cl15 tail-calls, retail does not)
+00e1cba0 ?Destroy@cUIMissionButton@SP@@QAEXXZ  # MATCH - restore the four vtables, run Shutdown, repeat the handler removal, release the remaining sub-objects, destroy the star vector, DestroyMembers
+00e1cc80 ?CreateMissionButton@cUIMissionButton@SP@@QAEXPAX000@Z  # nonmatching (294) - rebuild the feed list, its two categories, the scroll frame with its content window and the notify window, then re-register the five messages
+00e1cfb0 ?ShutdownList@cUIMissionButton@SP@@QAEXXZ  # MATCH - empty the feed list, shut the categories down, clear the star vector, SetTracked, update the UI hint flags, ShutdownA
