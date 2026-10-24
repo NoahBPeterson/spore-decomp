@@ -307,3 +307,225 @@ bool cParticlesEffect::ApplyForceMap(cParticle* particle, float dt)
 }
 
 }} // namespace EA::Swarm
+
+// ===========================================================================
+// 00f59370 / 00f59e40 -- particle force-map transform step and evaluation
+// ===========================================================================
+namespace EA { namespace Swarm {
+
+// 0x38-byte transform with the out-of-line assignment helper 0x00537dc0.
+struct cSPTransformOps : cTransform
+{
+    cSPTransformOps* Assign(const void* src);       // 0x00537dc0
+};
+
+// Object 8 bytes before the evaluation object (00f59370's `this`), used by 0x00f58b70.
+struct cParticlesOwner
+{
+    void Release(void* block);                      // 0x00f58b70
+};
+
+// 00f59370's view of the effect (its `this` is the evaluation object + 8).
+struct cParticlesForceStep
+{
+    char           mPad00[0xa0];                    // +0x00 .. +0x9f
+    float          mAccA0X;                         // +0xa0
+    float          mAccA0Y;                         // +0xa4
+    float          mAccA0Z;                         // +0xa8
+    float          mAccAcX;                         // +0xac
+    float          mAccAcY;                         // +0xb0
+    float          mAccAcZ;                         // +0xb4
+    Vector3        mVelocity;                       // +0xbc
+    cSPTransformOps mXformA;                        // +0xc8
+    cSPTransformOps mXformB;                        // +0x100
+    char           mPad138[0x1e0 - 0x138];          // +0x138 .. +0x1df
+    void*          mPtr1e0;                         // +0x1e0
+    char           mPad1e4[0x1f8 - 0x1e4];          // +0x1e4 .. +0x1f7
+    uint8_t        mFlag1f8;                        // +0x1f8
+
+    void Step(const void* srcA, const void* srcB);  // 0x00f59370
+};
+
+extern "C" const float g_noDirection;               // 0x015b0c34
+
+// @ 0x00f59370
+void cParticlesForceStep::Step(const void* srcA, const void* srcB)
+{
+    mXformA.Assign(srcA);
+    mXformB.Assign(srcB);
+    if (mPtr1e0)
+        ((cParticlesOwner*)((char*)this - 8))->Release(mPtr1e0);
+    mFlag1f8 = 0;
+
+    Vector3 prev = mVelocity;
+    mVelocity = mXformA.mTranslation;
+
+    if (mXformB.mFlags & 2)
+    {
+        float x = mVelocity.x;
+        float y = mVelocity.y;
+        float z = mVelocity.z;
+        const float (&R)[3][3] = mXformB.mRotation;
+        mVelocity.x = (R[1][0] * y + R[2][0] * z) + R[0][0] * x;
+        mVelocity.y = (R[0][1] * x + R[1][1] * y) + R[2][1] * z;
+        mVelocity.z = (R[0][2] * x + R[1][2] * y) + R[2][2] * z;
+    }
+
+    float s = mXformB.mScale;
+    mVelocity.z = mVelocity.z * s;
+    mVelocity.y = s * mVelocity.y;
+    mVelocity.x = s * mVelocity.x;
+    mVelocity.x = mXformB.mTranslation.x + mVelocity.x;
+    mVelocity.y = mXformB.mTranslation.y + mVelocity.y;
+    mVelocity.z = mXformB.mTranslation.z + mVelocity.z;
+
+    float noDir = g_noDirection;
+    if (mAccA0X == noDir)
+        return;
+    float dx = mVelocity.x - prev.x;
+    float dy = mVelocity.y - prev.y;
+    float dz = mVelocity.z - prev.z;
+    if (mAccA0X == noDir || mAccA0X == -noDir)
+        return;
+    mAccA0X = mAccA0X + dx;
+    mAccA0Y = dy + mAccA0Y;
+    mAccA0Z = dz + mAccA0Z;
+    mAccAcX = mAccAcX + dx;
+    mAccAcY = dy + mAccAcY;
+    mAccAcZ = dz + mAccAcZ;
+}
+
+// Two-component float range of the random height offset.
+struct Vector2
+{
+    float x, y;
+};
+
+extern "C" float __cdecl RandomInRange(const Vector2& range);     // 0x004df2d0
+
+// 00f59e40's view of the effect.
+struct cParticlesForceEval
+{
+    char                 mPad00[0x24];              // +0x00 .. +0x23
+    cParticlesDescription* mDesc;                   // +0x24
+    char                 mPad28[0xd0 - 0x28];       // +0x28 .. +0xcf
+    cSPTransformOps      mXformA;                   // +0xd0
+    cSPTransformOps      mXformB;                   // +0x108
+    char                 mPad140[0x18c - 0x140];    // +0x140 .. +0x18b
+    float                mMinHeight;                // +0x18c
+    float                mMaxHeight;                // +0x190
+    char                 mPad194[0x1bc - 0x194];    // +0x194 .. +0x1bb
+    IEffectMap*          mForceMap;                 // +0x1bc
+    char                 mPad1c0[0x1c5 - 0x1c0];    // +0x1c0 .. +0x1c4
+    bool                 mForceMapInWorldSpace;     // +0x1c5
+    char                 mPad1c6[0x1d0 - 0x1c6];    // +0x1c6 .. +0x1cf
+    float                mRangeMin;                 // +0x1d0
+    char                 mPad1d4[0x1dc - 0x1d4];    // +0x1d4 .. +0x1db
+    float                mRangeMax;                 // +0x1dc
+
+    bool Evaluate(cParticle* particle);             // 0x00f59e40
+};
+
+// @ 0x00f59e40
+bool cParticlesForceEval::Evaluate(cParticle* particle)
+{
+    Vector3 p(particle->mPosition.x, particle->mPosition.y, particle->mPosition.z);
+
+    if (mForceMapInWorldSpace)
+    {
+        if (mXformA.mFlags & 2)
+        {
+            float x = p.x;
+            float y = p.y;
+            float z = p.z;
+            const float (&R)[3][3] = mXformA.mRotation;
+            p.x = (R[1][0] * y + R[2][0] * z) + R[0][0] * x;
+            p.y = (R[0][1] * x + R[1][1] * y) + R[2][1] * z;
+            p.z = (R[0][2] * x + R[1][2] * y) + R[2][2] * z;
+        }
+        float s = mXformA.mScale;
+        Vector3 q(mXformA.mTranslation.x + s * p.x,
+                  mXformA.mTranslation.y + s * p.y,
+                  mXformA.mTranslation.z + s * p.z);
+        if (mXformB.mFlags & 2)
+        {
+            float x = q.x;
+            float y = q.y;
+            float z = q.z;
+            const float (&R)[3][3] = mXformB.mRotation;
+            q.x = (R[1][0] * y + R[2][0] * z) + R[0][0] * x;
+            q.y = (R[0][1] * x + R[1][1] * y) + R[2][1] * z;
+            q.z = (R[0][2] * x + R[1][2] * y) + R[2][2] * z;
+        }
+        float s2 = mXformB.mScale;
+        p.x = mXformB.mTranslation.x + s2 * q.x;
+        p.y = mXformB.mTranslation.y + s2 * q.y;
+        p.z = mXformB.mTranslation.z + s2 * q.z;
+    }
+
+    if (!mForceMap || !mForceMap->PointInMap(p))
+        return false;
+
+    float h = mForceMap->Height(p);
+    p.z = h;
+    uint32_t flags = mDesc->mFlags;
+    if ((flags >> 6) & 1)
+    {
+        if (mMinHeight > h)
+            return false;
+        if (h > mMaxHeight)
+            return false;
+    }
+    else if ((flags >> 7) & 1)
+    {
+        if (!(h > SP::sMathRandom.RandomDoubleUniform()))
+            return false;
+    }
+    if ((mDesc->mFlags >> 5) & 1)
+    {
+        Vector2 range;
+        range.x = mRangeMin;
+        range.y = mRangeMax;
+        p.z = h + RandomInRange(range);
+    }
+    if (mForceMapInWorldSpace)
+    {
+        mXformB.InverseTransformPoint(&p);
+        mXformA.InverseTransformPoint(&p);
+    }
+    particle->mPosition.x = p.x;
+    particle->mPosition.y = p.y;
+    particle->mPosition.z = p.z;
+    return true;
+}
+
+}} // namespace EA::Swarm
+
+// ===========================================================================
+// 00f5a1c0 -- EA::Allocator fixed-allocator free-list pop
+// ===========================================================================
+namespace EA { namespace Allocator {
+struct FixedAllocatorBase
+{
+    bool AddCore(void* block, unsigned count);      // 0x00926650
+};
+}}
+
+extern "C" void** g_pAllocFreeList;                                 // 0x016c9478
+extern "C" EA::Allocator::FixedAllocatorBase g_allocatorCore;       // 0x016c9468
+
+// @ 0x00f5a1c0
+void** __cdecl FUN_00f5a1c0()
+{
+    void** node = g_pAllocFreeList;
+    while (node == 0)
+    {
+        if (!g_allocatorCore.AddCore(0, 0))
+            return 0;
+        node = g_pAllocFreeList;
+    }
+    g_pAllocFreeList = (void**)*node;
+    node[1] = 0;
+    node[0] = 0;
+    return node;
+}

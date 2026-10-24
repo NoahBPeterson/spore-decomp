@@ -1,1 +1,4 @@
-00f595e0 EA::Swarm::cParticlesEffect::ApplyForceMap  # moves a particle through mForceMap (+0x1b8, world-space flag +0x1c4, scale mCurrentMapForceScale +0x1a4) with velocity/repulse/bounce modes; Claude-coined name
+00f59370 ?Step@cParticlesForceStep@Swarm@EA@@QAEXPBX0@Z  # nonmatching (631) - particle force-map transform step (name guessed: no symbol)
+00f595e0 ?ApplyForceMap@cParticlesEffect@Swarm@EA@@QAE_NPAUcParticle@23@M@Z  # nonmatching (1901) - force-map step over one particle (pre-existing committed body, kept)
+00f59e40 ?Evaluate@cParticlesForceEval@Swarm@EA@@QAE_NPAUcParticle@23@@Z  # nonmatching (773) - force-map evaluation with death gates and height jitter (name guessed)
+00f5a1c0 ?FUN_00f5a1c0@@YAPAPAXXZ  # nonmatching (55) - EA::Allocator fixed-allocator free-list pop (AddCore 0x926650)
