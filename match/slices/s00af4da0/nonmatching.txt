@@ -1,0 +1,4 @@
+00af4da0 59 diff | SPShape::InitDefault; scheduler artifact only: `mov esi`/`xor eax,eax` placement plus per-component lo/hi store-temp/load-temp interleave. | equiv PASS (400 valid, 100.0%)
+00af4ea0 10 diff | pure 2-instruction reorder: `mov ecx,[eax+0x10]` and `mov esi,[esp+0x28]` swapped. | equiv PASS (382 valid, 100.0%)
+00af5060 840 diff | scheduling/register allocation only (size 844 vs 922); semantics verified against Ghidra (SegmentBoxIntersect gets boxF; 4ea0 gets box+boxF). | equiv PASS (285 valid, 100.0%)
+00af5400 1749 diff | large function; scheduler + x87/SSE mix differs (size 1912 vs 1850). Original leaves `local_30` uninitialized on the `fVar6 >= local_70` path and reads it back, so the returned contact/halfExt observe caller stack garbage; our stack garbage differs (orig 0 vs ours -NaN). | equiv FAIL (5/12 mismatch: mem pool @40020050 orig 00000000 / ours ffc00000, contact 0xbc-0xc4 orig ff800000 / ours ffc00000)
