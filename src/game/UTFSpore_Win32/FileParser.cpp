@@ -160,20 +160,20 @@ unsigned char __fastcall FileParser_HandleMessage(int* self, int, int msg, int)
 }
 
 // @ 0x0083f630
-int __fastcall FileParser_Init(int* self)
+bool __fastcall FileParser_Init(int* self)
 {
     if (*((unsigned char*)self + 0xc) == 0) {
         *((unsigned char*)self + 0xc) = 1;
         int* server = (int*)Messaging_GetServer();
         if (server)
             ((void(__thiscall*)(int*, int*, int))(*(void***)server)[8])(server, self + 1, 0x6f41f272);
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 // @ 0x0083f680
-int __fastcall FileParser_Shutdown(int* self)
+bool __fastcall FileParser_Shutdown(int* self)
 {
     if (*((unsigned char*)self + 0xc)) {
         *((unsigned char*)self + 0xc) = 0;
@@ -188,10 +188,10 @@ int __fastcall FileParser_Shutdown(int* self)
                 ((void(__thiscall*)(int*))(*(void***)p)[1])(p);
             }
         }
-        ((void(__thiscall*)(int*))(*(void***)self[0])[6])(self);
-        return 1;
+        ((void(__thiscall*)(int*))(*(void***)self)[6])(self);
+        return true;
     }
-    return 0;
+    return false;
 }
 
 // @ 0x0083f6f0
@@ -199,18 +199,18 @@ void __fastcall FileParser_SetParser(int* self, int, cIParser* p)
 {
     cIParser* old = (cIParser*)self[4];
     if (old)
-        ((void(__thiscall*)(cIParser*))(*(void***)old->vftable)[3])(old);
+        ((void(__thiscall*)(cIParser*))(*(void***)old)[3])(old);
     old = (cIParser*)self[4];
     if (p != old) {
         if (p)
-            ((void(__thiscall*)(cIParser*))(*(void***)p->vftable)[0])(p);
+            ((void(__thiscall*)(cIParser*))(*(void***)p)[0])(p);
         self[4] = (int)p;
         if (old)
-            ((void(__thiscall*)(cIParser*))(*(void***)old->vftable)[1])(old);
+            ((void(__thiscall*)(cIParser*))(*(void***)old)[1])(old);
     }
     old = (cIParser*)self[4];
     if (old)
-        ((void(__thiscall*)(cIParser*))(*(void***)old->vftable)[2])(old);
+        ((void(__thiscall*)(cIParser*))(*(void***)old)[2])(old);
 }
 
 // @ 0x0083f740
