@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f53590  936  cCloudDescription::cCloudDescription default ctor complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast): initialises all 0x268 bytes (scalars, blobs, six vector push_backs, 3-word data constants); 1448 vs 1450 bytes; residual difference is instruction scheduling/address-coalescing order plus one SSE-vs-integer Vec3 fast-path copy; equiv WEAK (160/400 valid, 84.8% coverage, no mismatches on the valid inputs)
