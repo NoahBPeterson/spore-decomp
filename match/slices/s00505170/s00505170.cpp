@@ -2,20 +2,20 @@
 //   0x505170  ray-triangle intersection (Moeller-Trumbore), outputs t/u/v, cull flag
 //   0x5056d0  squared distance from a point to an axis-aligned box (per-axis clamp)
 //
-// Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE (scalar movss/comiss; x87 only for the float
-// return of the distance helper).
+// Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast (scalar movss/comiss; /fp:fast is required
+// for the SSE codegen in an /Od build. x87 only for the float return of the distance helper).
 
 typedef unsigned int uint32_t;
 
 // ---------------------------------------------------------------------------
 // @ 0x00505170
-// int __cdecl RayTri(const float* orig, const float* dir, const float* v0,
-//                    const float* v1, const float* v2, float* t, float* u,
-//                    float* v, char cull)
+// bool __cdecl RayTri(const float* orig, const float* dir, const float* v0,
+//                     const float* v1, const float* v2, float* t, float* u,
+//                     float* v, char cull)
 // ---------------------------------------------------------------------------
-int __cdecl RayTri(const float* orig, const float* dir, const float* v0,
-                   const float* v1, const float* v2, float* t, float* u,
-                   float* v, char cull)
+bool __cdecl RayTri(const float* orig, const float* dir, const float* v0,
+                    const float* v1, const float* v2, float* t, float* u,
+                    float* v, char cull)
 {
     const float e1x = v1[0] - v0[0];
     const float e1y = v1[1] - v0[1];
@@ -29,11 +29,34 @@ int __cdecl RayTri(const float* orig, const float* dir, const float* v0,
     const float pz = dir[0] * e2y - dir[1] * e2x;
 
     float det = (e1x * px + e1y * py) + e1z * pz;
+
+    // The original's `comiss` guards send a NaN determinant (e.g. inf-inf from huge
+    // direction/edge products) down the miss path; /fp:fast would otherwise invert those
+    // comparisons, so test the exponent/mantissa directly.
+    union DetBits { float f; unsigned int u; };
+    DetBits db;
+    db.f = det;
+    if ((db.u & 0x7fffffffu) > 0x7f800000u)
+        return 0;
+
     const float inv = 1.0f / det;
 
     float tx, ty, tz, qx, qy, qz;
 
-    if (det <= 1e-06f) {
+    if (det > 1e-06f) {
+        tx = orig[0] - v0[0];
+        ty = orig[1] - v0[1];
+        tz = orig[2] - v0[2];
+        *u = (tx * px + ty * py) + tz * pz;
+        if ((*u <= 0.0f && *u != 0.0f) || det < *u)
+            return 0;
+        qx = ty * e1z - tz * e1y;
+        qy = tz * e1x - tx * e1z;
+        qz = tx * e1y - ty * e1x;
+        *v = (dir[0] * qx + dir[1] * qy) + dir[2] * qz;
+        if ((*v <= 0.0f && *v != 0.0f) || det < *u + *v)
+            return 0;
+    } else {
         if (cull != 0 || -1e-06f <= det)
             return 0;
         tx = orig[0] - v0[0];
@@ -47,19 +70,6 @@ int __cdecl RayTri(const float* orig, const float* dir, const float* v0,
         qz = tx * e1y - ty * e1x;
         *v = (dir[0] * qx + dir[1] * qy) + dir[2] * qz;
         if (0.0f < *v || *u + *v < det)
-            return 0;
-    } else {
-        tx = orig[0] - v0[0];
-        ty = orig[1] - v0[1];
-        tz = orig[2] - v0[2];
-        *u = (tx * px + ty * py) + tz * pz;
-        if ((*u <= 0.0f && *u != 0.0f) || det < *u)
-            return 0;
-        qx = ty * e1z - tz * e1y;
-        qy = tz * e1x - tx * e1z;
-        qz = tx * e1y - ty * e1x;
-        *v = (dir[0] * qx + dir[1] * qy) + dir[2] * qz;
-        if ((*v <= 0.0f && *v != 0.0f) || det < *u + *v)
             return 0;
     }
 
