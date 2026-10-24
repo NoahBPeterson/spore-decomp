@@ -1,0 +1,5 @@
+# Creature animation / tool-effect helpers (names inferred where there is no PDB candidate).
+00c24e80  cCreatureBase_SpawnScaledEffect  # sub-object accept vcall then SpawnEffect(0,0x10000,0,0x10000,scale,...) with scale clamped to [3,5]
+00c24f40  cSPCreatureSPCitizen_SetCurrentToolEffect  # tool-id -> effect crc + distance switch (jump table), GetLeader test, then FUN_00c23f80 spawn
+00c25480  SP::CONJURE_FOOD_Activate  # PDB candidate (caller-scored); TestFlag/WaitForAnimEventOrEnd/SetToolEffect routing
+00c25530  SP::TRIBE_SAVE_BUNDLE_Tick  # PDB candidate (caller-scored); animation-state routing + bundle spawn/detach tails
