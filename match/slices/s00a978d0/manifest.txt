@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a978d0/s00a978d0.cpp  ?FUN_00a97f10@@YAXXZ  00a97f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a978d0/s00a978d0.cpp  ?Destroy@EffectObjA@@QAEPAXD@Z  00a97f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a978d0/s00a978d0.cpp  ?FUN_00a97f90@@YAXPAXHPAUSwarmDesc@@@Z  00a97f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a978d0/s00a978d0.cpp  ?SetUnknownParam@cGameEffect@Swarm@EA@@QAEDHPAUIUnknown32@23@@Z  00a98030  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a978d0/s00a978d0.cpp  ?ApplyEffect@cGameEffect@Swarm@EA@@QAEXMHH@Z  00a98050  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a978d0/s00a978d0.cpp  ?Init@cGameEffect@Swarm@EA@@QAEXHHPAX@Z  00a98090  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a978d0/s00a978d0.cpp  ?SetTransform@cGameEffect@Swarm@EA@@QAEXPAXPBUcSPTransform@@@Z  00a98400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a978d0/s00a978d0.cpp  ?FUN_00a984f0@@YAXXZ  00a984f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a978d0/s00a978d0.cpp  ?Destroy@EffectObjB@@QAEXXZ  00a98520  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a978d0/s00a978d0.cpp  ?FUN_00a985c0@@YAXPAXPAUEffectObjB2@@@Z  00a985c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
