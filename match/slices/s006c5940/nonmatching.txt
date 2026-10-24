@@ -1,4 +1,4 @@
-006c5940  785  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006c5c60  839  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006c5fb0  853  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006c6310  799  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
+006c5940  728  complete source via shared BakeCore (XF_OFFSET/CF_USHORT2); equivalence PASS, byte diff is cl15 codegen: original has an /GS EH prologue and SSE-scalar float path, cl15 emits x87 copies for the v/dir/s/outA/outB stack arrays and lays the s[4]/col[4] locals out differently
+006c5c60  776  complete source via shared BakeCore (XF_OFFSET/CF_USHORT4); equivalence PASS, byte diff is cl15 codegen (EH prologue, x87 vs SSE-scalar float path, stack-array layout)
+006c5fb0  796  complete source via shared BakeCore (XF_WEIGHT2/CF_BYTE4); equivalence PASS, byte diff is cl15 codegen (EH prologue, x87 vs SSE-scalar float path, stack-array layout)
+006c6310  739  complete source via shared BakeCore (XF_WEIGHT2/CF_USHORT2); equivalence PASS, byte diff is cl15 codegen (EH prologue, x87 vs SSE-scalar float path, stack-array layout)

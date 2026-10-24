@@ -6,47 +6,81 @@
 #pragma once
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
+
+// cl15 does not inline sqrt here (the original ends the root in x87 fsqrt);
+// sqrtss keeps the same single-precision result without a _CIsqrt import call.
+static inline float BakeSqrt(float x)
+{
+  return _mm_cvtss_f32(_mm_sqrt_ss(_mm_set_ss(x)));
+}
+
+extern "C" double __cdecl acos(double);
 
 struct RefCounted {
   virtual void AddRef();
   virtual void Release();
 };
 
-// Base address at +4, u16 element stride at +0xa.
+// 16-byte arena-block descriptor: base address at +4, u16 element stride at
+// +0xa, ref-counted payload at +0xc.  The destructor releases the payload, which
+// is why each wrapper carries the retail EH frame (the compiler must unwind the
+// two live locals on an exception).
 struct BakeRange {
-  char pad0[4];
-  int base;         // +4
-  char pad1[2];
-  uint16_t stride;  // +0xa
+  int unk0;          // +0
+  int base;          // +4
+  uint16_t unk8;     // +8
+  uint16_t stride;   // +0xa
+  RefCounted* rc;    // +0xc
+  ~BakeRange() { if (rc) rc->Release(); }
 };
 
-// Block-matrix transforms (defined in slices s006c2cd0 / s006c3b90).
-void FUN_006c3550(float* outA, float* outB, const float* base, const float* dir,
-                  const float* s, const int* idx, int layout); // point transform
-void FUN_006c3780(float* outA, float* outB, const float* base, const float* dir,
-                  const float* s, const int* idx, int layout); // offset transform
-void FUN_006c3b90(float* outA, float* outB, const float* base, const float* dir,
-                  const float* s, const int* idx, int layout); // weighted x2
-void FUN_006c4200(float* outA, float* outB, const float* base, const float* dir,
-                  const float* s, const int* idx, int layout); // weighted x3
+// Handle_Assign (0x00424f70): __thiscall, dst in ecx, src on the stack. Named by
+// its address so the resolver binds it (the member spelling mangles to a free
+// ?Handle_Assign@@YAXH@Z that resolve.py cannot map).
+void FUN_00424f70(void* src);   // Handle_Assign
 
-void Handle_Assign(int blockInfo); // 0x00424f70
+// Block-matrix transforms (defined in slices s006c2cd0 / s006c3b90).
+// All four leave the outA pointer in eax, i.e. they return it, so the declaration
+// has to say float* as well (a void declaration mangles differently and the
+// harness then cannot resolve the call).
+float* FUN_006c3550(float* outA, float* outB, const float* base, const float* dir,
+                    const float* s, const int* idx, int layout); // 0x006c3550 point transform
+float* FUN_006c3780(float* outA, float* outB, const float* base, const float* dir,
+                    const float* s, const int* idx, int layout); // 0x006c3780 offset transform
+float* FUN_006c3b90(float* outA, float* outB, const float* base, const float* dir,
+                    const float* s, const int* idx, int layout); // 0x006c3b90 weighted x2
+float* FUN_006c4200(float* outA, float* outB, const float* base, const float* dir,
+                    const float* s, const int* idx, int layout); // 0x006c4200 weighted x3
 
 enum BakeXForm { XF_POINT, XF_OFFSET, XF_WEIGHT2, XF_WEIGHT3 };
 enum BakeColor { CF_BYTE4, CF_USHORT4, CF_USHORT2 };
 
-static void BakeCore(float* out, int count, int res, const int* data, int vtx,
+static __forceinline void BakeCore(float* out, int count, int res, const int* data, int vtx,
                      const float* scalePair, const char* params, int blockIdx, int assignIdx,
                      int layout, BakeXForm xf, BakeColor cf) {
   char* e = (char*)(*(int*)(res + 8) + blockIdx * 0x20 + 0x10);
-  int blockBase = *(int*)(e + 4);
-  RefCounted* rc = *(RefCounted**)(e + 0xc);
-  uint16_t blockStride = *(uint16_t*)(e + 0xa);
-  if (rc) rc->AddRef();
-  if (assignIdx >= 0) Handle_Assign(*(int*)(res + 8) + assignIdx * 0x20 + 0x10);
+
+  // Bake block (colours): copied out of the block table and AddRef'd.
+  BakeRange blk;
+  blk.unk0 = *(int*)(e + 0);
+  blk.base = *(int*)(e + 4);
+  blk.unk8 = *(uint16_t*)(e + 8);
+  blk.stride = *(uint16_t*)(e + 0xa);
+  blk.rc = *(RefCounted**)(e + 0xc);
+  if (blk.rc) blk.rc->AddRef();
+
+  // Companion "assign" block (the s vector): a zeroed range is assigned from
+  // the block at assignIdx.
+  BakeRange asg = {0, 0, 0, 0, 0};
+  if (assignIdx >= 0) {
+    const BakeRange* ai =
+        (const BakeRange*)(*(int*)(res + 8) + assignIdx * 0x20 + 0x10);
+    ((void(__thiscall*)(void*, const void*))FUN_00424f70)(&asg, ai);
+  }
 
   for (int i = 0; i < count; ++i) {
-    const unsigned char* cb = (const unsigned char*)(blockBase + blockStride * data[3]);
+    const unsigned char* cb = (const unsigned char*)(blk.base + blk.stride * data[3]);
     int col[4];
     if (cf == CF_BYTE4) {
       col[0] = cb[0] / 3; col[1] = cb[1] / 3; col[2] = cb[2] / 3; col[3] = cb[3] / 3;
@@ -60,25 +94,55 @@ static void BakeCore(float* out, int count, int res, const int* data, int vtx,
 
     const float* q = (const float*)(*(int*)(vtx + 4) + (uint32_t)*(uint16_t*)(vtx + 0xa) * data[0]);
     float v[3] = {q[0], q[1], q[2]};
-    float matA[4] = {1.0f, 0.0f, 0.0f, 0.0f};
-    float matB[4] = {1.0f, 0.0f, 0.0f, 0.0f};
+    // Transform-specific offset vector: point transforms use a constant, the
+    // others take 2 (offset), 3 (weighted x2) or 4 (weighted x3) floats from the
+    // assigned companion block.
+    float s[4] = {1.0f, 0.0f, 0.0f, 0.0f};
+    if (xf != XF_POINT) {
+      const float* bp = (const float*)(asg.base + asg.stride * data[2]);
+      s[0] = bp[0];
+      s[1] = bp[1];
+      if (xf == XF_WEIGHT2 || xf == XF_WEIGHT3) {
+        s[2] = bp[2];
+        if (xf == XF_WEIGHT3) s[3] = bp[3];
+      }
+    }
+    float dir[3] = {1.0f, 0.0f, 0.0f};
     float outA[3], outB[3];
     switch (xf) {
-      case XF_POINT:   FUN_006c3550(outA, outB, v, matB, matA, col, layout); break;
-      case XF_OFFSET:  FUN_006c3780(outA, outB, v, matB, matA, col, layout); break;
-      case XF_WEIGHT2: FUN_006c3b90(outA, outB, v, matB, matA, col, layout); break;
-      case XF_WEIGHT3: FUN_006c4200(outA, outB, v, matB, matA, col, layout); break;
+      case XF_POINT:   FUN_006c3550(outA, outB, v, dir, s, col, layout); break;
+      case XF_OFFSET:  FUN_006c3780(outA, outB, v, dir, s, col, layout); break;
+      case XF_WEIGHT2: FUN_006c3b90(outA, outB, v, dir, s, col, layout); break;
+      case XF_WEIGHT3: FUN_006c4200(outA, outB, v, dir, s, col, layout); break;
     }
 
-    float dy = outA[1] - *(const float*)(params + 8);
-    float dz = outA[2] - *(const float*)(params + 0xc);
-    float ang = acosf(dy / sqrtf(dy * dy + dz * dz));
+    // Each block transform leaves its result vector in its own component order:
+    // point writes (dy, dz, cos), offset/weighted-x2 write (cos, dy, dz) and
+    // weighted-x3 writes (dz, cos, dy).  The offsets below pick the helper's
+    // (1-cos, dy, dz) sources out of that order.
+    int cosIdx = 0, dyIdx = 1, dzIdx = 2;
+    if (xf == XF_POINT) {
+      cosIdx = 2; dyIdx = 0; dzIdx = 1;
+    } else if (xf == XF_WEIGHT3) {
+      cosIdx = 1; dyIdx = 2; dzIdx = 0;
+    }
+    float cosSrc = outA[cosIdx];
+    float dy = outA[dyIdx] - scalePair[2];
+    float dz = outA[dzIdx] - scalePair[3];
+    float len2 = dy * dy + dz * dz;
+    float ratio = dy / BakeSqrt(len2);
+    float ang = (float)acos((double)ratio);
     float k = *(const float*)(params + 0x10);
-    out[0] = scalePair[0] * ang * 1.2732406f * k;
-    out[1] = (1.0f - scalePair[1] * outA[0]) * k;
+    __m128 o0 = _mm_mul_ss(_mm_load_ss(&scalePair[0]), _mm_set_ss(ang));
+    o0 = _mm_mul_ss(o0, _mm_set_ss(1.2732406f));
+    o0 = _mm_mul_ss(o0, _mm_set_ss(k));
+    _mm_store_ss(&out[0], o0);
+    __m128 o1 = _mm_mul_ss(_mm_load_ss(&scalePair[1]), _mm_load_ss(&cosSrc));
+    o1 = _mm_sub_ss(_mm_set_ss(1.0f), o1);
+    o1 = _mm_mul_ss(o1, _mm_set_ss(k));
+    _mm_store_ss(&out[1], o1);
 
     data += 6;
     out += 2;
   }
-  if (rc) rc->Release();
 }
