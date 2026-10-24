@@ -1,0 +1,6 @@
+slices/s00d48010/s00d48010.cpp  ??0cCreatureTokenTranslator@@QAE@XZ  00d486f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d48010/s00d48010.cpp  ?InitButtonTable@@YAXXZ  00d48a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d48010/s00d48010.cpp  ?FreeButtonTable@@YAXXZ  00d48ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d48010/s00d48010.cpp  ?SelectAbility@@YAXH@Z  00d48b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d48010/s00d48010.cpp  ?GetCreatureGUIWindow@@YAPAXI@Z  00d48b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d48010/s00d48010.cpp  ?sGetButtonCategoryFromButtonID@@YA_NIPAH0@Z  00d48bc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

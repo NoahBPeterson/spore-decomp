@@ -1,0 +1,2 @@
+010a70e0 1361 complete; equivalence FAIL 5/22 valid only on the call trace: retail's `call [reg+off]` leaves the cold fake-target vtable page unread when the site hook samples it, while VC9's `mov reg,[reg+off]; call reg` warms the page first and records the call; args, edx/ecx, esp and callee-saved state match
+010a76d0 65 complete; equivalence PASS 400/400 (100% coverage); 73 vs 75 bytes: MSVC folds retail's `mov ebp,[ecx+0x24]; sub edi,ebp` into `sub ebp,[ecx+0x24]`

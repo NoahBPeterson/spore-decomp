@@ -1,1 +1,2 @@
-00a9ce00 EA::Swarm::cParticlesEffect::BuildParticleTransform  # Claude-coined: per-particle model transform (align-to-velocity, orientation quaternion, 3 rotation curves, wiggle, offset); caller is StreamModelParticles 0xa9f170
+00a9ce00 ?BuildParticleTransform@cParticlesEffect@@QAEXPAUcParticle@@MMPAUVector3@@PAUcSPTransform@@@Z  # per-particle model transform (pre-existing row; nonmatching)
+00a9d640 ?FUN_00a9d640@ParticleEmitter@@QAE_NPAUcParticle@@M@Z  # particle integration step: path/velocity, sub-curves, quaternion, attractor, collision, spin (nonmatching)

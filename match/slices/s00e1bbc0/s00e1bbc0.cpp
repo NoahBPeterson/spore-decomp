@@ -33,10 +33,204 @@
 // Fixed-address helpers.
 #define FIND_WIN(L, ID) (((void*(__thiscall*)(void*, unsigned, int))(0x8105b0))((L), (ID), 1))
 
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+
 namespace SP {
 
-class cUIMissionButton { public:
+struct float4 { float x, y, z, w; };
+
+// ---- engine UI interfaces (only the vtable slots and methods this slice calls) ----
+
+class cSPUILayout;
+class cSPUIFeedList;
+class cSPUIFeedCategory;
+class cScrollFrameVertical;
+class IWinWindow;
+class IMessageServer;
+
+class IRefObj {                                     // intrusive ref count in slots 0 / 4
+public:
+    virtual void AddRef();                          // +0x00
+    virtual void Release();                         // +0x04
+};
+
+class IRefObjB {                                    // intrusive ref count in slots 8 / 0xc
+public:
+    PV2
+    virtual void AddRef();                          // +0x08
+    virtual void Release();                         // +0x0c
+};
+
+class IObj5c {                                      // second release path in slot 8
+public:
+    PV2
+    virtual void ReleaseB();                        // +0x08
+};
+
+class IObj60 : public IObj5c {
+public:
+    void Stop();                                    // 0x00e2ed40
+};
+
+class IObj64 {                                      // slot 8 + a ref-counted member at +0x10
+public:
+    PV                                              // +0x00
+    PV                                              // +0x04
+    virtual void Detach();                          // +0x08
+    uint32_t mPad04[3];                             // +0x04 .. +0x0f
+    IRefObj mSub10;                                 // +0x10
+};
+
+class IObj68 {                                      // stop (slot 0x20) + release (slot 4)
+public:
+    PV                                              // +0x00
+    virtual void Release();                         // +0x04
+    PV PV PV PV PV PV                               // +0x08 .. +0x1c
+    virtual void Stop();                            // +0x20
+};
+
+// Mission-panel window interface: window operations used by the panel setup.
+class IWinWindow {
+public:
+    virtual void Attach();                          // +0x00
+    virtual void Release();                         // +0x04
+    PV2                                             // +0x08, +0x0c
+    virtual void* GetContent();                     // +0x10
+    virtual void Activate();                        // +0x14
+    PV8                                             // +0x18 .. +0x34
+    virtual float4* GetRect();                      // +0x38
+    PV8 PV4                                         // +0x3c .. +0x68
+    virtual void SetRect(void* pRect);              // +0x6c
+    virtual void SetPosition(float x, float y);     // +0x70
+    PV2                                             // +0x74, +0x78
+    virtual void SetSize(int w, int h);             // +0x7c
+    PV8 PV8 PV4 PV2                                 // +0x80 .. +0xd4
+    virtual void SetParent(void* pParent);          // +0xd8
+    virtual void SetOwner(void* pOwner);            // +0xdc
+    PV8 PV2                                         // +0xe0 .. +0x104
+    virtual void SetHandler(void* pHandler);        // +0x108
+};
+
+class IMessageServer {
+public:
+    PV8 PV                                          // +0x00 .. +0x20
+    virtual void Subscribe(void* pHandler, uint32_t messageId);   // +0x24
+};
+
+class cSPUIFeedList {
+public:
+    virtual void AddRef();                                           // +0x00
+    virtual void Release();                                          // +0x04
+    void* Ctor();                                                    // 0x00663040
+    void AddWindow(void* pWindow, uint32_t id, void* a, void* b);    // 0x00663860
+    void* FindEntry(uint32_t id);                                    // 0x00662a40
+    void Shutdown();                                                 // 0x006628d0
+    void SetEnabled(bool b);                                         // 0x00662920
+};
+
+class cSPUIFeedCategory : public IRefObjB {
+public:
+    void ShutdownChildren();                                         // 0x006657a0
+};
+
+class cScrollFrameVertical {
+public:
+    virtual void AddRef();                          // +0x00
+    virtual void Release();                         // +0x04
+    PV                                              // +0x08
+    PV                                              // +0x0c
+    uint32_t mPad04[3];                             // +0x04 .. +0x0f
+    IWinWindow* mpObj10;                            // +0x10
+    uint32_t mPad14;                                // +0x14
+    IWinWindow* mpObj18;                            // +0x18
+    void* Ctor();                                   // 0x0082a040 (returns this)
+    bool Create(uint32_t id, int a, int b);         // 0x0082a140
+    float GetScrollOffset();                        // 0x0082a4e0
+    void Shutdown();                                // 0x0082a450
+};
+
+class cStarRecordList {                             // eastl vector of star records at +0x44
+public:
+    void* mpBegin;                                  // +0x44
+    void* mpEnd;                                    // +0x48
+    void* mpCapacity;                               // +0x4c
+    void erase(void* first, void* last);            // 0x00e25bd0
+    ~cStarRecordList();                             // 0x00ae6970
+};
+
+class cUIHints {
+public:
+    int SetFlag(int flag, int value);               // 0x0067c420
+};
+cUIHints* FUN_0067cac0();                           // 0x0067cac0
+
+class cSPUILayout {
+public:
+    IWinWindow* FindWindowByID(uint32_t id, int a); // 0x008105b0
+};
+
+IMessageServer* MessageServer();                    // 0x0067dcc0
+void* operator_new(unsigned size, const char* pFile, int a, int b, int c, int d);   // 0x00f473a0
+void FUN_00e1c8b0(void* a, void* b, void* c);                                       // 0x00e1c8b0
+extern const uint32_t g_missionMessageIds[5];                                       // 0x014802b0
+
+namespace EA { namespace Messaging {
+void RemoveHandler(IMessageServer* pServer, void* pHandler, const uint32_t* pIds,
+                   uint32_t count, uint32_t flags);                                 // 0x00571db0
+}}
+
+// The mission card panel the button is a part of (its methods are reached by a tail call).
+class cUIMissionCardPanel {
+public:
+    void OnNotify(void* p1, void* p2, void* p3, void* p4);   // 0x00e186d0
+    void ShutdownCard();                                     // 0x00e18810
+    void DestroyMembers();                                   // 0x00e18980
+    void ShutdownA();                                        // 0x00e18a30
+};
+
+class cUIMissionButton {
+public:
     void SetTracked();
+    void Shutdown();                                                     // 0x00e1ca30
+    void Destroy();                                                      // 0x00e1cba0
+    void CreateMissionButton(void* p1, void* p2, void* p3, void* p4);    // 0x00e1cc80
+    void ShutdownList();                                                 // 0x00e1cfb0
+
+    void* mpVtbl00;                        // +0x00
+    uint32_t mPad04;                       // +0x04
+    void* mpVtbl08;                        // +0x08
+    void* mpVtbl0c;                        // +0x0c
+    uint32_t mTag10;                       // +0x10
+    void* mpSelf14;                        // +0x14
+    cSPUILayout* mpLayout;                 // +0x18
+    uint32_t mPad1c;                       // +0x1c
+    void* mpMission;                       // +0x20
+    void* mpParent;                        // +0x24
+    void* mpItem;                          // +0x28
+    uint32_t mPad2c[5];                    // +0x2c
+    void* mpVtbl40;                        // +0x40
+    cStarRecordList mStars;                // +0x44
+    uint32_t mPad50[2];                    // +0x50
+    cScrollFrameVertical* mpScrollFrame;   // +0x58
+    IObj5c* mpObj5c;                       // +0x5c
+    IObj60* mpObj60;                       // +0x60
+    IObj64* mpObj64;                       // +0x64
+    IObj68* mpObj68;                       // +0x68
+    cSPUIFeedList* mpFeedList;             // +0x6c
+    cSPUIFeedCategory* mpCategoryA;        // +0x70
+    cSPUIFeedCategory* mpCategoryB;        // +0x74
+    IMessageServer* mpMessageServer;       // +0x78
+    void* mpHandlerArg;                    // +0x7c
+    const uint32_t* mpMessageIds;          // +0x80
+    uint32_t mMessageIdCount;              // +0x84
+    uint32_t mHandlerFlags;                // +0x88
+    uint32_t mWindowId;                    // +0x8c
+    int mIndex;                            // +0x90
 };
 
 // @ 0x00e1bbc0
@@ -403,6 +597,304 @@ L_542:
 L_54f:
     if (FR(0x5c) != 0 && *(int*)(FR(0x5c) - 4) != 0)
         ((void(__cdecl*)(void*))(0xf47380))((void*)FR(0x5c));
+}
+
+// The four vtables the object installs while it is being torn down. Only their addresses are
+// stored, so their contents never matter here.
+extern const uint32_t g_missionButtonVtbl00[];
+extern const uint32_t g_missionButtonVtbl08[];
+extern const uint32_t g_missionButtonVtbl0c[];
+extern const uint32_t g_missionButtonVtbl40[];
+
+// Releases every sub-object the button created, stops listening to the message server, drops the
+// layout callback and finally lets the panel shut the card down.
+// @ 0x00e1ca30
+void cUIMissionButton::Shutdown()
+{
+    if (mpMessageServer != 0)
+    {
+        IMessageServer* pServer = mpMessageServer;
+        mpMessageServer = 0;
+        EA::Messaging::RemoveHandler(pServer, mpHandlerArg, mpMessageIds, mMessageIdCount, mHandlerFlags);
+    }
+    if (mpCategoryA != 0)
+    {
+        mpCategoryA->ShutdownChildren();
+        if (mpCategoryA != 0)
+        {
+            cSPUIFeedCategory* pOld = mpCategoryA;
+            mpCategoryA = 0;
+            pOld->Release();
+        }
+    }
+    if (mpCategoryB != 0)
+    {
+        mpCategoryB->ShutdownChildren();
+        if (mpCategoryB != 0)
+        {
+            cSPUIFeedCategory* pOld = mpCategoryB;
+            mpCategoryB = 0;
+            pOld->Release();
+        }
+    }
+    if (mpObj68 != 0)
+    {
+        mpObj68->Stop();
+        if (mpObj68 != 0)
+        {
+            IObj68* pOld = mpObj68;
+            mpObj68 = 0;
+            pOld->Release();
+        }
+    }
+    if (mpObj64 != 0)
+    {
+        mpObj64->Detach();
+        if (mpObj64 != 0)
+        {
+            IObj64* pOld = mpObj64;
+            mpObj64 = 0;
+            pOld->mSub10.Release();
+        }
+    }
+    if (mpObj60 != 0)
+    {
+        mpObj60->Stop();
+        if (mpObj60 != 0)
+        {
+            IObj60* pOld = mpObj60;
+            mpObj60 = 0;
+            pOld->ReleaseB();
+        }
+    }
+    mStars.erase(mStars.mpBegin, mStars.mpEnd);
+    if (mpFeedList != 0)
+    {
+        mpFeedList->Shutdown();
+        if (mpFeedList != 0)
+        {
+            cSPUIFeedList* pOld = mpFeedList;
+            mpFeedList = 0;
+            pOld->Release();
+        }
+    }
+    if (mpScrollFrame != 0)
+    {
+        mpScrollFrame->Shutdown();
+        if (mpScrollFrame != 0)
+        {
+            cScrollFrameVertical* pOld = mpScrollFrame;
+            mpScrollFrame = 0;
+            pOld->Release();
+        }
+    }
+    if (mpLayout != 0)
+    {
+        IWinWindow* pHandlerWindow = mpLayout->FindWindowByID(0x5ee1ee0, 1);
+        if (pHandlerWindow != 0)
+            pHandlerWindow->SetHandler(&mpVtbl08);
+    }
+    reinterpret_cast<cUIMissionCardPanel*>(this)->ShutdownCard();
+}
+
+// Three-argument forwarder to the shared layout helper.
+// @ 0x00e1cb80
+void FUN_00e1cb80(void* p1, void* p2, void* p3)
+{
+    FUN_00e1c8b0(p1, p2, p3);
+}
+
+// Destructor body: restore the four vtables, run the shutdown pass, then release every remaining
+// sub-object and destroy the star record vector.
+// @ 0x00e1cba0
+void cUIMissionButton::Destroy()
+{
+    mpVtbl00 = (void*)&g_missionButtonVtbl00;
+    mpVtbl08 = (void*)&g_missionButtonVtbl08;
+    mpVtbl0c = (void*)&g_missionButtonVtbl0c;
+    mpVtbl40 = (void*)&g_missionButtonVtbl40;
+
+    Shutdown();
+
+    // The original repeats the message-handler removal here (it is already done by Shutdown, so
+    // this copy never runs; it is kept because the retail body contains it).
+    if (mpMessageServer != 0)
+    {
+        IMessageServer* pServer = mpMessageServer;
+        mpMessageServer = 0;
+        EA::Messaging::RemoveHandler(pServer, mpHandlerArg, mpMessageIds, mMessageIdCount, mHandlerFlags);
+    }
+
+    if (mpCategoryB != 0)
+        mpCategoryB->Release();
+    if (mpCategoryA != 0)
+        mpCategoryA->Release();
+    if (mpFeedList != 0)
+        mpFeedList->Release();
+    if (mpObj68 != 0)
+        mpObj68->Release();
+    if (mpObj64 != 0)
+        mpObj64->mSub10.Release();
+    if (mpObj60 != 0)
+        mpObj60->ReleaseB();
+    if (mpObj5c != 0)
+        mpObj5c->ReleaseB();
+    if (mpScrollFrame != 0)
+        mpScrollFrame->Release();
+
+    mStars.~cStarRecordList();
+
+    reinterpret_cast<cUIMissionCardPanel*>(this)->DestroyMembers();
+}
+
+// Rebuilds the button's contents for the current mission: feed list, the two feed categories,
+// the scroll frame with its content window, the notify window, and re-registers the messages.
+// @ 0x00e1cc80
+void cUIMissionButton::CreateMissionButton(void* p1, void* p2, void* p3, void* p4)
+{
+    ((IWinWindow*)this)->Activate();
+    reinterpret_cast<cUIMissionCardPanel*>(this)->OnNotify(p1, p2, p3, p4);
+    if (mpLayout == 0)
+        return;
+
+    void* pRawFeed = operator_new(0x6c, (const char*)0x13f6b3c, 0, 0, 0, 0);
+    cSPUIFeedList* pNewFeed = pRawFeed != 0 ? (cSPUIFeedList*)((cSPUIFeedList*)pRawFeed)->Ctor() : 0;
+    {
+        cSPUIFeedList* pOldFeed = mpFeedList;
+        if (pNewFeed != pOldFeed)
+        {
+            if (pNewFeed != 0)
+                pNewFeed->AddRef();
+            mpFeedList = pNewFeed;
+            if (pOldFeed != 0)
+                pOldFeed->Release();
+        }
+    }
+
+    cSPUIFeedList* pFeed = mpFeedList;
+    pFeed->AddWindow(mpLayout->FindWindowByID(0x519ab80, 1), 0x215ee951, 0, 0);
+
+    {
+        void* pNewCatA = mpFeedList->FindEntry(0x9e5ecccf);
+        cSPUIFeedCategory* pOldCatA = mpCategoryA;
+        if (pNewCatA != pOldCatA)
+        {
+            if (pNewCatA != 0)
+                ((IRefObjB*)pNewCatA)->AddRef();
+            mpCategoryA = (cSPUIFeedCategory*)pNewCatA;
+            if (pOldCatA != 0)
+                pOldCatA->Release();
+        }
+    }
+    {
+        void* pNewCatB = mpFeedList->FindEntry(0x897576da);
+        cSPUIFeedCategory* pOldCatB = mpCategoryB;
+        if (pNewCatB != pOldCatB)
+        {
+            if (pNewCatB != 0)
+                ((IRefObjB*)pNewCatB)->AddRef();
+            mpCategoryB = (cSPUIFeedCategory*)pNewCatB;
+            if (pOldCatB != 0)
+                pOldCatB->Release();
+        }
+    }
+
+    IWinWindow* pScroll = mpLayout->FindWindowByID(0x519cac8, 1);
+    if (pScroll != 0)
+    {
+        pScroll->Attach();
+
+        void* pRawSfv = operator_new(0x48, "UI/cSPUIScrollFrameVertical", 0, 0, 0, 0);
+        cScrollFrameVertical* pNewSfv =
+            pRawSfv != 0 ? (cScrollFrameVertical*)((cScrollFrameVertical*)pRawSfv)->Ctor() : 0;
+        {
+            cScrollFrameVertical* pOldSfv = mpScrollFrame;
+            if (pNewSfv != pOldSfv)
+            {
+                if (pNewSfv != 0)
+                    pNewSfv->AddRef();
+                mpScrollFrame = pNewSfv;
+                if (pOldSfv != 0)
+                    pOldSfv->Release();
+            }
+        }
+
+        if (mpScrollFrame->Create(0xaef7d6ba, 1, 0))
+        {
+            IWinWindow* pContent = (IWinWindow*)pScroll->GetContent();
+            IWinWindow* pObj10 = mpScrollFrame->mpObj10;
+            IWinWindow* pObj18 = mpScrollFrame->mpObj18;
+            pContent->SetParent(pObj10);
+
+            float4* pRect = pScroll->GetRect();
+            float4 rect;
+            rect.x = pRect->x;
+            rect.y = pRect->y;
+            rect.z = pRect->z;
+            rect.w = pRect->w;
+            rect.z += mpScrollFrame->GetScrollOffset();
+            pObj10->SetRect(&rect);
+
+            pContent->SetOwner(pScroll);
+            pObj18->SetParent(pScroll);
+            pScroll->SetPosition(0.0f, 0.0f);
+        }
+    }
+
+    IWinWindow* pWindow = mpLayout->FindWindowByID(0x67a2ae0, 1);
+    if (pWindow != 0)
+    {
+        pWindow->Attach();
+        pWindow->SetSize(4, 1);
+        mWindowId = 0x67a2ae0;
+    }
+
+    if (mpCategoryA != 0)
+        mpCategoryA->ShutdownChildren();
+    if (mpCategoryB != 0)
+        mpCategoryB->ShutdownChildren();
+    mStars.erase(mStars.mpBegin, mStars.mpEnd);
+    SetTracked();
+
+    void* pHandlerArg = &mpVtbl0c;
+    IMessageServer* pServer = MessageServer();
+    mpMessageServer = pServer;
+    mpHandlerArg = pHandlerArg;
+    mpMessageIds = g_missionMessageIds;
+    mMessageIdCount = 5;
+    mHandlerFlags = 0;
+    if (pServer != 0 && pHandlerArg != 0)
+    {
+        uint32_t offset = 0;
+        do
+        {
+            pServer->Subscribe(pHandlerArg, *(const uint32_t*)((const char*)g_missionMessageIds + offset));
+            offset += 4;
+        } while (offset < 0x14);
+    }
+
+    if (pWindow != 0)
+        pWindow->Release();
+    if (pScroll != 0)
+        pScroll->Release();
+}
+
+// Empties the feed list and refreshes the button, then asks the hint system for a UI hint update.
+// @ 0x00e1cfb0
+void cUIMissionButton::ShutdownList()
+{
+    if (mpFeedList != 0)
+        mpFeedList->SetEnabled(false);
+    if (mpCategoryA != 0)
+        mpCategoryA->ShutdownChildren();
+    if (mpCategoryB != 0)
+        mpCategoryB->ShutdownChildren();
+    mStars.erase(mStars.mpBegin, mStars.mpEnd);
+    SetTracked();
+    cUIHints* pHints = FUN_0067cac0();
+    if (pHints != 0)
+        FUN_0067cac0()->SetFlag(1, 1);
+    reinterpret_cast<cUIMissionCardPanel*>(this)->ShutdownA();
 }
 
 }  // namespace SP

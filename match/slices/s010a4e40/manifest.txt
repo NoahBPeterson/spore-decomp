@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s010a4e40/jobqueue.cpp  ?reserve@?$hkQueue@UhkBQueueEntry@@@@QAEXH@Z  010a5890  /vc71 /O2 /MD /Gy /TP
+slices/s010a4e40/jobqueue.cpp  ??1JobQueueDynamicData@@QAE@XZ  010a59b0  /vc71 /O2 /MD /Gy /TP
+slices/s010a4e40/jobqueue.cpp  ?pushFront@?$hkQueue@UhkBQueueEntry@@@@QAEXABUhkBQueueEntry@@@Z  010a59f0  /vc71 /O2 /MD /Gy /TP
+slices/s010a4e40/jobqueue.cpp  ?pushBack@?$hkQueue@UhkBQueueEntry@@@@QAEXABUhkBQueueEntry@@@Z  010a5a40  /vc71 /O2 /MD /Gy /TP
+slices/s010a4e40/jobqueue.cpp  ?pushEntry@hkJobQueue@@QAEXPAXHH@Z  010a5ba0  /vc71 /O2 /MD /Gy /TP

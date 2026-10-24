@@ -1,0 +1,2 @@
+slices/s00a7d5e0/s00a7d5e0.cpp  ?CopyRefElements@@YAPAURefElement@@PBU1@0PAU1@@Z  00a7d5e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7d5e0/s00a7d5e0.cpp  ?CopyRefElementsBackward@@YAPAURefElement@@PBU1@0PAU1@@Z  00a7d640  /O2 /MD /Gy /TP /arch:SSE /fp:fast

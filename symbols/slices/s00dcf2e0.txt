@@ -2,3 +2,6 @@
 00dc6640 SP::IsFormationMember  # cdecl(formation, cVehicle**) -> bool: is the vehicle's locomotive (+0x34) in the formation's entity list
 00dc6680 SP::FindClosestVehicle  # cdecl(vector*, pos*, int) -> entry nearest to pos (min distSq starting at FLT_MAX)
 00dc6430 SP::FUN_00dc6430  # label-only code at 0xdc6430, stored as the third formation callback (+0x170)
+00dcfc40 SP::cVehicleGroupOrder::Clear  # clears mActiveVehicles (+0x50), mInvitedVehicles (+0x34), mFormations (+0x7c); byte-exact
+00dcfc90 SP::cMilitaryAttackCityOrder::GetCurrentTarget  # cVehicle* -> cCombatant*; per-locomotion primary/next target slots at +0x9c/+0xb0; diff 1082
+00dd0180 SP::cCulturalConvertCityOrder::~cCulturalConvertCityOrder  # base clear + cultural target (+0x94), hologram/effect clear, holo vehicle (+0xa0); diff 37

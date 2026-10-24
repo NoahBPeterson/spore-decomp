@@ -1,1 +1,4 @@
 0116efb0 ?HELPER_Imdct36X4Implementation@core@audio@rw@@YAXPAM00@Z  # HELPER_Imdct36X4Implementation migrated from s0116efb0 (verbatim, slice spelling)
+0116f960 ?HELPER_OverlapAddX4@core@audio@rw@@YAXPAM00@Z  # pdb_names.json 0116f960 callee-single rw::audio::core::HELPER_OverlapAddX4; window table 0x014da860
+0116fc20 ?Hybrid@cMpegHybridDecoder@core@audio@rw@@QAEXHHPAM@Z  # no PDB entry; thiscall ret 0xc helper, class reconstructed as cMpegHybridDecoder (granules +0x70, history +0x1c8)
+0116fdc0 ?FUN_0116fdc0@core@audio@rw@@YAXPBMPAF@Z  # no PDB entry; cdecl, no PDB name; leaves eax = dst + 0x480 (hidden void return)

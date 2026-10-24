@@ -1,1 +1,3 @@
 # source  symbol  original VA  [flags override]
+slices/s00b0b3d0/s00b0b3d0.cpp  ?Resize@Elem24Vec@@QAEXI@Z  00b0bd10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b0b3d0/s00b0b3d0.cpp  ?Insert@ScatterVec@@QAEPAUScatterE@@PAU2@ABU2@@Z  00b0c110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

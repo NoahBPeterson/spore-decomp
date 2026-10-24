@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0115c360/s0115c360.cpp  ?FUN_0115cfb0@core@audio@rw@@YAXPAUDequantCtx@123@PAMI@Z  0115cfb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0115c360/s0115c360.cpp  ?InitFrame@HELPER_CMpegLayer3B@core@audio@rw@@QAEHPAXH@Z  0115cc60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

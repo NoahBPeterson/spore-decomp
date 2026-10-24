@@ -1,1 +1,4 @@
 00c6d7c0 SP::cHerd::Update  # PDB name; guard count, herd-mom pick, egg layer, respawn, egg update, feeding ground tick
+00c6e120 ?EnsureProfiles@cHerd@SP@@QAEEI@Z  # vtable slot (Simulator::cGameData::cGameData_func3Ch): resolve species profile for mKey98 + each key in +0xa8..+0xac, resize the +0x1f4 bool vector to mSizeTarget
+00c6e200 ?UpdateFromArchetype@cHerd@SP@@QAEXHD@Z  # SP::cHerd::UpdateFromArchetype(int,char) PDB name: seed target size / scale / call timer / movement / respawn species / egg goal from a species archetype
+00c6e4f0 ?FUN_00c6e4f0@cHerd@SP@@QAEXXZ  # cHerd per-frame archetype upkeep (target-size fixup, scale defaults, respawn fixup, vector resizes, timers, avatar-link spawn)

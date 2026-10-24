@@ -1,1 +1,8 @@
 00e1fb20 TestWin::Refresh  # UI refresh of a test-bed window (PDB candidate cPlanetTestBedCheat::runIteration)
+00e20210 Panel12::OnMessage  # message handler subobject at TestWin+0xc: tribe-changed (0x1e8c9e0) opens the community editor, feed-item (0x5bf34455) drains the check list, else forwards to 0xe18600 (names Claude-coined)
+00e20360 TestWinEx::UpdateSlot  # loads the unlocked-items string for the current mode/id, walks the category/page/item palette and pushes a feed-list entry, then drains the matching check entry (names Claude-coined)
+00e205e0 PatchMgr::Apply  # invokes the +0x20 callback for the current element, clears the per-element 0x2c byte and sets +0x3c=8 (names Claude-coined)
+00e20630 PatchMgr::~PatchMgr  # derived scalar deleting destructor: releases the +0x2068 container then chains to the base destructor (vtable 0x1480498 -> 0x13ec458)
+00e206b0 PatchElem::Destroy  # vector deleting destructor (ret 4) of the 0x38-byte patch element: releases each element's two vectors then the array and/or object per the flags
+00e20780 PatchMgr::PatchMgr  # constructor of the 0x2080-byte UI/GGE/PatchManager object (vtable 0x1480498)
+00e20800 PatchMgr::Shutdown  # cleanup: calls the +0x38 callback, FreeLibrary(hModule) and zeroes the state fields; then destroys the element array

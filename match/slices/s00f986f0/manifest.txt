@@ -1,0 +1,2 @@
+slices/s00f986f0/s00f986f0.cpp  ?FUN_00f986f0@@YIHPAUTerrainSphere@@PAXH@Z  00f986f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f986f0/s00f986f0.cpp  ?FUN_00f987f0@@YIMPAUTerrainSphere@@PAX@Z  00f987f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

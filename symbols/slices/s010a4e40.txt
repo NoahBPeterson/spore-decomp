@@ -1,1 +1,11 @@
 010a5070 hkBuildAndSolve  # Havok 3.1 solver driver: sizes the stack block, builds accumulators/jacobians/schemas, hkSolveConstraints, export impulses; inferred from structure
+010a4e40 ?internalAddJacobianElements@hkConstraintSolverSetup@@SAXAAUhkConstraintSolverResources@@PAPAVhkConstraintInstance@@HAAV?$hkArray@UhkConstraintSchemaInfo@@@@@Z  # Havok 3.1 hkConstraintSolverSetup::internalAddJacobianElements (356 bytes)
+010a4fb0 ?internalIsMemoryOkForNewJacobianElements@hkConstraintSolverSetup@@SA?AVhkBool@@AAUhkConstraintSolverResources@@PAPAVhkConstraintInstance@@H@Z  # Havok 3.1 hkConstraintSolverSetup::internalIsMemoryOkForNewJacobianElements (183 bytes)
+010a5830 hkJobQueue::releaseAll  # release both semaphores once per queued count
+010a5890 hkQueue<hkBQueueEntry>::reserve  # grow the entry buffer to newCapacity via the hkMemory chunk allocator
+010a58f0 hkQueue<hkBQueueEntry>::growInternal  # double the buffer and relocate the wrapped region
+010a59b0 hkJobQueue::DynamicData::~DynamicData  # free the three per-class queue buffers
+010a59f0 hkQueue<hkBQueueEntry>::pushFront  # push at the tail index
+010a5a40 hkQueue<hkBQueueEntry>::pushBack  # push at the head index
+010a5a90 hkJobQueue::hkJobQueue  # ctor: critical section, two semaphores, DynamicData + first queue
+010a5ba0 hkJobQueue::pushEntry  # lock, push to the queue for the class, release a semaphore, unlock

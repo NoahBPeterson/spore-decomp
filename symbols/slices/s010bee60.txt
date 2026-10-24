@@ -1,1 +1,4 @@
-010bee60 hkSimpleConstraintUtil_InitInfo  # havok_names; mC = (invMassA+invMassB) I + sum (r x R)^T Iinv (r x R), then 3x3 inverse
+010bee60 hkSimpleConstraintUtil_InitInfo  # pre-existing committed function (complete, nonmatching); effective-mass setup for 2 bodies + 3x3 inverse
+010bf620 hkSimpleConstraintUtil_applyImpulse  # fold the relative velocity through the direction frame and both bodies' invInertia*(r x R) blocks into the constraint impulse/velocity
+010bf800 hkSimpleConstraintUtil_getPointVelocity  # relative point velocity of two bodies: R*(vA-vB) + (m_rxR[0]*wA - m_rxR[1]*wB)
+010bf980 hkSimpleConstraintUtil_Collide  # BIAS/soft-constraint clamp on the normal impulse (friction cone), then applyImpulse and return the clamped value

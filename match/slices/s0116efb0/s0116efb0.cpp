@@ -176,3 +176,261 @@ void HELPER_Imdct36X4Implementation(float* param_1, float* param_2, float* param
 }
 
 }}}  // namespace rw::audio::core
+
+// ---------------------------------------------------------------------------------------------
+// 0x0116f960 / 0x0116fc20 / 0x0116fdc0 -- the layer-3 hybrid stage around the IMDCT helpers.
+// All three are LTCG-register-ABI code from the same TU as the IMDCT helpers: the calls into
+// HELPER_Imdct36X1 (win=ECX, out=EDX, in=stack) and HELPER_Imdct12X1 (out=EAX, in=stack) use
+// per-function register conventions, so the 12-point helper is transcribed locally instead of
+// being declared (see the s01145d10 slice, same algorithm on the other decoder class).
+// ---------------------------------------------------------------------------------------------
+#include <mmintrin.h>
+#include <malloc.h>     // _alloca
+
+// 0x014da860: 36-point window table used by this decoder object (block type selects +0x90 each).
+extern "C" const float g_imdct36WinHybrid[];      // 0x014da860 IMDCT36 windows (hybrid stage)
+
+namespace rw { namespace audio { namespace core {
+
+class System {
+public:
+    void* Alloc(int size, const char* name, int align, int flags);  // 0x0112c820
+};
+
+extern System* g_audioSystem;                    // 0x016e61a8
+void* AudioMemset(void* dst, int c, unsigned n); // 0x011e073e memset
+void HELPER_Imdct12X4(float* in, float* out);    // 0x011464a0
+void HELPER_Imdct36X4Implementation(float* in, float* out, const float* tbl); // 0x0116efb0
+
+// HELPER_Imdct36X1 is caller-cleanup in the original (plain ret), but the __fastcall declaration
+// that reproduces its ECX/EDX register assignment makes our compiler assume a callee-pop of the
+// pushed third argument. Route the call through a dynamic-frame wrapper: its epilogue restores ESP
+// from EBP, so the two leaked stack words cannot shift the aligned scratch frame over the saved
+// registers in Hybrid.
+static void CallImdct36X1(const float* win, float* out, float* in)
+{
+    _alloca(4);
+    HELPER_Imdct36X1(win, out, in);
+}
+
+// !!! 0x0116f960: overlap-add of four interleaved lanes.
+// out[i] = tmp[i] + hist[i] and hist[i] = tmp[72 + i] for the 72 samples of the block.
+// The aligned path copies 8 floats per iteration with SSE, the fallback walks the four lanes
+// vertically (one float every four), which is why the element stride below is 4.
+// @ 0x0116f960
+void HELPER_OverlapAddX4(float* out, float* tmp, float* hist)
+{
+    if ((((unsigned int)out | (unsigned int)tmp | (unsigned int)hist) & 0xf) == 0) {
+        F4* o = (F4*)out;
+        F4* s = (F4*)tmp;
+        F4* h = (F4*)hist;
+        for (int i = 0; i < 9; ++i) {
+            F4 h0 = h[0];
+            F4 h1 = h[1];
+            F4 s0 = s[0];
+            F4 s1 = s[1];
+            o[0] = h0 + s0;
+            o[1] = h1 + s1;
+            h += 2;
+            s += 2;
+            o += 2;
+        }
+        h = (F4*)hist;
+        for (int i = 0; i < 9; ++i) {
+            F4 s0 = s[0];
+            F4 s1 = s[1];
+            h[0] = s0;
+            h[1] = s1;
+            h += 2;
+            s += 2;
+        }
+        return;
+    }
+    for (int k = 0; k < 4; ++k) {
+        for (int n = 0; n < 18; ++n)
+            out[n * 4 + k] = hist[n * 4 + k] + tmp[n * 4 + k];
+        for (int n = 0; n < 18; ++n)
+            hist[n * 4 + k] = tmp[72 + n * 4 + k];
+    }
+}
+
+// Local bit-faithful transcription of HELPER_Imdct12X1 (0x011661b0): `out` arrives in EAX, which
+// has no C spelling. Zero this lane's 36 slots (stride 4) then run the three short-block
+// butterflies, accumulating into the same slots.
+void Imdct12X1Local(float* in, float* out)
+{
+    for (int k = 0; k < 36; k++)
+        out[4 * k] = 0.0f;
+    for (int w = 0; w < 3; w++) {
+        float* p = in + 4 * w;
+        float A = p[0x00];
+        float B = p[0x0c];
+        float C = p[0x18];
+        float D = p[0x24];
+        float E = p[0x30];
+        float F = p[0x3c];
+        p[0x0c] = A + B;
+        p[0x18] = C + B;
+        p[0x3c] = E + F;
+        p[0x30] = E + D;
+        p[0x24] = (A + B) + (C + D);
+        float u5 = (C + D) + (E + F);
+        p[0x3c] = u5;
+
+        float v26 = (E + D) * 0.5f + A;
+        float v14 = (C + B) * 0.8660254f;
+        float t33 = v26 - v14;
+        float t34 = v26 + v14;
+        float W   = u5 * 0.5f + (A + B);
+        float vX  = ((A + B) - u5) * 0.70710677f;
+        float t44 = ((A + B) + (C + D)) * 0.8660254f;
+        float t46 = W - t44;
+        float t47 = W + t44;
+        float t48 = t46 * 1.9318516f;
+        float t49 = t47 * 0.5176381f;
+        float t53 = t34 - t49;
+        float t58 = (t49 + t34) * 0.50431448f;
+        float t56 = t53 * 3.8306489f;
+        float t61 = (vX + (A - (E + D))) * 0.54119611f;
+        float t64 = ((A - (E + D)) - vX) * 1.306563f;
+        float t68 = (t48 + t33) * 0.63023621f;
+        float t81 = (t33 - t48) * 0.82133979f;
+        float* o = out + 0x18 + 0x18 * w;
+        o[0x00] += t81 * 0.13052619f;
+        o[0x04] += t64 * 0.38268343f;
+        o[0x08] += t56 * 0.60876143f;
+        o[0x0c] += t56 * -0.79335332f;
+        o[0x10] += t64 * -0.92387950f;
+        o[0x14] += t81 * -0.99144489f;
+        o[0x18] += t68 * -0.99144489f;
+        o[0x1c] += t61 * -0.92387950f;
+        o[0x20] += t58 * -0.79335332f;
+        o[0x24] += t58 * -0.60876143f;
+        o[0x28] += t61 * -0.38268343f;
+        o[0x2c] += t68 * -0.13052619f;
+    }
+}
+
+// Granule side-info record, PDB GranuleInfo layout (0x18 bytes) as recovered in s01145d10.
+struct GranuleInfo {                            // size 0x18
+    uint16_t part2And3Length;                   // +0x00
+    uint16_t bigValues;                         // +0x02
+    uint16_t scaleFacCompress;                  // +0x04
+    uint8_t  globalGain;                        // +0x06
+    uint8_t  windowSwitchingFlag;               // +0x07
+    uint8_t  blockType;                         // +0x08
+    uint8_t  mixedBlockFlag;                    // +0x09
+    uint8_t  region0Count;                      // +0x0a
+    uint8_t  region1Count;                      // +0x0b
+    uint8_t  tableSelect[3];                    // +0x0c
+    uint8_t  count1TableSelect;                 // +0x0f
+    uint8_t  subBlockGain[3];                   // +0x10
+    uint8_t  preFlag;                           // +0x13
+    uint32_t scaleFacScale;                     // +0x14
+};
+
+// Reconstructed layout of this caller's decoder object (no PDB class name survived; only the
+// members the hybrid stage touches are named). Distinct from CMpegLayer3Base: granules at +0x70
+// and the hybrid history at +0x1c8 instead of +0x154/+0x2c0.
+struct cMpegHybridDecoder {
+    uint8_t     pad00[0x3c];                    // +0x000
+    uint8_t     mChannels;                      // +0x03c  hybrid planes allocated
+    uint8_t     pad3d[0x70 - 0x3d];             // +0x03d
+    GranuleInfo mGranules[4];                   // +0x070  [2*granule + channel]
+    uint8_t     padD0[0x1c8 - 0xd0];            // +0x0d0
+    float*      mpHybridHistory;                // +0x1c8  one 0x900-byte plane per granule
+
+    void Hybrid(int gr, int ch, float* buf);    // 0x0116fc20
+};
+
+// !!! 0x0116fc20: hybrid synthesis for one granule/channel.
+// Lazily allocates the per-granule history planes, runs the mixed-block IMDCT quartet when the
+// granule has both window switching and a mixed block, then fills the remaining eight short
+// blocks (block type 2) or long blocks and overlap-adds each into the history plane.
+// @ 0x0116fc20
+void cMpegHybridDecoder::Hybrid(int gr, int ch, float* buf)
+{
+    __declspec(align(16)) float tmp[0x240 / 4];
+
+    if (mpHybridHistory == 0) {
+        mpHybridHistory = (float*)g_audioSystem->Alloc(mChannels * 0x900, "MP3HybridHistory", 0x10, 0);
+        if (mpHybridHistory == 0) {
+            // The original stores a zero dword here (the Alloc result was already 0 in EAX);
+            // an integer store keeps the same bytes without touching XMM.
+            *(unsigned int*)buf = 0;
+            return;
+        }
+        AudioMemset(mpHybridHistory, 0, mChannels * 0x900);
+    }
+    GranuleInfo* gi = &mGranules[gr * 2 + ch];
+    float* hist = (float*)((uint8_t*)mpHybridHistory + gr * 0x900);
+    int flag = 0;
+    if (gi->windowSwitchingFlag && gi->mixedBlockFlag) {
+        uint8_t* t = (uint8_t*)tmp;
+        uint8_t* in = (uint8_t*)buf;
+        CallImdct36X1(g_imdct36WinHybrid, (float*)(t + 0), (float*)(in + 0));
+        CallImdct36X1(g_imdct36WinHybrid, (float*)(t + 4), (float*)(in + 4));
+        Imdct12X1Local((float*)(in + 8), (float*)(t + 8));
+        Imdct12X1Local((float*)(in + 0xc), (float*)(t + 0xc));
+        HELPER_OverlapAddX4(buf, tmp, hist);
+        flag = 1;
+    }
+    if (gi->blockType == 2) {
+        for (; flag < 8; flag++) {
+            float* p = buf + flag * 0x48;       // 0x120 bytes of four interleaved lanes
+            HELPER_Imdct12X4(p, tmp);
+            HELPER_OverlapAddX4(p, tmp, hist + flag * 0x48);
+        }
+    } else {
+        const float* tbl = (const float*)((const uint8_t*)g_imdct36WinHybrid + gi->blockType * 0x90);
+        for (; flag < 8; flag++) {
+            float* p = buf + flag * 0x48;
+            HELPER_Imdct36X4Implementation(p, tmp, tbl);
+            HELPER_OverlapAddX4(p, tmp, hist + flag * 0x48);
+        }
+    }
+}
+
+// !!! 0x0116fdc0: requantise the 8 interleaved hybrid planes into 16-bit samples.
+// 18 blocks of four samples per plane; each plane is 0x120 bytes apart, the destination advances
+// one 32-word group per block. Values are scaled by 16384 and saturated by packssdw; the stores
+// are streaming (movntq) and the MMX state is cleared at the end.
+// @ 0x0116fdc0
+void FUN_0116fdc0(const float* src, int16_t* dst)
+{
+    const __m128 scale = _mm_set1_ps(16384.0f);
+    const float* s = src;
+    int16_t* d = dst;
+    for (int i = 0; i < 18; i++) {
+        // The original unrolls the eight planes in four two-plane blocks (the pair shares the
+        // multiply/conversion pipeline before the two streaming stores).
+#define HYBRID_PAIR(g)                                                          \
+        {                                                                       \
+            const float* q = s + (g) * 0x48;                                    \
+            __m128 x0 = _mm_loadl_pi(_mm_setzero_ps(), (const __m64*)(q + 0));  \
+            __m128 x1 = _mm_loadl_pi(_mm_setzero_ps(), (const __m64*)(q + 2));  \
+            __m128 y0 = _mm_loadl_pi(_mm_setzero_ps(), (const __m64*)(q + 0x48)); \
+            __m128 y1 = _mm_loadl_pi(_mm_setzero_ps(), (const __m64*)(q + 0x4a)); \
+            __m64 m0 = _mm_packs_pi32(_mm_cvtps_pi32(_mm_mul_ps(x0, scale)),    \
+                                      _mm_cvtps_pi32(_mm_mul_ps(x1, scale)));   \
+            __m64 m1 = _mm_packs_pi32(_mm_cvtps_pi32(_mm_mul_ps(y0, scale)),    \
+                                      _mm_cvtps_pi32(_mm_mul_ps(y1, scale)));   \
+            _mm_stream_pi((__m64*)(d + (g) * 4), m0);                           \
+            _mm_stream_pi((__m64*)(d + (g) * 4 + 4), m1);                       \
+        }
+        HYBRID_PAIR(0);
+        HYBRID_PAIR(2);
+        HYBRID_PAIR(4);
+        HYBRID_PAIR(6);
+#undef HYBRID_PAIR
+        s += 4;
+        d += 32;
+    }
+    _mm_empty();
+    // The original's loop counter is the *destination* end pointer and it is still in EAX at the
+    // epilogue; a volatile keep-read reproduces that hidden void return value.
+    int16_t* volatile done = d;
+    (void)done;
+}
+
+}}}  // namespace rw::audio::core
