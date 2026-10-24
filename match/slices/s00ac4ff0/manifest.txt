@@ -1,1 +1,8 @@
-# byte-exact functions for slice s00ac4ff0 (none)
+# byte-exact functions for slice s00ac4ff0
+slices/s00ac4ff0/s00ac4ff0.cpp  ?resize@GlyphVec@@QAEXI@Z  00ac52d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac4ff0/s00ac4ff0.cpp  ?FUN_00ac5330@@YIXPAUcPathFinderHandle@@@Z  00ac5330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac4ff0/s00ac4ff0.cpp  ??1cPathFinder@@QAE@XZ  00ac5350  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac4ff0/s00ac4ff0.cpp  ?FUN_00ac5400@@YIXPAE@Z  00ac5400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac4ff0/s00ac4ff0.cpp  ??1cPathFinderHandle@@QAE@XZ  00ac5430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac4ff0/s00ac4ff0.cpp  ?DestroyAndFree@cPathFinderHandle@@QAEPAXI@Z  00ac5490  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac4ff0/s00ac4ff0.cpp  ?SwapPointVecs@@YAXPAU?$fixed_vector@UVector3@@$0BAA@@@0@Z  00ac54d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
