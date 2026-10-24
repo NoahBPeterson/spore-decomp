@@ -227,12 +227,10 @@ void ConvertDXT3ToARGB8888(uint8_t* dst, int dstStride, const uint8_t* src, int 
     int bw = (width + 3) >> 2;
     int bh = (height + 3) >> 2;
     if (bw == 0 || bh == 0) return;
+    int rowBytes = bw * 16;
+    uint8_t* d = dst;
+    const uint8_t* s = src;
     do {
-        uint8_t* d0 = dst;
-        uint8_t* d1 = dst + dstStride;
-        uint8_t* d2 = dst + dstStride * 2;
-        uint8_t* d3 = dst + dstStride * 3;
-        const uint8_t* s = src;
         int n = bw;
         do {
             uint32_t col[4];
@@ -254,26 +252,30 @@ void ConvertDXT3ToARGB8888(uint8_t* dst, int dstStride, const uint8_t* src, int 
             uint32_t B = hi + (hi >> 4);
             uint32_t C = lo2 * 0x11;
             uint32_t D = hi2 + (hi2 >> 4);
-            ((uint32_t*)d0)[0] = A * 0x1000000 + col[idx & 3];
-            ((uint32_t*)d0)[1] = B * 0x1000000 + col[(idx >> 2) & 3];
-            ((uint32_t*)d0)[2] = (A & 0xffffff00) * 0x10000 + col[(idx >> 4) & 3];
-            ((uint32_t*)d0)[3] = (B & 0xffffff00) * 0x10000 + col[(idx >> 6) & 3];
-            ((uint32_t*)d1)[0] = (A & 0xffff0000) * 0x100 + col[(idx >> 8) & 3];
-            ((uint32_t*)d1)[1] = (B & 0xffff0000) * 0x100 + col[(idx >> 10) & 3];
-            ((uint32_t*)d1)[2] = (A & 0xff000000) + col[(idx >> 12) & 3];
-            ((uint32_t*)d1)[3] = (B & 0xff000000) + col[(idx >> 14) & 3];
-            ((uint32_t*)d2)[0] = C * 0x1000000 + col[(idx >> 16) & 3];
-            ((uint32_t*)d2)[1] = D * 0x1000000 + col[(idx >> 18) & 3];
-            ((uint32_t*)d2)[2] = (C & 0xffffff00) * 0x10000 + col[(idx >> 20) & 3];
-            ((uint32_t*)d2)[3] = (D & 0xffffff00) * 0x10000 + col[(idx >> 22) & 3];
-            ((uint32_t*)d3)[0] = (C & 0xffff0000) * 0x100 + col[(idx >> 24) & 3];
-            ((uint32_t*)d3)[1] = (D & 0xffff0000) * 0x100 + col[(idx >> 26) & 3];
-            ((uint32_t*)d3)[2] = (C & 0xff000000) + col[(idx >> 28) & 3];
-            ((uint32_t*)d3)[3] = (D & 0xff000000) + col[idx >> 30];
-            d0 += 16; d1 += 16; d2 += 16; d3 += 16; s += 16;
+            uint8_t* p0 = d;
+            uint8_t* p1 = d + dstStride;
+            uint8_t* p2 = d + dstStride * 2;
+            uint8_t* p3 = d + dstStride * 3;
+            ((uint32_t*)p0)[0] = A * 0x1000000 + col[idx & 3];
+            ((uint32_t*)p0)[1] = B * 0x1000000 + col[(idx >> 2) & 3];
+            ((uint32_t*)p0)[2] = (A & 0xffffff00) * 0x10000 + col[(idx >> 4) & 3];
+            ((uint32_t*)p0)[3] = (B & 0xffffff00) * 0x10000 + col[(idx >> 6) & 3];
+            ((uint32_t*)p1)[0] = (A & 0xffff0000) * 0x100 + col[(idx >> 8) & 3];
+            ((uint32_t*)p1)[1] = (B & 0xffff0000) * 0x100 + col[(idx >> 10) & 3];
+            ((uint32_t*)p1)[2] = (A & 0xff000000) + col[(idx >> 12) & 3];
+            ((uint32_t*)p1)[3] = (B & 0xff000000) + col[(idx >> 14) & 3];
+            ((uint32_t*)p2)[0] = C * 0x1000000 + col[(idx >> 16) & 3];
+            ((uint32_t*)p2)[1] = D * 0x1000000 + col[(idx >> 18) & 3];
+            ((uint32_t*)p2)[2] = (C & 0xffffff00) * 0x10000 + col[(idx >> 20) & 3];
+            ((uint32_t*)p2)[3] = (D & 0xffffff00) * 0x10000 + col[(idx >> 22) & 3];
+            ((uint32_t*)p3)[0] = (C & 0xffff0000) * 0x100 + col[(idx >> 24) & 3];
+            ((uint32_t*)p3)[1] = (D & 0xffff0000) * 0x100 + col[(idx >> 26) & 3];
+            ((uint32_t*)p3)[2] = (C & 0xff000000) + col[(idx >> 28) & 3];
+            ((uint32_t*)p3)[3] = (D & 0xff000000) + col[idx >> 30];
+            d += 16; s += 16;
         } while (--n);
-        src += srcStride;
-        dst += dstStride * 4;
+        d += dstStride * 4 - rowBytes;
+        s += srcStride - rowBytes;
     } while (--bh);
 }
 
@@ -283,12 +285,10 @@ void ConvertDXT5ToARGB8888(uint8_t* dst, int dstStride, const uint8_t* src, int 
     int bw = (width + 3) >> 2;
     int bh = (height + 3) >> 2;
     if (bw == 0 || bh == 0) return;
+    int rowBytes = bw * 16;
+    uint8_t* d = dst;
+    const uint8_t* s = src;
     do {
-        uint8_t* d0 = dst;
-        uint8_t* d1 = dst + dstStride;
-        uint8_t* d2 = dst + dstStride * 2;
-        uint8_t* d3 = dst + dstStride * 3;
-        const uint8_t* s = src;
         int n = bw;
         do {
             uint32_t col[4];
@@ -330,26 +330,26 @@ void ConvertDXT5ToARGB8888(uint8_t* dst, int dstStride, const uint8_t* src, int 
                 al[6] = 0;
                 al[7] = 0xff000000;
             }
-            ((uint32_t*)d0)[0] = al[w0 & 7] + col[idx & 3];
-            ((uint32_t*)d0)[1] = al[(w0 & 0x38) >> 3] + col[(idx >> 2) & 3];
-            ((uint32_t*)d0)[2] = al[(w0 & 0x1c0) >> 6] + col[(idx >> 4) & 3];
-            ((uint32_t*)d0)[3] = al[(w0 & 0xe00) >> 9] + col[(idx >> 6) & 3];
-            ((uint32_t*)d1)[0] = al[(w0 & 0x7000) >> 12] + col[(idx >> 8) & 3];
-            ((uint32_t*)d1)[1] = al[(d32 >> 15) & 7] + col[(idx >> 10) & 3];
-            ((uint32_t*)d1)[2] = al[(w1 & 0x1c) >> 2] + col[(idx >> 12) & 3];
-            ((uint32_t*)d1)[3] = al[(w1 & 0xe0) >> 5] + col[(idx >> 14) & 3];
-            ((uint32_t*)d2)[0] = al[(w1 & 0x700) >> 8] + col[(idx >> 16) & 3];
-            ((uint32_t*)d2)[1] = al[(w1 & 0x3800) >> 11] + col[(idx >> 18) & 3];
-            ((uint32_t*)d2)[2] = al[((w1 >> 14) + w2 * -4) & 7] + col[(idx >> 20) & 3];
-            ((uint32_t*)d2)[3] = al[(w2 >> 1) & 7] + col[(idx >> 22) & 3];
-            ((uint32_t*)d3)[0] = al[(w2 >> 4) & 7] + col[(idx >> 24) & 3];
-            ((uint32_t*)d3)[1] = al[(w2 >> 7) & 7] + col[(idx >> 26) & 3];
-            ((uint32_t*)d3)[2] = al[(w2 >> 10) & 7] + col[(idx >> 28) & 3];
-            ((uint32_t*)d3)[3] = al[w2 >> 13] + col[idx >> 30];
-            d0 += 16; d1 += 16; d2 += 16; d3 += 16; s += 16;
+            ((uint32_t*)d)[0] = al[w0 & 7] + col[idx & 3];
+            ((uint32_t*)d)[1] = al[(w0 & 0x38) >> 3] + col[(idx >> 2) & 3];
+            ((uint32_t*)d)[2] = al[(w0 & 0x1c0) >> 6] + col[(idx >> 4) & 3];
+            ((uint32_t*)d)[3] = al[(w0 & 0xe00) >> 9] + col[(idx >> 6) & 3];
+            ((uint32_t*)(d + dstStride))[0] = al[(w0 & 0x7000) >> 12] + col[(idx >> 8) & 3];
+            ((uint32_t*)(d + dstStride))[1] = al[(d32 >> 15) & 7] + col[(idx >> 10) & 3];
+            ((uint32_t*)(d + dstStride))[2] = al[(w1 & 0x1c) >> 2] + col[(idx >> 12) & 3];
+            ((uint32_t*)(d + dstStride))[3] = al[(w1 & 0xe0) >> 5] + col[(idx >> 14) & 3];
+            ((uint32_t*)(d + dstStride * 2))[0] = al[(w1 & 0x700) >> 8] + col[(idx >> 16) & 3];
+            ((uint32_t*)(d + dstStride * 2))[1] = al[(w1 & 0x3800) >> 11] + col[(idx >> 18) & 3];
+            ((uint32_t*)(d + dstStride * 2))[2] = al[((w1 >> 14) + w2 * -4) & 7] + col[(idx >> 20) & 3];
+            ((uint32_t*)(d + dstStride * 2))[3] = al[(w2 >> 1) & 7] + col[(idx >> 22) & 3];
+            ((uint32_t*)(d + dstStride * 3))[0] = al[(w2 >> 4) & 7] + col[(idx >> 24) & 3];
+            ((uint32_t*)(d + dstStride * 3))[1] = al[(w2 >> 7) & 7] + col[(idx >> 26) & 3];
+            ((uint32_t*)(d + dstStride * 3))[2] = al[(w2 >> 10) & 7] + col[(idx >> 28) & 3];
+            ((uint32_t*)(d + dstStride * 3))[3] = al[w2 >> 13] + col[idx >> 30];
+            d += 16; s += 16;
         } while (--n);
-        src += srcStride;
-        dst += dstStride * 4;
+        d += dstStride * 4 - rowBytes;
+        s += srcStride - rowBytes;
     } while (--bh);
 }
 
