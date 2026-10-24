@@ -17,7 +17,7 @@ extern "C" {
     unsigned int DAT_016b3c0c;                // cLocalInputState* base (as int)
     unsigned int g_CellGame;                  // base of SP::gspCellGame
     unsigned int g_CellGfx;                   // base of SP::gspCellGfx
-    double       g_RandomState;               // EA::Random singleton
+    extern double g_RandomState;               // 0x01601760 EA::Random singleton
 }
 
 extern "C" {
@@ -60,11 +60,14 @@ extern "C" {
     void  FUN_005fdf40();
     float FUN_00e696a0(unsigned int, unsigned int, unsigned int, unsigned int);
     float FUN_00e69740(unsigned int, unsigned int, unsigned int, unsigned int);
-    double EA_RandomRandomDoubleUniform(double*);
     int   EA_RefCountRelease(const char*, unsigned int, int);
     void  FUN_007c4900(void*, void*);
 }
 namespace eastl { void vector_uint_DoInsertValue(void*, void*); }
+
+// The random helper at 0x009360d0 is a thiscall member: the original sets ecx to the
+// EA::Random singleton (mov ecx, 0x1601760) before calling it.
+class RandomLinearCongruential { public: double RandomDoubleUniform(); };   // 0x009360d0
 
 // @ 0x00e6bf30
 void SP_sUpdatePoisonReleaseEffect(unsigned int param_1, int* param_2, unsigned int param_3,
@@ -416,7 +419,7 @@ void FUN_00e6cad0(unsigned int param_1, unsigned int param_2, unsigned int param
         return;
     }
     double fVar2 = FUN_00e69740(param_1, param_2, param_3, param_4);
-    double fVar3 = EA_RandomRandomDoubleUniform(&g_RandomState);
+    double fVar3 = ((RandomLinearCongruential*)&g_RandomState)->RandomDoubleUniform();
     fVar1 = fVar2 + fVar1;
     fVar3 = fVar3 * fVar1;
     if (fVar3 < fVar1)
