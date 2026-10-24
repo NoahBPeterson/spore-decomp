@@ -1,1 +1,8 @@
-00c42710 SP::cLocomotiveObject::EvaluateForces  # PDB candidate (caller-scored); stdcall(Vec3* out, tSteeringData*) sums tForceData list
+00c423d0 ClosestPointsOnSegments  # closest points of two segments (degenerate guards, denominator guard, t/s parameters); Eq. of the standard closest-point-of-two-segments solution; cdecl 6 args; nonmatching (equiv PASS)
+00c42650 SegmentsNear  # closest points then squared distance between them < 1/65536; nonmatching (equiv PASS)
+00c426e0 CLocoObject::HasId  # linear scan of the id list at +0x490/+0x494 for the argument; byte-exact
+00c42de0 CLocoObject::GetGoalPosition  # scan the id list for 0x00b49a50, return &+0x190 when found and +0x19c is set, else &+0x208; nonmatching (equiv PASS)
+00c42e20 CLocoObject::IsNearGoal  # flag gate, mode 0 accept, last/default goal zone, type 1 spherical-triangle containment via three acos angles summing to 2pi, type 0 squared-distance InRange plus optional direction dot test; nonmatching (equiv WEAK)
+00c42710 SP::cLocomotiveObject::EvaluateForces  # PDB candidate (caller-scored); stdcall(Vec3* out, tSteeringData*) sums tForceData list; nonmatching (equiv PASS)
+00c431a0 CLocoObject::UpdateGoalProgress  # early-out without a locomotion, fill the steer parameter (dt from unsigned ms * 0.001, distance from HasLineOfSight/GetDistance, steered position, owner), ApplyMotion, accumulate goal time when a mode is set, write back the position; byte-exact
+00c43270 eastl::remove_copy_if<AutoRefCount<cSpatialObject>*,AutoRefCount<cSpatialObject>*,bool(*)(cSpatialObject*)>  # copy the neighbours the predicate keeps (AddRef new, Release old) and return the new end; byte-exact

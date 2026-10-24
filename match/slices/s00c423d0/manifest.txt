@@ -1,2 +1,4 @@
 # source  symbol  original VA  [flags override]
-# No byte-exact functions in slice s00c423d0 (see nonmatching.txt).
+slices/s00c423d0/s00c423d0.cpp  ?HasId@CLocoObject@@QAE_NI@Z  00c426e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c423d0/s00c423d0.cpp  ?UpdateGoalProgress@CLocoObject@@QAEXI@Z  00c431a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c423d0/s00c423d0.cpp  ?RemoveCopyIfNeighbors@@YAPAV?$AutoRefCount@UCSpatialObject@@@@PAV1@00P6A_NPAUCSpatialObject@@@Z@Z  00c43270  /O2 /MD /Gy /TP /arch:SSE /fp:fast
