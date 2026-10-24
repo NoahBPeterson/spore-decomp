@@ -20,10 +20,13 @@ inline void* operator new(unsigned int, void* p) { return p; }
 extern char gEmptyString[];  // 0x01667bac
 
 // ------------------------------------------------------------------ basic_string<char>
+// The engine's string is 16 bytes: begin / end / capacity plus an unused 4th slot (the original's
+// pair<string,int> puts the int at +0x10 and its copy ctor never touches +0xc).
 struct string8 {
   char* mpBegin;
   char* mpEnd;
   char* mpCapacity;
+  unsigned int mUnused0c;
   __declspec(nothrow) string8() {
     mpBegin = gEmptyString;
     mpEnd = gEmptyString;
@@ -99,23 +102,35 @@ extern RBNodeBase* RBTreeIncrement(RBNodeBase* p);                // 0x00921580
 
 // ---- map<int,string>
 struct IntStrPair { int first; string8 second; };
+// pair<int,string> constructor: copies the default string into the pair's second member
+struct String4 { __declspec(noinline) void* ctor(void* key, void* def); };  // 0x00b209f0
 struct IntStrMap {
   char pad[4];
   RBNodeBase mAnchor;  // +4
   unsigned mnSize;     // +0x14
   __declspec(noinline) string8* Index(const int& key);                    // 0x00b1ba90
   string8* operator[](const int& key) { return Index(key); }
-  void DoInsert(Iter* out, IntStrNode* hint, IntStrPair* value, bool forceLeft);  // 0x00b1ad00
+  // 0x00b1ad00; the trailing slot is an unused flag argument that the original fills with the
+  // caller's (dead) key-pointer stack slot, so callers pass that value through
+  void DoInsert(Iter* out, IntStrNode* hint, IntStrPair* value, unsigned int unusedFlag);
 };
-void __cdecl MakeIntStrPair(IntStrPair* out, const int* key, const string8* def);  // 0x00b209f0
+
 
 // ---- map<string,int>
-struct StrIntPair { const string8* first; int second; };
+// The pair is laid out like the original's: the key string at +0 (so a pair* doubles as a
+// string*), the mapped int at +0x10.
+struct StrIntPair {
+  string8 first;
+  int second;
+  StrIntPair(const string8& key) : first(key.mpBegin, key.mpEnd), second(0) {}
+};
 struct StrIntMap {
   char pad[4];
   RBNodeBase mAnchor;  // +4
   unsigned mnSize;     // +0x14
-  __declspec(noinline) Iter* insert(Iter* out, RBNodeBase* hint, const void* value);  // 0x00b1b980
+  void LowerBound(RBNodeBase** out, const string8* key);                              // 0x00b19cb0
+  __declspec(noinline) Iter* insert(Iter* out, RBNodeBase* hint, const void* value,
+                                    bool forceLeft);                                  // 0x00b1b980
   __declspec(noinline) int* Index(const string8& key);                                // 0x00b1c220
   int* operator[](const string8& key) { return Index(key); }
   void DoInsertValueImpl(Iter* out, RBNodeBase* parent, const void* value, bool forceLeft);  // 0x00b1a600
@@ -130,7 +145,8 @@ struct IntVecMap {
   unsigned mnSize;     // +0x14
   __declspec(noinline) Elem38Vector* Index(const int& key);                             // 0x00b1c150
   Elem38Vector* operator[](const int& key) { return Index(key); }
-  void DoInsert(Iter* out, RBNodeBase* hint, IntVecPair* value, bool forceLeft);  // 0x00b1b8b0
+  // 0x00b1b8b0; the trailing slot is unused and carries the caller's (dead) key-pointer value
+  void DoInsert(Iter* out, RBNodeBase* hint, IntVecPair* value, unsigned int unusedFlag);
 };
 
 // @ 0x00b1ba90
@@ -139,24 +155,25 @@ string8* IntStrMap::Index(const int& key) {
   RBNodeBase* pLowerBound = &mAnchor;
   if (pCurrent) {
     do {
-      if (pCurrent->first < key) pCurrent = (IntStrNode*)pCurrent->mpNodeRight;
+      // the original orders the keys as unsigned (`jb`/`jae`)
+      if ((unsigned)pCurrent->first < (unsigned)key) pCurrent = (IntStrNode*)pCurrent->mpNodeRight;
       else { pLowerBound = pCurrent; pCurrent = (IntStrNode*)pCurrent->mpNodeLeft; }
     } while (pCurrent);
   }
-  if (pLowerBound == &mAnchor || key < ((IntStrNode*)pLowerBound)->first) {
+  if (pLowerBound == &mAnchor || (unsigned)key < (unsigned)((IntStrNode*)pLowerBound)->first) {
     string8 empty;
     IntStrPair pair;
-    int k = key;
-    MakeIntStrPair(&pair, &k, &empty);
+    ((String4*)&pair)->ctor((void*)&key, &empty);
     Iter it;
-    DoInsert(&it, (IntStrNode*)pLowerBound, &pair, false);
+    // the unused flag rides in the key's dead stack slot: only its low byte is cleared
+    DoInsert(&it, (IntStrNode*)pLowerBound, &pair, (unsigned int)&key & ~0xFFu);
     return &((IntStrNode*)it.mpNode)->second;
   }
   return &((IntStrNode*)pLowerBound)->second;
 }
 
 // @ 0x00b1b980
-Iter* StrIntMap::insert(Iter* out, RBNodeBase* hint, const void* value) {
+Iter* StrIntMap::insert(Iter* out, RBNodeBase* hint, const void* value, bool forceLeft) {
   RBNodeBase* pCurrent = mAnchor.mpNodeParent;
   if (hint == pCurrent || hint == &mAnchor) {
     if (mnSize != 0 && StringLess(&((StrIntNode*)pCurrent)->first, (const string8*)value)) {
@@ -183,22 +200,16 @@ Iter* StrIntMap::insert(Iter* out, RBNodeBase* hint, const void* value) {
 
 // @ 0x00b1c220
 int* StrIntMap::Index(const string8& key) {
-  StrIntNode* pCurrent = (StrIntNode*)mAnchor.mpNodeParent;
-  RBNodeBase* pLowerBound = &mAnchor;
-  if (pCurrent) {
-    do {
-      if (StringLess(&((StrIntNode*)pCurrent)->first, &key)) pCurrent = (StrIntNode*)pCurrent->mpNodeRight;
-      else { pLowerBound = pCurrent; pCurrent = (StrIntNode*)pCurrent->mpNodeLeft; }
-    } while (pCurrent);
-  }
+  // the tree search lives in the shared lower_bound helper (0x00b19cb0), which compares with the
+  // length-first string ordering
+  RBNodeBase* pLowerBound;
+  LowerBound(&pLowerBound, &key);
   if (pLowerBound != &mAnchor && !StringLess(&key, &((StrIntNode*)pLowerBound)->first)) {
     return &((StrIntNode*)pLowerBound)->second;
   }
-  StrIntPair pair;
-  pair.first = &key;
-  pair.second = 0;
+  StrIntPair value(key);
   Iter it;
-  insert(&it, pLowerBound, &pair);
+  insert(&it, pLowerBound, &value, false);
   return &((StrIntNode*)it.mpNode)->second;
 }
 
@@ -208,23 +219,25 @@ Elem38Vector* IntVecMap::Index(const int& key) {
   RBNodeBase* pLowerBound = &mAnchor;
   if (pCurrent) {
     do {
-      if (pCurrent->first < key) pCurrent = (IntVecNode*)pCurrent->mpNodeRight;
+      // the original orders the keys as unsigned (`jb`/`jae`)
+      if ((unsigned)pCurrent->first < (unsigned)key) pCurrent = (IntVecNode*)pCurrent->mpNodeRight;
       else { pLowerBound = pCurrent; pCurrent = (IntVecNode*)pCurrent->mpNodeLeft; }
     } while (pCurrent);
   }
-  if (pLowerBound != &mAnchor && !(key < ((IntVecNode*)pLowerBound)->first)) {
+  if (pLowerBound != &mAnchor && (unsigned)((IntVecNode*)pLowerBound)->first <= (unsigned)key) {
     return &((IntVecNode*)pLowerBound)->second;
   }
+  // value_type(key, mapped_type()): the zeroed mapped_type() is copy-constructed into the pair
+  Elem38Vector empty;
   IntVecPair value;
   value.first = key;
-  value.second.mpBegin = 0;
-  value.second.mpEnd = 0;
-  value.second.mpCapacity = 0;
+  new (&value.second) Elem38Vector(empty);   // 0x00b1a350
   Iter it;
-  DoInsert(&it, pLowerBound, &value, false);
+  DoInsert(&it, pLowerBound, &value, (unsigned int)&key & ~0xFFu);
   Elem38* pb = value.second.mpBegin;
   value.second.Destruct(value.second.mpBegin, value.second.mpEnd);
   if (pb && ((int*)pb)[-1]) delete[] (char*)pb;
+  empty.Destruct(empty.mpBegin, empty.mpEnd);
   return &((IntVecNode*)it.mpNode)->second;
 }
 
@@ -267,7 +280,6 @@ struct cStateMachineHost {
   void DeclareState(int index, const char* name);          // 0x00b1c080
   void virtual6(int a, int b, int c, int d, int e, int f); // 0x00b1c540
   void SetupTransitions(int a);                            // 0x00b1c630
-  int UpdateEditedScript(int* recs, int type, int val, int* obj, int a6, unsigned a7, unsigned a8);  // 0x00b1bb40
 };
 
 // @ 0x00b1c080
@@ -346,11 +358,268 @@ void cStateMachineHost::SetupTransitions(int a) {
   (void)a;
 }
 
+// ================================================================== the edited-script updater
+// The updater walks the host's pending property-edit records, applies the first one that matches the
+// requested (type, flags, mask, value, object) tuple through the script property services, and moves
+// the host to the record's target state id.
+
+extern unsigned char g_0167be90;   // 0x0167be90: nonzero while the updater runs
+extern int g_0167be8c;             // 0x0167be8c: the record that was applied
+extern float g_013f5c8c;           // 0x013f5c8c: seconds per tick (1/120)
+extern int g_015d1160;             // 0x015d1160: fallback for a non-integer property value
+extern void* FUN_006895b0();       // 0x006895b0: script property services singleton
+
+namespace eastl {
+struct sp_vector_allocator;
+template <class T, class A> struct vector {
+  T* mpBegin;
+  T* mpEnd;
+  T* mpCapacity;
+  void DoInsertValue(T* position, const T& value);   // 0x004558a0
+};
+}
+
+namespace EA {
+struct Variant {                    // 16-byte inline payload followed by the flag/type words
+  unsigned int value0;              // +0x00 inline int, or a pointer when mFlags & 0x30
+  unsigned int value1;              // +0x04
+  unsigned int value2;              // +0x08
+  unsigned int value3;              // +0x0c
+  unsigned short mFlags;            // +0x10
+  unsigned short mTypeId;           // +0x12
+  bool Construct(unsigned short type, unsigned short flags, const void* src, unsigned int width,
+                 unsigned int isAtomic);           // 0x0093dd80
+  void Destruct(char bFree);                       // 0x0093db80
+};
+}
+
+struct IPropertyTarget {            // what a record's object id is resolved against
+  virtual void v0();
+  virtual void v4();
+  virtual void v8();
+  virtual int v0c(int objectId);    // +0x0c nonzero when the object exists
+};
+
+struct PropBag {                    // a property bag handed out by the services
+  virtual void v0();
+  virtual void v4();                                        // +0x04 release
+  virtual void v8();
+  virtual void vc();
+  virtual void v10();
+  virtual void v14(int keep);                               // +0x14 commit
+  virtual void v18(int id);
+  virtual const EA::Variant* GetProp(int id);               // +0x1c
+  virtual void SetProp(int id, const EA::Variant* value);   // +0x20
+};
+
+struct ScriptServices {             // the services singleton (0x006895b0)
+  virtual void v0();
+  virtual void v4();
+  virtual void v8();
+  virtual void vc();
+  virtual void v10();
+  virtual void v14();
+  virtual void v18(PropBag** out);                          // +0x18 hand out a bag
+  virtual void v1c();
+  virtual void v20();
+  virtual void v24();
+  virtual void v28();
+  virtual void v2c();
+  virtual void v30();
+  virtual void v34();
+  virtual void v38();
+  virtual void v3c();
+  virtual void v40();
+  virtual void v44();
+  virtual void v48();
+  virtual void v4c();
+  virtual void v50();
+  virtual void v54(int a, PropBag* b, PropBag* c);          // +0x54 apply the edit
+};
+
+struct EditRecord {                 // one pending property edit, 0x38 bytes
+  uint32_t pad00[4];                // +0x00
+  int32_t mField10;                 // +0x10
+  int32_t mField14;                 // +0x14
+  int32_t mValue18;                 // +0x18
+  int32_t mLimit1c;                 // +0x1c (-1: no value restriction)
+  int32_t mObjectId20;              // +0x20 (-1: no object restriction)
+  unsigned char mKeep24;            // +0x24 keep the current state id on the id stack
+  unsigned char pad25[3];           // +0x25
+  int32_t mType28;                  // +0x28
+  uint32_t mFlags2c;                // +0x2c
+  uint32_t mMask30;                 // +0x30
+  uint32_t mTime34;                 // +0x34
+};
+
+struct EditRecordVector {           // eastl vector of records
+  EditRecord* mpBegin;
+  EditRecord* mpEnd;
+  EditRecord* mpCapacity;
+};
+
+struct cScriptHost {                // the state-machine host as the script updater sees it
+  uint32_t pad00[17];               // +0x00
+  IntStrMap mStateNames;            // +0x44 state id -> name
+  uint32_t pad5c;                   // +0x5c
+  int32_t mCurrentId;               // +0x60
+  int32_t mPreviousId;              // +0x64
+  uint32_t pad68[2];                // +0x68
+  float mTime;                      // +0x70
+  uint32_t pad74[34];               // +0x74
+  eastl::vector<unsigned int, eastl::sp_vector_allocator> mIdStack;   // +0xfc
+  bool UpdateEditedScript(EditRecordVector* recs, int type, int val, IPropertyTarget* obj,
+                          const int* vec3, unsigned mask, unsigned flags);
+};
+
 // @ 0x00b1bb40
-// (SP::cAppModeTerrainEditor::UpdateEditedScript; the full body is not reconstructed)
-int cStateMachineHost::UpdateEditedScript(int* recs, int type, int val, int* obj, int a6, unsigned a7, unsigned a8) {
-  (void)recs; (void)type; (void)val; (void)obj; (void)a6; (void)a7; (void)a8;
-  return 0;
+bool cScriptHost::UpdateEditedScript(EditRecordVector* recs, int type, int val, IPropertyTarget* obj,
+                                     const int* vec3, unsigned mask, unsigned flags) {
+  g_0167be90 = 1;
+  int count = (int)((char*)recs->mpEnd - (char*)recs->mpBegin) / 0x38;
+  if (count == 0) {
+    g_0167be90 = 0;
+    return false;
+  }
+  // pick the first record that matches the requested edit
+  EditRecord* rec;
+  unsigned int i = 0;
+  for (;;) {
+    rec = recs->mpBegin + i;
+    bool match = type == rec->mType28 &&
+                 (((flags | 0x40) & rec->mFlags2c) == rec->mFlags2c || rec->mFlags2c == 0x3ff) &&
+                 (rec->mMask30 & mask) == rec->mMask30 &&
+                 !((rec->mFlags2c & 0x40) && (flags & 0x40));
+    if (rec->mObjectId20 != -1) {
+      // the object lookup runs whether or not the rest of the record matched
+      bool found = obj ? obj->v0c(rec->mObjectId20) != 0 : rec->mObjectId20 == 0;
+      match = match && found;
+    }
+    if (match && (rec->mLimit1c == -1 || val == rec->mLimit1c)) break;
+    ++i;
+    if (i >= (unsigned int)count) {   // the original scans with an unsigned index
+      g_0167be90 = 0;
+      return false;
+    }
+  }
+
+  if (rec->mTime34) mTime = (float)rec->mTime34;
+  int value18 = rec->mValue18;
+  if (rec->mType28 == 9 && value18 == -1) value18 = val;
+  int pending = 0;
+  if (rec->mType28 == 10 || rec->mType28 == 11) pending = rec->mType28;
+  float fvec[3] = {0.0f, 0.0f, 0.0f};
+  if (rec->mType28 == 8) {
+    float ticks = (float)val;                 // seconds: the value in ticks scaled to the frame time
+    fvec[2] = ticks * g_013f5c8c;
+  }
+
+  ScriptServices* services = (ScriptServices*)FUN_006895b0();
+  PropBag* primary;
+  services->v18(&primary);
+  EA::Variant v;
+  v.mFlags = 0;
+  v.mTypeId = 0;
+  v.Construct(0x11, 0x29, obj, 4, 1);      // the edited object itself
+  primary->SetProp(0, &v);
+  if (v.mFlags & 4) v.Destruct(false);
+
+  v.value0 = (unsigned)value18;            // the record's value
+  v.mFlags = 0;
+  v.mTypeId = 0xa;
+  primary->SetProp(1, &v);
+  if (v.mFlags & 4) v.Destruct(false);
+
+  v.value0 = (unsigned)pending;            // the pending state / event
+  v.mFlags = 0;
+  v.mTypeId = 0xa;
+  primary->SetProp(2, &v);
+  if (v.mFlags & 4) v.Destruct(false);
+
+  v.value0 = (unsigned)vec3[0];            // the target position
+  v.value1 = (unsigned)vec3[1];
+  v.value2 = (unsigned)vec3[2];
+  v.mFlags = 0;
+  v.mTypeId = 0x31;
+  primary->SetProp(3, &v);
+  if (v.mFlags & 4) v.Destruct(false);
+
+  memcpy(&v.value0, fvec, sizeof(fvec));   // the extra vector
+  v.mFlags = 0;
+  v.mTypeId = 0x31;
+  primary->SetProp(4, &v);
+  if (v.mFlags & 4) v.Destruct(false);
+
+  PropBag* secondary;
+  services->v18(&secondary);
+  v.value0 = 0;
+  v.mFlags = 0;
+  v.mTypeId = 9;
+  secondary->SetProp(0, &v);
+  if (v.mFlags & 4) v.Destruct(false);
+
+  services->v54(rec->mField14, primary, secondary);
+
+  // the applied edit reports the state id to switch to
+  const EA::Variant* r = secondary->GetProp(0);
+  int mode;
+  if (!r) {
+    mode = 0;
+  } else if (r->mTypeId == 9 || r->mTypeId == 0x10) {
+    mode = (r->mFlags & 0x30) ? *(const int*)(unsigned)r->value0 : (int)r->value0;
+  } else {
+    mode = g_015d1160;
+  }
+
+  primary->v14(0);
+  secondary->v14(0);
+  primary->v4();
+  secondary->v4();
+
+  int value = mCurrentId;
+  if (mode == 1) {
+    // drop the whole id stack (the original clears it through a zero-length copy)
+    volatile unsigned nothing = 0;
+    memcpy(mIdStack.mpBegin, mIdStack.mpEnd, nothing);
+    mIdStack.mpEnd = mIdStack.mpBegin;
+    value = mPreviousId;
+  } else if (mode == 0) {
+    if (rec->mField10 == -3) {
+      value = (int)*--mIdStack.mpEnd;
+    } else if (rec->mField10 != -2) {
+      value = rec->mField10;
+    }
+  }
+
+  if (mCurrentId != value) {
+    if (rec->mKeep24) {
+      if (mIdStack.mpEnd >= mIdStack.mpCapacity) {
+        mIdStack.DoInsertValue(mIdStack.mpEnd, (const unsigned int&)mCurrentId);
+      } else {
+        unsigned int* slot = mIdStack.mpEnd++;
+        if (slot) *slot = (unsigned int)mCurrentId;
+      }
+    }
+    // name of the state being left: copied once, then released (nothing reads the copy)
+    string8* s = mStateNames.Index(mCurrentId);
+    unsigned int n = (unsigned int)(s->mpEnd - s->mpBegin);
+    char* buf;
+    char* cap;
+    if (n + 1 > 1) {
+      buf = (char*)SPORE_ALLOC(n + 1);
+      cap = buf + n + 1;
+    } else {
+      buf = gEmptyString;
+      cap = gEmptyString + 1;
+    }
+    memcpy(buf, s->mpBegin, n);
+    buf[n] = 0;
+    mCurrentId = value;
+    if (cap - buf > 1 && buf) delete[] buf;
+  }
+  g_0167be8c = (int)rec;
+  g_0167be90 = 0;
+  return true;
 }
 
 // @ 0x00b1c580
@@ -376,5 +645,6 @@ void __stdcall FUN_00b1c580(int value, const char* name) {
   s.mpCapacity = end;
   int* v = gStringIntMap.operator[](s);
   *v = value;
-  if ((end - buf) > 1 && buf) delete[] buf;
+  // `s`'s destructor releases `buf` (only when the capacity was allocated, not the shared empty
+  // string), which is exactly where the original frees it -- a manual free would double-free.
 }

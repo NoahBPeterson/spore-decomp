@@ -1,4 +1,3 @@
-00b1bb40 SP::cAppModeTerrainEditor::UpdateEditedScript (1335 B); body NOT reconstructed -- Ghidra output is heavily obfuscated; stub returned 0
 00b1c2c0 ctor of the 0x190-byte host/editor object (353 B); vtable/field stores present but the inlined EA::Stopwatch start (rdtsc / QueryPerformanceCounter) and several field inits are approximate
 00b1c480 dtor of the same object (184 B); sub-object destruction present but ordering/complete member set not verified
 00b1c630 transition-script setup (664 B); body NOT reconstructed -- builds an Elem38 "transition" record and resets lists/maps, stub only
