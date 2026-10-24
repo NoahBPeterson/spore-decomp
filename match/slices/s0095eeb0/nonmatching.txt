@@ -6,6 +6,7 @@
 0095f1c0  289  CM::TransformPoint4: complete; reciprocal branch and SSE schedule differ
 0095f320  318  BuildRotation: complete; sin/cos x87 interleave with SSE differs
 0095f5c0  84   CM::SetRotationAtLeast2: complete; frame/register schedule differs
+0095f620  501  CM::Invert: complete; type-1/2/3 paths rebuilt, type-2 feeds SetAxes three stack row copies (as the original does) then Inv3; equiv PASS (400 inputs, 100% coverage); remaining diff is SSE/allocator schedule
 0095f860  84   CM::Multiply: complete; 17-dword copy / multiply branch layout differs
 0095f8c0  133  ModulateARGB32: complete; channel packing arithmetic schedule differs
 0095f960  14   Window::AsInterface: complete; shared tail branch layout differs
@@ -14,7 +15,8 @@
 0095fad0  69   Window::IsAncestorOf: complete; ancestor walk register schedule differs
 0095fb20  41   Window::Test30Slot48: complete; this-adjust mask differs
 0095fb60  41   Window::Test30Slot54: complete; this-adjust mask differs
-0095fc00  3    Window::AllDescendantsAll: complete; bool return uses al instead of eax
+0095fc50  2    Window::FindChild: complete; only encoding differs (original `add eax,-4`, cl 15 normalises every -4 form to `sub eax,4`); equiv WEAK (231 valid, 18% coverage)
+0095fcc0  19   Window::WalkChildren: complete; original homes the iterator on the arg-1 slot and caches the pre-call value in esi, cl15 routes the copy through ecx
 0095fd60  26   Window::SetA8: complete; event arg block order differs
 0095fdc0  26   Window::Set1D4: complete; this-4 arguments differ
 0095fe40  33   Window::SetArea: complete; float compare/set order differs

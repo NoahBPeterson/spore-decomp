@@ -1,4 +1,1 @@
 # va  diff-bytes  reason
-0095f620  -  Transform::Invert: type 3 (full 4x4) invert path approximated
-0095fc50  -  Window::FindChild: child search loop partially reconstructed
-0095fcc0  -  Window::WalkChildren: recursive child walk not reconstructed

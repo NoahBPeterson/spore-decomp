@@ -149,37 +149,39 @@ void CM::SetRotationAtLeast2(float* axis, float angle) {
         m[i] = tmp[i];
 }
 
-// @ 0x0095F620 (partial: full 4x4 invert path approximated)
+// @ 0x0095F620
 void CM::Invert() {
     int type = *(int*)&m[16];
     if (type == 1) {
-        float f1 = m[9];
-        float f6 = 1.0f / m[10];
-        m[10] = f6;
-        float f2 = m[11];
-        float f7 = 1.0f / m[15];
-        m[15] = f7;
-        float f5 = 1.0f / m[0];
-        m[0] = f5;
-        m[12] = -(m[12] * f5);
-        m[13] = -(f1 * f6);
-        m[14] = -(f2 * f7);
+        // scale + translation only: reciprocate the three diagonal terms, then negate the offset
+        m[5]  = 1.0f / m[5];
+        m[10] = 1.0f / m[10];
+        m[0]  = 1.0f / m[0];
+        m[12] = -(m[12] * m[0]);
+        m[13] = -(m[13] * m[5]);
+        m[14] = -(m[14] * m[10]);
         m[15] = 1.0f;
     } else if (type == 2) {
-        float axes[12];
-        ((CM*)axes)->SetAxes(m + 8, m + 4, m);
-        float inv[12];
+        // rotation + translation: invert the 3x3 (rows built from the columns, reversed) and
+        // negate the offset; the inverse's 4th component of every row is forced to zero.
+        CM axes;
+        float row0[3] = { m[0], m[1], m[2] };
+        float row1[3] = { m[4], m[5], m[6] };
+        float row2[3] = { m[8], m[9], m[10] };
+        axes.SetAxes(row0, row1, row2);
+        float inv[16];
         float det;
-        Inv3((CM*)inv, axes, &det);
-        for (int i = 0; i < 12; i++)
-            m[i] = inv[i];
-        m[3] = 0.0f; m[7] = 0.0f; m[11] = 0.0f;
-        m[12] = -m[12]; m[13] = -m[13]; m[14] = -m[14];
+        Inv3((CM*)inv, (float*)&axes, &det);
+        m[0] = inv[0]; m[1] = inv[1]; m[2] = inv[2];   m[3] = 0.0f;
+        m[4] = inv[4]; m[5] = inv[5]; m[6] = inv[6];   m[7] = 0.0f;
+        m[8] = inv[8]; m[9] = inv[9]; m[10] = inv[10]; m[11] = 0.0f;
+        m[12] = -m[12];
+        m[13] = -m[13];
+        m[14] = -m[14];
         m[15] = 1.0f;
     } else if (type == 3) {
-        if (MatInvertFull(this, this))
-            *(int*)&m[16] = *(int*)&m[16];
-        else
+        // full 4x4; on failure the type degrades to "not invertible"
+        if (!MatInvertFull(this, this))
             *(int*)&m[16] = 4;
     }
 }
@@ -217,9 +219,9 @@ struct Window {
     bool    Test30Slot48(int v);
     bool    Test30Slot54(int v);
     bool    AllDescendants(char param);
-    bool    AllDescendantsAll(char param);
-    int     FindChild(int arg);
-    int     WalkChildren(int* iface);
+    int     AllDescendantsAll(bool param);
+    void    FindChild();
+    int     WalkChildren(Window* cur, int target, char recurse);
     void    SetA8(int v);
     void    Set1D4(int v);
     void    SetArea(float* area);
@@ -321,44 +323,61 @@ bool Window::AllDescendants(char param) {
 }
 
 // @ 0x0095FC00
-bool Window::AllDescendantsAll(char param) {
+int Window::AllDescendantsAll(bool param) {
     unsigned mask = ((param != 0) - 1) & 2 | 1;
     int node = m38;
     while (node != 0) {
         unsigned r = (*(unsigned(__thiscall**)(int))((char*)*(void**)(node + 4) + 0x28))(node + 4);
         if ((r & mask) == mask)
-            return true;
+            return node;
         node = *(int*)(node + 0x38);
-    }
-    return false;
-}
-
-// @ 0x0095FC50 (partial)
-int Window::FindChild(int arg) {
-    int edi = m34;
-    if (edi == 0)
-        return 0;
-    for (int i = 0; i < 2; i++) {
-        int r = (*(int(__thiscall**)(int, int))((char*)*(void**)edi + 0x48))(edi, i);
-        if (r == 0)
-            break;
-        r -= 4;
-        if (r == 0)
-            break;
-        int node = r;
-        while (node != 0 && node != (int)this)
-            node = *(int*)(node + 0x38);
-        if (node == 0)
-            break;
-        (void)arg;
-        return node + 4;
     }
     return 0;
 }
 
-// @ 0x0095FCC0 (partial)
-int Window::WalkChildren(int* iface) {
-    (void)iface;
+// @ 0x0095FC50
+void Window::FindChild() {
+    int c = m34;
+    if (c == 0)
+        return;
+    for (unsigned i = 0; i < 10; i++) {
+        int r = (*(int(__thiscall**)(int, int))((char*)*(void**)c + 0x48))(c, (int)i);
+        if (r == 0)
+            continue;
+        r = r + (-4);                 // skip the "owner interface" sentinel
+        if (r == 0)
+            continue;
+        int node = r;
+        do {
+            if (node == (int)this)
+                break;
+            node = *(int*)(node + 0x38);
+        } while (node != 0);
+        if (node == 0)
+            continue;
+        int d = this->AllDescendantsAll(i == 1);
+        int x = d ? d + 4 : 0;
+        (*(void(__thiscall**)(int, int, int))((char*)*(void**)c + 0x4c))(c, (int)i, x);
+    }
+}
+
+// @ 0x0095FCC0
+int Window::WalkChildren(Window* cur, int target, char recurse) {
+    Window* self = cur;
+    Window* end;
+    (*(void(__thiscall**)(Window*, Window**))((char*)*(void**)cur + 0xcc))(cur, &cur);
+    (*(void(__thiscall**)(Window*, Window**))((char*)*(void**)self + 0xd0))(self, &end);
+    while (cur != end) {
+        Window* node = (Window*)((char*)cur - 4);
+        if ((*(int(__thiscall**)(Window*))((char*)*(void**)node + 0x1c))(node) == target)
+            return (int)node;
+        if (recurse) {
+            int r = WalkChildren(node, target, recurse);
+            if (r != 0)
+                return r;
+        }
+        cur = *(Window**)cur;
+    }
     return 0;
 }
 
