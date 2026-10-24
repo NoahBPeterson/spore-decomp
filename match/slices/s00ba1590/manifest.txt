@@ -1,0 +1,7 @@
+slices/s00ba1590/s00ba1590.cpp  ?StageChangeHandler@G7@@YAXI@Z  00ba1c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba1590/s00ba1590.cpp  ?SimCtxStageHandler@G7@@YAXPAUSimCtx@1@@Z  00ba1ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba1590/s00ba1590.cpp  ?Notify5c@Owner@G7@@QAEXPAX0@Z  00ba1d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba1590/s00ba1590.cpp  ?NotifyAll@G7@@YA_NPAXPAUList@1@@Z  00ba1da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba1590/s00ba1590.cpp  ?ReadFrom@Owner@G7@@QAEXPAX@Z  00ba1f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba1590/s00ba1590.cpp  ?ClearActive@Owner@G7@@QAEXXZ  00ba20f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba1590/s00ba1590.cpp  ?Dtor@Owner@G7@@QAEPAU12@E@Z  00ba2290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

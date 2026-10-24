@@ -433,3 +433,518 @@ void FUN_00ba1590(void)
     }
     FUN_00b9c830(list.get(), avatarPos, 3.402823466e+38F, 0x204e6edd, 0x73cc6df5);
 }
+
+// ===============================================================================================
+// G7: cGonzagoSubsystem-derived key-list owner (0x00ba1c60 .. 0x00ba2400).
+//
+// The object is 0x44 bytes: two vtable pointers (+0x0, +0x4), three intrusive circular lists
+// (+0x1c, +0x28, +0x34) of 12-byte nodes {next, prev, key} and two flag bytes (+0x40 staging,
+// +0x41 committing).  Keys are COM-like refcounted objects: first vtable at +0x0 (AddRef +4,
+// Release +8), a second interface vtable at +0x8 (slots +0xc/+0x1c/+0x20) and three flag bytes
+// at +0xc..+0xe used by the commit notification pass.
+namespace G7
+{
+    typedef unsigned int  u32;
+    typedef unsigned char u8;
+
+#define G7NOINLINE __declspec(noinline)
+
+    struct Obj
+    {
+        void* pVtbl0;       // +0x0  first interface (AddRef +4, Release +8)
+        void* pUnk04;       // +0x4
+        void* pVtbl1;       // +0x8  second interface (GetId +0x20, Prepare +0xc, Notify +0x1c)
+        char  mNotifyMode;  // +0xc  written from the commit flag
+        char  m0d;          // +0xd
+        char  m0e;          // +0xe
+    };
+
+    struct Node
+    {
+        Node* pNext;        // +0x0
+        Node* pPrev;        // +0x4
+        Obj*  pObj;         // +0x8
+    };
+
+    // A list base is itself a node (the sentinel); its value slot is unused.
+    struct List
+    {
+        Node* pNext;        // +0x0  sentinel next
+        Node* pPrev;        // +0x4  sentinel prev
+        Obj*  pUnused;      // +0x8  sentinel value slot
+
+        void DoClear();                             // 0x0060c4a0
+        __forceinline void Init() { pNext = (Node*)this; pPrev = (Node*)this; }
+    };
+
+    // First parameter of FUN_00ba1fa0: version/build pair at +0xc/+0x10.
+    struct VersionArg
+    {
+        u32 mPad00[3];      // +0x0
+        u32 mVersion;       // +0xc
+        u32 mBuild;         // +0x10
+    };
+
+    struct Owner
+    {
+        void* pVtbl0;       // +0x0
+        void* pVtbl1;       // +0x4
+        u32   mPad08[5];    // +0x8 .. +0x1b
+        List  mActive;      // +0x1c
+        List  mPending;     // +0x28
+        List  mScratch;     // +0x34
+        u8    m40;          // +0x40
+        u8    mCommitted;   // +0x41
+        u8    mPad42[2];
+
+        void BaseCtor();    // 0x00b5b960
+        void BaseDtor();    // 0x00b5b9a0
+
+        void Notify5c(void* unused, void* value);                 // 0x00ba1d80 (ret 8)
+        void ReadFrom(void* stream);                              // 0x00ba1f30
+        void NotifyAndPrune(VersionArg* arg);                     // 0x00ba1fa0
+        void RemoveKey(Obj* key);                                 // 0x00ba2070
+        void ClearActive();                                       // 0x00ba20f0
+        Owner* Ctor();                                            // 0x00ba2250
+        Owner* Dtor(u8 flags);                                    // 0x00ba2290
+        void AddKey(Obj* key);                                    // 0x00ba22e0
+        void CommitPending(void* a, void* b, char flag);          // 0x00ba2400 (ret 0xc)
+    };
+
+    struct SimCtx
+    {
+        int GetStage();     // 0x00c70e00
+    };
+
+    // Planet grid object whose Rebuild (0x00b9a630) runs after a stage switch.
+    struct Grid
+    {
+        void Rebuild();     // 0x00b9a630
+    };
+
+    // Variable-list serializer built on the stack by FUN_00ba1f30.
+    struct VarListSerializer
+    {
+        u8 mData[0xa14];
+        void Ctor(void* owner, void* name, int id);   // 0x00692f90 (ret 0xc)
+        void Read(void* stream);                      // 0x00693e10
+    };
+
+    // Stage ids passed to FUN_00ba0770.
+    extern char DAT_01654c01;
+    extern char DAT_01654c02;
+    extern char DAT_01654c04;
+    extern char DAT_01654c05;
+
+    void G7SetupSpots(void* stage, int on);         // 0x00ba0770
+    void G7NounManager();                           // 0x00b3d300
+    void G7CreatureStage();                         // 0x00ba1590
+    void G7TribeStage();                            // 0x00b9caa0
+    void G7SpaceStage();                            // 0x00b9d820
+    void G7AfterSpawn();                            // 0x00b99420
+    void G7Stage2(void* ctx);                       // 0x00b9bed0
+    void G7Stage4(void* ctx);                       // 0x00b9ff80
+    void G7Stage5(void* ctx);                       // 0x00ba0080
+    void G7WriteUint32(void* stream, void* data, int count, int flags);   // 0x0093aa70
+    void G7ReadInt32(void* stream, void* data, int count, int flags);     // 0x0093a780
+
+    __forceinline void* VSlot(void* p, int off)
+    {
+        return *(void**)((char*)(*(void**)(p)) + off);
+    }
+    __forceinline void* ObjSub(Obj* o) { return &o->pVtbl1; }
+    __forceinline void ObjAddRef(Obj* o)  { ((void (__thiscall*)(Obj*))VSlot(o, 4))(o); }
+    __forceinline void ObjRelease(Obj* o) { ((void (__thiscall*)(Obj*))VSlot(o, 8))(o); }
+
+    void* G7NewNode()
+    {
+        return operator new(0xc, "Simulator", 0, 0, (const char*)0x13ebb38, 0xd1);
+    }
+
+    __forceinline void InsertNode(List* list, Obj* obj)
+    {
+        if (obj)
+            ObjAddRef(obj);
+        Node* n = (Node*)G7NewNode();
+        if (&n->pObj) {
+            n->pObj = obj;
+            if (obj)
+                ObjAddRef(obj);
+        }
+        n->pNext = (Node*)list;
+        n->pPrev = list->pPrev;
+        list->pPrev->pNext = n;
+        list->pPrev = n;
+        if (obj)
+            ObjRelease(obj);
+    }
+
+// @ 0x00ba1c60
+    void StageChangeHandler(u32 stage)
+    {
+        G7NounManager();
+        switch (stage) {
+        case 0x1654c04:
+            G7SetupSpots(&DAT_01654c04, 1);
+            G7SpaceStage();
+            break;
+        case 0x1654c02:
+            G7SetupSpots(&DAT_01654c02, 1);
+            G7TribeStage();
+            G7AfterSpawn();
+            break;
+        case 0x1654c01:
+            G7SetupSpots(&DAT_01654c01, 1);
+            G7CreatureStage();
+            G7AfterSpawn();
+            break;
+        }
+        ((Grid*)0x156c060)->Rebuild();
+    }
+
+// @ 0x00ba1ce0
+    void SimCtxStageHandler(SimCtx* ctx)
+    {
+        switch (ctx->GetStage()) {
+        case 5:
+            G7SetupSpots(&DAT_01654c05, 0);
+            G7Stage5(ctx);
+            break;
+        case 4:
+            G7SetupSpots(&DAT_01654c04, 0);
+            G7Stage4(ctx);
+            break;
+        case 2:
+            G7SetupSpots(&DAT_01654c02, 0);
+            G7Stage2(ctx);
+            break;
+        }
+    }
+
+// @ 0x00ba1d80
+    void Owner::Notify5c(void* unused, void* value)
+    {
+        ((void (__thiscall*)(Owner*, void*, int, int))VSlot(this, 0x5c))(this, value, 0, 0);
+    }
+
+// @ 0x00ba1da0
+    bool NotifyAll(void* arg, List* list)
+    {
+        for (Node* n = list->pNext; n != (Node*)list; n = n->pNext) {
+            Obj* o = n->pObj;
+            if (o)
+                ((void (__thiscall*)(void*, void*))VSlot(ObjSub(o), 0x1c))(ObjSub(o), arg);
+        }
+        return true;
+    }
+
+    void __stdcall EraseIt(Node** out, Node* it);
+
+// @ 0x00ba1ea0
+    void SerializeList(Owner* owner, List* list)
+    {
+        u32 count = 0;
+        Node* p = list->pNext;
+        while (p != (Node*)list) {
+            p = p->pNext;
+            ++count;
+        }
+        void* a = ((void* (__thiscall*)(Owner*))VSlot(owner, 0x20))(owner);
+        void* b = ((void* (__thiscall*)(void*))VSlot(a, 0x18))(a);
+        u32 num = count;
+        G7WriteUint32(b, &num, 1, 0);
+        for (Node* n = list->pNext; n != (Node*)list; n = n->pNext) {
+            void* r = 0;
+            if (n->pObj)
+                r = ((void* (__thiscall*)(void*, int))VSlot(ObjSub(n->pObj), 0xc))(ObjSub(n->pObj), 0x179c807);
+            ((void (__thiscall*)(Owner*, void*))VSlot(owner, 0x2c))(owner, r);
+        }
+        ((void (__thiscall*)(Owner*))VSlot(owner, 0x1c))(owner);
+    }
+
+// @ 0x00ba1f30
+    void Owner::ReadFrom(void* stream)
+    {
+        mActive.DoClear();
+        mActive.Init();
+        mPending.DoClear();
+        mPending.Init();
+        mScratch.DoClear();
+        mScratch.Init();
+
+        VarListSerializer ser;
+        ser.Ctor(this, (void*)0x156c0b8, 0x1a80d26);
+        ser.Read(stream);
+    }
+
+// @ 0x00ba1fa0
+    void Owner::NotifyAndPrune(VersionArg* arg)
+    {
+        for (Node* n = mActive.pNext; n != (Node*)&mActive; n = n->pNext)
+            ((void (__thiscall*)(Obj*, VersionArg*))VSlot(n->pObj, 0x18))(n->pObj, arg);
+
+        if ((u32)((arg->mVersion << 16) | arg->mBuild) >= 0x220000)
+            return;
+
+        Node* end = (Node*)&mActive;
+        Node* n = mActive.pNext;
+        while (n != end) {
+            u32 id = ((u32 (__thiscall*)(void*))VSlot(ObjSub(n->pObj), 0x20))(ObjSub(n->pObj));
+            n = n->pNext;
+            if (id == 0x12326f68) {
+                Node* node = n->pPrev;
+                node->pPrev->pNext = node->pNext;
+                node->pNext->pPrev = node->pPrev;
+                if (node->pObj)
+                    ObjRelease(node->pObj);
+                operator delete[](node);
+                return;
+            }
+        }
+    }
+// @ 0x00ba2070
+    void Owner::RemoveKey(Obj* key)
+    {
+        for (Node* n = mActive.pNext; n != (Node*)&mActive; n = n->pNext) {
+            if (n->pObj == key) {
+                if (n != (Node*)&mActive) {
+                    if (mCommitted) {
+                        ((void (__thiscall*)(Owner*, Obj*))VSlot(this, 0x60))(this, key);
+                    } else {
+                        EraseIt((Node**)&key, n);
+                    }
+                    return;
+                }
+                break;
+            }
+        }
+        for (Node* n = mPending.pNext; n != (Node*)&mPending; n = n->pNext) {
+            if (n->pObj == key) {
+                if (n != (Node*)&mPending)
+                    EraseIt((Node**)&key, n);
+                break;
+            }
+        }
+    }
+
+// @ 0x00ba20f0
+    void Owner::ClearActive()
+    {
+        List* l = &mActive;
+        l->DoClear();
+        l->Init();
+    }
+
+    void CopyRange(Node** out, Node* first, Node* last, Node* dst, Obj** skip);
+    void __stdcall EraseRange(Node** out, Node* first, Node* last);
+
+// @ 0x00ba2170
+    void DeserializeList(Owner* owner, List* list)
+    {
+        list->DoClear();
+        list->Init();
+
+        void* fnA = VSlot(owner, 0x20);
+        void* a = ((void* (__thiscall*)(Owner*))fnA)(owner);
+        u32 count = 0;
+        void* fnB = VSlot(a, 0x18);
+        void* b = ((void* (__thiscall*)(void*))fnB)(a);
+        G7ReadInt32(b, &count, 1, 0);
+
+        for (u32 i = 0; i < count; ++i) {
+            Obj* obj = 0;
+            void* fnC = VSlot(owner, 0x28);
+            ((void (__thiscall*)(Owner*, int, Obj**, int))fnC)(owner, 0x11416b8, &obj, 0);
+            Node* n = (Node*)G7NewNode();
+            if (&n->pObj) {
+                n->pObj = obj;
+                if (obj)
+                    ObjAddRef(obj);
+            }
+            n->pNext = (Node*)list;
+            n->pPrev = list->pPrev;
+            list->pPrev->pNext = n;
+            list->pPrev = n;
+            if (obj)
+                ObjRelease(obj);
+        }
+        ((void (__thiscall*)(Owner*))VSlot(owner, 0x1c))(owner);
+    }
+
+// @ 0x00ba2250
+    Owner* Owner::Ctor()
+    {
+        BaseCtor();
+        pVtbl0 = (void*)0x1465c40;
+        pVtbl1 = (void*)0x1465c3c;
+        mActive.Init();
+        mPending.Init();
+        mScratch.Init();
+        m40 = 0;
+        mCommitted = 0;
+        return this;
+    }
+
+// @ 0x00ba2290
+    Owner* Owner::Dtor(u8 flags)
+    {
+        pVtbl0 = (void*)0x1465c40;
+        pVtbl1 = (void*)0x1465c3c;
+        mScratch.DoClear();
+        mPending.DoClear();
+        mActive.DoClear();
+        BaseDtor();
+        if (flags & 1)
+            operator delete[](this);
+        return this;
+    }
+
+// @ 0x00ba22e0
+    void Owner::AddKey(Obj* key)
+    {
+        for (Node* n = mActive.pNext; n != (Node*)&mActive; n = n->pNext) {
+            if (n->pObj == key) {
+                if (n != (Node*)&mActive)
+                    return;
+                break;
+            }
+        }
+        for (Node* n = mPending.pNext; n != (Node*)&mPending; n = n->pNext) {
+            if (n->pObj == key) {
+                if (n != (Node*)&mPending)
+                    return;
+                break;
+            }
+        }
+        if (mCommitted)
+            InsertNode(&mPending, key);
+        else
+            InsertNode(&mActive, key);
+    }
+
+// @ 0x00ba2400
+    void Owner::CommitPending(void* a, void* b, char flag)
+    {
+        if (mScratch.pNext != (Node*)&mScratch) {
+            for (Node* s = mScratch.pNext; s != (Node*)&mScratch; s = s->pNext) {
+                Obj* key = s->pObj;
+                Node* n = mActive.pNext;
+                while (n != (Node*)&mActive && n->pObj != key)
+                    n = n->pNext;
+                n = n->pNext;
+                Node* node = n->pPrev;
+                node->pPrev->pNext = node->pNext;
+                node->pNext->pPrev = node->pPrev;
+                if (node->pObj)
+                    ObjRelease(node->pObj);
+                operator delete[](node);
+            }
+            Node* s = mScratch.pNext;
+            while (s != (Node*)&mScratch) {
+                Node* next = s->pNext;
+                if (s->pObj)
+                    ObjRelease(s->pObj);
+                operator delete[](s);
+                s = next;
+            }
+            mScratch.Init();
+        }
+
+        u32 count = 0;
+        for (Node* n = mPending.pNext; n != (Node*)&mPending; n = n->pNext)
+            ++count;
+        if (count > 0) {
+            Node* first = mPending.pNext;
+            if (first != (Node*)&mPending) {
+                mPending.pPrev->pNext = (Node*)&mActive;
+                first->pPrev->pNext = (Node*)&mPending;
+                mActive.pPrev->pNext = first;
+                Node* old = mActive.pPrev;
+                mActive.pPrev = mPending.pPrev;
+                mPending.pPrev = first->pPrev;
+                first->pPrev = old;
+            }
+        }
+
+        mCommitted = 1;
+        Node* end = (Node*)&mActive;
+        for (Node* n = mActive.pNext; n != end; n = n->pNext) {
+            Obj* o = n->pObj;
+            if (!o)
+                continue;
+            o->mNotifyMode = flag;
+            if (o->m0e)
+                continue;
+            if (flag && !o->m0d)
+                continue;
+            ((void (__thiscall*)(Obj*, void*, void*))VSlot(o, 0x10))(o, a, b);
+        }
+
+        Obj* none = 0;
+        Node* n = mActive.pNext;
+        while (n != end && n->pObj != 0)
+            n = n->pNext;
+        if (n != end) {
+            Node* dst = n;
+            CopyRange(&dst, n->pNext, end, n, &none);
+            Node* dummy = 0;
+            EraseRange(&dummy, dst, end);
+        }
+        mCommitted = 0;
+    }
+
+// @ 0x00ba1dd0
+    G7NOINLINE void CopyRange(Node** out, Node* first, Node* last, Node* dst, Obj** skip)
+    {
+        if (first == last) {
+            *out = dst;
+            return;
+        }
+        do {
+            Obj* obj = first->pObj;
+            if (obj != *skip) {
+                Obj* old = dst->pObj;
+                if (obj != old) {
+                    if (obj)
+                        ObjAddRef(obj);
+                    dst->pObj = obj;
+                    if (old)
+                        ObjRelease(old);
+                }
+                dst = dst->pNext;
+            }
+            first = first->pNext;
+        } while (first != last);
+        *out = dst;
+    }
+
+// @ 0x00ba1e50
+    G7NOINLINE void __stdcall EraseIt(Node** out, Node* it)
+    {
+        it = it->pNext;
+        Node* node = it->pPrev;
+        node->pPrev->pNext = node->pNext;
+        node->pNext->pPrev = node->pPrev;
+        if (node->pObj)
+            ObjRelease(node->pObj);
+        operator delete[](node);
+        *out = it;
+    }
+
+// @ 0x00ba2110
+    G7NOINLINE void __stdcall EraseRange(Node** out, Node* first, Node* last)
+    {
+        if (first != last) {
+            do {
+                first = first->pNext;
+                Node* node = first->pPrev;
+                node->pPrev->pNext = node->pNext;
+                node->pNext->pPrev = node->pPrev;
+                if (node->pObj)
+                    ObjRelease(node->pObj);
+                operator delete[](node);
+            } while (first != last);
+        }
+        *out = last;
+    }
+}

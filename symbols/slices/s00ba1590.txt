@@ -1,0 +1,25 @@
+# slice s00ba1590 (gold7, shared with cl2) - names inferred from the cards and behaviour
+# Modelled types (retail member offsets):
+#   G7::Obj        virtual object: vtable @0 slot+4 AddRef, slot+8 Release; id via ObjSub vtable +0x20
+#   G7::Node       intrusive node: pNext @0, pPrev @4, pObj @8; a List base is itself the sentinel node
+#   G7::List       16-byte sentinel: pNext @0, pPrev @4, unused value slot @8; Init() self-links
+#   G7::Owner      key-list owner (0x44 bytes): two vtables @0/@4, mActive list @0x1c, mPending @0x28,
+#                  mScratch @0x34, flag m40 @0x40, mCommitted @0x41
+00ba1590  ?FUN_00ba1590@@YAXXZ  # cl2: recorded by the cl2 batch
+00ba1c60  ?StageChangeHandler@G7@@YAXI@Z  # free: stage switch 0x1654c04/0x1654c02/0x1654c01
+00ba1ce0  ?SimCtxStageHandler@G7@@YAXPAUSimCtx@1@@Z  # free: sim-context stage switch 5/4/2
+00ba1d80  ?Notify5c@Owner@G7@@QAEXPAX0@Z  # thiscall: owner notify with two args via vtable +0x5c
+00ba1da0  ?NotifyAll@G7@@YA_NPAXPAUList@1@@Z  # free: notify every node of a list, returns whether any
+00ba1dd0  ?CopyRange@G7@@YAXPAPAUNode@1@PAU21@11PAPAUObj@1@@Z  # free: copy node values [first,last) into dst, skipping one obj
+00ba1e50  ?EraseIt@G7@@YGXPAPAUNode@1@PAU21@@Z  # stdcall: erase node it, advance the caller's iterator
+00ba1ea0  ?SerializeList@G7@@YAXPAUOwner@1@PAUList@1@@Z  # free: write list count then each object's id
+00ba1f30  ?ReadFrom@Owner@G7@@QAEXPAX@Z  # thiscall: stream-read the owner (VarListSerializer)
+00ba1fa0  ?NotifyAndPrune@Owner@G7@@QAEXPAUVersionArg@2@@Z  # thiscall: notify all, then prune the stale node
+00ba2070  ?RemoveKey@Owner@G7@@QAEXPAUObj@2@@Z  # thiscall: remove a key from active/pending
+00ba20f0  ?ClearActive@Owner@G7@@QAEXXZ  # thiscall: drain the active list
+00ba2110  ?EraseRange@G7@@YGXPAPAUNode@1@PAU21@1@Z  # stdcall: erase node range [first,last), write last back
+00ba2170  ?DeserializeList@G7@@YAXPAUOwner@1@PAUList@1@@Z  # free: read count and rebuild the list
+00ba2250  ?Ctor@Owner@G7@@QAEPAU12@XZ  # thiscall: owner constructor body
+00ba2290  ?Dtor@Owner@G7@@QAEPAU12@E@Z  # thiscall: owner destructor body
+00ba22e0  ?AddKey@Owner@G7@@QAEXPAUObj@2@@Z  # thiscall: append a key to active (or pending when committed)
+00ba2400  ?CommitPending@Owner@G7@@QAEXPAX0D@Z  # thiscall: fold scratch/pending into active, notify, compact
