@@ -1,1 +1,2 @@
 # <va>  <diff-bytes>  <reason>
+00b6d160  7  complete; ShowHealthBar modelled as a thiscall member (the binary passes the object in EAX, not ECX), int store and const-float load scheduled in the other order; equivalence PASS (209 valid inputs, 100% coverage)

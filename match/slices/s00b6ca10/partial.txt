@@ -1,1 +1,8 @@
 00b6cde0  342  complete semantics but three callees take register inputs (FUN_00b686a0: EAX = P->vptr; FUN_00b6a720: EDI = P and EAX = the 2-float pair pointer) that C++ cannot express; stand-in calls pass only the stack args; frame 0x20 vs 0x60 and P kept in edi not esi
+00b6ca10  310  complete; RemoveUISlot (0xb686a0) takes P->vptr in EAX and 0xb6a720 takes P in EDI, both inexpressible (stand-in calls pass only stack args); frame 0x20 vs 0x60; equivalence UNSUPPORTED (0/400 inputs valid: random vtable calls fault)
+00b6cba0  134  complete; same register-arg stand-ins plus the 0.28/0.375/0.41 floats are global constants (movss from .rdata) not literals, so the stores differ; equivalence UNSUPPORTED (0/400 inputs valid)
+00b6cc50  315  complete; SetCtxWindow (0xb69460) takes EDI/ESI register args that C++ cannot express; register-arg stand-ins throughout; equivalence UNSUPPORTED (0/400 inputs valid)
+00b6cf70  185  complete; register-arg stand-ins (0xb686a0/0xb6a720); frame 0x20 vs 0x60; equivalence UNSUPPORTED (0/400 inputs valid)
+00b6d060  187  complete; register-arg stand-ins (0xb686a0/0xb6a720); frame 0x20 vs 0x60; equivalence UNSUPPORTED (0/400 inputs valid)
+00b6d190  7  complete; the singleton is kept in ECX and copied to ESI (mov ecx,[g]; mov esi,ecx) while the local-variable form reloads it into ESI; equivalence WEAK (17.6% coverage, the s_pTooltip guard is rarely non-null under default inputs)
+00b6d1d0  322  complete; Stopwatch reset inlined with __asm rdtsc for the mode==1 path, x87 elapsed*rate compare and the 0x20-match cap reproduced; equivalence UNSUPPORTED (0/400 inputs valid: every input faults on read)
