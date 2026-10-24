@@ -117,7 +117,7 @@ public:
     { \
         volatile float radiusSum = sphereShapeA->m_spheres[I].w + triangleShapeB->m_radius; \
         hkCollideTriangleUtil::closestPointTriangle(SPH[I], vertices, CACHE, result); \
-        if (result.distance < radiusSum + input.m_tolerance) \
+        if (radiusSum + input.m_tolerance > result.distance) \
         { \
             const float k = triangleShapeB->m_radius - result.distance; \
             point.m_contact.m_position.x = result.hitDirection.x * k + SPH[I].x; \
