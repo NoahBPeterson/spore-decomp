@@ -5,19 +5,19 @@
 00960050 ?Set1E4@Window_s0095_ff20@@QAEXPAX@Z  # Window_s0095_ff20::Set1E4 migrated from s0095ff20 (verbatim, slice spelling)
 009600a0 ?OnPaint2@Window_s0095_ff20@@QAEXXZ  # Window_s0095_ff20::OnPaint2 migrated from s0095ff20 (verbatim, slice spelling)
 009600d0 ?InvalidateTransform@Window@UTFWin@EA@@UAEXXZ  # EA::UTFWin::Window::InvalidateTransform migrated from s0095ff20
-00960100 ?TransformPoint@Window_s0095_ff20@@QAEXMMPAM@Z  # Window_s0095_ff20::TransformPoint migrated from s0095ff20 (verbatim, slice spelling)
-00960180 ?ScreenToLocal@Window_s0095_ff20@@QAEXMMPAM@Z  # Window_s0095_ff20::ScreenToLocal migrated from s0095ff20 (verbatim, slice spelling)
-009601e0 ?GetChild@Window_s0095_ff20@@QAEXPAX0@Z  # Window_s0095_ff20::GetChild migrated from s0095ff20 (verbatim, slice spelling)
-00960230 ?RemoveChild@Window_s0095_ff20@@QAEXPAX@Z  # Window_s0095_ff20::RemoveChild migrated from s0095ff20 (verbatim, slice spelling)
+00960100 ?TransformPoint@Window_s0095_ff20@@QAEXMMPAM@Z  # Window_s0095_ff20::TransformPoint: probe ==FUN_009580b0(m30), then mMat (this-4) transform into out
+00960180 ?ScreenToLocal@Window_s0095_ff20@@QAEXMMPAM@Z  # Window_s0095_ff20::ScreenToLocal(float* out, float x, float y): this->vtable[0xc8](x,y,&pt)
+009601e0 ?GetChild@Window_s0095_ff20@@QAEXPAX0@Z  # Window_s0095_ff20::GetChild(out,node): *out = node->[0x38]==this-4 ? node+4 : *vtable[0xd0](&node); returns out
+00960230 ?RemoveChild@Window_s0095_ff20@@QAEXPAX@Z  # Window_s0095_ff20::RemoveChild(node): detach node, vtable[0xdc](child), then node->vtable[0x1c]()/[4]()
 00960280 ?ClearChildren@Window_s0095_ff20@@QAEXXZ  # Window_s0095_ff20::ClearChildren migrated from s0095ff20 (verbatim, slice spelling)
 009602c0 ?Dispatch14@Window_s0095_ff20@@QAEHPAX@Z  # Window_s0095_ff20::Dispatch14 migrated from s0095ff20 (verbatim, slice spelling)
 009602f0 ?Dispatch@Window_s0095_ff20@@QAEHPAX@Z  # Window_s0095_ff20::Dispatch migrated from s0095ff20 (verbatim, slice spelling)
-00960310 ?OnPaint@Window_s0095_ff20@@QAEXXZ  # Window_s0095_ff20::OnPaint migrated from s0095ff20 (verbatim, slice spelling)
-00960410 ?DoMessage@Window_s0095_ff20@@QAEXXZ  # Window_s0095_ff20::DoMessage migrated from s0095ff20 (verbatim, slice spelling)
+00960310 ?OnPaint@Window_s0095_ff20@@QAEXXZ  # Window_s0095_ff20::OnPaint: Begin2D fill + drawable vtable +0x10 paint
+00960410 ?DoMessage@Window_s0095_ff20@@QAEXXZ  # Window_s0095_ff20::DoMessage(msg): arms 0xd (OnPaint), 0x16 (GetDimensions), 0x14 (IsColliding)
 00960550 ?AllocPair@@YGPAXPAX@Z  # AllocPair migrated from s0095ff20 (verbatim, slice spelling)
-009605a0 ?Rehash@@YAXPAXI@Z  # Rehash migrated from s0095ff20 (verbatim, slice spelling)
-00960650 ?WindowListMarshaller_Read@@YAHPAX00@Z  # WindowListMarshaller_Read migrated from s0095ff20 (verbatim, slice spelling)
-009608c0 ?SetPhysicalArea@Window@UTFWin@EA@@UAEXABV?$RectT@M@3@@Z  # EA::UTFWin::Window::SetPhysicalArea migrated from s0095ff20
-009609b0 ?InvalidateLayout@Window@UTFWin@EA@@UAEXXZ  # EA::UTFWin::Window::InvalidateLayout migrated from s0095ff20
-00960ae0 ?FUN_00960AE0@@YAHPAX@Z  # FUN_00960AE0 migrated from s0095ff20 (verbatim, slice spelling)
-00960b40 ?FUN_00960B40@@YAHPAX@Z  # FUN_00960B40 migrated from s0095ff20 (verbatim, slice spelling)
+009605a0 ?Rehash@@YAXPAXI@Z  # Rehash(HashTable*, uint n): alloc (n*4+4), memset buckets, relink, free old bucket array
+00960650 ?WindowListMarshaller_Read@@YAHPAX00@Z  # WindowListMarshaller_Read(p1,p2,p3): detach children to a local list, re-attach the p2 id array, unwind/destroy
+009608c0 ?SetPhysicalArea@Window@UTFWin@EA@@UAEXABV?$RectT@M@3@@Z  # EA::UTFWin::Window::SetPhysicalArea(rect): copies rect, probes m34+4 children via 0xcf3df10b, vtable +0x60
+009609b0 ?InvalidateLayout@Window@UTFWin@EA@@UAEXXZ  # EA::UTFWin::Window::InvalidateLayout: manager walk (this-4) + re-layout when a width changed
+00960ae0 ?WalkFlagsUp@NodeOwner@@QAEXXZ  # NodeOwner::WalkFlagsUp (was FUN_00960ae0): recursive child-flag walk, ecx = object
+00960b40 ?WalkFlagsDown@NodeOwner@@QAEXXZ  # NodeOwner::WalkFlagsDown (was FUN_00960b40): recursive child-flag walk + list unlink, ecx = object

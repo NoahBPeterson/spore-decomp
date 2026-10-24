@@ -6,6 +6,18 @@
 00960050  59  Window::Set1E4: complete; refcount swap and vtable +0x90 call differ
 009600a0  33  Window::OnPaint2: complete; flag test order differs
 009600d0  15  Window::CallSlot: complete; trivial call wrapper tail shape differs
+00960100  19  Window::TransformPoint: complete; equiv PASS (339 valid, 94.6% cov); flag probe uses mov+test instead of cmovne and the mMat transform schedule differs
+00960180  83  Window::ScreenToLocal: complete (calls vtable +0xc8 and copies or zeroes the out pair); equiv UNSUPPORTED 0/400 (fake-arity=396: the float args reach the call as fld/fstp [esp]); original is (float* out, float x, float y)
+009601e0  59  Window::GetChild: complete; equiv WEAK (192 valid, 68.0% cov); returns out in eax, vtable +0xd0 result deref and branch layout differ
+00960230  58  Window::RemoveChild: complete; equiv PASS (273 valid, 93.9% cov); detach path and vtable +0xdc/+0x1c/+4 call order differ
 00960280  3   Window::ClearChildren: complete; node==8 test uses cmp instead of add -8
 009602c0  39  Window::Dispatch14: complete; this-adjust and vtable +0x14 args differ
 009602f0  20  Window::Dispatch: complete; tail-call not formed
+00960310  135  Window::OnPaint: complete; equiv PASS (246 valid, 100.0% cov); render-context calls and SSE area computation schedule differ
+00960410  227  Window::DoMessage: complete; equiv WEAK (397 valid, 21.1% cov); message-arm dispatch (0xd/0x16/0x14) and stack temps differ
+009605a0  98  HashTable::Rehash: complete (allocator call, memset, bucket relink, free old, swap); equiv UNSUPPORTED 0/400 (fault=276, import:memset=103)
+00960650  520  WindowListMarshaller_Read: complete (detach-to-local, id-array re-attach, unwind, destroy); equiv UNSUPPORTED 0/400 (fault(read)=392, fault(write)=6)
+009608c0  185  Window::SetPhysicalArea: complete; equiv WEAK (272 valid, 30.3% cov); getter this is m34+4, vtable +0x60 store differs
+009609b0  8   Window::InvalidateLayout: complete; equiv WEAK (235 valid, 22.9% cov); layout-changed test is != (ucomiss/jnp falls only on equal); frame/slot allocation differs
+00960ae0  20  NodeOwner::WalkFlagsUp (was FUN_00960AE0): complete; equiv UNSUPPORTED 0/400 (fault(read)=395: reads ecx at entry as the object, so soup this pointers fault); recursive flag walk, ecx=object
+00960b40  73  NodeOwner::WalkFlagsDown (was FUN_00960B40): complete; equiv UNSUPPORTED 0/400 (fault(read)=383: reads ecx at entry as the object); recursive flag walk + list unlink, ecx=object

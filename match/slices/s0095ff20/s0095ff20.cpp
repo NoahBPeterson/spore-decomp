@@ -32,9 +32,15 @@ struct RenderCtx {                // EA::UTFWin::RenderContext
     void* Begin2D(int flags);     // 0x0095bc10 (ret 4)
 };
 
-struct MNode {                    // intrusive list node { next@0, prev@4 }
+// A sentinel head whose first member is the list node itself (head.next at
+// head+0, head.prev at head+4); `obj` points into the window at its +0x3c head.
+struct MNode {
     MNode* next;
     MNode* prev;
+};
+struct MHead {
+    MNode* next;   // +0x00
+    MNode* prev;   // +0x04
 };
 
 struct HashNode {                 // one bucket entry
@@ -84,7 +90,7 @@ struct Window {
     void CallSlot();                                    // 0x9600D0
     void TransformPoint(float* out, float x, float y);   // 0x960100
     void ScreenToLocal(float* out, float x, float y);    // 0x960180
-    void GetChild(void* out, void* node);               // 0x9601E0
+    void* GetChild(void* out, void* node);              // 0x9601E0
     void RemoveChild(void* node);                       // 0x960230
     void ClearChildren();                               // 0x960280
     int  Dispatch14(void* p);                           // 0x9602C0
@@ -210,7 +216,7 @@ void Window::ScreenToLocal(float* out, float x, float y) {
 }
 
 // @ 0x009601E0
-void Window::GetChild(void* out, void* node) {
+void* Window::GetChild(void* out, void* node) {
     char* e;
     if (node == 0)
         e = 0;
@@ -223,6 +229,7 @@ void Window::GetChild(void* out, void* node) {
         r = *(void**)(*(void***(__thiscall**)(Window*, void**))
             ((char*)*(void**)this + 0xd0))(this, &node);
     *(void**)out = r;
+    return out;
 }
 
 // @ 0x00960230
@@ -486,8 +493,8 @@ void Window::SetPhysicalArea(const float* r) {
     area[2] = r[2];
     area[3] = r[3];
     if (m34 != 0) {
-        float* prev = (*(float*(__thiscall**)(int))((char*)*(void**)((char*)m34 + 4) + 0x38))(
-            *(int*)((char*)m34 + 4));
+        char* obj = (char*)m34 + 4;
+        float* prev = (*(float*(__thiscall**)(char*))((char*)*(void**)obj + 0x38))(obj);
         float save[4];
         save[0] = prev[0];
         save[1] = prev[1];
@@ -523,7 +530,7 @@ void Window::InvalidateLayout() {
         m->FUN_00959FE0((int)w);
         m->FUN_009588C0(w);
         m->FUN_009580E0(w);
-        if ((r - l) == (m8c - m84) || (b - t) == (m90 - m88)) {
+        if ((r - l) != (m8c - m84) || (b - t) != (m90 - m88)) {
             m->FUN_00958820(w);
             char* head = (char*)this + 0x38;
             for (char* it = *(char**)head; it != head; it = *(char**)it) {
@@ -542,15 +549,70 @@ void Window::InvalidateLayout() {
     m90 = mA0;
 }
 
-// ---- functions outside this slice's VA list (stubs kept from the migration) --
+// Child-list / layout-link view used by the two recursive flag walkers below.
+struct LLink { LLink* next; LLink* prev; };
+struct ChildNode { ChildNode* next; ChildNode* prev; };
+struct NodeOwner {
+    LLink*        m0;          // +0x00
+    LLink*        m4;          // +0x04
+    ChildNode*    m8;          // +0x08  child-list node (next)
+    ChildNode*    mC;          // +0x0c
+    LLink*        m10;         // +0x10
+    LLink*        m14;         // +0x14
+    char          pad18[0x2c - 0x18];
+    unsigned int  m2c;         // +0x2c
+    unsigned char m30;         // +0x30
+    char          pad31[0xb];
+    ChildNode*    mHeadNext;   // +0x3c  child-list sentinel (next)
+    ChildNode*    mHeadPrev;   // +0x40
+    void WalkFlagsUp();    // 0x00960AE0
+    void WalkFlagsDown();  // 0x00960B40
+};
+
 // @ 0x00960AE0
-int FUN_00960AE0(void* self) {
-    (void)self;
-    return 0;
+void NodeOwner::WalkFlagsUp() {
+    NodeOwner* self = this;
+    unsigned char b = (((self->m2c & 0x400) == 0) && ((self->m30 & 2) == 0)) ? 0 : 1;
+    ChildNode* head = (ChildNode*)((char*)self + 0x3c);
+    for (ChildNode* it = self->mHeadNext; it != head; it = it->next) {
+        NodeOwner* o = it ? (NodeOwner*)((char*)it - 8) : 0;
+        unsigned char al = o->m30;
+        if (b != (unsigned char)((al >> 1) & 1)) {
+            o->m30 = (unsigned char)((((b * 2) ^ al) & 2) ^ al);
+            o->WalkFlagsUp();
+        }
+    }
 }
 
 // @ 0x00960B40
-int FUN_00960B40(void* self) {
-    (void)self;
-    return 0;
+void NodeOwner::WalkFlagsDown() {
+    NodeOwner* self = this;
+    unsigned char al0 = self->m30;
+    bool b = !(((al0 & 4) == 0) && (((al0 & 1) != 0) || ((self->m2c & 1) != 0)));
+    ChildNode* head = (ChildNode*)((char*)self + 0x3c);
+    if (b) {
+        for (ChildNode* it = self->mHeadNext; it != head; it = it->next) {
+            NodeOwner* o = it ? (NodeOwner*)((char*)it - 8) : 0;
+            if ((o->m30 & 4) == 0) {
+                o->m30 = (unsigned char)((o->m30 & 0xef) | 4);
+                if (o->m14 != 0) {
+                    LLink* prev = (LLink*)o->m14;
+                    LLink* next = (LLink*)o->m10;
+                    prev->next = next;
+                    next->prev = prev;
+                    o->m10 = 0;
+                    o->m14 = 0;
+                }
+                o->WalkFlagsDown();
+            }
+        }
+    } else {
+        for (ChildNode* it = self->mHeadNext; it != head; it = it->next) {
+            NodeOwner* o = it ? (NodeOwner*)((char*)it - 8) : 0;
+            if ((o->m30 & 4) != 0) {
+                o->m30 = (unsigned char)(o->m30 & 0xfb);
+                o->WalkFlagsDown();
+            }
+        }
+    }
 }
