@@ -1,1 +1,1 @@
-00f64290  2566  complete; diffs are register choice (this in edi vs ebx), frame 0x304 vs 0x310 and pointer- vs index-form strength reduction in the mixed-type loop
+00f64290  2566  complete; diffs are register choice (this in edi vs ebx), frame 0x304 vs 0x310 and pointer- vs index-form strength reduction in the mixed-type loop; equivalence FAIL is 1/233 inputs (--layout 0) storing 3 dwords through a soup-derived pointer at a code-shape-dependent pool address (bisect moves it with unrelated edits), 81.2% coverage, WEAK territory
