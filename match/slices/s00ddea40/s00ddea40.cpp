@@ -6,6 +6,7 @@
 // owner's property list (this+0x10) when the property exists / is a float. Angle properties are
 // converted from degrees to radians (x 0.017453292).
 #include "types.h"
+#include <stddef.h>
 
 #pragma warning(disable: 4100 4700 4701 4244)
 
@@ -121,6 +122,7 @@ static __forceinline bool ReadFloat(cPropertyList* list, uint32_t id, float& out
     return false;
 }
 
+// @ 0x00ddea40
 void cViewConfig::LoadDefaultsAndProperties()
 {
     float a, b, x, y;
@@ -188,4 +190,164 @@ void cViewConfig::LoadDefaultsAndProperties()
     ReadFloat(mpPropList, 0xab7ecaa, gF302c);
     ReadFloat(mpPropList, 0x23e13c2e, gF3030);
     ReadFloat(mpPropList, 0xb7cc369a, gF16a10c4);
+}
+
+// ---------------------------------------------------------------------------------------------
+// cXform / EA::Swarm::cTransform: the retail object is 0x38 bytes, the same odd 9-float rotation
+// block the three builders below fill in from the global identity table at 0x016a10e0.
+struct Matrix33 {
+    Vector3 xAxis, yAxis, zAxis;
+};
+
+inline Vector3 operator*(const Matrix33& m, const Vector3& v)
+{
+    Vector3 r;
+    r.x = m.xAxis.x * v.x + m.yAxis.x * v.y + m.zAxis.x * v.z;
+    r.y = m.xAxis.y * v.x + m.yAxis.y * v.y + m.zAxis.y * v.z;
+    r.z = m.xAxis.z * v.x + m.yAxis.z * v.y + m.zAxis.z * v.z;
+    return r;
+}
+
+inline Vector3 operator+(const Vector3& a, const Vector3& b)
+{
+    Vector3 r;
+    r.x = a.x + b.x;
+    r.y = a.y + b.y;
+    r.z = a.z + b.z;
+    return r;
+}
+
+extern Matrix33 gIdentityRotation;   // 0x016a10e0
+extern Vector3  gZeroTranslation;    // 0x016a10cc
+
+// RenderWare's transform base: 6-byte header, translation, scale, 3x3 rotation.
+struct cXform {
+    uint16_t mFlags;                // +0x00
+    uint16_t mModificationCount;    // +0x02
+    Vector3  mTranslation;          // +0x04
+    float    mScale;                // +0x10
+    Matrix33 mRotation;             // +0x14
+
+    void PreRotateX(float angle);   // 0x005a2d90
+
+    void MakeIdentity()
+    {
+        mRotation = gIdentityRotation;
+        mScale = 1.0f;
+        mTranslation = gZeroTranslation;
+        mFlags = 0;
+        mModificationCount = 0;
+    }
+
+    void PreTranslateBy(const Vector3& v)
+    {
+        Vector3 t;
+        t.x = v.x * mScale;
+        t.y = v.y * mScale;
+        t.z = v.z * mScale;
+        Vector3 d = mRotation * t;
+        mTranslation.x += d.x;
+        mTranslation.y += d.y;
+        mTranslation.z += d.z;
+        mFlags |= 4;
+        mModificationCount = mModificationCount + 1;
+    }
+
+    void PostTranslateBy(const Vector3& v)
+    {
+        mTranslation.x += v.x;
+        mTranslation.y += v.y;
+        mTranslation.z += v.z;
+        mFlags |= 4;
+        mModificationCount = mModificationCount + 1;
+    }
+};
+
+namespace EA {
+namespace Swarm {
+
+struct cTransform : ::cXform {
+    void PreRotateY(float angle);   // 0x004099b0
+};
+
+} // namespace Swarm
+} // namespace EA
+
+#define CHK(cls, name, off) typedef char chk_##cls##_##name[(offsetof(cls, name) == (off)) ? 1 : -1]
+CHK(cXform, mFlags, 0x00);
+CHK(cXform, mModificationCount, 0x02);
+CHK(cXform, mTranslation, 0x04);
+CHK(cXform, mScale, 0x10);
+CHK(cXform, mRotation, 0x14);
+typedef char chk_cXform_size[(sizeof(cXform) == 0x38) ? 1 : -1];
+
+// The three transform sources: a view/bone object that rotates by its own pitch/yaw, drops a
+// local -Y offset through the rotation, then adds the world translation.
+struct cViewSourceA {
+    uint32_t pad00[8];       // +0x00
+    float    mAngleX;        // +0x20
+    uint32_t pad24;          // +0x24
+    float    mOffsetY;       // +0x28
+    uint32_t pad2c;          // +0x2c
+    float    mAngleY;        // +0x30
+    Vector3  mPosition;      // +0x34
+    void Build(EA::Swarm::cTransform* out) const;
+};
+CHK(cViewSourceA, mAngleX, 0x20);
+CHK(cViewSourceA, mOffsetY, 0x28);
+CHK(cViewSourceA, mAngleY, 0x30);
+CHK(cViewSourceA, mPosition, 0x34);
+
+struct cViewSourceB {
+    uint32_t pad00[2];       // +0x00
+    float    mAngleY;        // +0x08
+    uint32_t pad0c[2];       // +0x0c
+    float    mAngleX;        // +0x14
+    uint32_t pad18;          // +0x18
+    float    mOffsetY;       // +0x1c
+    void Build(EA::Swarm::cTransform* out) const;
+};
+CHK(cViewSourceB, mAngleY, 0x08);
+CHK(cViewSourceB, mAngleX, 0x14);
+CHK(cViewSourceB, mOffsetY, 0x1c);
+
+struct cViewSourceC {
+    uint32_t pad00[4];       // +0x00
+    float    mOffsetY;       // +0x10
+    uint32_t pad14;          // +0x14
+    Vector3  mPosition;      // +0x18
+    void Build(EA::Swarm::cTransform* out) const;
+};
+CHK(cViewSourceC, mOffsetY, 0x10);
+CHK(cViewSourceC, mPosition, 0x18);
+#undef CHK
+
+// @ 0x00ddf4d0
+void cViewSourceA::Build(EA::Swarm::cTransform* out) const
+{
+    out->MakeIdentity();
+    out->PreRotateY(-mAngleY);
+    out->PreRotateX(mAngleX);
+    out->PreTranslateBy(MakeVector3(0.0f, -mOffsetY, 0.0f));
+    out->PostTranslateBy(mPosition);
+}
+
+// @ 0x00ddf660
+void cViewSourceC::Build(EA::Swarm::cTransform* out) const
+{
+    out->MakeIdentity();
+    out->PreRotateY(-gV308c.x);
+    out->PreRotateX(gV308c.y);
+    out->PreTranslateBy(MakeVector3(0.0f, -mOffsetY, 0.0f));
+    out->PostTranslateBy(mPosition);
+}
+
+// @ 0x00ddf800
+void cViewSourceB::Build(EA::Swarm::cTransform* out) const
+{
+    out->MakeIdentity();
+    out->PreRotateY(-mAngleY);
+    out->PreRotateX(mAngleX);
+    out->PreTranslateBy(MakeVector3(0.0f, -mOffsetY, 0.0f));
+    out->PostTranslateBy(gV3048);
 }

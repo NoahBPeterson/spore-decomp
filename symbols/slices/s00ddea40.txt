@@ -1,1 +1,4 @@
 00ddea40 cViewConfig::LoadDefaultsAndProperties  # descriptive: reads camera/view tuning floats from the property list at this+0x10
+00ddf4d0 cViewSourceA::Build  # constructs a 0x38-byte cTransform from this+0x20 (pitch), this+0x30 (yaw), a local -Y offset this+0x28 and the world position this+0x34..0x3c
+00ddf660 cViewSourceC::Build  # same construction with the two angles taken from the global Vector2 0x015a308c, offset this+0x10, position this+0x18..0x20
+00ddf800 cViewSourceB::Build  # same construction with angles this+0x08/this+0x14, offset this+0x1c, and the world position from the global Vector3 0x015a3048

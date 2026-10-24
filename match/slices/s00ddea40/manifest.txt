@@ -1,1 +1,1 @@
-# byte-exact functions for slice s00ddea40 (none)
+# source  symbol  va  [flags]  (none byte-exact)
