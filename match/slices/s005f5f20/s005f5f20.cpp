@@ -387,8 +387,18 @@ class cUILayeredObject {
  public:
   void SetVisible(bool visible);   // 0x0080d7c0
   void RemoveModel(void* model);   // 0x0080e980
+  void FUN_0080dda0(int a, int b); // 0x0080dda0 (thiscall, ret 8)
 };
-class cSwatchTexture { public: void* GetTexture(); };                // 0x0080d610
+class cSwatchTexture {
+ public:
+  void* GetTexture();              // 0x0080d610
+  void FUN_0080dfc0();             // 0x0080dfc0 (thiscall, no args)
+  void FUN_0080df80();             // 0x0080df80 (thiscall, no args)
+};
+class cBoundingBoxList {
+ public:
+  void FUN_0080f7c0(void* a);      // 0x0080f7c0 (thiscall, ret 4)
+};
 
 namespace eastl {
 template <typename T>
@@ -607,10 +617,7 @@ class cSPPaletteSwatch : public cSPSwatch {
 
 
 // ==================== slice s005f5f20 ====================
-void FUN_0080dda0(void* a, int b);   // 0x0080dda0
-void FUN_0080f7c0(void* a);          // 0x0080f7c0
-void FUN_0080dfc0(void* a);          // 0x0080dfc0
-void FUN_0080df80(void* a);          // 0x0080df80
+void FUN_0080df80(void* a);          // 0x0080df80 (free-form declaration used by the destructor)
 void FUN_005f0320();                 // 0x005f0320
 void FUN_005ed6c0(void* a);          // 0x005ed6c0
 void* FUN_00804500();                // 0x00804500
@@ -618,7 +625,8 @@ int  FUN_006c1100();                 // 0x006c1100
 void* FUN_006c10e0();                // 0x006c10e0
 void FUN_00803bd0(void* a);          // 0x00803bd0
 void* FUN_0113ae10();                // 0x0113ae10
-void* cSPBoundingBox_AddBoundingBox2(int, int, int);  // 0x0067cad0
+cBoundingBoxList* cSPBoundingBox_AddBoundingBox2();          // 0x0067cad0 (no-arg getter)
+cBoundingBoxList* cSPBoundingBox_AddBoundingBox2(void* a);   // 0x0067cad0 (same getter, argument ignored)
 
 // ---- extra externs used by the s005f5f20 targets ----
 bool  FUN_00401d90(const void* a);                          // 0x00401d90
@@ -701,40 +709,47 @@ class cAnimWorld { public: void Release(); };
 void cSwatch3DView::Shutdown() {
   if (mCamera) {
     ((cRefVt*)mCamera)->Vt44();
-    if (mCamera) {
+    void* camera = mCamera;
+    if (camera) {
       mCamera = 0;
-      ((cRefVt*)mCamera)->Vt4();
+      ((cRefVt*)camera)->Vt4();
     }
   }
   RemoveAllModels();
   if (mLayeredObject) {
-    FUN_0080dda0(0, 0);
-    if (cSPBoundingBox_AddBoundingBox2(0, 0, 0)) {
-      FUN_0080f7c0(mLayeredObject);
+    mLayeredObject->FUN_0080dda0(0, 0);
+    if (cSPBoundingBox_AddBoundingBox2()) {
+      cUILayeredObject* boxed = mLayeredObject;
+      cBoundingBoxList* list = cSPBoundingBox_AddBoundingBox2(boxed);
+      list->FUN_0080f7c0(boxed);
     }
-    if (mLayeredObject) {
+    cUILayeredObject* layered = mLayeredObject;
+    if (layered) {
       mLayeredObject = 0;
-      ((cRefVt*)mLayeredObject)->Vt8();
+      ((cRefVt*)layered)->Vt8();
     }
   }
   if (mWindow) {
     ((cRefVt*)mWindow)->Vt20();
-    if (mWindow) {
+    IWindow* window = mWindow;
+    if (window) {
       mWindow = 0;
-      ((cRefVt*)mWindow)->Vt4();
+      ((cRefVt*)window)->Vt4();
     }
   }
   if (mTexture) {
     ((cRefVt*)mRenderer)->Vt88();
-    FUN_0080dfc0(mTexture);
-    if (mTexture) {
+    mTexture->FUN_0080dfc0();
+    cSwatchTexture* texture = mTexture;
+    if (texture) {
       mTexture = 0;
-      FUN_0080df80(mTexture);
+      texture->FUN_0080df80();
     }
   }
   if (mRenderer) {
+    cSwatchRenderer* renderer = mRenderer;
     mRenderer = 0;
-    ((cRefVt*)mRenderer)->Vt4();
+    ((cRefVt*)renderer)->Vt4();
   }
   mVisible = false;
 }
