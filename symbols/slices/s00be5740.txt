@@ -1,0 +1,46 @@
+# Slice s00be5740 -- cRaidBehavior family (space-stage raid/city event behaviour)
+#
+#   VA          symbol                                          disposition
+#   00be5740  cRaidBeh::FUN_00be5740                           nonmatching  978 diff
+#   00be5be0  cRaidBeh::FUN_00be5be0                           nonmatching  348 diff
+#   00be5dd0  cRaidBeh::FUN_00be5dd0                           nonmatching  632 diff
+#   00be60a0  cBlockVecOwner::FUN_00be60a0                      nonmatching  176 diff
+#
+# Build flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+# Source: match/slices/s00be5740/s00be5740.cpp
+#
+# Object model (same cRaidBeh family as slice s00be4c00; pdb_type.py --exact
+# reports no matching exported type, so the layout was taken from the sibling
+# slice and confirmed against every offset used here):
+#   this+0x2c   selected-city handle (<= p2c)
+#   this+0x2f0  low-LOD / space-game handle (FUN_010212a0, FUN_00ff2810)
+#   this+0x320  builder noun (its +0x34 sub-object exposes the world position)
+#   this+0x340/+0x344  raid-participant pointer vector (begin/end)
+#   this+0x354/+0x358  slot pointer vector (begin/end)
+#   this+0x3ec/+0x450/+0x4b4  cActionCircle agent rings
+#   this+0x51c  camera/builder anchor (Vec3)
+#   this+0x590  cSPSimulatorSpaceGame* (float timer at +0x4ac, flag at +0x8a)
+#   this+0x670  countdown (int)
+#   this+0x6e8  cGonzagoTimer (GetElapsedTime -> eax:edx, 0x00bc3190)
+#   this+0x760  "city picked up" one-shot flag
+#
+# The 0x00be60a0 helper operates on a separate cBlockVecOwner object: begin/end
+# at +0/+4, stride 0x80, records with two embedded cGonzagoTimers at +0x30/+0x50
+# and two owned handles at +0x70/+0x78 (released through vtable+0xc0).
+#
+# Notes
+#   * 00be5be0's stage switch: 2 -> FUN_00be41b0, 5 -> FUN_00bdc350,
+#     8 -> FUN_00be4400, other 0..11 -> FUN_00bdc1a0; 2/5/8 additionally rebuild
+#     the camera framing.  0x014688ac holds the per-stage 3D-sound ids.
+#   * 00be5740/00be5dd0 both enumerate the three property keys 0x1a56aba /
+#     0x18ea2cc / 0x18eb106 (index 1/2/0) and re-bind via FUN_00be53b0 with the
+#     0x1a55e4d / 0xecade42 / 0xff10521 tags.
+#   * 00be5740 constants: 0x013ec5b4 (active threshold), 0x0169c1b0 (per-tick
+#     step), 0x013ec4b8 (1e-8), 0x013f1160 / 0x0156e15c / 0x014688e0 (camera).
+#   * Random randoms go through sMathRandom at 0x01601760 (0x00a68fb0).
+#
+# Equivalence (tools/difftest/equiv.py, default inputs, run once):
+#   00be5740  FAIL  5/5 valid, 34.4% coverage
+#   00be5be0  WEAK  168/400 valid, 35.9% coverage, no mismatch
+#   00be5dd0  FAIL  5/114 valid, 16.7% coverage
+#   00be60a0  FAIL  5/5 valid, 47.3% coverage
