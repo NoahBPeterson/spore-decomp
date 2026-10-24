@@ -7,6 +7,12 @@
 // locator's quaternion, scales them by mScale (+0x25c), adds the locator position, projects
 // them onto the planet surface and stores them in the 4-point record array (+0x198).
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE  (movss scalar math, no EH frame)
+//
+// The batch claimed with this slice (0x00bef4e0 .. 0x00befc00) is the object bookkeeping that
+// hangs off the same class (RecomputeGameData + the two checked Locator setters), the small
+// SP::cCivilization helpers (money, level, state, timers, flag bytes, species profile), the
+// Object::Cast / relationship classification helpers and the two cCultureSet serializer wrappers.
+// Those two are the only entries built with /GS- (they hold a 0xa14-byte serializer by value).
 #include "types.h"
 
 extern "C" void* __cdecl memset(void* dst, int val, unsigned int n);   // thunk 0x011e073e
@@ -56,7 +62,13 @@ struct Locator {
     virtual void v34();
     virtual void SetPosition(const Vector3* p);                 // 0x38
     virtual void SetOrientation(const Quaternion* q);           // 0x3c
+
+    void SetPositionRaw(const Vector3* p);                      // 0x00c88670
+    void SetOrientationRaw(const Quaternion* q);                // 0x00c886d0
+    void SetPositionIfChanged(const Vector3* p);                // 0x00bef540
+    void SetOrientationIfChanged(const Quaternion* q);          // 0x00bef590
 };
+class cVehicleLike;
 
 struct IntrusiveObj {
     virtual void AddRef();
@@ -116,7 +128,10 @@ public:
     SpVector mPoints;               // +0x15c
     uint32_t pad170[10];
     Rec4*    mpRecs;                // +0x198
-    uint32_t pad19c[0x30];          // to 0x25c
+    uint32_t pad19c[0x22];          // to 0x224
+    Vector3  mV224;                 // +0x224 source of the copy below
+    Vector3  mV230;                 // +0x230 copy target
+    uint32_t pad23c[0x20];          // to 0x25c
     float    mScale;                // +0x25c
     uint32_t pad260;
     IntrusiveObj* mpCity;           // +0x264
@@ -128,8 +143,13 @@ public:
 
     void SetGameDataOwner2(cCity* city);    // 0x00b18550
     void FUN_00bee150();                    // 0x00bee150
+    void FUN_00bee200();                    // 0x00bee200
+    void FUN_00becc80();                    // 0x00becc80
+    void FUN_00beccf0();                    // 0x00beccf0
+    Vector3* FUN_00becb10(Vector3* out, const Vector3* src);   // 0x00becb10
 
     void Init(cCity* city, int model);      // 0x00beeb70
+    void RecomputeGameData();               // 0x00bef4e0
 };
 
 // @ 0x00beeb70
@@ -173,4 +193,357 @@ void cVehicleLike::Init(cCity* city, int model)
     mpRecs->p[4] = mpRecs->p[2];
     mpRecs->p[5] = mpRecs->p[1];
     memset(mBlock274, 0, sizeof(mBlock274));
+}
+
+// ---------------------------------------------------------------------------------------------
+// Object bookkeeping that hangs off the same vehicle/object class (0x00bef4e0), and the small
+// civilization/relationship helpers at 0x00bef5f0 .. 0x00befc00.
+extern const float g_invisibleFloorHeight;   // 0x0168c478 (first of the 6 offset floats above)
+
+// @ 0x00bef4e0
+void cVehicleLike::RecomputeGameData()
+{
+    FUN_00bee150();
+    FUN_00bee200();
+    FUN_00becc80();
+    Vector3 tmp;
+    Vector3* v = FUN_00becb10(&tmp, &mV224);
+    mV230 = *v;
+    FUN_00beccf0();
+}
+
+// @ 0x00bef540
+void Locator::SetPositionIfChanged(const Vector3* p)
+{
+    const Vector3* cur = GetPosition();
+    if (p->x == cur->x && p->y == cur->y && p->z == cur->z)
+        return;
+    SetPositionRaw(p);
+    reinterpret_cast<cVehicleLike*>((char*)this - 0x34)->RecomputeGameData();
+}
+
+// @ 0x00bef590
+void Locator::SetOrientationIfChanged(const Quaternion* q)
+{
+    const Quaternion* cur = GetOrientation();
+    if (q->x == cur->x && q->y == cur->y && q->z == cur->z && q->w == cur->w)
+        return;
+    SetOrientationRaw(q);
+    reinterpret_cast<cVehicleLike*>((char*)this - 0x34)->RecomputeGameData();
+}
+
+namespace SP {
+
+// 0x48-byte game timer (lives inline in the civilization record).
+struct cSPTimer {
+    char mData[0x48];
+    void Restart();                     // 0x00bc3130
+    uint64_t GetElapsedTime();          // 0x00bc3190
+};
+
+struct cGameNounManager;
+
+// The player's civilization record (money, tutorial/level progress, timers and the 12 flag
+// bytes counted by CountFlags).
+class cCivilization {
+public:
+    char     pad000[0x89];
+    uint8_t  mUnlimitedMoney;        // +0x89  no-bankruptcy cheat
+    char     pad08a[0x0e];
+    float    mMoney;                 // +0x98
+    char     pad09c[0x6c];
+    cSPTimer mTimer108;              // +0x108
+    char     pad150[0x118];
+    uint32_t mSpeciesKey[0xc];       // +0x268 species/archetype key
+    int      mLevel;                 // +0x298 civ level
+    char     pad29c[0xd4];
+    uint8_t  mFlag370;               // +0x370
+    char     pad371[0x07];
+    cSPTimer mTimer378;              // +0x378
+    uint8_t  mFlag3c0;               // +0x3c0
+    char     pad3c1[0x07];
+    cSPTimer mTimer3c8;              // +0x3c8
+    char     pad410[0x24];
+    int      mState434;              // +0x434
+    int      mId438;                 // +0x438
+    int      mValue43c;              // +0x43c
+    int      mValue440;              // +0x440
+    int      mValue444;              // +0x444
+    float    mValue448;              // +0x448
+    char     pad44c[0x38];
+    uint8_t  mFlags484[0x28];        // +0x484 flag bytes
+    float    mCredit4ac;             // +0x4ac
+    float    mDebt4b0;               // +0x4b0
+
+    float GetMoney();                        // 0x00bef6d0
+    void  SpendMoney(float amount);          // 0x00bef710
+    void  RaiseLevel(int level);             // 0x00bef770
+    bool  IsBelowTopState();                 // 0x00bef7e0
+    void  SetState(int id, int state);       // 0x00bef800
+    void  RestartTimer378();                 // 0x00bef830
+    void  RestartTimer3c8();                 // 0x00bef850
+    bool  IsTimer108Elapsed();               // 0x00bef8a0
+    void  ResetValues();                     // 0x00bef5f0
+    uint8_t GetFlag484(int index);           // 0x00bef970
+    int   CountFlags();                      // 0x00befab0
+    void* GetSpeciesProfile();               // 0x00bef950
+};
+
+struct cGameNounManager {
+    char pad000[0x10];
+    cCivilization* GetPlayerCivilization();    // 0x00b25fb0
+};
+
+cGameNounManager* NounManager();                 // 0x00b3d300
+
+class cCivModeStrategy {
+public:
+    void CheckEvents();                          // 0x00cf9ba0
+    void DoNext(int id, int flag);               // 0x00cfa990
+};
+cCivModeStrategy* GetCivModeStrategy();          // 0x00cf74c0
+
+}  // namespace SP
+
+struct cSPEditorSpeciesManager {
+    const void* GetProfile();                    // 0x004df550
+};
+struct cSpeciesKey {
+    cSPEditorSpeciesManager* Lookup(const void* key);   // 0x00401090
+};
+
+// @ 0x00bef5f0
+void SP::cCivilization::ResetValues()
+{
+    mValue43c = -1;
+    mValue440 = 0;
+    mValue444 = 0;
+    mValue448 = 0.0f;
+}
+
+// 0x00d00a70 ?ClampClassify@cRelationshipManager@@QAEHPAX00@Z
+struct cRelationshipManager {
+    int ClampClassify(void* a, void* b, int c);
+    bool ClassifyIsHigh(void* a, void* b);       // 0x00bef620
+};
+
+// @ 0x00bef620
+bool cRelationshipManager::ClassifyIsHigh(void* a, void* b)
+{
+    return ClampClassify(a, b, 1) >= 4;
+}
+
+// @ 0x00bef640
+int __cdecl FUN_00bef640(int type)
+{
+    switch (type) {
+    case 0:
+        return 0;
+    case 1:
+        return 2;
+    case 2:
+        return 1;
+    default:
+        return 5;
+    }
+}
+
+struct Object {
+    void* FUN_00b18460(int type);                // 0x00b18460 dynamic cast for other types
+    void* Cast(int type);                        // 0x00bef670
+};
+
+// @ 0x00bef670
+void* Object::Cast(int type)
+{
+    Object* self = this;
+    if (type == (int)0x901f1362 || type == (int)0xee3f516e)
+        return self;
+    if (type == (int)0x5593a1a)
+        return self ? (void*)((char*)self + 0x3c) : 0;
+    return self->FUN_00b18460(type);
+}
+
+// @ 0x00bef6d0
+float SP::cCivilization::GetMoney()
+{
+    float money = mMoney;
+    if (!mUnlimitedMoney)
+        money = (mCredit4ac + money) + mDebt4b0;
+    return money;
+}
+
+// @ 0x00bef710
+void SP::cCivilization::SpendMoney(float amount)
+{
+    mMoney -= amount;
+    if (!mUnlimitedMoney && mMoney < 0.0f) {
+        mMoney = (mCredit4ac + mMoney) + mDebt4b0;
+        mCredit4ac = 0.0f;
+        mDebt4b0 = 0.0f;
+    }
+}
+
+// @ 0x00bef770
+void SP::cCivilization::RaiseLevel(int level)
+{
+    if (mLevel >= level)
+        return;
+    mLevel = level;
+    if (this == SP::NounManager()->GetPlayerCivilization())
+        SP::GetCivModeStrategy()->CheckEvents();
+    if (mLevel < 4)
+        return;
+    if (this != SP::NounManager()->GetPlayerCivilization())
+        return;
+    SP::GetCivModeStrategy()->DoNext(0x3120767d, 1);
+}
+
+// @ 0x00bef7e0
+bool SP::cCivilization::IsBelowTopState()
+{
+    return (uint32_t)mState434 <= 4u;
+}
+
+// @ 0x00bef800
+void SP::cCivilization::SetState(int id, int state)
+{
+    if (id == mId438 && (state == 1 || state == 2))
+        mState434 = state;
+}
+
+// @ 0x00bef830
+void SP::cCivilization::RestartTimer378()
+{
+    mFlag370 = 1;
+    mTimer378.Restart();
+}
+
+// @ 0x00bef850
+void SP::cCivilization::RestartTimer3c8()
+{
+    mFlag3c0 = 1;
+    mTimer3c8.Restart();
+}
+
+// @ 0x00bef8a0
+bool SP::cCivilization::IsTimer108Elapsed()
+{
+    uint64_t t = mTimer108.GetElapsedTime();
+    uint32_t hi = (uint32_t)(t >> 32);
+    uint32_t lo = (uint32_t)t;
+    if (hi > 0)
+        return true;
+    if (lo <= 120000u)
+        return false;
+    return true;
+}
+
+// @ 0x00bef950
+void* SP::cCivilization::GetSpeciesProfile()
+{
+    cSpeciesKey* key = reinterpret_cast<cSpeciesKey*>(mSpeciesKey);
+    const void* profile = key->Lookup(key)->GetProfile();
+    return (void*)profile;
+}
+
+// @ 0x00bef970
+uint8_t SP::cCivilization::GetFlag484(int index)
+{
+    return mFlags484[index];
+}
+
+// @ 0x00bef980
+int __stdcall FUN_00bef980(int type)
+{
+    switch (type) {
+    case (int)0x8226d0:   return 1;
+    case (int)0x45cdf1a:  return 3;
+    case (int)0x756d422:  return 10;
+    case (int)0x3221e759: return 6;
+    case (int)0x8a91f1e:  return 7;
+    case (int)0x2cdbd6a1: return 0;
+    case (int)0x36213c6a: return 2;
+    case (int)0x4a78672c: return 11;
+    case (int)0xfd05ab6d: return 4;
+    case (int)0x81299805: return 5;
+    case (int)0xc0617b2f: return 9;
+    case (int)0xfc716a94: return 8;
+    default:              return -1;
+    }
+}
+
+// @ 0x00bef920
+int __cdecl FUN_00bef920(int type)
+{
+    switch (type) {
+    case 0:
+        return 0;
+    case 1:
+        return 2;
+    case 2:
+        return 1;
+    default:
+        return -1;
+    }
+}
+
+// @ 0x00befa50
+int __stdcall FUN_00befa50(int type)
+{
+    switch (type) {
+    case 0:
+    case 6:
+    case 11:
+        return 2;
+    case 1:
+    case 4:
+    case 7:
+        return 4;
+    case 2:
+    case 5:
+    case 8:
+        return 6;
+    default:
+        return 1;
+    }
+}
+
+// @ 0x00befab0
+int SP::cCivilization::CountFlags()
+{
+    int n0 = 0, n1 = 0, n2 = 0, n3 = 0;
+    for (int i = 0; i < 3; ++i) {
+        n0 += mFlags484[i * 4 + 0] != 0;
+        n1 += mFlags484[i * 4 + 1] != 0;
+        n2 += mFlags484[i * 4 + 2] != 0;
+        n3 += mFlags484[i * 4 + 3] != 0;
+    }
+    return n0 + (n3 + n2 + n1);
+}
+
+extern char g_smDataSerializerList_cCultureSet[];   // 0x0156fa30
+
+// 0xa14-byte key/value list serializer used by the cCultureSet accessors below.
+struct cVarListSerializer {
+    char mData[0xa14];
+    cVarListSerializer(void* context, const void* list, int id);   // 0x00692f90
+    void Read(void* dest);                                          // 0x00693e10
+    void Serialize(void* dest);                                     // 0x00692900
+};
+
+// @ 0x00befbc0
+void* __cdecl FUN_00befbc0(void* dest, void* context)
+{
+    cVarListSerializer s(context, g_smDataSerializerList_cCultureSet, 0x1a80d26);
+    s.Read(dest);
+    return dest;
+}
+
+// @ 0x00befc00
+void* __cdecl FUN_00befc00(void* dest, void* context)
+{
+    cVarListSerializer s(context, g_smDataSerializerList_cCultureSet, 0x1a80d26);
+    s.Serialize(dest);
+    return dest;
 }

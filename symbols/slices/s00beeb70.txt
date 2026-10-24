@@ -1,1 +1,24 @@
-00beeb70 FUN_00beeb70  # Init-from-city: owner city at +0x264, locator +0x34, rotates 4 offset vectors by the city locator quaternion onto the planet surface
+00beeb70 ?Init@cVehicleLike@@QAEXPAUcCity@@H@Z  # nonmatching (pre-existing) - vehicle/object (re)init from the owning city, /arch:SSE /fp:fast
+00bef4e0 ?RecomputeGameData@cVehicleLike@@QAEXXZ  # nonmatching (15) - FUN_00bee150/00bee200/00becc80, copy the vector at +0x224 through FUN_00becb10 into +0x230, tail call FUN_00beccf0
+00bef540 ?SetPositionIfChanged@Locator@@QAEXPBUVector3@@@Z  # byte-exact; skip when equal to GetPosition(), else SetPositionRaw + outer cVehicleLike::RecomputeGameData
+00bef590 ?SetOrientationIfChanged@Locator@@QAEXPBUQuaternion@@@Z  # byte-exact; same for GetOrientation()/SetOrientationRaw
+00bef5f0 ?ResetValues@cCivilization@SP@@QAEXXZ  # byte-exact; +0x43c = -1, +0x440/+0x444 = 0, +0x448 = 0.0f
+00bef620 ?ClassifyIsHigh@cRelationshipManager@@QAE_NPAX0@Z  # byte-exact; ClampClassify(a, b, 1) >= 4
+00bef640 ?FUN_00bef640@@YAHH@Z  # byte-exact; 0->0, 1->2, 2->1, else 5
+00bef670 ?Cast@Object@@QAEPAXH@Z  # nonmatching (50) - 0x901f1362/0xee3f516e -> this, 0x5593a1a -> this+0x3c, else FUN_00b18460(type)
+00bef6d0 ?GetMoney@cCivilization@SP@@QAEMXZ  # byte-exact; mMoney, or (credit + mMoney) + debt when not the unlimited-money cheat
+00bef710 ?SpendMoney@cCivilization@SP@@QAEXM@Z  # byte-exact; subtract, then fold credit/debt in and clear them when the result is negative
+00bef770 ?RaiseLevel@cCivilization@SP@@QAEXH@Z  # nonmatching (73) - raise mLevel; player civ gets CheckEvents, level >= 4 gets DoNext(0x3120767d, 1)
+00bef7e0 ?IsBelowTopState@cCivilization@SP@@QAE_NXZ  # nonmatching (14) - mState434 <= 4
+00bef800 ?SetState@cCivilization@SP@@QAEXHH@Z  # byte-exact; state 1/2 accepted only for the matching id at +0x438
+00bef830 ?RestartTimer378@cCivilization@SP@@QAEXXZ  # byte-exact; mFlag370 = 1 then the +0x378 timer Restart
+00bef850 ?RestartTimer3c8@cCivilization@SP@@QAEXXZ  # byte-exact; mFlag3c0 = 1 then the +0x3c8 timer Restart
+00bef8a0 ?IsTimer108Elapsed@cCivilization@SP@@QAE_NXZ  # nonmatching (15) - 64-bit elapsed time of the +0x108 timer over 120000 ticks
+00bef920 ?FUN_00bef920@@YAHH@Z  # byte-exact; 0->0, 1->2, 2->1, else -1
+00bef950 ?GetSpeciesProfile@cCivilization@SP@@QAEPAXXZ  # nonmatching (2) - cSpeciesKey::Lookup(&+0x268) then cSPEditorSpeciesManager::GetProfile
+00bef970 ?GetFlag484@cCivilization@SP@@QAEEH@Z  # byte-exact; flag byte at +0x484 + index
+00bef980 ?FUN_00bef980@@YGHH@Z  # byte-exact; 12-way animation-type id hash -> 0..11
+00befa50 ?FUN_00befa50@@YGHH@Z  # nonmatching (38) - 12-way state -> animation group (0/6/11->2, 1/4/7->4, 2/5/8->6, else 1)
+00befab0 ?CountFlags@cCivilization@SP@@QAEHXZ  # nonmatching (236) - count non-zero bytes among the 12 flag bytes at +0x484..+0x48f
+00befbc0 ?FUN_00befbc0@@YAPAXPAX0@Z  # byte-exact; construct a cVarListSerializer on the stack and Read into dest, /GS-
+00befc00 ?FUN_00befc00@@YAPAXPAX0@Z  # byte-exact; same with Serialize, /GS-

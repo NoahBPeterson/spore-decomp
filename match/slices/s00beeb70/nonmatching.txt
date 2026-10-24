@@ -1,1 +1,9 @@
 00beeb70  1716  cVehicleLike::Init (owner city, locator copy, 8 offset points, 4 rotated+projected corner points, memset): complete, call/vslot sequence matches; SSE register allocation and scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00bef4e0  15  complete: RecomputeGameData (three sibling updates, vector copy through FUN_00becb10, tail call FUN_00beccf0); /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; cl15 hoists `mov ecx,esi` above the last `mV230` component store (82 vs 81 bytes)
+00bef670  50  complete: Object::Cast (two identity type ids, +0x3c view for the third, else FUN_00b18460); cl15 keeps the type id in eax and `this` in ecx, retail keeps `this` in eax and the id in ecx (54 vs 56 bytes)
+00bef770  73  complete: RaiseLevel (raise civ level, ping the civ-mode strategy's CheckEvents for the player, DoNext(0x3120767d,1) above level 4); retail reloads mLevel into ecx for a second (self) compare, cl15 folds the load and branches directly (97 vs 105 bytes)
+00bef7e0  14  complete: IsBelowTopState (`mState434 <= 4`); cl15 folds the field into `cmp eax,[ecx+0x434]`, retail loads it into ecx first (15 vs 17 bytes)
+00bef8a0  15  complete: IsTimer108Elapsed (64-bit elapsed time of the +0x108 timer, > 120000 ticks); cl15 merges the two `true` returns into one `seta` tail, retail keeps `jne`-style branch + separate true/false blocks (27 vs 28 bytes)
+00bef950  2  complete: GetSpeciesProfile (key lookup then manager GetProfile); only difference: cl15 tail-jumps into GetProfile where retail keeps `call` + `ret` (19 vs 20 bytes)
+00befa50  38  complete: FUN_00befa50 12-way state->animation mapping; cl15 emits a byte case-map plus jump table, retail a plain `jmp [eax*4+table]` (84 vs 96 bytes)
+00befab0  236  complete: CountFlags (count set bytes among the 12 flag bytes at +0x484..+0x48f); retail keeps the 3x4 loop with four accumulators, cl15 unrolls and reassociates the additions (167 vs 79 bytes)

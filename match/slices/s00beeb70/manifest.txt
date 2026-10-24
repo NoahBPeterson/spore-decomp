@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00beeb70/s00beeb70.cpp  ?SetPositionIfChanged@Locator@@QAEXPBUVector3@@@Z  00bef540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?SetOrientationIfChanged@Locator@@QAEXPBUQuaternion@@@Z  00bef590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?ResetValues@cCivilization@SP@@QAEXXZ  00bef5f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?ClassifyIsHigh@cRelationshipManager@@QAE_NPAX0@Z  00bef620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?FUN_00bef640@@YAHH@Z  00bef640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?GetMoney@cCivilization@SP@@QAEMXZ  00bef6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?SpendMoney@cCivilization@SP@@QAEXM@Z  00bef710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?SetState@cCivilization@SP@@QAEXHH@Z  00bef800  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?RestartTimer378@cCivilization@SP@@QAEXXZ  00bef830  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?RestartTimer3c8@cCivilization@SP@@QAEXXZ  00bef850  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?FUN_00bef920@@YAHH@Z  00bef920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?GetFlag484@cCivilization@SP@@QAEEH@Z  00bef970  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?FUN_00bef980@@YGHH@Z  00bef980  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00beeb70/s00beeb70.cpp  ?FUN_00befbc0@@YAPAXPAX0@Z  00befbc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00beeb70/s00beeb70.cpp  ?FUN_00befc00@@YAPAXPAX0@Z  00befc00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
