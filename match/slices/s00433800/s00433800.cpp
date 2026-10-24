@@ -18,6 +18,7 @@ extern Matrix3 g_IdentityMatrix;                // 015D2638
 extern const float kZero;                       // 01485378
 extern const float kDefaultDelay;               // 01488874 (0.1f)
 extern const float kOne;                        // 01485720
+extern const float kStatFillValue;              // 015D1E9C
 
 // Transform-update message: flags select which parts are valid.
 struct XformMsg {
@@ -291,7 +292,7 @@ void StatVec::Resize(uint32_t n)
 {
     if (n > (uint32_t)(end - begin)) {
         Stat fill;
-        fill.value = *(const float*)&kOne;
+        fill.value = kStatFillValue;
         Stat* at;
         uint32_t add = n - (end - begin);
         at = end;
