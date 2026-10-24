@@ -6,8 +6,8 @@
 010c0110 0 havok-equivalent
 010c0160 0 havok-equivalent
 010c0220 0 havok-equivalent
-010c03a0 0 havok-equivalent
+010c03a0 487 FIXED hkAabbUtil::calcAabb signed-zero/return-register repair: precompute the eight final min/max sums into locals and store them last, so cl leaves the out pointer in EAX at the plain ret (the original loads out with `mov eax,[ebp+0x14]` and stores all eight components through it). The negated extents n0..n3 are declared `volatile float` so each is rounded to a float slot before its `+ m[12..15]` add, matching the original's `fchs`/`fstp [esp+..]`/`fld`/`fadd` sequence (without this, out.m_min.x/out.m_min.z came out -0.0 vs the original's +0.0 on tiny/zero extents). equiv PASS 400 valid, 100.0% coverage; replay first difference None; size 370 vs 516 (register schedule / stack frame differ). flags /vc71 /O2 /MD /Gy /TP
 010c05d0 0 havok-equivalent
 010c0690 0 havok-equivalent
-010c0780 0 havok-equivalent
+010c0780 392 FIXED hkBoxShape::convertVertexIdsToVertices corner table: the original reads the corner table at image VA 0x014a2680 with a raw `id*8` byte stride (`fld [esi*8+0x14a2680]`, then +4/+8/+0xc), so out-of-range 16-bit ids read neighbouring image bytes. A local static copy at the same values lives in our small object mapping, where those reads faulted (UC_ERR_READ_UNMAPPED). Point at the image table instead (`static const float* const s_boxCorner = (const float*)0x014a2680;` and `corner = s_boxCorner + (hkUint32)ids[i]*2`), keeping the dead `w = corner[3]*m_halfExtents.w` store then `id | 0x3f000000`. equiv PASS 328 valid, 100.0% coverage; replay first difference None; size 419 vs 398 (the original unrolls by four, ours by a different factor). flags /vc71 /O2 /MD /Gy /TP
 010c0910 0 havok-equivalent

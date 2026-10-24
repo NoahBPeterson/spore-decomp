@@ -402,19 +402,32 @@ void hkAabbUtil::calcAabb(const hkTransform& t, const hkVector4& halfExtents, fl
     float s3 = (float)((hkX87Real)b3 + a3);
     float x3 = (float)((hkX87Real)s3 + e3);
 
-    float n0 = -x0;
-    float n1 = -x1;
-    float n2 = (float)(-x2);
-    float n3 = -x3;
+    volatile float n0 = -x0;              // the binary rounds every negated extent to a float slot
+    volatile float n1 = -x1;
+    volatile float n2 = (float)(-x2);     // the binary rounds the negated z extent to a float slot
+    volatile float n3 = -x3;
 
-    out.m_max.z = (float)(x2 + m[14]);
-    out.m_max.w = x3 + m[15];
-    out.m_min.x = n0 + m[12];
-    out.m_min.y = n1 + m[13];
-    out.m_min.z = n2 + m[14];
-    out.m_min.w = n3 + m[15];
-    out.m_max.x = x0 + m[12];
-    out.m_max.y = x1 + m[13];
+    float t0 = m[12];
+    float t1 = m[13];
+    float t2 = m[14];
+    float t3 = m[15];
+    float maxZ = (float)(x2 + t2);
+    float maxW = x3 + t3;
+    float minX = n0 + t0;
+    float minY = n1 + t1;
+    float minZ = n2 + t2;
+    float minW = n3 + t3;
+    float maxX = x0 + t0;
+    float maxY = x1 + t1;
+
+    out.m_max.z = maxZ;
+    out.m_max.w = maxW;
+    out.m_min.x = minX;
+    out.m_min.y = minY;
+    out.m_min.z = minZ;
+    out.m_min.w = minW;
+    out.m_max.x = maxX;
+    out.m_max.y = maxY;
 }
 
 // @ 0x010c05d0
@@ -475,21 +488,16 @@ void hkBoxShape::getSupportingVertex(const hkVector4& direction, hkCdVertex& sup
     memcpy(&supportingVertexOut.w, &wBits, 4);
 }
 
-// sign table of the eight box corners (0x014A2680), indexed by vertex id / 2
-static const float s_boxCorner[8][4] =
-{
-    {  1.0f,  1.0f,  1.0f, 0.0f }, {  1.0f,  1.0f, -1.0f, 0.0f },
-    {  1.0f, -1.0f,  1.0f, 0.0f }, {  1.0f, -1.0f, -1.0f, 0.0f },
-    { -1.0f,  1.0f,  1.0f, 0.0f }, { -1.0f,  1.0f, -1.0f, 0.0f },
-    { -1.0f, -1.0f,  1.0f, 0.0f }, { -1.0f, -1.0f, -1.0f, 0.0f },
-};
+// sign table of the eight box corners in the image (0x014A2680); the binary indexes it by
+// vertex id * 8 bytes (four floats per entry), so ids outside 0..15 read neighbouring image data
+static const float* const s_boxCorner = (const float*)0x014a2680;
 
 // @ 0x010c0780
 void hkBoxShape::convertVertexIdsToVertices(const hkUint16* ids, int numIds, hkCdVertex* verticesOut) const
 {
     for (int i = 0; i < numIds; ++i)         // the binary unrolls by four; same order
     {
-        const float* corner = s_boxCorner[ids[i] >> 1];
+        const float* corner = s_boxCorner + (hkUint32)ids[i] * 2;
         verticesOut[i].x = corner[0] * m_halfExtents.x;
         verticesOut[i].y = corner[1] * m_halfExtents.y;
         verticesOut[i].z = corner[2] * m_halfExtents.z;
