@@ -1,1 +1,6 @@
 00f39580 1595 complete token switch; tail-merge/register scheduling differ, 2026 vs 2145 bytes. flags /O2 /MD /Gy /TP /GS-
+00f392b0 374 complete; GetEditorPropertyList + mission key chain + localized cString; register allocation differs (key esi vs edi, progress/ok spills), size 442 vs 444. flags /O2 /MD /Gy /TP /GS-; equiv WEAK (400 valid, 16.3% coverage, no mismatch)
+00f39470 203 complete; property list -> collectable item value -> cString; size 247 vs 232, extra zero-register/frame. flags /O2 /MD /Gy /TP /GS-; equiv WEAK (400 valid, 27.6% coverage, no mismatch)
+00f39e80 17 complete; marker write + cVarListSerializer; marker store scheduled before the writer vtable load instead of after, 102 bytes. flags /O2 /MD /Gy /TP /GS-; equiv UNSUPPORTED (0/400 valid, virtual calls fault on random stream pointers)
+00f39f50 300 complete; mode-2 vehicle tick; size 434 vs 449, register/scheduling differences in begin/index and unsigned-to-double conversion. flags /O2 /MD /Gy /TP /GS-; equiv UNSUPPORTED (0/400 valid, fake NounManager pointer faults)
+00f3a160 65 complete; four double-threshold compares; VC9 emits fcom/fnstsw while retail uses fld/fcompi, size 88 vs 78. flags /O2 /MD /Gy /TP /GS-; equiv PASS 400/400, 100% coverage
