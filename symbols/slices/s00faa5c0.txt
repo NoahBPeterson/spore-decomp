@@ -1,1 +1,4 @@
 00faa5c0 ?SaveModifications@cTerrainSphere_s00fa_a5c0@@QAEXXZ  # cTerrainSphere_s00fa_a5c0::SaveModifications migrated from s00faa5c0 (verbatim, slice spelling)
+00faacd0 CreateTerrainMapJob  # cdecl(cTerrainSphere*, cJob**): job-manager CanRegister guard, alloc "Terrain/Sphere/cTerrainMapJobInfo" 0x14 bytes, construct cTerrainMapJobInfo (2 interfaces + refcount/owner base), virtual slot 0, out->SetObject(info), mpFunction=0x00fa9830, mpUserData=info, priority 0x80000000, Release; returns bool
+00faad80 SP::cTerrainSphere::UpdatePostCamera  # thiscall(int,int) ret 8: countdown/cull-radius refresh, dirty-flag decision, 6-quad rect update + job recreate, cull-distance flag at +0x110, UpdateQuadsPostCamera, region callback
+00fab230 cQuadVec::Append  # thiscall(): push a default cQuadElem (0x110 B, inline buffer at +0x18, cap +0x8c) into mEnd or grow via DoInsertValue(0x00fab0e0)

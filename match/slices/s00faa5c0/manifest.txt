@@ -1,0 +1,2 @@
+# source  symbol  original VA
+slices/s00faa5c0/s00faa5c0.cpp  ?Append@cQuadVec@@QAEXXZ  00fab230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
