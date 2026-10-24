@@ -93,6 +93,7 @@ struct IOReader {
     void* readObj(void* obj, int size);
 };
 struct Mutex {
+    char mData[0x30];      // retail EA::Thread::Mutex is 0x30 bytes
     void ctor(int a, int b);
     void dtor();
 };
@@ -112,13 +113,17 @@ struct ResConfig {
     char  ReadVariant(IOReader* reader, Variant_s00a1_96f0* v);
     char  Read(IOReader* reader);
 };
+struct RBTree_s00a1_96f0 {   // eastl rbtree storage at FactoryConfiguration+0x40
+    void* mNodeParent;                    // +0x00 (unused by this slice)
+    void  DoNukeSubtree(void* node);      // 0x009a9600
+};
 struct FactoryConfiguration_s00a1_96f0 {
     void* mVtbl;        // 0x00
     void* mField04;     // 0x04
     void* mField08;     // 0x08
-    char  mPad[0x08];
+    char  mPad[0x04];
     Mutex mMutex;       // 0x10
-    char  mPad2[0x44 - 0x10 - sizeof(Mutex)];
+    RBTree_s00a1_96f0 mTree;  // 0x40
     void* mAnchor;      // 0x44
     void* mField48;     // 0x48
     void* mField4c;     // 0x4c
@@ -451,14 +456,11 @@ FactoryConfiguration_s00a1_96f0::FactoryConfiguration_s00a1_96f0()
 // @ 0x00a19e00
 FactoryConfiguration_s00a1_96f0::~FactoryConfiguration_s00a1_96f0()
 {
-    void* begin = *(void**)((char*)this + 0x5c);
-    void* end = *(void**)((char*)this + 0x64);
-    if (((char*)end - (char*)begin) > 1 && begin != 0) {
-        f_00f47380(begin);
+    if (((char*)mField64 - (char*)mField5c) > 1 && mField5c != 0) {
+        f_00f47380(mField5c);
     }
-    // eastl::rbtree<...>::DoNukeSubtree(this->mLine.mpCapacity)
-    extern void f_009a9600(void* self, void* node);
-    f_009a9600((char*)this + 0x40, *(void**)((char*)this + 0x4c));
+    // eastl::rbtree<...>::DoNukeSubtree(mField4c) on the tree at +0x40
+    mTree.DoNukeSubtree(mField4c);
     mMutex.dtor();
     mVtbl = (void*)0x013effb8;
 }

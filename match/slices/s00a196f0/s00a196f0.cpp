@@ -26,10 +26,10 @@ extern void* f_008de1a0(void);                                           // Eapd
 extern void* f_011e0744(void* dst, void* src, unsigned bytes);           // DoInsertValue
 extern void* f_00951bb0(void* a, void* b, void* c);
 extern void* f_00951bf0(void* a, void* b, void* c);
-extern void  __stdcall f_008f05f0(void* a, void* b, void* c, void* d);   // ret 0x10
-extern void  __stdcall f_008f0640(void* a, void* b, void* c, void* d);   // ret 0x10
-extern void  __stdcall f_00f96e70(void* a, void* b, void* c);            // ret 0xc
-extern void  __stdcall f_00c50ad0(void* a, void* b, void* c);            // ret 0xc
+extern void  f_008f05f0(void* a, void* b, void* c, void* d);             // cdecl (plain ret)
+extern void  f_008f0640(void* a, void* b, void* c, void* d);             // cdecl (plain ret; 4th arg unused)
+extern void  f_00f96e70(void* a, void* b, void* c);                      // cdecl (plain ret)
+extern void  f_00c50ad0(void* a, void* b, void* c);                      // cdecl (plain ret)
 extern void  __stdcall f_006a2b80(void* self, unsigned n);               // vector resize (ret 4)
 
 static const char* const kAllocFile =
@@ -56,6 +56,7 @@ struct IOReader {
 
 // Mutex, rebuilt from EA::Thread::Mutex.
 struct Mutex {
+    char mData[0x30];      // retail EA::Thread::Mutex is 0x30 bytes
     void ctor(int a, int b);
     void dtor();
 };
@@ -117,9 +118,11 @@ struct FloatVec {
 
 // ResponseCurveData vector (element size 0x14).
 struct RcdVec {
-    ResponseCurveData* mpBegin;
-    ResponseCurveData* mpEnd;
-    ResponseCurveData* mpCap;
+    ResponseCurveData* mpBegin;    // 0x00
+    ResponseCurveData* mpEnd;      // 0x04
+    ResponseCurveData* mpCap;      // 0x08
+    int                mPad;       // 0x0c
+    void*              mpFixed;    // 0x10 fixed_vector_allocator's inline buffer
     void insertN(int pos, unsigned count, const ResponseCurveData& value);
     void resize(unsigned n);
 };
@@ -302,13 +305,20 @@ char ResConfig::ReadVariant(IOReader* reader, Variant* v) {
 // 0x00A19D60  EA::Audio::FactoryConfiguration::FactoryConfiguration
 // Constructor with EH frame; behaviourally complete reconstruction.
 // =======================================================================================
+// eastl::rbtree storage at FactoryConfiguration+0x40; this slice only calls its
+// node-nuke helper (0x009a9600, thiscall with the node on the stack).
+struct RBTree_40 {
+    void* mNodeParent;                    // +0x00 (unused by this slice)
+    void  DoNukeSubtree(void* node);      // 0x009a9600
+};
+
 struct FactoryConfiguration {
     void* mVtbl;        // 0x00
     void* mField04;     // 0x04
     void* mField08;     // 0x08
-    char  mPad[0x08];
+    char  mPad[0x04];
     Mutex mMutex;       // 0x10
-    char  mPad2[0x44 - 0x10 - sizeof(Mutex)];
+    RBTree_40 mTree;    // 0x40
     void* mAnchor;      // 0x44
     void* mField48;     // 0x48
     void* mField4c;     // 0x4c
@@ -358,14 +368,11 @@ FactoryConfiguration::FactoryConfiguration() {
 // =======================================================================================
 // @ 0x00A19E00
 FactoryConfiguration::~FactoryConfiguration() {
-    void* begin = *(void**)((char*)this + 0x5c);
-    void* end = *(void**)((char*)this + 0x64);
-    if (((char*)end - (char*)begin) > 1 && begin != 0) {
-        f_00f47380(begin);
+    if (((char*)mField64 - (char*)mField5c) > 1 && mField5c != 0) {
+        f_00f47380(mField5c);
     }
-    // eastl::rbtree<...>::DoNukeSubtree(this->mLine.mpCapacity)
-    extern void f_009a9600(void* self, void* node);
-    f_009a9600((char*)this + 0x40, *(void**)((char*)this + 0x4c));
+    // eastl::rbtree<...>::DoNukeSubtree(mField4c) on the tree at +0x40
+    mTree.DoNukeSubtree(mField4c);
     mMutex.dtor();
     mVtbl = (void*)0x013effb8;
 }
@@ -582,7 +589,7 @@ void RcdVec::insertN(int pos, unsigned count, const ResponseCurveData& value) {
         f_008f0640(mid, (char*)count, (void*)&value, p);
         char* newend = (char*)f_00951bb0(p, mpEnd, (char*)mid + count * 0x14);
         char* old = (char*)mpBegin;
-        if (old != 0 && old != (char*)mpCap) f_00f47380(old);
+        if (old != 0 && old != (char*)mpFixed) f_00f47380(old);
         mpBegin = (ResponseCurveData*)dst;
         mpEnd = (ResponseCurveData*)newend;
         mpCap = (ResponseCurveData*)(dst + total * 0x14);
@@ -633,9 +640,11 @@ void FloatVec::pushBack(const float& value) {
 // @ 0x00A1A500
 void RcdVec::resize(unsigned n) {
     ResponseCurveData* end = mpEnd;
-    int have = (int)((char*)end - (char*)mpBegin) / 0x14;
-    if (have < (int)n) {
-        ResponseCurveData value = {};
+    unsigned have = (unsigned)((int)((char*)end - (char*)mpBegin) / 0x14);
+    if (have < n) {
+        ResponseCurveData value;
+        int* pz = (int*)&value;
+        pz[0] = 0; pz[1] = 0; pz[2] = 0; pz[3] = 0; pz[4] = 0;
         insertN((int)end, n - have, value);
         return;
     }

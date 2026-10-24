@@ -31,10 +31,10 @@ extern void  f_00f47380(void* p);                                        // oper
 extern void* f_011e0744(void* dst, void* src, unsigned bytes);           // DoInsertValue
 extern void* f_00951bb0(void* a, void* b, void* c);
 extern void* f_00951bf0(void* a, void* b, void* c);
-extern void  __stdcall f_008f05f0(void* a, void* b, void* c, void* d);   // ret 0x10
-extern void  __stdcall f_008f0640(void* a, void* b, void* c, void* d);   // ret 0x10
-extern void  __stdcall f_00f96e70(void* a, void* b, void* c);            // ret 0xc
-extern void  __stdcall f_00c50ad0(void* a, void* b, void* c);            // ret 0xc
+extern void  f_008f05f0(void* a, void* b, void* c, void* d);            // cdecl (plain ret)
+extern void  f_008f0640(void* a, void* b, void* c, void* d);            // cdecl (plain ret; 4th arg unused)
+extern void  f_00f96e70(void* a, void* b, void* c);                     // cdecl (plain ret)
+extern void  f_00c50ad0(void* a, void* b, void* c);                     // cdecl (plain ret)
 static const char* const kAllocFile =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 struct ResponseCurveData {
@@ -66,6 +66,8 @@ struct RcdVec {
     ResponseCurveData* mpBegin;
     ResponseCurveData* mpEnd;
     ResponseCurveData* mpCap;
+    int                mPad;
+    void*              mpFixed;
     void insertN(int pos, unsigned count, const ResponseCurveData& value);
     void resize(unsigned n);
 };
@@ -197,7 +199,7 @@ void RcdVec::insertN(int pos, unsigned count, const ResponseCurveData& value)
         f_008f0640(mid, (char*)count, (void*)&value, p);
         char* newend = (char*)f_00951bb0(p, mpEnd, (char*)mid + count * 0x14);
         char* old = (char*)mpBegin;
-        if (old != 0 && old != (char*)mpCap) f_00f47380(old);
+        if (old != 0 && old != (char*)mpFixed) f_00f47380(old);
         mpBegin = (ResponseCurveData*)dst;
         mpEnd = (ResponseCurveData*)newend;
         mpCap = (ResponseCurveData*)(dst + total * 0x14);
@@ -244,9 +246,11 @@ void FloatVec::pushBack(const float& value)
 void RcdVec::resize(unsigned n)
 {
     ResponseCurveData* end = mpEnd;
-    int have = (int)((char*)end - (char*)mpBegin) / 0x14;
-    if (have < (int)n) {
-        ResponseCurveData value = {};
+    unsigned have = (unsigned)((int)((char*)end - (char*)mpBegin) / 0x14);
+    if (have < n) {
+        ResponseCurveData value;
+        int* pz = (int*)&value;
+        pz[0] = 0; pz[1] = 0; pz[2] = 0; pz[3] = 0; pz[4] = 0;
         insertN((int)end, n - have, value);
         return;
     }
