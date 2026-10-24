@@ -29,9 +29,9 @@ static inline int32_t ElemU32(EltArray* a, int i)
 }
 
 // @ 0x00730240
-void FUN_00730240(EltArray* p1, EltArray* p2, uint32_t p3, EltArray* p4, EltArray* p5,
-                  EltArray* p6, EltArray* p7, EltArray* p8, EltArray* p9,
-                  uint8_t* p10, char p11)
+uint32_t FUN_00730240(EltArray* p1, EltArray* p2, uint32_t p3, EltArray* p4, EltArray* p5,
+                      EltArray* p6, EltArray* p7, EltArray* p8, EltArray* p9,
+                      uint8_t* p10, char p11)
 {
     bool hasA = p7->mData != 0;
     bool hasB = p9->mData != 0;
@@ -82,7 +82,12 @@ void FUN_00730240(EltArray* p1, EltArray* p2, uint32_t p3, EltArray* p4, EltArra
 
     int32_t count = p4->mNumElts;
     if (count <= 0)
-        return;
+        return (uint32_t)count;
+
+    // The retail routine leaves its last computed packed value in eax (the caller-visible
+    // return slot): the second normal stream if it ran, else the first, else the position
+    // output pointer it just stored through; an empty range returns the element count.
+    uint32_t rv = 0;
 
     float d4 = 1.0f;  // inverse squared length, row 0
     float d0 = 1.0f;  // inverse squared length, row 1
@@ -179,11 +184,16 @@ void FUN_00730240(EltArray* p1, EltArray* p2, uint32_t p3, EltArray* p4, EltArra
             float x = inv * c8;
             float y = c4 * inv;
             float z = c0 * inv;
-            *(uint32_t*)(p7->mData + (uint32_t)p7->mEltStride * (uint32_t)i) =
+            uint32_t packed =
                 ((((uint32_t)(int32_t)(z * 127.0f) + 0x7fu) << 8) |
                   ((uint32_t)(int32_t)(y * 127.0f) + 0x7fu)) << 8 |
                   ((uint32_t)(int32_t)(x * 127.0f) + 0x7fu);
+            *(uint32_t*)(p7->mData + (uint32_t)p7->mEltStride * (uint32_t)i) = packed;
+            rv = packed;
         }
+
+        if (!hasA)
+            rv = (uint32_t)(uintptr_t)pout;
 
         if (hasB)
         {
@@ -198,10 +208,14 @@ void FUN_00730240(EltArray* p1, EltArray* p2, uint32_t p3, EltArray* p4, EltArra
             float x = inv * b0;
             float y = ac * inv;
             float z = a8 * inv;
-            *(uint32_t*)(p9->mData + (uint32_t)p9->mEltStride * (uint32_t)i) =
+            uint32_t packed =
                 ((((uint32_t)(int32_t)(z * 127.0f) + 0x7fu) << 8) |
                   ((uint32_t)(int32_t)(y * 127.0f) + 0x7fu)) << 8 |
                   ((uint32_t)(int32_t)(x * 127.0f) + 0x7fu);
+            *(uint32_t*)(p9->mData + (uint32_t)p9->mEltStride * (uint32_t)i) = packed;
+            rv = packed;
         }
     }
+
+    return rv;
 }
