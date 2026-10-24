@@ -1,0 +1,13 @@
+# slice s00eaefa0 - names inferred from the cards, the PDB candidates and behaviour
+# SP::Audio::cResourceCityMusic (0x6c bytes): vtable + 5 dwords @8/+0xc/+0x10/+0x14/+0x18
+#   + four vector<float,SP_STL_Sound> @0x1c/+0x30/+0x44/+0x58 (each is 0xc data + 8 allocator)
+00eaefa0  VecP::InsertRange(void* pos, ListNode* first, ListNode* last)  # eastl vector insert of a singly-linked range: shift/append/realloc branches; node payload at +8
+00eaf190  SP::Audio::cResourceCityMusic::cResourceCityMusic(const cResourceCityMusic&)  # copy-ctor: vtable 0x13ebcdc -> 0x14884a0, header dwords, then deep-copy the four vectors (FUN_00b93c60 + memcpy)
+00eaf2b0  SP::Audio::cResourceCityMusic::`scalar_deleting_destructor'(u8) -> void*  # frees the four vectors @0x58/0x44/0x30/0x1c, vtable 0x13eb938, optional delete
+00eaf350  eastl::fill_imp<0>::do_fill<cResourceCityMusic*,cResourceCityMusic>  # fills [first,last) from *src, assigning the four vectors via operator=
+00eaf410  eastl::copy_impl<0,random_access_iterator_tag>::do_copy<cResourceCityMusic*,cResourceCityMusic*>  # copies [first,last) to dst, returns dst
+00eaf490  eastl::copy_backward_impl<0,random_access_iterator_tag>::do_copy<cResourceCityMusic*,cResourceCityMusic*>  # copies [first,last) backwards to dst, returns dst
+00eaf510  SP::Audio::cPlayerCityMusic::AddNote(u32* out)  # picks a weighted degree, computes pitch and differ-flag, derives the next onset from the tempo, emits trace channels, returns {pitch, delta, flag}
+00eaf8d0  SP::Audio::cPlayerCityMusic::MoveNote(u32 index, u32 numMoved)  # removes a note from the four parallel vectors, re-inserts it, re-emits the trace channels
+00eafcf0  PlayerMusic_ToString(PlayerMusic*, void* writer, u16* name) -> char  # serializes a circular list as a "uint32_t" array under a name
+00eafe40  PlayerMusic_FromString(PtrVec* vec, u16* name, void* writer) -> char  # serializes a (begin,end) u32 range as a "uint32_t" array

@@ -1,0 +1,2 @@
+slices/s00eaefa0/s00eaefa0.cpp  ?ScalarDeletingDtor@ResMusic@@QAEPAU1@E@Z  00eaf2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eaefa0/s00eaefa0.cpp  ?do_fill_Music@@YAXPAUResMusic@@0PBU1@@Z  00eaf350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
