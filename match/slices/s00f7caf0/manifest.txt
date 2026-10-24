@@ -1,0 +1,1 @@
+slices/s00f7caf0/s00f7caf0.cpp  ?F7d990@cParticlesEffectView@Swarm@EA@@QAEXPAUcParticlesDescription@23@@Z  00f7d990  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
