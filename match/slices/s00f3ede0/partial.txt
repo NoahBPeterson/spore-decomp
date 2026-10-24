@@ -1,0 +1,6 @@
+# va  verdict  notes
+00f3ede0  UNSUPPORTED  no symbol: the 804-byte rule/noun hash dispatcher was not reconstructed in this pass
+00f3f950  PASS  345 valid inputs, 100.0% coverage (25/25 insns): the row lookup, the mode==2 branch, both offset computations and the null result all agree; the only byte differences are two register names (cl picks ecx/edx where retail picked edx/eax)
+00f3f9a0  UNSUPPORTED  2 unresolved references (?SimAllocBlock and ?SimFillRecords are only declared here, so the harness cannot fake them)
+00f3fa20  UNSUPPORTED  no symbol: a mid-function fragment that reads the caller's eax/esi at entry, so it has no standalone symbol to test
+00f3fad0  UNSUPPORTED  no symbol: the 660-byte editor-name-provider constructor was not reconstructed in this pass

@@ -244,3 +244,80 @@ L85e:
     }
     return true;
 }
+
+// ---- tutorial/scenario row lookup ------------------------------------------------------------
+// Row of the simulation data table (out-of-slice builder 0x00F3E8A0 keyed by a slot reference).
+struct SimRow {
+    char pad[0x70];
+    int mOffset;                                // +0x70 byte offset inside a per-tutorial block
+};
+// Slot reference handed in by the callers: only the key at +0x1c is read.
+struct SlotRef {
+    char pad[0x1c];
+    void* mKey;                                 // +0x1c
+};
+// Tutorial bookkeeping hanging off the global singleton.
+struct TutorialState {
+    char pad[0xb8];
+    int mActive;                                // +0xb8 currently active tutorial index
+};
+struct SimGlobals {
+    char pad00[0x78];
+    TutorialState* mTutorials;                  // +0x78
+    char pad7c[0xcc - 0x7c];
+    int mMode;                                  // +0xcc
+    int GetTutorialRowOffset(SlotRef* slot);    // 0x00F3F950 (does not touch `this`)
+};
+extern SimGlobals* g_simGlobals;                // 0x016C7AA4
+extern "C" SimRow* __stdcall FUN_00f3e8a0(void* key);    // 0x00F3E8A0
+extern "C" int __cdecl ScenarioTutorials_GetActive();    // 0x00EFC520
+
+// @ 0x00F3F950
+int SimGlobals::GetTutorialRowOffset(SlotRef* slot)
+{
+    void* key = slot->mKey;
+    SimRow* row = FUN_00f3e8a0(key);
+    if (row) {
+        if (g_simGlobals->mMode == 2) {
+            TutorialState* tutorials = g_simGlobals->mTutorials;
+            return tutorials->mActive * 0x4e0 + row->mOffset;
+        }
+        return ScenarioTutorials_GetActive() * 0x4e0 + row->mOffset;
+    }
+    return 0;
+}
+
+// ---- fixed-stride record array ---------------------------------------------------------------
+// Every record is 0x44 bytes; the array keeps [begin, cur, end) like eastl::vector.
+struct SimRecord {
+    uint8_t mData[0x44];
+};
+struct SimArray {
+    SimRecord* mBegin;                          // +0x00
+    SimRecord* mCur;                            // +0x04
+    SimRecord* mEnd;                            // +0x08
+    SimArray* Assign(int count, const SimRecord* value, int unused);
+};
+// 0x00F473A0: Spore's debug-tagged block allocator (size, category, 0, 0, file, line).
+void* __cdecl SimAllocBlock(int size, const char* category, int arg3, int arg4,
+                            const char* file, int line);
+// 0x00F09D70: fills `count` records with `value`.
+void __cdecl SimFillRecords(SimRecord* dest, int count, const SimRecord* value, int valueCount);
+
+// @ 0x00F3F9A0
+SimArray* SimArray::Assign(int count, const SimRecord* value, int unused)
+{
+    SimRecord* p;
+    if (count)
+        p = (SimRecord*)SimAllocBlock(count * (int)sizeof(SimRecord), "Simulator", 0, 0,
+                                      "SimData.cpp", 209);
+    else
+        p = 0;
+    SimRecord* end = p + count;
+    mBegin = p;
+    mCur = p;
+    mEnd = end;
+    SimFillRecords(p, count, value, count);
+    mCur = mBegin + count;
+    return this;
+}
