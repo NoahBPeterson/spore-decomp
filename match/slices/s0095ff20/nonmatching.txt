@@ -2,17 +2,14 @@
 0095ff20  35  Window::MoveBy: complete; +0x60 call and SSE add schedule differ
 0095ff70  54  Window::GrowBy: complete; +0x6c call and SSE add schedule differ
 0095ffd0  35  Window::MoveBy2: complete; +0x6c call and SSE add schedule differ
-00960020  35  Window::SetA4: complete; tail-call to FUN_009580b0 not formed
 00960050  59  Window::Set1E4: complete; refcount swap and vtable +0x90 call differ
 009600a0  33  Window::OnPaint2: complete; flag test order differs
-009600d0  15  Window::CallSlot: complete; trivial call wrapper tail shape differs
 00960100  19  Window::TransformPoint: complete; equiv PASS (339 valid, 94.6% cov); flag probe uses mov+test instead of cmovne and the mMat transform schedule differs
 00960180  83  Window::ScreenToLocal: complete (calls vtable +0xc8 and copies or zeroes the out pair); equiv UNSUPPORTED 0/400 (fake-arity=396: the float args reach the call as fld/fstp [esp]); original is (float* out, float x, float y)
 009601e0  59  Window::GetChild: complete; equiv WEAK (192 valid, 68.0% cov); returns out in eax, vtable +0xd0 result deref and branch layout differ
 00960230  58  Window::RemoveChild: complete; equiv PASS (273 valid, 93.9% cov); detach path and vtable +0xdc/+0x1c/+4 call order differ
 00960280  3   Window::ClearChildren: complete; node==8 test uses cmp instead of add -8
-009602c0  39  Window::Dispatch14: complete; this-adjust and vtable +0x14 args differ
-009602f0  20  Window::Dispatch: complete; tail-call not formed
+009602c0  48  Window::Dispatch14: complete; this-adjust (`neg/sbb/and` -> self or 0) and the manager vtable +0x14 call (4 args: mgr/*p/self/p, ecx=mgr) - [equiv: WEAK, 821 valid inputs, 23.8% cov (5/21), no mismatch; only the mgr==0 arm is reachable, everything past the call is discarded as fake-arity because the call-site return address is not resolvable for the fake-call arity probe]
 00960310  135  Window::OnPaint: complete; equiv PASS (246 valid, 100.0% cov); render-context calls and SSE area computation schedule differ
 00960410  227  Window::DoMessage: complete; equiv WEAK (397 valid, 21.1% cov); message-arm dispatch (0xd/0x16/0x14) and stack temps differ
 009605a0  98  HashTable::Rehash: complete (allocator call, memset, bucket relink, free old, swap); equiv UNSUPPORTED 0/400 (fault=276, import:memset=103)

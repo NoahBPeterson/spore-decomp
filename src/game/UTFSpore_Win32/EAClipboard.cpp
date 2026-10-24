@@ -194,6 +194,10 @@ void  Mutex_Unlock(void* m);                 // 0x922270
 void  Win32Clipboard_WriteText(void* w, const wchar_t* t, int n); // 0x92aa20
 void* FUN_009289f0(int size, int a, int b, int c, int d, int e); // 0x9289f0
 void* FUN_0092aae0(void* text, int n);       // 0x92aae0
+// EA::Clipboard::DataText16(const wchar_t*, int) built in place: thiscall on the raw storage
+struct DataTextCtorStub {
+    void* ctor(const wchar_t* text, int n);  // 0x92aae0
+};
 struct WString {
     wchar_t* mpBegin;    // +0
     wchar_t* mpEnd;      // +4
@@ -445,17 +449,17 @@ void* FUN_0092ac90(void* v)
 // @ 0x0092acb0
 bool SetClipboardText(Clipboard_s0092_abb0* clipboard, const wchar_t* s, int len)
 {
-    char result = 0;
-    void* mem = FUN_009289f0(len * 2 + 0x1a, 0, 0, 0, 0, 0);
+    bool result = false;
+    void* mem = EA::Clipboard::g_pMemPool->LockedAlloc(len * 2 + 0x1a, 0, 0, 0, 0, 0);
     if (mem != 0) {
-        IData_s0092_abb0* obj = (IData_s0092_abb0*)FUN_0092aae0((void*)s, len);
+        IData_s0092_abb0* obj = (IData_s0092_abb0*)((DataTextCtorStub*)mem)->ctor(s, len);
         if (obj != 0) {
             obj->i1();
             result = clipboard->SetClipboardData(obj, true);
             obj->i2();
         }
     }
-    return result != 0;
+    return result;
 }
 
 // @ 0x0092ad10

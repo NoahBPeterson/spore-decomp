@@ -35,7 +35,7 @@ struct Helper {
     void   Hc0(int);
     void   H40(void*, float, float, void*);
     void   Hb0();
-    float  H70b();
+    float  H70b();   // 0x00813070 cSPUIMainWin::GetScaledElapsed
 };
 struct IWnd {
     void H0();
@@ -310,8 +310,9 @@ struct IWin2 {
 };
 // @ 0x00805080
 float GetElapsedSeconds() {
-    WMgr* wm = (WMgr*)SP_WindowManager();
-    void* r = wm->s1();
+    void* wm = SP_WindowManager();
+    if (wm == 0) return 0.0f;
+    void* r = ((WMgr*)wm)->s1();
     if (r != 0) {
         Helper* self = (Helper*)((char*)r - 4);
         return self->H70b();
@@ -319,29 +320,30 @@ float GetElapsedSeconds() {
     return 0.0f;
 }
 // @ 0x008050b0
-int WalkAll(int* p) {
-    if (p != 0) {
-        for (;;) {
-            int r = (*(int(__thiscall**)(void*))VSlot(p, 0x28))(p);
-            if ((r & 1) == 0) return 0;
-            p = (int*)(*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p);
-            if (p == 0) return 1;
-        }
+bool WalkAll(int* p) {
+    if (p == 0) return false;
+    for (;;) {
+        if (!((*(int(__thiscall**)(void*))VSlot(p, 0x28))(p) & 1))
+            return false;
+        p = (int*)(*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p);
+        if (p == 0) return true;
     }
-    return 0;
 }
 // @ 0x008050f0
 int* WalkFind(int* p) {
     if (p == 0) return 0;
-    do {
-        int* n = (int*)(*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p);
-        if (n != 0) {
+    for (;;) {
+        if ((*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p) != 0) {
+            int* n = (int*)(*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p);
             int r = (*(int(__thiscall**)(void*))VSlot(n, 0x1c))(n);
-            if (r != 0) return (int*)r;
+            if (r != 0) {
+                int* n2 = (int*)(*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p);
+                return (int*)(*(int(__thiscall**)(void*))VSlot(n2, 0x1c))(n2);
+            }
         }
         p = (int*)(*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p);
-    } while (p != 0);
-    return 0;
+        if (p == 0) return 0;
+    }
 }
 // @ 0x00805150
 bool Contains(int* a, int* b) {
@@ -476,16 +478,24 @@ void VThunk8::CallVt8(int a, int b, int c, int d, int e) {
     (*(void(__thiscall**)(void*, int, int, int))VSlot(this, 8))(this, a, b, c);
 }
 // @ 0x008054b0
-void FixedFree(int* self, void* p) {
+// Original ABI: `this` (the allocator) in ECX, two stack args (the chunk header pointer
+// and the flags forwarded to the fallback deallocator), `ret 8`.
+struct FixedAlloc {
+    int   mPads[1];
+    void* mFreeList_4[0x9e];
+    void  FixedFree(void* p, int flags);
+};
+void FixedAlloc::FixedFree(void* p, int flags) {
     int* base = (int*)((char*)p - 4);
     int idx = *base;
     if (idx < 0x9e) {
-        char* block = *(char**)((char*)self + 4 + idx * 4);
+        char* block = *(char**)((char*)this + 4 + idx * 4);
         *base = *(int*)(block + 0x10);
         *(int**)(block + 0x10) = base;
         return;
     }
-    (*(void(__thiscall**)(void*, int*, int))VSlot(*(void**)0x164c4b8, 0xc))(*(void**)0x164c4b8, base, 0);
+    void* alloc = *(void**)0x164c4b8;
+    (*(void(__thiscall**)(void*, int*, int))VSlot(alloc, 0xc))(alloc, base, flags);
 }
 void* g_alloc;
 // @ 0x008054f0

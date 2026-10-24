@@ -2,11 +2,11 @@
 008de020  89  swizzle of 64-bit value; shift/pack instruction schedule differs
 008de0c0  172 EA::ResourceMan::ReadKey; wcstoul/StrtoU6416 parse branch layout differs
 008de280  18  Manager::GetLoadedResource compressor-vector scan; register allocation differs (equiv PASS)
-008de2d0  4   Manager::IsDatabaseRegistered database-list scan; register allocation differs (equiv PASS)
+008de2d0  4   Manager::IsDatabaseRegistered database-list scan. Source matches retail instruction-for-instruction (same `mov ecx,[ecx+0x2c]` list fetch, same `cmp [eax+4],param` scan, same `test pOut` + store `[eax+8]`). The only residual is cl15 holding `n->mpValue` in edx where retail holds it in eax before `mov al,1` (the value feeds only the `pOut` store, so both leave the same node matched, same value stored, same bool). equiv replay: first difference is `edx (untouched by the original)` - an LTCG caller-live-value artifact, not a behavioral mismatch. Not forced within budget (4-byte diff).
 008de310  68  Manager::FindDatabase database scan + virtual call; codegen differs (equiv WEAK)
 008de360  60  Manager::Fn8de360 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
 008de3b0  50  Manager::Fn8de3b0 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
-008de450  187 ChangeSet::LowerBound rbtree lower_bound; codegen differs (equiv PASS)
+008de450  222 ChangeSet::LowerBound rbtree lower_bound: FIXED this session. The retail leaves `ppOut` in eax on both exits (`mov eax,[esp+0x10]` before each `ret 8`), so the source now returns `void**` (`return ppOut` on the `!less` exit and on the fallthrough) instead of `void`. The generated loop/blame structure already matched; the change is the recovered return value. equiv PASS on the frozen replay (first difference: None). Not byte-exact (222 diff, size 191 vs 156): returning changed the EH/register shape.
 008de530  86  HashBase::DoRehash1; memset/allocation sequence codegen differs
 008de5e0  86  HashBase::DoRehash2; memset/allocation sequence codegen differs
 008de690  85  HashBase::DoRehash3; memset/allocation sequence codegen differs
@@ -16,8 +16,8 @@
 008de8e0  129 InternalDatabaseList constructor; allocator-ctor codegen differs
 008de940  120 InternalDatabaseList::Add; lock/xchg list-insert codegen differs
 008debf0  95  Manager::DoDatabaseChanged tree walk; codegen differs (equiv WEAK)
-008decb0  53  AutoRefCount vector destructor; register allocation differs (equiv PASS)
-008ded00  196 hash-map insert; rehash-policy template codegen differs
+008decb0  53  AutoRefCount vector destructor: FIXED this session. The retail's Deallocate size is `(mpCapacity - mpBegin)` (loads `[edi+8]` then `>>3` and three `add esi,esi` to multiply back by 8), not `(mpEnd - mpBegin)` as the source had; the source now uses `mpCapacity`. The element-release loop (`mov ecx,[esi]; test; mov eax,[ecx]; mov edx,[eax+8]; call edx`) already matched. equiv PASS on the frozen replay (first difference: None). Not byte-exact (53 diff): the loop-bound/register shape differs (retail hoists `mpEnd` into ebx and uses `mov edi,edi` alignment padding).
+008ded00  151 HashBase_Insert hash-map insert with rehash-on-demand: FIXED this session. The source's uninitialized `dontCare`/`allocObj` local plus the cdecl `Fn921440(&allocObj,...)` call was wrong and FAULTED in the emulator (`Invalid memory read at eip=30000064`); it also made the source return `void`. Replaced with a 12-byte `RehashResult { bool mRequired; uint32 mnNewCount; uint32 mPad; }` local and a typed `HashBase::RehashPolicy` (at +0x10) calling `mRehash.GetRehashRequired(&rehash, mnBucketCount, mnElementCount, 1)` (0x00921440 thiscall), then `if (rehash.mRequired) { idx = hash % rehash.mnNewCount; DoRehash1(rehash.mnNewCount); }`. The retail leaves `ppResult` in eax, so the function now returns `void**` (`return ppResult`). Fault gone; equiv PASS on the frozen replay (first difference: None). chk 196 -> 151 (size 226 vs 221).
 008dede0  30  AutoRefCount range release; interlocked sequence codegen differs (equiv WEAK)
 008dee30  31  AutoRefObj::operator=; interlocked sequence codegen differs (equiv WEAK: 83% coverage)
 008dee90  90  rbtree DoInsertValueImpl; payload copy/insert codegen differs (equiv PASS)

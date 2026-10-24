@@ -10,7 +10,7 @@
 // Initialise a scanline descriptor from a starting point and two extents.
 class Span {
 public:
-    void Init(int x, int y, int dx, int dy, int extra);
+    Span* Init(int x, int y, int dx, int dy, int extra);
     int mX;         // +0x00
     int mY;         // +0x04
     int mXEnd;      // +0x08
@@ -21,17 +21,18 @@ public:
     uint8_t mFlag;  // +0x1c
 };
 
-void Span::Init(int x, int y, int dx, int dy, int extra)
+Span* Span::Init(int x, int y, int dx, int dy, int extra)
 {
     int* p = (int*)this;
     p[0] = x;
     p[2] = x + dx;
     p[1] = y;
     p[3] = y + dy;
-    p[4] = extra;
     p[5] = -1;
     p[6] = -1;
     ((uint8_t*)this)[0x1c] = 0;
+    p[4] = extra;
+    return this;
 }
 
 // ---------------------------------------------------------------------------
@@ -137,10 +138,49 @@ static inline void BuildPalette(uint32_t* pal, uint32_t c0, uint32_t c1, uint32_
     }
 }
 
+// Pixel mapper used by mapblock. The original 0x007ad2e0 is a usercall (pix in ecx,
+// palette in eax, index pointer on the stack), so reproduce its arithmetic locally
+// instead of trying to enter it through the C++ calling convention.
+static uint32_t MapPixelLocal(uint32_t pix, const uint32_t* pal, int* idx)
+{
+    int d0 = (int)(pal[0] & 0xff) - (int)(pal[1] & 0xff);
+    int d1 = (int)((pal[0] >> 8) & 0xff) - (int)((pal[1] >> 8) & 0xff);
+    int d2 = (int)((pal[0] >> 16) & 0xff) - (int)((pal[1] >> 16) & 0xff);
+    int e0 = ((int)(pal[1] & 0xff) - (int)(pix & 0xff)) * 3;
+    int e1 = ((int)((pal[1] >> 8) & 0xff) - (int)((pix >> 8) & 0xff)) * 3;
+    int e2 = ((int)((pal[1] >> 16) & 0xff) - (int)((pix >> 16) & 0xff)) * 3;
+    uint32_t best = (uint32_t)(e0 * e0 + e1 * e1 + e2 * e2);
+    uint32_t index = 1;
+    e0 += d0; e1 += d1; e2 += d2;
+    uint32_t err = (uint32_t)(e0 * e0 + e1 * e1 + e2 * e2);
+    if ((int)err < (int)best) { index = 3; best = err; }
+    e0 += d0; e1 += d1; e2 += d2;
+    err = (uint32_t)(e0 * e0 + e1 * e1 + e2 * e2);
+    if ((int)err < (int)best) { index = 2; best = err; }
+    e0 += d0; e1 += d1; e2 += d2;
+    err = (uint32_t)(e0 * e0 + e1 * e1 + e2 * e2);
+    if ((int)err < (int)best) { index = 0; best = err; }
+    *idx = (int)index;
+    return best / 9;
+}
+
+// The original 0x007ad760 is likewise a usercall (pix in edx, palette in esi).
+static uint32_t RBMapPixelLocal(uint32_t pix, const uint32_t* pal)
+{
+    uint32_t blue = pix & 0xff;
+    uint32_t red = (pix >> 16) & 0xff;
+    uint32_t best = 0x7fffffff;
+    for (int i = 0; i < 4; i++) {
+        int db = (int)(pal[i] & 0xff) - (int)blue;
+        int dr = (int)((pal[i] >> 16) & 0xff) - (int)red;
+        uint32_t err = (uint32_t)(db * db + dr * dr);
+        if ((int)err < (int)best) best = err;
+    }
+    return best;
+}
+
 // Pixel mappers (callees outside this slice).
 void mappixeltransparent(uint32_t pix, int* idx, const uint32_t* pal);   // @ 0x007ad400
-void __fastcall mappixel(uint32_t pix, const uint32_t* pal, int* idx);    // @ 0x007ad2e0 (pal in eax in the original)
-uint32_t rbmappixel(uint32_t pix, const uint32_t* pal);                  // @ 0x007ad760 (pal in esi, pix in edx)
 uint32_t trymapblockfast(const uint32_t* px, uint32_t c0, uint32_t c1, uint32_t limit);  // @ 0x007ad950
 
 // ---------------------------------------------------------------------------
@@ -172,7 +212,7 @@ void mapblock(const uint32_t* src, uint8_t* dst, uint32_t c0, uint32_t c1, int m
             int bits = 0;
             for (int k = 0; k < 8; k += 2) {
                 int idx = 0;
-                mappixel(*src, pal, &idx);
+                MapPixelLocal(*src, pal, &idx);
                 bits |= idx << k;
                 src++;
             }
@@ -264,7 +304,7 @@ uint32_t rbtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1)
     BuildPalette(pal, pal[0], pal[1], raw0, raw1);
     uint32_t total = 0;
     for (int i = 0; i < 16; i++)
-        total += rbmappixel(src[i], pal);
+        total += RBMapPixelLocal(src[i], pal);
     return total;
 }
 
@@ -355,22 +395,24 @@ void FUN_007ae840(const uint8_t* src, int stride, __m64* copy, uint32_t* out)
     const uint8_t* p = src;
     __m64 r0 = *(const __m64*)p;
     __m64 r1 = *(const __m64*)(p + 8);
+    copy[0] = r0; copy[1] = r1;
+    __m64 mn = _mm_min_pu8(r0, r1);
+    __m64 mx = _mm_max_pu8(r1, r0);
     p += stride;
     __m64 r2 = *(const __m64*)p;
     __m64 r3 = *(const __m64*)(p + 8);
+    copy[2] = r2; copy[3] = r3;
+    mn = _mm_min_pu8(mn, r2); mx = _mm_max_pu8(mx, r2);
+    mn = _mm_min_pu8(mn, r3); mx = _mm_max_pu8(mx, r3);
     p += stride;
     __m64 r4 = *(const __m64*)p;
     __m64 r5 = *(const __m64*)(p + 8);
-    __m64 r6 = *(const __m64*)(p + stride);
-    __m64 r7 = *(const __m64*)(p + stride + 8);
-    copy[0] = r0; copy[1] = r1; copy[2] = r2; copy[3] = r3;
-    copy[4] = r4; copy[5] = r5; copy[6] = r6; copy[7] = r7;
-    __m64 mn = _mm_min_pu8(r0, r1);
-    __m64 mx = _mm_max_pu8(r1, copy[0]);
-    mn = _mm_min_pu8(mn, r2); mx = _mm_max_pu8(mx, r2);
-    mn = _mm_min_pu8(mn, r3); mx = _mm_max_pu8(mx, r3);
+    copy[4] = r4; copy[5] = r5;
     mn = _mm_min_pu8(mn, r4); mx = _mm_max_pu8(mx, r4);
     mn = _mm_min_pu8(mn, r5); mx = _mm_max_pu8(mx, r5);
+    __m64 r6 = *(const __m64*)(p + stride);
+    __m64 r7 = *(const __m64*)(p + stride + 8);
+    copy[6] = r6; copy[7] = r7;
     mn = _mm_min_pu8(mn, r6); mx = _mm_max_pu8(mx, r6);
     mn = _mm_min_pu8(mn, r7); mx = _mm_max_pu8(mx, r7);
     __m64 mn2 = _mm_srli_si64(mn, 32);

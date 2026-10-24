@@ -41,7 +41,12 @@ struct string8_s0083_c900 {
 }
 void  __cdecl ThrowCError(void* out, const char* fmt, ...);                // 0x0052df30
 float __cdecl EvalRealExpression(void* self, const char** p);              // 0x0083e470
-struct PairCtorStub { void CtorA(const eastl::string8_s0083_c900* s, int** ref); void CtorB(const void* src); };
+struct PairCtorStub {
+    eastl::string8_s0083_c900 mKey;    // +0x00
+    int*                       mpRef;  // +0x10  AutoRefCount payload
+    PairCtorStub* CtorA(const eastl::string8_s0083_c900* s, int** ref);   // 0x0083cef0
+    PairCtorStub* CtorB(const void* src);                                 // 0x0083d020
+};
 struct TrueTag {};                       // eastl::true_type (an empty by-value argument still takes a stack slot)
 struct ExprNode_s0083_c900 {
     eastl::string8_s0083_c900 mFirst;               // +0x00  key
@@ -308,36 +313,36 @@ void ReleaseRefCount(int** p)
 }
 
 // @ 0x0083cef0
-void PairCtorStub::CtorA(const eastl::string8_s0083_c900* s, int** ref)
+PairCtorStub* PairCtorStub::CtorA(const eastl::string8_s0083_c900* s, int** ref)
 {
-    void* self = this;
-    eastl::string8_s0083_c900* str = (eastl::string8_s0083_c900*)self;
+    eastl::string8_s0083_c900* str = &mKey;
     str->mpBegin = 0; str->mpEnd = 0; str->mpCapacity = 0;
     int len = (int)(s->mpEnd - s->mpBegin);
     str->RangeInitialize((unsigned)(len + 1));
-    for (int i = 0; i < len; ++i) str->mpBegin[i] = s->mpBegin[i];
-    str->mpEnd = str->mpBegin + len;
+    memcpy(str->mpBegin, s->mpBegin, (unsigned)len);
+    str->mpEnd = str->mpBegin + (s->mpEnd - s->mpBegin);
     *str->mpEnd = 0;
     int* obj = *ref;
-    *(int**)((char*)self + 0x10) = obj;
+    mpRef = obj;
     if (obj) ++obj[1];
+    return this;
 }
 
 // @ 0x0083d020
-void PairCtorStub::CtorB(const void* src)
+PairCtorStub* PairCtorStub::CtorB(const void* src)
 {
-    void* self = this;
-    eastl::string8_s0083_c900* str = (eastl::string8_s0083_c900*)self;
+    eastl::string8_s0083_c900* str = &mKey;
     const eastl::string8_s0083_c900* s = (const eastl::string8_s0083_c900*)src;
     str->mpBegin = 0; str->mpEnd = 0; str->mpCapacity = 0;
     int len = (int)(s->mpEnd - s->mpBegin);
     str->RangeInitialize((unsigned)(len + 1));
-    for (int i = 0; i < len; ++i) str->mpBegin[i] = s->mpBegin[i];
-    str->mpEnd = str->mpBegin + len;
+    memcpy(str->mpBegin, s->mpBegin, (unsigned)len);
+    str->mpEnd = str->mpBegin + (s->mpEnd - s->mpBegin);
     *str->mpEnd = 0;
-    int* obj = *(int**)((char*)src + 0x10);
-    *(int**)((char*)self + 0x10) = obj;
+    int* obj = ((const PairCtorStub*)src)->mpRef;
+    mpRef = obj;
     if (obj) ++obj[1];
+    return this;
 }
 
 // @ 0x0083d080

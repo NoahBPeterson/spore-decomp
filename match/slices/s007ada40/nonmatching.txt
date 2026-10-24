@@ -1,9 +1,9 @@
-007ae920  50  COMPLETE span/scanline descriptor init; store sequence is identical but `this` lives in eax in the original and in ecx here, so every operand register differs.
-007ada40  646  COMPLETE mapblock (DXT1 index mapper); original uses custom register convention for mappixel and different loop scheduling; difftest FAIL is a checker artifact: the callee mappixel (0x007ad2e0) takes pix in ecx and pal in eax (usercall); our __fastcall stand-in passes pal in edx, so the call into the real original callee reads a garbage eax and faults
+007ae920  49  COMPLETE span/scanline descriptor init; now returns `this` in eax as the original does and stores the same fields, but the compiler still schedules the stores via ecx rather than eax.
+007ada40  652  COMPLETE mapblock (DXT1 index mapper); the original calls the usercall mappixel (pix in ecx, palette in eax), so we inline an equivalent MapPixelLocal with the same incremental squared-error candidates and index tie-breaking; loop scheduling and the call/inline shape differ.
 007adcf0  377  COMPLETE MMX nearest-endpoint mapper via intrinsics; cl adds ebp frame/spills the original does not have
 007ade70  560  COMPLETE rtrymapblock (byte-channel error sum); palette build scheduling differs
-007ae0b0  475  COMPLETE rbtrymapblock; rbmappixel uses edx/esi register convention in original; difftest FAIL is a checker artifact: the callee rbmappixel (0x007ad760) takes pix in edx and pal in esi (usercall); our cdecl stand-in passes them on the stack, so the call into the real original callee reads a garbage esi and faults
+007ae0b0  479  COMPLETE rbtrymapblock; the original calls the usercall rbmappixel (pix in edx, palette in esi), so we inline an equivalent RBMapPixelLocal using the same blue/red squared distances and signed minimum; call/inline shape and scheduling differ.
 007ae2a0  608  COMPLETE RefineMinMaxColors; original takes pixel ptr in esi (usercall)
 007ae5b0  193  COMPLETE alpha nibble interleave; original takes src in eax, dst in esi, stride in edi (usercall)
 007ae660  406  COMPLETE InterpolatedAlphaBlock; original usercall (eax/ecx/edi regs), loop fully unrolled
-007ae840  120  COMPLETE MMX 4x4 min/max reduction via intrinsics; cl emits ebp frame and spills, original is frameless
+007ae840  289  COMPLETE MMX 4x4 min/max reduction via intrinsics; all stores and the min/max result match, but cl allocates stride to edx while the original uses only eax/ecx and never writes edx; FAIL-KEPT because only asm could reserve edx (no non-asm C++ construct controls the allocator)

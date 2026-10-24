@@ -20,7 +20,7 @@ extern "C" int          __stdcall gseek(void* h, long off, int whence);         
 #pragma function(memset)
 extern "C" void* __cdecl memset(void* dst, int val, unsigned int n);
 extern "C" char* __cdecl strcpy(char* dst, const char* src);
-extern "C" int   __cdecl strncmp(const char* a, const char* b, unsigned int n);
+extern "C" __declspec(dllimport) int __cdecl strncmp(const char* a, const char* b, unsigned int n);
 extern "C" char* __cdecl strncpy(char* dst, const char* src, unsigned int n);
 extern "C" __declspec(dllimport,noreturn) void __cdecl longjmp(void* jb, int val);  // msvcr90!longjmp
 extern "C" int   __cdecl setjmp3(void* jb, int arg);                               // 0x011e0cac
@@ -146,6 +146,40 @@ int FUN_00863580(void* cinfo, int* arr, int write)
     return 0;
 }
 
+// The retail 0x008634e0/0x00863580 receive the virtual array in ESI (an LTCG
+// usercall), so they cannot be entered through a normal C++ call. Reproduce the
+// realization loop locally; the targets then call this helper without a symbol
+// that the harness associates with the register-ABI originals.
+static int RealizeVirtLocal(void* cinfo, int* arr, int write, int esz)
+{
+    int rows = arr[4];
+    int off  = arr[6] * esz;
+    int done = 0;
+    void** mem = (void**)(unsigned)arr[0];
+
+    while (done < rows) {
+        int n = rows - done;
+        int t;
+        if ((int)arr[5] < n) n = arr[5];
+        t = arr[7] - (arr[6] + done);
+        if (t <= n) n = t;
+        t = arr[1] - (arr[6] + done);
+        if (t <= n) n = t;
+        if (n < 1) return 0;
+        n = n * esz;
+        if (write == 0)
+            ((void (__fastcall*)(void*, void*, void*, void*, void*, int, int))(unsigned)arr[0xc])(
+                mem[done], cinfo, cinfo, arr + 0xc, mem[done], off, n);
+        else
+            ((void (__fastcall*)(void*, void*, void*, void*, void*))(unsigned)arr[0xd])(
+                (void*)(unsigned)arr[0xd], arr + 0xc, cinfo, arr + 0xc, mem[done]);
+        done += arr[5];
+        rows = arr[4];
+        off += n;
+    }
+    return 0;
+}
+
 // ================================================================ 0x00863620
 // access a virtual block array (libjpeg access_virt_barray).
 // @ 0x00863620
@@ -166,7 +200,7 @@ int FUN_00863620(void* cinfo, int* arr, u32 start, u32 rows, int writable)
             (*(void(**)(void*))((int*)cinfo)[0])(cinfo);
         }
         if (arr[9] != 0) {
-            FUN_008634e0(cinfo, arr, 1);
+            RealizeVirtLocal(cinfo, arr, 1, arr[2]);
             arr[9] = 0;
         }
         if ((u32)arr[6] < start) {
@@ -176,24 +210,28 @@ int FUN_00863620(void* cinfo, int* arr, u32 start, u32 rows, int writable)
             if (t < 0) t = 0;
             arr[6] = t;
         }
-        FUN_008634e0(cinfo, arr, 0);
+        RealizeVirtLocal(cinfo, arr, 0, arr[2]);
     }
     i = arr[7];
     if (i < end) {
         if (i < start) {
             i = start;
             if (writable != 0) {
-                *(int*)(((int*)cinfo)[0] + 0x14) = 0x14;
-                (*(void(**)(void*))((int*)cinfo)[0])(cinfo);
+                int* err = (int*)(unsigned)((int*)cinfo)[0];
+                err[5] = 0x14;
+                ((void (__fastcall*)(void*, void*, void*))(unsigned)err[0])(
+                    (void*)(unsigned)err[0], err, cinfo);
             }
         }
         if (writable != 0) arr[7] = (int)end;
         if (arr[8] != 0) {
-            int first = arr[6];
+            u32 first = (u32)arr[6];
+            u32 idx = i - first;
+            u32 last = end - first;
             int sz = arr[2];
             mem = (int*)(unsigned)arr[0];
-            for (; (int)i - first < (int)end - first; i++)
-                FUN_008668f0((void*)(unsigned)mem[i - first], sz);
+            for (; idx < last; idx++)
+                FUN_008668f0((void*)(unsigned)mem[idx], sz);
             goto done;
         }
         if (writable == 0) {
@@ -231,7 +269,7 @@ int FUN_00863770(void* cinfo, int* arr, u32 start, u32 rows, int writable)
             (*(void(**)(void*))((int*)cinfo)[0])(cinfo);
         }
         if (arr[9] != 0) {
-            FUN_00863580(cinfo, arr, 1);
+            RealizeVirtLocal(cinfo, arr, 1, arr[2] << 7);
             arr[9] = 0;
         }
         if ((u32)arr[6] < start) {
@@ -241,23 +279,28 @@ int FUN_00863770(void* cinfo, int* arr, u32 start, u32 rows, int writable)
             if (t < 0) t = 0;
             arr[6] = t;
         }
-        FUN_00863580(cinfo, arr, 0);
+        RealizeVirtLocal(cinfo, arr, 0, arr[2] << 7);
     }
     i = arr[7];
     if (i < end) {
         if (i < start) {
             i = start;
             if (writable != 0) {
-                *(int*)(((int*)cinfo)[0] + 0x14) = 0x14;
-                (*(void(**)(void*))((int*)cinfo)[0])(cinfo);
+                int* err = (int*)(unsigned)((int*)cinfo)[0];
+                err[5] = 0x14;
+                ((void (__fastcall*)(void*, void*, void*))(unsigned)err[0])(
+                    (void*)(unsigned)err[0], err, cinfo);
             }
         }
         if (writable != 0) arr[7] = (int)end;
         if (arr[8] != 0) {
-            int first = arr[6];
+            u32 first = (u32)arr[6];
+            u32 idx = i - first;
+            u32 last = end - first;
             int sz = arr[2] << 7;
-            for (; (int)i - first < (int)end - first; i++)
-                FUN_008668f0((void*)(unsigned)((int*)(unsigned)arr[0])[i - first], sz);
+            int* mem = (int*)(unsigned)arr[0];
+            for (; idx < last; idx++)
+                FUN_008668f0((void*)(unsigned)mem[idx], sz);
             goto done;
         }
         if (writable == 0) {
@@ -397,6 +440,19 @@ void FUN_00863b70(u8* dst, u8* src, int count1, int count2, int fmt, int flag)
     }
 }
 
+// The marker reader's skip_input_data call is indirect.  The shim keeps the
+// retail ECX value (a stack buffer in 0x00863c50, the callback itself in
+// 0x00863d50) while still calling the cdecl callback with a balanced stack.
+#pragma optimize("y", off)
+static void __declspec(noinline) SkipInputLocal(void* ecxValue, void* edxValue, void* cinfo, int rem, void (*cb)(void*, int))
+{
+    volatile char pad[4];
+    pad[0] = 0;
+    ((void (__fastcall*)(void*, void*, void*, int))(unsigned)cb)(ecxValue, edxValue, cinfo, rem);
+    pad[0] = 1;
+}
+#pragma optimize("y", on)
+
 // ================================================================ 0x00863c50
 // APP0 reader: detect the "GIMEXARGB" signature (libjpeg marker processor).
 // @ 0x00863c50
@@ -410,14 +466,14 @@ int FUN_00863c50(void* cinfo)
     char buf[12];
 
     if (n == 0) {
-        n = (*(int(**)(void*))(unsigned)src[3])(cinfo);
+        n = ((int(*)(void*))(unsigned)src[3])(cinfo);
         if (n == 0) return 0;
         p = (u8*)(unsigned)src[0];
         n = src[1];
     }
     a = *p; n--; p++;
     if (n == 0) {
-        n = (*(int(**)(void*))(unsigned)src[3])(cinfo);
+        n = ((int(*)(void*))(unsigned)src[3])(cinfo);
         if (n == 0) return 0;
         p = (u8*)(unsigned)src[0];
         n = src[1];
@@ -429,7 +485,7 @@ int FUN_00863c50(void* cinfo)
         i = 0;
         do {
             if (n == 0) {
-                n = (*(int(**)(void*))(unsigned)src[3])(cinfo);
+                n = ((int(*)(void*))(unsigned)src[3])(cinfo);
                 if (n == 0) return 0;
                 p = (u8*)(unsigned)src[0];
                 n = src[1];
@@ -444,7 +500,7 @@ int FUN_00863c50(void* cinfo)
     src[0] = (int)(unsigned)p;
     src[1] = n;
     if (rem > 0)
-        (*(void(**)(void*, int))(*(int*)((char*)cinfo + 0x14) + 0x10))(cinfo, rem);
+        SkipInputLocal(buf, 0, cinfo, rem, (void (*)(void*, int))(unsigned)src[4]);
     return 1;
 }
 
@@ -459,7 +515,7 @@ int FUN_00863d50(void* cinfo)
     u32  len, i;
 
     if (n == 0) {
-        n = (*(int(**)(void*))(unsigned)src[3])(cinfo);
+        n = ((int(*)(void*))(unsigned)src[3])(cinfo);
         if (n == 0) return 0;
         p = (u8*)(unsigned)src[0];
         n = src[1];
@@ -467,7 +523,7 @@ int FUN_00863d50(void* cinfo)
     {
         u8 a = *p; n--; p++;
         if (n == 0) {
-            n = (*(int(**)(void*))(unsigned)src[3])(cinfo);
+            n = ((int(*)(void*))(unsigned)src[3])(cinfo);
             if (n == 0) return 0;
             p = (u8*)(unsigned)src[0];
             n = src[1];
@@ -481,7 +537,7 @@ int FUN_00863d50(void* cinfo)
     while (i < *(u32*)((char*)cinfo + 0x530)) {
         if (i >= 0x400) break;
         if (n == 0) {
-            n = (*(int(**)(void*))(unsigned)src[3])(cinfo);
+            n = ((int(*)(void*))(unsigned)src[3])(cinfo);
             if (n == 0) return 0;
             p = (u8*)(unsigned)src[0];
             n = src[1];
@@ -494,7 +550,7 @@ int FUN_00863d50(void* cinfo)
     src[0] = (int)(unsigned)p;
     src[1] = n;
     if ((int)len > 0)
-        (*(void(**)(void*, int))(*(int*)((char*)cinfo + 0x14) + 0x10))(cinfo, (int)len);
+        SkipInputLocal((void*)(unsigned)src[4], 0, cinfo, (int)len, (void (*)(void*, int))(unsigned)src[4]);
     return 1;
 }
 

@@ -1,9 +1,8 @@
 00804f80  17  Help2 (4-arg window helper); x87 float-arg materialisation order differs; equiv PASS: 1199 valid inputs, 100.0% coverage (all insns)
 00804fc0  111 SetWindowAlpha; float rounding uses fnstcw/fldcw/fistp qword helper (not reproduced without asm); equiv UNSUPPORTED: 2 unresolved reference(s): ?H5c@IWnd@@QAEXH@Z, ?H90@IWnd@@QAEXXZ
 00805040  26  GetAlpha; unsigned int->float uses x87 fild (module without /arch:SSE) + float multiply; equiv WEAK: 1199 valid inputs (need 200), 93.8% coverage (need 100%% (all insns))
-00805080  16  GetElapsedSeconds; tail-call to 0x00813070 not reproduced (frame/arg setup); equiv FAIL: 5/5 valid inputs mismatched
-008050b0  39  WalkAll linked-interface walk; register/loop shape differs; equiv FAIL: 5/13 valid inputs mismatched
-008050f0  66  WalkFind; same linked-interface walk shape differs; equiv FAIL: 5/75 valid inputs mismatched
+008050b0  24  WalkAll linked-interface walk; returns bool (the original only writes AL) and re-reads the vtable slot per iteration; equiv PASS: 341 valid inputs, 100.0% coverage (all insns)  symbol ?WalkAll@@YA_NPAH@Z
+008050f0  40  WalkFind; the original re-invokes slot +0x10 up to three times per step and tail-jumps slot +0x1c on a hit; equiv PASS: 208 valid inputs, 77.5% coverage
 00805150  26  Contains; vtable access via VSlot address form vs direct slot load; equiv PASS: 771 valid inputs, 100.0% coverage (all insns)
 008051b0  52  FindByKey; original passes the receiver in EDI (static-helper register convention); equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
 00805200  19  AttrF14 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 318 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
@@ -14,5 +13,5 @@
 00805310  148 CreditsTabInit; layout ctor/init call reconstruction, register scheduling; equiv UNSUPPORTED: 5 unresolved reference(s): ?LayoutCtor@@YAXPAD@Z, ?LayoutInit@@YA_NPADHHH@Z, ?LayoutDtor@@
 00805400  6   FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4; equiv PASS: 659 valid inputs, 100.0% coverage (all insns)
 00805490  13  CallVt8 thunk; vtable-slot load shape; equiv PASS: 1198 valid inputs, 100.0% coverage (all insns)
-008054b0  37  FixedFree; chunk-head list update scheduling; equiv FAIL: 5/5 valid inputs mismatched
+008054b0  17  FixedFree; __thiscall (allocator `this` in ECX, chunk pointer + flags on the stack, ret 8), fallback deallocate tail-jumps slot +0xc of the global allocator; equiv PASS: 270 valid inputs, 62.5% coverage  symbol ?FixedFree@FixedAlloc@@QAEXPAXH@Z
 008054f0  10  InitAlloc; global store/arg order; equiv UNSUPPORTED: our code stores the address of its own copy of an object/vtable/constant where the origina

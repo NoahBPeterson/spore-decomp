@@ -9,7 +9,7 @@ extern "C" {
 void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, const char* file, int line);
 void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 int   __cdecl isspace(int);
-double __cdecl ceil(double);
+__declspec(dllimport) float __cdecl ceil(double);  // the original calls [__imp_ceil] and returns st0 untouched
 void* __cdecl memcpy(void*, const void*, unsigned);
 }
 inline void* operator new(unsigned, void* p) { return p; }
@@ -277,23 +277,26 @@ void CmdInstaller::SetCommand(const char* name, int* cmd) {
 // ===========================================================================
 // 0x0083cd90  EA::ArgScript::cBlockCommandBase::~cBlockCommandBase
 // ===========================================================================
+struct CmdHashTable {
+    void*    mpAlloc;         // +0x00
+    void*    mpBucketArray;   // +0x04
+    unsigned mnBucketCount;   // +0x08
+    int      mnElementCount;  // +0x0c
+};
 struct CmdDtor {
-    void* vtbl;
-    int pad04[3];
-    void* mpBucketArray;
-    int   mnBucketCount;
-    int   mnElementCount;
-    int   pad1c;
-    int   pad20[4];
+    void*        vtbl;        // +0x00
+    int          pad04[3];    // +0x04
+    CmdHashTable mTable;      // +0x10
+    int          pad20[4];
     void Dtor();
 };
 // @ 0x0083cd90
 void CmdDtor::Dtor() {
-    vtbl = vtbl_AppProps;
-    DoFreeNodesTable(mpBucketArray, mnBucketCount);
-    if (mnBucketCount > 1)
-        EASTL_allocator_deallocate(mpBucketArray);
-    mnElementCount = 0;
+    vtbl = (void*)&vtbl_AppProps;
+    DoFreeNodesTable(mTable.mpBucketArray, mTable.mnBucketCount);
+    if (mTable.mnBucketCount > 1)
+        EASTL_allocator_deallocate(mTable.mpBucketArray);
+    mTable.mnElementCount = 0;
 }
 
 // ===========================================================================
@@ -375,19 +378,26 @@ void ReleaseRefCount(int** p) {
 // ===========================================================================
 // 0x0083cef0  pair<string, AutoRefCount>::pair(const string&, const AutoRefCount&)
 // ===========================================================================
+struct PairCtorStub {
+    char*    mpBegin;     // +0x00  eastl::string8
+    char*    mpEnd;       // +0x04
+    char*    mpCapacity;  // +0x08
+    unsigned mAlloc;      // +0x0c
+    int*     mpRef;       // +0x10  AutoRefCount payload
+    PairCtorStub(const eastl::string8* s, int** ref);
+    PairCtorStub(const void* src);
+};
 // @ 0x0083cef0
-struct PairCtorStub { void CtorA(const eastl::string8* s, int** ref); void CtorB(const void* src); };
-void PairCtorStub::CtorA(const eastl::string8* s, int** ref) {
-    void* self = this;
-    eastl::string8* str = (eastl::string8*)self;
+PairCtorStub::PairCtorStub(const eastl::string8* s, int** ref) {
+    eastl::string8* str = (eastl::string8*)this;
     str->mpBegin = 0; str->mpEnd = 0; str->mpCapacity = 0;
     int len = (int)(s->mpEnd - s->mpBegin);
     str->RangeInitialize((unsigned)(len + 1));
-    for (int i = 0; i < len; ++i) str->mpBegin[i] = s->mpBegin[i];
-    str->mpEnd = str->mpBegin + len;
+    memcpy(str->mpBegin, s->mpBegin, (unsigned)len);
+    str->mpEnd = str->mpBegin + (s->mpEnd - s->mpBegin);
     *str->mpEnd = 0;
     int* obj = *ref;
-    *(int**)((char*)self + 0x10) = obj;
+    mpRef = obj;
     if (obj) ++obj[1];
 }
 
@@ -395,18 +405,17 @@ void PairCtorStub::CtorA(const eastl::string8* s, int** ref) {
 // 0x0083d020  pair<string, AutoRefCount>::pair(const pair&)
 // ===========================================================================
 // @ 0x0083d020
-void PairCtorStub::CtorB(const void* src) {
-    void* self = this;
-    eastl::string8* str = (eastl::string8*)self;
+PairCtorStub::PairCtorStub(const void* src) {
+    eastl::string8* str = (eastl::string8*)this;
     const eastl::string8* s = (const eastl::string8*)src;
     str->mpBegin = 0; str->mpEnd = 0; str->mpCapacity = 0;
     int len = (int)(s->mpEnd - s->mpBegin);
     str->RangeInitialize((unsigned)(len + 1));
-    for (int i = 0; i < len; ++i) str->mpBegin[i] = s->mpBegin[i];
-    str->mpEnd = str->mpBegin + len;
+    memcpy(str->mpBegin, s->mpBegin, (unsigned)len);
+    str->mpEnd = str->mpBegin + (s->mpEnd - s->mpBegin);
     *str->mpEnd = 0;
-    int* obj = *(int**)((char*)src + 0x10);
-    *(int**)((char*)self + 0x10) = obj;
+    int* obj = ((const PairCtorStub*)src)->mpRef;
+    mpRef = obj;
     if (obj) ++obj[1];
 }
 

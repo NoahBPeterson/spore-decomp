@@ -21,7 +21,7 @@ struct E5 {
 extern void*  f67dd40();
 extern void*  f67dd50();
 extern void   f_f47380(void*);   // EASTL_allocator_deallocate
-extern void   f6e6e90(void*, void*);
+extern void   f6e6e90(const float* src, float* dst);   // copies |m| of a 3x3 (nine floats)
 extern float  g1533c74;
 extern char   g13ec47c;
 extern void*  g1618f60;
@@ -47,8 +47,8 @@ struct S5 {
     // 0x6e9330
     void m9330(void* src);
     // 0x6e94a0 (free, but declared here for convenience) -- not used
-    // 0x6e9530
-    void m9530();
+    // 0x6e9530 -- returns this (original: mov eax, ecx)
+    S5* m9530();
     // 0x6e95a0
     void m95a0(unsigned char* p);
     // 0x6e9910
@@ -89,21 +89,27 @@ void S5::m8f90(float a, float b, float c, unsigned char flags)
     v[0] = a; v[1] = b; v[2] = c;
     if ((flags & 0x10) != 0) {
         if (0.0f < a)
-            ((void(__thiscall*)(void*, int, float*))VFN(o, 4))(o, 0x109d352, &v[0]);
+            ((void(__thiscall*)(void*, int, float*))VFN(*(void**)((char*)this + 0xc), 4))(
+                *(void**)((char*)this + 0xc), 0x109d352, &v[0]);
         if (0.0f < b)
-            ((void(__thiscall*)(void*, int, float*))VFN(o, 4))(o, 0x109d372, &v[1]);
+            ((void(__thiscall*)(void*, int, float*))VFN(*(void**)((char*)this + 0xc), 4))(
+                *(void**)((char*)this + 0xc), 0x109d372, &v[1]);
         if (c <= 0.0f)
             return;
-        ((void(__thiscall*)(void*, int, float*))VFN(o, 4))(o, 0x109d375, &v[2]);
+        ((void(__thiscall*)(void*, int, float*))VFN(*(void**)((char*)this + 0xc), 4))(
+            *(void**)((char*)this + 0xc), 0x109d375, &v[2]);
         return;
     }
     if (0.0f < a)
-        ((void(__thiscall*)(void*, int, float*))VFN(o, 4))(o, 0x109d174, &v[0]);
+        ((void(__thiscall*)(void*, int, float*))VFN(*(void**)((char*)this + 0xc), 4))(
+            *(void**)((char*)this + 0xc), 0x109d174, &v[0]);
     if (0.0f < b)
-        ((void(__thiscall*)(void*, int, float*))VFN(o, 4))(o, 0x109d1aa, &v[1]);
+        ((void(__thiscall*)(void*, int, float*))VFN(*(void**)((char*)this + 0xc), 4))(
+            *(void**)((char*)this + 0xc), 0x109d1aa, &v[1]);
     if (c <= 0.0f)
         return;
-    ((void(__thiscall*)(void*, int, float*))VFN(o, 4))(o, 0x109d1af, &v[2]);
+    ((void(__thiscall*)(void*, int, float*))VFN(*(void**)((char*)this + 0xc), 4))(
+        *(void**)((char*)this + 0xc), 0x109d1af, &v[2]);
 }
 
 // ---------------------------------------------------------------------------
@@ -250,6 +256,48 @@ int f94a0(int p1, int p2, int p3)
 }
 
 // ---------------------------------------------------------------------------
+// Six-float bound pair: min xyz, then max xyz (the object's +0x00..0x14 block).
+struct Bounds6 {
+    float minX;                  // +0x00
+    float minY;                  // +0x04
+    float minZ;                  // +0x08
+    float maxX;                  // +0x0c
+    float maxY;                  // +0x10
+    float maxZ;                  // +0x14
+};
+
+// Vertex-source descriptor passed to the transform helpers (original: unsigned char*).
+struct UnitBox {
+    uchar flags;                 // +0x00  bit 1 selects the matrix path
+    uchar pad00[3];
+    float centreX;               // +0x04
+    float centreY;               // +0x08
+    float centreZ;               // +0x0c
+    float scale;                 // +0x10
+    float absMatrix[9];          // +0x14  f6e6e90 copies |m| of the 3x3 here
+};
+
+// Projection matrix read by m9d50 (m->+0x100..+0x13c, column-major: column 0 holds the x output
+// coefficients, column 1 the y ones, the last two the translation terms).
+struct ProjMatrix {
+    float m00, m01, m02, m03;    // +0x100
+    float m10, m11, m12, m13;    // +0x110
+    float m20, m21, m22, m23;    // +0x120
+    float m30, m31, m32, m33;    // +0x130
+};
+
+// Tail of the per-frame block m9d50 writes.
+struct FrameTail {
+    float viewport[3];           // +0x98  copy of the block's own +0x80 viewport origin (float bits)
+    float dirX;                  // +0xa4
+    float dirY;                  // +0xa8
+    float dirZ;                  // +0xac
+    uchar hasDir;                // +0xb0
+    uchar padB1[3];              // +0xb1
+    int   frame;                 // +0xb4
+    int   frameTag;              // +0xb8
+};
+
 struct Vec3 { float x, y, z; };
 static inline Vec3 MakeV3(float c)
 {
@@ -258,71 +306,56 @@ static inline Vec3 MakeV3(float c)
     return v;
 }
 // @ 0x006e9530
-void S5::m9530()
+S5* S5::m9530()
 {
     float c = g1533c74;
     *(Vec3*)((char*)this) = MakeV3(c);
     *(Vec3*)((char*)this + 0xc) = MakeV3(-c);
+    return this;
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x006e95a0
 void S5::m95a0(unsigned char* p)
 {
-    float* self = (float*)this;
-    float C = g1533c74;
-    if (self[0] == C || self[0] == -C)
+    const UnitBox* box = (const UnitBox*)p;
+    Bounds6* b = (Bounds6*)this;
+    // 0x1533c74 is FLT_MAX (the "uninitialised bounds" sentinel), 0x13eb8b0 the sign mask of its negative
+    if (b->minX == g1533c74 || b->minX == -g1533c74)
         return;
-    if ((p[0] >> 1 & 1) != 0) {
-        float f4 = self[3], f7 = self[1], f9 = self[2];
-        float f5 = self[4], f8 = self[5];
-        float f1 = self[3], f2 = self[4], f12 = self[5];
-        float f3 = *(float*)(p + 0x10) * 0.5f;
-        float m[6];
-        f6e6e90(p + 0x14, m);
-        float f11 = (f8 - f9) * f3;
-        float f10 = (f5 - f7) * f3;
-        f8 = (f4 - self[0]) * f3;
-        f4 = (m[3] * f11 + m[0] * f10) + m[5] * f8;
-        f5 = (m[2] * f11 + m[4] * f10) + m[1] * f8;
-        f12 = (f12 + f9) * f3;
-        f9 = (f1 + self[0]) * f3;
-        float f6 = (m[1] * f11 + m[2] * f10) + m[3] * f8;
-        f3 = (f2 + f7) * f3;
-        f8 = *(float*)(p + 4) +
-             ((*(float*)(p + 0x2c) * f12 + *(float*)(p + 0x20) * f3) +
-              f9 * *(float*)(p + 0x14));
-        f7 = *(float*)(p + 8) +
-             ((*(float*)(p + 0x30) * f12 + *(float*)(p + 0x24) * f3) +
-              *(float*)(p + 0x18) * f9);
-        f9 = *(float*)(p + 0xc) +
-             ((*(float*)(p + 0x34) * f12 + *(float*)(p + 0x28) * f3) +
-              *(float*)(p + 0x1c) * f9);
-        self[0] = f8 - f4;
-        self[1] = f7 - f5;
-        self[2] = f9 - f6;
-        self[3] = f4 + f8;
-        self[4] = f5 + f7;
-        self[5] = f6 + f9;
+    if ((box->flags >> 1 & 1) != 0) {
+        float m[9];
+        f6e6e90(box->absMatrix, m);       // |m| of the 3x3, nine floats
+        float h = box->scale * 0.5f;
+        // half/half sums of the box (centre*2 and size*2) scaled by h
+        float ea2 = (b->maxZ + b->minZ) * h;
+        float ea1 = (b->maxY + b->minY) * h;
+        float ea0 = (b->maxX + b->minX) * h;
+        float ed2 = (b->maxZ - b->minZ) * h;
+        float ed1 = (b->maxY - b->minY) * h;
+        float ed0 = (b->maxX - b->minX) * h;
+        float ax = (m[6] * ed2 + m[3] * ed1) + m[0] * ed0;   // extent along x
+        float ay = (m[7] * ed2 + m[4] * ed1) + m[1] * ed0;   // extent along y
+        float az = (m[8] * ed2 + m[5] * ed1) + m[2] * ed0;   // extent along z
+        // the centre offset uses the signed matrix, the half extents the f6e6e90 copy of |m|
+        float cx = box->centreX + ((box->absMatrix[6] * ea2 + box->absMatrix[3] * ea1) + ea0 * box->absMatrix[0]);
+        float cy = box->centreY + ((box->absMatrix[7] * ea2 + box->absMatrix[4] * ea1) + box->absMatrix[1] * ea0);
+        float cz = box->centreZ + ((box->absMatrix[8] * ea2 + box->absMatrix[5] * ea1) + box->absMatrix[2] * ea0);
+        b->minX = cx - ax;
+        b->minY = cy - ay;
+        b->minZ = cz - az;
+        b->maxX = cx + ax;
+        b->maxY = cy + ay;
+        b->maxZ = cz + az;
         return;
     }
-    float k = *(float*)(p + 0x10);
-    float s0 = self[0], s2 = self[2], s1 = self[1];
-    self[0] = s0 * k;
-    self[2] = s2 * k;
-    self[1] = k * s1;
-    float a8 = *(float*)(p + 8), ac = *(float*)(p + 0xc);
-    self[0] = s0 * k + *(float*)(p + 4);
-    self[1] = a8 + k * s1;
-    self[2] = ac + s2 * k;
-    float k2 = *(float*)(p + 0x10);
-    self[3] = self[3] * k2;
-    self[4] = self[4] * k2;
-    self[5] = self[5] * k2;
-    float b8 = *(float*)(p + 8), bc = *(float*)(p + 0xc);
-    self[3] = *(float*)(p + 4) + self[3];
-    self[4] = b8 + self[4];
-    self[5] = bc + self[5];
+    float k = box->scale;
+    b->minX = b->minX * k + box->centreX;
+    b->minY = box->centreY + b->minY * k;
+    b->minZ = box->centreZ + b->minZ * k;
+    b->maxX = b->maxX * k + box->centreX;
+    b->maxY = box->centreY + b->maxY * k;
+    b->maxZ = box->centreZ + b->maxZ * k;
 }
 
 // ---------------------------------------------------------------------------
@@ -564,24 +597,22 @@ void S5::m9d50(void* out)
     *(int*)(o + 0x98) = *(int*)(o + 0x80);
     *(int*)(o + 0x9c) = *(int*)(o + 0x84);
     *(int*)(o + 0xa0) = *(int*)(o + 0x88);
-    int m = *(int*)(self + 0x20);
-    float fy = (float)((rect[2] - v2) * 2) / (float)(rect[3] - rect[2]) + 1.0f;
-    float fx = (float)((v1 - rect[0]) * 2) / (float)(rect[1] - rect[0]) - 1.0f;
-    float w = 1.0f / (((*(float*)(m + 0x11c) * fy + *(float*)(m + 0x10c) * fx) +
-                       *(float*)(m + 0x13c)) + *(float*)(m + 0x12c));
-    float fz = (((*(float*)(m + 0x118) * fy + *(float*)(m + 0x108) * fx) +
-                 *(float*)(m + 0x138)) + *(float*)(m + 0x128)) * w - *(float*)(o + 0xa0);
-    float fyy = (((*(float*)(m + 0x114) * fy + *(float*)(m + 0x104) * fx) +
-                  *(float*)(m + 0x134)) + *(float*)(m + 0x124)) * w - *(float*)(o + 0x9c);
-    float fxx = (((*(float*)(m + 0x110) * fy + *(float*)(m + 0x100) * fx) +
-                  *(float*)(m + 0x130)) + *(float*)(m + 0x120)) * w - *(float*)(o + 0x98);
-    *(char*)(o + 0xb0) = 1;
-    float n = 1.0f / (float)sqrt((double)((fxx * fxx + (fyy * fyy + fz * fz)) + 1e-08f));
-    *(float*)(o + 0xa4) = n * fxx;
-    *(float*)(o + 0xa8) = fyy * n;
-    *(float*)(o + 0xac) = fz * n;
-    *(uint*)(o + 0xb8) = *(uint*)(o + 0xb4) ^ *(uint*)(self + 0x200);
-    *(uint*)(o + 0xb4) = *(uint*)(self + 0x200);
+    const ProjMatrix* pm = (const ProjMatrix*)(*(char**)(self + 0x20) + 0x100);
+    FrameTail* frame = (FrameTail*)(o + 0x98);
+    // screen -> clip: x and y go through their own denominators (the caller's rect, not the neighbour edge)
+    float fy = (float)((rect[1] - v2) * 2) / (float)(rect[3] - rect[1]) + 1.0f;
+    float fx = (float)((v1 - rect[0]) * 2) / (float)(rect[2] - rect[0]) - 1.0f;
+    float iw = 1.0f / (((pm->m13 * fy + pm->m03 * fx) + pm->m33) + pm->m23);
+    float pz = (((pm->m12 * fy + pm->m02 * fx) + pm->m32) + pm->m22) * iw - frame->viewport[2];
+    float py = (((pm->m11 * fy + pm->m01 * fx) + pm->m31) + pm->m21) * iw - frame->viewport[1];
+    float px = (((pm->m10 * fy + pm->m00 * fx) + pm->m30) + pm->m20) * iw - frame->viewport[0];
+    frame->hasDir = 1;
+    float n = 1.0f / (float)sqrt((double)(((py * py + px * px) + pz * pz) + 1e-08f));
+    frame->dirX = n * px;
+    frame->dirY = py * n;
+    frame->dirZ = pz * n;
+    frame->frameTag = frame->frame ^ *(uint*)(self + 0x200);
+    frame->frame = *(uint*)(self + 0x200);
     *(int*)(self + 0x44) = (int)o;
     *(char*)(self + 0x1f4) = 0;
 }

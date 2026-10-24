@@ -133,7 +133,8 @@ WString* WStringVector::Erase(WString* pos)
         CopyWStrings((char*)pos + 0x10, *(void**)(v + 4), pos);
     *(int*)(v + 4) -= 0x10;
     WString* last = *(WString**)(v + 4);
-    if ((((char*)last->mpCapacity - (char*)last->mpBegin) & 0xfffffffe) > 2 && last->mpBegin)
+    int spare = (int)((char*)last->mpCapacity - (char*)last->mpBegin) & 0xfffffffe;   // signed, as the original's jle
+    if (spare > 2 && last->mpBegin)
         operator_delete__(last->mpBegin);
     return pos;
 }

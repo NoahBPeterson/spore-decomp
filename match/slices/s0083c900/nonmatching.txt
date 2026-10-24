@@ -1,12 +1,12 @@
 0083c900  224  complete: HashCmdTable::Insert(outIt, keyPtr, bool tag); hash walk/EH and helper call shapes differ; equiv: UNSUPPORTED (0/1200 valid inputs)
-0083cd90  37   complete: cBlockCommandBase::~cBlockCommandBase; vtable store and free scheduling differ
+0083cd90  34   complete: cBlockCommandBase::~cBlockCommandBase; fixed the hashtable sub-object (this+0x10: mpAlloc/mpBucketArray/mnBucketCount/mnElementCount at +0x10/+0x14/+0x18/+0x1c, unsigned count -> jbe) and the vtable store (address of vtbl_AppProps, not its contents); equiv: PASS (232/400 valid, 100% coverage); src/game/UTFSpore_Win32/Commands.cpp same fix + DoFreeNodesTable is __stdcall (ret 8), also PASS (232 valid)
 0083cdd0  34   complete: AppProps ctor; movss constant loads and member store order differ
 0083ce20  54   complete: AppProps deleting dtor; scheduling differs
-0083ce70  13   complete: ceil helper (x87 fld/fstp around ceil)
+0083ce70  0    byte-exact (20/0 diff): ceil helper; declared __declspec(dllimport) float ceil(double) so the call is [__imp_ceil] and st0 is returned untouched (x87 fld/fstp only); listed in manifest.txt
 0083ce90  32   complete: DiscardWhiteSpace; isspace loop register allocation differs
 0083ced0  13   complete: AutoRefCount release; branch layout differs
-0083cef0  92   complete: pair<string,AutoRefCount> ctor; string copy loop scheduling differs; equiv: FAIL (import call #0 mismatch)
-0083d020  89   complete: pair<string,AutoRefCount> copy ctor; scheduling differs; equiv: FAIL (import call #0 mismatch)
+0083cef0  86   complete: pair<string,AutoRefCount> ctor; zero-init + RangeInitialize + memcpy(buffer, s->mpBegin, len) + mpRef store then ++obj[1]; written as a real constructor so the epilogue is eax=this; equiv: PASS (404/900 valid, 100% coverage); src/game/UTFSpore_Win32/Expression.cpp copy also PASS (404 valid)
+0083d020  84   complete: pair<string,AutoRefCount> copy ctor; same body from the source pair, mpRef read as ((const PairCtorStub*)src)->mpRef; written as a real constructor (eax=this); equiv: PASS (424/900 valid, 100% coverage); src/game copy also PASS (424 valid)
 0083d080  39   complete: pair<string,cExprFunction> dtor; branch layout differs
 0083d240  45   complete: EvalBoolParentheses (expect char + throw)
 0083d290  95   complete: EvalContinueChar (expect char + throw)

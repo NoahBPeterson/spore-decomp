@@ -4,7 +4,7 @@
 007c4d20  135  builds affine 4x4 into locals then calls 4c40; SIMD local layout differs [equiv: PASS 1200 valid, 100% cov]
 007c4dd0  390  cViewer::Init; identity-matrix SIMD + x87 fov block not reproduced [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan, ours calls tanf)]
 007c4fd0  201  cViewer::Update; x87 aspect compare + shader-state compare schedule differs [equiv: WEAK 15.2% cov (D3DXMatrixMultiply import)]
-007c50b0  0  cViewer::Copy; emitted size differs from original range (no similar-size symbol)
+007c50b0  350  cViewer::Copy; diff is structural (ours: /GS frame + thiscall `ret 0xc`, retail: ebp frame + plain `ret`); chk cannot guess the symbol (marker name is the slice-spelling class), counted with cmpobj --len 390 [equiv: PASS 400 valid, 100% cov]; fixed 2026-10-24: raster setup went through the wrong camera (see 007c4010) [hybrid src/game/SPEngine/SPGraphicsViewer.cpp too]
 007c5240  185  cViewer::CopyFrom; SIMD 4x4 copy + reciprocal schedule differs [equiv: PASS 1200 valid, 100% cov]
 007c5350  91  SetViewAngle; fptan-based fov path differs [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan)]
 007c53d0  77  SetViewAngleY; fptan-based fov path differs [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan)]
@@ -12,12 +12,12 @@
 007c5490  18  operator new[] wrapper; calling convention/arg shape near-miss [equiv: PASS 824 valid, 100% cov (now SerializedArray::Alloc member)]
 007c54b0  42  rw resolve ObjectToId; arena pointer chain codegen differs
 007c54f0  33  rw resolve IdToObject; arena pointer chain codegen differs
-007c5520  38  rw resolve IdToObject (returns 1); differs
+007c5520  41  rw resolve IdToObject (returns 1); fixed 2026-10-24: the manager pointer is arg1 (`[esp+0xc]`), not arg2; loop shape still differs [equiv: PASS 358 valid, 73.7% cov]
 007c5560  86  rw resolve array via ObjectToId; loop shape differs
 007c55d0  52  rw resolve array via IdToObject; loop shape differs
-007c5630  52  rw resolve array via IdToObject2; loop shape differs
+007c5630  52  rw resolve array via IdToObject2; fixed 2026-10-24: the manager pointer is arg1 (`[esp+0xc]`), not arg2; loop shape still differs [equiv: PASS 280 valid, 89.7% cov]
 007c56a0  40  rw serialize floats; array accessor call shape differs
 007c5740  93  arena type 0xff0001 registration; index range includes orphan 0x7c5760 block
 007c5820  241  static row byte-compare helper (arg in edi); register convention not reproduced
-007c5920  245  FindMatchingRow; scan/mode branches differ
+007c5920  369  FindMatchingRow; fixed 2026-10-24: u32 eax-leftover model, raw (untruncated) n/stride, and the 0x7c5820 row test inlined because that helper takes its index in edi; loop shape still differs [equiv: PASS 980 valid, 97.5% cov]
 007c5a40  71  POD field initializer; /O2 store ordering differs

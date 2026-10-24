@@ -42,7 +42,7 @@ extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wcha
 extern "C" __declspec(dllimport) wchar_t* __cdecl wcsstr(const wchar_t*, const wchar_t*);
 
 void* operator_new(uint32_t n, const char* name, int a, int b, int c, int d); // 0x00f473a0
-void  operator_delete__(void* p);
+void  operator_delete__(void* p);            // 0x00f47380
 inline void* operator new(unsigned int, void* p) { return p; }
 void* EASTL_allocator_allocate(uint32_t n, const char* name, int flags, unsigned dbg,
                                const char* file, int line);   // 0x00f473a0
@@ -51,12 +51,17 @@ void* CopyWStrings(const void* first, const void* last, void* dst);  // 0x84ab40
 void* FUN_006abeb0(unsigned n);              // 0x6abeb0
 bool  FUN_006ab760(void* p, const wchar_t* s); // 0x6ab760
 int   Stristr16_real(const wchar_t* s, const wchar_t* sub); // 0x92cc90
-void  Mutex_Lock(void* m, void* name);       // 0x9221b0
-void  Mutex_Unlock(void* m);                 // 0x922270
+
 void  Clipboard_Clear(void* c, unsigned type); // 0x92a940
 void  Win32Clipboard_WriteText(void* w, const wchar_t* t, int n); // 0x92aa20
-void* FUN_009289f0(int size, int a, int b, int c, int d, int e); // 0x9289f0
-void* FUN_0092aae0(void* text, int n);       // 0x92aae0
+// SP::cSPMemPool::LockedAlloc(this = *g_SPMemPool) and the Clipboard::DataText16 ctor (this = raw
+// storage): member stubs so cl emits a __thiscall call, bound to their address by the annotation
+struct PoolStub {
+    void* LockedAlloc(int size, int a, int b, int c, int d, int e);   // 0x9289f0
+};
+struct DataTextStub {
+    void* ctor(const wchar_t* text, int n);                           // 0x92aae0
+};
 void* FUN_0092aa20;                          // unused
 
 typedef long LRESULT_DEF;
@@ -97,7 +102,12 @@ struct WStringVector {
 };
 
 // ---------------------------------------------------------------- Clipboard
-struct Mutex { char pad[0x14]; void Lock(void* name) { Mutex_Lock(this, name); } void Unlock() { Mutex_Unlock(this); } };
+// EA::Thread::Mutex: members declared (this in ecx) and bound to their addresses by the annotations
+struct MutexStub {
+    void Lock(void* name);       // 0x9221b0
+    void Unlock();               // 0x922270
+};
+struct Mutex : MutexStub { char pad[0x14]; };
 struct DataInfo { unsigned mnType; void* mpData; };
 struct IData {
     virtual void i0();
@@ -141,6 +151,7 @@ struct Win32Clipboard {
 
 // global AutoOSGlobalPtr-like object with the Clipboard at +0x10
 extern void* g_ClipboardAutoPtr;   // 0x1668f00
+extern void* g_SPMemPool;          // 0x16c8b44  process mem-pool object (this of LockedAlloc)
 
 // ---------------------------------------------------------------- CommandLine
 struct CommandLine {
@@ -304,17 +315,17 @@ bool Clipboard::SetClipboardData(IData* pData, bool b) {
 
 // @ 0x0092acb0
 bool SetClipboardText(Clipboard* clipboard, const wchar_t* s, int len) {
-    char result = 0;
-    void* mem = FUN_009289f0(len * 2 + 0x1a, 0, 0, 0, 0, 0);
+    bool result = false;
+    void* mem = ((PoolStub*)g_SPMemPool)->LockedAlloc(len * 2 + 0x1a, 0, 0, 0, 0, 0);
     if (mem != 0) {
-        IData* obj = (IData*)FUN_0092aae0((void*)s, len);
+        IData* obj = (IData*)((DataTextStub*)mem)->ctor(s, len);
         if (obj != 0) {
             obj->i1();
             result = clipboard->SetClipboardData(obj, true);
             obj->i2();
         }
     }
-    return result != 0;
+    return result;
 }
 
 // @ 0x0092b0b0
@@ -411,7 +422,8 @@ WString* WStringVector::Erase(WString* pos) {
         CopyWStrings((char*)pos + 0x10, *(void**)(v + 4), pos);
     *(int*)(v + 4) -= 0x10;
     WString* last = *(WString**)(v + 4);
-    if ((((char*)last->mpCapacity - (char*)last->mpBegin) & 0xfffffffe) > 2 && last->mpBegin)
+    int spare = (int)((char*)last->mpCapacity - (char*)last->mpBegin) & 0xfffffffe;   // signed, as the original's jle
+    if (spare > 2 && last->mpBegin)
         operator_delete__(last->mpBegin);
     return pos;
 }

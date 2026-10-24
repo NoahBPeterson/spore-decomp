@@ -20,8 +20,10 @@ struct W_s0095_9780 {
     void FUN_00959FE0(int w);     // 0x00959FE0
     void FUN_00959E00(void* w);   // 0x00959E00
     void FUN_009580E0(void* w);   // 0x009580E0
+    void FUN_009580B0(void* w);   // 0x009580B0 (thiscall, ecx = mgr)
     void FUN_00958820(void* w);   // 0x00958820
     void FUN_009588C0(void* w);   // 0x009588C0
+    bool FUN_0095A0B0(void* w, int p); // 0x0095A0B0 (thiscall, returns bool in al)
 };
 
 struct CM {                       // the cached-transform block at this+0x148
@@ -93,8 +95,8 @@ struct Window {
     void* GetChild(void* out, void* node);              // 0x9601E0
     void RemoveChild(void* node);                       // 0x960230
     void ClearChildren();                               // 0x960280
-    int  Dispatch14(void* p);                           // 0x9602C0
-    int  Dispatch(void* p);                             // 0x9602F0
+    bool Dispatch14(void* p);                           // 0x9602C0
+    bool Dispatch(void* p);                             // 0x9602F0
     bool OnPaint(RenderCtx* rc);                        // 0x960310
     bool DoMessage(void* msg);                          // 0x960410
     void SetPhysicalArea(const float* r);               // 0x9608C0
@@ -140,7 +142,7 @@ void Window::SetA4(int v) {
     mgr = (W_s0095_9780*)m30;
     if (mgr == 0)
         return;
-    (*(void(__stdcall**)(void*, int))((char*)*(void**)mgr - 4))(mgr, (int)((char*)this - 4));
+    mgr->FUN_009580B0((void*)((char*)this - 4));
 }
 
 // @ 0x00960050
@@ -174,7 +176,7 @@ void Window::OnPaint2() {
 void Window::CallSlot() {
     W_s0095_9780* mgr = (W_s0095_9780*)m30;
     if (mgr != 0)
-        (*(void(__stdcall**)(void*, int))((char*)*(void**)mgr - 4))(mgr, (int)((char*)this - 4));
+        mgr->FUN_009588C0((void*)((char*)this - 4));
 }
 
 // @ 0x00960100
@@ -270,21 +272,21 @@ void Window::ClearChildren() {
 }
 
 // @ 0x009602C0
-int Window::Dispatch14(void* p) {
+bool Window::Dispatch14(void* p) {
     void* mgr = m30;
     if (mgr == 0)
-        return 0;
+        return false;
     Window* self = (this - 1) ? this : 0;
-    return (*(int(__thiscall**)(void*, int, Window*, void*))((char*)*(void**)mgr + 0x14))(
+    return (*(bool(__thiscall**)(void*, int, Window*, void*))((char*)*(void**)mgr + 0x14))(
         mgr, *(int*)p, self, p);
 }
 
 // @ 0x009602F0
-int Window::Dispatch(void* p) {
+bool Window::Dispatch(void* p) {
     W_s0095_9780* mgr = (W_s0095_9780*)m30;
     if (mgr != 0)
-        return FUN_0095A0B0((char*)this - 4, (int)p);
-    return 0;
+        return mgr->FUN_0095A0B0((void*)((char*)this - 4), (int)p);
+    return false;
 }
 
 // @ 0x00960310

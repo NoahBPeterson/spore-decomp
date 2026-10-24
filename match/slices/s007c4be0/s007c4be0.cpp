@@ -63,6 +63,21 @@ struct cViewer {
     void SetViewAngle(float a);
     void SetViewAngleY(float a);
     void SetViewWindow(float x, float y);
+    void FUN_007c4010(u32* out);     // 0x007c4010 (cViewer method: this->mCamera->m_viewport rect)
+};
+
+// The hybrid build's migrated copy of this slice stub spells the class cViewer_s007c_4be0
+// (src/game/SPEngine/SPGraphicsViewer.cpp), and symbols/slices/s007c4be0.txt records
+// ?Copy@cViewer_s007c_4be0@@QAE_NPAU1@_N1@Z for 0x007c50b0, so the migrated method keeps that
+// spelling (same layout: it only adds the spelling of `this`).
+struct cViewer_s007c_4be0 : cViewer {
+    bool Copy(cViewer_s007c_4be0* src, bool a, bool b);
+};
+
+// 0x011f38f0 is a __thiscall member of VBi (`?FUN_011f38f0@VBi@@QAEXHI@Z`): the original sets
+// ecx to the destination camera before releasing the source raster, so it cannot be a free call.
+struct VBi {
+    void FUN_011f38f0(int a, u32 b);
 };
 
 // ---- renderer singleton (global DAT_015fd8d4) ----
@@ -228,7 +243,7 @@ __declspec(noinline) bool cViewer::Update() {
 
 // ===========================================================================
 // @ 0x007c50b0
-__declspec(noinline) bool cViewer::Copy(cViewer* src, bool copyZBuffer, bool keepRaster) {
+__declspec(noinline) bool cViewer_s007c_4be0::Copy(cViewer_s007c_4be0* src, bool copyZBuffer, bool keepRaster) {
     if (this == src) return true;
     if (src == 0 || src->mCamera == 0 || mCamera == 0) return false;
 
@@ -251,10 +266,10 @@ __declspec(noinline) bool cViewer::Copy(cViewer* src, bool copyZBuffer, bool kee
     if (!copyZBuffer)
         mCamera->m_zbuffer = sc->m_zbuffer;
     if (!keepRaster && sc->m_raster[1] != 0)
-        FUN_011f38f0(1, sc->m_raster[1]);
+        ((VBi*)mCamera)->FUN_011f38f0(1, (u32)sc->m_raster[1]);
 
     int r[4];
-    sc->GetViewport(r);
+    src->FUN_007c4010((u32*)r);
     mCamera->SetSize(r[0], r[1], r[2] - r[0], r[3] - r[1]);
 
     float vx = sc->m_viewWindow[0];
@@ -395,7 +410,7 @@ void ResolveOneToObject(void* obj, int unused, ResMgr1* mgr) {
 }
 
 // @ 0x007c5520
-int ResolveAllOne(void* obj, int unused, ResMgr1* mgr) {
+int ResolveAllOne(void* obj, ResMgr1* mgr) {
     int* p = (int*)((char*)obj + 0x3c);
     if (*p == -1) {
         *p = 0;
@@ -436,7 +451,7 @@ void ResolveManyToObject(void* a, int unused, ResMgr1* mgr) {
 }
 
 // @ 0x007c5630
-int ResolveManyToObject2(void* a, int unused, ResMgr1* mgr) {
+int ResolveManyToObject2(void* a, ResMgr1* mgr) {
     int x = (*(int*)a == -1) ? 0 : mgr->m_inner->m_arena->IdToObject(*(int*)a);
     *(int*)a = x;
     int n = *(int*)((char*)a + 4);
@@ -555,29 +570,66 @@ int CompareRows(int base, int count, int stride, int idx) {
     return 1;
 }
 
+// 0x7c5820's row test, written out because its index argument arrives in edi (not expressible in
+// C): true when row <row> and row <row+1> are identical. count/stride are truncated like the
+// helper's own `movzx word` loads, and a stride of 0 or 1 also compares row <row+2>.
+static int AdjacentRowsMatch(int base, u32 cnt, u32 st, u32 row) {
+    if (row == cnt - 1) return 0;
+    const char* a = (const char*)(base + row * st);
+    const char* b = (const char*)(base + (row + 1) * st);
+    for (u32 j = 0; j < st; j++)
+        if (a[j] != b[j]) return 0;
+    if (st > 1) return 1;
+    if ((int)row >= (int)cnt - 2) return 0;
+    const char* c = (const char*)(base + (row + 2) * st);
+    for (u32 j = 0; j < st; j++)
+        if (b[j] != c[j]) return 0;
+    return 1;
+}
+
+// The original returns its match count as a u8 in al but every `mov al,imm/bl` leaves the upper
+// 24 bits of eax holding whatever the last computation left there (`lea eax,[esi-1]` = n-1 on the
+// early exits, the row pointer base+(idx+k)*stride in the mode-1 scan, the 0x7c5820 result or
+// idx+k in the other mode). The caller observably reads eax&0xffff, so the leftover is modelled
+// here: the function returns the whole eax the original leaves behind.
 // @ 0x007c5920
-u8 FindMatch(int base, int p2, int p3, int stride, int mode) {
-    int n = p3 & 0xffff;
-    int idx = p2 & 0xffff;
+u32 FindMatch(int base, int p2, int p3, int stride, int mode) {
+    // The original loads the row stride only after the early exits, so keep that load (and the
+    // scratch register it needs) out of the fast path.
+    u32 n = (u32)p3 & 0xffff;
+    u32 idx = (u32)p2 & 0xffff;
+    u32 eax = n - 1;                       // lea eax,[esi-1]
     u8 k = 2;
-    if (idx == n - 1) return 1;
-    if (idx == n - 2) return 2;
+    if (idx == n - 1) return (eax & ~0xffu) | 1;
+    if (idx == n - 2) return (eax & ~0xffu) | 2;
     if (mode == 1) {
-        while (idx + 2 < n) {
-            if (!CompareRows(base, p3 & 0xffff, stride & 0xffff, idx + k))
-                return k;
+        // Mode 1 compares row idx against row idx+k in line (the original inlines it) and
+        // returns as soon as a byte differs; the other mode calls 0x7c5820 instead.
+        if ((int)(idx + 2) >= (int)n) return (eax & ~0xffu) | k;
+        u32 st = (u32)stride & 0xffff;     // movzx edi,word[esp+0x24]
+        const char* row = (const char*)(base + idx * st);
+        for (;;) {
+            const char* other = (const char*)(base + (idx + k) * st);
+            int differs = 0;
+            for (u32 j = 0; j < st; j++) {
+                if (row[j] != other[j]) { differs = 1; break; }
+            }
+            if (differs) return ((u32)other & ~0xffu) | k;   // eax = that row pointer
             k++;
-            if (k == 0x80) return 0x80;
+            if (k == 0x80) return ((u32)other & ~0xffu) | 0x80;
+            if ((int)(idx + k) >= (int)n)
+                return ((u32)(base + (idx + k) * st) & ~0xffu) | k;
         }
-        return k;
     } else {
-        while (idx + 2 < n) {
-            if (CompareRows(base, p3 & 0xffff, stride & 0xffff, idx + k))
-                return k;
+        if ((int)(idx + 2) >= (int)n) return (eax & ~0xffu) | k;
+        u32 st = (u32)stride & 0xffff;
+        for (;;) {
+            if (AdjacentRowsMatch(base, n, st, idx + k)) return k;   // eax = the helper's 1
             k++;
             if (k == 0x80) return 0x80;
+            if ((int)(idx + k) >= (int)n)
+                return ((idx + k) & ~0xffu) | k;            // eax = bl+idx, then al = bl
         }
-        return k;
     }
 }
 

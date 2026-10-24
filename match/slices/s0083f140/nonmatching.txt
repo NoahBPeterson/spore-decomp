@@ -2,10 +2,9 @@
 0083f2e0  325  complete: EvalBoolExpression; string build + EH frame + loop shape differ
 0083f480  86   complete: EvalChar; throw temp frame/register reuse differ; difftest UNSUPPORTED (0/1200 valid inputs; all throw/fault) after ECX member fix
 0083f510  66   complete: ParseBool; throw frame differs
-0083f580  26   complete: FileMessageCallback; messaging vtable call shape differs
-0083f630  28   complete: cFileParser::Init; base-subobject adjust and call shape differ
-0083f680  47   complete: cFileParser::Shutdown; secondary-base vtable slots differ
-0083f6f0  69   complete: cFileParser::SetParser; AutoRefCount vtable call sequence differs
+0083f580  29   complete: FileMessageCallback (5-arg cdecl: ctx, msg, a, b, payload; server path posts to the messaging vtable slot 6, fallback calls the handler vtable at arg+4 slot 1); call-shape/register diff only - [equiv: WEAK, 399 valid inputs, 43.3% cov (13/30), no mismatch; the server!=0 path is unreachable because the harness leaves the 0x16514cc messaging-server global null]
+0083f630  14   complete: cFileParser::Init (byte-flag guard at +0xc, server registration slot 8 with msg 0x6f41f272, returns bool in al); call-shape/register diff only - [equiv: PASS, 400 valid inputs, 66.7% cov]
+0083f680  24   complete: cFileParser::Shutdown (clear flag, server unregister slot 11 with 0x6f41f272/0xffffd8f1, parser slot 3 + clear + slot 1, own slot 6, returns bool in al); call-shape/register diff only - [equiv: PASS, 399 valid inputs, 79.5% cov]
 0083f740  49   complete: cFileParser::Parser; AutoRefCount vtable call sequence differs
 0083f8f0  32   complete: AutoRefCount<RefCounted<FileChangeNotification>>::release; slot/register differ
 0083f940  33   complete: AutoRefCount<RefCounted<FileChangeNotification>>::operator=; refcount scheduling differs

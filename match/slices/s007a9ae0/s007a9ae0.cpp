@@ -7,9 +7,13 @@ extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int 
 extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" long  _InterlockedExchangeAdd(volatile long* addend, long value);
 #pragma intrinsic(_InterlockedExchangeAdd)
+extern "C" long  _InterlockedExchange(volatile long* target, long value);
+#pragma intrinsic(_InterlockedExchange)
 extern "C" void  memmove(void*, const void*, unsigned int);
 extern "C" void* VectorDoInsertValue(void*, void*, unsigned int);
+// 0x00690120 is the thiscall member ?Release@cJob@@QAEHXZ (this in ecx, no stack args).
 extern "C" void  FUN_00690_120_GetStatus(void*);
+typedef int (__thiscall* cJobReleaseFn)(void*);
 extern "C" void* FUN_0067dd60();
 extern "C" unsigned int FUN_00932e80_hash(const char*, unsigned int, int);
 extern "C" int   FUN_011ef750(int, int, void*);
@@ -21,6 +25,15 @@ extern "C" void  FUN_0041e990_GetInt();
 extern "C" int   FUN_00926650_AddCore(void*, int, int);
 
 // ---- deque map (eastl::deque storage) ----------------------------------------
+// eastl::DequeIterator<int>: points into a 64-int subarray; mpCurrentArrayPtr walks
+// the map array of subarray base pointers (same layout as s004a9920 / s00513930).
+struct DequeIterator {
+    int*  mpCurrent;         // +0x00
+    int*  mpBegin;           // +0x04
+    int*  mpEnd;             // +0x08
+    int** mpCurrentArrayPtr; // +0x0c
+};
+
 struct DequeMap {
     int*  mpBegin;      // +0x00
     int   mCapacity;    // +0x04
@@ -91,17 +104,32 @@ void DequeMap::InsertAt(int count, int zero)
     this->mCur = 0;
 }
 
-// @ 0x007a9d70  reverse copy into a deque range (behavioral)
-void FUN_007a9d70(int** out, int* end, int* first, int** map, int* mfirst, int* mlast, int** map2)
+// @ 0x007a9d70  eastl deque copy_backward: move [first, last) to end at last2.
+// The three iterators are passed by value (4 dwords each) and the function returns
+// the new destination begin, so all 13 stack dwords of the original are consumed.
+DequeIterator* FUN_007a9d70(DequeIterator* result, DequeIterator first,
+                            DequeIterator last, DequeIterator last2)
 {
-    int* a = first; int* b = map[0]; int** c = map; int* d = mfirst;
-    while (a != end) {
-        if (a == b) { --c; b = *c; a = b + 0x40; }
-        --a;
-        if (d == mlast) { --map2; mlast = *map2; d = mlast + 0x40; }
-        --d; *d = *a;
+    while (last.mpCurrent != first.mpCurrent) {
+        if (last.mpCurrent == last.mpBegin) {
+            --last.mpCurrentArrayPtr;
+            last.mpBegin = *last.mpCurrentArrayPtr;
+            last.mpEnd = last.mpBegin + 0x40;      // EASTL subarray = 64 ints
+        }
+        --last.mpCurrent;
+        if (last2.mpCurrent == last2.mpBegin) {
+            --last2.mpCurrentArrayPtr;
+            last2.mpBegin = *last2.mpCurrentArrayPtr;
+            last2.mpEnd = last2.mpBegin + 0x40;
+        }
+        --last2.mpCurrent;
+        *last2.mpCurrent = *last.mpCurrent;
     }
-    out[0] = d; out[1] = mlast; out[2] = *map2; out[3] = (int*)map2;
+    result->mpCurrent = last2.mpCurrent;
+    result->mpBegin = last2.mpBegin;
+    result->mpEnd = last2.mpEnd;
+    result->mpCurrentArrayPtr = last2.mpCurrentArrayPtr;
+    return result;
 }
 
 // @ 0x007a9e10  Editor::cPropertyList-like ctor
@@ -153,14 +181,18 @@ int FUN_007a9f30(int* self)
 
 struct JobSlots {
     void Clear();      // 007aa320
-    int  Transfer(int param_2);   // 007aa3a0
+    char Transfer(int param_2);   // 007aa3a0 (returns in al)
 };
 
 // @ 0x007aa320
 void JobSlots::Clear()
 {
     int* self = (int*)this;
-    if (self[1]) { void* old = (void*)self[1]; self[1] = 0; FUN_00690_120_GetStatus(old); }
+    if (self[1]) {
+        void* old = (void*)self[1];
+        self[1] = 0;
+        ((cJobReleaseFn)FUN_00690_120_GetStatus)(old);      // thiscall: this in ecx
+    }
     if (self[0]) {
         volatile long* rc = (volatile long*)((char*)self[0] + 0x10);
         self[0] = 0;
@@ -168,22 +200,41 @@ void JobSlots::Clear()
         long cur = _InterlockedExchangeAdd(rc, 0);
         if (cur < 1) _InterlockedExchangeAdd(rc, 1); else _InterlockedExchangeAdd(rc, 0);
     }
-    if (self[2]) { void* p = (void*)self[2]; self[2] = 0; ((void(__thiscall*)(void*))((void**)p)[1])(p); }
-    if (self[3]) { void* p = (void*)self[3]; self[3] = 0; ((void(__thiscall*)(void*))((void**)p)[1])(p); }
+    if (self[2]) {
+        int* p = (int*)self[2];
+        self[2] = 0;
+        void** vt = *(void***)p;                            // vtable at *p, slot 1
+        ((void(__thiscall*)(void*))vt[1])(p);
+    }
+    if (self[3]) {
+        int* p = (int*)self[3];
+        self[3] = 0;
+        void** vt = *(void***)p;
+        ((void(__thiscall*)(void*))vt[1])(p);
+    }
 }
 
 // @ 0x007aa3a0
-int JobSlots::Transfer(int param_2)
+char JobSlots::Transfer(int param_2)
 {
     int self = (int)this;
     int* a = *(int**)(self + 0xc);
     if (a && *(int*)(self + 8) == 0) {
         int* b = *(int**)(self + 8);
-        if (b) { *(int*)(self + 8) = 0; ((void(__thiscall*)(void*))((void**)b)[1])(b); }
-        ((void(__thiscall*)(void*, int*))((void**)a)[0x14 / 4])(a, (int*)(self + 8));
+        if (b) {
+            *(int*)(self + 8) = 0;
+            void** vt = *(void***)b;
+            ((void(__thiscall*)(void*))vt[1])(b);
+        }
+        void** vt = *(void***)a;                            // slot 5 with &self[2]
+        ((void(__thiscall*)(void*, int*))vt[0x14 / 4])(a, (int*)(self + 8));
     }
     int* c = *(int**)(self + 0xc);
-    if (c) { *(int*)(self + 0xc) = 0; ((void(__thiscall*)(void*))((void**)c)[1])(c); }
+    if (c) {
+        *(int*)(self + 0xc) = 0;
+        void** vt = *(void***)c;
+        ((void(__thiscall*)(void*))vt[1])(c);
+    }
     int* d = *(int**)(self + 8);
     if (d && d[6]) {
         void (*cb)(int) = *(void(**)(int))(param_2 + 0x24);
@@ -236,7 +287,7 @@ Chunk* cNodeAllocator::Create()
     *(int*)((char*)p + 0) = 0;
     *(int*)((char*)p + 8) = 0;
     *(unsigned char*)((char*)p + 0xc) = 0;
-    _InterlockedExchangeAdd((volatile long*)((char*)p + 0x10), 1);
+    _InterlockedExchange(&p->mRef, 1);          // retail: xchg [p+0x10], 1 (not add)
     *(int*)((char*)p + 0x18) = 0;
     *(int*)((char*)p + 0x1c) = 0;
     *(int*)((char*)p + 0x20) = 0;
