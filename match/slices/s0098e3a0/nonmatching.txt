@@ -5,4 +5,4 @@
 0098e930  32  GetParagraphAtPosition: complete; same final-subtract ordering difference
 0098e9d0  374  RecalculateCursorPosition: complete; float temp/slot layout, x87 vs SSE for caret x, line-break index ordering
 0098ec70  876  MoveCursor: complete (all 10 kinds); frame/register allocation differs, owner pointer hoisted; difftest WEAK after fixing CharBreakIterator size (was 0x18, the real EAText iterator is 0x20: SetTextRunArray overwrote the return address) and the explicit zeroing of its +0x1c field before SetPosition
-0098f120  288  ScrollToCursor: complete; original recomputes visible width per use, register allocation differs
+0098f120  316  ScrollToCursor: complete; difftest FAIL register-only: ours writes xmm5 (chosen pt.x kept in xmm5) where the original keeps it in xmm3; the visible-width subexpression is CSE'd here but rematerialized by the original. Values, stores and the SetScrollPosition call match.
