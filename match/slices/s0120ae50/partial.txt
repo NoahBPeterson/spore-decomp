@@ -1,11 +1,1 @@
 # va  diff-bytes  reason
-0120bcb0  n/a  MSVC EH unwind-funclet (no prologue; reads enclosing EBP; pushes type-desc + [ebp-0x24] and tail-jumps to delete-with-info 0x00f47410; string "Skinner/Clear"); orphaned - enclosing fn's EH prolog is outside the slice; no standalone C++ source
-0120bd30  n/a  MSVC EH unwind-funclet (no prologue; reads enclosing EBP; string "ArgScript/SPSkinPaintDistributeParticle"); orphaned; no standalone C++ source
-0120be20  n/a  MSVC EH unwind-funclet group (no prologue; reads enclosing EBP; delete-with-info 0x00f47410); orphaned; no standalone C++ source
-0120be90  n/a  MSVC EH unwind-funclet group (no prologue; reads enclosing EBP; delete-with-info 0x00f47410); orphaned; no standalone C++ source
-0120bf00  n/a  partial: EH cleanup fragment (Swarm)
-0120bfc0  n/a  partial: EH cleanup fragment (App/CheatManager)
-0120c0f0  n/a  partial: EH cleanup fragment
-0120c2a0  n/a  partial: EH cleanup fragment
-0120c330  n/a  partial: EH cleanup fragment
-0120c360  n/a  partial: EH cleanup fragment

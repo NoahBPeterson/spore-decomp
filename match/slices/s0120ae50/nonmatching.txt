@@ -1,4 +1,14 @@
 # va  diff-bytes  reason
+# 0x0120bcb0..0x0120c382 is the /EHsc cleanup table MSVC emits while compiling the
+# owning function, which lies outside this slice.  Each VA is a run of `push 0 x4;
+# push <tag>; push [ebp-N]; call operator_delete__ (0x00f47410)` frees, `mov/lea
+# ecx,[ebp+N]; jmp <dtor>` thiscall destructor thunks and a trailing `mov eax,
+# <FuncInfo>; jmp __CxxFrameHandler3` (0x011e090c) record; the tags are the
+# NUL-terminated type-name strings EA's tagged operator delete takes.  No
+# standalone C++ spelling yields those bare thunks, so every VA is modelled as the
+# identical cleanup sequence applied to the owning frame (s0120ae50.cpp).  Every
+# gate run reports the ORIGINAL faulting on all 400 generated inputs: the funclet
+# runs on a caller frame the input generator cannot synthesise.
 0120b890  42  complete hkUnaryAction ctor; base-vtable/field store scheduling differs
 0120b8d0  15  complete hkUnaryAction::removeFromWorld; tail-call argument shape differs
 0120b8f0  20  complete hkUnaryAction dtor; base-vptr restore shape differs
@@ -6,3 +16,13 @@
 0120b9c0  42  complete hkBinaryAction dtor
 0120b0a0  254  complete _hkMatrix6SetMul (260 B); x87 2x2 block MAC; frame/prologue and esi/edi loop-pointer allocation differ
 0120b310  1440  complete hkMatrix6::setInvert (1384 B); Gauss-Jordan inversion; register scheduling/stack slots differ
+0120bcb0  28  complete EH cleanup funclet chain; tag 0x13f2140 ("Skinner/Clear") freed by operator_delete__ 0x00f47410, then `lea ecx,[ebp-0x10]; jmp 0x00472540`; FuncInfo 0x014f9194; compiler-generated, so the bytes are not reproducible from standalone C++ (our 39 B vs the original 44 B); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fault(read))
+0120bd30  75  complete EH cleanup funclet chain; five tagged deletes (tags 0x13f243c "ArgScript/SPSkinPaintDistributeParticle", 0x13f23e0, 0x13f2378, 0x13f2338, 0x13f22f8) through 0x00f47410; FuncInfo 0x014f923c; compiler-generated (our 123 B vs 140 B); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fault(read))
+0120be20  21  complete EH cleanup funclet; tag 0x13f25f4 freed through 0x00f47410; FuncInfo 0x014f92f0; compiler-generated (our 30 B vs 36 B); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fault(read))
+0120be90  28  complete EH cleanup funclet chain; tag 0x13f2648 freed through 0x00f47410, then `lea ecx,[ebp-0x18]; jmp 0x00472540`; FuncInfo 0x014f9384; compiler-generated (our 39 B vs 44 B); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fault(read))
+0120bf00  21  complete EH cleanup funclet; tag 0x13f1fdc ("Swarm") freed through 0x00f47410; FuncInfo 0x014f9410; compiler-generated (our 30 B vs 36 B); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fault(read))
+0120bfc0  59  complete EH cleanup funclet group; `lea ecx,[ebp-0x14]; jmp 0x0067e0f0`, three tagged deletes (tag 0x1401ab0 "App/CheatManager") through 0x00f47410, then `mov ecx,[ebp-0x10]; jmp 0x00530670` (eastl::basic_string<char>::~basic_string on the pointer held in the frame); FuncInfo 0x014f9514 and 0x014f9540; compiler-generated (our 91 B vs 114 B); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fault(read))
+0120c0f0  13  complete EH cleanup funclet; `mov ecx,[ebp+4]; jmp 0x00530670` frees the string the owning function's first argument points at; FuncInfo 0x014f9684; compiler-generated (our 12 B vs 18 B); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fault(read))
+0120c2a0  20  complete EH cleanup funclet chain; the string at [ebp+4] (0x00530670) and that object's +0x28 sub-object (`mov ecx,[ebp+4]; add ecx,0x28; jmp 0x00680730`); FuncInfo 0x014f98d0; compiler-generated (our 25 B vs 29 B); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fault(read))
+0120c330  30  complete EH cleanup funclet; `lea ecx,[ebp-0xd0]; jmp 0x00680930`, then the cdecl 0x00c2e4e0 called with the frame values at [ebp-0xd4] and [ebp-0xd8]; FuncInfo 0x014f99a8; compiler-generated (our 40 B vs 44 B); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fault(read))
+0120c360  23  complete EH cleanup funclet; `lea ecx,[ebp-0x6c]; jmp 0x006804a0`, then the cdecl 0x00c2e4e0 called with the frame values at [ebp-0x70] and [ebp-0x74]; FuncInfo 0x014f99dc; compiler-generated (our 31 B vs 35 B); flags /vc71 /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fault(read))

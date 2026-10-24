@@ -2,9 +2,10 @@
 // RenderWare DocMessage debug-output helpers.
 //
 // The hkMatrix6 float kernels (582/260/347/1384 B) are reconstructed from their
-// unrolled source form; the exception-cleanup fragments at 0x0120bcb0..0x0120c360
-// are compiler-generated EH funclets (no prologue; they read the enclosing
-// function's frame through EBP) and are recorded as partial in partial.txt.
+// unrolled source form; the exception-cleanup fragments at 0x0120bcb0..0x0120c382
+// are compiler-generated /EHsc funclet tables (no prologue; they read the enclosing
+// function's frame through EBP). Each is modelled below as the identical cleanup
+// sequence applied to the owning frame and recorded in nonmatching.txt.
 #include "types.h"
 
 extern "C" {
@@ -15,12 +16,6 @@ __declspec(dllimport) void __stdcall OutputDebugStringA(const char*);
 void FUN_01086030(void*);          // hkWorld::removeActionImmediately
 void* hkReferencedObject_addReference(void*);   // 0x01082590
 void  hkWorldObject_removeReference(void*);     // 0x0109ae60
-void FUN_011e090c();
-void FUN_00680930(void*);
-void FUN_00680730(void*);
-void FUN_0067e0f0();
-void FUN_00472540(void*);
-void FUN_00f47410(void*, const char*, int, int, int, int);
 void FUN_01081c30(float*, int, int);   // hkMatrix6 4x4 block multiply-accumulate
 
 #define HK_ARRAY_CAPACITY_MASK 0x3fffffff
@@ -529,21 +524,129 @@ void __cdecl f_0120bb70(unsigned int *param_1, unsigned int param_2, unsigned in
     }
 }
 
-// @ 0x0120bcb0
-void __cdecl FUN_0120bcb0() {}
+// ---------------------------------------------------------------------------
+// 0x0120bcb0..0x0120c382: the /EHsc cleanup table MSVC emits while compiling the
+// owning function, which lies outside this slice. Every VA here is a run of
+// `push 0 x4; push <tag>; push [ebp-N]; call operator_delete__` (0x00f47410) frees,
+// `mov/lea ecx,[ebp+N]; jmp <dtor>` thiscall destructor thunks and a trailing
+// `mov eax,<FuncInfo>; jmp __CxxFrameHandler3` (0x011e090c) record. No standalone
+// C++ spelling yields those bare thunks, so each VA is written as the identical
+// cleanup sequence applied to the owning frame; see nonmatching.txt.
+// ---------------------------------------------------------------------------
+extern "C" void __cdecl operator_delete__(void* p, const char* tag, int a, int b, int c, int d);   // 0x00f47410
+extern "C" int  __cdecl eh_cxx_frame_handler(void* frame, void* record, void* context, void* dispatcher);   // 0x011e090c
+extern "C" void __cdecl free_two_00c2e4e0(void* a, void* b);   // 0x00c2e4e0 (the image holds a bare `ret`)
 
-// @ 0x0120bd30
-void __cdecl FUN_0120bd30() {}
+extern "C" const char g_tag13f2140[];   // 0x013f2140
+extern "C" const char g_tag13f1fdc[];   // 0x013f1fdc
+extern "C" const char g_tag13f22f8[];   // 0x013f22f8
+extern "C" const char g_tag13f2338[];   // 0x013f2338
+extern "C" const char g_tag13f2378[];   // 0x013f2378
+extern "C" const char g_tag13f23e0[];   // 0x013f23e0
+extern "C" const char g_tag13f243c[];   // 0x013f243c
+extern "C" const char g_tag13f25f4[];   // 0x013f25f4
+extern "C" const char g_tag13f2648[];   // 0x013f2648
+extern "C" const char g_tag1401ab0[];   // 0x01401ab0
 
-// @ 0x0120be20
-void __cdecl FUN_0120be20() {}
+struct T_472540 {
+  void d();   // 0x472540
+};  // 0x00472540
+struct T_67e0f0 {
+  void d();   // 0x67e0f0
+};  // 0x0067e0f0
+struct T_530670 {
+  void d();   // 0x530670
+};  // 0x00530670  eastl::basic_string<char>::~basic_string
+struct T_680730 {
+  void d();   // 0x680730
+};  // 0x00680730
+struct T_680930 {
+  void d();   // 0x680930
+};  // 0x00680930
+struct T_6804a0 {
+  void d();   // 0x6804a0
+};  // 0x006804a0
 
-// @ 0x0120be90
-void __cdecl FUN_0120be90() {}
+typedef void* Frame;
 
-void f_0120bf00() {}   // @ 0x0120bf00  EH cleanup fragment
-void f_0120bfc0() {}   // @ 0x0120bfc0  EH cleanup fragment
-void f_0120c0f0() {}   // @ 0x0120c0f0  EH cleanup fragment
-void f_0120c2a0() {}   // @ 0x0120c2a0  EH cleanup fragment
-void f_0120c330() {}   // @ 0x0120c330  EH cleanup fragment
-void f_0120c360() {}   // @ 0x0120c360  EH cleanup fragment
+template <class T> static inline void Clean(Frame fp, int off)          // lea ecx,[ebp+N]; jmp dtor
+{ ((T*)((char*)fp + off))->d(); }
+template <class T> static inline void CleanPtr(Frame fp, int off)       // mov ecx,[ebp+N]; jmp dtor
+{ ((T*)*(void**)((char*)fp + off))->d(); }
+template <class T> static inline void CleanPtrAdd(Frame fp, int off, int add)   // mov ecx,[ebp+N]; add ecx,M
+{ ((T*)((char*)*(void**)((char*)fp + off) + add))->d(); }
+static inline void Del(Frame fp, int off, const char* tag)              // push 0 x4; push tag; push [ebp+N]; call
+{ operator_delete__(*(void**)((char*)fp + off), tag, 0, 0, 0, 0); }
+
+// @ 0x0120bcb0  (FuncInfo 0x014f9194)
+void Unwind_0120bcb0(Frame fp)
+{
+    Del(fp, -0x24, g_tag13f2140);
+    Clean<T_472540>(fp, -0x10);
+}
+
+// @ 0x0120bd30  (FuncInfo 0x014f923c)
+void Unwind_0120bd30(Frame fp)
+{
+    Del(fp, -0x14, g_tag13f243c);
+    Del(fp, -0x1c, g_tag13f23e0);
+    Del(fp, -0x24, g_tag13f2378);
+    Del(fp, -0x2c, g_tag13f2338);
+    Del(fp, -0x34, g_tag13f22f8);
+}
+
+// @ 0x0120be20  (FuncInfo 0x014f92f0)
+void Unwind_0120be20(Frame fp)
+{
+    Del(fp, -0x14, g_tag13f25f4);
+}
+
+// @ 0x0120be90  (FuncInfo 0x014f9384)
+void Unwind_0120be90(Frame fp)
+{
+    Del(fp, -0x20, g_tag13f2648);
+    Clean<T_472540>(fp, -0x18);
+}
+
+// @ 0x0120bf00  (FuncInfo 0x014f9410)
+void Unwind_0120bf00(Frame fp)
+{
+    Del(fp, -0x14, g_tag13f1fdc);
+}
+
+// @ 0x0120bfc0  (FuncInfo 0x014f9514 and 0x014f9540)
+void Unwind_0120bfc0(Frame fp)
+{
+    Clean<T_67e0f0>(fp, -0x14);
+    Del(fp, -0x10, g_tag1401ab0);
+    Del(fp, -0x10, g_tag1401ab0);
+    Del(fp, -0x10, g_tag1401ab0);
+    CleanPtr<T_530670>(fp, -0x10);
+}
+
+// @ 0x0120c0f0  (FuncInfo 0x014f9684)
+void Unwind_0120c0f0(Frame fp)
+{
+    CleanPtr<T_530670>(fp, 0x04);
+}
+
+// @ 0x0120c2a0  (FuncInfo 0x014f98d0)
+void Unwind_0120c2a0(Frame fp)
+{
+    CleanPtr<T_530670>(fp, 0x04);
+    CleanPtrAdd<T_680730>(fp, 0x04, 0x28);
+}
+
+// @ 0x0120c330  (FuncInfo 0x014f99a8)
+void Unwind_0120c330(Frame fp)
+{
+    Clean<T_680930>(fp, -0xd0);
+    free_two_00c2e4e0(*(void**)((char*)fp - 0xd4), *(void**)((char*)fp - 0xd8));
+}
+
+// @ 0x0120c360  (FuncInfo 0x014f99dc)
+void Unwind_0120c360(Frame fp)
+{
+    Clean<T_6804a0>(fp, -0x6c);
+    free_two_00c2e4e0(*(void**)((char*)fp - 0x70), *(void**)((char*)fp - 0x74));
+}
