@@ -533,7 +533,7 @@ void cSPUIAssetWebBrowser::FUN_0065b510() {
 // @ 0x0065b5f0
 void cSPUIAssetWebBrowser::FUN_0065b5f0() {
   void* obj = operator_new_ea(0x18, "Sporepedia", 0, 0, 0, 0);
-  cSPUILayout* pNew = obj ? (cSPUILayout*)LayoutCtor18() : 0;
+  cSPUILayout* pNew = obj ? (cSPUILayout*)((void*(__thiscall*)(void*))LayoutCtor18)(obj) : 0;
   cSPUILayout* pOld = mpLayout;
   if (pNew != pOld) {
     if (pNew)

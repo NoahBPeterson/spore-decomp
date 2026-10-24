@@ -446,7 +446,7 @@ __declspec(noinline) const char* CharTypeStringRSearch(const char* p1Begin, cons
 void cSPUIAssetWebBrowser::FUN_0065b5f0()
 {
   void* obj = operator_new_ea(0x18, "Sporepedia", 0, 0, 0, 0);
-  cSPUILayout_s0065_af90* pNew = obj ? (cSPUILayout_s0065_af90*)LayoutCtor18() : 0;
+  cSPUILayout_s0065_af90* pNew = obj ? (cSPUILayout_s0065_af90*)((void*(__thiscall*)(void*))LayoutCtor18)(obj) : 0;
   cSPUILayout_s0065_af90* pOld = mpLayout;
   if (pNew != pOld) {
     if (pNew)
