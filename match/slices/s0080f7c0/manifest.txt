@@ -14,3 +14,5 @@ slices/s0080f7c0/s0080f7c0.cpp  ?VectorDtor@cSPUILayoutObjectCollection@@QAEPAXE
 slices/s0080f7c0/s0080f7c0.cpp  ?AnyWorldHidden@cSPUILayoutManager@@QAE_NXZ  00810730  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s0080f7c0/s0080f7c0.cpp  ?MethodF9D0@cSPUILayeredObject@@QAE_NPAX0@Z  0080f9d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s0080f7c0/s0080f7c0.cpp  ?Shutdown@cSPUILayoutObjectCollectionV8@@QAEXXZ  008101a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?SetReloadCallback@cSPUILayout@@QAEXPAX0@Z  00810090  /O2 /MD /Gy /EHsc /TP /arch=SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?cEditorResource_dtor@@YIXPAX@Z  00810400  /O2 /MD /Gy /EHsc /TP /arch=SSE2

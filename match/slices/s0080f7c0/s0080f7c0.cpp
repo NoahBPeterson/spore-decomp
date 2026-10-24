@@ -32,7 +32,10 @@ extern void* __cdecl SPUIHelpers_VisitWindowTreeDepthFirst(void*, void*, void*);
 extern int   __cdecl FUN_0082e1d0(void*);         // 0x82e1d0
 extern bool  __cdecl FUN_00902fc0(void*);         // 0x902fc0
 extern void  __cdecl FUN_0093a610(void*, void*);  // 0x93a610
-extern void  __cdecl FUN_00903120(void*);         // 0x903120
+// EA::XML::TokenIOContext: its destructor is a plain __thiscall with no stack arguments.
+struct TokenIOContext {
+    void Destroy();   // 0x00903120
+};
 extern void  __cdecl operator_delete__(void*);    // 0xf47380
 extern void* __cdecl operator_new(u32, void*, int, int, const char*, int); // 0xf473a0
 typedef void* (__thiscall *VFTh1)(void*);
@@ -609,13 +612,15 @@ bool __thiscall cSPUILayout::IsVisible()
     return false;
 }
 
-// @ 0x00810090
+// @ 0x00810090  (installs the reload callback on the collection; reading the collection into a
+// local first is what makes cl keep it in eax from the first instruction to the ret, as retail does)
 void __thiscall cSPUILayout::SetReloadCallback(void* cb, void* ctx)
 {
-    if (mpCollection) {
-        *(void**)((u8*)mpCollection + 0x90) = this;
-        *(void**)((u8*)mpCollection + 0x94) = cb;
-        *(void**)((u8*)mpCollection + 0x98) = ctx;
+    cSPUILayoutObjectCollection* c = mpCollection;
+    if (c) {
+        *(void**)((u8*)c + 0x90) = this;
+        *(void**)((u8*)c + 0x94) = cb;
+        *(void**)((u8*)c + 0x98) = ctx;
     }
 }
 
@@ -738,12 +743,12 @@ void __thiscall cSPUILayoutManager::SetNodeVisibility(void* node, char delta)
 void __fastcall cEditorResource_dtor(void* thisp)
 {
     u32* s = (u32*)thisp;
-    s[0] = (u32)&vtbl_AddRef_014181e8;
-    void* p = (void*)s[6];
+    *(void* volatile*)s = &vtbl_AddRef_014181e8;  // volatile on both: the original stores the vptr
+    void* p = *(void* volatile*)((u8*)s + 0x18);  // before reloading +0x18, and the two do not swap
     if (p) { s[6] = 0; ((VF0v)VT(p)[2])(p); }
     void* q = (void*)s[8];
     s[7] = 0;
-    if (q) { FUN_00903120(q); operator_delete__(q); s[8] = 0; }
+    if (q) { ((TokenIOContext*)q)->Destroy(); operator_delete__(q); s[8] = 0; }
     p = (void*)s[6];
     if (p) ((VF0v)VT(p)[2])(p);
     s[0] = (u32)&vtbl_EditorResource;

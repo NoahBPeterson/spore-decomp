@@ -15,9 +15,9 @@
 0080f8e0  24  complete; begin-pointer reloaded through eax instead of a fresh ecx load
 0080fa00  5   complete; vbase adjustor uses add ecx,0xfffffdb0 (cl canonicalises to sub)
 00810020  20  complete; ctor register allocation (zero in eax, this in esi) differs
-00810090  39  complete; mpCollection temp/register schedule differs
+00810090  0   now byte-exact (36/36) -- see the manifest row. The failing input was a return-register mismatch: retail leaves the object collection in eax from the first instruction to the ret, and the source only reproduces that when the collection is read into a local first (`c = mpCollection; if (c) {...}`) instead of dereferencing mpCollection at each store; the signature stays void and the three stores keep retail's order (this, then cb, then ctx).  [equiv: PASS 400 valid, 100% cov]
 008100d0  7   complete; derived-vtable store scheduling / pop edi placement differ
 00810140  4   complete; vcall target loaded into eax instead of edx (2 sites)
 00810200  39  complete; vcall target register choice + loop reload differ
 00810310  90  complete; visibility compare/object re-load schedule differs; equiv PASS (250 valid, 100% cov)
-00810400  32  complete; dtor release/store ordering differs
+00810400  0   now byte-exact (91/91) -- see the manifest row. Two fixes: the callee at 0x00903120 is an EA::XML::TokenIOContext destructor (plain __thiscall, no stack arguments; it frees the bucket array at +0x2c), so it is called through a TokenIOContext stub member and ecx carries q instead of q landing on the stack; and the vptr store at +0 must stay ahead of the +0x18 reload, which only happens when both are volatile (otherwise cl sinks the reload above the store, 2 bytes differ).  [equiv: PASS 275 valid, 90.3% cov (28/31 insns); same with --src src/game/Spui/SPUILayout.cpp]
