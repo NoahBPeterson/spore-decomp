@@ -1,0 +1,6 @@
+00c00b00 911 not reconstructed in this pass (cCommunity helper); not byte-exact; size 0 vs 911; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c01060 350 not reconstructed in this pass (cCommunity helper); not byte-exact; size 0 vs 350; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c011c0 250 not reconstructed in this pass (cCommunity helper); not byte-exact; size 0 vs 250; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c01310 55 not reconstructed in this pass (SP::cCommunity::AddSpecialBubbles: loads the cLaneInfo vector at +0x70/+0x74, calls copy_Rec20(end,end,begin) at 0x00951bf0, then advances mpEnd by a signed-magic multiple of 20 bytes; the exact eastl range-insert/erase form could not be recovered, so no guess is committed); not byte-exact; size 0 vs 55; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c01350 361 not reconstructed in this pass (cCommunity helper); not byte-exact; size 0 vs 361; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c014c0 275 not reconstructed in this pass (cCommunity helper); not byte-exact; size 0 vs 275; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
