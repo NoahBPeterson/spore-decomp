@@ -1,0 +1,2 @@
+slices/s00e9e290/s00e9e290.cpp  ?Shutdown@cAmbLayer@@QAE_NXZ  00e9e290  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e9e290/s00e9e290.cpp  ?DestroyCubeMap@cAmbLayer@@QAEXXZ  00e9e350  /O2 /MD /Gy /TP /arch:SSE /fp:fast
