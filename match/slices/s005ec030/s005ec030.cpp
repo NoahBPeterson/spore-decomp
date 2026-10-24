@@ -191,7 +191,7 @@ struct cSPNameGenerator {
   void FUN_005ec130(StrVec* names, NameGenData* data);
   WStr* FUN_005ec370(WStr* out, NameGenData* data, StrSet* excluded, StrVec* subs, StrVec* fallback,
                      bool allowDup);
-  void Init();  // @ 0x005ec7c0
+  void Init();  // 0x005ec7c0 (definition below)
 };
 
 // @ 0x005EC130
