@@ -8,8 +8,7 @@ void* operator new[](size_t size, const char* pName, int flags, unsigned debugFl
                      const char* file, int line); // 0x00f473a0
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags,
                    const char* file, int line);
-void operator delete(void* p); // 0x00f47380
-void operator delete[](void* p);
+void operator delete(void* p);  // 0x00f47380
 
 namespace EA {
 namespace IO {
@@ -69,25 +68,37 @@ class cTelemetryItem { public:
   float* mDataCap;                     // +0x14
   const char* mDataName;               // +0x18
   uint32_t mDataFlags;                 // +0x1c
+  ~cTelemetryItem() {
+    if (mDataBegin && *(uint32_t*)((char*)mDataBegin - 4)) ::operator delete(mDataBegin);
+  }
+};
+struct TItemListNode;
+// The bucket head is the node itself: list links live at node +0x0/+0x4 and
+// the value at node +0x8 (see TItemList::AllocNode).
+struct TItemList {
+  TItemListNode* mpNext;  // +0x0
+  TItemListNode* mpPrev;  // +0x4
+  TItemListNode* AllocNode(const cTelemetryItem& item);  // 0x007EB720
 };
 struct TItemListNode {
   TItemListNode* mpNext;  // +0x0
   TItemListNode* mpPrev;  // +0x4
   cTelemetryItem mValue;  // +0x8
 };
-struct TItemList {
-  TItemListNode* mpNext;  // +0x0
-  TItemListNode* mpPrev;  // +0x4
-  uint32_t mnSize;        // +0x8
-};
-struct TItemMapNode {
-  uint32_t mKey;         // +0x0
-  TItemList mList;       // +0x4
-  TItemMapNode* mpNext;  // +0x10
+// eastl::vector<float>
+struct VecFloat {
+  float* mpBegin;     // +0x0
+  float* mpEnd;       // +0x4
+  float* mpCapacity;  // +0x8
+  // eastl::vector<float>::DoInsertValues, 0x007EB430. VecFloat is a different type than the
+  // SP::IntVector that the definition in the s007eb430 TU belongs to, so the original call names
+  // the mangled symbol directly instead of resolving through the __thiscall helper it normally uses
+  // for thiscall calls to mangled definitions (see 0x007EC220's call to 0x007EBFD0).
+  void Insert(float* pos, uint32_t n, const float& value);  // 0x007EB430
 };
 struct TItemMap {
   uint32_t mHash;               // +0x0
-  TItemMapNode** mpBucketArray; // +0x4
+  void** mpBucketArray;        // +0x4
   uint32_t mnBucketCount;       // +0x8
   uint32_t mnElementCount;      // +0xc
   float mfMaxLoadFactor;        // +0x10
@@ -97,93 +108,75 @@ struct TItemMap {
 };
 // The telemetry object whose map is being read/written.
 struct cTelemetryReader {
-  void* vtbl;                       // +0x0
-  int32_t mRefCount;                // +0x4
-  void* vtbl2;                      // +0x8
-  TItemMap mStats;                  // +0xc
-  int64_t mSession;                 // +0x30
-  bool mbFileDump;                  // +0x38
-  void* mpStream;                   // +0x3c
+  void* vtbl;                 // +0x0
+  TItemMap mStats;            // +0x4
+  uint32_t mPad24;            // +0x24
+  int64_t mSession;           // +0x28
+  char Read(void* iface);     // 0x007EC220
 };
 }  // namespace SP
 
-// Helpers defined in slice s007eb430's translation unit (masked relocations).
-SP::TItemMapNode* ItemMapIndex(SP::TItemMap* map, const uint32_t& key);  // 0x007EBFD0
-SP::TItemListNode* ItemListAdd(SP::TItemList* list, SP::cTelemetryItem* item);  // 0x007EB720
-void IntVecInsert(int* pos, uint32_t n, int* value);  // 0x007EB430
+// Defined in slice s007eb430's translation unit (masked relocations).
+SP::TItemList* ItemMapIndex(SP::TItemMap* map, const uint32_t& key);  // 0x007EBFD0
 
 // @ 0x007EC220
-// Telemetry deserialize: reads a version, then 7 buckets of telemetry items.
-extern "C" int TelemetryRead(SP::cTelemetryReader* self, void* iface) {
+// Telemetry deserialize: reads a version, then buckets 7..version of telemetry items.
+char SP::cTelemetryReader::Read(void* iface) {
+  uint32_t sourceId;
+  EA::IO::ReadInt32(TelemetryReader(iface), &sourceId, 1, 0);
   uint32_t version = 0xc;
-  EA::IO::ReadInt32(TelemetryReader(iface), &version, 1, 0);
-  uint32_t v = TelemetryVersion(iface);
-  if (v < 0x1c0012)
+  if (TelemetryVersion(iface) < 0x1c0012)
     version = 9;
-  else {
-    v = TelemetryVersion(iface);
-    if (v < 0x1c0013) version = 0xf;
-  }
-  uint32_t key = 7;
-  if (version > 6) {
-    do {
-      SP::TItemMapNode* pNode = ItemMapIndex(&self->mStats, key);
-      void* reader = TelemetryReader(iface);
-      uint32_t count = 0;
-      EA::IO::ReadInt32(reader, &count, 1, 0);
-      uint32_t i = 0;
-      if (count != 0) {
-        do {
-          SP::cTelemetryItem item;
-          item.mSystemTime.Set(2);
-          item.mDataBegin = 0;
-          item.mDataEnd = 0;
-          item.mDataCap = 0;
-          SP::TItemListNode* pNew = ItemListAdd((SP::TItemList*)&pNode->mList, &item);
-          pNew->mpNext = pNode->mList.mpNext;
-          pNew->mpPrev = (SP::TItemListNode*)&pNode->mList;
-          pNode->mList.mpNext->mpPrev = pNew;
-          pNode->mList.mpNext = pNew;
-          ++pNode->mList.mnSize;
-          if (item.mDataBegin && *(uint32_t*)((char*)item.mDataBegin - 4))
-            operator delete(item.mDataBegin); // 0x00f47380
-          SP::TItemListNode* pItem = pNode->mList.mpNext;
-          EA::IO::ReadInt32(TelemetryReader(iface), (char*)pItem + 0x10, 1, 0);
-          int64_t time = 0;
-          EA::IO::ReadTriple(TelemetryReader(iface), &time, 1, 0);
-          uint32_t nData = 0;
-          EA::IO::ReadInt32(TelemetryReader(iface), &nData, 1, 0);
-          *(int64_t*)((char*)pItem + 8) = time;
-          float* begin = *(float**)((char*)pItem + 0x14);
-          float* end = *(float**)((char*)pItem + 0x18);
-          uint32_t have = (uint32_t)(end - begin);
-          if (have < nData) {
-            int zero = 0;
-            IntVecInsert((int*)end, nData - have, &zero);
-          } else {
-            *(float**)((char*)pItem + 0x18) = begin + nData;
-          }
-          WriteBytes(iface, begin, (int)(nData * 4));
-          v = TelemetryVersion(iface);
-          if (v < 0x230002 && key >= 7 && key <= 0xb) {
-            float* e2 = *(float**)((char*)pItem + 0x18);
-            uint32_t want = nData + 1;
-            uint32_t have2 = (uint32_t)(e2 - *(float**)((char*)pItem + 0x14));
-            if (have2 < want) {
-              int zero = 0;
-              IntVecInsert((int*)e2, want - have2, &zero);
-            }
-            *(float*)(*(float**)((char*)pItem + 0x14) + 0xb) = 10.0f;
-          }
-          ++i;
-        } while (i < count);
+  else if (TelemetryVersion(iface) < 0x1c0013)
+    version = 0xf;
+  for (uint32_t key = 7; key <= version; ++key) {
+    SP::TItemList* pList = (SP::TItemList*)ItemMapIndex(&mStats, key);
+    uint32_t count;
+    EA::IO::ReadInt32(TelemetryReader(iface), &count, 1, 0);
+    for (uint32_t i = 0; i < count; ++i) {
+      SP::TItemListNode* pNew;
+      {
+        SP::cTelemetryItem item;
+        item.mSystemTime.Set(2);
+        item.mDataBegin = 0;
+        item.mDataEnd = 0;
+        item.mDataCap = 0;
+        pNew = pList->AllocNode(item);
+        pNew->mpNext = (SP::TItemListNode*)pList;
+        pNew->mpPrev = pList->mpPrev;
+        pNew->mpPrev->mpNext = pNew;
+        pList->mpPrev = pNew;
       }
-      ++key;
-    } while (key <= version);
+      EA::IO::ReadInt32(TelemetryReader(iface), &pNew->mValue.mType, 1, 0);
+      int64_t time;
+      EA::IO::ReadTriple(TelemetryReader(iface), &time, 1, 0);
+      uint32_t nData;
+      EA::IO::ReadInt32(TelemetryReader(iface), &nData, 1, 0);
+      pNew->mValue.mSystemTime.mnSeconds = time;
+      SP::VecFloat* vec = (SP::VecFloat*)&pNew->mValue.mDataBegin;
+      uint32_t have = (uint32_t)(vec->mpEnd - vec->mpBegin);
+      if (have < nData) {
+        float zero = 0.0f;
+        vec->Insert(vec->mpEnd, nData - have, zero);
+      } else {
+        vec->mpEnd = vec->mpBegin + nData;
+      }
+      ((void(__thiscall*)(void*, void*, int))VSLOT(iface, 0x34))(iface, vec->mpBegin,
+                                                               (int)(nData * 4));
+      if (TelemetryVersion(iface) <= 0x230001 && key >= 7 && key <= 0xb) {
+        uint32_t want = nData + 1;
+        uint32_t have2 = (uint32_t)(vec->mpEnd - vec->mpBegin);
+        if (have2 < want) {
+          float zero = 0.0f;
+          vec->Insert(vec->mpEnd, want - have2, zero);
+        } else {
+          vec->mpEnd = vec->mpBegin + want;
+        }
+        vec->mpBegin[11] = 10.0f;
+      }
+    }
   }
-  int64_t tail = 0;
-  EA::IO::ReadTriple(TelemetryReader(iface), &tail, 1, 0);
-  *(int64_t*)((char*)self + 0x28) = tail;
+  EA::IO::ReadTriple(TelemetryReader(iface), (char*)this + 0x28, 1, 0);
   return 1;
 }
 
@@ -230,6 +223,7 @@ struct SwarmEffect {
   uint32_t f2c, f30, f34, f38, f3c, f40, f44, f48, f4c, f50, f54, f58, f5c,
       f60, f64, f68, f6c, f70, f74, f78, f7c;
   SwarmEffect();
+  static void* operator new(size_t, void* p) { return p; }
 };
 extern int g_swarm_1667bac, g_swarm_1667bae, g_swarm_1639970, g_swarm_1639974;
 
@@ -329,10 +323,61 @@ void Vec3VecFull::Vec3Insert(Vec3* position, uint32_t n, Vec3* value) {
   }
 }
 
-// @ 0x007EC9E0  cGroupTerrainScriptCommand::Execute
-extern "C" void GroupTerrainScriptExecute(int* self, EA::ArgScript::cArguments* args) {
-  EA::ArgScript::MainArguments(args, 0);
-  (void)self;
+// (declaration of the GroupModelCommand command type below)
+struct GroupModelCommand {
+  char pad0[0x10];
+  void Execute(void* args);
+};
+struct cError {
+  cError(const char* msg);  // 0x0052DF30
+};
+typedef void** (__thiscall* ArgsFn)(void*, void*, int, int);
+typedef void** (__thiscall* Void2Fn)(void*, const char*, int);
+void WStr_Format(void* dst, const void* fmt, int arg);  // 0x0041E050
+// Refcount guard: releases the Swarm effect (running its destructor at zero) when
+// the scope is left, including via the cError throw.
+struct EffGuard {
+  SwarmEffect* p;
+  ~EffGuard() {
+    if (p && --p->f04 == 0) {
+      p->f04 = 1;
+      ((void(__thiscall*)(void*, int))VSLOT(p, 0))(p, 1);
+    }
+  }
+};
+// @ 0x007EC9E0
+// thiscall member-call handles for the parser / effect-parser entry points.
+struct ArgsOps {
+  void** MainArguments(void* out, int minArgs, int maxArgs);  // 0x838020
+  void** OptionArguments(const char* name, int n);            // 0x838330
+  char HasFlag(const char* name);                            // 0x8380b0
+};
+struct EffParserOps {
+  void AddDescription(void* args, void* argv, int a, int b);      // 0xa6fc30
+  void AddAnonDescription(void* args, int a, void* eff, int b);   // 0xa6fd40
+};
+void GroupModelCommand::Execute(void* args) {
+  void* subArgs;
+  GroupModelCommand* cmd = this;
+  ArgsOps* A = (ArgsOps*)args;
+  void** p = A->MainArguments(&subArgs, 0, 0x7fffffff);
+  if (subArgs == 0) {
+    SwarmEffect* eff = (SwarmEffect*)operator new(0x80, (const char*)0x13f1fdc, 0, 0, 0, 0);
+    if (eff) new ((void*)eff) SwarmEffect();  // 0x007EC5E0
+    if (eff) ++eff->f04;
+    {
+      EffGuard guard = {eff};
+      void** opt = A->OptionArguments((const char*)0x1408a34, 1);
+      if (!opt) throw cError("Need at least -string for anonymous text effect");
+      WStr_Format((char*)eff + 0xc, (const void*)0x13f3da0, (int)*opt);
+      void** q = A->OptionArguments((const char*)0x13f293c, 1);
+      if (q) eff->f28 = ArgToFloat(*(void**)((char*)this + 4), *q);
+      if (A->HasFlag((const char*)0x14143bc)) eff->f08 |= 1;
+      ((EffParserOps*)*(void**)((char*)this + 0xc))->AddAnonDescription(args, 0x2f, eff, 0);
+    }
+    return;
+  }
+  ((EffParserOps*)*(void**)((char*)cmd + 0xc))->AddDescription(args, *p, 0x2f, 0);
 }
 
 // @ 0x007ECB50  cScreenFilterTextureCommand::Execute
@@ -379,23 +424,73 @@ void ScaleVec3Vec(float s, Vec3Vec* v) {
   }
 }
 
-// @ 0x007ECCD0  register the ArgScript text commands (Font)
-struct CommandBase {
-  void* vtable;  // +0x0 (cCommandBase)
+// @ 0x007ECCD0  EA::Text::Font::SetupCommands: register the ArgScript text commands
+struct cCommandBase {  // EA::ArgScript::cCommandBase
+  void* vtable;        // +0x0
+  void* mpField4;      // +0x4
+  void* mpField8;      // +0x8
+  void* mpFieldC;      // +0xc
 };
-void CommandBaseCtor(CommandBase*);  // EA::ArgScript::cCommandBase::cCommandBase
+extern const char* g_cmdname_153fd40;  // "string"
+extern const char* g_cmdname_153fd44;  // "font"
+extern const char* g_cmdname_153fd48;  // "style"
+extern const char* g_cmdname_153fd4c;  // "life"
+extern const char* g_cmdname_153fd50;  // "color"
+extern const char* g_cmdname_153fd54;  // "colour"
+extern const char* g_cmdname_153fd58;  // "color255"
+extern const char* g_cmdname_153fd5c;  // "colour255"
+extern const char* g_cmdname_153fd60;  // "alpha"
+extern const char* g_cmdname_153fd64;  // "alpha255"
+extern const char* g_cmdname_153fd68;  // "size"
+extern char g_vtbl_cmd_string;    // 0x014143EC
+extern char g_vtbl_cmd_font;      // 0x01414404
+extern char g_vtbl_cmd_life;      // 0x0141441C
+extern char g_vtbl_cmd_color;     // 0x01414434
+extern char g_vtbl_cmd_alpha;     // 0x0141444C
+extern char g_vtbl_cmd_size;      // 0x01414464
+
+// Returns the cCommandBase subobject of the freshly allocated command (esi in the original).
+cCommandBase* CommandBaseCtor(void* cmd);  // 0x0083C800
+typedef void(__thiscall* RegFn)(void*, void*, cCommandBase*);
+typedef void(__thiscall* CmdRegFn)(void*, const char*, void*);
+
 struct Font {
-  void* vtable;  // +0x0
-  char pad[0x8];
+  char pad0[0x30];
+  void* mState;       // +0x30
+  char pad34[0x4];    // +0x34
+  char mUserData[0xc];// +0x38
+  void SetupCommands(void* parser, char* state);
 };
-extern "C" void FontSetupCommands(Font* font, int arg, int param3) {
-  int v = (param3 == 0) ? 0 : param3 - 0xc;
-  *(int*)((char*)font + 0x4) = v;
-  extern void FUN_0083c780(int, int);
-  FUN_0083c780(arg, param3);
-  *(int*)((char*)font + 8) = (int)((char*)font + 0x8);
-  (void)v;
+
+#define REGISTER_TEXT_CMD(type_, vtbl_, name_)                        \
+  {                                                                   \
+    cCommandBase* c = (cCommandBase*)::operator new(0x10, type_, 0, 0, 0, 0); \
+    if (c) {                                                          \
+      c = CommandBaseCtor(c);                                         \
+      c->vtable = (void*)&vtbl_;                                      \
+    }                                                                 \
+    ((CmdRegFn)VSLOT(self, 0x18))(self, name_, c);                    \
+  }
+
+void Font::SetupCommands(void* parser, char* state) {
+  cCommandBase* self = (cCommandBase*)this;
+  ((Font*)self)->mState = state ? state - 0xc : 0;
+  ((RegFn)0x83c780)(self, parser, (cCommandBase*)state);  // cCommandBase::Register
+  ((void(__thiscall*)(void*, char*))0xfd9450)(self, ((Font*)self)->mUserData);
+  (void)parser;
+  REGISTER_TEXT_CMD("ArgScript/TextString", g_vtbl_cmd_string, g_cmdname_153fd40);
+  REGISTER_TEXT_CMD("ArgScript/TextFont", g_vtbl_cmd_font, g_cmdname_153fd44);
+  REGISTER_TEXT_CMD("ArgScript/TextStyle", g_vtbl_cmd_font, g_cmdname_153fd48);
+  REGISTER_TEXT_CMD("ArgScript/TextLife", g_vtbl_cmd_life, g_cmdname_153fd4c);
+  REGISTER_TEXT_CMD("ArgScript/TextColor", g_vtbl_cmd_color, g_cmdname_153fd50);
+  REGISTER_TEXT_CMD("ArgScript/TextColor255", g_vtbl_cmd_color, g_cmdname_153fd58);
+  REGISTER_TEXT_CMD("ArgScript/TextColour", g_vtbl_cmd_color, g_cmdname_153fd54);
+  REGISTER_TEXT_CMD("ArgScript/TextColour255", g_vtbl_cmd_color, g_cmdname_153fd5c);
+  REGISTER_TEXT_CMD("ArgScript/TextAlpha", g_vtbl_cmd_alpha, g_cmdname_153fd60);
+  REGISTER_TEXT_CMD("ArgScript/TextAlpha255", g_vtbl_cmd_alpha, g_cmdname_153fd64);
+  REGISTER_TEXT_CMD("ArgScript/TextSize", g_vtbl_cmd_size, g_cmdname_153fd68);
 }
+#undef REGISTER_TEXT_CMD
 
 // @ 0x007ED090  EA::Swarm::cSphereSurface::ParseExtraOptions
 struct SphereSurface {
