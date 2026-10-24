@@ -272,7 +272,7 @@ public:
     virtual bool Write(const void* pData, size_type nSize);
 
     bool Open();                                                         // 0x00615450
-    void GetStatus();
+    void GetStatus();                     // 0x00614ab0
     void StartPollinatorResponse();   // 0x00614930
     void EndPollinatorResponse();     // 0x00614940
     void Noop();                      // 0x00c2e4e0
@@ -436,19 +436,19 @@ void cServerResponse::SetupDict()
     HandlerPair p;
     gStartHandlers.clear();
     gStartHandlers.reserve(2);
-    SetHandler(p, L"AssetIdList", &cServerResponse::Noop);
+    SetHandler(p, (const wchar_t*)0x013fc0ec, &cServerResponse::Noop);             // L"AssetIdList"
     gStartHandlers.insert(p);
-    SetHandler(p, L"PollinatorResponse", &cServerResponse::StartPollinatorResponse);
+    SetHandler(p, (const wchar_t*)0x013fc114, &cServerResponse::StartPollinatorResponse);   // L"PollinatorResponse"
     gStartHandlers.insert(p);
     gEndHandlers.clear();
     gEndHandlers.reserve(4);
-    SetHandler(p, L"Id", &cServerResponse::IDListElement);
+    SetHandler(p, (const wchar_t*)0x013fc0e4, &cServerResponse::IDListElement);    // L"Id"
     gEndHandlers.insert(p);
-    SetHandler(p, L"AssetIdList", &cServerResponse::Noop);
+    SetHandler(p, (const wchar_t*)0x013fc0ec, &cServerResponse::Noop);             // L"AssetIdList"
     gEndHandlers.insert(p);
-    SetHandler(p, L"PollinatorResponse", &cServerResponse::EndPollinatorResponse);
+    SetHandler(p, (const wchar_t*)0x013fc114, &cServerResponse::EndPollinatorResponse);   // L"PollinatorResponse"
     gEndHandlers.insert(p);
-    SetHandler(p, L"Status", &cServerResponse::GetStatus);
+    SetHandler(p, (const wchar_t*)0x013fc104, &cServerResponse::GetStatus);        // L"Status"
     gEndHandlers.insert(p);
     gXMLMemorySuite.malloc_fcn = (void* (*)(size_t))0x6abeb0;
     gXMLMemorySuite.realloc_fcn = (void* (*)(void*, size_t))0x900b10;

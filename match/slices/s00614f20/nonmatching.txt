@@ -1,6 +1,6 @@
 00614f20  4    StrMap::DoInsertValue (rbtree insert-unique): complete; only the order of two spill reloads after the loop differs
 00615330  23   cServerResponse::EndElementHandler: complete; cl keeps one shared epilogue instead of the original tail jump
-006155f0  160  cServerResponse::SetupDict: complete; handler pair construction/store order and clear() load order differ
+006155f0  160  cServerResponse::SetupDict: complete; equivalent (equiv PASS 997/997 valid, 100% coverage) but not byte-identical (177 bytes, 394 vs 410): cl keeps the map/capacity loads in ebx/esi instead of eax/esi and uses a different insertion setup order. The FAIL cause was the handler keys: as L"..." relocations they land at the test object's literal pool, and with a misaligned vector buffer the retail's absolute key pointers straddle a compared dword (low16<<16), defeating the const-pointer tolerance; spelling the keys as the retail image addresses (0x13fc0e4/0x13fc0ec/0x13fc104/0x13fc114) makes the stores the same immediates and the pair values compare exactly.
 00615d30  15   cAssetUploadTransaction ctor: complete; parameter load scheduling differs
 00615db0  21   cModelUploadTransaction::OnFailure: complete; esi/edi register assignment swapped
 00615e50  15   cModelUploadTransaction ctor: complete; parameter load scheduling differs
