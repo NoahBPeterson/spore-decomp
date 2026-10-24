@@ -47,7 +47,8 @@ struct Matrix3 { float m[9]; };
 
 struct IWindow {
     virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
-    virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
+    virtual IWindow* Get10();                                        // 0x10
+    virtual void s14(); virtual void s18(); virtual void s1c();
     virtual void s20(); virtual void s24(); virtual void s28(); virtual void s2c();
     virtual void s30(); virtual void s34(); virtual void s38(); virtual void s3c();
     virtual void s40(); virtual void s44(); virtual void s48(); virtual void s4c();
@@ -55,6 +56,18 @@ struct IWindow {
     virtual void s60(); virtual void s64(); virtual void s68(); virtual void s6c();
     virtual void s70(); virtual void s74(); virtual void s78();
     virtual void SetVisible(int a, int b);                           // 0x7c
+    virtual void s80(); virtual void s84(); virtual void s88(); virtual void s8c();
+    virtual void s90(); virtual void s94(); virtual void s98(); virtual void s9c();
+    virtual void sA0(); virtual void sA4(); virtual void sA8(); virtual void sAC();
+    virtual void sB0(); virtual void sB4(); virtual void sB8(); virtual void sBC();
+    virtual void sC0(); virtual void sC4(); virtual void sC8(); virtual void sCC();
+    virtual void sD0(); virtual void sD4(); virtual void sD8();
+    virtual void FDC(void* p);                                       // 0xdc
+    virtual void sE0(); virtual void sE4(); virtual void sE8(); virtual void sEC();
+    virtual IWindow* F0(uint id, int flag);                          // 0xf0
+    virtual void sF4(); virtual void sF8(); virtual void sFC();
+    virtual void s100(); virtual void s104();
+    virtual void F108(void* p);                                      // 0x108
 };
 struct GlobalUI {
     IWindow* FindWindowByID(uint id);    // 0x00e012b0 (ret 4)
@@ -62,6 +75,7 @@ struct GlobalUI {
 
 struct cString {
     char d[0x14]; const wchar_t* GetText(int flags);    // 0x006b55c0 (ret 4)
+    void Load(uint a, const wchar_t* b, int c);         // 0x006b54b0 (ret 0xc)
 };
 
 struct WString {                         // eastl::basic_string<wchar_t> (begin, end, capacity)
@@ -190,6 +204,9 @@ struct UISpace {
 
 // Static helper receiving the key pointer in EAX (UFO key -> window image), 0x01066720.
 struct Layout {
+    virtual void v00();
+    virtual void v04();
+    virtual void Release();                        // +0x08
     IWindow* FindWindowByID(uint id, int flag);    // 0x008105b0 (ret 8)
 };
 struct LayoutHolder {
@@ -449,4 +466,241 @@ __declspec(noinline) bool UISpace::F1065e20()
     int s = mState618;
     if (s == 1 || s == 2 || s == 5 || s == 7) return true;
     return false;
+}
+
+// ---------------------------------------------------------------------------
+// cSPUISpaceTrading methods (offsets are relative to the trading object's `this`).
+
+struct RefObj {                                       // released through slot +0x04
+    virtual void v00();
+    virtual void Release();
+};
+
+struct CountedObj { char pad0[0x10]; int mCount; };    // +0x10
+
+struct TradingGlobal {                                // *(void**)0x0167eb20
+    void* F1039ab0(int id);                           // 0x01039ab0 (ret 4)
+    void* F1039ad0(int id);                           // 0x01039ad0 (ret 4)
+    int   F1039b70(void* item);                       // 0x01039b70 (ret 4)
+    CountedObj* F1039c00(void* item);                 // 0x01039c00 (ret 4)
+    int   F103b950(int a, int flag, void* item, int b); // 0x0103b950 (ret 0x10)
+};
+
+extern "C" TradingGlobal* __cdecl FUN_00b3d3d0();     // 0x00b3d3d0
+extern "C" char __cdecl FUN_008076f0(void* p);        // 0x008076f0
+extern "C" void* __cdecl FUN_010666a0();              // 0x010666a0
+
+struct Sender { char pad0[0x10]; int mCount; };        // +0x10
+
+struct UIRoot61C {
+    void F0E31030(uint a, uint b, int c, uint d);     // 0x00e31030 (ret 0x10)
+};
+struct SpaceRoot { char pad0[0x61c]; UIRoot61C* m61c; };
+
+struct cTrading {
+    char pad0[0x10];
+    IWindow* m10;            // +0x10
+    void*    m14;            // +0x14
+    void*    m18;            // +0x18
+    IWindow* m1c;            // +0x1c
+    void*    m20;            // +0x20
+    void*    m24;            // +0x24
+    char pad1[0xb4 - 0x28];
+    cString  mStrB4;         // +0xb4
+    cString  mStrC8;         // +0xc8
+    cString  mStrDC;         // +0xdc
+    cString  mStrF0;         // +0xf0
+    Layout*  mLayout;        // +0x104
+    char pad2[0x11c - 0x108];
+    char mFlag11C;           // +0x11c
+    char pad3[0x120 - 0x11d];
+    int  mId120;             // +0x120
+    unsigned char mFlag124;  // +0x124
+
+    int  F1075450();
+    void F1075490();
+    void F1075510();
+    void F1075570();
+    void SetMidPanel();
+    void RemoveExistingItem();
+    void F1075760();
+    void F1075810(int flag, void* item);
+    void F1075990();
+};
+
+// @ 0x01075450
+int cTrading::F1075450()
+{
+    int id = mId120;
+    if (id == -1)
+        return 0;
+    if (mFlag124)
+        return (int)FUN_00b3d3d0()->F1039ab0(id);
+    return (int)FUN_00b3d3d0()->F1039ad0(id);
+}
+
+// @ 0x01075490
+void cTrading::F1075490()
+{
+    mFlag11C = 0;
+    mStrB4.Load(0x2db6dad3, (const wchar_t*)0x679ed24, 0);
+    mStrC8.Load(0x2db6dad3, (const wchar_t*)0x679eac6, 0);
+    mStrDC.Load(0x2db6dad3, (const wchar_t*)0x679eac5, 0);
+    mStrF0.Load(0xba5c1bf, (const wchar_t*)0xa0bb7099, 0);
+}
+
+// @ 0x01075510
+void cTrading::F1075510()
+{
+    if (m14)
+    {
+        if (m10)
+            m10->FDC(m14);
+        FUN_008076f0(m14);
+        if (m14)
+        {
+            void* p = m14;
+            m14 = 0;
+            ((RefObj*)p)->Release();
+        }
+        if (m18)
+        {
+            void* p = m18;
+            m18 = 0;
+            ((RefObj*)p)->Release();
+        }
+    }
+}
+
+// @ 0x01075570
+void cTrading::F1075570()
+{
+    if (m20)
+    {
+        if (m1c)
+            m1c->FDC(m20);
+        FUN_008076f0(m20);
+        if (m20)
+        {
+            void* p = m20;
+            m20 = 0;
+            ((RefObj*)p)->Release();
+        }
+        if (m24)
+        {
+            void* p = m24;
+            m24 = 0;
+            ((RefObj*)p)->Release();
+        }
+    }
+}
+
+// @ 0x010755d0
+void cTrading::SetMidPanel()
+{
+    mLayout->FindWindowByID(0x4c19a88, 1)->SetVisible(1, 0);
+    mLayout->FindWindowByID(0x4d149a8, 1)->SetVisible(1, 0);
+    mLayout->FindWindowByID(0x4c1b588, 1)->SetVisible(1, 0);
+    mLayout->FindWindowByID(0x4c1510e, 1)->SetVisible(1, 0);
+    mLayout->FindWindowByID(0x4c1510a, 1)->SetVisible(2, 0);
+    mLayout->FindWindowByID(0x4c1510c, 1)->SetVisible(2, 0);
+}
+
+// @ 0x01075690
+void cTrading::RemoveExistingItem()
+{
+    if (mId120 == -1)
+        return;
+    Layout* lay = mLayout;
+    IWindow* w;
+    if (mFlag124)
+        w = lay->FindWindowByID(mId120 + 0x10000, 1);
+    else
+        w = lay->FindWindowByID(mId120 + 0x20000, 1);
+    if (w)
+    {
+        IWindow* o = w->Get10();
+        IWindow* w2 = o->F0(0x4c6f028, 1);
+        if (w2)
+            w2->SetVisible(1, 0);
+    }
+    if (mId120 != -1)
+    {
+        CountedObj* it = (CountedObj*)(mFlag124 ? FUN_00b3d3d0()->F1039ab0(mId120)
+                                                : FUN_00b3d3d0()->F1039ad0(mId120));
+        if (it)
+        {
+            while (it->mCount)
+                FUN_00b3d3d0()->F103b950(0, mFlag124, it, 1);
+        }
+    }
+    mId120 = -1;
+}
+
+// @ 0x01075760
+void cTrading::F1075760()
+{
+    if (m1c)
+    {
+        void* p = m1c;
+        m1c = 0;
+        ((RefObj*)p)->Release();
+    }
+    if (m10)
+    {
+        void* p = m10;
+        m10 = 0;
+        ((RefObj*)p)->Release();
+    }
+    IWindow* w = mLayout->FindWindowByID(0x5da83b8, 1);
+    if (w)
+    {
+        w->F108(this);
+        w->SetVisible(1, 0);
+        IWindow* w2 = mLayout->FindWindowByID(0x5e62a48, 1);
+        w2->F108(this);
+        w2->SetVisible(1, 0);
+    }
+    if (mLayout)
+    {
+        Layout* l = mLayout;
+        mLayout = 0;
+        l->Release();
+    }
+}
+
+// @ 0x01075810
+void cTrading::F1075810(int flag, void* item)
+{
+    int n = (flag & 0xff) ? FUN_00b3d3d0()->F1039c00(item)->mCount
+                          : FUN_00b3d3d0()->F1039b70(item);
+    if (item && ((Sender*)item)->mCount < n &&
+        FUN_00b3d3d0()->F103b950(1, flag, item, 0) == 0)
+    {
+        mLayout->FindWindowByID(0x4c1510f, 1)->SetVisible(2, 1);
+        mLayout->FindWindowByID(0x5db90d0, 1)->SetVisible(2, 1);
+    }
+    else
+    {
+        mLayout->FindWindowByID(0x4c1510f, 1)->SetVisible(2, 0);
+        mLayout->FindWindowByID(0x5db90d0, 1)->SetVisible(2, 0);
+    }
+    if (item && ((Sender*)item)->mCount != 0 &&
+        FUN_00b3d3d0()->F103b950(0, flag, item, 0) == 0)
+    {
+        mLayout->FindWindowByID(0x4c1510d, 1)->SetVisible(2, 1);
+        mLayout->FindWindowByID(0x5db90d1, 1)->SetVisible(2, 1);
+    }
+    else
+    {
+        mLayout->FindWindowByID(0x4c1510d, 1)->SetVisible(2, 0);
+        mLayout->FindWindowByID(0x5db90d1, 1)->SetVisible(2, 0);
+    }
+}
+
+// @ 0x01075990
+void cTrading::F1075990()
+{
+    SpaceRoot* r = (SpaceRoot*)FUN_010666a0();
+    r->m61c->F0E31030(0x10000, 0x144dbf9c, 1, 0x697075e);
 }
