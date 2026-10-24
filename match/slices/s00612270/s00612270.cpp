@@ -437,7 +437,7 @@ bool FloodHandler::HandleMessage(uint32_t id, void* pMessage) {
         }
         FloodHandler* const pCheat = ((uint32_t)this - 0x10) ? this : 0;
         cMessageServer* const pServer = GetMessageServer();
-        pServer->SetHandlerPriority(pCheat, 0x269c832, -10000);
+        pServer->SetHandlerPriority(pCheat, 0x269c832, -9999);
         pPollinator->ProcessTransactionTick();
     }
     return true;
@@ -574,8 +574,8 @@ bool cPollinatorLookup::Lookup(uint64_t key, IRefObj** ppOut, bool bTouch) {
     } else if (!bTouch) {
         goto store;
     }
-    if (GetAuthManager()->IsLoggedIn()) return true;
-    if (!*((char*)SP::GetPollinator() + 0xf1)) return true;
+    if (GetAuthManager()->IsLoggedIn()) return false;
+    if (!*((char*)SP::GetPollinator() + 0xf1)) return false;
 store:
     if (ppOut) {
         IRefObj* pObj = pEnd->pObject;

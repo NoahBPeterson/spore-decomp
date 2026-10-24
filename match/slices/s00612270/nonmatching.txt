@@ -1,8 +1,8 @@
-00612980  52  vptr/this-cast scheduling (pCheat computed after MessageServer call)
+00612980  52  complete; priority constant is -9999 (not -10000), vptr/this-cast scheduling differs; equiv PASS 595 valid, 100% coverage (slice and src/game/SPEditors/SPPollinator.cpp)
 00612ba0  94  frame 0x34 vs 0x30: count local not sharing dead param slot
 00612e00  64  Variant copy-ctor zero stores share one reg in original; equiv WEAK (703 valid, 64.3% cov)
 00612f00  15  store scheduling of derived vptr/field before fixed-vector init
-00612f50  116  reg allocation (ppOut in ebp) and extra lea/cmp in original
+00612f50  116  complete; failed auth/disabled-pollinator paths return false (not true); reg allocation differs; equiv PASS 434 valid, 90.8% coverage
 006130e0  84  destroy loop is a counted loop in original; equiv WEAK (311 valid, 56.8% cov)
 00613140  200  reg allocation (first in ebp, begin cached in ebx)
 00612270  1420  ProcessTransactionTick complete: iterator/AutoRef register allocation and block layout of the 3 queue loops differ
