@@ -1,2 +1,4 @@
 # source  symbol  original VA  [cl flags override]
-# (no byte-exact functions in this slice)
+slices/s006f54a0/s006f54a0.cpp  ?W6060@cState@@QAEXPAUcColorCtx@@0HHHHH@Z  006f6060  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006f54a0/s006f54a0.cpp  ?W60f0@cState@@QAEXPAUcColorCtx@@0HHHHH@Z  006f60f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006f54a0/s006f54a0.cpp  ?W6180@cState@@QAEXPAUcColorCtx@@0HHHHH@Z  006f6180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

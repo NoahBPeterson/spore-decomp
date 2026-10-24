@@ -3,6 +3,8 @@
 // Region 0x6f54a0-0x6f6430. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 #include "types.h"
 
+extern char g_0154df28[];          // shared empty-bucket sentinel stored at +0x10/+0x30 of the state struct
+
 // ---- external callees -------------------------------------------------------------------
 void  __cdecl FUN_007c4be0(void* p, int a);
 void  __cdecl FUN_007c3c50(int a);
@@ -103,10 +105,10 @@ struct cState {
 
     void F54a0(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, short a9);
     void Setup(EmbState* st, int n, Vec4f v);      // 0x006f4b90
-    void W5f80(int a0, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7);
-    void W6060(int a0, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7);
-    void W60f0(int a0, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7);
-    void W6180(int a0, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7);
+    void W5f80(cColorCtx* colors, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7);
+    void W6060(cColorCtx* colors, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7);
+    void W60f0(cColorCtx* colors, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7);
+    void W6180(cColorCtx* colors, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7);
     void W6270(int a0, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7);
 };
 
@@ -303,50 +305,46 @@ void cState::F54a0(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a
 }
 
 // @ 0x006f5f80
-void cState::W5f80(int a0, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7) {
-    (void)a0;
-    unsigned char* p = ctx->mRGB;
+void cState::W5f80(cColorCtx* colors, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7) {
     float a = 0.0f;
     float b = 1.0f;
     int mode = 0x32;
-    if (p[2] != 0) mode = 0x33;
-    if (p[0] != 0xff) a = ctx->mColors[p[0]];
-    if (p[1] != 0xff) b = ctx->mColors[p[1]];
+    if (ctx->mRGB[2] != 0) mode = 0x33;
+    if (ctx->mRGB[0] != 0xff) a = colors->mColors[ctx->mRGB[0]];
+    if (ctx->mRGB[1] != 0xff) b = colors->mColors[ctx->mRGB[1]];
     BlobCall(this, 0, a, b, 0.0f, 0.0f);
     F54a0(mode, 0, p3, p4, p5, 0, 0, p6, p7);
 }
 
 // @ 0x006f6060
-void cState::W6060(int a0, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7) {
-    (void)a0;
+void cState::W6060(cColorCtx* colors, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7) {
     float a = 1.0f;
     unsigned short c0 = ctx->mRGB[0];
-    if (c0 != 0xff) a = ctx->mColors[c0];
+    if (c0 != 0xff) a = colors->mColors[c0];
     BlobCall(this, 0, a, 0.0f, 0.0f, 0.0f);
     F54a0(0x50, 0, p3, p4, p5, 0, 0, p6, p7);
 }
 
 // @ 0x006f60f0
-void cState::W60f0(int a0, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7) {
-    (void)a0;
+void cState::W60f0(cColorCtx* colors, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7) {
     float a = 1.0f;
     unsigned short c0 = ctx->mRGB[0];
-    if (c0 != 0xff) a = ctx->mColors[c0];
+    if (c0 != 0xff) a = colors->mColors[c0];
     BlobCall(this, 0, a, 0.0f, 0.0f, 0.0f);
     F54a0(0x5a, 0, p3, p4, p5, 0, 0, p6, p7);
 }
 
 // @ 0x006f6180
-void cState::W6180(int a0, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7) {
-    (void)a0;
-    unsigned char* p = ctx->mRGB;
-    float b = 1.0f, g = 1.0f, r = 1.0f;
-    unsigned short c0 = p[0];
-    if (c0 != 0xff) r = ctx->mColors[c0];
-    unsigned short c1 = p[1];
-    if (c1 != 0xff) g = ctx->mColors[c1];
-    unsigned short c2 = p[2];
-    if (c2 != 0xff) b = ctx->mColors[c2];
+void cState::W6180(cColorCtx* colors, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p7) {
+    float r = 1.0f;
+    float g = 1.0f;
+    float b = 1.0f;
+    unsigned short c0 = ctx->mRGB[0];
+    if (c0 != 0xff) r = colors->mColors[c0];
+    unsigned short c1 = ctx->mRGB[1];
+    if (c1 != 0xff) g = colors->mColors[c1];
+    unsigned short c2 = ctx->mRGB[2];
+    if (c2 != 0xff) b = colors->mColors[c2];
     BlobCall(this, 0, r, g, b, 0.0f);
     F54a0(100, 0, p3, p4, p5, 0, 0, p6, p7);
 }
@@ -384,14 +382,14 @@ void cState::W6270(int a0, cColorCtx* ctx, int p3, int p4, int p5, int p6, int p
 }
 
 // @ 0x006f5ed0
-void __fastcall FUN_006f5ed0(int* self) {
+int* __fastcall FUN_006f5ed0(int* self) {
     self[0] = 0;
     self[1] = 0;
     *(unsigned short*)(self + 2) = 0xffff;
     self[7] = 0x3f800000;
     self[8] = 0x40000000;
     self[5] = 1;
-    self[4] = (int)(self + 4);
+    self[4] = (int)g_0154df28;
     self[6] = 0;
     self[9] = 0;
     self[0xf] = 0x3f800000;
@@ -399,7 +397,7 @@ void __fastcall FUN_006f5ed0(int* self) {
     self[0xe] = 0;
     self[0x11] = 0;
     self[0xd] = 1;
-    self[0xc] = (int)(self + 4);
+    self[0xc] = (int)g_0154df28;
     self[0x13] = 0;
     self[0x14] = 0;
     self[0x15] = 0;
@@ -409,6 +407,7 @@ void __fastcall FUN_006f5ed0(int* self) {
     self[0x1e] = 0;
     self[0x1f] = 0;
     self[0x20] = 0;
+    return self;
 }
 
 // ---- vector helpers: skeletons (see partial.txt) ----------------------------------------
