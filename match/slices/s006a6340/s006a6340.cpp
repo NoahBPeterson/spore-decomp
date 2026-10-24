@@ -490,8 +490,13 @@ bool ParseVariantValue(uint32_t type, cFormatParser* parser, int count, const ch
 
 }  // namespace
 
-// Keeps the anonymous-namespace function emitted in this TU.
-bool (*g_pParseVariantValue)(uint32_t, cFormatParser*, int, const char**, Variant*) = &ParseVariantValue;
+// Keeps the anonymous-namespace function emitted in this TU.  A .data-initialized pointer
+// would be relocated over the retail Variant operation table at 0x0154eb40, so use a
+// never-called external keeper function instead.
+extern "C" bool KeepParseVariantValueForEmission(uint32_t type, cFormatParser* parser, int count,
+                                                 const char** args, Variant* out) {
+    return ParseVariantValue(type, parser, count, args, out);
+}
 // --- equivalence checker address annotations
     void operator delete[](void*); // 0x00f47380
 
