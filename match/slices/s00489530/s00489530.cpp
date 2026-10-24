@@ -284,7 +284,7 @@ void cSPEditorLimbStructure::RepinJoint(cSPEditorLimbJoint* joint)
         }
     } else if (joint->mJointBlock->mFlags.test(0x2c)) {
         RwVec3 pos(joint->mJointBlock->GetPosition());
-        RwVec3 pos2(pos);
+        RwVec3 pos2(static_cast<const Vector3T&>(pos));
         if (joint->mJointBlock->GetLink()) {
             cSPVector3 linkPos;
             linkPos = joint->mJointBlock->GetLink()->GetLinkData()->GetPos();
