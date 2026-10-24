@@ -1,8 +1,11 @@
 slices/s00a21130/s00a21130.cpp  ?isVoiceShareMsg_00a21130@@YGHPAX@Z  00a21130  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00a21130/s00a21130.cpp  ?RegisterBuiltInModules@AudioSystem_00a21170@@QAEXXZ  00a21170  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00a21130/s00a21130.cpp  ?isMsg00a21200@@YG_NPAX@Z  00a21200  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00a21130/s00a21130.cpp  ?globalTime_00a21220@@YANXZ  00a21220  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00a21130/s00a21130.cpp  ?get3_00a216d0@@YIXPADPAXPAH22@Z  00a216d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00a21130/s00a21130.cpp  ?forward_00a21a60@@YIXPAX@Z  00a21a60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00a21130/s00a21130.cpp  ?Command@AudioSys_00a21b20@@QAE_NHHHHH@Z  00a21b20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00a21130/s00a21130.cpp  ?Command4@AudioSys_00a21b90@@QAE_NHHHHH@Z  00a21b90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00a21130/s00a21130.cpp  ?command_00a21bd0@@YIXPAX0H@Z  00a21bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00a21130/s00a21130.cpp  ?copyRef_00a21d00@@YIPAXPADPAX1PAPAI@Z  00a21d00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00a21130/s00a21130.cpp  ?ringPush_00a21d30@@YIXPADPAXPAI@Z  00a21d30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

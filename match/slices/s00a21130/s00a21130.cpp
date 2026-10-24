@@ -16,14 +16,14 @@ extern void* f_00a149a0(void);
 extern void* f_00a161b0(void);
 extern void* f_00a15d30(void);
 extern void* f_00a14800(void);
-extern void  f_0112ccc0(void* self, int a, int b, void* c);
 extern void  f_00f47380(void* p);
-extern void* f_00f473a0(void* a, void* b, unsigned size, void* file, unsigned line, const char* cat);
+extern void* f_00f473a0(unsigned size, void* name, void* a3, void* a4, void* file, unsigned line);
 
 // Thiscall callees (receiver in ECX), modeled as members of stub classes.
 struct Callee_Th {
     void* m_0112ce00(); void m_0112dca0(); void m_0112cd60(void* v); void* m_0112dc80(); void m_0112dbd0();
     void* m_00a34230(unsigned tag); void m_00a34890(); void m_0112c600(); void m_0112c620();
+    void m_0112ccc0(int a, void* b);
 };
 #define TH(p) ((Callee_Th*)(p))
 
@@ -53,10 +53,14 @@ struct Submix_00a21390 { bool DisconnectFromSubmix(); };
 struct VoiceContainer { bool Connect(int a1, int a2); bool Connect4(int a1, int a2, int a3, int a4); };
 struct MsgTarget_00a21630 { bool Handle(int a1, int a2); };
 struct VoiceVec_00a21c00 { void Destroy(); };
-struct RbTree_00a21dc0 { void* Find(void* key, void** out); };
+struct RbTree_00a21dc0 { void* Find(void** out, void* key); };
 struct HashA_00a21eb0 { void Rehash(unsigned a); void* Alloc(unsigned n); };
 struct HashB_00a22060 { void Rehash(unsigned a); void* Alloc(unsigned n); };
 struct HashC_00a22110 { void Rehash(unsigned a); void* Alloc(unsigned n); };
+struct AudioSys_00a21a80 { void* FindVoice(unsigned tag); };
+struct AudioSys_00a21b20 { bool Command(int a1, int a2, int a3, int a4, int a5); };
+struct AudioSys_00a21b90 { bool Command4(int a1, int a2, int a3, int a4, int a5); };
+struct MsgSystem_00a21710 { bool HandleMessage(unsigned msg, void* info); };
 
 // ---------------------------------------------------------------------------------------
 // 0x00A21130  EA::Audio message predicate (41-plot / voice tags)
@@ -151,35 +155,31 @@ void** __fastcall resetHead_00a21290(void** self) {
 // 0x00A212B0  eastl list splice helper
 // ---------------------------------------------------------------------------------------
 // @ 0x00A212B0
-void splice_00a212b0(void* dummy, void* node, void* pos, void* last) {
-    char* p  = (char*)node;
-    char* q  = (char*)pos;
-    unsigned qprev = *(unsigned*)(q + 0x14);
-    char* qp = (qprev != 0) ? (char*)(qprev - 0x10) : (char*)0;
-    char* esi_p = (char*)*(unsigned*)(q + 4);
-    char* ecx_p = (char*)(q + 0x14);
-    char* eax_p = qp + 0x10;
-    *(unsigned*)(*(unsigned*)eax_p + 4) = (unsigned)esi_p;
-    *(unsigned*)*(unsigned*)(long)ecx_p = *(unsigned*)eax_p;
-    char* edx_p = (char*)last;
-    char* esi_q = (char*)(edx_p + 0x14);
-    char* ebx_p = edx_p;
-    unsigned edx_v = *(unsigned*)esi_q;
-    char* edx2 = (edx_v != 0) ? (char*)(edx_v - 0x10) : (char*)0;
-    p += 0x10;
-    edx2 += 0x10;
-    *(unsigned*)edx2 = (unsigned)p;
-    ebx_p += 0x10;
-    *(unsigned*)(long)ecx_p = (unsigned)edx2;
-    *(unsigned*)eax_p = (unsigned)ebx_p;
-    *(unsigned*)esi_q = (unsigned)eax_p;
+void __stdcall splice_00a212b0(void* a1, void* dummy, void* pos, void* last) {
+    if (pos == last) return;
+    char* p1 = (char*)a1;
+    char* p3 = (char*)pos;
+    char* p4 = (char*)last;
+    unsigned v = *(unsigned*)(p4 + 0x14);
+    char* q = (v != 0) ? (char*)(v - 0x10) : (char*)0;
+    char* piVar1 = q + 0x10;
+    unsigned esi = *(unsigned*)(p3 + 0x14);
+    char* ecx = p3 + 0x14;
+    *(unsigned*)(*(unsigned*)piVar1 + 4) = esi;
+    *(unsigned*)*(unsigned*)ecx = *(unsigned*)piVar1;
+    unsigned v2 = *(unsigned*)(p1 + 0x14);
+    char* iVar2 = (v2 != 0) ? (char*)(v2 - 0x10) : (char*)0;
+    *(unsigned*)(iVar2 + 0x10) = (unsigned)(p3 + 0x10);
+    *(unsigned*)ecx = (unsigned)(iVar2 + 0x10);
+    *(unsigned*)piVar1 = (unsigned)(p1 + 0x10);
+    *(unsigned*)(p1 + 0x14) = (unsigned)piVar1;
 }
 
 // ---------------------------------------------------------------------------------------
 // 0x00A21310  eastl list erase helper
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21310
-void erase_00a21310(void* a1, void* holder, void* target) {
+void __stdcall erase_00a21310(void* a1, void* holder) {
     char* eax_p = (char*)holder;
     unsigned edx = *(unsigned*)eax_p;
     if (edx == (unsigned)holder) return;
@@ -192,7 +192,7 @@ void erase_00a21310(void* a1, void* holder, void* target) {
     char* edi_p = (c2 != 0) ? (char*)(c2 - 0x10) : (char*)0;
     char* edx2 = (esi_0 != 0) ? (char*)(esi_0 + 0x10) : (char*)0;
     *(unsigned*)(ebp_p + 0x10) = (unsigned)edx2;
-    unsigned edx3 = (unsigned)target;
+    unsigned edx3 = (unsigned)a1;
     char* ecx2 = (char*)(ebp_p + 0x10);
     *(unsigned*)(esi_0 + 0x14) = (unsigned)ecx2;
     char* ecx3 = (char*)(edi_p + 0x10);
@@ -214,7 +214,7 @@ bool Submix_00a21390::DisconnectFromSubmix() {
     void* esi = (char*)self + 0x10;
     void* p = TH(esi)->m_00a34230(0x41695730);
     if (p != 0)
-        f_0112ccc0(p, 1, 0, 0);
+        TH(p)->m_0112ccc0(1, 0);
     TH(esi)->m_00a34890();
     m = *(void**)0x16e61a8;
     if (m != 0) TH(m)->m_0112c620();
@@ -234,7 +234,7 @@ bool VoiceContainer::Connect(int a1, int a2) {
     char buf[8];
     *(int*)(buf + 0) = a1;
     *(int*)(buf + 4) = a2;
-    f_0112ccc0(p, 2, 0, buf);
+    TH(p)->m_0112ccc0(2, buf);
     m = *(void**)0x16e61a8;
     if (m != 0) TH(m)->m_0112c620();
     return true;
@@ -258,7 +258,7 @@ bool VoiceContainer::Connect4(int a1, int a2, int a3, int a4) {
         *(int*)(buf + 4)  = a2;
         *(int*)(buf + 8)  = a3;
         *(int*)(buf + 12) = a4;
-        f_0112ccc0(*(void**)(self + 0x15f4), 0, 0, buf);
+        TH(*(void**)(self + 0x15f4))->m_0112ccc0(0, buf);
     }
     m = *(void**)0x16e61a8;
     if (m != 0) TH(m)->m_0112c620();
@@ -274,7 +274,7 @@ void __fastcall disconnect_00a21590(char* self) {
     if (*(int*)(self + 0x15f4) == 0) return;
     void* m = *(void**)0x16e61a8;
     if (m != 0) TH(m)->m_0112c600();
-    f_0112ccc0(*(void**)(self + 0x15f4), 1, 0, 0);
+    TH(*(void**)(self + 0x15f4))->m_0112ccc0(1, 0);
     *(void**)(self + 0x15f4) = 0;
     m = *(void**)0x16e61a8;
     if (m != 0) TH(m)->m_0112c620();
@@ -311,7 +311,8 @@ void __fastcall get3_00a216d0(char* self, void* dummy, int* a, int* b, int* c) {
 // 0x00A21710  EA::Audio::System::HandleMessage (big property dispatch)
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21710
-bool HandleMessage_00a21710(char* self, unsigned msg, void* info) {
+bool MsgSystem_00a21710::HandleMessage(unsigned msg, void* info) {
+    char* self = (char*)this;
     char* esi = self - 4;
     void* vt;
     char* edi;
@@ -413,7 +414,8 @@ void __fastcall forward_00a21a60(void* self) {
 // 0x00A21A80  EA::Audio::Voice::FindByTag
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21A80
-void* findVoice_00a21a80(char* self, unsigned tag) {
+void* AudioSys_00a21a80::FindVoice(unsigned tag) {
+    char* self = (char*)this;
     if (tag == 0) tag = 0xf1cc1687;
     char* end = *(char**)(self + 0x119ba8);
     char* it  = *(char**)(self + 0x119ba4);
@@ -435,21 +437,20 @@ void* findVoice_00a21a80(char* self, unsigned tag) {
 // 0x00A21B20  EA::Audio multi-arg commander
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21B20
-bool command_00a21b20(char* self, int a, int n, void* extra) {
-    if (a == 0 || n == 0) return false;
-    void* p = VPTR(void*, self, 0x17c, int)(self, a);
+bool AudioSys_00a21b20::Command(int a1, int a2, int a3, int a4, int a5) {
+    void* self = (void*)this;
+    if (a2 == 0 || a3 == 0) return false;
+    void* p = VPTR(void*, self, 0x17c, int)(self, a1);
     if (p != 0) {
-        if (((VoiceContainer*)p)->Connect(n, (int)extra)) {
+        if (((VoiceContainer*)p)->Connect(a2, a3)) {
             return true;
         }
     }
-    if (extra == 0) return false;
-    int i = 0;
-    if (n <= 0) return false;
-    while (i < n) {
-        void* v = *(void**)(a + i * 4);
-        ((void (__cdecl*)(void*, void*))extra)(v, extra);
-        ++i;
+    if (a4 == 0) return false;
+    unsigned n = (unsigned)a3;
+    for (unsigned i = 0; i < n; ++i) {
+        void* v = *(void**)(a2 + i * 4);
+        ((void (__cdecl*)(void*, void*))a4)(v, (void*)a5);
     }
     return false;
 }
@@ -458,11 +459,12 @@ bool command_00a21b20(char* self, int a, int n, void* extra) {
 // 0x00A21B90  EA::Audio multi-arg commander (4 args)
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21B90
-bool command4_00a21b90(char* self, int a, int b, int c, int d) {
-    if (d == 0) return false;
-    void* p = VPTR(void*, self, 0x17c, int)(self, a);
+bool AudioSys_00a21b90::Command4(int a1, int a2, int a3, int a4, int a5) {
+    void* self = (void*)this;
+    if (a4 == 0) return false;
+    void* p = VPTR(void*, self, 0x17c, int)(self, a1);
     if (p == 0) return false;
-    return ((VoiceContainer*)p)->Connect4(b, c, d, d);
+    return ((VoiceContainer*)p)->Connect4(a2, a3, a4, a5);
 }
 
 // ---------------------------------------------------------------------------------------
@@ -518,7 +520,7 @@ void** __fastcall nodeToPayload_00a21c90(void* self, void* dummy, void** out) {
 // 0x00A21CB0  eastl list insert helper
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21CB0
-void listInsert_00a21cb0(void* a1, void* holder, void* newnode) {
+void* __stdcall listInsert_00a21cb0(void* a1, void* holder, void* newnode) {
     char* eax_p = (char*)holder;
     char* edx_p = (char*)(eax_p + 0x14);
     unsigned e = *(unsigned*)edx_p;
@@ -533,6 +535,7 @@ void listInsert_00a21cb0(void* a1, void* holder, void* newnode) {
     char* eax4 = (char*)(eax_p + 0x10);
     *(unsigned*)(ecx_p + 0x10) = (unsigned)eax4;
     *(unsigned*)a1 = (unsigned)ecx_p;
+    return a1;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -587,7 +590,7 @@ void* __fastcall copyRef2_00a21d90(char* self, void* dummy, unsigned** a, unsign
 // 0x00A21DC0  eastl::rbtree<Key,...>::find
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21DC0
-void* RbTree_00a21dc0::Find(void* key, void** out) {
+void* RbTree_00a21dc0::Find(void** out, void* key) {
     char* self = (char*)this;
     unsigned node = *(unsigned*)(self + 0xc);
     char* root = self + 4;
@@ -633,10 +636,10 @@ void* RbTree_00a21dc0::Find(void* key, void** out) {
                 less = k[1] < *(unsigned*)((char*)it + 0x14);
             }
         }
-        if (!less) { *out = it; return it; }
+        if (!less) { *out = it; return out; }
     }
     *out = root;
-    return root;
+    return out;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -665,9 +668,13 @@ void HashA_00a21eb0::Rehash(unsigned a) {
     }
     if (*(unsigned*)(self + 8) > 1) {
         void* p = *(void**)(self + 4);
-        if (p != *(void**)(self + 0x30)
-            && !((char*)p < *(char**)(self + 0x24) || (char*)p >= *(char**)(self + 0x28))) {
-            f_00f47380(p);
+        if (p != *(void**)(self + 0x30)) {
+            if ((char*)p >= *(char**)(self + 0x24) && (char*)p < *(char**)(self + 0x28)) {
+                *(void**)p = *(void**)(self + 0x1c);
+                *(void**)(self + 0x1c) = p;
+            } else {
+                f_00f47380(p);
+            }
         }
     }
     *(void**)(self + 4) = newTable;
@@ -678,8 +685,8 @@ void HashA_00a21eb0::Rehash(unsigned a) {
 // 0x00A21F60  allocate an AutoRefCount record
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21F60
-void* allocRef_00a21f60(void* src) {
-    unsigned char* esi = (unsigned char*)f_00f473a0(0, 0, 0x14, (void*)0x13ebb38, 0xd1, "EASTL");
+void* __stdcall allocRef_00a21f60(void* src) {
+    unsigned char* esi = (unsigned char*)f_00f473a0(0x14, (void*)0x13f2150, 0, 0, (void*)0x13ebb38, 0xd1);
     if (esi != 0) {
         *(unsigned*)(esi + 0) = *(unsigned*)((char*)src + 0);
         *(unsigned*)(esi + 4) = *(unsigned*)((char*)src + 4);
@@ -740,7 +747,7 @@ void HashC_00a22110::Rehash(unsigned a) {
         if (node == 0) continue;
         for (;;) {
             unsigned bucket = (unsigned)node[0] % a;
-            int* next = (int*)((char*)node + 0x24);
+            int* next = *(int**)((char*)node + 0x24);
             *(unsigned*)((char*)*(void**)(self + 4) + i * 4) = (unsigned)next;
             int** head = (int**)((char*)newTable + bucket * 4);
             *(unsigned*)((char*)node + 0x24) = (unsigned)*head;
@@ -751,9 +758,13 @@ void HashC_00a22110::Rehash(unsigned a) {
     }
     if (*(unsigned*)(self + 8) > 1) {
         void* p = *(void**)(self + 4);
-        if (p != *(void**)(self + 0x30)
-            && !((char*)p < *(char**)(self + 0x24) || (char*)p >= *(char**)(self + 0x28))) {
-            f_00f47380(p);
+        if (p != *(void**)(self + 0x30)) {
+            if ((char*)p >= *(char**)(self + 0x24) && (char*)p < *(char**)(self + 0x28)) {
+                *(void**)p = *(void**)(self + 0x1c);
+                *(void**)(self + 0x1c) = p;
+            } else {
+                f_00f47380(p);
+            }
         }
     }
     *(void**)(self + 4) = newTable;

@@ -1,24 +1,24 @@
 # va  diff-bytes  reason
-00a21170  74  complete; EA::Audio voice-registry insert; thiscall reconstruction, cl register allocation differs; equiv PASS; now a thiscall stub-class member
+00a21170  -   MOVED TO manifest.txt: byte-exact as ?RegisterBuiltInModules@AudioSystem_00a21170@@QAEXXZ.
 00a21260  10  complete; AutoRefCount::Release; cl emits `sub eax,1` (orig `add eax,-1`) and hoists the vptr load above the refcount store; equiv PASS
 00a21290  9   complete; intrusive-list head reset to prev(-0x10)/null; returns the incoming prev node in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
-00a212b0  76  complete; eastl list splice (relink nodes); register/clone-layout differences; equiv FAIL
-00a21310  96  complete; eastl list erase; register/layout differences; equiv FAIL
-00a21390  76  complete; EA::Audio::Submix::DisconnectFromSubmix (thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
-00a21410  119 complete; voice connect (thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
-00a214b0  171 complete; voice connect variant (4 stack args, thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
-00a21590  103 complete; EA::Audio::VoiceContainer::Disconnect (SEH frame + import calls); equiv FAIL
+00a212b0  76  complete; eastl list splice (relink nodes); fixed wrong receiver (param_1 not node) and field +0x14, cdecl->__stdcall; equiv PASS (262 valid, 95.2% coverage)
+00a21310  96  complete; eastl list erase; fixed bogus 3rd param 'target' -> a1, cdecl->__stdcall; equiv PASS (226 valid, 91.7% coverage)
+00a21390  76  complete; EA::Audio::Submix::DisconnectFromSubmix (thiscall + EH frame); fixed f_0112ccc0 thiscall (ecx=receiver, 2 stack args); equiv PASS (340 valid, 94.4% coverage); thiscall stub-class member
+00a21410  119 complete; voice connect (thiscall + EH frame); fixed f_0112ccc0 thiscall (ecx=plugin, args 2,&buf); equiv PASS (219 valid, 95.5% coverage); thiscall stub-class member
+00a214b0  171 complete; voice connect variant (4 stack args, thiscall + EH frame); fixed f_0112ccc0 thiscall (ecx=plugin, args 0,&buf); equiv PASS (343 valid, 94.9% coverage); thiscall stub-class member
+00a21590  103 complete; EA::Audio::VoiceContainer::Disconnect (SEH frame + import calls); fixed f_0112ccc0 thiscall (ecx=plugin, args 1,0); equiv PASS (392 valid, 93.3% coverage)
 00a21630  71  complete; voice message handler (thiscall + EH frame, vtable factory); equiv UNSUPPORTED (fake-arity: 0/1200 valid inputs); now a thiscall stub-class member
-00a21710  789 complete; EA::Audio::System::HandleMessage (large vtable dispatch + EH + message-hash constants); equiv FAIL
-00a21a80  81  complete; find voice by id; differing internal layout/registers; equiv FAIL
-00a21b20  86  complete; voice command forwarder (calls connect); equiv FAIL
-00a21b90  45  complete; 4-arg voice command forwarder (calls connect4); equiv FAIL
+00a21710  789 complete; EA::Audio::System::HandleMessage (large vtable dispatch + EH + message-hash constants); fixed calling convention to thiscall (ecx=this, ret 8); equiv WEAK (399 valid, 26.5% coverage)
+00a21a80  81  complete; find voice by id; fixed calling convention to thiscall (ecx=this, tag stack, ret 4); equiv PASS (225 valid, 100% coverage)
+00a21b20  -   MOVED TO manifest.txt: byte-exact as ?Command@AudioSys_00a21b20@@QAE_NHHHHH@Z (thiscall 5 stack args).
+00a21b90  -   MOVED TO manifest.txt: byte-exact as ?Command4@AudioSys_00a21b90@@QAE_NHHHHH@Z (thiscall 5 stack args).
 00a21c00  77  complete; eastl vector<T>::~vector; equiv WEAK (76.3% coverage); now a thiscall stub-class member
 00a21c70  11  complete; list-node -> payload; returns the out pointer in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
 00a21c90  11  complete; list-node -> payload; returns the out pointer in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
-00a21cb0  63  complete; eastl list insert helper; register/layout differences; equiv FAIL
-00a21dc0  87  complete; eastl rbtree find; equiv FAIL; now a thiscall stub-class member
-00a21eb0  131 complete; voice hash-bucket rehash (node next at +0x10); equiv FAIL; now a thiscall stub-class member
-00a21f60  73  complete; ref-counted allocation; reconstruction calls a faulting callee on synthetic inputs; equiv FAIL
+00a21cb0  63  complete; eastl list insert helper; fixed cdecl->__stdcall (ret 0xc) and return a1; equiv PASS (315 valid, 93.1% coverage)
+00a21dc0  87  complete; eastl rbtree find; fixed swapped args (out=arg1, key=arg2) and return out pointer; equiv PASS (387 valid, 100% coverage); thiscall stub-class member
+00a21eb0  131 complete; voice hash-bucket rehash (node next at +0x10); fixed inverted tail free-list branch (inline-pool ptr pushed on free list, not delete()d); equiv WEAK (104 valid, 100% coverage); thiscall stub-class member
+00a21f60  73  complete; ref-counted allocation; fixed operator-new argument order (size,"EASTL",0,0,file,0xd1) and cdecl->__stdcall (ret 4); equiv PASS (344 valid, 100% coverage)
 00a22060  135 complete; voice hash-bucket rehash (node next at +0x1e4); equiv WEAK (46.9% coverage); now a thiscall stub-class member
-00a22110  130 complete; hash-bucket rehash (node next at +0x24); equiv FAIL; now a thiscall stub-class member
+00a22110  130 complete; hash-bucket rehash (node next at +0x24); fixed next-link read as value (*(node+0x24)) and inverted tail free-list branch; equiv WEAK (42 valid, 95.3% coverage); thiscall stub-class member
