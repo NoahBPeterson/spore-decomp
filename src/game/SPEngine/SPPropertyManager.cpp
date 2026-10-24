@@ -154,14 +154,14 @@ struct Vec208 {
 struct VecC {
     void* begin; void* end; void* cap;
     VecC* Init(unsigned n, const void* alloc);
-    VecC* InitValue(unsigned n, const float* value, const void* alloc);
+    VecC* InitValue(unsigned n, const float* value);
 };
 struct Vec8 {
     void* begin; void* end; void* cap;
     Vec8* Init(unsigned n, const float* value);
     void* Alloc(unsigned n, const void* x);   // 0x006a40a0 (external)
 };
-struct E208 { uint32_t a; uint32_t b; uint32_t rest[0x80]; };
+struct E208 { int32_t a; int32_t b; int16_t c; char rest[0x1fe]; };
 struct E12 { uint32_t x, y, z; };
 struct Vec10 {
     void* begin; void* end; void* cap;
@@ -1347,8 +1347,11 @@ const char* __stdcall FUN_006a3980(int index)
 // @ 0x006a39a0
 int SP::cPropertyManager::GetPropertyGroupCount()
 {
+    // The retail code reloads mpEnd for the subtraction (it is not kept in a
+    // register across the branch), so the end pointer is read through a
+    // volatile-qualified lvalue to reproduce that load.
     if (((char *)mPropertyGroupIDs.mpBegin) != ((char *)mPropertyGroupIDs.mpEnd))
-        return (int)((((char *)mPropertyGroupIDs.mpEnd) - ((char *)mPropertyGroupIDs.mpBegin)) >> 2);
+        return (int)((*(char *volatile *)&mPropertyGroupIDs.mpEnd - (char *)mPropertyGroupIDs.mpBegin) >> 2);
     return 0;
 }
 
@@ -1512,16 +1515,20 @@ void FUN_006a3f40(String* self, const char** range, const void* tag)
 
 
 // @ 0x006a4100
-void CopyVec12(void* dst, unsigned n, const void* src)
+void* CopyVec12(void* dst, unsigned n, const void* src)
 {
-    while (n--) {
-        if (dst) {
-            *(float*)dst = *(const float*)src;
-            *((float*)dst + 1) = *((const float*)src + 1);
-            *((float*)dst + 2) = *((const float*)src + 2);
-        }
-        dst = (char*)dst + 0xc;
+    if (n > 0) {
+        do {
+            if (dst) {
+                *(float*)dst = *(const float*)src;
+                *((float*)dst + 1) = *((const float*)src + 1);
+                *((float*)dst + 2) = *((const float*)src + 2);
+            }
+            --n;
+            dst = (char*)dst + 0xc;
+        } while (n > 0);
     }
+    return dst;
 }
 
 
@@ -1619,12 +1626,7 @@ void cDealloc::Release()
 // @ 0x006a4380
 String& String::assign(const char* p)
 {
-    const char* q = p;
-    char c;
-    do {
-        c = *q++;
-    } while (c);
-    return assign(p, p + (q - p - 1));
+    return assign(p, p + strlen(p));
 }
 
 
@@ -1687,22 +1689,23 @@ Vec208* Vec208::Init(unsigned n, const void* alloc)
 {
     (void)alloc;
     char* p = n ? (char*)EA_Alloc(n * 0x208, "App", 0, 0, kAllocPath, 0xd1) : 0;
-    unsigned bytes = n * 0x208;
-    cap = p + bytes;
+    unsigned cnt = n;
+    cap = p + n * 0x208;
     E208 v;
-    v.a = 0xffffffff;
-    v.b = 0;
+    v.a = -1;
+    v.b = -1;
     begin = p;
     end = p;
-    unsigned cnt = n;
+    v.c = 0;
     if (cnt > 0) {
         do {
             if (p)
                 *(E208*)p = v;
+            --cnt;
             p += 0x208;
-        } while (--cnt);
+        } while (cnt > 0);
     }
-    end = (char*)begin + bytes;
+    end = (char*)begin + n * 0x208;
     return this;
 }
 
@@ -1755,8 +1758,8 @@ Vec8* Vec8::Init(unsigned n, const float* value)
     unsigned cnt = n;
     while (cnt--) {
         if (p) {
-            *(float*)p = b;
-            *(float*)(p + 4) = a;
+            *(float*)p = a;
+            *(float*)(p + 4) = b;
         }
         p = (char*)p + 8;
     }
@@ -1791,18 +1794,25 @@ Vec10* Vec10::Init(int n, const void* value)
 
 
 // @ 0x006a46a0
-VecC* VecC::InitValue(unsigned n, const float* value, const void* alloc)
+VecC* VecC::InitValue(unsigned n, const float* value)
 {
-    (void)alloc;
     char* p = n ? (char*)EA_Alloc(n * 0xc, "App", 0, 0, kAllocPath, 0xd1) : 0;
     begin = p;
+    end = p;
     cap = p + n * 0xc;
-    for (int i = 0; i < n; i++) {
-        *(float*)(p + i * 0xc) = value[0];
-        *(float*)(p + i * 0xc + 4) = value[1];
-        *(float*)(p + i * 0xc + 8) = value[2];
+    float v0 = value[0];
+    float v1 = value[1];
+    float v2 = value[2];
+    unsigned cnt = n;
+    while (cnt--) {
+        if (p) {
+            *(float*)(p + 0) = v0;
+            *(float*)(p + 4) = v1;
+            *(float*)(p + 8) = v2;
+        }
+        p += 0xc;
     }
-    end = p + n * 0xc;
+    end = p;
     return this;
 }
 

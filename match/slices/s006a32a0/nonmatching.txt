@@ -2,13 +2,10 @@
 006a3430  95  Euler-from-matrix: original uses x87 fpatan/fsqrt chains; C atan2f/sqrtf cannot reproduce the exact fpu sequence; equiv: UNSUPPORTED (unresolved ref _atan2f_)
 006a38c0  19  OnRegister: cl threads both branches to one shared tail call; original duplicates the tail jmp; equiv: UNSUPPORTED (orig-abi-broken, 0/1200 valid)
 006a38f0  19  OnRegister: same shared-tail shape as 006a38c0; equiv: UNSUPPORTED (orig-abi-broken, 0/1200 valid)
-006a39a0  21  Count: cl CSEs the begin pointer; original reloads it with a memory operand in the subtraction; equiv: PASS
 006a39d0  46  GetAt: same CSE/register-assignment difference as Count; equiv: PASS
-006a4100  32  CopyVec12: loop idiom (dec/ja vs sub/jne) and zero-register assignment differ; equiv: PASS
-006a4380  23  basic_string::assign(const char*): inlined strlen loop shape differs; equiv: FAIL (execution mismatch; ours resolved to assign(p,p+n) callee conflict)
-006a44d0  84  vector<0x208> ctor: cl peels/vectorises the rep-movsd fill loop; equiv: FAIL (fill differs)
+006a44d0  24  vector<0x208> ctor: fill shape now matches (do/while, dec-before-add, unsigned cnt) and needs /GS-; residual 24 bytes are register allocation (bytes/cnt swap ebx/edx) plus the begin/end store schedule; equiv: PASS 254 valid, 100% cov
 006a4580  8   vector<0xc> ctor: only dec/ja vs sub/jne encoding of the fill loop differs; equiv: PASS
-006a4600  75  vector<8> ctor: cl vectorises the 2-float fill loop; equiv: FAIL (fill differs)
+006a4600  78  vector<8> ctor: FAIL-KEPT. The original never reads the value pointer for the fill: it loads the two floats from the uninitialized `sub esp,8` scratch slots (0xCC in the test harness) and stores those. Reproducing the write of garbage would require deliberately reading an uninitialized local, so the fill cannot be made equivalent from meaningful source; ours writes value[0]/value[1]. equiv: FAIL 5/5 valid (memory-pool bytes differ); /arch:SSE diff 82
 006a4660  50  vector<0x10> ctor: helper call/return shape differs; equiv: PASS
-006a46a0  114  vector<0xc> ctor: original reads the value from stack locals; register schedule not reproduced; equiv: FAIL (esp after return differs)
+006a46a0  158  vector<0xc> ctor (InitValue): FAIL-KEPT. Same original defect as 006a4600: the three fill floats are loaded from the uninitialized `sub esp,0xc` scratch slots, not from value[0..2]. Signature fixed to the retail `ret 8` (extra alloc parameter removed) and the loop is a pointer loop, but the fill cannot be equivalent from meaningful source. equiv: FAIL 5/9 valid; /arch:SSE diff 108
 006a4730  50  vector<0x10> ctor (2nd helper): helper call/return shape differs; equiv: PASS

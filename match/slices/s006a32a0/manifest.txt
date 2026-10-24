@@ -9,7 +9,10 @@ slices/s006a32a0/s006a32a0.cpp  ?SetVec31@Variant@@QAEAAU1@PBX@Z  006a3570
 slices/s006a32a0/s006a32a0.cpp  ?SetVec32@Variant@@QAEAAU1@PBX@Z  006a3610
 slices/s006a32a0/s006a32a0.cpp  ?FUN_006a3920@@YAPAUFloat3@@PAU1@PBM@Z  006a3920
 slices/s006a32a0/s006a32a0.cpp  ?FUN_006a3980@@YGPBDH@Z  006a3980
+slices/s006a32a0/s006a32a0.cpp  ?Count@cPropertyManager@@QAEHXZ  006a39a0
 slices/s006a32a0/s006a32a0.cpp  ?Execute@cAppPropsCommand@@QAEXPAX@Z  006a3ce0
 slices/s006a32a0/s006a32a0.cpp  ?OnEndParse@cAppPropsCommand@@QAEXH@Z  006a3d10
+slices/s006a32a0/s006a32a0.cpp  ?CopyVec12@@YAPAXPAXIPBX@Z  006a4100
 slices/s006a32a0/s006a32a0.cpp  ?Init@Vec38@@QAEPAU1@HPBX@Z  006a4130
 slices/s006a32a0/s006a32a0.cpp  ?Release@cDealloc@@QAEXXZ  006a4360
+slices/s006a32a0/s006a32a0.cpp  ?assign@String@@QAEAAU1@PBD@Z  006a4380
