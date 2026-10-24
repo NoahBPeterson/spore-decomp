@@ -10,3 +10,4 @@
 00bf17f0 104 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(165 valid,34.1% cov) u64->float conversion and the fdivr sequence differ: retail keeps the numerator on the x87 stack, cl stores/reloads it.
 00bf1880 478 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/107 mismatched, st0) retail compares the float param against the three 32-bit magic constants (0x0a35d0f5/0x3360727f/0x6aeb96a1) with the param slot reused as the result slot; not reproduced.
 00bf19c0 318 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(228 valid,9.1% cov) Cast()/slot sequence over the object-ptr array; cl emits a different call/IP shape for the QueryInterface casts.
+00bf0f40 57 /O2 /MD /Gy /TP /arch:SSE equiv=PASS(390 valid,100.0% cov) behaviourally identical to retail; the byte diff is the pointer-difference mask (test [ecx+0xa0 - ecx+0x9c] vs the compiler's sar/inc pair) and the switch lowering.

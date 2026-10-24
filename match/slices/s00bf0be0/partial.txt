@@ -1,1 +1,1 @@
-00bf0f40 57 /O2 /MD /Gy /TP /arch:SSE equiv=PASS(390 valid,100.0% cov) behaviourally identical to retail; the byte diff is the pointer-difference mask (test [ecx+0xa0 - ecx+0x9c] vs the compiler's sar/inc pair) and the switch lowering.
+# va  diff-bytes  reason
