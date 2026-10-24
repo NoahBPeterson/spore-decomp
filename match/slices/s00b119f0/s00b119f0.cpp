@@ -15,7 +15,15 @@ struct cSPVector3 {
     cSPVector3() {}
     cSPVector3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
     cSPVector3(const cSPVector3& o) : x(o.x), y(o.y), z(o.z) {}
-    float Dot(const cSPVector3& o) const { return x * o.x + y * o.y + z * o.z; }
+    // /fp:fast reassociates the 3-term sum to (z+y)+x; the original sums x-first.
+    // A volatile accumulator forces the original's left-to-right order.
+    float Dot(const cSPVector3& o) const
+    {
+        volatile float s = x * o.x;
+        s = s + y * o.y;
+        s = s + z * o.z;
+        return s;
+    }
     float LengthSq() const { return x * x + y * y + z * z; }
     cSPVector3& operator*=(float s) { x *= s; y *= s; z *= s; return *this; }
     float Normalize() { float len = sqrtf(LengthSq()); float inv = 1.0f / len; x *= inv; y *= inv; z *= inv; return len; }
@@ -30,7 +38,14 @@ struct cSPQuaternion {
     cSPQuaternion() {}
     cSPQuaternion(float ax, float ay, float az, float aw) : x(ax), y(ay), z(az), w(aw) {}
     cSPQuaternion(const cSPQuaternion& o) : x(o.x), y(o.y), z(o.z), w(o.w) {}
-    float Dot(const cSPQuaternion& o) const { return x * o.x + y * o.y + z * o.z + w * o.w; }
+    float Dot(const cSPQuaternion& o) const
+    {
+        volatile float s = x * o.x;
+        s = s + y * o.y;
+        s = s + z * o.z;
+        s = s + w * o.w;
+        return s;
+    }
     float LengthSq() const { return x * x + y * y + z * z + w * w; }
     cSPQuaternion& operator*=(float s) { x *= s; y *= s; z *= s; w *= s; return *this; }
     float Normalize() { float len = sqrtf(LengthSq()); float inv = 1.0f / len; x *= inv; y *= inv; z *= inv; w *= inv; return len; }
