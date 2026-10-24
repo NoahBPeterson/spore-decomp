@@ -1,0 +1,4 @@
+0105b180  121  WEAK (181/400 valid inputs, need 200; coverage 54.5%); complete; same call sequence, vptr/arg registers differ from the original's allocation (edx vs eax for the vptr, ecx vs edx for a2)
+0105b240  133  UNSUPPORTED (0/400 valid inputs, fake arity through simulated vtables); complete; Find-call scheduling differs (original precomputes the inv vtable slot address and loads self->f14 after GetKey) plus the a2 arg register
+0105b350  562  FAIL (5/5 valid inputs mismatched, execution); complete; all four key blocks and calls present, block scheduling/register allocation differs (pushed RandomDirection3 result, message-object store order, extra spills)
+0105b6a0  525  UNSUPPORTED (0/400 valid inputs, fake arity through simulated vtables); complete; vector iterators not hoisted into the original's begin/end registers, extra locals/spills, arg registers differ

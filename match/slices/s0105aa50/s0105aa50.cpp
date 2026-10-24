@@ -45,8 +45,9 @@ struct Inv {
     P(g0)
     virtual int Find(int type, int n);                        // +0x64 (slot 25)
     P(h0) P(h1) P(h2) P(h3) P(h4)
-    virtual void Take(int handle, void** out, int count);     // +0x7c (slot 31)
+    virtual bool Take(int handle, void** out, int count);     // +0x7c (slot 31)
     Item* Current();                                          // 0x00ff3f10
+    void Refresh();                                           // 0x00ff3e80
 };
 
 struct YSub {
@@ -135,14 +136,30 @@ struct Artifact {
     void Set(int type, int n, int f10, int one);                          // 0x00c74d30
     int Dir(Vec3* out);                                                   // 0x00ad2620
 };
-struct Nm { Artifact* Get(); };                                           // 0x0103a080
-struct Planet { char pad[0x13c]; int f13c; };
+struct GameDataVec;
+struct Nm {
+    Artifact* Get();                                                      // 0x0103a080
+    GameDataVec* GetGameDataVector(int a, int b, int c, int d, void* e);  // 0x00b21340
+};
+struct Empire;
+struct Planet {
+    char pad[0x13c];
+    int f13c;
+    bool Fb7e3e0(Vec3* p);                                               // 0x00b7e3e0
+    Empire* F00c71e30();                                                 // 0x00c71e30
+};
+struct Empire { char pad[0x84]; int f84; };
 
 struct ProfSrc {
     Profile* GetProfile();                                                // 0x004df550
     Profile* GetPlantProfile();                                           // 0x004df440
 };
-struct Game { Inv* GetPlayerInventory(); };                               // 0x00a1ad60
+struct Game {
+    Inv* GetPlayerInventory();                // 0x00a1ad60
+    void* f5180(int n);                       // 0x01005180
+    void* GetAvatar();                        // 0x00b1fdb0
+    void* F1003480();                         // 0x01003480
+};
 
 bool __stdcall Base(Tool* self, Vec3* a2, int a3);                        // 0x01059f20
 Game* SpaceGameGet();                                                     // 0x01002bd0
@@ -296,4 +313,374 @@ bool __stdcall StartTool(Tool* self, Vec3* a2, int a3)
 done:
     at.Destroy();
     return true;
+}
+
+// ---------------------------------------------------------------------------
+// tool-strategy handlers sharing cSPToolStrategy::OnHit
+// ---------------------------------------------------------------------------
+
+struct ItemBase {
+    P8(a) P8(b) P8(c) P8(d) P8(e) P4(f) P(g0) P(g1)
+    virtual void* FindPlugin(int key);                                // +0xb8 (slot 46)
+};
+
+struct Strategy {
+    P(a0)
+    virtual void Slot1();                                             // +0x04
+    P(a2) P(a3) P(a4) P(a5)
+    virtual void* GetKey();                                           // +0x18 action key (int[3])
+    P8(b) P8(c) P(d0) P(d1)
+    virtual bool Slot64(void* z);                                     // +0x64
+    P8(e) P8(f) P4(g)
+    char pad0[0x14 - 4];
+    int f14;                                                          // +0x14
+    char pad1[0x114 - 0x18];
+    ItemBase* item;                                                   // +0x114 held item sub-object
+    bool CanUse();                                                    // 0x0104cbc0
+    void SetValue(int v);                                             // 0x0104cc00
+    int GetCount();                                                   // 0x00a02d30
+    float GetRate();                                                  // 0x00ce6940
+};
+
+// item requested by key 0xb033b403 (energy repair)
+struct RepairObj {
+    char pad0[0x714];
+    int f714;                                                         // +0x714
+    char pad1[0x7f4 - 0x718];
+    float f7f4;                                                       // +0x7f4
+    float f7f8;                                                       // +0x7f8
+    float Repair(float amount);                                       // 0x00c389f0
+};
+
+// item requested by key 0x13f94d4 (combatant repair)
+struct Combatant {
+    P8(a) P8(b) P4(c) P(d0) P(d1)
+    virtual float Slot58();                                           // +0x58
+    char pad0[0x38 - 4];
+    float f38;                                                        // +0x38
+    void PartialRepair(float amount);                                 // 0x00bfd1a0
+};
+
+struct FVec8 {
+    char pad[0xc];
+    float* mData;                                                     // +0x0c element array
+    void resize(uint32_t n);                                          // 0x007eb820
+};
+
+struct WalkAround { void GetOutOfUFO(); };                            // 0x01016070
+
+struct WM {
+    P(b0)
+    virtual void* Slot1();                                            // +0x04
+    P8(c) P8(d) P(e0)
+    virtual void Slot4c(int a, void* b);                              // +0x4c (slot 19)
+};
+
+struct UFOSim {
+    char pad[0x18];
+    char f18;                                                         // +0x18
+    void F00ffc0b0();                                                 // 0x00ffc0b0
+};
+
+struct MsgServer {
+    P(a0) P(a1) P(a2) P(a3) P(a4)
+    virtual int Slot14(int id, void* msg, int z);                     // +0x14
+    virtual int Slot18(int key, int a, int b, int c);                 // +0x18
+};
+
+// 5-arg message: vftable/refcount then 10 data slots, id, rc-flags
+struct MsgRC5 {
+    void* mVftable;                                                   // +0x00
+    int mRefCount;                                                    // +0x04
+    uint32_t mData[10];                                               // +0x08
+    int mId;                                                          // +0x30
+    int mPad34;                                                       // +0x34
+    int mRCFlags;                                                     // +0x38
+    void Destruct();                                                  // 0x00421cf0
+};
+
+struct TargetC {
+    P(a0) P(a1) P(a2)
+    virtual void* SlotC(int key);                                     // +0x0c
+};
+
+struct PlanetRecord { char pad[0x2c]; uint32_t f2c; };
+
+struct Ocean {
+    P(a0) P(a1) P(a2) P(a3) P(a4) P(a5)
+    virtual void Slot18(float f, int a, int b, Vec3* v, int z);       // +0x18
+};
+
+struct Profile {
+    char pad0[0x504];
+    void* f504;                                                       // +0x504 key passed to GetPollinator
+};
+
+struct Creature {
+    char pad0[0x5a8];
+    Ocean sub;                                                        // +0x5a8
+    char pad1[0x5e0 - 0x5a8 - 4];
+    float f5e0;                                                       // +0x5e0
+    Profile* GetSpeciesProfile();                                     // 0x00c0bbd0
+    int F00c0bc00(int z);                                             // 0x00c0bc00
+    Vec3* GetVec3();                                                  // 0x00c0bc00
+};
+
+struct TF { char pad[0x20]; Vec3 f20; Vec3 f2c; };
+struct TFA { void F00bbcb10(); };                                     // 0x00bbcb10
+struct Pollinator { void Update(); };                                 // 0x0060d860
+struct RelationshipMgr { float RecordEvent(int key, float amount); }; // 0x00d06240
+struct Tok { char pad[0xc]; void* f0c; };
+struct Msg { void Fff6380(); };                                       // 0x00ff6380
+struct CreatureEdit { void AutoTest(); };                             // 0x00676e90
+
+struct GDSub {
+    P8(a) P(b0) P(b1) P(b2)
+    virtual void* Slot2c();                                           // +0x2c (slot 11)
+};
+struct GDElem {
+    P8(a) P4(b)
+    virtual void* Slot2c();                                           // +0x2c of the element itself
+    char pad[0x34 - 4];
+    GDSub sub;                                                        // +0x34
+    int ProfLeaveZone();                                              // 0x00bd9e30
+};
+
+struct ColonySub {
+    P8(a) P(b0) P(b1) P(b2)
+    virtual void* Position();                                         // +0x2c (slot 11)
+    P(c0) P(c1)
+    virtual void SetPosition(Vec3* p);                                // +0x38 (slot 14)
+    P8(d) P4(e) P(f0)
+    virtual float Radius();                                           // +0x70 (slot 28)
+};
+struct ColonyObj {
+    virtual void Slot0();                                             // +0x00
+    virtual void Slot1();                                             // +0x04
+    P8(a) P8(b) P8(c) P8(d) P8(e) P4(f)
+    virtual void* SlotB8(int key);                                    // +0xb8 (slot 46)
+    char pad[0x34 - 4];
+    ColonySub sub;                                                    // +0x34
+};
+struct Cursor {
+    P8(a) P8(b) P8(c) P8(d) P8(e) P8(f) P(g0) P(g1) P(g2) P(g3) P(g4)
+    virtual void* SlotD4();                                           // +0xd4 (slot 53)
+};
+
+struct GameDataVec { char pad[4]; void** mBegin; void** mEnd; };
+
+bool __stdcall OnHit(void* self, void* a2, int a3, int zero);          // 0x010593e0 cSPToolStrategy::OnHit
+bool __stdcall CanUseToolBase(void* self, Vec3* pos, int a3);          // 0x01053980 cSPToolStrategy::CanUseToolAtLocation
+int __stdcall SetErrorEvent(void* self, int key, int flag);            // 0x010527f0 cSPToolStrategy::SetErrorEvent
+void __stdcall CreatePanicBubbleForTool(void* self, Vec3 pos);         // 0x01059170
+PlanetRecord* __stdcall GetActivePlanetRecord();                       // 0x010212a0
+Empire* __stdcall GetPlayerEmpire();                                   // 0x01021300
+int __stdcall GetPlayerEmpireID(int key);                              // 0x01021090
+MsgServer* MessageServer();                                            // 0x0067dcc0
+CreatureEdit* __stdcall AchievementsController(int a, int b);           // 0x00675250
+UFOSim* GetUFOSimulator();                                             // 0x00ffbe50
+Planet* PlanetModel();                                                 // 0x00b3d350
+Cursor* GetGameTerrainCursor();                                        // 0x00b30d70
+TF* TerraformingMgr();                                                 // 0x00b3d390
+TFA* __stdcall TerraformingMgrArg(int v);                              // 0x00b3d430
+RelationshipMgr* __stdcall RelationshipManager(int a, int b);          // 0x00b3d2c0
+Pollinator* __stdcall GetPollinator(const void* key, void* src);       // 0x0067cb30
+Vec3* __stdcall RandomDirection3(Vec3* out);                           // 0x00b7e560
+WalkAround* F1015df0();                                                // 0x01015df0
+WM* WindowManager();                                                   // 0x0067caa0
+
+extern int g_keyZoo[3];                                                // 0x016e1e08
+extern int g_keyEradicate[3];                                          // 0x016e1e14
+extern int g_keyEpicize[3];                                            // 0x016e1e20
+extern int g_keyCreatureEdit[3];                                       // 0x016e1d9c
+extern Tok* g_spaceTokenTranslator;                                    // 0x016e0d08
+extern float g_relEventAmount;                                         // 0x013ef568
+extern float g_oneF;                                                   // 0x01485720
+
+// @ 0x0105b0f0
+bool __stdcall EnergyRepairDoToolAction(Strategy* self, void* a2, int a3, void* a4)
+{
+    if (OnHit(self, a2, a3, 0)) {
+        ItemBase* item = self->item;
+        if (item) {
+            RepairObj* obj = (RepairObj*)item->FindPlugin(0xb033b403);
+            if (obj && !obj->f714) {
+                float v = obj->f7f8;
+                if (v > obj->f7f4) obj->Repair(v * self->GetRate() * 0.01f);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// @ 0x0105b180
+bool __stdcall FUN_0105b180(Strategy* self, void* a2, int a3, void* a4)
+{
+    if (OnHit(self, a2, a3, 0)) {
+        Combatant* c = 0;
+        ItemBase* item = self->item;
+        if (item) c = (Combatant*)item->FindPlugin(0x13f94d4);
+        float cap = c->f38;
+        if (c->Slot58() > cap) {
+            float r = c->Slot58() * self->GetRate() * 0.01f;
+            c->PartialRepair(r);
+            FVec8* v = (FVec8*)SpaceGameGet()->f5180(0xc);
+            v->resize(8);
+            v->mData[7] = r;
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x0105b240
+bool __stdcall GetOutOfUFODoToolAction(Strategy* self, void* a2, int a3, void* a4)
+{
+    if (OnHit(self, a2, a3, 0)) {
+        if (self->CanUse()) {
+            self->SetValue(-1);
+            if (self->GetCount() <= 0) {
+                Inv* inv = SpaceGameGet()->GetPlayerInventory();
+                int handle = inv->Find(self->f14, (int)self->GetKey());
+                void* taken = self;
+                self->Slot1();
+                if (SpaceGameGet()->GetPlayerInventory()->Take(handle, &taken, -1)) {
+                    SpaceGameGet()->GetPlayerInventory()->Refresh();
+                }
+                if (taken) ((Unk*)taken)->Release();
+            }
+        }
+        SpaceGameGet()->F1003480();
+        WalkAround* wa = F1015df0();
+        wa->GetOutOfUFO();
+        WindowManager()->Slot4c(0, WindowManager()->Slot1());
+        return true;
+    }
+    return false;
+}
+
+// @ 0x0105b350
+bool __stdcall DefaultProjectileWeaponDoToolAction(Strategy* self, Vec3* pos, int a3, TargetC* a4)
+{
+    if (!OnHit(self, pos, a3, 0)) return false;
+    int* k1 = (int*)self->GetKey();
+    if (k1[0] == g_keyZoo[0] && k1[1] == g_keyZoo[1] && k1[2] == g_keyZoo[2]) {
+        PlanetRecord* rec = GetActivePlanetRecord();
+        rec->f2c |= 0x800;
+        void* av = SpaceGameGet()->GetAvatar();
+        if (av) ((Msg*)av)->Fff6380();
+        MessageServer()->Slot18(0x490d429, 0, 0, 0);
+        g_spaceTokenTranslator->f0c = GetActivePlanetRecord();
+        AchievementsController(0xcfc6c8ee, 1)->AutoTest();
+        GetUFOSimulator()->f18 = 0;
+    }
+    int* k2 = (int*)self->GetKey();
+    if (k2[0] == g_keyEradicate[0] && k2[1] == g_keyEradicate[1]
+        && k2[2] == g_keyEradicate[2] && a3 == 0) {
+        if (a4) {
+            Creature* cr = (Creature*)a4->SlotC(0xd0036e08);
+            if (cr) {
+                void* prof = &cr->GetSpeciesProfile()->f504;
+                GetPollinator((const void*)0xbe96cd0, prof)->Update();
+                TerraformingMgrArg(cr->F00c0bc00(0))->F00bbcb10();
+                float f = cr->f5e0;
+                Vec3 dir;
+                cr->sub.Slot18(f, -1, 0, RandomDirection3(&dir), 0);
+                Empire* e = GetActivePlanet()->F00c71e30();
+                if (e && e != GetPlayerEmpire()) {
+                    RelationshipManager(e->f84, GetPlayerEmpireID(0x526e531))
+                        ->RecordEvent(0x526e531, g_relEventAmount);
+                }
+            }
+        }
+    }
+    int* k3 = (int*)self->GetKey();
+    if (k3[0] == g_keyEpicize[0] && k3[1] == g_keyEpicize[1]
+        && k3[2] == g_keyEpicize[2] && a3 == 0 && a4) {
+        Creature* cr = (Creature*)a4->SlotC(0xd0036e08);
+        if (cr) {
+            Vec3 p = *cr->GetVec3();
+            TerraformingMgr()->f20 = p;
+            TerraformingMgr()->f2c = *pos;
+        }
+    }
+    int* k4 = (int*)self->GetKey();
+    if (k4[0] == g_keyCreatureEdit[0] && k4[1] == g_keyCreatureEdit[1]
+        && k4[2] == g_keyCreatureEdit[2]) {
+        GetUFOSimulator()->F00ffc0b0();
+        GetUFOSimulator()->f18 = 0;
+        if (a3 == 0 && a4) {
+            Creature* cr = (Creature*)a4->SlotC(0xd0036e08);
+            if (cr) {
+                MsgRC5 msg;
+                msg.mId = 0x3b092aa;
+                msg.mVftable = (void*)0x13eb90c;
+                msg.mRefCount = 0;
+                msg.mVftable = (void*)0x13eb844;
+                msg.mRCFlags = 0;
+                msg.mData[0] = (uint32_t)cr;
+                MessageServer()->Slot14(msg.mId, &msg, 0);
+                msg.Destruct();
+            }
+        }
+    }
+    CreatePanicBubbleForTool(self, *pos);
+    return true;
+}
+
+// @ 0x0105b6a0
+bool __stdcall PlaceColonyCanUseToolAtLocation(Strategy* self, Vec3* pos, int a3)
+{
+    if (!CanUseToolBase(self, pos, a3)) return false;
+    Planet* pm = PlanetModel();
+    if (pm && pm->Fb7e3e0(pos)) {
+        SetErrorEvent(self, 0xd7ff4c0b, a3);
+        return false;
+    }
+    Cursor* cur = GetGameTerrainCursor();
+    ColonyObj* probe = (ColonyObj*)cur->SlotD4();
+    if (!probe) return false;
+    ColonyObj* obj = (ColonyObj*)probe->SlotB8(0x2450023);
+    if (!obj) return false;
+    obj->Slot0();
+    obj->sub.SetPosition(pos);
+    Nm* nm = NounManager();
+    GameDataVec* vec = NounManager()->GetGameDataVector(0xcd7d10, 0xd3d420, 0xacdff0, 0xb1e500, (void*)0x18c43e8);
+    GDElem** it = (GDElem**)vec->mBegin;
+    GDElem** end = (GDElem**)vec->mEnd;
+    for (; it != end; ++it) {
+        GDElem* e = *it;
+        if (!e->Slot2c()) {
+            int z = e->ProfLeaveZone();
+            if (z && self->Slot64((void*)z)) {
+                SetErrorEvent(self, 0x147e3c98, a3);
+                obj->Slot1();
+                return false;
+            }
+        }
+    }
+    GameDataVec* vec2 = nm->GetGameDataVector(0xcd7d10, 0xd3d420, 0xae5ea0, 0xb1e500, (void*)0x403df5c);
+    float r = obj->sub.Radius();
+    float radius = r * obj->sub.Radius() - g_oneF;
+    bool found = false;
+    GDElem** it2 = (GDElem**)vec2->mBegin;
+    GDElem** end2 = (GDElem**)vec2->mEnd;
+    for (; it2 != end2; ++it2) {
+        Vec3* p = (Vec3*)(*it2)->sub.Slot2c();
+        if ((pos->y - p->y) * (pos->y - p->y) + (pos->z - p->z) * (pos->z - p->z)
+            + (pos->x - p->x) * (pos->x - p->x) <= 14400.0f) {
+            SetErrorEvent(self, 0x1458fe70, a3);
+            obj->Slot1();
+            return false;
+        }
+        Vec3* q = (Vec3*)(*it2)->sub.Slot2c();
+        if ((pos->z - q->z) * (pos->z - q->z) + (pos->y - q->y) * (pos->y - q->y)
+            + (pos->x - q->x) * (pos->x - q->x) <= radius) {
+            found = true;
+        }
+    }
+    if (!found) SetErrorEvent(self, 0xc18c8011, a3);
+    obj->Slot1();
+    return found;
 }
