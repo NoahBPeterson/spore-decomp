@@ -1,101 +1,134 @@
-// Control-point smoothing / min-max solver  @ 0x01161900  (6336 bytes, /O2, SSE).
+// Control-point smoothing / min-max solver (6336 bytes, /O2, SSE).  FUN_01161900.
 //
-// Reconstructed from the Ghidra decompile.  Computes an absolute-scaled copy of the
-// input point array, then iteratively smooths it (factor 0.997), solves each 0x20-wide
-// window with FUN_01161540 and either writes the solution into param_4 or keeps a
-// running min/max when param_6 selects that path.  Behavioural reconstruction; NOT
-// byte-exact (see nonmatching.txt/Its working array and the two solve calls are the
-// parts most likely to drift from retail).
+// Reconstructed from the disassembly.  Computes an absolute-scaled copy of the
+// input point array, then per 0x20-wide window runs two interleaved chains:
+//   x[k] = x[k-1]*0.997f + work[base+k]        (seeded by param_5[0])
+//   c[k] = Clamp(c[k-1], x[k])                 (seeded by param_5[1])
+// solves the window with FUN_01161540 and writes the result either into param_3
+// (when param_1[0x4c] == 0) or param_4 (otherwise, with an optional min-accumulate
+// when param_6 != 0).  Behavioural reconstruction; NOT byte-exact (see
+// nonmatching.txt).
 
 #include "../../include/types.h"
 #include <math.h>
+#include <string.h>
+#include <xmmintrin.h>   // switches scalar float codegen to SSE
+#include <emmintrin.h>
 
 void FUN_01161540(float* in, float scale, float* a, float* out, int count);
 
-// lazily-initialised per-axis scale factors
-static float s_scale[4];
-static int   s_scaleInit;
+// lazily-initialised per-axis scale factors (retail globals)
+extern "C" float g_016f1720[4];   // 0x16f1720  per-axis scale factors
+extern "C" int   g_016f1730;      // 0x16f1730  lazy-init flag
+
+static const float HK_EPS = 1.000000045813705e-18f;
 
 static float AbsEps(float v) {
-    float r = v + 1e-18f;
-    return r < 0.0f ? -r : r;
+    __m128 r = _mm_add_ss(_mm_set_ss(v), _mm_set_ss(HK_EPS));
+    r = _mm_and_ps(r, _mm_castsi128_ps(_mm_set1_epi32(0x7fffffff)));
+    return _mm_cvtss_f32(r);
 }
 
 // @ 0x01161900
-extern "C" void SmoothControlPoints(int param_1, float* param_2, int param_3,
+// param_1 arrives in ecx (the retail build's first-arg-in-ecx ABI): declare __fastcall with the
+// register slot then a dummy edx slot so param_2..param_6 land on the stack as the original reads them.
+extern "C" void __fastcall SmoothControlPoints(int param_1, int param_edx, float* param_2, int param_3,
                                     int param_4, float* param_5, int param_6) {
-    if (!(s_scaleInit & 1)) {
-        s_scaleInit |= 1;
-        s_scale[0] = s_scale[1] = s_scale[2] = s_scale[3] = 0.003000021f;
+    (void)param_edx;
+
+    const float* pi = (const float*)param_1; // p[0x30..0x4c] fields
+
+    if (!(g_016f1730 & 1)) {
+        g_016f1730 |= 1;
+        g_016f1720[0] = g_016f1720[1] = g_016f1720[2] = g_016f1720[3] = 0.003000020980834961f;
     }
 
-    float work[0x130 + 0x20];
-    int   n = 0;
+    float work[0x100];
 
-    // scale + |.| the first 12 blocks of 0x14 floats, then the tail
+    // scale + |.| the whole 0x100-float input block: work[j] = fabs(scale[j&3] * src[j])
     {
-        float s0 = s_scale[0], s1 = s_scale[1], s2 = s_scale[2], s3 = s_scale[3];
-        float a = s0 * param_2[0], b = s1 * param_2[1], c = s2 * param_2[2], d = s3 * param_2[3];
-        float e = s0 * param_2[4], f = s1 * param_2[5], g = s2 * param_2[6], h = s3 * param_2[7];
-        int   blk = 0xc;
-        float* src = param_2;
-        float* dst = work;
-        do {
-            float v8 = src[8], v9 = src[9], v10 = src[10], v11 = src[11];
-            float v12 = src[0xc], v13 = src[0xd], v14 = src[0xe], v15 = src[0xf];
-            dst[0] = AbsEps(a); dst[1] = AbsEps(b); dst[2] = AbsEps(c); dst[3] = AbsEps(d);
-            float v16 = src[0x10], v17 = src[0x11], v18 = src[0x12], v19 = src[0x13];
-            dst[4] = AbsEps(e); dst[5] = AbsEps(f); dst[6] = AbsEps(g); dst[7] = AbsEps(h);
-            dst[8]  = AbsEps(s0 * v8);  dst[9]  = AbsEps(s1 * v9);
-            dst[10] = AbsEps(s2 * v10); dst[0xb] = AbsEps(s3 * v11);
-            dst[0xc] = AbsEps(s0 * v12); dst[0xd] = AbsEps(s1 * v13);
-            dst[0xe] = AbsEps(s2 * v14); dst[0xf] = AbsEps(s3 * v15);
-            a = s0 * src[0x14]; b = s1 * src[0x15]; c = s2 * src[0x16]; d = s3 * src[0x17];
-            dst[0x10] = AbsEps(s0 * v16); dst[0x11] = AbsEps(s1 * v17);
-            dst[0x12] = AbsEps(s2 * v18); dst[0x13] = AbsEps(s3 * v19);
-            e = s0 * src[0x18]; f = s1 * src[0x19]; g = s2 * src[0x1a]; h = s3 * src[0x1b];
-            src += 0x14;
-            dst += 0x14;
-        } while (--blk != 0);
-        for (int i = 0; i < 8; ++i) {
-            dst[0x14 + i] = AbsEps((i & 1) == 0 ? s0 * src[0x1c + i] : s1 * src[0x1c + i]);
-        }
+        float sc[4] = { g_016f1720[0], g_016f1720[1], g_016f1720[2], g_016f1720[3] };
+        for (int j = 0; j < 0x100; ++j)
+            work[j] = AbsEps(sc[j & 3] * param_2[j]);
     }
+
+    const float s30 = pi[0x30 / 4];
+    const float s34 = pi[0x34 / 4];
+    const float s38 = pi[0x38 / 4];
+    const float s44 = pi[0x44 / 4];
+    const float s48 = pi[0x48 / 4];
 
     int base = 0;
-    do {
-        // smoothing pass: v = v*0.997 + input, seeded from param_5
-        float acc = (*param_5 * 0.997f + work[base]);
-        work[0x104] = acc;
-        work[0x105] = work[0x104] * 0.997f + work[base + 1];
-        work[0x106] = work[0x105] * 0.997f + work[base + 2];
+    if (*(const unsigned char*)(param_1 + 0x4c) != 0) {
+        // `param_1[0x4c] != 0` path: solve into a scratch buffer, then write param_4.
+        do {
+            char zb[0x7c];
+            memset(zb, 0, 0x7c);
+            volatile char zv = zb[0x7b];
+            (void)zv;
+            float xch[0x20];
+            float cch[0x20];
+            float solved[0x20];
 
-        // running min/max over the window
-        float lo = work[0x104], hi = work[0x104];
-        for (int i = 0; i < 0x20; ++i) {
-            float v = work[base + i];
-            if (v < lo) lo = v;
-            if (v > hi) hi = v;
-        }
-        (void)lo; (void)hi;
+            float x = *param_5;
+            for (int k = 0; k < 0x20; ++k) {
+                x = x * 0.997f + work[base + k];
+                xch[k] = x;
+            }
+            float c = param_5[1];
+            for (int k = 0; k < 0x20; ++k) {
+                float v = xch[k];
+                if (!(v > s30)) {
+                    if (!(s34 <= v)) c = (c < s48) ? (c - s48) : 0.0f;
+                } else if (c > s38) {
+                    c = s44 + c;
+                }
+                cch[k] = c;
+            }
+            *param_5 = xch[0x1f];
+            param_5[1] = cch[0x1f];
 
-        // solve this window
-        float solved[0x20];
-        FUN_01161540(work + 0x104, 1.0f / *(float*)(param_1 + 0x30), &work[0x104], solved, 0x20);
+            FUN_01161540(xch, 1.0f / s30, cch, solved, 0x20);
 
-        float* out = (float*)(param_4 + base * 4);
-        if (param_6 == 0) {
-            for (int i = 0; i < 0xb; ++i) out[i] = solved[i];
-        } else {
-            // component-wise max of solved vs the accumulated window
-            for (int i = 0; i < 0x20; i += 8)
-                for (int j = 0; j < 8; ++j)
-                    out[i + j] = solved[i + j] < work[base + i + j] ? work[base + i + j]
-                                                                    : solved[i + j];
-        }
-        *param_5 = solved[0];
-        param_5[1] = solved[1];
+            float* out = (float*)(param_4 + base * 4);
+            if (param_6 == 0) {
+                for (int i = 0; i < 0x20; ++i) out[i] = solved[i];
+            } else {
+                for (int i = 0; i < 0x20; ++i)
+                    out[i] = (solved[i] < out[i]) ? solved[i] : out[i];
+            }
+            base += 0x20;
+        } while (base < 0x100);
+    } else {
+        // `param_1[0x4c] == 0` path: solve straight into param_3.
+        do {
+            char zb[0x7c];
+            memset(zb, 0, 0x7c);
+            volatile char zv = zb[0x7b];
+            (void)zv;
+            float xch[0x20];
+            float cch[0x20];
 
-        base += 0x20;
-    } while (base < 0x100);
+            float x = *param_5;
+            for (int k = 0; k < 0x20; ++k) {
+                x = x * 0.997f + work[base + k];
+                xch[k] = x;
+            }
+            float c = param_5[1];
+            for (int k = 0; k < 0x20; ++k) {
+                float v = xch[k];
+                if (!(v > s30)) {
+                    if (!(s34 <= v)) c = (c < s48) ? (c - s48) : 0.0f;
+                } else if (c > s38) {
+                    c = s44 + c;
+                }
+                cch[k] = c;
+            }
+            *param_5 = xch[0x1f];
+            param_5[1] = cch[0x1f];
+
+            FUN_01161540(xch, 1.0f / s30, cch, (float*)(param_3 + base * 4), 0x20);
+            base += 0x20;
+        } while (base < 0x100);
+    }
 }
