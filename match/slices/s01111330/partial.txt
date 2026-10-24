@@ -1,1 +1,9 @@
 # va  diff-bytes  reason
+# Build flags (all rows): /vc71 /O2 /MD /Gy /TP
+#
+# Slice s01111330: 0/3 new functions byte-exact (the pre-existing 011114b0 Simplex5::SelectVertexToDrop row is unchanged).
+# 01111330 is semantically identical to retail (equiv PASS) and differs only in two stack-slot numbers.
+# 01111d90 and 011120a0 are structural reconstructions of Havok GSK 3.1 routines.
+01111330   10  hkSimplexTable_FindRow; every instruction matches except that cl put the loop index in the reused first-argument home ([esp+0x18]) and the vertex-count sum in the pushed slot ([esp+0x10]); retail has them the other way round, so all 10 diff bytes are the slot numbers of those two ints; equiv PASS 400/400 valid, 91.5% coverage
+01111d90  714  hkPackedSimplex_InsertVertex; 4-row drop (SelectVertexToDrop 0x011114b0, vtable+0x10), MRU row copy, 0x0110fc50, vtable+0x08 lookup with the 0xffff replacement path (0x01103af0, returns 6), the bReplace/ids[1]==3 lookup path, packed-word shift + row append and the per-vertex packed bytes; same callees in retail order, control flow/registers approximate; equiv FAIL
+011120a0  354  hkGsk_ContactDistance; per-body segment lerp, basis cross product dotted with the separating axis, sign-selected scale and the final subtraction; retail keeps two pointers in ebx/edi (not expressible in C++) and uses an and esp,-0x10 frame; equiv UNSUPPORTED (fake scale externals)
