@@ -16,6 +16,9 @@ struct ResMgr {
     virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
     virtual void v10(); virtual void v11(); virtual void v12();
     virtual void Resolve(LazyRes* h);      // slot 13 (+0x34)
+    virtual void v14();
+    virtual void* CreateTexture(uint32_t id, uint32_t global, uint32_t width, uint32_t height,
+                                uint32_t flag, uint32_t format, uint32_t mip, uint32_t extra);   // slot 15 (+0x3c)
 };
 extern ResMgr* __cdecl GetResMgr();        // 0x0067dd60
 
@@ -313,4 +316,415 @@ void PlanetPass::Run(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
         }
         viewer->Finish();
     }
+}
+
+// ---------------------------------------------------------------------------
+// Scatter-texture resources: refcounted at +8, released with interlocked ops.
+// ---------------------------------------------------------------------------
+extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
+extern "C" long __cdecl _InterlockedIncrement(volatile long*);
+extern "C" long __cdecl _InterlockedDecrement(volatile long*);
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement, _InterlockedDecrement)
+
+struct cScatterResource {
+    void*    mpImage;                                               // +0x00 raw image handle
+    uint32_t mFlags;                                                // +0x04
+    volatile long mnRefCount;                                       // +0x08
+    __forceinline int Release()
+    {
+        _InterlockedDecrement(&mnRefCount);
+        if (_InterlockedExchangeAdd(&mnRefCount, 0) < 1) {
+            _InterlockedIncrement(&mnRefCount);
+            return 1;
+        }
+        return _InterlockedExchangeAdd(&mnRefCount, 0);
+    }
+};
+
+struct cScatterViewer {
+    void Destroy();                                                 // 0x007c3ba0
+    bool Init(bool flag);                                           // 0x007c4dd0
+    void Clear(uint32_t color) const;                               // 0x007c3cc0
+    void SetImage(void* pImage);                                    // 0x007c3cb0
+    void SetClearColor(const struct cSPColorRGBA& color);           // 0x007c3c20
+    void SetViewAngleY(float angle);                                // 0x007c53d0
+    void SetQuad(uint16_t* pQuad);                                  // 0x007c4a60
+    void GetTransform(struct cSPTransform* pOut);                    // 0x007c40f0
+};
+
+// The image handle globals are owning reference slots; GetImageResource() stores a
+// newly created texture into one of them (thiscall on the slot itself).
+struct cImageSlot {
+    cScatterResource* mpResource;                                   // +0x00
+    void GetImageResource(void* pTexture);                          // 0x00576650
+};
+
+struct cSPColorRGBA { float r, g, b, a; };
+
+// 16-byte quad description handed to cScatterViewer::SetQuad.
+struct cViewQuad {
+    uint32_t x;                                                     // +0x00
+    uint32_t y;                                                     // +0x04
+    uint32_t width;                                                 // +0x08
+    uint32_t height;                                                // +0x0c
+};
+
+extern cScatterResource* g_pScatterTex1;                            // 0x016c9f54
+extern cScatterResource* g_pScatterTex1b;                           // 0x016c9f58
+extern cScatterResource* g_pScatterTex2;                            // 0x016c9f5c
+extern cScatterViewer   g_scatterViewer1;                           // 0x016c9f60
+extern cScatterViewer   g_scatterViewer2;                           // 0x016ca260
+
+// @ 0x00f9e1f0
+void ShutdownScatterTexture1()
+{
+    cScatterResource* pTex = g_pScatterTex1;
+    if (pTex) {
+        g_pScatterTex1 = 0;
+        pTex->Release();
+    }
+    g_scatterViewer1.Destroy();
+    cScatterResource* pImage = g_pScatterTex1b;
+    if (pImage) {
+        g_pScatterTex1b = 0;
+        pImage->Release();
+    }
+}
+
+// @ 0x00f9e350
+void ShutdownScatterTexture2()
+{
+    g_scatterViewer2.Destroy();
+    cScatterResource* pImage = g_pScatterTex2;
+    if (pImage) {
+        g_pScatterTex2 = 0;
+        pImage->Release();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Scatter sensor/effect rebuild.
+// ---------------------------------------------------------------------------
+struct cScatterProbe {
+    virtual void AddRef();                                          // +0x00
+    virtual void Release();                                         // +0x04
+    virtual void SetActive(int a);                                  // +0x08
+};
+
+struct cScatterMgr {
+    virtual void AddRef();                                          // +0x00
+    virtual void Release();                                         // +0x04
+    virtual void GetProbe(uint32_t id, int a, void** ppOut);        // +0x08
+    virtual void V0c(int a);                                        // +0x0c
+    virtual void V10(); virtual void V14(); virtual void V18();
+    virtual void V1c(void* p);                                      // +0x1c
+    virtual void V20();
+    virtual void V24(int a);                                        // +0x24
+    virtual void V28(); virtual void V2c(); virtual void V30(); virtual void V34();
+    virtual void V38(); virtual void V3c(); virtual void V40(); virtual void V44();
+    virtual void V48(); virtual void V4c(); virtual void V50(); virtual void V54();
+    virtual void V58(); virtual void V5c(); virtual void V60(); virtual void V64();
+    virtual void V68(); virtual void V6c(); virtual void V70(); virtual void V74();
+    virtual void V78(int a);                                        // +0x78
+    virtual void V7c(); virtual void V80();
+    virtual void V84(uint32_t a, uint32_t b);                       // +0x84
+};
+
+struct cEffectsMgrIface {
+    virtual void V00(); virtual void V04(); virtual void V08(); virtual void V0c();
+    virtual void V10(); virtual void V14(); virtual void V18(); virtual void V1c();
+    virtual void V20(); virtual void V24(); virtual void V28(); virtual void V2c();
+    virtual void V30(); virtual void V34(); virtual void V38(); virtual void V3c();
+    virtual void V40(); virtual void V44(); virtual void V48();
+    virtual void* V4c(uint32_t id, int a);                          // +0x4c
+};
+cEffectsMgrIface* EffectsManagerPtr();                              // 0x0067ddd0
+cScatterMgr* FUN_006eea10();                                        // 0x006eea10
+
+struct cAppHost {
+    virtual void V00(); virtual void V04(); virtual void V08(); virtual void V0c();
+    virtual void V10(); virtual void V14(); virtual void V18(); virtual void V1c();
+    virtual void V20(); virtual void V24(); virtual void V28(); virtual void V2c();
+    virtual void V30(); virtual void V34(); virtual void V38(); virtual void V3c();
+    virtual void V40(); virtual void V44(); virtual void V48(); virtual void V4c();
+    virtual uint32_t V50();                                         // +0x50
+};
+cAppHost* GetAppHost();                                             // 0x0067dd10
+
+// Owning reference: assignment AddRefs the new object and Releases the old one.
+template <class T> struct ip {
+    T* p;
+    ip& operator=(T* o)
+    {
+        if (o != p) {
+            T* const pTemp = p;
+            int d1, d2, d3;
+            if (o) o->AddRef();
+            p = o;
+            if (pTemp) pTemp->Release();
+        }
+        return *this;
+    }
+    T* operator->() const { return p; }
+    T** AsOutParam() { if (p) { T* t = p; p = 0; t->Release(); } return &p; }
+};
+
+struct cScatterHost {
+    uint8_t       pad00[0x8d8];
+    ip<cScatterMgr>   mpSensorMgr;                                  // +0x8d8
+    ip<cScatterMgr>   mpEffectMgr;                                  // +0x8dc
+    ip<cScatterProbe> mpProbe;                                      // +0x8e0
+    void RebuildEffects();
+};
+
+// @ 0x00f9e3a0
+void cScatterHost::RebuildEffects()
+{
+    mpSensorMgr = (cScatterMgr*)EffectsManagerPtr()->V4c(0xd0a45522u, 0);
+    mpEffectMgr = FUN_006eea10();
+    mpEffectMgr->V78(7);
+    mpEffectMgr->V84(0x16ca0d8u, GetAppHost()->V50());
+    mpSensorMgr->V1c(mpEffectMgr.p);
+    mpSensorMgr->V24(2);
+    mpSensorMgr->GetProbe(0x8ebc7a73u, 0, (void**)mpProbe.AsOutParam());
+    if (mpProbe.p)
+        mpProbe->SetActive(0);
+    mpSensorMgr->V0c(0);
+}
+
+extern cImageSlot g_imageSlot1;                                     // 0x016c9f54
+extern cImageSlot g_imageSlot1b;                                    // 0x016c9f58
+extern cImageSlot g_imageSlot2;                                     // 0x016c9f5c
+extern uint32_t g_15b11f0;                                          // 0x015b11f0
+extern uint32_t g_15b14c8;                                          // 0x015b14c8
+extern const float k_13ec4d8;                                       // 0x013ec4d8
+extern void FUN_0067dda0();                                         // 0x0067dda0
+
+struct cTerrainSphere {
+    void InitScatterTexture();                                      // 0x00f9e120
+};
+
+// @ 0x00f9e120
+void cTerrainSphere::InitScatterTexture()
+{
+    FUN_0067dda0();
+    g_imageSlot1.GetImageResource(
+        GetResMgr()->CreateTexture(0x7df39217u, g_15b11f0, 0x20, 0x20, 1, 0x1009, 0x15, 0));
+    g_imageSlot1b.GetImageResource(
+        GetResMgr()->CreateTexture(0x3090ff70u, g_15b11f0, 0x20, 0x20, 1, 0x1009, 0x15, 0));
+
+    g_scatterViewer1.Init(true);
+    g_scatterViewer1.Clear(0);
+    g_scatterViewer1.SetImage(g_pScatterTex1b->mpImage);
+
+    cViewQuad quad;
+    quad.x = 0;
+    quad.y = 0;
+    quad.width = 0x20;
+    quad.height = 0x20;
+    g_scatterViewer1.SetQuad((uint16_t*)&quad);
+}
+
+struct cScatterSphere {
+    void InitScatterTexture2();                                     // 0x00f9e280
+};
+
+// @ 0x00f9e280
+void cScatterSphere::InitScatterTexture2()
+{
+    FUN_0067dda0();
+    ResMgr* res = GetResMgr();
+    g_imageSlot2.GetImageResource(
+        res->CreateTexture(0x7ef570ccu, g_15b11f0, g_15b14c8, g_15b14c8, 1, 0x1009, 0x15, 0));
+
+    g_scatterViewer2.Init(false);
+    g_scatterViewer2.SetImage(g_pScatterTex2->mpImage);
+
+    cSPColorRGBA clearColor;
+    clearColor.r = 0.0f;
+    clearColor.g = 0.0f;
+    clearColor.b = 0.0f;
+    clearColor.a = 0.0f;
+    g_scatterViewer2.SetClearColor(clearColor);
+    g_scatterViewer2.SetViewAngleY(k_13ec4d8);
+
+    cViewQuad quad;
+    quad.x = 0;
+    quad.y = 0;
+    quad.width = g_15b14c8;
+    quad.height = g_15b14c8;
+    g_scatterViewer2.SetQuad((uint16_t*)&quad);
+}
+
+// ---------------------------------------------------------------------------
+// Scatter refresh: keeps the sphere's scatter transform in sync with the viewer.
+// ---------------------------------------------------------------------------
+struct cSPMatrix3 {
+    float m[9];                                                     // +0x00 (0x24 bytes)
+    cSPMatrix3* Assign(const void* pSrc);                           // 0x0041cb40
+};
+
+extern const float g_16c9e8c;                                       // 0x016c9e8c
+extern const float g_16c9e90;                                       // 0x016c9e90
+extern const float g_16c9e94;                                       // 0x016c9e94
+extern const float g_16c9f24;                                       // 0x016c9f24
+extern const float g_hkRealOne;                                     // 0x01485720 (_HK_REAL_ONE)
+extern const float g_15b14c0;                                       // 0x015b14c0
+extern const float g_15b14c4;                                       // 0x015b14c4
+extern uint8_t     g_16ca5a5;                                       // 0x016ca5a5
+
+struct cSPTransform {                                               // 0x38 bytes
+    uint16_t   mFlags;                                              // +0x00
+    uint16_t   mFlags2;                                             // +0x02
+    Vec3f      mOffset;                                             // +0x04
+    float      mScale;                                              // +0x10
+    cSPMatrix3 mRotation;                                           // +0x14
+    cSPTransform()
+    {
+        mFlags = 0;
+        mFlags2 = 0;
+        mOffset.x = g_16c9e8c;
+        mOffset.y = g_16c9e90;
+        mOffset.z = g_16c9e94;
+        mScale = g_hkRealOne;
+        mRotation.Assign(&g_16c9f24);
+    }
+    cSPTransform& operator=(const cSPTransform& other);             // 0x00537dc0
+};
+
+extern void __cdecl IssueScatterShader(uint32_t id, uint32_t a, uint32_t b);   // 0x00777ae0
+extern "C" float __cdecl sqrtf(float);
+extern "C" float __cdecl fabsf(float);
+#pragma intrinsic(sqrtf, fabsf)
+
+struct cTerrainSphere7 {
+    uint8_t      pad00[0x8e8];
+    cSPTransform mScatterXform;                                     // +0x8e8
+    int32_t      mScatterState;                                     // +0x920
+    void UpdateScatterTexture(int face, Raster* pRaster, const void* pData, uint32_t arg);   // 0x00f9d9b0
+    void UpdateScatter(cScatterViewer* pViewer, Raster* pRaster, const void* pData, uint32_t arg);
+};
+
+// @ 0x00f9df20
+void cTerrainSphere7::UpdateScatter(cScatterViewer* pViewer, Raster* pRaster, const void* pData,
+                                    uint32_t arg)
+{
+    if (g_16ca5a5) {
+        if (mScatterState == 6) {
+            cSPTransform xform;
+            pViewer->GetTransform(&xform);
+
+            float dx = xform.mOffset.x - mScatterXform.mOffset.x;
+            float dy = xform.mOffset.y - mScatterXform.mOffset.y;
+            float dz = xform.mOffset.z - mScatterXform.mOffset.z;
+
+            float dist = sqrtf(dz * dz + dy * dy + dx * dx);
+            float lenOld = sqrtf(mScatterXform.mOffset.z * mScatterXform.mOffset.z
+                                 + mScatterXform.mOffset.y * mScatterXform.mOffset.y
+                                 + mScatterXform.mOffset.x * mScatterXform.mOffset.x);
+            float lenNew = sqrtf(xform.mOffset.z * xform.mOffset.z
+                                 + xform.mOffset.y * xform.mOffset.y
+                                 + xform.mOffset.x * xform.mOffset.x);
+
+            if (dist > g_15b14c4 || fabsf(lenOld - lenNew) > g_15b14c0)
+                mScatterState = -1;
+            else
+                mScatterState = 0;
+            mScatterXform = xform;
+        }
+        if (mScatterState == -1) {
+            mScatterState = 0;
+            while (mScatterState < 6) {
+                UpdateScatterTexture(mScatterState, pRaster, pData, arg);
+                ++mScatterState;
+            }
+        } else {
+            int32_t face = mScatterState;
+            mScatterState = face + 1;
+            UpdateScatterTexture(face, pRaster, pData, arg);
+        }
+    } else {
+        for (int face = 0; face < 6; ++face)
+            UpdateScatterTexture(face, pRaster, pData, arg);
+    }
+    IssueScatterShader(0x206, 0, 0);
+}
+
+// ---------------------------------------------------------------------------
+// Terraform refresh after a scatter rebuild.
+// ---------------------------------------------------------------------------
+struct cSPVector3 { float x, y, z; };
+
+extern const float g_1471064;                                       // 0x01471064
+
+struct cTerrainEditorObj {
+    void FUN_00f67560();                                            // 0x00f67560
+};
+cTerrainEditorObj* __cdecl TerrainEditor();                         // 0x00f48a70
+
+struct cProperty {
+    uint8_t    pad00[0x12];
+    uint16_t   mType;                                               // +0x12
+    uint32_t*  GetUInt();                                           // 0x0041ea00
+};
+struct cPropertyList {
+    virtual void V00(); virtual void V04(); virtual void V08(); virtual void V0c();
+    virtual void V10(); virtual void V14(); virtual void V18(); virtual void V1c();
+    virtual void V20();
+    virtual bool V24(uint32_t id, cProperty** ppOut);               // +0x24
+};
+bool __cdecl GetPropertyAsVector3(const cPropertyList* pList, uint32_t id, cSPVector3* pOut);   // 0x006a1110
+
+struct cTerraformParams {
+    uint8_t pad00[0x50];
+    float   mValues[2];                                             // +0x50
+};
+
+struct cPlanetLike {
+    void BuildHeightHistogram();                                    // 0x00fbb1a0
+    float HeightToRatio(float height);                              // 0x00fbd8b0
+    void FUN_00fb9420(float a, float b, float* pOut);               // 0x00fb9420
+    void RefreshTerraformValues();                                  // 0x00fbdee0
+};
+
+struct cTerrainSphere8 {
+    uint8_t           pad00[0x28];
+    cPropertyList*    mpPropList;                                   // +0x28
+    cTerraformParams* mpParams;                                     // +0x2c
+    uint8_t           pad30[0x20c - 0x30];
+    cPlanetLike*      mpPlanet;                                     // +0x20c
+    void FUN_00f9a610();                                            // 0x00f9a610
+    void RefreshTerraform();
+};
+
+// @ 0x00f9eda0
+void cTerrainSphere8::RefreshTerraform()
+{
+    TerrainEditor()->FUN_00f67560();
+    mpPlanet->BuildHeightHistogram();
+
+    cSPVector3 v;
+    v.x = g_1471064;
+    v.y = g_1471064;
+    v.z = g_1471064;
+    GetPropertyAsVector3(mpPropList, 0x3a23f98u, &v);
+
+    float ratio = mpPlanet->HeightToRatio(v.x);
+    float dest[2];
+    float* pValues = mpParams->mValues;
+    dest[0] = pValues[0];
+    dest[1] = pValues[1];
+    mpPlanet->FUN_00fb9420(v.x, ratio, dest);
+
+    FUN_00f9a610();
+
+    cPropertyList* pList = mpPropList;
+    if (pList) {
+        cProperty* pProp;
+        if (pList->V24(0xd2f669ecu, &pProp)
+            && pProp->mType == 0xa
+            && *pProp->GetUInt() != 1)
+            return;
+    }
+    mpPlanet->RefreshTerraformValues();
 }

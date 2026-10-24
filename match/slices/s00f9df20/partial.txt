@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00f9df20  488 cTerrainSphere7::UpdateScatter; equiv UNSUPPORTED 2 unresolved refs (_sqrtf/_fabsf); retail's distance/length math is x87 (fld/fmul/faddp/fsqrt + fcomi) while cl13 emits SSE under the slice's /arch:SSE /fp:fast flags, control flow and the transform copy otherwise agree
+00f9e4d0 1167 Scatter pass (both modes: 6-face scatter refresh, and single-face quad draw with 5 textures); frame/regalloc and stack-temp shapes differ

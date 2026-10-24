@@ -1,1 +1,7 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f9df20/s00f9df20.cpp  ?ShutdownScatterTexture1@@YAXXZ  00f9e1f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f9df20/s00f9df20.cpp  ?ShutdownScatterTexture2@@YAXXZ  00f9e350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f9df20/s00f9df20.cpp  ?RebuildEffects@cScatterHost@@QAEXXZ  00f9e3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f9df20/s00f9df20.cpp  ?InitScatterTexture@cTerrainSphere@@QAEXXZ  00f9e120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f9df20/s00f9df20.cpp  ?InitScatterTexture2@cScatterSphere@@QAEXXZ  00f9e280  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f9df20/s00f9df20.cpp  ?RefreshTerraform@cTerrainSphere8@@QAEXXZ  00f9eda0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
