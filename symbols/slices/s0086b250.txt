@@ -1,0 +1,7 @@
+0086b250 png_error            # libpng error handler (PNG_STRING_FROM_0x from png.c)
+0086b300 png_warning          # libpng warning handler
+0086b360 png_chunk_error      # libpng chunk error (png_format_buffer + png_error)
+0086b3b0 png_chunk_warning    # libpng chunk warning (png_format_buffer + png_warning)
+0086b500 png_create_read_struct_2 # libpng 1.2.3 reader constructor with mem/error fn args (byte-exact)
+0086b750 png_read_info        # libpng chunk loop up to first IDAT
+0086bd90 png_read_row         # libpng row inflate + filter pipeline

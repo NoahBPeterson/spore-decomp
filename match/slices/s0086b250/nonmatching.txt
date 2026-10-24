@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0086b250  51  png_error complete; the default handler png_default_error (0x86aff0) is given the message in eax (register-convention callee), so its NULL-message path is `mov eax,msg; pop esi; jmp` where our cdecl call pushes the argument. Only that call shape differs; equiv UNSUPPORTED (no valid inputs, import __iob_func).
+0086b300  5  png_warning complete; only the last tail call to png_default_warning (0x86b110, message in eax) differs from our cdecl push. equiv WEAK 58.8% cov (import __iob_func).
+0086b360  25  png_chunk_error complete; png_format_buffer (0x86af60) takes ecx=png, eax=buf, edx=msg, so our cdecl call cannot reproduce its argument setup (66 bytes vs 65). equiv UNSUPPORTED (import __iob_func).
+0086b3b0  25  png_chunk_warning complete; same register-convention png_format_buffer call (66 vs 65). equiv FAIL: our call leaves the pointer args in the wrong registers so the original 0x86af90 writes through a garbage pointer.
+0086b750  1440  png_read_info complete; the 20 eight-byte chunk-name tables reproduce, but cl orders/dedups the byte stores differently (retail keeps 's' in bl) so the frame is 0xa8 vs 0xa4 and every branch offset shifts; sig_bytes is also kept in a copy local. equiv WEAK 3.3% cov.
+0086bd90  395  png_read_row complete; one extra 4-byte zero store (`mov dword [esp+0x10],0` next to the 14-entry mask table) shifts the whole frame and all branch offsets. Body logic, call order and row_info store order now match. equiv WEAK 22.5% cov.
