@@ -1,0 +1,10 @@
+00cfe160 1103 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1103 bytes - relation helper not reconstructed.
+00cfe5b0 413 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 413 bytes - relation helper not reconstructed.
+00cfe820 272 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 272 bytes - SP::GetTributeAmount not reconstructed.
+00cfe930 144 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 106 bytes - IsAllied: the list walk, the two identity skips (player civ, argument civ), the owner-id virtual (+0x4c) lookups and the GetAttitude >= 4 test are instruction-for-instruction, but retail spills the list pointer into a push-ecx slot (edi=list, ebx=count, ebp=index) while this source keeps it in ebp with ebx=index (131 vs 144, register-allocation-only).
+00cfea20 159 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 159 bytes - relation helper not reconstructed.
+00cfeac0 67 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - global-singleton swap: the guard on the global at 0x169d3c8, the NounManager-style virtual +0x20 access and the release through virtual +0x08 are readable, but the getter chain and the tail-jumped release needed a class layout the slice does not pin down.
+00cfeb40 102 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 102 bytes - summarizer helper not reconstructed.
+00cfec10 85 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 8 bytes - summarizer constructor: size 85 exact and every store matches (two base vptrs, +8/+0xc/+0x10 zeroed, +0x14/+0x18 set to -1 through one `or edx,-1`, three float fields copied from the globals at 0x169d388/38c/390 and +0x28 zeroed); only the placement of the `or edx,-1` differs (MSVC schedules it before the +0x0c/+0x10 stores here).
+00cfecc0 36 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 43 bytes - subsystem constructor: base ctor call plus the two vptr stores and the +0x1c/+0x20/+0x24 zeroed fields are known, but sizeof(cGonzagoSubsystem) is unknown so the second base's placement at +4 (and thus the field offsets) could not be derived from a legal hierarchy (43 vs 36).
+00cfee00 162 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - SP::FindTargetCity not reconstructed.

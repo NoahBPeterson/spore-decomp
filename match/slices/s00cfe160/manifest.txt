@@ -1,0 +1,4 @@
+slices/s00cfe160/s00cfe160.cpp  ?SetField0C@cCivRefTable@@QAEPAVcCivilization@SP@@PAV23@@Z  00cfe780  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00cfe160/s00cfe160.cpp  ?SetField10@cCivRefTable@@QAEPAVcCivilization@SP@@PAV23@@Z  00cfe790  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00cfe160/s00cfe160.cpp  ?SetEntry@cCivRefTable@@QAEPAVcCivilization@SP@@HPAV23@@Z  00cfe7a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00cfe160/s00cfe160.cpp  ?FUN_00cfe9c0@@YAXPAVcCivilization@SP@@PAPAV12@1@Z  00cfe9c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
