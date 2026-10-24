@@ -302,7 +302,10 @@ void cSPSkinPaintClearCommand::Execute(EA::ArgScript::cArguments& args)
 extern uint8_t DAT_015dfa30[0x800];
 extern void*   DAT_01667bac;
 int  Vsnprintf8(char* buf, uint32_t n, const char* fmt, ...);          // 0x00938400
-void EastlStringAssign(void* str, const char* first, const char* last); // 0x00454cb0
+// 0x00454cb0 is a thiscall string assign: the destination is in ecx.
+struct EastlString {
+    void Assign(const char* first, const char* last);                  // 0x00454cb0
+};
 
 // @ 0x0052df30  cError/cError(const char* fmt, ...)
 int* ErrorStringCtor(int* out, const char* fmt, ...)
@@ -320,7 +323,7 @@ int* ErrorStringCtor(int* out, const char* fmt, ...)
     char* p = (char*)DAT_015dfa30;
     while (*p)
         p++;
-    EastlStringAssign(out, (const char*)DAT_015dfa30, p);
+    ((EastlString*)out)->Assign((const char*)DAT_015dfa30, p);
     return out;
 }
 
