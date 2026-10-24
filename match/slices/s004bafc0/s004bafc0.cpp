@@ -12,6 +12,13 @@ struct IRefCounted {
     virtual void Release();  // +4
 };
 
+// EA::AutoRefCount<T>::AsPPVoidParam: takes the address of the T* slot in ecx,
+// releases/zeroes the old pointer, and returns the slot address in eax.
+struct AutoRefSlot {
+    IRefCounted* p;
+    void* AsPPVoidParam();   // 0x0041d870
+};
+
 struct IResourceManager {
     virtual void v0();       // +0
     virtual void v4();       // +4
@@ -29,19 +36,18 @@ struct cEditorCreature : IRefCounted {
     uint32_t f8;             // +8
     uint32_t fC;             // +0xc
     uint32_t f10;            // +0x10
+    cEditorCreature* FUN_0046a630(IRefCounted* a);  // 0x46a630
+    cEditorCreature* FUN_004b9da0();                // 0x4b9da0
 };
 
 struct cPropertyList {
-    bool GetDescription(uint32_t id);
+    bool GetDescription(uint32_t id);               // 0x6a25a0
 };
 
 extern void* GetManager();                                                   // 0x67dcd0
-extern void* FUN_0041d870(void* key);                                        // 0x41d870
 extern void* EditorAlloc(uint32_t size, const char* name, int, int, int, int);// 0xf473a0
-extern cEditorCreature* FUN_0046a630(cEditorCreature* self, IRefCounted* a); // 0x46a630
 extern void MakeBabyRuntimeCreature(cEditorCreature* c);                     // 0x46a8a0
 extern cEditorResource* InterfaceCast(IRefCounted** p);                      // 0x421eb0
-extern cEditorCreature* FUN_004b9da0(cEditorCreature* self);                 // 0x4b9da0
 extern bool FUN_0046d840(cEditorResource* res, cEditorCreature* c);          // 0x46d840
 extern void SetCachingType(int, cEditorCreature* c);                         // 0x6ac040
 extern void FUN_006ad010(cEditorCreature* c);                                // 0x6ad010
@@ -67,14 +73,14 @@ bool FUN_004bafc0(int* param_1, int* param_2) {
         sub.type = param_1[1];
         sub.group = param_1[2] & 0xe0ffffff;
         IRefCounted* tmp = 0;
-        void* handle = FUN_0041d870(&tmp);
+        void* handle = ((AutoRefSlot*)&tmp)->AsPPVoidParam();
         if (!FUN_004bafc0((int*)&sub, (int*)handle)) {
             ReleaseRef(tmp);
             return false;
         }
         cEditorCreature* c = (cEditorCreature*)EditorAlloc(0x128, "Editor", 0, 0, 0, 0);
         if (c)
-            c = FUN_0046a630(c, tmp);
+            c = c->FUN_0046a630(tmp);
         if (c)
             c->v0();
         MakeBabyRuntimeCreature(c);
@@ -87,7 +93,7 @@ bool FUN_004bafc0(int* param_1, int* param_2) {
     }
 
     IRefCounted* local18 = 0;
-    void* h1 = FUN_0041d870(&local18);
+    void* h1 = ((AutoRefSlot*)&local18)->AsPPVoidParam();
     if (manager->FindCached(&key, h1, 0, 0, 0, 0)) {
         void* r = LoadCreatureData(&local18);
         if (r) {
@@ -99,7 +105,7 @@ bool FUN_004bafc0(int* param_1, int* param_2) {
         return false;
     }
 
-    void* h2 = FUN_0041d870(&local18);
+    void* h2 = ((AutoRefSlot*)&local18)->AsPPVoidParam();
     if (manager->FindCached((ResourceKey*)param_1, h2, 0, 0, 0, 0)) {
         cEditorResource* res = InterfaceCast(&local18);
         if (!res) {
@@ -116,7 +122,7 @@ bool FUN_004bafc0(int* param_1, int* param_2) {
         }
         cEditorCreature* c = (cEditorCreature*)EditorAlloc(0x128, "Editor", 0, 0, 0, 0);
         if (c)
-            c = FUN_004b9da0(c);
+            c = c->FUN_004b9da0();
         if (c)
             c->v0();
         if (FUN_0046d840(res, c)) {
