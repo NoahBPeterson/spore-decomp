@@ -3,9 +3,21 @@
 // selection, save/load glue). Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
 #include <string.h>
+#include <math.h>
 #include <xmmintrin.h>
 
 static inline void** Vt(void* p) { return *(void***)p; }
+
+// Rounding float->int (cvtss2si, current MXCSR rounding); asm helper as in the original.
+inline int RoundToInt(float f)
+{
+    int r;
+    __asm {
+        cvtss2si eax, f
+        mov r, eax
+    }
+    return r;
+}
 
 // ---- globals (masked relocations) ----
 extern float gBox_16b3c88, gBox_16b3c8c, gBox_16b3c90, gBox_16b3c94,
@@ -47,9 +59,10 @@ extern "C" void*  __cdecl FUN_0067de90(int, int);         // 0x67de90
 extern "C" void*  __cdecl FUN_007ec160(int, int);         // 0x7ec160
 extern "C" void   __cdecl FUN_007eb820(int);              // 0x7eb820
 extern "C" void   __cdecl FUN_00e394f0(uint32_t, void*, void*, void*, void*); // 0xe394f0
-extern "C" float  __cdecl FUN_01041cd0(void*, void*, void*); // 0x1041cd0
+extern "C" float  __cdecl FUN_01041cd0(float, float, float); // 0x1041cd0
 extern "C" void*  __cdecl EA_IO_WriteUint32(void*, void*, int, int); // 0x93aa70
 extern "C" int    __cdecl SP_sGetSourceLevel();           // 0xe4ee60
+extern "C" int    __fastcall SP_sGetSourceLevelReg(void* self, int level); // 0xe4ee60
 struct cVarListSerializer {
   void Ctor(int a, void* b, uint32_t c);   // 0x692f90
   void Serialize(void* o);                 // 0x692900
@@ -85,25 +98,33 @@ void FUN_00e50810(float* p) {
   FUN_006ffe00((void*)0x16b4378);
 }
 
+struct ScreenStub { void setModal(int); };   // 0xad7e40
+
 // @ 0x00e50940
 void FUN_00e50940(int a, uint8_t b) {
   (void)a;
   void* r = FUN_00b3d4d0();
-  FUN_00ad7e40(r);
+  ((ScreenStub*)r)->setModal(0);
   *(uint8_t*)((char*)gState_16b3c0c + 0x936) = 0;
   *(uint32_t*)((char*)gState_16b3c0c + 0xe0) = 0;
   *(uint8_t*)((char*)gCellGame_16b3c04 + 0x51d8) = 1;
   *(uint8_t*)((char*)gCellGame_16b3c04 + 0x51d9) = b;
 }
 
+struct CellGfxStub { void VecClear(); };     // 0x743b50
+struct RefStub {
+  void Release();  // 0xe82130
+};
+extern "C" void* __cdecl FUN_00e4cc40(void*, void*);  // 0xe4cc40
+
 // @ 0x00e50990
 int FUN_00e50990(int a) {
-  float local[1];
-  FUN_00743b50();
-  char* r = (char*)thunk_FUN_00e823a0(a, local);
-  if (*(int*)(r + 0xb4) != 6) { FUN_00e82130(); return 0; }
+  void* local[1];
+  ((CellGfxStub*)local)->VecClear();
+  char* r = (char*)FUN_00e4cc40((void*)a, local);
+  if (*(int*)(r + 0xb4) != 6) { ((RefStub*)local)->Release(); return 0; }
   int v = *(int*)(r + 0xb8);
-  FUN_00e82130();
+  ((RefStub*)local)->Release();
   return v;
 }
 
@@ -122,19 +143,31 @@ bool __cdecl FUN_00e509d0(int a, char* obj) {
 }
 
 // @ 0x00e50a10
-int FUN_00e50a10(float* a, float* b, float c, float d, float e) {
+bool FUN_00e50a10(float* a, float* b, float c, float d, float e) {
+  float* p = a;
   float x = *a;
-  if (x == c && *b == 0.0f) return 1;
-  float sign = 1.0f;
-  if (x > c) sign = -1.0f;
-  float diff = (c - x) * sign;
-  float bv = *b;
-  if (bv * e > diff) { *a = c; *b = 0.0f; return 1; }
-  float step = sign * d * e;
-  // |bv| / d * bv * sign < diff  -> move back
-  float cmp = ((bv < 0 ? -bv : bv) / d * bv) * sign;
-  if (diff < cmp) { bv = bv - step; *b = bv; *a = bv * e + *a; return 0; }
-  bv = step + bv; *b = bv; *a = bv * e + *a; return 0;
+  if (x != c || *b != 0.0f) {
+    float sign = 1.0f;
+    if (x > c) sign = -1.0f;
+    float diff = (c - x) * sign;
+    float bv = *b;
+    if (bv * e <= diff) {
+      float step = (sign * d) * e;
+      if (diff < ((bv < 0 ? -bv : bv) / d * bv) * sign) {
+        bv = bv - step;
+        *b = bv;
+        *p = bv * e + *p;
+        return 0;
+      }
+      bv = step + bv;
+      *b = bv;
+      *p = bv * e + *p;
+      return 0;
+    }
+    *p = c;
+    *b = 0.0f;
+  }
+  return 1;
 }
 
 // @ 0x00e50b80
@@ -164,7 +197,7 @@ float FUN_00e50cb0(float a, float b, float* out) {
   b = b - a;
   for (; b <= -gHalf_15a7c24; b = gPeriod_16b3dd0 + b) {}
   for (; gHalf_15a7c24 < b; b = b - gPeriod_16b3dd0) {}
-  *out = b < 0 ? -b : b;
+  *out = fabsf(b);
   return b >= 0.0f ? 1.0f : -1.0f;
 }
 
@@ -248,10 +281,14 @@ void FUN_00e51060(float n) {
   float lo, hi;
   FUN_00e836f0(0x71cb8a60, &n, &lo);
   (void)hi;
-  __m128 r = _mm_load_ss((float*)(s + 0xf8));
-  r = _mm_max_ss(r, _mm_load_ss(&n));
-  r = _mm_min_ss(r, _mm_load_ss(&lo));
-  _mm_store_ss((float*)(s + 0xf8), r);
+  float v = *(float*)(s + 0xf8);
+  __asm {
+    movss xmm0, v
+    maxss xmm0, n
+    minss xmm0, lo
+    movss v, xmm0
+  }
+  *(float*)(s + 0xf8) = v;
   *(uint32_t*)(s + 0x88) = 0;
 }
 
@@ -289,8 +326,12 @@ void FUN_00e511b0() {
 // @ 0x00e511e0
 float FUN_00e511e0(int a, int b) {
   float v = ((1000.0f - (float)(a + b)) * 0.0f + (float)(b - a)) * 0.001f;
-  if (v <= -1.0f) v = -1.0f;
-  if (v >= 1.0f) v = 1.0f;
+  __asm {
+    movss xmm0, v
+    maxss xmm0, gNegOne_13eb1bc
+    minss xmm0, gOne_1485720
+    movss v, xmm0
+  }
   return v;
 }
 
@@ -322,26 +363,33 @@ void Obj51300::Write(void* other) {
   ((cVarListSerializer*)buf)->Serialize(other);
 }
 
+__declspec(noinline) float FUN_00e513d0(float a, float b, float c, float lo, float hi);
 // @ 0x00e513d0
-float FUN_00e513d0(int a, int b, int c, float lo, float hi) {
-  float t = (float)FUN_01041cd0((void*)a, (void*)b, (void*)c);
-  if (t <= 0.0f) t = 0.0f;
-  if (t >= 1.0f) t = 1.0f;
+float FUN_00e513d0(float a, float b, float c, float lo, float hi) {
+  float t = FUN_01041cd0(a, b, c);
+  float one = 1.0f;
+  __asm {
+    xorps xmm0, xmm0
+    maxss xmm0, t
+    minss xmm0, one
+    movss t, xmm0
+  }
   return (hi - lo) * t + lo;
 }
 
 // @ 0x00e51430
 int __fastcall FUN_00e51430(int level) {
-  float* row;
-  if (level == 1000) row = (float*)0x1483e60;
+  int* row;
+  if (level == 1000) row = (int*)0x1483e60;
   else {
     int i = 0;
     int* p = (int*)0x1483c34;
     if (level >= 0) { do { p += 7; ++i; } while (*p <= level); }
-    row = (float*)(0x1483c14 + i * 0x1c);
+    row = (int*)(0x1483c14 + i * 0x1c);
   }
-  if (level == (int)row[1]) return (int)row[2];
-  return (int)(FUN_00e513d0((int)row[1], (int)row[8], level, row[2], row[9]) + 0.5f);
+  if (level == row[1]) return row[2];
+  float t = FUN_00e513d0((float)row[1], (float)row[8], (float)level, (float)row[2], (float)row[9]);
+  return RoundToInt(t);
 }
 
 // @ 0x00e514c0
@@ -396,8 +444,14 @@ void FUN_00e51650() {
 }
 
 // @ 0x00e51690
-void FUN_00e51690(int obj) {
-  if (*(int*)(obj + 0x358) == -1) SP_sGetSourceLevel();
+int FUN_00e51690(int obj) {
+  int v = *(int*)(obj + 0x358);
+  if (v == -1) {
+    void* cg = gCellGame_16b3c04;
+    int level = *(int*)(*(int*)((char*)cg + 0x5190) + 0x1c);
+    return SP_sGetSourceLevelReg(cg, level);
+  }
+  return v;
 }
 
 // @ 0x00e516c0
@@ -429,8 +483,14 @@ float FUN_00e51720(int idx) {
     row = (float*)(0x1483c14 + i * 0x1c);
   }
   float v = row[6] * gTable_1483e7c[idx];
-  if (v <= 0.0f) v = 0.0f;
-  if (v >= 1.0f) v = 1.0f;
+  float zero = 0.0f;
+  float one = 1.0f;
+  __asm {
+    movss xmm0, v
+    maxss xmm0, zero
+    minss xmm0, one
+    movss v, xmm0
+  }
   return v;
 }
 
@@ -441,12 +501,13 @@ int __fastcall FUN_00e517d0(char* p) {
 
 // @ 0x00e517e0
 void __stdcall FUN_00e517e0(float* out) {
-  out[0] = gBox_16b3c88;
-  out[1] = gBox_16b3c8c;
-  out[2] = gBox_16b3c90;
-  out[3] = gBox_16b3c94;
-  out[4] = gBox_16b3c98;
-  out[5] = gBox_16b3c9c;
+  uint32_t* o = (uint32_t*)out;
+  o[0] = *(uint32_t*)&gBox_16b3c88;
+  o[1] = *(uint32_t*)&gBox_16b3c8c;
+  o[2] = *(uint32_t*)&gBox_16b3c90;
+  o[3] = *(uint32_t*)&gBox_16b3c94;
+  o[4] = *(uint32_t*)&gBox_16b3c98;
+  o[5] = *(uint32_t*)&gBox_16b3c9c;
 }
 // --- equivalence checker address annotations
 
