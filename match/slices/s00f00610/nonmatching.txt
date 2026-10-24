@@ -1,4 +1,13 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
 00f00ba0  10   placement V4 fetch: argument register allocation differs (eax vs ecx)
+00f00610  407  placement sync: CRT `exp` is absent from the image so the e^x step is a forced-inline polynomial, and the call/register schedule differs; equiv WEAK 22.3% cov [/O2 /MD /Gy /TP]
+00f00790  20   placement apply: `this`/param register allocation swapped (this in esi vs original edi); equiv WEAK 31.8% cov [/O2 /MD /Gy /TP]
+00f00850  524  secondary placement apply: container/record walk and vcall schedule differs; equiv WEAK 12.8% cov [/O2 /MD /Gy /TP]
+00f00bd0  270  placement commit: vcall/refcount call schedule differs; equiv PASS 83.0% cov [/O2 /MD /Gy /TP]
+00f00d10  242  teardown: release/audio-slot vcall schedule differs; equiv PASS 67.0% cov [/O2 /MD /Gy /TP]
+00f00e50  221  placement update: object/refcount schedule differs; equiv UNSUPPORTED (0/400 valid, every input fault-reads the global mgr) [/O2 /MD /Gy /TP]
+00f00f80  131  vtable dispatch: virtual-slot call schedule differs; equiv WEAK 41.0% cov [/O2 /MD /Gy /TP]
 00f01030  62   placement adjust: indirect f_eff4c0 call shape / x87 mul schedule differs
+00f01090  70   object add: call schedule differs; equiv UNSUPPORTED (0/400 valid: budget/global reads) [/O2 /MD /Gy /TP]
 00f01140  83   uninitialized_copy: iterator register assignment differs (outs ea/edx/esi)
+00f011b0  919  scene build: inline SSE/quaternion math and register-ABI helper FUN_00efd8e0 (pointer arrives in esi) not reproducible; equiv UNSUPPORTED (0/400 valid) [/O2 /MD /Gy /TP]
