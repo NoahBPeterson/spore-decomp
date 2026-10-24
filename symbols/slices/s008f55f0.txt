@@ -1,2 +1,6 @@
-008f5960 ?ParseSimpleSelector@CSSParser_s008f_55f0@Style@XHTML@EA@@QAE_NPAUSelectorList@234@@Z  # CSSParser_s008f_55f0::ParseSimpleSelector migrated from s008f55f0 (verbatim, slice spelling)
-01667b10 ??_B?1??NameScanStatics@Style@XHTML@EA@@YAXXZ@51  # init-guard bits 1,2,4 (0x01667b10) set by the inlined name scan in CSSParser::ParseSimpleSelector 0x008f5960
+008f55f0 ?MatchColor@CSSParser@Style@XHTML@EA@@QAE_NPAI@Z
+008f5960 ?ParseSimpleSelector@CSSParser@Style@XHTML@EA@@QAE_NPAVSelectorList@234@@Z
+008f5f70 ?ParseSelector@CSSParser@Style@XHTML@EA@@QAE_NPAVSelectorList@234@@Z
+008f61f0 ?ParseSelectorList@CSSParser@Style@XHTML@EA@@QAEPAXPAVStylesheet@234@@Z
+008f6420 ?ParseFontWeight@CSSParser@Style@XHTML@EA@@QAE_NPAVPropertyList@234@@Z
+008f64f0 ?ParseFontSize@CSSParser@Style@XHTML@EA@@QAE_NPAVPropertyList@234@@Z

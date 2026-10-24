@@ -1,2 +1,7 @@
 # va  diff-bytes  reason
 008f5960 1176  complete ParseSimpleSelector (55 calls in the same order); token-swap scheduling and this/list register allocation differ, shifting later jumps
+008f55f0 650  complete MatchColor (#-hex/rgb(); makes the color with MakeColor); frame layout (push ebp), MakeColor argument staging and mulss operand order differ
+008f5f70 528  complete ParseSelector (space/>/+ combinators via ChildSelector/DescendantSelector); same control flow, but cl holds pList in ebp with a live zero register instead of retail's ebx, plus swap-store scheduling (size 623 vs 626)
+008f61f0 301  complete ParseSelectorList (comma-separated selectors, rule nodes, GetLength loop); same flow, but the zero constant takes ebp so pGroup stays in a stack slot instead of retail's ebp (size 343 vs 333)
+008f6420 16  complete ParseFontWeight (wcstod number path, keyword table); only scheduler placement of the mAllocator load/xor pair inside the Setter block differs
+008f64f0 12  complete ParseFontSize (length, size-keyword table, larger/smaller); only the zero register is edi where retail picked ebx (same instructions, swapped names)
