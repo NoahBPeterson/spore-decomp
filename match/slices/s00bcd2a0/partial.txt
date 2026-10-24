@@ -1,1 +1,10 @@
 # va  diff-bytes  reason
+00bcd2a0  162  complete serializer Write body; equiv UNSUPPORTED (0/400, all inputs fault reading the 0xa14 cVarListSerializer local which emits a GS cookie).
+00bcd340  153  complete serializer Read body; equiv UNSUPPORTED (0/400, same 0xa14 GS-cookie serializer local as Write).
+00bcd480  26  complete x87 divider; equiv WEAK (400 valid, 26.9% cov); no [push ecx] thiscall prologue (declared __cdecl so the 3 wrappers 00bcde40/70/a0 tail-call it byte-exactly) so arg offsets and fild/fdivr frame differ.
+00bcd630  10  complete civ-resolve body; equiv UNSUPPORTED (DAT_018c43e8 annotation-implausible); vslot loads land in eax instead of retail's edx.
+00bcd690  435  complete wander-node spawner; equiv UNSUPPORTED (0/400, fake-arity/vtable callees fault); register allocation and vtable-slot call shape differ widely.
+00bcd890  269  complete owner-city flag update; equiv WEAK (131 valid, 63.5% cov); vtable 0x5c lookups and 0xbf02b0/0xc00b00 arg marshalling differ.
+00bcd970  170  complete water-distance check; equiv FAIL (esp diff); arg/return frame and FindClosestWater thiscall call differ.
+00bcda00  163  complete distance gate; equiv FAIL (esp +0x8 vs +0x10); the 0xb81470 out-param marshalling differs.
+00bcda90  533  complete model-key refresh; equiv UNSUPPORTED (DAT_01186577 annotation-implausible); the +0x1ec container walk and normal math are approximate.

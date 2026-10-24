@@ -1,1 +1,22 @@
 00bcdd00 cUpdater::UpdateFromSubobject  # owner stub from slice; vslots 0x2c/0x5c/0x70 are virtual calls on cSubObject
+00bcd2a0 Simulator::cGameData::Write  # card name ISimulatorSerializable::Write; serializer ctor 0x692f90 + EA::IO::WriteUint32
+00bcd340 Simulator::cGameData::Read  # card name ISimulatorSerializable::Read; serializer ctor 0x692f90 + EA::IO::ReadInt32
+00bcd3f0 Simulator::cCommunity::SetFloat  # this+0x64 compare, calls cCommunity::func5Ch (0xc884a0), sets +0x30c
+00bcd450 FUN_00bcd450  # attaches L"cCombatant" via FUN_00695b40 with DAT_01570858; returns true
+00bcd480 FUN_00bcd480  # SP::cSPSpaceEconomyTuning::GetHomeWorldBuildingMultiplier divider; game-mode/empire gate
+00bcd4e0 Simulator::cBuilding::SetModelKey2  # compares key vs +0x90..0x98, caches at +0x1f0, tail-calls SetModelKey
+00bcd550 Simulator::cGameData::SetFlag230  # toggles +0x230, builds 0xd1bf030c key, refresh via 0xbd9e50
+00bcd5b0 Simulator::cBuilding::SetOwnerCity2  # card symbol; SetGameDataOwner2 + refcounted owner swap at +0x1f0
+00bcd5f0 Simulator::cGameData::RemoveOwner  # card symbol; releases +0x120/+0x108/+0x34 then owner +0x1f0
+00bcd630 FUN_00bcd630  # resolves owner city civ: vslot 0x30 -> type tag DAT_018c43e8 -> 0xbd9bf0/0xb25f40
+00bcd690 Simulator::CitizenTree::GetNextWanderNode  # PDB candidate (caller-scored); wander-node spawner
+00bcd890 FUN_00bcd890  # owner city flag/civ update; three vtable 0x5c lookups + 0xbf02b0/0xc00b00
+00bcd970 FUN_00bcd970  # water-distance check: cPlanetModel::FindClosestWater + 0x108db30 loop
+00bcda00 Simulator::cBuilding::func7Ch  # card symbol; distance gate over owner model key
+00bcda90 FUN_00bcda90  # building model-key refresh over +0x1ec container
+00bcddc0 Simulator::cGameData::RemoveOwner  # card symbol; noun removal + 0x120/0x108/0x34 + owner release
+00bcde40 FUN_00bcde40  # wrapper: FUN_00bcd480(param, DAT_0169c0fc, DAT_0169c100)
+00bcde70 FUN_00bcde70  # wrapper: FUN_00bcd480(param, DAT_0169c07c, DAT_0169c080)
+00bcdea0 FUN_00bcdea0  # wrapper: FUN_00bcd480(param, DAT_0169c0a8, DAT_0169c0ac)
+00bcded0 Simulator::cTurret::cTurret  # card symbol; 8 vtable stores + two GonzagoTimer members at +0x660/+0x6b0
+00bce0a0 Simulator::cTurret::~cTurret  # card: dtor; reverses ctor vtables and releases +0x680..+0x6a4

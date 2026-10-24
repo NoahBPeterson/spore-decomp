@@ -1,1 +1,10 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00bcd2a0/s00bcd2a0.cpp  ?SetFloat@cCommunityT@@QAEXM@Z  00bcd3f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00bcd2a0/s00bcd2a0.cpp  ?FUN_00bcd450@@YA_NIPAI@Z  00bcd450  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00bcd2a0/s00bcd2a0.cpp  ?SetOwnerCity2@cOwnerT@@QAEXPAX@Z  00bcd5b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00bcd2a0/s00bcd2a0.cpp  ?RemoveOwner@cOwnerT@@QAEXXZ  00bcd5f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00bcd2a0/s00bcd2a0.cpp  ?RemoveOwnerFull@cOwnerT@@QAEXXZ  00bcddc0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00bcd2a0/s00bcd2a0.cpp  ?FUN_00bcde40@@YAMI@Z  00bcde40  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00bcd2a0/s00bcd2a0.cpp  ?FUN_00bcde70@@YAMI@Z  00bcde70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00bcd2a0/s00bcd2a0.cpp  ?FUN_00bcdea0@@YAMI@Z  00bcdea0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00bcd2a0/s00bcd2a0.cpp  ??1cTurret@@QAE@XZ  00bce0a0  /O2 /MD /Gy /EHsc /TP /arch:SSE

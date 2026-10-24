@@ -1,2 +1,5 @@
 # va  diff-bytes  reason
 00bcdd00  66  complete body but equiv.py UNSUPPORTED (0/400 valid: harness faults on fake vtable callees); keeps esi to epilogue, k via fstp to stack, store/load order differs.
+00bcd4e0  74  complete body, equiv PASS (289/400); MSVC keeps key ptr in esi (retail uses eax/edx) so every compare differs in the scratch register; tail-call to SetModelKey matches.
+00bcd550  38  complete body, equiv PASS (291/400); retail tests bl,bl/je (on==0 path first) while ours falls through the on!=0 key-build; key/flag/refresh sequence identical.
+00bcded0  36  complete body, equiv PASS (296/400); identical vtable/timer/zero sequence, only MSVC schedules the deferred [esi+0x660] timer-ctor call before the vtable block instead of after.
