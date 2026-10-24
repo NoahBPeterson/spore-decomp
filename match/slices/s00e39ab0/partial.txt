@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00e3a000  464  approximate; EvalCatmullRom2D is written as the compact closed-form Catmull-Rom polynomial for x and y, but the original pre-scales coefficients by 0.5, keeps ~8 xmm temporaries and spills 6 of them to its 0x20-byte frame, so the arithmetic sequence and frame do not correspond (340 vs 550 bytes)
