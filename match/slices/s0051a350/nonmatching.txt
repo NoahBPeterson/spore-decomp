@@ -2,7 +2,7 @@
 0051a350  717   /Od address-temp + vcall/refcount differences; complete cPaintSplatAlphaJob::Render
 0051a8a0  63    /Od member-address temp locals differ; complete ctor reconstruction
 0051a930  99    /Od member-address temps + thiscall helpers; complete dtor reconstruction
-0051a9a0  222   /Od arg stores; complete 10-arg ctor reconstruction
-0051aaa0  140   /Od refcount release pattern differs; complete Release reconstruction
-0051ab50  900   /Od int-iterator loop shape differs; complete PreloadTextures reconstruction
+0051a9a0  125   /Od arg stores; complete 10-arg ctor reconstruction [equiv PASS 288 valid, 100% coverage]
+0051aaa0  138   /Od refcount release pattern differs; complete Release reconstruction [equiv PASS 343 valid, 92.6% coverage]
+0051ab50  1018  /Od iterator loop shape differs; complete PreloadTextures reconstruction [equiv WEAK no mismatch: 278/7.6% default, 1467/40.6% at 2000 inputs; deeper blocks need unreachable property-key branches]
 0051a6a0  344  FUN_0051a6a0 (texture-from-image helper): complete (all calls, atomic AddRef, SetMipLevelData); /Od inline-accessor temps and frame layout differ (407 vs 512 bytes) [equiv: UNSUPPORTED, 0/400 valid: reads of service globals fault]

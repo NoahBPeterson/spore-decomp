@@ -32,7 +32,7 @@ extern void* g_splatVtblBase;
 struct Factory {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6();
-    virtual void* Create(void* p, int a, int b, int type);         // +0x1c
+    virtual void* Create(int a, int b, int c, int type);          // +0x1c
     virtual void* v8(int key, int a, int b);                       // +0x20
     virtual bool  Valid(void* p, int a, int b);                    // +0x24
     virtual void v10(); virtual void v11(); virtual void v12();
@@ -65,6 +65,22 @@ class cPaintSplatAlphaJob { public:        // size 0x18
 }  // namespace nSPSkinner
 
 // The ctor/dtor/init cluster belongs to one 0x350-byte skin job class.
+struct RefSlot {                          // reference slot at SkinJob+0x8
+    void* mpFirst;                        // +0x0
+    void* mpSecond;                       // +0x4
+    void  CopyFrom(void* first, void* second);   // 0x004259e0 (thiscall)
+    void  Push(void* value);              // 0x0051d1e0 (thiscall)
+};
+struct AtomicRefCounted {                 // reference-counted object
+    int Release();                        // 0x00402420 (thiscall)
+};
+struct HashIter {                         // eastl hashtable iterator (8 bytes)
+    void* mpNode;                         // +0x0
+    void* mpBucket;                       // +0x4
+    void  Increment();                    // 0x0051d140 (thiscall)
+    void  IncrementBucket();              // 0x00552750 (thiscall)
+};
+
 struct SkinJob {
     void* FUN_0051a8a0();
     void  FUN_0051a930();
@@ -93,7 +109,7 @@ bool nSPSkinner::cPaintSplatAlphaJob::Render()
         if ((*(uint16_t*)(blocks + 8 + mBlock * 0x8c) & 1) == 0) {
             int prop[3]; prop[0] = 0; prop[1] = 0; prop[2] = 0;
             if (SP_GetPropertyAsKey(*(void**)(*(int*)(skin + 0xc) + mBlock * 4), 0x2424657, prop)) {
-                int* tex = (int*)((Factory*)FUN_0067dd60())->Create(prop, prop[1], prop[2], 6);
+                int* tex = (int*)((Factory*)FUN_0067dd60())->Create(prop[0], prop[1], prop[2], 6);
                 if (tex != 0) {
                     uint32_t* rect = (uint32_t*)(mBlock * 0x10 + *(int*)(skin + 0x90));
                     float uv0[2]; uv0[0] = (float)rect[0]; uv0[1] = (float)rect[1];
@@ -234,7 +250,8 @@ void SkinJob::FUN_0051a9a0(int a2, char a3, char a4, int a5, int a6, int a7, int
 {
     void* self = this;
     *(int*)((char*)self + 0x33c) = 0;
-    FUN_004259e0(*(void**)((char*)self + 8), *(void**)((char*)self + 0xc));
+    RefSlot* slot = (RefSlot*)((char*)self + 8);
+    slot->CopyFrom(slot->mpFirst, slot->mpSecond);
     *(int*)((char*)self + 0x340) = 0;
     *(int*)((char*)self + 0x344) = 0;
     *(int*)((char*)self + 0x338) = a2;
@@ -262,15 +279,17 @@ void SkinJob::FUN_0051aaa0()
         void* p = *(void**)((char*)self + 0x330);
         *(void**)((char*)self + 0x330) = 0;
         if (p != 0)
-            (*(Factory**)p)->v1();
+            ((Factory*)p)->v1();
     }
-    FUN_004259e0(*(void**)((char*)self + 8), *(void**)((char*)self + 0xc));
+    RefSlot* slot = (RefSlot*)((char*)self + 8);
+    slot->CopyFrom(slot->mpFirst, slot->mpSecond);
     *(int*)((char*)self + 0x33c) = -1;
 }
 
 // @ 0x0051ab50 ?PreloadTextures@cPaintRenderer@nSPSkinner@@QAEX_N@Z
 void SkinJob::FUN_0051ab50(char deep)
 {
+    void* self = this;
     int ps = GetPaintSystem();
     int mat = *(int*)(ps + 0xc);
     int ps2 = GetPaintSystem();
@@ -278,32 +297,28 @@ void SkinJob::FUN_0051ab50(char deep)
     if (mat != 0 && skin != 0) {
         int blocks = *(int*)(*(int*)(skin + 8) + 0x98);
         int base = mat + 0x3c;
-        int c = 0;
-        int* it = 0;
-        int* p = *(int**)(mat + 0x40);
-        int v = *p;
-        if (v == 0)
-            FUN_00552750();
+        RefSlot* slot = (RefSlot*)((char*)self + 8);
+        HashIter it;
+        it.mpBucket = *(void**)(base + 4);
+        it.mpNode = *(void**)it.mpBucket;
+        if (it.mpNode == 0)
+            it.IncrementBucket();
         for (;;) {
-            it = p;
-            c = v;
-            int* end = (int*)(*(int*)(base + 4) + *(int*)(base + 8) * 4);
-            if (c == *end)
+            void* endNode = *(void**)(*(int*)(base + 4) + *(int*)(base + 8) * 4);
+            if (it.mpNode == endNode)
                 break;
             for (int i = 0; i < 3; i++) {
-                if (*(int*)(c + 4 + i * 4) != 0)
-                    FUN_0051d1e0((void*)(c + 4 + i * 4));
+                if (*(int*)((char*)it.mpNode + 4 + i * 4) != 0)
+                    slot->Push((char*)it.mpNode + 4 + i * 4);
             }
-            FUN_0051d140();
-            v = c;
-            p = it;
+            it.Increment();
         }
-        int tex = ((Factory*)FUN_0067dd60())->Make((void*)0xbd77bb98, 0, 0);
+        int tex = (int)((Factory*)FUN_0067dd60())->v8((int)0xbd77bb98, 0, 0);
         if (tex != 0)
             *(int*)(tex + 8) = *(int*)(tex + 8) + 1;
-        FUN_0051d1e0(&tex);
+        slot->Push(&tex);
         if (tex != 0)
-            FUN_00402420();
+            ((AtomicRefCounted*)tex)->Release();
         if (deep != 0) {
             int nBlocks = (*(int*)(*(int*)(skin + 8) + 0x9c) - *(int*)(*(int*)(skin + 8) + 0x98)) / 0x8c;
             for (int j = 0; j < nBlocks; j++) {
@@ -311,22 +326,22 @@ void SkinJob::FUN_0051ab50(char deep)
                     int propKey = *(int*)(*(int*)(skin + 0xc) + j * 4);
                     int prop[3]; prop[0] = 0; prop[1] = 0; prop[2] = 0;
                     if (SP_GetPropertyAsKey((void*)propKey, 0x2424655, prop)) {
-                        int t = (int)((Factory*)FUN_0067dd60())->Create(prop, prop[1], prop[2], 4);
+                        int t = (int)((Factory*)FUN_0067dd60())->Create(prop[0], prop[1], prop[2], 4);
                         if (t != 0) *(int*)(t + 8) = *(int*)(t + 8) + 1;
-                        FUN_0051d1e0(&t);
-                        if (t != 0) FUN_00402420();
+                        slot->Push(&t);
+                        if (t != 0) ((AtomicRefCounted*)t)->Release();
                     }
                     if (SP_GetPropertyAsKey((void*)propKey, 0x2424657, prop)) {
-                        int t = (int)((Factory*)FUN_0067dd60())->Create(prop, prop[1], prop[2], 4);
+                        int t = (int)((Factory*)FUN_0067dd60())->Create(prop[0], prop[1], prop[2], 4);
                         if (t != 0) *(int*)(t + 8) = *(int*)(t + 8) + 1;
-                        FUN_0051d1e0(&t);
-                        if (t != 0) FUN_00402420();
+                        slot->Push(&t);
+                        if (t != 0) ((AtomicRefCounted*)t)->Release();
                     }
                     if (SP_GetPropertyAsKey((void*)propKey, 0x2424656, prop)) {
-                        int t = (int)((Factory*)FUN_0067dd60())->Create(prop, prop[1], prop[2], 4);
+                        int t = (int)((Factory*)FUN_0067dd60())->Create(prop[0], prop[1], prop[2], 4);
                         if (t != 0) *(int*)(t + 8) = *(int*)(t + 8) + 1;
-                        FUN_0051d1e0(&t);
-                        if (t != 0) FUN_00402420();
+                        slot->Push(&t);
+                        if (t != 0) ((AtomicRefCounted*)t)->Release();
                     }
                 }
             }
