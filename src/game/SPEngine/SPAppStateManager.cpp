@@ -430,19 +430,19 @@ struct AMVecFull {
     cActionMessage* mpCapacity;
     cActionMessage* a10;
     cActionMessage* a14;
-    void push_back(const cActionMessage* m);   // 0x007e3d90
+    __declspec(noinline) void push_back(const cActionMessage* m);   // 0x007e3d90
+    void grow(cActionMessage* pos, const cActionMessage* m);  // 0x007e32c0
 };
 struct cAppState {
     char pad00[0x14];
     int  field14;            // +0x14
     char pad18[0x14];
     AMVecFull mMsgs;         // +0x2c  (begin/end/cap at +0x2c/+0x30/+0x34)
-    char pad38[8];
     AMVecFull mExitMsgs;     // +0x40
-    char pad4c[0x34];
+    char pad54[0x2c];
     uint8_t field80;         // +0x80
     uint8_t field81;         // +0x81
-    void* AddAction(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* msg);
+    void AddAction(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* msg);
     void AddMessage(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* msg, char c);
 };
 void AMVecFull_push_back(AMVecFull* v, const cActionMessage* m);  // 0x007e3d90
@@ -1017,16 +1017,16 @@ void FUN_007e3b40(void* self, void* a, void* b)
 void AMVecFull::push_back(const cActionMessage* m)
 {
     cActionMessage* end = mpEnd;
-    if (end < mpCapacity) {
-        mpEnd = end + 1;
-        if (end) {
-            end->p = m->p;
-            if (end->p)
-                ((void(__thiscall*)(RefObj*))(*(void***)end->p)[1])(end->p);
-            end->flag = m->flag;
-        }
-    } else {
-        FUN_007e32c0(this, end, m);
+    if (end >= mpCapacity) {
+        grow(end, m);
+        return;
+    }
+    mpEnd = end + 1;
+    if (end) {
+        end->p = m->p;
+        if (end->p)
+            ((void(__thiscall*)(RefObj*))(*(void***)end->p)[1])(end->p);
+        end->flag = m->flag;
     }
 }
 
@@ -1058,48 +1058,39 @@ void FUN_007e3f00(void* self, EA::ArgScript::cArguments_s007e_32c0* args)
 }
 
 // @ 0x007e40d0
-void* cAppState::AddAction(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* msg)
+void cAppState::AddAction(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* msg)
 {
     cAppState* self = this;
-    int flag;
-    if (args && args->HasFlag("onExit"))
-        flag = 0;
-    else if (self->field80)
-        flag = 0;
-    else
-        flag = 1;
+    bool exitPath = (args && args->HasFlag("onExit")) || self->field80;
     cActionMessage m;
     m.p = msg;
     if (msg)
         ((void(__thiscall*)(RefObj*))(*(void***)msg)[1])(msg);
-    m.flag = flag;
-    if (flag)
-        AMVecFull_push_back(&self->mMsgs, &m);
+    m.flag = 0;
+    if (exitPath)
+        self->mExitMsgs.push_back(&m);
     else
-        AMVecFull_push_back(&self->mExitMsgs, &m);
-    return 0;
+        self->mMsgs.push_back(&m);
+    if (m.p)
+        ((void(__thiscall*)(RefObj*))(*(void***)m.p)[2])(m.p);
 }
 
 // @ 0x007e4190
 void cAppState::AddMessage(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* msg, char c)
 {
     cAppState* self = this;
-    int flag;
-    if (args && args->HasFlag("onExit"))
-        flag = 0;
-    else if (self->field80 || c)
-        flag = 0;
-    else
-        flag = 1;
+    bool exitPath = (args && args->HasFlag("onExit")) || self->field80 || c;
     cActionMessage m;
     m.p = msg;
     if (msg)
         ((void(__thiscall*)(RefObj*))(*(void***)msg)[1])(msg);
-    m.flag = flag;
-    if (flag)
-        AMVecFull_push_back(&self->mMsgs, &m);
+    m.flag = 1;
+    if (exitPath)
+        self->mExitMsgs.push_back(&m);
     else
-        AMVecFull_push_back(&self->mExitMsgs, &m);
+        self->mMsgs.push_back(&m);
+    if (m.p)
+        ((void(__thiscall*)(RefObj*))(*(void***)m.p)[2])(m.p);
 }
 
 // @ 0x007e4260
