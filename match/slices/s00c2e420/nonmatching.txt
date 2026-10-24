@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
+00c2e420  98  complete: mission Read (cGameData::Read + a cVarListSerializer pass over 0x01572560 with tag 0x01a80d26), one thiscall frame + return differs; difftest UNSUPPORTED (0/400 valid: original faults reading)
 00c2e4b0  20  complete: state change + two vtable calls, scheduling differs
 00c2e4f0  3   complete: vtable accessor + GetPropertyAsKey, one byte/frame differs
 00c2e780  8   complete: two-step accessor chain, call setup differs
@@ -6,5 +7,11 @@
 00c2e980  13  complete: NotifyEvent float push, register scheduling differs
 00c2e9b0  22  complete: timer/state float getter, branch layout differs
 00c2e9e0  37  complete: state change + timer restart, scheduling differs
+00c2ec30  52  complete: property getter (vtbl[0xc0] -> vtbl[0x24](key 0x63ff8cc5) -> type tag 0x12==10 -> Property::GetUInt), call layout/scheduling differs; difftest UNSUPPORTED (0/400 valid: original faults reading)
+00c2ec80  61  complete: property getter (vtbl[0xc0] -> vtbl[0x24](key 0x5d6796fd) -> type tag 0x12==10 -> Property::GetUInt), call layout/scheduling differs; difftest UNSUPPORTED (0/400 valid: original faults reading)
+00c2ecd0  61  complete: SP::cSPCreatureMission::GetContentWinCommandID (same getter pattern, key 0xe2da314e), call layout/scheduling differs; difftest UNSUPPORTED (0/400 valid: original faults reading)
+00c2f1f0  22  complete: id/vtable accessor chain (vtbl[0xc0], then vtbl[0]/vtbl[4] around the 0xa4/0xb0/0xbc id fields), call scheduling differs; difftest UNSUPPORTED (0/400 valid: original faults reading)
 00c2f340  34  complete: tutorial mission ctor, init order differs
 00c2f3e0  26  complete: tutorial mission dtor, vtable/refcount order differs
+00c2f470  57  complete: cTribeToTribeMission ctor (base ctor + [0x78]/[0x7c] + three vtable stores + [0x80..0x90] zeroing), init/store order differs; difftest PASS (400/400, 100.0% coverage)
+00c2f650  28  complete: mission helper (self+0x80 -> vtbl[0x4c] then NounManager/RelationshipManager chain), call setup differs; difftest UNSUPPORTED (0/400 valid: original faults reading)

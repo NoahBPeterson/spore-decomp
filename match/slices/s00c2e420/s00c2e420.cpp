@@ -19,6 +19,16 @@ extern "C" void  SP_cCreatureModeStrategy_NotifyEvent(float);
 extern "C" int   SP_cSPTimer_IsRunning(void*);
 extern "C" void  SP_cSPTimer_Restart(void*);
 extern "C" int   SP_GetPropertyAsKey(int, int, int);
+void* __fastcall FUN_0041ea00(void*);   // Property::GetUInt (this in ECX, returns &value)
+extern "C" void* FUN_00b3d300(int);     // 0x00b3d300 SP::NounManager accessor
+int  __fastcall FUN_00b1f9d0(void*);    // 0x00b1f9d0 ?GetPlayerEmpireOrMinus1 (this in ECX)
+extern "C" void* FUN_00b3d2c0(int);     // 0x00b3d2c0 SP::RelationshipManager accessor
+void __fastcall FUN_00d00a10(void*);    // 0x00d00a10 (this in ECX)
+extern "C" void FUN_00b18600();         // 0x00b18600 SP::cGameData::Read     (this in ECX, stack stream)
+extern "C" void FUN_00692f90();         // 0x00692f90 SP::cVarListSerializer ctor
+extern "C" void FUN_00693e10();         // 0x00693e10 SP::cVarListSerializer Read
+
+struct cVarListSerializer { char mPad[0xa14]; };   // 2580-byte stack serializer
 
 typedef void (__fastcall *VFn)(void*);
 
@@ -36,6 +46,7 @@ public:
     void  FUN_00c2ebc0();
     int   FUN_00c2f300();
     char  FUN_00c2f320(int* out);
+    unsigned char FUN_00c2e420(int param_2);
 };
 
 // @ 0x00c2e4e0
@@ -185,10 +196,14 @@ void __fastcall FUN_00c2f3e0(int* self)
 // ===========================================================================
 
 // @ 0x00c2e420
-unsigned char __fastcall FUN_00c2e420(int* self, int param)
+unsigned char MissionStub::FUN_00c2e420(int param_2)
 {
-    (void)self; (void)param;
-    return 0;
+    // cGameData::Read, then one cVarListSerializer pass over the mission var list.
+    unsigned char a = ((unsigned char(__thiscall*)(void*, int))FUN_00b18600)(this, param_2);
+    cVarListSerializer ser;
+    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser, this, (int)0x01572560, (int)0x01a80d26);
+    unsigned char b = ((unsigned char(__thiscall*)(void*, int))FUN_00693e10)(&ser, param_2);
+    return (unsigned char)(a & b);
 }
 
 // @ 0x00c2e520
@@ -231,22 +246,45 @@ unsigned char __fastcall FUN_00c2eaa0(int* self, int param)
 }
 
 // @ 0x00c2ec30
-void __fastcall FUN_00c2ec30(int* self, int param)
+int __fastcall FUN_00c2ec30(int* self)
 {
-    (void)self; (void)param;
+    int result = 0;
+    int* p = (int*)((void*(__fastcall*)(void*))(*(void***)self)[0xc0 / 4])(self);
+    if (p != 0) {
+        int* local = 0;
+        char ok = ((char(__thiscall*)(void*, int, int*))(*(void***)p)[0x24 / 4])(p, (int)0x63ff8cc5, (int*)&local);
+        if (ok != 0 && *(unsigned short*)((char*)local + 0x12) == 0xa)
+            result = *(int*)FUN_0041ea00(local);
+    }
+    return result;
 }
 
 // @ 0x00c2ec80
-void __fastcall FUN_00c2ec80(int* self, int param)
+int __fastcall FUN_00c2ec80(int* self)
 {
-    (void)self; (void)param;
+    int result = 0;
+    int* p = (int*)((void*(__fastcall*)(void*))(*(void***)self)[0xc0 / 4])(self);
+    if (p != 0) {
+        int* local = 0;
+        char ok = ((char(__thiscall*)(void*, int, int*))(*(void***)p)[0x24 / 4])(p, (int)0x5d6796fd, (int*)&local);
+        if (ok != 0 && *(unsigned short*)((char*)local + 0x12) == 0xa)
+            result = *(int*)FUN_0041ea00(local);
+    }
+    return result;
 }
 
 // @ 0x00c2ecd0
-int __fastcall FUN_00c2ecd0(int* self)
+int __fastcall FUN_00c2ecd0(int* self)   // SP::cSPCreatureMission::GetContentWinCommandID
 {
-    (void)self;
-    return 0;
+    int result = 0;
+    int* p = (int*)((void*(__fastcall*)(void*))(*(void***)self)[0xc0 / 4])(self);
+    if (p != 0) {
+        int* local = 0;
+        char ok = ((char(__thiscall*)(void*, int, int*))(*(void***)p)[0x24 / 4])(p, (int)0xe2da314e, (int*)&local);
+        if (ok != 0 && *(unsigned short*)((char*)local + 0x12) == 0xa)
+            result = *(int*)FUN_0041ea00(local);
+    }
+    return result;
 }
 
 // @ 0x00c2ed20
@@ -268,9 +306,19 @@ void __fastcall FUN_00c2f190(int* self, int param)
 }
 
 // @ 0x00c2f1f0
-void __fastcall FUN_00c2f1f0(int* self, int param)
+int __fastcall FUN_00c2f1f0(int* self)
 {
-    (void)self; (void)param;
+    void* p = ((void*(__fastcall*)(void*))(*(void***)self)[0xc0 / 4])(self);
+    if (p != 0)
+        ((void(__fastcall*)(void*))(*(void***)p)[0 / 4])(p);
+    int r;
+    if (p == (void*)self[0x29])
+        r = self[0x2f];
+    else
+        r = self[0x2c];
+    if (p != 0)
+        ((void(__fastcall*)(void*))(*(void***)p)[4 / 4])(p);
+    return r;
 }
 
 // @ 0x00c2f240
@@ -281,9 +329,19 @@ int __fastcall FUN_00c2f240(int* self)
 }
 
 // @ 0x00c2f470
-int* __fastcall FUN_00c2f470(int* self)
+int* __fastcall FUN_00c2f470(int* self)   // Simulator::cTribeToTribeMission ctor
 {
-    self[0] = 0x146b238;
+    FUN_00c46500(self);                   // base ctor (this in ECX)
+    self[0x1e] = 0;
+    self[0x1f] = 3;
+    self[0] = 0x0146b210;                 // vtbl_Simulator::cTribeToTribeMission
+    self[1] = 0x0146b200;
+    self[0x0d] = 0x0146b1f0;
+    self[0x20] = 0;
+    self[0x21] = 0;
+    self[0x22] = 0;
+    self[0x23] = 0;
+    self[0x24] = 0;
     return self;
 }
 
@@ -306,9 +364,14 @@ void __fastcall FUN_00c2f5f0(int* self, int param)
 }
 
 // @ 0x00c2f650
-void __fastcall FUN_00c2f650(int* self, int param)
+void __fastcall FUN_00c2f650(int* self)
 {
-    (void)self; (void)param;
+    int* p = *(int**)((char*)self + 0x80);
+    void* noun = FUN_00b3d300(0);
+    int empire = FUN_00b1f9d0(noun);
+    int rel = ((int(__thiscall*)(void*, int))(*(void***)p)[0x4c / 4])(p, empire);
+    void* relMgr = FUN_00b3d2c0(rel);
+    FUN_00d00a10(relMgr);
 }
 
 // @ 0x00c2f690
