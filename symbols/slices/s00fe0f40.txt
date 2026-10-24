@@ -1,1 +1,2 @@
 00fe0f40 SP::cAppModeSpace::HandleSimulationUpdate  # dev PDB caller-single candidate (dev 0x00875d40); calls cAppModeSpace transition methods on this
+00fe19a0 SP::cAppModeSpace::FUN_00fe19a0  # unnamed in retail: init the space game, notify the simulator, dispatch the interplanetary-drive tool check, then run the pending noun queue; byte-exact MATCH
