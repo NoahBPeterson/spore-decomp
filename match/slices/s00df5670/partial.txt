@@ -1,0 +1,4 @@
+00df5670 260 flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL fake-arity null vtable call (approximate)
+00df5ac0 382 flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL extra FUN_00df57d0 call faults (approximate)
+00df6330 253 flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL vtable call on garbage ptr (approximate)
+00df64c0 245 flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL FUN_007c4510 thiscall ecx not set (approximate)
