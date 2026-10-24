@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a4fff0  258  gatom_motion: approximated - the float snapping is reconstructed from the decompiled control flow (sign-dependent floor/ceil via floor(), x87 truncation, clamp to a_min/a_max and the 1/100 rescale) rather than the exact retail expression sequence, so it is not byte-exact (ours 294 bytes vs retail 344); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equiv PASS (397 valid inputs, 100.0% coverage, tolerated inline-calls 31)

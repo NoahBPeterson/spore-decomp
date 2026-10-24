@@ -1,1 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a4f1e0/s00a4f1e0.cpp  ?canvas_objfor@@YAXPAUGlist@@PAUText@@HPAUt_atom@@@Z  00a4f590  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?messresponder_symbol@@YAXPAUText@@Ut_symbol@@@Z  00a4f670  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?message_bang@@YAXPAUText@@@Z  00a4f6f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?message_float@@YAXPAUText@@M@Z  00a4f710  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?message_symbol@@YAXPAUText@@Ut_symbol@@@Z  00a4f750  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?message_list@@YAXPAUText@@Ut_symbol@@HPAUt_atom@@@Z  00a4f790  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?message_addcomma@@YAXPAUText@@@Z  00a4f880  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?message_adddollar@@YAXPAUText@@M@Z  00a4f8b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?message_adddollsym@@YAXPAUText@@Ut_symbol@@@Z  00a4f900  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?message_click@@YAXPAUText@@@Z  00a4f950  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?message_tick@@YAXPAUText@@@Z  00a4f9e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4f1e0/s00a4f1e0.cpp  ?gatom_set@@YAXPAUGatom@@Ut_symbol@@HPAUt_atom@@@Z  00a4fd50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a4f1e0/s00a4f1e0.cpp  ?gatom_bang@Eapd@Audio@EA@@  00a4fdb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
