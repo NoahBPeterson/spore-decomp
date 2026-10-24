@@ -1,0 +1,6 @@
+slices/s00e98bd0/s00e98bd0.cpp  ?FUN_00e98bd0@@YA_NPAX0@Z  00e98bd0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e98bd0/s00e98bd0.cpp  ?FUN_00e98c80@@YA_NPAX0@Z  00e98c80  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e98bd0/s00e98bd0.cpp  ?FUN_00e98f60@@YAPAXPAVcNounVector@@PBUVector3@@P6ADPAX@Z@Z  00e98f60  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e98bd0/s00e98bd0.cpp  ?FUN_00e990f0@@YAPAUcEffectInfo@@PAU1@00@Z  00e990f0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e98bd0/s00e98bd0.cpp  ?FUN_00e99140@@YAPAUcEffectRecord@@PAU1@00@Z  00e99140  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e98bd0/s00e98bd0.cpp  ?FUN_00e994f0@@YGPAVcSPUFOGfx@@PAX@Z  00e994f0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

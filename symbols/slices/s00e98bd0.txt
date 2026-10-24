@@ -1,0 +1,13 @@
+00e98bd0 ?FUN_00e98bd0@@YA_NPAX0@Z  # bool MissionLookupA(void*, void*) - first active mission on the active planet whose fetch object verifies the target
+00e98c80 ?FUN_00e98c80@@YA_NPAX0@Z  # bool MissionLookupB(void*, void*) - same walk with key 0x2afd27e and cSPMissionFetch::VerifyTargetPlanet
+00e98d30 ?FUN_00e98d30@@YA_NPAVcNounHolder@@@Z  # bool NounHasTerraformingKey(cNounHolder*) - terraforming key compare plus the unscanned-object walk
+00e98db0 ?SetVisible@cSPUFOGfx@@QAEX_N@Z  # void cSPUFOGfx::SetVisible(bool) - shadow/render flags, ring sound and the four effect gates
+00e98f60 ?FUN_00e98f60@@YAPAXPAVcNounVector@@PBUVector3@@P6ADPAX@Z@Z  # void* NearestNoun(cNounVector*, const Vector3*, bool (*)(void*)) - filtered nearest-noun search
+00e99010 ?FUN_00e99010@@YAXPAUVector3@@PAVcNounVector@@PBU1@@Z  # void NearestTrailPosition(Vector3*, cNounVector*, const Vector3*) - nearest float3 in the sample list
+00e990f0 ?FUN_00e990f0@@YAPAUcEffectInfo@@PAU1@00@Z  # cEffectInfo* UninitializedCopy(cEffectInfo*, cEffectInfo*, cEffectInfo*) - copies the record and AddRefs the effect
+00e99140 ?FUN_00e99140@@YAPAUcEffectRecord@@PAU1@00@Z  # cEffectRecord* CopyAssign(cEffectRecord*, cEffectRecord*, cEffectRecord*) - record copy-assign through the auto-refcount
+00e991b0 ?FUN_00e991b0@@YA_NPAVcPropertyObject@@@Z  # bool PropertyGate(cPropertyObject*) - kind-4 property object with the 0x7ecbe6f5 group
+00e99280 ?FUN_00e99280@@YAXPAVcSPUFOGfx@@PAUcTrailSample@@@Z  # void BuildTrailSample(cSPUFOGfx*, cTrailSample*) - offset sample with the surface-orientation matrix
+00e993c0 ?Construct@cSPUFOGfx@@QAEPAV1@XZ  # cSPUFOGfx* cSPUFOGfx::Construct() - the flying-saucer effect constructor
+00e994f0 ?FUN_00e994f0@@YGPAVcSPUFOGfx@@PAX@Z  # cSPUFOGfx* __stdcall CreateUFOGfx(void*) - allocates, constructs, attaches the owner and sets the render flag
+00e99550 ?UpdateTrail@cSPUFOGfx@@QAEXXZ  # void cSPUFOGfx::UpdateTrail() - effect selection, speed/scale clamps and the per-frame trail sample
