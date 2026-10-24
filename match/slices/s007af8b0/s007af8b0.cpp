@@ -188,16 +188,17 @@ int cDXTCompressJobData::DXTCompressRow(int row)
             unsigned char* rowp = src->mData + stride * row * 4;
             int block[16];
             int k = 4;
+            int* bp = block;
             do {
-                block[0] = (off < stride) ? *(int*)(rowp + nBlocks*0x10)
-                                          : *(int*)(rowp + stride*4 - 4);
-                block[1] = (off+1 < src->mWidth) ? *(int*)(rowp + 4 + nBlocks*0x10)
-                                                 : *(int*)(rowp + src->mWidth*4 - 4);
-                block[2] = (off+2 < src->mWidth) ? *(int*)(rowp + (off+2)*4)
-                                                 : *(int*)(rowp + src->mWidth*4 - 4);
-                block[3] = (off+3 < src->mWidth) ? *(int*)(rowp + (off+3)*4)
-                                                 : *(int*)(rowp + src->mWidth*4 - 4);
-                stride = src->mWidth;
+                bp[0] = (off < stride) ? *(int*)(rowp + nBlocks*0x10)
+                                       : *(int*)(rowp + stride*4 - 4);
+                bp[1] = (off+1 < src->mWidth) ? *(int*)(rowp + 4 + nBlocks*0x10)
+                                              : *(int*)(rowp + src->mWidth*4 - 4);
+                bp[2] = (off+2 < src->mWidth) ? *(int*)(rowp + (off+2)*4)
+                                              : *(int*)(rowp + src->mWidth*4 - 4);
+                bp[3] = (off+3 < src->mWidth) ? *(int*)(rowp + (off+3)*4)
+                                              : *(int*)(rowp + src->mWidth*4 - 4);
+                bp += 4;
                 rowp += stride * 4;
                 k--;
             } while (k);
@@ -216,16 +217,18 @@ int cDXTCompressJobData::DXTCompressRow(int row)
             int* rowp = (int*)(src->mData + src->mWidth * row * 4);
             int col = 2;
             int block[16];
+            int* bp = block;
             int m = 0;
             do {
-                block[0] = (col-2 < src->mWidth) ? *(int*)((char*)rowp + srcOff-0xc)
-                                                 : *(int*)((char*)rowp + src->mWidth*4 - 4);
-                block[1] = (col-1 < src->mWidth) ? *(int*)((char*)rowp + srcOff-8)
-                                                 : *(int*)((char*)rowp + src->mWidth*4 - 4);
-                block[2] = (col   < src->mWidth) ? *(int*)((char*)rowp + srcOff-4)
-                                                 : *(int*)((char*)rowp + src->mWidth*4 - 4);
-                block[3] = (col+1 < src->mWidth) ? *(int*)((char*)rowp + srcOff)
-                                                 : *(int*)((char*)rowp + src->mWidth*4 - 4);
+                bp[0] = (col-2 < src->mWidth) ? *(int*)((char*)rowp + srcOff-0xc)
+                                              : *(int*)((char*)rowp + src->mWidth*4 - 4);
+                bp[1] = (col-1 < src->mWidth) ? *(int*)((char*)rowp + srcOff-8)
+                                              : *(int*)((char*)rowp + src->mWidth*4 - 4);
+                bp[2] = (col   < src->mWidth) ? *(int*)((char*)rowp + srcOff-4)
+                                              : *(int*)((char*)rowp + src->mWidth*4 - 4);
+                bp[3] = (col+1 < src->mWidth) ? *(int*)((char*)rowp + srcOff)
+                                              : *(int*)((char*)rowp + src->mWidth*4 - 4);
+                bp += 4;
                 if (++m < 4)
                     rowp = (int*)((char*)rowp + src->mWidth*4);
                 col += 4;
@@ -303,18 +306,20 @@ bool WriteImageDataAsTexture(void* ppData, int a, int b, void** out)
 // ---------------------------------------------------------------------------
 // @ 0x007b0040  (copy ref-counted pointers into a run, AddRef'ing each)
 // ---------------------------------------------------------------------------
-void** CopyRefRange(void** dst, void** first, void** last)
+void** CopyRefRange(void*** dstRef, void** first, void** last, void* fillValue)
 {
+    *dstRef = (void**)fillValue;
     for (; first != last; ++first) {
-        if (*dst) {
+        void* dst = *dstRef;
+        if (dst) {
             void* p = *first;
-            *(void**)*dst = p;
+            *(void**)dst = p;
             if (p)
                 (*(void (__thiscall**)(void*))*(void**)p)(p);
         }
-        ++dst;
+        *dstRef = (void**)((char*)dst + 4);
     }
-    return dst;
+    return (void**)dstRef;
 }
 
 // placeholder so the file compiles for the two hard functions below
@@ -445,16 +450,23 @@ public:
 // @ 0x007b0130
 C0130::~C0130() {}
 
-struct DObj { virtual int AddRef(); virtual int Release(); };
+// mObj points at a resource whose first base is IEditorResource and whose
+// second base (at +4) carries Release: the retail code fetches Release from
+// *(mObj + 4)[1], i.e. the +4-adjusted second-base vtable.
+struct DObj : IEditorResource, IRefCounted { };
 class C0160 : public IEditorResource, public IRefCounted {
 public:
     AutoVec mVec;
     char    pad18[8];
-    DObj*   mObj;
+    IEditorResource* mObj;
     virtual ~C0160();
 };
 // @ 0x007b0160
-C0160::~C0160() { if (mObj) mObj->Release(); }
+C0160::~C0160()
+{
+    if (mObj)
+        static_cast<IRefCounted*>(static_cast<DObj*>(mObj))->Release();
+}
 
 class C03e0 : public IEditorResource, public IRefCounted {
 public:
