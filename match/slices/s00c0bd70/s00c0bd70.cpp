@@ -9,7 +9,7 @@ void* __cdecl SP_NounManager(void*);                   // 0xb3d300
 void* __cdecl FUN_00401090();                          // 0x401090
 void* __cdecl FUN_004df420();                          // 0x4df420
 void  __cdecl FUN_00ef1930(void*, float);              // 0xef1930
-void  __cdecl FUN_00ebfd50();                          // 0xebfd50
+int   __cdecl FUN_00ebfd50(int, int);                  // 0xebfd50
 bool  __cdecl FUN_00c0b1c0(void*, void*, int);         // 0xc0b1c0
 bool  __cdecl FUN_00c0b220(void*, void*);              // 0xc0b220
 bool  __cdecl FUN_00c0bb90();                          // 0xc0bb90
@@ -50,12 +50,11 @@ struct C {
   void __thiscall CallFind13();
   void __thiscall CallFind27();
   void __thiscall IsDefaultSpecies_();
-  void __thiscall CopyRec(void* src);
-  void __thiscall QuatHalf(float a);
-  bool __thiscall C5b0(int a, int b, int* out);
+  C*   __thiscall CopyRec(void* src);
+  C*   __thiscall QuatHalf(float a);
   int  __thiscall RelationIndex(int idx, char b);
-  int  __thiscall Cdb0();
-  int  __thiscall C200(float f);
+  __declspec(noinline) int __thiscall Cdb0();
+  void __thiscall C200(float f);
   int  __thiscall C0bd70(int x);
   void __thiscall C0bee0(int a, int b);
   void __thiscall C0bf10(int a,int b,int c,int d,int e,int f,int g,int h,int i,int j,int k,char l);
@@ -132,15 +131,17 @@ void __thiscall C::IsDefaultSpecies_() {
 }
 
 // @ 0x00c0c3e0  copy 0x24-byte record with refcount on +0x20
-void __thiscall C::CopyRec(void* srcv) {
+C* __thiscall C::CopyRec(void* srcv) {
   uint32_t* s = (uint32_t*)srcv;
   uint32_t* d = (uint32_t*)this;
-  d[0]=s[0]; d[1]=s[1]; d[2]=s[2]; d[3]=s[3]; d[4]=s[4]; d[5]=s[5];
+  d[0]=s[0]; d[1]=s[1]; d[2]=s[2]; d[3]=s[3]; d[4]=s[4];
+  *(float*)(d+5) = *(float*)(s+5);
   *(uint8_t*)(d+6) = *(uint8_t*)(s+6);
   d[7]=s[7];
   void* o = (void*)s[8];
   d[8]=(uint32_t)o;
   if (o) (*(void(__thiscall*)(void*))((*(void***)o)[0xbc/4]))(o);
+  return this;
 }
 
 // @ 0x00c0c440  copy records [first,last) to dst
@@ -161,36 +162,40 @@ void* __cdecl FUN_00c0c440(uint32_t* first, uint32_t* last, uint32_t* dst) {
 }
 
 // @ 0x00c0c4b0  quaternion rotate by half angle
-void __thiscall C::QuatHalf(float a) {
+C* __thiscall C::QuatHalf(float a) {
   float* q = (float*)this;
   float x=q[0], y=q[1], z=q[2], w=q[3];
   float c = cosf(a * 0.5f);
   float s = sinf(a * 0.5f);
-  q[0] = ((w*c + x*0.0f) - y*s) + z*0.0f;
-  q[1] = ((x*c + z*s) + y*0.0f) - w*0.0f;
-  q[2] = ((y*c - x*0.0f) + w*s) + z*0.0f;
-  q[3] = ((z*c - w*0.0f) - x*s) - y*0.0f;
+  q[0] = x*c + w*0.0f - z*s + y*0.0f;
+  q[1] = y*c + w*s + z*0.0f - x*0.0f;
+  q[2] = z*c - y*0.0f + x*s + w*0.0f;
+  q[3] = w*c - x*0.0f - y*s - z*0.0f;
+  return this;
 }
 
-// @ 0x00c0c5b0
-bool __thiscall C::C5b0(int a, int b, int* out) {
-  void* gm = SP_GetCurrentGameMode();
-  if (gm == (void*)0x1654c10) {
-    int r = 0; FUN_00ebfd50(); r = 0;
+// @ 0x00c0c5b0  water reflection helper (cdecl: object passed on the stack)
+bool __cdecl C5b0(int obj, int b, int* out) {
+  if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
+    int r = FUN_00ebfd50(obj, b);
     *out = r;
     return r != b;
   }
-  return false;
+  void* p = *(void**)((char*)obj + 0xe84);
+  if (p && *(char*)((char*)p + 0x388) != 0) {
+    void* mgr = *(void**)0x168d900;
+    if (FUN_00c0b1c0((void*)b, (void*)out, *(int*)((char*)mgr + 0x1c))) return true;
+  }
+  return FUN_00c0b220((void*)b, (void*)out);
 }
 
 // @ 0x00c0c200
-int __thiscall C::C200(float f) {
+void __thiscall C::C200(float f) {
   void* gm = SP_GetCurrentGameMode();
   if (gm == (void*)0x1654c10 && *(int*)((char*)g_16c7aa4 + 0xcc) == 2) {
     if (this) FUN_00ef1930((char*)this + 0x5a8, f);
     else FUN_00ef1930(0, f);
   }
-  return 0;
 }
 
 // @ 0x00c0cdb0
