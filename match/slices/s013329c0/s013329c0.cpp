@@ -156,8 +156,37 @@ void SetDefault_00bfe3f0(Attribute*);
 void SetDefault_00bfe410(Attribute*);
 void SetDefault_00bfe430(Attribute*);
 
+// Free-function callbacks of the cCommunity / cSPCreatureAnimal attribute tables.
+bool Read_00c01ce0(ISerializerReadStream* pStream, void* pData);      // 0x00c01ce0
+bool Write_00c006a0(ISerializerWriteStream* pStream, void* pData);    // 0x00c006a0
+bool Validate_00c00740();                                             // 0x00c00740
+bool ToXml_00c51440(void* pData, const char* pName, int depth);       // 0x00c51440
+bool Read_00c024f0(ISerializerReadStream* pStream, void* pData);      // 0x00c024f0
+bool Write_00c00780(ISerializerWriteStream* pStream, void* pData);    // 0x00c00780
+bool Validate_00c00810();                                             // 0x00c00810
+bool ToXml_00f29650(void* pData, const char* pName, int depth);       // 0x00f29650
+bool Read_00ac87c0(ISerializerReadStream* pStream, void* pData);      // 0x00ac87c0
+bool Write_00ac87f0(ISerializerWriteStream* pStream, void* pData);    // 0x00ac87f0
+void ReadText_00694c80(const string8& text, void* pData);             // 0x00694c80
+void WriteText_00694c10(char* pBuffer, void* pData);                  // 0x00694c10
+bool ToXml_00acbbc0(void* pData, const char* pName, int depth);       // 0x00acbbc0
+bool Read_00b02540(ISerializerReadStream* pStream, void* pData);      // 0x00b02540
+bool Read_00ae3430(ISerializerReadStream* pStream, void* pData);      // 0x00ae3430
+bool Write_00ae3450(ISerializerWriteStream* pStream, void* pData);    // 0x00ae3450
+void ReadText_00693150(const string8& text, void* pData);             // 0x00693150
+void WriteText_00695080(char* pBuffer, void* pData);                  // 0x00695080
+bool ToXml_00ae5720(void* pData, const char* pName, int depth);       // 0x00ae5720
+bool Read_00b20540(ISerializerReadStream* pStream, void* pData);      // 0x00b20540
+bool Read_00b6e3a0(ISerializerReadStream* pStream, void* pData);      // 0x00b6e3a0
+bool Write_00ac88c0(ISerializerWriteStream* pStream, void* pData);    // 0x00ac88c0
+bool Read_00bd0d50(ISerializerReadStream* pStream, void* pData);      // 0x00bd0d50
+bool Write_00bd17b0(ISerializerWriteStream* pStream, void* pData);    // 0x00bd17b0
+bool Validate_00bcd450();                                             // 0x00bcd450
+
 struct AttrSlot { uint32_t d[15]; };
 extern AttrSlot cCommodityNode_sAttributes[15];   // 0x01570a60
+extern AttrSlot cCommunity_sAttributes[6];        // 0x015710b8
+extern AttrSlot cSPCreatureAnimal_sAttributes[13]; // 0x01571370
 
 // Static default values of the class (written between the records).
 extern uint8_t  cCommodityNode_sDefault_0168d181;   // 0x0168d181
@@ -182,6 +211,7 @@ extern float    cCommodityNode_sDefault_0168d1a4;   // 0x0168d1a4
 #define PTR_ATTR(R, W, V)  R, W, ReadText_00c2e4e0, WriteText_00692fb0, V, ToXml_00ac8050
 
 #define ADD(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cCommodityNode_sAttributes[IDX] = a; }
+#define ADD_TO(TABLE, IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&TABLE[IDX] = a; }
 
 // @ 0x013329c0
 void InitCommodityNodeAttributes()
@@ -211,6 +241,73 @@ void InitCommodityNodeAttributes()
     ADD(13, "mBuyPercent", 0x0521d448, 0x22c, FLOAT_ATTR(s, r13, r13, s, r13, r13), SetDefault_00bfe430)
     ADD(14, "mConstructingVehicle", 0x05776f58, 0x1e0, PTR_ATTR(Read_00bfeca0, Write_00bca960, Validate_00b6f550))
     cCommodityNode_sDefault_0168d1a4 = 0.0f;
+}
+
+// @ 0x013342f0
+void InitCommunityAttributes()
+{
+    ADD_TO(cCommunity_sAttributes, 0, "mCommunitySize", 0x03223734, 0x38,
+           Read_00572810_s, Write_00572840_s, ReadText_00692ff0_s, WriteText_00694ee0,
+           Validate_00b1fbf0_s, ToXml_0057cde0)
+    ADD_TO(cCommunity_sAttributes, 1, "mAssemblyBubbles", 0x03223735, 0x70,
+           Read_00c01ce0, Write_00c006a0, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00c00740, ToXml_00c51440)
+    ADD_TO(cCommunity_sAttributes, 2, "mLanes", 0x03223736, 0x84,
+           Read_00c024f0, Write_00c00780, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00c00810, ToXml_00f29650)
+    ADD_TO(cCommunity_sAttributes, 3, "mName", 0x042c8cee, 0xf8,
+           Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10,
+           Validate_00b1fbf0_s, ToXml_00acbbc0)
+    ADD_TO(cCommunity_sAttributes, 4, "mDescription", 0x042e213c, 0x108,
+           Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10,
+           Validate_00b1fbf0_s, ToXml_00acbbc0)
+    ADD_TO(cCommunity_sAttributes, 5, "mpLeader", 0x04bd34fb, 0x11c,
+           Read_00b02540, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00b6f550, ToXml_00ac8050)
+}
+
+// @ 0x01334790
+void InitSPCreatureAnimalAttributes()
+{
+    ADD_TO(cSPCreatureAnimal_sAttributes, 0, "mPlayerAlertState", 0xd2708c85, 0x101c,
+           Read_00572810_r0, Write_00572840_r0, ReadText_00692ff0_r0, WriteText_00694ee0,
+           Validate_00b1fbf0_r0, ToXml_0057cde0)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 1, "mNextSpecies", 0x03f6565d, 0x1004,
+           Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080,
+           Validate_00b1fbf0_r1, ToXml_00ae5720)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 2, "mHerd", 0x72ae9fe0, 0x1674,
+           Read_00b20540, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00b6f550, ToXml_00ac8050)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 3, "mNoDamageTimer", 0x05c02449, 0xfc0,
+           Read_00ae3470, Write_00ae3490, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00ae3310, ToXml_00ac8050)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 4, "mLastAvatarDamageTimer", 0x05ee740c, 0xfe0,
+           Read_00ae3470, Write_00ae3490, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00ae3310, ToXml_00ac8050)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 5, "mPregnantEggs", 0x52709079, 0x1678,
+           Read_00572810_r5, Write_00572840_r5, ReadText_00692ff0_r5, WriteText_00694ee0,
+           Validate_00b1fbf0_r5, ToXml_0057cde0)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 6, "mUntargetDistanceTime", 0x021d2388, 0x167c,
+           Read_00572810_r6, Write_00ac88f0_r6, ReadText_006930b0_r6, WriteText_00694fc0_r6,
+           Validate_00b1fbf0_r6, ToXml_00acbb80_r6)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 7, "mOwnerMissionID", 0x92709161, 0x1680,
+           Read_00572810_r7, Write_00572840_r7, ReadText_00693090_r7, WriteText_00694f00_r7,
+           Validate_00b1fbf0_r7, ToXml_00675ca0_r7)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 8, "mPersonality", 0x72709236, 0x1684,
+           Read_00572810_r8, Write_00572840_r8, ReadText_00692ff0_r8, WriteText_00694ee0,
+           Validate_00b1fbf0_r8, ToXml_0057cde0)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 9, "mColor", 0x042a2b01, 0x1010,
+           Read_00b6e3a0, Write_00ac88c0, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00b1fbf0_r9, ToXml_00ac8050)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 10, "mCharmDamage", 0x0666441b, 0x1694,
+           Read_00572810_r10, Write_00ac88f0_r10, ReadText_006930b0_r10, WriteText_00694fc0_r10,
+           Validate_00b1fbf0_r10, ToXml_00acbb80_r10)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 11, "mCharmTime", 0x06664451, 0x169c,
+           Read_00572810_r11, Write_00ac88f0_r11, ReadText_006930b0_r11, WriteText_00694fc0_r11,
+           Validate_00b1fbf0_r11, ToXml_00acbb80_r11)
+    ADD_TO(cSPCreatureAnimal_sAttributes, 12, "mpCharmer", 0x06664454, 0x1698,
+           Read_00bd0d50, Write_00bd17b0, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00bcd450, ToXml_00ac8050)
 }
 
 }  // namespace Simulator
