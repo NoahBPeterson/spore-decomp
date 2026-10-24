@@ -20,6 +20,7 @@ extern int        g_15acef0;           // 0x015acef0
 extern "C" int   sscanf(const char*, const char*, ...);
 extern "C" void* memcpy(void*, const void*, unsigned);
 extern "C" void  free(void*);
+void __cdecl FreeNode(void*);                                // 0x00f47380
 
 // ---------------------------------------------------------------------------
 // virtual-call helpers
@@ -129,7 +130,6 @@ void* __cdecl FUN_005ca910();                                // 0x005ca910
 void* __cdecl FUN_00f3be60(void*);                           // 0x00f3be60
 void* __cdecl FUN_00efc520();                                // 0x00efc520
 void* __cdecl FUN_00f3e8a0(void*, void*);                    // 0x00f3e8a0
-void* __cdecl FUN_00ef7b90(uint32_t);                        // 0x00ef7b90
 void* __cdecl FUN_004eb930(void*, int);                      // 0x004eb930
 void* __cdecl FUN_00ef6f00(void*, void*);                    // 0x00ef6f00
 void* __cdecl FUN_00ef4bd0();                                // 0x00ef4bd0
@@ -184,7 +184,7 @@ void CAssetView::Reset()
     void* p = *(void**)(self + 0x78);
     if (p != 0) {
         *(void**)(self + 0x78) = 0;
-        ((IRefCounted*)*(void**)((char*)p + 0x10))->v1();
+        ((IRefCounted*)((char*)p + 0x10))->v1();
     }
     p = *(void**)(self + 0x7c);
     if (p != 0) {
@@ -209,11 +209,11 @@ void CAssetView::Reset()
     }
     *(uint8_t*)(self + 0x9e) = 0;
     *(uint8_t*)(self + 0x9f) = 0;
-    void* begin = *(void**)(self + 0xa0);
-    void* end   = *(void**)(self + 0xa4);
+    uint32_t* begin = *(uint32_t**)(self + 0xa0);
+    uint32_t* end   = *(uint32_t**)(self + 0xa4);
     memcpy(begin, end, 0);
-    int n = (int)((char*)end - (char*)begin) >> 2;
-    *(void**)(self + 0xa4) = (char*)end + (-n) * 4;
+    int n = (int)(end - begin);
+    *(uint32_t**)(self + 0xa4) -= n;
     CSPUILayout* L = *(CSPUILayout**)(self + 0xc);
     if (L != 0) {
         L->Shutdown(1);
@@ -765,6 +765,7 @@ void CScenarioTutorialsChecklistUI::sub_ef7b40()
 // EASTL hashtable internals instantiated in this TU
 // ===========================================================================
 struct CHash {
+    void* AllocBuckets(uint32_t n);   // 0x00ef7b90 (thiscall member: reads this, ends with `ret 4`)
     void DoRehash(uint32_t n);
 };
 
@@ -772,7 +773,7 @@ struct CHash {
 void CHash::DoRehash(uint32_t n)
 {
     char* self = (char*)this;
-    void* buckets = FUN_00ef7b90(n);
+    void* buckets = AllocBuckets(n);
     uint32_t i = 0;
     while (i < *(uint32_t*)(self + 8)) {
         void** p = (void**)(*(char**)(self + 4) + i * 4);
@@ -796,7 +797,7 @@ void CHash::DoRehash(uint32_t n)
             *(uint32_t*)(self + 8) = n;
             return;
         }
-        free(old);
+        FreeNode(old);
     }
     *(void**)(self + 4) = buckets;
     *(uint32_t*)(self + 8) = n;
