@@ -52,8 +52,10 @@ void __cdecl FUN_011f5b10();
 void __cdecl FUN_011fa0b0();
 void __cdecl FUN_011f3900();
 void __cdecl FUN_011f3990();
-void __cdecl FUN_011eff60();
-void __cdecl FUN_011f7d00(int* p);
+// FUN_011eff60 is a thiscall with no stack arguments (plain `ret`); VC7.1 cannot spell __thiscall
+// in a pointer cast, so it is declared as a member of a receiver stub class.
+struct RasterReceiver { void FUN_011eff60(); };
+int  __cdecl FUN_011f7d00(int* p);
 int  __cdecl FUN_011f7b20(void* s);
 int  __cdecl DevCapsManager_GetD3DCAPS9(); // 0x011f8af0
 void __cdecl DocMessage_Send(void* a, int b, const char* fmt, ...);
@@ -80,7 +82,7 @@ struct DEVINFO {
 // thiscall members live on a stub Device class
 struct Device {
     void Reset(int* p);
-    void GetDefaultParameters(int which);
+    void* GetDefaultParameters(int which);   // returns `this` (the D3DPRESENT_PARAMETERS block) in eax
     int  StartInternal(int* p);
 };
 
@@ -227,7 +229,7 @@ void __cdecl FUN_011f8b00(void)
 // ---------------------------------------------------------------------------
 // @ 0x011f8340
 // ---------------------------------------------------------------------------
-void Device::GetDefaultParameters(int which)
+void* Device::GetDefaultParameters(int which)
 {
     int* p = (int*)this;
     for (int i = 0; i < 15; ++i)
@@ -249,6 +251,7 @@ void Device::GetDefaultParameters(int which)
     p[12] = 0;
     p[13] = 0;
     p[14] = 2;
+    return this;
 }
 
 // ---------------------------------------------------------------------------
@@ -273,8 +276,8 @@ void __cdecl FUN_011f7f10(void)
         g_shader1 = 0;
     }
     FUN_011f3900();
-    FUN_011eff60();
-    FUN_011eff60();
+    ((RasterReceiver*)g_rasterA)->FUN_011eff60();
+    ((RasterReceiver*)g_rasterB)->FUN_011eff60();
     void* d = g_d3d9dev;
     ((void(__stdcall*)(void*))VTD(d)[2])(d);
     g_d3d9dev = 0;
@@ -382,7 +385,7 @@ void __cdecl FUN_011f8a40(int* out, int param_2)
 // ---------------------------------------------------------------------------
 // @ 0x011f7d00  (anonymous namespace rwg_SetPresent)
 // ---------------------------------------------------------------------------
-void __cdecl FUN_011f7d00(int* p)
+int __cdecl FUN_011f7d00(int* p)
 {
     g_present[0] = p[2];
     g_present[1] = p[3];
@@ -394,14 +397,17 @@ void __cdecl FUN_011f7d00(int* p)
     g_present[3] = 1;
     g_present[4] = 0;
     g_present[5] = 0;
-    g_present[6] = (int)g_window;
-    g_present[7] = (p[9] == 0) ? 1 : 3;
+    g_present[6] = (p[9] == 0) ? 3 : 1;
+    g_present[7] = (int)g_window;
     g_present[8] = (p[9] == 0);
     g_present[9] = 1;
     g_present[10] = p[7];
     g_present[11] = (p[7] == 0x46 || p[7] == 0x52 || p[10] == 1) ? 1 : 0;
     g_present[12] = (p[9] != 0) ? p[4] : 0;
-    g_present[13] = (-(p[8] != 0) & 0x80000001) + 0x80000000;
+    // The HRESULT is both stored as the 14th dword and returned in eax.
+    int hr = (-(p[8] != 0) & 0x80000001) + 0x80000000;
+    g_present[13] = hr;
+    return hr;
 }
 
 // ---------------------------------------------------------------------------

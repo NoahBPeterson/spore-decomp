@@ -1,10 +1,8 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
 011f7c70  110  D3D9VertexShaderDescriptor::DefaultLoadAndSelect: complete; the inlined
                2-byte strcmp scan and the sbb sign fixup differ
-011f7d00   76  rwg_SetPresent: complete; cl 15 assigns the many D3DPRESENT_PARAMETERS
-               stores to different registers (the module is a prebuilt RenderWare object)
-011f7f10   40  Device::Stop: complete; the vcall form differs (cl 15 emits mov+call, the
-               original uses call [reg+8])
+011f7d00   74  rwg_SetPresent: complete; D3DPRESENT_PARAMETERS field mapping fixed (g_present[6]=(p[9]==0)?3:1, [7]=g_window, [13]=the HRESULT, which is also returned in eax); only the register assignment of the many stores differs [equiv PASS 400 valid, 100% cov]
+011f7f10   43  Device::Stop: complete; FUN_011eff60 is a no-arg thiscall, now invoked on g_rasterA/g_rasterB (the two pointers at 0x015d0838/0x015d083c) through a member stub; only the vcall form differs (cl 15 emits mov+call, the original uses call [reg+8]) [equiv PASS 398 valid, 75% cov]
 011f7fd0   70  Device::Reset: complete; the 15-dword rep movsd block copies and the
                changed-check schedule differ
 011f8070   75  Device::D3D9WindowResize: complete; vcall form and register schedule differ
@@ -13,8 +11,7 @@
 011f81d0   53  Device::RestoreVertexShader: complete; vcall form differs
 011f8270   20  Device::D3D9GetDesktopDisplayMode: complete; register assignment differs
 011f82a0   78  Device::D3D9CreateDevice: complete; vcall form / 6-arg schedule differ
-011f8340   119 Device::GetDefaultParameters: complete; the 15-dword copy + switch layout
-               differs
+011f8340  151  Device::GetDefaultParameters: complete; returns `this` in eax (Device* return type) with the 15-dword copy and switch constants in the original order; only the rep movsd/switch register layout differs [equiv PASS 400 valid, 100% cov]
 011f8400  139  Device::D3D9GetMaxSamplerStage: complete; DevCapsManager/DocMessage argument
                schedule differs
 011f8a40  117  Device::GetAdapterInfo: complete; nested-loop register schedule differs
