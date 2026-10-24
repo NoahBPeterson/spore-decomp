@@ -1,0 +1,5 @@
+00c53180  240  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) Update: body reconverges correctly but the shipping compiler kept fewer registers/nested tail (335 vs 340 bytes); state-machine case order and the mpParentMission vtable lookup differ.
+00c532d0  808  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) Fulfill: switch and inventory helpers modeled, but the original builds 0x21c/0x228 key paths and the 0x19ec2c8b key local differently (948 vs 710 bytes).
+00c53720  158  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) GetUIShortDescription: caching getter shape correct; original compares mUIText against memory operands and pushes the text id before the tail jump (216 vs 210 bytes).
+00c53800  431  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) GetFetchItemName: switch correct, but cString/GetPropertyAsText temporaries and the 0x736c417f species-name paths compile to a different sequence (582 vs 575 bytes).
+00c53bc0  1110 (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) PickFetchItem: all reward types modeled; the 1360-byte layout with the animal/plant key loops and the empty-key tail check does not reproduce byte-for-byte (1360 vs 1367 bytes).
