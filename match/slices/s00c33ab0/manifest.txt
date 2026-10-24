@@ -1,0 +1,2 @@
+slices/s00c33ab0/s00c33ab0.cpp  ?Reset_34140@cEmpire@SP@@QAEXXZ  00c34140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c33ab0/s00c33ab0.cpp  ?Resize_34710@EVec@@QAEXIPAX@Z  00c34710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
