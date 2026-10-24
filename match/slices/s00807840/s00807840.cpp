@@ -1,6 +1,7 @@
 // Slice s00807840 (w2g6 #18): SPUIHelpers window image/shader/transform helpers.
 #include <math.h>
-#define ABS(x) ((x) < 0 ? -(x) : (x))
+#pragma intrinsic(fabs)
+static __forceinline float AbsF(float x) { return (float)fabs((double)x); }
 // 32-bit MSVC 2008 SP1. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 
@@ -16,12 +17,12 @@ extern "C" unsigned char FUN_00806db0(void*, void*);         // 0x00806db0
 extern "C" void  __fastcall DoErase(void*);                  // 0x008077f0
 extern "C" void* SPUIShader_AcquireShaderProxy();            // 0x0082f630
 extern "C" char  FUN_0064e6b0();                             // 0x0064e6b0
-extern "C" void  FUN_0095eb00(int);
-extern "C" void  FUN_0095ec30(int);
-extern "C" void  FUN_0095ed60(int);
-extern "C" void  FUN_0095f5c0(void*, float);
-extern "C" void  FUN_0095ea30(void*);
-extern "C" void  FUN_0095e890(void*);
+extern "C" void __fastcall FUN_0095eb00(void* self, int dummy, float angle); // 0x0095eb00
+extern "C" void __fastcall FUN_0095ec30(void* self, int dummy, float angle); // 0x0095ec30
+extern "C" void __fastcall FUN_0095ed60(void* self, int dummy, float angle); // 0x0095ed60
+extern "C" void __fastcall FUN_0095f5c0(void* self, int dummy, void* v, float angle); // 0x0095f5c0
+extern "C" void __fastcall FUN_0095ea30(void* self, int dummy, void* v);      // 0x0095ea30
+extern "C" void __fastcall FUN_0095e890(void* self, int dummy, void* v);      // 0x0095e890
 extern "C" void* SP_PropertyManager();                       // 0x00?????? // 0x0067de30
 extern "C" char  SP_GetPropertyAsUint32Array(void*, int, int*, int*);   // 0x006a0840 (equiv t2)
 extern "C" int   SP_OpenRecordAsStream(void*, void*);   // 0x00686490 (equiv t2)
@@ -197,23 +198,24 @@ char __stdcall FUN_00807ed0(W* w) {
 }
 
 // @ 0x00807f50
-void __fastcall FUN_00807f50(int p) {
-    float* f = (float*)p;
+void __fastcall FUN_00807f50(void* self, int dummy, void* a, void* b) {
+    (void)a;
+    float* f = (float*)self;
     int count = 0;
     unsigned mode = 0;
-    if (ABS(f[7]) > 1.1920929e-07f) { count = 1; }
-    if (ABS(f[8]) > 1.1920929e-07f) { count++; mode = 1; }
-    if (ABS(f[9]) > 1.1920929e-07f) { count++; mode = 2; }
+    if (AbsF(f[7]) > 1.1920929e-07f) { count = 1; }
+    if (AbsF(f[8]) > 1.1920929e-07f) { count++; mode = 1; }
+    if (AbsF(f[9]) > 1.1920929e-07f) { count++; mode = 2; }
     if (count > 1) mode = 3;
     if (count != 0) {
         switch (mode) {
-        case 0: FUN_0095eb00(*(int*)(p + 0x28)); return;
-        case 1: FUN_0095ec30(*(int*)(p + 0x28)); return;
-        case 2: FUN_0095ed60(*(int*)(p + 0x28)); return;
+        case 0: FUN_0095eb00(b, 0, f[10]); return;
+        case 1: FUN_0095ec30(b, 0, f[10]); return;
+        case 2: FUN_0095ed60(b, 0, f[10]); return;
         case 3: {
             float v[3];
             v[0] = f[7]; v[1] = f[8]; v[2] = f[9];
-            FUN_0095f5c0(v, f[10] * 0.017453292f);
+            FUN_0095f5c0(b, 0, v, f[10] * 0.017453292f);
         }
         }
     }
@@ -226,17 +228,16 @@ void XAlign::Update(void* a, void* b) {
     if (f[5] != 1.0f || f[6] != 1.0f) {
         float v[3];
         v[0] = f[5]; v[1] = f[6]; v[2] = 1.0f;
-        FUN_0095ea30(v);
+        FUN_0095ea30(b, 0, v);
     }
     if (f[7] != DAT_01544384 || f[8] != DAT_01544388 || f[9] != DAT_0154438c || f[10] != DAT_01544390) {
-        FUN_00807f50((int)a);
+        FUN_00807f50(this, 0, a, b);
     }
     if (f[3] != 0.0f || f[4] != 0.0f) {
         float v[3];
         v[0] = f[3]; v[1] = f[4]; v[2] = 1.0f;
-        FUN_0095e890(v);
+        FUN_0095e890(b, 0, v);
     }
-    (void)b;
 }
 
 // @ 0x00808190
