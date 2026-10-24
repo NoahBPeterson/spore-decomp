@@ -1,1 +1,3 @@
 009ecac0 IkSolver::UpdateBone  # thiscall ret 4 (bone); distance clamp, child recursion, constraint re-aim via 0x9ec360, pivotPos refresh (name guessed)
+009ed370 ?AccumulateReference@@YAXPAUIkBody@@0PAMPAUVec3@@21@Z  # IK rigid-follow reference accumulation (out-of-line copy; inlined at 0x009f09a0, slice s009f09a0); register ABI eax=other
+009ed560 ?BuildIKContext@@YAPAUIkContext@@PAU1@PAUIkWorldInfo@@PAUQuat@@@Z  # fills IKContext for IKSolveParticles (0x009f2a00), called from IKSolveDistances (0x009f3af0); register ABI eax=ctx
