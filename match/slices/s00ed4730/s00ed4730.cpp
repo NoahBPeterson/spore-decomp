@@ -71,7 +71,9 @@ char  __cdecl FUN_00e00ac0(void);                               // 0xe00ac0
 void* __cdecl SP_WindowManager(void);                           // 0x67caa0
 void* __cdecl FUN_00d539d0(void);                               // 0xd539d0
 unsigned __cdecl FUN_00f3bf70_v(void);
-char  __cdecl cSPUIPosseItem_init(void*, int);                  // 0xe277b0
+struct S_e277b0 {
+    int f(int w);   // 0x00e277b0  cSPUIPosseItem::init (char in al; declared int to keep the full eax)
+};
 void  __cdecl FUN_00571db0(int, int, int, int, int);            // EA::Messaging::RemoveHandler
 void  __cdecl FUN_006447c0(char flag, void** out);              // 0x006447c0
 void  __cdecl FUN_0064a990(void* launch);                       // 0x0064a990
@@ -134,7 +136,9 @@ int Obj4840::f()
 char __cdecl FUN_00ed48a0(void* a, int* c)
 {
     (void)a;
-    return (unsigned)(c[2] - 1) <= 9;
+    unsigned v = (unsigned)c[2] - 1;
+    unsigned r = (v & 0xffffff00u) | (v <= 9);
+    return (char)r;
 }
 
 // ================================================================ 0x00ed48b0
@@ -200,7 +204,7 @@ void Obj49a0::f()
     }
     if (*(int**)(s + 0x44)) ((FV_v)(*(void***)*(int**)(s + 0x44))[4 / 4])(*(int**)(s + 0x44));
     if (*(int**)(s + 0x40)) ((FV_v)(*(void***)*(int**)(s + 0x40))[4 / 4])(*(int**)(s + 0x40));
-    for (int i = 1; i >= 0; i--) {
+    for (int i = 0; i < 2; i++) {
         int* p = *(int**)(s + 0x3c - i * 4);
         if (p) ((FV_v)(*(void***)p)[4 / 4])(p);
     }
@@ -492,7 +496,8 @@ struct Obj5190 { int f(int w); };
 int Obj5190::f(int w)
 {
     char* s = (char*)this;
-    if (!cSPUIPosseItem_init(s, w)) return 0;
+    int r0 = ((S_e277b0*)s)->f(w);
+    if ((unsigned char)r0 == 0) return (int)(r0 & 0xffffff00u);
     int* win = (int*)((S_8105b0*)(w + 0x1bc))->f(0x3dae412, 1);
     ((FV_ii)(*(void***)win)[0x7c / 4])(win, 0x10, 1);
     int* q = *(int**)(s + 0x50);
