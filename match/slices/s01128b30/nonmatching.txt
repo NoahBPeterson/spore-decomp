@@ -4,8 +4,8 @@
 01129290  109  hkPhysicsData dtor: refcount loop and hkArray free schedule differ
 01129360  80   hkPairwiseCollisionFilter::isCollisionEnabled: min/max + pair scan register shape differs
 011293c0  84   hkPairwiseCollisionFilter::entityRemovedCallback: compaction loop shape differs
-011294e0  12   filter-create helper: 1-constant hoist / branch schedule differs
+011294e0  12   filter-create helper; equiv PASS 400/400 (ctor 0x01129420 returns `this` in eax, so the helper's own eax after the call is the ctor result: return the ctor value instead of a fresh 1); 1-constant hoist / branch schedule differs
 01129640  159  hkMotorAction ctor: base-ctor chain and x87 normalize schedule differ
 01129c70  3    hkDisableEntityCollisionFilter::isCollisionEnabled: only prologue push edi placement differs
-01129cc0  72   hkDisableEntityCollisionFilter::removeEntity: hkBool sret path differs
-01129d20  48   hkDisableEntityCollisionFilter::entityRemovedCallback: tail/ABI differs
+01129cc0  72   hkDisableEntityCollisionFilter::removeEntity; equiv PASS (was reading m_arr2/m_n2 at +0x20/+0x24: a stray pad1c[4] shifted them past the original's +0x1c/+0x20; removed the pad, and modelled it as the thiscall sret member the original uses); hkBool sret path differs
+01129d20  48   hkDisableEntityCollisionFilter::entityRemovedCallback; equiv PASS (entry ecx is the +0x18 listener subobject, not the filter base; now a member of hkEntityListener that adjusts to the filter at ecx-0x18, calls removeEntity(e), then e->removeEntityListener(0x01088a20, ecx=this)); tail/ABI differs

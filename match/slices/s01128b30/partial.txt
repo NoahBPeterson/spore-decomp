@@ -1,8 +1,8 @@
 # va  diff-bytes  reason
-01128b30  -  hkReorientAction::applyAction: large x87 reconstruction approximated
+01128b30  -  hkReorientAction::applyAction; FAIL-KEPT (1407-byte x87 routine still approximated: needs the full corrective-impulse reconstruction plus its hkVector4/hkRotation helper calls, which the 3-byte stub does not emit)
 01129420  57 multi-vtable collision-filter ctor: 5 base subobjects approximated
 01129500  185 hkGroupCollisionFilter support routine: skeleton
-01129720  195 hkMotorAction::applyAction: skeleton
+01129720  195 hkMotorAction::applyAction; FAIL-KEPT (206-byte routine still a stub: needs dir.setRotatedInverseDir(0x01081440), the m_maxVelocity/m_strength impulse math, two hkVector4::setRotatedDir(0x010814a0) calls, hkEntity::activate(0x01088ae0) and the motion vtable calls at +0x2c/+0x74; the hkMotion vtable slots are not modelled here)
 011297f0  87  hkMotorAction::clone: skeleton
 01129850  -  hkGroupCollisionFilter::isCollisionEnabled core: skeleton
 01129af0  71  hkGroupCollisionFilter::isCollisionEnabled: skeleton

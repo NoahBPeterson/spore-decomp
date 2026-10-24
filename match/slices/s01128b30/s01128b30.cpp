@@ -25,7 +25,11 @@ class hkThreadMemory { public: void deallocateChunk(void* p, int size, int memCl
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long index);
 extern unsigned long g_hkTlsIndex;
 
-struct hkEntity;
+struct hkEntity {
+    void removeEntityListener(void* listener);   // 0x01088a20 (thiscall on the entity)
+};
+
+struct hkDisableEntityCollisionFilter;
 
 // hkMotion / hkRigidBody minimal layout.
 class hkMotion { public:
@@ -246,15 +250,20 @@ void hkPairwiseCollisionFilter2::entityRemovedCallback(hkEntity* e)
 }
 
 // ---------------------------------------------------------------- 011294e0
-struct hkFilterCtor {
-    void ctor(unsigned int flag);
+// 0x01129420 is the multi-vtable filter ctor; it returns `this` in eax, and
+// hkCreateFilterCtor's eax after the call is that ctor's result.
+struct hkMultiFilter {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual void v3(); virtual void v4(); virtual void v5();
+    char pad[0x28];
+    __declspec(noinline) hkMultiFilter* ctor(unsigned int flag);
 };
 
 // @ 0x011294e0
 int hkCreateFilterCtor(unsigned int a)
 {
     if (a) {
-        ((hkFilterCtor*)(void*)a)->ctor(1);
+        return (int)(uintptr_t)((hkMultiFilter*)(void*)a)->ctor(1);
     }
     return 1;
 }
@@ -316,18 +325,13 @@ void FUN_01129500(void) {}
 void FUN_01129850(void* a, void* b, void* c) { (void)a; (void)b; (void)c; }
 
 // @ 0x01129420 -- multi-vtable filter ctor (5 bases); partial skeleton.
-struct hkMultiFilter {
-    virtual void v0(); virtual void v1(); virtual void v2();
-    virtual void v3(); virtual void v4(); virtual void v5();
-    char pad[0x28];
-    void ctor(unsigned int flag);
-};
-void hkMultiFilter::ctor(unsigned int flag)
+hkMultiFilter* hkMultiFilter::ctor(unsigned int flag)
 {
     (void)flag;
     *(int*)((char*)this + 0x1c) = 0;
     *(int*)((char*)this + 0x20) = 0;
     *(int*)((char*)this + 0x24) = 0x80000000;
+    return this;
 }
 
 // ---------------------------------------------------------------- 01129af0
@@ -359,11 +363,17 @@ struct hkDisableEntityCollisionFilter {
     char pad00[0x14];
     void** m_arr;  // +0x14
     int    m_n;    // +0x18
-    char   pad1c[4];
     void** m_arr2; // +0x1c
     int    m_n2;   // +0x20
     hkBool isCollisionEnabled(const hkCollidable& a, const hkCollidable& b) const;
-    void entityRemovedCallback(hkEntity* e);
+    hkBool removeEntity(void* item);
+};
+
+// The entity-removed listener is a second base subobject placed at +0x18 of the
+// filter object; ecx on entry is that subobject, and the filter base is ecx-0x18.
+struct hkEntityListener {
+    virtual void el0(); virtual void el1(); virtual void el2();
+    virtual void entityRemovedCallback(hkEntity* e);
 };
 
 // @ 0x01129c70
@@ -380,14 +390,14 @@ hkBool hkDisableEntityCollisionFilter::isCollisionEnabled(const hkCollidable& a,
 }
 
 // @ 0x01129cc0
-hkBool hkDisableEntityCollisionFilter_remove(hkDisableEntityCollisionFilter* self, void* item)
+hkBool hkDisableEntityCollisionFilter::removeEntity(void* item)
 {
     if (item == 0) return hkBool(false);
-    for (int i = 0; i < self->m_n2; ++i) {
-        if (self->m_arr2[i] == item) {
-            int last = self->m_n2 - 1;
-            self->m_n2 = last;
-            self->m_arr2[i] = self->m_arr2[last];
+    for (int i = 0; i < m_n2; ++i) {
+        if (m_arr2[i] == item) {
+            int last = m_n2 - 1;
+            m_n2 = last;
+            m_arr2[i] = m_arr2[last];
             return hkBool(true);
         }
     }
@@ -395,9 +405,14 @@ hkBool hkDisableEntityCollisionFilter_remove(hkDisableEntityCollisionFilter* sel
 }
 
 // @ 0x01129d20
-void hkDisableEntityCollisionFilter::entityRemovedCallback(hkEntity* e)
+void hkEntityListener::entityRemovedCallback(hkEntity* e)
 {
-    hkDisableEntityCollisionFilter_remove(this, e);
+    hkDisableEntityCollisionFilter* self =
+        (hkDisableEntityCollisionFilter*)(void*)((char*)this - 0x18);
+    if (e != 0) {
+        self->removeEntity(e);
+        e->removeEntityListener(self ? (void*)this : 0);
+    }
 }
 // --- equivalence checker address annotations
 
