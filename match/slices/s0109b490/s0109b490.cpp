@@ -6,10 +6,13 @@
 // (sorted by island index and prepended to m_pending before executing), +0x1c flag, +0x20 critical section.
 // Each Op is 0x14 bytes: byte type at +0, payload from +4. Type names marked "(coined)" are not from a symbol.
 #include <stddef.h>
+#include <math.h>
 #include "types.h"
 
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 extern unsigned long g_hkThreadMemoryTlsIndex;       // 0x016e4174
+extern float g_hkRealZero;                           // 0x01485378 (_HK_REAL_ZERO)
+extern float g_hkRealOne;                            // 0x01485720 (_HK_REAL_ONE)
 
 enum { HK_ARRAY_FLAG_MASK = 0x3fffffff, HK_ARRAY_DONT_DEALLOCATE = (int)0x80000000 };
 enum { HK_MEMORY_CLASS_ARRAY = 0x14, HK_MEMORY_CLASS_UNKNOWN4 = 4, HK_MEMORY_CLASS_AABB = 0x24 };
@@ -27,6 +30,10 @@ class hkThreadMemory
 { public:
     void deallocateChunk(void* p, int nbytes, int memClass);     // 0x0107db10
     static hkThreadMemory* getInstance() { return (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTlsIndex); }
+    char m_pad00[0x20];
+    int  m_usedAt20;            // +0x20  bytes used in the current stack chunk
+    char m_pad24[8];
+    int  m_capacityAt2c;        // +0x2c  bytes available in the current stack chunk
 };
 
 // hkMemory::getInstance() (0x016e4178): vtable slot 5 = deallocateChunk.
@@ -36,6 +43,12 @@ public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void deallocateChunk(void* p, int nbytes, int memClass);
     static hkMemory* s_instance;                     // 0x016e4178
+    int m_outOfMemory4;         // +0x04  set to 1 when an allocation failed
+    int m_freeAt08;             // +0x08
+    char m_pad0c[8];
+    int m_usedAt14;             // +0x14
+    char m_pad18[0x10];
+    int m_allocatedAt28;        // +0x28
 };
 
 class hkReferencedObject
@@ -203,11 +216,42 @@ public:
     virtual void resetCollisionInformationForEntities(hkEntity** entities, int numEntities, hkWorld* world);   // slot 10 (+0x28)
 };
 
+struct hkTime
+{
+    float m_start;                                        // +0
+    float m_end;                                          // +4
+    float m_delta;                                        // +8
+    float m_invDelta;                                     // +0xc
+    hkTime() {}
+    hkTime(float start, float end) { set(start, end); }
+    void set(float start, float end)
+    {
+        m_start = start;
+        m_end = end;
+        m_delta = end - start;
+        m_invDelta = (m_delta == g_hkRealZero) ? 0.0f : g_hkRealOne / m_delta;
+    }
+};
+
+// Virtual solver reached through hkWorld::m_solver (+0x5c): step() is vtable slot 3 (+0xc).
+class hkSolver
+{
+public:
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual void step(hkWorld* world, const hkTime* time);   // +0xc
+};
+
 class hkWorld : public hkReferencedObject
 {
 public:
     hkSimulation* m_simulation;                           // +0x8
-    char m_pad0c[0x9c - 0xc];
+    float m_stepTime0c;                                   // +0xc   time snapshot for the last step
+    float m_currentTime;                                  // +0x10  simulation clock
+    float m_prevTime;                                     // +0x14  start of the last step
+    float m_endTime;                                      // +0x18  end of the last step
+    char m_pad1c[0x5c - 0x1c];
+    hkSolver* m_solver;                                   // +0x5c
+    char m_pad60[0x9c - 0x60];
     int m_pendingOperationQueueCount;                     // +0x9c
 
     hkEntity* addEntity(hkEntity* entity, hkEntityActivation act);                   // 0x01082ee0
@@ -226,6 +270,7 @@ public:
     hkBool removeConstraint(hkConstraintInstance* c);                                // 0x01086e90
     void removeAction(hkAction* action);                                             // 0x01086f40
     void updateCollisionFilterOnWorld(int updateMode, int shapeMode);                // 0x010869e0
+    int calcMaxIslandSizeEstimate();                                                 // 0x01082ca0
 };
 
 struct hkWorldOperationUtil
@@ -260,6 +305,119 @@ static inline void freeBlock(void* p, int nbytes, int cls)
 {
     hkMemory::s_instance->deallocateChunk(p, nbytes, cls);
 }
+
+// ---- asynchronous simulation ---------------------------------------------------------------------------
+extern "C" __declspec(dllimport) int __stdcall TlsSetValue(unsigned long index, void* value);
+extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);
+extern unsigned long g_hkMonitorStreamCurrentTls;    // 0x016e42a4
+extern unsigned long g_hkMonitorStreamEndTls;        // 0x016e42a8
+extern const char hkMonitorTimerEndTag[];            // 0x0149cc34 ("Et")
+
+// A 12-byte monitor-stream command: tag pointer + 32-bit tick stamp. begin/end advance the TLS write cursor.
+struct hkMonitorCommand { const char* m_commandAndMonitor; uint32_t m_time0; uint32_t m_pad; };
+
+#define HK_READ_TICKS(dst) { uint32_t ticks_; __asm { rdtsc } __asm { mov ticks_, eax } (dst) = ticks_; }
+#define HK_TIMER_CMD(name) do { \
+    void* hkEnd_ = TlsGetValue(g_hkMonitorStreamEndTls); \
+    if (TlsGetValue(g_hkMonitorStreamCurrentTls) < hkEnd_) { \
+        hkMonitorCommand* hkCmd_ = (hkMonitorCommand*)TlsGetValue(g_hkMonitorStreamCurrentTls); \
+        hkCmd_->m_commandAndMonitor = (name); \
+        HK_READ_TICKS(hkCmd_->m_time0) \
+        TlsSetValue(g_hkMonitorStreamCurrentTls, hkCmd_ + 1); \
+    } \
+} while (0)
+
+class hkStepInfo
+{
+public:
+    hkStepInfo(float start, float end);               // 0x01099430
+    float m_start;                                    // +0
+    float m_end;                                      // +4
+    float m_delta;                                    // +8
+    float m_invDelta;                                 // +0xc
+};
+
+struct hkMultithreadConfig
+{
+    int m_numThreads;                                 // +0
+    int m_maxNumThreads;                              // +4
+};
+
+struct hkCriticalSection
+{
+    char m_os[0x18];
+    int  m_ownerThread;                               // +0x18
+    int  m_recursionCount;                            // +0x1c
+};
+
+class hkAsynchronousSimulation : public hkReferencedObject
+{
+public:
+    virtual void a0();
+    virtual int executeStep(hkWorld* world, int mode, void* arg);          // slot 2 (+0x8)
+    virtual int recoverFromStepFailure(hkWorld* world, int result);        // 0x0109be00
+    virtual int stepDeltaTime(hkWorld* world, float deltaTime, float maxDeltaTime);   // 0x0109bed0
+    void stepCollide(hkWorld* world, const hkTime* time);                 // 0x0109a200
+    void postStep(hkWorld* world, const hkTime* time);                    // 0x01099690
+    union
+    {
+        void* m_arg8;                                 // +0x8   payload handed to executeStep
+        float m_f8;                                   // +0x8   max delta time for stepDeltaTime
+    };
+    unsigned char m_flagC;                            // +0xc   "snap time / reprocess" flag
+};
+
+class hkMultiThreadedSimulation : public hkAsynchronousSimulation
+{
+public:
+    char m_pad10[0xb8 - 0x10];
+    hkMultithreadConfig m_config;                     // +0xb8
+    char m_padc0[0x150 - 0xc0];
+    unsigned char m_flag150;                          // +0x150
+    char m_pad151[0x154 - 0x151];
+    unsigned char m_flag154;                          // +0x154
+    char m_pad155[0x1c0 - 0x155];
+    hkCriticalSection m_broadphaseLock;               // +0x1c0
+    void leaveBroadphaseCriticalSection();            // 0x0109c310
+    void getMultithreadConfig(hkMultithreadConfig& config);            // 0x0109c330
+    void setMultithreadConfig(const hkMultithreadConfig& config);      // 0x0109c350
+};
+
+// Operation dispatcher records: type byte at +4, signed byte delta to the real object at +5, and a second
+// signed delta at +0x10 from the real object to its vtable sub-object.
+class hkDispatchable
+{
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
+    virtual void d4(); virtual void d5();
+    virtual void dispatch(void* arg);                 // slot 6 (+0x18)
+    virtual void d7();
+    virtual void dispatchAlt(void* arg);              // slot 8 (+0x20)
+    unsigned char m_type;                             // +4
+    signed char   m_offset;                           // +5
+    char m_pad6[0xa];
+    int m_vtableDelta;                                // +0x10
+};
+
+static inline hkDispatchable* dispatchTarget(hkDispatchable* o)
+{
+    hkDispatchable* p = (hkDispatchable*)((char*)o + o->m_offset);
+    return (hkDispatchable*)((char*)p + p->m_vtableDelta);
+}
+
+static inline void* dispatchArg(hkDispatchable* o)
+{
+    return (char*)o + o->m_offset;
+}
+
+struct hkWorldCallbackUtil
+{
+    static void firePostSimulationCallback(hkWorld* world, const hkStepInfo* stepInfo);   // 0x0109f5a0
+};
+
+void FUN_0109bda0(hkDispatchable** p);                // 0x0109bda0
+void FUN_0109c240(hkDispatchable** p);                // 0x0109c240
+void FUN_0109c2a0(hkDispatchable** p);                // 0x0109c2a0
 
 // @ 0x0109b490
 void hkWorldOperationQueue::executeAllPending()
@@ -499,4 +657,154 @@ void hkWorldOperationQueue::executeAllPending()
     ops.swap(m_pending);
     m_pending.m_size = 0;
     m_world->m_pendingOperationQueueCount--;
+}
+
+// @ 0x0109BDA0
+void FUN_0109bda0(hkDispatchable** p)
+{
+    if (p[0]->m_type == 2)
+    {
+        void* arg = dispatchArg(p[1]);
+        dispatchTarget(p[0])->dispatch(arg);
+    }
+    if (p[1]->m_type != 2)
+        return;
+    return dispatchTarget(p[1])->dispatch(dispatchArg(p[0]));
+}
+
+// @ 0x0109C240
+void FUN_0109c240(hkDispatchable** p)
+{
+    if (p[0]->m_type == 2)
+    {
+        void* arg = dispatchArg(p[1]);
+        dispatchTarget(p[0])->dispatchAlt(arg);
+    }
+    if (p[1]->m_type == 2)
+    {
+        void* arg = dispatchArg(p[0]);
+        dispatchTarget(p[1])->dispatchAlt(arg);
+    }
+}
+
+// @ 0x0109C2A0
+void FUN_0109c2a0(hkDispatchable** p)
+{
+    if (p[0]->m_type == 3)
+    {
+        if (p[1]->m_type == 3)
+            return;
+        dispatchTarget(p[0])->dispatch(dispatchArg(p[1]));
+    }
+    if (p[1]->m_type == 3)
+        dispatchTarget(p[1])->dispatch(dispatchArg(p[0]));
+}
+
+// @ 0x0109C310
+void hkMultiThreadedSimulation::leaveBroadphaseCriticalSection()
+{
+    hkCriticalSection* cs = &m_broadphaseLock;
+    cs->m_ownerThread = -1;
+    cs->m_recursionCount = -1;
+    LeaveCriticalSection(cs);
+}
+
+// @ 0x0109C330
+void hkMultiThreadedSimulation::getMultithreadConfig(hkMultithreadConfig& config)
+{
+    config.m_numThreads = m_config.m_numThreads;
+    config.m_maxNumThreads = m_config.m_maxNumThreads;
+}
+
+// @ 0x0109C350
+void hkMultiThreadedSimulation::setMultithreadConfig(const hkMultithreadConfig& config)
+{
+    m_config.m_numThreads = config.m_numThreads;
+    m_config.m_maxNumThreads = config.m_maxNumThreads;
+    unsigned char v;
+    if (config.m_numThreads == 1)
+        v = 2;
+    else
+        v = 3;
+    m_flag150 = v;
+    m_flag154 = v;
+}
+
+// @ 0x0109BE00
+int hkAsynchronousSimulation::recoverFromStepFailure(hkWorld* world, int result)
+{
+    if (result == 1)
+        return executeStep(world, 0, m_arg8);
+
+    hkTime time(world->m_prevTime, world->m_endTime);
+
+    world->updateCollisionFilterOnWorld(0, 1);
+    if (hkMemory::s_instance->m_outOfMemory4 == 1)
+        return 2;
+    stepCollide(world, &time);
+    if (hkMemory::s_instance->m_outOfMemory4 == 1)
+        return 2;
+    return executeStep(world, 0, m_arg8);
+}
+
+// @ 0x0109BED0
+int hkAsynchronousSimulation::stepDeltaTime(hkWorld* world, float deltaTime, float maxDeltaTime)
+{
+    HK_TIMER_CMD("TtSimulate");
+
+    m_f8 = maxDeltaTime;
+    float newTime = deltaTime + world->m_currentTime;
+    world->m_currentTime = newTime;
+    if (world->m_endTime < newTime)
+    {
+        do
+        {
+            if (m_flagC != 0 &&
+                fabsf(world->m_currentTime - world->m_endTime) < maxDeltaTime * 0.01f &&
+                deltaTime / maxDeltaTime > 0.1f)
+            {
+                world->m_currentTime = world->m_endTime;
+            }
+
+            int estimate = world->calcMaxIslandSizeEstimate();
+            hkThreadMemory* threadMemory = hkThreadMemory::getInstance();
+            int& used = threadMemory->m_usedAt20;
+            if (estimate > threadMemory->m_capacityAt2c - used - 0x10)
+            {
+                int total = hkMemory::s_instance->m_allocatedAt28 + hkMemory::s_instance->m_usedAt14;
+                int available = (hkMemory::s_instance->m_freeAt08 > total)
+                              ? hkMemory::s_instance->m_freeAt08 - total : 0;
+                if (estimate > available)
+                {
+                    hkMemory::s_instance->m_outOfMemory4 = 1;
+                    HK_TIMER_CMD(hkMonitorTimerEndTag);
+                    return 1;
+                }
+            }
+
+            world->m_prevTime = world->m_endTime;
+            world->m_endTime = maxDeltaTime + world->m_endTime;
+
+            const hkTime& time = hkTime(world->m_prevTime, world->m_endTime);
+
+            world->m_solver->step(world, &time);
+            world->m_stepTime0c = world->m_prevTime;
+            postStep(world, &time);
+            stepCollide(world, &time);
+
+            if (hkMemory::s_instance->m_outOfMemory4 == 1)
+            {
+                HK_TIMER_CMD(hkMonitorTimerEndTag);
+                return 2;
+            }
+        } while (world->m_endTime < world->m_currentTime);
+    }
+
+    world->m_stepTime0c = world->m_currentTime;
+    HK_TIMER_CMD("TtPostSimulateCb");
+    hkWorldCallbackUtil::firePostSimulationCallback(
+        world, &hkStepInfo(world->m_currentTime - deltaTime, world->m_currentTime));
+    HK_TIMER_CMD(hkMonitorTimerEndTag);
+    HK_TIMER_CMD(hkMonitorTimerEndTag);
+    return 0;
 }
