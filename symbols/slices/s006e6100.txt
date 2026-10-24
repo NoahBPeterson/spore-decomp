@@ -5,7 +5,7 @@
 006e6930 ?CallF1@ShaderHost@@QAEXM@Z  # ShaderHost::CallF1 migrated from s006e6100 (verbatim, slice spelling)
 006e6970 ?CallF3@ShaderHost@@QAEXHMH@Z  # ShaderHost::CallF3 migrated from s006e6100 (verbatim, slice spelling)
 006e69a0 ?CallF2@ShaderHost@@QAEXHM@Z  # ShaderHost::CallF2 migrated from s006e6100 (verbatim, slice spelling)
-006e69e0 ?SetMode@ShaderHost@@QAEXH@Z  # ShaderHost::SetMode migrated from s006e6100 (verbatim, slice spelling)
+006e69e0 ?SetMode@ShaderHost@@QAEXHH@Z  # ShaderHost::SetMode migrated from s006e6100 (verbatim, slice spelling)
 006e6b70 ?SetParams@ShaderHost@@QAEXHHDDD@Z  # ShaderHost::SetParams migrated from s006e6100 (verbatim, slice spelling)
 006e6c20 ?CallIface@ShaderHost@@QAEXH@Z  # ShaderHost::CallIface migrated from s006e6100 (verbatim, slice spelling)
 006e6ca0 ?SortPairsA@@YAXPAI0@Z  # SortPairsA migrated from s006e6100 (verbatim, slice spelling)

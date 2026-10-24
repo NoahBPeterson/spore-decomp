@@ -19,7 +19,7 @@ public:
     void CallF2(int a, float b);                              // 0x006e69a0
     void CallF1(float b);                                     // 0x006e6930
     void CallF3(int a, float b, int c);                       // 0x006e6970
-    void SetMode(int mode);                                   // 0x006e69e0
+    void SetMode(int mode, int value);                        // 0x006e69e0
     int  ComputeSize(int a, int b, int c);                    // 0x006e6a20
     int  ResetCounter();                                      // 0x006e6b40
     void SetParams(int a, int b, char c1, char c2, char c3);  // 0x006e6b70
@@ -45,6 +45,9 @@ typedef void(__thiscall* VirtualFn2)(void*, int, int);
 typedef void(__thiscall* VirtualFn3)(void*, int, int, int);
 
 extern "C" char FUN_006f4170();
+
+// cRenderInstanceSet::IsRangeEmpty: __thiscall member, `this` in ecx.
+struct RenderSet { char FUN_006f4170(); };
 
 // globals (all relocation-masked)
 extern uint32_t g_activeColor[4];
@@ -223,13 +226,13 @@ void ShaderHost::CallF2(int a, float b)
 }
 
 // @ 0x006e69e0
-void ShaderHost::SetMode(int mode)
+void ShaderHost::SetMode(int mode, int value)
 {
     Manager* m = (Manager*)FUN_0067dd50();
     if (mode != 6 && mode != 5) {
         VirtualFn1 fn = (VirtualFn1)((void**)m->vtbl)[0x58 / 4];
         if (fn(m, 0x16) != 0) {
-            *(char*)((char*)this + 0x368) = (char)mode;
+            *(char*)((char*)this + 0x368) = (char)value;
         }
     }
 }
@@ -307,9 +310,9 @@ void ShaderHost::CallIface(int v)
 // @ 0x006e6c60
 bool ShaderHost::IsDone()
 {
-    Inner* p = *(Inner**)((char*)this + 0x35c);
+    RenderSet* p = *(RenderSet**)((char*)this + 0x35c);
     if (p != 0) {
-        char r = FUN_006f4170();
+        char r = p->FUN_006f4170();
         return r == 0;
     }
     return false;
@@ -394,13 +397,25 @@ void FillSix(float* p)
     p[5] = nv;
 }
 
-// @ 0x006e6df0
-void Normalize3(float* out, const float* in)
+// The vc71 <math.h> sqrtf is a double-precision wrapper; the retail module takes the
+// root inline with x87 fsqrt, so use a small primitive helper instead.
+static double Normalize3_Sqrt(double f)
 {
-    float inv = 1.0f / sqrtf((in[0] * in[0] + in[1] * in[1] + in[2] * in[2]) + 1e-08f);
-    out[0] = in[0] * inv;
-    out[1] = inv * in[1];
-    out[2] = inv * in[2];
+    __asm fld f
+    __asm fsqrt
+    __asm fstp f
+    return f;
+}
+
+// @ 0x006e6df0
+float* Normalize3(float* out, const float* in)
+{
+    double sum = (double)in[0] * in[0] + (double)in[1] * in[1] + (double)in[2] * in[2];
+    double inv = 1.0 / Normalize3_Sqrt(sum + 1e-08f);
+    out[0] = (float)(in[0] * inv);
+    out[1] = (float)(inv * in[1]);
+    out[2] = (float)(inv * in[2]);
+    return out;
 }
 
 // @ 0x006e6e30

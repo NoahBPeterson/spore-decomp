@@ -10,4 +10,5 @@ slices/s006e6100/s006e6100.cpp  ?CallF3@ShaderHost@@QAEXHMH@Z  006e6970  /O2 /MD
 slices/s006e6100/s006e6100.cpp  ?CallF2@ShaderHost@@QAEXHM@Z  006e69a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s006e6100/s006e6100.cpp  ?ResetCounter@ShaderHost@@QAEHXZ  006e6b40  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s006e6100/s006e6100.cpp  ?CallIface@ShaderHost@@QAEXH@Z  006e6c20  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s006e6100/s006e6100.cpp  ?IsDone@ShaderHost@@QAE_NXZ  006e6c60  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s006e6100/s006e6100.cpp  ?TailVirtual@ShaderHost@@QAEXXZ  006e6c80  /O2 /MD /Gy /EHsc /TP /arch:SSE
