@@ -1,0 +1,2 @@
+slices/s00c32980/s00c32980.cpp  ?RebindPropertyKey@cEmpire@SP@@QAEXXZ  00c32980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c32980/s00c32980.cpp  ?Destroy_33410@cEmpire@SP@@QAEXXZ  00c33410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
