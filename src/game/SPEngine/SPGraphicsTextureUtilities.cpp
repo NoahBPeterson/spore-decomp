@@ -386,7 +386,7 @@ extern const uint32_t g_alphaIndexTable[8];   // 0x153bcec
 #pragma auto_inline(on)
 class Span {
 public:
-    void Init(int x, int y, int dx, int dy, int extra);
+    Span* Init(int x, int y, int dx, int dy, int extra);
     int mX;         // +0x00
     int mY;         // +0x04
     int mXEnd;      // +0x08
@@ -977,10 +977,10 @@ static __forceinline void AccWeighted(uint8_t& dest, int srcByte, int weight)
     uint8_t add = (uint8_t)(((unsigned)(v >> 8) + (unsigned)v) >> 8);
     dest = (uint8_t)(dest + add);
 }
-uint32_t mappixel(uint32_t* colors, uint32_t pixel, uint32_t* outIndex);            // 0x007ad2e0
+static uint32_t MapPixelLocal(uint32_t* colors, uint32_t pixel, int* outIndex); // 0x007ad2e0
 uint32_t mappixeltransparent(uint32_t pixel, uint32_t* outIndex, uint32_t* colors); // 0x007ad400
 uint32_t trymappixel(uint32_t pixel, uint32_t* colors);                             // 0x007ad610
-uint32_t rbmappixel(uint32_t pixel, uint32_t* colors);                              // 0x007ad760
+static uint32_t RBMapPixelLocal(uint32_t pixel, uint32_t* colors);                  // 0x007ad760
 // ---- items of slice s007acbb0 end
 
 // @ 0x004e0880
@@ -1039,7 +1039,7 @@ bool FUN_007ad0c0(DXTDesc* params, DXTDesc* image)
 }
 
 // @ 0x007ad2e0
-uint32_t mappixel(uint32_t* colors, uint32_t pixel, uint32_t* outIndex)
+static uint32_t MapPixelLocal(uint32_t* colors, uint32_t pixel, int* outIndex)
 {
     int d0 = (int)(colors[0] & 0xff) - (int)(colors[1] & 0xff);
     int d1 = (int)((colors[0] >> 8) & 0xff) - (int)((colors[1] >> 8) & 0xff);
@@ -1107,7 +1107,7 @@ uint32_t trymappixel(uint32_t pixel, uint32_t* colors)
 }
 
 // @ 0x007ad760
-uint32_t rbmappixel(uint32_t pixel, uint32_t* colors)
+static uint32_t RBMapPixelLocal(uint32_t pixel, uint32_t* colors)
 {
     uint32_t pr = pixel & 0xff, pb = (pixel >> 16) & 0xff;
     uint32_t best = 0x7fffffff;
@@ -1192,7 +1192,7 @@ void mapblock(const uint32_t* src, uint8_t* dst, uint32_t c0, uint32_t c1, int m
             int bits = 0;
             for (int k = 0; k < 8; k += 2) {
                 int idx = 0;
-                mappixel(*src, pal, &idx);
+                MapPixelLocal(pal, *src, &idx);
                 bits |= idx << k;
                 src++;
             }
@@ -1279,7 +1279,7 @@ uint32_t rbtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1)
     BuildPalette(pal, pal[0], pal[1], raw0, raw1);
     uint32_t total = 0;
     for (int i = 0; i < 16; i++)
-        total += rbmappixel(src[i], pal);
+        total += RBMapPixelLocal(src[i], pal);
     return total;
 }
 
@@ -1364,22 +1364,24 @@ void FUN_007ae840(const uint8_t* src, int stride, __m64* copy, uint32_t* out)
     const uint8_t* p = src;
     __m64 r0 = *(const __m64*)p;
     __m64 r1 = *(const __m64*)(p + 8);
+    copy[0] = r0; copy[1] = r1;
+    __m64 mn = _mm_min_pu8(r0, r1);
+    __m64 mx = _mm_max_pu8(r1, r0);
     p += stride;
     __m64 r2 = *(const __m64*)p;
     __m64 r3 = *(const __m64*)(p + 8);
+    copy[2] = r2; copy[3] = r3;
+    mn = _mm_min_pu8(mn, r2); mx = _mm_max_pu8(mx, r2);
+    mn = _mm_min_pu8(mn, r3); mx = _mm_max_pu8(mx, r3);
     p += stride;
     __m64 r4 = *(const __m64*)p;
     __m64 r5 = *(const __m64*)(p + 8);
-    __m64 r6 = *(const __m64*)(p + stride);
-    __m64 r7 = *(const __m64*)(p + stride + 8);
-    copy[0] = r0; copy[1] = r1; copy[2] = r2; copy[3] = r3;
-    copy[4] = r4; copy[5] = r5; copy[6] = r6; copy[7] = r7;
-    __m64 mn = _mm_min_pu8(r0, r1);
-    __m64 mx = _mm_max_pu8(r1, copy[0]);
-    mn = _mm_min_pu8(mn, r2); mx = _mm_max_pu8(mx, r2);
-    mn = _mm_min_pu8(mn, r3); mx = _mm_max_pu8(mx, r3);
+    copy[4] = r4; copy[5] = r5;
     mn = _mm_min_pu8(mn, r4); mx = _mm_max_pu8(mx, r4);
     mn = _mm_min_pu8(mn, r5); mx = _mm_max_pu8(mx, r5);
+    __m64 r6 = *(const __m64*)(p + stride);
+    __m64 r7 = *(const __m64*)(p + stride + 8);
+    copy[6] = r6; copy[7] = r7;
     mn = _mm_min_pu8(mn, r6); mx = _mm_max_pu8(mx, r6);
     mn = _mm_min_pu8(mn, r7); mx = _mm_max_pu8(mx, r7);
     __m64 mn2 = _mm_srli_si64(mn, 32);
@@ -1391,17 +1393,18 @@ void FUN_007ae840(const uint8_t* src, int stride, __m64* copy, uint32_t* out)
 }
 
 // @ 0x007ae920
-void Span::Init(int x, int y, int dx, int dy, int extra)
+Span* Span::Init(int x, int y, int dx, int dy, int extra)
 {
     int* p = (int*)this;
     p[0] = x;
     p[2] = x + dx;
     p[1] = y;
     p[3] = y + dy;
-    p[4] = extra;
     p[5] = -1;
     p[6] = -1;
     ((uint8_t*)this)[0x1c] = 0;
+    p[4] = extra;
+    return this;
 }
 
 // @ 0x007ae960
@@ -1840,16 +1843,17 @@ int cDXTCompressJobData::DXTCompressRow(int row)
             unsigned char* rowp = src->mData + stride * row * 4;
             int block[16];
             int k = 4;
+            int* bp = block;
             do {
-                block[0] = (off < stride) ? *(int*)(rowp + nBlocks*0x10)
-                                          : *(int*)(rowp + stride*4 - 4);
-                block[1] = (off+1 < src->mWidth) ? *(int*)(rowp + 4 + nBlocks*0x10)
-                                                 : *(int*)(rowp + src->mWidth*4 - 4);
-                block[2] = (off+2 < src->mWidth) ? *(int*)(rowp + (off+2)*4)
-                                                 : *(int*)(rowp + src->mWidth*4 - 4);
-                block[3] = (off+3 < src->mWidth) ? *(int*)(rowp + (off+3)*4)
-                                                 : *(int*)(rowp + src->mWidth*4 - 4);
-                stride = src->mWidth;
+                bp[0] = (off < stride) ? *(int*)(rowp + nBlocks*0x10)
+                                       : *(int*)(rowp + stride*4 - 4);
+                bp[1] = (off+1 < src->mWidth) ? *(int*)(rowp + 4 + nBlocks*0x10)
+                                              : *(int*)(rowp + src->mWidth*4 - 4);
+                bp[2] = (off+2 < src->mWidth) ? *(int*)(rowp + (off+2)*4)
+                                              : *(int*)(rowp + src->mWidth*4 - 4);
+                bp[3] = (off+3 < src->mWidth) ? *(int*)(rowp + (off+3)*4)
+                                              : *(int*)(rowp + src->mWidth*4 - 4);
+                bp += 4;
                 rowp += stride * 4;
                 k--;
             } while (k);
@@ -1868,16 +1872,18 @@ int cDXTCompressJobData::DXTCompressRow(int row)
             int* rowp = (int*)(src->mData + src->mWidth * row * 4);
             int col = 2;
             int block[16];
+            int* bp = block;
             int m = 0;
             do {
-                block[0] = (col-2 < src->mWidth) ? *(int*)((char*)rowp + srcOff-0xc)
-                                                 : *(int*)((char*)rowp + src->mWidth*4 - 4);
-                block[1] = (col-1 < src->mWidth) ? *(int*)((char*)rowp + srcOff-8)
-                                                 : *(int*)((char*)rowp + src->mWidth*4 - 4);
-                block[2] = (col   < src->mWidth) ? *(int*)((char*)rowp + srcOff-4)
-                                                 : *(int*)((char*)rowp + src->mWidth*4 - 4);
-                block[3] = (col+1 < src->mWidth) ? *(int*)((char*)rowp + srcOff)
-                                                 : *(int*)((char*)rowp + src->mWidth*4 - 4);
+                bp[0] = (col-2 < src->mWidth) ? *(int*)((char*)rowp + srcOff-0xc)
+                                              : *(int*)((char*)rowp + src->mWidth*4 - 4);
+                bp[1] = (col-1 < src->mWidth) ? *(int*)((char*)rowp + srcOff-8)
+                                              : *(int*)((char*)rowp + src->mWidth*4 - 4);
+                bp[2] = (col   < src->mWidth) ? *(int*)((char*)rowp + srcOff-4)
+                                              : *(int*)((char*)rowp + src->mWidth*4 - 4);
+                bp[3] = (col+1 < src->mWidth) ? *(int*)((char*)rowp + srcOff)
+                                              : *(int*)((char*)rowp + src->mWidth*4 - 4);
+                bp += 4;
                 if (++m < 4)
                     rowp = (int*)((char*)rowp + src->mWidth*4);
                 col += 4;
