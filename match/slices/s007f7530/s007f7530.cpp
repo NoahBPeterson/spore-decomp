@@ -117,7 +117,7 @@ struct InterpResult {             // matches cAnimationTimer
 // Callees (masked relocations).
 // ---------------------------------------------------------------------------
 extern "C" float __cdecl SPUIHelpers_GetElapsedSeconds();
-extern "C" void* __cdecl FUN_007f6170(Point2DT* out, float a, int b, int c, float d, int e, int f, float g, int h);
+extern "C" void* __cdecl FUN_007f6170(void* out, float total, float a3, float a4, int a5, int a6, float a7, float a8);
 extern "C" void* __cdecl FUN_007f60d0(InterpResult* out, float a, int b, int c, int d, int e);
 extern "C" void* __cdecl FUN_007f6040(InterpResult* out, float a, int b, int c);
 
@@ -160,7 +160,7 @@ AnimRaw* SPUICreateWindowAnimationTargetShade(AnimRaw* p, void* win, uint32_t ta
 // ===========================================================================
 // @ 0x007f7670  SPUICreateWindowAnimationTargetOscillatingFill
 // ===========================================================================
-AnimRaw* SPUICreateWindowAnimationTargetOscillatingFill(AnimRaw* p, void* win, uint32_t target, float duration, float from, float type) {
+AnimRaw* SPUICreateWindowAnimationTargetOscillatingFill(AnimRaw* p, void* win, uint32_t target, float type, float duration, float from) {
     float elapsed = SPUIHelpers_GetElapsedSeconds();
     float remain = duration - elapsed;
     float ratio = 0.0f;
@@ -170,7 +170,7 @@ AnimRaw* SPUICreateWindowAnimationTargetOscillatingFill(AnimRaw* p, void* win, u
         ratio = remain / total;
     }
     InterpResult interp;
-    FUN_007f6170((Point2DT*)&interp, total, 0xbf800000, 1, 1, ratio, 0, 0.0f, 0);
+    FUN_007f6170(&interp, total, type, -1.0f, 1, 1, ratio, 0.0f);
     SPUICreateWindowAnimationTargetShade(p, win, target, (cAnimationTimer*)&interp);
     if (interp.mpTimeFunction) RcRel(interp.mpTimeFunction);
     return p;
@@ -397,12 +397,12 @@ InterpResult* SPUICreateAnimationTimerInterpolation(InterpResult* dest, float du
 // ===========================================================================
 // @ 0x007f80d0  SPUICreateWindowAnimationTargetPosition
 // ===========================================================================
-extern "C" AnimRaw* __cdecl Concrete_TargetPosition(AnimRaw* p, void* win, Point2DT pos, cAnimationTimer* t);
+extern "C" AnimRaw* __cdecl FUN_007f7050(AnimRaw* p, void* win, Point2DT pos, cAnimationTimer* t);
 __forceinline Point2DT Pt(float x, float y) { Point2DT p; p.x = x; p.y = y; return p; }
 AnimRaw* SPUICreateWindowAnimationTargetPosition(AnimRaw* p, void* win, float x, float y, float duration, float from, int type) {
     cAnimationTimer timer;
     SPUICreateAnimationTimerInterpolation((InterpResult*)&timer, duration, from, type);
-    Concrete_TargetPosition(p, win, Pt(x, y), &timer);
+    FUN_007f7050(p, win, Pt(x, y), &timer);
     if (timer.mpTimeFunction) RcRel(timer.mpTimeFunction);
     return p;
 }
@@ -410,11 +410,11 @@ AnimRaw* SPUICreateWindowAnimationTargetPosition(AnimRaw* p, void* win, float x,
 // ===========================================================================
 // @ 0x007f8140  SPUICreateWindowAnimationRotation
 // ===========================================================================
-extern "C" AnimRaw* __cdecl Concrete_Rotation(AnimRaw* p, void* win, float vx, float vy, float vz, float vw, cAnimationTimer* t);
+extern "C" AnimRaw* __cdecl FUN_007f7290(AnimRaw* p, void* win, float vx, float vy, float vz, float vw, cAnimationTimer* t);
 AnimRaw* SPUICreateWindowAnimationRotation(AnimRaw* p, void* win, float vx, float vy, float vz, float vw, float duration, float from, int type) {
     cAnimationTimer timer;
     SPUICreateAnimationTimerInterpolation((InterpResult*)&timer, duration, from, type);
-    Concrete_Rotation(p, win, vx, vy, vz, vw, &timer);
+    FUN_007f7290(p, win, vx, vy, vz, vw, &timer);
     if (timer.mpTimeFunction) RcRel(timer.mpTimeFunction);
     return p;
 }
@@ -422,11 +422,11 @@ AnimRaw* SPUICreateWindowAnimationRotation(AnimRaw* p, void* win, float vx, floa
 // ===========================================================================
 // @ 0x007f81d0  SPUICreateWindowAnimationTargetScale
 // ===========================================================================
-extern "C" AnimRaw* __cdecl Concrete_TargetScale(AnimRaw* p, void* win, float from, cAnimationTimer* t);
+extern "C" AnimRaw* __cdecl FUN_007f7340(AnimRaw* p, void* win, float from, cAnimationTimer* t);
 AnimRaw* SPUICreateWindowAnimationTargetScale(AnimRaw* p, void* win, float from, float duration, float base, int type) {
     cAnimationTimer timer;
     SPUICreateAnimationTimerInterpolation((InterpResult*)&timer, duration, base, type);
-    Concrete_TargetScale(p, win, from, &timer);
+    FUN_007f7340(p, win, from, &timer);
     if (timer.mpTimeFunction) RcRel(timer.mpTimeFunction);
     return p;
 }
@@ -434,11 +434,11 @@ AnimRaw* SPUICreateWindowAnimationTargetScale(AnimRaw* p, void* win, float from,
 // ===========================================================================
 // @ 0x007f8230  SPUICreateWindowAnimationTargetSize
 // ===========================================================================
-extern "C" AnimRaw* __cdecl Concrete_TargetSize(AnimRaw* p, void* win, uint32_t value, cAnimationTimer* t);
+extern "C" AnimRaw* __cdecl FUN_007f73e0(AnimRaw* p, void* win, uint32_t value, cAnimationTimer* t);
 AnimRaw* SPUICreateWindowAnimationTargetSize(AnimRaw* p, void* win, uint32_t value, float duration, float from, int type) {
     cAnimationTimer timer;
     SPUICreateAnimationTimerInterpolation((InterpResult*)&timer, duration, from, type);
-    Concrete_TargetSize(p, win, value, &timer);
+    FUN_007f73e0(p, win, value, &timer);
     if (timer.mpTimeFunction) RcRel(timer.mpTimeFunction);
     return p;
 }
@@ -468,25 +468,29 @@ AnimRaw* SPUICreateWindowAnimationTargetShadeW(AnimRaw* p, void* win, uint32_t t
 // ===========================================================================
 // @ 0x007f8350  eastl::vector<cAnimInfo,sp_vector_allocator>::vector(const vector&)
 // ===========================================================================
-extern "C" void* __cdecl EASTL_allocator_allocate(int n, void* a, int b, int c, const char* file, int line);
-extern "C" void* __cdecl FUN_007f6e60(AInfo8c** srcOut, AInfo8c* first, AInfo8c* last, AInfo8c* dst, AInfo8c** srcIn);
+extern "C" void* __cdecl FUN_00f473a0(int n, void* a, int b, int c, const char* file, int line);
+extern "C" void* __cdecl FUN_007f6e60(AInfo8c** out, AInfo8c* first, AInfo8c* last, AInfo8c* dst, AInfo8c* src);
 
 struct Vec8c { AInfo8c* mpBegin; AInfo8c* mpEnd; AInfo8c* mpCapacity; void* mAlloc;
-    Vec8c* ctor_copy(Vec8c* src); Vec8c* assign(Vec8c* src); };
+    Vec8c* ctor_copy(Vec8c* src); Vec8c* assign(Vec8c* src);
+    void FUN_007f5f70(AInfo8c* first, AInfo8c* last);           // 0x7f5f70 (thiscall, ret 8)
+    AInfo8c* FUN_007f79d0(int n, AInfo8c* first, AInfo8c* last); // 0x7f79d0 (thiscall, ret 0xc)
+};
 
 Vec8c* Vec8c::ctor_copy(Vec8c* src) {
     Vec8c* this_ = this;
     int n = (int)((char*)src->mpEnd - (char*)src->mpBegin) / 0x8c;
     AInfo8c* mem = 0;
     if (n != 0) {
-        mem = (AInfo8c*)EASTL_allocator_allocate(n * 0x8c, (void*)g_vtblAnim, 0, 0,
+        mem = (AInfo8c*)FUN_00f473a0(n * 0x8c, (void*)g_vtblAnim, 0, 0,
             "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     }
     this_->mpBegin = mem;
     this_->mpEnd = mem;
     this_->mpCapacity = (AInfo8c*)((char*)mem + n * 0x8c);
-    FUN_007f6e60(&src->mpBegin, src->mpBegin, src->mpEnd, mem, &src->mpBegin);
-    this_->mpEnd = src->mpBegin;
+    AInfo8c* end;
+    FUN_007f6e60(&end, src->mpBegin, src->mpEnd, mem, src->mpBegin);
+    this_->mpEnd = end;
     return this_;
 }
 
@@ -511,8 +515,6 @@ void MissionCardAnimator::v1() {}
 // ===========================================================================
 // @ 0x007f8400  eastl::vector<cAnimInfo,sp_vector_allocator>::operator=
 // ===========================================================================
-extern "C" void __cdecl FUN_007f5f70(AInfo8c* first, AInfo8c* last);
-extern "C" void* __cdecl FUN_007f79d0(int n, AInfo8c* first, AInfo8c* last);
 extern "C" void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 Vec8c* Vec8c::assign(Vec8c* src) {
@@ -520,9 +522,9 @@ Vec8c* Vec8c::assign(Vec8c* src) {
     if (src != this_) {
         int n = (int)((char*)src->mpEnd - (char*)src->mpBegin) / 0x8c;
         int cap = (int)((char*)this_->mpCapacity - (char*)this_->mpBegin) / 0x8c;
-        if (cap < n) {
-            AInfo8c* mem = (AInfo8c*)FUN_007f79d0(n, src->mpBegin, src->mpEnd);
-            FUN_007f5f70(this_->mpBegin, this_->mpEnd);
+        if ((unsigned)cap < (unsigned)n) {
+            AInfo8c* mem = this_->FUN_007f79d0(n, src->mpBegin, src->mpEnd);
+            this_->FUN_007f5f70(this_->mpBegin, this_->mpEnd);
             if (this_->mpBegin != 0 && *(int*)((char*)this_->mpBegin - 4) != 0) {
                 EASTL_allocator_deallocate(this_->mpBegin);
             }
@@ -530,12 +532,13 @@ Vec8c* Vec8c::assign(Vec8c* src) {
             this_->mpCapacity = (AInfo8c*)((char*)mem + n * 0x8c);
         } else {
             int have = (int)((char*)this_->mpEnd - (char*)this_->mpBegin) / 0x8c;
-            if (have < n) {
+            if ((unsigned)have < (unsigned)n) {
                 do_copy_animinfo(src->mpBegin, src->mpBegin + have, this_->mpBegin);
-                FUN_007f6e60(&src->mpBegin, this_->mpBegin + have, src->mpEnd, this_->mpEnd, &src->mpBegin);
+                AInfo8c* end;
+                FUN_007f6e60(&end, src->mpBegin + have, src->mpEnd, this_->mpEnd, src->mpBegin);
             } else {
                 AInfo8c* r = do_copy_animinfo(src->mpBegin, src->mpEnd, this_->mpBegin);
-                FUN_007f5f70(r, this_->mpEnd);
+                this_->FUN_007f5f70(r, this_->mpEnd);
             }
         }
         this_->mpEnd = (AInfo8c*)((char*)this_->mpBegin + n * 0x8c);

@@ -5,7 +5,8 @@
 007f7c00 162  complete copy_backward of cAnimationInfo; register schedule differs
 007f7ce0 143  complete fill/copy of cAnimInfo from one source; register schedule differs
 007f7db0 158  complete backward fill/copy of cAnimInfo; register schedule differs
-007f80d0 79  complete Position wrapper; cl materializes Point2DT temp in frame (original builds it in the outgoing arg area)
-007f8140 78  complete Rotation wrapper; cl materializes vector temp in frame (original builds it in the outgoing arg area)
-007f8350 95  complete vector copy-ctor; allocator tag/calling-convention codegen differs; equiv: FAIL (5/239 mismatched, ecx fixed via Vec8c member)
-007f8400 245  complete vector operator=; allocation/copy call scheduling differs; equiv: FAIL (5/5 mismatched, ecx fixed via Vec8c member)
+007f7670 42  complete OscillatingFill wrapper; FUN_007f6170 is (out,total,type,-1.0f,1,1,ratio,0.0f) and the wrapper's floats are (type,duration,from); remaining diff is /O2 SSE scheduling [equiv: PASS 377 valid, 100% cov]
+007f80d0 79  complete Position wrapper; concrete callee is FUN_007f7050 (was mis-bound to this VA by an annotation, recursing); cl still materializes the Point2DT temp in frame [equiv: PASS 405 valid, 100% cov]
+007f8140 78  complete Rotation wrapper; concrete callee is FUN_007f7290 (was mis-bound to this VA by an annotation, recursing); cl still materializes the vector temp in frame [equiv: PASS 405 valid, 100% cov]
+007f8350 71  complete vector copy-ctor; allocator is 0x00f473a0, the copy loop (0x7f6e60) writes an out cursor (not src->mpBegin), 5th arg is src; remaining diff is /O2 scheduling [equiv: PASS 305 valid, 78.0% cov; n!=0 alloc path needs a coherent vector]
+007f8400 246  complete vector operator=; count/capacity compares are unsigned, 0x7f5f70 (ret 8) and 0x7f79d0 (ret 0xc) are thiscall Vec8c members, and the fill-copy starts at src->mpBegin+have; remaining diff is /O2 scheduling [equiv: WEAK 0 mismatches, 611 valid, 52.9% cov; alloc/fill branches need coherent vectors]
