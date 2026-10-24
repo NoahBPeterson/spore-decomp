@@ -1,0 +1,4 @@
+slices/s00cdab10/s00cdab10.cpp  ?FUN_00cdafb0@cVec16@@QAEXPAURec16@@@Z  00cdafb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cdab10/s00cdab10.cpp  ?FUN_00cdb3a0@cTribeModeStrategy@@QAEXII@Z  00cdb3a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cdab10/s00cdab10.cpp  ?FUN_00cdb430@cVec1c@@QAEXXZ  00cdb430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cdab10/s00cdab10.cpp  ?FUN_00cdba50@cTribeModeStrategy@@QAEIXZ  00cdba50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
