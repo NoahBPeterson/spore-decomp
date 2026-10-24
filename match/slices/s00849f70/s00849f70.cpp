@@ -161,8 +161,12 @@ struct CanvasStub {
 };
 
 struct IHandler {
-    virtual void h00(); virtual ~IHandler();
+    virtual void h00() = 0;      // slot 1 -> _purecall, matching the image vtable at 0x13eb394
+    virtual ~IHandler();         // slot 0 -> ??_GIHandler; the empty body inlines to the vptr reset
 };
+
+// Empty: MSVC inlines it into ~IMEServerWin32 as just the vptr reset, like the original.
+IHandler::~IHandler() {}
 
 // ---------------------------------------------------------------- IMEServer
 class IMEServer {
@@ -193,6 +197,7 @@ public:
 
 class IMEServerWin32 : public IMEServer, public IHandler {
 public:
+    IMEServerWin32();          // image ctor 0x0084b2e0 (only defined to emit the class vtable)
     HWND  mhWnd;               // +0xc0
     unsigned mC4;              // +0xc4
     unsigned mC8;              // +0xc8
@@ -207,7 +212,15 @@ public:
     void SetCompositionWindow(unsigned short a, unsigned short b, int c); // @ 0084a540
     void SetFlag(bool b);                          // @ 0084a600
     bool SetCandidateSelection(unsigned idx);      // @ 0084a640
-    virtual ~IMEServerWin32();
+    // Scalar deleting dtor (??_G, image 0x0084acf0). The image ctor emits the vtable, so the
+    // inline body lands in ??_G together with the IMEServer base-dtor call and the delete.
+    virtual ~IMEServerWin32() {
+        if (mbInitialized) {
+            mbInitialized = false;
+            mpMessageServer = 0;
+            SetEnabled(false);                     // derived slot-5 target (0x0084a230)
+        }
+    }
     bool AssignComposition(const wchar_t* s, int len);   // @ 0084aab0
     bool SetCompositionData(const wchar_t* s, int len);  // @ 0084ab80
 };
@@ -295,26 +308,28 @@ void ConstructWStringsN(WString* dst, unsigned count, const WString* src) {
         return;
     WString* p = dst;
     do {
-        p->mpBegin = 0;
-        p->mpEnd = 0;
-        p->mpCapacity = 0;
-        unsigned n = (unsigned)(src->mpEnd - src->mpBegin);
-        if (n + 1 < 2) {
-            p->mpBegin = (wchar_t*)0x1667bac;
-            p->mpEnd = (wchar_t*)0x1667bac;
-            p->mpCapacity = (wchar_t*)0x1667bae;
-        } else {
-            unsigned bytes = (n + 1) * 2;
-            uint8_t* q = (uint8_t*)EASTL_allocator_allocate(bytes, "EASTL", 0, 0,
-                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-            p->mpBegin = (wchar_t*)q;
-            p->mpEnd = (wchar_t*)q;
-            p->mpCapacity = (wchar_t*)(q + bytes);
+        if (p) {
+            p->mpBegin = 0;
+            p->mpEnd = 0;
+            p->mpCapacity = 0;
+            unsigned n = (unsigned)(src->mpEnd - src->mpBegin);
+            if (n + 1 < 2) {
+                p->mpBegin = (wchar_t*)0x1667bac;
+                p->mpEnd = (wchar_t*)0x1667bac;
+                p->mpCapacity = (wchar_t*)0x1667bae;
+            } else {
+                unsigned bytes = (n + 1) * 2;
+                uint8_t* q = (uint8_t*)EASTL_allocator_allocate(bytes, "EASTL", 0, 0,
+                    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+                p->mpBegin = (wchar_t*)q;
+                p->mpEnd = (wchar_t*)q;
+                p->mpCapacity = (wchar_t*)(q + bytes);
+            }
+            wchar_t* d = p->mpBegin;
+            DoInsertValue(d, src->mpBegin, n * 2);
+            p->mpEnd = d + n;
+            *p->mpEnd = 0;
         }
-        wchar_t* d = p->mpBegin;
-        DoInsertValue(d, src->mpBegin, n * 2);
-        p->mpEnd = d + n;
-        *p->mpEnd = 0;
         p = (WString*)((char*)p + 0x10);
         --count;
     } while (count != 0);
@@ -459,7 +474,9 @@ IMEServer::~IMEServer() {
     if (mbInitialized) {
         mbInitialized = false;
         mpMessageServer = 0;
-        v05(0);
+        // The dtor prologue stores IMEServer's vtable first, so MSVC devirtualizes
+        // v05(0) into a direct call of the slot-5 target: SetFlag @ 0x0084a600.
+        ((IMEServerWin32*)this)->SetFlag(false);
     }
     // mDataPointers, mStringArray and mCompData are destroyed by the compiler
 }
@@ -668,8 +685,10 @@ bool IMEServerWin32::SetCandidateSelection(unsigned idx) {
     return false;
 }
 
-// @ 0x0084acf0
-IMEServerWin32::~IMEServerWin32() {}
+// Image ctor 0x0084b2e0. The slice never instantiates the class, but defining the constructor
+// makes MSVC emit the class vtable, which in turn emits the scalar deleting dtor (??_G).
+IMEServerWin32::IMEServerWin32() {
+}
 
 // @ 0x0084aab0
 bool IMEServerWin32::AssignComposition(const wchar_t* s, int len) {

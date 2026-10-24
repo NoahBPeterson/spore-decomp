@@ -7,3 +7,11 @@
 0084aad0 eastl::vector<eastl::basic_string<wchar_t,eastl::allocator>,eastl::sp_vector_allocator>::DoDestroyValues  # ghidra symbol
 0084ab40 ?CopyWStrings@@YAPAUWString@@PBU1@0PAU1@@Z  # CopyWStrings migrated from s00849f70 (verbatim, slice spelling)
 0084ad40 ?WriteCompositionString@IMEServer@@QAEXPAXHHI@Z  # IMEServer::WriteCompositionString migrated from s00849f70 (verbatim, slice spelling)
+0084a7e0 ??0WString@@QAE@ABU0@@Z  # WString copy ctor (disambiguates the overload set for equiv/chk)
+0084a8f0 ?ConstructWStringsN@@YAXPAUWString@@IPBU1@@Z  # ConstructWStringsN
+0084abd0 ??1IMEServer@@UAE@XZ  # IMEServer base dtor
+0084acf0 ??_GIMEServerWin32@@UAEPAXI@Z  # IMEServerWin32 scalar deleting dtor
+00404430 ??_GIHandler@@UAEPAXI@Z  # IHandler scalar deleting dtor (slot 0 of the IHandler vtable)
+013eb394 ??_7IHandler@@6B@  # IHandler vtable (the second-base subobject vptr)
+0141cb28 ??_7IMEServer@@6B@  # IMEServer vtable
+0141cb78 ??_7IMEServerWin32@@6B@  # IMEServerWin32 vtable
