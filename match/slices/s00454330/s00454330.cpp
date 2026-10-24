@@ -21,14 +21,6 @@ void* __cdecl  Tree_LowerBound(void* b, void* e, const int* key, bool cmpflag); 
 void* __fastcall Tree_AllocNode0(void* self);                                         // 0x440f60
 void  __fastcall Tree_ConstructValue(void* self, void* alloc);                        // 0x440ff0
 void* __fastcall Tree_DoInsert(void* self, void* pos, void* value);                   // 0x4552e0 (thiscall)
-void  __cdecl  Set_Find(int* out, const unsigned* key);                               // 0x4b5e90
-void  __cdecl  Set_End(int* out);                                                     // 0x566c50
-unsigned* __cdecl Set_Deref(void* it);                                                // 0x564f50
-void* __cdecl  Set_Alloc(void* self);                                                 // 0x4727a0
-void  __cdecl  Set_Prep(void* out, void* alloc);                                      // 0x455cf0
-void  __cdecl  Set_Insert1(void* it, void* a, void* b);                               // 0x5673e0
-void* __cdecl  Set_Insert2(void* self, void* out);                                    // 0x455460
-void  __cdecl  Set_Cleanup(void* self);                                               // 0x45daf0
 void* __cdecl  EASTL_Allocate(void* alloc, unsigned n, unsigned align, unsigned off); // 0x42dee0
 void  __cdecl  EASTL_allocator_deallocate(void* p);                                   // 0xf47380
 void  __cdecl  Hashtable_DoFreeNodes(void* b, void* e, void* dest);                   // 0x4554f0
@@ -42,14 +34,11 @@ void  __cdecl  Ptr_Copy(void* first, void* last);                               
 void  __cdecl  Vec3_Normalized(Vector3* out, void* in);                               // 0x455c00
 float __cdecl  Vec3_Dot(const Vector3* a, const Vector3* b);                          // 0x455c50
 void* __cdecl  FUN_006bb640(void* variant);                                           // 0x6bb640
-void  __cdecl  String_AssignBytes(void* dst, const void* src, unsigned n);            // string DoInsertValue / memmove helper
-void  __cdecl  String_Append(void* self, const void* b, const void* e);               // eastl::basic_string::append
-void  __cdecl  String_Terminate(void* self, void* a, void* b);                        // 0x45f080
-int   __cdecl  Wstr_Find(void* b, void* e, const void* nb, const void* ne);           // 0x455f50
+extern "C" void* __cdecl FUN_11e0744_memcpy(void*, const void*, unsigned int);        // 0x011e0744
+int   __cdecl  WStr_FindFirst(void* b, void* e, const void* nb, const void* ne);      // 0x455f50
 void  __cdecl  Elem32_Destruct(void* p);                                              // 0x4ae250
 void* __cdecl  Ptr_Move(void* first, void* last, void* destEnd);                      // 0x4574c0
-void* __cdecl  Ptr_MoveBackward(void* p, void* q);                                    // string/vector DoInsertValue (0x11e0744)
-void  __cdecl  Operator_Delete(void* p);
+void  __cdecl  Operator_Delete(void* p);                                              // 0xf47380
 
 // ---- container layouts ----
 struct PtrVector { cRefCounted** mpBegin; cRefCounted** mpEnd; cRefCounted** mpCapacity; };
@@ -68,7 +57,8 @@ struct FloatVec {             // vector<float> (Vector3Template<float>::x slot c
 };
 struct KeyVec { char* mpBegin; char* mpEnd; };          // 12-byte elements (EA::ResourceMan::Key)
 struct IntVec { int* mpBegin; int* mpEnd; };            // 4-byte elements
-struct WVec   { char* mpBegin; char* mpEnd; };          // 2-byte elements
+struct WVec   { char* mpBegin; char* mpEnd; char* mpCapacity;      // 2-byte elements (addressed as bytes)
+    int find(const wchar_t* needle, unsigned pos, int count); };
 struct BlockVec { char* mpBegin; char* mpEnd; char* mpCapacity; int mAlloc; char* mpFixed; }; // 32-byte elements
 
 // @ 0x00454330  (erase one intrusive pointer from a ref-ptr vector; returns position)
@@ -111,29 +101,73 @@ struct RbIntMap : RbSet {
 };
 int* __fastcall RbIntMap_Index(RbIntMap* self, int, const int* key) { return self->find_or_insert(key); }
 
-// @ 0x004544d0
-struct RbUIntMap2 {
-    char pad0[4]; char setHdr[1];
-    unsigned* find_or_insert(const unsigned* key)
-    {
-        int found, end;
-        Set_Find(&found, key);
-        Set_End(&end);
-        if (found == end || *Set_Deref(&found) < *key) {
-            // not present: build a node and insert it
-            char vecA[0x58];
-            Set_Alloc(&vecA);
-            unsigned value = *key;
-            Set_Prep(vecA, &value);
-            Set_Insert1(&found, vecA, &value);
-            found = *(int*)Set_Insert2(this, &found);
-            Set_Cleanup(vecA);
-            Set_Cleanup(&found);
-        }
-        return Set_Deref(&found) + 1;
-    }
+// ---- EASTL rbtree pieces used by 0x004544d0 (all but find_or_insert live elsewhere) ----
+struct RbNode;
+struct RbNodeBase {                    // rbtree node header
+    RbNodeBase* mpLeft;                // +0x000
+    RbNodeBase* mpRight;               // +0x004
+    RbNodeBase* mpParent;              // +0x008
 };
-unsigned* __fastcall RbUIntMap2_Index(RbUIntMap2* self, int, const unsigned* key) { return self->find_or_insert(key); }
+struct RbNode : RbNodeBase {           // node value: pair<const unsigned, unsigned> at +0x10
+    char     mColor;                   // +0x00c
+    char     pad00d[3];
+    unsigned mKey;                     // +0x010
+    unsigned mValue;                   // +0x014
+};
+struct MapValue { unsigned mKey; unsigned mValue; };
+struct RbIter {                        // 1-word node iterator
+    RbNode*   mpNode;
+    RbIter*   assign(RbNode* node);    // 0x00566c50  *this = node; returns this
+    unsigned* value();                 // 0x00564f50  &node->mKey (the stored pair)
+};
+// Fixed 8-slot vector EASTL builds on the stack around the insert call.
+struct NodeVec {
+    void* mpBegin;                     // +0x000
+    void* mpEnd;                       // +0x004
+    void* mpCapacity;                  // +0x008
+    char  mAlloc[8];                   // +0x00c
+    void* mpOverflow;                  // +0x014
+    char  mFixed[0x40];                // +0x018  8 inline 8-byte slots
+    NodeVec* Construct();                        // 0x004727a0  default construction
+    NodeVec* ConstructFrom(const NodeVec& src);  // 0x00455cf0  construction from another's allocator state
+    void     Destroy();                          // 0x0045daf0  destroys the elements and frees storage
+};
+struct RbTree {
+    char       pad000[4];
+    RbNodeBase mAnchor;                // +0x004  end() sentinel node; mAnchor.mpParent (+0x00c) is the root
+    RbIter* find(RbIter* out, const unsigned* key);                 // 0x004b5e90  lower_bound
+    RbIter* insert(RbIter* out, RbIter position, const MapValue* value);  // 0x00455460
+};
+struct RbUIntMap2 : RbTree {
+    unsigned* find_or_insert(const unsigned* key);
+};
+// @ 0x004544d0
+unsigned* RbUIntMap2::find_or_insert(const unsigned* key)
+{
+    RbIter found;
+    find(&found, key);
+    RbIter end;
+    end.assign((RbNode*)&mAnchor);
+    if (found.mpNode == end.mpNode || *key < *found.value()) {
+        // not present: build the value and insert it at the lower bound
+        NodeVec scratchA;
+        scratchA.Construct();
+        MapValue value;
+        value.mKey = *key;
+        value.mValue = 0;
+        NodeVec scratchB;
+        scratchB.ConstructFrom(scratchA);
+        RbIter out;
+        insert(&out, found, &value);
+        found = out;
+        // the element destructors of both scratch vectors run inline (trivial 8-byte slots) before the storage is freed
+        for (char* p = (char*)scratchB.mpBegin; p < (char*)scratchB.mpEnd; p += 8) {}
+        scratchB.Destroy();
+        for (char* p = (char*)scratchA.mpBegin; p < (char*)scratchA.mpEnd; p += 8) {}
+        scratchA.Destroy();
+    }
+    return found.value() + 1;
+}
 
 // @ 0x00454640  (vector reserve for 8-byte elements with fixed-buffer allocator)
 void __fastcall HashVec8_reserve(HashVec8* self, int, unsigned n)
@@ -279,30 +313,35 @@ Vector3* __cdecl Vec3_Cross(Vector3* out, const Vector3* a, const Vector3* b)
     return out;
 }
 
-// @ 0x00454cb0  eastl::basic_string<char>::assign(first,last)
+// eastl::basic_string<char>::assign(first, last)
 struct BasicString { char* mpBegin; char* mpEnd; char* mpCapacity;
-    BasicString* assign(const char* b, const char* e)
-    {
-        unsigned n = (unsigned)(e - b);
-        if ((unsigned)(mpEnd - mpBegin) < n) {
-            String_AssignBytes(mpBegin, b, (unsigned)(mpEnd - mpBegin));
-            String_Append(this, b + (mpEnd - mpBegin), e);
-        } else {
-            String_AssignBytes(mpBegin, b, n);
-            String_Terminate(this, mpBegin + n, mpEnd);
-        }
-        return this;
-    }
+    BasicString* assign(const char* first, const char* last);
+    BasicString* append(const char* first, const char* last);   // 0x00455d60
+    char*        erase(char* first, char* last);                // 0x0045f080
 };
-BasicString* __fastcall BasicString_assign(BasicString* s, int, const char* b, const char* e) { return s->assign(b, e); }
-
-// @ 0x00454d50  (wide string find: returns index or -1)
-int __fastcall WStr_find(WVec* self, int, const void* needle, unsigned pos, int len)
+// @ 0x00454cb0
+BasicString* BasicString::assign(const char* first, const char* last)
 {
-    if (pos < (unsigned)((self->mpEnd - self->mpBegin) >> 1)) {
-        char* p = (char*)Wstr_Find(self->mpBegin + pos * 2, self->mpEnd, needle, (const char*)needle + len * 2);
-        if (p != self->mpEnd) {
-            return (int)(p - self->mpBegin) >> 1;
+    unsigned n = (unsigned)(last - first);
+    if (n > (unsigned)(mpEnd - mpBegin)) {
+        // too long for the current buffer: keep the bytes that fit and append the rest
+        FUN_11e0744_memcpy(mpBegin, first, (unsigned)(mpEnd - mpBegin));
+        append(first + (mpEnd - mpBegin), last);
+    } else {
+        FUN_11e0744_memcpy(mpBegin, first, n);
+        erase(mpBegin + n, mpEnd);
+    }
+    return this;
+}
+
+// wide string find: returns the element index of the first match, or -1
+// @ 0x00454d50
+int WVec::find(const wchar_t* needle, unsigned pos, int count)
+{
+    if (pos < (unsigned)((mpEnd - mpBegin) >> 1)) {
+        char* p = (char*)WStr_FindFirst(mpBegin + pos * 2, mpEnd, needle, needle + count);
+        if (p != mpEnd) {
+            return (int)(p - mpBegin) >> 1;
         }
     }
     return -1;
@@ -334,47 +373,53 @@ void PtrRangeOwner::ReleaseRange(cRefCounted** first, cRefCounted** last)
     }
 }
 
-// @ 0x00454ee0  (vector<intrusive ptr>::insert(position, value) slow/fast paths)
+// vector<intrusive_ptr>::DoInsertValue(position, value)
 struct RefPtrVec { cRefCounted** mpBegin; cRefCounted** mpEnd; cRefCounted** mpCapacity; int mAlloc;
-    void DoInsertValue(cRefCounted** position, cRefCounted** value)
-    {
-        if (mpEnd == mpCapacity) {
-            int newCap = (int)(mpEnd - mpBegin);
-            newCap = newCap ? newCap << 1 : 1;
-            cRefCounted** newData = newCap ? (cRefCounted**)EASTL_Allocate(&mAlloc, newCap << 2, 4, 0) : 0;
-            cRefCounted** nb = (cRefCounted**)Ptr_MoveBackward(newData, mpBegin);
-            cRefCounted** slot = nb + (position - mpBegin);
-            if (slot) {
-                *slot = *value;
-                if (*slot) (*slot)->AddRef();
-            }
-            cRefCounted** oldEnd = mpEnd;
-            cRefCounted** ne = (cRefCounted**)Ptr_MoveBackward(slot + 1, position);
-            if (mpBegin && ((int*)mpBegin)[-1] != 0) Operator_Delete(mpBegin);
-            mpBegin = newData;
-            mpEnd = ne + (oldEnd - position);
-            mpCapacity = newData + newCap;
-        } else {
-            cRefCounted* const* v = value;
-            if (position <= value && value < mpEnd) ++v;
-            cRefCounted** e = mpEnd;
-            if (e) {
-                *e = e[-1];
-                if (*e) (*e)->AddRef();
-            }
-            Ptr_Move(position, mpEnd - 1, mpEnd);
-            cRefCounted* nv = *v;
-            if (nv != *position) {
-                cRefCounted* old = *position;
-                if (nv) nv->AddRef();
-                *position = nv;
-                if (old) old->Release();
-            }
-            ++mpEnd;
-        }
-    }
+    void DoInsertValue(cRefCounted** position, cRefCounted** value);
 };
-void __fastcall RefPtrVec_DoInsertValue(RefPtrVec* self, int, cRefCounted** position, cRefCounted** value) { self->DoInsertValue(position, value); }
+// @ 0x00454ee0
+void RefPtrVec::DoInsertValue(cRefCounted** position, cRefCounted** value)
+{
+    if (mpEnd == mpCapacity) {
+        // grow: copy the slot before the insertion point, construct the new element, copy the tail
+        int size = (int)(mpEnd - mpBegin);
+        int newCap = size > 0 ? size << 1 : 1;
+        cRefCounted** newData = newCap ? (cRefCounted**)EASTL_Allocate(&mAlloc, newCap << 2, 4, 0) : 0;
+        int before = (int)(position - mpBegin);
+        cRefCounted** slot = (cRefCounted**)FUN_11e0744_memcpy(newData, mpBegin, before * 4) + before;
+        if (slot) {
+            *slot = *value;
+            if (*slot) (*slot)->AddRef();
+        }
+        ++slot;
+        int after = (int)(mpEnd - position);
+        slot = (cRefCounted**)FUN_11e0744_memcpy(slot, position, after * 4) + after;
+        if (mpBegin && ((int*)mpBegin)[-1] != 0) {
+            Operator_Delete(mpBegin);
+        }
+        mpBegin = newData;
+        mpEnd = slot;
+        mpCapacity = newData + newCap;
+    } else {
+        // shift the tail one slot up, then assign the new pointer at the position
+        cRefCounted* const* v = value;
+        if (position <= value && value < mpEnd) ++v;
+        cRefCounted** e = mpEnd;
+        if (e) {
+            *e = e[-1];
+            if (*e) (*e)->AddRef();
+        }
+        Ptr_Move(position, mpEnd - 1, mpEnd);
+        cRefCounted* nv = *v;
+        if (nv != *position) {
+            cRefCounted* old = *position;
+            if (nv) nv->AddRef();
+            *position = nv;
+            if (old) old->Release();
+        }
+        ++mpEnd;
+    }
+}
 
 // @ 0x004551e0  (uninitialized copy of intrusive pointers)
 cRefCounted** __cdecl RefPtr_UninitCopy(cRefCounted** first, cRefCounted** last, cRefCounted** dest)
