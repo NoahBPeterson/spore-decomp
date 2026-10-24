@@ -1,6 +1,6 @@
-00ecbb10 1508 message dispatcher: not reconstructed (stub)
+00ecbb10 1508 message dispatcher: complete; 1101 diff, one-time init guard, vtable-slot dispatch registers and float-store scheduling differ; equivalence WEAK (10.7% coverage)
 00ecc100 60 sporepedia hashtable lookup: complete; 41 diff, missing `push esi`/zero-register and trailing block layout; equivalence PASS 81.8% coverage
-00ecc140 974 palette-item init: not reconstructed (stub)
+00ecc140 974 palette-item init: complete; 665 diff, AutoRefCount assignment schedule, property-read order and local frame differ; equivalence WEAK (31.2% coverage)
 00ecc550 164 property-refresh: complete; 136 diff, vtable-slot call schedule and property-type compares differ; equivalence WEAK (19% coverage)
 00ecc620 87 card destructor: complete; 16 diff, vtable-store encoding (c7 06 imm vs mov [reg],0) ordering differs; equivalence PASS 100% coverage
 00ecc680 252 card copy-constructor: complete; 190 diff, member-copy/addref schedule differs; equivalence WEAK (no mismatch, 100% coverage)
