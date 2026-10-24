@@ -28,10 +28,25 @@ public:
     basic_string() : mpBegin(EmptyStr<T>::Get()), mpEnd(EmptyStr<T>::Get()), mpCapacity(EmptyStr<T>::Get() + 1) {}
     ~basic_string() { DeallocateSelf(); }
     const T* c_str() const { return mpBegin; }
-    void DeallocateSelf() { if ((char*)mpCapacity - (char*)mpBegin > 1) DoFree(mpBegin); }
+    void DeallocateSelf() { if (mpCapacity - mpBegin > 1) DoFree(mpBegin); }
     void DoFree(T* p) { if (p) mAllocator.deallocate(p); }
 };
 typedef basic_string<wchar_t> string16;
+// Stored/member strings use a byte-distance threshold in their dtor (retail
+// 0x7d2490: `sub; cmp 1; jle`), while the temporaries returned by
+// ConvertToString16 compare in element units (retail 0x7d1e40/0x7d1cc0:
+// `sub; and ~1; cmp 2; jle`). Keep both so each site matches retail.
+template <typename T, typename Allocator = allocator>
+class basic_string_member {
+public:
+    T* mpBegin; T* mpEnd; T* mpCapacity; Allocator mAllocator;
+    basic_string_member() : mpBegin(EmptyStr<T>::Get()), mpEnd(EmptyStr<T>::Get()), mpCapacity(EmptyStr<T>::Get() + 1) {}
+    ~basic_string_member() { DeallocateSelf(); }
+    const T* c_str() const { return mpBegin; }
+    void DeallocateSelf() { if ((char*)mpCapacity - (char*)mpBegin > 1) DoFree(mpBegin); }
+    void DoFree(T* p) { if (p) mAllocator.deallocate(p); }
+};
+typedef basic_string_member<wchar_t> string16_member;
 }
 
 namespace EA {
@@ -138,7 +153,12 @@ struct cGameModelState {
     cGameModelDescription mDesc;  // +0x04
 };
 
-struct Matrix33 { float m[9]; };
+struct Matrix33 {
+    union {
+        float    m[9];
+        uint32_t bits[9];   // same storage; retail stores RotateZ results via int registers
+    };
+};
 struct cTransform {
     uint16_t mFlags;              // +0x00
     uint16_t mModificationCount;  // +0x02
@@ -243,14 +263,20 @@ void SP::cTransform::RotateZ(float angle) {
     float c = (float)cos((double)angle);
     float m0 = mRotation.m[0], m1 = mRotation.m[1], m2 = mRotation.m[2];
     float m3 = mRotation.m[3], m4 = mRotation.m[4], m5 = mRotation.m[5];
-    mRotation.m[0] = m0 * c + m3 * s;
-    mRotation.m[1] = m1 * c + m4 * s;
-    mRotation.m[2] = m2 * c + m5 * s;
+    float r0 = m0 * c + m3 * s;
+    float r1 = m1 * c + m4 * s;
+    float r2 = m2 * c + m5 * s;
+    mRotation.bits[0] = *(uint32_t*)&r0;
+    mRotation.bits[1] = *(uint32_t*)&r1;
+    mRotation.bits[2] = *(uint32_t*)&r2;
     mFlags |= 2;
     mModificationCount++;
-    mRotation.m[3] = -m0 * s + m3 * c;
-    mRotation.m[4] = -m1 * s + m4 * c;
-    mRotation.m[5] = -m2 * s + m5 * c;
+    float r3 = -m0 * s + m3 * c;
+    float r4 = -m1 * s + m4 * c;
+    float r5 = -m2 * s + m5 * c;
+    mRotation.bits[3] = *(uint32_t*)&r3;
+    mRotation.bits[4] = *(uint32_t*)&r4;
+    mRotation.bits[5] = *(uint32_t*)&r5;
 }
 
 struct cGameModelNameCommand : EA::ArgScript::cCommandBase {
@@ -288,7 +314,7 @@ struct cGameModelWorldCommand : EA::ArgScript::cCommandBase {
 // @ 0x007d1e40
 void cGameModelWorldCommand::Execute(EA::ArgScript::cArguments& args) {
     eastl::string16 s = EA::ConvertToString16(args.MainArguments(1)[0], -1);
-    EA::ResourceKey key;
+    EA::ResourceKey key = {0, 0, 0};
     EA::SPKeyFromName(&key, s.c_str(), 0, 0);
     mState->mDesc.mWorldID = key.a;
 }
@@ -317,7 +343,7 @@ struct cGameModelSplitterCommand : EA::ArgScript::cCommandBase {
 struct cGameModelEffectCommand : EA::ArgScript::cBlockCommandBase {
     uint32_t             field30;          // +0x30
     SP::cGameModelState  mGameModelState;  // +0x34
-    eastl::string16      mDescName;        // +0xc8
+    eastl::string16_member mDescName;     // +0xc8
     void OnRegister(void* parser, void* childState);
     ~cGameModelEffectCommand();
 };
