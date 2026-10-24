@@ -1,0 +1,2 @@
+00df6850 44 register allocation: original keeps param in edi and old in ebx; mine materialises param in volatile ecx and reloads it after the v00 call (110 vs 110)
+00df6980 514 missing Matrix33 ctor call + inlined 9-dword matrix copy and the duplicated GfxPoint field stores; frame 0x30 vs 0x48 (512 vs 691)

@@ -1,0 +1,4 @@
+slices/s00df6700/s00df6700.cpp  ?FUN_00df6700@WinA@@QAEXPAX@Z  00df6700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00df6700/s00df6700.cpp  ?FUN_00df6740@WinA@@QAEXXZ  00df6740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00df6700/s00df6700.cpp  ?FUN_00df68c0@WinA@@QAE_NIPAX@Z  00df68c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00df6700/s00df6700.cpp  ?FUN_00df6c40@WinB@@QAEXXZ  00df6c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
