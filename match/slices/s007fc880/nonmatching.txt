@@ -3,6 +3,6 @@
 007fcca0 150 complete; eastl vector insert (stride 8) reconstruction; call/register schedule differs; equiv: UNSUPPORTED (no valid inputs: pool-limit/read faults)
 007fcf40 135 complete; eastl vector emplace reconstruction; argument/register schedule differs; equiv: WEAK (84.5% coverage)
 007fd200 167 complete; flag setter reconstruction; virtual-call and local frame schedule differs
-007fd2d0 131 complete; vector element copy reconstruction; register schedule differs
+007fd2d0 119 complete; element-by-element vector copy in the original's three-argument form (VecOwner* owner, VecSrc* src, VecElemList* list): the span comes from the thiscall slot accessor 0x007f53c0 (ecx = arg1, one pushed arg, `ret $4`), the loop bound is list->[0x14], the per-element vtable slot +0xc takes the class id $0x2439c2f on the stack, and *src->begin is probed through a local before the call; size now matches exactly (183 bytes), residual is cl's eax/edx choice per statement; equiv PASS (255 valid, 78.1% coverage)
 007fd390 131 complete; SerItem writer reconstruction; allocator/register schedule differs
 007fd790 130 complete; damping exp multiplier/local frame layout differs; equiv: UNSUPPORTED (unresolved _exp; defined in s007fc880_o2.cpp, run with --src)

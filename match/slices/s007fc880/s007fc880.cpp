@@ -24,6 +24,11 @@ inline int VCallI(void* o, int off) {
 inline void VCallV(void* o, int off) {
     ((void(__thiscall*)(void*))(*(void**)((char*)*(void**)o + off)))(o);
 }
+// slot call that also takes a class id on the stack (0x007fd34d pushes $0x2439c2f; the callee
+// pops it, so it is a normal thiscall argument)
+inline void* VCallR1(void* o, int off, int id) {
+    return ((void*(__thiscall*)(void*, int))(*(void**)((char*)*(void**)o + off)))(o, id);
+}
 inline void VCall1(void* o, int off, void* a) {
     ((void(__thiscall*)(void*, void*))(*(void**)((char*)*(void**)o + off)))(o, a);
 }
@@ -335,17 +340,31 @@ struct VecHit {
     unsigned char inserted;  // +4
 };
 
+// The element span and the element count live in two different objects: 0x007f53c0 returns
+// owner->[4] + list->[0x10] (thiscall, `ret $4`), and the loop bound is list->[0x14].
+struct VecElemList {
+    char pad0[0x10];
+    void*    mpBase;    // +0x10
+    unsigned mCount;    // +0x14
+};
+struct VecOwner {
+    char pad0[4];
+    void** mpBegin;     // +4
+    void** Elements(VecElemList* list);   // 0x007f53c0
+};
+
 // @ 0x007fd2d0
-bool Vec8CopyFrom(VecSrc* src, void* a) {
+bool __cdecl Vec8CopyFrom(VecOwner* owner, VecSrc* src, VecElemList* list) {
     void** d = src->begin;
-    void** s = (void**)f_7f53c0(a);
-    for (unsigned i = 0; i < *(unsigned*)((char*)a + 0x14); ++i) {
+    void** s = owner->Elements(list);
+    for (unsigned i = 0; i < list->mCount; ++i) {
         void* created = 0;
         void* old = *s;
         if (old)
             VCallV(old, 4);
-        if (*d) {
-            created = VCallR(*d, 0xc);
+        void* slot = *d;
+        if (slot) {
+            created = VCallR1(slot, 0xc, 0x2439c2f);
             if (created)
                 VCallV(created, 0);
         }
