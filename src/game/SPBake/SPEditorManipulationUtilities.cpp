@@ -2963,10 +2963,13 @@ struct BoundingBox {
 };
 struct Tracker {
     char pad0[0x33c];
-    int field33c;                         // 0x33c
-    void GetOffsetA(Vector3* out, int flag);
-    void GetOffsetB(Vector3* out, int flag);
-    void Place();
+    int field33c;                          // 0x33c
+    char pad1[0x3a0 - 0x340];
+    Vector3 dir;                           // 0x3a0
+    Vector3 off;                           // 0x3ac
+    void GetOffsetB(Vector3* out, char flag);               // 0x004381e0
+    void GetTrianglePickDirection(Vector3* out, char flag); // 0x00438120
+    void PlaceHandlesBaseOnPinning(Vector3 a, Vector3 b);   // 0x00437b00
 };
 struct SubMgr {
     int Count();
@@ -2992,10 +2995,10 @@ struct cSPEditorBlock {
     char pad4[0xdc8 - 0x3e8];
     uint32_t bits;                        // 0xdc8
 
-    bool Test();                          // 0x0044f220
+    int GetSymmetrySign();                // 0x0044f220
     BoundingBox* GetBBox(BoundingBox* out, int a, int b, int c);
     BoundingBox* GetBBox(BoundingBox* out, int a, int b, int c, Vector3* extra);
-    void F(Tracker* t);                   // 0x00438700
+    void AddChild(Tracker* t);            // 0x00438700
     bool F1(cSPEditorBlock* c, int type); // 0x00438440
     bool F2(cSPEditorBlock* c);           // 0x00438420
 };
@@ -4444,19 +4447,20 @@ void FUN_0048fde0(cSPEditorBlock* block)
 {
     if (block == 0)
         return;
-    if (block->Test() != 0)
+    if (block->GetSymmetrySign() != 0)
         return;
-    void** begin = block->vecBegin;
-    void** end = block->vecEnd;
+    void** begin = block->vecBegin;       // 0x340
+    void** end = block->vecEnd;           // 0x344
     for (int i = 0; i < (int)(end - begin); ++i) {
         cSPEditorBlock* child = (cSPEditorBlock*)begin[i];
-        Tracker* t = child->tracker;
+        Tracker* t = child->tracker;      // 0x3e0
         if (t != 0 && t->field33c == 0) {
-            block->F(t);
-            Vector3 a, b;
-            t->GetOffsetA(&a, 1);
-            t->GetOffsetB(&b, 1);
-            t->Place();
+            block->AddChild(t);
+            Vector3 off;
+            t->GetOffsetB(&off, 1);
+            Vector3 dir;
+            t->GetTrianglePickDirection(&dir, 1);
+            t->PlaceHandlesBaseOnPinning(dir, off);
         } else {
             FUN_0048fde0(child);
         }

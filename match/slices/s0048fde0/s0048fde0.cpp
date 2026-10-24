@@ -4,6 +4,10 @@
 // unknown gaps are char pad[]. Callees/globals are stubbed (masked relocs).
 
 #include "types.h"
+extern "C" double __cdecl fabs(double);
+#pragma intrinsic(fabs)
+#include <math.h>
+#pragma intrinsic(acos)
 
 struct Vector3 {
     float x, y, z;
@@ -15,7 +19,16 @@ struct Vector3 {
 
 struct Matrix3 {
     float m[9];
-    void Assign(const void* src);
+    void Assign(const void* src);          // 0x0041cb40
+};
+
+struct Transform {
+    uint16_t flags;                        // 0x00
+    uint16_t field2;                       // 0x02
+    uint8_t pad0[0x14 - 0x04];
+    Matrix3 matrix;                        // 0x14
+    void Init();                           // 0x00409930
+    void SetAngleAxis(Vector3* axis, float angle); // 0x006baba0
 };
 
 struct BoundingBox {
@@ -23,14 +36,35 @@ struct BoundingBox {
     Vector3 mx;
     BoundingBox() {}
     bool Intersects(const BoundingBox& b) const;
+    void GetCenter(Vector3* out) const;    // 0x00409b90
+};
+
+struct WeightedPoint {
+    float weight;                          // 0x00
+    Vector3 pos;                           // 0x04
+};
+
+struct VSet {
+    WeightedPoint* begin;                  // 0x00
+    WeightedPoint* end;                    // 0x04
+    WeightedPoint* cap;                    // 0x08
+    uint32_t alloc0;                       // 0x0c
+    uint32_t alloc1;                       // 0x10
+    VSet(const void* alloc);               // 0x00540470
+    ~VSet();                               // 0x004748c0
+    void push_back(const WeightedPoint& wp); // 0x004a9e40
+    bool empty();                          // 0x00526430
 };
 
 struct Tracker {
     char pad0[0x33c];
-    int field33c;                         // 0x33c
-    void GetOffsetA(Vector3* out, int flag);
-    void GetOffsetB(Vector3* out, int flag);
-    void Place();
+    int field33c;                          // 0x33c
+    char pad1[0x3a0 - 0x340];
+    Vector3 dir;                           // 0x3a0
+    Vector3 off;                           // 0x3ac
+    void GetOffsetB(Vector3* out, char flag);               // 0x004381e0
+    void GetTrianglePickDirection(Vector3* out, char flag); // 0x00438120
+    void PlaceHandlesBaseOnPinning(Vector3 a, Vector3 b);   // 0x00437b00
 };
 
 struct SubMgr {
@@ -41,7 +75,7 @@ struct SubMgr {
 struct ModelType {
     void** begin;                         // 0x00
     void** end;                           // 0x04
-    bool GetResourceTypeX();              // 0x00526430, thiscall
+    bool empty();                         // 0x00526430, thiscall
 };
 
 struct cSPEditorBlock {
@@ -59,10 +93,10 @@ struct cSPEditorBlock {
     char pad4[0xdc8 - 0x3e8];
     uint32_t bits;                        // 0xdc8
 
-    bool Test();                          // 0x0044f220
+    int GetSymmetrySign();                // 0x0044f220
     BoundingBox* GetBBox(BoundingBox* out, int a, int b, int c);
     BoundingBox* GetBBox(BoundingBox* out, int a, int b, int c, Vector3* extra);
-    void F(Tracker* t);                   // 0x00438700
+    void AddChild(Tracker* t);            // 0x00438700
     bool F1(cSPEditorBlock* c, int type); // 0x00438440
     bool F2(cSPEditorBlock* c);           // 0x00438420
 };
@@ -90,9 +124,6 @@ void SomePush(void* self, void* v);                                   // 0x004a9
 bool SomeMethod(void* self);                                          // 0x00526430
 void SomeDtor(void* self);                                            // 0x004748c0
 Vector3 BoundingBox_GetCenter(BoundingBox* b);                        // 0x00409b90 (approx.)
-float Acos(float x);                                                  // 0x011e08c8
-void TransformCtor(void* self);                                       // 0x00409930
-void TransformSetAngleAxis(void* self, float angle, Vector3* axis);   // 0x006baba0
 
 // @ 0x004909d0
 Vector3* FUN_004909d0(Vector3* out, const Vector3* a, const Vector3* b) {
@@ -108,19 +139,20 @@ Vector3* FUN_004909d0(Vector3* out, const Vector3* a, const Vector3* b) {
 void FUN_0048fde0(cSPEditorBlock* block) {
     if (block == 0)
         return;
-    if (block->Test() != 0)
+    if (block->GetSymmetrySign() != 0)
         return;
-    void** begin = block->vecBegin;
-    void** end = block->vecEnd;
+    void** begin = block->vecBegin;       // 0x340
+    void** end = block->vecEnd;           // 0x344
     for (int i = 0; i < (int)(end - begin); ++i) {
         cSPEditorBlock* child = (cSPEditorBlock*)begin[i];
-        Tracker* t = child->tracker;
+        Tracker* t = child->tracker;      // 0x3e0
         if (t != 0 && t->field33c == 0) {
-            block->F(t);
-            Vector3 a, b;
-            t->GetOffsetA(&a, 1);
-            t->GetOffsetB(&b, 1);
-            t->Place();
+            block->AddChild(t);
+            Vector3 off;
+            t->GetOffsetB(&off, 1);
+            Vector3 dir;
+            t->GetTrianglePickDirection(&dir, 1);
+            t->PlaceHandlesBaseOnPinning(dir, off);
         } else {
             FUN_0048fde0(child);
         }
@@ -129,47 +161,59 @@ void FUN_0048fde0(cSPEditorBlock* block) {
 
 // @ 0x0048fee0
 float FUN_0048fee0(cSPEditorBlock* p, ModelType* model, Vector3* out, float scale) {
-    Vector3 tmp(p->position);
+    Vector3 tmp(p->position);             // 0x48
     *out = tmp;
-    if (model->GetResourceTypeX())
+
+    if (model->empty())                   // 0x00526430
         return -1.0f;
-    if (((p->bits >> 0x1b) & 1) == 0)
+    if (((p->bits >> 0x1b) & 1) == 0)     // 0xdc8 bit 27
         return -1.0f;
 
-    BoundingBox bb1;
-    Vector3 extra;
-    BoundingBox* r = p->GetBBox(&bb1, 0, 0, 0, &extra);
-    Vector3 ctr = BoundingBox_GetCenter(r);
-    char arr[0x20];
-    SomeCtor(arr, &ctr);
+    BoundingBox bb;
+    Vector3 center;
+    p->GetBBox(&bb, 0, 0, 0)->GetCenter(&center);
+
+    char alloc;
+    VSet vset(&alloc);                    // 0x00540470
 
     void** mbegin = model->begin;
     void** mend = model->end;
     for (int i = 0; i < (int)(mend - mbegin); ++i) {
         cSPEditorBlock* child = (cSPEditorBlock*)mbegin[i];
         BoundingBox bb2;
-        Vector3 extra2;
-        BoundingBox* r2 = child->GetBBox(&bb2, 0, 0, 0, &extra2);
-        Vector3 c2 = BoundingBox_GetCenter(r2);
-        float dy = c2.z - extra.z;
-        Vector3 v(c2);
+        Vector3 center2;
+        child->GetBBox(&bb2, 0, 0, 0)->GetCenter(&center2);
+
+        float dy = center2.z - center.z;
+        Vector3 v(center2);
         v.z = v.z - dy;
-        float ady = dy < 0 ? -dy : dy;
+        float ady = (float)fabs((double)dy);
         if (0.2f * scale > ady) {
             Vector3 d;
-            Vector3_Sub(&d, &c2, &ctr);
-            float len = VectorLength(&d);
-            float f = len * ady;
+            Vector3_Sub(&d, &center2, &center);
+            float w = VectorLength(&d) * ady;
             Vector3 q(tmp);
             q.z = q.z + dy;
-            SomePush(arr, &f);
-            (void)q;
+            WeightedPoint wp;
+            wp.weight = w;
+            wp.pos = q;
+            vset.push_back(wp);           // 0x004a9e40
         }
     }
-    SomeMethod(arr);
-    if (SomeMethod(arr))
-        SomeDtor(arr);
-    return -1.0f;
+
+    if (vset.empty())                     // 0x00526430
+        return -1.0f;
+
+    float best = 1000000.0f;
+    Vector3 q(tmp);
+    for (int i = 0, n = (int)(vset.end - vset.begin); i < n; ++i) {
+        if (best > vset.begin[i].weight) {
+            best = vset.begin[i].weight;
+            q = vset.begin[i].pos;
+        }
+    }
+    *out = q;
+    return best;
 }
 
 // @ 0x004902c0
@@ -272,14 +316,15 @@ void FUN_004905d0(cSPEditorBlock* self, void** vec, PtrBag* bag) {
 Matrix3* FUN_004906e0(Matrix3* out, Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4) {
     Vector3 n;
     Cross(&n, &v3, &v4);
-    Vector3_Normalize(&n, &n);
-    float d = v0.x * n.x + v0.y * n.y + v0.z * n.z;
-    float ad = d < 0 ? -d : d;
-    if (ad > 1.5258789e-05f) {
+    Vector3 n2;
+    Vector3_Normalize(&n2, &n);
+    float d = v0.x * n2.x + v0.y * n2.y + v0.z * n2.z;
+    float ad = (float)fabs((double)d);
+    if (!(1.5258789e-05f >= ad)) {
         Vector3 u, w, x;
-        FUN_004909d0(&u, &n, &v1);
+        FUN_004909d0(&u, &v1, &n2);
         Vector3_Normalize(&u, &u);
-        FUN_004909d0(&w, &n, &v2);
+        FUN_004909d0(&w, &v2, &n2);
         Vector3_Normalize(&w, &w);
         Cross(&x, &u, &w);
         Vector3_Normalize(&x, &x);
@@ -289,24 +334,27 @@ Matrix3* FUN_004906e0(Matrix3* out, Vector3 v0, Vector3 v1, Vector3 v2, Vector3 
         out->Assign(&v0);
     } else {
         Vector3 p;
-        FUN_004909d0(&p, &n, &v1);
+        FUN_004909d0(&p, &n2, &v1);
         Vector3_Normalize(&p, &p);
         float c = p.x * v0.x + p.y * v0.y + p.z * v0.z;
-        if (c < 0.0f)
-            c = 0.0f;
-        if (c > 1.0f)
-            c = 1.0f;
-        float ang = Acos(c);
-        char tf[0x28];
-        TransformCtor(tf);
-        Vector3 arr[3];
-        arr[0] = v0;
-        arr[1] = v1;
-        arr[2] = v2;
-        *(uint16_t*)(tf + 0) = *(uint16_t*)(tf + 0) | 2;
-        *(uint16_t*)(tf + 2) = *(uint16_t*)(tf + 2) + 1;
-        TransformSetAngleAxis(tf, ang, &v1);
-        out->Assign(&arr[0]);
+        c = (c > -1.0f) ? c : -1.0f;
+        c = (c < 1.0f) ? c : 1.0f;
+        float ang = (float)acos((double)c);
+        Transform tf;
+        tf.Init();                        // 0x00409930
+        tf.matrix.m[0] = v0.x;
+        tf.matrix.m[1] = v0.y;
+        tf.matrix.m[2] = v0.z;
+        tf.matrix.m[3] = v1.x;
+        tf.matrix.m[4] = v1.y;
+        tf.matrix.m[5] = v1.z;
+        tf.matrix.m[6] = v2.x;
+        tf.matrix.m[7] = v2.y;
+        tf.matrix.m[8] = v2.z;
+        tf.flags = (uint16_t)(tf.flags | 2);
+        tf.field2 = (uint16_t)(tf.field2 + 1);
+        tf.SetAngleAxis(&v1, ang);        // 0x006baba0
+        out->Assign(&tf.matrix);
     }
     return out;
 }
