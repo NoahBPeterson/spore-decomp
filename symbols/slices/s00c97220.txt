@@ -1,1 +1,8 @@
-00c97220 SP::cTribe::LoadTribeArchetypeData  # PDB name; byte-exact
+00c979e0 ?RandomRegionPoint@cTribe@@QAEPAUVec3@@PAU2@IH@Z  # cTribe::RandomRegionPoint(Vec3* out, uint32_t key, int)
+00c97b10 ?RandomRegionPointAt@cTribe@@QAEPAUVec3@@HPAU2@I@Z  # cTribe::RandomRegionPointAt(int unused, Vec3* out, uint32_t key)
+00c97c40 ?FindRegionIndex@cTribe@@QAEHIH@Z  # cTribe::FindRegionIndex(uint32_t key, int unused)
+00c97ca0 ?InsertRegionValue@cTribe@@QAEHIPAX@Z  # cTribe::InsertRegionValue(uint32_t key, void* obj)
+00c97d40 ?UpdateRegionSlot@cTribe@@QAEXIPAI@Z  # cTribe::UpdateRegionSlot(uint32_t key, uint32_t* extra)
+00c97de0 ?Destroy@cTribe@@QAEXXZ  # cTribe::Destroy()
+00c98080 ?Sub120Query@cTribe@@QAE_NXZ  # cTribe::Sub120Query()
+00c98230 ?AllocateRegion@cTribe@@QAEII@Z  # cTribe::AllocateRegion(uint32_t key)
