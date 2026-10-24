@@ -143,6 +143,9 @@ static __forceinline __m128 Normalize3(__m128 d)
 }
 
 // ---------------------------------------------------------------------------------------
+struct CapsuleQuery;
+struct Segment;
+
 class CapsuleVolume {
 public:
     Transform4 mTransform;          // +0x00
@@ -151,10 +154,151 @@ public:
     float mField48[2];              // +0x48
     float mRadius;                  // +0x50
 
+    int GetBounds(const Transform4* xf, const void* unused, __m128* out);
+    int BuildQuery(CapsuleQuery* out, const Transform4* xf);
+
     int LinearCast(const __m128* from, const __m128* to, const Transform4* xf, VolumeCastResult* out);
 };
 
-// 0x01205f30
+struct CapsuleQuery {
+    __m128 mCenter;                 // +0x00
+    uint32_t pad10[12];             // +0x10..0x3f
+    __m128 mAxis;                   // +0x40
+    uint32_t pad50[8];              // +0x50..0x6f
+    float mHalfHeight;              // +0x70
+    uint32_t pad74[2];              // +0x74..0x7b
+    float mRadius;                  // +0x7c
+    const CapsuleVolume* mpVolume;  // +0x80
+    uint32_t pad84;                 // +0x84
+    uint32_t mField88;              // +0x88
+    uint32_t mField8c;              // +0x8c
+    void* mFunc90;                  // +0x90
+    void* mFunc94;                  // +0x94
+    void* mFunc98;                  // +0x98
+    void* mFunc9c;                  // +0x9c
+};
+
+// @ 0x01205c00
+int CapsuleVolume::GetBounds(const Transform4* xf, const void* unused, __m128* out)
+{
+    __m128 axis = mTransform.c2;
+    __m128 center;
+    if (xf) {
+        axis = RotateBy(xf->c0, xf->c1, xf->c2, axis);
+        __m128 rt = RotateBy(xf->c0, xf->c1, xf->c2, mTransform.t);
+        center = _mm_add_ps(_mm_mul_ps(xf->t, Splat(1.0f)), rt);
+    } else {
+        center = mTransform.t;
+    }
+
+    __m128 radius4 = Vector4(mRadius, mRadius, mRadius, mRadius);
+    __m128 extent = _mm_add_ps(
+        _mm_mul_ps(_mm_max_ps(_mm_mul_ps(Splat(-1.0f), axis), axis), Splat(mHalfHeight)),
+        radius4);
+
+    out[0] = _mm_sub_ps(center, extent);
+    out[1] = _mm_add_ps(center, extent);
+    return 1;
+}
+
+struct CastResult {
+    uint32_t mField00;              // +0x00
+    uint32_t pad04[3];              // +0x04..0x0f
+    __m128 mField10;                // +0x10
+    __m128 mField20;                // +0x20
+    __m128 mField30;                // +0x30
+    float mField40;                 // +0x40
+    uint32_t pad44[55];             // +0x44..0x11f
+    __m128 mField120;               // +0x120
+    uint32_t mField130;             // +0x130
+};
+
+struct Segment {
+    __m128 mField00;                // +0x00
+    __m128 mField10;                // +0x10
+    __m128 mField20;                // +0x20
+    float mField30;                 // +0x30
+    uint32_t pad34;                 // +0x34
+    Segment(const __m128& a, const __m128& b);
+};
+
+// @ 0x01205d10
+void CapsuleQueryFunc(CapsuleQuery* q, const void* unused, const __m128* dir, CastResult* out)
+{
+    __m128 sum = Dot3(*dir, q->mAxis);
+    float dot = Get(sum, 0);
+
+    union FloatBits { float f; uint32_t u; };
+    FloatBits ad;
+    ad.f = dot;
+    ad.u &= 0x7fffffffu;
+
+    if (0.05f > ad.f) {
+        __m128 h = Splat(q->mHalfHeight);
+        __m128 axisH = _mm_mul_ps(q->mAxis, h);
+        __m128 from = _mm_sub_ps(q->mCenter, axisH);
+        __m128 to = _mm_add_ps(q->mCenter, axisH);
+        Segment seg(to, from);
+        out->mField10 = seg.mField00;
+        out->mField20 = seg.mField10;
+        out->mField30 = seg.mField20;
+        out->mField40 = seg.mField30;
+        out->mField130 = 1;
+        out->mField00 = 0;
+    } else {
+        __m128 h = Splat(q->mHalfHeight);
+        __m128 axisH = _mm_mul_ps(q->mAxis, h);
+        __m128 center = q->mCenter;
+        if (dot > 0.0f)
+            center = _mm_add_ps(center, axisH);
+        else
+            center = _mm_sub_ps(center, axisH);
+        out->mField120 = center;
+        out->mField130 = 0;
+        out->mField00 = 0;
+    }
+}
+
+// @ 0x01205e20
+int CapsuleVolume::BuildQuery(CapsuleQuery* out, const Transform4* xf)
+{
+    __m128 axis = mTransform.c2;
+    __m128 center;
+    if (xf) {
+        __m128 c0 = xf->c0, c1 = xf->c1, c2 = xf->c2;
+        __m128 ax = _mm_shuffle_ps(mTransform.c2, mTransform.c2, 0x00);
+        __m128 ay = _mm_shuffle_ps(mTransform.c2, mTransform.c2, 0x55);
+        __m128 az = _mm_shuffle_ps(mTransform.c2, mTransform.c2, 0xaa);
+        __m128 axisX = _mm_mul_ps(c0, ax);
+        axis = _mm_add_ps(axisX, _mm_mul_ps(c1, ay));
+        axis = _mm_add_ps(axis, _mm_mul_ps(c2, az));
+
+        __m128 tx = _mm_shuffle_ps(mTransform.t, mTransform.t, 0x00);
+        __m128 ty = _mm_shuffle_ps(mTransform.t, mTransform.t, 0x55);
+        __m128 tz = _mm_shuffle_ps(mTransform.t, mTransform.t, 0xaa);
+        __m128 cx = _mm_mul_ps(c0, tx);
+        __m128 rot = _mm_add_ps(cx, _mm_mul_ps(c1, ty));
+        rot = _mm_add_ps(rot, _mm_mul_ps(c2, tz));
+        center = _mm_add_ps(_mm_mul_ps(xf->t, Splat(1.0f)), rot);
+    } else {
+        center = mTransform.t;
+    }
+
+    out->mCenter = center;
+    out->mField88 = 0;
+    out->mField8c = 1;
+    out->mRadius = mRadius;
+    out->mAxis = axis;
+    out->mHalfHeight = mHalfHeight;
+    out->mpVolume = this;
+    out->mFunc90 = (void*)0x01205d10;
+    out->mFunc94 = (void*)0x01205820;
+    out->mFunc98 = (void*)0x012058e0;
+    out->mFunc9c = (void*)0x011fb220;
+    return 1;
+}
+
+// @ 0x01205f30
 int CapsuleVolume::LinearCast(const __m128* from, const __m128* to, const Transform4* xf, VolumeCastResult* out)
 {
     const __m128 base = Vector4(0.0f, 0.0f, 0.0f, 0.0f);   // capsule axis: base + s*axis
