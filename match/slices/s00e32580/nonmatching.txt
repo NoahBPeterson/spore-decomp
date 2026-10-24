@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00e32580  1223  huge reload callback; transformed image/window/trig math and register/scheduling layout diverge
+00e32b20  320  transform matrix builder; stack array layout and x87/sincos scheduling diverge
+00e32c80  18  destructor loop; compiler hoists callee-saved push ebx/push edi above the m1ec release
+00e32f00  7  second loop register allocation swaps index/vtable (ebx/ebp) versus original
+00e330c0  307  constructor; dead-store elimination removes first vtable store and zero/float init scheduling diverges
