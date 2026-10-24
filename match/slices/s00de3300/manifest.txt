@@ -1,0 +1,10 @@
+slices/s00de3300/s00de3300.cpp  ?FUN_de3300@GameEntry@@QAEXXZ  00de3300  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00de3300/s00de3300.cpp  ?Dtor_de35d0@GameEntry@@QAEXXZ  00de35d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00de3300/s00de3300.cpp  ?FUN_de38b0@GameEntry@@QAEXII@Z  00de38b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00de3300/s00de3300.cpp  ?FUN_00de3be0@@YAXPAUAnimObj@@@Z  00de3be0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00de3300/s00de3300.cpp  ?FUN_00de3d00@@YA_NPAULayout@@II@Z  00de3d00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00de3300/s00de3300.cpp  ?sGetWindowImage@@YAIPAX@Z  00de3e00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00de3300/s00de3300.cpp  ?FUN_00de3e40@@YAXI@Z  00de3e40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00de3300/s00de3300.cpp  ?FUN_00de3f00@@YA_NPAXI0@Z  00de3f00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00de3300/s00de3300.cpp  ?FUN_00de3fa0@@YAPAUEaString16@@PAU1@I@Z  00de3fa0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00de3300/s00de3300.cpp  ?FUN_00de40e0@@YAPAUEaString16@@PAU1@PAX@Z  00de40e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
