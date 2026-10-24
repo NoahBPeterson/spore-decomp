@@ -1,0 +1,26 @@
+; slice s00e4ba40 = 0x00e4ba40..0x00e4c8c0 (SP Simulator app-data runtime)
+00e4ba40 SP::cMyMagicCommand::Command(cFieldDef*)             ; 0x00e4ba40  thiscall: hash the field name and push it into the current type's field list
+00e4bad0 cMyMagicCommand::Destroy(unsigned int)               ; 0x00e4bad0  thiscall: scalar deleting destructor  byte-exact (MATCH)
+00e4bb10 FUN_00e4bb10(void)                                   ; 0x00e4bb10  free every pooled app-data object then clear the global list
+00e4bc70 FUN_00e4bc70(void)                                   ; 0x00e4bc70  clear the global tag map (nuke subtree + reset anchor)  byte-exact (MATCH)
+00e4bca0 FUN_00e4bca0(void*, void*)                           ; 0x00e4bca0  build a context record and register it in the app-data list
+00e4bd70 FUN_00e4bd70(void)                                   ; 0x00e4bd70  walk the global app-data list and reset each entry  byte-exact (MATCH)
+00e4bda0 MapStrInt::at(const EaString*)                       ; 0x00e4bda0  thiscall: eastl::map<int,string>::operator[]
+00e4be50 FUN_00e4be50(const char*)                            ; 0x00e4be50  intern a C string into the global string table (FNV hash key)
+00e4bf30 SP::DebugNameFromSPID(int)                           ; 0x00e4bf30  map a Simulator id to a debug name ("<null key>" / "<unknown key>" cache)
+00e4bff0 FUN_00e4bff0(const char*, int)                       ; 0x00e4bff0  store an int under a formatted string key in the field map  byte-exact (MATCH)
+00e4c060 SP::sAppDataCompile(void*, void*)                    ; 0x00e4c060  reset the parser, format the layout path, run it and stamp the compile time (live-in ESI ABI)
+00e4c130 SP::sReadAppDataResource(const char*, int)           ; 0x00e4c130  open a .cel catalog, read it line by line and fill the field map
+00e4c330 SP::sHandlePostedFileChangeMessage(void*)            ; 0x00e4c330  run a file-change callback for a layout id (live-in ESI ABI)
+00e4c370 SP::sIsUpToDate(void*)                               ; 0x00e4c370  compare a layout's stored timestamp against the field map
+00e4c440 SP::sCellResourceCompileAll(const char*, void*)      ; 0x00e4c440  walk *.cel in a directory and recompile every stale layout
+00e4c520 SP::sAppendData(void*, void*, FieldDefArg*)          ; 0x00e4c520  switch on a field's data type and store the incoming value
+00e4c670 SP::sParseField(FieldDefFull*, void*, void*)         ; 0x00e4c670  pull an argument by name/position and hand it to sAppendData
+00e4c730 cMyMagicCommand::Execute(void*)                      ; 0x00e4c730  thiscall: run the current context's fields (scalar store or pool-array append)
+00e4c8c0 FUN_00e4c8c0(void)                                   ; 0x00e4c8c0  allocate and initialise the global app-data block, parser and message hook
+; helpers: EAAllocate 0x00f473a0, operator_delete_array 0x00f47380, memcpy 0x011e0744, memset 0x011e073e
+;          FNVHash 0x00932e80, SimpleVector<CellData*>::DoInsertValue 0x00a80dd0, ZoneObject_new 0x00926020
+;          map<string,int>::operator[] 0x00b1c220, MapStrFind::Find 0x00b20930, DoNukeSubtree 0x00e84940
+;          EaString::sprintf 0x00472fe0, EaString::assign 0x00454cb0, WStr_Format 0x0041e050
+;          FileStream ctor/open/close 0x00931da0/0x009318f0/0x00931a70, DirectoryIterator 0x0092e730/0x0092e8e0/0x0092e9b0
+;          globals block 0x016ad060 (_gspAppDataGlobals), app-data list 0x016ad100/0x016ad104/0x016ad108

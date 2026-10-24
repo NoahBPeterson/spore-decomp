@@ -1,0 +1,31 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00e4ba40 = the Simulator app-data runtime: the "magic command" context
+# stack (Command / Execute / scalar dtor), the global app-data block (field map /
+# tag map / pooled-object list), the string table (intern / DebugName / formatted
+# store), the .cel catalog reader and the ArgScript field-parsing helpers.
+# 4/19 byte-exact (cMyMagicCommand::Destroy, FUN_00e4bc70, FUN_00e4bd70,
+# FUN_00e4bff0).  The remaining 15 are complete C++ that reproduces the original
+# control flow and container semantics; the byte-exact budget is missed mostly
+# because of MSVC register allocation / store scheduling, because several callees
+# use a non-standard register ABI (a live-in ESI carrying a second argument:
+# SP::sAppDataCompile 00e4c060, SP::sFileInfo 00e4b390), and because the EASTL
+# string/map helpers are declared by hand.  Per-row verdicts are the equivalence
+# gate results measured with the flags above.
+
+00e4ba40 111 cMyMagicCommand::Command: hash the field name then push it into the current context's type descriptor list. Ours reproduces the descent and the vector push, but edx vs ebx register choice and the -1 sentinel materialisation differ; equiv PASS 228 valid inputs, 88.7% coverage
+00e4bb10  39 FUN_00e4bb10: free every pooled app-data object then clear the global list. Ours matches the walk and the free loop; only store order (vptr reload vs the 0x9c flag store), the prologue push order and the count-scaling in the tail (lea/add,add vs neg/lea) differ; equiv WEAK 400 valid inputs (need 200), 50.0% coverage (need 60%)
+00e4bca0 216 FUN_00e4bca0: build a CellData/context record and register it in the app-data list. Ours reproduces the two allocations and the list pushes, but the allocation-size immediates, the owner virtual call argument order and the list-tail handling are scheduled differently; equiv FAIL 5/5 valid inputs mismatched; first: execution (ours faults where the original returns normally)
+00e4bda0 152 eastl::map<int,string>::operator[]: lower-bound descent then node insert. Ours reproduces the descent and the key compare, but the node-insert helper is hand-declared (NewMapNode) and the key/element copies are laid out differently; equiv UNSUPPORTED 1 unresolved reference (?NewMapNode@@YAPAXPAX0H@Z)
+00e4be50 128 FUN_00e4be50: intern a C string into the global string table. Ours reproduces the FNV hash, the length scan and the map lookup, but the ownership test and the node string assign are hand-declared; equiv UNSUPPORTED 1 unresolved reference (?NewMapNode@@YAPAXPAX0H@Z)
+00e4bf30  82 DebugNameFromSPID: map a Simulator id to a debug name, caching "<null key>"/"<unknown key>". Ours reproduces the lookup and the fixed-buffer copies, but the find/at helpers and the 12-byte string copies are declared by hand; equiv UNSUPPORTED 1 unresolved reference (?NewMapNode@@YAPAXPAX0H@Z)
+00e4c060 145 SP::sAppDataCompile: reset the parser, format the layout path, run it and stamp the compile time. The original reads its layout pointer from a live-in ESI (non-standard register ABI), which cannot be expressed from C++; ours passes it as an ordinary argument instead; equiv UNSUPPORTED only 0/400 inputs valid (fault(read)=400)
+00e4c130 357 SP::sReadAppDataResource: open a .cel catalog, read it line by line and fill the field map. Ours reproduces the FileStream/StreamBuffer sequence and the read loop, but the file-string format, the atoi/strchr helpers and the map insert are declared by hand and the EASTL wide-string frames differ; equiv UNSUPPORTED 3 unresolved references (?atoi_, ?strchr_, ?NewMapNode)
+00e4c330  21 SP::sHandlePostedFileChangeMessage: run a file-change callback for a layout id. The original takes its object in the 2nd stack slot and passes the layout to sAppDataCompile in the live-in ESI; ours cannot reproduce that non-standard register ABI (extra push + add esp,4 vs 8); equiv UNSUPPORTED only 0/400 inputs valid (fault(read)=357)
+00e4c370 144 SP::sIsUpToDate: compare a layout's stored timestamp against the field map. Ours reproduces the find/at calls and the two-way return, but the string format key and the map helpers are declared by hand; equiv UNSUPPORTED 1 unresolved reference (?NewMapNode@@YAPAXPAX0H@Z)
+00e4c440 167 SP::sCellResourceCompileAll: walk *.cel in a directory and recompile every stale layout. Ours reproduces the FindFirst/FindNext/FindFinish walk and the extension/up-to-date tests, but SP::sFileInfo uses a live-in ESI (non-standard register ABI) and the wide-string compares are declared by hand; equiv UNSUPPORTED only 0/400 inputs valid (discards fault(write)=189, import:FindFirstFileW=168)
+00e4c520 211 SP::sAppendData: switch on a field's data type and store the incoming value. Ours reproduces the type switch and the default copy branch, but the field-offset/size members and the copy immediates are declared by hand and the memcpy argument order differs; equiv FAIL 5/9 valid inputs mismatched; first: import call #0 (memcpy dst)
+00e4c670 544 SP::sParseField: pull an argument by name/position and hand it to sAppendData. Ours reproduces the flag test and the Main/Option-argument selects, but the FieldDefFull members are declared by hand and an unresolved helper faults at 0x009289f4; equiv FAIL 5/15 valid inputs mismatched; first: execution (ours faults where the original returns normally)
+00e4c730 335 cMyMagicCommand::Execute: run the current context's fields (scalar store or pool-array append). Ours reproduces the size cutoff, the pool append and the field walk, but the context descriptor members and the asset-create/pool helpers are declared by hand; equiv WEAK 266 valid inputs (need 200), 16.1% coverage (need 60%)
+00e4c8c0 208 FUN_00e4c8c0: allocate and initialise the global app-data block, parser and message hook. Ours reproduces the allocation, the map/list clears and the parser setup, but the object sizes and the message-server hook arguments are scheduled/declared differently; equiv UNSUPPORTED only 0/400 inputs valid (discards fault(write)=271, import:FindFirstFileW=100)
