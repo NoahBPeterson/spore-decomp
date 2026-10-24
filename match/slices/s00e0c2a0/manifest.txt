@@ -1,0 +1,5 @@
+slices/s00e0c2a0/s00e0c2a0.cpp  ?Copy@cRec28Copy@@QAEPAXPBI0@Z  00e0c610  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e0c2a0/s00e0c2a0.cpp  ?Copy@cRec14Copy@@QAEPAXPBUcRec14@@@Z  00e0c670  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e0c2a0/s00e0c2a0.cpp  ?Copy@cRec28CopyB@@QAEPAXPBUcRec28@@@Z  00e0c6b0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e0c2a0/s00e0c2a0.cpp  ?DestroyRecRange@@YAPAXPAX00@Z  00e0c780  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e0c2a0/s00e0c2a0.cpp  ?Destroy@cTerrainRenderer@@QAEPAXE@Z  00e0c7d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
