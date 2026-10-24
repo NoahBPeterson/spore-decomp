@@ -11,9 +11,6 @@ typedef unsigned int size_t;
 // ---------------------------------------------------------------- math
 struct cSPVector3 {
     float x, y, z;
-    cSPVector3() {}
-    cSPVector3(const cSPVector3& v) { x = v.x; y = v.y; z = v.z; }
-    cSPVector3& operator=(const cSPVector3&);   // @ 0x4098a0
 };
 
 cSPVector3* Vector3_Normalize(cSPVector3* out, const cSPVector3* in);   // @ 0x436ce0
@@ -34,7 +31,7 @@ class vector { public:
 };
 } // namespace eastl
 
-extern "C" int __stdcall QueryPerformanceCounter(__int64* pCount); // @ IAT
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64* pCount); // @ IAT
 
 namespace EA {
 namespace Thread { void ThreadSleep(const int* pTime); } // @ 0x921df0
@@ -44,27 +41,41 @@ namespace Stopwatch {
 }
 }
 
-// object pointed at by context +0x90
+// Evaluator object (context +0x90).  Its dispatch table is stored inside the object: +8 is
+// the combine entry, reached with an indirect call (ecx = the evaluator).  The other entry
+// points are called directly by their own addresses.
+typedef char (__thiscall* EvalCombineFn)(void* self, cSPVector3* a, cSPVector3* b);
+
 struct Evaluator {
-    virtual void slot0();
-    virtual void slot1();
-    virtual char Combine(cSPVector3* a, cSPVector3* b);                        // @ 0x4f9250
-    virtual cSPVector3* Interp(cSPVector3* out, cSPVector3* a, cSPVector3* b, int mode); // @ 0x4fc100
-    virtual char Blend(float t, cSPVector3* a, cSPVector3* b, cSPVector3* out); // @ 0x4fbcc0
+    int mPad0;                                          // +0
+    int mPad4;                                          // +4
+    EvalCombineFn mpCombine;                            // +8
+    char FUN_004f9250(cSPVector3* a, cSPVector3* b);                        // @ 0x4f9250
+    cSPVector3* FUN_004fc100(cSPVector3* out, cSPVector3* a, cSPVector3* b, int mode); // @ 0x4fc100
+    char FUN_004fbcc0(float t, cSPVector3* a, cSPVector3* b, cSPVector3* out); // @ 0x4fbcc0
 };
 
 // ---------------------------------------------------------------- helpers
 // External helpers in adjacent functions (all compiled separately).
 char*        VecAdd(char* out, const char* a, const char* b);            // @ 0x53eaa0
-void         EvalScaledAdd(void* self, cSPVector3* out, uint32_t key);   // @ 0x53eb10
 int*         EvalAllocEntry(void* self, int key, uint32_t hash);         // @ 0x53ece0
 uint8_t      EvalApplyMode(void* entry, uint8_t mask);                   // @ 0x53e3a0
 unsigned int EvalFlush(void* self, int key, uint8_t mask);               // @ 0x53fe30
 void         EvalBuild(float* begin, float* end, float* out);            // @ 0x541420
-void         EvalInit0(int n);                                          // @ 0x473810
-void         EvalInit1(int n);                                          // @ 0x4cd3c0
-unsigned int Map1Hash(void* pMap, int key);                             // @ 0x540340
-unsigned int Map2Hash(void* pMap, int key);                             // @ 0x540820
+
+// 0x540340/0x540820 are the thiscall finders of the two id->index maps: ecx is the map
+// object (the pointer to its table lives at +0), the key is the only stack argument.
+struct PaintVarMap {
+    void* mpTable;
+    unsigned int FUN_00540340(int key);
+    unsigned int FUN_00540820(int key);
+};
+
+// 0x473810/0x4cd3c0 are SpVector<T>::resize specialisations (thiscall, count on the stack).
+struct PaintVarVec {
+    void FUN_00473810(int n);
+    void FUN_004cd3c0(int n);
+};
 
 // tables indexed by the modifier number
 extern uint8_t gPaintVarModNormal[];    // @ 0x15e2d08
@@ -83,6 +94,7 @@ struct PaintVarCtx {
     unsigned char FUN_0053eda0(char bWait);
     void          FUN_0053f300(int key, int* pOut);
     void          FUN_0053f4e0();
+    void          FUN_0053eb10(cSPVector3* out, uint32_t key);   // @ 0x53eb10 (thiscall)
 };
 
 EvalGuard::EvalGuard(int* p) : mpEval(p) {}
@@ -165,7 +177,7 @@ unsigned char PaintVarCtx::FUN_0053eda0(char bWait)
                 char keybuf[4];
                 VecAdd(keybuf, (char*)&entryValue, tableEntry + 8);
                 int localKey = *(int*)keybuf;
-                unsigned int h = Map1Hash((char*)self + 0x3c, localKey);
+                unsigned int h = ((PaintVarMap*)(self + 0x3c))->FUN_00540340(localKey);
                 int found = 0;
                 bool bFound = false;
                 if (h < 0x4000) {
@@ -224,7 +236,7 @@ unsigned char PaintVarCtx::FUN_0053eda0(char bWait)
 void PaintVarCtx::FUN_0053f300(int key, int* pOut)
 {
     char* self = (char*)this;
-    unsigned int h = Map2Hash((char*)self + 0x68, key);
+    unsigned int h = ((PaintVarMap*)(self + 0x68))->FUN_00540820(key);
     bool bFound = false;
     if (h < 0x8000) {
         int mapBegin = *(int*)(self + 0x68);
@@ -237,7 +249,7 @@ void PaintVarCtx::FUN_0053f300(int key, int* pOut)
     if (!bFound) {
         *(unsigned int*)(self + 0x1c) = h & 0xffff8000 | *(unsigned int*)(self + 0x1c);
         cSPVector3 v;
-        EvalScaledAdd(self, &v, (uint32_t)key);
+        FUN_0053eb10(&v, (uint32_t)key);
         int count = *(int*)(self + 0x64);
         int tbl = *(int*)(self + 0x50);
         char* te = (char*)(tbl + count * 0x18);
@@ -245,7 +257,7 @@ void PaintVarCtx::FUN_0053f300(int key, int* pOut)
         *(cSPVector3*)(te + 0xc) = v;
         *(int*)(te + 4) = -1;
         Evaluator* evaluator = *(Evaluator**)(self + 0x90);
-        evaluator->Combine(&v, (cSPVector3*)pOut);
+        evaluator->mpCombine(evaluator, &v, (cSPVector3*)pOut);
         pOut[1] = count;
         int k0 = pOut[0];
         int k1 = pOut[1];
@@ -263,8 +275,8 @@ void PaintVarCtx::FUN_0053f4e0()
     char* self = (char*)this;
     int ev = *(int*)(self + 0x94);
 
-    EvalInit0((*(int*)(ev + 0xc) - *(int*)(ev + 8)) / 0xc);
-    EvalInit1((*(int*)(ev + 0x5c) - *(int*)(ev + 0x58)) >> 2);
+    ((PaintVarVec*)(ev + 0x1c))->FUN_00473810((*(int*)(ev + 0xc) - *(int*)(ev + 8)) / 0xc);
+    ((PaintVarVec*)(ev + 0x6c))->FUN_004cd3c0((*(int*)(ev + 0x5c) - *(int*)(ev + 0x58)) >> 2);
     EvalBuild((float*)*(int*)(ev + 0x58),
               (float*)*(int*)(ev + 0x5c),
               (float*)*(int*)(ev + 0x6c));
@@ -279,20 +291,20 @@ void PaintVarCtx::FUN_0053f4e0()
         Vector3_MulAdd(vecA, &inv);
 
         Evaluator* evaluator = *(Evaluator**)(self + 0x90);
-        char r = evaluator->Combine(vecA, vecB);
+        char r = evaluator->FUN_004f9250(vecA, vecB);
         if (r == 0) {
             int tbl = *(int*)(self + 0x50);
             int entry = tbl + 0xc + *(int*)(tbl + mod[0] * 0x18 + 8) * 0x18;
             cSPVector3 interpOut;
-            cSPVector3* pv = evaluator->Interp(&interpOut, (cSPVector3*)entry, vecA, 0);
+            cSPVector3* pv = evaluator->FUN_004fc100(&interpOut, (cSPVector3*)entry, vecA, 0);
             cSPVector3 a = *pv;
             cSPVector3 blendOut;
-            char r2 = evaluator->Blend(*(float*)(self + 0x14), &a,
+            char r2 = evaluator->FUN_004fbcc0(*(float*)(self + 0x14), &a,
                                        (cSPVector3*)entry, &blendOut);
             if (r2 == 0) {
                 *vecA = a;
                 cSPVector3 tmp;
-                evaluator->Combine(vecA, &tmp);
+                evaluator->FUN_004f9250(vecA, &tmp);
                 cSPVector3 n;
                 Vector3_Normalize(&n, &blendOut);
                 cSPVector3 neg;
