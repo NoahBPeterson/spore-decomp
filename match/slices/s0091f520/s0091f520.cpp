@@ -535,14 +535,17 @@ struct HTStrNode {
     uint32_t       a, b, c;
     HTStrNode*     next;   // +0x10
 };
+struct HTStrIter;
 struct HTStr {
     uint32_t    pad0;
     HTStrNode** buckets;   // +4
     uint32_t    bucketCount; // +8
+
+    HTStrIter* Find(HTStrIter* out, void** pkey); // @ 0x00920560
 };
 struct HTStrIter { HTStrNode* node; HTStrNode** slot; };
 
-void HTStr_Find(HTStr* self, HTStrIter* out, void** pkey)
+HTStrIter* HTStr::Find(HTStrIter* out, void** pkey)
 {
     const uint8_t* s = (const uint8_t*)*pkey;
     uint32_t h = 0x811c9dc5;
@@ -552,18 +555,19 @@ void HTStr_Find(HTStr* self, HTStrIter* out, void** pkey)
         h = h * 0x1000193 ^ c;
         c = *s;
     }
-    uint32_t slot = h % self->bucketCount;
-    HTStrNode** slotPtr = &self->buckets[slot];
-    HTStrNode* cur = self->buckets[slot];
+    uint32_t slot = h % bucketCount;
+    HTStrNode** slotPtr = &buckets[slot];
+    HTStrNode* cur = buckets[slot];
     while (cur) {
         if (*pkey == cur->key) goto found;
         cur = cur->next;
     }
-    slotPtr = &self->buckets[self->bucketCount];
+    slotPtr = &buckets[bucketCount];
     cur = *slotPtr;
 found:
     out->node = cur;
     out->slot = slotPtr;
+    return out;
 }
 
 // ---------------------------------------------------------------- misc structs/helpers
@@ -575,27 +579,27 @@ struct NTbl {
     virtual int   n04(void*, int);              // 0x04
     virtual int   n08(int, int);                // 0x08
     virtual void* n0c(int);                     // 0x0c
-    virtual int   n10(const char*, void*);      // 0x10
+    virtual NTbl* n10(const char*, void*);      // 0x10
+
+    int FindByName(const char* name, int extra, NTbl* tbl); // @ 0x00920160
 };
 
-int MgrFindByName(NTbl* self, const char* name, int, NTbl* tbl)
+int NTbl::FindByName(const char* name, int extra, NTbl* tbl)
 {
     unsigned found = 0;
     unsigned handles[0x80];
     if (tbl == 0) {
-        tbl = (NTbl*)self->n10(name, &found);
+        tbl = n10(name, &found);
     } else {
         unsigned n = (unsigned)tbl->n04(handles, 0x80);
-        if (n != 0) {
-            unsigned i = 0;
-            do {
-                const char* nm = (const char*)tbl->n0c((int)handles[i]);
-                if (strcmp(name, nm) == 0) { found = handles[i]; break; }
-                ++i;
-            } while (i < n);
-            if (i == n) return 0;
+        unsigned i = 0;
+        while (i < n) {
+            const char* nm = (const char*)tbl->n0c((int)handles[i]);
+            if (strcmp(name, nm) == 0) { found = handles[i]; break; }
+            ++i;
         }
+        if (i == n) return 0;
     }
     if (tbl == 0) return 0;
-    return tbl->n08((int)found, 0);
+    return tbl->n08((int)found, extra);
 }
