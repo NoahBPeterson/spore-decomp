@@ -4,3 +4,7 @@
 0062c7e0  220  FUN_0062c7e0: complete; event-info construction / vcall arg setup differs (retail layout via raw offsets)
 0062c910   73  FUN_0062c910: complete; release-chain scheduling and tail-call epilogue placement
 0062c990   85  FUN_0062c990: complete; branch layout of the toggle/destroy paths differs
+0062bb40  564  FUN_0062bb40: complete; creature dedupe, in-place vector append and AddRef/ref-swap scheduling differ; equiv: WEAK (190/400 valid inputs, 28.2% coverage; need 200/60%)
+0062bf10  876  FUN_0062bf10: complete; message-server registration, UI group init calls and path allocation/clear ordering differ; equiv: UNSUPPORTED (only 0/400 inputs valid: fault(read)=324, import:iswctype=75)
+0062c340  386  SP::cSPPlayMode::Stop: complete; teardown ordering, refcount-release chains and register scheduling differ; equiv: UNSUPPORTED (harness error: 'I' format requires 0 <= number <= 4294967295)
+0062c550  641  SP::cSPPlayMode::Update: complete; x87 length math, camera-state branch and UI-update block scheduling differ; equiv: UNSUPPORTED (harness error: 'I' format requires 0 <= number <= 4294967295)
