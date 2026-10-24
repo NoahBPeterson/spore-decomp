@@ -1,0 +1,8 @@
+00df0280 1007 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1007 bytes - cGalaxyGameEntryUIStateMachine::ShowPanel not reconstructed.
+00df0670 444 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 444 bytes - cGalaxyGameEntryUIStateMachine::SetCurrentState not reconstructed.
+00df0830 333 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 333 bytes - state machine helper not reconstructed.
+00df09a0 145 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 145 bytes - state machine helper not reconstructed.
+00df0a40 143 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 143 bytes - state machine helper not reconstructed.
+00df0ad0 299 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 299 bytes - state machine helper not reconstructed.
+00df0c00 755 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 755 bytes - state machine helper not reconstructed.
+00df0f20 395 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 395 bytes - state machine helper not reconstructed.
