@@ -1,0 +1,3 @@
+slices/s0068b150/s0068b150.cpp  ?EnumerateCommands@cCommandServer@@QAEXAAUUintVec@@@Z  0068b900  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0068b150/s0068b150.cpp  ?DestroyNodes@CmdMap@cCommandServer@@QAEXPAURbNode@@@Z  0068b9d0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0068b150/s0068b150.cpp  ?SetParameter@cCommandParameterSet@@QAEXII@Z  0068c020  /O2 /MD /Gy /EHsc /TP /GS-

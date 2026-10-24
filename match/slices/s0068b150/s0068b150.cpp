@@ -6,6 +6,7 @@ typedef unsigned int   uint32;
 typedef unsigned short uint16;
 typedef unsigned char  uint8;
 typedef unsigned __int64 uint64;
+typedef unsigned long uintptr_t;
 
 // ---------------------------------------------------------------------------
 // externals (call targets are masked relocations)
@@ -75,9 +76,10 @@ struct Variant {
 // refcounted bases and AutoRefCount
 // ---------------------------------------------------------------------------
 struct IRefCounted {
-    virtual void AddRef() = 0;      // slot 0
-    virtual void Release() = 0;     // slot 1
+    virtual void AddRef() {}        // slot 0
+    virtual void Release() {}       // slot 1
     virtual void s2();
+    virtual void s3();
     virtual void Init();            // slot 4 (+0x10)
     virtual void Deinit();          // slot 5 (+0x14)
     virtual void s6();
@@ -100,13 +102,13 @@ template <class T>
 struct AutoRefCount {
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
-    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+    ~AutoRefCount() { if (mpObject) ((IRefCounted*)mpObject)->Release(); }
     T* operator=(T* p)
     {
-        if (p != mpObject) {
+        T* old = mpObject;
+        if (p != old) {
             if (p)
                 ((IRefCounted*)p)->AddRef();
-            T* old = mpObject;
             mpObject = p;
             if (old)
                 ((IRefCounted*)old)->Release();
@@ -132,24 +134,24 @@ struct RbTreeBase {
     char    pad0[4];
     RbNode  mAnchor;      // +0x04
     uint32  mnSize;       // +0x14
+
     void  DoNuke(RbNode* node);                       // 0x00EB6280 (extern)
     void  Find(void* out, void* key);                 // 0x00E5C780 (extern)
-    void* Insert(void* a, void* b, void* c);          // 0x0068BA40/0x0068BB50 (extern)
+    void* Insert(void* a, void* b, void* c);          // 0x0068BB50 (extern)
     __forceinline void reset()
     {
-        RbNode* a = &mAnchor;
-        a->mpRight   = a;
-        a->mpLeft    = a;
-        a->mpParent  = 0;
-        a->mColor    = 0;
-        mnSize       = 0;
+        mAnchor.mpRight  = &mAnchor;
+        mAnchor.mpLeft   = &mAnchor;
+        mAnchor.mpParent = 0;
+        mAnchor.mColor   = 0;
+        mnSize           = 0;
     }
 };
 
-// node of the command-info map: value at +0x14 (id + two WStr)
+// node of the command-info map: key at +0x10, cCommandInfo value at +0x14
 struct CmdInfoNode {
     RbNode  mBase;        // +0x00
-    char    pad10[4];     // +0x10
+    uint32  mKey;         // +0x10
     uint32  mnID;         // +0x14
     WStr    msName;       // +0x18
     WStr    msTypeInfo;   // +0x28
@@ -169,7 +171,8 @@ struct VarMap : RbTreeBase {
 // ---------------------------------------------------------------------------
 // cCommandParameterSet (0x3c)
 // ---------------------------------------------------------------------------
-struct cCommandParameterSet {
+class cCommandParameterSet {
+public:
     void*   mVt0;         // +0x00
     void*   mVt4;         // +0x04
     void*   m08;
@@ -179,28 +182,27 @@ struct cCommandParameterSet {
     uint16  m3A;
 
     void* operator new(unsigned s) { return EAAllocate(s, "App/cCommandParameterSet", 0, 0, 0, 0); }
-    cCommandParameterSet();
+    cCommandParameterSet()
+    {
+        mVt4 = &gVtCpsBase2;
+        m08  = 0;
+        mVt0 = &gVtCpsPri;
+        mVt4 = &gVtCpsSec;
+        mParams.reset();
+        m38 = 0;
+        m3A = 0;
+    }
     void SetParameter(uint32 id, uint32 value);   // 0x0068C020
-    void AddRef() { ((IRefCounted*)this)->AddRef(); }
+    bool CompareParameterString(WStr* out);       // 0x0068B370
 };
 
-cCommandParameterSet::cCommandParameterSet()
-{
-    mVt4 = &gVtCpsBase2;
-    m08  = 0;
-    mVt0 = &gVtCpsPri;
-    mVt4 = &gVtCpsSec;
-    mParams.mAnchor.mpLeft   = 0;
-    mParams.mAnchor.mpParent = 0;
-    *(uint32*)&mParams.mAnchor.mColor = 0;
-    mParams.mAnchor.mpRight  = &mParams.mAnchor;
-    mParams.mAnchor.mpLeft   = &mParams.mAnchor;
-    mParams.mAnchor.mpParent = 0;
-    mParams.mAnchor.mColor   = 0;
-    mParams.mnSize = 0;
-    m38 = 0;
-    m3A = 0;
-}
+// vtable view of a cCommandParameterSet (primary vptr at +0, four ref/dispatch slots)
+struct ICommandParamSetVt {
+    virtual void AddRef();       // slot 0
+    virtual void Release();      // slot 1
+    virtual void s2();
+    virtual void s3();
+};
 
 // parameter-set interface used through its vtable
 struct IParamSet {
@@ -225,13 +227,19 @@ struct IParamSet {
 // ---------------------------------------------------------------------------
 // generators / dispatchers
 // ---------------------------------------------------------------------------
-struct cStringCommandGenerator {
-    char mBase[0x08];
+class cStringCommandGenerator : public IRefCounted {
+public:
+    uint32_t mBase[8];   // +0x04..+0x24
+    cStringCommandGenerator();                  // 0x0068AF10 (defined elsewhere)
     void* operator new(unsigned s) { return EAAllocate(s, "App/cStringCommandGenerator", 0, 0, 0, 0); }
+    void ProcessToken(WStr* a, WStr* b);        // 0x0068A320
+    bool ConvertCommandToString(int pCmd, IParamSet* pSet, WStr* out);  // 0x0068B150
 };
 
-struct cMessageCommandDispatcher {
-    char mBase[0x44];
+class cMessageCommandDispatcher : public IRefCounted {
+public:
+    uint32_t mBase[0x11];  // +0x04..+0x48
+    cMessageCommandDispatcher();                // 0x00689D40 (defined elsewhere)
     void* operator new(unsigned s) { return EAAllocate(s, "App/cMessageCommandDispatcher", 0, 0, 0, 0); }
 };
 
@@ -246,7 +254,7 @@ struct ICommandServerVt {
     virtual void i6();
     virtual void i7();
     virtual void i8();
-    virtual void RegisterCmd(unsigned id, const wchar_t* name); // slot 9 (+0x24)
+    virtual void RegisterCmd(unsigned id, const wchar_t* name, void* p); // slot 9 (+0x24)
     virtual void i10();
     virtual void i11();
     virtual bool ProcessCommand(int pCmd, WStr* out, int b); // slot 12 (+0x30)
@@ -280,7 +288,8 @@ struct UintVec {
 };
 
 // map<uint32, Variant>
-struct cCommandServer : ICommandServerVt {
+class cCommandServer : public ICommandServerVt {
+public:
     struct CmdMap : RbTreeBase {
         void  DestroyNodes(RbNode* node);              // 0x0068B9D0
         void  DestroyNode(RbNode* node, void** itOut); // 0x0068B950
@@ -291,6 +300,7 @@ struct cCommandServer : ICommandServerVt {
     };
 
     CmdMap                 mCommandInfoMap;             // +0x04
+    AutoRefCount<IRefCounted>               m1cRef;                     // +0x1c
     AutoRefCount<IRefCounted>               mpCommandDispatcher;        // +0x20
     AutoRefCount<cMessageCommandDispatcher> mpMessageCommandDispatcher; // +0x24
     AutoRefCount<cStringCommandGenerator>   mpStringCommandGenerator;   // +0x28
@@ -298,6 +308,9 @@ struct cCommandServer : ICommandServerVt {
     bool                   mb48;                        // +0x48
 
     bool Shutdown();                                    // 0x0068BCF0
+    bool InitDispatchers();                              // 0x0068B760
+    cCommandServer();                                   // 0x0068C040
+    ~cCommandServer();                                  // 0x0068BC50
     bool RegisterCommand(uint32 id, const wchar_t* name, void* p3); // 0x0068BDA0
     bool UnregisterCommand(uint32 id);                  // 0x0068BEC0
     void EnumerateCommands(UintVec& out);               // 0x0068B900
@@ -308,11 +321,7 @@ cCommandServer* gpCommandServer;   // 0x015FF660
 // ===========================================================================
 // @ 0x0068b150  SP::cStringCommandGenerator::ConvertCommandToString
 // ===========================================================================
-struct ConvCmdThis {
-    void ProcessToken(WStr* a, WStr* b);   // 0x0068A320
-};
-
-bool ConvertCommandToString(ConvCmdThis* self, int pCmd, IParamSet* pSet, WStr* out)
+bool cStringCommandGenerator::ConvertCommandToString(int pCmd, IParamSet* pSet, WStr* out)
 {
     if (out->mpBegin != out->mpEnd) {
         *(uint16*)out->mpBegin = 0;
@@ -325,7 +334,7 @@ bool ConvertCommandToString(ConvCmdThis* self, int pCmd, IParamSet* pSet, WStr* 
     if (!gpCommandServer->ProcessCommand(pCmd, &local, 0))
         return false;
 
-    self->ProcessToken(&local, &local);
+    ProcessToken(&local, &local);
     out->Append(local.mpBegin, local.mpEnd);
 
     if (pSet) {
@@ -345,9 +354,9 @@ bool ConvertCommandToString(ConvCmdThis* self, int pCmd, IParamSet* pSet, WStr* 
             }
 
             local = WStr(s);
-            self->ProcessToken(&local, &local);
+            ProcessToken(&local, &local);
             out->push_back(' ');
-            out->Append(local.mpEnd, local.mpCapacity);
+            out->Append(local.mpBegin, local.mpEnd);
             if (temp.mFlags & 4)
                 temp.Destruct(0);
         }
@@ -358,13 +367,15 @@ bool ConvertCommandToString(ConvCmdThis* self, int pCmd, IParamSet* pSet, WStr* 
 // ===========================================================================
 // @ 0x0068b370  SP::cCommandParameterSet::CompareParameterString
 // ===========================================================================
-bool CompareParameterString(WStr* out, IParamSet* pSet)
+bool cCommandParameterSet::CompareParameterString(WStr* out)
 {
     out->Resize(0);
     WStr local;
 
-    for (int idx = pSet->First(); idx != -1; idx = pSet->Next(idx)) {
-        unsigned v = (unsigned)pSet->GetValue(idx);
+    RbNode* it  = mParams.mAnchor.mpLeft;
+    RbNode* end = &mParams.mAnchor;
+    for (; it != end; it = (RbNode*)RbTreeIncrement(it)) {
+        unsigned v = ((VarMapNode*)it)->mKey;
         Variant temp;
         temp.mFlags  = 0x13;
         temp.mTypeId = 0x0b;
@@ -388,7 +399,7 @@ bool CompareParameterString(WStr* out, IParamSet* pSet)
         }
 
         local = WStr(s);
-        out->Append(local.mpEnd, local.mpCapacity);
+        out->Append(local.mpBegin, local.mpEnd);
         if (temp.mFlags & 4)
             temp.Destruct(0);
     }
@@ -396,7 +407,7 @@ bool CompareParameterString(WStr* out, IParamSet* pSet)
 }
 
 // ===========================================================================
-// @ 0x0068b5b0  generator-set init (members at +0x38/+0x3c/+0x40)
+// @ 0x0068b5b0  SP::GenOwner::InitGenerators
 // ===========================================================================
 struct GenOwner {
     char pad0[0x38];
@@ -404,45 +415,47 @@ struct GenOwner {
     AutoRefCount<cCommandParameterSet>    mParams1;    // +0x3c
     AutoRefCount<cStringCommandGenerator> mGenerator;  // +0x40
     char m44[4];
+
+    bool InitGenerators();               // 0x0068B5B0
 };
 
-bool InitGenerators(GenOwner* self)
+bool GenOwner::InitGenerators()
 {
-    if (self->mParams0.mpObject == 0) {
+    if (mParams0.mpObject == 0) {
         cCommandParameterSet* p = new cCommandParameterSet();
-        self->mParams0 = p;
+        mParams0 = p;
     }
-    if (self->mParams1.mpObject == 0) {
+    if (mParams1.mpObject == 0) {
         cCommandParameterSet* p = new cCommandParameterSet();
-        self->mParams1 = p;
+        mParams1 = p;
     }
-    if (self->mGenerator.mpObject == 0) {
+    if (mGenerator.mpObject == 0) {
         cStringCommandGenerator* p = new cStringCommandGenerator();
-        self->mGenerator = p;
-        if (self->mGenerator.mpObject)
-            ((IRefCounted*)self->mGenerator.mpObject)->Init();
+        mGenerator = p;
+        if (mGenerator.mpObject)
+            ((IRefCounted*)mGenerator.mpObject)->Init();
     }
     return true;
 }
 
 // ===========================================================================
-// @ 0x0068b760  dispatcher init
+// @ 0x0068b760  SP::cCommandServer::InitDispatchers
 // ===========================================================================
-bool InitDispatchers(cCommandServer* self)
+bool cCommandServer::InitDispatchers()
 {
-    if (!self->HasSet()) {
+    if (!HasSet()) {
         cMessageCommandDispatcher* d = new cMessageCommandDispatcher();
-        self->mpMessageCommandDispatcher = d;
-        if (self->mpMessageCommandDispatcher.mpObject)
-            ((IRefCounted*)self->mpMessageCommandDispatcher.mpObject)->Init();
-        self->SetDispatcher((IRefCounted*)self->mpMessageCommandDispatcher.mpObject);
+        mpMessageCommandDispatcher = d;
+        if (mpMessageCommandDispatcher.mpObject)
+            ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Init();
+        SetDispatcher((IRefCounted*)mpMessageCommandDispatcher.mpObject);
     }
     {
         cStringCommandGenerator* g = new cStringCommandGenerator();
-        self->mpStringCommandGenerator = g;
-        if (self->mpStringCommandGenerator.mpObject)
-            ((IRefCounted*)self->mpStringCommandGenerator.mpObject)->Init();
-        self->SetGenerator((IRefCounted*)self->mpStringCommandGenerator.mpObject);
+        mpStringCommandGenerator = g;
+        if (mpStringCommandGenerator.mpObject)
+            ((IRefCounted*)mpStringCommandGenerator.mpObject)->Init();
+        SetGenerator((IRefCounted*)mpStringCommandGenerator.mpObject);
     }
     return true;
 }
@@ -450,10 +463,11 @@ bool InitDispatchers(cCommandServer* self)
 // ===========================================================================
 // @ 0x0068b880  CreateParameterSet
 // ===========================================================================
-void CreateParameterSet(cCommandParameterSet** out)
+void __stdcall CreateParameterSet(cCommandParameterSet** out)
 {
-    *out = new cCommandParameterSet();
-    ((IRefCounted*)*out)->AddRef();
+    cCommandParameterSet* p = new cCommandParameterSet();
+    *out = p;
+    ((ICommandParamSetVt*)p)->AddRef();
 }
 
 // ===========================================================================
@@ -465,7 +479,7 @@ void cCommandServer::EnumerateCommands(UintVec& out)
     RbNode* end = &mCommandInfoMap.mAnchor;
     if (it != end) {
         do {
-            unsigned v = *(unsigned*)((char*)it + 0x10);
+            unsigned v = ((CmdInfoNode*)it)->mKey;
             out.push_back(v);
             it = (RbNode*)RbTreeIncrement(it);
         } while (it != end);
@@ -473,45 +487,29 @@ void cCommandServer::EnumerateCommands(UintVec& out)
 }
 
 // ===========================================================================
-// @ 0x0068b950  map node destroy helper (this = &map)
+// @ 0x0068b950  CmdMap::DestroyNode
 // ===========================================================================
 void cCommandServer::CmdMap::DestroyNode(RbNode* node, void** itOut)
 {
     --mnSize;
-    void* next = RbTreeIncrement(node);
+    RbNode* next = (RbNode*)RbTreeIncrement(node);
     RbTreeErase(node, &mAnchor);
-    {
-        WStr* s = (WStr*)((char*)node + 0x28);
-        if ((((char*)s->mpCapacity - (char*)s->mpBegin) & ~1) > 2 && s->mpBegin)
-            EAFree(s->mpBegin);
-    }
-    {
-        WStr* s = (WStr*)((char*)node + 0x18);
-        if ((((char*)s->mpCapacity - (char*)s->mpBegin) & ~1) > 2 && s->mpBegin)
-            EAFree(s->mpBegin);
-    }
+    ((CmdInfoNode*)node)->msTypeInfo.~WStr();
+    ((CmdInfoNode*)node)->msName.~WStr();
     EAFree(node);
     *itOut = next;
 }
 
 // ===========================================================================
-// @ 0x0068b9d0  SP::cCommandServer::DestroyMapNodes (recursive, this = &map)
+// @ 0x0068b9d0  SP::cCommandServer::CmdMap::DestroyNodes
 // ===========================================================================
 void cCommandServer::CmdMap::DestroyNodes(RbNode* node)
 {
     while (node) {
         DestroyNodes(node->mpRight);
         RbNode* parent = node->mpLeft;
-        {
-            WStr* s = (WStr*)((char*)node + 0x28);
-            if ((((char*)s->mpCapacity - (char*)s->mpBegin) & ~1) > 2 && s->mpBegin)
-                EAFree(s->mpBegin);
-        }
-        {
-            WStr* s = (WStr*)((char*)node + 0x18);
-            if ((((char*)s->mpCapacity - (char*)s->mpBegin) & ~1) > 2 && s->mpBegin)
-                EAFree(s->mpBegin);
-        }
+        ((CmdInfoNode*)node)->msTypeInfo.~WStr();
+        ((CmdInfoNode*)node)->msName.~WStr();
         EAFree(node);
         node = parent;
     }
@@ -520,19 +518,18 @@ void cCommandServer::CmdMap::DestroyNodes(RbNode* node)
 // ===========================================================================
 // @ 0x0068bc50  SP::cCommandServer::~cCommandServer
 // ===========================================================================
-void cCommandServerDtor(cCommandServer* self)
+cCommandServer::~cCommandServer()
 {
-    *(void**)self = &gVtCmdSrv;
-    // member destruction in reverse declaration order:
-    self->mCommandGeneratorSet.~GenSet();
-    if (self->mpStringCommandGenerator.mpObject)
-        ((IRefCounted*)self->mpStringCommandGenerator.mpObject)->Release();
-    if (self->mpMessageCommandDispatcher.mpObject)
-        ((IRefCounted*)self->mpMessageCommandDispatcher.mpObject)->Release();
-    if (self->mpCommandDispatcher.mpObject)
-        ((IRefCounted*)self->mpCommandDispatcher.mpObject)->Release();
-    self->mCommandInfoMap.~CmdMap();
-    *(void**)self = &gVtEditorRes;
+    *(void**)this = &gVtCmdSrv;
+    mCommandGeneratorSet.~GenSet();
+    if (mpStringCommandGenerator.mpObject)
+        ((IRefCounted*)mpStringCommandGenerator.mpObject)->Release();
+    if (mpMessageCommandDispatcher.mpObject)
+        ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Release();
+    if (mpCommandDispatcher.mpObject)
+        ((IRefCounted*)mpCommandDispatcher.mpObject)->Release();
+    mCommandInfoMap.~CmdMap();
+    *(void**)this = &gVtEditorRes;
 }
 
 // ===========================================================================
@@ -543,19 +540,19 @@ bool cCommandServer::Shutdown()
     mCommandInfoMap.DestroyNodes(mCommandInfoMap.mAnchor.mpParent);
     mCommandInfoMap.reset();
     this->SetDispatcher(0);
-    if (mpMessageCommandDispatcher.mpObject) {
+    if (mpMessageCommandDispatcher.mpObject)
         ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Deinit();
-        if (mpMessageCommandDispatcher.mpObject) {
-            mpMessageCommandDispatcher.mpObject = 0;
-            ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Release();
-        }
+    if (mpMessageCommandDispatcher.mpObject) {
+        IRefCounted* old = (IRefCounted*)mpMessageCommandDispatcher.mpObject;
+        mpMessageCommandDispatcher.mpObject = 0;
+        old->Release();
     }
-    if (mpStringCommandGenerator.mpObject) {
+    if (mpStringCommandGenerator.mpObject)
         ((IRefCounted*)mpStringCommandGenerator.mpObject)->Deinit();
-        if (mpStringCommandGenerator.mpObject) {
-            mpStringCommandGenerator.mpObject = 0;
-            ((IRefCounted*)mpStringCommandGenerator.mpObject)->Release();
-        }
+    if (mpStringCommandGenerator.mpObject) {
+        IRefCounted* old = (IRefCounted*)mpStringCommandGenerator.mpObject;
+        mpStringCommandGenerator.mpObject = 0;
+        old->Release();
     }
     for (RbNode* it = mCommandGeneratorSet.mAnchor.mpLeft;
          it != &mCommandGeneratorSet.mAnchor; it = (RbNode*)RbTreeIncrement(it)) {
@@ -584,11 +581,11 @@ bool cCommandServer::RegisterCommand(uint32 id, const wchar_t* name, void* p3)
     FUN_0068A000(&b);
     void* nodeOut = 0;
     mCommandInfoMap.Insert(&nodeOut, &b, &a);
-    void* node = nodeOut;
-    *(uint32*)((char*)node + 0x14) = id;
-    (*(WStr*)((char*)node + 0x18)).operator=(name);
-    this->RegisterCmd(id, name);
-    FUN_00689DC0((char*)node + 0x14, 1, 0);
+    CmdInfoNode* node = (CmdInfoNode*)nodeOut;
+    node->mnID = id;
+    node->msName = name;
+    this->RegisterCmd(id, name, p3);
+    FUN_00689DC0(&node->mnID, 1, 0);
     FUN_00D167E0();
     return true;
 }
@@ -598,18 +595,18 @@ bool cCommandServer::RegisterCommand(uint32 id, const wchar_t* name, void* p3)
 // ===========================================================================
 bool cCommandServer::UnregisterCommand(uint32 id)
 {
-    void* it;
+    RbNode* it;
     mCommandInfoMap.Find(&it, &id);
-    if ((RbNode*)it == &mCommandInfoMap.mAnchor)
+    if (it == &mCommandInfoMap.mAnchor)
         return false;
-    FUN_00689DC0((char*)it + 0x14, 0, 0);
-    void* out;
-    mCommandInfoMap.DestroyNode((RbNode*)it, &out);
+    FUN_00689DC0(&((CmdInfoNode*)it)->mnID, 0, 0);
+    RbNode* next;
+    mCommandInfoMap.DestroyNode(it, (void**)&next);
     return true;
 }
 
 // ===========================================================================
-// @ 0x0068bf20  eastl::map<unsigned,EA::Variant>::operator[]
+// @ 0x0068bf20  VarMap::GetPos
 // ===========================================================================
 __declspec(noinline) Variant* VarMap::GetPos(uint32* key)
 {
@@ -653,15 +650,23 @@ void cCommandParameterSet::SetParameter(uint32 id, uint32 value)
 // ===========================================================================
 // @ 0x0068c040  SP::cCommandServer::cCommandServer (ctor)
 // ===========================================================================
-void cCommandServerCtor(cCommandServer* self)
+cCommandServer::cCommandServer()
 {
-    *(void**)self = &gVtCmdSrv;
-    self->mCommandInfoMap.reset();
-    self->mpCommandDispatcher.mpObject = 0;
-    self->mpMessageCommandDispatcher.mpObject = 0;
-    self->mpStringCommandGenerator.mpObject = 0;
-    self->mCommandGeneratorSet.reset();
-    self->mb48 = false;
+    *(void**)this = &gVtCmdSrv;
+    mCommandInfoMap.reset();
+    m1cRef.mpObject = 0;
+    mpCommandDispatcher.mpObject = 0;
+    mpMessageCommandDispatcher.mpObject = 0;
+    mpStringCommandGenerator.mpObject = 0;
+    {
+        RbNode* a = &mCommandGeneratorSet.mAnchor;
+        a->mpRight = a;
+        a->mpLeft  = a;
+        a->mpParent = 0;
+        a->mColor  = 0;
+        mCommandGeneratorSet.mnSize = 0;
+    }
+    mb48 = false;
 }
 
 // ===========================================================================
@@ -670,11 +675,9 @@ void cCommandServerCtor(cCommandServer* self)
 uint64 __fastcall AtomicRead64(volatile uint64* p)
 {
     volatile uint64 old;
-    volatile uint64 next;
     do {
-        old  = *(volatile uint64*)p;
-        next = old;
-    } while (_InterlockedCompareExchange64((volatile __int64*)p, next, old) != old);
+        old = *p;
+    } while (_InterlockedCompareExchange64((volatile __int64*)p, (__int64)old, (__int64)old) != (__int64)old);
     return old;
 }
 
@@ -685,8 +688,8 @@ uint64 __fastcall AtomicExchange64(volatile uint64* p, uint64 v)
 {
     volatile uint64 old;
     do {
-        old = *(volatile uint64*)p;
-    } while (_InterlockedCompareExchange64((volatile __int64*)p, v, old) != old);
+        old = *p;
+    } while (_InterlockedCompareExchange64((volatile __int64*)p, (__int64)v, (__int64)old) != (__int64)old);
     return old;
 }
 
@@ -694,7 +697,8 @@ uint64 __fastcall AtomicExchange64(volatile uint64* p, uint64 v)
 // @ 0x0068c220  free-list drain
 // ===========================================================================
 struct FreeItem {
-    uint64 pad;
+    uint32 pad0;
+    uint32 pad4;
     uint64 next;
 };
 
@@ -707,26 +711,25 @@ struct FreeList {
 
 void FreeList::Drain()
 {
-    if ((uint32)AtomicRead64(&mHead) != 0) {
-        do {
-            uint64 v = mHead;
-            FreeItem* item = (FreeItem*)(uint32)AtomicRead64(&v);
-            mHead = item->next;
-            EAFree((void*)(uint32)AtomicRead64(&v));
-        } while ((uint32)AtomicRead64(&mHead) != 0);
+    while (AtomicRead64(&mHead) != 0) {
+        FreeItem* n = (FreeItem*)(uintptr_t)AtomicRead64(&mHead);
+        mHead = n->next;
+        EAFree((void*)(uintptr_t)AtomicRead64(&mHead));
     }
 }
 
+// @ 0x0068c280  FreeList::Push
+// ===========================================================================
 void FreeList::Push(uint32 a, uint32 b)
 {
-    uint64 t = ((uint64)b << 32) | a;
-    FreeItem* item = (FreeItem*)(uint32)AtomicRead64(&t);
-    item->pad  = t;
-    item->next = mHead;
+    FreeItem* n = (FreeItem*)(uintptr_t)AtomicRead64(&mHead);
+    n->pad0 = a;
+    n->pad4 = b;
     for (;;) {
-        uint64 old = *(volatile uint64*)&mHead;
-        uint64 c   = AtomicRead64(&old);
-        if (_InterlockedCompareExchange64((volatile __int64*)&mHead, (__int64)(c + 1), (__int64)c) == c)
+        uint64 old = AtomicRead64(&mHead);
+        n->next = old;
+        uint64 want = AtomicRead64(&mHead);
+        if (_InterlockedCompareExchange64((volatile __int64*)&mHead, (__int64)(old + 1), (__int64)want) == (__int64)want)
             break;
     }
 }

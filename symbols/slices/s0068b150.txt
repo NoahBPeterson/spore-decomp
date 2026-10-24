@@ -1,0 +1,19 @@
+0068b150 ?ConvertCommandToString@cStringCommandGenerator@@QAE_NHPAUIParamSet@@PAUWStr@@@Z  # App/cStringCommandGenerator.cpp
+0068b370 ?CompareParameterString@cCommandParameterSet@@QAE_NPAUWStr@@@Z  # App/cCommandParameterSet.cpp
+0068b5b0 ?InitGenerators@GenOwner@@QAE_NXZ  # GenOwner::InitGenerators
+0068b760 ?InitDispatchers@cCommandServer@@QAE_NXZ  # App/cCommandServer.cpp
+0068b880 ?CreateParameterSet@@YGXPAPAVcCommandParameterSet@@@Z  # CreateParameterSet
+0068b900 ?EnumerateCommands@cCommandServer@@QAEXAAUUintVec@@@Z  # App/cCommandServer.cpp
+0068b950 ?DestroyNode@CmdMap@cCommandServer@@QAEXPAURbNode@@PAPAX@Z  # CmdMap node destructor
+0068b9d0 ?DestroyNodes@CmdMap@cCommandServer@@QAEXPAURbNode@@@Z  # App/cCommandServer.cpp
+0068bc50 ??1cCommandServer@@QAE@XZ  # App/cCommandServer.cpp
+0068bcf0 ?Shutdown@cCommandServer@@QAE_NXZ  # App/cCommandServer.cpp
+0068bda0 ?RegisterCommand@cCommandServer@@QAE_NIPB_WPAX@Z  # App/cCommandServer.cpp
+0068bec0 ?UnregisterCommand@cCommandServer@@QAE_NI@Z  # App/cCommandServer.cpp
+0068bf20 ?GetPos@VarMap@@QAEPAUVariant@@PAI@Z  # eastl::map<unsigned,EA::Variant>::operator[]
+0068c020 ?SetParameter@cCommandParameterSet@@QAEXII@Z  # App/cCommandParameterSet.cpp
+0068c040 ??0cCommandServer@@QAE@XZ  # App/cCommandServer.cpp
+0068c140 ?AtomicRead64@@YI_KPC_K@Z  # atomic 64-bit read (lock cmpxchg8b)
+0068c1b0 ?AtomicExchange64@@YI_KPC_K_K@Z  # atomic 64-bit exchange
+0068c220 ?Drain@FreeList@@QAEXXZ  # FreeList drain
+0068c280 ?Push@FreeList@@QAEXII@Z  # FreeList push
