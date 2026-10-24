@@ -1,9 +1,7 @@
 # <va> <diff-bytes> <reason>
-0103a480 159 complete SP::cSPSpaceTrading::CreateCommodityFromID (new + ctor, PropertyManager unregister, vtable SetType, item type/count/cost, SetPropertyList, AddRef); register allocation differs; flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (ours faults in the ctor call)
+0103a480 175 complete SP::cSPSpaceTrading::CreateCommodityFromID (new + ctor, PropertyManager unregister, vtable SetItemID, item type/count/cost, SetPropertyList, AddRef); cost conversion rounds via (int)(cost+0.5) because cl15 calls __ftol2_sse where the original inlines fld/fistp; size 199 vs 192; flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (replay, first difference None)
 0103a540 201 complete commodity-scan (vector at +0x34, PropertyManager unregister, rare-property test); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
-0103a760 93 complete index-of-key in the 0x24-stride table; magic-division register allocation differs; flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (249 valid, 100% coverage)
+0103a760 96 complete index-of-key in the 0x24-stride table; magic-division register allocation differs; size 106 vs 104; flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (replay, first difference None)
 0103a930 172 complete sListHasRare (scan 0xc-stride list, GetPropertyAsKey, compare 0x7ecbe6f5); flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (249 valid, 35.8% coverage)
-0103ac40 46 complete rbtree find + payload at +0x1c; flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
-0103ac70 191 complete IsRareGroupComplete (group table scan, rbtree find, inventory presence check); flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (now member fn; ours fake-arity no call site)
-0103af90 207 complete pair-placement: two random ints, compare world positions, else AddCitySpicePile twice; flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (now member fn; ours faults at 00a68fb0)
-0103b320 149 complete has-rare-commodity; flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (now member fn; ours faults at 30000041)
+0103ac70 171 complete IsRareGroupComplete (group table scan, rbtree find, inventory presence check); edi/esi roles swapped vs the original; size 213 vs 216; flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (replay, first difference None)
+0103b320 26 complete has-rare-commodity (property->key, inventory query, per-item test); tail register allocation differs; size 188 vs 188; flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (replay, first difference None)

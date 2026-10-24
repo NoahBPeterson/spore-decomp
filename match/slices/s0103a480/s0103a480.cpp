@@ -1,6 +1,7 @@
 // Slice s0103a480: SP::cSPSpaceTrading commodity/rare-commodity helpers + EASTL vector/heap helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE
 #include "types.h"
+#include <xmmintrin.h>
 
 typedef unsigned int uint;
 
@@ -9,7 +10,7 @@ struct Obj { void* vptr; };
 // generic vtable wrappers (each starts with a vptr, so a cast reaches the right slot)
 struct V0c { virtual void z0(); virtual void z1(); virtual void z2(); virtual void* v0c(int); };
 struct V14 { virtual void z0(); virtual void z1(); virtual void z2(); virtual void z3();
-             virtual void z4(); virtual void v14(int); };
+             virtual void z4(); virtual void v14(void*); };
 struct V18 { virtual void z0(); virtual void z1(); virtual void z2(); virtual void z3();
              virtual void z4(); virtual void z5(); virtual int v18(); };
 struct V1c { virtual void z0(); virtual void z1(); virtual void z2(); virtual void z3();
@@ -40,7 +41,7 @@ struct V70 { virtual void z0(); virtual void z1(); virtual void z2(); virtual vo
              virtual void z16(); virtual void z17(); virtual void z18(); virtual void z19();
              virtual void z20(); virtual void z21(); virtual void z22(); virtual void z23();
              virtual void z24(); virtual void z25(); virtual void z26(); virtual void z27();
-             virtual bool v70(void* k); };
+             virtual bool v70(int id, void* k); };
 struct V74 { virtual void z0(); virtual void z1(); virtual void z2(); virtual void z3();
              virtual void z4(); virtual void z5(); virtual void z6(); virtual void z7();
              virtual void z8(); virtual void z9(); virtual void z10(); virtual void z11();
@@ -133,23 +134,25 @@ struct Commodity {
     int   mItemCount;    // +0x10
     int   mType;         // +0x14
     int   mCost;         // +0x18
+    Commodity* ctor_00c87660();                 // thiscall ctor (ecx = item)
+    void SetPropertyList_00c877f0(void* list);  // thiscall
 };
-void FUN_0103a480(void** out, int* id, int count, float cost) {
-    void* item = operator_new(0x7c, "Simulator/cSpaceInventoryItem", 0, 0, 0, 0);
-    void* inst = item ? FUN_00c87660(item) : 0;
+struct VItemRef { virtual void z0(); virtual int AddRef(); };   // AddRef at +4
+void __stdcall FUN_0103a480(void** out, int* id, int count, float cost) {
+    Commodity* item = (Commodity*)operator_new(0x7c, "Simulator/cSpaceInventoryItem", 0, 0, 0, 0);
+    Commodity* inst = item ? item->ctor_00c87660() : 0;
     IUnk* local = 0;
     PropertyMgr* pm = (PropertyMgr*)PropertyManager();
     if (local) {
         IUnk* old = local; local = 0; old->Release();
     }
     pm->Unregister(*id, 0x34d97fa, &local);
-    ((V14*)inst)->v14(*id);
-    Commodity* c = (Commodity*)inst;
-    c->mType = 4;
-    c->mItemCount = count;
-    c->mCost = (int)cost;
-    SetPropertyList(inst, local);
-    ((V4*)inst)->AddRef();
+    ((V14*)inst)->v14(id);
+    inst->mType = 4;
+    inst->mItemCount = count;
+    inst->mCost = (int)(cost + 0.5);   // rounds like the original's x87 fistp
+    inst->SetPropertyList_00c877f0(local);
+    ((VItemRef*)inst)->AddRef();
     *out = inst;
     if (local) local->Release();
 }
@@ -216,15 +219,13 @@ bool FUN_0103a630(void* self, int a, int b, int c) {
 // ---------------------------------------------------------------------------
 struct T760 {
     char pad0[0xbc];
-    int* mBegin;   // +0xbc
-    int* mEnd;     // +0xc0
+    int* volatile mBegin;   // +0xbc
+    int* volatile mEnd;     // +0xc0
     uint find(int id);
 };
 uint T760::find(int id) {
-    int total = (int)mEnd - (int)mBegin;
-    int n = total / 0x24;
     uint i = 0;
-    if (n == 0) return 0;
+    if ((uint)(((int)mEnd - (int)mBegin) / 0x24) == 0) return i;
     int* p = (int*)((char*)mBegin + 0xc);
     do {
         if (*p == id) return i;
@@ -316,51 +317,68 @@ void FUN_0103aa00(void* self, void* p2) {
 // @ 0x0103ac40
 // ---------------------------------------------------------------------------
 struct RBTreeT {
-    void** find(int* k);   // 0x00a21dc0
+    void** find(void** out, const int* k);   // 0x00a21dc0
 };
 struct TAC40 {
     char pad0[0xa0];
     void* find(int* key);
 };
 void* TAC40::find(int* key) {
-    int k = *key;
-    void** node = ((RBTreeT*)((char*)this + 0xa0))->find(&k);
-    if (*node != (void*)((char*)this + 0xa4)) return *(void**)((char*)*node + 0x1c);
-    return 0;
+    void* node;
+    void* p = *((RBTreeT*)((char*)this + 0xa0))->find((void**)&node, key);
+    return (p != (void*)((char*)this + 0xa4)) ? *(void**)((char*)p + 0x1c) : 0;
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x0103ac70  SP::cSPSpaceTrading::IsRareGroupComplete
 // ---------------------------------------------------------------------------
-struct TSx { bool f_ac70(int group, bool needInventory); void f_af90(void* p1, void* p2); bool f_b320(int* prop); };
+struct RareNode {
+    char pad0[0x1c];
+    int  mCount;      // +0x1c
+};
+struct RareTree {          // EASTL rbtree map living at trading+0xa0
+    char  pad0[4];
+    void* mAnchor;         // +0x4   header node (end iterator)
+    char  pad1[4];
+    void* mRoot;           // +0xc
+    int   mCount;          // +0x10
+    void** find(void** out, const int* key);   // 0x00a21dc0
+};
+struct GroupEntry {        // 0x24-byte element of the commodity-group table
+    char pad0[0x10];
+    int* mBegin;           // +0x10  int[3] keys, stride 0xc
+    int* mEnd;             // +0x14
+    char pad1[0xc];
+};
+struct SpaceGame {
+    void* get_00a1ad60();  // GetPlayerInventory (thiscall)
+};
+struct TSx {
+    char pad0[0xa0];
+    RareTree  mRare;       // +0xa0
+    char pad1[8];
+    GroupEntry* mGroups;   // +0xbc
+    bool f_ac70(int group, bool needInventory);
+    void f_af90(void* p1, void* p2);
+    bool f_b320(int* prop);
+};
 bool TSx::f_ac70(int group, bool needInventory) {
-    void* self = this;
-    int base = *(int*)((char*)self + 0xbc) + group * 0x24;
-    int n = (*(int*)(base + 0x14) - *(int*)(base + 0x10)) / 0xc;
-    if (n == 0) return true;
-    int idx = 0;
-    int i = 0;
-    int count = n;
-    do {
-        int* arr = (int*)(*(int*)((char*)self + 0xbc) + group * 0x24 + 0x10);
+    uint n = (uint)(((int)mGroups[group].mEnd - (int)mGroups[group].mBegin) / 0xc);
+    for (uint i = 0; i < n; ++i) {
+        int* arr = mGroups[group].mBegin + i * 3;
         int key[3];
-        key[0] = *arr;
+        key[0] = arr[0];
         key[1] = arr[1];
         key[2] = arr[2];
-        extern void* RBFind(void* tree, int* k);   // 0x00a21dc0
-        void** node = (void**)RBFind((char*)self + 0xa0, key);
-        (void)idx;
-        if (*node == (char*)self + 0xa4) return false;
-        if (*(int*)((char*)*node + 0x1c) != 1) return false;
+        void* node;
+        void* p = *mRare.find((void**)&node, key);
+        if (p == mRare.mAnchor) return false;
+        if (((RareNode*)p)->mCount != 1) return false;
         if (needInventory) {
-            void* inv = GetPlayerInventoryOf(SpaceGameGet());
-            if (!((V70*)inv)->v70(key)) return false;
+            void* inv = ((SpaceGame*)SpaceGameGet())->get_00a1ad60();
+            if (!((V70*)inv)->v70(4, key)) return false;
         }
-        ++arr;
-        ++i;
-        (void)arr;
-        idx += 0xc;
-    } while (i < count);
+    }
     return true;
 }
 
@@ -383,33 +401,51 @@ void FUN_0103ad50(void* self, int* p2, int a3, int a4) {
 // ---------------------------------------------------------------------------
 // @ 0x0103af90
 // ---------------------------------------------------------------------------
+struct Rng {                        // global RNG object at 0x01601760
+    uint next_00a68fb0(int n);       // uniform int in [0,n)
+};
+struct WorldObj {
+    Vec3i* pos_00b8dad0();           // returns this+0x198
+    void*  item_00b8dec0(int idx);   // 0x00b8dec0
+};
+struct ItemVec {                     // container read at +0x3c/+0x40
+    char pad0[0x3c];
+    void** mBegin;                   // +0x3c
+    void** mEnd;                     // +0x40
+};
+struct ItemElem {
+    char  pad0[0x1c];
+    float mValue;                    // +0x1c
+    void add_00ff0350(float f);      // thiscall
+};
+struct Ad50 {                        // view of the trading object for the AddCitySpicePile call
+    void call_0103ad50(void* star, Vec3i* pos, uint amount, int extra);
+};
 void TSx::f_af90(void* p1, void* p2) {
-    int a = (int)RandomUint32Uniform(g_rand, 4) + 1;
-    int b = (int)RandomUint32Uniform(g_rand, 4) + 1;
-    int* v1 = (int*)FUN_00b8dad0(p1, 0);
-    int* v2 = (int*)FUN_00b8dad0(p2, 0);
-    if (v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2]) {
-        void* r = FUN_00b8dec0(0);
+    uint a = ((Rng*)&g_rand)->next_00a68fb0(4) + 1;
+    uint b = ((Rng*)&g_rand)->next_00a68fb0(4) + 1;
+    Vec3i* v1 = ((WorldObj*)p1)->pos_00b8dad0();
+    Vec3i* v2 = ((WorldObj*)p2)->pos_00b8dad0();
+    if (v2->x == v1->x && v2->y == v1->y && v2->z == v1->z) {
+        ItemVec* r = (ItemVec*)((WorldObj*)p1)->item_00b8dec0(0);
         if (r) {
-            int n = (*(int*)((char*)r + 0x40) - *(int*)((char*)r + 0x3c)) >> 2;
+            int n = ((int)r->mEnd - (int)r->mBegin) >> 2;
             if (n) {
-                int k = (int)RandomUint32Uniform(g_rand, n);
-                FUN_00ff0350((float)a);
-                (void)k;
+                uint k = ((Rng*)&g_rand)->next_00a68fb0(n);
+                ((ItemElem*)r->mBegin[k])->add_00ff0350((float)a);
             }
         }
-        void* r2 = FUN_00b8dec0(0);
+        ItemVec* r2 = (ItemVec*)((WorldObj*)p2)->item_00b8dec0(0);
         if (r2) {
-            int n = (*(int*)((char*)r2 + 0x40) - *(int*)((char*)r2 + 0x3c)) >> 2;
+            int n = ((int)r2->mEnd - (int)r2->mBegin) >> 2;
             if (n) {
-                int k = (int)RandomUint32Uniform(g_rand, n);
-                FUN_00ff0350((float)b);
-                (void)k;
+                uint k = ((Rng*)&g_rand)->next_00a68fb0(n);
+                ((ItemElem*)r2->mBegin[k])->add_00ff0350((float)b);
             }
         }
     } else {
-        FUN_0103ad50(this, (int*)FUN_00b8dad0(p1, 0), a, 0);
-        FUN_0103ad50(this, (int*)FUN_00b8dad0(p2, 0), b, 0);
+        ((Ad50*)this)->call_0103ad50(p1, ((WorldObj*)p2)->pos_00b8dad0(), a, 0);
+        ((Ad50*)this)->call_0103ad50(p2, ((WorldObj*)p1)->pos_00b8dad0(), b, 0);
     }
 }
 
@@ -507,22 +543,25 @@ void FUN_0103b290(int* a, int b, int c) {
 }
 
 // @ 0x0103b320
+struct InvItems {
+    void* list_00ff5b80();   // returns this+0x34
+};
+struct A630 {
+    bool f_0103a630(int elem, Vec3i key);   // 0x0103a630
+};
 bool TSx::f_b320(int* prop) {
     void* self = this;
-    int key[3];
-    key[0] = key[1] = key[2] = 0;
+    int key[3] = { 0, 0, 0 };
     GetPropertyAsKey(prop, 0x35d5cb4, key);
-    int k2[3] = { key[0], 0, 0 };
-    void* inv = GetPlayerInventoryOf(SpaceGameGet());
-    if (((V74*)inv)->v74(k2)) return false;
-    void* inv2 = GetPlayerInventoryOf(SpaceGameGet());
-    void* list = FUN_00ff5b80();
-    (void)inv2;
-    int* it = *(int**)list;
-    int* end = *(int**)((char*)list + 4);
-    while (it != end) {
-        if (FUN_0103a630(self, *it, k2[0], k2[1])) return false;
-        ++it;
+    Vec3i k2;
+    k2.x = key[0];
+    k2.y = 0;
+    k2.z = 0;
+    void* inv = ((SpaceGame*)SpaceGameGet())->get_00a1ad60();
+    if (((V74*)inv)->v74(&k2)) return false;
+    void* list = ((InvItems*)((SpaceGame*)SpaceGameGet())->get_00a1ad60())->list_00ff5b80();
+    for (void** it = *(void***)list; it != *(void***)((char*)list + 4); ++it) {
+        if (((A630*)self)->f_0103a630((int)*it, k2)) return false;
     }
     return true;
 }
