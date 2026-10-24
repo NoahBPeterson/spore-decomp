@@ -1,3 +1,3 @@
 # va  diff-bytes  reason (complete, not byte-exact)
-006e2b50  n/a  SP::PrefilterCube; all six cube faces, the size*size weight, the specular boost and AddColourSample call translated, x87/SSE sqrt schedule and helper ABI differ
-006e3000  n/a  SP::cViewer::UpdateTransforms; all 12 float stores + zero w components present, the original reads an undefined 4th stack slot per axis
+006e2b50  n/a  SP::PrefilterCube; all six cube faces, the size*size weight, the specular boost and AddColourSample call translated; the direction array is written only for faces 0..5 and left as the untouched stack slots (0xCC) otherwise, exactly like the original, so an out-of-range face gets a huge len3 and a microscopic colour instead of a full weight; x87/SSE sqrt schedule and helper ABI differ
+006e3000  n/a  SP::cViewer::UpdateTransforms; the 12 axis components go into an uninitialised Matrix44 temporary that is then copied whole into the viewer, so the w lanes of the result read the untouched stack slots (0xCCCCCCCC) and the function returns `this` in EAX, both as in the original; store/copy schedule differs

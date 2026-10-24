@@ -27,23 +27,31 @@ void SP_PrefilterCube(void* dst, int size, int face, int pixels, float px, float
                 float fx = ((float)x - half) / half;
                 float fx2 = fx * fx;
                 float base = fx2 + fy2 + 1.0f;
-                float n0 = 0.0f, n1 = 0.0f, n2 = 0.0f;
+                // The original writes the direction only for faces 0..5; any other face reads
+                // the untouched stack slots (undefined in C, 0xCC under the harness).
+                float dir[4];
                 if (face == 0 || face == 2) {
-                    n0 = (float)(1.0 / sqrt((double)base));
-                    n1 = n0 * fy;
-                    n2 = n0 * fx;
-                    if (face == 2) { n0 = -n0; n1 = -n1; }
+                    float n = (float)(1.0 / sqrt((double)base));
+                    dir[1] = n;
+                    dir[0] = n * fy;
+                    dir[2] = n * fx;
+                    if (face == 2) { dir[1] = -dir[1]; dir[0] = -dir[0]; }
                 } else if (face == 1 || face == 3) {
-                    n1 = (float)(1.0 / sqrt((double)base));
-                    n0 = -(n1 * fy);
-                    n2 = n1 * fx;
-                    if (face == 3) { n1 = -n1; n0 = -n0; }
+                    float n = (float)(1.0 / sqrt((double)base));
+                    dir[0] = n;
+                    dir[1] = -(n * fy);
+                    dir[2] = n * fx;
+                    if (face == 3) { dir[0] = -dir[0]; dir[1] = -dir[1]; }
                 } else if (face == 4 || face == 5) {
-                    n2 = (float)(1.0 / sqrt((double)base));
-                    n1 = n2 * fy;
-                    n0 = -(n2 * fx);
-                    if (face == 5) { n2 = -n2; n0 = -n0; }
+                    float n = (float)(1.0 / sqrt((double)base));
+                    dir[0] = n * fy;
+                    dir[1] = -(n * fx);
+                    dir[2] = n;
+                    if (face == 5) { dir[0] = -dir[0]; dir[1] = -dir[1]; }
                 }
+                float n0 = dir[1];
+                float n1 = dir[0];
+                float n2 = dir[2];
                 float len3 = (n0 * n0 + n1 * n1) + 1.0f;
                 float c2 = (float)p[-2] * 0.003921569f;
                 float c1 = (float)p[-1] * 0.003921569f;
@@ -58,22 +66,19 @@ void SP_PrefilterCube(void* dst, int size, int face, int pixels, float px, float
                         float t = 1.0f - d;
                         c0 = c0 + t;
                         c1 = c1 + t;
-                        ca = c2 + t;
                         c2 = c2 + t;
+                        ca = ca + t;
                     }
                 }
-                float local_40 = wt * c0;
-                float fStack_3c = wt * c1;
-                float fStack_38 = wt * c2;
-                float fStack_34 = wt * ca;
-                float local_4c = n1;
-                float local_48 = n0;
-                float local_44 = n2;
-                (void)fStack_34;
-                AddColourSample(&local_40, 5, &local_4c, dst);
+                float colour[5];
+                colour[0] = wt * c0;
+                colour[1] = wt * c1;
+                colour[2] = wt * c2;
+                colour[3] = wt * ca;
+                colour[4] = 0.0f;
+                AddColourSample(colour, 5, dir, dst);
                 x = x + 1;
                 p = p + 1;
-                (void)local_44;
             } while (x < size);
             row = row + size;
             y = y + 1;
@@ -93,24 +98,28 @@ struct Matrix44 {
 
 struct cViewer {
     Matrix44 mCameraToWorldTransform;   // +0x0
-    void UpdateTransforms(float* p);
+    cViewer* UpdateTransforms(float* p);
 };
 
-void cViewer::UpdateTransforms(float* p) {
-    mCameraToWorldTransform.xAxis[0] = p[0];
-    mCameraToWorldTransform.xAxis[1] = p[1];
-    mCameraToWorldTransform.xAxis[2] = p[2];
-    mCameraToWorldTransform.xAxis[3] = 0.0f;
-    mCameraToWorldTransform.yAxis[0] = p[3];
-    mCameraToWorldTransform.yAxis[1] = p[4];
-    mCameraToWorldTransform.yAxis[2] = p[5];
-    mCameraToWorldTransform.yAxis[3] = 0.0f;
-    mCameraToWorldTransform.zAxis[0] = p[6];
-    mCameraToWorldTransform.zAxis[1] = p[7];
-    mCameraToWorldTransform.zAxis[2] = p[8];
-    mCameraToWorldTransform.zAxis[3] = 0.0f;
-    mCameraToWorldTransform.wAxis[0] = p[9];
-    mCameraToWorldTransform.wAxis[1] = p[10];
-    mCameraToWorldTransform.wAxis[2] = p[11];
-    mCameraToWorldTransform.wAxis[3] = 0.0f;
+// Retail loads EAX with ECX (this) at the entry and never rewrites it, so the function returns the
+// viewer (`this`) in EAX although callers ignore it.
+cViewer* cViewer::UpdateTransforms(float* p) {
+    // Retail fills a stack temporary with the 12 axis components and then copies the whole 4x4
+    // into the viewer, so the w lanes of the viewer get whatever the temporary's w lanes hold --
+    // they are never written (the copy at 0x006e3040 loads the untouched stack slot).
+    Matrix44 m;
+    m.xAxis[0] = p[0];
+    m.xAxis[1] = p[1];
+    m.xAxis[2] = p[2];
+    m.yAxis[0] = p[3];
+    m.yAxis[1] = p[4];
+    m.yAxis[2] = p[5];
+    m.zAxis[0] = p[6];
+    m.zAxis[1] = p[7];
+    m.zAxis[2] = p[8];
+    m.wAxis[0] = p[9];
+    m.wAxis[1] = p[10];
+    m.wAxis[2] = p[11];
+    mCameraToWorldTransform = m;
+    return this;
 }
