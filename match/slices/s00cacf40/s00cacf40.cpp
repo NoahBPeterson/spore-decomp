@@ -362,3 +362,275 @@ void Agent34::Update()
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+// ---------------------------------------------------------------------------------------------
+// Simulator UI panel: 8 layout sub-objects (0x100 bytes each) followed by 8 ref-counted slots.
+struct IRef2 {
+    virtual void AddRef();
+    virtual void Release();                                         // +4
+};
+struct SimSlot {
+    void ResetSerializer();                                         // 0x00c2e4e0
+    uint8_t pad00[0x100];                                           // sizeof == 0x100
+};
+struct SimPanel {
+    SimSlot mSlotArray[8];                                          // +0x000
+    IRef2*  mRefArray[8];                                           // +0x800
+    void Shutdown();
+};
+extern "C" void* __cdecl memset(void*, int, size_t);
+
+// @ 0x00cadb00
+void SimPanel::Shutdown()
+{
+    int i = 7;
+    do
+    {
+        IRef2* r = mRefArray[i];
+        if (r)
+            r->Release();
+    } while (--i >= 0);
+    int j = 7;
+    do
+    {
+        mSlotArray[j].ResetSerializer();
+    } while (--j >= 0);
+}
+
+// @ 0x00cadb50
+void SimPanelReset(SimPanel* panel)
+{
+    memset(panel, 0, 0x800);
+    for (int i = 0; i < 8; ++i)
+    {
+        IRef2* r = panel->mRefArray[i];
+        if (r)
+        {
+            panel->mRefArray[i] = 0;
+            r->Release();
+        }
+    }
+}
+
+// Normalized-direction helper: out = normalize(v) * ctx->GetScale(v).
+struct NormCtx {
+    float GetScale(const Vec3& v);                                  // 0x00c9ffd0
+};
+extern const float kNormalizeEps;                                   // 0x013ec4b8
+
+// @ 0x00cadb90
+void ScaleNormalizedVec(Vec3* out, const Vec3* v, NormCtx* ctx)
+{
+    float scale = ctx->GetScale(*v);
+    float inv = 1.0f / sqrtf(v->x * v->x + v->y * v->y + v->z * v->z + kNormalizeEps);
+    Vec3 dir;
+    dir.x = v->x * inv;
+    dir.y = v->y * inv;
+    dir.z = v->z * inv;
+    out->x = dir.x * scale;
+    out->y = dir.y * scale;
+    out->z = dir.z * scale;
+}
+
+// Ref-counted simulator object added to a per-object target list.
+struct SimTarget {
+    virtual void V00(); virtual void V01(); virtual void V02(); virtual void V03();
+    virtual void V04(); virtual void V05(); virtual void V06(); virtual void V07();
+    virtual void V08(); virtual void V09(); virtual void V10(); virtual void V11();
+    virtual void V12(); virtual void V13(); virtual void V14(); virtual void V15();
+    virtual void V16(); virtual void V17(); virtual void V18(); virtual void V19();
+    virtual void V20(); virtual void V21(); virtual void V22(); virtual void V23();
+    virtual void AddRef();                                          // +0x60
+    virtual void Release();                                         // +0x64
+};
+
+struct SimTargetVec {                   // eastl::vector<AutoRefCount<SimTarget>>
+    SimTarget** mpBegin;                                            // +0x684
+    SimTarget** mpEnd;                                              // +0x688
+    SimTarget** mpEndOfStorage;                                     // +0x68c
+    void PushBack(SimTarget* const& value);
+    void Grow(SimTarget** pEnd, SimTarget* const& value);           // 0x00ae6ed0
+};
+
+void SimTargetVec::PushBack(SimTarget* const& value)
+{
+    SimTarget** pEnd = mpEnd;
+    if (pEnd >= mpEndOfStorage) {
+        Grow(pEnd, value);
+        return;
+    }
+    mpEnd = pEnd + 1;
+    if (!pEnd)
+        return;
+    *pEnd = value;
+    if (value)
+        value->AddRef();
+}
+
+struct SimObject {
+    uint8_t pad00[0x684];
+    SimTargetVec mTargets;                                          // +0x684
+    void AddTarget(SimTarget* target);
+};
+
+// @ 0x00cad7e0
+void SimObject::AddTarget(SimTarget* target)
+{
+    SimTargetVec* vec = &mTargets;
+    SimTarget** it = vec->mpBegin;
+    SimTarget** end = vec->mpEnd;
+    if (it != end) {
+        do {
+            if (*it == target)
+                break;
+            ++it;
+        } while (it != end);
+    }
+    if (it != end)
+        return;
+
+    SimTarget* ref = target;
+    if (ref)
+        ref->AddRef();
+    vec->PushBack(ref);
+    if (ref)
+        ref->Release();
+}
+
+// Sub-object reached through SimObjA::mSub; its vtable feeds the pathing update.
+struct SimSub {
+    virtual void V00(); virtual void V01(); virtual void V02(); virtual void V03();
+    virtual void V04(); virtual void V05(); virtual void V06(); virtual void V07();
+    virtual void V08(); virtual void V09(); virtual void V10();
+    virtual Vec3* GetPos();                                         // +0x2c
+    virtual void V12(); virtual void V13(); virtual void V14(); virtual void V15();
+    virtual void V16(); virtual void V17(); virtual void V18(); virtual void V19();
+    virtual void V20(); virtual void V21(); virtual void V22(); virtual void V23();
+    virtual void V24(); virtual void V25(); virtual void V26(); virtual void V27();
+    virtual void V28();
+    virtual float GetPathScale();                                   // +0x74
+    virtual void V30(); virtual void V31(); virtual void V32(); virtual void V33();
+    virtual void V34(); virtual void V35(); virtual void V36(); virtual void V37();
+    virtual void V38(); virtual void V39(); virtual void V40(); virtual void V41();
+    virtual void V42(); virtual void V43(); virtual void V44(); virtual void V45();
+    virtual void V46(); virtual void V47(); virtual void V48(); virtual void V49();
+    virtual void V50(); virtual void V51(); virtual void V52(); virtual void V53();
+    virtual void V54(); virtual void V55(); virtual void V56();
+    virtual void SetDestination(const Vec3& v, float radius);       // +0xe4
+    void* CreateSpawn();                                            // 0x00c41ec0
+};
+
+struct SimObjA : NormCtx {
+    uint8_t pad00[0x34];
+    SimSub  mSub;                                                   // +0x34
+    uint8_t pad38[0x2a4 - 0x38];
+    uint32_t mFlags;                                                // +0x2a4
+};
+
+struct SimObjB {
+    uint8_t pad00[0x14];
+    Vec3    mDir;                                                   // +0x14
+    uint8_t pad20[0x50 - 0x20];
+    Vec3    mVel;                                                   // +0x50
+    int32_t mMode;                                                  // +0x5c
+    uint8_t pad60[0x68 - 0x60];
+    float   mTimer;                                                 // +0x68
+    float   mTimer2;                                                // +0x6c
+};
+
+struct SimStepProvider {
+    uint8_t pad00[0x10];
+    float mStep;                                                    // +0x10
+};
+
+Vec3 normalized_safe(const Vec3& v);                                // 0x00449c20
+extern const float kPathOne;                                        // 0x013eb8a0
+extern const float kPathTwo;                                        // 0x013eeda0
+
+// @ 0x00cadd50
+void SimPathUpdate(SimStepProvider* step, SimObjA* a, SimObjB* b, bool armed, float dt)
+{
+    if (dt < b->mTimer && !(a->mFlags & 0xb))
+    {
+        b->mTimer2 = 0.0f;
+        return;
+    }
+    b->mTimer2 += step->mStep;
+    if (b->mTimer2 <= kPathOne)
+        return;
+
+    Vec3 dir;
+    ScaleNormalizedVec(&dir, &b->mDir, a);
+    b->mDir = dir;
+    if (b->mTimer2 <= kPathTwo)
+        return;
+
+    if (!armed || b->mMode != 3)
+    {
+        a->mFlags |= 1;
+        return;
+    }
+
+    float k = a->mSub.GetPathScale();
+    Vec3 tmp;
+    tmp.x = b->mVel.x * k + b->mDir.x;
+    tmp.y = b->mVel.y * k + b->mDir.y;
+    tmp.z = b->mVel.z * k + b->mDir.z;
+    const Vec3* pos = a->mSub.GetPos();
+    tmp.x -= pos->x;
+    tmp.y -= pos->y;
+    tmp.z -= pos->z;
+    b->mVel = normalized_safe(tmp);
+    a->mFlags &= ~0xbu;
+}
+
+struct SimSpawnOut {
+    Vec3    mPos;                                                   // +0x00
+    uint8_t pad0c[0x50 - 0x0c];
+    Vec3    mVel;                                                   // +0x50
+    int32_t mKind;                                                  // +0x5c
+    float   mScale;                                                 // +0x60
+};
+
+struct SimSpawnSrc {
+    void**  mpBegin;                                                // +0x00
+    void**  mpEnd;                                                  // +0x04
+    uint8_t pad08[0x14 - 0x08];
+    Vec3    mVec;                                                   // +0x14
+    float   mRadiusIn;                                              // +0x20
+    uint8_t pad24[0x50 - 0x24];
+    Vec3    mVel;                                                   // +0x50
+    int32_t mKind;                                                  // +0x5c
+    float   mScale;                                                 // +0x60
+};
+
+extern const float kSpawnRadiusBias;                                // 0x013ec4d0
+
+// @ 0x00cadc20
+bool SimTrySpawn(SimSpawnOut* out, SimObjA* self, const Vec3* target, SimSpawnSrc* src)
+{
+    if (src->mpBegin != src->mpEnd)
+        return true;
+
+    float radiusIn = src->mRadiusIn;
+    float radius = src->mRadiusIn + src->mScale + kSpawnRadiusBias;
+    if (self->mFlags & 4)
+        return true;
+
+    float dx = src->mVec.x - target->x;
+    float dy = src->mVec.y - target->y;
+    float dz = src->mVec.z - target->z;
+    if (dx * dx + dy * dy + dz * dz <= radius * radius)
+        return true;
+
+    out->mPos.x = 0.0f;
+    out->mPos.y = 0.0f;
+    out->mPos.z = 0.0f;
+
+    self->mSub.SetDestination(src->mVec, radiusIn);
+    SimSpawnOut* spawn = (SimSpawnOut*)self->mSub.CreateSpawn();
+    spawn->mVel = src->mVel;
+    spawn->mKind = src->mKind;
+    spawn->mScale = src->mScale;
+    return false;
+}

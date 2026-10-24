@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00cad7e0  145 SimObject::AddTarget; equiv pending; register roles only
+00cadb00   56 SimPanel::Shutdown; equiv PASS 341 valid inputs, 100% coverage; only callee-saved roles and the dec/test/jge vs sub/jns loop idiom
+00cadc20  262 SimTrySpawn; equiv WEAK 383 valid inputs, 50% coverage; register allocation only
+00cadd50  337 SimPathUpdate; equiv WEAK 333 valid inputs, 51.9% coverage; store ordering and register allocation only
