@@ -12,20 +12,42 @@ short* FUN_00547970(const void* table, int a, int b);
 void   FUN_004228e0(int a, unsigned int b);
 int    FUN_00685520(int a);
 int*   LowerBound(int* first, int* last, unsigned int* key, char cmp);
-int*   FUN_00547d80(int* pos, void* value);
-int*   FUN_00548450(int* pos, void* value);
-void   FUN_0047d390(const void* a, const void* b);
-void   FUN_005477e0();
-void   FUN_00547e90(int* pos, void* value);
 void   FUN_005481d0(int* pos, void* value);
-int    FUN_005476e0();
-void   FUN_005477a0(int* a, int b);
-void   FUN_00547a10(void* a, void* b);
 void   FUN_00548e70(int* a);
-void   FUN_00423820(int a, int b);
-void   FUN_00546f80();
-void   StringAppendW(void* self, const wchar_t* first, const wchar_t* last);
 void   StringResizeW(int n);
+
+// element constructors / destructors (all thiscall)
+struct FeedLink {                    // 0x34-byte vector element
+    int  data[0x34 / 4];
+    FeedLink* Ctor();                // 0x005476e0
+    int       Destroy();             // 0x005477a0
+};
+struct FeedVec {                     // eastl::vector<FeedLink>
+    FeedLink* begin;                 // +0x00
+    FeedLink* end;                   // +0x04
+    FeedLink* cap;                   // +0x08
+};
+struct FeedEntry {                   // 0x118-byte vector element
+    int  data[0x118 / 4];
+    int* Ctor();                     // 0x00546c20
+    void Destroy();                  // 0x00546f80
+};
+struct E16 {                         // 0x10-byte vector element
+    int  data[4];
+    void Ctor(int a, int b);         // 0x00423820
+};
+struct WStrVal {                     // eastl::basic_string<wchar_t>
+    int  data[3];
+    WStrVal* Ctor(const wchar_t* first, const wchar_t* last); // 0x0047d390
+};
+struct MapValue {                    // eastl::pair<unsigned, WStrVal>
+    unsigned key;
+    WStrVal  str;
+    void Destroy();                  // 0x005477e0
+};
+struct WStr {
+    void Append(const wchar_t* first, const wchar_t* last); // 0x00429580
+};
 
 // hash-dispatched handlers (ellipsis keeps arity flexible)
 void FUN_00545ad0(...); void FUN_00545aa0(...); void FUN_005459a0(...);
@@ -60,6 +82,10 @@ struct Obj42 {
     void FUN_00546a60(void* value);            // push_back 0x10
     void FUN_00546b70();                       // push_back 0x118
     int* FUN_00546c20();                       // ctor of 0x118 entry
+    void InsertLink(int* pos, void* value);    // 0x00547a10 (thiscall)
+    int* InsertMap(int* pos, void* value);     // 0x00547d80 (thiscall)
+    void Insert16(int* pos, void* value);      // 0x00547e90 (thiscall)
+    void Insert118(int* pos, void* value);     // 0x00548450 (thiscall)
 };
 
 // @ 0x00546160  SP::Feed::HandshakeParser::StartElementHandler
@@ -172,9 +198,10 @@ void FUN_005462f0(int param_1, const wchar_t* name)
 }
 
 // @ 0x00546600
-void FUN_00546600(int self, int a, int b)
+void FUN_00546600(int self, const wchar_t* a, int b)
 {
-    StringAppendW((void*)self, (const wchar_t*)a, (const wchar_t*)(a + b * 2));
+    int s = self;
+    ((WStr*)(s + 0x10))->Append(a, a + b);
 }
 
 // @ 0x00546630
@@ -204,15 +231,14 @@ int* Obj42::FUN_00546630()
 // @ 0x00546800
 void Obj42::FUN_00546800()
 {
-    int* p = (int*)this;
-    if ((unsigned int)p[1] < (unsigned int)p[2]) {
-        int e = p[1];
-        p[1] = p[1] + 0x34;
-        if (e != 0) FUN_005476e0();
+    if ((unsigned int)((FeedVec*)this)->end < (unsigned int)((FeedVec*)this)->cap) {
+        FeedLink* e = ((FeedVec*)this)->end;
+        ((FeedVec*)this)->end = ((FeedVec*)this)->end + 1;
+        (e != 0) ? e->Ctor() : 0;
     } else {
-        int v = FUN_005476e0();
-        FUN_00547a10((void*)p[1], (void*)v);
-        FUN_005477a0(p, p[1]);
+        FeedLink tmp;
+        ((Obj42*)this)->InsertLink((int*)((FeedVec*)this)->end, tmp.Ctor());
+        tmp.Destroy();
     }
 }
 
@@ -227,7 +253,7 @@ int Obj42::FUN_00546880(int pos)
             FUN_00548e70((int*)cur);
     }
     p[1] = p[1] - 0x34;
-    FUN_005477a0(p, p[1]);
+    ((FeedLink*)p[1])->Destroy();
     return pos;
 }
 
@@ -235,16 +261,16 @@ int Obj42::FUN_00546880(int pos)
 unsigned int* Obj42::FUN_00546930(unsigned int* key)
 {
     int* p = (int*)this;
-    int* lb = LowerBound((int*)p[0], (int*)p[1], key, *(char*)((char*)p + 5));
+    int* lb = LowerBound((int*)p[0], (int*)p[1], key, *(char*)((char*)p + 0x14));
     if (lb == (int*)p[1] || *key < *(unsigned int*)lb) {
-        unsigned int local_20[4];
-        local_20[0] = *key;
-        local_20[1] = 0;
-        local_20[2] = 0;
-        local_20[3] = 0;
-        FUN_0047d390(gEmptyString, gEmptyString);
-        lb = FUN_00547d80(lb, local_20);
-        FUN_005477e0();
+        MapValue mv;
+        mv.key = *key;
+        mv.str.data[0] = 0;
+        mv.str.data[1] = 0;
+        mv.str.data[2] = 0;
+        mv.str.Ctor((const wchar_t*)gEmptyString, (const wchar_t*)gEmptyString);
+        lb = ((Obj42*)this)->InsertMap(lb, &mv);
+        mv.Destroy();
     }
     return (unsigned int*)lb + 1;
 }
@@ -258,10 +284,10 @@ void Obj42::FUN_00546a60(void* value)
         p[1] = p[1] + 0x10;
         if (e != 0) {
             e[0] = 0; e[1] = 0; e[2] = 0;
-            FUN_00423820(((int*)value)[0], ((int*)value)[1]);
+            ((E16*)e)->Ctor(((int*)value)[0], ((int*)value)[1]);
         }
     } else {
-        FUN_00547e90((int*)p[1], value);
+        ((Obj42*)this)->Insert16((int*)p[1], value);
     }
 }
 
@@ -272,11 +298,12 @@ void Obj42::FUN_00546b70()
     if ((unsigned int)p[1] < (unsigned int)p[2]) {
         int e = p[1];
         p[1] = p[1] + 0x118;
-        if (e != 0) FUN_00546c20();
+        if (e != 0) ((FeedEntry*)e)->Ctor();
     } else {
-        int* v = FUN_00546c20();
-        FUN_00548450((int*)p[1], v);
-        FUN_00546f80();
+        FeedEntry tmp;
+        tmp.Ctor();
+        ((Obj42*)this)->Insert118((int*)p[1], &tmp);
+        tmp.Destroy();
     }
 }
 

@@ -11,9 +11,15 @@ extern char  gEmptyString[];        // @ 0x1667bac
 
 // ---- items of slice s00546160 begin (TODO(rewrite): local stubs, replace by canonical classes)
 int*   LowerBound(int* first, int* last, unsigned int* key, char cmp);
-int*   FUN_00547d80(int* pos, void* value);
-void   FUN_0047d390(const void* a, const void* b);
-void   FUN_005477e0();
+struct MapStr {                      // eastl::basic_string<wchar_t> inside a map value
+    int  data[3];
+    MapStr* Ctor(const wchar_t* first, const wchar_t* last);  // 0x0047d390
+};
+struct MapValue {                    // eastl::pair<unsigned, MapStr>
+    unsigned key;
+    MapStr   str;
+    void     Destroy();              // 0x005477e0
+};
 extern char  gEmptyString[];        // @ 0x1667bac
 struct Obj42 {
     char mPad[0x200];
@@ -24,6 +30,7 @@ struct Obj42 {
     void FUN_00546a60(void* value);            // push_back 0x10
     void FUN_00546b70();                       // push_back 0x118
     int* FUN_00546c20();                       // ctor of 0x118 entry
+    int* InsertMap(int* pos, void* value);     // 0x00547d80 (thiscall)
 };
 // ---- items of slice s00546160 end
 
@@ -66,16 +73,16 @@ extern const char* gURL1520d00;   // 0x1520d00
 unsigned int* Obj42::FUN_00546930(unsigned int* key)
 {
     int* p = (int*)this;
-    int* lb = LowerBound((int*)p[0], (int*)p[1], key, *(char*)((char*)p + 5));
+    int* lb = LowerBound((int*)p[0], (int*)p[1], key, *(char*)((char*)p + 0x14));
     if (lb == (int*)p[1] || *key < *(unsigned int*)lb) {
-        unsigned int local_20[4];
-        local_20[0] = *key;
-        local_20[1] = 0;
-        local_20[2] = 0;
-        local_20[3] = 0;
-        FUN_0047d390(gEmptyString, gEmptyString);
-        lb = FUN_00547d80(lb, local_20);
-        FUN_005477e0();
+        MapValue mv;
+        mv.key = *key;
+        mv.str.data[0] = 0;
+        mv.str.data[1] = 0;
+        mv.str.data[2] = 0;
+        mv.str.Ctor((const wchar_t*)gEmptyString, (const wchar_t*)gEmptyString);
+        lb = ((Obj42*)this)->InsertMap(lb, &mv);
+        mv.Destroy();
     }
     return (unsigned int*)lb + 1;
 }
