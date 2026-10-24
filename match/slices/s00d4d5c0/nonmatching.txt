@@ -1,0 +1,72 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00d4d5c0 = SPDrama.obj: cSPDramaManager's drama-event multimap (consume / consume-all /
+# trigger), the cDramaEventInstanceData stream reader/writer group (WriteData + the eight per-event
+# Write overrides + ClearData), the cSPDramaManager destructor, and its Init / Shutdown.  2/18
+# byte-exact (00d4d9b0, 00d4dfd0).  The remaining 16 are complete C++ reconstructions that reproduce
+# the original control flow, container semantics and vtable/stream calls; the byte-exact budget is
+# missed mostly because our compiler run schedules the delayed signature store of the Write family
+# differently (see below) and allocates callee-saved registers differently in the big map walks.
+# The per-row verdict is the equivalence-gate result measured with default inputs.
+#
+00d4d5c0  216  ConsumeDramaEvents(uint): walks the drama-event multimap for the requested event mask,
+#                dispatches TriggerEvent and rebuilds mActiveDramaEventMask.  Two inlined red-black
+#                walks + refcounted handle updates are emitted with different branch/register
+#                scheduling (230 vs 245 bytes).  equiv WEAK: 297/400 inputs valid, 21.8% coverage.
+00d4d6c0  175  ConsumeAllDramaEvents(): full walk that deactivates every event, recomputing the active
+#                mask via two tree walks.  Same logic, different callee-saved allocation and loop
+#                rotation (225 vs 206 bytes).  equiv UNSUPPORTED: 0/400 inputs valid (faults reading
+#                the unmodelled manager members).
+00d4d790   10  TriggerDramaEvent(uint,uint): equal_range on the multimap, then activate + dispatch the
+#                matching event.  Only difference: we load the loop bound through a scratch eax before
+#                copying it into ebx (original loads straight into ebx) so the loop-alignment nop is
+#                absent.  equiv PASS: 296/400 inputs valid, 100% coverage.
+00d4d7f0  321  Stream re-reader: clears the tree, re-initialises the anchor, reads (key,event) pairs via
+#                StreamGetData and rebuilds nodes with RBTreeInsert.  Complete reconstruction; the
+#                inlined eastl insert/hint sequence and node allocator bookkeeping are scheduled
+#                differently (415 vs 435 bytes).  equiv UNSUPPORTED: 0/400 inputs valid.
+00d4da10   15  WriteData(void*): base stream writer (signature + prop-key + game-data record).  The
+#                single difference is that the original seeds the signature store into the delay slot
+#                of the OReader::v6() virtual call; no source shape or flag reproduces that placement
+#                (see the Write family note below).  equiv UNSUPPORTED: 0/400 inputs valid.
+00d4dae0   36  ClearData(): drops mpPropList, erases mData, removes every game-data noun, erases the
+#                game-data map.  Same semantics; the original caches the map end pointer in edi and
+#                keeps &mGameDataMap in ebp, ours swaps ebx/ebp and materialises the loop bound one
+#                slot earlier (101 vs 102 bytes).  equiv WEAK: 148/400 inputs valid, 81.8% coverage.
+00d4db50   15  cDramaEventInstanceData::Write(void*): emit signature, WriteData, then run the per-event
+#                serialiser.  Same delayed-signature-store discrepancy as WriteData.  equiv
+#                UNSUPPORTED: 0/400 inputs valid.
+00d4dbe0   15  cNightPredatorEvent::Write(void*): same body, signature 0x5599e34 / name 0x1583920.
+#                equiv UNSUPPORTED: 0/400 inputs valid.
+00d4dc70   15  cUFOAbductionEvent::Write(void*): signature 0x5599eb8 / name 0x158395c.  equiv
+#                UNSUPPORTED: 0/400 inputs valid.
+00d4dd00   15  cBabyGameEvent::Write(void*): signature 0x5599f2c / name 0x15839d4.  equiv UNSUPPORTED:
+#                0/400 inputs valid.
+00d4dd90   15  cRainStormEvent::Write(void*): signature 0x5599f52 / name 0x1583a10.  equiv UNSUPPORTED:
+#                0/400 inputs valid.
+00d4de20   15  cSeaMonsterEvent::Write(void*): signature 0x5599f7c / name 0x1583a4c.  equiv
+#                UNSUPPORTED: 0/400 inputs valid.
+00d4deb0   15  cTribeFoodRaidEvent::Write(void*): signature 0x5ed29d3 / name 0x1583a88.  equiv
+#                UNSUPPORTED: 0/400 inputs valid.
+00d4df40   15  cMeteorStrikeEvent::Write(void*): signature 0x609eedc / name 0x1583ac4.  equiv
+#                UNSUPPORTED: 0/400 inputs valid.
+00d4e070  629  Init(): mode-gated rebuild of the drama-event multimap from the mode's tuning property
+#                list — property queries, variant tag dispatch (0..8), per-event factory calls, key
+#                copy and insert-unique.  Complete reconstruction; the deeply inlined property/variant
+#                accessors and the jump table are scheduled differently (708 vs 728 bytes).  equiv
+#                WEAK: 400/400 inputs valid, 4.5% coverage.
+00d4e350  299  Shutdown(): ConsumeAllDramaEvents, then walk the map deactivating and destroying each
+#                event while recomputing the active mask, then tear the tree down and release the
+#                manager's handles/timers.  Complete reconstruction (344 vs 327 bytes); the two
+#                inlined tree walks diverge in scheduling.  equiv UNSUPPORTED: 0/400 inputs valid.
+#
+# Delayed signature store (rows 00d4da10 and 00d4db50..00d4df40): every writer fetches the input
+# stream with two virtual calls (OStream::v8 -> OReader, OReader::v6 -> istream) and seeds a 32-bit
+# key with the event signature before WriteUint32(istream,&key,1,0).  The original compiler emitted the
+# key store between `mov eax,[edx+0x18]` and `call eax` (the istream call's delay slot).  With cl
+# 15.00.30729.01 every source phrasing we tried (key before / between / after the calls, by-value and
+# by-reference FORCEINLINE helpers, nested one-expression vcall, comma expressions) and every flag
+# set (/Od /Ob1, /O1, /Os, /Ot, /Oy-, /Oi-, fp:precise) places the store adjacent to a call instead,
+# leaving a stable 15-byte (7-byte instruction duplicated) difference.  The emitted code performs the
+# same operations in the same data flow.

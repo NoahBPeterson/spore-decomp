@@ -1,0 +1,2 @@
+slices/s00d4d5c0/s00d4d5c0.cpp  ?insert_00d4d9b0@RefVec@@QAEPAXPAURefPair@@PBU2@@Z  00d4d9b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4d5c0/s00d4d5c0.cpp  ??1cSPDramaManager@@QAE@XZ  00d4dfd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

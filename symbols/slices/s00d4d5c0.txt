@@ -1,0 +1,30 @@
+# slice s00d4d5c0 = 0x00d4d5c0..0x00d4e350 (SPDrama/cDramaEventInstanceData: drama-event
+# multimap consume/trigger, the event writers, the drama-manager dtor/init/shutdown)
+00d4d5c0 ConsumeDramaEvents        # cSPDramaManager::ConsumeDramaEvents(uint)
+00d4d6c0 ConsumeAllDramaEvents     # cSPDramaManager::ConsumeAllDramaEvents()
+00d4d790 TriggerDramaEvent         # cSPDramaManager::TriggerDramaEvent(uint,uint)
+00d4d7f0 FUN_00d4d7f0              # cDramaEventInstanceData read-from-stream helper
+00d4d9b0 insert_00d4d9b0           # RefVec::insert_00d4d9b0(RefPair*,const RefPair*)
+00d4da10 WriteData                 # cDramaEventInstanceData::WriteData(void*)
+00d4dae0 ClearData                 # cDramaEventInstanceData::ClearData()
+00d4db50 Write                     # cDramaEventInstanceData::Write(void*)
+00d4dbe0 Write                     # cNightPredatorEvent::Write(void*)
+00d4dc70 Write                     # cUFOAbductionEvent::Write(void*)
+00d4dd00 Write                     # cBabyGameEvent::Write(void*)
+00d4dd90 Write                     # cRainStormEvent::Write(void*)
+00d4de20 Write                     # cSeaMonsterEvent::Write(void*)
+00d4deb0 Write                     # cTribeFoodRaidEvent::Write(void*)
+00d4df40 Write                     # cMeteorStrikeEvent::Write(void*)
+00d4dfd0 ??1cSPDramaManager        # cSPDramaManager::~cSPDramaManager
+00d4e070 Init                      # cSPDramaManager::Init()
+00d4e350 Shutdown                  # cSPDramaManager::Shutdown()
+# helpers: FUN_0093aa70 0x0093aa70 WriteUint32, FUN_0093a780 0x0093a780 ReadInt32,
+#          FUN_00921580 0x00921580 RBTreeIncrement, FUN_009216a0 0x009216a0 RBTreeInsert,
+#          FUN_00d4b450 0x00d4b450 equal_range, FUN_00d4b4f0 0x00d4b4f0 insert_unique,
+#          FUN_00d4cda0 0x00d4cda0 insert_at, FUN_00d4d530 0x00d4d530 TriggerEvent,
+#          FUN_00a35070 0x00a35070 move-range, FUN_00b3d300 0x00b3d300 NounManager,
+#          FUN_00b225d0 0x00b225d0 RemoveNoun, FUN_0067de30 0x0067de30 PropertyManager,
+#          FUN_00b5b800 0x00b5b800 GetCurrentGameMode, FUN_00920090 0x00920090 event factory,
+#          FUN_00692f90 0x00692f90 cVarListSerializer ctor, FUN_00692900 0x00692900 Serialize,
+#          FUN_00d0c930 0x00d0c930 rbtree destroy-nodes, FUN_00b638b0 0x00b638b0 cGonzagoTimer dtor,
+#          FUN_00f473a0 0x00f473a0 operator new, FUN_00f47380 0x00f47380 operator delete[]
