@@ -1,1 +1,2 @@
-# (no byte-exact functions in this slice)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005fd260/s005fd260.cpp  ?Handler@HandlerStub@@QAE_NIPAX@Z  005fda40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
