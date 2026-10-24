@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s00d15440/s00d15440.cpp  ?FUN_00d15600@cGameEditInputStrategy@SP@@QAEXXZ  00d15600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d15440/s00d15440.cpp  ?StartSelection@cGameEditInputStrategy@SP@@QAEIPAXEI@Z  00d15ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d15440/s00d15440.cpp  ?FUN_00d15af0@cGameEditInputStrategy@SP@@QAEIPAXEI@Z  00d15af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
