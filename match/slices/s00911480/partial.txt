@@ -1,2 +1,6 @@
 # va  diff-bytes  reason
-00911ae0  175  complete state machine written; reg ABI not expressible (orig: eax=end, edx=p, edi=enc, nextTokPtr on stack; equiv UNSUPPORTED); unicode_byte_type calls 2 vs 5
+00911ae0  175  complete state machine written; reg ABI not expressible (orig: eax=end, edx=p, edi=enc, nextTokPtr on stack; equiv UNSUPPORTED); unicode name tables match
+00911480  1017  not reconstructed: retail scanLt is entered with eax=end, edx=ptr, edi=enc and enc/nextTokPtr pushed, so no plain source form reproduces it; equiv not run (no symbol)
+00911880  603  not reconstructed: retail contentTok is entered the same way (ptr/end arrive via edx/ebx, its scanner calls set eax/edx/edi); equiv not run (no symbol)
+00911c90  256  faithful scanPoundName state machine (name-char switch, UCS2 name-table checks, LEAD2/3/4 partial checks, -20 at end, 20 at first non-name char); equiv UNSUPPORTED - original reads eax at entry but our declaration passes nothing there (custom/LTCG register ABI)
+00911e40  157  faithful scanLit state machine (quote/apostrophe close test against open, open-literal follow set S/CR/LF/GT/PERCNT/LSQB, -27 unterminated, 0 invalid); equiv UNSUPPORTED - original reads edx at entry but our declaration passes nothing there (custom/LTCG register ABI)

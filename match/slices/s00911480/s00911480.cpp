@@ -127,7 +127,120 @@ invalid:
   return 0;
 }
 
-// Non-static entry so the register-convention static above is emitted (the object keeps only referenced statics).
+// @ 0x00911e40
+static int little2_scanLit(int open, const void* enc, const char* p, const char* e, const char** nextTokPtr)
+{
+  while (p != e) {
+    int t = byteType(enc, p);
+    switch (t) {
+    case BT_LEAD2:
+      if (e - p < 2) return -2;
+      goto invalid;
+    case BT_LEAD3:
+      if (e - p < 3) return -2;
+      goto invalid;
+    case BT_LEAD4:
+      if (e - p < 4) return -2;
+      goto invalid;
+    case BT_QUOT:
+    case BT_APOS:
+      p += 2;
+      if (t != open)
+        break;
+      if (p == e)
+        return -27;                             /* -XML_TOK_LITERAL */
+      *nextTokPtr = p;
+      switch (byteType(enc, p)) {
+      case BT_S: case BT_CR: case BT_LF:
+      case BT_GT: case BT_PERCNT: case BT_LSQB:
+        return 27;                              /* XML_TOK_OPEN_LIT */
+      default:
+        return 0;
+      }
+    case BT_LF:
+    case BT_CR:
+    case BT_GT:
+    case BT_PERCNT:
+    case BT_LSQB:
+      goto invalid;
+    default:
+      p += 2;
+      break;
+    }
+  }
+  return -27;
+
+invalid:
+  *nextTokPtr = p;
+  return 0;
+}
+
+// @ 0x00911c90
+static int little2_scanPoundName(const void* enc, const char* p, const char* e, const char** nextTokPtr)
+{
+  int t;
+  if (p == e)
+    return -1;
+  t = byteType(enc, p);
+  switch (t) {
+  case BT_DIGIT: case BT_NAME: case BT_MINUS: case BT_NMSTRT: case BT_HEX:
+    break;
+  case BT_NONASCII:
+    if (!UCS2_GET_NAMING(nmstrtPages, p[1], p[0]))
+      goto notName;
+    break;
+  case BT_LEAD2:
+    if (e - p < 2) return -2;
+    goto notName;
+  case BT_LEAD3:
+    if (e - p < 3) return -2;
+    goto notName;
+  case BT_LEAD4:
+    if (e - p < 4) return -2;
+    goto notName;
+  default:
+    goto notName;
+  }
+  for (;;) {
+    p += 2;
+    if (p == e)
+      return -20;                               /* -XML_TOK_POUND_NAME */
+    t = byteType(enc, p);
+    switch (t) {
+    case BT_DIGIT: case BT_NAME: case BT_MINUS: case BT_NMSTRT: case BT_HEX:
+      break;
+    case BT_NONASCII:
+      if (!UCS2_GET_NAMING(namePages, p[1], p[0]))
+        goto notName;
+      break;
+    case BT_LEAD2:
+      if (e - p < 2) return -2;
+      goto notName;
+    case BT_LEAD3:
+      if (e - p < 3) return -2;
+      goto notName;
+    case BT_LEAD4:
+      if (e - p < 4) return -2;
+      goto notName;
+    default:
+      goto notName;
+    }
+  }
+
+notName:
+  *nextTokPtr = p;
+  return 20;                                    /* XML_TOK_POUND_NAME */
+}
+
+// Non-static entries so the register-convention statics above are emitted (the object keeps only referenced statics).
 int little2_scanPercent_entry(const void* enc, const char* p, const char* e, const char** nextTokPtr) {
   return little2_scanPercent(enc, p, e, nextTokPtr);
+}
+
+int little2_scanLit_entry(int open, const void* enc, const char* p, const char* e, const char** nextTokPtr) {
+  return little2_scanLit(open, enc, p, e, nextTokPtr);
+}
+
+int little2_scanPoundName_entry(const void* enc, const char* p, const char* e, const char** nextTokPtr) {
+  return little2_scanPoundName(enc, p, e, nextTokPtr);
 }
