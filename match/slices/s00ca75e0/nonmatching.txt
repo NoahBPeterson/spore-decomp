@@ -1,0 +1,10 @@
+00ca75e0 64 deque read loop; MSVC register/slot allocation differs (count/temp in different dead arg slots, pushed argument copy temp)
+00ca7690 32 deque write; evaluation order and register/slot allocation differ, n reuses a different dead arg slot
+00ca77b0 107 heap make: vtable slot 0x60 callback ABI (extra stack self arg) and cSPVector4 copy via integer movs vs movss
+00ca7830 83 heap pop loop: cSPVector4 by-value copy emitted with integer movs instead of movss
+00ca78a0 741 cVehicle constructor; full field-init layout transcribed but base-ctor call sequencing and partial ctor inlining differ
+00ca7ef0 247 cVehicle destructor; teardown order and base-dtor inlining differ
+00ca81d0 161 locomotor vtable slot 0x2c call arg layout and timer restart sequence differ
+00ca8340 202 continent check; virtual GetPositionPtr/GetContinent call scheduling and branch layout differ
+00ca8470 308 list reader; inlined eastl wstring construction differs (ConvertToString16/range_initialize/copy-ctor sequence)
+00ca85c0 305 list writer; inlined eastl wstring construction and element reader loop differ
