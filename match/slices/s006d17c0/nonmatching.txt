@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-006d17c0 643  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/382 valid inputs mismatched)
-006d1a80 689  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ; equiv PASS (556 valid inputs, 100% coverage)
-006d1d80 660  bake evaluator (uv4x8/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/438 valid inputs mismatched)
-006d2080 649  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ; equiv PASS (468 valid inputs, 100% coverage)
-006d2350 660  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ; equiv FAIL (4/497 valid inputs mismatched)
+006d17c0 620  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3780, dot tail res[0]/res[2]); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; /O2 frame + scheduling differ; equiv PASS (200 valid inputs, 100% coverage, seed 3)
+006d1a80 670  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3780, dot tail res[0]/res[2]); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; /O2 frame + scheduling differ; equiv PASS (225 valid inputs, 100% coverage, seed 3)
+006d1d80 680  bake evaluator (uv4x8/colour3f/pos3f, core FUN_006c3b90, dot tail res[0]/res[2]); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; /O2 frame + scheduling differ; equiv PASS (166 valid inputs, 100% coverage, seed 3)
+006d2080 626  bake evaluator (uv2x16/colour3f/pos3f, core FUN_006c3b90, dot tail res[0]/res[2]); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; /O2 frame + scheduling differ; equiv PASS (198 valid inputs, 100% coverage, seed 3)
+006d2350 680  bake evaluator (uv4x16/colour3f/pos3f, core FUN_006c3b90, dot tail res[0]/res[2]); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; /O2 frame + scheduling differ; equiv PASS (164 valid inputs, 100% coverage, seed 3)
