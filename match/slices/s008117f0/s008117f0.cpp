@@ -146,11 +146,16 @@ class cSPUILayoutManager { public:
 // nodes
 struct VecView { void* begin; void* end; };
 struct RBNode1 { RBNode1* left; RBNode1* right; RBNode1* parent; };
+// The node base sits at +4, not +0: eraseSys passes (this + 4) as the tree to
+// eastl::RBTreeErase and retail decrements the size at [this + 0x14], i.e.
+// +4 + 0x10 (the base is four dwords: parent, left, right, colour).
 struct RBTree1 {
-    RBNode1 anchor;         // +0
-    i32     count;          // +0x10
+    void*   mpHead;         // +0
+    RBNode1 anchor;         // +4
+    void*   mColor;         // +0x10
+    i32     count;          // +0x14
     void __thiscall DoNukeSubtree(void* node);   // 0x810df0
-    void __thiscall eraseSys(void** out, void* node);  // 0x812310
+    void* __thiscall eraseSys(void** out, void* node);  // 0x812310
     void __thiscall Method12370(void** out, VecView* key, int unused);  // 0x812370
 };
 struct RBTree2 {
@@ -504,15 +509,16 @@ bool __cdecl FUN_00812210(VecView* a, VecView* b)
     int lb = (int)((u8*)b->end - (u8*)b->begin);
     int len = lb < la ? lb : la;
     int r = eastl_Compare_(ab, bb, len);
-    if (r == 0) {
-        if (la < lb) return true;
-        return lb < la;
-    }
+    if (r == 0)
+        return la < lb;
     return r < 0;
 }
 
+// Retail is declared void, but eax is live at the ret: it holds the `out` argument (the
+// pointer the increment result is finally stored through), so the residue is modelled by
+// returning it.
 // @ 0x00812310
-void __thiscall RBTree1::eraseSys(void** out, void* node)
+void* __thiscall RBTree1::eraseSys(void** out, void* node)
 {
     u8* n = (u8*)node;
     count--;
@@ -522,6 +528,7 @@ void __thiscall RBTree1::eraseSys(void** out, void* node)
     if (*(int*)(n + 0x18) - (int)data > 1 && data) operator_delete__(data);
     operator_delete__(node);
     *out = next;
+    return out;
 }
 
 // @ 0x00812370  (lower_bound/upper_bound over the tree; 3-arg (out, key, unused), ret 0xc)
