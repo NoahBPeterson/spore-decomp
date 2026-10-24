@@ -137,34 +137,71 @@ void cSmoothCameraController::UpdateSubjectMotion(float dt)
 // ===========================================================================
 // 0x007dc340  HandleRequest
 // ===========================================================================
+// Retail cSmoothCameraController differs from the 2008 dev layout the class above was migrated
+// from: the zoom-level index is an int at +0x28 with the raw zoom distance a float at +0x2c,
+// and the subject offset's rounded floor level is an int sharing the word at +0x160.
+struct SmZoomFields {
+    char  _pad00[0x28];
+    int   mZoomIndex;        // +0x28
+    float mZoomDistance;     // +0x2c
+    char  _pad30[0x130];
+    int   mFloorLevel;       // +0x160
+};
+
+// @ 0x007dc340
 bool cSmoothCameraController::HandleRequest(int id)
 {
-    void** vt = *(void***)this;
+    SmZoomFields* rf = (SmZoomFields*)this;
+    if ((unsigned)id > 0x2ca2978bu) {
+        if (id == 0x2ca298e9) {
+            void** vt = *(void** volatile*)this;
+            ((void(__thiscall*)(void*, int))vt[0x74 / 4])(this, rf->mZoomIndex - 1);
+            return true;
+        }
+        if (id == 0xcca2977c) {
+            void** vt = *(void** volatile*)this;
+            ((void(__thiscall*)(void*, int))vt[0x74 / 4])(
+                this, (int)(((char*)mZoomLevels.mpCapacity - (char*)mZoomLevels.mpEnd) >> 2) - 1);
+            return true;
+        }
+        if (id == 0xcca298c4) {
+            void** vt = *(void** volatile*)this;
+            ((void(__thiscall*)(void*, int))vt[0x74 / 4])(this, rf->mZoomIndex + 1);
+            return true;
+        }
+        return false;
+    }
     if (id == 0x2ca2978b) {
         mKeyboardTranslation.mCurrent.y = 0.0f;
         return true;
     }
-    if (id == 0x0101b527) {
-        float f = ((float*)mZoomLevels.mpEnd)[mCurrentZoomLevel];
-        ((void(__thiscall*)(void*, float))vt[0xd4 / 4])(this, f);
+    id -= 0x0101b527;
+    if (id == 0) {
+        void** vt = *(void** volatile*)this;
+        float* begin = (float*)mZoomLevels.mpEnd;
+        float f = begin[rf->mZoomIndex];
+        float r = ((float(__thiscall*)(void*, float))vt[0xd4 / 4])(
+            this, f - ((f + 10.0f) * mCameraPositions[0].mFarClip) * 0.02f);
+        rf->mZoomDistance = r;
+        unsigned idx = 0;
+        unsigned last = (unsigned)(((char*)mZoomLevels.mpCapacity - (char*)mZoomLevels.mpEnd) >> 2) - 1;
+        while (idx < last && !(r < begin[idx]))
+            ++idx;
+        ((void(__thiscall*)(void*, int))vt[0x74 / 4])(this, (int)idx);
         return true;
     }
-    if (id == 0x0101b52d) return true;
-    if (id == 0x0101b52f) return true;
-    if (id == 0x2ca298e9) {
-        ((void(__thiscall*)(void*, int))vt[0x74 / 4])(this, mCurrentZoomLevel - 1);
+    id -= 6;
+    if (id == 0) {
+        void** vt = *(void** volatile*)this;
+        ((void(__thiscall*)(void*, int))vt[0x88 / 4])(this, rf->mFloorLevel - 1);
         return true;
     }
-    if (id == 0xcca2977c) {
-        ((void(__thiscall*)(void*, int))vt[0x74 / 4])(
-            this, (int)(((char*)mZoomLevels.mpCapacity - (char*)mZoomLevels.mpEnd) >> 2) - 1);
-        return true;
-    }
-    if (id == 0xcca298c4) {
-        ((void(__thiscall*)(void*, int))vt[0x74 / 4])(this, mCurrentZoomLevel + 1);
-        return true;
-    }
-    return false;
+    id -= 2;
+    if (id != 0)
+        return false;
+    void** vt = *(void** volatile*)this;
+    ((void(__thiscall*)(void*, int))vt[0x88 / 4])(this, rf->mFloorLevel + 1);
+    return true;
 }
 
 // ===========================================================================
@@ -220,16 +257,106 @@ float cSmoothCameraController::ConstrainDistanceAlongCurve(float d)
 // ===========================================================================
 
 // ===========================================================================
-// 0x007dc7b0  ViewerOrientationFromPositionAndLookAt  (partial)
+// 0x007dc7b0  ViewerOrientationFromPositionAndLookAt
 // ===========================================================================
-void ViewerOrientationFromPositionAndLookAt(const float* pos, const float* look,
-                                            const float* up, float* out)
+// The original keeps the whole 1/sqrt(x*x + y*y + z*z + 1e-8f) chain in 80-bit x87 registers
+// (no intermediate rounding; the reciprocal is the only value rounded, to float).  /arch:SSE2
+// will not reproduce that from C, so the two sum orders the original uses are written out.
+static const float SmEps = 1e-8f;
+
+// x*x + (y*y + z*z): the order the original uses for the two cross-product vectors.
+__declspec(noinline) static void SmInvLenZYX(float* out, float x, float y, float z)
 {
-    float dx = look[0] - pos[0];
-    float dy = look[1] - pos[1];
-    float dz = look[2] - pos[2];
-    (void)up; (void)dx; (void)dy; (void)dz;
-    out[0] = 0; out[1] = 0; out[2] = 0; out[3] = 1.0f;
+    __asm {
+        fld  dword ptr [z]
+        fmul st(0), st(0)
+        fld  dword ptr [y]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fld  dword ptr [x]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fld  dword ptr [SmEps]
+        fadd st(1), st(0)
+        fxch st(1)
+        fsqrt
+        fld1
+        fld  st(0)
+        fdivrp st(2), st(0)
+        fxch st(1)
+        mov  eax, dword ptr [out]
+        fstp dword ptr [eax]
+        fstp st(0)
+        fstp st(0)
+    }
+}
+
+// z*z + (x*x + y*y): the order the original uses for the position delta.
+__declspec(noinline) static void SmInvLenXY(float* out, float x, float y, float z)
+{
+    __asm {
+        fld  dword ptr [x]
+        fmul st(0), st(0)
+        fld  dword ptr [y]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fld  dword ptr [z]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fld  dword ptr [SmEps]
+        fadd st(1), st(0)
+        fxch st(1)
+        fsqrt
+        fld1
+        fld  st(0)
+        fdivrp st(2), st(0)
+        fxch st(1)
+        mov  eax, dword ptr [out]
+        fstp dword ptr [eax]
+        fstp st(0)
+        fstp st(0)
+    }
+}
+
+float* QuaternionFromMatrix33(const float* axes, const float* ref, float w);   // 0x00472b80
+
+// The original is void but its last eax write is the output-pointer load, so eax holds `out`
+// on return; returning it reproduces that observable exactly.
+// @ 0x007dc7b0
+float* __stdcall ViewerOrientationFromPositionAndLookAt(const float* pos, const float* look,
+                                                         const float* up, float* out)
+{
+    cSPVector3 delta, v1, v3;
+    delta.x = look[0] - pos[0];
+    delta.y = look[1] - pos[1];
+    delta.z = look[2] - pos[2];
+
+    v1.x = delta.y * up[8] - delta.z * up[7];
+    v1.y = delta.z * up[6] - delta.x * up[8];
+    v1.z = delta.x * up[7] - delta.y * up[6];
+
+    v3.x = v1.y * delta.z - v1.z * delta.y;
+    v3.y = v1.z * delta.x - v1.x * delta.z;
+    v3.z = v1.x * delta.y - v1.y * delta.x;
+
+    float i1, i2, i3;
+    SmInvLenZYX(&i1, v1.x, v1.y, v1.z);
+    v1.x *= i1; v1.y *= i1; v1.z *= i1;
+    SmInvLenXY(&i2, delta.x, delta.y, delta.z);
+    delta.x *= i2; delta.y *= i2; delta.z *= i2;
+    SmInvLenZYX(&i3, v3.x, v3.y, v3.z);
+    v3.x *= i3; v3.y *= i3; v3.z *= i3;
+
+    float axes[9];
+    axes[0] = v1.x; axes[1] = v1.y; axes[2] = v1.z;
+    axes[3] = delta.x; axes[4] = delta.y; axes[5] = delta.z;
+    axes[6] = v3.x; axes[7] = v3.y; axes[8] = v3.z;
+    float* q = QuaternionFromMatrix33((const float*)&v3, axes, 0.0f);
+    out[0] = q[0];
+    out[1] = q[1];
+    out[2] = q[2];
+    out[3] = q[3];
+    return out;
 }
 
 // ===========================================================================
