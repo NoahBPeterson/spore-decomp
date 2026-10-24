@@ -5,4 +5,4 @@
 0076a4d0 TryLockChain  # try-locks two jobs and chains a 4-step job
 0076a720 ?CanConvert@@YI_NPAXH0@Z  # CanConvert migrated from s00769f20 (verbatim, slice spelling)
 0076a940 ?CreateConvertedResourceAsync@@YA_NPAX00PAH0@Z  # CreateConvertedResourceAsync migrated from s00769f20 (verbatim, slice spelling)
-0076ac30 ?CreateResourceAsync@@YI_NPAXH0PAH00H@Z  # CreateResourceAsync migrated from s00769f20 (verbatim, slice spelling)
+0076ac30 ?CreateResourceAsync@@YI_NPAXH00PAH00H@Z  # CreateResourceAsync migrated from s00769f20 (verbatim, slice spelling)
