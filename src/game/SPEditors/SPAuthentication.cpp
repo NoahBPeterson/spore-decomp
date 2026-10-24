@@ -474,6 +474,7 @@ struct cAuthMessage {
 // ---- items of slice s00607800 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);   // s00607800 range copy
 extern "C" unsigned int __cdecl strlen(const char*);
 extern char gEmptyString[];  // 0x01667bac (shared "" for char and wchar_t strings)
 extern const char DAT_0151e5f0[], DAT_0151e5e0[], DAT_0151e5ec[], DAT_0151e5d4[];
@@ -534,7 +535,7 @@ struct basic_string_s0060_7800 {
     *mpEnd = 0;
   }
   static T* CharStringUninitializedCopy(const T* pSource, const T* pSourceEnd, T* pDestination) {
-    memmove(pDestination, pSource, (size_t)(pSourceEnd - pSource) * sizeof(T));
+    memcpy(pDestination, pSource, (size_t)(pSourceEnd - pSource) * sizeof(T));
     return pDestination + (pSourceEnd - pSource);
   }
   size_type length() const { return (size_type)(mpEnd - mpBegin); }
@@ -1084,7 +1085,7 @@ struct basic_string_s0060_87b0 {
     *mpEnd = 0;
   }
   static T* CharStringUninitializedCopy(const T* pSource, const T* pSourceEnd, T* pDestination) {
-    memmove(pDestination, pSource, (size_t)(pSourceEnd - pSource) * sizeof(T));
+    memcpy(pDestination, pSource, (size_t)(pSourceEnd - pSource) * sizeof(T));
     return pDestination + (pSourceEnd - pSource);
   }
   size_type length() const { return (size_type)(mpEnd - mpBegin); }
