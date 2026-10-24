@@ -132,7 +132,7 @@ extern "C" void __fastcall FUN_00695dc0(void* self)
 // =====================================================================
 struct Elem { unsigned int m0; unsigned int mId; unsigned int m2[13]; };
 extern "C" void operator_delete_arr(void* p);                       // 0xf47380
-extern "C" void FUN_006950b0(Elem* first, Elem* last, bool cmp);   // 0x6950b0
+extern "C" void FUN_006950b0(Elem* first, Elem* last, int cmp);   // 0x6950b0
 
 struct Sorter {
     void* run(char* first);
@@ -148,8 +148,7 @@ void* Sorter::run(char* first)
         p += 0x3c;
         if (*(int*)(old + 0x24) == 0) break;
     } while (*(int*)(old + 0x28) != 0);
-    bool flag = false;
-    FUN_006950b0((Elem*)first, (Elem*)p, flag);
+    FUN_006950b0((Elem*)first, (Elem*)p, (int)((unsigned)first & 0xffffff00u));
     return this;
 }
 
@@ -167,7 +166,7 @@ struct Vec60 {
 
 void Vec60::reserve(unsigned int n)
 {
-    if ((unsigned)((end - begin) / 0x60) < n)
+    if ((unsigned)((cap - begin) / 0x60) < n)
     {
         char* p;
         if (n == 0)

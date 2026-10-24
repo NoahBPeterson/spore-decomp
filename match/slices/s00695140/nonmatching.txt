@@ -1,5 +1,5 @@
-00695450  22  short-circuit range scan + sort entry; only the bool-literal argument materialisation differs
-00695490  111  vector reserve: allocate/copy/destroy/pointer fix-up all present; allocator-arg and ratio scheduling differ
+00695450  22  short-circuit range scan + sort entry; only the bool-literal argument materialisation differs (the int cmp arg is first with its low byte cleared, matching the retail's bool stack-slot quirk); equiv PASS (1200 valid inputs)
+00695490  111  vector reserve: capacity check is cap-begin (not end-begin); allocate/copy/destroy/pointer fix-up all present; equiv PASS (930 valid inputs)
 00695cf0  13  indirection thunk: correct target/computation; branch layout and load order differ
 00695d10  13  resource-manager add loop: both manager calls and list walk present; vtable load scheduled after the pushes
 00695dc0  17  intrusive-list destroy: per-node vtbl+4 release and manager free present; this/cur register assignment swapped
