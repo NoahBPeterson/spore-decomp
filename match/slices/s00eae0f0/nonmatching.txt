@@ -3,3 +3,4 @@
 00eae540  174  complete eastl::vector<float,SP_STL_Sound>::operator=; branch/list scheduling differs. difftest UNSUPPORTED (unresolved operator new/delete refs); symbol now resolved
 00eaeb60  440  complete vector<int>::insert_n reconstruction; scheduling differs. difftest UNSUPPORTED (unresolved operator new/delete refs); symbol now resolved
 00eaeef0  154  complete eastl::vector<float,SP_STL_Sound>::assign reconstruction; scheduling differs. difftest UNSUPPORTED (unresolved operator new/delete refs); symbol now resolved
+00eae610  689  complete RemoveNote reconstruction: mDownbeat uses mVec1e0B[idx], four vector erases via 0x011e0744, and four NoteEvent events. Replay and fresh 600 differ only in ECX: retail preserves ECX (push ecx/pop ecx) while our /O2 build leaves the last GetSystemAT result in ECX (40010000 vs 49749ef0); cannot restore without asm. FAIL-KEPT ECX. Fresh 5/5 valid at 30.7% coverage; size 714 vs 653.

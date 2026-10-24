@@ -271,6 +271,32 @@ struct AT {
     virtual void v58();
 };
 AT* __cdecl GetSystemAT();   // 0x00a206f0
+extern "C" void* __cdecl FUN_11e0744_memcpy(void*, const void*, unsigned int);  // 0x011e0744
+
+static __forceinline void NoteEventI(int which, int val)
+{
+    AT* at = GetSystemAT();
+    if (at) {
+        at->v38(0x3cdd1a9);
+        at->v40(0x34753a7, which);
+        float f = (float)val;
+        if (val < 0)
+            f += 4294967296.0f;
+        at->v3c(0x34753aa, f);
+        at->v58();
+    }
+}
+
+static __forceinline void NoteEventF(int which, float val)
+{
+    AT* at = GetSystemAT();
+    if (at) {
+        at->v38(0x3cdd1a9);
+        at->v40(0x34753a7, which);
+        at->v3c(0x34753aa, val);
+        at->v58();
+    }
+}
 
 static void NoteEvent(int which, int val, int tagB)
 {
@@ -310,8 +336,8 @@ struct cPlayerCityMusic {
     char   pad154[0x1b8 - 0x154];
     int*   mList1b8;          // +0x1b8
     char   pad1bc[0x1cc - 0x1bc];
-    float* mNoteDegB;         // +0x1cc
-    float* mNoteDegE;         // +0x1d0
+    int*   mNoteDegB;         // +0x1cc
+    int*   mNoteDegE;         // +0x1d0
     char   pad1d4[0x1e0 - 0x1d4];
     float* mVec1e0B;          // +0x1e0
     float* mVec1e0E;          // +0x1e4
@@ -367,20 +393,39 @@ void cPlayerCityMusic::DeselectAmbience(float value, unsigned* idx, float* out)
 // 0x00eae610  SP::Audio::cPlayerCityMusic::RemoveNote
 void cPlayerCityMusic::RemoveNote(unsigned idx)
 {
-    unsigned off = idx * 4;
-    this->mDownbeat = this->mDownbeat - *(float*)((char*)this + 0x1cc + off);
-    *(int*)((char*)this + 0x1d0) -= 4;
-    *(int*)((char*)this + 0x1e4) -= 4;
-    *(int*)((char*)this + 0x140) -= 4;
-    *(int*)((char*)this + 0x12c) -= 4;
+    this->mDownbeat -= this->mVec1e0B[idx];
 
-    unsigned count = (unsigned)(*(int*)((char*)this + 0x1d0) -
-                                *(int*)((char*)this + 0x1cc)) >> 2;
-    for (; idx < count; ++idx) {
-        NoteEvent(0xe7b72656, (int)idx, 0xfe31e5d9);
-        NoteEvent(0xc309bcc9, (int)*(float*)(*(int*)((char*)this + 0x1e0) + idx * 4), 0);
+    int* noteDeg = this->mNoteDegB + idx;
+    if (noteDeg + 1 < this->mNoteDegE)
+        FUN_11e0744_memcpy(noteDeg, noteDeg + 1,
+                           (unsigned)(this->mNoteDegE - (noteDeg + 1)) * 4);
+    this->mNoteDegE -= 1;
+
+    float* vec13c = this->mVec13cB + idx;
+    if (vec13c + 1 < this->mVec13cE)
+        FUN_11e0744_memcpy(vec13c, vec13c + 1,
+                           (unsigned)(this->mVec13cE - (vec13c + 1)) * 4);
+    this->mVec13cE -= 1;
+
+    float* vec1e0 = this->mVec1e0B + idx;
+    if (vec1e0 + 1 < this->mVec1e0E)
+        FUN_11e0744_memcpy(vec1e0, vec1e0 + 1,
+                           (unsigned)(this->mVec1e0E - (vec1e0 + 1)) * 4);
+    this->mVec1e0E -= 1;
+
+    float* vec128 = this->mVec128B + idx;
+    if (vec128 + 1 < this->mVec128E)
+        FUN_11e0744_memcpy(vec128, vec128 + 1,
+                           (unsigned)(this->mVec128E - (vec128 + 1)) * 4);
+    this->mVec128E -= 1;
+
+    int count = (int)(this->mNoteDegE - this->mNoteDegB);
+    for (; idx < (unsigned)count; ++idx) {
+        NoteEventI(0xe7b72656, (int)idx);
+        NoteEventI(0xfe31e5d9, this->mNoteDegB[idx]);
+        NoteEventF(0xc309bcc9, this->mVec1e0B[idx]);
     }
-    NoteEvent(0xead8248, (int)count, 0);
+    NoteEventI(0xead8248, count);
 }
 
 // ---------------------------------------------------------------- serialization readers
