@@ -1,0 +1,17 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104bde0@cSPSpaceToolData_s0104_bcc0@SP@@QAEHXZ  0104bde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104be00@cSPSpaceToolData_s0104_bcc0@SP@@QAEHXZ  0104be00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104be30@cSPSpaceToolData_s0104_bcc0@SP@@QAENXZ  0104be30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ??1cSPSpaceToolData_s0104_bcc0@SP@@QAE@XZ  0104c910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104cbd0@cSPSpaceToolData_s0104_bcc0@SP@@QAEXH@Z  0104cbd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104cc00@cSPSpaceToolData_s0104_bcc0@SP@@QAEXH@Z  0104cc00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104cc90@cSPSpaceToolData_s0104_bcc0@SP@@QAEEXZ  0104cc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FreeEffectBuffers@cSPSpaceToolData_s0104_e060@@QAEXXZ  0104e6f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104f930@@YIPAUCPropertyList@@PAUCToolObject@@@Z  0104f930  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104fbb0@@YG_NPAUCToolObject@@@Z  0104fbb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104fe10@@YIXPAUCToolObject@@@Z  0104fe10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104fe50@@YI_NPAUCToolObject@@@Z  0104fe50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104feb0@@YI_NPAUCToolObject@@@Z  0104feb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104fff0@@YIHPAUCToolObject@@@Z  0104fff0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_01050020@@YIXPAUCToolObject@@@Z  01050020  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_01050a60@@YIMPAUcSPToolManager_s0105_0070@@@Z  01050a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,2 +1,4 @@
-# Slice s01051850 names.
-01051850 Simulator::cToolManager::HandleMessage  # IUnmanagedMessageListener vftable 0x0149add0 at +0x1c of cToolManager (ctor 0x0104f960)
+004df440 ?GetPlantProfile@cSPEditorSpeciesManager@SP@@QAEPBUcSpeciesProfile@2@ABVKey@ResourceMan@EA@@@Z  # SP::cSPEditorSpeciesManager::GetPlantProfile (callee of s01051850, named from the dev publics; slice address comment)
+004df550 ?GetProfile@cSPEditorSpeciesManager@SP@@QAEPBUcSpeciesProfile@2@ABVKey@ResourceMan@EA@@@Z  # SP::cSPEditorSpeciesManager::GetProfile (callee of s01051850, named from the dev publics; slice address comment)
+00c70e00 ?GetTechLevel@cPlanet@SP@@QBE?AW4eTechLevel@2@XZ  # SP::cPlanet::GetTechLevel (callee of s01051850, named from the dev publics; slice address comment)
+01051850 ?HandleMessage@cToolManager@@UAE_NIPAX@Z  # cToolManager::HandleMessage migrated from s01051850 (verbatim, slice spelling)

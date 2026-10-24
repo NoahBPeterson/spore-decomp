@@ -1,0 +1,7 @@
+0104f930 ?FUN_0104f930@@YIPAUCPropertyList@@PAUCToolObject@@@Z  # FUN_0104f930 migrated from s0104f2a0 (verbatim, slice spelling)
+0104fbb0 ?FUN_0104fbb0@@YG_NPAUCToolObject@@@Z  # FUN_0104fbb0 migrated from s0104f2a0 (verbatim, slice spelling)
+0104fe10 ?FUN_0104fe10@@YIXPAUCToolObject@@@Z  # FUN_0104fe10 migrated from s0104f2a0 (verbatim, slice spelling)
+0104fe50 ?FUN_0104fe50@@YI_NPAUCToolObject@@@Z  # FUN_0104fe50 migrated from s0104f2a0 (verbatim, slice spelling)
+0104feb0 ?FUN_0104feb0@@YI_NPAUCToolObject@@@Z  # FUN_0104feb0 migrated from s0104f2a0 (verbatim, slice spelling)
+0104fff0 ?FUN_0104fff0@@YIHPAUCToolObject@@@Z  # FUN_0104fff0 migrated from s0104f2a0 (verbatim, slice spelling)
+01050020 ?FUN_01050020@@YIXPAUCToolObject@@@Z  # FUN_01050020 migrated from s0104f2a0 (verbatim, slice spelling)

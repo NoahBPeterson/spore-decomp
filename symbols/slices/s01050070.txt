@@ -1,0 +1,4 @@
+00bc3170 ?Stop@cSPTimer@SP@@QAEXXZ  # SP::cSPTimer::Stop (callee of s01050070, named from the dev publics; slice address comment)
+01050640 ?CreateGenericToolEffect@cSPToolManager_s0105_0070@@QAEPAHPAU1@@Z  # cSPToolManager_s0105_0070::CreateGenericToolEffect migrated from s01050070 (verbatim, slice spelling)
+01050850 ?insert@cVec14@@QAEXPAXI0@Z  # cVec14::insert migrated from s01050070 (verbatim, slice spelling)
+01050a60 ?FUN_01050a60@@YIMPAUcSPToolManager_s0105_0070@@@Z  # FUN_01050a60 migrated from s01050070 (verbatim, slice spelling)
