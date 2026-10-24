@@ -6,15 +6,16 @@
 
 struct Matrix3 {
     float m[9];
-    void Assign(const void* src);
+    Matrix3() {}
+    Matrix3(const Matrix3& src);          // copy ctor, 0x41cb40 (PDB name Assign)
 };
 
 char FUN_004a7e60(void* p);
-char FUN_0043bd80(void* self, float f, Matrix3 m);
 
 struct X973 {
     char pad[0xdc8];
     uint32_t flags;                       // 0xdc8
+    char F_43bd80(Matrix3 m, float f);    // 0x0043bd80 (thiscall, matrix then float)
 };
 
 // @ 0x004973f0
@@ -22,18 +23,12 @@ char FUN_004973f0(X973* p, void* mat, float f, char flag) {
     char result = 0;
     if (p != 0) {
         Matrix3 m;
-        if (mat == 0) {
-            const float* src = (const float*)((char*)p + 0xf0);
-            for (int i = 0; i < 9; ++i)
-                m.m[i] = src[i];
-        } else {
-            const float* src = (const float*)mat;
-            for (int i = 0; i < 9; ++i)
-                m.m[i] = src[i];
-        }
+        if (mat != 0)
+            m = *(const Matrix3*)mat;
+        else
+            m = *(const Matrix3*)((char*)p + 0xf0);
         result = 0;
-        char r = FUN_0043bd80(p, f, m);
-        if (r) {
+        if (p->F_43bd80(m, f)) {
             if ((p->flags & 1) == 0) {
                 result = 1;
             } else {

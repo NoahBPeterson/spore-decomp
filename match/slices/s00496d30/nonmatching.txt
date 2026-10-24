@@ -1,2 +1,2 @@
-004973f0  150  complete transform/flag routine; logic present, but the by-value Matrix3 argument and /Od frame differ
+004973f0  147  /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE /fp:fast /GS- transform/flag routine: the by-value Matrix3 is now passed as a thiscall member (Matrix3 then float, 0x43bd80), the local/argument copies use the out-of-line copy ctor (0x41cb40), and testing the call result directly keeps the callee's eax on the early-out path. Complete: default gate PASS 354 valid / 95.1% coverage (78/82); remaining diff is /Od slot order (frame 0x2c vs 0x68; ours 162 vs 233 bytes)
 00496d30  1465  complete: two opposed ray casts + hit-point/length evals; /Od slot order and out-of-line W-copy arg temps differ
