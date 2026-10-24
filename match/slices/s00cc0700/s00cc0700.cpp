@@ -335,3 +335,259 @@ hit_done:
     mLastUpdate = now;
     return true;
 }
+
+// ---------------------------------------------------------------------------
+// SP::FirePeaceBomb (0x00cc0700) and SP::cDefaultToolProjectile::SetupPathFollowing
+// (0x00cc0870), the other two functions of the space-tool projectile TU. Both run on
+// the full cDefaultToolProjectile object: this+0x34 is the cLocomotiveObject
+// subobject, this+0x518 the owning cSpaceToolData.
+// ---------------------------------------------------------------------------
+#define K_DIST_EPS   (*(const float*)0x013EC4B8)   // 1e-8f, ray/sphere epsilon
+#define K_FLOAT_ZERO (*(const float*)0x01485378)   // _HK_REAL_ZERO
+
+// --- 0x00cc0700: Sim-side views ---
+struct ISimSpatial {                                // sim's spatial data view
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual const cSPVector3& GetPosition();        // 0x2c
+};
+
+struct ISimOwner {                                  // sim's empire data view
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48();
+    virtual int GetEmpireID();                      // 0x4c
+};
+
+struct cSimGameData {
+    uint32_t mPad000[0x714 / 4];                    // +0x000
+    int mSpeciesKind;                               // +0x714
+};
+
+struct ISim {
+    virtual void v00();                             // 0x00
+    virtual void v04();                             // 0x04
+    virtual ISimSpatial* GetSpatial();              // 0x08
+    virtual ISimOwner* GetOwner();                  // 0x0c
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48();
+    virtual void v4c(); virtual void v50(); virtual void v54(); virtual void v58();
+    virtual cSimGameData* GetGameData(const void* typeId);      // 0x5c
+    bool TimedExpired();                            // 0x00bfc600
+    void TimedAdd(uint32_t ms);                     // 0x00bfc640
+};
+
+struct cSimPtrVector {
+    ISim** mpBegin;                                 // +0x00
+    ISim** mpEnd;                                   // +0x04
+    ISim** mpCapacity;                              // +0x08
+};
+
+struct cGameDataList {                              // vector returned by GetGameDataVector
+    uint32_t mField000;                             // +0x00
+    cSimPtrVector mVec;                             // +0x04
+};
+
+struct cGameNounManager {
+    cGameDataList* GetGameDataVector(void* collect, void* clear, void* collectSub,
+                                     void* filter, const void* typeId);      // 0x00b21340
+};
+cGameNounManager* NounManager();                    // 0x00b3d300
+int GetPlayerEmpireID();                            // 0x01021090
+
+// Gives every non-player sim that sits in front of (pos, dir) a two-minute lifetime
+// extension, so the peace bomb's wave front does not cull them mid-animation.
+// @ 0x00CC0700
+void FirePeaceBomb(cSPVector3 pos, cSPVector3 dir)
+{
+    cGameNounManager* pMgr = NounManager();
+    cGameDataList* pList = pMgr->GetGameDataVector(
+        (void*)0x00cd7d10, (void*)0x00ae7230, (void*)0x00ae7250, (void*)0x00b1e520,
+        (const void*)0x013f94d4);
+    cSimPtrVector& vec = pList->mVec;
+    int count = (int)(vec.mpEnd - vec.mpBegin);
+    for (int i = 0; i < count; ++i) {
+        ISim* sim = vec.mpBegin[i];
+        if (sim->GetOwner()->GetEmpireID() == GetPlayerEmpireID())
+            continue;
+        if (sim->TimedExpired())
+            continue;
+        Vector3 delta = sim->GetSpatial()->GetPosition() - pos;
+        double sq = (double)delta.z * delta.z + (double)delta.y * delta.y
+                  + (double)delta.x * delta.x + K_DIST_EPS;
+        float inv = (float)(1.0 / sqrt(sq));
+        float dot = dir.z * (delta.z * inv) + dir.y * (delta.y * inv)
+                  + dir.x * (delta.x * inv);
+        if (dot > K_FLOAT_ZERO) {
+            cSimGameData* pData = sim->GetGameData((const void*)0x00b033b403);
+            if (pData == 0 || pData->mSpeciesKind != 3)
+                sim->TimedAdd(120000);
+        }
+    }
+}
+
+// --- 0x00cc0870: projectile locomotion set-up ---
+struct ILocomotion {                                // SmartPtr-managed behaviour (slots 0/4)
+    virtual void AddRef();                          // 0x00
+    virtual void Release();                         // 0x04
+};
+
+struct cLocomotiveView {                            // cLocomotiveObject at this+0x34
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual const cSPVector3& GetPosition();        // 0x2c
+    virtual void v30(); virtual void v34();
+    virtual void SetPosition(const Vector3& pos);   // 0x38
+    virtual void v3c(); virtual void v40(); virtual void v44(); virtual void v48();
+    virtual void v4c(); virtual void v50(); virtual void v54(); virtual void v58();
+    virtual void v5c(); virtual void v60(); virtual void v64(); virtual void v68();
+    virtual void v6c(); virtual void v70(); virtual void v74(); virtual void v78();
+    virtual void v7c(); virtual void v80(); virtual void v84(); virtual void v88();
+    virtual void v8c(); virtual void v90(); virtual void v94(); virtual void v98();
+    virtual void v9c(); virtual void va0(); virtual void va4(); virtual void va8();
+    virtual void vac(); virtual void vb0(); virtual void vb4(); virtual void vb8();
+    virtual void AddRef();                          // 0xbc
+    virtual void Release();                         // 0xc0
+    virtual void Advance(float deltaTime, int flags);   // 0xc4
+    void SetLocomotion(ILocomotion* p);             // 0x00c421b0
+};
+
+struct cTargetObj {                                 // the projectile's target object
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24();
+    virtual cSPVector3 GetAimPoint(int part);       // 0x28 (hidden return pointer)
+    virtual const cSPVector3& GetPosition();        // 0x2c
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
+    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
+    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
+    virtual void vb0(); virtual void vb4();
+    virtual cTargetObj* Cast(const void* typeId);   // 0xb8
+    virtual void AddRef();                          // 0xbc
+    virtual void Release();                         // 0xc0
+};
+
+struct cPathFollowingLocomotion : ILocomotion {
+    cPathFollowingLocomotion(VectorV3& path, void* motion);     // 0x00cbaf00
+};
+
+inline void* operator new(size_t size, const char* tag, int a, int b, int c, int d);
+void HeapDelete(void* p);                           // 0x00f47380: operator delete(void*)
+
+struct cToolData {                                  // cSpaceToolData, members used here
+    uint32_t mPad000[0x114 / 4];                    // +0x000
+    IObj*    mpOwner;                               // +0x114
+    IObj*    mpTarget;                              // +0x118
+    int      mTargetPart;                           // +0x11c
+    float GetSpread();                              // 0x0104bda0
+    void* GetProjectileMotion();                    // 0x0104bd90
+};
+
+struct cPhaseTimer { uint32_t mData[8]; void Restart(); };      // 0x00bc3130
+
+struct cDefaultToolProjectile {
+    uint32_t mvftable;                              // +0x000
+    uint32_t mPad004[0x30 / 4];                     // +0x004
+    cLocomotiveView mLocomotive;                    // +0x034
+    uint32_t mPad038[(0x224 - 0x038) / 4];          // +0x038
+    int      mProjectileState;                      // +0x224
+    uint32_t mPad228[(0x518 - 0x228) / 4];          // +0x228
+    cToolData* mpTool;                              // +0x518
+    ILocomotion* mpLocomotion;                      // +0x51c
+    cSPVector3 mLastPosition;                       // +0x520
+    uint32_t mPad52c[(0x544 - 0x52c) / 4];          // +0x52c
+    int      mBombPhase;                            // +0x544
+    cPhaseTimer mPhaseTimer;                        // +0x548
+    uint32_t mPad568[(0x58c - 0x568) / 4];          // +0x568
+    cSPVector3 mPathEndPoint;                       // +0x58c
+    int      mTargetPart;                           // +0x598
+    cSPVector3 mStartPosition;                      // +0x59c
+    uint32_t mPad5a8[(0x5d8 - 0x5a8) / 4];          // +0x5a8
+    cTargetObj* mpTarget;                           // +0x5d8
+    uint32_t mPad5dc[(0x5f0 - 0x5dc) / 4];          // +0x5dc
+
+    void SetupPathFollowing(float deltaTime, cTargetObj* pTarget, cSPVector3* pPos);   // 0x00cc0870
+};
+
+template <class T> struct ScopedRef {               // AddRef on entry, Release on exit
+    T* mpObject;
+    explicit ScopedRef(T* p) : mpObject(p) { if (p) p->AddRef(); }
+    ~ScopedRef() { if (mpObject) mpObject->Release(); }
+};
+
+// Builds the flight path towards pTarget (or along pPos when there is no target), gives
+// it to the locomotive and spawns the cPathFollowingLocomotion that walks it.
+// @ 0x00CC0870
+void cDefaultToolProjectile::SetupPathFollowing(float deltaTime, cTargetObj* pTarget,
+                                               cSPVector3* pPos)
+{
+    mProjectileState = 5;
+    cSPVector3 aim;
+
+    if (pTarget) {
+        mTargetPart = mpTool->mTargetPart;
+        cTargetObj* pOldTarget = mpTarget;
+        if (pTarget != pOldTarget) {
+            pTarget->AddRef();
+            mpTarget = pTarget;
+            if (pOldTarget)
+                pOldTarget->Release();
+        }
+        cTargetObj* pAim = pTarget->Cast(&g_013f94d4);
+        const cSPVector3& targetPos = pTarget->GetPosition();
+        aim = pAim->GetAimPoint(mTargetPart) - targetPos;
+    } else {
+        mStartPosition = *pPos;
+        aim = *pPos;
+    }
+
+    VectorV3 path;
+    path.mpBegin = 0;
+    path.mpEnd = 0;
+    path.mpCapacity = 0;
+
+    IObj* pOwner;
+    if (mpTool->mpOwner) {
+        pOwner = mpTool->mpOwner;
+    } else {
+        ScopedRef<cLocomotiveView> held(&mLocomotive);
+        pOwner = (IObj*)&mLocomotive;
+    }
+
+    FindProjectilePath(pOwner, (IObj*)pTarget, &path, aim, PathPrefsForTool((cSpaceToolData*)mpTool),
+                       mpTool->GetSpread());
+
+    mLocomotive.SetPosition(*path.mpBegin);
+
+    cPathFollowingLocomotion* pLoco = new ("Simulator/cPathFollowingLocomotion", 0, 0, 0, 0)
+        cPathFollowingLocomotion(path, mpTool->GetProjectileMotion());
+    if (pLoco != mpLocomotion) {
+        if (pLoco)
+            pLoco->AddRef();
+        ILocomotion* pOldLoco = mpLocomotion;
+        mpLocomotion = pLoco;
+        if (pOldLoco)
+            pOldLoco->Release();
+    }
+    mLocomotive.SetLocomotion(mpLocomotion);
+
+    mPathEndPoint = path.back();
+    mLocomotive.Advance(deltaTime, 0);
+    mBombPhase = 0;
+    mPhaseTimer.Restart();
+    mLastPosition = mLocomotive.GetPosition();
+
+    if (path.mpBegin)
+        HeapDelete(path.mpBegin);
+}
