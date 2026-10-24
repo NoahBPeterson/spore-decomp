@@ -577,7 +577,7 @@ void* FindPlaceholder(uint32_t id)
 }
 
 // @ 0x00b99420
-void* FUN_00b99420()
+void FUN_00b99420()
 {
     cSpeciesProfile* pAvatar = FUN_00401090()->GetAvatarProfile();
     ObjectTemplateDB* pDB = GetObjectTemplateDB();
@@ -585,8 +585,9 @@ void* FUN_00b99420()
     GameDataVec* pData = pMgr->GetGameDataVector(&FUN_00cd7d10, &FUN_00d3d420,
                                                  &FUN_00ace070, &FUN_00b1e500, 0x36be27e);
     GameDataVectorCore* pVec = &pData->mVec;
-    void* pLast = 0;
-    for (void** p = pVec->mpBegin; p != pVec->mpEnd; ++p) {
+    void** p = pVec->mpBegin;
+    void** pEnd = pVec->mpEnd;
+    for (; p != pEnd; ++p) {
         NounData* pObj = (NounData*)*p;
         void* pNoun = pObj->mpNoun1a4;
         if (!pNoun)
@@ -605,7 +606,6 @@ void* FUN_00b99420()
                 pDB->RegisterProfile(&((ProfileHolder*)pProfile)->mKey, 0);
         }
     }
-    return pLast;
 }
 
 // @ 0x00b99530
