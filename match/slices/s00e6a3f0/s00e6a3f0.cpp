@@ -73,11 +73,19 @@ static char Usercall_e52960(int obj) {
 
 static inline int CellOwnerId() { return *(int*)(g_016b3c04 + 0x411c); }
 
+// Retail saves the incoming ECX with its 4-byte local-frame push and restores it at every exit.
+// Keep the same caller-visible register state for LTCG callers without changing the C++ body.
+struct EcxPreserve {
+    __forceinline EcxPreserve() { __asm push ecx }
+    __forceinline ~EcxPreserve() { __asm pop ecx }
+};
+
 // ---------------------------------------------------------------- the function
 extern "C" void sResolvePartCollision(int p1, int p2, int p3, float p4, int* p5, int p6, int p7,
                                       int p8, int* p9, int p10, unsigned int p11, int p12, int p13,
                                       int p14)
 {
+    EcxPreserve ecxPreserve;
     CollPart* A = (CollPart*)p5;
     CollPart* B = (CollPart*)p9;
     int uVar5;
