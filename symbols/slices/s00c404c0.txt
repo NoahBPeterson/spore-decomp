@@ -1,0 +1,47 @@
+00c3f9b0  SP::cInteractableObject::cInteractableObject  # base ctor, called implicitly by the two real ctors (this)
+00c3f890  SP::cInteractableObject::LoadModelChecked  # 0xc3f890
+00c3f9a0  SP::cInteractableObject::FUN_00c3f9a0  # 0xc3f9a0
+00c3fa70  SP::cInteractableObject::Destroy  # tail-called from ~cInteractiveOrnament, ret 4
+00c3fc80  SP::cInteractableObject::InitFromDefinition  # ret 0xc
+00c89630  SP::cSpatialObject::cSpatialObject  # subobject at +0x34, called explicitly in the road ctor
+00c8a420  SP::cSpatialObject::~cSpatialObject  # 0xc8a420
+00c8b2e0  SP::cSpatialObject::FUN_00c8b2e0  # tail-jumped from RemoveOwner
+00c88a90  SP::cSpatialObject::Write
+00c88b00  SP::cSpatialObject::Read
+00c884f0  SP::cSpatialObject::Cast  # virtual slot call in Cast_00c40cd0
+00b18660  SP::cGameData::cGameData  # base ctor of cInterCityRoad
+00b184c0  SP::cGameData::~cGameData  # tail-jumped from Dtor_00c41040
+00b18590  SP::cGameData::Write
+00b18600  SP::cGameData::Read
+00bfd4e0  SP::cCombatant::cCombatant  # subobject at +0x170
+00bfcd00  SP::cCombatant::~cCombatant
+00b3d350  SP::PlanetModel  # called twice in FUN_00c40d20
+00b3d300  SP::NounManager  # ret 4
+00b8bba0  SP::cCityDisplayStrategy::AddResourceNodes  # thiscall, ecx = display
+00692f90  SP::cVarListSerializer::cVarListSerializer  # (owner, 0x15740d8, 0x1a80d26)
+00692900  SP::cVarListSerializer::Serialize
+00693e10  SP::cVarListSerializer::Read
+0093aa70  EA::IO::WriteUint32  # (io, p, count, flags)
+0093a780  EA::IO::ReadInt32  # (io, p, count, flags)
+00f47380  operator delete[]
+00f21760  FUN_00f21760  # cdecl (obj, arg)
+00b18460  FUN_00b18460  # __stdcall type-id cast helper (ret 4)
+00571d90  FUN_00571d90  # detach/delete model helper (no return used)
+00423650  eastl::basic_string<wchar_t>::assign  # (first, last)
+004e3e10  SpVector<Key>::DoInsertKey  # 0x4e3e10
+0050f740  SpVector<Vector3>::erase
+00473890  SpVector<Vector3>::reserve
+004b5ad0  SpVector<Vector3>::DoInsertValue
+00ac45e0  SpVector<cCurvePoint>::DoInsertValue
+00ac1ff0  cCurvePoint::CopyFrom  # 8 float fields, called by insert_00c41190
+01667bac  eastl::gEmptyString16  # empty wstring singleton (cap = +2 = 0x1667bae)
+0146cd68  L"IntercityRoadMesh"  # assigned into mStr_108
+0146ce68  vtbl_SP::cInterCityRoad  # +0x00 in cInterCityRoad ctor
+0146ce54  PTR_FUN_0146ce54  # +0x04 in cInterCityRoad ctor
+0146cd90  SP::cSpatialObject vtbl (road variant)  # +0x00 of the +0x34 subobject
+0146cca0  vtbl_cInteractiveOrnament  # +0x00 of cInteractiveOrnament ctor/dtor
+0146cc8c  PTR_FUN_0146cc8c  # +0x04 of cInteractiveOrnament ctor/dtor
+0146cbc8  SP::cSpatialObject vtbl (ornament variant)  # +0x34
+0146cbb8  PTR_FUN_0146cbb8  # +0x130 first vtable
+0146c56c  PTR_FUN_0146c56c  # +0x130 second vtable
+0146cb50  vtbl_cCombatant  # +0x170

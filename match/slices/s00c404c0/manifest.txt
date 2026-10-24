@@ -1,0 +1,7 @@
+slices/s00c404c0/s00c404c0.cpp  ?LoadModel_00c407d0@cInteractiveOrnament@@QAE_NPAX@Z  00c407d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c404c0/s00c404c0.cpp  ?Attach_00c40800@cInteractiveOrnament@@QAEXPAX@Z  00c40800  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c404c0/s00c404c0.cpp  ?FUN_00c40d20@@YG_NPAX@Z  00c40d20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c404c0/s00c404c0.cpp  ?Dtor_00c41040@cInterCityRoad@@QAEXXZ  00c41040  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c404c0/s00c404c0.cpp  ?push_back_default@SpVecCurve@@QAEXXZ  00c410e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c404c0/s00c404c0.cpp  ?insert_00c41190@SpVecCurve@@QAEPAUcCurvePoint@@PAU2@ABU2@@Z  00c41190  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c404c0/s00c404c0.cpp  ?RemoveOwner_00c412f0@cInterCityRoad@@QAEXXZ  00c412f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
