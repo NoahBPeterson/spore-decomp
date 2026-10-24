@@ -1,1 +1,4 @@
+00c80ce0 SP::cSimPlanetLowLOD::UpdateFauna  # recounts the two high fauna slots of the five species tables, applies the random-spawn/hysteresis rules and accumulates living counts into the filter-results fauna hash (names Claude-coined)
 00c810e0 SP::cSimPlanetLowLOD::UpdateFloraAndFauna  # existing name (card); body reconstructed: recounts flora/fauna species via cell callback, posts extinction events
+00c817e0 SP::cSimPlanetLowLOD::UpdateBackgroundPlanet  # builds a cSPFilterResults scratch and runs the flora/fauna recount when SortBanners()==IsArchived(); called by the background update path
+00c81890 SP::cSimPlanetLowLOD::SetPlantDensity  # writes one species-kind slot of a planet species table, maintains the live flora map counts and the density list / extinction reason (names Claude-coined)
