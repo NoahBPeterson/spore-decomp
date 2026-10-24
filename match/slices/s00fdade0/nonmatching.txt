@@ -1,0 +1,7 @@
+00fdade0 377 FUN_00fdade0: size 735 vs 742; equiv UNSUPPORTED (only 0/400 inputs valid, fault(read)=400)
+00fdb0c0 263 FUN_00fdb0c0: size 360 vs 320; equiv WEAK (400 valid, coverage 16.7% < 60%)
+00fdb230 53 FUN_00fdb230: size 68 vs 68; equiv FAIL (eax is caller-saved; function is void, original happens to leave `out` in eax, ours leaves `begin`; benign)
+00fdb330 737 FUN_00fdb330: size 985 vs 918; equiv WEAK (244 valid, coverage 40.8% < 60%)
+00fdb710 204 Activate: size 642 vs 613; equiv WEAK (89 valid, coverage 88.1% < 60%)
+00fdba50 290 TransitionFromCivToSpace: size 454 vs 413; equiv WEAK (220 valid, coverage 16.0% < 60%)
+00fdbc20 218 CompleteTransitionFromEntryToNewGame: size 312 vs 326; equiv UNSUPPORTED (only 0/400 inputs valid; fault(read)=277, fault(write)=111, budget=10)
