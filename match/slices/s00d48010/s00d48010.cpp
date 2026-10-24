@@ -328,3 +328,321 @@ bool cCreatureCollectableItemsScenario::EvaluateEvent(uint32_t eventID, Scenario
         return false;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Simulator creature-GUI button table (global at 0x0169e3ec)
+//   five categories of five {id, flag} entries, followed by the two category
+//   base ids (0xd0/0xd4) and the id count shared by every range (0xcc).
+// ---------------------------------------------------------------------------
+struct ButtonEntry
+{
+    int32_t mID;          // +0x00 (-1 = unused slot)
+    uint8_t mFlag;        // +0x04
+    uint8_t pad05[3];     // +0x05
+};
+
+struct ButtonCategory
+{
+    ButtonEntry mEntries[5];   // +0x00 .. +0x27
+};
+
+struct ButtonTable
+{
+    union
+    {
+        ButtonEntry mAllEntries[0x19];    // +0x000 (flat view used by the filler loop)
+        ButtonCategory mCategories[5];    // +0x000 (category view used by the lookups)
+    };
+    uint32_t mFieldC8;                    // +0x0c8
+    uint32_t mCategoryCount;              // +0x0cc (ids per category range)
+    uint32_t mBase0;                      // +0x0d0 (first id of categories 0/1)
+    uint32_t mBase1;                      // +0x0d4 (first id of categories 3/4)
+};
+
+extern ButtonTable* gButtonTable;         // 0x0169e3ec
+
+void operator delete(void* p);                                    // 0x00f47380
+void* operator new(uint32_t size, const char* name, int, int, int, int);   // 0x00f473a0
+
+// ---------------------------------------------------------------------------
+// Wide string (EASTL basic_string<wchar_t>)
+// ---------------------------------------------------------------------------
+struct WString
+{
+    wchar_t* mpBegin;        // +0
+    wchar_t* mpEnd;          // +4
+    wchar_t* mpCapacity;     // +8
+
+    WString& assign(const wchar_t* s);                            // 0x005c3d90 (ret 4)
+    WString& Assign(const wchar_t* first, const wchar_t* last);   // 0x00423650 (ret 8)
+};
+
+class cSpeciesProfile
+{
+public:
+    void GetUiName(WString* out);            // 0x004da330 (ret 4)
+};
+
+class cCivTokenTranslator
+{
+public:
+    cCivTokenTranslator();                                           // 0x00b32470
+    virtual bool TranslateToken(const wchar_t* token, WString* out); // 0x00b324f0 (ret 8)
+    uint32_t pad04[2];                                               // +0x04 .. +0x0b
+};
+
+class cCreatureTokenTranslator : public cCivTokenTranslator
+{
+public:
+    cCreatureTokenTranslator();                                      // 0x00d486f0
+
+    uint32_t mValueC;                // +0x0c
+    uint32_t mValue10;               // +0x10
+    uint32_t mValue14;               // +0x14
+    uint32_t mValue18;               // +0x18
+    cSpeciesProfile* mpProfile;      // +0x1c
+    int32_t mValue20;                // +0x20
+    int32_t mValue24;                // +0x24
+    const wchar_t* mpText;           // +0x28 (null = no token)
+    float mValue2c;                  // +0x2c
+
+    bool TranslateToken(const wchar_t* token, WString* out);         // 0x00d48750
+};
+
+extern const wchar_t kTokenError[];      // 0x0147ae78 L"*TOKEN ERROR*"
+extern const wchar_t kTokenNumberSep[];  // 0x013ec468 number prefix text
+
+uint32_t __cdecl FNV1_String16(const wchar_t* s, uint32_t seed, int fold);   // 0x00932f30
+void __cdecl SetNumberString(int64_t value, wchar_t* buf, int cch);          // 0x00881ae0
+void __cdecl FormatNumberDouble(double value, wchar_t* buf, int cch, int flags); // 0x00881ea0
+
+static inline void AssignWideLiteral(WString* out, const wchar_t* s)
+{
+    const wchar_t* end = s;
+    while (*end != 0)
+        ++end;
+    out->Assign(s, end);
+}
+
+// @ 0x00d486f0
+cCreatureTokenTranslator::cCreatureTokenTranslator()
+    : mValueC(0), mValue10(0), mValue14(0), mpProfile(0), mValue20(0), mpText(0), mValue2c(0.0f)
+{
+}
+
+// @ 0x00d48750
+bool cCreatureTokenTranslator::TranslateToken(const wchar_t* token, WString* out)
+{
+    wchar_t buf[64];
+    switch (FNV1_String16(token, 0x811c9dc5, 1))
+    {
+    case 0x7142102a:                        // species profile name
+        AssignWideLiteral(out, kTokenError);
+        if (mpProfile == 0)
+            return true;
+        mpProfile->GetUiName(out);
+        return true;
+
+    case 0x4276d4e:                         // signed count
+        out->assign(kTokenError);
+        SetNumberString((int64_t)mValue20, buf, 0x40);
+        buf[0x3f] = 0;
+        out->assign(buf);
+        return true;
+
+    case 0x171f9d3:                         // unsigned count
+        out->assign(kTokenError);
+        SetNumberString((int64_t)(uint32_t)mValue18, buf, 0x40);
+        buf[0x3f] = 0;
+        out->assign(buf);
+        return true;
+
+    case 0x5edec022:                        // unsigned count
+        out->assign(kTokenError);
+        SetNumberString((int64_t)(uint32_t)mValueC, buf, 0x40);
+        buf[0x3f] = 0;
+        out->assign(buf);
+        return true;
+
+    case 0x801ac859:                        // unsigned count
+        out->assign(kTokenNumberSep);
+        SetNumberString((int64_t)mValue24, buf, 0x40);
+        buf[0x3f] = 0;
+        out->assign(buf);
+        return true;
+
+    case 0xe976268a:                        // float value
+        out->assign(kTokenNumberSep);
+        FormatNumberDouble((double)mValue2c, buf, 0x40, 0);
+        buf[0x3f] = 0;
+        out->assign(buf);
+        return true;
+
+    case 0x548c1df2:                        // unsigned count
+        out->assign(kTokenError);
+        SetNumberString((int64_t)(uint32_t)mValue10, buf, 0x40);
+        buf[0x3f] = 0;
+        out->assign(buf);
+        return true;
+
+    case 0xe37cf60f:                        // unsigned count
+        out->assign(kTokenError);
+        SetNumberString((int64_t)(uint32_t)mValue14, buf, 0x40);
+        buf[0x3f] = 0;
+        out->assign(buf);
+        return true;
+
+    case 0x485fc991:                        // literal text
+    case 0xdb8f7823:
+    case 0xd004e927:
+        if (mpText == 0)
+            return true;
+        out->assign(mpText);
+        return true;
+
+    default:
+        return cCivTokenTranslator::TranslateToken(token, out);
+    }
+}
+
+// @ 0x00d48a00
+void InitButtonTable()
+{
+    gButtonTable = (ButtonTable*)operator new(0xd8, "Simulator", 0, 0, 0, 0);
+    switch (GetCurrentGameMode())
+    {
+    case 0x1654c01:                         // creature editor / creature game
+    case 0x1654c10:
+        gButtonTable->mFieldC8 = 5;
+        gButtonTable->mCategoryCount = 5;
+        gButtonTable->mBase0 = 0x1012010;
+        gButtonTable->mBase1 = 0x1012020;
+        break;
+
+    case 0x1654c02:                         // tribe/civ stage
+        gButtonTable->mFieldC8 = 5;
+        gButtonTable->mCategoryCount = 3;
+        gButtonTable->mBase0 = 0x1012060;
+        gButtonTable->mBase1 = 0x1012050;
+        break;
+    }
+    ButtonTable* t = gButtonTable;
+    for (int i = 0; i < 0x19; ++i)
+    {
+        t->mAllEntries[i].mID = -1;
+        t->mAllEntries[i].mFlag = 0;
+    }
+}
+
+// @ 0x00d48ae0
+void FreeButtonTable()
+{
+    if (gButtonTable != 0)
+        operator delete(gButtonTable);
+    gButtonTable = 0;
+}
+
+void* FUN_00d1e610();                                     // 0x00d1e610
+void UseAbility(void* user, int index);                    // 0x00d1e930
+void ActivateAbilityTarget(int index);                     // 0x00d1fe00
+
+// @ 0x00d48b00
+void SelectAbility(int index)
+{
+    void* user = FUN_00d1e610();
+    if (user != 0)
+    {
+        int count = ((int (__thiscall*)(void*))(*(void***)user)[0xb0 / 4])(user);
+        if (index < count)
+        {
+            UseAbility(user, index);
+            return;
+        }
+        if (GetCurrentGameMode() == 0x1654c02)
+            ActivateAbilityTarget(index - count);
+    }
+}
+
+class cSPUILayout
+{
+public:
+    void* FindWindowByID(uint32_t windowID, int unused);   // 0x008105b0 (ret 8)
+};
+
+cSPUILayout* FUN_00d39000();      // 0x00d39000
+cSPUILayout* FUN_00cc8990();      // 0x00cc8990
+class cUILayoutManager
+{
+public:
+    cSPUILayout* GetCurrentLayout();    // 0x00ef0dc0
+};
+extern cUILayoutManager* gUILayoutManager;   // 0x016c7aa4
+
+// @ 0x00d48b50
+void* GetCreatureGUIWindow(uint32_t windowID)
+{
+    cSPUILayout* layout;
+    switch (GetCurrentGameMode())
+    {
+    case 0x1654c01: layout = FUN_00d39000(); break;
+    case 0x1654c02: layout = FUN_00cc8990(); break;
+    case 0x1654c10: layout = gUILayoutManager->GetCurrentLayout(); break;
+    default: layout = 0; break;
+    }
+    return layout->FindWindowByID(windowID, 1);
+}
+
+// @ 0x00d48bc0
+bool sGetButtonCategoryFromButtonID(uint32_t buttonID, int32_t* outIndex, int32_t* outCategory)
+{
+    if (gButtonTable == 0)
+        return false;
+    if (buttonID >= gButtonTable->mBase0 && buttonID < gButtonTable->mBase0 + gButtonTable->mCategoryCount)
+    {
+        *outCategory = 0;
+        *outIndex = (int32_t)(buttonID - gButtonTable->mBase0);
+        return true;
+    }
+    if (buttonID >= gButtonTable->mBase1 && buttonID < gButtonTable->mBase1 + gButtonTable->mCategoryCount)
+    {
+        *outCategory = 1;
+        *outIndex = (int32_t)(buttonID - gButtonTable->mBase1);
+        return true;
+    }
+    if (buttonID >= 0x1012030 && buttonID < 0x1012030 + gButtonTable->mCategoryCount)
+    {
+        *outCategory = 2;
+        *outIndex = (int32_t)(buttonID - 0x1012030);
+        return true;
+    }
+    if (buttonID >= 0x1012040 && buttonID < 0x1012040 + gButtonTable->mCategoryCount)
+    {
+        *outCategory = 4;
+        *outIndex = (int32_t)(buttonID - 0x1012040);
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00d48cb0
+uint32_t FindButtonIDBySlot(uint32_t buttonID)
+{
+    ButtonTable* t = gButtonTable;
+    for (int cat = 0; cat < 5; ++cat)
+    {
+        for (int i = 0; i < 5; ++i)
+        {
+            if (t->mCategories[cat].mEntries[i].mID == (int32_t)buttonID)
+            {
+                switch (cat)
+                {
+                case 0:  return t->mBase0 + i;
+                case 1:  return t->mBase1 + i;
+                case 2:  return 0x1012030 + i;
+                case 4:  return 0x1012040 + i;
+                }
+            }
+        }
+    }
+    return 0;
+}
