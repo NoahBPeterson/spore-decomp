@@ -100,6 +100,14 @@ class SubMix { public:
     void FUN_01137420(int, int);   // 0x01137420
     void FUN_01137450(void*);      // 0x01137450
 };
+// DelayLine::Release is __thiscall: this = the delay line, no stack args.
+struct DelayLine {
+    void Release();                // 0x0114d770
+};
+// PlugIn::Initialize<SndPlayer1> instantiation used by the SampleCapture ctor.
+class PlugIn_s0112_ce20 { public:
+    PlugIn_s0112_ce20* Initialize_SndPlayer1();   // 0x0112dbb0
+};
 // TimerManager::AddTimer is __thiscall: this = TimerManager, 6 stack args, ret 8.
 struct TimerMgr {
     char AddTimer(void*, void*, void*, const char*, int, int); // 0x0112d8e0
@@ -128,7 +136,6 @@ int  FUN_011431a0(void* ptrs, int n);               // 0x011431a0
 int  FUN_0113f940(void);                            // 0x0113f940
 void FUN_0112d590(void** a, void** b, float g, int c, int d, int e); // 0x0112d590
 void* FUN_011373c0(void);                           // 0x011373c0
-int  FUN_0114d770(void* ctx);                       // 0x0114d770
 void* operator_new_arr(unsigned sz, int a, unsigned n); // 0x011e073e
 double ceil(double);                                // msvcr90!ceil
 int strcmp(const char*, const char*);
@@ -153,8 +160,8 @@ void __cdecl FUN_011388f0(SndPlayer1* self)
         return;
     }
     self->mAttribute[0].f32 = self->mCurrentRequestHandle;
-    self->mAttribute[2].f64 = (double)((float)self->mCurrentRequestNumSamples / self->mCurrentRequestSampleRate);
-    self->mAttribute[1].f64 = (double)((float)self->mCurrentRequestSamplesPlayed / self->mCurrentRequestSampleRate);
+    self->mAttribute[2].f64 = (double)self->mCurrentRequestNumSamples / self->mCurrentRequestSampleRate;
+    self->mAttribute[1].f64 = (double)self->mCurrentRequestSamplesPlayed / self->mCurrentRequestSampleRate;
     while (ri->samplesFed == 0) {
         b = (u8)(b + 1); b = (b == self->mMaxRequests) ? 0 : b;
         ri = (RequestInternal*)((char*)self + off + b * 0x30);
@@ -244,7 +251,7 @@ void AudioObj::F_d00()
         A<System*>(self, 4)->RemoveTimer((TimerHandle*)((char*)self + 0x24));
     SNDSYS_restore();
     int p = A<int>(self, 0x3c);
-    if (p) { g_pSystem->Free((void*)p, 0); A<int>(self, 0x3c) = 0; }
+    if (p) g_pSystem->Free((void*)p, 0);
 }
 
 // @ 0x01138d40  Snd9Service::UpdateSnd9SampleRate
@@ -487,11 +494,7 @@ bool __cdecl FUN_01139450(void* p)
 {
     if (p) {
         *(void**)p = (void*)0x14b1788;
-        /* PlugIn::Initialize<...>(p+0x24) */
-        A<int>(p, 0x24) = 0;
-        A<int>(p, 0x30) = 0x13f9034;
-        A<int>(p, 0x34) = 0;
-        A<u8>(p, 0x38) = 3;
+        ((PlugIn_s0112_ce20*)((char*)p + 0x24))->Initialize_SndPlayer1();
     }
     A<float>(p, 0x40) = 0.0f;
     A<int>(p, 0xc) = (int)((char*)p + 0x40);
@@ -616,9 +619,9 @@ void AudioObj::F_8b0()
 {
     void* self = this;
     for (int i = 0; i < 6; i++)
-        FUN_0114d770((char*)self + 0x2b4 + i * 0x3c);
+        ((DelayLine*)((char*)self + 0x2b4 + i * 0x3c))->Release();
     for (int i = 0; i < (int)A<u8>(self, 0x439); i++)
-        FUN_0114d770((char*)self + 0x88 + i * 0x3c);
+        ((DelayLine*)((char*)self + 0x88 + i * 0x3c))->Release();
     if (A<char>(self, 0x43a))
         g_pSystem->RemoveTimer((TimerHandle*)((char*)self + 0x13c));
 }

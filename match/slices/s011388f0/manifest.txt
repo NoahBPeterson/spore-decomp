@@ -4,3 +4,4 @@ slices/s011388f0/s011388f0.cpp  ?FUN_01138fb0@core@audio@rw@@YAHPAX@Z  01138fb0 
 slices/s011388f0/s011388f0.cpp  ?FUN_01138fd0@core@audio@rw@@YA_NPAX@Z  01138fd0  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s011388f0/s011388f0.cpp  ?FUN_011397e0@core@audio@rw@@YA_NPAX@Z  011397e0  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s011388f0/s011388f0.cpp  ?F_820@AudioObj@core@audio@rw@@QAEXHPAH@Z  01139820  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s011388f0/s011388f0.cpp  ?FUN_01139450@core@audio@rw@@YA_NPAX@Z  01139450  /vc71 /O2 /MD /Gy /TP /arch:SSE
