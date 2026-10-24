@@ -9,3 +9,4 @@
 00a358d0  -   F_a358d0::call (AutoRefCount-pair vector insert, EH-aware): equivalent; difftest WEAK (127 valid, 59.0% coverage)
 00a35c00  -   FUN_00a35c00 (clear primitive vector, reset accumulators): equivalent; difftest PASS (400 valid, 100.0% coverage)
 00a35c40  178 F_a35c40::call (select primitives + recentre): complete implementation; difftest UNSUPPORTED (0/400 valid, read faults)
+00a35420  298  F_a35420::call (move segment endpoint along direction): complete; direction/capping math now uses the original x87 double-precision products and grouping (was float-rounded squares and reused length); difftest FAIL is register-only (ours writes xmm7, original uses xmm3/xmm1)

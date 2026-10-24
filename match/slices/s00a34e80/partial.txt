@@ -1,6 +1,5 @@
 # va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a350d0  115 F_a350d0::call (travel-segment update): approximated; difftest FAIL (5/349, 1-ulp difference in stored speed)
-00a35420  358 F_a35420::call (move segment endpoint along direction): approximated; difftest FAIL (5/390, direction/capping math diverges)
 00a35720  209 FUN_00a35720 (object destructor): approximated; difftest FAIL (5/5, fake-arity: indirect call through zero)
 00a35840  119 F_a35840::call (set + cache global audio style property): approximated; difftest FAIL (5/5, fault in hashtable find at 0x645ed8; find/insert iterator ABI not reproduced)
 00a35aa0  -   FUN_00a35aa0 (ambience-layer ctor): approximated; difftest FAIL (5/5, invalid write at 0x9212a8; inlined pool ctor args differ)

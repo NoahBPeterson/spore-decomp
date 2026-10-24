@@ -310,11 +310,12 @@ void F_a35420::call(float dt)
     float dx = x - self[3];
     float dy = self[1] - self[4];
     float dz = self[2] - self[5];
-    float len = dy * dy + (dz * dz + dx * dx);
-    float inv = (float)(1.0 / sqrt((double)len));
-    float dist = (float)sqrt((double)((dy * dy + dz * dz) + (x - self[3]) * (x - self[3])));
+    double len = (double)dx * dx + (double)dz * dz + (double)dy * dy;
+    float inv = (float)(1.0 / sqrt(len));
+    double dist2 = (double)dz * dz + (double)dy * dy + ((double)x - (double)self[3]) * ((double)x - (double)self[3]);
+    float dist = (float)sqrt(dist2);
     float step = self[6] * dt;
-    if (dist < self[6] * dt)
+    if (step > dist)
         step = dist;
     self[3] = self[3] + (inv * dx) * step;
     self[4] = self[4] + (inv * dy) * step;
