@@ -1,1 +1,15 @@
-00d79470 SP::cTribeGameBehaviorParty::Action  # vtable 0x0147bf60 (vtbl_Simulator::cTribeGameBehaviorParty) slot 6, same slot as cTribeGameBehaviorFish::Action; PDB names neighbours AddAgent/RemoveAgent/PostAction
+00d79470 SP::cTribeGameBehaviorParty::Action  # preserved; nonmatching
+00d79fd0 SP::cEditorGameObject::Destroy  # newly claimed; byte-exact
+00d7a020 SP::InitEditorParams  # newly claimed; partial
+00d7a070 SP::UpdateEditorSelection  # newly claimed; nonmatching
+00d7a260 SP::IsDanceFinisher  # newly claimed; nonmatching
+00d7a320 SP::IsSub58FlagSet  # newly claimed; byte-exact
+00d7a360 SP::CanUseEditorAction  # newly claimed; nonmatching
+00d7a3a0 SP::IsC04590FlagSet  # newly claimed; nonmatching
+00d7a3e0 SP::IsPartyModeReady  # newly claimed; nonmatching
+00d7a440 SP::CanStartEditorAction  # newly claimed; nonmatching
+00d7a470 SP::IsD51660BitClear  # newly claimed; nonmatching
+00d7a490 SP::IsEditorObjectBitClear  # newly claimed; nonmatching
+00d7a4d0 SP::IsLookupBFlagSet  # newly claimed; nonmatching
+00d7a530 SP::IsEditorActionAvailableValue  # newly claimed; partial
+00d7a560 SP::GetEditorSelection  # newly claimed; nonmatching

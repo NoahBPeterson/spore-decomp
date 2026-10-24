@@ -304,6 +304,306 @@ IAudioSystem* GetSystemAT();               // 0x00a206f0
 void Start3dSoundByName(uint32_t soundID, uint32_t handle, float x, float y, float z);   // 0x00571f80
 
 
+// ---------------------------------------------------------------------------------------
+// Adjacent editor/game-state predicates (0x00d79fd0..0x00d7a5be).
+// ---------------------------------------------------------------------------------------
+extern float kEditorDistanceLimit;                  // 0x0147c034
+
+class cSub58 {
+public:
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
+    virtual int Check();                             // +0x20
+    uint8_t mData[0x20];
+};
+
+class cObjectManager {
+public:
+    uint32_t mField0;
+    uint32_t mField4;
+    void* Get(uint32_t mask, uint32_t zero);         // 0x00bc96a0
+    void* GetZeroFirst(uint32_t zero, uint32_t mask); // 0x00bc96a0
+    void Remove(uint32_t mask, uint32_t zero);       // 0x00bc98f0
+};
+
+class cManagerOwner {
+public:
+    uint8_t mPad00[8];
+    cObjectManager mManager;                         // +0x08
+    uint8_t mPad18[0x1cc - 0x10];
+    uint32_t mField1cc;                              // +0x1cc
+    uint8_t mPad1d0[0x1d8 - 0x1d0];
+    uint32_t mField1d8;                              // +0x1d8
+};
+
+class cLookupResult {
+public:
+    uint8_t mPad00[0x5a8];
+    uint8_t mSub5a8[0xb20 - 0x5a8];                  // +0x5a8
+    uint32_t mObjectID;                              // +0xb20
+    uint8_t mPadB24[0xb4c - 0xb24];
+    cManagerOwner* mpB4C;                            // +0xb4c
+    uint8_t mPadB50[0xb58 - 0xb50];
+    uint32_t mFlagsB58;                              // +0xb58
+    uint8_t mPadB5C[2];
+    uint8_t mByteB5E;                                // +0xb5e
+};
+
+class cRawHandle {
+public:
+    uint8_t mPad00[0xc];
+    uint32_t mState;                                 // +0x0c
+    uint32_t mField10;                               // +0x10
+};
+
+class cGameState {
+public:
+    uint8_t mPad00[0x28];
+    uint8_t mByte28;                                 // +0x28
+    uint8_t mByte29;                                 // +0x29
+    uint8_t mPad2a[2];
+    int mState2c;                                    // +0x2c
+};
+
+class cD51660Result {
+public:
+    uint8_t mPad00[0x6c];
+    uint32_t mFlags6c;                               // +0x6c
+};
+
+class cC04590Result {
+public:
+    uint8_t mPad00[0x190];
+    uint8_t mFlag190;                                // +0x190
+};
+
+class cEditorOutput {
+public:
+    uint8_t mFlag0;
+    void* mpData4;
+    void Clear();                                    // 0x00d997e0
+};
+
+class cEditorGameObject {
+public:
+    void* mpVtable0;
+    void* mpVtable4;
+    uint8_t mPad08[0x58 - 0x08];
+    cSub58 mSub58;                                   // +0x58
+    uint8_t mPad7c[0x110 - 0x7c];
+    uint32_t mFlags110;                              // +0x110
+    uint8_t mPad114[0x5e0 - 0x114];
+    float mField5e0;                                 // +0x5e0
+    uint8_t mPad5e4[0xb20 - 0x5e4];
+    uint32_t mObjectID;                              // +0xb20
+    uint8_t mPadB24[0xb4c - 0xb24];
+    cManagerOwner* mpB4C;                            // +0xb4c
+    uint8_t mPadB50[8];
+    uint32_t mFlagsB58;                              // +0xb58
+    uint8_t mPadB5C[2];
+    uint8_t mByteB5E;                                // +0xb5e
+    uint8_t mPadB5F[0x1004 - 0xb5f];
+    uint32_t mField1004;                             // +0x1004
+    uint8_t mPad1008[0x101c - 0x1008];
+    uint32_t mField101c;                             // +0x101c
+
+    void BaseDestroy();                              // 0x00abf190
+    void Destroy();                                  // 0x00d79fd0
+    cC04590Result* LookupC04590();                   // 0x00c04590
+    bool IsEditorActionAvailable();                  // 0x00c0bb90
+};
+
+void InitEditorParamsInner(uint32_t* params);        // 0x00abedb0
+cLookupResult* ResolveA(void* handle);               // 0x00d99980
+cLookupResult* ResolveB(void* handle);               // 0x00d999d0
+int HasTag(void* handle, uint32_t tag);              // 0x00d998d0
+cGameState* GetGameState();                          // 0x00b3d4d0
+uint32_t GetGameModeID();                            // 0x00b5b800
+cD51660Result* LookupD51660();                       // 0x00d51660
+cC04590Result* __fastcall LookupC04590Fast(cEditorGameObject* p); // 0x00c04590
+bool __fastcall IsEditorActionAvailableFast(cEditorGameObject* p); // 0x00c0bb90
+
+// @ 0x00d79fd0
+void cEditorGameObject::Destroy()
+{
+    mpVtable0 = (void*)0x147bdb0;
+    mpVtable4 = (void*)0x147bda0;
+    BaseDestroy();
+}
+
+// @ 0x00d7a020
+void InitEditorParams(uint32_t a, uint32_t b, uint32_t c, uint32_t d,
+                      uint32_t e, uint32_t f)
+{
+    uint32_t params[6];
+    params[0] = a;
+    params[1] = b;
+    params[2] = c;
+    params[3] = d;
+    params[4] = e;
+    params[5] = f;
+    InitEditorParamsInner(params);
+}
+
+// @ 0x00d7a070
+void UpdateEditorSelection(cEditorGameObject* p, uint32_t objectID)
+{
+    cObjectManager* manager = &p->mpB4C->mManager;
+    void* handle = manager->Get(0x400, 0);
+    cLookupResult* result = handle ? ResolveA(handle) : 0;
+    if (result && (objectID == 0 || result->mObjectID == objectID))
+        manager->Remove(0x400, 0);
+
+    cRawHandle* raw = (cRawHandle*)manager->Get(0x200, 0);
+    result = raw ? ResolveA(raw) : 0;
+    if (raw && result && raw->mState == 1 && raw->mField10 == 0) {
+        cObjectManager* manager2 = &result->mpB4C->mManager;
+        void* handle2 = manager2->Get(0x400, 0);
+        cLookupResult* result2 = handle2 ? ResolveB(handle2) : 0;
+        if (result2 && (objectID == 0 || result2->mObjectID == objectID))
+            manager->Remove(0x200, 0);
+    }
+}
+
+// @ 0x00d7a260
+float IsDanceFinisher(cEditorGameObject* p)
+{
+    cObjectManager* manager = &p->mpB4C->mManager;
+    cRawHandle* raw = (cRawHandle*)manager->GetZeroFirst(0, 0x40000);
+    if (raw && raw->mState == 6) {
+        if (HasTag(raw, 0xe9cb8ba) || HasTag(raw, 0x137e8e0))
+            return 1.0f;
+    }
+    return 0.0f;
+}
+
+// @ 0x00d7a320
+float IsSub58FlagSet(cEditorGameObject* p)
+{
+    return p->mSub58.Check() != 0 ? 1.0f : 0.0f;
+}
+
+// @ 0x00d7a360
+float CanUseEditorAction(cEditorGameObject* p)
+{
+    if (kEditorDistanceLimit < p->mField5e0)
+        goto return_zero;
+    if (p->mpB4C->mField1d8 == 0x3845d9d)
+        goto return_zero;
+    if (p->mFlags110 & 0x100)
+        goto return_zero;
+    return 1.0f;
+return_zero:
+    return 0.0f;
+}
+
+// @ 0x00d7a3a0
+float IsC04590FlagSet(cEditorGameObject* p)
+{
+    return LookupC04590Fast(p)->mFlag190 ? 1.0f : 0.0f;
+}
+
+// @ 0x00d7a3e0
+float IsPartyModeReady(cEditorGameObject* p)
+{
+    cGameState* state = GetGameState();
+    int state2c = state->mState2c;
+    bool isTwo = state2c == 2;
+    uint32_t mode = GetGameModeID();
+    if (mode == 0x1654c10) {
+        if (isTwo || state2c == 1) {
+        } else {
+            return 0.0f;
+        }
+    } else {
+        if (!isTwo)
+            return 0.0f;
+    }
+
+    if (state->mByte28 != 0)
+        return 0.0f;
+    if (state->mByte29 != 0) {
+        uint32_t shifted = p->mFlagsB58 >> 9;
+        if ((shifted & 1) != 0)
+            return 0.0f;
+    }
+    return 1.0f;
+}
+
+// @ 0x00d7a440
+float CanStartEditorAction(cEditorGameObject* p, uint32_t a, uint32_t b, uint32_t flags)
+{
+    if (p->mField1004 != 0 && p->mField101c == 0)
+        goto test_arg;
+    if ((p->mFlagsB58 & 0x10000) == 0)
+        goto return_zero;
+test_arg:
+    if (flags & 0x10000)
+        goto return_zero;
+    return 1.0f;
+return_zero:
+    return 0.0f;
+}
+
+// @ 0x00d7a470
+float IsD51660BitClear()
+{
+    cD51660Result* result = LookupD51660();
+    if (result == 0)
+        goto return_zero;
+    uint32_t shifted = result->mFlags6c >> 1;
+    if (shifted & 1)
+        goto return_zero;
+    return 1.0f;
+return_zero:
+    return 0.0f;
+}
+
+// @ 0x00d7a490
+float IsEditorObjectBitClear(cEditorGameObject* p)
+{
+    if ((p->mpB4C->mField1cc & 0x100) != 0)
+        return 0.0f;
+    return 1.0f;
+}
+
+// @ 0x00d7a4d0
+float IsLookupBFlagSet(cEditorGameObject* p)
+{
+    cObjectManager* manager = &p->mpB4C->mManager;
+    void* handle = manager->Get(0x2000, 0);
+    cLookupResult* result = handle ? ResolveB(handle) : 0;
+    if (result != 0) {
+        uint32_t shifted = result->mFlagsB58 >> 9;
+        if (shifted & 1)
+            return 1.0f;
+    }
+    return 0.0f;
+}
+
+// @ 0x00d7a530
+float IsEditorActionAvailableValue(cEditorGameObject* p)
+{
+    return IsEditorActionAvailableFast(p) ? 1.0f : 0.0f;
+}
+
+// @ 0x00d7a560
+float GetEditorSelection(cEditorGameObject* p, uint32_t a, uint32_t b, uint32_t c,
+                         cEditorOutput* output, uint8_t* flag)
+{
+    cObjectManager* manager = &p->mpB4C->mManager;
+    void* handle = manager->Get(0x800000, 0);
+    cLookupResult* result = handle ? ResolveA(handle) : 0;
+    if (result && result->mByteB5E == 0) {
+        if (output)
+            output->Clear();
+        *flag = 1;
+        output->mpData4 = (void*)((uint32_t)result + 0x5a8);
+        return 1.0f;
+    }
+    return 0.0f;
+}
+
 // @ 0x00d79470  SP::cTribeGameBehaviorParty::Action
 int cTribeGameBehaviorParty::Action()
 {

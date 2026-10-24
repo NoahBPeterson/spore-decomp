@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00d7a020  60  InitEditorParams: partial six-dword forwarding helper; the original builds a 0x18-byte argument block on the stack and tail-enters 0xabedb0 without an explicit argument, while the reconstruction passes the block pointer; equiv FAIL (fake-arity)
+00d7a530  27  IsEditorActionAvailableValue: partial predicate wrapper around 0xc0bb90; 45 vs 46 B; the compiler saves/restores ecx around the thiscall instead of loading it directly; equiv UNSUPPORTED (0/400 valid, original ABI is a fake/this call)
