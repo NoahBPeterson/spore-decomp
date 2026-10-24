@@ -78,15 +78,16 @@ class IUnknown32 {
 }  // namespace COM
 
 namespace ResourceMan {
-class Key { public:
+struct Key_s005f_4310 { public:
   unsigned int mInstance, mType, mGroup;
-  bool operator==(const Key& b) const {
+  bool operator==(const Key_s005f_4310& b) const {
     return mInstance == b.mInstance && mType == b.mType && mGroup == b.mGroup;
   }
-  Key() : mInstance(0), mType(0), mGroup(0) {}
-  Key(unsigned int instance, unsigned int type, unsigned int group)
+  Key_s005f_4310() : mInstance(0), mType(0), mGroup(0) {}
+  Key_s005f_4310(unsigned int instance, unsigned int type, unsigned int group)
       : mInstance(instance), mType(type), mGroup(group) {}
 };
+typedef Key_s005f_4310 Key;
 }  // namespace ResourceMan
 
 struct Point2D {
@@ -492,7 +493,7 @@ struct cModelChangedMessage {
   uint32_t mTypeID;      // +0x18
 };
 
-class cSPSwatch : public IWinProc, public EA::RefCountVTemplate<int>, public EA::Messaging::IHandler {
+class cSPSwatch_s005f_4310 : public IWinProc, public EA::RefCountVTemplate<int>, public EA::Messaging::IHandler {
  public:
   virtual int AddRef();
   virtual int Release();
@@ -613,13 +614,13 @@ inline void cMWModel::Release() {
 }
 // ---------------------------------------------------------------------------------------------
 struct cSwatchMessage {
-  cSPSwatch* mpSwatch;  // +0x0
+  cSPSwatch_s005f_4310* mpSwatch;  // +0x0
   uint32_t pad4;
   uint32_t mID;         // +0x8
   uint32_t padc;
 };
 
-class cSPPaletteSwatch : public cSPSwatch {
+class cSPPaletteSwatch : public cSPSwatch_s005f_4310 {
  public:
   bool IsMouseOutside();
   bool IsItemAvailable();
@@ -699,7 +700,7 @@ void cSwatch3DView::RemoveModel(cMWModel* model) {
 }
 
 // @ 0x005F4F80
-void cSPSwatch::Init(Key* key, uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e, uint32_t scale) {
+void cSPSwatch_s005f_4310::Init(Key* key, uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e, uint32_t scale) {
   if (a != 0) {
     mScaleParam = scale;
     bool b8 = true;
@@ -713,7 +714,7 @@ void cSPSwatch::Init(Key* key, uint32_t a, uint32_t b, uint32_t c, uint32_t d, u
 }
 
 // @ 0x005F5000
-void cSPSwatch::Init(Key* key, void* a, void* b, uint32_t c, uint32_t d, uint32_t e, uint32_t f,
+void cSPSwatch_s005f_4310::Init(Key* key, void* a, void* b, uint32_t c, uint32_t d, uint32_t e, uint32_t f,
                      uint32_t scale) {
   if (a != 0 && b != 0) {
     mScaleParam = scale;
