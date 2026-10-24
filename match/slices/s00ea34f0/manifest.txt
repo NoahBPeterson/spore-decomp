@@ -1,0 +1,5 @@
+# source symbol va flags
+slices/s00ea34f0/s00ea34f0.cpp  ?Update@cCityMusicNoteEditor@@QAEXXZ  00ea3b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ea34f0/s00ea34f0.cpp  ?ResetNoteLayouts@cCityMusicNoteEditor@@QAEXXZ  00ea3ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ea34f0/s00ea34f0.cpp  ?SetLayoutAndRebuild@cCityMusicNoteEditor@@QAE_NPAUcUILayout@@_N@Z  00ea4250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ea34f0/s00ea34f0.cpp  ?FUN_00ea42c0@@YG_NPBUMatchParam@@PAUParamVec@@@Z  00ea42c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
