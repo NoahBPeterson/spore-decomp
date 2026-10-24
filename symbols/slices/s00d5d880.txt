@@ -1,0 +1,4 @@
+00d5d880 ?AllegianceUpdate@cCityVisualizer@@QAEXXZ  # void SP::cCityVisualizer::AllegianceUpdate()
+00d5de40 ?UpdateArtifacts@cCityVisualizer@@QAEXXZ  # void SP::cCityVisualizer::UpdateArtifacts()
+00d5e0c0 ?SpaceOnlyTick@cCityVisualizer@@QAEHXZ  # int SP::cCityVisualizer::SpaceOnlyTick()
+00d5e5c0 ?Insert@SlotVector@@QAEXPAVCitySlot@@PBV2@@Z  # void SlotVector::Insert(CitySlot*, const CitySlot*)
