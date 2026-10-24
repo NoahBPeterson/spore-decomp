@@ -1,0 +1,15 @@
+slices/s00e2e6e0/s00e2e6e0.cpp  ?UpdateProgessIcons@@YAXPAVcSPUILayout@@PAVtIWindowEx@@@Z  00e2e790  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2e8a0@@YAPAXPAX0II@Z  00e2e8a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2e8d0@@YAXMMMPAUtRectEdge@@PAM1PAI@Z  00e2e8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2eba0@@YAPADPAVcSimNoun@@@Z  00e2eba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?Init@cSPUIRelationshipStrip@@QAEXPAVtIWindow@@@Z  00e2ec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2ed40@cSPUIRelationshipStrip@@QAEXXZ  00e2ed40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2ef80@cSPUIRelationshipStrip@@QAEXM@Z  00e2ef80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2f1c0@cRelationshipPanel@@QAEXXZ  00e2f1c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2f250@cRelationshipPanel@@QAEXXZ  00e2f250  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2f2b0@@YA_NPAVtIWindow@@PAUtVisitMsg@@@Z  00e2f2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2f300@@YA_NPAVtIWindow@@PAUtVisitMsg@@@Z  00e2f300  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2f340@@YAXPAVtIWindow@@PAUtVisitMsg@@@Z  00e2f340  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?Init@cStripListener@@QAE_NXZ  00e2f370  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2f3c0@tRecordList@@QAE_NI@Z  00e2f3c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e2e6e0/s00e2e6e0.cpp  ?FUN_00e2f3f0@@YGXPAUtWindowSpec@@H@Z  00e2f3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
