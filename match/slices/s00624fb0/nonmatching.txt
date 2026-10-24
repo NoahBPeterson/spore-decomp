@@ -2,5 +2,5 @@
 00625380  145  HandleMessage; complete (two jump-table switches), copy of mAnim->mCameraInputState goes through edx in original; most diff bytes are jump-table data
 00625750  98  UpdateOffsets (depends); complete, original interleaves the 3-component lerp through Vector3 operators
 00625830  193  InitCameraData; complete, original schedules Vector3 ops differently (stores y,z,x; base edi reuse)
-00625a90  285  camera look-at lerp; complete, original uses Vector3 operator temps (different register scheduling)
-00625bf0  449  platform velocity integrator; complete, x87/SSE mix and temp scheduling differ
+00625a90  283  camera look-at lerp; complete, now assigns a Vector3 temp to avatarPosition (the original's 12-byte copy leaves the z bits in eax, which the void declaration hides). equiv: PASS (400 valid, 100% cov)
+00625bf0  616  platform velocity integrator; complete. equiv: PASS (400+900 valid, 100% cov) -- the deltas/inv/products/lenSq partials are volatile so the x87 temps round exactly like the original's SSE ops and the original's vz2+vy2+vx2 association is preserved; this also keeps the code off xmm6/xmm7

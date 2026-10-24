@@ -442,9 +442,11 @@ void cCreatureCameraBase::UpdateAvatarLookAt()
     float az = mDepends.mAvatar.mPosition.z + kAvatarUp.z * e;
     float t = (mCameraData.currentPlayerDistance - mMinCameraDistance) / (mMaxCameraDistance - mMinCameraDistance);
     t = Clamp(t, 0.0f, 1.0f);
-    mCameraData.avatarPosition.x = ((mDepends.mAvatar.mPosition.x + kAvatarUp.x * d) - ax) * t + ax;
-    mCameraData.avatarPosition.y = ((mDepends.mAvatar.mPosition.y + kAvatarUp.y * d) - ay) * t + ay;
-    mCameraData.avatarPosition.z = ((mDepends.mAvatar.mPosition.z + kAvatarUp.z * d) - az) * t + az;
+    cSPVector3 lookAt;
+    lookAt.x = ((mDepends.mAvatar.mPosition.x + kAvatarUp.x * d) - ax) * t + ax;
+    lookAt.y = ((mDepends.mAvatar.mPosition.y + kAvatarUp.y * d) - ay) * t + ay;
+    lookAt.z = ((mDepends.mAvatar.mPosition.z + kAvatarUp.z * d) - az) * t + az;
+    mCameraData.avatarPosition = lookAt;
 }
 
 // @ 0x00625bf0
@@ -459,16 +461,20 @@ void cCreatureCameraBase::UpdateVelocity()
               mCameraData.newPlatformVelocity.z * mCameraData.newPlatformVelocity.z) < 0.01f) {
         mCameraData.newPlatformVelocity = kZeroVector;
     }
-    float dx = mCameraData.desiredPosition.x - mCameraData.platformPosition.x;
-    float dy = mCameraData.desiredPosition.y - mCameraData.platformPosition.y;
-    float dz = mCameraData.desiredPosition.z - mCameraData.platformPosition.z;
+    volatile float dz = mCameraData.desiredPosition.z - mCameraData.platformPosition.z;
+    volatile float dy = mCameraData.desiredPosition.y - mCameraData.platformPosition.y;
+    volatile float dx = mCameraData.desiredPosition.x - mCameraData.platformPosition.x;
     if (0.01f < sqrtf(dz * dz + dy * dy + dx * dx)) {
-        float inv = 1.0f / kVelocityRate;
+        volatile float inv = 1.0f / kVelocityRate;
         float maxDelta = kVelocityAccel * mCameraData.dt;
-        float vz = dz * inv - mCameraData.newPlatformVelocity.z;
-        float vx = inv * dx - mCameraData.newPlatformVelocity.x;
-        float vy = dy * inv - mCameraData.newPlatformVelocity.y;
-        float lenSq = vz * vz + vy * vy + vx * vx;
+        volatile float pz = dz * inv;
+        volatile float px = inv * dx;
+        volatile float py = dy * inv;
+        float vz = pz - mCameraData.newPlatformVelocity.z;
+        float vx = px - mCameraData.newPlatformVelocity.x;
+        float vy = py - mCameraData.newPlatformVelocity.y;
+        volatile float lenSq = vz * vz + vy * vy;
+        lenSq = lenSq + vx * vx;
         if (maxDelta * maxDelta < lenSq) {
             float s = maxDelta / sqrtf(lenSq);
             vx = vx * s;
