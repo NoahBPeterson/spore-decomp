@@ -1,0 +1,1 @@
+slices/s00d77360/s00d77360.cpp  ?FUN_00d77360@@YAXPAUCreature@@@Z  00d77360  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
