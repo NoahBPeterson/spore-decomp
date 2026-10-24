@@ -6,3 +6,4 @@ slices/s007d85b0/s007d85b0.cpp  ?cAppModeInfoAssignBackward@@YAPAUcAppModeInfo@@
 slices/s007d85b0/s007d85b0.cpp  ?SetAppModeByIndex@cApp@SP@@QAE_NH@Z  007d8c80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 slices/s007d85b0/s007d85b0.cpp  ?Handle@cAppToggleHandler@@QAE_NHH@Z  007d9350  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 slices/s007d85b0/s007d85b0.cpp  ?Check@cAppHasState@@QAE_NXZ  007d9380  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007d85b0/s007d85b0.cpp  ?AddAppMode@cApp@SP@@QAEXPAXIPBD@Z  007d9260  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

@@ -77,7 +77,6 @@ typedef unsigned int size_type;
 void* GetServer883860();
 void  ErrorNoSuchMode(const char* fmt);                  // cError ctor/throw site
 int  Sub_7d8890(void* first, void* last, void* dest);    // uninitialized copy
-void Sub_7d90a0(void* value);                            // add to vector
 struct cAppModeInfo_s007d_85b0;
 struct Str16 {
     char* mpBegin;      // +0x00
@@ -92,6 +91,33 @@ struct cAppModeInfo_s007d_85b0 {                 // size 0x18
     Str16    mName;                   // +0x08
 
     cAppModeInfo_s007d_85b0* operator=(const cAppModeInfo_s007d_85b0& x);       // @ 0x007d8830
+};
+// The eastl vector collision happening at cApp+0x14: a __thiscall insert whose value
+// pointer is passed on the stack (the original `lea ecx,[edi+0x14]; call 0x7d90a0`).
+struct AppModeVec {
+    cAppModeInfo_s007d_85b0* mpBegin;         // +0x00
+    cAppModeInfo_s007d_85b0* mpEnd;           // +0x04
+    cAppModeInfo_s007d_85b0* mpCapacity;      // +0x08
+    void DoInsertValue(cAppModeInfo_s007d_85b0* value);   // @ 0x007d90a0 (thiscall)
+};
+// Shared empty-string buffer the eastl basic_string default-initialises to.
+extern char gEmptyString[];                                       // 0x1667bac
+// Managed local used by AddAppMode: the name string defaults to the shared empty buffer and
+// the aggregate destructor frees it and then releases the mode (which is what makes cl emit
+// the original's C++ EH frame, state 0 -> -1 around the body, with the cleanup inlined).
+struct InfoE {                         // size 0x18
+    void*    mpMode;                  // +0x00
+    unsigned mID;                     // +0x04
+    Str16    mName;                   // +0x08
+    InfoE() : mpMode(0) {
+        mName.mpBegin = gEmptyString;
+        mName.mpEnd = gEmptyString;
+        mName.mpCapacity = gEmptyString + 1;
+    }
+    __forceinline ~InfoE() {
+        if ((int)(mName.mpCapacity - mName.mpBegin) > 1 && mName.mpBegin != 0) ea_free(mName.mpBegin);
+        if (mpMode) ((void(__thiscall*)(void*))(*(void***)mpMode)[1])(mpMode);
+    }
 };
 inline void ModeInfoRelease(void* obj) {
     if (obj) ((void(__thiscall*)(void*))(*(void***)obj)[1])(obj);
@@ -152,7 +178,7 @@ struct cApp_s007d_85b0 {
     void ApplyAppMode(int index);                            // @ 0x007d85b0
     bool SetAppMode(unsigned id);                            // @ 0x007d8c30
     bool SetAppModeByIndex(int index);                       // @ 0x007d8c80
-    bool AddAppMode(void* mode, unsigned id, const char* name); // @ 0x007d9260
+    void AddAppMode(void* mode, unsigned id, const char* name); // @ 0x007d9260
     void InsertAppMode(cAppModeInfo_s007d_85b0* position, const cAppModeInfo_s007d_85b0& value); // @ 0x007d8e40
     bool RemoveAppMode(unsigned id);                         // @ 0x007d8ff0
     bool Shutdown();                                         // @ 0x007d9120
@@ -650,24 +676,16 @@ bool SP::cApp_s007d_85b0::Shutdown()
 }
 
 // @ 0x007d9260
-bool SP::cApp_s007d_85b0::AddAppMode(void* mode, unsigned id, const char* name)
+void SP::cApp_s007d_85b0::AddAppMode(void* mode, unsigned id, const char* name)
 {
     if (mode == 0)
-        return false;
+        return;
     if (mInitialized)
         ((void(__thiscall*)(void*))(*(void***)mode)[3])(mode);
-    cAppModeInfo_s007d_85b0 info;
-    info.mpMode = 0;
-    info.mName.mpBegin = 0;
-    info.mName.mpEnd = 0;
-    info.mName.mpCapacity = 0;
-    info.mName.mAlloc = 0;
+    InfoE info;
     ((void(__thiscall*)(void*))(*(void***)mode)[0])(mode);
     info.mpMode = mode;
     info.mID = id;
     info.mName.assign(name, name + strlen(name));
-    Sub_7d90a0(&info);
-    ModeInfoFreeName(&info);
-    ModeInfoRelease(info.mpMode);
-    return true;
+    ((AppModeVec*)&mAppModesBegin)->DoInsertValue((cAppModeInfo_s007d_85b0*)&info);
 }

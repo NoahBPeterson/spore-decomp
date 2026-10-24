@@ -27,7 +27,6 @@ void  ErrorNoSuchMode(const char* fmt);                  // cError ctor/throw si
 
 // helpers defined elsewhere (masked)
 int  Sub_7d8890(void* first, void* last, void* dest);    // uninitialized copy
-void Sub_7d90a0(void* value);                            // add to vector
 
 struct cAppModeInfo;
 
@@ -46,6 +45,36 @@ struct cAppModeInfo {                 // size 0x18
     Str16    mName;                   // +0x08
 
     cAppModeInfo* operator=(const cAppModeInfo& x);       // @ 0x007d8830
+};
+
+// The eastl vector collision happening at cApp+0x14: a __thiscall insert whose value
+// pointer is passed on the stack (the original `lea ecx,[edi+0x14]; call 0x7d90a0`).
+struct AppModeVec {
+    cAppModeInfo* mpBegin;            // +0x00
+    cAppModeInfo* mpEnd;              // +0x04
+    cAppModeInfo* mpCapacity;         // +0x08
+    void DoInsertValue(cAppModeInfo* value);   // @ 0x007d90a0 (thiscall)
+};
+
+// Shared empty-string buffer the eastl basic_string default-initialises to.
+extern char gEmptyString[];                                       // 0x1667bac
+
+// Managed local used by AddAppMode: the name string defaults to the shared empty buffer and
+// carries a freeing destructor, and the mode pointer releases on destruction.  The destructors
+// are what make cl emit the C++ EH frame the original has (state 0 -> -1 around the body).
+struct InfoE {                         // size 0x18, layout twin of cAppModeInfo
+    void*    mpMode;                  // +0x00
+    unsigned mID;                     // +0x04
+    Str16    mName;                   // +0x08
+    InfoE() : mpMode(0) {
+        mName.mpBegin = gEmptyString;
+        mName.mpEnd = gEmptyString;
+        mName.mpCapacity = gEmptyString + 1;
+    }
+    __forceinline ~InfoE() {
+        if ((int)(mName.mpCapacity - mName.mpBegin) > 1 && mName.mpBegin != 0) ea_free(mName.mpBegin);
+        if (mpMode) ((void(__thiscall*)(void*))(*(void***)mpMode)[1])(mpMode);
+    }
 };
 
 inline void ModeInfoRelease(void* obj) {
@@ -169,7 +198,7 @@ class cApp { public:
     void ApplyAppMode(int index);                            // @ 0x007d85b0
     bool SetAppMode(unsigned id);                            // @ 0x007d8c30
     bool SetAppModeByIndex(int index);                       // @ 0x007d8c80
-    bool AddAppMode(void* mode, unsigned id, const char* name); // @ 0x007d9260
+    void AddAppMode(void* mode, unsigned id, const char* name); // @ 0x007d9260
     void InsertAppMode(cAppModeInfo* position, const cAppModeInfo& value); // @ 0x007d8e40
     bool RemoveAppMode(unsigned id);                         // @ 0x007d8ff0
     bool Shutdown();                                         // @ 0x007d9120
@@ -285,25 +314,17 @@ void cApp::InsertAppMode(cAppModeInfo* position, const cAppModeInfo& value) {
 }
 
 // @ 0x007d9260
-bool cApp::AddAppMode(void* mode, unsigned id, const char* name) {
+void cApp::AddAppMode(void* mode, unsigned id, const char* name) {
     if (mode == 0)
-        return false;
+        return;
     if (mInitialized)
         ((void(__thiscall*)(void*))(*(void***)mode)[3])(mode);
-    cAppModeInfo info;
-    info.mpMode = 0;
-    info.mName.mpBegin = 0;
-    info.mName.mpEnd = 0;
-    info.mName.mpCapacity = 0;
-    info.mName.mAlloc = 0;
+    InfoE info;
     ((void(__thiscall*)(void*))(*(void***)mode)[0])(mode);
     info.mpMode = mode;
     info.mID = id;
     info.mName.assign(name, name + strlen(name));
-    Sub_7d90a0(&info);
-    ModeInfoFreeName(&info);
-    ModeInfoRelease(info.mpMode);
-    return true;
+    ((AppModeVec*)&mAppModesBegin)->DoInsertValue((cAppModeInfo*)&info);
 }
 
 // @ 0x007d8ff0

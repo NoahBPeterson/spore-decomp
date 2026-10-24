@@ -11,5 +11,5 @@
 007d8e40 ?InsertAppMode@cApp_s007d_85b0@SP@@QAEXPAUcAppModeInfo_s007d_85b0@@ABU3@@Z  # cApp_s007d_85b0::InsertAppMode migrated from s007d85b0 (verbatim, slice spelling)
 007d8ff0 ?RemoveAppMode@cApp_s007d_85b0@SP@@QAE_NI@Z  # cApp_s007d_85b0::RemoveAppMode migrated from s007d85b0 (verbatim, slice spelling)
 007d9120 ?Shutdown@cApp_s007d_85b0@SP@@QAE_NXZ  # cApp_s007d_85b0::Shutdown migrated from s007d85b0 (verbatim, slice spelling)
-007d9260 ?AddAppMode@cApp_s007d_85b0@SP@@QAE_NPAXIPBD@Z  # cApp_s007d_85b0::AddAppMode migrated from s007d85b0 (verbatim, slice spelling)
+007d9260 ?AddAppMode@cApp_s007d_85b0@SP@@QAEXPAXIPBD@Z  # cApp_s007d_85b0::AddAppMode migrated from s007d85b0 (verbatim, slice spelling)
 007d9350 ?Handle@cAppToggleHandler@@QAE_NHH@Z  # cAppToggleHandler::Handle migrated from s007d85b0 (verbatim, slice spelling)
