@@ -39,7 +39,10 @@ void FUN_00a16fd0(int a);
 int  FUN_00a17090(int n);
 int  FUN_00a17100(int self);
 void FUN_00a136f0(void* out, int* src, unsigned flags);
-void FUN_00a24480(int a, int b);
+// 0x00a24480: PHTable::FreeBuckets(PHNode**, unsigned), thiscall on the table at Mixer+0xc.
+struct PHTable {
+    void FreeBuckets(int* buckets, unsigned n);
+};
 struct TrackCopy {
     void Reserve(int count, void* p);   // 0x00a3d4c0 (thiscall: this in ECX)
     int* CopyCtor(int* src);            // 0x00a3db50
@@ -278,7 +281,7 @@ void EA::Audio::Mixer::Command(int a, int b, int count, int* entries) {
             if (sys->Slot62(a) == 0) {
                 sys = EA::Audio::GetSystemAT();
                 mo = sys->Slot93(m4);
-                if (mo) mo->Slot3(a, key, 1);
+                if (mo) mo->Slot3(a, entries[1], 1);
             } else {
                 if (eastl_hashtable_find((void*)((char*)this + 0xc), &key)) {
                     int obj = FUN_00a17090(0x1c);
@@ -327,10 +330,10 @@ void EA::Audio::Mixer::Release() {
             first = *(int*)(first + 8);
             while (first == 0) { p++; first = *p; }
         }
-        FUN_00a24480((int)m10, m14);
+        ((PHTable*)((char*)this + 0xc))->FreeBuckets(m10, m14);
         m18 = 0;
     }
-    FUN_00a24480((int)m10, m14);
+    ((PHTable*)((char*)this + 0xc))->FreeBuckets(m10, m14);
     int* v = m10;
     m18 = 0;
     if ((unsigned)m14 > 1 && v != m3c) {
@@ -507,17 +510,17 @@ void TrackVec::DoInsertValue(int* pos, int* value) {
 }
 
 // @ 0x00a3d810
-int* FUN_00a3d810(int* out, int* first, int* last, int dst) {
-    *out = dst;
+int** FUN_00a3d810(int** out, int* first, int* last, int dst, int* src) {
+    *out = (int*)dst;
     for (; first != last; first += 8) {
-        int* p = (int*)*out;
+        int* p = *out;
         if (p) {
             p[0] = first[0];
             p[1] = first[1];
             p[2] = first[2];
             FUN_00a3d5b0(first + 3);
         }
-        *out += 0x20;
+        *out = (int*)((char*)*out + 0x20);
     }
     return out;
 }
@@ -595,8 +598,7 @@ void __stdcall FUN_00a3da70(unsigned* first, unsigned* last) {
 int* TrackCopy::CopyCtor(int* src) {
     int* out = (int*)this;
     Reserve((src[1] - *src) >> 5, src + 3);
-    int tmp;
-    FUN_00a3d810(&tmp, (int*)*src, (int*)src[1], *out);
+    FUN_00a3d810(&src, (int*)*src, (int*)src[1], *out, src);
     out[1] = (int)src;
     return out;
 }
