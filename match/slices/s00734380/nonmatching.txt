@@ -1,4 +1,8 @@
-007345c0    30  COMPLETE two-call wrapper (0.5f args); x87 constant reload and param register differ.
-00734660    98  COMPLETE vector emplace (fast-path + insert fallback); /0xc magic and copy shape differ. [equiv: WEAK 218 valid, 60% cov, after ecx/member fix]
-007348a0   172  COMPLETE vector assign-from-vector; EASTL branch order and copy/memcpy tails differ. [equiv: WEAK 521 valid, 42% cov, after ecx/member fix]
-00735260   183  COMPLETE vector operator= for refcounted pointers; helper call shapes differ. [equiv: FAIL fake-arity no call site, after ecx/member fix]
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00734380   494  refcounted element builder: alloc + float3 pack + descriptor install, complete behaviour; equiv WEAK (348 valid, 19.0% cov, no mismatch); SEH frame, inlined vtable refcount plumbing and the never-written frame slot the original releases differ
+00734660    62  vector emplace (fast-path + insert fallback): complete behaviour; equiv WEAK (218 valid, 60.0% cov, no mismatch, after ecx/member fix); /0xc magic and the copy shape differ
+007346d0   324  reserve/insert over 0x24-byte Matrix33 elements: complete behaviour; equiv WEAK (174 valid, 14.6% cov, no mismatch); grow/cap-choice codegen (branch vs cmov) and register allocation differ
+007348a0   178  vector assign-from-vector: complete behaviour; equiv WEAK (521 valid, 42.0% cov, no mismatch, after ecx/member fix); EASTL branch order and the copy/memcpy tails differ
+00734970   847  per-record scratch scan + handle write-back: complete behaviour; equiv WEAK (174 valid, 25.8% cov, no mismatch); SEH frame and the inlined eastl append plumbing differ
+00734d00  1213  three element passes + hashed-element application: complete behaviour; equiv WEAK (309 valid, 38.5% cov, no mismatch); SEH frame and the inlined eastl insert/reset idiom (zero-length memcpy) differ
+00735260   196  vector operator= for refcounted pointers: complete behaviour; equiv WEAK (163 valid, 69.2% cov, no mismatch); helper call shapes differ; the two helpers are thiscall (ecx = the vector) and the grow/assign helper pair order differs
