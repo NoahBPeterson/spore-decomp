@@ -6,7 +6,7 @@
   "type": "decomp",
   "original": {
     "region": "World",
-    "revision": "Steam release (SporeApp.exe, PE timestamp 2024-09-30)",
+    "revision": "Steam, base game SporeBin/SporeApp.exe (20,626,168 bytes, PE timestamp 2024-09-30); not the Galactic Adventures SporebinEP1 exe",
     "serial": "17390"
   },
   "project": "spore-decomp",
