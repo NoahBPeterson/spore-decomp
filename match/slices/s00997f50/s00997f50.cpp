@@ -619,7 +619,7 @@ struct KeyHT {            // eastl::hashtable<Key, pair<Key,int>> (multi); membe
     unsigned bcount;      // +8
     unsigned count;       // +0xc
     HashPolicy policy;    // +0x10
-    void equal_range(HRange* out, const Key3* k);          // 0x998920
+    HRange* equal_range(HRange* out, const Key3* k);       // 0x998920
     HIter* insert(HIter* out, const KV* v, false_type);    // 0x9989d0 DoInsertValue(value, false_type)
     void __thiscall DoRehash(unsigned n);                  // 0x998870
     HIter* __thiscall find(HIter* out, const Key3* k);     // 0x833840
@@ -685,7 +685,7 @@ struct SerAutoUpdate {
 };
 
 // @ 0x00998920
-void KeyHT::equal_range(HRange* out, const Key3* k)
+HRange* KeyHT::equal_range(HRange* out, const Key3* k)
 {
     unsigned a = k->a;
     unsigned c = k->c;
@@ -696,7 +696,7 @@ void KeyHT::equal_range(HRange* out, const Key3* k)
             HNode** e = buckets + bcount;
             HNode* en = *e;
             out->first = en; out->fb = e; out->last = en; out->lb = e;
-            return;
+            return out;
         }
         if (a == p->kv.k.a && k->b == p->kv.k.b && c == p->kv.k.c)
             break;
@@ -723,6 +723,7 @@ void KeyHT::equal_range(HRange* out, const Key3* k)
     out->first = p;
     out->last = q;
     out->lb = qb;
+    return out;
 }
 
 // @ 0x009989d0
