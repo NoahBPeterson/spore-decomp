@@ -267,7 +267,7 @@ void AutoSizeWindowForText(W* w, int param2) {
 }
 
 // @ 0x00806ee0
-void FUN_00806ee0(W* w) {
+void FUN_00806ee0(W* w, float delta) {
     if (w == 0) return;
     W* d = (W*)w->va8();
     if (d == 0) return;
@@ -276,7 +276,7 @@ void FUN_00806ee0(W* w) {
     float pad[2];
     for (int i = 0; i < 8; i++) {
         sd->GetIconColor(pad, i);
-        pad[0] = pad[0] + 0.0f;
+        pad[0] = pad[0] + delta;
         sd->SetImageIconColor(i, pad);
     }
 }
@@ -431,7 +431,7 @@ void* FUN_00807600(void* p1, void* p2, void* p3) {
     void* sf = 0;
     if (mem != 0) sf = ((ScrollCtor*)mem)->ctor();
     if (sf != 0) (*(void(__thiscall**)(void*))VSlot(sf, 0))(sf);
-    char ok = FUN_0082aa20(p1, p3, 0);
+    char ok = ((char(__thiscall*)(void*, void*, void*, int))FUN_0082aa20)(sf, p1, p3, 0);
     if (ok == 0) {
         if (sf != 0) {
             (*(void(__thiscall**)(void*))VSlot(sf, 4))(sf);
