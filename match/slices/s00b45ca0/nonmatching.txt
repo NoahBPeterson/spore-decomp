@@ -1,0 +1,2 @@
+# bare-8hex-VA  diff-bytes  reason (one line each)
+00b45ca0  2178  cThing::Update (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv WEAK (no mismatch, 34 valid); complete port of the 2495-byte planetary integration, cl schedules the SSE/x87 blocks with fewer temporaries (size 2149 vs 2495)

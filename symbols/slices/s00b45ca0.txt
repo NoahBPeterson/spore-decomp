@@ -1,0 +1,1 @@
+00b45ca0 ?Update@cThing@@QAEXM@Z  # cThing::Update(float): per-frame planetary position/velocity integration (complete)
