@@ -168,7 +168,9 @@ struct Ent24 { int f0, f4, f8, fc, f10, f14, f18, f1c, f20; };
 
 // ---- items of slice s00631810 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void __cdecl CALLEE_memcpy_11e0744(void* dst, const void* src, unsigned n);
-extern "C" void __cdecl FUN_005c8480(void*, void**);
+struct PhotoVecGrow {
+  void FUN_005c8480(void* pos, void** value);   // thiscall @ 0x5c8480, ecx = vector
+};
 extern void __fastcall ExitDeleteMode(void*);
 extern void __fastcall ExitMoveMode(void*);
 typedef void (__thiscall *TF0)(void*);
@@ -1071,20 +1073,29 @@ void __fastcall FUN_00631dc0(void* self)
 }
 
 // @ 0x00631df0
-void __fastcall FUN_00631df0(void* self, void* p)
+// 4-dword vector header; the grow helper at 0x5c8480 receives the +0x4 sub-object in ecx and
+// the old end plus the value slot on the stack (ret 8).
+struct PhotoVec {
+  void* mOwner;   // +0x0
+  void* mBegin;   // +0x4
+  void* mEnd;     // +0x8
+  void* mCap;     // +0xc
+};
+
+void __fastcall FUN_00631df0(void* self, void* /*edx_unused*/, void* p)
 {
-  int* s = (int*)self;
+  PhotoVec* v = (PhotoVec*)self;
   void* obj = p;
   if (obj != 0) ((TF0)(*(void**)(*(char**)obj + 4)))(obj);
-  if (s[2] < s[3]) {
-    int* end = (int*)s[2];
-    s[2] = (int)(end + 1);
+  if (v->mEnd < v->mCap) {
+    unsigned int* end = (unsigned int*)v->mEnd;
+    v->mEnd = end + 1;
     if (end != 0) {
-      *end = (int)obj;
+      *end = (unsigned int)obj;
       if (obj != 0) ((TF0)(*(void**)(*(char**)obj + 4)))(obj);
     }
   } else {
-    FUN_005c8480((void*)s[2], &obj);
+    ((PhotoVecGrow*)&v->mBegin)->FUN_005c8480(v->mEnd, &obj);
   }
   if (obj != 0) ((TF0)(*(void**)(*(char**)obj + 8)))(obj);
 }
