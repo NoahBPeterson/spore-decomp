@@ -67,30 +67,38 @@ void __stdcall DoFreeNodes(FreeNode** pNodeArray, uint32_t n)
 // ---------------------------------------------------------------------------------------------
 // container clear helper (fixed array of pointers + tail vector), returns to a zeroed state
 // ---------------------------------------------------------------------------------------------
+struct VecBase {
+    void** mpBegin;    // +0x00
+    void** mpEnd;      // +0x04
+    void** mpCapacity; // +0x08
+    void DestroyRange(void** first, void** last);   // 0x0070F520
+};
 struct FixedClear {
     uint8_t mCount;            // +0x00
     char pad0[3];
     void* mItems[6];           // +0x04 .. +0x1b
     int32_t mFlag1c;           // +0x1c
-    void* mpBegin;             // +0x20
-    void* mpEnd;               // +0x24
+    VecBase mTail;             // +0x20
     void clear();
 };
 
 // @ 0x00711380
 void FixedClear::clear()
 {
-    if (mFlag1c == 0) {
+    if (mFlag1c != 0) {
+        mFlag1c = 0;
+    } else {
         for (int i = 0; i < (int)mCount; ++i) {
             ReleaseObject(mItems[i]);
             mItems[i] = 0;
         }
-    } else {
-        mFlag1c = 0;
     }
-    void* pNewEnd = AssignCopyRef(mpEnd, mpEnd, mpBegin);
-    DestroyRange(pNewEnd, mpEnd);
-    mpEnd = (char*)mpEnd - ((char*)mpEnd - (char*)mpBegin);
+    VecBase* tail = &mTail;
+    void** first = tail->mpBegin;
+    void** last = tail->mpEnd;
+    void* pNewEnd = AssignCopyRef(last, last, first);
+    tail->DestroyRange((void**)pNewEnd, tail->mpEnd);
+    tail->mpEnd -= (int32_t)(last - first);
     mCount = 0;
 }
 

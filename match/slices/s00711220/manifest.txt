@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00711220/s00711220.cpp  ?clear@FixedClear@@QAEXXZ  00711380  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00711220/s00711220.cpp  ?WriteExternalReferences@MaterialManagerBig@@QAEHHPAIPAUStream@@PAX@Z  00711490  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00711220/s00711220.cpp  ?RemoveAllRegisteredMaterials@MaterialManagerBig@@QAEXXZ  00711d10  /O2 /MD /Gy /EHsc /TP /GS-
