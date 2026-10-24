@@ -92,7 +92,7 @@ extern "C" void  VecBoolGrow(void* begin, uint32_t n, const int* value);   // 0x
 extern "C" void  VecBoolInsert(void* pos, void* end, int value);           // 0x011E0744
 extern "C" void  VecMatResize(void* self, int n);                          // 0x004751A0 / 0x00475260
 extern "C" void  PartArrayInit(void* dst, uint32_t count, void* tag, uint32_t count2); // 0x00735FA0
-extern "C" void  GroupCtor(void* self, void* a, void* b);                  // 0x00736090
+// GroupCtor is a thiscall member-style initializer (this in ecx); declared on InlineBuf below.
 extern "C" void  IndexAdd5(void* self, void* vec, int id);                 // 0x0071ECC0
 extern "C" void  IndexAddGroup(void* self, void* vec, int a, int b, int c); // 0x0071EC20
 extern "C" void  Sleep(void* a);                                            // 0x00921DF0
@@ -398,6 +398,7 @@ struct InlineBuf {
     void* f10;                  // +0x10
     char pad14[4];
     char buffer[0x40];          // +0x18
+    void GroupCtor(void* a, void* b);   // 0x00736090 (this in ecx)
     void* ctor(unsigned a, unsigned b);
 };
 
@@ -409,7 +410,7 @@ void* InlineBuf::ctor(unsigned a, unsigned b)
     f8 = bufBase + 0x40;
     f10 = bufBase;
     int local = 0;
-    GroupCtor(this, (void*)a, &b);
+    GroupCtor((void*)a, &b);
     (void)local;
     return this;
 }
@@ -573,6 +574,8 @@ void PartRebuild(ModelOuter* self)
 // ---------------------------------------------------------------------------
 void PartInit(ModelOuter* self, int count, int* indices)
 {
+    if (count <= 0)
+        return;
     int i;
     for (i = 0; i < count; ++i) {
         Part* p = self->partBegin + indices[i];
@@ -605,7 +608,7 @@ void PartInit(ModelOuter* self, int count, int* indices)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x007387F0 — add animation groups 5,6,9 and 9,10,11,12,13,16,17 then rebuild.
+// Add animation groups 5,6,9 and 9,10,11,12,13,16,17 then rebuild.
 // ---------------------------------------------------------------------------
 struct IntVec {
     int* begin;

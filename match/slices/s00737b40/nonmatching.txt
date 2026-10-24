@@ -2,7 +2,7 @@
 00737ef0  1135  group data de-duplication + material expansion (dense ids, descriptor clone/fill, owner refcount swap): complete; equiv WEAK (8.7% coverage); open-addressed map replaced by an ordered key scan, schedule differs; flags /O2 /MD /Gy /EHsc /TP
 007383a0  532  part compaction (live-part map, pack, index renumber, vector resize): complete; equiv WEAK (38.1% coverage); bitmap/eastl-helper inlining differs from the retail inline sequence; flags /O2 /MD /Gy /EHsc /TP
 00737dc0  136  ElemPool24::ctor reconstruction; allocator + construction sequence differs from original
-00737e80  99   InlineBuf::ctor reconstruction; inline-buffer/frame schedule differs
-00738610  472  PartInit reconstruction; EASTL vector schedule differs
+00737e80  90   InlineBuf::ctor reconstruction; GroupCtor now a thiscall member (this in ecx, args a/&b) matching the original; inline-buffer/frame schedule differs [equiv: PASS 302/302, 100% cov]
+00738610  455  PartInit reconstruction; early-returns for count <= 0 (original skips init/compact/rebuild); EASTL vector schedule differs [equiv: WEAK 260/260, 10.3% cov]
 007387f0  18   AddAnimGroupsA: complete; near miss, EH-state store placement only
 00738900  30   AddAnimGroupsB: complete; near miss, EH-state store placement only
