@@ -41,6 +41,8 @@ struct IdleAnim {
 struct IdleHost {                              // cSPCreatureBase at group-order +8
     IdleAnim* PlayIdleAnimation(uint32_t flags, int z);                        // 0x00bc96a0 (ret 8)
     IdleAnim* StartIdle(uint32_t flags, int z, float dur, GameDataV* src);     // 0x00bc97f0 (ret 0x10)
+    IdleAnim* FUN_00bc97f0(uint32_t flags, int z, float dur, GameDataV* src);  // 0x00bc97f0 (ret 0x10)
+    void FUN_00bc98f0(uint32_t flags, uint32_t mask);                          // 0x00bc98f0 (ret 8)
 };
 struct IdleOwner {
     char pad[8];
@@ -228,6 +230,7 @@ struct CombatantV {                            // cCombatant sub-object
     void TakeHit(float damage, uint32_t id, int type, const Vec3& dir, CombatantV* attacker);   // 0x00bfcdd0
     void F_bfc640(int ms);                     // 0x00bfc640 (ret 4)
     float F_bfc490();                          // 0x00bfc490
+    float F_bfc400();                          // 0x00bfc400 (NodeValue)
 };
 struct TrailObj { void Release(int v); };      // 0x00ff1ff0 (ret 4)
 struct AbandonVisualizer { void MakeCitizensAbandonVehicle(VehV* v); };   // 0x00d5d360 (ret 4)
@@ -426,5 +429,270 @@ void CombatantV::TakeDamage(float damage, uint32_t id, int type, const Vec3& dir
     if (mpTrail != 0) {
         mpTrail->Release(mTrailArg);
         mTrailArg = 0;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Extra cVehicle entry points sharing the same object layout.
+// ---------------------------------------------------------------------------
+struct IRefV {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+};
+struct PropV {
+    virtual void p0();  virtual void p1();  virtual void p2();  virtual void p3();
+    virtual void p4();  virtual void p5();  virtual void p6();  virtual void p7();
+    virtual void p8();  virtual void p9();  virtual void p10();
+    virtual bool Check();                       // +0x2c
+};
+struct CombatantIface {
+    virtual void s0();  virtual void s1();  virtual void s2();  virtual void s3();
+    virtual void s4();  virtual void s5();  virtual void s6();  virtual void s7();
+    virtual void s8();  virtual void s9();  virtual void s10(); virtual void s11();
+    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+    virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+    virtual void s20(); virtual void s21(); virtual void s22();
+    virtual PropV* GetProp(uint32_t id);        // +0x5c
+    virtual void Release60();                   // +0x60
+    virtual void Release64();                   // +0x64
+};
+struct CombatantVt {
+    virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3();
+    virtual uint32_t GetPoliticalID();          // +0x10
+};
+struct Elem18 {
+    IRefV* obj;      // +0x00
+    uint32_t f04;    // +0x04
+    uint32_t f08;    // +0x08
+    uint32_t f0c;    // +0x0c
+    int f10;         // +0x10
+    int f14;         // +0x14
+};
+struct Vec18 {
+    Elem18* begin;   // +0x00
+    Elem18* end;     // +0x04
+    Elem18* cap;     // +0x08
+    void FUN_00ca9b70(Elem18* pos, Elem18* value);
+};
+struct VehicleExt {
+    char pad00[0x34];
+    LocoV loco;                                     // +0x34
+    char pad38[0x508 - 0x38];
+    CombatantVt combatant;                          // +0x508
+    char pad50c[0xaf0 - 0x50c];
+    IdleOwner* mpIdle;                              // +0xaf0
+    char padaf4[0xb68 - 0xaf4];
+    Vec18 list;                                     // +0xb68
+    char padb74[0xb8c - 0xb74];
+    CombatantV** mobjBegin;                         // +0xb8c
+    CombatantV** mobjEnd;                           // +0xb90
+    char padb94[0xbc8 - 0xb94];
+    int fieldbc8;                                   // +0xbc8
+
+    Elem18* FUN_00ca71d0();
+    void FUN_00caa900();
+    void FUN_00c9f7c0();
+    void FUN_00cabe70();
+    void FUN_00cac000(IRefV* p2, int p3, int p4);
+    void FUN_00cac0e0(uint32_t p2, uint32_t p3, uint32_t p4, uint32_t p5);
+    void DebugChangeWeapons(uint32_t param);
+};
+struct Vec4 { float x, y, z, w; };
+extern "C" void __cdecl FUN_00caa0c0(CombatantV** begin, CombatantV** end, Vec4 v); // 0xcaa0c0
+
+// @ 0x00cabe70
+void VehicleExt::FUN_00cabe70()
+{
+    int i = 0;
+    if ((int)(mobjEnd - mobjBegin) > 0) {
+        do {
+            CombatantV* c = mobjBegin[i];
+            bool remove = (c->GetDamageState() == 2);
+            if (!remove && c != 0) {
+                PropV* p = ((CombatantIface*)c)->GetProp(0x17f243b);
+                if (p != 0 && p->Check())
+                    remove = true;
+            }
+            if (remove) {
+                CombatantIface* cur = (CombatantIface*)mobjBegin[i];
+                CombatantIface* last = (CombatantIface*)*(mobjEnd - 1);
+                if (last != cur) {
+                    if (last != 0) last->Release60();
+                    mobjBegin[i] = (CombatantV*)last;
+                    if (cur != 0) cur->Release64();
+                }
+                mobjEnd--;
+                CombatantIface* tail = (CombatantIface*)*mobjEnd;
+                if (tail != 0) tail->Release64();
+            } else {
+                i++;
+            }
+        } while (i < (int)(mobjEnd - mobjBegin));
+    }
+
+    if (mobjBegin != mobjEnd) {
+        float f = ((CombatantV*)((char*)this + 0x508))->F_bfc400();
+        const Vec3* pos = loco.GetPosition();
+        Vec4 v;
+        v.x = pos->x;
+        v.y = pos->y;
+        v.z = pos->z;
+        v.w = f;
+        FUN_00caa0c0(mobjBegin, mobjEnd, v);
+        mpIdle->host.FUN_00bc97f0(8, 0, 4.0f, 0);
+    } else {
+        mpIdle->host.FUN_00bc98f0(8, 0);
+    }
+}
+
+// @ 0x00cac000
+void VehicleExt::FUN_00cac000(IRefV* p2, int p3, int p4)
+{
+    Elem18* cur = FUN_00ca71d0();
+    if (cur->obj == p2 && cur->f10 == p3)
+        return;
+
+    FUN_00caa900();
+
+    Vec18* l = &list;
+    Elem18* e = l->end;
+    if (e < l->cap) {
+        l->end = e + 1;
+        if (e != 0) e->obj = 0;
+    } else {
+        Elem18 tmp;
+        tmp.obj = 0;
+        l->FUN_00ca9b70(e, &tmp);
+        if (tmp.obj != 0) tmp.obj->v1();
+    }
+
+    Elem18* node = l->end - 1;
+    IRefV* old = node->obj;
+    if (p2 != old) {
+        if (p2 != 0) p2->v0();
+        node->obj = p2;
+        if (old != 0) old->v1();
+    }
+    node->f10 = p3;
+    node->f14 = (int)((CombatantVt*)((char*)this + 0x508))->GetPoliticalID();
+    fieldbc8 = p4;
+    FUN_00c9f7c0();
+}
+
+// @ 0x00cac0e0
+void VehicleExt::FUN_00cac0e0(uint32_t p2, uint32_t p3, uint32_t p4, uint32_t p5)
+{
+    FUN_00caa900();
+
+    Vec18* l = &list;
+    Elem18* e = l->end;
+    if (e < l->cap) {
+        l->end = e + 1;
+        if (e != 0) e->obj = 0;
+    } else {
+        Elem18 tmp;
+        tmp.obj = 0;
+        l->FUN_00ca9b70(e, &tmp);
+        if (tmp.obj != 0) tmp.obj->v1();
+    }
+
+    l->end[-1].f04 = p2;
+    l->end[-1].f08 = p3;
+    l->end[-1].f0c = p4;
+    l->end[-1].f10 = 6;
+    l->end[-1].f14 = (int)((CombatantVt*)((char*)this + 0x508))->GetPoliticalID();
+    fieldbc8 = p5;
+    FUN_00c9f7c0();
+}
+
+struct ToolObj {
+    virtual void t0();
+    virtual void t1();                          // +0x04
+    virtual void t2();                          // +0x08
+    char pad04[0x144 - 0x04];                    // vptr at +0, data starts at +4
+    float f144;
+    float f148;
+    float f14c;
+    bool f150;
+    int FUN_0104bd50();
+};
+struct ToolRef { ToolObj* mp; };
+struct ToolDesc { uint32_t a, b, c; };
+struct GameDataObj {
+    char pad00[0xb1c];
+    int f_b1c;
+    int f_b20;
+    char padb24[0xb60 - 0xb24];
+    ToolObj* tool;
+};
+struct VecGameData {
+    char pad00[4];
+    GameDataObj** begin;
+    GameDataObj** end;
+};
+struct RandomLCG { uint32_t FUN_00a68fb0(uint32_t max); };
+struct cGameNounManager {
+    VecGameData* FUN_00b21340(void* f1, void* f2, void* f3, void* f4, void* f5);
+};
+struct cSPToolManager {
+    bool FUN_0104e340(void* desc, ToolObj** out);
+    void FUN_0104fa90(ToolObj* tool);
+};
+extern cGameNounManager* FUN_00b3d300();
+extern cSPToolManager* FUN_00b3d390();
+extern RandomLCG g_1601760;
+extern uint32_t g_169a1a8[];
+
+// @ 0x00cac1a0
+void VehicleExt::DebugChangeWeapons(uint32_t param)
+{
+    cGameNounManager* nm = FUN_00b3d300();
+    VecGameData* v = nm->FUN_00b21340((void*)0x00cd7d10, (void*)0x00d3d420,
+                                      (void*)0x00ae72d0, (void*)0x00b1e500,
+                                      (void*)0x018c6de8);
+    int count = (int)(v->end - v->begin);
+    int i = 0;
+    ToolRef local;
+    local.mp = 0;
+    if (count > 0) {
+        do {
+            local.mp = 0;
+            if (v->begin[i]->f_b20 == 0) {
+                uint32_t idx = param;
+                if (param >= 0x30)
+                    idx = g_1601760.FUN_00a68fb0(0x30);
+
+                ToolDesc desc;
+                desc.a = g_169a1a8[idx * 3 + 0];
+                desc.b = g_169a1a8[idx * 3 + 1];
+                desc.c = g_169a1a8[idx * 3 + 2];
+                if (local.mp != 0) {
+                    local.mp = 0;
+                    local.mp->t2();
+                }
+
+                if (FUN_00b3d390()->FUN_0104e340(&desc, &local.mp)) {
+                    ToolObj* old = v->begin[i]->tool;
+                    if (old != 0) old->t1();
+                    if (old->FUN_0104bd50()) {
+                        FUN_00b3d390()->FUN_0104fa90(old);
+                    }
+
+                    local.mp->f144 = old->f144;
+                    local.mp->f148 = old->f148;
+                    local.mp->f14c = old->f14c;
+                    local.mp->f150 = (v->begin[i]->f_b1c != 2);
+                    if (local.mp != old) {
+                        local.mp->t1();
+                        v->begin[i]->tool = local.mp;
+                        if (old != 0) old->t2();
+                    }
+                    old->t2();
+                }
+                if (local.mp != 0) local.mp->t2();
+            }
+            i++;
+        } while (i < count);
     }
 }
