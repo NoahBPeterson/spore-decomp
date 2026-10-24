@@ -1,1 +1,4 @@
-008b2b30  156  nibble-stream reader: branch layout and cursor store order differ, hi/lo register roles differ
+008b2250  927  complete but not byte-exact: register-ABI (this=edi, eax=ctx, edx=char-ctx); packed bitmap selector decode + allocator-hook path; size 642 vs 988; equiv UNSUPPORTED 0/400 (fault read=400)
+008b2630  1280  complete but not byte-exact: register-ABI (edx=PFRClass, eax=source cursor, ebp=target); 6-way jump-table glyph/stroke byte decoder modelled at entry; size 1 vs 1280; equiv FAIL 5/5 valid (memory pool divergence at 0x40030000)
+008b2be0  469  complete but not byte-exact: register-ABI (eax=packed mode word, ebx=glyph, esi=nibble reader) not expressible in a scalar declaration; nibble/byte x-y delta reader; size 468 vs 435; equiv UNSUPPORTED (original reads eax at entry)
+008b2da0  601  complete but not byte-exact: register-ABI (edi=glyph); two-pass extra-stroke point append with tsi_ReAllocMem growth of the four arrays; size 570 vs 658; equiv UNSUPPORTED 0/400 (fault read=400)
