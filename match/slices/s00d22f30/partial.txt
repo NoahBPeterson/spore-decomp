@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+# No incomplete functions: every target in this slice is a complete C++
+# reconstruction with a col-0 `// @ 0x<VA>` marker and a full body.
+# All three targets (00d22f30, 00d23320, 00d23840) are byte-different from the
+# original -- see nonmatching.txt for the per-row diff counts and the
+# equivalence-gate verdicts.

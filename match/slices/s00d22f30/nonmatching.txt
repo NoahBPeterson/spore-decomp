@@ -1,0 +1,26 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00d22f30 = cCreatureCamera per-frame camera cluster (0x00d22f30..
+# 0x00d23992): the creature/space-camera per-frame orbit update (00d22f30), the
+# planet-surface eye projection (00d23320) and the eye-radius blend that feeds
+# the camera solver (00d23840).  All three are complete C++ reconstructions of
+# the original control flow, each with a col-0 `// @ 0x<VA>` marker and every
+# touched field named on a real cCreatureCamera class declaration.  0/3
+# byte-exact: the originals are heavy x87 + SSE float pipelines and MSVC's
+# /fp:fast codegen choices -- which intermediate values live in the x87 FPU
+# stack vs are spilled, and the order in which the three component subtractions
+# are pushed -- could not be reproduced from C++ even after isolating the exact
+# trigger that makes /fp:fast fold the fused distance back to float precision
+# (a whole-vector aggregate copy in the sibling branch of 00d23840).  Per-row
+# verdicts are the equivalence-gate results measured with the flags above.
+#
+# MATCHes (0/3): none.
+
+00d22f30  689 cCreatureCamera::FUN_00d22f30(void): per-frame creature-camera update from the raw speed magnitudes at +0x54 and +0xac (two double sqrt magnitudes, pick the smaller, clamp to [DAT_01582788,DAT_0158278c]), the smoothstep ((3-v*2)*v)*v, the two orbit amplitude lerps (DAT_01582790/94 and DAT_01582798/9c), the cos-driven orbit displacement (tools 1.9/1.3/2.1/1.7, phase offsets 1.0/0.3/1.2/0.8, weights 0.5/0.35/0.7), the pitch clamp against +/-DAT_015827a0*s2 and the final split between accumulating into the local anchor (+0x48..) and writing the eye anchor (+0x13c..).  The whole orbit path uses x87 magnitudes plus an SSE cos/float pipeline and the interleaving of the two in MSVC's scheduler differs throughout; ours is 946 bytes against the 999-byte original.  equiv FAIL 5/5 valid inputs mismatched -- the first divergence is edx, a register the original never writes (an LTCG caller may keep a live value there).
+
+00d23320 1089 cCreatureCamera::FUN_00d23320(void): per-frame planet-surface eye projection.  Recovered: the cPlanetModel bring-up (mpISphere null check), the terrain basis rows at +0x264.. rotated by the DAT_0169deb0/b4/b8..DAT_0169df58 basis block when (m260&2)!=0, the four lifted sample points (base p0, A = p0 + forward*radius*unit, B = A + C, C' = A - C where C = right*radius*tan(m258)*m220), the cPlanetModel::GetRadiusAt/GetWaterHeight clears, the max-of-four selection and the normalised_safe() orthonormalisation gated by the ang-sized interval test, the m260|=4 / m262++ state bump and the m264/m268/m26c = n*ang writeback.  The reconstruction follows the Ghidra decompile but many of the inlined basis-multiply / sphere-projection helpers are written as straight-line float code rather than the original's interleaved x87+SSE sequence, so the block layout and store scheduling diverge early; ours is 903 bytes against the 1308-byte original.  equiv WEAK only 4.3% instruction coverage (12/280) -- the two implementations diverge in the first few blocks and never re-converge.
+
+00d23840  272 cCreatureCamera::FUN_00d23840(void): the eye-radius blend that feeds the camera solver.  Recovered: the anchor selection (m164 ? +0x168 : +0x13c) copied into a local 3-vector, the FUN_0059aed0 orientation sample into the scratch 3-float out buffer, the fused-x87 distance sqrt((dz*dz+dy*dy)+dx*dx) from the +0x114 desired position minus the +0x13c eye anchor, the SSE blend v = pf[i]*f + v[i], the alternative FUN_00d20880(anchor) path selected by the m044 Havok-zero compare, the whole-vector cache copies into +0x1ac/+0x1b0/+0x1b4 and +0x1b8..+0x1c4 when attached, and the trailing FUN_00d21bc0(0.0f,0.0f,val) push.  The distance IS reproduced as the original's (dz*dz+dy*dy)+dx*dx x87 sequence and the cache copies ARE the original's integer moves; the residual 272-byte difference is the frame size (0x14 vs 0x1c -- MSVC reloads two of the three anchor lanes from the still-live pointer instead of spilling all three as the original does), the load order of the three subtraction lanes and the x87 stack bookkeeping around the two calls.  equiv FAIL 9/14 valid inputs agree, 5 mismatch only on the x87 stack depth left at return (0 in the original, the reconstruction leaves the FPU stack occupied across the m044 branch).
+
+# Notes: 00d23840's fold trigger was isolated by standalone experiments (work/match/scratch_s00d22f30_test.cpp): with /fp:fast MSVC folds the double distance back to float precision (subss) as soon as the sibling branch performs scalar float copies, but keeps the fused x87 form when those copies are modelled as whole-vector aggregate assignments.  The extra anchor lane spills that remain are a register-allocation choice that could not be forced from C++.

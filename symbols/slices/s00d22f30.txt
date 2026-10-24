@@ -1,0 +1,15 @@
+; slice s00d22f30 = 0x00d22f30..0x00d23992 (cCreatureCamera per-frame camera cluster)
+00d22f30 cCreatureCamera::FUN_00d22f30(void)            ; 0x00d22f30  thiscall ret 0: per-frame creature-camera orbit update -- double sqrt of the +0x54 and +0xac speed groups, pick the smaller, clamp to [DAT_01582788,DAT_0158278c], smoothstep ((3-v*2)*v)*v, the DAT_01582790/94 + DAT_01582798/9c amplitude lerps, the cos-driven orbit displacement, the +/-DAT_015827a0*s2 pitch clamp and the accumulate-vs-write split on DAT_01582785
+00d23320 cCreatureCamera::FUN_00d23320(void)            ; 0x00d23320  thiscall ret 0: per-frame planet-surface eye projection -- cPlanetModel bring-up, terrain basis rotation by the +0x264.. matrix when (m260&2), four lifted sample points (base, A=p0+fwd*radius*unit, A+C, A-C with C=right*radius*tan(m258)*m220), GetRadiusAt/GetWaterHeight clears, max-of-four and normalized_safe() orthonormalisation under the ang-sized interval test, then m260|=4/m262++/m264,m268,m26c=n*ang
+00d23840 cCreatureCamera::FUN_00d23840(void)            ; 0x00d23840  thiscall ret 0: eye-radius blend -- anchor select (m164?+0x168:+0x13c), FUN_0059aed0 orientation sample, fused-x87 distance from +0x114 minus +0x13c, SSE blend v=pf[i]*f+v[i], FUN_00d20880(anchor) alternative gated by the m044 Havok-zero compare, whole-vector cache copies into +0x1ac..+0x1c4 when attached, then FUN_00d21bc0(0.0f,0.0f,val)
+; helpers: FUN_0059aed0 0x0059aed0 (orientation sample -> 3-float out buffer), FUN_00d20880 0x00d20880 (thiscall anchor-resolve, f32* , void*),
+;          FUN_00d21bc0 0x00d21bc0 (camera-solver push, 3 f32), SP::PlanetModel 0x00b3d350, cPlanetModel::GetRadiusAt 0x00b7ef70 (thiscall, f32*),
+;          cPlanetModel::GetWaterHeight 0x00b7e390 (thiscall), SP::normalized_safe 0x00449c20 (cdecl f32*(f32*,f32*))
+; globals: DAT_01582784/85 enable + accumulate gates, DAT_01582788/8c distance clamp lo/hi, DAT_01582790/94/98/9c orbit amplitudes, DAT_015827a0 pitch-limit scale,
+;          DAT_015827f0 ground clearance, DAT_0169deb0/b4/b8 terrain basis row, DAT_0169df44/48/4c forward basis, DAT_0169df50/54/58 right basis,
+;          _HK_REAL_ZERO 0x01485378 (Havok 0.0f), _HK_REAL_ONE 0x01485720 (Havok 1.0f)
+; fields: cCreatureCamera +0x1c pitch cos scale, +0x20 yaw accumulator, +0x28/2c/30 position, +0x34 pitch, +0x44 attached/cockpit flag,
+;         +0x48/4c/50 accumulated anchor, +0x54/58/5c velocity, +0x7c/80/84 strafe, +0x88/8c/90 bob, +0xac/b0/b4 accel,
+;         +0x114/118/11c desired position, +0x13c/140/144 eye anchor, +0x154/158/15c/160 orientation basis, +0x164 use-alt-anchor byte, +0x168/16c/170 alt anchor,
+;         +0x1ac/1b0/1b4 cached desired position, +0x1b8/1bc/1c0/1c4 cached basis, +0x220 fov/unit scale, +0x258 planet water-line angle, +0x25c surface offset angle,
+;         +0x260 state flags (bit1 rotated-basis, bit2 surface contact), +0x262 contact counter, +0x264/268/26c orientation, +0x270 radius, +0x274..+0x294 basis rows
