@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 00598260  37  pool-pop and value copy-construction scheduling differ
 00597290  7  value copy uses edx instead of ecx for the key
-00597d00  172  temporary fixed_hash_map construction/destruction order differs; equiv FAIL (5/5 valid inputs mismatched at call #5)
+00597d00  185  temporary fixed_hash_map construction/destruction order differs; the SummaryValue temporary now uses an out-of-line destructor at 0x00596190 (SummaryTemp) while DoFreeNode keeps its inlined destructor, and the bool tag is passed as the original dword (low byte of the failed-find end pointer zeroed); PASS 222 valid/89.2% coverage, replay first difference None; chk diff 185, size 237 vs 244; run_all 5/5
 005973a0  82  rbtree find call/result handling differs
 00597410  161  result-flag bookkeeping and inlined push_back differ
 005976d0  509  register allocation and erase/push_back inlining differ

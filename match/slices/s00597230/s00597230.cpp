@@ -836,6 +836,12 @@ struct SummaryValue {
     SetBitsMap second;
     SummaryValue(uint32_t k, const SetBitsMap& m) : first(k), second(m) {}
 };
+// The operator[] temporary is destroyed by the original out-of-line SummaryValue
+// destructor (0x00596190), while DoFreeNode keeps its inlined destructor.
+struct SummaryTemp : SummaryValue {
+    SummaryTemp(uint32_t k, const SetBitsMap& m) : SummaryValue(k, m) {}
+    ~SummaryTemp();                  // 0x00596190
+};
 struct SummaryNode { SummaryValue mValue; SummaryNode* mpNext; };
 struct SummaryMap {
     uint32_t mHashCodeBase;
@@ -850,7 +856,9 @@ struct SummaryMap {
     SetBitsMap& operator[](const uint32_t& key);
     void find(SummaryNode** result, const uint32_t& key);                                 // 0x00594EE0
     struct insert_return_type { SummaryNode* mpNode; SummaryNode** mpBucket; bool second; };
-    insert_return_type DoInsertValue(const SummaryValue& value, bool tag);               // 0x00597590
+    // The original passes the tag as a dword whose low byte is zero and whose upper
+    // bytes are the low byte of `it` after the failed-find end pointer was overwritten.
+    insert_return_type DoInsertValue(const SummaryValue& value, uint32_t tag);            // 0x00597590
 };
 
 // NM 0x00597290: value copy uses edx instead of ecx for the key
@@ -893,7 +901,10 @@ SetBitsMap& SummaryMap::operator[](const uint32_t& key)
     if (it != mpBucketArray[mnBucketCount])
         return it->mValue.second;
     uint8_t hashFunction, predicate;
-    insert_return_type result = DoInsertValue(SummaryValue(key, SetBitsMap(predicate, hashFunction)), false);
+    // The failed find leaves `it` at the bucket-array end; the original stores a zero
+    // byte into that slot and loads the whole dword as the bool argument.
+    uint32_t tag = (uint32_t)it & 0xffffff00u;
+    insert_return_type result = DoInsertValue(SummaryTemp(key, SetBitsMap(predicate, hashFunction)), tag);
     return result.mpNode->mValue.second;
 }
 
