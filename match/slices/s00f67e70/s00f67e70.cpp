@@ -55,8 +55,7 @@ IResolver* __cdecl FUN_0067dd60();                            // 0x0067dd60
 struct ShaderIds { u32 pad; u32 id; };
 struct ShaderTable {
     char       pad00[0x0c];
-    ShaderIds** table;                                        // +0x0c (indexed by id)
-    char      pad10[0x4c - 0x10];
+    ShaderIds* table[0x10];                                   // +0x0c (indexed by id)
     ShaderIds* s4c;                                           // +0x4c
 };
 ShaderTable* __cdecl GetShaderTable();                        // 0x00f48a60
@@ -406,13 +405,25 @@ void __stdcall cTerrainEditor::TessellateBrush(void* out, void* vec, const float
         const float* src = in + 3;
         int iters = ((count - 4) >> 2) + 1;
         written = iters * 4;
-        char* dst = (char*)out;
+        float* dst = (float*)out;
         do {
-            *(V4*)(dst + 0x00) = V4(src[-3] * eps, 1.0f - src[-2] * eps, 1.0f, 1.0f);
-            *(V4*)(dst + 0x2c) = V4(src[0] * eps, 1.0f - src[1] * eps, 1.0f, 1.0f);
-            *(V4*)(dst + 0x58) = V4(src[3] * eps, 1.0f - src[4] * eps, 1.0f, 1.0f);
-            *(V4*)(dst + 0x84) = V4(src[6] * eps, 1.0f - src[7] * eps, 1.0f, 1.0f);
-            dst += 0xb0;
+            dst[0x00] = src[-3] * eps;
+            dst[0x01] = 1.0f - src[-2] * eps;
+            dst[0x02] = 1.0f;
+            dst[0x03] = 1.0f;
+            dst[0x0b] = src[0] * eps;
+            dst[0x0c] = 1.0f - src[1] * eps;
+            dst[0x0d] = 1.0f;
+            dst[0x0e] = 1.0f;
+            dst[0x16] = src[3] * eps;
+            dst[0x17] = 1.0f - src[4] * eps;
+            dst[0x18] = 1.0f;
+            dst[0x19] = 1.0f;
+            dst[0x21] = src[6] * eps;
+            dst[0x22] = 1.0f - src[7] * eps;
+            dst[0x23] = 1.0f;
+            dst[0x24] = 1.0f;
+            dst += 0x2c;
             src += 12;
             --iters;
         } while (iters);
@@ -420,11 +431,14 @@ void __stdcall cTerrainEditor::TessellateBrush(void* out, void* vec, const float
     if (written < count) {
         const float* src = in + written * 3;
         int n = count - written;
-        char* dst = (char*)out + written * 0x2c;
+        float* dst = (float*)out + written * 0xb;
         written += n;
         do {
-            *(V4*)dst = V4(src[0] * eps, 1.0f - src[1] * eps, 1.0f, 1.0f);
-            dst += 0x2c;
+            dst[0] = src[0] * eps;
+            dst[1] = 1.0f - src[1] * eps;
+            dst[2] = 1.0f;
+            dst[3] = 1.0f;
+            dst += 0xb;
             src += 3;
             --n;
         } while (n);
@@ -449,25 +463,31 @@ void __stdcall cTerrainEditor::TessellateBrush(void* out, void* vec, const float
         int newStrips = (cursor - start) / 3;
         int top = cursor;
         if (written + newStrips * 3 <= limit && (u32)(cursor + newStrips * 12) < 0x801 && newStrips > 0) {
-            char* dst = (char*)out + written * 0x2c;
+            float* dst = (float*)out + written * 0xb;
             u16* ip = idxbuf + start + 2;
-            int m = written;
             int cnt = newStrips;
             do {
                 u16 i0 = ip[-2];
                 u16 i1 = ip[-1];
                 u16 i2 = ip[0];
+                int m = written;
                 const float* v0 = (const float*)((char*)out + i0 * 0x2c);
                 const float* v1 = (const float*)((char*)out + i1 * 0x2c);
                 const float* v2 = (const float*)((char*)out + i2 * 0x2c);
-                *(V4*)(dst) = V4((v1[0] + v0[0]) * 0.5f, (v1[1] + v0[1]) * 0.5f,
-                                 (v1[2] + v0[2]) * 0.5f, (v1[3] + v0[3]) * 0.5f);
+                dst[0x00] = (v1[0] + v0[0]) * 0.5f;
+                dst[0x01] = (v1[1] + v0[1]) * 0.5f;
+                dst[0x02] = (v1[2] + v0[2]) * 0.5f;
+                dst[0x03] = (v1[3] + v0[3]) * 0.5f;
                 ++written;
-                *(V4*)(dst + 0x2c) = V4((v1[0] + v2[0]) * 0.5f, (v1[1] + v2[1]) * 0.5f,
-                                        (v1[2] + v2[2]) * 0.5f, (v1[3] + v2[3]) * 0.5f);
+                dst[0x0b] = (v1[0] + v2[0]) * 0.5f;
+                dst[0x0c] = (v1[1] + v2[1]) * 0.5f;
+                dst[0x0d] = (v1[2] + v2[2]) * 0.5f;
+                dst[0x0e] = (v1[3] + v2[3]) * 0.5f;
                 ++written;
-                *(V4*)(dst + 0x58) = V4((v2[0] + v0[0]) * 0.5f, (v2[1] + v0[1]) * 0.5f,
-                                        (v2[2] + v0[2]) * 0.5f, (v2[3] + v0[3]) * 0.5f);
+                dst[0x16] = (v2[0] + v0[0]) * 0.5f;
+                dst[0x17] = (v2[1] + v0[1]) * 0.5f;
+                dst[0x18] = (v2[2] + v0[2]) * 0.5f;
+                dst[0x19] = (v2[3] + v0[3]) * 0.5f;
                 ++written;
                 idxbuf[cursor] = i0;
                 idxbuf[cursor + 1] = (u16)m;
@@ -481,6 +501,7 @@ void __stdcall cTerrainEditor::TessellateBrush(void* out, void* vec, const float
                 idxbuf[cursor + 9] = (u16)m;
                 idxbuf[cursor + 10] = (u16)(m + 1);
                 idxbuf[cursor + 11] = (u16)(m + 2);
+                dst += 0x21;
                 cursor += 12;
                 ip += 3;
             } while (--cnt);
@@ -495,22 +516,19 @@ void __stdcall cTerrainEditor::TessellateBrush(void* out, void* vec, const float
 // @ 0x00f68c80
 void cTerrainEditor::DrawRaster(int idx, u32 a, int* handle, u32 b)
 {
-    zip((int)a);
-
     int sh = FUN_00f67770(a, handle);
-    ShaderIds* zsid = GetShaderTable()->table[sh];
-    u32 shader = zsid->id;
+    u32 shader = GetShaderTable()->table[sh]->id;
     Binding b0;
     b0.Init(shader, 0, mHandle68);
 
     void* h = (void*)*handle;
     u32 resolved;
-    if (h == 0) {
-        resolved = 0;
-    } else {
+    if (h != 0) {
         if ((*(u8*)((char*)h + 4) & 1) == 0)
             FUN_0067dd60()->Resolve(h);
         resolved = *(u32*)h;
+    } else {
+        resolved = 0;
     }
 
     Binding b1;
