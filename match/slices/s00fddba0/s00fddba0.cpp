@@ -166,6 +166,8 @@ class cMessageServer
 public:
     VIRT4(a) virtual void v10(); virtual void v14();
     virtual void PostMessage(uint32_t id, int a, int b, int c);   // +0x18
+    virtual void v1c(); virtual void v20(); virtual void v24(); virtual void v28();
+    virtual void Notify(void* target, uint32_t id, int param);    // +0x2c (ret 0xc)
 };
 cMessageServer* MessageServer();                           // 0x0067dcc0
 
@@ -238,6 +240,7 @@ class cEmpire
 {
 public:
     int GetID();                                           // 0x00c30c80
+    void* GetUFOKey();                                     // 0x00c326b0
 };
 cEmpire* GetPlayerEmpire();                                // 0x01021300
 class cHudEmpire
@@ -290,12 +293,19 @@ inline Quaternion QuatMul(const Quaternion& a, const Quaternion& b)
     return r;
 }
 
+class cModeBase { public: void* mpVtbl; };                         // interface sub-object at +0x04
+
 class cAppModeSpace
 {
 public:
     void TransitionFromPlanetToSolar(bool bUpdateEmpire);          // 0x00fde3e0
+    bool Shutdown();                                               // 0x00fde180
+    void ShutdownSPG();                                            // 0x00fdc150
+    static void SetDefaultPickPriority();                          // 0x00fddba0
 
-    char pad00[0x144];
+    char pad00[0x04];
+    cModeBase mBase;                                               // +0x04 message-server target
+    char pad08[0x144 - 0x08];
     ModelVector mModels;                                           // +0x144
     char pad150[0x15c - 0x150];
     cSPSpaceGameState* mpSpaceGame;                                // +0x15c
@@ -461,5 +471,213 @@ void cAppModeSpace::TransitionFromPlanetToSolar(bool bUpdateEmpire)
         if (*it)
             (*it)->Release();
     if (buf && ((int*)buf)[-1] != 0)
+        operator delete[](buf);
+}
+
+// ---------------------------------------------------------------------------
+// Pick-priority tables and space-mode shutdown.
+// ---------------------------------------------------------------------------
+#include <string.h>
+
+struct PickPriority
+{
+    uint32_t mKey;          // interface id the picker looks for
+    uint32_t mMode;         // pick mode it applies to
+    int32_t  mPriority;     // lower runs first
+    PickPriority(uint32_t key, uint32_t mode, int32_t priority)
+        : mKey(key), mMode(mode), mPriority(priority) {}
+};
+
+// eastl::vector<PickPriority>: 12-byte elements, grown through DoInsertValue.
+struct PickPriorityVec
+{
+    PickPriority* mpBegin;
+    PickPriority* mpEnd;
+    PickPriority* mpCapacity;
+
+    PickPriorityVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+
+    void DoInsertValue(PickPriority* pos, const PickPriority& value);       // 0x00b535d0 (ret 8)
+
+    void push_back(const PickPriority& value)
+    {
+        PickPriority* end = mpEnd;
+        if (end < mpCapacity)
+        {
+            mpEnd = end + 1;
+            if (end != 0)
+                *end = value;
+        }
+        else
+        {
+            DoInsertValue(end, value);
+        }
+    }
+
+    ~PickPriorityVec()
+    {
+        if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+            operator delete[](mpBegin);
+    }
+};
+
+class cPickPriorityMgr
+{
+public:
+    VIRT4(a) VIRT4(b) virtual void v20(); virtual void v24(); virtual void v28();
+    virtual void SetList(PickPriorityVec* list, int mode);                 // +0x2c (ret 8)
+};
+cPickPriorityMgr* PickPriorityMgr();                                       // 0x00b3d240
+
+// @ 0x00fddba0
+void cAppModeSpace::SetDefaultPickPriority()
+{
+    PickPriorityVec list;
+    list.push_back(PickPriority(0xb033b403, 1, 10));
+    list.push_back(PickPriority(0x137e8e0, 1, 10));
+    list.push_back(PickPriority(0xb033b403, 2, 20));
+    list.push_back(PickPriority(0x137e8e0, 2, 20));
+    list.push_back(PickPriority(0xe9cb8ba, 2, 40));
+    list.push_back(PickPriority(0x436f315, 0, 30));
+    list.push_back(PickPriority(0xe9cb8ba, 0, 30));
+    list.push_back(PickPriority(0x175cdc9, 0, 30));
+    list.push_back(PickPriority(0xce9f6639, 0, 30));
+    list.push_back(PickPriority(0x3275872, 1, 100));
+    list.push_back(PickPriority(0x44462a6, 1, 100));
+    list.push_back(PickPriority(0x38cfb68, 0, 100));
+    list.push_back(PickPriority(0x3275872, 2, 110));
+    list.push_back(PickPriority(0x44462a6, 2, 110));
+    PickPriorityMgr()->SetList(&list, 0);
+}
+
+// @ 0x00fddfa0
+void FUN_00fddfa0()
+{
+    PickPriorityVec list;
+    list.push_back(PickPriority(0xb033b403, 1, 10));
+    list.push_back(PickPriority(0x137e8e0, 1, 10));
+    list.push_back(PickPriority(0xb033b403, 2, 20));
+    list.push_back(PickPriority(0x137e8e0, 2, 20));
+    list.push_back(PickPriority(0xe9cb8ba, 1, 30));
+    list.push_back(PickPriority(0xce9f6639, 0, 30));
+    PickPriorityMgr()->SetList(&list, 0);
+}
+
+// ---- shutdown helpers ---------------------------------------------------------------------------------
+void FUN_00e1dbd0();                                                       // 0x00e1dbd0
+extern uint32_t g_cheatFlag;                                               // 0x015b732c
+
+class cCheatManager
+{
+public:
+    VIRT4(a) virtual void v10(); virtual void v14(); virtual void v18();
+    virtual void SetFlag(uint32_t flag);                                   // +0x1c (ret 4)
+};
+cCheatManager* CheatManager();                                             // 0x0067de20
+
+// The message server talks to the interface sub-object at +0x04 of the mode; the
+// retail build null-checks the mode pointer for every conversion.
+inline cModeBase* GetModeBase(cAppModeSpace* mode)
+{
+    return (mode != 0) ? &mode->mBase : 0;
+}
+
+// @ 0x00fde180
+bool cAppModeSpace::Shutdown()
+{
+    FUN_00e1dbd0();
+    mModels.clear();
+
+    cMessageServer* server = MessageServer();
+    if (server != 0)
+    {
+        server->Notify(GetModeBase(this), 0x1a0219e, 0xffffd8f1);
+        server->Notify(GetModeBase(this), 0x3795725, 0xffffd8f1);
+    }
+    CheatManager()->SetFlag(g_cheatFlag);
+    ShutdownSPG();
+    return true;
+}
+
+// ---- planet record notification -----------------------------------------------------------------------
+class cObjectTemplateDB
+{
+public:
+    VIRT4(a) VIRT4(b) VIRT4(c) VIRT4(d) VIRT4(e) VIRT4(f)
+    virtual void Unregister(void* entry);                                  // +0x60 (ret 4)
+};
+cObjectTemplateDB* ObjectTemplateDB();                                     // 0x0067cb40
+
+class cBioElemSort
+{
+public:
+    void* Func_bb9b80();                                                   // 0x00bb9b80
+    int   Func_bb9ae0();                                                   // 0x00bb9ae0
+    int   GetAvatar();                                                     // 0x00b1fdb0
+};
+
+class cStarManager
+{
+public:
+    cEmpire* GetEmpireByID(int id);                                        // 0x00ba9370 (ret 4)
+};
+cStarManager* StarManager();                                               // 0x00b3d2a0
+
+struct PlanetTemplateRef { uint32_t mKey; uint32_t mField04; uint32_t mField08; };
+struct PlanetTemplateVec { PlanetTemplateRef* mpBegin; PlanetTemplateRef* mpEnd; };
+
+struct cPlanetRecord
+{
+    char pad00[0xd0];
+    PlanetTemplateRef* mTemplatesBegin;                                    // +0xd0
+    PlanetTemplateRef* mTemplatesEnd;                                      // +0xd4
+    char padD8[0x15c - 0xd8];
+    PlanetTemplateVec** mExtraBegin;                                       // +0x15c
+    PlanetTemplateVec** mExtraEnd;                                         // +0x160
+    cBioElemSort* SortBanners();                                           // 0x00b8de30
+};
+
+// @ 0x00fde230
+void NotifyActivePlanetRecord(void* record_)
+{
+    cPlanetRecord* record = (cPlanetRecord*)record_;
+
+    int count = (int)(record->mTemplatesEnd - record->mTemplatesBegin);
+    for (int i = 0; i < count; i++)
+        ObjectTemplateDB()->Unregister(&record->mTemplatesBegin[i]);
+
+    cBioElemSort* sort = record->SortBanners();
+
+    void* key = sort->Func_bb9b80();
+    if (*(int*)key != 0)
+        ObjectTemplateDB()->Unregister(key);
+
+    if (sort->Func_bb9ae0() == 5)
+    {
+        cEmpire* empire = StarManager()->GetEmpireByID(sort->GetAvatar());
+        if (empire != 0)
+            ObjectTemplateDB()->Unregister(empire->GetUFOKey());
+    }
+
+    int n = (int)(record->mExtraEnd - record->mExtraBegin);
+    PlanetTemplateVec** buf = 0;
+    if (n != 0)
+        buf = (PlanetTemplateVec**)operator new[](n * 4, "Simulator", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1);
+    memcpy(buf, record->mExtraBegin, n * 4);
+
+    int copied = n;
+    for (int i = 0; i < copied; i++)
+    {
+        PlanetTemplateVec* v = buf[i];
+        int m = (int)(v->mpEnd - v->mpBegin);
+        for (int j = 0; j < m; j++)
+        {
+            PlanetTemplateRef* e = &v->mpBegin[j];
+            if (e->mKey != 0 && e->mKey != 0xffffffff)
+                ObjectTemplateDB()->Unregister(e);
+        }
+    }
+
+    if (buf != 0 && ((int*)buf)[-1] != 0)
         operator delete[](buf);
 }
