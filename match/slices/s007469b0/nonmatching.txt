@@ -1,8 +1,15 @@
+# va  diff-bytes  reason  (complete behaviour, not byte-exact)
+007469b0 215 SetWorldBounds complete; register assignment/x87 float-arg shape differs (equiv: PASS 91.6% cov)
 00746b90 233 cModelWorld::ShutdownModel shape/order differs
+00746cf0 180 cModelManager::DebugPick complete; pick-protocol shape differs (equiv: UNSUPPORTED 0/400 valid)
+00746e50 227 cLoadingModel ctor complete; SEH try-level frame absent (equiv: UNSUPPORTED 5 unresolved globals)
 00746fc0 140 load-entry destructor shape differs
 007470c0 173 member release sequence shape differs; equiv: WEAK 81.8% cov
 00747190  77 entry copy-assign register shape differs; equiv: WEAK 90.2% cov
+007471f0 110 cLoadingModel::cLoadingModel complete; SEH frame absent (equiv: PASS 100% cov)
 00747270  88 cLoadingModel dtor shape differs; equiv: FAIL 5/5 mismatch (execution)
+00747340 638 load-queue slot refresh complete; SEH/refcount shape differs (equiv: UNSUPPORTED 1 unresolved ref)
+00747640 199 deque entry lookup complete; by-value 16B iterator args not reproduced (equiv: PASS 100% cov)
 00747720 121 deque< cLoadQueueEntry >::~deque shape differs
 007477d0 215 deque< cLoadQueueEntry >::clear shape differs
 007478b0  57 vector< cLoadQueueEntry >::~vector shape differs
