@@ -117,14 +117,20 @@ struct Int_mBombPhase;
 struct Int_mDamageType;
 struct Int_mTargetDamagePointId;
 struct Int_mStrikeType;
+struct Int_mLastPathPointIndex;
+struct Int_mLastPointReached;
+struct Int_mMotionType;
+struct PathVector;      // tag only: selects the folded AlwaysValid instance
 
 bool Read_00aca060(ISerializerReadStream* pStream, void* pData);
 bool Read_00ae3470(ISerializerReadStream* pStream, void* pData);
 bool Read_00aff840(ISerializerReadStream* pStream, void* pData);
 bool Read_00b6e3a0(ISerializerReadStream* pStream, void* pData);
 bool Read_00bceb00(ISerializerReadStream* pStream, void* pData);
+bool Read_00bd0d50(ISerializerReadStream* pStream, void* pData);
 bool Read_00bdc650(ISerializerReadStream* pStream, void* pData);
 bool Read_00bf3ea0(ISerializerReadStream* pStream, void* pData);
+bool Read_00c41210(ISerializerReadStream* pStream, void* pData);
 bool Read_00cbb4c0(ISerializerReadStream* pStream, void* pData);
 
 bool Write_00ac88c0(ISerializerWriteStream* pStream, void* pData);
@@ -134,7 +140,9 @@ bool Write_00ae3490(ISerializerWriteStream* pStream, void* pData);
 bool Write_00aff870(ISerializerWriteStream* pStream, void* pData);
 bool Write_00bca960(ISerializerWriteStream* pStream, void* pData);
 bool Write_00bd1780(ISerializerWriteStream* pStream, void* pData);
+bool Write_00bd17b0(ISerializerWriteStream* pStream, void* pData);
 bool Write_00bdd350(ISerializerWriteStream* pStream, void* pData);
+bool Write_00c40e80(ISerializerWriteStream* pStream, void* pData);
 bool Write_00cbad90(ISerializerWriteStream* pStream, void* pData);
 
 void ReadText_00692fd0(const string8& text, void* pData);
@@ -150,6 +158,7 @@ void WriteText_00695010(char* pBuffer, void* pData);
 bool Validate_00ae3310();
 bool Validate_00b6f550();
 bool Validate_00b6f860();
+bool Validate_00bcd450();
 bool Validate_00bf2670();
 bool Validate_00c87090();
 
@@ -162,9 +171,12 @@ bool ToXml_00acbb80(void* pData, const char* pName, int depth);
 bool ToXml_00acbba0(void* pData, const char* pName, int depth);
 bool ToXml_00c6c390(void* pData, const char* pName, int depth);
 bool ToXml_00cbb590(void* pData, const char* pName, int depth);
+bool ToXml_00c41b00(void* pData, const char* pName, int depth);
 
 struct AttrSlot { uint32_t d[15]; };
 extern AttrSlot cDefaultToolProjectile_sAttributes[20];   // 0x0157d890
+extern AttrSlot cToolBase_sAttributes[6];                 // 0x0157d398
+extern AttrSlot cPathFollowingLocomotion_sAttributes[10]; // 0x0157d540
 
 #define INTX_ATTR(T) Read4<T>, Write4<int>, ReadTextInt<T>, WriteTextInt<T>, AlwaysValid<T>, ToXmlIntT<T>
 #define INT_ATTR(T) Read4<T>, Write4<int>, ReadTextInt<T>, WriteTextInt<T>, AlwaysValid<T>, ToXml_0057cde0
@@ -173,8 +185,11 @@ extern AttrSlot cDefaultToolProjectile_sAttributes[20];   // 0x0157d890
 #define UINT64_ATTR Read_00aff840, Write_00aff870, ReadText_00692fd0, WriteText_00694ec0, AlwaysValid<uint64_t>, ToXml_00595a70
 #define PTR_ATTR(T, R, W, V)  /* T: pointee, for reading only */ R, W, ReadText_00c2e4e0, WriteText_00692fb0, V, ToXml_00ac8050
 #define PTRX_ATTR(R, W, V, X) R, W, ReadText_00c2e4e0, WriteText_00692fb0, V, X
+// Path sequence rows: raw pointer read/write, plain string text callbacks, own ToXml.
+#define PATH_ATTR   Read_00c41210, Write_00c40e80, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<PathVector>, ToXml_00c41b00
 
 #define ADD(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cDefaultToolProjectile_sAttributes[IDX] = a; }
+#define ADD_TO(TABLE, IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&TABLE[IDX] = a; }
 
 // @ 0x0135a630
 void InitDefaultToolProjectileAttributes()
@@ -199,6 +214,36 @@ void InitDefaultToolProjectileAttributes()
     ADD(17, "mpTarget", 0x0679c218, 0x5d8, PTR_ATTR(cSpatialObject, Read_00bdc650, Write_00bdd350, Validate_00b6f550))
     ADD(18, "mWaveFrontTargetCities", 0x0679c258, 0x5dc, PTRX_ATTR(Read_00bf3ea0, Write_00aca730, Validate_00b6f860, ToXml_00c6c390))
     ADD(19, "mDamagedObjects", 0x0679c2c1, 0x570, PTRX_ATTR(Read_00cbb4c0, Write_00cbad90, Validate_00bf2670, ToXml_00cbb590))
+}
+
+// Dynamic initializers of the cToolBase serializer attribute table (6 Simulator::Attribute
+// records at 0x0157d398..0x0157d4ff) and of the cPathFollowingLocomotion serializer attribute
+// table (10 records at 0x0157d540..0x0157d797).
+
+// @ 0x01359ed0
+void InitToolBaseAttributes()
+{
+    ADD_TO(cToolBase_sAttributes, 0, "mpOwner", 0x032128d8, 0x524, PTR_ATTR(cGameData, Read_00bd0d50, Write_00bd17b0, Validate_00bcd450))
+    ADD_TO(cToolBase_sAttributes, 1, "mLastPosition", 0x032128d9, 0x518, VEC3_ATTR)
+    ADD_TO(cToolBase_sAttributes, 2, "mMinDamage", 0x032128da, 0x528, INT_ATTR(Int_mMinDamage))
+    ADD_TO(cToolBase_sAttributes, 3, "mMaxDamage", 0x032128db, 0x52c, INT_ATTR(Int_mMaxDamage))
+    ADD_TO(cToolBase_sAttributes, 4, "mDamageType", 0x032128dc, 0x530, INT_ATTR(Int_mDamageType))
+    ADD_TO(cToolBase_sAttributes, 5, "mTool", 0x032128dd, 0x534, PTR_ATTR(cWeapon, Read_00bceb00, Write_00bd1780, Validate_00c87090))
+}
+
+// @ 0x0135a150
+void InitPathFollowingLocomotionAttributes()
+{
+    ADD_TO(cPathFollowingLocomotion_sAttributes, 0, "mPath", 0x0643fc18, 0x10, PATH_ATTR)
+    ADD_TO(cPathFollowingLocomotion_sAttributes, 1, "mLastPathPointIndex", 0x0643fe1a, 0x24, INT_ATTR(Int_mLastPathPointIndex))
+    ADD_TO(cPathFollowingLocomotion_sAttributes, 2, "mDistanceFromLastPoint", 0x0643fe1b, 0x28, FLOAT_ATTR)
+    ADD_TO(cPathFollowingLocomotion_sAttributes, 3, "mCurrentSegmentLength", 0x0643fe1c, 0x2c, FLOAT_ATTR)
+    ADD_TO(cPathFollowingLocomotion_sAttributes, 4, "mLastPointReached", 0x0643fe1d, 0x30, INT_ATTR(Int_mLastPointReached))
+    ADD_TO(cPathFollowingLocomotion_sAttributes, 5, "mToNextPoint", 0x0643fe1e, 0x34, VEC3_ATTR)
+    ADD_TO(cPathFollowingLocomotion_sAttributes, 6, "mMotionType", 0x0643fe1f, 0x40, INT_ATTR(Int_mMotionType))
+    ADD_TO(cPathFollowingLocomotion_sAttributes, 7, "mLowestAltitude", 0x0643fe20, 0x48, FLOAT_ATTR)
+    ADD_TO(cPathFollowingLocomotion_sAttributes, 8, "mHighestAltitude", 0x0643fe21, 0x44, FLOAT_ATTR)
+    ADD_TO(cPathFollowingLocomotion_sAttributes, 9, "mLastSpeed", 0x0643fe22, 0x4c, FLOAT_ATTR)
 }
 
 }  // namespace Simulator
