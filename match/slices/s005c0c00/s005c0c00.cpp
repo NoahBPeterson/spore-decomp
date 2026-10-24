@@ -347,7 +347,7 @@ class cSPEditorPaintLikeThis : public cSPPaletteItemUIOneClickPaint, public cSPU
   cSPEditorPaintLikeThis(unsigned int paintGroup);
   ~cSPEditorPaintLikeThis();
   void SetImage(EA::ResourceMan::Key key);
-  void OnPaintThemeSelected(uint32_t themeID, int unused, IWindow* window);
+  void OnPaintThemeSelected(int paletteItemID, uint32_t paintGroupID, IWindow* window);
   void OnSelected();
   void OnRollover();
   void OffRollover();
@@ -364,12 +364,12 @@ class cSPEditorPaintLikeThis : public cSPPaletteItemUIOneClickPaint, public cSPU
 };
 
 // @ 0x005C0C00
-void cSPEditorPaintLikeThis::OnPaintThemeSelected(uint32_t themeID, int unused, IWindow* window) {
-  if (themeID != mPaintGroupId && themeID != 0xffffffff) {
+void cSPEditorPaintLikeThis::OnPaintThemeSelected(int paletteItemID, uint32_t paintGroupID, IWindow* window) {
+  if (paintGroupID != mPaintGroupId && paintGroupID != 0xffffffff) {
     SetIsSelected(false);
     return;
   }
-  if (themeID == GetPaletteItem()->mID && window == mWinThumbnail)
+  if (paletteItemID == GetPaletteItem()->mID && window == mWinThumbnail)
     SetIsSelected(true);
   else
     SetIsSelected(false);

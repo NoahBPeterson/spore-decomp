@@ -469,7 +469,7 @@ class cSPEditorPaintLikeThis_s005c_0c00 : public cSPPaletteItemUIOneClickPaint_s
   cSPEditorPaintLikeThis_s005c_0c00(unsigned int paintGroup);
   ~cSPEditorPaintLikeThis_s005c_0c00();
   void SetImage(EA::ResourceMan::Key_s005c_0c00 key);  // 0x005c0ba0 (SP::cSPEditorPaintLikeThis::SetImage)
-  void OnPaintThemeSelected(uint32_t themeID, int unused, IWindow_s005c_0c00* window);  // 0x005c0c00 (SP::cSPEditorPaintLikeThis::OnPaintThemeSelected)
+  void OnPaintThemeSelected(int paletteItemID, uint32_t paintGroupID, IWindow_s005c_0c00* window);  // 0x005c0c00 (SP::cSPEditorPaintLikeThis::OnPaintThemeSelected)
   void OnSelected();  // 0x005c0c60 (SP::cSPEditorPaintLikeThis::OnSelected)
   void OnRollover();  // 0x005c0c80 (SP::cSPEditorPaintLikeThis::OnRollover)
   void OffRollover();  // 0x005c0c90 (SP::cSPEditorPaintLikeThis::OffRollover)
@@ -559,13 +559,13 @@ void cSPEditorPaintLikeThis_s005b_fb90::SetImage(EA::ResourceMan::Key_s005b_fb90
 
 // @ 0x005c0c00
 namespace SP {
-void cSPEditorPaintLikeThis_s005c_0c00::OnPaintThemeSelected(uint32_t themeID, int unused, IWindow_s005c_0c00* window)
+void cSPEditorPaintLikeThis_s005c_0c00::OnPaintThemeSelected(int paletteItemID, uint32_t paintGroupID, IWindow_s005c_0c00* window)
 {
-  if (themeID != mPaintGroupId && themeID != 0xffffffff) {
+  if (paintGroupID != mPaintGroupId && paintGroupID != 0xffffffff) {
     SetIsSelected(false);
     return;
   }
-  if (themeID == GetPaletteItem()->mID && window == mWinThumbnail)
+  if (paletteItemID == GetPaletteItem()->mID && window == mWinThumbnail)
     SetIsSelected(true);
   else
     SetIsSelected(false);

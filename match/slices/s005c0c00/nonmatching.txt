@@ -1,4 +1,4 @@
-005c0c00  80  OnPaintThemeSelected: themeID kept in edi instead of reloaded from the stack
+005c0c00  69  OnPaintThemeSelected: parameter order corrected (first stack arg is the palette item ID, second is the paint group); behavior complete, remaining /O2 schedule/register allocation differs (size 75 vs 88). [equiv: PASS 390 valid, 80.6% cov; src PASS]
 005c0d20  59  cSPEditorPaintLikeThis::HandleUIMessage (IWinProc): early-return block placement
 005c14f0  78  SendPaintMessage: message object layout/ctor (UI::BehaviorMessage) approximated
 005c1870  108  cSPEditorPaintLikeThis::HandleMessage (IHandlerRC): branch layout differs
