@@ -49,7 +49,9 @@ virtual void v17();
 RwDevice* GetDevice();                 // 0x0067dda0
 void FreeObj(void* p);                 // 0x00f47410
 void SetRenderState(int state, uint32_t value);       // 0x00529350
-void DrawVertices4(void* v, int n);                   // 0x011f3d40
+struct VPi {
+    bool FUN_011f3d40(uint32_t a, uint32_t b);         // 0x011f3d40
+};
 uint32_t RwStreamX(uint32_t);                          // 0x011fd790
 void RwStreamY(uint32_t, void*);                       // 0x011fd7b0
 void RwGfxCall(int, void*);                            // 0x004cdd70
@@ -150,8 +152,9 @@ typedef void (__thiscall *RwDeviceVtbl5)(void* self, int pageID, int allocID);
 using nSPSkinner::cRTTBuffer_s0052_88f0;
 struct Matrix44f { float m[16]; };
 struct DrawCtx {
-    char pad[8];
-    uint32_t writemask;
+    VPi* mVertexProcessor;          // +0
+    uint32_t mUnused4;              // +4
+    uint32_t writemask;             // +8
     void Draw(float* v, float w);   // 0x005292d0
 };
 // ---- items of slice s005288f0 end
@@ -272,7 +275,7 @@ void DrawCtx::Draw(float* v, float w)
     local[1] = v[1];
     local[2] = v[2];
     local[3] = w;
-    DrawVertices4(local, 1);
+    mVertexProcessor->FUN_011f3d40((uint32_t)(uintptr_t)local, 1);
 }
 
 // @ 0x00529350

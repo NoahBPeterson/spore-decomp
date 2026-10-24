@@ -31,7 +31,10 @@ void* MaterialManager();               // 0x0067dd70
 
 void SetRenderState(int state, uint32_t value);       // 0x00529350
 void SetSomeState(int, int, int, int);                 // 0x00529280
-void DrawVertices4(void* v, int n);                   // 0x011f3d40
+struct VPi {
+    bool FUN_011f3d40(uint32_t a, uint32_t b);         // 0x011f3d40
+};
+
 uint32_t RwStreamX(uint32_t);                          // 0x011fd790
 void RwStreamY(uint32_t, void*);                       // 0x011fd7b0
 void RwGfxCall(int, void*);                            // 0x004cdd70
@@ -199,8 +202,9 @@ void SetRenderState(int state, uint32_t value)
 
 // @ 0x005292d0
 struct DrawCtx {
-    char pad[8];
-    uint32_t writemask;
+    VPi* mVertexProcessor;          // +0
+    uint32_t mUnused4;              // +4
+    uint32_t writemask;             // +8
     void Draw(float* v, float w);   // 0x005292d0
 };
 void DrawCtx::Draw(float* v, float w)
@@ -211,7 +215,7 @@ void DrawCtx::Draw(float* v, float w)
     local[1] = v[1];
     local[2] = v[2];
     local[3] = w;
-    DrawVertices4(local, 1);
+    mVertexProcessor->FUN_011f3d40((uint32_t)(uintptr_t)local, 1);
 }
 
 // @ 0x005293a0
