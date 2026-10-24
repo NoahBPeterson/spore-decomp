@@ -1,1 +1,6 @@
 00fb1c10 SP::cTerrainSphereQuad::SamplePosition  # cube-face quad cell interpolation of terrain-height sphere positions (Claude-coined)
+00fb2290 ?QuadPos@cTerrainSphereQuad@SP@@QAEXPAMHH@Z  # cTerrainSphereQuad::QuadPos(out,ix,iy): one grid corner on the height sphere
+00fb2400 ?CalcMorphedPoint@cTerrainSphereQuad@SP@@QAEXPAMHH@Z  # cTerrainSphereQuad::CalcMorphedPoint(out,ix,iy): odd/even morph split, 2x Vec3
+00fb2550 ?BuildSpanMask@cTerrainSphereQuad@SP@@QAEXPAUcSpanJob@2@@Z  # cTerrainSphereQuad::BuildSpanMask(job): 8 span-mask bytes from the projected cell quad
+00fb29f0 ??4Rec30@SP@@QAEAAU01@ABU01@@Z  # Rec30::operator= (0x30-byte record: 9 floats, word, 2 floats)
+00fb2a40 ?CopyRange30@SP@@YAXPAURec30@1@00@Z  # CopyRange30(first,last,dst): 0x30-byte record range copy
