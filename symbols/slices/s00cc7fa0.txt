@@ -1,0 +1,2 @@
+00cc8810 ?FUN_00cc8810@CameraCtl@@QAE_NXZ  # CameraCtl::FUN_00cc8810 migrated from s00cc7fa0 (verbatim, slice spelling)
+00cc88e0 ?FUN_00cc88e0@TribeStrategy@@QAEII@Z  # TribeStrategy::FUN_00cc88e0 migrated from s00cc7fa0 (verbatim, slice spelling)

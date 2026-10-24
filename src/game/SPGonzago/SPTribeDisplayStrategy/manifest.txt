@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc8810@CameraCtl@@QAE_NXZ  00cc8810  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc88e0@TribeStrategy@@QAEII@Z  00cc88e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9430@TribeStrategy_s00cc_8ed0@@QAEXXZ  00cc9430  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9640@TribeStrategy_s00cc_8ed0@@QAEXPAUIWinText@@C@Z  00cc9640  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9740@TribeStrategy_s00cc_8ed0@@QAEXPAUIWinText@@UVector3@@HC@Z  00cc9740  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9890@@YAXXZ  00cc9890  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9cd0@TribeStrategy_s00cc_8ed0@@QAEXH@Z  00cc9cd0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9d50@TribeStrategy_s00cc_8ed0@@QAEXPAUEntityRef@@@Z  00cc9d50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cca060@cTribeDisplayStrategy@@QAEXXZ  00cca060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cca090@cTribeDisplayStrategy@@QAEDXZ  00cca090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cca0a0@cTribeDisplayStrategy@@QAEXXZ  00cca0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cca170@CPool@@QAEPAXPAX@Z  00cca170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?Insert@Vec3D@@QAEPAUVertex3D@@PAU2@0@Z  00ccbc90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
