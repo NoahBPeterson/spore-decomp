@@ -484,13 +484,27 @@ bool __thiscall cParticlesEffectView::SetParameter(int opcode, const float* data
         v.x = mFieldB4.x - data[0];
         v.y = mFieldB4.y - data[1];
         v.z = mFieldB4.z - z0;
-        float num = dir->x * v.x + dir->y * v.y + dir->z * v.z;
-        float scale = num / Dot3(dir, dir);
-        v.x = data[0] + dir->x * scale;
-        v.y = data[1] + dir->y * scale;
-        v.z = z0 + dir->z * scale;
+        // The original accumulates the numerator in x87, which the harness
+        // keeps at extended precision, then rounds it to 32 bits (fstp) and
+        // divides.  The numerator cancels to near zero here, so the sum must
+        // keep the extended-precision residual: do it in double, in the
+        // original's z+y then x order, and round once to float.
+        double dn = (double)dir->z * v.z;
+        dn += (double)dir->y * v.y;
+        dn += (double)dir->x * v.x;
+        float num = (float)dn;
+        double dd = Dot3(dir, dir);     // keep the unrounded st0 result
+        volatile double q = (double)num / dd;
+        float scale = (float)q;
+        volatile float s32 = scale;   // original positions with the rounded copy
+        v.x = data[0] + dir->x * s32;
+        v.y = data[1] + dir->y * s32;
+        v.z = z0 + dir->z * s32;
         mField84 = v;
-        mField90 = (scale <= 0.0f) ? 1.0f : 0.0f;
+        // The sign test sees the unrounded x87 quotient: a numerator that
+        // cancels to a tiny value (e.g. -2e-36 over a 2e18 dot) is still
+        // negative even though the 32-bit quotient underflows to -0.0.
+        mField90 = (q < 0.0) ? 0.0f : 1.0f;
         mXform1.InverseTransformPoint(mField84);
         return true;
     }
