@@ -180,7 +180,10 @@ inline void* operator new(size_t n, const char* name, int f, unsigned d, const c
 }
 inline void* operator new(size_t, void* p) { return p; }
 extern "C" size_t __cdecl strlen(const char*);
-struct Vector16 { void* a; void* b; void* c; void* d; };
+struct Vector16 {
+    void* a; void* b; void* c; void* d;
+    Vector16* VectorAssign(const Vector16* src);                   // 0x50d4e0
+};
 void __cdecl EASTL_allocator_deallocate(void* p);                 // 0x00f47380
 namespace eastl {
 struct allocator_s0053_9d70 { void deallocate(void* p, size_t) { EASTL_allocator_deallocate(p); } };
@@ -253,6 +256,7 @@ namespace EA {
 namespace ArgScript {
 class cBlockCommandBase : public cICommand_s0053_9d70 { public:
     cIParser_s0053_9d70* mParser; int mRefCount; cState_s0053_9d70* mChildState; char mCommands[0x20];
+    ~cBlockCommandBase();                                        // 0x0083cd90
 };
 }
 }
@@ -286,17 +290,24 @@ void* EASTL_allocator_allocate(size_t, const char*, int, unsigned, const char*, 
 void EvalResizeA(void* vec, int n);                               // 0x53b520
 void EvalResizeB(void* vec, int n);                               // 0x53b8a0
 void EvalResizeC(void* vec, int n);                               // 0x4afc80
-void EvalCopyA_(void* dst, const void* src);                      // 0x53b210
-void EvalCopyB_(void* dst, const void* src);                      // 0x53b5a0
+struct EvalVec16 {
+    char mItems[0x14];                                            // +0x00
+    EvalVec16* Vector16Assign(const EvalVec16* src);               // 0x53b210
+};
+struct EvalVec20 {
+    char mItems[0x14];                                            // +0x00
+    EvalVec20* Vector20Assign(const EvalVec20* src);               // 0x53b5a0
+};
 struct EvalList {
-    char m0[0x14];                                                // +0x00
-    char m1[0x14];                                                // +0x14
+    EvalVec16 m0;                                                 // +0x00
+    EvalVec20 m1;                                                 // +0x14
     Vector16 m2;                                                  // +0x28
     char pad[4];
     EvalList& operator=(const EvalList& o);                       // 0x53a420
 };
+struct IBrushRef { virtual void AddRef(); virtual void Release(); };
 struct BrushDesc_s0053_9d70 {
-    char pad0[4];
+    void** mpVtbl;                // +0x00
     Vector16 mHashes;             // +0x04
     char pad1[4];
     int mChainId;                 // +0x18
@@ -818,15 +829,15 @@ void cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::SetChild(int b)
 cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::~cSPSkinPaintParticleEffectBlockCommand_s0053_9d70()
 {
     if (mpDesc.mpObject) {
-        void** vt = *(void***)mpDesc.mpObject;
-        ((void(__thiscall*)(char*))vt[2])((char*)mpDesc.mpObject + 8);
+        IBrushRef* brush = (IBrushRef*)&mpDesc.mpObject->mBrush;
+        brush->Release();
     }
 }
 
 // @ 0x0053a2b0
 BrushDesc_s0053_9d70& BrushDesc_s0053_9d70::operator=(const BrushDesc_s0053_9d70& o)
 {
-    mHashes = o.mHashes;
+    mHashes.VectorAssign(&o.mHashes);
     mChainId = o.mChainId;
     mFlags = o.mFlags;
     mUserColorHSV = o.mUserColorHSV;
@@ -853,9 +864,9 @@ BrushDesc_s0053_9d70& BrushDesc_s0053_9d70::operator=(const BrushDesc_s0053_9d70
 // @ 0x0053a420
 __declspec(noinline) EvalList& EvalList::operator=(const EvalList& o)
 {
-    EvalCopyA_(this, &o);
-    EvalCopyB_((char*)this + 0x14, (const char*)&o + 0x14);
-    m2 = o.m2;
+    m0.Vector16Assign(&o.m0);
+    m1.Vector20Assign(&o.m1);
+    m2.VectorAssign(&o.m2);
     return *this;
 }
 

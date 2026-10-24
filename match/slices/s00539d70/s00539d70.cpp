@@ -15,8 +15,12 @@ extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 
 extern char gEmptyString[];                                       // @ 0x1667bac
 
-struct Vector16 { void* a; void* b; void* c; void* d; };
-Vector16& VectorAssign(Vector16& dst, const Vector16& src);       // @ 0x50d4e0
+// A four-pointer eval vector.  Its assign is a thiscall (ret 4) on the destination, matching
+// ?Vector16Assign@BlobVec@@QAEPAU1@PBU1@@Z (the same shape as the other two eval assigns).
+struct Vector16 {
+    void* a; void* b; void* c; void* d;
+    Vector16* VectorAssign(const Vector16* src);                   // 0x50d4e0
+};
 
 void __cdecl EASTL_allocator_deallocate(void* p);                 // 0x00f47380
 
@@ -69,6 +73,7 @@ class cICommand { public: virtual void AddRef(); virtual void Release(); virtual
 class cCommandBase : public cICommand { public: cIParser* mParser; int mRefCount; };
 class cBlockCommandBase : public cICommand { public:
     cIParser* mParser; int mRefCount; cState* mChildState; char mCommands[0x20];
+    ~cBlockCommandBase();                                        // 0x0083cd90
 };
 template <class T, class B> struct cCommandStateT : B { T* mState; };
 template <class T> class cBlockCommandT : public cCommandStateT<T, cBlockCommandBase> { public:};
@@ -89,15 +94,21 @@ void* EASTL_allocator_allocate(size_t, const char*, int, unsigned, const char*, 
 void EvalResizeA(void* vec, int n);                               // 0x53b520
 void EvalResizeB(void* vec, int n);                               // 0x53b8a0
 void EvalResizeC(void* vec, int n);                               // 0x4afc80
-void EvalCopyA_(void* dst, const void* src);                      // 0x53b210
-void EvalCopyB_(void* dst, const void* src);                      // 0x53b5a0
 
 // ---------------------------------------------------------------- description
 struct cSPSkinPaintParticleDescription;
 
+struct EvalVec16 {
+    char mItems[0x14];                                            // +0x00
+    EvalVec16* Vector16Assign(const EvalVec16* src);               // 0x53b210
+};
+struct EvalVec20 {
+    char mItems[0x14];                                            // +0x00
+    EvalVec20* Vector20Assign(const EvalVec20* src);               // 0x53b5a0
+};
 struct EvalList {
-    char m0[0x14];                                                // +0x00
-    char m1[0x14];                                                // +0x14
+    EvalVec16 m0;                                                 // +0x00
+    EvalVec20 m1;                                                 // +0x14
     Vector16 m2;                                                  // +0x28
     char pad[4];
     EvalList& operator=(const EvalList& o);                       // 0x53a420
@@ -106,14 +117,18 @@ struct EvalList {
 // @ 0x0053a420
 __declspec(noinline) EvalList& EvalList::operator=(const EvalList& o)
 {
-    EvalCopyA_(this, &o);
-    EvalCopyB_((char*)this + 0x14, (const char*)&o + 0x14);
-    m2 = o.m2;
+    m0.Vector16Assign(&o.m0);
+    m1.Vector20Assign(&o.m1);
+    m2.VectorAssign(&o.m2);
     return *this;
 }
 
-struct BrushDesc {
-    char pad0[4];
+// The brush block is polymorphic: its vptr sits at +0x00 (the description ctor stores it there and
+// operator= starts at +0x04, so the copy never touches it).  The block destructor releases the
+// brush, i.e. slot 1 (Release) of that vptr, with the brush block itself as the receiver.
+struct IBrushRef { virtual void AddRef(); virtual void Release(); };
+struct BrushDesc_s0053_9d70 {
+    void** mpVtbl;                // +0x00
     Vector16 mHashes;             // +0x04
     char pad1[4];
     int mChainId;                 // +0x18
@@ -139,12 +154,12 @@ struct BrushDesc {
     int mRuntimeComponentId;      // +0xac
 
     void Init();                                                  // @ 0x53a530
-    BrushDesc& operator=(const BrushDesc& o);                     // 0x53a2b0
+    BrushDesc_s0053_9d70& operator=(const BrushDesc_s0053_9d70& o); // 0x53a2b0
     struct cSPSkinPaintParticleDescription* GetRuntimeDesc();     // 0x53a4a0
 };
 
 struct DescriptionBase { virtual void d0(); virtual void d1(); int mnRefCount; };
-struct cSPSkinPaintParticleDescription : DescriptionBase { BrushDesc mBrush; };
+struct cSPSkinPaintParticleDescription : DescriptionBase { BrushDesc_s0053_9d70 mBrush; };
 
 template <class T> struct AutoRefCount {
     T* mpObject;
@@ -198,7 +213,7 @@ void cSPSkinPaintParticleinheritCommand::Execute(EA::ArgScript::cArguments& args
     cSPSkinPaintParticleDescription* pDesc;
     pDesc = A;
     pDesc = state->mpDesc;
-    BrushDesc* p = pDesc ? &pDesc->mBrush : 0;
+    BrushDesc_s0053_9d70* p = pDesc ? &pDesc->mBrush : 0;
     size_t count = 0;
     const char** argv = args.MainArguments(&count, 1, 0x32);
     for (size_t i = 0; i < count; ++i) {
@@ -284,15 +299,15 @@ void cSPSkinPaintParticleEffectBlockCommand::SetChild(int b)
 cSPSkinPaintParticleEffectBlockCommand::~cSPSkinPaintParticleEffectBlockCommand()
 {
     if (mpDesc.mpObject) {
-        void** vt = *(void***)mpDesc.mpObject;
-        ((void(__thiscall*)(char*))vt[2])((char*)mpDesc.mpObject + 8);
+        IBrushRef* brush = (IBrushRef*)&mpDesc.mpObject->mBrush;
+        brush->Release();
     }
 }
 
 // @ 0x0053a2b0
-BrushDesc& BrushDesc::operator=(const BrushDesc& o)
+BrushDesc_s0053_9d70& BrushDesc_s0053_9d70::operator=(const BrushDesc_s0053_9d70& o)
 {
-    mHashes = o.mHashes;
+    mHashes.VectorAssign(&o.mHashes);
     mChainId = o.mChainId;
     mFlags = o.mFlags;
     mUserColorHSV = o.mUserColorHSV;
@@ -333,9 +348,9 @@ void cSPSkinPaintParticleAddDescCommand::AddDesc(EA::ArgScript::cArguments& args
 
 // @ 0x0053a4a0
 // The original receives the BrushDesc (chain id at +0x18, runtime component id at +0xac) in ECX.
-cSPSkinPaintParticleDescription* BrushDesc::GetRuntimeDesc()
+cSPSkinPaintParticleDescription* BrushDesc_s0053_9d70::GetRuntimeDesc()
 {
-    BrushDesc* b = this;
+    BrushDesc_s0053_9d70* b = this;
     void** mgr = (void**)SP_EffectsManager();
     if (!mgr || b->mChainId < 0 || b->mRuntimeComponentId < 0)
         return 0;
@@ -346,7 +361,7 @@ cSPSkinPaintParticleDescription* BrushDesc::GetRuntimeDesc()
 }
 
 // @ 0x0053a530
-void BrushDesc::Init()
+void BrushDesc_s0053_9d70::Init()
 {
     mFlags = 0;
     mChainId = -1;
