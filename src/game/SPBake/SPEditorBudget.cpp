@@ -34,6 +34,7 @@ struct cSPUILayout_s0045_75d0 {                       // vtable: +4 AddRef, +8 R
     cSPUILayout_s0045_75d0* Construct();              // 0x00810000 (thiscall, returns this)
     bool Init(const void* key, bool b, unsigned int id);                  // 0x008120d0 (ret 0xc)
     bool SetParentWin(void* parent, bool b, unsigned int id);             // 0x008121b0 (ret 0xc)
+    void Shutdown(unsigned int flags);                                    // 0x00811ad0 (ret 8)
     void* FindWindowByID(unsigned int id, bool recursive) const;          // 0x008105b0 (ret 8)
 };
 struct IWinX {                             // EA::UTFWin::IWindow slots used here
@@ -298,7 +299,7 @@ void cSPEditorBudget::Init(const void* key, cSPEditorEconomy* economy, unsigned 
 void SP::cSPEditorBudget::Shutdown()
 {
     if (mLayout.mpObject != 0) {
-        FUN_00811ad0(mLayout.mpObject, 1);
+        ((cSPUILayout_s0045_75d0*)mLayout.mpObject)->Shutdown(1);
         if (mLayout.mpObject != 0) {
             void* old = mLayout.mpObject;
             mLayout.mpObject = 0;

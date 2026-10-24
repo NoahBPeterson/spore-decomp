@@ -8,27 +8,31 @@ struct Float4 { float x, y, z, w; };
 
 // @ 0x004580c0
 unsigned int ColorRGBAToU32(const float* c) {
+    // The retail tail keeps everything in xmm0: xorps/maxss with the sample as the memory
+    // operand, then mulss/minss against the 255 constant.  Building max(r, 0) the other way
+    // round needs a second vector register and the original never writes one.
     __m128 v;
+    unsigned char r, g, b, a;
     v = _mm_load_ss(&c[0]);
     v = _mm_max_ss(_mm_setzero_ps(), v);
     v = _mm_mul_ss(v, _mm_set_ss(255.0f));
     v = _mm_min_ss(v, _mm_set_ss(255.0f));
-    unsigned char r = (unsigned char)_mm_cvtss_si32(v);
+    r = (unsigned char)_mm_cvtss_si32(v);
     v = _mm_load_ss(&c[1]);
     v = _mm_max_ss(_mm_setzero_ps(), v);
     v = _mm_mul_ss(v, _mm_set_ss(255.0f));
     v = _mm_min_ss(v, _mm_set_ss(255.0f));
-    unsigned char g = (unsigned char)_mm_cvtss_si32(v);
+    g = (unsigned char)_mm_cvtss_si32(v);
     v = _mm_load_ss(&c[2]);
     v = _mm_max_ss(_mm_setzero_ps(), v);
     v = _mm_mul_ss(v, _mm_set_ss(255.0f));
     v = _mm_min_ss(v, _mm_set_ss(255.0f));
-    unsigned char b = (unsigned char)_mm_cvtss_si32(v);
+    b = (unsigned char)_mm_cvtss_si32(v);
     v = _mm_load_ss(&c[3]);
     v = _mm_max_ss(_mm_setzero_ps(), v);
     v = _mm_mul_ss(v, _mm_set_ss(255.0f));
     v = _mm_min_ss(v, _mm_set_ss(255.0f));
-    unsigned char a = (unsigned char)_mm_cvtss_si32(v);
+    a = (unsigned char)_mm_cvtss_si32(v);
     return ((unsigned int)r << 0x10) | ((unsigned int)g << 8) | (unsigned int)b | ((unsigned int)a << 0x18);
 }
 
@@ -47,6 +51,7 @@ class cSPUILayout { public:                       // vtable: +4 AddRef, +8 Relea
     cSPUILayout* Construct();              // 0x00810000 (thiscall, returns this)
     bool Init(const void* key, bool b, unsigned int id);                  // 0x008120d0 (ret 0xc)
     bool SetParentWin(void* parent, bool b, unsigned int id);             // 0x008121b0 (ret 0xc)
+    void Shutdown(unsigned int flags);                                    // 0x00811ad0 (ret 8)
     void* FindWindowByID(unsigned int id, bool recursive) const;          // 0x008105b0 (ret 8)
 };
 struct IWinX {                             // EA::UTFWin::IWindow slots used here
@@ -186,7 +191,7 @@ struct MessageServer {
 // @ 0x004581d0
 void cSPEditorBudget::Shutdown() {
     if (mLayout.mpObject != 0) {
-        FUN_00811ad0(mLayout.mpObject, 1);
+        ((cSPUILayout*)mLayout.mpObject)->Shutdown(1);
         if (mLayout.mpObject != 0) {
             void* old = mLayout.mpObject;
             mLayout.mpObject = 0;
