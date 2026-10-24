@@ -14,3 +14,6 @@ slices/s0107f4a0/s0107f4a0.cpp  ?skip@hkMemoryStreamReader@@UAEHH@Z  010800b0  /
 slices/s0107f4a0/s0107f4a0.cpp  ?isOk@hkMemoryStreamReader@@UBE?AVhkBool@@XZ  01080100  /vc71 /O2 /MD /Gy /TP
 slices/s0107f4a0/s0107f4a0.cpp  ?markSupported@hkMemoryStreamReader@@UBE?AVhkBool@@XZ  01080120  /vc71 /O2 /MD /Gy /TP
 slices/s0107f4a0/s0107f4a0.cpp  ??0hkMemoryStreamReader@@QAE@PBXHW4MemoryType@0@@Z  010801d0  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?getAllocatedSize@hkPoolMemory@@UAEHH@Z  0107f670  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?deallocateChunkByRow@hkPoolMemory@@UAEXPAXHH@Z  0107fff0  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ??_GhkMemoryStreamReader@@UAEPAXI@Z  01080240  /vc71 /O2 /MD /Gy /TP

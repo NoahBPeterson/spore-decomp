@@ -23,7 +23,7 @@
 01080150 hkMemoryStreamReader::rewindToMark  # havok 3.1 base lib
 01080170 hkMemoryStreamReader::seek  # havok 3.1 base lib
 010801d0 hkMemoryStreamReader::hkMemoryStreamReader  # havok 3.1 base lib
-01080240 hkMemoryStreamReader::scalar_deleting_dtor  # havok 3.1 base lib
+01080240 ??_GhkMemoryStreamReader@@UAEPAXI@Z  # hkMemoryStreamReader scalar deleting dtor (compiler-generated; ??_G)
 01080290 hkReferencedObject_constructAt  # havok 3.1 base lib
 010802b0 hkClass::hkClass  # havok 3.1 base lib
 01080300 hkClass::isSuperClass  # havok 3.1 base lib

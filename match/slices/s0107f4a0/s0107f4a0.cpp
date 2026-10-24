@@ -113,15 +113,16 @@ static inline int hkPoolRowForSize(int n)
 // @ 0x0107f670
 int hkPoolMemory::getAllocatedSize(int nbytes)
 {
-	if (0x2000 < nbytes)
+	int row;
+	if (nbytes <= 0x2000)
 	{
-		if (0x10 < nbytes)
-			return ((nbytes + 0xf) & 0xfffffff0) + 0x10;
-		return nbytes + 8;
+		if (nbytes <= 0x200)
+			row = m_sizeToRow[nbytes];
+		else
+			row = m_bigSizeToRow[(nbytes - 1) >> 10];
+		return m_rowSizes[row];
 	}
-	if (nbytes < 0x201)
-		return m_rowSizes[(int)m_sizeToRow[nbytes]];
-	return m_rowSizes[m_bigSizeToRow[(nbytes - 1) >> 10]];
+	return hkMemory::getAllocatedSize(nbytes);
 }
 
 // @ 0x0107f6c0
@@ -412,7 +413,7 @@ void hkPoolMemory::deallocateChunk(void* p, int nbytes, int cl)
 }
 
 // @ 0x0107fff0
-void hkPoolMemory::deallocateChunkByRow(void* p, int row)
+void hkPoolMemory::deallocateChunkByRow(void* p, int row, int cl)
 {
 	m_lock.enter();
 	m_stats.m_inUseBytes = m_stats.m_inUseBytes - m_rowSizes[row];
