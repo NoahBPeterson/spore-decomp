@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00c85a30.  0/3 new functions byte-exact (plus the pre-existing 00c85a30 InitComets, also non-matching).
+00c85a30  1645  SP::cSolarSystem::InitComets; complete source with the same 30 callees in retail order; x87/SSE scheduling of the inlined quaternion math and register allocation differ
+00c86390   356  SP::cSolarSystem::UpdateBodies; per-body visual update reconstructed (SetBrightness, camera-distance bright factor, orbit matrix/colour, effect size, 0x00c85380 tail); register allocation and the inferred visual/effect slot names differ; equiv UNSUPPORTED (three fake externals unresolved)
+00c86640   178  SP::cSolarSystem::InitTuning; cl15 keeps the null RefPtr in a zero register instead of storing an immediate, shifting every base register of the release/GetProperty block; equiv WEAK 178 inputs 14.4% coverage
+00c86760   601  SP::cSolarSystem::InitStar; star body/refcount setup, radius-cache blocks and planet activation loop reconstructed; refcount order and loop layout approximate; equiv FAIL (refcount/activation order, 5/5 inputs diverge)
