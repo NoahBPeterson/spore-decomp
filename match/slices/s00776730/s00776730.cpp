@@ -426,7 +426,9 @@ bool cShaderPreviewA::Shutdown() {
 
 // @ 0x00777130
 bool cShaderPreviewB::Init() {
-    g.b.vec[0] = g_vec4[0]; g.b.vec[1] = g_vec4[1]; g.b.vec[2] = g_vec4[2]; g.b.vec[3] = g_vec4[3];
+    uint32_t* dst = (uint32_t*)&g.b.vec[0];
+    const uint32_t* src = (const uint32_t*)&g_vec4[0];
+    dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = src[3];
     g.b.flagA = 0;
     g.b.mode = 0xffff;
     g.b.key[0] = 0xffffffff; g.b.key[1] = 0xffffffff;
