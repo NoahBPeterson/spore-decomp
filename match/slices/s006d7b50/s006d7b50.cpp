@@ -1,6 +1,6 @@
 // Slice s006d7b50: bake evaluators (core 6c4200 / 6c3b90, acos len tail).
-// Reuses the shared bake template from the sibling slice s006ccf50.
-#include "../s006ccf50/s006ccf50.h"
+// Local copy of the shared bake template (colour2f reads 3 floats, not white).
+#include "s006d7b50.h"
 
 // uv2u16 / colour2f / core FUN_006c3b90 / acos weight (axis.y * len)
 DEFINE_BAKE(Bake_6d7b50, 1, 2, 1, 2, 2)   // @ 0x006d7b50
