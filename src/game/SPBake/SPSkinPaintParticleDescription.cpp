@@ -395,6 +395,7 @@ void ReadEvalList(EA::IO::IStream_s0053_acc0*, char*);                        //
 void WriteEvalList(EA::IO::IStream_s0053_acc0*, char*);                       // @ 0x53a930 (slice 31)
 void ReadDescBase(EA::IO::IStream_s0053_acc0*, char*);                        // @ 0x53bc90
 void WriteDescBase(EA::IO::IStream_s0053_acc0*, char*);                       // @ 0x53bd00
+void __fastcall FUN_0083c800(void* self);                                     // 0x83c800 (cCommandBase::cCommandBase, this in ECX)
 struct IStreamV {
 virtual void v00();
 virtual void v01();
@@ -1062,15 +1063,17 @@ AutoRefSlot* AutoRefSlot::AutoRefCountAssign(void* p)
 // @ 0x0053b1c0
 PaintCompatA* PaintCompatA::Ctor1b0()
 {
-    *(void**)this = (void*)0x13f4b30;
-    *(void**)this = (void*)0x13f4b30;
+    FUN_0083c800(this);                          // cCommandBase::cCommandBase
+    *(void**)this = (void*)0x13f2424;            // vtbl_ArgScript::PaintCompat
+    *(void**)this = (void*)0x13f2424;
     return this;
 }
 
 // @ 0x0053b1f0
 PaintCompatB* PaintCompatB::Ctor1f0()
 {
-    *(void**)this = (void*)0x13f4b30;
+    FUN_0083c800(this);                          // cCommandBase::cCommandBase
+    *(void**)this = (void*)0x13f2424;            // vtbl_ArgScript::PaintCompat
     return this;
 }
 
