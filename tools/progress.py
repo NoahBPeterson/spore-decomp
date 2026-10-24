@@ -692,6 +692,9 @@ def plot_history(path):
     with open(hist_path, "w") as f:
         json.dump(dict(sorted(hist.items())), f, indent=1)
         f.write("\n")
+    # A day with a saved point drops its committed-STATUS.md points: a commit can carry a stale STATUS.md (78294a25,
+    # 2026-10-24, committed the 2026-10-19 copy and drew a 4-point dip), and the saved point is the day's real figure.
+    pts = [(t, p) for t, p in pts if t.astimezone(now.tzinfo).date().isoformat() not in hist]
     for day, p in hist.items():
         if day != today:      # today is the live point below
             pts.append((datetime.datetime.fromisoformat(p["when"]), p))
