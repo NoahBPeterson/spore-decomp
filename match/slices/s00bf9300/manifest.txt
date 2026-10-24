@@ -1,1 +1,2 @@
-# no byte-exact functions
+slices/s00bf9300/s00bf9300.cpp  ?FUN_00bf9700@cCivilizationHelper@@QAEPAUBits3@@H@Z  00bf9700  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00bf9300/s00bf9300.cpp  ?FUN_00bf9790@cCivilization@@QAEXXZ  00bf9790  /O2 /MD /Gy /TP /arch:SSE /GS-

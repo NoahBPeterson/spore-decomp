@@ -95,10 +95,20 @@ public:
     int FUN_00c75420();                                 // 0x00c75420
 };
 
+struct ConstraintVector;
+struct Tri;
+
 class cCivilizationHelper
 {
 public:
+    uint32_t m_pad00;                                   // +0x00
+    uint32_t m_sentinel[6];                             // +0x04 (rbtree links + node pool)
+    void Find(void** out, int* key);                    // 0x00e39fb0
+    void FUN_00bf9300(int key);                         // 0x00bf9300
+    Bits3* FUN_00bf3cb0(int* key);                      // 0x00bf3cb0
     Bits3* FUN_00bf9700(int v);                         // 0x00bf9700 (ret 4)
+    void FUN_00bf30b0(int key, Tri* out);               // 0x00bf30b0
+    void FUN_00bf8ff0(ConstraintVector* vec, int key, Bits3* out); // 0x00bf8ff0
 };
 
 // the civilization (AI "space game" state), retail layout: only the used fields.
@@ -107,7 +117,7 @@ class cCivilization
 public:
     char pad0[0x6c];
     cCivilizationHelper mHelper;                        // +0x6c
-    char pad6c[0x89 - 0x6c - 1];
+    char pad6c[0x89 - 0x6c - sizeof(cCivilizationHelper)];
     bool mFlag89;                                       // +0x89
     bool mFlag8a;                                       // +0x8a
     char pad8b[0x93 - 0x8b];
@@ -127,6 +137,7 @@ public:
     float mBonusB;                                      // +0x4b0
 
     void FUN_00bf9820();                                // 0x00bf9820
+    void FUN_00bf9790();                                // 0x00bf9790
     int FUN_00bf7150();                                 // 0x00bf7150
     char FUN_00bf00a0(int continent, int flag);         // 0x00bf00a0 (ret 8)
     char FUN_00beff90(const Vec3* pos, int flag);       // 0x00beff90 (ret 8)
@@ -342,4 +353,281 @@ void cCivilization::FUN_00bf9820()
             old->Release();
     }
     mTimer.Restart();
+}
+
+uint32_t g_168cb60;  // 0x0168cb60
+uint32_t g_168cb54;  // 0x0168cb54
+uint32_t g_168cb58;  // 0x0168cb58
+uint32_t g_168cb5c;  // 0x0168cb5c
+
+// @ 0x00bf9700
+Bits3* cCivilizationHelper::FUN_00bf9700(int v)
+{
+    if ((g_168cb60 & 1) == 0) {
+        g_168cb60 |= 1;
+        g_168cb54 = 0;
+        g_168cb58 = 0;
+        g_168cb5c = 0;
+    }
+
+    void* found;
+    Find(&found, &v);
+    if (found != (char*)this + 4)
+        return (Bits3*)((char*)found + 0x14);
+
+    FUN_00bf9300(v);
+    return FUN_00bf3cb0(&v);
+}
+
+// @ 0x00bf9790
+void cCivilization::FUN_00bf9790()
+{
+    Bits3* p = mHelper.FUN_00bf9700(0x4e3f7777);
+    if (p->a == 0 && p->b == 0 && p->c == 0)
+        mHelper.FUN_00bf9300(0x4e3f7777);
+
+    p = mHelper.FUN_00bf9700(0x47c10953);
+    if (p->a == 0 && p->b == 0 && p->c == 0)
+        mHelper.FUN_00bf9300(0x47c10953);
+
+    p = mHelper.FUN_00bf9700(0x72c49181);
+    if (p->a == 0 && p->b == 0 && p->c == 0)
+        mHelper.FUN_00bf9300(0x72c49181);
+}
+
+// ---------------------------------------------------------------- FunctionalMatch
+struct Tri { int a, b, c; };
+
+namespace eastl
+{
+struct allocator { uint32_t mName; uint32_t mFlags; };
+struct sp_vector_allocator : allocator {};
+
+template <class T, class A>
+struct vector
+{
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    A mAllocator;
+
+    vector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~vector() {}
+    void push_back(const T& value) {
+        if (mpEnd < mpCapacity) {
+            *mpEnd = value;
+            ++mpEnd;
+        }
+    }
+    void resize(uint32_t count) { (void)count; }
+};
+}
+
+namespace SP { namespace FunctionalMatch
+{
+enum eType {
+    kInteger = 48342877,
+    kFloat = 48343039,
+    kTerminal = 48343507,
+    kNotEqual = 0xcba453f7
+};
+enum EqualConstraint { kEquals = 0 };
+enum RangeConstraint { kBetween = 0 };
+
+struct Constraint
+{
+    uint32_t mParameter;
+    int mType;
+    union {
+        struct { int mMin; int mMax; } mIntVal;
+        struct { float mMin; float mMax; } mFloatVal;
+    };
+    eastl::vector<Constraint, eastl::sp_vector_allocator> mConstraints;
+
+    Constraint() : mParameter(0), mType(kTerminal) {}
+    Constraint(uint32_t param, RangeConstraint, float minVal, float maxVal)
+        : mParameter(param), mType(kFloat)
+    {
+        mFloatVal.mMin = minVal;
+        mFloatVal.mMax = maxVal;
+    }
+    Constraint(uint32_t param, EqualConstraint, int value)
+        : mParameter(param), mType(kInteger)
+    {
+        mIntVal.mMin = value;
+        mIntVal.mMax = value + 1;
+    }
+};
+}}
+
+class ConstraintVector : public eastl::vector<SP::FunctionalMatch::Constraint, eastl::sp_vector_allocator>
+{
+public:
+    void Add(const SP::FunctionalMatch::Constraint& c) { push_back(c); }
+    void Resize(uint32_t n) { resize(n); }
+};
+
+// ---------------------------------------------------------------- property manager
+struct Property
+{
+    char pad0[0x12];
+    uint16_t mnType;             // +0x12
+    float* GetFloat();           // 0x0041ea70
+};
+
+class PropertyList
+{
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08();
+    virtual bool GetProperty(uint32_t propertyID, Property*& result);  // +0x24
+};
+
+class IPropertyManager
+{
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b();
+    virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyList** out); // +0x30
+};
+
+IPropertyManager* PropertyManager();  // 0x0067de30
+
+// ---------------------------------------------------------------- object template DB
+class cObjectTemplateDB
+{
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b();
+    virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b();
+    virtual void v1c(); virtual void v1d(); virtual void v1e(); virtual void v1f();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v2a(); virtual void v2b();
+    virtual void v2c(); virtual void v2d(); virtual void v2e(); virtual void v2f();
+    virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33();
+    virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37();
+    virtual void v38();
+    virtual void FindTriangles(Bits3* out, int count, Tri* tri, Bits3* pos);  // +0x3c
+    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
+    virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+    virtual void v48(); virtual void v49(); virtual void v4a(); virtual void v4b();
+    virtual void v4c(); virtual void v4d(); virtual void v4e(); virtual void v4f();
+    virtual void v50(); virtual void v51(); virtual void v52(); virtual void v53();
+    virtual void v54(); virtual void v55(); virtual void v56(); virtual void v57();
+    virtual void SetPosition(Bits3* pos, int count);  // +0x58
+};
+
+cObjectTemplateDB* ObjectTemplateDB();  // 0x0067cb40
+void FUN_00c75570(cSPTerrainSphere* sphere); // 0x00c75570
+
+// @ 0x00bf9300
+void cCivilizationHelper::FUN_00bf9300(int key)
+{
+    cObjectTemplateDB* db = ObjectTemplateDB();
+    if (NounManager()->GetCurrentTerrainSphere() != 0)
+        NounManager()->GetCurrentTerrainSphere();
+
+    if (db == 0)
+        return;
+
+    ConstraintVector constraints;
+    float radius = 0.1f;
+    PropertyList* pList = 0;
+    Property* pProperty = 0;
+
+    PropertyManager()->GetPropertyList(0xcc271289, 0x6087cb6, &pList);
+    if (pList != 0 &&
+        pList->GetProperty(0x6087cb6, pProperty) &&
+        pProperty->mnType == 0xd) {
+        float* value = pProperty->GetFloat();
+        if (value != 0)
+            radius = *value;
+    }
+
+    Bits3 position;
+    position.a = 0;
+    position.b = 0;
+    position.c = 0;
+    Tri triangle;
+    triangle.a = 0;
+    triangle.b = 0;
+    triangle.c = 0;
+
+    if (key == 0x99e92f05 || key == 0x4e3f7777 ||
+        key == 0x47c10953 || key == 0x72c49181) {
+        constraints.Add(SP::FunctionalMatch::Constraint(
+            key, SP::FunctionalMatch::kBetween, radius, 3.4028234e38f));
+    } else if (key == 0x2090a11b || key == (int)0xbc1041e6u ||
+               key == (int)0xc15695dau) {
+        FUN_00bf8ff0(&constraints, key, &position);
+    } else {
+        constraints.Add(SP::FunctionalMatch::Constraint(
+            key, SP::FunctionalMatch::kBetween, 1.75f, 4.2f));
+        constraints.Add(SP::FunctionalMatch::Constraint(
+            key, SP::FunctionalMatch::kBetween, 0.0f, 3.4028234e38f));
+        constraints.Add(SP::FunctionalMatch::Constraint(
+            key, SP::FunctionalMatch::kEquals, 0));
+        FUN_00bf30b0(key, &triangle);
+        db->FindTriangles(&position, 1, &triangle, &position);
+        db->SetPosition(&position, 1);
+    }
+
+    Bits3* result = FUN_00bf3cb0(&key);
+    result->a = position.a;
+    result->b = position.b;
+    result->c = position.c;
+}
+
+void cCivilizationHelper::FUN_00bf30b0(int key, Tri* out)
+{
+    int mapped = -1;
+    switch (key) {
+    case 0x441cd3e6:
+    case 0x8f963dcb:
+        mapped = 0x7d433fad;
+        break;
+    case 0x1f2a25b6:
+    case 0x449c040f:
+        mapped = 0x9ad7d4aa;
+        break;
+    case 0x1a4e0708:
+    case 0x2a5147a9:
+        mapped = 0xf670aa43;
+        break;
+    case 0x4e3f7777:
+    case 0x47c10953:
+    case 0x72c49181:
+        mapped = 0x99e92f05;
+        break;
+    }
+
+    void* node = 0;
+    Find(&node, &mapped);
+    if (node != (char*)this + 4) {
+        Bits3* value = FUN_00bf3cb0(&mapped);
+        out->a = value->a;
+        out->b = value->b;
+        out->c = value->c;
+        return;
+    }
+    out->a = -1;
+    out->b = -1;
+    out->c = -1;
+}
+
+void cCivilizationHelper::FUN_00bf8ff0(ConstraintVector* vec, int key, Bits3* out)
+{
+    Bits3* value = FUN_00bf3cb0(&key);
+    value->a = out->a;
+    value->b = out->b;
+    value->c = out->c;
+    vec->Add(SP::FunctionalMatch::Constraint(
+        key, SP::FunctionalMatch::kEquals, 0));
 }
