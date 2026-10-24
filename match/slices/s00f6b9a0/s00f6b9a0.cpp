@@ -1,4 +1,4 @@
-// Slice s00f6b9a0 -- SP::cTerrainEditor::UpdateCPUFromGPU  @ 0x00f6bd70  (2190 bytes).
+// Slice s00f6b9a0 -- SP::cTerrainEditor::UpdateCPUFromGPU  (2190 bytes).
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-.
 //
 // After the GPU edited the terrain height maps, read the changed rectangles of each of the six
@@ -7,6 +7,7 @@
 // terrain sphere and post message 0x44448ed. Returns false if the sphere is missing or a tile
 // read-back failed.
 #include "../../include/types.h"
+#include <intrin.h>
 
 namespace TE {
 
@@ -109,6 +110,7 @@ bool cTerrainEditor::UpdateCPUFromGPU(float elapsed)
     for (int i = 0; i < 5; i++) {
         Rect& r = mDirty[i];
         if (r.l != r.r && r.t != r.b) {
+            _ReadWriteBarrier();
             if (r.Width() < eps || r.Height() < eps)
                 ClearRect(r);
             else
@@ -118,6 +120,7 @@ bool cTerrainEditor::UpdateCPUFromGPU(float elapsed)
     {
         Rect& r = mDirty[5];
         if (r.l != r.r && r.t != r.b) {
+            _ReadWriteBarrier();
             if (r.Width() < eps || r.Height() < eps)
                 ClearRect(r);
             else
@@ -145,7 +148,11 @@ relevel:
                 uint16_t mn = 0xffff;
                 uint16_t mx = 0;
                 uint16_t* src = heights->mSamples + heights->mSide * heights->mSide * face;
-                if (sFullFraction <= r.Width() || sFullFraction <= r.Height()) {
+                _ReadWriteBarrier();
+                const bool wFull = r.Width() >= sFullFraction;
+                _ReadWriteBarrier();
+                const bool hFull = r.Height() >= sFullFraction;
+                if (wFull || hFull) {
                     // large dirty area: read the whole face back
                     const uint32_t count = height * width;
                     mTemp.resize(count);

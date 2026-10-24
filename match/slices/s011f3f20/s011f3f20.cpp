@@ -251,10 +251,10 @@ Shader* __cdecl ShaderConstruct(Shader* s, u32 id, u32 geomType, u32 flags, u32 
     s->m_geomType = geomType;
     s->m_dispatchCB = (void*)&ShaderDispatch;
     s->m_refCount = 1;
-    s->m_minVSVersionSupported = _byteswap_ushort((u16)vsMin);
-    s->m_maxVSVersionSupported = _byteswap_ushort((u16)vsMax);
-    s->m_minPSVersionSupported = _byteswap_ushort((u16)psMin);
-    s->m_maxPSVersionSupported = _byteswap_ushort((u16)psMax);
+    s->m_minVSVersionSupported = (u16)vsMin;
+    s->m_maxVSVersionSupported = (u16)vsMax;
+    s->m_minPSVersionSupported = (u16)psMin;
+    s->m_maxPSVersionSupported = (u16)psMax;
     s->m_id = id;
     s->m_numDataTypes = 0;
     s->m_dataTypeList = 0;

@@ -1,4 +1,4 @@
-// s00aae8c0: Swarm particle effect, "initialise one new particle" @ 0x00aaeb90 (2510 bytes).
+// s00aae8c0: Swarm particle effect, "initialise one new particle", 0x00aaeb90 (2510 bytes).
 // Sister of ParticleEmitter::InitParticle @ 0x00a9ddd0 (slice s00a9ddd0): the same spawn steps
 // (life, emit volume, spawn check, velocity, attractor, per-particle variances, colour sampler,
 // emitter transform, collision surfaces) for a second effect class whose fields sit at other
@@ -15,6 +15,8 @@ struct Vec3 {
     Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {}
 };
 struct Vec4 { float x, y, z, w; };
+static inline Vec3 V3Mul(float x, float y, float z, float s) { Vec3 r; r.x = x * s; r.y = y * s; r.z = z * s; return r; }
+static inline void V3AddTo(Vec3& v, const Vec3& a) { v.x += a.x; v.y += a.y; v.z += a.z; }
 static inline bool Bit(uint32_t v, int n) { return (v >> n) & 1; }
 static inline bool TestAny(const uint32_t* w, const uint32_t* m) { return ((w[0] & m[0]) | (w[1] & m[1])) != 0; }
 
@@ -235,10 +237,9 @@ bool ParticleEffectB::InitParticle(Particle* p)
             float dx = p->pos.x - d->attractPos.x;
             float m2 = (dz * dz + dy * dy) + dx * dx;
             if (m2 > 0.0f) {
-                k = k / sqrtf(m2);
-                p->vel.x = dx * k + p->vel.x;
-                p->vel.y = dy * k + p->vel.y;
-                p->vel.z = dz * k + p->vel.z;
+                float kk = k / sqrtf(m2);
+                Vec3 a = V3Mul(dx, dy, dz, kk);
+                V3AddTo(p->vel, a);
             }
         }
     }

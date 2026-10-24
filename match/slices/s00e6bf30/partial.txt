@@ -1,4 +1,3 @@
 # va  diff-bytes  reason  (incomplete / approximate, or equiv did not confirm: not counted as decompiled)
 00e6bf30  652  SP::sUpdatePoisonReleaseEffect: main loop transcribed but the four-float "target" struct and the unaff_EBX vcall are approximated.
 00e6c330  502  cell-hero decoration effect: the two position/orientation structs (built from the cell transform) are approximated; the effect-id selection chain is faithful.
-# (note; row is in nonmatching.txt or manifest.txt) 00e6cad0  172  random spread range: equiv=FAIL (5/5 valid inputs, first mismatch is a .data write at 01601760: orig 46851220 vs ours 0); the x87 float10 temporaries and RNG usage are not faithful.

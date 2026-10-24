@@ -1,4 +1,4 @@
-010df100 52 havok-equivalent
+010df100 54 destroy: reset vptr to 0x013ef094 after the array deallocation and before the optional flags&1 deallocation (the store was missing; replay originally left 3f82063e at [this]); difftest PASS 222 valid inputs / 60.0% coverage; remaining diff is vc71 x87/register scheduling (size 82 vs 86).
 010df160 166 havok-equivalent
 010df280 39 havok-equivalent
 010df3d0 76 havok-equivalent

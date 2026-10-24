@@ -113,7 +113,7 @@ struct Obj188 {
     Vec188 vec;             // +0x84
 };
 void* __stdcall FUN_00f3be60(int a);   // 0x00f3be60
-void __cdecl f_43830(int a, int idx)
+void __stdcall f_43830(int a, int idx)
 {
     Obj188* o = (Obj188*)FUN_00f3be60(a);
     if (o != 0 && idx >= 0) {

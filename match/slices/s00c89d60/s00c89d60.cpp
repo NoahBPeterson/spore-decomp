@@ -38,7 +38,13 @@ void __cdecl FUN_00b3d240();
 char __cdecl FUN_00b33e10(float x);
 int* __cdecl FUN_00401010();
 void __cdecl FUN_00478db0(unsigned int v);
-void __cdecl FUN_00c895f0(void* p);
+// Destructor helpers the original reaches through `this` in ecx.
+struct SpatialBaseDtor {
+    void Destroy();  // 0x00c898f0
+};
+struct EffectVecDtor {
+    void Destroy();  // 0x00c895f0
+};
 void __cdecl FUN_00c88ba0(void* p);
 void __cdecl FUN_00c88570(int a, int b, int c);
 int  __cdecl FUN_00c88cd0(int a, int b, int c);
@@ -124,20 +130,29 @@ void __fastcall F8a200(Spatial* s, int unused, int id, int val)
 // ===========================================================================
 // @ 0x00c8a420  destructor: reset vtable, release +0xa0, release +0x9c
 // ===========================================================================
+// Refcounted holder behind +0x9c: +0x00 the shared object, +0x04 flags, +0x40 refcount.
+struct RefHolder {
+    void**   mpObject;    // +0x00
+    uint32_t mFlags;      // +0x04
+    char     pad08[0x40 - 0x08];
+    int32_t  mRefCount;   // +0x40
+};
+// slot 0x170 takes the holder and the "delete" flag on the stack, this = the shared object
+typedef void (__thiscall* RefReleaseFn)(void* self, void* holder, unsigned char del);
 void __fastcall F8a420(Spatial* s)
 {
-    s->vt = 0;
-    FUN_00c895f0((char*)s + 0xc0);
+    s->vt = (void**)0x1473758;
+    ((SpatialBaseDtor*)s)->Destroy();
+    ((EffectVecDtor*)((char*)s + 0xc0))->Destroy();
     if (s->pa0 != 0) {
         void** vt = *(void***)s->pa0;
         ((void(__thiscall*)(int*))vt[4 / 4])(s->pa0);
     }
-    int* p = s->p9c;
+    RefHolder* p = (RefHolder*)s->p9c;
     if (p != 0) {
-        int refs = p[0x10];
-        if (refs > 1) { p[0x10] = refs - 1; return; }
-        void** vt = *(void***)p;
-        ((void(__thiscall*)(int*, unsigned int))vt[0x170 / 4])(p, (unsigned int)p[1] >> 31);
+        if (p->mRefCount > 1) { p->mRefCount -= 1; return; }
+        void** vt = *(void***)p->mpObject;
+        ((RefReleaseFn)vt[0x170 / 4])(p->mpObject, p, (unsigned char)((p->mFlags >> 31) & 1));
     }
 }
 

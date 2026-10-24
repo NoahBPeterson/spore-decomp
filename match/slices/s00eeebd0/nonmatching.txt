@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-00eeee80  8   ?DoInsertValue@?$Vector@UKey_@@UKeyAllocator@@: complete EASTL reimplementation; realloc-path register allocation differs (mpBegin/mpEnd in edx vs original eax/ecx)
-00eeefb0  19  ?DoInsertValue@?$Vector@UEntry32@@USPVectorAllocator@@: complete; Entry32 copy-ctor fld/fstp schedule (mov interleave) and mpEnd load position differ; equiv: UNSUPPORTED (only 1/216 inputs valid, pool-limit/read faults)
-00eef110  5   ?push_back@?$Vector@UEntry32@@USPVectorAllocator@@: complete; Entry32 copy-ctor fld/fstp schedule differs (mov not interleaved)
+00eeee80  295 ?DoInsertValue@?$Vector@UKey_@@UKeyAllocator@@: complete EASTL reimplementation (marker sits on a thin named wrapper, the tail-jumped body is the templated helper); realloc-path register allocation differs; equiv UNSUPPORTED (uninitialized_move<Key_> unresolved)
+00eeefb0  346 ?DoInsertValue@?$Vector@UEntry32@@USPVectorAllocator@@: complete; marker on a thin named wrapper over the templated body; Entry32 copy-ctor fld/fstp schedule and mpEnd load position differ; equiv UNSUPPORTED (wrapper is cdecl, original is thiscall so ecx-at-entry differs)
+00eef110  18  ?push_back@?$Vector@UEntry32@@USPVectorAllocator@@: complete; the realloc path now inlines the insert body instead of calling DoInsertValue; Entry32 copy-ctor fld/fstp schedule differs (mov not interleaved); equiv PASS (291 valid, 100% coverage)

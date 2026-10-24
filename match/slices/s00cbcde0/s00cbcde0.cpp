@@ -15,9 +15,20 @@ static inline Vector3 operator+(const Vector3& a, const Vector3& b) { return Vec
 static inline Vector3 operator*(const Vector3& a, float s) { return Vector3(a.x * s, a.y * s, a.z * s); }
 static inline Vector3 operator*(float s, const Vector3& a) { return Vector3(s * a.x, s * a.y, s * a.z); }
 static inline float Dot(const Vector3& a, const Vector3& b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
-static inline float Length(const Vector3& a) { return sqrtf(a.x * a.x + a.y * a.y + a.z * a.z); }
+// x87 sums the squares as (x*x + z*z) + y*y in the original, so keep that order here.
+static inline float Length(const Vector3& a) { return sqrtf(a.x * a.x + a.z * a.z + a.y * a.y); }
 static inline Vector3 NormalizedSafe(const Vector3& a) {
     float inv = 1.0f / sqrtf(a.x * a.x + a.y * a.y + a.z * a.z + 1e-8f);
+    return inv * a;
+}
+// The original's second-arc loop sums the squared length as (z*z + y*y) + x*x, and its
+// intermediates are materialised separately, so that grouping survives at that site.  |p| is
+// only a few units there, which makes the grouping visible in the last bit of the result.
+static inline Vector3 NormalizedSafeArc(const Vector3& a) {
+    float zz = a.z * a.z;
+    float yy = a.y * a.y;
+    float rr = zz + yy;
+    float inv = 1.0f / sqrtf(rr + a.x * a.x + 1e-8f);
     return inv * a;
 }
 
@@ -79,13 +90,12 @@ bool BuildFlightArcPath(Vector3 a, Vector3 b, SpVectorV3* out)
     if (Length(a - b) < 300.0f)
         return false;
 
-    float rad = GetPlanetModel()->GetRadius();
-    float R = rad + 80.0f;
+    float R = GetPlanetModel()->GetRadius() + 80.0f;
 
     // ---- arc leaving A toward B
     Vector3 u = NormalizedSafe(b - a);
     float la = Length(a);
-    float k = ((rad + 80.0f) - la) * -4.4444445e-05f;
+    float k = (R - la) * -4.4444445e-05f;
     Vector3 n = NormalizedSafe(a);
     Vector3 t = NormalizedSafe(u - Dot(n, u) * n);
     for (int i = 0; i < 12; ++i) {
@@ -105,9 +115,9 @@ bool BuildFlightArcPath(Vector3 a, Vector3 b, SpVectorV3* out)
         Vector3 tb = NormalizedSafe(e - Dot(nb, e) * nb);
         for (int i = 0; i < 12; ++i) {
             float s = (float)i * 12.5f;
-            Vector3 p = b + tb * s;
+            Vector3 p = s * tb + b;
             float h = ((s - 150.0f) * (s - 150.0f)) * kb + R;
-            arr[i] = NormalizedSafe(p) * h;
+            arr[i] = NormalizedSafeArc(p) * h;
         }
     }
 

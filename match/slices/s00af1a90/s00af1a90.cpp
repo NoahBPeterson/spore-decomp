@@ -12,7 +12,10 @@ extern char   FUN_004232c0(const float* a, const float* b);                   //
 extern void   FUN_00436ce0(float* out, const float* v);                       // 0x436ce0 Vector3_Normalize
 extern float* FUN_00699800(float* out, const float* a, float r,
                            const float* b, const float* c);                   // 0x699800
-extern void   FUN_00466320(void* self, float* out);                           // 0x466320
+struct cSPVector3;
+struct cSPBoundingBox {
+    void GetCorners(cSPVector3* out) const;                                  // 0x00466320
+};
 // 0x167ae24/28/2c is the constant 3-vector compared against; 0x167ae78/7c/80
 // is a 3-float matrix/axis used by the edge solver.
 extern float       DAT_0167ae24, DAT_0167ae28, DAT_0167ae2c;
@@ -50,8 +53,8 @@ extern const float DAT_0167ae78, DAT_0167ae7c, DAT_0167ae80;
                (x - fVar19) * (local_f8 - fVar13)) * param_4))
 
 // @ 0x00af1a90
-int FUN_00af1a90(float* param_1, float* param_2, float* param_3, float param_4,
-                 float param_5, void* p)
+bool FUN_00af1a90(float* param_1, float* param_2, float* param_3, float param_4,
+                  float param_5, void* p)
 {
     char  cVar2;
     float *pfVar3, *pfVar8;
@@ -65,22 +68,28 @@ int FUN_00af1a90(float* param_1, float* param_2, float* param_3, float param_4,
     int   local_c4;
     float local_c0, local_bc, local_b4, local_b0, local_ac;
     float local_a8[3], local_9c[3], local_90[3], local_84[3], local_78[3], local_6c[3];
+    // The two case-0 normalized_safe inputs are 3-float vectors.  They must be a real
+    // contiguous array: passing &local_108 of three separate scalar locals lets the
+    // compiler place the y/z stores in unrelated stack slots, so the callee reads
+    // garbage for y/z (and the result differs from the original for some inputs).
+    float local_v[3];
+    float local_va[3];
 
     switch (OI(0x24)) {
     case 0: {
-        local_108 = OF(0x28) - param_1[0];
-        local_104 = OF(0x2c) - param_1[1];
-        local_100 = OF(0x30) - param_1[2];
+        local_v[0] = OF(0x28) - param_1[0];
+        local_v[1] = OF(0x2c) - param_1[1];
+        local_v[2] = OF(0x30) - param_1[2];
         pfVar3 = (float*)((char*)p + 0x28);
-        pfVar8 = normalized_safe(local_6c, &local_108);
+        pfVar8 = normalized_safe(local_6c, local_v);
         local_fc = pfVar8[0];
         local_f8 = pfVar8[1];
         local_f4 = pfVar8[2];
         pfVar8 = normalized_safe(local_a8, pfVar3);
-        local_f0 = (pfVar8[2] * local_f8 - pfVar8[1] * local_f4) * param_4;
-        local_ec = (pfVar8[0] * local_f4 - local_fc * pfVar8[2]) * param_4;
-        local_e8 = (local_fc * pfVar8[1] - pfVar8[0] * local_f8) * param_4;
-        pfVar8 = FUN_00699800(local_84, pfVar3, OF(0x54), param_1, &local_f0);
+        local_v[0] = (pfVar8[2] * local_f8 - pfVar8[1] * local_f4) * param_4;
+        local_v[1] = (pfVar8[0] * local_f4 - local_fc * pfVar8[2]) * param_4;
+        local_v[2] = (local_fc * pfVar8[1] - pfVar8[0] * local_f8) * param_4;
+        pfVar8 = FUN_00699800(local_84, pfVar3, OF(0x54), param_1, local_v);
         param_3[0] = pfVar8[0];
         param_3[1] = pfVar8[1];
         param_3[2] = pfVar8[2];
@@ -103,18 +112,18 @@ int FUN_00af1a90(float* param_1, float* param_2, float* param_3, float param_4,
         fVar16 = param_3[0] - param_1[0];
         if ((fVar15 * fVar15 + fVar11 * fVar11) + fVar16 * fVar16 < 1.5258789e-05f) {
             fVar16 = OF(0x54);
-            param_3[0] = local_f0 * fVar16 + param_1[0];
-            param_3[1] = fVar16 * local_ec + fVar13;
-            param_3[2] = fVar16 * local_e8 + fVar19;
+            param_3[0] = local_v[0] * fVar16 + param_1[0];
+            param_3[1] = fVar16 * local_v[1] + fVar13;
+            param_3[2] = fVar16 * local_v[2] + fVar19;
         }
         if (1.5258789e-05f < param_5) {
             fVar19 = param_3[0];
             local_d4 = param_3[1];
             local_c0 = param_3[2];
-            local_108 = fVar19 - pfVar3[0];
-            local_104 = local_d4 - OF(0x2c);
-            local_100 = local_c0 - OF(0x30);
-            pfVar3 = normalized_safe(local_9c, &local_108);
+            local_v[0] = fVar19 - pfVar3[0];
+            local_v[1] = local_d4 - OF(0x2c);
+            local_v[2] = local_c0 - OF(0x30);
+            pfVar3 = normalized_safe(local_9c, local_v);
             fVar13 = pfVar3[1];
             fVar16 = pfVar3[2];
             param_3[0] = pfVar3[0] * param_5 + fVar19;
@@ -126,7 +135,10 @@ int FUN_00af1a90(float* param_1, float* param_2, float* param_3, float param_4,
     }
     case 1: {
         pfVar3 = (float*)((char*)p + 0x28);
-        FUN_00436ce0(&local_e0, pfVar3);
+        FUN_00436ce0(local_va, pfVar3);
+        local_e0 = local_va[0];
+        local_dc = local_va[1];
+        local_d8 = local_va[2];
         local_c8 = param_1[1] - OF(0x2c);
         fVar19 = OF(0x48);
         fVar16 = (local_d8 * (param_1[2] - OF(0x30)) + local_dc * local_c8) +
@@ -143,7 +155,7 @@ int FUN_00af1a90(float* param_1, float* param_2, float* param_3, float param_4,
         local_104 = local_104 - local_dc * fVar19;
         local_100 = local_100 - local_d8 * fVar19;
         float m[24];
-        FUN_00466320((char*)p + 0x58, m);
+        ((const cSPBoundingBox*)((char*)p + 0x58))->GetCorners((cSPVector3*)m);
         local_fc = local_108;
         local_f8 = local_104;
         local_f4 = local_100;

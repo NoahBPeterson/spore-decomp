@@ -1,6 +1,6 @@
 00ee0d70  234  complete; property setter, loop bound re-evaluated per iteration and register assignment differ
 00ee0f50  256  complete; teardown walks refcounted array / layout; register assignment and inlined vcall scheduling differ
-00ee1080  159  complete; popup-menu intrusive-iterator walk; iterator mechanics approximate
+00ee1080   15  complete; popup-menu handler: the original's first stack argument is the queried object (its second, `value`, is only compared at +0x888), so the model's parameters were swapped; the walk is the engine's child list (ChildLink{mpNext} at +0, window = link + gChildLinkOffset[0x01440aec]) and the slots 51/52 (GetChildBegin/GetChildEnd) plus the final OnMenuItemSelected(0x0081bef0) are thiscall with no dummy edx; only the `it.mpLink = it.mpLink->mpNext` store is scheduled 5 bytes earlier than the original's (after the vtable slot load). difftest WEAK (329 valid, 8.6% cov, no mismatch): the loop needs a vtable-bearing menu object the pointer-soup generator cannot build (fake slot 51 never fills the iterator)
 00ee1140  127  complete; vector walk; frame size (extra 8 bytes) and loop-cache registers differ
 00ee1200  142  complete; vector walk; frame size and loop-cache registers differ
 00ee12c0  578  complete; large teardown; inlined vcalls and frame layout differ

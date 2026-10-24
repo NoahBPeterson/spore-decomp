@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00f47680  28  complete cSporeApp destructor; cl schedules the entry vptr stores after the first member load and tail-jumps the last release instead of emitting the base-vptr restore
+00f47680  2  complete cSporeApp destructor; gave both base classes a virtual dtor so cl emits the base-vptr epilogue (pop esi / stores / ret) instead of tail-jumping the last release and dropping those stores; residual 2 bytes = entry vptr stores scheduled after the first member load; difftest UNSUPPORTED local-address only (base vptr immediates 0x13eb394/0x13ec458 vs our own COMDAT vtables; retail IHandler vtable has 34 slots including one null, so it cannot be content-mapped) flags /O2 /MD /Gy /TP
 00f47930  368  complete frame/timer update; register allocation and call scheduling differ
 00f47b10  214  complete message handler; vtable release blocks outlined differently
 00f47c20  88  complete resource-key predicate + string assign; size/reloc shape differ

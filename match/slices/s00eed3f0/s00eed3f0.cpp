@@ -123,11 +123,15 @@ void __cdecl f00eeda20(int a, int b)
     (void)a; (void)b;   // 376-byte handler not reconstructed
 }
 
-// ============================================================ 0x00eedba0  (partial)
+// ============================================================ 0x00eedba0
 // @ 0x00eedba0
-void __cdecl f00eedba0(int a, float* out)
+void __cdecl f00eedba0(float* out, unsigned key)
 {
-    (void)a; (void)out;   // colour-unpack helper not reconstructed
+    unsigned c = FUN_00eec870(key);
+    c = (c == (unsigned)DAT_015ac948) ? (unsigned)DAT_015ac94c : c;
+    out[0] = (float)((c >> 16) & 0xff) * 0.003921569f;
+    out[1] = (float)((c >> 8) & 0xff) * 0.003921569f;
+    out[2] = (float)(c & 0xff) * 0.003921569f;
 }
 
 // ============================================================ 0x00eedc10  (partial)

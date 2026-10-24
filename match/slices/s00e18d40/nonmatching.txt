@@ -1,5 +1,5 @@
 # va  diff-bytes  reason   (all compiled with /O2 /MD /Gy /EHsc /TP)
-00e18d40  117  rbtree insert-or-assign helper; register/scheduling leftover, EASTL inline shape not reproduced. difftest: PASS (323 valid, 100% cov)
+00e18d40  111  rbtree insert-or-assign helper; register/scheduling leftover, EASTL inline shape not reproduced. difftest: PASS (323 valid, 100% cov); the equivalence FAIL was the leftover eax: retail leaves eax = the out slot (mov eax,[esp+0x24]; mov [eax],edi) while ours kept the void callee's eax and stored through ecx; fixed by making the insert side flag an int local (int b = 0) instead of char, so cl pushes ebx for the 4th argument and colours the out store into eax like the original; residual diff is the early xor ebx,ebx / cmp flag with bl and the inc [esi+0x14] vs out-load order
 00e192a0  145  HandleMessage for feedback panel; large dispatch body, slots not fitted. difftest: WEAK (400 valid, 28.8% cov)
 00e19350  171  feedback-event remove path (rbtree find + pending-list scan); locals not fitted. difftest: PASS (379 valid, 89.7% cov)
 00e193f0  129  cPanel destructor (MI 5 vtables + member teardown); vtable order/EH not reproduced. difftest: UNSUPPORTED (0/400 valid: fault read/write + VirtualFree)

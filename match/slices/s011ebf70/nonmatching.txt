@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 011ec0f0  14  complete rw::core::thread::Mutex::Destroy; cl uses `cmp byte [ecx+0x24],0` instead of `mov al,[..]; test al,al`
-011ec110  74  complete Mutex::Init; branch/scheduling shape differs
+011ec110  47  complete Mutex::Init: the intra-process flag gets the raw *name byte (a char store, not a normalized bool) and the null-argument return sits at the function tail; the remaining difference is cl's scheduling of the null test against the prologue, the branchless name[1] ternary encoding (byte neg vs movsx) and the return register choice.  [equiv: WEAK 540 valid, 0 mismatches, 52.9% cov -- the uncovered CreateMutexA path needs an unresolved import, so all 260 inputs that reach it are discarded]
 011ec170  133 complete Mutex::Lock; register allocation around TryEnterCriticalSection loop differs
 011ec230  27  complete Mutex::Unlock; cl picks esi and folds the bool test
 011ecf40  24  complete stream-list teardown; cl materialises the vtable slot in eax instead of `call [edx+0x10]`

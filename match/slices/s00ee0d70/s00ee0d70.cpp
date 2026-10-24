@@ -242,32 +242,50 @@ void __stdcall f_ee1060(int* p)
 // ===========================================================================
 // @ 0x00ee1080   popup-menu handler (menu-title selection)
 // ===========================================================================
-void __cdecl f_ee1080(void* param_1, void* param_2)
+// Child-window list node: mpNext at +0; the owning window sits at mpLink +
+// gChildLinkOffset (the game stores the link as a separate member).
+struct ChildLink { ChildLink* mpNext; };                       // +0x00
+struct ChildIter { ChildLink* mpLink; };                       // iterator: one link pointer
+extern int gChildLinkOffset;                                   // 0x01440aec
+class cSPUIPopupMenuWin_Selected {
+ public:
+    void OnMenuItemSelected(int a, void* item);                // 0x0081bef0
+};
+
+// The original dispatches these vtable slots as plain thiscall calls (no dummy edx); the shared
+// vc*/vcp* helpers use __fastcall with edx=0, so this function uses its own thiscall flavour.
+typedef void* (__thiscall *VFQ_T)(void*, int);
+typedef void  (__thiscall *VFp_T)(void*, void*);
+static __forceinline void* vcq_t(void* o, int slot, int a)
+{ return ((VFQ_T)(((void**)(*(void***)o))[slot]))(o, a); }
+static __forceinline void  vcp_t(void* o, int slot, void* a)
+{ ((VFp_T)(((void**)(*(void***)o))[slot]))(o, a); }
+
+void __cdecl f_ee1080(void* owner, void* value)
 {
-    if (param_2 == 0)
+    if (owner == 0)
         return;
-    void* menu = vcq(param_2, 3, 0x4c058d5);
+    void* menu = vcq_t(owner, 3, 0x4c058d5);
     if (menu == 0)
         return;
-    // The original walks an intrusive iterator anchored at (menu+4) via vtable slots
-    // 0xcc/0xd0, finds the first node whose query(0x4c058cf) has +0x888 == param_1,
-    // and invokes OnMenuItemSelected(menu, 0, node).
-    int local0 = 0;
-    vcp((char*)menu + 4, 51, &local0);
-    int* it = (int*)vcq((char*)menu + 4, 52, 0);
-    if (it != &local0) {
-        for (;;) {
-            void* node = it ? (void*)it : 0;
-            void* r = node ? vcq(node, 3, 0x4c058cf) : 0;
-            if (r != 0 && param_1 == *(void**)((char*)r + 0x888)) {
-                cSPUIPopupMenuWin_OnMenuItemSelected(menu, 0, r);
+    // The original walks an intrusive child list anchored at (menu+4) via vtable slots
+    // 0xcc/0xd0, resolves each link to its window through gChildLinkOffset, finds the
+    // first node whose query(0x4c058cf) has +0x888 == value, and invokes
+    // OnMenuItemSelected(menu, 0, node).
+    ChildIter it, end;
+    vcp_t((char*)menu + 4, 51, &it);                               // GetChildBegin(&it)
+    if (it.mpLink != ((ChildIter*)vcq_t((char*)menu + 4, 52, (int)&end))->mpLink) {
+        do {
+            void* r = 0;
+            char* node = (char*)it.mpLink + gChildLinkOffset;      // link -> owning window
+            if (node != 0)
+                r = vcq_t(node, 3, 0x4c058cf);
+            if (r != 0 && value == *(void**)((char*)r + 0x888)) {
+                ((cSPUIPopupMenuWin_Selected*)menu)->OnMenuItemSelected(0, r);
                 return;
             }
-            int* nxt = (int*)vcq((char*)menu + 4, 52, 0);
-            it = nxt;
-            if (it == &local0)
-                return;
-        }
+            it.mpLink = it.mpLink->mpNext;
+        } while (it.mpLink != ((ChildIter*)vcq_t((char*)menu + 4, 52, (int)&end))->mpLink);
     }
 }
 

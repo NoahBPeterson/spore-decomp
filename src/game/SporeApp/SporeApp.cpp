@@ -6,6 +6,7 @@
 #include "EA/CommandLine.h"
 #include "EA/Variant.h"
 #include "SP/cDirectPropertyList.h"
+#include <xmmintrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(long long*);
@@ -56,10 +57,12 @@ struct WString { int assign(unsigned int b, unsigned int e); };
 #define VC2i(p, off, a, b) (*(void (__thiscall**)(void*, int, int))((*(char**)(p)) + (off)))(p, (a), (b))
 #define RVC2i(p, off, a, b) (*(int (__thiscall**)(void*, int, int))((*(char**)(p)) + (off)))(p, (a), (b))
 struct IHandlerBase {
+    virtual ~IHandlerBase() {}
     virtual bool HandleMessage(unsigned int, unsigned int, int*);
     virtual void h1(); virtual void h2(); virtual void h3(); virtual void h4();
 };
 struct RefCountBase {
+    virtual ~RefCountBase() {}
     virtual void r0(); virtual void r1(); virtual void r2(); virtual void r3();
 };
 struct cSporeApp : IHandlerBase, RefCountBase {
@@ -568,7 +571,19 @@ int Timer::Elapsed()
     long long t;
     QueryPerformanceCounter(&t);
     long long d = t - last;
-    return (int)((float)d * freq);
+    union { float f; unsigned u; } c;
+    c.f = (float)d * freq;
+    unsigned bits = c.u;
+    int exp = (int)((bits >> 23) & 0xFF) - 127;
+    if (exp < 0)
+        return 0;
+    if (exp >= 31)
+        return (int)0x80000000u;
+    unsigned mant = (bits & 0x7FFFFF) | 0x800000;
+    unsigned mag = (exp >= 23) ? (mant << (exp - 23)) : (mant >> (23 - exp));
+    if (bits & 0x80000000u)
+        return -(int)mag;
+    return (int)mag;
 }
 
 // @ 0x00f47680

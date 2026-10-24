@@ -1,4 +1,4 @@
-// Draw/effect parameter builder (variant)  @ 0x00f76000  (6464 bytes, /O2, SSE).
+// Draw/effect parameter builder (variant)  0x00f76000  (6456 bytes, /O2 /arch:SSE /fp:fast).
 //
 // Reconstructed from the Ghidra decompile.  Same algorithm as 0x00f5a200 with a
 // different source-object layout: it fills a parameter record (two frame vectors,
@@ -7,6 +7,9 @@
 
 #include "../../include/types.h"
 #include <math.h>
+#include <xmmintrin.h>
+
+static inline float InlineSqrt(float x) { return _mm_cvtss_f32(_mm_sqrt_ss(_mm_set_ss(x))); }
 
 static float g_a0;   // DAT_016c9ba0
 static float g_a4;   // DAT_016c9ba4
@@ -18,7 +21,7 @@ static float g_b8;   // DAT_016c9bb8
 static float g_bc;   // DAT_016c9bbc
 static float g_c0;   // DAT_016c9bc0
 
-void FUN_00a7d6b0(float* v);
+extern void __fastcall FUN_00a7d6b0(void* self, int, float* v);
 
 struct DrawParams {
     float v0, v1, v2;
@@ -27,8 +30,8 @@ struct DrawParams {
     uint8_t flag28;
     uint8_t pad29[3];
     float invW, invH;
-    float wMinus1, hMinus1;
-    float log2W;
+    int wMinus1, hMinus1;
+    int log2W;
     uint8_t alpha40;
 };
 
@@ -52,13 +55,13 @@ extern "C" void BuildDrawParams2(int param_1, EffectObject* p, DrawParams* out) 
         float cy = (p->y1 + p->y0) * 0.5f;
         float cz = (p->z1 + p->z0) * 0.5f;
         if (p->mode == 1) {
-            FUN_00a7d6b0(&cx);
-            FUN_00a7d6b0(&cx);
+            FUN_00a7d6b0((char*)param_1 + 0xb0, 0, &cx);
+            FUN_00a7d6b0((char*)param_1 + 0xe8, 0, &cx);
         }
         float d = cy * g_a8 - cz * g_a4;
         float e = cz * g_a0 - cx * g_a8;
         float f = cx * g_a4 - cy * g_a0;
-        float len = (float)sqrt((double)(f * f + e * e + d * d));
+        float len = InlineSqrt(f * f + e * e + d * d);
         if (len <= 0.0001f) {
             out->v0 = g_ac; out->v1 = g_b0; out->v2 = g_b4;
             out->v3 = g_b8; out->v4 = g_bc;
@@ -80,25 +83,25 @@ extern "C" void BuildDrawParams2(int param_1, EffectObject* p, DrawParams* out) 
         }
         o[5] = len;
         if (p->mode == 5) {
-            FUN_00a7d6b0(o);
-            FUN_00a7d6b0(o + 3);
-            FUN_00a7d6b0(o);
-            FUN_00a7d6b0(o + 3);
+            FUN_00a7d6b0((char*)param_1 + 0xb0, 0, o);
+            FUN_00a7d6b0((char*)param_1 + 0xb0, 0, o + 3);
+            FUN_00a7d6b0((char*)param_1 + 0xe8, 0, o);
+            FUN_00a7d6b0((char*)param_1 + 0xe8, 0, o + 3);
         }
         break;
     }
     case 6: {
         float* b = o + 3;
         b[0] = g_a0; b[1] = g_a4; b[2] = g_a8;
-        FUN_00a7d6b0(b);
-        FUN_00a7d6b0(b);
+        FUN_00a7d6b0((char*)param_1 + 0xb0, 0, b);
+        FUN_00a7d6b0((char*)param_1 + 0xe8, 0, b);
         float* pa = *(float**)((char*)param_1 + 0x30);
         o[0] = pa[0x68 / 4]; o[1] = pa[0x6c / 4]; o[2] = pa[0x70 / 4];
         float fy = o[1], fx = o[0];
         o[0] = o[5] * fy - o[4] * o[2];
         o[1] = b[0] * o[2] - o[5] * fx;
         o[2] = o[4] * fx - b[0] * fy;
-        float inv = 1.0f / ((float)sqrt((double)(o[0] * o[0] + o[1] * o[1] + o[2] * o[2])) + 0.1f);
+        float inv = 1.0f / (InlineSqrt(o[0] * o[0] + o[1] * o[1] + o[2] * o[2]) + 0.1f);
         o[0] *= inv; o[1] *= inv; o[2] *= inv;
         break;
     }
@@ -111,7 +114,7 @@ extern "C" void BuildDrawParams2(int param_1, EffectObject* p, DrawParams* out) 
         o[0] = o[5] * fy - o[4] * o[2];
         o[1] = o[3] * o[2] - o[5] * fx;
         o[2] = o[4] * fx - o[3] * fy;
-        float inv = 1.0f / ((float)sqrt((double)(o[0] * o[0] + o[1] * o[1] + o[2] * o[2])) + 0.1f);
+        float inv = 1.0f / (InlineSqrt(o[0] * o[0] + o[1] * o[1] + o[2] * o[2]) + 0.1f);
         o[0] *= inv; o[1] *= inv; o[2] *= inv;
         break;
     }
@@ -135,17 +138,17 @@ extern "C" void BuildDrawParams2(int param_1, EffectObject* p, DrawParams* out) 
     ((uint8_t*)o)[0x28] = flag;
     o[0x0b] = 1.0f / (float)(uint8_t)c[0x132];
     o[0x0c] = 1.0f / (float)(uint8_t)c[0x133];
-    o[0x0d] = (float)((uint8_t)c[0x132] - 1);
-    o[0x0e] = (float)((uint8_t)c[0x133] - 1);
-    o[0x0f] = 0.0f;
+    out->wMinus1 = (uint8_t)c[0x132] - 1;
+    out->hMinus1 = (uint8_t)c[0x133] - 1;
+    out->log2W = 0;
 
     uint32_t n = (uint8_t)c[0x132];
     if (n > 1) {
-        float log2 = 0.0f;
+        int log2 = 0;
         do {
             n >>= 1;
-            log2 = (float)((int)log2 + 1);
+            log2++;
         } while (n > 1);
-        o[0x0f] = log2;
+        out->log2W = log2;
     }
 }

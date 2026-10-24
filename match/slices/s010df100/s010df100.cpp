@@ -42,6 +42,7 @@ hkReferencedObjectWithArray* hkReferencedObjectWithArray::destroy(unsigned flags
         hkThreadMemory* tm = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
         tm->deallocateChunk(m_data, (m_capacityAndFlags & 0x3fffffff) << 2, 0x14);
     }
+    *(void**)this = (void*)0x013ef094;
     if (flags & 1) {
         hkMemory::s_instance->deallocateChunk(this, (int)m_memSizeAndFlags, 0x1c);
     }

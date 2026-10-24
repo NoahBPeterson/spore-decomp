@@ -1,4 +1,4 @@
-// @ 0x00e85dc0  shape-matching goal positions (no symbol; free cdecl function)
+// 0x00e85dc0  shape-matching goal positions (no symbol; free cdecl function)
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast  (scalar SSE math with reassociated sums).
 //
 // One step of meshless shape matching (Mueller et al. 2005) over n particles:
@@ -30,9 +30,18 @@ struct Matrix3 {
   Matrix3 operator+(const Matrix3& m) const { return Matrix3(r[0] + m.r[0], r[1] + m.r[1], r[2] + m.r[2]); }
   Matrix3 operator*(float f) const { return Matrix3(r[0] * f, r[1] * f, r[2] * f); }
   __forceinline Matrix3 operator*(const Matrix3& m) const {
-    return Matrix3(m.r[0] * r[0].x + m.r[1] * r[0].y + m.r[2] * r[0].z,
-                   m.r[0] * r[1].x + m.r[1] * r[1].y + m.r[2] * r[1].z,
-                   m.r[0] * r[2].x + m.r[1] * r[2].y + m.r[2] * r[2].z);
+    // Retail sums the three terms of row i starting at column (i+1)%3: row 0 (y,z,x),
+    // row 1 (z,x,y), row 2 (x,y,z).  Parenthesise to keep that rounding order.
+    return Matrix3(
+        Vector3((r[0].y * m.r[1].x + r[0].z * m.r[2].x) + r[0].x * m.r[0].x,
+                (r[0].y * m.r[1].y + r[0].z * m.r[2].y) + r[0].x * m.r[0].y,
+                (r[0].y * m.r[1].z + r[0].z * m.r[2].z) + r[0].x * m.r[0].z),
+        Vector3((r[1].z * m.r[2].x + r[1].x * m.r[0].x) + r[1].y * m.r[1].x,
+                (r[1].z * m.r[2].y + r[1].x * m.r[0].y) + r[1].y * m.r[1].y,
+                (r[1].z * m.r[2].z + r[1].x * m.r[0].z) + r[1].y * m.r[1].z),
+        Vector3((r[2].x * m.r[0].x + r[2].y * m.r[1].x) + r[2].z * m.r[2].x,
+                (r[2].x * m.r[0].y + r[2].y * m.r[1].y) + r[2].z * m.r[2].y,
+                (r[2].x * m.r[0].z + r[2].y * m.r[1].z) + r[2].z * m.r[2].z));
   }
 };
 
@@ -40,9 +49,11 @@ struct Matrix3 {
 inline Matrix3 Outer(const Vector3& a, const Vector3& b) { return Matrix3(b * a.x, b * a.y, b * a.z); }
 // row vector times matrix
 inline Vector3 operator*(const Vector3& v, const Matrix3& m) {
-  return Vector3(v.x * m.r[0].x + v.y * m.r[1].x + v.z * m.r[2].x,
-                 v.x * m.r[0].y + v.y * m.r[1].y + v.z * m.r[2].y,
-                 v.x * m.r[0].z + v.y * m.r[1].z + v.z * m.r[2].z);
+  // Keep the original's per-component summation order: (x*col0 + z*col2) + y*col1
+  // for x, (z*col2 + x*col0) + y*col1 for y, and (y*col1 + z*col2) + x*col0 for z.
+  return Vector3(v.x * m.r[0].x + v.z * m.r[2].x + v.y * m.r[1].x,
+                 v.z * m.r[2].y + v.x * m.r[0].y + v.y * m.r[1].y,
+                 v.y * m.r[1].z + v.z * m.r[2].z + v.x * m.r[0].z);
 }
 
 extern const Vector3 kZeroVector;   // 0x016c4584

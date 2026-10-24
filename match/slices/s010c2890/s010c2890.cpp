@@ -2,6 +2,7 @@
 // Built as part of the whole-program LTCG link of SporeApp.exe.
 #include <math.h>
 #include <string.h>
+#include <intrin.h>
 
 // -----------------------------------------------------------------------------------
 // Havok types used by this slice (member names/offsets from the type registry).
@@ -10,8 +11,56 @@ typedef float hkReal;
 
 struct __declspec(align(16)) hkVector4          // 16 bytes, HK_ALIGN16
 {
-	hkReal m_quad[4];     // +0x00
+	union
+	{
+		hkReal m_quad[4];     // +0x00
+		struct { hkReal x, y, z, w; };
+	};
 };
+
+class hkBool
+{
+public:
+	hkBool() {}
+	hkBool(bool b) : m_bool(b ? 1 : 0) {}
+	operator bool() const { return m_bool != 0; }
+	char m_bool;
+};
+
+struct hkShapeRayCastInput
+{
+	hkVector4 m_from;                    // +0x00
+	hkVector4 m_to;                      // +0x10
+	unsigned int m_filterInfo;           // +0x20
+	void* m_rayShapeCollectionFilter;    // +0x24
+};
+
+struct hkShapeRayCastOutput
+{
+	float m_normal[4];                   // +0x00
+	unsigned int m_shapeKey;             // +0x10
+	float m_hitFraction;                 // +0x14
+};
+
+extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
+extern "C" __declspec(dllimport) int __stdcall TlsSetValue(unsigned long, void*);
+extern unsigned long g_hkMonitorStreamCurrentTls;   // 0x016e42a4
+extern unsigned long g_hkMonitorStreamEndTls;       // 0x016e42a8
+extern const char hkMonitorTimerEndTag[];           // 0x0149cc34
+extern const char hkTtrcCapsule[];                  // 0x014a28bc ("TtrcCapsule")
+struct hkMonitorCommand { const char* m_command; unsigned int m_time0; unsigned int m_pad; };
+static __forceinline void hkTimerCommand(const char* name)
+{
+	void* end = TlsGetValue(g_hkMonitorStreamEndTls);
+	if (TlsGetValue(g_hkMonitorStreamCurrentTls) < end)
+	{
+		hkMonitorCommand* c = (hkMonitorCommand*)TlsGetValue(g_hkMonitorStreamCurrentTls);
+		c->m_command = name;
+		volatile unsigned int t = (unsigned int)__rdtsc();
+		c->m_time0 = t;
+		TlsSetValue(g_hkMonitorStreamCurrentTls, c + 1);
+	}
+}
 
 struct hkAabb             // two vectors
 {
@@ -85,6 +134,8 @@ struct hkSphereShape : public hkShape
 	                                        hkVector4* vertices) const;                // 0x010c37b0
 	virtual void getFirstVertex(hkVector4& v) const;                                   // 0x010c37e0
 	virtual void getAabb(const hkTransform& t, hkReal tol, hkAabb& aabb) const;        // 0x010c3800
+	virtual hkBool castRay(const hkShapeRayCastInput& input,
+	                       hkShapeRayCastOutput& output) const;                        // 0x010c3880
 };
 
 struct hkCapsuleShape : public hkSphereShape
@@ -93,6 +144,8 @@ struct hkCapsuleShape : public hkSphereShape
 	hkVector4 m_vertexB;   // +0x20
 
 	virtual void getAabb(const hkTransform& t, hkReal tol, hkAabb& aabb) const;        // 0x010c2c10
+	virtual hkBool castRay(const hkShapeRayCastInput& input,
+	                       hkShapeRayCastOutput& output) const;                        // 0x010c2e30
 
 	// Static __cdecl helpers (HK_CALL): the addresses carry the identical-code-folded
 	// static copies, so the emitted epilogue is a plain `ret`, not thiscall's `ret N`.
@@ -254,6 +307,143 @@ void hkCapsuleShape::getAabb(const hkTransform& t, hkReal tol, hkAabb& aabb) con
 	aabb.m_max.m_quad[1] = r + aabb.m_max.m_quad[1];
 	aabb.m_max.m_quad[2] = r + aabb.m_max.m_quad[2];
 	aabb.m_max.m_quad[3] = r + aabb.m_max.m_quad[3];
+}
+
+
+// Ray/capsule epsilon (FLT_EPSILON); distinct from the 2^-20 degeneracy scale above.
+static const hkReal HK_RAY_EPS = 1.1920929e-07f;
+
+// @ 0x010c2e30
+// Ray against a capsule (segment A..B plus radius r), x87 build.  If the ray start is inside the capsule the
+// cast fails.  Otherwise the ray is intersected with the infinite cylinder around the segment (closest
+// approach of the two infinite lines gives the entry fraction); the hit is accepted when it falls between the
+// two end points of the segment and in front of the best fraction so far.  A miss of the cylinder body falls
+// back to a ray cast against a temporary hkSphereShape placed at the nearer end point (A when the along-axis
+// position is <= 0, else B).
+hkBool hkCapsuleShape::castRay(const hkShapeRayCastInput& input, hkShapeRayCastOutput& output) const
+{
+	hkTimerCommand(hkTtrcCapsule);
+
+	const hkVector4& A = m_vertexA;
+	const hkVector4& B = m_vertexB;
+	const hkVector4& from = input.m_from;
+	const hkVector4& to = input.m_to;
+
+	{
+		hkVector4 pt;
+		hkCapsuleShape::closestPointLineSeg(from, A, B, pt);
+		const float dx = from.x - pt.x, dy = from.y - pt.y, dz = from.z - pt.z;
+		const float dist = (float)sqrt(dx * dx + dz * dz + dy * dy);
+		if (dist < m_radius)
+			goto fail;
+	}
+
+	{
+		hkVector4 d;
+		d.x = to.x - from.x; d.y = to.y - from.y; d.z = to.z - from.z; d.w = to.w - from.w;
+		hkVector4 e;
+		e.x = B.x - A.x; e.y = B.y - A.y; e.z = B.z - A.z; e.w = B.w - A.w;
+
+		float distSq = 3.40282e+38f;
+		float tRay, tSeg;
+		hkVector4 pA, pB;
+		hkCapsuleShape::closestInfLineSegInfLineSeg(from, d, A, e, &distSq, &tRay, &tSeg, &pA, &pB);
+
+		const float r2 = m_radius * m_radius;
+		if (distSq > r2)
+			goto fail;
+
+		// unit axis a and its length
+		float ax, ay, az, len;
+		const float len2 = e.x * e.x + e.z * e.z + e.y * e.y;
+		if (len2 > HK_RAY_EPS)
+		{
+			len = (float)sqrt(len2);
+			const float inv = 1.0f / len;
+			ax = e.x * inv; ay = e.y * inv; az = e.z * inv;
+		}
+		else
+		{
+			ax = 0.0f; ay = 0.0f; az = 0.0f;
+			len = 0.0f;
+		}
+
+		// component of the ray direction perpendicular to the axis
+		const float s = -(d.x * ax + d.z * az + d.y * ay);
+		const float px = ax * s + d.x;
+		const float py = ay * s + d.y;
+		const float pz = az * s + d.z;
+		const float h = (float)sqrt(m_radius * m_radius - distSq);
+		const float q = px * px + pz * pz + py * py;
+		float invq;
+		if (q == 0.0f) invq = 0.0f; else invq = 1.0f / (float)sqrt(q);
+		volatile float f = tRay - invq * h;       // entry fraction on the cylinder
+
+		volatile float along;
+		if (!(f >= output.m_hitFraction))
+		{
+			const float ap = az * A.z + ay * A.y + ax * A.x;
+			const float omf = 1.0f - f;
+			volatile hkVector4 hit;
+			hit.x = omf * from.x + f * to.x;
+			hit.y = f * to.y + omf * from.y;
+			hit.z = f * to.z + omf * from.z;
+			hit.w = f * to.w + omf * from.w;
+			along = (hit.x * ax + hit.z * az + hit.y * ay) - ap;
+
+			if (f >= 0.0f && along > 0.0f && along < len)
+			{
+				const float u = along / len;
+				const float omu = 1.0f - u;
+				volatile float spx = u * B.x + omu * A.x;
+				volatile float spy = omu * A.y + u * B.y;
+				volatile float spz = omu * A.z + u * B.z;
+				float spw = omu * A.w + u * B.w;
+				volatile hkVector4 nrm;
+				nrm.x = hit.x - spx;
+				nrm.y = hit.y - spy;
+				nrm.z = hit.z - spz;
+				nrm.w = hit.w - spw;
+				double nq = (double)nrm.x * nrm.x + (double)nrm.z * nrm.z + (double)nrm.y * nrm.y;
+				double invn;
+				if (nq == 0.0) invn = 0.0; else invn = 1.0 / sqrt(nq);
+				output.m_shapeKey = 0xffffffff;
+				nrm.y = nrm.y * invn; output.m_normal[1] = nrm.y;
+				nrm.z = nrm.z * invn; output.m_normal[2] = nrm.z;
+				output.m_hitFraction = f;
+				nrm.w = nrm.w * invn; output.m_normal[3] = nrm.w;
+				output.m_normal[0] = nrm.x * invn;
+				hkTimerCommand(hkMonitorTimerEndTag);
+				return true;
+			}
+
+			// missed the cylinder body: test the nearer end cap sphere
+			const float v = ((ax * from.x + az * from.z + ay * from.y) - ap) / len;
+			const float omv = 1.0f - v;
+			hkVector4 cp;
+			cp.x = omv * A.x + v * B.x;
+			cp.y = omv * A.y + v * B.y;
+			cp.z = omv * A.z + v * B.z;
+			const float ex = from.x - cp.x, ey = from.y - cp.y, ez = from.z - cp.z;
+			const float cd = (float)sqrt(ez * ez + ey * ey + ex * ex);
+			if (cd > m_radius && f < 0.0f)
+				goto fail;
+
+			hkShapeRayCastInput sin;
+			sin.m_filterInfo = 0;
+			sin.m_rayShapeCollectionFilter = 0;
+			const hkVector4& c = (along <= 0.0f) ? A : B;
+			sin.m_from.x = from.x - c.x; sin.m_from.y = from.y - c.y; sin.m_from.z = from.z - c.z; sin.m_from.w = from.w - c.w;
+			sin.m_to.x = to.x - c.x; sin.m_to.y = to.y - c.y; sin.m_to.z = to.z - c.z; sin.m_to.w = to.w - c.w;
+			hkSphereShape sphere(m_radius);
+			hkTimerCommand(hkMonitorTimerEndTag);
+			return sphere.castRay(sin, output);
+		}
+	}
+
+fail:
+	hkTimerCommand(hkMonitorTimerEndTag);
+	return false;
 }
 
 

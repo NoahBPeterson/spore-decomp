@@ -4,7 +4,7 @@
 00ee0310  260  complete; loop bound re-evaluated per iteration and register assignment differ
 00ee0450  260  complete; loop bound re-evaluated per iteration and register assignment differ
 00ee0590  260  complete; loop bound re-evaluated per iteration and register assignment differ
-00ee06d0  470  complete; vector-notify path and loop scheduling differ
+00ee06d0 537 behaviour-complete; vector-notify path now matches (zero-init IntVec, pointer-difference element count, 0x00f40c20 modelled as the callee-pop thiscall Manager::CollectByNoun with ecx=manager); remaining diff is /O2 stack layout and loop scheduling
 00ee0960  281  complete; lookup/notify tail and register assignment differ
 00ee0af0  234  complete; loop bound re-evaluated per iteration and register assignment differ
 00ee0c30  242  complete; loop bound re-evaluated per iteration and register assignment differ

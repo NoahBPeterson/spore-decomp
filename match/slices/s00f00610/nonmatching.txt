@@ -9,5 +9,5 @@
 00f00f80  131  vtable dispatch: virtual-slot call schedule differs; equiv WEAK 41.0% cov [/O2 /MD /Gy /TP]
 00f01030  62   placement adjust: indirect f_eff4c0 call shape / x87 mul schedule differs
 00f01090  70   object add: call schedule differs; equiv UNSUPPORTED (0/400 valid: budget/global reads) [/O2 /MD /Gy /TP]
-00f01140  83   uninitialized_copy: iterator register assignment differs (outs ea/edx/esi)
+00f01140  102  uninitialized_copy: the original returns its `out` argument in eax, but the source was declared void and the compiler happened to leave the final `dst` there. Restored the return type to `void**` and `return out;` on both exits (the replay's eax was 40040000 vs the original's 40020000). Iterator/loop register assignment still differs (89 vs 109 bytes); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; replay None; equiv PASS 318 valid/100.0% coverage and PASS 1496 valid/100.0% at --inputs 2000
 00f011b0  919  scene build: inline SSE/quaternion math and register-ABI helper FUN_00efd8e0 (pointer arrives in esi) not reproducible; equiv UNSUPPORTED (0/400 valid) [/O2 /MD /Gy /TP]

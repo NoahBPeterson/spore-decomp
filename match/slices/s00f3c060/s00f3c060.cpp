@@ -181,6 +181,8 @@ struct cSPTransform {
     float mScale;                       // +0x10
     cSPMatrix3 mRotation;               // +0x14
     void BackTransformPoint(float* p);  // 0x004FF6D0
+    void MakeIdentity();                        // 0x00409930 (flags/rev = 0, identity)
+    void SetTranslation(const cSPVector3& v);   // 0x00571D40 (dirty flag 4, rev++)
 };
 #define VP1(p, n) virtual void p##n() = 0;
 #define VP4(p, n) VP1(p, n##0) VP1(p, n##1) VP1(p, n##2) VP1(p, n##3)
@@ -428,7 +430,105 @@ unsigned W::FUN_00f3c7f0(unsigned id)
 }
 
 // ---------------------------------------------------------------- not yet matching
-void FUN_00f3c870(void* self) { (void)self; }                         // @ 0x00F3C870
+
+// -- overlap test between two spatial objects --------------------------------
+// Both objects publish their position (vtable slot 11, +0x2c), an orientation
+// quaternion (slot 12, +0x30), a uniform size (slot 13, +0x34) and a shadow proxy
+// (slot 43, +0xac); the proxy carries the world bounding box at +0x70.
+enum {
+    kVtPosition   = 0x2c,
+    kVtQuaternion = 0x30,
+    kVtSize       = 0x34,
+    kVtProxy      = 0xac,
+    kProxyBox     = 0x70
+};
+
+static inline void* VCallPtr(void* obj, int slot)
+{
+    typedef void* (__thiscall* Fn)(void*);
+    return ((Fn)(*(void***)obj)[slot / 4])(obj);
+}
+
+static inline float VCallFloat(void* obj, int slot)
+{
+    typedef float (__thiscall* Fn)(void*);
+    return ((Fn)(*(void***)obj)[slot / 4])(obj);
+}
+
+char FUN_00b66b20(void* id, void* shapeOwner, float filter);           // 0x00B66B20
+cSPMatrix3* Matrix3FromQuaternion(cSPMatrix3* out, const void* quat);  // 0x0059C190
+bool __cdecl FUN_0069b910(const float* boxA, const cSPTransform* shapeA,
+                          const float* boxB, const cSPTransform* shapeB);  // 0x0069B910
+
+struct cSPBoundingBox {
+    cSPVector3 mMin;                    // +0x00
+    cSPVector3 mMax;                    // +0x0c
+    cSPBoundingBox(const cSPBoundingBox& o);    // 0x00511140
+};
+
+// @ 0x00F3C870
+// Broad phase (bounding spheres) then a `coarse` collision query, and finally the
+// exact oriented-box test: both shapes are built from the objects' translation,
+// quaternion-derived rotation and size, and the first box is grown by `pad`.
+bool __stdcall FUN_00f3c870(void* a, void* b, float pad, bool coarse)
+{
+    if (!a || !b)
+        return false;
+
+    const cSPVector3* pa = (const cSPVector3*)VCallPtr(a, kVtPosition);
+    float ra = VCallFloat(a, kVtSize) + pad;
+    const cSPVector3* pb = (const cSPVector3*)VCallPtr(b, kVtPosition);
+    float rb = VCallFloat(b, kVtSize);
+    float reach = ra + rb;
+    float dx = pa->x - pb->x;
+    float dy = pa->y - pb->y;
+    float dz = pa->z - pb->z;
+    if (reach * reach <= dx * dx + dy * dy + dz * dz)
+        return false;
+
+    if (coarse) {
+        char hit = FUN_00b66b20(a, b, 0.5f);
+        if (hit)
+            return hit == 2;
+    }
+
+    void* proxyA = VCallPtr(a, kVtProxy);
+    void* proxyB = VCallPtr(b, kVtProxy);
+    if (!proxyA || !proxyB)
+        return false;
+
+    cSPTransform ta;
+    ta.MakeIdentity();
+    ta.SetTranslation(*(const cSPVector3*)VCallPtr(a, kVtPosition));
+    cSPMatrix3 rot;
+    Matrix3FromQuaternion(&rot, VCallPtr(a, kVtQuaternion));
+    ta.mRotation = rot;
+    ta.mFlags |= 2;
+    ta.mModificationCount++;
+    ta.mScale = VCallFloat(a, kVtSize);
+    ta.mModificationCount++;
+
+    cSPTransform tb;
+    tb.MakeIdentity();
+    tb.SetTranslation(*(const cSPVector3*)VCallPtr(b, kVtPosition));
+    Matrix3FromQuaternion(&rot, VCallPtr(b, kVtQuaternion));
+    tb.mRotation = rot;
+    tb.mFlags |= 2;
+    tb.mModificationCount++;
+    tb.mScale = VCallFloat(b, kVtSize);
+    tb.mModificationCount++;
+
+    cSPBoundingBox box = *(const cSPBoundingBox*)((char*)proxyA + kProxyBox);
+    box.mMin.x -= pad;
+    box.mMin.y -= pad;
+    box.mMin.z -= pad;
+    box.mMax.x += pad;
+    box.mMax.y += pad;
+    box.mMax.z += pad;
+
+    return FUN_0069b910(&box.mMin.x, &ta, (const float*)((char*)proxyB + kProxyBox), &tb);
+}
+
 void FUN_00f3cb60(void* self) { (void)self; }                         // @ 0x00F3CB60
 void FUN_00f3cc40(void* self, void* a, void* b) { (void)self; (void)a; (void)b; }  // @ 0x00F3CC40
 void FUN_00f3cd10(void* self) { (void)self; }                         // @ 0x00F3CD10

@@ -4,6 +4,7 @@
 //   Project* entry points pick a kernel (or the radial terrain ray-cast) based on game mode and
 //   snap options. Members, helper names and layouts from the retail disassembly + the 2008 PDB.
 #include "types.h"
+#include <xmmintrin.h>
 
 #pragma warning(disable: 4100)
 
@@ -384,20 +385,38 @@ float cPlanetModel::SurfaceDistance(const Vec3* p, const Vec3* dir)
     float ux = dir->x;
     float uy = dir->y;
     float uz = dir->z;
-    float inv = 1.0f / (float)sqrt((double)(ux * ux + uy * uy + uz * uz));
+    double sxy = (double)ux * ux + (double)uy * uy;
+    double dn = sxy + (double)uz * uz;
+    float inv = (float)(1.0 / sqrt(dn));
 
     Vec3 q;
-    q.x = p->x + ux * inv;
-    q.y = p->y + inv * uy;
-    q.z = p->z + inv * uz;
+    __m128 invv = _mm_set_ss(inv);
+    __m128 qq = _mm_mul_ss(_mm_load_ss(&ux), invv);
+    qq = _mm_add_ss(_mm_load_ss(&p->x), qq);
+    _mm_store_ss(&q.x, qq);
+    qq = _mm_mul_ss(_mm_load_ss(&uy), invv);
+    qq = _mm_add_ss(_mm_load_ss(&p->y), qq);
+    _mm_store_ss(&q.y, qq);
+    qq = _mm_mul_ss(_mm_load_ss(&uz), invv);
+    qq = _mm_add_ss(_mm_load_ss(&p->z), qq);
+    _mm_store_ss(&q.z, qq);
 
     float r = GetRadiusAt(&q);
-    float inv2 = 1.0f / (float)sqrt((double)(q.x * q.x + (q.y * q.y + q.z * q.z)) + kEps);
-    float rx = (q.z * inv2) * r;
-    float ry = (q.y * inv2) * r;
-    float rz = (inv2 * q.x) * r;
-    return (float)sqrt((double)(rx * rx + (ry * ry + rz * rz))) -
-           (float)sqrt((double)(p->x * p->x + (p->y * p->y + p->z * p->z)));
+    double dq = (double)q.x * q.x + ((double)q.y * q.y + (double)q.z * q.z) + (double)kEps;
+    __m128 inv2v = _mm_set_ss((float)(1.0 / sqrt(dq)));
+    __m128 rv = _mm_set_ss(r);
+    __m128 t;
+    float rx, ry, rz;
+    t = _mm_mul_ss(_mm_load_ss(&q.z), inv2v);
+    _mm_store_ss(&rx, _mm_mul_ss(t, rv));
+    t = _mm_mul_ss(_mm_load_ss(&q.y), inv2v);
+    _mm_store_ss(&ry, _mm_mul_ss(t, rv));
+    t = _mm_mul_ss(_mm_load_ss(&q.x), inv2v);
+    _mm_store_ss(&rz, _mm_mul_ss(t, rv));
+    double dzy = (double)rx * rx + (double)ry * ry;
+    double dr = dzy + (double)rz * rz;
+    double dp = (double)p->x * p->x + ((double)p->y * p->y + (double)p->z * p->z);
+    return (float)(sqrt(dr) - sqrt(dp));
 }
 
 // @ 0x00b82fc0

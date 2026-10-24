@@ -72,10 +72,12 @@ typedef eastl::basic_string<wchar_t, eastl::allocator> EWStr16;
 // cSporeApp layout (dev-PDB): IHandler at +0, RefCountVTemplate<int> at +4.
 // ---------------------------------------------------------------------------
 struct IHandlerBase {
+    virtual ~IHandlerBase() {}
     virtual bool HandleMessage(unsigned int, unsigned int, int*);
     virtual void h1(); virtual void h2(); virtual void h3(); virtual void h4();
 };
 struct RefCountBase {
+    virtual ~RefCountBase() {}
     virtual void r0(); virtual void r1(); virtual void r2(); virtual void r3();
 };
 

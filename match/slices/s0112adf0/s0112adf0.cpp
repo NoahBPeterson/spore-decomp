@@ -62,7 +62,7 @@ class hkStringMapBase { public:
     hkStringMapBase();
     ~hkStringMapBase();
     void* getIterator() const;
-    bool isValid(void* it) const;          // FUN_012098f0 writes through a bool*
+    void isValid(bool* out, void* it) const;   // 0x012098f0: *out = it <= m_size, ret 8
     const char* getKey(void* it) const;
     hkUlong32 getValue(void* it) const;
     void* getNext(void* it) const;
@@ -634,11 +634,14 @@ void hkFinishLoadedObjectRegistry::finishLoadedObject(void* obj, const char* cla
 void hkFinishLoadedObjectRegistry::merge(const hkFinishLoadedObjectRegistry& from)
 {
     void* it = from.m_map.getIterator();
-    while (from.m_map.isValid(it)) {
+    bool valid;
+    from.m_map.isValid(&valid, it);
+    while (valid) {
         const char* key = from.m_map.getKey(it);
         hkUlong32 value = from.m_map.getValue(it);
         m_map.insert(key, value);
         it = from.m_map.getNext(it);
+        from.m_map.isValid(&valid, it);
     }
 }
 

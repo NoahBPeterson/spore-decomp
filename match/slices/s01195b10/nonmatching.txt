@@ -1,7 +1,4 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
-011964f0  180  X509_check_purpose: complete translation; cl lays out the early return / -1
-               paths differently and shortens the id-1 range check
-01196a90  184  BIO buffer read helper: complete translation; the two read loops' register
-               schedule and tail merges differ
-011984b0  119  ASN1 ex-clear dispatcher: complete, but it forwards a value in EAX to
-               FUN_01198420, a convention cl will not reproduce from C
+011964f0  180  X509_check_purpose: complete translation; cl lays out the early return / -1 paths differently and shortens the id-1 range check
+01196a90  192  BIO buffer read helper: complete translation; the two read loops' register schedule and tail merges differ.  The second loop's negative return must be a ternary `(total > 0) ? total : s` rather than `if (total < 1) total = s;` so cl does not store into `total` - that slot is the saved-ecx local, and the store left ecx = s on return (equiv caught it as a scratch-register clobber). equiv PASS 312/400, 98.3% cov (283 vs 280 B).
+011984b0  119  ASN1 ex-clear dispatcher: complete, but it forwards a value in EAX to FUN_01198420, a convention cl will not reproduce from C

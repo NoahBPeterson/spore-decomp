@@ -29,7 +29,7 @@ extern u32   DAT_0148d088;
 // ---------------------------------------------------------------------------
 void   __cdecl  FUN_00f31f20(void*, u32, int, void*);          // 0x00f31f20
 void   __cdecl  FUN_007dade0(u32);                             // 0x007dade0 SP::SetEffectSeed
-float* __stdcall FUN_0059c190(void*, const void*);            // 0x0059c190 Matrix3FromQuaternion
+float* __cdecl FUN_0059c190(void*, const void*);              // 0x0059c190 Matrix3FromQuaternion
 void   __stdcall FUN_00f31c40(int);                            // 0x00f31c40
 void   __stdcall FUN_00f31cb0(int);                            // 0x00f31cb0
 void   __cdecl  FUN_006a0ae0(void*, u32, int*, void**);        // 0x006a0ae0

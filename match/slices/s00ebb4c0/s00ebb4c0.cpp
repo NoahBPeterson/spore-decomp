@@ -304,9 +304,9 @@ void FUN_00ebb4c0(unsigned* p, int a2, int a3)
     saved.z = *(float*)(p + 0x13);
 
     float* v = (float*)(p + 0x11);
-    float nx = (float)p[1];
-    float ny = (float)p[2];
-    float nz = (float)p[3];
+    float nx = *(float*)(p + 1);
+    float ny = *(float*)(p + 2);
+    float nz = *(float*)(p + 3);
     v[0] = nx; v[1] = ny; v[2] = nz;
 
     if ((*p & 1) != 0) {

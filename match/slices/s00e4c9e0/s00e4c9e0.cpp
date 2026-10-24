@@ -528,9 +528,12 @@ void FUN_00e4d600(int* node, float** out, int depth, int maxDepth)
 {
     if (depth == maxDepth) {
         float* p = *out;
-        p[0] = (*(float*)((char*)node + 0x14) + *(float*)((char*)node + 0x20)) * 0.5f;
-        p[1] = (*(float*)((char*)node + 0x24) + *(float*)((char*)node + 0x18)) * 0.5f;
-        p[2] = (*(float*)((char*)node + 0x28) + *(float*)((char*)node + 0x1c)) * 0.5f;
+        float s0 = (*(float*)((char*)node + 0x14) + *(float*)((char*)node + 0x20)) * 0.5f;
+        float s1 = (*(float*)((char*)node + 0x24) + *(float*)((char*)node + 0x18)) * 0.5f;
+        float s2 = (*(float*)((char*)node + 0x28) + *(float*)((char*)node + 0x1c)) * 0.5f;
+        p[0] = s0;
+        p[1] = s1;
+        p[2] = s2;
         *out = p + 3;
         return;
     }

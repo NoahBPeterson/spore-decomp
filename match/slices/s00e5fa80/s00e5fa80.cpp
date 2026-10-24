@@ -79,22 +79,21 @@ float* sRandomExtents(float* out, float* in, float t)
 
     double r1 = gRandomLCG.RandomDoubleUniform();
     double d1 = r1 * lim;
+    if (d1 >= lim)
+        d1 = lim;
+    else if (d1 < 0.0)
+        d1 = 0.0;
     float v1 = (float)d1;
-    if (v1 >= (float)lim)
-        v1 = (float)lim;
-    if (v1 < 0.0f)
-        v1 = 0.0f;
 
     double r2 = gRandomLCG.RandomDoubleUniform();
     double d2 = r2 * lim;
-    float v2 = (float)d2;
-    if (v2 >= (float)lim)
-        v2 = (float)lim;
-    if (v2 < 0.0f)
-        v2 = 0.0f;
+    if (d2 >= lim)
+        d2 = lim;
+    else if (d2 < 0.0)
+        d2 = 0.0;
 
     out[0] = (in[3] - in[0]) * v1 + in[0];
-    out[1] = (in[4] - in[1]) * v2 + in[0];
+    out[1] = (in[4] - in[1]) * d2 + in[0];
     out[2] = 0.0f;
     out[3] = (in[3] - in[0]) * t + out[0];
     out[4] = (in[4] - in[1]) * t + out[1];

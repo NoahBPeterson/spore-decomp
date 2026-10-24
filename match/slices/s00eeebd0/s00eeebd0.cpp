@@ -88,6 +88,11 @@ struct SPVectorAllocator {  // SP's header-tracked allocator
 };
 
 template <typename T, typename A>
+struct Vector;
+template <typename T, typename A>
+void VectorDoInsertValue(Vector<T, A>* v, T* position, const T& value);
+
+template <typename T, typename A>
 struct Vector {
     T* mpBegin;
     T* mpEnd;
@@ -121,32 +126,6 @@ struct Vector {
         return position;
     }
 
-    // @ 0x00eeee80 (Key_) / 0x00eeefb0 (Entry32)
-    void DoInsertValue(T* position, const T& value) {
-        if (mpEnd != mpCapacity) {
-            const T* pValue = &value;
-            if ((pValue >= position) && (pValue < mpEnd))
-                ++pValue;
-            if (mpEnd)
-                ::new ((void*)mpEnd) T(*(mpEnd - 1));
-            eastl::move_backward(position, mpEnd - 1, mpEnd);
-            *position = *pValue;
-            ++mpEnd;
-        } else {
-            const size_type nPrevSize = size_type(mpEnd - mpBegin);
-            const size_type nNewSize = GetNewCapacity(nPrevSize);
-            T* const pNewData = DoAllocate(nNewSize);
-            T* pNewEnd = eastl::uninitialized_move<T>(mpBegin, position, pNewData);
-            if (pNewEnd)
-                ::new ((void*)pNewEnd) T(value);
-            pNewEnd = eastl::uninitialized_move<T>(position, mpEnd, pNewEnd + 1);
-            DoFree(mpBegin, size_type(mpCapacity - mpBegin));
-            mpBegin = pNewData;
-            mpEnd = pNewEnd;
-            mpCapacity = pNewData + nNewSize;
-        }
-    }
-
     // @ 0x00eef110
     void push_back(const T& value) {
         T* pEnd = mpEnd;
@@ -155,13 +134,53 @@ struct Vector {
             if (pEnd)
                 ::new ((void*)pEnd) T(value);
         } else {
-            DoInsertValue(mpEnd, value);
+            VectorDoInsertValue(this, mpEnd, value);
         }
     }
 };
 
 typedef Vector<Key_, KeyAllocator> KeyVector;
 typedef Vector<Entry32, SPVectorAllocator> EntryVector;
+
+// Shared body of the two DoInsertValue specializations.  The marker above each
+// wrapper below binds one VA to one emitted symbol (a single templated
+// definition would carry two VAs on one line and the resolver would map both
+// instantiations to the first address).
+template <typename T, typename A>
+void VectorDoInsertValue(Vector<T, A>* v, T* position, const T& value) {
+    if (v->mpEnd != v->mpCapacity) {
+        const T* pValue = &value;
+        if ((pValue >= position) && (pValue < v->mpEnd))
+            ++pValue;
+        if (v->mpEnd)
+            ::new ((void*)v->mpEnd) T(*(v->mpEnd - 1));
+        eastl::move_backward(position, v->mpEnd - 1, v->mpEnd);
+        *position = *pValue;
+        ++v->mpEnd;
+    } else {
+        const size_type nPrevSize = size_type(v->mpEnd - v->mpBegin);
+        const size_type nNewSize = v->GetNewCapacity(nPrevSize);
+        T* const pNewData = v->DoAllocate(nNewSize);
+        T* pNewEnd = eastl::uninitialized_move<T>(v->mpBegin, position, pNewData);
+        if (pNewEnd)
+            ::new ((void*)pNewEnd) T(value);
+        pNewEnd = eastl::uninitialized_move<T>(position, v->mpEnd, pNewEnd + 1);
+        v->DoFree(v->mpBegin, size_type(v->mpCapacity - v->mpBegin));
+        v->mpBegin = pNewData;
+        v->mpEnd = pNewEnd;
+        v->mpCapacity = pNewData + nNewSize;
+    }
+}
+
+// @ 0x00eeee80
+void DoInsertValue_Key(KeyVector* v, Key_* position, const Key_& value) {
+    VectorDoInsertValue(v, position, value);
+}
+
+// @ 0x00eeefb0
+void DoInsertValue_Entry32(EntryVector* v, Entry32* position, const Entry32& value) {
+    VectorDoInsertValue(v, position, value);
+}
 
 // Force the four instantiations.
 template struct Vector<Key_, KeyAllocator>;
