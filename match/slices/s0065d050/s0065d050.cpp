@@ -276,7 +276,7 @@ struct cSPUIFeedEdit {
   void UpdateGrid();         // 0065d260
   void FUN_0065d490();       // 0065d490
   bool SetPage(unsigned int page);  // 0065d4e0
-  void ShowAsset(int a, int b);     // 0065d570
+  bool ShowAsset(int a, int b);     // 0065d570
   bool TranslateToken(const wchar_t* token, void* out);  // 0065dc60
   void SetActive(bool b);    // 0065d9f0
   bool FUN_0065dd30(unsigned int id);  // 0065dd30 wrapper
@@ -364,12 +364,12 @@ bool cSPUIFeedEdit::SetPage(unsigned int page) {
 }
 
 // @ 0x0065d570
-void cSPUIFeedEdit::ShowAsset(int a, int b) {
+bool cSPUIFeedEdit::ShowAsset(int a, int b) {
   char* p = (char*)this;
   int idx = GetAssetIndex(a, b);
   unsigned int count = (*(int*)(p + 0xc8) - *(int*)(p + 0xc4)) >> 4;
   if ((unsigned int)idx >= count)
-    return;
+    return false;
   *(int*)(p + 0xac) = -1;
   unsigned int per = (*(int*)(p + 0xb4) - *(int*)(p + 0xb0)) >> 2;
   SetPage((unsigned int)idx / per);
@@ -399,6 +399,7 @@ void cSPUIFeedEdit::ShowAsset(int a, int b) {
       *(int*)(view + 0x30) = 2;
     }
   }
+  return true;
 }
 
 // @ 0x0065d410
@@ -423,6 +424,7 @@ void AssetRequestCallBack(int* param) {
 
 // @ 0x0065d6a0
 struct HashtableU64 {
+  char pad[0xc];
   int count;  // +0x0c
   int* erase(int* out, int* node, int* bucket);
 };
