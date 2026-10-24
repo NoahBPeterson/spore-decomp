@@ -72,6 +72,18 @@ template <class T> struct intrusive_ptr {
     intrusive_ptr() : mpObject(0) {}
     ~intrusive_ptr() { if (mpObject) mpObject->Release(); }
     T* operator->() const { return mpObject; }
+    intrusive_ptr& operator=(T* pObject)
+    {
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject)
+                pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp)
+                pTemp->Release();
+        }
+        return *this;
+    }
     // releases the current object and hands out the slot for an out parameter
     T** reset_out()
     {
@@ -160,9 +172,11 @@ struct ByteVector {                                          // eastl::vector, s
     ~ByteVector() { if (mpBegin && ((int*)mpBegin)[-1]) operator delete[](mpBegin); }
 };
 
+struct ResourceKey;
 struct cPlanet {
     uint32_t pad00[0x13c / 4];
     cPlanetRecord* mpPlanetRecord;   // +0x13c
+    ResourceKey* FUN_00c713e0();     // 0x00c713e0
     int      GetTScore();             // 0x00c70880
     float    GetAtmosphereScore();    // 0x00c709d0
     float    GetTemperatureScore();   // 0x00c70a20
@@ -209,7 +223,7 @@ struct cCreatureLike {
 struct cGameData {
     virtual int AddRef();
     virtual int Release();            // +0x04
-    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14(); virtual void v18();
+    virtual void v08(); virtual void* v0c(uint32_t type); virtual void v10(); virtual void v14(); virtual void v18();
     virtual void v1c(); virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
     virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c(); virtual void v40();
     virtual void v44(); virtual void v48(); virtual void v4c(); virtual void v50(); virtual void v54();
@@ -278,6 +292,7 @@ struct cGameNounManager {
     tGameDataVector* GetGameDataVector(void (*create)(), void (*f2)(), void (*filter)(), void (*f4)(),
                                        uint32_t typeID);   // 0x00b21340
     void RemoveNoun(cGameData* noun);                       // 0x00b225d0
+    cGameData* CreateNoun(uint32_t typeID);                 // 0x00b20c60
     void RemoveNounsOfType(uint32_t typeID);                // 0x00b22650
     void FUN_00b25ee0();                                    // 0x00b25ee0
     cTerrainSphere* GetCurrentTerrainSphere();              // 0x00f67d90
@@ -560,3 +575,239 @@ void cSimPlanetLowLOD::UpdateTerraforming(int arg)
 }
 
 }  // namespace SP
+
+// ===========================================================================
+// cSolarSystem serialization interface and the retail cSolarSystem layout.
+// Everything below is at global scope; the VA markers bind each definition.
+// ===========================================================================
+
+// ------------------------------------------------------------------ EA interfaces
+namespace EA {
+namespace COM {
+struct IUnknown32 {
+    virtual int AddRef();
+    virtual int Release();
+};
+}  // namespace COM
+namespace Swarm {
+struct cIVisualEffect {
+    virtual int AddRef();
+    virtual int Release();
+    virtual bool Start(int flags);
+    virtual void v0c();
+    virtual bool IsRunning();
+};
+}  // namespace Swarm
+template <typename T> struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount* AsPPTypeParam();                        // 0x00a16f40
+    T* operator->() const { return mpObject; }
+};
+}  // namespace EA
+
+struct ResourceKey {
+    uint32_t instanceID;
+    uint32_t typeID;
+    uint32_t groupID;
+};
+
+struct cSPVector3 { float x, y, z; };
+
+struct cHitSphere {
+    virtual int AddRef();
+    virtual int Release();
+    void SetTransform(cSPVector3* position, float size);  // 0x00c3f160
+    void SetRange(float minValue, float maxValue);        // 0x00c3f1b0
+    void SetOwner(void* owner);                           // 0x00c3f2d0
+};
+
+struct cCelestialBody : cGameData {
+    uint8_t    pad004[0xa0 - 4];
+    cSPVector3 mPosition;                                 // +0xa0
+    uint8_t    pad0ac[0xc0 - 0xac];
+    void*      mEffect;                                   // +0xc0
+    intrusive_ptr<cHitSphere> mHitSphere;                 // +0xc4
+    float      mHitSphereSize;                            // +0xc8
+};
+
+// ------------------------------------------------------------------ property access
+struct cPropertyList : EA::COM::IUnknown32 {
+    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
+    virtual bool HasKey(uint32_t instanceID, uint32_t groupID);                   // +0x28
+    virtual void QueryObject(uint32_t instanceID, uint32_t groupID,
+                             EA::COM::IUnknown32** result);                       // +0x2c
+};
+cPropertyList* PropertyManager();                                         // 0x0067de30
+bool GetPropertyAsKey(cPropertyList* list, uint32_t id, ResourceKey& value);  // 0x006a1250
+
+// ------------------------------------------------------------------ serialization stream
+struct StreamSub {
+    void* GetIO() { return (**(void* (__thiscall**)(void*))(*(void***)this + 6))(this); }
+};
+struct StreamObj {
+    StreamSub* GetSub() { return (**(StreamSub* (__thiscall**)(void*))(*(void***)this + 8))(this); }
+};
+struct cVarListSerializer {
+    uint32_t mData[0xa14 / 4];
+    void Ctor(void* owner, void* name, uint32_t tag);     // 0x00692f90
+    bool Serialize(void* stream);                         // 0x00692900
+};
+bool __cdecl EA_IO_WriteUint32(void* io, const void* p, uint32_t count,
+                               int32_t flags);            // 0x0093aa70
+extern "C" uint8_t g_1579d78;                             // 0x01579d78
+extern float g_147346c;                                   // 0x0147346c
+
+// ------------------------------------------------------------------ cSolarSystem
+struct cISerializableObject {
+    virtual int AddRef();
+    virtual int Release();
+    virtual void vDtor();
+    virtual void* AsInterface(uint32_t id);
+    virtual bool Write(void* stream);
+    virtual void Read(void* stream);
+    void* mpOwner;                                        // +0x04
+};
+struct cSolarSystemPrimary {
+    virtual int AddRef();
+    virtual int Release();
+    uint32_t mRefCount;                                   // +0x04
+};
+struct cSolarSystem : cSolarSystemPrimary, cISerializableObject {
+    void* mpPlanetsBegin;                                 // +0x10
+    void* mpPlanetsEnd;                                   // +0x14
+    void* mpPlanetsCapacity;                              // +0x18
+    uint32_t mPad1c;                                      // +0x1c
+    uint32_t mPad20;                                      // +0x20
+    cCelestialBody** mpCelestialBodiesBegin;              // +0x24
+    cCelestialBody** mpCelestialBodiesEnd;                // +0x28
+    cCelestialBody** mpCelestialBodiesCapacity;           // +0x2c
+    uint32_t mPad30;                                      // +0x30
+    uint32_t mPad34;                                      // +0x34
+    cCelestialBody* mStar1;                               // +0x38
+    cCelestialBody* mStar2;                               // +0x3c
+    void* mpPtolemaicBegin;                               // +0x40
+    void* mpPtolemaicEnd;                                 // +0x44
+    void* mpPtolemaicCapacity;                            // +0x48
+
+    cCelestialBody* GetStar(bool primary);
+    void ActivateHitSpheres(bool activate);
+};
+
+struct cStarEffectHost {
+    virtual int AddRef();
+    virtual int Release();
+    virtual void StartEffect(uint32_t id, int flags,
+                             EA::AutoRefCount<EA::Swarm::cIVisualEffect>* effect);
+};
+
+// ------------------------------------------------------------------ definitions
+// @ 0x00c83b60
+void* cISerializableObject::AsInterface(uint32_t id)
+{
+    if (id == 0x38cf949)
+        return (char*)this - 8;
+    if (id == 0x179c807)
+        return static_cast<cISerializableObject*>((cSolarSystem*)((char*)this - 8));
+    if (id == 0xee3f516e)
+        return static_cast<cISerializableObject*>((cSolarSystem*)((char*)this - 8));
+    return 0;
+}
+
+// @ 0x00c83b90
+bool cISerializableObject::Write(void* stream)
+{
+    StreamSub* sub = ((StreamObj*)stream)->GetSub();
+    uint32_t tag = 0x38cf949;
+    void* io = sub->GetIO();
+    EA_IO_WriteUint32(io, &tag, 1, 0);
+    cVarListSerializer ser;
+    ser.Ctor((char*)this - 8, &g_1579d78, 0x1a80d26);
+    return ser.Serialize(stream);
+}
+
+// @ 0x00c83c70
+cCelestialBody* cSolarSystem::GetStar(bool primary)
+{
+    if (primary)
+        return mStar1;
+    return mStar2;
+}
+
+// @ 0x00c83fd0
+void cSolarSystem::ActivateHitSpheres(bool activate)
+{
+    if (activate) {
+        for (cCelestialBody** it = mpCelestialBodiesBegin; it != mpCelestialBodiesEnd; ++it) {
+            cCelestialBody* body = *it;
+            if (!body->mHitSphere.mpObject) {
+                cGameNounManager* nouns = NounManager();
+                cGameData* noun = nouns->CreateNoun(0x32f9778);
+                cHitSphere* sphere = noun ? (cHitSphere*)noun->v0c(0x32f9777) : 0;
+                body->mHitSphere = sphere;
+                body->mHitSphere->SetTransform(&body->mPosition, body->mHitSphereSize);
+                body->mHitSphere->SetRange(0.0f, g_147346c);
+                body->mHitSphere->SetOwner(body);
+            }
+        }
+    } else {
+        for (cCelestialBody** it = mpCelestialBodiesBegin; it != mpCelestialBodiesEnd; ++it) {
+            cCelestialBody* body = *it;
+            if (body->mHitSphere.mpObject) {
+                NounManager()->RemoveNoun((cGameData*)body->mHitSphere.mpObject);
+                body->mHitSphere = 0;
+            }
+        }
+    }
+}
+
+namespace {
+// @ 0x00c83cf0
+void sStartStarEffect(EA::AutoRefCount<EA::Swarm::cIVisualEffect>* effect,
+                      cStarEffectHost* target, uint32_t type)
+{
+    if (effect->mpObject) {
+        if (!effect->mpObject->IsRunning())
+            effect->mpObject->Start(0);
+        if (target)
+            target->Release();
+        return;
+    }
+    switch (type) {
+    case 1: target->StartEffect(0x3d6ef7b, 0, effect->AsPPTypeParam()); break;
+    case 2: target->StartEffect(0x3d6eef6, 0, effect->AsPPTypeParam()); break;
+    case 3: target->StartEffect(0x3d6ef40, 0, effect->AsPPTypeParam()); break;
+    case 4: target->StartEffect(0x3d6ef4d, 0, effect->AsPPTypeParam()); break;
+    case 5: target->StartEffect(0x3d6ef59, 0, effect->AsPPTypeParam()); break;
+    case 6: target->StartEffect(0x3d6ef67, 0, effect->AsPPTypeParam()); break;
+    }
+    effect->mpObject->Start(0);
+    if (target)
+        target->Release();
+}
+
+// @ 0x00c83e40
+bool Execute(cPlanet* planet)
+{
+    if (planet->FUN_00c713e0()->instanceID == 0)
+        return false;
+    ResourceKey key = *planet->FUN_00c713e0();
+    uint32_t group = (key.groupID & 0xe0ff28ff) | 0x2800;
+    key.typeID = 0;
+    if (!PropertyManager()->HasKey(key.instanceID, group))
+        return false;
+    intrusive_ptr<EA::COM::IUnknown32> h1;
+    PropertyManager()->QueryObject(key.instanceID, group, h1.reset_out());
+    intrusive_ptr<EA::COM::IUnknown32> h2;
+    PropertyManager()->QueryObject(0x752f1cd8, 0x40842000, h2.reset_out());
+    if (h1.mpObject && h2.mpObject) {
+        ResourceKey k1 = { 0, 0, 0 };
+        ResourceKey k2 = { 0, 0, 0 };
+        bool b1 = GetPropertyAsKey((cPropertyList*)h1.mpObject, 0xf9efbb, k1);
+        bool b2 = GetPropertyAsKey((cPropertyList*)h2.mpObject, 0xf9efbb, k2);
+        if (b1 && b2 && k1.instanceID != k2.instanceID)
+            return true;
+    }
+    return false;
+}
+}  // namespace

@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c830f0/s00c830f0.cpp  ?AsInterface@cISerializableObject@@UAEPAXI@Z  00c83b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c830f0/s00c830f0.cpp  ?GetStar@cSolarSystem@@QAEPAUcCelestialBody@@_N@Z  00c83c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c830f0/s00c830f0.cpp  ?ActivateHitSpheres@cSolarSystem@@QAEX_N@Z  00c83fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
