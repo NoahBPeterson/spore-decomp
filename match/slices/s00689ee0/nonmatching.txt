@@ -1,16 +1,16 @@
 00689ee0  178  cCommandInfo copy ctor: member init order right, but cl homes source/dest in different regs and uses push ecx instead of sub esp,8
-0068a040  140  find-by-name loop: begin iteration + case-insensitive compare correct, but loop/compare scheduling and register use differ; equiv: FAIL (5/15 valid inputs mismatched at import call #0 tolower)
-0068a250  95   map node allocator: new-expression body correct, original keeps an EH frame + cleanup around operator new/Variant assign
-0068a320  148  command-string fixup: control flow reproduced with gotos, but cl folds the length>>1 to test and lays blocks out differently
+0068a040  141  find-by-name loop: signed vs unsigned length fix (int lengths, qlen<nlen ? qlen:nlen); loop/compare scheduling still differs [equiv: PASS 291 valid inputs, 94.1% coverage]
+0068a250  98   map node allocator: __stdcall (ret 4) so the callee pops its one arg; original keeps an EH frame + cleanup around operator new/Variant assign [equiv: PASS 342 valid inputs, 100.0% coverage]
+0068a320  134  command-string fixup: __stdcall (ret 8) so the callee pops both args; cl folds the length>>1 to test and lays blocks out differently [equiv: WEAK 109 valid inputs, 61.0% coverage]
 0068a720  78   ~cCommandParameterSet: vtable stores + DoNukeSubtree correct, EH state table from real base-class dtors not reproduced
 0068a870  64   RemoveParameter: find/erase sequence correct, but cl uses an extra callee-saved reg and reads the iterator from a different slot
-0068a8d0  91   ~cStringCommandGenerator: members destroyed correctly, EH frame/state from base-class dtors not reproduced
+0068a8d0  98   ~cStringCommandGenerator: DoDestroyValues invoked as thiscall with this=&mArrBegin; EH frame/state from base-class dtors not reproduced [equiv: PASS 236 valid inputs, 100.0% coverage]
 0068a970  65   RegisterCommandParameterInfo: find/assign/format paths present, block layout and assign argument setup differ
-0068aae0  164  RegisterCommandGenerator: refcount, set-find/insert and info loop present, EH states/temporaries differ
-0068abb0  174  UnregisterCommandGenerator: set-find/erase + release present, EH states/temporaries differ
-0068ac60  160  ExecuteCommandFormatted: Format + virtual dispatch + string cleanup present, EH frame and va_list forwarding differ
-0068ad30  20   cCommandParameterSet ctor: vtable stores and map anchor init correct, cl reorders/CSEs the zero stores
-0068ad90  380  ExecuteCommand: variant type selection, locale path and cleanup present, scheduling/regalloc differ throughout
+0068aae0  178  RegisterCommandGenerator: insert/Walk helpers called thiscall (ecx=set / this); info loop walks the command-info map (cm*) not the generator set [equiv: PASS 302 valid inputs, 78.1% coverage]
+0068abb0  152  UnregisterCommandGenerator: set-find/erase + release correct, body unchanged by this pass; EH states/temporaries differ [equiv: PASS 388 valid inputs, 72.6% coverage]
+0068ac60  209  ExecuteCommandFormatted: format string is the dereferenced fmt argument (*(const wch**)fmt); EH frame and va_list forwarding differ [equiv: WEAK 306 valid inputs, 50.8% coverage]
+0068ad30  41   cCommandParameterSet ctor: whole dword at +0x1c zeroed via the aColorWord union (color + padding); cl reorders/CSEs the zero stores [equiv: PASS 400 valid inputs, 100.0% coverage]
+0068ad90  357  ExecuteCommand: local Variant initialised from v by Sub689e80 (thiscall), chosen/type read from it; b tested as a byte value, not dereferenced; scheduling/regalloc differ [equiv: PASS 248 valid inputs, 65.9% coverage]
 0068af10  133  cStringCommandGenerator ctor: vtable stores + parameter-set new correct, EH frame around new-expression differs
 0068a460  104  vector<WStr>::vector(n, alloc) (thiscall ret 8, returns this): base ctor 0x7c7a40 + uninitialized_fill_n(0x555c40) with an empty-string temp; original drops the temp's destructor from the normal path (EH funclet only), cl keeps it [equiv: PASS 271 valid inputs, 100% coverage]
 0068a7a0  79  AdjustParameterCount: add loop through vtable +0x24 with a Variant local (inline dtor), shrink loop via RBTreeDecrement/Increment/Erase; original holds two separate copies of the map anchor in ebx/ebp, which spills n to the stack [equiv: WEAK 98 valid inputs, 68.7% coverage]

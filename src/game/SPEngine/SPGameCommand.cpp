@@ -174,8 +174,10 @@ struct VMap {
     VMapNode* aRight;        // +0x04 (anchor, also end())
     VMapNode* aLeft;         // +0x08 (anchor begin)
     VMapNode* aParent;       // +0x0c (root)
-    u8 aColor;               // +0x10
-    u8 pad1[3];
+    union {
+        u32 aColorWord;      // +0x10 (whole dword zeroed by the anchor init)
+        struct { u8 aColor; u8 pad1[3]; };
+    };
     u32 mnSize;              // +0x14
     u32 mAlloc;              // +0x18
 
@@ -580,12 +582,12 @@ u32 cCommandServer::FindCommandInfoByName(const wch* name)
     CInfoNode* endNode = (CInfoNode*)&cmRight;
     while (p != endNode) {
         const wch* nrl = p->mValue.msName.mpBegin;
-        unsigned nlen = (unsigned)(p->mValue.msName.mpEnd - nrl);
+        int nlen = (int)(p->mValue.msName.mpEnd - nrl);
         const wch* q = name;
         while (*q) q += 1;
-        unsigned qlen = (unsigned)(q - name);
-        unsigned mn = nlen < qlen ? nlen : qlen;
-        int r = WMemCmp(nrl, name, mn);
+        int qlen = (int)(q - name);
+        int mn = qlen < nlen ? qlen : nlen;
+        int r = WMemCmp(nrl, name, (unsigned)mn);
         if (r == 0 && nlen == qlen)
             return p->mValue.mnID;
         p = (CInfoNode*)RBTreeIncrement(p);
@@ -594,7 +596,7 @@ u32 cCommandServer::FindCommandInfoByName(const wch* name)
 }
 
 // @ 0x0068a250
-extern "C" VMapNode* FUN_0068a250(const PairUV* src)
+extern "C" VMapNode* __stdcall FUN_0068a250(const PairUV* src)
 {
     return new (gAllocTag, 0u, 0u, gEASTLFile, 0xd1u) VMapNode(*src);
 }
@@ -607,7 +609,7 @@ extern "C" WStr* FUN_0068a2e0()
 }
 
 // @ 0x0068a320
-extern "C" void FUN_0068a320(WStr* src, WStr* dst)
+extern "C" void __stdcall FUN_0068a320(WStr* src, WStr* dst)
 {
     if (dst != src)
         dst->Assign(src->mpBegin, src->mpEnd);
@@ -740,7 +742,7 @@ cStringCommandGenerator::~cStringCommandGenerator()
     if (mpEmptySet) {
         ((void(__thiscall*)(void*))VFN(mpEmptySet, 4))(mpEmptySet);
     }
-    VecDestroyValues(mArrBegin, mArrEnd);
+    ((void(__thiscall*)(void*, void*, void*))VecDestroyValues)(&mArrBegin, mArrBegin, mArrEnd);
     if (mArrBegin && *(int*)((char*)mArrBegin - 4) != 0)
         EASTL_dealloc(mArrBegin);
     vtbl1 = &vtbl_Base1;
@@ -786,14 +788,17 @@ bool cCommandServer::RegisterCommandGenerator(void* gen)
     if (gen)
         ((void(__thiscall*)(void*))VFN(gen, 0))(gen);
     VMap* set = (VMap*)((char*)this + 0x2c);
-    CGenNode* endNode = (CGenNode*)&csRight;
+    CGenNode* genEnd = (CGenNode*)&csRight;
     CGenNode* node = (CGenNode*)set->find((u32)(size_t)gen).mpNode;
-    if (node == endNode) {
-        void* v = 0;
-        Sub68a140((char*)this + 0x2c, &gen, v);
-        if (csSize != 0) {
-            for (CGenNode* p = csLeft; p != endNode; p = (CGenNode*)RBTreeIncrement(p)) {
-                Sub689dc0((char*)p + 0x14, 1, gen);
+    if (node == genEnd) {
+        struct GenIter { CGenNode* p; u32 flag; } out;
+        ((void(__thiscall*)(VMap*, GenIter*, void*, unsigned))Sub68a140)(
+            set, &out, &gen, (unsigned)(size_t)this);
+        if (cmSize != 0) {
+            CInfoNode* infoEnd = (CInfoNode*)&cmRight;
+            for (CInfoNode* p = cmLeft; p != infoEnd; p = (CInfoNode*)RBTreeIncrement(p)) {
+                ((void(__thiscall*)(cCommandServer*, void*, unsigned, void*))Sub689dc0)(
+                    this, &p->mValue, 1, gen);
             }
         }
     }
@@ -827,7 +832,7 @@ bool cCommandServer::UnregisterCommandGenerator(void* gen)
 int cCommandServer::ExecuteCommandFormatted(const wch* fmt, ...)
 {
     WStr s;
-    s.Format(fmt, (void*)((char*)&fmt + 4));
+    s.Format(*(const wch**)fmt, (void*)((char*)&fmt + 4));
     if (s.mpBegin != s.mpEnd) {
         int r = ((int(__thiscall*)(cCommandServer*, WStr*))VFN(this, 0x50))(this, &s);
         if (s.mpBegin && (((unsigned)((char*)s.mpEndCap - (char*)s.mpBegin)) & 0xfffffffeu) > 2u)
@@ -848,7 +853,7 @@ cCommandParameterSet::cCommandParameterSet()
     vtbl1 = &vtbl_cCommandParameterSet2;
     mParameterMap.aLeft = 0;
     mParameterMap.aParent = 0;
-    mParameterMap.aColor = 0;
+    mParameterMap.aColorWord = 0;
     mParameterMap.aRight = (VMapNode*)&mParameterMap.aRight;
     mParameterMap.aLeft = (VMapNode*)&mParameterMap.aRight;
     mParameterMap.aParent = 0;
@@ -873,24 +878,21 @@ bool cCommandParameterSet::ExecuteCommand(int cmd, void* a, void* b)
     void* v = ((void*(__thiscall*)(cCommandParameterSet*, int))VFN(this, 0x1c))(this, cmd);
     if (!v)
         return false;
-    Sub689e80(v);
     Variant var;
-    var.mFlags = 0;
-    var.mTypeId = 0;
-    unsigned short type = ((Variant*)v)->mTypeId;
+    ((Variant*(__thiscall*)(Variant*, void*))Sub689e80)(&var, v);
     void* chosen;
-    if (type == 0x13 || type == 0x10) {
-        if (((Variant*)v)->mFlags & 0x30)
-            chosen = v;
+    if (var.mTypeId == 0x13 || var.mTypeId == 0x10) {
+        if (var.mFlags & 0x30)
+            chosen = (void*)(size_t)var.raw0;
         else
-            chosen = (type != 0) ? v : 0;
+            chosen = (var.mTypeId != 0) ? (void*)&var : 0;
     } else {
         chosen = FUN_0068a2e0();
     }
     int r;
-    if (*(char*)b == 0) {
+    if (((char)(size_t)b) == 0) {
         WStr tmp;
-        ((WStr*)v)->MakeLower();
+        ((WStr*)chosen)->MakeLower();
         tmp.RangeInit(((WStr*)a)->mpBegin, ((WStr*)a)->mpEnd);
         tmp.MakeLower();
         r = MakeLocaleAvailable(chosen, &tmp);
