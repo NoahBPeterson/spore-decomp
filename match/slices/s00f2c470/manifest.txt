@@ -1,2 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-# No byte-exact functions in this slice.
+slices/s00f2c470/s00f2c470.cpp  ?resize@Vec34@@QAEXIABUE34@@@Z  00f2d3d0

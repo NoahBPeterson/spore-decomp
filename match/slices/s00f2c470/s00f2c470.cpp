@@ -560,8 +560,32 @@ SmallObj* __fastcall FUN_00f2d330(SmallObj* p)
     return p;
 }
 
+// ---------------------------------------------------------------------------
+// eastl::vector<E34>: begin/end/capacity at +0x00/+0x04/+0x08, 0x34-byte elements.
+// DoInsertValues is FUN_00f2cb50; its recorded free-function spelling carries the vector in
+// ecx (plus an unused register arg), so the member ABI is used through this cast.
+typedef void (__thiscall *TCins34)(void* self, E34* pos, uint n, const E34& value);
+
+struct Vec34 {
+    E34* mBegin;      // +0x00
+    E34* mEnd;        // +0x04
+    E34* mCapacity;   // +0x08
+    uint size() const { return (uint)(mEnd - mBegin); }   // element count (0x34 stride)
+    void DoErase(E34* first, E34* last);                  // 0x00f2cb00
+    void resize(uint n, const E34& value);                // 0x00f2d3d0
+};
+
 // @ 0x00f2d3d0
-void FUN_00f2d3d0() {}
+// resize(n, value): shrink by erasing the tail (n <= size) or grow by inserting
+// size()-to-n copies of value at the end (n > size).
+void Vec34::resize(uint n, const E34& value)
+{
+    if (n > size()) {
+        ((TCins34)FUN_00f2cb50)(this, mEnd, n - size(), value);
+    } else {
+        DoErase(mBegin + n, mEnd);
+    }
+}
 
 // ---------------------------------------------------------------------------
 // The remaining 0x238-stride and 0x188-stride helpers.

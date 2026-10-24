@@ -1,3 +1,4 @@
 # Slice s00f2c470 names.
 # All functions are scenario-resource / cBuildingData copy and serialization
 # helpers (0x188, 0x238, 0x34 and 0x44 strides).  No exact names confirmed.
+00f2d3d0 ?resize@Vec34@@QAEXIABUE34@@@Z  # eastl::vector<E34>::resize(n, value) — shrink by DoErase (0x00f2cb00) when n <= size, else insert n-size copies via DoInsertValues (0x00f2cb50); 0x34-byte elements, byte-exact over the real 96-byte extent (manifest MATCH)
