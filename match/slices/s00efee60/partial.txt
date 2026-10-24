@@ -1,5 +1,4 @@
 # va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
-00eff0c0  -  visibility/placement update loop: only the initial guard reproduced
 00eff280  181  placement commit (variant): body approximated
 00eff3b0  163  flag/object reset: body approximated
 00eff4c0  205  scroll/zoom adjust: SSE clamp body approximated
