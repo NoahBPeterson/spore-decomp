@@ -1,2 +1,6 @@
 # va  diff-bytes  reason
 00eede20  46  noun-from-key factory complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; only the ResourceKey.typeID store is scheduled before the vcall setup instead of after
+00eee530  525  quaternion + cross-product helper complete; equiv PASS 400/400 (100% cov); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; x87 fld/fstp copies emitted as SSE movss and the -0.0 sign mask is a local constant instead of the shared 0x13eb8b0 load
+00eee760  463  range-walk position/quaternion update complete; equiv WEAK 180 valid (need 200), 10.4% cov; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; the original faults on most random pool/list inputs so the loop body is barely reached
+00eee970  161  eastl vector-of-12B-elements assign complete; equiv WEAK 90 valid (need 200), 49.5% cov; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; random begin/end/capacity fields make the grow/delete and copy paths die on unmapped memory
+00eeea50  315  resource-key lookup + property-text read complete; equiv WEAK 400 valid (need 200), 15.8% cov; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; random keys satisfy neither branch's asset/property lookup so the inner vcall paths are seldom taken

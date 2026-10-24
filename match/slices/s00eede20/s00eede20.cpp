@@ -143,6 +143,54 @@ extern GameState* gpGameState;       // 0x016c7aa4
 extern Vector3 gVec3Zero;            // 0x016c78cc
 extern char gQuatRef[];              // 0x015ac960
 
+float* __cdecl FUN_0059aed0(float* out, const float* a, const float* b);        // 0x0059aed0
+void*  __stdcall FUN_00f3d780(void* p);                                          // 0x00f3d780
+void   __cdecl FUN_00f3da90(void* obj, int z);                                   // 0x00f3da90
+void*  __stdcall FUN_00eeddc0(unsigned n, const void* first, const void* last);  // 0x00eeddc0
+void*  __cdecl FUN_00b84c80(const void* first, const void* last, void* dst);     // 0x00b84c80
+void   __cdecl FUN_00512050(void* out, void* mid, void* val, void* endp, void* val2);  // 0x00512050
+void   __cdecl FUN_00f47380(void* p);                                            // 0x00f47380
+
+// eastl::vector<AnalysisInfo (12 bytes)>-style container used by 00eee970.
+struct Vec12 {
+    uint8_t* mpBegin;
+    uint8_t* mpEnd;
+    uint8_t* mpCapacity;
+    uint8_t* mpUnk0c;
+    uint8_t* mpEmptySentinel;
+    void Assign(const void* pFirst, const void* pLast, void* pOut);
+};
+
+// One entry of the list walked by 00eee760: object pointer, a position, a quaternion.
+struct ListEntry { void* pObj; float p[3]; float q[4]; };
+struct ListRange { ListEntry* pBegin; ListEntry* pEnd; };
+
+// ---- 0x00eeea50 helpers -------------------------------------------------------------------
+// A 3-dword resource-key-like value: instance, type, group.
+struct AssetRef { void* p0; void* type; void* p2; };
+struct ResKey3 { void* a; uint32_t b; void* c; };
+struct CSString { char pad[8]; };                       // opaque cString
+
+// Member calls made through ecx (address encoded in the member name).
+struct ExtCall {
+    void FUN_00423650(const wchar_t* first, const wchar_t* last);  // 0x00423650 basic_string::assign
+    void FUN_005c3d90(const wchar_t* s);                           // 0x005c3d90 basic_string::append
+    const wchar_t* FUN_00414e10();                                 // 0x00414e10 cAssetMetadata::GetName
+    void FUN_006b5060();                                           // 0x006b5060 cString ctor
+    void FUN_006b5240();                                           // 0x006b5240 cString dtor
+    const wchar_t* FUN_006b55c0();                                 // 0x006b55c0 cString::GetText
+};
+
+// Resource manager: slot 3 (offset 0xc) takes a key, an out slot, and four more args.
+struct ResMgr {
+    SLOT(0) SLOT(1) SLOT(2)
+    virtual void Slot3(void* key, void** out, int, int, int, int);  // +0xc
+};
+
+bool __cdecl FUN_004bbe20(void* p, int one);                     // 0x004bbe20 SetAssetData
+void* __cdecl FUN_0067dcd0();                                    // 0x0067dcd0 GetManager
+bool __cdecl FUN_006a1360(void* prop, int id, void* cs);         // 0x006a1360 GetPropertyAsText
+
 // @ 0x00eede20
 Noun* __cdecl FUN_00eede20(const ResourceKey* key, const Vector3* pos, const Quaternion* ori, float scale,
                            bool bOwned, int a6, int a7, int a8, int a9)
@@ -339,23 +387,163 @@ Noun* __cdecl FUN_00eede20(const ResourceKey* key, const Vector3* pos, const Qua
 }
 
 // ================================================================ 0x00eee530
-void __cdecl FUN_00eee530(void)
+// @ 0x00eee530
+void __cdecl FUN_00eee530(float* p1, float* p2, float* p3, float* p4, float* out5, float* out6)
 {
+    float nq[4];
+    float d[3];
+    float aux[3];
+    float* r;
+    nq[0] = -p2[0];
+    nq[1] = -p2[1];
+    nq[2] = -p2[2];
+    nq[3] = p2[3];
+    d[0] = p3[0] - p1[0];
+    d[1] = p3[1] - p1[1];
+    d[2] = p3[2] - p1[2];
+    r = FUN_0059aed0(aux, d, nq);
+    out5[0] = r[0];
+    out5[1] = r[1];
+    out5[2] = r[2];
+    {
+        float a0 = p4[0];
+        float a1 = p4[1];
+        float a2 = p4[2];
+        float a3 = p4[3];
+        float b0 = nq[0];
+        float b1 = nq[1];
+        float b2 = nq[2];
+        float b3 = nq[3];
+        float t0 = a2 * b1 - a1 * b2;
+        float t1 = b2 * a0 - a2 * b0;
+        float t2 = a1 * b0 - a0 * b1;
+        out6[0] = (b3 * a0 + a3 * b0) + t0;
+        out6[1] = (a1 * b3 + a3 * b1) + t1;
+        out6[2] = (a2 * b3 + a3 * b2) + t2;
+        out6[3] = a3 * b3 - ((a2 * b2 + a1 * b1) + a0 * b0);
+    }
 }
 
 // ================================================================ 0x00eee760
-void __cdecl FUN_00eee760(void)
+// @ 0x00eee760
+void __cdecl FUN_00eee760(void* arg1, ListRange* list)
 {
+    {
+        void* gsv = *(void**)((char*)gpGameState + 0x74);   // loaded into a dead local by the original
+        (void)gsv;
+    }
+    if (!arg1)
+        return;
+    if (list->pBegin == list->pEnd)
+        return;
+    void* pv = FUN_00f3d780(arg1);
+    void* edi;
+    if (pv)
+        edi = (void*)((Noun*)pv)->Cast(0x1186577);
+    else
+        edi = 0;
+    ListEntry* it = list->pBegin;
+    ListEntry* end = list->pEnd;
+    if (it == end)
+        return;
+    do {
+        float aux[3];
+        float* m = (float*)((void*(__thiscall*)(void*))(*(void***)edi)[0x30 / 4])(edi);
+        float* rr = FUN_0059aed0(aux, it->p, m);
+        float* sp = (float*)((void*(__thiscall*)(void*))(*(void***)edi)[0x2c / 4])(edi);
+        float* pos = (float*)((char*)it->pObj + 4);
+        pos[0] = sp[0] + rr[0];
+        pos[1] = sp[1] + rr[1];
+        pos[2] = sp[2] + rr[2];
+        float* a = (float*)((void*(__thiscall*)(void*))(*(void***)edi)[0x30 / 4])(edi);
+        float a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3];
+        float e0 = it->q[0], e1 = it->q[1], e2 = it->q[2], e3 = it->q[3];
+        float t0 = e3 * a1 - e1 * a2;
+        float t1 = a2 * e0 - e3 * a0;
+        float t2 = e1 * a0 - e0 * a1;
+        float* oq = (float*)((char*)it->pObj + 0x10);
+        oq[0] = (a3 * e0 + e3 * a0) + t0;
+        oq[1] = (a3 * e1 + e3 * a1) + t1;
+        oq[2] = (a3 * e2 + e3 * a2) + t2;
+        oq[3] = e3 * a3 - ((e2 * a2 + e0 * a0) + e1 * a1);
+        FUN_00f3da90(it->pObj, 0);
+        ++it;
+    } while (it != end);
 }
 
 // ================================================================ 0x00eee970
-int __stdcall FUN_00eee970(int a, int b, int c)
+// @ 0x00eee970
+void Vec12::Assign(const void* pFirst, const void* pLast, void* pOut)
 {
-    (void)a; (void)b; (void)c;
-    return 0;
+    uint8_t* pOld = mpBegin;
+    unsigned n = (unsigned)((int)((const uint8_t*)pLast - (const uint8_t*)pFirst) / 12);
+    if (n > (unsigned)((int)(mpCapacity - mpBegin) / 12)) {
+        uint8_t* pNew = (uint8_t*)FUN_00eeddc0(n, pFirst, pLast);
+        if (pOld && pOld != mpEmptySentinel)
+            FUN_00f47380(pOld);
+        mpBegin = pNew;
+        mpEnd = pNew + n * 12;
+        mpCapacity = pNew + n * 12;
+        return;
+    }
+    unsigned m = (unsigned)((int)(mpEnd - mpBegin) / 12);
+    if (n <= m) {
+        mpEnd = (uint8_t*)FUN_00b84c80(pFirst, pLast, mpBegin);
+        return;
+    }
+    uint8_t* pMid = (uint8_t*)pFirst + m * 12;
+    FUN_00b84c80(pFirst, pMid, mpBegin);
+    FUN_00512050(&pOut, pMid, pOut, mpEnd, pOut);
+    mpEnd = (uint8_t*)pOut;
 }
 
 // ================================================================ 0x00eeea50
-void __cdecl FUN_00eeea50(void)
+// @ 0x00eeea50
+bool __cdecl FUN_00eeea50(AssetRef* arg1, ExtCall* outStr)
 {
+    bool bl = false;
+    if (FUN_004bbe20((void*)arg1->type, 1)) {
+        ResKey3 key;
+        key.a = arg1->p0;
+        key.b = 0x30bdee3;
+        key.c = arg1->p2;
+        void* slot = 0;
+        ResMgr* mgr = (ResMgr*)FUN_0067dcd0();
+        mgr->Slot3(&key, &slot, 0, 0, 0, 0);
+        if (slot) {
+            void* p = ((void*(__thiscall*)(void*, int))(*(void***)slot)[0xc / 4])(slot, 0x30bdee3);
+            if (p) {
+                ((void(__thiscall*)(void*))(*(void***)p)[0])(p);
+                const wchar_t* name = ((ExtCall*)p)->FUN_00414e10();
+                const wchar_t* end = name;
+                while (*end)
+                    ++end;
+                outStr->FUN_00423650(name, end);
+                bl = true;
+                ((void(__thiscall*)(void*))(*(void***)p)[4 / 4])(p);
+            }
+            ((void(__thiscall*)(void*))(*(void***)slot)[4 / 4])(slot);
+        }
+        return bl;
+    }
+    if (arg1->type != (void*)0xb1b104)
+        return bl;
+    CSString cs;
+    ((ExtCall*)&cs)->FUN_006b5060();
+    {
+        void* slot = 0;
+        PropMgr* pm = FUN_0067de30();
+        bool ok = ((bool(__thiscall*)(void*, uint32_t, uint32_t, IPropList**))(*(void***)pm)[0x2c / 4])
+            (pm, (uint32_t)arg1->p0, (uint32_t)arg1->p2, (IPropList**)&slot);
+        if (ok) {
+            if (FUN_006a1360(slot, 0x71e9bd1, &cs)) {
+                outStr->FUN_005c3d90(((ExtCall*)&cs)->FUN_006b55c0());
+                bl = true;
+            }
+        }
+        ((ExtCall*)&cs)->FUN_006b5240();
+        if (slot)
+            ((void(__thiscall*)(void*))(*(void***)slot)[4 / 4])(slot);
+    }
+    return bl;
 }
