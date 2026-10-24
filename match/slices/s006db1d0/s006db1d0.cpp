@@ -2,6 +2,20 @@
 // one acos-len projection), same shape as slice s006da360.
 #include "../s006ccf50/s006ccf50.h"
 
+// The original ends the acos tail in x87 fsqrt on the 24-bit device-thread control word: the
+// root is never narrowed to float and no _CIsqrt import is made.  cl15 will not inline a sqrt,
+// so take the root from the x87 itself.
+static inline double BakeSqrtX87(double x)
+{
+    __asm
+    {
+        fld qword ptr [x]
+        fsqrt
+        fstp qword ptr [x]
+    }
+    return x;
+}
+
 int __cdecl FUN_0071ddc0(void* obj, int code, int a, int b, int c);
 
 unsigned char __cdecl FUN_006d9e30(void*, int, ElemTable*, BakeEntry*, StreamDesc*, float*, ScaleInfo*, int, int, Handle*);
@@ -40,14 +54,14 @@ unsigned char __cdecl FUN_006da290(void*, int, ElemTable*, BakeEntry*, StreamDes
             if (!(w2 >= 1 && w2 <= 4))                                                           \
                 type = (w2 == 10) ? 4 : 1;                                                       \
         }                                                                                        \
-        unsigned char _r;                                                                        \
+        bool _r;                                                                                 \
         switch (type)                                                                            \
         {
 
 // ---------------------------------------------------------------------------
 // 0x006db1d0: dot projection, out0 uses component 0, weight uses component 2.
 // @ 0x006db1d0
-unsigned char FUN_006db1d0(float* out, int count, ElemTable* table, BakeEntry* entries,
+bool FUN_006db1d0(float* out, int count, ElemTable* table, BakeEntry* entries,
                            StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)
 {
     DISPATCH_PROLOGUE(table)
@@ -75,8 +89,11 @@ fallback:
         do
         {
             float* p = (float*)(pos->base + pos->stride * e->f0);
-            o[0] = (axis[0] * p[0] + axis[2]) * scaleInfo->scale;
-            o[1] = (1.0f - (axis[3] + axis[1] * p[2])) * scaleInfo->scale;
+            float scale = scaleInfo->scale;
+            float v0 = BakeAddSS(BakeMulSS(axis[0], p[0]), axis[2]);
+            float v1 = BakeSubSS(1.0f, BakeAddSS(axis[3], BakeMulSS(axis[1], p[2])));
+            o[0] = BakeMulSS(v0, scale);
+            o[1] = BakeMulSS(v1, scale);
             e += 1;
             o += 2;
         } while (--n);
@@ -87,7 +104,7 @@ fallback:
 // ---------------------------------------------------------------------------
 // 0x006db6b0: dot projection, out0 uses component 1, weight uses component 2.
 // @ 0x006db6b0
-unsigned char FUN_006db6b0(float* out, int count, ElemTable* table, BakeEntry* entries,
+bool FUN_006db6b0(float* out, int count, ElemTable* table, BakeEntry* entries,
                            StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)
 {
     DISPATCH_PROLOGUE(table)
@@ -115,8 +132,11 @@ fallback:
         do
         {
             float* p = (float*)(pos->base + pos->stride * e->f0);
-            o[0] = (axis[0] * p[1] + axis[2]) * scaleInfo->scale;
-            o[1] = (1.0f - (axis[3] + axis[1] * p[2])) * scaleInfo->scale;
+            float scale = scaleInfo->scale;
+            float v0 = BakeAddSS(BakeMulSS(axis[0], p[1]), axis[2]);
+            float v1 = BakeSubSS(1.0f, BakeAddSS(axis[3], BakeMulSS(axis[1], p[2])));
+            o[0] = BakeMulSS(v0, scale);
+            o[1] = BakeMulSS(v1, scale);
             e += 1;
             o += 2;
         } while (--n);
@@ -127,7 +147,7 @@ fallback:
 // ---------------------------------------------------------------------------
 // 0x006dbba0: acos-len projection (weight = axis.y * radius), components (0,1).
 // @ 0x006dbba0
-unsigned char FUN_006dbba0(float* out, int count, ElemTable* table, BakeEntry* entries,
+bool FUN_006dbba0(float* out, int count, ElemTable* table, BakeEntry* entries,
                            StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)
 {
     DISPATCH_PROLOGUE(table)
@@ -155,12 +175,17 @@ fallback:
         do
         {
             float* p = (float*)(pos->base + pos->stride * e->f0);
+            float scale = scaleInfo->scale;
             float dOther = p[1] - axis[3];
             float dNum = p[0] - axis[2];
-            float len = (float)sqrt(dOther * dOther + dNum * dNum);
-            float angle = (float)acos(dNum / len);
-            o[0] = ((axis[0] * angle) * 1.2732406f) * scaleInfo->scale;
-            o[1] = (1.0f - axis[1] * len) * scaleInfo->scale;
+            double rad = (double)dOther * dOther + (double)dNum * dNum;
+            double dlen = BakeSqrtX87(rad);
+            float len = (float)dlen;
+            double a = acos((double)dNum / dlen);
+            float ang = (float)(a * axis[0] * 1.2732406f);
+            float w = BakeSubSS(1.0f, BakeMulSS(axis[1], len));
+            o[0] = BakeMulSS(ang, scale);
+            o[1] = BakeMulSS(w, scale);
             e += 1;
             o += 2;
         } while (--n);
