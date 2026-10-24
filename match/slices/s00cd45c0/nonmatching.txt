@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00cd45c0  173  complete; loop object held in esi not eax and some block placement differ; equiv WEAK (no mismatch, low coverage)
+00cd4720    8  complete; store/load scheduling of the vtable store and ref load is permuted; equiv PASS
+00cd4770  471  complete; size 586 vs 553 (extra/missing blocks in the mode-switch logic); equiv UNSUPPORTED (fake-arity)
+00cd49d0  215  complete; same-size reconstruction, register/scheduling differences throughout; equiv WEAK (no mismatch)
+00cd4e10  310  complete; size 341 vs 380, abridged branch bodies (vtable stores expanded); equiv WEAK (no mismatch)
+00cd50b0  211  complete; size 320 vs 323, register allocation of the vector walk differs; equiv FAIL call #1 this-pointer differs
+00cd5200   68  complete; thiscall arg-push cleanup (add esp,0x10 vs 0x4), frame 0x14 vs 0x8, key imm-push; equiv UNSUPPORTED (CWinMgr::FindWindowByID unresolved)
+00cd52e0   44  complete; float store scheduling around fnstcw/fistp differs (same 216-byte body); equiv WEAK (no mismatch)
+00cd54f0   49  complete; pointer select emits cmov instead of the original branch + return shape; equiv FAIL xmm1 clobber
