@@ -13,6 +13,5 @@
 00c46310 115 SerializeVarList: byte-diff vs retail (equivalent)
 00c46470 120 WriteUintVector: byte-diff vs retail (equivalent)
 00c46590 202 ShutdownSystems: byte-diff vs retail (equivalent)
-00c466d0 100 PostLoad: byte-diff vs retail (equivalent)
-00c468b0 223 OnReject: byte-diff vs retail (equivalent)
+00c468b0 214 OnReject: byte-diff vs retail (equivalent)
 00c469f0 193 OnFail: byte-diff vs retail (equivalent)
