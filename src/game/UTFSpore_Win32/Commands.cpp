@@ -64,21 +64,24 @@ struct string8_s0083_c900 {
     ~string8_s0083_c900();
 };
 }
-void  __cdecl DoFreeNodesTable(void* bucketArray, int bucketCount);       // 0x0083cad0 (this)
+void  __stdcall DoFreeNodesTable(void* bucketArray, int bucketCount);     // 0x0083cad0 (ret 8)
 void  __cdecl HashNodeAlloc(void* out, int nBuckets, int nElem, int flag); // 0x00921440
 void* __cdecl NewHashCommandNode(const void** key);                        // 0x0083c880
 void  __cdecl HashDoRehash(void* self, int n);                             // 0x0083cf50
 int   __cdecl StrEqInsensitive(const char* a, const char* b);              // 0x00554fb0
 void  __cdecl MakeCaseInsensitive(void* p);
 struct HashCmdTable { void* Insert(void* outIt, const void** keyPtr); };
+struct CmdHashTable {
+    void*    mpAlloc;         // +0x00
+    void*    mpBucketArray;   // +0x04
+    unsigned mnBucketCount;   // +0x08
+    int      mnElementCount;  // +0x0c
+};
 struct CmdDtor {
-    void* vtbl;
-    int pad04[3];
-    void* mpBucketArray;
-    int   mnBucketCount;
-    int   mnElementCount;
-    int   pad1c;
-    int   pad20[4];
+    void*        vtbl;        // +0x00
+    int          pad04[3];    // +0x04
+    CmdHashTable mTable;      // +0x10
+    int          pad20[4];
     void Dtor();
 };
 struct AppPropsFields {
@@ -206,7 +209,7 @@ void* HashFindExprValue(void* self, const char* key)
 }
 
 // @ 0x0083cad0
-void __cdecl DoFreeNodesTable(void* bucketArray, int bucketCount)
+void __stdcall DoFreeNodesTable(void* bucketArray, int bucketCount)
 {
     if (bucketCount > 1) {
         for (int i = 0; i < bucketCount; ++i) {
@@ -242,11 +245,11 @@ void HashmapSetCommand(void* self, const char* name, int* cmd)
 // @ 0x0083cd90
 void CmdDtor::Dtor()
 {
-    vtbl = vtbl_AppProps;
-    DoFreeNodesTable(mpBucketArray, mnBucketCount);
-    if (mnBucketCount > 1)
-        EASTL_allocator_deallocate(mpBucketArray);
-    mnElementCount = 0;
+    vtbl = (void*)&vtbl_AppProps;
+    DoFreeNodesTable(mTable.mpBucketArray, mTable.mnBucketCount);
+    if (mTable.mnBucketCount > 1)
+        EASTL_allocator_deallocate(mTable.mpBucketArray);
+    mTable.mnElementCount = 0;
 }
 
 // @ 0x0083ce20

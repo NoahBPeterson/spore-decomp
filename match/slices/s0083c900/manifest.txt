@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0083c900/s0083c900.cpp  ?CeilToFloat@@YAMM@Z  0083ce70  /O2 /MD /Gy /EHsc /TP /GS-
