@@ -1,0 +1,41 @@
+00a06600 ?Refresh@pose_bone_set@nSPCreatureAnim@@QAEXMH@Z  # Claude-coined this + pose_bone/pose_bone_set; thiscall, ret 8 (float elapsed, int mode), 1863 bytes
+
+# Semantics (derived from the listing, see match/slices/s00a06600/s00a06600.cpp).
+#   if (bone_begin == bone_end) return;
+#   vtable[0x28/4](this, elapsed, mode)                       # pre-refresh notification
+#   for each enabled bone: rotate the cached creature basis onto the bone, publish it back into the
+#   creature, then lift the creature position along the ground normal by the height change.
+#   vtable[0x2c/4](this, elapsed, mode)                       # post-refresh notification
+
+# Callees (already named elsewhere in the repo; see symbols/slices/s009bfc20.txt).
+009b6220 nSPCreatureAnim::creature_instance_data::GetGroundHeight  # (const vector_3* pos, vector_3* normal) -> float in st0; called with normal = 0 here
+009b62c0 nSPCreatureAnim::creature_instance_data::GetGroundUp      # (vector_3* out, const vector_3* pos) -> out
+
+# pose_bone_set (invented): vtable +0x00, pose_bone** bone_begin +0x24, pose_bone** bone_end +0x28.
+# vtable slot +0x28 and slot +0x2c are both void(float, int).
+
+# pose_bone (invented), 0x180 bytes, only the touched fields named:
+#   +0x004 vector_3 position          +0x010 vector_4 orientation (x, y, z, w)
+#   +0x020 vector_3 cached_axis       (creature +0x160)      +0x02c vector_4 cached_orientation (creature +0x170)
+#   +0x064 uint8 enabled              +0x17c creature_instance_data* creature
+
+# creature_instance_data: the s009bfc20 view extended with the fields this function touches.
+#   +0x010 uint8 flags (low 5 bits clear => the orientation is already unit and gets normalised)
+#   +0x018 vector_3 position, +0x030/+0x034/+0x038 floats, +0x03c vector_4 orientation,
+#   +0x05c vector_4 q_05c, +0x118 vector_3 v_118, +0x128/+0x12c/+0x130/+0x134 floats,
+#   +0x160 vector_3 v_160, +0x170 vector_4 q_170.
+
+# Math forms (order matters for byte matching; each is (((a*b + c*d) +/- e*f) +/- g*h) * 2 + v).
+#   inverse rotation of v by a unit q:  r.x = (-(z*z) + -(y*y))*v.x + (z*x + y*w)*v.z + (y*x - z*w)*v.y
+#                                      r.y = (-(z*z) + -(x*x))*v.y + (z*y - x*w)*v.z + (y*x + z*w)*v.x
+#                                      r.z = (-(y*y) + -(x*x))*v.z + (z*x - y*w)*v.x + (z*y + x*w)*v.y
+#   post-multiply the bone orientation by the creature q_170 (x, y, z, w):
+#     x' = ((x*w2 + x2*w) - y2*z) + z2*y    y' = ((y*w2 + x2*z) + y2*w) - z2*x
+#     z' = ((z*w2 - y*x2) + y2*x) + z2*w    w' = ((w*w2 - x*x2) - y*y2) - z*z2
+#   creature orientation (+0x3c) from the bone orientation and (w2,x2,y2,z2) = +0x128,+0x134,+0x130,+0x12c:
+#     x' = ((w2*w + x*x2) - z2*z) + y2*y    y' = ((z*w2 + z2*w) + y*x2) - y2*x
+#     z' = ((z*x2 - y*w2) + y2*w) + z2*x    w' = ((w*x2 - w2*x) - y*z2) - y2*z
+#   normalisation (x87 fsqrt + fld1/fdivrp) only when (flags & 0x1f) == 0; the lift is
+#   position += GetGroundUp(&up, &position) * (GetGroundHeight(&position, 0) - base_height).
+
+# Flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast  (SSE scalar math; no stack cookie in the original).
