@@ -121,7 +121,7 @@ struct B3d360 {
     void FUN_00b7daf0(IRel* p);                 // 0x00b7daf0
 };
 
-struct Rec1021230 { char pad[0x44]; char f44; };
+struct Rec1021230 { char pad[0x44]; char f44; Vector3* FUN_00c8b360(); };   // 0x00c8b360
 
 struct Owner {
     char pad0[0x508];
@@ -159,10 +159,11 @@ struct SpaceGame {
     Tribe* GetPlayerTribe();                    // 0x00bfc5f0
 };
 
+struct Viewer;
 struct IQ { virtual void q0(); virtual void q1(); virtual void q2(); virtual void* Query(uint32_t id); };   // +0xc
 struct IL2 {
     virtual void l0(); virtual void l1(); virtual void l2(); virtual void l3(); virtual void l4(); virtual void l5();
-    virtual void l6(); virtual void l7(); virtual void l8(); virtual void l9(); virtual void l10(); virtual void l11();
+    virtual void l6(); virtual Viewer* GetViewer(); virtual void l8(); virtual void l9(); virtual void l10(); virtual void l11();
     virtual void l12(); virtual void l13(); virtual void l14(); virtual void l15();
     virtual IQ* GetNode(uint32_t id);           // +0x40
 };
@@ -386,4 +387,544 @@ void Cls::Run(Civ* target)
         if (r)
             FUN_01017000(r);
     }
+}
+
+// ===========================================================================
+// gold7-assigned helpers (s010021a0): posse / space-game / UI-space code.
+// ===========================================================================
+
+// ---- supporting declarations ----------------------------------------------
+extern "C" void FUN_00c8bc10(uint32_t p);                                          // 0x00c8bc10
+extern "C" void EA_IO_WriteUint32(void* dst, const void* src, int n, int flag);    // 0x0093aa70
+
+struct IOConnect {                                                                 // reached from a serializable's +0x20
+    virtual void a0(); virtual void a1(); virtual void a2();
+    virtual void a3(); virtual void a4(); virtual void a5();
+    virtual void* GetWriter();                                                     // vtable +0x18
+};
+struct SerContainer {                                                              // the object handed to Write/Read
+    virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3();
+    virtual void c4(); virtual void c5(); virtual void c6();
+    virtual void Finish();                                                         // vtable +0x1c
+    virtual IOConnect* GetConnect();                                               // vtable +0x20
+};
+struct PRec5 {                                                                     // 0x14-byte record with a vtable
+    virtual void p0(); virtual void p1();
+    virtual void Slot8(int v);                                                     // vtable +0x08
+    virtual void p3();
+    virtual void Slot10(SerContainer* c);                                          // vtable +0x10
+    uint32_t pad14[4];                                                             // +0x04..+0x14
+};
+struct PRecList { PRec5* begin; PRec5* end; };
+
+struct UISpace {                                                                   // SP::cSPUISpace
+    virtual void Ifc0();                                                           // vtable +0x00
+    virtual void Release4();                                                       // vtable +0x04
+    UISpace* Construct();                                                          // 0x01070ba0 (constructor)
+    void FUN_01071570();                                                           // 0x01071570
+    void Init();                                                                   // 0x01073700
+};
+struct SimGame {                                                                   // owner of the UI space at +0x14
+    char pad00[0x14];
+    UISpace* mUISpace14;                                                           // +0x14
+    char pad18[0x54 - 0x18];
+    void* mField54;                                                                // +0x54
+    char pad58[0x70 - 0x58];
+    void* mField70;                                                                // +0x70
+    char pad74[0xb4 - 0x74];
+    void* mFieldb4; void* mFieldb8; void* mFieldbc; void* mFieldc0;                // +0xb4..+0xc0
+};
+struct SimTicker {                                                                 // SP::SimTicker
+    virtual void k0(); virtual void k1(); virtual void k2(); virtual void k3(); virtual void k4();
+    virtual void k5(); virtual void k6(); virtual void k7(); virtual void k8(); virtual void k9();
+    virtual void k10(); virtual void k11(); virtual void k12(); virtual void k13(); virtual void k14();
+    virtual void k15(); virtual void k16(); virtual void k17(); virtual void k18(); virtual void k19();
+    virtual void k20();
+    virtual void Slot54(void* v);                                                  // vtable +0x54
+};
+struct MgdObj {                                                                    // object returned by FUN_0067ddc0
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3(); virtual void m4();
+    virtual void m5(); virtual void m6(); virtual void m7(); virtual void m8();
+    virtual void Slot24();                                                         // vtable +0x24
+    virtual void Slot28(void* v);                                                  // vtable +0x28
+};
+struct ResMan {                                                                    // EA::ResourceMan
+    virtual void r0(); virtual void r1(); virtual void r2(); virtual void r3(); virtual void r4(); virtual void r5();
+    virtual void r6(); virtual void r7(); virtual void r8(); virtual void r9(); virtual void r10(); virtual void r11();
+    virtual void r12(); virtual void r13(); virtual void r14(); virtual void r15(); virtual void r16(); virtual void r17();
+    virtual void r18(); virtual void r19(); virtual void r20(); virtual void r21(); virtual void r22(); virtual void r23();
+    virtual void r24(); virtual void r25(); virtual void r26(); virtual void r27();
+    virtual void Slot70(void* a, void* b);                                         // vtable +0x70
+};
+struct RefMgr {                                                                    // manager at 0x0167ea54
+    virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3(); virtual void f4(); virtual void f5();
+    virtual void f6(); virtual void f7(); virtual void f8(); virtual void f9(); virtual void f10(); virtual void f11();
+    virtual void Slot30(void* id);                                                 // vtable +0x30
+};
+struct CardPanel { void SetCardsVisibility(bool v); };                             // 0x00e14c10
+
+extern "C" SimTicker* FUN_00b3d330();                                             // SP::SimTicker
+extern "C" MgdObj*    FUN_0067ddc0();                                             // 0x0067ddc0
+extern "C" ResMan*    FUN_0067dcd0();                                             // EA::ResourceMan::GetManager
+extern "C" CardPanel* FUN_00b3d400();                                             // 0x00b3d400
+extern "C" void FUN_00ff9390();                                                   // 0x00ff9390
+extern "C" int FUN_01021080();                                                    // cSPLivingUniverse::GetUniverseContext
+extern "C" void* operator_new(uint32_t size, const char* file, uint32_t line, uint32_t a, void* alloc, uint32_t tag);   // 0x00f473a0
+extern RefMgr* g_0167ea54;                                                        // 0x0167ea54
+
+struct SimSpace {                                                                  // ecx receiver of the serializer wrappers
+    void OnSolarRollover(uint32_t p);
+    bool Write(void* param_2);
+    bool Read(void* param_2);
+    char GonzagoWrite(void* io);                                                   // 0x00b5b610 cGonzagoSimulator::Write
+    char GonzagoRead(void* io);                                                    // 0x00b5b650 cGonzagoSimulator::Read
+};
+struct Serializer {                                                                // cVarListSerializer
+    Serializer(void* obj, uint32_t a, uint32_t b);                                 // 0x00692f90
+    bool Serialize(void* io);                                                      // 0x00692900
+    bool Read(void* io);                                                           // 0x00693e10
+    uint32_t m[0x285];
+};
+extern "C" void EA_IO_ReadInt32(void* dst, void* src, int n, int flag);           // 0x0093a780
+
+// ---------------------------------------------------------------------------
+// 0x01002bf0  solar-rollover notification (thin forwarder).
+// ---------------------------------------------------------------------------
+// @ 0x01002bf0
+void SimSpace::OnSolarRollover(uint32_t param_1)
+{
+    FUN_00c8bc10(param_1);
+}
+
+// ---------------------------------------------------------------------------
+// 0x01002ea0  copy-forward 0x14-byte records, clearing each through vtable +0x08.
+// ---------------------------------------------------------------------------
+// @ 0x01002ea0
+PRec5* FUN_01002ea0(PRec5* first, PRec5* last, PRec5* out)
+{
+    if (first != last) {
+        do {
+            first->Slot8(0);
+            ++first;
+            ++out;
+        } while (first != last);
+    }
+    return out;
+}
+
+// ---------------------------------------------------------------------------
+// 0x01002e30  write a record count, then serialize each 0x14-byte record.
+// ---------------------------------------------------------------------------
+// @ 0x01002e30
+void FUN_01002e30(SerContainer* c, PRecList* list)
+{
+    int count = (int)(list->end - list->begin);
+    IOConnect* conn = c->GetConnect();
+    void* writer = conn->GetWriter();
+    EA_IO_WriteUint32(writer, &count, 1, 0);
+    PRec5* p = list->begin;
+    PRec5* end = list->end;
+    for (; p != end; ++p)
+        p->Slot10(c);
+    c->Finish();
+}
+
+// ---------------------------------------------------------------------------
+// 0x01002ee0  post two manager events.
+// ---------------------------------------------------------------------------
+// @ 0x01002ee0
+void FUN_01002ee0()
+{
+    struct Local { void* vftable; uint32_t tag; };
+    ResMan* m = FUN_0067dcd0();
+    Local a; a.vftable = (void*)0x13eb428; a.tag = 0x1c135da;
+    m->Slot70(0, &a);
+    Local b; b.vftable = (void*)0x13eb428; b.tag = 0xe6bce5;
+    m->Slot70(0, &b);
+}
+
+// ---------------------------------------------------------------------------
+// 0x01003070  shut down the UI space and notify the manager.
+// ---------------------------------------------------------------------------
+// @ 0x01003070
+void __fastcall FUN_01003070(SimGame* self)
+{
+    UISpace* u = self->mUISpace14;
+    if (u != 0) {
+        u->FUN_01071570();
+        UISpace* u2 = self->mUISpace14;
+        if (u2 != 0) {
+            self->mUISpace14 = 0;
+            u2->Release4();
+        }
+    }
+    MgdObj* m = FUN_0067ddc0();
+    if (m != 0) {
+        m->Slot28(0);
+        m->Slot24();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 0x010030c0  lazily create the UI space and show the mission cards.
+// ---------------------------------------------------------------------------
+// @ 0x010030c0
+void __fastcall FUN_010030c0(SimGame* self)
+{
+    if (self->mUISpace14 == 0) {
+        UISpace* nw = (UISpace*)operator_new(0x6ac, "Simulator", 0, 0, 0, 0);
+        UISpace* u = (nw != 0) ? nw->Construct() : 0;
+        UISpace* old = self->mUISpace14;
+        if (u != old) {
+            if (u != 0)
+                u->Ifc0();
+            self->mUISpace14 = u;
+            if (old != 0)
+                old->Release4();
+        }
+        self->mUISpace14->Init();
+        if (self->mField54 != 0)
+            FUN_00ff9390();
+    }
+    MgdObj* m = FUN_0067ddc0();
+    if (m != 0 && FUN_01021080() == 0) {
+        m->Slot28((void*)1);
+        m->Slot24();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 0x01003160  tick the six tracked objects, drop the UI space and pick the map.
+// ---------------------------------------------------------------------------
+// @ 0x01003160
+void __fastcall FUN_01003160(SimGame* self)
+{
+    SimTicker* t = FUN_00b3d330();
+    t->Slot54(self);
+    t->Slot54(self->mField70);
+    t->Slot54(self->mFieldb8);
+    t->Slot54(self->mFieldc0);
+    t->Slot54(self->mFieldb4);
+    t->Slot54(self->mFieldbc);
+    UISpace* u = self->mUISpace14;
+    if (u != 0) {
+        u->FUN_01071570();
+        UISpace* u2 = self->mUISpace14;
+        if (u2 != 0) {
+            self->mUISpace14 = 0;
+            u2->Release4();
+        }
+    }
+    if (FUN_00b3d400() != 0)
+        FUN_00b3d400()->SetCardsVisibility(false);
+    g_0167ea54->Slot30((void*)FNV1_String8("Planet_Space", 0x811c9dc5, 1));
+}
+
+// ===========================================================================
+// 0x01002c30 / 0x01002cc0  cSPSimulatorSpaceGame serialization wrappers.
+// ===========================================================================
+// @ 0x01002c30
+bool SimSpace::Write(void* param_2)
+{
+    SerContainer* ctx = (SerContainer*)param_2;
+    IOConnect* pl = ctx->GetConnect();
+    uint32_t tag = 0xb03517bc;
+    void* writer = pl->GetWriter();
+    EA_IO_WriteUint32(writer, &tag, 1, 0);
+    char ok = GonzagoWrite(param_2);
+    Serializer ser((char*)this - 8, 0x15b6618, 0x1a80d26);
+    if (ok != 0) {
+        if (ser.Serialize(param_2) != 0)
+            return true;
+    }
+    return false;
+}
+
+// @ 0x01002cc0
+bool SimSpace::Read(void* param_2)
+{
+    SerContainer* ctx = (SerContainer*)param_2;
+    IOConnect* pl = ctx->GetConnect();
+    void* reader = pl->GetWriter();
+    char tag[4];
+    EA_IO_ReadInt32(reader, tag, 1, 0);
+    char ok = GonzagoRead(param_2);
+    Serializer ser((char*)this - 8, 0x15b6618, 0x1a80d26);
+    if (ok != 0) {
+        if (ser.Read(param_2) != 0)
+            return true;
+    }
+    return false;
+}
+
+// ===========================================================================
+// supporting types for 0x01002f30 / 0x010027b0
+// ===========================================================================
+extern float DAT_013fec70;                          // 1460.0f
+extern float DAT_01477fc0;                          // 300.0f
+extern float DAT_013ef54c;                          // 1.1f
+extern float DAT_015b6254;                          // camera-distance scale
+
+struct TerrainSphereFull { char pad[0x124c]; int mMaxMembers; };   // +0x124c
+
+struct InvSub {                                     // sub-object embedded at inventory+0x508
+    virtual void i0(); virtual void i1(); virtual void i2(); virtual void i3(); virtual void i4();
+    virtual void i5(); virtual void i6(); virtual void i7(); virtual void i8(); virtual void i9();
+    virtual void i10(); virtual void i11(); virtual void i12(); virtual void i13(); virtual void i14();
+    virtual void i15(); virtual void i16(); virtual void i17(); virtual void i18(); virtual void i19();
+    virtual void i20(); virtual void i21();
+    virtual float Slot58();                         // vtable +0x58
+};
+struct InvView {                                    // SP::cSPSimulatorPlayerInventory (view)
+    char pad0[0x508];
+    InvSub sub508;                                  // +0x508
+    char pad1[0x7f8 - 0x50c];
+    float f7f8;                                     // +0x7f8
+    float FUN_00c389f0(float v);                    // 0x00c389f0
+};
+struct UFOSimGame {                                 // cSPSimulatorSpaceGame
+    InvView* GetPlayerInventory();                  // 0x00a1ad60
+};
+extern "C" UFOSimGame* FUN_00ffbe50();              // SP::GetUFOSimulator
+extern "C" void FUN_00f924e0(float v);              // 0x00f924e0
+
+struct SubC4 {                                      // object at GetUFOThing(...)+0xc4
+    virtual void s0(); virtual void Release4();     // +0x04
+    virtual void s2(); virtual void Slot0c(int v);  // +0x0c
+};
+struct B3d470b { char pad[0xc4]; SubC4* fC4; };     // view of FUN_00b3d470() result
+struct TriggerMgr {                                 // SP::cTriggerMgr
+    void PostTrigger(const char* name, int a, int b, int c, int d, int e);   // 0x00ae0930
+};
+extern "C" TriggerMgr* FUN_00b3d4d0();              // SP::GetTriggerMgr
+extern "C" void FUN_00e39ab0(uint32_t a, int b, void* c, void* d, int e, int f, void* g, void* h);   // 0x00e39ab0
+
+// ---------------------------------------------------------------------------
+// 0x01002f30  "center of galaxy" trigger handler.
+// ---------------------------------------------------------------------------
+// @ 0x01002f30
+void FUN_01002f30(void)
+{
+    TerrainSphere* sp = FUN_00b3d300()->GetCurrentTerrainSphere();
+    if (!sp->FUN_00c772c0(0x681c28e)) {
+        TerrainSphere* sp2 = FUN_00b3d300()->GetCurrentTerrainSphere();
+        sp2->FUN_00c77bf0(0x681c28e);
+
+        InvView* inv = FUN_00ffbe50()->GetPlayerInventory();
+        if (inv != 0) {
+            FUN_00f924e0(inv->sub508.Slot58());
+            inv->FUN_00c389f0(inv->f7f8);
+        }
+
+        uint32_t loc[12] = {0};
+        FUN_00e39ab0(0x57baffd3, 0, &loc[9], &loc[6], 0, 0, &loc[3], &loc[0]);
+
+        B3d470b* b = (B3d470b*)FUN_00b3d470();
+        if (b->fC4 != 0) {
+            b->fC4->Slot0c(1);
+            B3d470b* b2 = (B3d470b*)FUN_00b3d470();
+            SubC4* p = b2->fC4;
+            if (p != 0) {
+                b2->fC4 = 0;
+                p->Release4();
+            }
+        }
+        FUN_00b3d4d0()->PostTrigger("SPG_CenterOfGalaxy", 1, 0, 0, 0, 0);
+    }
+}
+
+// ===========================================================================
+// 0x010027b0  AddPosseMember -- add an ally UFO to the player's posse.
+// ===========================================================================
+struct ListBuf {                                    // EASTL intrusive list root/node (player+0x70)
+    ListBuf* mpNext;                                // +0x00
+    ListBuf* mpPrev;                                // +0x04
+    int      mValue;                                // +0x08
+};
+struct EmpireView {                                 // SP::cEmpire (view)
+    char pad0[0x58];
+    int  mArchetype;                                // +0x58
+    char pad1[0x84 - 0x5c];
+    int  mId;                                       // +0x84
+    int  GetWeaponryLevel();                        // 0x00c317a0
+    int  GetUFOKey();                               // 0x00c326b0
+    void* GetPollinator(uint32_t prop, int key);    // 0x0067cb30
+};
+struct Pollinator { void UpdateProperty(uint32_t prop, int key); };   // 0x0060d860
+struct EventLogT { void PostFeedbackEvent(int a, int b, int c, int d, int e, int f); };   // 0x00dd8640
+extern "C" EventLogT* FUN_00b3d3e0();               // SP::EventLog
+
+struct GUFOInner {                                  // sub-object at ufo+0x34
+    virtual void i0(); virtual void i1(); virtual void i2(); virtual void i3(); virtual void i4();
+    virtual void i5(); virtual void i6(); virtual void i7(); virtual void i8(); virtual void i9();
+    virtual void i10();
+    virtual void* Slot2c(float a, float b);         // vtable +0x2c
+};
+struct GameDataUFO {                                // SP::cSPGameDataUFO
+    virtual void u0(); virtual void u1(); virtual void u2(); virtual void u3(); virtual void u4();
+    virtual void u5(); virtual void u6(); virtual void u7(); virtual void u8(); virtual void u9();
+    virtual void u10(); virtual void u11(); virtual void u12(); virtual void u13(); virtual void u14();
+    virtual void u15(); virtual void u16(); virtual void u17(); virtual void u18();
+    virtual int GetEmpireId();                      // vtable +0x4c
+    char pad2[0x34 - 0x04];
+    GUFOInner inner34;                              // +0x34
+    void SetDestination(Vector3* p);                // 0x00c3bfe0
+    void PopToDestination();                        // 0x00c37e60
+    void FUN_00c3aa40(Vector3* dir, void* orient);  // 0x00c3aa40
+};
+struct PlanetModelT {                               // SP::cPlanetModel
+    void MakeRandomWorldPosition(Vector3* out, void* a);   // 0x00b81780
+    void* BuildSurfaceOrientation(void* out, Vector3* p);  // 0x00b7f190
+};
+extern "C" PlanetModelT* FUN_00b3d350();            // SP::PlanetModel
+struct PlanetObj {                                  // SP::cSPLivingUniverse active planet
+    virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4();
+    virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9();
+    virtual void p10();
+    virtual Vector3* GetPos();                      // vtable +0x2c
+};
+extern "C" PlanetObj* FUN_01021260();               // SP::cSPLivingUniverse::GetActivePlanet
+struct Viewer {                                     // SP::cViewer
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    void GetCameraLocationInfo(int a, Vector3* out, int b, int c);   // 0x007c3d30
+};
+struct AT {                                         // EA::Audio::SystemAT
+    virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3();
+    virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7();
+    virtual void* Slot20();                         // vtable +0x20
+};
+extern "C" AT* GetSystemAT();                       // EA::Audio::GetSystemAT
+struct UIFinder { void FUN_0106b500(); };           // 0x0106b500
+extern "C" UIFinder* FUN_010666a0(void* ufo);       // 0x010666a0
+extern "C" GameDataUFO* AddHighLODAlliedUFO(EmpireView* emp, int a, int count);   // 0x0102b1d0
+extern "C" void PositionPosseMembers();             // 0x0102be20
+extern "C" void KillSetiEffects(uint32_t sound, void* at);   // 0x00435ed0
+
+struct PlayerUFO {                                  // SP::cSPSimulatorPlayerUFO
+    char pad[0x70];
+    ListBuf mPosse;                                 // +0x70
+    void  FUN_01001700(int id, int b);              // 0x01001700
+    void* AddPosseMember(int param_2, char param_3);   // 0x010027b0
+};
+
+// @ 0x010027b0
+void* PlayerUFO::AddPosseMember(int param_2, char param_3)
+{
+    TerrainSphereFull* ts = (TerrainSphereFull*)FUN_00b3d300()->GetCurrentTerrainSphere();
+    int maxMembers = ts->mMaxMembers;
+    if (maxMembers == 0)
+        return 0;
+
+    int playerEmpireId = FUN_01021090();
+
+    int count = 0;
+    for (ListBuf* n = mPosse.mpNext; n != &mPosse; n = n->mpNext)
+        ++count;
+
+    bool doAdd = true;
+    EmpireView* chosen = 0;
+    if (count > 0 && maxMembers <= count) {
+        doAdd = false;
+        for (ListBuf* n = mPosse.mpNext; n != &mPosse; n = n->mpNext) {
+            EmpireView* emp = (EmpireView*)FUN_00b3d2a0()->GetEmpireByID(n->mValue);
+            if (emp != 0 && emp->mId != playerEmpireId) {
+                if (chosen != 0) {
+                    int empLvl = emp->GetWeaponryLevel();
+                    int chosenLvl = chosen->GetWeaponryLevel();
+                    if (chosenLvl <= empLvl)
+                        continue;
+                }
+                chosen = emp;
+            }
+        }
+        if (chosen != 0) {
+            doAdd = true;
+            FUN_01001700(chosen->mId, 0);
+            if (param_3 != 0)
+                FUN_00b3d3e0()->PostFeedbackEvent(0x36d582f0, 0x131a9f54, 0, 0, 1, 0);
+        }
+    }
+
+    GameDataUFO* ufo = 0;
+    if (doAdd) {
+        ListBuf* node = (ListBuf*)operator_new(0xc, "Simulator", 0, 0, (void*)0x13ebb38, 0xd1);
+        node->mValue = param_2;
+        node->mpNext = mPosse.mpNext;
+        node->mpPrev = mPosse.mpPrev;
+        mPosse.mpPrev->mpNext = node;
+        mPosse.mpPrev = node;
+
+        EmpireView* emp2 = (EmpireView*)FUN_00b3d2a0()->GetEmpireByID(param_2);
+        int cnt2 = 0;
+        for (ListBuf* n = mPosse.mpNext; n != &mPosse; n = n->mpNext)
+            ++cnt2;
+        ufo = AddHighLODAlliedUFO(emp2, 0, cnt2);
+        PositionPosseMembers();
+        if (param_3 != 0 && param_2 != playerEmpireId)
+            FUN_00b3d3e0()->PostFeedbackEvent(0xa0c7000a, 0x131a9f54, 0, 0, 1, 0);
+
+        if (FUN_01021090() != ufo->GetEmpireId()) {
+            int key = emp2->GetUFOKey();
+            Pollinator* pol = (Pollinator*)emp2->GetPollinator(0x27ef0ff0, key);
+            pol->UpdateProperty(0x27ef0ff0, key);
+        }
+
+        int ctx = FUN_01021080();
+        if (ctx == 0) {
+            PlanetModelT* model = FUN_00b3d350();
+            void* r = ufo->inner34.Slot2c(DAT_01477fc0, DAT_013fec70);
+            Vector3 p0;
+            model->MakeRandomWorldPosition(&p0, r);
+            Vector3 scr;
+            scr.x = p0.x * DAT_013ef54c;
+            scr.y = p0.y * DAT_013ef54c;
+            scr.z = p0.z * DAT_013ef54c;
+            uint32_t orient[4];
+            void* o = model->BuildSurfaceOrientation(orient, &p0);
+            ufo->FUN_00c3aa40(&scr, o);
+        } else if (ctx == 1) {
+            Viewer* viewer = FUN_0067dd10()->GetL2()->GetViewer();
+            Vector3 cam;
+            viewer->GetCameraLocationInfo(0, &cam, 0, 0);
+            PlanetObj* act = FUN_01021260();
+            Vector3 scr;
+            scr.x = cam.x * DAT_015b6254;
+            scr.y = cam.y * DAT_015b6254;
+            scr.z = cam.z * DAT_015b6254;
+            Vector3* base = act->GetPos();
+            Vector3 dst;
+            dst.x = base->x + scr.x;
+            dst.y = base->y + scr.y;
+            dst.z = base->z + scr.z;
+            ufo->SetDestination(&dst);
+            ufo->PopToDestination();
+        } else if (ctx == 2) {
+            Rec1021230* r2 = FUN_01021230();
+            ufo->SetDestination(r2->FUN_00c8b360());
+            ufo->PopToDestination();
+        }
+
+        if (emp2 != 0) {
+            uint32_t sound = 0;
+            switch (emp2->mArchetype) {
+            case 0: sound = 0x99422df0; break;
+            case 1: sound = 0xd3feb879; break;
+            case 2: sound = 0x350cfd88; break;
+            case 3: sound = 0x51d62aab; break;
+            case 4: sound = 0xf628f0e1; break;
+            case 5: sound = 0x8b050578; break;
+            case 6: sound = 0xdb4ad9f1; break;
+            case 7: sound = 0xb07352e1; break;
+            case 8: sound = 0x2b67bd78; break;
+            default:
+                if ((void*)FUN_01021300() == (void*)emp2)
+                    sound = 0xb261f252;
+                break;
+            }
+            AT* at = GetSystemAT();
+            KillSetiEffects(sound, at != 0 ? at->Slot20() : 0);
+        }
+        FUN_010666a0(ufo)->FUN_0106b500();
+    }
+    return ufo;
 }

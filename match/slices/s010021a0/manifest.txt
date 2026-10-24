@@ -1,0 +1,5 @@
+slices/s010021a0/s010021a0.cpp  ?OnSolarRollover@SimSpace@@QAEXI@Z  01002bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010021a0/s010021a0.cpp  ?Read@SimSpace@@QAE_NPAX@Z  01002cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010021a0/s010021a0.cpp  ?FUN_01002ea0@@YAPAUPRec5@@PAU1@00@Z  01002ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010021a0/s010021a0.cpp  ?FUN_01002ee0@@YAXXZ  01002ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010021a0/s010021a0.cpp  ?FUN_01003070@@YIXPAUSimGame@@@Z  01003070  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,1 +1,12 @@
 010021a0 TravelToStarCharge  # thiscall(Civ* target): charges travel cost, plays UI_common_reticle_goto_screen, rebuilds star map filter, bumps awareness of nearby empires
+010027b0 AddPosseMember  # thiscall(int starId, char announce): add an allied UFO to the player posse list at +0x70, swapping out the weakest non-player empire when the list is full
+01002bf0 SimSpace::OnSolarRollover  # forwards to FUN_00c8bc10
+01002c30 cSPSimulatorSpaceGame::Write  # write tag 0xb03517bc, cGonzagoSimulator::Write, then cVarListSerializer::Serialize over (this-8, 0x15b6618, 0x1a80d26)
+01002cc0 cSPSimulatorSpaceGame::Read  # ReadInt32 tag, cGonzagoSimulator::Read, then cVarListSerializer::Read over (this-8, 0x15b6618, 0x1a80d26)
+01002e30 FUN_01002e30  # write the record-list element count through the container's IO writer, then each record's vtable +0x10, finish via vtable +0x1c
+01002ea0 FUN_01002ea0  # copy-forward 0x14-byte records, clearing each through vtable +0x08
+01002ee0 FUN_01002ee0  # no-arg helper (80 bytes)
+01002f30 FUN_01002f30  # center-of-galaxy trigger: set terrain-sphere flag 0x681c28e, refresh inventory accumulator, release +0xc4 handle, post SPG_CenterOfGalaxy
+01003070 FUN_01003070  # tick the UI space at +0x14 and cancel the redo manager's +0x28/+0x24 slots
+010030c0 FUN_010030c0  # lazily build the 0x6ac-byte mission-card UI space into +0x14
+01003160 FUN_01003160  # tick six tracked objects via SimTicker +0x54, tear down the UI space, hash Planet_Space into the ref manager +0x30
