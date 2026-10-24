@@ -48,8 +48,10 @@ namespace hkSweptTransformUtil
 // ---- monitor stream (TLS) ---------------------------------------------------------------------------------
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long, void*);
+#if _MSC_VER >= 1400      // cl13 (VC71) already declares it in <intrin.h>, without C linkage
 extern "C" unsigned __int64 __rdtsc();
 #pragma intrinsic(__rdtsc)
+#endif
 extern unsigned long g_hkMonitorStreamCurrentTls;   // 0x016e42a4
 extern unsigned long g_hkMonitorStreamEndTls;       // 0x016e42a8
 
@@ -327,4 +329,306 @@ void __cdecl hkAgentNnMachine_ProcessTrack(hkAgentNnTrack* track, hkProcessColli
         }
     }
     hkMonitorAddValue("MinumTim", (float)numUpdated);
+}
+
+// ===========================================================================
+// Track statistics collectors
+// ===========================================================================
+class hkStatisticsCollector
+{
+public:
+    virtual void v0();                                                         // +0x00
+    virtual void v1();                                                         // +0x04
+    virtual void addObject(const char* name, int size, const void* obj,
+                           hkUint32 sizeA, hkUint32 sizeB);                     // +0x08
+    virtual void addReference(const char* name, int size, const void* obj);     // +0x0c
+    virtual void addValue(int value);                                          // +0x10
+};
+
+// Stream entry of a track sector.
+struct hkAgentEntry
+{
+    hkUchar           m_streamCommand;    // +0x00
+    hkUchar           m_agentType;        // +0x01
+    hkUchar           m_numContactPoints; // +0x02
+    hkUchar           m_size;             // +0x03
+    hkCollisionAgent* m_agent;            // +0x04
+    hkUint32          m_pad08[2];         // +0x08
+    hkContactMgr*     m_contactMgr;       // +0x10
+};
+
+// Sector header as walked by the 0x010fce10 scanner (entries start after it).
+struct hkSectorHeader
+{
+    hkUint32 m_bytesUsed;    // +0x00 (including the header)
+    hkUint32 m_pad04;        // +0x04
+    hkUint32 m_pad08;        // +0x08
+    hkUint32 m_pad0c;        // +0x0c
+};
+
+// @ 0x010fce10
+void __cdecl hkAgentNnMachine_CalcStatistics(const hkAgentNnTrack* track, hkStatisticsCollector* collector)
+{
+    hkUint32 offset = 0;
+    for (;;)
+    {
+        hkSectorHeader* sector = *(hkSectorHeader**)((const char*)track->m_sectors.m_data + offset);
+        hkUint32 usedBytes = sector->m_bytesUsed;
+        const char* end = (const char*)sector + usedBytes + sizeof(hkSectorHeader);
+        hkAgentEntry* entry = (hkAgentEntry*)((const char*)sector + sizeof(hkSectorHeader));
+        collector->addObject("Sector", 8, sector, usedBytes + sizeof(hkSectorHeader), 0x200);
+        offset += sizeof(hkSectorHeader*);
+        do
+        {
+            switch (entry->m_streamCommand)
+            {
+            case 1:
+                return;
+            case 6:
+                collector->addReference("Agent", 8, entry->m_agent);
+                entry = (hkAgentEntry*)((const char*)entry + entry->m_size);
+                break;
+            case 0:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                entry = (hkAgentEntry*)((const char*)entry + entry->m_size);
+                break;
+            default:
+                break;
+            }
+        } while ((const char*)entry < end);
+    }
+}
+
+struct hkAgentMachineUtil
+{
+    static void calcNnStatistics(const hkAgentNnTrack& track, hkStatisticsCollector* collector);                 // 0x010fceb0
+    static void calcNnStatisticsContactMgrsOnly(const hkAgentNnTrack& track, hkStatisticsCollector* collector);   // 0x010fcf90
+};
+
+// @ 0x010fceb0
+void hkAgentMachineUtil::calcNnStatistics(const hkAgentNnTrack& track, hkStatisticsCollector* collector)
+{
+    int i = 0;
+    for (; i < track.m_sectors.m_size - 1; i++)
+    {
+        collector->addObject("Sector", 8, track.m_sectors.m_data[i],
+                             track.m_bytesUsedInFullSector, track.m_bytesUsedInFullSector);
+    }
+    if (i < track.m_sectors.m_size)
+    {
+        collector->addObject("Sector", 8, track.m_sectors.m_data[i],
+                             track.m_bytesUsedInLastSector, track.m_bytesUsedInFullSector);
+    }
+
+    int j = 0;
+    if (track.m_sectors.m_size > 0)
+    do
+    {
+        char* sector = (char*)track.m_sectors.m_data[j];
+        j++;
+        char* sectorEnd = sector + ((j == track.m_sectors.m_size) ? track.m_bytesUsedInLastSector
+                                                                  : track.m_bytesUsedInFullSector);
+        for (char* pc = sector; pc < sectorEnd; pc += (hkUchar)pc[3])
+        {
+            hkAgentEntry* entry = (hkAgentEntry*)pc;
+            switch (entry->m_streamCommand)
+            {
+            case 2:
+            case 4:
+                collector->addReference("ContactMgr", 8, entry->m_contactMgr);
+                break;
+            case 6:
+                collector->addReference("Agent", 8, entry->m_agent);
+                collector->addReference("ContactMgr", 8, entry->m_contactMgr);
+                break;
+            }
+        }
+    } while (j < track.m_sectors.m_size);
+}
+
+// @ 0x010fcf90
+void hkAgentMachineUtil::calcNnStatisticsContactMgrsOnly(const hkAgentNnTrack& track, hkStatisticsCollector* collector)
+{
+    int j = 0;
+    if (track.m_sectors.m_size > 0)
+    do
+    {
+        char* sector = (char*)track.m_sectors.m_data[j];
+        j++;
+        char* sectorEnd = sector + ((j == track.m_sectors.m_size) ? track.m_bytesUsedInLastSector
+                                                                  : track.m_bytesUsedInFullSector);
+        for (char* pc = sector; pc < sectorEnd; pc += (hkUchar)pc[3])
+        {
+            hkAgentEntry* entry = (hkAgentEntry*)pc;
+            switch (entry->m_streamCommand)
+            {
+            case 2:
+            case 4:
+            case 6:
+                collector->addReference("ContactMgr", 8, entry->m_contactMgr);
+                break;
+            }
+        }
+    } while (j < track.m_sectors.m_size);
+}
+
+// ===========================================================================
+// hkCapsuleTriangleAgent3
+// ===========================================================================
+struct hkPointTriangleDistanceCache { hkUint32 m_data[6]; };        // 0x18 bytes, agent data + 0x08
+
+// Local-space geometry of one side of the pair (points start at +0x10, key at +0x0c).
+struct hkCapsuleShapeData
+{
+    char      m_pad00[0xc];      // +0x00
+    hkUint32  m_shapeKey;        // +0x0c
+    hkVector4 m_endA;            // +0x10
+    hkVector4 m_endB;            // +0x20
+};
+struct hkTriangleShapeData
+{
+    char      m_pad00[0xc];      // +0x00
+    hkUint32  m_shapeKey;        // +0x0c
+    hkVector4 m_vertex0;         // +0x10
+    hkVector4 m_vertex1;         // +0x20
+    hkVector4 m_vertex2;         // +0x30
+};
+
+// One side of the agent input: shape, shape key and the body's world transform.
+struct hkAgent3Pair
+{
+    const void*        m_shape;      // +0x00
+    hkUint32           m_pad04;      // +0x04
+    const hkTransform* m_transform;  // +0x08
+};
+struct hkAgent3Input
+{
+    const hkAgent3Pair* m_pairA;     // +0x00 (capsule)
+    const hkAgent3Pair* m_pairB;     // +0x04 (triangle)
+};
+
+struct hkCollideTriangleUtil
+{
+    static void setupPointTriangleDistanceCache(const hkVector4* point,
+                                                hkPointTriangleDistanceCache& cache);   // 0x01105e90
+};
+
+// vtable +0x10 receives one point id (capsule-triangle contact point notification).
+class hkPointIdSink
+{
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void addPoint(int pointId);                                         // +0x10
+};
+
+struct hkCapsuleTriangleAgent3
+{
+    static void  removePoint(hkAgentEntry* entry, void* agentData, hkUint16 pointId);        // 0x010fd010
+    static void  commitPotential(hkAgentEntry* entry, void* agentData, hkUint16 pointId);    // 0x010fd040
+    static void* create(const hkAgent3Input& input, hkAgentEntry* entry, void* agentData);   // 0x010fd060
+    static void  sepNormal(const hkAgent3Input& input, void* agentData, hkVector4& normal);  // 0x010fd0f0
+};
+
+// @ 0x010fd010
+void hkCapsuleTriangleAgent3::removePoint(hkAgentEntry* entry, void* agentData, hkUint16 pointId)
+{
+    hkUint16* pointIds = (hkUint16*)agentData;
+    for (int i = 0; i < 3; i++)
+    {
+        if (pointIds[i] == pointId)
+        {
+            pointIds[i] = 0xffff;
+            return;
+        }
+    }
+}
+
+// @ 0x010fd040
+void hkCapsuleTriangleAgent3::commitPotential(hkAgentEntry* entry, void* agentData, hkUint16 pointId)
+{
+    hkUint16* pointIds = (hkUint16*)agentData;
+    for (int i = 0; i < 3; i++)
+    {
+        if (pointIds[i] == 0xffff)
+        {
+            pointIds[i] = pointId;
+            return;
+        }
+    }
+}
+
+// @ 0x010fd060
+void* hkCapsuleTriangleAgent3::create(const hkAgent3Input& input, hkAgentEntry* entry, void* agentData)
+{
+    hkUint16* pointIds = (hkUint16*)agentData;
+    const hkTriangleShapeData* triangle = (const hkTriangleShapeData*)input.m_pairB->m_shape;
+
+    entry->m_numContactPoints = 0;
+    pointIds[2] = pointIds[1] = pointIds[0] = 0xffff;
+
+    hkCollideTriangleUtil::setupPointTriangleDistanceCache(
+        &triangle->m_vertex0, *(hkPointTriangleDistanceCache*)(pointIds + 4));
+    return pointIds + 0x10;
+}
+
+// @ 0x010fd0a0
+void* __cdecl hkCapsuleTriangleAgent3_freePoints(hkAgentEntry* entry, hkUint16* pointIds, hkPointIdSink* sink)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        if (pointIds[i] != 0xffff)
+        {
+            sink->addPoint((hkUint32)pointIds[i]);
+            pointIds[i] = 0xffff;
+        }
+    }
+    return pointIds + 0x10;
+}
+
+// Separating normal of a capsule against a triangle; both sides are moved into world space with the
+// body transforms, the manifold routine fills two candidate normals and the farther one wins.
+void __cdecl hkCollideCapsuleUtilManifoldCapsVsTriangle(
+    const hkVector4* capsulePoints, hkUint32 capsuleShapeKey,
+    const hkVector4* trianglePoints, hkUint32 triangleShapeKey,
+    const hkPointTriangleDistanceCache& cache, float maxDistance, int flags,
+    hkVector4* manifold);                                                       // 0x01107270
+
+static __forceinline hkVector4 transformPoint(const hkTransform& t, const hkVector4& p)
+{
+    hkVector4 out;
+    out.x = (t.col0[0] * p.x + (t.col1[0] * p.y + t.col2[0] * p.z)) + t.trans[0];
+    out.y = (t.col0[1] * p.x + (t.col1[1] * p.y + t.col2[1] * p.z)) + t.trans[1];
+    out.z = (t.col0[2] * p.x + (t.col1[2] * p.y + t.col2[2] * p.z)) + t.trans[2];
+    out.w = 0.0f;
+    return out;
+}
+
+// @ 0x010fd0f0
+void hkCapsuleTriangleAgent3::sepNormal(const hkAgent3Input& input, void* agentData, hkVector4& normal)
+{
+    const hkCapsuleShapeData* capsule = (const hkCapsuleShapeData*)input.m_pairA->m_shape;
+    const hkTransform& capTransform = *input.m_pairA->m_transform;
+    const hkTriangleShapeData* triangle = (const hkTriangleShapeData*)input.m_pairB->m_shape;
+    const hkTransform& triTransform = *input.m_pairB->m_transform;
+
+    hkVector4 capsulePoints[2];
+    hkVector4 trianglePoints[3];
+    capsulePoints[0] = transformPoint(capTransform, capsule->m_endA);
+    capsulePoints[1] = transformPoint(capTransform, capsule->m_endB);
+    trianglePoints[0] = transformPoint(triTransform, triangle->m_vertex0);
+    trianglePoints[1] = transformPoint(triTransform, triangle->m_vertex1);
+    trianglePoints[2] = transformPoint(triTransform, triangle->m_vertex2);
+
+    hkVector4 manifold[2];
+    hkCollideCapsuleUtilManifoldCapsVsTriangle(capsulePoints, capsule->m_shapeKey,
+                                               trianglePoints, triangle->m_shapeKey,
+                                               *(const hkPointTriangleDistanceCache*)((char*)agentData + 8),
+                                               HK_REAL_MAX, 0, manifold);
+    if (manifold[0].w < manifold[1].w)
+        normal = manifold[0];
+    else
+        normal = manifold[1];
 }

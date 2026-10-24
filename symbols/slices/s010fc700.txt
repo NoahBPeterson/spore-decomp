@@ -1,2 +1,9 @@
-010fc700 hkAgentNnMachine_ProcessTrack  # Havok 3.1 name from index; stream cmds 2/4/6, TIM recompute via hkSweptTransformUtil::lerp2, "MinumTim" monitor value
-01209c50 hkSweptTransformUtil::lerp2  # (const hkSweptTransform&, float t, hkTransform& out) cdecl, called with motion+0x40 and the step start time
+010fc700 FUN_010fc700  # nonmatching (1516) - track walk/dispatch (pre-existing committed body, kept)
+010fce10 ?hkAgentNnMachine_CalcStatistics@@YAXPBUhkAgentNnTrack@@PAVhkStatisticsCollector@@@Z  # MATCH - per-sector scan: addObject("Sector",8,sector,used+0x10,0x200) then stream cmds (1 = stop, 6 = addReference("Agent"), others advance by m_size), flags /vc71
+010fceb0 ?calcNnStatistics@hkAgentMachineUtil@@SAXABUhkAgentNnTrack@@PAVhkStatisticsCollector@@@Z  # nonmatching (99) - sector sizes + Agent/ContactMgr references, flags /vc71
+010fcf90 ?calcNnStatisticsContactMgrsOnly@hkAgentMachineUtil@@SAXABUhkAgentNnTrack@@PAVhkStatisticsCollector@@@Z  # nonmatching (93) - ContactMgr references only, flags /vc71
+010fd010 ?removePoint@hkCapsuleTriangleAgent3@@SAXPAUhkAgentEntry@@PAXG@Z  # MATCH - clears the matching contact point id to 0xffff, flags /vc71
+010fd040 ?commitPotential@hkCapsuleTriangleAgent3@@SAXPAUhkAgentEntry@@PAXG@Z  # MATCH - stores the id in the first free (0xffff) contact point slot, flags /vc71
+010fd060 ?create@hkCapsuleTriangleAgent3@@SAPAXABUhkAgent3Input@@PAUhkAgentEntry@@PAX@Z  # MATCH - clears m_numContactPoints, fills the 3 ids with 0xffff, setupPointTriangleDistanceCache(0x01105e90) from the triangle vertex, returns agentData+0x20, flags /vc71
+010fd0a0 FUN_010fd0a0  # nonmatching (52) - release of the 3 contact point ids through vtable +0x10, returns agentData+0x20
+010fd0f0 ?sepNormal@hkCapsuleTriangleAgent3@@SAXABUhkAgent3Input@@PAXAAVhkVector4@@@Z  # nonmatching (935) - capsule/triangle separating normal via 0x01107270, flags /vc71
