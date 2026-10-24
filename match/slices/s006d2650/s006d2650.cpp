@@ -1,4 +1,5 @@
 // Slice s006d2650: bake evaluators (dot tail).
+// (The shared DEFINE_BAKE dot tail reads res[2]; uv2 zero-fills u[2]/u[3])
 #include "../s006ccf50/s006ccf50.h"
 
 DEFINE_BAKE(Bake_6d2650, 0, 4, 0, 0, 1)   // @ 0x006d2650  uv4u8  / colour4u8 / dot

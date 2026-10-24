@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-006d2650 715  bake evaluator (uv4x8/colour4x8/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (4/568 valid inputs mismatched)
-006d2980 680  bake evaluator (uv2x16/colour4x8/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/5 valid inputs mismatched)
-006d2c80 715  bake evaluator (uv4x16/colour4x8/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/91 valid inputs mismatched)
-006d2fb0 688  bake evaluator (uv4x8/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/6 valid inputs mismatched)
-006d32c0 649  bake evaluator (uv2x16/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/74 valid inputs mismatched)
+006d2650 806 FIXED bake evaluator (uv4x8/colour4x8/pos3f, core FUN_006c4200, dot tail); shared DEFINE_BAKE dot tail now reads res[2] (Ghidra-inverted frame: afStack_24[2]==fStack_1c); equiv PASS (568 valid, 100% coverage); chk ~size 760 vs 806 (frame/schedule). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006d2980 755 FIXED bake evaluator (uv2x16/colour4x8/pos3f, core FUN_006c4200, dot tail); uv2 path zero-fills u[2]/u[3] (original writes only s[0..1], zero-inits the passed index array tail at [esp+0x74]/[esp+0x78]); equiv PASS (512 valid, 100% coverage); chk ~size 760 vs 755 (frame/schedule). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006d2c80 806 FIXED bake evaluator (uv4x16/colour4x8/pos3f, core FUN_006c4200, dot tail); same res[2] dot-tail fix; equiv PASS (516 valid, 100% coverage); chk ~size 760 vs 806 (frame/schedule). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006d2fb0 773 FIXED bake evaluator (uv4x8/colour4f/pos3f, core FUN_006c4200, dot tail); same res[2] dot-tail fix; equiv PASS (472 valid, 100% coverage); chk ~size 760 vs 773 (frame/schedule). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006d32c0 722 FIXED bake evaluator (uv2x16/colour4f/pos3f, core FUN_006c4200, dot tail); uv2 zero-fill fix as 006d2980; equiv PASS (494 valid, 100% coverage); chk ~size 716 vs 722 (frame/schedule). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
