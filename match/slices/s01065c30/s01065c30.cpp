@@ -97,6 +97,10 @@ void  cString_dtor(void* s);                             // 0x006b5240
 bool  Layout_Init(void* l, const wchar_t* name, int a, int b, int c);  // 0x00812160
 void  Layout_Shutdown(void* l, int a);                   // 0x00811ad0
 void  Layout_SetVisibility(void* l, int v);              // 0x00810590
+// 0x00810590 is __thiscall: ecx = layout window, one stack arg (ret 4).
+struct LayoutWindow {
+    void SetVisibility(int v);                           // @ 0x00810590
+};
 void* FUN_00ba9370(void* mgr, int id);                   // 0x00ba9370
 
 struct V4 { virtual int AddRef(); virtual int Release(); };
@@ -151,17 +155,28 @@ struct T5d20 {
     bool isStateSpecial();
     void reset();
 };
-struct ConfigMgr { virtual void* v0(); virtual void* Lookup(uint id); };
+// ConfigManager lookup is vtable slot +0x30 (the original loads [edx+0x30]).
+struct ConfigMgr {
+    virtual void* v0(); virtual void* v1(); virtual void* v2(); virtual void* v3();
+    virtual void* v4(); virtual void* v5(); virtual void* v6(); virtual void* v7();
+    virtual void* v8(); virtual void* v9(); virtual void* v10(); virtual void* v11();
+    virtual void* Lookup(uint id);   // +0x30
+};
+// Manager returned by FUN_0067cac0(id): both calls below are __thiscall.
+struct CfgMgr {
+    void F_67c830(uint id);          // @ 0x0067c830  (ret 4)
+    void Set(uint id, int on);       // @ 0x0067c8c0  (ret 8)
+};
 void T5d20::f() {
     if (((ConfigMgr*)ConfigManager())->Lookup(0x4ea96cb) == 0) { mState = 8; return; }
     switch (mState) {
-    case 0: mState = 1; FUN_0067cac0(0x43c18587); FUN_0067c830(0x43c18587); return;
-    case 1: mState = 2; FUN_0067cac0(0x1930f01e); FUN_0067c830(0x1930f01e); return;
+    case 0: mState = 1; ((CfgMgr*)FUN_0067cac0(0x43c18587))->F_67c830(0x43c18587); return;
+    case 1: mState = 2; ((CfgMgr*)FUN_0067cac0(0x1930f01e))->F_67c830(0x1930f01e); return;
     case 2: mState = 3; return;
     case 3: mState = 4; return;
-    case 4: mState = 5; FUN_0067cac0(0xf98be0b8); FUN_0067c830(0xf98be0b8); return;
+    case 4: mState = 5; ((CfgMgr*)FUN_0067cac0(0xf98be0b8))->F_67c830(0xf98be0b8); return;
     case 5: mState = 6; return;
-    case 6: mState = 7; FUN_0067cac0(0xe43f6bbd); FUN_0067c830(0xe43f6bbd); return;
+    case 6: mState = 7; ((CfgMgr*)FUN_0067cac0(0xe43f6bbd))->F_67c830(0xe43f6bbd); return;
     case 7: break;
     default: return;
     }
@@ -182,10 +197,10 @@ bool T5d20::isStateSpecial() {
 // ===========================================================================
 void T5d20::reset() {
     mState = 8;
-    FUN_0067cac0(0x43c18587); FUN_0067c8c0(0x43c18587, 1);
-    FUN_0067cac0(0x1930f01e); FUN_0067c8c0(0x1930f01e, 1);
-    FUN_0067cac0(0xf98be0b8); FUN_0067c8c0(0xf98be0b8, 1);
-    FUN_0067cac0(0xe43f6bbd); FUN_0067c8c0(0xe43f6bbd, 1);
+    ((CfgMgr*)FUN_0067cac0(0x43c18587))->Set(0x43c18587, 1);
+    ((CfgMgr*)FUN_0067cac0(0x1930f01e))->Set(0x1930f01e, 1);
+    ((CfgMgr*)FUN_0067cac0(0xf98be0b8))->Set(0xf98be0b8, 1);
+    ((CfgMgr*)FUN_0067cac0(0xe43f6bbd))->Set(0xe43f6bbd, 1);
 }
 
 // ===========================================================================
@@ -311,7 +326,7 @@ void FUN_01066230(void* self, char param) {
 // @ 0x01066310
 // ===========================================================================
 void __stdcall FUN_01066310(int* src) {
-    void* p = operator_new(0x18, "Simulator", 0, 0, "EASTL/allocator.h", 0xd1);
+    void* p = operator_new(0x18, "Simulator", 0, 0, (const char*)0x13ebb38, 0xd1);
     int* d = (int*)p;
     if (d) { d[0]=src[0]; d[1]=src[1]; d[2]=src[2]; d[3]=src[3]; d[4]=src[4]; }
     d[5] = 0;
@@ -529,5 +544,5 @@ struct T6a10 {
     void hide();
 };
 void T6a10::hide() {
-    if (mWin) Layout_SetVisibility(mWin, 0);
+    if (mWin) ((LayoutWindow*)mWin)->SetVisibility(0);
 }
