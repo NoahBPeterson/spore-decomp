@@ -11,7 +11,7 @@ struct Endpoint {
 
 // ---------------------------------------------------------------------------
 // @ 0x007af5d0
-void FUN_007af5d0(Endpoint* first, Endpoint* last, Endpoint* dest)
+Endpoint* FUN_007af5d0(Endpoint* first, Endpoint* last, Endpoint* dest)
 {
     for (; first != last; ++first) {
         if (dest != 0) {
@@ -26,6 +26,7 @@ void FUN_007af5d0(Endpoint* first, Endpoint* last, Endpoint* dest)
         }
         ++dest;
     }
+    return dest;
 }
 
 // ---------------------------------------------------------------------------
@@ -67,7 +68,7 @@ void FUN_007af670(Endpoint* dest, uint32_t n, const Endpoint* src)
 
 // ---------------------------------------------------------------------------
 // @ 0x007af6d0
-void FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
+Endpoint* FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
 {
     while (last != first) {
         last = (Endpoint*)((char*)last - 0x20);
@@ -81,6 +82,7 @@ void FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
         dest->v[6] = last->v[6];
         dest->c    = last->c;
     }
+    return dest;
 }
 
 // ---------------------------------------------------------------------------
@@ -113,6 +115,32 @@ void DestroyDxtSurfaceEx(DxtSurfaceEx* p)
 }
 #pragma auto_inline(on)
 
+// In the original the helpers in this TU use compiler-chosen register
+// conventions (findendpoints: colors in ecx; trymapblock: c0 in ecx, c1 in eax,
+// map/pixels/best on the stack, caller-cleaned).  No MSVC calling convention
+// expresses that pair of register arguments, so seed ecx/eax explicitly right
+// before the (otherwise cdecl) call.
+extern "C" uint32_t trymapblock(uint32_t* map, const uint32_t* pixels, uint32_t best);  // 0x7ad810
+static __forceinline uint32_t TryMapBlock(uint32_t c0, uint32_t c1, uint32_t* map,
+                                          const uint32_t* pixels, uint32_t best)
+{
+    uint32_t r;
+    uint32_t* m = map;
+    const uint32_t* p = pixels;
+    uint32_t b = best;
+    __asm {
+        push b
+        push p
+        push m
+        mov ecx, c0
+        mov eax, c1
+        call trymapblock
+        add esp, 12
+        mov r, eax
+    }
+    return r;
+}
+
 // @ 0x007aeab0  findendpoints
 //
 // Searches 565 endpoint pairs for a 4x4 DXT block.  `colors` holds the block's
@@ -123,11 +151,6 @@ void DestroyDxtSurfaceEx(DxtSurfaceEx* p)
 //          alone (>=25), then red/blue pre-screened pairs (>=30).
 // Stops early once the error is <= the quality threshold.  Returns the best error.
 //
-// In the original the helpers in this TU use compiler-chosen register
-// conventions (findendpoints: colors in ecx; trymapblock: c0 in ecx, c1 in eax).
-// Here they are plain cdecl with the same argument values.
-extern "C" uint32_t trymapblock(uint32_t c0, uint32_t c1, uint32_t* map,
-                                const uint32_t* pixels, uint32_t best);       // 0x7ad810
 uint32_t rtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1);  // 0x7ade70
 uint32_t rbtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1); // 0x7ae0b0
 
@@ -172,12 +195,12 @@ uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, u
 
     if (quality >= 5)
     {
-        best = trymapblock(e0, e1, map, pixels, best);
+        best = TryMapBlock(e0, e1, map, pixels, best);
         if (best > thresh)
         {
             if (quality < 10)
             {
-                uint32_t err = trymapblock(e1, e0, map, pixels, best);
+                uint32_t err = TryMapBlock(e1, e0, map, pixels, best);
                 if (err < best)
                 {
                     uint32_t t = e0;
@@ -196,7 +219,7 @@ uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, u
                         uint32_t b = RGB888TO565(pixels[j]);
                         if (a > b)
                         {
-                            uint32_t err = trymapblock(a, b, map, pixels, best);
+                            uint32_t err = TryMapBlock(a, b, map, pixels, best);
                             if (err < best)
                             {
                                 best = err;
@@ -276,7 +299,7 @@ uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, u
                             uint32_t c = ((r << 6 | g) << 5) | b;
                             if (c > e1)
                             {
-                                uint32_t err = trymapblock(c, e1, map, pixels, best);
+                                uint32_t err = TryMapBlock(c, e1, map, pixels, best);
                                 if (err < best)
                                 {
                                     best = err;
@@ -298,7 +321,7 @@ uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, u
                             uint32_t c = ((r << 6 | g) << 5) | b;
                             if (e0 > c)
                             {
-                                uint32_t err = trymapblock(e0, c, map, pixels, best);
+                                uint32_t err = TryMapBlock(e0, c, map, pixels, best);
                                 if (err < best)
                                 {
                                     best = err;
@@ -335,7 +358,7 @@ uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, u
                                             uint32_t cb = ((r1 << 6 | g1) << 5) | b1;
                                             if (ca > cb || quality >= 60)
                                             {
-                                                uint32_t e = trymapblock(ca, cb, map, pixels, best);
+                                                uint32_t e = TryMapBlock(ca, cb, map, pixels, best);
                                                 if (e < best)
                                                 {
                                                     best = e;
