@@ -1,0 +1,11 @@
+slices/s00dd1280/s00dd1280.cpp  ?Init@cUIBanningContent@SP@@QAEXXZ  00dd12f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00dd1280/s00dd1280.cpp  ?Shutdown@cUIBanningContent@SP@@QAEXXZ  00dd14b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00dd1280/s00dd1280.cpp  ?SetModeWindows@cUIBanningContent@SP@@SAX_N@Z  00dd1520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00dd1280/s00dd1280.cpp  ?FUN_00dd1670@SP@@YIXPAUcBanUiObject@1@@Z  00dd1670  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00dd1280/s00dd1280.cpp  ?GetKey@cUIBanningContent@SP@@SAPAHPAUIQueryable@2@@Z  00dd1730  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00dd1280/s00dd1280.cpp  ?ToggleBanningContent@cUIBanningContent@SP@@SAX_N@Z  00dd17f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00dd1280/s00dd1280.cpp  ?EndBanMode@cUIBanningContent@SP@@SAX_N@Z  00dd1840  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00dd1280/s00dd1280.cpp  ?GetBannability@cUIBanningContent@SP@@SA_NPAUIQueryable@2@@Z  00dd18b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00dd1280/s00dd1280.cpp  ?GetBanMode@cUIBanningContent@SP@@SAHPAH@Z  00dd18d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00dd1280/s00dd1280.cpp  ?FUN_00dd1c50@SP@@YAXII@Z  00dd1c50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00dd1280/s00dd1280.cpp  ?FUN_00dd1ce0@SP@@YGPAUtUiKey@1@HH@Z  00dd1ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
