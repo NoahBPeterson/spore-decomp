@@ -89,7 +89,9 @@ NUDGE = ("Continue your task. Act through tool calls: call the edit/write tool t
          "compile; do not end your turn with a plan in text. Run .venv/bin/python tools/matching/claim.py %s %%s (it "
          "prints the slice you hold if it is unfinished, else your next slice), finish that slice (source, chk.py, "
          "bookkeeping, run_all), and keep claiming until it prints NO SLICE; then give the final one-line-per-slice "
-         "summary. Name every field you touch (docs/matching.md): no raw-offset casts like *(u32*)((char*)p + 0x5fc)."
+         "summary. Name every field you touch (docs/matching.md): no raw-offset casts like *(u32*)((char*)p + 0x5fc). "
+         "If the slice already has committed functions, keep every one of them and its rows: add yours to the same "
+         "file, never rewrite it from scratch (a gold7 rewrite dropped an exact function, 2026-10-24)."
          % G["batch"]) if QUEUE else (
          "Continue your task: check the files already written in your slices and finish the remaining slices, then "
          "give the final one-line-per-slice summary.")
