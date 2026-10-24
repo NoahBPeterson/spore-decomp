@@ -1,0 +1,4 @@
+00f7ba80 ?GenerateCurveParticles@cParticlesEffectOld@@QAEXM@Z  # external emission-mode target (not defined in this slice)
+00f7bf90 ?GenerateNewParticles@cParticlesEffectOld@@QAEXM@Z  # rate-curve particle emitter (nonmatching)
+00f7c660 ?GenerateBurstParticles@cParticlesEffectOld@@QAEXM@Z  # fixed per-cycle-count particle emitter (nonmatching)
+00f7ca60 ?AdvanceParticles@cParticlesEffectOld@@QAEXM@Z  # leftover-time/clamp/emission-mode dispatch

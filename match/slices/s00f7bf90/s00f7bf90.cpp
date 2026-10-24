@@ -46,6 +46,20 @@ __forceinline int FloorToInt(float f)
     }
 }
 
+// float -> int, rounding up (the module's asm helper: cvtss2si + cmovb)
+__forceinline int CeilToInt(float f)
+{
+    __asm {
+        movss    xmm0, f
+        cvtss2si eax, xmm0
+        cvtsi2ss xmm1, eax
+        mov      ecx, eax
+        add      ecx, 1
+        ucomiss  xmm1, xmm0
+        cmovb    eax, ecx
+    }
+}
+
 // Random in [lo, hi], clamped (inlined in the original)
 static __forceinline double RandomRangeM(double lo, double hi)
 {
@@ -85,7 +99,11 @@ struct cParticlesDescription {
     uint32_t mPad0[2];
     uint32_t mFlags;                             // +0x08 (bit 2: loop, 8/9/10: scale by emitter scale,
                                                  //        27: kill on spawn, 28: no auto stop)
-    uint32_t mPad0c[(0x24 - 0x0c) / 4];
+    uint32_t mPad0c;                             // +0x0c
+    uint32_t mPad10;                             // +0x10
+    float    mEmitThreshold;                     // +0x14 (burst mode emits while cycle time is below this)
+    float    mTimeLimit;                         // +0x18 (dt clamp, seconds)
+    uint32_t mPad1c[2];                          // +0x1c
     float    mRestartMin;                        // +0x24 (>= 0: restart with random delay)
     float    mRestartMax;                        // +0x28
     uint32_t mPad2c[(0x68 - 0x2c) / 4];
@@ -150,6 +168,9 @@ public:
     void FUN_00f7bd70();
     void FUN_00f7a5d0(cParticle* p);
     void GenerateNewParticles(float deltaTime);  // 0x00f7bf90
+    void GenerateBurstParticles(float deltaTime); // 0x00f7c660
+    void AdvanceParticles(float deltaTime);       // 0x00f7ca60
+    void GenerateCurveParticles(float deltaTime); // 0x00f7ba80
 };
 
 // @ 0x00f7bf90
@@ -341,4 +362,158 @@ void cParticlesEffectOld::GenerateNewParticles(float dt)
             }
         }
     } while (dt > 0.0f);
+}
+
+// @ 0x00f7c660
+void cParticlesEffectOld::GenerateBurstParticles(float dt)
+{
+    double time = (double)dt * mCycleRate + mParticleSystemTime;
+    mParticleSystemTime = time;
+    if ((double)mCycle > time)
+        return;
+
+    int count = CeilToInt(mDesc->mRateCurveBegin[0] * mCurrentEmitRateScale);
+
+    while (mParticleSystemTime >= (double)mCycle) {
+        if (TestBit(mDesc->mFlags, 27))
+            FUN_00f7bd70();
+
+        float cycleTime = (float)((mParticleSystemTime - (double)mCycle) * mDesc->mRestartBackdate);
+        int i = 0;
+        if (cycleTime < mDesc->mEmitThreshold && count > 0) {
+            do {
+                // Take a particle from the pool (growing it when empty).
+                cParticle* p;
+            retry:
+                p = sParticlePool.mpFreeHead;
+                if (p) {
+                    sParticlePool.mpFreeHead = p->mpNext;
+                    p->mpPrev = 0;
+                    p->mpNext = 0;
+                } else if (sParticlePool.AddCore(0, 0)) {
+                    goto retry;
+                } else {
+                    p = 0;
+                }
+
+                bool alive = InitParticle(p);
+                if (!alive)
+                    goto free;
+
+                {
+                    cParticlesDescription* pd = mDesc;
+                    if (sPhysicsUpdate[pd->mPhysicsType]) {
+                        alive = sPhysicsUpdate[pd->mPhysicsType](p, cycleTime, pd, this);
+                    } else {
+                        float age = p->mAge;
+                        p->mAge = age + cycleTime;
+                        if (age + cycleTime < p->mLife) {
+                            float fy = mDirectionalForcesSum.y;
+                            float fz = mDirectionalForcesSum.z;
+                            float oldVz = p->mVelocity.z;
+                            float oldVx = p->mVelocity.x;
+                            float oldVy = p->mVelocity.y;
+                            float vx = mDirectionalForcesSum.x * cycleTime + oldVx;
+                            p->mVelocity.x = vx;
+                            float vz = fz * cycleTime + p->mVelocity.z;
+                            p->mVelocity.z = vz;
+                            float vy = fy * cycleTime + oldVy;
+                            p->mVelocity.y = vy;
+                            float damp = 1.0f - pd->mDrag * cycleTime;
+                            vx = vx * damp;
+                            p->mVelocity.x = vx;
+                            vy = vy * damp;
+                            p->mVelocity.y = vy;
+                            vz = vz * damp;
+                            p->mVelocity.z = vz;
+                            float half = cycleTime * 0.5f;
+                            p->mPosition.y = p->mPosition.y + (vy + oldVy) * half;
+                            p->mPosition.x = (vx + oldVx) * half + p->mPosition.x;
+                            p->mPosition.z = p->mPosition.z + (vz + oldVz) * half;
+                            alive = true;
+                        } else {
+                            alive = false;
+                        }
+                    }
+                }
+                if (!alive)
+                    goto free;
+
+                // Link at the tail of the live list and grow the bounding box.
+                p->mpPrev = mpListPrev;
+                p->mpNext = (cParticle*)&mpListNext;
+                ((cParticle*)&mpListNext)->mpPrev = p;
+                p->mpPrev->mpNext = p;
+                mParticleCount++;
+                if (mBBMin.x > p->mPosition.x) mBBMin.x = p->mPosition.x;
+                if (p->mPosition.x > mBBMax.x) mBBMax.x = p->mPosition.x;
+                if (mBBMin.y > p->mPosition.y) mBBMin.y = p->mPosition.y;
+                if (p->mPosition.y > mBBMax.y) mBBMax.y = p->mPosition.y;
+                if (mBBMin.z > p->mPosition.z) mBBMin.z = p->mPosition.z;
+                if (p->mPosition.z > mBBMax.z) mBBMax.z = p->mPosition.z;
+                goto next;
+
+            free:
+                // Free or kill the particle (shared by init and physics failure).
+                if (!mChainSystem || (p->mAge < p->mLife && !TestBit(mDesc->mFlags, 27))) {
+                    p->mpNext = sParticlePool.mpFreeHead;
+                    sParticlePool.mpFreeHead = p;
+                } else {
+                    FUN_00f7a5d0(p);
+                    if (mChainSystem && mParticleCount == 0 && mDelayedStopActive)
+                        mChainSystem->mComponent.Stop(false);
+                }
+            next:
+                i++;
+            } while (i < count);
+        }
+
+        mCycle++;
+        cParticlesDescription* d = mDesc;
+        if (d->mNumCycles != 0 && mCycle >= (int)d->mNumCycles) {
+            if (TestBit(d->mFlags, 28))
+                return;
+            mComponent.Stop(false);
+            return;
+        }
+        if (d->mRestartMin >= 0.0f) {
+            double v = RandomRangeM((double)d->mRestartMin, (double)d->mRestartMax);
+            mParticleSystemTime = mParticleSystemTime - v * mCycleRate;
+            if (mParticleSystemTime < (double)mCycle) {
+                mLeftoverTime = (float)(d->mRestartBackdate * ((double)mCycle - mParticleSystemTime));
+                mParticleSystemTime = (double)mCycle;
+                return;
+            }
+        }
+    }
+}
+
+// @ 0x00f7ca60
+void cParticlesEffectOld::AdvanceParticles(float dt)
+{
+    if (mLeftoverTime > 0.0f) {
+        dt = mLeftoverTime - dt;
+        mLeftoverTime = dt;
+        if (dt > 0.0f)
+            return;
+        dt = -dt;
+    }
+
+    float limit = mDesc->mTimeLimit;
+    if (limit > 0.01f) {
+        limit -= 0.01f;
+        if (dt > limit)
+            dt = limit;
+    }
+
+    uint32_t flags = mDesc->mFlags;
+    if (TestBit(flags, 1)) {
+        GenerateCurveParticles(dt);
+        return;
+    }
+    if (TestBit(flags, 0)) {
+        GenerateBurstParticles(dt);
+        return;
+    }
+    GenerateNewParticles(dt);
 }
