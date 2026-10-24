@@ -588,41 +588,48 @@ struct Sorter830 {
   bool m20;               // +0x20
   bool operator()(void* pa, void* pb);
 };
+// The elements the sorter compares (RefElem): sort key bytes at +0x1c/+0x1d, an owner pointer at
+// +0x10 and three key words at +0x0/+0x4/+0x8.
+struct SortElem {
+  unsigned m0;            // +0x0
+  unsigned m4;            // +0x4
+  unsigned m8;            // +0x8
+  char pad0c[4];
+  void* m10;              // +0x10
+  char pad14[8];
+  unsigned char m1c;      // +0x1c
+  unsigned char m1d;      // +0x1d
+};
 bool Sorter830::operator()(void* pa, void* pb) {
-  unsigned char* a = (unsigned char*)pa;
-  unsigned char* b = (unsigned char*)pb;
-  bool r = b[0x1c] < a[0x1c];
-  if (b[0x1c] != a[0x1c]) return r;
-  unsigned char a1 = a[0x1d];
-  unsigned char av = 0, bv = 0;
-  if (a1 == 0 && *(void**)(a + 4) != 0 && *(char*)((char*)*(void**)(a + 4) + 0xf4) != 0) av = 1;
-  if (b[0x1d] == 0 && *(void**)(b + 4) != 0 && *(char*)((char*)*(void**)(b + 4) + 0xf4) != 0) bv = 1;
-  r = bv < av;
-  if (bv != av) return r;
-  r = b[0x1d] < a1;
-  if (b[0x1d] != a1) return r;
+  SortElem* a = (SortElem*)pa;
+  SortElem* b = (SortElem*)pb;
+  if (b->m1c != a->m1c) return b->m1c < a->m1c;
+  unsigned char a1 = a->m1d;
+  bool av = false, bv = false;
+  if (a1 == 0 && a->m10 != 0 && *(char*)((char*)a->m10 + 0xf4) != 0) av = true;
+  if (b->m1d == 0 && b->m10 != 0 && *(char*)((char*)b->m10 + 0xf4) != 0) bv = true;
+  if (bv != av) return bv < av;
+  if (b->m1d != a1) return b->m1d < a1;
   int n = (int)(m10 - mC);
   for (int i = 0; i < n; ++i) {
-    int* obj;
+    void* obj;
     int slot;
-    if (i == 0 && m20) { obj = (int*)*mC; slot = 6; }
-    else { obj = (int*)mC[i]; slot = 5; }
+    if (i == 0 && m20) { obj = *(void**)mC; slot = 6; }
+    else { obj = (void*)mC[i]; slot = 5; }
     int res = ((FnCmp2)((VObj*)obj)->vt[slot])(obj, pa, pb);
     if (res != 0) return res < 0;
   }
-  unsigned x = *(unsigned*)a, y = *(unsigned*)b;
-  r = x < y;
-  if (x == y) {
-    if (a[4] == b[4] && a[8] == b[8]) return false;
-    if (a[8] != b[8]) return a[8] < b[8];
-    return a[4] < b[4];
+  if (a->m0 == b->m0) {
+    if (a->m4 == b->m4 && a->m8 == b->m8) return false;
+    if (a->m8 != b->m8) return a->m8 < b->m8;
+    return a->m4 < b->m4;
   }
-  return r;
+  return a->m0 < b->m0;
 }
 // @ 0x0066af20
-struct Vec3 { int* begin; int* end; int* cap; };
-void vec_cctor(void*, int, void*);
-void FUN_01022c60(void*, void*, void*, void*, void*);
+// 0x0066aec0 is the eastl vector range-ctor: __thiscall (ECX = the vector, `ret 8`), args (count, src).
+struct Vec3 { int* begin; int* end; int* cap; void m0066aec0(int count, void* src); };
+void FUN_01022c60(void*, void*, void*, void*, int);
 struct CtorAf {
   void* vt;              // +0
   int m4;                // +4
@@ -638,11 +645,13 @@ CtorAf::CtorAf(int p2, Vec3* p3) {
   m4 = 0;
   vt = (void*)0x1400620;
   m8 = p2;
-  vec_cctor(&mC, (int)(p3->end - p3->begin), (void*)((char*)p3 + 0xc));
-  int v = p2;
+  mC.m0066aec0((int)(p3->end - p3->begin), (void*)((char*)p3 + 0xc));
+  // uninitialized_copy_impl returns the new end through its hidden first argument; the trailing tag
+  // argument is a by-value empty false_type, so retail pushes whatever was left in the register
+  // (p2, which is dead by then) and never reads it.
   void* out;
-  FUN_01022c60(&v, p3->begin, p3->end, mC.begin, &out);
-  mC.end = (int*)v;
+  FUN_01022c60(&out, p3->begin, p3->end, mC.begin, p2);
+  mC.end = (int*)out;
   m20 = false;
   m24 = 0;
   m21 = true;
