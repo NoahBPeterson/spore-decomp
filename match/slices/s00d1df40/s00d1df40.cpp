@@ -22,7 +22,14 @@
 //   d1e830  manager/inline-table index lookup by editor species.
 //   d1e8d0  predicate: element flag "detached" (value != 1.0 and bit set in the +0xbf8 set).
 //
-// Result (this session): see manifest.txt / nonmatching.txt / partial.txt.
+// Result (this session): 3 byte-exact (00d1e5c0, 00d1e670, 00d1e7f0); the equivalence gate ran
+// once at the end (all 13 complete definitions). PASS: 00d1e140, 00d1e8d0. WEAK: 00d1e4b0,
+// 00d1e610, 00d1e6c0. FAIL: 00d1df40 (fault inside the shared FUN_00bf1fd0), 00d1e180 (fault at
+// 0x30000049), 00d1e530 (fault inside FUN_00c0e8d0), 00d1e720 (FUN_00c0bc00 modelled as a thiscall
+// receiver call where the original is a 2-arg cdecl whose pushed words feed FUN_00ba3f90),
+// 00d1e830 (mode-switch call layout). The five FAIL rows are recorded as approximate in
+// partial.txt because the 5-round chk.py compile cap was already reached, so their real
+// differences (noted above) were not re-compiled. See manifest.txt / nonmatching.txt / partial.txt.
 // Every function below is a complete definition.
 //
 // Notes / decisions:
