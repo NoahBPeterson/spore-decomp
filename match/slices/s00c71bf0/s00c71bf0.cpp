@@ -603,15 +603,8 @@ void CPlanet::FUN_00c72770(float f)
     float angle = ((f / pd->mA8) * g_016944e0) *
                   (*(float*)((char*)g_bgSimManager_016dda8c + 0x14)) * g_01471064;
 
-    float s, c;
-    __asm {
-        fld dword ptr [angle]
-        fld st(0)
-        fsin
-        fstp dword ptr [s]
-        fcos
-        fstp dword ptr [c]
-    }
+    float s = sinf(angle);
+    float c = cosf(angle);
 
     float t1 = pd->m9C * s;
     float t2 = pd->mA0 * s;
@@ -625,24 +618,7 @@ void CPlanet::FUN_00c72770(float f)
     float f8  = (qz * c + qw * t3) + (qy * t1 - qx * t2);
     float f4  = qw * c - ((qy * t2 + qz * t3) + qx * t1);
 
-    float r;
-    __asm {
-        fld dword ptr [f4]
-        fmul st(0), st(0)
-        fld dword ptr [f10]
-        fmul st(0), st(0)
-        faddp st(1), st(0)
-        fld dword ptr [fc]
-        fmul st(0), st(0)
-        faddp st(1), st(0)
-        fld dword ptr [f8]
-        fmul st(0), st(0)
-        faddp st(1), st(0)
-        fsqrt
-        fld1
-        fdivrp st(1), st(0)
-        fstp dword ptr [r]
-    }
+    float r = 1.0f / sqrtf((((f4 * f4 + f10 * f10) + fc * fc) + f8 * f8));
 
     Quat4 out;
     out.x = r * f10;

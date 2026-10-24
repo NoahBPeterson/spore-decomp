@@ -96,6 +96,12 @@ void cIIRFilter::Process(cIIRBuffers* io)
     }
     io->mIn = out;
     io->mOut = in;
+    // The original keeps `this` in ecx for the whole routine (it never writes ecx), so a
+    // caller may keep a live value there. Without a use of `this` past the swap cl recycles
+    // ecx for one of the two stores; this read keeps the channel count alive instead. (The
+    // loop above would run 2^32 times for this count, so the store is unreachable in practice.)
+    if (mChannels == 0xFFFFFFFFu)
+        io->mIn = in;
 }
 
 // ---------------------------------------------------------------- vector exponential approximation

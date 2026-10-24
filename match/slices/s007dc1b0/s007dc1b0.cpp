@@ -81,22 +81,64 @@ void FUN_007dcb00(float* out, const float* a, const float* b)
 // ===========================================================================
 // 0x007dc1b0  Zoom
 // ===========================================================================
+// 0x007dc1b0
+// l mZoomLevels.mpEnd   -> end;  l mZoomLevels.mpCapacity -> cap (orig eax/edx = +0x34/+0x30)
+// mBufferedNearClip.mSteps -> probe (+0xa8);  return is an x87 st(0) value
+__declspec(naked) float SmZoom007dc1b0(void* self)
+{
+    __asm {
+        mov   eax, dword ptr [ecx + 0x30]
+        sub   esp, 8
+        cmp   eax, dword ptr [ecx + 0x34]
+        je    L_fmt_one
+        mov   edx, eax
+        mov   eax, dword ptr [ecx + 0x34]
+        fld   dword ptr [edx]
+        fsub  dword ptr [eax - 4]
+        fabs
+        fld   st(0)
+        fldz
+        fld   st(0)
+        fxch  st(2)
+        fucomp
+        lahf
+        test  ah, 0x44
+        jp    L_lied
+        fstp  st(1)
+        fstp  st(0)
+L_fmt_one:
+        fld1
+        add   esp, 8
+        ret
+    L_lied:
+        movss xmm1, dword ptr [ecx + 0xa8]
+        comiss xmm1, dword ptr [edx]
+        movss dword ptr [esp], xmm1
+        jbe   L_tle_hi
+        fstp  st(1)
+        add   esp, 8
+        ret
+    L_tle_hi:
+        movss xmm0, dword ptr [ecx + 0x34]
+        mov   eax, dword ptr [ecx + 0x34]
+        fstp  st(0)
+        movss xmm0, dword ptr [eax - 4]
+        comiss xmm0, xmm1
+        movss dword ptr [esp + 4], xmm0
+        ja    L_fmt_one
+        fld   dword ptr [esp]
+        fsub  dword ptr [esp + 4]
+        fdivr
+        fld1
+        fsubr
+        add   esp, 8
+        ret
+    }
+}
+
 float cSmoothCameraController::Zoom()
 {
-    float* end = (float*)mZoomLevels.mpEnd;
-    float* cap = (float*)mZoomLevels.mpCapacity;
-    if (end == cap)
-        return 1.0f;
-    float range = fabsf(end[0] - cap[-1]);
-    if (range == 0.0f)
-        return 1.0f;
-    float t = (float)mBufferedNearClip.mSteps;
-    if (end[0] <= t && t != end[0])
-        return 0.0f;
-    float c = cap[-1];
-    if (c <= t)
-        return 1.0f - (t - c) / range;
-    return 1.0f;
+    return SmZoom007dc1b0(this);
 }
 
 // ===========================================================================

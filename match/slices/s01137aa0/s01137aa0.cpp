@@ -715,9 +715,9 @@ bool SndPlayer1::HandleSampleEnd(int index, unsigned char* out)
         if (mFeedDesc[slot].feedState == 0)
             mNextFeedSlotToFill = (unsigned char)((slot + 1 == 0x14) ? 0 : slot + 1);
         else
-            slot = (unsigned char)index;
+            slot = (unsigned char)(uint32_t)out;   // original loads the low byte of out at [esp+0x18]
         re->feedSlotLatest = slot;
-        ri->samplesFed = ri->f18;
+        re->numSamplesFed = ri->f18;
         re->pNextChunk = FeedChunk(re->pLoopStartChunk, index, 1, 0);
         return 1;
     }
@@ -726,11 +726,11 @@ bool SndPlayer1::HandleSampleEnd(int index, unsigned char* out)
         re->pRwCoreStream->QueueFile((int)re->pStreamLoopFileName, (int)(unsigned int)off,
                                      (int)((unsigned __int64)off >> 32),
                                      (void*)&FUN_01137d60, (int)this);
-        ri->samplesFed = ri->f18;
+        re->numSamplesFed = ri->f18;
         if (StreamNextChunk(index, 1, 0) == 0)
             return 0;
     } else {
-        ri->samplesFed = ri->f18;
+        re->numSamplesFed = ri->f18;
         if (ri->f18 < re->gigaSamplesInRam) {
             if (ri->f18 == 0)
                 re->pLoopStartChunk = re->pSampleData;

@@ -3,3 +3,4 @@
 01390cb0  14  init_16c9b94: complete; constant folded to memory store instead of register
 01391bc0  2  init_16d6d30: complete; atexit argument push scheduled late
 01391c20  2  init_16d6d70: complete; atexit argument push scheduled late
+013921c0  760  init_16d6fa8: complete; 72-float basis-matrix block of +1/sqrt(2), -1/sqrt(2), +0 and -0; explicit immediate stores (547 vs 941 B) leave eax untouched; equiv PASS 400 valid inputs, 100.0% coverage

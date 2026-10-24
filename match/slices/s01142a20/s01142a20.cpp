@@ -391,14 +391,19 @@ extern "C" void __stdcall FUN_01143460(int src, void* dstf)
 {
     uint8_t* s = (uint8_t*)src;
     float* dst = (float*)dstf;
+    // The original is a hand-vectorised (MMX/SSE) leaf that never touches xmm2, and an LTCG
+    // caller may keep a live value there, so the scalar lowering must not need a third xmm
+    // temporary.  Keeping the lattice state and the partial products in memory (volatile)
+    // limits it to two; the arithmetic and its grouping are unchanged.
     float P[4], Q[4], E0[4], E1[4], C[4];
+    volatile float sc = 3.0517578e-05f;
     for (int i = 0; i < 4; i++) {
         uint8_t b0 = s[0], b1 = s[1], b2 = s[2], b3 = s[3];
         E0[i] = g_tab300[(b0 & 0xf) * 2];
         E1[i] = g_tab300[(b0 & 0xf) * 2 + 1];
         C[i]  = g_tab2c4[b2 & 0xf];
-        float pv = (float)(int)((int8_t)b1 * 0x100 + (b0 & 0xf0)) * 3.0517578e-05f;
-        float qv = (float)(int)((int8_t)b3 * 0x100 + (b2 & 0xf0)) * 3.0517578e-05f;
+        float pv = (float)(int)((int8_t)b1 * 0x100 + (b0 & 0xf0)) * sc;
+        float qv = (float)(int)((int8_t)b3 * 0x100 + (b2 & 0xf0)) * sc;
         P[i] = pv;
         Q[i] = qv;
         dst[i * 0x20 + 0] = pv;
@@ -408,11 +413,11 @@ extern "C" void __stdcall FUN_01143460(int src, void* dstf)
     float* o = (float*)((char*)dst + 8);
     for (int k = 0; k < 15; k++) {
         uint32_t w = *(uint32_t*)s;
-        float Pn[4], Qn[4];
+        volatile float Pn[4], Qn[4];
         for (int i = 0; i < 4; i++) {
             uint32_t b = (w >> (i * 8)) & 0xff;
-            float nibA = (float)(int)((b & 0xf0u) << 24);   // high nibble << 28
-            float nibB = (float)(int)(b << 28);             // low  nibble << 28
+            volatile float nibA = (float)(int)((b & 0xf0u) << 24);   // high nibble << 28
+            volatile float nibB = (float)(int)(b << 28);             // low  nibble << 28
             Pn[i] = P[i] * E1[i] + (nibA * C[i] + Q[i] * E0[i]);
             Qn[i] = Q[i] * E1[i] + (nibB * C[i] + Pn[i] * E0[i]);
         }

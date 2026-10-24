@@ -107,8 +107,84 @@ void init_16d6d70()
 // @ 0x0138d560  PARTIAL: 15-dword descriptor table (6 records)
 void init_15afd38() { }
 
-// @ 0x013921c0  PARTIAL: large float basis-matrix constant table
-void init_16d6fa8() { }
+// The table at 0x16d6fa8 is a 72-float basis-matrix block built from
+// +1/sqrt(2), -1/sqrt(2), +0.0 and -0.0 (0x3f3504f3, 0xbf3504f3, 0, 0x80000000).
+// @ 0x013921c0
+void init_16d6fa8()
+{
+    *(float*)0x016d6fa8 = 0.0f;
+    *(float*)0x016d6fac = -0.70710678f;
+    *(float*)0x016d6fb0 = 0.70710678f;
+    *(float*)0x016d6fb4 = 0.70710678f;
+    *(float*)0x016d6fb8 = 0.0f;
+    *(float*)0x016d6fbc = 0.70710678f;
+    *(float*)0x016d6fc0 = 0.0f;
+    *(float*)0x016d6fc4 = 0.70710678f;
+    *(float*)0x016d6fc8 = 0.70710678f;
+    *(float*)0x016d6fcc = -0.70710678f;
+    *(float*)0x016d6fd0 = 0.0f;
+    *(float*)0x016d6fd4 = 0.70710678f;
+    *(float*)0x016d6fd8 = 0.0f;
+    *(float*)0x016d6fdc = -0.70710678f;
+    *(float*)0x016d6fe0 = -0.70710678f;
+    *(float*)0x016d6fe4 = 0.70710678f;
+    *(float*)0x016d6fe8 = 0.0f;
+    *(float*)0x016d6fec = -0.70710678f;
+    *(float*)0x016d6ff0 = 0.0f;
+    *(float*)0x016d6ff4 = 0.70710678f;
+    *(float*)0x016d6ff8 = -0.70710678f;
+    *(float*)0x016d6ffc = -0.70710678f;
+    *(float*)0x016d7000 = 0.0f;
+    *(float*)0x016d7004 = -0.70710678f;
+    *(float*)0x016d7008 = 0.70710678f;
+    *(float*)0x016d700c = -0.70710678f;
+    *(float*)0x016d7010 = 0.0f;
+    *(float*)0x016d7014 = 0.70710678f;
+    *(float*)0x016d7018 = 0.0f;
+    *(float*)0x016d701c = 0.70710678f;
+    *(float*)0x016d7020 = 0.70710678f;
+    *(float*)0x016d7024 = 0.70710678f;
+    *(float*)0x016d7028 = 0.0f;
+    *(float*)0x016d702c = 0.70710678f;
+    *(float*)0x016d7030 = 0.0f;
+    *(float*)0x016d7034 = -0.70710678f;
+    *(float*)0x016d7038 = -0.70710678f;
+    *(float*)0x016d703c = -0.70710678f;
+    *(float*)0x016d7040 = 0.0f;
+    *(float*)0x016d7044 = -0.70710678f;
+    *(float*)0x016d7048 = 0.0f;
+    *(float*)0x016d704c = 0.70710678f;
+    *(float*)0x016d7050 = -0.70710678f;
+    *(float*)0x016d7054 = 0.70710678f;
+    *(float*)0x016d7058 = 0.0f;
+    *(float*)0x016d705c = -0.70710678f;
+    *(float*)0x016d7060 = 0.0f;
+    *(float*)0x016d7064 = -0.70710678f;
+    *(float*)0x016d7068 = -0.70710678f;
+    *(float*)0x016d706c = 0.70710678f;
+    *(float*)0x016d7070 = 0.0f;
+    *(float*)0x016d7074 = -0.0f;
+    *(float*)0x016d7078 = 0.70710678f;
+    *(float*)0x016d707c = 0.70710678f;
+    *(float*)0x016d7080 = 0.70710678f;
+    *(float*)0x016d7084 = 0.70710678f;
+    *(float*)0x016d7088 = 0.0f;
+    *(float*)0x016d708c = 0.0f;
+    *(float*)0x016d7090 = 0.70710678f;
+    *(float*)0x016d7094 = -0.70710678f;
+    *(float*)0x016d7098 = -0.70710678f;
+    *(float*)0x016d709c = -0.70710678f;
+    *(float*)0x016d70a0 = 0.0f;
+    *(float*)0x016d70a4 = 0.0f;
+    *(float*)0x016d70a8 = -0.70710678f;
+    *(float*)0x016d70ac = 0.70710678f;
+    *(float*)0x016d70b0 = 0.70710678f;
+    *(float*)0x016d70b4 = -0.70710678f;
+    *(float*)0x016d70b8 = 0.0f;
+    *(float*)0x016d70bc = 0.0f;
+    *(float*)0x016d70c0 = -0.70710678f;
+    *(float*)0x016d70c4 = -0.70710678f;
+}
 
 // @ 0x01396110  PARTIAL: 15-dword descriptor table
 void init_15b4568() { }

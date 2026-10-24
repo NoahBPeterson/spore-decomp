@@ -8,6 +8,7 @@ extern "C" int   __cdecl BN_copy(int dst, int src);                             
 extern "C" int   __cdecl BN_mod_mul(int r, int a, int b, int m, int ctx);                  // 0x11ad640
 extern "C" int   __cdecl FUN_011875c0(int, int, int, int, int, int);                       // 0x11875c0
 extern "C" void* __cdecl CRYPTO_malloc(int num, const char* file, int line);               // 0x1183410
+extern "C" void  __cdecl FUN_011835c0(void* p);                                            // 0x11835c0 CRYPTO_free
 extern "C" int   __cdecl BN_STACK_push(int a);                                             // 0x11878b0
 extern "C" int   __cdecl BN_POOL_get(void);                                                // 0x1187990
 extern "C" int   __cdecl BN_set_word(int a, int w);                                        // 0x117ac20
@@ -119,11 +120,37 @@ int* lib_cblock_BN_CTX_new(void)
     return p;
 }
 
+// BN_STACK_push's retail build receives the stack context in ESI (LTCG custom register ABI),
+// which an ordinary call cannot supply; the call above would run it with a garbage context.
+// Inline the growable int-array append at ctx+0x14 instead (same malloc/copy/free sequence).
+struct BnStack { int* data; int count; int cap; };
+static __declspec(noinline) int BnStackPushInline(BnStack* st, int value)
+{
+    int count = st->count;
+    int cap = st->cap;
+    if (count == cap) {
+        int* data = (int*)CRYPTO_malloc((cap ? ((cap * 3) >> 1) : 0x20) * 4,
+                                        (const char*)0x14e4c7c, 0x152);
+        if (data == 0)
+            return 0;
+        if (count != 0) {
+            for (int i = 0; i < count; ++i)
+                data[i] = st->data[i];
+        }
+        if (cap != 0)
+            FUN_011835c0(st->data);
+        st->data = data;
+        st->cap = cap ? ((cap * 3) >> 1) : 0x20;
+    }
+    st->data[st->count++] = value;
+    return 1;
+}
+
 // @ 0x01187b00
 void lib_cblock_BN_STACK_push(int param_1)
 {
     if (*(int*)(param_1 + 0x24) == 0 && *(int*)(param_1 + 0x28) == 0) {
-        if (BN_STACK_push(*(int*)(param_1 + 0x20)) == 0) {
+        if (BnStackPushInline((BnStack*)((char*)param_1 + 0x14), *(int*)(param_1 + 0x20)) == 0) {
             ERR_put_error(3, 0x81, 0x6d, 0, 0);
             ++*(int*)(param_1 + 0x24);
         }
