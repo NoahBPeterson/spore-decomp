@@ -1,6 +1,15 @@
-# Slice s00b73e70 -- VAs that cannot be attributed to a single symbol.
-# Rows: bare 8-hex VA, one per line.
-
-# (none) -- every one of the 19 target VAs resolves to a distinct, correctly
-# bounds-checked function symbol, so each is either byte-exact (manifest.txt)
-# or a partial match (partial.txt).
+# va  diff-bytes  reason (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast)
+00b73e70  73  Simulator::cObstacle grid/wrapper lookup: complete behaviour; equiv PASS (400 valid, 100.0% cov); the self[0x88] dispatch is reproduced exactly (jl/jle/je chain with mode<0 and mode>4 falling into the global-descriptor init, mode<=3 falling through the [0x58] lookup into the shared [0x70] test); cl emits the global init last instead of between the range tests, and the one-shot Matrix3::Assign schedule differs
+00b73f30  388  Simulator::cObstacle obstacle setter/serialiser: complete behaviour; equiv WEAK (154 valid, 29.0% cov, no mismatch); now a cObstacle member (thiscall, (float,int), ret 8) with the FUN_00c3e240 thiscall(this,float) ret 4 (this=[arg+0x10]) and FUN_00a887b0 thiscall(this,int,float) ret 8; the deep argument-spill scheduling cl picks makes our body ~50 bytes shorter
+00b74130  476  obstacle serialiser: complete behaviour; equiv WEAK (400 valid, 6.2% cov, no mismatch); reconstructed field-for-field; cl's argument-spill scheduling makes our body ~117 bytes shorter (445 vs 562)
+00b74370  124  container pop/release: complete behaviour; equiv PASS (371 valid, 76.5% cov); element[0x40f4] read twice (-4), vtable[0] of the popped element with this=element, release call element->[element]->[vtable+4] with this=element; cl uses `test eax,-4` where the original uses `sar eax,2`, plus register rotation
+00b74400  329  obstacle update/add path: complete behaviour; equiv WEAK (288 valid, 36.6% cov, no mismatch); FUN_00a887b0 now gets this=[self+0x54] and 0.0f; residue is register allocation across the long arithmetic prologue (392 vs 393)
+00b746a0  111  eastl 2-key hashtable Find: complete behaviour; equiv WEAK 197 valid (needs 200) / 89.2% cov, no mismatch; now returns `out` (object pointer on hit, end-bucket pair on miss) which is what the original leaves in eax at every ret; cl spills the key words to the frame
+00b74740  81  eastl 3-key hashtable Find: complete behaviour; equiv PASS (215 valid, 78.7% cov); same `return out` fix; only the bucket/node register set differs
+00b74a60  23  serialise-uint32 helper: complete behaviour; equiv UNSUPPORTED (0/400 valid - the original itself faults on 391/400 generated inputs, so the gate cannot judge it); both virtual calls take 0 stack args (the original parks it[3] in its argument slot and passes that stack address; ours uses a stack temporary, normalised to the same "STK" token) and WriteUint32/FUN_00ae2e40 are cdecl; same size, residue is parameter-load scheduling
+00b74b60  7  free-list node allocator (AllocNode3): complete behaviour; equiv PASS (357 valid, 100.0% cov); byte-identical in shape, only the temporary register names rotate (orig ecx,edx vs mine edx,ecx)
+00b74bc0  5  free-list node allocator (AllocNode2): complete behaviour; equiv PASS (362 valid, 100.0% cov); same as 00b74b60, register names rotate
+00b74c50  48  heapify prologue: complete behaviour; equiv WEAK (400 valid, 44.4% cov, no mismatch); the original copies the by-value Vec3 argument through the x87 stack (fld/fstp) while cl emits integer movs for the same POD copy
+00b74cc0  144  heap-sort body: complete behaviour; equiv WEAK (400 valid, 36.8% cov, no mismatch); same by-value Vec3 copy choice plus callee-saved register rotation (145 vs 148)
+00b74d60  256  sift-down: complete behaviour; equiv PASS (318 valid, 100.0% cov); the child selection is the original's (keep index c=2i+2 when DIST(c-1) <= DIST(c), i.e. choose 2i+1 only when DIST(c-1) > DIST(c)) and FUN_00b73920 is cdecl; residue is the x87/integer scheduling of the six squared-distance terms (277 vs 264)
+00b74e90  37  ObstacleMgr::FindById: complete behaviour; equiv WEAK (400 valid, 55.9% cov, no mismatch); correct 16-byte eastl iterator {cur,bucket,end,endBucket} and 0x10 stride walk; fully rotated register set and 10 bytes of tail alignment padding

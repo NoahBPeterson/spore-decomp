@@ -2,3 +2,4 @@ slices/s00b73e70/s00b73e70.cpp  ?FUN_00b74590@@YGXH@Z  00b74590  /O2 /MD /Gy /EH
 slices/s00b73e70/s00b73e70.cpp  ?FUN_00b749c0@@YAXPAM0MMM@Z  00b749c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00b73e70/s00b73e70.cpp  ?FUN_00b74c20@@YAXPAM00@Z  00b74c20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00b73e70/s00b73e70.cpp  ?Lookup@ObstacleMgr@@QAEHPAI@Z  00b74f40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00b73e70/s00b73e70.cpp  ?FUN_00b74ef0@@YGXH@Z  00b74ef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

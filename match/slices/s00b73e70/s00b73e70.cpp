@@ -5,11 +5,11 @@
 #include "types.h"
 
 // ---------------------------------------------------------------- callees
-void __stdcall FUN_00a887b0(int a, float f);      // 0xa887b0
+void FUN_00a887b0();                              // 0xa887b0  (thiscall: this, int, float)
 void* SP_NounManager(int id);                      // 0xb3d300
 void* SP_cGameNounManager_CreateNoun(void* m, int id);  // 0xb20c60
 void* __cdecl EAAllocate(int a, const char* b, int c, int d, int e, int f); // 0xf473a0
-void __stdcall FUN_00c3e240(float f);              // 0xc3e240
+void FUN_00c3e240();                               // 0xc3e240  (thiscall: this, float)
 void* SP_GonzagoModelWorld();                      // 0xb3d520
 void* __fastcall FUN_00b90410(void* self);         // 0xb90410  (GetSpeciesFromID)
 void* __fastcall FUN_00b8f860(void* self);         // 0xb8f860
@@ -18,10 +18,10 @@ void* __fastcall FUN_00b03320(void* self);         // 0xb03320
 void __stdcall FUN_00b74860(int* out, int* key);   // 0xb74860
 extern "C" unsigned long long __allshl(unsigned lo, unsigned hi, int sh); // 0x011e06e0
 struct Vec3 { float x, y, z; };
-void __stdcall FUN_00b737d0(int begin, int i, int n, int idx, Vec3 v, void* cmp);
-void __stdcall FUN_00b73920(int a, void* b, int c, void* d, Vec3 v);
-bool __stdcall WriteUint32(void* stream, const void* p, int n, int flag);   // 0x93aa70
-void __stdcall FUN_00ae2e40(void* a, int b);                                // 0xae2e40
+void __cdecl FUN_00b737d0(int begin, int i, int n, int idx, Vec3 v, void* cmp);
+void __cdecl FUN_00b73920(int a, void* b, int c, void* d, Vec3 v);
+bool __cdecl WriteUint32(void* stream, const void* p, int n, int flag);     // 0x93aa70
+void __cdecl FUN_00ae2e40(void* a, int b);                                  // 0xae2e40
 void* __stdcall FUN_00b3d420_p(void* a);                                    // 0xb3d420
 void* __stdcall FUN_00b3d440_0();                                            // 0xb3d440 (0 args)
 void __stdcall FUN_00b3d440_2(void* out, void* a);                          // 0xb3d440 (2 args)
@@ -68,6 +68,7 @@ struct Node2View {
 struct Simulator_cObstacle {
     void* AllocNode3(int* src);   // 0xb74b60
     void* AllocNode2(int* src);   // 0xb74bc0
+    void FUN_00b73f30(float f, int arg);   // 0xb73f30
 };
 
 // eastl hashtables used by the obstacle manager: two-key and three-key variants.
@@ -75,10 +76,10 @@ struct Hashtable2 {
     int mPad;                 // +0x00
     int* mBegin;              // +0x04
     int mCount;               // +0x08
-    void Find(int* out, unsigned int* key);   // 0xb746a0
+    int* Find(int* out, unsigned int* key);   // 0xb746a0
 };
 struct Hashtable3 {
-    void Find(int* out, unsigned int* key);   // 0xb74740
+    int* Find(int* out, unsigned int* key);   // 0xb74740
     void* FindNode(void* node, int* key, unsigned int hash);  // 0xb72f10
 };
 
@@ -90,6 +91,10 @@ struct Inner { void** vptr; };            // first word is the vtable pointer
 struct Wrapper { Inner* impl; };          // what +0x78 points at
 typedef void (__thiscall *Fn16c)(void* self, void* owner, int a);
 typedef void (__thiscall *Fn170)(void* self, void* owner, bool a);
+// 0xa887b0 is a method: this in ecx, (int, float) on the stack, ret 8.
+typedef void (__thiscall *Fn_vif)(void* self, int a, float f);
+// 0xc3e240 is a method: this in ecx, (float) on the stack, ret 4.
+typedef void (__thiscall *Fn_vf)(void* self, float f);
 
 // The 0x1688114 static descriptor block and its one-shot init flag.
 struct C74860;   // fwd
@@ -138,18 +143,12 @@ void __stdcall FUN_00b74590(int self)
 void* __fastcall FUN_00b73e70(int self)
 {
     int mode = *(int*)(self + 0x88);
-    int* result = 0;
-    if (mode >= 0) {
-        if (mode <= 3) {
-            if (*(int*)(self + 0x58) != 0)
-                result = (int*)(*(int*)(self + 0x5c) * 0x4c + *(int*)(self + 0x58));
-        } else if (mode == 4) {
-            if (*(int*)(self + 0x70) != 0)
-                result = (int*)(*(int*)(self + 0x70) + 8);
-        }
+    if (mode >= 0 && (mode <= 3 || mode == 4)) {
+        if (mode <= 3 && *(int*)(self + 0x58) != 0)
+            return (void*)(*(int*)(self + 0x5c) * 0x4c + *(int*)(self + 0x58));
+        if (*(int*)(self + 0x70) != 0)
+            return (void*)(*(int*)(self + 0x70) + 8);
     }
-    if (result != 0)
-        return result;
     if ((g_168814c & 1) == 0) {
         g_168814c |= 1;
         g_desc.f4 = g_1687ad4;
@@ -171,7 +170,7 @@ void __stdcall FUN_00b74ef0(int self)
     *(volatile unsigned int*)(self + 0x34) &= 0xfffffffe;
     int c = *(int*)(self + 0x54);
     if (c != 0) {
-        FUN_00a887b0(*(int*)(self + 0x5c), c ? 1.0f : 0.0f);
+        ((Fn_vif)FUN_00a887b0)((void*)c, *(int*)(self + 0x5c), 1.0f);
         return;
     }
     Wrapper* pw = *(Wrapper**)(self + 0x70);
@@ -289,9 +288,9 @@ void* __fastcall FUN_00b74370(int self)
             result = top;
         }
         *(int*)(self + 0x40f4) -= 4;
-        int* slot = *(int**)(self + 0x40f4);
-        if (*slot != 0)
-            (*(void(__thiscall**)(int*))(*slot + 4))(slot);
+        int* obj = *(int**)(*(int*)(self + 0x40f4));
+        if (obj != 0)
+            (*(void(__thiscall**)(int*))(*(int*)obj + 4))(obj);
     } else {
         void* m = SP_NounManager(0x3ed8573);
         result = SP_cGameNounManager_CreateNoun(m, 0x3ed8573);
@@ -305,7 +304,7 @@ void* __fastcall FUN_00b74370(int self)
 
 // ======================================================================
 // @ 0x00b746a0
-void Hashtable2::Find(int* out, unsigned int* key)
+int* Hashtable2::Find(int* out, unsigned int* key)
 {
     int* bucket = (int*)(*(int*)((char*)this + 4) + (*key % *(unsigned int*)((char*)this + 8)) * 4);
     unsigned int* node = (unsigned int*)*bucket;
@@ -325,20 +324,22 @@ void Hashtable2::Find(int* out, unsigned int* key)
                 out[0] = (int)node;
                 out[2] = (int)nx;
                 out[3] = (int)slot;
-                return;
+                return out;
             }
             node = (unsigned int*)node[4];
         } while (node != 0);
     }
     int* endb = (int*)(*(int*)((char*)this + 4) + *(int*)((char*)this + 8) * 4);
-    out[0] = *endb;
+    int v = *endb;
+    out[0] = v;
     out[1] = (int)endb;
-    out[2] = *endb;
+    out[2] = v;
     out[3] = (int)endb;
+    return out;
 }
 // ======================================================================
 // @ 0x00b74740 Hashtable3::Find
-void Hashtable3::Find(int* out, unsigned int* key)
+int* Hashtable3::Find(int* out, unsigned int* key)
 {
     unsigned int k2 = key[2];
     unsigned int h = key[0] ^ k2;
@@ -359,7 +360,7 @@ void Hashtable3::Find(int* out, unsigned int* key)
         out[1] = (int)bucket;
         out[2] = (int)p;
         out[3] = (int)slot;
-        return;
+        return out;
     }
     int* endb = (int*)(*(int*)((char*)this + 4) + *(int*)((char*)this + 8) * 4);
     int v = *endb;
@@ -367,6 +368,7 @@ void Hashtable3::Find(int* out, unsigned int* key)
     out[1] = (int)endb;
     out[2] = v;
     out[3] = (int)endb;
+    return out;
 }
 
 // ======================================================================
@@ -437,8 +439,9 @@ void FUN_00b74cc0(char* begin, char* end, void* cmp)
 void FUN_00b74a60(int* m, int* it)
 {
     int* a = (*(int*(__thiscall**)(int*))(*(int*)m + 0x20))(m);
-    int* ser = (int*)(*(int*(__thiscall**)(int*, int))(*(int*)a + 0x18))(a, it[3]);
-    WriteUint32(ser, &it[3], 1, 0);
+    unsigned int k3 = (unsigned int)it[3];
+    int* ser = (int*)(*(int*(__thiscall**)(int*))(*(int*)a + 0x18))(a);
+    WriteUint32(ser, &k3, 1, 0);
     int* bucket = (int*)it[1];
     int* node = (int*)*bucket;
     int* slot = bucket;
@@ -478,7 +481,7 @@ void FUN_00b74d60(int* base, void* b, int n, int i, void* cmp, float x, float y,
             float dz2 = z - *(float*)((char*)n2 + 0x40);
             float d1 = dz1 * dz1 + dx1 * dx1 + dy1 * dy1;
             float d2 = dz2 * dz2 + dy2 * dy2 + dx2 * dx2;
-            c = (d2 > d1) ? c : (i * 2 + 1);
+            c = (d2 > d1) ? (i * 2 + 1) : c;
             base[i] = base[c];
             i = c;
             c = i * 2 + 2;
@@ -493,9 +496,10 @@ void FUN_00b74d60(int* base, void* b, int n, int i, void* cmp, float x, float y,
 }
 
 // ======================================================================
-// @ 0x00b73f30
-void __fastcall FUN_00b73f30(int self, float f, int arg)
+// @ 0x00b73f30 Simulator::cObstacle::FUN_00b73f30
+void Simulator_cObstacle::FUN_00b73f30(float f, int arg)
 {
+    int self = (int)this;
     *(float*)(self + 0x68) = f;
     if (arg == 0) {
         if (*(int*)(self + 0x78) != 0 && g_1687ad0 == 0) {
@@ -504,15 +508,15 @@ void __fastcall FUN_00b73f30(int self, float f, int arg)
         }
     } else if (*(int*)(arg + 0x10) != 0) {
         if (g_1687ad0 == 0) {
-            FUN_00c3e240(f);
+            ((Fn_vf)FUN_00c3e240)(*(void**)(arg + 0x10), f);
         } else if (f == 1.0f) {
-            FUN_00c3e240(1.0f);
+            ((Fn_vf)FUN_00c3e240)(*(void**)(arg + 0x10), 1.0f);
         } else {
-            FUN_00c3e240(0.0f);
+            ((Fn_vf)FUN_00c3e240)(*(void**)(arg + 0x10), 0.0f);
         }
     }
     if ((*(unsigned char*)(self + 0x34) & 1) == 0 && *(int*)(self + 0x54) != 0)
-        FUN_00a887b0(*(int*)(self + 0x5c), 1.0f);
+        ((Fn_vif)FUN_00a887b0)((void*)*(int*)(self + 0x54), *(int*)(self + 0x5c), 1.0f);
 
     if (*(int*)(self + 0x88) != 3 && *(int*)(self + 0x88) != 4) {
         void* p = FUN_00b3d420_p((void*)(self + 0x7c));
@@ -540,7 +544,9 @@ void __fastcall FUN_00b73f30(int self, float f, int arg)
                                 float v;
                                 if (g_1687ad0 == 0) v = *(float*)(self + 0x68);
                                 else { v = 1.0f; if (*(float*)(self + 0x68) != 1.0f) v = 0.0f; }
-                                FUN_00a887b0(*(int*)(*(int*)((char*)esi + 0x19c) + i * 4), v);
+                                ((Fn_vif)FUN_00a887b0)(
+                                    *(void**)((char*)pa + 0x2c),
+                                    *(int*)(*(int*)((char*)esi + 0x19c) + i * 4), v);
                             }
                         }
                     }
@@ -597,7 +603,7 @@ unsigned char __stdcall FUN_00b74400(int self)
                         ((Fn16c)((void**)in)[0x16c / 4])(in, w2, 0);
                     }
                 } else {
-                    FUN_00a887b0(*(int*)(self + 0x5c), 0.0f);
+                    ((Fn_vif)FUN_00a887b0)((void*)*(int*)(self + 0x54), *(int*)(self + 0x5c), 0.0f);
                 }
             }
         }
