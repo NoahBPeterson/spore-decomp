@@ -4,6 +4,7 @@
 // behaviour-equivalent source (nonmatching.txt).  32-bit only (the code shuffles 32-bit pointers).
 // Flags: /vc71 /O2 /MD /Gy /TP
 #include "types.h"
+#include <xmmintrin.h>
 
 namespace rw { namespace audio { namespace core {
 
@@ -369,7 +370,9 @@ int AiffPlayer_start(AiffPlayer* self)
 // Set the start position (in samples).
 int AiffPlayer_setStart(void* fmt, AiffPlayer* self)
 {
-    FUN_0113fba0(self->mStartHandle, (int)(RwFloat2Int(((AiffFormat*)fmt)->f1 * 4096.0f)));
+    volatile int handle = self->mStartHandle;
+    int value = _mm_cvtss_si32(_mm_set_ss(((AiffFormat*)fmt)->f1 * 4096.0f));
+    FUN_0113fba0(handle, value);
     self->mState = 0;
     return 0;
 }
