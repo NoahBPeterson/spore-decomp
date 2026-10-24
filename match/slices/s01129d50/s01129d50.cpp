@@ -128,7 +128,7 @@ class hkConstrainedSystemFilter : public hkCollisionFilter
 {
 public:
     HK_DECLARE_CLASS_ALLOCATOR_B(0x24)
-    virtual ~hkConstrainedSystemFilter();                                     // 0x0112A3C0 (scalar deleting form)
+    virtual ~hkConstrainedSystemFilter();                                     // scalar deleting form
     virtual hkBool isCollisionEnabled(const hkCollidable& a, const hkCollidable& b) const;   // 0x0112A430
     virtual hkBool isCollisionEnabled(const hkCollisionInput& input, const hkCdBody& a, const hkCdBody& b,
                                       const hkShapeCollection& bCollection, hkUint32 keyB) const;   // 0x0112A2B0
@@ -177,7 +177,7 @@ public:
     hkVector4 m_impulse;                                                       // +0x50
 };
 
-class hkAngularDashpotAction : public hkBinaryAction
+class __declspec(align(16)) hkAngularDashpotAction : public hkBinaryAction
 {
 public:
     HK_DECLARE_CLASS_ALLOCATOR_B(0x26)
@@ -452,6 +452,7 @@ hkBool hkConstrainedSystemFilter::isCollisionEnabled(const hkWorldRayCastInput& 
 }
 
 // @ 0x0112a3c0
+void hkConstrainedSystemFilter_scalarDeletingDtor();
 // Scalar deleting destructor: releases m_otherFilter, runs ~hkCollisionFilter (0x005EFD40), and (flag & 1)
 // frees through hkMemory::deallocateChunk(this, memSize, 0x24) (the class allocator's operator delete).
 hkConstrainedSystemFilter::~hkConstrainedSystemFilter()

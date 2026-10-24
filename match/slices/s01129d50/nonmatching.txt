@@ -7,12 +7,12 @@
 0112a200 0 havok-equivalent
 0112a2b0 0 havok-equivalent
 0112a300 0 havok-equivalent
-0112a340 0 havok-equivalent
-0112a3c0 0 havok-equivalent
+0112a340 0 havok-equivalent [equiv: PASS]
+0112a3c0 0 havok-equivalent [equiv: PASS]
 0112a430 0 havok-equivalent
 0112a5c0 0 havok-equivalent
 0112a610 0 havok-equivalent
-0112a890 0 havok-equivalent
+0112a890 0 havok-equivalent [equiv: PASS]
 0112a9c0 0 havok-equivalent
 0112aab0 0 havok-equivalent
 0112ad10 0 havok-equivalent

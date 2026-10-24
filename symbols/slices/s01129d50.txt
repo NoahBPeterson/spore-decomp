@@ -4,3 +4,19 @@
 01129f40 ??0hkDashpotAction@@QAE@PAVhkEntity@@0I@Z  # calls hkBinaryAction ctor, strength 0.1 damping 0.01, size 0x60 in clone
 0112a3c0 ??_GhkConstrainedSystemFilter@@UAEPAXI@Z  # releases m_otherFilter(+0x18), ~hkCollisionFilter, deallocateChunk class 0x24
 0112a5c0 ??0hkAngularDashpotAction@@QAE@PAVhkEntity@@0I@Z  # called from hkAngularDashpotAction::clone, rotation=(0,0,0,1)
+0112a340 ?isCollisionEnabled@hkConstrainedSystemFilter@@UBE?AVhkBool@@ABUhkWorldRayCastInput@@ABVhkCollidable@@@Z  # world-ray variant; exact decorated name disambiguates the overload set
+0112a3c0 ??_EhkConstrainedSystemFilter@@UAEPAXI@Z  # vector deleting destructor slot in the primary vtable (same code as ??_G)
+0112a380 ??_EhkConstrainedSystemFilter@@W7AEPAXI@Z  # adjustor thunk: sub ecx,8; jmp 0x112a3c0
+0112a390 ??_EhkConstrainedSystemFilter@@WM@AEPAXI@Z  # adjustor thunk: sub ecx,0xc; jmp 0x112a3c0
+0112a3a0 ??_EhkConstrainedSystemFilter@@WBA@AEPAXI@Z  # adjustor thunk: sub ecx,0x10; jmp 0x112a3c0
+0112a3b0 ??_EhkConstrainedSystemFilter@@WBE@AEPAXI@Z  # adjustor thunk: sub ecx,0x14; jmp 0x112a3c0
+014a708c ??_7hkConstrainedSystemFilter@@6BhkReferencedObject@@@  # primary vtable
+014a7084 ??_7hkConstrainedSystemFilter@@6BhkCollidableCollidableFilter@@@  # +8 vtable
+014a707c ??_7hkConstrainedSystemFilter@@6BhkShapeCollectionFilter@@@  # +0xc vtable
+014a7074 ??_7hkConstrainedSystemFilter@@6BhkRayShapeCollectionFilter@@@  # +0x10 vtable
+014a706c ??_7hkConstrainedSystemFilter@@6BhkRayCollidableFilter@@@  # +0x14 vtable
+013ef094 ??_7hkReferencedObject@@6B@  # hkCollisionFilter primary base vtable (set by 0x005efd40)
+013ef82c ??_7hkCollidableCollidableFilter@@6B@  # base vtable (also used by hkRayCollidableFilter)
+013ef824 ??_7hkShapeCollectionFilter@@6B@  # base vtable (also used by hkRayShapeCollectionFilter)
+013ef824 ??_7hkRayShapeCollectionFilter@@6B@  # shares the hkShapeCollectionFilter vtable
+013ef82c ??_7hkRayCollidableFilter@@6B@  # shares the hkCollidableCollidableFilter vtable
