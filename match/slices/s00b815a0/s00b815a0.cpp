@@ -1,11 +1,27 @@
 // SporeApp.exe slice s00b815a0 -- SP::cPlanetModel surface-position queries.
 // Build: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 #include <math.h>
+#include <xmmintrin.h>
 
 typedef unsigned int uint;
 
 struct Vec3 { float x, y, z; };
 struct Quat { float x, y, z, w; };
+
+struct RadialRay {
+    float pos[4];                          // +0x00
+    float h0, h1;                          // +0x10, +0x14
+};
+
+struct RayHitResult {
+    int   status;                          // +0x00
+    int   pad04[3];                        // +0x04
+    float pos[4];                          // +0x10
+    void* normalOut;                       // +0x20
+    void* distOut;                         // +0x24
+    void* userData;                        // +0x28
+    void* entity;                          // +0x2c
+};
 
 // ---- external helpers -----------------------------------------------------
 void  RandomDirection3(Vec3* out);                                   // 0x00b7e560
@@ -15,13 +31,13 @@ void  Matrix3FromQuaternion(float* out, const Quat* q);              // 0x0059c1
 float* FUN_0059aed0(float* out, const float* a, const float* b);    // 0x0059aed0
 char  FUN_005a9c40(Vec3* a, Vec3* b, Vec3* c, float d, float* out); // 0x005a9c40
 int   FUN_00b3d310();                                                // 0x00b3d310
-float FUN_00b65b10(Vec3* a, int b, int c, int d, int e, float* out); // 0x00b65b10
+void  FUN_00b65b10(const RadialRay* ray, void* world, void* obj, bool useWorld, unsigned int filterInfo, RayHitResult* out); // 0x00b65b10
 
 struct cTerrainSphere {
     Quat BuildSurfaceOrientation(const Vec3& a, const Vec3& b);      // 0x00f9c960
 };
 
-extern float DAT_0167ecd0;
+extern void* DAT_0167ecd0;
 extern float DAT_01688274;
 extern Vec3  DAT_01688278;
 extern Vec3  DAT_016881f0;             // fallback surface direction
@@ -59,13 +75,18 @@ void cPlanetModel::DirectionToSurfacePosition(Vec3* out, const Vec3* dir)
 {
     float f4 = (float)GetRadiusAt((uint)dir);
     float inv = 1.0f / sqrtf(dir->x * dir->x + dir->y * dir->y + dir->z * dir->z + 1e-8f);
-    Vec3 res;
-    res.x = dir->x * inv * f4;
-    res.y = inv * dir->y * f4;
-    res.z = inv * dir->z * f4;
-    out->x = res.x;
-    out->y = res.y;
-    out->z = res.z;
+    __m128 iv = _mm_load_ss(&inv);
+    __m128 r  = _mm_load_ss(&f4);
+    __m128 v;
+    v = _mm_mul_ss(_mm_load_ss(&dir->x), iv);
+    v = _mm_mul_ss(v, r);
+    _mm_store_ss(&out->x, v);
+    v = _mm_mul_ss(_mm_load_ss(&dir->y), iv);
+    v = _mm_mul_ss(v, r);
+    _mm_store_ss(&out->y, v);
+    v = _mm_mul_ss(_mm_load_ss(&dir->z), iv);
+    v = _mm_mul_ss(v, r);
+    _mm_store_ss(&out->z, v);
 }
 
 // =======================================================================================
@@ -276,7 +297,7 @@ void cPlanetModel::FUN_00b81c80(Vec3* out, const Vec3* pa, const Vec3* pb, float
     axis.x = q.x;
     axis.y = q.y;
     axis.z = q.z;
-    float* p = FUN_0059aed0((float*)&q, (const float*)&va, (const float*)&axis);
+    float* p = FUN_0059aed0((float*)&axis, (const float*)&va, (const float*)&q);
     float rx = p[0], ry = p[1], rz = p[2];
     float rr2 = (float)GetRadiusAt((uint)&rx);
     float inv2 = 1.0f / sqrtf((ry * ry + (rz * rz + rx * rx)) + 1e-8f);
@@ -388,25 +409,22 @@ long double cPlanetModel::FUN_00b82310(void* param)
     }
     float height = f5 * 2.0f - f2;
 
-    struct Probe {
-        Vec3   dir;        // +0x00 (local_6c/68/64)
-        Vec3   dir2;       // +0x0c (local_60/5c/58)
-        float  height;     // +0x18 (fStack_50)
-        int    z0;         // +0x1c
-        int    z1;         // +0x20
-        int    out[4];     // +0x24 (local_40)
-        float  res[3];     // +0x34 (fStack_30/2c/28)
-    };
-    Probe p;
-    p.dir = d;
-    p.dir2 = d;
-    p.height = height;
-    p.z0 = 0;
-    p.z1 = 0;
-    p.out[0] = 0; p.out[1] = 0; p.out[2] = 0; p.out[3] = 0;
-    FUN_00b65b10(&p.dir2, (int)&DAT_0167ecd0, 0, 1, 6, (float*)p.out);
-    if (p.out[0] != 0) {
-        float v = (p.res[1] * p.res[1] + p.res[2] * p.res[2]) + p.res[0] * p.res[0];
+    RadialRay ray;
+    ray.pos[0] = d.x;
+    ray.pos[1] = d.y;
+    ray.pos[2] = d.z;
+    ray.pos[3] = 0.0f;
+    ray.h0 = height;
+    ray.h1 = 0.0f;
+
+    RayHitResult hit;
+    hit.normalOut = 0;
+    hit.distOut = 0;
+    hit.userData = 0;
+    hit.entity = 0;
+    FUN_00b65b10(&ray, DAT_0167ecd0, 0, true, 6, &hit);
+    if (hit.status != 0) {
+        float v = (hit.pos[1] * hit.pos[1] + hit.pos[2] * hit.pos[2]) + hit.pos[0] * hit.pos[0];
         if (f1 < v)
             return (long double)sqrtf(v);
     }
