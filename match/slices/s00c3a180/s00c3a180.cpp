@@ -55,10 +55,6 @@ void* __cdecl IsArchivedState();            // 0x01021240 (returns cCivData* or 
 void* __cdecl StarManager();                // 0x00b3d2a0 (StarManager())
 void* __cdecl GetSpaceCombatTuning();       // 0x01029940
 int   __cdecl GetPropertyAsFloatArray(void* pList, int id, int* pCount, float** pArray); // 0x006a08b0
-char  __cdecl FUN_0104bd50(void* pTool);   // 0x0104bd50 (bool; tool data)
-void  __cdecl FUN_005766e0(void* pSlot, void* pTarget);   // 0x005766e0
-void  __cdecl FUN_00572620(void* pSlot, void* p);          // 0x00572620
-void* __cdecl FUN_00c37740(void* p);        // 0x00c37740
 void* __cdecl EraseToolEntry(void* p, void* q);   // 0x00b3d390
 void* __cdecl FUN_00b3d300(void* p);        // 0x00b3d300 (noun-manager relookup)
 void  __cdecl RemoveHandler(void*, void*, void*, void*, void*);   // 0x00571db0
@@ -67,7 +63,6 @@ void* __cdecl FUN_00b3d2a0(void* p);        // 0x00b3d2a0 (StarManager from id)
 void* __cdecl FUN_00ba9370(void* p);        // 0x00ba9370 (GetEmpireByID)
 void  __cdecl FUN_00c38510(void* thisp);    // 0x00c38510 DeactivateBehaviorTree
 void  __cdecl FUN_00bfc720(void* thisp);    // 0x00bfc720
-void  __cdecl FUN_00bfc860(void* thisp);    // 0x00bfc860 WriteAsText
 void  __cdecl FUN_00c42140(void* p);        // 0x00c42140
 void  __cdecl FUN_00c38b10(void* thisp);    // 0x00c38b10
 void  __cdecl FUN_00ac0450(void);           // 0x00ac0450
@@ -83,6 +78,27 @@ int   __cdecl cSPSpaceCombatTuning_GetWeaponLevel(void* pTuning, const float* pP
 int   __cdecl cEmpire_GetWeaponryLevel(void* pEmpire);   // 0x00c317a0
 float*__cdecl cCivData_GetCities(void* pCiv);            // 0x005c65e0
 void  __cdecl FUN_006a0ae0(void* pVector, int id, int* pCount, int* pBase); // 0x006a0ae0 (vector reserve)
+
+// thiscall member stubs -- each member is declared on its own line inside the struct so
+// the '// 0x...' address annotation attaches to the (class, member) pair for the resolver.
+struct Fn00bfc860 {
+    void __thiscall f(void* pTool);            // 0x00bfc860  cGameData::WriteAsText
+};
+struct Fn0104bd50 {
+    char __thiscall f();                       // 0x0104bd50  tool-active test
+};
+struct Fn005766e0 {
+    void __thiscall f(void* pTarget);          // 0x005766e0
+};
+struct Fn00572620 {
+    void __thiscall f(void* p);                // 0x00572620
+};
+struct Fn00c37740 {
+    void* __thiscall f(void* p);               // 0x00c37740
+};
+struct Fn0104e340 {
+    char __thiscall f(unsigned int toolId);    // 0x0104e340  CreateToolFromToolID (ret 4)
+};
 
 // external tuning pointer 0x0168df68 dereferenced directly at each use
 
@@ -294,7 +310,11 @@ void enableWeapon(int toolID, int weaponLevel, IRefObject** ppSlot)
         vcall_release8(pOld);           // vtable +0x8
     }
     void* pEntryResult = EraseToolEntry(pEntry, ppSlot);
-    ((Fn104e340*)pEntryResult)->f((unsigned int)(U32)pEntry);
+    // CreateToolFromToolID is `?CreateToolFromToolID@cSPToolManager@@QAE_NI@Z`; its `this`
+    // (ecx) is the erase result and the tool id is the stack argument.  MSVC /O2 folds the
+    // `mov ecx, eax` here, so the encoded call differs from the original even though the
+    // observable behaviour is the same (see nonmatching.txt).
+    ((Fn0104e340*)pEntryResult)->f((unsigned int)(U32)pEntry);
 }
 
 // =============================================================================================
@@ -333,7 +353,7 @@ void cSPGameDataUFO::OnContextChange(int context)
         weaponLevel = 0;
     }
 
-    if (this->mp790 != 0 && FUN_0104bd50(this->mp790))
+    if (this->mp790 != 0 && ((Fn0104bd50*)this->mp790)->f())
     {
         IRefObject* pTool = this->mp790;
         EraseToolEntry(pTool, 0);
@@ -402,7 +422,7 @@ void cSPGameDataUFO::ShutdownInternal()
     FUN_00ac0450();
     FUN_00ac0520(this);                         // cLocomotiveObject::Shutdown
 
-    if (this->mp790 != 0 && FUN_0104bd50(this->mp790))
+    if (this->mp790 != 0 && ((Fn0104bd50*)this->mp790)->f())
     {
         IRefObject* pTool = this->mp790;
         EraseToolEntry(pTool, 0);
@@ -494,7 +514,7 @@ void cSPGameDataUFO::SetNPCTool(void* pTool)
 
         if (a != 0)
         {
-            FUN_005766e0(&pBase->mp790, &pBase->mp7a4);
+            ((Fn005766e0*)&pBase->mp790)->f(&pBase->mp7a4);
             goto done;
         }
 
@@ -502,23 +522,23 @@ void cSPGameDataUFO::SetNPCTool(void* pTool)
         {
             if (c == 0 || *(int*)(c + 0xb1c) != 2)
             {
-                FUN_005766e0(&pBase->mp790, &pBase->mp794);
+                ((Fn005766e0*)&pBase->mp790)->f(&pBase->mp794);
                 goto done;
             }
         }
 
-        void* r = FUN_00c37740(pTool);
-        FUN_00572620(&pBase->mp790, r);
+        void* r = ((Fn00c37740*)pBase)->f(pTool);
+        ((Fn00572620*)&pBase->mp790)->f(r);
     }
 
 done:
-    if (pOld != 0 && FUN_0104bd50(pOld) && pOld != pBase->mp790)
+    if (pOld != 0 && ((Fn0104bd50*)pOld)->f() && pOld != pBase->mp790)
     {
         EraseToolEntry(pOld, 0);
         UseToolStop(pOld);
     }
 
-    FUN_00bfc860(pBase);                        // WriteAsText  (this = base)
+    ((Fn00bfc860*)this)->f(pTool);              // WriteAsText  (this = base+0x508)
 
     if (pOld != 0)
         vcall_release8(pOld);                   // vtable +0x8 -> Release
@@ -542,20 +562,20 @@ void cSPGameDataUFO::SetNPCToolIndexed(void* pTool, int index)
         vcall_5c((IRefObject*)pTool, kPropMineState02);
 
         if (index == 1)
-            FUN_005766e0(&this->mp790, &this->mp798);
+            ((Fn005766e0*)&this->mp790)->f(&this->mp798);
         else if (index == 2)
-            FUN_005766e0(&this->mp790, &this->mp79c);
+            ((Fn005766e0*)&this->mp790)->f(&this->mp79c);
         else if (index == 3)
-            FUN_005766e0(&this->mp790, &this->mp7a0);
+            ((Fn005766e0*)&this->mp790)->f(&this->mp7a0);
     }
 
-    if (pOld != 0 && FUN_0104bd50(pOld) && pOld != *ppSlot)
+    if (pOld != 0 && ((Fn0104bd50*)pOld)->f() && pOld != *ppSlot)
     {
         EraseToolEntry(pOld, 0);
         UseToolStop(pOld);
     }
 
-    FUN_00bfc860((U8*)this + 0x508);            // WriteAsText
+    ((Fn00bfc860*)((U8*)this + 0x508))->f(pTool);   // WriteAsText
 
     if (pOld != 0)
         vcall_release8(pOld);                   // vtable +0x8
@@ -588,6 +608,15 @@ char cSPGameDataUFO::vtableSlot40Wrapper(int arg)
 // 00c3aa40  cSPGameDataUFO::SetFacing (SetHeading-shaped)
 //   Normalise the facing vector, store it into the destination + current-position
 //   cache, build the orthonormal basis + quaternion into +0x730.
+//
+// NOTE (set 2026-10-24):  this reconstruction uses the Ghidra *variable* names from the
+// bounded-stack decompilation, but the author's description text below it (written earlier)
+// cites addresses differently.  Cross-checked against the raw listing at 00c3aa40..00c3ad40:
+//   +0x718/+0x71c/+0x720 = the incoming facing (raw *pFacing)
+//   +0x750/+0x754/+0x758 = the *normalised* dir
+//   +0x5f4(z)/+0x5f8(x)/+0x5fc(y) = the orthogonal components
+// The Ghidra variable `dir` is therefore the raw pFacing, and `unit` is the normalised one;
+// the pre-refactor source had these swapped.  Renamed here for readability only.
 // =============================================================================================
 // @ 0x00c3aa40
 void cSPGameDataUFO::SetFacing(const Vector3* pFacing)
@@ -599,17 +628,15 @@ void cSPGameDataUFO::SetFacing(const Vector3* pFacing)
                                 pFacing->y * pFacing->y +
                                 pFacing->z * pFacing->z);
 
-    Vector3 dir;
-    dir.x = pFacing->x * invLen;
-    dir.y = pFacing->y * invLen;
-    dir.z = pFacing->z * invLen;
+    Vector3 unit;
+    unit.x = pFacing->x * invLen;
+    unit.y = pFacing->y * invLen;
+    unit.z = pFacing->z * invLen;
 
     this->mb74c = 0;
     FUN_00bc3110(this->mTimer648);              // cSPTimer::Stop
 
-    this->mDestination.x = pFacing->x;
-    this->mDestination.y = pFacing->y;
-    this->mDestination.z = pFacing->z;
+    this->mDestination = unit;
 
     // (*(vftbl34+0x38))(pFacing)
     (*(void (__thiscall**)(void*, const Vector3*))
@@ -619,12 +646,11 @@ void cSPGameDataUFO::SetFacing(const Vector3* pFacing)
     this->mCurY = pFacing->y;
     this->mCurZ = pFacing->z;
 
-    float dot = basis.x * dir.x + basis.y * dir.y + basis.z * dir.z;
-    float oz  = basis.z - dir.z * dot;
-    float ox  = basis.x - dir.x * dot;
-    float oy  = basis.y - dir.y * dot;
+    float dot = unit.x * basis.x + unit.y * basis.y + unit.z * basis.z;
+    float oy  = basis.y - unit.y * dot;         // -> +0x5fc
+    float oz  = basis.z - unit.z * dot;         // -> +0x5f4
+    float ox  = basis.x - unit.x * dot;         // -> +0x5f8
 
-    // +0x5f4 = z, +0x5f8 = x, +0x5fc = y (dst order per the original stores)
     this->mDestZ = oz;
     this->mDestX = ox;
     this->mDestY = oy;
@@ -643,7 +669,7 @@ void cSPGameDataUFO::SetFacing(const Vector3* pFacing)
     }
 
     float mtx[9];
-    FUN_0069b440(mtx, &basis, &dir);
+    FUN_0069b440(mtx, &basis, &unit);
     float quat[4];
     FUN_00472b80(quat, mtx, 0);
     (*(float*)((U8*)this + 0x730)) = quat[0];
