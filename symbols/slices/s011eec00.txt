@@ -1,1 +1,9 @@
 011eef30 rw::graphics::CompiledState::D3D9Initialize  # PDB candidate; calls D3D9GetResourceDescriptor and GlobalState::D3D9InitializeBitShiftTable, builds the compiled state stream
+011eec00 rw::graphics::CompiledState::D3D9GetResourceDescriptor  # PDB candidate; returns the 0x20-byte ResourceDescriptor (size/alignment plus four memory descriptors); calls BuildState::D3D9HasVertexDescriptor/GetVertexDescriptor and Device::D3D9GetMaxSamplerStage
+011ef6f0 rw::graphics::CompiledState::D3D9InitializePair  # chk byte-exact (20B); pairs two compiled-state pointers
+011ef710 rw::graphics::Raster::D3D9AddToUnmanagedList  # chk byte-exact (55B); prepends this to g_D3D9UnmanagedList and sets m_nextParent
+011ef750 rw::graphics::Raster::Lock  # PDB candidate; D3D9 texture lock for cube face / volume box / 2D rect
+011ef880 rw::graphics::Raster::Unlock  # PDB candidate; D3D9 texture unlock for cube face / level
+011ef910 rw::graphics::Raster::FormatGetDepth  # PDB candidate; maps D3DFORMAT codes to bit depths
+011efa70 rw::graphics::Raster::D3D9ReleaseResources  # PDB candidate; unbinds sampler stages then releases swap chain/texture of every unmanaged raster
+011efb20 rw::graphics::Raster::D3D9RemoveFromUnmanagedList  # chk byte-exact (57B); unlinks this from g_D3D9UnmanagedList
