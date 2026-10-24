@@ -18,16 +18,17 @@ void* __stdcall FUN_00f3e8a0(int nounId);       // noun lookup by id (ret 4)
 void  __cdecl   FUN_00f3b710(void* e);          // per-entry reset
 void* __stdcall SP_NounManager();               // cGameNounManager* (0 args)
 void* __cdecl   FUN_00efe5a0();
-void  __cdecl   FUN_00adc970(void* a, void* b);
 void  __cdecl   FUN_00eec2b0(void* a, void* b, int c, void* d, int e);
 void  __cdecl   operator_delete(void* p);
 void* __cdecl   FUN_00b18e00(void* p);
 uint8_t __cdecl FUN_00c9e8e0(int a, void* b);
-float __cdecl   FUN_00eed3f0(int a, int b, float c, int d, float* e);
+float __cdecl   FUN_00eed3f0(int a, float b, int c, int d, float* e);
 void  __cdecl   FUN_00f21850(Noun* n, float* a, float* b, float* c, float* d, int** e);
 void  __cdecl   FUN_00f3b5e0(void* p, float f);
 void  __cdecl   FUN_00b96600(void* a, void* b);
 void* __cdecl   FUN_00b18530(void* p);
+uint8_t __cdecl FUN_00f3b2f0(int a);            // flag test on the state value
+int __cdecl   FUN_00ba28a0(void* n, int idx, int flag);
 
 extern char DAT_01186577;
 extern int  DAT_016c7aa4;   // Simulator*
@@ -44,6 +45,7 @@ struct Vec3p {
 struct HTab {
     char pad[0x20];
     void find(void* out, void* key);
+    void clear(void* key);
 };
 
 struct Entry38 {
@@ -71,7 +73,7 @@ struct Noun {
     char  m25ee0(); char m25f20(); char m25670(); char m25680();
     char  m25730(); char m25370(); char m25490(); char m254d0();
     char  m25530(); int  m25750(); char m253f0(); char m27730();
-    char  m25330(); char m25ed0(); char m253e0(); char m3b990();
+    char  m25330(int x); char m25ed0(); char m253e0(); char m3b990();
     void* m_b18530();
 };
 
@@ -86,6 +88,13 @@ struct Hdr {
     uint32_t b30 : 1;
     uint32_t b31 : 1;
 };
+
+// 8-byte hashtable iterator/find output slot (two words).
+struct Node {
+    void* p0;                        // +0
+    void* p1;                        // +4
+};
+void __cdecl FUN_00adc970(Node* key, Node val);   // erase(key, node pair)
 struct Entry {
     Hdr      hdr;                    // +0x000
     Noun     node;                   // +0x004
@@ -117,13 +126,19 @@ struct C {
     char  m3f110(Noun* ent, void* buf, Noun* n, Entry* e, int x);
     void  m3d900();
 
+    // thiscall noun lookup (receiver = this); same VA as the stdcall convenience
+    // wrapper FUN_00f3e8a0 but with the receiver set explicitly, as in the original.
+    void* m_f3e8a0(int nounId);
+    // thiscall 8-arg state callback (ret 0x20).
+    int   m_f416b0(int a, int* ctx, int b, int c, int d, int e, int f, int g);
+
     void    FUN_00f3fd90(int* p);
     char    FUN_00f3ff70(Noun* n);
     char    FUN_00f40090(Noun* n);
     uint8_t FUN_00f401a0();
     uint8_t FUN_00f40240(Noun* n, uint32_t* pstart);
     uint8_t FUN_00f40370();
-    uint8_t FUN_00f40500(int a, int b, int c);
+    uint8_t FUN_00f40500(int idx, int* p, char flag);
     int     FUN_00f40ae0(void* e);
     void    FUN_00f40c20(uint32_t key, uint32_t* out);
 };
@@ -135,6 +150,7 @@ uint32_t __stdcall ScenarioTutorials_GetActive();
 // ---------------------------------------------------------------------------
 void C::FUN_00f3fd90(int* p)
 {
+    Node found;
     if (*p == -2) {
         World* w = world;
         int n = (int)((char*)w->v38.end - (char*)w->v38.begin) / 0x38;
@@ -173,26 +189,24 @@ void C::FUN_00f3fd90(int* p)
     }
 
     // non-destruction path: dequeue the node from the 0xb0 table and remove it.
-    char* pp = (char*)p;
-    char found[8];
-    hB0.find(found, pp + 0x228);
-    if (*(void**)((char*)this + 0xb4 + *(int*)((char*)this + 0xb8) * 4) != *(void**)found) {
-        Noun* n = (Noun*)*(void**)(found + 4);
+    hB0.find(&found, (char*)p + 0x228);
+    if (*(void**)((char*)this + 0xb4 + *(int*)((char*)this + 0xb8) * 4) != found.p0) {
+        Noun* n = (Noun*)found.p1;
         if (*(int*)((char*)DAT_016c7aa4 + 0xcc) == 1) {
             if (FUN_00efe5a0() == n) {
                 void* g = *(void**)&DAT_015ad298;
                 ((void(__thiscall*)(void*, int))(*(void***)g)[8])(g, 0);
             }
         }
-        Noun* o2 = (Noun*)FUN_00f3e8a0(*(int*)*(void**)(pp + 0x228));
+        Noun* o2 = (Noun*)m_f3e8a0(*p);
         if (o2->m253e0())
             n->m3b990();
         Mgr* mgr = (Mgr*)SP_NounManager();
         mgr->RemoveNoun(n);
-        FUN_00adc970(found, found);
-        char k2[8];
-        h90.find(k2, found);
-        h90.find(found, k2);
+        FUN_00adc970(&found, found);
+        Node k2;
+        h90.find(&k2, &found);
+        h90.clear(&found);
     }
 }
 
@@ -416,11 +430,174 @@ uint8_t C::FUN_00f40370()
 // ---------------------------------------------------------------------------
 // @ 0x00f40500
 // ---------------------------------------------------------------------------
-uint8_t C::FUN_00f40500(int a, int b, int c)
+// Selection/refresh state machine.  `p` is a context record:
+//   p[0]     = state (1..11)                 p[0x61] (+0x184) = result code
+//   p[1]     = noun id A                     p[2] = noun id B
+// Returns true when the node pair is still valid.
+uint8_t C::FUN_00f40500(int idx, int* p, char flag)
 {
-    // State machine not reconstructed (see partial.txt).
-    (void)a; (void)b; (void)c;
-    return 0;
+    int idA = p[1];
+    Noun* nA = (Noun*)m_f3e8a0(idA);
+    Noun* nB = (Noun*)m_f3e8a0(p[2]);
+    Noun* cur = nB;
+    char result = 0;
+
+    if (flag != 0 &&
+        ((nA == 0 && idA != -2) ||
+         ((nB == 0 && p[2] != -2) &&
+          ((p[0] == 9 || p[0] == 6) || p[0] == 10)))) {
+        p[0x61] = 1;
+        return 0;
+    }
+
+    if (nA != 0) {
+        char* nd = (char*)(*(int*)((char*)nA + 0x70) + idx * 0x4e0);
+        if (*nd == 0 || (p[0] != 1 && *(int*)((char*)nA + 0x24) == 1)) {
+            p[0x61] = 2;
+            return 0;
+        }
+        if (nd[2] != 0) {
+            char c1 = nA->m25670();
+            if (c1 == 0 || FUN_00f3b2f0(p[0]) == 0) {
+                p[0x61] = 3;
+                return 0;
+            }
+        }
+    }
+
+    switch (p[0]) {
+    case 1:                                  // -> f405e9
+        if (nA == 0)
+            goto lab_40615;
+        if (nA->m25490())
+            goto lab_4064d;
+        result = 0;
+        p[0x61] = nA->m25750();
+        return (uint8_t)result;
+
+    case 2:                                  // -> f40659
+        if (nA == 0)
+            goto lab_40615;
+        if (nA->m25490())
+            goto lab_4063e;
+        result = 0;
+        p[0x61] = nA->m25750();
+        return (uint8_t)result;
+
+    case 3:                                  // -> f40666
+        if (nA == 0)
+            goto lab_40615;
+        if (nA->m25370())
+            goto lab_4063e;
+        result = 0;
+        p[0x61] = nA->m25750();
+        return (uint8_t)result;
+
+    case 4:                                  // -> f406c4
+    case 5:
+        if (nA == 0 || nA->m25670() == 0)
+            goto lab_40615;
+        result = 1;
+        cur = nA;
+        goto lab_406e1;
+
+    case 6:                                  // -> f4084b
+    case 10:
+        goto lab_4084b;
+
+    case 7:                                  // -> f40633
+        if (nA == 0)
+            goto lab_40615;
+        if (nA->m25490())
+            goto lab_4063e;
+        goto lab_40642;
+
+    case 8:                                  // -> f40708
+        if (nA == 0)
+            goto lab_40615;
+        if (nA->m254d0()) {
+            if (nA->m27730())
+                goto lab_40615;
+            goto lab_40642;
+        }
+        if (nA->m25730())
+            goto lab_40615;
+        goto lab_40642;
+
+    case 9:                                  // -> f40733
+        if (nA == 0)
+            goto lab_40615;
+        if (nA->m254d0()) {
+            if (nA->m27730())
+                goto lab_40615;
+            goto lab_40642;
+        }
+        if (nA->m25730())
+            goto lab_40615;
+        {
+            int e = *(int*)((char*)p + 0x18);
+            if (e != 0 && nA->m25330(e) != 0)
+                goto lab_40615;
+        }
+        goto lab_40642;
+
+    case 11:                                 // -> f406b0
+        if (nA == 0)
+            goto lab_40615;
+        if (nA->m25370())
+            goto lab_4063e;
+        goto lab_40642;
+
+    default:
+        return (uint8_t)result;
+    }
+
+lab_4063e:
+    if (nA->m25730())
+        goto lab_40615;
+lab_40642:
+    if (cur == 0)
+        goto lab_40615;
+    if (cur->m25730())
+        goto lab_4064d;
+    result = 0;
+    p[0x61] = cur->m25750();
+    return (uint8_t)result;
+
+lab_4064d:
+    result = 1;
+lab_40615:
+    return (uint8_t)result;
+
+lab_406e1:
+    if (FUN_00ba28a0(cur, idx, 0) != 5)
+        return (uint8_t)result;
+    result = 0;
+    p[0x61] = 0x10;
+    return (uint8_t)result;
+
+lab_4084b:
+    if (nA == 0)
+        goto lab_40615;
+    if (nA->m25490() == 0)
+        result = 1;
+    nA->m25490();
+    nA->m25730();
+    nA->m25730();
+    nA->m25530();
+    nA->m25530();
+    if (m_f416b0(idx, p, p[1], 0, 1, 0, 0, 1) < 2)
+        p[0x61] = 0x13;
+    if (cur == 0)
+        goto lab_40615;
+    if (cur->m254d0()) {
+        if (cur->m27730())
+            goto lab_40615;
+        goto lab_40642;
+    }
+    if (cur->m25730() != 0)
+        goto lab_40642;
+    goto lab_40615;
 }
 
 // ---------------------------------------------------------------------------
@@ -429,11 +606,12 @@ uint8_t C::FUN_00f40500(int a, int b, int c)
 float __cdecl FUN_00f409a0(int* p, int a, float lo, int b, float* out)
 {
     if (*p == -2)
-        return FUN_00eed3f0(a, b, lo, 1, out);
+        return FUN_00eed3f0(a, lo, b, 1, out);
 
-    Noun* obj = (Noun*)FUN_00f3e8a0(*p);
+    C* host = (C*)*(void**)((char*)DAT_016c7aa4 + 0x74);
+    Noun* obj = (Noun*)host->m_f3e8a0(*p);
     if (obj->m253f0() != 0) {
-        float v18 = 0, v14 = 0, v20 = 0, v1c = 0;
+        float v18, v14, v20, v1c;
         FUN_00f21850(obj, &v18, &v14, &v20, &v1c, &p);
         float r = lo;
         if (r < v18) r = v18;
@@ -446,7 +624,7 @@ float __cdecl FUN_00f409a0(int* p, int a, float lo, int b, float* out)
         }
         return r;
     }
-    return FUN_00eed3f0(a, b, lo, 0, out);
+    return FUN_00eed3f0(a, lo, b, 0, out);
 }
 
 // ---------------------------------------------------------------------------
