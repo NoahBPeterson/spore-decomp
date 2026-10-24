@@ -2,5 +2,5 @@
 00552c20  188  complete; /Od hashtable::erase(iterator) schedule differs
 005531b0  283  complete; /Od hashtable<key3>::erase(key) schedule differs
 00553620  267  complete; /Od hashtable<pair>::erase(key) schedule differs
-00553b90  50   complete; /Od vector<string16> element dtor loop schedule differs
-00553be0  175  complete; /Od vector<string16> resize schedule differs
+00553b90   57  complete; equivalence PASS; element-dtor loop + VectorBase::~VectorBase thiscall (this in ecx); /Od schedule differs
+00553be0  175  complete; equivalence PASS; VectorBase reserve thiscall (this in ecx + 3 stack args); /Od schedule differs

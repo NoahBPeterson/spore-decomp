@@ -31,7 +31,12 @@ struct HT {
     int* FindU32(int* out, uint32_t* key);
 };
 struct El { void Dtor(); };
-struct Vec16 { void FUN_00553b90(); void FUN_00553be0(unsigned n); };
+struct Vec16 {
+    void FUN_00553b90();
+    void FUN_00553be0(unsigned n);
+    void DestroyStorage();                       // 0x00554B10
+    void ReserveRaw(void* pos, int n, void* out); // 0x005550A0
+};
 
 // @ 0x00552af0
 int HT::Erase64(uint32_t* key)
@@ -307,7 +312,7 @@ void Vec16::FUN_00553b90()
     for (uint32_t p = *(uint32_t*)s; p < end; p = p + 0x10) {
         ((El*)p)->Dtor();
     }
-    FUN_00554b10();
+    DestroyStorage();
 }
 
 // @ 0x00553be0
@@ -318,7 +323,7 @@ void Vec16::FUN_00553be0(unsigned n)
         char* local_14 = DAT_01667bac;
         char* local_10 = DAT_01667bac;
         int local_c = 0x1667bad;
-        FUN_005550a0(*(void**)(s + 4), n - ((*(int*)(s + 4) - *(int*)s) >> 4), &local_14);
+        ReserveRaw(*(void**)(s + 4), n - ((*(int*)(s + 4) - *(int*)s) >> 4), &local_14);
         if (1 < local_c - (int)local_14 && local_14 != 0) {
             operator_delete(local_14);
         }
