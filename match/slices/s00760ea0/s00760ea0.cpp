@@ -21,7 +21,11 @@ void  __cdecl opnew3(void* p, int a, unsigned int n);           // @ 0x11e073e
 void  __cdecl FUN_00777ae0(int a, void* p, int b);             // @ 0x777ae0
 void  __cdecl FUN_007823b0(void* a, void* b);                  // @ 0x7823b0
 void  __cdecl FUN_00781b10();                                  // @ 0x781b10
-void* __cdecl FUN_00928a30(void* a, void* b, int c, int d, int e, int f, int g, int h); // @ 0x928a30
+// SP::cSPMemPool global allocator (0x016c8b44); LockedAligned is __thiscall (this = the pool).
+struct SPMemPoolStub {
+    void* LockedAligned(unsigned int size, unsigned int align, int a, int b, int c, int d, int e, int f); // @ 0x928a30
+};
+extern SPMemPoolStub* g_pSPMemPool;                            // 0x016c8b44
 void* __cdecl FUN_011f3c40(void* p);                           // @ 0x11f3c40
 void* __cdecl FUN_011f34a0(void* p, int a, int b);             // @ 0x11f34a0
 void* __cdecl FUN_011f9a90(void* p, int a);                    // @ 0x11f9a90
@@ -234,7 +238,7 @@ unsigned int __cdecl FUN_00761380()
 {
     D4 d = FUN_00761340();
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return (unsigned int)FUN_011f3c40(local);
 }
@@ -248,7 +252,7 @@ void* __cdecl SP_CreateRaster(int w, int h, int levels, int fmt, int flags)
         flags &= 0xfffffdff;
     D1 d = FUN_011f0220(w, h, levels, fmt, flags);
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return Raster_Initialize(local, w, h, levels, fmt, flags);
 }
@@ -259,7 +263,7 @@ void* __cdecl FUN_00761650(int n)
 {
     D1 d = FUN_00761280(n);
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return FUN_011f34a0(local, n, 0);
 }
@@ -270,7 +274,7 @@ void* __cdecl FUN_007616f0(int a, int b)
 {
     D1 d = FUN_011f9e50(a, b);
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return FUN_011f9eb0(local, a, b);
 }
@@ -281,7 +285,7 @@ void* __cdecl FUN_007617a0(int a)
 {
     D1 d = FUN_011eec00(a, a);
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return FUN_011eef30(local, a, a);
 }
@@ -292,7 +296,7 @@ void* __cdecl FUN_00761840(int a)
 {
     D2 d = FUN_007612c0(a);
     int local[4];
-    local[0] = (int)FUN_00928a30((void*)d.v[0].a, (void*)d.v[0].b, 0, 0, 0, 0, 0, 0);
+    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
     return FUN_011f9a90(local, a);
 }
@@ -300,21 +304,48 @@ void* __cdecl FUN_00761840(int a)
 // ------------------------------------------------------------------- 0x761500
 void* __cdecl FUN_012055f0(void* out, int a, int b, int c, int d, void* e, int f); // @ 0x12055f0
 void* __cdecl FUN_012046f0(void* p, int a, int b, int c, int d, void* e, int f);    // @ 0x12046f0
+// Non-trivial element type: its destructor makes the compiler emit the SEH frame,
+// the `mov local_4,-1` state machine and the two _eh_vector_destructor_iterator_ calls.
+struct KDElem { int a, b; ~KDElem(); };
+// @ 0xc2e4e0
+KDElem::~KDElem() {}
+// The 0x50-byte descriptor FUN_012055f0 fills and both KD routines reuse.
+struct KDDesc {
+    KDElem elems[4];   // +0x00  the two dwords LockedAligned consumes are elems[0].a, elems[0].b
+    char   rest[0x30]; // +0x20  remaining payload FUN_012055f0 wrote
+};
+// The 0x38-byte node SP::CreateTriangleKDTreeProcedural hands back to its caller.
+struct KDTreeDesc {
+    unsigned int tag;        // +0x00  0x80003
+    void*        obj;        // +0x04  Initialize result
+    unsigned int a;          // +0x08  == local[0]
+    unsigned int b;          // +0x0c  == local[1]
+    unsigned int c;          // +0x10  == local[2]
+    unsigned int d;          // +0x14  == local[3]
+    KDElem       tail[4];    // +0x18  copy of the descriptor's elems[0..3]
+};
 // @ 0x761500  SP::CreateTriangleKDTreeProcedural
-void* __cdecl FUN_00761500(int a, int b, int c, int d, void** out)
+void* __cdecl FUN_00761500(int a, int b, int c, int d, KDTreeDesc* out)
 {
-    char desc[0x50];
-    FUN_012055f0(desc, a, b, c, d, (void*)0x15d0a7c, 0x50);
-    int local[4];
-    local[0] = (int)FUN_00928a30(*(void**)desc, *(void**)(desc + 4), 0, 0, 0, 0, 0, 0);
-    local[1] = 0; local[2] = 0; local[3] = 0;
+    KDTreeDesc tmp;
+    KDDesc desc;
+    unsigned int local[4];
+    FUN_012055f0(&desc, a, b, c, d, (void*)0x15d0a7c, 0x50);
+    local[0] = (unsigned int)g_pSPMemPool->LockedAligned(desc.elems[0].a, desc.elems[0].b, 0, 0, 0, 0, 0, 0);
+    local[1] = 0;
+    local[2] = 0;
+    local[3] = 0;
     void* r = FUN_012046f0(local, a, b, c, d, (void*)0x15d0a7c, 0x50);
     if (out) {
-        out[0] = r;
-        char* src = desc;
-        char* dst = (char*)out + 0x20;
-        for (int i = 0; i < 8; i++)
-            ((int*)dst)[i] = ((int*)src)[i];
+        tmp.tag = 0x80003;
+        tmp.obj = r;
+        tmp.a = local[0];
+        tmp.b = local[1];
+        tmp.c = local[2];
+        tmp.d = local[3];
+        for (int i = 0; i < 4; i++)
+            tmp.tail[i] = desc.elems[i];
+        *out = tmp;
     }
     return r;
 }
@@ -330,35 +361,50 @@ extern unsigned int g_16fa088, g_16fa08c, g_16f9660, g_16fa0bc, g_16fa0c0;
 extern unsigned int g_16fa0c4, g_16f9664, g_16fa0f4, g_16fa0f8, g_16fa0fc;
 extern unsigned int g_16f96a0, g_16f96a8, g_16f96ac, g_16f96b0, g_16f96b4;
 extern unsigned int g_16fa380;
+extern float g_16fa4f0[16];      // the 4x4 affine matrix local copy (0x40 bytes)
+extern float g_1485720;          // _HK_REAL_ONE == 1.0f
 // @ 0x7618e0  SP::ResetGlobalState
 void __cdecl FUN_007618e0()
 {
+    const int two = 2;
     g_16fa38c |= 0x10080;
     g_16f9218 = 1;
-    g_16f923c = 2;
+    g_16f923c = two;
     FUN_011f1340(0x10002);
-    g_16f9530 |= 0x70;
-    g_16f9534 |= 0x70;
-    g_16f9538 |= 0x70;
-    g_16fa3a8 |= 0x3f;
-    g_16f953c |= 0x70;
-    g_16f9540 |= 0x70;
-    g_16f9544 |= 0x70;
-    g_16f9528 |= 0x11;
+    unsigned int v;
+    v = g_16f9530; v |= 0x20; v |= 0x10; v |= 0x40; g_16f9530 = v;
+    v = g_16f9534; v |= 0x20; v |= 0x10; v |= 0x40; g_16f9534 = v;
+    v = g_16f9538; v |= 0x20;
+    g_16fa38c |= 0x63100;
+    v |= 0x10; v |= 0x40; g_16f9538 = v;
+    v = g_16fa3a8; v |= 1; v |= two; v |= 4; v |= 8; v |= 0x10; v |= 0x20; g_16fa3a8 = v;
+    v = g_16f953c; v |= 0x20; v |= 0x10; v |= 0x40; g_16f953c = v;
+    v = g_16f9540; v |= 0x20; v |= 0x10; v |= 0x40; g_16f9540 = v;
+    v = g_16f9544; v |= 0x20; v |= 0x10; v |= 0x40; g_16f9544 = v;
     g_16f922c = 5;
     g_16f9230 = 6;
     g_16f921c = 0;
     g_16f9244 = 8;
     g_16f9240 = 0;
-    g_16f9650 = 0; g_16f9fe0 = 2; g_16f9fdc = 2; g_16f9fe4 = 2;
-    g_16f9654 = 0; g_16fa018 = 2; g_16fa014 = 2; g_16fa01c = 2;
-    g_16f9658 = 0; g_16fa050 = 2; g_16fa04c = 2; g_16fa054 = 2;
-    g_16f965c = 0; g_16fa088 = 2; g_16fa084 = 2; g_16fa08c = 2;
-    g_16f9660 = 0; g_16fa0c0 = 2; g_16fa0bc = 2; g_16fa0c4 = 2;
-    g_16f9664 = 0; g_16fa0f8 = 2; g_16fa0f4 = 2; g_16fa0fc = 2;
+    g_16f9650 = 0; g_16f9fe0 = two; g_16f9fdc = two; g_16f9fe4 = two;
+    g_16f9654 = 0; g_16fa018 = two; g_16fa014 = two; g_16fa01c = two;
+    g_16f9658 = 0; g_16fa050 = two; g_16fa04c = two; g_16fa054 = two;
+    g_16f965c = 0; g_16fa088 = two; g_16fa084 = two; g_16fa08c = two;
+    g_16f9660 = 0; g_16fa0c0 = two; g_16fa0bc = two; g_16fa0c4 = two;
+    g_16f9664 = 0; g_16fa0f8 = two; g_16fa0f4 = two; g_16fa0fc = two;
+    // SSE-built 4x4 affine matrix: diag(1,1,1) in rows 0..2 (1.0 from _HK_REAL_ONE), row 3 zero.
+    const float one = g_1485720;
+    g_16f9528 |= 0x11;
+    float m[16];
+    m[0] = one; m[1] = 0; m[2] = 0; m[3] = 0;
+    m[4] = 0; m[5] = one; m[6] = 0; m[7] = 0;
+    m[8] = 0; m[9] = 0; m[10] = one; m[11] = 0;
+    m[12] = 0; m[13] = 0; m[14] = 0; m[15] = 0;
     g_16f96a0 = 4;
     g_16fa380 = 0x16fa4f0;
-    g_16f96ac = 0x3f800000; g_16f96b0 = 0x3f800000; g_16f96b4 = 0x3f800000;
+    for (int i = 0; i < 16; i++)
+        g_16fa4f0[i] = m[i];
+    g_16f96a8 = g_16f96ac = g_16f96b0 = g_16f96b4 = 0x3f800000;
 }
 
 // ------------------------------------------------------------------- 0x761b40

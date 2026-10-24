@@ -10,3 +10,5 @@
 00761840  125  CreateMesh wrapper: EH frame not emitted in one TU
 00761b40  137  raster texture builder: abs-loop register allocation (ebx/ebp vs edi/ebx)
 00761c50   61  descriptor-array allocate loop: redundant first store elided and loop indexing
+00761500  360  SP::CreateTriangleKDTreeProcedural: full C++ (0x50 descriptor with a KDElem[4] non-trivial member, __thiscall LockedAligned via g_pSPMemPool, 0x38 out-node); size 385 vs 321, SEH frame layout and _eh_vector_destructor_iterator_ state differ; equiv WEAK (90/400 valid inputs, 100% coverage, no mismatch)
+007618e0  211  ResetGlobalState: full C++ (per-global |= chains, six 2-blocks, SSE 4x4 identity matrix from _HK_REAL_ONE); size 604 vs 599, `and esp,-16` alignment prologue and unpcklps matrix build ordering differ; equiv PASS (400/400)
