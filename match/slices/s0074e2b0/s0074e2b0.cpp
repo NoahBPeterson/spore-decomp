@@ -348,11 +348,12 @@ struct Matrix33 {
     Matrix33(const Matrix33& o);                  // 0x0041cb40
 };
 struct cSPTransform {
-    unsigned short mFlags;
-    unsigned short mModificationCount;
-    Vec3 mTranslation;
-    float mScale;
-    Matrix33 mRotation;
+    unsigned short mFlags;                // +0x00
+    unsigned short mModificationCount;    // +0x02
+    Vec3 mTranslation;                    // +0x04
+    float mScale;                         // +0x10
+    unsigned int pad14;                   // +0x14
+    Matrix33 mRotation;                   // +0x18
     cSPTransform& operator=(const cSPTransform& x);   // 0x00537dc0
     cSPTransform(const Vec3& t, const Matrix33& r) : mTranslation(t), mRotation(r)
     {
@@ -380,11 +381,11 @@ struct ModelFilter {
     unsigned char mFlags;                 // +0x15 (1: use model LOD, 2: ignore model scale)
 };
 struct LODData { char pad[0xcc]; int mValid; };
+#pragma pack(push, 4)                         // mMask is 8 bytes with only 4-byte alignment
 struct ModelItem : Node {             // cMWModelInternal (intrusive list node first)
-    unsigned mFlags;                  // +0x08 is the model; flags at +0xc
-    char pad0[0x10 - 0x0c];
+    void* mpModel;                    // +0x08
+    unsigned mFlags;                  // +0x0c
     cSPTransform mTransform;          // +0x10
-    char pad1[0x4c - 0x10 - sizeof(cSPTransform)];
     unsigned __int64 mMask;           // +0x4c
     char pad2[0x65 - 0x54];
     unsigned char mLOD;               // +0x65
@@ -396,6 +397,7 @@ struct ModelItem : Node {             // cMWModelInternal (intrusive list node f
     char pad5[0xac - 0xa0];
     LODData* mpLOD2;                  // +0xac
 };
+#pragma pack(pop)
 
 bool __cdecl RaySphereHit(const Vec3* start, const Vec3* end, const Vec3* center, float radius, float* pDist);  // 0x00700c80
 bool __cdecl RayModelLOD(const Vec3* start, const Vec3* end, const cSPTransform* xf, const float* bounds, const Matrix33* basis,
@@ -461,6 +463,7 @@ bool cModelWorld::RayCastModels(const Vec3* start, const Vec3* end, HitVec* out,
             out->insert(out->mpBegin + idx, hit);
             ++count;
         }
+        return count != 0;
     } else {
         for (ModelItem* item = (ModelItem*)mGroupList.next; item != (ModelItem*)&mGroupList; item = (ModelItem*)item->next) {
             if (!(item->mFlags & 1)) continue;
@@ -491,5 +494,5 @@ bool cModelWorld::RayCastModels(const Vec3* start, const Vec3* end, HitVec* out,
             ++count;
         }
     }
-    return count != 0;
+    return out->mpBegin != out->mpEnd;
 }
