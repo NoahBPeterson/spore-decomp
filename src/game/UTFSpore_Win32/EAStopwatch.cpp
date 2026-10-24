@@ -52,8 +52,7 @@ class cSPUILayerManager { public:
     int64_t GetDelta();
 };
 struct cDirectPropertyList {
-    void*   mpVtbl;      // 0x00
-    int32_t mnRefCount;  // 0x04
+    int64_t mnStart;     // 0x00 (the elapsed time is measured from this reading)
     int64_t mnAccum;     // 0x08
     int32_t mGroup;      // 0x10
     void SetBoolProperty();
@@ -89,31 +88,31 @@ void EA::Stopwatch::SetUnits(int units)
     case 6:
         mfStopwatchCyclesToUnitsCoefficient = mfStopwatchCyclesToMinutesCoefficient;
         break;
+    default:
+        mfStopwatchCyclesToUnitsCoefficient = 1.0f;
+        break;
     }
 }
 
 // @ 0x0093a2e0
 void cDirectPropertyList::SetBoolProperty()
 {
-    if (mpVtbl != 0 || mnRefCount != 0) {
+    if (mnStart != 0) {
         int64_t now = 0;
         if (mGroup == 1)
             now = (int64_t)__rdtsc();
         else
             QueryPerformanceCounter(&now);
-        uint64_t elapsed = (uint64_t)(now - mnAccum);
+        uint64_t elapsed = (uint64_t)(now - mnStart);
         if (elapsed > mnStopwatchCycleReadingOverhead) {
             uint64_t c = elapsed - mnStopwatchCycleReadingOverhead;
             uint64_t old = (uint64_t)mnAccum;
             mnAccum = (int64_t)(old + c);
-            mpVtbl = 0;
-            mnRefCount = 0;
         } else {
             uint64_t old = (uint64_t)mnAccum;
             mnAccum = (int64_t)(old + 1);
-            mpVtbl = 0;
-            mnRefCount = 0;
         }
+        mnStart = 0;
     }
 }
 

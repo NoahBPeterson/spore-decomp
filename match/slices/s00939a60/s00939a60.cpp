@@ -97,6 +97,9 @@ void Stopwatch::SetUnits(int units) {
     case 6:
         mfStopwatchCyclesToUnitsCoefficient = mfStopwatchCyclesToMinutesCoefficient;
         break;
+    default:
+        mfStopwatchCyclesToUnitsCoefficient = 1.0f;
+        break;
     }
 }
 
@@ -332,33 +335,31 @@ int64_t cSPUILayerManager::GetDelta() {
 }
 
 // @ 0x0093a2e0  (complete, near miss: timing/refcount bookkeeping)
+// The first two dwords are not a vtable/refcount pair: they are the 64-bit start
+// reading the elapsed time is measured from (the original tests them as one qword).
 struct cDirectPropertyList {
-    void*   mpVtbl;      // 0x00
-    int32_t mnRefCount;  // 0x04
+    int64_t mnStart;     // 0x00
     int64_t mnAccum;     // 0x08
     int32_t mGroup;      // 0x10
     void SetBoolProperty();
 };
 void cDirectPropertyList::SetBoolProperty() {
-    if (mpVtbl != 0 || mnRefCount != 0) {
+    if (mnStart != 0) {
         int64_t now = 0;
         if (mGroup == 1)
             now = (int64_t)__rdtsc();
         else
             QueryPerformanceCounter(&now);
-        uint64_t elapsed = (uint64_t)(now - mnAccum);
+        uint64_t elapsed = (uint64_t)(now - mnStart);
         if (elapsed > mnStopwatchCycleReadingOverhead) {
             uint64_t c = elapsed - mnStopwatchCycleReadingOverhead;
             uint64_t old = (uint64_t)mnAccum;
             mnAccum = (int64_t)(old + c);
-            mpVtbl = 0;
-            mnRefCount = 0;
         } else {
             uint64_t old = (uint64_t)mnAccum;
             mnAccum = (int64_t)(old + 1);
-            mpVtbl = 0;
-            mnRefCount = 0;
         }
+        mnStart = 0;
     }
 }
 

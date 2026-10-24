@@ -1,5 +1,5 @@
-0093a1a0 168 Stopwatch::SetUnits: complete; unit-1 frequency-ratio branch uses a different int64->float divide sequence
-0093a2e0 110 cDirectPropertyList::SetBoolProperty: complete; timing/refcount bookkeeping cl form differs
+0093a1a0 209 Stopwatch::SetUnits: the switch now carries `default: coefficient = 1.0f; break;` beside the pre-store, so cl keeps the whole 0..6 jump table (`cmp eax,6`, no `dec eax`) and eax survives as the units value; the unit-1 frequency-ratio branch uses a different int64->float divide sequence. difftest 0 mismatches (WEAK only on the 60% coverage bar: the x87 unit-1 branch is never reached by the generated inputs) [flags /O2 /MD /Gy /EHsc /TP /arch:SSE]
+0093a2e0 117 cDirectPropertyList::SetBoolProperty: the first two dwords are one 64-bit start reading (mnStart at +0), not a vptr/refcount pair; elapsed = now - mnStart and mnStart is cleared once at the end; accum stays at +8 [equiv: PASS 600 valid 89.8% cov, flags /O2 /MD /Gy /EHsc /TP /arch:SSE]
 0093a3a0 4   Stopwatch::GetElapsedTimeFloat: complete; only the 64-bit half-load order after QueryPerformanceCounter differs
 0093a480 103 LimitStopwatch::SetTimeLimit: complete; x87 double rounding dance (fstp/fld/fistp) not reproduced
 0093a510 43  cSPUILayerManager::GetDelta: complete; cl emits an inline fistp instead of the original's stored double round-trip
