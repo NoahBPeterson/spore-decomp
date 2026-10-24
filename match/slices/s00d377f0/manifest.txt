@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d377f0/s00d377f0.cpp  ?SetupNestMissionCard@cSPCreatureMissionManager@@QAEXXZ  00d37ea0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00d377f0/s00d377f0.cpp  ?ReleaseNestMission@cSPCreatureMissionManager@@QAEXXZ  00d37ed0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00d377f0/s00d377f0.cpp  ?IsTracked@cSPCreatureMissionManager@@QAE_NPAX@Z  00d37ef0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00d377f0/s00d377f0.cpp  ?ScalarDeletingDtor@cSPCreatureMissionManager@@QAEPAXI@Z  00d37f50  /O2 /MD /Gy /TP /arch:SSE
+slices/s00d377f0/s00d377f0.cpp  ?MarkEventAsOccurred@@YAXI@Z  00d387c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00d377f0/s00d377f0.cpp  ?EvaluateEvent@@YAPBDH@Z  00d38800  /O2 /MD /Gy /TP /arch:SSE
+slices/s00d377f0/s00d377f0.cpp  ?HasBrainUpgrade@cCreatureLevelUpScenario@@QAE_NXZ  00d38880  /O2 /MD /Gy /TP /arch:SSE
+slices/s00d377f0/s00d377f0.cpp  ?OnMouseMove@cCreatureModeStrategy@@QAEXHMMH@Z  00d388a0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00d377f0/s00d377f0.cpp  ?OnMouseButton@cCreatureModeStrategy@@QAEXHMMH@Z  00d388d0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00d377f0/s00d377f0.cpp  ?FUN_00d38900@@YA_NXZ  00d38900  /O2 /MD /Gy /TP /arch:SSE
