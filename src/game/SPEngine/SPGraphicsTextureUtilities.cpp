@@ -479,8 +479,7 @@ static const unsigned __int64 kThird = 0x5555555555555555ULL;      // 0x140fbc8
 // ---- items of slice s007ada40 end
 
 // ---- items of slice s007aea30 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" uint32_t trymapblock(uint32_t c0, uint32_t c1, uint32_t* map,
-                                const uint32_t* pixels, uint32_t best);       // 0x7ad810
+extern "C" uint32_t trymapblock(uint32_t* map, const uint32_t* pixels, uint32_t best);  // 0x7ad810 (c0=ecx, c1=eax)
 struct Endpoint {
     int      v[7];   // +0x00
     uint8_t  c;      // +0x1c
@@ -1434,6 +1433,28 @@ void DestroyDxtSurfaceEx(DxtSurfaceEx* p)
 }
 #pragma auto_inline(on)
 
+// The retail callee takes c0 in ecx, c1 in eax and map/pixels/best on the stack
+// (caller-cleaned); no MSVC keyword expresses that pair of register arguments.
+static __forceinline uint32_t TryMapBlock(uint32_t c0, uint32_t c1, uint32_t* map,
+                                          const uint32_t* pixels, uint32_t best)
+{
+    uint32_t r;
+    uint32_t* m = map;
+    const uint32_t* p = pixels;
+    uint32_t b = best;
+    __asm {
+        push b
+        push p
+        push m
+        mov ecx, c0
+        mov eax, c1
+        call trymapblock
+        add esp, 12
+        mov r, eax
+    }
+    return r;
+}
+
 // @ 0x007aeab0
 uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, uint32_t* out1, int alpha, int quality)
 {
@@ -1455,12 +1476,12 @@ uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, u
 
     if (quality >= 5)
     {
-        best = trymapblock(e0, e1, map, pixels, best);
+        best = TryMapBlock(e0, e1, map, pixels, best);
         if (best > thresh)
         {
             if (quality < 10)
             {
-                uint32_t err = trymapblock(e1, e0, map, pixels, best);
+                uint32_t err = TryMapBlock(e1, e0, map, pixels, best);
                 if (err < best)
                 {
                     uint32_t t = e0;
@@ -1479,7 +1500,7 @@ uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, u
                         uint32_t b = RGB888TO565(pixels[j]);
                         if (a > b)
                         {
-                            uint32_t err = trymapblock(a, b, map, pixels, best);
+                            uint32_t err = TryMapBlock(a, b, map, pixels, best);
                             if (err < best)
                             {
                                 best = err;
@@ -1559,7 +1580,7 @@ uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, u
                             uint32_t c = ((r << 6 | g) << 5) | b;
                             if (c > e1)
                             {
-                                uint32_t err = trymapblock(c, e1, map, pixels, best);
+                                uint32_t err = TryMapBlock(c, e1, map, pixels, best);
                                 if (err < best)
                                 {
                                     best = err;
@@ -1581,7 +1602,7 @@ uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, u
                             uint32_t c = ((r << 6 | g) << 5) | b;
                             if (e0 > c)
                             {
-                                uint32_t err = trymapblock(e0, c, map, pixels, best);
+                                uint32_t err = TryMapBlock(e0, c, map, pixels, best);
                                 if (err < best)
                                 {
                                     best = err;
@@ -1618,7 +1639,7 @@ uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, u
                                             uint32_t cb = ((r1 << 6 | g1) << 5) | b1;
                                             if (ca > cb || quality >= 60)
                                             {
-                                                uint32_t e = trymapblock(ca, cb, map, pixels, best);
+                                                uint32_t e = TryMapBlock(ca, cb, map, pixels, best);
                                                 if (e < best)
                                                 {
                                                     best = e;
@@ -1661,7 +1682,7 @@ done:
 }
 
 // @ 0x007af5d0
-void FUN_007af5d0(Endpoint* first, Endpoint* last, Endpoint* dest)
+Endpoint* FUN_007af5d0(Endpoint* first, Endpoint* last, Endpoint* dest)
 {
     for (; first != last; ++first) {
         if (dest != 0) {
@@ -1676,6 +1697,7 @@ void FUN_007af5d0(Endpoint* first, Endpoint* last, Endpoint* dest)
         }
         ++dest;
     }
+    return dest;
 }
 
 // @ 0x007af620
@@ -1714,7 +1736,7 @@ void FUN_007af670(Endpoint* dest, uint32_t n, const Endpoint* src)
 }
 
 // @ 0x007af6d0
-void FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
+Endpoint* FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
 {
     while (last != first) {
         last = (Endpoint*)((char*)last - 0x20);
@@ -1728,6 +1750,7 @@ void FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
         dest->v[6] = last->v[6];
         dest->c    = last->c;
     }
+    return dest;
 }
 
 // @ 0x007af720
