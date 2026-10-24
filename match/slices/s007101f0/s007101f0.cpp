@@ -16,14 +16,17 @@ void  __cdecl CopyBackwardRef(void* first, void* last, void* resultEnd);        
 void  __cdecl UninitCopyRef(void* first, void* last, void* result);                                     // 0x0070EB70
 void  __cdecl FillRef(void* first, void* last, const void* value);                                      // 0x0070EBB0
 void  __cdecl UninitFillRef(void* dst, uint32_t n, const void* value);                                  // 0x0070F570
-void  __cdecl EraseRef(void* first, void* last);                                                        // 0x0070FA60 / 0x0070FAB0
-void  __cdecl DoInsertValuesRef(void* position, uint32_t n, const void* value);                         // 0x0070FB00 / 0x0070FD50
-void* __cdecl ReallocRef(void* self, uint32_t n, const void* first, const void* last);                  // 0x00710190
-void* __cdecl AssignCopyRef(void* first, void* last, void* dst);                                        // 0x006F43E0
-void* __cdecl AssignMoveRef(void* out, void* first, void* last, void* dst, void* end);                  // 0x0070EA70
-void  __cdecl DestroyRange0(void* first, void* last);                                                   // 0x0070F520
-void* __cdecl HashtableFind10(void* self, const uint32_t* key, void* out);                              // 0x00645ED0
-void  __cdecl HashtableInsert10(void* self, void* out, const void* value, uint8_t tag);                 // 0x0070F5A0
+// THISCALL: the original passes the vector in ECX and the remaining args on the stack.
+void  __fastcall VecA_Shrink(void* self, int, void* first, void* last);                              // 0x0070FA60
+void  __fastcall VecB_Shrink(void* self, int, void* first, void* last);                              // 0x0070FAB0
+void  __fastcall VecA_Insert(void* self, int, void* position, uint32_t n, const void* value);        // 0x0070FB00
+void  __fastcall VecB_Insert(void* self, int, void* position, uint32_t n, const void* value);        // 0x0070FD50
+void* __fastcall ReallocRef(void* self, int, uint32_t n, const void* first, const void* last);       // 0x00710190
+void* __cdecl AssignCopyRef(void* first, void* last, void* dst);                                     // 0x006F43E0
+void* __cdecl AssignMoveRef(void* out, void* first, void* last, void* dst, void* end);               // 0x0070EA70
+void  __fastcall DestroyRange0(void* self, int, void* first, void* last);                            // 0x0070F520
+void  __fastcall HashtableFind10(void* self, int, void* out, const uint32_t* key);                   // 0x00645ED0
+void  __fastcall HashtableInsert10(void* self, int, void* out, const void* value, const void* key);  // 0x0070F5A0
 void  __cdecl DestroyTex(void* p);                                                                      // 0x006E57A0
 void  __cdecl DestroyMat(void* p);                                                                      // 0x006FD300
 
@@ -151,19 +154,19 @@ struct VecResizeA {
     void* mpEnd;         // +0x04
     void* mpCapacity;    // +0x08
     uint32_t mAllocator[2];
-    uint32_t size() const { return (uint32_t)((char*)mpEnd - (char*)mpBegin) >> 2; }
+    int32_t size() const { return (int32_t)((char*)mpEnd - (char*)mpBegin) >> 2; }
     void resize(uint32_t n);
 };
 
 // @ 0x00711070
 void VecResizeA::resize(uint32_t n)
 {
-    if (n > size()) {
+    if (n > (uint32_t)size()) {
         typedef int32_t value_type;
         value_type value = 0;
-        DoInsertValuesRef(mpEnd, n - size(), &value);
+        VecA_Insert(this, 0, mpEnd, n - (uint32_t)size(), &value);
     } else {
-        EraseRef((char*)mpBegin + n * 4, mpEnd);
+        VecA_Shrink(this, 0, (char*)mpBegin + n * 4, mpEnd);
     }
 }
 
@@ -172,19 +175,19 @@ struct VecResizeB {
     void* mpEnd;         // +0x04
     void* mpCapacity;    // +0x08
     uint32_t mAllocator[2];
-    uint32_t size() const { return (uint32_t)((char*)mpEnd - (char*)mpBegin) >> 2; }
+    int32_t size() const { return (int32_t)((char*)mpEnd - (char*)mpBegin) >> 2; }
     void resize(uint32_t n);
 };
 
 // @ 0x007110F0
 void VecResizeB::resize(uint32_t n)
 {
-    if (n > size()) {
+    if (n > (uint32_t)size()) {
         typedef int32_t value_type;
         value_type value = 0;
-        DoInsertValuesRef(mpEnd, n - size(), &value);
+        VecB_Insert(this, 0, mpEnd, n - (uint32_t)size(), &value);
     } else {
-        EraseRef((char*)mpBegin + n * 4, mpEnd);
+        VecB_Shrink(this, 0, (char*)mpBegin + n * 4, mpEnd);
     }
 }
 
@@ -248,16 +251,17 @@ struct VecAsn {
     void* mpEnd;         // +0x04
     void* mpCapacity;    // +0x08
     uint32_t mAllocator[2];
-    void assign(const void* first, const void* last);
+    void assign(const void* first, const void* last, const void* allocator);
 };
 
 // @ 0x007106D0
-void VecAsn::assign(const void* first, const void* last)
+void VecAsn::assign(const void* first, const void* last, const void* allocator)
 {
+    (void)allocator;
     const uint32_t n = (uint32_t)((const char*)last - (const char*)first) >> 2;
     if ((uint32_t)((char*)mpCapacity - (char*)mpBegin) >> 2 < n) {
-        void* pNewData = ReallocRef(this, n, first, last);
-        DestroyRange0(mpBegin, mpEnd);
+        void* pNewData = ReallocRef(this, 0, n, first, last);
+        DestroyRange0(this, 0, mpBegin, mpEnd);
         if (mpBegin && ((int32_t*)mpBegin)[-1] != 0) EastlFree(mpBegin);
         mpBegin = pNewData;
         mpEnd = (char*)pNewData + n * 4;
@@ -266,7 +270,7 @@ void VecAsn::assign(const void* first, const void* last)
         const uint32_t nSize = (uint32_t)((char*)mpEnd - (char*)mpBegin) >> 2;
         if (n <= nSize) {
             void* pNewEnd = AssignCopyRef((void*)first, (void*)last, mpBegin);
-            DestroyRange0(pNewEnd, mpEnd);
+            DestroyRange0(this, 0, pNewEnd, mpEnd);
             mpEnd = pNewEnd;
         } else {
             const void* position = (const char*)first + nSize * 4;
@@ -286,26 +290,28 @@ struct Tex4 {
 };
 
 struct MapA {
-    uint32_t mField0[2];
+    uint32_t mField0;          // +0x00
     uint32_t* mpBucketArray;   // +0x04
     uint32_t mnBucketCount;    // +0x08
-    uint32_t mField0c;
-    uint8_t mEnd[8];
+    uint32_t mField0c;         // +0x0c
+    uint8_t mEnd[8];           // +0x10
     Tex4& operator[](const uint32_t& key);
 };
 
 // @ 0x007101F0
 Tex4& MapA::operator[](const uint32_t& key)
 {
+    // The original reuses the find-iterator buffer as the insert value (it.first/it.second).
     void* it[2];
-    HashtableFind10(this, &key, it);
+    HashtableFind10(this, 0, it, &key);
     if (it[0] != (void*)*(uint32_t*)((char*)mpBucketArray + mnBucketCount * 4)) {
         return *(Tex4*)((char*)it[0] + 4);
     }
-    struct Pair { const uint32_t first; Tex4 second; };
-    Pair value = { key, Tex4() };
+    uint32_t* value = (uint32_t*)it;
+    value[0] = key;
+    value[1] = 0;
     uint8_t out[12];
-    HashtableInsert10(this, out, &value, 0);
+    HashtableInsert10(this, 0, out, value, (const void*)&key);
     return *(Tex4*)(*(uint32_t*)out + 4);
 }
 
@@ -315,26 +321,28 @@ struct Mat4 {
 };
 
 struct MapB {
-    uint32_t mField0[2];
+    uint32_t mField0;          // +0x00
     uint32_t* mpBucketArray;   // +0x04
     uint32_t mnBucketCount;    // +0x08
-    uint32_t mField0c;
-    uint8_t mEnd[8];
+    uint32_t mField0c;         // +0x0c
+    uint8_t mEnd[8];           // +0x10
     Mat4& operator[](const uint32_t& key);
 };
 
 // @ 0x007102B0
 Mat4& MapB::operator[](const uint32_t& key)
 {
+    // The original reuses the find-iterator buffer as the insert value (it.first/it.second).
     void* it[2];
-    HashtableFind10(this, &key, it);
+    HashtableFind10(this, 0, it, &key);
     if (it[0] != (void*)*(uint32_t*)((char*)mpBucketArray + mnBucketCount * 4)) {
         return *(Mat4*)((char*)it[0] + 4);
     }
-    struct Pair { const uint32_t first; Mat4 second; };
-    Pair value = { key, Mat4() };
+    uint32_t* value = (uint32_t*)it;
+    value[0] = key;
+    value[1] = 0;
     uint8_t out[12];
-    HashtableInsert10(this, out, &value, 0);
+    HashtableInsert10(this, 0, out, value, (const void*)&key);
     return *(Mat4*)(*(uint32_t*)out + 4);
 }
 

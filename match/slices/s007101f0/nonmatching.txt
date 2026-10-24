@@ -1,7 +1,7 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
-007101f0 130 hash_map<uint32_t,T>::operator[]; equiv FAIL (5/5 inputs mismatched: ours faults at a bad address, guessed helper roles); EH frame/locals and insert-return shape not reproduced
-007102b0 130 hash_map<uint32_t,T>::operator[] second instantiation; equiv FAIL (5/5 inputs mismatched: ours faults, guessed helper roles); same shape mismatch
-007106d0 126 vector::assign(first,last); helper roles (ReallocRef/copy/move) guessed, slot order off
-00711070 100 vector::resize(uint32_t); inlined resize(n,value) / DoInsertValues call shape not reproduced
-007110f0 100 vector::resize(uint32_t) second instantiation; same shape mismatch
+007101f0 153 hash_map<uint32_t,T>::operator[]; behaviourally equivalent (replay exact, fresh WEAK 199 valid, 98.3% cov): Map bucket array is at +0x04/count +0x08, find reuses its iterator buffer as the insert value, insert helper is thiscall(ECX=map); only the inlined EH frame/insert-return shape is not byte-identical
+007102b0 153 hash_map<uint32_t,T>::operator[] second instantiation; same fix and equivalence as 007101f0 (replay exact, fresh WEAK 152 valid, 98.3% cov)
+007106d0 127 vector::assign(first,last); replay exact (ret 0xc matched by an extra unused 3rd arg; ReallocRef/DestroyRange thiscall, copy/move remain cdecl in original order). Fresh run is UNSUPPORTED: 0/400 valid because this caller-built synthetic VecAsn has no dev-PDB layout, so random `this` objects fault inside the original
+00711070 111 vector::resize(uint32_t); behaviourally equivalent (replay exact, fresh PASS 233 valid, 100% cov): size() is a signed arithmetic shift and the helpers take ECX=vector (thiscall)
+007110f0 111 vector::resize(uint32_t) second instantiation; same fix and equivalence as 00711070 (replay exact, fresh PASS 264 valid, 100% cov)
 00711170 151 vector::push_back() no-argument; grow path's temp + atomic release not reproduced
