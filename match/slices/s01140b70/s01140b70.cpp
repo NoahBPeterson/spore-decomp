@@ -176,10 +176,11 @@ extern "C" int FUN_01140b70(int index, int a1, int a2, int a3, SndPlayParams* pp
 {
     SndVoice* v = &g_voices[index];
     uint8_t n = v->count;
+    int16_t* subp = v->sub;
+    int32_t* f14p = pp->f14;
     for (int i = 0; i < (int)n; i++) {
-        int sv = v->sub[i];
-        MIX_playinit(sv, v->b22, 0, 0, 0, pp->f14[i], n, v->f14, -1, -1, pp->b06, i);
-        FUN_011406e0(sv);
+        MIX_playinit(subp[i], v->b22, 0, 0, 0, f14p[i], n, v->f14, -1, -1, pp->b06, i);
+        FUN_011406e0(subp[i]);
     }
     FUN_01140890(index);
     for (int i = 0; i < (int)v->count; i++) {

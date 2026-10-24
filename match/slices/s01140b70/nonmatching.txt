@@ -1,9 +1,9 @@
 # s01140b70: complete, behavior-equivalent source that is not byte-exact.
 # All built with VC .NET 2003 (/vc71) + /GL /LTCG, so register/schedule differences are expected.
 # Each reason names the flags and the difftest verdict.
-01140b70  274  voice patch setup: loops sub-voices through MIX_playinit/stop/highpass; complete; difftest WEAK 39.3% cov (object-heavy, needs live voice table). flags /vc71 /O2 /MD /Gy /TP
+01140b70  274  voice patch setup: loops sub-voices through MIX_playinit/stop/highpass; complete; difftest FAIL (1/114 valid inputs mismatched, only ecx, untouched by the original: the original preserves ecx via a `push ecx` frame-scratch dead store at [esp+0xc], ours clobbers it as scratch; /GL LTCG register ABI, no memory/callee-saved/esp difference; not source-controllable under a single-object /vc71 build). coverage 39.3%. flags /vc71 /O2 /MD /Gy /TP
 01140cb0  581  SNDVOICEI_alloc: voice-slot allocation + sort over the 0x84-byte voice table; complete; difftest PASS 96.0% cov. flags /vc71 /O2 /MD /Gy /TP
-01141020  234  SNDVOICEI_free: leaf; unlink/clear voice slot and its partner; complete; difftest WEAK 50.0% cov (random inputs rarely satisfy partner conditions). flags /vc71 /O2 /MD /Gy /TP
+01141020  234  SNDVOICEI_free: leaf; unlink/clear voice slot and its partner; complete; difftest FAIL (5/5 valid inputs mismatched, only eax: the original leaves a leftover return value (index*0x84 on the b==0 path, g_tick on the partner path, other*0x84 on the double-free path) while ours leaves the voice pointer; not source-controllable under /O2 register colouring). No caller reads eax (both call sites 0x113f57b and 0x1140af7 overwrite it immediately), so the clobber is benign. coverage 50.0%. flags /vc71 /O2 /MD /Gy /TP
 01141150   34  voice-handle validation leaf; complete; difftest WEAK 58.8% cov. flags /vc71 /O2 /MD /Gy /TP
 011411a0   16  intrusive list push-front leaf; complete; difftest PASS 100% cov; only the else-branch count increment schedules as load/inc/store instead of inc [mem] (/LTCG codegen). flags /vc71 /O2 /MD /Gy /TP
 011411d0   16  intrusive list push-back leaf; complete; difftest PASS 100% cov; same /LTCG count-increment schedule difference. flags /vc71 /O2 /MD /Gy /TP
