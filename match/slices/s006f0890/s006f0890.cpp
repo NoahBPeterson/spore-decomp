@@ -412,7 +412,9 @@ void Effects0B90::Render(unsigned flags, Region** pr, int arg)
     }
     m260.Set((char*)*(int*)pr + 0xc0);
     if (g_pProps) {
-        Prop* p;
+        // cl homes the out-pointer of this first Get in the live-range-dead `flags`
+        // argument slot, so a Get that returns true without writing *out leaves flags there
+        Prop* p = (Prop*)(unsigned)flags;
         if (g_pProps->Get(0x13d7382, &p) && p->type == 0xd) {
             float* f = (float*)p;
             if (p->flags & 0x30)
