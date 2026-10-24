@@ -1,6 +1,6 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00631dc0   21  FUN_00631dc0: complete; register swap (edi/ebx), materialised zero size vs memcpy thunk call order
-00631df0   84  FUN_00631df0: complete; AutoRefCount push/AddRef/Release and grow-path call shape
+00631df0   78  FUN_00631df0: complete; equiv PASS (273 valid, 100.0% cov). The symbol's 2-arg `@@YIXPAX0@Z` fastcall spelling does not describe the body: the original takes self in ecx and the object pointer from the first stack dword ([esp+8] after push esi, ret 4), so the declaration now has a dummy edx and the real pointer as the third arg. The end/capacity test is an unsigned pointer compare (jae), so the int* source's signed test was replaced with a named PhotoVec end/cap compare; FUN_005c8480 is a thiscall helper on the vector at self+0x4 (ecx=self+4, old end and the value slot on the stack, ret 8) and is now a PhotoVecGrow member so ecx and the cleanup match. Remaining diff is register allocation (original keeps self in edi and the value in esi; we keep self in esi and the value in the frame slot) plus the resulting scheduling. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00632660   -   SP::cSPPlayModePhotoBrowser::DeleteSelected: complete; re-evaluated count loops + tail ExitDeleteMode
 006326f0   -   SP::cSPPlayModePhotoBrowser::MoveSelected: complete; re-evaluated count loops + tail ExitMoveMode
 00631a10   243  FUN_00631a10: complete; AutoRefCount release + loaded-vector compact; difftest WEAK (0 mismatch, 188 valid, 56.8% cov)
