@@ -1,0 +1,2 @@
+slices/s00e97bf0/s00e97bf0.cpp  ??1cPlanetGfxView@@QAE@XZ  00e98440  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00e97bf0/s00e97bf0.cpp  ?GetCreatureDetailLevel@@YAHPAUSimPlanetOrbitView@@@Z  00e98a40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

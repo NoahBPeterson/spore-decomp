@@ -440,3 +440,268 @@ void cCreatureCameraEffects::Update(int, int)
         }
     }
 }
+
+// =====================================================================
+// Slice s00e97bf0 (continued): 0x00E98440 (view destructor),
+// 0x00E98500 (cSPPlanetGfx::MakeView), 0x00E98A40 (creature-detail
+// level from orbit distance), 0x00E98AE0 (sGetClosestDiseasedCreature).
+// NAMING NOTE: no symbols are known for these; names are Claude-coined.
+// =====================================================================
+
+// --- accessors / helpers used by the four functions below ------------
+extern "C" int   __cdecl GetUniverseModeA();                      // 0x01021080 (context; ==1 test)
+extern "C" int   __cdecl GetUniverseModeB();                      // 0x01021090
+extern "C" void* __cdecl GetActivePlanet();                       // 0x01021260
+extern "C" void* __cdecl GetMissionManager();                     // 0x00feb9f0
+extern "C" void  __cdecl EffectsInitEmpty(void* out);             // 0x004b5440
+extern "C" void* __cdecl PlanetGfxAlloc(uint32_t size, const char* name,
+                                        int, int, int, int);      // 0x00f473a0 (operator new)
+extern "C" void* __cdecl AxisAngleMatrix(void* out, const void* axis, float a); // 0x00576b00
+extern "C" void  __cdecl DtorXformMsg(void* msg);                 // 0x005765e0
+extern "C" char  __cdecl GetOrbitPosition(void* orbit, void* out); // 0x00fe88d0 (name guessed)
+extern "C" int   __cdecl GetPlanetName(void* out, int x, int y);  // 0x00576b00? (see below)
+
+struct SimPlanet;
+
+// Other classes referenced only by pointer here.
+struct cIPlanetOrbit
+{
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void v15();
+    virtual void SetOrbit(void* a, int b);            // +0x40
+};
+
+struct SimPlanet
+{
+    char     mPad00[0x13c];
+    void*    mpOwner;                                 // +0x13c (cOwner; name guessed)
+    char     mPad140[0x15c - 0x140];
+    int32_t  mField15c;                               // +0x15c
+    void*    mpField160;                              // +0x160
+    char     mPad164[0x16c - 0x164];
+    void*    mpField16c;                              // +0x16c
+    char     mPad170[0x1bc - 0x170];
+    uint32_t mFlags1bc;                               // +0x1bc
+
+    int32_t GetPlanetType();                          // 0x00c70880 (name guessed)
+    void*   GetOrbit(uint32_t which);                 // 0x00c708a0 (name guessed)
+    void*   GetNameRow(int32_t index);                // 0x00c707f0 (name guessed)
+    int32_t GetCreatureField15c() { return mField15c; }
+    void*   GetCreatureField160() { return mpField160; }
+    void*   GetCreatureField16c() { return mpField16c; }
+};
+
+// ---------------------------------------------------------------------
+// @ 0x00e98a40
+// Creature detail level from the orbit distance: planet+0x540 is the
+// current orbit radius, planet+0x508 is the orbit object whose vfunc
+// +0x58 yields the reference radius; the ratio selects detail 0..3.
+// ---------------------------------------------------------------------
+struct SimPlanetOrbitView;
+
+struct IOrbitRadius
+{
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21();
+    virtual float GetRadius();                        // +0x58
+};
+
+extern "C" float gDetailRatioHalf;                    // 0x01471064 (0.5f)
+extern "C" float gDetailRatioThird;                   // 0x013ef568 (0.33f)
+extern "C" float gDetailRatioFifth;                   // 0x013ec480 (0.2f)
+
+struct SimPlanetOrbitView
+{
+    char         mPad00[0x508];
+    IOrbitRadius mOrbit508;      // +0x508 (embedded object; vtable first)
+    char         mPad50c[0x540 - 0x50c];
+    float        mOrbitRadius540; // +0x540
+};
+
+// @ 0x00e98a40
+int __cdecl GetCreatureDetailLevel(SimPlanetOrbitView* planet)
+{
+    float orbitRadius = planet->mOrbitRadius540;
+    float reference = planet->mOrbit508.GetRadius();
+    float ratio = orbitRadius / reference;
+    if (gDetailRatioHalf <= ratio)
+        return 0;
+    float r = ratio;
+    if (gDetailRatioThird <= r)
+        return 1;
+    if (r >= gDetailRatioFifth)
+        return 2;
+    return 3;
+}
+
+// --- SP mission objects (0x00E98AE0) ---------------------------------
+struct cSPMission;
+
+struct cSPMissionVtbl
+{
+    virtual void v00(); virtual void v01(); virtual void v02();
+    virtual void* GetItem(uint32_t key);              // +0x0c
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
+    virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51();
+    virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55();
+    virtual void v56(); virtual void v57(); virtual void v58(); virtual void v59();
+    virtual void v60(); virtual void v61();
+    virtual bool IsFlagged();                         // +0xf8
+};
+
+struct cSPMission : cSPMissionVtbl
+{
+    void* vfuncF8() { return (void*)(uint32_t)IsFlagged(); }
+    bool  IsActive();                                 // 0x00c44c80
+    void* GetTargetPlanet();                          // 0x00970b30
+    void* GetItemKey(uint32_t key);                   // vtable +0x0c
+};
+
+struct MissionList
+{
+    cSPMission** mpBegin;            // +0x00
+    cSPMission** mpEnd;              // +0x04
+};
+
+struct cSPMissionManager
+{
+    MissionList* GetMissionList();                    // 0x00fedd50
+};
+
+struct cSPMissionEradicate
+{
+    uint32_t GetClosestDiseasedAnimal(void* a, void* b);   // 0x00c50300
+};
+
+extern "C" void* __cdecl GetMissionMgr();             // 0x00feb9f0
+extern "C" uint32_t __cdecl FUN_00c4cb90(void* a, void* b);   // 0x00c4cb90
+
+// @ 0x00e98ae0
+char __cdecl sGetClosestDiseasedCreature(void* param_1, void* param_2)
+{
+    void* activePlanet = GetActivePlanet();
+    if (activePlanet == 0)
+        return 0;
+
+    void* local_c = 0;
+    void* local_8 = 0;
+
+    cSPMissionManager* mgr = (cSPMissionManager*)GetMissionMgr();
+    MissionList* list = mgr->GetMissionList();
+    int count = (int)(list->mpEnd - list->mpBegin);
+    for (int i = 0; i < count; ++i)
+    {
+        cSPMission* mission = list->mpBegin[i];
+        if (mission->IsActive())
+        {
+            if (!mission->IsFlagged())
+            {
+                if (mission->GetTargetPlanet() == activePlanet)
+                {
+                    if (local_c == 0)
+                        local_c = mission->GetItemKey(0x2f9998c);
+                    if (local_8 == 0)
+                        local_8 = mission->GetItemKey(0x437443d);
+                }
+            }
+        }
+    }
+
+    if (local_c != 0)
+        return ((cSPMissionEradicate*)local_c)->GetClosestDiseasedAnimal(param_1, param_2);
+    if (local_8 != 0)
+        return FUN_00c4cb90(param_1, param_2);
+    return 0;
+}
+
+// --- 0x00E98440: destructor of the planet-Gfx spatial view -----------
+// Same object layout as the committed 0x00E97BF0 view; modelled with
+// raw effect pointers so the explicit Stop/Release sequence is visible.
+struct CreatureOps { void Detach(); };                   // 0x00c723d0 (thiscall, this=creature)
+struct EffectListOps { void Clear(); };                  // 0x004b5440 (thiscall, this=EffectList)
+
+struct ViewEffectList
+{
+    cIVisualEffect** mpBegin;                        // +0x00
+    cIVisualEffect** mpEnd;                          // +0x04
+    cIVisualEffect** mpCapacity;                     // +0x08
+    uint32_t         mAllocator;                     // +0x0c
+    uint32_t         mPad10;                         // +0x10
+};
+
+struct cSpatialObjectView
+{
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10();
+    virtual cModelInstance* GetModel();              // +0x2c
+    ~cSpatialObjectView() throw();                   // 0x00e92660
+};
+
+class cPlanetGfxView : public cSpatialObjectView
+{
+public:
+    ~cPlanetGfxView() throw();
+
+    char            mPad04[0x34 - 4];                // +0x04
+    cCreature*      mpCreature;                      // +0x34
+    ViewEffectList  mEffectsA;                       // +0x38
+    ViewEffectList  mEffectsB;                       // +0x4c
+    cIVisualEffect* mpSelected;                      // +0x60
+    cIVisualEffect* mpHidden;                        // +0x64
+
+    void ClearEffects(ViewEffectList* list);         // 0x00e97310
+};
+
+// @ 0x00e98440
+cPlanetGfxView::~cPlanetGfxView()
+{
+    if (mpCreature)
+    {
+        ClearEffects((ViewEffectList*)&mpCreature->mEffects);
+        ((CreatureOps*)mpCreature)->Detach();
+    }
+    if (mpSelected)
+    {
+        mpSelected->Stop(1);
+        cIVisualEffect* selected = mpSelected;
+        if (selected)
+        {
+            mpSelected = 0;
+            selected->Release();
+        }
+    }
+    if (mpHidden)
+    {
+        mpHidden->Stop(1);
+        cIVisualEffect* hidden = mpHidden;
+        if (hidden)
+        {
+            mpHidden = 0;
+            hidden->Release();
+        }
+    }
+    ClearEffects(&mEffectsA);
+    ClearEffects(&mEffectsB);
+    if (mpHidden)
+        mpHidden->Release();
+    if (mpSelected)
+        mpSelected->Release();
+    ((EffectListOps*)&mEffectsB)->Clear();
+    ((EffectListOps*)&mEffectsA)->Clear();
+}
