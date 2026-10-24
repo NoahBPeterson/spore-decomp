@@ -16,10 +16,30 @@ extern float  gInvalidKey_15a83a4[3];
 extern float  gPollinatedKey_15a7d0c;
 
 // ---- external callees ----
-extern "C" void  __cdecl FUN_00743b50();
-extern "C" void* __cdecl thunk_FUN_00e823a0(int, void*);      // 0xe4cc40
-extern "C" void  __cdecl FUN_00e82130();
-extern "C" double __cdecl EA_Random_RandomDoubleUniform(void*); // 0x9360d0
+// 0x00743b50 is a thiscall (`mov eax,ecx; mov dword ptr [eax],0; ret`) and 0x00e82130 is the release
+// thiscall for the same stack object (`lea ecx,[esp+0x10]; call 0xe82130` on every exit path).
+// That object is a list handle: 0x00e4cc40 stores the list at +0 and bumps list->0xc, the release
+// drops it again - which is why the field has to be released through the stack object's address.
+struct ListHandle {
+    int* p;        // +0   list object (set by 0x00e4cc40)
+    int  r4;       // +4
+    int  r8;       // +8
+    int  rC;       // +0xc
+    int  pad[2];
+    void FUN_00743B50();   // 0x00743b50
+    void FUN_00E82130();   // 0x00e82130
+};
+// 0x009360d0 is a thiscall on the RNG state object at 0x01601760 (reads/writes [ecx]), returning
+// the next double in st(0); it takes no stack args.
+struct RngState {
+    double FUN_009360D0();
+};
+extern RngState gRng_1601760;
+// 0x00b721d0 is a thiscall on the cell-game sub-object at gCellGame+0x1c (ecx), with the id pushed.
+struct CellGameSub {
+    void* FUN_00B721D0(int id);   // 0x00b721d0
+};
+extern "C" void* __cdecl thunk_FUN_00e4cc40(int, void*);      // 0xe4cc40 (jmp 0xe823a0)
 extern "C" void  __cdecl SP_GetPollinatedCell(float* out, float, float, float, float); // 0xe84f30
 extern "C" void* __cdecl FUN_00b72210(void* self, int id);    // thunk, this=ecx
 extern "C" void* __cdecl FUN_00b72160_thunk(void* self);
@@ -36,7 +56,7 @@ extern "C" void* __cdecl FUN_007ec160(int a, int b);
 extern "C" void  __cdecl FUN_007eb820(int n);
 extern "C" void  __cdecl FUN_00e394f0(uint32_t a, void* b, void* c, void* d, void* e);
 extern "C" float __cdecl FUN_00e511e0(int a, int b);
-extern "C" void  __cdecl FUN_00e4ce40(void* out);
+extern "C" void* __cdecl FUN_00e4ce40(void* out);
 extern "C" void  __cdecl SP_GetRandomDirection3(float* out);   // 0xb7e560
 extern "C" int   __cdecl FUN_00e4dbc0(void* fluid, float* aabb, float* dir, float c, float d);
 extern "C" bool  __cdecl FUN_00743fb0(void* p, float radius, void* box); // 0x743fb0
@@ -50,9 +70,9 @@ struct cVarListSerializer {
 
 // @ 0x00e5c250
 float* FUN_00e5c250(float* out, int a) {
-  float local[1];
-  FUN_00743b50();
-  int* list = (int*)thunk_FUN_00e823a0(a, local);
+  ListHandle local;
+  local.FUN_00743B50();
+  int* list = (int*)thunk_FUN_00e4cc40(a, &local);
   int idx = -1;
   float total = 0.0f;
   if (*list > 0) {
@@ -60,7 +80,8 @@ float* FUN_00e5c250(float* out, int a) {
     for (int i = 0; i < *list; ++i) {
       char* e = (char*)list[1] + off;
       total += *(float*)(e + 8);
-      double r = EA_Random_RandomDoubleUniform(gMathRandom_15a83a4) * total;
+      double r = gRng_1601760.FUN_009360D0() * total;
+      if (r > total) r = total;
       if (r < 0.0) r = 0.0;
       if (r < *(float*)(e + 8)) idx = i;
       off += 0x1c;
@@ -70,9 +91,9 @@ float* FUN_00e5c250(float* out, int a) {
       int kind = *(int*)e;
       if (kind == 0) {
         out[0] = *(float*)(e + 4);
-        out[1] = 0x3d97a8e4;
+        out[1] = 0.0740526f;   // the original stores the dword 0x3d97a8e4 as a float constant
         out[2] = gPollinatedKey_15a7d0c;
-        FUN_00e82130();
+        local.FUN_00E82130();
         return out;
       } else if (kind == 1) {
         int f18 = *(int*)(e + 0x18);
@@ -83,20 +104,20 @@ float* FUN_00e5c250(float* out, int a) {
           f10 = (*(int*)(e + 0x10) >= 0 && base < 10) ? base + *(int*)(e + 0x10) : 10;
         }
         SP_GetPollinatedCell(out, *(float*)(e + 0x14), (float)f18, *(float*)(e + 0xc), (float)f10);
-        FUN_00e82130();
+        local.FUN_00E82130();
         return out;
       }
       out[0] = gInvalidKey_15a83a4[0];
       out[1] = gInvalidKey_15a83a4[1];
       out[2] = gInvalidKey_15a83a4[2];
-      FUN_00e82130();
+      local.FUN_00E82130();
       return out;
     }
   }
   out[0] = gInvalidKey_15a83a4[0];
   out[1] = gInvalidKey_15a83a4[1];
   out[2] = gInvalidKey_15a83a4[2];
-  FUN_00e82130();
+  local.FUN_00E82130();
   return out;
 }
 
@@ -150,8 +171,9 @@ float __fastcall FUN_00e5c530(void* self) {
 // @ 0x00e5c560
 void __fastcall FUN_00e5c560(void* self) {
   (void)self;
-  char* e = (char*)FUN_00b721d0((char*)gCellGame_16b3c04 + 0x1c,
-                                *(int*)((char*)gCellGame_16b3c04 + 0x411c));
+  char* g = (char*)gCellGame_16b3c04;
+  int id = *(int*)(g + 0x411c);
+  char* e = (char*)((CellGameSub*)(g + 0x1c))->FUN_00B721D0(id);
   if (e) *(int*)(e + 0x244) = 6;
 }
 
@@ -231,7 +253,17 @@ struct Elem2c {
   uint32_t f24, f28;
 };
 Elem2c* __fastcall FUN_00e5c7d0(Elem2c* dst, int, const Elem2c* src) {
-  memcpy(dst, src, 0x2c);
+  dst->f0  = src->f0;
+  dst->f4  = src->f4;
+  dst->f8  = src->f8;
+  dst->fC  = src->fC;
+  dst->f10 = src->f10;
+  dst->f14 = src->f14;
+  dst->f18 = src->f18;
+  dst->f1c = src->f1c;
+  dst->f20 = src->f20;   // the original copies this member as a single byte; pad21 keeps dst's bytes
+  dst->f24 = src->f24;
+  dst->f28 = src->f28;
   return dst;
 }
 
@@ -269,15 +301,12 @@ int FUN_00e5c9d0() {
   char* d = (char*)*(int*)((char*)gCellGame_16b3c04 + 0x5190);
   float v = FUN_00e511e0(*(int*)(d + 0x24) + *(int*)(d + 0x20),
                          (*(int*)(d + 0x28) - *(int*)(d + 0x20)) + *(int*)(d + 0x1c));
-  char local[4];
-  FUN_00743b50();
-  char* r = (char*)0;
-  FUN_00e4ce40(local);
-  r = local;
-  (void)r;
-  if (v < *(float*)(d + 0xcc)) { FUN_00e82130(); return 0xa8ec6f99; }
-  if (v > *(float*)(d + 0xc8)) { FUN_00e82130(); return 0xcfb01b93; }
-  FUN_00e82130();
+  ListHandle local;
+  local.FUN_00743B50();
+  char* r = (char*)FUN_00e4ce40(&local);
+  if (v < *(float*)(r + 0xcc)) { local.FUN_00E82130(); return 0xa8ec6f99; }
+  if (v > *(float*)(r + 0xc8)) { local.FUN_00E82130(); return 0xcfb01b93; }
+  local.FUN_00E82130();
   return 0x5ece4770;
 }
 

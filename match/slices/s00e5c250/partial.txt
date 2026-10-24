@@ -1,4 +1,3 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00e5c250  353  SP::sGetRandomCreatureKey: weighted-random list walk + kind switch (pollinated key / GetPollinatedCell / default) present; the float10/EA::Random call schedule and default-key loads approximated
 00e5cac0  4  this-return accessor (ret 4): only the raw two-instruction body is known and is not reproducible as C++ at /O2
 00e5cb60  369  fluid ray/AABB cast: incomplete stub (3-byte body vs ~0x1a0 original; box matrix math approximated, returns 0); difftest: UNSUPPORTED (symbol rejected, >5x smaller than original)
