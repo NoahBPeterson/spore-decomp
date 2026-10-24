@@ -1,0 +1,9 @@
+00ca9820 735 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 735 bytes - vehicle helper not reconstructed.
+00ca9b00 101 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 30 bytes - 24-byte slot vector erase: size exact, the do_move call, the release walk over the shifted-out tail and the /24 end adjustment all match, but MSVC keeps pFirst in eax across the helper call instead of reloading the argument slot (retail: first in ecx, end in eax, one extra reload).
+00ca9b70 322 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 322 bytes - vehicle helper not reconstructed.
+00ca9cc0 81 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 17 bytes - 16-byte slot vector erase: size exact and the body matches, only the argument load order differs (MSVC CSEs pFirst into eax and hoists it above the prologue where retail reloads it after the pushes).
+00ca9d20 356 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 356 bytes - vehicle helper not reconstructed.
+00ca9e90 335 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 335 bytes - vehicle helper not reconstructed.
+00caa0c0 243 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 243 bytes - vehicle helper not reconstructed.
+00caa1c0 414 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 414 bytes - vehicle helper not reconstructed.
+00caa360 679 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 679 bytes - cVehicle::DestroyVehicle not reconstructed.
