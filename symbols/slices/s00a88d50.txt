@@ -1,1 +1,10 @@
 00a88d50 ?ApplyColorAndAlpha@cDistributeEffect@@QAEXHH@Z  # cDistributeEffect::ApplyColorAndAlpha migrated from s00a88d50 (verbatim, slice spelling)
+00a89490 ?ReleaseRenderSet@cDistributeEffect@@QAEXXZ  # EA::Swarm::cDistributeEffect::ReleaseRenderSet (PDB); shared bit 14 picks ReleaseShared else ReleaseUnshared on mpRenderHost->GetTarget(), then mRenderIndex = -1; byte-exact
+00a894e0 ?Render@cDistributeEffect@@QAEXH@Z  # cDistributeEffect::Render: gRenderFns[mRenderType] gate, mesh sample-count sum into a stack cRenderParams (vtbl 0x014582e0), renderer Begin / per-mesh gRenderFns call / End; nonmatching (equiv WEAK)
+00a89680 ?CollectSamples@@YAHPAUcSampleTarget@@PAUcSampleSource@@PAUcSampleOut@@H@Z  # cDistributeEffect::CollectSamples: slot/pair sample collection with capacity clamping and the base-transform fill path (flags bits 7/8); nonmatching (equiv PASS)
+00a89940 ?CopySamplesWithAddRef@@YAXPAPAXI0@Z  # cDistributeEffect::CopySamplesWithAddRef: copies count sample pointers and AddRefs each non-null entry; nonmatching (equiv PASS)
+00a89980 ??0cDistributeSample@@QAE@ABU0@H@Z  # cDistributeSample copy ctor: transform copy, default sample colour, sample number; nonmatching (equiv PASS)
+00a89a00 ?SetTransforms@cDistributeEffect@@QAEXPAUcTransform@@0@Z  # EA::Swarm::cDistributeEffect::SetTransforms (PDB); rigid + source transform copies and clears flag bit 6; byte-exact
+00a89a30 ?Dispatch@cDistributeEffectPart@@QAEXH@Z  # cDistributeEffectPart::Dispatch: desc bit 14 renders the whole effect else the per-part gRenderFns call and counter bump; byte-exact
+00a89a90 ?ProjectSample@cDistributeEffect@@QAE_NPAUVector3@@HH@Z  # cDistributeEffect::ProjectSample: local/world transform choice, inverse-base world->local, Contains gate and density/colour sample projection; nonmatching (equiv PASS)
+00a89ce0 ?MapSample@cDistributeEffect@@QAEXPAUVector3@@@Z  # cDistributeEffect::MapSample: samples the colour map at the position and writes the result back; byte-exact

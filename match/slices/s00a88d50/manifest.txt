@@ -1,0 +1,5 @@
+# source  symbol  original VA  [flags override]
+slices/s00a88d50/s00a88d50.cpp  ?ReleaseRenderSet@cDistributeEffect@@QAEXXZ  00a89490  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a88d50/s00a88d50.cpp  ?SetTransforms@cDistributeEffect@@QAEXPAUcTransform@@0@Z  00a89a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a88d50/s00a88d50.cpp  ?Dispatch@cDistributeEffectPart@@QAEXH@Z  00a89a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a88d50/s00a88d50.cpp  ?MapSample@cDistributeEffect@@QAEXPAUVector3@@@Z  00a89ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
