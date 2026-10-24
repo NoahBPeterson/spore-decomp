@@ -1,1 +1,12 @@
+010ec0a0 hkIterativeLinearCastAgent::linearCast  # iterative swept-sphere linear cast; virtual getClosestPoints at vtable +0xc
+010ec4a0 hkBoxBoxManifold::removePoint  # clear complete flag, move last point into the removed slot, decrement count
+010ec4c0 hkBoxBoxManifold::findInManifold  # reverse scan for matching feature-id pair
+010ec500 hkBoxBoxManifold::init  # zero contact-point ids and manifold header (retail leaves this in eax)
+010ec540 hkBoxBoxManifold::addPoint  # reject duplicate/full, append point, return its index
+010ec590 hkGskfAgent::cleanup  # hkGskManifold_cleanup then delete this
+010ec5b0 hkGskfAgent::removePoint  # find contact id and remove it from the GSK manifold
+010ec5f0 hkGskfAgent::commitPotential  # turn the first potential contact id (0xffff) into the given id
+010ec630 hkGskfAgent::createZombie  # find contact id and zero its feature dimensions
+010ec660 hkGskfAgent::hkGskfAgent  # run hkGskfAgentBase ctor, zero the manifold header
+010ec690 hkGskfAgent::createGskfAgent  # allocate agent, run base ctor, install derived vtable/zero manifold
 010ec700 hkGskfAgent::processCollisionNoTim  # havok_names.txt; same flow as hkPredGskAgent3::process (s010ff9e0) on this-relative state

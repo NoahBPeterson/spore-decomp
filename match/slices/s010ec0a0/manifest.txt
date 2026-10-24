@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# flags: /O2 /MD /Gy /TP /GS- /vc71
+slices/s010ec0a0/s010ec0a0.cpp  ?findInManifold@hkBoxBoxManifold@@QAE?AVhkBool@@ABVhkFeatureContactPoint@@@Z  010ec4c0  /O2 /MD /Gy /TP /GS- /vc71
+slices/s010ec0a0/s010ec0a0.cpp  ?cleanup@hkGskfAgent@@UAEXXZ  010ec590  /O2 /MD /Gy /TP /GS- /vc71
+slices/s010ec0a0/s010ec0a0.cpp  ?removePoint@hkGskfAgent@@UAEXG@Z  010ec5b0  /O2 /MD /Gy /TP /GS- /vc71
+slices/s010ec0a0/s010ec0a0.cpp  ?commitPotential@hkGskfAgent@@UAEXG@Z  010ec5f0  /O2 /MD /Gy /TP /GS- /vc71
+slices/s010ec0a0/s010ec0a0.cpp  ??0hkGskfAgent@@QAE@ABVhkCdBody@@0PAVhkContactMgr@@@Z  010ec660  /O2 /MD /Gy /TP /GS- /vc71
