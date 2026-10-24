@@ -1,1 +1,7 @@
+# Slice s00c95980 manifest -- no functions byte-exact.
+# Functions: ?
+#   00c95af0 SetupChatAreas, 00c95cc0 AddChatArea_5cc0, 00c95d70 AddExistingCreatureInternal,
+#   00c95ee0 RemoveCreature, 00c95fe0 SpawnHut_5fe0, 00c96150 AddTool_6150,
+#   00c962b0 UpdateHut_62b0, 00c96410 Read, 00c966d0 GetStructures,
+#   00c967a0 GetInhabitants, 00c96840 CopyFrom_6840
 slices/s00c95980/s00c95980.cpp  ??$quick_sort@PAUcSPVector3@SP@@  00c95980  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2

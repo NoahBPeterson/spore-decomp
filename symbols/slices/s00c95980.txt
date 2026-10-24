@@ -1,1 +1,11 @@
-00c95980 eastl::quick_sort<cSPVector3_*,SP::(anon)::ComparePositions>  # 226 bytes; 3 calls (quick_sort_impl, insertion_sort x2 or 1, insertion_sort_simple), depth 2*bitlen(n)-2, threshold 28
+00c95af0 ?SetupChatAreas@cTribe@SP@@QAEXXZ  # symbol; touches mTools guard 0x2d4, chat-area vec 0x294/0x298, grid 0x558
+00c95cc0 ?AddChatArea_5cc0@cTribe@SP@@QAEXPAX@Z  # symbol; AutoRefCount roster 0x354/0x358/0x35c, vtable 0xbc/0xc0
+00c95d70 ?AddExistingCreatureInternal@cTribe@SP@@QAEXPAX@Z  # symbol; roster 0x340/0x344, count 0x338, string 0xb38
+00c95ee0 ?RemoveCreature@cTribe@SP@@QAEXPAXE@Z  # symbol; packing 0x334, count 0x338, PickAPeon 0xc8f310
+00c95fe0 ?SpawnHut_5fe0@cTribe@SP@@QAEPAXPAX@Z  # symbol; CreateNoun 0xb20c60
+00c96150 ?AddTool_6150@cTribe@SP@@QAE_NPAX@Z  # symbol; mTools 0x2d4
+00c962b0 ?UpdateHut_62b0@cTribe@SP@@QAE_NXZ  # symbol; handle 0x260, object 0x368
+00c96410 ?Read@cTribe@SP@@QAE_NPAX@Z  # symbol; spatial 0x120, 0x20c, timer 0x510, grid 0x558, vec3 0x1904/0x1908
+00c966d0 ?GetStructures@cTribe@SP@@QAEPAXXZ  # symbol; object 0x368, struct vec 0x370/0x36c
+00c967a0 ?GetInhabitants@cTribe@SP@@QAEPAXXZ  # symbol; roster 0x340/0x344, 0xe4
+00c96840 ?CopyFrom_6840@cTribe@SP@@QAEPAXPAX@Z  # symbol; plain sub-object copy + vector assign + refcount swap

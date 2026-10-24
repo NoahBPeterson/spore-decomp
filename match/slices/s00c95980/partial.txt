@@ -1,0 +1,11 @@
+00c95af0  416  SetupChatAreas: reservation-grid id churn + chat-area vector resize/loop approximated
+00c95cc0  183  AddChatArea_5cc0: AutoRefCount roster push with vtable[0xbc]/[0xc0] approximated
+00c95d70  319  AddExistingCreatureInternal: roster insert + refcount/EH subobject path approximated
+00c95ee0  200  RemoveCreature: count/packing guard and behaviour/planar detach approximated (WEAK)
+00c95fe0  353  SpawnHut_5fe0: noun creation + vtable dispatch body approximated (UNSUPPORTED)
+00c96150  339  AddTool_6150: tool AutoRefCount insertion not equivalent
+00c962b0  319  UpdateHut_62b0: noun/vtable handle refresh + surface orientation approximated
+00c96410  657  Read: cVarListSerializer + grid resolution + string reset approximated (UNSUPPORTED)
+00c966d0  176  GetStructures: roster erase + AutoRefCount push + FUN_00bdefa0 not equivalent
+00c967a0  133  GetInhabitants: roster filter loop and container return not equivalent
+00c96840  175  CopyFrom_6840: chunked struct copy + vector assign + refcount swap approximated
