@@ -64,11 +64,17 @@ struct VObj {  // polymorphic subobject (vtable slot access)
     virtual void* s25(unsigned);
     virtual void* s26(unsigned);
     virtual void* s27(unsigned);
+    virtual void* s28(unsigned);
+    virtual void* s29(unsigned);
+    virtual void* s30(unsigned);
+    virtual void* s31(int, int);
 };
 
 struct CEditor {  // receiver (ECX) carrier for the hashtable/step helpers
     bool FUN_00ef8820(int);
     void FUN_00ef8860();
+    bool FUN_00ef84b0();          // this+0x44 = inventory index (default 5)
+    int  FUN_00ef8940(int mode);  // hashtable gap count for table mode 0/1
 };
 
 extern "C" void* FUN_0041e920(void* p);  // Property::GetBool
@@ -96,12 +102,12 @@ bool FUN_00ef8440() {
 // ---------------------------------------------------------------------------
 // @ 0x00ef84b0
 // ---------------------------------------------------------------------------
-bool FUN_00ef84b0(int param_1) {
+bool CEditor::FUN_00ef84b0() {
     void* g = *(void**)((char*)(*(void**)(char*)&g_simMgr) + 0x14);
     g = *(void**)((char*)g + 0x14);
     void* x = 0;
     if (g) {
-        int idx = *(int*)((char*)param_1 + 0x44);
+        int idx = *(int*)((char*)this + 0x44);
         if (idx == -1)
             idx = 5;
         void* p1 = ((Stub*)g)->GetPlayerInventory(0, 0, idx);
@@ -226,10 +232,10 @@ void CEditor::FUN_00ef8860() {
         for (int k = 0; k != 0xad; ++k)
             ((Stub*)param_1)->FUN_00ef7ec0(k);
     }
-    int o = (int)((Stub*)((char*)&g_simMgr))->FUN_00ed4b50(*(int*)(param_1 + 0x34));
+    int o = (int)((Stub*)(*(void**)((char*)(*(void**)(char*)&g_simMgr) + 0x14)))->FUN_00ed4b50(*(int*)(param_1 + 0x34));
     if (o) {
         void* sub = *(void**)(o + 0x1c);
-        ((VObj*)sub)->s27(0);
+        ((VObj*)sub)->s31(1, 0);
     }
     *(int*)(param_1 + 0x30) = -1;
     *(int*)(param_1 + 0x34) = -1;
@@ -244,15 +250,15 @@ void CEditor::FUN_00ef8860() {
 }
 
 // @ 0x00ef8940 — hashtable occupancy/gap count over a bucket array.
-int FUN_00ef8940(int param_1, int param_2) {
+int CEditor::FUN_00ef8940(int mode) {
     int count = 0;
-    if (param_2 == 0)
+    if (mode == 0)
         count = 0xc;
-    else if (param_2 == 1)
+    else if (mode == 1)
         count = 5;
-    char* base = (char*)param_1 + param_2 * 0x14c + 0x4a8;
+    char* base = (char*)this + mode * 0x14c + 0x4a8;
     int stride = *(int*)(base + 8);
-    int* buckets = (int*)*(int*)((char*)param_1 + param_2 * 0x14c + 0x4ac);
+    int* buckets = (int*)*(int*)((char*)this + mode * 0x14c + 0x4ac);
     int* ref = (int*)buckets[stride];
     int diff = 0;
     for (int u = 0; u < count; ++u) {

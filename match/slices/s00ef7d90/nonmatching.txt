@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00ef8440  62  complete: cSPSimulatorSpaceGame inventory->Allocator->FUN_00f3e8a0==0; global reload/register choices differ
-00ef84b0  73  complete: same with param+0x44 inventory index (fallback 5); register choices differ
+00ef84b0  65  complete: thiscall member (inventory index from ecx+0x44, fallback 5); the old free-cdecl signature read the index from the stack and faulted. difftest replay passes; default 400 inputs UNSUPPORTED (0 valid, the inventory chain only survives a sparse index), with --inputs 1200 PASS 316 valid, 95.2% cov. 65 diff bytes are register allocation/frame (size 117 vs 116).
 00ef8820  50  complete: hashtable find + compare against bucket head; differs in stub call arg layout; difftest PASS (782 valid, 100% cov) after ecx receiver fix
-00ef8860  160 complete: step list walk, FUN_00ef7ec0 loop, selection release and field reset; difftest FAIL (call #0 FUN_00ed4b50 ecx differs: ours passes &g_simMgr, orig passes a loaded object)
-00ef8940  184 complete: hashtable gap count over two table modes
+00ef8860  139 complete: step list walk, FUN_00ef7ec0 loop, selection release and field reset. Fixed the FUN_00ed4b50 receiver to [0x16c7aa4]+0x14 and the final virtual call to vtable slot +0x7c with two args (1,0). Replay matches memory/return; fresh run FAILs only on an ecx clobber (original leaves ecx untouched) - FAIL-KEPT register ecx, no memory/return difference; 97.4% cov, size 203 vs 211.
+00ef8940  200 complete: thiscall member (mode on the stack) over the two table modes; the old free-cdecl signature read the object from the wrong stack arg and faulted. Algorithm matches the decompile (count 0xc/5, stride at +0x4b0, buckets +0x4ac, ref=buckets[stride], bucket dict walk, gap count vs ref). difftest PASS 232/400, 100% coverage; 200 diff bytes are frame/loop codegen (size 117 vs 205).
