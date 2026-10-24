@@ -1,0 +1,5 @@
+00c829e0 872 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 872 bytes - low-LOD planet cell update not reconstructed.
+00c82d50 326 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 326 bytes - background planet rebuild helper not reconstructed (stubbed with an explicit side effect so callers keep the call).
+00c82ea0 93 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 93 bytes - cell grid walk: guard on (planet->0x13c->flags2c & 0x800), then a 6x4x4 loop over the 0x54-byte cells at +0x50 calling FUN_00c82900 for each non-null cell; MSVC emits the triple counter nest plus a duplicated pointer null test on the back edge, which this source shape did not reproduce.
+00c82f00 123 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 123 bytes - planet-key match gate: mByte2058 guard, GetUniverseContext() and FUN_01021260() guards, then two field comparisons between PlanetModel()->GetPlanetKey() and mpPlanet->FUN_00c713e0(), the +0x2058 latch and three chained calls ending in a tail jump to FUN_00c82ea0; not reconstructed within the remaining budget.
+00c82f80 198 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 198 bytes - cell grid rebuild helper not reconstructed.

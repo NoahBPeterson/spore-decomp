@@ -1,0 +1,4 @@
+slices/s00c829e0/s00c829e0.cpp  ?FUN_00c83050@cSimPlanetLowLOD@SP@@QAEXPAVcPlanet@2@0_N@Z  00c83050  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c829e0/s00c829e0.cpp  ?FUN_00c83090@cSimPlanetLowLOD@SP@@QAEXUtPlanetKey@2@_N@Z  00c83090  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c829e0/s00c829e0.cpp  ?FUN_00c830b0@cSimPlanetLowLOD@SP@@QAE_NUtPlanetKey@2@@Z  00c830b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c829e0/s00c829e0.cpp  ?FUN_00c830d0@cSimPlanetLowLOD@SP@@QAEXUtPlanetKey@2@_N@Z  00c830d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
