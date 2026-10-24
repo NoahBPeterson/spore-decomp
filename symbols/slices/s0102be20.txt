@@ -1,0 +1,15 @@
+0102be20 ?PositionPosseMembers@@YAXXZ  # void PositionPosseMembers
+0102c0c0 ?ReleaseCreaturePosse@@YAXPAX@Z  # void ReleaseCreaturePosse
+0102c1a0 ?UpdatePosseMembers@@YAXPAX@Z  # void UpdatePosseMembers
+0102c340 ?DestroyCreature@@YAXPAUcCreatureData@@I@Z  # void DestroyCreature
+0102c460 ?PickCombatTarget@@YAPAUcCreatureData@@PAU1@@Z  # cCreatureData* PickCombatTarget
+0102c600 ?IsHostileToAll@@YADPAX@Z  # char IsHostileToAll
+0102c720 ?GetCreatureColorProperty@@YADPAX00@Z  # char GetCreatureColorProperty
+0102c7f0 ?ApplyFilterConstraints@@YAXPAXD@Z  # void ApplyFilterConstraints
+0102c980 ?ClearTradeRoute@@YAXPAX@Z  # void ClearTradeRoute
+0102c9e0 ?StartMission@@YAXPAXPAUcMissionData@@0@Z  # void StartMission
+0102caa0 ?CollectSpice@@YAXPAXPAUcMissionData@@@Z  # void CollectSpice
+0102cae0 ?GiveGift@@YAXPAXI@Z  # void GiveGift
+0102cc30 ?CreateNewRaid@@YAXPAXPAUcMissionData@@@Z  # void CreateNewRaid
+0102cd30 ?ResumeSpaceGame@@YAXXZ  # void ResumeSpaceGame
+0102cd40 ?CloseCommScreenToSpace@@YAXXZ  # void CloseCommScreenToSpace
