@@ -96,8 +96,9 @@ struct cSPSpaceCombatTuning {
 
 // cSPGameDataUFO forward
 struct cSPGameDataUFO {
-    void Init(int a, int b);
-    void SetDesiredModel(void* model, bool flag);
+    void Init(int a, int b);                                 // 0x00c3e0b0 (ret 8)
+    void SetDesiredModel(void* model, bool flag);            // 0x00c37180 (ret 8)
+    void SetOrientation(void* scaledNormal, void* orientation);  // 0x00c3aa40 (ret 8)
 };
 
 // mission list vector
@@ -579,22 +580,31 @@ void* SP_CreateUFOForSolarOrGalaxy(int arg1, int arg2) {
 // ===========================================================================
 // @ 0x0102acb0
 // ===========================================================================
+// 0x00b7f190 writes an opaque 16-byte orientation block; 0x00c3aa40 consumes it.
+// uint32_t (not char) so a stack local does not pull in a /GS cookie (docs/codegen.md 339).
+struct SurfaceOrientation { uint32_t mWords[4]; };
 struct PlanetModel {
     char pad[0x24];
-    void* mpSphere;
-    void GetPosition(Vec3* out);                        // 0x00b81720
-    void* BuildSurfaceOrientation(void* out, Vec3* in); // 0x00b7f190
+    void* mpSphere;                                             // +0x24
+    void GetPosition(Vec3* out);                                // 0x00b81720 (ret 4)
+    void* BuildSurfaceOrientation(SurfaceOrientation* out, Vec3* in);  // 0x00b7f190 (ret 8)
 };
+// 0x010666a0 returns the object whose +0x31c field is handed to CreateMinimapIcon; 0x01067e60 gets it.
+void* MinimapIconSource();                                      // 0x010666a0
+struct IconSource {
+    char pad[0x31c];
+    void* mpMinimapParam;                                       // +0x31c
+    void* GetMinimapParam();                                    // 0x01067e60
+};
+
 void* SP_CreateUFO(int arg1, int* arg2, Vec3* arg3) {
     Obj0c* n = ((NounMgr*)NounManager())->CreateNoun(0x18ebadc);
     cSPGameDataUFO* d;
     if (n) d = (cSPGameDataUFO*)n->v0c(0xb033b403);
     else d = 0;
     void* emp = 0;
-    if (*arg2 != -1) {
-        extern void* GetEmpireByIDThunk(void* mgr, int id);
-        emp = GetEmpireByIDThunk(StarManager(), *arg2);
-    }
+    if (*arg2 != -1)
+        emp = ((cStarManager*)StarManager())->GetEmpireByID(*arg2);
     d->Init(arg1, (int)emp);
     bool flag;
     Vec3 tmp;
@@ -615,21 +625,16 @@ void* SP_CreateUFO(int arg1, int* arg2, Vec3* arg3) {
             Vec3 p;
             pm->GetPosition(&p);
             Vec3 scaled;
-            scaled.x = p.x * 1.1f;
-            scaled.y = p.y * 1.1f;
-            scaled.z = p.z * 1.1f;
-            char orient[16];
-            void* orientPtr = pm->BuildSurfaceOrientation(orient, &p);
-            extern void FunC3aa40(void* v, void* o);   // 0x00c3aa40
-            FunC3aa40(&scaled, orientPtr);
+            scaled.x = p.x * g_1_1;
+            scaled.y = p.y * g_1_1;
+            scaled.z = p.z * g_1_1;
+            SurfaceOrientation orient;
+            void* orientPtr = pm->BuildSurfaceOrientation(&orient, &p);
+            d->SetOrientation(&scaled, orientPtr);
         }
         if (GetCurrentGameMode() == 0x1654c05) {
-            extern void* Fun10666a0();   // 0x010666a0
-            void* x = Fun10666a0();
-            extern void* Fun1067e60();   // 0x01067e60
-            void* y = Fun1067e60();
-            CreateMinimapIcon(d, y);
-            (void)x;
+            IconSource* src = (IconSource*)MinimapIconSource();
+            CreateMinimapIcon(d, src->GetMinimapParam());
         }
     }
     return d;
