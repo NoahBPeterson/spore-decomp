@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00d71fa0  351  TRIBE_BABY_FOOD_CRY_Tick (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): behaviour tick reconstructed from decompile; instruction scheduling and x87/SSE float ordering differ. equiv WEAK (336 valid, 28.8% coverage)
+00d72100  888  TRIBE_BABY_FEAR_Tick (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): our 635-byte reconstruction (vs 888) diverges in order-manager lookups and the sin/cos quaternion steer block. equiv FAIL (5/123 mismatched)
+00d72520  444  SP_CastRay (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): ray-march step loop reconstructed; our 397-byte body differs in the loop tail/termination. equiv FAIL (5/7 mismatched)
+00d727b0  1018  SP_FindNearestCell (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): our 1666-byte body (vs 1018) is an oversized reconstruction; nearest-cell search shape is wrong. equiv WEAK (239 valid, 13.7% coverage)
+00d72bb0  103  SP_CopyCells (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): original copies the six Cell floats with x87 fld/fstp pairs; our struct assignment emits SSE moves at a different base. equiv UNSUPPORTED (0/400 valid)
+00d72c30  285  cTribeGameBehaviorFish::CanJoin (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): reconstructed join test; differs in the tribe compare and target-block lookup sequence. equiv WEAK (155 valid, 11.5% coverage)
+00d72d50  135  AgentInfoMap::InsertNode (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): rbtree insert; side computation (branched vs sbb) and the 0x38-byte node copy (rep movsd vs loop) differ. equiv FAIL (5/5 mismatched)
+00d72e70  218  cTribeGameBehaviorFish::cTribeGameBehaviorFish (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): base ctor call plus member init; float constant loads and the duplicated map-allocator zero stores scheduled differently. equiv PASS (400 valid, 100% coverage)
+00d72f50  77  cTribeGameBehaviorFish::DeleteDtor (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): 9 bytes differ; mpTribe load scheduled before the two vtable stores and the DoNukeSubtree lea/push order is swapped. equiv WEAK (173 valid, 100% coverage)
+00d72fd0  191  CellVector::reserve (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): signed capacity division; remaining diffs are EAAllocate size/register scheduling and the old-end recompute. equiv PASS (330 valid, 91.4% coverage)

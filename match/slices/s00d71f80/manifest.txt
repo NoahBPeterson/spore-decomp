@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d71f80/s00d71f80.cpp  ?FUN_00d71f80@@YA_NPAVcTribeMember@SP@@HHHHPAI@Z  00d71f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d71f80/s00d71f80.cpp  ?SP_ClearCellByIndex@@YAXPAUcSurfaceSampler@SP@@I@Z  00d726e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d71f80/s00d71f80.cpp  ?SP_ClearCellAtPos@@YAXPBUcSPVector3@SP@@I@Z  00d72720  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d71f80/s00d71f80.cpp  ?SP_GetCellByIndex@@YAPAXPAUcSurfaceSampler@SP@@I@Z  00d72770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
