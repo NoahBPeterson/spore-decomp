@@ -1,0 +1,7 @@
+slices/s00cb5620/s00cb5620.cpp  ?FUN_00cb5620@cCommunity@@QAEXI@Z  00cb5620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cb5620/s00cb5620.cpp  ?FUN_00cb5670@cGameData@@QAEXXZ  00cb5670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cb5620/s00cb5620.cpp  ?FUN_00cb56f0@cGameData@@QAEXPAXHMM@Z  00cb56f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cb5620/s00cb5620.cpp  ?FUN_00cb5930@cDefaultBeamProjectile@@QAEXPAM@Z  00cb5930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cb5620/s00cb5620.cpp  ?FUN_00cb5b70@cDefaultBeamProjectile@@QAEIXZ  00cb5b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cb5620/s00cb5620.cpp  ?FUN_00cb5bd0@cDefaultAoEArea@@QAEXXZ  00cb5bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cb5620/s00cb5620.cpp  ?FUN_00cb5cf0@cDefaultAoEArea@@QAEXPAX@Z  00cb5cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
