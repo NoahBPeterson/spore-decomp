@@ -1,0 +1,3 @@
+00caa610 ?DisbandUnit@cVehicle@SP@@QAEXD@Z  # PDB candidate "SP::cVehicle::DisbandUnit" on the card
+00caa980 ?ReadWeaponsFromPropList@cVehicle@SP@@QAEXXZ  # PDB candidate "SP::cVehicle::ReadWeaponsFromPropList" on the card
+00cab360 ?LoadModel@cVehicle@SP@@QAE_NH@Z  # PDB candidate "SP::cVehicle::LoadModel" on the card

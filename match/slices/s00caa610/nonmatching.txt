@@ -1,0 +1,4 @@
+00caa610  645  cVehicle::DisbandUnit; complete, but the thiscall entry takes its bool arg on the stack (ret 4) while __fastcall puts it in edx, and the radius/offset math is scheduled differently (SSE-vs-x87 and register allocation); equivalence harness could not validate (0/400 inputs valid)
+00caa900   10  FUN_00caa900; complete and same size (113 bytes), only the two vtable-call temps are mirrored (eax<->edx); a stable allocator tie-break, not fixable from C++; equiv.py PASS
+00cab0e0  529  weapon-slot serializer read; complete, but the float field copies emit x87 fld/fstp where the original uses movss, and the region is a fused 0xa38-byte stack object
+00cab360  419  cVehicle::LoadModel; register-arg (LTCG) entry: retail passes this = cVehicle+0x34 in ecx with the int arg on the stack (ret 4); written as __fastcall (ecx=this, edx=arg) so the prologue and register allocation differ and equiv.py cannot express the entry ABI

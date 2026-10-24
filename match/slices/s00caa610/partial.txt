@@ -1,0 +1,1 @@
+00caa980 1619  cVehicle::ReadWeaponsFromPropList; incomplete: 1412 bytes vs 1876, the name-resolution branch and weapon-table slot writes are missing paths (equiv.py WEAK, 3.5% coverage)
