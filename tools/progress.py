@@ -19,14 +19,6 @@ import base64, collections, contextlib, glob, io, json, os, re, runpy, subproces
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = lambda *p: os.path.join(ROOT, *p)
 
-# Byte-exact counts that were verified but never written to manifest.txt (so the
-# manifest scan misses them). b007: GLM's per-slice re-check found 33 byte-exact, of
-# which 3 are in a manifest (s00680c30); the other 30 were never banked.
-EXTRA_EXACT = {"b007": 30}
-# b008/b009 were created from the 10 b007 slices GLM never started, so those slice
-# IDs appear in two batches; the manifests are DeepSeek's, not GLM's. Do not let b007
-# claim slices it shares with those batches.
-CLAIM_EXCLUDE = {"b007": {"b008", "b009"}}
 # Slices that Claude workflows (cl1_*, op1_*) later reworked: opencode models are credited with
 # their manifest/nonmatching counts frozen at the last pre-Claude commit, not with Claude's edits.
 # bfs4 was never committed before Claude resumed it, so its DeepSeek output is not recoverable
@@ -36,6 +28,33 @@ try:
 except (OSError, ValueError, KeyError):
     CLAUDE_BASELINE = {}
 BATCH_FROZEN = {"bfs4": (178, None, 625)}  # (exact, equiv unknown, accounted)
+# ---- who produced each function (per-model table; tools/attribution.py credits the commit that first added a row) ----
+NO_MODEL_PATTERN = "(no model) pattern templates (tools/synth generator)"
+NO_MODEL_CLONES = "(no model) clones of identical functions"
+NO_MODEL_UNKNOWN = "(model not recorded) Claude workflows of Oct 2-7, library imports"
+NO_MODEL = {NO_MODEL_PATTERN, NO_MODEL_CLONES, NO_MODEL_UNKNOWN}
+CLAUDE_KEY = {"claude-sonnet-5-5": "sonnet-5.5", "claude-opus-5-5": "opus-5.5", "claude-haiku-5-5": "haiku-5.5"}
+# commit-subject tag -> opencode batches (session title "spore-<batch>-<k>") when the names differ
+WAVE_BATCHES = {"DeepSeek-v4.1-flash": ["b006"], "b008/b009:": ["b008", "b009"], "gold2/gold3": ["gold2g0", "gold3g0"],
+                "g4-cherry": ["gold4g0"], "Round": ["mig2"], "fix2/fix3:": ["fix2", "fix3"]}
+# waves with no opencode sessions on record: the model their commit subject names
+TAG_MODEL = {"cl1": "sonnet-5.5", "cl2": "sonnet-5.5", "Sonnet": "sonnet-5.5", "Tier-3": "sonnet-5.5", "Migration": "sonnet-5.5",
+             "op1_big": "opus-5.5", "op2_big": "opus-5.5", "op3": "opus-5.5", "fix1": "opus-5.5", "unsup1": "opus-5.5",
+             "unsup1b": "opus-5.5", "Fix": "opus-5.5", "hk1": "haiku-5.5", "hk2": "haiku-5.5",
+             "b007": "cheaperinference/glm-5.3-flash"}
+for _t in ("gold0", "gold1", "gold2", "gold3", "gold4", "gold5", "gold6", "gold7", "part1", "fix24", "dec1", "dec2", "spcg1",
+           "bfs0", "bfs1", "bfs2", "bfs3", "w4g2", "rck1", "rck2", "rw0", "fix0", "fix2", "fix3"):
+    TAG_MODEL.setdefault(_t, "cheaperinference/deepseek-v4.1-flash")   # opencode waves whose sessions are gone
+for _w in ("w1g", "w2g", "w3g"):
+    for _k in range(8):
+        TAG_MODEL.setdefault("%s%d" % (_w, _k), "cheaperinference/deepseek-v4.1-flash")
+for _k in range(7, 30):
+    TAG_MODEL.setdefault("mig%d" % _k, "cheaperinference/deepseek-v4.1-flash")      # module landings by opencode sessions
+try:   # slices written by Claude subagents (scan of the surviving transcripts: work/claude/agent_slice_models.json)
+    AGENT_SLICES = json.load(open(W("work/claude/agent_slice_models.json")))
+except (OSError, ValueError):
+    AGENT_SLICES = {}
+sys.path.insert(0, W("tools"))
 _slice_batches = collections.defaultdict(set)
 for _bf in glob.glob(os.path.join(ROOT, "work/batches", "*.json")):
     _bn = os.path.basename(_bf)[:-5]
@@ -242,40 +261,8 @@ def _svc_sessions():
     except Exception:
         return None
 
-_slice_log = None
 # a manifest row ("slices/<id>/<id>.cpp sym va ...") or a nonmatching row ("<va> ..."), not a note line
 ROW_RE = re.compile(r"^(?:slices/\S+\s+\S+\s+(?:0x)?[0-9a-fA-F]{6,8}\b|[0-9a-fA-F]{6,8}(?:\s|$))")
-
-
-def commit_row_deltas(tag):
-    """(exact, equivalent) rows net-added to match/slices/*/manifest.txt and nonmatching.txt by
-    commits whose subject starts with "<tag>:", or None when there are no such commits."""
-    global _slice_log
-    if _slice_log is None:
-        try:
-            _slice_log = subprocess.run(["git", "-C", ROOT, "log", "--format=@%s", "-p", "-U0", "--no-renames", "--",
-                                         "match/slices/*/manifest.txt", "match/slices/*/nonmatching.txt"],
-                                        capture_output=True, text=True, check=True).stdout
-        except (OSError, subprocess.CalledProcessError):
-            _slice_log = ""
-    out = _slice_log
-    ex = eq = 0; mine = seen = False; cur = None
-    for l in out.splitlines():
-        if l.startswith("@") and not l.startswith("@@"):
-            mine = l[1:].startswith(tag + ":"); seen |= mine
-            continue
-        if l.startswith("+++ ") or l.startswith("--- "):
-            if l.startswith("+++ "):
-                cur = "ex" if l.endswith("/manifest.txt") else "eq"
-            continue
-        if not mine or l[:1] not in "+-" or not ROW_RE.match(l[1:]):
-            continue
-        n = 1 if l[0] == "+" else -1
-        if cur == "ex":
-            ex += n
-        else:
-            eq += n
-    return (ex, eq) if seen else None
 
 
 def _db_batch_models():
@@ -318,6 +305,17 @@ def _db_batch_models():
         tmp = cpath + ".tmp"
         json.dump(cache, open(tmp, "w"))
         os.replace(tmp, cpath)
+    # usage caches copied from other machines (work/opencode/model_usage_cache_<host>.json, e.g. the Runpod pod
+    # that ran gold6..fix24 on 2026-10-23/24): their sessions are in that machine's opencode database, not this one
+    for other in sorted(glob.glob(W("work", "opencode", "model_usage_cache_*.json"))):
+        try:
+            oc = json.load(open(other))
+        except (OSError, ValueError):
+            continue
+        for sid, v in oc.items():
+            if sid not in upd and isinstance(v, dict) and v.get("rows") is not None:
+                upd[sid] = (v.get("title", ""), v.get("updated"))
+                cache[sid] = v
     bm = collections.defaultdict(lambda: {"cost": 0.0, "inp": 0, "cr": 0, "out": 0, "rea": 0, "n": 0})
     for sid, (title, _u) in upd.items():
         batch = title.split("-")[1] if "-" in title else title
@@ -363,94 +361,65 @@ def _api_batch_models():
 
 
 def _model_rows(bm, calls):
-    def batch_counts(batch):
-        """(exact, equivalent) function counts from this batch's manifests, minus
-        slices that actually belong to a different model's batch."""
-        bf = W("work/batches", batch + ".json"); ex = eq = 0
-        gf = W("work/opencode/groups", batch + ".json")
-        if not os.path.exists(bf) and os.path.exists(gf):
-            # opencode_sup titles sessions by group (gold3g0); the group names its batch
-            bf = W("work/batches", json.load(open(gf))["batch"] + ".json")
-        exclude = CLAIM_EXCLUDE.get(batch, set())
-        recs = json.load(open(bf)) if os.path.exists(bf) else []
-        tag = os.path.basename(bf)[:-5]
-        if recs and not any(r.get("module") for r in recs):
-            d = commit_row_deltas(tag)
-            if d is not None:
-                # waves that rework existing slices (dec2, gold3 after gold2): credit only the rows
-                # their own "<tag>:" commits added, not every row the slices hold today
-                return d[0] + EXTRA_EXACT.get(batch, 0), d[1]
-        if recs:
-            for rec in recs:
-                if _slice_batches[rec["id"]] & exclude:
-                    continue  # shared slice actually produced by another model's batch
-                if rec["id"] in CLAUDE_BASELINE:
-                    # later reworked by a Claude workflow: credit only what existed before
-                    b_ex, b_eq = CLAUDE_BASELINE[rec["id"]]
-                    ex += b_ex; eq += b_eq
-                    continue
-                if rec.get("module"):
-                    # migration batch: credit the entry's VAs found in the module's bookkeeping, not the slice's
-                    want = {v.lower() for v in rec["vas"]}
-                    for fname, is_exact in (("manifest.txt", True), ("nonmatching.txt", False)):
-                        p = W("src/game", rec["module"], fname)
-                        if os.path.exists(p):
-                            for l in open(p):
-                                parts = l.split("#", 1)[0].split()
-                                va = (parts[2] if is_exact and len(parts) > 2 else parts[0] if parts else "").lower()
-                                if va in want:
-                                    if is_exact: ex += 1
-                                    else: eq += 1
-                    continue
-                for fname, is_exact in (("manifest.txt", True), ("nonmatching.txt", False)):
-                    p = W("match/slices", rec["id"], fname)
-                    if os.path.exists(p):
-                        n = sum(1 for l in open(p) if ROW_RE.match(l))   # wrapped notes are not rows
-                        if is_exact:
-                            ex += n
-                        else:
-                            eq += n
-        if batch in BATCH_FROZEN:  # equivalents stay as computed (an undercount for bfs4)
-            ex = BATCH_FROZEN[batch][0]
-        return ex + EXTRA_EXACT.get(batch, 0), eq
-
     agg = collections.defaultdict(lambda: {"cost": 0.0, "inp": 0, "cr": 0, "out": 0,
                                             "rea": 0, "exact": 0, "equiv": 0, "batches": 0})
-    counts = {}
     for (batch, key), a in bm.items():
-        # a batch served by several models (a mid-wave provider switch) splits its functions by share of model calls
-        if batch not in counts:
-            counts[batch] = batch_counts(batch)
-        ex, eq = counts[batch]
-        share = a["n"] / calls[batch] if calls[batch] else 0
         g = agg[key]
         for k in ("cost", "inp", "cr", "out", "rea"):
             g[k] += a[k]
-        g["exact"] += ex * share; g["equiv"] += eq * share; g["batches"] += 1
+        g["batches"] += 1
+    # Functions: every byte-exact / equivalent function counted above, credited to the wave whose commit first added
+    # its row (tools/attribution.py), then to that wave's model(s) by share of model calls (2026-10-24: the old
+    # per-batch manifest count credited ~13k of 61k byte-exact functions and missed the pod's waves entirely).
+    import attribution as _att
+    att = _att.build()
+    by_batch = collections.defaultdict(lambda: collections.Counter())
+    for (batch, key), a in bm.items():
+        by_batch[batch][key] += a["n"]
+    def shares_for(tag, slice_id):
+        if tag in ("synth", "Pattern", "Tier-1", "Tier-2"):
+            return {NO_MODEL_PATTERN: 1.0}
+        if tag == "clones":
+            return {NO_MODEL_CLONES: 1.0}
+        for cand in WAVE_BATCHES.get(tag, [tag, tag + "g0"]):
+            c = by_batch.get(cand)
+            if c:
+                tot = sum(c.values())
+                return {k: n / tot for k, n in c.items()}
+        if tag in TAG_MODEL:
+            return {TAG_MODEL[tag]: 1.0}
+        am = AGENT_SLICES.get(slice_id)
+        if am:
+            tot = sum(am.values())
+            return {CLAUDE_KEY.get(k, k): n / tot for k, n in am.items()}
+        return {NO_MODEL_UNKNOWN: 1.0}
+    for kind, cur in (("exact", byte_exact), ("equiv", equiv)):
+        src = att["exact" if kind == "exact" else "equiv"]
+        for va in cur:
+            e = src.get("%08x" % va)
+            tag, sl = (e[1], e[2] if len(e) > 2 else "") if e else ("?", "")
+            for key, sh in shares_for(tag, sl).items():
+                agg[key][kind] += sh
     rows = []
-    for key, g in sorted(agg.items(), key=lambda x: -x[1]["cost"]):
-        ex, eq = g["exact"], g["equiv"]; comp = ex + eq
-        inp = g["inp"] + g["cr"]
-        per = lambda d: ("$%.4f" % (g["cost"] / d)) if d else "-"
-        ex, eq = int(round(ex)), int(round(eq)); comp = ex + eq
-        rows.append((key, g["batches"], human(ex), human(eq), "$%.2f" % g["cost"],
-                     per(ex), per(eq), per(comp),
-                     "%.2f" % (inp / ex / 1e6) if ex else "-",
-                     ("%.0f%%" % (100 * g["cr"] / inp)) if inp else "-"))
-    # Claude models: NOMINAL API-rate cost from a cached transcript scan (subscription => $0 marginal).
     try:
         cr_json = json.load(open(W("work/claude/model_efficiency.json")))
     except (OSError, ValueError):
         cr_json = {}
-    for key, g in cr_json.items():
-        ex, eq = g.get("exact", 0), g.get("equiv", 0); comp = ex + eq
-        inp = g.get("inp", 0) + g.get("cr", 0)
-        per = lambda d: ("$%.4f" % (g["cost"] / d)) if d else "-"
-        rows.append((key + " (API-rate est.)", g.get("batches", 0), human(ex), human(eq), "$%.2f" % g.get("cost", 0),
-                     per(ex), per(eq), per(comp),
-                     "%.2f" % (inp / ex / 1e6) if ex else "-",
-                     ("%.0f%%" % (100 * g.get("cr", 0) / inp)) if inp else "-"))
-    rows.sort(key=lambda r: -float(r[4].lstrip("$") or 0))     # most expensive first
+    claude_keys = set(CLAUDE_KEY.values())
+    for key, g in sorted(agg.items(), key=lambda x: -x[1]["cost"]):
+        ex, eq = int(round(g["exact"])), int(round(g["equiv"])); comp = ex + eq
+        if key in NO_MODEL:
+            rows.append((key, "-", human(ex), human(eq), "-", "-", "-", "-", "-", "-"))
+            continue
+        cost, inp, cr, nb, label = g["cost"], g["inp"] + g["cr"], g["cr"], g["batches"], key
+        if key in claude_keys:
+            # Claude: NOMINAL API-rate cost from a cached transcript scan (subscription => $0 marginal)
+            c = cr_json.get(key, {})
+            cost, inp, cr, nb, label = c.get("cost", 0), c.get("inp", 0) + c.get("cr", 0), c.get("cr", 0), c.get("batches", 0), key + " (API-rate est.)"
+        per = lambda d: ("$%.4f" % (cost / d)) if d and cost else "-"
+        rows.append((label, nb, human(ex), human(eq), "$%.2f" % cost, per(ex), per(eq), per(comp),
+                     "%.2f" % (inp / ex / 1e6) if ex and inp else "-", ("%.0f%%" % (100 * cr / inp)) if inp else "-"))
+    rows.sort(key=lambda r: (r[4] == "-", -float(r[4].lstrip("$") or 0) if r[4] != "-" else -int(r[2].replace(",", ""))))
     if not rows:
         return "(no spore-* sessions found)"
     return table(["Model (provider/id)", "Batches", "Exact fns", "Equiv fns", "Cost",
