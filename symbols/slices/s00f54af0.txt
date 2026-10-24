@@ -1,0 +1,15 @@
+00f54af0 EA::ArgScript::cPinCommand::ParseLine  # MainArguments(&count,0,1); id=EffectsMapID(main[0]) or 0; flags|=0x2000; pinToMap -> flags|=0x40000 + mPinDistance=0.0f else bounce -> mPinDistance=Evaluate(opt[0]); killOutsideMap -> flags|=0x20000; death -> mDeathTime=ParseRangedFloat(0.0f,1.0f); ret 4
+00f54c00 EA::ArgScript::cScoutCommand::ParseLine  # MainArguments(&count,2,3); count>2 ? (id, mValue1=Evaluate(main[1]), third=main[2]) : (id=0, mValue1=Evaluate(main[0]), third=main[1]); mStrength=Evaluate(third); flags|=0x2000,0x4000; scout/vertical/killHeight -> mScout/mVertical/mKillHeight; killOutsideMap; ret 4
+00f54d60 EA::ArgScript::cStrengthCommand::ParseLine  # MainArguments(&count,1,0x7fffffff); id=EffectsMapID(main[0]); flags|=0x2000,0x8000; strength option -> mStrength=Evaluate(opt[0]) else mStrength=1.0f; killOutsideMap; ret 4
+00f54e10 EA::ArgScript::cStrengthExCommand::ParseLine  # same as cStrengthCommand but sets flags|=0x10000 instead of 0x8000; ret 4
+00f558b0 EA::ArgScript::cCloudAlphaCommand::Execute  # MainArguments(&count,1,0x7fffffff); mCurve.erase(begin,end); per arg EvaluateVector + inline push_back (grow via ScaleCurve); vary -> mVary=*ParseRangedVector3(...); strstr(args[0],"255") -> ApplyCurveAlpha(1/255,&mCurve); ret 4
+00838020 EA::ArgScript::cArguments::MainArguments  # thiscall(const this, int* count, int minArgs, int maxArgs) ret 0x10
+008380b0 EA::ArgScript::cArguments::HasFlag  # thiscall(const this, const char* name) ret 8, returns bool
+00838330 EA::ArgScript::cArguments::OptionArguments  # thiscall(const this, const char* name, int minArgs) ret 0xc, returns const char**
+00837f20 EA::ArgScript::cArguments::operator[]  # thiscall(const this, int index) ret 8, returns const char*
+00a6e600 EA::Swarm::cEffectsParser::EffectsMapID  # thiscall(this, const char* name) ret 8, returns __int64 effect id
+009e0480 eastl::vector<rw::math::fpu::Vector3Template<float,0>>::erase  # thiscall(this, Vector3* first, Vector3* last) ret 0xc
+007ed1b0 EA::Swarm::ScaleCurve  # vector grow helper, ecx=this(Vec0C), (Vector3* end, const Vector3* value) on the stack, ret 8
+00840d50 EA::ArgScript::ParseRangedFloat  # cdecl(cParser*, const char*, float min, float max) -> float
+00840e10 EA::ArgScript::ParseRangedVector3  # cdecl(Vector3* out, cParser*, const char*, float min, float max) -> Vector3*
+007ecc30 EA::Swarm::ApplyCurveAlpha  # cdecl(float value, Vec0C* curve); caller cleans 8
