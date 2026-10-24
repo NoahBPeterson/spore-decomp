@@ -56,7 +56,7 @@ struct C3 {
     char pad[8];
     void* stream;       // +8
     unsigned char flag; // +0xc
-    bool read(int size);
+    unsigned char read(int size);
 };
 struct C5 { char pad[0x20]; float mfProgress; void setProgress(float v); };
 struct C6 { VP asInterface(int iid); };
@@ -610,11 +610,11 @@ bool C2a::f(int, int)
 { flag = 0; return false; }
 
 // @ 0x0069d210
-bool C3::read(int size)
+unsigned char C3::read(int size)
 {
     char buffer[1024];
     if (size >= 0x400) {
-        int blocks = size >> 10;
+        unsigned blocks = (unsigned)size >> 10;
         size -= blocks << 10;
         do {
             ((void(__thiscall*)(void*, void*, int))(*(void***)stream)[0x34 / 4])(stream, buffer, 0x400);
@@ -623,7 +623,7 @@ bool C3::read(int size)
     if (size > 0) {
         ((void(__thiscall*)(void*, void*, int))(*(void***)stream)[0x34 / 4])(stream, buffer, size);
     }
-    return flag != 0;
+    return flag;
 }
 
 // @ 0x0069d280
@@ -874,9 +874,10 @@ void cObjectDatabase::dtor()
     vt4 = g_vtbl_1408698;
     vt8 = g_vtbl_1408688;
     vt10 = g_vtbl_1408678;
-    if (p1c) {
+    void* q = p1c;
+    if (q) {
         p1c = 0;
-        ((void(__thiscall*)(void*))(*(void***)p1c)[4 / 4])(p1c);
+        ((void(__thiscall*)(void*))(*(void***)q)[4 / 4])(q);
     }
     if (p1c) {
         ((void(__thiscall*)(void*))(*(void***)p1c)[4 / 4])(p1c);
