@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# (no byte-exact functions in this slice; build flags: /O2 /MD /Gy /EHsc /TP)
+# 9 of 9 functions decompiled: 7 nonmatching (01054110 010541f0 010542a0 01054350
+# 01054ec0 01055040 01055130), 2 partial sketches (010543e0 010551b0).
+# See nonmatching.txt / partial.txt.
