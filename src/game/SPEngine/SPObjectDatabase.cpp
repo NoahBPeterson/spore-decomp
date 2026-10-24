@@ -309,7 +309,7 @@ virtual void v9();
 // ---- items of slice s0069e3a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* EASTL_allocator_allocate(unsigned size, const char* name, int, int, const char* file, int line); // 0x00f473a0
 extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
-extern "C" void  FUN_00932da0();
+extern "C" unsigned FUN_00932da0(const void* data, unsigned len, unsigned seed, int flag);
 extern "C" void  FUN_004c0410(int);
 extern "C" void  FUN_0069e880(void*);
 extern char g_vtbl_1408750[];
@@ -379,7 +379,7 @@ int F_e9e0::f(char* a, int b, int c)
     return 0;
 }
 struct F_eb60 { int f(int* key); };
-struct F_ec20 { bool f(int* io, unsigned index); };
+struct F_ec20 { bool f(int* io, unsigned index, unsigned* outCRC); };
 CComSer* FUN_0069f840(CComSer* self, void* param);
 // ---- items of slice s0069e3a0 end
 
@@ -1100,19 +1100,21 @@ RBNode* Tree::CopyA(RBNode* pNode, RBNode* pParent)
 }
 
 // @ 0x0069ec20
-bool F_ec20::f(int* io, unsigned index)
+bool F_ec20::f(int* io, unsigned index, unsigned* outCRC)
 {
     if (index > 0xf4240)
         return false;
     void* p = ((void*(__thiscall*)(void*))(*(void***)io)[0x18 / 4])(io);
     ((void(__thiscall*)(void*, int))(*(void***)p)[0x24 / 4])(p, 0);
-    FUN_004c0410(index + 1);
+    typedef void (__thiscall *ResizeFn)(void*, int);
+    ((ResizeFn)0x004c0410)((char*)this + 0x54, index + 1);
     p = ((void*(__thiscall*)(void*))(*(void***)io)[0x18 / 4])(io);
-    int r = ((int(__thiscall*)(void*, void*, unsigned))(*(void***)p)[0x30 / 4])(p, this, index);
+    int r = ((int(__thiscall*)(void*, void*, unsigned))(*(void***)p)[0x30 / 4])(p, *(void**)((char*)this + 0x54), index);
     bool ok = r != 0;
     if (ok) {
-        *(unsigned char*)((char*)this + index) = 0;
-        FUN_00932da0();
+        char* buf = *(char**)((char*)this + 0x54);
+        buf[index] = 0;
+        *outCRC = FUN_00932da0(buf, index, 0xffffffffu, 1);
     }
     p = ((void*(__thiscall*)(void*))(*(void***)io)[0x18 / 4])(io);
     ((void(__thiscall*)(void*, int, int))(*(void***)p)[0x28 / 4])(p, 0, 0);
@@ -1126,7 +1128,8 @@ RBNode* Tree::AllocB(P_ecc0* src)
     *(int*)((char*)n + 0x10) = src->a;
     *(int*)((char*)n + 0x14) = src->b;
     *(int*)((char*)n + 0x18) = src->c;
-    FUN_0069e880(src->rest);
+    typedef void (__thiscall *ValueCtorFn)(void*, void*);
+    ((ValueCtorFn)0x0069e880)((char*)n + 0x1c, (void*)((char*)src + 0xc));
     return n;
 }
 
@@ -1161,7 +1164,8 @@ void Tree::Nuke(RBNode* pNode)
     while (pNode) {
         Nuke(pNode->mpNodeLeft);
         RBNode* pRight = pNode->mpNodeRight;
-        FUN_d0c930((char*)pNode + 0x1c, *(void**)((char*)pNode + 0x28));
+        typedef void (__thiscall *NodeDtorFn)(void*, void*);
+        ((NodeDtorFn)0x00d0c930)((char*)pNode + 0x1c, *(void**)((char*)pNode + 0x28));
         EASTL_allocator_deallocate(pNode);
         pNode = pRight;
     }
@@ -1199,6 +1203,7 @@ void CComSer::reset()
     mTree2.mpNodeParent = 0;
     mTree2.mColor = 0;
     mTree2.mnSize = 0;
+    p48 = 0;
     b4c = 0;
     b4d = 0;
     void* p = p50;

@@ -11,7 +11,7 @@ extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* operator_new6(unsigned size, const char* name, int, int, int, int);
 extern "C" void* FUN_00920090(); // 0x00920090 returns the object-factory singleton
 extern "C" void  FUN_0093a780(void* io, void* p, int n, int f);
-extern "C" void  FUN_00932da0();
+extern "C" unsigned FUN_00932da0(const void* data, unsigned len, unsigned seed, int flag);
 extern "C" void  FUN_004c0410(int);
 extern "C" void  FUN_0069e880(void*);
 extern "C" void  FUN_005766e0(void*);
@@ -140,7 +140,8 @@ RBNode* Tree::AllocB(P_ecc0* src)
     *(int*)((char*)n + 0x10) = src->a;
     *(int*)((char*)n + 0x14) = src->b;
     *(int*)((char*)n + 0x18) = src->c;
-    FUN_0069e880(src->rest);
+    typedef void (__thiscall *ValueCtorFn)(void*, void*);
+    ((ValueCtorFn)0x0069e880)((char*)n + 0x1c, (void*)((char*)src + 0xc));
     return n;
 }
 
@@ -182,7 +183,8 @@ void Tree::Nuke(RBNode* pNode)
     while (pNode) {
         Nuke(pNode->mpNodeLeft);
         RBNode* pRight = pNode->mpNodeRight;
-        FUN_d0c930((char*)pNode + 0x1c, *(void**)((char*)pNode + 0x28));
+        typedef void (__thiscall *NodeDtorFn)(void*, void*);
+        ((NodeDtorFn)0x00d0c930)((char*)pNode + 0x1c, *(void**)((char*)pNode + 0x28));
         EASTL_allocator_deallocate(pNode);
         pNode = pRight;
     }
@@ -246,6 +248,7 @@ void CComSer::reset()
     mTree2.mAnchor.mpNodeParent = 0;
     mTree2.mAnchor.mColor = 0;
     mTree2.mnSize = 0;
+    mMode = 0;
     b4c = 0;
     b4d = 0;
     void* p = p50;
@@ -378,9 +381,9 @@ void* Tree::IndexID(const unsigned* key)
     return (char*)lb + 0x14;
 }
 
-struct F_e9e0 { char pad[0x10]; Tree t1; Tree t2; int mMode; bool f(void** out, unsigned instanceID, unsigned classID); };
+struct F_e9e0 { char pad[0x10]; Tree t1; Tree t2; int mMode; bool f(void** out, unsigned instanceID, unsigned classID, unsigned* outCRC); };
 // @ 0x0069e9e0
-bool F_e9e0::f(void** out, unsigned instanceID, unsigned classID)
+bool F_e9e0::f(void** out, unsigned instanceID, unsigned classID, unsigned* outCRC)
 {
     *out = 0;
     RBNode* itC;
@@ -394,6 +397,8 @@ bool F_e9e0::f(void** out, unsigned instanceID, unsigned classID)
             *out = ((void*(__thiscall*)(void*, unsigned, int, int, int))(*(void***)fac)[0x20 / 4])(fac, classID, 0x179c807, 0, 0);
             if (!*out)
                 return false;
+            if (outCRC)
+                *outCRC = *(unsigned*)((char*)itC + 0x18);
             AR tmp;
             IDPair v(instanceID, tmp);
             IterBool r;
@@ -415,23 +420,25 @@ bool F_e9e0::f(void** out, unsigned instanceID, unsigned classID)
 
 // 0x0069ec20  load one class object blob (behaviour)
 struct F_ec20 {
-    bool f(int* io, unsigned index);
+    bool f(int* io, unsigned index, unsigned* outCRC);
     bool g(void* io, unsigned maxLen, unsigned* outCRC);   // 0x0069ec20 (3-arg form, as LoadClassObjects calls it)
 };
 // @ 0x0069ec20
-bool F_ec20::f(int* io, unsigned index)
+bool F_ec20::f(int* io, unsigned index, unsigned* outCRC)
 {
     if (index > 0xf4240)
         return false;
     void* p = ((void*(__thiscall*)(void*))(*(void***)io)[0x18 / 4])(io);
     ((void(__thiscall*)(void*, int))(*(void***)p)[0x24 / 4])(p, 0);
-    FUN_004c0410(index + 1);
+    typedef void (__thiscall *ResizeFn)(void*, int);
+    ((ResizeFn)0x004c0410)((char*)this + 0x54, index + 1);
     p = ((void*(__thiscall*)(void*))(*(void***)io)[0x18 / 4])(io);
-    int r = ((int(__thiscall*)(void*, void*, unsigned))(*(void***)p)[0x30 / 4])(p, this, index);
+    int r = ((int(__thiscall*)(void*, void*, unsigned))(*(void***)p)[0x30 / 4])(p, *(void**)((char*)this + 0x54), index);
     bool ok = r != 0;
     if (ok) {
-        *(unsigned char*)((char*)this + index) = 0;
-        FUN_00932da0();
+        char* buf = *(char**)((char*)this + 0x54);
+        buf[index] = 0;
+        *outCRC = FUN_00932da0(buf, index, 0xffffffffu, 1);
     }
     p = ((void*(__thiscall*)(void*))(*(void***)io)[0x18 / 4])(io);
     ((void(__thiscall*)(void*, int, int))(*(void***)p)[0x28 / 4])(p, 0, 0);
@@ -568,9 +575,10 @@ bool CS8::LoadClassObjects(void* progress)
                                     }
                                     unsigned instanceID;
                                     ReadI32(s2.p, &instanceID);
+                                    unsigned dcrc = 0;
                                     SRef obj;
                                     F_e9e0* real = (F_e9e0*)((char*)this - 8);
-                                    if (real->f(&obj.p, instanceID, classID)) {
+                                    if (real->f(&obj.p, instanceID, classID, &dcrc)) {
                                         VC1(void, void*, obj.p, 5, this);
                                         int pos = VC1(int, int, VC0(void*, x2, 6), 9, 0);
                                         if (pos != (int)(recLen + posA))
