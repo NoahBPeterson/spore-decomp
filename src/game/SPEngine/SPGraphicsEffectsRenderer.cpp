@@ -724,6 +724,24 @@ struct VecC {
     int* cap;
     void DoInsert(int* pos, int* v);   // 0x6ec260
 };
+// Inline small-string storage helper (thiscall, two int args).
+struct SmallStrObj {
+    void FUN_006ebd20(int a, int b);   // 0x006ebd20
+};
+// eastl::vector<unsigned int> (grow path lives in 0x4558a0).
+struct VecU32_s006e_c0c0 {
+    int* b;
+    int* e;
+    int* cap;
+    void DoInsertValue(int* pos, const int* v);   // 0x004558a0
+};
+// cVecU16 (end at +4, capacity at +8; this = object+0x5c).
+struct VecU16_s006e_c0c0 {
+    ushort* b;
+    ushort* e;
+    ushort* cap;
+    void FUN_006f66a0(const ushort* v);   // 0x006f66a0
+};
 struct S8 {
     char m_unk[0x30d80];
 
@@ -741,7 +759,7 @@ struct S8 {
     void me30(int a, int b, int c);                         // 0x6ece30
     void me90(int n, int* a, int* b);                       // 0x6ece90
     void mf10();                                            // 0x6ecf10
-    void mfc0(void* src);                                   // 0x6ecfc0
+    S8*  mfc0(void* src);                                   // 0x6ecfc0 (returns this)
     void md070();                                           // 0x6ed070
     void md1a0(int idx, char v);                            // 0x6ed1a0
     void md210(int idx);                                    // 0x6ed210
@@ -1954,7 +1972,7 @@ void S8::m660(void* src)
     *(void**)d = q;
     *(void**)(d + 8) = d + 0x94;
     *(ushort*)q = 0;
-    f_6ebd20(*(int*)s, *((int*)s + 1));
+    ((SmallStrObj*)d)->FUN_006ebd20(*(int*)s, *((int*)s + 1));
 }
 
 // @ 0x006ec6d0
@@ -2037,18 +2055,18 @@ void S8::mdd0(int a, int b)
 {
     int loc[3];
     loc[0] = a; loc[1] = b; loc[2] = 0;
-    char* self = (char*)this;
-    int* p = *(int**)(self + 0xc);
-    if (p < *(int**)(self + 0x10)) {
-        *(int**)(self + 0xc) = p + 3;
+    VecC* v = (VecC*)((char*)this + 8);
+    int* p = v->e;
+    if (p < v->cap) {
+        v->e = p + 3;
         if (p != 0) {
             p[0] = loc[0];
             p[1] = loc[1];
             p[2] = loc[2];
-            return;
         }
+        return;   // the shipped p==0 path still returns without growing
     }
-    ((VecC*)(self + 8))->DoInsert(p, loc);
+    v->DoInsert(p, loc);
 }
 
 // @ 0x006ece30
@@ -2056,18 +2074,18 @@ void S8::me30(int a, int b, int c)
 {
     int loc[3];
     loc[0] = a; loc[1] = b; loc[2] = c;
-    char* self = (char*)this;
-    int* p = *(int**)(self + 0xc);
-    if (p < *(int**)(self + 0x10)) {
-        *(int**)(self + 0xc) = p + 3;
+    VecC* v = (VecC*)((char*)this + 8);
+    int* p = v->e;
+    if (p < v->cap) {
+        v->e = p + 3;
         if (p != 0) {
             p[0] = loc[0];
             p[1] = loc[1];
             p[2] = loc[2];
-            return;
         }
+        return;   // the shipped p==0 path still returns without growing
     }
-    ((VecC*)(self + 8))->DoInsert(p, loc);
+    v->DoInsert(p, loc);
 }
 
 // @ 0x006ece90
@@ -2127,17 +2145,19 @@ void S8::mf10()
 }
 
 // @ 0x006ecfc0
-void S8::mfc0(void* src)
+S8* S8::mfc0(void* src)
 {
     char* d = (char*)this;
     char* s = (char*)src;
     *(uchar*)d = *(uchar*)s;
     if (d + 4 != s + 4) {
-        if (*(ushort*)(d + 4) != *(ushort*)(d + 8)) {
-            **(ushort**)(d + 4) = 0;
-            *(uint*)(d + 8) = *(uint*)(d + 4);
+        int* d4 = *(int**)(d + 4);
+        int* d8 = *(int**)(d + 8);
+        if (d4 != d8) {
+            *(ushort*)d4 = 0;
+            *(int**)(d + 8) = d4;
         }
-        f_6ebd20(*(int*)(s + 4), *(int*)(s + 8));
+        ((SmallStrObj*)(d + 4))->FUN_006ebd20(*(int*)(s + 4), *(int*)(s + 8));
     }
     *(float*)(d + 0x98) = *(float*)(s + 0x98);
     *(float*)(d + 0x9c) = *(float*)(s + 0x9c);
@@ -2149,6 +2169,7 @@ void S8::mfc0(void* src)
     *(uint*)(d + 0xb4) = *(uint*)(s + 0xb4);
     *(uint*)(d + 0xb8) = *(uint*)(s + 0xb8);
     *(uint*)(d + 0xbc) = *(uint*)(s + 0xbc);
+    return this;
 }
 
 // @ 0x006ed070
@@ -2169,7 +2190,7 @@ void S8::md1a0(int idx, char v)
         *p = v;
         if (v != 0 && *(char*)(*(int*)(self + 0x48) + 0x49 + off) == 0) {
             int t = idx & 0xffff;
-            f_6f66a0(&t);
+            ((VecU16_s006e_c0c0*)(self + 0x5c))->FUN_006f66a0((const ushort*)&t);
             *(char*)(*(int*)(self + 0x48) + 0x49 + off) = 1;
         }
     }
@@ -2187,26 +2208,25 @@ void S8::md210(int idx)
     char* e = (char*)(*(int*)(self + 0x174) + off);
     if (*(int*)e == 0)
         return;
+    int v = *(int*)(e + 0x64);   // read before the clears, like the emitted code
     *(int*)e = 0;
     *(uchar*)(e + 0x48) = 0;
-    int v = *(int*)(e + 0x64);
     if (v != 0) {
         void* h = *(void**)(self + 0x1e0);
         if (h)
             ((void(__thiscall*)(void*, int))VFN(h, 0x20))(h, v);
         *(int*)(e + 0x64) = 0;
     }
-    VecC* vv = (VecC*)(self + 0x19c);
+    VecU32_s006e_c0c0* vv = (VecU32_s006e_c0c0*)(self + 0x19c);
     int* p = vv->e;
     if (p < vv->cap) {
         vv->e = p + 1;
-        if (p) {
+        if (p)
             *p = idx;
-            return;
-        }
+        return;   // the shipped p==0 path still returns without growing
     }
     int loc = idx;
-    f_grow4(vv, &loc);
+    vv->DoInsertValue(p, &loc);
 }
 
 // @ 0x006ed2c0
