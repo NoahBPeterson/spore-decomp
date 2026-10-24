@@ -1,0 +1,14 @@
+00e2cb00 ?GetStringSlot@cStringMap@@QAEAAVcString@SP@@I@Z  # SP::cString& cStringMap::GetStringSlot(uint32_t) - the event id -> localized string map lookup (eastl::map<unsigned int, SP::cString>::operator[]), inserting an empty string for unknown ids
+00e2cba0 ?Init@cSPUIRolloverCivRelationship@@QAE_NXZ  # bool cSPUIRolloverCivRelationship::Init() - the civil relationship rollover setup: base layout init, root window attach, the four label strings, the three personality names, one string per relationship event and the row count
+00e2cce0 ?Read@cRelationshipValues@@QAEAAV1@II@Z  # cRelationshipValues& cRelationshipValues::Read(uint32_t, uint32_t) - rebuilds the event id -> relationship value cache for a civ pair
+00e2cd70 ?RelationshipInsertionSort@@YAXAAUcAbsValueLess@@PAI1@Z  # void RelationshipInsertionSort(cAbsValueLess&, uint32_t*, uint32_t*) - insertion sort of event ids by descending absolute relationship value
+00e2ce30 ?RelationshipInsertionSortTail@@YAXAAUcAbsValueLess@@PAI1@Z  # void RelationshipInsertionSortTail(cAbsValueLess&, uint32_t*, uint32_t*) - the unguarded tail of the same insertion sort
+00e2ced0 ?RelationshipMedianOfThree@@YAPAIAAUcAbsValueLess@@PAI11@Z  # uint32_t* RelationshipMedianOfThree(cAbsValueLess&, uint32_t*, uint32_t*, uint32_t*) - median-of-three pivot pick
+00e2d0a0 ?RelationshipPartition@@YAPAIAAUcAbsValueLess@@PAI1I@Z  # uint32_t* RelationshipPartition(cAbsValueLess&, uint32_t*, uint32_t*, uint32_t) - Hoare partition around a pivot event id
+00e2d180 ?RelationshipPushHeap@@YAXAAUcAbsValueLess@@PAIHI@Z  # void RelationshipPushHeap(cAbsValueLess&, uint32_t*, int32_t, uint32_t) - sift a value up into a heap hole
+00e2d220 ?RelationshipAdjustHeap@@YAXAAUcAbsValueLess@@PAIHHI@Z  # void RelationshipAdjustHeap(cAbsValueLess&, uint32_t*, int32_t, int32_t, uint32_t) - sift a value down to its heap position
+00e2d300 ?RelationshipMakeHeap@@YAXAAUcAbsValueLess@@PAI1@Z  # void RelationshipMakeHeap(cAbsValueLess&, uint32_t*, uint32_t*) - heapify a range of event ids
+00e2d360 ?RelationshipSortHeap@@YAXAAUcAbsValueLess@@PAI1@Z  # void RelationshipSortHeap(cAbsValueLess&, uint32_t*, uint32_t*) - drain a heap into descending order
+00e2d430 ?RelationshipPartialSort@@YAXAAUcAbsValueLess@@PAI11@Z  # void RelationshipPartialSort(cAbsValueLess&, uint32_t*, uint32_t*, uint32_t*) - the introsort fallback: partial sort of the range
+00e2d520 ?RelationshipIntrosortLoop@@YAXAAUcAbsValueLess@@PAI1H@Z  # void RelationshipIntrosortLoop(cAbsValueLess&, uint32_t*, uint32_t*, int32_t) - the introsort loop (median-of-three, partition, depth limit)
+00e2d5f0 ?RelationshipSort@@YAXAAUcAbsValueLess@@PAI1@Z  # void RelationshipSort(cAbsValueLess&, uint32_t*, uint32_t*) - sort entry: introsort plus the final insertion sorts
