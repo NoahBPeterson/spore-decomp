@@ -20,13 +20,7 @@ extern "C" void  __cdecl FUN_00f257b0(void*);
 extern "C" void  __cdecl FUN_00811fe0(void*);
 extern "C" void* __cdecl FUN_00ef19f0();
 extern "C" void  __cdecl FUN_00de4850(void*);
-extern "C" void  __cdecl FUN_00dd9190();
-extern "C" char  __cdecl FUN_00dda060();
-extern "C" char  __cdecl FUN_00dd91a0();
-extern "C" void* __cdecl FUN_00b3d360();
-extern "C" void* __cdecl FUN_00b3d410();
 extern "C" void* __cdecl FUN_00401010();
-extern "C" char  __cdecl FUN_00ec4320();
 extern "C" void* __cdecl FUN_0067dd20();
 extern "C" char  __cdecl FUN_00f56f0(wchar_t c);
 extern "C" char  __cdecl FUN_005bf0e0(void* self, void** out);
@@ -42,7 +36,6 @@ extern "C" char  __cdecl FUN_00de46e0();
 extern "C" void  __cdecl FUN_00de7010(void*);
 extern "C" void  __cdecl FUN_00ddb760();
 extern "C" void  __cdecl FUN_00dfab20(int);
-extern "C" double __cdecl FUN_0093a3a0(void*);
 extern "C" void* __cdecl Vec38_AllocCopy(void* self, int n, void* first, void* last); // 0xdfb1b0
 extern "C" void  __cdecl Vec38_Copy(void* first, void* last, void* dest);             // 0xdfb210
 extern "C" void* __cdecl CopyRangeB(void* first, void* last, void* dest);             // 0xdfc170
@@ -50,8 +43,18 @@ extern "C" void* __cdecl UninitCopyD(void* out, const void* first, const void* l
 extern "C" void* __cdecl UninitCopyA(void* out, const void* first, const void* last, void* dest);
 extern "C" void  __cdecl FUN_0050f740(void* a, void* b, void* c);
 extern "C" void  __cdecl VecInsertKey(void* self, void* pos, void* val);
-extern "C" void  __cdecl FUN_00473460(void* dst, const void* src);   // 0x473460
-extern "C" void  __cdecl FUN_00473500(void* dst, const void* src);   // 0x473500
+struct SubVec38 {                                  // 12-byte eastl vector at TypeB+0x1c
+  uint32_t b, e, c;
+  void assign_00473460(const void* src);           // 0x473460 (thiscall, 1 arg)
+  void assign_00473500(const void* src);           // 0x473500 (thiscall, 1 arg)
+};
+extern "C" void  __cdecl FUN_00473460(void* dst, const void* src);   // 0x473460 (cdecl form)
+extern "C" void  __cdecl FUN_00473500(void* dst, const void* src);   // 0x473500 (cdecl form)
+struct Swarm {                                     // global swarm container (0xdd9190)
+  int  GetLinkCount(int id);                       // 0xdda060
+  char IsReady();                                  // 0xdd91a0
+};
+extern "C" Swarm* __cdecl FUN_00dd9190();          // 0xdd9190
 
 extern wchar_t gEmptyA_1667bac;   // 0x1667bac
 extern wchar_t gEmptyB_1667bae;   // 0x1667bae
@@ -85,7 +88,7 @@ struct TypeC {                      // 0x38 bytes
   uint32_t f28;      // +0x28
   WString  s2;       // +0x2c
   TypeC* CopyCtor(const TypeC* src);   // 0xdfb280
-  void   Dtor();                        // 0xf280f0
+  void   dtor_f280f0();                // 0xf280f0 (out of line)
 };
 
 struct TypeD {                      // 0x44 bytes
@@ -112,7 +115,7 @@ struct TypeA {                      // 0x24 bytes
 struct TypeB {                      // 0x34 bytes
   float    f0;       // +0x00
   uint32_t f4, f8, fC, f10, f14, f18;  // +0x04..+0x1c
-  uint32_t v1c, v20, v24;              // +0x1c eastl::vector (12 bytes)
+  SubVec38 v1c;                        // +0x1c eastl::vector (12 bytes)
   uint32_t pad28, pad2c;               // +0x28
   uint32_t f30;                        // +0x30
   TypeB* CopyCtorA(const TypeB* src);  // 0xdfb890
@@ -137,7 +140,43 @@ struct Big {
   void Update();        // 0xdfbd70
   void Update2(int);    // 0xdfc240
   char Check();         // 0xdfc500
+  void sub_dfa370();    // 0xdfa370 (thiscall)
+  void sub_df9fc0();    // 0xdf9fc0 (thiscall)
+  void sub_dfa790(int); // 0xdfa790 (thiscall, 1 arg)
 };
+
+struct B3Obj {                     // object returned by 0x00b3d360
+  char   pad[0x20];
+  void*  head;                     // +0x20 (self-referential while empty)
+  char   sub_de46e0();             // 0xde46e0 (thiscall)
+};
+struct Obj3c   { void sub_de7010(); };          // 0xde7010 (thiscall) on g_16a1344 + 0x3c
+struct Ec43    { char sub_ec4320(); };          // 0xec4320 (thiscall)
+struct Svc410  { void sub_e3e350(int, void*, int); };  // 0xe3e350 (thiscall, 3 args)
+struct Stopwatch { long long sub_0093a3a0(); };        // 0x93a3a0 (thiscall, __int64 result)
+
+extern "C" B3Obj*  __cdecl FUN_00b3d360();
+extern "C" Svc410* __cdecl FUN_00b3d410();
+extern "C" char*   g_16a1344;      // 0x16a1344
+extern "C" char*   g_16c7aa4;      // 0x16c7aa4
+
+// 0x38-byte render description handed to vtable slot 5 of the object at +0x84.
+struct Vec3g { float x, y, z; };
+struct Mat3g {                        // 0x24 bytes (cSPMatrix3)
+  float m[9];
+  void CopyCtor_0041cb40(const Mat3g* src);   // 0x41cb40 (thiscall, 1 arg)
+};
+struct Desc38 {
+  int16_t kind;                       // +0x00
+  int16_t sub;                        // +0x02
+  Vec3g   pos;                        // +0x04
+  float   scale;                      // +0x10
+  Mat3g   mat;                        // +0x14
+};
+extern "C" Vec3g g_vec_16a173c;       // 0x16a173c
+extern "C" float g_scale_1485720;     // 0x1485720
+extern "C" float g_depth_147eeac;     // 0x147eeac
+extern "C" Mat3g g_mat_16a1718;       // 0x16a1718
 
 // Larger class whose destructor appears at 0xdfbba0.
 struct Huge {
@@ -196,22 +235,31 @@ Vec38* Vec38::Assign(const Vec38& x) {
 
 // @ 0x00dfb890  TypeB copy constructor (sub-vector construct form)
 TypeB* TypeB::CopyCtorA(const TypeB* o) {
-  f0 = o->f0; f4 = o->f4; f8 = o->f8; fC = o->fC; f10 = o->f10; f14 = o->f14; f18 = o->f18;
-  FUN_00473460(&v1c, &o->v1c);
+  *(float*)&f0 = *(const float*)&o->f0;
+  *(float*)&f4 = *(const float*)&o->f4;
+  *(float*)&f8 = *(const float*)&o->f8;
+  *(float*)&fC = *(const float*)&o->fC;
+  *(float*)&f10 = *(const float*)&o->f10;
+  *(float*)&f14 = *(const float*)&o->f14;
+  *(float*)&f18 = *(const float*)&o->f18;
+  v1c.assign_00473460(&o->v1c);
   f30 = o->f30;
   return this;
 }
 
 // @ 0x00dfb8e0  uninitialized_copy of 0x44-byte TypeD elements
-void* UninitCopyD(void* out, const void* first, const void* last, void* dest) {
-  TypeD* d = (TypeD*)dest;
-  TypeD* f = (TypeD*)first;
-  TypeD* l = (TypeD*)last;
-  for (; f != l; ++f) {
-    if (d) { d->f0 = f->f0; d->c.CopyCtor(&f->c); d->f40 = f->f40; }
-    d = (TypeD*)((char*)d + 0x44);
+void* UninitCopyD(void* outP, const void* firstP, const void* lastP, void* dest) {
+  TypeD** out = (TypeD**)outP;
+  const TypeD* first = (const TypeD*)firstP;
+  const TypeD* last = (const TypeD*)lastP;
+  *out = (TypeD*)dest;
+  while (first != last) {
+    TypeD* d = *out;
+    if (d) { d->f0 = first->f0; d->c.CopyCtor(&first->c); d->f40 = first->f40; }
+    *out = (TypeD*)((char*)*out + 0x44);
+    first = (const TypeD*)((const char*)first + 0x44);
   }
-  return out;
+  return outP;
 }
 
 // @ 0x00dfb930  copy-assign a range of TypeD elements
@@ -279,6 +327,7 @@ void Big::Destroy() {
     TypeA* b0 = *(TypeA**)(self + 0x0c);
     TypeA* e0 = *(TypeA**)(self + 0x10);
     for (TypeA* t = b0; t < e0; ++t) t->Dtor();
+
     if (b0 && *(int*)((char*)b0 - 4) != 0) EA_Free(b0);
   }
   *(void**)self = (void*)0x147dba8;
@@ -289,7 +338,17 @@ void Big::DestroyVec18() {
   char* self = (char*)this;
   char* b = *(char**)(self + 0x18);
   char* e = *(char**)(self + 0x1c);
-  for (char* p = b; p < e; p += 0x44) ((TypeC*)(p + 4))->Dtor();
+  for (char* p = b; p < e; p += 0x44) ((TypeC*)(p + 4))->dtor_f280f0();
+  b = *(char**)(self + 0x18);
+  if (b && *(int*)(b - 4) != 0) EA_Free(b);
+}
+
+// destroy an eastl vector of 0x44-byte elements (TypeC at +4)
+static void DestroyVec44(char* v) {
+  char* e = *(char**)(v + 4);
+  char* b = *(char**)(v);
+  for (char* q = b; q < e; q += 0x44) ((TypeC*)(q + 4))->dtor_f280f0();
+  b = *(char**)(v);
   if (b && *(int*)(b - 4) != 0) EA_Free(b);
 }
 
@@ -298,15 +357,10 @@ void Huge::Destroy() {
   char* self = (char*)this;
   void* p = *(void**)(self + 0x4cc);
   if (p && *(int*)((char*)p - 4) != 0) EA_Free(p);
-  ((TypeC*)(self + 0x448))->Dtor();
-  struct { uint32_t off; } const vecs[3] = { {0x2dc}, {0x170}, {0x04} };
-  for (int i = 0; i < 3; ++i) {
-    uint32_t off = vecs[i].off;
-    char* b = *(char**)(self + off);
-    char* e = *(char**)(self + off + 4);
-    for (char* q = b; q < e; q += 0x44) ((TypeC*)(q + 4))->Dtor();
-    if (b && *(int*)(b - 4) != 0) EA_Free(b);
-  }
+  ((TypeC*)(self + 0x448))->dtor_f280f0();
+  DestroyVec44(self + 0x2dc);
+  DestroyVec44(self + 0x170);
+  DestroyVec44(self + 0x04);
 }
 
 // @ 0x00dfbc80  uninitialized_copy of 0x34-byte TypeB elements
@@ -325,7 +379,7 @@ void* UninitCopyB(void* out, const void* first, const void* last, void* dest) {
 // @ 0x00dfbd00  TypeB copy constructor (sub-vector assignment form)
 TypeB* TypeB::CopyCtorB(const TypeB* o) {
   f0 = o->f0; f4 = o->f4; f8 = o->f8; fC = o->fC; f10 = o->f10; f14 = o->f14; f18 = o->f18;
-  FUN_00473500(&v1c, &o->v1c);
+  v1c.assign_00473500(&o->v1c);
   f30 = o->f30;
   return this;
 }
@@ -468,13 +522,12 @@ void* CopyRangeB(void* first, void* last, void* dest) {
 }
 
 // @ 0x00dfc1e0  allocate an array of n TypeD elements and uninitialized-copy into it
-void* AllocCopyD(int n, void* first, void* last) {
-  void* buf = 0;
-  if (n)
-    buf = EA_Allocate(n * 0x44, "Simulator", 0, 0,
-        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-  void* out;
-  UninitCopyD(&out, first, last, buf);
+void* __stdcall AllocCopyD(int n, void* first, void* last) {
+  void* buf = n ? EA_Allocate(n * 0x44, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+  // retail also pushes the element count as a fifth (unused) stack slot; our 4-arg
+  // call leaves the same observable state
+  UninitCopyD((void**)&n, first, last, buf);
   return buf;
 }
 
@@ -483,40 +536,52 @@ void Big::Update2(int arg) {
   char* self = (char*)this;
   (void)arg;
   if (*(uint32_t*)(self + 0x20) == 0) {
-    FUN_00dd9190();
-    if (!FUN_00dda060()) FUN_00dfa370();
+    if (!FUN_00dd9190()->GetLinkCount(0)) sub_dfa370();
   }
-  if (*(uint8_t*)(self + 0x7e)) { FUN_00df9fc0(); *(uint8_t*)(self + 0x7e) = 0; }
+  if (*(uint8_t*)(self + 0x7e)) { sub_df9fc0(); *(uint8_t*)(self + 0x7e) = 0; }
   if (*(uint32_t*)(self + 0x20) != 0xb) {
-    if (*(void**)(self + 0x84)) {
-      uint32_t desc[7] = {0,0,0,0,0,0,0};
-      ((void(__thiscall*)(void*, void*))Vt(*(void**)(self + 0x84))[5])(*(void**)(self + 0x84), desc);
+    void* obj84 = *(void**)(self + 0x84);
+    if (obj84) {
+      Desc38 d;
+      Vec3g pos;
+      pos = g_vec_16a173c;                   // defaults (overwritten below)
+      d.pos = pos;
+      d.scale = g_scale_1485720;
+      d.mat.CopyCtor_0041cb40(&g_mat_16a1718);
+      d.kind = 4;
+      d.sub = 1;
+      pos.x = 0.0f;
+      pos.y = 0.0f;
+      pos.z = g_depth_147eeac;
+      d.pos = pos;
+      d.scale = g_scale_1485720;
+      d.mat = g_mat_16a1718;
+      ((void(__thiscall*)(void*, Desc38*))Vt(obj84)[5])(obj84, &d);
     }
     if (*(uint8_t*)(self + 0x80) == 0) {
       uint32_t e = *(uint32_t*)(self + 0x28);
       if (e) { *(uint32_t*)(self + 0x28) = e - 1; return; }
       uint32_t st = *(uint32_t*)(self + 0x20);
       if (st == 10 || st == 9) { Update(); return; }
-      FUN_00b3d360();
-      if (FUN_00de46e0()) { FUN_00de7010(self + 0x3c); return; }
+      if (FUN_00b3d360()->sub_de46e0()) { ((Obj3c*)(g_16a1344 + 0x3c))->sub_de7010(); return; }
     } else {
       if (*(uint32_t*)(self + 0x78) == 0) {
-        float t = (float)FUN_0093a3a0(self + 0x60);
+        double t = (double)((Stopwatch*)(self + 0x60))->sub_0093a3a0();
         if (t * *(float*)(self + 0x74) > 0.5f) {
-          FUN_00dfa790(1);
+          sub_dfa790(1);
           *(uint32_t*)(self + 0x78) = 1;
         }
       }
       if (*(uint32_t*)(self + 0x78) == 1) {
-        char* g = (char*)FUN_00b3d360();
-        int empty = (*(int*)(g + 0x20) == (int)(g + 0x20));
+        B3Obj* g = FUN_00b3d360();
+        int empty = ((int)g->head == (int)&g->head);
         void* w = FUN_00401010();
         int v = ((int(__thiscall*)(void*))Vt(w)[10])(w);
-        if (!FUN_00ec4320() && v < 1 && empty) *(uint32_t*)(self + 0x78) = 2;
+        char busy = ((Ec43*)(*(char**)(g_16c7aa4 + 0x1c)))->sub_ec4320();
+        if (!busy && v < 1 && empty) *(uint32_t*)(self + 0x78) = 2;
       }
       if (*(uint32_t*)(self + 0x78) == 2) {
-        FUN_00dd9190();
-        if (FUN_00dd91a0()) {
+        if (FUN_00dd9190()->IsReady()) {
           *(uint8_t*)(self + 0x80) = 0;
           *(uint32_t*)(self + 0x28) = 10;
           void* r = *(void**)(self + 0x84);
@@ -532,8 +597,7 @@ void Big::Update2(int arg) {
           o[6] = *(uint32_t*)(self + 0xa4);
           o[7] = *(uint32_t*)(self + 0xa8);
           o[8] = *(uint32_t*)(self + 0xac);
-          void* svc = FUN_00b3d410();
-          ((void(__thiscall*)(void*, int, void*, int))Vt(svc)[0])(svc, 1, (void*)0x1654c10, 1);
+          FUN_00b3d410()->sub_e3e350(1, (void*)0x1654c10, 1);
           return;
         }
       }
@@ -594,10 +658,8 @@ TypeC* TypeC::CopyCtor(const TypeC* o) {
   return this;
 }
 
-void TypeC::Dtor() {
-  if ((char*)s2.cap - (char*)s2.begin > 2 && s2.begin) EA_Free(s2.begin);
-  if ((char*)s1.cap - (char*)s1.begin > 2 && s1.begin) EA_Free(s1.begin);
-}
+// TypeC::dtor_f280f0 is out of line (0xf280f0).
+
 
 TypeA* TypeA::CopyCtor(const TypeA* o) {
   f0 = o->f0; f4 = o->f4; f8 = o->f8; fC = o->fC;
@@ -622,7 +684,7 @@ TypeD* TypeD::CopyCtor(const TypeD* o) {
   return this;
 }
 
-void TypeD::Dtor() { c.Dtor(); }
+void TypeD::Dtor() { c.dtor_f280f0(); }
 
 void* UninitCopyA(void* out, const void* first, const void* last, void* dest) {
   TypeA* d = (TypeA*)dest;

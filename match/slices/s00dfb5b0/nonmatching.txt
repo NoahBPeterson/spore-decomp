@@ -1,13 +1,10 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs are chk.py best-symbol estimates)
 00dfb720  300  eastl::vector<0x38>::operator=: realloc/copy/uninit-copy path; cl register/order differs (known unsolvable from C++, cf. synth template eastl_vec_assign_trivial_div_stride)
-00dfb890   67  TypeB copy ctor (sub-vector construct form): complete; differs in sub-vector helper call scheduling
-00dfb8e0   60  uninitialized_copy of 0x44-byte TypeD: complete (first dword + TypeC copy + tail dword); call schedule differs
+00dfb8e0   62  uninitialized_copy of 0x44-byte TypeD: the destination is the pointer at arg1 (`*out = dest`, advanced by 0x44 per element) as retail does; retail additionally keeps `first`/`last` in their argument slots (reloads `mov eax,[esp+0x14]` each iteration) while cl keeps them in ebp/esi  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: replay clean; random runs UNSUPPORTED 18/400 valid (the original itself faults on the out/range pointers)]
 00dfb930   94  copy-assign range of TypeD: complete (cString=, two wstring assigns, tail dword); differs in inline assign shape
-00dfbb60   41  vector<0x44> destroy + header-checked free at +0x18: complete; loop/return shape differs
-00dfbba0  191  large-class destructor (four 0x44 vectors + buffer + wstring): complete; address/order schedule differs
 00dfbc80  101  uninitialized_copy of 0x34-byte TypeB: complete; differs by delegating to the TypeB copy ctor rather than inlining it
-00dfbd00   25  TypeB copy ctor (sub-vector assignment form): complete; near-miss, sub-vector helper call differs
 00dfc000  382  vector<0x24>::DoInsertValue: complete (inline element operator=, grow path); registers swapped (pv/pos) vs original
 00dfc170   93  copy-construct range of 0x34-byte TypeB: complete; sub-vector helper schedule differs
-00dfc1e0   51  allocate n TypeD + uninitialized_copy: complete; differs in uninit-copy call/return shape
+00dfc1e0   24  AllocCopyD is `__stdcall` (ret 0xc) and the copy uses the element count's argument slot as `out` (`*out = dest`, retail: `lea edx,[esp+0x18]` = &n); retail also passes `n` as a fifth (never read) stack slot (`add esp,0x14`), our 4-arg call cleans 0x10  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: replay clean; random runs UNSUPPORTED 0/400 valid (the original faults on every generated input)]
+00dfc240  470  Big::Update2: call conventions fixed (0xdda060 is `GetLinkCount(int)` thiscall on 0xdd9190's result, 0xdfa370/0xdf9fc0/0xdfa790 are thiscall on self, 0xe3e350 thiscall on 0xb3d410's result, 0xde7010 on `[0x16a1344]+0x3c`, 0xec4320 on `[[0x16c7aa4]+0x1c]`, 0x93a3a0 is a thiscall returning __int64 used as `(double)ticks * f > 0.5f`) and the 0x38-byte vcall descriptor is built with the cSPMatrix3 copy ctor 0x41cb40; retail's redundant default-then-assign store schedule differs  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: replay clean; WEAK 242 valid, 54.6% cov]
 00dfc500  143  Big::Check string filter loop: complete; differs in loop/register schedule

@@ -1,1 +1,5 @@
-# source  symbol  original VA  [flags override]
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00dfb5b0/s00dfb5b0.cpp  ?CopyCtorA@TypeB@@QAEPAU1@PBU1@@Z  00dfb890  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dfb5b0/s00dfb5b0.cpp  ?DestroyVec18@Big@@QAEXXZ  00dfbb60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dfb5b0/s00dfb5b0.cpp  ?Destroy@Huge@@QAEXXZ  00dfbba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dfb5b0/s00dfb5b0.cpp  ?CopyCtorB@TypeB@@QAEPAU1@PBU1@@Z  00dfbd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
