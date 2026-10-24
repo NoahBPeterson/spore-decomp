@@ -4,7 +4,7 @@
 00dfab20  250  tooltip/panel enable: complete (best-effort). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00dfaa40  65  eastl pod-array destructor loop; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (no mismatch, 31% cov).
 00dfaa90  n/a  eastl pod-array move-backwards; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (no mismatch, 25% cov).
-00dfae00  54  cString slice copy assignment; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest FAIL (5/5: our callee reads a bad pointer; cString operator= ABI).
+00dfae00  54  cString slice copy assignment; complete; the two eastl string assigns are thiscalls on the destination sub-objects (ecx=this+0x14 / this+0x2c) with the source begin/end as stack args, not cdecl calls taking the source pointers; the function returns this. equiv PASS: 338 valid, 100% coverage
 00dfb380  25  eastl vector<0x44> destructor; complete; original is __fastcall(ecx=this) not cdecl. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest UNSUPPORTED (register ABI). difftest WEAK after ecx fix (804 valid, 76.9% cov).
 00dfb430  13  thin wrapper (FUN_ab20(0); FUN_97e0()); complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest PASS (267 valid, 100% cov).
-00dfb450  17  thin wrapper (tail-jump); complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest FAIL (esp: callee arg cleanup).
+00dfb450  17  thin wrapper (tail-jump); complete; the retail takes no stack arg and tail-jumps to FUN_97e0, so the wrapper is declared void FUN_b450() (the old int arg left a stale ret 4 and esp +8 instead of +4). equiv PASS: 754 valid, 100% coverage

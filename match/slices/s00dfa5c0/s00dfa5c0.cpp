@@ -59,7 +59,7 @@ struct UI {
     void FUN_ab20(bool enable);  // 0xdfab20
     void FUN_aca0(int* pos);     // 0xdfaca0
     void FUN_ad50(int* pos);     // 0xdfad50
-    void FUN_ae00(void* other);  // 0xdfae00
+    UI*  FUN_ae00(void* other);  // 0xdfae00
     void FUN_ae50();             // 0xdfae50
     void FUN_ae90();             // 0xdfae90
     void FUN_af80();             // 0xdfaf80
@@ -69,7 +69,7 @@ struct UI {
     void FUN_b280(void* o);      // 0xdfb280
     void FUN_b3c0(void* o);      // 0xdfb3c0
     void FUN_b430(int a);        // 0xdfb430
-    void FUN_b450(int a);        // 0xdfb450
+    void FUN_b450();             // 0xdfb450
     void FUN_b470(int a);        // 0xdfb470
     void FUN_97e0();             // 0x00df97e0 (this file's callee)
     void FUN_9ad0();             // 0x00df9ad0
@@ -244,19 +244,25 @@ void UI::FUN_a790(char on)
     }
 }
 
-struct CStr { void Assign(void* o); };  // 0x006b5430 thiscall ret 4
+struct CStr {
+    void Assign(void* o);   // 0x006b5430 thiscall ret 4
+};
+struct WStrAssign {
+    void assign(void* b, void* e);   // 0x00423650 thiscall ret 8
+};
 
 // @ 0x00dfae00
-void UI::FUN_ae00(void* other)
+UI* UI::FUN_ae00(void* other)
 {
     char* o = (char*)other;
     ((CStr*)this)->Assign(other);
     if ((void*)(o + 0x14) != (void*)((char*)this + 0x14))
-        WString_Assign(*(void**)(o + 0x14), *(void**)(o + 0x18));
+        ((WStrAssign*)((char*)this + 0x14))->assign(*(void**)(o + 0x14), *(void**)(o + 0x18));
     *(int*)((char*)this + 0x24) = *(int*)(o + 0x24);
     *(int*)((char*)this + 0x28) = *(int*)(o + 0x28);
     if ((void*)(o + 0x2c) != (void*)((char*)this + 0x2c))
-        WString_Assign(*(void**)(o + 0x2c), *(void**)(o + 0x30));
+        ((WStrAssign*)((char*)this + 0x2c))->assign(*(void**)(o + 0x2c), *(void**)(o + 0x30));
+    return this;
 }
 
 // @ 0x00dfb430
@@ -268,9 +274,8 @@ void UI::FUN_b430(int a)
 }
 
 // @ 0x00dfb450
-void UI::FUN_b450(int a)
+void UI::FUN_b450()
 {
-    (void)a;
     FUN_ab20(0);
     FUN_97e0();
 }
