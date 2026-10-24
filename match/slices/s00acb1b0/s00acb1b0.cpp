@@ -14,8 +14,6 @@ void* __cdecl FUN_00f9b050(void* a, void* b, void* c);
 void  __cdecl FUN_00c50ad0(void* a, void* b, void* c);
 void* __cdecl FUN_00ac9740(void* a, void* b, void* c);
 void* __cdecl FUN_00ac89e0(void* a, void* b, void* c);
-void* __cdecl FUN_00acaa50(uint n, void* a, void* b);
-void  __cdecl FUN_00ac8930(void* a, void* b);
 void  __cdecl FUN_00ac94c0(void* a, void* b, void* c, void* d, void* e);
 void  __cdecl FUN_00ac9200(void* a);
 
@@ -39,6 +37,8 @@ struct VO {
     int*  FUN_00acbd90(int* other);
     int   FUN_00acbed0(int a2, int a3);
     void  FUN_00acbf30(int a2, uint a3, int a4);
+    void* FUN_00acaa50(uint n, void* a, void* b);
+    void  FUN_00ac8930(void* a, void* b);
 };
 
 // free (cdecl) functions
@@ -50,27 +50,24 @@ char FUN_00acbc10(int* obj, int p2, int p3);          // 00acbc10
 // @ 0x00acb490
 void* VO::FUN_00acb490(int* src) {
     int* p = (int*)this;
+    int tmp = (int)src;
     p[0] = 0x145a184;
     p[1] = src[1];
     p[2] = src[2];
     p[3] = src[3];
     p[4] = src[4];
     ((XC*)((uchar*)p + 0x14))->FUN_00b93c60((src[6] - src[5]) >> 2, (uchar*)src + 0x20);
-    int* tmp = 0;
-    FUN_00829110(&tmp, (void*)src[5], (void*)src[6], (void*)p[5], (void*)src);
-    p[6] = (int)tmp;
-    ((XC*)((uchar*)p + 0x28))->FUN_00b93c60((src[10] - src[9]) >> 2, (uchar*)src + 0x34);
-    tmp = 0;
-    FUN_00829110(&tmp, (void*)src[9], (void*)src[10], (void*)p[10], (void*)src);
-    p[0xb] = (int)tmp;
+    FUN_00829110(&tmp, (void*)src[5], (void*)src[6], (void*)p[5], (void*)tmp);
+    p[6] = tmp;
+    ((XC*)((uchar*)p + 0x28))->FUN_00b93c60((src[11] - src[10]) >> 2, (uchar*)src + 0x34);
+    FUN_00829110(&tmp, (void*)src[10], (void*)src[11], (void*)p[10], (void*)tmp);
+    p[0xb] = tmp;
     ((XC*)((uchar*)p + 0x3c))->FUN_00b93c60((src[0x10] - src[0xf]) >> 2, (uchar*)src + 0x48);
-    tmp = 0;
-    FUN_00829110(&tmp, (void*)src[0xf], (void*)src[0x10], (void*)p[0xf], (void*)src);
-    p[0x10] = (int)tmp;
+    FUN_00829110(&tmp, (void*)src[0xf], (void*)src[0x10], (void*)p[0xf], (void*)tmp);
+    p[0x10] = tmp;
     ((XC*)((uchar*)p + 0x50))->FUN_00b93c60((src[0x15] - src[0x14]) >> 2, (uchar*)src + 0x5c);
-    tmp = 0;
-    FUN_00829110(&tmp, (void*)src[0x14], (void*)src[0x15], (void*)p[0x14], (void*)src);
-    p[0x15] = (int)tmp;
+    FUN_00829110(&tmp, (void*)src[0x14], (void*)src[0x15], (void*)p[0x14], (void*)tmp);
+    p[0x15] = tmp;
     return p;
 }
 
@@ -172,10 +169,10 @@ int VO::FUN_00acbed0(int a2, int a3) {
     int* it = (int*)FUN_00ac9740((void*)a3, *(void**)((uchar*)p + 4), (void*)a2);
     int* end = *(int**)((uchar*)p + 4);
     for (; it < end; it += 3) {
-        void* o = (void*)*it;
-        ((void (__thiscall*)(void*, int))vc(o, 0))(o, 0);
+        void*** obj = (void***)it;
+        ((void (__thiscall*)(void*, int))((*obj)[0]))(obj, 0);
     }
-    int n = (a3 - a2) / 0xc;
+    int n = (a2 - a3) / 0xc;
     *(int*)((uchar*)p + 4) += n * 0xc;
     return a2;
 }

@@ -1,6 +1,6 @@
-00acb490  229  complete; 4-vector copy ctor, call schedule differs
+00acb490  250  FIXED 4-vector copy ctor: the 5th arg of FUN_00829110 is the running local (initially the source pointer, then each previous call's result), and the second vector's begin/end are src[10]/src[11] (0x28/0x2c); equiv WEAK (107 valid, 100% coverage, no mismatch); chk ~size 291 vs 289 (schedule)
 00acb680  71   complete; vector<0x14> insert, block-move schedule differs
 00acb7c0  42   complete; vector erase+release, argument order/register differs
 00acbb20  85   complete; 0x20-stride node range copy, register schedule differs
-00acbd90  246  complete; vector<0xc> assign, grow/overlap schedule differs
-00acbed0  33   complete; vector<0xc> erase, vcall/register schedule differs
+00acbd90  215  FIXED vector<0xc> assign: FUN_00acaa50 and FUN_00ac8930 are thiscall members of the vector owner (ecx = the owner), not cdecl helpers, so the grow and element-destroy calls now pass the right this; equiv WEAK (144 valid, 44.4% coverage, no mismatch); chk ~size 302 vs 318 (schedule)
+00acbed0  32   FIXED vector<0xc> erase: each element is destroyed through its own vtable (this = the element address, callee = element->vptr[0]); the size delta is (first - last) / 0xc (the original's negated-magic signed division), then end += delta; equiv WEAK (134 valid, 81.4% coverage, no mismatch); chk size 95 (schedule)
