@@ -6,3 +6,7 @@ slices/s00f46560/s00f46560.cpp  ?f_47410@@YAXH@Z  00f47410
 slices/s00f46560/s00f46560.cpp  ?f_474d0@@YADXZ  00f474d0
 slices/s00f46560/s00f46560.cpp  ?f_47550@@YAXXZ  00f47550
 slices/s00f46560/s00f46560.cpp  ?Run@CanvasProc@@QAEXXZ  00f47580
+slices/s00f46560/s00f46560.cpp  ?FUN_00f46a40@cOnlineTab@@QAE_NXZ  00f46a40
+slices/s00f46560/s00f46560.cpp  ?FUN_00f46c00@cOnlineTab@@QAEXXZ  00f46c00
+slices/s00f46560/s00f46560.cpp  ?FUN_00f47040@cScreen@@QAE_NXZ  00f47040
+slices/s00f46560/s00f46560.cpp  ?FUN_00f47120@cScreen@@QAEXXZ  00f47120
