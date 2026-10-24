@@ -1,0 +1,9 @@
+# complete behaviorally-equivalent source, not byte-exact (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+# difftest verdicts: PASS = equivalence harness verified it; WEAK = no mismatch seen but coverage
+# below threshold; UNSUPPORTED = harness could not run it (unresolved externals / no valid inputs).
+# FAIL = an observed mismatch (none in this slice).
+# Bounded gate: --budget 200000 --time-limit 60 --min-valid 1 --min-cov 0
+00cac360  cVehicle invalid-area notification -- PlanetModel refresh, steering position/goal distance, curve segment search, vtable[0xec]/[0xe4]/[0xe8] dispatch; x87 sqrt/SSE mix differs
+00cac740  nearest vehicle curve hand-off -- candidate scan by +0xd24/+0xb1c, CanOccupyTerrain, local curve copy + point append, closest-point erase, vtable[0xdc] install; sqrt/register scheduling differs (1173 vs 1169 bytes)
+00cacbe0  goal-arrival refresh -- FUN_00cac740 result gates c9f380 timer read + vtable[0xc4] and cAStar release on +0x108; shrink-wrapped ebx/edi saves and Vec3 copy differ
+00cacc60  community-editor model-key sync -- position read, NounManager notify, faction/model key table, manager resource probe, map insert, 3x14 key-table scan, city/vehicle Vec3 match loops, rbtree nuke; complete behavioral implementation, unresolved-input gate (nested map helpers fault)

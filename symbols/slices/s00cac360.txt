@@ -1,0 +1,22 @@
+# slice s00cac360 - retail cVehicle invalid-area notification, weapon-list refresh and
+# goal/curve plumbing (community-editor model-key sync).
+# Modelled types (retail member offsets):
+#   Vec3                     x/y/z @0x00/0x04/0x08
+#   CSteeringSub             vtable @0x00 (embedded at vehicle+0x34)
+#   CPropFlags               pad @0x00, flags @0x04
+#   CVehicle                 vtable @0x000, steering @0x034, prop ptr @0x0d0,
+#                            flags @0x2a4, weapon list @0x508, faction @0xb1c, model @0xb20,
+#                            pos @0xc3c, altitude @0xc48/@0xc4c, bool @0xd10, ptr @0xd24,
+#                            opaque sub-object @0x108
+#   CCurvePoint              pos @0x00, w @0x0c, u @0x10, byte @0x38 (0x3c bytes)
+#   CCurve                   begin/end/cap @0x00/0x04/0x08, start point @0x14, fields @0x50..0x70
+#   CGoal                    0x3c-byte goal copy (pos @0x00)
+#   GameDataList             pad @0x00, begin @0x04, end @0x08
+#   CModelMap                anchor @0x04, root @0x0c, fields @0x10/@0x14
+#   CGameObject              pad 0x00..0x6b, model map @0x6c
+#   CTreeNode                child @0x00, next @0x04
+00cac360  FUN_00cac360(px,py,pz,radius) -> void  # cdecl; PlanetModel refresh, per-vehicle goal/curve invalid-area notification (NOT byte-exact; see nonmatching.txt)
+00cac710  FUN_00cac710(v) -> void  # if !v->0xd10 && prop list && !(prop->flags & 0x40000): v->0xd10=1, ReadWeaponsFromPropList; byte-exact
+00cac740  FUN_00cac740(v,x,y,z,a,b) -> char  # nearest same-owner/faction vehicle curve hand-off (NOT byte-exact; see nonmatching.txt)
+00cacbe0  FUN_00cacbe0(v) -> void  # if v->flags&4 and FUN_00cac740(...): vtable[0xc4](c9f380(),0), aStar release on v+0x108 (NOT byte-exact; see nonmatching.txt)
+00cacc60  FUN_00cacc60(v) -> char  # community-editor model-key sync: position, noun notify, key table, map insert, key/position scans, rbtree nuke (NOT byte-exact; see nonmatching.txt)
