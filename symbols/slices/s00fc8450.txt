@@ -1,1 +1,23 @@
-00fc8660 ?Dump@EventLogger@movie@rw@@QAEXXZ  # EventLogger::Dump migrated from s00fc8450 (verbatim, slice spelling)
+00fc83b0 rw::movie::BufferedWriter::Flush  # unnamed in the PDB (called by every writer method with `mov ecx,esi`); flushes mBuffer[0..mPos) and advances mBase
+00fc8450 rw::movie::BufferedWriter::Seek  # coined name; thiscall ret 8 -- origin 1 = absolute (offset - mBase - mPos), 2 = from end (mEnd - mBase - mPos + offset), 0 = relative
+00fc84b0 rw::movie::BufferedWriter::Write  # coined name; memcpy loop over the free space, flush on a full buffer
+00fc8500 rw::movie::BufferedWriter::WriteFill  # PDB name; memset loop, same clamp/flush shape as Write
+00fc8550 rw::movie::BufferedWriter::Write16  # PDB name; flush if fewer than 2 bytes are free, then store a u16
+00fc8580 rw::movie::BufferedWriter::Write32  # PDB name; same with 4 bytes / u32
+00fc85b0 ValidateChunk  # coined name; cdecl :: ValidateChunk(header, size, type, tracker, cb, ctx, outLen) -> 0 fail / 1 continue / 2 stop
+00fc8620 IsMChunk  # coined name; unnamed static 'M' + ('V' or 'P') tag test, absorbed into 0x00fc85b0's symbol size
+00fc8640 IsSCChunk  # coined name; 'S','C' tag test
+00fc9050 RenderableStore::Destroy  # coined class and name; frees the mutex, the reference-counted object, the renderable slot array (each slot reset to -1) and the scratch buffer through the allocator
+00fc90e0 rw::movie::MovieDecoder::MovieDecoder  # PDB name; allocator + thread/semaphore/VideoRenderableManager construction
+00fc91f0 MovieDecoder::SetStreamTaps  # coined name; stores the audio/subtitle stream taps only while mState == STATE_CREATED (0)
+00fc9210 MovieDecoder::SetOverlayStreamTap  # coined name; stores the +0x20 stream tap under the same state guard
+00fc9220 rw::movie::MovieDecoder::VideoDecodeThreadFcn  # the real 230-byte thread body, absorbed into 0x00fc9210's symbol size
+011e073e memset  # cdecl
+011e0744 memcpy  # cdecl
+00922bf0 ThreadMemSize  # stubbed `mov eax,4 / ret`
+009227f0 SemaphoreMemSize  # stubbed `mov eax,0x10 / ret`
+00922c00 EA::Thread::ThreadFactory::ConstructThread  # cdecl, 1 arg
+009228c0 EA::Thread::MakeSemaphore  # cdecl, 1 arg
+00922130 EA::Thread::Mutex::~Mutex  # thiscall
+00fce560 rw::movie::VideoRenderableManager::VideoRenderableManager  # thiscall ret 4, takes the allocator
+00fce2c0 VideoRenderableManager::AcquireRenderable  # used by the thread function

@@ -1,223 +1,287 @@
-// Slice s00fc8450: rw::movie::EventLogger (RenderWare movie event logger).
-// Region flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc: the AsyncOp local gets no EH frame).
-#include "types.h"
+// Slice s00fc8450 -- rw::movie streaming helpers (Bink-style chunk writer / MovieDecoder setup).
+// The BufferedWriter methods append to a fixed buffer and flush it when full (0x00fc83b0), the
+// chunk validator walks {tag,len} records, and the rest is the MovieDecoder constructor plus two
+// stream-tap setters and the decoder resource teardown.
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.  Callees are masked relocations: declarations
+// only need the right calling convention and argument sizes.
+typedef unsigned int uint;
 
-namespace rw {
-namespace core {
-namespace filesys {
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int size);
+extern "C" void* __cdecl memset(void* dst, int value, unsigned int size);
 
-// rwcore/filesys/asyncop.h (b5-decomp layout, size 0x48).
-class AsyncOp
-{ public:
-    uint8_t mData[0x48];
+inline void* operator new(unsigned int, void* place) { return place; }   // placement new
 
-    AsyncOp();                                                          // 0x11e84f0
-    ~AsyncOp();                                                         // 0x11e8530
-    int32_t Open(const char* lpcPath, uint32_t luFlags, void* lpfnComplete,
-                 uint32_t luUserData, int32_t liPriority);            // 0x11e8a40
-    int32_t Write(void* lpStream, void* lpBuffer, uint64_t lu64Position, uint64_t lu64Count,
-                  void* lpfnComplete, uint32_t luUserData, int32_t liPriority); // 0x11e88a0
-    int32_t Close(void* lpStream, void* lpfnComplete, uint32_t luUserData,
-                  int32_t liPriority);                                  // 0x11e89e0
-    void*    GetResultHandle();                                         // 0x11e8770
-    uint64_t GetResultSize();                                           // 0x11e87a0
-    int32_t  GetStatus(const int32_t* lpbWantWait);                     // 0x11e8740
+// the retail build's min() keeps the left operand on ties (a <= b ? a : b), which is what makes
+// the clamp a short branch instead of a cmov
+#define SP_MIN(a, b) ((a) <= (b) ? (a) : (b))
+
+// ---------------------------------------------------------------------------------------------
+// allocator interface used by MovieDecoder (vtable +0x04 = Alloc, +0x0c = Free)
+// ---------------------------------------------------------------------------------------------
+struct ICoreAllocator {
+    virtual void  v00();
+    virtual void* Alloc(unsigned int size, const char* name, int flags, int align, void* extra); // +0x04
+    virtual void  v08();
+    virtual void  Free(void* ptr, int flags);                                                    // +0x0c
 };
 
-} // namespace filesys
-} // namespace core
+unsigned int ThreadMemSize();       // 0x00922bf0 (4)
+unsigned int SemaphoreMemSize();    // 0x009227f0 (0x10)
 
-namespace movie {
+namespace EA { namespace Thread {
+struct Mutex { ~Mutex(); };                                        // 0x00922130
+struct Semaphore;
+struct Thread;
+struct ThreadFactory { static Thread* ConstructThread(void* mem); }; // 0x00922c00
+Semaphore* MakeSemaphore(void* mem);                               // 0x009228c0
+} }
 
-class Event
-{
-public:
-    unsigned int mTag;      // +0x0
-    char*        mMessage;  // +0x4
+namespace rw { namespace movie {
+
+// destroyed through its first vtable slot (the deleting-destructor entry point)
+struct IRefCounted {
+    virtual void Destroy(int flags);                                // +0x00
 };
 
-struct Entry
-{
-    float  timeStamp;        // +0x00
-    Event* event;            // +0x04
-    int    eventContext;     // +0x08
-    float  timeStart;        // +0x0c
-    float  timeStop;         // +0x10
-    bool   isDurationEvent;  // +0x14
+struct BufferedWriter {
+    char           pad00[8];
+    unsigned char* mBuffer;                     // +0x08
+    int            mCapacity;                   // +0x0c
+    int            mPos;                        // +0x10
+    int            mBase;                       // +0x14
+    int            mEnd;                        // +0x18
+
+    void Flush();                                                     // 0x00fc83b0
+    void Seek(int offset, int origin);                                // 0x00fc8450
+    void Write(const void* data, int count);                          // 0x00fc84b0
+    void WriteFill(unsigned char value, int count);                   // 0x00fc8500
+    void Write16(unsigned short value);                               // 0x00fc8550
+    void Write32(unsigned int value);                                 // 0x00fc8580
 };
 
-class EventLogger
-{
-public:
-    void*         mAllocator;   // +0x00 EA::Allocator::ICoreAllocator*
-    void*         mStopwatch;   // +0x04 rw::core::timer::Stopwatch*
-    void*         mMutex;       // +0x08 EA::Thread::Mutex*
-    unsigned int  mMaxEntries;  // +0x0c
-    Entry*        mEntriesList; // +0x10
-    unsigned int  mEntryPos;    // +0x14
-    unsigned int  mMaxEvents;   // +0x18
-    unsigned int  mEventTag;    // +0x1c
-    Event**       mEventList;   // +0x20
-
-    void Dump();
-
-    bool IsDurationEvent(unsigned int tag)
-    {
-        for (unsigned int i = 0; i < mEntryPos; ++i)
-        {
-            if (mEntriesList[i].event->mTag == tag)
-                return mEntriesList[i].isDurationEvent;
-        }
-        return false;
-    }
+// {tag,len} reader accounting state
+struct ChunkTracker {
+    IRefCounted* mpRef;                         // +0x00  only counted once
+    unsigned int mLimit;                        // +0x04
+    unsigned int mTotal;                        // +0x08
 };
 
-} // namespace movie
-} // namespace rw
+struct VideoRenderableManager {
+    VideoRenderableManager(ICoreAllocator* allocator);                // 0x00fce560
+};
 
-extern "C" void   FUN_00c2e4e0(const char* fmt, ...);                         // debug printf
-extern "C" int    FUN_011ea790(char* buf, unsigned int n, const char* fmt, ...); // snprintf
-extern "C" size_t FUN_011e8c40(const char* s);                                // strlen
+// teardown object sitting right before the decoder constructor: allocator, one reference-counted
+// object, a mutex, a scratch buffer and the renderable slot array (each slot starts at -1)
+struct RenderableStore {
+    ICoreAllocator*     mAllocator;             // +0x00
+    IRefCounted*        mpObject;               // +0x04
+    EA::Thread::Mutex*  mMutex;                 // +0x08
+    char                pad0c[4];
+    void*               mpBuffer;               // +0x10
+    char                pad14[8];
+    unsigned int        mCount;                 // +0x1c
+    int**               mpArray;                // +0x20
 
-static const int32_t kWaitForCompletion = -1;  // 0x149184c
+    void Destroy();                                                  // 0x00fc9050
+};
 
-using rw::core::filesys::AsyncOp;
+struct MovieDecoder {
+    ICoreAllocator*            mAllocator;                        // +0x00
+    IRefCounted*               mVideoDecoder;                     // +0x04
+    EA::Thread::Mutex*         mMutex;                            // +0x08
+    IRefCounted*               mSubtitleDecoder;                  // +0x0c
+    void*                      mpRenderableBuffer;                // +0x10
+    void*                      mVideoStreamTapHandle;             // +0x14
+    void*                      mAudioStreamTapHandle;             // +0x18
+    void*                      mSubtitleStreamTapHandle;          // +0x1c
+    void*                      mOverlayStreamTapHandle;           // +0x20
+    EA::Thread::Thread*        mVideoDecodeThread;                // +0x24
+    void*                      mVideoDecodeThreadMem;             // +0x28
+    EA::Thread::Semaphore*     mEmptyVideoRenderablesSemaphore;   // +0x2c
+    void*                      mEmptyVideoRenderablesSemaphoreMem;// +0x30
+    VideoRenderableManager*    mVideoRenderableManager;           // +0x34
+    unsigned int               mNumVideoRenderables;              // +0x38
+    int                        mCurFrameNumber;                   // +0x3c
+    int                        mTotalFrames;                      // +0x40
+    void*                      mEventLogger;                      // +0x44
+    int                        mState;                            // +0x48
 
-// Echo to the debug console, then append the text to the log file.
-#define LOG_LINE(fmt, text)                                                       \
-    do {                                                                          \
-        FUN_00c2e4e0(fmt, text);                                                  \
-        op.Write(handle, (void*)(text), pos, FUN_011e8c40(text), 0, 0, 0);       \
-        pos += op.GetResultSize();                                                \
-    } while (0)
+    MovieDecoder(ICoreAllocator* allocator);                      // 0x00fc90e0
+    void SetStreamTaps(void* audio, void* subtitle);              // 0x00fc91f0
+    void SetOverlayStreamTap(void* tap);                          // 0x00fc9210
+};
 
-static const char kDashesNL[] =
-    "-------------------------------------------------------------------------\n";
-static const char kDashes[] =
-    "-------------------------------------------------------------------------";
-static const char kHeader[] = "EVENT LOGGER DUMP ----------------------------------";
-static const char kCapacity[] = "**Entries log capacity reached.  Increase number of entries**";
-
-// @ 0x00fc8660  rw::movie::EventLogger::Dump
-void rw::movie::EventLogger::Dump()
+// ---------------------------------------------------------------------------------------------
+// buffer writer
+// ---------------------------------------------------------------------------------------------
+// @ 0x00fc8450
+void BufferedWriter::Seek(int offset, int origin)
 {
-    AsyncOp op;
-    char buffer[256];
-
-    op.Open("EventLog.txt", 7, 0, 0, 0);
-    void* handle = op.GetResultHandle();
-
-    if (mEntryPos >= mMaxEntries)
-        FUN_00c2e4e0(kCapacity);
-
-    uint64_t pos = 0;
-
-    // Per-tag statistics.
-    for (unsigned int tag = 0; tag < mEventTag; ++tag)
-    {
-        if (IsDurationEvent(tag))
-        {
-            LOG_LINE("\n%s", kDashesNL);
-
-            FUN_011ea790(buffer, 0x100, "EventTag %d is a duration event\n", tag);
-            LOG_LINE("%s\n", buffer);
-
-            FUN_011ea790(buffer, 0x100, ",%s \n", mEventList[tag]->mMessage);
-            LOG_LINE("%s", buffer);
-
-            float minDur = 1000000.0f;
-            float maxDur = -1000000.0f;
-            float total = 0.0f;
-            int   count = 0;
-            for (unsigned int j = 0; j < mEntryPos; ++j)
-            {
-                if (mEntriesList[j].event->mTag == tag)
-                {
-                    float d = mEntriesList[j].timeStop - mEntriesList[j].timeStart;
-                    total += d;
-                    if (d < minDur)
-                        minDur = d;
-                    if (d > maxDur)
-                        maxDur = d;
-                    ++count;
-                }
-            }
-
-            FUN_011ea790(buffer, 0x100,
-                         "NumberEvents: %5d, TotalDuration: %12.4f ms\nAve: %12.4f ms = %6.2f Hz\n"
-                         "Min: %12.4f ms = %6.2f Hz\nMax: %12.4f ms = %6.2f Hz\n",
-                         count, (double)total, (double)(total / count),
-                         (double)(1000.0f / (total / count)), (double)minDur,
-                         (double)(1000.0f / minDur), (double)maxDur, (double)(1000.0f / maxDur));
-            LOG_LINE("%s", buffer);
-
-            LOG_LINE("%s", kDashesNL);
-        }
-        else
-        {
-            FUN_011ea790(buffer, 0x100, "EventTag %d is not a duration event \n", tag);
-            LOG_LINE("%s", buffer);
-        }
+    int delta = offset;
+    if (origin == 1) {
+        delta = offset - mBase - mPos;
+    } else if (origin == 2) {
+        delta = mEnd - mBase - mPos + offset;
     }
-
-    LOG_LINE("%s", kHeader);
-    LOG_LINE("%s", "Time (ms): \n");
-
-    // Chronological list.
-    for (unsigned int i = 0; i < mEntryPos; ++i)
-    {
-        if (mEntriesList[i].isDurationEvent)
-            FUN_011ea790(buffer, 0x100, "<%12.4f : %12.4f> = %12.4f: %s%d\n",
-                         (double)mEntriesList[i].timeStart, (double)mEntriesList[i].timeStop,
-                         (double)(mEntriesList[i].timeStop - mEntriesList[i].timeStart),
-                         mEventList[mEntriesList[i].event->mTag]->mMessage,
-                         mEntriesList[i].eventContext);
-        else
-            FUN_011ea790(buffer, 0x100, "%12.4f: %s%d\n", (double)mEntriesList[i].timeStamp,
-                         mEventList[mEntriesList[i].event->mTag]->mMessage,
-                         mEntriesList[i].eventContext);
-        LOG_LINE("%s", buffer);
+    if (delta == 0)
+        return;
+    int newPos = mPos + delta;
+    if (newPos > 0 && newPos < mCapacity && mBase == mEnd) {
+        mPos = newPos;
+        return;
     }
-
-    if (mEntryPos >= mMaxEntries)
-        LOG_LINE("%s", kCapacity);
-
-    LOG_LINE("%s\n", kHeader);
-
-    // Per-tag entry lists.
-    for (unsigned int tag = 0; tag < mEventTag; ++tag)
-    {
-        LOG_LINE("\n%s", kDashes);
-
-        FUN_011ea790(buffer, 0x100, ",%s \n", mEventList[tag]->mMessage);
-        LOG_LINE("%s", buffer);
-
-        for (unsigned int i = 0; i < mEntryPos; ++i)
-        {
-            if (mEntriesList[i].event->mTag == tag)
-            {
-                if (mEntriesList[i].isDurationEvent)
-                {
-                    FUN_011ea790(buffer, 0x100, "%04d, %12.4f -> %12.4f = %12.4f,\n",
-                                 mEntriesList[i].eventContext, (double)mEntriesList[i].timeStart,
-                                 (double)mEntriesList[i].timeStop,
-                                 (double)(mEntriesList[i].timeStop - mEntriesList[i].timeStart));
-                    FUN_00c2e4e0("%s", buffer);
-                }
-                else
-                {
-                    FUN_011ea790(buffer, 0x100, "%04d, %12.4f,\n", mEntriesList[i].eventContext,
-                                 (double)mEntriesList[i].timeStamp);
-                    FUN_00c2e4e0("%s", buffer);
-                }
-                op.Write(handle, buffer, pos, FUN_011e8c40(buffer), 0, 0, 0);
-                pos += op.GetResultSize();
-            }
-        }
-
-        LOG_LINE("%s", kDashes);
-    }
-
-    op.Close(handle, 0, 0, 0);
-    op.GetStatus(&kWaitForCompletion);
+    Flush();
+    mBase += delta;
 }
+
+// @ 0x00fc84b0
+void BufferedWriter::Write(const void* data, int count)
+{
+    while (count > 0) {
+        int n = SP_MIN(mCapacity - mPos, count);
+        memcpy(mBuffer + mPos, data, n);
+        mPos += n;
+        if (mPos == mCapacity)
+            Flush();
+        count -= n;
+        data = (const char*)data + n;
+    }
+}
+
+// @ 0x00fc8500
+void BufferedWriter::WriteFill(unsigned char value, int count)
+{
+    while (count > 0) {
+        int n = SP_MIN(mCapacity - mPos, count);
+        memset(mBuffer + mPos, value, n);
+        mPos += n;
+        if (mPos == mCapacity)
+            Flush();
+        count -= n;
+    }
+}
+
+// @ 0x00fc8550
+void BufferedWriter::Write16(unsigned short value)
+{
+    if (mCapacity - mPos < 2)
+        Flush();
+    *(unsigned short*)(mBuffer + mPos) = value;
+    mPos += 2;
+}
+
+// @ 0x00fc8580
+void BufferedWriter::Write32(unsigned int value)
+{
+    if (mCapacity - mPos < 4)
+        Flush();
+    *(unsigned int*)(mBuffer + mPos) = value;
+    mPos += 4;
+}
+
+// ---------------------------------------------------------------------------------------------
+// chunk validation
+// ---------------------------------------------------------------------------------------------
+// @ 0x00fc85b0
+int ValidateChunk(const int* header, unsigned int size, unsigned int type, ChunkTracker* tracker,
+                  bool (*callback)(const int*, void*), void* context, unsigned int* outLength)
+{
+    if (size < 8)
+        return 0;
+    if (callback != 0 && !callback(header, context))
+        return 0;
+    unsigned int length = (unsigned int)header[1];
+    if (size < length)
+        return 0;
+    *outLength = length;
+    if (tracker != 0) {
+        tracker->mTotal += length;
+        if (tracker->mTotal >= tracker->mLimit)
+            return 2;
+        if (tracker->mpRef != 0 && *header == *(const int*)tracker->mpRef)
+            return 2;
+    }
+    return 1;
+}
+
+// @ 0x00fc8640
+bool IsSCChunk(const char* data)
+{
+    if (data[0] == 'S' && data[1] == 'C')
+        return true;
+    return false;
+}
+
+// ---------------------------------------------------------------------------------------------
+// decoder lifetime
+// ---------------------------------------------------------------------------------------------
+// @ 0x00fc9050
+void RenderableStore::Destroy()
+{
+    if (mMutex != 0) {
+        mMutex->~Mutex();
+        mAllocator->Free(mMutex, 0);
+        mMutex = 0;
+    }
+    if (mpObject != 0) {
+        mpObject->Destroy(0);
+        mAllocator->Free(mpObject, 0);
+        mpObject = 0;
+    }
+    if (mpArray != 0) {
+        for (unsigned int i = 0; i < mCount; i++)
+            *(int*)mpArray[i] = -1;
+        mAllocator->Free(mpArray, 0);
+        mpArray = 0;
+    }
+    if (mpBuffer != 0) {
+        mAllocator->Free(mpBuffer, 0);
+        mpBuffer = 0;
+    }
+}
+
+// @ 0x00fc90e0
+MovieDecoder::MovieDecoder(ICoreAllocator* allocator)
+{
+    mAllocator = allocator;
+    mVideoDecoder = 0;
+    mMutex = 0;
+    mSubtitleDecoder = 0;
+    mpRenderableBuffer = 0;
+    mVideoStreamTapHandle = 0;
+    mAudioStreamTapHandle = 0;
+    mOverlayStreamTapHandle = 0;
+    mVideoDecodeThreadMem = mAllocator->Alloc(ThreadMemSize(), "mVideoDecodeThreadMem", 1, 0x10, 0);
+    mVideoDecodeThread = EA::Thread::ThreadFactory::ConstructThread(mVideoDecodeThreadMem);
+    mEmptyVideoRenderablesSemaphoreMem =
+        mAllocator->Alloc(SemaphoreMemSize(), "mEmptyVideoRenderablesSemaphoreMem", 1, 0x10, 0);
+    mEmptyVideoRenderablesSemaphore = EA::Thread::MakeSemaphore(mEmptyVideoRenderablesSemaphoreMem);
+    mVideoRenderableManager =
+        (VideoRenderableManager*)mAllocator->Alloc(0x50, "VideoRenderableManager object", 1, 4, 0);
+    mVideoRenderableManager = mVideoRenderableManager
+        ? new (mVideoRenderableManager) VideoRenderableManager(mAllocator)
+        : 0;
+    mNumVideoRenderables = 0;
+    mCurFrameNumber = 0;
+    mTotalFrames = 0;
+    mEventLogger = 0;
+    mState = 0;
+}
+
+// @ 0x00fc91f0
+void MovieDecoder::SetStreamTaps(void* audio, void* subtitle)
+{
+    if (mState == 0) {
+        mAudioStreamTapHandle = audio;
+        mSubtitleStreamTapHandle = subtitle;
+    }
+}
+
+// @ 0x00fc9210
+void MovieDecoder::SetOverlayStreamTap(void* tap)
+{
+    if (mState == 0)
+        mOverlayStreamTapHandle = tap;
+}
+
+} }
