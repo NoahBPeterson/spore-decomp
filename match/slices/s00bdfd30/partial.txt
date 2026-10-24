@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 # s00bdfd30: no partial/approximate function. 2 targets are byte-exact (see manifest.txt); the other
 # 11 gold7 targets plus the pre-existing 00be0020 (cl2) are complete but not byte-exact and are recorded
-# in nonmatching.txt. Closest miss is 00be0c80 at 16 diff bytes (register assignment only).
+# in nonmatching.txt. Closest miss is 00be0730 at 9 diff bytes (tail-call shape only).

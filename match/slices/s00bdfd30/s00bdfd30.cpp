@@ -349,7 +349,16 @@ void cAnalysisOwner::AddAnalysis(const AnalysisInfo& a, long long delta)
 }
 
 // --- RefVec2 (vector of 0xc-byte ref-counted elements) ---------------------
-struct RefVecElem { void* mpVtbl; int pad; int pad2; };   // 0xc
+struct AutoRefObj {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
+    virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24();
+    virtual void v25();                                   // +0x64
+};
+
+struct RefVecElem { AutoRefObj* mpA; AutoRefObj* mpB; int pad; };   // 0xc (only +0,+4 written here)
 struct RefVec2 {
     RefVecElem* mpBegin; RefVecElem* mpEnd; RefVecElem* mpCap;
     void insert(RefVecElem* pos, const RefVecElem& v);   // 0x00bdf480
@@ -359,34 +368,49 @@ struct RefVec2 {
 // @ 0x00be0730
 void RefVec2::AddDefault()
 {
+    if (mpEnd < mpCap) {
+        RefVecElem* p = mpEnd;
+        mpEnd = mpEnd + 1;
+        if (p) {
+            p->mpA = 0;
+            p->mpB = 0;
+        }
+        return;
+    }
     RefVecElem v;
-    v.mpVtbl = 0;
-    v.pad = 0;
-    v.pad2 = 0;
+    v.mpA = 0;
+    v.mpB = 0;
     insert(mpEnd, v);
+    if (v.mpB)
+        v.mpB->v01();
+    if (!v.mpA)
+        return;
+    return v.mpA->v01();
 }
 
 // --- std::map<int,...>::GetOrInsert ----------------------------------------
 struct MapNode {
     MapNode* mpLeft;      // +0
     MapNode* mpRight;     // +4
-    char pad8[8];         // +8
+    MapNode* mpParent;    // +8   (header sentinel: the root lives here)
+    int mPad;             // +0xc
     int mKey;             // +0x10
     char mVal[0x14];      // +0x14
 };
 
 struct IntMap {
-    char pad0[4];
-    MapNode mHead;                                    // +4  (sentinel: left=root)
+    int mPad0;                                        // +0
+    MapNode mHead;                                    // +4
     int* GetOrInsert(const int* key);                 // 0x00be0790
+    void* DoInsert(int** out, void* where, int* kv, int extra);  // 0x00de6a60
 };
 
 // @ 0x00be0790
 int* IntMap::GetOrInsert(const int* key)
 {
     MapNode* header = &mHead;                         // +4
-    MapNode* node = mHead.mpLeft;                     // +0xc
     MapNode* lb = header;
+    MapNode* node = mHead.mpParent;                   // root at +0xc
     while (node) {
         if (node->mKey < *key) {
             node = node->mpLeft;
@@ -396,9 +420,13 @@ int* IntMap::GetOrInsert(const int* key)
         }
     }
     if (lb != header && *key <= lb->mKey)
-        return (int*)((char*)lb + 0x14);
-    int inserted = InsertNode(header, lb, *key);      // 0x00de6a60
-    return (int*)((char*)inserted + 0x14);
+        return (int*)(lb->mVal);
+    int kv[2];
+    kv[0] = *key;
+    kv[1] = 0;
+    int* out = (int*)((unsigned)key & 0xffffff00u);
+    DoInsert(&out, lb, kv, (int)(intptr_t)out);       // 0x00de6a60
+    return (int*)((char*)out + 0x14);
 }
 
 // --- cVarListSerializer -----------------------------------------------------
@@ -437,9 +465,9 @@ bool RemoveItem(PtrVec2* vec, int** key)
             if (it + 1 < vec->mpEnd)
                 MoveOverlap(it + 1, vec->mpEnd, it);        // 0x00ae6880
             vec->mpEnd = vec->mpEnd - 1;
-            int* e = *vec->mpEnd;
+            AutoRefObj* e = (AutoRefObj*)*vec->mpEnd;
             if (e)
-                (*(void (**)(void))(*e + 0x64))();
+                e->v25();
             return true;
         }
     }
@@ -450,7 +478,7 @@ bool RemoveItem(PtrVec2* vec, int** key)
 struct FloatVec {                                    // 0x14 bytes: 3 pointers + allocator state
     float* mpBegin; float* mpEnd; float* mpCap;
     int mAllocState[2];
-    void reserve(unsigned n);                         // 0x004aa350
+    void DoAllocate(unsigned n, const int* alloc);    // 0x004aa350 (sets begin/end/cap)
     FloatVec& operator=(const FloatVec& o);           // 0x0050d4e0
 };
 struct InfoRec {                                     // 0x20 bytes
@@ -462,9 +490,10 @@ struct InfoRec {                                     // 0x20 bytes
 // @ 0x00be0d70
 InfoRec::InfoRec(const InfoRec& o) : pos(o.pos)
 {
-    v.reserve((unsigned)(o.v.mpEnd - o.v.mpBegin));
-    memcpy(v.mpBegin, o.v.mpBegin, (char*)o.v.mpEnd - (char*)o.v.mpBegin);
-    v.mpEnd = v.mpBegin + (o.v.mpEnd - o.v.mpBegin);
+    unsigned n = (unsigned)(o.v.mpEnd - o.v.mpBegin);
+    v.DoAllocate(n, o.v.mAllocState);                 // 0x004aa350
+    memcpy(v.mpBegin, o.v.mpBegin, n * 4);
+    v.mpEnd = v.mpBegin + n;
 }
 
 // @ 0x00be0dd0
