@@ -85,6 +85,31 @@ struct IUILayoutObj {
     virtual void Init(const void* key, bool, int) = 0;
     virtual void Ctor();                               // 0x00810000
 };
+// Resource objects released by Shutdown: [0]=Release(int), [4]=Close(), [8]=Stop().
+struct IMovieResource {
+    virtual void Release(bool b) = 0;                  // +0x00
+    virtual void Close() = 0;                          // +0x04
+    virtual void Stop() = 0;                           // +0x08
+};
+// UI layout node whose child has a direct non-virtual Shutdown(uint) method.
+struct UILayoutChild {
+    void Shutdown(uint32_t);                           // 0x00811ad0 (thiscall)
+};
+struct UILayoutBox {
+    virtual void v00() = 0;
+    virtual void v04() = 0;
+    virtual void v08() = 0;
+    virtual void v0c() = 0;
+    void* mField4;               // +0x04
+    void* mField8;               // +0x08
+    void* mChild;                // +0x0c
+};
+// A packed dword at +0x324 whose second byte is a flag.
+struct Field324 {
+    uint8_t mPad324;             // +0x324
+    bool    mField325;           // +0x325
+    uint8_t mPad326[2];          // +0x326
+};
 struct IWindowCtl {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
     virtual void v0c() = 0; virtual void v10() = 0; virtual void v14() = 0;
@@ -96,6 +121,13 @@ struct IWindowCtl {
 };
 struct EAMutex {
     uint32_t mData[0xc];
+    void Lock(void* tag);                              // 0x009221b0 (thiscall)
+    void Unlock();                                     // 0x00922270 (thiscall)
+    void Construct(void* params, bool b);              // 0x009222a0 (thiscall)
+};
+struct EAFileStream {
+    uint8_t mData[0x228];
+    void Construct(const char* path);                  // 0x00931da0 (thiscall)
 };
 void EAMutex_ctor(void* p, int, int);              // 0x009222a0
 void EAMutex_dtor(void* p);                        // 0x00922130
@@ -143,6 +175,7 @@ public:
     float mField60;              // +0x60
     void* mField64;              // +0x64
     void* mField68;              // +0x68
+    uint32_t mField6c;           // +0x6c (draw-thread lock word)
     EAMutex mRecordMutex;        // +0x70 (constructor uses +0x70)
     bool mRecording;             // +0xa0
     char mPadA1[3];
@@ -160,7 +193,8 @@ public:
     bool mExcludeUI;             // +0xcd
     bool mFieldCe;               // +0xce
     char mPadCf;
-    char mRecordStream[0x228];   // +0xd0
+    EAFileStream mRecordStream;  // +0xd0
+    int mField2f8;               // +0x2f8 (record-frame counter)
     int mField2fc;               // +0x2fc
     int mCapturedFrames;         // +0x300
     int mField304;               // +0x304
@@ -171,14 +205,14 @@ public:
     void* mLetterbox;            // +0x318
     void* mPacketList;           // +0x31c
     void* mPacketList2;          // +0x320
-    char mPad324[4];
+    Field324 mField324;          // +0x324
     bool mField328;              // +0x328
     char mPad329[3];
     bool mField32c;              // +0x32c
     bool mField32d;              // +0x32d
 
     void DrawLayer(int, int, int, int);              // 0x00fd7260
-    char OnMovieMsg(int msg, int, int);              // 0x00fd74f0
+    char OnMovieMsg(int msg, int);                   // 0x00fd74f0
     bool MovieIsPlaying();                           // 0x00fd75a0
     char PauseMovie2();                              // 0x00fd7610
     int RecordFrames(int nFrames);                   // 0x00fd7660
@@ -420,23 +454,28 @@ void cMovieSystem::DrawLayer(int, int, int, int arg3)
 }
 
 // @ 0x00fd74f0
-char cMovieSystem::OnMovieMsg(int msg, int, int)
+char cMovieSystem::OnMovieMsg(int msg, int)
 {
-    char* p = (char*)this;
-    MoviePlayer* pl = *(MoviePlayer**)(p + 0x34);
-    if (msg == 0x1ee1008 || msg == 0x1ee100f || msg == 0x44edd9a) {
-        if (pl != 0 && !*(bool*)(p + 0x325)) {
+    switch ((unsigned)msg) {
+    case 0x1ee1008:
+    case 0x1ee100f:
+    case 0x44edd9a: {
+        MoviePlayer* pl = (MoviePlayer*)mField2c;
+        if (pl != 0 && !mField324.mField325) {
             pl->Play();
-            *(bool*)(p + 0x325) = 1;
+            mField324.mField325 = 1;
         }
         return 1;
     }
-    if (msg == 0x1ee100e || msg == 0x44edd9c) {
-        if (pl != 0 && *(bool*)(p + 0x325)) {
+    case 0x1ee100e:
+    case 0x44edd9c: {
+        MoviePlayer* pl = (MoviePlayer*)mField2c;
+        if (pl != 0 && mField324.mField325) {
             pl->Stop();
-            *(bool*)(p + 0x325) = 0;
+            mField324.mField325 = 0;
         }
         return 1;
+    }
     }
     return 0;
 }
@@ -473,30 +512,29 @@ char cMovieSystem::PauseMovie2()
 // @ 0x00fd7660
 int cMovieSystem::RecordFrames(int nFrames)
 {
-    char* p = (char*)this;
-    EAMutex* mx = (EAMutex*)(p + 0x70);
-    EAMutex_Lock(mx, g_pMutexTag);
-    if (*(int*)(p + 0x2fc) == 0) {
-        EAMutex_Unlock(mx);
+    EAMutex* mx = &mRecordMutex;
+    mx->Lock((void*)0x1493900);
+    if (mField2fc == 0) {
+        mx->Unlock();
         return 0;
     }
     BlitArgs args;
     args.a = 3;
-    args.b = *(int*)(p + 0xb8);
-    args.c = *(int*)(p + 0xbc);
-    args.d = *(int*)(p + 0x30c);
-    float quality = *(float*)(p + 0xc0);
+    args.b = mHeight;
+    args.c = *(int*)&mFPS;
+    args.d = (int)(intptr_t)mField30c;
+    float quality = mFieldC0;
     if (quality < (float)nFrames)
-        nFrames = (int)quality;
+        nFrames = _mm_cvtss_si32(_mm_set_ss(quality));
     int count = nFrames;
     if (nFrames > 0) {
         do {
-            ((IVideoOps*)*(void**)(p + 0xb4))->Blit2(args);
-            ++*(int*)(p + 0x300);
+            ((IVideoOps*)mWidth)->Blit2(args);
+            ++mCapturedFrames;
         } while (--nFrames != 0);
     }
-    *(int*)(p + 0x2fc) = 0;
-    EAMutex_Unlock(mx);
+    mField2fc = 0;
+    mx->Unlock();
     return count;
 }
 
@@ -534,31 +572,63 @@ void cMovieLetterbox::Init()
 // @ 0x00fd7800
 bool cMovieSystem::Shutdown()
 {
-    char* p = (char*)this;
-    int self2 = (p != 0) ? (int)(p + 8) : 0;
-    SP_MessageServer()->PostMsg2(self2, 0x1ee1008, -0x270f);
-    SP_MessageServer()->PostMsg2(self2, 0x1ee100e, -0x270f);
-    SP_MessageServer()->PostMsg2(self2, 0x1ee100f, -0x270f);
-    SP_MessageServer()->PostMsg2(self2, 0x44edd9a, -0x270f);
-    SP_MessageServer()->PostMsg2(self2, 0x44edd9c, -0x270f);
-    void* lb = *(void**)(p + 0x318);
+    void* self2 = (void*)((char*)this + 8);
+    SP_MessageServer()->PostMsg2((int)self2, 0x1ee1008, -0x270f);
+    SP_MessageServer()->PostMsg2((int)self2, 0x1ee100e, -0x270f);
+    SP_MessageServer()->PostMsg2((int)self2, 0x1ee100f, -0x270f);
+    SP_MessageServer()->PostMsg2((int)self2, 0x44edd9a, -0x270f);
+    SP_MessageServer()->PostMsg2((int)self2, 0x44edd9c, -0x270f);
+    UILayoutBox* lb = (UILayoutBox*)mLetterbox;
     if (lb != 0) {
-        void* child = *(void**)((char*)lb + 0xc);
-        if (child != 0) {
-            ((IUILayoutObj*)child)->v0c();
-            child = *(void**)((char*)lb + 0xc);
-            if (child != 0) {
-                *(void**)((char*)lb + 0xc) = 0;
-                ((IUILayoutObj*)child)->v08_Release0();
-            }
+        UILayoutChild* child = (UILayoutChild*)lb->mChild;
+        if (child != 0)
+            child->Shutdown(1);
+        IMovieResource* child2 = (IMovieResource*)lb->mChild;
+        if (child2 != 0) {
+            lb->mChild = 0;
+            child2->Stop();
         }
-        void* lb2 = *(void**)(p + 0x318);
+        IMovieResource* lb2 = (IMovieResource*)mLetterbox;
         if (lb2 != 0) {
-            *(void**)(p + 0x318) = 0;
-            ((IUILayoutObj*)lb2)->v04_Release1(1);
+            mLetterbox = 0;
+            lb2->Close();
         }
     }
     SP_CheatManager()->RunCheat("movie");
+    ((IWindowCtl*)this)->v20();
+    ((IWindowCtl*)this)->v38();
+    IAudioSystem* au = EA_Audio_GetSystemAT();
+    if (au != 0)
+        au->v60();
+    if (mVideoDecoder != 0) {
+        ((IMovieResource*)mVideoDecoder)->Release(true);
+        mVideoDecoder = 0;
+        if (mVideoOps != 0)
+            ((IMovieResource*)mVideoOps)->Release(true);
+        mVideoOps = 0;
+        if (mAudioDecoder != 0)
+            ((IMovieResource*)mAudioDecoder)->Release(true);
+        mAudioDecoder = 0;
+    }
+    if (mAudioRenderer != 0) {
+        ((IMovieResource*)mAudioRenderer)->Release(true);
+        mAudioRenderer = 0;
+        if (mMaterials[0] != 0)
+            ((IMovieResource*)mMaterials[0])->Release(true);
+        mMaterials[0] = 0;
+    }
+    if (mField64 != 0) {
+        ((IMovieResource*)mField64)->Stop();
+        if (mField64 != 0)
+            ((IMovieResource*)mField64)->Release(true);
+        mField64 = 0;
+    }
+    if (mField68 != 0) {
+        ((IMovieResource*)mField68)->Stop();
+        if (mField68 != 0)
+            ((IMovieResource*)mField68)->Release(true);
+        mField68 = 0;
+    }
     return true;
 }
 
@@ -613,7 +683,7 @@ cMovieSystem::cMovieSystem()
     *(float*)(p + 0x60) = 0.0f;
     *(void**)(p + 0x64) = 0;
     *(void**)(p + 0x68) = 0;
-    EAMutex_ctor(p + 0x70, 0, 1);
+    mRecordMutex.Construct(0, true);
     *(bool*)(p + 0xa0) = false;
     *(bool*)(p + 0xa1) = true;
     *(void**)(p + 0xa4) = (void*)0x1667bac;
@@ -628,7 +698,7 @@ cMovieSystem::cMovieSystem()
     *(bool*)(p + 0xcc) = true;
     *(bool*)(p + 0xcd) = false;
     *(bool*)(p + 0xce) = true;
-    FileStream_ctor(p + 0xd0, 0);
+    mRecordStream.Construct(0);
     *(int*)(p + 0x2fc) = 0;
     *(int*)(p + 0x300) = 0;
     *(int*)(p + 0x304) = -1;

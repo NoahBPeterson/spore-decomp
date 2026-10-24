@@ -1,12 +1,12 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
 00fd71e0  82  no symbol of similar size; 5-arg cdecl, switch mapping + two vcalls
-00fd74f0  90  message-driven movie play/stop; class/offset uncertainty
+00fd74f0  90  message-driven movie play/stop; class/offset uncertainty [equiv: PASS]
 00fd75a0  89  frame-count vs elapsed-time check; register/rounding
-00fd7660  162  RecordFrames loop
+00fd7660  162  RecordFrames loop [equiv: PASS]
 00fd7750  116  cMovieLetterbox::Init refcount assignment + layout Init
-00fd7800  441  Shutdown: 5 message posts + layout release
+00fd7800  441  Shutdown: 5 message posts + layout release [equiv: PASS]
 00fd79e0  124  StopMovie
 00fd7ab0  5  cContentValidationSummarizer Init returns this in eax (caller feeds AutoRefCount::operator=); base vtable store + zero-store scheduling differ
-00fd7b30  297  cMovieSystem constructor
+00fd7b30  297  cMovieSystem constructor [equiv: PASS]
 00fd7cd0  128  cMovieSystem destructor
 00fd7d80  111  cMovieSystem record/update tick (StopRecordingMovie): complete; compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast; frame float lives in xmm1 (orig xmm0) and floor-by-cvtss2si is asm-block + ternary instead of the original's cmov sequence [equiv: PASS]
