@@ -12,7 +12,7 @@ typedef int  (__thiscall *FN0_i)(void*);
 typedef void (__thiscall *FN1_i)(void*, int);
 typedef void (__thiscall *FN2_ii)(void*, int, int);
 
-void* __cdecl FUN_00ff3f00(void*);
+void* __fastcall FUN_00ff3f00(void*);
 void* __cdecl FUN_00b3d300();
 void* __cdecl FUN_00c680d0(void*, int);
 void* __cdecl FUN_00c654e0(void*, float);
@@ -382,13 +382,16 @@ struct cSurfacePoint {
 // @ 0x00f001b0
 void* __cdecl FUN_00f001b0(int a, void* b)
 {
-    char* mgr = (char*)*(void**)((char*)gSimulator + 0x74);
-    if (a == -2)
-        return FUN_00ff3f00(mgr);
     // The original keeps its element pointer in ecx and restores ecx from the 4-byte scratch slot
     // it reserves at entry (push ecx / pop ecx; LTCG callers may keep a live value there and the
-    // gate requires it untouched: docs/codegen.md 11.3.2).  Save and restore ours the same way.
+    // gate requires it untouched: docs/codegen.md 11.3.2).  Save and restore ours the same way,
+    // before anything (notably the manager load) can take ecx.
     __asm { push ecx }
+    char* mgr = (char*)*(void**)((char*)gSimulator + 0x74);
+    if (a == -2) {
+        __asm { add esp, 4 }
+        return FUN_00ff3f00(mgr);
+    }
     char* base = *(char**)(mgr + 0x10);
     const float* pos = (const float*)b;
     float best = g_0148b6e0;
