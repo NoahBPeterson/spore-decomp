@@ -569,17 +569,17 @@ char cSPUIFeedListHandler::Msg(unsigned msg, int* data) {
 }
 
 // @ 0x00663b80
-char FUN_00663b80(int a, int b) {
-    if (!a || !b) return 0;
+bool __stdcall FUN_00663b80(int a, int b) {
+    if (!a || !b) return false;
     int x = *(int*)(a + 0xc4);
     int y = *(int*)(b + 0xc4);
-    if (x != y) return (char)(x < y);
+    if (x != y) return x < y;
     const wchar_t* sa = *(const wchar_t**)(a + 0x18);
     const wchar_t* sb = *(const wchar_t**)(b + 0x18);
     if (sa && sb) {
-        if (_wcsicmp(sa, sb) < 0) return 1;
+        if (_wcsicmp(sa, sb) < 0) return true;
     }
-    return 0;
+    return false;
 }
 // --- equivalence checker address annotations
 
