@@ -5,7 +5,7 @@
 00ebbcd0  48  complete node copy-construct (__thiscall, dst in ECX) modelled as WpStub::cpy. The two vtable destroy calls are now real virtual calls, so the fake-call `this` (ECX) matches. difftest PASS (371 valid, 100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ebbf60  42  complete rbtree clear; RBTreeIncrement/DoNukeSubtree call shapes differ. difftest UNSUPPORTED (RBTreeIncrement unresolved). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ebc120  44  complete structure init; returns `this` in EAX (the caller at 0x00ef22bc reads it), so the declaration now returns int*. difftest PASS (400 valid, 100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ebb4c0  522  complete: advance one waypoint sample (radius/water/surface clamp); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv FAIL (first mismatch: memory pool @40020044, 5 valid inputs, 28.3% coverage)
+00ebb4c0  520  complete: advance one waypoint sample (radius/water/surface clamp); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv PASS (312 valid inputs, 96.0% coverage)
 00ebb720  194  complete: update the current path handle / node; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (164 valid inputs, 11.9% coverage)
 00ebb8b0  129  complete: bool terraforming/world-setup gate (1-byte return; `xor al,al` sites prove al-only); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (400 valid inputs, 20.0% coverage)
 00ebb980  203  complete: current position + target direction (game-mode dependent); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv FAIL (first mismatch: memory pool @40020000, input 173)
