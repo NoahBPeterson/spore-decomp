@@ -64,7 +64,7 @@ void* __cdecl SP_PlanetModel();
 void* __cdecl SP_App();
 void* __cdecl SP_GameInputManager();
 int   __cdecl SP_TerrainEditor(int on);
-void* __cdecl FUN_00c713e0(void* p);
+void* __fastcall FUN_00c713e0(void* self);   // 0x00c713e0 (ecx receiver, no stack args)
 void* __cdecl FUN_00b3d240();
 void* __cdecl FUN_00b8da60();
 void  __cdecl FUN_00b8d8a0(void* a, void* b, void* c);
@@ -93,7 +93,8 @@ int  __cdecl FUN_00b7cf50(int* begin, int* end, int dest);
 int* __cdecl FUN_00b7d000(int* src, int* end, int* dst);
 int* __cdecl FUN_00b7d0d0(int* begin, int* end, int* dst);
 int* __cdecl FUN_00b7d120(int* first, int* last, int* outLast);
-void __fastcall FUN_00b7d180(int* vec, int* value);
+// retail ABI: this in ecx, pos and value on the stack (ret 8); edx is unused
+void __fastcall FUN_00b7d180(int* vec, int /*edx unused*/, int* pos, int* value);
 void __fastcall FUN_00b7d7b0(ListNode** p);
 
 // =======================================================================================
@@ -291,9 +292,10 @@ int* __fastcall FUN_00b7d170(int* p)
 }
 
 // =======================================================================================
-// 00b7d180 -- vector::insert of one WStr element
+// 00b7d180 FUN_00b7d180 -- vector::insert of one WStr element
 // =======================================================================================
-void __fastcall FUN_00b7d180(int* vec, int* value)
+// retail ABI: this in ecx, pos and value on the stack (ret 8); edx is unused
+void __fastcall FUN_00b7d180(int* vec, int /*edx unused*/, int* pos, int* value)
 {
     int* end = (int*)vec[1];
     if (end != (int*)vec[2]) {
@@ -316,45 +318,48 @@ void __fastcall FUN_00b7d180(int* vec, int* value)
         if (cap == 0)
             cap = 0;
     }
-    int* n = (int*)operator_new(cap * 0x18, "Simulator", 0, 0,
-            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-    int off = vec[1] - vec[0];
-    int* mid = (int*)((char*)n + off);
-    FUN_00b7d000((int*)vec[0], mid, n);
-    ((WStr*)mid)->copy((const WStr*)value);
-    FUN_00b7d000(mid + 6, end, mid + 6);
-    FUN_00b7cf50((int*)vec[0], end, (int)mid);
-    if (vec[0])
+    int* n;
+    if (cap == 0)
+        n = 0;
+    else
+        n = (int*)operator_new(cap * 0x18, "Simulator", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    int* mid = FUN_00b7d000((int*)vec[0], end, n);
+    if (mid)
+        ((WStr*)mid)->copy((const WStr*)value);
+    int* newEnd = FUN_00b7d000(end, end, mid + 6);
+    FUN_00b7cf50(end, end, (int)(mid + 6));
+    if (vec[0] && *(int*)(vec[0] - 4) != 0)
         operator_delete__((void*)vec[0]);
     vec[0] = (int)n;
-    vec[1] = (int)(n + cap * 6);
-    vec[2] = (int)(n + cap * 6);
+    vec[1] = (int)newEnd;
+    vec[2] = (int)((char*)n + cap * 0x18);
 }
 
 // =======================================================================================
 // 00b7d2e0 -- cCityInputStrategy::PrepareCommodityNodeMenu
 // =======================================================================================
-void __fastcall FUN_00b7d2e0(void* self, short* name, int a3, int a4)
+// retail: `this` in ecx, then name/a3/a4 on the stack (ret 0xc); the edx slot is unused
+void __fastcall FUN_00b7d2e0(void* self, int /*edx unused*/, short* name, int a3, int a4)
 {
     WStr local;
     local.mpBegin = (void*)0x1667bac;
     local.mpEnd   = (void*)0x1667bac;
     local.mpCap   = (void*)0x1667bae;
-    local.f0c = 0;
     short* p = name;
     while (*p != 0)
         p++;
-    ((WStr*)name)->assign(name, p);
+    local.assign(name, p);
     local.f10 = a3;
     local.f14 = a4;
-    int* node = (int*)*(void**)((char*)self + 0x1c);
-    int* endp = (int*)*(void**)((char*)self + 0x20);
-    if (node < endp) {
-        *(void**)((char*)self + 0x1c) = (char*)node + 0x18;
-        if (node)
-            ((WStr*)node)->copy(&local);
+    int* endp = (int*)*(void**)((char*)self + 4);
+    int* cap  = (int*)*(void**)((char*)self + 8);
+    if (endp < cap) {
+        *(void**)((char*)self + 4) = (char*)endp + 0x18;
+        if (endp)
+            ((WStr*)endp)->copy(&local);
     } else {
-        FUN_00b7d180((int*)((char*)self + 0x1c), (int*)&local);
+        FUN_00b7d180((int*)self, 0, endp, (int*)&local);
     }
     int d = ((int)local.mpCap - (int)local.mpBegin) & 0xfffffffe;
     if (d > 2 && local.mpBegin)
@@ -428,7 +433,7 @@ int __stdcall FUN_00b7d4f0(int* p)
 }
 
 // =======================================================================================
-// 00b7d580 -- property-manager round trip used when the selection is valid
+// 00b7d580 FUN_00b7d580 -- property-manager round trip used when the selection is valid
 // =======================================================================================
 void __stdcall FUN_00b7d580(int p)
 {

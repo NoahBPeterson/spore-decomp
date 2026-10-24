@@ -1,11 +1,4 @@
 # va  size (ours/orig)  reason
-00b7cc60  553/677  pie-menu rebuild; the record's exact shape, the pie-menu/screen-position ctor
-                   calls and the window-area math are reconstructed from the decompile but the
-                   vtable argument conventions and several locals were guessed, so neither the
-                   control flow nor the call sequence is byte-faithful.
-00b7d180  259/342  vector::insert of one element; the reallocation/copy-back path is modelled with
-                   the right helpers but the iterator-invalidation branch and capacity arithmetic
-                   are approximations.
-00b7d810  664/736  pie-menu terrain-editor state machine; the five-case switch is reconstructed with
-                   the right callee set, but the virtual-call conventions on the PlanetModel object
-                   and the several opaque FUN_ helpers make it non-faithful.
+00b7cc60  553/677  pie-menu rebuild; the record's exact shape, the pie-menu/screen-position ctor calls and the window-area math are reconstructed from the decompile but the vtable argument conventions and several locals were guessed, so neither the control flow nor the call sequence is byte-faithful.
+00b7d180  294/342  vector::insert of one element; the thiscall ABI (ecx + pos/value on the stack) and the grow path (uninitialized_copy return, tail copy, cookie-checked delete) are now modelled, but the fast-path iterator-invalidation branch and the copy_backward ordering are still approximations.
+00b7d810  664/736  pie-menu terrain-editor state machine; the five-case switch is reconstructed with the right callee set, but the virtual-call conventions on the PlanetModel object and the several opaque FUN_ helpers make it non-faithful.
