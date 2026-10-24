@@ -5,11 +5,13 @@
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
-extern void* EditorTuning();                       // tuning struct, Vec3 members at +0x6c.. +0x90
-extern void  Transform_Ctor(void* t);              // 0x409930
-extern void  TrianglePinningInfo_Ctor(void* p);    // FUN_004e8f70
-extern void  TrianglePinningInfo_Dtor(void* p);    // FUN_004ae250
-extern const float kDeformVec0, kDeformVec1, kDeformVec2;  // 0x15d4fd8..0x15d4fe0
+extern void* EditorTuning();                       // 0x00401070 tuning struct, Vec3 members at +0x6c.. +0x90
+extern void  __fastcall Transform_Ctor(void* t);              // 0x409930 (ecx = &mTransform)
+extern void  __fastcall TrianglePinningInfo_Ctor(void* p);    // FUN_004e8f70 (ecx = this)
+extern void  __fastcall TrianglePinningInfo_Dtor(void* p);    // FUN_004ae250 (ecx = this)
+extern const float kDeformVec0;  // 0x15d4fd8
+extern const float kDeformVec1;  // 0x15d4fdc
+extern const float kDeformVec2;  // 0x15d4fe0
 extern const float kPreviewDelta;                          // 0x1471064 (0.5f)
 extern char gEmptyString[];                                // 0x1667bac
 
@@ -18,13 +20,15 @@ typedef uint32_t u32;
 struct Vec3 { float x, y, z; };
 struct cMWModel { char pad[0x44]; u32 mGroups[2]; };
 struct cSPEditorHandle;
-extern void* EditorTuning();                       // tuning struct, Vec3 members at +0x6c.. +0x90
-extern void  cSPEditorHandle_Shutdown(cSPEditorHandle*);   // SP::cSPEditorHandle::Shutdown
-extern void  cSPEditorHandle_BaseCtor(cSPEditorHandle*);   // FUN_0047d6a0
-extern void  Transform_Ctor(void* t);              // 0x409930
-extern void  TrianglePinningInfo_Ctor(void* p);    // FUN_004e8f70
-extern void  TrianglePinningInfo_Dtor(void* p);    // FUN_004ae250
-extern const float kDeformVec0, kDeformVec1, kDeformVec2;  // 0x15d4fd8..0x15d4fe0
+extern void* EditorTuning();                       // 0x00401070 tuning struct, Vec3 members at +0x6c.. +0x90
+extern void  __fastcall cSPEditorHandle_Shutdown(cSPEditorHandle*);   // SP::cSPEditorHandle::Shutdown
+extern void  __fastcall cSPEditorHandle_BaseCtor(cSPEditorHandle*);   // FUN_0047d6a0
+extern void  __fastcall Transform_Ctor(void* t);              // 0x409930 (ecx = &mTransform)
+extern void  __fastcall TrianglePinningInfo_Ctor(void* p);    // FUN_004e8f70 (ecx = this)
+extern void  __fastcall TrianglePinningInfo_Dtor(void* p);    // FUN_004ae250 (ecx = this)
+extern const float kDeformVec0;  // 0x15d4fd8
+extern const float kDeformVec1;  // 0x15d4fdc
+extern const float kDeformVec2;  // 0x15d4fe0
 extern const float kPreviewDelta;                          // 0x1471064 (0.5f)
 extern char gEmptyString[];                                // 0x1667bac
 #define AT(T, p, off) (*(T*)((char*)(p) + (off)))
@@ -42,10 +46,6 @@ struct cSPEditorHandle {
 };
 struct DeformIface { void* QueryInterface(u32 id); };
 // ---- items of slice s0047f520 end
-
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern void  cSPEditorHandle_Shutdown(cSPEditorHandle*);   // SP::cSPEditorHandle::Shutdown
-extern void  cSPEditorHandle_BaseCtor(cSPEditorHandle*);   // FUN_0047d6a0
 
 // ---- items of slice s00480320 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vec3_s0048_0320 {
@@ -143,7 +143,7 @@ void* __fastcall cSPEditorHandleDeform_Ctor(cSPEditorHandle* self)
     cSPEditorHandle_BaseCtor(self);
     *(void**)self = (void*)0x13ef270;
     self->mRefCountVft = (void*)0x13ef25c;
-    Transform_Ctor((char*)self + 0x50);
+    Transform_Ctor((char*)self + 0x54);
     AT(u32, self, 0xac) = 0x95f07f3d;      // mPinningType
     AT(u32, self, 0xb0) = 0;               // mAxisToIgnore
     AT(void*, self, 0xb4) = 0;             // mSymmetricHandle
@@ -177,11 +177,10 @@ void __fastcall cSPEditorHandleDeform_Shutdown(cSPEditorHandle* self)
 // @ 0x0047fce0
 void* DeformIface::QueryInterface(u32 id)
 {
-    void* self = this;
     switch (id) {
-    case 0xee3f516e: return self;
-    case 0x050a1fe5: return self;
-    case 0x050a993c: return self;
+    case 0xee3f516e: return this;
+    case 0x050a1fe5: return this;
+    case 0x050a993c: return this;
     }
     return 0;
 }

@@ -1,16 +1,14 @@
-0047f520 24 Dtor; written at /O2 only, original is /Od (not attempted at /Od)
-0047f550 45 interface-id switch; /O2 compile, original /Od [equiv PASS after ecx fix]
-0047f5a0 167 push pos+rot to both models; /O2 compile, original /Od
-0047f720 183 BallConnector::Init; /O2 compile, original /Od
-0047f960 48 block offset getter; /O2 compile, original /Od (SSE movss)
-0047f9e0 35 tuning vec getter; /O2 compile, original /Od
-0047fa30 147 Deform ctor; /O2 compile, original /Od
-0047fc10 79 Deform dtor; /O2 compile, original /Od
-0047fcb0 27 Deform shutdown; /O2 compile, original /Od
-0047fce0 45 interface-id switch; /O2 compile, original /Od [equiv PASS after ecx fix]
-0047fd30 87 Deform_SetData; /O2 compile, original /Od
-0047fda0 77 handle data copy; /O2 compile, original /Od
-0047fe20 237 update direction; /O2 compile, original /Od
-0047ff90 72 3 dot products; /O2 compile, original /Od
-00480030 205 Deform::Init; /O2 compile, original /Od
-00480280 104 tuning vec by pinning type; /O2 compile, original /Od
+# va  diff-bytes  reason
+0047f550 13  BallConnectorIface::QueryInterface (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): equiv PASS; same interface-id chain, but /Od hoists the three compared IDs into different stack temps (13 bytes differ)
+0047f5a0 337  cSPEditorHandle_UpdateModelTransforms (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 330 vs 378 bytes; body unexercised by equiv (virtual GetHandlePosition resolves through synthetic vtable slot 9 to mid-function 00472d00) so only the non-virtual writes are covered; equiv WEAK at --inputs 3000 (1271 valid, 10.3% cov), no mismatch; byte layout needs the original's unknown /Od temp frame
+0047f720 527  BallConnector_Init (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 362 vs 565 bytes; logic matches (init, null-mBlock early return, then return self), but original /Od materializes far more temps around the unaligned /GS- style prologue; equiv WEAK (129 valid, 14.0% cov), no mismatch
+0047f960 98  cSPEditorHandle_GetBlockOffset (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 123 vs 125 bytes; instruction stream matches (block vec at +0x48 else default constant), /Od chooses different spill slots for the Vec3 result; equiv PASS
+0047f9e0 43  cSPEditorHandle_GetTuningVec90 (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 56 vs 53 bytes; reads tuning vector +0x90 from the EditorTuning global (0x15d0c1c); that address lies in the unbacked virtual tail of .data so equiv is UNSUPPORTED (0/400 valid, original faults); harness limit, not a source bug
+0047fa30 304  cSPEditorHandleDeform_Ctor (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 335 vs 406 bytes; ctor chain and member stores match (deform vecs at 0x15d4fd8/fdc/fe0, transform at +0x54); original /Od keeps many extra dead temp slots; equiv PASS
+0047fc10 117  cSPEditorHandleDeform_Dtor (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 138 vs 159 bytes; same teardown order, /Od spill slots differ; equiv PASS
+0047fce0 12  DeformIface::QueryInterface (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): equiv PASS; same interface-id chain, only /Od temp placement differs (12 bytes)
+0047fd30 8  cSPEditorHandleDeform::SetData (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): equiv PASS; 34 instructions match, only the bool/pointer arg spill slots differ (8 bytes)
+0047fe20 303  cSPEditorHandleDeform::UpdateDirection (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 304 vs 360 bytes; math and member writes match; original /Od keeps extra temporaries for the inlined dot/normalize sequence; equiv PASS (inline-calls tolerated)
+0047ff90 134  Mat3_TransformDir_ (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 114 vs 159 bytes; three dot products are all present, original /Od materializes each row sum into its own temp; equiv PASS
+00480030 563  cSPEditorHandleDeform::Init (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 354 vs 587 bytes; initialization sequence matches by disassembly (model manager validation, copy, Deform::Init call), original /Od temp frame is much larger; equiv WEAK (142 valid, 21.3% cov), no mismatch
+00480280 129  Deform_GetTuningVec (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 140 vs 145 bytes; same EditorTuning (0x401070) switch on pinning type; /Od branch-tail layout differs; equiv WEAK (197 valid, 55.1% cov), no mismatch
