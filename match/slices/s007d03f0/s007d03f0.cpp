@@ -13,8 +13,8 @@ void WB(void*, const void*, int);          // 0x0093a9a0
 
 extern "C" void* __cdecl RBTreeIncrement(void* node);                                // 0x00921580
 extern "C" void  __cdecl RBTreeInsert(void* node, void* parent, void* anchor, int f); // 0x009216a0
-extern "C" void  __cdecl FUN_007d08e0(void* b, void* e);
-extern "C" void  __cdecl FUN_007d0d00();
+extern "C" void  __stdcall FUN_007d08e0(void* b, void* e);   // ret 8
+struct VecDtor58 { void FUN_007d0d00(); };   // 0x007d0d00 thiscall (ecx = vector)
 extern "C" void  __cdecl FUN_0053bd00(void*, void*);
 extern "C" void* __cdecl FUN_004aa350(void* self, int n, const void* src);
 extern "C" void* __cdecl VecDoInsert(void* dst, const void* src, unsigned size);
@@ -32,7 +32,7 @@ extern const float g_1636f68, g_1636f6c, g_1636f70;
 extern const Matrix3 g_16370e8;
 extern const float g_1636ef4, g_1636ef8, g_1636efc;
 static void* s_vt_1411f04[1];
-static void* s_vt_13ef094[1];
+extern void* s_vt_13ef094[];   // 0x013ef094
 static void* s_vt_1411f48[1];
 extern char g_empty1[];   // 0x01667bac (equiv t3)
 extern char g_empty2[];   // 0x01667bad (equiv t3)
@@ -83,7 +83,7 @@ void* SerResp(void* stream, int* vec)
 // ===========================================================================
 // @ 0x007d04b0  dialog-list serialization
 // ===========================================================================
-void SerDlg(void* stream, int* vec)
+void* SerDlg(void* stream, int* vec)
 {
     uint32_t n = (uint32_t)((vec[1] - vec[0]) / 0x68);
     WU32(stream, &n, 1, 0);
@@ -107,6 +107,7 @@ void SerDlg(void* stream, int* vec)
             n--;
         } while (n != 0);
     }
+    return stream;
 }
 
 // ===========================================================================
@@ -146,8 +147,7 @@ struct LayoutWorld {
     void* p50;
     void* p54;
     void* p58;
-    uint8_t b5c;
-    char pad5d[3];
+    union { uint8_t b5c; uint32_t b5cWord; };   // retail zeroes all four bytes at 0x5c
     uint32_t f60;
     LayoutWorld();
 };
@@ -160,13 +160,10 @@ LayoutWorld::LayoutWorld()
     f14 = g_1636f70;
     f18 = g_1485720;
     m1c.Assign(g_16370e8);
-    p54 = 0;
-    p58 = 0;
-    b5c = 0;
-    p54 = (char*)this + 0x50;
     p50 = (char*)this + 0x50;
+    p54 = (char*)this + 0x50;
     p58 = 0;
-    b5c = 0;
+    b5cWord = 0;
     f60 = 0;
 }
 
@@ -390,7 +387,7 @@ cGameModelDescription::~cGameModelDescription()
     void* p6c = a6c;
     if (p6c && *(int*)((char*)p6c - 4) != 0)
         EFree(p6c);
-    FUN_007d0d00();
+    ((VecDtor58*)((char*)this + 0x58))->FUN_007d0d00();
     void* p44 = a44;
     if (p44 && *(int*)((char*)p44 - 4) != 0)
         EFree(p44);

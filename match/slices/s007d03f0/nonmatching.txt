@@ -1,10 +1,10 @@
 007d0450  72    SerResp response-list serializer; prologue/register schedule differs (ebp/edi choice) [equiv: WEAK (1150 inputs valid, 68.3% cov)]
-007d04b0  229   SerDlg dialog-list serializer; byte/uint16 writes and virtual-stream calls differ [equiv: WEAK (30.9% cov)]
+007d04b0  235   SerDlg dialog-list serializer; returns the stream in eax like the original and is value-exact, but FAIL-KEPT on ecx: the original's push-ecx frame slot is never reused (all temporaries live in the incoming argument home area), whereas cl allocates the first local in the pushed slot, so pop ecx restores a local instead of the caller's ecx on every loop-iterating input [equiv: FAIL-KEPT ecx]
 007d05b0  7     RBTreeW::Insert; only the load of `out` vs `inc [this+0x14]` is scheduled in the other order [equiv: PASS]
-007d0670  -     LayoutWorld ctor; uint16 store order, dead-store folding and Matrix3 call schedule differ
+007d0670  44    LayoutWorld ctor; fixed the 0x5c field: the retail zeroes all four bytes there before the byte store, so it is a uint8/uint32 union (b5c/b5cWord); remaining diff is uint16 store order, dead-store folding and Matrix3 call schedule [equiv: PASS (400 valid, 100% cov)]
 007d06f0  -     Ser6F0 top-level dialog serializer; register schedule differs [equiv: UNSUPPORTED (0 valid inputs: fault(read)/fetch)]
 007d0920  117   CloneTree; recursive clone body schedule differs [equiv: PASS (CloneTree now a member, ecx=this)]
-007d0f60  -     cGameModelDescription dtor; EH frame/unwind funclet not reproduced
+007d0f60  107   cGameModelDescription dtor; fixed the teardown calls: 0x7d0d00 is a thiscall vector dtor (ecx=this+0x58, via helper struct) and 0x7d08e0 is stdcall (ret 8, so a cdecl declaration over-popped the stack); the vptr 0x13ef094 is now mapped by an extern declaration carrying the VA comment. No MSVC EH frame/unwind funclet is reproduced [equiv: PASS (212 valid, 100% cov)]
 007d1010  4     cGameModelDescription ctor; only the 1.0f load is hoisted above `mov eax,ecx`
 007d1140  -     S1140 copy ctor; vector copy uses operator= rather than reserve+DoInsertValue [equiv: UNSUPPORTED (SVec::operator= callee unresolved; original calls 0x4aa350 reserve)]
 007d18c0  26    GameModelEffect ctor; placement-new null check and vtable/f34 store order differ
