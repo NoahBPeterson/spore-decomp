@@ -21,7 +21,7 @@ void* FUN_01021300();                                  // 0x01021300
 void* FUN_00ffbe50();                                  // 0x00ffbe50
 void* MaterialManager();                               // 0x0067dd70
 void* __stdcall FUN_01002bd0(u32 key);                 // 0x01002bd0
-void* __stdcall FUN_00b3d3e0(u32 key, int unk);        // 0x00b3d3e0
+void* __stdcall FUN_00b3d3e0();                        // 0x00b3d3e0
 void* __stdcall FUN_00b3d3f0(void* avatar);            // 0x00b3d3f0
 void* __stdcall FUN_00b3d2a0(void* arg);               // 0x00b3d2a0
 void* __stdcall FUN_01021230(void* box, void* vec);    // 0x01021230
@@ -52,8 +52,8 @@ struct COps
     u8  FUN_007c4fd0();                    // 0x007c4fd0
     u8  FUN_01044bf0(void* civ);           // 0x01044bf0
     u8  FUN_010449e0(u32 arg);             // 0x010449e0
-    i32  FUN_00dd5d80();                   // 0x00dd5d80
-    void FUN_00dd6d10();                   // 0x00dd6d10
+    i32  FUN_00dd5d80(u32 a, u32 b);       // 0x00dd5d80
+    void FUN_00dd6d10(u32 a, u32 b);       // 0x00dd6d10
     void FUN_00695b40(void* a, void* b, void* c); // 0x00695b40
     void FUN_00c47d80();                   // 0x00c47d80
     void FUN_00c32cd0(float* out);         // 0x00c32cd0
@@ -284,12 +284,10 @@ void FUN_00feb120(void* mesh, void* civA, void* civB, float* dir, float t, u8 fl
 // @ 0x00feba10
 void cSPMissionManager::RemoveNewMissionAvailableEventLog()
 {
-    void* log = FUN_00b3d3e0(0xe737105a, 0);
-    i32 id = MOPS(log)->FUN_00dd5d80();
+    i32 id = MOPS(FUN_00b3d3e0())->FUN_00dd5d80(0xe737105a, 0);
     if (id != 0)
     {
-        void* log2 = FUN_00b3d3e0(id, 0);
-        MOPS(log2)->FUN_00dd6d10();
+        MOPS(FUN_00b3d3e0())->FUN_00dd6d10(id, 0);
     }
 }
 

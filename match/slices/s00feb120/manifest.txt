@@ -1,3 +1,4 @@
+slices/s00feb120/s00feb120.cpp  ?RemoveNewMissionAvailableEventLog@cSPMissionManager@@QAEXXZ  00feba10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00feb120/s00feb120.cpp  ?FUN_00feba50@cSPMissionManager@@QAEXXZ  00feba50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00feb120/s00feb120.cpp  ?FUN_00febc70@cSPMissionManager@@QAEIXZ  00febc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00feb120/s00feb120.cpp  ?FUN_00febdc0@cSPMissionManager@@QAEII@Z  00febdc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
