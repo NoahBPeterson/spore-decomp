@@ -1,1 +1,4 @@
 01023fc0  777  cCommandMission::Execute complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; register allocation, shared-tail merging and block layout differ
+01024630  459  cCommandCheat::Rename complete; sim_string ctor inlined (operator new[] + memcpy), strcmp chain star/planet, ConvertToString16 + rename; register allocation and inlined string ctors differ
+01024920   93  FUN_01024920 complete; introsort depth loop (median-of-3 + partition + insertion-sort fallback); prologue shrink-wrap, obj spill and shared cmp push differ
+010249f0  683  cCommandCheat::Badge complete; badge name -> id chain (incl. "level" planet-key set walk) + GrantBadge loop; inlined string ctor and chained compares differ

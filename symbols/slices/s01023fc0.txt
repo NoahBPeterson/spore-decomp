@@ -1,1 +1,5 @@
-01023fc0 SP::nSpaceCheats::cCommandMission::Execute  # "mission" cheat command: create/complete/fulfill/abort/fail/list/debugdraw|dd/next/ui
+01023fc0 ?Execute@cCommandMission@nSpaceCheats@SP@@QAEXPAVcArguments@ArgScript@EA@@@Z  # cCommandMission::Execute: mission subcommand dispatch; nonmatching (1645 bytes)
+01024630 ?Rename@cCommandCheat@nSpaceCheats@SP@@QAEXPAVcArguments@ArgScript@EA@@@Z  # rename active star/planet; nonmatching
+01024920 ?FUN_01024920@nSpaceCheats@SP@@YAXPAPAH0HP6AHHH@Z@Z  # introsort depth loop over ref slots; nonmatching
+010249f0 ?Badge@cCommandCheat@nSpaceCheats@SP@@QAEXPAVcArguments@ArgScript@EA@@@Z  # badge cheat name->id chain + level set walk; nonmatching
+01024e90 ?reserve@LayoutNodeVec@nSpaceCheats@SP@@QAEXI@Z  # byte-exact: vector<LayoutNode>::reserve (0x1c-byte nodes)
