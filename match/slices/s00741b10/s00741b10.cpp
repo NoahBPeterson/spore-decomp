@@ -151,7 +151,6 @@ class cModelInstance { public:
     Vec<Blender*> v64;
     Vec<P8> v78;
 
-    // @ 0x00741b10  SP::cModelInstance::AddAnimationsFromArena
     void AddAnimationsFromArena(ArenaOwner* src, int param_3, uint16_t* param_4, uint16_t* param_5);
     void ResizeV78(uint32_t n);
 };
@@ -198,6 +197,7 @@ static __forceinline Blender* MakeBlender(cModelInstance* self, uint32_t res, ui
     return bl;
 }
 
+// @ 0x00741b10
 void cModelInstance::AddAnimationsFromArena(ArenaOwner* src, int param_3, uint16_t* param_4,
                                             uint16_t* param_5)
 {
@@ -290,13 +290,12 @@ void cModelInstance::AddAnimationsFromArena(ArenaOwner* src, int param_3, uint16
         for (int i = 0; i < n3; ++i) {
             E12* el = v3c.mpBegin + i;
             int cnt = 0; Obj* first = 0;
-            Res* rr = el->obj->r10;
             for (int j = 0; j < n1; ++j) {
                 Obj* it = v1.mpBegin[j];
-                if (rr->key == it->key) { if (!first) first = it; ++cnt; }
+                if (el->obj->r10->key == it->key) { if (!first) first = it; ++cnt; }
             }
             if (cnt > 0) {
-                uint32_t res = rr->resId;
+                uint32_t res = el->obj->r10->resId;
                 uint32_t fl; ((uint8_t*)&fl)[0] = 1; ((uint8_t*)&fl)[1] = 3; ((uint8_t*)&fl)[2] = 0;
                 if (has1) ((uint8_t*)&fl)[1] = 6;
                 Blender* bl = MakeBlender(this, res, fl, cnt, 0, 0, 0, first);
@@ -312,10 +311,9 @@ void cModelInstance::AddAnimationsFromArena(ArenaOwner* src, int param_3, uint16
             cMaterial* m = v28.mpBegin + i;
             int cnt = 0; Obj* first = 0;
             m->info->Prepare(ObjCallback);
-            Res* rr = m->info->r0c;
             for (int j = 0; j < n1; ++j) {
                 Obj* it = v1.mpBegin[j];
-                if (rr->key == it->key) { if (!first) first = it; ++cnt; }
+                if (m->info->r0c->key == it->key) { if (!first) first = it; ++cnt; }
             }
             if (cnt > 0 || param_3 != 0) {
                 uint32_t res = m->info->r0c->resId;
@@ -333,13 +331,12 @@ void cModelInstance::AddAnimationsFromArena(ArenaOwner* src, int param_3, uint16
         for (int i = 0; i < n50; ++i) {
             E12* el = v50.mpBegin + i;
             int cnt = 0; Obj* first = 0;
-            Obj* info = el->obj;
             for (int j = 0; j < n1; ++j) {
                 Obj* it = v1.mpBegin[j];
-                if (info->k18 == it->key) { if (!first) first = it; ++cnt; }
+                if (el->obj->k18 == it->key) { if (!first) first = it; ++cnt; }
             }
             if (cnt > 0) {
-                uint32_t res = (uint32_t)info->r0c;
+                uint32_t res = (uint32_t)el->obj->r0c;
                 uint32_t fl; ((uint8_t*)&fl)[0] = 0; ((uint8_t*)&fl)[1] = 1; ((uint8_t*)&fl)[2] = 0;
                 Blender* bl = MakeBlender(this, res, fl, cnt, 0, 0, 0, first);
                 v64.push(bl);
