@@ -1,0 +1,32 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+#
+# Slice s00859e20 -- IJG libjpeg 6a decompression: Huffman entropy decoder,
+# input controller and main-controller helpers, linked into SporeApp.exe.
+# Each module is a vendored upstream translation unit (work/third_party/src/
+# jpeg-6a) pulled in by a thin wrapper under this directory and compiled
+# verbatim as C (/TC) with the retail-patched jpeglib.h (shared with slices
+# s008590d0 / s00858190 / s0085bb90).  No source reconstructed by hand.
+#
+#   jdhuff.c   00859e20 decode_mcu        0085a250 start_pass_huff_decoder
+#              0085a390 jinit_huff_decoder
+#   jdinput.c  0085a3e0 initial_setup     0085a5e0 per_scan_setup
+#              0085a780 latch_quant_tables 0085a820 start_input_pass
+#              0085a860 consume_markers     0085a930 reset_input_controller
+#              0085a980 finish_input_pass   0085a9a0 jinit_input_controller
+#   jdmainct.c 0085a9f0 alloc_funny_pointers
+#              0085aaa0 make_funny_pointers
+#              0085abe0 set_wraparound_pointers
+slices/s00859e20/jdhuff.cpp  _decode_mcu  00859e20  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdhuff.cpp  _start_pass_huff_decoder  0085a250  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdhuff.cpp  _jinit_huff_decoder  0085a390  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdinput.cpp  _initial_setup  0085a3e0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdinput.cpp  _per_scan_setup  0085a5e0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdinput.cpp  _latch_quant_tables  0085a780  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdinput.cpp  _start_input_pass  0085a820  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdinput.cpp  _consume_markers  0085a860  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdinput.cpp  _reset_input_controller  0085a930  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdinput.cpp  _finish_input_pass  0085a980  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdinput.cpp  _jinit_input_controller  0085a9a0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdmainct.cpp  _alloc_funny_pointers  0085a9f0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdmainct.cpp  _make_funny_pointers  0085aaa0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
+slices/s00859e20/jdmainct.cpp  _set_wraparound_pointers  0085abe0  /O2 /arch:SSE /MD /Gy /TC /GS- /Iwork/third_party/src/jpeg-6a /Iwork/third_party/build/jpeg-6a-inc
