@@ -1,16 +1,16 @@
 0070e060  206   eastl::vector<SP::cLightingConfig> resize; helper inlining/temp differs
-0070e280  54    cLightingManager message registration; register/stack allocation differs; equiv FAIL (orig calls 0070e160 with different stack arg)
+0070e280  45    cLightingManager message registration; 0070e160 is __thiscall (this in ecx, no stack arg); equiv WEAK (331 valid, 32.1% cov)
 0070e3e0  19    eastl::copy_backward<AutoRefCount>; register assignment differs
 0070e430  19    eastl::copy_backward<AutoRefCount>; register assignment differs
 0070e4e0  198   graphics resource rebuild; vector/call shape differs; equiv WEAK (712 valid, 18.2% cov)
 0070e5e0  91    graphics resource release; fine register/order differences
-0070e6b0  120   hash-node constructor; EH frame missing
+0070e6b0  91    hash-node constructor; __stdcall (callee pops src); equiv PASS (358 valid, 100% cov); EH frame still smaller than orig
 0070e8c0  129   uninitialized_copy<AutoRefCount>; EH frame/order differs
 0070e9a0  115   uninitialized_fill_n<AutoRefCount>; EH frame/order differs
-0070ea70  57    uninitialized_copy with atomic refcount; spill/order differs
+0070ea70  61    uninitialized_copy with atomic refcount; returns out in eax; equiv WEAK (78 valid, 30.4% cov)
 0070eac0  89    fill with atomic refcount; deferred-release shape differs
 0070eb30  45    fill_n with atomic refcount; register allocation differs
 0070eb70  41    uninitialized_copy weak-refcount; parameter spills differ
 0070ebf0  30    assign weak-refcount; dst kept in memory not register
-0070ec30  33    copy_backward weak-refcount; register assignment differs
+0070ec30  4     copy_backward weak-refcount; returns dstEnd in eax; equiv WEAK (127 valid, 34.5% cov); cl encodes the pointer decrement as add -4 vs orig sub 4
 0070eea0  200   SP::cMaterialManager::WriteMaterials; stream/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))

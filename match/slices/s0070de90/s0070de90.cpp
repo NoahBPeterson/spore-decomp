@@ -133,7 +133,7 @@ struct LConfigVec {
 };
 LConfig* __cdecl LConfig_Default(LConfig* out);                      // 0x70dd50
 
-void ReloadLightingStates(void* self);  // 0x70e160
+struct ReloadOwner { void Reload(); };   // 0x70e160 (__thiscall, this = lighting manager)
 struct MsgReg { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3();
                 virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7();
                 virtual void a8(void*, int); virtual void a9(); virtual void a10(); virtual void a11(); };
@@ -163,7 +163,7 @@ struct MatMgrW { char WriteMaterials(void* stream); };
 char MsgRegOwner::MsgRegister()
 {
     void* self = this;
-    ReloadLightingStates(self);
+    ((ReloadOwner*)self)->Reload();
     void* ms = MessageServer();
     if (ms != 0)
     {
@@ -176,7 +176,7 @@ char MsgRegOwner::MsgRegister()
 }
 
 // @ 0x0070e6b0
-void** MakeHashNode(void** src)
+void** __stdcall MakeHashNode(void** src)
 {
     void** p = (void**)EAlloc(0xc, "Graphics", 0, 0, ALLOC_FILE, 0xd1);
     if (p != 0)
@@ -192,7 +192,7 @@ void** MakeHashNode(void** src)
 }
 
 // @ 0x0070ea70
-void UninitCopyAtomic8(void** out, void** first, void** last, void** dst)
+void** UninitCopyAtomic8(void** out, void** first, void** last, void** dst)
 {
     *out = dst;
     for (; first != last; ++first)
@@ -207,6 +207,7 @@ void UninitCopyAtomic8(void** out, void** first, void** last, void** dst)
         }
         *out = (void**)((char*)*out + 4);
     }
+    return out;
 }
 
 // @ 0x0070eb30
@@ -315,7 +316,7 @@ void AssignWeak14(void** first, void** last, void** dst)
 }
 
 // @ 0x0070ec30
-void CopyBackwardWeak14(void** first, void** last, void** dstEnd)
+void** CopyBackwardWeak14(void** first, void** last, void** dstEnd)
 {
     while (last != first)
     {
@@ -336,6 +337,7 @@ void CopyBackwardWeak14(void** first, void** last, void** dstEnd)
             }
         }
     }
+    return dstEnd;
 }
 
 // @ 0x0070eb70
@@ -730,8 +732,9 @@ int cLightingManager_HandleMessage(void* self, int msg, void* data)
 }
 
 // @ 0x0070e160  (reload lighting states from the property manager)
-void ReloadLightingStates(void* self)
+void ReloadOwner::Reload()
 {
+    void* self = this;
     unsigned local[3];
     local[0] = 0; local[1] = 0; local[2] = 0;
     void* pm = PropertyManager();
