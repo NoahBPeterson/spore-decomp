@@ -4,4 +4,4 @@
 007c9040  181  card-vendor command Execute: strlen/string assign scheduling differs
 007c9760  46   GetConfigString: CSE of mStrings across the bounds check changes registers
 007c97a0  100  AutoRef element copy-construct loop: missing EH frame, slot order differs
-007c9830  84   AutoRef fill loop: missing EH frame, register allocation differs
+007c9830  0  FIXED: expose original InsertAutoRef as an external and call it through a __thiscall pointer with a volatile destination cursor; default WEAK (194 valid, 100% coverage, no mismatch), replay and hybrid SPAppConfigManager.cpp first-difference None

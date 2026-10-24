@@ -371,11 +371,7 @@ void VariantPropertyCommand_Execute(cArguments* args)
 }
 
 // @ 0x007c8af0
-void* __cdecl InsertAutoRef(void* out, void* src)
-{
-    (void)out; (void)src;
-    return out;
-}
+void* __cdecl InsertAutoRef(void* out, void* src);  // external original; stub body omitted in this slice
 
 // @ 0x007c97a0
 void* __cdecl UninitCopyAutoRef2(void* out, char* first, char* last, char* dest)
@@ -392,15 +388,19 @@ void* __cdecl UninitCopyAutoRef2(void* out, char* first, char* last, char* dest)
     return out;
 }
 
+typedef void* (__thiscall *InsertThiscall)(void*, void*);
+static InsertThiscall volatile g_insertAutoRef = (InsertThiscall)InsertAutoRef;
+
 // @ 0x007c9830
 void __cdecl FillAutoRef(char* first, unsigned n, char* src)
 {
+    char* volatile cur = first;
     while (n--) {
-        if (first) {
-            InsertAutoRef(first, src);
-            first[0x14] = src[0x14];
+        if (cur) {
+            g_insertAutoRef((char*)cur, src);
+            ((char*)cur)[0x14] = src[0x14];
         }
-        first += 0x18;
+        cur = (char*)cur + 0x18;
     }
 }
 
