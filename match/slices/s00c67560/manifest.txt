@@ -1,0 +1,4 @@
+# byte-exact functions for slice s00c67560
+slices/s00c67560/s00c67560_g7.cpp  ?SetState@Ctrl@@QAEXH@Z  00c680d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c67560/s00c67560_g7.cpp  ?RemoveFromVec@@YAXPAUPtrVec@@PAX@Z  00c68100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c67560/s00c67560_g7.cpp  ?Fn68250@PathObj@@QAE_NPAX@Z  00c68250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

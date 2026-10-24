@@ -1,1 +1,7 @@
 00c678f0 Ctrl::Update  # camera ring controller: camera ray vs target plane -> angle -> quaternion compose; writes +0x1a4 quat, calls 0x00c66c10 when changed
+00c67560 Vec12Vector::Insert  # eastl vector<12-byte>::insert(pos,count,value): grow / shift / fill paths, capacity max(2*size, size+n), 0xd1 alloc line, +0x10 inline-buffer free guard
+00c67730 Ctrl::Attach  # refresh the cached target position (+0x198), orientation quat (+0x1a4) and span (+0x1b4), then republish when anything changed
+00c680d0 Ctrl::SetState  # store the ring state (+0x1b8) and rebuild + flush the orientation
+00c68100 RemoveFromVec  # detach + RemoveNoun, erase one pointer from the vector, release the vacated slot
+00c68190 PathObj::Fn68190  # reset the anchor triple from 0x01693d74, prune neighbours within 2.0 units, then re-propagate via 0x00c64460
+00c68250 PathObj::Fn68250  # remove a path point unless it is the only one left
