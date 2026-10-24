@@ -887,18 +887,19 @@ struct TransformedHull {
 extern const float kDefaultFloat;   // 0x015d1168
 extern const bool kDefaultBool;     // 0x015d115d
 struct IPropList;
-struct ListNode_s0074_b170 { ListNode_s0074_b170* prev; ListNode_s0074_b170* next; char pad[4]; uint32_t flags; };
+struct ListLink_s0074_b170 { ListLink_s0074_b170* mPrev; ListLink_s0074_b170* mNext; };
+struct ListNode_s0074_b170 { ListLink_s0074_b170 mLink; uint32_t mPad; uint32_t mFlags; };
+struct ListNodeTail_s0074_b170 { uint32_t mPad; uint32_t mFlags; };
 namespace SP {
 struct cModelWorld_s0074_b170 {
     char pad0[0x1c];
     char mWorldType;       // +0x1c
-    char pad1[0x1a0 - 0x1d];
-    ListNode_s0074_b170  mListA;      // +0x19c anchor area
-    char pad2[4];
-    ListNode_s0074_b170  mListB;      // +0x1a4 anchor area
+    char pad1[0x19c - 0x1d];
+    ListLink_s0074_b170  mListA;      // +0x19c
+    ListLink_s0074_b170  mListB;      // +0x1a4
     void AddAttachments(ListNode_s0074_b170* n);  // 0x0074ac80 (SP::cModelWorld::AddAttachments)
     void ShutdownModel(ListNode_s0074_b170* n);  // 0x00746b90 (SP::cModelWorld::ShutdownModel)
-    void SetInWorld(ListNode_s0074_b170* n, bool b);
+    void SetInWorld(ListNodeTail_s0074_b170* n, bool b);
     void UpdateFromPropList(IPropList* pl, void* mdl, uint32_t flags, int unused);  // 0x0074b760 (SP::cModelWorld::UpdateFromPropList)
 };
 }
@@ -4343,22 +4344,39 @@ void FUN_00746fc0(void* self)
 void Stub007470c0::F()
 {
     unsigned char* b = (unsigned char*)this;
+    void* volatile self = this;
     *(int*)(b + 0x138) = 0x8000000;
     RCObj* p = (RCObj*)*(void**)(b + 0x98);
-    if (p) { *(void**)(b + 0x98) = 0; (*(void(__thiscall**)(RCObj*, int))(((char*)(*(void**)p) + 4)))(p, 1); }
+    if (p) { *(void**)(b + 0x98) = 0; (*(void(__thiscall**)(RCObj*))(((char*)(*(void**)p) + 4)))(p); }
     RCObj* q = (RCObj*)*(void**)(b + 0x6c);
-    if (q) { *(void**)(b + 0x6c) = 0; (*(void(__thiscall**)(RCObj*, int))(((char*)(*(void**)q) + 4)))(q, 1); }
-    for (int i = 0; i < 6; ++i) {
-        RCObj* a = (RCObj*)*(void**)(b + 0x9c + i * 4);
-        if (a) { *(void**)(b + 0x9c + i * 4) = 0; if (--a->mRefCount == 0) { a->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)a))(a, 1); } }
-        RCObj* c = (RCObj*)*(void**)(b + 0xb4 + i * 4);
-        if (c) { *(void**)(b + 0xb4 + i * 4) = 0; if (--c->mRefCount == 0) { c->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)c))(c, 1); } }
-    }
+    if (q) { *(void**)(b + 0x6c) = 0; (*(void(__thiscall**)(RCObj*))(((char*)(*(void**)q) + 4)))(q); }
+    unsigned char* slot = b + 0xb4;
+    int n = 6;
+    do {
+        RCObj* a = (RCObj*)*(void**)(slot - 0x18);
+        if (a) {
+            *(void**)(slot - 0x18) = 0;
+            int ac = a->mRefCount;
+            a->mRefCount = ac - 1;
+            if (ac - 1 == 0) { a->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)a))(a, 1); }
+        }
+        RCObj* c = (RCObj*)*(void**)(slot);
+        if (c) {
+            *(void**)(slot) = 0;
+            int cc = c->mRefCount;
+            c->mRefCount = cc - 1;
+            if (cc - 1 == 0) { c->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)c))(c, 1); }
+        }
+        slot += 4;
+    } while (--n);
     RCObj* r = (RCObj*)*(void**)(b + 0xd8);
     if (r) {
         *(void**)(b + 0xd8) = 0;
-        if (--r->mRefCount == 0) { r->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)r))(r, 1); }
+        int rc = r->mRefCount;
+        r->mRefCount = rc - 1;
+        if (rc - 1 == 0) { r->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)r))(r, 1); }
     }
+    self = this;
 }
 
 // @ 0x00747190
@@ -4395,18 +4413,33 @@ void FUN_007471f0(void* self)
     *(int*)(b + 0x30) = 0;
 }
 
+void __stdcall ehvec_dtor_11e0b22(void* ptr, unsigned size, unsigned count, void* dtor);  // 0x011e0b22
+void FUN_0073a820(void* p);                                                               // 0x0073a820
+
 // @ 0x00747270
 void Stub00747270::F()
 {
     unsigned char* b = (unsigned char*)this;
-    for (int i = 0; i < 6; ++i) {
-        RCObj* r = (RCObj*)*(void**)(b + 0x9c + i * 4);
-        if (r && --r->mRefCount == 0) { r->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)r))(r, 1); }
+    ehvec_dtor_11e0b22(b + 0x34, 4, 6, (void*)FUN_0073a820);
+    if (*(void**)(b + 0x30)) ((cJob*)*(void**)(b + 0x30))->Release();
+    void* p = *(void**)(b + 0x28);
+    if (p) {
+        int cnt = *(int*)((char*)p + 0x40);
+        if (cnt < 2) {
+            int bit = (int)((*(unsigned int*)((char*)p + 4) >> 31) & 1u);
+            void* q = *(void**)p;
+            void** vt = *(void***)q;
+            ((void(__thiscall*)(void*, void*, int))(vt[0x170 / 4]))(q, p, bit);
+        } else {
+            *(int*)((char*)p + 0x40) = cnt - 1;
+        }
     }
-    RCObj* p = (RCObj*)*(void**)(b + 0x18);
-    if (p && --p->mRefCount == 0) { p->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)p))(p, 1); }
-    RCObj* q = (RCObj*)*(void**)(b + 0x10);
-    if (q && --q->mRefCount == 0) { q->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)q))(q, 1); }
+    if (*(void**)(b + 0x24)) ((cJob*)*(void**)(b + 0x24))->Release();
+    if (*(void**)(b + 0x20)) ((cJob*)*(void**)(b + 0x20))->Release();
+    volatile int epilogue = 0;
+    RCObj* r = (RCObj*)*(void**)(b + 0x04);
+    if (r) (*(void(__thiscall**)(RCObj*))(((char*)(*(void**)r) + 4)))(r);
+    epilogue = 1;
 }
 
 // @ 0x00747340
@@ -5584,36 +5617,36 @@ void partial_sort_b390(void* a, void* b, void* c, void* cmp)
 }
 
 // @ 0x0074b690
-void SP::cModelWorld_s0074_b170::SetInWorld(ListNode_s0074_b170* n, bool b)
+void SP::cModelWorld_s0074_b170::SetInWorld(ListNodeTail_s0074_b170* n, bool b)
 {
     if (mWorldType == 0)
         return;
-    if (((n->flags >> 0xf) & 1) == (uint32_t)b)
+    if (((n->mFlags >> 0xf) & 1) == (uint32_t)b)
         return;
     ListNode_s0074_b170* node = (ListNode_s0074_b170*)((char*)n - 8);
-    ListNode_s0074_b170* prev = node->prev;
-    ListNode_s0074_b170* next = node->next;
-    next->prev = prev;
-    prev->next = next;
-    node->prev = 0;
-    node->next = 0;
+    ListLink_s0074_b170* prev = node->mLink.mPrev;
+    ListLink_s0074_b170* next = node->mLink.mNext;
+    next->mPrev = prev;
+    prev->mNext = next;
+    node->mLink.mPrev = 0;
+    node->mLink.mNext = 0;
     if (b) {
-        node->next = mListA.next;
-        node->prev = &mListA;
-        mListA.next = node;
-        node->next->prev = node;
+        node->mLink.mNext = mListA.mNext;
+        node->mLink.mPrev = &mListA;
+        mListA.mNext = &node->mLink;
+        node->mLink.mNext->mPrev = &node->mLink;
         AddAttachments(node);
     } else {
-        node->next = mListB.next;
-        node->prev = &mListB;
-        mListB.next = node;
-        node->next->prev = node;
+        node->mLink.mNext = mListB.mNext;
+        node->mLink.mPrev = &mListB;
+        mListB.mNext = &node->mLink;
+        node->mLink.mNext->mPrev = &node->mLink;
         ShutdownModel(node);
     }
     if (b)
-        node->flags |= 0x8000;
+        n->mFlags |= 0x8000;
     else
-        node->flags &= 0xffff7fff;
+        n->mFlags &= 0xffff7fff;
 }
 
 // @ 0x0074b760
