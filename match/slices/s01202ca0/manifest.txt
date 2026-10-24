@@ -1,1 +1,2 @@
-# source (relative to match/)   symbol   original VA   [cl flags override]
+# s01202ca0 manifest
+slices/s01202ca0/s01202ca0.cpp  ?Build3@SegSrc@@QAEIIIPAUSegBlock@@@Z  01202fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

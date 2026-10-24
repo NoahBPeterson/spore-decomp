@@ -1,4 +1,0 @@
-# va  diff-bytes  reason
-01202ca0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 810 B.  void __thiscall(float, float*, undefined4) float/vector routine: calls FUN_01202160 and FUN_01202020; 11 base relocs (float constants / absolute data refs) emitted raw.
-01202fd0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 229 B.  undefined4 __thiscall(undefined4*, undefined4, undefined4, int): calls FUN_012016f0 three times; no relocs.
-012030c0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 66 B.  void (void) routine using SSE (16-byte vector ops), no calls; 1 base reloc emitted raw.

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01202ca0  686  complete; EdgeBuilder::BuildFrame (four-point edge frame: two helper calls, three normalised edge vectors p2-p0 / p3-p2 / p0-p3 via rsqrt+2x Newton refine with a zero-masked reciprocal, reciprocal lengths at +0x70/+0x74/+0x78, live=1, count=3, owner=this, four callback pointers at +0x90..+0x9c); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS (400 valid, 100.0% coverage, 221/221 insns)
