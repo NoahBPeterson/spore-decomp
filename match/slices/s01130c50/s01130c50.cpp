@@ -403,9 +403,17 @@ int Mp3Player_start(Mp3Player* self)
 }
 
 // @ 0x01131420
+// Retail's call site keeps the conversion in eax and pushes it directly (cvtss2si eax,[esp+8];
+// push eax). A C result variable would make cl spill it and reload into another register (edx),
+// which the original never writes, so this variant deliberately leaves the value in the return
+// register (the asm writes eax; no C return is needed).
+static inline int RwFloat2IntInEax(float f)
+{
+    __asm { cvtss2si eax, f }
+}
 int Mp3Player_setStart(void* fmt, Mp3Player* self)
 {
-    FUN_0113fba0(self->mStartHandle, RwFloat2Int(*(float*)((unsigned char*)fmt + 4) * 4096.0f));
+    FUN_0113fba0(self->mStartHandle, RwFloat2IntInEax(*(float*)((unsigned char*)fmt + 4) * 4096.0f));
     self->mState = 0;
     return 0;
 }
