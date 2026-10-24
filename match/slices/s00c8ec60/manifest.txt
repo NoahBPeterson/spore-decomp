@@ -1,0 +1,8 @@
+slices/s00c8ec60/s00c8ec60.cpp  ?Init@cPointerVector@@QAEPAV1@HH@Z  00c8ed30  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c8ec60/s00c8ec60.cpp  ?func58h@cCommunity@@QAEXH@Z  00c8f2b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c8ec60/s00c8ec60.cpp  ?FUN_00c8f2e0@@YGPAVcSPVector3@@PAV1@PAVcSpatialThing@@@Z  00c8f2e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c8ec60/s00c8ec60.cpp  ?GetAdultPopulation@cTribe@@QAEHXZ  00c8f370  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c8ec60/s00c8ec60.cpp  ?FUN_00c8f3a0@cTribe@@QAEHXZ  00c8f3a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c8ec60/s00c8ec60.cpp  ?GetToolOfType@cTribe@@QAEPAVcTool@@H@Z  00c8f6e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c8ec60/s00c8ec60.cpp  ?FUN_00c8f730@cTribe@@QAE_NH@Z  00c8f730  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c8ec60/s00c8ec60.cpp  ?FUN_00c8fb50@cTribe@@QAEXXZ  00c8fb50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
