@@ -1,0 +1,6 @@
+00c6c630 303 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 303 bytes - game-data serialisation helper not reconstructed.
+00c6c760 349 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 349 bytes - ISimulatorSerializable::Write not reconstructed.
+00c6c8c0 802 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 802 bytes - cGameData::RemoveOwner not reconstructed.
+00c6cbf0 347 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 347 bytes - game-data serialisation helper not reconstructed.
+00c6ce30 213 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 213 bytes - vector deserialisation: memcpy-shift of a 4-byte-slot vector with the end adjustment, then a count read through virtual +0x20/+0x18 and EA::IO::ReadInt32, a call into FUN_00d01790 and a push_back loop guarded by the same count; not reconstructed within the remaining budget.
+00c6cf10 477 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 477 bytes - cHerd::AddEggInNest not reconstructed.
