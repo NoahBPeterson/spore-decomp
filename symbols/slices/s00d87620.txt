@@ -1,0 +1,2 @@
+00bc97f0 ?Set@behavior_stimuli@nSPBehaviorTree@@QAEXAAUstimulus@12@_KMPAVIUnknown32@COM@EA@@@Z  # nSPBehaviorTree::behavior_stimuli::Set (callee of s00d87620, named from the dev publics; slice address comment)
+00d87620 ?EAT_FRUIT_Tick@@YAHPAUCreature_s00d8_7620@@IIIIPAUEatFruitNode@@@Z  # EAT_FRUIT_Tick migrated from s00d87620 (verbatim, slice spelling)

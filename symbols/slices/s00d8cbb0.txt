@@ -1,0 +1,4 @@
+00d8cde0 ?StimulusProbe_SelfState@@YAMPAVcCreature_s00d8_cbb0@@HHHPAVcBehaviorStimuli_s00d8_cbb0@@PAEHPAVcStimulusContext@@@Z  # StimulusProbe_SelfState migrated from s00d8cbb0 (verbatim, slice spelling)
+00d8cf80 ?NEARBY_ENEMY_EGG_Decide@@YAMPAVcCreature_s00d8_cbb0@@@Z  # NEARBY_ENEMY_EGG_Decide migrated from s00d8cbb0 (verbatim, slice spelling)
+00d8d300 ?CLAIM_NEST_Tick@@YAHHPAVcCreature_s00d8_cbb0@@HHHPAVcActionState@@@Z  # CLAIM_NEST_Tick migrated from s00d8cbb0 (verbatim, slice spelling)
+00d8d5b0 ?STARTLED_RESPONSE_Activate@@YAHPAVcCreature_s00d8_cbb0@@HHHHHPAVcActionState@@@Z  # STARTLED_RESPONSE_Activate migrated from s00d8cbb0 (verbatim, slice spelling)

@@ -1,0 +1,70 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7a5c0@@YAMPAX@Z  00d7a5c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7a5e0@@YAMPAUCB@@@Z  00d7a5e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7a660@@YAMPAUCB@@@Z  00d7a660  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7a6b0@@YAMPAUCB@@@Z  00d7a6b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7a780@@YAMPAUCB@@@Z  00d7a780  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7a7d0@@YAMPAUCB@@HHIPAXPAD@Z  00d7a7d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7aad0@@YAMPAUCB@@@Z  00d7aad0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7ac10@@YAMPAUCB@@HHIPAXPAD@Z  00d7ac10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7ac70@@YA_NPAUCB@@@Z  00d7ac70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b2e0@@YAMPAXHHI0PAD@Z  00d7b2e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b310@@YA_NPAX0@Z  00d7b310  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b3a0@@YAXPAUCB@@@Z  00d7b3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b3c0@@YA_NPAUCB@@@Z  00d7b3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b3f0@@YAXPAUCB@@@Z  00d7b3f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b400@@YA_NPAUCB@@HHIPAXPAUSt@@@Z  00d7b400  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b4c0@@YAXPAUCB@@HHIPAXPAUSt@@@Z  00d7b4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b510@@YA_NPAUCB@@@Z  00d7b510  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b530@@YA_NPAUCB@@@Z  00d7b530  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b550@@YAXPAVcSPCreatureBase@@@Z  00d7b550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b6a0@@YA_NPAVcSPCreatureBase@@IIIIPAVtAnimCtx@@@Z  00d7b6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b970@@YA_NPAVcSPCreatureBase@@IIIHPAVtAnimCtx@@@Z  00d7b970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7ba00@@YA_NPAVcSPCreatureBase@@IIIIPAVtAnimCtx@@@Z  00d7ba00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7baf0@@YAXPAVcSPCreatureBase@@@Z  00d7baf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bb20@@YA_NPAVcSPCreatureBase@@@Z  00d7bb20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bb50@@YAXPAVcSPCreatureBase@@@Z  00d7bb50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bb90@@YA_NPAVcSPCreatureBase@@@Z  00d7bb90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bbc0@@YAXPAVcSPCreatureBase@@@Z  00d7bbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bbe0@@YA_NPAVcSPCreatureBase@@IIIIPAVtAnimCtx@@@Z  00d7bbe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bc60@@YA_NPAVcSPCreatureBase@@IIIIPAVtAnimCtx@@@Z  00d7bc60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bc80@@YAXPAVcSPCreatureBase@@@Z  00d7bc80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bd00@@YAXPAVcSPCreatureBase@@@Z  00d7bd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bd40@@YA_NPAVcSPCreatureBase@@IIIIPAVtGreetCtx@@@Z  00d7bd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bdc0@@YA_NPAVcSPCreatureBase@@IIIIPAVtConfusedCtx@@@Z  00d7bdc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7be00@@YAXPAVcSPCreatureBase@@@Z  00d7be00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7be30@@YA_NPAVcCreatureIterator@@PAVcSPCreatureBase@@@Z  00d7be30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bea0@@YA_NPAVcCreatureIterator@@PAVcSPCreatureBase@@@Z  00d7bea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bee0@@YA_NPAVcSPCreatureBase@@IIIIPAVtAnimCtx@@@Z  00d7bee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bf80@@YAXPAVcSPCreatureBase@@@Z  00d7bf80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bfa0@@YA_NPAVcSPCreatureBase@@IIIIPAVtConfusedCtx@@@Z  00d7bfa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7c090@@YAXPAVcSPCreatureBase@@@Z  00d7c090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7c1d0@@YA_NPAVcSPCreatureBase@@@Z  00d7c1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7c310@@YA_NPAVcSPCreatureBase@@IIIIPAVtGreetCtx@@@Z  00d7c310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?Advance@cAnimIterator@@QAEPAV1@XZ  00d7cf50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7d160@@YA_NPAVcCreatureBase@@@Z  00d7d160  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7d220@@YAXPAVcCreatureBase@@PAX@Z  00d7d220  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7d2c0@@YAXPAVcCreatureBase@@PAX@Z  00d7d2c0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?ManageInteractiveOrnamentEventSFX@SP@@YAXPAHPAE@Z  00d7d4a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7d720@SP@@YAMPAUcCreatureBase_s00d7_d370@1@@Z  00d7d720  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7e290@@YAMPAUcGameObj@@PAX11PAUcOutRec@@PAE1PAUcKeySrc@@@Z  00d7e290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7e9d0@@YAMPAUcGameObj@@PAX11PAUcOutRec@@PAE1PAUcKeySrc@@@Z  00d7e9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7ea20@@YAMPAUcGameObj@@PAX11PAUcOutRec@@PAE1PAUcKeySrc@@@Z  00d7ea20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7ea70@@YAXPAUcGameObj@@PAX11PAUcOutRec@@PAE1PAUcKeySrc@@@Z  00d7ea70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d823b0@@YAXPAUcSPCreatureBase_s00d8_1940@@@Z  00d823b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d82410@@YA_NPAUcSPCreatureBase_s00d8_1940@@IIIIIIM@Z  00d82410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d85000@@YA_NPAVcSPCreatureBase_s00d8_4c50@@@Z  00d85000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d85060@@YA_NPAVcSPCreatureBase_s00d8_4c50@@@Z  00d85060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?AddLoudness@@YA_NPAVtLoudnessStim@@@Z  00d85370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?RemoveLoudness@@YA_NPAVtLoudnessStim@@@Z  00d853b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d85e40@SP@@YA_NPAVCitizen@@@Z  00d85e40  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d86410@@YA_NPAVCitizen@@PAX111PAUStateItemOnHead@@@Z  00d86410  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?REACT_TO_AVATAR_Deactivate@SP@@YAXPAVCitizen@@PAX111PAUStateReact@@@Z  00d86810  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d88970@@YAXPAXIIII0@Z  00d88970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d88ef0@@YAXPAXIIII0@Z  00d88ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d88f20@@YAEPAXIIII0@Z  00d88f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d8a500@@YAXPAUCitizen_s00d8_a2a0@@PAX111PAUStateReceiveItem@@@Z  00d8a500  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d8a550@@YAXPAUCitizen_s00d8_a2a0@@@Z  00d8a550  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d8a660@@YA_NPAUCitizen_s00d8_a2a0@@@Z  00d8a660  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d8ac30@@YAXPAUCitizen_s00d8_a2a0@@PAX111PAUStateBundle@@@Z  00d8ac30  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d8b1a0@@YAXPAUCitizen_s00d8_a2a0@@PAX111PAUStateBundle@@@Z  00d8b1a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

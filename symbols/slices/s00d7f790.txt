@@ -1,0 +1,1 @@
+00d7f790 ?THROW_OBJECT_Tick@SP@@YA_NPAVcSPCreatureBase_s00d7_f790@1@HHHHPAUThrowState@1@@Z  # THROW_OBJECT_Tick migrated from s00d7f790 (verbatim, slice spelling)

@@ -1,0 +1,3 @@
+00d8e8d0 ?FUN_00d8e8d0@@YA_NPAUcCreature_s00d8_e8d0@@IIIIPAUTickStatePlay@@@Z  # FUN_00d8e8d0 migrated from s00d8e8d0 (verbatim, slice spelling)
+00d8f170 ?FUN_00d8f170@@YAXPAUcCreature_s00d8_e8d0@@IIIIPAUTickStateRelease@@@Z  # FUN_00d8f170 migrated from s00d8e8d0 (verbatim, slice spelling)
+00d8f560 ?FUN_00d8f560@@YAMPAUcCreature_s00d8_e8d0@@IIIPAUBehaviorStimuli@@PAE@Z  # FUN_00d8f560 migrated from s00d8e8d0 (verbatim, slice spelling)

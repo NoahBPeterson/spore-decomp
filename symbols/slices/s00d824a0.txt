@@ -1,1 +1,1 @@
-00d824a0 SP::POSSE_IDLE_Tick  # PDB anchor name (symbols/pdb_names.json), behavior-tick signature confirmed by arg use
+00d824a0 ?POSSE_IDLE_Tick@SP@@YA_NPAVcSPCreatureBase_s00d8_24a0@1@HHHHPAUPOSSE_IDLE_memory_block@1@HM@Z  # POSSE_IDLE_Tick migrated from s00d824a0 (verbatim, slice spelling)

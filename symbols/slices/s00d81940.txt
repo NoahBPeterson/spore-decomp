@@ -1,0 +1,5 @@
+00d81940 ?FUN_00d81940@@YA_NPAUcSPCreatureBase_s00d8_1940@@IIIIPAUDRINK_Mem@@@Z  # FUN_00d81940 migrated from s00d81940 (verbatim, slice spelling)
+00d81b60 ?FUN_00d81b60@@YA_NPAUcSPCreatureBase_s00d8_1940@@IIIIPAUDRINK_Mem@@IM@Z  # FUN_00d81b60 migrated from s00d81940 (verbatim, slice spelling)
+00d821a0 ?SP_LOUNGE_VIGNETTE_Activate@@YAXPAUcSPCreatureBase_s00d8_1940@@IIIIIPAULOUNGE_Mem@@@Z  # SP_LOUNGE_VIGNETTE_Activate migrated from s00d81940 (verbatim, slice spelling)
+00d823b0 ?FUN_00d823b0@@YAXPAUcSPCreatureBase_s00d8_1940@@@Z  # FUN_00d823b0 migrated from s00d81940 (verbatim, slice spelling)
+00d82410 ?FUN_00d82410@@YA_NPAUcSPCreatureBase_s00d8_1940@@IIIIIIM@Z  # FUN_00d82410 migrated from s00d81940 (verbatim, slice spelling)

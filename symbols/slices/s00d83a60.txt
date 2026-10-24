@@ -1,0 +1,1 @@
+00d83a60 ?OFFER_ITEM_Tick@@YA_NPAUCreature@@PAX111PAUS1@@@Z  # OFFER_ITEM_Tick migrated from s00d83a60 (verbatim, slice spelling)

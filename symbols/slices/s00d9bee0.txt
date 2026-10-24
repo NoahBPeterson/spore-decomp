@@ -1,0 +1,1 @@
+00d9c9c0 ?EAT_BUNDLE_Tick@@YA_NPAUcSPCreatureBase_s00d9_bee0@@HHHHPAUEAT_BUNDLE_state@@PA_N@Z  # EAT_BUNDLE_Tick migrated from s00d9bee0 (verbatim, slice spelling)
