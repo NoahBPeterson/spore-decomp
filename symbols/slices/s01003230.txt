@@ -1,0 +1,24 @@
+# slice s01003230 - SP::cSPSimulatorSpaceGame galaxy/solar/planet context activation
+#   (0x01003230..0x01003c60) plus the free function SP::UpdateSound.
+# cSPSimulatorSpaceGame member offsets (observed): mpSpaceUI@0x14, mfCamOffset_3c@0x3c,
+#   mpInv_40@0x40, mFlag4c..4f@0x4c..0x4f (four bools), mpEditorResult@0x54, mpObj6c@0x6c,
+#   mpSub70@0x70, mpObjAC@0xac, mpSubB4/B8/BC/C0@0xb4/0xb8/0xbc/0xc0.
+# cStar/sub-object offsets used: cPlanet civ pointer @0x13c, cStar mpTime48 @0x48,
+#   camera controller mf68@0x68 / mf6c@0x6c / mf70@0x70.
+# SpVectorF is a 3-float class with a user-declared copy constructor: the retail build
+#   passes it *by value* to FUN_01036940 (copy constructor inlined through the x87 stack).
+# VA        name                                          note
+01003230    ?FUN_01003230@cSPSimulatorSpaceGame@@QAEXXZ    galaxy-context activate (city-sim/attach subsystems); byte-exact MATCH
+010033a0    ?UpdateSound@@YAXXZ                           free SP::UpdateSound - App()->+0x50()->+0x38() probe + clamped camera-offset MessageServer message; nonmatching (frame/register layout, equiv WEAK)
+01003490    ?GalaxyContextActivate@cSPSimulatorSpaceGame@@QAEXXZ  full galaxy-context activate chain; byte-exact MATCH
+01003620    ?FUN_01003620@cSPSimulatorSpaceGame@@QAEXXZ    mpObjAC/+0x0c action + EffectsManager +0x5c/+0x38; byte-exact MATCH
+01003690    ?FUN_01003690@cSPSimulatorSpaceGame@@QAEXXZ    full planet-context activation driver (effects/ticker/city-sim/planet-sim + lazy singletons); nonmatching (register allocation, equiv UNSUPPORTED)
+010039c0    ?FUN_010039c0@cSPSimulatorSpaceGame@@QAEXPAUcStar@@@Z  star arrival handler (GetSolarSystem + ActivateGraphics); byte-exact MATCH
+01003a50    ?FUN_01003a50@@YAXXZ                           free handler: sqrt-len of the cStar vector then FUN_01036940(SpVectorF(x,y,z)); byte-exact MATCH
+01003c60    ?ChangeCameraByOffset@cSPSimulatorSpaceGame@@QAEXMM@Z  camera tilt/pan update (speed-class select, mf68/mf6c/mf70 muls, clamp); nonmatching (block order/frame, equiv FAIL)
+#
+# External helpers referenced (VAs carried as // 0x annotations in the slice source):
+#   App 0x0067dd10, MessageServer 0x0067dcc0, EffectsManagerPtr 0x0067ddd0, FUN_0067dd40 0x0067dd40,
+#   FUN_0067de00 0x0067de00, FUN_00b3d470 0x00b3d470, TerraformingManager 0x00b3d430, FUN_00b3d230 0x00b3d230,
+#   FUN_00b3d2a0 0x00b3d2a0, FUN_00b3d300 0x00b3d300, FUN_00b3d330 0x00b3d330, GetUniverseContext 0x01021080,
+#   FUN_01017030 0x01017030, FUN_01017070 0x01017070, FUN_01036940 0x01036940, cCivData::GetCities 0x005c65e0.

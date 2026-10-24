@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01003230/s01003230.cpp  ?FUN_01003230@cSPSimulatorSpaceGame@@QAEXXZ  01003230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01003230/s01003230.cpp  ?GalaxyContextActivate@cSPSimulatorSpaceGame@@QAEXXZ  01003490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01003230/s01003230.cpp  ?FUN_01003620@cSPSimulatorSpaceGame@@QAEXXZ  01003620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01003230/s01003230.cpp  ?FUN_010039c0@cSPSimulatorSpaceGame@@QAEXPAUcStar@@@Z  010039c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01003230/s01003230.cpp  ?FUN_01003a50@@YAXXZ  01003a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
