@@ -254,7 +254,8 @@ Vec20::Vec20(const Vec20& x)
     mpEnd = mpBegin;
     mpCapacity = mpBegin + n;
     void* pResult;
-    UninitCopy20(&pResult, x.mpBegin, x.mpEnd, mpBegin, (uint8_t)0);
+    uint8_t bFill;                     // retail passes this uninitialized flag byte
+    UninitCopy20(&pResult, x.mpBegin, x.mpEnd, mpBegin, bFill);
     mpEnd = (T20*)pResult;
 }
 

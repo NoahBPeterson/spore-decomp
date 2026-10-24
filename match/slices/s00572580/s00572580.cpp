@@ -8,6 +8,10 @@
 #include <intrin.h>
 #include "types.h"
 
+// Retail computes this sqrt with an inline x87 fsqrt, not a _CIsqrt call.
+#pragma intrinsic(sqrt)
+static inline float InlineSqrt(float x) { return (float)sqrt((double)x); }
+
 #define PVCAT2(a, b) a##b
 #define PVCAT(a, b) PVCAT2(a, b)
 #define PV virtual void PVCAT(pv_, __COUNTER__)();
@@ -539,7 +543,7 @@ float __cdecl EditorGroundSampler(cEditorGround* editor, uint32_t unused, const 
                 return 0.0f;
             }
         }
-        const float inv = 1.0f / sqrtf(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+        const float inv = 1.0f / InlineSqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
         normal.x *= inv;
         normal.y *= inv;
         normal.z *= inv;

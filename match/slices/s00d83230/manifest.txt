@@ -1,0 +1,4 @@
+# slice s00d83230: the avatar idle tick is byte-exact; the 1765-byte behaviour-tree tick below is
+# logged in nonmatching.txt (complete, compiling source, but a 60-branch behaviour tree that the
+# compiler will not reproduce instruction for instruction from the round budget).
+slices/s00d83230/s00d83230.cpp  ?AvatarIdleTick@@YA_NPAUCreature@@HHHHPAUIdleTimer@@HM@Z  00d83230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

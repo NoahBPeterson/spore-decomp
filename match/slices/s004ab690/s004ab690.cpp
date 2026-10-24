@@ -1,6 +1,8 @@
 // Slice s004ab690 — cSPEditorModel teardown / block search helpers.
 #include "types.h"
 
+struct cSPEditorModel;
+
 struct cSPEditorBlock {
     char pad0[0xdc8];
     uint32_t mFlags[4];  // +0xdc8
@@ -12,8 +14,33 @@ struct cSPEditorBlock {
         else { result = false; }
         return result;
     }
+    void sub_435be0(cSPEditorModel* model);   // 0x00435be0 (thiscall on the block, one stack arg)
+    void sub_449ed0();                        // 0x00449ed0 (Blk_s0044_9ed0::A49ed0)
 };
-struct cSPEditorModel { void RemoveBlock(cSPEditorBlock* block); };
+
+struct EditorBlockList {                      // the block vector object embedded at model+0x18
+    void sub_4541f0(void* slot);              // 0x004541f0 (thiscall on the vector, one stack arg)
+};
+
+// The list stores refcounted wrappers: *it converts to the block pointer through a temporary.
+template <class T> struct BlockRef {
+    T* mpObject;
+    BlockRef() {}
+    BlockRef(T* p) : mpObject(p) {}
+    operator T*() const { return mpObject; }
+};
+
+// Only the vtable prefix is needed: RemoveBlock dispatches slots +4 and +8 on the block.
+struct cSPEditorBlockVtbl {
+    virtual void vfn0();
+    virtual void vfn1();                      // +0x04
+    virtual void vfn2();                      // +0x08
+};
+
+struct cSPEditorModel {
+    void RemoveBlock(cSPEditorBlock* block, uint32_t arg2);
+    void sub_4adfc0(int v);                   // 0x004adfc0 (thiscall on the model, one stack arg)
+};
 
 extern void* g_vtbl_model_a;
 extern void* g_vtbl_model_b;
@@ -47,34 +74,28 @@ void ModelDestructor(cSPEditorModel* self)
 }
 
 // @ 0x004abaf0
-extern void FUN_00435be0(cSPEditorBlock* b);
-extern void FUN_00449ed0();
-extern void FUN_004541f0(void** p);
-extern void FUN_004adfc0(int v);
-void cSPEditorModel::RemoveBlock(cSPEditorBlock* block)
+void cSPEditorModel::RemoveBlock(cSPEditorBlock* block, uint32_t arg2)
 {
-    cSPEditorModel* self = this;
-    if (block != 0) {
-        cSPEditorBlock** begin = *(cSPEditorBlock***)((char*)self + 0x18);
-        cSPEditorBlock** end = *(cSPEditorBlock***)((char*)self + 0x1c);
-        cSPEditorBlock** it = begin;
-        while (it != end && *it != block) {
-            ++it;
-        }
-        if (it == end) {
-            FUN_00435be0((cSPEditorBlock*)self);
-            FUN_00449ed0();
-            cSPEditorBlock* local = block;
-            if (block != 0) {
-                (*(void(**)(cSPEditorBlock*))(*(uint32_t*)block + 4))(block);
-            }
-            FUN_004541f0((void**)&local);
-            if (local != 0) {
-                (*(void(**)(cSPEditorBlock*))(*(uint32_t*)local + 8))(local);
-            }
-            FUN_004adfc0(1);
-        }
-    }
+    (void)arg2;
+    if (block == 0)
+        return;
+    BlockRef<cSPEditorBlock>* last = *(BlockRef<cSPEditorBlock>**)((char*)this + 0x1c);
+    BlockRef<cSPEditorBlock>* first = *(BlockRef<cSPEditorBlock>**)((char*)this + 0x18);
+    BlockRef<cSPEditorBlock>* it = first;
+    while (it != last && *it != block)
+        ++it;
+    if (it != *(BlockRef<cSPEditorBlock>**)((char*)this + 0x1c))
+        return;
+    block->sub_435be0(this);
+    block->sub_449ed0();
+    cSPEditorBlock* raw = block;
+    BlockRef<cSPEditorBlock> local = raw;
+    if (local.mpObject != 0)
+        ((cSPEditorBlockVtbl*)local.mpObject)->vfn1();
+    ((EditorBlockList*)((char*)this + 0x18))->sub_4541f0(&local);
+    if (local.mpObject != 0)
+        ((cSPEditorBlockVtbl*)local.mpObject)->vfn2();
+    this->sub_4adfc0(1);
 }
 
 // @ 0x004abbc0

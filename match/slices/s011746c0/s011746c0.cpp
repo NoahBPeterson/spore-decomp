@@ -14,10 +14,17 @@
 // coefficients in ECX and the output in EDI. The stand-in caller at the bottom makes cl emit them
 // with the same conventions. ReflectionToLpc (0x01174420) is not a VA of this slice; its real body
 // is here because the convention of the call in LpcSynthesize depends on it (it matches too).
+// LpcInit (0x01175170) decodes the frame header from the same LSB-first bit stream (stdcall).
 #include "types.h"
 
 struct LpcVoice {
-    uint32_t pad000[0x114 / 4];
+    const unsigned char* next;               // +0x000 next input byte of the bit reader
+    unsigned int buffer;                     // +0x004 LSB-first bit buffer
+    int bitCount;                            // +0x008 valid bits in buffer
+    unsigned int field0;                     // +0x00c 1-bit header field
+    int field1;                              // +0x010 0x20 - 4-bit header field
+    float base;                              // +0x014 (4-bit field + 1) * 8
+    float table[63];                         // +0x018 base * factor^(k+1)
     float refl[12];                          // +0x114 reflection coefficients (interpolated per sub-block)
     float hist[12];                          // +0x144 synthesis filter history (circular)
     uint32_t pad174[(0x684 - 0x174) / 4];
@@ -71,8 +78,54 @@ static void LpcSynthesize(LpcVoice* v, int offset, int numBlocks)
     }
 }
 
-// Stand-in for the decoder's sub-block loop (0x01175afd...), only so that cl emits the static
-// functions above with the original register conventions.
+extern unsigned int g_bitMask[];   // 0x015c4b78: low-bit masks {1,3,7,0xf,0x1f,0x3f,0x7f,0xff}
+
+static __forceinline unsigned int LpcReadBits(LpcVoice* v, int n)
+{
+    unsigned int value = v->buffer & g_bitMask[n - 1];
+    v->buffer >>= n;
+    v->bitCount -= n;
+    if (v->bitCount < 8) {
+        v->buffer |= (unsigned int)*v->next++ << v->bitCount;
+        v->bitCount += 8;
+    }
+    return value;
+}
+
+// @ 0x01175170
+void __stdcall LpcInit(const unsigned char* data, LpcVoice* v, int flag)
+{
+    v->bitCount = 8;
+    v->next = ++data;
+    v->buffer = data[-1];
+    if (flag == 0)
+        return;
+
+    v->field0 = LpcReadBits(v, 1);
+    v->field1 = 0x20 - LpcReadBits(v, 4);
+    unsigned int i = LpcReadBits(v, 4) + 1;
+    v->base = (float)i * 8.0f;
+    unsigned int f3 = LpcReadBits(v, 6);
+    float factor = (float)f3 * 0.001f + 1.04f;
+
+    float* p = v->table;
+    for (int j = 0; j < 7; j++) {
+        float val = p[-1];
+        for (int k = 0; k < 9; k++) {
+            val = val * factor;
+            *p++ = val;
+        }
+    }
+
+    for (int k = 0; k < 12; k++) {
+        v->refl[k] = 0.0f;
+        v->hist[k] = 0.0f;
+    }
+    for (int k = 0; k < 0x144; k++)
+        v->pad174[k] = 0;
+}
+
+
 void s011746c0_LpcSynthesizeCaller(LpcVoice* v, int offset, int numBlocks)
 {
     LpcSynthesize(v, offset, numBlocks);

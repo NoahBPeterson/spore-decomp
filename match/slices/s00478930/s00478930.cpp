@@ -164,8 +164,13 @@ void Shift12Out(E12** out, E12* first, E12* last, E12* dest)
     *out = d;
 }
 
+// 4-dword vector: three data pointers plus an embedded allocator instance at
+// +0xc, whose address is what eastl hands to the allocate entry point.
+struct AllocHolder { void* mpData; };
+
 struct Vec12 {
     E12* mpBegin; E12* mpEnd; E12* mpCapacity;
+    AllocHolder alloc;                    // +0xc
     void Elem12Insert(E12* position, uint n, const E12& value);
 };
 
@@ -176,11 +181,13 @@ void Vec12::Elem12Insert(E12* position, uint n, const E12& value)
         uint oldSize = (uint)((char*)mpEnd - (char*)mpBegin) / 0xc;
         uint grow = oldSize ? oldSize * 2 : 1;
         uint newSize = (oldSize + n < grow) ? grow : oldSize + n;
-        E12* pNew = newSize ? (E12*)EASTL_Allocate(mpCapacity, newSize * 0xc, 4, 0) : 0;
+        E12* pNew = newSize ? (E12*)EASTL_Allocate(&alloc, newSize * 0xc, 4, 0) : 0;
         E12* p = (E12*)Copy12Range(mpBegin, position, pNew);
         Construct12Range(p, n, &value);
         E12* pNewEnd = (E12*)Move12Range(position, mpEnd, p + n);
-        if (mpBegin) EASTL_allocator_deallocate(mpBegin);
+        // eastl's debug header in front of the block gates the release.
+        if (mpBegin && *(int*)((char*)mpBegin - 4) != 0)
+            EASTL_allocator_deallocate(mpBegin);
         mpBegin = pNew;
         mpEnd = pNewEnd;
         mpCapacity = pNew + newSize;

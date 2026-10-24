@@ -57,7 +57,9 @@ struct cSpatialObject {
     virtual const Vector3& GetPosition();                          // +0x2c
     PAD8 PAD1 PAD1 PAD1                                            // slots 12..22
     virtual Vector3 GetVelocity();                                 // +0x5c
-    PAD16 PAD8 PAD1 PAD1 PAD1                                      // slots 24..50
+    PAD16 PAD8 PAD1                                                // slots 24..48
+    virtual void Stop(float speed, int mode);                      // +0xc4
+    PAD1                                                           // slot 50
     virtual float GetSpeed();                                      // +0xcc
     PAD4 PAD1                                                      // slots 52..56
     virtual void MoveTo(const Vector3& dst, float speed);          // +0xe4
@@ -104,6 +106,23 @@ struct cVehicle {
     cTargetObject* GetTarget();                                    // 0x00c9fee0
     void SetStrafeDistance(float f);                               // 0x00c9ee70
     float GetSurfaceHeight();                                      // 0x00c9eb80
+    void EndAngryCrowdAttack();                                    // 0x00ca8180
+    void SetPathTarget(const Vector3& pos);                        // 0x00ca33b0
+    void ConsumeTimer();                                           // 0x00c9ee50
+};
+
+// The order object the behaviour-tree tick context points at (context+0x04).
+struct cVehicleOrder {
+    PAD1                                                           // +0x00
+    virtual void Release();                                        // +0x04
+    PAD8 PAD1                                                      // slots 2..10
+    virtual bool IsDone();                                         // +0x2c
+    void Cancel(cVehicle* owner);                                  // 0x00dc8c50
+};
+
+struct cTreeContext {               // last argument of the vehicle-tree callbacks
+    void* mpPad00;                  // +0x00
+    cVehicleOrder* mpOrder;         // +0x04
 };
 
 static __forceinline void PushSurface(cSpatialObject* loco, cVehicle* self, Raw3& p)
@@ -211,3 +230,26 @@ bool AirAttack_Tick(cVehicle* self, int, int, int, int, int* pState)
 }
 
 }}
+
+// @ 0x00dca070
+// Cancels the vehicle's current order: asks the order object to finish, releases it, then resets
+// the attack target, stops the locomotion object and snapshots its position as the new path
+// target before the vehicle timer is consumed.
+void __cdecl FUN_00dca070(cVehicle* self, int, int, int, int, cTreeContext* ctx)
+{
+    cVehicleOrder* order = ctx->mpOrder;
+    if (order) {
+        if (!order->IsDone())
+            order->Cancel(self);
+    }
+    {
+        cVehicleOrder* pOrder = ctx->mpOrder;
+        if (pOrder)
+            pOrder->Release();
+    }
+    self->EndAngryCrowdAttack();
+    self->mGameData.SetAttackTarget(0);
+    self->mLoco.Stop(0.0f, 0);
+    self->SetPathTarget(self->mLoco.GetPosition());
+    self->ConsumeTimer();
+}

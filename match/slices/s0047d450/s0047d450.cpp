@@ -159,6 +159,7 @@ void* cSPEditorHandle::AsInterface(uint32_t id)
 // relocations, so they are declared with the right calling convention and the
 // calls are reproduced through explicit vtable-slot casts (retail layout).
 struct cSPEditorBlock {
+    char  pad_00[0x0c];
     void* mPropList;              // +0x0c (unused here)
     char  pad_10[0x08];
     void* mModelWorld;            // +0x18  cIModelWorld*

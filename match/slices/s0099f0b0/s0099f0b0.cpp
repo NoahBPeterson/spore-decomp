@@ -296,3 +296,120 @@ AnimHeader* CloneAnim(AnimHeader* src, bool filterOn)
     }
     return dst;
 }
+
+#include <intrin.h>
+
+// ---------------------------------------------------------------------------
+// 0x0099f0b0 / 0x0099f8b0 / 0x0099f900 -- animation block helpers.
+// ---------------------------------------------------------------------------
+struct FreedBlockHeader {
+    uint32_t mFlags;                  // at buffer[-1]
+};
+
+struct RefBlock {
+    char       pad00[0x1c];
+    void*      mpBuffer;              // +0x1c
+    char       pad20[0x10];
+    int        mRefCount;             // +0x30
+
+    int Release();                    // 0x0099f0b0
+};
+
+void __cdecl FreeRawBlock(void* p);   // 0x00f47380
+
+struct PaintSource {
+    struct PaintRec {
+        uint32_t mFlags;              // +0x00
+        uint32_t mPad04;              // +0x04
+        uint32_t mOffset;             // +0x08
+        uint32_t mStride;             // +0x0c
+        uint32_t mIndex;              // +0x10
+        char     pad14[0x0c];
+    } mRecs[1];                       // records start at +0x00, stride 0x20
+};
+struct ChunkEntry {
+    void*    mpData;                  // +0x00
+    char     pad04[0x1c];
+};
+extern ChunkEntry kAnimChunkTable[9]; // 0x01446cc0, stride 0x20
+
+struct AnimPaintDest {
+    char       pad000[0x208];
+    uint32_t   m208;                  // +0x208
+    char       pad20c[0x214 - 0x20c];
+    const PaintSource* mpSource;      // +0x214
+    char       pad218[0x22c - 0x218];
+    struct PaintSlot {
+        uint32_t mA;                  // +0x00
+        uint32_t mB;                  // +0x04
+        uint32_t mC;                  // +0x08
+        char     pad0c[0x1c];
+    };
+    union {
+        PaintSlot mSlots[0x40];       // +0x22c
+        struct {
+            char     padSlots[0xc1c - 0x22c];
+            uint32_t mC1c;            // +0xc1c
+            uint32_t mC20;            // +0xc20
+        } mTail;
+    };
+};
+
+// @ 0x0099f0b0
+int RefBlock::Release()
+{
+    int local[2];
+    local[0] = mRefCount - 1;
+    local[1] = 0;
+
+    int* selected = &local[0];
+    if (local[0] > 0)
+        selected = &local[0];
+    else
+        selected = &local[1];
+
+    int count = *selected;
+    mRefCount = count;
+    if (count > 0)
+        return count;
+
+    mRefCount = 1;
+    _ReadWriteBarrier();
+    if (mpBuffer != 0 && ((FreedBlockHeader*)mpBuffer)[-1].mFlags != 0)
+        FreeRawBlock(mpBuffer);
+    FreeRawBlock(this);
+    return 0;
+}
+
+// @ 0x0099f8b0
+void __cdecl FUN_0099f8b0(AnimPaintDest* dest, const PaintSource* source)
+{
+    dest->m208 = source->mRecs[0].mOffset;
+    dest->mpSource = source;
+
+    for (int i = 0; i < 0x40; i++) {
+        dest->mSlots[i].mA = 0;
+        dest->mSlots[i].mB = 0;
+        dest->mSlots[i].mC = 0;
+    }
+
+    dest->mTail.mC1c = source->mRecs[0].mFlags;
+    dest->mTail.mC20 = source->mRecs[0].mPad04;
+}
+
+// @ 0x0099f900
+void __cdecl FUN_0099f900(int arg1, int arg2, PaintSource* source,
+                          uint32_t count, int baseOffset)
+{
+    PaintSource::PaintRec* rec = source->mRecs;
+    while (count != 0) {
+        uint32_t index = rec->mIndex;
+        if (index < 9) {
+            void* dst = (char*)kAnimChunkTable[index].mpData + baseOffset;
+            void* src = (char*)(rec->mStride * arg1 + arg2 + rec->mOffset);
+            memcpy(dst, src, kAnimElemSize[rec->mFlags & 0xf]);
+        }
+        rec = (PaintSource::PaintRec*)((char*)rec + 0x20);
+        count--;
+    }
+}

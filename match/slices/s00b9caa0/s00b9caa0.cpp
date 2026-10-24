@@ -61,6 +61,7 @@ struct Property {
     uint16_t mnType;   // +0x12  (0xa = uint32, 0xd = float)
 
     uint32_t* GetUInt();   // 0x0041ea00
+    float*    GetFloat();  // 0x0041ea70
 };
 
 __forceinline int PropertyItemCount(const Property* p)
@@ -405,6 +406,7 @@ public:
 
 struct cCubeGrid {
     void FUN_00b90ea0(const Vector3* pos, float a, float b, float c);   // clear marker area
+    void FUN_00b90ea0(void* target, Vector3 pos);                       // same address, (target, pos) form
 };
 extern cCubeGrid g_PlanetGrid;   // 0x0156c060
 
@@ -571,5 +573,93 @@ void FUN_00b9caa0(void)
             }
         }
     }
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x00b9d640 / 0x00b9d6d0: the two per-site placement helpers of the tribe stage setup.
+// ---------------------------------------------------------------------------------------------
+struct SpawnRecord {                 // the small value kept per placed definition
+    uint8_t mbFlag;                  // +0x0
+    uint8_t mPad01[3];
+};
+
+struct SpawnRbtreeIterator {
+    eastl::rbtree_node_base* mpNode;
+};
+
+struct SpawnRbtreePair {
+    eastl::rbtree_node_base* first;
+    bool                     second;
+};
+
+struct cSpawnTree {                                  // eastl::rbtree held by a spawn definition
+    eastl::less             mCompare;                // +0x00
+    eastl::rbtree_node_base mAnchor;                 // +0x04
+    uint32_t                mnSize;                  // +0x14
+    uint32_t                mAllocator;              // +0x18 (rest of the fixed node allocator)
+    SpawnRbtreeIterator find(const uint32_t& key);                          // 0x00e5c780
+    SpawnRbtreePair     insert(const uint32_t& key, SpawnRecord value);     // 0x00a17a70
+    __forceinline eastl::rbtree_node_base* end() { return &mAnchor; }
+};
+
+struct cSpawnDefinition {                            // the definition record searched here
+    uint32_t   mPad00[4];                            // +0x00
+    bool       mbEnabled;                            // +0x10
+    uint8_t    mPad11[7];                            // +0x11
+    cSpawnTree mPlaced;                              // +0x18
+};
+
+class cSpawnPropertyList : public PropertyList {
+public:
+    uint32_t mPad04;                                 // +0x04
+    uint32_t mGroupId;                               // +0x08
+};
+
+__forceinline bool GetSpawnFloat(PropertyList* list, uint32_t id, float& value)
+{
+    Property* p;
+    if (list->GetProperty(id, p) && p->mnType == 0xd) {
+        value = *p->GetFloat();
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00B9D640
+int FUN_00b9d640(cSpawnDefinition* def, const uint32_t& key, int* pBelow, int* pAbove)
+{
+    if (def->mbEnabled && def->mPlaced.find(key).mpNode != def->mPlaced.end()) {
+        int placed = FUN_00b9b090((const Vector3*)def, &key, 1, key, 1);
+        if (placed != 0) {
+            if (pBelow)
+                *pBelow += placed;
+            if (pAbove)
+                *pAbove -= placed;
+        } else {
+            SpawnRecord record;
+            record.mbFlag = (uint8_t)placed;
+            def->mPlaced.insert(key, record);
+        }
+        return placed;
+    }
+    return 0;
+}
+
+// @ 0x00B9D6D0
+void FUN_00b9d6d0(void* target, cSpawnPropertyList* list)
+{
+    float offsetX = 0.0f, offsetY = 0.0f, offsetZ = 0.0f;
+    if (list) {
+        GetSpawnFloat(list, 0x24a02634, offsetX);
+        GetSpawnFloat(list, 0xcbb8d102, offsetY);
+        GetSpawnFloat(list, 0x561c98ac, offsetZ);
+    }
+    Vector3 pos(offsetX, offsetY, offsetZ);
+    g_PlanetGrid.FUN_00b90ea0(target, pos);
+
+    if (list->HasProperty(0xbb64b481)) {
+        Property* p = list->GetPropertyObject(0xbb64b481);
+        FUN_00b9aa10((const Vector3*)target, PropertyItems(p), PropertyItemCount(p), list->mGroupId);
     }
 }

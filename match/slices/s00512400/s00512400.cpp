@@ -15,7 +15,7 @@ struct RenderJobSink {
     void InitRenderJob(RenderCfg* cfg, uint32_t* pBones, uint32_t id, float* pos, float* color,
                        uint32_t a6, uint32_t a7);
 };
-void BuildMatrix(float* p5, uint32_t p6, uint32_t p7, int mode, float* out0, float* out1, int z);  // 0x004fe510
+
 
 // ---------------------------------------------------------------------------
 // config object (fields used by this routine)
@@ -42,8 +42,12 @@ struct RenderCfg {
     uint8_t b88;      // 0x88
     uint8_t pad5[0x9c - 0x89];
     uint8_t b9c;      // 0x9c
+    uint8_t pad6[3];
     uint8_t ba0;      // 0xa0
+    uint8_t pad7[3];
     uint8_t ba4;      // 0xa4
+
+    void BuildMatrix(float* p5, uint32_t p6, uint32_t p7, int mode, float* out0, float* out1, int z); // 0x004fe510
 };
 
 inline float Saturate(float x)
@@ -70,19 +74,18 @@ void RenderJobSink::InitRenderJob(RenderCfg* cfg, uint32_t* pBones, uint32_t id,
         job[2] = *(uint32_t*)&color[1];
         job[3] = *(uint32_t*)&color[2];
 
-        float local_30, local_2c, local_28, local_24, local_20, local_1c;
-        BuildMatrix(color, a6, a7, 2, &local_30, &local_24, 0);
-        (void)local_2c; (void)local_28; (void)local_20; (void)local_1c;
+        float local[6];
+        cfg->BuildMatrix(color, a6, a7, 2, &local[0], &local[3], 0);
 
-        job[4] = *(uint32_t*)&local_30;
-        job[5] = *(uint32_t*)&local_2c;
-        job[6] = *(uint32_t*)&local_28;
-        job[7] = *(uint32_t*)&local_24;
-        job[8] = *(uint32_t*)&local_20;
-        job[9] = *(uint32_t*)&local_1c;
+        job[4] = *(uint32_t*)&local[0];
+        job[5] = *(uint32_t*)&local[1];
+        job[6] = *(uint32_t*)&local[2];
+        job[7] = *(uint32_t*)&local[3];
+        job[8] = *(uint32_t*)&local[4];
+        job[9] = *(uint32_t*)&local[5];
 
-        const float v10 = -((local_30 * pos[0] + local_2c * pos[1]) + local_28 * pos[2]) + 0.5f - cfg->f14;
-        const float v11 = -((local_24 * pos[0] + local_20 * pos[1]) + local_1c * pos[2]) + 0.5f - cfg->f18;
+        const float v10 = -((local[0] * pos[0] + local[1] * pos[1]) + local[2] * pos[2]) + 0.5f - cfg->f14;
+        const float v11 = -((local[3] * pos[0] + local[4] * pos[1]) + local[5] * pos[2]) + 0.5f - cfg->f18;
         job[10] = *(uint32_t*)&v10;
         job[11] = *(uint32_t*)&v11;
 

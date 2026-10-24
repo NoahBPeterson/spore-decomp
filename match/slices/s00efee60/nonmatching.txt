@@ -2,7 +2,8 @@
 00efee60  68   object-selection toggle: vcall/refcount schedule differs
 00efeee0  164  placement/orientation + audio cue: x87 float args and flag flip schedule differ
 00eff030  89   placement commit: call schedule / vcall slot differs
-00eff1e0  43   visibility predicate: SSE int->float->compare idiom not reproduced exactly
+00eff0c0  210  visibility/placement update: complete; gate, handle lookup, two orientation comparisons, both SetTLerp calls and all three +0x54 vcalls reproduce the retail trace and memory. Equiv PASS 514 valid, 100% coverage. Residual diff is the x87 staging frame: the float is routed through an aligned volatile local and a volatile self keeps ECX=this across the calls, while retail uses its push ecx slot directly
+00eff1e0  56   visibility predicate: complete; retail is a thiscall with one ignored stack argument (ret 4), so the source declares f_eff1e0(int) and reads the placement object through named +0x04/+0x60/+0x64 fields. Equiv WEAK 589 valid, 44% coverage (the generator rarely reaches both compare outcomes). Residual diff is retail's SSE bool->float->ucomiss idiom vs our direct float compare
 00eff230  44   singleton pointer assignment: `this`-slot/arg register assignment differs
 00eff360  39   flag-gated commit: branch/call schedule differs
 00eff590  83   placement read: vcall slots and float load schedule differ

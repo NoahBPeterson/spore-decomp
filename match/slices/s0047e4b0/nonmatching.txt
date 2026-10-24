@@ -5,7 +5,7 @@
 0047e830  269  GetOverdrawHandleAlphaForState: switch body layout and inlined-helper local slots differ
 0047e980  284  GetHandleColorForState: switch body layout and /Od local slots differ
 0047eaa0  284  GetOverdrawHandleColorForState: switch body layout and /Od local slots differ
-0047ebe0  57   GetZeroVector: zero-init aggregate uses integer stores in original [equiv PASS after ecx fix (now cSPEditorHandle member)]
+0047ebe0  52   GetZeroVector: zero-init aggregate uses integer stores in original; the zero vector local was declared `Vector3 v = {0.0f,0.0f,0.0f}` and copied with float movss stores, which writes xmm0 (a register the original never touches) - it is now an `int v[3] = {0,0,0}` copied as three dwords, matching the original's `xor eax,eax`/immediate zeroing and integer `mov` copies. equiv PASS (300 valid, 100% cov, 0 mismatches)
 0047f290  286  IsFlagSet: bitset test and local slots differ
 0047f3e0  179  SetScale: reference-local product ordering and /Od slots differ; equiv PASS (279 valid, 100% cov) now returns hidden eax (overdraw+8 upper | modcount, else model+8, else this)
 0047ec40  643  SetState: complete (guard, alpha+colour transitions for model and overdraw model, animate vs direct); /Od local slot layout differs (holes after SetFlag pairs)

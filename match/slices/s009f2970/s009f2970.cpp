@@ -26,10 +26,15 @@ struct IKBody {
     float    velocity[3];         // +0x350
 };
 
+struct SplineCtx;                 // 0x10c bytes, solved by 0x009eddc0
+
 struct IKWorld {
     uint32_t pad000[0x70 / 4];
     float    dt;                  // +0x70
-    uint32_t pad074[(0x2e4 - 0x74) / 4];
+    uint32_t pad074[(0x24c - 0x74) / 4];
+    SplineCtx* splineCtxBegin;    // +0x24c (array of 0x10c-byte spline contexts)
+    SplineCtx* splineCtxEnd;      // +0x250
+    uint32_t pad254[(0x2e4 - 0x254) / 4];
     char*    particlesBegin;      // +0x2e4 (700-byte IKParticle array)
     char*    particlesEnd;        // +0x2e8
     uint32_t pad2ec[(0x1794 - 0x2ec) / 4];
@@ -57,6 +62,8 @@ struct IKParticle {
 struct IKContext {
     IKWorld* world;               // +0x00
     void __thiscall Update(IKParticle* p);   // 0x009f1990
+    void __thiscall UpdateBone(IKParticle* p);               // 0x009ecac0
+    void __thiscall WriteParticles(IKBody** ppBody);         // 0x009f2970
 };
 
 extern int   g_holdEnabled;       // DAT_01550ad4
@@ -193,4 +200,46 @@ void __stdcall IKSolveParticles(IKContext* ctx, IKParticle* root)
         off += 700;
         n -= 1;
     } while (n != 0);
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x009f2970: refresh every child particle of one body, then re-fit the chain splines.
+//
+// The solver object is *not* an argument: the retail body never initialises EDI, it only reads
+// `[edi]` (the world) and hands EDI on as the `this` of UpdateBone and as the ScaleOwner of
+// FUN_009eddc0.  So the caller passes the IKContext in EDI (a custom convention; see the
+// papercut) and the only stack argument is the body handle.  Modelled here as an ordinary
+// member function, i.e. cl takes the context from ECX.
+// ---------------------------------------------------------------------------------------------
+
+struct SplineCtx {                 // one chain spline, 0x10c bytes
+    uint32_t pad000[0x94 / 4];
+    uint8_t  rescale;              // +0x94 (bit 0: the chain has to be re-fitted)
+    uint8_t  pad095[0x10c - 0x95];
+};
+
+void __stdcall FUN_009eddc0(IKContext* owner, SplineCtx* ctx);   // 0x009eddc0
+
+// @ 0x009f2970
+void IKContext::WriteParticles(IKBody** ppBody)
+{
+    // the child count is latched, but the handle itself is re-read every iteration
+    uint32_t const count = (*ppBody)->childCount;
+    uint32_t i = 0;
+    if (count != 0) {
+        do {
+            UpdateBone((IKParticle*)(world->particlesBegin + ((*ppBody)->childStart + i) * 700));
+            ++i;
+        } while (i < count);
+    }
+
+    int n = (int)(world->splineCtxEnd - world->splineCtxBegin);
+    int idx = 0;
+    while (n != 0) {
+        SplineCtx* ctx = world->splineCtxBegin + idx;   // re-read: the callee may grow the array
+        if (ctx->rescale & 1)
+            FUN_009eddc0(this, ctx);
+        ++idx;
+        --n;
+    }
 }

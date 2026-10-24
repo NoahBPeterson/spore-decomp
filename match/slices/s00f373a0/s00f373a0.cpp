@@ -372,27 +372,27 @@ void SPObj::f37a40(void* arg, char flag) {
     int local_10 = 0;
     if (!flag) {
         void* pman = FUN_0067de30();
-        int old = local_10;
-        if (old) {
+        if (local_10 != 0) {
+            void* old = (void*)local_10;
             local_10 = 0;
-            ((void(__thiscall*)(void*))VTP((void*)old)[1])((void*)old);
+            ((void(__thiscall*)(void*))VTP(old)[1])(old);
         }
         char c = ((char(__thiscall*)(void*, u32, int, int*))VTP(pman)[0x2c / 4])(
             pman, *(u32*)arg, *(int*)((char*)arg + 8), &local_10);
         if (c) goto done;
     }
     {
-        int local_c = 0, local_8 = 0, local_4 = 0;
+        u32 key[3] = { 0, 0, 0 };
         void* idg = FUN_0067de60();
-        ((void(__thiscall*)(void*, int*, u32, int))VTP(idg)[8 / 4])(
-            idg, &local_c, 0xb1b104, *(int*)((char*)arg + 8));
+        ((void(__thiscall*)(void*, u32*, u32, int))VTP(idg)[8 / 4])(
+            idg, key, 0xb1b104, *(int*)((char*)arg + 8));
         void* m = FUN_00f48a80();
-        void* got = ((void*(__thiscall*)(void*, void*))VTP(m)[4 / 4])(m, &local_c);
-        int old = local_10;
-        if (got != (void*)old) {
+        void* got = ((void*(__thiscall*)(void*, void*))VTP(m)[4 / 4])(m, key);
+        if (got != (void*)local_10) {
+            void* old = (void*)local_10;
             if (got) ((void(__thiscall*)(void*))VTP(got)[0])(got);
             local_10 = (int)got;
-            if (old) ((void(__thiscall*)(void*))VTP((void*)old)[1])((void*)old);
+            if (old) ((void(__thiscall*)(void*))VTP(old)[1])(old);
         }
     }
 done:

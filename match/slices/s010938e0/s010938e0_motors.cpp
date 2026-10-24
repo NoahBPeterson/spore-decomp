@@ -217,18 +217,17 @@ void hkPositionConstraintMotor::calcMotorData(const hkConstraintMotorInput& in, 
 	out.m_damping = m_damping;
 
 	const hkReal error = in.m_positionError;
-	// Proportional recovery: move at most m_proportionalRecoveryVelocity * error per frame.  The
-	// subexpression is repeated on purpose: the original keeps it as an x87 temporary (the value is
-	// shared by the common subexpression eliminator), which is what keeps it in extended precision.
-	const hkReal delta = error - error * m_proportionalRecoveryVelocity * in.m_stepInfo->m_frameDeltaTime;
+	// Proportional recovery: move at most m_proportionalRecoveryVelocity * error per frame.
+	const hkReal correction = error * m_proportionalRecoveryVelocity * in.m_stepInfo->m_frameDeltaTime;
+	const hkReal delta = error - correction;
 	const hkReal maxCorrection = m_constantRecoveryVelocity * in.m_stepInfo->m_frameDeltaTime;
 
-	// Start from the raw position error; if the proportional correction did not get all the way to it,
-	// step from the correction by the constant recovery amount in the direction of the error.
+	// If the proportional correction still leaves more than one constant step of error, step from the
+	// correction by the constant recovery amount in the direction of the error; otherwise the target
+	// stays at the raw position error.
 	hkReal target = error;
-	if (fabsf(delta) < maxCorrection)
-		target = error * m_proportionalRecoveryVelocity * in.m_stepInfo->m_frameDeltaTime
-		         + (delta <= 0.0f ? -maxCorrection : maxCorrection);
+	if (fabsf(delta) > maxCorrection)
+		target = correction + (delta <= 0.0f ? -maxCorrection : maxCorrection);
 
 	// Clamp against the solver's own idea of where the body may go this step.
 	const hkReal upper = fabsf(error) - in.m_lastResults.m_internalSolverData;

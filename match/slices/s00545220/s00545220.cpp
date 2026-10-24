@@ -495,7 +495,7 @@ public:
     bool SetLists(FeedList* pMyFeeds, FeedList* pSubscriptions, FeedList* pList28, HandshakeData* pData);
     bool ResetParser();
     bool Open();
-    void StartDoc(const wchar_t** attrs);
+    void StartDoc();
     void EndDoc();
     void StartFeed();
     void EndFeed();
@@ -671,7 +671,7 @@ off_type HandshakeParser::GetPosition(EA::IO::PositionType positionType) const {
 }
 
 // @ 0x005459a0
-void HandshakeParser::StartDoc(const wchar_t**) {
+void HandshakeParser::StartDoc() {
     if (mpMyFeeds && mpSubscriptions && mpList28) {
         mpMyFeeds->clear();
         mpSubscriptions->clear();

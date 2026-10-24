@@ -237,7 +237,7 @@ class hashtable : public rehash_base<hashtable> { public:
             DoRehash(nBuckets);
     }
     insert_return_type DoInsertValue(const value_type& value, true_type);   // 0x00506d70
-    insert_return_type insert(const value_type& value) { return DoInsertValue(value_type(value), true_type()); }
+    insert_return_type insert(const value_type& value) { return DoInsertValue(value, true_type()); }
 };
 
 // @ 0x00506b80 set_max_load_factor

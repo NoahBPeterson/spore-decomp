@@ -1,1 +1,1 @@
-45ec30  -  mesh builder; only skeleton reproduced
+# va  diff-bytes  reason   (none: 0045ec30 moved to manifest.txt as byte-exact; 0045eac0 is in nonmatching.txt)

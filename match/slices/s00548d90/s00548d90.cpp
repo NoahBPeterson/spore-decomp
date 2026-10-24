@@ -29,9 +29,15 @@ int   FUN_0054a570(int n, int a, int b);
 void  FUN_0054a470(int a);
 void  FUN_0054a920(int a, int b);
 
+// A 0x14 element of the vector: the insert helper is a thiscall member of the element.
+struct Elem14 {
+    int sub_54a470(int b);              // 0x0054a470 (thiscall on the element, one stack arg)
+};
+
 // ---------------------------------------------------------------- object
 struct Obj44 {
     char mPad[0x200];
+    void sub_54a920(int a, int b);      // 0x0054a920 (thiscall on the vector, two stack args)
     int* FUN_00548d90(int* param_2);
     int* FUN_00548e70(int* param_2);
     int* FUN_00548ee0(int* param_2);
@@ -250,16 +256,21 @@ unsigned* Obj44::FUN_00549940(unsigned* param_2)
 // @ 0x00549d20
 int Obj44::FUN_00549d20(int param_2, int param_3)
 {
-    int* p = (int*)this;
-    int base = *p;
-    if (param_2 == p[1] && p[1] != p[2]) {
-        int e = p[1];
-        p[1] = p[1] + 0x14;
-        if (e != 0) FUN_0054a470(param_3);
+    int n = (param_2 - ((int*)this)[0]) / 0x14;
+    if (param_2 != ((int*)this)[1] || ((int*)this)[1] == ((int*)this)[2]) {
+        sub_54a920(param_2, param_3);
     } else {
-        FUN_0054a920(param_2, param_3);
+        Elem14* e = (Elem14*)((int*)this)[1];
+        ((int*)this)[1] = ((int*)this)[1] + 0x14;
+        Elem14* q = e;
+        int r;
+        if (q != 0)
+            r = q->sub_54a470(param_3);
+        else
+            r = 0;
+        (void)r;
     }
-    return ((param_2 - base) / 0x14) * 0x14 + *p;
+    return n * 0x14 + ((int*)this)[0];
 }
 
 // @ 0x00549dc0

@@ -1,1 +1,4 @@
 010593e0 SP::cSPToolStrategy::OnHit  # vtable slot 0x30 OnHit(pTool, position, SpaceToolHit, int) per ModAPI cToolStrategy; PDB caller-scored candidate cSPToolStrategy
+0105a050 SP::DefaultAoEOnHit  # newly claimed; nonmatching; shared tool-hit helper
+01059f20 SP::cSPDefaultBeamTool::StartTool  # newly claimed; nonmatching; PDB candidate
+0105a100 SP::cSPDefaultAoETool::DoToolAction  # newly claimed; byte-exact

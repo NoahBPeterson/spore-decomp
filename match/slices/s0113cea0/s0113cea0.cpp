@@ -3,6 +3,7 @@
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
 #include "types.h"
 #include <string.h>
+#include <xmmintrin.h>
 
 // keep memset/memcpy out of line so the imported memset trace matches (0x11e073e/0x11e0744)
 #pragma function(memset)
@@ -207,24 +208,26 @@ void Ctx::FUN_0113cff0(void* param_2, int param_3)
 }
 
 // @ 0x0113d200
-void Ctx::FUN_0113d200(int unused)
+void Ctx::FUN_0113d200(int nBytesIn)
 {
     if (B(this, 0x9c) != 0)
         return;
     uint8_t* buf = (uint8_t*)P(this, 0x50);
-    int local_4 = 0, local_8 = 0;
-    int ok = ((int(__stdcall*)(void*, int*, int*))((void**)buf)[4])(buf, &local_4, &local_8);
+    int local_4 = (int)0xcccccccc, local_8 = (int)0xcccccccc;
+    void** vt = *(void***)buf;
+    int ok = ((int(__stdcall*)(void*, int*, int*))vt[4])(buf, &local_8, &local_4);
     if (ok < 0) {
         ((Ctx*)this)->FUN_0113cf70();
         return;
     }
     uint32_t ch = B(this, 0x89);
     uint32_t frames = (uint32_t)local_4 / ch;
-    int nBytes = local_8;
+    int nBytes = nBytesIn;
     if ((int)W(this, 0x64) + nBytes <= (int)frames)
         nBytes += W(this, 0x60);
-    int limit = (int)(F(this, 0x30) * 0.001f) * 0;
-    limit = (int)((float)(int)(F(this, 0x30) * 0.001f * 5.0f)) + (int)frames;
+    float fRate = F(this, 0x30) * 0.001f;
+    fRate = fRate * 5.0f;
+    int limit = _mm_cvt_ss2si(_mm_set_ss(fRate)) + (int)frames;
     if (limit < nBytes) {
         float target = ((float)(nBytes - (int)frames) / F(this, 0x30)) * 1000.0f;
         if (target < F(this, 0x58))
@@ -516,9 +519,10 @@ void Ctx::FUN_0113dae0(int param_2)
     g_16e6304 = 1;
     W(this, 0x5c) = 0;
     F(this, 0x58) = 1000.0f;
-    *(double*)((char*)this + 0x80) = *(double*)((uint8_t*)P(this, 4) + 8) + 10.0;
+    uint8_t* src = (uint8_t*)P(this, 4);
+    *(double*)((char*)this + 0x80) = *(double*)(src + 8) + 10.0;
     W(this, 0x68) = 5;
-    *(double*)((char*)this + 0x70) = *(double*)((uint8_t*)P(this, 4) + 8) + 1.0;
+    *(double*)((char*)this + 0x70) = *(double*)(src + 8) + 1.0;
     if (param_2 == 0) {
         ((Ctx*)this)->FUN_0113d9f0();
         g_16e7b9c = 1;

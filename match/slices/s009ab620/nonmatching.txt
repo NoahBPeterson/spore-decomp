@@ -3,3 +3,5 @@
 009ac460  100  complete; UnpackBytes; SSE clamp/sqrt schedule differs
 009ab620  165  complete; baked_anim_manager::Clear; EASTL map teardown register/allocation schedule differs
 009abce0  33  complete; ~baked_anim_manager; member-destructor call schedule differs
+009abbb0  46  complete; unnamed baked-anim eviction walker; retail uses an ebp frame + `and esp,-8`, ours a plain esp frame, so every esp-relative local and the vdc x87 schedule differ; equiv PASS 231 valid 83.3% cov (inline-calls 173)
+009ac130  20  complete; RestartTimer; same frame-pointer/alignment difference (retail `mov ebp,esp; and esp,-8`), ours keeps the stopwatch 8 bytes lower and reloads the limit from memory; equiv PASS 256 valid 92.8% cov

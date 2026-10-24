@@ -1,1 +1,1 @@
-00524a50 2037 /Od frame slot layout (large inlined-helper frame 0x188); behaviorally complete, frame offsets diverge
+00524a50  2026  flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; behaviorally complete; slot>=nBlocks tail fixed (m58 vector header/layout corrected to 0x10, signed m58 index loop); replay matches, fresh WEAK 272 valid/no mismatch, 17.9% cov; frame 0xd0 vs original 0x188 (large inlined-helper frame still diverges)

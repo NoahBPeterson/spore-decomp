@@ -409,3 +409,112 @@ bool cParticlesEffectOld::InitParticle(cParticle* particle)
 }
 
 }} // namespace EA::Swarm
+
+#include <string.h>
+
+struct StreamGlobals {
+    uint32_t mVtable0;                                  // +0x00
+    uint32_t mPad4;                                     // +0x04
+    uint32_t mFn8;                                      // +0x08
+    uint32_t mFnC;                                      // +0x0c
+    uint32_t mPad10[0x1c];                              // +0x10
+};
+StreamGlobals gStreamGlobals;                           // 0x016c9aa0
+
+// @ 0x00f79bb0
+void FUN_00f79bb0(char init)
+{
+    if (init != 0) {
+        memset(&gStreamGlobals, 0, sizeof(gStreamGlobals));
+        gStreamGlobals.mVtable0 = 0x00f765a0;
+        gStreamGlobals.mFn8 = 0x00f77940;
+        gStreamGlobals.mFnC = 0x00f78a60;
+    }
+}
+
+namespace EA {
+namespace Swarm {
+
+struct EffectSub {
+    virtual void v0();
+    virtual void v1();
+    virtual void Set(int value);                        // +0x08
+    virtual void Dispatch(int value);                   // +0x0c
+    virtual bool Test();                                // +0x10
+};
+
+struct ParticleList {
+    cParticle* mNext;                                   // +0x00 (sentinel)
+    cParticle* mPrev;                                   // +0x04
+    uint32_t mCount;                                    // +0x08
+};
+
+struct SwarmEmitterE {
+    uint32_t mPad0[2];                                  // +0x00
+    EffectSub mSub8;                                    // +0x08
+    uint32_t mPadC[3];                                  // +0x0c
+    ParticleList mList18;                               // +0x18
+    cParticlesDescription* mDesc24;                     // +0x24
+};
+
+struct SwarmSystem {
+    uint8_t mPad0[0x15];                                // +0x00
+    uint8_t mField15;                                   // +0x15
+    uint8_t mPad16[0xa];                                // +0x16
+    uint32_t mField20;                                  // +0x20
+    cParticlesDescription* mDesc24;                     // +0x24
+    uint8_t mPad28[0x1f0];                              // +0x28
+    SwarmEmitterE* mEffect218;                          // +0x218
+
+    void InitParticle2(cParticle* particle);
+    void Spawn(cParticle* particle);
+};
+
+cParticle* gFreeParticleList;                           // 0x016c9b68
+
+// @ 0x00f7a5d0
+void SwarmSystem::InitParticle2(cParticle* particle)
+{
+    SwarmEmitterE* effect = mEffect218;
+    cParticlesDescription* desc = effect->mDesc24;
+
+    particle->mBase.mAge = 0.0f;
+    particle->mBase.mLife = (float)RandomRangeM(desc->mLife.x, desc->mLife.y);
+
+    EffectSub* sub = &effect->mSub8;
+    if (!sub->Test())
+        sub->Set(0);
+
+    if (TestBit((uint32_t)desc->mFlags, 26))
+        ((cParticlesEffectOld*)effect)->InitParticle(particle);
+
+    ParticleList* list = &effect->mList18;
+    particle->mpPrev = list->mPrev;
+    particle->mpNext = (void*)&list->mNext;
+    list->mPrev = particle;
+    ((cParticle*)particle->mpPrev)->mpNext = particle;
+    list->mCount++;
+}
+
+// @ 0x00f7a6a0
+void SwarmSystem::Spawn(cParticle* particle)
+{
+    float age = particle->mBase.mAge;
+    float life = particle->mBase.mLife;
+    if (mEffect218 == 0 ||
+        ((age < life) &&
+         !TestBit((uint32_t)mDesc24->mFlags, 27))) {
+        particle->mpNext = gFreeParticleList;
+        gFreeParticleList = particle;
+        return;
+    }
+
+    InitParticle2(particle);
+
+    if (mEffect218 != 0 && mField20 == 0 && mField15 != 0) {
+        EffectSub* sub = (EffectSub*)((char*)mEffect218 + 8);
+        sub->Dispatch(0);
+    }
+}
+
+}} // namespace EA::Swarm

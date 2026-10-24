@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009074d0/s009074d0.cpp  ?externalEntityInitProcessor@@YA?AW4XML_Error@@PAUXML_ParserStruct@@PBD1PAPBD@Z  00907f70  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

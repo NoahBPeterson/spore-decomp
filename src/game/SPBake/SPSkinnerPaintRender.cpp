@@ -553,7 +553,8 @@ public:
     uint32_t f50, f54;           // 0x50, 0x54
     uint32_t f58, f5c, f60;      // 0x58, 0x5c, 0x60
 
-    void SwapWith(cFieldSwap* o);   // 0x00518b00
+    // returns the swapped-out f0: retail leaves it in eax
+    uint32_t SwapWith(cFieldSwap* o);   // 0x00518b00
 };
 }
 namespace nSPSkinner {
@@ -736,11 +737,15 @@ struct cRTTBuffer_s0051_9640 {                 // size 0x64
     uint32_t mWidth;                // +0x58
     uint32_t mHeight;               // +0x5c
     void*    mTexture;              // +0x60
+    void Begin();                                   // 0x00528E90 (thiscall: ecx = buffer)
+    void SetParams(int a, int b, int c, int d);     // 0x00529280
+    void Draw(void* a, void* b, uint32_t color);    // 0x005296B0
+    void BeginDraw();                               // 0x00529BF0
 };
 }
 namespace nSPSkinner {
 struct cPaintSplatJob_s0051_9640 {             // size 0x18
-    uint32_t pad00[3];
+    uint32_t pad00[2];
     bool     mComplete;             // +0x0c
     uint8_t  pad0d[3];
     int      mStage;                // +0x10
@@ -1786,13 +1791,16 @@ bool cPaintDilateJob_s0051_82f0::Render()
 
 // @ 0x00518b00
 namespace nSPSkinner {
-void cFieldSwap::SwapWith(cFieldSwap* o)
+uint32_t cFieldSwap::SwapWith(cFieldSwap* o)
 {
-    swapv(*(uint64_t*)((char*)this + 0x50), *(uint64_t*)((char*)o + 0x50));
-    swapv(*(uint32_t*)((char*)this + 0x60), *(uint32_t*)((char*)o + 0x60));
-    swapv(*(uint32_t*)((char*)this + 0x58), *(uint32_t*)((char*)o + 0x58));
-    swapv(*(uint32_t*)((char*)this + 0x5c), *(uint32_t*)((char*)o + 0x5c));
-    swapv(*(uint32_t*)this, *(uint32_t*)o);
+    swapv(*(uint64_t*)((char*)o + 0x50), *(uint64_t*)((char*)this + 0x50));
+    swapv(*(uint32_t*)((char*)o + 0x60), *(uint32_t*)((char*)this + 0x60));
+    swapv(*(uint32_t*)((char*)o + 0x58), *(uint32_t*)((char*)this + 0x58));
+    swapv(*(uint32_t*)((char*)o + 0x5c), *(uint32_t*)((char*)this + 0x5c));
+    uint32_t t = *(uint32_t*)o;
+    *(uint32_t*)o = *(uint32_t*)this;
+    *(uint32_t*)this = t;
+    return t;
 }
 }  // namespace nSPSkinner
 
@@ -1976,9 +1984,9 @@ bool nSPSkinner::cPaintSplatJob_s0051_9640::Render()
         mStage = 2;
     if (mStage < 4) {
         if (mStage < 2)
-            RTTBuffer_Begin(buf0);
+            buf0->Begin();
         else
-            RTTBuffer_Begin(buf1);
+            buf1->Begin();
 
         float c4c, c48, c44, c40, c3c, c38, c34, c30, c2c, c28, c24, c20;
         c40 = 0.0f; c30 = 0.0f; c20 = 0.0f;
@@ -2048,7 +2056,7 @@ bool nSPSkinner::cPaintSplatJob_s0051_9640::Render()
                 (void)haveA; (void)haveB; (void)haveC;
 
                 if (mStage == 0 && texA != 0 && texB != 0) {
-                    RTTBuffer_SetParams(buf0, 1, 1, 1, 0);
+                    buf0->SetParams(1, 1, 1, 0);
                     buf0->material = 0xd9ec39bc;
                     if (buf0->maxparam < 1) buf0->maxparam = 1;
                     buf0->params[0] = c4c; buf0->params[1] = c48; buf0->params[2] = c44; buf0->params[3] = c40;
@@ -2066,10 +2074,10 @@ bool nSPSkinner::cPaintSplatJob_s0051_9640::Render()
                     raster = (void*)*texB;
                     if (raster != 0 && buf0->maxtexture < 2) buf0->maxtexture = 2;
                     buf0->textures[1] = raster;
-                    RTTBuffer_Draw(buf0, uv0, uv1, 0xffffffff);
+                    buf0->Draw(uv0, uv1, 0xffffffff);
                 }
                 if (mStage == 1 && texB != 0) {
-                    RTTBuffer_SetParams(buf0, 0, 0, 0, 1);
+                    buf0->SetParams(0, 0, 0, 1);
                     buf0->material = 0xa91b6551;
                     if (buf0->maxparam < 1) buf0->maxparam = 1;
                     buf0->params[0] = 1.0f; buf0->params[1] = 1.0f; buf0->params[2] = 1.0f; buf0->params[3] = 1.0f;
@@ -2079,11 +2087,11 @@ bool nSPSkinner::cPaintSplatJob_s0051_9640::Render()
                     if (raster != 0 && buf0->maxtexture < 1) buf0->maxtexture = 1;
                     buf0->textures[0] = raster;
                     buf0->textures[1] = 0;
-                    RTTBuffer_Draw(buf0, uv0, uv1, 0xffffffff);
+                    buf0->Draw(uv0, uv1, 0xffffffff);
                 }
                 if (mStage == 2 && texC != 0) {
                     float f = *(float*)(mat + 0x30);
-                    RTTBuffer_SetParams(buf1, 1, 0, 0, 0);
+                    buf1->SetParams(1, 0, 0, 0);
                     buf1->material = 0x3815422;
                     if (buf1->maxparam < 1) buf1->maxparam = 1;
                     buf1->params[0] = f; buf1->params[1] = f; buf1->params[2] = f; buf1->params[3] = 1.0f;
@@ -2092,11 +2100,11 @@ bool nSPSkinner::cPaintSplatJob_s0051_9640::Render()
                     void* raster = (void*)*texC;
                     if (raster != 0 && buf1->maxtexture < 1) buf1->maxtexture = 1;
                     buf1->textures[0] = raster;
-                    RTTBuffer_Draw(buf1, uv0, uv1, 0xffffffff);
+                    buf1->Draw(uv0, uv1, 0xffffffff);
                 }
                 if (mStage == 3 && texC != 0) {
                     float f = *(float*)(mat + 0x2c) * fGloss;
-                    RTTBuffer_SetParams(buf1, 0, 0, 1, 0);
+                    buf1->SetParams(0, 0, 1, 0);
                     buf1->material = 0x968e3fff;
                     if (buf1->maxparam < 1) buf1->maxparam = 1;
                     buf1->params[0] = f; buf1->params[1] = f; buf1->params[2] = f; buf1->params[3] = 1.0f;
@@ -2105,15 +2113,15 @@ bool nSPSkinner::cPaintSplatJob_s0051_9640::Render()
                     void* raster = (void*)*texC;
                     if (raster != 0 && buf1->maxtexture < 1) buf1->maxtexture = 1;
                     buf1->textures[0] = raster;
-                    RTTBuffer_Draw(buf1, uv0, uv1, 0xffffffff);
+                    buf1->Draw(uv0, uv1, 0xffffffff);
                 }
             }
             mBlock = mBlock + 1;
         }
         if (mStage < 2)
-            RTTBuffer_BeginDraw(buf0);
+            buf0->BeginDraw();
         else
-            RTTBuffer_BeginDraw(buf1);
+            buf1->BeginDraw();
         if (nBlocks <= mBlock) {
             mBlock = 0;
             mStage = mStage + 1;

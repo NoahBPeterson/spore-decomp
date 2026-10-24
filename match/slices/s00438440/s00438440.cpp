@@ -26,6 +26,15 @@ struct Node {
 
 class cContentValidationSummarizer;
 
+// The object reached through LinkRec::field4 is released through the second
+// vtable slot (0x00438C9B loads [old+0x04] before the call at 0x00438C9E);
+// cContentValidationSummarizer keeps Release at +0x08, so the field gets its
+// own two-slot interface.
+struct LinkTarget {
+    virtual void AddRef();               // vtable +0x00
+    virtual void Release();              // vtable +0x04
+};
+
 // Inlined intrusive-pointer assignment; taking `dst` by reference reproduces
 // the original's `&member` temporaries.
 template<class T>
@@ -41,7 +50,7 @@ inline void RefAssign(T*& dst, T* n)
 
 struct LinkRec {
     void*  field0;                       // +0x00
-    cContentValidationSummarizer* field4;// +0x04
+    LinkTarget*    field4;               // +0x04
     char   pad8[0x3C];
     int32_t field44;                     // +0x44
 };
@@ -240,7 +249,7 @@ void cContentValidationSummarizer::Detach(cContentValidationSummarizer* e)
         if (e->linkRec != 0) {
             e->linkRec->field0 = 0;
             if (e->linkRec->field4 != 0) {
-                cContentValidationSummarizer* old = e->linkRec->field4;
+                LinkTarget* old = e->linkRec->field4;
                 e->linkRec->field4 = 0;
                 old->Release();
             }

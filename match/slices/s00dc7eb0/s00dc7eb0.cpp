@@ -4,6 +4,7 @@
 // the hologram/effect following the converting vehicles.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 #include "types.h"
+#include <intrin.h>
 
 extern "C" double __cdecl sqrt(double);
 #pragma intrinsic(sqrt)
@@ -435,3 +436,243 @@ bool cCulturalConvertCityOrder::OnTick(float deltaTime)
 }
 
 }  // namespace SP
+
+// ---------------------------------------------------------------------------------------
+// Copy constructor for an EASTL-style hash container (bucket array of linked lists):
+// 0x00dc8a60.  The node payload is 0x20 bytes (one integer followed by seven floats),
+// the chain pointer sits at +0x20.  The bucket array has mBucketCount entries plus a
+// 0xffffffff terminator.
+struct CultureHashPayload {
+    uint32_t mField00;              // +0x00
+    float mField04;                 // +0x04
+    float mField08;                 // +0x08
+    float mField0c;                 // +0x0c
+    float mField10;                 // +0x10
+    float mField14;                 // +0x14
+    float mField18;                 // +0x18
+    float mField1c;                 // +0x1c
+
+    CultureHashPayload& operator=(const CultureHashPayload& src)
+    {
+        mField04 = src.mField04;
+        mField00 = src.mField00;
+        mField08 = src.mField08;
+        mField0c = src.mField0c;
+        mField10 = src.mField10;
+        mField14 = src.mField14;
+        mField18 = src.mField18;
+        mField1c = src.mField1c;
+        return *this;
+    }
+};
+
+struct CultureHashNode {
+    CultureHashPayload mPayload;    // +0x00
+    CultureHashNode* mpNext;        // +0x20
+};
+
+struct CultureHashTail {
+    uint32_t a, b, c;               // +0x00..+0x0b
+};
+
+struct CultureHash {
+    uint32_t mField00;              // +0x00
+    CultureHashNode** mBuckets;     // +0x04
+    uint32_t mBucketCount;          // +0x08
+    uint32_t mElementCount;         // +0x0c
+    CultureHashTail mTail;          // +0x10..+0x1b
+
+    CultureHash(const CultureHash& src);
+    void Swap(CultureHash& other);
+};
+
+extern "C" void* __cdecl FUN_00f473a0(uint32_t size, const char* name, uint32_t flags,
+                                      uint32_t align, void* allocator, uint32_t line);
+extern "C" void* __cdecl memset(void*, int, unsigned int);
+
+// @ 0x00dc8a60
+CultureHash::CultureHash(const CultureHash& src)
+{
+    mField00 = src.mField00;
+    mBucketCount = src.mBucketCount;
+    mElementCount = src.mElementCount;
+    mTail.a = src.mTail.a;
+    mTail.b = src.mTail.b;
+    mTail.c = src.mTail.c;
+
+    if (mElementCount != 0) {
+        uint32_t count = mBucketCount;
+        uint32_t byteSize = count * 4;
+        CultureHashNode** buckets = (CultureHashNode**)FUN_00f473a0(
+            byteSize + 4, (const char*)0x13f09b4, 0, 0, (void*)0x13ebb38, 0xd1);
+        memset(buckets, 0, byteSize);
+        buckets[count] = (CultureHashNode*)0xffffffff;
+        mBuckets = buckets;
+
+        uint32_t i = 0;
+        if (src.mBucketCount > 0) {
+            do {
+                CultureHashNode* srcNode = src.mBuckets[i];
+                CultureHashNode** dstSlot = &mBuckets[i];
+                while (srcNode) {
+                    CultureHashNode* newNode = (CultureHashNode*)FUN_00f473a0(
+                        sizeof(CultureHashNode), (const char*)0x13f09b4, 0, 0,
+                        (void*)0x13ebb38, 0xd1);
+                    if (newNode) {
+                        newNode->mPayload = srcNode->mPayload;
+                    }
+                    newNode->mpNext = 0;
+                    *dstSlot = newNode;
+                    srcNode = srcNode->mpNext;
+                    dstSlot = &newNode->mpNext;
+                }
+                ++i;
+            } while (i < src.mBucketCount);
+        }
+    } else {
+        mBucketCount = 1;
+        mBuckets = (CultureHashNode**)0x154df28;
+        mElementCount = 0;
+        mTail.c = 0;
+    }
+}
+
+// @ 0x00dc8ba0
+void CultureHash::Swap(CultureHash& other)
+{
+    CultureHashTail t = mTail;
+    mTail = other.mTail;
+    other.mTail = t;
+    _ReadWriteBarrier();
+
+    CultureHashNode** bp = mBuckets;
+    mBuckets = other.mBuckets;
+    other.mBuckets = bp;
+    _ReadWriteBarrier();
+
+    uint32_t bc = mBucketCount;
+    mBucketCount = other.mBucketCount;
+    other.mBucketCount = bc;
+    _ReadWriteBarrier();
+
+    uint32_t ec = mElementCount;
+    mElementCount = other.mElementCount;
+    other.mElementCount = ec;
+}
+
+// ---------------------------------------------------------------------------------------
+// 0x00dc8c00: intrusive-pointer protected map lookup.  The map lives at this+0x34; the
+// key passed to the tree is the pointer with its low byte cleared (tag bits removed).
+struct DecalMapTree {
+    uint32_t mPad[0x1c / 4];
+    void Find(void* out, const void* key, uint32_t hash);
+};
+
+struct Removable {
+    virtual void AddRef();
+    virtual void Release();
+};
+
+union TaggedPtr {
+    uint32_t mValue;                // +0x00
+    Removable* mPtr;                // +0x00
+    struct {
+        uint8_t mTag;               // +0x00
+        uint8_t mRest[3];           // +0x01
+    } mBytes;
+};
+
+struct DecalRemover {
+    uint32_t mPad[0x34 / 4];        // +0x00..0x33
+    DecalMapTree mMap;              // +0x34
+    void Remove(Removable* p);
+};
+
+struct RemoveLocals {
+    Removable* key;                 // +0x00
+    uint32_t it[2];                 // +0x04
+};
+
+// @ 0x00dc8c00
+void DecalRemover::Remove(Removable* p)
+{
+    RemoveLocals locals;
+    locals.key = p;
+    if (p)
+        p->AddRef();
+    TaggedPtr key;
+    key.mBytes.mTag = 0;
+    mMap.Find(locals.it, &locals.key, key.mValue);
+    if (p)
+        p->Release();
+}
+
+// ---------------------------------------------------------------------------------------
+// 0x00dc8c50: remove a decal owner from the +0x50 pointer vector and notify every
+// 0x178-byte entry in the +0x7c vector.
+struct RemoveArg : Removable {
+    uint32_t mPad04[(0x34 - 0x04) / 4]; // +0x04..0x33
+    uint32_t mField34;                  // +0x34
+    void Method(int);                   // 0x00ca0000
+};
+
+struct DecalEntry {
+    uint8_t mData[0x178];
+    void RemoveDecal(void* arg);        // 0x00afedf0
+};
+
+struct DecalManager {
+    virtual void pad00();
+    virtual void pad04();
+    virtual void pad08();
+    virtual void pad0c();
+    virtual void pad10();
+    virtual void pad14();
+    virtual void pad18();
+    virtual void pad1c();
+    virtual void pad20();
+    virtual void pad24();
+    virtual void pad28();
+    virtual bool Skip();                // +0x2c
+    uint32_t mPad04[(0x50 - 0x04) / 4]; // +0x04..0x4f
+    Removable** mVec50Begin;            // +0x50
+    Removable** mVec50End;              // +0x54
+    uint32_t mPad58[(0x7c - 0x58) / 4]; // +0x58..0x7b
+    DecalEntry* mDecalBegin;            // +0x7c
+    DecalEntry* mDecalEnd;              // +0x80
+    void Remove(RemoveArg* arg);
+};
+
+extern "C" void __cdecl CopyImpl_do_copy(void* src, void* end, void* dst);
+
+// @ 0x00dc8c50
+void DecalManager::Remove(RemoveArg* arg)
+{
+    arg->Method(0);
+    if (!Skip()) {
+        Removable** it = mVec50Begin;
+        while (it != mVec50End && *it != arg)
+            ++it;
+        if (it != mVec50End) {
+            if (it + 1 < mVec50End)
+                CopyImpl_do_copy(it + 1, mVec50End, it);
+            --mVec50End;
+            Removable* last = *mVec50End;
+            if (last)
+                last->Release();
+        }
+
+        int count = (int)(mDecalEnd - mDecalBegin);
+        if (count > 0) {
+            uint32_t off = 0;
+            int n = count;
+            do {
+                DecalEntry* e = (DecalEntry*)((uint8_t*)mDecalBegin + off);
+                void* target = arg ? (void*)&arg->mField34 : 0;
+                e->RemoveDecal(target);
+                off += 0x178;
+                --n;
+            } while (n != 0);
+        }
+    }
+}

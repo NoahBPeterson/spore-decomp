@@ -1,0 +1,3 @@
+00e7e7f0 SP::sExecuteCollisionResult  # collision-result dispatcher; 21 result types, LTCG register-convention callees
+00e7f140 SP::PrepareCollisionPair  # collision pair setup: two resource handles, both-order sExecuteCollisionResult, handle release
+00e7f5a0 SP::cCellGame::UpdateRollover  # cell-game rollover tick; entity in edi for FUN_00e7e130, TriggerMgr/gspCellGfx wait-toggle path

@@ -109,52 +109,44 @@ void SndDecoder::DecodeS16(int srcs, int n)
 // @ 0x011403b0
 void SndDecoder::DecodeRaw(int srcs, int n)
 {
-    int c = count;
-    if (c == 0) return;
-    if (n < c) c = n;
+    if (count == 0) return;
+    if (n > count) n = count;
+    count = count - n;
     int i = 0;
-    if (c > 0) {
-        do {
-            short s = 0;
-            if (chans > 0) {
-                do {
-                    unsigned short* d = (unsigned short*)(*(int*)(srcs + s * 4) + i * 2);
-                    dst = (short*)d;
-                    *d = (unsigned short)((src[0] << 8) | src[1]);
-                    src = src + 3;
-                    s++;
-                } while (s < chans);
-            }
-            i++;
-        } while (i < c);
+    while (n > 0) {
+        for (short s = 0; s < chans; s++) {
+            unsigned short* d = (unsigned short*)(*(int*)(srcs + s * 4) + i * 2);
+            dst = (short*)d;
+            *d = (unsigned short)((src[0] << 8) | src[1]);
+            src = src + 3;
+        }
+        i++;
+        n--;
     }
-    count = count - c;
+    volatile SndDecoder* keep = this;
+    if (keep == this) return;
 }
 
 // @ 0x01140460
 void SndDecoder::DecodeSwap(int srcs, int n)
 {
-    int c = count;
-    if (c == 0) return;
-    if (n < c) c = n;
+    if (count == 0) return;
+    if (n > count) n = count;
+    count = count - n;
     int i = 0;
-    if (c > 0) {
-        do {
-            short s = 0;
-            if (chans > 0) {
-                do {
-                    unsigned short* d = (unsigned short*)(*(int*)(srcs + s * 4) + i * 2);
-                    dst = (short*)d;
-                    unsigned short v = *(unsigned short*)src;
-                    *d = (unsigned short)((v >> 8) | (v << 8));
-                    src = src + 2;
-                    s++;
-                } while (s < chans);
-            }
-            i++;
-        } while (i < c);
+    while (n > 0) {
+        for (short s = 0; s < chans; s++) {
+            unsigned short* d = (unsigned short*)(*(int*)(srcs + s * 4) + i * 2);
+            dst = (short*)d;
+            unsigned short v = *(unsigned short*)src;
+            *d = (unsigned short)((v >> 8) | (v << 8));
+            src = src + 2;
+        }
+        i++;
+        n--;
     }
-    count = count - c;
+    volatile SndDecoder* keep = this;
+    if (keep == this) return;
 }
 
 // @ 0x01140560

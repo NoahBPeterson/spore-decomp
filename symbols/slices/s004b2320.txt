@@ -6,7 +6,7 @@
 004b2710 ?Reset@cSPEditorPaintTheme_s004b_2320@SP@@QAEXXZ  # cSPEditorPaintTheme_s004b_2320::Reset migrated from s004b2320 (verbatim, slice spelling)
 004b27c0 ?Reset2@cSPEditorPaintTheme_s004b_2320@SP@@QAEXXZ  # cSPEditorPaintTheme_s004b_2320::Reset2 migrated from s004b2320 (verbatim, slice spelling)
 004b2800 ?ReadFromAsset@cSPEditorPaintTheme_s004b_2320@SP@@QAEIPAUAsset@@@Z  # cSPEditorPaintTheme_s004b_2320::ReadFromAsset migrated from s004b2320 (verbatim, slice spelling)
-004b29b0 ?ReadFromProp2@cSPEditorPaintTheme_s004b_2320@SP@@QAEIHD@Z  # cSPEditorPaintTheme_s004b_2320::ReadFromProp2 migrated from s004b2320 (verbatim, slice spelling)
+004b29b0 ?ReadFromProp2@cSPEditorPaintTheme_s004b_2320@SP@@QAE_NHD@Z  # cSPEditorPaintTheme_s004b_2320::ReadFromProp2 migrated from s004b2320 (verbatim, slice spelling)
 004b2bb0 ?ReadFromProp@cSPEditorPaintTheme_s004b_2320@SP@@QAE_NI@Z  # cSPEditorPaintTheme_s004b_2320::ReadFromProp migrated from s004b2320 (verbatim, slice spelling)
 004b2f80 ?WriteToProp@cSPEditorPaintTheme_s004b_2320@SP@@QAEXPAUAsset@@H@Z  # cSPEditorPaintTheme_s004b_2320::WriteToProp migrated from s004b2320 (verbatim, slice spelling)
 004b3190 ?ApplyToAsset@cSPEditorPaintTheme_s004b_2320@SP@@QAEXHH@Z  # cSPEditorPaintTheme_s004b_2320::ApplyToAsset migrated from s004b2320 (verbatim, slice spelling)

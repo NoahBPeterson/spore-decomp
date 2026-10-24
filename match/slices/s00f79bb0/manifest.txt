@@ -1,0 +1,2 @@
+# byte-exact functions for slice s00f79bb0
+slices/s00f79bb0/s00f79bb0.cpp  ?FUN_00f79bb0@@YAXD@Z  00f79bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

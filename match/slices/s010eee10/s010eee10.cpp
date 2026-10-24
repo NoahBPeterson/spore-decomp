@@ -269,3 +269,62 @@ void hkRagdollConstraintData::buildJacobian(const hkConstraintQueryIn& in, hkCon
 	buildLimits(twistAxisAinWorld, twistAxisBinWorld, planeAxisBinWorld, in, out);
 	hkBallSocketBuildJacobian(pivotAinWorld, pivotBinWorld, in, out);
 }
+
+// ---------------------------------------------------------------------------------------------
+// 0x010EF4B0: the powered ragdoll's destructor. Releases the three friction motors and lets the
+// hkReferencedObject base destructor restore the base vtable.
+// ---------------------------------------------------------------------------------------------
+class hkReferencedObject
+{
+public:
+	virtual ~hkReferencedObject() {}        // +0x00 (the deleting destructor is called on last ref)
+
+	uint16_t mLockCount;                    // +0x04
+	uint16_t mReferenceCount;               // +0x06
+};
+
+// hkReferencedObject::removeReference inlined: nothing while the object is locked, then drop the
+// reference count and delete it when it reaches zero.
+__forceinline void hkRemoveReference(hkReferencedObject* obj)
+{
+	if (obj == 0 || obj->mLockCount == 0)
+		return;
+	obj->mReferenceCount--;
+	if (obj->mReferenceCount == 0)
+		delete obj;
+}
+
+class hkPoweredRagdollConstraintData : public hkReferencedObject
+{
+public:
+	virtual void buildJacobian(const hkConstraintQueryIn& in, hkConstraintQueryOut& out);
+
+	hkVector4 m_basisA_pivot;            // +0x10
+	hkVector4 m_basisA_planeAxis;        // +0x20
+	hkVector4 m_basisA_twistAxis;        // +0x30
+	hkVector4 m_basisB_pivot;            // +0x40
+	hkVector4 m_basisB_planeAxis;        // +0x50
+	hkVector4 m_basisB_twistAxis;        // +0x60
+	hkReal m_coneMinAngle;               // +0x70
+	hkReal m_planeMinAngle;              // +0x74
+	hkReal m_planeMaxAngle;              // +0x78
+	hkReal m_twistMinAngle;              // +0x7c
+	hkReal m_twistMaxAngle;              // +0x80
+	hkReal m_maxFrictionTorque;          // +0x84
+	hkReal m_angularLimitsTauFactor;     // +0x88
+	uint32_t mPad08C[(0x0c4 - 0x08c) / 4];                // +0x8c (motor configuration)
+
+	hkReferencedObject* m_twistFrictionMotor;             // +0xc4
+	hkReferencedObject* m_coneFrictionMotor;              // +0xc8
+	hkReferencedObject* m_planeFrictionMotor;             // +0xcc
+
+	~hkPoweredRagdollConstraintData();
+};
+
+// @ 0x010EF4B0
+hkPoweredRagdollConstraintData::~hkPoweredRagdollConstraintData()
+{
+	hkRemoveReference(m_twistFrictionMotor);
+	hkRemoveReference(m_coneFrictionMotor);
+	hkRemoveReference(m_planeFrictionMotor);
+}

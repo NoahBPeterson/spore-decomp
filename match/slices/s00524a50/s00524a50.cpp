@@ -8,7 +8,7 @@ template <> inline void ScratchSlots<0>() {}
 
 // ---------------------------------------------------------------- vector helpers
 struct sp_vector_allocator {
-    uint32_t mFlags[2];
+    uint32_t mFlags;                 // 4-byte allocator state (vector header is 0x10 bytes)
 };
 
 template <typename T> struct VectorBase {
@@ -97,9 +97,9 @@ struct cMesh : DefaultRefCounted {      // retail size 0x1d0
     VectorVec2 mTexCoords;              // +0x30
     uint32_t pad40[6];
     VectorU32 mVertexIndices;           // +0x58
-    uint32_t pad6c[5];
+    uint32_t pad68[6];                  // +0x68..+0x80
     VectorU32 mTexIndices;              // +0x80
-    uint32_t pad94[0x3f];
+    uint32_t pad90[0x40];               // +0x90..+0x190
     VectorU32 m190;                     // +0x190
     uint32_t pad1a0[1];
     VectorU32 m1a4;                     // +0x1a4
@@ -109,9 +109,9 @@ struct cMesh : DefaultRefCounted {      // retail size 0x1d0
 
 struct cSkinnerResult : DefaultRefCounted {
     VectorElemC m08;                                    // +0x08
-    uint32_t pad18[0x10];
+    uint32_t pad18[0x10];                               // +0x18..+0x58
     VectorU32 m58;                                      // +0x58
-    uint32_t pad6c[0x1e];
+    uint32_t pad68[0x1f];                               // +0x68..+0xe4
     VectorBase<cMeshAORenderObj*> mE4;                  // +0xe4
     uint32_t padf4[7];
     VectorU32 m110;                                     // +0x110
@@ -178,8 +178,9 @@ bool __cdecl BuildMeshJobCallback(SPcJob* job, BuildMeshContext* ctx)
         result->Finish();
         ctx->m80.clear();
         ctx->m80.resize((uint32_t)(result->m08.size()), (uint32_t)-1);
-        for (uint32_t i = 0; i < result->m58.size(); i++)
-            ctx->m80.mpBegin[result->m58.mpBegin[i]] = i;
+        int n58 = (int)result->m58.size();
+        for (int i = 0; i < n58; i++)
+            ctx->m80.mpBegin[result->m58.mpBegin[i]] = (uint32_t)i;
         return true;
     }
     cRigBlock* pBlock = &blocks[slot];

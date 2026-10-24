@@ -414,3 +414,97 @@ bool cSPUITradeItemInfo::Populate(cTradeSource* source)
 
     return true;
 }
+
+// =======================================================================================
+// 0x00E3D9E0
+//
+// The image-cursor provider keeps a hash table (at +0xc) that maps a uint32 key to a
+// bucket header.  Each bucket header owns a circular intrusive list (anchor at +0x04)
+// of cursor records; a record stores the cursor object pointer at +0x14.  This helper
+// looks up a key and, for every record in the bucket, remaps the two cursor resource
+// keys that match the supplied search key.
+//
+// 0x00DB4780 is the table's find: out = {node, bucket}, node = bucketArray[count] when
+// the key is absent.  0x00E39DE0 is CursorKeys::Apply (compares/rewrites the two keys).
+// =======================================================================================
+namespace ImageCursorProvider {
+
+struct CursorData;
+
+struct CursorNodeValue {
+    uint32_t mID;                       // +0x00
+    uint32_t mPad04;                    // +0x04
+    uint32_t mPad08;                    // +0x08
+    CursorData* mpData;                 // +0x0c
+};
+
+// Intrusive list node; the value sits after the two link words.
+struct CursorListNode {
+    CursorListNode* mpNext;             // +0x00
+    CursorListNode* mpPrev;             // +0x04
+    CursorNodeValue mValue;             // +0x08
+};
+
+// Hash bucket header: the key at +0, then the list anchor.  The hash chain and the
+// record count that follow are only touched by find().
+struct CursorBucket {
+    uint32_t mKey;                      // +0x00
+    CursorListNode mAnchor;             // +0x04 (anchor.mpNext is the first record)
+};
+
+struct CursorKey {                      // resource key as stored on a cursor object
+    uint32_t typeID;                    // +0x00
+    uint32_t instanceID;                // +0x04
+    uint32_t groupID;                   // +0x08
+};
+
+struct CursorData {
+    uint32_t mPad00[3];                 // +0x00
+    CursorKey mKeyA;                    // +0x0c
+    CursorKey mKeyB;                    // +0x18
+};
+
+// Two resource keys passed by value (0x18 bytes, hence ret 0x1c).
+struct CursorKeys {
+    ResourceKey mSearch;                // +0x00
+    ResourceKey mReplace;               // +0x0c
+    void Apply(CursorNodeValue* value); // 0x00e39de0
+};
+
+class CursorMap {
+public:
+    struct Iterator {
+        CursorBucket* mpNode;           // +0x00
+        CursorBucket** mpBucket;        // +0x04
+    };
+    void find(Iterator& out, const uint32_t& key);   // 0x00db4780
+
+    uint32_t mPad00;                    // +0x00
+    CursorBucket** mpBuckets;           // +0x04
+    uint32_t mnBucketCount;             // +0x08
+};
+
+class CursorProvider {
+public:
+    void RemapCursorKeys(uint32_t key, CursorKeys keys);
+
+    uint32_t mPad00[3];                 // +0x00
+    CursorMap mCursorMap;               // +0x0c
+};
+
+// @ 0x00e3d9e0
+void CursorProvider::RemapCursorKeys(uint32_t key, CursorKeys keys)
+{
+    CursorMap& map = mCursorMap;
+    CursorMap::Iterator it;
+    map.find(it, key);
+
+    if (it.mpNode == map.mpBuckets[map.mnBucketCount])
+        return;
+
+    CursorBucket* bucket = it.mpNode;
+    for (CursorListNode* p = bucket->mAnchor.mpNext; p != &bucket->mAnchor; p = p->mpNext)
+        keys.Apply(&p->mValue);
+}
+
+}  // namespace ImageCursorProvider

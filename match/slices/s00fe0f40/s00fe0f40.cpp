@@ -188,6 +188,7 @@ struct cSimulatorSystem {                                     // FUN_00b3d230()
     virtual void Update(int deltaMS);                         // +0x2c
     virtual void PostUpdate(int deltaMS);                     // +0x30
     void UpdateMessages(int deltaMS);                         // 0x00b5e9a0
+    void PostEvent(uint32_t id);                              // 0x00b5cde0
 };
 cSimulatorSystem* SimulatorSystem();                          // 0x00b3d230
 
@@ -199,7 +200,10 @@ class cGameTimeManager { public:
 cGameTimeManager* GameTimeManager();                          // 0x00b3d380
 void UpdateGameTime(int gameDeltaMS);                         // 0x01022920
 
-class cSPUISpace { public: void UpdateUI(int deltaMS); };                   // 0x010743a0
+class cSPUISpace { public:
+    void UpdateUI(int deltaMS);                               // 0x010743a0
+    void FUN_0106ab20(int state);                             // 0x0106ab20
+};
 class cCommunityEditor { public:
     void HandleSimulationUpdate(int deltaMS);                 // 0x00d124e0
     bool IsOpen();                                            // 0x00d09660
@@ -225,6 +229,13 @@ struct cSpaceGameFlags {
     bool IsSet(uint8_t flag) const { return (mBits & flag) != 0; }
 };
 
+// SP::cSPPlayerInventory (size 0xac): the player's space tool/item inventory.  The virtual
+// HasTool at slot 29 (+0x74) tests a ResourceKey; only its head is modelled here.
+struct cSPPlayerInventory {
+    PV8 PV8 PV8 PV4 PV
+    virtual bool HasTool(const ResourceKey& toolID);          // +0x74
+};
+
 class cSPSimulatorSpaceGame { public:
     uint32_t pad00[0x14 / 4];
     cSPUISpace* mpUI;                                         // +0x14
@@ -233,6 +244,8 @@ class cSPSimulatorSpaceGame { public:
     uint32_t pad24[(0x50 - 0x24) / 4];
     cSpaceGameFlags mFlags;                                   // +0x50
     cSPPlayerUFO* GetPlayerUFO();                             // 0x00a1ad60
+    cSPPlayerInventory* GetPlayerInventory();                 // 0x00a1ad60
+    void FUN_01003a50();                                      // 0x01003a50
     void UpdateUfoKeys(int deltaMS);                          // 0x00ffe860
     void UpdateSpaceGame(int gameDeltaMS);                    // 0x00ffcab0
     void SetPlanetDestinationFromOffset(float x, float y, bool a, bool b, bool c, bool d, bool e);  // 0x00ffe570
@@ -266,6 +279,7 @@ void* GameData_Write();                                       // 0x00cdb110
 void* GameData_Read();                                        // 0x00b1e520
 class cGameNounManager { public:
     cGameDataVector* GetGameDataVector(GameDataFn a, GameDataFn b, GameDataFn c, GameDataFn d, uint32_t type);  // 0x00b21340
+    void ProcessPending();                                    // 0x00b22960
 };
 cGameNounManager* NounManager();                              // 0x00b3d300
 
@@ -369,6 +383,8 @@ struct cLocalInputState {
 };
 
 extern const Vector3 kToolTargetDefault;                      // 0x016d9944
+extern const ResourceKey kInterplanetaryDrive;                // 0x016d9994
+void FUN_010213b0(int value);                                 // 0x010213b0
 
 class cAppModeSpace {
 public:
@@ -405,6 +421,9 @@ public:
     void CompleteTransitionFromSolarToPlanet();               // 0x00fe0c60
     void CompleteTransitionFromEntryToNewGame();              // 0x00fdbc20
     void TransitionFromCivToSpace(bool a, bool b);            // 0x00fdba50
+    void InitSpaceGame();                                     // 0x00fdbd60
+    void FUN_00fe0e10();                                      // 0x00fe0e10
+    void FUN_00fe19a0();                                      // 0x00fe19a0
     void HandleSimulationUpdate(float delta1, float delta2);
 };
 
@@ -644,6 +663,23 @@ void cAppModeSpace::HandleSimulationUpdate(float delta1, float delta2)
     pSimulator->PostUpdate(deltaMS);
     pSimulator->UpdateMessages(deltaMS);
     mbToolBlocked = false;
+}
+
+// @ 0x00fe19a0
+void cAppModeSpace::FUN_00fe19a0()
+{
+    InitSpaceGame();
+    SimulatorSystem()->PostEvent(0x1103192);
+    mpSimulatorSpaceGame->FUN_01003a50();
+    if (!mpSimulatorSpaceGame->GetPlayerInventory()->HasTool(kInterplanetaryDrive)) {
+        FUN_00fe0e10();
+        return;
+    }
+    if (mpSimulatorSpaceGame->mpUI) {
+        mpSimulatorSpaceGame->mpUI->FUN_0106ab20(0);
+    }
+    FUN_010213b0(-1);
+    NounManager()->ProcessPending();
 }
 
 }  // namespace SP

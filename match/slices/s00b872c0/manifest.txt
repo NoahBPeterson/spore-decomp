@@ -1,0 +1,2 @@
+slices/s00b872c0/s00b872c0.cpp  ?resize@ByteVector@@QAEXI@Z  00b87c70  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b872c0/s00b872c0.cpp  ?Init@cPlanetRibbonCore@@QAEXXZ  00b87cc0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

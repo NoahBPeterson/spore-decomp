@@ -21,8 +21,9 @@
 #include "EA/IO/IStream.h"
 
 // ---- items of slice s0054afe0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct cAssetMetadata;
-void* cAssetMetadata_ctor(cAssetMetadata* p);                      // 0x550450
+struct cAssetMetadata {
+    void Ctor();                                                   // 0x550450 (thiscall Meta ctor)
+};
 void* operator_new_meta(unsigned int n, const char* name, int a, unsigned b, const char* c, int d);
 struct IObj10 {
     virtual void s0();
@@ -46,7 +47,7 @@ struct IHost {
     bool cAssetMetadataFactory_Create(struct IObj10* param2, struct IMeta** out, int param4, int param5);
 };
 struct IMeta {
-    char pad0[8];
+    char pad0[4];              // vptr is at +0; the first payload dword is +8
     uint32_t f2, f3, f4;
     virtual void s0();
     virtual void Delete();          // vtable slot 1
@@ -1542,14 +1543,15 @@ bool IHost::cAssetMetadataFactory_Create(IObj10* param2, IMeta** out, int param4
     if (meta == 0) {
         meta = 0;
     } else {
-        meta = (IMeta*)cAssetMetadata_ctor((cAssetMetadata*)meta);
+        ((cAssetMetadata*)meta)->Ctor();
     }
     meta->s0();
     int* p = param2->GetBounds();
     meta->f2 = p[0];
     meta->f3 = p[1];
     meta->f4 = p[2];
-    bool ok = this->Make(param2, meta, param4, param5);
+    // The original tests Make's raw AL and returns a normalised 0/1.
+    bool ok = this->Make(param2, meta, param4, param5) != 0;
     if (!ok) {
         meta->Delete();
     } else {

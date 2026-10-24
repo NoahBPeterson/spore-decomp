@@ -320,6 +320,7 @@ struct cCivilization {
 struct cGameNounManager {
     cCivilization* GetCivilization(int politicalID);         // 0x00b25f40
     cGameData* CreateNoun(uint32_t classID);                 // 0x00b20c60
+    cGameData* Func_00b25c30();                              // 0x00b25c30 (the requested class's noun)
 };
 
 struct cSpeciesProfile { void GetUiName(string16& name); };  // 0x004da330
@@ -572,4 +573,32 @@ void cPlanetSimHost::LoadCivilization(cCivData* civ, cPlanetSimHost* host)
             vehicle->Release();
         }
     }
+}
+
+// ---- 0x00ff74f0: start the UFO celebration for the planet's current target and drop the
+// player back into modal play. -----------------------------------------------------------------
+class Screen {
+public:
+    void setModal(bool modal);           // 0x00ad7e40 (ret 4)
+};
+Screen* GetTriggerMgr();                 // 0x00b3d4d0
+
+class cSpaceGameHudHost {
+public:
+    void Func_01066d60();                // 0x01066d60
+};
+cSpaceGameHudHost* FUN_010666a0();       // 0x010666a0
+
+class cSPSimPlanetHighLOD {              // holds the celebrated noun at +0x30
+public:
+    void StartUFOCelebration(cGameData* target);   // 0x00ff65f0 (ret 4)
+    void Func_00ff74f0();                          // 0x00ff74f0
+};
+
+// @ 0x00FF74F0
+void cSPSimPlanetHighLOD::Func_00ff74f0()
+{
+    StartUFOCelebration(NounManager()->Func_00b25c30());
+    GetTriggerMgr()->setModal(true);
+    FUN_010666a0()->Func_01066d60();
 }

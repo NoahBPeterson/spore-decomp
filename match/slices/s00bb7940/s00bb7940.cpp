@@ -163,6 +163,65 @@ extern SomeCache* gSomeCache;           // [0x16c7aa4]
 extern uint32_t gAssetGroup;            // [0x156c5f4]
 extern EA::Random::RandomLinearCongruential sRandom;   // 0x1601760
 
+// ------------------------------------------------------------ entry map
+namespace SP {
+class cStarRecord;
+
+// Ref-counted record list cached by an entry.
+typedef eastl::sp_vector<EA::AutoRefCount<cStarRecord> > StarRecordVector;
+
+// Width-string table hanging off an entry (only its address is copied, 0x00bae0a0).
+class WStringVector {
+ public:
+  unsigned char mState[0x20];
+};
+
+// Cached per-object-template entry; default-constructed when its key is first requested.
+class CGalaxyEntry {
+ public:
+  CGalaxyEntry() {
+    mRecords.mpBegin = 0;
+    mRecords.mpEnd = 0;
+    mRecords.mpCapacity = 0;
+    mExtraRecords.mpBegin = 0;
+    mExtraRecords.mpEnd = 0;
+    mExtraRecords.mpCapacity = 0;
+  }
+  ~CGalaxyEntry() {
+  }
+  uint32_t mFlags;                  // +0x00
+  StarRecordVector mRecords;        // +0x04
+  StarRecordVector mExtraRecords;   // +0x20
+  uint32_t mInstance;               // +0x34  key the map is ordered by
+  WStringVector mNames;             // +0x38
+};
+
+// Ordered-map node: children, colour/parent, the instance id, then the cached entry.
+struct CGalaxyEntryNode {
+  CGalaxyEntryNode* mpRight;   // +0x00
+  CGalaxyEntryNode* mpLeft;    // +0x04
+  char mPad08[8];
+  uint32_t mInstance;          // +0x10
+  CGalaxyEntry mEntry;         // +0x14
+};
+
+// Node-based map kept by the state machine; its end sentinel is the map itself.
+class CGalaxyEntryMap {
+ public:
+  char mPad00[8];
+  CGalaxyEntryNode* mpRoot;    // +0x08
+  void Insert(CGalaxyEntryNode** ppResult, CGalaxyEntryNode* pHint, const uint32_t* pInstance,
+              bool bNew);      // 0x00bb6960
+};
+
+class cGalaxyGameEntryUIStateMachine {
+ public:
+  CGalaxyEntry* GetOrInsertEntry(const Key* pKey);   // 0x00bb8010
+  char mPad00[4];
+  CGalaxyEntryMap mEntries;    // +0x04
+};
+}
+
 // ===========================================================================
 // @ 0x00bb7940
 bool __stdcall PickRandomAsset(uint32_t* pInstance, bool bRepeat)
@@ -241,3 +300,33 @@ bool __stdcall PickRandomAsset(uint32_t* pInstance, bool bRepeat)
   } while (true);
   return *pInstance != 0;
 }
+
+namespace SP {
+
+// @ 0x00bb8010
+// Finds the cached entry for pKey->mInstance, inserting a default-constructed one (before the
+// lower-bound node) when the instance is not in the map yet, and returns it.
+CGalaxyEntry* cGalaxyGameEntryUIStateMachine::GetOrInsertEntry(const Key* pKey)
+{
+  const uint32_t nInstance = pKey->mInstance;
+  CGalaxyEntryNode* pEnd = (CGalaxyEntryNode*)&mEntries;
+  CGalaxyEntryNode* pLower = pEnd;
+  for (CGalaxyEntryNode* pNode = mEntries.mpRoot; pNode != 0;) {
+    if (pNode->mInstance >= nInstance) {
+      pLower = pNode;
+      pNode = pNode->mpLeft;
+    } else {
+      pNode = pNode->mpRight;
+    }
+  }
+  if (pLower == pEnd || nInstance < pLower->mInstance) {
+    CGalaxyEntry entry;
+    entry.mInstance = nInstance;
+    CGalaxyEntryNode* pNew = 0;
+    mEntries.Insert(&pNew, pLower, &entry.mInstance, false);
+    pLower = pNew;
+  }
+  return &pLower->mEntry;
+}
+
+}  // namespace SP

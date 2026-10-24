@@ -3,4 +3,4 @@
 00405050  185  ~OptionParser (implicit): instruction-identical, frame 0x98 vs 0x8c (failed-inline slots of the three eastl::vector dtors: 22 vs 19), so every later slot offset shifts
 004051e0  38  Baker::CancelAll: instruction-identical, frame/slot offsets differ (failed-inline slots of BakeEntry ctor/dtor)
 00405440  50  BakeEntry::operator= (implicit): equiv PASS (795 valid, 100% cov); instruction-identical, frame 0x5c vs 0x54 (AddRef's value is a named local here, a compiler temp in the original)
-004055b0  43  Baker::Shutdown: instruction-identical, slot offsets differ (AddRef temp placement, 2 slots)
+004055b0  43  Baker::Shutdown: mBatch now at +0x1168 (padding array starts at the actual mDeferred end +0x330) and DefaultRefCounted::Release is out-of-line (0x00453540), matching the original's two cTribePlanner releases; remaining diff is frame 0x60 vs 0x78 (slot offsets only). [equiv: PASS 225 valid, 78.3% cov; src PASS]

@@ -1,271 +1,417 @@
-// Slice s00d83230 (cl2 #373): 0x00d83370 SP::FIND_STUFF_Tick, a creature behavior-tree "tick" handler
-// (cdecl, same shape as the handlers in s00d83a60):
-//   bool Tick(Creature* c, void* a2, void* a3, unsigned flags, void* a5, State* st, void* a7, float dt)
-// st->state: 0 start, 1/2 running (moving to the item), 3 done.
-// Flags (match neighbour s00d83a60): /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-#include "types.h"
+// Slice s00d83230 -- SP::AVATAR_IDLE_Tick (Simulator avatar idle-state tick).
+// Flags: /O2 /MD /Gy /EHsc /TP /arch=SSE /fp=fast.  Callees are masked relocations.
+typedef unsigned int uint;
 
-struct Vec3 { float x, y, z; };
+const int kAvatarIdleGuid = 0x27844ad;
 
-#define AT(T, p, off) (*(T*)((char*)(p) + (off)))
-
-struct PosHolder {                       // object with a vtable whose slot 0x2c returns a position
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
-    virtual void v20(); virtual void v24(); virtual void v28();
-    virtual Vec3* GetPosition();         // 0x2c
+// ---------------------------------------------------------------------------------------------
+// externs
+// ---------------------------------------------------------------------------------------------
+struct RandomLinearCongruential {
+    unsigned int RandomUint32Uniform(unsigned int n);        // 0x00a68fb0
 };
 
-struct Loco {                            // locomotion sub-object at creature + 0xc0
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
-    virtual void v20(); virtual void v24(); virtual void v28();
-    virtual Vec3* GetPosition();         // 0x2c
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
-    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
-    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
-    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
-    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
-    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
-    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
-    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
-    virtual void vb0(); virtual void vb4(); virtual void vb8(); virtual void vbc();
-    virtual void vc0(); virtual void vc4(); virtual void vc8(); virtual void vcc();
-    virtual void vd0(); virtual void vd4(); virtual void vd8(); virtual void vdc();
-    virtual void ve0(); virtual void ve4(); virtual void ve8(); virtual void vec();
-    virtual void vf0(); virtual void vf4();
-    virtual bool vf8();                  // 0xf8
-    bool IsNearGoal();                   // 0xc42e20
-    struct GoalInfo* FUN_00c41ec0();     // 0xc41ec0
-    Vec3* FUN_00c421f0();                // 0xc421f0
+extern RandomLinearCongruential gRandom;                     // 0x01601760
+extern unsigned char gAvatarIdleSuppressed;                  // 0x0169e381
+
+// ---------------------------------------------------------------------------------------------
+// animation provider queried for the current animation (vtable slot at +0x58)
+// ---------------------------------------------------------------------------------------------
+struct AnimProvider {
+    virtual void v00();  virtual void v01();  virtual void v02();  virtual void v03();
+    virtual void v04();  virtual void v05();  virtual void v06();  virtual void v07();
+    virtual void v08();  virtual void v09();  virtual void v10();  virtual void v11();
+    virtual void v12();  virtual void v13();  virtual void v14();  virtual void v15();
+    virtual void v16();  virtual void v17();  virtual void v18();  virtual void v19();
+    virtual void v20();  virtual void v21();
+    virtual void QueryAnimation(int* pGuid, int unusedA, int* pDuration, int unusedB); // +0x58
 };
 
-struct GoalInfo {
-    char pad[0x5c];
-    int f5c;
-    Vec3* FUN_00c423c0();                // 0xc423c0
+struct Vector3 {
+    float x;                                                 // +0x00
+    float y;                                                 // +0x04
+    float z;                                                 // +0x08
 };
 
-struct IdleNode {                        // result of PlayIdleAnimation
-    char pad00[8];
-    float f08;                           // +0x08
-    char pad0c[0x2c - 0x0c];
-    void* f2c;                           // +0x2c
+struct ContextInfo {
+    char mPad00[0x5c];
+    int  mField5c;                                           // +0x5c
+
+    Vector3* GetFallbackPoint();                             // 0x00c423c0
 };
 
-struct Behaviors {                       // behavior tree at creature + 0xb4c (+ 8)
-    IdleNode* PlayIdleAnimation(int a, int mask);               // 0xbc96a0
-    void FUN_00bc97f0(int a, int b, float f, void* o);          // 0xbc97f0
-    void ClearAll(int a, int mask);                             // 0xbc98f0
-};
-struct BTreePad8 { char pad[8]; };
-struct BTree : BTreePad8, Behaviors {
-    bool FUN_00bca2a0();                                        // 0xbca2a0 (called on creature+0xb4c)
-    bool FUN_00bcb510(struct Creature* c, void* st, int z);     // 0xbcb510
+// spatial subobject embedded at +0xc0 of the creature
+struct Spatial {
+    virtual void u00(); virtual void u01(); virtual void u02(); virtual void u03();
+    virtual void u04(); virtual void u05(); virtual void u06(); virtual void u07();
+    virtual void u08(); virtual void u09(); virtual void u10();
+    virtual Vector3* GetPosition();                          // vtable +0x2c
+    virtual void u12(); virtual void u13(); virtual void u14(); virtual void u15();
+    virtual void u16(); virtual void u17(); virtual void u18(); virtual void u19();
+    virtual void u20(); virtual void u21(); virtual void u22(); virtual void u23();
+    virtual void u24(); virtual void u25(); virtual void u26(); virtual void u27();
+    virtual void u28(); virtual void u29(); virtual void u30(); virtual void u31();
+    virtual void u32(); virtual void u33(); virtual void u34(); virtual void u35();
+    virtual void u36(); virtual void u37(); virtual void u38(); virtual void u39();
+    virtual void u40(); virtual void u41(); virtual void u42(); virtual void u43();
+    virtual void u44(); virtual void u45(); virtual void u46(); virtual void u47();
+    virtual void u48(); virtual void u49(); virtual void u50(); virtual void u51();
+    virtual void u52(); virtual void u53(); virtual void u54(); virtual void u55();
+    virtual void u56(); virtual void u57(); virtual void u58(); virtual void u59();
+    virtual void u60(); virtual void u61();
+    virtual bool CanStep();                                  // vtable +0xf8
+
+    ContextInfo* GetContext();                               // 0x00c41ec0
+    Vector3* GetApproachPoint();                             // 0x00c421f0
+    bool IsNearGoal();                                       // 0x00c42e20
 };
 
-struct CreatureBase;
-struct Node1;
+// same vtable prefix as Spatial, for spatial subobjects that live at other offsets
+struct LocoRef {
+    virtual void w00(); virtual void w01(); virtual void w02(); virtual void w03();
+    virtual void w04(); virtual void w05(); virtual void w06(); virtual void w07();
+    virtual void w08(); virtual void w09(); virtual void w10();
+    virtual Vector3* GetPosition();                          // vtable +0x2c
+};
+
+// tuning block reached through Creature::Get()
+struct CreatureTuning {
+    char mPad000[0x108];
+    float mField108;                                         // +0x108
+
+    Vector3* GetPosition();                                  // 0x00c6acc0
+};
+
+struct PlayHandle {
+    char  mPad000[8];
+    float mSpeed;                                            // +0x08
+    char  mPad00c[0x2c - 0x0c];
+    int   mSoundId;                                          // +0x2c
+};
+
+struct BehaviourNode;
+struct Creature;
+
+struct FindStuffState {
+    char mPad000[0x1a4];
+    Vector3 mDestination;                                    // +0x1a4
+
+    bool IsFinished();                                       // 0x00a75010
+    Creature* CurrentId();                                   // 0x00bc9b10
+};
+
+struct AgentManager {
+    char mPad000[8];
+    struct OrderQueue {
+        char mPad[4];
+        PlayHandle* Play(int animId, int flags);             // 0x00bc96a0
+        void PlayEx(int animId, int flags, float speed, int soundId); // 0x00bc97f0
+        void ClearAll(int reason, int flags);                // 0x00bc98f0
+    } mOrders;                                               // +0x08
+    char mPad00c[0x600 - 0x0c];
+    FindStuffState* mpFindStuff;                             // +0x600
+
+    bool IsSourceEmpty();                                    // 0x00bca2a0
+    bool QueueOrder(Creature* pSelf, int* pState, int a);     // 0x00bcb510
+};
+
+// ---------------------------------------------------------------------------------------------
+// creature, only the members this tick touches
+// ---------------------------------------------------------------------------------------------
 struct Creature {
-    char pad00[0xc0];
-    Loco loco;                           // +0xc0 (vptr only used)
-    char pad04[0xb4c - 0xc0 - 4];
-    BTree* mpBehavior;                   // +0xb4c
-    char pad50[0xb5e - 0xb50];
-    char b5e;                            // +0xb5e
+    char mPad000[0xc0];
+    Spatial mSpatial;                                        // +0x0c0
+    char mPad0c4[0x137 - 0xc4];
+    char mState137;                                          // +0x137
+    char mPad138[0xb4c - 0x138];
+    AgentManager* mpAgentManager;                            // +0x0b4c
+    char mPadB50[0xb54 - 0xb50];
+    AnimProvider* mpAnimProvider;                            // +0x0b54
+    char mPadB58[0xb5e - 0xb58];
+    char mFieldB5e;                                          // +0x0b5e
+    char mPadB5f[0xe3c - 0xb5f];
+    int  mFieldE3c;                                          // +0x0e3c
 
-    void SetStealthed(int a, int b);                            // 0xc1aed0
-    void* FUN_00c04590();                                       // 0xc04590
-    int FUN_00c0b750();                                         // 0xc0b750
-    bool FUN_00c0b7c0(Creature* o);                             // 0xc0b7c0
-    bool FUN_00c0c130();                                        // 0xc0c130
-    void FUN_00c14750(int a);                                   // 0xc14750
-    void FUN_00c122c0(unsigned id, float a, float b);           // 0xc122c0
-    void InterruptAnimation(unsigned id, int a, int b);         // 0xc12310
-    void MoveToPointAtSpeed(int mode, const Vec3* p, float speed, float f);   // 0xc1c1d0
+    void UpdateLocomotion(int reason);                       // 0x00c14750
+    bool CheckState();                                       // 0x00c0c130
+    bool IsAnimationFinished(int);                           // 0x00c123f0
+    bool HasAnimationEnded();                                // 0x00c0e420
+    int  GetCurrentAnimationGUID();                          // 0x00c0e040
+    void PlayAnimation(int guid, int loop, int blend);       // 0x00c12190
+
+    void SetStealthed(int a, int b);                         // 0x00c1aed0
+    CreatureTuning* Get();                                   // 0x00c04590
+    int  SpeedClass();                                       // 0x00c0b750
+    bool AcceptTarget(int handle);                           // 0x00c0b7c0
+    void MoveToPointAtSpeed(int speedClass, const void* pPoint, float a, float b); // 0x00c1c1d0
+    void InterruptAnimation(int animId, int a, int b);       // 0x00c12310
+    void PlayGesture(int animId, float a, float b);          // 0x00c122c0
 };
 
-struct Planet {
-    Vec3* FUN_00b81630(Vec3* out, const Vec3* p);               // 0xb81630
-};
-Planet* __cdecl PlanetModel();                                  // 0xb3d350
-
-struct Tgt {                             // behavior->+0x600 target record
-    char pad[0x1a4];
-    Vec3 dest;                           // +0x1a4
-    bool FUN_00a75010();                                        // 0xa75010
-    Creature* FUN_00bc9b10();                                   // 0xbc9b10
+// timer pair: elapsed time at +0, current clip duration at +4
+struct IdleTimer {
+    float mElapsed;                                          // +0x00
+    float mDuration;                                         // +0x04
 };
 
-struct Item { char pad[0x34]; PosHolder h34; };
+// ---------------------------------------------------------------------------------------------
+// @ 0x00d83230
+bool AvatarIdleTick(Creature* self, int arg2, int arg3, int arg4, int arg5, IdleTimer* pTimer,
+                    int arg7, float deltaTime)
+{
+    pTimer->mElapsed += deltaTime;
 
-struct Node1 {                           // d998d0(r, 0x4f396a66)
-    char pad[0x120];
-    PosHolder h120;                      // +0x120
-    char pad2[0x210 - 0x120 - sizeof(PosHolder)];
-    Creature** begin;                    // +0x210
-    Creature** end;                      // +0x214
-    Vec3* FUN_00c91190(Vec3* tmp, int one);                     // 0xc91190
-};
+    if (self->mState137 == 0) {
+        self->UpdateLocomotion(0);
+        return true;
+    }
 
-struct Node2 {                           // d998d0(r, 0x4ffcdeda)
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
-    virtual void v20(); virtual void v24(); virtual void v28();
-    virtual bool vcall2c();              // 0x2c
-    char pad[0x34 - 4];
-    PosHolder h34;                       // +0x34
-};
+    bool hasIdleAnim = false;
+    AnimProvider* pProvider = self->mpAnimProvider;
+    if (pProvider != 0) {
+        int guid;
+        int duration;
+        pProvider->QueryAnimation(&guid, 0, &duration, 0);
+        if (guid == kAvatarIdleGuid)
+            hasIdleAnim = duration > 0;
+    }
 
-struct MC { Vec3* FUN_00c6acc0(); };                            // 0xc6acc0
+    if (self->mSpatial.GetContext()->mField5c != 0
+            || self->CheckState()
+            || gAvatarIdleSuppressed != 0
+            || hasIdleAnim) {
+        pTimer->mElapsed = 0.0f;
+        if (self->GetCurrentAnimationGUID() == kAvatarIdleGuid)
+            self->UpdateLocomotion(gAvatarIdleSuppressed);
+        return true;
+    }
 
-Creature* __cdecl WatchMemoryBlock(void* p);                    // 0xd999d0
-void* __cdecl FUN_00d998d0(void* r, unsigned id);               // 0xd998d0
-bool __cdecl FindForageDestination(Creature* c, Vec3* out);     // 0xd7cfb0
-extern float kCreatureFoodSearchTravelDistance;                 // 0x1582e8c
+    if (self->GetCurrentAnimationGUID() == kAvatarIdleGuid) {
+        pTimer->mElapsed = 0.0f;
+        return true;
+    }
 
-struct State { int state; float timer; float radius; };
+    if (pTimer->mElapsed > pTimer->mDuration) {
+        if (self->mFieldE3c != -1)
+            return true;
 
-static inline float DistSqA(const Vec3* a, const Vec3* b) {
-    float dx = a->x - b->x;
-    float dy = a->y - b->y;
-    float dz = a->z - b->z;
-    return dx * dx + dy * dy + dz * dz;
+        if (!self->HasAnimationEnded() && !self->IsAnimationFinished(0))
+            return true;
+
+        pTimer->mElapsed = 0.0f;
+        unsigned int roll = gRandom.RandomUint32Uniform(10);
+        pTimer->mDuration = (float)(int)(roll + 5);
+        self->PlayAnimation(kAvatarIdleGuid, 1, -1);
+        return true;
+    }
+    return true;
 }
-static inline float DistSq(const Vec3* a, const Vec3* b) {
-    float dz = a->z - b->z;
-    float dy = a->y - b->y;
-    float dx = a->x - b->x;
-    return dz * dz + dy * dy + dx * dx;
-}
+
+// =============================================================================================
+// 00d83370: SP::FIND_STUFF_Tick -- drive the "find stuff" behaviour toward its destination
+// =============================================================================================
+extern const float gkFoodSearchMinRadius;                    // 0x0147c034
+extern const float gkFoodSearchDefaultRadius;                // 0x01582e8c
+extern const float gkOne;                                    // 0x01485720
+extern const float gkSearchTimeout;                          // 0x014853bc
+
+struct PlanetModelResult {
+    const void* GetPoint();                                  // 0x00b81630
+};
+
+extern "C" PlanetModelResult* __stdcall PlanetModel(Vector3* pOut, const Vector3* pDest); // 0x00b3d350
+extern "C" Creature* __cdecl WatchMemoryBlock(const void* pHandle);          // 0x00d999d0
+extern "C" void* __cdecl Find(const void* pHandle, int guid);                // 0x00d998d0
+extern "C" bool __cdecl FindForageDestination(Creature* self, Vector3* pOut); // 0x00d7cfb0
+
+// behaviour node the search results hang off of
+struct BehaviourNode {
+    char mPad000[0x34];
+    LocoRef mSpatial34;                                      // +0x34
+    char mPad038[0x120 - 0x38];
+    LocoRef mSpatial120;                                     // +0x120
+    char mPad124[0x210 - 0x124];
+    int* mpHandles;                                          // +0x210
+    int* mpHandlesEnd;                                       // +0x214
+
+    Vector3* GetPoint(Vector3* pOut, int n);                 // 0x00c91190
+};
+
+struct AltNode {
+    virtual void a00(); virtual void a01(); virtual void a02(); virtual void a03();
+    virtual void a04(); virtual void a05(); virtual void a06(); virtual void a07();
+    virtual void a08(); virtual void a09(); virtual void a10();
+    virtual bool IsBlocked();                                // vtable +0x2c
+    char mPad004[0x34 - 0x04];
+    LocoRef mSpatial34;                                      // +0x34
+};
 
 // @ 0x00d83370
-bool __cdecl FIND_STUFF_Tick(Creature* c, void* a2, void* a3, unsigned flags, void* a5, State* st, void* a7, float dt)
+bool FindStuffTick(Creature* self, int arg2, int arg3, unsigned int flags, int arg5,
+                   int* pState, int arg7, float deltaTime)
 {
-    Tgt* tgt = AT(Tgt*, c->mpBehavior, 0x600);
-    if (tgt == 0 || tgt->FUN_00a75010())
+    FindStuffState* pFind = self->mpAgentManager->mpFindStuff;
+    if (pFind == 0 || pFind->IsFinished())
         return false;
 
-    unsigned stealthFlag = flags & 0x10000;
-    if (stealthFlag)
-        c->SetStealthed(1, 1);
+    bool skipDistanceCheck = (flags & 0x10000) != 0;
+    if (skipDistanceCheck)
+        self->SetStealthed(1, 1);
 
-    Creature* other = tgt->FUN_00bc9b10();
-    if (other != c) {
-        Loco* loco = &c->loco;
-        Vec3* pos = loco->GetPosition();
-        Vec3* tpos = &tgt->dest;
-        IdleNode* r = other->mpBehavior->PlayIdleAnimation(0x80000000, 0);
-        if (r != 0) {
-            Creature* w = WatchMemoryBlock(r);
-            if (w != 0 && w->b5e == 0)
-                c->mpBehavior->FUN_00bc97f0(0x80000000, 0, r->f08, r->f2c);
+    Creature* pCurrent = pFind->CurrentId();
+    if (pCurrent != self) {
+        Vector3* pSelfPos = self->mSpatial.GetPosition();
+        Vector3* pDestination = &pFind->mDestination;
+
+        PlayHandle* pHandle = pCurrent->mpAgentManager->mOrders.Play(0x80000000, 0);
+        if (pHandle != 0) {
+            Creature* pWatched = WatchMemoryBlock(pHandle);
+            if (pWatched != 0 && pWatched->mFieldB5e == 0)
+                self->mpAgentManager->mOrders.PlayEx(0x80000000, 0, pHandle->mSpeed,
+                                                     pHandle->mSoundId);
         }
-        GoalInfo* gi = loco->FUN_00c41ec0();
-        float r2 = st->radius * st->radius;
-        Vec3* goal = pos;
-        if (gi->f5c != 0)
-            goal = gi->FUN_00c423c0();
-        if (DistSqA(goal, tpos) > r2) {
-            int mode = 2;
-            int m = other->FUN_00c0b750();
-            if (m != 0) mode = m;
-            Vec3 tmp;
-            c->MoveToPointAtSpeed(mode, PlanetModel()->FUN_00b81630(&tmp, tpos), st->radius, st->radius);
-            if (!loco->vf8())
-                c->FUN_00c14750(0);
-            st->state = 2;
-        } else if (loco->IsNearGoal() && st->state == 2) {
-            c->FUN_00c122c0(0x715be665, 0.5f, 0.0f);
-            st->state = 3;
+
+        ContextInfo* pInfo = self->mSpatial.GetContext();
+        float radius = (float)pState[2];
+        Vector3* pFrom = pSelfPos;
+        if (pInfo->mField5c != 0)
+            pFrom = pInfo->GetFallbackPoint();
+
+        float dx = pFrom->x - pDestination->x;
+        float dy = pFrom->y - pDestination->y;
+        float dz = pFrom->z - pDestination->z;
+        float distSq = dx * dx + dy * dy + dz * dz;
+        if (distSq <= radius * radius) {
+            if (self->mSpatial.IsNearGoal() && *pState == 2) {
+                self->PlayGesture(0x715be665, 0.5f, 0.0f);
+                *pState = 3;
+            }
+            return true;
         }
+
+        int speedClass = pCurrent->SpeedClass();
+        if (speedClass == 0)
+            speedClass = 2;
+        Vector3 target;
+        PlanetModelResult* pModel = PlanetModel(&target, pDestination);
+        const void* pPoint = pModel->GetPoint();
+        self->MoveToPointAtSpeed(speedClass, pPoint, radius, radius);
+        if (!self->mSpatial.CanStep())
+            self->UpdateLocomotion(0);
+        *pState = 2;
         return true;
     }
 
-    if (st->state > 1)
-        st->state = 0;
-    BTree* bt = c->mpBehavior;
-    if (!bt->FUN_00bca2a0() && bt->FUN_00bcb510(c, st, 0))
-        return true;
-    st->timer = st->timer - dt;
-    if (st->state != 0)
+    if (*pState > 1)
+        *pState = 0;
+
+    if (!self->mpAgentManager->IsSourceEmpty()) {
+        if (self->mpAgentManager->QueueOrder(self, pState, 0))
+            return true;
+    }
+
+    pState[1] -= deltaTime;
+    if (*pState != 0)
         return true;
 
-    Loco* loco = &c->loco;
-    Vec3* pos = loco->GetPosition();
-    float R = kCreatureFoodSearchTravelDistance;
-    if (AT(float, c->FUN_00c04590(), 0x108) > 1.52587890625e-05f)
-        R = AT(float, c->FUN_00c04590(), 0x108);
-    R = R * R;
-    bool found = false;
-    bool nearGoal = loco->IsNearGoal();
-    if (!nearGoal && (flags & 0x10))
-        c->SetStealthed(1, 0);
+    Vector3* pSelfPos = self->mSpatial.GetPosition();
+    float radius = (self->Get()->mField108 > gkFoodSearchMinRadius)
+                       ? self->Get()->mField108 : gkFoodSearchDefaultRadius;
+    float radiusSq = radius * radius;
 
-    Vec3 dest;
-    IdleNode* r = c->mpBehavior->PlayIdleAnimation(0x80000000, 0);
-    if (r != 0) {
-        Creature* w = WatchMemoryBlock(r);
-        if (w != 0 && w->b5e == 0) {
-            if (stealthFlag != 0 || R > DistSq(w->loco.GetPosition(), pos)) {
-                dest = *w->loco.GetPosition();
-                found = true;
-                if (w->FUN_00c0c130())
-                    dest = *((MC*)c->FUN_00c04590())->FUN_00c6acc0();
+    bool nearGoal = self->mSpatial.IsNearGoal();
+    if (!nearGoal && (flags & 0x10) != 0)
+        self->SetStealthed(1, 0);
+
+    Vector3 vec;
+    bool haveVec = false;
+
+    PlayHandle* pIdle = self->mpAgentManager->mOrders.Play(0x80000000, 0);
+    if (pIdle != 0) {
+        Creature* pWatch = WatchMemoryBlock(pIdle);
+        if (pWatch != 0 && pWatch->mFieldB5e == 0) {
+            bool closeEnough = true;
+            if (!skipDistanceCheck) {
+                Vector3* pPos = pWatch->mSpatial.GetPosition();
+                float dx = pPos->x - pSelfPos->x;
+                float dy = pPos->y - pSelfPos->y;
+                float dz = pPos->z - pSelfPos->z;
+                closeEnough = dx * dx + dy * dy + dz * dz < radiusSq;
+            }
+            if (closeEnough) {
+                vec = *pWatch->mSpatial.GetPosition();
+                haveVec = true;
+                if (pWatch->CheckState())
+                    vec = *self->Get()->GetPosition();
             }
         }
     }
 
-    r = c->mpBehavior->PlayIdleAnimation(0, 0x100);
-    if (r != 0) {
-        Node1* n = (Node1*)FUN_00d998d0(r, 0x4f396a66);
-        if (n != 0) {
-            dest = *n->h120.GetPosition();
-            Creature** it = n->begin;
-            Creature** end = n->end;
-            for (; it != end; ++it) {
-                Item* item = (Item*)*it;
-                if (c->FUN_00c0b7c0((Creature*)item)) {
-                    dest = *item->h34.GetPosition();
-                    goto have_dest;
+    PlayHandle* pObj = self->mpAgentManager->mOrders.Play(0, 0x100);
+    if (pObj != 0) {
+        BehaviourNode* pNode = (BehaviourNode*)Find(pObj, 0x4f396a66);
+        if (pNode != 0) {
+            vec = *pNode->mSpatial120.GetPosition();
+            bool accepted = false;
+            for (int* pIt = pNode->mpHandles; pIt != pNode->mpHandlesEnd; ++pIt) {
+                if (self->AcceptTarget(*pIt)) {
+                    vec = *((BehaviourNode*)*pIt)->mSpatial34.GetPosition();
+                    accepted = true;
+                    break;
                 }
             }
-            Vec3 tmp2;
-            dest = *n->FUN_00c91190(&tmp2, 1);
+            if (!accepted) {
+                Vector3 scratch;
+                vec = *pNode->GetPoint(&scratch, 1);
+            }
         } else {
-            Node2* n2 = (Node2*)FUN_00d998d0(r, 0x4ffcdeda);
-            if (n2 == 0 || n2->vcall2c()) {
-                c->mpBehavior->ClearAll(0, 0x100);
+            AltNode* pAlt = (AltNode*)Find(pObj, 0x4ffcdeda);
+            if (pAlt == 0 || pAlt->IsBlocked()) {
+                self->mpAgentManager->mOrders.ClearAll(0, 0x100);
                 return false;
             }
-            dest = *n2->h34.GetPosition();
+            vec = *pAlt->mSpatial34.GetPosition();
         }
-    have_dest:
-        found = true;
+        haveVec = true;
     }
 
-    if (!nearGoal) {
-        if (!found) return true;
-    } else {
-        st->timer = 30.0f;
-        if (!found) {
-            found = FindForageDestination(c, &dest);
-            if (DistSq(&dest, c->loco.GetPosition()) < 1.0f || !found)
-                dest = *((MC*)c->FUN_00c04590())->FUN_00c6acc0();
+    if (nearGoal) {
+        pState[1] = gkSearchTimeout;
+        if (!haveVec) {
+            bool found = FindForageDestination(self, &vec);
+            haveVec = found;
+            Vector3* pPos = self->mSpatial.GetPosition();
+            float dx = vec.x - pPos->x;
+            float dy = vec.y - pPos->y;
+            float dz = vec.z - pPos->z;
+            if (dx * dx + dy * dy + dz * dz < gkOne || !found)
+                vec = *self->Get()->GetPosition();
         }
-    }
-
-    tgt->dest = dest;
-    bool far = nearGoal && DistSq(&dest, c->loco.GetPosition()) > 1.0f;
-    if (!nearGoal) {
-        float rad = st->radius;
-        if (!(DistSq(loco->FUN_00c421f0(), &dest) > rad * rad))
-            return true;
-    } else if (!far) {
+    } else if (!haveVec) {
         return true;
     }
-    c->MoveToPointAtSpeed(2, &dest, 1.0f, 2.0f);
-    if (!c->loco.vf8())
-        c->InterruptAnimation(0x2481de5, -1, 0);
+
+    pFind->mDestination = vec;
+
+    if (nearGoal) {
+        Vector3* pPos = self->mSpatial.GetPosition();
+        float dx = vec.x - pPos->x;
+        float dy = vec.y - pPos->y;
+        float dz = vec.z - pPos->z;
+        if (!(dx * dx + dy * dy + dz * dz > gkOne))
+            return true;
+    } else {
+        float limit = (float)pState[2];
+        Vector3* pApproach = self->mSpatial.GetApproachPoint();
+        float dx = pApproach->x - vec.x;
+        float dy = pApproach->y - vec.y;
+        float dz = pApproach->z - vec.z;
+        if (dx * dx + dy * dy + dz * dz <= limit * limit)
+            return true;
+    }
+
+    self->MoveToPointAtSpeed(2, &vec, 1.0f, 2.0f);
+    if (!self->mSpatial.CanStep())
+        self->InterruptAnimation(0x2481de5, -1, 0);
     return true;
 }

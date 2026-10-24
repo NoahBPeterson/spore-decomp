@@ -1,5 +1,6 @@
 005709b0 cTraitQuery::Compute  # switch on +0x54, bool +0x50, vector +0x38 (name inferred)
 00570c40 cTraitQuery::Op1  # this+0x1c feature vector; global map 0x15e4a1c
+00571530 IntersectWeights  # merge-join cFeatureVector (12-byte Key12) against a {u32 key,float weight} vector; multiplies mC by the matched weight, false on an unmatched key
 00570e50 cTraitQuery::Op2  # merge-join similarity
 00571100 cTraitQuery::Op3  # merge-join squared-magnitude similarity
 005715d0 Key12::operator<  # 12-byte {u32,u32,float} key compare; matches s005718f0's Key12

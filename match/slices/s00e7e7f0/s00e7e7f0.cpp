@@ -12,7 +12,8 @@ struct Transform {
 struct Entity {
     uint32_t id;                      // +0x00
     uint8_t flag4;                    // +0x04
-    char pad5[0xb8 - 5];
+    char pad5[0xb4 - 5];
+    uint32_t u_b4;                    // +0xb4
     float mass;                       // +0xb8
     char padbc[0x108 - 0xbc];
     uint32_t u108;                    // +0x108
@@ -56,12 +57,17 @@ struct Registry {
     Entity* Get(uint32_t id);         // 0x00b72210
     Entity* GetOwner(uint32_t id);    // 0x00b721d0
 };
+struct Registry54 {
+    Entity* GetOwner(uint32_t id);    // 0x00b721d0
+};
 struct CellGame { char pad[0x74]; int time; };
 struct Game {
     char pad0[0x1c];
     Registry reg;                     // +0x1c
-    char pad1[0x5190 - 0x54];
+    Registry54 reg54;                 // +0x54
+    char pad1[0x5190 - 0x55];
     CellGame* cell;                   // +0x5190
+    uint32_t mField5194;              // +0x5194
 };
 extern Game* g_016b3c04;              // 0x016b3c04
 
@@ -341,4 +347,98 @@ void __cdecl sExecuteCollisionResult(CollisionResult* r, float dt)
         return;
     }
     Finish(r, dt);
+}
+
+// ---------------------------------------------------------------------------
+// Collision-pair setup (00e7f140) and the cell-game rollover tick (00e7f5a0).
+// ---------------------------------------------------------------------------
+struct Handle {
+    uint32_t mValue;                  // resource handle, ref-counted through +0xc
+};
+
+struct TriggerMgr {
+    char pad00[0x2c];
+    int  mMode;                       // +0x2c
+};
+
+struct GfxObject {
+    void FUN_00e02e80();              // 0x00e02e80 (thiscall, no args)
+};
+
+struct CellGfx {
+    char       pad00[0x98];
+    GfxObject* mpObject;              // +0x98
+    char       pad9c[0x936 - 0x9c];
+    uint8_t    b936;                  // +0x936
+};
+extern CellGfx* g_016b3c0c;           // 0x016b3c0c gspCellGfx
+
+void __fastcall FUN_00743b50(Handle* h);                    // 0x00743b50 VecClear
+Entity* __cdecl FUN_00e4cc40(uint32_t resource, Handle* out); // 0x00e4cc40 ResourceGetFromHandle
+void __fastcall FUN_00e82130(Handle* h);                    // 0x00e82130 release handle
+void __cdecl FUN_00e73dd0(CollisionResult* r, Entity* a, Entity* b,
+                          Entity* ea, Entity* eb);          // 0x00e73dd0
+void __cdecl FUN_00e7e130(float f, int a, int b);           // 0x00e7e130
+void __cdecl FUN_00e7f550();                                // 0x00e7f550
+TriggerMgr* __cdecl FUN_00b3d4d0();                         // 0x00b3d4d0 GetTriggerMgr
+bool __cdecl FUN_00e00ac0();                                // 0x00e00ac0
+void __cdecl toggle(int control, bool value);               // 0x00e53660
+
+// @ 0x00e7f140
+void __cdecl FUN_00e7f140(Entity* a, Entity* b, float dt)
+{
+    if (a->id == b->id)
+        return;
+
+    Entity* pa = a;
+    Entity* pb = b;
+
+    FUN_00743b50((Handle*)&a);
+    Entity* ea = FUN_00e4cc40(pa->u108, (Handle*)&a);
+
+    FUN_00743b50((Handle*)&b);
+    Entity* eb = FUN_00e4cc40(pb->u108, (Handle*)&b);
+
+    if (ea->u_b4 != 0 && eb->u_b4 != 0) {
+        CollisionResult r;
+        r.id0 = 0;
+        r.id1 = 0;
+        r.type = 0;
+        r.a3 = 0;
+        r.a4 = 0;
+        r.f14 = 0.0f;
+
+        FUN_00e73dd0(&r, pa, pb, ea, eb);
+        FUN_00e73dd0(&r, pb, pa, eb, ea);
+
+        if (r.type != 0 && r.type != 0x16)
+            sExecuteCollisionResult(&r, dt);
+    }
+
+    FUN_00e82130((Handle*)&b);
+    FUN_00e82130((Handle*)&a);
+}
+
+// @ 0x00e7f5a0
+void __cdecl FUN_00e7f5a0()
+{
+    Entity* e = g_016b3c04->reg54.GetOwner(g_016b3c04->mField5194);
+    g_016b3c04->mField5194 = 0;
+
+    if (e != 0) {
+        FUN_00e7e130(0.0f, 1, 0);
+        FUN_00e7f550();
+        return;
+    }
+
+    TriggerMgr* tm = FUN_00b3d4d0();
+    if (tm->mMode == 1 || tm->mMode == 2)
+        return;
+
+    CellGfx* gfx = g_016b3c0c;
+    if (gfx->b936 != 0)
+        return;
+
+    gfx->mpObject->FUN_00e02e80();
+    toggle(2, FUN_00e00ac0());
 }

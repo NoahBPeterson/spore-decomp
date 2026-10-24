@@ -180,6 +180,10 @@ struct HashMap {
     struct value_type {
         K first;
         M second;
+        // The retail value_type is 16 bytes: the node's mpNext sits at +0x10 and the
+        // node allocator (0x00425240) copies all 16 bytes, so the surrounding map
+        // instantiations see 4 bytes of padding after `second` (left uninitialised).
+        uint32_t mPad;
         value_type(const K& k, const M& m) : first(k), second(m) {}
     };
     struct Node {
@@ -205,7 +209,7 @@ struct HashMap {
     Iterator     find(const K& key);
     InsertResult DoInsert(const value_type& v, InsertTag tag);
     InsertResult insert(const value_type& v) { return DoInsert(v, InsertTag()); }
-    Iterator     end() { Node** b = mpBucketArray + mnBucketCount; return Iterator(*b, b); }
+    Iterator     end() { Node** b = mpBucketArray + mnBucketCount; Node* n = *b; return Iterator(n, b); }
     M&           operator[](const K& key);
 };
 

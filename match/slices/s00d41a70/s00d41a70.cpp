@@ -344,3 +344,97 @@ void SetGlobalAudioProperties(cCreature* avatar)
 // Taking the address keeps the internal-linkage function emitted out of line (its callers live in
 // this TU in the original; here there are none).
 void (*g_pSetGlobalAudioProperties)(cCreature*) = &SetGlobalAudioProperties;
+
+// ---------------------------------------------------------------------------
+// 0x00d42570 -- cCreatureModeStrategy::ReloadTuning.
+// ---------------------------------------------------------------------------
+namespace SP {
+
+struct AppObj2;
+struct AppObj3;
+struct AppObj;
+
+struct AppObjBase {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+};
+struct AppObj : AppObjBase {
+    virtual AppObj2* GetAt50();       // +0x50
+};
+
+struct AppObj2Base {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34();
+};
+struct AppObj2 : AppObj2Base {
+    virtual AppObj3* GetAt38();       // +0x38
+};
+
+struct AppObj3 {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual void* Cast(uint32_t type); // +0x0c
+};
+
+struct cCreatureCamera {
+    void ReloadTuning();              // 0x00d247f0
+};
+
+struct cDisplayStrategy {
+    void ReloadTuning();              // 0x00d2c280
+    void ReadText_00c2e4e0();         // 0x00c2e4e0
+};
+
+struct Thing64 {
+    virtual void v00(); virtual void v04();
+    virtual void v08();               // +0x08
+};
+
+struct cReloadOwner {
+    char          pad000[0x64];
+    Thing64*      mp64;               // +0x64
+    cDisplayStrategy* mp68;           // +0x68
+
+    void ReloadTuning();              // 0x00d42570
+};
+
+struct cMotiveTuning {
+    void Init(uint32_t hash);         // 0x00b71480
+};
+extern cMotiveTuning g_motiveTuning;  // 0x01687a00
+
+AppObj* __cdecl App();                // 0x0067dd10
+
+} // namespace SP
+
+extern "C" void __cdecl LoadCreatureGameplayTuning(uint32_t hashA, uint32_t hashB); // 0x00d3d870
+
+// @ 0x00d42570
+void SP::cReloadOwner::ReloadTuning()
+{
+    SP::g_motiveTuning.Init(0xad56080c);
+
+    SP::AppObj3* stage2 = SP::App()->GetAt50()->GetAt38();
+    if (stage2 != 0) {
+        SP::cCreatureCamera* camera =
+            (SP::cCreatureCamera*)stage2->Cast(0x2a7ecd2);
+        if (camera != 0)
+            camera->ReloadTuning();
+    }
+
+    SP::Thing64* p64 = mp64;
+    if (p64 != 0)
+        p64->v08();
+
+    if (mp68 != 0)
+        mp68->ReloadTuning();
+
+    LoadCreatureGameplayTuning(0xad56080c, 0x7c340397);
+
+    if (mp68 != 0)
+        mp68->ReadText_00c2e4e0();
+}

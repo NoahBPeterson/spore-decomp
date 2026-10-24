@@ -1,2 +1,3 @@
 # <va> <diff-bytes> <reason>
 00bb7940  1504  PickRandomAsset: complete (45 calls like the original; same call order and vtable slots 0x4,0xc,0xc,0x74,0x4,0x2c,0x4,0x58; size 1759 vs 1737); stack-slot placement of the first-block Key vs the 4 bucket vectors, shrink-wrapped prologue/edi hoisting and a few cmp-vs-test choices differ
+00bb8010  180  GetOrInsertEntry: map lower-bound search matches instruction-for-instruction; retail inlines the cached entry's default ctor (6 zero stores + 0xbae0a0 string-table copy) and dtor (2 FreeRawBlock + 2 RefVector::Destroy) into the 0x70-byte temp (size 221 vs 178) and keeps pLower/zero in esi/ebx where cl15 picks edx/esi; equiv FAIL (the modelled map header/insert ABI is a stand-in, fabricated roots diverge)

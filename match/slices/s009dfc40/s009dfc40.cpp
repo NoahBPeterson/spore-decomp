@@ -270,9 +270,10 @@ AnimC::~AnimC()
         p0ac = 0;
     if (p0b0 != 0)
         p0b0 = 0;
-    v28.DestroyRange(v28.mpBegin, v28.mpEnd);
-    if (v28.mpBegin && ((int*)v28.mpBegin)[-1] != 0)
-        operator delete[](v28.mpBegin);
+    Vec40* v = &v28;
+    v->DestroyRange(v->mpBegin, v->mpEnd);
+    if (v->mpBegin && ((int*)v->mpBegin)[-1] != 0)
+        operator delete[](v->mpBegin);
     if (p014 && ((int*)p014)[-1] != 0)
         operator delete[](p014);
 }

@@ -1,14 +1,13 @@
 // slice s00583c50 — vector resize helper + stubs.
 #include "types.h"
 
-void __stdcall VecGrow(int* at, uint32_t count, const int* value);   // 0x0057f220
-void __stdcall VecErase(int* first, int* last);                      // 0x005c2170
-
 struct cIntVec {
     int* mpBegin;
     int* mpEnd;
     int* mpCapacity;
     void Resize(uint32_t n);
+    int* Insert(int* at, uint32_t count, const int* value);   // @ 0x0057f220
+    int* Erase(int* first, int* last);                       // @ 0x005c2170
 };
 
 // @ 0x00584160
@@ -19,10 +18,10 @@ void cIntVec::Resize(uint32_t n)
     uint32_t cur = (uint32_t)(end - begin);
     if (n > cur) {
         int zero = 0;
-        VecGrow(end, n - cur, &zero);
+        Insert(end, n - cur, &zero);
         return;
     }
-    VecErase(begin + n, end);
+    Erase(begin + n, end);
 }
 
 // ---------------------------------------------------------------------------------------------

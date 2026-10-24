@@ -1,0 +1,1 @@
+00f1dfa0 ?destroyRange@GoalVec@@QAEXPAUGoal@@0@Z  # vector<Goal> range destructor: per goal frees the 0x44-byte step elements, the step buffer and the map node list

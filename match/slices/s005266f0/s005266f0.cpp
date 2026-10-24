@@ -88,7 +88,7 @@ template <typename T> struct VectorBase {
     sp_vector_allocator mAllocator;
     uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
     uint32_t capacity() const { return (uint32_t)(mpCapacity - mpBegin); }
-    T* DoAllocate(uint32_t n) { return n ? (T*)EA_Allocate(&mAllocator, n * sizeof(T), 4, 0) : 0; }
+    T* DoAllocate(uint32_t n) { return n ? (T*)EA_Allocate(&mAllocator, n * sizeof(T), 0, 0) : 0; }
     void DoFree(T* p, uint32_t) { if (p && ((uint32_t*)p)[-1]) { void* q = p; EA_Free(q); } }
 };
 

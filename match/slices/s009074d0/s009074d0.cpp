@@ -5,6 +5,8 @@
 #include "../s00908c00/s00908c00.h"
 #include <string.h>
 
+#define NOINLINE __declspec(noinline)
+
 /* poolStoreString inlined into storeAtts by the original's whole-program build (poolAppend +
    poolGrow + 16-bit NUL store). */
 static __forceinline XML_Char *
@@ -19,6 +21,7 @@ poolStoreStringInline(STRING_POOL *pool, const ENCODING *enc,
   return pool->start;
 }
 
+// @ 0x009074d0
 enum XML_Error
 storeAtts(XML_Parser parser, const ENCODING *enc,
           const char *attStr, TAG_NAME *tagNamePtr,
@@ -339,6 +342,97 @@ storeAtts(XML_Parser parser, const ENCODING *enc,
   tagNamePtr->str = binding->uri;
   return XML_ERROR_NONE;
 }
+// @ 0x00907e10
+enum XML_Error PTRCALL
+entityValueInitProcessor(XML_Parser parser,
+                         const char *s,
+                         const char *end,
+                         const char **nextPtr)
+{
+  int tok;
+  const char *start = s;
+  const char *next = start;
+  eventPtr = start;
+
+  for (;;) {
+    tok = XmlPrologTok(encoding, start, end, &next);
+    eventEndPtr = next;
+    if (tok <= 0) {
+      if (!ps_finalBuffer && tok != XML_TOK_INVALID) {
+        *nextPtr = s;
+        return XML_ERROR_NONE;
+      }
+      switch (tok) {
+      case XML_TOK_INVALID:
+        return XML_ERROR_INVALID_TOKEN;
+      case XML_TOK_PARTIAL:
+        return XML_ERROR_UNCLOSED_TOKEN;
+      case XML_TOK_PARTIAL_CHAR:
+        return XML_ERROR_PARTIAL_CHAR;
+      case XML_TOK_NONE:   /* start == end */
+      default:
+        break;
+      }
+      /* found end of entity value - can store it now */
+      return storeEntityValue(parser, encoding, s, end);
+    }
+    else if (tok == XML_TOK_XML_DECL) {
+      enum XML_Error result;
+      result = processXmlDecl(parser, 0, start, next);
+      if (result != XML_ERROR_NONE)
+        return result;
+      switch (ps_parsing) {
+      case XML_SUSPENDED:
+        *nextPtr = next;
+        return XML_ERROR_NONE;
+      case XML_FINISHED:
+        return XML_ERROR_ABORTED;
+      default:
+        *nextPtr = next;
+      }
+      /* stop scanning for text declaration - we found one */
+      processor = entityValueProcessor;
+      return entityValueProcessor(parser, next, end, nextPtr);
+    }
+    /* If we are at the end of the buffer, this would cause XmlPrologTok to
+       return XML_TOK_NONE on the next call, which would then cause the
+       function to exit with *nextPtr set to s - that is what we want for other
+       tokens, but not for the BOM - we would rather like to skip it;
+       then, when this routine is entered the next time, XmlPrologTok will
+       return XML_TOK_INVALID, since the BOM is still in the buffer
+    */
+    else if (tok == XML_TOK_BOM && next == end && !ps_finalBuffer) {
+      *nextPtr = next;
+      return XML_ERROR_NONE;
+    }
+    start = next;
+    eventPtr = start;
+  }
+}
+
+// LTCG passes parser to initializeEncoding in eax.  cl 15 gives a TU-static
+// wrapper's leading pointer argument the same eax convention, and its
+// push eax / call leaves eax intact for the register-argument callee.
+static NOINLINE enum XML_Error
+FA_initializeEncoding(XML_Parser parser)
+{
+  return initializeEncoding(parser);
+}
+
+// @ 0x00907f70
+enum XML_Error PTRCALL
+externalEntityInitProcessor(XML_Parser parser,
+                            const char *start,
+                            const char *end,
+                            const char **endPtr)
+{
+  enum XML_Error result = FA_initializeEncoding(parser);
+  if (result != XML_ERROR_NONE)
+    return result;
+  processor = externalEntityInitProcessor2;
+  return externalEntityInitProcessor2(parser, start, end, endPtr);
+}
+
 // --- equivalence checker address annotations
 
 // --- equivalence checker address annotations (dummy declarations) ---

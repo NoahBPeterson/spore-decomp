@@ -1,6 +1,7 @@
 // Swarm skin-paint paint-variable commands (copy/add-variable), the
 // PaintVarModifier ctor and the 0x14-stride vector insert helpers.
-// Unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast.
+// Unoptimized module.
+// Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 
 typedef unsigned int size_t;
@@ -152,14 +153,17 @@ void** UninitCopy20(void** out, void** first, void** last, void** dst)
 }
 
 // @ 0x0053d230
-void UninitFill20(void* dst, int n, void* src)
+void* UninitFill20(void* dst, int n, void* src)
 {
     int* d = (int*)dst;
+    void* result = dst;
     for (; n != 0; --n) {
+        result = d;
         if (d) {
             d[0] = ((int*)src)[0]; d[1] = ((int*)src)[1]; d[2] = ((int*)src)[2];
             d[3] = ((int*)src)[3]; d[4] = ((int*)src)[4];
         }
         d += 5;
     }
+    return result;
 }

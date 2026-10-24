@@ -117,19 +117,16 @@ void Body8c80(void* a, void* b, void* c)
 }
 
 // @ 0x004e8d30
-// Allocates a 0x24-byte node and stores the 0x14-byte key at node+0x10.
+// Allocates a 0x24-byte node and stores the 0x14-byte key at node+0x10.  Retail keeps the
+// node+0x10 temporary in its own /Od slot but returns the raw node (the iterator's node base).
 Key5* NodeAlloc::Allocate(const Key5* rp)
 {
     void* foo = AllocNodeMem((char*)this + 0x18, 0x24, 4, 0);
     Key5* cc = (Key5*)((char*)foo + 0x10);
-    Key5* tmp;
-    if (cc != 0) {
-        *cc = *rp;
-        tmp = cc;
-    } else {
-        tmp = 0;
-    }
-    return tmp;
+    // Retail copies through a discarded conditional expression: the copy happens when the key slot
+    // is non-null and the (unused) result is the key pointer, else null; the node is returned.
+    cc != 0 ? &(*cc = *rp) : (Key5*)0;
+    return (Key5*)foo;
 }
 
 // @ 0x004e8da0

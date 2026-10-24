@@ -73,7 +73,7 @@ extern "C" {
     void  FUN_004b5610(void* a);
     void  FUN_004b5a60(void* a);
     void  FUN_004b97e0(void* a, void* b);
-    int   EA_RandomDoubleUniform(void* rng);
+    double __fastcall EA_RandomDoubleUniform(void* rng);   // 0x009360d0
     void  FUN_00540470(void* a);
     void  FUN_00540520(void);
     void  FUN_005c7bc0(void* a);
@@ -275,15 +275,15 @@ void* __fastcall FUN_004b8860(void** o)
 extern void* g_vtbl;
 
 // @ 0x4b8900
-float FUN_004b8900(void* rng, double lo, double hi)
+double FUN_004b8900(void* rng, double lo, double hi)
 {
-    float v = (float)((float)EA_RandomDoubleUniform(rng) * (hi - lo) + lo);
+    double v = EA_RandomDoubleUniform(rng) * (hi - lo) + lo;
     if (v < hi) {
         if (v >= lo)
             return v;
-        return (float)lo;
+        return lo;
     }
-    return (float)hi;
+    return hi;
 }
 
 // @ 0x4b8a70

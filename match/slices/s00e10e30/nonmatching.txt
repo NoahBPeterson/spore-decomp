@@ -1,2 +1,3 @@
 # <va>  <diff-bytes>  <reason>   (complete, behaviorally equivalent, not byte-exact)
 00e10e30  2347  cSPUIMinimapWin::draw_trade_routes: both branches (noun-manager road polylines, planet trade-route dot cache with horizon test) complete; same call/vslot sequence, size 0.98x; /O2 register allocation (this in ebx+spill vs edi) and frame layout differ (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e11910  151  cDataArray::FindOrInsert: lower_bound + legacy "past the end" guard + insert path complete (162 vs 161 bytes); /O2 keeps the key in ecx and reloads it for the value store where the original keeps it in ebp, shifting the temp/pair address registers (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)

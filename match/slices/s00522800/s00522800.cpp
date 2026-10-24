@@ -4,7 +4,10 @@
 
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
 void* FUN_00507c70(void* p);              // 0x00507c70
-void* FUN_00529d30(void* p);              // 0x00529d30
+// The converter takes the destination first and the RGB triple by value;
+// the old one-argument declaration dropped the 12-byte argument.
+struct V3 { float x, y, z; };
+void* FUN_00529d30(float* out, V3 rgb);    // 0x00529d30
 void  FUN_00523690(void* self);           // 0x00523690
 void  RefCountTemplate_Release(void* p);  // 0x00453540
 
@@ -49,11 +52,12 @@ void FUN_005229c0(int idx, float* v)
     g1[0] = *(int*)&v[0];
     g1[1] = *(int*)&v[1];
     g1[2] = *(int*)&v[2];
-    float tmp[3];
-    tmp[0] = v[0];
-    tmp[1] = v[1];
-    tmp[2] = v[2];
-    int* r = (int*)FUN_00529d30(tmp);
+    float hsv[3];
+    V3 rgb;
+    rgb.x = v[0];
+    rgb.y = v[1];
+    rgb.z = v[2];
+    int* r = (int*)FUN_00529d30(hsv, rgb);
     int* g2 = (int*)((char*)g_userColors2 + idx * 0xc);
     g2[0] = r[0];
     g2[1] = r[1];

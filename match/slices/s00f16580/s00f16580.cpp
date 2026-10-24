@@ -343,6 +343,127 @@ public:
     void RecordResults(bool finished);
 };
 
+// ---------------------------------------------------------------------------------------------
+// 0x00f16fd0: teardown of the object that owns the SP palette, its category UI and the
+// collectables bookkeeping it registered with EA::Messaging.
+// ---------------------------------------------------------------------------------------------
+#define PAL_V4(a) virtual void a##0(); virtual void a##1(); virtual void a##2(); virtual void a##3();
+
+struct cPaletteRef4 {                       // Release is vtable slot 1
+    virtual void v00();
+    virtual void Release();                 // +0x04
+};
+
+struct cPaletteRef8 {                       // Release is vtable slot 2
+    virtual void v00(); virtual void v04();
+    virtual void Release();                 // +0x08
+};
+
+class cSPPalette {                          // SP::cSPPalette
+public:
+    virtual void v00(); virtual void v04();
+    virtual void Release();                 // +0x08
+    void Shutdown();                        // 0x005c5c20
+};
+
+class cSPPaletteCategoryUI {                 // SP::cSPPaletteCategoryUI_s005c_4500
+public:
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual void Release();                 // +0x0c
+    void Shutdown();                        // 0x005c4e40
+};
+
+class cPaletteListener {                    // detaches through slot 0x108
+public:
+    virtual void v00(); virtual void Release(); virtual void v08(); virtual void v0c();   // 0x00
+    PAL_V4(x10) PAL_V4(x20) PAL_V4(x30) PAL_V4(x40) PAL_V4(x50) PAL_V4(x60) PAL_V4(x70)
+    PAL_V4(x80) PAL_V4(x90) PAL_V4(xa0) PAL_V4(xb0) PAL_V4(xc0) PAL_V4(xd0) PAL_V4(xe0) PAL_V4(xf0)
+    virtual void v100(); virtual void v104();
+    virtual void Detach(void* owner);       // +0x108
+};
+
+class cPaletteChain {                       // the helper held at +0x38
+public:
+    virtual void v00(); virtual void Release(); virtual void v08(); virtual void v0c();   // 0x00
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();       // 0x10
+    virtual void v20();
+    virtual void Build();                   // +0x24
+};
+
+class cPaletteManager {
+public:
+    virtual void v00(); virtual void v04();
+    virtual void Reset(uint32_t tag);       // +0x08
+};
+cPaletteManager* __cdecl FUN_0067ca90();    // 0x0067ca90
+
+namespace EA { namespace Messaging {
+void __cdecl RemoveHandler(uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e);   // 0x00571db0
+} }
+
+template <class T> struct PaletteRef {
+    T* mp;
+    __forceinline void reset() { if (mp) { T* p = mp; mp = 0; p->Release(); } }
+    __forceinline T* operator->() const { return mp; }
+};
+
+struct PaletteElementVector {               // the vector at +0x24
+    void*    mpBegin;                       // +0x24
+    void*    mpEnd;                         // +0x28
+    void*    mpCapacity;                    // +0x2c
+    uint32_t mAllocator;                    // +0x30
+    uint32_t mPad34;                        // +0x34
+    void EraseRange(void* first, void* last);   // 0x00f16330
+};
+
+class cScenarioPaletteOwner {
+public:
+    uint32_t mPad000[(0x0c - 0x00) / 4];                     // +0x00
+    uint32_t mAttachOwner;                                   // +0x0c
+    PaletteRef<cSPPalette>           mpPalette;              // +0x10
+    PaletteRef<cPaletteRef8>         mp14;                   // +0x14
+    PaletteRef<cSPPaletteCategoryUI> mpCategory;             // +0x18
+    PaletteRef<cPaletteListener>     mpListener;             // +0x1c
+    PaletteRef<cPaletteRef8>         mp20;                   // +0x20
+    PaletteElementVector             mElements;              // +0x24
+    PaletteRef<cPaletteChain>        mpChain;                // +0x38
+    uint32_t mPad3c[(0x48 - 0x3c) / 4];                      // +0x3c
+    uint32_t mHandler;                                       // +0x48
+    uint32_t mHandlerIds[4];                                 // +0x4c
+    void Shutdown();                                         // 0x00f16fd0
+};
+
+// @ 0x00F16FD0
+void cScenarioPaletteOwner::Shutdown()
+{
+    if (mHandler != 0) {
+        uint32_t handler = mHandler;
+        mHandler = 0;
+        EA::Messaging::RemoveHandler(handler, mHandlerIds[0], mHandlerIds[1],
+                                     mHandlerIds[2], mHandlerIds[3]);
+    }
+    if (mpListener.mp != 0) {
+        mpListener->Detach(&mAttachOwner);
+        mpListener.reset();
+    }
+    mp14.reset();
+    if (mpPalette.mp != 0) {
+        mpPalette->Shutdown();
+        mpPalette.reset();
+    }
+    if (mpCategory.mp != 0) {
+        mpCategory->Shutdown();
+        mpCategory.reset();
+    }
+    mp20.reset();
+    mElements.EraseRange(mElements.mpBegin, mElements.mpEnd);
+    if (mpChain.mp != 0) {
+        mpChain->Build();
+        mpChain.reset();
+    }
+    FUN_0067ca90()->Reset(0x15ad8a4);
+}
+
 // @ 0x00f16580
 void cScenarioResultsRecorder::RecordResults(bool finished)
 {

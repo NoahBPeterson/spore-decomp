@@ -4,4 +4,4 @@
 0054b510  146  complete; /Od uninitialized_copy (out-param) schedule differs
 0054b5b0  105  complete; /Od copy<pair> forward schedule differs
 0054b630  100  complete; /Od copy_backward<pair> schedule differs
-0054b6f0  172  complete; /Od factory vtable/new schedule differs; equiv FAIL pool mismatch at 40030000 (now thiscall member of IHost)
+0054b6f0  172  complete; /Od factory vtable/new schedule differs; fixed the Meta ctor call to thiscall (object in ecx), moved IMeta's payload to +8 (vptr + 4-byte pad) and normalised Make's raw AL to 0/1; slice and SPPollinatorAssetDirectory.cpp both WEAK 172 valid/98.6% coverage, replays first difference None; size 142 vs 192

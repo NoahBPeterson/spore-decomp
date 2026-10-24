@@ -138,8 +138,7 @@ int rwcSphereLineSegIntersect(CastFraction* t, const __m128* from, const __m128*
 void SphereVolumeInstance_GetBBox(const __m128* src, const void* a, const void* b, void* out)
 {
     (void)a; (void)b;
-    __m128* o = (__m128*)out;
-    o[0x12] = *src;                          // +0x120: sphere centre
+    _mm_store_ps((float*)((char*)out + 0x120), _mm_load_ps((const float*)src));
     *(uint32_t*)((char*)out + 0x130) = 0;    // feature type
     *(uint32_t*)out = 0;                     // result
 }
@@ -148,8 +147,8 @@ void SphereVolumeInstance_GetBBox(const __m128* src, const void* a, const void* 
 void SphereVolumeInstance_GetInterval(const __m128* dir, const __m128* pt, float* out)
 {
     float d = Get(Dot3(*pt, *dir), 0);
-    out[0] = d;
     out[1] = d;
+    out[0] = d;
 }
 
 // @ 0x01206ba0
@@ -172,20 +171,20 @@ void SphereVolumeInstance_GetIntervals(const __m128* dir, const __m128* pts, uin
 int SphereVolume::GetBBox(const Matrix44Affine* xf, const void* unused, AABB* out)
 {
     (void)unused;
-    const __m128 t = mTransform.r3;
     __m128 center;
     if (xf) {
-        center = _mm_add_ps(
-                    _mm_add_ps(_mm_add_ps(_mm_mul_ps(xf->r0, SplatX(t)),
-                                          _mm_mul_ps(xf->r1, SplatY(t))),
-                               _mm_mul_ps(xf->r2, SplatZ(t))),
-                    _mm_mul_ps(xf->r3, Splat(1.0f)));
+        center = _mm_add_ps(_mm_mul_ps(xf->r3, Splat(1.0f)),
+                            _mm_add_ps(
+                                _mm_add_ps(_mm_mul_ps(xf->r1, SplatY(mTransform.r3)),
+                                           _mm_mul_ps(xf->r0, SplatX(mTransform.r3))),
+                                _mm_mul_ps(xf->r2, SplatZ(mTransform.r3))));
     } else {
-        center = t;
+        center = mTransform.r3;
     }
-    __m128 r = Splat(mRadius);
-    out->mn = _mm_sub_ps(center, r);
-    out->mx = _mm_add_ps(center, r);
+    const float one_f[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    const __m128 one = _mm_load_ps(one_f);
+    out->mn = _mm_sub_ps(center, _mm_mul_ps(one, Splat(mRadius)));
+    out->mx = _mm_add_ps(center, _mm_mul_ps(one, Splat(mRadius)));
     return 1;
 }
 

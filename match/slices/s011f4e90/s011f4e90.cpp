@@ -184,6 +184,11 @@ u32* FUN_011f5010(u32* param_1, int* param_2, u32 param_3, int param_4, u32 para
 // ===================================================================================
 u32 FUN_011f50d0(u32* param_1, void* param_2)
 {
+  // The original's 4-byte `push ecx` frame is never written on its early
+  // error paths, so the epilogue restores the caller's ecx.  A volatile
+  // (uninitialised) frame slot reproduces that without an entry store.
+  volatile u32 frame;
+  frame = frame;
   Arena* arena = (Arena*)*(void**)((char*)param_2 + 0x78);
   param_1[6] = (u32)arena->IdToObject(param_1[6]);
 
@@ -196,6 +201,7 @@ u32 FUN_011f50d0(u32* param_1, void* param_2)
       if (FUN_011f5bd0(esize, uVar4 & 0xff3fffff, uVar5, (int)(~(uVar4 >> 0x17) & 1),
                        (u32*)&param_2, param_1 + 1) >= 0) {
         param_1[0] = (u32)param_2;
+        frame = 0;
         void* dst = 0;
         if ((*(int(__stdcall**)(void*, u32, u32, void**, u32))(*(u32*)param_2 + 0x2c))
               ((void*)param_2, param_1[1] * esize, uVar5, &dst, 0) >= 0) {
@@ -538,13 +544,12 @@ int FUN_011f57a0(u32 param_1, int param_2, void** param_3, void** param_4, u32* 
 
   u32 need = (u32)param_2 * param_1;
   u32 uVar5 = ((used + param_1 - 1) / param_1) * param_1;
-  u32 local = need + uVar5;
+  volatile u32 local = need + uVar5;
 
   if (cap < need + uVar5) {
     // look for a different slot with enough room
     u32 i = 0, off = 0;
-    bool found = false;
-    do {
+    for (;;) {
       if (g_vtxCurSlot != i) {
         u32 used_i = *(u32*)((u8*)g_vtxSlots + off + 8);
         u32 cap_i  = *(u32*)((u8*)g_vtxSlots + off + 4);
@@ -553,21 +558,23 @@ int FUN_011f57a0(u32 param_1, int param_2, void** param_3, void** param_4, u32* 
         if (local <= cap_i) {
           g_vtxCurSlot = i;
           uVar5 = a;
-          found = (i < 4);
-          if (found)
-            break;
+          if (i < 4)
+            goto found_slot;
         }
       }
       off += 0xc;
       ++i;
-    } while (off < 0x30);
-    if (!found) {
-      ++g_vtxCurSlot;
-      if (g_vtxCurSlot > 3)
-        g_vtxCurSlot = 0;
-      uVar5 = 0;
-      local = need;
+      if (off >= 0x30) {
+        ++g_vtxCurSlot;
+        if (g_vtxCurSlot > 3)
+          g_vtxCurSlot = 0;
+        uVar5 = 0;
+        local = need;
+        break;
+      }
     }
+  found_slot:
+    ;
   }
 
   slot = g_vtxCurSlot;

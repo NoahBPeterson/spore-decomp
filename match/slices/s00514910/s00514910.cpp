@@ -6,6 +6,7 @@
 #include "types.h"
 
 inline void* operator new(unsigned int, void* p) { return p; }
+extern "C" void* __cdecl memcpy(void*, const void*, uint32_t);
 void* EASTL_Allocate(void* alloc, unsigned int n, unsigned int align, unsigned int offset);  // 0x0042dee0
 
 enum { kSubarraySize = 4 };
@@ -104,12 +105,13 @@ void** Fill7(void** out, void* dst, int n, void* value)
 // ---------------------------------------------------------------------------
 // @ 0x00515650  range insert helper (result via out-param)
 // ---------------------------------------------------------------------------
-void* RangeInsertHelper(void* self, void* first, void* last, void* dst);
-
 void** RangeInsertOut(void** out, void* first, int last, void* dst)
 {
-    void* p = RangeInsertHelper(dst, first, (void*)last, dst);
-    *out = (char*)p + ((last - (int)first) / 0x1c) * 0x1c;
+    void* d = dst;
+    int l = last;
+    void* f = first;
+    bool b = true;
+    *out = (char*)memcpy(d, f, (uint32_t)(l - (int)f)) + ((l - (int)f) / 0x1c) * 0x1c;
     return out;
 }
 

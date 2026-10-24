@@ -9,26 +9,26 @@ void ea_delete(void* p);              // operator_delete__
 
 struct Container;
 
-void DestroySubA();                   // 0x005156b0
-void DestroySubB();                   // 0x00425990
-void DestroySubC();                   // 0x0050ea50
+void __fastcall DestroySubA(void* self);   // 0x005156b0
+void __fastcall DestroySubB(void* self);   // 0x00425990
+void __fastcall DestroySubC(void* self);   // 0x0050ea50
 
 // @ 0x00507b30  (destroy the six vector members)
 void __fastcall DestroyVectors(Container* self)
 {
     char* base = (char*)self;
     for (uint32_t* p = *(uint32_t**)(base + 0x80); p < *(uint32_t**)(base + 0x84); p += 3) {}
-    DestroySubA();
+    DestroySubA(base + 0x80);
     for (uint32_t* p = *(uint32_t**)(base + 0x6c); p < *(uint32_t**)(base + 0x70); p += 1) {}
-    DestroySubB();
+    DestroySubB(base + 0x6c);
     for (uint32_t* p = *(uint32_t**)(base + 0x44); p < *(uint32_t**)(base + 0x48); p += 5) {}
-    DestroySubC();
+    DestroySubC(base + 0x44);
     for (uint32_t* p = *(uint32_t**)(base + 0x30); p < *(uint32_t**)(base + 0x34); p += 1) {}
-    DestroySubB();
+    DestroySubB(base + 0x30);
     for (uint32_t* p = *(uint32_t**)(base + 0x1c); p < *(uint32_t**)(base + 0x20); p += 1) {}
-    DestroySubB();
+    DestroySubB(base + 0x1c);
     for (uint32_t* p = *(uint32_t**)(base + 0x08); p < *(uint32_t**)(base + 0x0c); p += 1) {}
-    DestroySubB();
+    DestroySubB(base + 0x08);
 }
 
 struct CSetA { char pad[0x14]; CSetA& operator=(const CSetA& o); };   // 0x0050d440

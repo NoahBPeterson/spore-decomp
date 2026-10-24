@@ -211,15 +211,7 @@ public:
         mnRefCount = mnRefCount + 1;
         return count;
     }
-    int Release() {
-        int count = mnRefCount - 1;
-        mnRefCount = mnRefCount - 1;
-        if (count)
-            return count;
-        mnRefCount = 1;
-        delete this;
-        return 0;
-    }
+    int Release();                      // 0x00453540
     void Unload();                      // 0x0055bee0
 
     int mnRefCount;
@@ -414,7 +406,7 @@ public:
     bool mbProcessQueue;                           // +0x2c4
     unsigned char mPad2c5[3];
     BakeQueue mDeferred;                           // +0x2c8
-    unsigned int mPad334[(0x1168 - 0x334) / 4];
+    unsigned int mPad330[(0x1168 - 0x330) / 4];
     BakeBatch mBatch;                              // +0x1168
 };
 

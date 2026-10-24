@@ -2,7 +2,7 @@
 # All differences are /Od stack-slot / frame-hole layout of inlined EASTL helpers.
 0050d750   165  Vec8::operator= (pair<int,int> stride-8): complete; target frame 0xa4 vs 0x4c (inlined copy/uninitialized_copy scratch holes); equiv: WEAK (symbol now resolved via symbols/slices/s0050d750.txt; ~33-44% cov)
 0050da10     4  Vec8::resize(n): complete; inline-arg temporaries (n-size, end) land at [ebp-0x24]/[ebp-0x28] vs [ebp-0x10]/[ebp-0xc]
-0050da90   141  Vec20::Vec20(const Vec20&) (stride 0x14): complete; out-param uninitialized_copy frame layout differs
+0050da90    93  Vec20::Vec20(const Vec20&) (stride 0x14): complete; the fifth UninitCopy20 argument is the uninitialized local byte retail reads from its stack hole (movzx eax,byte ptr [ebp-0xa]), so the source now passes an uninitialized uint8_t bFill instead of (uint8_t)0; replay PASS, equiv PASS 729/2000 and 911/2000, 83.8% coverage. Not byte-exact: 165 B vs 201 B (/Od frame 0x4c vs 0x44+: inlined helper scratch holes and out-param temp slots differ)
 0050db60   221  Vec20::operator= (stride 0x14): complete; target frame 0x? larger (inlined copy + uninitialized_copy scratch holes); equiv: WEAK (symbol now resolved via symbols/slices/s0050d750.txt; ~33-44% cov)
 0050dea0   170  Vec12::operator= (stride 0xc): complete; target frame larger (inlined copy/uninitialized_copy scratch holes); equiv: WEAK (symbol now resolved via symbols/slices/s0050d750.txt; ~33-44% cov)
 0050e290    40  Vec100::~Vec100: complete; outer/inner loop locals and 6 scratch holes in different /Od slots

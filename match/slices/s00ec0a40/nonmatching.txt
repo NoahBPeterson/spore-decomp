@@ -1,3 +1,5 @@
+00bc96a0 55 complete (register allocation only: params land in edx/edi with ebx as loop scratch vs retail edi/ebx with eax/ecx scratch; identical instruction count, +2 bytes from the loop-exhaust xor eax,eax); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv: PASS 400 valid, 82.9% coverage, 0 mismatches
+00bc97f0 129 complete (epilogue emits load-modify-store for both mask updates where retail uses the and/or memory-dest form (+4 bytes) and schedules the slot-mask/old-object loads differently; /fp:fast is required for the comiss duration ladder); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv: PASS 391 valid, 96.7% coverage, 0 mismatches
 00ec0a40 73 scenario-goal callback (8-arg); reordered ctx accessor calls and flag-store shape
 00ec0ae0 136 scenario-goal callback (early-out variant, 8-arg); deep vtable chain reorders
 00ec0b90 21 weapon-pickup entry; failure block placement and float-global reloc form differ

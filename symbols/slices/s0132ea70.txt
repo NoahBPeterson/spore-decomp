@@ -1,0 +1,3 @@
+0132ea70 InitSerializerDescs  # static initializer for the eight 0x3c-byte model-type serializer descriptors at 0x156f588
+0132ff90 InitRbtreeSentinels  # initializes three rbtree sentinel nodes at 0x168caf4 and registers the static destructor with atexit
+0132ffd0 InitSerializerList  # populates the 0x3c-byte serializer-list entry at 0x156fa30 for mModelTypeToKeyMap

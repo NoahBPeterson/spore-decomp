@@ -756,13 +756,14 @@ struct HolderA {
 // ---- items of slice s00496d30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Matrix3_s0049_6d30 {
     float m[9];
-    void Assign(const void* src);
+    Matrix3_s0049_6d30() {}
+    Matrix3_s0049_6d30(const Matrix3_s0049_6d30& src);   // copy ctor, 0x41cb40
 };
 char FUN_004a7e60(void* p);
-char FUN_0043bd80(void* self, float f, Matrix3_s0049_6d30 m);
 struct X973 {
     char pad[0xdc8];
     uint32_t flags;                       // 0xdc8
+    char F_43bd80(Matrix3_s0049_6d30 m, float f);   // 0x0043bd80 (thiscall, matrix then float)
 };
 struct W {                                         // rw::math::fpu::Vector3Template<float,0>
     float x, y, z;
@@ -5541,18 +5542,12 @@ char FUN_004973f0(X973* p, void* mat, float f, char flag)
     char result = 0;
     if (p != 0) {
         Matrix3_s0049_6d30 m;
-        if (mat == 0) {
-            const float* src = (const float*)((char*)p + 0xf0);
-            for (int i = 0; i < 9; ++i)
-                m.m[i] = src[i];
-        } else {
-            const float* src = (const float*)mat;
-            for (int i = 0; i < 9; ++i)
-                m.m[i] = src[i];
-        }
+        if (mat != 0)
+            m = *(const Matrix3_s0049_6d30*)mat;
+        else
+            m = *(const Matrix3_s0049_6d30*)((char*)p + 0xf0);
         result = 0;
-        char r = FUN_0043bd80(p, f, m);
-        if (r) {
+        if (p->F_43bd80(m, f)) {
             if ((p->flags & 1) == 0) {
                 result = 1;
             } else {
@@ -7288,22 +7283,59 @@ bool FUN_4a2560(cSPEditorModel_s004a_1a70* model)
     return result;
 }
 
+// The original's lazily-initialised orientation statics live in image .data,
+// not in this translation unit; spelling them as externs makes the memory
+// writes comparable and keeps the shared guard at 0x015d60e4.
+extern rwVec3 sNegX;                          // 0x015d60d8
+extern rwVec3 sPosX;                          // 0x015d60cc
+extern rwVec3 sNegX2;                         // 0x015d60c0
+extern unsigned int sAxisGuard;               // 0x015d60e4
+
 // @ 0x004a25f0
 rwMat3 FUN_4a25f0(rwMat3 m, int mode)
 {
     rwMat3 result;
     rwVec3 up(m[1]);
-    float a = (float)fabs((up.x * kUpAxis.x + up.y * kUpAxis.y) + up.z * kUpAxis.z);
+    // The original computes the dot in xmm0/xmm1 (no xmm2) and applies an
+    // inline x87 fabs; spell it as accumulations plus an SSE-sign compare so
+    // the CRT fabs call and the extra xmm2 accumulator disappear.
+    float dot = up.x * kUpAxis.x;
+    dot = dot + up.y * kUpAxis.y;
+    dot = dot + up.z * kUpAxis.z;
+    if (dot < 0.0f)
+        dot = -dot;
+    float a = dot;
     rwVec3 dir;
     dir.x = 0.0f;
     dir.y = 0.0f;
     dir.z = 0.0f;
     if (mode == 0) {
-        static rwVec3 sNegX = Vec3Normalized(rwVec3(-1.0f, 0.0f, 0.0f));     // 0x015d60d8
+        if ((sAxisGuard & 1) == 0) {
+            sAxisGuard = sAxisGuard | 1;
+            rwVec3 t;
+            t.x = -1.0f;
+            t.y = 0.0f;
+            t.z = 0.0f;
+            Vec3Normalize(&sNegX, &t);
+        }
         dir = sNegX;
     } else {
-        static rwVec3 sPosX = Vec3Normalized(rwVec3(1.0f, 0.0f, 0.2f));      // 0x015d60cc
-        static rwVec3 sNegX2 = Vec3Normalized(rwVec3(-1.0f, 0.0f, 0.2f));    // 0x015d60c0 (guard 0x015d60e4)
+        if ((sAxisGuard & 2) == 0) {
+            sAxisGuard = sAxisGuard | 2;
+            rwVec3 t;
+            t.x = 1.0f;
+            t.y = 0.0f;
+            t.z = 0.2f;
+            Vec3Normalize(&sPosX, &t);
+        }
+        if ((sAxisGuard & 4) == 0) {
+            sAxisGuard = sAxisGuard | 4;
+            rwVec3 t;
+            t.x = -1.0f;
+            t.y = 0.0f;
+            t.z = 0.2f;
+            Vec3Normalize(&sNegX2, &t);
+        }
         rwVec3* p = (mode == 1) ? &sPosX : &sNegX2;
         rwVec3 base(*p);
         rwVec3 tmp;

@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+0132ff90 41 complete: initializes the three rbtree sentinel nodes at 0x0168caf4, linking each node to itself, zeroing the count/flag pair and payload pointer, then registers the static destructor through atexit(0x013c33a0). Target keeps the node base in eax and the zero value in ecx (53 bytes); cl instead picks node+0xc as eax, keeps the base in a callee-saved register, and needs an extra push/pop plus one reordered store (57 bytes). Equiv UNSUPPORTED: all 400 inputs discarded by import:_decode_pointer before execution

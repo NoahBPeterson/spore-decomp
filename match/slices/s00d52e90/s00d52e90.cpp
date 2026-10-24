@@ -154,8 +154,7 @@ void* PosseSim::Dtor(unsigned int flags) {
 // @ 0x00d53730
 void PosseSim::Shutdown() {
     PosseSim* self = this;
-    SP_NounManager();
-    FUN_00b234c0();
+    ((void(__thiscall*)(void*))FUN_00b234c0)(SP_NounManager());
     Slot** e = *(Slot***)((char*)self + 0x24);
     while (e != self->mpBegin) {
         e -= 1;
@@ -216,7 +215,7 @@ PosseSim* PosseSim::Init() {
     Slot** base = (Slot**)((char*)self + 0x38);
     self->mpBegin = base;
     self->mpEnd = base;
-    self->mpCapacity = (Slot**)((char*)self + 0x80);
+    self->mpCapacity = (Slot**)((char*)self + 0x58);
     *(void**)0x169e5b8 = self;
     return self;
 }

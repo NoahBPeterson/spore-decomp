@@ -13,7 +13,7 @@ extern void* g_vtblE;   // 0x013eeda4
 extern "C" {
     void  FUN_004329e0();
     void  FUN_004b1700();
-    void  FUN_00429360(void* a);
+    void* __fastcall FUN_00429360(void* self, int dummy, void* arg);
     void  FUN_00427440();
     void  FUN_00425990(void* vec);
     void  FUN_0041e5d0();
@@ -73,13 +73,13 @@ int* __fastcall FUN_004b9da0(int* p)
     p[0x26] = 0;
     p[0x27] = 0;
     p[0x28] = 0;
-    FUN_00429360(&tag);
+    FUN_00429360((char*)p + 0xa4, 0, &tag);
     p[0x2b] = 0; p[0x2c] = 0; p[0x2d] = 0;
-    FUN_00429360(&tag);
+    FUN_00429360((char*)p + 0xb8, 0, &tag);
     p[0x30] = 0; p[0x31] = 0; p[0x32] = 0;
-    FUN_00429360(&tag);
+    FUN_00429360((char*)p + 0xcc, 0, &tag);
     p[0x35] = 0; p[0x36] = 0; p[0x37] = 0;
-    FUN_00429360(&tag);
+    FUN_00429360((char*)p + 0xe0, 0, &tag);
     p[0x3a] = 0; p[0x3b] = 0; p[0x3c] = 0;
     p[0x3f] = 0; p[0x40] = 0; p[0x41] = 0;
     p[0x45] = 0; p[0x46] = 0; p[0x47] = 0;

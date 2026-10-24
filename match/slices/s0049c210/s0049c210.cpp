@@ -2,6 +2,7 @@
 // Module flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
 #include <float.h>
+#include <math.h>
 
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 
@@ -26,6 +27,8 @@ struct cSPVector3 : Vector3T {
 struct cSPMatrix3 : Matrix33T {
     cSPMatrix3() {}
     cSPMatrix3(const Matrix33T& m) : Matrix33T(m) {}
+    cSPMatrix3& operator=(const cSPMatrix3& m);          // @ 0x449cc0
+    cSPMatrix3& CopyFrom(const cSPMatrix3& m);           // @ 0x41cb40
 };
 template<class T> struct AutoRefCount {
     T* mpObject;
@@ -77,8 +80,10 @@ struct cSPEditorBlock {
     char pad1[0x60 - 0x54];
     cSPMatrix3 mOrientation;                     // +0x60
     char pad1b[0xa8 - 0x84];
-    cSPVector3 mRestPose;                        // +0xa8
-    char pad2[0x1d8 - 0xb4];
+    cSPVector3 mRestPose;                        // +0xa8  rest-pose axes, 12 bytes apart
+    cSPVector3 mRestPoseB;                       // +0xb4
+    cSPVector3 mRestPoseC;                       // +0xc0
+    char pad2[0x1d8 - 0xcc];
     float mScale;                                // +0x1d8
     char pad3[0x33c - 0x1dc];
     AutoRefCount<cSPEditorBlock> mParentBlock;   // +0x33c
@@ -89,6 +94,7 @@ struct cSPEditorBlock {
     void* mSkin;                                 // +0x3ec
     char pad6[0xdc8 - 0x3f0];
     bitset<60> mFlags;                           // +0xdc8
+    bool FUN_43c510();                           // @ 0x43c510
     void FUN_438700(cSPEditorBlock* block);      // @ 0x438700
     void GetOffsetA(cSPVector3* out, bool f);    // @ 0x438120
     void GetOffsetB(cSPVector3* out, bool f);    // @ 0x4381e0
@@ -147,8 +153,17 @@ void RepinBlocks(vector<TrackerRecord>* list)
 }
 
 bool FUN_435c80(cSPEditorBlock* block);   // @ 0x435c80
-bool FUN_43c510(cSPEditorBlock* block);   // @ 0x43c510
 struct cSPEditorModel;
+
+// ---- matrix-from-direction helpers (FUN_49c210) ----
+extern const cSPVector3 g_axis;                       // @ 0x15d6324
+extern const cSPMatrix3 g_identityMatrix;             // @ 0x15d63a8
+extern const float kZero;                             // @ 0x1485378
+cSPVector3* FUN_422020(cSPVector3* out, const cSPVector3* v);                    // @ 0x422020
+cSPVector3* FUN_449c20(cSPVector3* out, const cSPVector3* v);                    // @ 0x449c20
+cSPVector3* FUN_44e460(cSPVector3* out, const cSPVector3* a, const cSPVector3* b);  // @ 0x44e460
+bool FUN_481f00(const cSPVector3* v);                                            // @ 0x481f00
+cSPMatrix3* FUN_4a89e0(cSPMatrix3* out, const cSPVector3* dir, const cSPVector3* axis);  // @ 0x4a89e0
 
 // @ 0x49c8f0
 void BuildBlockTransforms(cSPEditorBlock* block, vector<TrackerRecord>* out, bool recurse)
@@ -214,14 +229,62 @@ cSPVector3* FUN_49c630(cSPVector3* out, float x, float y, float z, cSPEditorMode
 cSPMatrix3* FUN_49c210(cSPMatrix3* out, cSPEditorBlock* block, float x, float y, float z)
 {
     if (!block) {
-        *out = cSPMatrix3();
+        out->CopyFrom(g_identityMatrix);
         return out;
     }
-    if (!FUN_43c510(block)) {
+    if (!block->FUN_43c510()) {
         *out = block->mOrientation;
         return out;
     }
-    *out = block->mOrientation;
+    cSPVector3 dir;
+    dir.x = x;
+    dir.y = y;
+    dir.z = z;
+    // dot = (x*axis.x + y*axis.y) + z*axis.z, then compare |1 - |dot|| against FLT_MIN: anything
+    // that is not exactly parallel (or a NaN deviation) takes the general matrix builder.
+    float dot = (x * g_axis.x + y * g_axis.y) + z * g_axis.z;
+    float dev = fabsf(1.0f - fabsf(dot));
+    if (!(dev < FLT_MIN))
+        return FUN_4a89e0(out, &dir, &g_axis);
+    cSPMatrix3 m;
+    // Second row: the axis itself, or its negation when the direction is exactly +axis.
+    cSPVector3 row1;
+    float dev2 = fabsf(1.0f - dot);
+    if (dev2 < FLT_MIN)
+        FUN_422020(&row1, &g_axis);
+    else
+        row1 = g_axis;
+    cSPVector3 src;
+    cSPVector3 norm;
+    src = block->mRestPose;
+    src.z = kZero;
+    FUN_449c20(&norm, &src);
+    cSPVector3 row0 = norm;
+    float len2 = row0.x * row0.x + row0.y * row0.y + row0.z * row0.z;
+    cSPVector3 row2;
+    if (len2 > 0.9f) {
+        FUN_44e460(&row2, &row0, &row1);
+    } else {
+        // The rest-pose C axis replaces the first row: row0 = normalize(row1 x normalize(restPoseC)),
+        // row2 = normalize(restPoseC).
+        cSPVector3 src2;
+        cSPVector3 norm2;
+        cSPVector3 crossv;
+        cSPVector3 norm3;
+        src2 = block->mRestPoseC;
+        src2.z = kZero;
+        FUN_449c20(&norm2, &src2);
+        FUN_44e460(&crossv, &row1, &norm2);
+        FUN_449c20(&norm3, &crossv);
+        row0 = norm3;
+        row2 = norm2;
+    }
+    m.xAxis = row0;
+    m.yAxis = row1;
+    m.zAxis = row2;
+    if (FUN_481f00(&row0) || FUN_481f00(&row1) || FUN_481f00(&row2))
+        return FUN_4a89e0(out, &dir, &g_axis);
+    out->CopyFrom(m);
     return out;
 }
 }}  // namespace SP::EditorUtils

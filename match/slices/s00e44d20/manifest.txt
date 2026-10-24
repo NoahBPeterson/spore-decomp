@@ -1,0 +1,4 @@
+# slice s00e44d20: the 12-state validity/tooltip tick is byte-exact; the upgrade-parts builder
+# below is logged in nonmatching.txt (complete, compiling source, but it is 1844 bytes of inlined
+# EASTL vector<Constraint>/ConstraintNode growth code that the compiler will not reproduce).
+slices/s00e44d20/s00e44d20.cpp  ?Tick@EditorValidity@@QAEXXZ  00e45460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

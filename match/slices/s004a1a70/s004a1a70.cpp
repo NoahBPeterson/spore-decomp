@@ -340,6 +340,13 @@ bool FUN_4a2350(cSPEditorBlock* editor, cSPEditorBlock* src, rwVec3* outPos, flo
 // ---- 0x4a25f0: build an orthonormal orientation from a base matrix and a snap mode ----
 extern rwVec3 kUpAxis;                        // 0x015d6370
 extern rwVec3 kBlendAxis;                     // 0x015d6324
+// The original's lazily-initialised orientation statics live in image .data,
+// not in this translation unit; spelling them as externs makes the memory
+// writes comparable and keeps the shared guard at 0x015d60e4.
+extern rwVec3 sNegX;                          // 0x015d60d8
+extern rwVec3 sPosX;                          // 0x015d60cc
+extern rwVec3 sNegX2;                         // 0x015d60c0
+extern unsigned int sAxisGuard;               // 0x015d60e4
 rwVec3* Vec3Normalize(rwVec3* out, const rwVec3* in);              // 0x436ce0
 rwVec3 Vec3Normalized(const rwVec3& in);                           // 0x436ce0 (by-value form)
 rwVec3* Vec3Negate(rwVec3* out, const rwVec3* in);                 // 0x422020
@@ -353,17 +360,46 @@ rwMat3 FUN_4a25f0(rwMat3 m, int mode)
 {
     rwMat3 result;
     rwVec3 up(m[1]);
-    float a = (float)fabs((up.x * kUpAxis.x + up.y * kUpAxis.y) + up.z * kUpAxis.z);
+    // The original computes the dot in xmm0/xmm1 (no xmm2) and applies an
+    // inline x87 fabs; spell it as accumulations plus an SSE-sign compare so
+    // the CRT fabs call and the extra xmm2 accumulator disappear.
+    float dot = up.x * kUpAxis.x;
+    dot = dot + up.y * kUpAxis.y;
+    dot = dot + up.z * kUpAxis.z;
+    if (dot < 0.0f)
+        dot = -dot;
+    float a = dot;
     rwVec3 dir;
     dir.x = 0.0f;
     dir.y = 0.0f;
     dir.z = 0.0f;
     if (mode == 0) {
-        static rwVec3 sNegX = Vec3Normalized(rwVec3(-1.0f, 0.0f, 0.0f));     // 0x015d60d8
+        if ((sAxisGuard & 1) == 0) {
+            sAxisGuard = sAxisGuard | 1;
+            rwVec3 t;
+            t.x = -1.0f;
+            t.y = 0.0f;
+            t.z = 0.0f;
+            Vec3Normalize(&sNegX, &t);
+        }
         dir = sNegX;
     } else {
-        static rwVec3 sPosX = Vec3Normalized(rwVec3(1.0f, 0.0f, 0.2f));      // 0x015d60cc
-        static rwVec3 sNegX2 = Vec3Normalized(rwVec3(-1.0f, 0.0f, 0.2f));    // 0x015d60c0 (guard 0x015d60e4)
+        if ((sAxisGuard & 2) == 0) {
+            sAxisGuard = sAxisGuard | 2;
+            rwVec3 t;
+            t.x = 1.0f;
+            t.y = 0.0f;
+            t.z = 0.2f;
+            Vec3Normalize(&sPosX, &t);
+        }
+        if ((sAxisGuard & 4) == 0) {
+            sAxisGuard = sAxisGuard | 4;
+            rwVec3 t;
+            t.x = -1.0f;
+            t.y = 0.0f;
+            t.z = 0.2f;
+            Vec3Normalize(&sNegX2, &t);
+        }
         rwVec3* p = (mode == 1) ? &sPosX : &sNegX2;
         rwVec3 base(*p);
         rwVec3 tmp;

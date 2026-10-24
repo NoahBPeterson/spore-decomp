@@ -1,0 +1,2 @@
+00c12310 cSPCreatureBase::InterruptAnimation  # resolve animation id, re-apply layer length, optional pause, notify FUN_00c10250, clear mAnimLength unless handle flagged; generated symbol ?InterruptAnimation@cSPCreatureBase@@QAEIIHD@Z (uint32_t return, nonmatching)
+00c12410 ?FUN_00c12410@cSPCreatureBase@@QAEIPBIMDDDDD@Z  # target-selection scan over mTargetSlots: mask/state/range/slot checks, GetTimeToReach gate, score/clamp/tie-break (nonmatching)

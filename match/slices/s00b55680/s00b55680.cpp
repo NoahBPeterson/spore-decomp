@@ -444,3 +444,67 @@ LAB_00b558c8:
         return;
     }
 }
+
+// ---------------------------------------------------------------------------------------
+// 0x00b56010: append a {1, object} record for the cell's lookup object to the global
+// 0x0167ed44 eastl-vector-like list, bumping the object's version word first.
+// ---------------------------------------------------------------------------------------
+
+struct ListObject {
+    virtual void v0();                  // slot 0 (+0x00)
+    virtual void v1();                  // slot 1 (+0x04)
+    virtual int  GetType();             // slot 2 (+0x08)  returns 0xe for the wrapper kind
+    uint16_t mField04;                  // +0x04
+    uint16_t mField06;                  // +0x06
+    void*    mValue;                    // +0x08
+    uint32_t mField0C;                  // +0x0c
+    ListObject* mChild;                 // +0x10
+};
+
+struct CellUpdateArg {
+    uint32_t mPad[0x1c / 4];            // +0x00..0x1b
+    ListObject* mpObject;               // +0x1c
+};
+
+struct SPListEntry {
+    int32_t mnType;                     // +0x00
+    void*   mpObj;                      // +0x04
+};
+
+struct SPListVec {
+    SPListEntry* mpBegin;               // +0x00
+    SPListEntry* mpEnd;                 // +0x04
+    SPListEntry* mpCap;                 // +0x08
+    void Realloc(SPListEntry* at, const SPListEntry* v); // 0x00b534c0
+    void push_back(const SPListEntry& v)
+    {
+        if (mpEnd < mpCap) {
+            SPListEntry* p = mpEnd++;
+            if (p)
+                *p = v;
+        } else {
+            Realloc(mpEnd, &v);
+        }
+    }
+};
+
+extern "C" SPListVec g_167ed44;         // 0x0167ed44
+
+// @ 0x00b56010
+void __stdcall FUN_00b56010(CellUpdateArg* arg)
+{
+    ListObject* obj = arg->mpObject;
+    if (obj->GetType() == 0xe)
+        obj = obj->mChild;
+
+    void* value = obj->mValue;
+    if (value) {
+        if (obj->mField04 != 0)
+            obj->mField06++;
+
+        SPListEntry entry;
+        entry.mpObj = value;
+        entry.mnType = 1;
+        g_167ed44.push_back(entry);
+    }
+}

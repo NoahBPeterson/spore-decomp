@@ -80,7 +80,7 @@ struct Block2 {
     void   SetF(void* a, unsigned char b);// 0x00451240
     void   SetRef(RCObj* p);              // 0x00451280
     Vec3*  GetVec14(Vec3* out);           // 0x004512e0
-    void   SetVec194(int x, int y, int z);// 0x00451330
+    Vec3*  SetVec194(int x, int y, int z);// 0x00451330
     void   ResetVec194();                 // 0x00451360
     Vec3*  GetVec194(Vec3* out);          // 0x004513a0
     void   SetPtr188(void* p);            // 0x00451e20
@@ -140,11 +140,19 @@ Vec3* Block2::GetVec14(Vec3* out) {
 }
 
 // @ 0x00451330
-void Block2::SetVec194(int x, int y, int z) {
-    *(int*)&mVec194.x = x;
-    *(int*)&mVec194.y = y;
-    *(int*)&mVec194.z = z;
+// The original leaves eax = &mVec194: it materialises the address once
+// (mov eax,[ebp-4]; add eax,0x194), stores all three words through it and never
+// overwrites eax again, so the setter returns the vector the way GetVec194 does
+// (its result is unused by the callers).
+Vec3* Block2::SetVec194(int x, int y, int z) {
+    Vec3* p = &mVec194;
+    // Retail stores the three argument words unchanged through eax; integer
+    // stores keep the compiler from turning this into SSE moves.
+    *(int*)&p->x = x;
+    *(int*)&p->y = y;
+    *(int*)&p->z = z;
     mFlag1a0 = true;
+    return p;
 }
 
 // @ 0x00451360

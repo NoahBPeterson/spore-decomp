@@ -201,7 +201,8 @@ cSPMatrix3 cSPEditorLimbJoint::GetOrientation(int mode)
         cSPVector3 side = Cross(dir, up);
         return MatrixFromAxes(dir, side);
     } else {
-        return cMatrix3Init(-1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        cMatrix3Init m(-1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        return m;
     }
 }
 

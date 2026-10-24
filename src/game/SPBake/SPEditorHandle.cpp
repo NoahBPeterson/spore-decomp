@@ -61,6 +61,7 @@ struct cSPEditorHandle {
 };
 extern uint32_t g_modelGroup;                                       // 0x015d4308
 struct cSPEditorBlock {
+    char  pad_00[0x0c];
     void* mPropList;              // +0x0c (unused here)
     char  pad_10[0x08];
     void* mModelWorld;            // +0x18  cIModelWorld*

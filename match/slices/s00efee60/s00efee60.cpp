@@ -5,6 +5,8 @@
 // +0x10 p10.  Global singleton g_mgr at 0x016c7b88.
 #include "types.h"
 
+static inline void** Vt(void* p) { return *(void***)p; }
+
 extern void*    g_mgr;           // 0x016c7b88 (singleton pointer variable)
 extern float   g_016c7d20;       // 0x016c7d20
 extern float   g_016c7d24;       // 0x016c7d24
@@ -24,7 +26,9 @@ extern "C" void  __cdecl FUN_00efccd0();                    // 0x00efccd0
 extern "C" void  __cdecl FUN_00f32410();                    // 0x00f32410
 
 struct GObj {
-    char pad0[0x400];
+    char pad0[0x1b0];
+    void* p1b0;            // +0x1b0
+    char pad1b4[0x400 - 0x1b4];
     void F43970();
     void BSO(void*, void*);        // 0x00b7f190 BuildSurfaceOrientation
     char FC930();                  // 0x00efc930
@@ -65,6 +69,43 @@ struct Handle {
     void* v0c(int);               // vtable slot 0xc
 };
 
+struct OrientationState {
+    char pad0[0x58];
+    float f58;     // +0x58
+    float f5c;     // +0x5c
+    float f60;     // +0x60
+    float f64;     // +0x64
+};
+
+struct Object1b0 {
+    char pad0[4];
+    OrientationState* p4;  // +0x04
+    char pad8[4];
+    float value0c;         // +0x0c
+};
+
+struct PlacementView {
+    char pad0[4];
+    OrientationState* p4;  // +0x04
+};
+
+struct MgrState {
+    char pad0[4];
+    void* handle;          // +0x04
+    char pad8[4];
+    void* pC;              // +0x0c
+    void* p10;             // +0x10
+    char pad14[0x0c];
+    void* p20;             // +0x20
+    char pad24[0x38];
+    void* p5c;             // +0x5c
+    void* p60;             // +0x60
+};
+
+struct RotationRing {
+    void SetTLerp(float value);  // 0x00c65b50 ret 4
+};
+
 // UI self-methods implemented elsewhere in the TU / this slice.
 struct UI {
     void* vtable;      // +0x00
@@ -85,7 +126,7 @@ struct UI {
     void  f_efefe0();              // 0x00efefe0
     void  f_eff030();              // 0x00eff030
     void  f_eff0c0();              // 0x00eff0c0
-    bool  f_eff1e0();              // 0x00eff1e0
+    bool  f_eff1e0(int);           // 0x00eff1e0 ret 4
     void  f_eff230(void*);         // 0x00eff230
     void  f_eff280(void*);         // 0x00eff280
     void  f_eff360(void*);         // 0x00eff360
@@ -183,19 +224,61 @@ void UI::f_eff030()
 // @ 0x00eff0c0
 void UI::f_eff0c0()
 {
-    // approximate: placement/visibility update driven by g_mgr fields.
-    if (*(int*)((char*)g_mgr + 0x20) == 0) return;
+    void* volatile self = this;
+    __declspec(align(16)) volatile float stagedLerp;
+    if (((MgrState*)g_mgr)->p20 == 0) return;
+
+    Object1b0* o = (Object1b0*)pGame->p1b0;
+    void* obj = 0;
+    void* firstArg = 0;
+    void* secondArg = 0;
+
+    if (o != 0) {
+        void* h = ((MgrState*)g_mgr)->handle;
+        if (h != 0 && (((MgrState*)g_mgr)->pC == 0 || ((MgrState*)g_mgr)->p10 != 0)) {
+            obj = FUN_00b18e00(h);
+
+            OrientationState* s = o->p4;
+            if (s->f64 > s->f60) {
+                void* ring = ((MgrState*)g_mgr)->p5c;
+                stagedLerp = ((float(__thiscall*)(void*))Vt(obj)[0x34 / 4])(obj);
+                stagedLerp -= 3.0f;
+                ((RotationRing*)ring)->SetTLerp(stagedLerp);
+                firstArg = obj;
+            }
+
+            s = o->p4;
+            if (s->f5c > s->f58) {
+                ((RotationRing*)((MgrState*)g_mgr)->p60)->SetTLerp(o->value0c);
+                secondArg = obj;
+            }
+        }
+    }
+
+    {
+        void* p = ((MgrState*)g_mgr)->p20;
+        ((void(__thiscall*)(void*, void*))Vt(p)[0x54 / 4])(p, obj);
+    }
+    {
+        void* p = ((MgrState*)g_mgr)->p5c;
+        ((void(__thiscall*)(void*, void*))Vt(p)[0x54 / 4])(p, firstArg);
+    }
+    {
+        void* p = ((MgrState*)g_mgr)->p60;
+        ((void(__thiscall*)(void*, void*))Vt(p)[0x54 / 4])(p, secondArg);
+    }
+    self = this;
 }
 
 // @ 0x00eff1e0
-bool UI::f_eff1e0()
+bool UI::f_eff1e0(int)
 {
     void* a = *(void**)((char*)g_mgr + 4);
     if (a == 0) return false;
     void* r = pGame->F32790(a);
     if (r == 0) return false;
-    float* o = (float*)(*(void**)((char*)r + 4));
-    return (float)(o[0x64 / 4] > o[0x60 / 4]) != 0.0f;
+    OrientationState* o = ((PlacementView*)r)->p4;
+    return o->f64 > o->f60;
 }
 
 // @ 0x00eff230

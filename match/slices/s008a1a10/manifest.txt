@@ -1,0 +1,2 @@
+slices/s008a1a10/s008a1a10.cpp  ?Insert@CVectorEntryArray@SP@@QAEXPAUCVectorEntry@2@ABU32@@Z  008a1a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008a1a10/s008a1a10.cpp  ?DestroyInlineBuffers@SP@@YAPAUCInlineBuffer@1@PAU21@00@Z  008a1b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -553,10 +553,12 @@ void hkTransform::setMul(const hkTransform& A, const hkTransform& B)
 	m[14] = (a10 * b2 + a6 * b1) + a2 * b0;
 	m[15] = 0.0f;
 
-	m[12] = m[12] + A.m[12];
-	m[13] = A.m[13] + m[13];
-	m[14] = A.m[14] + m[14];
-	m[15] = A.m[15] + m[15];
+	// The original rounds each translation element to float (fstp) and reloads it for the add; the volatile
+	// reads stop cl from forwarding the unrounded x87 value and from folding `x + 0.0f` into a raw copy.
+	m[12] = *(volatile float*)&m[12] + A.m[12];
+	m[13] = A.m[13] + *(volatile float*)&m[13];
+	m[14] = A.m[14] + *(volatile float*)&m[14];
+	m[15] = A.m[15] + *(volatile float*)&m[15];
 }
 
 // @ 0x010810f0
@@ -597,7 +599,7 @@ void hkTransform::setMulInverseMul(const hkTransform& A, const hkTransform& B)
 }
 
 // @ 0x010812b0
-hkBool hkVector4::isOk3() const
+__declspec(noinline) hkBool hkVector4::isOk3() const
 {
 	const float* v = &x;
 	int i = 0;
@@ -616,10 +618,14 @@ hkBool hkVector4::isOk3() const
 // @ 0x010812f0
 hkBool hkVector4::isNormalized3(float epsilon) const
 {
+	// isOk3 is a real call here and it clobbers ecx (the original's isOk3 overwrites its own saved ecx with
+	// the last component's float bits via `push ecx` / `fstp [esp]`, which is why the original reloads `this`
+	// from esi after the call). Read the components before the call so no `this` reload is needed.
+	const float a = x, b = y, c = z;
 	if (!isOk3())
 		return false;
 	// X87-PRECISION: (x*x + y*y) + z*z - 1.0 is formed on the FPU stack, then fabs and compare against epsilon.
-	if (fabsf(((x * x + y * y) + z * z) - 1.0f) < epsilon)
+	if (fabsf(((a * a + b * b) + c * c) - 1.0f) < epsilon)
 		return true;
 	return false;
 }

@@ -1,1 +1,1 @@
-0052df30 52 cError string ctor; complete, but inlined strlen/va_start frame differs
+0052df30 53 cError string ctor; complete, but inlined strlen/va_start frame differs; fixed the eastl string assign call to thiscall (destination in ecx) instead of cdecl, so the begin/end arguments and destination match; PASS 365 valid/100% coverage, replay first difference None; size 160 vs 174
