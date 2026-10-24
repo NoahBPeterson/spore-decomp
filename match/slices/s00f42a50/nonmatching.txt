@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
 00f43830  41  complete erase-at-index wrapper; cl CSEs the vector begin pointer into edi instead of the original's memory reload
+00f42e60  52  complete vector<T4e0> range copy-constructor; cl keeps the source-vector pointer in ebx for the 5th helper arg instead of reloading it (original: mov edx,[esp+0x10]; push edx) and puts x.mpBegin in edx rather than ebx. [equiv: WEAK]

@@ -37,7 +37,10 @@ struct Vec4e0 {
     void DoInsert(T4e0* pos, const T4e0& value);   // 0x00f2df80
     void eraseRange(T4e0* first, T4e0* last);      // 0x00f2dd70
     Vec4e0* fillCtor(uint32_t n, const T4e0& value, const void* alloc);   // 0x00f42f90
+    Vec4e0* rangeCtor(const Vec4e0& x);            // 0x00f42e60
 };
+// 0x00dfd570 uninitialized_copy for 0x4e0-stride elements (cursor returned via out-param)
+extern "C" T4e0** __cdecl uninit_copy4e0(T4e0** out, const T4e0* first, const T4e0* last, T4e0* dest, const void* srcVec);
 
 // @ 0x00f43880
 T4e0* Vec4e0::insert(T4e0* pos, const T4e0& value)
@@ -135,10 +138,21 @@ int f_42a50(int a, int b, int c)
 }
 
 // @ 0x00f42e60
-void* f_42e60(void* self, void* src)
+Vec4e0* Vec4e0::rangeCtor(const Vec4e0& x)
 {
-    (void)self; (void)src;
-    return self;
+    uint32_t n = (uint32_t)(((char*)x.mpEnd - (char*)x.mpBegin) / 0x4e0);
+    T4e0* p;
+    if (n)
+        p = (T4e0*)eastl_alloc(n * 0x4e0, "Simulator", 0, 0, "eastl/allocator.h", 0xd1);
+    else
+        p = 0;
+    mpBegin = p;
+    mpEnd = p;
+    mpCapacity = (T4e0*)((char*)p + n * 0x4e0);
+    T4e0* result;
+    uninit_copy4e0(&result, x.mpBegin, x.mpEnd, p, &x);
+    mpEnd = result;
+    return this;
 }
 
 // @ 0x00f42ef0
