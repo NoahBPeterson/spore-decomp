@@ -142,27 +142,96 @@ void MeshBuilder8::finish()
 // remaining routines (nonmatching / partial reconstructions)
 // ---------------------------------------------------------------------------
 
-// @ 0x00719170  FixedIdVector6 assignment (different element type)
-void __cdecl fixedIdDoAssign(void* a, void* b, void* c);
-int* fixedIdAssign(int* self, int* other)
+// ---------------------------------------------------------------------------
+// Rework VAs: the fixed-id vector and the 0xd0 / 0x50-byte element vectors.
+// ---------------------------------------------------------------------------
+
+// spstl fixed-id vector (16-bit ids, 4-byte slots).
+struct FixedIdVector6
 {
-    if (self != other) {
-        self[1] = self[1] + ((self[1] - self[0]) >> 2) * -4;
-        fixedIdDoAssign((void*)other[0], (void*)other[1], other);
+    u32* mpBegin;      // +0x00
+    u32* mpEnd;        // +0x04
+    u32* mpCapacity;   // +0x08
+
+    FixedIdVector6* Assign(const FixedIdVector6& x);               // @ 0x00719170
+    void DoAssign(u32* first, u32* last, const FixedIdVector6& x); // 0x0042cd50
+};
+typedef void (__thiscall* FixedIdDoAssignFn)(void*, const u32*, const u32*, const void*);
+extern "C" void FUN_0042cd50(void);                 // FixedIdVector6::DoAssign
+
+// @ 0x00719170  FixedIdVector6::Assign  (inlined erase, then DoAssign)
+FixedIdVector6* FixedIdVector6::Assign(const FixedIdVector6& x)
+{
+    if (this != &x) {
+        u32* first = mpBegin;
+        u32* last  = mpEnd;
+        u32* dst   = first;
+        for (const u32* src = last; src != last; ++src)   // empty tail copy
+            *dst++ = *src;
+        mpEnd = mpEnd - (last - first);
+        ((FixedIdDoAssignFn)(void*)FUN_0042cd50)(this, x.mpBegin, x.mpEnd, &x);
     }
-    return self;
+    return this;
 }
 
-// @ 0x00719330  insert range with destructor loop over 0xd0-byte elements
-void editorInsert19330(void* self, int a, int b)
+// eastl-style vector of 0xd0-byte elements (SP::cMeshBuilder instances).
+struct MeshVecD0
 {
-    (void)self; (void)a; (void)b;
+    u8* mpBegin;      // +0x00
+    u8* mpEnd;        // +0x04
+    u8* mpCapacity;   // +0x08
+
+    u8*  relocateRange(u8* first, u8* last);              // @ 0x00719330
+    void insert(u8* position, u32 n, const void* value);  // @ 0x007193e0
+};
+
+// eastl-style vector of 0x50-byte elements.
+struct MeshVec50
+{
+    u8* mpBegin;      // +0x00
+    u8* mpEnd;        // +0x04
+    u8* mpCapacity;   // +0x08
+
+    u8* copyEraseRange(u8* first, u8* last);              // @ 0x00719390
+};
+
+extern "C" void* FUN_00717a90(void*, void*, void*);       // relocate 0xd0 elements
+extern "C" void* FUN_00717ad0(void*, void*, void*);       // copy 0x50 elements
+extern "C" void  FUN_00714b40(void);                      // tail teardown (thiscall, 2 args)
+extern "C" void  FUN_007146c0(void);                      // AdapterTeardown::Destroy
+extern "C" void  FUN_00716110(void);                      // 0xd0-element copy ctor
+extern "C" void  FUN_00716440(void*, u32, void*, void*);   // construct n copies
+extern "C" void  FUN_007191d0(void*, void*, void*);        // construct a range
+extern "C" void  FUN_007163c0(void*, void*, void*, void*, void*); // range relocation
+extern "C" void* FUN_007165c0(void*, void*, void*);       // copy-construct a range
+extern "C" void  FUN_00714960(void*, void*, void*);       // destroy a range
+extern "C" void  FUN_00717b30(void*, void*, void*);       // move an element range
+
+typedef void (__thiscall* DestroyFn)(void*);
+typedef void (__thiscall* CopyCtorFn)(void*, const void*);
+typedef void (__thiscall* TailFn)(void*, u8*, u8*);
+
+#define ELEM_D0 0xd0
+#define ELEM_50 0x50
+
+// @ 0x00719330  MeshVecD0::relocateRange — relocate [first,last) and destroy the tail
+u8* MeshVecD0::relocateRange(u8* first, u8* last)
+{
+    u8* r      = (u8*)FUN_00717a90(last, mpEnd, first);
+    u8* oldEnd = mpEnd;
+    for (; r < oldEnd; r += ELEM_D0)
+        ((DestroyFn)(void*)FUN_007146c0)(r);
+    mpEnd -= ((ptrdiff_t)(last - first) / ELEM_D0) * ELEM_D0;
+    return first;
 }
 
-// @ 0x00719390  copy + erase range over 0x50-byte elements
-void editorErase19390(void* self, int a, int b)
+// @ 0x00719390  MeshVec50::copyEraseRange — copy [first,last) down and tear down the tail
+u8* MeshVec50::copyEraseRange(u8* first, u8* last)
 {
-    (void)self; (void)a; (void)b;
+    u8* r = (u8*)FUN_00717ad0(last, mpEnd, first);
+    ((TailFn)(void*)FUN_00714b40)(this, r, mpEnd);
+    mpEnd -= ((ptrdiff_t)(last - first) / ELEM_50) * ELEM_50;
+    return first;
 }
 
 // ---------------------------------------------------------------------------
@@ -382,8 +451,60 @@ void MeshBuilderUV::CompactAttributeVertices()
     if (verts.mpBegin && ((u32*)verts.mpBegin)[-1]) EAFree(verts.mpBegin);
 }
 
-// @ 0x007193e0  insert n copies of an element into a vector<0xd0>
-void editorInsert193e0(void* self, int a, int b, int c)
+// 0xd0-byte element (SP::cMeshBuilder).  Only the pieces the insert path uses.
+struct ElemD0
 {
-    (void)self; (void)a; (void)b; (void)c;
+    u8    pad00[0xc];    // +0x00
+    void* mpAux;         // +0x0c  auxiliary pointer forwarded to the range helpers
+    u8    pad10[0xd0 - 0x10];
+};
+
+// @ 0x007193e0  MeshVecD0::insert — insert n copies of value before position
+void MeshVecD0::insert(u8* position, u32 n, const void* value)
+{
+    if ((u32)((ptrdiff_t)(mpCapacity - mpEnd) / ELEM_D0) < n) {
+        // not enough spare capacity: reallocate, copy the head, fill, move the tail
+        u32 size = (u32)((ptrdiff_t)(mpEnd - mpBegin) / ELEM_D0);
+        u32 grown = size * 2;
+        if (size == 0) grown = 1;
+        u32 cap = size + n;
+        if (cap < grown) cap = grown;
+        u8* buf = cap ? (u8*)EAAlloc(cap * ELEM_D0, "Graphics", 0, 0, ALLOC_H, 0xd1) : 0;
+        u8* oldBegin = mpBegin;
+        u8* mid = (u8*)FUN_007165c0(oldBegin, position, buf);
+        FUN_00714960(oldBegin, position, buf);
+        FUN_00716440(mid, n, (void*)value, oldBegin);
+        u8* tailDst = mid + n * ELEM_D0;
+        u8* oldEnd  = mpEnd;
+        u8* newEnd  = (u8*)FUN_007165c0(position, oldEnd, tailDst);
+        FUN_00714960(position, oldEnd, tailDst);
+        if (mpBegin && ((u32*)mpBegin)[-1] != 0)
+            EAFree(mpBegin);
+        mpEnd      = newEnd;
+        mpBegin    = buf;
+        mpCapacity = buf + cap * ELEM_D0;
+    }
+    else if (n != 0) {
+        ElemD0 temp;
+        ((CopyCtorFn)(void*)FUN_00716110)(&temp, value);
+        u32 tail = (u32)((ptrdiff_t)(mpEnd - position) / ELEM_D0);
+        if (n < tail) {
+            // the tail is longer than n: shift the last n elements on by n, then fill
+            u8* split = mpEnd - n * ELEM_D0;
+            FUN_007163c0(&temp.mpAux, split, mpEnd, mpEnd, temp.mpAux);
+            mpEnd = mpEnd + n * ELEM_D0;
+            FUN_00717b30(position, split, mpEnd);
+            FUN_007191d0(position, position + n * ELEM_D0, &temp);
+        }
+        else {
+            // construct the overflow past the end, then shift the whole tail
+            FUN_00716440(mpEnd, n - tail, &temp, temp.mpAux);
+            u8* oldEnd = mpEnd;
+            mpEnd = mpEnd + (n - tail) * ELEM_D0;
+            FUN_007163c0(&temp.mpAux, position, oldEnd, mpEnd, temp.mpAux);
+            mpEnd = mpEnd + tail * ELEM_D0;
+            FUN_007191d0(position, oldEnd, &temp);
+        }
+        ((DestroyFn)(void*)FUN_007146c0)(&temp);
+    }
 }
