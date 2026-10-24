@@ -1,1 +1,11 @@
-00ddd1a0 cModelSetup::Setup  # Claude-coined; binds light + three preview models + layer, resets 7 global name tables, runs an OTDB query (Constraint 0x2dd90af==0x2b978c46, 0x54a32960==1)
+ 00ddd1a0 cModelSetup::Setup  # Claude-coined; binds light + three preview models + layer, resets 7 global name tables, runs an OTDB query (Constraint 0x2dd90af==0x2b978c46, 0x54a32960==1)
+00ddd970 ?FUN_00ddd970@@YAXXZ  # free __cdecl: return 0 (stub/const-returned default)
+00ddd9b0 ?FUN_00ddd9b0@@YIDPAX@Z  # free __cdecl(void*)->unsigned int: GUI panel id lookup helper
+00ddda30 ?FUN_00ddda30@@YIHPAX@Z  # free __cdecl(void*)->unsigned int: GUI panel id lookup helper (second form)
+00dddaa0 ?FUN_00dddaa0@@YGDHMMH@Z  # free __cdecl(char,int,float,float,int)->char: panel/extent setup on the keyed GUI panel
+00dddb10 ?FUN_00dddb10@@YGDHMMH@Z  # free __cdecl(char,int,float,float,int)->char: two WindowManager()->GetLayoutManager() chains
+00dddba0 ?FUN_00dddba0@@YGXMMH@Z  # free __cdecl(float,float,int): panel resize/reposition through the GUI panel vtable
+00dddbd0 ?FUN_00dddbd0@@YGXMM@Z  # free __cdecl(float,float): scale arg2 by 1000, feed FUN_00b3d230 -> FUN_00b5e9a0 after the panel M8760 call
+00dddc30 ?FUN_00dddc30@@YIDPAUcGUIHandler@@@Z  # free __cdecl(cGUIHandler*)->unsigned int: attach model object via FUN_00e20780 / FUN_00c2e4e0
+00dddca0 ?FUN_00dddca0@@YIDPAUcGUIHandler@@@Z  # free __cdecl(cGUIHandler*)->unsigned int: detach model object and reset cheat/flag state
+00ddcdc0 ?FUN_00ddcdc0@@YAXXZ  # free __cdecl: simulator reset/setup (random spherical jitter + timestamps + name-table vcall)

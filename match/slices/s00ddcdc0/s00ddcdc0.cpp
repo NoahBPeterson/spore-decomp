@@ -319,3 +319,352 @@ void cModelSetup::Setup()
         }
     }
 }
+
+// ==================================================================================================
+// GUI / simulator helpers  (slice s00ddcdc0, part 2)
+// ==================================================================================================
+
+extern "C" void* __cdecl G7New(unsigned int size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
+extern "C" void* __fastcall FUN_00dda920(void* mem);                                             // 0x00dda920
+extern "C" int   __stdcall  FUN_00b3d230(int v);                                                 // 0x00b3d230
+extern "C" void  __fastcall FUN_00b5e9a0(int v);                                                 // 0x00b5e9a0
+extern "C" void* __cdecl    FUN_006895b0();                                                      // 0x006895b0
+void* __cdecl WindowManager();                                                                   // 0x0067caa0
+void* __cdecl GetLayoutManager();                                                                // 0x00805070
+void* __cdecl FUN_0067de20();                                                                    // 0x0067de20
+void  __fastcall FUN_00c2e4e0(void* p);                                                          // 0x00c2e4e0
+void  __fastcall FUN_00e20800(void* p);                                                          // 0x00e20800
+void* __fastcall FUN_00e20780(void* mem);                                                        // 0x00e20780
+
+extern const char gSimulatorName[];   // "Simulator"          @ 0x013f09b4
+extern const char gPatchMgrName[];    // "UI/GGE/PatchManager" @ 0x0147d3a4
+extern cModelSetup* gSimulator;       // 0x016a0b08
+extern char gCheatArg;                // 0x0147d2ec
+extern unsigned char gFlag0c80;       // 0x016a0c80
+
+inline void* VFn(void* p, int off) { return *(void**)(*(char**)p + off); }
+
+struct PanelOps {
+    void M4450(int a, float b, float c, int d);   // 0x00de4450
+    void M44a0(int a, float b, float c, int d);   // 0x00de44a0
+    void M44f0(float a, float b, int c);          // 0x00de44f0
+    void M8760(float a, float b);                 // 0x00de8760
+    void Ma200();                                 // 0x00dea200
+    int  M81b0();                                 // 0x00de81b0
+    void M7eb0();                                 // 0x00de7eb0
+};
+
+struct cGUIPanel {
+    int  m0;                   // +0x00
+    void* mSubVt;              // +0x04
+    char mPad08[0x38 - 0x08];
+    void* mp38;                // +0x38
+    char mPad3c[0x108 - 0x3c];
+    int  mState;               // +0x108
+    int  mState2;              // +0x10c
+    char mPad110[0x178 - 0x110];
+    void* mp178;               // +0x178
+    unsigned char mFlag17c;    // +0x17c
+};
+extern cGUIPanel* kGUI_PanelIDs;   // 0x016a1344
+
+struct cGUIHandler {
+    char mPad0c[0xc];
+    void* mp0c;                // +0x0c
+};
+
+struct LayoutOps {
+    char Is(int id);           // 0x00810760
+    void M660(int id, int v);  // 0x00810660
+};
+
+// @ 0x00ddd970
+void FUN_00ddd970()
+{
+    void* mem = G7New(0x74, gSimulatorName, 0, 0, 0, 0);
+    cModelSetup* s;
+    if (mem)
+        s = (cModelSetup*)FUN_00dda920(mem);
+    else
+        s = 0;
+    gSimulator = s;
+    s->Setup();
+}
+
+// @ 0x00ddd9b0
+char __fastcall FUN_00ddd9b0(void* self)
+{
+    ((void (__thiscall*)(void*, int, float, float, int))VFn(self, 0x2c))(self, 0x3ea, 0.0f, 0.0f, 0);
+    ((void (__thiscall*)(void*, int, float, float, int))VFn(self, 0x30))(self, 0x3ea, 0.0f, 0.0f, 0);
+    ((PanelOps*)kGUI_PanelIDs)->Ma200();
+    cISPObjectTemplateDB* db = ObjectTemplateDB();
+    if (db)
+        ((void (__thiscall*)(void*))VFn(db, 0x54))(db);
+    LayoutOps* lm = (LayoutOps*)GetLayoutManager();
+    if (lm->Is(0x614de4c))
+        lm->M660(0x614de4c, 0);
+    return 1;
+}
+
+// @ 0x00ddda30
+int __fastcall FUN_00ddda30(void* self)
+{
+    ((void (__thiscall*)(void*, int, float, float, int))VFn(self, 0x2c))(self, 0x3ea, 0.0f, 0.0f, 0);
+    ((void (__thiscall*)(void*, int, float, float, int))VFn(self, 0x30))(self, 0x3ea, 0.0f, 0.0f, 0);
+    return ((PanelOps*)kGUI_PanelIDs)->M81b0();
+}
+
+// @ 0x00dddaa0
+char __stdcall FUN_00dddaa0(int a1, float a2, float a3, int a4)
+{
+    ((PanelOps*)kGUI_PanelIDs)->M4450(a1, a2, a3, a4);
+    if (kGUI_PanelIDs->mState == 4)
+        return 1;
+    if (a1 == 0x3ea) {
+        void* wm = WindowManager();
+        ((void (__thiscall*)(void*, int, int))VFn(wm, 0x58))(wm, 1, 0);
+        kGUI_PanelIDs->mFlag17c = 0;
+    }
+    return 0;
+}
+
+// @ 0x00dddb10
+char __stdcall FUN_00dddb10(int a1, float a2, float a3, int a4)
+{
+    if (kGUI_PanelIDs != 0)
+        ((PanelOps*)kGUI_PanelIDs)->M44a0(a1, a2, a3, a4);
+    if (kGUI_PanelIDs->mState == 4)
+        return 1;
+    if (a1 == 0x3ea) {
+        void* wm1 = WindowManager();
+        void* wm2 = WindowManager();
+        int r = ((int (__thiscall*)(void*))VFn(wm1, 4))(wm1);
+        ((void (__thiscall*)(void*, int, int))VFn(wm2, 0x58))(wm2, 1, r);
+        kGUI_PanelIDs->mFlag17c = 1;
+    }
+    return 0;
+}
+
+// @ 0x00dddba0
+void __stdcall FUN_00dddba0(float a1, float a2, int a3)
+{
+    ((PanelOps*)kGUI_PanelIDs)->M44f0(a1, a2, a3);
+}
+
+// @ 0x00dddbd0
+void __stdcall FUN_00dddbd0(float a1, float a2)
+{
+    int t = (int)(float)(a2 * 1000.0f);
+    ((PanelOps*)kGUI_PanelIDs)->M8760(a1, a2);
+    FUN_00b5e9a0(FUN_00b3d230(t));
+}
+
+// @ 0x00dddc30
+char __fastcall FUN_00dddc30(cGUIHandler* self)
+{
+    void* mem = G7New(0x2080, gPatchMgrName, 0, 0, 0, 0);
+    void* np;
+    if (mem)
+        np = FUN_00e20780(mem);
+    else
+        np = 0;
+    void* old = self->mp0c;
+    if (np != old) {
+        if (np)
+            ((int (__thiscall*)(void*))VFn(np, 4))(np);
+        self->mp0c = np;
+        if (old)
+            ((void (__thiscall*)(void*))VFn(old, 8))(old);
+    }
+    FUN_00c2e4e0(self->mp0c);
+    return 1;
+}
+
+// @ 0x00dddca0
+char __fastcall FUN_00dddca0(cGUIHandler* self)
+{
+    void* m = FUN_006895b0();
+    ((void (__thiscall*)(void*, int))VFn(m, 0x28))(m, 0x4530082);
+    ((PanelOps*)kGUI_PanelIDs)->M7eb0();
+    if (kGUI_PanelIDs) {
+        void* sub = (char*)kGUI_PanelIDs + 4;
+        ((void (__thiscall*)(void*, int))VFn(sub, 8))(sub, 1);
+    }
+    FUN_00e20800(self->mp0c);
+    if (self->mp0c) {
+        void* o = self->mp0c;
+        self->mp0c = 0;
+        ((void (__thiscall*)(void*))VFn(o, 8))(o);
+    }
+    void* cm = FUN_0067de20();
+    if (cm) {
+        ((void (__thiscall*)(void*, void*))VFn(cm, 0x1c))(cm, &gCheatArg);
+        gFlag0c80 = 0;
+    }
+    return 1;
+}
+
+// ---- FUN_00ddcdc0 support -------------------------------------------------------------------------
+extern "C" void* __cdecl FUN_00ddc4a0();                        // 0x00ddc4a0
+extern "C" double __cdecl FUN_009360d0(void* rng);              // 0x009360d0 ended up __fastcall
+#include <math.h>
+extern const float  gF1000;     // 0x13ec5b4 = 1000.0f
+extern const float  gFSign;     // 0x13eb8b0 = sign-mask float
+extern float gCam48;            // 0x16a0c48
+extern float gCam4c;            // 0x16a0c4c
+extern float gCam50;            // 0x16a0c50
+extern float gRadA;             // 0x15a2cf4
+extern float gRadB;             // 0x1485544 = 0.75f
+extern float gBA4;              // 0x16a0ba4
+extern float gBA8;              // 0x16a0ba8
+extern float gBAC;              // 0x16a0bac
+extern float gC3C;              // 0x16a0c3c
+extern float gC40;              // 0x16a0c40
+extern float gC44;              // 0x16a0c44
+extern float gScale;            // 0x15a2cf0
+extern const double gD02;       // 0x147d2d0 = 0.2
+extern const double gD09;       // 0x147d2c8 = 0.9
+extern const double gD11;       // 0x147d2c0 = 1.1
+extern const double gD500;      // 0x147d2b8 = 500.0
+extern int gV2c;                // 0x15a2d2c
+extern int gV30;                // 0x15a2d30
+extern int gV34;                // 0x15a2d34
+extern int gV38;                // 0x15a2d38
+extern "C" int __stdcall QueryPerformanceCounter(long long* ctr);   // import 0x13cc2b8
+extern "C" unsigned __int64 __cdecl __rdtsc();
+#pragma intrinsic(__rdtsc)
+
+struct cSimState {
+    char mPad0[0x0c];
+    float mPosX;                    // +0x0c
+    float mPosY;                    // +0x10
+    float mPosZ;                    // +0x14
+    float mVelX;                    // +0x18
+    float mVelY;                    // +0x1c
+    float mVelZ;                    // +0x20
+    char mPad24[0x48 - 0x24];
+    int m48;                        // +0x48
+    int m4c;                        // +0x4c
+    int m50;                        // +0x50
+    int m54;                        // +0x54
+    char mPad58[0xb0 - 0x58];
+    unsigned int mLoB0;             // +0xb0
+    unsigned int mHiB4;             // +0xb4
+    char mPadB8[0xc0 - 0xb8];
+    int mC0;                        // +0xc0
+    char mPadC4[0xc8 - 0xc4];
+    int mC8;                        // +0xc8
+    char mPadCC[0xd4 - 0xcc];
+    unsigned char mD4;              // +0xd4
+    unsigned char mD5;              // +0xd5
+    char mPadD6[0xf8 - 0xd6];
+    void* mpF8;                     // +0xf8
+};
+
+inline float ClampF(float x, float lo, float hi)
+{
+    if (x < hi) {
+        if (x < lo)
+            return lo;
+        return x;
+    }
+    return hi;
+}
+
+inline double ClampD(double x, double lo, double hi)
+{
+    if (x < hi) {
+        if (x < lo)
+            return lo;
+        return x;
+    }
+    return hi;
+}
+
+// @ 0x00ddcdc0
+void FUN_00ddcdc0()
+{
+    cSimState* s = (cSimState*)FUN_00ddc4a0();
+    if (!s)
+        return;
+
+    s->mPosX = gCam48 * gF1000;
+    s->mPosY = gCam4c * gF1000;
+    s->mPosZ = gCam50 * gF1000;
+
+    float r = gRadA;
+    float px = 0.0f;
+    float py = 0.0f;
+    float pz = 0.0f;
+    float qx;
+    float qy;
+    float qz;
+    do {
+        float lo = -r;
+        float c = (float)FUN_009360d0((void*)0x1601760);
+        c = ClampF(c * (r - lo) + lo, lo, r);
+        r = c;
+
+        qx = gBA4 * r + px;
+        qy = gBA8 * r + py;
+        qz = gBAC * r + pz;
+
+        float lo2 = -gRadA;
+        float c2 = (float)FUN_009360d0((void*)0x1601760);
+        c2 = ClampF(c2 * (gRadA - lo2) + lo2, lo2, gRadA);
+
+        qx = gC3C * c2 + qx;
+        qy = gC40 * c2 + qy;
+        qz = gC44 * c2 + qz;
+        px = qx;
+        py = qy;
+        pz = qz;
+        r = gRadA;
+    } while (sqrtf(qx * qx + qy * qy + qz * qz) < gRadA * gRadB);
+
+    double d = FUN_009360d0((void*)0x1601760);
+    d = ClampD(d * gD02 + gD09, 0.9, 1.1);
+
+    s->mVelX = -(s->mPosX * gScale) * (float)d;
+    s->mVelY = -(s->mPosY * gScale) * (float)d;
+    s->mVelZ = -(s->mPosZ * gScale) * (float)d;
+
+    s->mPosX += qx;
+    s->mPosY += qy;
+    s->mPosZ += qz;
+
+    double k = FUN_009360d0((void*)0x1601760);
+    k = ClampD(k * gD500, 0.0, 500.0);
+
+    s->mPosX += gCam48 * (float)k;
+    s->mPosY += gCam4c * (float)k;
+    s->mPosZ += gCam50 * (float)k;
+
+    s->mC8 = 100;
+    s->mD5 = 0;
+
+    if ((s->mLoB0 | s->mHiB4) == 0) {
+        if (s->mC0 == 1) {
+            unsigned long long t = __rdtsc();
+            s->mLoB0 = (unsigned int)t;
+            s->mHiB4 = (unsigned int)(t >> 32);
+        } else {
+            unsigned int ctr[2];
+            ctr[0] = 0;
+            ctr[1] = 0;
+            QueryPerformanceCounter((long long*)ctr);
+            s->mLoB0 = ctr[0];
+            s->mHiB4 = ctr[1];
+        }
+    }
+
+    s->m48 = gV2c;
+    s->m4c = gV30;
+    s->m50 = gV34;
+    s->m54 = gV38;
+    s->mpF8 = &gNames0bc4;
+    s->mD4 = 1;
+
+    void* first = (void*)*gNames0bc4.mpBegin;
+    ((void (__thiscall*)(void*, void*))VFn(first, 0))(first, s);
+}
