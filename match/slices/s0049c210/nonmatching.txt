@@ -1,2 +1,3 @@
 0049ce40  243  complete; /Od frame 0x100 vs 0xa8, temp/slot layout differs
 0049cb90  509  complete; /Od frame/slot layout and tracker call shapes differ
+0049c210  630  complete; matrix-from-direction builder, equivalent (WEAK 399 valid, 0 mismatches, 23.4% coverage; /Od frame and slot layout differ). The in-function fast path needs |1-|dot|| == 0 exactly, but the axis global at 0x15d6324 sits in the image gap past .data and reads as a zero vector, so dot is always 0 and only the null-block / F_43c510 / general-builder paths can run
