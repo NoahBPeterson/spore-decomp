@@ -1,0 +1,16 @@
+00e8d0e0 ??0cGamePlantView@@QAE@XZ  # cGamePlantView::cGamePlantView
+00e8d160 ??1cGamePlantView@@QAE@XZ  # cGamePlantView::~cGamePlantView
+00e8d1e0 ?UpdateEffectScale@cGamePlantView@@QAEXXZ  # void cGamePlantView::UpdateEffectScale
+00e8d260 ?HandleSimulationUpdate@cGamePlantView@@QAEXPAXI@Z  # void cGamePlantView::HandleSimulationUpdate
+00e8d4f0 ?Create@cGamePlantView@@QAEPAV1@PAVcSpatialObject@@@Z  # cGamePlantView::Create
+00e8d6b0 ?PackColor@@YAIMMMM@Z  # uint32_t PackColor
+00e8d740 ?SetFlag@cGameTerrainCursorView@@QAEXD@Z  # void cGameTerrainCursorView::SetFlag
+00e8d760 ?GetFlag@cGameTerrainCursorView@@QAEDXZ  # char cGameTerrainCursorView::GetFlag
+00e8d770 ??0cGameTerrainCursorView@@QAE@XZ  # cGameTerrainCursorView::cGameTerrainCursorView
+00e8d790 ??1cGameTerrainCursorView@@QAE@XZ  # cGameTerrainCursorView::~cGameTerrainCursorView
+00e8d880 ?HandleSimulationUpdate@cGameTerrainCursorView@@QAEXXZ  # void cGameTerrainCursorView::HandleSimulationUpdate
+00e8dd90 ?loadModel@@YAPAXXZ  # void* loadModel
+00e8de10 ?CreateGameTerrainCursorView@@YAPAVcGameTerrainCursorView@@PAVcSpatialObject@@@Z  # cGameTerrainCursorView* CreateGameTerrainCursorView
+00e8ded0 ??0cNestView@@QAE@XZ  # cNestView::cNestView
+00e8df50 ?SetupNestModelKey@cNestView@@QAEXXZ  # void cNestView::SetupNestModelKey
+00e8e050 ??0cEggView@@QAE@XZ  # cEggView::cEggView
