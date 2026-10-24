@@ -49,7 +49,7 @@ void __cdecl GetPropertyT_int(cPropertyList* pList, uint id, int* pOut);   // 0x
 struct cSimulatorUniverse {
     virtual void vf0();
     virtual void vf1();
-    char mPad08[8];                                           // +0x08
+    char mPad04[0xc];                                         // +0x04 (vptr occupies the first dword)
     cPropertyList* mpTuning;                                  // +0x10
     char mPad14[0x118 - 0x14];                                // +0x14
     int m118;                                                 // +0x118
@@ -129,7 +129,7 @@ double FUN_0100d500(float seconds, float rate);               // 0x0100d500
 
 void* NounManager(uint id);                                   // 0x00b3d300
 struct cTerrainSphere {
-    double GetRadius();                                       // 0x00c75c30
+    double GetRadius(uint id);                                // 0x00c75c30 (pops its stack argument)
 };
 struct cTerrainEditor {
     cTerrainSphere* GetCurrentTerrainSphere();                // 0x00f67d90
@@ -140,6 +140,8 @@ struct SpaceGameData {
     IntVector mList18;                                        // +0x18
     char mPad20[0x2c - 0x20];                                 // +0x20
     IntVector mPlanets;                                       // +0x2c
+    char mPad34[0x100 - 0x34];                                // +0x34
+    int  m100;                                                // +0x100 subtracted from the planet count
 };
 
 struct SpaceGame {
@@ -176,6 +178,12 @@ struct HappinessDisasterEvent {
     int   m08;                                                // +0x08
     double GetEventFrequency(uint64 deltaMs);                 // 0x0100fbc0
     void*  TryCreateMission(void* pMission, int param);       // 0x0100fdb0
+};
+
+struct BiosphereCollapseEvent {
+    virtual void vf0();
+    float mTimeSinceLastEvent;                                // +0x04
+    double GetEventFrequency(uint64 deltaMs);                 // 0x0100f930
 };
 
 } // namespace SP
@@ -318,7 +326,7 @@ double SP::PirateRaidPlunderEvent::GetEventFrequency(uint64 deltaMs)
         fRate = *p->GetFloat();
     if (((SpaceGame*)SpaceGameGet())->mFlags & 0x200)
         fRate = ((SpaceGame*)SpaceGameGet())->GetRaidSpeedFactor(9) * fRate;
-    fRate = ((cTerrainEditor*)NounManager(0xc42edf05))->GetCurrentTerrainSphere()->GetRadius() * fRate;
+    fRate = ((cTerrainEditor*)NounManager(0xc42edf05))->GetCurrentTerrainSphere()->GetRadius(0xc42edf05) * fRate;
     SpaceGameData* pData = ((SpaceGame*)SpaceGameGet())->mpData;
     IntVector* pPlanets = &pData->mPlanets;
     int nPlanets = pPlanets->mpEnd - pPlanets->mpBegin;
@@ -352,7 +360,7 @@ double SP::PirateRaidAllyEvent::GetEventFrequency(uint64 deltaMs)
                 fRate = *p->GetFloat();
             if (((SpaceGame*)SpaceGameGet())->mFlags & 0x200)
                 fRate = ((SpaceGame*)SpaceGameGet())->GetRaidSpeedFactor(9) * fRate;
-            double dRadius = ((cTerrainEditor*)NounManager(0xc42edf05))->GetCurrentTerrainSphere()->GetRadius();
+            double dRadius = ((cTerrainEditor*)NounManager(0xc42edf05))->GetCurrentTerrainSphere()->GetRadius(0xc42edf05);
             double dScale = dRadius * fRate;
             if (0.0 < dScale)
                 return (float)(1.0 - exp((double)deltaMs / dScale * -0.000301030028));
@@ -458,12 +466,51 @@ double SP::HappinessDisasterEvent::GetEventFrequency(uint64 deltaMs)
         fRate = fRate * 2.0f;
     if (((SpaceGame*)SpaceGameGet())->mFlags & 0x10)
         fRate = fRate * 3.0f;
-    fRate = ((cTerrainEditor*)NounManager(0xc42edf05))->GetCurrentTerrainSphere()->GetRadius() * fRate;
+    fRate = ((cTerrainEditor*)NounManager(0xc42edf05))->GetCurrentTerrainSphere()->GetRadius(0xc42edf05) * fRate;
     m08 = ((cStarRecordRef*)pPlanet)->GetCommContext();
     fRate = (float)FUN_0100d500(fDelta * 0.001f, fRate);
     if (pRef)
         PlanetRelease(pRef);
     return fRate;
+}
+
+// ===========================================================================================
+// @ 0x0100f930
+double SP::BiosphereCollapseEvent::GetEventFrequency(uint64 deltaMs)
+{
+    // The original converts the (unsigned) 64-bit millisecond delta with the x87 sign-split
+    // idiom, multiplies by 0.001f, keeps the unrounded value for the elapsed-time accumulator
+    // and spills the rounded float for the exp tail.
+    double dSeconds = (double)deltaMs * 0.001f;
+    float fSeconds = (float)dSeconds;
+    mTimeSinceLastEvent = (float)(dSeconds + (double)mTimeSinceLastEvent);
+
+    Property* p = 0;
+    float fGate = 0.0f;
+    if (gSimUniverse->mpTuning && gSimUniverse->mpTuning->GetProperty(0x4488192, &p) && p->mType == 13)
+        fGate = *p->GetFloat();
+    if (mTimeSinceLastEvent <= fGate)
+        return 0.0f;
+
+    // planets in the current space game, less the reserve count at +0x100
+    SpaceGameData* pData = ((SpaceGame*)SpaceGameGet())->mpData;
+    int nPlanets = (pData->mPlanets.mpEnd - pData->mPlanets.mpBegin) - pData->m100;
+
+    p = 0;
+    float fRate = 0.0f;
+    if (gSimUniverse->mpTuning && gSimUniverse->mpTuning->GetProperty(0x44881a3, &p) && p->mType == 13)
+        fRate = *p->GetFloat();
+    if (((SpaceGame*)SpaceGameGet())->mFlags & 0x800)
+        fRate = ((SpaceGame*)SpaceGameGet())->GetRaidSpeedFactor(0xb) * fRate;
+    fRate = ((cTerrainEditor*)NounManager(0xc42edf05))->GetCurrentTerrainSphere()->GetRadius(0xc42edf05) * fRate;
+
+    if (nPlanets <= 0)
+        return 0.0f;
+    fRate = fRate / (float)nPlanets;
+    if (fRate <= 0.0f)
+        return 0.0f;
+    float fResult = (float)(1.0 - exp((double)fSeconds / (double)fRate * -0.30103f));
+    return fResult;
 }
 
 // ===========================================================================================
