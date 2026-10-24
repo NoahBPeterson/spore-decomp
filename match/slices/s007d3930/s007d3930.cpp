@@ -471,14 +471,17 @@ namespace EA { namespace Random {
 class RandomLinearCongruential { public: double RandomDoubleUniform(); };
 }}
 extern EA::Random::RandomLinearCongruential gRandom;   // 0x16778dc
-float __cdecl RandomRange(float a, float b) {
+double __cdecl RandomRange(float a, float b) {
     double r = gRandom.RandomDoubleUniform();
     double lo = (double)a - (double)b;
     double hi = (double)a + (double)b;
     double v = r * (hi - lo) + lo;
-    if (v < hi && lo <= v)
-        return (float)v;
-    return (float)v;
+    if (v < hi) {
+        if (lo <= v)
+            return v;
+        return lo;
+    }
+    return hi;
 }
 
 // @ 0x007d4620
@@ -498,6 +501,24 @@ void cEffectParams::UnknownStore(int idx, IUnknown32* p) {
 
 struct cEffectNode { void Tick(void* arg); char HandleParam(int kind, float* value, void* extra); };
 
+// UTFWin::Message layout used by the effect tick's messaging dispatch.
+struct cEffectMessage {
+    void* mpSource;         // +0x00
+    uint32_t mPad4;         // +0x04
+    uint32_t mEventType;    // +0x08
+    uint32_t mPadc;         // +0x0c
+    uint32_t mKey;          // +0x10
+};
+// Messaging context hung off the effect node at +0x0c.
+struct cEffectMsgContext {
+    char pad00[0x0c];
+    uint32_t mFlags;        // +0x0c
+    char pad10[0x78];
+    uint32_t mMessageId;    // +0x88
+};
+struct cMessageServer;
+cMessageServer* __cdecl GetServer();   // 0x00883860
+
 // @ 0x007d4670
 void cEffectNode::Tick(void* arg) {
     char* s = (char*)this;
@@ -506,11 +527,25 @@ void cEffectNode::Tick(void* arg) {
         unsigned n = (unsigned)((*(int*)(s + 0xb0) - *(int*)(s + 0xac)) >> 6);
         for (unsigned i = 0; i < n; ++i) {
             void* c = *(void**)(*(int*)(s + 0xac) + i * 0x40 + 0x3c);
-            (*(void(__thiscall**)(void*, void*))((*(void***)c)[0xc / 4]))(c, arg);
+            ((void (__thiscall*)(void*, void*))(*(void***)c)[0xc / 4])(c, arg);
         }
         void* p = *(void**)(s + 0x38);
-        if (p && *(int*)((char*)p + 0x40) < 2)
-            (*(void(__thiscall**)(void*, int))((*(void***)p)[0x16c / 4]))(p, 0);
+        if (p && *(int*)((char*)p + 0x40) < 2) {
+            void* const pOwner = *(void**)p;   // +0x00: the released object
+            ((void (__thiscall*)(void*, void*, int))(*(void***)pOwner)[0x16c / 4])(pOwner, p, 0);
+        }
+        cEffectMsgContext* const ctx = (cEffectMsgContext*)*(void**)(s + 0xc);
+        if ((ctx->mFlags >> 2) & 1) {
+            cMessageServer* const pServer = GetServer();
+            if (pServer) {
+                cEffectMessage msg;
+                msg.mpSource = p;
+                msg.mEventType = 0;
+                msg.mKey = 0;
+                ((void (__thiscall*)(void*, uint32_t, cEffectMessage*, int))(*(void***)pServer)[0x14 / 4])(
+                    pServer, ctx->mMessageId, &msg, 0);
+            }
+        }
     }
 }
 
