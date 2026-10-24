@@ -27,7 +27,7 @@ void AssetViewS68::SetPos(float x, float y, char snap) {
     if (w) {
         float* p = (float*)(*(void*(__thiscall**)(void*))((char*)*(void**)w + 0x34))(w);
         if (p[0] != *(float*)(s + 0xc) || p[1] != *(float*)(s + 0x10))
-            FUN_00657810(s);
+            ((void(__thiscall*)(void*))FUN_00657810)(s);
     }
 }
 

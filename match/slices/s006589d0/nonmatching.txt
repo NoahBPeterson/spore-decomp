@@ -1,2 +1,2 @@
 # va  diff-bytes  reason (complete, not byte-exact)
-00658e00  45   SP::cSPUIAssetView::SetPos(x,y,snap): field stores + window vcall 0x64 + Show-on-change complete; x87 arg order / xmm register assignment differ
+00658e00  41   SP::cSPUIAssetView::SetPos(x,y,snap): field stores + window vcall 0x64 + Show-on-change complete; Show is now called as thiscall, but x87 arg order / xmm register assignment still differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; PASS 290 valid/100.0% coverage, replay first difference None, hybrid copy PASS; no manifest rows
