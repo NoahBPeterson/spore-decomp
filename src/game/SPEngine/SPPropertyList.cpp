@@ -360,6 +360,7 @@ public:
   virtual bool HasProperty(unsigned int index) const;                       // 7 0x006a27d0
   virtual bool GetPropertyA(unsigned int index, EA::Variant_s006a_22a0** out);         // 8
   virtual bool GetProperty(unsigned int index, EA::Variant_s006a_22a0** out) const;    // 9
+  EA::Variant_s006a_22a0 const& GetProperty(unsigned int key) const;                   // 0x006a2800
   virtual EA::Variant_s006a_22a0* GetPropertyValue(unsigned int index) const;          // 10
   virtual void Copy(cPropertyList_s006a_22a0* src);                                    // 11 0x006a2ad0
   virtual void Add(cPropertyList_s006a_22a0* src);                                     // 12 0x006a1600
@@ -395,6 +396,35 @@ public:
 extern EA::Variant_s006a_22a0 g_sNullVariant;  // 0x016027d0
 void* PropertyManager();            // 0x0067de30
 bool WriteVariant(EA::IO::IStream_s006a_22a0* stream, EA::Variant_s006a_22a0* value, int flags);
+// PropertyManager vtable slot +0x50 (GetPropertyByID) is a thiscall member: `this` in ecx and the
+// key on the stack, so it is declared as a __fastcall shim with one dummy stack argument.
+typedef void* (__fastcall* PropertyLookup_s006a_22a0)(void* mgr, int unused, unsigned int key);
+// EA::Variant's assignments (0x00542b80 copy, 0x00422e20/0x00422eb0/0x00428060 scalar) cannot carry
+// an annotation (the overloads are ambiguous), so they are called through these annotated shims;
+// `dst` arrives in ecx and the scalar overloads take a pointer to a temporary, matching the retail
+// `operator=(const T&)` argument.
+void __fastcall VariantCopyAssign_EA(EA::Variant* dst, int unused, const EA::Variant* src);  // 0x00542b80
+void __fastcall VariantAssignBool_EA(EA::Variant* dst, int unused, const bool* src);   // 0x00422e20
+void __fastcall VariantAssignInt_EA(EA::Variant* dst, int unused, const int* src);     // 0x00422eb0
+void __fastcall VariantAssignFloat_EA(EA::Variant* dst, int unused, const float* src);  // 0x00428060
+// The retail bulk pair helpers: 0x00612b20 copies [first,last) to dst (cdecl), 0x00685a30
+// destroys [first,last) and pops its two arguments (stdcall), 0x011e0744 is the memcpy thunk.
+void PairsCopyRange_s006a_22a0(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last,
+                               VariantPair_s006a_22a0* dst);  // 0x00612b20
+void __stdcall PairsDestroyRange_s006a_22a0(VariantPair_s006a_22a0* first,
+                                            VariantPair_s006a_22a0* last);  // 0x00685a30
+void PairsCopyBytes_s006a_22a0(void* dst, const void* src, unsigned int size);  // 0x011e0744
+// Address of the retail map-clear helper: it is a VariantMap method, so the map goes in ecx.
+void __fastcall MapClearOnly_s006a_22a0(SP::VariantMap* map, int unused);  // 0x006a28f0
+// eastl::vector<unsigned int> stub used by GetPropertyIDs (the retail argument is a vector).
+struct UIntVector_s006a_22a0 {
+  unsigned int* mpBegin;     // +0x00
+  unsigned int* mpEnd;       // +0x04
+  unsigned int* mpCapacity;  // +0x08
+  void resize(unsigned int n);                                            // 0x004cd3c0
+  void DoInsertValue(unsigned int* position, const unsigned int& value);  // 0x004558a0
+  void DoInsertValues(unsigned int* position, unsigned int n, const unsigned int& value);  // 0x004cea40
+};
 namespace EA {
 namespace IO {
 bool ReadInt32(IStream_s006a_22a0* stream, void* pData, unsigned int count, int flags);
@@ -412,6 +442,23 @@ static void PairsCopy(VariantPair_s006a_22a0* dst, VariantPair_s006a_22a0* first
 }
 static void PairsMoveBack(VariantPair_s006a_22a0* dstEnd, VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
   for (; last != first;) *--dstEnd = *--last;
+}
+// The clear paths shrink an end pointer by the whole elements of the signed byte distance; the pair
+// map divides by truncation, the unsigned-int vector by a floor shift.
+static VariantPair_s006a_22a0* ShrinkEnd(VariantPair_s006a_22a0* begin, VariantPair_s006a_22a0* end) {
+  int diff = (int)((char*)end - (char*)begin);
+  return (VariantPair_s006a_22a0*)((char*)end - diff / 0x18 * 0x18);
+}
+static unsigned int* ShrinkUIntEnd(unsigned int* base, unsigned int* end) {
+  int diff = (int)((char*)end - (char*)base);
+  return (unsigned int*)((char*)end - (diff >> 2) * 4);
+}
+static void MapPairsCopy(VariantPair_s006a_22a0* dst, VariantPair_s006a_22a0* first,
+                         VariantPair_s006a_22a0* last) {
+  PairsCopyRange_s006a_22a0(first, last, dst);
+}
+static void MapPairsDestroy(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
+  PairsDestroyRange_s006a_22a0(first, last);
 }
 VariantPair_s006a_22a0* SP::VariantMap::insert_pos(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value) {
   if (position == mpEnd && mpEnd != mpCapacity) {
@@ -912,14 +959,37 @@ float SP::cDirectPropertyList::GetFloatProperty(unsigned int index) const
 // @ 0x006a27d0
 bool SP::cDirectPropertyList::HasProperty(unsigned int key) const
 {
-  if (key < mNumDirectProps) return mDirectProps[key] != 0;
-  return cPropertyList::HasProperty(key);
+  if (key != 0 && key < mNumDirectProps) return true;
+  // The original keeps the inherited lookup as a real call (never a tail call) and returns a
+  // full-width 0/1 (`mov eax,1` / `xor eax,eax`), not just a normalized `al`; widening the
+  // callee's bool through a volatile int reproduces that.
+  volatile int bInherited = cPropertyList::HasProperty(key);
+  return bInherited != 0;
 }
 
 // @ 0x006a2800
 EA::Variant const & SP::cDirectPropertyList::GetProperty(unsigned int key) const
 {
-  if (key < mNumDirectProps) return *((EA::Variant*)(mDirectProps + key));
+  if (key < mNumDirectProps) {
+    EA::Variant* out = const_cast<EA::Variant*>(&mTempDirectVariant);
+    void* mgr = PropertyManager();
+    void* entry = (*(PropertyLookup_s006a_22a0*)(*(int*)mgr + 0x50))(mgr, 0, key);
+    VariantCopyAssign_EA(out, 0, (const EA::Variant*)entry);
+    if (!(out->mFlags & 0x10)) {
+      // A variant that is not constructed from a raw pointer is rebuilt from the direct slot.
+      if (out->mTypeId == EA::Variant::kTypeBool) {
+        bool value = mDirectProps[key] != 0;
+        VariantAssignBool_EA(out, 0, &value);
+      } else if (out->mTypeId == EA::Variant::kTypeInt32) {
+        int value = mDirectProps[key];
+        VariantAssignInt_EA(out, 0, &value);
+      } else if (out->mTypeId == EA::Variant::kTypeFloat) {
+        float value = ((float*)mDirectProps)[key];
+        VariantAssignFloat_EA(out, 0, &value);
+      }
+    }
+    return mTempDirectVariant;
+  }
   return cPropertyList::GetProperty(key);
 }
 
@@ -936,23 +1006,41 @@ bool SP::cDirectPropertyList::GetProperty(unsigned int key, EA::Variant const **
 // @ 0x006a28f0
 void SP::cPropertyList_s006a_22a0::ClearMapOnly()
 {
-  PairsDestroy_s006a_22a0(mPropertyMap.mpBegin, mPropertyMap.mpEnd);
-  mPropertyMap.mpEnd = mPropertyMap.mpBegin;
+  // The retail helper is a VariantMap method (it takes the map itself in ecx), so this member form
+  // works on the object as the map it was named after.
+  VariantMap* map = (VariantMap*)(void*)this;
+  MapPairsCopy(map->mpBegin, map->mpEnd, map->mpEnd);
+  MapPairsDestroy(map->mpBegin, map->mpEnd);
+  map->mpEnd = ShrinkEnd(map->mpBegin, map->mpEnd);
 }
 
 // @ 0x006a2940
 VariantPair_s006a_22a0* eastl::pvector_s006a_22a0::insert(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value)
 {
+  // The append fast path is inlined here (the original only calls DoInsertValue when it has to
+  // grow), and the result is indexed off the *new* begin.
   VariantPair_s006a_22a0* beg = mpBegin;
-  DoInsertValue(position, value);
-  return beg + (position - beg);
+  unsigned int idx = (unsigned int)(position - beg);
+  if (position == mpEnd && mpEnd != mpCapacity) {
+    VariantPair_s006a_22a0* e = mpEnd;
+    mpEnd = e + 1;
+    if (e) {
+      e->first = value.first;
+      e->second = value.second;
+    }
+  } else {
+    DoInsertValue(position, value);
+  }
+  return mpBegin + idx;
 }
 
 // @ 0x006a2a80
 void SP::cPropertyList_s006a_22a0::Clear()
 {
-  PairsDestroy_s006a_22a0(mPropertyMap.mpBegin, mPropertyMap.mpEnd);
-  mPropertyMap.mpEnd = mPropertyMap.mpBegin;
+  VariantMap* map = &mPropertyMap;
+  MapPairsCopy(map->mpBegin, map->mpEnd, map->mpEnd);
+  MapPairsDestroy(map->mpBegin, map->mpEnd);
+  map->mpEnd = ShrinkEnd(map->mpBegin, map->mpEnd);
   mModificationCount++;
 }
 
@@ -960,11 +1048,11 @@ void SP::cPropertyList_s006a_22a0::Clear()
 void SP::cDirectPropertyList_s006a_22a0::Copy(cPropertyList_s006a_22a0* src)
 {
   if (this == src) return;
-  ClearMapOnly();
+  MapClearOnly_s006a_22a0(&mPropertyMap, 0);
   VariantPair_s006a_22a0* it = src->mPropertyMap.mpBegin;
   VariantPair_s006a_22a0* end = src->mPropertyMap.mpEnd;
   for (; it != end; ++it) SetProperty(it->first, &it->second);
-  SetParent(src->mParent);
+  SetParent(mParent);  // the original re-parents to its own (already current) parent
 }
 
 // @ 0x006a2b20
@@ -1050,25 +1138,51 @@ bool SP::cPropertyList_s006a_22a0::Read(EA::IO::IStream_s006a_22a0* stream)
 // @ 0x006a3070
 unsigned int SP::cPropertyList_s006a_22a0::GetPropertyIDs(unsigned int* ids)
 {
+  UIntVector_s006a_22a0* v = (UIntVector_s006a_22a0*)ids;
   unsigned int n = (unsigned int)(mPropertyMap.mpEnd - mPropertyMap.mpBegin);
+  v->resize(n);
   unsigned int i = 0;
-  for (VariantPair_s006a_22a0* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it)
-    ids[i++] = it->first;
-  return n;
+  for (VariantPair_s006a_22a0* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it) {
+    v->mpBegin[i] = it->first;
+    i++;
+  }
+  return (unsigned int)(size_t)mPropertyMap.mpEnd;
 }
 
 // @ 0x006a3180
 unsigned int SP::cDirectPropertyList_s006a_22a0::GetPropertyIDs(unsigned int* ids)
 {
-  unsigned int out = 0;
-  unsigned int i = 1;
-  while (i < mNumDirectProps) {
-    void* mgr = PropertyManager();
-    void* entry = (*(void*(**)(void*, unsigned int))(*(int*)mgr + 0x50))(mgr, i);
-    if (*(short*)((char*)entry + 0x12) != 0) ids[out++] = i;
-    i++;
+  UIntVector_s006a_22a0* v = (UIntVector_s006a_22a0*)ids;
+  PairsCopyBytes_s006a_22a0(v->mpBegin, v->mpEnd, 0);
+  v->mpEnd = ShrinkUIntEnd(v->mpBegin, v->mpEnd);
+  void* mgr = PropertyManager();
+  for (unsigned int i = 1; i < mNumDirectProps; i++) {
+    void* entry = (*(PropertyLookup_s006a_22a0*)(*(int*)mgr + 0x50))(mgr, 0, i);
+    if (*(short*)((char*)entry + 0x12) != 0) {
+      unsigned int* e = v->mpEnd;
+      if (e < v->mpCapacity) {
+        v->mpEnd = e + 1;
+        if (e) *e = i;
+      } else {
+        v->DoInsertValue(e, i);
+      }
+    }
   }
-  for (VariantPair_s006a_22a0* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it)
-    ids[out++] = it->first;
-  return out;
+  unsigned int mapN = (unsigned int)(mPropertyMap.mpEnd - mPropertyMap.mpBegin);
+  unsigned int oldN = (unsigned int)(v->mpEnd - v->mpBegin);
+  unsigned int total = oldN + mapN;
+  if (total > oldN) {
+    unsigned int zero = 0;
+    v->DoInsertValues(v->mpEnd, total - oldN, zero);
+  } else {
+    unsigned int* dst = v->mpBegin + total;
+    PairsCopyBytes_s006a_22a0(dst, v->mpEnd, 0);
+    v->mpEnd = ShrinkUIntEnd(dst, v->mpEnd);
+  }
+  unsigned int k = oldN;
+  for (VariantPair_s006a_22a0* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it) {
+    v->mpBegin[k] = it->first;
+    k++;
+  }
+  return (unsigned int)(size_t)mPropertyMap.mpEnd;
 }
