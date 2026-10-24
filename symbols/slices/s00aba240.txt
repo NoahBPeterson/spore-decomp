@@ -1,1 +1,4 @@
 00aba3f0 Trail::Update  # name coined: per-frame update of a point trail (head distance vs segment length, decay, field displacement); class name is a stand-in
+00aba330 FloatVector::resize  # name coined: eastl::vector<float> grow-or-truncate
+00aba240 TrailBase::Cleanup  # name coined: base-subobject teardown (virtual stop, field slot, two ref objects, point/decay vectors)
+00ababd0 TrailBase::UpdateEx  # name coined: base-subobject per-frame update (animated progress, velocity, bounds, field submit)

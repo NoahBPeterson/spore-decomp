@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-# (no byte-exact functions in this slice yet)
 # flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00aba240/s00aba240.cpp  ?Cleanup@TrailBase@@QAEXXZ  00aba240  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00aba240/s00aba240.cpp  ?resize@FloatVector@@QAEXI@Z  00aba330  /O2 /MD /Gy /TP /arch:SSE /fp:fast

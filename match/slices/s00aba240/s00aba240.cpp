@@ -4,6 +4,7 @@
 // per-point decay values fade. Optionally each point is displaced by a field object.
 #include <xmmintrin.h>
 #include <math.h>
+#include <string.h>
 #include "types.h"
 
 struct Vec3 {
@@ -17,10 +18,15 @@ extern const float kEpsilon;  // 0x013f11c8 (1e-6f), loaded from memory
 
 struct TrailParams {
     char pad0[8];
-    uint32_t flags;           // +0x08: bit 6 = keep a second (colour) track, bit 9 = displace points
+    uint32_t flags;           // +0x08: bit 6 = keep a second (colour) track, bit 9 = displace points,
+                              //        bit 4 = animated progress, bit 8 = clamp instead of stop
     char pad1[0xec - 0x0c];
     float segmentLength;      // +0xec
-    char pad2[0x148 - 0xf0];
+    char pad2[0x120 - 0xf0];
+    Vec3  mVec120;            // +0x120: velocity bias from the parameters
+    float mScalar12c;         // +0x12c: direction scale
+    float mScalar130;         // +0x130: speed scale
+    char pad3[0x148 - 0x134];
     float fieldStrength;      // +0x148
 };
 
@@ -34,6 +40,7 @@ struct FloatVector {          // eastl::vector<float>
     float* mpBegin; float* mpEnd; float* mpCap;
     void resize(unsigned n);                       // 00aba330
     void resize(unsigned n, const float& v);       // 00aba390
+    void Insert(float* pos, unsigned n, const float* v); // 00aba040
 };
 
 struct IField {
@@ -213,4 +220,244 @@ void Trail::Update(float dt)
             *p = *(p - 1);
         }
     }
+}
+
+// ---------------------------------------------------------------------------
+// The 00aba240/00ababd0 methods belong to the base subobject that sits 4 bytes
+// into the Trail object (the call to Update passes ecx = this - 4).  Its field
+// layout is the Trail layout shifted down by 4 bytes, plus the extra members
+// that the update path touches.
+// ---------------------------------------------------------------------------
+
+struct Elem0C { float x, y, z; };
+
+struct Vec0C {                 // eastl::vector<rw::math::fpu::Vector3Template<float,0>, sp_vector_allocator>
+    Elem0C* mpBegin; Elem0C* mpEnd; Elem0C* mpCap;
+    Elem0C* erase(Elem0C* first, Elem0C* last);   // 0x009e0480
+};
+
+struct TrailBaseVtbl {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c(int);                        // +0x0c: stop/refresh notification
+};
+
+struct IField2 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18();
+    virtual void f1c(int index);                       // +0x1c
+    virtual void f20(int index, Vec3* bounds, float v); // +0x20
+    virtual void f24(int index, uint8_t b);             // +0x24
+};
+
+struct RefObj {
+    virtual void r00();       // +0x00
+    virtual void Release();   // +0x04
+    virtual void r08();       // +0x08
+    virtual void Destroy();   // +0x0c
+};
+
+struct Emit18 {               // object reached through TrailBase+0x18
+    char pad0[0xbc];
+    float mBC, mC0, mC4;      // +0xbc direction
+    char pad2[0xd8 - 0xc8];
+    float mD8, mDC, mE0;      // +0xd8 direction
+    char pad3[0x120 - 0xe4];
+    Vec3  mVec120;            // +0x120 offset
+};
+
+struct CardTarget30 {
+    char pad[0x30];
+    int mField30;             // +0x30
+};
+
+struct BoundsXform {          // this = six floats (min xyz, max xyz)
+    float m[6];
+    void Apply(void* xform);  // 0x006e95a0
+};
+
+struct TrailBase : TrailBaseVtbl {
+    uint8_t pad04[8];         // +0x04 .. +0x0b
+    uint8_t mbFlag0c;         // +0x0c
+    uint8_t mByte0d;          // +0x0d
+    uint8_t pad0e[2];         // +0x0e .. +0x0f
+    TrailParams* mParams;     // +0x10
+    IField2* mpField;         // +0x14
+    Emit18* mpEmit;           // +0x18
+    char pad1c[0x24 - 0x1c];
+    float mTime;              // +0x24
+    float mTimeMax;           // +0x28
+    char pad2c[0x30 - 0x2c];
+    float m30;                // +0x30
+    int m34;                  // +0x34
+    float m38;                // +0x38
+    float m3c;                // +0x3c
+    float m40;                // +0x40
+    float m44;                // +0x44
+    Vec3 mMin;                // +0x48
+    Vec3 mMax;                // +0x54
+    Vec3 mHead;               // +0x60
+    char pad6c[0xb0 - 0x6c];
+    uint8_t mXformFlags;      // +0xb0
+    char padb1[3];
+    Vec3 mOffset;             // +0xb4
+    float mScale;             // +0xc0
+    float mM[9];              // +0xc4
+    char padE8[4];            // +0xe8 .. +0xeb
+    Vec3 mVel;                // +0xec
+    float mF8;                // +0xf8
+    float mFC;                // +0xfc
+    float m100, m104, m108, m10c, m110, m114;  // +0x100
+    char pad118[0x124 - 0x118];
+    int mIndex;               // +0x124
+    char pad128[0x130 - 0x128];
+    Vec0C mPoints;            // +0x130
+    char pad13c[0x538 - 0x13c];
+    Vec0C mPoints2;           // +0x538
+    char pad544[0x568 - 0x544];
+    float mDecayRate;         // +0x568
+    FloatVector mDecay;       // +0x56c
+    char pad578[0x6d4 - 0x578];
+    RefObj* mpObj6d4;         // +0x6d4
+    RefObj* mpObj6d8;         // +0x6d8
+
+    void Cleanup();                               // 00aba240
+    void UpdateEx(float dt, float t, void* p4);   // 00ababd0
+};
+
+// @ 0x00aba330
+void FloatVector::resize(unsigned n)
+{
+    float* end = mpEnd;
+    float* begin = mpBegin;
+    unsigned count = (unsigned)(end - begin);
+    if (n > count) {
+        float zero = 0.0f;
+        Insert(end, n - count, &zero);
+        return;
+    }
+    float* first = begin + n;
+    memcpy(first, end, (char*)mpEnd - (char*)end);
+    mpEnd -= (end - first);
+}
+
+// @ 0x00aba240
+void TrailBase::Cleanup()
+{
+    if (mbFlag0c)
+        v0c(1);
+    if (mIndex >= 0)
+        mpField->f1c(mIndex);
+    if (mpObj6d4) {
+        mpObj6d4->Destroy();
+        RefObj* p = mpObj6d4;
+        if (p) {
+            mpObj6d4 = 0;
+            p->Release();
+        }
+    }
+    if (mpObj6d8) {
+        mpObj6d8->Destroy();
+        RefObj* p = mpObj6d8;
+        if (p) {
+            mpObj6d8 = 0;
+            p->Release();
+        }
+    }
+    mPoints.erase(mPoints.mpBegin, mPoints.mpEnd);
+    mPoints2.erase(mPoints2.mpBegin, mPoints2.mpEnd);
+    {
+        float* end = mDecay.mpEnd;
+        float* begin = mDecay.mpBegin;
+        memcpy(begin, end, (char*)mDecay.mpEnd - (char*)end);
+        mDecay.mpEnd -= (end - begin);
+    }
+    mParams = 0;
+    mpField = 0;
+}
+
+// @ 0x00ababd0
+void TrailBase::UpdateEx(float dt, float t, void* p4)
+{
+    ((CardTarget30*)p4)->mField30 += m34;
+    if (mIndex >= 0)
+        mpField->f24(mIndex, mByte0d);
+
+    mF8 = ((m104 - m100) * t + m100) * m110;
+    mFC = ((m10c - m108) * t + m108) * m114;
+
+    if (((mParams->flags >> 4) & 1) != 0) {
+        if (mPoints.mpBegin == mPoints.mpEnd) {
+            m38 = 0.0f;
+        } else if (m40 != -999.0f) {
+            m38 = m40 * dt + m38;
+        } else {
+            int count = (int)(mPoints.mpEnd - mPoints.mpBegin);
+            float fc = (float)(unsigned)count;
+            m38 = (dt * 30.0f) / fc + m38;
+        }
+        if (m38 >= 1.0f)
+            m38 = (float)fmod((double)m38, 1.0);
+    }
+
+    m3c = m44 * dt + m3c;
+
+    float s = mParams->mScalar130;
+    Emit18* e = mpEmit;
+    mVel.x = s * e->mD8;
+    mVel.y = e->mDC * s;
+    mVel.z = e->mE0 * s;
+    float k = mParams->mScalar12c;
+    mVel.x = k * e->mBC + mVel.x;
+    mVel.y = mVel.y + e->mC0 * k;
+    mVel.z = mVel.z + e->mC4 * k;
+
+    if (mScale != 1.0f) {
+        float inv = 1.0f / mScale;
+        mVel.x = mVel.x * inv;
+        mVel.y = inv * mVel.y;
+        mVel.z = inv * mVel.z;
+    }
+    if (mXformFlags & 2) {
+        float z = mVel.z, y = mVel.y, x = mVel.x;
+        mVel.x = (mM[2] * z + mM[1] * y) + x * mM[0];
+        mVel.y = (mM[5] * z + mM[4] * y) + x * mM[3];
+        mVel.z = (mM[8] * z + mM[7] * y) + x * mM[6];
+    }
+    mVel.x += mParams->mVec120.x;
+    mVel.y += mParams->mVec120.y;
+    mVel.z += mParams->mVec120.z;
+
+    mTime = mTime + dt;
+    if (mTime > mTimeMax) {
+        if (((mParams->flags >> 8) & 1) == 0)
+            v0c(1);
+        else
+            mTime = mTimeMax;
+    }
+
+    if ((mParams->flags & 1) == 0) {
+        ((Trail*)((char*)this - 4))->Update(dt);
+        if (mMin.x > mHead.x) mMin.x = mHead.x;
+        if (mHead.x > mMax.x) mMax.x = mHead.x;
+        if (mMin.y > mHead.y) mMin.y = mHead.y;
+        if (mHead.y > mMax.y) mMax.y = mHead.y;
+        if (mMin.z > mHead.z) mMin.z = mHead.z;
+        if (mHead.z > mMax.z) mMax.z = mHead.z;
+    } else {
+        int n = (int)(mDecay.mpEnd - mDecay.mpBegin);
+        for (int i = 0; i < n; i++) {
+            float v = mDecay.mpBegin[i] - mDecayRate * dt;
+            mDecay.mpBegin[i] = Max0(v);
+        }
+    }
+
+    float bounds[6];
+    bounds[0] = mMin.x; bounds[1] = mMin.y; bounds[2] = mMin.z;
+    bounds[3] = mMax.x; bounds[4] = mMax.y; bounds[5] = mMax.z;
+
+    float v = m30 * mFC * 2.0f;
+    ((BoundsXform*)bounds)->Apply((char*)this + 0xb0);
+    mpField->f20(mIndex, (Vec3*)bounds, mScale * v);
 }
