@@ -89,3 +89,182 @@ static __declspec(noinline) void FillTable(uint8_t* t)
 }
 
 void InitColorTable(uint8_t* t) { FillTable(t); }
+
+// ---------------------------------------------------------------------------
+// CFF class factory and T2K stream reader.
+// _tsi_NewCFFClass receives its CFF context in EAX (custom register ABI) and
+// FUN_008bf2b0 receives size in EAX and context in EDI, so those entry points
+// cannot be expressed as ordinary C++ calls; they are implemented here with
+// the register values named as parameters and are recorded as partial.
+
+struct T2KOwnerX { uint8_t pad[0xa8]; int fielda8; };
+
+struct T2KCfgX
+{
+    uint8_t  pad00[0x28];
+    T2KOwnerX* field28;                   // +0x28
+    uint8_t  pad2c[0x88 - 0x2c];
+    uint16_t w88;                         // +0x88
+    uint16_t w8a;                         // +0x8a
+    uint8_t  pad8c[0x90 - 0x8c];
+    int      field90;                     // +0x90
+    uint16_t w94;                         // +0x94
+    uint16_t w96;                         // +0x96
+    uint8_t  pad98[0xf4 - 0x98];
+    int      fieldf4;                     // +0xf4
+};
+
+struct T2KCtxX
+{
+    uint8_t  pad00[0x10];
+    uint32_t field10;                     // +0x10
+};
+
+struct T2KObjX
+{
+    uint32_t magic;                       // +0x00
+    T2KCtxX* field04;                     // +0x04
+    uint8_t  pad08[0x18 - 0x08];
+    uint32_t field18;                     // +0x18
+    uint8_t  pad1c[0x20 - 0x1c];
+    uint32_t field20;                     // +0x20
+    uint32_t field24;                     // +0x24
+    uint8_t  pad28[0x30 - 0x28];
+    uint32_t field30;                     // +0x30
+    uint32_t field34;                     // +0x34
+    uint32_t field38;                     // +0x38
+    uint32_t field3c;                     // +0x3c
+    uint32_t field40;                     // +0x40
+    uint32_t field44;                     // +0x44
+    uint32_t field48;                     // +0x48
+    uint32_t field4c;                     // +0x4c
+    uint32_t field50;                     // +0x50
+    uint32_t field54;                     // +0x54
+    int      field58;                     // +0x58
+    int      field5c;                     // +0x5c
+    uint16_t w60;                         // +0x60
+    uint16_t w62;                         // +0x62
+    uint8_t  pad64[0x104 - 0x64];
+    uint32_t field104;                    // +0x104
+    uint16_t w108;                        // +0x108
+    uint8_t  pad10a[0x118 - 0x10a];
+    uint32_t field118;                    // +0x118
+    uint32_t field11c;                    // +0x11c
+    uint8_t  pad120[0x16c - 0x120];
+    uint32_t field16c;                    // +0x16c
+    uint32_t field170;                    // +0x170
+    uint8_t  pad174[0x184 - 0x174];
+    T2KCfgX* field184;                    // +0x184
+    uint32_t field188;                    // +0x188
+    uint32_t field18c;                    // +0x18c
+    uint32_t field190;                    // +0x190
+    uint32_t field194;                    // +0x194
+    uint8_t  table[0xa30 - 0x198];        // +0x198
+    uint32_t fielda30;                    // +0xa30
+};
+
+struct T2KReaderX
+{
+    T2KCtxX* field00;                     // +0x00
+    int      field04;                     // +0x04
+    int      field08;                     // +0x08
+    int      field0c;                     // +0x0c
+    void*    field10;                     // +0x10
+    int      field14;                     // +0x14
+};
+
+void _tsi_NewCFFClass(int a, int b, int c, int d);   // 0x8beca0
+void* tsi_AllocMem(T2KCtxX* ctx, uint32_t size);      // 0x8d1260
+int  FUN_011e0cac(uint32_t* p, int flag);             // 0x11e0cac
+void tsi_EmergencyShutDown(T2KCtxX* ctx);             // 0x8d1210
+void FUN_008bf300(uint8_t* table);                    // 0x8bf300
+
+// @ 0x008bf270
+void FUN_008bf270(int a, int ctx, int c, int d)
+{
+    (void)ctx;
+    _tsi_NewCFFClass(a, c, 1, d);
+}
+
+// @ 0x008bf290
+void FUN_008bf290(int a, int ctx, int c)
+{
+    (void)ctx;
+    _tsi_NewCFFClass(a, c, 0, 0);
+}
+
+// @ 0x008bf2b0
+T2KReaderX* FUN_008bf2b0(T2KCtxX* ctx, uint32_t size)
+{
+    T2KReaderX* r = (T2KReaderX*)tsi_AllocMem(ctx, 0x18);
+    r->field00 = ctx;
+    r->field08 = -1;
+    r->field04 = -1;
+    if ((int)size > 0x800)
+        size = 0x800;
+    r->field0c = ((int)(size + 7) >> 3) * 2;
+    r->field10 = tsi_AllocMem(ctx, (uint32_t)r->field0c);
+    r->field14 = (r->field0c >> 1) + (int)r->field10;
+    return r;
+}
+
+// @ 0x008bfac0
+T2KObjX* NewT2K(T2KCtxX* ctx, T2KCfgX* cfg, int* err)
+{
+    if (ctx == 0)
+    {
+        *err = 0x2710;
+        return 0;
+    }
+
+    int created = FUN_011e0cac(&ctx->field10, 0);
+    *err = created;
+    if (created != 0)
+    {
+        tsi_EmergencyShutDown(ctx);
+        return 0;
+    }
+
+    T2KObjX* t = (T2KObjX*)tsi_AllocMem(ctx, 0xa34);
+    t->field184 = cfg;
+    t->field04 = ctx;
+    t->magic = 0x5a1234a5;
+    int f4 = cfg->fieldf4;
+    uint16_t zero = 0;
+    t->w108 = zero;
+    t->field58 = f4;
+    t->field170 = 0xffffffff;
+    t->field16c = 0xffffffff;
+    t->fielda30 = 0xa5fedc5a;
+    t->field104 = 0;
+    t->field188 = 0;
+    t->field118 = 0;
+    t->field11c = 0;
+    t->field30 = 0;
+    t->field34 = 0;
+    t->field50 = 0;
+    t->field54 = 0;
+    t->field20 = 0;
+    t->field24 = 0;
+    t->field38 = 0;
+    t->field3c = 0;
+    t->field40 = 0;
+    t->field44 = 0;
+    t->field48 = 0;
+    t->field4c = 0;
+    t->field5c = cfg->field90;
+    t->w60 = cfg->w94;
+    t->w62 = cfg->w96;
+    cfg->w88 = 0xffff;
+    t->field184->w8a = 0xffff;
+    T2KOwnerX* owner = t->field184->field28;
+    if (owner != 0)
+        owner->fielda8 = (int)cfg;
+    uint8_t* table = t->table;
+    t->field18 = 0;
+    t->field18c = 0;
+    t->field190 = 0;
+    t->field194 = 0;
+    FUN_008bf300(table);
+    return t;
+}
