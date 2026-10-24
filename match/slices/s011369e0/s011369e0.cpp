@@ -322,8 +322,14 @@ void __fastcall FUN_01136ec0(int param_1)
 void __cdecl FUN_01136ee0(int param_1)
 {
 	if (*(int16_t*)(param_1 + 0x148) == 0)
-		*(int16_t*)(param_1 + 0x148) =
-			(int16_t)Cvtss2si(*(float*)(*(int*)(param_1 + 4) + 0xc0) * 0.01f);
+	{
+		// Rounded sample rate. Stored as two bytes so the value never needs a
+		// 32-bit scratch register: retail leaves edx untouched and so do we.
+		unsigned v = (unsigned)Cvtss2si(*(float*)(*(int*)(param_1 + 4) + 0xc0) * 0.01f);
+		char* d = (char*)(param_1 + 0x148);
+		d[0] = (char)v;
+		d[1] = (char)(v >> 8);
+	}
 	if (*(char*)(param_1 + 0x14c) != 0)
 	{
 		*(uint8_t*)(param_1 + 0x14c) = 0;

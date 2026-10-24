@@ -5,7 +5,7 @@
 01136cc0 254 complete EaLayer3DecBase::CreateInstance: aligned running total ((total+15)&~15)+0x2e0 per core, Alloc, operator_new, thiscall ctor, back-pointer; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 195/400 valid 42.2% cov (no mismatches; <200 valid).
 01136de0 6 complete FUN_01136de0: CreateInstance(this,2); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid.
 01136e10 144 complete FUN_01136e10: zero 0x12 pairs at +0x40 then 18 tail floats; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 184/400 valid 100% cov.
-01136ee0 130 complete FUN_01136ee0: sample-rate-derived short at +0x148 and 12 float clears; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 387/400 100% cov (cvtss2si via inline asm).
+01136ee0 130 complete FUN_01136ee0: sample-rate-derived short at +0x148 and 12 float clears; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 387/400 100% cov (cvtss2si via inline asm; the short is stored as two bytes so the value needs no 32-bit scratch register - retail leaves edx untouched).
 01136fa0 192 complete VuMeter ctor: vtable, PlugIn::Initialize, Cvtss2si sample-rate, zero 0x40..0x98, six thiscall ResetSlot, TimerManager::AddTimer; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 315/400 100% cov.
 01137150 15 complete FUN_01137150: return channels*0x1c + 0x80; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov.
 01137170 509 complete TimeStretch::CreateInstance: signed cvttss2si rate + spacing rounding, per-channel buffer slicing, Alloc, field init; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 377/400 100% cov.
