@@ -3,6 +3,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
 #include "types.h"
+#include <string.h>
 
 void* __cdecl operator_new6(uint32_t, const void*, int, int, const char*, int);
 void  __cdecl operator_delete__(void*);
@@ -22,13 +23,14 @@ struct RawFixed {
     void Init(const RawFixed& other);                 // 0x836850
     void Assign(const void* first, const void* last); // 0x836910
     void AppendRange(const void* first, const void* last); // 0x45f430
+    void AppendWide(const void* first, const void* last);  // 0x42f9d0 (WideFixedBuf::append)
     void AssignStr(const wchar_t* first, const wchar_t* last); // 0x672750
     RawFixed* AssignCStr(const wchar_t* s);           // 0x8369e0
     RawFixed* SubstrInto(RawFixed* dst, uint32_t pos, uint32_t len); // 0x836a30
     void Swap(RawFixed& other);                       // 0x836a90
     void Reserve(uint32_t n);                         // 0x837020
     void Reserve2(uint32_t n);                        // 0x837230
-    void AppendN(uint32_t count, uint8_t c);          // 0x837270
+    RawFixed* AppendN(uint32_t count, uint8_t c);     // 0x837270
     void Resize(uint32_t n);                          // 0x837310
 };
 
@@ -154,11 +156,11 @@ RawFixed* RawFixed::SubstrInto(RawFixed* dst, uint32_t pos, uint32_t len) {
     uint32_t n = (avail < len) ? avail : len;
     wchar_t* d = (wchar_t*)dst;
     dst->e = (int)(d + 10);
-    dst->c = (int)(d + 0x100);
+    dst->c = (int)(d + 10 + 0x100);
     dst->b = (int)(d + 10);
     dst->a = (int)(d + 10);
-    *d = 0;
-    dst->AppendRange(begin + pos, begin + pos + n);
+    d[10] = 0;
+    dst->AppendWide(begin + pos, begin + pos + n);
     return dst;
 }
 
@@ -199,26 +201,29 @@ void RawFixed::Reserve2(uint32_t n) {
 }
 
 // @ 0x00837270
-void RawFixed::AppendN(uint32_t count, uint8_t ch) {
+RawFixed* RawFixed::AppendN(uint32_t count, uint8_t ch) {
+    void* volatile self = this;
     uint32_t size = (uint32_t)(b - a);
     uint32_t cap = (uint32_t)(c - a);
     uint32_t need = size + count;
     if (need > cap - 1) {
         uint32_t ncap = cap - 1;
         ncap = (ncap < 9) ? 8 : ncap * 2;
-        uint32_t chosen = (need < ncap) ? need : ncap;
-        uint32_t cap2 = (size < chosen) ? size : chosen;
+        uint32_t chosen = (ncap < need) ? need : ncap;
+        uint32_t cap2 = (chosen < size) ? size : chosen;
         if (cap < cap2 + 1) {
             Reserve(cap2 + 1);
         }
     }
     if (count != 0) {
         uint8_t* dst = (uint8_t*)b;
-        for (uint32_t i = 0; i + 1 < count; ++i) dst[1 + i] = ch;
+        memset(dst + 1, ch, count - 1);
         *dst = ch;
         b = (int)(dst + count);
         *(uint8_t*)b = 0;
     }
+    self = this;
+    return this;
 }
 
 // @ 0x00837310
