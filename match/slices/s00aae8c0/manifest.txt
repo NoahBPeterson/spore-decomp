@@ -1,1 +1,5 @@
-# byte-exact functions for slice s00aae8c0 (none)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00aae8c0/s00aae8c0_b.cpp  ?SwarmModuleInit@@YAXD@Z  00aae8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00aae8c0/s00aae8c0_b.cpp  ?StepParticle@ParticleEffectB@@QAE_NPAUParticle@@M@Z  00aaeb20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00aae8c0/s00aae8c0_b.cpp  ?AllocateParticle@@YAPAUParticle@@XZ  00aaf630  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00aae8c0/s00aae8c0_b.cpp  ?KillParticle@ParticleEffectB@@QAEXPAUParticle@@@Z  00aaf670  /O2 /MD /Gy /TP /arch:SSE /fp:fast
