@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00cfab90  598  input/verb handler: stub only; 1 vs 598 B - GameInputManager vtbl dispatch, ConfigManager 0x30 lookup, HasCivTutorialOccurred probes and the long UI-message walk not reconstructed
+00cfadf0  584  input handler continuation: stub only; 1 vs 584 B - large virtual-call dispatch / message handling not reconstructed
+00cfb040   99  hide-all pass over a byte-per-entry vector: stub only; 1 vs 99 B - the 0x1c-entry zeroing loop with FUN_0067dd50 vtbl +0x5c writes plus the inlined vector-shrink (memcpy(begin,end,n) + end += begin-end, from an eastl vector<bool> erase) not reconstructed byte-exactly
+00cfb0b0  138  show-all pass over the same vector: stub only; 1 vs 138 B - the fixed-capacity eastl vector<bool> insert (FUN_005151b0 / memcpy branch), the 0x1c-entry vtbl +0x60 fill loop and FindLocal re-enable not reconstructed byte-exactly
+00cfb140  374  city-model placement probe: stub only; 1 vs 374 B - GetGameDataVector walk, PlanetModel / x87 normalize and virtual +0x?? probe not reconstructed
+00cfb2c0  848  large strategy update: stub only; 1 vs 848 B - not reconstructed
+00cfb660  548  SP::cCivModeStrategy::FinishMaxLoad: stub only; 1 vs 548 B - two GetGameDataVector sweeps (tags 0x18c43e8 / 0x18c6de8), the per-city candidate loop with RandomUint32Uniform triples, GetModelTypeKey, the three-float equality test and cCity::FUN_00bddda0 placement not reconstructed byte-exactly
