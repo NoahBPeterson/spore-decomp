@@ -133,8 +133,33 @@ bool cSPUIMainWin_InitFonts() {
 // ---------------------------------------------------------------------------
 void __cdecl EastlDealloc(void*);          // 0xf47380
 
-struct HashtableStub { void DoFreeNodes(void** buckets, unsigned n); };
-struct TextStyleReaderStub { void Dtor(); };
+struct HashtableStub {
+  char pad0[4];
+  void** buckets;    // +0x04
+  unsigned n;        // +0x08
+  int hC;            // +0x0c
+  char pad10[0x0c];
+  void* freeHead;    // +0x1c
+  char pad20[4];
+  void* rangeLo;     // +0x24
+  void* rangeHi;     // +0x28
+  char pad2c[4];
+  void* sentinel;    // +0x30
+  void DoFreeNodes(void** buckets, unsigned n);
+};
+struct TextStyleReaderStub {
+  char pad0[0x10];
+  void* m10;         // +0x10
+  char pad14[4];
+  int m18;           // +0x18
+  char pad1c[0x18];
+  void* m34;         // +0x34
+  char pad38[4];
+  int m3c;           // +0x3c
+  char pad40[4];
+  HashtableStub ht;  // +0x44
+  void Dtor();
+};
 
 // @ 0x00815aa0
 void HashtableStub::DoFreeNodes(void** buckets, unsigned n) {
@@ -160,16 +185,22 @@ void HashtableStub::DoFreeNodes(void** buckets, unsigned n) {
 
 // @ 0x00815b50
 void TextStyleReaderStub::Dtor() {
-    char* t = (char*)this;
-    ((HashtableStub*)(t + 0x44))->DoFreeNodes(*(void***)(t + 0x48), *(unsigned*)(t + 0x4c));
-    void* b = *(void**)(t + 0x48);
-    *(int*)(t + 0x50) = 0;
-    if (*(int*)(t + 0x4c) > 1 && b && b != *(void**)(t + 0x60))
-        EastlDealloc(b);
-    void* v = *(void**)(t + 0x34);
-    if (*(int*)(t + 0x3c) - (int)v > 1 && v) EastlDealloc(v);
-    void* m = *(void**)(t + 0x10);
-    if (*(int*)(t + 0x18) - (int)m > 1 && m) EastlDealloc(m);
+    HashtableStub* s = &ht;
+    s->DoFreeNodes(s->buckets, s->n);
+    void* b = s->buckets;
+    s->hC = 0;
+    if (s->n > 1 && b != s->sentinel) {
+        if (b >= s->rangeLo && b < s->rangeHi) {
+            *(void**)b = s->freeHead;
+            s->freeHead = b;
+        } else {
+            EastlDealloc(b);
+        }
+    }
+    void* v = m34;
+    if (m3c - (int)v > 1 && v) EastlDealloc(v);
+    void* m = m10;
+    if (m18 - (int)m > 1 && m) EastlDealloc(m);
 }
 
 // @ 0x00815bd0 (partial: CSS stream load)
