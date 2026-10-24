@@ -45,10 +45,12 @@ struct Vec3Vec {
   Vec3* mpEnd;       // +0x4
   Vec3* mpCapacity;  // +0x8
   void PushBack(Vec3* value);
+  void ScaleCurve(Vec3* pos, Vec3* value);
 };
 
 // @ 0x007ED1B0  EA::Swarm::ScaleCurve
-extern "C" void ScaleCurve(Vec3Vec* v, Vec3* pos, Vec3* value) {
+void Vec3Vec::ScaleCurve(Vec3* pos, Vec3* value) {
+  Vec3Vec* v = this;
   if (v->mpEnd != v->mpCapacity) {
     if (pos <= value && value < v->mpEnd) value = (Vec3*)((char*)value + 0xc);
     if (v->mpEnd) *v->mpEnd = v->mpEnd[-1];
@@ -66,7 +68,8 @@ extern "C" void ScaleCurve(Vec3Vec* v, Vec3* pos, Vec3* value) {
   uint32_t cap = (uint32_t)((char*)v->mpEnd - (char*)v->mpBegin) / 0xc;
   if (cap == 0) cap = 1;
   else cap = cap * 2;
-  Vec3* data = cap ? (Vec3*)operator new[](cap * 0xc, "App", 0, 0, "allocator.h", 0xd1) : 0;
+  Vec3* data = cap ? (Vec3*)operator new[](cap * 0xc, "App", 0, 0,
+      "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
   Vec3* d = data;
   for (Vec3* p = v->mpBegin; p != pos; ++p, ++d) *d = *p;
   if (d) *d = *value;
@@ -112,7 +115,7 @@ void Vec3Vec::PushBack(Vec3* value) {
       return;
     }
   } else {
-    ScaleCurve(v, value, value);
+    ScaleCurve(p, value);
   }
 }
 
@@ -261,6 +264,14 @@ void FlagHolder::SetFlag(uint32_t v) {
   if (f14 != 0) f10->Recv(f18, v);
 }
 
+extern void* gEffectVtable;                 // 0x01414618  GmeIComponent vtable (ctor)
+extern void* gEffectModifierVtable;         // 0x01414614  SP::Audio::IEventModifier vtable (ctor)
+extern void* gEffectFinalVtable;            // 0x013f21d4  GmeIComponent vtable (destroyed)
+extern void* gEffectModifierFinalVtable;    // 0x013ef094  SP::Audio::IEventModifier vtable (destroyed)
+extern float gEffectExtent[3];              // 0x01639c18  default extents (x, y, z)
+extern void StringCtor();                   // 0x006b5060  cString::cString
+extern void StringDtor();                   // 0x006b5240  cString::~cString
+
 struct EffectObject {
   void* vt;  // +0x0
   void* vt2;
@@ -271,27 +282,31 @@ struct EffectObject {
   uint8_t f15;
   int32_t f18;
   float f1c;
-  uint32_t f20;
-  uint32_t f24;
-  uint32_t f28;
-  uint32_t f2c;
+  float f20;
+  float f24;
+  float f28;
+  float f2c;
   char cString[0x14];  // +0x30
   uint32_t f44;
   EffectObject* Init(void* p);
   void Destroy();
   void Update();
-  uint32_t Handler(int msg, int* obj);
+  bool Handler(int msg, int* obj);
 };
 
 // @ 0x007EDC90  destructor
 void EffectObject::Destroy() {
   void** self = (void**)this;
+  *(void**)self = &gEffectVtable;
+  *(void**)((char*)self + 4) = &gEffectModifierVtable;
   if (self[0x11]) {
     typedef void(__thiscall * F0)(void*);
     ((F0)VSLOT(self[0x11], 4))(self[0x11]);
   }
-  extern void StringBase(void*);
-  StringBase((char*)self + 0xc);
+  typedef void(__thiscall * FStr)(void*);
+  ((FStr)&StringDtor)((char*)self + 0x30);
+  *(void**)self = &gEffectFinalVtable;
+  *(void**)((char*)self + 4) = &gEffectModifierFinalVtable;
 }
 
 // @ 0x007EDD10  activate
@@ -332,27 +347,38 @@ void ActiveObject::Deactivate(int unused) {
 void EffectObject::Update() {
   int self = (int)(size_t)this;
   int p = *(int*)(self + 0x44);
-  uint16_t val;
-  if (p == 0) {
-    p = *(int*)(self + 0xc);
-    if ((*(uint32_t*)(p + 0x20) & *(uint32_t*)(p + 0x24)) == 0xffffffff) return;
-    val = 0;
+  uint32_t idx;
+  if (p != 0) {
+    idx = *(uint32_t*)(p + 0xc);
   } else {
-    val = *(uint16_t*)(p + 0xc);
+    p = *(int*)(self + 0xc);
+    if ((*(uint32_t*)(p + 0x20) & *(uint32_t*)(p + 0x24)) == 0xffffffff) {
+      idx = *(uint32_t*)(p + 0xc);
+    } else {
+      typedef int (__thiscall * FText)(void*);
+      extern int StringGetText();  // 0x006b55c0  cString::GetText
+      idx = (uint32_t)((FText)&StringGetText)((char*)self + 0x30);
+    }
   }
   int q = *(int*)(self + 0xc);
-  extern char FUN_006f1770(int, int, int, int, int);
-  char ok = FUN_006f1770(val, *(int*)(q + 0x30), *(int*)(q + 0x34), *(int*)(q + 0x28),
-                         self + 0x18);
+  typedef bool (__thiscall * FAdd)(void*, uint32_t, int, int, float, int*);
+  extern bool FUN_006f1770();  // 0x006f1770
+  bool ok = ((FAdd)&FUN_006f1770)(*(void**)(self + 0x10), idx, *(int*)(q + 0x30),
+                                  *(int*)(q + 0x34), *(float*)(q + 0x28),
+                                  (int*)(self + 0x18));
   if (ok) {
-    extern void Propagate(int, uint32_t);
-    Propagate(*(int*)(self + 0x18), *(uint8_t*)(self + 0x15));
+    typedef void (__thiscall * FProp)(void*, int, uint8_t);
+    extern void FUN_006e7aa0();  // 0x006e7aa0
+    ((FProp)&FUN_006e7aa0)(*(void**)(self + 0x10), *(int*)(self + 0x18),
+                           *(uint8_t*)(self + 0x15));
   }
 }
 
 // @ 0x007EDDE0  constructor
 EffectObject* EffectObject::Init(void* p) {
   EffectObject* self = this;
+  *(void**)self = &gEffectVtable;
+  *(void**)((char*)self + 4) = &gEffectModifierVtable;
   self->f08 = 0;
   self->f1c = 1.0f;
   self->f0c = (uint32_t)(size_t)p;
@@ -360,10 +386,12 @@ EffectObject* EffectObject::Init(void* p) {
   self->f14 = 0;
   self->f15 = 1;
   self->f18 = -1;
-  self->f20 = 0;
-  self->f24 = 0;
-  self->f28 = 0;
-  self->f2c = 0;
+  self->f20 = gEffectExtent[0];
+  self->f24 = gEffectExtent[1];
+  self->f28 = gEffectExtent[2];
+  self->f2c = 0.0f;
+  typedef void(__thiscall * FStr)(void*);
+  ((FStr)&StringCtor)((char*)self + 0x30);
   self->f44 = 0;
   return self;
 }
@@ -379,14 +407,15 @@ void TransformObj::Update(char* src, uint8_t* params) {
   *(uint32_t*)(self + 0x28) = *(uint32_t*)(src + 0xc);
   if ((*params & 2) != 0) {
     float m1 = *(float*)(self + 0x24), m2 = *(float*)(self + 0x28), m0 = *(float*)(self + 0x20);
-    float p7 = *(float*)(params + 0x24), p8 = *(float*)(params + 0x18);
-    float p3 = *(float*)(params + 0x30), p4 = *(float*)(params + 0x1c);
-    float p5 = *(float*)(params + 0x28), p6 = *(float*)(params + 0x34);
     *(float*)(self + 0x20) =
         (*(float*)(params + 0x20) * m1 + *(float*)(params + 0x2c) * m2) +
         *(float*)(params + 0x14) * m0;
-    *(float*)(self + 0x24) = (p8 * m0 + p7 * m1) + p3 * m2;
-    *(float*)(self + 0x28) = (p4 * m0 + p5 * m1) + p6 * m2;
+    *(float*)(self + 0x24) =
+        (*(float*)(params + 0x18) * m0 + *(float*)(params + 0x24) * m1) +
+        *(float*)(params + 0x30) * m2;
+    *(float*)(self + 0x28) =
+        (*(float*)(params + 0x1c) * m0 + *(float*)(params + 0x28) * m1) +
+        *(float*)(params + 0x34) * m2;
   }
   float s = *(float*)(params + 0x10);
   float y = s * *(float*)(self + 0x24);
@@ -403,28 +432,27 @@ void TransformObj::Update(char* src, uint8_t* params) {
 }
 
 // @ 0x007EDFF0  message handler
-uint32_t EffectObject::Handler(int msg, int* obj) {
+bool EffectObject::Handler(int msg, int* obj) {
   int self = (int)(size_t)this;
-  uint32_t eax = 0;
   if (msg == 8) {
-    typedef int*(__thiscall * F0)(void*);
-    int* p = ((F0)VSLOT(obj, 0xc))(0);
+    typedef int* (__thiscall * F0)(void*, int);
+    int* p = ((F0)VSLOT(obj, 0xc))(obj, 0);
     int* old = *(int**)(self + 0x44);
     if (p != old) {
       if (p) ((void(__thiscall*)(void*))VSLOT(p, 0))(p);
       *(int**)(self + 0x44) = p;
       if (old) ((void(__thiscall*)(void*))VSLOT(old, 4))(old);
     }
-    eax = *(uint32_t*)(self + 0x18);
+    uint32_t eax = *(uint32_t*)(self + 0x18);
     if ((int)eax >= 0) {
-      extern void FUN_006ee940(int);
-      FUN_006ee940(eax);
+      typedef void (__thiscall * F1)(void*, int);
+      extern void FUN_006ee940();  // 0x006ee940
+      ((F1)&FUN_006ee940)(*(void**)(self + 0x10), eax);
       *(int*)(self + 0x18) = -1;
       Update();
-      eax = *(uint32_t*)(self + 0x18);
     }
   }
-  return eax & 0xffffff00;
+  return false;
 }
 // --- equivalence checker address annotations
     void operator delete(void*); // 0x00f47380
