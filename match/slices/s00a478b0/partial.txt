@@ -1,0 +1,6 @@
+# va  verdict  notes
+00a478b0  FAIL  5/25 valid inputs mismatched (13.7% coverage): on a zeroish input the original returns normally while our build faults reading unmapped memory at eip=0x3000014c, i.e. a call through one of the out-of-slice callees (EapdBindRemove / atom_getsymbol / gensym / the bindlist) that resolve.py leaves as a stub; the reconstructed selector/eval/dispatch logic is unchanged from the nonmatching build
+00a47d00  UNSUPPORTED  0/400 valid inputs (fake-arity on all of them): t_symbol is passed by value as two words, so the harness rejects every generated argument set before running either version
+00a47e70  WEAK  212 valid inputs (need 200), 30.6% coverage: the table growth and entry fill stop at resizebytes' return value, so only the early-out and the copy head execute
+00a48040  PASS  400 valid inputs, 100.0% coverage: the +0x44 setter behaves identically for null and non-null classes
+00a487f0  PASS  309 valid inputs, 77.2% coverage: identical atom building, format-letter walk and pd_typedmess dispatch (the 6-atom overrun is reproduced on both sides)
