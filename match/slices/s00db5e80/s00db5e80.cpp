@@ -1,314 +1,519 @@
-// Slice s00db5e80 -- SP::IDLE_VIGNETTE_Decide (0x00db65a0, 1643 bytes), the "decide" half of the citizen idle
-// vignette behavior (PDB name). __cdecl, returns the decision priority in st0 (1.0 = chosen / 0.0 = none).
-//   arg0 creature (cSPCreatureCitizen*), arg1/arg2 unused, arg3 flags (bit 5 = flag, 0x400 = disabled),
-//   arg4 behavior_stimuli* (receives the chosen vignette), arg5 bool* (set to true when something was chosen).
-// Flow: bail out unless the creature may idle. A creature in state 1 without flag bit 5 first looks the active
-// event up in a global list (0x168b56c); a hit becomes the stimulus. Otherwise roll against the property
-// 0x633e78a1 (default 0.5), pick the vignette table by key, find the tribe slot closest to the creature (slots
-// are 0x14-byte records at tribe+0x294; disabled ones are skipped), measure the context of the tribe (day phase,
-// crowd count, tribe role mask, relationship to the player's tribe) and collect every table entry (0x7b4 bytes)
-// whose limits accept that context into a fixed vector, from which one is picked at random and stored as stimulus
-// ints [3] = vignette index, [4] = tribe slot, [5] = table key.
-// Names are Claude-coined except the PDB ones. Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no EH frame),
-// like the sibling SP::TRIBE_TAKE_OUT_TOOL_Tick (s00db4f60).
+// Slice s00db5e80 : tribe domestication + tribe-vignette decision helpers.
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 
-#include <float.h>
+typedef unsigned char  u8;
+typedef unsigned short u16;
+typedef unsigned int   u32;
+typedef          int   s32;
 
-void* operator new(unsigned size, void* p);
-inline void* operator new(unsigned, void* p) { return p; }
-void operator delete(void* p);                                    // 0x00f47380
+// ------------------------------------------------------------------ retail data
+#define G1581270       (*(const u32*)0x01581270)
+#define G13F9428       (*(const float*)0x013f9428)   // 0.001f
+#define G13EBC4C       (*(const float*)0x013ebc4c)   // 60.0f
+#define G1485548       (*(const float*)0x01485548)
+#define G169F3B8       (*(const float*)0x0169f3b8)
+#define G169F3BC       (*(const float*)0x0169f3bc)
+#define G169F3C0       (*(const float*)0x0169f3c0)
+#define G13EB8A0       (*(const float*)0x013eb8a0)
+#define G1485720       (*(const float*)0x01485720)   // _HK_REAL_ONE
+#define G147C21C       (*(const float*)0x0147c21c)
+#define VTABLE_147C2C4 ((void*)0x0147c2c4)
+#define RNG1601760     ((void*)0x01601760)           // EA::Random::RandomLinearCongruential
+#define SLIST169B41C   ((void*)0x0169b41c)           // rw::SList singleton
 
-namespace SP {
+// ------------------------------------------------------------------ indirect-call shapes
+typedef void   (__thiscall* FnV0)(void*);
+typedef void   (__thiscall* FnV1)(void*, void*);
+typedef char   (__thiscall* FnC0)(void*);
+typedef u32    (__thiscall* FnU0)(void*);
+typedef float  (__thiscall* FnF0)(void*);
+typedef void*  (__thiscall* FnP0)(void*);
+typedef float* (__thiscall* FnFP0)(void*);
+typedef u32    (__thiscall* FnU3)(void*, int, int, int);
 
-struct Vec3 {
-    float x, y, z;
-};
-
-#define PV(n) virtual void pv##n();
-
-// Spatial/locomotive sub-object (creature+0xc0, tribe+0x120).
-struct Loco {
-    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
-    virtual const Vec3* GetPosition();                                 // +0x2c
-};
-
-class cTribe;
-
-class cSPCreatureCitizen { public:
-    char pad00[0xc0];
-    Loco mLoco;                                                        // +0xc0
-    char padc4[0x135 - 0xc4];
-    bool mbF135;                                                       // +0x135
-    char pad136[0xb4c - 0x136];
-    struct Behavior {
-        char pad00[0x1d8];
-        int  mId;                                                      // +0x1d8
-    }* mpBehavior;                                                     // +0xb4c
-    char padb50[0xb58 - 0xb50];
-    unsigned mFlagsB58;                                                // +0xb58
-    char padb5c[0xb5e - 0xb5c];
-    bool mbB5e;                                                        // +0xb5e
-    char padb5f[0xf90 - 0xb5f];
-    bool mbCanIdle;                                                    // +0xf90
-
-    char IsState1();                                                   // 0x00c0b770 (state at +0xb34 == 1)
-    bool FUN_00c24560();                                               // 0x00c24560
-    cTribe* GetTribe();                                                // 0x00c22f50
-};
-
-struct TribeSlot {                                                     // 0x14 bytes
-    Vec3 mPos;
-    int  mUnk0c;
-    bool mbDisabled;                                                   // +0x10
-};
-
-struct TribeMember {
-    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b) PV(0c) PV(0d) PV(0e)
-    PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
-    virtual int GetRole();                                             // +0x58
-};
-
-struct CitizenRange { cSPCreatureCitizen** mpBegin; cSPCreatureCitizen** mpEnd; };
-struct MemberRange  { TribeMember** mpBegin; TribeMember** mpEnd; };
-
-class cTribe { public:
-    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b)
-    PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12)
-    virtual int GetTribeId();                                          // +0x4c
-    PV(14) PV(15) PV(16) PV(17)
-    virtual float GetRadius();                                         // +0x60
-    PV(19) PV(1a) PV(1b) PV(1c) PV(1d) PV(1e) PV(1f) PV(20) PV(21) PV(22) PV(23)
-    virtual CitizenRange* GetCitizens();                               // +0x90
-    PV(25) PV(26) PV(27) PV(28) PV(29) PV(2a) PV(2b) PV(2c) PV(2d) PV(2e)
-    virtual MemberRange* GetMembers();                                 // +0xbc
-    char pad04[0x120 - 0x4];
-    Loco mLoco;                                                        // +0x120
-    char pad124[0x294 - 0x124];
-    TribeSlot* mpSlotsBegin;                                           // +0x294
-    TribeSlot* mpSlotsEnd;                                             // +0x298
-
-    float GetRating();                                                 // 0x00fc7f80 (returns 0.0)
-};
-
-struct DayNight {
-    int IsDay(const Vec3* pos);                                        // 0x00bc2b80 (thiscall, ret 4)
-};
-DayNight* TimeOfDay();                                                 // 0x00bc30b0
-
-struct RelationshipMgr {
-    int GetRelationship(int a, int b, int c);                          // 0x00d00a70 (thiscall, ret 0xc)
-};
-RelationshipMgr* GetRelationshipManager();                             // 0x00b3d2c0
-
-struct NounMgr {
-    cTribe* GetPlayerTribe();                                          // 0x00bfc5f0
-};
-NounMgr* NounManager();                                                // 0x00b3d300
-
-struct VignetteDef {                                                   // 0x7b4 bytes
-    char pad00[4];
-    int    mMinCrowd;                                                  // +0x004
-    char pad08[0x78c - 0x8];
-    float  mMinRating;                                                 // +0x78c
-    float  mMaxRating;                                                 // +0x790
-    char pad794[0x7a0 - 0x794];
-    int    mDayPhase;                                                  // +0x7a0 (0 = any)
-    int    mRelationship;                                              // +0x7a4 (-1 = any)
-    char pad7a8[0x7ac - 0x7a8];
-    unsigned mRoleMask;                                                // +0x7ac
-    char pad7b0[4];
-};
-struct VignetteRange { VignetteDef* mpBegin; VignetteDef* mpEnd; };
-struct VignetteTable {
-    VignetteRange* Find(unsigned key, int a);                          // 0x00bc7610 (thiscall, ret 8)
-};
-VignetteTable* GetVignetteTable();                                     // 0x00b3d4e0
-
-struct ActiveList {
-    void* Find(unsigned id, bool (*pred)(void*, void*), void* ctx);    // 0x00bca620 (thiscall, ret 0xc)
-};
-ActiveList* GetActiveList();                                           // 0x00bc9b00
-bool IdleEventPredicate(void* entry, void* ctx);                       // 0x00da7140
-
-struct PropertyList;
-float GetPropertyT_float(PropertyList* list, unsigned id, float def);  // 0x004e1c70 (cdecl)
-extern PropertyList* g_DebugProps;                                     // 0x01581288
-
-struct RandomLCG {
-    double   RandomDoubleUniform();                                    // 0x009360d0
-    unsigned RandomUint32Uniform(unsigned n);                          // 0x00a68fb0 (thiscall, ret 4)
-};
-extern RandomLCG gMathRandom;                                          // 0x01601760
-
-} // namespace SP
-
-#undef PV
-
-namespace nSPBehaviorTree {
-struct behavior_stimuli {
-    struct stimulus {
-        unsigned __int64 StimulusID;                                   // +0x0
-        float Duration;                                                // +0x8
-        unsigned Ints[8];                                              // +0xc
-        unsigned pad2c;
-        void GetAny();                                                 // 0x00d997e0 (resets the stimulus)
-    } Stimuli[8];
-};
-}
-using nSPBehaviorTree::behavior_stimuli;
-
-namespace SP {
-
-// eastl::fixed_vector<int, 16>
-struct IntFixedVector {
-    int*     mpBegin;
-    int*     mpEnd;
-    int*     mpCapacity;
-    unsigned pad0c;
-    int*     mpPoolBegin;
-    unsigned pad14;
-    int      mBuffer[16];
-
-    IntFixedVector() : mpBegin(mBuffer), mpEnd(mBuffer), mpCapacity(mBuffer + 16), mpPoolBegin(mBuffer) {}
-    ~IntFixedVector()
-    {
-        if (mpBegin && mpBegin != mpPoolBegin)
-            operator delete(mpBegin);
-    }
-    void DoInsertValue(int* pos, const int& value);                    // 0x004281d0 (thiscall, ret 8)
-    void push_back(const int& value)
-    {
-        if (mpEnd < mpCapacity)
-            ::new (mpEnd++) int(value);
-        else
-            DoInsertValue(mpEnd, value);
-    }
-    int* begin() { return mpBegin; }
-    int* end() { return mpEnd; }
-};
-
-// @ 0x00db65a0
-float IDLE_VIGNETTE_Decide(cSPCreatureCitizen* creature, int unused1, int unused2, unsigned flags,
-                           behavior_stimuli* stimuli, bool* pChosen)
+struct Cont2                          // { begin, end } pair returned by several containers
 {
-    if (!creature->mbCanIdle || (flags & 0x400))
-        return 0.0f;
+    char* mBegin;
+    char* mEnd;
+};
 
-    unsigned char bit5 = (flags >> 5) & 1;
-    char state1 = creature->IsState1();
-    if (!bit5 && state1 == 1) {
-        void* entry = GetActiveList()->Find(0x55241ec, IdleEventPredicate, creature);
-        if (entry) {
-            if (stimuli)
-                stimuli->Stimuli[0].GetAny();
-            *pChosen = true;
-            *(unsigned*)stimuli = (unsigned)entry;
-            return 1.0f;
+// ------------------------------------------------------------------ direct callees
+// Every one of the indirect (ecx) callees below is __thiscall in retail; modelling
+// them as members makes cl emit `mov ecx,<this>` plus the same `ret N`.
+struct ObjV
+{
+    void* FUN_00c04590();                        // 0x00c04590  Get() -> herd
+    void  FUN_00c045a0(void*);                   // 0x00c045a0  SetHerd
+    void* FUN_00c0bbd0();                        // 0x00c0bbd0  GetSpeciesProfile
+    void  FUN_00c042e0();                        // 0x00c042e0
+    void  FUN_00c0d950(int);                     // 0x00c0d950
+    u32   FUN_00c0bc00(void*, u32, int, int);    // 0x00c0bc00
+    char  FUN_00c0b770();                        // 0x00c0b770
+    char  FUN_00c24560();                        // 0x00c24560
+    void* FUN_00c22f50();                        // 0x00c22f50  cSPCreatureCitizen::GetTribe
+    char  FUN_00c8e7c0();                         // 0x00c8e7c0
+    void* FUN_00c8fee0();                        // 0x00c8fee0
+    void  FUN_00c8fef0();                        // 0x00c8fef0  cTribe::InitDomesticatedAnimalsHerd
+    void* FUN_00c8e820(int);                     // 0x00c8e820
+    char  FUN_00feba90();                        // 0x00feba90  cSPTimer::IsRunning
+    long long FUN_00bc3190();                    // 0x00bc3190  cSPTimer::GetElapsedTime
+    float FUN_00fc7f80();                        // 0x00fc7f80  GetCost
+    int   FUN_00bc2b80(void*);                   // 0x00bc2b80
+    int   FUN_00bc3db0(int);                     // 0x00bc3db0
+    void* FUN_00bc7610(int, int);                // 0x00bc7610
+    u32   FUN_00a68fb0(int);                     // 0x00a68fb0  RandomUint32Uniform
+    void* FUN_00d997e0();                        // 0x00d997e0  behavior_stimuli::GetAny
+    int   FUN_00d00a70(u32, u32, int);           // 0x00d00a70
+    void* FUN_00bfc5f0();                        // 0x00bfc5f0
+    void  FUN_00fcc200(u32);                     // 0x00fcc200  rw::SList::SetElementAlignment
+    u32   FUN_006766e0(u32);                     // 0x006766e0
+    void  FUN_00676710(u32);                     // 0x00676710  AwardAchievement
+    void  FUN_0060d860(u32, void*);              // 0x0060d860  UpdateProperty
+    void  FUN_00dd8640(u32, u32, void*, int, int, int);  // 0x00dd8640  PostFeedbackEvent
+    void  FUN_00cd6980(void*);                   // 0x00cd6980  SignalTribeEvent
+    void  FUN_00aea5d0(void*, void*);            // 0x00aea5d0  DoInsertPtr
+    // ctor / dtor helpers
+    void  FUN_00ac14d0();                        // 0x00ac14d0
+    void  FUN_00afba10();                        // 0x00afba10
+    void  FUN_00afbad0();                        // 0x00afbad0  cActionCircle::~cActionCircle
+    void  FUN_00ad92d0();                        // 0x00ad92d0  eastl vector dtor
+    void  FUN_00ac5430();                        // 0x00ac5430  base dtor
+    void  FUN_00db5c20(void*, void*);            // 0x00db5c20
+    void  FUN_005941f0(void*, void*);            // 0x005941f0
+};
+
+// cdecl callees (args cleaned by the caller)
+char  __cdecl FUN_00c0d3a0(void*);                       // 0x00c0d3a0
+void  __cdecl FUN_00acca00(void*, void**);               // 0x00acca00  spstl::remove_1st
+u32   __cdecl FUN_00b6f0c0(u32);                         // 0x00b6f0c0
+void* __cdecl FUN_00cd40b0(void*);                       // 0x00cd40b0  cTribeModeStrategy::Instance
+void* __cdecl FUN_00b3d4e0(u32);                         // 0x00b3d4e0
+void* __cdecl FUN_00bc30b0(void*);                       // 0x00bc30b0
+void* __cdecl FUN_00b3d2c0(void*, void*, int);           // 0x00b3d2c0  RelationshipManager
+void* __cdecl FUN_00b3d300();                            // 0x00b3d300  NounManager
+void* __cdecl FUN_00675250(u32);                         // 0x00675250  Achievements::Controller
+void* __cdecl FUN_0067cb30(u32, void*);                  // 0x0067cb30
+void* __cdecl FUN_00e398e0(u32, void*, void*);           // 0x00e398e0
+void* __cdecl FUN_00b3d3e0(u32, u32, void*);             // 0x00b3d3e0  EventLog
+void  __cdecl FUN_00f47380(void*);                       // 0x00f47380  operator delete
+
+// local eastl-style fixed_vector<int,16> (Also the inline buffer lives at +0x18.)
+struct FVecV
+{
+    u32*  mBegin;        // 0x00
+    u32*  mCur;          // 0x04
+    u32*  mCap;          // 0x08
+    u32*  mFieldC;       // 0x0c
+    u32*  mHeapBase;     // 0x10
+    u32*  mField14;      // 0x14
+    u32   mInline[16];   // 0x18
+    void  FUN_004281d0(u32* pos, const u32& v);          // 0x004281d0  DoInsertValue
+};
+
+// ------------------------------------------------------------------ functions
+
+// @ 0x00db5e80
+char __cdecl FUN_00db5e80(void* creature_, void* tribe_)
+{
+    char* creature = (char*)creature_;
+    char* tribe    = (char*)tribe_;
+    u32   evt      = 0xab6fe2a9;
+    char  ret      = 0;
+    int   count    = 0;
+    char* herd;
+
+    herd = (char*)((ObjV*)tribe_)->FUN_00c8fee0();
+    if (herd == 0)
+    {
+        ((ObjV*)tribe_)->FUN_00c8fef0();
+        herd = (char*)((ObjV*)tribe_)->FUN_00c8fee0();
+        if (herd == 0)
+            goto L_c2;
+    }
+    if ((char*)((ObjV*)creature_)->FUN_00c04590() == herd)
+        goto L_c2;
+
+    {
+        char* it  = *(char**)(herd + 0x40);
+        char* end = *(char**)(herd + 0x44);
+        ret = 1;
+        if (it != end)
+        {
+            do
+            {
+                char* e = *(char**)it;
+                if (e[0xb5e] == 0)
+                {
+                    count++;
+                    if (*(float*)(e + 0xb20) == *(float*)(creature + 0xb20))
+                        ret = 0;
+                }
+                it += 4;
+            } while (it != end);
+            if (ret == 0)
+            {
+                evt = 0xbea77fd3;
+                goto L_c2;
+            }
+        }
+        if (!((u32)count < G1581270))
+        {
+            evt = 0xab6fe2a9;
+            goto L_c2;
         }
     }
 
-    float chance = GetPropertyT_float(g_DebugProps, 0x633e78a1, 0.5f);
-    if (gMathRandom.RandomDoubleUniform() > chance)
+    evt = 0x4f7d2332;
+    FUN_00c0d3a0(creature_);
+    FUN_00acca00((char*)((ObjV*)creature_)->FUN_00c04590() + 0x40, (void**)&creature_);
+    ((ObjV*)creature_)->FUN_00c045a0(herd);
+
+    {   // eastl::vector<EA::AutoRefCount<cSPCreatureBase>>::push_back at herd+0x40
+        void*  keep = creature_;
+        void** pos;
+        void*  rel;
+        if (creature_ != 0)
+            ((FnV0)(*(void***)creature_)[0])(creature_);          // AddRef
+        pos = *(void***)(herd + 0x44);
+        rel = creature_;
+        if (pos < *(void***)(herd + 0x48))
+        {
+            *(void***)(herd + 0x44) = pos + 1;
+            if (pos != 0)
+            {
+                *pos = creature_;
+                if (creature_ != 0)
+                    ((FnV0)(*(void***)creature_)[0])(creature_);  // AddRef
+            }
+        }
+        else
+        {
+            ((ObjV*)(herd + 0x40))->FUN_00aea5d0(pos, &keep);
+            rel = keep;
+        }
+        if (rel != 0)
+            ((FnV0)(*(void***)rel)[1])(rel);                      // Release
+    }
+
+    ((ObjV*)creature_)->FUN_00c042e0();
+    {
+        u32 u12 = FUN_00b6f0c0(*(u32*)(tribe + 0x234));
+        ((FnV1)(*(void***)creature_)[0xe4 / 4])(creature_, (void*)u12);
+        ((ObjV*)creature_)->FUN_00c0d950(1);
+        u32 u13 = ((FnU0)(*(void***)tribe_)[0x4c / 4])(tribe_);
+        ((FnV1)(*(void***)creature_)[0x48 / 4])(creature_, (void*)u13);
+    }
+    ((ObjV*)FUN_00cd40b0((void*)0x84f037b0))->FUN_00cd6980((void*)0x84f037b0);
+
+    if (((FnC0)(*(void***)(tribe + 0x120))[0x58 / 4])(tribe + 0x120) != 0)
+    {
+        u32 n = ((ObjV*)FUN_00675250(0x9073fca4))->FUN_006766e0(0x9073fca4);
+        if ((u32)(count + 1) >= n)
+            ((ObjV*)FUN_00675250(0x9073fca4))->FUN_00676710(0x9073fca4);
+
+        {
+            u32 loc0 = 0;
+            u32 loc1 = 0;
+            u32 loc2 = 0;
+            u32 bc   = ((ObjV*)creature_)->FUN_00c0bc00(&loc0, *(u32*)(tribe + 0x234), 0, 0);
+            void* prof = (char*)((ObjV*)creature_)->FUN_00c0bbd0() + 0x504;
+            void* r12  = (char*)((ObjV*)tribe_)->FUN_00c8e820(0) + 0x504;
+            void* prop;
+            FUN_00e398e0(0x7a7d8111, r12, (void*)bc);
+            prop = FUN_0067cb30(0x3110f7cf, prof);
+            ((ObjV*)prop)->FUN_0060d860(0x3110f7cf, prof);
+        }
+    }
+
+L_c2:
+    if (((FnC0)(*(void***)(tribe + 0x120))[0x58 / 4])(tribe + 0x120) != 0)
+    {
+        u32   a;
+        void* lg;
+        ((ObjV*)SLIST169B41C)->FUN_00fcc200(*(u32*)(creature + 0xb20));
+        a  = ((FnU3)(*(void***)(creature + 0xc0))[0x2c / 4])(creature + 0xc0, 0, 1, 0);
+        lg = FUN_00b3d3e0(evt, 0x182cd6ce, (void*)a);
+        ((ObjV*)lg)->FUN_00dd8640(evt, 0x182cd6ce, (void*)a, 0, 1, 0);
+    }
+    return ret;
+}
+
+// @ 0x00db6130
+float __cdecl FUN_00db6130(void* citizen_, void* a2, void* a3, void* a4, char* stimuli_, u8* flag_)
+{
+    char* tribe  = (char*)((ObjV*)citizen_)->FUN_00c22f50();
+    void* tribe_ = (void*)tribe;
+
+    if ((char)((ObjV*)tribe)->FUN_00c8e7c0() != 0)
         return 0.0f;
 
-    unsigned key;
-    if (state1 == 0)
-        key = 0x7dcc4e7e;
-    else
-        key = (bit5 ? 0xb546d379u : 0u) + 0x5523ddc;
+    if ((char)((ObjV*)(tribe + 0x270))->FUN_00feba90() != 0)
+    {
+        long long et = ((ObjV*)(tribe + 0x270))->FUN_00bc3190();
+        if ((float)((double)et * 0.001f) < 60.0f)
+            return 0.0f;
+    }
 
-    VignetteRange* table = GetVignetteTable()->Find(key, 0);
-    if (table->mpBegin == table->mpEnd)
-        return 0.0f;
+    {
+        float* pos1 = ((FnFP0)(*(void***)(tribe + 0x120))[0x2c / 4])(tribe + 0x120);
+        float  r    = ((FnF0)(*(void***)tribe_)[0x60 / 4])(tribe_);
+        float  r2   = r * r;
+        float* pos2 = ((FnFP0)(*(void***)((char*)citizen_ + 0xc0))[0x2c / 4])((char*)citizen_ + 0xc0);
+        float  dx   = pos2[0] - pos1[0];
+        float  dy   = pos2[1] - pos1[1];
+        float  dz   = pos2[2] - pos1[2];
+        float  d2   = dz * dz + dy * dy + dx * dx;
 
-    cTribe* tribe = creature->GetTribe();
-    int nearest = -1;
-    float nearestDist = FLT_MAX;
-    const Vec3* pos = creature->mLoco.GetPosition();
+        if (d2 > r2)
+            return 0.0f;
 
-    int slotCount = (int)(tribe->mpSlotsEnd - tribe->mpSlotsBegin);
-    for (unsigned i = 0; i < (unsigned)slotCount; ++i) {
-        TribeSlot* slot = &tribe->mpSlotsBegin[i];
-        if (!slot->mbDisabled) {
-            float dx = pos->x - slot->mPos.x;
-            float dz = pos->z - slot->mPos.z;
-            float dy = pos->y - slot->mPos.y;
-            float d = dx * dx + dy * dy + dz * dz;
-            if (d < nearestDist) {
-                nearestDist = d;
-                nearest = i;
+        {
+            int rel = *(int*)(tribe + 0x26c);
+
+            if (rel == -1)
+            {
+                void*  h    = FUN_00b3d4e0(0x55172d5);
+                Cont2* cont = (Cont2*)((ObjV*)h)->FUN_00bc7610(0x55172d5, 0);
+
+                if (cont->mBegin != cont->mEnd)
+                {
+                    int   local60;
+                    float cost;
+                    int   ncnt = 0;
+                    FVecV vec;
+                    int   nrec;
+
+                    {
+                        void* tm = FUN_00bc30b0(pos1);
+                        int   b  = ((ObjV*)tm)->FUN_00bc2b80(pos1);
+                        local60  = 2 - (int)(b != 0);
+                    }
+                    cost = ((ObjV*)tribe_)->FUN_00fc7f80();
+
+                    {
+                        Cont2* elems = (Cont2*)((FnP0)(*(void***)tribe_)[0x90 / 4])(tribe_);
+                        char** p     = (char**)elems->mBegin;
+                        char** pe    = (char**)elems->mEnd;
+                        if (p == pe)
+                            return 0.0f;
+                        for (; p != pe; p++)
+                        {
+                            char* e = *p;
+                            if ((char)((ObjV*)e)->FUN_00c0b770() != 0
+                                && *(char*)(e + 0x135) != 0
+                                && *(char*)(e + 0xb5e) == 0
+                                && (char)((ObjV*)e)->FUN_00c24560() != 0
+                                && (*(u8*)(e + 0xb58) & 0x10) == 0)
+                            {
+                                float* p2 = ((FnFP0)(*(void***)(e + 0xc0))[0x2c / 4])(e + 0xc0);
+                                float  ex = p2[0] - pos1[0];
+                                float  ey = p2[1] - pos1[1];
+                                float  ez = p2[2] - pos1[2];
+                                if (r2 > ez * ez + ey * ey + ex * ex)
+                                    ncnt++;
+                            }
+                        }
+                    }
+                    if (ncnt <= 0)
+                        return 0.0f;
+
+                    rel = -1;
+                    {
+                        int   relv = -1;
+                        u32   u20  = ((FnU0)(*(void***)tribe_)[0x4c / 4])(tribe_);
+                        void* pt   = ((ObjV*)FUN_00b3d300())->FUN_00bfc5f0();
+
+                        if (pt != 0 && pt != tribe_)
+                        {
+                            u32   u21 = ((FnU0)(*(void***)pt)[0x4c / 4])(pt);
+                            void* mgr = FUN_00b3d2c0((void*)u20, (void*)u21, 1);
+                            relv  = ((ObjV*)mgr)->FUN_00d00a70(u20, u21, 1);
+                            rel   = relv;
+                        }
+                        else
+                        {
+                            rel = relv;
+                        }
+
+                        {
+                            u32    mask = 0;
+                            Cont2* tools = (Cont2*)((FnP0)(*(void***)tribe_)[0xbc / 4])(tribe_);
+                            char** q   = (char**)tools->mBegin;
+                            char** qe  = (char**)tools->mEnd;
+                            for (; q != qe; q++)
+                            {
+                                u8 b = (u8)((FnC0)(*(void***)(*q))[0x58 / 4])(*q);
+                                mask |= 1u << (b & 0x1f);
+                            }
+
+                            {
+                                Cont2* recs = cont;
+                                u32    kval = 0;
+
+                                nrec = (int)(recs->mEnd - recs->mBegin) / 0x7b4;
+
+                                vec.mBegin    = vec.mInline;
+                                vec.mCur      = vec.mInline;
+                                vec.mCap      = vec.mInline + 16;
+                                vec.mHeapBase = vec.mInline;
+
+                                if (nrec > 0)
+                                {
+                                    for (int k = 0; k < nrec; k++)
+                                    {
+                                        char* rec = recs->mBegin + k * 0x7b4;
+                                        if (*(float*)(rec + 0x78c) <= cost
+                                            && cost <= *(float*)(rec + 0x790)
+                                            && (*(int*)(rec + 0x7a0) == 0 || *(int*)(rec + 0x7a0) == local60)
+                                            && (*(int*)(rec + 0x7a4) == -1 || rel == -1 || *(int*)(rec + 0x7a4) == rel)
+                                            && *(int*)(rec + 0x04) <= ncnt
+                                            && (*(u32*)(rec + 0x7ac) == 0 || (*(u32*)(rec + 0x7ac) & mask) == *(u32*)(rec + 0x7ac)))
+                                        {
+                                            kval = (u32)k;
+                                            if (vec.mCur < vec.mCap)
+                                            {
+                                                *vec.mCur = kval;
+                                                vec.mCur++;
+                                            }
+                                            else
+                                            {
+                                                vec.FUN_004281d0(vec.mCur, kval);
+                                            }
+                                        }
+                                    }
+
+                                    if (vec.mBegin != vec.mCur)
+                                    {
+                                        u32 u      = ((ObjV*)RNG1601760)->FUN_00a68fb0((int)(vec.mCur - vec.mBegin));
+                                        u32 chosen = vec.mBegin[u];
+                                        if (stimuli_ != 0)
+                                            ((ObjV*)stimuli_)->FUN_00d997e0();
+                                        *(u32*)(stimuli_ + 0x18) = chosen;
+                                        *(u32*)(stimuli_ + 0x1c) = 0x55172d5;
+                                        *flag_ = 1;
+                                        if (vec.mBegin != 0 && vec.mBegin != vec.mInline)
+                                            FUN_00f47380(vec.mBegin);
+                                        return 1.0f;
+                                    }
+                                    if (vec.mBegin != 0 && vec.mBegin != vec.mInline)
+                                        FUN_00f47380(vec.mBegin);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                void* tm = FUN_00b3d4e0((u32)rel);
+                int   rc = ((ObjV*)tm)->FUN_00bc3db0(rel);
+                if (rc > 0)
+                {
+                    if (stimuli_ != 0)
+                        ((ObjV*)stimuli_)->FUN_00d997e0();
+                    *(u32*)(stimuli_ + 0x18) = 0;
+                    *(u32*)(stimuli_ + 0x1c) = 0;
+                    *flag_ = 1;
+                    return 1.0f;
+                }
             }
         }
     }
-    if (nearest == -1)
-        return 0.0f;
+    return 0.0f;
+}
 
-    const Vec3* tribePos = tribe->mLoco.GetPosition();
-    int phase = -(TimeOfDay()->IsDay(tribePos) != 0) + 2;
-    float rating = tribe->GetRating();
-    int crowd = 0;
-    float radius = tribe->GetRadius();
-    float radiusSq = radius * radius;
-    CitizenRange* citizens = tribe->GetCitizens();
-    cSPCreatureCitizen** citizensEnd = citizens->mpEnd;
-    for (cSPCreatureCitizen** it = citizens->mpBegin; it != citizensEnd; ++it) {
-        cSPCreatureCitizen* c = *it;
-        if (c->IsState1() && c->mbF135 && !c->mbB5e && c->FUN_00c24560() && !(c->mFlagsB58 & 0x10)
-            && c->mpBehavior->mId != 0x5524115) {
-            const Vec3* cp = c->mLoco.GetPosition();
-            float dy = cp->y - tribePos->y;
-            float dz = cp->z - tribePos->z;
-            float dx = cp->x - tribePos->x;
-            if (dz * dz + dy * dy + dx * dx < radiusSq)
-                ++crowd;
+// @ 0x00db6c50
+void* __fastcall FUN_00db6c50(void* self_)
+{
+    char* self = (char*)self_;
+    u8    b;
+
+    ((ObjV*)self)->FUN_00ac14d0();
+    *(void**)self = VTABLE_147C2C4;
+    *(u32*)(self + 0x08) = 0;
+    *(u32*)(self + 0x0c) = 0;
+    *(u32*)(self + 0x10) = 0;
+    *(char**)(self + 0x1c) = self + 0x34;
+    *(char**)(self + 0x20) = self + 0x34;
+    *(char**)(self + 0x24) = self + 0x54;
+    *(u32*)(self + 0x30) = 0;
+    ((ObjV*)(self + 0x54))->FUN_00db5c20(&b, &b);
+
+    *(void**)(self + 0x18c) = 0;
+    *(void**)(self + 0x190) = 0;
+    *(float*)(self + 0x194) = G169F3B8;
+    *(float*)(self + 0x198) = G169F3BC;
+    *(float*)(self + 0x19c) = G169F3C0;
+    *(float*)(self + 0x1a0) = G169F3B8;
+    *(float*)(self + 0x1a4) = G169F3BC;
+    *(float*)(self + 0x1a8) = G169F3C0;
+    *(float*)(self + 0x1ac) = 0.0f;
+    *(float*)(self + 0x1b0) = G13EB8A0;
+    *(float*)(self + 0x1b4) = G1485720;
+    *(float*)(self + 0x1b8) = G1485720;
+    *(float*)(self + 0x1bc) = G1485548;
+    *(float*)(self + 0x1c0) = G147C21C;
+    *(float*)(self + 0x1c4) = G1485720;
+    *(float*)(self + 0x1c8) = 0.0f;
+    *(u32*)(self + 0x1cc) = 1;
+    *(u8*)(self + 0x1d0) = 1;
+    *(u8*)(self + 0x1d1) = 1;
+    ((ObjV*)(self + 0x1d4))->FUN_00afba10();
+    *(u32*)(self + 0x238) = 0;
+    *(u32*)(self + 0x240) = 0;
+    *(u8*)(self + 0x244) = 0;
+    *(u32*)(self + 0x248) = 0;
+    *(u8*)(self + 0x23c) = 1;
+    return self_;
+}
+
+// @ 0x00db6db0
+void __fastcall FUN_00db6db0(void* self_)
+{
+    char* self = (char*)self_;
+
+    *(void**)self = VTABLE_147C2C4;
+    ((ObjV*)(self + 0x1d4))->FUN_00afbad0();
+
+    {
+        void* o = *(void**)(self + 0x190);
+        if (o != 0)
+            ((FnV0)(*(void***)o)[0xc0 / 4])(o);
+    }
+    {
+        void* o = *(void**)(self + 0x18c);
+        if (o != 0)
+            ((FnV0)(*(void***)o)[0xc0 / 4])(o);
+    }
+
+    {
+        char* s  = self + 0x54;
+        void* a1 = *(void**)(self + 0x58);
+        void* a2 = *(void**)(self + 0x5c);
+        void* p;
+        ((ObjV*)s)->FUN_005941f0(a1, a2);
+        p = *(void**)(s + 0x04);
+        *(u32*)(s + 0x0c) = 0;
+        if (*(u32*)(s + 0x08) > 1 && p != *(void**)(s + 0x30))
+        {
+            if (p < *(void**)(s + 0x24) || p >= *(void**)(s + 0x28))
+            {
+                FUN_00f47380(p);
+            }
+            else
+            {
+                *(void**)p = *(void**)(s + 0x1c);
+                *(void**)(s + 0x1c) = p;
+            }
         }
     }
 
-    unsigned roleMask = 0;
-    MemberRange* members = tribe->GetMembers();
-    TribeMember** membersEnd = members->mpEnd;
-    for (TribeMember** m = members->mpBegin; m != membersEnd; ++m)
-        roleMask |= 1 << (*m)->GetRole();
-
-    int relationship = -1;
-    int tribeId = tribe->GetTribeId();
-    cTribe* player = NounManager()->GetPlayerTribe();
-    if (player && player != tribe) {
-        int playerId = player->GetTribeId();
-        relationship = GetRelationshipManager()->GetRelationship(tribeId, playerId, 1);
+    ((ObjV*)(self + 0x1c))->FUN_00ad92d0();
+    {
+        void* p2 = *(void**)(self + 0x08);
+        if (p2 != 0 && *(u32*)((char*)p2 - 4) != 0)
+            FUN_00f47380(p2);
     }
-
-    VignetteRange* defs = table;
-    int defCount = (int)(defs->mpEnd - defs->mpBegin);
-    IntFixedVector picks;
-    for (int i = 0; i < defCount; ++i) {
-        VignetteDef* d = &defs->mpBegin[i];
-        if (d->mMinRating > rating)
-            continue;
-        if (rating > d->mMaxRating)
-            continue;
-        if (d->mDayPhase != 0 && d->mDayPhase != phase)
-            continue;
-        if (d->mRelationship != -1 && relationship != -1 && d->mRelationship != relationship)
-            continue;
-        if (d->mMinCrowd > crowd)
-            continue;
-        if (d->mRoleMask != 0 && (d->mRoleMask & roleMask) != d->mRoleMask)
-            continue;
-        picks.push_back(i);
-    }
-    if (picks.begin() == picks.end())
-        return 0.0f;
-
-    int chosen = picks.begin()[gMathRandom.RandomUint32Uniform((unsigned)(picks.end() - picks.begin()))];
-    if (stimuli)
-        stimuli->Stimuli[0].GetAny();
-    stimuli->Stimuli[0].Ints[4] = nearest;
-    stimuli->Stimuli[0].Ints[3] = chosen;
-    stimuli->Stimuli[0].Ints[5] = key;
-    *pChosen = true;
-    return 1.0f;
+    ((ObjV*)self)->FUN_00ac5430();
 }
-
-} // namespace SP

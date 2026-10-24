@@ -1,1 +1,5 @@
-00db65a0 SP::IDLE_VIGNETTE_Decide  # PDB name; 32/32 calls, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+# Tribe domestication / tribe-vignette helpers (names inferred where there is no PDB candidate).
+00db5e80  SP::DomesticateAnimal  # PDB candidate; herd Get/Init, species-dup + domesticate-limit gates, remove_1st/SetHerd + AutoRefCount push_back, SetToolEffect/SignalTribeEvent, achievements + PostFeedbackEvent tail
+00db6130  SP::TRIBE_VIGNETTE_Decide  # PDB candidate; timer guard, radius test, relationship/tool-mask 0x7b4-record scan with fixed_vector pick into behavior_stimuli[+0x18]
+00db6c50  cTribeVignette_ctor  # inferred; vtable 0x147c2c4, vector at +0x1c, embedded hash-map/sub-container at +0x54, float block at +0x194, cActionCircle at +0x1d4
+00db6db0  cTribeVignette_dtor  # inferred; cActionCircle dtor, vtbl[0xc0] releases, inlined DoFreeNodes free-list at +0x54, vector dtor at +0x1c, base dtor tail
