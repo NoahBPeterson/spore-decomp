@@ -1,0 +1,1 @@
+01486d60 ??_7cVehicleView@@6B@  # SP::cVehicleView vtable (ctor/dtor store it)
