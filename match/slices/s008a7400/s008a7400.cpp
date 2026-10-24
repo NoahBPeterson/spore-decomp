@@ -2,6 +2,7 @@
 // Bitstream FontFusion Type-1 hinting engine (prebuilt module; different codegen from cl 15.00).
 // No function here reached byte-exact except the trivial memory-hook setter.
 #include <intrin.h>
+#include <string.h>
 
 typedef unsigned int uint32;
 typedef unsigned short uint16;
@@ -224,9 +225,33 @@ struct FFT1HintClass {                  // size 0x378
 extern "C" void* tsi_AllocMem(void* mem, unsigned size);          // 0x008d1260
 extern "C" int   util_FixMul(int a, int b);                       // 0x008d1590
 extern "C" int   util_FixDiv(int a, int b);                       // 0x008d16d0
-extern "C" float FUN_008a6430(void* a, void* b);                  // 0x008a6430
-extern "C" void  FUN_008a5880(void* a, void* b, void* c, int d);  // 0x008a5880
-extern "C" void* operator_new_array(unsigned size);               // 0x011e073e
+// color-bucket emitter: quantises both colours, then applies the class table (cdecl, 4 args)
+extern "C" void  FUN_008a5880(float* a, float* b, unsigned char* classes, void* target); // 0x008a5880
+
+// ---------------------------------------------------------------------------
+// Per-glyph colour-fit context (FontFusion internal, not in the 2008 dev PDB;
+// its bounds come from the disassembly of 008a7400 / 008a6430).
+// ---------------------------------------------------------------------------
+struct colorFitGlyph_t {
+    int  numPix;        // +0x000 pixel count
+    char pad004[0x100];
+    int  pixClass[16];  // +0x104 per-output-pixel entry into the class table, -1 = none
+};
+
+struct ColorFit {                        // size 0x2b4 used
+    char pad000[4];
+    colorFitGlyph_t* glyph;              // +0x004
+    char  pad008[0x190];
+    float fitWidth[16];                  // +0x198 reference width of every search class
+    char  pad1d8[0xc];
+    float weightA[16];                   // +0x1e4 first  colour weight of the class
+    float weightB[16];                   // +0x224 second colour weight of the class
+    char  pad264[0xc];
+    float bestWidth;                     // +0x270 smallest distance found so far
+    int   order[16];                     // +0x274 class-table scratch (sorted order)
+    float Fit(float* a, float* b);       // 0x008a6430
+    void  FitGlyph(void* target);
+};
 
 // ---------------------------------------------------------------------------
 // @ 0x008a77b0
@@ -429,16 +454,84 @@ FFT1HintClass* New_FFT1HintClass(tsiMemObject* mem, short upem)
 }
 
 // ---------------------------------------------------------------------------
-// The remaining three are large glyph-hinting passes over the hint-class scratch
-// arrays plus opaque helper structs; only their high-level structure is reproduced.
+// Remaining passes.
 // ---------------------------------------------------------------------------
 
+// Exhaustive three-way split search over the per-stem widths: every stem is assigned to
+// class 1 (full width), class 2 or class 3 (2/3 and 1/3 of its width in either order);
+// Fit() scores the resulting pair of colours and the cheapest split wins.  The winning
+// class table is then permuted through order[] and handed to the colour-bucket emitter.
 // @ 0x008a7400
-void FUN_008a7400(void* self, int a2)
+void ColorFit::FitGlyph(void* target)
 {
-    // PARTIAL: complex stem/blue-zone fit pass over hintmarkers + x_strokes/y_strokes
-    // scratch arrays with a float reference-width search and operator new[] scratch.
-    (void)self; (void)a2;
+    int n = glyph->numPix;
+    float bestA[3] = { 0.0f, 0.0f, 0.0f };
+    float bestB[3] = { 0.0f, 0.0f, 0.0f };
+    float curA[3];
+    float curB[3];
+    unsigned char bestClass[16];
+    unsigned char classBuf[16];
+    float best = bestWidth;
+
+    if (n > 0) {
+        memset(classBuf, 0, n);
+        for (int k = 0; k < n; k++) {
+            weightA[k] = fitWidth[k];
+            weightB[k] = 0.0f;
+        }
+    }
+    if (n < 0)
+        return;
+    for (int i = n; i >= 0; i--) {
+        if (i < n) {
+            memset(&classBuf[i], 2, n - i);
+            for (int k = i; k < n; k++) {
+                weightA[k] = fitWidth[k] * 0.6666667f;
+                weightB[k] = fitWidth[k] * 0.33333334f;
+            }
+        }
+        for (int j = n; j >= i; j--) {
+            if (j < n) {
+                memset(&classBuf[j], 3, n - j);
+                for (int k = j; k < n; k++) {
+                    weightA[k] = fitWidth[k] * 0.33333334f;
+                    weightB[k] = fitWidth[k] * 0.6666667f;
+                }
+            }
+            for (int k = n; k >= j; k--) {
+                if (k < n) {
+                    weightB[k] = fitWidth[k];
+                    classBuf[k] = 1;
+                    weightA[k] = 0.0f;
+                }
+                float dist = Fit(curA, curB);
+                if (dist < best) {
+                    bestA[0] = curA[0];
+                    bestA[1] = curA[1];
+                    bestA[2] = curA[2];
+                    bestB[0] = curB[0];
+                    bestB[1] = curB[1];
+                    bestB[2] = curB[2];
+                    for (int t = 0; t < 16; t++)
+                        bestClass[t] = classBuf[t];
+                    best = dist;
+                }
+            }
+        }
+    }
+    if (best < bestWidth) {
+        for (int i = 0; i < n; i++)
+            classBuf[order[i]] = bestClass[i];
+        for (int i = 0; i < 16; i++) {
+            int idx = glyph->pixClass[i];
+            if (idx == -1)
+                bestClass[i] = 3;
+            else
+                bestClass[i] = classBuf[idx];
+        }
+        FUN_008a5880(bestA, bestB, bestClass, target);
+        bestWidth = best;
+    }
 }
 
 // @ 0x008a76e0
@@ -449,16 +542,140 @@ void FUN_008a76e0(int a1, void* a2, int a3, int a4, int a5)
     (void)a1; (void)a2; (void)a3; (void)a4; (void)a5;
 }
 
+// Builds the per-hint-set interpolation tables: for every hint set and both directions the
+// hint array is sorted (extra strokes/edges are cut off and their indices appended in
+// sorted order), then each hint gets a fixed-point multiplier and offset so that the
+// hinted positions interpolate linearly between the reference hint values.
 // @ 0x008a7e30
 void SetInterpolation(FFT1HintClass* h)
 {
-    // PARTIAL: per-hint-set interpolation table builder (two passes over x_hints/y_hints).
-    (void)h;
+    int scale = h->xScale;
+    int pos = h->xpos;
+    for (int set = 0; set < h->numHintSets; set++) {
+        for (int dir = 0; dir < 2; dir++) {
+            hints_t*       hints   = dir == 0 ? h->x_hints   : h->y_hints;
+            extraStroke_t* strokes = dir == 0 ? h->x_strokes : h->y_strokes;
+            extraEdge_t*   edges   = dir == 0 ? h->x_edges   : h->y_edges;
+            short* order = hints[set].hint_array;
+            short  n = hints[set].num_hints;
+            short  m = (short)(n - strokes[set].num_hints - edges[set].numEdges);
+            short* IntOrus = hints[set].IntOrus;
+            int    result;
+
+            if (n == 0) {
+                hints[set].mult_ptr[0] = scale;
+                hints[set].offset_ptr[0] = pos;
+                result = 0;
+            } else {
+                bool  clipped = n > m;
+                int   firstOrder;
+                int   firstPix;
+                int   curPix;
+
+                if (clipped) {
+                    for (int k = 0; k < m; k++)
+                        IntOrus[k] = (short)k;
+                    for (int k = m; k < n; k++) {
+                        short v = order[k];
+                        int   t = k;
+                        while (t > 0 && v < order[IntOrus[t - 1]]) {
+                            IntOrus[t] = IntOrus[t - 1];
+                            t--;
+                        }
+                        IntOrus[t] = (short)k;
+                    }
+                    int idx0 = IntOrus[0];
+                    firstOrder = (unsigned short)order[idx0];
+                    IntOrus[0] = (short)firstOrder;
+                    firstPix = hints[set].hint_pix[idx0];
+                } else {
+                    IntOrus[0] = order[0];
+                    firstOrder = (unsigned short)order[0];
+                    firstPix = hints[set].hint_pix[0];
+                }
+                hints[set].mult_ptr[0] = scale;
+                hints[set].offset_ptr[0] = firstPix - util_FixMul((short)firstOrder, scale);
+
+                int   k = 1;
+                short lastOrder = (short)firstOrder;
+                curPix = firstPix;
+                for (int i = 1; i < n; i++) {
+                    int   idx = clipped ? (short)IntOrus[i] : i;
+                    short v = order[idx];
+                    short delta = (short)(v - lastOrder);
+                    if (delta > 0) {
+                        IntOrus[k] = v;
+                        int q = util_FixDiv(hints[set].hint_pix[idx] - curPix, delta);
+                        hints[set].mult_ptr[k] = q;
+                        curPix = hints[set].hint_pix[idx];
+                        hints[set].offset_ptr[k] = curPix - util_FixMul((short)v, q);
+                        lastOrder = v;
+                        if (hints[set].mult_ptr[k] == hints[set].mult_ptr[k - 1] &&
+                            hints[set].offset_ptr[k] == hints[set].offset_ptr[k - 1])
+                            IntOrus[k - 1] = v;
+                        else
+                            k++;
+                    }
+                }
+                hints[set].mult_ptr[k] = scale;
+                hints[set].offset_ptr[k] = curPix - util_FixMul((short)lastOrder, scale);
+                if (hints[set].mult_ptr[k] == hints[set].mult_ptr[k - 1] &&
+                    hints[set].offset_ptr[k] == hints[set].offset_ptr[k - 1])
+                    k--;
+                result = (unsigned short)k;
+            }
+
+            if (dir == 0) {
+                h->nxIntOrus_ptr[set] = (short)result;
+                scale = h->yScale;
+                pos = h->ypos;
+            } else {
+                h->nyIntOrus_ptr[set] = (short)result;
+                scale = h->xScale;   // the retail code leaves pos at ypos here
+            }
+        }
+    }
 }
 
+// Fits the vertical strokes in edges[start..limit) into the vertical snap zones: every
+// stroke pair is snapped to onepix/pixrnd resolution (or to the matching snap zone) and
+// the two byte-span positions are written to out[start..limit).
+// The retail function takes its loop index in EAX and the hint class in EDI with the rest
+// of the arguments on the stack (custom register ABI, symbol ?DoVStrokes@@YAXXZ), so this
+// is the natural-C spelling of the same body.
 // @ 0x008a8180
-void DoVStrokes(void)
+void DoVStrokes(FFT1HintClass* h, int start, int limit, const short* edges, int* out, int prev)
 {
-    // PARTIAL: vertical-stroke fitting inner loop; the original takes its first value and
-    // its hint-class pointer in registers (EAX/EDI), a non-C register ABI.
+    for (int i = start; i < limit; i += 2) {
+        int lo = edges[i];
+        int hi = edges[i + 1];
+        int width = util_FixMul(hi - lo, h->xScale);
+
+        for (int k = 0; k < h->numSnapVZones; k++) {
+            if (width < h->pSnapV[k].minPix)
+                break;
+            if (width <= h->pSnapV[k].maxPix) {
+                width = h->pSnapV[k].refPix;
+                break;
+            }
+        }
+
+        int snap = h->onepix;
+        if (width >= snap)
+            snap = (h->pixrnd + width) & h->pixfix;
+
+        int mid;
+        int off;
+        if (prev < 0) {
+            mid = (lo + hi + 1) >> 1;
+            off = -snap;
+        } else {
+            mid = (lo - edges[prev + 1] - edges[prev] + hi) >> 1;
+            off = out[prev + 1] - snap + out[prev];
+        }
+        int v = util_FixMul((short)mid, h->xScale) + h->pixrnd + (off >> 1);
+        v &= h->pixfix;
+        out[i] = v;
+        out[i + 1] = v + snap;
+    }
 }
