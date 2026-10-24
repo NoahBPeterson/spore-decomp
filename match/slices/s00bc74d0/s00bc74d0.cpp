@@ -72,7 +72,7 @@ struct WE {
     void  FUN_00bc77e0(int index);
     void** FUN_00bc7a70(void** out, Rec* at);
     void  FUN_00bc7b70(uint n);
-    int   FUN_00bc7c40(int first, int last);
+    __declspec(noinline) int FUN_00bc7c40(int first, int last);
     void  FUN_00bc7ca0(Rec* at, int* val);
     void  FUN_00bc7e20();
     uint  FUN_00bc7e80(int src);
@@ -255,7 +255,7 @@ void __stdcall FUN_00bc78d0(Rec* param_1, Rec* param_2)
 // ===========================================================================
 Rec* Rec::FUN_00bc7920(Rec* param_2)
 {
-    if ((*&param_2->flags < 0) && ((*&flags >= 0))) {
+    if ((int)param_2->flags < 0 && (int)flags >= 0) {
         if (p28 != 0) {
             ((RefObj*)p28)->Release();
         }
@@ -265,8 +265,8 @@ Rec* Rec::FUN_00bc7920(Rec* param_2)
             return this;
         }
     }
-    else if (*&param_2->flags >= 0) {
-        if (*&flags < 0) {
+    else if ((int)param_2->flags >= 0) {
+        if ((int)flags < 0) {
             if (this != (Rec*)0xfffffffc) {
                 ((Rec*)((char*)this + 4))->FUN_00bc7850((Rec*)((char*)param_2 + 4));
                 flags = param_2->flags;
@@ -360,9 +360,8 @@ int WE::FUN_00bc7c40(int param_2, int param_3)
 {
     int* uVar1 = FUN_00bc79f0((void*)param_3, (void*)end, (void*)param_2);
     FUN_00bc78d0((Rec*)uVar1, end);
-    int n = (param_3 - param_2) * 0x77777777;
-    int iVar2 = (int)(((long long)n) >> 0x20) - (param_3 - param_2);
-    end = (Rec*)((char*)end + ((iVar2 >> 5) - (iVar2 >> 0x1f)) * 0x3c);
+    int x = param_3 - param_2;
+    end = (Rec*)((char*)end - (x / 0x3c) * 0x3c);
     return param_2;
 }
 
