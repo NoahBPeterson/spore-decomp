@@ -1,10 +1,10 @@
 0068c6d0  28  SetKeyKind: member-load scheduling (key loaded before the two byte loads)
 
 0068c770  6   GetExplicitIdStartW: p=last hoisted before the first==last test
-0068c820  110  GetExplicitIdStartA (narrow): loop rotation / branch placement
-0068c460  47  FreeQueue::Drain: next-pointer register role + loop rotation
+0068c820  149  GetExplicitIdStartA (narrow): isdigit/isxdigit must be called with the byte zero-extended (unsigned char), not sign-extended [equiv: PASS 367 valid, 73.0% cov]
+0068c460  36  FreeQueue::Drain: takes no stack argument (ret 0); the callback function pointer comes from TryPop's out[1], not from the caller [equiv: PASS 231 valid, 68.4% cov]
 0068c590  195  FreeQueue::Flush: inline vector DoInsertValue schedule
 0068cd40  47  PackStr::InsertCStr: inlined strlen codegen shape
 0068d0d0  100  SPNameFromKeyW: string-length do-while + res-branch order
-0068d290  95  SPNameFromKeyA: packed-insert + append_sprintf scheduling
-0068d420  74  HashClearBuckets: node/next register roles + loop rotation
+0068d290  77  SPNameFromKeyA: the "." separator is pushed as the retail literal address 0x1403550 (0x1403551 for the end), not a fresh pooled copy [equiv: UNSUPPORTED 0/400 valid (input generator cannot fabricate a valid PackStr), 0 mismatch on the repaired replay]
+0068d420  77  HashClearBuckets: __stdcall with two stack arguments (ret 8), not cdecl; node/next register roles + loop rotation [equiv: WEAK 161 valid, 100% cov, 0 mismatch]

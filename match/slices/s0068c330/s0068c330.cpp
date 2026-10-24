@@ -168,14 +168,14 @@ char* GetExplicitIdStartA(char* first, char* last, uint8 flag3, uint8 flag4)
     if (*start == 0x30 && (start[1] == 0x78 || start[1] == 0x58)) {
         start += 2;
     } else {
-        if (isdigit(*start) == 0)
+        if (isdigit((unsigned char)*start) == 0)
             return 0;
     }
     {
         char* p = start;
         int n = 0;
         while (p != last) {
-            if (isxdigit(*p) == 0)
+            if (isxdigit((unsigned char)*p) == 0)
                 return 0;
             ++p;
             ++n;
@@ -223,7 +223,7 @@ void SPNameFromKeyThunk(const ResKey* key, void* out, int a3, int a4, const char
 // ===========================================================================
 // @ 0x0068D420  hash bucket clear
 // ===========================================================================
-void HashClearBuckets(void** buckets, uint32 n)
+void __stdcall HashClearBuckets(void** buckets, uint32 n)
 {
     for (uint32 i = 0; i < n; ++i) {
         void* node = buckets[i];
@@ -256,7 +256,7 @@ struct FreeQueue {
     uint32 m30;       // +0x30
 
     bool __declspec(noinline) TryPop(void** out);
-    void Drain(void (__cdecl* fn)(void*));
+    void Drain();
     void Shutdown();
     void Flush();
     void DrainList();
@@ -299,7 +299,7 @@ void FreeQueue::Shutdown()
 // ===========================================================================
 // @ 0x0068C460  FreeQueue::Drain
 // ===========================================================================
-void FreeQueue::Drain(void (__cdecl* fn)(void*))
+void FreeQueue::Drain()
 {
     while (mPending != mPendingEnd) {
         void* item = ((void**)mPendingEnd)[-2];
@@ -309,7 +309,7 @@ void FreeQueue::Drain(void (__cdecl* fn)(void*))
     }
     PopOut v;
     while (TryPop((void**)&v))
-        fn(v.a);
+        ((void (__cdecl*)(void*))v.b)(v.a);
 }
 
 // ===========================================================================
@@ -403,7 +403,7 @@ void SPNameFromKeyA(const ResKey* key, void* out, const char* name)
 {
     Str_Format(out, "0x%08x", key->mGroup);
     if (name != 0) {
-        ((PackStr*)out)->Insert(*(char**)out, ".", "." + 1);
+        ((PackStr*)out)->Insert(*(char**)out, (const char*)0x1403550, (const char*)0x1403551);
         const char* n = name;
         const char* ne = n;
         while (*ne)

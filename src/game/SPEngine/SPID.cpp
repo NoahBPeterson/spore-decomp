@@ -486,14 +486,14 @@ char* GetExplicitIdStartA(char* first, char* last, uint8 flag3, uint8 flag4)
     if (*start == 0x30 && (start[1] == 0x78 || start[1] == 0x58)) {
         start += 2;
     } else {
-        if (isdigit(*start) == 0)
+        if (isdigit((unsigned char)*start) == 0)
             return 0;
     }
     {
         char* p = start;
         int n = 0;
         while (p != last) {
-            if (isxdigit(*p) == 0)
+            if (isxdigit((unsigned char)*p) == 0)
                 return 0;
             ++p;
             ++n;
@@ -577,7 +577,7 @@ void SPNameFromKeyA(const ResKey* key, void* out, const char* name)
 {
     Str_Format(out, "0x%08x", key->mGroup);
     if (name != 0) {
-        ((PackStr*)out)->Insert(*(char**)out, ".", "." + 1);
+        ((PackStr*)out)->Insert(*(char**)out, (const char*)0x1403550, (const char*)0x1403551);
         const char* n = name;
         const char* ne = n;
         while (*ne)
