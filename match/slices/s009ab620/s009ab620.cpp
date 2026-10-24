@@ -415,14 +415,15 @@ bool __fastcall RestartTimer(void* self, void* edxUnused, float seconds) {
 
   // The budget is rounded (fistp, round-half-to-even) to whole microseconds; SetTimeLimit only
   // keeps the low 32 bits.
+  // EA's budget conversion: the microsecond count is rounded (fistp, round-half-to-even) to an
+  // int64; SetTimeLimit only keeps the low 32 bits.  A C cast would go through __ftol2, which
+  // truncates, so the conversion is written out.
   float usec = seconds * 1000000.0;
-  long double usecD = (long double)usec;
-  int64_t ticks = (int64_t)usecD;
-  long double frac = usecD - (long double)ticks;
-  if (frac >= 0.5)
-    ticks += (frac > 0.5 || (ticks & 1));
-  else if (frac <= -0.5)
-    ticks -= (frac < -0.5 || (ticks & 1));
+  int64_t ticks;
+  __asm {
+    fld dword ptr [usec]
+    fistp qword ptr [ticks]
+  }
 
   EA::LimitStopwatch sw;
   FUN_0093a560(&sw, 0, 3, 0);
