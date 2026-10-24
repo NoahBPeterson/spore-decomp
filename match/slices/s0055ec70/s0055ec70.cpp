@@ -3,101 +3,98 @@
 #include "../s0055ce80/s0055ce80.h"
 
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
-typedef void (__thiscall *Vfn8)(void*, void*, void**, int, int, int, int, int);
-typedef void (__thiscall *Vfn2)(void*, int);
+typedef void (__thiscall *Vfn8)(void*, const void*, void**, void**, int, int, int, int, int);
+typedef void (__thiscall *Vfn1)(void*, void*);
 namespace EA { namespace XHTML { namespace DOM { struct Node { static int Type(void* p); }; } } }
-unsigned DateTime_Set(int a);
 
 namespace SP {
 
 struct EcxStub70 {
-    unsigned char FUN_0055f7a0();
-    unsigned char FUN_0055f8e0();
+    bool FUN_0055f7a0(void* job);
+    bool FUN_0055f8e0(void* job);
     void FUN_0055f9e0();
-    unsigned char FUN_0055fa20(void* key, char flag);
-    unsigned char FUN_0055fb30(void* key);
-    unsigned char FUN_0055fbb0(void* key);
+    bool FUN_0055fa20(void* key, char flag);
+    bool FUN_0055fb30(void* key);
+    bool FUN_0055fbb0(void* key);
 };
 
 
 // Helpers (call targets are relocated, so signatures only fix the stack shape).
-void FUN_00563e10(void* self);
-void FUN_00561850(int index);
-void FUN_00561970(int index);
-void FUN_005631e0(void* self, void* out);
-void* FUN_00566c50(void* node);
-void* FUN_00564f50(void* it);
+struct Iter70 {
+    void* mpNode;
+    void  Construct(void* node);                        // 0x00566c50
+    void* Deref();                                      // 0x00564f50
+    void  Increment();                                  // 0x00422c50
+};
+struct DateVal70 {
+    int mLow; int mHigh;
+    void Set(int mode);                                 // 0x0092e3d0
+};
+struct CJob70 {
+    void Wait();                                        // 0x006926b0
+    void AddWeakDependency(int type);                   // 0x006913c0
+    unsigned char RestoreContinuation(void* p);         // 0x00564f90
+    unsigned char RemoveContinuation(void* p);          // 0x00564fb0
+};
+struct LookupDB70 {
+    void OnIndexComplete();                             // 0x00563e10
+    int  FindAssetIndex(const void* key);               // 0x005631e0
+    void DecreasePopulation(int index);                 // 0x00561970
+    void UpdateGroupMembership(int index);              // 0x00561850
+};
+struct VecSet70 {
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    void* Insert(void* out, void* val);                 // 0x00554020
+    void  EqualRange(void* out, void* key);             // 0x00555980
+    void  EraseOne(void* it);                           // 0x0048c720
+};
 void* FUN_00564ea0(void* p);
-int  FUN_00564f90(void* self);
-void FUN_00555980(void* out, void* key);
-void FUN_0048c720(void* it);
-void FUN_00422c50(void* node);
-void FUN_00564fb0(void* self);
-void FUN_006926b0(void* obj);
-void FUN_006913c0(int type);
-void* FUN_00554020(void* out, void* val);
-void FUN_00566d20(void* out, void* val, char flag);
-void RBTreeErase(void* node, void* anchor);
+void  RBTreeErase(void* node, void* anchor);
 
 
 // @ 0x0055f7a0
-unsigned char EcxStub70::FUN_0055f7a0() {
+bool EcxStub70::FUN_0055f7a0(void* job) {
     void* this_ = this;
     if (*(int*)((char*)this_ + 0x5c) == 0) {
-        FUN_00563e10(this_);
+        ((LookupDB70*)this_)->OnIndexComplete();
         *(unsigned char*)((char*)this_ + 0x40) = 1;
         return 1;
     }
-    FUN_00566c50(*(void**)((char*)this_ + 0x50));
-    void* key = FUN_00564f50(*(void**)((char*)this_ + 0x50));
-    void* local_c = 0;
-    void* local_8 = 0;
+    Iter70 it;
+    it.Construct(*(void**)((char*)this_ + 0x50));
+    void* key = it.Deref();
+    IntrusivePtr<ResourceObject> local_8;
+    IntrusivePtr<ResourceObject> local_c;
     void* mgr = EA::ResourceMan::GetManager();
-    if (local_8) {
-        void* p = local_8; local_8 = 0;
-        (*(void(__thiscall**)(void*))((*(void***)p)[1]))(p);
-    }
-    if (local_c) {
-        void* p = local_c; local_c = 0;
-        (*(void(__thiscall**)(void*))((*(void***)p)[1]))(p);
-    }
-    ((Vfn8)(*(void***)mgr)[0x10 / 4])(mgr, key, &local_c, 0, 0, 0, 0, 0);
-    void* node = FUN_00564ea0(local_c);
+    ((Vfn8)(*(void***)mgr)[0x10 / 4])(mgr, key, (void**)&local_8, (void**)&local_c, 0, 0, 0, 0, 0);
+    void* node = FUN_00564ea0(local_8.mpObject);
     if (node)
-        FUN_006913c0(EA::XHTML::DOM::Node::Type(node));
-    unsigned char r = (unsigned char)FUN_00564f90(this_);
-    if (local_8) {
-        void* p = local_8;
-        (*(void(__thiscall**)(void*))((*(void***)p)[1]))(p);
-    }
-    if (local_c) {
-        void* p = local_c;
-        (*(void(__thiscall**)(void*))((*(void***)p)[1]))(p);
-    }
+        ((CJob70*)job)->AddWeakDependency(EA::XHTML::DOM::Node::Type(node));
+    bool r = ((CJob70*)job)->RestoreContinuation(this_) != 0;
     return r;
 }
 
 // @ 0x0055f8e0
-unsigned char EcxStub70::FUN_0055f8e0() {
+bool EcxStub70::FUN_0055f8e0(void* job) {
     void* this_ = this;
     if (*(int*)((char*)this_ + 0x5c) == 0) {
-        FUN_00563e10(this_);
+        ((LookupDB70*)this_)->OnIndexComplete();
         *(unsigned char*)((char*)this_ + 0x40) = 1;
         return 1;
     }
-    void* p = (void*)0x1;
-    (void)p;
-    FUN_00566c50(*(void**)((char*)this_ + 0x50));
-    int value = (int)FUN_00564f50(*(void**)((char*)this_ + 0x50));
-    ((Vfn2)(*(void***)this_)[0x70 / 4])(this_, value);
-    FUN_00566c50(*(void**)((char*)this_ + 0x50));
+    Iter70 it;
+    it.Construct(*(void**)((char*)this_ + 0x50));
+    void* key = it.Deref();
+    ((Vfn1)(*(void***)this_)[0x70 / 4])(this_, key);
+    Iter70 eraseIt;
+    eraseIt.Construct(*(void**)((char*)this_ + 0x50));
+    void* node = eraseIt.mpNode;
     *(int*)((char*)this_ + 0x5c) -= 1;
-    void* node = (void*)value;
-    FUN_00422c50(&node);
-    void* anchor = (char*)this_ + 0x48;
-    RBTreeErase(node, anchor);
+    void* next = node;
+    ((Iter70*)&next)->Increment();
+    RBTreeErase(node, (char*)this_ + 0x4c);
     EASTL_allocator_deallocate(node);
-    return 1;
+    return ((CJob70*)job)->RemoveContinuation(this_);
 }
 
 // @ 0x0055f9e0
@@ -106,49 +103,46 @@ void EcxStub70::FUN_0055f9e0() {
     if (*(char*)((char*)this_ + 0x40) == 0) {
         void* obj = *(void**)((char*)this_ + 0x44);
         if (obj != 0)
-            FUN_006926b0(obj);
+            ((CJob70*)obj)->Wait();
     }
 }
 
 // @ 0x0055fa20
-unsigned char EcxStub70::FUN_0055fa20(void* key, char flag) {
+bool EcxStub70::FUN_0055fa20(void* key, char flag) {
     void* this_ = this;
-    int index = 0;
-    FUN_005631e0(this_, &index);
-    ((int*)this_)[0] = 0;   // placeholder to keep `index` live
+    int index = ((LookupDB70*)this_)->FindAssetIndex(key);
     if (index == -1)
         return 0;
     if (flag != 0) {
         char tmp[8];
-        void* p = FUN_00554020(tmp, &index);
+        void* p = ((VecSet70*)((char*)this_ + 0x64))->Insert(tmp, &index);
         if (*(char*)((char*)p + 4) != 0) {
-            FUN_00561970(index);
+            ((LookupDB70*)this_)->DecreasePopulation(index);
             *(unsigned char*)((char*)this_ + 0x1d0) = 1;
         }
-        unsigned a = DateTime_Set(1);
-        (void)a;
-        int base = index * 0x50 + *(int*)((char*)this_ + 0x14);
-        (void)base;
+        DateVal70 now;
+        now.Set(1);
+        char* asset = (char*)(index * 0x50 + *(int*)((char*)this_ + 0x14));
+        *(DateVal70*)(asset + 0x48) = now;
     } else {
         void* itpair[2];
-        FUN_00555980(itpair, &index);
+        ((VecSet70*)((char*)this_ + 0x64))->EqualRange(itpair, &index);
         void* it = (itpair[0] != itpair[1]) ? itpair[0] : *(void**)((char*)this_ + 0x68);
         if (it != *(void**)((char*)this_ + 0x68)) {
-            FUN_0048c720(it);
-            FUN_00561850(index);
+            ((VecSet70*)((char*)this_ + 0x64))->EraseOne(it);
+            ((LookupDB70*)this_)->UpdateGroupMembership(index);
         }
     }
     return 1;
 }
 
 // @ 0x0055fb30
-unsigned char EcxStub70::FUN_0055fb30(void* key) {
+bool EcxStub70::FUN_0055fb30(void* key) {
     void* this_ = this;
-    int index = 0;
-    FUN_005631e0(this_, &index);
+    int index = ((LookupDB70*)this_)->FindAssetIndex(key);
     if (index != -1) {
         void* itpair[2];
-        FUN_00555980(itpair, &index);
+        ((VecSet70*)((char*)this_ + 0x64))->EqualRange(itpair, &index);
         void* it = (itpair[0] != itpair[1]) ? itpair[0] : *(void**)((char*)this_ + 0x68);
         if (it != *(void**)((char*)this_ + 0x68))
             return 1;
@@ -157,16 +151,15 @@ unsigned char EcxStub70::FUN_0055fb30(void* key) {
 }
 
 // @ 0x0055fbb0
-unsigned char EcxStub70::FUN_0055fbb0(void* key) {
+bool EcxStub70::FUN_0055fbb0(void* key) {
     void* this_ = this;
-    int index = 0;
-    FUN_005631e0(this_, &index);
+    int index = ((LookupDB70*)this_)->FindAssetIndex(key);
     if (index == -1)
         return 0;
-    unsigned a = DateTime_Set(1);
-    (void)a;
-    int base = index * 0x50 + *(int*)((char*)this_ + 0x14);
-    (void)base;
+    DateVal70 now;
+    now.Set(1);
+    char* asset = (char*)(index * 0x50 + *(int*)((char*)this_ + 0x14));
+    *(DateVal70*)(asset + 0x48) = now;
     return 1;
 }
 

@@ -1,7 +1,7 @@
-0055f7a0  214  complete group-record restore/query path; /Od temp schedule differs; equiv FAIL (ecx receiver fixed)
-0055f8e0  226  complete asset timestamp restore path; /Od frame differs; equiv FAIL (ecx receiver fixed)
-0055f9e0   56  complete conditional object release; /Od local layout differs; equiv FAIL (ecx receiver fixed)
-0055fa20  212  complete asset activate/deactivate path; /Od frame differs; equiv FAIL (ecx receiver fixed)
-0055fb30  101  complete asset-membership query; /Od frame differs; equiv FAIL (ecx receiver fixed)
-0055fbb0   90  complete asset timestamp setter; /Od frame differs; equiv FAIL (ecx receiver fixed)
+0055f7a0  255  FIXED RestoreGroupRecords takes a cJob* arg; the iterator ctor/deref are rbtree-iterator members, the manager call passes (&local_8,&local_c), and AddWeakDependency/Continuation are thiscall on the job; equiv WEAK (99 valid, 64.1% coverage, no mismatch). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0055f8e0  177  FIXED RemoveGroupRecord takes a cJob* arg; erases mPendingKeys.begin() via RBTreeErase(node,&anchor at +0x4c)+deallocate (anchor was +0x48) and finishes with the job's RemoveContinuation; equiv WEAK (128 valid, 93.3% coverage, no mismatch). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0055f9e0   37  FIXED cJob::Wait is a thiscall on mpIndexJob (was a cdecl free call); equiv PASS (304 valid, 76.2% coverage). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0055fa20  225  FIXED FindAssetIndex returns the index (was discarded into a dummy local); vector_set at +0x64 insert/equal_range/eraseOne are thiscall members, and DateTime::Set fills the 8-byte timestamp at +0x48; equiv WEAK (216 valid, 16.9% coverage, no mismatch). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0055fb30   73  FIXED FindAssetIndex return value is now used; vector_set equal_range at +0x64 is a thiscall member; equiv WEAK (166 valid, 100% coverage, no mismatch). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0055fbb0   72  FIXED FindAssetIndex return value is now used; DateTime::Set fills the 8-byte timestamp at +0x48; equiv WEAK (215 valid, 46.9% coverage, no mismatch). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0055ec70  2185  complete index-rebuild driver (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast) (all 55 calls in order); /Od frame slots differ, 2 out-of-line key_vector ctor/dtor instances inlined
