@@ -112,7 +112,7 @@ struct ReportWriter {
     virtual bool r09(const char* fmt, ...);           // +0x24  (variadic)
     virtual bool r10(const char* name, const char* value); // +0x28
     virtual bool r11(const char* name, const char* fmt, ...); // +0x2c (variadic)
-    virtual void r12();                               // +0x30
+    virtual bool r12();                               // +0x30
     virtual bool r13(const void* data, int n);        // +0x34
     virtual int  r14();                               // +0x38
 
@@ -121,7 +121,7 @@ struct ReportWriter {
     bool Open(const char* path);                      // e9c0
     bool Close();                                     // ea20
     bool BeginSection(const char* name);              // ea50
-    void EndSection();                                // ea80
+    bool EndSection(const char* name);                // ea80
     bool WriteSubstr(const char* data, bool flag);    // ea90
     bool WriteFormattedV(const char* fmt, va_list ap);// ead0
     bool WritePair(const char* a, const char* b);     // eb20
@@ -352,9 +352,9 @@ bool ReportWriter::BeginSection(const char* name) {
 }
 
 // @ 0x0091ea80
-void ReportWriter::EndSection() {
+bool ReportWriter::EndSection(const char* name) {
     --mnSectionDepth;
-    r12();
+    return r12();
 }
 
 // @ 0x0091ea90

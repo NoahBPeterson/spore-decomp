@@ -3,7 +3,7 @@
 0091e770  103  ExceptionHandlerWin32 ctor: field-init order + strncpy/memset scheduling differ
 0091e810  136  ExceptionHandler ctor: fixed-vector inline storage / DoInsertValue clear schedule differ
 0091e8d0  107  ExceptionHandler dtor: platform-handler teardown / list walk schedule differ
-0091ea80  8    EndSection: tail-call to r12() instead of call+ret
+0091ea80  0    EndSection: byte-exact after restoring the PDB signature `bool EndSection(const char*)` (the unused stack argument produces `ret 4`) and returning `r12()`'s bool; moved to manifest.txt (row kept). [equiv: PASS 400 valid, 100.0% cov; replay None]
 0091ea90  33   WriteSubstr: branch block layout differs
 0091ead0  37   WriteFormattedV: va_list slot / comparison shape differs
 0091eb20  84   WritePair: r13 arg schedule / block layout differs
