@@ -6,6 +6,8 @@
 #include "types.h"
 #include <math.h>
 
+typedef unsigned int u32;
+
 // ---- globals (addresses in comments; relocations are masked in byte diffs) ----
 extern "C" {
     unsigned int  g_16acc84;                          // 0x016acc84  one-time-init bitmask
@@ -28,16 +30,20 @@ extern "C" {
 }
 
 // ---- callees ----
+struct U3 { u32 x, y, z; };                                 // 12-byte uint triple (by value)
+struct V3 { float x, y, z; };                               // 12-byte float triple (by value)
+struct Vector2 { float x, y; };                             // 8-byte fpu pair
+struct cSPHintMgr                                          // object returned by the argless getter
+{
+    void FUN_0067aaf0(U3 col, void* p, int a, V3 v, int b, int c);  // 0x0067aaf0 (__thiscall, ret 0x28)
+};
 int   SP_GetCurrentGameMode();                              // 0x00b5b800
-void* FUN_0067caf0(unsigned int, unsigned int, unsigned int, void*, unsigned int,
-                   unsigned int, unsigned int, unsigned int, unsigned int, unsigned int); // 0x0067caf0
-void  FUN_0067aaf0(void* self);                             // 0x0067aaf0
+void* FUN_0067caf0();                                       // 0x0067caf0 (argless getter; args belong to FUN_0067aaf0)
 void  FUN_00677360(int);                                    // 0x00677360
 void* FUN_00e3a730(unsigned int, int);                      // 0x00e3a730
 int   FUN_00e36f50(unsigned int);                           // 0x00e36f50
-char  FUN_00e38020(void*, void*, void*, void*, int);        // 0x00e38020
-float* FUN_00e3a000(void*, void*, void*, void*, void*, float); // 0x00e3a000
-float* FUN_00e3a570(void*, ...);                            // 0x00e3a570
+float* FUN_00e3a000(void*, Vector2*, Vector2*, Vector2*, Vector2*, float); // 0x00e3a000
+float* FUN_00e3a570(void*, float, float, Vector2*, float, Vector2*, float, float); // 0x00e3a570
 void* SP_WindowManager();                                   // 0x0067caa0
 void* SP_MessageServer();                                   // 0x0067dcc0
 void  FUN_0067caa0();                                       // n/a
@@ -59,44 +65,45 @@ void  SlotMessage_Destruct(void*);                          // 0x00421cf0
 struct cUIManager
 {
     int   FUN_00e3b5d0();   // @0x00e3b5d0 helper (defined in the binary; declaration only here)
-    void  FUN_00e3b9e0(float dt);
+    void  FUN_00e3b9e0(int dt);
     void  FUN_00e3be20(unsigned int p2, float a, float b, float c, float d, float e,
                        float f, float g, float h, float i, char p8);
     void  FUN_00e3c000();
     float FUN_00e3c100(float x);
     char  FUN_00e3c1a0(unsigned int* p2, float* p3, unsigned int* p4, float* p5,
                        unsigned int p6, unsigned int p7, char p8, float p9);
+    char  FUN_00e38020(Vector2* a, Vector2* b, Vector2* c, Vector2* d, int flag);  // 0x00e38020 (__thiscall Timeline::ClipTracks)
 };
 
 // @ 0x00e3b9e0
-void cUIManager::FUN_00e3b9e0(float dt)
+void cUIManager::FUN_00e3b9e0(int dt)
 {
-    MEM(int, 0x288) -= (int)dt;
+    MEM(int, 0x288) -= dt;
     int iVar5 = MEM(int, 0x288);
-    void** arr = (void**)MEM(unsigned int, 0x188);
 
+    float scratch;
     switch (MEM(int, 0x284))
     {
     case 1:
     {
-        int iVar5b = (int)arr[-1];
+        int iVar5b = *(int*)(MEM(unsigned int, 0x188) - 4);
         if (iVar5b != 0 && *(int*)(iVar5b + 0xf0) != 0)
         {
             if (MEM(char, 0x27c) != 0)
                 return;
 
-            unsigned int a = 0, b = 0, c = 0;
+            U3 col;
             switch (SP_GetCurrentGameMode())
             {
-            case 0x1654c00: a = g_15a5984[0]; b = g_15a5984[1]; c = g_15a5984[2]; break;
-            case 0x1654c01: a = g_15a5984[3]; b = g_15a5984[4]; c = g_15a5984[5]; break;
-            case 0x1654c02: a = g_15a5984[6]; b = g_15a5984[7]; c = g_15a5984[8]; break;
-            case 0x1654c03: break;
-            case 0x1654c04: a = g_15a5984[9]; b = g_15a5984[10]; c = g_15a5984[11]; break;
+            case 0x1654c00: col.x = g_15a5984[0]; col.y = g_15a5984[1]; col.z = g_15a5984[2]; break;
+            case 0x1654c01: col.x = g_15a5984[3]; col.y = g_15a5984[4]; col.z = g_15a5984[5]; break;
+            case 0x1654c02: col.x = g_15a5984[6]; col.y = g_15a5984[7]; col.z = g_15a5984[8]; break;
+            case 0x1654c04: col.x = g_15a5984[9]; col.y = g_15a5984[10]; col.z = g_15a5984[11]; break;
             default: goto label_1654c03;
             }
-            void* o = FUN_0067caf0(a, b, c, &PTR_PTR_015a59b4, 0, 0xbf800000u, 0xbf800000u, 0, 0, 0);
-            FUN_0067aaf0(o);
+            V3 v3;
+            v3.x = -1.0f; v3.y = -1.0f; v3.z = 0.0f;
+            ((cSPHintMgr*)FUN_0067caf0())->FUN_0067aaf0(col, &PTR_PTR_015a59b4, 0, v3, 0, 0);
             MEM(char, 0x27c) = 1;
         }
     label_1654c03:
@@ -112,18 +119,21 @@ void cUIManager::FUN_00e3b9e0(float dt)
             ((void(__thiscall*)(void*, int, int))(*(unsigned int**)(char*)MEM(void*, 0x5c))[0x7c / 4])((void*)MEM(unsigned int, 0x5c), 2, 1);
         {
             float v = MEM(float, 0x28c) - (MEM(float, 0x98) + 1.0f);
-            float zero = 0.0f;
-            MEM(float, 0x28c) = (v <= 0.0f) ? zero : v;
+            scratch = 0.0f;
+            float* picked = &scratch;
+            if (v > 0.0f) picked = &v;
+            MEM(float, 0x28c) = *picked;
         }
         if (MEM(unsigned int, 0x3c) != 0)
         {
             void* o = (void*)MEM(unsigned int, 0x3c);
             float* pf = (float*)((void*(__thiscall*)(void*))(*(unsigned int**)(char*)o)[0x38 / 4])(o);
             float v = MEM(float, 0x28c) - (pf[2] - pf[0]) * DAT_016acde0;
-            float zero = 0.0f;
-            float picked = (v <= 0.0f) ? zero : v;
-            MEM(float, 0x270) = picked;
-            MEM(float, 0x290) = picked;
+            scratch = 0.0f;
+            float* picked = &scratch;
+            if (v > 0.0f) picked = &v;
+            MEM(float, 0x270) = *picked;
+            MEM(float, 0x290) = *picked;
         }
         MEM(unsigned int, 0x288) = DAT_016acd90;
         MEM(int, 0x284) = 3;
@@ -152,7 +162,7 @@ void cUIManager::FUN_00e3b9e0(float dt)
         if (0 < iVar5)
             return;
         {
-            int i = (int)arr[-1];
+            int i = *(int*)(MEM(unsigned int, 0x188) - 4);
             if (i != 0 && *(int*)(i + 0xf0) != 0)
             {
                 void* r = FUN_00e3a730(*(unsigned int*)(i + 0xe4), 0);
@@ -168,7 +178,7 @@ void cUIManager::FUN_00e3b9e0(float dt)
         if (0 < iVar5)
             return;
         {
-            int i = (int)arr[-1];
+            int i = *(int*)(MEM(unsigned int, 0x188) - 4);
             unsigned int id = (i != 0) ? *(unsigned int*)(i + 0xe4) : 0xa426730bu;
             int idx = FUN_00e36f50(id);
             if (*(int*)(MEM(unsigned int, 0x198) + idx * 4) != 0)
@@ -286,11 +296,11 @@ float cUIManager::FUN_00e3c100(float x)
 char cUIManager::FUN_00e3c1a0(unsigned int* p2, float* p3, unsigned int* p4, float* p5,
                               unsigned int p6, unsigned int p7, char p8, float p9)
 {
-    float local_a8 = p3[0], local_a4 = p3[1];
-    float p3x = p3[0], p3y = p3[1];
-    unsigned int q1 = p2[0], q2 = p2[1];
-    unsigned int r1 = p4[0], r2 = p4[1];
-    unsigned int s1 = p5[0], s2 = p5[1];
+    Vector2 p2c, p3c, p4c, p5c;
+    p2c.x = ((float*)p2)[0]; p2c.y = ((float*)p2)[1];
+    p3c.x = p3[0];           p3c.y = p3[1];
+    p4c.x = ((float*)p4)[0]; p4c.y = ((float*)p4)[1];
+    p5c.x = p5[0];           p5c.y = p5[1];
 
     int iVar8 = 0x1e;
     float local_54 = (float)MEM(int, 0x280) / (float)DAT_016acf2c;
@@ -299,25 +309,24 @@ char cUIManager::FUN_00e3c1a0(unsigned int* p2, float* p3, unsigned int* p4, flo
 
     if (p8 != 0)
     {
-        cVar4 = FUN_00e38020(&q1, &p3x, &r1, &s1, (int)p7);
+        cVar4 = FUN_00e38020(&p2c, &p3c, &p4c, &p5c, p7);
         if (cVar4 != 0)
         {
             local_90 = 0xf;
             iVar8 = 0xf;
         }
     }
-    local_a8 = p3x;
-    local_a4 = p3y;
+    float local_a8 = p3c.x, local_a4 = p3c.y;
     int local_8c = 1;
-    (void)q2; (void)r2; (void)s2;
 
     if (iVar8 != 0)
     {
         float local_60 = (float)iVar8;
         do
         {
-            unsigned int obuf[2];
-            float* pf = FUN_00e3a000(obuf, &q1, &p3x, &r1, &s1, (float)local_8c / local_60);
+            Vector2 obuf;
+            float* pf = FUN_00e3a000(&obuf, &p2c, &p3c, &p4c, &p5c,
+                                     (float)((double)local_8c / (double)local_60));
             float fVar1 = pf[0];
             float fVar2 = pf[1];
             if (MEM(unsigned int, 0x58) != 0 && MEM(unsigned int, 0x5c) != 0)
@@ -361,15 +370,15 @@ char cUIManager::FUN_00e3c1a0(unsigned int* p2, float* p3, unsigned int* p4, flo
             float fStack_74 = fVar2 - fVar10b;
             float fStack_6c = fVar2 + fVar10b;
 
-            float t1[2], t2[2], t3[2], t4[2];
+            Vector2 t1, t2, t3, t4;
             float* r;
-            r = FUN_00e3a570(t1, local_a8, local_a4 - fVar10b, &p3x, DAT_016acf0c, &r1, DAT_016acf0c, -1.0f);
+            r = FUN_00e3a570(&t1, local_a8, local_a4 - fVar10b, &p3c, DAT_016acf0c, &p4c, DAT_016acf0c, -1.0f);
             float fStack_48 = r[0], fStack_44 = r[1];
-            r = FUN_00e3a570(t2, local_a8, fStack_80, &p3x, DAT_016acf0c, &r1, DAT_016acf0c, 1.0f);
+            r = FUN_00e3a570(&t2, local_a8, fStack_80, &p3c, DAT_016acf0c, &p4c, DAT_016acf0c, 1.0f);
             float uStack_84 = r[0], fStack_80b = r[1];
-            r = FUN_00e3a570(t3, fVar1, fStack_74, &p3x, DAT_016acf0c, &r1, DAT_016acf0c, -1.0f);
+            r = FUN_00e3a570(&t3, fVar1, fStack_74, &p3c, DAT_016acf0c, &p4c, DAT_016acf0c, -1.0f);
             float uStack_78 = r[0], fStack_74b = r[1];
-            r = FUN_00e3a570(t4, fVar1, fStack_6c, &p3x, DAT_016acf0c, &r1, DAT_016acf0c, 1.0f);
+            r = FUN_00e3a570(&t4, fVar1, fStack_6c, &p3c, DAT_016acf0c, &p4c, DAT_016acf0c, 1.0f);
             float uStack_70 = r[0], fStack_6cb = r[1];
             float fStack_4c = fVar10b / DAT_016acecc;
 

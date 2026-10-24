@@ -1,12 +1,3 @@
 # va  diff-bytes  reason  (incomplete / approximate, or equiv did not confirm: not counted as decompiled)
-00e3b9e0  594  hint state machine: all seven states transcribed, but the per-mode message object built via
-               FUN_0067caf0/FUN_0067aaf0 is approximated (thiscall finaliser convention not pinned down).
-00e3be20  192  11-argument effect-position updater: the float-quad argument mapping and the FUN_00e37840 tail
-               are reconstructed from the disassembly and are not behaviourally signed off.
-00e3c100   58  angle-wrap helper: logic/constants identical, but equiv=FAIL (5/186 inputs, st0 x87 rounding:
-               ours 2.83283007144928 vs orig 2.8328299522399902); cl contracts the branch arithmetic into
-               fld/fsub instead of the original's addss/subss.
-00e3c1a0 1150  screen-space path builder: large translation, but FUN_00e3a000/FUN_00e3a570 helper signatures
-               and the resulting stack frame are approximated.
-00e3c6f0  118  PostMessage of a MessageBasicRC<5>: the exact stack object layout (vftable/AtomicInt/Data[5])
-               is approximated.
+00e3b9e0  768  hint state machine: all seven states and the per-mode U3/V3 message (FUN_0067caf0()->FUN_0067aaf0) are complete, but the gate FAILs on a single register clobber on all 5 valid inputs -- ecx, which the original preserves via its `push ecx` / `pop ecx; ret 4` epilogue (its only 4-byte scratch slot) while ours allocates a 0x10 frame and uses ecx for the state jump table; eax/edx/esi and every call argument match. FAIL-KEPT, see work/match/scratch_s00e3b9e0_fixlog.txt.
+00e3be20  335  11-argument effect-position updater: complete source (one-time-init bitmask + four vtable(0xc4) 2-float queries + FUN_00e37840 tail) but untestable -- gate UNSUPPORTED, 0/400 inputs valid because the ORIGINAL faults on every generated input (fault(read)=398, fault(write-prot)=1, fake-arity=1). PARTIAL UNSUPPORTED, see work/match/scratch_s00e3b9e0_fixlog.txt.
