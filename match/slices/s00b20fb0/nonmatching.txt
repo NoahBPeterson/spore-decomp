@@ -1,0 +1,4 @@
+00b21000 75 two-word-key hashtable lookup; MSVC combines the two key dwords through edi/edx (original emits cdq/xor edi,edi/or eax,edi/xor edx,edx/or edx,esi) and keeps this+0x20 in esi; key register/local layout differs, 85 vs 84 bytes
+00b210d0 45 hashtable key flatten; MSVC assigns the bucket cursor to edx, the node to eax and the index to esi (original keeps bucket in esi, node in edx, index in eax) and builds the bucket scan as a bottom-tested loop, 103 bytes
+00b21140 18 hashtable lookup + entry invoke; original folds the call through the entry's function pointer into call dword ptr [eax+4], MSVC emits mov edx,[eax+4]/call edx; all other bytes identical, 59 vs 57 bytes
+00b21da0 168 intrusive-list segment swap; MSVC keeps the anchor addresses in edx/esi and reorders the +4/+8/+0xc swap/store sequence (original reloads each field through [ecx+..]/[eax+..]), 165 vs 184 bytes

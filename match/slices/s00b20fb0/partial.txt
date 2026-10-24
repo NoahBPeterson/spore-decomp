@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00b211e0  338  noun/map iterator merge (vtable slot 0x20 calls, eastl rbtree find/insert, FUN_00579bd0); not emitted
+00b21340  202  SP::cGameNounManager::GetGameDataVector (eastl rbtree find + cached-list walk, four callback code pointers, FUN_00ba8420); not emitted
+00b21410  120  rbtree keyed by (*pObj)[0x4c] + multimap erase + Release (this+0xd0 map, this+0x70 field compare); not emitted
+00b214e0  189  clsid-string lookup (eastl vector<bool>::DoInsertValue, FUN_00b20930, operator_new "Simulator"); not emitted
+00b215a0  1250  large game-data-vector builder (nested rbtree/list walks, vtable slot calls, FUN_00b215a0 body); not emitted
+00b21a90  778  large noun/player-tribe reconciliation (rbtree/list walks, vtable slot calls); not emitted
