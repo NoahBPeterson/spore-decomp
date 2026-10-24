@@ -355,9 +355,12 @@ bool F6C30(void* self, int a2, float a3, int phase)
 // @ 0x007F6D20
 bool F6D20(void* self, int a2, int a3, int phase)
 {
-    if (phase == 2)
-        return (bool)((int(__cdecl*)(void*, void*, int))*(void**)((char*)self + 0x28))(
-            *(void**)((char*)self + 0x10), (char*)self + 0x14, 2);
+    char* s = (char*)self;
+    if (phase == 2) {
+        void* a = *(void**)(s + 0x10);
+        void* b = s + 0x14;
+        return ((bool(__cdecl*)(void*, void*, int))(*(void**)(s + 0x28)))(a, b, 2);
+    }
     return true;
 }
 

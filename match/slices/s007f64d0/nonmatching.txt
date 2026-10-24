@@ -3,7 +3,7 @@
 007f6910  6  complete; return-value cmp scheduled before the last fstp
 007f6a60  37  complete; Color::Lerp/vcall register schedule differs
 007f6b50  138  complete; vtable slot call shape differs
-007f6d20  24  complete; cdecl argument register assignment differs
+007f6d20  6   complete; named arg temps make cl hold the first argument in ecx like the original (the fake-call hash includes live ecx) and a bool-returning callee type drops the setne; only the load of self is scheduled after instead of before the phase test
 007f6d90  70  complete; element copy / refcount addref order differs [equiv PASS (100% coverage)]
 007f6df0  86  complete; element copy / refcount addref order differs [equiv PASS (100% coverage)]
 007f6ee0  127  complete; range copy loop layout differs
