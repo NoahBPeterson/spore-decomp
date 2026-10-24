@@ -1,0 +1,3 @@
+00b07980 ?FUN_00b07980@Mgr@@QAE_NPAUReq@@_NPAUGroup@@22@Z  # nonmatching (1323) - place the plants of one spawn request on the planet
+00b07fa0 ?FUN_00b07fa0@Mgr@@QAE_NPAUSimEvent@@_NPAUPlantRange@@PAUGroup@@@Z  # nonmatching (568) - re-seat / renumber / unregister the objects of a range
+00b08260 ?FUN_00b08260@Mgr@@QAE_NIPAUSimEvent@@@Z  # nonmatching (890) - plant event dispatcher (0x2f3fc35 / 0x25630b7 / 0x2e9977e / 0x477c00d)
