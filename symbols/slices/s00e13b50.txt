@@ -1,1 +1,14 @@
-00e13b50 SP::cUICard::ResizeToContent  # PDB-derived name interface_cast<cSPMission*> is a mislabel; resizes card text/background windows (animated or instant) and pokes the 0x5397388 button
+00e13b50 SP::cUICard::ResizeToContent  # PDB-derived name interface_cast<cSPMission*> is a mislabel; resizes card text/background windows (animated or instant) and pokes the 0x5397388 button; nonmatching
+00e14180 CardLayout::ResizeToStyle0  # ResizeToContent(false-style 0) then primary-vtable slot +0x34; byte-exact
+00e141a0 CardLayout::InitA  # card ctor: base vptr 0x013ec458, zeroed members to +0x44, vptrs 0x0147fe14/0x0147fe04, float +0x98, mission +0x9c = 0; nonmatching (equiv PASS)
+00e14220 CardLayout::RefreshChildWindows  # clear the mission flag on the 0x2aa5ada cast, re-own the 0x94a4a6ea/0x54bf5692/0x5397388 children, then cUICard::UpdateLayout; byte-exact
+00e142c0 SP::cUIMissionCard::GetCardColor  # PDB name; mission highlight -> sub-mission, complete 0xff93bfa6 else 0xffbbadbf + failed ? 0x3e2e7 : 0; nonmatching (equiv WEAK)
+00e14360 CardLayout::HandleEvent  # sender event router: v09 on type 0xc, flag set on type 0xa/id 1, ids 0x5235aa8/0x5235138/0xf4e6882f (mode gates, panel open, EventCtx color draw at the view +0x504); nonmatching (equiv WEAK)
+00e14590 SP::cUIMissionCard::GetContentWinID  # PDB name; mission content window id or 0x74bf58cb; byte-exact
+00e145b0 CardLayout::UpdateButtonStateA  # checked-state toggle of children 0x574efda/0x7591f955 plus the +0x44 button colour or/and 0x99000000 / 0xffffff; byte-exact
+00e14690 CardLayout::UpdateButtonStateB  # selected-state toggle of 0xf5a74bec/0x7591f955 plus the 0x35b08191 child colour or/and; byte-exact
+00e147a0 CardLayout::InitB  # card ctor variant: vptrs 0x0147fe60/0x0147fe50, integer +0x98 = 0, no mission store; nonmatching (equiv PASS)
+00e14810 CardLayout::InitC  # card ctor variant with two EA::LimitStopwatch members at +0xb0 (type 5) and +0xd0 (type 4), +0xf0/+0xf4 = 0; nonmatching (equiv PASS)
+00e148d0 CardLayout::ShowCard  # show the +0x1c animator, re-show the main window, set +0xf0 = 1; byte-exact
+00e14900 CardLayout::UpdateScrollButtons  # scroll-list host/source counts drive the 0x74b5328/0x74b5329 arrows and the 0x74b6990 counter text (localized cString 0x21851ebe); byte-exact
+00e149e0 CardLayout::HideButtons  # hide children 0x7a15028 and 0x7a15027; byte-exact

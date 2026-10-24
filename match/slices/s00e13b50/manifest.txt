@@ -1,0 +1,9 @@
+# source  symbol  original VA  [flags override]
+slices/s00e13b50/s00e13b50.cpp  ?ResizeToStyle0@CardLayout@@QAEX_N@Z  00e14180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e13b50/s00e13b50.cpp  ?RefreshChildWindows@CardLayout@@QAEXXZ  00e14220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e13b50/s00e13b50.cpp  ?GetContentWinID@CardLayout@@QAEIXZ  00e14590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e13b50/s00e13b50.cpp  ?UpdateButtonStateA@CardLayout@@QAEXPAUIWindow@@@Z  00e145b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e13b50/s00e13b50.cpp  ?UpdateButtonStateB@CardLayout@@QAEXPAUISelectable@@@Z  00e14690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e13b50/s00e13b50.cpp  ?ShowCard@CardLayout@@QAEXXZ  00e148d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e13b50/s00e13b50.cpp  ?UpdateScrollButtons@CardLayout@@QAEXXZ  00e14900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e13b50/s00e13b50.cpp  ?HideButtons@CardLayout@@QAEXXZ  00e149e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
