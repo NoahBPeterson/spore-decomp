@@ -1,0 +1,4 @@
+slices/s00db9380/s00db9380.cpp  ??0cHealOtherData@SP@@QAE@ABV01@@Z  00db97f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00db9380/s00db9380.cpp  ?FUN_00db99a0@SP@@YAPAUcHealOtherEntry@1@PAU21@00@Z  00db99a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00db9380/s00db9380.cpp  ?FUN_00dba000@SP@@YA_NPAVcSPCreatureCitizen@1@HHHHPAUcHealActionState@1@@Z  00dba000  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00db9380/s00db9380.cpp  ??4cHealOtherData@SP@@QAEAAV01@ABV01@@Z  00dba120  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

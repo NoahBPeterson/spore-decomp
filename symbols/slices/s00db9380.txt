@@ -1,0 +1,7 @@
+00db9380 HealToolStepTick  # descriptive name; seven-step heal animation/effect state machine over cHealActionState
+00db97f0 cHealOtherData::Copy  # descriptive name; copy constructor of the 0x24c-byte payload
+00db99a0 cHealEntryRangeCopy  # descriptive name; copies a range of 0x250-byte heal entries into raw storage
+00db9a00 HealFindNearestNoun  # descriptive name; nearest injured noun within the heal radius
+00db9b30 TRIBE_HEAL_OTHER_Tick  # PDB name
+00dba000 HealAnimationTick  # descriptive name; two-step heal animation tick
+00dba120 cHealOtherData::operator=  # copy assignment
