@@ -108,6 +108,9 @@ extern cCellGame* gspCellGame_016b3c04;
 extern cCellUI*   sCellUI_016b3c0c;
 extern Vector3    gCellFocusTarget_016b3c28;
 extern const Vector3 kUp_015a7c34;
+extern float g16b4450, g16b4454, g16b4458;  // 0x016b4450 kFollowBox x/y/z
+extern float g16b4444, g16b4448, g16b444c;  // 0x016b4444 kRaise x/y/z
+extern int   g16b445c;                      // 0x016b445c static-init guard
 
 cGameModeState* FUN_00b3d4d0();
 float FUN_00e837c0(uint32_t curveID, float x);                       // evaluate tuning curve
@@ -189,9 +192,14 @@ void FUN_00e600a0(float dt, bool bFrozen)
             sCellUI_016b3c0c->mFollowBlend = blend;
             float r = FUN_00e50ed0(sCellUI_016b3c0c->mFollowBlend, speed);
 
-            static const Vector3 kFollowBox(7.0f, 5.0f, 0.0f);
+            if ((g16b445c & 1) == 0) {
+                g16b445c |= 1;
+                g16b4450 = 7.0f;
+                g16b4454 = 5.0f;
+                g16b4458 = 0.0f;
+            }
             Vector3& camPos = sCellUI_016b3c0c->mCameraPos;
-            Vector3 half(r * kFollowBox.x, r * kFollowBox.y, r * kFollowBox.z);
+            Vector3 half(r * g16b4450, r * g16b4454, r * g16b4458);
             Vector3 d = camPos - player->mPosition;
             float len = sqrtf(d.x * d.x + d.y * d.y + d.z * d.z);
             if (len > 1.5258789e-05f) {
@@ -284,9 +292,14 @@ void FUN_00e600a0(float dt, bool bFrozen)
         }
     }
 
-    static const Vector3 kRaise(0.0f, -0.5f, 0.0f);
+    if ((g16b445c & 2) == 0) {
+        g16b445c |= 2;
+        g16b4444 = 0.0f;
+        g16b4448 = -0.5f;
+        g16b444c = 0.0f;
+    }
     float h = FUN_00e513d0(20.0f, 0.0f, focus.z, 1.0f, 0.0f);
-    Vector3 raise(h * kRaise.x, h * kRaise.y, kRaise.z * h);
+    Vector3 raise(h * g16b4444, h * g16b4448, g16b444c * h);
     cViewer* viewer = SP::App_0067dd10()->GetViewer();
     Vector3 eye = pos + raise;
     Vector3 at = (pos + focus) + raise;
