@@ -348,7 +348,10 @@ def marker_names(src, va):
     """Candidate qualified names for the function at va: the definition right after a
     '// ... @ 0x<va>' marker, and names written next to the address in comments."""
     lines = open(src, encoding="utf-8", errors="replace").read().split("\n")
-    marker = re.compile(r"//.*@\s*0x0*%x\b" % va, re.I)
+    # only a marker that starts its line binds (2026-10-24): `void Layer(unsigned id);  // @ 0x0075e090` inside a class
+    # body bound 0075e090 and five siblings to the inline helper defined after the class (LayerBegin), and
+    # `void Init();  // @ 0x005ec7c0` bound 005ec7c0 to the next function; the playbook puts markers at column 0
+    marker = re.compile(r"^\s*//.*@\s*0x0*%x\b" % va, re.I)
     named = re.compile(r"//\s*(?:@\s*)?(?:0x)?0*%x\b[\s:,-]*((?:[A-Za-z_]\w*::)*~?[A-Za-z_]\w*)" % va, re.I)
     out = []
     for i, line in enumerate(lines):
