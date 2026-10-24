@@ -3,7 +3,7 @@
 00660430  96  eastl lower_bound; register assignment (first=ebp vs ebx) and a spill differ
 00660650  58  KeyContains; comparison materialised with setcc per step instead of once at the join
 00660880  255  FeedEntry predicate; loop keeps a cached count/base instead of recomputing from the vector header
-006609a0  266  eastl vector<Key>::operator=; param held in eax instead of ebx, whole schedule differs; equiv FAIL (5/87 inputs mismatched; ours faults on unmapped read at 0x00b84c91 where original returns)
+006609a0  266  eastl vector<Key>::operator=; schedule differs (param in eax, n/have in different registers). Fixed the copy operands: partial path is CopyOverlap(o.mBegin, o.mBegin+have, mBegin) then UninitCopyPtr(..., extra=o.mEnd); the full path is CopyOverlap(o.mBegin, o.mEnd, mBegin) (source incorrectly passed mBegin as the source first). Replay None; fresh equiv WEAK 164/400 valid, 44.3% coverage, no mismatches; src copy mirrored and same. Residual /O2 schedule (290 vs 283 B).
 00660ad0  83  vector range construct; out/first/last register assignment differs
 00660b90  96  map clear; keeps w in a register and uses ebx, original reloads and uses ebp for the end anchor
 006600c0  505  cSPUIFeedFilter::GetSupportedFilterTypes: complete (flag-set rebuild, array property, per-button AND/OR merge, recursion); loop induction variable and frame-slot assignment differ [equiv: WEAK 398 valid, 12.9% coverage]

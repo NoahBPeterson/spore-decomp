@@ -393,13 +393,13 @@ KeyVec& KeyVec::operator=(const KeyVec& o) {
     }
     uint32_t have = (uint32_t)(mEnd - mBegin);
     if (have < n) {
-        CopyOverlap(o.mBegin, o.mEnd, mBegin);
+        CopyOverlap(o.mBegin, o.mBegin + have, mBegin);
         void* last = o.mEnd;
-        UninitCopyPtr((void**)&last, o.mBegin + have, o.mEnd, mEnd, mEnd);
+        UninitCopyPtr((void**)&last, o.mBegin + have, o.mEnd, mEnd, o.mEnd);
         mEnd = mBegin + n;
         return *this;
     }
-    CopyOverlap(mBegin, o.mEnd, mBegin);
+    CopyOverlap(o.mBegin, o.mEnd, mBegin);
     mEnd = mBegin + n;
     return *this;
 }
