@@ -2,8 +2,14 @@
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
+#include <intrin.h>
 
 struct Vec3 { float x, y, z; };
+struct Transform;
+struct cViewerShim {
+    void GetCameraLocationInfo(Vec3* a, Vec3* b, Vec3* c, Vec3* d) const;   // 0x007c3d30
+    void ProjectToScreen(Vec3* out, const Vec3* in) const;                  // 0x007c4180
+};
 struct cSPVector3 {
     float x, y, z;
     cSPVector3() {}
@@ -38,13 +44,12 @@ void*         FUN_00b3d3c0(void);                               // 0x00b3d3c0
 struct Mgr { void Fn(void* p); };                               // 0x00b76ef0 (thiscall ret 4)
 void          Matrix3FromQuaternion(Matrix3* m, Quat* q);       // 0x0059c190
 void          FUN_007c4180(Vec3* out, Vec3* in);                // 0x007c4180
-void          Matrix3_Assign(Matrix3* m, Matrix3* src);         // 0x0041cb40
-void          BoundingBox_TransformBy(BBox* b, Matrix3* m);     // 0x00409dd0
+struct Matrix3Shim { float m[9]; void Assign(const Matrix3* src) const; };  // 0x0041cb40
+struct BBoxShim { Vec3 mn; Vec3 mx; void TransformBy(const Transform* t) const; };  // 0x00409dd0
 float*        GetPropertyAsFloat(void* prop);                   // 0x0041ea70
 void          SPUIHelpers_GetMainWindowArea(float* out);        // 0x00805ea0
 struct AutoRef { void Assign(int a); };                         // 0x00478db0 (thiscall ret 4)
 void*         App();                                            // 0x0067dd10
-float*        cViewer_GetCameraLocationInfo(void* viewer, Vec3* out, int a, int b, int c); // 0x007c3d30
 
 struct IUnk {
     virtual void AddRef();
@@ -97,15 +102,16 @@ struct cSO {
     void LocalToWorldTransform(Transform* out);
     void SetModel(int a1, void* b);
     void funcA4h();
-    bool func7Ch(int a2, int a3, char a4, float* out);
+    bool func7Ch(char a4, float* out);
 };
 
 // @ 0x00c88e30
 bool cSO::funcE30()
 {
-    void* viewer = (void*)((void*(__thiscall*)(void*))VT(0x58))(App());
+    void* app = App();
+    void* viewer = ((void*(__thiscall*)(void*))(*(void***)app)[0x58 / 4])(app);
     Vec3 camLoc;
-    cViewer_GetCameraLocationInfo(viewer, &camLoc, 0, 0, 0);
+    ((cViewerShim*)viewer)->GetCameraLocationInfo(&camLoc, 0, 0, 0);
     Vec3* pos = (Vec3*)((void*(__thiscall*)(cSO*))VT(0x2c))(this);
     float px = pos->x;
     float py = pos->y;
@@ -127,12 +133,16 @@ bool cSO::funcE30()
     float dp = (dx * c2x + dz * c2z) + dy * c2y;
     float dd = (dz * dz + dy * dy) + dx * dx;
     float disc = dp * dp - (((c2x * c2x + c2z * c2z) + c2y * c2y) - fVar6 * fVar6) * dd;
-    if (disc >= 0.0f) {
+    if (0.0f > disc)
+        return false;
+    {
         float root = sqrtf(disc);
-        if (root - dp >= 0.0f && -dp - root <= dd)
-            return true;
+        if (0.0f > root - dp)
+            return false;
+        if (-dp - root > dd)
+            return false;
+        return true;
     }
-    return false;
 }
 
 // @ 0x00c89020
@@ -164,18 +174,10 @@ void cSO::GetCommunityName(cSPVector3* out)
 // @ 0x00c89160
 void cSO::SetLocalExtents(float* e, float scale)
 {
-    mLocalExtents.mx.x = e[3];
-    mLocalExtents.mx.y = e[4];
-    mLocalExtents.mx.z = e[5];
-    mLocalExtents.mn.x = e[0];
-    mLocalExtents.mn.y = e[1];
-    mLocalExtents.mn.z = e[2];
-    mWorldExtents.mx.x = e[3];
-    mWorldExtents.mx.y = e[4];
-    mWorldExtents.mx.z = e[5];
-    mWorldExtents.mn.x = e[0];
-    mWorldExtents.mn.y = e[1];
-    mWorldExtents.mn.z = e[2];
+    *(Vec3*)&mLocalExtents.mx = *(Vec3*)(e + 3);
+    *(Vec3*)&mLocalExtents.mn = *(Vec3*)(e + 0);
+    *(Vec3*)&mWorldExtents.mx = *(Vec3*)(e + 3);
+    *(Vec3*)&mWorldExtents.mn = *(Vec3*)(e + 0);
 
     mWorldExtents.mn.x *= scale;
     mWorldExtents.mn.y *= scale;
@@ -186,17 +188,26 @@ void cSO::SetLocalExtents(float* e, float scale)
     f64 = scale;
     f7c = scale;
 
+    _ReadWriteBarrier();
     float cz = (mWorldExtents.mx.z + mWorldExtents.mn.z) * 0.5f;
+    _ReadWriteBarrier();
     float cx = (mWorldExtents.mx.x + mWorldExtents.mn.x) * 0.5f;
+    _ReadWriteBarrier();
     float cy = (mWorldExtents.mx.y + mWorldExtents.mn.y) * 0.5f;
+    _ReadWriteBarrier();
     float hz = mWorldExtents.mx.z - cz;
+    _ReadWriteBarrier();
     float hx = mWorldExtents.mx.x - cx;
+    _ReadWriteBarrier();
     float hy = mWorldExtents.mx.y - cy;
+    _ReadWriteBarrier();
     float nhx = mWorldExtents.mn.x - cx;
+    _ReadWriteBarrier();
     float nhy = mWorldExtents.mn.y - cy;
+    _ReadWriteBarrier();
     float nhz = mWorldExtents.mn.z - cz;
-    float lenA = sqrtf(hz * hz + hx * hx + hy * hy);
-    float lenB = sqrtf(nhz * nhz + nhx * nhx + nhy * nhy);
+    float lenA = (float)sqrt((double)hz * hz + (double)(hx * hx) + (double)(hy * hy));
+    float lenB = (float)sqrt((double)nhz * nhz + (double)(nhx * nhx) + (double)(nhy * nhy));
 
     void* m = mp9c;
     if (m != 0 && mpA0 != 0) {
@@ -205,12 +216,12 @@ void cSO::SetLocalExtents(float* e, float scale)
     } else if (mFlags & 0x40) {
         m5c = *(float*)((char*)m + 0x6c) * scale;
     } else {
-        m5c = (lenA > lenB) ? lenA : lenB;
+        m5c = (lenB > lenA) ? lenB : lenA;
     }
 
-    float lenC = sqrtf(hx * hx + hy * hy);
-    float lenD = sqrtf(nhx * nhx + nhy * nhy);
-    m60 = (lenC > lenD) ? lenC : lenD;
+    float lenC = (float)sqrt((double)(hx * hx) + (double)(hy * hy));
+    float lenD = (float)sqrt((double)(nhx * nhx) + (double)(nhy * nhy));
+    m60 = (lenD > lenC) ? lenD : lenC;
 
     if (m != 0) {
         void* p = *(void**)((char*)m + 0x90);
@@ -218,7 +229,7 @@ void cSO::SetLocalExtents(float* e, float scale)
             void** vt = *(void***)p;
             void* prop = 0;
             char ok = ((char(__thiscall*)(void*, unsigned int, void**))(vt[0x24 / 4]))(p, 0x0579ef6c, &prop);
-            if (ok && *(unsigned short*)((char*)prop + 0x12) == 0xd) {
+            if (ok && prop != 0 && *(unsigned short*)((char*)prop + 0x12) == 0xd) {
                 float* f = GetPropertyAsFloat(prop);
                 m60 = *f;
             }
@@ -408,7 +419,7 @@ void cSO::funcA4h()
 }
 
 // @ 0x00c899a0
-bool cSO::func7Ch(int a2, int a3, char a4, float* out)
+bool cSO::func7Ch(char a4, float* out)
 {
     BBox box;
     box.mn.x = -0.5f;
@@ -427,38 +438,52 @@ bool cSO::func7Ch(int a2, int a3, char a4, float* out)
         computed = true;
         pB = (BBox*)((void*(__thiscall*)(cSO*))VT(0x68))(this);
     }
-    float fStack_54 = pB->mx.z * 0.9f;
+    float ext = pB->mx.z * 0.9f;
     Vec3* pos = (Vec3*)((void*(__thiscall*)(cSO*))VT(0x2c))(this);
-    float fVar1 = pos->x, fVar2 = pos->y, fVar3 = pos->z;
-    if (a4 == 0) {
-        if (!computed) {
-            BBox* p = (BBox*)((void*(__thiscall*)(cSO*, void*))VT(0x6c))(this, &box);
-            box.mn.x = (p->mn.x + p->mx.x) * 0.5f;
-            box.mn.y = (p->mx.y + p->mn.y) * 0.5f;
-            box.mn.z = (p->mx.z + p->mn.z) * 0.5f;
-        } else {
-            Transform t;
-            Matrix3_Assign(&t.rot, &g_mat16952ac);
-            t.pos = g_vec1695248;
-            t.flags = 0;
-            t.version = 0;
-            t.scale = 1.0f;
-            LocalToWorldTransform(&t);
-            BoundingBox_TransformBy(&box, &t.rot);
-            box.mn.z = (box.mx.z + box.mn.z) * 0.5f;
-            box.mn.x = (fStack_54 + box.mn.x) * 0.5f;
-        }
+    float px = pos->x, py = pos->y, pz = pos->z;
+    Vec3 ctr;
+    if (a4 != 0) {
+        volatile float inv = 1.0f / sqrtf(px * px + (py * py + pz * pz));
+        volatile float m;
+        m = px * inv; m = m * ext; ctr.x = m + px;
+        m = py * inv; m = m * ext; ctr.y = m + py;
+        m = pz * inv; m = m * ext; ctr.z = m + pz;
+    } else if (computed) {
+        BBox* p = (BBox*)((void*(__thiscall*)(cSO*, void*))VT(0x6c))(this, &box);
+        ctr.x = (p->mn.x + p->mx.x) * 0.5f;
+        ctr.y = (p->mx.y + p->mn.y) * 0.5f;
+        ctr.z = (p->mx.z + p->mn.z) * 0.5f;
     } else {
-        float inv = 1.0f / sqrtf(fVar1 * fVar1 + (fVar2 * fVar2 + fVar3 * fVar3));
-        box.mn.z = (fStack_54 * fVar3) * inv + fVar3;
-        box.mn.x = (fVar2 * inv) * inv + fVar2;
-        box.mn.y = (fVar3 * inv) * inv + fVar3;
+        Transform t;
+        ((Matrix3Shim*)&t.rot)->Assign(&g_mat16952ac);
+        t.pos = g_vec1695248;
+        t.flags = 0;
+        t.version = 0;
+        t.scale = 1.0f;
+        LocalToWorldTransform(&t);
+        ((BBoxShim*)&box)->TransformBy(&t);
+        ctr.x = (box.mx.x + box.mn.x) * 0.5f;
+        ctr.y = (box.mx.y + box.mn.y) * 0.5f;
+        ctr.z = (box.mx.z + box.mn.z) * 0.5f;
     }
-    void* viewer = (void*)((void*(__thiscall*)(void*))VT(0x58))(App());
-    (void)viewer; (void)a2; (void)a3;
-    Vec3 t2;
-    FUN_007c4180(&t2, (Vec3*)&box.mn.x);
-    (void)t2;
-    (void)out;
-    return false;
+
+    void* app = App();
+    void* viewer = ((void*(__thiscall*)(void*))(*(void***)app)[0x58 / 4])(app);
+    Vec3 v;
+    ((cViewerShim*)viewer)->ProjectToScreen(&v, &ctr);
+
+    const float* M = (const float*)((char*)viewer + 0x40);
+    float t1 = ((((M[8] * ctr.z) + (M[4] * ctr.y)) + (M[0] * ctr.x)) + M[0xc]) * g_vec1695294.x;
+    float t2 = ((((M[9] * ctr.z) + (M[5] * ctr.y)) + (M[1] * ctr.x)) + M[0xd]) * g_vec1695294.y;
+    float t3 = ((((M[10] * ctr.z) + (M[6] * ctr.y)) + (M[2] * ctr.x)) + M[0xe]) * g_vec1695294.z;
+    float d = (t3 + t2) + t1;
+    if (0.0f > d)
+        return false;
+    if (funcE30())
+        return false;
+    float area[4];
+    SPUIHelpers_GetMainWindowArea(area);
+    out[0] = ((v.x + 1.0f) * area[2]) * 0.5f;
+    out[1] = ((1.0f - v.y) * area[3]) * 0.5f;
+    return true;
 }
