@@ -1,1 +1,8 @@
-005810a0 29 complete but not byte-exact (zero count passed via register instead of immediate)
+# va  diff-bytes  reason
+005802f0  579  cAppModeEditorBase_s0058_02f0::Save: full body reconstructed (metadata, res-key, UI flags, editor prop-list, save-area, launch-data, Achievements/thumb-export branches); remaining diff is register allocation and the inlined serializer call sequence (740 vs 745 bytes)
+00580700  582  cAppModeEditorBase_s0058_02f0::BuildThumb: thumbnail descriptor build reconstructed; property-lookup vcall schedule, the vector midpoint math and the AutoRefCount assignment differ (690 vs 672)
+005809a0  486  GIF-name capture (stdcall, ret 4): DateTime/Sprite16/sprintf/StrncpyUTF8ToUTF16 sequence reconstructed; x87 evaluation and the string-local frame differ (661 vs 610)
+00580c10  14   editor user name: byte-identical size (157); only the inlined eastl empty-string ctor is scheduled differently (the original hoists the GetName vtable load before the three field stores)
+00580cb0  259  cAppModeEditorBase_s0058_02f0::WriteEditorInfo: FTP-job var-list serialization reconstructed; the job/c3 virtual-call sequence and frame differ (332 vs 307)
+00580df0  590  cAppModeEditorBase_s0058_02f0::ReadEditorInfo: DatabasePackedFile/cObjectDatabase reader plus var-list deserialize reconstructed; virtual-call schedule and frame differ (710 vs 674)
+005810a0  29   cBoolVec::EraseAll: complete; EraseAll's memmove pointer-shift arithmetic codegen differs (40 vs 43 bytes)
