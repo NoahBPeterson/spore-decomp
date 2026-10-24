@@ -1,4 +1,7 @@
 slices/s00b85380/s00b85380.cpp  ?insert@SpVector3@@QAEPAUVec3f@@PAU2@PBU2@@Z  00b85d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00b85380/s00b85380.cpp  ?push_back@Vertex3DVec@@QAEXPBUVertex3D@@@Z  00b85db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b85380/s00b85380.cpp  ?AssignN@SpVector20B@@QAEPAXII@Z  00b85e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b85380/s00b85380.cpp  ?AllocAndCopy@@YGPAXIPBX0@Z  00b85930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b85380/s00b85380.cpp  ?CopyCtor@ByteVec@@QAEPAXPBU1@@Z  00b85fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00b85380/s00b85380.cpp  ?CopyVec20BForward@@YAPAIPAI00@Z  00b86350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00b85380/s00b85380.cpp  ?CopyVec20BBackward@@YAPAIPAI00@Z  00b86390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

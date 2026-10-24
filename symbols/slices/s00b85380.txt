@@ -14,11 +14,11 @@
 00b85930  AllocAndCopy(u32 n, const void* first, const void* last) -> void*  # __stdcall alloc + memcpy of [first,last)
 00b859c0  TileMapLookup::LookupAssign(u32 key, Vec20B* out) -> char  # find key in the +0x34 vector; assign the +0x0c[index] 0x14-byte record
 00b85a30  PaintSystem::~PaintSystem() -> void  # dtor: free the 7 byte vectors, the +0x38 bitvector, the +0x20 object; destroy cGonzagoSubsystem at +4
-00b85bc0  PaintSystem::InitPool(void* a, void* b) -> void*  # eastl fixed_pool init (0x12000/0x24) + node bookkeeping + bounds
+00b85bc0  PaintSystem_InitPool(void* pThis, void* a, void* b) -> void*  # eastl fixed_pool init (0x12000/0x24) + node bookkeeping + bounds
 00b85ca0  TileMap::operator[](void* key) -> void*  # HashMap::Find / create a 0x14-byte record; returns record+0xc
 00b85d40  SpVector3::insert(Vec3f* pos, const Vec3f* pVal) -> Vec3f*  # eastl vector<Vec3f> insert-one (fast append or DoInsertValue @0x4b5ad0)
 00b85db0  Vertex3DVec::push_back(const Vertex3D* pVal) -> void  # eastl vector<Vertex3D> push_back fast path (copy 9 dwords)
-00b85e10  SpVector20B::AssignN(u32 n) -> void*  # alloc n 0x14-byte elements, construct each (FUN_00b84ba0), set begin/end/cap
+00b85e10  SpVector20B::AssignN(u32 n, u32 unused) -> void*  # alloc n 0x14-byte elements, construct each (FUN_00b84ba0), set begin/end/cap
 00b85f30  Vertex2DVec_Resize(u32 n) -> void  # eastl vector<Vertex2D> resize (append defaults or erase tail)
 00b85fb0  ByteVec::CopyCtor(const ByteVec* src) -> void*  # eastl vector<byte> copy-ctor (alloc + memcpy)
 00b86010  ByteVec::AssignFrom(const ByteVec* src) -> void*  # eastl vector<byte>::operator=(const Vec&)
