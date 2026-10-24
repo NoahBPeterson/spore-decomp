@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# Byte-exact matches: the domestication activate/deactivate helpers, the slot refill loop and
+# the three order-value predicates of this slice.
+slices/s00dadce0/s00dadce0.cpp  ?FUN_00dae630@SP@@YA_NPAVcSPCreatureBase@1@HHHHPAUDomesticationBlock@1@H@Z  00dae630  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dadce0/s00dadce0.cpp  ?FUN_00dae680@SP@@YAXPAVcSPCreatureBase@1@HHHHPAUDomesticationBlock@1@H@Z  00dae680  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dadce0/s00dadce0.cpp  ?FUN_00dae730@SP@@YAXPAUSlotList@1@@Z  00dae730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dadce0/s00dadce0.cpp  ?FUN_00dae760@SP@@YAMPAVcSPCreatureBase@1@@Z  00dae760  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dadce0/s00dadce0.cpp  ?FUN_00dae7d0@SP@@YAMPAVcSPCreatureBase@1@@Z  00dae7d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dadce0/s00dadce0.cpp  ?FUN_00dae840@SP@@YA_NPAVcSPCreatureBase@1@HHHHPAUOrderValueBlock@1@H@Z  00dae840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
