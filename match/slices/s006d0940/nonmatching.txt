@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-006d0940 693  bake evaluator (uv4x16/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (1/527 valid inputs mismatched)
-006d0c50 643  bake evaluator (uv4x8/const colour/pos3f, core FUN_006c3550, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/255 valid inputs mismatched)
-006d0f40 604  bake evaluator (uv2x16/const colour/pos3f, core FUN_006c3550, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/211 valid inputs mismatched)
-006d11e0 643  bake evaluator (uv4x16/const colour/pos3f, core FUN_006c3550, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/116 valid inputs mismatched)
-006d14c0 687  bake evaluator (uv4x8/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ; equiv FAIL (5/41 valid inputs mismatched)
+006d0940 707  bake evaluator (uv4x16/colour4f/pos3f, core FUN_006c4200, dot tail); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; equiv WEAK 160 valid / 100% coverage after fixing COLMODE 2 to the constant {1,0,0,0} colour the original uses (it does not sample a float2 stream).
+006d0c50 730  bake evaluator (uv4x8/const colour/pos3f, core FUN_006c3550, dot tail); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; equiv WEAK 172 valid / 100% coverage (the earlier mem-pool mismatch was the stale default flags).
+006d0f40 667  bake evaluator (uv2x16/const colour/pos3f, core FUN_006c3550, dot tail); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; equiv FAIL 4/164 valid, all float-special: out[1] = (1 - (res*axis[1] + axis[3])) * scale yields 80000000 (-0.0) in the original where ours yields ffc00000 (NaN) for +/-inf operands.
+006d11e0 730  bake evaluator (uv4x16/const colour/pos3f, core FUN_006c3550, dot tail); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; equiv FAIL 5/116 valid, same float-special out[1] case as 006d0f40.
+006d14c0 761  bake evaluator (uv4x8/colour2f/pos3f, core FUN_006c3780, dot tail); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; equiv FAIL 5/44 valid: out[0] matches but out[1] reads pool-soup operands differently (orig f46d4676 vs ours fa095db7).
