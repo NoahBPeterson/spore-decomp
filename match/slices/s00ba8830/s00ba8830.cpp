@@ -377,11 +377,11 @@ void FUN_00ba94e0(int* writer, int* data)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00ba95f0  cdecl(begin, end, value) : eastl::lower_bound over 16-byte
-//              wstring records.  Compare is "shorter length first, then
-//              lexicographic on wchar_t".
+// eastl::lower_bound over 16-byte wstring records: cdecl(begin, end, value).
+// The compare is "shorter length first, then lexicographic on wchar_t" and the
+// original inlines it at every step.
 // ---------------------------------------------------------------------------
-static int CompareWStrRec(int* rec, int* value)
+static __forceinline int CompareWStrRec(int* rec, int* value)
 {
     const uint16_t* a = (const uint16_t*)rec[0];
     const uint16_t* b = (const uint16_t*)value[0];
@@ -397,6 +397,7 @@ static int CompareWStrRec(int* rec, int* value)
     return 0;
 }
 
+// @ 0x00ba95f0
 int* FUN_00ba95f0(int* begin, int* end, int* value)
 {
     int count = (int)((char*)end - (char*)begin) >> 4;
