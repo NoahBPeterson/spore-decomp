@@ -1,0 +1,1 @@
+slices/s00c793e0/s00c793e0.cpp  ?FUN_00c79f20@cPlayer@@QAEXPAVcPlayerInner@@@Z  00c79f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
