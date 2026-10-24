@@ -89,10 +89,8 @@ void cSPPlayModeSubModePhoto::Shutdown()
     mAnim->v3(*(uint32_t*)((char*)mObj4 + 0x364), 0x4330667, 1, 1, 0);
 }
 
-// @ 0x0063D9E0  PARTIAL
-void cSPPlayModeSubModePhoto::FUN_0063d9e0() {}
-// @ 0x0063DC40  PARTIAL
-void cSPPlayModeSubModePhoto::FUN_0063dc40() {}
+// The two SPSS-side helpers FUN_0063d9e0 / FUN_0063dc40 belong to cSPPlayModeSubModeMovie
+// (they touch +0x22ec/+0x22fc/+0x234c); implemented below.
 
 // ---------------------------------------------------------------- cSPPlayModeSubModeMovie::HandleButton
 struct Key12 { uint32_t a, b, c; };
@@ -197,7 +195,8 @@ struct cSPPlayModeSubModeMovie {
     int mIndicatorTimer;            // +0x22C4
     char pad22c8[0x22e4 - 0x22c8];
     int mDialogInProgress;          // +0x22E4
-    char pad22e8[0x22fc - 0x22e8];
+    char pad22e8[0x22ec - 0x22e8];
+    eastl::string mYTAuthToken;     // +0x22EC
     eastl::string mYTUsername;      // +0x22FC
     char pad230c[0x231c - 0x230c];
     bool mRegisterSuccess;          // +0x231C
@@ -220,7 +219,7 @@ struct cSPPlayModeSubModeMovie {
     void CheckYouTubeRegistration();                 // 0x0063CED0
     void FUN_0063cd30();
     void FUN_0063de20(int dt);                       // 0x0063DE20
-    void FUN_0063dc40();
+    __declspec(nothrow) void FUN_0063dc40();
     void FUN_0063d9e0();
     void FUN_0063cf90();
     void SetState2();                                // 0x0063B7B0
@@ -239,6 +238,65 @@ struct cSPPlayModeSubModeMovie {
     static bool GetYTPrompt();                       // 0x0063B890
     static bool IsLocaleEnglish();                   // 0x0063C0A0
 };
+
+// Layout-compatible eastl string with a non-throwing destructor (the original bodies
+// carry no SEH frame because their string temporaries cannot throw).
+struct NoThrowStr {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    NoThrowStr() : mpBegin((void*)eastl::gEmptyString16), mpEnd((void*)eastl::gEmptyString16),
+                   mpCapacity((char*)eastl::gEmptyString16 + 1) {}
+    __declspec(nothrow) ~NoThrowStr() {
+        if (((char*)mpCapacity - (char*)mpBegin) > 1 && mpBegin)
+            operator delete(mpBegin);
+    }
+};
+
+// YouTube video-upload message payload posted with id 0x55e8bc8 (char eastl::strings).
+struct cEditorYouTubeVideoUploadMessage {
+    NoThrowStr mUsername;               // +0x00
+    NoThrowStr mClientID;               // +0x10
+    NoThrowStr mAuthenticationToken;    // +0x20
+    NoThrowStr mDeveloperKey;           // +0x30
+    NoThrowStr mVideoFilename;          // +0x40
+    uint32_t   mVideoKey[3];            // +0x50
+    NoThrowStr mXMLRequest;             // +0x5C
+    ~cEditorYouTubeVideoUploadMessage();          // 0x63c750
+};
+
+void ConstructYouTubeVideoUploadXMLRequest(eastl::string16* out);            // 0x63d050 (this in ecx)
+void __cdecl CString_Sprintf(eastl::string* str, const char* fmt, ...);      // 0x472fe0
+int  __cdecl FNV1_String16A(uint32_t seed, const void* s, int n);            // 0x932f30
+void* __cdecl GetPropertyManager();                                          // 0x67de30
+void __cdecl SaveNamedResource(eastl::string* dst, void* a, void* b);        // 0x6b4010
+void* __cdecl operator_new_ea(unsigned int size, const char* tag, int, int, int, int);  // 0x0F473A0
+extern void* g_1524440;   // 0x01524440
+extern void* g_1524444;   // 0x01524444
+
+// Minimal releasable base (Release lives in vtbl slot 1/+4), matching ILayoutObj usage.
+struct IReleasable { virtual void r0(); virtual void Release(); virtual void r2(); };
+// Editor::cPropertyList::cPropertyList (0x6a1c40), this in ecx, returns this.
+void* __fastcall PropertyList_Ctor(void* self, int edx);
+
+// Layout-compatible eastl string with a non-throwing destructor (the original bodies
+// carry no SEH frame because their string temporaries cannot throw).
+struct NoThrowStrPlaceholder;
+
+struct IPropertyList {
+    virtual void p0(); virtual void p1(); virtual uint32_t p2(); virtual void p3();
+    virtual void p4(); virtual uint32_t v14(uint32_t id, void* variant);   // +0x14
+    virtual void p6(); virtual void p7();
+    virtual void p8(); virtual void p9(); virtual void p10();
+    virtual void* v2c(uint32_t key, uint32_t id, void* out);   // +0x2c
+};
+
+// EA::Variant with a 4-byte flag word at +0x10 used by the caller after construction.
+struct Variant { uint32_t w[4]; uint32_t flags; uint32_t pad[2]; };
+void __fastcall Variant_FromString16(Variant* self, int edx, const void* src, int a, int b, int c,
+                                     int d);                                       // 0x93dd80
+void __cdecl Variant_Destruct(Variant* v, int a);                                  // 0x93db80
+void __cdecl Encrypt(void* dst, const void* src);                                  // 0x60bcf0
 void CreateConnectingDialog();                       // 0x0063BC70
 void __cdecl DestroyConnectingDialog(bool b);        // 0x0063C060
 struct cSPPlayModeUIExt {
@@ -461,3 +519,99 @@ void cSPPlayModeSubModeMovie::FUN_0063de20(int dt)
         mDoVideoUpload = false;
     }
 }
+
+// @ 0x0063D9E0  cSPPlayModeSubModeMovie::SendYouTubeVideoUploadPost
+void cSPPlayModeSubModeMovie::FUN_0063d9e0()
+{
+    mDoVideoUpload = true;
+    mVideoUploadComplete = false;
+    mVideoUploadSuccess = false;
+
+    eastl::string16 req;                       // constructed by 0x63d050, then reformatted
+    ConstructYouTubeVideoUploadXMLRequest(&req);              // 0x63d050
+
+    // Convert the current filename to UTF-16 and format it (e.g. "name.avi") into req.
+    eastl::string16 fnW = EA::ConvertToString16(mCurrFilename, -1);   // 0x93c5a0
+    WStr_Format(&req, L"%s.avi", fnW.c_str());                // 0x41e050
+
+    // Ask the save area for a suitable resource name/slot.
+    ISaveArea* sa = GetSaveArea(0x11ac197);                   // 0x6b1f90
+    eastl::string16 extra;
+    sa->SetName(extra.mpBegin, 0, 2);                         // vtbl[0x68] (arg plumbing)
+
+    // Build the upload payload (five char strings + a 3-dword key + the XML request).
+    cEditorYouTubeVideoUploadMessage msg;
+    CString_Sprintf((eastl::string*)&msg.mUsername, "%s", mYTUsername.mpBegin);   // 0x472fe0
+    CString_Sprintf((eastl::string*)&msg.mClientID, "%s", mYTAuthToken.mpBegin);
+    CString_Sprintf((eastl::string*)&msg.mAuthenticationToken, "%s", (const char*)g_1524444);
+    CString_Sprintf((eastl::string*)&msg.mDeveloperKey, "%s", fnW.mpBegin);
+    CString_Sprintf((eastl::string*)&msg.mVideoFilename, "%s", mYTUsername.mpBegin);
+    CString_Sprintf((eastl::string*)&msg.mXMLRequest, "%s", req.mpBegin);
+
+    IMessageServer* ms = GetMessageServer();                  // 0x67dcc0
+    ms->PostMessage(0x55e8bc8, &msg, 0);                      // vtbl[0x14]
+
+    msg.~cEditorYouTubeVideoUploadMessage();                  // 0x63c750
+    (void)extra;
+}
+
+// @ 0x0063DC40
+void cSPPlayModeSubModeMovie::FUN_0063dc40()
+{
+    // 1. Look up / create the property list that carries the YouTube credentials.
+    uint32_t key = FNV1_String16A(0x811c9dc5, g_1524440, 1);  // 0x932f30
+    IPropertyList* pm = (IPropertyList*)GetPropertyManager(); // 0x67de30
+
+    void* pl = 0;                                             // [esp+0x10]
+    if (pl)
+        ((IReleasable*)pl)->Release();                        // stale-slot release
+    pm->v2c(key, 0x11ac192, &pl);                             // vtbl[0x2c] GetProperty
+
+    if (!pl) {
+        void* p = operator_new_ea(0x38, (const char*)0x13eb430, 0, 0, 0, 0);  // 0x0F473A0
+        if (p)
+            p = PropertyList_Ctor(p, 0);                      // 0x6a1c40 (this in ecx)
+        else
+            p = 0;
+        if (p != pl) {
+            void* old = pl;
+            if (p)
+                ((IReleasable*)p)->r0();                      // vtbl[0]
+            pl = p;
+            if (old)
+                ((IReleasable*)old)->Release();               // vtbl[4]
+        }
+        char* q = (char*)pl + 8;
+        *(uint32_t*)(q + 0) = key;                            // +8
+        *(uint32_t*)(q + 4) = 0xb1b104;                       // +0xc
+        *(uint32_t*)(q + 8) = 0x11ac192;                      // +0x10
+    }
+
+    // 2. Publish the username as a property (0x93dd80 builds the Variant from a string16).
+    Variant v1;
+    Variant_FromString16(&v1, 0, &mYTUsername, 1, 0x10, 9, 0x12);   // 0x93dd80
+    ((IPropertyList*)pl)->v14(0x5664bf5, &v1);                   // vtbl[0x14]
+    if (v1.flags & 4)
+        Variant_Destruct(&v1, 0);                                // 0x93db80
+
+    // 3. Encrypt the password, then publish it as a property.
+    NoThrowStr enc;                                              // [esp+0x14] (wstring-shaped temp)
+    Encrypt(&enc, &mYTPassword);                                 // 0x60bcf0
+    Variant v2;
+    Variant_FromString16(&v2, 0, &enc, 1, 0x10, 9, 0x12);        // 0x93dd80
+    ((IPropertyList*)pl)->v14(0x5664bf6, &v2);                   // vtbl[0x14]
+    if (v2.flags & 4)
+        Variant_Destruct(&v2, 0);                                // 0x93db80
+
+    // 4. Save the credentials through the named save area.
+    ISaveArea* sa = GetSaveArea(0x11ac192);                      // 0x6b1f90
+    if (sa) {
+        NoThrowStr name;                                         // [esp]
+        SaveNamedResource((eastl::string*)&name, g_1524440, sa); // 0x6b4010
+    }
+
+    // 5. Release the property list.
+    if (pl)
+        ((IReleasable*)pl)->Release();                           // vtbl[4]
+}
+
