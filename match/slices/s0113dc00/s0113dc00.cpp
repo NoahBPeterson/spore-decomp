@@ -49,6 +49,8 @@ extern unsigned char g_16e7ba0[];  // 0x16e7ba0
 extern unsigned char g_14bc0fc[];  // 0x14bc0fc  vtable
 extern unsigned char g_14c2fa8[];  // 0x14c2fa8  vtable
 extern unsigned char g_14ca66c[];  // 0x14ca66c  vtable
+extern float         g_14c8a98;    // 0x14c8a98  0.1f   (constant pool slot)
+extern float         g_14c8a9c;    // 0x14c8a9c  0.5f   (constant pool slot)
 
 // opaque framework entry points.  vc71 has no usable __thiscall in casts, so each direct
 // thiscall callee is declared __fastcall with a dummy second (edx) parameter.
@@ -342,14 +344,17 @@ bool Plugin_InitA(void* self)
     *(void**)((char*)self + 0x0c) = (char*)self + 0x28;
     *(float*)((char*)self + 0x30) = 1.0f;
     *(float*)((char*)self + 0x28) = 120.0f;
-    *(float*)((char*)self + 0x38) = 0.1f;
+    // the original reloads the 0.1f / 0.5f constants for the second (b0-group) instance
+    // instead of keeping them live in a third/fourth xmm register; a volatile read forces
+    // the reload (and keeps the function from clobbering xmm3, which the original never writes)
+    *(float*)((char*)self + 0x38) = *(volatile float*)&g_14c8a98;
     *(float*)((char*)self + 0x48) = 1.0f;
     *(float*)((char*)self + 0xa4) = 1.0f;
-    *(float*)((char*)self + 0x40) = 0.5f;
+    *(float*)((char*)self + 0x40) = *(volatile float*)&g_14c8a9c;
     *(float*)((char*)self + 0xa0) = 120.0f;
-    *(float*)((char*)self + 0xa8) = 0.1f;
+    *(float*)((char*)self + 0xa8) = *(volatile float*)&g_14c8a98;
     *(float*)((char*)self + 0xb0) = 1.0f;
-    *(float*)((char*)self + 0xac) = 0.5f;
+    *(float*)((char*)self + 0xac) = *(volatile float*)&g_14c8a9c;
     *(float*)((char*)self + 0xb4) = 0.0f;
     *(int*)((char*)self + 0xb8) = 0;
     return 1;
