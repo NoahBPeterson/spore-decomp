@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0110c160/s0110c160.cpp  ?sortFeatureIndices@hkTriangleUtil@@QAEXPAX@Z  0110cd00  /O2 /MD /Gy /TP /vc71

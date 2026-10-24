@@ -1,0 +1,6 @@
+# Slice s0110c160 names. Havok 3.1.0 hkGsk / hkCollideTriangleUtil region.
+0110c160 TriangleHalfspaceResolve  # local helper: halfspace vertex resolver (__fastcall, edx=tri)
+0110c330 hkGsk::checkTriangleBoundaries  # dev-PDB mangled name; reads +0x20/+0xa0 planes
+0110c720 hkGsk::subdivideTriangle  # triangle/segment contact splitter; calls 0110c330 + 01105940
+0110cd00 hkTriangleUtil::sortFeatureIndices  # sorts 3 ushort indices to (min,median,max)
+0110cde0 hkGsk::convertFeatureToClosestDistance  # dev-PDB mangled name

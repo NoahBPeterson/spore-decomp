@@ -1,0 +1,5 @@
+# Slice s0110c160 -- incomplete / approximate functions.  Format:
+# <va>  <diff-bytes>  <reason>
+0110c160  360  triangle halfspace vertex resolver; x87 spill frame differs; equiv: FAIL (5/5 mismatched, first esp)
+0110c330  921  hkGsk::checkTriangleBoundaries; x87 reg-alloc differs; equiv: FAIL (5/5 mismatched, first eax&0xffff)
+0110c720  1390  hkGsk::subdivideTriangle; x87 + contact solver differs; equiv: FAIL (5/5 mismatched, first memory pool)
