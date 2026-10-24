@@ -2,3 +2,15 @@
 00b18740 Claude::IsDestroyedCheck  # Claude-coined name: cdecl(void*) -> char; zero means continue to FUN_00bfca80
 00bfca80 Claude::IsDestroyedNotify  # Claude-coined name: cdecl(void*, void*, uint) notifier, three arguments
 0067dcc0 SP::MessageServer  # Claude-coined name from the callers: cdecl() returns the message server singleton
+00bfcc80 ?FUN_00bfcc80@@YIPAXPAUCombatant@@HI@Z  # find an unused effect slot at +0xbc and instantiate through the effect manager
+00bfcd00 ?Combatant_dtor@@YIXPAUCombatant@@@Z  # SP::cCombatant destructor
+00bfcdd0 ?Combatant_TakeHit@@YIXPAUCombatant@@HMPAXHPAUVector3@@1@Z  # SP::cCombatant::TakeHit
+00bfd1a0 ?Combatant_PartialRepair@@YIXPAUCombatant@@HM@Z  # SP::cCombatant::PartialRepair
+00bfd2b0 ?FUN_00bfd2b0@@YIXPAUOrientObject@@@Z  # apply an orientation/placement transform
+00bfd3e0 ?FUN_00bfd3e0@@YIPAUHostileEntry@@PAU1@HPBU1@@Z  # copy one hostile-entry record
+00bfd430 ?FUN_00bfd430@@YAXPBUHostileEntry@@0PAU1@@Z  # forward-copy a hostile-entry range
+00bfd490 ?FUN_00bfd490@@YAXPAUHostileEntry@@00@Z  # backward-copy a hostile-entry range
+00bfd4e0 ?Combatant_ctor@@YIPAUCombatant@@PAU1@@Z  # SP::cCombatant constructor
+00bfd610 ?Cleanup@GameData@@QAEXXZ  # SP::cGameData::Cleanup
+00bfd800 ?SetDefinitionID@GameData@@QAEXXZ  # SP::cGameData::SetDefinitionID
+00bfd840 ?SetGameDataOwner@GameData@@QAEPAMPAMH@Z  # SP::cGameData::SetGameDataOwner
