@@ -1,1 +1,1 @@
-00796910 1724 complete Ghidra transcription of FUN_00796910; hand-scheduled SSE matrix kernel, compiler keeps spilled scratch array (emits 3184 bytes vs 1460); equiv FAIL (5/90 mismatched, ours faults)
+00796910 6605 complete Ghidra transcription of FUN_00796910; hand-scheduled SSE matrix kernel, MSVC keeps a spilled scratch/frame (4221 bytes vs 1460); equiv FAIL only signed zero (-0.0 vs +0.0, 0 ULP) at first-iteration outputs 4a430000/4a430014, 5/107 valid
