@@ -35,7 +35,7 @@ struct RenderJob {
     RenderJob* mpPrev;         // +0x04
     RNode*     mpObject;       // +0x08
     int        mField0c;       // +0x0c
-    float      mJobId;         // +0x10
+    uint32_t   mJobId;         // +0x10 (sRenderJobId value; compared as an integer)
 };
 
 // SP::cRenderer.  Only the fields this slice touches are named; everything else is padN.
@@ -53,8 +53,8 @@ struct cRenderer {
     void*    mpNodesB;         // +0x34c (render-node array)
     char     pad350[0x63c - 0x350];
     void*    mpShaderDebug;    // +0x63c
-    bool RemovePostRenderJob(float id);
-    bool RemovePreRenderJob(float id);
+    bool RemovePostRenderJob(uint32_t id);
+    bool RemovePreRenderJob(uint32_t id);
 };
 
 // eastl::vector<SP::cLayerInfoExtra> (fixed_vector_allocator carries an inline buffer)
@@ -298,7 +298,7 @@ void* DestroyRenderJobList(void* self_)
 }
 
 // @ 0x0075f8a0  (SP::cRenderer::RemovePostRenderJob)
-bool cRenderer::RemovePostRenderJob(float id)
+bool cRenderer::RemovePostRenderJob(uint32_t id)
 {
     void* self = this;
     char* sentinel = (char*)self + 0x324;
@@ -310,16 +310,20 @@ bool cRenderer::RemovePostRenderJob(float id)
         if (n == (RenderJob*)sentinel)
             return false;
     }
-    n->mpPrev->mpNext = n->mpNext;
-    n->mpNext->mpPrev = n->mpPrev;
-    if (n->mpObject != 0)
-        ((void (__thiscall*)(void*))*(void**)(*(int*)n->mpObject + 4))(n->mpObject);
-    EASTL_deallocate(n);
+    // The original advances to n->next before testing the id and then recovers the
+    // node as next->prev; that is the node actually unlinked (and differs from n
+    // when the list links are inconsistent).
+    RenderJob* target = n->mpNext->mpPrev;
+    target->mpPrev->mpNext = target->mpNext;
+    target->mpNext->mpPrev = target->mpPrev;
+    if (target->mpObject != 0)
+        ((void (__thiscall*)(void*))*(void**)(*(int*)target->mpObject + 4))(target->mpObject);
+    EASTL_deallocate(target);
     return true;
 }
 
 // @ 0x0075f900  (SP::cRenderer::RemovePreRenderJob)
-bool cRenderer::RemovePreRenderJob(float id)
+bool cRenderer::RemovePreRenderJob(uint32_t id)
 {
     void* self = this;
     char* sentinel = (char*)self + 0x330;
@@ -331,11 +335,12 @@ bool cRenderer::RemovePreRenderJob(float id)
         if (n == (RenderJob*)sentinel)
             return false;
     }
-    n->mpPrev->mpNext = n->mpNext;
-    n->mpNext->mpPrev = n->mpPrev;
-    if (n->mpObject != 0)
-        ((void (__thiscall*)(void*))*(void**)(*(int*)n->mpObject + 4))(n->mpObject);
-    EASTL_deallocate(n);
+    RenderJob* target = n->mpNext->mpPrev;
+    target->mpPrev->mpNext = target->mpNext;
+    target->mpNext->mpPrev = target->mpPrev;
+    if (target->mpObject != 0)
+        ((void (__thiscall*)(void*))*(void**)(*(int*)target->mpObject + 4))(target->mpObject);
+    EASTL_deallocate(target);
     return true;
 }
 
