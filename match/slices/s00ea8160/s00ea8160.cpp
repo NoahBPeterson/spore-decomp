@@ -99,7 +99,9 @@ struct C_00ea4fd0 { uint32_t pad[3]; C_00ea4fd0(); };   // 0xea4fd0
 
 // EA::Audio system (GetSystemAT): handlers are registered at slot 6.
 struct cAudioAT {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5();
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual float* GetListenerPos();        // +0x10
+    virtual void s5();
     virtual void Register(void* handler);   // +0x18
 };
 // SP::AudioSystem
@@ -118,6 +120,8 @@ struct AudioSetup {
     uint32_t pad00[3];
     MixModeRef mMixMgr;                     // +0xc
     bool Setup();
+    bool FUN_00ea8a90(int id, int unused);
+    bool FUN_00ea8ad0();
 };
 
 #define REGISTER(T) at->Register(new ("Audio", 0, 0, 0, 0) T())
@@ -179,4 +183,174 @@ bool AudioSetup::Setup()
         sys->SetObject(new ("Audio", 0, 0, 0, 0) C_00ea4fd0());
     }
     return true;
+}
+
+// ---------------------------------------------------------------------------
+// Additional AudioSetup / audio-helper entry points in this slice.
+// ---------------------------------------------------------------------------
+void __cdecl FUN_00f47380(void* p);          // 0xf47380 operator delete
+
+struct DtorA {
+    void* vtbl0;                             // +0x00
+    void* vtbl4;                             // +0x04
+    void* vtbl8;                             // +0x08
+    char pad0c[0x0c];
+    IRefCounted* obj18;                      // +0x18
+    char pad1c[0x1c];
+    char* begin38;                           // +0x38
+    char gap3c[4];
+    char* end40;                             // +0x40
+    DtorA* FUN_00ea89d0(unsigned char flags);
+};
+
+// @ 0x00ea89d0
+DtorA* DtorA::FUN_00ea89d0(unsigned char flags)
+{
+    if (end40 - begin38 > 1 && begin38 != 0)
+        FUN_00f47380(begin38);
+    if (obj18 != 0)
+        obj18->v1();
+    vtbl8 = (void*)0x013ef094;
+    vtbl4 = (void*)0x013eb394;
+    vtbl0 = (void*)0x013eb938;
+    if ((flags & 1) != 0)
+        FUN_00f47380(this);
+    return this;
+}
+
+struct DtorB {
+    void* vtbl0;                             // +0x00
+    void* vtbl4;                             // +0x04
+    void* vtbl8;                             // +0x08
+    char pad0c[0x0c];
+    IRefCounted* obj18;                      // +0x18
+    char pad1c[0x10];
+    char* begin2c;                           // +0x2c
+    char gap30[4];
+    char* end34;                             // +0x34
+    DtorB* FUN_00ea8a30(unsigned char flags);
+};
+
+// @ 0x00ea8a30
+DtorB* DtorB::FUN_00ea8a30(unsigned char flags)
+{
+    if (end34 - begin2c > 1 && begin2c != 0)
+        FUN_00f47380(begin2c);
+    if (obj18 != 0)
+        obj18->v1();
+    vtbl8 = (void*)0x013ef094;
+    vtbl4 = (void*)0x013eb394;
+    vtbl0 = (void*)0x013eb938;
+    if ((flags & 1) != 0)
+        FUN_00f47380(this);
+    return this;
+}
+
+struct MsgServerIface {
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
+    virtual void m4();
+    virtual void Send14(int id, int a, int b);       // +0x14
+    virtual void m6(); virtual void m7();
+    virtual void Send20(void* self, int id);         // +0x20
+};
+
+extern MsgServerIface* FUN_0067dcc0();       // 0x67dcc0
+extern MsgServerIface* FUN_00883860();       // 0x883860
+
+// @ 0x00ea8a90
+bool AudioSetup::FUN_00ea8a90(int id, int unused)
+{
+    bool ok = (id == 0x0578f803);
+    if (ok) {
+        Setup();
+        MsgServerIface* m = FUN_0067dcc0();
+        m->Send14(0x07c7686f, 0, 0);
+    }
+    return ok;
+}
+
+// @ 0x00ea8ad0
+bool AudioSetup::FUN_00ea8ad0()
+{
+    MsgServerIface* m = FUN_0067dcc0();
+    m->Send20(this, 0x0578f803);
+    return Setup();
+}
+
+struct RefHolder {
+    char pad00[0x14];
+    IRefCounted sub;                         // +0x14
+};
+
+struct ManagerIface {
+    virtual void m0(); virtual void m1(); virtual void m2();
+    virtual void V0c(void* outField, void** outObj, int a, int b, int c, int d); // +0xc
+};
+
+extern ManagerIface* FUN_0067dcd0();         // 0x67dcd0
+
+struct AudioObj {
+    virtual void a0();  virtual void a1();  virtual void a2();  virtual void a3();
+    virtual void a4();  virtual void a5();  virtual void a6();  virtual void a7();
+    virtual void a8();  virtual void a9();  virtual void a10(); virtual void a11();
+    virtual void a12();
+    virtual void SetVolume(float volume);    // +0x34
+    virtual void v38();                      // +0x38
+    int field04;                             // +0x04
+    char pad08[0x18 - 0x08];
+    IRefCounted* field18;                    // +0x18
+    char pad1c[0x24 - 0x1c];
+    float f24;                               // +0x24
+    float f28;                               // +0x28
+    float f2c;                               // +0x2c
+    float f30;                               // +0x30
+    float f34;                               // +0x34
+    bool FUN_00ea8ed0();
+    void FUN_00ea8af0(float f, int a);
+    void FUN_00ea8c30(float f, int a);
+};
+
+// @ 0x00ea8ed0
+bool AudioObj::FUN_00ea8ed0()
+{
+    SetVolume(0.0f);
+    MsgServerIface* server = FUN_00883860();
+    if (server != 0)
+        server->Send20(&field04, 0x02b0c259);
+
+    void* local = 0;
+    ManagerIface* mgr = FUN_0067dcd0();
+    if (local != 0) {
+        void* tmp = local;
+        local = 0;
+        ((IRefCounted*)tmp)->v1();
+    }
+    mgr->V0c(&f28, &local, 0, 0, 0, 0);
+
+    IRefCounted* nw = local != 0 ? &((RefHolder*)local)->sub : 0;
+    IRefCounted* old = field18;
+    if (nw != old) {
+        if (nw != 0) nw->v0();
+        field18 = nw;
+        if (old != 0) old->v1();
+    }
+    v38();
+    if (local != 0)
+        ((IRefCounted*)local)->v1();
+    return true;
+}
+
+void __cdecl FUN_00a16ed0(float f, void* self, int arg); // 0xa16ed0
+
+// @ 0x00ea8af0
+void AudioObj::FUN_00ea8af0(float f, int a)
+{
+    FUN_00a16ed0(f, this, a);
+    SetVolume(3.402823466e38f);
+}
+
+// @ 0x00ea8c30
+void AudioObj::FUN_00ea8c30(float f, int a)
+{
+    FUN_00a16ed0(f, this, a);
 }
