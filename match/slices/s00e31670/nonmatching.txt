@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00e31aa0  20  instance has-animation probe: complete reconstruction - equiv PASS (219/400 valid, 0 mismatch, 66.0% coverage); 112 vs 117 B, only the bool return-register encoding differs (cl emits mov al,1 / drops the zeroing where the original emits mov eax,1 / xor eax,eax)
+00e320c0  132  3-variant float lerp setter: complete reconstruction - equiv PASS (310/400 valid, 0 mismatch, 66.7% coverage); 149 vs 147 B, the variant type-check/address-constant idiom is scheduled differently

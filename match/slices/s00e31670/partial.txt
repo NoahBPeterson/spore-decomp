@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00e31670  854  rainbow frame update (large): stub only; 1 vs 854 B - the frame-update body is not reconstructed
+00e31bb0  204  cSPUISocialRainbow::GetRoundBounds: approximate; 211 vs 220 B - equiv FAIL (instance base folded as a*0xa4+0xa4 instead of (a+1)*0xa4 and one output slot differs)
+00e31d60  863  rainbow secondary update (large): stub only; 1 vs 863 B - the secondary-update body is not reconstructed
+00e32160  229  cSPUISocialRainbow helper (0xe32160): stub only; 12 vs 233 B - the helper body is not reconstructed
+00e32250  518  cSPUISocialRainbow helper (0xe32250): stub only; 23 vs 522 B - the helper body is not reconstructed
+00e32460  114  cSPUISocialRainbow::StartDrain: approximate; 97 vs 137 B - equiv FAIL (helper-call visibility lets cl reuse ecx and skip the stack frame; the 0.01f clamp is a branch instead of maxss)
+00e324f0  108  cSPUISocialRainbow::Stop: approximate; 127 vs 131 B - equiv FAIL (helper-call visibility lets cl reuse ecx instead of saving this in edi)

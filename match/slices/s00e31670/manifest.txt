@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e31670/s00e31670.cpp  ?SetCurrent@cSPUISocialRainbow@@QAEXHM@Z  00e319d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e31670/s00e31670.cpp  ?Ratio@cSPUISocialRainbow@@QAENH@Z  00e31a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e31670/s00e31670.cpp  ?F0e31b30@@YAXPAXPAIPAUVariant@@@Z  00e31b30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e31670/s00e31670.cpp  ?F0e31b70@@YA_NPAXPAIH@Z  00e31b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e31670/s00e31670.cpp  ?Fwd@cSPUISocialRainbow@@QAEXXZ  00e31c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00e31670/s00e31670.cpp  ?Mode@cSPUISocialRainbow@@QAEXH@Z  00e31cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
