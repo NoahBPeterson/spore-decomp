@@ -1,0 +1,14 @@
+slices/s00d2dd20/s00d2dd20.cpp  ?Update@cCreatureModeEventSink@@QAEXM@Z  00d2e2e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?GetTerrainHeight@@YANXZ  00d2e360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?GetTierHeight@@YANH@Z  00d2e380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?GetTierBaseHeight@@YANH@Z  00d2e410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?SetClampedValue@@YAXM@Z  00d2e480  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?GetRecomputedZoom@@YANPAVcAvatar@@@Z  00d2e800  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?GetTierForTerrain@@YAHXZ  00d2e830  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?ResetCreatureModeState@@YAXXZ  00d2e980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?AsInterface@cCreatureModeInputStrategy@@QAEPAXI@Z  00d2ea80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?IsStrafeLeftDown@cCreatureModeInputStrategy@@QAE_NXZ  00d2eab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?IsStrafeRightDown@cCreatureModeInputStrategy@@QAE_NXZ  00d2eaf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?OnDisplayStrategyModal@@YG_NPAXPAI@Z  00d2eb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?ToggleBanningMode@@YAXXZ  00d2eb70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d2dd20/s00d2dd20.cpp  ?ToggleBuildMode@@YAXXZ  00d2ebc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
