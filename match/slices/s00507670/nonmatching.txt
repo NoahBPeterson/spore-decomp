@@ -1,1 +1,1 @@
-00507b30  217  six-vector member destruction: complete behaviour; /Od loop/register schedule differs
+00507b30  217  six-vector member destruction: complete behaviour; thiscall sub-destructors at +0x80/+0x6c/+0x44/+0x30/+0x1c/+0x08; flags /Od /Ob1 /MD /Gy /TP; equiv WEAK (196 valid, 89.0% coverage, no mismatch)
