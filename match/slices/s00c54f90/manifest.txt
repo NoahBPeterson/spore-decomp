@@ -1,0 +1,9 @@
+slices/s00c54f90/s00c54f90.cpp  ??0cMissionFindAliens@@QAE@XZ  00c55130  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c54f90/s00c54f90.cpp  ?GetUIMediumDescription@cMissionFindAliens@@QAEXPAX@Z  00c552d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c54f90/s00c54f90.cpp  ?GetUILongDescription@cMissionFindAliens@@QAEXPAX@Z  00c55330  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c54f90/s00c54f90.cpp  ?Shutdown@cSPMissionFlight101@@QAEXXZ  00c557f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c54f90/s00c54f90.cpp  ?Init@cSPMissionFlight101@@QAE_NXZ  00c55ec0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c54f90/s00c54f90.cpp  ?PostLoad@cSPMissionFlight101@@QAEXXZ  00c55ef0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c54f90/s00c54f90.cpp  ?Destroy@cSPMissionFlight101@@QAEPAXD@Z  00c55fc0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c54f90/s00c54f90.cpp  ?OnSubMissionComplete@cSPMissionFlight101@@QAEXXZ  00c56170  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c54f90/s00c54f90.cpp  ?OnAbort@cSPMissionFlight101@@QAEXXZ  00c56260  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
