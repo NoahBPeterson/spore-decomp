@@ -5,6 +5,6 @@
 00621d50 eastl::uninitialized_copy_backward<ControlDrawable>  # AddRef/Release on copy-backward
 00621db0 ?CreateHitMaskFromResource@cXHTMLControlAppearance@@QAE_NPAH0PAPAX@Z  # cXHTMLControlAppearance::CreateHitMaskFromResource migrated from s00621830 (verbatim, slice spelling)
 00621ee0 ??0cXHTMLControlAppearance@@QAE@XZ  # cXHTMLControlAppearance::cXHTMLControlAppearance migrated from s00621830 (verbatim, slice spelling)
-00621f00 ??1cXHTMLControlAppearance@@QAE@XZ  # cXHTMLControlAppearance::~cXHTMLControlAppearance migrated from s00621830 (verbatim, slice spelling)
+00621f00 ??_GcXHTMLControlAppearance@@UAEPAXI@Z  # cXHTMLControlAppearance scalar deleting dtor (PDB candidate said ~cXHTMLControlAppearance via caller-single; the code takes the delete flag and ret 4, so it is ??_G)
 00621f50 ?erase@vector_s0062_1830@eastl@@QAEPAUControlDrawable@@PAU3@0@Z  # vector_s0062_1830::erase migrated from s00621830 (verbatim, slice spelling)
 00621fc0 ?DoInsertValue@vector_s0062_1830@eastl@@QAEXPAUControlDrawable@@ABU3@@Z  # vector_s0062_1830::DoInsertValue migrated from s00621830 (verbatim, slice spelling)

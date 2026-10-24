@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 
 // ---- items of slice s00621830 begin (TODO(rewrite): local stubs, replace by canonical classes)
 uint32_t __cdecl FUN_00a35070(void* a, void* b, void* c);                    // 0xa35070
@@ -38,7 +39,8 @@ struct cXHTMLControlAppearance {
   Drawable* mpScroll2;        // +0x20
 
   cXHTMLControlAppearance();                       // 0x621ee0
-  ~cXHTMLControlAppearance();                      // 0x621f00
+  virtual ~cXHTMLControlAppearance();              // 0x621f00 (the VA is the ??_G deleting dtor)
+  static void operator delete(void* p) { EA_Free(p); }
   void Apply(WinXHTML* w);                         // 0x621bf0
   bool CreateHitMaskFromResource(int* p1, int* p2, void** out);  // 0x621db0
 };
@@ -220,11 +222,19 @@ cXHTMLControlAppearance::cXHTMLControlAppearance()
 : mPad4(0), mpBegin(0), mpEnd(0), mpCap(0), mpScroll1(0), mpScroll2(0) {}
 
 // @ 0x00621f00
+// The VA is the ??_G deleting destructor: retail inlines the destructor body into it, sets the
+// class vtable first and restores the base vtable after the body (both as absolute immediates).
+// The vector member at +0x08 is torn down by vector<ControlDrawable>::~vector @0x621ea0.
+void __fastcall ControlDrawableVecDtor(void* self);   // 0x00621ea0 (thiscall; ecx = &vector)
+
 cXHTMLControlAppearance::~cXHTMLControlAppearance()
 {
+  *(const uint32_t**)this = (const uint32_t*)0x013FD3FC;   // own vtable
+  _ReadWriteBarrier();                                     // retail stores the vptr before loading +0x20
   if (mpScroll2) ((void(__thiscall*)(Drawable*))Vt(mpScroll2)[1])(mpScroll2);
   if (mpScroll1) ((void(__thiscall*)(Drawable*))Vt(mpScroll1)[1])(mpScroll1);
-  if (mpBegin) EA_Free(mpBegin);
+  ControlDrawableVecDtor((char*)this + 8);
+  *(const uint32_t**)this = (const uint32_t*)0x013EC458;   // base vtable (inlined base dtor)
 }
 
 // @ 0x00621f50
