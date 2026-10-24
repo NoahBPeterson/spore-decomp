@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009bd2b0 113 FUN_009bd2b0 complete but difftest WEAK (118 valid inputs, 79.5% coverage, no mismatch): copies center (3 floats) to +0x1644 and orientation (4 floats) to +0x1650 with fld/fstp, then if the +0x2f8 state pointer is null calls anim_state_x::F_9e3f70(6,4) on the field address and F_9b7b10(0,0), and if cGameData(+0x15b8).GetPoliticalID() != 0 calls cGameData::F_9d33a0(&field_2f8); the game-data call makes the fuzzer discard most inputs (fake-arity/budget/faults)
