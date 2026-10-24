@@ -253,6 +253,8 @@ nudged_at = {}   # sid -> (monotonic time, done-count when nudged)
 nudge_done = {}  # range -> done-count at its last nudge (queue groups reset the nudge count when it grows)
 moved = {}       # range -> (time the settled count last changed, that count)
 nudges = {}      # range -> nudges sent (re-read from the log on restart)
+toolfixed = set()  # message ids already re-prompted for a tool call written as text
+TOOL_TEXT = re.compile(r"DSML|<parameter name=|<invoke name=|<tool_call>")
 abandoned = set()
 if os.path.exists(LOG):
     for l in open(LOG):
@@ -328,6 +330,19 @@ while True:
                 busy += 1
             continue
         # idle and unfinished
+        # A turn that ended on tool-call markup written as text (the provider's parser did not turn it into a call):
+        # re-prompt at once, without waiting the cooldown or spending a nudge (CheaperInference, 2026-10-24: 0.47% of
+        # responses, e.g. '<parameter name="shell"> <｜DSML｜ parameter name="command" ...', abandoned 6 gold7 workers)
+        txt = " ".join(c.get("text", "") for c in ((last or {}).get("content") or []) if isinstance(c, dict))
+        if last and last.get("id") not in toolfixed and TOOL_TEXT.search(txt):
+            toolfixed.add(last.get("id"))
+            log("toolfix r%d %s (tool call came back as text)" % (k, sid))
+            api("POST", "/api/session/%s/prompt" % sid, {"text": "Your last tool call came back as plain text, so it "
+                "was not executed. Call the tool again through the tool interface (no markup in your reply text), "
+                "then continue your task.", "model": model_of(k)})
+            nudged_at[sid] = (now, done)
+            busy += 1
+            continue
         since = now - (act or completed or created or 0)
         prev = nudged_at.get(sid)
         if prev and prev[1] == done and now - prev[0] < a.cooldown:
