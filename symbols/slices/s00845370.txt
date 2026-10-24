@@ -1,2 +1,10 @@
 008456e0 EA::ArgScript::cParser::Init  # registers built-in commands (include..trace) and expression functions via vtable slot 5 / cExpression::AddFunction(0x83df90); PDB name
 0083df90 EA::ArgScript::cExpression::AddFunction  # thiscall(this=parser+0x4c, name, fn) ret 8
+00845370 EA::ArgScript::StringMap::operator[]  # eastl hash_map<string8,string8>::operator[] ret 4: find, else default string8 + PairSS ctor (0x841d60) + insert (0x8439b0), return node+0x10
+00845460 EA::ArgScript::CommandMap::erase  # hashtable<string8,AutoRefCount<cICommand>>::erase(iterator) ret 0xc: advance to next bucket, unlink, ~PairB (0x67e830), operator delete, --mnElementCount
+008454e0 EA::ArgScript::StringMap::erase  # hashtable<string8,string8>::erase(key) ret 4: inline FNV-1a, mod mnBucketCount, walk bucket with operator== (0x554fb0), free all matches, return oldCount-mnElementCount
+008455c0 EA::ArgScript::StringMap::erase  # hashtable<string8,string8>::erase(iterator) ret 0xc: advance, unlink, inline ~StringNode (value then key), operator delete, --mnElementCount
+00846000 EA::ArgScript::cParser::RegisterCommand  # MakeCaseInsensitiveChars(0x840cc0) into mNameBuf (+0x1b0), mCommands[mNameBuf] (0x83cb70) slot addref/release, cmd->Attach(this, state) vtable slot 2; ret 8
+00846070 EA::ArgScript::cParser::UnregisterCommand  # overload (cICommand*): walk mCommands from begin() while != end(), match node->mpObject, erase(it); ret 4 returns bool
+008460f0 EA::ArgScript::cParser::UnregisterCommand  # overload (const char*): MakeCaseInsensitiveChars + mCommands.find (0x7e2ea0) + end check + erase(it); ret 4 returns bool
+00846160 EA::ArgScript::cParser::SetVariableNoSubstitution  # key = mScope(+0x130) + name, mVariables[key] (0x845370).assign(value) (0x454cb0); ret 8

@@ -11,7 +11,150 @@ inline void operator delete(void*, const char*, int, unsigned, const char*, int)
 namespace EA { namespace ArgScript {
 
 struct cArguments;
-class cICommand { public: virtual void ParseLine(const cArguments&) {} };
+class cParser;
+struct cParserIsState { uint32_t m[2]; };
+
+class cICommand { public:
+    virtual void v0() {}
+    virtual void v1() {}
+    virtual void Attach(cParser*, void*) {}       // slot 2 (+0x8)
+    virtual int  AddRef() { return 0; }           // slot 3 (+0xc)
+    virtual int  Release() { return 0; }          // slot 4 (+0x10)
+    virtual void ParseLine(const cArguments&) {}
+};
+
+// ---- eastl stand-ins ---------------------------------------------------------------------------
+extern "C" void  __cdecl FUN_00f47380(void* p);                                    // operator delete
+extern "C" void* __cdecl FUN_011e0744(void* dst, const void* src, unsigned size);  // memcpy
+void MakeCaseInsensitiveChars(char* src, int* dst);                                // 0x00840cc0
+
+// eastl::basic_string<char, eastl::allocator> (16 bytes: three pointers + pad)
+struct string8 {
+    char* mpBegin;                          // +0
+    char* mpEnd;                            // +4
+    char* mpCapacity;                       // +8
+    uint32_t mPad;                          // +0xc
+
+    string8()
+    {
+        mpBegin = (char*)0x01667bac;
+        mpEnd = (char*)0x01667bac;
+        mpCapacity = (char*)0x01667bad;
+    }
+    __forceinline string8(const char* first, const char* last)
+    {
+        uint32_t n = (uint32_t)(last - first);
+        if (n + 1 > 1) {
+            mpBegin = (char*)operator new(n + 1, "ArgScript", 0, 0, (const char*)0x013ebb38, 0xd1);
+            mpCapacity = mpBegin + n + 1;
+        } else {
+            mpBegin = (char*)0x01667bac;
+            mpCapacity = (char*)0x01667bad;
+        }
+        FUN_011e0744(mpBegin, first, n);
+        mpEnd = mpBegin + n;
+        *mpEnd = 0;
+    }
+    ~string8()
+    {
+        if (mpCapacity - mpBegin > 1 && mpBegin)
+            FUN_00f47380(mpBegin);
+    }
+    string8& append(const char* first, const char* last);    // 0x00455d60
+    string8& assign(const char* first, const char* last);    // 0x00454cb0
+};
+
+bool String8Equal(const string8& a, const string8& b);       // 0x00554fb0
+
+// node of hashtable<string8, AutoRefCount<cICommand>>
+struct PairB {
+    string8    mKey;        // +0
+    cICommand* mpObject;    // +0x10
+    ~PairB();               // 0x0067e830
+};
+struct CommandNode : PairB {
+    CommandNode* mpNext;    // +0x14
+};
+
+// node of hashtable<string8, string8>
+struct PairSS {
+    string8 mKey;           // +0
+    string8 mValue;         // +0x10
+    PairSS(const string8& k, const string8& v);   // 0x00841d60
+};
+struct StringNode : PairSS {
+    StringNode* mpNext;     // +0x20
+};
+
+struct InsertResult { StringNode* mpNode; void** mpBucketPtr; };
+
+struct CmdIter {
+    CommandNode*  mpNode;
+    CommandNode** mpBucketPtr;
+    bool operator!=(const CmdIter& o) const { return mpNode != o.mpNode; }
+    CmdIter& operator++()
+    {
+        CommandNode* n = mpNode->mpNext;
+        while (!n) { ++mpBucketPtr; n = *mpBucketPtr; }
+        mpNode = n;
+        return *this;
+    }
+};
+
+// hashtable<string8, AutoRefCount<cICommand>>, 0x20 bytes
+struct CommandMap {
+    uint32_t       mField00;            // +0
+    CommandNode**  mpBucketArray;       // +4
+    uint32_t       mnBucketCount;       // +8
+    uint32_t       mnElementCount;      // +0xc
+    uint32_t       mPad10[4];           // +0x10
+    cICommand*& operator[](const string8& key);   // 0x0083cb70
+    CmdIter find(const string8& key);             // 0x007e2ea0
+    CmdIter erase(CmdIter pos);                   // 0x00845460
+    CmdIter begin()
+    {
+        CmdIter it;
+        it.mpBucketPtr = mpBucketArray;
+        CommandNode* n = *it.mpBucketPtr;
+        while (!n) { ++it.mpBucketPtr; n = *it.mpBucketPtr; }
+        it.mpNode = n;
+        return it;
+    }
+    CmdIter end()
+    {
+        CmdIter it;
+        it.mpBucketPtr = mpBucketArray + mnBucketCount;
+        it.mpNode = *it.mpBucketPtr;
+        return it;
+    }
+};
+
+struct StrIter {
+    StringNode*  mpNode;
+    StringNode** mpBucketPtr;
+    bool operator!=(const StrIter& o) const { return mpNode != o.mpNode; }
+};
+
+// hashtable<string8, string8>, 0x20 bytes
+struct StringMap {
+    uint32_t      mField00;             // +0
+    StringNode**  mpBucketArray;        // +4
+    uint32_t      mnBucketCount;        // +8
+    uint32_t      mnElementCount;       // +0xc
+    uint32_t      mPad10[4];            // +0x10
+    string8& operator[](const string8& key);                  // 0x00845370
+    StrIter find(const string8& key);                         // 0x007e2ea0
+    StrIter erase(StrIter pos);                               // 0x008455c0
+    int erase(const string8& key);                            // 0x008454e0
+    InsertResult insert(const PairSS* value, void* rehash);   // 0x008439b0
+    StrIter end()
+    {
+        StrIter it;
+        it.mpBucketPtr = mpBucketArray + mnBucketCount;
+        it.mpNode = *it.mpBucketPtr;
+        return it;
+    }
+};
 
 // cCommandBase: vtable, mParser, mRefCount, mState (0x10 bytes)
 class cCommandBase : public cICommand { public:
@@ -82,10 +225,22 @@ class cParser { public:
     PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39) PV(40) PV(41) PV(42) PV(43) PV(44) PV(45)
     PV(46)
     virtual void Reset(int arg);                                 // slot 47 (+0xbc)
-    char pad0[8];
-    bool mInitialized;                  // +0xc
-    char pad1[0x3f];
+    cParserIsState mStateDefault;       // +0x04
+    bool mInitialized;                  // +0x0c
+    char pad1[0x1b];                    // +0x0d..+0x27
+    cParserIsState* mState;             // +0x28
+    CommandMap mCommands;               // +0x2c (0x20)
     cExpression mExpression;            // +0x4c
+    char pad50[0x3f];                   // +0x4d..+0x8b
+    StringMap mVariables;               // +0x8c (0x20)
+    char padAC[0x84];                   // +0xac..+0x12f
+    string8 mScope;                     // +0x130
+    char pad140[0x70];                  // +0x140..+0x1af
+    string8 mNameBuf;                   // +0x1b0
+    void RegisterCommand(const char* name, cICommand* cmd);              // 0x00846000
+    bool UnregisterCommand(cICommand* cmd);                              // 0x00846070
+    bool UnregisterCommand(const char* name);                            // 0x008460f0
+    void SetVariableNoSubstitution(const char* name, const char* value); // 0x00846160
     bool Init();                        // @ 0x8456e0
 };
 
@@ -130,5 +285,157 @@ bool cParser::Init()
     return true;
     }
     return false;
+}
+
+// @ 0x00845460
+CmdIter CommandMap::erase(CmdIter pos)
+{
+    CmdIter next;
+    next.mpNode = pos.mpNode->mpNext;
+    next.mpBucketPtr = pos.mpBucketPtr;
+    while (!next.mpNode) {
+        ++next.mpBucketPtr;
+        next.mpNode = *next.mpBucketPtr;
+    }
+    if (*pos.mpBucketPtr == pos.mpNode)
+        *pos.mpBucketPtr = pos.mpNode->mpNext;
+    else {
+        CommandNode* p = *pos.mpBucketPtr;
+        while (p->mpNext != pos.mpNode)
+            p = p->mpNext;
+        p->mpNext = pos.mpNode->mpNext;
+    }
+    ((PairB*)pos.mpNode)->~PairB();
+    FUN_00f47380(pos.mpNode);
+    --mnElementCount;
+    return next;
+}
+
+// @ 0x008455c0
+StrIter StringMap::erase(StrIter pos)
+{
+    StrIter next;
+    next.mpNode = pos.mpNode->mpNext;
+    next.mpBucketPtr = pos.mpBucketPtr;
+    while (!next.mpNode) {
+        ++next.mpBucketPtr;
+        next.mpNode = *next.mpBucketPtr;
+    }
+    if (*pos.mpBucketPtr == pos.mpNode)
+        *pos.mpBucketPtr = pos.mpNode->mpNext;
+    else {
+        StringNode* p = *pos.mpBucketPtr;
+        while (p->mpNext != pos.mpNode)
+            p = p->mpNext;
+        p->mpNext = pos.mpNode->mpNext;
+    }
+    delete pos.mpNode;
+    --mnElementCount;
+    return next;
+}
+
+// @ 0x008454e0
+int StringMap::erase(const string8& key)
+{
+    uint32_t h = 0x811c9dc5;
+    const unsigned char* p = (const unsigned char*)key.mpBegin;
+    uint32_t c = *p;
+    while (c) {
+        h *= 0x1000193;
+        ++p;
+        h ^= c;
+        c = *p;
+    }
+    StringNode** link = mpBucketArray + h % mnBucketCount;
+    uint32_t oldCount = mnElementCount;
+    if (*link) {
+        do {
+            StringNode* n = *link;
+            if (String8Equal(key, n->mKey))
+                break;
+            link = &n->mpNext;
+        } while (*link);
+        while (*link) {
+            StringNode* node = *link;
+            if (!String8Equal(key, node->mKey))
+                break;
+            *link = node->mpNext;
+            delete node;
+            --mnElementCount;
+        }
+    }
+    return (int)(oldCount - mnElementCount);
+}
+
+// @ 0x00845370
+string8& StringMap::operator[](const string8& key)
+{
+    StrIter it = find(key);
+    if (it != end())
+        return it.mpNode->mValue;
+    string8 def;
+    PairSS pair(key, def);
+    InsertResult res = insert(&pair, 0);
+    return res.mpNode->mValue;
+}
+
+// @ 0x00846000
+void cParser::RegisterCommand(const char* name, cICommand* cmd)
+{
+    MakeCaseInsensitiveChars((char*)name, (int*)&mNameBuf);
+    cICommand*& slot = mCommands[mNameBuf];
+    cICommand* old = slot;
+    if (cmd != old) {
+        if (cmd)
+            cmd->AddRef();
+        slot = cmd;
+        if (old)
+            old->Release();
+    }
+    cParserIsState* st = mState;
+    if (!st)
+        st = &mStateDefault;
+    cmd->Attach(this, st);
+}
+
+// @ 0x00846070
+bool cParser::UnregisterCommand(cICommand* cmd)
+{
+    CmdIter it = mCommands.begin();
+    while (it != mCommands.end()) {
+        if (it.mpNode->mpObject == cmd) {
+            it = mCommands.erase(it);
+            return true;
+        }
+        ++it;
+    }
+    return false;
+}
+
+// @ 0x008460f0
+bool cParser::UnregisterCommand(const char* name)
+{
+    MakeCaseInsensitiveChars((char*)name, (int*)&mNameBuf);
+    CmdIter it = mCommands.find(mNameBuf);
+    if (it != mCommands.end()) {
+        it = mCommands.erase(it);
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00846160
+void cParser::SetVariableNoSubstitution(const char* name, const char* value)
+{
+    string8 key(mScope.mpBegin, mScope.mpEnd);
+    const char* nameEnd = name;
+    while (*nameEnd)
+        ++nameEnd;
+    key.append(name, nameEnd);
+    string8& slot = mVariables[key];
+    const char* valueEnd = value;
+    while (*valueEnd)
+        ++valueEnd;
+    slot.assign(value, valueEnd);
 }
 }} // namespace
