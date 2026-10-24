@@ -83,8 +83,9 @@ void CacheList::AddOrUpdate(const Key12& k, uint32_t score) {
   tmp.c = k.c;
   tmp.score = score;
   if (vec.end < vec.cap) {
-    *vec.end = tmp;
-    ++vec.end;
+    Entry* pos = vec.end;
+    vec.end = pos + 1;
+    if (pos != 0) *pos = tmp;
   } else {
     vec.DoInsertValue(vec.end, tmp);
   }
@@ -93,6 +94,8 @@ void CacheList::AddOrUpdate(const Key12& k, uint32_t score) {
 
 // @ 0x6b0c00
 Cache::Cache(int a, int b) {
+  vt0 = 0x014096c4;
+  vt1 = 0x014096c0;
   refcnt = 0;
   m0c = a;
   if (a != 0) {
@@ -109,7 +112,6 @@ Cache::Cache(int a, int b) {
   m2c = 0;
   nodeNext = (uint32_t)&nodeNext;
   nodePrev = (uint32_t)&nodeNext;
-  m3c = 0;
   m40 = 0;
   m48 = 0;
   m4c = 0;
@@ -120,8 +122,8 @@ Cache::Cache(int a, int b) {
 }
 
 // @ 0x6b0da0
-void** Cache::Insert(void** out, uint32_t key, uint64_t val) {
-  uint32_t payload = helper08a0(key, (uint32_t)val);
+void** Cache::Insert(void** out, uint32_t key, uint32_t val) {
+  uint32_t payload = helper08a0(key, val);
   uint32_t* node = (uint32_t*)EAlloc(0xc, "App", 0, 0, kAllocFile, 0xd1);
   if (node + 2 != 0) {
     node[2] = payload;
@@ -133,9 +135,9 @@ void** Cache::Insert(void** out, uint32_t key, uint64_t val) {
   *out = node;
   Key12 k;
   k.a = key;
-  k.b = 0;
-  k.c = (uint32_t)val;
-  ((Map*)&m18)->Insert(&k, node, 0);
+  k.b = val;
+  k.c = (uint32_t)node;
+  ((Map*)&m18)->Insert(&key, &k, (void*)((uint32_t)out & 0xffffff00));
   ((uint8_t*)this)[0x15] = 1;
   return out;
 }

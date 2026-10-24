@@ -37,7 +37,7 @@ extern ResourceMgr* ResourceMan_GetManager();    // 0x0067dcd0
 
 // Callback with slot 0x40 (0x6b1000) / 0x38 (0x6b10a0), stream slots.
 struct Callback40 : Vt16 { virtual void Call40(void*); };
-struct Callback38 : Vt14 { virtual bool Call38(void*); };
+struct Callback38 : Vt14 { virtual uint32_t Call38(void*); };
 
 // I/O stream (slots 0x1c,0x28,0x2c).
 struct Stream : Vt7 {
@@ -89,7 +89,7 @@ struct Map {
   uint32_t r[7];
   void DoNukeSubtree(uint32_t);                     // 0x009a9600
   void Find(uint32_t* out, Key12* key);             // 0x00a05730
-  void Insert(void* key, void* val, int tag);       // 0x006b0670
+  void Insert(void* key, void* val, void* out);      // 0x006b0670
 };
 extern void  RBTreeIncrement(void*);                // 0x00921580
 extern void  RBTreeErase(void*, void*);             // 0x00921880
@@ -150,7 +150,7 @@ struct Cache {
   void  A(Key12* e, int v);                          // 0x6b0ce0
   void  B(Key12* e);                                 // 0x6b0d20
   void  C(Key12* e);                                 // 0x6b0d60
-  void** Insert(void** out, uint32_t key, uint64_t val); // 0x6b0da0
+  void** Insert(void** out, uint32_t key, uint32_t val); // 0x6b0da0
   void  Clear();                                     // 0x6b0e40
   void  Load();                                      // 0x6b14f0
   void  Refresh();                                   // 0x6b15b0
