@@ -1,0 +1,4 @@
+00bac830 ?FUN_00bac830@@YGXPAUKeyVec@@HHHD0@Z  # SP::cSimPlanetLowLOD::SeedCellPlants (pdb_candidates.json, caller-scored; not authoritative)
+00baccd0 ?FUN_00baccd0@@YGXPAUKeyVec@@HHHH0@Z  # SP::cCivModeStrategy::ChooseNeutrals (pdb_candidates.json, caller-scored; not authoritative)
+00bad080 ?FUN_00bad080@@YGXPAUKey@@PAUKeyVec@@@Z  # unnamed in PDB
+00bad440 ?FUN_00bad440@Self440@@QAEXPAUObj440@@PAUCfg440@@@Z  # SP::GetEpicAnimation (pdb_candidates.json, caller-scored); modelled thiscall (unused ecx)
