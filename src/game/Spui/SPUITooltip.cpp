@@ -83,7 +83,7 @@ void  __cdecl FUN_00808b20(void*, void*, int);            // 0x808b20
 void  __cdecl FUN_00805fe0(void*, void*);                 // 0x805fe0
 void  __cdecl SPUI_UpdateMouseFocus(int);                 // 0x804f50
 float __cdecl SPUI_GetElapsedSeconds();                   // 0x805080
-void  __cdecl SPKeyFromName(void*, const wchar_t*, int, int); // 0x68d840
+uint32_t __cdecl SPKeyFromName(void*, const wchar_t*, int, int); // 0x68d840
 struct WString {
     wchar_t* mpBegin;
     wchar_t* mpEnd;
@@ -231,10 +231,10 @@ void TooltipManager::Dtor()
 // @ 0x008353a0
 bool TooltipManager::ReleaseRefs()
 {
-    if (layout) { layout = 0; ((VFv)VT(layout)[8 / 4])(layout); }
-    if (window) { window = 0; ((VFv)VT(window)[4 / 4])(window); }
-    if (parent) { parent = 0; ((VFv)VT(parent)[4 / 4])(parent); }
-    if (props)  { props = 0;  ((VFv)VT(props)[4 / 4])(props); }
+    if (void* p = layout) { layout = 0; ((VFv)VT(p)[8 / 4])(p); }
+    if (void* p = window) { window = 0; ((VFv)VT(p)[4 / 4])(p); }
+    if (void* p = parent) { parent = 0; ((VFv)VT(p)[4 / 4])(p); }
+    if (void* p = props)  { props = 0;  ((VFv)VT(p)[4 / 4])(p); }
     return true;
 }
 
@@ -310,7 +310,7 @@ void TooltipManager::MakeFullyVisibleInMainWindow(int dummy)
 bool TooltipManager::LoadProps()
 {
     void* pm = FUN_0067de30();
-    if (props) { props = 0; ((VFv)VT(props)[4 / 4])(props); }
+    if (void* p = props) { props = 0; ((VFv)VT(p)[4 / 4])(p); }
     char c = ((char (__thiscall*)(void*, int, void**))VT(pm)[0x30 / 4])(pm, 0x5c770db7, &props);
     if (c)
         ((void (__thiscall*)(void*, void*))FUN_006237d0)(&g_1548560, props);
@@ -424,6 +424,8 @@ uint32_t cSPUITooltipWinProc_s0083_56e0::DoMessage(void* pWindow, int* msg)
                                   (float*)&mTooltipOffsetPosition, 0, 0xffffffff, 0, 0);
         mgr->mbTooltipDisplayed = false;
         return result & 0xffffff00u;
+    case 7: case 8: case 9: case 11: case 13: case 14: case 15: case 16:
+        break;
     case 10:
         if (mpMyWindow) {
             if (msg[3] != 1) goto L_af5;
@@ -479,7 +481,7 @@ uint32_t cSPUITooltipWinProc_s0083_56e0::DoMessage(void* pWindow, int* msg)
         }
         break;
     case 17:
-        SPKeyFromName(&mKeyInstance, mLayoutName.mpBegin, 0x510a95b, 0x40464100);
+        result = SPKeyFromName(&mKeyInstance, mLayoutName.mpBegin, 0x510a95b, 0x40464100);
         mpMyWindow = pWindow;
         return result & 0xffffff00u;
     case 18:
@@ -494,7 +496,7 @@ uint32_t cSPUITooltipWinProc_s0083_56e0::DoMessage(void* pWindow, int* msg)
         }
         break;
     default:
-        break;
+        return ((uint32_t)msg[2] - 6u) & 0xffffff00u;
     }
     return result & 0xffffff00u;
 }
