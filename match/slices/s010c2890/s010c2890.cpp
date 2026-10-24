@@ -1,8 +1,12 @@
 // Slice s010c2890 -- Havok collision shapes (hkCapsuleShape / hkSphereShape / hkShape).
 // Built as part of the whole-program LTCG link of SporeApp.exe.
-#include <math.h>
 #include <string.h>
 #include <intrin.h>
+
+// The VC7.1 compiler recognises this exact declaration and expands sqrt to the
+// inline x87 `fsqrt` (as the original does), instead of calling the CRT.
+extern "C" double __cdecl sqrt(double);
+extern "C" float __cdecl fabsf(float);
 
 // -----------------------------------------------------------------------------------
 // Havok types used by this slice (member names/offsets from the type registry).
@@ -333,7 +337,7 @@ hkBool hkCapsuleShape::castRay(const hkShapeRayCastInput& input, hkShapeRayCastO
 		hkVector4 pt;
 		hkCapsuleShape::closestPointLineSeg(from, A, B, pt);
 		const float dx = from.x - pt.x, dy = from.y - pt.y, dz = from.z - pt.z;
-		const float dist = (float)sqrt(dx * dx + dz * dz + dy * dy);
+		const float dist = (float)sqrt((double)(dx * dx + dz * dz + dy * dy));
 		if (dist < m_radius)
 			goto fail;
 	}
@@ -358,7 +362,7 @@ hkBool hkCapsuleShape::castRay(const hkShapeRayCastInput& input, hkShapeRayCastO
 		const float len2 = e.x * e.x + e.z * e.z + e.y * e.y;
 		if (len2 > HK_RAY_EPS)
 		{
-			len = (float)sqrt(len2);
+			len = (float)sqrt((double)len2);
 			const float inv = 1.0f / len;
 			ax = e.x * inv; ay = e.y * inv; az = e.z * inv;
 		}
@@ -373,10 +377,10 @@ hkBool hkCapsuleShape::castRay(const hkShapeRayCastInput& input, hkShapeRayCastO
 		const float px = ax * s + d.x;
 		const float py = ay * s + d.y;
 		const float pz = az * s + d.z;
-		const float h = (float)sqrt(m_radius * m_radius - distSq);
+		const float h = (float)sqrt((double)(m_radius * m_radius - distSq));
 		const float q = px * px + pz * pz + py * py;
 		float invq;
-		if (q == 0.0f) invq = 0.0f; else invq = 1.0f / (float)sqrt(q);
+		if (q == 0.0f) invq = 0.0f; else invq = 1.0f / (float)sqrt((double)q);
 		volatile float f = tRay - invq * h;       // entry fraction on the cylinder
 
 		volatile float along;
@@ -398,21 +402,20 @@ hkBool hkCapsuleShape::castRay(const hkShapeRayCastInput& input, hkShapeRayCastO
 				volatile float spx = u * B.x + omu * A.x;
 				volatile float spy = omu * A.y + u * B.y;
 				volatile float spz = omu * A.z + u * B.z;
-				float spw = omu * A.w + u * B.w;
-				volatile hkVector4 nrm;
-				nrm.x = hit.x - spx;
-				nrm.y = hit.y - spy;
-				nrm.z = hit.z - spz;
-				nrm.w = hit.w - spw;
-				double nq = (double)nrm.x * nrm.x + (double)nrm.z * nrm.z + (double)nrm.y * nrm.y;
+				const float spw = omu * A.w + u * B.w;
+				volatile float nrmx = hit.x - spx;
+				volatile float nrmy = hit.y - spy;
+				volatile float nrmz = hit.z - spz;
+				const float nrmw = hit.w - spw;
+				const double nq = (double)nrmx * nrmx + (double)nrmz * nrmz + (double)nrmy * nrmy;
 				double invn;
 				if (nq == 0.0) invn = 0.0; else invn = 1.0 / sqrt(nq);
 				output.m_shapeKey = 0xffffffff;
-				nrm.y = nrm.y * invn; output.m_normal[1] = nrm.y;
-				nrm.z = nrm.z * invn; output.m_normal[2] = nrm.z;
+				output.m_normal[1] = (float)((double)nrmy * invn);
+				output.m_normal[2] = (float)((double)nrmz * invn);
 				output.m_hitFraction = f;
-				nrm.w = nrm.w * invn; output.m_normal[3] = nrm.w;
-				output.m_normal[0] = nrm.x * invn;
+				output.m_normal[3] = (float)((double)nrmw * invn);
+				output.m_normal[0] = (float)((double)nrmx * invn);
 				hkTimerCommand(hkMonitorTimerEndTag);
 				return true;
 			}
@@ -425,7 +428,7 @@ hkBool hkCapsuleShape::castRay(const hkShapeRayCastInput& input, hkShapeRayCastO
 			cp.y = omv * A.y + v * B.y;
 			cp.z = omv * A.z + v * B.z;
 			const float ex = from.x - cp.x, ey = from.y - cp.y, ez = from.z - cp.z;
-			const float cd = (float)sqrt(ez * ez + ey * ey + ex * ex);
+			const float cd = (float)sqrt((double)(ez * ez + ey * ey + ex * ex));
 			if (cd > m_radius && f < 0.0f)
 				goto fail;
 
