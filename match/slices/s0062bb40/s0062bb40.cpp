@@ -177,6 +177,7 @@ extern "C" void* FUN_011e0744(void* dst, const void* src, unsigned n); // memcpy
 extern "C" void** FUN_0062ffd0(void** first, void** last, void** result);
 extern "C" int   __stdcall FUN_013cc2b8(void* p);                      // QueryPerformanceCounter
 extern "C" float sqrtf(float);
+extern "C" double sqrt(double);
 extern const char g_013fe150[];   // 0x13fe150 "Casual/PLAYMODE"
 extern const char g_013f586c[];   // 0x13f586c "Casual"
 extern float gHalf1471064;        // 0x1471064 0.5f
@@ -655,19 +656,9 @@ void PM::Update(int delta) {
       float fDeltaX = pos[0] - s->m54;
       float fDeltaY = pos[1] - s->m58;
       float fDeltaZ = pos[2] - s->m5c;
-      float dist;
-      __asm {
-        fld  dword ptr [fDeltaX]
-        fmul dword ptr [fDeltaX]
-        fld  dword ptr [fDeltaY]
-        fmul dword ptr [fDeltaY]
-        faddp st(1), st(0)
-        fld  dword ptr [fDeltaZ]
-        fmul dword ptr [fDeltaZ]
-        faddp st(1), st(0)
-        fsqrt
-        fstp dword ptr [dist]
-      }
+      float dx = fDeltaX, dy = fDeltaY, dz = fDeltaZ;
+      double t = dx * dx + dy * dy;
+      float dist = (float)sqrt(t + dz * dz);
       if (dist > gTol0_05_13ec478) {
         int state = ((PMCamera*)slot->FUN_00572400())->mState8c;
         if (state != 4 && state != 5) {
