@@ -17,7 +17,10 @@
 
 // unnamed retail callees and globals (address in the comment)
 extern void  __cdecl FlushCache(int);
-extern void  __cdecl FUN_00903120(void*);         // 0x903120
+// EA::XML::TokenIOContext: its destructor is a plain __thiscall with no stack arguments.
+struct TokenIOContext {
+    void Destroy();   // 0x00903120
+};
 extern void  __cdecl operator_delete__(void*);    // 0xf47380
 extern char FUN_0080e6b0_sym, FUN_0080ee90_sym, FUN_0080f380_sym, FUN_0080d6d0_sym,
             FUN_0080d770_sym, SerShutdown_sym, SerDtor_sym, ResetWinCache_sym,
@@ -277,11 +280,16 @@ struct cSPUILayoutManager_s0081_17f0 {
 };
 struct VecView { void* begin; void* end; };
 struct RBNode1 { RBNode1* left; RBNode1* right; RBNode1* parent; };
+// The node base sits at +4, not +0: eraseSys passes (this + 4) as the tree to
+// eastl::RBTreeErase and retail decrements the size at [this + 0x14], i.e.
+// +4 + 0x10 (the base is four dwords: parent, left, right, colour).
 struct RBTree1 {
-    RBNode1 anchor;         // +0
-    i32     count;          // +0x10
+    void*   mpHead;         // +0
+    RBNode1 anchor;         // +4
+    void*   mColor;         // +0x10
+    i32     count;          // +0x14
     void __thiscall DoNukeSubtree(void* node);   // 0x810df0
-    void __thiscall eraseSys(void** out, void* node);  // 0x812310
+    void* __thiscall eraseSys(void** out, void* node);  // 0x812310
     void __thiscall Method12370(void** out, VecView* key);  // 0x812370
 };
 struct RBTree2 {
@@ -481,10 +489,13 @@ bool cSPUILayout::IsVisible() const
 // @ 0x00810090
 void cSPUILayout::SetReloadCallback(void (__cdecl *cb)(void *, cSPUILayout *, bool), void * ctx)
 {
-    if (mpObjectCollection.mpObject) {
-        *(void**)((u8*)mpObjectCollection.mpObject + 0x90) = this;
-        *(void**)((u8*)mpObjectCollection.mpObject + 0x94) = cb;
-        *(void**)((u8*)mpObjectCollection.mpObject + 0x98) = ctx;
+    // the collection is read into a local first: that is what makes cl keep it in eax all the way to
+    // the ret, as retail does (the value is not part of the void signature)
+    cSPUILayoutObjectCollection* c = mpObjectCollection.mpObject;
+    if (c) {
+        *(void**)((u8*)c + 0x90) = this;
+        *(void**)((u8*)c + 0x94) = cb;
+        *(void**)((u8*)c + 0x98) = ctx;
     }
 }
 
@@ -626,12 +637,12 @@ void __thiscall cSPUILayoutManager_s0080_f7c0::SetNodeVisibility(void* node, cha
 void __fastcall cEditorResource_dtor(void* thisp)
 {
     u32* s = (u32*)thisp;
-    s[0] = (u32)&vtbl_AddRef_014181e8;
-    void* p = (void*)s[6];
+    *(void* volatile*)s = &vtbl_AddRef_014181e8;  // volatile on both: the original stores the vptr
+    void* p = *(void* volatile*)((u8*)s + 0x18);  // before reloading +0x18, and the two do not swap
     if (p) { s[6] = 0; ((VF0v)VT(p)[2])(p); }
     void* q = (void*)s[8];
     s[7] = 0;
-    if (q) { FUN_00903120(q); operator_delete__(q); s[8] = 0; }
+    if (q) { ((TokenIOContext*)q)->Destroy(); operator_delete__(q); s[8] = 0; }
     p = (void*)s[6];
     if (p) ((VF0v)VT(p)[2])(p);
     s[0] = (u32)&vtbl_EditorResource;
@@ -1306,15 +1317,16 @@ bool __cdecl FUN_00812210(VecView* a, VecView* b)
     int lb = (int)((u8*)b->end - (u8*)b->begin);
     int len = lb < la ? lb : la;
     int r = eastl_Compare_(ab, bb, len);
-    if (r == 0) {
-        if (la < lb) return true;
-        return lb < la;
-    }
+    if (r == 0)
+        return la < lb;
     return r < 0;
 }
 
+// Retail is declared void, but eax is live at the ret: it holds the `out` argument (the
+// pointer the increment result is finally stored through), so the residue is modelled by
+// returning it.
 // @ 0x00812310
-void __thiscall RBTree1::eraseSys(void** out, void* node)
+void* __thiscall RBTree1::eraseSys(void** out, void* node)
 {
     u8* n = (u8*)node;
     count--;
@@ -1324,6 +1336,7 @@ void __thiscall RBTree1::eraseSys(void** out, void* node)
     if (*(int*)(n + 0x18) - (int)data > 1 && data) operator_delete__(data);
     operator_delete__(node);
     *out = next;
+    return out;
 }
 
 // @ 0x00812370
