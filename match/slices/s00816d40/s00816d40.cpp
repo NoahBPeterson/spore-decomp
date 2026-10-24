@@ -70,9 +70,9 @@ void MsgBoxB::teardown() {
     o = Vcp0(o, 0x20);
     Vv1(o, 0x20, (int)p);
     if (mLayout) {
-        if (mW1) { mW1 = 0; Vv0(mW1, 0x04); }
-        if (mW2) { mW2 = 0; Vv0(mW2, 0x04); }
-        if (mW3) { mW3 = 0; Vv0(mW3, 0x04); }
+        if (mW1) { void* old = mW1; mW1 = 0; Vv0(old, 0x04); }
+        if (mW2) { void* old = mW2; mW2 = 0; Vv0(old, 0x04); }
+        if (mW3) { void* old = mW3; mW3 = 0; Vv0(old, 0x04); }
         ((cSPUILayout*)mLayout)->Shutdown(1);
         if (mLayout) { void* q = mLayout; mLayout = 0; Vv0(q, 0x08); }
     }
