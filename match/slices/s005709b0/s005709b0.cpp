@@ -35,6 +35,7 @@ struct KeyVector {
 struct InsertResult {
     Key12* position;      // +0x0
     bool inserted;        // +0x4
+    InsertResult(Key12* p, bool b) { position = p; inserted = b; }
 };
 
 struct cFeatureVector : KeyVector {
@@ -159,22 +160,13 @@ InsertResult cFeatureVector::insertValue(const Key12& value)
     Key12* pBegin = mpBegin;
     Key12* pEnd = mpEnd;
     Key12* pos = lower_bound(pBegin, pEnd, value, mSorted);
-    if (pos != mpEnd && !(value < *pos)) {
-        InsertResult r;
-        r.position = pos;
-        r.inserted = false;
-        return r;
-    }
-    InsertResult r;
-    r.position = insert(pos, value);
-    r.inserted = true;
-    return r;
+    if (pos != mpEnd && !(value < *pos))
+        return InsertResult(pos, false);
+    return InsertResult(insert(pos, value), true);
 }
 
 // ---------------------------------------------------------------------------
-// Large /Od dispatch / similarity functions. These are behaviourally summarised
-// below; see partial.txt. They are kept as compiling placeholders until the
-// full translation is verified.
+// Large /Od dispatch / similarity functions.
 // ---------------------------------------------------------------------------
 struct cTraitQuery {
     char pad[0x100];
@@ -182,6 +174,19 @@ struct cTraitQuery {
     float Op1(cFeatureVector* a, cFeatureVector* b);       // 0x570c40
     float Op2(cFeatureVector* a, cFeatureVector* b);       // 0x570e50
     float Op3(cFeatureVector* a, cFeatureVector* b);       // 0x571100
+};
+
+// 0x555980 returns [position, position+1) when the key is present, else
+// [position, position); the callers keep the result in an 8-byte local.
+struct Range { Key12* first; Key12* second; };
+
+struct cTraitSet : cFeatureVector {
+    Range FUN_00555980(const Key12& key);    // 0x00555980  equal_range
+};
+extern cTraitSet g_traitSet_15e4a1c;          // 0x15e4a1c  global trait-frequency set
+
+struct TraitData {
+    float Intersect(cFeatureVector* a, cFeatureVector* b);   // 0x005704c0 (ignores this)
 };
 
 // @ 0x005709b0
@@ -201,13 +206,106 @@ float cTraitQuery::Op1(cFeatureVector* a, cFeatureVector* b)
 // @ 0x00570e50
 float cTraitQuery::Op2(cFeatureVector* a, cFeatureVector* b)
 {
-    (void)a; (void)b;
-    return 0.0f;
+    Key12* itA = a->begin();
+    Key12* itB = b->begin();
+    Key12* endA = a->end();
+    Key12* endB = b->end();
+    float fA = 0.0f;
+    float fB = 0.0f;
+    float fC = 0.0f;
+
+    while (itA != endA && itB != endB) {
+        while (itA != endA && itB != endB && *itA < *itB) {
+            Range rA = g_traitSet_15e4a1c.FUN_00555980(*itA);
+            Key12* pA = rA.first != rA.second ? rA.first : g_traitSet_15e4a1c.mpEnd;
+            if (pA != g_traitSet_15e4a1c.mpEnd)
+                fA += 1.0f;
+            ++itA;
+        }
+        while (itA != endA && itB != endB && *itB < *itA) {
+            Range rB = g_traitSet_15e4a1c.FUN_00555980(*itB);
+            Key12* pB = rB.first != rB.second ? rB.first : g_traitSet_15e4a1c.mpEnd;
+            if (pB != g_traitSet_15e4a1c.mpEnd)
+                fB += 1.0f;
+            ++itB;
+        }
+        while (*itA == *itB && itA != endA && itB != endB) {
+            Range rC = g_traitSet_15e4a1c.FUN_00555980(*itA);
+            Key12* pC = rC.first != rC.second ? rC.first : g_traitSet_15e4a1c.mpEnd;
+            if (pC != g_traitSet_15e4a1c.mpEnd) {
+                fC += 1.0f;
+                fA += 1.0f;
+                fB += 1.0f;
+            }
+            ++itA;
+            ++itB;
+        }
+    }
+
+    char ignore = 0;
+    return (fA + fB) * ((TraitData*)&ignore)->Intersect(a, b) / (2.0f * fC);
 }
 
 // @ 0x00571100
 float cTraitQuery::Op3(cFeatureVector* a, cFeatureVector* b)
 {
-    (void)a; (void)b;
-    return 0.0f;
+    Key12* itA = a->begin();
+    Key12* itB = b->begin();
+    Key12* endA = a->end();
+    Key12* endB = b->end();
+    float fA = 0.0f;
+    float fB = 0.0f;
+    float fC = 0.0f;
+
+    while (itA != endA && itB != endB) {
+        while (itA != endA && itB != endB && *itA < *itB) {
+            Key12* pA = itA;
+            Range rA = g_traitSet_15e4a1c.FUN_00555980(*pA);
+            Key12* found = rA.first != rA.second ? rA.first : g_traitSet_15e4a1c.mpEnd;
+            if (found != g_traitSet_15e4a1c.mpEnd)
+                fB += pA->mC * pA->mC;
+            ++itA;
+        }
+        while (itA != endA && itB != endB && *itB < *itA) {
+            Key12* pB = itB;
+            Range rB = g_traitSet_15e4a1c.FUN_00555980(*pB);
+            Key12* found = rB.first != rB.second ? rB.first : g_traitSet_15e4a1c.mpEnd;
+            if (found != g_traitSet_15e4a1c.mpEnd)
+                fC += pB->mC * pB->mC;
+            ++itB;
+        }
+        while (*itA == *itB && itA != endA && itB != endB) {
+            Key12* pA = itA;
+            float mB = itB->mC;
+            Range rC = g_traitSet_15e4a1c.FUN_00555980(*pA);
+            Key12* found = rC.first != rC.second ? rC.first : g_traitSet_15e4a1c.mpEnd;
+            if (found != g_traitSet_15e4a1c.mpEnd) {
+                fA += pA->mC * mB;
+                fB += pA->mC * pA->mC;
+                fC += mB * mB;
+            }
+            ++itA;
+            ++itB;
+        }
+    }
+    while (itA != endA && itB == endB) {
+        Key12* pA = itA;
+        Range rA = g_traitSet_15e4a1c.FUN_00555980(*pA);
+        Key12* found = rA.first != rA.second ? rA.first : g_traitSet_15e4a1c.mpEnd;
+        if (found != g_traitSet_15e4a1c.mpEnd)
+            fB += pA->mC * pA->mC;
+        ++itA;
+    }
+    while (itA == endA && itB != endB) {
+        Key12* pB = itB;
+        Range rB = g_traitSet_15e4a1c.FUN_00555980(*pB);
+        Key12* found = rB.first != rB.second ? rB.first : g_traitSet_15e4a1c.mpEnd;
+        if (found != g_traitSet_15e4a1c.mpEnd)
+            fC += pB->mC * pB->mC;
+        ++itB;
+    }
+
+    float nA = sqrtf(fB);
+    float nB = sqrtf(fC);
+    return acosf(fA / (nA * nB));
 }

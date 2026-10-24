@@ -29,6 +29,7 @@ struct KeyVector {
 struct InsertResult {
     Key12* position;      // +0x0
     bool inserted;        // +0x4
+    InsertResult(Key12* p, bool b) { position = p; inserted = b; }
 };
 struct cFeatureVector : KeyVector {
     char pad10[4];                 // +0x10 .. +0x13
@@ -77,14 +78,7 @@ InsertResult cFeatureVector::insertValue(const Key12& value)
     Key12* pBegin = mpBegin;
     Key12* pEnd = mpEnd;
     Key12* pos = lower_bound(pBegin, pEnd, value, mSorted);
-    if (pos != mpEnd && !(value < *pos)) {
-        InsertResult r;
-        r.position = pos;
-        r.inserted = false;
-        return r;
-    }
-    InsertResult r;
-    r.position = insert(pos, value);
-    r.inserted = true;
-    return r;
+    if (pos != mpEnd && !(value < *pos))
+        return InsertResult(pos, false);
+    return InsertResult(insert(pos, value), true);
 }
