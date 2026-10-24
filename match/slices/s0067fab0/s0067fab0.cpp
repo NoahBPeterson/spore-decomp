@@ -4,6 +4,7 @@
 // cCheatManager record destructors (0x6804a0..0x680b70).
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+#include <xmmintrin.h>   // the float tail of HSL->RGB is SSE scalar in the retail build
 
 // ---------------------------------------------------------------- externals
 void* EAAlloc(unsigned size, const char* area, int a, int b, const char* file, int line);
@@ -76,20 +77,24 @@ struct CheatManager {
   void* f10;        // +0x10
   void* f14;        // +0x14
   unsigned f18;     // +0x18
-  unsigned char f1c; // +0x1c
+  union { unsigned char f1c; unsigned f1cWord; }; // +0x1c (retail writes a dword, then a byte)
   unsigned f20;     // +0x20
+  unsigned pad24;   // +0x24 (unwritten gap)
   unsigned char f28; // +0x28
   void* f2c;        // +0x2c
   void* f30;        // +0x30
   unsigned f34;     // +0x34
-  unsigned f38;     // +0x38
+  union { unsigned f38; unsigned char f38Byte; }; // +0x38 (dword, then a byte)
   unsigned f3c;     // +0x3c
+  unsigned pad40;   // +0x40 (unwritten gap)
   unsigned f44;     // +0x44
+  unsigned pad48;   // +0x48 (unwritten gap)
   void* f4c;        // +0x4c
   void* f50;        // +0x50
   unsigned f54;     // +0x54
   unsigned char f58; // +0x58
   unsigned f5c;     // +0x5c
+  unsigned pad60;   // +0x60 (unwritten gap)
   unsigned char f64; // +0x64
 };
 
@@ -99,7 +104,7 @@ CheatManager* __fastcall CheatManager_ctor(CheatManager* p) {
   p->vt0 = (void*)0x1401b78;
   p->vt4 = (void*)0x1401b74;
   p->fc = 0;
-  p->f14 = 0; p->f18 = 0; p->f1c = 0; p->f18 = 0;
+  p->f14 = 0; p->f18 = 0; p->f1cWord = 0; p->f18 = 0;
   p->f1c = 0;
   p->f20 = 0;
   p->f10 = (char*)p + 0x10;
@@ -109,7 +114,7 @@ CheatManager* __fastcall CheatManager_ctor(CheatManager* p) {
   p->f2c = (char*)p + 0x2c;
   p->f30 = (char*)p + 0x2c;
   p->f34 = 0;
-  p->f38 = 0;
+  p->f38Byte = 0;
   p->f3c = 0;
   p->f44 = 0;
   p->f50 = 0;
@@ -250,7 +255,7 @@ void __fastcall FUN_00680b10(char* p) {
 }
 
 // @ 0x00680890  (zero-initialise a large aggregate)
-void __fastcall FUN_00680890(char* p) {
+char* __fastcall FUN_00680890(char* p) {
 #define Z4(o) (*(unsigned*)(p + (o)) = 0)
   Z4(0x00); Z4(0x04); Z4(0x08); Z4(0x0c); Z4(0x10); Z4(0x14); Z4(0x18);
   Z4(0x1c); Z4(0x20); Z4(0x24); Z4(0x28); Z4(0x2c); Z4(0x30); Z4(0x34);
@@ -261,6 +266,7 @@ void __fastcall FUN_00680890(char* p) {
   Z4(0x9c); Z4(0xa0); Z4(0xa4);
   Z4(0xb0); Z4(0xb4); Z4(0xb8);
 #undef Z4
+  return p;
 }
 
 // ================================================================ bitset serializers
@@ -482,20 +488,26 @@ int FUN_0067fe30(float* out, float h, float s, float l) {
   double d = ValidateDouble((double)(hp * 0.0027777778f));
   float f = hp - (float)d * 360.0f;
   float ff = f * 0.008333334f;
-  int n = (int)RoundHalf(ff);
-  if (ff < (float)n) n = n - 1;
+  int n = (int)RoundHalf(ff);   // RoundHalf already applies the retail cmovb floor
   f = (f - (float)(n * 0x78)) * 0.016666668f;
   if (n == 3) n = 2;
   out[n] = l;
+  // The retail tail is SSE scalar (mulss/subss), so mirror it with intrinsics;
+  // plain C float arithmetic here is x87 on this compiler and rounds differently
+  // for denormal results.
+  __m128 vf = _mm_set_ss(f);
   float p;
-  if (f <= 1.0f) {
-    p = f * s;
+  if (_mm_comile_ss(vf, _mm_set_ss(1.0f))) {
+    p = _mm_cvtss_f32(_mm_mul_ss(vf, _mm_set_ss(s)));
   } else {
     p = s;
-    s = (2.0f - f) * s;
+    float tmf = 2.0f - f;   // exact on x87; rounded to float by _mm_set_ss (== subss)
+    s = _mm_cvtss_f32(_mm_mul_ss(_mm_set_ss(tmf), _mm_set_ss(s)));
   }
-  out[(n + 1) % 3] = (1.0f - s) * l;
-  out[(n + 2) % 3] = (1.0f - p) * l;
+  float oms = _mm_cvtss_f32(_mm_sub_ss(_mm_set_ss(1.0f), _mm_set_ss(s)));
+  float omp = _mm_cvtss_f32(_mm_sub_ss(_mm_set_ss(1.0f), _mm_set_ss(p)));
+  out[(n + 1) % 3] = _mm_cvtss_f32(_mm_mul_ss(_mm_set_ss(oms), _mm_set_ss(l)));
+  out[(n + 2) % 3] = _mm_cvtss_f32(_mm_mul_ss(_mm_set_ss(omp), _mm_set_ss(l)));
   return (int)out;
 }
 

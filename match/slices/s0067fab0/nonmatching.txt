@@ -1,5 +1,5 @@
-0067fab0  n/a  App::CheatManager::CheatManager; complete multi-base/list-head initialiser, vtable-store scheduling and register choice differ.
-0067fe30  n/a  HSL->RGB conversion; complete, /O2 x87 vs SSE scheduling and round-helper shape differ.
+0067fab0  103  App::CheatManager::CheatManager; complete multi-base/list-head initialiser, vtable-store scheduling and register choice differ; equiv PASS (400 valid, 100% cov)
+0067fe30  625  HSL->RGB conversion; complete, hue chain is x87 in the retail build while the tail is SSE scalar, so the tail is written with xmmintrin intrinsics and is longer; equiv PASS (400 valid, 98.6% cov)
 0067ff30  n/a  RGB->HSL conversion; complete, min/max pointer selection and colour branch codegen differ.
 006800c0  n/a  Rec48 copy constructor; complete, only a one-instruction lea/mov reorder differs (string-call argument scheduling).
 00680130  n/a  Rec48 copy-assign; complete, same lea/mov reorder as 0x006800c0.
@@ -10,7 +10,6 @@
 00680560  n/a  bitset deserializer; complete, register/branch layout differs.
 006805c0  n/a  vector<0x48-record> serializer; complete, EH/temp-copy scheduling differs.
 00680730  n/a  vector<0x48-record> destroy-and-free; complete, missing compiler EH frame and register layout differs.
-00680890  n/a  large aggregate zero-init; complete, store scheduling differs.
 00680930  n/a  cCheatManager record destructor chain; complete (tail call to 0x00680730), register layout differs.
 006809f0  n/a  destructor with EH frame; complete, missing compiler EH prolog/state stores.
 0067fb80  157  CheatCmdMap::AddCheat (map operator[]); complete, EH state/temp slot sharing and register allocation differ (equiv UNSUPPORTED)
