@@ -1,1 +1,2 @@
 00f10bd0 cHudTargetController::Update  # Claude-coined: UTFWin::InteractiveWinProc subclass tick (ends with base OnWinProcAdd 010829f0); drives avatar HUD bars and the target-follow effect
+00f10670 ?FUN_00f10670@cHudTargetController@@QAEXPAVFixedMap@@M@Z  # target HUD scan: camera query, fade nearby target texts, merge/erase a fixed hash map (nonmatching)

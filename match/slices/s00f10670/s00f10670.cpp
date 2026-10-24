@@ -14,6 +14,7 @@
 // cHudTargetController and every FUN_ name are Claude-coined placeholders from the addresses.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (x87 float args, no EH, no cookie).
 #include "types.h"
+#include <math.h>
 
 #pragma warning(disable:4035)
 __forceinline int CeilToInt(float f)
@@ -135,6 +136,25 @@ public:
     virtual float* GetBounds(Vector3* pTemp);  // +0x6c
     virtual void s70();
     virtual float GetRadius();  // +0x74
+    virtual void s78();
+    virtual void s7c();
+    virtual void s80();
+    virtual void s84();
+    virtual void s88();
+    virtual void s8c();
+    virtual void s90();
+    virtual void s94();
+    virtual void s98();
+    virtual void s9c();
+    virtual void sA0();
+    virtual void sA4();
+    virtual void sA8();
+    virtual void sAc();
+    virtual void sB0();
+    virtual void sB4();
+    virtual void* Cast(uint32_t typeID);  // +0xb8
+    virtual void sBc();
+    virtual void ReleaseVector();  // +0xc0
 };
 
 class IObject {
@@ -143,6 +163,22 @@ public:
     virtual void s04();
     virtual void s08();
     virtual void* Cast(uint32_t typeID);  // +0xc
+};
+
+// eastl::fixed_vector<IBody*, 8> as built by the camera query at 0x00F10670.
+struct FixedVector
+{
+    IBody** mpBegin;        // +0x00
+    IBody** mpEnd;          // +0x04
+    IBody** mpCapacity;     // +0x08
+    uint32_t mPad0c;        // +0x0c
+    uint32_t mPad10;        // +0x10
+    uint32_t mFlag14;       // +0x14
+    IBody* mBuffer[8];      // +0x18
+
+    FixedVector()
+        : mpBegin(mBuffer), mpEnd(mBuffer), mpCapacity(mBuffer + 8),
+          mPad0c(0), mPad10(0), mFlag14(0) {}
 };
 
 class ICameraSource {
@@ -161,6 +197,12 @@ public:
     virtual void s2c();
     virtual void s30();
     virtual IObject* GetSelection();  // +0x34
+    virtual void s38();
+    virtual void s3c();
+    virtual void s40();
+    virtual void s44();
+    virtual bool Query(const Vector3* pPos, float radius, FixedVector* pOut,
+                       int a, void* pCallback, void* pUser);  // +0x48
 };
 
 class IEffect {
@@ -375,6 +417,129 @@ cPlanetModel* PlanetModel();                                   // 0x00b3d350
 extern float kLowThreshold;                                    // 0x01687a0c
 
 // ---------------------------------------------------------------------------------------
+// Containers / interfaces used by 0x00F10670
+// ---------------------------------------------------------------------------------------
+
+// EA::UTFWinControls::IWinText - only the alpha value at +0x80 is touched here.
+struct IWinText
+{
+    uint8_t mPad00[0x80];
+    float mAlpha;                                           // +0x80
+};
+
+// The object returned by IBody::Cast(0xd0036e08): target HUD data.
+class CCastObject
+{
+public:
+    virtual void AddRef();                                  // +0x00
+    virtual void Release();                                 // +0x04
+    uint8_t mPad04[0x24 - 0x04];
+    uint32_t mKey;                                          // +0x24
+    uint8_t mPad28[0xb54 - 0x28];
+    IWinText* mpText;                                       // +0xb54
+    uint32_t mFlags;                                        // +0xb58
+};
+
+// eastl::AutoRefCount<T> value stored in the hash map.
+struct AutoRefCountSlot
+{
+    void* mpObject;                                         // +0x00
+    void __thiscall Assign(void* pObject);                  // 0x00b5f950
+};
+
+struct HashNode
+{
+    uint32_t mKey;                                          // +0x00
+    AutoRefCountSlot mValue;                                // +0x04
+    HashNode* mpNext;                                       // +0x08
+};
+
+struct MapIterator
+{
+    HashNode* mpNode;                                       // +0x00
+    HashNode** mpBucket;                                    // +0x04
+};
+
+// eastl::hashtable<...> base fields that 0x00F10670 reads.
+struct HashBase
+{
+    uint8_t mExtract;                                       // +0x00
+    uint8_t mEqual;                                         // +0x01
+    uint8_t mHash;                                          // +0x02
+    uint8_t mModRange;                                      // +0x03
+    HashNode** mpBucketArray;                               // +0x04
+    uint32_t mnBucketCount;                                 // +0x08
+    uint32_t mnElementCount;                                // +0x0c
+    uint8_t mRehashPolicy[0x0c];                            // +0x10
+    uint8_t mAllocator[0x18];                               // +0x1c
+};
+
+// fixed_hash_map<uint32_t, AutoRefCount<T>, 16 nodes, 17 buckets>:
+// buckets at +0x34 (18 slots), fixed node pool at +0x7c (16 * 0x0c bytes).
+class FixedMap : public HashBase
+{
+public:
+    HashNode* mBucketBuffer[18];                            // +0x34
+    uint8_t mNodeBuffer[0xc0];                              // +0x7c
+
+    void __thiscall Construct(const void* pHash, const void* pEqual);      // 0x00d2d5c0
+    AutoRefCountSlot* __thiscall FindOrInsert(const uint32_t* pKey);        // 0x00b76460
+    MapIterator* __thiscall Erase(MapIterator* pOut, HashNode* pNode,
+                                  HashNode** ppBucket);                     // 0x00d2c9f0
+    void __thiscall Clear(HashNode** ppBuckets, uint32_t nBuckets);         // 0x00a24480
+};
+
+class IViewer
+{
+public:
+    void GetCameraLocationInfo(Vector3* pPos, int a, int b, int c);  // 0x007c3d30
+};
+
+class IAppSub
+{
+public:
+    virtual void a00();
+    virtual void a04();
+    virtual void a08();
+    virtual void a0c();
+    virtual void a10();
+    virtual void a14();
+    virtual void a18();
+    virtual IViewer* GetViewer();                           // +0x1c
+};
+
+class IApp
+{
+public:
+    virtual void b00();
+    virtual void b04();
+    virtual void b08();
+    virtual void b0c();
+    virtual void b10();
+    virtual void b14();
+    virtual void b18();
+    virtual void b1c();
+    virtual void b20();
+    virtual void b24();
+    virtual void b28();
+    virtual void b2c();
+    virtual void b30();
+    virtual void b34();
+    virtual void b38();
+    virtual void b3c();
+    virtual void b40();
+    virtual void b44();
+    virtual void b48();
+    virtual void b4c();
+    virtual IAppSub* GetSub();                              // +0x50
+};
+
+IApp* App();                                                // 0x0067dd10
+void __cdecl EASTL_allocator_deallocate(void* p);           // 0x00f47380
+extern "C" void FUN_00d9a9c0();                             // 0x00d9a9c0
+extern Vector3 gCameraLocation;                             // 0x016c8004
+
+// ---------------------------------------------------------------------------------------
 // The controller
 // ---------------------------------------------------------------------------------------
 class cHudTargetController
@@ -393,10 +558,10 @@ public:
     uint32_t pad6c[(0xb0 - 0x6c) / 4];
     cTimerBar mTimerBar;                                       // +0xb0
     uint32_t padb4[(0x14c - 0xb4) / 4];
-    uint32_t mSub14c[1];                                       // +0x14c
+    FixedMap mSub14c;                                          // +0x14c
 
     void FUN_00f0e520(cAvatar* pAvatar);                       // 0x00f0e520 (ret 4)
-    void FUN_00f10670(uint32_t* pSub, float dt);               // 0x00f10670 (ret 8)
+    void FUN_00f10670(FixedMap* pSub, float dt);               // 0x00f10670 (ret 8)
     void FUN_00f0e6e0();                                       // 0x00f0e6e0
     void FUN_00f0efa0();                                       // 0x00f0efa0
     void OnWinProcAdd(uint32_t arg);                           // 0x010829f0 (base class, ret 4)
@@ -410,7 +575,7 @@ void cHudTargetController::Update(uint32_t arg1, uint32_t timeMs)
     cAvatar* pAvatar = NounManager()->GetAvatar();
     FUN_00f0e520(pAvatar);
     float dt = (float)timeMs * 0.0001f;
-    FUN_00f10670(mSub14c, dt);
+    FUN_00f10670(&mSub14c, dt);
 
     if (pAvatar->mModeA || pAvatar->mModeB) {
         bool found = false;
@@ -638,4 +803,175 @@ void cHudTargetController::Update(uint32_t arg1, uint32_t timeMs)
         }
     }
     OnWinProcAdd(arg1);
+}
+
+// @ 0x00F10670
+void cHudTargetController::FUN_00f10670(FixedMap* pMap, float dt)
+{
+    uint8_t hashStub = 0;
+    uint8_t equalStub = 0;
+    FixedMap localMap;
+    localMap.Construct(&hashStub, &equalStub);
+
+    IViewer* pViewer = App()->GetSub()->GetViewer();
+    if (pViewer)
+    {
+        Vector3 camPos = gCameraLocation;
+        pViewer->GetCameraLocationInfo(&camPos, 0, 0, 0);
+
+        FixedVector results;
+        const float kSelectRadius = 3.0f;
+        float queryRadius = kSelectRadius * kSelectRadius;
+        bool queryOk = GetCameraSource()->Query(&camPos, queryRadius, &results, 0,
+                                                (void*)&FUN_00d9a9c0, 0);
+
+        float cullRadius2 = kSelectRadius * kSelectRadius;
+        if (queryOk && results.mpBegin != results.mpEnd)
+        for (IBody** ppBody = results.mpBegin; ppBody < results.mpEnd; ++ppBody)
+        {
+            IBody* pBody = *ppBody;
+            if (!pBody)
+                continue;
+
+            float bodyRadius = pBody->GetRadius();
+            Vector3 temp;
+            float* pBounds = pBody->GetBounds(&temp);
+
+            float dx = camPos.x - (pBounds[0] + pBounds[3]) * 0.5f;
+            float dy = camPos.y - (pBounds[4] + pBounds[1]) * 0.5f;
+            float dz = camPos.z - (pBounds[5] + pBounds[2]) * 0.5f;
+
+            float dist2 = ((dx * dx + dz * dz) + dy * dy) - bodyRadius * bodyRadius;
+            if (dist2 < 0.0f)
+                dist2 = 0.0f;
+
+            if (dist2 <= cullRadius2)
+            {
+                CCastObject* pCast = (CCastObject*)pBody->Cast(0xd0036e08);
+                if (pCast && pCast->mpText)
+                {
+                    float target = (pCast->mFlags & 0x200) ? 0.0f : 0.1f;
+                    double p = pow(0.1, (double)dt * 15.0);
+                    IWinText* pText = pCast->mpText;
+                    pText->mAlpha = (float)((1.0 - p) * (double)target +
+                                            (double)pText->mAlpha * p);
+                    pCast->mFlags |= 0x800;
+
+                    uint32_t key = pCast->mKey;
+                    AutoRefCountSlot* pSlot = localMap.FindOrInsert(&key);
+                    pSlot->Assign(pCast);
+                }
+            }
+        }
+
+        for (IBody** ppBody = results.mpBegin; ppBody < results.mpEnd; ++ppBody)
+        {
+            IBody* pBody = *ppBody;
+            if (pBody)
+                pBody->ReleaseVector();
+        }
+        if (results.mpBegin && *(uint32_t*)(results.mpBegin - 1) != 0)
+            EASTL_allocator_deallocate(results.mpBegin);
+    }
+
+    // Walk the persistent map; entries that were not seen this frame fade out.
+    HashNode* pNode = pMap->mpBucketArray[0];
+    HashNode** ppBucket = pMap->mpBucketArray;
+    if (!pNode)
+    {
+        ++ppBucket;
+        while (!*ppBucket)
+            ++ppBucket;
+        pNode = *ppBucket;
+    }
+
+    HashNode* pEnd = pMap->mpBucketArray[pMap->mnBucketCount];
+    while (pNode != pEnd)
+    {
+        uint32_t key = pNode->mKey;
+        uint32_t bucketIndex = key % localMap.mnBucketCount;
+        HashNode* pLocal = localMap.mpBucketArray[bucketIndex];
+        while (pLocal && pLocal->mKey != key)
+            pLocal = pLocal->mpNext;
+
+        if (!pLocal)
+        {
+            CCastObject* pCast = (CCastObject*)pNode->mValue.mpObject;
+            if (pCast && pCast->mpText)
+            {
+                IWinText* pText = pCast->mpText;
+                double p = pow(0.1, (double)dt * 15.0);
+                float alpha = (float)((1.0 - p) * 1.0 + (double)pText->mAlpha * p);
+                pText->mAlpha = alpha;
+                pCast->mFlags |= 0x800;
+
+                if (!(fabsf(alpha - 1.0f) < 0.01f))
+                {
+                    pNode = pNode->mpNext;
+                    while (!pNode)
+                    {
+                        ++ppBucket;
+                        pNode = *ppBucket;
+                    }
+                    continue;
+                }
+
+                pText->mAlpha = 1.0f;
+                pCast->mFlags &= ~0x800u;
+            }
+
+            MapIterator next;
+            pMap->Erase(&next, pNode, ppBucket);
+            pNode = next.mpNode;
+            ppBucket = next.mpBucket;
+        }
+        else
+        {
+            pNode = pNode->mpNext;
+            while (!pNode)
+            {
+                ++ppBucket;
+                pNode = *ppBucket;
+            }
+        }
+    }
+
+    // Merge the entries seen this frame back into the persistent map.
+    pNode = localMap.mpBucketArray[0];
+    ppBucket = localMap.mpBucketArray;
+    if (!pNode)
+    {
+        ++ppBucket;
+        while (!*ppBucket)
+            ++ppBucket;
+        pNode = *ppBucket;
+    }
+
+    pEnd = localMap.mpBucketArray[localMap.mnBucketCount];
+    while (pNode != pEnd)
+    {
+        uint32_t key = pNode->mKey;
+        CCastObject* pValue = (CCastObject*)pNode->mValue.mpObject;
+        AutoRefCountSlot* pSlot = pMap->FindOrInsert(&key);
+        CCastObject* pOld = (CCastObject*)pSlot->mpObject;
+        if (pValue != pOld)
+        {
+            if (pValue)
+                pValue->AddRef();
+            pSlot->mpObject = pValue;
+            if (pOld)
+                pOld->Release();
+        }
+
+        pNode = pNode->mpNext;
+        while (!pNode)
+        {
+            ++ppBucket;
+            pNode = *ppBucket;
+        }
+    }
+
+    localMap.Clear(localMap.mpBucketArray, localMap.mnBucketCount);
+    if (localMap.mnBucketCount > 1 && localMap.mpBucketArray != localMap.mBucketBuffer)
+        EASTL_allocator_deallocate(localMap.mpBucketArray);
 }
