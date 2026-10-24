@@ -212,6 +212,7 @@ SymbolEngine::SymbolEngine() {
 
 // @ 0x0091d7d0  (scalar deleting destructor)
 SymbolEngine::~SymbolEngine() {
+    *(void**)this = (void*)0x0143cf5c;
     if (mHandle != 0) {
         SymCleanup(mHandle);
         CloseHandle(mHandle);
@@ -219,6 +220,7 @@ SymbolEngine::~SymbolEngine() {
         mLo = 0;
         mHi = 0;
     }
+    *(void**)this = (void*)0x013f68c4;
 }
 
 // @ 0x0091d830

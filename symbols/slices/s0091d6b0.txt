@@ -11,3 +11,6 @@
 0091e5c0 ?WriteExceptionReport@ExceptionHandlerWin32@@QAEXXZ  # ExceptionHandlerWin32::WriteExceptionReport migrated from s0091d6b0 (verbatim, slice spelling)
 0091e770 EA::Debug::ExceptionHandlerWin32::ExceptionHandlerWin32  # pdb_names anchor
 0091e810 EA::Debug::ExceptionHandler::ExceptionHandler  # pdb_names callee-scored
+
+0091d7d0 ??_GSymbolEngine@@UAEPAXI@Z  # SymbolEngine scalar deleting destructor (compiler-generated)
+00f47380 ??3@YAXPAX@Z  # FreeRawBlock / scalar operator delete used by the SymbolEngine deleting dtor
