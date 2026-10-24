@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00bb5ae0    93  cStarManager::GetMatchingItem; 5/14 inputs valid (47% coverage, pointer-heavy): only the ecx live-out differs on one replay case, memory effects match. Instruction diff is the zero-exit block placement plus the missing push-ecx spill slot described in nonmatching.txt

@@ -155,17 +155,51 @@ extern float g_NegOne;      // 0x013eb1bc
 extern float g_FltMax;      // 0x01465eb8
 extern float g_Epsilon;     // 0x01485720
 
+// A "star item" is the UI/gameplay object that owns a star reference at +0x13c.
+struct cStarItem;
+struct cStarItemList {
+    cStarItem** mpBegin;
+    cStarItem** mpEnd;
+};
+
+struct cStarItem {
+    uint8_t    pad00[0x13c];
+    cStarItem* mpTarget;                        // +0x13c
+    uint32_t GetId();                           // 0x00b8d8f0 (thiscall)
+    uint32_t GetItemId();                       // 0x00b8dab0 (thiscall)
+    uint32_t GetSelectedId();                   // 0x00bb9ae0 (thiscall)
+    cStarItemList* GetItems();                  // 0x00bba790 (thiscall)
+};
+
+// Helper container sitting at cStarManager+0x16c.
+struct StarItemMap {
+    void Find(void* out, int arg);              // 0x00bb1560 (thiscall, ret 8)
+};
+
 class cStarManager {
 public:
     uint8_t pad00[0xc8];
     StarRecordRow* mpGridBegin;                 // +0xc8
     StarRecordRow* mpGridEnd;                   // +0xcc
+    uint8_t padD0[0x118 - 0xd0];
+    StarVector mPending;                        // +0x118
+    uint8_t pad12C[0x14c - 0x12c];
+    cStarRecord* mpDefaultRecord;               // +0x14c
+    uint8_t pad150[0x16c - 0x150];
+    StarItemMap mItemMap;                       // +0x16c
 
     cStarRecord* FindStar(uint32_t arg, const StarSearchCriteria* c);                   // 0x00bb0e90 (ret 8)
     void GetStarRecords(const Vector3& pos, const StarSearchCriteria& c, StarVector& out);   // 0x00bb1080 (ret 0xc)
     cStarRecord* FindNearest(const Vector3& pos, const StarVector& v);                  // 0x00ba71b0 (ret 8)
 
     void TestIfAllStarsAreReachable(uint32_t startArg, float maxJump, bool flag);       // 0x00bb4f30
+
+    void FUN_00bb57b0(void* star, void* arg);                                           // 0x00bb57b0 (ret 8)
+    cStarItem* GetMatchingItem(cStarItem* h);                                           // 0x00bb5ae0 (ret 4)
+    void UpdateStarItem(cStarItem* h, void* arg);                                       // 0x00bb5930 (ret 8)
+    void UpdateStarItemTarget(cStarItem* h, void* arg);                                 // 0x00bb5990 (ret 8)
+    void FindStarItem(int arg);                                                         // 0x00bb5b50 (ret 4)
+    void UpdateItem(void* h, void* arg);                                                // 0x00badd10 (ret 8)
 };
 
 // @ 0x00bb4f30
@@ -280,4 +314,56 @@ void cStarManager::TestIfAllStarsAreReachable(uint32_t startArg, float maxJump, 
         if (!flag)
             done = true;
     } while (!done);
+}
+
+// ---------------------------------------------------------------------------------------------
+// Star item helpers (00bb5640..00bb5b70).
+
+// Grid lookup used by the star-item helpers: grid row (id >> 12), slot (id & 0xfff).
+__forceinline cStarRecord* FindRecordInGrid(cStarManager* m, uint32_t id)
+{
+    return m->mpGridBegin[id >> 12].mpBegin[id & 0xfff].mpObject;
+}
+
+// @ 0x00bb5930
+void cStarManager::UpdateStarItem(cStarItem* h, void* arg)
+{
+    uint32_t id = h->GetId();
+    cStarRecord* rec;
+    if (!id)
+        rec = mpDefaultRecord;
+    else if (id == 0xffffffff)
+        rec = 0;
+    else
+        rec = FindRecordInGrid(this, id);
+    FUN_00bb57b0(rec, arg);
+    UpdateItem(h, arg);
+}
+
+// @ 0x00bb5990
+void cStarManager::UpdateStarItemTarget(cStarItem* h, void* arg)
+{
+    UpdateStarItem(h->mpTarget, arg);
+}
+
+// @ 0x00bb5b50
+void cStarManager::FindStarItem(int arg)
+{
+    unsigned char result[8];
+    mItemMap.Find(result, arg);
+}
+
+// @ 0x00bb5ae0
+cStarItem* cStarManager::GetMatchingItem(cStarItem* h)
+{
+    FUN_00bb57b0(h, 0);
+    cStarItemList* list = h->GetItems();
+    int n = list->mpEnd - list->mpBegin;
+    for (int i = 0; i < n; i++)
+    {
+        uint32_t id = list->mpBegin[i]->GetItemId();
+        if (id == h->GetSelectedId())
+            return list->mpBegin[i];
+    }
+    return 0;
 }
