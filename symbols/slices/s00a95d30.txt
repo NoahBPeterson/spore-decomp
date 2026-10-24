@@ -1,1 +1,18 @@
-00a95d30 WriteParticleQuads  # particle list -> 4 vertices per particle; sink vtable[0]=Fetch(want,&base,&stride), vtable[2]=Flush
+# slice s00a95d30 (gold7) - names inferred from the batch/call sites and behaviour
+# Modelled types (retail member offsets):
+#   EffectDesc   size curve (vector<float>) @0x80, colour curve (vector<Vec3>) @0x94,
+#                alpha curve (vector<float>) @0xa8 (each 20 bytes: begin/end/capacity + allocator)
+#   Effect       particle list @0x14, live count @0x1c, descriptor @0x20, flags @0xcc,
+#                origin @0xd0, scale @0xdc, 3x3 matrix @0xe0, sizeScale @0x150, alphaScale @0x154,
+#                rgb scale @0x158
+#   Particle     next @0, age @8, life @0xc, first vector @0x10, second vector @0x1c, uv @0x28
+#   VertexSink   vtable: Fetch(want, &base, &stride) @0, Flush() @2
+#   SwarmEffect  allocation is 0x198 bytes; the public pointer is allocation+4, so the embedded
+#                particle list lives at allocation+0x14 (count +0x1c); the object itself has the
+#                active/paused bytes @0xc/0xd, owner pointer @0x20 and owner slot @0x184
+00a96520  ?WriteParticleQuadsUV@@YAXPAUEffect@@PAUVertexSink@@PBE@Z  # free: quad writer for the position/ARGB/float2-uv vertex format
+00a96b70  ?CreateSwarmEffect@@YAHH@Z  # free: allocate a 0x198-byte Swarm effect and construct it, returns object+4
+00a96bb0  ?RegisterSwarmVtables@@YAXD@Z  # free: zero the 0x80-byte handler table and install the four particle-writer entry points
+00a96c00  ?ClearParticles@SwarmEffectBase@@QAEXXZ  # thiscall: move every live particle to the global free list and reset the list head
+00a96c60  ?Release@SwarmEffect@@QAEXH@Z  # thiscall: stop or pause the effect; on a real release clear particles and free the owner slot
+00a95d30  ?WriteParticleQuads@@YAXPAUEffect@@PAUVertexSink@@PBE@Z  # free: quad writer for the position/attribute/ARGB/uv-word vertex format
