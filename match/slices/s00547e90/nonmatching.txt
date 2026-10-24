@@ -5,7 +5,7 @@
 00548450  510  complete; /Od vector<0x118>::insert grow/shift schedule differs
 00548690  142  complete; /Od relocate loop slot schedule differs
 00548740  200  complete; /Od lower_bound/find comparison schedule differs
-00548860  126  complete; /Od vector insert-one schedule differs
+00548860  126  complete; the vector insert was called as a cdecl helper (pos, value) but 0x0054a070 is DoInsertValue(this, pos, value) __thiscall ret 8 with the vector in ecx: the replay showed ecx=the value object instead of the vector, so the callee grew/wrote through the wrong storage. Now an annotated thiscall member (WStringVector::DoInsertValue).  [equiv: PASS (436/1200 valid, 77.6% cov)]
 00548910  200  complete; /Od lower_bound/find comparison schedule differs
-00548a30  160  complete; /Od erase range 0x70 schedule differs
+00548a30  192  complete; erase-range had two defects: the 0x70-byte element move (0x005496a0) is __thiscall (ecx = destination, one stack arg = source) and the element dtor (0x00547840) is __thiscall with the element in ecx, but both were called through cdecl one-arg/no-arg helpers; and the destroy loop's bound test must be unsigned (retail `cmp/jae`), so with dst > stop (e.g. dst = 0xa3af314c, stop = 2) the signed loop entered and destroyed an unmapped element (fault at eip=0x547858). The moves/destroys are now annotated thiscall members (FeedElemMove::MoveFrom, FeedElemDtor::Destroy) and the loop counter/bound are unsigned.  [equiv: PASS (334/1200 valid, 64.7% cov)]
 00548b10  500  complete; /Od vector<0x70>::insert grow/shift schedule differs

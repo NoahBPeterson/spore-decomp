@@ -21,6 +21,17 @@ void  FUN_00549250(int a);                         // @ 0x549250 copy 0x118
 int   FUN_00549500(int a);                         // @ 0x549500 ctor 0x70
 void  FUN_005496a0(int a);                         // @ 0x5496a0 move 0x70
 void  FUN_00547840();                              // @ 0x547840 dtor 0x70
+// The same two 0x70-byte element helpers as real thiscall members (the declarations above are cdecl
+// leftovers used by the other slice functions).
+struct FeedElemMove {
+    void MoveFrom(void* src);      // 0x005496a0 (thiscall, ret 4)
+};
+struct FeedElemDtor {
+    void Destroy();                // 0x00547840 (thiscall, ret 0)
+};
+struct WStringVector {
+    void DoInsertValue(void* pos, void* value);   // 0x0054a070 (thiscall, ret 8)
+};
 void* DoInsertBool(void* vec, void* pos, int n);   // @ 0x11e0744
 void  WStringAssign(void* self, const wchar_t* s); // eastl basic_string<wchar_t>::assign   // 0x00549e40 (equiv t3)
 void  WStringAppend(void* self, const wchar_t* a, const wchar_t* b);
@@ -220,7 +231,7 @@ int Obj43::FUN_00548860(int param_2, int* param_3)
             e[0] = param_3[0]; e[1] = param_3[1]; e[2] = param_3[2]; e[3] = param_3[3];
         }
     } else {
-        FUN_0054a070(param_2, param_3);
+        ((WStringVector*)this)->DoInsertValue((void*)param_2, param_3);
     }
     return (param_2 - base >> 4) * 0x10 + *p;
 }
@@ -250,12 +261,12 @@ int Obj43::FUN_00548a30(int param_2, int param_3)
     int end = *(int*)(base + 4);
     int dst = param_2;
     for (int cur = param_3; cur != end; cur = cur + 0x70) {
-        FUN_005496a0(cur);
+        ((FeedElemMove*)dst)->MoveFrom((void*)cur);
         dst = dst + 0x70;
     }
     int stop = *(int*)(base + 4);
-    for (int cur = dst; cur < stop; cur = cur + 0x70)
-        FUN_00547840();
+    for (unsigned cur = (unsigned)dst; cur < (unsigned)stop; cur = cur + 0x70)
+        ((FeedElemDtor*)cur)->Destroy();
     *(int*)(base + 4) = *(int*)(base + 4) + ((param_3 - param_2) / 0x70) * -0x70;
     return param_2;
 }
