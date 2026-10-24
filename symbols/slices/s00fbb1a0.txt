@@ -1,0 +1,4 @@
+00fbb1a0 PlanetColor::BuildHeightHistogram  # percentile height ramp from 0x40000-byte histogram + 6x4x4 grid from terrain map (complete)
+00fbb7a0 SampleRampValue  # piecewise-linear 12-byte-stop ramp sample at t, three floats out (complete)
+00fbb8b0 PlanetColor::ExportRampTexture  # ramp rows from the two stops + ScaleHSL, then lock/sample/Unlock (complete)
+00fbbc00 PlanetColor::ExportRampTextureEx  # terrain-map colour-ramp rows + BuildPaintTexture, delegates when b264 set (complete)
