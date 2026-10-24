@@ -2,14 +2,16 @@
 // (0x0101aea0..0x0101bd02).  Module flags: /O2 /MD /Gy /TP /arch:SSE
 #include "types.h"
 #include <intrin.h>
+#include <math.h>
 
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
 typedef int            intptr_t;
 
-extern float DAT_015b6da4, DAT_015b6da0, DAT_015b6d9c, DAT_015b6d98, DAT_015b6d94;
-extern float DAT_015b6da8, DAT_01495390, DAT_01495394, DAT_01485720;
+extern float DAT_015b6da4, DAT_015b6da0, DAT_015b6d9c, DAT_015b6d94;
+extern u8    DAT_015b6d98;
+extern float DAT_015b6da8, DAT_01495390, DAT_01495394, DAT_01485720, DAT_01495934;
 extern float DAT_013f4fd0, DAT_013fdf1c, DAT_013f89b8, DAT_013f9428, DAT_01470f1c;
 extern float DAT_013eb1bc, DAT_013f0e84;
 extern float DAT_016dd3d0, DAT_016dd384, DAT_016dd3b4, DAT_016dd374, DAT_016dd3cc;
@@ -33,7 +35,7 @@ void* __cdecl FUN_010666a0();                        // 0x010666a0
 void* __cdecl FUN_00b3d470();                        // 0x00b3d470
 void* __cdecl FUN_0067cac0();                        // 0x0067cac0
 void* __cdecl FUN_00b3d4d0();                        // GetTriggerMgr
-void* __cdecl FUN_00b534c0(void*, float*);           // 0x00b534c0
+void* __cdecl FUN_00b534c0(void*, void*);             // 0x00b534c0 (vector append)
 unsigned char __cdecl FUN_01044920();                // 0x01044920
 unsigned char __cdecl FUN_010422e0();                // TransitionFromSolarToGalaxy
 unsigned char __cdecl FUN_01042450();                // 0x01042450
@@ -69,6 +71,18 @@ struct Ext {
 static inline Ext* E(void* p) { return (Ext*)p; }
 static inline void** VTP(void* o) { return *(void***)o; }
 
+// The locomotion/camera sample vector at UFO+0x48 holds 8-byte samples {float time; char keep;}
+// (three padding bytes). The vector's end/capacity words live at +0x4c/+0x50.
+struct UFO_Sample {
+    union {
+        long long raw;      // the stopwatch's 64-bit value is spilled into the sample's own storage
+        struct {
+            float t;
+            char  keep;
+        };
+    };
+};
+
 struct UFO {
     u8 raw[0x300];
     void  aea0(float delta);   // UpdateMouseWheel
@@ -93,18 +107,65 @@ void UFO::aea0(float delta) {
     long long lVar = E(s + 0x30)->FUN_0093a3a0();
     float fVar12 = (float)lVar * *(float*)(s + 0x44);
     *(float*)(s + 0x64) = *(float*)(s + 0x60);
-    if (*(int*)(s + 0x48) != *(int*)(s + 0x4c)) {
-        char* end = *(char**)(s + 0x4c);
-        char* begin = *(char**)(s + 0x48);
-        char dl = end[-4];
-        char* found = end;
-        void* xmm0v = (void*)0;
-        (void)xmm0v;
-        for (char* it = begin; it != end; it += 8) {
-            bool cond = (it[4] != dl) || (fVar12 - *(float*)it > DAT_015b6da4);
-            if (cond) found = it;
+
+    // drop the stale prefix of the sample vector (8-byte {float t; char keep;} elements)
+    UFO_Sample* begin = *(UFO_Sample**)(s + 0x48);
+    UFO_Sample* end = *(UFO_Sample**)(s + 0x4c);
+    if (begin != end) {
+        char dl = ((char*)end)[-4];
+        UFO_Sample* mark = end;
+        for (UFO_Sample* it = begin; it != end; ++it) {
+            if (it->keep != dl || (fVar12 - it->t) > DAT_015b6da4) mark = it + 1;
         }
-        (void)found;
+        if (mark != end) {
+            UFO_Sample* dst = begin;
+            for (UFO_Sample* src = mark; src != end; ++src) *dst++ = *src;
+            *(UFO_Sample**)(s + 0x4c) = end - (mark - begin);
+        }
+    }
+
+    int mode = *(int*)(s + 0x5c);
+    if (mode != 0) {
+        float k = (mode == 1) ? DAT_01485720 : DAT_013eb1bc;
+        int n = *(int*)(s + 0x4c) - *(int*)(s + 0x48);
+        n >>= 3;
+        float t = (float)(unsigned)n / DAT_015b6da0 * delta * DAT_013fdf1c;
+        float z = *(float*)(s + 0x60);
+        *(float*)(s + 0x60) = z + (expf(t) - 1.0f) * (k - z);
+    } else {
+        bool run = true;
+        if (*(int*)(s + 0x48) != *(int*)(s + 0x4c)) {
+            float d = fVar12 - (*(UFO_Sample**)(s + 0x4c))[-1].t;
+            if (!(d > DAT_015b6d9c)) run = false;
+        }
+        if (run) {
+            if (DAT_015b6d98 != 0) {
+                float z = *(float*)(s + 0x60);
+                *(float*)(s + 0x60) = z - (expf(delta / DAT_015b6d94 * DAT_013fdf1c) - 1.0f) * z;
+            } else {
+                *(float*)(s + 0x60) = 0.0f;
+            }
+        }
+    }
+
+    float z = *(float*)(s + 0x60);
+    if (z > DAT_01495934 && DAT_01495934 > *(float*)(s + 0x64)) {
+        void* a = FUN_00a206f0();
+        int r = a ? ((int(__thiscall*)(void*))VTP(a)[0x20 / 4])(a) : 0;
+        void* b = FUN_00a206f0();
+        if (b) {
+            ((void(__thiscall*)(void*, int))VTP(b)[0x38 / 4])(b, 0x3475365);
+            ((void(__thiscall*)(void*, int, int))VTP(b)[0x40 / 4])(b, 0x3475381, 0xfeb2337b);
+            ((void(__thiscall*)(void*, int, int))VTP(b)[0x40 / 4])(b, 0x3475385, r);
+            ((void(__thiscall*)(void*))VTP(b)[0x58 / 4])(b);
+        }
+        *(int*)(s + 0x5c) = 0;
+        return;
+    }
+    if (DAT_013f89b8 > z && *(float*)(s + 0x64) >= DAT_013f89b8) {
+        void* a = FUN_00a206f0();
+        int r = a ? ((int(__thiscall*)(void*))VTP(a)[0x20 / 4])(a) : 0;
+        FUN_00435ed0(0x5677db96, r);
     }
     *(int*)(s + 0x5c) = 0;
 }
@@ -296,18 +357,19 @@ void UFO::bad0(int a, int b) {
 // ===========================================================================
 // @ 0x0101bb10
 char UFO::bb10(int a, int b, int c, int d) {
-    (void)c; (void)d;
+    (void)b; (void)c; (void)d;
     char* s = (char*)raw;
     if (a == 0) return 0;
-    long long lVar = E(s + 0x30)->FUN_0093a3a0();
-    float local_8 = (float)lVar * *(float*)(s + 0x44);
-    float fStack_4 = (a > 0) ? 1.0f : 0.0f;
-    float* p = *(float**)(s + 0x4c);
-    if (p < *(float**)(s + 0x50)) {
-        *(float**)(s + 0x4c) = p + 2;
-        if (p) { p[0] = local_8; p[1] = fStack_4; }
+    UFO_Sample smp;
+    smp.raw = E(s + 0x30)->FUN_0093a3a0();
+    smp.t = (float)smp.raw * *(float*)(s + 0x44);
+    smp.keep = (a > 0);
+    UFO_Sample* end = *(UFO_Sample**)(s + 0x4c);
+    if (end < *(UFO_Sample**)(s + 0x50)) {
+        *(UFO_Sample**)(s + 0x4c) = end + 1;
+        if (end) *end = smp;
     } else {
-        FUN_00b534c0(p, &local_8);
+        FUN_00b534c0(end, &smp);
     }
     *(int*)(s + 0x5c) = (a < 1) + 1;
     return 0;
