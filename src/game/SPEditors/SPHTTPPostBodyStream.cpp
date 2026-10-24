@@ -762,16 +762,18 @@ lOk:
     WriteToStream("\r\n", mpMemStream);
     WriteToStream("\r\n", mpMemStream);
     if (mpMemStream->GetState() == 0 && CommitTextSegment()) {
-      StreamRef<IO::IStream_s0060_c780> ref(pStream);
-      IStreamNode_s0060_c780* const pNode = (IStreamNode_s0060_c780*)EASTL_allocator_allocate(sizeof(IStreamNode_s0060_c780), "Editor", 0, 0, "EASTL/allocator.h", 0xd1);
-      if (&pNode->mpStream) {
-        pNode->mpStream = ref.mpObject;
-        if (ref.mpObject) ref.mpObject->AddRef();
+      {
+        StreamRef<IO::IStream_s0060_c780> ref(pStream);
+        IStreamNode_s0060_c780* const pNode = (IStreamNode_s0060_c780*)EASTL_allocator_allocate(sizeof(IStreamNode_s0060_c780), "Editor", 0, 0, "EASTL/allocator.h", 0xd1);
+        if (&pNode->mpStream) {
+          pNode->mpStream = ref.mpObject;
+          if (ref.mpObject) ref.mpObject->AddRef();
+        }
+        pNode->mpNext = &mFormDataList.mNode;
+        pNode->mpPrev = mFormDataList.mNode.mpPrev;
+        mFormDataList.mNode.mpPrev->mpNext = pNode;
+        mFormDataList.mNode.mpPrev = pNode;
       }
-      pNode->mpNext = &mFormDataList.mNode;
-      pNode->mpPrev = mFormDataList.mNode.mpPrev;
-      mFormDataList.mNode.mpPrev->mpNext = pNode;
-      mFormDataList.mNode.mpPrev = pNode;
       mnSize += pStream->GetAvailable();
       mLastDataType = kStream;
       return true;

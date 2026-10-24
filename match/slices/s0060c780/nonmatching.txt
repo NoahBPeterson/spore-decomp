@@ -1,5 +1,5 @@
 0060c780  459  HTTPMultipartRelatedPostBodyStream::AddFormData(name, stream, type, file, encoding): complete; same shape but ebx/ebp/edi allocation is rotated and the stream-ref copy differs
-0060c9c0  146  AddFormDataVideo: complete; same register rotation as AddFormData (edi/ebp/ebx), success block layout otherwise matches
+0060c9c0  379  AddFormDataVideo: complete; register rotation (edi/ebp/ebx) and success block layout differ; StreamRef released before GetAvailable as in the original; equiv PASS
 0060cb90  256  CommitTextSegment (vtable slot 0x68): complete; original uses one ref variable (edi) where cl keeps two (ebx/edi)
 0060d210  32   AtomicRef::~AtomicRef: complete; original does dec esi after the lock xadd, cl emits sub edx,1 with different registers
 0060d240  33   AtomicRef::reset: complete; same dec/register difference and the original keeps the inner delete-this null check
