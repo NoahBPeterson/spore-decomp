@@ -1,2 +1,2 @@
 0053d1a0  128  UninitCopy20 complete; 0x14-stride uninitialized copy
-0053d230  105  UninitFill20 complete; 0x14-stride fill
+0053d230  115  UninitFill20 complete; 0x14-stride fill; returns the original's leftover EAX (dst when n==0, last processed element otherwise) via a result local. difftest PASS 481/600 valid, 97.5% coverage (remaining discards are harness pool-limit/write faults). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
