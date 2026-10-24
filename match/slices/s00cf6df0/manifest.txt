@@ -1,0 +1,17 @@
+slices/s00cf6df0/s00cf6df0.cpp  ?FUN_00cf6df0@@YAXXZ  00cf6df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?FUN_00cf6e30@@YAIXZ  00cf6e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?FUN_00cf7150@@YAXXZ  00cf7150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?ShutdownGonzagoSubsystem@@YAXXZ  00cf7360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?OnMouseDown@cCivModeStrategy@@QAEXIMMI@Z  00cf7380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?OnMouseMove@cCivModeStrategy@@QAEXMMI@Z  00cf73d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?OnMouseUp@cCivModeStrategy@@QAEXIMMI@Z  00cf7420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?AsInterface@cCivModeStrategy@@QAEPAXI@Z  00cf7490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?CanBuildSeaVehicles@cCivModeStrategy@@QAE_NXZ  00cf75d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?CanBuildAirVehicles@cCivModeStrategy@@QAE_NXZ  00cf7600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?MarkCivEventAsOccurred@@YGXI@Z  00cf77f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?HasCivTutorialOccurred@cCivModeStrategy@@QAEHI@Z  00cf7830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?DoCVGCompletionAchievements@cCivModeStrategy@@QAEXXZ  00cf7630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?SetDialogueTimed@cCivModeStrategy@@QAEXI@Z  00cf7a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?ClearDialogue@cCivModeStrategy@@QAEXXZ  00cf7a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?IsNotCivEventA@cCivModeStrategy@@QAE_NXZ  00cf7a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cf6df0/s00cf6df0.cpp  ?FindBuildableVehicle@cCivModeStrategy@@QAEPAXI@Z  00cf7d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

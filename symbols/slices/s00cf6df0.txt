@@ -1,0 +1,39 @@
+# slice s00cf6df0 - SP::cCivModeStrategy (civ-mode strategy/input) + Gondago/civ-event helpers
+# Modelled types (retail member offsets):
+#   cCivModeStrategy  vtable @0x00, embedded cLocalInputState @0x68, civ-event id @0xb4,
+#                     dialogue pointers @0x110/@0x114, dialogue id @0x118, dialogue timer @0x11c,
+#                     input strategy ptr @0xe8, display strategy ptr @0xec, byte @0x148
+#   CivEventReq       0x0c-byte request record: {u32 id @0x00, u32 pad @0x04, u32 hash @0x08}
+#   Vec4Arr           vector header {begin @0x00, end @0x04} stride 4
+#   SubObj            object whose vtable pointer sits at +0x00 of a +0x34 sub-object
+#   V3 / U3           12-byte triples passed by value to FUN_0067caf0
+#   Sphere115c        terrain-sphere position triple at +0x115c
+00cf6df0  FUN_00cf6df0() -> void  # GameTimeManager DecPauseGate(0x4bf38a7); pump FUN_00b3d4f0 until [+0x54]==0 via FUN_00e2f270(0)
+00cf6e30  FUN_00cf6e30() -> u32  # property list 0x15fd918 GetDescription(0x61b67b6) ? FNVHash("CVG-CamRotate-MAC") : FNVHash("CVG-CamRotate") seed 0x811c9dc5 flag 1
+00cf6e70  FUN_00cf6e70() -> float  # civic hue/bias: three FUN_00bf1880 ratios (0xa35d0f5/0x6aeb96a1/0x3360727f) blended by min-selection with constants 2.0/0.3333/0.6667/1.0 (NOT byte-exact; see nonmatching.txt)
+00cf7090  FUN_00cf7090() -> float  # civ==0 -> kCivRatioConst 0x1471064 else min(a,b,c)/(a+b+c) when min>0 (NOT byte-exact; see nonmatching.txt)
+00cf7150  FUN_00cf7150() -> void  # city= FUN_00b25c30(NounManager); civ= GetPlayerCivilization; sphere pos @0x115c; FUN_00bddda0(city,spec,0,Vec3,0); cost= FUN_00bf2170(civ,spec,0); FUN_00bef710(civ,cost)
+00cf71d0  FUN_00cf71d0(this, arg) -> void  # lazily build cCityInputStrategy @+0xe8 / cCityDisplayStrategy @+0xec, virtual Release, ConfigManager 0x679b873, GameInputManager PushState, FindLocal 0x1002, camera FOV/pitch, camera-pose set (NOT byte-exact; see nonmatching.txt)
+00cf7360  cCivModeStrategy::ShutdownGonzagoSubsystem() -> void  # clear subsystem handle
+00cf7380  cCivModeStrategy::OnMouseDown(a, x, y, b) -> void  # forward to embedded cLocalInputState::OnMouseDown @+0x68 then GameInputManager vtable[0x54]
+00cf73d0  cCivModeStrategy::OnMouseMove(x, y, a) -> void  # forward to embedded cLocalInputState::OnMouseWheel @+0x68 then GameInputManager vtable[0x5c]
+00cf7420  cCivModeStrategy::OnMouseUp(a, x, y, b) -> void  # forward to embedded cLocalInputState::OnMouseUp @+0x68 then GameInputManager vtable[0x58]
+00cf7490  cCivModeStrategy::AsInterface(iid) -> void*  # iid 0x0116d389 -> this, iid 0x2f009dd0 -> this+0x20, else 0
+00cf7520  FUN_00cf7520() -> void  # IncPauseGate(0x4bf38a7); two FUN_0067caf0(Vec3 globals,&PTR,0,{-1,-1,0},0,0)+FUN_0067aaf0 (NOT byte-exact; see nonmatching.txt)
+00cf75d0  cCivModeStrategy::CanBuildSeaVehicles() -> bool  # GetPlayerCivilization[civ+0x298] >= 4
+00cf7600  cCivModeStrategy::CanBuildAirVehicles() -> bool  # GetPlayerCivilization[civ+0x298] >= 3
+00cf7630  cCivModeStrategy::DoCVGCompletionAchievements() -> void  # Achievements AutoTest(count_specialty_cities(civ,0/1/2,0)) for 0x256ed7f6/0x78d05a36/0xc15fda9b, AutoTest(1) 0xb2352dc5, Award 0x6a5c80e9 if sphere[0x128c]<0x36ee80, 0x9d649052 if !FUN_00c772c0(sphere,0x5dd433e), 0xa7b1c920 if FUN_00c75420(sphere)==2
+00cf7710  FUN_00cf7710(stream) -> bool  # write version 3 then iterate registry [0x168caf0,0x168cb44) stride 0x1c FUN_00befc00(stream,elem) (NOT byte-exact; see nonmatching.txt)
+00cf7770  FUN_00cf7770(stream) -> bool  # if g_serVersion(0x145f8dc)>=0x1c0007 read version, reject !=3, iterate registry FUN_00befbc0(stream,elem) (NOT byte-exact; see nonmatching.txt)
+00cf77f0  MarkCivEventAsOccurred(id) -> void  # __stdcall; CivEventReq{id,0,0xaa9a8ed7} -> FUN_00c78420(sphere,&req) if sphere
+00cf7830  cCivModeStrategy::HasCivTutorialOccurred(id) -> int  # CivEventReq{id,0,0xaa9a8ed7} -> FUN_00c77c50(sphere,&req)
+00cf7880  cCivModeStrategy::IsEitherDialogueIdle() -> bool  # (FUN_007cd9c0||FUN_007cfac0) on +0x110 and +0x114 (NOT byte-exact; see nonmatching.txt)
+00cf78d0  IsCityVehicleSpecialtyMismatch() -> bool  # city[0x44c] specialty vs city[0x29c]; mismatch -> FUN_00bd91e0(city), true (NOT byte-exact; see nonmatching.txt)
+00cf7920  FUN_00cf7920() -> void  # PossiblyStartSpiceTutorial: CivEventReq{0x6307841,0,0xaa9a8ed7}, FUN_00c77c50 early-out / FUN_00c78420 publish, ConfigManager 0x4ea96cb gate, IncPauseGate, FUN_0067caf0+FUN_0067aaf0 (NOT byte-exact; see nonmatching.txt)
+00cf7a10  cCivModeStrategy::SetDialogueTimed(id) -> void  # +0x118 = id, +0x11c = 0xfa
+00cf7a30  cCivModeStrategy::ClearDialogue() -> void  # +0x11c = 0, +0x118 = 0
+00cf7a40  cCivModeStrategy::IsNotCivEventA() -> bool  # +0xb4 != 10
+00cf7a50  GetTerrainEditModeHeight() -> float  # switch on terrain-edit mode -> default height constants (NOT byte-exact; see nonmatching.txt)
+00cf7a90  IsCivTriggerActive() -> bool  # GetTriggerMgr[0x2c] in {1,2} and GetTriggerMgr[0x148] in {0x5fdca7a2,0xb1ea776a} (NOT byte-exact; see nonmatching.txt)
+00cf7ad0  FUN_00cf7ad0(this) -> void  # this[0x148]=0; drain pause gate 0x64beb65; FUN_00b3d4f0[+0x54] step loop; publish CivEventReq ids 0x64e6666..0x64e6679; CVG-CamRotate hash + FUN_0067cac0/FUN_0067c8c0 (NOT byte-exact; see nonmatching.txt)
+00cf7d40  cCivModeStrategy::FindBuildableVehicle(arg) -> void*  # civ vec [civ+0xb0,civ+0xb4) stride 4; elem+0xb1c==0 gate; arg!=0 -> elem+0x34 vtable[0x50]==1; returns element or 0
