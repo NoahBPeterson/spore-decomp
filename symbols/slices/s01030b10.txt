@@ -1,0 +1,32 @@
+01030b10 SP::cSPSpaceEconomyTuning::Init  # property manager fetch, property-block hand-off, SPVector<unsigned>::reserve(3), 0xd-element conversion
+01030b70 SP::cSPSpaceEconomyTuning::ComputeAmount  # coined name: float-array property lookup, inventory + noun scan, ceil, empire clamp (nonmatching)
+01030d50 SP::GetAbductionScale  # coined name: abductee-kind id -> beam scale factor (1.0/1.5/2.0)
+01030dd0 SP::cSPSpaceGameBehaviorAbducted::SetState  # state setter: mode flag at +0x74, state at +0x7c
+01030df0 SP::cSPSpaceGameBehaviorAbducted::CanJoin  # vtable slot; false when either state field is 2
+01030e80 Simulator::cAbductionBeamLocomotion::cAbductionBeamLocomotion  # two bases: beam base at +0, cContentValidationSummarizer at +8
+01030ef0 SP::cSPSpaceGameBehaviorAbducted::AdjustRelationship  # agent interface 0x4f176642 -> city -> empire compare -> relationship event + community reaction
+01030fd0 SP::cSPSpaceGameBehaviorAbducted::OnAgentHitsGround  # existing function, see nonmatching.txt
+0067de30 SP::PropertyManager
+004e0880 ?reserve@?$SPVector@I@@QAEXI@Z  # SPVector<unsigned int>::reserve
+00bb15d0 FUN_00bb15d0  # property-block conversion helper (4 cdecl args)
+006a08b0 SP::GetPropertyAsFloatArray  # (block, property id, int* count, float** values)
+00ffbe50 GetUFOSimulator  # coined name; returns the space-game simulator
+00a1ad60 SP::cSPSimulatorSpaceGame::GetPlayerInventory
+00b3d300 SP::NounManager
+00b21340 SP::cGameNounManager::GetGameDataVector  # 4 filters + type id, returns noun vector (begin at +4, end at +8)
+00cd7d10 FUN_00cd7d10  # noun filter callback
+00d3d420 FUN_00d3d420  # noun filter callback
+00ad48b0 FUN_00ad48b0  # noun filter callback
+00b1e500 FUN_00b1e500  # noun filter callback
+0102f820 FUN_0102f820  # float argument, int result (index selector for the property array)
+01021300 SP::cSPLivingUniverse::GetPlayerEmpire
+00c30cb0 FUN_00c30cb0  # empire -> integer capacity used by the clamp
+00abf0b0 SP::cSPSpaceGameBehaviorAbducted::GetAgent  # coined name; thiscall, no arguments
+00c23e40 SP::cSPCreatureCitizen::GetCity
+00c75650 cTerrainSphere::Check
+00b3d2c0 RelationshipManager  # coined name; one empire id (callee pops), returns the relationship manager
+00d06240 cRelationshipManager::RecordEvent  # (empire, event id, amount) -> float
+01021090 SP::cSPLivingUniverse::GetPlayerEmpireID
+00ff5270 SP::DoCommunityReaction  # (city, amount, center) cdecl
+00dd8640 SP::cSPUIEventLog::PostFeedbackEvent  # 6 arguments, callee pops 0x18
+00f67d90 SP::cGameNounManager::GetCurrentTerrainSphere

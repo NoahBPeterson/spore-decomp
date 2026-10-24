@@ -161,15 +161,27 @@ Mgr2*  FUN_00b3d480();
 struct EventLogT { void PostFeedbackEvent(uint id, uint a, int b, int c, int d, int e); };  // ret 0x18
 EventLogT* EventLog();                                       // 0x00b3d3e0
 int    GetCurrentGameMode();                                 // 0x00b5b800
-struct Sim { void* GetPlayerInventory(); };                  // 0x00a1ad60
+struct Inventory;
+struct Sim { Inventory* GetPlayerInventory(); };             // 0x00a1ad60
 Sim*   GetUFOSimulator();                                    // 0x00ffbe50
 extern uint DAT_016df328;
 extern char DAT_016ded38[];
 
+// Retail class: SP::cSPSpaceGameBehaviorAbducted (vtable slot 0x01030df0 = CanJoin).  Kept
+// non-polymorphic here so the explicit field offsets stay valid for the existing function.
 struct Abducted {
-    char  pad0[0x9c];
+    char  pad0[0x74];
+    bool  mField74;                                          // +0x74
+    char  pad75[3];
+    int   mField78;                                          // +0x78
+    int   mField7c;                                          // +0x7c
+    char  pad80[0x1c];
     void* mInventory;                                        // +0x9c
     bool  OnAgentHitsGround(Agent* agent, bool beam, bool flag);
+    Agent* GetAgent();                                       // 0x00abf0b0
+    void  SetState(int state);                               // 0x01030dd0
+    int   CanJoin(int a, int b);                             // 0x01030df0
+    void  AdjustRelationship();                              // 0x01030ef0
 };
 
 // @ 0x01030fd0
@@ -394,4 +406,302 @@ struct Mgr2 {
 struct SlowDeath {
     void SetDeathType();   // 0x01034260 (equiv t2)
 };
+}
+
+// ============================================================================================
+// SP::cSPSpaceEconomyTuning::Init (0x01030b10), the abduction amount computation (0x01030b70)
+// and the small abducted-behaviour helpers.
+// ============================================================================================
+
+// Engine-wide float constants (external globals in the retail image).
+extern const float _HK_REAL_ONE;                            // 0x01485720 (1.0f)
+extern const float _HK_REAL_ZERO;                           // 0x01485378 (0.0f)
+extern const float _HK_REAL_ONE_HALF;                       // 0x01485548 (1.5f)
+extern const float _HK_REAL_TWO;                            // 0x01470f1c (2.0f)
+extern const float _HK_REAL_NEG_ONE;                        // 0x013eb1bc (-1.0f)
+
+struct PropertyBlock;
+
+// Reference-counted handle to a property block; AsPropertyParam() hands the slot to the
+// property system so that it can swap the block out while releasing the previous one.
+template <class T> struct AutoRefCount {
+    T* mpObject;                                            // +0x00
+    T** AsPropertyParam()
+    {
+        T* p = mpObject;
+        if (p) {
+            mpObject = 0;
+            p->Release();
+        }
+        return &mpObject;
+    }
+};
+
+struct PropertyBlock {
+    virtual void v00();                                     // +0x00
+    virtual void Release();                                 // +0x04
+};
+
+struct PropertyMgr {
+    virtual void p00(); virtual void p01(); virtual void p02(); virtual void p03();
+    virtual void p04(); virtual void p05(); virtual void p06(); virtual void p07();
+    virtual void p08(); virtual void p09(); virtual void p10();
+    virtual void GetProperty(unsigned id, unsigned name, PropertyBlock** out);   // 0x2c
+};
+PropertyMgr* PropertyManager();                              // 0x0067de30
+
+template <class T> struct SPVector {
+    T* mpBegin;                                             // +0x00
+    T* mpEnd;                                               // +0x04
+    T* mpCapacity;                                          // +0x08
+    void reserve(unsigned n);                               // 0x004e0880
+};
+
+void FUN_00bb15d0(void* prop, unsigned id, int index, void* values);               // 0x00bb15d0
+void GetPropertyAsFloatArray(void* prop, unsigned id, int* count, float** values); // 0x006a08b0
+
+struct EconomyTuning {
+    char pad00[8];                                          // +0x00
+    AutoRefCount<PropertyBlock> mProperties;                // +0x08
+    SPVector<unsigned> mValues;                             // +0x0c
+    void Init();                                            // 0x01030b10
+    int  ComputeAmount(float amount, float* out);           // 0x01030b70
+};
+
+// @ 0x01030b10
+void EconomyTuning::Init()
+{
+    PropertyMgr* manager = PropertyManager();
+    manager->GetProperty(0xd0cd1d4b, 0x2ae0c7e, mProperties.AsPropertyParam());
+    mValues.reserve(3);
+    FUN_00bb15d0(mProperties.mpObject, 0x566a42f, 0xd, &mValues);
+}
+
+// --- player inventory / noun data used by ComputeAmount -------------------------------------
+
+struct PropertyObject;
+
+// Empire data block embedded at +0x508 of the inventories and noun game-data objects.
+struct InvSub {
+    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+    virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
+    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+    virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+    virtual void s20(); virtual void s21();
+    virtual float GetValue();                              // +0x58
+};
+
+struct Inventory {
+    char pad00[0x508];
+    InvSub mSub;                                            // +0x508
+    char pad50c[0x540 - 0x50c];
+    float mField540;                                        // +0x540
+};
+
+struct SpaceObject {
+    char pad00[0x508];
+    InvSub mSub;                                            // +0x508
+    char pad50c[0x540 - 0x50c];
+    float mField540;                                        // +0x540
+    char pad544[0x714 - 0x544];
+    int mType714;                                           // +0x714
+};
+
+struct NounVector {
+    void* mpUnused;                                         // +0x00
+    SpaceObject** mpBegin;                                  // +0x04
+    SpaceObject** mpEnd;                                    // +0x08
+};
+
+bool FUN_00cd7d10(PropertyObject* object);
+bool FUN_00d3d420(PropertyObject* object);
+bool FUN_00ad48b0(PropertyObject* object);
+bool FUN_00b1e500(PropertyObject* object);
+typedef bool (*NounFilter)(PropertyObject*);
+
+struct TerrainSphere {
+    bool Check();                                           // 0x00c75650
+};
+
+struct GameNounManager {
+    NounVector* GetGameDataVector(NounFilter f1, NounFilter f2, NounFilter f3,
+                                  NounFilter f4, unsigned id);     // 0x00b21340
+    TerrainSphere* GetCurrentTerrainSphere();               // 0x00f67d90
+};
+GameNounManager* NounManager();                              // 0x00b3d300
+
+int   FUN_0102f820(float value);                             // 0x0102f820
+void* GetPlayerEmpire();                                     // 0x01021300
+int   FUN_00c30cb0(void* empire);                            // 0x00c30cb0
+
+// Truncate, then step up unless the value was integral.
+inline int RoundUp(float value)
+{
+    int truncated = (int)value;
+    return ((float)truncated < value) ? truncated + 1 : truncated;
+}
+
+// @ 0x01030b70
+int EconomyTuning::ComputeAmount(float amount, float* out)
+{
+    int count = 0;
+    float* values = 0;
+    float factor = 0.0f;
+    GetPropertyAsFloatArray(mProperties.mpObject, 0x5e90ecf, &count, &values);
+    if (count > 0) {
+        int index = FUN_0102f820(amount);
+        int last = count - 1;
+        factor = values[(index < last) ? index : last];
+    }
+    Inventory* inventory = GetUFOSimulator()->GetPlayerInventory();
+    amount = inventory->mField540;
+    amount = inventory->mSub.GetValue() - amount;
+    GameNounManager* manager = NounManager();
+    NounVector* nouns = manager->GetGameDataVector(
+        FUN_00cd7d10, FUN_00d3d420, FUN_00ad48b0, FUN_00b1e500, 0x18ebadc);
+    for (SpaceObject** object = nouns->mpBegin; object != nouns->mpEnd; ++object) {
+        SpaceObject* noun = *object;
+        if (noun->mType714 == 3) {
+            float value = noun->mField540;
+            amount = (noun->mSub.GetValue() - value) + amount;
+        }
+    }
+    int result = RoundUp(amount * factor);
+    if (factor > _HK_REAL_ZERO) {
+        int empire = FUN_00c30cb0(GetPlayerEmpire());
+        float limit = (float)((empire < result) ? empire : result) / factor;
+        amount = (amount > limit) ? limit : amount;
+        result = RoundUp(amount * factor);
+    }
+    if (out)
+        *out = amount;
+    return result;
+}
+
+// @ 0x01030d50
+float GetAbductionScale(unsigned id)
+{
+    float scale = _HK_REAL_ONE;
+    if (id != 0x29c388a) {
+        if (id == 0x3a8be428)
+            scale = _HK_REAL_TWO;
+    } else {
+        scale = _HK_REAL_ONE_HALF;
+    }
+    return scale;
+}
+
+// @ 0x01030dd0
+void Abducted::SetState(int state)
+{
+    mField7c = state;
+    switch (state) {
+    case 0:
+        mField74 = true;
+        break;
+    case 1:
+        mField74 = false;
+        break;
+    }
+}
+
+// @ 0x01030df0
+int Abducted::CanJoin(int, int)
+{
+    return mField78 != 2 && mField7c != 2;
+}
+
+// --- abduction beam locomotion ---------------------------------------------------------------
+
+namespace Simulator {
+
+struct IRefCounted {
+    virtual void AddRef();                                  // +0x00
+};
+
+// Primary (polymorphic) base occupying 0x00..0x07 so that the summarizer base sits at +0x08.
+class cBeamLocomotionBase {
+public:
+    virtual void b00();
+    int mField04;                                           // +0x04
+};
+
+class cContentValidationSummarizer {
+public:
+    cContentValidationSummarizer() : mField4(0) {}
+    virtual void c00();
+    int mField4;                                            // +0x0c
+};
+
+class cAbductionBeamLocomotion : public cBeamLocomotionBase,
+                                 public cContentValidationSummarizer {
+public:
+    cAbductionBeamLocomotion(IRefCounted* target, bool flag);    // 0x01030e80
+    IRefCounted* mpTarget;                                  // +0x10
+    float mScale;                                           // +0x14
+    bool  mFlag;                                            // +0x18
+    float mRate;                                            // +0x1c
+    bool  mEnabled;                                         // +0x20
+};
+
+// @ 0x01030e80
+cAbductionBeamLocomotion::cAbductionBeamLocomotion(IRefCounted* target, bool flag)
+{
+    mpTarget = target;
+    if (target)
+        target->AddRef();
+    mScale = _HK_REAL_NEG_ONE;
+    mRate = _HK_REAL_ONE;
+    mFlag = flag;
+    mEnabled = true;
+}
+
+} // namespace Simulator
+
+// --- relationship adjustment --------------------------------------------------------------
+
+struct City {
+    virtual void c00(); virtual void c01(); virtual void c02(); virtual void c03();
+    virtual void c04(); virtual void c05(); virtual void c06(); virtual void c07();
+    virtual void c08(); virtual void c09(); virtual void c10(); virtual void c11();
+    virtual void c12(); virtual void c13(); virtual void c14(); virtual void c15();
+    virtual void c16(); virtual void c17(); virtual void c18();
+    virtual unsigned GetEmpireID();                         // +0x4c
+    char pad04[0x120 - 0x04];
+    Centered mCenter;                                       // +0x120
+};
+
+struct Citizen {
+    City* GetCity();                                        // 0x00c23e40
+};
+
+struct RelationshipMgr {
+    float RecordEvent(unsigned empire, unsigned eventID, float amount);   // 0x00d06240
+};
+
+RelationshipMgr* __stdcall RelationshipManager(unsigned empire);          // 0x00b3d2c0
+unsigned GetPlayerEmpireID();                               // 0x01021090
+void DoCommunityReaction(City* city, float amount, const Vec3* center);   // 0x00ff5270
+
+// @ 0x01030ef0
+void Abducted::AdjustRelationship()
+{
+    Agent* agent = GetAgent();
+    if (!agent)
+        return;
+    Citizen* citizen = (Citizen*)agent->GetInterface(0x4f176642);
+    if (!citizen)
+        return;
+    if (NounManager()->GetCurrentTerrainSphere()->Check())
+        return;
+    City* city = citizen->GetCity();
+    if (!city)
+        return;
+    if (city->GetEmpireID() == GetPlayerEmpireID())
+        return;
+    float amount = RelationshipManager(city->GetEmpireID())->RecordEvent(
+        GetPlayerEmpireID(), 0x526e5d4, 1.0f);
+    DoCommunityReaction(city, amount, city->mCenter.GetCenter());
+    EventLog()->PostFeedbackEvent(0x9ad9306e, 0x131a9f54, 0, 0, 1, 0);
 }

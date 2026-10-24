@@ -1,0 +1,8 @@
+# slice s01030b10: six of the seven abducted-behaviour functions are byte-exact; the 480-byte
+# amount computation (01030b70) is logged in nonmatching.txt with complete compiling source.
+slices/s01030b10/s01030b10.cpp  ?Init@EconomyTuning@@QAEXXZ  01030b10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01030b10/s01030b10.cpp  ?GetAbductionScale@@YAMI@Z  01030d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01030b10/s01030b10.cpp  ?SetState@Abducted@@QAEXH@Z  01030dd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01030b10/s01030b10.cpp  ?CanJoin@Abducted@@QAEHHH@Z  01030df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01030b10/s01030b10.cpp  ??0cAbductionBeamLocomotion@Simulator@@QAE@PAUIRefCounted@1@_N@Z  01030e80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01030b10/s01030b10.cpp  ?AdjustRelationship@Abducted@@QAEXXZ  01030ef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
