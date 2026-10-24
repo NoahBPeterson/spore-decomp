@@ -100,7 +100,16 @@ struct cPlanetModel {
 };
 
 struct cTerrainSphere { int GetType(); };                  // 0xc75420
-struct cTerrainSphereOwner { cTerrainSphere* GetCurrentTerrainSphere(); };   // 0xf67d90
+class cStarRecord;
+struct NounVector {                                        // noun manager game-data view
+    void* mpUnused;          // +0x00
+    cStarRecord** mpBegin;   // +0x04
+    cStarRecord** mpEnd;     // +0x08
+};
+struct cTerrainSphereOwner {
+    cTerrainSphere* GetCurrentTerrainSphere();                              // 0xf67d90
+    NounVector* GetGameDataVector(u32, u32, u32, u32, u32);                 // 0xb21340
+};
 
 struct cRecordEntry { u32 pad0; Vector3 mPosition; u32 pad10[6]; u8 mFlags; u8 pad29[3]; };   // 0x2c
 template <class T> struct Vec {
@@ -409,6 +418,226 @@ void __cdecl SetupPlanetSpots(u32 planetType, bool bFillRegions)
                 }
             }
             g_SpotGrid.FinishRegions();
+        }
+    }
+}
+
+// ---- simulator object hash map used by the star-record re-index pass --------------------
+// The map is the leading member of SimObj: buckets at +0x04, bucket count at +0x08,
+// element count at +0x0c, an embedded fixed pool at +0x1c (free list / range / chunk size)
+// and the inline bucket array pointer at +0x30.  Its nodes are 0x48-byte chunks whose
+// payload vector starts at +0x08 and whose chain link lives at +0x40.
+struct ObjKey { u32 mLo; u32 mHi; };
+
+struct ObjVec {
+    cStarRecord** mpBegin;      // +0x00
+    cStarRecord** mpEnd;        // +0x04
+    cStarRecord** mpCapacity;   // +0x08
+    void reserve(unsigned n);                                             // 0x00d01790
+    void DoInsertPtr(cStarRecord** pos, cStarRecord* const& value);       // 0x00aea5d0
+};
+
+struct HashNode {
+    u32        mUnk00;          // +0x00
+    u32        mUnk04;          // +0x04
+    ObjVec     mVec;            // +0x08
+    u32        mUnk14[11];      // +0x14..+0x3f
+    HashNode*  mpNext;          // +0x40
+    u32        mUnk44;          // +0x44
+};
+
+struct SimObj {
+    u32         mUnk00;                 // +0x00
+    HashNode**  mpBuckets;              // +0x04
+    u32         mnBucketCount;          // +0x08
+    u32         mnElementCount;         // +0x0c
+    u32         mUnk10[3];              // +0x10..+0x1b
+    HashNode*   mpFreeList;             // +0x1c
+    u32         mUnk20;                 // +0x20
+    char*       mpPoolBegin;            // +0x24
+    char*       mpPoolEnd;              // +0x28
+    u32         mPoolChunkSize;         // +0x2c
+    HashNode**  mpInlineBuckets;        // +0x30
+    u32         mInlineBuckets[0x48/4]; // +0x34..+0x7b
+    u32         mPool[0x480/4];         // +0x7c..+0x4fb
+    u32         mTail[0x80/4];          // +0x4fc..+0x57b
+
+    SimObj* setup(void* a2, void* a3);                              // 0x00ba0570
+    ObjVec* FindOrAdd(const ObjKey* key);                           // 0x00b9c180
+    void DestroyNodes(HashNode** buckets, u32 bucketCount);         // 0x00b982e0
+};
+
+// Star records are intrusive-refcounted; slots 0/1 of the vtable are AddRef/Release.
+class cStarRecord {
+public:
+    virtual void AddRef();          // slot 0
+    virtual void Release();         // slot 1
+    char         mPad04[0x104];     // +0x04..+0x107
+    u32          mType;             // +0x108
+    char         mPad10c[8];        // +0x10c..+0x113
+    u32          mKey0;             // +0x114
+    char         mPad118[4];        // +0x118..+0x11b
+    int          mIndex;            // +0x11c
+    char         mPad120[4];        // +0x120..+0x123
+    u32          mKey1;             // +0x124
+    char         mPad128[0x74];     // +0x128..+0x19b
+    cStarRecord* mLink;             // +0x19c
+    cStarRecord* mFirst;            // +0x1a0
+};
+
+void __cdecl IntroSelect(void* first, void* last, int depth, void* compare);   // 0x00e26410
+void __cdecl InsertionSort(void* first, void* last, void* compare);            // 0x00bbe970
+void __cdecl MergeSort(void* first, void* last, void* compare);                // 0x00b90a40
+void __cdecl FreeBuckets(void* p);                                            // 0x00f47380
+
+// @ 0x00ba1280
+void FUN_00ba1280()
+{
+    SimObj sim;
+    u8 flag = 0;
+    sim.setup(&flag, &flag);
+
+    cTerrainSphereOwner* manager = SP::TerrainSphereOwner();
+    NounVector* nouns = manager->GetGameDataVector(0xcd7d10, 0xd3d420, 0xace070,
+                                                   0xb1e500, 0x36be27e);
+    for (cStarRecord** it = nouns->mpBegin; it != nouns->mpEnd; ++it)
+    {
+        cStarRecord* obj = *it;
+        if (obj->mType != 0xc012ae1f)
+            continue;
+
+        ObjKey key;
+        key.mLo = obj->mKey0;
+        key.mHi = obj->mKey1;
+        ObjVec* vec = sim.FindOrAdd(&key);
+
+        int count = (int)(vec->mpEnd - vec->mpBegin);
+        int hint = count;
+        if (count < obj->mIndex)
+            hint = obj->mIndex;
+        vec->reserve((unsigned)hint);
+
+        cStarRecord* local = obj;
+        obj->AddRef();
+        cStarRecord** pos = vec->mpEnd;
+        if (pos < vec->mpCapacity)
+        {
+            vec->mpEnd = pos + 1;
+            if (pos)
+            {
+                *pos = obj;
+                obj->AddRef();
+            }
+        }
+        else
+        {
+            vec->DoInsertPtr(pos, local);
+            obj = local;
+        }
+        if (obj)
+            obj->Release();
+    }
+
+    HashNode** bucket = sim.mpBuckets;
+    HashNode* node = *bucket;
+    if (!node)
+    {
+        do
+        {
+            ++bucket;
+        } while (!*bucket);
+        node = *bucket;
+    }
+    HashNode* endNode = sim.mpBuckets[sim.mnBucketCount];
+
+    while (node != endNode)
+    {
+        cStarRecord** begin = node->mVec.mpBegin;
+        cStarRecord** last = node->mVec.mpEnd;
+        if (begin != last)
+        {
+            int count = (int)(last - begin);
+            int depth = 0;
+            for (int v = count; v != 0; v >>= 1)
+                ++depth;
+            IntroSelect(begin, last, depth * 2 - 2, (void*)0xb908a0);
+            if (count <= 0x1c)
+            {
+                InsertionSort(begin, last, (void*)0xb908a0);
+            }
+            else
+            {
+                cStarRecord** mid = begin + 0x1c;
+                InsertionSort(begin, mid, (void*)0xb908a0);
+                MergeSort(mid, last, (void*)0xb908a0);
+            }
+        }
+
+        cStarRecord** p = node->mVec.mpBegin;
+        cStarRecord** vecEnd = node->mVec.mpEnd;
+        cStarRecord* prev = 0;
+        cStarRecord* first = 0;
+        int index = 0;
+        if (p != vecEnd)
+        {
+            do
+            {
+                cStarRecord* cur = *p;
+                cur->mIndex = index;
+                if (prev)
+                {
+                    cStarRecord* old = prev->mLink;
+                    if (cur != old)
+                    {
+                        cur->AddRef();
+                        prev->mLink = cur;
+                        if (old)
+                            old->Release();
+                    }
+                }
+                if (index == 0)
+                    first = cur;
+                cStarRecord* oldFirst = cur->mFirst;
+                if (first != oldFirst)
+                {
+                    if (first)
+                        first->AddRef();
+                    cur->mFirst = first;
+                    if (oldFirst)
+                        oldFirst->Release();
+                }
+                cStarRecord* oldLink = cur->mLink;
+                if (oldLink)
+                {
+                    cur->mLink = 0;
+                    oldLink->Release();
+                }
+                ++index;
+                ++p;
+                prev = cur;
+            } while (p != vecEnd);
+        }
+
+        node = node->mpNext;
+        while (!node)
+        {
+            ++bucket;
+            node = *bucket;
+        }
+    }
+
+    sim.DestroyNodes(sim.mpBuckets, sim.mnBucketCount);
+    sim.mnElementCount = 0;
+    if (sim.mnBucketCount > 1 && (void*)sim.mpBuckets != (void*)sim.mpInlineBuckets)
+    {
+        if ((char*)sim.mpBuckets >= sim.mpPoolBegin && (char*)sim.mpBuckets < sim.mpPoolEnd)
+        {
+            *sim.mpBuckets = sim.mpFreeList;
+            sim.mpFreeList = (HashNode*)sim.mpBuckets;
+        }
+        else
+        {
+            FreeBuckets(sim.mpBuckets);
         }
     }
 }
