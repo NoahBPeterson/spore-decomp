@@ -1,8 +1,9 @@
 00758240  57  At6 intrusive assignment: swap/AddRef/Release + 5 word copy complete; xadd register roles and dec/cmp differ; equiv PASS (776 valid inputs, 100% coverage)
-00758540  67  Holder841 dtor: vtable stores + RefVector dtor complete; missing /EHsc frame (base/object not modeled as EH); equiv FAIL (dtor memory diff: orig vptr stores vs ours zero)
-007585c0  84  new 0x28 + ctor: allocation and null path complete; EH frame from new-expression differs
+00758540  59  Holder841 dtor: vtable stores + RefVector dtor now called thiscall on this+0xc (and vt1 reset to the base vtable); only the /EHsc prologue/frame differs; equiv PASS (288 valid inputs, 100% coverage)
+007585c0  83  new 0x20 via the 6-arg Graphics allocator + thiscall ctor; EH frame from the new-expression differs; equiv: no mismatch (WEAK 176/400 valid), PASS at 800 inputs (344 valid, 83.9% coverage)
 00758860  207 eastl vector<0x14> range ctor: allocation + copy complete; DoInsertValue call shape differs
 00758950  146 eastl vector<0x14> fill: allocation + copy complete; call shape differs
 00758e20  45  Elem50 range copy: 4 member assignments per element complete; element OpAssign/inlined schedule differs
 00758e80  39  Elem50 range copy backward: complete; element schedule differs; equiv UNSUPPORTED (only 46/1200 inputs valid)
 00758f70  63  Elem50 range copy: complete but source/destination argument mapping and float-vector operator= differ; equiv WEAK (350 valid, 19.4% coverage)
+00758fc0  276  weight update: threshold compare + zero-tail scan + byte-rounded truncate + resize/fill/copy paths reproduced (thiscall resize, both memcpy calls); equiv: no mismatch (WEAK 197/400 valid), PASS at 800 inputs (402 valid, 89.8% coverage)

@@ -23,6 +23,9 @@ template<class T> T* xmove(T* f, T* l, T* o) { while (f != l) *o++ = *f++; retur
 extern "C" void __cdecl FUN_00424430(void* end, void* src);
 extern "C" int  __cdecl FUN_00732220(void* a, void* b, void* c);
 extern "C" void* __cdecl operator_new_graph(unsigned size);
+extern "C" void* __cdecl operator_new_graph6(unsigned size, const char* name, int, int, int, int); // 0x00f473a0
+extern const char g_GraphicsTag[];                                                          // 0x013EB8A4
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned n);
 extern "C" void  __cdecl eastl_dealloc(void* p);
 extern "C" void  __cdecl FUN_00733070(int n, void* src);
 extern "C" void  __cdecl FUN_0047c800(int* a, int b, int c, int d, int* e);
@@ -80,13 +83,14 @@ bool C582b0::Build(void* arg, At6* tmp, void** out) {
 // ---------------------------------------------------------------------------
 // @ 0x007583e0 / 0x00758540   0x28 holder with RefVector at +0xc
 // ---------------------------------------------------------------------------
+struct RefVectorDtor { void Destroy(); };   // 0x0041eb80 (thiscall dtor)
 struct Holder841 {
     void* vt0;
     void* vt1;
     RCArray vec;
     void* p18;
-    Holder841* Ctor(int* src);
-    void Dtor();
+    Holder841* Ctor(int* src);   // 0x007583e0
+    void Dtor();                 // 0x00758540
 };
 Holder841* Holder841::Ctor(int* src) {
     vt0 = 0; vt1 = 0;
@@ -96,9 +100,14 @@ Holder841* Holder841::Ctor(int* src) {
     return this;
 }
 // @ 0x00758540
+extern char g_0140da88[];   // 0x0140da88
+extern char g_0140da84[];   // 0x0140da84
+extern char g_013ef094[];   // 0x013ef094
 void Holder841::Dtor() {
-    FUN_0041eb80(&vec);
-    vt1 = 0;
+    vt0 = &g_0140da88;
+    vt1 = &g_0140da84;
+    ((RefVectorDtor*)((char*)this + 0xc))->Destroy();
+    vt1 = &g_013ef094;
 }
 
 // ---------------------------------------------------------------------------
@@ -111,7 +120,7 @@ bool C58480::Update(void* a, void* b, void* c) { (void)a; (void)b; (void)c; retu
 // @ 0x007585c0
 // ---------------------------------------------------------------------------
 Holder841* __cdecl FUN_007585c0(int* src) {
-    Holder841* p = (Holder841*)operator_new_graph(0x28);
+    Holder841* p = (Holder841*)operator_new_graph6(0x20, g_GraphicsTag, 0, 0, 0, 0);
     if (p) return p->Ctor(src);
     return 0;
 }
@@ -121,6 +130,7 @@ Holder841* __cdecl FUN_007585c0(int* src) {
 // ---------------------------------------------------------------------------
 struct IntVec {
     int* mBegin; int* mEnd; int* mCap;
+    void resize(int n);                          // 0x004afc80 (SpVector<float>::resize)
     void Insert(int* pos, unsigned n, int* val);
 };
 void IntVec::Insert(int* pos, unsigned n, int* val) {
@@ -267,18 +277,45 @@ void __cdecl FUN_00758f70(Elem50* first, Elem50* last, Elem50* out) {
 // ---------------------------------------------------------------------------
 // @ 0x00758fc0
 // ---------------------------------------------------------------------------
-float g_f162f0e8;
-char __cdecl FUN_00758fc0(unsigned* src, IntVec* dst, int a, int b) {
+extern float g_f162f0e8;   // 0x0162f0e8
+bool __cdecl FUN_00758fc0(unsigned* src, IntVec* dst, int a, int b) {
     int n = src ? (int)src[0] : 0;
     int* p = src ? (int*)src[1] : 0;
     int have = (int)(dst->mEnd - dst->mBegin);
-    if (have < n) {
-        FUN_004afc80(n);
-        FUN_00738e90(n, p, a, b);
-        dst->mEnd = xcopy((int*)dst->mBegin, (int*)dst->mEnd, (int*)dst->mBegin);
-        return 1;
+    char flag = 0;
+    if (n > have) {
+        dst->resize(n);
+        flag = 1;
+    } else {
+        for (int i = 0; i < n; ++i) {
+            float d = ((float*)dst->mBegin)[i] - ((float*)p)[i];
+            if (d < 0.0f)
+                d = -d;
+            if (d > g_f162f0e8) {
+                flag = 1;
+                break;
+            }
+        }
+        if (n < have) {
+            int j = n;
+            float* q = (float*)dst->mBegin + n;
+            for (; j < have; ++j, ++q) {
+                if (*q != 0.0f) {
+                    flag = 1;
+                    break;
+                }
+            }
+            volatile unsigned zero = 0;
+            memcpy(dst->mBegin + n, dst->mEnd, zero);
+            int bytes = (int)((char*)dst->mEnd - (char*)(dst->mBegin + n));
+            dst->mEnd = (int*)((char*)dst->mEnd - ((bytes >> 2) << 2));
+        }
+        if (!flag)
+            return 0;
     }
-    return 0;
+    FUN_00738e90(n, p, a, b);
+    memcpy(dst->mBegin, p, n * 4);
+    return flag;
 }
 
 // ---------------------------------------------------------------------------
