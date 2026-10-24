@@ -1,4 +1,4 @@
 00450f70  493  Rebuild: inlined bit-array set/clear and the 9-arg BuildBlock wrapper not reproduced
-00451330  49   SetVec194: original materialises &mVec194 once (add eax,0x194); this cl folds the displacement
+00451330  78   SetVec194: retail leaves eax = &mVec194 (it materialises the address once with add eax,0x194, stores the three argument words through it and never overwrites eax), so the setter now returns the vector; the stores go through int* so the declared floats do not turn into SSE moves. difftest PASS (396 valid, 100% cov). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast (manifest(slice))
 00451e90  10   GetSub38: only the /Od inline branch layout (extra jmp) differs
 00451400  3    SP::cSPEditorBlock::Shutdown2: complete, instruction stream identical (647/647 instrs, 42/42 calls+vcalls in order, size 2592/2592); one inline slot (operator= pTemp of the socket-connector release) sits 8 bytes off (an unexplained 2-dword hole; filled with ScratchSlots)
