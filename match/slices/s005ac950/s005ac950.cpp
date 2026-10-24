@@ -275,6 +275,8 @@ PinRot::PinRot() {
 
 // @ 0x005aca70
 bool PinRot::OnMouseUp(int, float, float, int) {
+  volatile uint32_t frameSlot;
+  (void)frameSlot;
   if (mHandle && mBlock) {
     mBlock->F43c450(mHandle, mAngle, 0, 1);
     if (mBlock->Flag11() && mBlock->m3f0 != 0)
