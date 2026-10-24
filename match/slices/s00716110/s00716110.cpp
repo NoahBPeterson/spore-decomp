@@ -3,6 +3,7 @@
 // This region (SporeEP1_RL) is not in the 2008 dev PDB; the class layout was read
 // from the constructor's member stores and the accessors below.
 #include <stddef.h>
+#include <xmmintrin.h>
 
 typedef unsigned int   u32;
 typedef unsigned char  u8;
@@ -208,12 +209,17 @@ struct BGRA { u8 b, g, r, a; };
 
 static __forceinline u8 PackComp(float f)
 {
-    if (f < 0.0f)
-        f = 0.0f;
-    f = f * 255.0f;
-    if (f > 255.0f)
-        f = 255.0f;
-    return (u8)(int)f;
+    // The retail tail keeps everything in xmm0 (xorps/maxss/mulss/minss/cvtss2si) and
+    // never writes another vector register.  Evaluate the clamp in x87 (double compares)
+    // so no extra xmm register is materialised, then materialise only xmm0 for the final
+    // round-to-nearest conversion the original uses (cvtss2si, not truncation).
+    double d = (double)f * 255.0;
+    if (d > 255.0 || !(d <= 255.0))
+        d = 255.0;                            // NaN and +inf clamp high, like minss
+    else if (d < 0.0)
+        d = 0.0;
+    float t = (float)d;
+    return (u8)_mm_cvtss_si32(_mm_load_ss(&t));
 }
 
 static __forceinline u32 PackColor(const Vec4& c)
@@ -344,7 +350,7 @@ namespace __equiv_ann {
 
 namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
 struct I {
-    void DoInsertValue();   // 0x004558a0 (equiv t2)
+    void DoInsertValue();   // 0x00715350 (equiv t2; aligned twin 0x004558a0)
 };
 struct M {
     void DoInsertValue();   // 0x00455660 (equiv t2)
