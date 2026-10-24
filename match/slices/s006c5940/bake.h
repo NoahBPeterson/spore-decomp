@@ -56,9 +56,14 @@ float* FUN_006c4200(float* outA, float* outB, const float* base, const float* di
 enum BakeXForm { XF_POINT, XF_OFFSET, XF_WEIGHT2, XF_WEIGHT3 };
 enum BakeColor { CF_BYTE4, CF_USHORT4, CF_USHORT2 };
 
+// The (1-cos, dy, dz) source positions in the transform's output vector are
+// compiled into each helper: retail variants of the same transform read
+// different positions, so callers may pass their own trio; -1 keeps the
+// per-transform default used by the other slices.
 static __forceinline void BakeCore(float* out, int count, int res, const int* data, int vtx,
                      const float* scalePair, const char* params, int blockIdx, int assignIdx,
-                     int layout, BakeXForm xf, BakeColor cf) {
+                     int layout, BakeXForm xf, BakeColor cf,
+                     int cosIdx = -1, int dyIdx = -1, int dzIdx = -1) {
   char* e = (char*)(*(int*)(res + 8) + blockIdx * 0x20 + 0x10);
 
   // Bake block (colours): copied out of the block table and AddRef'd.
@@ -116,15 +121,14 @@ static __forceinline void BakeCore(float* out, int count, int res, const int* da
       case XF_WEIGHT3: FUN_006c4200(outA, outB, v, dir, s, col, layout); break;
     }
 
-    // Each block transform leaves its result vector in its own component order:
-    // point writes (dy, dz, cos), offset/weighted-x2 write (cos, dy, dz) and
-    // weighted-x3 writes (dz, cos, dy).  The offsets below pick the helper's
-    // (1-cos, dy, dz) sources out of that order.
-    int cosIdx = 0, dyIdx = 1, dzIdx = 2;
-    if (xf == XF_POINT) {
-      cosIdx = 2; dyIdx = 0; dzIdx = 1;
-    } else if (xf == XF_WEIGHT3) {
-      cosIdx = 1; dyIdx = 2; dzIdx = 0;
+    // Default per-transform order; a caller that verified the retail helper's
+    // own reads passes its trio explicitly (some variants of the same transform
+    // read a different rotation).
+    if (cosIdx < 0) {
+      cosIdx = 0; dyIdx = 1; dzIdx = 2;
+      if (xf != XF_WEIGHT2) {
+        cosIdx = 1; dyIdx = 2; dzIdx = 0;
+      }
     }
     float cosSrc = outA[cosIdx];
     float dy = outA[dyIdx] - scalePair[2];
