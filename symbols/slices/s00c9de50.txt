@@ -1,0 +1,30 @@
+00c9de50 ?LoadTribeToolData@cTribeTool@SP@@SA_NXZ  # cTribeTool::LoadTribeToolData: populate the twelve tribe-tool description records (pre-existing impl)
+00c9e530 ?DestroyTribeToolData@@YAXXZ  # DestroyTribeToolData: release the twelve gTribeTools records and clear the loaded flag
+00c9e5a0 ?FormatName@cLoco@@QAEXPAUcString@@@Z  # cLoco::FormatName(out): sprintf the owner's slot-0x5c name through kNameFormat
+00c9e5d0 ?TryCivModeTutorial@@YAXXZ  # TryCivModeTutorial: config gate, then the civ-mode strategy's seen/next tutorial pair
+00c9e610 ?Find@cVehicle@@QAEPAU1@I@Z  # cVehicle::Find(id): null-object short circuit, then loco/vehicle/combatant/three child containers
+00c9e690 ?IsLocalPlayer@cLoco@@QAE_NXZ  # cLoco::IsLocalPlayer: non-ten-mode, compare the owner's slot 0x4c with the local empire index
+00c9e6d0 ?RadiusTableValue@@YAIHH@Z  # RadiusTableValue(a, b): game-mode-five picks kRadiusTable1[b], else kRadiusTable2[a*3+b]
+00c9e700 ?UpdateDamageState@cVehicle@@QAEXXZ  # cVehicle::UpdateDamageState: ten-mode loco/combatant gates, then flag the local player's civilization
+00c9e760 ?WriteAsText@cVehicle@@QAEXPAX@Z  # cVehicle::WriteAsText(ar): archive text writer
+00c9e790 ?RemoveOwner@cVehicle@@QAE_NH@Z  # cVehicle::RemoveOwner(owner): false for the null owner object, else the base remove
+00c9e7c0 ?GetHealthFraction@cVehicle@@QAEMXZ  # cVehicle::GetHealthFraction: mValue/GetFraction clamped to [0,1], scaled by half and the civ modifier
+00c9e8a0 ?GetC3C@cVehicle@@QAEXPAUFloat3@@PAM1@Z  # cVehicle::GetC3C(out, a, b): one Float3 plus two floats
+00c9e8e0 ?TerrainFlagForType@@YA_NHH@Z  # TerrainFlagForType(type, data): planet-radius bit test per carrier type (0x9800/0x5800/negated bit 29)
+00c9e960 ?CanOccupyTerrain@cVehicle@@QAE_NH@Z  # cVehicle::CanOccupyTerrain(data): carrier-type terrain flag plus the bit-0x8000 override
+00c9e9e0 ?Write@cVehicle@@QAE_NPAUcArchive@@@Z  # cVehicle::Write(ar): name id through the stream handle, base/combatant/loco writes, serializer
+00c9eaf0 ?GetMode@cVehicle@@QAEHXZ  # cVehicle::GetMode: carrier type plus property-id/flag overrides
+00c9eb60 ?ModeRadiusScale@@YAMXZ  # ModeRadiusScale: ten-mode scale else the default mode scale
+00c9eb80 ?GetModeRadius@cVehicle@@QAEMXZ  # cVehicle::GetModeRadius: radius scale per carrier type/mode
+00c9ec00 ?GetFraction@cVehicle@@QAEMXZ  # cVehicle::GetFraction: loco slot 0x34 over the property-pair span
+00c9ec50 ?GetArea@cVehicle@@QAEMXZ  # cVehicle::GetArea: squared radius field times kAreaScale
+00c9ec80 ?SetDrone@cVehicle@@QAEX_N@Z  # cVehicle::SetDrone(on): byte flag plus attachment flag bit 0x40
+00c9ecb0 ?SetJustEyeCandy@cVehicle@@QAEX_N@Z  # cVehicle::SetJustEyeCandy(on): attachment flag bit 0x80
+00c9ece0 ?SetValue@cLoco@@QAEXMH@Z  # cLoco::SetValue(v, n): property pair write
+00c9ed00 ?WeaponClassFromHash@@YAHI@Z  # WeaponClassFromHash(hash): thirteen property-name hashes to class 0/1/2
+00c9ed80 ?WeaponSlotFromHash@@YAHI@Z  # WeaponSlotFromHash(hash): fourteen hashes to slot 0/1/2/3 (three carry the mode test)
+00c9ee30 ?SetTimer@cVehicle@@QAEXH@Z  # cVehicle::SetTimer(t)
+00c9ee50 ?ConsumeTimer@cVehicle@@QAEXXZ  # cVehicle::ConsumeTimer
+00c9eea0 ?PlaySomething@cVehicle@@QAEXXZ  # cVehicle::PlaySomething: slot-0x24 predicate then slot 0x28 reset
+00c9eed0 ?HasBit2000@cVehicle@@QAE_NXZ  # cVehicle::HasBit2000: bit 0x2000 of the +0x1c8 bit field
+00c9eef0 ?IsFlying@cVehicle@@QAE_NXZ  # cVehicle::IsFlying: byte flag XOR
