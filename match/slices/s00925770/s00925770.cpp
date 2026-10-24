@@ -584,3 +584,121 @@ void FUN_009260c0(void *p) {
 }
 
 }} // namespace EA::Trace
+
+// ================================================================== EA::Trace chained hash table
+namespace EA { namespace Trace {
+
+void  FUN_00926160(unsigned size);                 // 0x00926160  allocator wrapper (EA alloc)
+void  FUN_00f47410(void* p);                       // 0x00f47410  allocator lockup (EA free)
+
+// A chained hash table with its own lock section, a pluggable alloc/free pair and an optional
+// case-insensitive byte-key compare.  Member names follow the offsets the original uses.
+struct C26190 {
+    void*    mpLock;              // 0x00  points at mCS once the section is built
+    int      mPad04;              // 0x04
+    char     mCS[0x20];           // 0x08  CRITICAL_SECTION
+    void*  (*mpAlloc)(unsigned);  // 0x28
+    void   (*mpFree)(void*);      // 0x2c
+    void*    mpNode0;             // 0x30
+    void*    mpNodes;             // 0x34
+    void**   mpBuckets;           // 0x38
+    unsigned mBlockSize;          // 0x3c
+    unsigned mBytesUsed;          // 0x40
+    unsigned mBucketCount;        // 0x44
+    unsigned mElementCount;       // 0x48
+    char     mCaseSensitive;      // 0x4c
+    char     mFlag;               // 0x4d
+    struct Node { Node* mpNext; unsigned mHash; void* mpValue; };
+    int     Hash(const char* s);
+    bool    Equal(const char* a, const char* b, unsigned len);
+    void*   Find(unsigned hash);
+    C26190* Init(unsigned size, unsigned bucketCount, char caseSensitive, char flag, char useHeap);
+};
+
+// @ 0x00926160
+void FUN_00926160(unsigned size) {
+    ((F9289f0*)g_016c8b44)->m(size, 0, 0, 0x143e114, (const char*)0x143e12c, 0x9a);
+}
+
+// FNV-1 hash of a byte key, optionally folded to lower case.
+// @ 0x00926190
+int C26190::Hash(const char* s) {
+    unsigned h = 0x811c9dc5u;
+    if (mCaseSensitive) {
+        const char* p = s;
+        int c = *p;
+        while (c != 0) {
+            h = (h * 0x1000193u) ^ (unsigned)c;
+            c = *++p;
+        }
+    } else {
+        int c = *s;
+        while (c != 0) {
+            unsigned d = (unsigned)(c - 'A');
+            if (d < 26u) c = d + 'a';
+            h = (h * 0x1000193u) ^ (unsigned)c;
+            c = *++s;
+        }
+    }
+    return (int)h;
+}
+
+// Key equality: the length must match, then bytes (or case-folded bytes) must be equal.
+// @ 0x009261f0
+bool C26190::Equal(const char* a, const char* b, unsigned len) {
+    unsigned n = 0;
+    while (b[n] != 0) ++n;
+    if (len != n) return false;
+    if (mCaseSensitive) return memcmp(a, b, len) == 0;
+    for (unsigned i = 0; i < len; ++i) {
+        int ca = a[i];
+        unsigned da = (unsigned)(ca - 'A');
+        if (da < 26u) ca = da + 'a';
+        int cb = b[i];
+        unsigned db = (unsigned)(cb - 'A');
+        if (db < 26u) cb = db + 'a';
+        if (ca != cb) return false;
+    }
+    return true;
+}
+
+// Walk the chain for the bucket the hash falls in and return the stored value.
+// @ 0x00926300
+void* C26190::Find(unsigned hash) {
+    Node* n = (Node*)mpBuckets[hash % mBucketCount];
+    while (n != 0) {
+        if (hash == n->mHash) return n->mpValue;
+        n = n->mpNext;
+    }
+    return (void*)0x13ec47c;
+}
+
+// Allocate the first node block, split the bucket array out of it and zero the buckets.
+// @ 0x00926350
+C26190* C26190::Init(unsigned size, unsigned bucketCount, char caseSensitive, char flag, char useHeap) {
+    mBlockSize = size;
+    mpLock = 0;
+    mElementCount = 0;
+    mBucketCount = bucketCount;
+    mCaseSensitive = caseSensitive;
+    mFlag = flag;
+    if (useHeap) {
+        mpAlloc = (void* (*)(unsigned))&FUN_00926080;
+        mpFree = &FUN_009260c0;
+    } else {
+        mpAlloc = (void* (*)(unsigned))&FUN_00926160;
+        mpFree = &FUN_00f47410;
+    }
+    mpLock = FUN_00926100(mCS);
+    void* nodes = mpAlloc(mBlockSize);
+    mpNodes = nodes;
+    mpNode0 = nodes;
+    *(int*)nodes = 0;
+    mBytesUsed = 4;
+    mpBuckets = (void**)((int*)mpNodes + 1);
+    memset(mpBuckets, 0, mBucketCount * 4);
+    mBytesUsed += mBucketCount * 4;
+    return this;
+}
+
+}} // namespace EA::Trace

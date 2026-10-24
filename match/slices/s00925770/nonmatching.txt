@@ -9,3 +9,5 @@
 009257e0  34  vector<TraceHelper*>::DoInsertValue: esi/edi swapped (this vs pos) [equiv: WEAK 116 valid inputs, memmove-heavy]
 00925a30  63  TraceHashtable ctor: &a2 arg lea not repeated (CSE'd), policy copy order [equiv: PASS]
 00925b00  6  HelperTablePtr ctor: push edi placement [equiv: PASS]
+00926190  61  FNV-1 byte-key hash: the sign-extended char loop lands in different pointer/temp registers (esi/edx) and the first char load is hoisted above the case-sensitivity test; equiv PASS (400 valid inputs, 100% coverage)
+009261f0  72  key compare: inlined strlen/memcmp and the case-folded compare loop allocate esi/edi/ebx differently; equiv PASS (400 valid inputs, 74% coverage)
