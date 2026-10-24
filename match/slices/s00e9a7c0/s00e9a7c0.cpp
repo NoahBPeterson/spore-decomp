@@ -146,10 +146,12 @@ IMessageBus* GetMessageBus();                                            // 0x00
 // effects
 class IEffect {
 public:
-    virtual void v00();
+    virtual void AddRef();                                               // 0x00
     virtual void Release();                                              // 0x04
-    virtual void v08();
+    virtual void v08(int arg);                                           // 0x08
     virtual void Stop(int arg);                                          // 0x0c
+    virtual void v10(); virtual void v14();
+    virtual void SendMessage(const void* message);                       // 0x18
 };
 class IEffectsManager {
 public:
@@ -258,8 +260,40 @@ public:
     virtual void v98(); virtual void v9c(); virtual void va0(); virtual void va4();
     virtual void va8(); virtual void vac(); virtual void vb0(); virtual void vb4();
     virtual IRefObject* Cast(uint32_t typeID);                           // 0xb8
-    uint32_t pad04[(0x50 - 4) / 4];
+    uint32_t pad04;                                                      // +0x04
+    uint16_t pad08;                                                      // +0x08
+    uint16_t mChangeCount;                                               // +0x0a bumped whenever the transform changes
+    uint32_t pad0c[3];                                                   // +0x0c
+    float mTransformScale;                                               // +0x18
+    uint32_t pad1c[(0x50 - 0x1c) / 4];
     uint32_t mFlags;                                                     // +0x50
+};
+
+struct Quaternion { float x, y, z, w; };
+struct Matrix33T { float m[9]; };
+Matrix33T& Matrix3FromQuaternion(Matrix33T& out, const Quaternion& q);   // 0x0059c190
+
+// 0x38 bytes: an effect transform message. The +0x02 word is the version counter that every
+// inlined field setter bumps.
+struct XformMsg {
+    uint16_t mFlags;                                                     // +0x00 bit 1 = matrix valid
+    uint16_t mVersion;                                                   // +0x02
+    uint32_t mPad04[3];                                                  // +0x04
+    float mScale;                                                        // +0x10
+    Matrix33T mMatrix;                                                   // +0x14
+    XformMsg();                                                          // 0x00434040
+    void SetTarget(const void* target);                                  // 0x00571d40 (ret 4)
+};
+
+// cSPGameDataUFO +0x34: the UFO's transform node.
+class cUfoTransform {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual const Vector3* GetPosition();                                // 0x2c
+    virtual const Quaternion* GetOrientation();                          // 0x30
+    virtual float GetScale();                                            // 0x34
 };
 
 class cSPGameDataUFO {
@@ -270,7 +304,9 @@ public:
     virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
     virtual void v40(); virtual void v44(); virtual void v48();
     virtual int GetEmpireID();                                           // 0x4c
-    uint32_t pad04[(0x714 - 4) / 4];
+    uint32_t pad04[(0x34 - 4) / 4];
+    cUfoTransform mTransform;                                            // +0x34
+    uint32_t pad38[(0x714 - 0x38) / 4];
     int mMode;                                                           // +0x714
     uint32_t pad718[(0x77c - 0x718) / 4];
     bool mbVisible;                                                      // +0x77c
@@ -291,16 +327,55 @@ struct UFOModelMessage {
     uint16_t mB;
 };
 
+// base of cSPUFOGfx (only needed to call its Init at 0x00e92910)
+class cSpatialObjectView {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    void Init(void* object);                                             // 0x00e92910 (ret 4)
+};
+
+class IMessageServer {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual void AddListener(const void* owner, uint32_t handler);       // 0x24 (ret 8)
+};
+IMessageServer* MessageServer();                                         // 0x0067dcc0
+
+// cSPUFOGfx +0x48: the binding the view hands to the message server.
+struct cServerBinding {
+    const uint32_t* mpHandlers;                                          // +0x00 (0x01486fb0)
+    int32_t mRefCount;                                                   // +0x04
+    uint32_t mState;                                                     // +0x08
+};
+extern const uint32_t kRadarTimerHandlers[2];                            // 0x01486fb0
+
+// cSPUFOGfx +0x3c: the message listener the view registers with the message server.
+class cSPUFOGfx;
+class cUfoListener {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    bool HandleMessage(uint32_t interfaceId, void* arg);                 // 0x00e9a7c0 (ret 8)
+    cSPUFOGfx* Parent();                                                 // this - 0x3c
+};
+
 class cSPUFOGfx {
 public:
     virtual void v00(); virtual void v04(); virtual void v08();
     virtual IGameObject* GetGameObject();                                // 0x0c
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual cSpatialObject* v2c();                                       // 0x2c
     virtual void SetModel(cGameModel* model, cModelWorld* world);        // 0x30
 
     void SetVisible(bool v);                                             // 0x00e98db0 (ret 4)
     void SetUFOModel(ResourceKey* key, bool announce);                   // 0x00e9a940 (ret 8)
+    void Init(void* object);                                             // 0x00e9b1a0 (ret 4)
 
     uint32_t pad04[2];
     cSpatialObject* mpObject;                                            // +0x0c
@@ -308,7 +383,12 @@ public:
     Vector3 mColor;                                                      // +0x18
     uint32_t pad24[(0x30 - 0x24) / 4];
     bool mbModelVisible;                                                 // +0x30
-    uint8_t pad31[0x80 - 0x31];
+    uint8_t pad31[0x3c - 0x31];
+    cUfoListener mListener;                                              // +0x3c
+    IMessageServer* mpMessageServer;                                     // +0x40
+    const void* mpMessageServerCookie;                                   // +0x44 (= &mListener)
+    cServerBinding mServerBinding;                                       // +0x48
+    uint8_t pad54[0x80 - 0x54];
     IEffect* mFilterRangeEffect;                                         // +0x80
     IEffect* mSelectionEffect;                                           // +0x84
     IEffect* mRolloverEffect;                                            // +0x88
@@ -316,6 +396,11 @@ public:
     uint32_t pad90[(0xb8 - 0x90) / 4];
     IEffect* mContextEffect;                                             // +0xb8
 };
+
+__forceinline cSPUFOGfx* cUfoListener::Parent()
+{
+    return (cSPUFOGfx*)((char*)this - 0x3c);
+}
 
 __forceinline void EnsureEffect(IEffect*& slot, uint32_t id)
 {
@@ -466,4 +551,168 @@ void cSPUFOGfx::SetUFOModel(ResourceKey* key, bool announce)
         else
             model->mpOwner->DisposeModel(model, (model->mFlags >> 31) & 1);
     }
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x00e9a7c0 .. 0x00e9b1a0: the UFO view's server side (+0x3c listener) and its two helpers.
+// ---------------------------------------------------------------------------------------------
+
+// @ 0x00E9A7C0
+bool cUfoListener::HandleMessage(uint32_t interfaceId, void* arg)
+{
+    if (interfaceId == 0x604c6f4) {
+        // "the UFO moved": copy the live transform's scale onto the view and bump its counter
+        cSpatialObject* pTarget = Parent()->v2c();
+        cSPGameDataUFO* ufo = Parent()->mpObject
+                            ? (cSPGameDataUFO*)Parent()->mpObject->Cast(0xb033b403) : 0;
+        pTarget->mTransformScale = ufo->mTransform.GetScale();
+        pTarget->mChangeCount++;
+        return true;
+    }
+    if (interfaceId != 0x6834927)
+        return false;
+
+    // "send the UFO transform to the glow effect"
+    if (Parent()->mpObject == 0)
+        return true;
+    cSPGameDataUFO* ufo = (cSPGameDataUFO*)Parent()->mpObject->Cast(0xb033b403);
+    if (ufo == 0 || ufo->mMode != 0)
+        return true;
+
+    AutoRef<IEffect> effect;
+    EffectsManager()->CreateEffect(0xbb1ceb80, 0, effect.AsPointer());
+    if (effect.mpObject == 0)
+        return true;
+
+    XformMsg msg;
+    msg.SetTarget(ufo->mTransform.GetPosition());
+    Matrix33T matrix;
+    Matrix3FromQuaternion(matrix, *ufo->mTransform.GetOrientation());
+    msg.mScale = ufo->mTransform.GetScale();
+    msg.mVersion++;
+    msg.mMatrix = matrix;
+    msg.mFlags |= 2;
+    msg.mVersion++;
+    effect.mpObject->SendMessage(&msg);
+    effect.mpObject->v08(0);
+    return true;
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x00e9b1a0: cSPUFOGfx::Init - bind the view's listener to the message server.
+// ---------------------------------------------------------------------------------------------
+extern const uint32_t kUfoDefaultKeyGroup;                               // 0x015a8b3c
+
+void __fastcall FUN_00c37230(cSPGameDataUFO* ufo, void* dummy,
+                             ResourceKey* key, bool* flag);              // 0x00c37230 (ret 8)
+
+// @ 0x00E9B1A0
+void cSPUFOGfx::Init(void* object)
+{
+    bool announce = true;
+    ResourceKey key;
+    key.instanceID = 0;
+    key.typeID = 0;
+    key.groupID = 0;
+
+    cSPGameDataUFO* ufo = 0;
+    if (object != 0) {
+        ufo = (cSPGameDataUFO*)((IGameObject*)object)->Cast(0xb033b403);
+        if (ufo != 0) {
+            FUN_00c37230(ufo, 0, &key, &announce);
+            if (key.instanceID == 0 && key.typeID == 0 && key.groupID == 0) {
+                key.typeID = 0x476a98c7;
+                key.groupID = kUfoDefaultKeyGroup;
+                key.instanceID = 0x9d5db21a;
+                announce = true;
+            }
+        }
+    }
+
+    reinterpret_cast<cSpatialObjectView*>(this)->Init(object);
+    SetUFOModel(&key, announce);
+    SetVisible(ufo->GetVisible());
+
+    const void* cookie = this ? &mListener : 0;
+    IMessageServer* server = MessageServer();
+    mpMessageServer = server;
+    mpMessageServerCookie = cookie;
+    mServerBinding.mpHandlers = kRadarTimerHandlers;
+    mServerBinding.mRefCount = 2;
+    mServerBinding.mState = 0;
+    if (server != 0 && cookie != 0) {
+        for (const uint32_t* p = kRadarTimerHandlers; p < kRadarTimerHandlers + 2; ++p)
+            server->AddListener(cookie, *p);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x00e9b030: eastl::vector<AssetInfo>::insert - the element is inserted at `pos`.
+// ---------------------------------------------------------------------------------------------
+#include <new>
+
+struct AssetInfo {
+    float mPosition[3];                                                  // +0x00
+    IRefObject* mpObject;                                                // +0x0c AddRef'd when copied
+    __forceinline AssetInfo() : mpObject(0) {}
+    __forceinline AssetInfo(const AssetInfo& src)
+    {
+        mPosition[0] = src.mPosition[0];
+        mPosition[1] = src.mPosition[1];
+        mPosition[2] = src.mPosition[2];
+        mpObject = src.mpObject;
+        if (mpObject)
+            mpObject->AddRef();
+    }
+    AssetInfo& operator=(const AssetInfo& src);                          // 0x0065cd70 (ret 4)
+};
+
+AssetInfo* FUN_0065ce10(AssetInfo* first, AssetInfo* last, AssetInfo* dest);  // 0x0065ce10
+AssetInfo* FUN_00e990f0(AssetInfo* first, AssetInfo* last, AssetInfo* dest);  // 0x00e990f0
+void FUN_0065c750(AssetInfo* first, AssetInfo* last, AssetInfo* dest);        // 0x0065c750
+
+extern const char kEastlAllocatorFile[];                                 // 0x013ebb38
+
+class AssetInfoVector {
+public:
+    void Insert(AssetInfo* pos, const AssetInfo* value);                  // 0x00e9b030 (ret 8)
+    AssetInfo* mpBegin;                                                   // +0x00
+    AssetInfo* mpEnd;                                                     // +0x04
+    AssetInfo* mpCapacity;                                                // +0x08
+};
+
+// @ 0x00E9B030
+void AssetInfoVector::Insert(AssetInfo* pos, const AssetInfo* value)
+{
+    AssetInfo* pEnd = mpEnd;
+    if (pEnd != mpCapacity) {
+        // a value that lives inside the vector moves when the tail is shifted
+        const AssetInfo* src = value;
+        if (value >= pos && value < pEnd)
+            src = value + 1;
+        ::new ((void*)pEnd) AssetInfo(pEnd[-1]);
+        FUN_0065ce10(pos, pEnd - 1, pEnd);
+        *pos = *src;
+        mpEnd++;
+        return;
+    }
+
+    const size_t nSize = (size_t)(mpEnd - mpBegin);
+    size_t nNewCapacity = nSize ? nSize * 2 : 1;
+    AssetInfo* pNew = 0;
+    if (nNewCapacity != 0)
+        pNew = (AssetInfo*)operator new(nNewCapacity * sizeof(AssetInfo), "Simulator", 0, 0,
+                                        kEastlAllocatorFile, 0xd1);
+
+    AssetInfo* pNewPos = FUN_00e990f0(mpBegin, pos, pNew);
+    FUN_0065c750(mpBegin, pos, pNew);
+    ::new ((void*)pNewPos) AssetInfo(*value);
+    AssetInfo* pNewEnd = FUN_00e990f0(pos, mpEnd, pNewPos + 1);
+    FUN_0065c750(pos, mpEnd, pNewPos + 1);
+
+    if (mpBegin != 0 && ((int32_t*)mpBegin)[-1] != 0)
+        operator delete[](mpBegin);
+    mpBegin = pNew;
+    mpEnd = pNewEnd;
+    mpCapacity = pNew + nNewCapacity;
 }

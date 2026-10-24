@@ -1,0 +1,4 @@
+00e9a940 cSPUFOGfx::SetUFOModel  # nonmatching (1511) - swap the UFO view's model: look up the 0xb033b403 game data, post the mode message, register the cSimulator property list under the key, load the model from the Gonzago model world, set its flags/effect and tint it with the owning empire's colour
+00e9a7c0 ?HandleMessage@cUfoListener@@QAE_NIPAX@Z  # nonmatching (336) - the view's +0x3c message listener: 0x604c6f4 copies the UFO transform's scale onto the view and bumps its counter, 0x6834927 sends an XformMsg to the 0xbb1ceb80 effect
+00e9b030 ?Insert@AssetInfoVector@@QAEXPAUAssetInfo@@PBU2@@Z  # nonmatching (305) - eastl::vector<AssetInfo>::insert with the in-place tail shift and the 2x-growth reallocation
+00e9b1a0 ?Init@cSPUFOGfx@@QAEXPAX@Z  # nonmatching (114) - cSPUFOGfx::Init: model key (or default key), base Init, SetUFOModel, SetVisible(ufo->GetVisible()), then register &mListener and the two kRadarTimerHandlers with MessageServer()
