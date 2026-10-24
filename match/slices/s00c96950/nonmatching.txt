@@ -1,0 +1,7 @@
+# slice s00c96950 -- resource-collection cluster, module 0x00c9xxxx.
+# Reconstructed in full from work/SporeApp.analysis.bin; not byte-exact.
+# One VA per row: va  diff-bytes  reason (difftest verdict; flags
+# /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-).
+#
+00c96950  176  CHash keyed lookup + insert (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): probes with 0xc929a0(&slot, arg), bails returning probe+4 unless the slot equals mpBuckets[mW08], then zero-fills a 0x2c scratch handed to 0xca09f0(0), builds a 0x40 key blob (first dword from arg, then 0xc93750), inserts through 0xc94d60 with the receiver left in ecx, and finally dtors both blob sub-objects via 0xabf900.  Not byte-exact: the scratch/blob promotion order and the probe-result register differ from the original's; size 191 vs 170.  equiv FAIL (5/5 valid inputs, first: execution) -- ours diverges on the keyed path.
+00c96a00  106  CHash keyed erase from a bucket chain (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): saves mW0c, hashes the key by mW08 into mpBuckets, walks the +0x30 next chain, and for every node whose +0x00 key matches unlinks it, dtors the +0x04 sub-object through 0xabf900, frees the node with 0xf47380 and decrements mW0c, returning the removal count.  Not byte-exact: the original spills the saved count to the incoming stack slot and re-reads it in the epilogue, while we keep it in a register, so our frame is 3 bytes shorter; size 123 vs 120.  equiv PASS (255 valid inputs, 100.0% coverage) -- behaviourally confirmed.
