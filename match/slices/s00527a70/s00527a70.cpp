@@ -181,7 +181,7 @@ void VectorElem40::DoInsertValues(Elem40* position, size_type n, const Elem40& v
 
 // ---------------------------------------------------------------- fixed_vector<8-byte>
 struct Alloc4 { uint32_t mFlags; };
-void* FixedAlloc8(uint32_t n, void* first, void* last);      // 0x0056a0e0
+void* __fastcall FixedAlloc8(void* self, int, uint32_t n, void* first, void* last);  // 0x0056a0e0 (thiscall, ret 0xc)
 void* FixedUninit8(void* first, void* last, void* dest);     // 0x004d0960
 
 struct FixedVec8 {
@@ -190,15 +190,17 @@ struct FixedVec8 {
     void* mpCapacity;
     Alloc4 mAllocator;
     void* mpInlineBuffer;    // +0x10
-    void assign(void* first, void* last);   // 0x005283d0
+    // retail pops three dwords (ret 0xc) but only ever reads [ebp+8] and [ebp+0xc]
+    void assign(void* first, void* last, void* unused);   // 0x005283d0
 };
 
 // @ 0x005283d0
-void FixedVec8::assign(void* first, void* last)
+void FixedVec8::assign(void* first, void* last, void* unused)
 {
+    (void)unused;
     uint32_t n = (uint32_t)(((char*)last - (char*)first) >> 3);
     if ((uint32_t)(((char*)mpCapacity - (char*)mpBegin) >> 3) < n) {
-        void* pNew = FixedAlloc8(n, first, last);
+        void* pNew = FixedAlloc8(this, 0, n, first, last);
         for (void* p = mpBegin; p < mpEnd; p = (char*)p + 8) { }
         void* old = mpBegin;
         if (old && old != mpInlineBuffer) {
