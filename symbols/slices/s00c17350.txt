@@ -1,0 +1,8 @@
+00c17350 FUN_00c17350  # Ghidra FUN; two-hashtable text-style lookup and erase; not reconstructed
+00c17420 QueryCreatureBodyParts  # PDB name SP::QueryCreatureBodyParts; enumerate body parts of a kind through the name table and context-target filter; not reconstructed
+00c17580 GetBodyPartIndex  # PDB name SP::cSPCreatureBase::GetBodyPartIndex; index into the enumerated body-part list, 0xffffffff when out of range; byte-exact
+00c175d0 CanReachPointWithBodyPart  # PDB name SP::cSPCreatureBase::CanReachPointWithBodyPart; test a point against each body part's reach volume; not reconstructed
+00c17a30 GetBodyPartPosition  # PDB name SP::cSPCreatureBase::GetBodyPartPosition; resolve the world position of a body part from the animation transform chain; not reconstructed
+00c17c80 CreateBodyEffect  # PDB name SP::cSPCreatureBase::CreateBodyEffect; spawn a body effect for the first body part of a kind; byte-exact
+00c17cc0 FUN_00c17cc0  # Ghidra FUN; checked body-effect creation guarding on a live effect, else notify+spawn; not byte-exact
+00c17d60 FUN_00c17d60  # Ghidra FUN; checked body-effect creation without a part query, guarding on a live effect; not byte-exact
