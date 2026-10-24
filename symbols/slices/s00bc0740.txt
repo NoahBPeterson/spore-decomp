@@ -1,0 +1,32 @@
+00bc08d0 ?Update@cPlanetCoverage@@QAEX_N@Z  # cPlanetCoverage::Update (existing row, nonmatching)
+00bc0740 ?adjust_heap@@YAXPAUHeapElem@@HHHU1@UHeapCompare@@@Z  # eastl::adjust_heap<HeapElem*,int,HeapElem,HeapCompare> (nonmatching)
+00bc0840 ?sort_heap_step@@YAXPAUHeapElem@@0UHeapCompare@@@Z  # eastl::sort_heap step (exact)
+00bc1450 ?UseTool@cPlanetCoverage@@QAEHPAVcPlanet@@@Z  # cPlanetCoverage::UseTool (nonmatching)
+00af0d40 ??0HeapCompare@@QAE@ABU0@@Z  # HeapCompare copy constructor (deep-copies the lookup tree)
+0103de50 ?Key@HeapCompare@@QAEPAHABUHeapElem@@@Z  # HeapCompare::Key: map<Vector3,int> lookup/insert
+00bbfdc0 ?promote_heap@@YAXPAUHeapElem@@HHU1@UHeapCompare@@@Z  # eastl::promote_heap
+00f47380 ?FreeNode@@YAXPAX@Z  # operator delete wrapper used by the tree destructor
+00ba95a0 ?Append@RefVector@@QAEXPAX@Z  # cPlanet::star-record vector append
+00ae6970 ?Destroy@RefVector@@QAEXXZ  # star-record vector destructor
+00c73520 ?GetStarRecords@cPlanet@@QAEPAURefVector@@PAU2@@Z  # cPlanet::GetStarRecords (out vector)
+00c70e00 ?GetToolMode@cPlanet@@QAEHXZ  # cPlanet::GetToolMode
+00c711e0 ?UseItem@cPlanet@@QAEXPAX@Z  # cPlanet::UseItem
+00bbe470 ?GetExploredCount@cPlanetCoverage@@QAEHPAUcPlanetRecord@@@Z  # cPlanetCoverage::GetExploredCount
+01021260 ?GetActivePlanet@cSPLivingUniverse@SP@@SAPAVcPlanet@@XZ  # SP::cSPLivingUniverse::GetActivePlanet
+010212a0 ?GetActivePlanetRecord@cSPLivingUniverse@SP@@SAPAUcPlanetRecord@@XZ  # SP::cSPLivingUniverse::GetActivePlanetRecord
+01021080 ?GetUniverseContext@cSPLivingUniverse@SP@@SAHXZ  # SP::cSPLivingUniverse::GetUniverseContext
+00fc2080 ?FUN_00fc2080@@YAHMM@Z  # planet mode test
+00b3d390 ?ToolManager@@YAPAVcSPToolManager@@XZ  # SP::ToolManager singleton
+0104e340 ?CreateToolFromToolID@cSPToolManager@@QAEXPBIPAPAVcSPSpaceToolData@@@Z  # cSPToolManager::CreateToolFromToolID
+01050020 ?GetUseCost@cSPSpaceToolData@@QAEHXZ  # cSPSpaceToolData::GetUseCost
+01021300 ?GetPlayerEmpire@@YAPAVcPlayer@@XZ  # SP::GetPlayerEmpire
+00c308e0 ?CanUseTool@cPlayer@@QAE_NPAUcPlanetRecord@@@Z  # cPlayer::CanUseTool
+00c31a00 ?Spend@cPlayer@@QAEXH@Z  # cPlayer::Spend
+01002bd0 ?SpaceGameGet@@YAPAVcSpaceGame@@XZ  # SP::SpaceGameGet
+00b1fdb0 ?GetAvatar@cSpaceGame@@QAEPAVcAvatar@@XZ  # cSpaceGame::GetAvatar
+00ffa900 ?ApplyTool@cAvatar@@QAEXPAXH@Z  # cAvatar::ApplyTool
+00e26de0 ?SortRecordsA@@YAXPAPAX0P6A_NPAX1@Z@Z  # sort game-data records (comparator 0x00bbcd40)
+00bbf6c0 ?SortRecordsB@@YAXPAPAX0P6A_NPAX1@Z@Z  # sort star records (comparator 0x00bbc630)
+00bbcd40 ?CompareStarA@@YA_NPAX0@Z  # game-data record comparator
+00bbc630 ?CompareStarB@@YA_NPAX0@Z  # star-record comparator
+00ace2c0 ?GetPlanetGameData@cGameNounManager@@QAEPAXXZ  # cGameNounManager::GetPlanetGameData

@@ -1,0 +1,1 @@
+slices/s00bc0740/s00bc0740.cpp  ?sort_heap_step@@YAXPAUHeapElem@@0UHeapCompare@@@Z  00bc0840  /O2 /MD /Gy /TP /arch:SSE /fp:fast

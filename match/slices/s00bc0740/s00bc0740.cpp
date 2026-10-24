@@ -168,6 +168,7 @@ class cGameNounManager
 public:
     GameDataVector* GetGameDataVector(GameDataFn a, GameDataFn b, GameDataFn c, GameDataFn d,
                                       uint32_t type);   // 0x00b21340
+    void* GetPlanetGameData();                      // 0x00ace2c0
 };
 namespace SP { cGameNounManager* NounManager(); }   // 0x00b3d300
 namespace SP { uint32_t GetCurrentGameMode(); }     // 0x00b5b800
@@ -188,6 +189,23 @@ struct PlanetPath
     char*    mpEnd;                            // +0x08
 };
 
+struct cPlanetRecord
+{
+    char  pad0[0xb0];
+    float mFieldB0;                            // +0xb0
+    float mFieldB4;                            // +0xb4
+};
+
+struct RefVector
+{
+    void** mpBegin;                            // +0x00
+    void** mpEnd;                              // +0x04
+    void** mpCapacity;                         // +0x08
+
+    void Append(void* source);                 // 0x00ba95a0
+    void Destroy();                            // 0x00ae6970
+};
+
 class cPlanet
 {
 public:
@@ -206,6 +224,13 @@ public:
     virtual void s45(); virtual void s46(); virtual void s47(); virtual void s48();
     virtual PlanetPath* GetPath(int index);             // +0xc4
     virtual int GetPathCount();                         // +0xc8
+
+    char pad04[0x13c - 4];
+    cPlanetRecord* mpRecord;                    // +0x13c
+
+    int  GetToolMode();                         // 0x00c70e00
+    void UseItem(void* item);                   // 0x00c711e0
+    RefVector* GetStarRecords(RefVector* out);  // 0x00c73520
 };
 
 class cPlanetModel
@@ -370,6 +395,63 @@ static __forceinline int CubeMapTexel(const Vector3& p)
     return (face * 128 + v) * 128 + u;
 }
 
+// ------------------------------------------------------- space-tool helpers
+class cPlayer
+{
+public:
+    bool CanUseTool(cPlanetRecord* record);     // 0x00c308e0
+    void Spend(int cost);                       // 0x00c31a00
+};
+
+class cSPSpaceToolData
+{
+public:
+    virtual void v00();
+    virtual void v04();
+    virtual void Release();                     // vtable +0x08
+    int GetUseCost();                           // 0x01050020
+};
+
+class cSPToolManager
+{
+public:
+    void CreateToolFromToolID(const uint32_t* id, cSPSpaceToolData** out); // 0x0104e340
+};
+
+class cAvatar
+{
+public:
+    void ApplyTool(void* item, int mode);       // 0x00ffa900
+};
+
+class cSpaceGame
+{
+public:
+    cAvatar* GetAvatar();                       // 0x00b1fdb0
+};
+
+namespace SP
+{
+    class cSPLivingUniverse
+    {
+    public:
+        static cPlanet*       GetActivePlanet();        // 0x01021260
+        static cPlanetRecord* GetActivePlanetRecord();  // 0x010212a0
+        static int            GetUniverseContext();     // 0x01021080
+    };
+}
+
+cSPToolManager* ToolManager();                  // 0x00b3d390
+cPlayer*        GetPlayerEmpire();              // 0x01021300
+cSpaceGame*     SpaceGameGet();                 // 0x01002bd0
+int             FUN_00fc2080(float a, float b); // 0x00fc2080
+
+typedef bool (*RecordCompare)(void*, void*);
+bool CompareStarA(void*, void*);                // 0x00bbcd40
+bool CompareStarB(void*, void*);                // 0x00bbc630
+void SortRecordsA(void** begin, void** end, RecordCompare cmp);  // 0x00e26de0
+void SortRecordsB(void** begin, void** end, RecordCompare cmp);  // 0x00bbf6c0
+
 class cPlanetCoverage
 {
 public:
@@ -379,6 +461,8 @@ public:
     eastl::set_int mRasterizedPaths;           // +0x48
 
     void Update(bool reset);
+    int  GetExploredCount(cPlanetRecord* record);   // 0x00bbe470
+    int  UseTool(cPlanet* planet);                  // 0x00bc1450
 };
 
 // @ 0x00bc08d0
@@ -527,4 +611,160 @@ void cPlanetCoverage::Update(bool reset)
 
     if (changed)
         CoverageOwner()->Refresh(0xf);
+}
+
+// ---------------------------------------------------------------------------
+// EASTL heap primitives over 0x0c-byte elements with a stateful comparator
+// (the comparator owns a lookup tree; it is copied by value on the stack).
+// ---------------------------------------------------------------------------
+void FreeNode(void* node);                          // 0x00f47380
+
+struct HeapElem
+{
+    float x, y, z;
+};
+
+struct HeapCompare
+{
+    uint32_t mAllocator;                            // +0x00
+    void*    mpLeft;                                // +0x04
+    void*    mpRight;                               // +0x08
+    void*    mpRoot;                                // +0x0c
+    uint8_t  mColor;                                // +0x10
+    uint8_t  mPad11[3];
+    uint32_t mSize;                                 // +0x14
+    uint32_t mPad18;
+
+    HeapCompare(const HeapCompare& src);            // 0x00af0d40 (copies the tree)
+    int*  Key(const HeapElem& v);                   // 0x0103de50 (lookup/insert)
+
+    void NukeTree(void* node)                       // 0x009a9600 (recursive delete)
+    {
+        while (node)
+        {
+            void* left = *(void**)node;
+            NukeTree(left);
+            void* right = *(void**)((char*)node + 4);
+            FreeNode(node);                         // 0x00f47380 (operator delete)
+            node = right;
+        }
+    }
+
+    bool Less(const HeapElem& a, const HeapElem& b) { return *Key(a) < *Key(b); }
+
+    ~HeapCompare() { NukeTree(mpRoot); }
+};
+
+void promote_heap(HeapElem* first, int topPosition, int position, HeapElem value,
+                  HeapCompare compare);           // 0x00bbfdc0
+
+// @ 0x00bc0740  eastl::adjust_heap<HeapElem*, int, HeapElem, HeapCompare>
+void adjust_heap(HeapElem* first, int topPosition, int heapSize, int position,
+                 HeapElem value, HeapCompare compare)
+{
+    int holeIndex = position;
+    int childPosition = 2 * holeIndex + 2;
+    for (; childPosition < heapSize; childPosition = 2 * childPosition + 2)
+    {
+        if (compare.Less(first[childPosition], first[childPosition - 1]))
+            --childPosition;
+        first[holeIndex] = first[childPosition];
+        holeIndex = childPosition;
+    }
+    if (childPosition == heapSize)
+    {
+        first[holeIndex] = first[childPosition - 1];
+        holeIndex = childPosition - 1;
+    }
+    promote_heap(first, topPosition, holeIndex, value, compare);
+}
+
+// @ 0x00bc0840  eastl::sort_heap step (swap first with last-1, then re-heapify)
+void sort_heap_step(HeapElem* first, HeapElem* last, HeapCompare compare)
+{
+    HeapElem value = *(last - 1);
+    *(last - 1) = *first;
+    adjust_heap(first, 0, (int)(last - first) - 1, 0, value, compare);
+}
+
+// @ 0x00bc1450  cPlanetCoverage::UseTool (spend a space tool on a planet's star records)
+int cPlanetCoverage::UseTool(cPlanet* planet)
+{
+    int count = 0;
+    if (!planet)
+        planet = SP::cSPLivingUniverse::GetActivePlanet();
+
+    cPlanetRecord* record = planet->mpRecord;
+    if (!record)
+        record = SP::cSPLivingUniverse::GetActivePlanetRecord();
+
+    if (FUN_00fc2080(record->mFieldB0, record->mFieldB4) == 3)
+        return 0;
+    if (planet->GetToolMode() != 5)
+        return 0;
+    if (SP::GetCurrentGameMode() != 0x1654c05)
+        return 0;
+
+    RefVector vec;
+    RefVector* starVec = planet->GetStarRecords(&vec);
+    int total = (int)(starVec->mpEnd - starVec->mpBegin);
+    if (starVec->mpBegin && starVec->mpBegin[-1] != 0)
+        FreeNode(starVec->mpBegin);
+
+    int explored = GetExploredCount(planet->mpRecord);
+    if (explored >= total)
+        return 0;
+
+    cSPSpaceToolData* tool = 0;
+    cSPToolManager* mgr = ToolManager();
+    mgr->CreateToolFromToolID((const uint32_t*)0x0168a570, &tool);
+    int cost = tool->GetUseCost();
+    cPlayer* player = GetPlayerEmpire();
+    bool canUse = player->CanUseTool(planet->mpRecord);
+
+    if (planet == SP::cSPLivingUniverse::GetActivePlanet() &&
+        SP::cSPLivingUniverse::GetUniverseContext() == 0)
+    {
+        cGameNounManager* nouns = SP::NounManager();
+        void* gameData = nouns->GetPlanetGameData();
+        vec.Append(gameData);
+        SortRecordsA(vec.mpBegin, vec.mpEnd, CompareStarA);
+        for (void** it = vec.mpBegin; it != vec.mpEnd; ++it)
+        {
+            void* item = *it;
+            if (canUse)
+                player->Spend(cost);
+            cSpaceGame* game = SpaceGameGet();
+            cAvatar* avatar = game->GetAvatar();
+            avatar->ApplyTool(item, -1);
+            ++count;
+            --total;
+            if (explored >= total)
+                break;
+        }
+        vec.Destroy();
+    }
+    else
+    {
+        RefVector other;
+        planet->GetStarRecords(&other);
+        SortRecordsB(other.mpBegin, other.mpEnd, CompareStarB);
+        for (void** it = other.mpBegin; it != other.mpEnd; ++it)
+        {
+            void* item = *it;
+            if (canUse)
+                player->Spend(cost);
+            planet->UseItem(item);
+            ++count;
+            --total;
+            if (explored >= total)
+                break;
+        }
+        if (other.mpBegin && other.mpBegin[-1] != 0)
+            FreeNode(other.mpBegin);
+    }
+
+    if (tool)
+        tool->Release();
+    return count;
 }
