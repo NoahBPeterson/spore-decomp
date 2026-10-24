@@ -1,1 +1,4 @@
 00d557f0 1866 complete; scheduling/spill differences in the inlined x87/SSE quaternion rotation (size 2208 vs 2176)
+00d56070 1025 complete (choose a randomized fire pattern and emit its points); size 969 vs 1179, diff 1025; EQUIV WEAK 122/400 valid, 81.8% coverage; x87 vs SSE expression scheduling, stack-slot reuse and the 12-dword argument marshalling differ
+00d56510 167 complete (lower-bound find-or-insert into the per-agent state map); size 185 vs 167, diff 167; EQUIV PASS 305/400 valid, 95.5% coverage; prologue and register allocation (this/position/cursor) differ, and the eastl empty integral_constant insert-tag is modelled explicitly
+00d565c0 86 complete (reset the agent's turret state and add it to the interaction); size 110 vs 109, diff 86; EQUIV WEAK 199/400 valid, 100.0% coverage; the original caches the agent argument in ebp while ours reloads it, and the mState/mpTarget store order differs
