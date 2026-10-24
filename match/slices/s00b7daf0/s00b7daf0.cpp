@@ -2,6 +2,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
 
 // ---- free callees --------------------------------------------
 void* __cdecl SP_GetUniverseContext();                    // 0x1021080
@@ -30,8 +31,10 @@ void  __cdecl FUN_00a16f40(void*, int);                   // 0xa16f40
 void  __cdecl FUN_00b7d710(void*);                        // 0xb7d710
 void  __cdecl FUN_00b7d750(void*, void*);                 // 0xb7d750
 
-struct RandomLCG { uint32_t mnSeed; };
-double __cdecl EA_RandomUniform(RandomLCG*);              // 0x9360d0
+struct RandomLCG {
+  uint32_t mnSeed;
+  double __thiscall Uniform();   // 0x9360d0
+};
 extern RandomLCG gMathRandom;                             // 0x1601760
 
 extern char  gMode_1654c10;   // 0x1654c10
@@ -313,8 +316,16 @@ float FUN_00b7e490() {
 }
 
 // @ 0x00b7e680
+static __forceinline int RoundNearestInt(float f) {
+  int n;
+  __asm {
+    fld f
+    fistp n
+  }
+  return n;
+}
 uint16_t FUN_00b7e680(float v) {
-  int n = (int)(v * 32767.0f) + 0x8000;
+  int n = RoundNearestInt(v * 32767.0f) + 0x8000;
   int z = 0;
   uint16_t* p = n > 0 ? (uint16_t*)&n : (uint16_t*)&z;
   return *p;
@@ -322,20 +333,23 @@ uint16_t FUN_00b7e680(float v) {
 
 // @ 0x00b7e560
 void SP_RandomDirection3(float* out) {
-  float x, y, z, d;
+  float x, y, z;
+  volatile float d;
   do {
-    x = (float)EA_RandomUniform(&gMathRandom);
+    x = (float)gMathRandom.Uniform();
     x = x + x - 1.0f;
     if (x < 1.0f) { if (x < -1.0f) x = -1.0f; }
-    y = (float)EA_RandomUniform(&gMathRandom);
+    y = (float)gMathRandom.Uniform();
     y = y + y - 1.0f;
     if (y < 1.0f) { if (y < -1.0f) y = -1.0f; }
-    z = (float)EA_RandomUniform(&gMathRandom);
+    z = (float)gMathRandom.Uniform();
     z = z + z - 1.0f;
     if (z < 1.0f) { if (z < -1.0f) z = -1.0f; }
-    d = z * z + x * x + y * y;
+    d = z * z;
+    d = d + x * x;
+    d = d + y * y;
   } while (d > 1.0f || d < 0.0001f);
-  float inv = 1.0f / sqrtf(d);
+  volatile float inv = 1.0f / sqrtf(d);
   out[0] = inv * x;
   out[1] = inv * y;
   out[2] = inv * z;
@@ -447,14 +461,16 @@ void __cdecl FUN_00b7e0b0(void* self) {
 }
 
 // @ 0x00b7e220  (cube-map face/tile walker)
-void __cdecl FUN_00b7e220(uint32_t param_1, int* param_2, int* param_3, int* param_4) {
+// The retail function is declared void but leaves param_2 in eax (it never rewrites eax), so the
+// decompiled form returns it to keep the final register state identical.
+int* __cdecl FUN_00b7e220(uint32_t param_1, int* param_2, int* param_3, int* param_4) {
   for (;;) {
     uint32_t uVar1 = (uint32_t)param_2[2];
     uint32_t uVar3 = (uVar1 & 1) - 1;
     uint32_t uVar2 = ~uVar3;
     int iVar4 = (int)uVar1 >> 1;
     int iVar6 = (int)((uVar2 & 2) - 1);
-    if (!((int)uVar1 >> 2 <= *param_2)) {
+    if ((int)uVar1 >> 2 <= *param_2) {
       if (*param_2 > (int)(param_1 - ((int)uVar1 >> 2))) {
         param_2[2] = (uVar2 & 1) + (uint32_t)(uint8_t)(DAT_014653b9)[iVar4 * 4] * 2;
         iVar4 = *param_2;
@@ -467,12 +483,12 @@ void __cdecl FUN_00b7e220(uint32_t param_1, int* param_2, int* param_3, int* par
         }
         continue;
       }
-      iVar4 = (iVar4 + 1) >> 1;
+      iVar4 = (((int)uVar1 >> 1) + 1) >> 1;
       if (param_2[1] < iVar4) {
         param_2[2] = (uint32_t)(uint8_t)(DAT_014653ba)[((int)uVar1 >> 1) * 4] * 2 + 1;
         iVar4 = param_2[1] + (int)param_1;
       } else {
-        if (param_2[1] <= (int)(param_1 - iVar4)) return;
+        if (param_2[1] <= (int)(param_1 - iVar4)) return param_2;
         param_2[2] = (uint32_t)(uint8_t)(DAT_014653ba)[((int)uVar1 >> 1) * 4] * 2;
         iVar4 = param_2[1] - (int)param_1;
       }
@@ -498,6 +514,7 @@ void __cdecl FUN_00b7e220(uint32_t param_1, int* param_2, int* param_3, int* par
       *param_4 = -(iVar4 * iVar6);
     }
   }
+  return param_2;
 }
 
 // @ 0x00b7daf0  (terrain/impostor property setup; large, partial translation)
