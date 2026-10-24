@@ -1,2 +1,9 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
-006700d0  202  constructor: every vtable/field store present; cl keeps this in ecx with the zero in eax, the original swaps them (base eax, zero ecx)
+0066f9f0  1132  card view builder: complete behaviour; equiv WEAK (379 valid, 10.7% cov); register/frame allocation and the two-temp rect-centering schedule differ; low coverage is fault(read) on unmapped generated card slots
+0066fee0  384   destructor: complete behaviour; equiv PASS (264 valid, 100.0% cov); our 299 bytes vs 427 - the card/window release loop shapes and the row-text free test differ
+006700d0  202   constructor: every vtable/field store present; cl keeps this in ecx with the zero in eax, the original swaps them (base eax, zero ecx)
+00670200  328   reset: complete behaviour; equiv WEAK (164 valid, 80.1% cov); the row-text eastl::assign call and the window/card release loop scheduling differ
+00670370  316   row resolve: complete behaviour; equiv WEAK (227 valid, 26.3% cov); guard lowered to x-1 <= 0xfffffffd (literal-id path only for id in [1, 0xfffffffe]); cString build + assign order and the lookup tail differ
+006704f0  232   feed-subscribe: complete behaviour; equiv WEAK (400 valid, 26.4% cov); formatted-string build (0x472f50) plus PostEatFeed/Release sequence scheduling differ
+00670610  412   state reconcile: complete behaviour; equiv PASS (254 valid, 74.5% cov); our 422 bytes vs 388 - id compare chains, row resolve and SetID tail scheduling differ
+006707a0  264   vector-push helper: complete behaviour; equiv PASS (311 valid, 85.0% cov); the 3-slot inline vector set-up, per-id push form and grow-append tail differ
