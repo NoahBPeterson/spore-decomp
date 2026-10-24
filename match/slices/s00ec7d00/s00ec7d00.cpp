@@ -187,24 +187,26 @@ struct RBTree {
     uint32_t m_pad1[3];    // +8
     uint32_t mnSize;       // +0x14
 
-    void Insert(void** out, void* parent, const void* value, bool b);  // 0x00ec7f40
+    // Retail is declared `void` but its last use loads `out` into eax and stores
+    // through it, so the leftover return value is `out`; returning it keeps eax.
+    void** Insert(void** out, void* parent, const void* value, bool b);  // 0x00ec7f40
 };
 
 // @ 0x00ec7f40
-void RBTree::Insert(void** out, void* parent, const void* value, bool b)
+void** RBTree::Insert(void** out, void* parent, const void* value, bool b)
 {
     int t;
-    char* anchor = (char*)&mAnchor;
-    if (!b && (char*)parent != anchor && (int)*(const uint32_t*)value >= (int)*(uint32_t*)((char*)parent + 0x10))
+    if (!b && (char*)parent != (char*)&mAnchor && (int)*(const uint32_t*)value >= (int)*(uint32_t*)((char*)parent + 0x10))
         t = 1;
     else
         t = 0;
     RBNode* node = (RBNode*)operator_new(0x28, "Simulator", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     ((Key*)((char*)node + 0x10))->FUN_00ec7ca0(value);
-    RBTreeInsert(node, parent, anchor, t);
+    RBTreeInsert(node, parent, (char*)&mAnchor, t);
     mnSize++;
     *out = node;
+    return out;
 }
 
 // ---------------------------------------------------------------------------
