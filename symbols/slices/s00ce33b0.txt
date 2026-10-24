@@ -1,0 +1,4 @@
+00ce3440 ?TryStartPlanStep@@YANPAXHHHPAUcStimuli@SP@@PAE@Z  # TryStartPlanStep migrated from s00ce33b0 (verbatim, slice spelling)
+00ce3b40 ?DeactivatePlanThunk1@@YAXPAXHHHHPAUPlanArgs@SP@@@Z  # DeactivatePlanThunk1 migrated from s00ce33b0 (verbatim, slice spelling)
+00ce3e20 ?RaidingDeactivate@@YAXPAXHHHHPAUPlanArgs@SP@@@Z  # RaidingDeactivate migrated from s00ce33b0 (verbatim, slice spelling)
+00ce3e90 ?DeactivatePlanThunk0@@YAXPAXHHHHPAUPlanArgs@SP@@@Z  # DeactivatePlanThunk0 migrated from s00ce33b0 (verbatim, slice spelling)

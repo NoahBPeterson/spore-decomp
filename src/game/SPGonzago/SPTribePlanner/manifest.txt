@@ -1,0 +1,21 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPTribePlanner.cpp  ?PLANNER_GIFTING_Tick@@YA_NPAUcTribePlannerContext@@HHHHPAUGiftState@@PAUWorkerFilter@@M@Z  00ce1a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?PLANNER_GATHERING_Tick@@YA_NPAUcTribePlannerContext@@HHHHPAUGatherState@@PAUWorkerFilter@@M@Z  00ce20d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?PLANNER_WATERING_Tick@@YA_NPAUcTribePlannerContext@@HHHHPAUWaterState@@PAUWorkerFilter@@M@Z  00ce22c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?GetStatString@cTribePlanner_s00ce_2330@@QAEPB_WH@Z  00ce23b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce2880@cTribePlanData_s00ce_2330@@QAEPAU1@PBU1@@Z  00ce2880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce28e0@cTribePlanData_s00ce_2330@@QAEPAU1@PBU1@@Z  00ce28e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce2a50@@YAXPAUcTribePlanData_s00ce_2330@@0PBU1@@Z  00ce2a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce2b30@@YAPAUcTribePlanData_s00ce_2330@@PBU1@0PAU1@@Z  00ce2b30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce2ba0@@YAPAUcTribePlanData_s00ce_2330@@PBU1@0PAU1@@Z  00ce2ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce2c10@@YAPAUPlannerGroup@@PAU1@00@Z  00ce2c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce2c70@@YGXPAUPlannerGroup@@0@Z  00ce2c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce30d0@@YAMPAUcTribePlannerContext_s00ce_2330@@IIIPAUbehavior_stimuli@@PAE@Z  00ce30d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce3120@@YAMPAUcTribePlannerContext_s00ce_2330@@IIIPAUbehavior_stimuli@@PAE@Z  00ce3120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce3170@@YAMPAUcTribePlannerContext_s00ce_2330@@IIIPAUbehavior_stimuli@@PAE@Z  00ce3170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce31e0@@YAMPAUcTribePlannerContext_s00ce_2330@@IIIPAUbehavior_stimuli@@PAE@Z  00ce31e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce3250@@YAMPAUcTribePlannerContext_s00ce_2330@@IIIPAUbehavior_stimuli@@PAE@Z  00ce3250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?DeactivatePlanThunk1@@YAXPAXHHHHPAUPlanArgs@SP@@@Z  00ce3b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?RaidingDeactivate@@YAXPAXHHHHPAUPlanArgs@SP@@@Z  00ce3e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?DeactivatePlanThunk0@@YAXPAXHHHHPAUPlanArgs@SP@@@Z  00ce3e90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce5ff0@PlannerGroupVector@@QAEXXZ  00ce5ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

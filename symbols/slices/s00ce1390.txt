@@ -1,0 +1,7 @@
+00ce0e60 ?GetPlanData@cTribePlanner@SP@@QAEPAUcTribePlanData@2@II@Z  # SP::cTribePlanner::GetPlanData (callee of s00ce1390, named from the dev publics; slice address comment)
+00ce1390 ?PLANNER_STEAL_CONGREGATE_Activate@@YA_NPAUcTribePlannerContext@@HHHHPAUCongState@@@Z  # PLANNER_STEAL_CONGREGATE_Activate migrated from s00ce1390 (verbatim, slice spelling)
+00ce1510 ?PLANNER_STEAL_CONGREGATE_Tick@@YA_NPAUcTribePlannerContext@@HHHHPAUCongState@@PAUWorkerFilter@@M@Z  # PLANNER_STEAL_CONGREGATE_Tick migrated from s00ce1390 (verbatim, slice spelling)
+00ce1690 ?PLANNER_STEALING_FOOD_Activate@@YA_NPAUcTribePlannerContext@@HHHHPAUStealState@@@Z  # PLANNER_STEALING_FOOD_Activate migrated from s00ce1390 (verbatim, slice spelling)
+00ce1a20 ?PLANNER_GIFTING_Tick@@YA_NPAUcTribePlannerContext@@HHHHPAUGiftState@@PAUWorkerFilter@@M@Z  # PLANNER_GIFTING_Tick migrated from s00ce1390 (verbatim, slice spelling)
+00ce20d0 ?PLANNER_GATHERING_Tick@@YA_NPAUcTribePlannerContext@@HHHHPAUGatherState@@PAUWorkerFilter@@M@Z  # PLANNER_GATHERING_Tick migrated from s00ce1390 (verbatim, slice spelling)
+00ce22c0 ?PLANNER_WATERING_Tick@@YA_NPAUcTribePlannerContext@@HHHHPAUWaterState@@PAUWorkerFilter@@M@Z  # PLANNER_WATERING_Tick migrated from s00ce1390 (verbatim, slice spelling)

@@ -1,19 +1,19 @@
-00cdfea0 ?FUN_00cdfea0@@YA_NPAUcCitizen@@@Z  # planner candidate filter (busy/flag/AI-flag test)
+00cdfea0 ?FUN_00cdfea0@@YA_NPAUcCitizen@@@Z  # FUN_00cdfea0 migrated from s00cdfea0 (verbatim, slice spelling)
 00cdfef0 ?FUN_00cdfef0@@YAOHHHHPAXPA_NHPAH@Z  # behavior-tree "set task" leaf
-00cdff70 ?FUN_00cdff70@@YIPAPAHPAPAPAH@Z  # candidate skip loop (__fastcall iterator)
+00cdff70 ?FUN_00cdff70@@YIPAPAHPAPAPAH@Z  # FUN_00cdff70 migrated from s00cdfea0 (verbatim, slice spelling)
 00cdffc0 ?FUN_00cdffc0@@YAPAUPlanEntry@@PAU1@PBU1@@Z  # plan-entry copy + AddRef
-00ce0150 ?LoadTuning@@YAXPAUcTribePlanConfiguration@@@Z  # PDB SP::cTribePlanConfiguration::LoadTuning
-00ce09b0 ?FUN_00ce09b0@@YAOXZ  # raid-target predicate
-00ce0a20 ?Shutdown@@YAXPAUcTribePlanner@@@Z  # PDB SP::cTribePlanner::Shutdown
+00ce0150 ?LoadTuning@@YAXPAUcTribePlanConfiguration@@@Z  # LoadTuning migrated from s00cdfea0 (verbatim, slice spelling)
+00ce09b0 ?FUN_00ce09b0@@YAOXZ  # FUN_00ce09b0 migrated from s00cdfea0 (verbatim, slice spelling)
+00ce0a20 ?Shutdown@@YAXPAUcTribePlanner@@@Z  # Shutdown migrated from s00cdfea0 (verbatim, slice spelling)
 00ce0b20 ?FUN_00ce0b20@@YAPAPAHPAPAH0I@Z  # plan-iterator init
-00ce0b60 ?FUN_00ce0b60@@YA_NPAUWorkerList@@H@Z  # worker-list plan-id membership
-00ce0d90 ?FUN_00ce0d90@@YAHPAD00@Z  # plan-range destroy
-00ce0e00 ?FUN_00ce0e00@@YAXPAD0@Z  # eastl::vector<cTribePlanData>::DoDestroyValues
+00ce0b60 ?FUN_00ce0b60@@YA_NPAUWorkerList@@H@Z  # FUN_00ce0b60 migrated from s00cdfea0 (verbatim, slice spelling)
+00ce0d90 ?FUN_00ce0d90@@YAHPAD00@Z  # FUN_00ce0d90 migrated from s00cdfea0 (verbatim, slice spelling)
+00ce0e00 ?FUN_00ce0e00@@YAXPAD0@Z  # FUN_00ce0e00 migrated from s00cdfea0 (verbatim, slice spelling)
 00ce0e60 ?FUN_00ce0e60@@YAPAUPlanTableEntry@@PAUPlanTable@@II@Z  # plan-table lookup
 00ce0ed0 ?FUN_00ce0ed0@@YAHPAUPlanTable@@PBUPlanEntry@@@Z  # plan entry insert-or-find
-00ce0f70 ?FUN_00ce0f70@@YIXPAUcTribePlanData@@@Z  # worker drop + erase
-00ce0ff0 ?FUN_00ce0ff0@@YAPAUcPlanTimer@@HPAUPlanTable@@IIH@Z  # plan-timer restart
-00ce1060 ?FUN_00ce1060@@YA_NPAUPlanTable@@HHHPAIPAUcPlanRecord@@@Z  # PLANNER raiding activate leaf
-00ce10c0 ?FUN_00ce10c0@@YA_NPAUPlanTable@@HHHPAIPAUcPlanRecord@@@Z  # PLANNER raiding deactivate leaf
-00ce1130 ?FUN_00ce1130@@YA_NPAUPlanTable@@HHHPAIPAUcPlanRecord@@@Z  # PLANNER raiding cancel leaf
-00ce1190 ?PLANNER_RAIDING_Activate@@YA_NPAUcTribePlanner@@HHHPAI@Z  # PDB SP::PLANNER_RAIDING_Activate
+00ce0f70 ?FUN_00ce0f70@@YIXPAUcTribePlanData@@@Z  # FUN_00ce0f70 migrated from s00cdfea0 (verbatim, slice spelling)
+00ce0ff0 ?FUN_00ce0ff0@@YAPAUcPlanTimer@@HPAUPlanTable@@IIH@Z  # FUN_00ce0ff0 migrated from s00cdfea0 (verbatim, slice spelling)
+00ce1060 ?FUN_00ce1060@@YA_NPAUPlanTable@@HHHPAIPAUcPlanRecord@@@Z  # FUN_00ce1060 migrated from s00cdfea0 (verbatim, slice spelling)
+00ce10c0 ?FUN_00ce10c0@@YA_NPAUPlanTable@@HHHPAIPAUcPlanRecord@@@Z  # FUN_00ce10c0 migrated from s00cdfea0 (verbatim, slice spelling)
+00ce1130 ?FUN_00ce1130@@YA_NPAUPlanTable@@HHHPAIPAUcPlanRecord@@@Z  # FUN_00ce1130 migrated from s00cdfea0 (verbatim, slice spelling)
+00ce1190 ?PLANNER_RAIDING_Activate@@YA_NPAUcTribePlanner@@HHHPAI@Z  # PLANNER_RAIDING_Activate migrated from s00cdfea0 (verbatim, slice spelling)

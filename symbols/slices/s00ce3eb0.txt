@@ -1,7 +1,7 @@
-00ce3eb0 ?OrderNearbyCitizensToAttack@@YA_NPAUOrderContext@@MM@Z  # bool OrderNearbyCitizensToAttack
-00ce4380 ?PlannerEquipWorkersActivate@@YA_NPAUOrderContext@@PAVcSPCreatureCitizen@@@Z  # bool PlannerEquipWorkersActivate
-00ce4810 ?PlannerCheckWorkers@@YA_NPAUOrderContext@@MM@Z  # bool PlannerCheckWorkers
-00ce48f0 ?Update@cGonzagoSimulator@@QAEXMI@Z  # void cGonzagoSimulator::Update
-00ce4c40 ?CopyPlannerVector@@YAPAHPAH0@Z  # int* CopyPlannerVector
-00ce4ca0 ?CopyPlannerGroups@@YAPAUPlannerGroup@@PAU1@000@Z  # PlannerGroup* CopyPlannerGroups
-00ce4d60 ?FillPlannerGroups@@YAXPAUPlannerGroup@@H0@Z  # void FillPlannerGroups
+00ce3eb0 ?OrderNearbyCitizensToAttack@@YA_NPAUOrderContext@@MM@Z  # OrderNearbyCitizensToAttack migrated from s00ce3eb0 (verbatim, slice spelling)
+00ce4380 ?PlannerEquipWorkersActivate@@YA_NPAUOrderContext@@PAVcSPCreatureCitizen@@@Z  # PlannerEquipWorkersActivate migrated from s00ce3eb0 (verbatim, slice spelling)
+00ce4810 ?PlannerCheckWorkers@@YA_NPAUOrderContext@@MM@Z  # PlannerCheckWorkers migrated from s00ce3eb0 (verbatim, slice spelling)
+00ce48f0 ?Update@cGonzagoSimulator@@QAEXMI@Z  # cGonzagoSimulator::Update migrated from s00ce3eb0 (verbatim, slice spelling)
+00ce4c40 ?CopyPlannerVector@@YAPAHPAH0@Z  # CopyPlannerVector migrated from s00ce3eb0 (verbatim, slice spelling)
+00ce4ca0 ?CopyPlannerGroups@@YAPAUPlannerGroup_s00ce_3eb0@@PAU1@000@Z  # CopyPlannerGroups migrated from s00ce3eb0 (verbatim, slice spelling)
+00ce4d60 ?FillPlannerGroups@@YAXPAUPlannerGroup_s00ce_3eb0@@H0@Z  # FillPlannerGroups migrated from s00ce3eb0 (verbatim, slice spelling)
