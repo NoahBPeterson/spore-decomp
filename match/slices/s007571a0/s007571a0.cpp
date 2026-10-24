@@ -141,21 +141,24 @@ Val7e20* Val7e20::Ctor(Val7e20* src, RCObj* a2, RCObj* a3) {
 // ---------------------------------------------------------------------------
 // @ 0x00757ff0   ctor of a 0x24-byte value type
 // ---------------------------------------------------------------------------
-struct Val7ff0Base {
-    virtual void slot0();
-};
-struct Val7ff0 : Val7ff0Base {
-    char pad04[4];
+struct Val7ff0 {
+    int*   vptr0;  // +0x00
+    int*   vptr4;  // +0x04
+    int*   p08;    // +0x08
     RCObj* p0c;    // +0x0c
     RCObj* p10;    // +0x10
     int    f14, f18, f1c, f20, f24;   // +0x14..+0x24
     Val7ff0* Ctor(RCObj* a2, int* a3);
 };
+extern int g_vtbl_140da78[];
+extern int g_vtbl_140da74[];
 Val7ff0* Val7ff0::Ctor(RCObj* a2, int* a3) {
-    this->p0c = 0;
-    this->p10 = 0;
+    this->vptr4 = g_vtbl_13ef094;
+    this->p08 = 0;
+    this->vptr0 = g_vtbl_140da78;
+    this->vptr4 = g_vtbl_140da74;
     this->p0c = a2;
-    if (a2) ((void (__thiscall*)(RCObj*))a2->vptr)(a2);
+    if (a2) ((void (__thiscall*)(RCObj*))((void**)a2->vptr)[0])(a2);
     RCObj* r = (RCObj*)a3[0];
     this->p10 = r;
     if (r) _InterlockedIncrement(&r->refcount);
@@ -180,16 +183,16 @@ C0755b* __cdecl FUN_007580a0(C0755b* self) {
     RCObj* p1 = *(RCObj**)(e + 0x1c);
     void** p2 = *(void***)(e + 0x14);
     int v = *(int*)(e + 0x10);
-    if (p1) ((void (__thiscall*)(RCObj*))p1->vptr)(p1);
+    if (p1) ((void (__thiscall*)(RCObj*))((void**)p1->vptr)[0])(p1);
     if (v) {
         int r = (*(int (__thiscall**)(void*, void*))(*(int*)mm + 0x28))(mm, *p2);
         if (r) {
             int out = *(int*)(r + 4);
-            RCRelease(p1);
+            if (p1) ((void (__thiscall*)(RCObj*))((void**)p1->vptr)[1])(p1);
             return (C0755b*)out;
         }
     }
-    RCRelease(p1);
+    if (p1) ((void (__thiscall*)(RCObj*))((void**)p1->vptr)[1])(p1);
     return 0;
 }
 

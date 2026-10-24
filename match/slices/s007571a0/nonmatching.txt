@@ -1,6 +1,6 @@
 00757e20  120  value ctor: matrices/refcount copies complete; SSE constant loads and M3Assign schedule differ
-00757ff0  115  0x24 value ctor: field copy + refcount AddRef complete; vtable store/base setup differs
+00757ff0  124  0x24 value ctor: field copy + refcount AddRef complete; vtable store/base setup differs; equivalence PASS (400 inputs, 300 valid, 100.0% coverage). The object has two vptrs at +0/+4 and a zero dword at +8, so the base class was dropped and the ctor now stores g_vtbl_140da78 at +0, g_vtbl_140da74 at +4 (after the base's g_vtbl_13ef094), 0 at +8, then p0c/p10/a3[1..5] at +0xc..+0x24
 00757d20  189  GetRwModelAsGameMeshesNoCache: Arena loop + 0x38 temp + EH vector ctor/dtor complete; EH state stores differ
-007580a0  201  material lookup: MaterialManager index, vcall, refcount release complete; slot offsets in the entry differ
+007580a0  228  material lookup: MaterialManager index, vcall, refcount release complete; slot offsets in the entry differ; equivalence PASS (400 inputs, 309 valid, 71.4% coverage). AddRef/Release are double-indirect vtable calls (`((void**)p->vptr)[0]` / `[1]`), not the inline RCObj refcount idiom; the stored replay input needs --start-budget 8000000 because its soup model has 0x112805 stream entries
 007581a0  ~90  destructor: two releases + vptr2 store complete; AutoRefCount inline release schedule differs
 007573a0  1614  GetModelAsGameMeshes: complete (property-list load/create, mesh-job object fill, per-slot job chain); call/vslot sequence matches; register allocation (zero reg, spills), the refcount decrement idiom (dec after lock xadd) and EH frame size differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
