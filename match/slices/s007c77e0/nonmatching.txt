@@ -9,7 +9,7 @@
 007c7e10  11  dest->mRC load hoisted above the two field stores
 007c80c0  97  missing compiler EH frame around the element Release loop
 007c8160  64  binary-search register allocation differs; equiv: PASS (now returns the position in eax as the original does; void left garbage: hybrid crash 2026-10-12)
-007c8270  368 command registration new-expression/EH scheduling differs
-007c84a0  114 command registration new-expression/EH scheduling differs
-007c8530  547 command registration new-expression/EH scheduling differs
+007c8270  354 command registration new-expression/EH scheduling differs; equiv: PASS (201 valid, 96.6% cov)
+007c84a0  117 command registration new-expression/EH scheduling differs; equiv: PASS (341 valid, 97.8% cov)
+007c8530  533 command registration new-expression/EH scheduling differs; equiv: PASS (444 valid with --inputs 900; default 400 gives 192/200 valid = WEAK, no mismatch)
 007c8880  147 parser init vcall/register allocation differs

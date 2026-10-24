@@ -1,5 +1,5 @@
 // Slice s007c77e0 -- SP::cConfigManager / ArgScript option commands (retail build).
-// Module flags: /O2 /MD /Gy /EHsc /TP
+// Module flags: /O2 /MD /Gy /EHsc /TP /GS-
 #include "types.h"
 
 // ---------------------------------------------------------------- masked externs
@@ -520,8 +520,11 @@ AutoRefCount* CopyAutoRef(AutoRefCount* first, AutoRefCount* last, AutoRefCount*
 }
 
 // ---------------------------------------------------------------- ArgScript commands
-struct CmdBase  { CmdBase();  char pad[0x0c]; };   // 0x10 with vptr
-struct BlockBase { BlockBase(); char pad[0x30]; }; // 0x34 with vptr
+// CmdBase/BlockBase are themselves polymorphic: the base subobject sits at
+// offset 0 (the ctor is called with this == the allocation) and the derived
+// ctor then overwrites the vptr with its own table.
+struct CmdBase  { CmdBase();  virtual void Execute(); char pad[0x0c]; };   // 0x10 with vptr
+struct BlockBase { BlockBase(); virtual void Execute(); char pad[0x30]; }; // 0x34 with vptr
 
 struct CmdOptionSetting       : CmdBase { virtual void Execute(); };
 struct CmdOptionBoolProperty  : CmdBase { virtual void Execute(); };
@@ -541,13 +544,14 @@ struct CmdKeyProperty         : CmdBase { virtual void Execute(); };
 struct CmdOptionBlock         : BlockBase { virtual void Execute(); };
 struct CmdVendor              : BlockBase { virtual void Execute(); };
 
-void __cdecl FUN_0083c780(void* a, void* b);   // 0x0083c780
+typedef void (__thiscall* Fn_0083c780)(void* self, void* a, void* b);   // 0x0083c780 cCommandBase::OnRegister
+void __cdecl FUN_0083c780();
 
 // @ 0x007c8270
 void cOptionBlockCommand::OnRegister(void* a, void* b)
 {
     mState = (cConfigScriptState*)b;
-    FUN_0083c780(a, b);
+    ((Fn_0083c780)FUN_0083c780)(this, a, b);
     void* c;
     c = new ("ArgScript/OptionSetting", 0, 0, 0, 0) CmdOptionSetting();
     ((VFn2P)VSLOT(this, 0x18))(this, g_CmdKey_setting, c);
@@ -567,7 +571,7 @@ void cOptionBlockCommand::OnRegister(void* a, void* b)
 void cVendorCommand::OnRegister(void* a, void* b)
 {
     mState = (cConfigScriptState*)b;
-    FUN_0083c780(a, b);
+    ((Fn_0083c780)FUN_0083c780)(this, a, b);
     void* c = new ("ArgScript/Card", 0, 0, 0, 0) CmdCard();
     ((VFn2P)VSLOT(this, 0x18))(this, g_CmdKey_card, c);
 }
