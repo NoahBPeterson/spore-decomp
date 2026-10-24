@@ -1,0 +1,6 @@
+slices/s00b047b0/s00b047b0.cpp  ?slotAt@SimObj@@QAEPAXIHI@Z  00b04c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b047b0/s00b047b0.cpp  ?reserve@VVec@@QAEXI@Z  00b04c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b047b0/s00b047b0.cpp  ?FUN_00b05770@@YAPAHPAH00H@Z  00b05770  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b047b0/s00b047b0.cpp  ?FUN_00b057b0@@YAXPAH@Z  00b057b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b047b0/s00b047b0.cpp  ?curEntry@SimObj@@QAEPAXXZ  00b058a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b047b0/s00b047b0.cpp  ?curEntryBits@SimObj@@QAEIXZ  00b058f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

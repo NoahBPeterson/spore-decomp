@@ -1,0 +1,27 @@
+; slice s00b047b0 = 0x00b047b0..0x00b058f0 (SimObj slot map + EASTL pool rbtree + pooled ctor/dtor helpers)
+00b047b0 FUN_00b047b0(void**, void**, void**, float, float, float) ; 0x00b047b0  heap-sort pop helper (squared-distance order)
+00b048f0 FUN_00b048f0(int, int, int)                          ; 0x00b048f0  destructor sweep over a leaf range (0x19a8-byte leaves)
+00b04aa0 SimObj::fillSlot(SimEnt*)                            ; 0x00b04aa0  thiscall: fill a species-dependent slot
+00b04ba0 SimObj::findSlot(unsigned int, int)                  ; 0x00b04ba0  thiscall: lower-bound + species-keyed field select
+00b04c20 SimObj::slotAt(unsigned int, int, unsigned int)      ; 0x00b04c20  thiscall: slot lookup then index into its vector  byte-exact (MATCH)
+00b04c50 VVec::reserve(unsigned int)                          ; 0x00b04c50  thiscall: vector reserve (0x38-byte elements)  byte-exact (MATCH)
+00b04e00 FUN_00b04e00(void*, int*, void*)                     ; 0x00b04e00  __stdcall: deserialize a vector of ints off a stream
+00b04ed0 RBTree::eraseRange(int*, void*, void*)               ; 0x00b04ed0  thiscall: erase a [first,last) node range, recycle to pool
+00b04f70 RBTree::insert(int*, unsigned int*, unsigned int)    ; 0x00b04f70  thiscall: lower-bound descent + AllocNode + RBTreeInsert
+00b05000 RBTree::copyNode(PoolElem*, PoolElem*)               ; 0x00b05000  thiscall: deep-copy a tiny binary tree into the pool
+00b051f0 FUN_00b051f0(unsigned int, unsigned int)             ; 0x00b051f0  destructor sweep over a count of leaves
+00b05410 FUN_00b05410(int, int, int, int)                     ; 0x00b05410  introsort driver (int pointers)
+00b054a0 FUN_00b054a0(int, int, int, int, float, float, float) ; 0x00b054a0  introsort driver (float-keyed records)
+00b055c0 FUN_00b055c0(int, int, int, int, float, float, float) ; 0x00b055c0  introsort driver (float-keyed records, variant)
+00b056e0 FUN_00b056e0(int**, int*, int*, int*)                ; 0x00b056e0  construct a range of pool elements at *out
+00b05730 FUN_00b05730(int*, unsigned int, int, void*)         ; 0x00b05730  construct n pool elements at p, copying src
+00b05770 FUN_00b05770(int*, int*, int*, int)                  ; 0x00b05770  construct pool elements at dest, copying [srcBegin,srcEnd)  byte-exact (MATCH)
+00b057b0 FUN_00b057b0(int*)                                   ; 0x00b057b0  clear pooled objects then erase the vector range  byte-exact (MATCH)
+00b05800 SimObj::reset(void)                                  ; 0x00b05800  thiscall: release the species map and clear the constants
+00b058a0 SimObj::curEntry(void)                               ; 0x00b058a0  thiscall: look up an element by index  byte-exact (MATCH)
+00b058f0 SimObj::curEntryBits(void)                           ; 0x00b058f0  thiscall: bit count of an entry looked up by index  byte-exact (MATCH)
+; helpers: EAAllocate 0x00f473a0, operator_delete 0x00f47380, vect_copy 0x005f4d00, memcpy thunk 0x011e0744
+;          rbtree_find 0x00b02750, RBTreeIncrement 0x00921580, RBTreeErase 0x00921880, RBTreeInsert 0x009216a0
+;          Payload copy-ctor 0x00b01cb0, pool node copy 0x00b04520, release_node_chain 0x00b04350
+;          PoolOwner::AllocNode 0x00b03820, AllocNodeTiny 0x00b03880, remove_1st 0x00acca00, reserve_tex 0x004e0880
+;          alloc source string 0x013f09b4, allocator table 0x013ebb38

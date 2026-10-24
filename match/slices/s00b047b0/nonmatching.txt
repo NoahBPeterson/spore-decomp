@@ -1,0 +1,28 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#
+# Slice s00b047b0 = the SimObj slot map (fill/find/slot lookup, entry bit test,
+# reset), the EASTL pool-owner rbtree (eraseRange / insert / copyNode) and the
+# pooled-object construct/destroy helpers plus the introsort drivers.
+# 6/21 byte-exact (slotAt, VVec::reserve, FUN_00b05770, FUN_00b057b0, curEntry,
+# curEntryBits).  The remaining 15 are complete C++ that reproduces the original
+# control flow and container semantics; the byte-exact budget is missed mostly
+# because of MSVC register allocation / store scheduling around the pool walks
+# and the float introsort pivots.  The per-row verdict is the equivalence gate
+# result measured with the flags above.
+
+00b047b0 256 FUN_00b047b0: heap-sort range helper; pops every element out of the heap in squared-distance order. Ours reproduces the pop/shift-down loop but the float distance subexpressions and the heap_adjust argument reload order are scheduled differently; equiv FAIL 5/5 valid inputs mismatched; first: eax return value (orig 40030000 vs ours 409e0000)
+00b048f0 353 FUN_00b048f0: destructor sweep over a range of 0x19a8-byte leaves (six embedded pointer vectors destroyed and freed per leaf). Ours reproduces the walk and the owned-header test exactly, but the per-vector prologue/epilogue and free ordering are laid out differently; equiv WEAK 88 valid inputs (need 200), 4.8% coverage (need 60%)
+00b04aa0 224 SimObj::fillSlot: resolve a slot from the tree by species id and store the entity. Ours differs in the slot tail/index reloads and the species compare cascade; equiv FAIL 5/9 valid inputs mismatched; first: execution (ours fake-arity: no call site before 00000000)
+00b04ba0 116 SimObj::findSlot: rbtree lower-bound then species-keyed field select. Ours keeps this/head in different registers (edi/ebp where the original uses esi/ebx) and spills the flag byte instead of pushing the zero-extended value; equiv FAIL 5/5 valid inputs mismatched; first: execution (ours faults where the original returns normally)
+00b04e00 178 FUN_00b04e00: __stdcall deserialize of a vector of ints off a stream. Ours differs in the stream-vtable reloads and the capacity-grow branch shape; equiv UNSUPPORTED only 0/400 inputs valid (discards fault(read)=365, fake-arity=34)
+00b04ed0 139 RBTree::eraseRange: erase a [first,last) range of nodes and recycle them to the pool. Ours reproduces the loop and the short-circuit empty-range special case but the recycle compare order and the delete/free branch layout differ; equiv UNSUPPORTED only 0/400 inputs valid (discards fault(read)=307, fault(write)=47, budget=25)
+00b04f70 99 RBTree::insert: lower-bound descent then AllocNode + eastl::RBTreeInsert. Ours matches the semantics (equivalence PASS) but allocates registers differently (this in edi vs esi, key pair in ebp/edx vs edi/edx) and re-reads the key fields; equiv PASS 324 valid inputs, 100.0% coverage
+00b05000 13 RBTree::copyNode: deep-copy a tiny binary tree into the pool. Structurally identical; only register-allocation differences remain (size in ecx vs eax, colour byte in cl vs al, the payload lea base esi+0x18 vs eax+8); equiv WEAK 166 valid inputs (need 200), 34.9% coverage
+00b051f0 379 FUN_00b051f0: destructor sweep over a count of 0x19a8-byte leaves (same walk as 00b048f0). The count/stride arithmetic and per-vector prologues are scheduled differently; equiv FAIL 5/5 valid inputs mismatched; first: esp after return (orig +0xc vs ours +0x4)
+00b05410 117 FUN_00b05410: introsort driver over int pointers. Ours differs in the pivot-index arithmetic and the recursion/tail-jump layout; equiv WEAK 385 valid inputs (need 200), 46.0% coverage (need 60%)
+00b054a0 259 FUN_00b054a0: introsort driver over float-keyed records. The descend call (00b04670 sort_and_visit) receives the pivot trio in a different argument order; equiv FAIL 5/47 valid inputs mismatched; first: call #0 (depth 1) argument order
+00b055c0 259 FUN_00b055c0: introsort driver over float-keyed records (variant). Same pivot argument-order divergence as 00b054a0 (descend into 00b047b0); equiv FAIL 5/81 valid inputs mismatched; first: call #0 (depth 1) argument order
+00b056e0 49 FUN_00b056e0: construct a range of pool elements at *out, copying [begin,end). MSVC keeps the cursor and end in callee-saved registers (ebx/ebp) where the original keeps the cursor in eax and re-reads the end pointer from its home slot; equiv UNSUPPORTED only 0/400 inputs valid (discards fault(write)=217, fault(read)=121)
+00b05730 18 FUN_00b05730: construct n pool elements at p, copying src each iteration. Only the callee-saved push/pop order differs (original pushes esi first, ours edi); equiv FAIL 5/5 valid inputs mismatched; first: execution (ours faults in the copied callee where the original returns normally)
+00b05800 33 SimObj::reset: release the species map and clear the constant fields. Ours hoists the mpSub_108 load above the constant stores (mov ecx,[esi+0x108]); equiv UNSUPPORTED 2 unresolved references (?Init@Sub130@@QAEXXZ, ?Finish@SelfOps@@QAEXXZ)
