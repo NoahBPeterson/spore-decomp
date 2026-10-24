@@ -1,0 +1,12 @@
+00e3a990  299  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITimeline::FindNextTrack: 299-byte rbtree walk over timeline tracks with a cTimelineTrack virtual protocol (IsEnabled +0x28, GetRange +0x38, GetTime +0xc4); only the null-return skeleton is reconstructed.
+00e3aac0  300  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITimeline::FindPreviousTrack: 300-byte reverse rbtree walk, same track virtual protocol as 00e3a990; skeleton only.
+00e3abf0  960  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITimeline::UpdateTransition: 960-byte transition evaluator (track clamping, fade windows, animator triggers); stubbed.
+00e3b0f0  125  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITimeline::StartPlayback: 144 bytes; ResetClip/SetRunning/InitGonzago and the state/mode stores reconstructed, the inlined tick-source Stopwatch restart (rdtsc vs QueryPerformanceCounter path writing +0x4f0..+0x4fc) is omitted.
+00e3b1f0  153  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITimeline::HidePanels: 171 bytes; window lookups/mode stores reconstructed, the inlined tick-source restart for the +0x510..+0x51c timer is omitted.
+00e3b2a0  236  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITimeline::LoadImage: 236-byte image load via SPUIHelpers::GetImageFromLayout / CreateImageFromResource2 plus size rounding; stubbed.
+00e3b390  566  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITimeline::HandleMessage: 566-byte message handler (palette item init, camera controller lookup, cinematic playback); stubbed.
+00e3b5d0  88  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITimeline::GetSelectedPaletteId: cached-id lookup iterating the simulator id list returned by 0x0067de90(0xc)/0x007eb100; only the cached read is reconstructed, the list layout is unresolved.
+00e3b630  53  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) IsPaletteIdPresent: id membership test over the same 0x0067de90(0xc) list; list/iterator layout unresolved, stubbed.
+00e3b670  139  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) rbtree DoInsertValue specialization (0x18-byte node, 8-byte value {Key, refcounted ptr}); needs the EASTL allocator/RBTreeInsert scaffolding, stubbed.
+00e3b700  133  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) rbtree DoInsertValue specialization (0x1c-byte node, 12-byte value {Key, x, y}); stubbed.
+00e3b790  147  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) rbtree DoInsertValue specialization (0x24-byte node, 20-byte value {Key, x, y, z, w}); stubbed.
