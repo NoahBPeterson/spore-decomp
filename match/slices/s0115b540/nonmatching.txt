@@ -1,1 +1,5 @@
 # <va>  <diff-bytes>  <reason>
+0115b540  11  LoadBitRegisterB: byte-exact except register allocation; orig uses ebx for the loaded byte + `add edx,8`, mine allocates edi + `lea ecx,[edx+8]`. ~12 source-shape variants tested, none reproduce MSVC's ebx/esi choice.
+0115b580  638  GetSideInfo: control flow and struct offsets match (mVersion +0x44, mLsf +0x3b, mGrInfo +0x154 stride 0x18, mSideInfo +0x150); diff is MSVC callee-saved allocation (orig ebp=version/edi=gri, mine edi=version/ebp=gri) cascading, plus push order. Unable to force allocator.
+0115bfd0  524  GetScaleFactorsA: variable-divisor locals reproduce orig `div` (was magic multiply, 593->524). Remaining diff is frame slot assignment for widths[] and version/g registers (orig ebx=version,esi=scalefac_compress; mine differs).
+0115c200  22  GetScaleFactorsB: only instruction scheduling; orig emits `lea eax,[esp+src]; lea ecx,[esi+dst]; mov edx,N`, mine emits dst-lea, mov edx,N, src-lea. Reorder attempts increased diff.

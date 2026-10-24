@@ -1,1 +1,5 @@
-0115b910 rw::audio::core::HELPER_CMpegLayer3B::GetScaleFactors  # ISO III_get_scale_factors twin of 01159cc0 (slen tables 0x14cb344/354, side info +0x150, gr info +0x154, scalefac 0x7c at +0x1b4); byte-exact
+0115b540 LoadBitRegisterB  # nonmatching (11 diff, register allocation only): bit-reservoir refill, mBufPtr2 +0x20, mCache +0x2c, mBitCount +0x30; Claude-coined
+0115b580 GetSideInfo  # nonmatching (638 diff, callee-saved allocation): MPEG-1/LSF side info reader; mLsf +0x3b, mNumChannels +0x18, mVersion +0x44, mCache +0x2c, mBitCount +0x30, mSideInfo +0x150, mGrInfo +0x154; Claude-coined
+0115bfd0 GetScaleFactorsA  # nonmatching (524 diff, frame slots): scalefactor width table fill; g_huffGroupLenB table, mVersion +0x44, mGrInfo +0x154; Claude-coined
+0115c200 GetScaleFactorsB  # nonmatching (22 diff, lea scheduling): scalefactor unpack into mScaleFac[ch] stride 0x7c; Claude-coined
+0115b910 GetScaleFactors  # exact
