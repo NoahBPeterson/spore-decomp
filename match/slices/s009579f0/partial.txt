@@ -1,10 +1,3 @@
 # va  diff-bytes  reason (incomplete / not equivalence-testable)
 00957c40  213  Fn00957c40 (ImageTable reset/clear): incomplete - only lock/drop-vector/unlock translated; original is a 225-byte routine handling more work; difftest NOT RUN (known incomplete)
 00958150  938  WM::ComputeClip: incomplete - best-effort AABB translation (ours 1163 bytes vs original 938); no symbol of similar size, not equivalence-tested
-00957b00  48  GetGlobalImageTable: complete logic but difftest UNSUPPORTED - lazy ctor path imports _decode_pointer; 400/400 inputs discarded
-00957bb0  92  ImageTable::Add: complete logic but difftest UNSUPPORTED - unresolved reference ?DoInsertValue@SimpleVec@@QAEXPAIABI@Z
-00957d30  16  ProcessPendingTextures: complete logic but difftest UNSUPPORTED - callee GetGlobalImageTable path imports _decode_pointer; 400/400 inputs discarded
-00958570  35  Fn00958570 (intrusive list merge/splice): complete logic but difftest UNSUPPORTED - all 400 inputs fault (fault(write)/fault(read)/pool-limit)
-009586f0  116  WindowMgr::Plot: complete logic but difftest UNSUPPORTED - imports WaitForSingleObject / _decode_pointer; 400/400 inputs discarded
-00958920  197  Fn00958920 (window event dispatch/hit-test): complete logic but difftest UNSUPPORTED - all 400 inputs fault (fault(read)/fake-arity)
-009589f0  91  WindowMgr::DispatchMsgToWindow: complete logic but difftest UNSUPPORTED - all 400 inputs fault (fault(read))
