@@ -1,1 +1,9 @@
-006aa450  79  group-name register: all calls present; this/name register roles and the inlined strlen prologue differ (this=edi/name=esi vs this=esi/name=edi)
+006aa450  79   group-name register: all calls present; this/name register roles and the inlined strlen prologue differ (this=edi/name=esi vs this=esi/name=edi)
+006aa4c0  245  rbtree<unsigned,pair<const unsigned,Variant>>::insert: complete source, insertion-tree call/vcall schedule differs; equiv PASS 100.0% cov (356 valid) [/O2 /MD /Gy /EHsc /TP]
+006aa640  254  cPropertyCommand::Execute: complete source; equiv UNSUPPORTED 0/400 valid (discards: _CxxThrowException=145, fault-read=137, fault=64) [/O2 /MD /Gy /EHsc /TP]
+006aa780  73   group-name command handler: complete source, call/register schedule differs; equiv UNSUPPORTED 0/400 valid (discards: fault-read=197, _CxxThrowException=129, fault-write=52) [/O2 /MD /Gy /EHsc /TP]
+006aa7c0  102  cPropertyManager::Shutdown: complete source, teardown call schedule differs; equiv PASS 76.3% cov (318 valid) [/O2 /MD /Gy /EHsc /TP]
+006aa910  222  bool-vector range append: complete source, memcpy/vcall/SimpleVector::resize schedule differs; equiv PASS (257 valid) [/O2 /MD /Gy /EHsc /TP]
+006aaa10  812  cPropertyManager::ParseAndAddProperty: complete source, parser/string call schedule differs; equiv WEAK 16.6% cov (382 valid) [/O2 /MD /Gy /EHsc /TP]
+006aae30  557  ~rbtree<unsigned,pair<const unsigned,Variant>> (DestroySelf): complete source, teardown call schedule differs; equiv WEAK 80.8% cov (194 valid) [/O2 /MD /Gy /EHsc /TP]
+006ab120  589  cPropertyManager::ReadResource: complete source, stream/parse call schedule differs; equiv UNSUPPORTED 0/400 valid (discards: fault-read=254, orig-abi-broken(fake)=144, fake-arity=1) [/O2 /MD /Gy /EHsc /TP]
