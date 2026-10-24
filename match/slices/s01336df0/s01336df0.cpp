@@ -151,12 +151,16 @@ void WriteText_00694f80(char* pBuffer, void* pData);
 bool Validate_00b6f860();
 bool Validate_00befb00();
 bool Validate_00c31ca0();
+bool Read_00c362d0(ISerializerReadStream* pStream, void* pData);
+bool Write_00c364e0(ISerializerWriteStream* pStream, void* pData);
+bool Validate_00c35d90();
 bool ToXml_00c6c390(void* pData, const char* pName, int depth);
 bool ToXml_00eafcf0(void* pData, const char* pName, int depth);
 bool ToXml_00595a50(void* pData, const char* pName, int depth);
 
 struct AttrStorage { char data[sizeof(Attribute)]; };
 AttrStorage cEmpire_sAttributes[19];   // 0x01572b60
+AttrStorage cItem_sAttributes[5];   // 0x01573038
 
 // @ 0x01336df0
 void InitEmpireAttributes()
@@ -274,6 +278,41 @@ void InitEmpireAttributes()
                   Read_00c33820, Write_00c332a0, ReadText_00c2e4e0, WriteText_00692fb0,
                   Validate_00c31ca0, ToXml_00eafcf0);
         *(Attribute*)&cEmpire_sAttributes[18] = a;
+    }
+}
+
+// @ 0x01337610
+void InitItemAttributes()
+{
+    {
+        Attribute a("mAmountInBundle", 0x22553f2, 0x134,
+                  Read_00572810, Write_00ac88f0, ReadText_006930b0, WriteText_00694fc0,
+                  Validate_00b1fbf0, ToXml_00acbb80);
+        *(Attribute*)&cItem_sAttributes[0] = a;
+    }
+    {
+        Attribute a("mpContainer", 0x22553f3, 0x128,
+                  Read_00c362d0, Write_00c364e0, ReadText_00c2e4e0, WriteText_00692fb0,
+                  Validate_00c35d90, ToXml_00ac8050);
+        *(Attribute*)&cItem_sAttributes[1] = a;
+    }
+    {
+        Attribute a("mType", 0x22553f4, 0x12c,
+                  Read_00572810, Write_00572840, ReadText_00692ff0, WriteText_00694ee0,
+                  Validate_00b1fbf0, ToXml_0057cde0);
+        *(Attribute*)&cItem_sAttributes[2] = a;
+    }
+    {
+        Attribute a("mDisplayType", 0x22553f5, 0x130,
+                  Read_00572810, Write_00572840, ReadText_00692ff0, WriteText_00694ee0,
+                  Validate_00b1fbf0, ToXml_0057cde0);
+        *(Attribute*)&cItem_sAttributes[3] = a;
+    }
+    {
+        Attribute a("mLoose", 0x6c3d90d, 0x124,
+                  Read_00ac8750, Write_00ac8780, ReadText_00693090, WriteText_00694fa0,
+                  Validate_00b1fbf0, ToXml_0057ce00);
+        *(Attribute*)&cItem_sAttributes[4] = a;
     }
 }
 
