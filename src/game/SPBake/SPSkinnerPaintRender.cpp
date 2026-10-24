@@ -1129,7 +1129,9 @@ extern void* g_vtblPaintD;               // 0x013f1b58
 extern "C" void* SP_MessageServer();                              // 0x0067dcc0
 int   GetPaintSystem_s0051_c470();                                   // 0x00401080
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
-void* BakeSprites_ctor(void* p);                          // 0x007b00f0
+struct BakeSprites {
+    void* Construct();                                    // 0x007b00f0 (thiscall ctor)
+};
 void  EASTL_allocator_deallocate(void* p);                // 0x00f47380
 struct RefCounted {
     uint32_t mvtbl; uint32_t pad04; uint32_t pad08;
@@ -2419,21 +2421,20 @@ PaintSystem::PaintSystem(int kind, void* a, void* b, char c, void* d, char e, ch
     *(int*)((char*)this + 0x3c) = 0;
     *(int*)((char*)this + 0x40) = 0;
     *(int*)((char*)this + 0x44) = 0;
-    *(int*)((char*)this + 0x48) = 0;
     int ps = GetPaintSystem_s0051_c470();
     int mat = *(int*)(ps + 0xc);
     void* mem = EA_alloc(0x20, "Skinner", 0, 0, 0, 0);
     void* bs = 0;
     if (mem != 0)
-        bs = BakeSprites_ctor(mem);
+        bs = ((BakeSprites*)mem)->Construct();
     void** slot = (void**)((char*)this + 0x30);
     if (bs != *slot) {
         void* old = *slot;
         if (bs != 0)
-            (*(void(__thiscall**)(void*))(((void**)*(void**)bs)[0]))(bs);
+            ((void(__thiscall*)(void*))(*(void***)bs)[0])(bs);
         *slot = bs;
         if (old != 0)
-            (*(void(__thiscall**)(void*))((*(void***)old)[1]))(old);
+            ((void(__thiscall*)(void*))(*(void***)old)[1])(old);
     }
     if (mat != 0 && *(int*)(mat + 0x10 + kind * 4) != 0)
         *(void**)((char*)this + 0x20) = *(void**)(*(int*)(mat + 0x10 + kind * 4) + 0x60);
