@@ -1,0 +1,10 @@
+00c11410 cSpatialObject::SetSpeedState  # retail ecx=creature+0xc0; sets creature mStateF98=CCB::d050(a), mValue2A0=b*(flags&0x300?1.5:1.0)
+00c11480 SP::cSPCreatureBase::IsWithinSight  # PDB candidate name; sight cone test: range==0 -> true; e4f0()*angle<range -> false; normalize delta, cos(minAngle*deg2rad) vs dot(sampleDir,dir)
+00c115d0 SP::cSPCreatureBase::funcC0h  # vtable name; gates on other->mbStealthed, clamps range by footprint radius, tail-calls IsWithinSight
+00c11690 FUN_00c11690  # builds a cTransform (pos, quaternion/facing-up rotation, scale) and drives a created visual effect: SetTransform + Start, ref released
+00c11920 SP::cSPCreatureBase::OneShotOverheadEffect  # spawns an overhead effect at position + (extents.mMax.z + 0.2) * normalized(pos)
+00c11b50 SP::cSPCreatureBase::GetBodyPartPositionAndOrientation  # reads body-part table (stride 0x2bc) at instance+0x2e4; local path transforms by instance quat/pos, world path applies PreRotateY(-halfTurn) + scale
+00c11f50 SP::cSPCreatureBase::CreateBodyEffect  # AddEffect(id) + effect::Init(partIdx); QuatHalf on part; cast obj via vtable+0xb8 to 0xee3f516e, assign refcounted to rec+0xa4, set callback 00c111b0
+00c12080 SP::cSPCreatureBase::DetachBodyEffect  # stops the effect, clears rec fields, releases +0x90 (refcount/vtable+0x170) and +0xa4 (Release), stops +0x8c
+00c12190 SP::cSPCreatureBase::PlayAnimation  # C5b0(id)==layer id; LayerManager()->GetLayer; anim V58/V08/V0C/V18/V40/V3C sequence, FUN_00c10250, stores handle at +0xe88 unless layer+0x1c==1
+00c122c0 FUN_00c122c0  # PlayAnimation(id,true,-1) then anim V44(handle, RandomFloatRange(b,a))
