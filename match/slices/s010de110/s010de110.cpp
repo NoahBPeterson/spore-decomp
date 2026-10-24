@@ -155,7 +155,13 @@ struct hkProcessCollisionInput
     bool       m_createPredictiveAgents;                // +0xc
     hkStepInfo m_stepInfo;                              // +0x10
 };
-class hkContactPoint { public: hkVector4 m_position; hkVector4 m_separatingNormal; };
+class hkContactPoint
+{
+public:
+    hkVector4 m_position;
+    hkVector4 m_separatingNormal;
+    void setFlipped(const hkContactPoint& other);       // 0x010cecf0
+};
 struct hkProcessCdPoint { hkContactPoint m_contact; uint32_t m_extra[4]; };   // 0x30 bytes
 struct hkProcessCollisionOutput
 {
@@ -256,6 +262,9 @@ struct hkConvexListAgent : hkPredGskfAgent
     uint32_t m_pad4[2];
     virtual void processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
                                   const hkProcessCollisionInput& input, hkProcessCollisionOutput& result);   // 0x010de110
+    // The list agent called with bodyA/bodyB swapped (the list is bodyA in the caller's frame).
+    void processCollisionFlip(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                              const hkProcessCollisionInput& input, hkProcessCollisionOutput& result);   // 0x010de760
 };
 
 // the agent track (stream mode) and the manifold (gsk mode) share storage at +0x30; in stream mode the
@@ -274,6 +283,178 @@ struct hkConvexListHullBody : hkCdBody
         m_motion = B.m_motion;
         m_parent = &B;
     }
+};
+
+// ---- hkListAgent support (hkListAgent.cpp) --------------------------------------------------------------
+// A list agent keeps one hkCollisionAgent per child shape of a hkConvexListShape (m_agents, hkArray<...,4>)
+// and forwards every collision query to the child agents with a temporary hkCdBody built around the child
+// shape.  Slot order of the hkCollisionAgent vtable as used here: 0 dtor, 4 clone, 8 getPenetrations,
+// 0xc getClosestPoints, 0x10 linearCast, 0x14 processCollision, 0x18 cleanup, 0x1c updateShapeCollectionFilter,
+// 0x20 invalidateTim, 0x24 warpTime.
+class hkBool  // Havok's bool class: returned through a hidden pointer
+{ public: hkBool(bool b = false) : m_value(b) {} char m_value; };
+
+// The two collectors are modelled as plain structs: the wrappers only need the object image (vtable stamp,
+// hit flag / early-out distance, user data) and the constructor writes the vtable stamp last, as retail does.
+static void* const kfBodyPairCollectorVTable[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+static void* const kfPointCollectorVTable[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+inline float hkFloatFromBits(unsigned u) { union { unsigned u; float f; } v; v.u = u; return v.f; }
+
+class hkCdBodyPairCollector  // size 0xc
+{
+public:
+    hkCdBodyPairCollector(void* pUserData)
+    {
+        m_pUserData = pUserData;
+        m_bHit = false;
+        m_vtable = (void*)kfBodyPairCollectorVTable;
+    }
+    void* m_vtable;     // +0x0 (hkCdBodyPairCollector vtable)
+    bool  m_bHit;       // +0x4
+    void* m_pUserData;  // +0x8
+};
+
+class hkCdPointCollector  // size 0xc
+{
+public:
+    hkCdPointCollector(void* pUserData)
+    {
+        m_pUserData = pUserData;
+        m_earlyOutDistance = hkFloatFromBits(0x7f7fffeeu);
+        m_vtable = (void*)kfPointCollectorVTable;
+    }
+    void* m_vtable;            // +0x0 (hkCdPointCollector vtable)
+    float m_earlyOutDistance;  // +0x4 (hkPointCollectorDefaultEarlyOutDistance)
+    void* m_pUserData;         // +0x8
+};
+
+class hkCollisionAgentV;
+class hkCollisionDispatcher;
+class hkCollisionFilter;
+struct hkLinearCastCollisionInput { uint32_t m_data[16]; };
+
+class hkCollisionInput  // leading fields shared with hkProcessCollisionInput
+{
+public:
+    hkCollisionDispatcher* m_dispatcher;              // +0x0
+    hkCollisionFilter*     m_filter;                  // +0x4
+    hkReal                 m_tolerance;               // +0x8
+    bool                   m_createPredictiveAgents;  // +0xc
+};
+
+// One agent-factory table entry of hkCollisionDispatcher (0x14 bytes).
+struct hkAgentFactoryEntry
+{
+    hkCollisionAgentV* (*m_createFunc)(const hkCdBody& childBody, const hkCdBody& bodyB,
+                                       const hkCollisionInput& input, hkContactMgr* mgr);   // +0x0
+    uint32_t m_pad[4];
+};
+
+class hkCollisionDispatcher  // only the parts the list agent consults
+{
+public:
+    uint32_t m_pad[0x190 / 4];        // +0x000
+    uint8_t  m_filterTypes[0x400];    // +0x190 shape-collection filter table, [typeA*0x20 + typeB]
+    uint8_t  m_gskFilterTypes[0x400]; // +0x590 same table used when predictive agents are created
+    hkAgentFactoryEntry m_factories[1];  // +0x990
+};
+
+class hkCollisionFilter
+{
+public:
+    virtual hkBool isCollisionEnabled(const hkCollisionInput& input, const hkCdBody& bodyB,
+                                      const hkCdBody& bodyA, const hkShape* shapeA, int subShapeIndex) = 0;  // +0x0
+};
+
+class hkCollisionAgentV
+{
+public:
+    virtual ~hkCollisionAgentV() {}                                                                    // +0x00
+    virtual hkCollisionAgentV* clone(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                     const hkCollisionInput& input, hkContactMgr* mgr) { return 0; }     // +0x04
+    virtual void getPenetrations(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                 const hkCollisionInput& input, hkCdBodyPairCollector& collector) {}    // +0x08
+    virtual void getClosestPoints(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                  const hkCollisionInput& input, hkCdPointCollector& collector) {}      // +0x0c
+    virtual void linearCast(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                            const hkLinearCastCollisionInput& input, hkCdPointCollector& collector,
+                            hkCdPointCollector* startCollector) {}                                     // +0x10
+    virtual void processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                  const hkProcessCollisionInput& input, hkProcessCollisionOutput& result) {}  // +0x14
+    virtual void cleanup() {}                                                                            // +0x18
+    virtual void updateShapeCollectionFilter(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                             const hkCollisionInput& input) {}                           // +0x1c
+    virtual void invalidateTim(hkCollisionInput& input) {}                                               // +0x20
+    virtual void warpTime(hkTime timeFrom, hkTime timeTo, hkCollisionInput& input) {}                     // +0x24
+    uint16_t          m_memSizeAndFlags;  // +0x4
+    int16_t           m_referenceCount;   // +0x6
+    hkContactMgr*     m_contactMgr;       // +0x8
+};
+
+// hkArray<hkCollisionAgentV*, 4>: 4 child agent slots are stored inline right behind the array header.
+struct hkAgentArray
+{
+    hkCollisionAgentV** m_data;      // +0x0
+    int                 m_size;      // +0x4
+    int                 m_capacityAndFlags;  // +0x8
+};
+struct hkArrayUtil
+{
+    static void _reserveExactly(hkAgentArray* array, int newCapacity, int elementSize);  // 0x0107f4a0
+};
+struct hkNullAgent
+{
+    static hkCollisionAgentV* getNullAgent();   // 0x010cd8d0
+};
+
+class hkShapeVirtual  // hkShape vtable slots the list agent calls
+{
+public:
+    virtual void s0(); virtual void s1();
+    virtual int getShapeType() const;        // +0x8
+    virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6();
+    virtual int getNumChildShapes() const;   // +0x1c
+};
+
+class hkMemory
+{
+public:
+    virtual void* m0(); virtual void* m1(); virtual void* m2(); virtual void* m3();
+    virtual void* allocate(int nbytes, int alignment);   // +0x10
+};
+extern hkMemory* g_hkMemoryInstance;              // 0x016e4178 (hkMemory::s_instance)
+extern const char hkMonitorTimerEndTag[];         // 0x0149cc34
+
+class hkListAgent : public hkCollisionAgentV
+{
+public:
+    hkListAgent(const hkCdBody& bodyA, const hkCdBody& bodyB, const hkCollisionInput& input,
+                hkContactMgr* mgr);                                                        // 0x010dedf0
+    virtual void processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                  const hkProcessCollisionInput& input, hkProcessCollisionOutput& result);  // 0x010de9e0
+    virtual void getClosestPoints(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                  const hkCollisionInput& input, hkCdPointCollector& collector);      // 0x010deae0
+    virtual void linearCast(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                            const hkLinearCastCollisionInput& input, hkCdPointCollector& collector,
+                            hkCdPointCollector* startCollector);                                    // 0x010debe0
+    virtual void getPenetrations(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                 const hkCollisionInput& input, hkCdBodyPairCollector& collector);    // 0x010dece0
+    virtual void cleanup();                                                                       // 0x010de7e0
+    virtual void updateShapeCollectionFilter(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                             const hkCollisionInput& input);                      // 0x010de890
+    virtual void invalidateTim(hkCollisionInput& input);                                          // 0x010de810
+    virtual void warpTime(hkTime timeFrom, hkTime timeTo, hkCollisionInput& input);                // 0x010de840
+    void processCollisionFlip(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                              const hkProcessCollisionInput& input, hkProcessCollisionOutput& result);  // 0x010df040
+    void getPenetrationsDefault(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                const hkCollisionInput& input, void* pUserData);                   // 0x010defc0
+    void getClosestPointsDefault(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                 const hkCollisionInput& input, void* pUserData);                  // 0x010df000
+    static hkCollisionAgentV* createListAAgent(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                               const hkCollisionInput& input, hkContactMgr* mgr);  // 0x010df0c0
+    hkAgentArray       m_agents;       // +0xc
+    hkCollisionAgentV* m_inlineAgents[4];  // +0x18 (inline storage of m_agents)
 };
 
 // @ 0x010de110
@@ -417,4 +598,276 @@ STREAM_PROCESS:
 
 END:
     HK_TIMER_END_LIST();
+}
+
+// ============================================================================================================
+// hkConvexListAgent::processCollisionFlip -- run the convex-list agent with the two bodies swapped, then flip
+// every contact point that was created (the caller had the list as bodyB).
+// ============================================================================================================
+// @ 0x010de760
+void hkConvexListAgent::processCollisionFlip(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                             const hkProcessCollisionInput& input, hkProcessCollisionOutput& result)
+{
+    const hkTime oldToiTime = result.m_toiTime;
+    hkProcessCdPoint* pStart = result.m_firstFreeContactPoint;
+    hkConvexListAgent::processCollision(bodyB, bodyA, input, result);
+    for (hkProcessCdPoint* p = pStart; p < result.m_firstFreeContactPoint; ++p)
+        p->m_contact.setFlipped(p->m_contact);
+    if (oldToiTime != result.m_toiTime) {
+        result.m_toiContact.m_separatingNormal.x = -result.m_toiContact.m_separatingNormal.x;
+        result.m_toiContact.m_separatingNormal.y = -result.m_toiContact.m_separatingNormal.y;
+        result.m_toiContact.m_separatingNormal.z = -result.m_toiContact.m_separatingNormal.z;
+    }
+}
+
+// ============================================================================================================
+// hkListAgent::cleanup -- release every child agent, then delete the list agent.
+// ============================================================================================================
+// @ 0x010de7e0
+void hkListAgent::cleanup()
+{
+    for (int i = 0; i < m_agents.m_size; ++i)
+        m_agents.m_data[i]->cleanup();
+    delete this;
+}
+
+// ============================================================================================================
+// hkListAgent::invalidateTim
+// ============================================================================================================
+// @ 0x010de810
+void hkListAgent::invalidateTim(hkCollisionInput& input)
+{
+    for (int i = 0; i < m_agents.m_size; ++i)
+        m_agents.m_data[i]->invalidateTim(input);
+}
+
+// ============================================================================================================
+// hkListAgent::warpTime
+// ============================================================================================================
+// @ 0x010de840
+void hkListAgent::warpTime(hkTime timeFrom, hkTime timeTo, hkCollisionInput& input)
+{
+    for (int i = 0; i < m_agents.m_size; ++i)
+        m_agents.m_data[i]->warpTime(timeFrom, timeTo, input);
+}
+
+// ============================================================================================================
+// hkListAgent::updateShapeCollectionFilter -- re-create the child agents whose filter verdict changed.
+// ============================================================================================================
+// @ 0x010de890
+void hkListAgent::updateShapeCollectionFilter(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                              const hkCollisionInput& input)
+{
+    const hkConvexListShape* shapeA = (const hkConvexListShape*)bodyA.m_shape;
+    hkCdBody childBody;
+    childBody.m_motion = bodyA.m_motion;
+    childBody.m_parent = &bodyA;
+    for (int i = 0; i < m_agents.m_size; ++i) {
+        childBody.m_shape = shapeA->m_subShapesData[i].m_shape;
+        childBody.m_shapeKey = i;
+        if (input.m_filter->isCollisionEnabled(input, bodyB, bodyA, bodyA.m_shape, i).m_value) {
+            if (m_agents.m_data[i] == hkNullAgent::getNullAgent()) {
+                const int typeA = ((const hkShapeVirtual*)childBody.m_shape)->getShapeType();
+                const int typeB = ((const hkShapeVirtual*)bodyB.m_shape)->getShapeType();
+                const hkCollisionDispatcher* dispatcher = input.m_dispatcher;
+                const int entry =
+                    (input.m_createPredictiveAgents ? dispatcher->m_gskFilterTypes : dispatcher->m_filterTypes)
+                        [typeA * 0x20 + typeB];
+                m_agents.m_data[i] = dispatcher->m_factories[entry].m_createFunc(childBody, bodyB, input, m_contactMgr);
+            } else {
+                m_agents.m_data[i]->updateShapeCollectionFilter(childBody, bodyB, input);
+            }
+        } else {
+            if (m_agents.m_data[i] != hkNullAgent::getNullAgent()) {
+                m_agents.m_data[i]->cleanup();
+                m_agents.m_data[i] = hkNullAgent::getNullAgent();
+            }
+        }
+    }
+}
+
+// ============================================================================================================
+// hkListAgent::processCollision -- forward to every child agent.
+// ============================================================================================================
+// @ 0x010de9e0
+void hkListAgent::processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                   const hkProcessCollisionInput& input, hkProcessCollisionOutput& result)
+{
+    HK_TIMER_CMD("Ttlist");
+    const hkConvexListShape* shapeA = (const hkConvexListShape*)bodyA.m_shape;
+    hkCdBody childBody;
+    childBody.m_parent = &bodyA;
+    childBody.m_motion = bodyA.m_motion;
+    const int numAgents = m_agents.m_size;
+    hkCollisionAgentV** ppChild = m_agents.m_data;
+    for (int i = 0; i < numAgents; ++ppChild, ++i) {
+        childBody.m_shape = shapeA->m_subShapesData[i].m_shape;
+        childBody.m_shapeKey = i;
+        (*ppChild)->processCollision(childBody, bodyB, input, result);
+    }
+    HK_TIMER_CMD(hkMonitorTimerEndTag);
+}
+
+// ============================================================================================================
+// hkListAgent::getClosestPoints
+// ============================================================================================================
+// @ 0x010deae0
+void hkListAgent::getClosestPoints(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                   const hkCollisionInput& input, hkCdPointCollector& collector)
+{
+    HK_TIMER_CMD("TtListAgent");
+    const hkConvexListShape* shapeA = (const hkConvexListShape*)bodyA.m_shape;
+    hkCdBody childBody;
+    childBody.m_parent = &bodyA;
+    childBody.m_motion = bodyA.m_motion;
+    const int numAgents = m_agents.m_size;
+    hkCollisionAgentV** ppChild = m_agents.m_data;
+    for (int i = 0; i < numAgents; ++ppChild, ++i) {
+        childBody.m_shape = shapeA->m_subShapesData[i].m_shape;
+        childBody.m_shapeKey = i;
+        (*ppChild)->getClosestPoints(childBody, bodyB, input, collector);
+    }
+    HK_TIMER_CMD(hkMonitorTimerEndTag);
+}
+
+// ============================================================================================================
+// hkListAgent::linearCast
+// ============================================================================================================
+// @ 0x010debe0
+void hkListAgent::linearCast(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                             const hkLinearCastCollisionInput& input, hkCdPointCollector& collector,
+                             hkCdPointCollector* startCollector)
+{
+    HK_TIMER_CMD("TtListAgent");
+    const hkConvexListShape* shapeA = (const hkConvexListShape*)bodyA.m_shape;
+    hkCdBody childBody;
+    childBody.m_parent = &bodyA;
+    childBody.m_motion = bodyA.m_motion;
+    const int numAgents = m_agents.m_size;
+    hkCollisionAgentV** ppChild = m_agents.m_data;
+    for (int i = 0; i < numAgents; ++ppChild, ++i) {
+        childBody.m_shape = shapeA->m_subShapesData[i].m_shape;
+        childBody.m_shapeKey = i;
+        (*ppChild)->linearCast(childBody, bodyB, input, collector, startCollector);
+    }
+    HK_TIMER_CMD(hkMonitorTimerEndTag);
+}
+
+// ============================================================================================================
+// hkListAgent::getPenetrations -- stop at the first child that reports a penetration.
+// ============================================================================================================
+// @ 0x010dece0
+void hkListAgent::getPenetrations(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                  const hkCollisionInput& input, hkCdBodyPairCollector& collector)
+{
+    HK_TIMER_CMD("TtListAgent");
+    const hkConvexListShape* shapeA = (const hkConvexListShape*)bodyA.m_shape;
+    hkCdBody childBody;
+    childBody.m_motion = bodyA.m_motion;
+    childBody.m_parent = &bodyA;
+    for (int i = 0; i < m_agents.m_size; ++i) {
+        childBody.m_shape = shapeA->m_subShapesData[i].m_shape;
+        childBody.m_shapeKey = i;
+        m_agents.m_data[i]->getPenetrations(childBody, bodyB, input, collector);
+        if (collector.m_bHit)
+            break;
+    }
+    HK_TIMER_CMD(hkMonitorTimerEndTag);
+}
+
+// ============================================================================================================
+// hkListAgent::hkListAgent -- create one agent per child shape.
+// ============================================================================================================
+// @ 0x010dedf0
+hkListAgent::hkListAgent(const hkCdBody& bodyA, const hkCdBody& bodyB, const hkCollisionInput& input,
+                         hkContactMgr* mgr)
+{
+    m_contactMgr = mgr;
+    m_referenceCount = 1;
+    m_agents.m_data = m_inlineAgents;
+    m_agents.m_size = 0;
+    m_agents.m_capacityAndFlags = (int)0x80000004;
+
+    const hkShapeVirtual* shapeA = (const hkShapeVirtual*)bodyA.m_shape;
+    const int numChildShapes = shapeA->getNumChildShapes();
+    if ((m_agents.m_capacityAndFlags & 0x3fffffff) < numChildShapes) {
+        int newCapacity = (m_agents.m_capacityAndFlags & 0x3fffffff) * 2;
+        if (newCapacity < numChildShapes)
+            newCapacity = numChildShapes;
+        hkArrayUtil::_reserveExactly(&m_agents, newCapacity, 4);
+    }
+    m_agents.m_size = numChildShapes;
+
+    const hkConvexListShape* list = (const hkConvexListShape*)bodyA.m_shape;
+    hkCdBody childBody;
+    childBody.m_motion = bodyA.m_motion;
+    childBody.m_parent = &bodyA;
+    for (int i = 0; i < m_agents.m_size; ++i) {
+        childBody.m_shape = list->m_subShapesData[i].m_shape;
+        childBody.m_shapeKey = i;
+        if (input.m_filter->isCollisionEnabled(input, bodyB, bodyA, bodyA.m_shape, i).m_value) {
+            const int typeA = ((const hkShapeVirtual*)childBody.m_shape)->getShapeType();
+            const int typeB = ((const hkShapeVirtual*)bodyB.m_shape)->getShapeType();
+            const hkCollisionDispatcher* dispatcher = input.m_dispatcher;
+            const int entry =
+                (input.m_createPredictiveAgents ? dispatcher->m_gskFilterTypes : dispatcher->m_filterTypes)
+                    [typeA * 0x20 + typeB];
+            m_agents.m_data[i] = dispatcher->m_factories[entry].m_createFunc(childBody, bodyB, input, mgr);
+        } else {
+            m_agents.m_data[i] = hkNullAgent::getNullAgent();
+        }
+    }
+}
+
+// ============================================================================================================
+// hkListAgent::processCollisionFlip -- body-swapped wrapper around hkListAgent::processCollision.
+// ============================================================================================================
+// @ 0x010df040
+void hkListAgent::processCollisionFlip(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                       const hkProcessCollisionInput& input, hkProcessCollisionOutput& result)
+{
+    const hkTime oldToiTime = result.m_toiTime;
+    hkProcessCdPoint* pStart = result.m_firstFreeContactPoint;
+    hkListAgent::processCollision(bodyB, bodyA, input, result);
+    for (hkProcessCdPoint* p = pStart; p < result.m_firstFreeContactPoint; ++p)
+        p->m_contact.setFlipped(p->m_contact);
+    if (oldToiTime != result.m_toiTime) {
+        result.m_toiContact.m_separatingNormal.x = -result.m_toiContact.m_separatingNormal.x;
+        result.m_toiContact.m_separatingNormal.y = -result.m_toiContact.m_separatingNormal.y;
+        result.m_toiContact.m_separatingNormal.z = -result.m_toiContact.m_separatingNormal.z;
+    }
+}
+
+// ============================================================================================================
+// hkListAgent::getPenetrationsDefault -- run getPenetrations with a throw-away body-pair collector.
+// ============================================================================================================
+// @ 0x010defc0
+void hkListAgent::getPenetrationsDefault(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                         const hkCollisionInput& input, void* pUserData)
+{
+    hkCdBodyPairCollector collector(pUserData);
+    hkListAgent::getPenetrations(bodyB, bodyA, input, collector);
+}
+
+// ============================================================================================================
+// hkListAgent::getClosestPointsDefault -- run getClosestPoints with a throw-away point collector.
+// ============================================================================================================
+// @ 0x010df000
+void hkListAgent::getClosestPointsDefault(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                          const hkCollisionInput& input, void* pUserData)
+{
+    hkCdPointCollector collector(pUserData);
+    hkListAgent::getClosestPoints(bodyB, bodyA, input, collector);
+}
+
+// ============================================================================================================
+// hkListAgent::createListAAgent -- factory entry stored in hkCollisionDispatcher's agent table.
+// ============================================================================================================
+// @ 0x010df0c0
+hkCollisionAgentV* hkListAgent::createListAAgent(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                                 const hkCollisionInput& input, hkContactMgr* mgr)
+{
+    hkListAgent* agent = (hkListAgent*)g_hkMemoryInstance->allocate(0x28, 0x1c);
+    agent->m_memSizeAndFlags = 0x28;
+    return new (agent) hkListAgent(bodyA, bodyB, input, mgr);
 }

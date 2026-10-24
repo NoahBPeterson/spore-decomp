@@ -1,1 +1,20 @@
 010de110 hkConvexListAgent::processCollision  # LtCvxLst monitor tag; calls hkPredGskfAgent::processCollision (0x010d9f60) on a temp hkConvexListConvexShape body and switches between agent-track (stream) and GSK modes
+010de760 ?processCollisionFlip@hkConvexListAgent@@QAEXABVhkCdBody@@0ABUhkProcessCollisionInput@@AAUhkProcessCollisionOutput@@@Z  # list is bodyB: swaps bodies, flips every new contact point, negates the TOI separating normal (no "LtCvxLst" timer)
+010de7e0 ?cleanup@hkListAgent@@UAEXXZ  # cleanup() on every child agent, then delete this
+010de810 ?invalidateTim@hkListAgent@@UAEXAAVhkCollisionInput@@@Z  # forwards invalidateTim to every child agent
+010de840 ?warpTime@hkListAgent@@UAEXMMAAVhkCollisionInput@@@Z  # forwards warpTime(from, to, input) to every child agent
+010de890 ?updateShapeCollectionFilter@hkListAgent@@UAEXABVhkCdBody@@0ABVhkCollisionInput@@@Z  # per-child filter verdict: create the agent from hkCollisionDispatcher::m_factories when it is the null agent, update it otherwise, cleanup + null agent when filtered out
+010de9e0 ?processCollision@hkListAgent@@UAEXABVhkCdBody@@0ABUhkProcessCollisionInput@@AAUhkProcessCollisionOutput@@@Z  # "Ttlist" timer; forwards processCollision to every child agent with a temp hkCdBody {childShape, i, bodyA.m_motion, &bodyA}
+010deae0 ?getClosestPoints@hkListAgent@@UAEXABVhkCdBody@@0ABVhkCollisionInput@@AAVhkCdPointCollector@@@Z  # "TtListAgent" timer; forwards getClosestPoints to every child agent
+010debe0 ?linearCast@hkListAgent@@UAEXABVhkCdBody@@0ABUhkLinearCastCollisionInput@@AAVhkCdPointCollector@@PAV4@@Z  # "TtListAgent" timer; forwards linearCast(childBody, bodyB, input, collector, startCollector) to every child agent
+010dece0 ?getPenetrations@hkListAgent@@UAEXABVhkCdBody@@0ABVhkCollisionInput@@AAVhkCdBodyPairCollector@@@Z  # "TtListAgent" timer; forwards getPenetrations to every child agent, stops at the first collector hit
+010dedf0 ??0hkListAgent@@QAE@ABVhkCdBody@@0ABVhkCollisionInput@@PAUhkContactMgr@@@Z  # ctor: contactMgr, refCount=1, inline hkArray<agent,4>, reserve max(2*capacity, childCount), one agent per child shape
+010defc0 ?getPenetrationsDefault@hkListAgent@@QAEXABVhkCdBody@@0ABVhkCollisionInput@@PAX@Z  # builds a hkCdBodyPairCollector{userData, hit=false} and calls getPenetrations with bodyA/bodyB swapped
+010df000 ?getClosestPointsDefault@hkListAgent@@QAEXABVhkCdBody@@0ABVhkCollisionInput@@PAX@Z  # builds a hkCdPointCollector{userData, earlyOut=0x7f7fffee} and calls getClosestPoints with bodyA/bodyB swapped
+010df040 ?processCollisionFlip@hkListAgent@@QAEXABVhkCdBody@@0ABUhkProcessCollisionInput@@AAUhkProcessCollisionOutput@@@Z  # list agent's body-swapped processCollision (same flip logic as hkConvexListAgent::processCollisionFlip)
+010df0c0 ?createListAAgent@hkListAgent@@SAPAVhkCollisionAgentV@@ABVhkCdBody@@0ABVhkCollisionInput@@PAUhkContactMgr@@@Z  # agent-factory entry: hkMemory::s_instance->allocate(0x28, 0x1c), memSize=0x28, placement-new hkListAgent
+010cecf0 ?setFlipped@hkContactPoint@@QAEXABV1@@Z  # contact point flipped in place (used by both processCollisionFlip wrappers)
+010cd8d0 ?getNullAgent@hkNullAgent@@SAPAVhkCollisionAgent@@XZ  # shared null agent instance
+0107f4a0 ?_reserveExactly@hkArrayUtil@@SAXAAV?$hkArray@PAVhkCollisionAgent@@$03@@HH@Z  # exact hkArray growth used by the hkListAgent ctor
+016e4178 g_hkMemoryInstance  # hkMemory::s_instance, allocate() is vtable slot +0x10
+0149cc34 hkMonitorTimerEndTag  # "end of monitor timer list" string used by every HK_TIMER_CMD in this slice
