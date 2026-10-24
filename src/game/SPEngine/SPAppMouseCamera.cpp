@@ -201,10 +201,13 @@ public:
     void Update(int a, void* ed);                      // 0x007da9f0
 };  // namespace SP
 }
-void SetNearFarClipPlane(void*, float);   // 0x007c5350
-void SetClipPlane1(void*, float);         // 0x007c4ba0
-void SetClipPlane2(void*, float);         // 0x007c4bc0
-void ApplyTransformToScene(void*, cTransform*);  // 0x007c4d00
+// The viewer handed in as `ed`: its plane/transform setters are __thiscall members.
+struct cViewerArg_s007d_a2d0 {
+    void SetNearFarClipPlane(float);          // 0x007c5350
+    void SetClipPlane1(float);                // 0x007c4ba0
+    void SetClipPlane2(float);                // 0x007c4bc0
+    void ApplyTransformToScene(cTransform*);  // 0x007c4d00
+};
 static const float kPi      = 3.1415927410125732f;
 static const float kNegFour = -4.0f;
 static const float k0025    = 0.0024999999441206455f;
@@ -328,11 +331,11 @@ bool SP::cMouseCameraController_s007d_a2d0::StartDrag(int a, int b, int c, int d
 void SP::cMouseCameraController_s007d_a2d0::Update(int a, void* ed)
 {
     if (mFieldOfView.mCurrent > 0.0f)
-        SetNearFarClipPlane(ed, mFieldOfView.mCurrent * kRadToDeg);
+        ((cViewerArg_s007d_a2d0*)ed)->SetNearFarClipPlane(mFieldOfView.mCurrent * kRadToDeg);
     if (mNearClip > 0.0f)
-        SetClipPlane1(ed, mNearClip);
+        ((cViewerArg_s007d_a2d0*)ed)->SetClipPlane1(mNearClip);
     if (mFarClip > 0.0f)
-        SetClipPlane2(ed, mFarClip);
+        ((cViewerArg_s007d_a2d0*)ed)->SetClipPlane2(mFarClip);
 
     cTransform t;
     t.mFlags = 0;
@@ -344,7 +347,7 @@ void SP::cMouseCameraController_s007d_a2d0::Update(int a, void* ed)
     t.mRotation.Assign(g_identity3);
 
     BuildTransform(&t);
-    ApplyTransformToScene(ed, &t);
+    ((cViewerArg_s007d_a2d0*)ed)->ApplyTransformToScene(&t);
 
     float lo = -kPi;
     float range = kPi - lo;

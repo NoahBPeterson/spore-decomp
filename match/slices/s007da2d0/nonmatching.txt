@@ -1,8 +1,8 @@
 007da2d0  650  cMouseCameraController::ApplyMotion; float expression scheduling and inlined exp differ
 007da5f0  242  cMouseCameraController::BuildTransform; translation-vector schedule / negation order differ
-007da790  -    SP::CreateMouseCameraController; SEH factory frame and allocator inline not reproduced; equiv FAIL (ours faults writing at 007d9fd6 inside ctor call where original returns; allocator/ctor stub shape)
+007da790  85  SP::CreateMouseCameraController; the ctor call is __thiscall (this in ecx, one stack arg) via a local ControllerCtor struct, so the allocation pointer is no longer pushed as a stack arg; SEH factory frame not reproduced [equiv: PASS 368/1500 valid 83.9% cov, flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast]
 007da800  229  cMouseCameraController::ProcessInput; modifier dispatch + prev-modifier scan call shape differ
 007da910  168  cMouseCameraController::StartDrag; x87 exp inline and field-copy flavour differ
-007da9f0  629  cMouseCameraController::Update; large float lerp/wrap schedule differs
+007da9f0  730  cMouseCameraController::Update; the viewer setters (SetNearFarClipPlane/SetClipPlane1/SetClipPlane2/ApplyTransformToScene) are __thiscall members of the passed viewer, now called through a cViewerArg cast, so `ed` lands in ecx instead of on the stack; large float lerp/wrap schedule differs [equiv: PASS 520/600 valid 96.2% cov, flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast]
 007db0c0  191  PluginManager::Load; constant-arg block and register allocation differ
 007dae20  568  SP::RunOfflineWorld; full loop/calls reproduced (stopwatch, eastl::basic_string message payload); frame size, dt float schedule and sprintf/x87 formatting differ

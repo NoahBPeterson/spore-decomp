@@ -130,10 +130,13 @@ struct cSwarmEditor {
     char pad[0x1c9];
 };
 
-void SetNearFarClipPlane(void*, float);   // 0x007c5350
-void SetClipPlane1(void*, float);         // 0x007c4ba0
-void SetClipPlane2(void*, float);         // 0x007c4bc0
-void ApplyTransformToScene(void*, cTransform*);  // 0x007c4d00
+// The viewer handed in as `ed`: its plane/transform setters are __thiscall members.
+struct cViewerArg {
+    void SetNearFarClipPlane(float);          // 0x007c5350
+    void SetClipPlane1(float);                // 0x007c4ba0
+    void SetClipPlane2(float);                // 0x007c4bc0
+    void ApplyTransformToScene(cTransform*);  // 0x007c4d00
+};
 
 static const float kPi      = 3.1415927410125732f;
 static const float kNegFour = -4.0f;
@@ -250,7 +253,11 @@ void SP::cMouseCameraController::BuildTransform(cTransform* out)
 // 0x007da790  SP::CreateMouseCameraController
 // ===========================================================================
 void* EAllocApp(int size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
-SP::cMouseCameraController* ConstructController(SP::cMouseCameraController*, void*);  // 0x007d9fb0
+
+// The controller constructor is a __thiscall member: this in ecx, one stack arg.
+struct ControllerCtor {
+    void* Init(void* arg);   // 0x007d9fb0
+};
 
 // @ 0x007da790
 void* SP_CreateMouseCameraController(void* arg)
@@ -258,7 +265,7 @@ void* SP_CreateMouseCameraController(void* arg)
     SP::cMouseCameraController* p =
         (SP::cMouseCameraController*)EAllocApp(0x124, "App", 0, 0, 0, 0);
     if (p) {
-        return ConstructController(p, arg);
+        return ((ControllerCtor*)p)->Init(arg);
     }
     return 0;
 }
@@ -350,11 +357,11 @@ bool SP::cMouseCameraController::StartDrag(int a, int b, int c, int d)
 void SP::cMouseCameraController::Update(int a, void* ed)
 {
     if (mFieldOfView.mCurrent > 0.0f)
-        SetNearFarClipPlane(ed, mFieldOfView.mCurrent * kRadToDeg);
+        ((cViewerArg*)ed)->SetNearFarClipPlane(mFieldOfView.mCurrent * kRadToDeg);
     if (mNearClip > 0.0f)
-        SetClipPlane1(ed, mNearClip);
+        ((cViewerArg*)ed)->SetClipPlane1(mNearClip);
     if (mFarClip > 0.0f)
-        SetClipPlane2(ed, mFarClip);
+        ((cViewerArg*)ed)->SetClipPlane2(mFarClip);
 
     cTransform t;
     t.mFlags = 0;
@@ -366,7 +373,7 @@ void SP::cMouseCameraController::Update(int a, void* ed)
     t.mRotation.Assign(g_identity3);
 
     BuildTransform(&t);
-    ApplyTransformToScene(ed, &t);
+    ((cViewerArg*)ed)->ApplyTransformToScene(&t);
 
     float lo = -kPi;
     float range = kPi - lo;
