@@ -82,6 +82,7 @@ struct cHexPointGenerator {
     PointVector mPoints;            // +0x50
 
     void Generate(float startDist);     // @ 0x00afc640
+    void GenerateRing(int ringCount);   // @ 0x00afcc80
 };
 
 static inline Vec3 Mul(const Vec3& v, float s) { return Vec3(v.x * s, v.y * s, v.z * s); }
@@ -160,6 +161,96 @@ void cHexPointGenerator::Generate(float startDist)
         cur.x = ring[5].x + cur.x;
         cur.y = ring[5].y + cur.y;
         cur.z = ring[5].z + cur.z;
+        for (int j = 0; j < 6; ++j) {
+            if (i > 0) {
+                Vec3 d = ring[j];
+                for (int m = i; m != 0; --m) {
+                    const Vec3* p = &cur;
+                    Vec3 pt;
+                    if (!mbFlat) {
+                        float inv = InvLength(cur.x, cur.y, cur.z);
+                        float sc = mScale;
+                        Vec3 sd;
+                        sd.x = (cur.x * inv) * sc;
+                        sd.y = (cur.y * inv) * sc;
+                        sd.z = (cur.z * inv) * sc;
+                        Vec3 surf = GetPlanetModel()->DirectionToSurfacePosition(cur);
+                        pt.x = sd.x + surf.x;
+                        pt.y = surf.y + sd.y;
+                        pt.z = surf.z + sd.z;
+                        p = &pt;
+                    }
+                    mPoints.push_back(PointElem(false, 0, 0, *p));
+                    cur.x = d.x + cur.x;
+                    cur.y = d.y + cur.y;
+                    cur.z = d.z + cur.z;
+                }
+            }
+        }
+    }
+}
+
+// @ 0x00afcc80
+// Appends ringCount more hexagon rings to the point vector: advances mMaxRadius by ringCount cells
+// and starts at the last fully generated ring (floor of the old radius), keeping whatever points the
+// vector already holds (no clear, no mCount reset).
+void cHexPointGenerator::GenerateRing(int ringCount)
+{
+    const Vec3* pc = &gZeroVec3;
+    if (!mbFlat) pc = &mDirection;
+    Vec3 center = *pc;
+
+    Vec3 normal;
+    const Vec3* pn;
+    if (!mbFlat) {
+        float inv = InvLength(mDirection.x, mDirection.y, mDirection.z);
+        normal.x = mDirection.x * inv;
+        normal.y = mDirection.y * inv;
+        normal.z = mDirection.z * inv;
+        pn = &normal;
+    } else {
+        pn = &gUpVec3;
+    }
+    Vec3 up = *pn;
+
+    Vec3 side;
+    side.x = up.y * mAxis.z - up.z * mAxis.y;
+    side.y = up.z * mAxis.x - up.x * mAxis.z;
+    side.z = up.x * mAxis.y - up.y * mAxis.x;
+
+    float edge = mCellRadius * 2.0f;
+    float invEdge = 1.0f / edge;
+    int oldRings = FloorToInt((mMaxRadius - mCellRadius) * invEdge + 1.0f);
+
+    float newMax = (float)ringCount * edge + mMaxRadius;
+    mMaxRadius = newMax;
+    int newRings = FloorToInt((newMax - mCellRadius) * invEdge + 1.0f);
+    int numRings = (newRings < oldRings + 1) ? oldRings + 1 : newRings;
+
+    float angle = 0.0f;
+    float step = gTwoPi * 0.16666667f;
+    Vec3 ring[6];
+    for (int k = 0; k < 6; ++k) {
+        float s = (float)sin(angle);
+        Vec3 sv = Mul(side, s);
+        float c = (float)cos(angle);
+        Vec3 av = Mul(mAxis, c);
+        ring[k].x = (av.x + sv.x) * edge;
+        ring[k].y = (av.y + sv.y) * edge;
+        ring[k].z = (av.z + sv.z) * edge;
+        angle = step + angle;
+    }
+
+    float kf = (float)(oldRings - 1);
+    Vec3 cur;
+    cur.x = ring[4].x * kf + center.x;
+    cur.y = ring[4].y * kf + center.y;
+    cur.z = ring[4].z * kf + center.z;
+
+    for (int i = oldRings; i < numRings; ++i) {
+        cur.x = ring[4].x + cur.x;
+        cur.y = ring[4].y + cur.y;
+        cur.z = ring[4].z + cur.z;
         for (int j = 0; j < 6; ++j) {
             if (i > 0) {
                 Vec3 d = ring[j];
