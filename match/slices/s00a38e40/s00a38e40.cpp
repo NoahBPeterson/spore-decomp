@@ -501,8 +501,10 @@ bool cEventModifier::CommandResolve(Command* cmd) {
 // @ 0x00a39c80
 bool cEventModifier::Shutdown() {
     ReleasePrimitives();
-    eastl_VecInsert(mEventModifiers.mpBegin, mEventModifiers.mpEnd, 0);
-    mEventModifiers.mpEnd -= (mEventModifiers.mpEnd - mEventModifiers.mpBegin);
+    cEventModifierPrimitive** begin = mEventModifiers.mpBegin;
+    cEventModifierPrimitive** end = mEventModifiers.mpEnd;
+    eastl_VecInsert(begin, end, 0);
+    mEventModifiers.mpEnd -= (end - begin);
     mModifierMap.Clear();
     return true;
 }
