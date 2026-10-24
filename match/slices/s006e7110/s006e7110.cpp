@@ -69,6 +69,7 @@ extern "C" void  FUN_007c3f70();
 extern "C" void  FUN_0076acd0();
 extern "C" void  FUN_007a84d0();
 extern "C" int   rw_VertexDescriptor_AreEqual(int, int);
+void __fastcall FUN_006e7270(void* self, int dummy, void* a, int arg);  // 0x006e7270
 extern int* g_1618d10;
 
 volatile int g_host3Sink;
@@ -97,7 +98,7 @@ void Host3::DispatchList(unsigned char* list, int arg)
         int i = 0;
         unsigned char* p = list;
         do {
-            Method7270(*(void**)(p + 4), (void*)arg);
+            FUN_006e7270(this, 0, *(void**)(p + 4), arg);
             ++i;
             p += 4;
         } while (i < (int)(unsigned char)*list);
@@ -272,10 +273,12 @@ int Host3::Method7fa0(int index, int value)
         return fn(p, index, value);
     }
     if (index >= 0) {
-        int count = (*(int*)((char*)this + 0x1bc) - *(int*)((char*)this + 0x1b8)) / 0x68;
+        int n = *(int*)((char*)this + 0x1bc) - *(int*)((char*)this + 0x1b8);
+        int count = n / 0x68;
         if (index < count) {
             *(char*)(e + 0x50) = (char)value;
         }
+        return (int)(0x4ec4ec4fu * (unsigned)n);
     }
     return (int)this;
 }
