@@ -301,9 +301,10 @@ bool DragDropCaptureWin::Sub8040e0(Cb* arg1, void* arg2) {
 
 // 0x008042f0 : event handler
 bool DragDropCaptureWin::OnEvent(int arg, void* pe) {
+    bool ret = true;      // return value
     bool bVar1 = false;   // used as bl
     bool bVar2 = false;   // [esp+0xe]
-    unsigned char flag10 = 0; // [esp+0x10]
+    bool flag10 = false;  // [esp+0x10]
     int* e = (int*)pe;
     switch (e[2]) {
     case 1:
@@ -339,8 +340,8 @@ bool DragDropCaptureWin::OnEvent(int arg, void* pe) {
     }
     Sub803e60();
     if (bVar1) {
-        Dispose(flag10 != 0);
-        return true;
+        Dispose(flag10);
+        return ret;
     }
     if (bVar2) {
         if (a.fn == b.fn && a.ctx == b.ctx) {
@@ -352,7 +353,7 @@ bool DragDropCaptureWin::OnEvent(int arg, void* pe) {
             SendEvent(&a, 0x7be2446);
         }
     }
-    return true;
+    return ret;
 }
 
 // 0x008044a0 scalar deleting destructor
