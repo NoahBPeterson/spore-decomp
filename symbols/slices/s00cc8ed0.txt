@@ -1,0 +1,19 @@
+00cc8ed0 FUN_00cc8ed0  # Ghidra FUN; TribeStrategy member: build the posse item for one tribe member (allocate the tribe or baby flavour, register it with the display strategy, push the item's tribe state back); not byte-exact
+00cc9040 FUN_00cc9040  # Ghidra FUN; TribeStrategy member: look up the entity's posse slot (the 0x00c0b770 gate picks the derived slot or slot 5) and add the item back to the posse; byte-exact
+00cc90a0 FUN_00cc90a0  # Ghidra FUN; TribeStrategy member: same slot lookup but returns the item found in the posse; byte-exact
+00cc90f0 FUN_00cc90f0  # Ghidra FUN; TribeStrategy member: re-home the item when the entity's slot and the given index's slot differ; byte-exact
+00cc91b0 FUN_00cc91b0  # Ghidra FUN; TribeStrategy member: broadcast the value to the six child slots that are present; byte-exact
+00cc91e0 FUN_00cc91e0  # Ghidra FUN; TribeStrategy member: compare the summed audio-item system value with the summed range size and broadcast the matching tick; byte-exact
+00cc9270 FUN_00cc9270  # Ghidra FUN; TribeStrategy member: union every non-empty posse slot's bounds into *out (x/y minimised, z/w maximised); byte-exact
+00cc9360 FUN_00cc9360  # Ghidra FUN; TribeStrategy member: true when every present child slot has enough spare audio items for its range; byte-exact
+00cc93b0 FUN_00cc93b0  # Ghidra FUN; TribeStrategy member: show/hide the strategy UI (global UI, nested items, icon sub-object, extra interface, HUD entry, event log); byte-exact
+00cc9430 FUN_00cc9430  # Ghidra FUN; TribeStrategy member: tear the six child slots down in reverse and install the IEventModifier base vtable; byte-exact
+00cc9460 FUN_00cc9460  # Ghidra FUN (PDB hint SP::cTribeDisplayStrategy::MakeTribeIcon); build one tribe object's minimap icon (kind/position/colour); not byte-exact
+00cc9640 FUN_00cc9640  # Ghidra FUN (PDB hint SP::cTribeDisplayStrategy::SetNestIcon); add/remove the nest icon and keep its handle for the window; byte-exact
+00cc9740 FUN_00cc9740  # Ghidra FUN; add/remove the minimap icon for an entity from the 0x24-byte icon description; byte-exact
+00cc9830 FUN_00cc9830  # Ghidra FUN; set the mode of a layout window by id, with the null-pointer fallback retail really takes; not byte-exact
+00cc9890 FUN_00cc9890  # Ghidra FUN; show the idle tribe icon window and hide the other per the mode strategy's state; byte-exact
+00cc98e0 FUN_00cc98e0  # Ghidra FUN; pick the ornament with an expired (or smallest positive) 0x240 value and move its icon target; not byte-exact
+00cc99b0 FUN_00cc99b0  # Ghidra FUN (PDB hint SP::cTribeDisplayStrategy::UpdateUI); per-frame UI update: window visibility, terrain events, animation target; not byte-exact
+00cc9cd0 FUN_00cc9cd0  # Ghidra FUN; age the spear/ornament timers and subtract the elapsed time from both forty-entry timer tables; byte-exact
+00cc9d50 FUN_00cc9d50  # Ghidra FUN; drop an entity's posse item from the tribe display and tag it for re-adding; byte-exact

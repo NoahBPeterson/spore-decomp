@@ -1,0 +1,14 @@
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc9040@TribeStrategy@@QAEXPAUEntityRef@@@Z  00cc9040  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc90a0@TribeStrategy@@QAEPAXPAUEntityRef@@@Z  00cc90a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc90f0@TribeStrategy@@QAEXPAUEntityRef@@H@Z  00cc90f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc91b0@TribeStrategy@@QAEXH@Z  00cc91b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc91e0@TribeStrategy@@QAEXH@Z  00cc91e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc9270@TribeStrategy@@QAEXPAUVector4@@@Z  00cc9270  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc9360@TribeStrategy@@QAE_NXZ  00cc9360  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc93b0@TribeStrategy@@QAEXH@Z  00cc93b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc9430@TribeStrategy@@QAEXXZ  00cc9430  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc9640@TribeStrategy@@QAEXPAUIWinText@@C@Z  00cc9640  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc9740@TribeStrategy@@QAEXPAUIWinText@@UVector3@@HC@Z  00cc9740  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc9890@@YAXXZ  00cc9890  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc9cd0@TribeStrategy@@QAEXH@Z  00cc9cd0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc8ed0/s00cc8ed0.cpp  ?FUN_00cc9d50@TribeStrategy@@QAEXPAUEntityRef@@@Z  00cc9d50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
