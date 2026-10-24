@@ -1,0 +1,6 @@
+# source symbol va flags
+slices/s00c4cb90/s00c4cb90.cpp  ?ReportEventLate@cSPMissionBiosphere@@QAEXXZ  00c4d830  /O2 /MD /Gy /EHsc /TP
+slices/s00c4cb90/s00c4cb90.cpp  ?ReportEventEarly@cSPMissionBiosphere@@QAEXXZ  00c4d920  /O2 /MD /Gy /EHsc /TP
+slices/s00c4cb90/s00c4cb90.cpp  ?TriggerHerbivoreBonus@cSPMissionBiosphere@@QAEXXZ  00c4da10  /O2 /MD /Gy /EHsc /TP
+slices/s00c4cb90/s00c4cb90.cpp  ?BeginHerbivorePhase@cSPMissionBiosphere@@QAEXXZ  00c4db40  /O2 /MD /Gy /EHsc /TP
+slices/s00c4cb90/s00c4cb90.cpp  ?GetPropertyInstance@cSPMissionBiosphere@@QAEXPAXPAH@Z  00c4db90  /O2 /MD /Gy /EHsc /TP
