@@ -1,13 +1,13 @@
 0076af50   45  Daf ctor: base/derived vtable store count and order differ
 0076afb0   40  Daf deleting dtor: vtable reset/EH schedule differs | equiv UNSUPPORTED (vtable address constant differs; needs symbol mapping)
 0076b240  283  cube-map refresh: helper register schedule differs
-0076b350   62  D350 ctor: vtable store/EH frame schedule differs
-0076b3c0  113  D350 dtor: vtable store/release schedule differs
-0076b5d0  118  reset refs: null-check/release schedule differs
-0076b660   53  D660 ctor: vtable store schedule differs
-0076b6c0   83  D660 dtor: vtable store schedule differs
-0076b720  284  viewer copy ctor: refcounted member attach schedule differs
-0076b840   49  release viewer: teardown schedule differs
-0076b890   91  render viewer: vcall/argument schedule differs
-0076b930   99  quaternion-from-basis: matrix temp layout and call schedule differ
+0076b350   67  D350 ctor: flattened to two named vptr members with explicit base/derived vtable stores (13ec458/140e254/140e244); EH frame not reproduced
+0076b3c0  127  D350 dtor: JobRelease is thiscall and the base vtables (13eb938/13ec458) are rewritten after releasing +0x14/+0x10/+0xc; EH frame/state table not reproduced [equiv: PASS 323 valid inputs, 100.0% coverage]
+0076b5d0  122  reset refs: thiscall (no stack args); JobRelease/PhysFini/PhysDel invoked thiscall and each refcounted member cleared before its release; EH/tail-call schedule differs [equiv: PASS 207 valid inputs, 84.2% coverage]
+0076b660   62  D660 ctor: flattened to two named vptr members with explicit base/derived vtable stores (13ec458/140e278/140e268); EH frame not reproduced
+0076b6c0   79  D660 dtor: flattened 2-vptr layout; base vtables (13eb938/13ec458) rewritten after releasing +0xc; EH frame not reproduced [equiv: PASS 394 valid inputs, 100.0% coverage]
+0076b720  240  viewer copy ctor: 5 stack args (ret 0x14); NewPhys/InitPhysics/CopyViewer are thiscall, old member released after the swap; a 0x10 local reproduces the original's call-time frame depth [equiv: PASS 216 valid inputs, 87.0% coverage]
+0076b840   29  release viewer: thiscall (no stack args); PhysFini/PhysDel thiscall then operator delete; remaining vcall/tail schedule differs [equiv: WEAK 192 valid inputs, 71.4% coverage]
+0076b890   57  render viewer: thiscall + 4 stack args; data[4]={viewer,0,0,0} is arg 3 and p4 arg 4 of vtable slot 3; FUN_7c4be0 thiscall [equiv: PASS 345 valid inputs, 100.0% coverage]
+0076b930   86  quaternion-from-basis: cdecl (ret 0); builds a 9-float 3x3 from src 0,1,2,4,5,6,8,9,10 and calls the 3-arg QuatFromMatrix; register scheduling differs [equiv: PASS 400 valid inputs, 100.0% coverage]
 0076b9a0  110  copy-range 0x28: field copy schedule differs

@@ -32,10 +32,16 @@ void  __cdecl FUN_7c4be0(void* p, void* a, int b);                         // 0x
 void  __cdecl FUN_7c4ba0(void* p, float f);                                // 0x7c4ba0
 void  __cdecl FUN_7c53d0(void* p, float f);                                // 0x7c53d0
 void  __cdecl FUN_7c40f0(void* p);                                         // 0x7c40f0
-void  __cdecl QuatFromMatrix(void* out, void* m, float f, int a);          // 0x472b80
+void  __cdecl QuatFromMatrix(void* out, void* m, float f);          // 0x472b80
 void  __cdecl Matrix3Assign(void* p, void* src);                           // 0x41cb40
 void  __cdecl Basis3Build(void* out, void* a, void* b);                    // 0x6b9440
 void  __cdecl CaptureCubeMap(void* a, void* b, void* c, void* d, int e, int f); // 0x6e4210
+extern char vtbl_13eb938[];
+extern char vtbl_13ec458[];
+extern char vtbl_140e254[];
+extern char vtbl_140e244[];
+extern char vtbl_140e278[];
+extern char vtbl_140e268[];
 }
 
 // ---------------------------------------------------------------------------
@@ -207,25 +213,39 @@ bool __fastcall RefreshCubeMap(void* self, int, int unused) {
 // ===========================================================================
 struct B1_350 { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); };
 struct B2_350 { virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); };
-struct D350 : B1_350, B2_350 {
+struct D350 {
+    void* vtbl0;              // +0
+    void* vtbl1;              // +4
     int m8;                   // +8
     int mc, m10, m14;
+    int pad18;                // +0x18
     int m1c, m20;             // +0x1c
     char pad24[0x118];
     int m13c;                 // +0x13c
     D350();
-    virtual ~D350();
+    ~D350();
 };
 D350::D350() {
-    m8 = 0; mc = 0; m10 = 0; m14 = 0;
+    vtbl1 = vtbl_13ec458;
+    m8 = 0;
+    vtbl0 = vtbl_140e254;
+    vtbl1 = vtbl_140e244;
+    mc = 0; m10 = 0; m14 = 0;
     m1c = -1; m20 = -1;
     m13c = 0;
 }
+// @ 0x0076b3c0
 D350::~D350() {
-    if (m13c) JobRelease((void*)m13c);
-    if (mc) ((void(__thiscall**)(void*))*(void***)mc)[1]((void*)mc);
-    if (m10) ((void(__thiscall**)(void*))*(void***)m10)[1]((void*)m10);
-    if (m14) ((void(__thiscall**)(void*))*(void***)m14)[1]((void*)m14);
+    if (m13c)
+        ((void(__thiscall*)(void*))JobRelease)((void*)m13c);
+    if (m14)
+        ((void(__thiscall**)(void*))*(void***)m14)[1]((void*)m14);
+    if (m10)
+        ((void(__thiscall**)(void*))*(void***)m10)[1]((void*)m10);
+    if (mc)
+        ((void(__thiscall**)(void*))*(void***)mc)[1]((void*)mc);
+    vtbl0 = vtbl_13eb938;
+    vtbl1 = vtbl_13ec458;
 }
 void DeleteD350(D350* p) { delete p; }
 
@@ -254,17 +274,16 @@ void __fastcall Ctor76b460(void* self, int, int a4, int a5, int a6, int a7, int 
 // ===========================================================================
 // @ 0x0076b5d0  reset viewer references
 // ===========================================================================
-void __fastcall ResetRefs76bs(void* self, int, int unused) {
-    (void)unused;
+void __fastcall ResetRefs76bs(void* self) {
     char* s = (char*)self;
     if (*(void**)(s + 0x13c)) {
         void* p = *(void**)(s + 0x13c);
-        if (p) { *(void**)(s + 0x13c) = 0; JobRelease(p); }
+        if (p) { *(void**)(s + 0x13c) = 0; ((void(__thiscall*)(void*))JobRelease)(p); }
     }
     if (*(void**)(s + 0x18)) {
-        PhysFini(*(void**)(s + 0x18));
+        ((void(__thiscall*)(void*))PhysFini)(*(void**)(s + 0x18));
         void* p = *(void**)(s + 0x18);
-        if (p) { PhysDel(p); Dealloc(p); }
+        if (p) { ((void(__thiscall*)(void*))PhysDel)(p); Dealloc(p); }
     }
     if (*(void**)(s + 0xc)) { void* p = *(void**)(s + 0xc); *(void**)(s + 0xc) = 0; ((void(__thiscall**)(void*))*(void***)p)[1](p); }
     if (*(void**)(s + 0x10)) { void* p = *(void**)(s + 0x10); *(void**)(s + 0x10) = 0; ((void(__thiscall**)(void*))*(void***)p)[1](p); }
@@ -276,49 +295,65 @@ void __fastcall ResetRefs76bs(void* self, int, int unused) {
 // ===========================================================================
 struct B1_660 { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); };
 struct B2_660 { virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); };
-struct D660 : B1_660, B2_660 {
-    int m8;
+struct D660 {
+    void* vtbl0;              // +0
+    void* vtbl1;              // +4
+    int m8;                   // +8
     int mc, m10, m14, m18;
     D660();
-    virtual ~D660();
+    ~D660();
 };
 D660::D660() {
-    m8 = 0; mc = 0; m10 = 0; m14 = -1; m18 = -1;
+    vtbl1 = vtbl_13ec458;
+    m8 = 0;
+    vtbl0 = vtbl_140e278;
+    vtbl1 = vtbl_140e268;
+    mc = 0; m10 = 0;
+    m14 = -1; m18 = -1;
 }
-D660::~D660() { if (mc) ((void(__thiscall**)(void*))*(void***)mc)[1]((void*)mc); }
+// @ 0x0076b6c0
+D660::~D660() {
+    if (mc)
+        ((void(__thiscall**)(void*))*(void***)mc)[1]((void*)mc);
+    vtbl0 = vtbl_13eb938;
+    vtbl1 = vtbl_13ec458;
+}
 void DeleteD660(D660* p) { delete p; }
 
 // ===========================================================================
 // @ 0x0076b720  ctor: copy a viewer and attach refcounted resources
 // ===========================================================================
-void __fastcall Ctor76b720(void* self, int, int a2, int a3, int a4, int a5, int a6, char a7, int a8) {
+void __fastcall Ctor76b720(void* self, int, int a2, int a3, int* a4, void* a5, char a6) {
     char* s = (char*)self;
+    volatile int pad[4];
+    pad[0] = 0;
     void* q = Alloc6(0x174, "Graphics", 0, 0, 0, 0);
-    void* o = q ? NewPhys(q) : 0;
+    void* o = q ? ((void*(__thiscall*)(void*))NewPhys)(q) : 0;
     *(void**)(s + 0x10) = o;
-    InitPhysics(o, 0);
-    CopyViewer(o, (void*)a2, 0, 0);
-    *(int*)(s + 0x14) = a3;
-    *(int*)(s + 0x18) = a4;
-    void* src = (void*)a5;
-    if (src) ((void(__thiscall**)(void*))*(void***)src)[0](src);
-    *(void**)(s + 0xc) = src;
-    (void)a6;
-    *(char*)(s + 0x1c) = a7;
-    *(int*)(s + 0x20) = a8;
+    ((void(__thiscall*)(void*, int))InitPhysics)(o, 0);
+    ((void(__thiscall*)(void*, void*, int, int))CopyViewer)(o, (void*)a3, 0, 0);
+    *(int*)(s + 0x14) = a4[0];
+    *(int*)(s + 0x18) = a4[1];
+    void* old = *(void**)(s + 0xc);
+    if (a5 != old) {
+        if (a5) ((void(__thiscall**)(void*))*(void***)a5)[0](a5);
+        *(void**)(s + 0xc) = a5;
+        if (old) ((void(__thiscall**)(void*))*(void***)old)[1](old);
+    }
+    *(char*)(s + 0x1c) = a6;
+    *(int*)(s + 0x20) = a2;
 }
 
 // ===========================================================================
 // @ 0x0076b840  release a viewer instance
 // ===========================================================================
-void __fastcall ReleaseViewer76b8(void* self, int, int unused) {
-    (void)unused;
+void __fastcall ReleaseViewer76b8(void* self) {
     char* s = (char*)self;
     void* p = *(void**)(s + 0x10);
     if (p) {
-        PhysFini(p);
+        ((void(__thiscall*)(void*))PhysFini)(p);
         void* q = *(void**)(s + 0x10);
-        if (q) { PhysDel(q); Dealloc(q); }
+        if (q) { ((void(__thiscall*)(void*))PhysDel)(q); Dealloc(q); }
     }
     void* r = *(void**)(s + 0xc);
     if (r) {
@@ -330,39 +365,43 @@ void __fastcall ReleaseViewer76b8(void* self, int, int unused) {
 // ===========================================================================
 // @ 0x0076b890  render/serialize a viewer
 // ===========================================================================
-void __fastcall RenderViewer76b8(void* self, int, void* a2, void* a3, void* a4) {
+void __fastcall RenderViewer76b8(void* self, int, void* a2, void* a3, void* a4, void* a5) {
     char* s = (char*)self;
     if (!*(void**)(s + 0xc))
         return;
-    FUN_7c4be0(*(void**)(s + 0x10), s + 0x14, 1);
+    ((void(__thiscall*)(void*, void*, int))FUN_7c4be0)(*(void**)(s + 0x10), s + 0x14, 1);
     void* m = App6740();
     ((void(__thiscall**)(void*, int))*(void***)m)[0x44 / 4](m, 1);
     void* m2 = App6740();
     ((void(__thiscall**)(void*, char*))*(void***)m2)[0x9c / 4](m2, s + 0x14);
     void* c = *(void**)(s + 0xc);
-    int zero[3] = {0, 0, 0};
-    ((void(__thiscall**)(void*, void*, void*, void*, void*))*(void***)c)[3](c, a2, a3, a4, zero);
+    int data[4];
+    data[0] = *(int*)(s + 0x10);
+    data[1] = 0;
+    data[2] = 0;
+    data[3] = 0;
+    ((void(__thiscall**)(void*, void*, void*, int*, void*))*(void***)c)[3](c, a2, a3, data, a5);
     void* m3 = App6740();
     ((void(__thiscall**)(void*, int))*(void***)m3)[0x44 / 4](m3, 0);
+    (void)a4;
 }
 
 // ===========================================================================
 // @ 0x0076b930  build a quaternion from a 3x3 matrix
 // ===========================================================================
-void* __stdcall QuatFromBasis(void* out, void* src, float w) {
-    int m[12];
-    m[0] = *(int*)((char*)src + 0);
-    m[1] = *(int*)((char*)src + 4);
-    m[2] = *(int*)((char*)src + 8);
-    m[3] = *(int*)((char*)src + 0xc);
-    m[4] = *(int*)((char*)src + 0x10);
-    m[5] = *(int*)((char*)src + 0x14);
-    m[6] = *(int*)((char*)src + 0x18);
-    m[7] = *(int*)((char*)src + 0x1c);
-    m[8] = *(int*)((char*)src + 0x20);
-    m[9] = *(int*)((char*)src + 0x24);
-    m[10] = *(int*)((char*)src + 0x28);
-    QuatFromMatrix(out, m, w, (int)(size_t)src);
+void* __cdecl QuatFromBasis(void* out, void* src, float w) {
+    float m[9];
+    int* s9 = (int*)src;
+    m[0] = *(float*)&s9[0];
+    m[1] = *(float*)&s9[1];
+    m[2] = *(float*)&s9[2];
+    m[3] = *(float*)&s9[4];
+    m[4] = *(float*)&s9[5];
+    m[5] = *(float*)&s9[6];
+    m[6] = *(float*)&s9[8];
+    m[7] = *(float*)&s9[9];
+    m[8] = *(float*)&s9[10];
+    QuatFromMatrix(out, m, w);
     return out;
 }
 
