@@ -1,0 +1,24 @@
+00ce2330 FUN_00ce2330  # bool: pending order -> clear that plan step's workers; writes float 0 to out
+00ce23b0 cTribePlanner::GetStatString  # lazy String16 "Tribe Planner 0x%08x" when arg==2
+00ce2420 cTribePlanner::Write  # version 0x9098aeb2, cVarListSerializer, plan groups + steps
+00ce27a0 FUN_00ce27a0  # read int32 array into an eastl vector (reserve + push_back)
+00ce2880 cTribePlanData::FUN_00ce2880  # construct into raw storage (inline 8-slot worker list)
+00ce28e0 cTribePlanData::FUN_00ce28e0  # assign from another cTribePlanData
+00ce2930 FUN_00ce2930  # construct [first,last) into raw storage, return new end
+00ce29c0 FUN_00ce29c0  # construct [first,last) into raw storage, advancing *ppDest
+00ce2a50 FUN_00ce2a50  # assign [destFirst,destLast) from one source
+00ce2ab0 FUN_00ce2ab0  # construct n copies of a source into raw storage
+00ce2b30 FUN_00ce2b30  # copy [srcFirst,srcLast) forward, return new dest end
+00ce2ba0 FUN_00ce2ba0  # copy [srcFirst,srcLast) backwards, return new dest begin
+00ce2c10 FUN_00ce2c10  # destroy PlannerGroup range (steps DoDestroyValues + operator_delete_array)
+00ce2c70 FUN_00ce2c70  # __stdcall destroy PlannerGroup range in place
+00ce2d20 SP::GetTribePlanConfiguration  # lazy hash table built from PropertyManager 0x72d02c25
+00ce2ee0 cTribePlanData::GetConfiguration  # lazy cached mID -> configuration lookup
+00ce2f00 SP::FindFirstEligiblePlanStep  # first eligible step index or 0xffffffff
+00ce3020 SP::DeactivatePlan  # release/reset a plan entry and pop the matching pending order
+00ce30d0 FUN_00ce30d0  # stimulus predicate: plan type 1
+00ce3120 FUN_00ce3120  # stimulus predicate: plan type 2
+00ce3170 FUN_00ce3170  # stimulus predicate: plan type 3 (requires buildable layout)
+00ce31e0 FUN_00ce31e0  # stimulus predicate: plan type 4 (requires buildable layout)
+00ce3250 FUN_00ce3250  # stimulus predicate: plan type 5 (closest water away from zero)
+00ce3300 FUN_00ce3300  # stimulus predicate: plan type 10 (target eligibility)

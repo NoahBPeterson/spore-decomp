@@ -1,0 +1,9 @@
+00ce2420 582 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid, fault(read)); nested cVarListSerializer frames + virtual serializer dispatch layout
+00ce27a0 179 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (unresolved PtrVector::reserve/push_back); eastl vector reserve/push_back not inlined by our compile
+00ce2930 112 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (62 valid, 19.2% cov); src-end bound register allocation (original keeps it in ebp)
+00ce29c0 125 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid, fault(write)); pointer-to-pointer dest register allocation
+00ce2ab0 96 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (198 valid, 100.0% cov); loop-count register allocation
+00ce2d20 317 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid, import:_decode_pointer); lazy hash-table build + property-manager call scheduling
+00ce2f00 267 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (5/14 valid mismatched; ecx clobber only, return/memory agree); local-frame layout and store-bound register allocation
+00ce3020 127 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (178 valid, 40.0% cov); argument-load register allocation + tail-called PopFront
+00ce3300 130 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (288 valid, 41.5% cov); context/target kept in edi-vs-esi (register choice only)
