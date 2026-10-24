@@ -19,8 +19,6 @@ static float g_b8;   // DAT_016c94b8
 static float g_bc;   // DAT_016c94bc
 static float g_c0;   // DAT_016c94c0
 
-void FUN_00a7d6b0(float* v);          // orientation/mirror helper on a 3-vector
-
 // Output record (sizes/offsets taken from the original's float indexing).
 struct DrawParams {
     float v0, v1, v2;         // +0x00  origin
@@ -29,8 +27,8 @@ struct DrawParams {
     uint8_t flag28;           // +0x28
     uint8_t pad29[3];
     float invW, invH;         // +0x2c
-    float wMinus1, hMinus1;   // +0x34
-    float log2W;              // +0x3c
+    int   wMinus1, hMinus1;   // +0x34
+    int   log2W;              // +0x3c
     uint8_t alpha40;          // +0x40
 };
 
@@ -43,6 +41,11 @@ struct EffectObject {
     uint8_t mode;             // +0x12c
 };
 
+// Orientation/mirror transform at param_1+0xd0 and param_1+0x108.
+struct VecXform {
+    void Apply(float* v);     // 0x00a7d6b0
+};
+
 // @ 0x00f5a200
 extern "C" void BuildDrawParams(int param_1, EffectObject* p, DrawParams* out) {
     char* c = (char*)p;
@@ -51,16 +54,17 @@ extern "C" void BuildDrawParams(int param_1, EffectObject* p, DrawParams* out) {
     switch (p->mode) {
     case 1:
     case 5: {
-        float cx = (p->x1 + p->x0) * 0.5f;
-        float cy = (p->y1 + p->y0) * 0.5f;
-        float cz = (p->z1 + p->z0) * 0.5f;
+        float c[3];
+        c[0] = (p->x1 + p->x0) * 0.5f;
+        c[1] = (p->y1 + p->y0) * 0.5f;
+        c[2] = (p->z1 + p->z0) * 0.5f;
         if (p->mode == 1) {
-            FUN_00a7d6b0(&cx);
-            FUN_00a7d6b0(&cx);
+            ((VecXform*)((char*)param_1 + 0xd0))->Apply(c);
+            ((VecXform*)((char*)param_1 + 0x108))->Apply(c);
         }
-        float d = cy * g_a8 - cz * g_a4;
-        float e = cz * g_a0 - cx * g_a8;
-        float f = cx * g_a4 - cy * g_a0;
+        float d = c[1] * g_a8 - c[2] * g_a4;
+        float e = c[2] * g_a0 - c[0] * g_a8;
+        float f = c[0] * g_a4 - c[1] * g_a0;
         float len = (float)sqrt((double)(f * f + e * e + d * d));
         if (len <= 0.0001f) {
             out->v0 = g_ac; out->v1 = g_b0; out->v2 = g_b4;
@@ -83,18 +87,18 @@ extern "C" void BuildDrawParams(int param_1, EffectObject* p, DrawParams* out) {
         }
         o[5] = len;
         if (p->mode == 5) {
-            FUN_00a7d6b0(o);
-            FUN_00a7d6b0(o + 3);
-            FUN_00a7d6b0(o);
-            FUN_00a7d6b0(o + 3);
+            ((VecXform*)((char*)param_1 + 0xd0))->Apply(o);
+            ((VecXform*)((char*)param_1 + 0xd0))->Apply(o + 3);
+            ((VecXform*)((char*)param_1 + 0x108))->Apply(o);
+            ((VecXform*)((char*)param_1 + 0x108))->Apply(o + 3);
         }
         break;
     }
     case 6: {
         float* b = o + 3;
         b[0] = g_a0; b[1] = g_a4; b[2] = g_a8;
-        FUN_00a7d6b0(b);
-        FUN_00a7d6b0(b);
+        ((VecXform*)((char*)param_1 + 0xd0))->Apply(b);
+        ((VecXform*)((char*)param_1 + 0x108))->Apply(b);
         float* pa = *(float**)((char*)param_1 + 0x34);
         o[0] = pa[0x68 / 4]; o[1] = pa[0x6c / 4]; o[2] = pa[0x70 / 4];
         float fy = o[1], fx = o[0];
@@ -139,17 +143,17 @@ extern "C" void BuildDrawParams(int param_1, EffectObject* p, DrawParams* out) {
     ((uint8_t*)o)[0x28] = flag;
     o[0x0b] = 1.0f / (float)(uint8_t)c[0x12a];
     o[0x0c] = 1.0f / (float)(uint8_t)c[0x12b];
-    o[0x0d] = (float)((uint8_t)c[0x12a] - 1);
-    o[0x0e] = (float)((uint8_t)c[0x12b] - 1);
-    o[0x0f] = 0.0f;
+    out->wMinus1 = (int)(uint8_t)c[0x12a] - 1;
+    out->hMinus1 = (int)(uint8_t)c[0x12b] - 1;
+    out->log2W = 0;
 
     uint32_t n = (uint8_t)c[0x12a];
     if (n > 1) {
-        float log2 = 0.0f;
+        int log2 = 0;
         do {
             n >>= 1;
-            log2 = (float)((int)log2 + 1);
+            ++log2;
         } while (n > 1);
-        o[0x0f] = log2;
+        out->log2W = log2;
     }
 }
