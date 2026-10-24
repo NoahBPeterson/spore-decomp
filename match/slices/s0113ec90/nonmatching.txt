@@ -15,6 +15,6 @@
 0113f8f0  65  F_0113f8f0 (update play cursor) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (350 valid, 40.9% coverage)
 0113f940  68  F_0113f940 (drain deferred callbacks) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 17.9% coverage)
 0113f9b0  79  F_0113f9b0 (stop play, free voices) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 8.7% coverage)
-0113fa70  114  PktCursor::Decode3 complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (380 valid, 100% coverage)
-0113fb20  115  PktCursor2::Decode2 complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (372 valid, 100% coverage)
+0113fa70  128  PktCursor::Decode3 complete, thiscall. flags /O1 /MD /Gy /TP /arch:SSE; equiv PASS (566 valid, 100% coverage). Equivalence-only flags: the /O2 build spills n into the saved-ECX scratch slot (`push ecx` ... `mov n,4(%esp)` ... `pop ecx`), so it returns ecx=n instead of the incoming this and fails the untouched-ECX check; /O1 keeps this in ecx through the epilogue (chk /O1: 126 vs 130 bytes).
+0113fb20  113  PktCursor2::Decode2 complete, thiscall. flags /O1 /MD /Gy /TP /arch:SSE; equiv PASS (556 valid, 100% coverage). Equivalence-only flags: the /O2 build reuses the saved-ECX slot for n and then `pop ecx` leaves ecx=n (fails the untouched-ECX check); /O1 keeps this in ecx (chk /O1: 99 vs 114 bytes).
 0113fba0  113  F_0113fba0 (apply sample-rate change) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 10.9% coverage)
