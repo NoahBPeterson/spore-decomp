@@ -21,14 +21,18 @@ struct VtblStub {
 };
 
 struct UnfixContextImpl {
-    void Serialize(int* value);               // 0x011e3ac0
+    // the original calls out to 0x011e3ac0; keep it out of line (the body here is only a skeleton)
+    __declspec(noinline) void Serialize(int* value);   // 0x011e3ac0
 };
 
 // ---------------------------------------------------------------- 011e3ac0
 // @ 0x011e3ac0 -- UnfixContextImpl::Serialize; large, approximated.
 void UnfixContextImpl::Serialize(int* value)
 {
-    (void)value;
+    // skeleton (the original walks a large context object); the self-assignment keeps the
+    // definition from being folded to nothing, so ObjectToId keeps its out-of-line call
+    if (value)
+        *value = *value;
 }
 
 // ---------------------------------------------------------------- Arena
@@ -46,8 +50,9 @@ struct Arena {
 // @ 0x011e3c30
 int Arena::ObjectToId(int id)
 {
-    m_ctx->Serialize(&id);
-    return id;
+    int local = id;
+    m_ctx->Serialize(&local);
+    return local;
 }
 
 // @ 0x011e3c50
@@ -75,15 +80,14 @@ struct ArenaOwner {
 int ArenaOwner::FUN_011e3e10(int param_2)
 {
     ArenaField* p = f;
-    int local_8;
-    ((EcxCtx*)p)->FUN_011e2b30(&local_8, &param_2);
+    int local_8[2];   // the original reserves 8 bytes of locals and hands the callee the first dword
+    ((EcxCtx*)p)->FUN_011e2b30(&local_8[0], &param_2);
     int* base = p->base;
-    int* elem = base + local_8 * 2;
+    int* elem = base + local_8[0] * 2;
     if (param_2 != elem[0]) {
         elem = base + p->count * 2;
     }
-    int* end = base + p->count * 2;
-    if (elem != end) {
+    if (elem != f->base + f->count * 2) {   // the original reloads f (the call may replace the arena)
         return elem[1];
     }
     return 0;
@@ -183,10 +187,9 @@ void* ArenaSectionManifest::Types()
 // @ 0x011e4640
 void ArenaSectionManifest::FUN_011e4640(int param_2, int param_3)
 {
-    int* d = dict;
-    *d = *(int*)(param_2 + 0x30);
+    dict[0] = *(int*)(param_2 + 0x30);
     f0c = param_2;
-    *(int*)((char*)d + 8) = *(int*)(param_3 + 0x10);
+    dict[2] = *(int*)(param_3 + 0x10);   // dict is reloaded here, as in the original
     f14 = param_2;
 }
 
@@ -211,11 +214,16 @@ void* ArenaSectionManifest_Initialize(void* param_1, int param_2)
 // @ 0x011e4970
 int Arena_FUN_011e4970(int param_1, int param_2)
 {
-    *(int*)(param_2 + 0x28) = *(int*)(param_2 + 0x28) + *(int*)(param_1 + 4) * 4 + 0xc;
+    // header grows by the new element count (n) plus three padding dwords
+    int* used = (int*)(param_2 + 0x28);
+    int words = *(int*)(param_1 + 4) + 3;
+    *used += words * 4;
+    // vtable slot 1 is called with the object as an explicit first argument (two stack dwords,
+    // caller-cleaned), not with `this` in ecx
     for (unsigned int i = 0; i < *(unsigned int*)(param_1 + 4); ++i) {
-        int* pi = *(int**)(*(int*)(param_1 + 8) + i * 4);
-        VtblStub* v = (VtblStub*)*(void**)pi;
-        v->slot1((void*)param_2);
+        void* elem = *(void**)(*(int*)(param_1 + 8) + i * 4);
+        void** vtbl = *(void***)elem;
+        ((void (__cdecl*)(void*, void*))vtbl[1])(elem, (void*)param_2);
     }
     return param_2;
 }
