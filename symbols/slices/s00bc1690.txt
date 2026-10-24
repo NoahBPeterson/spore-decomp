@@ -1,0 +1,15 @@
+00bc1690 ?AdvanceCommunities@@YIXPAUCommunityUpdater@@HHH@Z  # community phase advance (dt scaling + vector walk)
+00bc1700 ?FUN_00bc1700@@YAXPAX0@Z  # record-vector heapify pass
+00bc17a0 ?FUN_00bc17a0@@YAXPAX0HHH0@Z  # record-vector front-insert + heapify pass
+00bc1830 ?FUN_00bc1830@@YAXPAX00@Z  # record-vector selection sort
+00bc1a50 ?FUN_00bc1a50@@YAXPAX0@Z  # introspective record-sort entry point
+00bc1b10 ?FUN_00bc1b10@@YIXPAXH0@Z  # reconcile community plant/editor species lists
+00bc2070 ?Activate@CityDisplayOwner@@QAEXPAX0@Z  # CityDisplayOwner::Activate
+00bc20e0 ?SetSubject@CityDisplayOwner@@QAEXPAX@Z  # CityDisplayOwner::SetSubject
+00bc2180 ?FUN_00bc2180@@YIXPAUSoundSlots@@HH@Z  # sound slot clear (range)
+00bc21c0 ?FUN_00bc21c0@@YIXPAUSoundSlots@@H@Z  # sound slot clear (one)
+00bc2240 ?FUN_00bc2240@@YIHPAUSoundSlots@@HPAXMMM@Z  # claim a free sound slot and start a 3D sound
+00bc22b0 ?FUN_00bc22b0@@YIMPAXH@Z  # sqrt of the minimum distance over the two blocks
+00bc23d0 ?FUN_00bc23d0@@YIXPAUSoundSlots@@HHMMM@Z  # position one sound slot's listener
+00bc24c0 ?FUN_00bc24c0@@YGIM@Z  # classify a value against three thresholds
+00bc2520 ?FUN_00bc2520@@YAEPAX@Z  # planet rotation dot test

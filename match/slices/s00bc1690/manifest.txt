@@ -1,0 +1,7 @@
+slices/s00bc1690/s00bc1690.cpp  ?Activate@CityDisplayOwner@@QAEXPAX0@Z  00bc2070  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc1690/s00bc1690.cpp  ?FUN_00bc2180@@YIXPAUSoundSlots@@HH@Z  00bc2180  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc1690/s00bc1690.cpp  ?FUN_00bc21c0@@YIXPAUSoundSlots@@H@Z  00bc21c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc1690/s00bc1690.cpp  ?FUN_00bc2240@@YIHPAUSoundSlots@@HPAXMMM@Z  00bc2240  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc1690/s00bc1690.cpp  ?FUN_00bc23d0@@YIXPAUSoundSlots@@HHMMM@Z  00bc23d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc1690/s00bc1690.cpp  ?FUN_00bc24c0@@YGIM@Z  00bc24c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc1690/s00bc1690.cpp  ?FUN_00bc2520@@YAEPAX@Z  00bc2520  /O2 /MD /Gy /TP /arch:SSE /fp:fast
