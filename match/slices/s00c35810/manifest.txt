@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c35810/s00c35810.cpp  ?CastTo@cGameBundle@@QAEPAXI@Z  00c35ad0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?Set12c134@cGameBundle@@QAEXIM@Z  00c35b20  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?Write@cGameBundle@@QAEXI@Z  00c35c60  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?Read@cGameBundle@@QAEXI@Z  00c35cb0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?IsState0Or4@cGameBundle@@QAE_NXZ  00c35d20  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?FUN_00c35d90@@YA_NPAXPAPAX@Z  00c35d90  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?Ctor@cGameBundle@@QAEPAV1@XZ  00c35dc0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?GetFieldValues@cGameBundle@@QAEII@Z  00c35e70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?Reset128And2c@cGameBundle@@QAEXXZ  00c35fe0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?Test@FF36030@@QAE_NXZ  00c36030  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?FUN_00c364e0@@YA_NPAX0@Z  00c364e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?Ctor@cGameBundleGroundContainer@@QAEPAV1@XZ  00c36510  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?CastTo@cGameBundleGroundContainer@@QAEPAXI@Z  00c36560  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?Init@cGameBundleGroundContainer@@QAEXI@Z  00c365a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?FUN_00c365e0@@YGPAXPAX0@Z  00c365e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?Dtor2c@cGameBundleGroundContainer@@QAEXXZ  00c36690  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
