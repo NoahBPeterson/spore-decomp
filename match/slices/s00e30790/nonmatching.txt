@@ -1,11 +1,11 @@
 # va  diff-bytes  reason
 00e308d0  36   list destructor: current/next node live in esi/edi swapped; equiv PASS
-00e30a60  106  vector erase-if(f0||f8): loop/removal shape differs from cl's; equiv FAIL (ours faults where orig succeeds)
-00e30ae0  104  vector erase-if(f8): loop/removal shape differs from cl's; equiv FAIL (ours faults where orig succeeds)
-00e30c00  62   in-place emplace_back: local zero element and branch layout differ; equiv FAIL (output mismatch)
+00e30a60  122  FIXED remove-head erase-if(f0||f8): rewritten as a member of the outer object (vec begin/end at +0x10/+0x14, FUN_00e2f480 called with ecx = outer, not the embedded Vec1c); equiv WEAK (219 valid, 26.0% coverage, no mismatch); chk ~size 105 vs 128 (frame/schedule). flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00e30ae0  117  FIXED remove-off8 erase-if(f8): rewritten as a member of the outer object (vec begin/end at +0x10/+0x14, FUN_00e2f480 called with ecx = outer, not the embedded Vec1c); equiv WEAK (234 valid, 27.1% coverage, no mismatch); chk ~size 101 vs 124 (frame/schedule). flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00e30c00  126  FIXED in-place emplace_back: zero all seven dwords (including the +0x14 pad) through a uint32_t view in both fast and slow paths; equiv PASS (291 valid, 100% coverage); chk ~size 123 vs 90 (frame/schedule). flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e30c60  43   MgrA ctor: vtable/zero store scheduling and ca09f0 arg setup order differ; equiv PASS
 00e30d20  143  asset-discovery-card Add(): intrusive_ptr release/call schedule differs; equiv UNSUPPORTED (0/1200 valid inputs)
 00e30dc0  47   MgrCard teardown: node-list destroy + handler removal schedule differs; equiv PASS
-00e313c0  337  card drag/fade update: float accumulation and erase schedule differ; equiv FAIL (ours faults where orig succeeds)
+00e313c0  339  FIXED card drag/fade update: two-pointer walk with a fixed end bound, erase copy performed as raw uint32_t dwords (the original emits integer movs, which keeps end spilled and preserves ecx via push/pop); equiv PASS (343 valid, 64.8% coverage); chk ~size 382 vs 397 (frame/schedule). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00e31550  22   card hide: erase-call address computation ordered after the 0-store; equiv UNSUPPORTED (0/1200 valid, fake-arity)
-00e315f0  49   card element append: fast-path pair copy and slow-path call differ; equiv FAIL (ours faults where orig succeeds)
+00e315f0  70   FIXED card element append: slow path calls FUN_00e63d60(vec, end, &local) (the 2-dword insert), not 0xd73090; equiv PASS (286 valid, 100% coverage); chk ~size 73 vs 81 (frame/schedule). flags /O2 /MD /Gy /EHsc /TP /arch:SSE

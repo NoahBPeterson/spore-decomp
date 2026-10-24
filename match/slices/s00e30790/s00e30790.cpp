@@ -48,6 +48,7 @@ struct TC {
     void  f_811ad0(int);               // 0x00811ad0
     char  f_810070(void);              // 0x00810070
     void  f_e2f6e0(int);               // 0x00e2f6e0
+    void  f_e63d60(void*, void*);      // 0x00e63d60
 };
 
 // ---------------------------------------------------------------- element / container types
@@ -74,9 +75,17 @@ struct Vec1c {
     Elem1c* cap;      // +0x08
     void  insert_(Elem1c* pos, const Elem1c* val);   // 0x00e30790
     void  push_back_default();                       // 0x00e30c00
+    void  erase(void* a, void* b);                   // 0x00d018d0
+};
+
+// Outer object whose Elem1c vector lives at +0x10/+0x14; remove-if helpers are members of
+// this object (ecx = outer), not of the embedded Vec1c.
+struct VecHolder {
+    char   pad0[0x10];
+    Elem1c* begin;    // +0x10
+    Elem1c* end;      // +0x14
     void  remove_head(uint32_t key);                 // 0x00e30a60
     void  remove_off8(uint32_t key);                 // 0x00e30ae0
-    void  erase(void* a, void* b);                   // 0x00d018d0
 };
 
 struct MgrVec {
@@ -207,12 +216,13 @@ void MgrVec::update(int dt)
 
 // ---------------------------------------------------------------- 0x00e30a60
 // @ 0x00e30a60
-void Vec1c::remove_head(uint32_t key)
+void VecHolder::remove_head(uint32_t key)
 {
     if (begin == end) return;
     Elem1c* cur = begin;
     while (cur != end) {
         if (cur->f0 == key || cur->f8 == key) {
+            ((TC*)this)->f_e2f480(cur);
             for (Elem1c* q = cur; q + 1 != end; ++q)
                 q[0] = q[1];
             end = (Elem1c*)((char*)end - 0x1c);
@@ -224,12 +234,13 @@ void Vec1c::remove_head(uint32_t key)
 
 // ---------------------------------------------------------------- 0x00e30ae0
 // @ 0x00e30ae0
-void Vec1c::remove_off8(uint32_t key)
+void VecHolder::remove_off8(uint32_t key)
 {
     if (begin == end) return;
     Elem1c* cur = begin;
     while (cur != end) {
         if (cur->f8 == key) {
+            ((TC*)this)->f_e2f480(cur);
             for (Elem1c* q = cur; q + 1 != end; ++q)
                 q[0] = q[1];
             end = (Elem1c*)((char*)end - 0x1c);
@@ -258,14 +269,14 @@ void Vec1c::push_back_default()
     if (p < cap) {
         end = p + 1;
         if (p) {
-            p->f0 = 0; p->f4 = 0; p->f8 = 0; p->fc = 0;
-            p->f10 = 0; p->f14 = 0; p->f18 = 0;
+            uint32_t* t = (uint32_t*)p;
+            t[0] = 0; t[1] = 0; t[2] = 0; t[3] = 0; t[4] = 0; t[5] = 0; t[6] = 0;
         }
         return;
     }
     Elem1c tmp;
-    tmp.f0 = 0; tmp.f4 = 0; tmp.f8 = 0; tmp.fc = 0;
-    tmp.f10 = 0; tmp.f14 = 0; tmp.f18 = 0;
+    uint32_t* t = (uint32_t*)&tmp;
+    t[0] = 0; t[1] = 0; t[2] = 0; t[3] = 0; t[4] = 0; t[5] = 0; t[6] = 0;
     insert_(end, &tmp);
 }
 
@@ -659,7 +670,7 @@ void CardView::update(float dt)
             f68 = 0.0f;
         }
         if (f68 <= 0.0f) {
-            void* p = aa4;
+            void* p = a94;
             ((void(__thiscall*)(void*, int, int))(*(void***)p)[0x7c / 4])(p, 1, 0);
             return;
         }
@@ -670,9 +681,10 @@ void CardView::update(float dt)
             p = a98;       ((void(__thiscall*)(void*, int, int))(*(void***)p)[0x7c / 4])(p, 1, 1);
             return;
         }
-        float* p = (float*)vecBegin;
         float* e = (float*)vecEnd;
+        float* p = (float*)vecBegin;
         for (; p != e; p += 2) {
+            float* q = p + 2;
             float t = p[1] * dt;
             float* src = &t;
             if (*p <= t) src = p;
@@ -681,18 +693,24 @@ void CardView::update(float dt)
             float d = *p - val;
             *p = d;
             if (d <= 0.0f) {
-                for (float* q = p; q + 2 != e; q += 2) {
-                    q[0] = q[2];
-                    q[1] = q[3];
+                uint32_t* endv = (uint32_t*)vecEnd;
+                uint32_t* s = (uint32_t*)q;
+                if (s < endv) {
+                    uint32_t* dst = (uint32_t*)p;
+                    do {
+                        dst[0] = s[0];
+                        dst[1] = s[1];
+                        s += 2;
+                        dst += 2;
+                    } while (s != endv);
                 }
-                e = (float*)((char*)e - 8);
-                *(void**)((char*)this + 0x14) = e;
+                vecEnd = (char*)vecEnd - 8;
             }
         }
         if (f68 <= 0.0f)
             return;
     }
-    void* p = aa4;
+    void* p = a94;
     ((void(__thiscall*)(void*, int, int))(*(void***)p)[0x7c / 4])(p, 1, 1);
     ((void(__thiscall*)(void*, float, float))(*(void***)p)[0x68 / 4])(
         p, (*(float*)((char*)this + 0x74) - *(float*)((char*)this + 0x6c)) * f68,
@@ -733,7 +751,7 @@ void CardView::add(uint32_t a, uint32_t b)
         }
         return;
     }
-    ((TC*)((char*)this + 0x10))->f_d73090((char*)local, (char*)local + 8);
+    ((TC*)((char*)this + 0x10))->f_e63d60(end, local);
 }
 
 // ---------------------------------------------------------------- 0x00e31650
