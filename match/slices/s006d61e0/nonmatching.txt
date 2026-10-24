@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-006d61e0 636  bake evaluator (uv4x16/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv now FAIL: 5/34 valid inputs mismatched; first: memory pool @40020004
-006d64f0 706  bake evaluator (uv4x8/const colour/pos3f, core FUN_006c3550, acos tail); /O2 frame + scheduling differ; equiv now FAIL: 5/5 valid inputs mismatched; first: import call #0
-006d6820 633  bake evaluator (uv2x16/const colour/pos3f, core FUN_006c3550, acos tail); /O2 frame + scheduling differ; equiv now FAIL: 5/5 valid inputs mismatched; first: import call #0
-006d6b10 706  bake evaluator (uv4x16/const colour/pos3f, core FUN_006c3550, acos tail); /O2 frame + scheduling differ; equiv now FAIL: 5/5 valid inputs mismatched; first: import call #0
+006d61e0 696  bake evaluator (uv4x16/colour4f/pos3f, core FUN_006c4200, dot tail); complete, /O2 frame + scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; equiv PASS (648 valid at --inputs 1500, 100% coverage)
+006d64f0 849  bake evaluator (uv4x8/const colour/pos3f, core FUN_006c3550, acos tail); complete, original inlines fsqrt and keeps the acos2 quotient in single precision; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; equiv PASS (648 valid at --inputs 1500, 100% coverage)
+006d6820 820  bake evaluator (uv2x16/const colour/pos3f, core FUN_006c3550, acos tail); complete, same acos2/fsqrt tail as 006d64f0; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; equiv PASS (771 valid at --inputs 1500, 100% coverage)
+006d6b10 848  bake evaluator (uv4x16/const colour/pos3f, core FUN_006c3550, acos tail); complete, same acos2/fsqrt tail as 006d64f0; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; equiv PASS (641 valid at --inputs 1500, 100% coverage)
