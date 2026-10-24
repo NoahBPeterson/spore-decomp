@@ -1,0 +1,4 @@
+slices/s0107a510/s0107a510.cpp  ?FUN_0107ab20@cToolWidget@SP@@QAEXH@Z  0107ab20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s0107a510/s0107a510.cpp  ?FUN_0107abb0@cToolWidget@SP@@QAEXXZ  0107abb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s0107a510/s0107a510.cpp  ?FUN_0107adf0@cToolWindow@@QAEXXZ  0107adf0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s0107a510/s0107a510.cpp  ?FUN_0107ae40@cToolWindow@@QAEXPAX@Z  0107ae40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
