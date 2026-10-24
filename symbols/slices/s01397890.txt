@@ -1,0 +1,5 @@
+# slice s01397890 - symbols (mangled name as emitted by the compiler at the marked VA)
+01397890 ?FUN_01397890@@YAXXZ  # void FUN_01397890()
+01397ff0 ?FUN_01397ff0@@YAXXZ  # void FUN_01397ff0()
+01398270 ?FUN_01398270@@YAXXZ  # void FUN_01398270()
+01398420 ?FUN_01398420@@YAXXZ  # void FUN_01398420()
