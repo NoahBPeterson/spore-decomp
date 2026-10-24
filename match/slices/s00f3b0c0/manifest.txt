@@ -14,3 +14,4 @@ slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3bcc0@cSim@@QAEXH@Z  00f3bcc0
 slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3be30@cSim@@QAEHXZ  00f3be30
 slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3bf70@cSim@@QAEHXZ  00f3bf70
 slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3bfa0@cSim@@QAEHH@Z  00f3bfa0
+slices/s00f3b0c0/s00f3b0c0.cpp  ?_E366@@YGHH@Z  00f3b2c0  /O2 /MD /Gy /EHsc /TP

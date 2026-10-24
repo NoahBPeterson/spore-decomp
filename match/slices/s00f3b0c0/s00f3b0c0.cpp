@@ -79,7 +79,7 @@ struct cSim {
     int   FUN_00f3bf00(int a, int b);
     int   FUN_00f3bf70();
     int   FUN_00f3bfa0(int idx);
-    void  FUN_00f3bfc0(int a, int* b, char c, int d);
+    int*  FUN_00f3bfc0(int a, int* b, char c, int d);
     void  FUN_00f3bce0(int idx, int* v);
     void  FUN_00f3bcc0(int v);
     void  FUN_00f3bc20(int param);
@@ -130,9 +130,13 @@ void cSim::FUN_00f3b290(char p) {
 // @ 0x00f3b2c0  (symbol $E366)
 // ---------------------------------------------------------------------------
 int __stdcall _E366(int x) {
-    if (x < 2) return 0;
-    if (x < 4) return 0xb1d38c08;
-    if (x == 4) return 0xfa14571d;
+    switch (x) {
+    case 2:
+    case 3:
+        return 0xb1d38c08;
+    case 4:
+        return 0xfa14571d;
+    }
     return 0;
 }
 
@@ -293,7 +297,7 @@ bool cSim::FUN_00f3bde0(int idx) {
     cInner* inner = mpInner;
     int count = (int)(((int)inner->p17c - (int)inner->p178) / 0x38);
     if (idx >= 0 && idx < count) {
-        return *(char*)((char*)inner->p178 + 0x20 + idx * 0x38) != 0;
+        return *(bool*)((char*)inner->p178 + 0x20 + idx * 0x38);
     }
     return false;
 }
@@ -361,7 +365,7 @@ int cSim::FUN_00f3bfa0(int idx) {
 // ---------------------------------------------------------------------------
 // @ 0x00f3bfc0
 // ---------------------------------------------------------------------------
-void cSim::FUN_00f3bfc0(int a, int* b, char c, int d) {
+int* cSim::FUN_00f3bfc0(int a, int* b, char c, int d) {
     if (a == 2) {
         if (c == 0) {
             vE8.x = *(float*)&b[0];
@@ -378,6 +382,7 @@ void cSim::FUN_00f3bfc0(int a, int* b, char c, int d) {
         f84 = 1;
     }
     mpInner->f68[d] = a;
+    return b;
 }
 
 // ---------------------------------------------------------------------------
@@ -429,32 +434,41 @@ void FUN_00f3b710(int* key) {
 // @ 0x00f3bc20
 // ---------------------------------------------------------------------------
 void cSim::FUN_00f3bc20(int param) {
-    cInner* inner = mpInner;
-    int n = ((int)inner->p240 - (int)inner->p23c) / 0x534;
-    for (int i = 0; i < n; i++) {
-        char* base = (char*)inner->p23c + i * 0x534;
-        int* p = *(int**)(base + 0x84);
-        int* end = (int*)(base + 0x88);
-        while (p != end) {
-            if (p[1] == param) p[1] = -1;
-            if (p[2] == param) p[2] = -1;
-            p = (int*)((char*)p + 0x188);
+    int n = (*(int*)(*(int*)((char*)this + 0x10) + 0x240) -
+             *(int*)(*(int*)((char*)this + 0x10) + 0x23c)) / 0x534;
+    if (n == 0) return;
+    int off = 0;
+    do {
+        int base = *(int*)(*(int*)((char*)this + 0x10) + 0x23c);
+        int p = *(int*)(base + 0x84 + off);
+        int end = base + off + 0x88;
+        if (p != end) {
+            do {
+                if (*(int*)(p + 4) == param) *(int*)(p + 4) = -1;
+                if (*(int*)(p + 8) == param) *(int*)(p + 8) = -1;
+                p += 0x188;
+            } while (p != end);
         }
-    }
+        off += 0x534;
+        n--;
+    } while (n != 0);
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x00f3b590  Random value in [min,max] (x87).
 // ---------------------------------------------------------------------------
 struct RandomLinearCongruential {
-    double RandomDoubleUniform();
+    double RandomDoubleUniform();                 // 0x009360d0
 };
 extern RandomLinearCongruential g_sMathRandom;   // 0x01601760
 
-float FUN_00f3b590(float a, float b) {
+double FUN_00f3b590(float a, float b) {
     double r = g_sMathRandom.RandomDoubleUniform();
-    float d = a - b;
-    float v = (float)(r * (double)((b + a) - d)) + d;
+    double lo = (double)a - (double)b;
+    double hi = (double)a + (double)b;
+    double v = r * (hi - lo) + lo;
+    if (v >= hi) v = hi;
+    else if (v < lo) v = lo;
     return v;
 }
 
