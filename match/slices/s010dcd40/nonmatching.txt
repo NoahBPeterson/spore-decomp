@@ -1,8 +1,8 @@
 010dce00 39 havok-equivalent
 010dce40 223 havok-equivalent
 010dd180 54 havok-equivalent
-010dd1d0 69 havok-equivalent
-010dd260 130 havok-equivalent
+010dd1d0 69 havok-equivalent; default PASS 329/100%, replay PASS
+010dd260 130 havok-equivalent; default PASS 400/100%, replay PASS
 010dd300 77 havok-equivalent
 010dd380 57 havok-equivalent
 010dd580 186 havok-equivalent

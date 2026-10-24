@@ -162,13 +162,13 @@ void hkConvexListConvexShape::getSupportingVertex(const hkVector4& dir, hkCdVert
 // ---------------------------------------------------------------------------------------------------
 struct hkProcessCollisionOutputBackup {
     hkProcessCdPoint* m_firstFreeContactPoint;     // +0
-    uint32_t m_potentialContacts[0x402 - 1];       // +4 .. 0x100c  (0x402 dwords copied starting at +4)
+    uint32_t m_potentialContacts[0x402];           // +4 .. 0x100b  (0x402 dwords copied starting at +4)
     uint32_t m_pad;                                // +0x100c (not touched)
     uint32_t m_toiContact[8];                      // +0x1010 .. 0x102c
     hkTime   m_toiTime;                            // +0x1030
     uint32_t m_toiProperties;                      // +0x1034
     hkProcessCollisionOutputBackup(const hkProcessCollisionOutput& out);
-    void restore(hkProcessCollisionOutput& out);
+    hkProcessCollisionOutputBackup* restore(hkProcessCollisionOutput& out);
 };
 // @ 0x010dd1d0  hkProcessCollisionOutputBackup::hkProcessCollisionOutputBackup
 hkProcessCollisionOutputBackup::hkProcessCollisionOutputBackup(const hkProcessCollisionOutput& out)
@@ -185,7 +185,7 @@ hkProcessCollisionOutputBackup::hkProcessCollisionOutputBackup(const hkProcessCo
     }
 }
 // @ 0x010dd260  hkProcessCollisionOutputBackup::restore
-void hkProcessCollisionOutputBackup::restore(hkProcessCollisionOutput& out)
+hkProcessCollisionOutputBackup* hkProcessCollisionOutputBackup::restore(hkProcessCollisionOutput& out)
 {
     out.m_firstFreeContactPoint = m_firstFreeContactPoint;
     out.m_toiTime = m_toiTime;
@@ -197,6 +197,7 @@ void hkProcessCollisionOutputBackup::restore(hkProcessCollisionOutput& out)
         const uint32_t* s = (const uint32_t*)this + 1;
         for (int i = 0; i < 0x402; i++) d[i] = s[i];
     }
+    return this;
 }
 
 // ---------------------------------------------------------------------------------------------------
