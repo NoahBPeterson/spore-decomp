@@ -25,17 +25,17 @@ int  __fastcall FUN_009ce410(int this_);                         // 0x009ce410
 extern "C" void  Sprintf8(void* buf, const char* fmt);           // 0x00938470
 char __fastcall FUN_009b78c0(int this_, int dummy, int param_2, int param_3, int param_4);
 char __fastcall FUN_009b3850(int a, int dummy, void* b, void* c, int d);   // ComposeGaitFileName
-int  __fastcall FUN_009e5b40(int a, int dummy, void* b, int c);
+int  __fastcall FUN_009e5b40(int a, int dummy, void* b, int c, int d);
 int  __fastcall FUN_009e18c0(int a, int dummy, void* b, int c, int d);     // LoadGaitFile
-int  __fastcall FUN_009dbe10(int a, int dummy, int b, int c);
-int  __fastcall FUN_009e4350(int a, int dummy, int b);
-int  __fastcall FUN_009e3790(int a, int dummy);
-int  __fastcall FUN_009e4450(int a, int dummy, int b, int c, int d);
-int  __fastcall FUN_009d24c0(int a, int dummy, int b, int c, int d, int e);
-float __fastcall FUN_009dc7a0(int a, int dummy);
-int  FUN_009d0c80(void);
-int  FUN_009dfc40(void);
-int  FUN_009d1050(void);
+int  __fastcall FUN_009dbe10(int a, int dummy, int b, int c, int d);
+int  __fastcall FUN_009e4350(int a, int dummy, int b, int c);
+int  __fastcall FUN_009e3790(int a, int dummy, void* b);
+int  __fastcall FUN_009e4450(int a, int dummy, float f, int b, int c, int d);
+int  __fastcall FUN_009d24c0(int a, int dummy, int b, int c, int d, int e, int f);
+float __fastcall FUN_009dc7a0(int a, int dummy, void* b);
+int  __fastcall FUN_009d0c80(int a);
+int  __fastcall FUN_009dfc40(int a);
+int  __fastcall FUN_009d1050(int a);
 
 // ===========================================================================
 // 0x009b77a0  project a point onto a circle of radius (speed*scale) around a bone
@@ -83,50 +83,48 @@ char __fastcall FUN_009b78c0(int param_1, int dummy, int param_2, int param_3, i
     int local_1a4;
     if (iVar4 == 7) {
         Sprintf8(local_1a0, "default");
-        local_1a4 = FUN_009e5b40(param_1 + 0x2f8, 0, local_1a0, param_4);
+        local_1a4 = FUN_009e5b40(param_1 + 0x2f8, 0, local_1a0, (int)piVar2, param_4);
     } else {
-        // ComposeGaitFileName(param_1, local_1a0, local_1a8, param_3)
         char cVar1 = FUN_009b3850(param_1, 0, local_1a0, local_1a8, param_3);
         if (cVar1 != 0) {
-            int iVar5 = param_4;
-            int uVar3 = FUN_009ce410(param_4);
-            local_1a4 = FUN_009e18c0(param_1 + 0x2f8, 0, local_1a0, uVar3, iVar5);
+            int uVar3 = FUN_009ce410((int)piVar2);
+            local_1a4 = FUN_009e18c0(param_1 + 0x2f8, 0, local_1a0, uVar3, param_4);
             if (local_1a4 != 0) goto LAB_009b79ca;
         }
         cVar1 = FUN_009b3850(param_1, 0, local_1a0, local_1a8, 0);
         if (cVar1 == 0) return 0;
-        int iVar5 = param_4;
-        int uVar3 = FUN_009ce410(param_4);
-        local_1a4 = FUN_009e18c0(param_1 + 0x2f8, 0, local_1a0, uVar3, iVar5);
+        int uVar3 = FUN_009ce410((int)piVar2);
+        local_1a4 = FUN_009e18c0(param_1 + 0x2f8, 0, local_1a0, uVar3, param_4);
     }
     if (local_1a4 == 0) return 0;
 LAB_009b79ca:
     {
-        int* base = (int*)(param_1);
-        iVar4 = *(int*)((int)base + param_2 * 4 + 0x2fc);
-        if (param_4 == iVar4) *(int*)((int)base + param_2 * 4 + 0x2fc) = iVar4 + 1;
-        if (param_4 == 0) *(int*)((int)base + (param_4 + param_2 * 4) * 4 + 0x374) = 0x3f800000;
-        else *(int*)((int)base + (param_4 + param_2 * 4) * 4 + 0x374) = 0;
-        int iVar5 = param_4;
-        int uVar3 = FUN_009ce410(param_4);
-        iVar4 = FUN_009dbe10(local_1a4, 0, uVar3, iVar5);
-        if (iVar4 != 0) {
+        int iVar5 = *(int*)(param_1 + param_2 * 4 + 0x2fc);
+        if (param_4 == iVar5) *(int*)(param_1 + param_2 * 4 + 0x2fc) = iVar5 + 1;
+        if (param_4 == 0) *(int*)(param_1 + (param_4 + param_2 * 4) * 4 + 0x374) = 0x3f800000;
+        else *(int*)(param_1 + (param_4 + param_2 * 4) * 4 + 0x374) = 0;
+        int uVar3 = FUN_009ce410((int)piVar2);
+        iVar5 = FUN_009dbe10(param_1 + 0x2f8, 0, local_1a4, uVar3, param_4);
+        if (iVar5 != 0) {
             *(int*)(param_1 + 0x434) = param_2 + 1;
-            uVar3 = FUN_009d0c80();
-            uVar3 = FUN_009e4350(*piVar2, 0, uVar3);
-            FUN_009e3790(uVar3, 0);
-            FUN_009dfc40();
-            float fVar5 = FUN_009dc7a0(param_1 + 0x264, 0);
+            int uVar4 = FUN_009d0c80((int)piVar2);
+            int inner[45];
+            FUN_009e4350((int)inner, 0, *piVar2, uVar4);
+            int index = param_4 + param_2 * 4;
+            int dest = param_1 + 0x440 + index * 0xb4;
+            FUN_009e3790(dest, 0, inner);
+            FUN_009dfc40((int)inner);
+            float fVar5 = FUN_009dc7a0(param_1 + 0x2f8, 0, (void*)(param_1 + 0x264));
             float fVar6 = 1.0f;
             if (1e-06f < *(float*)(param_1 + 0x70)) fVar6 = 1.0f / *(float*)(param_1 + 0x70);
-            FUN_009e4450(param_1 + 0x2f8, 0, (int)(fVar6 * fVar5), param_4, 0);
+            FUN_009e4450(param_1 + 0x2f8, 0, fVar6 * fVar5, param_4, 0, 0);
             int a = *(int*)(param_1 + param_2 * 4 + 0x2fc);
             int b = param_1 + param_2 * 0x10 + 0x374;
-            int c = param_1 + param_2 * 0x2d0 + 0x3d4;
-            int d = (int)((char*)base + param_2 * 0x2d0 + 0x438);
+            int c = param_1 + param_2 * 0x10 + 0x3d4;
+            int d = param_1 + param_2 * 0x2d0 + 0x438;
             int e = param_1 + 0x434;
-            FUN_009d24c0(a, 0, b, c, d, e);
-            FUN_009d1050();
+            FUN_009d24c0((int)piVar2, 0, a, b, c, d, e);
+            FUN_009d1050((int)piVar2);
         }
     }
     return 1;
@@ -196,7 +194,7 @@ void nSPCreatureAnim::creature_instance_data::SetStyleWeightForAllGroups(int par
 // 0x009b7c00  blend a target velocity into the accumulated displacement
 // ===========================================================================
 // @ 0x009b7c00
-void __fastcall FUN_009b7c00(int param_1, int dummy, float param_2, float* param_3, float param_4)
+void* __fastcall FUN_009b7c00(int param_1, int dummy, float param_2, float* param_3, float param_4)
 {
     (void)dummy;
     float fVar1 = *param_3;
@@ -221,13 +219,14 @@ void __fastcall FUN_009b7c00(int param_1, int dummy, float param_2, float* param
     if ((*(float*)(param_1 + 0x1670) * *(float*)(param_1 + 0x1670) +
          *(float*)(param_1 + 0x1674) * *(float*)(param_1 + 0x1674)) +
         *(float*)(param_1 + 0x1678) * *(float*)(param_1 + 0x1678) < d) {
-        *(int*)(param_1 + 0x1670) = 0;
-        *(int*)(param_1 + 0x1674) = 0;
-        *(int*)(param_1 + 0x1678) = 0;
+        *(float*)(param_1 + 0x1670) = 0.0f;
+        *(float*)(param_1 + 0x1674) = 0.0f;
+        *(float*)(param_1 + 0x1678) = 0.0f;
     }
     if (*(float*)(param_1 + 0x167c) * *(float*)(param_1 + 0x167c) < d) {
-        *(int*)(param_1 + 0x167c) = 0;
+        *(float*)(param_1 + 0x167c) = 0.0f;
     }
+    return param_3;
 }
 
 // ===========================================================================
@@ -238,8 +237,13 @@ void __fastcall FUN_009b7da0(int param_1, int dummy, float param_2)
 {
     (void)dummy;
     float fVar6 = 1.0f / *(float*)(param_1 + 0x70);
-    float local_2c, local_28, local_24, local_20, local_1c, local_18, local_14, local_10, local_c, local_8, local_4;
-    float local_2cbase[8];
+    float out[3];
+    float vec[3];
+    float quat[4];
+    float zero[3];
+    float rot[4];
+    float scaled[3];
+    float dir[3];
     if (*(char*)(param_1 + 0x263) == '\0') {
         if (param_2 <= 1e-06f) param_2 = 0.0f;
         else param_2 = 1.0f / param_2;
@@ -253,11 +257,11 @@ void __fastcall FUN_009b7da0(int param_1, int dummy, float param_2)
             *(float*)(param_1 + 0x1664) = *(float*)(param_1 + 0x1664) - (*(float*)(param_1 + 0xe0) * fVar5) * param_2;
             *(float*)(param_1 + 0x1668) = *(float*)(param_1 + 0x1668) - (*(float*)(param_1 + 0xe4) * fVar5) * param_2;
         }
-        float* pfVar4 = (float*)FUN_0099c310(&local_20, (float*)(param_1 + 0x3c), pfVar3);
-        *pfVar3 = *pfVar4;
+        float* pfVar4 = (float*)FUN_0099c310(out, (float*)(param_1 + 0x3c), pfVar3);
+        *pfVar3 = pfVar4[0];
         *(float*)(param_1 + 0x1664) = pfVar4[1];
         *(float*)(param_1 + 0x1668) = pfVar4[2];
-        *(int*)(param_1 + 0x1668) = 0;
+        *(float*)(param_1 + 0x1668) = 0.0f;
         *pfVar3 = *pfVar3 * fVar6;
         *(float*)(param_1 + 0x1664) = *(float*)(param_1 + 0x1664) * fVar6;
         float g0 = *(float*)(param_1 + 0x3c);
@@ -267,59 +271,57 @@ void __fastcall FUN_009b7da0(int param_1, int dummy, float param_2)
         float h1 = -*(float*)(param_1 + 0x1654);
         float h2 = -*(float*)(param_1 + 0x1658);
         float g3 = *(float*)(param_1 + 0x48);
-        local_20 = ((g0 * *(float*)(param_1 + 0x165c) + g3 * h0) - g2 * h1) + g1 * h2;
-        local_1c = ((g1 * *(float*)(param_1 + 0x165c) + g3 * h1) + g2 * h0) - g0 * h2;
-        local_18 = ((g2 * *(float*)(param_1 + 0x165c) - g1 * h0) + g0 * h1) + g3 * h2;
-        local_14 = ((g3 * *(float*)(param_1 + 0x165c) - g0 * h0) - g1 * h1) - g2 * h2;
-        local_2c = 0.0f;
-        local_28 = 0.0f;
-        local_24 = 0.0f;
-        FUN_009b4ba0(&local_10, &local_20, &local_2c);
-        local_4 = local_4 * param_2;
+        quat[0] = ((g0 * *(float*)(param_1 + 0x165c) + g3 * h0) - g2 * h1) + g1 * h2;
+        quat[1] = ((g1 * *(float*)(param_1 + 0x165c) + g3 * h1) + g2 * h0) - g0 * h2;
+        quat[2] = ((g2 * *(float*)(param_1 + 0x165c) - g1 * h0) + g0 * h1) + g3 * h2;
+        quat[3] = ((g3 * *(float*)(param_1 + 0x165c) - g0 * h0) - g1 * h1) - g2 * h2;
+        zero[0] = 0.0f;
+        zero[1] = 0.0f;
+        zero[2] = 0.0f;
+        FUN_009b4ba0(rot, quat, zero);
+        rot[3] = rot[3] * param_2;
+        scaled[0] = rot[0] * rot[3];
+        scaled[1] = rot[1] * rot[3];
+        scaled[2] = rot[2] * rot[3];
+        dir[1] = 0.0f;
         float fVar10 = 1.0f, fVar5b = 0.0f, fVar6b = 0.0f;
-        local_2c = local_10 * local_4;
-        local_28 = local_c * local_4;
-        local_24 = local_8 * local_4;
-        local_1c = 0.0f;
         if ((*(char**)(param_1 + 0x1688) != 0) && (**(char**)(param_1 + 0x1688) != '\0')) {
             fVar5b = *(float*)(param_1 + 0x18);
             if ((fVar5b * fVar5b + *(float*)(param_1 + 0x1c) * *(float*)(param_1 + 0x1c)) +
                 *(float*)(param_1 + 0x20) * *(float*)(param_1 + 0x20) <= 0.01f) {
                 fVar5b = 0.0f;
             } else {
-                float* pfVar3b = (float*)FUN_009a49d0(&local_20, (float*)(param_1 + 0x18), 0);
-                fVar6b = *pfVar3b;
+                float* pfVar3b = (float*)FUN_009a49d0(dir, (float*)(param_1 + 0x18), 0);
+                fVar6b = pfVar3b[0];
                 fVar5b = pfVar3b[1];
                 fVar10 = pfVar3b[2];
             }
         }
-        fVar6 = (fVar10 * local_24 + fVar5b * local_28) + fVar6b * local_2c;
+        fVar6 = (fVar10 * scaled[2] + fVar5b * scaled[1]) + fVar6b * scaled[0];
     } else {
-        local_2c = *(float*)(param_1 + 0x264) * fVar6;
-        local_28 = *(float*)(param_1 + 0x268) * fVar6;
-        local_24 = 0.0f;
-        int* puVar2 = (int*)FUN_0099c310(&local_20, (void*)(param_1 + 0x3c), &local_2c);
-        *(int*)(param_1 + 0x1660) = *puVar2;
-        float fVar10 = 1.0f, fVar6b = 0.0f, fVar5b = 0.0f;
-        *(int*)(param_1 + 0x1664) = puVar2[1];
-        *(int*)(param_1 + 0x1668) = puVar2[2];
-        *(int*)(param_1 + 0x1668) = 0;
+        vec[0] = *(float*)(param_1 + 0x264) * fVar6;
+        vec[1] = *(float*)(param_1 + 0x268) * fVar6;
+        vec[2] = 0.0f;
+        float* puVar2 = (float*)FUN_0099c310(out, (void*)(param_1 + 0x3c), vec);
+        *(float*)(param_1 + 0x1660) = puVar2[0];
+        *(float*)(param_1 + 0x1664) = puVar2[1];
+        *(float*)(param_1 + 0x1668) = puVar2[2];
+        *(float*)(param_1 + 0x1668) = 0.0f;
         float fVar1 = *(float*)(param_1 + 0x18);
+        float fVar10 = 1.0f, fVar6b = 0.0f, fVar5b = 0.0f;
         if (((*(char**)(param_1 + 0x1688) != 0) && (**(char**)(param_1 + 0x1688) != '\0')) &&
             (0.01f < (fVar1 * fVar1 + *(float*)(param_1 + 0x1c) * *(float*)(param_1 + 0x1c)) +
                       *(float*)(param_1 + 0x20) * *(float*)(param_1 + 0x20))) {
-            float* pfVar3b = (float*)FUN_009a49d0(&local_20, (float*)(param_1 + 0x18), 0);
-            fVar6b = *pfVar3b;
+            float* pfVar3b = (float*)FUN_009a49d0(dir, (float*)(param_1 + 0x18), 0);
+            fVar6b = pfVar3b[0];
             fVar5b = pfVar3b[1];
             fVar10 = pfVar3b[2];
         }
         fVar6 = (fVar5b + fVar6b) * 0.0f + *(float*)(param_1 + 0x26c) * fVar10;
     }
     *(float*)(param_1 + 0x166c) = fVar6;
-    float fVar5c = -6.2831855f;
-    if ((fVar6 <= -6.2831855f) || (fVar5c = 6.2831855f, 6.2831855f < fVar6)) {
-        fVar6 = fVar5c;
-    }
+    if (!(fVar6 > -6.2831855f)) fVar6 = -6.2831855f;
+    else if (!(fVar6 <= 6.2831855f)) fVar6 = 6.2831855f;
     *(float*)(param_1 + 0x166c) = fVar6;
 }
 
