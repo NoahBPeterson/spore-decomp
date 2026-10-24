@@ -1,0 +1,3 @@
+00ceb2b0 148 not reconstructed in this pass (intrusive map lower-bound lookup by *param2 key in [this+0xc], then temporary refcounted pointer copy, byte temp at [esp+0x18], 0x00ceab60 insert call, release, returns bound+0x14); not byte-exact; size 0 vs 148; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ceb350 214 not reconstructed in this pass (city display strategy map helper); not byte-exact; size 0 vs 214; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ceb430 690 not reconstructed in this pass (SP::cCityDisplayStrategy::NoteVehicleAdded, 690 bytes); not byte-exact; size 0 vs 690; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
