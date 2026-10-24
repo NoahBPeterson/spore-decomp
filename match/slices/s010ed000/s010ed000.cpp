@@ -234,10 +234,17 @@ void hkSimpleClosestContactCollector::addCdPoint(const hkCdPoint& p)
     }
 }
 
-struct hkGskBuilder { void build(hkCdBody* a, hkCdBody* b, int flags); };
+// shape interface: slot 2 of the vtable (+0x08) is the shape type id
+struct hkShape {
+    virtual void v00() = 0;
+    virtual void v04() = 0;
+    virtual int getShapeType() = 0;      // +0x08
+};
+
+struct hkGskBuilder { hkGskBuilder* build(hkCdBody* a, hkCdBody* b, int flags); };
 
 // @ 0x010ed2a0  hkGskBuilder::build (hkGskCache builder using two bodies)
-void hkGskBuilder::build(hkCdBody* a, hkCdBody* b, int flags)
+hkGskBuilder* hkGskBuilder::build(hkCdBody* a, hkCdBody* b, int flags)
 {
     char* p = (char*)this;
     *(int*)(p + 8) = flags;
@@ -248,27 +255,30 @@ void hkGskBuilder::build(hkCdBody* a, hkCdBody* b, int flags)
     hkTransform xf;
     xf.setMulInverseMul(*(const hkTransform*)a->mTransform, *(const hkTransform*)b->mTransform);
     void* cache = p + 0xc;
-    int k = ((int(__thiscall*)(void*))VFN(shapeB, 8))(shapeB);
+    int k = ((hkShape*)shapeB)->getShapeType();
     if (k == 6)
-        FUN_01113fd0(cache, 0, shapeB, shapeA, &xf);
+        FUN_01113fd0(cache, 0, shapeA, shapeB, &xf);
     else
-        hkGskCache_init(cache, 0, shapeB, shapeA, &xf);
-    *(int*)(p + 0x2c) = -1082130432;  // 0xbf800000
+        hkGskCache_init(cache, 0, shapeA, shapeB, &xf);
+    *(int*)(p + 0x2c) = 0;
     *(int*)(p + 0x28) = 0;
     *(int*)(p + 0x24) = 0;
     *(int*)(p + 0x20) = 0;
     *(int*)(p + 0x2c) = -1082130432;
     *(int*)(p + 0x18) = -1082130432;
-    // depth = min of the two bodies' depth fields
-    void* n1 = (char*)a + 0xc;
-    while (n1 != 0) n1 = *(void**)((char*)n1 + 0xc);
-    void* n2 = (char*)b + 0xc;
-    while (n2 != 0) n2 = *(void**)((char*)n2 + 0xc);
-    float d = *(float*)((char*)n2 + 0x20);
-    if (*(float*)((char*)n1 + 0x20) < d)
-        d = *(float*)((char*)n1 + 0x20);
-    *(float*)(p + 0x1c) = d;
+    // depth = min of the two bodies' depth fields, taken from the last node of the
+    // +0x0c parent chain (next at +0x0c, depth float at +0x20)
+    void* n1 = (void*)a;
+    while (*(void**)((char*)n1 + 0xc) != 0)
+        n1 = *(void**)((char*)n1 + 0xc);
+    void* n2 = (void*)b;
+    while (*(void**)((char*)n2 + 0xc) != 0)
+        n2 = *(void**)((char*)n2 + 0xc);
+    float depthA = *(float*)((char*)n1 + 0x20);
+    float depthB = *(float*)((char*)n2 + 0x20);
+    *(float*)(p + 0x1c) = depthA > depthB ? depthB : depthA;
     (void)shapeA;
+    return this;
 }
 
 // @ 0x010ed380  (point/plane query: closest point in a's frame, radius pushed into w)
