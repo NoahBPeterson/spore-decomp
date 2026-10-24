@@ -1583,15 +1583,14 @@ void* Sorter::run(char* first)
         p += 0x3c;
         if (*(int*)(old + 0x24) == 0) break;
     } while (*(int*)(old + 0x28) != 0);
-    bool flag = false;
-    FUN_006950b0((Elem*)first, (Elem*)p, flag);
+    FUN_006950b0((Elem*)first, (Elem*)p, (int)((unsigned)first & 0xffffff00u));
     return this;
 }
 
 // @ 0x00695490
 void Vec60::reserve(unsigned int n)
 {
-    if ((unsigned)((end - begin) / 0x60) < n)
+    if ((unsigned)((cap - begin) / 0x60) < n)
     {
         char* p;
         if (n == 0)
