@@ -1,4 +1,4 @@
-0045edf0  -  matrix*vector transform; /Od 24-temp staging scheduling differs
-0045efa0  -  string append-fill; capacity/growth temp layout differs
+0045edf0  390  matrix*vector transform; flags /Od /Ob1 /MD /Gy /TP /arch:SSE2 /fp:fast; the retail body is scalar SSE (movss/mulss/addss) with single-precision intermediates, so both the SSE arch and /fp:fast are required for identical rounding; 24-byte temp staging scheduling differs; difftest PASS (400/400 valid, 100% coverage; 353 vs 423 bytes)
+0045efa0  151  string append-fill; difftest WEAK (154/400 valid, 94.9% coverage, need 200 valid; no mismatch, the discarded inputs fault on both sides); retail fills with memset(mpEnd+1, (unsigned char)c, n-1) and reserves max(max(room*2, 8), used+n); capacity/growth temp layout differs
 0045f0e0  -  reserve/max helper; reference-temp frame differs
 0045f390  -  string assign(range); call/temp scheduling differs

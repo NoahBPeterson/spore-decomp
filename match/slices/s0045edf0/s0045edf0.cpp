@@ -4,6 +4,7 @@
 
 extern "C" __declspec(dllimport) void* memmove(void* d, const void* s, unsigned int n);
 extern "C" void* memcpy(void* d, const void* s, unsigned int n);
+extern "C" void* memset(void* d, int c, unsigned int n);
 extern "C" void* EaAlloc(unsigned int n, const char* tag, int a, int b, const char* file, int line);
 
 struct StrBuf {
@@ -160,7 +161,7 @@ void StrBuf::appendFill(unsigned int n, char c)
         reserve(newCap);
     }
     if (n != 0) {
-        memcpy(end + 1, &c, n - 1);
+        memset(end + 1, (unsigned char)c, n - 1);
         *end = c;
         end = end + n;
         *end = 0;
@@ -181,6 +182,11 @@ void TransformVec4(float* out, const float* v, const float* m)
     out[1] = m[1] * v0 + m[5] * v1 + m[9] * v2 + m[13] * v3;
     out[2] = m[2] * v0 + m[6] * v1 + m[10] * v2 + m[14] * v3;
     out[3] = m[3] * v0 + m[7] * v1 + m[11] * v2 + m[15] * v3;
+
+    // The retail image's only return-value trace is a dead `mov eax,[ebp+8]` (arg1 = out) placed
+    // right before the epilogue; keep the destination in a local so the /Od codegen ends the same.
+    float* const pOut = out;
+    (void)pOut;
     return;
 }
 
