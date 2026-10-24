@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+slices/s009b2340/s009b2340.cpp  ?CapFlag@nSPCreatureAnim@@YAKK@Z  009b2f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009b2340/s009b2340.cpp  ?Recompute@creature_part_caps_holder@nSPCreatureAnim@@QAEXXZ  009b3010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009b2340/s009b2340.cpp  ?GetCap@creature_part_caps_holder@nSPCreatureAnim@@QBE_NK_N@Z  009b3050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009b2340/s009b2340.cpp  ?SetCap@creature_part_caps_holder@nSPCreatureAnim@@QAEXK_N@Z  009b3090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009b2340/s009b2340.cpp  ?HasCap@creature_part_caps_holder@nSPCreatureAnim@@QBE_NK@Z  009b30e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009b2340/s009b2340.cpp  ?GetFreeSlot@creature_part_caps_holder@nSPCreatureAnim@@QBEKXZ  009b3110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009b2340/s009b2340.cpp  ?SameCaps@nSPCreatureAnim@@YA_NPBUcreature_part_caps_holder@1@0@Z  009b3150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
