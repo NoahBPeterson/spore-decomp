@@ -1,0 +1,1 @@
+slices/s01057d50/s01057d50.cpp  ?ScanBuildingSpecies@@YAXPAXH@Z  01058660  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
