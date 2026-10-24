@@ -1,1 +1,16 @@
-008d5340 ?Parse@TriggerConfigParser@Input@EA@@QAE_NPBD0@Z  # TriggerConfigParser::Parse migrated from s008d5340 (verbatim, slice spelling)
+008d5340 ?Parse@TriggerConfigParser@Input@EA@@QAE_NPBD0@Z  # nonmatching (1882, pre-existing) - parse "[platform]" sections, "#define" symbols, "(a,b)=value" combos and "MOD+KEY = value" bindings
+008d5c50 ?ParseTriggerConfigText@Input@EA@@YAHPAVTriggerMap@12@PBD1PAD@Z  # byte-exact; init a stack TriggerConfigParser (empty bucket array, 1.0f/2.0f hash factors), Parse, return mEntryCount
+008d5d70 ?FUN_008d5d70@ResourceMan@EA@@YIPAXPAX0@Z  # byte-exact; adjustor thunk forwarding interface slot +0x24 to the primary object at this-8
+008d5d80 ?FUN_008d5d80@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NXZ  # byte-exact; clear mbInitialized and call vtable slot 0x1c, return true
+008d5da0 ?Cast@DatabaseDirectoryFiles@ResourceMan@EA@@QAEPAXI@Z  # byte-exact; 0x226a1de -> this-4, 0xee3f516e -> this (null only for this==4), else 0
+008d5de0 ?SetMutexLocked@DatabaseDirectoryFiles@ResourceMan@EA@@QAEX_N@Z  # byte-exact; lock the +0x138 mutex with tag 0x1436624, or unlock it
+008d5e10 ?OpenRecord@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NPAX00PAURecordOpenResult@23@@Z  # nonmatching (53) - record key converter (override else hook 0x154c464 with mDefaultGroupId), then slot 0x5c handle into the result when != -1
+008d5ea0 ?OpenRecordFromPath@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NPB_WPAX@Z  # byte-exact; FilePath GetExtension/GetDirectory into a 0x104-wchar buffer, then OpenRecord
+008d5f70 ?AddRef@BackgroundRecordLoad@@QAE_NXZ  # byte-exact; xadd 0 test, then xadd +1 only while the count is nonzero
+008d5fa0 ?Release@BackgroundRecordLoad@@QAE_NXZ  # byte-exact; xadd 0 test, decrement, and hand the object to owner slot 0x3c when the count reaches zero
+008d5fe0 ?SetLocation@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NIH@Z  # nonmatching (189) - resolve type 6 into 3/4, exists/create/remove-recursive directory flags, re-check, publish flags and notify slot 0x58
+008d60d0 ?Initialize@BackgroundRecordLoad@@QAEPAXPAXPBUKey@ResourceMan@EA@@@Z  # byte-exact; resource/stream vtables, in-place FileStream, copy the key, owner, zero both counts
+008d6140 ?Destroy@BackgroundRecordLoad@@QAEPAXI@Z  # byte-exact; stream vtables, release the owner's reference, destroy the stream, scalar delete
+008d61a0 ?FUN_008d61a0@@YGIPAUListOwner@@@Z  # byte-exact; OR slot 0x10 of the object returned by slot 0x18 of every item in the list at owner+0x18
+008d61e0 ?GetTypeByExtension@DatabaseDirectoryFiles@ResourceMan@EA@@QAEHPB_W@Z  # nonmatching (101) - skip a leading '.', case-insensitive extension tree search, else parse hex; -1 on trailing characters
+008d6290 ?GetExtensionByType@DatabaseDirectoryFiles@ResourceMan@EA@@QAEPB_WI@Z  # nonmatching (10) - first extension whose mapped type matches, else null

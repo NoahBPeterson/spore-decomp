@@ -1,2 +1,6 @@
 # va  diff-bytes  reason
 008d5340  1882  Parse: complete; inline/register-allocation differences (this spilled to stack in original); flags /O2 /MD /Gy /TP
+008d5e10  53  OpenRecord: complete; original keeps the failure path out of line (cl15 inverts it) and hoists the context load differently
+008d5fe0  189  SetLocation: complete; retail takes a third unused stack argument (ret 0xc) that the modelled signature omits, and cl15 duplicates the return-false epilogue per site where the original shares one block
+008d61e0  101  GetTypeByExtension: complete; register allocation only (original spills/reloads the mutex pointer, extension and loop anchor in other registers)
+008d6290  10  GetExtensionByType: complete; register allocation only (original keeps the mutex in edi and reuses the this register for the tree anchor)

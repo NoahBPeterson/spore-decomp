@@ -1,1 +1,12 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008d5340/s008d5340.cpp  ?ParseTriggerConfigText@Input@EA@@YAHPAVTriggerMap@12@PBD1PAD@Z  008d5c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008d5340/s008d5340.cpp  ?FUN_008d5d70@ResourceMan@EA@@YIPAXPAX0@Z  008d5d70  /O2 /MD /Gy /TP
+slices/s008d5340/s008d5340.cpp  ?FUN_008d5d80@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NXZ  008d5d80  /O2 /MD /Gy /TP
+slices/s008d5340/s008d5340.cpp  ?Cast@DatabaseDirectoryFiles@ResourceMan@EA@@QAEPAXI@Z  008d5da0  /O2 /MD /Gy /TP
+slices/s008d5340/s008d5340.cpp  ?SetMutexLocked@DatabaseDirectoryFiles@ResourceMan@EA@@QAEX_N@Z  008d5de0  /O2 /MD /Gy /TP
+slices/s008d5340/s008d5340.cpp  ?OpenRecordFromPath@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NPB_WPAX@Z  008d5ea0  /O2 /MD /Gy /TP /GS-
+slices/s008d5340/s008d5340.cpp  ?AddRef@BackgroundRecordLoad@@QAE_NXZ  008d5f70  /O2 /MD /Gy /TP
+slices/s008d5340/s008d5340.cpp  ?Release@BackgroundRecordLoad@@QAE_NXZ  008d5fa0  /O2 /MD /Gy /TP
+slices/s008d5340/s008d5340.cpp  ?Initialize@BackgroundRecordLoad@@QAEPAXPAXPBUKey@ResourceMan@EA@@@Z  008d60d0  /O2 /MD /Gy /TP
+slices/s008d5340/s008d5340.cpp  ?Destroy@BackgroundRecordLoad@@QAEPAXI@Z  008d6140  /O2 /MD /Gy /TP
+slices/s008d5340/s008d5340.cpp  ?FUN_008d61a0@@YGIPAUListOwner@@@Z  008d61a0  /O2 /MD /Gy /TP
