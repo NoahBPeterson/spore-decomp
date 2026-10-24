@@ -1,4 +1,4 @@
-// @ 0x010E2270  hkBvTreeAgent::prepareCollisionPartners(bodyA, bodyB, input)   (Havok 3.1.0, thiscall, ret 0xC)
+// hkBvTreeAgent::prepareCollisionPartners(bodyA, bodyB, input)   (Havok 3.1.0, thiscall, ret 0xC)
 //
 // 1. bTa = inverse(B's transform) * A's transform; the aabb of body A's shape in B's space is computed with the
 //    tolerance 1.5 * input.m_tolerance (tolerance * 0.5 + tolerance).
