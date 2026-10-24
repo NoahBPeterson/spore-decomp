@@ -47,8 +47,12 @@ struct cTerrainSphere {
     virtual void v2();
     virtual HeightMap* GetHeightMap();                            // +0x0c
     virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
-    virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual void v9(); virtual void v10(); virtual void v11();
+    virtual bool IsReady();                                       // +0x30
+    virtual void OnEnter();                                       // +0x34
+    virtual void v14();                                           // +0x38
+    virtual void Reset();                                         // +0x3c
+    virtual void v17();
     virtual void Notify(int flag);                                // +0x48
     void Relevel(float a, int b);                                 // 0x00FA43E0 (thiscall, ret 8)
     void MarkFaceDirty(int face, const Rect* r);                  // 0x00F99AC0 (thiscall, ret 8)
@@ -81,13 +85,14 @@ struct cTerrainEditor {
     cTerrainSphere* mpSphere;           // +0x74
     char pad78[0x80 - 0x78];
     Rect mDirty[6];                     // +0x80
-    char pade0[0x140 - 0xe0];
+    Rect mRectsE0[6];                   // +0xe0
     uint16_t mMinMax[6][2];             // +0x140: per face {min, max} heights
     char pad158[0x168 - 0x158];
     U32Vector mTemp;                    // +0x168
 
     bool ReadTile(int face, const int* rect, float a);            // 0x00F69F50 (thiscall, ret 0xc)
     bool UpdateCPUFromGPU(float elapsed);
+    void ResetEditor();                                           // 0x00F6BC10
 };
 
 static __forceinline void ClearRect(Rect& r) { r.l = 0.0f; r.t = 0.0f; r.r = 0.0f; r.b = 0.0f; }
@@ -213,6 +218,71 @@ relevel:
         MessageServer()->Post(0x44448ed, 0, 0);
     }
     return true;
+}
+
+// --- 0x00F6BD20: intrusive-list push_front node allocation ------------
+// EASTL list node: allocates 0x1f0 bytes ("Simulator"), constructs the
+// payload at +8 from the argument, then links the node after the head
+// sentinel using the +0 (next) / +4 (prev) links.
+struct ListNode
+{
+    ListNode* mpNext;                     // +0x00
+    ListNode* mpPrev;                     // +0x04
+    char      mPayload[0x1f0 - 0x08];     // +0x08
+};
+struct TilePayload
+{
+    void Construct(const void* arg);      // 0x00f6b670 (thiscall, ret 4)
+};
+struct ListHead
+{
+    ListNode* mpHead;                     // +0x00 (sentinel next)
+    ListNode* mpTail;                     // +0x04 (sentinel prev)
+    void PushFront(const void* arg);      // 0x00f6bd20
+};
+
+void* __cdecl operator_new(uint32_t size, const char* name, int a, int b,
+                           const char* allocator, int line);       // 0x00f473a0
+
+// @ 0x00f6bd20
+void ListHead::PushFront(const void* arg)
+{
+    ListNode* node = (ListNode*)operator_new(0x1f0, "Simulator", 0, 0,
+                                             "eastl/allocator.h", 0xd1);
+    struct NodePayload { char pad[8]; TilePayload mPayload; };
+    if (&node->mPayload != 0)
+        ((TilePayload*)&node->mPayload)->Construct(arg);
+
+    node->mpNext = (ListNode*)this;
+    node->mpPrev = this->mpTail;
+    this->mpTail->mpNext = node;
+    this->mpTail = node;
+}
+
+// --- 0x00F6BC10: reset the editor's sphere hook and clear the 24-float
+// working block at +0xe0, re-initialising the 0x015b0e48 gate list.
+struct GateList
+{
+    GateList* mpNext;                     // +0x00
+    GateList* mpPrev;                     // +0x04
+    void Reset();                         // 0x00f6b7c0
+};
+extern GateList g_gateList;               // 0x015B0E48
+
+// @ 0x00f6bc10
+void cTerrainEditor::ResetEditor()
+{
+    if (mpSphere != 0)
+    {
+        mpSphere->OnEnter();
+        if (!mpSphere->IsReady())
+            mpSphere->Reset();
+    }
+    g_gateList.Reset();
+    g_gateList.mpNext = &g_gateList;
+    g_gateList.mpPrev = &g_gateList;
+    for (int i = 0; i < 6; i++)
+        ClearRect(mRectsE0[i]);
 }
 
 }  // namespace TE
