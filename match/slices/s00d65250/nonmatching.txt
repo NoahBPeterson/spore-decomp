@@ -1,0 +1,14 @@
+00d65250 8 IntrusiveList::Remove: unlink register allocation differs (prev/next in eax/ecx vs ecx/edx); 77 bytes
+00d652a0 88 Pool::Alloc: allocator base hoisted differently; 81 vs 70 bytes
+00d652f0 52 FUN_00d652f0: object kept in ecx instead of esi; 60 vs 62 bytes
+00d65330 435 target selection: aim/world state opaque, loop abbreviated; 135 vs 459 bytes
+00d65530 47 random float: x87 return conversion differs; 68 vs 74 bytes
+00d65580 53 surface projection: PlanetModel call cleanup deferred in original; 70 vs 67 bytes
+00d655d0 593 nearest interactable scan abbreviated (inventory/avatar state opaque); 306 vs 625 bytes
+00d65850 361 symbol extent covers the following body too (388 bytes); 32 bytes emitted
+00d659e0 596 combatant decision tree abbreviated; 63 vs 603 bytes
+00d65c40 899 FIGHT_Tick state machine abbreviated; 148 vs 913 bytes
+00d65fe0 151 lounge vignette decision approximated; 151 vs 186 bytes
+00d660a0 57 FindNext: bit tests folded to test/jns instead of shr/test; 61 bytes
+00d660e0 61 CopyFrom: compiler shrink-wraps esi and folds the sign test; 57 vs 61 bytes
+00d66120 115 AssignFrom: compiler tail-merges the two payload copies; 102 vs 123 bytes
