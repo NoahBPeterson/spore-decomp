@@ -18,6 +18,7 @@
 // Claude-coined. The face-axis table at 0x01491030 is {u,v,w,pad} per axis pair: {0,1,2}, {1,2,0}, {2,0,1}.
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
 
 struct Vector3
 {
@@ -35,7 +36,14 @@ struct Vector3
     float& operator[](int i) { return (&x)[i]; }
     const float& operator[](int i) const { return (&x)[i]; }
 
-    float Dot(const Vector3& v) const { return x * v.x + y * v.y + z * v.z; }
+    float Dot(const Vector3& v) const
+    {
+        // The original evaluates dot products in SSE (mulss/addss), not on x87.
+        __m128 px = _mm_mul_ss(_mm_set_ss(x), _mm_set_ss(v.x));
+        __m128 py = _mm_mul_ss(_mm_set_ss(y), _mm_set_ss(v.y));
+        __m128 pz = _mm_mul_ss(_mm_set_ss(z), _mm_set_ss(v.z));
+        return _mm_cvtss_f32(_mm_add_ss(_mm_add_ss(px, py), pz));
+    }
     float Length() const { return sqrtf(x * x + y * y + z * z); }
     void Normalize()
     {
@@ -56,6 +64,16 @@ struct Vector3
 
 static inline Vector3 operator+(const Vector3& a, const Vector3& b) { return Vector3(a.x + b.x, a.y + b.y, a.z + b.z); }
 static inline Vector3 operator-(const Vector3& a, const Vector3& b) { return Vector3(a.x - b.x, a.y - b.y, a.z - b.z); }
+
+// The original subtracts the two edge vectors in SSE (subss) after the corner values have been
+// rounded to float. cl otherwise keeps the corners in x87 and subtracts in extended precision.
+static inline Vector3 EdgeSub(const Vector3& a, const Vector3& b)
+{
+    volatile float ax = a.x, ay = a.y, az = a.z;
+    volatile float bx = b.x, by = b.y, bz = b.z;
+    volatile float x = ax - bx, y = ay - by, z = az - bz;
+    return Vector3(x, y, z);
+}
 static inline Vector3 operator*(const Vector3& a, float s) { return Vector3(a.x * s, a.y * s, a.z * s); }
 static inline Vector3 operator/(const Vector3& a, float s)
 {
@@ -192,8 +210,8 @@ void cViewFaceCover::Update(const cViewRect& view, float aspect)
     IntersectRayPlane(mPlane, origin, n2, c2);
     IntersectRayPlane(mPlane, origin, n1, c1);
 
-    Vector3 uEdge = c2 - c3;
-    Vector3 vEdge = c1 - c2;
+    Vector3 uEdge = EdgeSub(c2, c3);
+    Vector3 vEdge = EdgeSub(c1, c2);
 
     mOrigin = c3;
     mULength = uEdge.Length();
