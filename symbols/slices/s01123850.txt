@@ -1,1 +1,6 @@
 01123850 _hkCvxCvxDistByHeuristicSampling  # havok_names; closest points of two convex shapes by sampling 3 axis directions then refining
+01124060 ?computeSphereVolumeMassProperties@hkInertiaTensorComputer@@SA?AW4hkResult@@MMAAUhkMassProperties@@@Z  # Havok 3.1 hkInertiaTensorComputer::computeSphereVolumeMassProperties (163 bytes)
+01124110 ?computeBoxVolumeMassProperties@hkInertiaTensorComputer@@SA?AW4hkResult@@ABVhkVector4@@MAAUhkMassProperties@@@Z  # Havok 3.1 hkInertiaTensorComputer::computeBoxVolumeMassProperties (200 bytes)
+011241e0 ?shiftInertiaToCom@hkInertiaTensorComputer@@SAXAAUhkVector4@@MAAUhkMatrix3@@@Z  # Havok 3.1 hkInertiaTensorComputer::shiftInertiaToCom (150 bytes)
+01124280 ?shiftInertiaFromCom@hkInertiaTensorComputer@@SAXAAUhkVector4@@MAAUhkMatrix3@@@Z  # Havok 3.1 hkInertiaTensorComputer::shiftInertiaFromCom (150 bytes)
+01124320 ?compProjectionIntegrals@InternalInertiaTensorComputer@@QAEXPBUhkVector4@@@Z  # Havok 3.1 InternalInertiaTensorComputer::compProjectionIntegrals, Mirtich projection integrals (768 bytes)
