@@ -603,6 +603,8 @@ Mgr::Mgr()
     *(uint8_t*)&t2.anchor_.color = 0;
     t2.size = 0;
     s4.p = 0; s4.a = 0; s4.b = 0; s4.c = 0;
+    S4Ref tmp; tmp.p = 0; tmp.a = 0; tmp.b = 0; tmp.c = 0;
+    s4 = tmp;
     total = 0;
 }
 

@@ -6,6 +6,6 @@
 009aaab0 103 BuildBaked (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast): frame size 0x24 vs 0x20, float temp placement
 009aacc0 194 TreeP::InsertUnique: compare-chain branch threading and extra local frame
 009ab2c0 279 TreeP::InsertHint: position spill / register allocation, inlined Less; difftest PASS
-009ab430 80 Mgr::Mgr: member-init store order (tree/anchor zero stores) differs
+009ab430 74 Mgr::Mgr: complete; the s4 member is released through S4Ref::operator= (the original inlines it: `cmp %ebx,%ecx; je; mov $0,%0x3c(%esi); call 0x9c26a0` for the old p, then writes a/b/c), so the ctor zeroes s4 explicitly and then assigns a zeroed temporary; residual is cl's member-init store interleaving (`lea 0x8(%esi)` before the anchor zeros in the first half, ebx instead of the original's xor ecx) and the missing `push ecx` frame hole; 91 B vs 105 B; equiv PASS (400 valid, 95.1% coverage, 39/41 insns)
 009ab4a0 65 Mgr::RemoveEntry: inlined push_back register choice and pit reloads; difftest PASS
 009ab540 170 Mgr::RemoveAll: n kept in ebp and anchor address recomputed in original; difftest WEAK (no difference; 14.6% coverage, key match rarely hit by random inputs)
