@@ -691,8 +691,11 @@ class BlockLimbMap_s005b_85d0 {
     return pNode;
   }
   rbtree_iterator_s005b_85d0 DoInsertValueImpl(rbtree_node_base_s005b_85d0* pNodeParent, const BlockLimbPair_s005b_85d0& value, bool bForceToLeft);
+  // The hinted insert FindOrCreate actually calls: it re-validates the hint against the root
+  // and the anchor and then forwards to DoInsertValueImpl with the side it computed.
+  rbtree_iterator_s005b_85d0 DoInsertValueWithHint(rbtree_node_base_s005b_85d0* pHint, const BlockLimbPair_s005b_85d0& value, bool bForceToLeft);  // 0x005b8340
   void DoNukeSubtree(rbtree_node_s005b_85d0* pNode);
-  EA::AutoRefCount_s005b_85d0<cSPEditorSkinPart_s005b_85d0>* FindOrCreate(cSPEditorBlock_s005b_85d0* key);
+  EA::AutoRefCount_s005b_85d0<cSPEditorSkinPart_s005b_85d0>* FindOrCreate(cSPEditorBlock_s005b_85d0* const& key);
 };
 }
 namespace SP {
@@ -1113,7 +1116,7 @@ void cSPEditorManipulationSpineResize_s005b_85d0::Shutdown()
 
 // @ 0x005b88d0
 namespace eastl {
-EA::AutoRefCount_s005b_85d0<SP::cSPEditorSkinPart_s005b_85d0>* BlockLimbMap_s005b_85d0::FindOrCreate(SP::cSPEditorBlock_s005b_85d0* key)
+EA::AutoRefCount_s005b_85d0<SP::cSPEditorSkinPart_s005b_85d0>* BlockLimbMap_s005b_85d0::FindOrCreate(SP::cSPEditorBlock_s005b_85d0* const& key)
 {
   rbtree_node_base_s005b_85d0* pNode = mAnchor.mpNodeParent;
   rbtree_node_base_s005b_85d0* pLower = &mAnchor;
@@ -1129,10 +1132,10 @@ EA::AutoRefCount_s005b_85d0<SP::cSPEditorSkinPart_s005b_85d0>* BlockLimbMap_s005
   }
   if (pLower != &mAnchor && !(key < ((rbtree_node_s005b_85d0*)pLower)->mValue.first))
     return &((rbtree_node_s005b_85d0*)pLower)->mValue.second;
-  BlockLimbPair_s005b_85d0 kv;
-  kv.first = key;
-  kv.second = EA::AutoRefCount_s005b_85d0<SP::cSPEditorSkinPart_s005b_85d0>();
-  rbtree_iterator_s005b_85d0 it = DoInsertValueImpl(pLower, kv, false);
+  BlockLimbPair_s005b_85d0 kv = { key };
+  // The third argument is never read by 0x5b8340 (it computes the insertion side itself); it is
+  // only pushed because the template signature carries it.
+  rbtree_iterator_s005b_85d0 it = DoInsertValueWithHint(pLower, kv, false);
   return &it.mpNode->mValue.second;
 }
 }  // namespace eastl

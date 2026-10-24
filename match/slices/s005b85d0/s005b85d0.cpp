@@ -248,8 +248,13 @@ class BlockLimbMap {
     return pNode;
   }
   rbtree_iterator DoInsertValueImpl(rbtree_node_base* pNodeParent, const BlockLimbPair& value, bool bForceToLeft);
+  // The hinted insert FindOrCreate actually calls: it re-validates the hint against the root
+  // and the anchor (walking one step when the hint sits at either end) and then forwards to
+  // DoInsertValueImpl with the side it computed. Calling the bare DoInsertValueImpl with the
+  // hint as parent corrupts a warm tree, so this stays a separate entry point.
+  rbtree_iterator DoInsertValueWithHint(rbtree_node_base* pHint, const BlockLimbPair& value, bool bForceToLeft);  // 0x005b8340
   void DoNukeSubtree(rbtree_node* pNode);
-  EA::AutoRefCount<cSPEditorSkinPart>* FindOrCreate(cSPEditorBlock* key);
+  EA::AutoRefCount<cSPEditorSkinPart>* FindOrCreate(cSPEditorBlock* const& key);
 };
 }  // namespace eastl
 
@@ -488,7 +493,7 @@ void BlockLimbMap::DoNukeSubtree(rbtree_node* pNode) {
 }
 
 // @ 0x005b88d0
-EA::AutoRefCount<SP::cSPEditorSkinPart>* BlockLimbMap::FindOrCreate(SP::cSPEditorBlock* key) {
+EA::AutoRefCount<SP::cSPEditorSkinPart>* BlockLimbMap::FindOrCreate(SP::cSPEditorBlock* const& key) {
   rbtree_node_base* pNode = mAnchor.mpNodeParent;
   rbtree_node_base* pLower = &mAnchor;
   if (pNode) {
@@ -503,10 +508,13 @@ EA::AutoRefCount<SP::cSPEditorSkinPart>* BlockLimbMap::FindOrCreate(SP::cSPEdito
   }
   if (pLower != &mAnchor && !(key < ((rbtree_node*)pLower)->mValue.first))
     return &((rbtree_node*)pLower)->mValue.second;
-  BlockLimbPair kv;
-  kv.first = key;
-  kv.second = EA::AutoRefCount<SP::cSPEditorSkinPart>();
-  rbtree_iterator it = DoInsertValueImpl(pLower, kv, false);
+  // defaultValue-construct the pair in place: retail only zeroes the dword (`movl $0x0,0x20(%esp)`)
+  // and needs no unwinding, while assigning a fresh AutoRefCount temporary leaves a release
+  // call (and an SEH frame) behind.
+  BlockLimbPair kv = { key };
+  // The third argument is never read by 0x5b8340 (it computes the insertion side itself); it is
+  // only pushed because the template signature carries it.
+  rbtree_iterator it = DoInsertValueWithHint(pLower, kv, false);
   return &it.mpNode->mValue.second;
 }
 
