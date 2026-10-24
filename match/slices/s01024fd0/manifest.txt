@@ -1,0 +1,2 @@
+# source symbol va flags
+slices/s01024fd0/s01024fd0.cpp  ?resize@VecSet@@QAEXI@Z  01025750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
