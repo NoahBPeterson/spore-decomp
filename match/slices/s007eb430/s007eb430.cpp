@@ -147,13 +147,26 @@ struct TItemList {
   TItemList(const TItemList& x);
   ~TItemList();
   __declspec(noinline) TItemListNode* AllocNode(const cTelemetryItem& value);
-  void CopyRange(TItemListNode* first, TItemListNode* last, TItemList* dst);
+  void CopyRange(TItemListNode* dst, TItemListNode* first, TItemList* last, uint32_t flags);
 };
 struct TItemMapNode {
   uint32_t mKey;         // +0x0
   TItemList mList;       // +0x4
   TItemMapNode* mpNext;  // +0x10
 };  // size 0x14
+struct TItemMapFindResult {
+  TItemMapNode* mpNode;    // +0x0
+  TItemMapNode** mppSlot;  // +0x4
+};
+struct TItemMapInsertResult {
+  TItemMapNode* mpNode;    // +0x0
+  TItemMapNode** mppSlot;  // +0x4
+  bool mbInserted;         // +0x8
+};
+struct TItemMapInsertPair {
+  uint32_t mKey;    // +0x0
+  TItemList mList;  // +0x4
+};
 struct TItemMap {
   uint32_t mHash;               // +0x0
   TItemMapNode** mpBucketArray; // +0x4
@@ -165,17 +178,25 @@ struct TItemMap {
   uint32_t mAllocator;          // +0x1c
   void DoFreeNodes(TItemMapNode** bucketArray, uint32_t n);
   uint32_t erase(const uint32_t& key);
+  void find(TItemMapFindResult* out, const uint32_t* key);                // 0x00DB4780
+  void insert(TItemMapInsertResult* out, const uint32_t* key, const void* value);  // 0x007EBAA0
   TItemList* operator[](const uint32_t& key);
 };  // size 0x20
 extern TItemMapNode* gEmptyBucketArray;  // 0x0154DF28
 
-// A plain EASTL-style vector<int> (allocator is stateless).
-struct IntVector {
-  int* mpBegin;   // +0x0
-  int* mpEnd;     // +0x4
+// The int vector lives in the +0xc tail of its owner (retail reads +0xc/+0x10).
+struct IntVecBase {
+  int* mpBegin;     // +0x0
+  int* mpEnd;       // +0x4
   int* mpCapacity;  // +0x8
   void DoInsertValues(int* position, uint32_t n, const int& value);  // 0x007EB430
-  void resize(uint32_t n);                                           // 0x007EB820
+  void copyDown(int* dst, int* src);                                 // 0x007EB3B0
+};
+struct IntVector {
+  int64_t mSystemTime;  // +0x0
+  uint32_t mType;       // +0x8
+  IntVecBase mData;     // +0xc
+  void resize(uint32_t n);  // 0x007EB820
 };
 
 class cTelemetry : public EA::RefCountTemplate<int>, public cISerializableObject {
@@ -240,8 +261,8 @@ struct MessageBasicRC5 {      // EA::Messaging::MessageBasicRC<5>
 };
 
 // ---------------------------------------------------------------------------
-// @ 0x007EB430  IntVector::DoInsertValues
-void SP::IntVector::DoInsertValues(int* position, uint32_t n, const int& value) {
+// @ 0x007EB430  IntVecBase::DoInsertValues
+void SP::IntVecBase::DoInsertValues(int* position, uint32_t n, const int& value) {
   uint32_t nPosition = (uint32_t)(position - mpBegin);
   uint32_t nElementCount = (uint32_t)(mpEnd - mpBegin);
   if ((uint32_t)(mpCapacity - mpEnd) >> 2 >= n) {
@@ -283,14 +304,12 @@ void SP::IntVector::DoInsertValues(int* position, uint32_t n, const int& value) 
 
 // @ 0x007EB820  IntVector::resize
 void SP::IntVector::resize(uint32_t n) {
-  uint32_t cur = (uint32_t)(mpEnd - mpBegin);
-  if ((uint32_t)(mpCapacity - mpBegin) < n) {
+  uint32_t cur = (uint32_t)(mData.mpEnd - mData.mpBegin);
+  if (n > cur) {
     int zero = 0;
-    DoInsertValues(mpEnd, n - cur, zero);
+    mData.DoInsertValues(mData.mpEnd, n - cur, zero);
   } else {
-    // erase tail (FUN_007EB3B0)
-    extern void IntVecEraseRange(int* first, int* last);
-    IntVecEraseRange(mpBegin + n, mpEnd);
+    mData.copyDown(mData.mpBegin + n, mData.mpEnd);
   }
 }
 
@@ -302,14 +321,13 @@ SP::TItemListNode* SP::TItemList::AllocNode(const cTelemetryItem& value) {
 }
 
 // @ 0x007EB7D0  TItemList::CopyRange
-void SP::TItemList::CopyRange(TItemListNode* first, TItemListNode* last, TItemList* dst) {
-  for (; first != last; first = first->mpNext) {
-    TItemListNode* pNode = dst->AllocNode(first->mValue);
-    pNode->mpNext = dst->mpNext;
-    pNode->mpPrev = (TItemListNode*)dst;
-    dst->mpNext->mpPrev = pNode;
-    dst->mpNext = pNode;
-    ++dst->mnSize;
+void SP::TItemList::CopyRange(TItemListNode* dst, TItemListNode* first, TItemList* last, uint32_t flags) {
+  for (; first != (TItemListNode*)last; first = first->mpNext) {
+    TItemListNode* pNode = AllocNode(first->mValue);
+    pNode->mpNext = dst;
+    pNode->mpPrev = dst->mpPrev;
+    dst->mpPrev->mpNext = pNode;
+    dst->mpPrev = pNode;
   }
 }
 
@@ -318,8 +336,8 @@ SP::TItemList::TItemList(const TItemList& x) {
   mpNext = (TItemListNode*)this;
   mpPrev = (TItemListNode*)this;
   mnSize = 0;
-  extern void ListCopyRange(TItemList* dst, TItemListNode* first, TItemListNode* last);
-  ListCopyRange(this, x.mpNext, (TItemListNode*)&x);
+  extern void ListCopyRange(TItemList* dst, TItemListNode* first, TItemListNode* last, uint32_t flags);
+  ListCopyRange(this, x.mpNext, (TItemListNode*)&x, 0);
 }
 
 // @ 0x007EB8D0  make a TItemMapNode
@@ -482,19 +500,14 @@ bool SP::cTelemetry::Shutdown() {
 
 // @ 0x007EBFD0  TItemMap::operator[]
 SP::TItemList* SP::TItemMap::operator[](const uint32_t& key) {
-  extern void MapFind(TItemList** out, const uint32_t* key, TItemMap* self);  // 0x00DB4780
-  TItemList* pFound;
-  MapFind(&pFound, &key, this);
-  if ((void*)pFound != (void*)mpBucketArray[mnBucketCount]) return pFound;
-  TItemMapNode* pNode = (TItemMapNode*)EAAlloc(sizeof(TItemMapNode));
-  pNode->mKey = key;
-  new (&pNode->mList) TItemList();
-  // insert at head of bucket
-  uint32_t n = key % mnBucketCount;
-  pNode->mpNext = mpBucketArray[n];
-  mpBucketArray[n] = pNode;
-  ++mnElementCount;
-  return &pNode->mList;
+  TItemMapFindResult found;
+  find(&found, &key);
+  if (found.mpNode != mpBucketArray[mnBucketCount]) return &found.mpNode->mList;
+  TItemMapInsertPair pair;
+  pair.mKey = key;
+  TItemMapInsertResult res;
+  insert(&res, &pair.mKey, &key);
+  return &res.mpNode->mList;
 }
 
 // @ 0x007EC0A0  cTelemetry::cTelemetry
