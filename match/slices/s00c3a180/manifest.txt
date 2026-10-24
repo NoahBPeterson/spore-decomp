@@ -1,0 +1,4 @@
+slices/s00c3a180/s00c3a180.cpp  ?HandleMessage@cUFOKinestheticsTuning@@QAEDHH@Z  00c3a180  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c3a180/s00c3a180.cpp  ?GetGalaxyWarpTime@cUFOKinestheticsTuning@@QAEMHMM@Z  00c3a1b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c3a180/s00c3a180.cpp  ?Initialize@cSPGameDataUFO@@QAEDXZ  00c3a9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c3a180/s00c3a180.cpp  ?vtableSlot40Wrapper@cSPGameDataUFO@@QAEDH@Z  00c3aa10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
