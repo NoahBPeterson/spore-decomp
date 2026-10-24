@@ -1,4 +1,4 @@
-// @ 0x00f6c940   DecalBoxBuilder  (5623 bytes)
+// 0x00f6c940   DecalBoxBuilder  (5623 bytes)
 //
 // __thiscall, ret 0x28 (10 stack args).  Projects a square decal centred on `pos` onto the
 // six faces of a cube map (the planet texture cube):
@@ -30,7 +30,16 @@ struct Vector3 {
 static inline Vector3 operator+(const Vector3& a, const Vector3& b) { return Vector3(a.x + b.x, a.y + b.y, a.z + b.z); }
 static inline Vector3 operator-(const Vector3& a, const Vector3& b) { return Vector3(a.x - b.x, a.y - b.y, a.z - b.z); }
 static inline Vector3 operator*(const Vector3& a, float s) { return Vector3(a.x * s, a.y * s, a.z * s); }
-static inline float Dot(const Vector3& a, const Vector3& b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
+static inline Vector3 operator-(const Vector3& a) { return Vector3(-a.x, -a.y, -a.z); }
+// Left-to-right association, written as statements so /fp:fast cannot reassociate it: the original
+// (0x00f6c96c..0x00f6c9a2) sums ((x*x + y*y) + z*z).
+static inline float Dot(const Vector3& a, const Vector3& b)
+{
+    float s = a.x * b.x;
+    s += a.y * b.y;
+    s += a.z * b.z;
+    return s;
+}
 static inline Vector3 Cross(const Vector3& a, const Vector3& b)
 {
     return Vector3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
@@ -48,7 +57,7 @@ struct Plane {
     {
         float denom = Dot(n, dir);
         if (denom != 0.0f) {
-            t = -(Dot(n, origin) + d) / denom;
+            t = -((Dot(n, origin) + d) / denom);
             if (t >= 0.0f)
                 return true;
         }
@@ -114,7 +123,10 @@ extern "C" const Vector3    DAT_015b0e10;       // random-spin axis
 extern "C" const Vector3    DAT_016d6fa8[6][4]; // side-plane normals per cube face
 extern "C" const u8         DAT_0148f608[6 / 2][4]; // per-axis component permutation
 
-float   RandomRange(float lo, float hi);                       // 0x007d45d0
+// 0x007d45d0: float in / double out (built for the double RNG at 0x009360d0).  Declared by
+// address: a C++ `float RandomRange(float,float)` would mangle to ?RandomRange@@YAMMM@Z, which
+// is a *different* function (RandomFloatRange at 0x00572a10).
+extern "C" double FUN_007d45d0(float lo, float hi);
 Vector3 FUN_0059aed0(const Vector3& v, const Quaternion& q);    // 0x0059aed0 rotate v by q
 void    FUN_00fc2c70(ClipVertex* poly, int* count, const Vector3* planeNormal); // 0x00fc2c70 clip
 
@@ -164,13 +176,13 @@ void DecalProjector::BuildDecal(const Vector3* pos, const Quaternion* orient, fl
     if (Dot(n, Vector3(0.0f, 0.0f, 1.0f)) >= 0.999f)
         up = Vector3(0.0f, 1.0f, 0.0f);
     Vector3 side = Cross(up, *pos);
-    Vector3 up2  = Cross(*pos, side);
+    Vector3 up2  = -Cross(side, *pos);      // = pos x side; written negated, as the original emits it
     Vector3 fwd  = Normalized(Cross(side, up2));
 
     Vector3 axisU = DAT_015b0df8;
     Vector3 axisV = DAT_015b0e04;
     if (decal->noRandomSpin == 0 && spinRange != 0.0f) {
-        float half = RandomRange(0.0f, spinRange) * 0.017453292f * 0.5f;
+        float half = FUN_007d45d0(0.0f, spinRange) * 0.017453292f * 0.5f;
         float s = sinf(half);
         Quaternion spin;
         spin.x = s * DAT_015b0e10.x;
