@@ -149,8 +149,8 @@ struct IContext {
 IDelegate* __stdcall FUN_0067de90(int, int);   // 0x0067de90
 void FUN_00e5cb60(void* a, void* out, void* b, void* c, int handle, int k, int z);  // 0x00e5cb60
 void FUN_00e5ce90(void* a, int b, bool c, int d, int e, CellKey key);                 // 0x00e5ce90
-void FUN_00e83e30(void* a, void* b, int* key);      // 0x00e83e30
-void FUN_00e52060(void* a, int b, int* c);          // 0x00e52060
+void FUN_00e83e30(void* a, void* b, CellKey* key);  // 0x00e83e30
+void FUN_00e52060(void* a, int b);                  // 0x00e52060 (a = the work block)
 class RandomLCG {
 public:
     double RandomDoubleUniform();                   // 0x009360d0
@@ -158,6 +158,61 @@ public:
 extern RandomLCG gMathRandom;                       // 0x01601760
 void MoveObstacle(int grid, int obstacle, const void* vMin, const void* vMax);   // 0x00bbc2f0
 extern char gCellSpawnTableTag[];   // 0x016ae800
+
+// one entry of a cell's placed-object list (stride 0x48, the object type at +0x00)
+struct CellInfoEntry {
+    unsigned mType;                 // 0x00
+    char pad04[0x44];
+};
+
+// the list returned by FindCellInfo: the entry count at +0x00, the entries at +0x08
+struct CellInfoList {
+    int mCount;                     // 0x00
+    char pad04[4];
+    CellInfoEntry mEntries[1];      // 0x08 (stride 0x48)
+};
+
+// the creature record returned by 0x00e52910 (its bit-field state at +0x10)
+struct EaterInfo {
+    char pad00[0x10];
+    unsigned mState;                // 0x10
+};
+
+static inline CellInfoList* CellListFor(int handle)
+{
+    cCell* cell = (cCell*)gspCellGame->mCells.Get(handle);
+    if (cell->mKey.a == 0)
+        return 0;
+    return (CellInfoList*)FindCellInfo(cell->mKey);
+}
+
+static inline bool CellListHasValue(int handle, int value)
+{
+    CellInfoList* list = CellListFor(handle);
+    if (list == 0)
+        return false;
+    for (int j = 0; j < list->mCount; j++) {
+        if ((int)list->mEntries[j].mType == value)
+            return true;
+    }
+    return false;
+}
+
+static inline unsigned EaterState(int a2)
+{
+    return ((EaterInfo*)FUN_00e52910(a2))->mState;
+}
+
+// The 0x1290-byte work block FUN_00e6d4a0 hands to 0x00e83e30 and then to 0x00e52060.  The
+// original keeps the block's base in ESI and its first dword in EAX across the second call
+// (a private register convention), which plain C++ cannot express.
+struct CellScratch {
+    int mCount00;                              // 0x0000 (written by FUN_00e83e30)
+    struct { char mBytes[0x1280]; } mDesc;     // 0x0004 (FUN_00e83e30's descriptor output)
+    int mOut1284;                              // 0x1284
+    int mOut1288;                              // 0x1288
+    int mOut128c;                              // 0x128c
+};
 
 // @ 0x00e6d680
 bool FUN_00e6d680(cCell* c)
@@ -185,13 +240,13 @@ float FUN_00e6d6d0(cCell* c)
 }
 
 // fwd
-int FUN_00e6cbd0(int handle, int a2, unsigned a3, int* outA, int* outB);
+int FUN_00e6cbd0(int handle, int a2, unsigned a3, char* outA, char* outB);
 
 // @ 0x00e6d180
 void FUN_00e6d180(cCell* c, int a2, int a3, int* out4, float* out5, int* out6, int* out7)
 {
     float f;
-    int r = FUN_00e6cbd0(c->mHandle, a2, (unsigned)a3, out6, out7);
+    int r = FUN_00e6cbd0(c->mHandle, a2, (unsigned)a3, (char*)out6, (char*)out7);
     *out4 = r;
     if (c->mPoolHandle == 0) {
         *out5 = 1.0f;
@@ -284,19 +339,19 @@ void CellUpdateAnimation(cCell* c, int a2, float dt)
 }
 
 // @ 0x00e6d4a0
-void FUN_00e6d4a0(int* key, int* outA, int* outB)
+void FUN_00e6d4a0(CellKey* key, int* outA, int* outB)
 {
     if (gspCellGame->mByte4121 == 1) {
-        CellInfo* info = FindCellInfo(*(CellKey*)key);
+        CellInfo* info = FindCellInfo(*key);
         *outA = info->mField1288;
         *outB = info->mField1284;
         return;
     }
-    char buf[0x1290];
-    FUN_00e83e30(buf, buf + 4, key);
-    FUN_00e52060(buf, 1, (int*)0);
-    *outA = *(int*)(buf + 0x128c);
-    *outB = *(int*)(buf + 0x1288);
+    CellScratch buf;
+    FUN_00e83e30(&buf.mCount00, &buf.mDesc, key);
+    FUN_00e52060(&buf, 1);              // ESI = &buf, EAX = buf.mCount00 in the original
+    *outA = buf.mOut1288;
+    *outB = buf.mOut1284;
 }
 
 // @ 0x00e6d560
@@ -374,15 +429,18 @@ void FUN_00e6dae0(cCell* c)
 }
 
 // @ 0x00e6d8f0
-void FUN_00e6d8f0(int handle, int a2)
+void FUN_00e6d8f0(int handle, int)
 {
     cCell* cell = (cCell*)gspCellGame->mCells.Get(handle);
-    int it1[4];
-    FUN_00743b50(it1);
-    int* p1 = FUN_00e823a0(cell->mType, it1);
-    int it2[4];
-    FUN_00743b50(it2);
-    FUN_00e823a0(*p1, it2);
+
+    // the animation channels of the cell's model: one 4-byte cursor per range, reset by
+    // 0x00743b50 and then seeded from the cell's type (and from the channels it lists)
+    int it1;
+    FUN_00743b50(&it1);
+    int* p1 = FUN_00e823a0(cell->mType, &it1);
+    int it2;
+    FUN_00743b50(&it2);
+    FUN_00e823a0(*p1, &it2);
 
     int k;
     if (cell->mRadius >= 2.0f) k = 3;
@@ -406,7 +464,7 @@ void FUN_00e6d8f0(int handle, int a2)
     int h = gspCellGfx->mEffects.Alloc();
     cell->mPoolHandle = h;
     EffectObj* obj = (EffectObj*)gspCellGfx->mEffects.Get(h);
-    FUN_00e5ce90(obj, cell->mKey.a, (grp != cmp), *p1, a2, cell->mKey);
+    FUN_00e5ce90(obj, cell->mHandle, (grp != cmp), *p1, handle, cell->mKey);
 
     cCell* c2 = (cCell*)gspCellGame->mCells.Get(handle);
     FUN_00e6d200(c2, 0, 0, c2->mState1);
@@ -414,55 +472,100 @@ void FUN_00e6d8f0(int handle, int a2)
     if (cell->mEffectGroup == gspCellGame->mSel4100 && gspCellGfx->mField16254 < 0x10)
         FUN_00e51930();
 
-    FUN_00e82130(it2);
-    FUN_00e82130(it1);
+    FUN_00e82130(&it2);
+    FUN_00e82130(&it1);
 }
 
 // @ 0x00e6cbd0
-int FUN_00e6cbd0(int handle, int a2, unsigned a3, int* outA, int* outB)
+int FUN_00e6cbd0(int handle, int a2, unsigned a3, char* outA, char* outB)
 {
     float total = 0.0f;
-    unsigned mismatch = (unsigned)(gspCellGame->mHandle411c != handle);
+    const unsigned mismatch = (unsigned)(gspCellGame->mHandle411c != handle);
     int picked[131];
     int n = 0;
 
+    // Sweep 1: records whose id matches and whose flag is the mismatch flag (or the literal 2).
+    // A type-1 record is always eligible; every other type must appear in the target cell's own
+    // placed-object list. Types 8/9 additionally consult the target creature's state and the list.
     for (int i = 0; i < 131; i++) {
         CellSpawn& e = gCellSpawns[i];
-        if (e.f0 == (int)a3 && (e.flag == (int)mismatch || e.flag == 2)) {
-            int v = e.type;
-            if (v != 1) {
-                cCell* cell = (cCell*)gspCellGame->mCells.Get(handle);
-                if (cell->mPoolHandle != 0) {
-                    CellInfo* info = FindCellInfo(cell->mKey);
-                    int* q = (int*)info;
-                    int cnt = *q;
-                    for (int j = 0; j < cnt; j++) {
-                        if (q[2 + j * 0x12] == (unsigned)v)
-                            goto check;
-                    }
+        if (e.f0 != (int)a3 || (e.flag != (int)mismatch && e.flag != 2))
+            continue;
+        if (e.type != 1 && !CellListHasValue(handle, e.type))
+            continue;
+
+        if (e.type == 9) {
+            bool hold = false;
+            if (a2 != 0) {
+                const unsigned state = EaterState(a2);
+                if (state != 0 && state != 8) {
+                    if ((state & 4) != 0)
+                        continue;
+                } else {
+                    hold = true;
                 }
+            } else {
+                hold = true;
+            }
+            if (hold && CellListHasValue(handle, 10))
                 continue;
+        } else if (e.type == 8) {
+            if (a2 != 0) {
+                const unsigned state = EaterState(a2);
+                if (state != 0 && state != 8) {
+                    if ((state & 4) != 0)
+                        continue;
+                    if ((state & 1) != 0)
+                        continue;
+                    goto eligible;
+                }
             }
-        check:
-            if (FUN_00e5c460(handle, e.f6) && FUN_00e5c410(handle, e.f7)) {
-                total = total + e.weight;
-                picked[n++] = i;
+            if (CellListHasValue(handle, 10))
+                continue;
+            if (a2 != 0) {
+                // the state is 0 or 8 here; the original re-reads it before the second gate
+                const unsigned state = EaterState(a2);
+                if (state != 0 && state != 8) {
+                    if ((state & 1) != 0)
+                        continue;
+                    goto eligible;
+                }
             }
+            if (CellListHasValue(handle, 9))
+                continue;
+        }
+
+    eligible:
+        if (FUN_00e5c460(handle, e.f6) && FUN_00e5c410(handle, e.f7)) {
+            total = total + e.weight;
+            picked[n++] = i;
         }
     }
 
-    if (total != 0.0f) {
-        float rr = (float)gMathRandom.RandomDoubleUniform() * total;
-        if (rr < 0.0f)
-            rr = 0.0f;
-        for (int i = 0; i < n; i++) {
-            int idx = picked[i];
-            rr = rr - gCellSpawns[idx].weight;
-            if (rr <= 0.0f) {
-                *outA = gCellSpawns[idx].outA;
-                *outB = gCellSpawns[idx].outB;
-                return gCellSpawns[idx].f1;
-            }
+    // Nothing weighed: fall back to the untyped (type 0) records over the whole table.
+    if (total == 0.0f) {
+        for (int i = 0; i < 131; i++) {
+            CellSpawn& e = gCellSpawns[i];
+            if (e.f0 != (int)a3 || (e.flag != (int)mismatch && e.flag != 2) || e.type != 0)
+                continue;
+            total = total + e.weight;
+            picked[n++] = i;
+        }
+    }
+
+    double draw = gMathRandom.RandomDoubleUniform() * (double)total;
+    if (draw > (double)total)
+        draw = (double)total;
+    if (draw < 0.0)
+        draw = 0.0;
+    float remaining = (float)draw;
+    for (int i = 0; i < n; i++) {
+        const int idx = picked[i];
+        remaining = remaining - gCellSpawns[idx].weight;
+        if (remaining <= 0.0f) {
+            *outB = gCellSpawns[idx].outB;
+            *outA = gCellSpawns[idx].outA;
+            return gCellSpawns[idx].f1;
         }
     }
     *outA = 0;

@@ -1,12 +1,12 @@
-00e6d680 FUN_00e6d680  # cell has a live effect info object ([cell+0xfc] key -> [info+0x1214] > 0)
-00e6d6d0 FUN_00e6d6d0  # per-cell effect delay from stage (FUN_00e516c0)
-00e6d200 FUN_00e6d200  # cell animation/sound update (calls 00e6d180, e4f330)
-00e6d340 SP::CellUpdateAnimation  # PDB name; updates cell animation timer and triggers 00e6d200
-00e6d180 FUN_00e6d180  # resolve animation index then query effect object (00e4f040)
-00e6d790 FUN_00e6d790  # GetCellBounds(cell, center, radius)
-00e6d8f0 FUN_00e6d8f0  # cell effect-group selection / spawn
-00e6d560 FUN_00e6d560  # push level info + selected cell key (variant 1)
-00e6d600 FUN_00e6d600  # push level info + selected cell key (variant 5)
-00e6d4a0 FUN_00e6d4a0  # level info from cell (fast path vs scratch buffer)
-00e6dae0 FUN_00e6dae0  # update obstacle AABB from cell bounds
-00e6cbd0 FUN_00e6cbd0  # weighted spawn-table pick
+00e6cbd0 FUN_00e6cbd0           # spawn-table weighted pick: type gate + 131-record sweep + untyped fallback sweep + weighted random draw 1456B (complete, nonmatching - WEAK)
+00e6d180 FUN_00e6d180           # pick an effect for a cell and report its scale (0xe6cbd0 + 0xe4f040) (complete, nonmatching - PASS)
+00e6d200 FUN_00e6d200           # cell effect scale query over 0xe6d180 (complete, nonmatching - WEAK)
+00e6d340 SP::CellUpdateAnimation # cell GFX/animation apply (byte-exact)
+00e6d4a0 FUN_00e6d4a0           # cell info lookup: mByte4121 fast path, else 0x1290 scratch via 0xe83e30/0xe52060 (complete, nonmatching - UNSUPPORTED)
+00e6d560 FUN_00e6d560           # step output triples: level info + GetChecked(handle411c) into IContext (complete, nonmatching - UNSUPPORTED)
+00e6d600 FUN_00e6d600           # write one int for GetChecked(handle411c) (complete, nonmatching - UNSUPPORTED)
+00e6d680 FUN_00e6d680           # cell info test: FindCellInfo(key)->mField1214 > 0 (byte-exact)
+00e6d6d0 FUN_00e6d6d0           # effect scale factor for a cell from 0xe516c0 (byte-exact)
+00e6d790 FUN_00e6d790           # cell bounding sphere (center + radius) from orientation/position (complete, nonmatching - UNSUPPORTED)
+00e6d8f0 FUN_00e6d8f0           # cell animation refresh: 0x743b50/0xe823a0 cursors, anim index from radius, 0xe5cb60 append, effect alloc + 0xe5ce90 (complete, nonmatching - UNSUPPORTED)
+00e6dae0 FUN_00e6dae0           # move the cell's obstacle volume (0xe6d790 + MoveObstacle) (complete, nonmatching - UNSUPPORTED)
