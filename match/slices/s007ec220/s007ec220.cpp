@@ -277,7 +277,7 @@ struct Vec3VecFull {
   Vec3* mpCapacity;  // +0x8
   const char* mpName;  // +0xc
   uint32_t mFlags;     // +0x10
-  void Vec3Insert(Vec3* position, uint32_t n, Vec3* value);
+  uint32_t Vec3Insert(Vec3* position, uint32_t n, Vec3* value);
 };
 void Vec3Copy(Vec3* dst, Vec3* src) {
   dst->x = src->x;
@@ -285,41 +285,54 @@ void Vec3Copy(Vec3* dst, Vec3* src) {
   dst->z = src->z;
 }
 // @ 0x007EC7F0
-void Vec3VecFull::Vec3Insert(Vec3* position, uint32_t n, Vec3* value) {
+uint32_t Vec3VecFull::Vec3Insert(Vec3* position, uint32_t n, Vec3* value) {
   Vec3VecFull* v = this;
-  uint32_t nPosition = (uint32_t)((char*)position - (char*)v->mpBegin) / 0xc;
-  uint32_t nCount = (uint32_t)((char*)v->mpEnd - (char*)v->mpBegin) / 0xc;
-  if ((uint32_t)((char*)v->mpCapacity - (char*)v->mpEnd) / 0xc < n) {
-    uint32_t nOldCap = (uint32_t)((char*)v->mpCapacity - (char*)v->mpBegin) / 0xc;
-    uint32_t nNewCap = nOldCap * 2;
-    if (nOldCap == 0) nNewCap = 1;
-    uint32_t nNeed = nOldCap + n;
+  // The original divides the byte distances as *signed* ptrdiff_t by 12 (0x2aaaaaab magic).
+  uint32_t nCount = (uint32_t)(int32_t)(((intptr_t)v->mpEnd - (intptr_t)v->mpBegin) / 0xc);
+  uint32_t nFree = (uint32_t)(int32_t)(((intptr_t)v->mpCapacity - (intptr_t)v->mpEnd) / 0xc);
+  if (nFree < n) {
+    // eastl reallocation: the new capacity is twice the current *size* (1 when empty),
+    // and the allocation must cover at least size + n elements.
+    uint32_t nNewCap = nCount * 2;
+    if (nCount == 0) nNewCap = 1;
+    uint32_t nNeed = nCount + n;
     if (nNeed < nNewCap) nNeed = nNewCap;
     Vec3* data = nNeed ? (Vec3*)operator new[](nNeed * 0xc, "App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
     Vec3* d = data;
     for (Vec3* p = v->mpBegin; p != position; ++p, ++d) Vec3Copy(d, p);
     for (uint32_t i = 0; i < n; ++i, ++d) Vec3Copy(d, value);
     for (Vec3* p = position; p != v->mpEnd; ++p, ++d) Vec3Copy(d, p);
-    if (v->mpBegin) operator delete(v->mpBegin);
+    if (v->mpBegin && *(uint32_t*)((char*)v->mpBegin - 4)) operator delete(v->mpBegin);
     v->mpBegin = data;
     v->mpEnd = d;
     v->mpCapacity = data + nNeed;
+    return nNeed;
+  }
+  if (n == 0) return nFree;
+  // The in-place paths snapshot the value before touching the array.
+  Vec3 saved = *value;
+  uint32_t nAfter = (uint32_t)(int32_t)(((intptr_t)v->mpEnd - (intptr_t)position) / 0xc);
+  if (n >= nAfter) {
+    Vec3* pOldEnd = v->mpEnd;
+    uint32_t nNew = n - nAfter;
+    for (uint32_t i = 0; i < nNew; ++i) Vec3Copy(pOldEnd + i, &saved);
+    v->mpEnd = pOldEnd + nNew;
+    for (uint32_t i = 0; i < nAfter; ++i) Vec3Copy(v->mpEnd + i, position + i);
+    v->mpEnd = pOldEnd + n;
+    for (uint32_t i = 0; i < nAfter; ++i) Vec3Copy(position + i, &saved);
+    return (uint32_t)(uintptr_t)pOldEnd;
   } else {
-    uint32_t nAfter = nCount - nPosition;
-    if (n >= nAfter) {
-      Vec3* pOldEnd = v->mpEnd;
-      uint32_t nNew = n - nAfter;
-      v->mpEnd = v->mpEnd + nNew;
-      for (uint32_t i = 0; i < nNew; ++i) Vec3Copy(pOldEnd + i, value);
-      for (uint32_t i = 0; i < nAfter; ++i) Vec3Copy(v->mpEnd + i, position + i);
-      for (uint32_t i = 0; i < nAfter; ++i) Vec3Copy(position + i, value);
-    } else {
-      Vec3* pOldEnd = v->mpEnd;
-      uint32_t nMove = nAfter - n;
-      for (uint32_t i = nMove; i > 0; --i) Vec3Copy(pOldEnd + i - 1 + n, pOldEnd + i - 1);
-      for (uint32_t i = 0; i < n; ++i) Vec3Copy(position + i, value);
-      v->mpEnd = pOldEnd + n;
-    }
+    Vec3* pOldEnd = v->mpEnd;
+    // (1) move the top n elements into the newly exposed tail
+    for (uint32_t i = 0; i < n; ++i) Vec3Copy(pOldEnd + i, pOldEnd - n + i);
+    v->mpEnd = pOldEnd + n;
+    // (2) shift [position, oldEnd - n) right by n (copy_backward)
+    uint32_t nMove = nAfter - n;
+    for (uint32_t i = nMove; i > 0; --i)
+      Vec3Copy(position + i - 1 + n, position + i - 1);
+    // (3) fill the gap
+    for (uint32_t i = 0; i < n; ++i) Vec3Copy(position + i, &saved);
+    return (uint32_t)(uintptr_t)(position + n);
   }
 }
 

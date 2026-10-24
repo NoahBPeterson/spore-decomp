@@ -3,7 +3,7 @@
 007ec5e0 92 Swarm effect ctor - field/vtable store schedule differs
 007ec660 72 Swarm effect dtor - inlined vector dtor differs
 007ec6d0 129 Swarm effect serialize - field layout/read helper shape differs
-007ec7f0 460 eastl::vector<Vector3>::DoInsertValues - codegen differs (no similar-size symbol); equiv: FAIL (member this-in-ecx, operator new[] 0xf473a0 annotated)
+007ec7f0  1921  eastl::vector<Vector3>::DoInsertValues complete (this-in-ecx): n==0 early exit, reallocation capacity from the element count (2*size, at least size+n) via operator new[] 0xf473a0, ownership-header guard before operator delete, in-place insert with the value snapshotted before the array is touched, signed byte-distance/12 counts; not byte-exact because our inline copy loops replace the original's eastl helper calls (uninitialized_copy 0x951740, copy_backward 0xabced0, fill 0xa177f0, fill_n 0x6a4100), so our code is larger; eax modelled as the caller-visible return (uint32_t): the new capacity on realloc, the free slot count for n==0, the old end for the n>=nAfter path, position+n for the insert-before path; equiv PASS 391 valid inputs / 62.4% coverage with --alias 0.9 (default soup faults before the in-place loops: 191 valid, 14.6% coverage, 0 mismatches)
 007ecb50 87 cScreenFilterTextureCommand::Execute - float-conv vcall convention differs
 007ecbb0 79 cScreenLengthCommand::Execute - float-conv vcall convention differs
 007ecc30 133 vector<Vector3> scale - loop/frame codegen differs; scalar multiply forced to SSE (mulss) so no x87 subnormal divergence; equiv: WEAK (191/200 valid, 100% coverage, no mismatch)
