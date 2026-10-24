@@ -46,12 +46,23 @@ struct EvBase {
     void SetValue(int);           // 0x7f9ae0
 };
 void  FUN_007fb320(void* self);
+void  FUN_00951330(void* p);        // 0x00951330 (MultiHeapObject::operator delete)
 void  SList_SetAllocator(void* p, void* a);
 struct Stopwatch {
     int lo, hi, a, b, mode;
     void Init(int, int);
     float GetElapsed();
 };
+struct Interp0 {
+    void* mVtbl0;   // +0x00
+    void* mVtbl4;   // +0x04
+    unsigned m08;   // +0x08
+    void* mVtblC;   // +0x0c
+    char pad10[0x2c];
+    void* mpTimeFunction;   // +0x3c
+    void* mpValueInterp;    // +0x40
+};
+struct C_7fb320 { void Dtor(); };   // 0x007fb320 (thiscall)
 struct Interp {
     char  pad0[0xc];
     void* mpEvent;
@@ -69,10 +80,14 @@ struct Interp {
     void SetValueInterp(IObj* p);             // @ 0x007fdb90
 };
 struct State {
-    char pad0[0xc];
+    void* mVtbl0;        // +0x00
+    void* mVtbl4;        // +0x04
+    void* mVtbl8;        // +0x08
+    void* mVtblC;        // +0x0c
     char pad10[0x2c];
     void* mpSlot;        // +0x3c
-    char pad40[0x10];
+    void* mpValueInterp; // +0x40
+    char pad44[0xc];
     State();
     void* DeletingDtor(unsigned char flags);
     int Refresh();                       // @ 0x007fe130
@@ -201,16 +216,22 @@ bool State::InitWith(int v)
 void* Interp::DeletingDtor(unsigned char flags)
 {
     void* self = this;
-    if (*(void**)((char*)self + 0x3c)) {
-        VCallV(*(void**)((char*)self + 0x3c), 4);
-        *(void**)((char*)self + 0x3c) = 0;
+    Interp0* p0 = (Interp0*)self;
+    void* a = p0->mpTimeFunction;        // +0x3c
+    p0->mVtbl0 = (void*)0x1415f18;
+    p0->mVtbl4 = (void*)0x1415f08;
+    p0->mVtblC = (void*)0x1415ef8;
+    if (a) {
+        VCallV(a, 4);
+        p0->mpTimeFunction = 0;
     }
-    if (*(void**)((char*)self + 0x40)) {
-        VCallV(*(void**)((char*)self + 0x40), 4);
-        *(void**)((char*)self + 0x40) = 0;
+    void* b = p0->mpValueInterp;         // +0x40
+    if (b) {
+        VCallV(b, 4);
+        p0->mpValueInterp = 0;
     }
-    FUN_007fb320(self);
-    (void)flags;
+    ((C_7fb320*)self)->Dtor();
+    if (flags & 1) FUN_00951330(self);
     return self;
 }
 

@@ -87,13 +87,14 @@ void  FUN_007fe950(void* p);
 void  FUN_007fb250(void* out);
 void  FUN_0095ea30(void* p);
 void  FUN_007fb480(void* self, int v);
-void  FUN_007fb320(void* self);
+void  FUN_00951330(void* p);        // 0x00951330 (MultiHeapObject::operator delete)
 void* EA_Messaging_GetServer();   // 0x00883860 (equiv t2)
 void  SList_SetAllocator(void* p, void* a);
 void  FUN_007fba00(void*);
 void  FUN_007fbb20(void*);
 void  FUN_007fbbc0(void*);
-void  FUN_007fc200(void*);
+struct C_7fb320 { void Dtor(); };   // 0x007fb320 (thiscall)
+struct C_7fc200 { void Dtor(); };   // 0x007fc200 (thiscall)
 
 // EA::StdC::Stopwatch (0x0093a560 ctor, 0x0093a3a0 elapsed read).  Layout taken
 // from the retail: a start tick, the accumulated elapsed ticks, the units the
@@ -135,11 +136,12 @@ struct Damped {
     char  mbCeilingMode;         // +0x48
     char  pad49[3];
     unsigned mPeriodicType;      // +0x4c
-    void  EvalBase();
-    bool  IsReady();
     float v25(float t);          // @ 0x007fd840
     bool  v24();                 // @ 0x007fd890
 };
+// Out-of-line overrides reached from Damped::v24 (this in ecx).
+struct Ev   { bool Eval(); };    // 0x007f9550 base Eval
+struct C_TF { bool IsValid(); }; // 0x007facf0 readiness check
 
 // @ 0x007fd840
 float Damped::v25(float t) {
@@ -155,18 +157,18 @@ float Damped::v25(float t) {
 bool Damped::v24() {
     if (mParamFrequency <= 0.0f && mParamFrequency != 0.0f)
         mParamFrequency = 0.0f;
-    EvalBase();
+    ((Ev*)this)->Eval();
     float f = mParamDamping;
     float delta = mWorkTimeTo - mWorkTimeFrom;
     if (f == 0.0f) {
-        if (0.0f < delta && IsReady()) {
+        if (0.0f < delta && ((C_TF*)this)->IsValid()) {
             mParamDamping = -(logf(0.001f) / delta);
-            EvalBase();
+            ((Ev*)this)->Eval();
         }
     } else if (0.0f < f) {
         mParamDuration = ((-1.0f / f) * logf(0.001f)) /
                          ((1.0f - mParamPreDelayFactor) - mParamPostDelayFactor);
-        EvalBase();
+        ((Ev*)this)->Eval();
     }
     return true;
 }
@@ -404,10 +406,14 @@ Interp::Interp() {
 // cSPUIBehaviorActionWinState (this = ActionBase subobject)
 // ===========================================================================
 struct State {
-    char pad0[0xc];
-    char pad10[0x2c];
+    void* mVtbl0;        // +0x00
+    void* mVtbl4;        // +0x04
+    void* mVtbl8;        // +0x08
+    void* mVtblC;        // +0x0c
+    char pad10[0x2c];    // +0x10
     void* mpSlot;        // +0x3c
-    char pad40[0x10];
+    void* mpValueInterp; // +0x40
+    char pad44[0xc];     // +0x44
     State();
     void* DeletingDtor(unsigned char flags);
     int Refresh();                       // @ 0x007fe130
@@ -638,7 +644,14 @@ bool State::InitWith(int v) {
 // cSPUIBehaviorWinEventBase and friends
 // ===========================================================================
 struct WinEvent {
-    char pad0[0x7c];
+    void* mVtbl0;   // +0x00
+    void* mVtbl4;   // +0x04
+    void* mVtbl8;   // +0x08
+    void* mVtblC;   // +0x0c
+    void* mVtbl10;  // +0x10
+    void* mVtbl14;  // +0x14
+    void* mVtbl18;  // +0x18
+    char  pad1c[0x60];               // +0x1c .. +0x7b
     bool mbMessageTargetRegistered;  // +0x7c
     unsigned mMessageType;           // +0x80
     unsigned mMessageWinId;          // +0x84
@@ -865,7 +878,7 @@ bool BoolEvent::Pred(char a, char b) {
     bool result = false;
     int counter = -1;
     if (FUN_007fa520((char*)self + 0x1c, 4, &counter)) {
-        void* w = *(void**)((char*)self + 0x18);
+        void* w = (char*)self + 0x18;
         switch (*(unsigned*)((char*)self + 0x8c)) {
         case 0: if (a == 0 || b != 0) { VCallI1(w, 0x48, a == 0); return a == 0; } break;
         case 1: if (a != 0 || b != 0) { VCallI1(w, 0x48, a != 0); return a != 0; } break;
@@ -898,37 +911,56 @@ done:
 // @ 0x007fe330
 void* Interp::DeletingDtor(unsigned char flags) {
     void* self = this;
-    if (*(void**)((char*)self + 0x3c)) {
-        VCallV(*(void**)((char*)self + 0x3c), 4);
-        *(void**)((char*)self + 0x3c) = 0;
+    Interp0* p0 = (Interp0*)self;
+    void* a = p0->mpTimeFunction;        // +0x3c
+    p0->mVtbl0 = (void*)0x1415f18;
+    p0->mVtbl4 = (void*)0x1415f08;
+    p0->mVtblC = (void*)0x1415ef8;
+    if (a) {
+        VCallV(a, 4);
+        p0->mpTimeFunction = 0;
     }
-    if (*(void**)((char*)self + 0x40)) {
-        VCallV(*(void**)((char*)self + 0x40), 4);
-        *(void**)((char*)self + 0x40) = 0;
+    void* b = p0->mpValueInterp;         // +0x40
+    if (b) {
+        VCallV(b, 4);
+        p0->mpValueInterp = 0;
     }
-    FUN_007fb320(self);
-    (void)flags;
+    ((C_7fb320*)self)->Dtor();
+    if (flags & 1) FUN_00951330(self);
     return self;
 }
 
 // @ 0x007fe390
 void* State::DeletingDtor(unsigned char flags) {
-    void* self = this;
-    if (*(void**)((char*)self + 0x40)) {
-        void* p = *(void**)((char*)self + 0x40);
-        *(void**)((char*)self + 0x40) = 0;
+    State* s = this;
+    s->mVtbl0 = (void*)0x1415fe8;
+    s->mVtbl4 = (void*)0x1415fd4;
+    s->mVtblC = (void*)0x1415fc4;
+    void* p = s->mpValueInterp;
+    if (p) {
+        s->mpValueInterp = 0;
         VCallV(p, 4);
     }
-    FUN_007fb320(self);
-    (void)flags;
-    return self;
+    p = s->mpValueInterp;
+    if (p) {
+        VCallV(p, 4);
+    }
+    ((C_7fb320*)s)->Dtor();
+    if (flags & 1) FUN_00951330(s);
+    return s;
 }
 
 // @ 0x007fea90
 void* WinEvent::DeletingDtor(unsigned char flags) {
     void* self = this;
-    FUN_007fc200(self);
-    (void)flags;
+    WinEvent* w = this;
+    w->mVtbl0 = (void*)0x14161c4;
+    w->mVtbl4 = (void*)0x14161ac;
+    w->mVtbl8 = (void*)0x14162a4;
+    w->mVtbl10 = (void*)0x141619c;
+    w->mVtbl18 = (void*)0x1416140;
+    ((C_7fc200*)self)->Dtor();
+    if (flags & 1) FUN_00951330(self);
     return self;
 }
 // --- equivalence checker address annotations

@@ -1,13 +1,13 @@
 # va diff reason
 007fd840 57 complete; DampedPeriodic periodic-time (slot25); fcos/x87 schedule differs
-007fd890 127 complete; DampedPeriodic eval (slot24); log/exp inlining and frame differ
+007fd890 149 complete; DampedPeriodic eval (slot24); now calls Ev::Eval (0x7f9550) / C_TF::IsValid (0x7facf0) thiscall; logf still inlined as x87 fyl2x, frame/schedule differs; equiv PASS
 007fde00 48 complete; SerItem vector load; loop/register schedule differs
 007fdfa0 36 complete; SList allocator propagation; vcall schedule differs
 007fdfe0 52 complete; SetValue + SList allocator; schedule differs
-007fe330 71 complete; interpolator deleting-dtor; vtable/base-dtor schedule differs; equiv: FAIL (vtable stores not reproduced)
-007fe390 64 complete; state deleting-dtor; vtable order differs; equiv: FAIL (vtable stores not reproduced)
-007fe7d0 150 complete; BoolStateEvent predicate switch; vcall/local schedule differs; equiv: FAIL
-007fea90 38 complete; WinEvent deleting-dtor; vtable stores differ; equiv: FAIL (vtable stores not reproduced)
+007fe330  0 complete; interpolator deleting-dtor; byte-exact (in manifest.txt); equiv PASS
+007fe390 11 complete; state deleting-dtor; vtable-store order preserved, only the [this+0x40] load is hoisted above the stores (scheduling-only); equiv PASS
+007fe7d0 176 complete; BoolStateEvent predicate switch; receiver is the embedded object at self+0x18 (not a pointer deref) and the jump table is [0]=7fe83f [1]=7fe810 [2]=7fe88e [3]=7fe86f; logic matches, register/local schedule differs; equiv PASS
+007fea90  0 complete; WinEvent deleting-dtor; byte-exact (in manifest.txt); equiv PASS
 007fead0 48 complete; IsWinState; vcall/local schedule differs; equiv: WEAK (40% coverage)
 007feb40 35 complete; SerRead secondary-base flavour; vcall base offset differs
 007fec00 27 complete; SetWinMessageType; message-manager vcall schedule differs

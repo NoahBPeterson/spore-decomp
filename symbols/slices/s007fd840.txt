@@ -16,3 +16,5 @@
 007feb70 ?SerUpdateWin@@YAXPAX@Z  # SerUpdateWin migrated from s007fd840 (verbatim, slice spelling)
 007fec00 ?SetWinMessageType@WinEvent@@QAEXI@Z  # WinEvent::SetWinMessageType migrated from s007fd840 (verbatim, slice spelling)
 007fec90 ?SetMessageWinId@WinEvent@@QAEXI@Z  # WinEvent::SetMessageWinId migrated from s007fd840 (verbatim, slice spelling)
+007f9550 ?Eval@Ev@@QAE_NXZ  # base Eval reached from Damped::v24 (ECX = this)
+007facf0 ?IsValid@C_TF@@QAE_NXZ  # readiness check reached from Damped::v24 (ECX = this)

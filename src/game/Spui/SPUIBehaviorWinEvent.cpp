@@ -35,14 +35,22 @@ struct Svr {
 bool  FUN_007fa520(void* arr, int n, void* counter);
 void  FUN_007fb480(void* self, int v);
 void* EA_Messaging_GetServer();   // 0x00883860 (equiv t2)
-void  FUN_007fc200(void*);
+void  FUN_00951330(void* p);      // 0x00951330 (MultiHeapObject::operator delete)
+struct C_7fc200 { void Dtor(); };// 0x007fc200 (thiscall, no args)
 struct SerItem { void* type; void* base; unsigned count; void* extra; };
 struct Sec5 {
     virtual void s0(); virtual void s1(); virtual void s2();
     virtual void s3(); virtual void s4(); virtual void s5(); // +0x14
 };
 struct WinEvent {
-    char pad0[0x7c];
+    void* mVtbl0;   // +0x00
+    void* mVtbl4;   // +0x04
+    void* mVtbl8;   // +0x08
+    void* mVtblC;   // +0x0c
+    void* mVtbl10;  // +0x10
+    void* mVtbl14;  // +0x14
+    void* mVtbl18;  // +0x18
+    char  pad1c[0x60];               // +0x1c .. +0x7b
     bool mbMessageTargetRegistered;  // +0x7c
     unsigned mMessageType;           // +0x80
     unsigned mMessageWinId;          // +0x84
@@ -86,7 +94,7 @@ bool BoolEvent::Pred(char a, char b)
     bool result = false;
     int counter = -1;
     if (FUN_007fa520((char*)self + 0x1c, 4, &counter)) {
-        void* w = *(void**)((char*)self + 0x18);
+        void* w = (char*)self + 0x18;
         switch (*(unsigned*)((char*)self + 0x8c)) {
         case 0: if (a == 0 || b != 0) { VCallI1(w, 0x48, a == 0); return a == 0; } break;
         case 1: if (a != 0 || b != 0) { VCallI1(w, 0x48, a != 0); return a != 0; } break;
@@ -120,8 +128,14 @@ done:
 void* WinEvent::DeletingDtor(unsigned char flags)
 {
     void* self = this;
-    FUN_007fc200(self);
-    (void)flags;
+    WinEvent* w = this;
+    w->mVtbl0 = (void*)0x14161c4;
+    w->mVtbl4 = (void*)0x14161ac;
+    w->mVtbl8 = (void*)0x14162a4;
+    w->mVtbl10 = (void*)0x141619c;
+    w->mVtbl18 = (void*)0x1416140;
+    ((C_7fc200*)self)->Dtor();
+    if (flags & 1) FUN_00951330(self);
     return self;
 }
 
