@@ -1,0 +1,14 @@
+00d1c010 SP::cGameEditModeStrategy::FUN_00d1c010  # cIModeStrategy +0x1c (Deactivate): tear down input/display strategies, release the time-manager pause gate
+00d1c090 SP::cGameEditModeStrategy::OnKeyUp  # forward key-up to the game input manager (vtable +0x50)
+00d1c0a0 SP::cGameEditModeStrategy::FUN_00d1c0a0  # input-manager vtable +0x5c: mouse position (x, y, flag)
+00d1c0d0 SP::cGameEditModeStrategy::FUN_00d1c0d0  # input-manager vtable +0x60: mouse position with an extra int (button/state)
+00d1c100 SP::cGameEditModeStrategy::Init  # register this strategy as an IHandler with the messaging server (id 0x1582738)
+00d1c150 SP::cGameEditModeStrategy::cGameEditModeStrategy  # constructor: two sets of vtables, cGonzagoSubsystem base, registrar fields zeroed, _sInstance
+00d1c200 SP::cGameEditModeStrategy::~cGameEditModeStrategy  # destructor: reset vtables, unregister handler, free the selectable-member vector, base dtor
+00d1c2e0 SP::cGameEditModeStrategy::FUN_00d1c2e0  # cIModeStrategy +0x24 (OnKeyDown): 'E' opens the planet-model marker message, else forward to input manager +0x4c
+00d1c400 SP::cGameEditModeStrategy::FUN_00d1c400  # cIModeStrategy +0x2c (OnMouseDown): ray pick / place selection, else forward to input manager +0x54
+00d1c560 SP::cGameEditModeStrategyGz::FUN_00d1c560  # cIGonzagoSubsystem +0x14 (PreGameModeTransition); this == object+0x08
+00d1c5d0 SP::cGameEditModeStrategy::Shutdown  # clear the selectable-member vector and unregister the messaging handler
+00d1c610 FUN_00d1c610  # EA::COM::interface_cast<SP::cGameplayMarker*,SP::cSpatialObject,EA::AutoRefCount> (PDB name unreliable) -- approximated
+00d1c9e0 SP::cGameEditModeStrategyGz::FUN_00d1c9e0  # cIGonzagoSubsystem +0x18 (PostGameModeTransition); this == object+0x08 -- approximated
+00d1cb00 SP::cGameEditModeStrategy::SaveScenario  # save the edited scenario through the resource manager -- approximated

@@ -1,0 +1,5 @@
+slices/s00d1c010/s00d1c010.cpp  ?FUN_00d1c0a0@cGameEditModeStrategy@SP@@QAEXMMH@Z  00d1c0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d1c010/s00d1c010.cpp  ?FUN_00d1c0d0@cGameEditModeStrategy@SP@@QAEXHMMH@Z  00d1c0d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d1c010/s00d1c010.cpp  ?Init@cGameEditModeStrategy@SP@@QAEEH@Z  00d1c100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d1c010/s00d1c010.cpp  ?FUN_00d1c2e0@cGameEditModeStrategy@SP@@QAEEHH@Z  00d1c2e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d1c010/s00d1c010.cpp  ?FUN_00d1c560@cGameEditModeStrategyGz@SP@@QAEXHH@Z  00d1c560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

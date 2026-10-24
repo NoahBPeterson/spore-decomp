@@ -1,0 +1,4 @@
+00d1c9e0 180 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid, fake-arity); PostGameModeTransition approximated: reproduced with if/goto rather than the original out-of-line layout, this kept in esi instead of edi, 250 vs 277 bytes
+00d1c400 221 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid, fake-arity); OnMouseDown approximated: ray/vec3 pick and SpVector<cCurvePoint> selection path reduced to a structural sketch (353 vs 343 bytes)
+00d1c610 971 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest FAIL (5/5 valid mismatch; eax&0xffff); stub returns 0 -- the 971-byte scenario-record loader / interface_cast body is not implemented (3 vs 971 bytes)
+00d1cb00 744 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (400 valid, 5.4% cov); stub returns 0 -- SaveScenario (resource-manager record walk) is not implemented (3 vs 744 bytes)
