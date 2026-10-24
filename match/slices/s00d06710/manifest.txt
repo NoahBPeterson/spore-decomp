@@ -1,0 +1,3 @@
+slices/s00d06710/s00d06710.cpp  ?FUN_00d06eb0@cCountedSlot@SP@@QAEPAV12@PAVcRefCounted@2@@Z  00d06eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00d06710/s00d06710.cpp  ?FUN_00d07420@cCountedSlot2@SP@@QAEPAV12@PAVcRefCounted@2@@Z  00d07420  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00d06710/s00d06710.cpp  ?FUN_00d07720@cCountedSlot3@SP@@QAEPAV12@PAVcRefCounted@2@@Z  00d07720  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

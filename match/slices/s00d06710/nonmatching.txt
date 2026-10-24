@@ -1,0 +1,13 @@
+00d06710 419 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 419 bytes - helper not reconstructed.
+00d068c0 90 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 90 bytes - helper not reconstructed.
+00d06920 289 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 289 bytes - cRelationshipManager::StartAlliance not reconstructed.
+00d06a50 469 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 469 bytes - vehicle slot update not reconstructed.
+00d06c30 13 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 13 bytes - the two-argument forwarder to FUN_00d06a50 is emitted by MSVC as an inline duplicate of the callee's body (size 3) instead of a push/call/ret 8 tail.
+00d06d80 102 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 102 bytes - helper not reconstructed.
+00d06e70 53 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 53 bytes - cSoundLoopObject constructor not reconstructed (base cGameData + embedded cSpatialObject at +0x34, two vtable stores after the base calls).
+00d06f00 418 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 418 bytes - helper not reconstructed.
+00d070b0 59 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 47 bytes - scalar deleting destructor: volatile member qualifiers keep the vtable store first but cost 3 extra bytes (size 62 vs 59).
+00d070f0 806 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 806 bytes - compiler-generated static initialiser $E207 (attribute registration) not reconstructed.
+00d07470 287 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 287 bytes - helper not reconstructed.
+00d07590 59 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 59 bytes - helper not reconstructed.
+00d075d0 325 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 325 bytes - helper not reconstructed.
