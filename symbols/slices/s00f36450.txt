@@ -1,0 +1,5 @@
+00f368b0 ?ReadParameters@cTemplateF368B0@@QAEXXZ  # effect/graphics template property-list parameter reader (nonmatching)
+00f36730 ?resize@TransformVector@@QAEXI@Z  # TransformVector::resize (EASTL vector growth/shrink)
+00f36810 ?ReadTransformArray@@YA_NPAUPropertyList@@IGPAUTransformVector@@@Z  # read a transform property array into a TransformVector
+00f372b0 ?AddTransformForObject@cTemplateF368B0@@QAEXIABUVector3@@ABUQuaternion@@M@Z  # build a keyed effect transform and append it
+00f36450 ?ActivateEffect@cTemplateF368B0@@QAEXPAXPAUEffect@@PAUEffectSlot@@@Z  # activate an effect: fade/scale, transform, slot insert, manager tick (nonmatching)

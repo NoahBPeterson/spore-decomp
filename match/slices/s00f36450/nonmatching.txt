@@ -1,2 +1,3 @@
 # va  diff-bytes  reason   (flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
 00f368b0  2180  complete property-list parameter reader (class unidentified): all 56 calls, property ids and vtable slots in original order; register allocation (ebp=&mKeys), Vector3 default copies and stack slots differ; equiv UNSUPPORTED (unresolved PodVector<float>::DoInsertValue)
+00f36450  360  complete and equivalent effect activation: slot lookup, fade/scale choice, transform build, slot insert/push_back and manager Done call.  Remaining differences are register allocation (this in ebp vs ebx), translation-copy scheduling and slot-vector scan addressing; size 733 vs 723 B.  [equiv PASS 702/2000 valid inputs, 65.0% coverage, no mismatches]

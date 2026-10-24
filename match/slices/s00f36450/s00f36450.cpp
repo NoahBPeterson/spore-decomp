@@ -28,15 +28,41 @@ struct Vector3 {
     float x, y, z;
     Vector3() {}
     Vector3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+    Vector3(const float* values) : x(values[0]), y(values[1]), z(values[2]) {}
     void Set(float ax, float ay, float az) { x = ax; y = ay; z = az; }
+};
+struct Quaternion { float x, y, z, w; };
+struct Matrix33 {
+    Vector3 xAxis, yAxis, zAxis;
+    Matrix33(const float* values);                       // 0x0041cb40
 };
 struct ResourceKey { uint32_t instanceID, typeID, groupID; };
 struct Key16 { uint32_t a, b, c, d; };
-struct cSPTransform { char data[0x38]; };
+
+// Shared default values used by the transform constructor (EA::Swarm::cTransform).
+extern const float gZeroTranslation[3];                  // 0x016c852c
+extern const float gDefaultRotation[9];                  // 0x016c8538
+extern const float gOne;                                 // 0x01485720
+
+struct cSPTransform {
+    uint16_t mFlags;                                     // +0x00
+    uint16_t mModificationCount;                         // +0x02
+    Vector3 mTranslation;                                // +0x04
+    float mScale;                                        // +0x10
+    Matrix33 mRotation;                                  // +0x14
+    __forceinline cSPTransform()
+        : mFlags(0), mModificationCount(0), mTranslation(gZeroTranslation),
+          mScale(gOne), mRotation(gDefaultRotation) {}
+    // Used when the caller overwrites the translation and scale immediately.
+    __forceinline cSPTransform(int)
+        : mFlags(0), mModificationCount(0), mRotation(gDefaultRotation) {}
+};
 struct cSPTransform2 {
     char data[0x38];
     cSPTransform2& operator=(const cSPTransform2& o);    // 0x00537dc0 (cSPTransform::operator=)
 };
+
+Matrix33 Matrix3FromQuaternion(const Quaternion& q);     // 0x0059c190
 
 // ---------------------------------------------------------------- property list
 struct Property {
@@ -44,7 +70,9 @@ struct Property {
         uint32_t mValueUInt32;
         void* mpData;
     };
-    uint32_t pad04[3];
+    uint32_t pad04;
+    int mnItemCount;                                    // +0x08
+    uint32_t pad0c;
     uint16_t mnFlags;                                   // +0x10
     uint16_t mnType;                                    // +0x12
     Property() : mnFlags(0), mnType(0) {}
@@ -195,7 +223,10 @@ struct Key16Vector {
 cSPTransform* CopyTransforms(cSPTransform* first, cSPTransform* last, cSPTransform* dest);   // 0x00f339d0
 struct TransformVector {
     cSPTransform* mpBegin; cSPTransform* mpEnd; cSPTransform* mpCapacity; sp_vector_allocator mAllocator;
+    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
     void resize(unsigned n);                                      // 0x00f36730
+    void DoInsertValues(cSPTransform* pos, unsigned n, const cSPTransform& value); // 0x00f350c0
+    cSPTransform* erase(cSPTransform* first, cSPTransform* last); // 0x00f34cb0
     bool empty() const { return mpBegin == mpEnd; }
     void clear()
     {
@@ -218,15 +249,73 @@ struct InlineTransformVector {
 
 void ReadKeyArray(PropertyList* p, uint32_t id, int type, KeyVector* dst);              // 0x00f34d40
 void ReadKeyArray(PropertyList* p, uint32_t id, int type, InlineKeyVector* dst);        // 0x00f34d40
-void ReadTransformArray(PropertyList* p, uint32_t id, int type, TransformVector* dst);  // 0x00f36810
-void ReadTransformArray(PropertyList* p, uint32_t id, int type, InlineTransformVector* dst); // 0x00f36810
+bool ReadTransformArray(PropertyList* p, uint32_t id, uint16_t type, TransformVector* dst);  // 0x00f36810
+bool ReadTransformArray(PropertyList* p, uint32_t id, int type, InlineTransformVector* dst); // 0x00f36810
 void ReadFloatArray(PropertyList* p, uint32_t id, int type, PodVector<float>* dst);     // 0x00bb15d0
 void ReadUIntArray(PropertyList* p, uint32_t id, int type, PodVector<uint32_t>* dst);   // 0x00fea840
+
+// ---------------------------------------------------------------- effect objects
+struct Effect {
+    virtual void AddRef();                              // +0x00
+    virtual void Release();                             // +0x04
+    char pad04[0x2c];                                   // +0x04
+    uint32_t mKeyInstance;                              // +0x30
+    char pad34[0x2c];                                   // +0x34
+    float mStart;                                       // +0x60
+    float mEnd;                                         // +0x64
+    bool mbFlag68;                                      // +0x68
+    char pad69[3];
+    float mScale6C;                                     // +0x6c
+    float mTime70;                                      // +0x70
+    void SetTime70(float value);                        // 0x00ecb790
+    void SetScale6C(float value);                       // 0x00ecb780
+};
+
+struct EffectSlot {
+    Effect* mpRef;                                      // +0x00 (AddRef/Release vtable)
+    Effect* mpEffect;                                   // +0x04
+    uint32_t mValue;                                    // +0x08
+    float mScale;                                       // +0x0c
+};
+
+struct EffectSlotVector {
+    EffectSlot* mpBegin; EffectSlot* mpEnd; EffectSlot* mpCapacity; sp_vector_allocator mAllocator;
+    void insert(EffectSlot* pos, const EffectSlot& value);     // 0x00f34f50
+    void push_back(const EffectSlot& value);                    // 0x00f35560
+};
+
+struct EffectManager {
+    void Done(void* owner);                             // 0x00f00bd0
+};
+extern EffectManager gEffectManager;                    // 0x016c7c08
+
+struct ISource {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual const Vector3* GetPosition();               // +0x2c
+    virtual const Quaternion* GetOrientation();         // +0x30
+    virtual float GetTime();                            // +0x34
+};
+ISource* GetSource(void* owner);                        // 0x00b18e00
+
+struct IResourceManager {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual bool Query(const ResourceKey* key, int a, int b, int c, int d, int e); // +0x0c
+};
+IResourceManager* GetResourceManager();                 // 0x0067dcd0
 
 class cTemplateF368B0 {
 public:
     void ReadParameters();
     void FillUIntDefaults(uint32_t value);              // 0x00f35be0
+    void ActivateEffect(void* owner, Effect* params, EffectSlot* activation); // 0x00f36450
+    EffectSlot* FindSlot(void* owner);                  // 0x00f32790
+    void SpawnEffect(EffectSlot* out, uint32_t key, const cSPTransform& transform,
+                     int count, void* owner);           // 0x00f33d70
+    void AppendKeyTransform(const ResourceKey& key, const cSPTransform& transform); // 0x00f359f0
+    void AddTransformForObject(uint32_t instanceID, const Vector3& position,
+                               const Quaternion& orientation, float scale); // 0x00f372b0
 
     char pad00[0xc];
     PropertyList* mpPropList;                           // +0x0c
@@ -258,6 +347,11 @@ public:
     uint32_t mUInt160;                                  // +0x160
     char pad164[0x18d - 0x164];
     bool mbFlag18D;                                     // +0x18d
+    char pad18E[0x19c - 0x18e];
+    EffectSlotVector mSlots;                            // +0x19c
+    char pad1B0[4];
+    int mSlotIndex;                                     // +0x1b4
+    bool mbActive;                                      // +0x1b8
 };
 
 // @ 0x00f368b0
@@ -368,4 +462,167 @@ void cTemplateF368B0::ReadParameters()
     mKeyF4.typeID = 0;
     mKeyF4.groupID = 0;
     GetPropertyAsKey(mpPropList, 0x48c74c5c, mKeyF4);
+}
+
+// ---------------------------------------------------------------- transform arrays
+// @ 0x00f36730
+void TransformVector::resize(unsigned n)
+{
+    if (n > size()) {
+        cSPTransform value;
+        DoInsertValues(mpEnd, n - size(), value);
+    }
+    else {
+        erase(mpBegin + n, mpEnd);
+    }
+}
+
+// @ 0x00f36810
+bool ReadTransformArray(PropertyList* p, uint32_t id, uint16_t type, TransformVector* dst)
+{
+    // The original reuses the incoming object pointer slot for the property result.
+    if (p != 0 && p->GetProperty(id, *(Property**)&p)) {
+        Property* prop = (Property*)p;
+        {
+            uint16_t propertyType = prop->mnType;
+            if (propertyType == type) {
+                uint16_t flags = prop->mnFlags;
+                if ((flags & 0x10) != 0) {
+                    unsigned count;
+                    cSPTransform* first;
+                    if ((flags & 0x30) != 0)
+                        count = (unsigned)prop->mnItemCount;
+                    else
+                        count = (propertyType != 0) ? 1u : 0u;
+                    if ((flags & 0x30) != 0)
+                        first = (cSPTransform*)prop->mpData;
+                    else
+                        first = (propertyType != 0) ? (cSPTransform*)prop : 0;
+
+                    dst->resize(count);
+                    CopyTransforms(first, first + count, dst->mpBegin);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+// Same routine (folded by the linker); the two vector types have identical layouts.
+bool ReadTransformArray(PropertyList* p, uint32_t id, int type, InlineTransformVector* dst)
+{
+    return ReadTransformArray(p, id, (uint16_t)type, (TransformVector*)dst);
+}
+
+// ---------------------------------------------------------------- effect transforms
+// @ 0x00f372b0
+void cTemplateF368B0::AddTransformForObject(uint32_t instanceID, const Vector3& position,
+                                            const Quaternion& orientation, float scale)
+{
+    ResourceKey key;
+    key.instanceID = instanceID;
+    key.typeID = 0xb1b104;
+    key.groupID = 0x41842000;
+    if (!GetResourceManager()->Query(&key, 0, 0, 0, 0, 0))
+        return;
+
+    cSPTransform transform(0);
+    transform.mFlags |= 4;
+    transform.mModificationCount++;
+    transform.mTranslation = position;
+    transform.mRotation = Matrix3FromQuaternion(orientation);
+    transform.mModificationCount++;
+    transform.mFlags |= 2;
+    transform.mModificationCount++;
+    transform.mScale = scale;
+    AppendKeyTransform(key, transform);
+}
+
+// @ 0x00f36450
+void cTemplateF368B0::ActivateEffect(void* owner, Effect* params, EffectSlot* activation)
+{
+    ISource* source = GetSource(owner);
+    float fade;
+    float scale;
+
+    if (params == 0 && activation == 0) {
+        mbActive = false;
+        goto done;
+    }
+    if (activation != 0) {
+        params = activation->mpEffect;
+        fade = source->GetTime() - 3.0f;
+        fade = (params->mEnd - params->mStart) * fade + params->mStart;
+        scale = activation->mScale;
+    }
+    else {
+        fade = (params->mEnd - params->mStart) * params->mTime70 + params->mStart;
+        scale = params->mScale6C;
+    }
+    {
+        cSPTransform transform(0);
+        transform.mTranslation = *source->GetPosition();
+        transform.mFlags |= 4;
+        transform.mModificationCount++;
+        transform.mRotation = Matrix3FromQuaternion(*source->GetOrientation());
+        transform.mModificationCount++;
+        transform.mFlags |= 2;
+        transform.mModificationCount++;
+        transform.mScale = fade;
+
+        EffectSlot slot;
+        slot.mpRef = 0;
+        slot.mpEffect = 0;
+        slot.mValue = 0;
+        slot.mScale = gOne;
+
+        int count;
+        if (params->mbFlag68 == 0)
+            count = (int)(mKeys.mpEnd - mKeys.mpBegin);
+        else
+            count = (int)(mTransforms2.mpEnd - mTransforms2.mpBegin);
+        SpawnEffect(&slot, params->mKeyInstance, transform, count, owner);
+
+        if (params->mbFlag68 == 0) {
+            unsigned n = (unsigned)(mSlots.mpEnd - mSlots.mpBegin);
+            int index = -1;
+            for (unsigned i = 0; i < n; i++) {
+                if (mSlots.mpBegin[i].mpEffect->mbFlag68 != 0)
+                    break;
+                index = (int)i;
+            }
+            mSlotIndex = index + 1;
+            EffectSlot* dest = mSlots.mpBegin + (index + 1);
+            slot.mScale = scale;
+            if (dest == mSlots.mpEnd && mSlots.mpEnd != mSlots.mpCapacity) {
+                EffectSlot* old = mSlots.mpEnd++;
+                if (old != 0) {
+                    old->mpRef = slot.mpRef;
+                    if (slot.mpRef != 0)
+                        slot.mpRef->AddRef();
+                    old->mpEffect = slot.mpEffect;
+                    old->mValue = slot.mValue;
+                    old->mScale = slot.mScale;
+                }
+            }
+            else {
+                mSlots.insert(dest, slot);
+            }
+        }
+        else {
+            mSlots.push_back(slot);
+        }
+        mbActive = true;
+        if (slot.mpRef != 0)
+            slot.mpRef->Release();
+    }
+done:
+    EffectSlot* found = FindSlot(owner);
+    if (found != 0) {
+        float time = source->GetTime() - 3.0f;
+        found->mpEffect->SetTime70(time);
+        found->mpEffect->SetScale6C(found->mScale);
+    }
+    gEffectManager.Done(owner);
 }

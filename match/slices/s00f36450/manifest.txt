@@ -1,1 +1,4 @@
-# no byte-exact functions in this slice (see nonmatching.txt)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f36450/s00f36450.cpp  ?resize@TransformVector@@QAEXI@Z  00f36730  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f36450/s00f36450.cpp  ?ReadTransformArray@@YA_NPAUPropertyList@@IGPAUTransformVector@@@Z  00f36810  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f36450/s00f36450.cpp  ?AddTransformForObject@cTemplateF368B0@@QAEXIABUVector3@@ABUQuaternion@@M@Z  00f372b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
