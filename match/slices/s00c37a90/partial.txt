@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00c37a90 = SPGameDataUFO.obj.  No function is left as an approximate sketch or a stub: all 17
+# are full reconstructions of the original's control flow and data layout, so this file is empty and the
+# slice is accounted for as manifest.txt (3 byte-exact) + nonmatching.txt (14 complete reconstructions
+# whose residue is cl register-allocation / store-scheduling only).  Two of those rows are worth calling
+# out for follow-up work and are therefore repeated here as caveats rather than as missing bodies:
+#
+00c37a90  381  Read(void*): the message-registration loop at the end (the 2-element g_aui146bb58 array
+#                dispatched through the message server's vtable slot 9 into mp804..mp814) is reproduced
+#                from the observed instruction sequence with an index loop; the original's rotated form
+#                is not recovered, and the equivalence gate cannot arbitrate because 0/400 inputs are
+#                valid (the stream-reader stubs fault).  The body is complete, but this loop is the one
+#                region where the reconstruction is behaviourally unverified.
+00c37f70  559  ApplyVelocity(const Vector3&, float): the negative-NaN output on float-special inputs means
+#                the radial magnitude's sign fix-up is fused differently from the original; the body is
+#                complete and the integration sequence is exact, but that one expression is unverified.

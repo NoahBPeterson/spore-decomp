@@ -1,0 +1,3 @@
+slices/s00c37a90/s00c37a90.cpp  ?HasPendingCollisions@cSPGameDataUFO@@QAE_NXZ  00c38260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c37a90/s00c37a90.cpp  ?DeactivateBehaviorTree@cSPGameDataUFO@@QAEXXZ  00c38510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c37a90/s00c37a90.cpp  ?SetFlag@cSPGameDataUFO@@QAEXI_N@Z  00c389c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

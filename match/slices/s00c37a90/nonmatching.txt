@@ -1,0 +1,114 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00c37a90 = SPGameDataUFO.obj: cSPGameDataUFO's UFO read/warp/motion helpers, the AI setup
+# and teardown pair, the two altitude speed getters and the flag bit accessors.  3/17 byte-exact
+# (00c38260, 00c38510, 00c389c0 = manifest.txt).  The remaining fourteen are complete C++
+# reconstructions that reproduce the original control flow, the retail member offsets (the 2008 PDB
+# layout is shifted, so the slice declares its own retail-offset struct), the __fastcall receiver
+# conventions of the neighbouring object-file stubs and the x87/SSE mix of the float paths; the
+# byte-exact budget is missed because cl 15.00.30729.01 chooses different register names for the
+# outgoing argument setup, sinks/hoists a few stores and orders two merged boolean blocks differently
+# than the original build.  The per-row verdict is the equivalence-gate result measured with default
+# inputs (tools/difftest/equiv.py s00c37a90 <va>).
+#
+00c37a90  381  Read(void*): resolves the object stream through two virtual hops, reads a version word,
+#                chains FUN_00b18600 / FUN_00bfc540 / FUN_00c43c10, allocates and installs the
+#                0x10-byte "Simulator" object, sets mInt224 = 5, runs the cVarListSerializer read
+#                (hash 0x1a80d26), reloads mInt7b0 / mInt764 from the two banner-list globals, re-applies
+#                the desired model key, restarts the movement timer when mbWarping, optionally rebuilds
+#                the 0x670-byte "Simulator/cBehaviorTreeData" object (FUN_00bcae90 + delete + alloc +
+#                FUN_00bcb2a0 + FUN_00bc9ac0) and, for mUFOType == 0, registers the two UFO message ids
+#                with the message server into mp804..mp814.  Complete reconstruction (559 vs 552 bytes);
+#                the original walks the 2-element message-id array with a rotated loop whose induction
+#                variable is carried around the block, ours is a plain counted loop, and the
+#                &&-accumulation of the three sub-recs uses a different branch shape.
+#                equiv UNSUPPORTED: 0/400 inputs valid (the stream-reader stubs fault).
+00c37cc0  148  WarpToDestination(): returns true immediately when mUFOType == 1 or the resource manager
+#                reports the desired model missing; otherwise computes a destination vector from either
+#                the current terrain sphere (owner id == -1) or the owner's star system, applies it with
+#                FUN_00ba5df0, SetOffset(@+0x94) and the desired-model setter, returning true on every
+#                path.  Complete reconstruction (236 vs 247 bytes); the original re-uses the
+#                StarManager/GetEmpireByID argument-register setup to push the model query's five zero
+#                arguments and zeroes vDest with xorps, ours needs separate pushes.
+#                equiv WEAK: 295/400 inputs valid, 30.9% coverage.
+00c37dc0  60   ScaleForPlanetDistance(const cMotionFrame*): forms the frame delta, keeps a pointer to the
+#                largest of the three components, and returns clamp(one/scale) from
+#                g_pPlanetTuning->mf028 / mf02c, defaulting to 1.0.  Size-exact (39 instructions);
+#                ours spills the two tuning constants to an extra stack slot and materialises the
+#                1.0 sink earlier.
+#                equiv FAIL (5/35): the original funnels every path through one `fld [esp]` of the slot it
+#                pre-initialises to 1.0, so degenerate frames yield a clean 1.0; ours returns a denormal
+#                from the inlined division on the same inputs.
+00c37e60  56   PopToDestination(): zeroes mNextVelocity, copies mDestination into mNextPosition, stores
+#                |mNextPosition| in mf768, applies SetPosition(mNextPosition + mOffsetFromPosition) and
+#                SetOrientation(mNextOrientation), sets mbWarping and restarts the movement timer when it
+#                is not running.  Size-exact; differs in store scheduling and in building the SetPosition
+#                argument (the original passes it through three xmm registers, ours through one).
+#                equiv UNSUPPORTED: 0/400 inputs valid (fake-arity on the two vtable calls).
+00c37f70  559  ApplyVelocity(const Vector3&, float): normalises mNextPosition, splits the scaled
+#                direction into tangential and radial components, integrates mDestination / mf768 /
+#                mf60c..mf620 and stops the movement timer.  Complete reconstruction (605 vs 622 bytes);
+#                the remaining diff is x87 scheduling of the two square roots and the order in which the
+#                integrated fields are stored.
+#                equiv FAIL (5/35): one float-special input produces a negative NaN where the original
+#                produces a positive one (the radial magnitude's sign fix-up is fused differently).
+00c381e0  67   SetOffset(const Vector3&): stores mOffsetFromPosition and re-applies
+#                SetPosition(mNextPosition + mOffsetFromPosition).  Complete reconstruction
+#                (119 vs 120 bytes); the original copies the offset through two xmm registers before the
+#                vector add, ours uses one.
+#                equiv UNSUPPORTED: 0/400 valid (fake-arity on the vtable call).
+00c38270  79   CanEnterPlanetContext(): rejects when there is no active planet, when its context id is 1,
+#                when its +0x13c object answers true, when the UFO is not warping, and - for
+#                non-positive mf540 - when the planet's owner differs from the current one or a mission is
+#                active there.  Complete reconstruction (113 vs 108 bytes); the original emits the merged
+#                false-block first and repeats the owner comparison, ours merges it later.
+#                equiv WEAK: 400/400 inputs valid, 26.8% coverage.
+00c382e0  260  ExitToSpace(): picks the nearest star to the planet's cities, then switches on
+#                GetUniverseContext() - ctx 0 stops the current planet context and clears the app mode,
+#                ctx 2 leaves the galaxy, ctx 1 falls straight through, default skips the transition - and
+#                calls TransitionFromPlanetToSolar(best,0) + the mode update, then posts the two messages,
+#                releases mp7f0, resets mInt53c, re-seats the weapon position and mirrors mf7f8 into
+#                mf7f4.  Complete reconstruction (528 vs 535 bytes); the diffs are the loop-carried
+#                city-pointer temporaries and the saved-`this`/app-mode reloads around the switch.
+#                equiv UNSUPPORTED: 0/400 valid (fault(read) on the planet/star stubs).
+00c385d0  209  SetupAI(): lazily initialises the behavior-tree blackboard, deactivates the old tree,
+#                allocates the 0x670-byte tree when absent, binds it with FUN_00bcb660 and sets the
+#                per-UFO-type flag bit in mFlags5fc (1/2/3/4/5/6/7/8/9/10/11 -> 4/8/0x10/0x20/0x80/0x100/
+#                2/0x200/0x400/0x800/0x10000).  Complete reconstruction (360 vs 364 bytes); the
+#                bit-setting tail is a jump table in both, ours differs in the table's induction
+#                arithmetic.
+#                equiv UNSUPPORTED: 0/400 valid (the reconstruction faults at 0x00bcb678, inside the
+#                stubbed FUN_00bcb660 path).
+00c38740  17   TickUFOBehaviorTree(float,double): early-outs on a missing tree, then forwards the root,
+#                this, the motion block, mInt5e8, mFlags5fc and FUN_00bc9980's result to FUN_00bc8ff0
+#                and returns its answer.  Complete reconstruction, size-exact; only the register names
+#                of the outgoing argument pushes differ (eax vs edx).
+#                equiv PASS: 385/400 inputs valid, 100% coverage.
+00c387b0  95   PlanetDistanceScale(Vector3): |v|, normalised against the planet radius
+#                (FUN_00b7e4d0) by mf010, clamped to [0,1] with maxss/minss, then lerped with mf090.
+#                Size-close (134 vs 130 bytes); the x87 length schedule differs.
+#                equiv PASS: 336/400 inputs valid, 100% coverage.
+00c38840  46   GetStandardSpeedForAltitude(): per-type base speed (mf068/mf078/mf070/mf08c/mf074, default
+#                mf06c) times PlanetDistanceScale(mNextPosition) times mf6b4.  Complete reconstruction
+#                (176 vs 180 bytes); the switch tail and the multiply order differ.
+#                equiv FAIL: one input yields -0.0 where the original yields +0.0 (the final tuning
+#                multiply keeps the sign of a zero operand in ours).
+00c38900  39   GetMaxSpeedForAltitude(): per-type base speed (mf0b4 / mf0b8), altitude-scaled by
+#                (|mf5ec| / mf0e8) * (mf0c4 - 1) + 1 in the space context, times
+#                PlanetDistanceScale(mNextPosition) times mf6b8.  Size-exact; ours clobbers edx, which the
+#                original keeps live across the inlined PlanetDistanceScale call.
+#                equiv FAIL: edx clobber observed on one input.
+00c38990  30   TestFlag(U32): inlined bit test - flag <= 10 guards, flag < 10 indexes mFlags7dc with
+#                1 << (flag & 0x1f).  Complete reconstruction (38 vs 40 bytes); the original emits a
+#                redundant second `ja` bound guard that our nested form folds away.
+#                equiv PASS: 400/400 inputs valid, 100% coverage.
+#
+# Register/scheduling note (rows 00c37a90, 00c37cc0, 00c37e60, 00c37f70, 00c381e0, 00c38270,
+# 00c382e0, 00c385d0, 00c38740, 00c38840, 00c38900): all of these are source-shape-stable.  Eight
+# compile rounds were spent moving the aggregate diff from 2740 to 2046 bytes and from 0 to 3 exact
+# functions; the residue is cl's allocator naming the outgoing argument registers (eax vs edx/ecx),
+# sinking or hoisting a handful of float stores around the inlined distance helpers, and choosing the
+# opposite order for two merged predicate blocks.  Local declaration order, __forceinline on the shared
+# helpers, rewriting the pointer-max idiom as a min/max chain and the loop restructurings tried in the
+# last rounds reproduce a stable result but not the original assignment.
