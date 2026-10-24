@@ -1,1 +1,18 @@
-00b84730 cPlanetModel::GetRandomSurfacePoint  # placeholder name; thiscall void(float*) ret 4
+# slice s00b84270 (gold7) - names inferred from the cards, the PDB candidates and behaviour
+# Modelled types (retail member offsets):
+#   Elem18    0x18-byte ragged element {u32 @0, float @4/8/c, u8 @10/11, pad, u32 @14}
+#   Elem0C    0x0c-byte element (3 dwords)
+#   Elem1C    0x1c-byte element {u32,u32, Vec20B @8}
+#   Vec20B    0x14-byte element (5 dwords), copy-constructs through 0x473460
+#   Vec18Vec / Vec0CVec / U16Vec  eastl vector headers (begin@0 end@4 cap@8)
+#   HashMap   eastl hashtable {buckets@4, bucketCount@8, elementCount@c, RehashPolicy@10}
+#   ScalarList the cModelTestCheat helper owner with the two IntVector members @0xc/@0x20
+00b84270  cModelTestCheat::Execute() -> bool  # thiscall: terrain-box rebuild + model/prop sync for the model-test cheat
+00b848f0  HashMap::Insert(InsertResult* out, const u32* key, void* unused) -> void  # eastl hashtable unique-key insert (ret 0xc)
+00b849e0  U16Vec::Reserve(u32 n) -> void  # eastl vector<u16>::reserve (ret 4)
+00b84b10  Vec18Vec::CopyCtor(const Vec18Vec* pSrc) -> Vec18Vec*  # eastl vector<0x18-byte> copy-ctor (ret 4)
+00b84cb0  Vec0CVec::insert(Elem0C* pos, Elem0C* first, Elem0C* last) -> void  # eastl vector<0xc-byte> range insert (ret 0x10)
+00b84e90  Vec18Vec::insert(Elem18* pos, u32 count, const Elem18* pValue) -> void  # eastl vector<0x18-byte>::insert(pos,n,value) (ret 0xc)
+00b850c0  UninitCopy1C(const Elem1C* first, const Elem1C* last, Elem1C* dst) -> Elem1C*  # eastl uninitialised_copy of 0x1c-byte elements (placement copy-ctor @8)
+00b85110  ScalarList::~ScalarList() -> void  # thiscall: frees the two IntVector members + the +8 object, resets the vtable
+00b85220  Vec18Vec::insert(Elem18* pos, const Elem18* pVal) -> void  # eastl vector<0x18-byte> insert-one (ret 8)

@@ -1,0 +1,3 @@
+slices/s00b84270/s00b84270.cpp  ?Reserve@U16Vec@@QAEXI@Z  00b849e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b84270/s00b84270.cpp  ?UninitCopy1C@@YAPAUElem1C@@PBU1@0PAU1@@Z  00b850c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b84270/s00b84270.cpp  ?Dtor@ScalarList@@QAEXXZ  00b85110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
