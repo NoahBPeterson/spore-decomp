@@ -1,4 +1,4 @@
-00765f80   62  deleting dtor: EH prolog + vptr-store schedule not reproduced
+00765f80   84  deleting dtor: fixed ABI (explicit scalar-deleting member: this+flags, ret 4, vptr reset to 0x13eb938, conditional EA_Dealloc) so replay matches and fresh PASS 300/100%; remaining diff is the EH prologue/vptr-store schedule (size 45 vs 93)
 00765fe0    7  ResB ctor: only zeroing-store order differs (0x18/0x20/0x24/0x28/0x2c)
 00766100   37  MoveOut: one reused zero register instead of four independent xors
 00766250   53  ResE dtor: EH frame and member-dtor call schedule not reproduced

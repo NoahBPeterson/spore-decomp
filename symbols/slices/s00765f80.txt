@@ -1,5 +1,5 @@
 006913c0 ?AddWeakDependency@cJob@SP@@QAEXPAV12@@Z  # SP::cJob::AddWeakDependency (callee of s00765f80, named from the dev publics; slice address comment)
-00765f80 ??1IResEd@@UAE@XZ  # IResEd::~IResEd migrated from s00765f80 (verbatim, slice spelling)
+00765f80 ?Delete@IResEd@@QAEPAXI@Z  # IResEd::Delete (scalar deleting destructor; was mislabeled ??1IResEd)
 00765fe0 ??0ResB@@QAE@XZ  # ResB::ResB migrated from s00765f80 (verbatim, slice spelling)
 00766030 ?AsInterfaceFC@@YIPAXPAXHH@Z  # AsInterfaceFC migrated from s00765f80 (verbatim, slice spelling)
 00766070 ?Method66070@ResB@@QAEXHH@Z  # ResB::Method66070 migrated from s00765f80 (verbatim, slice spelling)

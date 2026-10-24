@@ -84,7 +84,7 @@ struct Arena {
 struct IElem { virtual void m0(); };
 
 // ===========================================================================
-// @ 0x00765f80  scalar deleting destructor of a refcounted resource
+// scalar deleting destructor of a refcounted resource
 // ===========================================================================
 struct IResEd {
     virtual void e0(); virtual void e1(); virtual void e2(); virtual void e3();
@@ -95,8 +95,20 @@ struct IResEd {
     int m08, m0c, m10, m14;   // +0x8..+0x14
     int m18;                  // +0x18
     IRef* m1c;                // +0x1c
+    void* Delete(unsigned flags);   // 0x00765f80 (scalar deleting destructor)
 };
 IResEd::~IResEd() { if (m1c) m1c->Release(); }
+
+// @ 0x00765f80
+void* IResEd::Delete(unsigned flags)
+{
+    if (m1c)
+        m1c->Release();
+    *(void**)this = (void*)0x13eb938;
+    if (flags & 1)
+        EA_Dealloc(this);
+    return this;
+}
 void DeleteResEd(IResEd* p) { delete p; }
 
 // ===========================================================================
