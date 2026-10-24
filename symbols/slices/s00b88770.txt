@@ -1,1 +1,2 @@
-00b88770 cPlanetModel::RayCast  # Claude-coined; casts a ray against the cube-map flag grid then marches to the surface (callers pass pos, maxDist, out)
+00b88770 ?RayCast@cPlanetModel@@QAE_NPBUVec3@@MPAU2@M_NI@Z  # nonmatching (pre-existing) - planet cube-map ray cast against the flag grid, /arch:SSE /fp:fast
+00b88f60 ?RayCellNormal@cPlanetModel@@QAE_NPBUVec3@@MPAU2@@Z  # nonmatching (1140) - accumulate the nearest flagged grid cell normals along a direction, write the normalised sum
