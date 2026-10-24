@@ -2,6 +2,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-   (region has no stack cookies, no /EHsc)
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
 
 #pragma warning(disable: 4100)
 
@@ -37,7 +38,7 @@ struct cPlanetModel {
     char pad3[0xf0 - 0x80];
     char mFlagF0;                               // +0xf0
 
-    int FUN_00b832d0(const float* dir, float step);
+    bool FUN_00b832d0(const float* dir, float step);
     float FUN_00b83620(int a, float b);
     uint FUN_00b83870(int arg);
     void FUN_00b83c40(const float* dir, float radius, uint flags, char (*cb)(float*));
@@ -68,7 +69,7 @@ extern const float kSmallEps;                   // 0x01485378
 extern const float kCellScale;                  // 0x01688274 unused placeholder
 
 // @ 0x00b832d0
-int cPlanetModel::FUN_00b832d0(const float* dir, float step)
+bool cPlanetModel::FUN_00b832d0(const float* dir, float step)
 {
     float local_38 = dir[0];
     if ((dir[1] * dir[1] + dir[2] * dir[2]) + local_38 * local_38 != 0.0f) {
@@ -175,7 +176,7 @@ float FUN_00b836b0(uint param_1, uint param_2)
         cTerrainMapSet* p = iVar2->mpISphere->s3();
         fVar6 = p->f3c * p->f38 + p->f34;
     }
-    return fVar6 * (float)sqrt((double)(((B.y - A.y) * (B.y - A.y) + (B.x - A.x) * (B.x - A.x)) + dz * dz)) *
+    return fVar6 * (float)sqrtf(((B.y - A.y) * (B.y - A.y) + (B.x - A.x) * (B.x - A.x)) + dz * dz) *
            (10.0f - fVar5b);
 }
 
@@ -233,26 +234,26 @@ struct HashTableA {
     char pad0[4];
     int* table;      // +4
     uint size;       // +8
-    void Find(int** out, int* key);
+    int** Find(int** out, int* key);
 };
 struct FindResult { int* node; int* slot; };
-void HashTableA::Find(int** out, int* key)
+int** HashTableA::Find(int** out, int* key)
 {
     uint uVar2 = (uint)(*key * 0x25 + key[2] * 0xfd + key[1]) % size;
-    int* slot = table + uVar2;
-    int* node = (int*)table[uVar2];
+    int* p = table;
+    int* slot = p + uVar2;
+    int* node = (int*)p[uVar2];
     for (; node != 0; node = (int*)node[8]) {
         if ((*key == node[0]) && (key[1] == node[1]) && (key[2] == node[2]))
             break;
     }
     if (node == 0) {
-        slot = table + size;
+        slot = p + size;
         node = (int*)*slot;
     }
-    FindResult r;
-    r.node = node;
-    r.slot = slot;
-    *(FindResult*)out = r;
+    out[0] = node;
+    out[1] = slot;
+    return out;
 }
 
 // @ 0x00b83b70
@@ -305,8 +306,8 @@ void cPlanetModel::FUN_00b83c40(const float* dir, float radius, uint flags, char
     if (1.5258789e-05f < fVar13) {
         fVar13 = 1.0f / fVar13;
         float local_88 = (fVar13 * 128.0f) * radius;
-        int iVar7 = (int)(local_88 + 0.5f);
-        if ((float)iVar7 < local_88)
+        int iVar7 = _mm_cvtss_si32(_mm_set_ss(local_88));   // cvtss2si: round to nearest even
+        if ((float)iVar7 < local_88)                        // cmovb: ceil semantics
             iVar7 = iVar7 + 1;
         if (iVar7 != 0) {
             local_b8 = fVar13 * local_b8;
@@ -345,9 +346,12 @@ void cPlanetModel::FUN_00b83c40(const float* dir, float radius, uint flags, char
                 local_d8 = 0x7f;
             if (local_d4 == 0x80)
                 local_d4 = 0x7f;
-            int local_d8b = local_d8, local_d4b = local_d4;
+            int local_d8b[3];                       // {d8, d4, d0} passed by pointer
+            local_d8b[0] = local_d8;
+            local_d8b[1] = local_d4;
+            local_d8b[2] = (int)local_d0;
             unsigned local_78[29];
-            int local_dc = FUN_00685450(0x80, &local_d8b, iVar7, local_78);
+            int local_dc = FUN_00685450(0x80, local_d8b, iVar7, local_78);
             unsigned* local_94 = *(unsigned**)((char*)this + 0x4c);
             flags = flags & 0x3c000000;
             unsigned char* local_90 = *(unsigned char**)((char*)this + 0x7c);

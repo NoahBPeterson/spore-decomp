@@ -1,8 +1,8 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
-00b832d0   649  cPlanetModel::FUN_00b832d0: complete; spiral rotation sin/cos + signed-vs-packed xmm scheduling differ
-00b836b0   367  FUN_00b836b0: complete; x87 extended-precision distance/return (float10) vs float arithmetic differ
+00b832d0   721  cPlanetModel::FUN_00b832d0: complete; spiral rotation sin/cos + signed-vs-packed xmm scheduling differ; declared bool (original writes only AL). [equiv: WEAK 400 valid, 35.6% cov, no mismatch]
+00b836b0   439  FUN_00b836b0: complete; x87 extended-precision distance/return (float10) vs float arithmetic differ. [equiv: FAIL-KEPT register xmm2 only — ours writes xmm2 (a 0.0/constant the original keeps in xmm4/xmm3) which the original never touches; 98.4% cov, values agree]
 00b83870   403  cPlanetModel::FUN_00b83870: property-list scan; two-array (stride 0xc / 0x38) traversal reconstructed approximately
-00b83af0   139  HashTableA::Find: complete; source uses a returned pair copied through a stack temp (128B vs 98B)
+00b83af0   128  HashTableA::Find: complete; returns out via eax. [equiv: PASS 209 valid, 94.1% cov]
 00b83b70     2  HashTableB::Insert: complete; node-size loaded into ecx (this) by original vs eax by ours (2 bytes)
-00b83c40   n/a  cPlanetModel::FUN_00b83c40: complete; cube-face march + bitmap marking, 1177B vs 1362B (loop/helper shape differs)
+00b83c40  1336  cPlanetModel::FUN_00b83c40: cube-face march + bitmap marking. The face cookie {d8,d4,d0} must be a contiguous int[3] block (non-contiguous locals faulted FUN_00685450); face index uses cvtss2si + cmovb (ceil), matching the original. [equiv: PASS 377 valid, 77.5% cov]
 00b841a0   180  eastl::vector<cSPColorRGB>::DoInsertValue: complete; MessageBasicRC<5> ctor/dtor and event dispatch scheduling differ
