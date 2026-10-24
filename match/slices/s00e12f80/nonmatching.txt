@@ -1,5 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00e130b0  82  cUICard message handler: complete (all branches/calls); cl assigns this->edi/msg->esi vs original this->esi/msg->edi and orders the compare tree differently
-00e13160  47  card comparison helper: complete; vtable-call pointer uses eax vs edx, and the float-compare branch polarity differs
+00e130b0  82  cUICard message handler: complete (all branches/calls); retail ignores the first stack argument and treats the second as the message pointer (type at +0x08, kind at +0x0c), so the source now declares HandleMessage(int, void*) and names those fields; cl still assigns this->edi/msg->esi vs original this->esi/msg->edi and orders the compare tree differently; equiv PASS 600 valid, 61.5% coverage
+00e13160  40  card comparison helper: complete; retail returns through AL-only writes, preserving the upper 24 bits of the last vtable result (z): the x==0 and x&&!y&&!z exits clear AL on z, and x&&!y&&z sets AL over z, while x&&y uses a full EAX=1. Source now masks z's low byte for those false/true-AL paths; vtable-call pointer still uses eax vs edx; equiv PASS 420 valid, 100% coverage
 00e132c0  28  cUICard teardown: complete; first null test of the 0x20 member uses memory rather than a register load
 00e133b0  1415  SP::cUIMissionCard::InitForCreature: complete (all paths, calls, vslots; size 1939 vs 1906, 58/58 calls); stack-slot layout and x87/SSE interleave of the three rect computations differ

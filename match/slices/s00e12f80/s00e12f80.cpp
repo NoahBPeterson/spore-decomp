@@ -95,7 +95,7 @@ struct cUICard {
   void Teardown();                   // 0xe132c0
   void SetVisible(int);              // 0xe13360
   IWindow* DoVcallF0(int);               // 0xe13390
-  bool HandleMessage(void* msg, int);  // 0xe130b0
+  bool HandleMessage(int unused, void* msg);  // 0xe130b0
 };
 
 // @ 0x00e12f80
@@ -132,18 +132,23 @@ void __fastcall FUN_00e13000(void* self) {
 }
 
 // @ 0x00e130b0
-bool cUICard::HandleMessage(void* msg, int) {
-  if (*(int*)((char*)msg + 8) == 0xc)
+bool cUICard::HandleMessage(int, void* msg) {
+  struct CardMessage {
+    int unknown[2];
+    int type;   // +0x08
+    int kind;   // +0x0c
+  };
+  CardMessage* m = (CardMessage*)msg;
+  if (m->type == 0xc)
     ((void(__thiscall*)(void*))Vt(this)[0x24 / 4])(this);
-  int kind = *(int*)((char*)msg + 0xc);
-  if (kind == 0x5235138) {
-    if (*(int*)((char*)msg + 8) == 0x287259f6) {
+  if (m->kind == 0x5235138) {
+    if (m->type == 0x287259f6) {
       void* r = FUN_00b3d3f0(-0xc, this);
       FUN_00e18dd0(r);
     }
     return true;
-  } else if (kind == 0x5235aa8) {
-    if (*(int*)((char*)msg + 8) == 0x287259f6)
+  } else if (m->kind == 0x5235aa8) {
+    if (m->type == 0x287259f6)
       ((void(__thiscall*)(void*))Vt(this)[0x20 / 4])(this);
     return true;
   }
@@ -164,9 +169,9 @@ int __stdcall FUN_00e13160(void* a, void* b) {
   else z = 0;
   if (x) {
     if (y) return *(float*)((char*)x + 0x98) > *(float*)((char*)y + 0x98);
-    if (z) return 1;
+    if (z) return (int)(((unsigned)z & 0xffffff00u) | 1u);
   }
-  return 0;
+  return (int)((unsigned)z & 0xffffff00u);
 }
 
 // @ 0x00e13210
