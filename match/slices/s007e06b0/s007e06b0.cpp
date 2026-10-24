@@ -80,9 +80,13 @@ class cCommandBase { public:
     int       mRefCount;    // +0x8
 };
 
+void FUN_0083cd90(void);   // CmdDtor::Dtor  0x0083cd90
+typedef void (__thiscall* CmdDtorFn)(void* self);
+
 class cBlockCommandBase : public cCommandBase { public:
     void* mChildState;      // +0xc
     char  mCommands[0x20];  // +0x10
+    ~cBlockCommandBase() { ((CmdDtorFn)FUN_0083cd90)(this); }
 };
 
 uint32_t ParseEnum(const char* value, const char** table);          // 0x00840bb0
@@ -106,8 +110,12 @@ namespace Swarm {
 
 // EA::Swarm::cDescription : EA::RefCountTemplate<int> (vtable +0, refcount +4)
 class cDescription { public:
-    virtual void d0();
-    virtual void d1();
+    virtual void d0();   // 0x0041d780
+    virtual void d1();   // 0x0047d670
+    virtual void d2();   // 0x00461290
+    virtual void d3();   // 0x00472970
+    virtual void d4();   // 0x00472a70
+    ~cDescription() {}
     int mRefCount;      // +0x4
 };
 
@@ -488,8 +496,18 @@ cSplitControllerEffect::cSplitControllerEffect(void* owner) {
 }
 
 // Matrix helpers
-void FUN_00537f40(void* self, void* p);                  // 0x00537f40
-void FUN_0079a0d0(void* p);                              // 0x0079a0d0
+void FUN_00537f40(void);   // 0x00537f40  cTransform::PreTransformBy (__thiscall: ecx=this)
+void FUN_0079a0d0(void);   // 0x0079a0d0  cLabelOps::Propagate (__thiscall: ecx=this)
+typedef void (__thiscall* PreTransformFn)(void* self, void* p);
+typedef void (__thiscall* PropagateFn)(void* self, void* p);
+
+// one record of the instance array reached through [elem+4] (stride 0x78)
+struct SplitInstanceOps { int mPad; };          // +0x00..+0x03 of the +4 subobject
+struct SplitInstanceRecord {
+    int field00;                                // +0x00
+    SplitInstanceOps ops;                       // +0x04
+    cSPTransform transform;                     // +0x08
+};
 
 // @ 0x007e10c0
 void cSplitControllerEffect::AddInstance(int a, void* b) {
@@ -503,7 +521,7 @@ void cSplitControllerEffect::AddInstance(int a, void* b) {
     local.mScale = *(const float*)(src + 0x10);
     local.mRotation.Assign(*(const Matrix33*)(src + 0x14));
 
-    FUN_00537f40(&local, (void*)a);
+    ((PreTransformFn)FUN_00537f40)(&local, (void*)a);
     mTransform = local;
 
     float s = *(const float*)(src + 0x10);
@@ -526,8 +544,9 @@ void cSplitControllerEffect::AddInstance(int a, void* b) {
             int j = it[1];
             int* base = *(int**)((char*)mpState + 0x40);
             char* elem = (char*)base + i * 0x1c;
-            (*(cSPTransform*)(*(int*)(elem + 4) + j * 0x78 + 8)) = mTransform;
-            FUN_0079a0d0((char*)mpState + 8);
+            SplitInstanceRecord* inst = (SplitInstanceRecord*)(*(int*)(elem + 4) + j * 0x78);
+            inst->transform = mTransform;
+            ((PropagateFn)FUN_0079a0d0)(&inst->ops, (char*)mpState + 8);
         }
     }
 }

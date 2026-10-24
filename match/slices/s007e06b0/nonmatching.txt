@@ -2,7 +2,7 @@
 007e07a0  4    SplitModelKernelRead; ctor vptr store scheduled after mKernelData/Variation, original before
 007e07f0  28   cSplitControllerEffectCommand::Execute; strlen loop shape and av register (ebx vs edi) differ
 007e0850  166  SplitControllerAddCommands; EH frame / inlined command ctor field-init schedule differs
-007e0950  46   cSplitControllerEffectCommand scalar deleting dtor; base-dtor call/vptr reset schedule differs; equiv: UNSUPPORTED (unresolved ??3@YAXPAX@Z, operator delete); symbol now resolves
+007e0950  46   cSplitControllerEffectCommand scalar deleting dtor; equiv: PASS (255 valid, 100% cov) -- compiler-generated dtor now calls CmdDtor::Dtor (0x0083cd90) via a __thiscall typedef and the cDescription member's 5-slot vtable (d0..d4 annotated 0x41d780/0x47d670/0x461290/0x472970/0x472a70) resolves to 0x13ef094, so the vptr reset matches; codegen stays call-vs-inline (our 30-byte deleting dtor calls a 125-byte non-deleting one, original inlines the chain into 67 bytes)
 007e0a60  82   cSplitModelKernelOffsetCommand::Execute; float-parse register allocation differs
 007e0b50  65   cSplitModelKernelRadiusCommand::Execute; second-float x87 spill/red-zone differs
 007e0bc0  136  cSplitModelKernelNormalCommand::Execute; sret temp / vector local scheduling differs
@@ -11,7 +11,7 @@
 007e0e30  148  cSplitModelKernelEffectCommand::Execute; EH frame and storage reset/inherit-copy schedule differs
 007e0f70  87   cSplitControllerEffect::~cSplitControllerEffect; vptr/base-dtor schedule differs
 007e1010  80   cSplitControllerEffect::cSplitControllerEffect; vptr/field init schedule differs
-007e10c0  300  cSplitControllerEffect::AddInstance; transform math register schedule differs
+007e10c0  300  cSplitControllerEffect::AddInstance; equiv: PASS (1200 inputs, 482 valid, 100% cov) -- PreTransformBy (0x00537f40) and Propagate (0x0079a0d0) are __thiscall (ecx=this, one stack arg) called through typedef casts; the old cdecl Propagate call also unbalanced the stack because the original ends in ret 4, which corrupted the second loop iteration; the 0x78-stride instance record now names ops (+0x04) and transform (+0x08)
 007e12b0  6    MyVector8::resize; tail register choice (eax/ecx) differs
 007e1450  190  cSplitControllerEffect::CopyFrom; rbtree/vector copy schedule differs
 007e15b0  34   cSplitControllerEffect::Start; callee-saved register allocation differs
