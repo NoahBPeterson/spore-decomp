@@ -1,0 +1,5 @@
+slices/s00c5b9c0/s00c5b9c0.cpp  ?FUN_00c5bbc0@@YAPAUMissionElem@@PAU1@00@Z  00c5bbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c5b9c0/s00c5b9c0.cpp  ?FUN_00c5bd00@@YIPAXPAUcRaidPlunderEvent@@PAXI@Z  00c5bd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c5b9c0/s00c5b9c0.cpp  ?FUN_00c5bea0@@YIPAXPAUcRaidEvent@@PAXI@Z  00c5bea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c5b9c0/s00c5b9c0.cpp  ?FUN_00c5c240@@YIXPAUElemVec@@PAX@Z  00c5c240  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c5b9c0/s00c5b9c0.cpp  ?FUN_00c5c410@@YIEPAUcRaidEvent@@PAXI1@Z  00c5c410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
