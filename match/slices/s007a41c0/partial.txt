@@ -1,30 +1,17 @@
 # va  diff-bytes  reason (none)
-007a41c0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4220  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4320  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4380  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4420  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a44b0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4600  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4650  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4710  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a47c0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a49e0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4a60  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4a80  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4ac0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4b10  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4bb0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4be0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4c00  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4c10  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4c90  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4cb0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4d20  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4d40  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4d90  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4e40  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4ef0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4f10  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a4f50  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
-007a5020  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a41c0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 82 B cStaticBufferDraw factory (operator new + ctor, SEH frame); not ported this pass
+007a4220  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 256 B cStaticBuffer destructor (SEH, intrusive-refcount teardown); not ported this pass
+007a4320  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 86 B cStaticBufferDraw singleton shutdown (SEH + global clear); not ported this pass
+007a4380  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 118 B cStaticBuffer constructor (SEH, member init); not ported this pass
+007a4420  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 138 B cStaticBuffer constructor variant (SEH, member init); not ported this pass
+007a44b0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 335 B EASTL vector insert/grow (overlapping relocate, allocator); not ported this pass
+007a4600  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 73 B EASTL vector push_back (capacity check + grow); not ported this pass
+007a4650  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 182 B EASTL vector emplace/append; not ported this pass
+007a4710  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 172 B cStaticBuffer::Flush (lock/refcount + vertex-buffer reset loop); not ported this pass
+007a47c0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 538 B cStaticBuffer::GetVertexBuffer (singleton growth/relocate + jump table); not ported this pass
+007a49e0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 125 B Direct3D9 capability probe; not ported this pass
+007a4cb0  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 106 B renderer device swap (FUN_0075fb90 + refcounted assign + validity check); not ported this pass
+007a4d90  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 173 B cGraphicsSystem::UpdateManagers (FlushCache delta + 4 manager vtables); not ported this pass
+007a4e40  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 174 B cDebugDraw::Update (App/cViewer camera query + x87/SSE distance lerp); not ported this pass
+007a4f50  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 170 B bake-texture rect dispatch (vtable 0xac/0xb0/0xb8/0xbc + GetBakeBuffer); not ported this pass
+007a5020  0  asm transcription (naked __asm/_emit), not decompiled C++; byte-exact 422 B cGraphicsSystem::RecycleBakingRTTs (RTT release + intrusive-refcount clear of 5 textures); not ported this pass

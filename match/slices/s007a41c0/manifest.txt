@@ -1,1 +1,13 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007a41c0/s007a41c0.cpp  ?SetDebugParam@cGraphicsSystem@@QAEXG@Z  007a4a60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?ShouldShowDebug@cGraphicsSystem@@QAEIXZ  007a4a80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?SetDebugRange@cGraphicsSystem@@QAEXMMMM@Z  007a4ac0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?GetCurrentCubemapFaceRectID@cGraphicsSystem@@QAEXPAI@Z  007a4bb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?SetCurrentCubemapFaceRectID@cGraphicsSystem@@QAEXPBI@Z  007a4be0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?GetByteFlag@cGraphicsSystem@@QAEEI@Z  007a4c00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?SetByteFlag@cGraphicsSystem@@QAEXIE@Z  007a4c10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?Flush@cObjectRef@@QAEXXZ  007a4c90  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?PreShutdown@cGraphicsSystem@@QAE_NXZ  007a4d20  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?RecycleEffectsBuffers@cGraphicsSystem@@QAEXXZ  007a4d40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?GetLazyBuffer@cGraphicsSystem@@QAEPAXXZ  007a4ef0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s007a41c0/s007a41c0.cpp  ?GetBakeBuffer@cGraphicsSystem@@QAEXPAIH@Z  007a4f10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
