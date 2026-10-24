@@ -1,1 +1,16 @@
-SP::ARCVectorTuning::Assign  # eastl::vector<AutoRefCount<ILogReporter>>::assign; PDB name unknown, 74 diff
+00bdee20 ?insert@ElevVec@@QAEXPAUElevRecord@@ABU2@@Z  # eastl::vector<ElevRecord(0x1c),sp_vector_allocator>::insert(pos,value)
+00bdefa0 ?insert@WordVec@@QAEXPAI00@Z  # eastl::vector<bool,fixed_vector_allocator>::insert(pos,first,last)
+00bdf170 ?CopyAssignRange80@@YAXPAUCElement@@0PBU1@@Z  # CElement range copy-assign (stride 0x80)
+00bdf1a0 ?CopyConstructRange80@@YAXPAUCElement@@IPBU1@@Z  # CElement range copy-construct (stride 0x80, count)
+00bdf1f0 ?Write@CityWrite@@QAEXPAX@Z  # SP::cCity::Write (Simulator serializable write path)
+00bdf380 ?BuildRelationshipString@RelCity@@QAEXPAX@Z  # build the "City\nRelationship To Player" string
+00bdf3e0 ?push_back@BubbleVec@@QAEXXZ  # eastl::vector<cEmptyBubble(0x14)>::push_back
+00bdf430 ?erase_last@RefElemVec@@QAEPAXPAX@Z  # eastl::vector<T(0xc)>::erase-last, releases two refcounted ptrs
+00bdf480 ?insert@RefVec2@@QAEXPAURefVecElem@@ABU2@@Z  # eastl::vector<T(0xc),sp_vector_allocator>::insert(pos,value)
+00bdf6d0 ?AddUniqueId@IdHost@@QAEII@Z  # append an id to the vector at +0x1e0 if not present
+00bdf750 ?Flatten5a4@CityFlatten@@QAEXPAUPairVec@@@Z  # flatten the RB-tree at +0x5a4 into a pair vector
+00bdf7e0 ?Flatten5c0@CityFlatten@@QAEXPAUPairVec@@@Z  # flatten the RB-tree at +0x5c0 (skip value==0)
+00bdf880 ?Flatten5dc@CityFlatten@@QAEXPAUPairVec@@@Z  # flatten the RB-tree at +0x5dc (skip value==0)
+00bdf920 ?RemoveByPointer@CreatureHost@@QAEXPAX@Z  # remove-by-pointer from the +0x55c vector and tear down
+00bdf9e0 ?RemoveById@CreatureHost@@QAEPAXI@Z  # remove-by-id from the +0x55c vector, returns the object
+00bdfb00 ?DamageCombatantsInRadius@@YIIPAX00@Z  # pick a combatant in radius and emit a surface transform
