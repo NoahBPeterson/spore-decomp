@@ -1,1 +1,1 @@
-# no byte-exact functions in this slice (see nonmatching.txt)
+slices/s00d29780/s00d29780.cpp  ?PrintDebug@cCreatureCamera@@QAEXPAX@Z  00d2a520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
