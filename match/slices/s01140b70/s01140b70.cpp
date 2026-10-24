@@ -174,7 +174,8 @@ uint8_t FUN_01140a20(int);                            // 0x1140a20
 // @ 0x01140b70
 extern "C" int FUN_01140b70(int index, int a1, int a2, int a3, SndPlayParams* pp)
 {
-    SndVoice* v = &g_voices[index];
+    volatile int offset = index * 0x84;
+    SndVoice* v = (SndVoice*)((char*)g_voices + offset);
     uint8_t n = v->count;
     int16_t* subp = v->sub;
     int32_t* f14p = pp->f14;
@@ -353,7 +354,7 @@ extern "C" int SNDVOICEI_alloc(uint32_t count, uint32_t param_2, uint32_t* param
 //  SNDVOICEI_free  0x01141020
 // ===========================================================================
 // @ 0x01141020
-extern "C" void SNDVOICEI_free(int index)
+extern "C" int SNDVOICEI_free(int index)
 {
     SndVoice* v = &g_voices[index];
     uint8_t b = v->b24;
@@ -366,7 +367,7 @@ extern "C" void SNDVOICEI_free(int index)
         v->b24 = 0;
         v->b25 = 0;
         v->counter = g_tick;
-        return;
+        return (index * 0x84) & 0xffffff00;
     }
 
     if (g_voiceCount > 0) {
@@ -394,11 +395,11 @@ extern "C" void SNDVOICEI_free(int index)
             o->b24 = 0;
             o->b25 = 0;
             o->counter = g_tick;
-            return;
+            return other * 0x84;
         }
         if (o->flag69 == 1 && index == other) {
             o->flag69 = 2;
-            return;
+            return other * 0x84;
         }
     }
 
@@ -406,6 +407,7 @@ extern "C" void SNDVOICEI_free(int index)
     v->b24 = 0;
     v->b25 = 0;
     v->counter = g_tick;
+    return g_tick;
 }
 
 // ===========================================================================
