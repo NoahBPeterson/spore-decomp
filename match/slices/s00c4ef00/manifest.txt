@@ -1,0 +1,6 @@
+slices/s00c4ef00/s00c4ef00.cpp  ?GetUIMediumDescription@cSPMissionEradicate@@QAEXPAX@Z  00c4ef00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4ef00/s00c4ef00.cpp  ?GetUILongDescription@cSPMissionEradicate@@QAEXPAX@Z  00c4ef90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4ef00/s00c4ef00.cpp  ?CheckType@cSPMissionEradicate@@QAEDXZ  00c4f060  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4ef00/s00c4ef00.cpp  ?FUN_00c4f0e0@cSPMissionEradicate@@QAEMPAUcEradicateTarget@@PAX@Z  00c4f0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4ef00/s00c4ef00.cpp  ?FUN_00c4f160@cSPMissionEradicate@@QAEXXZ  00c4f160  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c4ef00/s00c4ef00.cpp  ?FUN_00c4f320@cSPMissionEradicate@@QAEXXZ  00c4f320  /O2 /MD /Gy /TP /arch:SSE /fp:fast

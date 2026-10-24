@@ -1,0 +1,1 @@
+00c4f4e0 612 partial: FUN_00c4f4e0 source incomplete (best-effort translation: vcall field-init + property lookup + target/animal species + PickPlanet sequence; ours 665 bytes vs 612); equivalence UNSUPPORTED (0/400 valid; discards fault(read)=352, fake-arity=41, fault(pool-limit)=3); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
