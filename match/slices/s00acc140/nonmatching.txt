@@ -1,9 +1,9 @@
 00acc140  132  complete; vector<0xc> insert, block-move/register schedule differs
 00acc2d0  76   complete; 0x18-range refcount assign, register schedule differs
 00acc330  81   complete; reverse 0x18-range assign, register schedule differs
-00acc700  101  complete; vector<0x14> push with squared floats, schedule differs
+00acc700  101  complete; vector<0x14> push with squared floats; grow path calls FUN_00acb680(cur, &local) with two stack args and this=VO+0x20 (the missing &local pointer made the callee fault). equiv PASS: 779 valid, 100% coverage
 00acc770  34   complete; release/compact loop, register allocation differs
-00acc9b0  58   complete; vector resize dispatch, schedule differs
+00acc9b0  58   complete; vector resize dispatch; both the grow call FUN_00acb930(end, add, &z) and the erase call FUN_00acb7c0(begin+n, end) are thiscalls on VO itself (ecx=this, not this+4). equiv PASS: 802 valid, 100% coverage
 00acca00  59   complete; spstl::remove_1st returns bool (orig writes al only: mov al,1 / xor al,al) so it is declared bool, not char (char made the checker compare ax); shift-loop shape differs. equiv PASS: 267 valid, 85.7% coverage, flags /O2 /MD /Gy /EHsc /TP (--require-all WEAK)
 00accd70  264  complete; 0x68-node freelist teardown, register schedule differs
 00accec0  72   complete; 0x20-range copy, element-ctor call schedule differs

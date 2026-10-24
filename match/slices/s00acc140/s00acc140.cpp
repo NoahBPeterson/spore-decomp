@@ -28,9 +28,9 @@ struct XC {
     void  FUN_00ac97f0(void*, void*);
     void  FUN_00ac89a0(void*, void*);
     void* FUN_00ac95a0(void*);
-    void  FUN_00acb680(void*);
+    void  FUN_00acb680(void*, void*);
     void  FUN_00acb810(void*);
-    void  FUN_00acb930(int, void*);
+    void  FUN_00acb930(void*, int, void*);
     void  FUN_00acb7c0(void*, void*);
     void  FUN_00c232b0();
     void  FUN_00c232c0();
@@ -240,7 +240,8 @@ void VO::FUN_00acc700(void* p, float a, float b) {
     if (cur < (uchar*)v[10]) {
         v[9] = (int)(cur + 0x14);
     } else {
-        ((XC*)(v + 8))->FUN_00acb680(cur);
+        uchar local[0x14];
+        ((XC*)(v + 8))->FUN_00acb680(cur, local);
     }
     uchar* e = (uchar*)(*(int*)((uchar*)this + 0x24) - 0x14);
     *(int*)e = *(int*)p;
@@ -279,10 +280,10 @@ void VO::FUN_00acc9b0(uint n) {
     if ((uint)(e - b) < n) {
         int add = n - (int)(e - b);
         int z = 0;
-        ((XC*)(v + 1))->FUN_00acb930(add, &z);
+        ((XC*)v)->FUN_00acb930(e, add, &z);
         return;
     }
-    ((XC*)(v + 1))->FUN_00acb7c0(b + n, e);
+    ((XC*)v)->FUN_00acb7c0(b + n, e);
 }
 
 // @ 0x00accf80  (SetupCultureStages; complex; approximated)
