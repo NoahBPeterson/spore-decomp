@@ -1,0 +1,6 @@
+00d97420 ?FUN_00d97420@CitizenTree_s00d9_7420@SP@@QAEXXZ  # CitizenTree_s00d9_7420::FUN_00d97420 migrated from s00d97420 (verbatim, slice spelling)
+00d97720 ?EnterCity_Activate@CitizenTree_s00d9_7420@SP@@QAEXXZ  # CitizenTree_s00d9_7420::EnterCity_Activate migrated from s00d97420 (verbatim, slice spelling)
+00d979b0 ?CultureAttack_Activate@CitizenTree_s00d9_7420@SP@@QAEXXZ  # CitizenTree_s00d9_7420::CultureAttack_Activate migrated from s00d97420 (verbatim, slice spelling)
+00d97d40 ?RemoveFromCultureStageGroup@@YAXPAVCitizenTree_s00d9_7420@SP@@HPAVcSPCreatureCitizen_s00d9_7420@@@Z  # RemoveFromCultureStageGroup migrated from s00d97420 (verbatim, slice spelling)
+00d97d80 ?CultureAttack_Tick@CitizenTree_s00d9_7420@SP@@QAEXXZ  # CitizenTree_s00d9_7420::CultureAttack_Tick migrated from s00d97420 (verbatim, slice spelling)
+00d980e0 ?CultureAttack_Deactivate@@YAXPAVcSPCreatureCitizen_s00d9_7420@@HHHHPAUtCultureAttackInfo@@@Z  # CultureAttack_Deactivate migrated from s00d97420 (verbatim, slice spelling)

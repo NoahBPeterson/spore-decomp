@@ -1,0 +1,2 @@
+00d964a0 ?Policeman_Tick@CitizenTree@SP@@YA_NPAUCreature_s00d9_64a0@@HHHHPAUPolicemanState@12@HM@Z  # Policeman_Tick migrated from s00d964a0 (verbatim, slice spelling)
+00d96da0 ?SimFeedback_Activate@CitizenTree@SP@@YA_NPAUCitizenCreature@@HHEHPAURouteChoice@12@@Z  # SimFeedback_Activate migrated from s00d964a0 (verbatim, slice spelling)

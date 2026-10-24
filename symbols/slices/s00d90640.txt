@@ -9,32 +9,32 @@
 00d90c80 FUN_00d90c80  # flag predicate
 00d90ca0 FUN_00d90ca0  # decrement counter + tool effect
 00d90cd0 FUN_00d90cd0  # SetSprinting(0) helper
-00d90ce0 FUN_00d90ce0  # play idle when near goal
-00d90d30 FUN_00d90d30  # in-action-circle predicate
-00d90d70 FUN_00d90d70  # spawn-at-locator tick
-00d90dd0 UfoWaving_Tick  # PDB name
-00d90e30 FUN_00d90e30  # state-machine tick
-00d90e90 RunFromDanger_Deactivate  # PDB name
-00d90ef0 WildPanic_Deactivate  # PDB name
-00d90f10 CropCirclesAttract_Deactivate  # PDB name
-00d90f60 FUN_00d90f60  # tool-effect deactivate
-00d90f90 FUN_00d90f90  # run-if-capacity tick
-00d90ff0 FUN_00d90ff0  # restore capacity
-00d91020 FUN_00d91020  # wait timer tick
-00d91080 FUN_00d91080  # hidden-state predicate
-00d91090 OffStage_Deactivate  # PDB name
-00d910d0 IsFunctional  # PDB name
-00d910f0 FUN_00d910f0  # flag-clear activate
-00d91110 FUN_00d91110  # identity predicate
-00d91130 FUN_00d91130  # not-animation-finished
-00d91150 AdmireObject_Tick  # PDB name
-00d911c0 AdmireObject_Deactivate  # PDB name
-00d911f0 ActInVignette_Activate  # PDB name
-00d91250 ActInVignette_Deactivate  # PDB name
-00d91280 ReactToRubble_Tick  # PDB name
-00d91320 IsDamaged  # PDB name
-00d91360 FUN_00d91360  # health-fraction predicate
-00d91390 FUN_00d91390  # react-to-abduction activate
-00d913d0 FUN_00d913d0  # hostile-alien level predicate
-00d91480 AlienGreeting_Activate  # PDB name
-00d91510 FUN_00d91510  # stimulus predicate
+00d90ce0 ?FUN_00d90ce0@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90ce0 migrated from s00d90640 (verbatim, slice spelling)
+00d90d30 ?FUN_00d90d30@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90d30 migrated from s00d90640 (verbatim, slice spelling)
+00d90d70 ?FUN_00d90d70@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@PAX1E1PAH@Z  # FUN_00d90d70 migrated from s00d90640 (verbatim, slice spelling)
+00d90dd0 ?UfoWaving_Tick@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@@Z  # UfoWaving_Tick migrated from s00d90640 (verbatim, slice spelling)
+00d90e30 ?FUN_00d90e30@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@PAX111PAH@Z  # FUN_00d90e30 migrated from s00d90640 (verbatim, slice spelling)
+00d90e90 ?RunFromDanger_Deactivate@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # RunFromDanger_Deactivate migrated from s00d90640 (verbatim, slice spelling)
+00d90ef0 ?WildPanic_Deactivate@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # WildPanic_Deactivate migrated from s00d90640 (verbatim, slice spelling)
+00d90f10 ?CropCirclesAttract_Deactivate@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # CropCirclesAttract_Deactivate migrated from s00d90640 (verbatim, slice spelling)
+00d90f60 ?FUN_00d90f60@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90f60 migrated from s00d90640 (verbatim, slice spelling)
+00d90f90 ?FUN_00d90f90@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@PAXE11PAH@Z  # FUN_00d90f90 migrated from s00d90640 (verbatim, slice spelling)
+00d90ff0 ?FUN_00d90ff0@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90ff0 migrated from s00d90640 (verbatim, slice spelling)
+00d91020 ?FUN_00d91020@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@PAX111PAUTickState@@1M@Z  # FUN_00d91020 migrated from s00d90640 (verbatim, slice spelling)
+00d91080 ?FUN_00d91080@SP@@YADPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d91080 migrated from s00d90640 (verbatim, slice spelling)
+00d91090 ?OffStage_Deactivate@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # OffStage_Deactivate migrated from s00d90640 (verbatim, slice spelling)
+00d910d0 ?IsFunctional@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@@Z  # IsFunctional migrated from s00d90640 (verbatim, slice spelling)
+00d910f0 ?FUN_00d910f0@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@PAX1I@Z  # FUN_00d910f0 migrated from s00d90640 (verbatim, slice spelling)
+00d91110 ?FUN_00d91110@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d91110 migrated from s00d90640 (verbatim, slice spelling)
+00d91130 ?FUN_00d91130@SP@@YADPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d91130 migrated from s00d90640 (verbatim, slice spelling)
+00d91150 ?AdmireObject_Tick@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@PAX111PAUAdmireState@@@Z  # AdmireObject_Tick migrated from s00d90640 (verbatim, slice spelling)
+00d911c0 ?AdmireObject_Deactivate@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # AdmireObject_Deactivate migrated from s00d90640 (verbatim, slice spelling)
+00d911f0 ?ActInVignette_Activate@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # ActInVignette_Activate migrated from s00d90640 (verbatim, slice spelling)
+00d91250 ?ActInVignette_Deactivate@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # ActInVignette_Deactivate migrated from s00d90640 (verbatim, slice spelling)
+00d91280 ?ReactToRubble_Tick@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@PAX111PAURubbleState@@@Z  # ReactToRubble_Tick migrated from s00d90640 (verbatim, slice spelling)
+00d91320 ?IsDamaged@SP@@YAHPAVcCombatant_s00d9_0640@@@Z  # IsDamaged migrated from s00d90640 (verbatim, slice spelling)
+00d91360 ?FUN_00d91360@SP@@YAHPAVcCombatant_s00d9_0640@@@Z  # FUN_00d91360 migrated from s00d90640 (verbatim, slice spelling)
+00d91390 ?FUN_00d91390@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d91390 migrated from s00d90640 (verbatim, slice spelling)
+00d913d0 ?FUN_00d913d0@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d913d0 migrated from s00d90640 (verbatim, slice spelling)
+00d91480 ?AlienGreeting_Activate@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@@Z  # AlienGreeting_Activate migrated from s00d90640 (verbatim, slice spelling)
+00d91510 ?FUN_00d91510@SP@@YAEPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d91510 migrated from s00d90640 (verbatim, slice spelling)

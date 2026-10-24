@@ -1,10 +1,10 @@
 00d922f0 FUN_00d922f0  # Ghidra FUN; wander/ufo tick (flag gate, IsNearGoal mode transitions, random animation pick); not byte-exact
-00d92560 FUN_00d92560  # Ghidra FUN; step toward the owner anchor point while facing it; not byte-exact
-00d92660 FUN_00d92660  # Ghidra FUN; reserve the owner action slot nearest the loco position and walk to it; batch region also holds unlisted 0xd92770
-00d92880 FUN_00d92880  # Ghidra FUN; ClearAll(1,0) then step toward the owner anchor; not byte-exact
-00d92990 RunFromDanger_ChooseDestination  # card name; pick a flee destination (collision-radius clamp or random lane point); not byte-exact
-00d92cc0 FUN_00d92cc0  # Ghidra FUN; run-from-danger activate (state copy, anim, sprint, game-mode state 4); batch region also holds unlisted 0xd92d90
-00d92f60 FUN_00d92f60  # Ghidra FUN; StopMoving + InterruptAnimation(0x2481dc8+rnd(3)); byte-exact
-00d92fb0 WildPanic_Tick  # card name; flag gate, random lane point -> MakeRandomWorldPosition then MoveToPointAtSpeed(3); byte-exact
-00d930b0 FUN_00d930b0  # Ghidra FUN; Play(0x200,0), cache the anim point into the timed point, MoveToPointAtSpeed(2); byte-exact
-00d93160 FUN_00d93160  # Ghidra FUN; accumulate the timed-point timer and switch to state 5 past 5.0f; byte-exact
+00d92560 ?FUN_00d92560@@YA_NPAUCreature_s00d9_22f0@@@Z  # FUN_00d92560 migrated from s00d922f0 (verbatim, slice spelling)
+00d92660 ?FUN_00d92660@@YA_NPAUCreature_s00d9_22f0@@HHHHPAH@Z  # FUN_00d92660 migrated from s00d922f0 (verbatim, slice spelling)
+00d92880 ?FUN_00d92880@@YA_NPAUCreature_s00d9_22f0@@HHHHPAH@Z  # FUN_00d92880 migrated from s00d922f0 (verbatim, slice spelling)
+00d92990 ?RunFromDanger_ChooseDestination@@YAXPAUCreature_s00d9_22f0@@PAUVec3@@1@Z  # RunFromDanger_ChooseDestination migrated from s00d922f0 (verbatim, slice spelling)
+00d92cc0 ?FUN_00d92cc0@@YA_NPAUCreature_s00d9_22f0@@HHHHPAUDangerState@@@Z  # FUN_00d92cc0 migrated from s00d922f0 (verbatim, slice spelling)
+00d92f60 ?FUN_00d92f60@@YA_NPAUCreature_s00d9_22f0@@@Z  # FUN_00d92f60 migrated from s00d922f0 (verbatim, slice spelling)
+00d92fb0 ?WildPanic_Tick@@YA_NPAUCreature_s00d9_22f0@@HHI@Z  # WildPanic_Tick migrated from s00d922f0 (verbatim, slice spelling)
+00d930b0 ?FUN_00d930b0@@YA_NPAUCreature_s00d9_22f0@@HHHHPAUTimedPoint@@@Z  # FUN_00d930b0 migrated from s00d922f0 (verbatim, slice spelling)
+00d93160 ?FUN_00d93160@@YA_NPAUCreature_s00d9_22f0@@HHHHPAUTimedPoint@@HM@Z  # FUN_00d93160 migrated from s00d922f0 (verbatim, slice spelling)
