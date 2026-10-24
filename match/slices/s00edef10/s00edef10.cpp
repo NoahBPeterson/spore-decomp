@@ -174,15 +174,25 @@ bool __cdecl f00edf370(int p1, int* p2, int p3)
 }
 
 // ============================================================ 0x00edf3c0
+// 0x00edf2c0 reads a third argument in EDI (retail's caller leaves p2 there: `mov edi,[esp+0x10]`
+// and keeps it in a callee-saved register across the call), which no C++ convention reproduces.
+// Load it explicitly around each call and keep EDI saved, as the original does (push edi/pop edi).
 // @ 0x00edf3c0
 void __cdecl f00edf3c0(int p1, int p2, char flag)
 {
-    int q = p2;
     if (flag) {
+        __asm { mov eax, p2 }
+        __asm { push edi }
+        __asm { mov edi, eax }
         f00edf2c0(p1, 0);
-        SPUIHelpers_CreateCallbackWinProc((void*)p1, (void*)&f00edf370, 2, 0, (void*)q);
+        __asm { pop edi }
+        SPUIHelpers_CreateCallbackWinProc((void*)p1, (void*)&f00edf370, 2, 0, (void*)p2);
     } else {
+        __asm { mov eax, p2 }
+        __asm { push edi }
+        __asm { mov edi, eax }
         f00edf2c0(p1, 1);
+        __asm { pop edi }
         SPUIHelpers_RemoveWindowCallback((void*)p1, (void*)&f00edf370);
     }
 }
@@ -229,12 +239,15 @@ bool __cdecl f00edfda0(int* p1, int* p2)
 }
 
 // ============================================================ 0x00edfd70
+// 0x00edfda0 is called as a real function here (retail: `call 0xedfda0; add esp,8`), so use a
+// body-less declaration of the same VA: a local definition would be inlined into this leaf.
+extern "C" bool FUN_00edfda0(int*, int*);
 // @ 0x00edfd70
 bool __cdecl f00edfd70(int p1, u32 p2, int p3, u32* p4)
 {
     bool r = false;
     if (p2 < *p4)
-        r = f00edfda0((int*)(p3 + p2 * 4), (int*)p1);
+        r = FUN_00edfda0((int*)p1, (int*)(p3 + p2 * 4));
     return r;
 }
 
@@ -319,8 +332,12 @@ void __cdecl f00edfcc0(int p1, int p2, int p3, int p4)
 struct Data {
     char pad[8];
     int  F45970(); int F45a80();
-    int  F27670(); int F253e0();
+    int  m00f27670(); int m00f253e0();
 };
+// 0x00ed39a0 is ScnRecBody::DeselectTwo: thiscall, ECX = the record body reached through the
+// 0x16c7aa4+0x14 manager's +0x14 field, one stack argument.
+struct RecBody { void m00ed39a0(int); };
+#define RECBODY()  (*(RecBody**)((char*)*(void**)((char*)DAT_016c7aa4 + 0x14) + 0x14))
 extern "C" int FUN_00f27670(void*);
 extern "C" int FUN_00f253e0(void*);
 // @ 0x00edfbf0
@@ -337,9 +354,9 @@ void Ed::FBF0(int* param)
         *(int*)(o + 0x2c) = param[1];
         *(int*)(o + 0x30) = param[2];
         *(char*)(o + 0x44) = 0;
-        char c = (char)FUN_00f27670((void*)o);
+        char c = (char)((Data*)o)->m00f27670();
         if (c == 0)
-            c = (char)FUN_00f253e0((void*)o);
+            c = (char)((Data*)o)->m00f253e0();
         if (c != 0 && *(int*)(o + 0x48) == 0 && old == 0)
             *(int*)(o + 0x48) = 1;
     } else {
@@ -349,7 +366,7 @@ void Ed::FBF0(int* param)
         *(int*)(o + 0x58) = param[2];
         *(char*)(o + 0x6c) = 0;
     }
-    FUN_00ed39a0(*(int*)(t + 8));
+    RECBODY()->m00ed39a0(*(int*)(t + 8));
     MGR()->F41a10(*(int*)(t + 8));
     MGR()->F45a80();
 }
