@@ -132,7 +132,7 @@ struct Server {
     char    _padc6[2];
 
     Server* ctor_init();                                                    // 00884a20
-    char Shutdown();                                                        // 00884ae0
+    bool Shutdown();                                                        // 00884ae0
     void AddHandlerInternal(void* info, unsigned int key);                  // 00884c80
     void MessageSend(uint id, uint arg, int* rc);                           // 008853b0
     void MessagePost(int a, void* rc, int b, void* hf);                     // 00885890
@@ -188,7 +188,7 @@ Server* Server::ctor_init()
 }
 
 // @ 0x00884ae0
-char Server::Shutdown()
+bool Server::Shutdown()
 {
     int* g = &g_1427918;
     if (this->mbThreadSafetyEnabled != 0)
@@ -698,8 +698,14 @@ void MessageQueue::InsertMessage(Message* msg)
         d.FUN_00884390(msg);
     } else {
         d.itEndCur = e + 1;
-        if (e != 0)
-            *e = *msg;
+        if (e != 0) {
+            e->mId = msg->mId;
+            e->mpMessageRC = msg->mpMessageRC;
+            e->mpHandlerRC = msg->mpHandlerRC;
+            e->mnPriority = msg->mnPriority;
+            e->mpHandlerFunction = msg->mpHandlerFunction;
+            e->mpHandlerFunctionContext = msg->mpHandlerFunctionContext;
+        }
     }
 }
 
