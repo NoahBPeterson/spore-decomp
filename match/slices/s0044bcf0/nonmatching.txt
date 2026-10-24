@@ -1,2 +1,8 @@
 # va  diff-bytes  reason
 0044c050  10   instruction sequence identical; only the hidden this-home slot and the result slot are swapped
+0044bcf0 755 complete: recursive unblocked walk (Blk::Abcf0; child-id vector iteration, RuntimeFlag(9,1), Paint and flag gates, child recursion); difftest PASS (309 valid, 67.8% coverage); /Od register/stack layout differs; flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+0044c0e0 348 complete: fills (kind, primary, secondary) for the block's next surface selection (flags 0x13/0x28 and 0x11); difftest PASS (400 valid, 94.9% coverage); /Od frame/register layout differs; flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+0044c270 381 complete: sign of a selected axis of the supplied direction matrix (flag 0x30 gate, primary/secondary rows, 0.001 threshold); difftest PASS (400 valid, 97.5% coverage); /Od frame/register layout differs; flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+0044c450  55 complete: copies the cached orientation matrix at this+0x60 and returns C270(copy); difftest PASS (395 valid, 100% coverage; callee inlined by us); /Od call form differs; flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+0044c4d0 182 complete: editor-model selection query (null guard; ids 0xf48eb09 and 0x3a3b9d21); difftest PASS (399 valid, 75.3% coverage); /Od frame/register layout differs; flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+0044c5a0 226 complete: editor-model selection query with the alternate -1 id 0x18c1dbe0, then 0xf48eb09 and 0x3a3b9d21; difftest PASS (399 valid, 77.5% coverage); /Od frame/register layout differs; flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
