@@ -1,0 +1,21 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c73cb0@PlanetCls@@QAEPAXPAX@Z  00c73cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c73cd0@PlanetCls@@QAEPAXPAX@Z  00c73cd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?SetSpeciesAsScanned@PlanetCls@@QAEDPAX@Z  00c73ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?IsSpeciesScanned@PlanetCls@@QAEDPAX@Z  00c73f10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c73f80@PlanetCls@@QAEXPAX@Z  00c73f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c741a0@PlanetCls@@QAEDPAX@Z  00c741a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74210@PlanetCls@@QAEXPAX@Z  00c74210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74400@PlanetCls@@QAEDPAX@Z  00c74400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74470@PlanetCls@@QAEXPAX@Z  00c74470  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74550@PlanetCls@@QAEDPAI@Z  00c74550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c745d0@PlanetCls@@QAEXDPAX@Z  00c745d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74650@PlanetCls@@QAEXXZ  00c74650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74690@PlanetCls@@QAEXPAXDD@Z  00c74690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74880@SpatialDerived@@QAEXHPAM@Z  00c74880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74950@cToolObject@@QAEPAXXZ  00c74950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c749e0@cToolObject@@QAEPAXE@Z  00c749e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74a30@cToolObject@@QAEXPAX@Z  00c74a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74ba0@cPlanetaryArtifact@@QAEXXZ  00c74ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74c20@cPlanetaryArtifact@@QAEXMHHHH@Z  00c74c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c73cb0/s00c73cb0.cpp  ?FUN_00c74ca0@cPlanetaryArtifact@@QAE_NXZ  00c74ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

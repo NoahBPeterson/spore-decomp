@@ -1,0 +1,3 @@
+# slice s00c73cb0 - external symbols (VA + our mangled name + note)
+# VA        name                          note
+00e30d20    ?Notify@Notifier@@QAEXXZ      FUN_00e30d20: notification sink fed by FUN_00b3d4f0's result
