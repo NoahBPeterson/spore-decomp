@@ -189,7 +189,7 @@ cSPVector3 cSPEditorLimbJoint::GetUpVector(bool b)
 
     int sign = Sign(false);
     if (sign == 0) return -DAT_015d5e00;
-    for (int i = 0, n = mLowerJoints.size(); i < n; i++) {
+    for (uint32_t i = 0, n = mLowerJoints.size(); i < n; i++) {
         if (mLowerJoints[i]->Sign(false) == 0)
             return -DAT_015d5e00;
     }
