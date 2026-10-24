@@ -21,7 +21,7 @@ struct S9a9600 { void f(void*); };
 struct S9a9640 { void f(); };
 struct S9a9b90 { S9a9b90* f(int); };
 struct S9aa4c0 { S9aa4c0* f(int*); };
-struct S9aa500 { void f(int*, unsigned*); };
+struct S9aa500 { int* f(int*, unsigned*); };
 
 // ---------------------------------------------------------------------------
 // @ 0x009a9600  eastl::rbtree<...>::DoNukeSubtree
@@ -224,7 +224,7 @@ void S9aa3a0::f(int a, int b, int* p3, int p4) {
 // ---------------------------------------------------------------------------
 // @ 0x009aa440
 // ---------------------------------------------------------------------------
-int FUN_009aa440(int param_1, int* param_2) {
+bool FUN_009aa440(int param_1, int* param_2) {
   bool bVar3;
   if (((*(unsigned char*)((char*)param_2 + 0x1ac) & 7) == 4) && param_2[0x8e] == 0)
     bVar3 = false;
@@ -261,7 +261,7 @@ S9aa4c0* S9aa4c0::f(int* p) {
 // ---------------------------------------------------------------------------
 // @ 0x009aa500  rbtree three-field lower_bound
 // ---------------------------------------------------------------------------
-void S9aa500::f(int* out, unsigned* key) {
+int* S9aa500::f(int* out, unsigned* key) {
   char* head = (char*)this + 4;
   char* parent = head;
   char* node = *(char**)((char*)this + 0xc);
@@ -276,8 +276,10 @@ void S9aa500::f(int* out, unsigned* key) {
   if (parent != head && *(unsigned*)(parent + 0x10) <= key[0] &&
       (key[0] != *(unsigned*)(parent + 0x10) ||
        (*(unsigned*)(parent + 0x14) <= key[1] &&
-        (key[1] != *(unsigned*)(parent + 0x14) || *(unsigned*)(parent + 0x1c) <= key[3]))))
+        (key[1] != *(unsigned*)(parent + 0x14) || *(unsigned*)(parent + 0x1c) <= key[3])))) {
     *out = (int)(size_t)parent;
-  else
-    *out = (int)(size_t)head;
+    return out;
+  }
+  *out = (int)(size_t)head;
+  return out;
 }

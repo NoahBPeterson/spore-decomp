@@ -1,3 +1,3 @@
-009aa440 97 complete creature-visibility predicate; register allocation differs
-009aa500 111 complete rbtree three-field lower_bound; register allocation differs
+009aa440 97 complete creature-visibility predicate; declared bool - the retail tail uses `mov al,1` / `xor al,al`, touching only the low byte (the upper eax bits are the leaked division magic); equiv: PASS (1200 valid, 100% coverage)
+009aa500 111 complete rbtree three-field lower_bound; declared int* and returns `out` - the retail leaves the out pointer in eax on both store paths; equiv: PASS (1128 valid, 100% coverage)
 009a9c00 1574 complete: creature anim update (quat compose + 4x-unrolled slot init); register allocation/ebx-ebp roles differ, size 1961 vs 1949; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
