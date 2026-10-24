@@ -1,7 +1,7 @@
 # va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
-007b0a70  326  eastl::vector<T20>::grow/DoInsertValue: allocation + move helpers, scheduling differs
+007b0a70  354  eastl::vector<T20>::grow/DoInsertValue: in-place insert now copies from the aliased &v+0x20 source (src) as the original does; allocation/move schedule differs; replay needs --budget 2000000 (original's MoveNodes2 0x8ffe0-byte backward copy exceeds the default 100k) [equiv: WEAK 118/118, 93.3% cov]
 007b0da0  102  eastl::vector<Ref4>::assign: copy/destroy call ordering differs
-007b1040   86  eastl::vector<T20>::resize: grow path uses DoInsert helper, not byte-exact
+007b1040   52  eastl::vector<T20>::resize: unsigned size comparison matches original jbe and tail update uses element pointer arithmetic (end -= end-ne); InsertN helper schedule differs [equiv: PASS 335/335, 100% cov]
 007b10a0   45  slot allocator (free-list pop else resize+index): register scheduling differs
 007b0be0  339  C20::InsertN (eastl DoInsertValues): complete; end/cap register roles and block order differ [equiv: WEAK]
 007b0e60  174  C20::Reap tree-node reap: complete; a/b spill and register allocation differ [equiv: WEAK]
