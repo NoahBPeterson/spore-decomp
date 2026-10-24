@@ -1,1 +1,3 @@
-# byte-exact functions for slice s0114ae60 (none)
+# source  symbol  original VA  [flags override]
+slices/s0114ae60/s0114ae60.cpp  ?MixFlush@@YAHPAUMixVoice@@PAUAudioCtx@@@Z  0114b9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0114ae60/s0114ae60.cpp  ?MixSetPending@@YAHPAUMixVoice@@HHG@Z  0114bcc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
