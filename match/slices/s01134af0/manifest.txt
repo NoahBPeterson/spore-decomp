@@ -1,1 +1,2 @@
-# byte-exact functions for slice s01134af0 (none)
+# byte-exact functions for slice s01134af0
+slices/s01134af0/s01134af0.cpp  ?GetBits@BitReservoir@core@audio@rw@@QAEII@Z  01134af0  /O2 /MD /Gy /EHsc /TP

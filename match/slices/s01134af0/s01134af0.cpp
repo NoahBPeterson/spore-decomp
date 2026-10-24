@@ -160,4 +160,252 @@ bool MpegLayer3Owner::ReadSideInfo()
     return true;
 }
 
+// ---------------------------------------------------------------------------------------------
+// The raw bit reservoir the side-information reader pulls from. It is a 0x800-byte ring buffer:
+// a 32-bit cache of the next bits (left aligned), the count still valid, the read cursor and the
+// byte storage. (The reader object handed to it sits at owner+0x34; its own GetBits models the
+// same idea with a linear pointer.)
+// ---------------------------------------------------------------------------------------------
+struct BitReservoir {
+    char pad00[4];
+    uint32_t mBitPos;            // +0x04
+    int mBitsInCache;            // +0x08
+    uint32_t mCache;             // +0x0c
+    uint8_t mData[0x800];        // +0x10
+    uint32_t GetBits(unsigned n);
+};
+
+// @ 0x01134af0
+uint32_t BitReservoir::GetBits(unsigned n)
+{
+    uint32_t result = 0;
+    if (n > 0) {
+        while (true) {
+            if (mBitsInCache == 0) {
+                mCache = (uint32_t)mData[mBitPos & 0x7ff] << 24;
+                mBitPos++;
+                mBitsInCache = 8;
+            }
+            int avail = mBitsInCache;
+            if (n < (unsigned)avail) {
+                result = (mCache >> (32 - n)) | (result << n);
+                mCache <<= n;
+                mBitsInCache -= (int)n;
+                break;
+            }
+            result = (result << avail) | (mCache >> (32 - avail));
+            mBitsInCache = 0;
+            n -= (unsigned)avail;
+            if (n == 0)
+                break;
+        }
+    }
+    return result;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Scalefactor reader (ISO 11172-3 "III_get_scalefactors") on the same decoder object: side info
+// at +0x184, the per-[channel][granule] gr info at +0x188, the 62-short scalefactor band array
+// per channel at +0x1e8 and the bit reservoir at +0x2710. slen1/slen2 come from the
+// scalefac_compress-indexed tables at 0x014cb344 / 0x014cb354.
+// ---------------------------------------------------------------------------------------------
+extern const signed char DAT_014cb344[];    // slen1 table (0x014cb344)
+extern const signed char DAT_014cb354[];    // slen2 table (0x014cb354)
+extern const unsigned char DAT_014cb368[];  // scalefactor-band count table (0x014cb368)
+extern "C" void* __cdecl MemZero(void* p, int v, unsigned n);   // 0x011e073e
+
+struct MpegScalefacDecoder {
+    char pad00[0x184];
+    SideInfo* mSideInfo;            // +0x184
+    GrInfo mGrInfo[2][2];           // +0x188
+    int16_t mScalefac[2][0x3e];     // +0x1e8 (0x7c bytes per channel)
+    char pad2e0[0x2710 - 0x2e0];
+    BitReservoir mReservoir;        // +0x2710
+    int mUberBits;                  // +0x2714 (bit offset into the frame)
+
+    void ReadScalefactors(int ch, int gr);        // 0x01135350
+    void ReadScalefactorsInto(int ch, int gr, uint8_t* dst);  // 0x011357f0
+};
+
+// @ 0x01135350
+void MpegScalefacDecoder::ReadScalefactors(int ch, int gr)
+{
+    GrInfo* gi = &mGrInfo[ch][gr];
+    int slen1 = DAT_014cb344[gi->scalefac_compress];
+    int slen2 = DAT_014cb354[gi->scalefac_compress];
+    int16_t* sf = mScalefac[ch];
+    BitReservoir* br = &mReservoir;
+
+    if (gi->window_switching_flag && gi->block_type == 2) {
+        if (gi->mixed_block_flag) {
+            for (int i = 0; i < 8; i++)
+                sf[i] = (int16_t)br->GetBits(slen1);
+            int16_t* p0 = sf + 0x1a;
+            for (int j = 0; j < 3; j++) {
+                int16_t* p1 = p0;
+                for (int k = 0; k < 3; k++) {
+                    *p1 = (int16_t)br->GetBits(slen1);
+                    p1 += 13;
+                }
+                p0 += 1;
+            }
+            int16_t* p2 = sf + 0x1d;
+            for (int j = 0; j < 6; j++) {
+                int16_t* p1 = p2;
+                for (int k = 0; k < 3; k++) {
+                    *p1 = (int16_t)br->GetBits(slen2);
+                    p1 += 13;
+                }
+                p2 += 1;
+            }
+            int16_t* p3 = sf + 0x23;
+            for (int k = 0; k < 3; k++) {
+                *p3 = 0;
+                p3 += 13;
+            }
+        } else {
+            int16_t* p0 = sf + 0x17;
+            for (int j = 0; j < 6; j++) {
+                int16_t* p1 = p0;
+                for (int k = 0; k < 3; k++) {
+                    *p1 = (int16_t)br->GetBits(slen1);
+                    p1 += 13;
+                }
+                p0 += 1;
+            }
+            int16_t* p2 = sf + 0x1d;
+            for (int j = 0; j < 6; j++) {
+                int16_t* p1 = p2;
+                for (int k = 0; k < 3; k++) {
+                    *p1 = (int16_t)br->GetBits(slen2);
+                    p1 += 13;
+                }
+                p2 += 1;
+            }
+            int16_t* p3 = sf + 0x23;
+            for (int k = 0; k < 3; k++) {
+                *p3 = 0;
+                p3 += 13;
+            }
+        }
+    } else {
+        if (mSideInfo->scfsi[ch][0] == 0 || gr == 0) {
+            sf[0] = (int16_t)br->GetBits(slen1);
+            sf[1] = (int16_t)br->GetBits(slen1);
+            sf[2] = (int16_t)br->GetBits(slen1);
+            sf[3] = (int16_t)br->GetBits(slen1);
+            sf[4] = (int16_t)br->GetBits(slen1);
+            sf[5] = (int16_t)br->GetBits(slen1);
+        }
+        if (mSideInfo->scfsi[ch][1] == 0 || gr == 0) {
+            sf[6] = (int16_t)br->GetBits(slen1);
+            sf[7] = (int16_t)br->GetBits(slen1);
+            sf[8] = (int16_t)br->GetBits(slen1);
+            sf[9] = (int16_t)br->GetBits(slen1);
+            sf[10] = (int16_t)br->GetBits(slen1);
+        }
+        if (mSideInfo->scfsi[ch][2] == 0 || gr == 0) {
+            sf[11] = (int16_t)br->GetBits(slen2);
+            sf[12] = (int16_t)br->GetBits(slen2);
+            sf[13] = (int16_t)br->GetBits(slen2);
+            sf[14] = (int16_t)br->GetBits(slen2);
+            sf[15] = (int16_t)br->GetBits(slen2);
+        }
+        if (mSideInfo->scfsi[ch][3] == 0 || gr == 0) {
+            sf[16] = (int16_t)br->GetBits(slen2);
+            sf[17] = (int16_t)br->GetBits(slen2);
+            sf[18] = (int16_t)br->GetBits(slen2);
+            sf[19] = (int16_t)br->GetBits(slen2);
+            sf[20] = (int16_t)br->GetBits(slen2);
+        }
+        sf[0x15] = 0;
+        sf[0x16] = 0;
+    }
+}
+
+// @ 0x011357f0
+void MpegScalefacDecoder::ReadScalefactorsInto(int ch, int gr, uint8_t* dst)
+{
+    int blockType = mGrInfo[ch][gr].block_type;
+    uint32_t compress = *(uint16_t*)((char*)&mGrInfo[ch][gr] + 4);
+    int sel = 0;
+    uint32_t part[4];
+    part[0] = 0;
+    part[1] = 0;
+    part[2] = 0;
+    part[3] = 0;
+
+    if (mGrInfo[ch][gr].block_type == 2) {
+        if (mGrInfo[ch][gr].mixed_block_flag == 0)
+            gr = 1;
+        else
+            gr = (mGrInfo[ch][gr].mixed_block_flag != 1) - 1 & 2;
+    } else {
+        gr = 0;
+    }
+
+    if (!((blockType == 1 || blockType == 3) && ch == 1)) {
+        if (compress < 400) {
+            part[0] = (compress >> 4) / 5;
+            part[1] = (compress >> 4) % 5;
+            mGrInfo[ch][gr].preflag = 0;
+            part[2] = compress >> 2 & 3;
+            part[3] = compress & 3;
+            sel = 0;
+        } else if (compress < 500) {
+            part[1] = (compress - 400) >> 2;
+            part[0] = part[1] / 5;
+            part[1] = part[1] % 5;
+            mGrInfo[ch][gr].preflag = 0;
+            sel = 1;
+            part[2] = compress & 3;
+            part[3] = 0;
+        } else if (compress <= 0x1ff) {
+            part[0] = (compress - 500) / 3;
+            part[1] = (compress - 500) % 3;
+            part[2] = 0;
+            mGrInfo[ch][gr].preflag = 1;
+            sel = 2;
+            part[3] = 0;
+        }
+    }
+
+    if ((blockType == 1 || blockType == 3) && ch == 1) {
+        compress >>= 1;
+        if (compress < 0xb4) {
+            part[0] = compress / 0x24;
+            part[1] = (compress % 0x24) / 6;
+            part[2] = (compress % 0x24) % 6;
+            sel = 3;
+        } else if (compress < 0xf4) {
+            part[0] = (compress + 0xc) >> 4 & 3;
+            part[1] = (compress - 4) >> 2 & 3;
+            part[2] = compress & 3;
+            sel = 4;
+        } else if (compress <= 0xfe) {
+            part[0] = (compress - 0xf4) / 3;
+            part[1] = (compress - 0xf4) % 3;
+            part[2] = 0;
+            sel = 5;
+        }
+        part[3] = 0;
+        mGrInfo[ch][gr].preflag = 0;
+    }
+
+    MemZero(dst, 0, 0x2d);
+
+    const uint8_t* bands = &DAT_014cb368[(gr + sel * 3) * 4];
+    int n = 0;
+    for (int i = 0; i < 4; i++) {
+        unsigned cnt = bands[i];
+        for (unsigned k = 0; k < cnt; k++) {
+            uint8_t v = 0;
+            if (part[i] != 0)
+                v = (uint8_t)mReservoir.GetBits(part[i]);
+            dst[n] = v;
+            n++;
+        }
+    }
+}
+
 }}}  // namespace rw::audio::core

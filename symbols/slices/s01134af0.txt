@@ -1,1 +1,4 @@
 01134b70 rw::audio::core::MpegLayer3Owner::ReadSideInfo  # MPEG layer III III_get_side_info (main_data_begin, scfsi, 2x granule info; LSF path with one granule); bit reader at this+0x34 (GetBits 0x01134a60), sibling of s0115b540 layout
+01134af0 rw::audio::core::BitReservoir::GetBits  # MPEG layer III bit-reservoir reader: 0x800-byte ring buffer at owner+0x10 (cursor +4, bits-in-cache +8, cache +0c), refills 8 bits at a time and returns the top n bits
+01135350 rw::audio::core::MpegScalefacDecoder::ReadScalefactors  # MPEG layer III III_get_scalefactors: window-switching/mixed-block band loops and the scfsi-guarded long-block reads into mScalefac[ch] at owner+0x1e8
+011357f0 rw::audio::core::MpegScalefacDecoder::ReadScalefactorsInto  # MPEG layer III scalefactor sub-band reader: selector from block_type/mixed_block_flag and scalefac_compress range, then fills 0x2d bytes via the band-count table 0x014cb368
