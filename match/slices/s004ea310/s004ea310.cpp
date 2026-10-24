@@ -67,13 +67,13 @@ extern int g_15daa00;
 // @ 0x004ea720  (MATCH)
 // Packs a model type + paint flag byte into the validity flag word.
 // ===========================================================================
-FlagWord FUN_004ea720(int p1, int p2)
+uint32_t FUN_004ea720(int p1, int p2)
 {
     FlagWord f = {0};
     f.e = 1;
     f.c = p1;
     f.b = p2;
-    return f;
+    return *(uint32_t*)&f;
 }
 
 // ===========================================================================
@@ -119,14 +119,6 @@ void FUN_004ea780(int id, int tag, VSet* out, int param4)
         ((Iface*)v14)->Release();
 }
 
-// ===========================================================================
-// @ 0x004ea310  (INCOMPLETE skeleton)
-// ===========================================================================
-void FUN_004ea310(void* a, void* b, void* c)
-{
-    (void)a; (void)b; (void)c;
-}
-
 struct Variant {
     uint32_t mData[4];
     unsigned short mnFlags;
@@ -154,7 +146,19 @@ struct cPropertyList {
     cPropertyList();           // Editor::cPropertyList::cPropertyList, 0x006a1c40
 };
 
-struct PropList { virtual void AddRef(); virtual void Release(); };   // the config property list (slot 4 = Release)
+struct Property {                                  // one config-list property
+    uint32_t mData[4];
+    unsigned short mFlags;   // +0x10
+    unsigned short mType;    // +0x12 (1 = bool)
+    bool* GetBool();         // 0x0041e920
+};
+struct PropList {                                  // the config property list
+    virtual void AddRef();                                  // +0x00
+    virtual void Release();                                 // +0x04
+    virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05();
+    virtual void v06(); virtual void v07(); virtual void v08();
+    virtual bool GetProperty(uint32_t id, Property*& pOut); // +0x24 (slot 9)
+};
 
 struct PropListRef {
     PropList* mpObject;
@@ -197,6 +201,93 @@ static inline uint32_t MakeFlags(unsigned a, unsigned b, unsigned c)
     f.b = b;
     f.a = a;
     return *(uint32_t*)&f;
+}
+
+// Inlined typed property read (same shape as the module's other readers): the
+// call-site null check, then the helper's own list check, then GetProperty's
+// out parameter, the 1/0x10 type test above (see Property::mType) and GetBool.
+inline void ReadPropertyBool(PropList* pList, uint32_t id, bool& dst)
+{
+    Property* prop;
+    if (pList && pList->GetProperty(id, prop) && prop->mType == 1)
+        dst = *prop->GetBool();
+}
+
+// The inline key builder the *not set* branch uses for each appended key: fills a
+// {key, 0, flagword} DeclareParam from the two flag field values.  /Ob1 inlines it
+// at every call site -- the values arrive as parameters (stripped to immediates),
+// which is why the branch has no call but keeps the full bitfield mask/shift.
+static inline void BuildPaintKey(DeclareParam& d, uint32_t key, int c, int b)
+{
+    FlagWord f = {0};
+    f.e = 1;
+    f.c = c;
+    f.b = b;
+    d.key = (int)key;
+    d.a = 0;
+    d.b = *(int*)&f;
+}
+
+// ===========================================================================
+// @ 0x004ea310
+// Appends the "special paints" validity keys of `modelType` to `out`.
+//
+// Reads the bool property 0x300de90b from the model-type config list.  If the
+// property is *not* set the five paint keys 0x2ec624b2/b3/b4/b5/b7 are appended,
+// otherwise the three completed ones (0x8ec5176c, 0xcf48a38f, 0xdd5391a5).  Each
+// is appended as a {instance, 0, flagword} ResourceMan::Key whose flag word is
+// 0x406a0200 (bitfields e=1, c=0x6a, b=2); the "not set" branch builds the flag
+// word inline, the "set" branch via FUN_004ea720.
+//
+// The original also materialises a dead null-guarded AddRef of the config holder
+// (the holder is still 0 at that point) right after its constructor; kept for
+// shape parity.  Local names are chosen to reproduce the /Od stack-slot order.
+// ===========================================================================
+void AddSpecialPaints(int modelType, VSet* out, int flag)
+{
+    const uint32_t key = 0x300de90b;
+    bool has = false;
+    PropListRef src;
+    if (src.mpObject)
+        src.mpObject->AddRef();
+    if (flag == 0)
+        flag = GetConfigFromModelType(modelType);
+    ((PaletteMgr*)PropertyManager())->GetConfig(flag, g_15daa00, (int*)&src);
+    if (src.mpObject)
+        ReadPropertyBool(src.mpObject, key, has);
+
+    if (!has) {
+        DeclareParam d1; BuildPaintKey(d1, 0x2ec624b7, 0x6a, 2);
+        out->push_back(d1);
+        DeclareParam d2; BuildPaintKey(d2, 0x2ec624b4, 0x6a, 2);
+        out->push_back(d2);
+        DeclareParam d3; BuildPaintKey(d3, 0x2ec624b5, 0x6a, 2);
+        out->push_back(d3);
+        DeclareParam d4; BuildPaintKey(d4, 0x2ec624b2, 0x6a, 2);
+        out->push_back(d4);
+        DeclareParam d5; BuildPaintKey(d5, 0x2ec624b3, 0x6a, 2);
+        out->push_back(d5);
+    }
+    else {
+        DeclareParam d1;
+        uint32_t w1 = FUN_004ea720(0x6a, 2);
+        d1.key = 0x8ec5176c;
+        d1.a = 0;
+        d1.b = (int)w1;
+        DeclareParam d2;
+        uint32_t w2 = FUN_004ea720(0x6a, 2);
+        d2.key = 0xcf48a38f;
+        d2.a = 0;
+        d2.b = (int)w2;
+        DeclareParam d3;
+        uint32_t w3 = FUN_004ea720(0x6a, 2);
+        d3.key = 0xdd5391a5;
+        d3.a = 0;
+        d3.b = (int)w3;
+        out->push_back(d1);
+        out->push_back(d2);
+        out->push_back(d3);
+    }
 }
 
 // ===========================================================================

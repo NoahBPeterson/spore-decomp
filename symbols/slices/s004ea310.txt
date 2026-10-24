@@ -1,5 +1,6 @@
 004ea310 ?AddSpecialPaints@EditorValidity@SP@@YAXW4eModelType@2@AAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@I@Z  # SP::EditorValidity::AddSpecialPaints migrated from s004ea310
-004ea720 ?FUN_004ea720@@YA?AUFlagWord@@HH@Z  # FUN_004ea720 migrated from s004ea310 (verbatim, slice spelling)
+004ea720 ?FUN_004ea720@@YAIHH@Z  # FUN_004ea720 migrated from s004ea310 (verbatim, slice spelling)
 004ea780 ?FUN_004ea780@@YAXHHPAUVSet@@H@Z  # FUN_004ea780 migrated from s004ea310 (verbatim, slice spelling)
 004ea920 ?FUN_004ea920@@YAXHHH@Z  # FUN_004ea920 migrated from s004ea310 (verbatim, slice spelling)
 0093dd80 ?Construct@Variant@EA@@IAE_NGGPBXII@Z  # EA::Variant::Construct (callee of s004ea310, named from the dev publics; slice address comment)
+004e19a0 ?push_back@VSet@@QAEXABUDeclareParam@@@Z  # 12-byte-element vector push_back(const T&); VSet is this slice's spelling for it (s00512840 names it SpVector<FillEntry>)
