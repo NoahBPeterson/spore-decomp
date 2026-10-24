@@ -282,7 +282,9 @@ float cMultiBlender::SumWeight()
     for (int i = 0; i < n; ++i) {
         if (mBlending[i]) {
             Interp* p = (Interp*)(mInterpolators + i * (int)mInterpolatorStride);
-            sum += p->Virt16() * mWeights[i];
+            typedef float (__thiscall *VFn)(void*);
+            VFn f = *(VFn*)(*(int*)((char*)p + 4) + 0x10);
+            sum += f(p) * mWeights[i];
         }
     }
     return sum;
@@ -321,14 +323,14 @@ int cMultiBlender::F900(void* arg)
             // (*(p+4))->virt24(arg)
             typedef int (__thiscall *Fn)(void*, void*);
             Fn f = *(Fn*)(*(int*)(p + 4) + 0x24);
-            if (f(*(void**)(p + 4), arg) != 0) { /* keep ok */ }
+            if (f(p, arg) != 0) { /* keep ok */ }
             else ok = 0;
         } else {
             if (*slot == 0 || *(int*)(*slot + 8) != *(int*)((char*)arg + 8)) {
                 *slot = (int)arg;
                 typedef int (__thiscall *Fn2)(void*);
                 Fn2 f = *(Fn2*)(*(int*)(p + 4) + 0x28);
-                if (f(*(void**)(p + 4)) == 0) ok = 0;
+                if (f(p) == 0) ok = 0;
             } else {
                 *slot = (int)arg;
             }

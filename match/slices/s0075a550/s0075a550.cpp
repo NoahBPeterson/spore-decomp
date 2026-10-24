@@ -14,7 +14,7 @@ extern "C" void  __cdecl FUN_00759880(void* p);
 extern "C" void  __cdecl FUN_00759c80(void* p);
 extern "C" void  __cdecl RefVector_dtor(void* p);
 extern "C" void  __cdecl FUN_0041eb80(void* p);
-extern "C" void  __cdecl VecVecInt_dtor(void* b, void* e);
+extern "C" void  __stdcall VecVecInt_dtor(void* b, void* e);
 extern "C" void  __cdecl FUN_0071dcc0(void* p);
 
 // ---------------------------------------------------------------------------
@@ -171,7 +171,9 @@ float cMultiBlender::SumWeight() {
     for (int i = 0; i < n; ++i) {
         if (mBlending[i]) {
             Interp* p = (Interp*)(mInterpolators + i * (int)mInterpolatorStride);
-            sum += p->Virt16() * mWeights[i];
+            typedef float (__thiscall *VFn)(void*);
+            VFn f = *(VFn*)(*(int*)((char*)p + 4) + 0x10);
+            sum += f(p) * mWeights[i];
         }
     }
     return sum;
@@ -215,14 +217,14 @@ int cMultiBlender::F900(void* arg) {
             // (*(p+4))->virt24(arg)
             typedef int (__thiscall *Fn)(void*, void*);
             Fn f = *(Fn*)(*(int*)(p + 4) + 0x24);
-            if (f(*(void**)(p + 4), arg) != 0) { /* keep ok */ }
+            if (f(p, arg) != 0) { /* keep ok */ }
             else ok = 0;
         } else {
             if (*slot == 0 || *(int*)(*slot + 8) != *(int*)((char*)arg + 8)) {
                 *slot = (int)arg;
                 typedef int (__thiscall *Fn2)(void*);
                 Fn2 f = *(Fn2*)(*(int*)(p + 4) + 0x28);
-                if (f(*(void**)(p + 4)) == 0) ok = 0;
+                if (f(p) == 0) ok = 0;
             } else {
                 *slot = (int)arg;
             }
@@ -261,12 +263,12 @@ extern int g_vt140dab0[], g_vt140daac[], g_vt13ef094[];
 void ClassX::Dtor() {
     vt0 = (void*)g_vt140dab0;
     vt1 = (void*)g_vt140daac;
-    if (p5c) eastl_dealloc(p5c);
-    FUN_00759880(sub48);
+    if (p5c && ((int*)p5c)[-1] != 0) eastl_dealloc(p5c);
+    ((void(__thiscall*)(void*))FUN_00759880)(sub48);
     VecVecInt_dtor(vec34.mBegin, vec34.mEnd);
-    if (vec34.mBegin) eastl_dealloc(vec34.mBegin);
-    FUN_0041eb80(&vec20);
-    FUN_0041eb80(&vec0);
+    if (vec34.mBegin && ((int*)vec34.mBegin)[-1] != 0) eastl_dealloc(vec34.mBegin);
+    ((void(__thiscall*)(void*))FUN_0041eb80)(&vec20);
+    ((void(__thiscall*)(void*))FUN_0041eb80)(&vec0);
     vt1 = (void*)g_vt13ef094;
 }
 // @ 0x0075a620
