@@ -1,6 +1,6 @@
 00456360  -1  complete, /Od variants not tried (budget)
 00456410  -1  complete, /Od variants not tried
-004565f0  -1  complete; original is /Od+SSE with _CIsqrt, not tried
+004565f0  72  complete; original is /Od+SSE and calls the x87 _CIsqrt import, so the slice now carries a source Flags comment /Od /Ob1 /Oi (without /Oi sqrtf lowered to a __CIsqrt call with a stacked double and the import trace differed); chk diff 72; difftest PASS (500 valid, 100% coverage)
 00456650  -1  complete, not tried
 004566e0  -1  complete behaviorally; EASTL inline layers flattened
 00456bb0  -1  complete, not tried [equiv PASS]
@@ -9,6 +9,6 @@
 004571d0  -1  complete, not tried
 00457250  -1  complete, not tried
 004572b0  -1  complete, not tried
-00457450  -1  complete, not tried
+00457450  75  complete; retail leaves the last written element in eax (the void source left one-past), so the helper now returns Triple* last; chk diff 75; difftest PASS (427 valid, 97.2% coverage)
 004574c0  -1  complete, not tried
-00457540  -1  complete, not tried
+00457540  102  complete; SubObj::CopyFrom was unresolved (the real callee is 0x00440ff0, ??0Trans@SP@@QAE@ABU01@@Z), so ours jumped to a fake and corrupted the stack; annotated the declaration and aligned the slice flags to /Od; chk diff 102; difftest PASS (373 valid, 97.6% coverage, replay needs --start-budget 10000000 for the 128-element range)
