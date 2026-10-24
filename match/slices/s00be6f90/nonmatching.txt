@@ -1,1 +1,4 @@
 00be7470  -  complete; all message paths incl. nested effect spawns; frame size (0x80 vs 0xfc) and register allocation differ; flags /O2 /MD /Gy /TP /arch:SSE2
+00be73d0  -  9 diff, 157 B; vtable load scheduled across `add esp,8` (mine hoists into edx) and base-register choice in the f354 loop; behavior complete; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+00be7aa0  -  11 diff, 322 B; grow path pos/dst register swap (orig pos=edi dst=ebx; mine pos=ebx dst=edi), append path byte-identical; behavior complete; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+00be6f90  -  800 diff, 936 vs 984 B; frame 0xc4 vs 0xc0 (orig saves ebp in prologue, mine pushes ebp inside the loop), i lives in ebx vs memory, x87 vs SSE for radius and len2 squares; behavior complete (game-mode singleton init, action-circle rebuild over nearby agents, slot reservation, cleanup); flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

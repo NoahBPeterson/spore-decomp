@@ -1,1 +1,2 @@
 # source  symbol  original VA  [flags override]
+slices/s00be6f90/s00be6f90.cpp  ?OverwriteNounsFromNounManager@City@@QAEII@Z  00be7370  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
