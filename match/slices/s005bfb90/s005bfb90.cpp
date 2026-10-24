@@ -356,20 +356,13 @@ bool cSPEditorNaming::HandleUIMessage(IWindow* window, const void* message) {
       }
       break;
     case 1:
-      if (msg->mParam1 == 1) {
-        SetExpanded(msg->mParam3 == 1);
-        return true;
-      }
-      break;
-    case 0x18: {
-      int key = msg->mParam2;
-      if (key == 0xd || key == 0x1b) {
+      if (msg->mParam2 == 0xd || msg->mParam2 == 0x1b) {
         if (!(msg->mParam3 & 0x47) && mIsExpanded) {
           SetExpanded(false);
           WindowManager()->SetFocusWindow(0, mOriginalParent);
           return true;
         }
-      } else if (key == 9 && msg->mpSource) {
+      } else if (msg->mParam2 == 9 && msg->mpSource) {
         uint32_t id = msg->mpSource->GetControlID();
         if (id == 0xc7ceb1bd) {
           IWindow* next = mLayout->FindWindowByID(0xaddc11ef, true);
@@ -397,7 +390,12 @@ bool cSPEditorNaming::HandleUIMessage(IWindow* window, const void* message) {
         }
       }
       break;
-    }
+    case 0x18:
+      if (msg->mParam1 == 1) {
+        SetExpanded(msg->mParam3 == 1);
+        return true;
+      }
+      break;
   }
   return false;
 }

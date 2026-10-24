@@ -1,2 +1,2 @@
-005c0100  292  cSPEditorNaming::HandleUIMessage (IWinProc): case block layout differs
+005c0100  167  cSPEditorNaming::HandleUIMessage (IWinProc): complete; the case 1 / case 0x18 bodies were swapped (retail dispatches mType==1 to the keyboard/arrow block and mType==0x18 to the SetExpanded block); /O2 case-block layout still differs (488 vs 540 bytes) (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); difftest WEAK 400 valid, no mismatch, 12.5% coverage (24/192 insns: random message bodies never carry mType 1/0x18/0x287259f6, so the deep case arms are unreached)
 005c0380  541  cSPEditorNaming::SetExpanded: ebp/edi allocation of the text-edit block differs
