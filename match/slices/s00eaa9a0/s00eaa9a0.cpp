@@ -102,6 +102,8 @@ struct cAudioSystem {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14();
     virtual void AddMixMode(cMixMode* mode);            // +0x18
+    virtual void v1c();                                 // +0x1c
+    virtual void* CreateAudioObject();                  // +0x20
 };
 cAudioSystem* GetSystemAT();                            // 0x00a206f0
 
@@ -252,6 +254,329 @@ bool cMixModeManager::Init()
             mode->Release();
     }
     return true;
+}
+
+// ---------------------------------------------------------------------------------------------------
+// NPC city music runtime (the vtable at 0x01488224) and its five-channel manager.
+// ---------------------------------------------------------------------------------------------------
+
+struct Vector3 { float x, y, z; };
+
+struct ChannelNode {
+    uint32_t mKey;                  // +0x00
+    int32_t mRefCount;              // +0x04
+    ChannelNode* mpNext;            // +0x08
+};
+
+struct RandomState {
+    uint32_t mState;                // +0x00
+    uint32_t Range(uint32_t count); // 0x00a68fb0
+};
+
+struct ChannelMap {
+    void* mpVtable;                 // +0x00
+    ChannelNode** mpBucketArray;    // +0x04
+    uint32_t mnBucketCount;         // +0x08
+    uint32_t mnElementCount;        // +0x0c
+    char mAllocator[0x10];          // +0x10
+
+    void FreeNodes(ChannelNode** buckets, uint32_t count);   // 0x00693230
+    ChannelNode* FindNode(uint32_t key);
+    ChannelNode* InsertNode(uint32_t key);
+};
+
+struct IGonzagoSubsystem {
+    virtual void AddRef();
+    virtual void Release();
+};
+
+struct GonzagoDesc {
+    uint32_t mField0, mField1, mField2, mField3;
+};
+
+struct IGonzagoSystem {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual void CreateSubsystem(IGonzagoSubsystem** out, const GonzagoDesc* desc,
+                                 int a, int b, int c, int d);   // +0x0c
+};
+
+struct GonzagoController {
+    void Activate(uint32_t subsystem, int a, int b);   // 0x00c8b130
+    void SetFade(int a, float value);                  // 0x00c88a00
+    void SetVolume(int a, float value);                // 0x00c8a020
+    void Deactivate(int a, int b);                     // 0x00c8ad30
+    char mData[0x64];
+};
+
+class cNPCCityMusicManager;
+
+IGonzagoSystem* GetGonzagoSystem();                    // 0x008de1a0
+cNPCCityMusicManager* GetMusicManager();               // 0x00b3d500
+bool __cdecl GetChannelList(IGonzagoSubsystem* sub, float param, void*** list, int* count);  // 0x006a0840
+
+extern const float kGonzagoParams[5];                  // 0x01488284
+extern const float kGonzagoOne;                        // 0x013ef548
+extern const float kGonzagoZero;                       // 0x014882b8
+extern const char kMusicNamePrefix[];                  // 0x01a80d26
+extern const char kMusicNameSuffix[];                  // 0x015a9018
+
+struct MusicNameBuffer {
+    char mData[0xa14];
+    void Init(const void* owner, const char* a, const char* b);   // 0x00692f90
+    bool Parse(const char* name);                                 // 0x00693e10
+};
+
+void __cdecl UpdateAudioPosition(void* handle, void* object, float x, float y, float z);  // 0x00571f80
+void __cdecl ReleaseAudioObject(void* object, int flags);                        // 0x00572020
+void __cdecl SetAudioObjectEnabled(void* object, uint8_t enabled);               // 0x00a37290
+void __cdecl SetAudioVector(void* object, float x, float y, float z);            // 0x009fbc50
+
+class cNPCCityMusic {
+public:
+    cNPCCityMusic();                                    // 0x00eab4a0
+    explicit cNPCCityMusic(uint32_t id);                // 0x00eab410
+    cNPCCityMusic* Destroy(int flags);                  // 0x00eab4d0
+    bool Load(const char* name);                        // 0x00eab2e0
+    void SetPosition(const Vector3* position);          // 0x00eab340
+    void ClearPosition();                               // 0x00eab390
+    void SetEnabled(uint8_t enabled);                   // 0x00eab3b0
+    void SetVector(const Vector3* value);               // 0x00eab3e0
+    void SetGonzagoEnabled(bool enabled);               // 0x00eab860
+
+    void* mpVtable0;                    // +0x00
+    void* volatile mpVtable1;           // +0x04
+    uint32_t mField08;                  // +0x08
+    uint32_t mId;                       // +0x0c
+    void* mHandle;                      // +0x10
+    void* mpAudioObject;                // +0x14
+    uint8_t mEnabled;                   // +0x18
+    char pad19[0x34 - 0x19];            // +0x19
+    GonzagoController mGonzago;         // +0x34
+    float mGonzagoVolume;               // +0x98
+    char pad9c[0x126 - 0x9c];           // +0x9c
+    uint8_t mGonzagoActive;             // +0x126
+    char pad127[0x12c - 0x127];         // +0x127
+    float mGonzagoFade;                 // +0x12c
+    float mGonzagoScale;                // +0x130
+    char pad134[0x1a4 - 0x134];         // +0x134
+    uint32_t mGonzagoSubsystem;         // +0x1a4
+};
+
+class cNPCCityMusicManager {
+public:
+    void ClearChannelMaps();                            // 0x00eab520
+    ChannelNode* AcquireChannel(uint32_t id);           // 0x00eab560
+    void AddChannelRef(uint32_t id, void* key);         // 0x00eab650
+    void ReleaseChannel(uint32_t id, void* key);        // 0x00eab690
+    void InitGonzagoSubsystem();                        // 0x00eab6e0
+
+    char pad00[0x1c];                   // +0x00
+    ChannelMap mChannels[5];            // +0x1c
+    RandomState mRandom;                // +0xbc
+};
+
+ChannelNode* ChannelMap::FindNode(uint32_t key) {
+    if (!mnBucketCount)
+        return 0;
+    ChannelNode* node = mpBucketArray[key % mnBucketCount];
+    while (node && node->mKey != key)
+        node = node->mpNext;
+    return node;
+}
+
+ChannelNode* ChannelMap::InsertNode(uint32_t key) {
+    if (!mnBucketCount) {
+        mnBucketCount = 8;
+        mpBucketArray = new ChannelNode*[8]();
+    }
+    uint32_t bucket = key % mnBucketCount;
+    ChannelNode* node = new ChannelNode;
+    node->mKey = key;
+    node->mRefCount = 0;
+    node->mpNext = mpBucketArray[bucket];
+    mpBucketArray[bucket] = node;
+    ++mnElementCount;
+    return node;
+}
+
+// @ 0x00eab2e0
+bool cNPCCityMusic::Load(const char* name) {
+    MusicNameBuffer buffer;
+    buffer.Init(this, kMusicNameSuffix, kMusicNamePrefix);
+    bool ok = buffer.Parse(name);
+    if (ok)
+        GetMusicManager()->AddChannelRef(mId, mHandle);
+    return ok;
+}
+
+// @ 0x00eab340
+void cNPCCityMusic::SetPosition(const Vector3* position) {
+    cAudioSystem* system = GetSystemAT();
+    void* object = system ? system->CreateAudioObject() : 0;
+    mpAudioObject = object;
+    UpdateAudioPosition(mHandle, object, position->x, position->y, position->z);
+}
+
+// @ 0x00eab390
+void cNPCCityMusic::ClearPosition() {
+    if (mpAudioObject) {
+        ReleaseAudioObject(mpAudioObject, 0);
+        mpAudioObject = 0;
+    }
+}
+
+// @ 0x00eab3b0
+void cNPCCityMusic::SetEnabled(uint8_t enabled) {
+    if (mpAudioObject && mEnabled != enabled) {
+        SetAudioObjectEnabled(mpAudioObject, enabled);
+        mEnabled = enabled;
+    }
+}
+
+// @ 0x00eab3e0
+void cNPCCityMusic::SetVector(const Vector3* value) {
+    if (mpAudioObject)
+        SetAudioVector(mpAudioObject, value->x, value->y, value->z);
+}
+
+// @ 0x00eab410
+cNPCCityMusic::cNPCCityMusic(uint32_t id) {
+    mpVtable1 = (void*)0x13ec458;
+    mField08 = 0;
+    mpVtable0 = (void*)0x1488224;
+    mpVtable1 = (void*)0x1488214;
+    mId = id;
+    mHandle = 0;
+    mpAudioObject = 0;
+    mEnabled = 0;
+    mHandle = GetMusicManager()->AcquireChannel(id);
+}
+
+// @ 0x00eab4a0
+cNPCCityMusic::cNPCCityMusic() {
+    mpVtable1 = (void*)0x13ec458;
+    mField08 = 0;
+    mpVtable0 = (void*)0x1488224;
+    mpVtable1 = (void*)0x1488214;
+    mId = 0xffffffff;
+    mHandle = 0;
+    mpAudioObject = 0;
+    mEnabled = 0;
+}
+
+// @ 0x00eab4d0
+cNPCCityMusic* cNPCCityMusic::Destroy(int flags) {
+    mpVtable0 = (void*)0x1488224;
+    mpVtable1 = (void*)0x1488214;
+    cNPCCityMusicManager* manager = GetMusicManager();
+    if (manager)
+        manager->ReleaseChannel(mId, mHandle);
+    mpVtable1 = (void*)0x13ec458;
+    mpVtable0 = (void*)0x13eb938;
+    if (flags & 1)
+        operator_delete_array(this);
+    return this;
+}
+
+// @ 0x00eab520
+void cNPCCityMusicManager::ClearChannelMaps() {
+    for (int i = 0; i < 5; ++i) {
+        ChannelMap& map = mChannels[i];
+        map.FreeNodes(map.mpBucketArray, map.mnBucketCount);
+        map.mnElementCount = 0;
+    }
+}
+
+// @ 0x00eab560
+ChannelNode* cNPCCityMusicManager::AcquireChannel(uint32_t id) {
+    ChannelMap& map = mChannels[id];
+    int best = 0x7fffffff;
+    int ties = 0;
+    for (uint32_t bucket = 0; bucket < map.mnBucketCount; ++bucket) {
+        for (ChannelNode* node = map.mpBucketArray[bucket]; node; node = node->mpNext) {
+            int count = node->mRefCount;
+            if (count == best) {
+                ++ties;
+            } else if (count < best) {
+                best = count;
+                ties = 1;
+            }
+        }
+    }
+    uint32_t pick = mRandom.Range((uint32_t)ties);
+    for (uint32_t bucket = 0; bucket < map.mnBucketCount; ++bucket) {
+        for (ChannelNode* node = map.mpBucketArray[bucket]; node; node = node->mpNext) {
+            if (node->mRefCount == best) {
+                if (pick == 0)
+                    return node;
+                --pick;
+            }
+        }
+    }
+    return 0;
+}
+
+// @ 0x00eab650
+void cNPCCityMusicManager::AddChannelRef(uint32_t id, void* key) {
+    ChannelMap& map = mChannels[id];
+    uint32_t value = (uint32_t)key;
+    ChannelNode* node = map.FindNode(value);
+    if (!node)
+        node = map.InsertNode(value);
+    ++node->mRefCount;
+}
+
+// @ 0x00eab690
+void cNPCCityMusicManager::ReleaseChannel(uint32_t id, void* key) {
+    ChannelNode* node = mChannels[id].FindNode((uint32_t)key);
+    if (node && node->mRefCount > 0)
+        --node->mRefCount;
+}
+
+// @ 0x00eab6e0
+void cNPCCityMusicManager::InitGonzagoSubsystem() {
+    IGonzagoSystem* system = GetGonzagoSystem();
+    if (!system)
+        return;
+    GonzagoDesc desc = { 0xba8f3430, 0x00b1b104, 0x021407ee, 0 };
+    IGonzagoSubsystem* subsystem = 0;
+    system->CreateSubsystem(&subsystem, &desc, 0, 0, 0, 0);
+    if (!subsystem)
+        return;
+    subsystem->AddRef();
+    for (int i = 0; i < 5; ++i) {
+        void** list = 0;
+        int count = 0;
+        if (GetChannelList(subsystem, kGonzagoParams[i], &list, &count)) {
+            for (int j = 0; j < count; ++j) {
+                uint32_t key = (uint32_t)list[j];
+                ChannelNode* node = mChannels[i].FindNode(key);
+                if (!node)
+                    node = mChannels[i].InsertNode(key);
+                node->mRefCount = 0;
+            }
+        }
+    }
+    subsystem->Release();
+}
+
+// @ 0x00eab860
+void cNPCCityMusic::SetGonzagoEnabled(bool enabled) {
+    if (enabled) {
+        if (mGonzagoActive)
+            return;
+        if (mGonzagoFade == kGonzagoZero)
+            return;
+        mGonzagoActive = 1;
+        mGonzago.Activate(mGonzagoSubsystem, 0, 1);
+        mGonzago.SetFade(1, kGonzagoOne);
+        mGonzago.SetVolume(1, mGonzagoScale * mGonzagoVolume);
+    } else {
+        if (!mGonzagoActive)
+            return;
+        mGonzagoActive = 0;
+        mGonzago.Deactivate(1, 0);
+    }
 }
 
 } }
