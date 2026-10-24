@@ -7,8 +7,10 @@
 #include <string.h>
 
 // ---- external callees -------------------------------------------------------------------
-void  __cdecl FUN_006fd330(void* dst, unsigned n, void* value);
-void  __cdecl FUN_00d73090(void* first, void* last);
+struct CellVector {
+    void erase(void* first, void* last);  // 0x00d73090
+    void insert(void* pos, unsigned n, void* value);  // 0x006fd330
+};
 void  __cdecl FUN_0093a6c0(void* stream, const void* data, int n);
 void  __cdecl FUN_0093a780(void* stream, void* data, int n, int flag);
 bool  __cdecl FUN_00777840(void* stream, unsigned flag, void* arg);
@@ -71,12 +73,12 @@ struct Elem1c {
 
 // @ 0x006fd520
 void Vec1c::Resize(unsigned n) {
-    if ((unsigned)Size() < n) {
+    if (n > (unsigned)Size()) {
         Elem1c temp;
         temp.stream = 0xff;
-        FUN_006fd330(end, n - Size(), &temp);
+        ((CellVector*)this)->insert(end, n - Size(), &temp);
     } else {
-        FUN_00d73090(begin + n * 0x1c, end);
+        ((CellVector*)this)->erase(begin + n * 0x1c, end);
     }
 }
 
