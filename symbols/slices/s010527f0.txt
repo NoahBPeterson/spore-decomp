@@ -1,0 +1,28 @@
+010527f0 ?SetErrorEvent@cSPToolStrategy@@QAEHH_N@Z  # int cSPToolStrategy::SetErrorEvent(int, bool)
+01052880 ?AppendScanResult@@YAXPAXPAH@Z  # void AppendScanResult(void*, int*)
+01052f00 ?GetMouseWorldPosition@cSPToolStrategy@@UAEPAUVec3@@PAU2@@Z  # Vec3* cSPToolStrategy::GetMouseWorldPosition
+01052f90 ?GetMouseRay@@YAXPAUVec3@@@Z  # void GetMouseRay(Vec3*)
+010531b0 ?ShowScanEventLog@@YAXHHHHH@Z  # void SP::ShowScanEventLog
+01053240 ?ScanSpecies@@YAHPAVcPlanet@@@Z  # int ScanSpecies(cPlanet*)
+01053320 ?ScanTribe@@YAHPAVcPlanet@@@Z  # int ScanTribe(cPlanet*)
+010533d0 ?ScanColony@@YAHPAVcSPSimulatorSpaceGame@@@Z  # int ScanColony(cSPSimulatorSpaceGame*)
+010534c0 ?ScanAllSpecies@@YAHPAVcPlanet@@@Z  # int ScanAllSpecies(cPlanet*)
+01053590 ?AdjustCost@cSPEnergyRepairToolStrategy@@QAEHH@Z  # int cSPEnergyRepairToolStrategy::AdjustCost(int)
+010535e0 ?AdjustCostPercent@cSPEnergyRepairToolStrategy@@QAEHH@Z  # int cSPEnergyRepairToolStrategy::AdjustCostPercent(int)
+01053650 ?StopTool@cSPToolStrategy@@QAE_NXZ  # bool cSPToolStrategy::StopTool
+010536e0 ?CastToAnimalCargoInfo@@YAPAVIRefCounted@@PAUIItemHolder@@@Z  # interface_cast<cSPAnimalCargoInfo*>
+01053700 ?CastToPlantCargoInfo@@YAPAVIRefCounted@@PAUIItemHolder@@@Z  # interface_cast<cSPPlantCargoInfo*>
+010537e0 ?ActivateTool@cSPToolStrategy@@QAE_NH@Z  # bool cSPToolStrategy::ActivateTool(int)
+01053980 ?CanUseToolAtLocation@cSPToolStrategy@@QAE_NHH@Z  # bool cSPToolStrategy::CanUseToolAtLocation(int, int)
+01053bb0 ?UpdatePassive@cSPToolStrategy@@QAEXXZ  # void cSPToolStrategy::UpdatePassive
+01053be0 ?FindTestTerrainLocation@cSPToolStrategy@@QAEPAUVec3@@PAU2@H@Z  # Vec3* cSPToolStrategy::FindTestTerrainLocation
+01053d50 ?AttachToolEffect@@YAXPBX@Z  # void AttachToolEffect(const void*)
+01053db0 ?StopTool@cSPDefaultBeamTool@@QAE_NXZ  # bool cSPDefaultBeamTool::StopTool
+01053e00 ?UpdateBeam@cSPDefaultBeamTool@@QAE_NXZ  # bool cSPDefaultBeamTool::UpdateBeam
+01053ee0 ?StopTool@cSPDefaultAoETool@@QAE_NXZ  # bool cSPDefaultAoETool::StopTool
+01053f20 ?UpdateArea@cSPDefaultAoETool@@QAE_NXZ  # bool cSPDefaultAoETool::UpdateArea
+01053fb0 ?ActivateTool@cSPScanToolStrategy@@QAE_NH@Z  # bool cSPScanToolStrategy::ActivateTool(int)
+01053ff0 ?StopTool@cSPScanToolStrategy@@QAE_NXZ  # bool cSPScanToolStrategy::StopTool
+01054080 ?UseTool@cSPScanToolStrategy@@QAE_NHH@Z  # bool cSPScanToolStrategy::UseTool(int, int)
+010540b0 ?CanUseToolAtLocation@cSPGetOutOfUFOToolStrategy@@QAE_NHH@Z  # bool cSPGetOutOfUFOToolStrategy::CanUseToolAtLocation
+010540d0 ?ActivateTool@cSPGetOutOfUFOToolStrategy@@QAE_NH@Z  # bool cSPGetOutOfUFOToolStrategy::ActivateTool(int)
