@@ -496,3 +496,152 @@ void cEffectCheat::ParseLine(const cArguments& args)
     if (Flag(kClear))
         mTestEffects[mID].reset();
 }
+
+// ---------------------------------------------------------------------------
+// EA::Swarm::cEffectsManagerCheat -- the "effectsManager" console cheat.
+//
+// The retail object is 0x100 bytes: a cCommandBase (vptr/parser/refcount),
+// a manager pointer, and a 0xc8-byte cArgumentSpec at +0x14, followed by the
+// scratch fields the individual options bind to.  The constructor registers
+// every option with one variadic cArgumentSpec::ConstructSpec call.
+// ---------------------------------------------------------------------------
+namespace EA { namespace ArgScript {
+
+struct cArguments;
+
+class cCommandBase {
+ public:
+    cCommandBase();                                            // 0x0083c800
+    virtual void Execute(cArguments*);
+    virtual const char* Description(int) const;
+    virtual void OnRegister(void*, void*);
+    virtual int AddRef();
+    virtual int Release();
+    virtual ~cCommandBase();
+    void* mParser;                                             // +0x04
+    int mRefCount;                                             // +0x08
+};
+
+class cArgumentSpec {
+ public:
+    cArgumentSpec(bool respectHelp);                           // 0x0083a9f0
+    int ConstructSpec(const char* name, const char* spec, ...);  // 0x0083bcd0
+    char mData[0xc8];                                          // real spec object
+};
+
+}}  // namespace EA::ArgScript
+
+extern const char* gActive;          // 0x01554938 -> 0x01456170 "active"
+extern const int gZeroValue;         // 0x013ec47c (first dword of a default table)
+
+namespace EA { namespace Swarm {
+
+class cEffectsManager;
+
+class cEffectsManagerCheat : public EA::ArgScript::cCommandBase {
+ public:
+    cEffectsManagerCheat(cEffectsManager* manager);            // 0x00a73c70
+    virtual void Execute(EA::ArgScript::cArguments*);
+    virtual const char* Description();
+
+    unsigned int mPad0c;                                       // +0x0c
+    cEffectsManager* mManager;                                 // +0x10
+    EA::ArgScript::cArgumentSpec mArgSpec;                     // +0x14 (0xc8)
+    unsigned int mWorldID;                                     // +0xdc
+    bool mShowBounds;                                          // +0xe0
+    bool mShowSurfaces;                                        // +0xe1
+    bool mShowEffects;                                         // +0xe2
+    bool mNoAlpha;                                             // +0xe3
+    int mAppFlag;                                              // +0xe4
+    bool mAppFlagSetting;                                      // +0xe8
+    unsigned char mPadE9[3];                                   // +0xe9
+    float mCurrentLOD;                                         // +0xec
+    int mState;                                                // +0xf0
+    int mWorldID2;                                             // +0xf4
+    const char* mWorldName;                                    // +0xf8
+    const char* mResourceName;                                 // +0xfc
+};
+
+class cEffectsManager {
+ public:
+    unsigned int mPad000[0x18c / 4];                            // +0x000 .. +0x18b
+    Vector3 mLODPosition;                                      // +0x18c
+    unsigned int mPad198[(0x1c4 - 0x198) / 4];                 // +0x198 .. +0x1c3
+    Vector3 mSunDirection;                                     // +0x1c4
+    unsigned int mPad1d0[(0x1e4 - 0x1d0) / 4];                 // +0x1d0 .. +0x1e3
+    float mGravityPointStrength;                               // +0x1e4
+};
+
+}}  // namespace EA::Swarm
+
+// @ 0x00a73c70
+EA::Swarm::cEffectsManagerCheat::cEffectsManagerCheat(EA::Swarm::cEffectsManager* manager)
+    : mManager(manager), mArgSpec(true)
+{
+    mArgSpec.ConstructSpec(
+        "Used to control the effect manager and global effect settings.",
+        ":worldState", &gActive, &gZeroValue,
+        "Used for querying and controlling the effects manager.",
+        "-stats^", 0,
+        "Lists various effect system statistics",
+        "-listActive^ [<pattern:cstring>]", 3, &mWorldID,
+        "Lists all active worlds and their effects",
+        "-list^ [<pattern:cstring>]", 4, &mWorldID,
+        "Lists all worlds and their effects",
+        "  -internal^", 5,
+        "  in addition, shows internally-spawned effects",
+        "  -all^", 6,
+        "  shows all effects: user, internal, and children of either of those",
+        "-listEffects^ [<pattern:cstring>]", 7, &mWorldID,
+        "Lists all or specified effects",
+        "-where^ [<pattern:cstring>]", 8, &mWorldID,
+        "Lists specified effects and shows where in the script files they come from",
+        "-edit^ [<name:cstring>]", 9, &mWorldID,
+        "Opens the given effect for editing",
+        "-resources^ [<name:cstring>]", 10, &mWorldID,
+        "Lists the resources potentially used by the given effect",
+        "-kill^ [<pattern:cstring>]", 1, &mWorldID,
+        "Kill any orphaned effects, or, with pattern, the named effects",
+        "-killAllBut^ [<pattern:cstring>]", 2, &mWorldID,
+        "Kill any orphaned effects, and, all effects except the one specified as pattern",
+        "-showBounds^ <on:bool>", 0x19, &mShowBounds,
+        "Show particle system bounds",
+        "-showSurfaces^ <on:bool>", 0x1a, &mShowSurfaces,
+        "Show collision surfaces",
+        "-showEffects^ <on:bool> [<size:float>]", 0x1b, &mShowEffects,
+        &mManager->mGravityPointStrength,
+        "Show effect locations",
+        "-windDir <vector3>", &mManager->mLODPosition,
+        "Set global wind direction",
+        "-sunDir <vector3>", &mManager->mSunDirection,
+        "Set global sun direction",
+        "-noAlpha^ <on:bool>", 0x18, &mNoAlpha,
+        "Force no alpha in particles -- makes amount of overdraw clearer",
+        "-appFlag^ <flag:int> <setting:bool>", 0xc, &mAppFlag, &mAppFlagSetting,
+        "Set the given application flag",
+        "-lod^ <float>", 0xd, &mCurrentLOD,
+        "Set current LOD.",
+        "-worlds^", 0xf,
+        "List current worlds",
+        "-createWorld^ <id:int> [<debugName:cstring>]", 0x10, &mWorldID2, &mWorldName,
+        "Create new effects world with given ID and optional debug name",
+        "-removeWorld^ <id:int>", 0x11, &mWorldID2,
+        "Remove effects world with given ID",
+        "-memStats^", 0x12,
+        "Lists various memory statistics",
+        "-version^", 0x13,
+        "Print current effects script version",
+        "-v^", 0x13,
+        "Shorthand for -version",
+        "-save^", 0x14,
+        "Save any resource sections",
+        "-load^ <name:cstring>", 0x15, &mResourceName,
+        "Load effects from given resource.",
+        "-unload^ <name:cstring>", 0x16, &mResourceName,
+        "Remove effects from given resource",
+        "-collections^", 0x17,
+        "List currently loaded collections",
+        "-state^ <worldState> [<world:cstring>]", 0xb, &mState, &mWorldName,
+        "Set state of default world, or given world if specified",
+        0);
+}
