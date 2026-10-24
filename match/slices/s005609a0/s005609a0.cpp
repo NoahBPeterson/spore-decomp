@@ -13,9 +13,9 @@ struct EcxStub9a {
 };
 
 
-void FUN_0048c720(void* p);
-void FUN_00564820(void* p);
-void FUN_00571680(void* p);
+void __fastcall FUN_0048c720(void* vec, int reserved, void* item);
+void __fastcall FUN_00564820(void* vec, int reserved);
+void __fastcall FUN_00571680(void* self, int reserved);
 void FUN_00571640(void* p);
 void FUN_00429360(void* p);
 void FUN_005688f0(void* a, void* b, void* c, void* d);
@@ -23,7 +23,7 @@ void FUN_005643e0(void* it);
 bool FUN_0055c6f0(void* a, void* b, void* c);
 void FUN_0068f9b0(void* p);
 void FUN_00564470(void* p);
-void FUN_005156b0(void* p);
+void __fastcall FUN_005156b0(void* self, int reserved, void* owner);
 void FUN_00564960(void* out, void* val);
 void FUN_0041d940();
 void* FUN_0068f4d0();
@@ -50,17 +50,17 @@ int EcxStub9a::FUN_00560c30(void* pKey) {
     int index = -1;
     if (!((DBSub*)((char*)this_ + 0x28))->GetResType()) {
         index = **(int**)((char*)this_ + 0x28);
-        FUN_0048c720(*(void**)((char*)this_ + 0x28));
+        FUN_0048c720((char*)this_ + 0x28, 0, *(void**)((char*)this_ + 0x28));
     } else {
         index = (int)((*(int*)((char*)this_ + 0x18) - *(int*)((char*)this_ + 0x14)) / 0x50);
-        FUN_00564820((char*)this_ + 0x14);
+        FUN_00564820((char*)this_ + 0x14, 0);
     }
     char* asset = (char*)(index * 0x50 + *(int*)((char*)this_ + 0x14));
     *(uint32_t*)(asset + 0) = ((uint32_t*)pKey)[0];
     *(uint32_t*)(asset + 4) = ((uint32_t*)pKey)[1];
     *(uint32_t*)(asset + 8) = ((uint32_t*)pKey)[2];
     *(uint32_t*)(asset + 0xc) = 0xffffffff;
-    FUN_00571680(asset + 0x10);
+    FUN_00571680(asset + 0x10, 0);
     *(uint32_t*)(asset + 0x48) = 0xffffffff;
     *(uint32_t*)(asset + 0x4c) = 0xffffffff;
     return index;
@@ -127,7 +127,7 @@ void EcxStub9a::FUN_005611b0() {
     char* v = (char*)this_ + 0x1c;
     for (char* it = *(char**)v; it < *(char**)(v + 4); it += 0xc) {
     }
-    FUN_005156b0(v);
+    FUN_005156b0(v, 0, this_);
     *(void**)((char*)this_ + 8) = (void*)0x13ef094;
     *(void**)this_ = (void*)0x13eb938;
 }

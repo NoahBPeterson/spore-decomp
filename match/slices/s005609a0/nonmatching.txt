@@ -1,4 +1,4 @@
-00560c30    0  complete asset insertion; /Od frame/holes differ; equiv FAIL (ecx receiver fixed)
+00560c30  194  complete asset insertion; /Od frame/holes differ; equiv PASS 339 valid, 100% coverage
 00560d20    0  complete asset key equality; /Od frame differs; equiv PASS (ecx receiver fixed)
 00561090  154  complete cEditorResource constructor; vtable/frame schedule differs; equiv PASS (ecx receiver fixed)
-005611b0   80  complete cEditorResource destructor; frame schedule differs; equiv FAIL (ecx receiver fixed)
+005611b0  103  complete cEditorResource destructor; frame schedule differs; equiv PASS 399 valid, 100% coverage
