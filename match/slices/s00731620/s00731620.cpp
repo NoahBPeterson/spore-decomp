@@ -1,8 +1,59 @@
 // Slice s00731620 — vertex-blend / normal output family plus small index helpers.
 // 0x00731620 is the float-weight sibling of 0x00730d10; 0x00731e70 dispatches between the
 // three vertex routines.  The small helpers are the surrounding element-array bookkeeping.
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
+#include <emmintrin.h>
+
+// The retail helpers take the root on the x87 stack: the sum of squares and the
+// root stay in extended precision and only the final store rounds to float.  cl15
+// has no fsqrt intrinsic (it emits a __CIsqrt call, which the original does not
+// import), so the same x87 primitive is used here, exactly like the retail
+// fld/fmul/faddp/fsqrt/fstp chain.  No registers are saved or restored.
+static inline float SqrtSq3X87(float a, float b, float c)
+{
+    float r;
+    __asm {
+        fld  dword ptr [a]
+        fmul st(0), st(0)
+        fld  dword ptr [b]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fld  dword ptr [c]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fsqrt
+        fstp dword ptr [r]
+    }
+    return r;
+}
+
+static inline float InvSqrtSq3X87(float a, float b, float c)
+{
+    float eps = 1e-08f;
+    float r;
+    __asm {
+        fld  dword ptr [a]
+        fmul st(0), st(0)
+        fld  dword ptr [b]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fld  dword ptr [c]
+        fmul st(0), st(0)
+        faddp st(1), st(0)
+        fadd dword ptr [eps]
+        fsqrt
+        fld1
+        fdivrp st(1), st(0)
+        fstp dword ptr [r]
+    }
+    return r;
+}
+
+#define SqrtWide3(a, b, c)       SqrtSq3X87(a, b, c)
+#define InvSqrtWide3(a, b, c)    InvSqrtSq3X87(a, b, c)
 
 struct EltArray
 {
@@ -160,7 +211,7 @@ void FUN_00731620(EltArray* p1, EltArray* p2, uint32_t p3, EltArray* p4, EltArra
             float q0 = ((cy * m1 + cx * m0) + cz * m2) * inv0;
             float q1 = ((cz * m6 + cy * m5) + cx * m4) * inv1;
             float q2 = ((cz * m10 + cy * m9) + cx * m8) * inv2;
-            float r = 1.0f / sqrtf((q1 * q1 + (q2 * q2 + q0 * q0)) + 1e-08f);
+            float r = InvSqrtWide3(q0, q2, q1);
             float* out = (float*)(p7->mData + (uint32_t)p7->mEltStride * (uint32_t)i);
             out[0] = r * q0;
             out[1] = q1 * r;
@@ -176,7 +227,7 @@ void FUN_00731620(EltArray* p1, EltArray* p2, uint32_t p3, EltArray* p4, EltArra
             float q0 = ((cy * m1 + cx * m0) + cz * m2) * inv0;
             float q1 = ((cz * m6 + cy * m5) + cx * m4) * inv1;
             float q2 = ((cz * m10 + cy * m9) + cx * m8) * inv2;
-            float r = 1.0f / sqrtf((q1 * q1 + (q2 * q2 + q0 * q0)) + 1e-08f);
+            float r = InvSqrtWide3(q0, q2, q1);
             float* out = (float*)(p9->mData + (uint32_t)p9->mEltStride * (uint32_t)i);
             out[0] = r * q0;
             out[1] = q1 * r;
@@ -337,6 +388,7 @@ void FUN_007320f0(C60* c)
     int m = (int)(c->mEnd2 - c->mBegin2);
     if (m > 0)
     {
+        int count = m;
         int off = 0;
         do
         {
@@ -353,7 +405,7 @@ void FUN_007320f0(C60* c)
                 } while (--k);
             }
             off += 0x8c;
-        } while (--m);
+        } while (--count);
     }
 }
 
@@ -378,8 +430,8 @@ bool FUN_007321a0(C44* c, int p2, int p3)
     int n = (int)(c->mEnd - c->mBegin);
     if (n > 0)
     {
-        int i = 0;
-        E10* e = c->mBegin;
+        volatile int i = 0;
+        E10* e = *(E10* volatile*)&c->mBegin;
         do
         {
             if (e->mPtr == 0)
@@ -435,7 +487,7 @@ void FUN_00732270(float* pm, uint16_t* out)
 
     out[1] = (uint16_t)(out[1] + 1);
     *(float*)((uint8_t*)out + 0x10) =
-        sqrtf((pm[9] * pm[9] + pm[5] * pm[5]) + pm[1] * pm[1]);
+        SqrtWide3(pm[9], pm[5], pm[1]);
     FUN_00698650(tmp);
     *(uint16_t*)out |= 2;
     out[1] = (uint16_t)(out[1] + 1);
