@@ -22,8 +22,10 @@ struct Vec3 {
 };
 static inline bool Bit(uint32_t v, int n) { return (v >> n) & 1; }
 
+namespace EA { namespace Random {
 struct RandomLinearCongruential { double RandomDoubleUniform(); };   // 0x009360d0
-extern RandomLinearCongruential g_Random;                            // 0x016778dc (sRandom_Swarm)
+}}
+extern EA::Random::RandomLinearCongruential g_Random;                // 0x016778dc (sRandom_Swarm)
 
 // 3x3 + translation transform (flags bit 1 = has rotation), at emitter+0x68.
 struct Xform {
@@ -237,4 +239,220 @@ bool Emitter::Constrain(Particle* p, float dt)
     p->vel.y = p->vel.y - n.y * dot;
     p->vel.z = p->vel.z - n.z * dot;
     return true;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Swarm emitter subclass used by 0x00a9c710 / 0x00a9ca50.  Same object family as Emitter but
+// with the sampler at +0x198 and the "local space" flag at +0x1a1 (see 0x00a9b480, which
+// manipulates the same +0x30/+0x68 transforms and +0xc description).
+// ---------------------------------------------------------------------------------------------
+
+float FUN_0053c480(const float* a, const float* b);        // 0x0053c480 (dot product)
+float FUN_007cdb90(float* range);                          // 0x007cdb90 (random in [range[0],range[1]])
+void* FUN_007d5590(void* out, void* a, const void* b);     // 0x007d5590 (copy matrix + update)
+void FUN_00a7ab40(int count, const float* data, float scale, void* params, void* extra);  // 0x00a7ab40
+
+struct SwarmDesc {
+    uint32_t pad0[2];
+    uint32_t flags;                          // +0x08
+    uint32_t pad0c[(0x44 - 0x0c) / 4];
+    float m_44;                              // +0x44
+};
+
+struct SwarmChild {
+    SwarmChild* m_next;                      // +0x00
+    uint32_t m_pad04[0x1f - 1];              // +0x04 .. +0x7b
+    void* m_processor;                       // +0x7c
+};
+
+struct SwarmProcessor {
+    virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3();
+    virtual void p4(); virtual void p5(); virtual void p6();
+    virtual bool Command(int command, float* data, int count);   // +0x1c
+};
+
+struct SwarmParamArray {
+    uint32_t m_begin;                        // +0x00
+    uint32_t m_end;                          // +0x04
+    uint32_t m_capacityAndFlags;             // +0x08
+};
+
+static inline void TransformPoint(const Xform& xf, Vec3& v)
+{
+    if (xf.flags & 2) {
+        Vec3 r;
+        r.x = (xf.m[3] * v.y + xf.m[6] * v.z) + xf.m[0] * v.x;
+        r.y = (xf.m[4] * v.y + xf.m[7] * v.z) + xf.m[1] * v.x;
+        r.z = (xf.m[5] * v.y + xf.m[8] * v.z) + xf.m[2] * v.x;
+        v = r;
+    }
+    v.x = xf.scale * v.x + xf.t.x;
+    v.y = xf.t.y + xf.scale * v.y;
+    v.z = xf.t.z + xf.scale * v.z;
+}
+
+class SwarmEmitter {
+public:
+    uint32_t m_pad00[3];                     // +0x00
+    SwarmDesc* m_desc;                       // +0x0c
+    uint32_t m_pad10[5];                     // +0x10 .. +0x23
+    SwarmChild* m_children;                  // +0x24 (head sentinel's next pointer)
+    uint32_t m_pad28[2];                     // +0x28 .. +0x2f
+    Xform m_xfA;                             // +0x30
+    Xform m_xfB;                             // +0x68
+    uint32_t m_padA0[(0x114 - 0xa0) / 4];    // +0xa0 .. +0x113
+    Vec3 m_surfacePoint;                     // +0x114
+    float m_surfaceSign;                     // +0x120
+    uint32_t m_pad124[(0x130 - 0x124) / 4];  // +0x124 .. +0x12f
+    Vec3 m_planePoint;                       // +0x130
+    float m_param13c;                        // +0x13c
+    float m_param140;                        // +0x140
+    float m_param144;                        // +0x144
+    float m_param148;                        // +0x148
+    float m_param14c;                        // +0x14c
+    Vec3 m_param150;                         // +0x150
+    float m_minHeight;                       // +0x15c
+    float m_maxHeight;                       // +0x160
+    float m_basis0;                          // +0x164
+    float m_basis1;                          // +0x168
+    float m_basis2;                          // +0x16c
+    float m_basis3;                          // +0x170
+    float m_basis4;                          // +0x174
+    float m_basis5;                          // +0x178
+    uint32_t m_pad17c[(0x198 - 0x17c) / 4];  // +0x17c .. +0x197
+    Sampler* m_sampler;                      // +0x198
+    uint32_t m_pad19c;                       // +0x19c
+    bool m_localA;                           // +0x1a0
+    bool m_local;                            // +0x1a1
+    uint8_t m_pad1a2[2];                     // +0x1a2 .. +0x1a3
+    Vec3 m_bboxMin;                          // +0x1a4
+    Vec3 m_bboxMax;                          // +0x1b0
+    uint32_t m_pad1bc[(0x218 - 0x1bc) / 4];  // +0x1bc .. +0x217
+    SwarmParamArray m_params;                // +0x218
+
+    bool ConstrainLocal(Particle* p);                       // 0x00a9c710
+    bool SetParameter(int command, float* data, int count); // 0x00a9ca50
+    void UpdateBasis(float* data);                          // 0x00a9b480
+};
+
+// @ 0x00a9c710  SwarmEmitter::ConstrainLocal
+bool SwarmEmitter::ConstrainLocal(Particle* p)
+{
+    Vec3 pos = p->pos;
+    if (m_local) {
+        TransformPoint(m_xfA, pos);
+        TransformPoint(m_xfB, pos);
+    }
+
+    if (m_sampler == 0 || !m_sampler->Contains(&pos))
+        return false;
+
+    float h = m_sampler->Height(&pos);
+    uint32_t flags = m_desc->flags;
+    if (Bit(flags, 6)) {
+        if (m_minHeight > h) return false;
+        if (h > m_maxHeight) return false;
+    } else if (Bit(flags, 7)) {
+        if (!(h > g_Random.RandomDoubleUniform()))
+            return false;
+    }
+
+    if (Bit(flags, 5)) {
+        float range[2];
+        range[0] = m_bboxMin.z;
+        range[1] = m_bboxMax.z;
+        pos.z = h + FUN_007cdb90(range);
+    }
+
+    if (m_local) {
+        m_xfB.InvTransform(&pos);
+        m_xfA.InvTransform(&pos);
+    }
+
+    p->pos = pos;
+    return true;
+}
+
+// @ 0x00a9ca50  SwarmEmitter::SetParameter
+bool SwarmEmitter::SetParameter(int command, float* data, int count)
+{
+    switch (command) {
+    case 0:
+        m_param13c = data[0];
+        return true;
+    case 1:
+        m_param148 = data[0];
+        return true;
+    case 2:
+        m_param144 = data[0];
+        return true;
+    case 3:
+        m_param140 = data[0];
+        return true;
+    case 4:
+        m_param14c = data[0];
+        return true;
+    case 5:
+        m_param150.x = data[0];
+        m_param150.y = data[1];
+        m_param150.z = data[2];
+        return true;
+    case 7:
+        UpdateBasis(data);
+        return true;
+    case 9:
+        m_surfacePoint.x = data[0];
+        m_surfacePoint.y = data[1];
+        m_surfacePoint.z = data[2];
+        m_xfB.InvTransform(&m_surfacePoint);
+        return true;
+    case 0xa:
+        m_surfaceSign = data[0];
+        return true;
+    case 0xb: {
+        float numer = (m_planePoint.x - data[0]) * data[3];
+        numer = numer + (m_planePoint.y - data[1]) * data[4];
+        numer = numer + (m_planePoint.z - data[2]) * data[5];
+        float len2 = FUN_0053c480(data + 3, data + 3);
+        float t = numer / len2;
+        m_surfacePoint.x = data[0] + data[3] * t;
+        m_surfacePoint.y = data[1] + data[4] * t;
+        m_surfacePoint.z = data[2] + data[5] * t;
+        m_surfaceSign = (t >= 0.0f) ? 1.0f : 0.0f;
+        m_xfB.InvTransform(&m_surfacePoint);
+        return true;
+    }
+    case 0xd: {
+        uint32_t buf[14];
+        void* out = FUN_007d5590(buf, &m_xfA, &m_xfB);
+        FUN_00a7ab40(count / 3, data, m_desc->m_44, out, &m_params);
+        return true;
+    }
+    case 0x10:
+        m_minHeight = data[0];
+        m_maxHeight = data[1];
+        return true;
+    case 0x101:
+        m_basis0 = data[0];
+        m_basis2 = data[1];
+        m_basis4 = data[2];
+        m_basis1 = data[3];
+        m_basis3 = data[4];
+        m_basis5 = data[5];
+        return true;
+    default:
+        break;
+    }
+
+    SwarmChild* head = (SwarmChild*)&m_children;
+    bool result = false;
+    for (SwarmChild* n = head->m_next; n != head; n = n->m_next) {
+        SwarmProcessor* proc = (SwarmProcessor*)n->m_processor;
+        if (proc != 0) {
+            bool r = proc->Command(command, data, count);
+            if (r || result)
+                result = true;
+        }
+    }
+    return result;
 }
