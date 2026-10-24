@@ -290,3 +290,414 @@ void __thiscall Reg::Update(int, int)
         }
     }
 }
+
+// ============================================================================
+// Simulator record vector / list / hash map (gold7 claim VAs)
+// ============================================================================
+
+struct VecA {
+    void* b; void* e; void* c;
+    VecA& operator=(const VecA&);                  // 0x0050d4e0
+};
+struct VecB {
+    void* b; void* e; void* c;
+    VecB& operator=(const VecB&);                  // 0x00473b00
+};
+struct ByteV {
+    void* b; void* e; void* c;
+    void assign(const ByteV&);                     // 0x00420e30
+};
+struct KeyV {
+    uint32_t w[12];
+    KeyV& operator=(const KeyV&);                  // 0x006609a0
+};
+struct VecC {
+    uint32_t w[0x136];
+    void CopyFrom(const VecC&);                    // 0x00bc5070
+};
+struct VecD {
+    uint8_t* b; uint8_t* e; uint8_t* c;
+    uint8_t pad[0x28];
+    void assign(uint8_t*, uint8_t*);               // 0x0045f430
+};
+
+struct Sub {
+    uint32_t f00;                                  // +0x000 (vtable for standalone)
+    uint32_t f04;                                  // +0x004 (anim handle when embedded)
+    VecA v08;                                      // +0x008
+    uint8_t pad14[0x2c];
+    VecB v40;                                      // +0x040
+    uint8_t pad4c[0x10c];
+    VecA v158;                                     // +0x158
+    uint8_t pad164[0x8c];
+    ByteV v1f0;                                    // +0x1f0
+    uint8_t pad1fc[0x2c];
+    KeyV v228;                                     // +0x228
+    VecB v258;                                     // +0x258
+    uint8_t pad264[0x1c];
+    VecC v280;                                     // +0x280
+    VecD v758;                                     // +0x758
+    float f78c;                                    // +0x78c
+    float f790;                                    // +0x790
+    uint32_t d794;                                 // +0x794
+    uint32_t d798;                                 // +0x798
+    uint8_t b79c;                                  // +0x79c
+    uint8_t b79d;                                  // +0x79d
+    uint8_t pad79e[2];
+    uint32_t d7a0, d7a4, d7a8, d7ac, d7b0;         // +0x7a0
+    Sub(const Sub&);                               // 0x00bc54f0
+    Sub& Assign(const Sub&);                       // @ 0x00bc6360
+};
+
+// @ 0x00bc6360
+Sub& Sub::Assign(const Sub& src)
+{
+    f00 = src.f00;
+    f04 = src.f04;
+    v08 = src.v08;
+    v40 = src.v40;
+    v158 = src.v158;
+    v1f0.assign(src.v1f0);
+    v228 = src.v228;
+    v258 = src.v258;
+    v280.CopyFrom(src.v280);
+    VecD* s = (VecD*)&src.v758;
+    VecD* dst = &v758;
+    if (dst != s) {
+        if (dst->b != dst->e) {
+            *dst->b = 0;
+            dst->e = dst->b;
+        }
+        dst->assign(s->b, s->e);
+    }
+    f78c = src.f78c;
+    f790 = src.f790;
+    d794 = src.d794;
+    d798 = src.d798;
+    b79c = src.b79c;
+    b79d = src.b79d;
+    d7a0 = src.d7a0;
+    d7a4 = src.d7a4;
+    d7a8 = src.d7a8;
+    d7ac = src.d7ac;
+    d7b0 = src.d7b0;
+    return *this;
+}
+
+struct Anim {
+    uint32_t pad0;
+    void Build(int anim, int* out);                // 0x004b2030
+};
+struct EntryB {
+    int32_t key;                                   // +0x00
+    V3 a;                                          // +0x04
+    V3 b;                                          // +0x10
+    float f1c;                                     // +0x1c
+    Sub sub;                                       // +0x20 (0x7b4)
+    uint8_t b7d4;                                  // +0x7d4
+    uint8_t disabled;                              // +0x7d5
+    uint8_t pad7d6[2];
+    int32_t state;                                 // +0x7d8
+    int32_t busy;                                  // +0x7dc
+    uint32_t p7e0;                                 // +0x7e0
+    uint32_t p7e4;                                 // +0x7e4
+    uint8_t pad7e8[0x878-0x7e8];
+    Anim anim;                                     // +0x878
+};
+struct Node2;                                       // { next, prev, EntryB }
+struct FixedState {
+    uint32_t w[8];
+};
+struct ListHead {
+    Node2* next;                                   // +0x00
+    Node2* prev;                                   // +0x04
+    FixedState alloc;                              // +0x08..0x28 (object+0x24..0x44)
+    void Init();                                   // 0x00bc51c0
+};
+struct Node2 {
+    Node2* next;
+    Node2* prev;
+    EntryB e;
+};
+
+void __cdecl ReadPropRecord(int a, int b, void* out);   // 0x00bc5730
+void __fastcall SubDtor(Sub* p);                         // 0x00bc4730
+
+// ---- vector<Sub> -----------------------------------------------------------
+struct SubVec {
+    Sub* b; Sub* e; Sub* c;
+    SubVec() {}
+    SubVec(const SubVec&);                         // @ 0x00bc6e20
+    Sub* Erase(Sub*, Sub*);                        // @ 0x00bc7110
+    void Insert(Sub*, uint32_t, const Sub&);       // @ 0x00bc7170
+};
+
+void* __cdecl SimNew(uint32_t size, const char* name, int a, int b, void* alloc, int line); // 0x00f473a0
+void __cdecl MoveRange5(Sub** out, Sub* first, Sub* last, Sub* dst, SubVec* self);          // 0x00bc56b0
+Sub* __cdecl CopyRange2(Sub* first, Sub* last, Sub* dst);                                   // 0x00bc56f0
+void __cdecl DestroyRange2(Sub* first, Sub* last, Sub* dst);                                // 0x00bc48c0
+void __cdecl FillCopy(Sub* dst, uint32_t n, const Sub& value);                              // 0x00bc6540
+void __cdecl MoveAssignRange(Sub* dst, Sub* first, Sub* last);                              // 0x00bc65b0
+void __cdecl FillValueRange(Sub* pos, Sub* end, const Sub* value);                          // 0x00bc6f40
+Sub* __cdecl ShiftTail(Sub* last, Sub* end, Sub* first);                                    // 0x00bc6570
+void __fastcall DestroyVecA(SubVec* p);            // 0x00bc5300
+void __fastcall DestroyVecB(SubVec* p);            // 0x00bc5210
+
+// @ 0x00bc6e20
+SubVec::SubVec(const SubVec& src)
+{
+    int n = (int)(((char*)src.e - (char*)src.b) / 0x7b4);
+    Sub* p = n ? (Sub*)SimNew((uint32_t)n * 0x7b4, "Simulator", 0, 0, (void*)0x13ebb38, 0xd1) : 0;
+    b = p;
+    e = p;
+    c = p + n;
+    Sub* outEnd = p;
+    MoveRange5(&outEnd, src.b, src.e, p, (SubVec*)&src);
+    e = outEnd;
+}
+
+// @ 0x00bc7110
+Sub* SubVec::Erase(Sub* first, Sub* last)
+{
+    Sub* newEnd = ShiftTail(last, e, first);
+    Sub* oldEnd = e;
+    for (Sub* p = newEnd; p < oldEnd; ++p)
+        SubDtor(p);
+    e += last - first;
+    return first;
+}
+
+// @ 0x00bc7170
+void SubVec::Insert(Sub* pos, uint32_t n, const Sub& value)
+{
+    uint32_t capN = (uint32_t)(c - b);
+    uint32_t usedN = (uint32_t)(e - b);
+    if (n > capN - usedN) {
+        uint32_t oldN = (uint32_t)(e - b);
+        uint32_t newCap = oldN * 2;
+        if (oldN == 0)
+            newCap = 1;
+        uint32_t need = oldN + n;
+        if (newCap < need)
+            newCap = need;
+        Sub* nb;
+        if (newCap == 0)
+            nb = 0;
+        else
+            nb = (Sub*)SimNew(newCap * 0x7b4, "Simulator", 0, 0, (void*)0x13ebb38, 0xd1);
+        Sub* mid = CopyRange2(b, pos, nb);
+        DestroyRange2(b, pos, nb);
+        FillCopy(mid, n, value);
+        Sub* mid2 = mid + n;
+        Sub* end2 = CopyRange2(pos, e, mid2);
+        DestroyRange2(pos, e, mid2);
+        if (b && ((int*)b)[-1] != 0)
+            operator_delete__((void*)b);
+        b = nb;
+        e = end2;
+        c = nb + newCap;
+        return;
+    }
+    if (n == 0)
+        return;
+    Sub tmp(value);
+    Sub* oldEnd = e;
+    uint32_t tailN = (uint32_t)(oldEnd - pos);
+    if (n < tailN) {
+        Sub* srcFirst = oldEnd - n;
+        Sub* outEnd = oldEnd;
+        MoveRange5(&outEnd, srcFirst, oldEnd, oldEnd, this);
+        e += n;
+        MoveAssignRange(pos, srcFirst, oldEnd);
+        Sub* fillEnd = pos + n;
+        FillValueRange(pos, fillEnd, &tmp);
+    } else {
+        FillCopy(oldEnd, n - tailN, tmp);
+        e += n - tailN;
+        Sub* outEnd = e;
+        MoveRange5(&outEnd, pos, oldEnd, e, this);
+        e += tailN;
+        Sub* fillEnd = pos + n;
+        FillValueRange(pos, fillEnd, &tmp);
+    }
+    SubDtor(&tmp);
+}
+
+// ---- hash map --------------------------------------------------------------
+struct HashNode2 {
+    uint32_t pad0;
+    Sub* begin;                                    // +0x04
+    Sub* end;                                      // +0x08
+    uint32_t pad0c[3];
+    HashNode2* next;                               // +0x18
+};
+
+struct HashMap {
+    uint32_t field00;                              // +0x00
+    void** buckets;                                // +0x04
+    uint32_t bucketCount;                          // +0x08
+    uint32_t size;                                 // +0x0c
+    float loadF;                                   // +0x10
+    float growF;                                   // +0x14
+    uint32_t field18;                              // +0x18
+    void ClearBuckets(void** buckets, uint32_t count);   // @ 0x00bc6eb0
+    void Find(void** out, uint32_t* key);                // 0x00aea1b0
+    void Insert(void** pos, uint32_t* key, void* value); // 0x00bc6f90
+    SubVec* FindOrAdd(uint32_t* key);                    // @ 0x00bc7440
+};
+
+struct SimClass {
+    uint32_t vtbl0;                                // +0x00
+    uint32_t vtbl1;                                // +0x04
+    uint8_t pad08[0x14];
+    ListHead list;                                 // +0x1c
+    uint32_t count;                                // +0x44
+    HashMap map;                                   // +0x48
+    void BaseCtor();                               // 0x00b5b960
+    void BaseDtor();                               // 0x00b5b9a0
+    int CreateEntry(int, int, const V3*, const V3*);           // @ 0x00bc64a0
+    int CreateEntryCopy(const Sub*, const V3*, const V3*);     // @ 0x00bc65f0
+    SimClass();                                    // @ 0x00bc7380
+    void Destroy();                                // @ 0x00bc7080
+    void ClearMap();                               // @ 0x00bc6f70
+};
+
+// @ 0x00bc64a0
+int SimClass::CreateEntry(int a, int b, const V3* pa, const V3* pb)
+{
+    list.Init();
+    EntryB* e = (EntryB*)((char*)list.prev + 8);
+    e->key = (int)count;
+    count++;
+    ReadPropRecord(a, b, &e->sub);
+    e->f1c = 0.0f;
+    int anim = (int)e->sub.f04;
+    e->busy = anim;
+    b = 0;
+    e->anim.Build(anim, &b);
+    e->a = *pa;
+    e->b = *pb;
+    e->b7d4 = 0;
+    e->disabled = 0;
+    e->state = 0;
+    return e->key;
+}
+
+// @ 0x00bc65f0
+int SimClass::CreateEntryCopy(const Sub* src, const V3* pa, const V3* pb)
+{
+    list.Init();
+    EntryB* e = (EntryB*)((char*)list.prev + 8);
+    e->key = (int)count;
+    count++;
+    const Sub* s = src;
+    e->sub.Assign(*s);
+    e->f1c = 0.0f;
+    int anim = (int)s->f04;
+    e->busy = anim;
+    src = 0;
+    e->anim.Build(anim, (int*)&src);
+    e->a = *pa;
+    e->b = *pb;
+    e->b7d4 = 0;
+    e->disabled = 0;
+    e->state = 0;
+    return e->key;
+}
+
+// @ 0x00bc6eb0
+void HashMap::ClearBuckets(void** bucketArray, uint32_t n)
+{
+    uint32_t i = 0;
+    while (i < n) {
+        HashNode2* node = (HashNode2*)bucketArray[i];
+        while (node) {
+            HashNode2* cur = node;
+            node = cur->next;
+            Sub* end = cur->end;
+            Sub* p = cur->begin;
+            while (p < end) {
+                SubDtor(p);
+                ++p;
+            }
+            freeBuf(cur->begin);
+            operator_delete__(cur);
+        }
+        bucketArray[i] = 0;
+        ++i;
+    }
+}
+
+// @ 0x00bc6f70
+void SimClass::ClearMap()
+{
+    HashMap* m = &map;
+    m->ClearBuckets((void**)m->buckets, m->bucketCount);
+    m->size = 0;
+}
+
+// @ 0x00bc7440
+SubVec* HashMap::FindOrAdd(uint32_t* key)
+{
+    void* found = 0;
+    Find(&found, key);
+    if (found == buckets[bucketCount]) {
+        uint32_t k = *key;
+        SubVec tmp;
+        tmp.b = tmp.e = tmp.c = 0;
+        SubVec v(tmp);
+        Insert(&found, &k, &v);
+        DestroyVecA(&v);
+        DestroyVecB(&tmp);
+    }
+    return (SubVec*)((char*)found + 4);
+}
+
+// ---- Simulator object ------------------------------------------------------
+struct FixedAlloc {
+    FixedState st;
+    FixedAlloc(uint32_t size, uint32_t align, uint32_t blocks, uint32_t a,
+               uint32_t max, void* alloc, void* free, const char* name);  // 0x00926720
+    void Commit();                                 // 0x00926640
+};
+
+void __fastcall DestroyList(void* p);              // 0x00bc53f0
+void __fastcall CommitAlloc(void* p);              // 0x00926640
+
+// @ 0x00bc7380
+SimClass::SimClass()
+{
+    BaseCtor();
+    vtbl0 = (uint32_t)0x1466898;
+    vtbl1 = (uint32_t)0x1466890;
+    uint32_t zero = 0;
+    FixedAlloc fa(0x95c, 4, 0x20, zero, 0xffffffff, (void*)0x6abeb0, (void*)0xf47410, "Simulator/list");
+    ListHead* l = &list;
+    l->alloc = fa.st;
+    l->next = (Node2*)l;
+    l->prev = (Node2*)l;
+    fa.Commit();
+    count = zero;
+    map.loadF = 1.0f;
+    map.growF = 2.0f;
+    map.size = zero;
+    map.field18 = zero;
+    map.bucketCount = 1;
+    map.buckets = (void**)0x154df28;
+}
+
+// @ 0x00bc7080
+void SimClass::Destroy()
+{
+    HashMap* m = &map;
+    vtbl0 = (uint32_t)0x1466898;
+    vtbl1 = (uint32_t)0x1466890;
+    m->ClearBuckets((void**)m->buckets, m->bucketCount);
+    m->size = 0;
+    if (m->bucketCount > 1)
+        operator_delete__(m->buckets);
+    ListHead* l = &list;
+    DestroyList(l);
+    CommitAlloc(&l->alloc);
+    BaseDtor();
+}

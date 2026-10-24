@@ -1,1 +1,5 @@
 # va  diff-bytes  reason
+00bc65f0 116 UNRECOVERED-EQUIV: body recovered (Sub::Assign, anim Build, V3 copies, state zero; 150 vs 148 bytes) but difftest UNSUPPORTED (0/400 valid inputs; call-read faults)
+00bc7110 29 NON-EQUIV: body recovered (shift tail, destroy trailing, shrink end; 92 vs 95 bytes) but difftest FAIL (5/8 valid mismatched)
+00bc7170 477 NON-EQUIV: body recovered (grow/fill-copy/move ranges; 541 vs 514 bytes) but difftest WEAK low coverage 14.6% (need 60%)
+00bc7440 65 NON-EQUIV: body recovered (find + insert empty vector on miss; 132/132 bytes) but difftest FAIL (5/5 valid mismatched)

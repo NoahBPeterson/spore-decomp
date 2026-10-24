@@ -1,2 +1,5 @@
 # va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
 00bc6690 1489 complete Reg::Update (state 0/1/2 sequence start, effect spawn, finish detect, reap); 1694 vs 1921 bytes: orig keeps dead Mat3 identity temp stores and larger frame, register allocation differs
+00bc64a0 38 complete SimClass::CreateEntry (list node alloc, ReadPropRecord into Sub, anim Build, V3 copies, state zero); 157/157 bytes: only push/store scheduling order differs
+00bc6e20 32 complete SubVec copy ctor (count, allocate n*0x7b4, range copy into new buffer); 129/130 bytes: temp/out pointer init and arg scheduling differ
+00bc7380 113 complete SimClass::SimClass (base ctor, FixedAlloc init/copy, list/map setup); 164 vs 155 bytes: fixed-allocator copy and zero-register scheduling differ
