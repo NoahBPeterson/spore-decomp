@@ -1,0 +1,3 @@
+00d34f90 SP::cCreatureModeInputStrategy::FUN_00d34f90  # per-frame substate refresh: if the strategy is active, rebuild the creature pick boxes and forward the input manager + argument to FUN_00d32df0
+00d34fc0 FUN_00d34fc0  # eastl sort thunk: forward (first, last, by-value compare functor) straight to FUN_00d340d0
+00d35030 SP::cCreatureModeInputStrategy::InitSubstate  # rebuild the creature hit-box pool: clean up, take the model world from the model manager, resize(5), create/normalise each empty hit-box model, release the world

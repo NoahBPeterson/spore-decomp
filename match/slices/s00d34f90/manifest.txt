@@ -1,0 +1,2 @@
+slices/s00d34f90/s00d34f90.cpp  ?FUN_00d34f90@cCreatureModeInputStrategy@@QAEXH@Z  00d34f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d34f90/s00d34f90.cpp  ?FUN_00d34fc0@@YAXPAX0UCompare7@@@Z  00d34fc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
