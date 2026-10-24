@@ -71,19 +71,21 @@ struct cSPUILayoutObjectCollection_s0080_f7c0 {
     void* __thiscall VectorDtor(u8 flag);              // 0x8105d0
 };
 struct cSPUILayoutObjectCollectionV8 {
-    u8     pad0[0xc];
-    void*  mService;        // +0xc  (base+0x14)
-    void*  mAutoUpdate;     // +0x10 (base+0x18)
-    void*  mKeyA;           // +0x14 (base+0x1c)
-    u8     pad18[4];
-    void*  mKeyB;           // +0x1c (base+0x24)
-    u8     pad20[0x80 - 0x20];
-    void*  m80;             // +0x80 (base+0x88)
+    u8     pad0[4];
+    void*  mService;        // +0x04 (collection+0xc)
+    void*  mAutoUpdate;     // +0x08 (collection+0x10)
+    void*  mKeyA;           // +0x0c (collection+0x14) key instance
+    u8     pad10[4];        // +0x10 (collection+0x18) key type
+    void*  mKeyB;           // +0x14 (collection+0x1c) key group
+    u8     bSerFlags;       // +0x18 (collection+0x20)
+    u8     pad19[0x80 - 0x19];
+    void*  m80;             // +0x80 (collection+0x88)
     u8     pad84[0x85 - 0x84];
-    u8     b85;             // +0x85 (base+0x8d)
-    u8     pad86[0x8c - 0x86];
-    void*  p8c;             // +0x8c (base+0x94) reload callback
-    void*  p90;             // +0x90 (base+0x98) ctx
+    u8     b85;             // +0x85 (collection+0x8d)
+    u8     pad86[0x88 - 0x86];
+    void*  p88;             // +0x88 (collection+0x90) reload layout owner
+    void*  p8c;             // +0x8c (collection+0x94) reload callback
+    void*  p90;             // +0x90 (collection+0x98) ctx
 
     void __thiscall Shutdown();  // 0x8101a0
     void __thiscall OnUnload();  // 0x810270
@@ -560,20 +562,23 @@ void __thiscall cSPUILayoutObjectCollectionV8::OnUnload()
 {
     u8* self = (u8*)this;
     cSPUILayoutObjectCollection_s0080_f7c0* coll = (cSPUILayoutObjectCollection_s0080_f7c0*)(self - 8);
-    if (((u8*)this)[0x18] & 1) {
-        void* svc = *(void**)((u8*)this + 0xc);
+    if (bSerFlags & 1) {
+        void* svc = mService;
         void* au = ((void*(__thiscall*)(void*, unsigned int))VT(svc)[0x10 / 4])(svc, 0x2fbf2058);
-        *(void**)((u8*)this + 0x10) = au;
+        mAutoUpdate = au;
         if (au) {
-            struct { u32 x, y, z; } k = { 0xefbda3ff, 0x050f4731, 0x250fe9a2 };
-            ((VF2v)VT(au)[0x14 / 4])(au, &k, (void*)((u8*)this - 8 + 8));
+            struct { u32 x, y, z; } k0 = { *(u32*)&mKeyA, 0xefbda3ff, *(u32*)&mKeyB };
+            struct { u32 x, y, z; } k1 = { *(u32*)&mKeyA, 0x050f4731, *(u32*)&mKeyB };
+            ((VF2v)VT(au)[0x14 / 4])(au, &k0, (void*)this);
+            au = mAutoUpdate;
+            ((VF2v)VT(au)[0x14 / 4])(au, &k1, (void*)this);
         }
     }
     ResetChildWindowCache_();
     if (p8c) {
         void* fn = p8c;
         void* a1 = p90;
-        void* a2 = *(void**)((u8*)this + 0x80);
+        void* a2 = p88;
         ((void(__cdecl*)(void*, void*, int))fn)(a1, a2, 0);
     }
     coll->detach_parent();
@@ -589,14 +594,13 @@ bool cSPUILayoutObjectCollection::SetVisibility(bool vis)
     }
     void** p = *(void***)(s + 0x64);
     void** e = *(void***)(s + 0x68);
-    u32 cur = *(u32*)(s + 0x88);
     while (p != e) {
         void* o = *p++;
         void* q = ((void*(__thiscall*)(void*, void*))VT(o)[0xc / 4])(o, (void*)0xeeee8218);
         if (!q) continue;
-        u32 g = *(u32*)((u8*)q + 0x10);
-        if (g == cur || g == 0)
-            ((void(__thiscall*)(void*, int, void*))VT(q)[0x7c / 4])(q, 1, (void*)(size_t)vis);
+        void* g = ((VF0)VT(q)[0x10 / 4])(q);
+        if (g == *(void**)(s + 0x88) || g == 0)
+            ((void(__thiscall*)(void*, int, bool))VT(q)[0x7c / 4])(q, 1, vis);
     }
     SPUIHelpers_UpdateMouseFocus_(1);
     s[0x8c] = (u8)vis;
@@ -607,14 +611,13 @@ bool cSPUILayoutObjectCollection::SetVisibility(bool vis)
 void __thiscall cSPUILayoutManager_s0080_f7c0::SetNodeVisibility(void* node, char delta)
 {
     u8* n = (u8*)node;
-    int nv = *(int*)(n + 0xc) + (delta ? 1 : -1);
-    if (nv < 0) nv = 0;
-    if (nv > 1) nv = 1;
+    int nv = *(int*)(n + 0xc) + (delta ? -1 : 1);
+    if (nv <= 0) nv = 0;
     if (nv >= 0 && nv < 2) {
         void* o = *(void**)(n + 8);
         ((void(__thiscall*)(void*, int, int))VT(o)[0x7c / 4])(o, 1, nv == 0);
-        *(int*)(n + 0xc) = nv;
     }
+    *(int*)(n + 0xc) = nv;
 }
 
 // @ 0x00810400
@@ -635,7 +638,8 @@ void __fastcall cEditorResource_dtor(void* thisp)
 // @ 0x00810460
 bool cSPUILayoutResourceFactory::WriteResource(EA::ResourceMan::Resource * a, EA::ResourceMan::Record * b, void * type, unsigned int d)
 {
-    int type_v = (int)type;
+    (void)type;
+    int type_v = (int)d;
     u8 bl = 0;
     if (type_v == 0x250fe9a2) {
         if (!a) return (void*)(size_t)bl;
@@ -735,7 +739,7 @@ void __thiscall cSPUILayoutManager_s0080_f7c0::SetAllWorldsVisibility(bool vis)
     void* anchor = (void*)(s + 0x10);
     void* node = *(void**)(s + 0x14);
     if (node == anchor) return;
-    int delta = vis ? 1 : -1;
+    int delta = vis ? -1 : 1;
     do {
         u8* cur = (u8*)node;
         node = (void*)(size_t)eastl_RBTreeIncrement(node);
@@ -765,7 +769,7 @@ bool __thiscall cSPUILayoutManager_s0080_f7c0::IsWorldVisible(u32 id)
     mTree.find(&it, &id);
     if (it.node == (void*)((u8*)this + 0x10)) return false;
     if ((u8*)it.node + 0x14 == 0) return false;
-    return *(int*)((u8*)it.node + 0x1c + 0xc) == 0;
+    return *(int*)((u8*)it.node + 0x14 + 0xc) == 0;
 }
 
 // @ 0x008107d0

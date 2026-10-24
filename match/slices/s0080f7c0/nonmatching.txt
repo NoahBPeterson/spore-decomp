@@ -1,3 +1,17 @@
+0080f7c0  259  complete; frame shape and this-register allocation differ (retail keeps this in esi with a leading push ebx, ours uses ebx/ebp) and begin/end pointer reloads are scheduled differently; size 259 vs 277. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest WEAK (308 valid, 23.5% coverage).
+0080f920  6  complete; instruction stream identical apart from relocation-operand rendering (external call target and data slot shown as raw immediates instead of resolved symbols). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest WEAK (400 valid, 15.2% coverage).
+0080fa20  107  complete; prologue/register allocation differ (this in ebp+push ebp retail vs edi with the early b34 test hoisted in ours) and the two-branch teardown layout is reordered; size 161 vs 159. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (356 valid, 100.0% coverage).
+0080fac0  319  complete; frame shape (retail sub esp,0x10 with this spilled to [esp+0xc]) and register schedule differ, and the vector push through CountedPtr_00423c40 is ordered differently; size 371 vs 389. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest WEAK (122 valid, 87.9% coverage).
+0080fc50  203  complete; retail spans a 0x10 frame and keeps the default movss in xmm0 before the null test while ours stores it later and uses a different push/register order; size 250 vs 264. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (204 valid, 86.8% coverage).
+0080fd60  142  complete; this kept in edx in retail vs ebx here, operand loads from the Init record are reordered (retail reads [eax+4] first), same call sequence; size 178 vs 168. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (245 valid, 92.5% coverage).
+0080fe10  47  complete; vcall target loaded into eax instead of edx and the mService reload is scheduled after the push, loop tail re-ordered; same call targets. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest WEAK (361 valid, 30.4% coverage).
+00810270  116  complete; prologue allocates ebx/esi in the opposite order (retail tests [ebx+0x18] before lea esi,[ebx-8]) and the key-building sequence is scheduled differently; size 155 vs 160. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest WEAK (187 valid, 55.4% coverage).
+008103a0  70  complete; retail materialises the delta in a stack slot ([esp+0xc]=0, [esp+0x10]=count) and tests it with jg, ours folds the clamp into lea/test with the vcall bracket laid out differently; size 65 vs 86. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (387 valid, 100.0% coverage).
+00810460  158  complete; extra callee-saved push (esi) shifts the arg slots by 4 bytes and the two type-id comparisons are laid out in a different order; same vcall/comparison semantics; size 177 vs 179. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest WEAK (389 valid, 26.4% coverage).
+00810620  54  complete; rbtree find() setup differs in argument staging (retail loads the key pointer into eax and reuses [esp] for the iterator slot) though the anchor address and sret order match; size 58 vs 60. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (377 valid, 79.2% coverage).
+00810660  54  complete; same find() argument staging difference as 00810620 plus a one-instruction difference in the counter store sequence; size 60 vs 64. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (388 valid, 100.0% coverage).
+008106a0  128  complete; frame shape push ecx vs sub esp,8 and the anchor address is formed with lea instead of add ecx,0x10 with the address spilled; loop tail layout differs; size 103 vs 133. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest WEAK (322 valid, 19.2% coverage).
+00810760  61  complete; same find() argument staging difference as 00810620 (key pointer via eax, iterator slot staged at [esp]) with the hidden-counter load scheduled later; size 65 vs 67. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (389 valid, 100.0% coverage).
 0080f8e0  24  complete; begin-pointer reloaded through eax instead of a fresh ecx load
 0080fa00  5   complete; vbase adjustor uses add ecx,0xfffffdb0 (cl canonicalises to sub)
 00810020  20  complete; ctor register allocation (zero in eax, this in esi) differs
@@ -5,6 +19,5 @@
 008100d0  7   complete; derived-vtable store scheduling / pop edi placement differ
 00810140  4   complete; vcall target loaded into eax instead of edx (2 sites)
 00810200  39  complete; vcall target register choice + loop reload differ
-00810310  90  complete; visibility compare/object re-load schedule differs
-008103a0  60  complete; clamped-visibility arithmetic + vcall schedule differ
+00810310  90  complete; visibility compare/object re-load schedule differs; equiv PASS (250 valid, 100% cov)
 00810400  32  complete; dtor release/store ordering differs
