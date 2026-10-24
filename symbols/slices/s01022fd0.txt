@@ -1,0 +1,8 @@
+01022fd0 ?VerifyMission@cCommandMission@nSpaceCheats@SP@@QAEPAXI@Z  # SP::nSpaceCheats::cCommandMission::VerifyMission
+01023030 ?vector_dtor_IntVector@nSpaceCheats@SP@@YGXPAUIntVectorElem@12@0@Z  # eastl::vector<eastl::vector<int>> destructor range
+01023180 ?FUN_01023180@nSpaceCheats@SP@@YGPAULayoutNode@12@PAU312@00@Z  # rbtree map range destroy (returns advanced out)
+010231e0 ?FUN_010231e0@nSpaceCheats@SP@@YGXPAULayoutNode@12@0@Z  # rbtree map range destroy
+01023270 ?FUN_01023270@nSpaceCheats@SP@@YAPAXPAPAX0PAHP6AHPAX2@Z@Z  # comparator partition
+010232f0 ?FUN_010232f0@nSpaceCheats@SP@@YAXPAPAH00P6AHPAX1@Z@Z  # flat-vector insert/erase wrapper
+01023be0 ?Execute@cCommandAri@nSpaceCheats@SP@@UAEXPAVcArguments@ArgScript@EA@@@Z  # SP::nSpaceCheats::cCommandAri::Execute
+010234a0 ?Execute@cCommandToolCheat@nSpaceCheats@SP@@UAEXPAVcArguments@ArgScript@EA@@@Z  # SP::nSpaceCheats::cCommandToolCheat::Execute
