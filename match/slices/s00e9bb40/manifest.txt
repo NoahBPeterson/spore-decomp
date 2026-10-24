@@ -1,1 +1,3 @@
-# no byte-exact functions in this slice (see nonmatching.txt)
+# slice s00e9bb40: the view destructor is byte-exact; the two position queries are logged in
+# nonmatching.txt (complete source, compiler-level codegen differences only).
+slices/s00e9bb40/s00e9bb40.cpp  ??1cSPUFOGfx@SP@@UAE@XZ  00e9c530  /O2 /MD /Gy /TP /arch:SSE /fp:fast

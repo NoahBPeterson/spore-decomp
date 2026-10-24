@@ -1,0 +1,26 @@
+00e9bb40 SP::cSPUFOGfx::CreateHitEffects  # collision drain (existing nonmatching function)
+00e9c530 SP::cSPUFOGfx::~cSPUFOGfx  # base-object destructor: 3 vptrs, hit-effect vector, 16 auto-refs, timer, handler
+00e9c6d0 SP::GetAbductedNounsCenter  # free function: centroid of filtered nouns (inline SpVector<Vector3>)
+00e9c7f0 SP::GetMissionObjectCenter  # free function: centroid of mission-marked objects (eastl vector<Vector3>)
+00e9b8e0 SP::cSPUFOGfx::ClearEffects  # non-virtual cleanup invoked first by the destructor
+0065cd30 eastl::vector::~vector  # storage destructor of the hit-effect vector at +0xc0
+00b638b0 SP::cGonzagoTimer::~cGonzagoTimer
+00e92660 SP::cSpatialObjectView::~cSpatialObjectView  # primary base destructor (tail call)
+00571db0 EA::Messaging::RemoveHandler
+00f47380 EASTL_allocator_deallocate
+004b5ad0 SpVector<Vector3>::DoInsertValue
+004739d0 eastl::vector<Vector3>::push_back
+00c4bdc0 FUN_00c4bdc0  # Vector3 (sret) centroid of a Vector3 range
+00e991b0 FUN_00e991b0  # noun predicate
+00b3d300 SP::NounManager
+00b21340 SP::cGameNounManager::GetGameDataVector
+00f67d90 SP::cGameNounManager::GetCurrentTerrainSphere
+00c5fd60 FUN_00c5fd60  # mission-object table (begin at +0)
+00c772c0 FUN_00c772c0  # terrain-sphere predicate on an event id
+00feb9f0 SP::GetMissionManager
+00fee480 SP::cSPMissionManager::GetMissionByID
+00c44c80 SP::cSPMission::IsActive
+00c5f3d0 FUN_00c5f3d0  # mission -> planet record (first variant)
+00c5f3b0 FUN_00c5f3b0  # mission -> planet record (second variant)
+01021080 SP::GetUniverseContext
+010212a0 SP::GetActivePlanetRecord
