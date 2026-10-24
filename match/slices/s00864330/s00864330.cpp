@@ -129,7 +129,7 @@ extern "C" void FUN_00863b70(u8* dst, u8* src, int width, int pixfmt, int flag);
 // slice-27 helpers
 extern "C" unsigned int __stdcall FUN_00864910(void* p);
 extern "C" int  FUN_00864930(int* param_1, int* param_2);
-extern "C" void FUN_008644f0(u8* src, u8* dst, int count, int mode, int fmt);
+extern "C" u8* FUN_008644f0(u8* src, u8* dst, int count, int mode, int fmt);
 
 // ================================================================ 0x00864330
 // JPG_read: decode a JPEG stream into dst, one output row per line.
@@ -183,7 +183,7 @@ int __stdcall FUN_00864330(int handle, int desc, u8* dst, int stride)
 // Convert one scanline from the GIMEX pixel layout to the layout libjpeg expects
 // (or vice versa).  mode 0/1/2 selects the byte order; fmt+0x18 == 0x20 means 32-bit.
 // @ 0x008644f0
-void FUN_008644f0(u8* param_1, u8* param_2, int param_3, int param_4, int param_5)
+u8* FUN_008644f0(u8* param_1, u8* param_2, int param_3, int param_4, int param_5)
 {
     int iVar1;
     u8* pbVar2;
@@ -203,7 +203,7 @@ void FUN_008644f0(u8* param_1, u8* param_2, int param_3, int param_4, int param_
                     pbVar3 = pbVar3 + 4;
                     param_3 = param_3 + -1;
                 } while (param_3 != 0);
-                return;
+                return param_1;
             }
         }
         else if (0 < param_3) {
@@ -229,7 +229,7 @@ void FUN_008644f0(u8* param_1, u8* param_2, int param_3, int param_4, int param_
                     param_1 = param_1 + 4;
                     param_3 = param_3 + -1;
                 } while (param_3 != 0);
-                return;
+                return param_1;
             }
         }
         else {
@@ -239,7 +239,7 @@ void FUN_008644f0(u8* param_1, u8* param_2, int param_3, int param_4, int param_
                     param_2[iVar1] = *(u8*)(param_5 + 0x29 + (u32)param_1[iVar1] * 4);
                     iVar1 = iVar1 + 1;
                 } while (iVar1 < param_3);
-                return;
+                return param_1;
             }
         }
     }
@@ -256,7 +256,7 @@ void FUN_008644f0(u8* param_1, u8* param_2, int param_3, int param_4, int param_
                     param_1 = param_1 + 4;
                     param_3 = param_3 + -1;
                 } while (param_3 != 0);
-                return;
+                return param_1;
             }
         }
         else if (0 < param_3) {
@@ -269,10 +269,10 @@ void FUN_008644f0(u8* param_1, u8* param_2, int param_3, int param_4, int param_
                 param_1 = param_1 + 1;
                 param_3 = param_3 + -1;
             } while (param_3 != 0);
-            return;
+            return param_1;
         }
     }
-    return;
+    return param_1;
 }
 
 // ================================================================ 0x00864680
@@ -444,16 +444,26 @@ extern "C" void FUN_00864a20(struct jpeg_decompress_struct* cinfo)
     total_colors = FUN_00864930((int*)cinfo, cquantize->Ncolors);
 
     /* Report selected color counts */
-    if (cinfo->out_color_components == 3)
-        TRACEMS4(cinfo, 1, 0x5d,
-                 total_colors, cquantize->Ncolors[0],
-                 cquantize->Ncolors[1], cquantize->Ncolors[2]);
-    else
-        TRACEMS1(cinfo, 1, 0x5e, total_colors);
+    void* report_this;
+    if (cinfo->out_color_components == 3) {
+        cinfo->err->msg_parm.i[0] = total_colors;
+        cinfo->err->msg_parm.i[1] = cquantize->Ncolors[0];
+        cinfo->err->msg_parm.i[2] = cquantize->Ncolors[1];
+        cinfo->err->msg_parm.i[3] = cquantize->Ncolors[2];
+        cinfo->err->msg_code = 0x5d;
+        report_this = (void*)cinfo->err->emit_message;
+    } else {
+        cinfo->err->msg_code = 0x5e;
+        cinfo->err->msg_parm.i[0] = total_colors;
+        report_this = (void*)cinfo->err;
+    }
+    ((void (__fastcall*)(void*, void*))cinfo->err->emit_message)
+        (report_this, (void*)cinfo);
 
     /* Allocate and fill in the colormap. */
-    colormap = (unsigned char**)(*cinfo->mem->alloc_sarray)
-        ((void*)cinfo, JPOOL_IMAGE,
+    colormap = (unsigned char**)((void* (__thiscall*)(void*, void*, int, unsigned, unsigned))
+        cinfo->mem->alloc_sarray)
+        ((void*)(size_t)cinfo->out_color_components, (void*)cinfo, JPOOL_IMAGE,
          (unsigned)total_colors, (unsigned)cinfo->out_color_components);
 
     blkdist = total_colors;
