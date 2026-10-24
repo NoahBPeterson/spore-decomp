@@ -1,6 +1,7 @@
 // slice s007fd840 — UTFWin behavior action/event region. Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include <cstddef>
 #include <math.h>
+#include <intrin.h>
 #include "types.h"
 
 inline void* VCallR(void* o, int off) {
@@ -23,6 +24,21 @@ inline void VCallI1(void* o, int off, int a) {
 }
 inline float VCallF(void* o, int off) {
     return ((float(__thiscall*)(void*))(*(void**)((char*)*(void**)o + off)))(o);
+}
+inline float VCallFI(void* o, int off, int a) {
+    return ((float(__thiscall*)(void*, int))(*(void**)((char*)*(void**)o + off)))(o, a);
+}
+inline void VCallF1(void* o, int off, float a) {
+    ((void(__thiscall*)(void*, float))(*(void**)((char*)*(void**)o + off)))(o, a);
+}
+inline void VCallF2(void* o, int off, float a, int b) {
+    ((void(__thiscall*)(void*, float, int))(*(void**)((char*)*(void**)o + off)))(o, a, b);
+}
+inline void VCallI2(void* o, int off, int a, int b) {
+    ((void(__thiscall*)(void*, int, int))(*(void**)((char*)*(void**)o + off)))(o, a, b);
+}
+inline void* VCallR1(void* o, int off, int a) {
+    return ((void*(__thiscall*)(void*, int))(*(void**)((char*)*(void**)o + off)))(o, a);
 }
 
 struct IObj {
@@ -79,14 +95,28 @@ void  FUN_007fbb20(void*);
 void  FUN_007fbbc0(void*);
 void  FUN_007fc200(void*);
 
+// EA::StdC::Stopwatch (0x0093a560 ctor, 0x0093a3a0 elapsed read).  Layout taken
+// from the retail: a start tick, the accumulated elapsed ticks, the units the
+// ticks are in and a scaling coefficient.
 struct Stopwatch {
-    int lo, hi, a, b, mode;
-    void Init(int, int);
-    float GetElapsed();
+    unsigned __int64 mnStartTime;         // +0x00
+    unsigned __int64 mnTotalElapsedTime;  // +0x08
+    int   mnUnits;                        // +0x10
+    float mfCoefficient;                  // +0x14
+    void Init(int a, int b);              // 0x93a560 (ctor; args units, start)
+    long long GetElapsed();               // 0x93a3a0 (tick count in edx:eax)
 };
-struct Li { int lo; int hi; };
+union Li { int Parts[2]; unsigned __int64 Quad; };
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(Li*);
-unsigned __int64 __rdtsc();
+
+// Out-of-line callees declared as methods so they keep the retail ABI
+// (ECX = object, remaining arguments on the stack).
+struct TC_7fb3b0 { bool FUN_007fb3b0(int v); };              // 0x007fb3b0 base SetEnabled gate
+struct TC_7fd200 { void FUN_007fd200(unsigned f, int on); };  // 0x007fd200 flag setter
+struct TC_7fb480 { bool FUN_007fb480(int v); };              // 0x007fb480
+struct TC_7fa1d0 { void FUN_007fa1d0(); };                   // 0x007fa1d0 cSPUIBehaviorEventBase::SerUpdate
+struct TC_b5f950 { void FUN_b5f950(void* p); };              // 0x00b5f950 AutoRefCount<T>::operator=
+void* FUN_005ca960(void* o);                                 // 0x005ca960 COM interface_cast<IWinButton_,IWindow>
 
 // ===========================================================================
 // DampedPeriodic overrides (slots 24/25 of the time-function vtable).
@@ -205,27 +235,59 @@ bool SerLoadVector(SerBuffer* p, void* self, SerItem14* item) {
 
 // @ 0x007fe690
 bool SerLoadVector2(SerBuffer* p, void* self, SerItem14* item) {
-    return SerLoadVector(p, self, item);
+    IObj** src = *(IObj***)((char*)self + 4);
+    IObj** dst = (IObj**)(*(int*)((char*)p + 4) + *(int*)((char*)item + 0x10));
+    for (unsigned i = 0; i < item->count; i++) {
+        void* created = 0;
+        if (*dst) VCallV(*dst, 4);
+        if (*src) {
+            created = VCallR1(*src, 0xc, 0x243c076);
+            if (created) VCallV(created, 0);
+        }
+        *dst = (IObj*)created;
+        ++dst;
+        ++src;
+    }
+    return true;
 }
 
 // ===========================================================================
 // cSPUIBehaviorActionWinInterpolator (this = ActionBase subobject + 0?)
 // ===========================================================================
+// HandleMessage is entered on the sub-object whose vtable the constructor
+// installs at primary+0x0c, so the fields it touches sit 0x0c below the primary
+// object's.  The ctor / SetEnabled / DeletingDtor run on the primary object
+// instead (Interp0 below).
 struct Interp {
     char  pad0[0xc];
-    void* mpEvent;
+    void* mpEvent;           // +0x0c
     char  pad10[0x20];
-    void* mpTimeFunction;   // +0x30
-    void* mpValueInterp;    // +0x34
-    float mLastTime;        // +0x38
-    Stopwatch mStopwatch;   // +0x3c
-    char  pad4c[0x14];
+    void* mpTimeFunction;    // +0x30  (primary + 0x3c)
+    void* mpValueInterp;     // +0x34  (primary + 0x40)
+    float mLastTime;         // +0x38  (primary + 0x44)
+    Stopwatch mStopwatch;    // +0x3c  (primary + 0x48)
+    int   pad54[4];          // +0x54..0x63
     Interp();
     void* DeletingDtor(unsigned char flags);
     bool HandleMessage(int msg, void* arg);   // @ 0x007fdbc0
     char SetEnabled(int v);                   // @ 0x007fdd10
     void SetTimeFunction(IObj* p);            // @ 0x007fdb60
     void SetValueInterp(IObj* p);             // @ 0x007fdb90
+};
+
+// The primary object: starts on the root vtable and is what the constructor,
+// SetEnabled and DeletingDtor receive in ECX.
+struct Interp0 {
+    void*    mVtbl0;         // 0x00
+    void*    mVtbl4;         // 0x04
+    unsigned m08;            // 0x08
+    void*    mVtblC;         // 0x0c
+    unsigned m10, m14, m18, m1c, m20, m24, m28, m2c, m30, m34;  // 0x10..0x37
+    void*    mpOwnerWin;     // 0x38  borrowed owner/window (queried through vt[0x44])
+    void*    mpTimeFunction; // 0x3c
+    void*    mpValueInterp;  // 0x40
+    float    mLastTime;      // 0x44
+    Stopwatch mStopwatch;    // 0x48  (0x18 bytes, coefficient at 0x5c)
 };
 
 // @ 0x007fdb60
@@ -250,33 +312,42 @@ void Interp::SetValueInterp(IObj* np) {
 
 // @ 0x007fdbc0
 bool Interp::HandleMessage(int msg, void* arg) {
-    AB* b = (AB*)this;
-    b->HandleMessageBase(msg, arg);
-    void* tf = *(void**)((char*)this + 0x30);
-    void* vi = *(void**)((char*)this + 0x34);
+    // ECX is the sub-object the constructor put its vtable on at primary+0x0c;
+    // the primary object (owner of the root vtable) sits 0x0c bytes below.
+    void* primary = (char*)this - 0x0c;
+    ((AB*)this)->HandleMessageBase(msg, arg);
     if (msg == 0xc) {
-        if (tf && vi) {
-            float el = mStopwatch.GetElapsed() * *(float*)((char*)this + 0x50) - mLastTime;
-            VCallI1(tf, 0x2c, *(int*)&el);
-            float v = VCallF(tf, 0x18);
-            VCall1(vi, 0x18, *(void**)&v);
-            mLastTime = el;
-            if (!VCallB(tf, 0x3c))
-                goto done;
+        if (mpTimeFunction == 0 || mpValueInterp == 0)
+            goto invalidate;
+        {
+            long long el = mStopwatch.GetElapsed();
+            float t = (float)el * mStopwatch.mfCoefficient;
+            VCallF1(mpTimeFunction, 0x2c, t - mLastTime);
+            float v = VCallF(mpTimeFunction, 0x18);
+            VCallF2(mpValueInterp, 0x18, v, 0);
+            mLastTime = t;
+            if (VCallB(mpTimeFunction, 0x3c) != 0)
+                goto invalidate;
         }
-        ((bool(__thiscall*)(void*, int))(*(void**)((char*)*(void**)this - 0xc + 0x1c)))((char*)this - 0xc, 0);
+        goto done;
+    invalidate:
+        VCallI1(primary, 0x1c, 0);
     } else if (msg == 0x15) {
-        if (tf && vi) {
+        if (mpTimeFunction == 0 || mpValueInterp == 0)
+            goto done;
+        {
             int u = *(int*)(*(int*)((char*)arg + 0x18) + 0x18);
-            float v = VCallF(tf, 0x18);
-            VCall1(vi, 0x18, *(void**)&v);
+            float v = VCallFI(mpTimeFunction, 0x18, u);
+            VCallF1(mpValueInterp, 0x18, v);
         }
-    } else if (msg == 0x24f6efa && tf) {
-        VCallI1(tf, 0x30, *(int*)((char*)arg + 0x10) == 0);
-        if (!((bool(__thiscall*)(void*, int))(*(void**)((char*)*(void**)this - 0xc + 0x18)))((char*)this - 0xc, 0)) {
-            float v = VCallF(tf, 0x18);
-            VCall1(vi, 0x18, *(void**)&v);
-        }
+    } else if (msg == 0x24f6efa) {
+        if (mpTimeFunction == 0)
+            goto done;
+        VCallI1(mpTimeFunction, 0x30, *(int*)((char*)arg + 0x10) == 0);
+        if (VCallB(primary, 0x18) != 0)
+            goto done;
+        float v = VCallFI(mpTimeFunction, 0x18, 0);
+        VCallF1(mpValueInterp, 0x18, v);
     }
 done:
     return false;
@@ -284,55 +355,48 @@ done:
 
 // @ 0x007fdd10
 char Interp::SetEnabled(int v) {
+    Interp0* o = (Interp0*)this;
     char before = VCallB(this, 0x18);
-    char ok = ((char(__thiscall*)(void*, int))(*(void**)((char*)*(void**)this + 0x0))) ? 1 : 0;
-    ok = ((char(__thiscall*)(void*, int))0, 0);
-    // FUN_007fb3b0
-    char r = 0;
-    if (r) {
-        void* tf = *(void**)((char*)this + 0x30);
-        void* vi = *(void**)((char*)this + 0x34);
-        if (tf && vi) {
-            int q = VCallI(vi, 0x44);
-            VCallI1(tf, 0x30, q == 0);
-        }
-        if (before == 0) {
-            before = VCallB(this, 0x18);
-            if (before) {
-                if (tf) VCallV(tf, 0x24);
-                float el = mStopwatch.GetElapsed() * *(float*)((char*)this + 0x5c);
-                *(float*)((char*)this + 0x44) = el;
-            }
+    char ok = ((TC_7fb3b0*)this)->FUN_007fb3b0(v);
+    if (ok == 0)
+        return 0;
+    if (o->mpTimeFunction != 0 && o->mpOwnerWin != 0) {
+        int q = VCallI(o->mpOwnerWin, 0x44);
+        VCallI1(o->mpTimeFunction, 0x30, q == 0);
+    }
+    if (before == 0) {
+        if (VCallB(this, 0x18) != 0) {
+            if (o->mpTimeFunction != 0)
+                VCallV(o->mpTimeFunction, 0x24);
+            long long el = o->mStopwatch.GetElapsed();
+            o->mLastTime = (float)el * o->mStopwatch.mfCoefficient;
         }
     }
-    return r;
+    return ok;
 }
 
 // @ 0x007fdab0
 Interp::Interp() {
+    Interp0* o = (Interp0*)this;
     ((AB*)this)->Ctor();
-    void* tf = 0, *vi = 0;
-    *(void**)((char*)this + 0x3c) = tf;
-    *(void**)((char*)this + 0x40) = vi;
-    *(float*)((char*)this + 0x44) = 0.0f;
-    mStopwatch.Init(5, 0);
-    void* vt = *(void**)((char*)this);
-    (void)vt;
-    // SetFlag(0x80,true) and SetFlag(0x100,true)
-    (void)0;
-    if (mStopwatch.mode == 1) {
-        unsigned __int64 t = __rdtsc();
-        mStopwatch.lo = (int)t;
-        mStopwatch.hi = (int)(t >> 32);
-        mStopwatch.a = 0;
-        mStopwatch.b = 0;
+    Stopwatch* sw = &o->mStopwatch;
+    o->mVtbl0 = (void*)0x1415f18;
+    o->mVtbl4 = (void*)0x1415f08;
+    o->mVtblC = (void*)0x1415ef8;
+    o->mpTimeFunction = 0;
+    o->mpValueInterp = 0;
+    o->mLastTime = 0.0f;
+    sw->Init(5, 0);
+    ((TC_7fd200*)this)->FUN_007fd200(0x80, 1);
+    ((TC_7fd200*)this)->FUN_007fd200(0x100, 1);
+    if (sw->mnUnits == 1) {
+        sw->mnStartTime = __rdtsc();
+        sw->mnTotalElapsedTime = 0;
     } else {
         Li li;
         QueryPerformanceCounter(&li);
-        mStopwatch.lo = li.lo;
-        mStopwatch.hi = li.hi;
-        mStopwatch.a = 0;
-        mStopwatch.b = 0;
+        sw->mnTotalElapsedTime = 0;
+        sw->mnStartTime = li.Quad;
     }
 }
 
@@ -357,10 +421,13 @@ struct State {
 State::State() {
     ((AB*)this)->Ctor();
     *(void**)((char*)this + 0x3c) = 0;
+    *(void**)((char*)this + 0x00) = (void*)0x1415fe8;
+    *(void**)((char*)this + 0x04) = (void*)0x1415fd4;
+    *(void**)((char*)this + 0x0c) = (void*)0x1415fc4;
     *(void**)((char*)this + 0x40) = 0;
+    *(void**)((char*)this + 0x4c) = 0;
     *(int*)((char*)this + 0x44) = 0x7fffffff;
     *(int*)((char*)this + 0x48) = 0x7fffffff;
-    *(void**)((char*)this + 0x4c) = 0;
 }
 
 // @ 0x007fe0e0
@@ -378,70 +445,164 @@ void State::SetWindow(IObj* np) {
 // @ 0x007fe130
 int State::Refresh() {
     void** slot = (void**)((char*)this + 0x40);
-    if (*slot && (VCallI(*slot, 0x10) == 0 ||
-        (*(int*)((char*)this + 0x44) != 0x7fffffff && VCallI(*slot, 0x1c) != *(int*)((char*)this + 0x44)))) {
-        void* p = *slot;
-        if (p) { *slot = 0; VCallV(p, 4); }
+    if (*slot != 0) {
+        if (VCallI(*slot, 0x10) == 0 ||
+            (*(int*)((char*)this + 0x44) != 0x7fffffff &&
+             VCallI(*slot, 0x1c) != *(int*)((char*)this + 0x44))) {
+            void* p = *slot;
+            if (p != 0) {
+                *slot = 0;
+                VCallV(p, 4);
+            }
+        }
     }
-    if (*slot == 0) {
-        if (*(int*)((char*)this + 0x4c) == 3) {
+    if (*slot != 0)
+        goto done;
+    {
+        unsigned kind = *(unsigned*)((char*)this + 0x4c);
+        if (kind == 3) {
             void* w = *(void**)((char*)this + 0x38);
             void* np = w ? VCallR(w, 0x58) : 0;
-            if (np != *slot) {
+            void* old = *slot;
+            if (np != old) {
                 if (np) VCallV(np, 0);
-                void* op = *slot;
                 *slot = np;
-                if (op) VCallV(op, 4);
+                if (old) VCallV(old, 4);
             }
-            if (VCallI(*slot, 0x10) == 0) {
+            if (VCallI(*slot, 0x10) != 0)
+                goto done;
+            if (*slot != 0) {
                 void* p = *slot;
-                if (p) { *slot = 0; VCallV(p, 4); }
+                *slot = 0;
+                VCallV(p, 4);
             }
         } else if (*(int*)((char*)this + 0x44) == 0x7fffffff) {
             void* w = *(void**)((char*)this + 0x38);
-            if (w) {
+            if (w != 0) {
                 void* np = VCallR(w, 0x1c);
-                if (np && VCallI(np, 0x10) != 0 && np != *slot) {
-                    if (np) VCallV(np, 0);
-                    void* op = *slot;
-                    *slot = np;
-                    if (op) VCallV(op, 4);
+                if (np != 0 && VCallI(np, 0x10) != 0)
+                    ((TC_b5f950*)((char*)this + 0x40))->FUN_b5f950(np);
+            }
+        } else if (kind == 0) {
+            void* w = *(void**)((char*)this + 0x38);
+            if (VCallR(w, 0x1c) != 0) {
+                void* e = VCallR(VCallR(w, 0x1c), 0x14);
+                if (e != 0 && VCallI(e, 4) != 0) {
+                    void* r = VCallR(e, 4);
+                    void* v = ((void*(__thiscall*)(void*, int, int))
+                               (*(void**)((char*)*(void**)r + 0xf0)))(r, *(int*)((char*)this + 0x44), 1);
+                    ((TC_b5f950*)((char*)this + 0x40))->FUN_b5f950(v);
                 }
             }
-        } else {
+        } else if (kind == 1) {
             void* w = *(void**)((char*)this + 0x38);
-            if (w) {
-                unsigned id = (unsigned)VCallR(w, 0x1c);
-                if (id == *(unsigned*)((char*)this + 0x44) && *slot == 0) {
-                    void* np = VCallR(w, 0x58);
-                    *slot = np;
+            if (w != 0) {
+                void* np = VCallR(w, 0x1c);
+                if (np != 0) {
+                    void* it = VCallR(np, 0x10);
+                    while (it != 0) {
+                        if (*slot != 0)
+                            goto done;
+                        if (VCallI(it, 0x1c) == *(int*)((char*)this + 0x44))
+                            ((TC_b5f950*)((char*)this + 0x40))->FUN_b5f950(it);
+                        it = VCallR(it, 0x10);
+                    }
+                }
+            }
+        } else if (kind == 2) {
+            void* w = *(void**)((char*)this + 0x38);
+            if (w != 0) {
+                void* r = VCallR(w, 0x1c);
+                if (r != 0) {
+                    void* v = ((void*(__thiscall*)(void*, int, int))
+                               (*(void**)((char*)*(void**)r + 0xf0)))(r, *(int*)((char*)this + 0x44), 1);
+                    ((TC_b5f950*)((char*)this + 0x40))->FUN_b5f950(v);
                 }
             }
         }
     }
+done:
     return (int)(intptr_t)*slot;
 }
 
 // @ 0x007fe3f0
 bool State::Activate(int v) {
     char before = VCallB(this, 0x18);
-    char ok = 1;
-    (void)ok;
-    if (!v) return true;   // reconstruction of the set-enabled gate
-    if (before) return true;
-    before = VCallB(this, 0x18);
-    if (!before) return true;
-    int* tgt = (int*)Refresh();
-    if (!tgt) return true;
+    char ok = ((TC_7fb3b0*)this)->FUN_007fb3b0(v);
+    if (ok == 0)
+        return true;
+    if (before != 0)
+        return true;
+    if (VCallB(this, 0x18) == 0)
+        return true;
+    void* tgt = (void*)(intptr_t)Refresh();
+    if (tgt == 0)
+        goto def;
     switch (*(unsigned*)((char*)this + 0x3c)) {
-    case 0: VCallI1(tgt, 0x7c, 1); break;
-    case 1: VCallI1(tgt, 0x7c, 0); break;
-    case 2: VCallI1(tgt, 0x7c, 2); break;
-    case 3: VCallI1(tgt, 0x7c, 4); break;
-    case 4: VCallI1(tgt, 0x7c, 0x10); break;
-    case 5: VCallI1(tgt, 0x7c, 0); break;
-    default: break;
+    case 0:  VCallI2(tgt, 0x7c, 1, 1);      break;
+    case 1:  VCallI2(tgt, 0x7c, 1, 0);      break;
+    case 2:  VCallI2(tgt, 0x7c, 2, 1);      break;
+    case 3:  VCallI2(tgt, 0x7c, 2, 0);      break;
+    case 4:  VCallI2(tgt, 0x7c, 0x10, 1);   break;
+    case 5:  VCallI2(tgt, 0x7c, 0x10, 0);   break;
+    case 6:  VCallI2(tgt, 0x7c, 0x1000, 1); break;
+    case 7:  VCallI2(tgt, 0x7c, 0x1000, 0); break;
+    case 8:
+    case 9: {
+        void* btn = FUN_005ca960(tgt);
+        if (btn == 0 || VCallI(btn, 0x18) == 1)
+            goto def;
+        VCallI2(btn, 0x28, 4, *(unsigned*)((char*)this + 0x3c) == 8);
+        VCallV(tgt, 0x90);
+        break;
     }
+    case 10:
+    case 11: {
+        void* btn = FUN_005ca960(tgt);
+        if (btn == 0)
+            goto def;
+        VCallI2(btn, 0x28, 8, *(unsigned*)((char*)this + 0x3c) == 10);
+        VCallV(tgt, 0x90);
+        break;
+    }
+    case 12:
+    case 13: {
+        void* btn = FUN_005ca960(tgt);
+        if (btn == 0)
+            goto def;
+        VCallI2(btn, 0x28, 2, *(unsigned*)((char*)this + 0x3c) == 0xc);
+        VCallV(tgt, 0x90);
+        break;
+    }
+    case 0xe:
+        VCallI1(tgt, 0x5c, *(int*)((char*)this + 0x48));
+        VCallV(tgt, 0x90);
+        break;
+    case 0xf:
+        VCallI1(tgt, 0xac, *(int*)((char*)this + 0x48));
+        VCallV(tgt, 0x90);
+        break;
+    case 0x10:
+        VCallV(tgt, 0x90);
+        break;
+    case 0x11:
+        VCallV(tgt, 0x98);
+        break;
+    case 0x12:
+    case 0x13: {
+        void* r = VCallR(tgt, 0x14);
+        int arg = (*(unsigned*)((char*)this + 0x3c) != 0x12) - 1;
+        arg &= (int)(intptr_t)tgt;
+        VCallI2(r, 0x58, 1, arg);
+        break;
+    }
+    default:
+        goto def;
+    }
+    ((TC_7fb3b0*)this)->FUN_007fb3b0(0);
+    return true;
+def:
+    ((TC_7fb3b0*)this)->FUN_007fb3b0(0);
     return true;
 }
 
@@ -486,6 +647,7 @@ struct WinEvent {
     bool IsWinState(unsigned v);     // 0x007fead0
     void* DeletingDtor(unsigned char flags);
     bool IsThisType();               // @ 0x007fe7a0
+    void SerUpdateWin();             // @ 0x007feb70
     void SetWinMessageType(unsigned t);
     void SetMessageWinId(unsigned id);
 };
@@ -553,27 +715,27 @@ void WinEvent::SetMessageWinId(unsigned id) {
 }
 
 // @ 0x007feb70
-void SerUpdateWin(void* self) {
-    ((EvBase*)self)->SetValue(0); // placeholder: real base SerUpdate
-    unsigned u = *(unsigned*)((char*)self + 0x80);
-    void* s = EA_Messaging_GetServer();
-    if (s && *(char*)((char*)self + 0x7c)) {
-        ((void(__thiscall*)(void*, void*, unsigned, int))(*(void**)((char*)*(void**)s + 0x2c)))(s, (char*)self + 0x10, u, -9999);
-        *(char*)((char*)self + 0x7c) = 0;
+void WinEvent::SerUpdateWin() {
+    ((TC_7fa1d0*)this)->FUN_007fa1d0();
+    unsigned u = *(unsigned*)((char*)this + 0x80);
+    Svr* s = (Svr*)EA_Messaging_GetServer();
+    if (s != 0 && *(char*)((char*)this + 0x7c) != 0) {
+        s->v11((char*)this + 0x10, u, -9999);
+        *(char*)((char*)this + 0x7c) = 0;
     }
-    u = *(unsigned*)((char*)self + 0x80);
-    s = EA_Messaging_GetServer();
-    if (s && !*(char*)((char*)self + 0x7c)) {
-        void* w = *(void**)((char*)self + 0x14);
-        if (w) {
+    u = *(unsigned*)((char*)this + 0x80);
+    s = (Svr*)EA_Messaging_GetServer();
+    if (s != 0 && *(char*)((char*)this + 0x7c) == 0) {
+        void* w = *(void**)((char*)this + 0x14);
+        if (w != 0) {
             unsigned q = (unsigned)(intptr_t)VCallR(w, 0x1c);
-            if (!((WinEvent*)self)->IsWinState(q)) {
-                ((void(__thiscall*)(void*, void*, unsigned))(*(void**)((char*)*(void**)s + 0x20)))(s, (char*)self + 0x10, u);
-                *(char*)((char*)self + 0x7c) = 1;
+            if (!IsWinState(q)) {
+                s->v8((char*)this + 0x10, u);
+                *(char*)((char*)this + 0x7c) = 1;
             }
         }
     }
-    VCallV((char*)self + 0x18, 0x3c);
+    VCallI1((char*)this + 0x18, 0x3c, 0);
 }
 
 // ===========================================================================
@@ -694,6 +856,7 @@ bool CopyThing(void* self) {
 
 struct BoolEvent {
     bool Pred(char a, char b);
+    void Activate(int v);            // @ 0x007fe8c0
 };
 
 // @ 0x007fe7d0
@@ -714,21 +877,22 @@ bool BoolEvent::Pred(char a, char b) {
 }
 
 // @ 0x007fe8c0
-void BoolActivate(void* self, int v) {
-    if ((char)v == 0 && *(int*)((char*)self + 0x68) == 0x25a61c5) {
+void BoolEvent::Activate(int v) {
+    if ((char)v == 0 && *(int*)((char*)this + 0x68) == 0x25a61c5) {
         int counter = -1;
-        if (FUN_007fa520((char*)self + 0x18, 4, &counter)) {
+        if (FUN_007fa520((char*)this + 4, 4, &counter)) {
             int arg;
-            switch (*(unsigned*)((char*)self + 0x68)) {
-            case 0: case 2: arg = 1; break;
+            switch (*(unsigned*)((char*)this + 0x74)) {
+            case 0:
+            case 2: arg = 1; break;
             case 3: arg = 0; break;
             default: goto done;
             }
-            VCallI1(*(void**)((char*)self + 0x10), 0x48, arg);
+            VCallI1(this, 0x48, arg);
         }
     }
 done:
-    FUN_007fb480(self, v);
+    ((TC_7fb480*)this)->FUN_007fb480(v);
 }
 
 // @ 0x007fe330

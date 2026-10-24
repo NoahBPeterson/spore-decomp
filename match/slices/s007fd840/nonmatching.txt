@@ -12,3 +12,11 @@
 007feb40 35 complete; SerRead secondary-base flavour; vcall base offset differs
 007fec00 27 complete; SetWinMessageType; message-manager vcall schedule differs
 007fec90 27 complete; SetMessageWinId; message-manager vcall schedule differs
+007fdab0 4 complete; Interp ctor; Stopwatch/QPC reset; 64-bit elapsed reset stores its halves high-then-low (retail low-then-high); equiv: PASS (400 valid, 80.0% coverage)
+007fdbc0 297 complete; Interp HandleMessage; message guards follow the base call, per-branch lazy field loads; register schedule differs (size 310 vs 299); equiv: PASS (399 valid, 60.9% coverage)
+007fdd10 134 complete; Interp SetEnabled; base gate + owner coefficient arm differ only in schedule (size 159 vs 160); equiv: UNSUPPORTED (0/400 valid; the retail itself faults on every generated input)
+007fe070 25 complete; State ctor; multi-base vtable store order differs; equiv: PASS (400 valid, 100.0% coverage)
+007fe130 388 complete; State::Refresh; selector resolution arms schedule differs (size 471 vs 497); equiv: WEAK (355 valid, 56.6% coverage)
+007fe3f0 192 complete; State::Activate; switch arms and COM interface casts differ only in schedule (size 664 vs 668); equiv: UNSUPPORTED (0/400 valid; the retail itself faults on every generated input)
+007fe8c0 44 complete; BoolStateEvent::Activate; predicate switch became a compare chain (size 100 vs 112); equiv: WEAK (287 valid, 40.0% coverage)
+007feb70 30 complete; cSPUIBehaviorWinEventBase::SerUpdate; messaging register/unregister arm schedule differs; equiv: WEAK (226 valid, 41.8% coverage)
