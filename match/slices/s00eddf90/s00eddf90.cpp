@@ -13,8 +13,8 @@ void  __cdecl FUN_00edcf60(void*);            // 0xedcf60
 void* __cdecl FUN_00edd240(void*, int, int);  // 0xedd240
 void  __cdecl SPUIHelpers_SetWindowImage(void*, void*); // 0x807bb0
 void  __cdecl FUN_00571db0(int,int,int,int,int);
-void  __cdecl FUN_00f45a80(void);
-void  __cdecl FUN_00f3c0b0(void);
+void  __fastcall FUN_00f45a80(void* mgr); // 0xf45a80
+void  __fastcall FUN_00f3c0b0(void* mgr); // 0xf3c0b0
 extern char* g_16c7aa4;
 void* __fastcall FUN_00ed85e0(void*);
 void  __fastcall FUN_00ed8610(void*);
@@ -52,56 +52,202 @@ int __cdecl FUN_00ede110(int a, int b, int c)
     return 0;
 }
 
-// ================================================================ setters
-#define DEF_SETTER(NAME, OFF)                                                    \
-int __cdecl NAME(int p1, int p2, float v)                                        \
-{                                                                                \
-    char* s = (char*)p1;                                                          \
-    float fv = *(float*)(p2 + OFF);                                               \
-    if (*(s + 0x20) == 0) {                                                       \
-        if (v != fv) { FUN_00f45a80(); return 1; }                                \
-        FUN_00f3c0b0(); return 0;                                                 \
-    }                                                                             \
-    int n = (*(int*)(s + 0x74) - *(int*)(s + 0x70)) / 0x4e0;                       \
-    char* e = (char*)(*(int*)(s + 0x70) + OFF);                                    \
-    int i = 0;                                                                    \
-    for (; i < n; i++, e += 0x4e0) if (*(float*)e != v) break;                     \
-    if (i == n && v == fv) { FUN_00f3c0b0(); return 0; }                          \
-    int m = (*(int*)(s + 0x74) - *(int*)(s + 0x70)) / 0x4e0;                       \
-    int j = 0, k = 0;                                                             \
-    for (; j < m; j++, k += 0x4e0) *(float*)(*(int*)(s + 0x70) + k + OFF) = fv;    \
-    FUN_00f45a80(); return 1;                                                      \
+// ================================================================ creature-field setters
+// Six copies of the same setter (one float field at a fixed offset inside each 0x4e0-byte fragment);
+// FUN_00ede2b0 (0x48c) additionally copies two flag bytes out of the incoming struct.
+// Shape notes (0xede400 family): the original keeps its status byte in bl, sets it right before the
+// notify/kill call of each arm and shares one kill block between the short and the main arm; every
+// count expression is recomputed per iteration.
+#define MGR (*(void**)(g_16c7aa4 + 0x74))
+#define FIELD_COUNT(s) ((*(volatile int*)((s) + 0x74) - *(volatile int*)((s) + 0x70)) / 0x4e0)
+#define DEF_FRAG(NAME, OFF) \
+    struct NAME { char pad0[OFF]; float f; char pad1[0x4e0 - OFF - 4]; };
+
+DEF_FRAG(Frag484, 0x484)
+DEF_FRAG(Frag4a0, 0x4a0)
+DEF_FRAG(Frag49c, 0x49c)
+DEF_FRAG(Frag498, 0x498)
+DEF_FRAG(Frag490, 0x490)
+DEF_FRAG(Frag494, 0x494)
+DEF_FRAG(Frag48c, 0x48c)
+
+// @ 0x00ede400
+bool __cdecl FUN_00ede400(int p1, int p2, float v)
+{
+    char* s = (char*)p1;
+    float fv = *(float*)(p2 + 0x484);
+    char r;
+    int i;
+    Frag484* e;
+    if (*(s + 0x20) != 0) {
+        for (i = 0, e = (Frag484*)*(int*)(s + 0x70); i < FIELD_COUNT(s); i++, e++)
+            if (e->f != v) goto store;
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else {
+          store:
+            r = 1;
+            for (i = 0; i < FIELD_COUNT(s); i++) ((Frag484*)*(int*)(s + 0x70))[i].f = fv;
+            FUN_00f45a80(MGR);
+        }
+    } else {
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else { r = 1; FUN_00f45a80(MGR); }
+    }
+    return r;
 }
 
-DEF_SETTER(FUN_00ede400, 0x484)
-DEF_SETTER(FUN_00ede530, 0x4a0)
-DEF_SETTER(FUN_00ede660, 0x49c)
-DEF_SETTER(FUN_00ede790, 0x498)
-DEF_SETTER(FUN_00ede8c0, 0x490)
-DEF_SETTER(FUN_00ede9f0, 0x494)
+// @ 0x00ede530
+bool __cdecl FUN_00ede530(int p1, int p2, float v)
+{
+    char* s = (char*)p1;
+    float fv = *(float*)(p2 + 0x4a0);
+    char r;
+    int i;
+    Frag4a0* e;
+    if (*(s + 0x20) != 0) {
+        for (i = 0, e = (Frag4a0*)*(int*)(s + 0x70); i < FIELD_COUNT(s); i++, e++)
+            if (e->f != v) goto store;
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else {
+          store:
+            r = 1;
+            for (i = 0; i < FIELD_COUNT(s); i++) ((Frag4a0*)*(int*)(s + 0x70))[i].f = fv;
+            FUN_00f45a80(MGR);
+        }
+    } else {
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else { r = 1; FUN_00f45a80(MGR); }
+    }
+    return r;
+}
 
-// ================================================================ 0x00ede2b0 (offset 0x48c + bytes)
-int __cdecl FUN_00ede2b0(int p1, int p2, float v)
+// @ 0x00ede660
+bool __cdecl FUN_00ede660(int p1, int p2, float v)
+{
+    char* s = (char*)p1;
+    float fv = *(float*)(p2 + 0x49c);
+    char r;
+    int i;
+    Frag49c* e;
+    if (*(s + 0x20) != 0) {
+        for (i = 0, e = (Frag49c*)*(int*)(s + 0x70); i < FIELD_COUNT(s); i++, e++)
+            if (e->f != v) goto store;
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else {
+          store:
+            r = 1;
+            for (i = 0; i < FIELD_COUNT(s); i++) ((Frag49c*)*(int*)(s + 0x70))[i].f = fv;
+            FUN_00f45a80(MGR);
+        }
+    } else {
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else { r = 1; FUN_00f45a80(MGR); }
+    }
+    return r;
+}
+
+// @ 0x00ede790
+bool __cdecl FUN_00ede790(int p1, int p2, float v)
+{
+    char* s = (char*)p1;
+    float fv = *(float*)(p2 + 0x498);
+    char r;
+    int i;
+    Frag498* e;
+    if (*(s + 0x20) != 0) {
+        for (i = 0, e = (Frag498*)*(int*)(s + 0x70); i < FIELD_COUNT(s); i++, e++)
+            if (e->f != v) goto store;
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else {
+          store:
+            r = 1;
+            for (i = 0; i < FIELD_COUNT(s); i++) ((Frag498*)*(int*)(s + 0x70))[i].f = fv;
+            FUN_00f45a80(MGR);
+        }
+    } else {
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else { r = 1; FUN_00f45a80(MGR); }
+    }
+    return r;
+}
+
+// @ 0x00ede8c0
+bool __cdecl FUN_00ede8c0(int p1, int p2, float v)
+{
+    char* s = (char*)p1;
+    float fv = *(float*)(p2 + 0x490);
+    char r;
+    int i;
+    Frag490* e;
+    if (*(s + 0x20) != 0) {
+        for (i = 0, e = (Frag490*)*(int*)(s + 0x70); i < FIELD_COUNT(s); i++, e++)
+            if (e->f != v) goto store;
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else {
+          store:
+            r = 1;
+            for (i = 0; i < FIELD_COUNT(s); i++) ((Frag490*)*(int*)(s + 0x70))[i].f = fv;
+            FUN_00f45a80(MGR);
+        }
+    } else {
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else { r = 1; FUN_00f45a80(MGR); }
+    }
+    return r;
+}
+
+// @ 0x00ede9f0
+bool __cdecl FUN_00ede9f0(int p1, int p2, float v)
+{
+    char* s = (char*)p1;
+    float fv = *(float*)(p2 + 0x494);
+    char r;
+    int i;
+    Frag494* e;
+    if (*(s + 0x20) != 0) {
+        for (i = 0, e = (Frag494*)*(int*)(s + 0x70); i < FIELD_COUNT(s); i++, e++)
+            if (e->f != v) goto store;
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else {
+          store:
+            r = 1;
+            for (i = 0; i < FIELD_COUNT(s); i++) ((Frag494*)*(int*)(s + 0x70))[i].f = fv;
+            FUN_00f45a80(MGR);
+        }
+    } else {
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else { r = 1; FUN_00f45a80(MGR); }
+    }
+    return r;
+}
+
+// @ 0x00ede2b0
+bool __cdecl FUN_00ede2b0(int p1, int p2, float v)
 {
     char* s = (char*)p1;
     float fv = *(float*)(p2 + 0x48c);
-    if (*(s + 0x20) == 0) {
-        if (v != fv) { FUN_00f45a80(); return 1; }
-        FUN_00f3c0b0(); return 0;
+    char r;
+    int i;
+    Frag48c* e;
+    if (*(s + 0x20) != 0) {
+        for (i = 0, e = (Frag48c*)*(int*)(s + 0x70); i < FIELD_COUNT(s); i++, e++)
+            if (e->f != v) goto store;
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else {
+          store:
+            r = 1;
+            for (i = 0; i < FIELD_COUNT(s); i++) {
+                ((Frag48c*)*(int*)(s + 0x70))[i].f = fv;
+                ((char*)*(int*)(s + 0x70))[i * 0x4e0 + 2] = ((char*)p2)[2];
+                ((char*)*(int*)(s + 0x70))[i * 0x4e0 + 1] = ((char*)p2)[1];
+            }
+            FUN_00f45a80(MGR);
+        }
+    } else {
+        if (v == fv) { r = 0; FUN_00f3c0b0(MGR); }
+        else { r = 1; FUN_00f45a80(MGR); }
     }
-    int n = (*(int*)(s + 0x74) - *(int*)(s + 0x70)) / 0x4e0;
-    char* e = (char*)(*(int*)(s + 0x70) + 0x48c);
-    int i = 0;
-    for (; i < n; i++, e += 0x4e0) if (*(float*)e != v) break;
-    if (i == n && v == fv) { FUN_00f3c0b0(); return 0; }
-    int m = (*(int*)(s + 0x74) - *(int*)(s + 0x70)) / 0x4e0;
-    int j = 0, k = 0;
-    for (; j < m; j++, k += 0x4e0) {
-        *(float*)(*(int*)(s + 0x70) + k + 0x48c) = fv;
-        *(unsigned char*)(*(int*)(s + 0x70) + k + 2) = *(unsigned char*)(p2 + 2);
-        *(unsigned char*)(*(int*)(s + 0x70) + k + 1) = *(unsigned char*)(p2 + 1);
-    }
-    FUN_00f45a80(); return 1;
+    return r;
 }
 
 // ================================================================ 0x00edeb20

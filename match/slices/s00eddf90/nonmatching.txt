@@ -1,9 +1,9 @@
 # va  diff-bytes  reason
-00ede400 154  creature field setter (0x484): complete but loop/division codegen differs; equiv: FAIL (eax return differs on 5/5 valid inputs)
-00ede530 154  creature field setter (0x4a0): complete but loop/division codegen differs; equiv: FAIL (eax return differs on 5/5 valid inputs)
-00ede660 154  creature field setter (0x49c): complete but loop/division codegen differs; equiv: FAIL (eax return differs on 5/5 valid inputs)
-00ede790 154  creature field setter (0x498): complete but loop/division codegen differs; equiv: FAIL (eax return differs on 5/5 valid inputs)
-00ede8c0 154  creature field setter (0x490): complete but loop/division codegen differs; equiv: FAIL (eax return differs on 5/5 valid inputs)
-00ede9f0 154  creature field setter (0x494): complete but loop/division codegen differs; equiv: FAIL (eax return differs on 5/5 valid inputs)
-00ede2b0 295  creature field setter (0x48c + byte copies): complete but codegen differs; equiv: FAIL (eax return differs on 5/5 valid inputs)
+00ede400 280  creature field setter (0x484): logic restored exactly (recomputed count per iteration, mismatch -> store lane, bool status kept in bl, notify/kill call per arm with the manager from [0x16c7aa4+0x74]); equiv: WEAK 55.6% coverage, no behavioural difference on the 5 failing replays or 354 random inputs. Byte gap = cl sinks the esi/edi prologue pushes into the main arm (original pushes ebx+esi+edi before the outer branch) and keeps two separate kill blocks instead of one shared tail (340 vs 298 bytes).
+00ede530 280  creature field setter (0x4a0): same body as 00ede400; equiv: PASS (342 valid inputs, 100% coverage). Byte gap as 00ede400 (340 vs 298 bytes: prologue pushes not hoisted, kill tail duplicated).
+00ede660 280  creature field setter (0x49c): same body as 00ede400; equiv: PASS (369 valid inputs, 88% coverage). Byte gap as 00ede400 (340 vs 298 bytes).
+00ede790 280  creature field setter (0x498): same body as 00ede400; equiv: WEAK 55.6% coverage, no difference on the failing replays. Byte gap as 00ede400 (340 vs 298 bytes).
+00ede8c0 280  creature field setter (0x490): same body as 00ede400; equiv: WEAK 55.6% coverage, no difference on the failing replays. Byte gap as 00ede400 (340 vs 298 bytes).
+00ede9f0 266  creature field setter (0x494): same body as 00ede400; equiv: WEAK 55.6% coverage, no difference on the failing replays. Byte gap as 00ede400 (340 vs 298 bytes).
+00ede2b0 367  creature field setter (0x48c + byte copies): full logic (float store plus the two flag-byte copies from p2 at +2/+1 per fragment); equiv: WEAK 58.3% coverage, no difference on the failing replays. Byte gap as 00ede400 (395 vs 324 bytes); original keeps p2 in ebx and the status byte on the stack.
 00edebb0 11   behavior UI destructor: member release schedule differs narrowly; equiv: PASS (839 valid inputs, 100% coverage)
