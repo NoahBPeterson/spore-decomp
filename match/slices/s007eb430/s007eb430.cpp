@@ -22,7 +22,7 @@ namespace DateTime {
 class DateTime {
  public:
   int64_t mnSeconds;  // +0x0
-  void Set(int);
+  void Set(int kind);  // 0x0092e3d0
 };
 }  // namespace DateTime
 namespace COM {
@@ -50,10 +50,10 @@ class IStream {
   virtual void v04();     // +0x10
   virtual void v05();     // +0x14
   virtual void v06();     // +0x18
-  virtual void v07();     // +0x1c
+  virtual uint32_t v07(); // +0x1c  byte count
   virtual void v08();     // +0x20
   virtual void v09();     // +0x24
-  virtual void v10();     // +0x28
+  virtual void v10(int a, int b);  // +0x28
   virtual void v11();     // +0x2c
 };
 class MemoryStream : public IStream {
@@ -66,8 +66,34 @@ class MemoryStream : public IStream {
   bool mbResizeEnabled;   // +0x18
   float mfResizeFactor;   // +0x1c
   int mnResizeIncrement;  // +0x20
+  void Init(const char* name);       // 0x0093bd50
+  void SetOption(int opt, float v);  // 0x0093bb40
+  void* GetData() const;             // 0x0093ba70
+};
+class FileStream {
+ public:
+  FileStream(const wchar_t* path);                  // 0x00931e10
+  ~FileStream();                                    // 0x00931e70
+  bool Open(uint32_t a, int b, uint32_t c, int d);  // 0x009318f0
+  bool SetPosition(int a, int b);                   // 0x00931c70
+  bool Write(const void* p, uint32_t n);            // 0x00931d30
+  bool Close();                                     // 0x00931a70
+ private:
+  char mStorage[0x22c];  // EA::IO::FileStream object body
 };
 }  // namespace IO
+namespace Messaging {
+class IServer {
+ public:
+  virtual void v00();
+  virtual void v01();
+  virtual void v02();
+  virtual void v03();
+  virtual void v04();
+  virtual void v05(uint32_t id, void* msg, int flags);  // +0x14
+};
+IServer* GetServer();  // 0x00883860
+}  // namespace Messaging
 
 template <class T>
 class RefCountTemplate {
@@ -120,7 +146,7 @@ struct TItemList {
   TItemList();
   TItemList(const TItemList& x);
   ~TItemList();
-  TItemListNode* AllocNode(const cTelemetryItem& value);
+  __declspec(noinline) TItemListNode* AllocNode(const cTelemetryItem& value);
   void CopyRange(TItemListNode* first, TItemListNode* last, TItemList* dst);
 };
 struct TItemMapNode {
@@ -163,7 +189,7 @@ class cTelemetry : public EA::RefCountTemplate<int>, public cISerializableObject
   void FileDump();                     // 0x007EB600
   void PrepareFlush(uint32_t a, uint32_t b);  // 0x007EBBA0
   void Reset(int id);                  // 0x007EBB60
-  void Flush(uint32_t id);             // 0x007EBCE0
+  __declspec(noinline) void Flush(uint32_t id);          // 0x007EBCE0
   ~cTelemetry();                       // 0x007EBE70
   bool Shutdown();                     // 0x007EBF90
   void Add(const uint32_t& key, const uint32_t& value);  // 0x007EC160
@@ -173,6 +199,45 @@ class cTelemetry : public EA::RefCountTemplate<int>, public cISerializableObject
 namespace {
 using namespace SP;
 }  // namespace
+
+// ---------------------------------------------------------------------------
+// callees that live outside this slice (each annotated with its address)
+// ---------------------------------------------------------------------------
+struct WString16 {                   // eastl::basic_string<wchar_t>
+  wchar_t* mpBegin;                  // +0x0
+  wchar_t* mpEnd;                    // +0x4
+  wchar_t* mpCapacity;               // +0x8
+  WString16() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  ~WString16() {
+    if (mpBegin && ((int)((char*)mpCapacity - (char*)mpBegin) & ~1) > 2)
+      operator delete(mpBegin);
+  }
+  void RangeInitialize(const wchar_t* p);  // 0x00579a90
+};
+void WstrFormat(void* s, const wchar_t* fmt, ...);  // 0x004e0850
+const wchar_t* GetBasePath();                       // 0x00688cf0
+extern const wchar_t DAT_0141428c[];                // 0x0141428c  L"telemetry.dat"
+extern const wchar_t DAT_014142a8[];                // 0x014142a8  session format
+extern void* const g_vtbl_013eb90c;                 // 0x013eb90c
+extern void* const g_vtbl_013eb844;                 // 0x013eb844
+
+struct ObjB0 {                // cTelemetry as a hashtable holder
+  char mPad[0x10];            // +0x0  (mStats up to its bucket array)
+  uint32_t FUN_007eb090();    // 0x007eb090  item count
+};
+
+bool WriteUint32(uint32_t stream, const void* p, int count, int flags);  // 0x0093aa70
+bool WriteUint64(uint32_t stream, const void* p, int count, int flags);  // 0x0093ab10
+
+struct MessageBasicRC5 {      // EA::Messaging::MessageBasicRC<5>
+  void* mpVtbl;               // +0x0
+  uint32_t mRefCount;         // +0x4
+  char mPad08[0x28];          // +0x8
+  uint32_t mField30;          // +0x30
+  char mPad34[4];             // +0x34
+  uint32_t mField38;          // +0x38
+  void Destruct();            // 0x00421cf0
+};
 
 // ---------------------------------------------------------------------------
 // @ 0x007EB430  IntVector::DoInsertValues
@@ -300,27 +365,30 @@ uint32_t SP::TItemMap::erase(const uint32_t& key) {
 
 // @ 0x007EBBA0  cTelemetry::PrepareFlush
 void SP::cTelemetry::PrepareFlush(uint32_t stream, uint32_t id) {
-  extern void WriteUint32(uint32_t stream, const void* p, int a, int b);
-  extern void WriteTime(uint32_t stream, const void* p, int a, int b);
   for (uint32_t k = 0; k <= 6; ++k) {
     if (id != 0xffffffff && k != id) continue;
-    TItemMapNode** buckets = mStats.mpBucketArray;
     uint32_t nBucketCount = mStats.mnBucketCount;
-    TItemMapNode* pNode = buckets[k % nBucketCount];
+    TItemMapNode** pBuckets = mStats.mpBucketArray;
+    uint32_t nBucket = k % nBucketCount;
+    TItemMapNode* pNode = pBuckets[nBucket];
     while (pNode && pNode->mKey != k) pNode = pNode->mpNext;
+    TItemMapNode** pIt = pBuckets + nBucket;
     TItemMapNode* pFound = pNode;
-    if (pFound && pFound != (TItemMapNode*)&buckets[nBucketCount * 0]) {
-      // (sentinel element check omitted: matches original bounds check)
+    if (!pNode) {
+      pIt = pBuckets + nBucketCount;
+      pFound = pBuckets[nBucketCount];
     }
-    if (pFound) {
-      for (TItemListNode* p = pFound->mList.mpNext; p != (TItemListNode*)&pFound->mList;
-           p = p->mpNext) {
+    if (pFound != pBuckets[mStats.mnBucketCount]) {
+      TItemList* pList = (TItemList*)((char*)pFound + 4);
+      for (TItemListNode* p = pList->mpNext; p != (TItemListNode*)pList; p = p->mpNext) {
         int64_t t = p->mValue.mSystemTime.mnSeconds;
-        WriteTime(stream, &t, 1, 0);
-        uint32_t type = k;
+        WriteUint64(stream, &t, 1, 0);
+        uint32_t key = k;
+        WriteUint32(stream, &key, 1, 0);
+        uint32_t type = p->mValue.mType;
         WriteUint32(stream, &type, 1, 0);
-        uint32_t nCount = (uint32_t)(p->mValue.mData.mpEnd - p->mValue.mData.mpBegin) >> 2;
-        WriteUint32(stream, &p->mValue.mData.mpBegin, nCount, 0);
+        uint32_t nCount = (uint32_t)(p->mValue.mData.mpEnd - p->mValue.mData.mpBegin);
+        WriteUint32(stream, p->mValue.mData.mpBegin, nCount, 0);
       }
     }
     if (k == 0xffffffff) {
@@ -345,28 +413,34 @@ void SP::cTelemetry::Reset(int id) {
 
 // @ 0x007EBCE0  cTelemetry::Flush
 void SP::cTelemetry::Flush(uint32_t id) {
-  extern void* MakeTelemetryStream();
-  extern void TelemetrySetFloat(int, float);
-  extern void TelemetryWriteAll(void*, ...);
   if (id == 0xffffffff || id < 7) {
-    EA::IO::MemoryStream* pNew = 0;
-    pNew = (EA::IO::MemoryStream*)MakeTelemetryStream();
+    EA::IO::MemoryStream* pNew =
+        (EA::IO::MemoryStream*)operator new[](0x24, "App", 0, 0, 0, 0);
+    if (pNew) pNew->Init("App/Telemetry");
     EA::IO::MemoryStream* pOld = mpStream.mpObject;
     if (pNew != pOld) {
       if (pNew) pNew->AddRef();
       mpStream.mpObject = pNew;
       if (pOld) pOld->Release();
     }
-    TelemetrySetFloat(1, 1.0f);
-    TelemetrySetFloat(2, 2.0f);
-    // (write header)
-    PrepareFlush((uint32_t)reinterpret_cast<size_t>(mpStream.mpObject), id);
+    mpStream.mpObject->SetOption(1, 1.0f);
+    mpStream.mpObject->SetOption(2, 2.0f);
+    mpStream.mpObject->v10(0, 0);
+    PrepareFlush((uint32_t)(size_t)mpStream.mpObject, id);
     FileDump();
+    MessageBasicRC5 msg;
+    msg.mField30 = 0;
+    msg.mpVtbl = (void*)&g_vtbl_013eb90c;
+    msg.mRefCount = 0;
+    msg.mpVtbl = (void*)&g_vtbl_013eb844;
+    msg.mField38 = 0;
+    EA::Messaging::GetServer()->v05(0x46d05ee, &msg, 0);
     if (mpStream.mpObject) {
       EA::IO::MemoryStream* p = mpStream.mpObject;
       mpStream.mpObject = 0;
       p->Release();
     }
+    msg.Destruct();
   }
 }
 
@@ -437,36 +511,22 @@ SP::cTelemetry::cTelemetry()
 // @ 0x007EB600  cTelemetry::FileDump
 void SP::cTelemetry::FileDump() {
   if (!mbFileDump) return;
-  extern void* GetTelemetryPath();
-  extern void TelemetrySprintf(void* s, const char* fmt, ...);
-  extern void FileStreamCtor(void* fs, const void* path);
-  extern bool FileStreamOpen(void* fs, int, int, int, int);
-  extern void FileStreamWrite(void* fs, const void* p, uint32_t n);
-  extern void FileStreamClose(void* fs);
-  extern void FileStreamDtor(void* fs);
-  extern void RecordDoPostClose(void* fs, int, int);
-  extern uint32_t StreamSize(EA::IO::MemoryStream*);
-  extern void MemoryStreamLock(EA::IO::MemoryStream*);
-  wchar_t path[0x120];
-  path[0] = 0;
-  // build path (original uses an eastl::string16 + sprintf)
-  char fsbuf[0x228];
-  FileStreamCtor(fsbuf, path);
-  int ok = FileStreamOpen(fsbuf, 3, 4, 1, 0);
-  if (ok) {
-    RecordDoPostClose(fsbuf, 0, 2);
-    uint32_t nSize = StreamSize(mpStream.mpObject);
-    FileStreamWrite(fsbuf, &mpStream.mpObject, nSize);
-    FileStreamClose(fsbuf);
+  WString16 path;
+  path.RangeInitialize(GetBasePath());
+  WstrFormat(&path, DAT_014142a8, mSession);
+  WstrFormat(&path, DAT_0141428c);
+  EA::IO::FileStream fs(path.mpBegin);
+  if (fs.Open(3, 4, 1, 0)) {
+    fs.SetPosition(0, 2);
+    uint32_t nSize = mpStream.mpObject->v07();
+    fs.Write(mpStream.mpObject->GetData(), nSize);
+    fs.Close();
   }
-  FileStreamDtor(fsbuf);
 }
 
 // @ 0x007EC160  cTelemetry::Add
 void SP::cTelemetry::Add(const uint32_t& key, const uint32_t& value) {
-  extern uint32_t GetTick();
-  uint32_t t = GetTick();
-  if (0x2800 < (uint32_t)(t * 0x20)) Flush(0xffffffff);
+  if (0x2800 < (uint32_t)(((ObjB0*)this)->FUN_007eb090() * 0x20)) Flush(0xffffffff);
   TItemList* pList = mStats[key];
   cTelemetryItem item;
   item.mSystemTime.Set(2);
@@ -474,14 +534,11 @@ void SP::cTelemetry::Add(const uint32_t& key, const uint32_t& value) {
   item.mData.mpEnd = 0;
   item.mData.mpCapacity = 0;
   TItemListNode* pNode = pList->AllocNode(item);
-  pNode->mpNext = pList->mpNext;
-  pNode->mpPrev = (TItemListNode*)pList;
-  pList->mpNext->mpPrev = pNode;
-  pList->mpNext = pNode;
-  ++pList->mnSize;
-  if (item.mData.mpBegin && *(uint32_t*)((char*)item.mData.mpBegin - 4))
-    operator delete(item.mData.mpBegin);
-  *(uint32_t*)((char*)pList->mpNext + 0x18) = value;
+  pNode->mpNext = (TItemListNode*)pList;
+  pNode->mpPrev = pList->mpPrev;
+  pList->mpPrev->mpNext = pNode;
+  pList->mpPrev = pNode;
+  pNode->mValue.mType = value;
 }
 
 // ---------------------------------------------------------------------------

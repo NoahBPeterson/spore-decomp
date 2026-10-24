@@ -1,5 +1,6 @@
 # va diff reason
 007eb430 413 eastl::vector<int>::DoInsertValues - codegen differs (move/fill loops, register schedule)
+007eb600 274 SP::cTelemetry::FileDump: complete source, telemetry path build (WString16 RangeInitialize/GetBasePath/WstrFormat) plus FileStream open/setpos/write/close against annotated EA::IO callees; SEH frame and inline schedule differs; equiv WEAK 21.7% cov (316 valid) [/O2 /MD /Gy /EHsc /TP /arch:SSE2]
 007eb720 112 eastl list-node allocate+copy - inlined ctor/AutoRefCount schedule differs
 007eb7d0 52 eastl list range transfer - register/loop schedule differs
 007eb820 63 eastl::vector<int>::resize - tail erase call shape differs
@@ -7,7 +8,10 @@
 007eb8d0 96 eastl hash-node allocate - placement-new/list ctor inlining differs
 007eb950 119 eastl hashtable::DoFreeNodes - inlined list dtor differs
 007eb9e0 145 eastl hashtable::erase - inlined list dtor/loop differs
+007ebba0 278 SP::cTelemetry::PrepareFlush: complete source, bucket walk plus per-item WriteUint64(system time) / WriteUint32(key, type, element count) serialization then erase()/DoFreeNodes(); loop schedule differs; equiv WEAK 50.4% cov (362 valid) [/O2 /MD /Gy /EHsc /TP /arch:SSE2]
+007ebce0 254 SP::cTelemetry::Flush: complete source, MemoryStream alloc/Init/AutoRefCount swap/SetOption, PrepareFlush + FileDump, MessageBasicRC5 server dispatch, release plus msg dtor; EH/register schedule differs; equiv PASS 99.1% cov (324 valid) [/O2 /MD /Gy /EHsc /TP /arch:SSE2]
 007ebe70 95 SP::cTelemetry::~cTelemetry - EH frame + vtable store schedule differs
 007ebf20 12 RefCountTemplate Release - `add r,-N` vs `sub r,N` encoding + load/store order
 007ebfd0 189 eastl hashtable operator[] - find/insert inlining differs; equiv: FAIL (5/5 valid mismatched; symbol via ?ATItemMap, MapFind annotated)
 007ec0a0 105 SP::cTelemetry::cTelemetry - base vtable/EH schedule differs
+007ec160 159 SP::cTelemetry::Add: complete source, item-count cap check/Flush, hashtable insert (list link order, no mnSize bump), item dtor free-check, mType store; equiv UNSUPPORTED 0/400 valid (discards: fault(read)=305, fault=59, budget=20 - the original itself faults under the harness) [/O2 /MD /Gy /EHsc /TP /arch:SSE2]
