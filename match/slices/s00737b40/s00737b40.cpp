@@ -82,8 +82,8 @@ struct ModelOuter {
     char pad28[0x14];
 };
 
-extern "C" void* EA_alloc(uint32_t size, const char* name, int flags, uint32_t align, const char* file, uint32_t line);
-extern "C" void  EA_dealloc(void* p);
+extern "C" void* EA_alloc(uint32_t size, const char* name, int flags, uint32_t align, const char* file, uint32_t line); // 0x00F473A0
+extern "C" void  EA_dealloc(void* p); // 0x00F47380
 
 // ---------------------------------------------------------------------------
 // Callees (relocations are masked, so only the calling convention/signature matters)
@@ -101,20 +101,259 @@ extern "C" void  Obj15b(void* self, int a, void* out);                      // 0
 extern "C" void  HashReserve(void* self, void* out);                        // 0x0042BFA0
 extern "C" void  HashSetInsert(void* self, void* v);                        // 0x006C1570
 extern "C" void  BasisReset(void* self);                                   // 0x007200F0
-extern "C" void  SkinBuild(void* self, void* a, void* b);                    // 0x007366E0
+extern "C" void  SkinBuild(void* self);                                    // 0x007366E0
 extern "C" void  ObjCtor(void* self, void* a, void* b);                      // 0x00732410
+
+// Out-of-line desc helpers used by the group-remap passes.
+extern "C" void* RefBlockAlloc(unsigned bytes);                            // 0x00720010
+extern "C" void  ThreadSleep(int zero);                                    // 0x00921DF0
+
+// Ref-counted allocation block: the descriptor payload starts 0xc bytes in (vptr + refcount).
+struct RefBlock {
+    virtual void AddRef();      // slot 0 (+0x00)
+    virtual void Release();     // slot 1 (+0x04)
+    int mnRefCount;             // +0x08
+};
+
+// A 0x10-byte strided small-int array descriptor. This is the prefix of both a Group and a
+// GroupMat: count(+0), data(+4), element size class in bytes (+8), element stride (+0xa),
+// owning ref-counted block (+0xc).
+struct Desc {
+    int        count;           // +0x00
+    void*      data;            // +0x04
+    int16_t    elemClass;       // +0x08   element width: 1, 2 or 4 bytes
+    int16_t    stride;          // +0x0a   byte distance between elements
+    RefBlock*  owner;           // +0x0c
+};
+
+static inline uint32_t ElemMask(int cls)
+{
+    if (cls >= 4) return 0xffffffffu;
+    if (cls <= 0) return 0u;
+    return (1u << (cls * 8)) - 1u;
+}
+
+static inline uint32_t ReadElem(const char* base, int off, uint32_t mask)
+{
+    return *(const uint32_t*)(base + off) & mask;
+}
+
+static inline void WriteElem(char* base, int off, uint32_t v, int cls)
+{
+    if (cls == 1)
+        *(char*)(base + off) = (char)v;
+    else if (cls == 2)
+        *(short*)(base + off) = (short)v;
+    else if (cls == 4)
+        *(uint32_t*)(base + off) = v;
+}
+
+// 0x00720070 — (re)allocate the payload for a descriptor: a ref-counted block whose payload
+// starts at +0xc, `count * elemClass` bytes, with stride set to the element width.
+static void DescAllocate(Desc* d)
+{
+    if (d->count > 0) {
+        RefBlock* mem = (RefBlock*)RefBlockAlloc((unsigned)(d->count * d->elemClass));
+        d->data = (char*)mem + 0xc;
+        RefBlock* old = d->owner;
+        if (mem != old) {
+            if (mem) mem->AddRef();
+            d->owner = mem;
+            if (old) old->Release();
+        }
+        d->stride = d->elemClass;
+    }
+}
+
+// 0x007201B0 — clone a descriptor's count/size and allocate a fresh payload.
+static void DescClone(const Desc* src, Desc* out)
+{
+    out->count     = src->count;
+    out->elemClass = src->elemClass;
+    DescAllocate(out);
+}
+
+// 0x00720190 — build a descriptor with an explicit count and element size, then allocate.
+static void DescMake(Desc* out, int count, int cls)
+{
+    out->count     = count;
+    out->elemClass = (int16_t)cls;
+    DescAllocate(out);
+}
+
+// Int vector with a 16-element inline buffer (the scratch index map used by the remap passes).
+struct IntMap {
+    int* begin;
+    int* end;
+    int* cap;
+    char pad0c[0xc];            // eastl allocator state
+    int  inlineBuf[16];
+
+    void Init() { begin = end = inlineBuf; cap = inlineBuf + 16; }
+    unsigned Size() const { return (unsigned)(end - begin); }
+
+    void Reserve(unsigned n)
+    {
+        if (n <= (unsigned)(cap - begin))
+            return;
+        unsigned old = Size();
+        int* nb = (int*)EA_alloc(n * 4, "Graphics", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+            0xd1);
+        for (unsigned i = 0; i < old; ++i)
+            nb[i] = begin[i];
+        if (begin != inlineBuf)
+            EA_dealloc(begin);
+        begin = nb;
+        end   = nb + old;
+        cap   = nb + n;
+    }
+
+    void Resize(unsigned n)
+    {
+        unsigned sz = Size();
+        if (n > sz) {
+            Reserve(n);
+            while (sz < n) {
+                begin[sz++] = 0;
+                end = begin + sz;
+            }
+        } else {
+            end = begin + n;
+        }
+    }
+
+    void Clear() { end = begin; }
+
+    int& operator[](unsigned i) { return begin[i]; }
+
+    void Destroy()
+    {
+        if (begin != inlineBuf)
+            EA_dealloc(begin);
+        begin = end = cap = 0;
+    }
+};
+
+// Ordered, duplicate-free list of raw element values (inline buffer of 256 ints).
+struct KeyVec {
+    int* begin;
+    int* end;
+    int* cap;
+    int  inlineBuf[256];
+
+    void Init() { begin = end = inlineBuf; cap = inlineBuf + 256; }
+
+    int Find(int key) const
+    {
+        for (int* p = begin; p != end; ++p)
+            if (*p == key)
+                return (int)(p - begin);
+        return -1;
+    }
+
+    int operator[](unsigned i) const { return begin[i]; }
+
+    void Push(int key)
+    {
+        if (end == cap) {
+            unsigned old = (unsigned)(end - begin);
+            unsigned n = old ? old * 2 : 1;
+            int* nb = (int*)EA_alloc(n * 4, "Graphics", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                0xd1);
+            for (unsigned i = 0; i < old; ++i)
+                nb[i] = begin[i];
+            if (begin != inlineBuf)
+                EA_dealloc(begin);
+            begin = nb;
+            end   = nb + old;
+            cap   = nb + n;
+        }
+        *end++ = key;
+    }
+
+    void Destroy()
+    {
+        if (begin != inlineBuf)
+            EA_dealloc(begin);
+        begin = end = cap = 0;
+    }
+};
+
+// Out-of-line EASTL vector resizes; `this` is the vector header (begin/end/capacity).
+struct MatVecOps {
+    void Resize(int n);         // 0x004751A0
+};
+struct PartVecOps {
+    void Resize(int n);         // 0x00475260
+};
+
+// Out-of-line constructor for the inline-buffered int vector (size `count`, every element `value`).
+struct IntMapCtor {
+    void Construct(unsigned count, int value);  // 0x00737E80
+};
 
 // ---------------------------------------------------------------------------
 // @ 0x00737B40 — walk groups, build/compact an index map, then rebuild group data.
 // ---------------------------------------------------------------------------
 // (Large optimized routine. Reconstructed behaviour below; not byte-exact.)
+//
+// For every group with materials: build a map over the material slots, mark the slots referenced
+// by the group's index list, compact the live materials to the front (renumbering them in the map)
+// and finally rewrite each index to the compacted slot number.
 void GroupRemapA(ModelOuter* self)
 {
-    Group* grp = self->grpBegin;
-    int nGroups = (int)((self->grpEnd - self->grpBegin) / 1);
-    (void)grp; (void)nGroups;
-    // Full reconstruction in work/match notes; see nonmatching.txt.
-    return;
+    IntMap map;
+    map.Init();
+
+    int nGroups = (int)(self->grpEnd - self->grpBegin);
+    for (int gi = 0; gi < nGroups; ++gi) {
+        Group* g = self->grpBegin + gi;
+        if (g->matBegin == g->matEnd)
+            continue;
+
+        unsigned nMat = (unsigned)(g->matEnd - g->matBegin);
+        map.Resize(nMat);
+
+        unsigned nIdx = (unsigned)(g->idxEnd - g->idxBegin);
+        for (unsigned i = 0; i < nIdx; ++i)
+            map[(unsigned)(unsigned short)g->idxBegin[i].b] = 1;
+
+        unsigned w = 0;
+        for (unsigned j = 0; j < nMat; ++j) {
+            if (map[j] == 0)
+                continue;
+
+            map[j] = (int)w;
+            GroupMat* dst = g->matBegin + w;
+            GroupMat* src = g->matBegin + j;
+            dst->f0 = src->f0;
+            dst->f4 = src->f4;
+            dst->f8 = src->f8;
+            dst->fA = src->fA;
+            RefCounted* nw  = src->pC;
+            RefCounted* old = dst->pC;
+            if (nw != old) {
+                if (nw) nw->AddRef();
+                dst->pC = nw;
+                if (old) old->Release();
+            }
+            ++w;
+        }
+
+        MatVecOps* mops = (MatVecOps*)&g->matBegin;
+        mops->Resize((int)w);
+
+        for (unsigned i = 0; i < nIdx; ++i) {
+            unsigned short slot = (unsigned short)g->idxBegin[i].b;
+            g->idxBegin[i].b = (int16_t)map[slot];
+        }
+
+        map.Clear();
+    }
+
+    map.Destroy();
 }
 
 // ---------------------------------------------------------------------------
@@ -177,24 +416,156 @@ void* InlineBuf::ctor(unsigned a, unsigned b)
 
 // ---------------------------------------------------------------------------
 // @ 0x00737EF0 — large skin/geometry pass over the groups (partial reconstruction).
+//
+// Each group's strided small-int array is rewritten to dense 0..n-1 ids (first occurrence order),
+// its materials are expanded to n elements in that same order, and the distinct-key table used for
+// the expansion is kept in `grp->n10`/`grp->mat*` for later passes.
 // ---------------------------------------------------------------------------
 void GroupRemapB(ModelOuter* self)
 {
-    (void)self;
-    return;
+    SkinBuild(self);
+
+    int nGroups = (int)(self->grpEnd - self->grpBegin);
+    for (int gi = 0; gi < nGroups; ++gi) {
+        Group* g = self->grpBegin + gi;
+        if (g->p4 == 0)
+            continue;
+
+        Desc* gd = (Desc*)g;
+        KeyVec keys;
+        keys.Init();
+
+        Desc nd = { 0, 0, 0, 0, 0 };
+        DescClone(gd, &nd);                     // count/element class from the group
+
+        unsigned count = (unsigned)g->n0;
+        int distinct = 0;
+        uint32_t gmask = ElemMask(gd->elemClass);
+        for (unsigned i = 0; i < count; ++i) {
+            uint32_t key = ReadElem((const char*)gd->data, gd->stride * (int)i, gmask);
+            int id = keys.Find((int)key);
+            if (id < 0) {
+                id = distinct++;
+                keys.Push((int)key);
+            }
+            WriteElem((char*)nd.data, nd.stride * (int)i, (uint32_t)id, nd.elemClass);
+        }
+
+        gd->data      = nd.data;
+        gd->elemClass = nd.elemClass;
+        gd->stride    = nd.stride;
+        if (nd.owner != gd->owner) {
+            if (nd.owner) nd.owner->AddRef();
+            RefBlock* old = gd->owner;
+            gd->owner = nd.owner;
+            if (old) old->Release();
+        }
+        g->n10 = distinct;
+
+        for (GroupMat* m = g->matBegin; m != g->matEnd; ++m) {
+            Desc* md = (Desc*)m;
+            int mcls    = md->elemClass;
+            int mstride = md->stride;
+            void* mdata = md->data;
+            RefBlock* mold = md->owner;
+            if (mold) mold->AddRef();
+
+            Desc nd2 = { 0, 0, 0, 0, 0 };
+            DescMake(&nd2, distinct, mcls);
+
+            uint32_t mmask = ElemMask(mcls);
+            for (int i = 0; i < distinct; ++i) {
+                uint32_t v = ReadElem((const char*)mdata, mstride * keys[i], mmask);
+                WriteElem((char*)nd2.data, nd2.stride * i, v, nd2.elemClass);
+            }
+
+            md->data      = nd2.data;
+            md->elemClass = nd2.elemClass;
+            md->stride    = nd2.stride;
+            if (nd2.owner != md->owner) {
+                if (nd2.owner) nd2.owner->AddRef();
+                RefBlock* old = md->owner;
+                md->owner = nd2.owner;
+                if (old) old->Release();
+            }
+            if (nd2.owner) nd2.owner->Release();
+            if (mold) mold->Release();
+        }
+
+        keys.Destroy();
+        ThreadSleep(0);
+    }
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x007383A0 — build/compact the Part vector using the Group data.
+//
+// Parts referenced by any group index (or that carry a non-default class) survive; the rest are
+// dropped, surviving parts keep their relative order, and group indices are renumbered to match.
 // ---------------------------------------------------------------------------
 void PartRebuild(ModelOuter* self)
 {
-    // 1) construct a bool/int map local sized partEnd-partBegin
-    // 2) mark from the Group vectors
-    // 3) compact the Part vector in place
-    // 4) resize the vector<bool> map at self+8
-    (void)self;
-    return;
+    int nPart = (int)(self->partEnd - self->partBegin);
+    if (nPart < 0)
+        nPart = 0;
+
+    IntMap map;
+    ((IntMapCtor*)&map)->Construct((unsigned)nPart, 0);
+    map.Resize((unsigned)nPart);
+
+    for (int i = 0; i < nPart; ++i) {
+        Part* p = self->partBegin + i;
+        if (p->fC > 3 && p->fC != 0xe)
+            map[(unsigned)i] = 1;
+    }
+
+    int nGroups = (int)(self->grpEnd - self->grpBegin);
+    for (int gi = 0; gi < nGroups; ++gi) {
+        Group* g = self->grpBegin + gi;
+        unsigned n = (unsigned)(g->idxEnd - g->idxBegin);
+        for (unsigned i = 0; i < n; ++i)
+            map[(unsigned)(unsigned short)g->idxBegin[i].a] = 1;
+    }
+
+    unsigned w = 0;
+    for (int j = 0; j < nPart; ++j) {
+        if (map[(unsigned)j] == 0)
+            continue;
+
+        map[(unsigned)j] = (int)w;
+        Part* dst = self->partBegin + w;
+        Part* src = self->partBegin + j;
+        dst->f0  = src->f0;
+        dst->f4  = src->f4;
+        dst->f8  = src->f8;
+        dst->fC  = src->fC;
+        dst->f10 = src->f10;
+        dst->f14 = src->f14;
+        dst->f18 = src->f18;
+        dst->f1A = src->f1A;
+        RefCounted* nw  = src->pC;
+        RefCounted* old = dst->pC;
+        if (nw != old) {
+            if (nw) nw->AddRef();
+            dst->pC = nw;
+            if (old) old->Release();
+        }
+        ++w;
+    }
+
+    PartVecOps* pops = (PartVecOps*)&self->partBegin;
+    pops->Resize((int)w);
+
+    for (int gi = 0; gi < nGroups; ++gi) {
+        Group* g = self->grpBegin + gi;
+        unsigned n = (unsigned)(g->idxEnd - g->idxBegin);
+        for (unsigned i = 0; i < n; ++i) {
+            unsigned short slot = (unsigned short)g->idxBegin[i].a;
+            g->idxBegin[i].a = (int16_t)map[slot];
+        }
+    }
+
+    map.Destroy();
 }
 
 // ---------------------------------------------------------------------------

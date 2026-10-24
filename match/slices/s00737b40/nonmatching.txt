@@ -1,3 +1,6 @@
+00737b40  603  group material remap/compaction (index map, live-material pack, index renumber, vector resize): complete; equiv WEAK (22.4% coverage); eastl map calls inlined, block/register schedule differs; flags /O2 /MD /Gy /EHsc /TP
+00737ef0  1135  group data de-duplication + material expansion (dense ids, descriptor clone/fill, owner refcount swap): complete; equiv WEAK (8.7% coverage); open-addressed map replaced by an ordered key scan, schedule differs; flags /O2 /MD /Gy /EHsc /TP
+007383a0  532  part compaction (live-part map, pack, index renumber, vector resize): complete; equiv WEAK (38.1% coverage); bitmap/eastl-helper inlining differs from the retail inline sequence; flags /O2 /MD /Gy /EHsc /TP
 00737dc0  136  ElemPool24::ctor reconstruction; allocator + construction sequence differs from original
 00737e80  99   InlineBuf::ctor reconstruction; inline-buffer/frame schedule differs
 00738610  472  PartInit reconstruction; EASTL vector schedule differs
