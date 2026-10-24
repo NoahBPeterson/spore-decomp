@@ -1,2 +1,5 @@
 # source  symbol  original VA  [flags override]
-# No byte-exact functions in slice s00ef5dd0 (see nonmatching.txt).
+slices/s00ef5dd0/s00ef5dd0.cpp  ?ClearSelection@cLargeAssetView@@QAEXXZ  00ef5dd0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00ef5dd0/s00ef5dd0.cpp  ?Destroy@cLargeAssetView@@QAEXXZ  00ef61b0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00ef5dd0/s00ef5dd0.cpp  ?cLargeAssetView_Ctor@@YIPAVcLargeAssetView@@PAV1@@Z  00ef64e0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00ef5dd0/s00ef5dd0.cpp  ?OnMessage@cLargeAssetView@@QAEXPAXI@Z  00ef6650  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
