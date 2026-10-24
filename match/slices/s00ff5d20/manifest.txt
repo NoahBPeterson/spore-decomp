@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ff5d20/s00ff5d20.cpp  ?ShowUFOForTransition@cSPSimPlanetHighLOD@@QAEXXZ  00ff60d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff5d20/s00ff5d20.cpp  ?FUN_00ff6190@cSPSimPlanetHighLOD@@QAEXXZ  00ff6190  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff5d20/s00ff5d20.cpp  ?FUN_00ff6200@cSPSimPlanetHighLOD@@QAEXXZ  00ff6200  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff5d20/s00ff5d20.cpp  ?FUN_00ff6290@cSPSimPlanetHighLOD@@QAEXXZ  00ff6290  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff5d20/s00ff5d20.cpp  ?FUN_00ff62d0@cSPSimPlanetHighLOD@@QAEXXZ  00ff62d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff5d20/s00ff5d20.cpp  ?FUN_00ff6380@@YAXXZ  00ff6380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff5d20/s00ff5d20.cpp  ?FUN_00ff63e0@@YAXXZ  00ff63e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff5d20/s00ff5d20.cpp  ?FUN_00ff6450@cSPSimPlanetHighLOD@@QAEXPAUVec3@@@Z  00ff6450  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ff5d20/s00ff5d20.cpp  ?FUN_00ff6520@cSPSimPlanetHighLOD@@QAEXPAXM@Z  00ff6520  /O2 /MD /Gy /TP /arch:SSE /fp:fast
