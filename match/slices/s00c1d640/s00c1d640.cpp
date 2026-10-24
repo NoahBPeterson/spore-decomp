@@ -1,6 +1,12 @@
-// Slice s00c1d640: creature AI, ability selection (picks the best usable attack/ability against a target).
-// Optimized module: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast (no /EHsc).
+// Slice s00c1d640 (gold7): creature body-part sound playback.  The batch targets
+// are 0x00C1D640 (unnamed body-part sound + live-handle map) and 0x00C1DB40
+// (SP::cSPCreatureBase::StartIndependentSound).  The older 0x00C1DE20
+// ability-selection reconstruction below was already present in this slice
+// directory and is preserved verbatim; its row and symbol stay in place.
+// Optimized module: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc).
 #include "types.h"
+#include <math.h>
+#include <string.h>
 
 typedef unsigned int uint;
 
@@ -274,3 +280,343 @@ OFFCHK(Ability, mbBusy, 0x114); OFFCHK(Ability, m120, 0x120);
 OFFCHK(Creature, mBody, 0xc0); OFFCHK(Creature, mFlags, 0xb58); OFFCHK(Creature, mbNoBonus, 0xbb0);
 OFFCHK(Creature, mpEntries, 0xc28); OFFCHK(Creature, mEnergy, 0xe58); OFFCHK(Creature, mpTypeHolder, 0xe7c);
 OFFCHK(Creature, mActiveAbility, 0xe8c); OFFCHK(Creature, mCooldownCount, 0x1670);
+
+// ===========================================================================
+// Slice targets 0x00C1D640 and 0x00C1DB40.
+//
+// The 0x00C1DE20 body above is an older reconstruction that was already present
+// in this slice directory; it is kept verbatim so its row in nonmatching.txt and
+// its symbols/slices entry remain valid.  The two functions below are the ones
+// the gold7 batch actually assigns to s00c1d640: they play body-part sounds for
+// a creature ("vcode_*"/"vsoc_*" names) and maintain a per-creature map of the
+// live sound handles.
+// ===========================================================================
+
+struct Vec3 {
+    float x, y, z;
+};
+
+struct Quat {
+    float x, y, z, w;
+};
+
+// Per-part data object (cCreaturePartData).  Only the audio-relevant fields are
+// modelled: the three radii used to compute the emitter sphere and the sound
+// emitter id at +0x428.
+struct PartData {
+    char  mPad000[0x138];
+    float mRadiusX;                 // +0x138
+    float mRadiusY;                 // +0x13c
+    float mRadiusZ;                 // +0x140
+    char  mPad144[0x428 - 0x144];
+    void* mpSound;                  // +0x428 (0 when the part is silent)
+};
+
+// One entry of the model's 0x2bc-byte body-part array.
+struct BodyPart {
+    PartData* mpData;               // +0x00
+    char      mPad04[0x10 - 0x04];
+    Vec3      mOffset;              // +0x10 (part-local emitter offset)
+    char      mPad1c[0x2bc - 0x1c];
+};
+
+// Model attached to the animated creature (+0xB54 -> +0x17C).
+struct CreatureModel {
+    char  mPad000[0x18];
+    Vec3  mPosition;                // +0x18
+    char  mPad024[0x3c - 0x24];
+    Quat  mRotation;                // +0x3c
+    char  mPad04c[0x70 - 0x4c];
+    float mScale;                   // +0x70
+    char  mPad074[0x2e4 - 0x74];
+    BodyPart* mpParts;              // +0x2e4
+};
+
+struct AnimCreature {
+    char          mPad000[0x17c];
+    CreatureModel* mpModel;         // +0x17c
+};
+
+// Nodes of the live-sound map (eastl::rbtree node base + pair payload).
+struct SoundNode {
+    SoundNode* mpLeft;              // +0x00
+    SoundNode* mpRight;             // +0x04
+    SoundNode* mpParent;            // +0x08
+    uint       mColor;              // +0x0c
+    uint       mKey;                // +0x10 (creature sound id)
+    uint       mHandle;             // +0x14 (audio-system handle)
+    int        mPart;               // +0x18 (body-part index)
+};
+
+struct SoundMapHead {
+    SoundNode* mpLeft;              // +0x00
+    SoundNode* mpRight;             // +0x04
+    SoundNode* mpParent;            // +0x08 (root)
+    uint       mColor;              // +0x0c
+};
+
+// SPVector<unsigned int> (begin, end, capacity).  The slice's first function
+// also uses it for the per-creature list of sound ids at +0xe24.
+struct UIntVec {
+    uint* mpBegin;                  // +0x00
+    uint* mpEnd;                    // +0x04
+    uint* mpCapacity;               // +0x08
+    void DoInsertValue(uint* position, const uint& value);   // 0x004558A0
+    void push_back(const uint& v)
+    {
+        if (mpEnd < mpCapacity) {
+            uint* p = mpEnd++;
+            if (p)
+                *p = v;
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
+};
+
+// EA::Audio::GetSystemAT() result.  Only the slots used by these two functions
+// are named; the other slots are padding.
+class AudioSystem {
+public:
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
+    virtual uint s20();             // +0x20
+    virtual uint s24();             // +0x24
+    virtual void s28(); virtual void s2c(); virtual void s30(); virtual void s34();
+    virtual void s38(uint key);                         // +0x38
+    virtual void s3c(uint key, float value);           // +0x3c
+    virtual void s40(uint key, uint value);            // +0x40
+    virtual void s44(uint key, const char* name, uint arg); // +0x44
+    virtual void s48(); virtual void s4c(); virtual void s50(); virtual void s54();
+    virtual void s58();             // +0x58 (commit/play)
+};
+
+AudioSystem* GetSystemAT();                                     // 0x00A206F0 EA::Audio::GetSystemAT
+uint QueryCreatureBodyParts(void* creature, int mode, int* parts, int maxParts); // 0x00C17420
+void* SimAlloc(unsigned int size, const char* name, int a, int b,
+               const char* file, int line);                     // 0x00F473A0 operator new
+void RBTreeInsert(void* node, void* parent, void* head, int side); // 0x009216A0 eastl::RBTreeInsert
+bool __fastcall Flag388(void* self);                            // 0x00C0C0E0 (thiscall; ecx = self)
+
+extern float g_168d910;                                         // 0x0168D910
+extern float g_168d914;                                         // 0x0168D914
+extern float g_168d918;                                         // 0x0168D918
+
+#define VSLOT(n) virtual void vs##n()
+class cSPCreatureBase {
+public:
+    // Slots 0x00..0xD4 are not used here; they only preserve the primary
+    // vtable offset of the sound-flag query at +0xD8.
+    VSLOT(00); VSLOT(04); VSLOT(08); VSLOT(0c); VSLOT(10); VSLOT(14);
+    VSLOT(18); VSLOT(1c); VSLOT(20); VSLOT(24); VSLOT(28); VSLOT(2c);
+    VSLOT(30); VSLOT(34); VSLOT(38); VSLOT(3c); VSLOT(40); VSLOT(44);
+    VSLOT(48); VSLOT(4c); VSLOT(50); VSLOT(54); VSLOT(58); VSLOT(5c);
+    VSLOT(60); VSLOT(64); VSLOT(68); VSLOT(6c); VSLOT(70); VSLOT(74);
+    VSLOT(78); VSLOT(7c); VSLOT(80); VSLOT(84); VSLOT(88); VSLOT(8c);
+    VSLOT(90); VSLOT(94); VSLOT(98); VSLOT(9c); VSLOT(a0); VSLOT(a4);
+    VSLOT(a8); VSLOT(ac); VSLOT(b0); VSLOT(b4); VSLOT(b8); VSLOT(bc);
+    VSLOT(c0); VSLOT(c4); VSLOT(c8); VSLOT(cc); VSLOT(d0); VSLOT(d4);
+    virtual uint vsD8();            // +0xD8
+
+    char       mPad004[0xb34 - 0x04];
+    int        mFieldB34;           // +0xb34
+    char       mPadB38[0xb54 - 0xb38];
+    AnimCreature* mpAnim;           // +0xb54
+    uint       mFlagsB58;           // +0xb58
+    char       mPadB5c[0xe0c - 0xb5c];
+    SoundMapHead mSoundMap;         // +0xe0c
+    uint       mSoundMapCount;      // +0xe1c
+    char       mPadE20[0xe24 - 0xe20];
+    UIntVec    mSoundIds;           // +0xe24
+    char       mPadE30[0xf94 - 0xe30];
+    uint       mSoundCounter;       // +0xf94
+
+    uint FUN_00c1d640(const char* name, int mode, uint id);
+    bool StartIndependentSound(const char* name, const Vec3* pos, UIntVec* out);
+    uint CallVd8() { return vsD8(); }
+    bool Flag388() { return ::Flag388(this); }
+};
+
+// Rotate v by quaternion q (right-handed, same expansion as the original
+// inlined SSE code) and return the model-space offset.
+static inline Vec3 RotateOffset(const Quat& q, const Vec3& v)
+{
+    float xx = q.x * q.x;
+    float yy = q.y * q.y;
+    float zz = q.z * q.z;
+    float xy = q.x * q.y;
+    float xz = q.x * q.z;
+    float yz = q.y * q.z;
+    float wx = q.w * q.x;
+    float wy = q.w * q.y;
+    float wz = q.w * q.z;
+    Vec3 r;
+    r.x = (1.0f - 2.0f * (yy + zz)) * v.x
+        + 2.0f * (xy - wz) * v.y
+        + 2.0f * (xz + wy) * v.z;
+    r.y = 2.0f * (xy + wz) * v.x
+        + (1.0f - 2.0f * (xx + zz)) * v.y
+        + 2.0f * (yz - wx) * v.z;
+    r.z = 2.0f * (xz - wy) * v.x
+        + 2.0f * (yz + wx) * v.y
+        + (1.0f - 2.0f * (xx + yy)) * v.z;
+    return r;
+}
+
+// @ 0x00c1d640
+uint cSPCreatureBase::FUN_00c1d640(const char* name, int mode, uint id)
+{
+    AudioSystem* audio = GetSystemAT();
+    if (!audio)
+        return id;
+
+    int parts[255];
+    uint count = QueryCreatureBodyParts(this, mode, parts, 0xff);
+    if (count == 0 || id != 0) {
+        id = 0;
+    } else {
+        ++mSoundCounter;
+        id = mSoundCounter;
+        if (id != 0) {
+            if (mSoundIds.mpEnd < mSoundIds.mpCapacity) {
+                uint* p = mSoundIds.mpEnd++;
+                if (p)
+                    *p = id;
+            } else {
+                mSoundIds.DoInsertValue(mSoundIds.mpEnd, id);
+            }
+        }
+    }
+
+    for (uint i = 0; i < count; ++i) {
+        BodyPart* part = &mpAnim->mpModel->mpParts[parts[i]];
+        if (!part->mpData->mpSound)
+            continue;
+
+        AudioSystem* sys = GetSystemAT();
+        uint handle = sys ? sys->s24() : 0;
+        int partIndex = parts[i];
+
+        SoundNode* root = mSoundMap.mpParent;
+        SoundNode* parent = (SoundNode*)&mSoundMap;
+        while (root) {
+            parent = root;
+            if (id < root->mKey)
+                root = root->mpRight;
+            else
+                root = root->mpLeft;
+        }
+        int side = 0;
+        if (parent != (SoundNode*)&mSoundMap && !(id < parent->mKey))
+            side = 1;
+
+        SoundNode* node = (SoundNode*)SimAlloc(
+            0x1c, "Simulator", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+            0xd1);
+        if (node) {
+            node->mKey = id;
+            node->mHandle = handle;
+            node->mPart = partIndex;
+        }
+        RBTreeInsert(node, parent, &mSoundMap, side);
+        ++mSoundMapCount;
+
+        audio->s38(0x3475365);
+        audio->s44(0x347537e, name, 0);
+        audio->s40(0x3475385, handle);
+        audio->s40(0x39f9e01, (uint)(uintptr_t)part->mpData->mpSound);
+
+        Vec3 pos = RotateOffset(mpAnim->mpModel->mRotation, part->mOffset);
+        pos.x += mpAnim->mpModel->mPosition.x;
+        pos.y += mpAnim->mpModel->mPosition.y;
+        pos.z += mpAnim->mpModel->mPosition.z;
+        audio->s3c(0x3475391, pos.x);
+        audio->s3c(0x3475395, pos.y);
+        audio->s3c(0x3475398, pos.z);
+
+        float scale = mpAnim->mpModel->mScale;
+        float rx = part->mpData->mRadiusX * scale;
+        float ry = part->mpData->mRadiusY * scale;
+        float rz = part->mpData->mRadiusZ * scale;
+        float radius = sqrtf(rx * rx + (rz * rz + ry * ry));
+        audio->s3c(0x39f9e0f, radius + radius);
+
+        audio->s40(0x39f9e08, CallVd8());
+        audio->s40(0x44d6399, (mFlagsB58 >> 9) & 1);
+        audio->s40(0x44d63a2, mFieldB34 == 1);
+        audio->s40(0x48def6d, (uint)Flag388() & 0xff);
+        audio->s40(0x3475381, 0);
+        audio->s58();
+    }
+    return id;
+}
+
+// @ 0x00c1db40
+bool cSPCreatureBase::StartIndependentSound(const char* name, const Vec3* pos, UIntVec* out)
+{
+    AudioSystem* audio = GetSystemAT();
+    if (!audio)
+        return false;
+
+    int parts[255];
+    uint count = QueryCreatureBodyParts(this, 2, parts, 0xff);
+
+    // Clear the caller-supplied handle vector (the original emits a zero-length
+    // memcpy for the element destructor pass, then resets end to begin).
+    memcpy(out->mpBegin, out->mpEnd, 0);
+    out->mpEnd = out->mpBegin;
+
+    for (uint i = 0; i < count; ++i) {
+        BodyPart* part = &mpAnim->mpModel->mpParts[parts[i]];
+        if (!part->mpData->mpSound)
+            continue;
+
+        uint handle = audio->s20();
+        out->push_back(handle);
+
+        audio->s38(0x3475365);
+        audio->s44(0x347537e, name, 0);
+        audio->s40(0x3475385, handle);
+        audio->s40(0x39f9e01, (uint)(uintptr_t)part->mpData->mpSound);
+
+        if (pos->x == g_168d910 && pos->y == g_168d914 && pos->z == g_168d918) {
+            audio->s40(0x3475389, 0);
+        } else {
+            audio->s40(0x3475389, 1);
+            audio->s3c(0x3475391, pos->x);
+            audio->s3c(0x3475395, pos->y);
+            audio->s3c(0x3475398, pos->z);
+        }
+
+        float scale = mpAnim->mpModel->mScale;
+        float rx = part->mpData->mRadiusX * scale;
+        float ry = part->mpData->mRadiusY * scale;
+        float rz = part->mpData->mRadiusZ * scale;
+        float radius = sqrtf(rx * rx + (rz * rz + ry * ry));
+        audio->s3c(0x39f9e0f, radius + radius);
+
+        audio->s40(0x39f9e08, CallVd8());
+        audio->s40(0x44d6399, 0);
+        audio->s40(0x44d63a2, 1);
+        audio->s40(0x48def6d, 0);
+        audio->s40(0x3475381, 0);
+        audio->s58();
+    }
+    return count != 0;
+}
+
+// Layout checks for the fields used above.
+OFFCHK(BodyPart, mpData, 0x0); OFFCHK(BodyPart, mOffset, 0x10);
+OFFCHK(PartData, mRadiusX, 0x138); OFFCHK(PartData, mRadiusY, 0x13c); OFFCHK(PartData, mRadiusZ, 0x140);
+OFFCHK(PartData, mpSound, 0x428);
+OFFCHK(CreatureModel, mPosition, 0x18); OFFCHK(CreatureModel, mRotation, 0x3c);
+OFFCHK(CreatureModel, mScale, 0x70); OFFCHK(CreatureModel, mpParts, 0x2e4);
+OFFCHK(AnimCreature, mpModel, 0x17c);
+OFFCHK(SoundNode, mKey, 0x10); OFFCHK(SoundNode, mHandle, 0x14); OFFCHK(SoundNode, mPart, 0x18);
+OFFCHK(SoundMapHead, mpParent, 0x8);
+OFFCHK(UIntVec, mpBegin, 0x0); OFFCHK(UIntVec, mpEnd, 0x4); OFFCHK(UIntVec, mpCapacity, 0x8);
+OFFCHK(cSPCreatureBase, mFieldB34, 0xb34); OFFCHK(cSPCreatureBase, mpAnim, 0xb54);
+OFFCHK(cSPCreatureBase, mFlagsB58, 0xb58); OFFCHK(cSPCreatureBase, mSoundMap, 0xe0c);
+OFFCHK(cSPCreatureBase, mSoundMapCount, 0xe1c); OFFCHK(cSPCreatureBase, mSoundIds, 0xe24);
+OFFCHK(cSPCreatureBase, mSoundCounter, 0xf94);
