@@ -61,9 +61,11 @@ extern "C" int  __cdecl sub_b7e0a0(void*);   // (thiscall-shaped helper, ECX=arg
 //  0x00c8b040 / 0x00c8b060 / 0x00c8b080  CreateEffect overloads
 // ===========================================================================
 // @ 0x00c8b040
+#pragma optimize("", off)
 void cSpatialObjectView::CreateEffect4(void* a, void* b, void* c, void* d) {
     CreateEffectInternal(a, (int)b, c, (int)d);
 }
+#pragma optimize("", on)
 // @ 0x00c8b060
 void cSpatialObjectView::CreateEffect3(void* a, void* b, void* c) {
     CreateEffectInternal(a, (int)b, c, 1);
@@ -148,18 +150,18 @@ void cSpatialObjectView::sub_ad30(int param2, int id) {
     EffectInfo* it = mpBegin;
     EffectInfo* end = mpEnd;
     if (it == end) return;
-    while (it->mId != id) {
+    while (it->mId != param2) {
         it = (EffectInfo*)((char*)it + 0x3c);
         if (it == end) return;
     }
     if (it->mpEffect) {
         char c = ((char(__thiscall*)(void*))(*(void***)it->mpEffect)[0x10 / 4])(it->mpEffect);
         if (c || it->mFlag8) {
-            ((void(__thiscall*)(void*, int))(*(void***)it->mpEffect)[0xc / 4])(it->mpEffect, param2);
+            ((void(__thiscall*)(void*, int))(*(void***)it->mpEffect)[0xc / 4])(it->mpEffect, id);
         }
     }
     for (EffectInfo* p = (EffectInfo*)((char*)it + 0x3c); p < mpEnd; p = (EffectInfo*)((char*)p + 0x3c)) {
-        sub_c88c30(p);
+        ((void(__thiscall*)(void*, void*))sub_c88c30)(it, p);
     }
     mpEnd = (EffectInfo*)((char*)mpEnd - 0x3c);
     if (mpEnd->mpEffect) {
@@ -177,11 +179,16 @@ void cSpatialObjectView::DestroyAllEffects(int param) {
         if (!it->mpEffect) continue;
         char c = ((char(__thiscall*)(void*))(*(void***)it->mpEffect)[0x10 / 4])(it->mpEffect);
         if (!c && !it->mFlag8) continue;
-        int kind = ((int(__thiscall*)(void*))(*(void***)it->mpEffect)[0x60 / 4])(it->mpEffect);
-        if (kind == 0x2abf6155 || kind == 0x2241f9c6) force = 1;
+        unsigned long long id = ((unsigned long long(__thiscall*)(void*))(*(void***)it->mpEffect)[0x60 / 4])(it->mpEffect);
+        if (id == 0x2abf6155ULL) {
+            force = 1;
+        } else {
+            id = ((unsigned long long(__thiscall*)(void*))(*(void***)it->mpEffect)[0x60 / 4])(it->mpEffect);
+            if (id == 0x2241f9c6ULL) force = 1;
+        }
         ((void(__thiscall*)(void*, int))(*(void***)it->mpEffect)[0xc / 4])(it->mpEffect, force);
     }
-    sub_c8a890(this);
+    ((void(__thiscall*)(void*, EffectInfo*, EffectInfo*))sub_c8a890)(&mpBegin, mpBegin, mpEnd);
 }
 
 // ===========================================================================
@@ -306,16 +313,18 @@ bool Obj48::sub_b800() {
     if (k != 0) { unsigned int v = (unsigned int)(k - 1); return v > 2u; }
     return false;
 }
+extern "C" int __cdecl FUN_00801920(void* a, void* b);
 // @ 0x00c8b6d0
-extern "C" void* __cdecl sub_801920b(void* a, void* b);
+#pragma optimize("", off)
 void Obj48::sub_b6d0(void* param) {
     mp48 = (Sub48*)param;
     mField4c = *(int*)((char*)param + 0x70);
     int* a = &mField34;
     int* b = &mField38;
-    int v = (int)sub_801920b(a, b);
+    int v = ((int (__fastcall*)(void*))FUN_00801920)(param);
     c8b470(v, a, b);
 }
+#pragma optimize("", on)
 
 // ===========================================================================
 //  0x00c8b5e0  pick max of a list

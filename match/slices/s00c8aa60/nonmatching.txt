@@ -2,14 +2,14 @@
 00c8b130  30   iterator kept in eax vs ecx; volatile global read became a load
 00c8b1b0  9    iterator kept in eax vs ecx
 00c8b220  158  full vector erase path; register allocation differs
-00c8ad30  131  full vector erase path; register allocation differs
-00c8b0a0  150  full vector erase path; register allocation differs
+00c8ad30  127  search key/id roles fixed; erase helper called with ECX=iterator; register allocation differs
+00c8b0a0  149  erase is thiscall on vector at +0xc0 with [begin,end); 64-bit id queried twice; block layout differs
 00c8b2e0  52   release handles: original does two derefs (this = *(void**)(self+0x9c), vtable = *this, method = vtable[0x16c], handle pushed as arg); fixed. equiv WEAK 229 valid no mismatch, 73.3% cov (refcount>1 / +0xa0 branches uncovered)
 00c8b450  16   cl folded the range test to add/cmp/setle
 00c8b520  12   cl reordered the predicate returns
 00c8b640  10   cl reordered the independent pointer stores in the ctor
-00c8b6d0  35   helper call argument forms differ
+00c8b6d0  116  00801920 called with ECX=param and no stack args; call/erase argument sharing differs
 00c8b700  58   operator-new / release schedule differs
 00c8b7e0  18   unsigned <= 5 lowered to cmp/sbb/inc instead of setbe
 00c8b800  18   unsigned > 2 lowered to cmp/sbb/neg instead of seta
-00c8b040  18   tail-call folded to jmp (caller/callee signatures identical)
+00c8b040  41   optimization disabled to keep call instead of tail jmp; frame setup differs
