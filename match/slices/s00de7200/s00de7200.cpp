@@ -597,9 +597,9 @@ void SimTeardown::Teardown()
     ReleaseSlot(mpC16c, 4);
     ReleaseSlot(mpC170, 4);
     ReleaseSlot(mpC250, 8);
-    for (RbNode* pNode = mHandlers.mAnchor.mpRight; pNode != &mHandlers.mAnchor;
-         pNode = RBTreeIncrement(pNode)) {
-        RefObj* pEffect = ((EffectNode*)pNode)->mpEffect;
+    for (RbNode* p = mHandlers.mAnchor.mpRight; p != &mHandlers.mAnchor;
+         p = RBTreeIncrement(p)) {
+        RefObj* pEffect = ((EffectNode*)p)->mpEffect;
         if (!pEffect) continue;
         pEffect->Stop();
         pEffect->s08(1);
@@ -613,7 +613,6 @@ void SimTeardown::Teardown()
         if (*pp) (*pp)->Release();
     mpVecEnd = mpVecBegin;
     ReleaseSlot(mpC1b0, 4);
-    for (int nRow = 0; nRow < 3; ++nRow)
-        for (int nCol = 0; nCol < 3; ++nCol)
-            ReleaseSlot(mGrid[nRow * 3 + nCol], 4);
+    for (int i = 0; i < 9; ++i)
+        ReleaseSlot(mGrid[i], 4);
 }
