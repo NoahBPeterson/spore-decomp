@@ -6,9 +6,9 @@
 007c6110  44  cCameraManager::SetActiveController(name); vtable + SPKeyFromName shape differs
 007c6200  -  UpdateFromControllerProperties; vtable property fetch differs (now member, ECX this; equiv UNSUPPORTED: 0/1200 valid inputs)
 007c6370  17  scalar deleting destructor; operator_delete call shape differs
-007c63a0  115  cCameraManager::Update; vtable walks differ
+007c63a0  120  cCameraManager::Update; complete behaviour; second vtable +0x4c call, parent/self modification-count comparison against +0xac, mViewer early-out and mViewer argument to vtable +0x20; slice/hybrid equiv WEAK 248 valid, 19.6% coverage, no mismatch; replay PASS
 007c6420  66  SetActiveControllerByIndex; vtable order differs
 007c65a0  24  VariantTypeTraits::GetTPTR; lazy static init differs
 007c6610  -  cCameraManager::HandleMessage; hashtable find not reproduced
 007c66b0  70  SetActiveController(id); hashtable find not reproduced
-007c6700  66  cCameraManager::Controller; hashtable find not reproduced
+007c6700  72  cCameraManager::Controller; complete behaviour; EASTL hashtable find reproduced with this=map+0x60, hidden iterator out and key pointer; node compared with bucket end and controller indexed from mControllers; slice/hybrid equiv PASS 305 valid, 100.0% coverage; replay PASS

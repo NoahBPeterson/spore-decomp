@@ -57,6 +57,9 @@ extern "C" int   FUN_007c5920(void);
 extern "C" int   IsType1Or9(int); // 0x007c57e0
 extern "C" int   IsType9to11(int); // 0x007c5800
 extern "C" int   CtrlIDMapFind(int* id);
+struct HashIter { void* node; void* other; };
+extern "C" void __fastcall HashFind_645ed0(void* self, int dummy, HashIter* out, const unsigned int* key); // 0x00645ed0
+extern "C" int  __fastcall GetModificationCount_6237a0(void* self);                                    // 0x006237a0
 
 extern "C" int   GetVersionExW(void*);
 extern "C" int   GlobalMemoryStatusEx(void*);
@@ -270,13 +273,18 @@ void** Destroy6370(void** p, int flags) {
 // @ 0x007c63a0
 void cCameraManager::Update(int dt) {
     if (mIndexA8 < 0) return;
+    if (*(int*)((char*)this + 0xb0) == 0) return;
     void* ctrl = mControllersBegin[mIndexA8];
-    void* vt = *(void**)ctrl;
-    void* p = (void*)((int(__thiscall*)(void*))((void**)vt)[0x4c / 4])(ctrl);
+    void** vt = *(void***)ctrl;
+    void* p = (void*)((int(__thiscall*)(void*))vt[0x4c / 4])(ctrl);
     if (p != 0) {
-        this->UpdateFromControllerProperties();
-        ((void(__thiscall*)(void*, int, void*))((void**)vt)[0x20 / 4])(ctrl, dt, 0);
+        p = (void*)((int(__thiscall*)(void*))vt[0x4c / 4])(ctrl);
+        void* pl = *(void**)((char*)p + 0x30);
+        int mods = pl != 0 ? GetModificationCount_6237a0(pl) : 0;
+        if (*(int*)((char*)p + 0x34) + mods != *(int*)((char*)this + 0xac))
+            this->UpdateFromControllerProperties();
     }
+    ((void(__thiscall*)(void*, int, void*))vt[0x20 / 4])(ctrl, dt, *(void**)((char*)this + 0xb0));
 }
 
 // ===========================================================================
@@ -353,8 +361,14 @@ int cCameraManager::SetActiveControllerByID(int id) {
 // ===========================================================================
 // @ 0x007c6700
 void* cCameraManager::Controller(int id) {
-    int found = CtrlIDMapFind(&id);
-    if (found != 0) return mControllersBegin[found];
+    char* map = (char*)this + 0x60;
+    HashIter it;
+    HashFind_645ed0(map, 0, &it, (const unsigned int*)&id);
+    void* end = *(void**)(*(char**)(map + 4) + *(int*)(map + 8) * 4);
+    if (it.node != end) {
+        int idx = *(int*)((char*)it.node + 4);
+        return mControllersBegin[idx];
+    }
     return 0;
 }
 // --- equivalence checker address annotations
