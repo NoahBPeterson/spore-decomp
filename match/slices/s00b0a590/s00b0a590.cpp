@@ -2,6 +2,7 @@
 // are attached to the nearby interactable objects around the current aim point.
 #include "types.h"
 #include <math.h>
+#include <string.h>
 
 struct Vec3 {
     float x, y, z;
@@ -74,8 +75,10 @@ struct Located {
 
 struct Avatar { uint32_t pad[0xc0 / 4]; Located loc; };
 
+struct NounObj;
 struct NounManager {
-    Avatar* GetAvatar();   // 0x00b1fdb0
+    Avatar* GetAvatar();            // 0x00b1fdb0
+    NounObj* CreateNoun(uint32_t key);   // 0x00b20c60
 };
 
 struct Viewer {
@@ -137,15 +140,176 @@ AimSource* __cdecl GetAimSource();           // 0x00b3d240
 Vec3* __cdecl RotateByQuat(Vec3* out, const Vec3* v, const Quat* q);   // 0x0059aed0
 void __cdecl operator_delete_array(void* p);                          // 0x00f47380 (operator delete[])
 
+// ---------------------------------------------------------------------------
+// pooled simulator items and the auto-ref vectors that hold them
+// ---------------------------------------------------------------------------
+inline void* operator new(size_t, void* p) { return p; }
+
+struct Key3 { uint32_t a, b, c; };
+
+extern uint32_t g_15673a8;   // 0x015673a8
+extern uint32_t g_15673ac;   // 0x015673ac
+extern uint32_t g_15673b0;   // 0x015673b0
+extern uint32_t g_15673b4;   // 0x015673b4
+extern uint32_t g_15673b8;   // 0x015673b8
+extern uint32_t g_1567410;   // 0x01567410
+extern uint32_t g_156741c;   // 0x0156741c
+
+// reference-counted target: AddRef in slot 0, Release in slot 1
+struct RefTarget {
+    virtual void AddRef();    // +0x00
+    virtual void Release();   // +0x04
+};
+
+// 4-byte element of RefVec
+struct RefElem {
+    RefTarget* mpObject;      // +0x00
+    RefElem() : mpObject(0) {}
+    RefElem(RefTarget* p) : mpObject(p) { if (p) p->AddRef(); }
+    ~RefElem() { if (mpObject) mpObject->Release(); }
+    RefElem& operator=(RefTarget* p) {
+        if (p != mpObject) {
+            if (p) p->AddRef();
+            RefTarget* old = mpObject;
+            mpObject = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+
+// vector<AutoRefCount> (begin/end/capacity)
+struct RefVec {
+    RefElem* mpBegin;   // +0x00
+    RefElem* mpEnd;     // +0x04
+    RefElem* mpCap;     // +0x08
+    void   F06d90(uint32_t n);                              // 0x00b06d90
+    void   insertSlow(RefElem* pos, const RefElem* value);  // 0x00aea5d0
+    void   push_back(const RefElem& value) {
+        if (mpEnd < mpCap) {
+            new ((void*)mpEnd) RefElem(value);
+            ++mpEnd;
+        } else {
+            insertSlow(mpEnd, &value);
+        }
+    }
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+    RefElem& operator[](uint32_t i) { return mpBegin[i]; }
+};
+
+// vector<uint32_t> used as the 64-entry object bit mask
+struct U32Vec {
+    uint32_t* mpBegin;   // +0x00
+    uint32_t* mpEnd;     // +0x04
+    uint32_t* mpCap;     // +0x08
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+};
+
+// spatial component every simulator item carries at item+0x34
+struct SpatialC {
+    VPAD10(a) VPAD10(b) VPAD10(c)
+    virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33();
+    virtual void v34(); virtual void v35(); virtual void v36();
+    virtual void SetKey(const Key3* key);   // +0x94
+    char pad_04[0x4c];                      // +0x04 .. +0x4f
+    uint32_t flags;                         // +0x50
+};
+
+struct ItemObj : RefTarget {
+    char pad_04[0x30];    // +0x04 .. +0x33
+    SpatialC spatial;     // +0x34
+};
+
+// noun created for the second grow loop
+struct NounObj : RefTarget {
+    virtual void n02(); virtual void n03(); virtual void n04(); virtual void n05();
+    virtual void n06(); virtual void n07(); virtual void n08(); virtual void n09();
+    virtual void n10(); virtual void n11(); virtual void n12(); virtual void n13();
+    virtual void n14(); virtual void n15(); virtual void n16(); virtual void n17();
+    virtual void n18(); virtual void n19(); virtual void n20();
+    virtual void Init();      // +0x54
+};
+
+struct PlanetObj {
+    virtual void p00(); virtual void p01();
+    virtual uint32_t GetId();   // +0x08
+};
+
+// ---------------------------------------------------------------------------
+// 0x24-byte pooled object and its vector (glyph records share the layout)
+// ---------------------------------------------------------------------------
+struct GlyphInfoVec { void* mpBegin; void* mpEnd; void* mpCap; };
+
+struct PoolOwner {
+    virtual ~PoolOwner();              // slot 0 (overridden by PoolElem)
+    uint8_t  mFlag_04;                 // +0x04
+    uint8_t  mPad_05[3];               // +0x05
+    GlyphInfoVec mGlyphs_08;           // +0x08
+    uint32_t mAlloc_14;                // +0x14
+    uint32_t mData_18;                 // +0x18
+    uint32_t mData_1c;                 // +0x1c
+    uint32_t mData_20;                 // +0x20
+    PoolOwner(const PoolOwner&);       // 0x00b04520
+};
+
+struct PoolElem : PoolOwner {
+    PoolElem(const PoolElem& o) : PoolOwner(o) {}
+    virtual ~PoolElem();               // 0x007ced20
+};
+
+struct PoolVec {
+    PoolElem* mpBegin;   // +0x00
+    PoolElem* mpEnd;     // +0x04
+    PoolElem* mpCap;     // +0x08
+    PoolElem* erase(PoolElem* first, PoolElem* last);                     // 0x00b0aee0
+    void insert(PoolElem* position, uint32_t n, const PoolElem* value);   // 0x00b0af40
+};
+
+extern "C" {
+PoolElem* copy_forward(PoolElem* first, PoolElem* last, PoolElem* dst);     // 0x00b06500
+PoolElem* copy_backward(PoolElem* first, PoolElem* last, PoolElem* dst);    // 0x00b06550
+PoolElem* construct_range(PoolElem* first, PoolElem* last, PoolElem* dst);  // 0x00b05770
+void**    construct_cursor(void** out, PoolElem* first, PoolElem* last,
+                           PoolElem* result, PoolElem* extra);              // 0x00b056e0
+void      fill_n_copy(PoolElem* dst, uint32_t n, const PoolElem* value,
+                      PoolElem* extra);                                     // 0x00b05730
+void      assign_range(PoolElem* first, PoolElem* last, const PoolElem* src); // 0x00b072d0
+PoolElem* destroy_range(PoolElem* first, PoolElem* last, PoolElem* out);    // 0x00affd00
+void*     EAAlloc(size_t size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
+}
+
+void* __cdecl PlanetModel();                                       // 0x00b3d350
+void  __cdecl GetPropertyAsKey(uint32_t id, uint32_t key, uint32_t* out);          // 0x006a1250
+void  __cdecl GetPropertyAsKeyInstance(uint32_t id, uint32_t key, uint32_t* out);  // 0x006a12a0
+
 struct BeamMgr2 {
     uint32_t pad0[0x16504 / 4];
     Light** lightBegin;       // +0x16504
     Light** lightEnd;         // +0x16508
     uint32_t pad1[(0x1659c - 0x1650c) / 4];
     uint32_t objMask;         // +0x1659c
+    uint32_t pad2[(0x1b8e10 - 0x165a0) / 4];
+    int state;                // +0x1b8e10
+    RefVec items;             // +0x1b8e14
+    uint32_t pad3[(0x1b8f44 - 0x1b8e20) / 4];
+    RefVec items2;            // +0x1b8f44
+    uint32_t pad4[(0x1b905c - 0x1b8f50) / 4];
+    U32Vec bitvec;            // +0x1b905c
+    uint32_t pad5[(0x1b9174 - 0x1b9068) / 4];
+    RefVec nouns;             // +0x1b9174
+    uint32_t pad6[(0x1ba18c - 0x1b9180) / 4];
+    uint32_t mode;            // +0x1ba18c
     void Gather(const Vec3* pos, PtrVec* out, uint32_t mask, float radius, char flag, Vec3* extra, char flag2); // 0x00b0a0c0
     void UpdateBeams();       // 0x00b0a6f0
+    void UpdateState();       // 0x00b0a590
+    void Init();              // 0x00b0b150
+    void RemoveAllNouns();    // 0x00b09b00
+    void FUN_00b02120();      // 0x00b02120
+    void FUN_00b06cd0();      // 0x00b06cd0
+    void FUN_00b091d0();      // 0x00b091d0
+    ItemObj* CreateItem();    // 0x00b00220
 };
+
 
 // BeamMgr2::UpdateBeams @ 0x00b0a6f0
 // BeamMgr2::UpdateBeams @ 0x00b0a6f0
@@ -318,4 +482,167 @@ done:
     }
     if (v.begin && v.begin[-1])
         operator_delete_array(v.begin);
+}
+
+// ---------------------------------------------------------------------------
+// 00b0a590  refresh the interactable item list / mode mask
+// ---------------------------------------------------------------------------
+// @ 0x00b0a590
+void BeamMgr2::UpdateState()
+{
+    uint32_t i = 0;
+    if (state != 0 && state != 1)
+        state = 0;
+    RemoveAllNouns();
+    if (state == 0) {
+        items.F06d90(g_15673b0);
+        uint32_t n = items.size();
+        for (; i < n; ++i) {
+            if (items[i].mpObject == 0) {
+                RefElem& slot = items[i];
+                slot = CreateItem();
+                Key3 key;
+                key.a = 0xb5bc5ab6;
+                key.b = 0x00e6bce5;
+                key.c = 0;
+                ((ItemObj*)items[i].mpObject)->spatial.SetKey(&key);
+                ((ItemObj*)items[i].mpObject)->spatial.flags |= 0x80;
+            }
+        }
+    }
+    if (state == 1) {
+        if (mode & 0x10) {
+            mode &= ~0x10u;
+            objMask = 0;
+            FUN_00b06cd0();
+        }
+        if (mode & 1)
+            mode |= 0x10;
+        else
+            mode &= ~0x10u;
+        if (mode & 0x10) {
+            objMask = 6;
+            return FUN_00b091d0();
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 00b0aee0  erase [first,last) out of a pooled-object vector
+// ---------------------------------------------------------------------------
+static void destroy_values(PoolElem* first, PoolElem* last)
+{
+    while (first < last) {
+        first->~PoolElem();
+        ++first;
+    }
+}
+
+// @ 0x00b0aee0
+PoolElem* PoolVec::erase(PoolElem* first, PoolElem* last)
+{
+    PoolElem* const position = copy_forward(last, mpEnd, first);
+    destroy_values(position, mpEnd);
+    mpEnd -= last - first;
+    return first;
+}
+
+// ---------------------------------------------------------------------------
+// 00b0b150  first-time setup of the item/noun lists and the object bit mask
+// ---------------------------------------------------------------------------
+// @ 0x00b0b150
+void BeamMgr2::Init()
+{
+    if (!(mode & 1))
+        return;
+    if (!(mode & 2)) {
+        FUN_00b02120();
+        void* pm = PlanetModel();
+        PlanetObj* p = pm ? *(PlanetObj**)((char*)pm + 0x24) : 0;
+        if (p && p->GetId()) {
+            uint32_t id = p->GetId();
+            GetPropertyAsKey(id, 0x463cda3, &g_156741c);
+            GetPropertyAsKey(id, 0x463d9ba, &g_1567410);
+            uint32_t tmp = 0;
+            GetPropertyAsKeyInstance(id, 0x463cdb4, &tmp);
+            g_15673a8 = tmp;
+            g_15673ac = 0;
+        }
+        uint32_t n = items2.size();
+        while (n < g_15673b4) {
+            ItemObj* it = CreateItem();
+            RefElem ref(it);
+            items2.push_back(ref);
+            ++n;
+        }
+        uint32_t m = nouns.size();
+        while (m < g_15673b8) {
+            NounObj* nw = GetNounManager()->CreateNoun(0x2e96892);
+            RefElem ref(nw);
+            nw->Init();
+            nouns.push_back(ref);
+            ++m;
+        }
+        if (bitvec.size() < 0x40) {
+            uint32_t* nb = (uint32_t*)EAAlloc(0x100, "Simulator", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+            memcpy(nb, bitvec.mpBegin, (char*)bitvec.mpEnd - (char*)bitvec.mpBegin);
+            if (bitvec.mpBegin && ((int*)bitvec.mpBegin)[-1] != 0)
+                operator_delete_array(bitvec.mpBegin);
+            uint32_t cnt = bitvec.size();
+            bitvec.mpBegin = nb;
+            bitvec.mpEnd = nb + cnt;
+            bitvec.mpCap = nb + 0x40;
+        }
+    }
+    if ((mode & 4) || !(mode & 2))
+        UpdateState();
+    mode |= 2;
+    mode &= ~4u;
+}
+
+// ---------------------------------------------------------------------------
+// 00b0af40  insert n copies of *value before position
+// ---------------------------------------------------------------------------
+// @ 0x00b0af40
+void PoolVec::insert(PoolElem* position, uint32_t n, const PoolElem* value)
+{
+    if (n <= (uint32_t)(mpCap - mpEnd)) {
+        if (n != 0) {
+            const PoolElem temp = *value;
+            const uint32_t nExtra = (uint32_t)(mpEnd - position);
+            PoolElem* const pEnd = mpEnd;
+            if (n < nExtra) {
+                construct_cursor((void**)&value, mpEnd - n, mpEnd, mpEnd, position);
+                mpEnd += n;
+                copy_backward(position, pEnd - n, pEnd);
+                assign_range(position, position + n, &temp);
+            } else {
+                fill_n_copy(mpEnd, n - nExtra, &temp, position);
+                mpEnd += n - nExtra;
+                construct_cursor((void**)&position, position, pEnd, mpEnd, position);
+                mpEnd += nExtra;
+                assign_range(position, pEnd, &temp);
+            }
+        }
+    } else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        uint32_t nGrowSize = nPrevSize ? nPrevSize * 2 : 1;
+        const uint32_t nNewSize = nGrowSize > (nPrevSize + n) ? nGrowSize : (nPrevSize + n);
+        PoolElem* const pNewData = nNewSize
+            ? (PoolElem*)EAAlloc(nNewSize * 0x24, "Simulator", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+            : 0;
+        PoolElem* pNewEnd = construct_range(mpBegin, position, pNewData);
+        destroy_range(mpBegin, position, pNewData);
+        fill_n_copy(pNewEnd, n, value, pNewEnd);
+        PoolElem* const tail = pNewEnd + n;
+        pNewEnd = construct_range(position, mpEnd, tail);
+        destroy_range(position, mpEnd, tail);
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            operator_delete_array(mpBegin);
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCap = pNewData + nNewSize;
+    }
 }

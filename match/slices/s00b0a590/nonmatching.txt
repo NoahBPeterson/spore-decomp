@@ -1,1 +1,5 @@
+00b0a590 254 complete; register allocation differs throughout (this in ebp vs ebx, loop index spilled, &items/esi vs edi) and mode bit tests use load+test instead of test-byte/RMW; difftest UNSUPPORTED (0/400 valid); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00b0a6f0 1371 complete; same as sibling 00b7a880 (scheduling/stack layout differ); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00b0aee0 23 complete; instruction-identical except a pure callee-saved swap (last in ebx / loop end in ebp instead of last in ebp / end in ebx) plus first-load hoisted above the prologue; difftest WEAK (66 valid, 81.4% coverage); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00b0af40 363 complete; grow-path temporaries keep extra values live so position lands in ebp not ebx (504 vs 522 bytes); difftest WEAK (168 valid, 13.2% coverage); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00b0b150 470 complete; mode tests differ (test/shr vs test al,2), planet-model fetch misses the second PlanetModel() call, size 587 vs 625; difftest FAIL (5/5 inputs mismatched, ecx clobber); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
