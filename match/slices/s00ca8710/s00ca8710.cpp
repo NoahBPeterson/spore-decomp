@@ -80,13 +80,18 @@ struct ILocomotion {
     virtual void SetOrientation(const Quaternion& q); // +0x3c
     PV4 PV2 PV
     virtual Vector3 GetFacing();                     // +0x5c
-    PV8 PV8 PV8 PV2
+    PV PV PV PV PV                                   // +0x60 .. +0x70
+    virtual float v74(float arg);                    // +0x74
+    PV8 PV8 PV2 PV2                                  // +0x78 .. +0xc4
     virtual float GetMaxSpeed();                     // +0xc8
-    PV
+    PV                                               // +0xcc
     virtual float GetMaxAcceleration();              // +0xd0
-    PV4 PV2
+    PV PV PV                                         // +0xd4 .. +0xdc
+    virtual void vE0(int a, float t);                // +0xe0
+    PV2                                              // +0xe4 .. +0xe8
     virtual void OnPathFailed();                     // +0xec
     LocoGoal* GetGoal();                             // 0x00c41ec0
+    bool Forward(int a, float b, float c);           // 0x00ca9770
 };
 
 struct cLocomotionOwner {
@@ -323,4 +328,239 @@ void cPathLocomotion::Update(LocoUpdateParams* params)
               accelSign);
         return;
     }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Debug-tooltip / angry-crowd helpers (0x00ca95c0 .. 0x00ca97a0).
+// The vehicle is a different model of the same object as cLocomotionOwner; its ILocomotion
+// subobject still lives at +0x34, so the two models stay independent.
+
+extern const char* kLocomotionString[];    // 0x0157d2b0
+extern const char* kPurposeString[];       // 0x0157d2bc
+extern const char* kCargoTypeString[];     // 0x0157d29c
+
+// eastl::basic_string<char, eastl::allocator>::append_sprintf (varargs member: this on the stack)
+struct EastlString {
+    EastlString* append_sprintf(const char* format, ...);
+};
+
+struct cSPTimer {
+    uint8_t pad00[0x20];
+    uint64_t GetElapsedTime();   // 0x00bc3190
+    bool IsRunning();            // 0x00feba90
+};
+
+// Queue of path goals; eastl-style vector whose live end/capacity words sit at +0x18/+0x20.
+struct IntQueue {
+    uint8_t pad00[0x18];
+    int* mpEnd;                  // +0x18
+    int* mpCapacityBegin;        // +0x1c
+    int* mpCapacityEnd;          // +0x20
+
+    void Grow(int* value);       // 0x01045370
+
+    void push_back(int value)
+    {
+        int* next = mpEnd + 1;
+        if (next != mpCapacityEnd) {
+            int* slot = mpEnd;
+            mpEnd = next;
+            if (slot)
+                *slot = value;
+        } else {
+            Grow(&value);
+        }
+    }
+};
+
+struct cVehicle {
+    uint8_t pad00[0x34];
+    ILocomotion mLocomotion;                             // +0x34
+    uint8_t pad38[0x238];
+    uint8_t mFlags;                                      // +0x270
+    uint8_t pad271[0xac4 - 0x271];
+    int32_t mSubtype;                                    // +0xac4
+    uint8_t padac8[0xae8 - 0xac8];
+    int32_t mLocomotionType;                             // +0xae8
+    int32_t mPurpose;                                    // +0xaec
+    uint8_t padf0[0xaf4 - 0xaf0];
+    int32_t mCargoType;                                  // +0xaf4
+    uint8_t padf8[0xb1c - 0xaf8];
+    int32_t mGameMode;                                   // +0xb1c
+    uint8_t padb20[0xb24 - 0xb20];
+    float mCargoAmount;                                  // +0xb24
+    uint8_t padb28[0xb2c - 0xb28];
+    IntQueue mPathQueue;                                 // +0xb2c
+    uint8_t padb50[0xb58 - 0xb50];
+    const int* mpHostilesBegin;                          // +0xb58
+    const int* mpHostilesEnd;                            // +0xb5c
+    uint8_t padb60[0xbcc - 0xb60];
+    bool mbCrowdTimerArmed;                              // +0xbcc
+    uint8_t padbcd[0xbd1 - 0xbcd];
+    bool mbPathWaitTimerArmed;                           // +0xbd1
+    uint8_t padbd2[0xbd8 - 0xbd2];
+    cSPTimer mTimerBD8;                                  // +0xbd8
+    cSPTimer mTimerBF8;                                  // +0xbf8
+    uint8_t padc18[0xc1c - 0xc18];
+    float mPower;                                        // +0xc1c
+    float mDefense;                                      // +0xc20
+    float mSpeedValue;                                   // +0xc24
+    uint8_t padc28[0xc88 - 0xc28];
+    cSPTimer mTimerC88;                                  // +0xc88
+
+    void GetDebugToolTip(EastlString* out);              // 0x00ca95c0
+    void UpdateCrowdTimers();                            // 0x00ca96b0
+    void MoveWithFlag(int a, float b, float c);          // 0x00ca97a0
+    void Move(int a, float b, float c, int flag);        // 0x00ca81d0
+    void EndAngryCrowdAttack();                          // 0x00ca8180
+};
+
+// @ 0x00ca95c0
+void cVehicle::GetDebugToolTip(EastlString* out)
+{
+    out->append_sprintf("\n%s %s vehicle (subtype %x)",
+                        kLocomotionString[mLocomotionType],
+                        kPurposeString[mPurpose],
+                        mSubtype);
+    out->append_sprintf("\nPower: %.1f  Defense: %.1f  Speed: %.1f",
+                        (double)mPower,
+                        (double)mDefense,
+                        (double)mSpeedValue);
+    if (mPurpose != 0 && mCargoType != 0) {
+        out->append_sprintf("\nCargo: %.1f %s",
+                            (double)mCargoAmount,
+                            kCargoTypeString[mCargoType]);
+    }
+    out->append_sprintf("\n%d hostile units detected", (int)(mpHostilesEnd - mpHostilesBegin));
+    if (mFlags & 2)
+        out->append_sprintf("\n==Goal Blocked==");
+    if (mFlags & 4)
+        out->append_sprintf("\n==Waiting for Path==");
+}
+
+// @ 0x00ca96b0
+void cVehicle::UpdateCrowdTimers()
+{
+    if (mbCrowdTimerArmed) {
+        if (mTimerC88.GetElapsedTime() > 0xc1c)
+            mbCrowdTimerArmed = false;
+    }
+    if (mbPathWaitTimerArmed) {
+        if (mTimerBD8.GetElapsedTime() > 0x9c4) {
+            mbPathWaitTimerArmed = false;
+            mPathQueue.push_back(0x19);
+        }
+    }
+    if (mTimerBF8.IsRunning()) {
+        if (mTimerBF8.GetElapsedTime() > 0x1388) {
+            EndAngryCrowdAttack();
+            return;
+        }
+    }
+}
+
+// @ 0x00ca9770
+bool ILocomotion::Forward(int a, float b, float c)
+{
+    cVehicle* owner = (cVehicle*)((char*)this - 0x34);
+    owner->Move(a, b, c, 1);
+    return true;
+}
+
+unsigned char* GetCurrentGameMode();   // 0x00b5b800
+extern unsigned char DAT_01654c10;
+
+// @ 0x00ca97a0
+void cVehicle::MoveWithFlag(int a, float b, float c)
+{
+    if (mGameMode == 2 && GetCurrentGameMode() == &DAT_01654c10) {
+        float t = mLocomotion.v74(0);
+        t = mLocomotion.v74(t + c);
+        mLocomotion.vE0(a, t + b);
+    } else {
+        Move(a, b, c, 0);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Generic debug-list validation (0x00ca8710) and nearest-object update (0x00ca89b0).
+
+const wchar_t* ConvertToString16(wchar_t* buffer, const char* text, int length);  // 0x0093c5a0
+
+struct WideString {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    WideString(const wchar_t* text);
+    ~WideString();
+    bool empty() const { return mpBegin == mpEnd; }
+    const wchar_t* c_str() const { return mpBegin; }
+};
+
+struct DebugItem { uint8_t mData[0x10]; };
+struct DebugRange { DebugItem* mpBegin; DebugItem* mpEnd; };
+
+struct DebugListOwner {
+    virtual void BeginList(const wchar_t* name);   // slot 0
+    virtual void EndList(const wchar_t* name);     // slot 1
+};
+
+bool CheckDebugListItem(DebugListOwner* owner, int index, DebugItem* item);  // 0x00ac8050
+
+// @ 0x00ca8710
+bool ValidateDebugList(DebugListOwner* owner, const char* name, DebugRange* range)
+{
+    bool ok = true;
+    if (range->mpBegin != range->mpEnd) {
+        wchar_t buffer[0x100];
+        WideString converted(name ? ConvertToString16(buffer, name, -1) : L"");
+        const wchar_t* displayName = converted.empty() ? L"list" : converted.c_str();
+        owner->BeginList(displayName);
+        for (DebugItem* it = range->mpBegin; it != range->mpEnd; ++it)
+            ok = ok && CheckDebugListItem(owner, 0, it);
+        owner->EndList(displayName);
+    }
+    return ok;
+}
+
+struct RefCounted {
+    PV8 PV8 PV8
+    virtual void AddRef();    // +0x60
+    virtual void Release();   // +0x64
+};
+
+struct Vec4 {
+    float x, y, z, w;
+    bool Closer(RefCounted* a, RefCounted* b) const;   // 0x00c9f490
+};
+
+void SortClosestBegin(RefCounted** slot, RefCounted** begin, Vec4 p);   // 0x00ca77b0
+void SortClosestEnd(RefCounted** slot, RefCounted** begin, Vec4 p);     // 0x00ca7830
+void InsertClosest(RefCounted** slot, int a, int count, int b, RefCounted* item, Vec4 p); // 0x00ca44f0
+
+// @ 0x00ca89b0
+void UpdateClosest(RefCounted** slot, RefCounted** begin, RefCounted** end, Vec4 p)
+{
+    SortClosestBegin(slot, begin, p);
+    for (RefCounted** it = begin; it < end; ++it) {
+        if (!p.Closer(*it, *slot))
+            continue;
+        RefCounted* item = *it;
+        if (item)
+            item->AddRef();
+        RefCounted* current = *slot;
+        if (current != item) {
+            if (current)
+                current->AddRef();
+            *it = current;
+            if (item)
+                item->Release();
+        }
+        if (item)
+            item->AddRef();
+        InsertClosest(slot, 0, (int)(begin - slot), 0, item, p);
+        if (item)
+            item->Release();
+    }
+    SortClosestEnd(slot, begin, p);
 }
