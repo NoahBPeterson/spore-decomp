@@ -18,6 +18,9 @@ void  CopyElems29(void* first, void* last, void* dest);  // @ 0x0047c980
 void  Move16(void* p);                                   // @ 0x00401b80
 void  CopyElems16(void* first, void* last, void* dest);  // @ 0x0047d3f0
 void  ReleaseBig(void* p);                               // @ 0x0047c... (element release)
+extern "C" void __cdecl FUN_0041cb40(void* dst, const void* src); // cSPMatrix3::Assign
+extern "C" void __cdecl FUN_0047c600(void* self, uint n);          // basic_string reserve
+extern "C" void* __cdecl FUN_011e073e(void* p, int c, uint n);     // memset
 
 // @ 0x0047c1c0
 E16* Copy16Range(E16* first, E16* last, E16* dest)
@@ -84,29 +87,29 @@ Big* Big::CopyBig(const Big* src)
 {
     Big* dst = this;
     dst->a = src->a; dst->b = src->b; dst->c = src->c; dst->d = src->d; dst->e = src->e;
-    for (int i = 0; i < 12; ++i) dst->mat.m[i] = src->mat.m[i];
+    ((void(__thiscall*)(void*, const void*))FUN_0041cb40)(&dst->mat, &src->mat);
     return dst;
 }
 
 // @ 0x0047b7b0
-void InsertionSort8F(float* first, float* last)
+float* InsertionSort8F(float* first, float* last)
 {
+    if (first == last || first + 2 == last) return first;
     float* cur = first;
-    if (first != last) {
-        while (cur + 2 != last) {
-            float* p = cur + 2;
-            float k0 = p[0], k1 = p[1];
-            float* w = p;
-            while (w != first && k0 < cur[0]) {
-                float t = cur[1];
-                w[0] = cur[0]; w[1] = t;
-                w -= 2;
-                cur -= 2;
-            }
-            w[0] = k0; w[1] = k1;
-            cur = p;
+    while (cur + 2 != last) {
+        float* p = cur + 2;
+        float k0 = p[0], k1 = p[1];
+        float* w = p;
+        while (w != first && k0 < cur[0]) {
+            float t = cur[1];
+            w[0] = cur[0]; w[1] = t;
+            w -= 2;
+            cur -= 2;
         }
+        w[0] = k0; w[1] = k1;
+        cur = p;
     }
+    return last;
 }
 
 // @ 0x0047b890
@@ -128,20 +131,27 @@ void InsertionSort8F2(float* first, float* last)
 // @ 0x0047bf30
 struct Str8 {
     char* mpBegin; char* mpEnd; char* mpCapacity;
-    void resize(uint n);
+    Str8* resize(uint n, char c);
 };
 void StrSetCapacity(Str8* s, uint n);       // @ 0x0047d240
 extern char gEmptyString[];
-void Str8::resize(uint n)
+Str8* Str8::resize(uint n, char c)
 {
     const uint cur = (uint)(mpEnd - mpBegin);
-    if (n < cur) {
-        StrSetCapacity(this, n);
-    } else if (n > cur) {
-        StrSetCapacity(this, n);
-        for (char* p = mpBegin + cur; p != mpBegin + n; ++p) *p = 0;
-        mpEnd = mpBegin + n;
+    const uint cap = (uint)(mpCapacity - mpBegin) - 1;
+    if (cur + n > cap) {
+        const uint target = cur + n;
+        const uint cap2 = cap > 8 ? cap * 2 : 8;
+        const uint chosen = cap2 >= target ? cap2 : target;
+        ((void(__thiscall*)(void*, uint))FUN_0047c600)(this, chosen);
     }
+    if (n) {
+        FUN_011e073e(mpEnd + 1, (unsigned char)c, n - 1);
+        *mpEnd = c;
+        mpEnd += n;
+        *mpEnd = 0;
+    }
+    return this;
 }
 
 // @ 0x0047b6d0  (introsort depth-limited quicksort; skeleton)
