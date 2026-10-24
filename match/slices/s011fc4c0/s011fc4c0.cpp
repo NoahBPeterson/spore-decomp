@@ -42,6 +42,52 @@ void __cdecl FUN_011fcee0(byte* param_1, uint param_2) {
     } while (bVar1 != 0);
 }
 
+// @ 0x011fcd10 -- FUN_011fcd10
+// Letter-list/mask intersection, sibling of FUN_011fce20: walks the letter list at
+// param_1+0x11 against the candidate list at param_2+0x11, accumulating the matched
+// masks in param_1+0xb4 and returning the mask of letters whose parallel dword at
+// param_1+0x34 differs from the candidate's dword at param_2+0x34+index*4.
+uint __cdecl FUN_011fcd10(byte* param_1, byte* param_2) {
+    byte* pbVar3 = param_2 + 0x11;
+    byte bVar4 = param_1[0x11];
+    uint uVar8 = 0;
+    byte* pbVar7 = param_1 + 0x12;
+    if (param_2[0x11] != 0) {
+        int* pl = (int*)(param_1 + 0x34);
+        uint local_4 = 0;
+        do {
+            uint uVar5 = *(uint*)(0x171a108 + (uint)bVar4 * 4);
+            if (uVar5 != 0) {
+                uVar8 = uVar8 | uVar5;
+                int iVar6 = 0;
+                byte bVar2 = *pbVar3;
+                while (bVar4 != bVar2 && bVar2 != 0) {
+                    int iVar1 = iVar6 + 1;
+                    iVar6 = iVar6 + 1;
+                    bVar2 = pbVar3[iVar1];
+                }
+                if (pbVar3[iVar6] == 0 ||
+                    *pl != *(int*)(param_2 + iVar6 * 4 + 0x34)) {
+                    local_4 = local_4 | uVar5;
+                }
+            }
+            bVar4 = *pbVar7;
+            pl = pl + 1;
+            pbVar7 = pbVar7 + 1;
+        } while (bVar4 != 0);
+        *(uint*)(param_1 + 0xb4) = uVar8;
+        return local_4;
+    }
+    do {
+        uint uVar5 = (uint)bVar4;
+        bVar4 = *pbVar7;
+        uVar8 = uVar8 | *(uint*)(0x171a108 + uVar5 * 4);
+        pbVar7 = pbVar7 + 1;
+    } while (bVar4 != 0);
+    *(uint*)(param_1 + 0xb4) = uVar8;
+    return uVar8;
+}
+
 // @ 0x011fce20 -- FUN_011fce20
 // Intersects the letter list at param_1 with the candidate string param_2,
 // accumulating the matched masks in param_1+0xa0 and returning the mask of the
