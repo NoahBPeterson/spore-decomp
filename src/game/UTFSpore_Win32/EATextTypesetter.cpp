@@ -162,7 +162,9 @@ struct RectSet {
     RectNode mAnchor;       // +4 (sentinel; leftmost node at +8)
     unsigned mnSize;        // +0x14
     RectIter erase(RectNode* pos);                                              // 0x00898b20
-    void DoInsertValue(void* result, const Rectangle& v, bool bForceToLeft);    // 0x0089a7d0
+    // third arg is a bool in the original's signature, but the caller passes a
+    // dword whose upper bytes are a dead stack temporary; the callee ignores it
+    void DoInsertValue(void* result, const Rectangle& v, unsigned bForceToLeft);    // 0x0089a7d0
 };
 }
 }
@@ -322,13 +324,15 @@ void EA::Text::FixedRunVec::erase(EA::Text::RunInfo_s0089_b520* first, EA::Text:
     mpEnd = mpEnd + -((int)(last - first)) ;
 }
 struct SpanNode { SpanNode* mpNext; SpanNode* mpPrev; EA::Text::Span mValue; };
+struct SpanAnchor { SpanNode* mpNext; SpanNode* mpPrev; };
 struct SpanList {   // eastl::fixed_list<Span,16,1>
-    SpanNode mAnchor;       // sentinel (next, prev)
-    unsigned mnSize;
-    SpanNode* mpFreeHead;   // +8 of the pool bookkeeping
-    SpanNode* mpPoolBegin;
-    SpanNode* mpPoolEnd;
-    SpanNode mBuffer[16];
+    SpanAnchor mAnchor;     // +0 sentinel (next, prev)
+    SpanNode* mpFreeHead;   // +0x8
+    unsigned mPad0c;        // +0xc
+    SpanNode* mpPoolBegin;  // +0x10
+    SpanNode* mpPoolEnd;    // +0x14
+    unsigned mnPoolCapacity; // +0x18
+    SpanNode mBuffer[16];   // +0x1c
     SpanList();                                  // 0x00898ce0
     static void insert(EA::Text::Span* s, SpanList* l);    // 0x0089aed0 (cdecl)
 };
@@ -862,35 +866,38 @@ unsigned EA::Text::LineLayout_s0089_b520::GetGlyphSelection(unsigned a, unsigned
     EA::Text::GlyphLayoutInfo_s0089_b520* pLayout = mGlyphLayoutInfoArray.mpBegin + g0;
     EA::Text::GlyphLayoutInfo_s0089_b520* pLayoutEnd = mGlyphLayoutInfoArray.mpBegin + g1;
     EA::Text::GlyphInfo_s0089_b520* pInfo = mGlyphInfoArray.mpBegin + g0;
+    unsigned forceToLeft = 0;      // dead bool slot the original reuses for the last span end
     if (pLayout < pLayoutEnd) {
-        unsigned n = ((((char*)pLayoutEnd - (char*)pLayout) - 1) >> 5) + 1;
+        unsigned n = ((((unsigned)((char*)pLayoutEnd - (char*)pLayout)) - 1) >> 5) + 1;
         float* pPen = &pLayout->mfPenX;
         do {
             float adv = pPen[2] / (float)((pInfo->mBits >> 12) & 3);
             float x1 = pPen[0];
             float x2 = x1 + adv;
             EA::Text::Span s;
-            s.mfBegin = (x1 <= x2) ? x1 : x2;
-            s.mfEnd = (x2 <= x1) ? x1 : x2;
+            // the original's `comiss x1,x2; ja` picks x2 only when x1 > x2 (unordered/NaN keeps x1)
+            s.mfBegin = (x1 > x2) ? x2 : x1;
+            s.mfEnd = (x2 > x1) ? x2 : x1;
+            forceToLeft = (*(unsigned*)&x2) & 0xFFFFFF00u;
             SpanList::insert(&s, &list);
             pPen += 8;
             ++pInfo;
         } while (--n != 0);
     }
     SpanNode* node = list.mAnchor.mpNext;
-    while (node != &list.mAnchor) {
+    while (node != (SpanNode*)&list.mAnchor) {
         EA::Text::Rectangle r;
         r.mLeft = node->mValue.mfBegin;
         r.mTop = *(float*)((char*)this + 0xa0);
         r.mRight = node->mValue.mfEnd;
         r.mBottom = *(float*)((char*)this + 0xa4);
         unsigned char result[8];
-        out->DoInsertValue(result, r, false);
+        out->DoInsertValue(result, r, forceToLeft);
         node = node->mpNext;
     }
     unsigned count = out->mnSize;
     node = list.mAnchor.mpNext;
-    while (node != &list.mAnchor) {
+    while (node != (SpanNode*)&list.mAnchor) {
         SpanNode* next = node->mpNext;
         if (node >= list.mpPoolBegin && node < list.mpPoolEnd) {
             node->mpNext = list.mpFreeHead;

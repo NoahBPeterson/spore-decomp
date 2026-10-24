@@ -6,5 +6,5 @@
 0089bdb0 22 vector<GlyphLayoutInfo>::resize: complete; zero-init temp register choice (eax vs edx); difftest PASS (body moved into force-inlined ResizableVec::DoResize so this wrapper carries it)
 0089bea0 195 AddRectangleToRectangleSet: complete; float compare shape (ucomiss parity checks) differs
 0089bf70 81 LineLayout copy ctor: complete; allocator store ordering differs
-0089c110 319 LineLayout::GetGlyphSelection: complete; fixed_list<Span,16> inlined parts and loop shape differ
+0089c110 446 LineLayout::GetGlyphSelection: complete; fixed_list<Span,16> inlined parts and loop shape differ; min/max ternary shape is `>`-based to match comiss/ja NaN semantics; difftest PASS (338 valid, 97.2% coverage)
 0089c2d0 542 LineLayout::GetGlyphDecoration: complete; switch jump table / min-max by-reference shapes differ; difftest FAIL was a checker artifact (the original passes pointers into its own dead a/b parameter slots as the glyph-range outputs, not normalised like frame pointers); source now writes the range into those parameters like the original, difftest WEAK (29.8% coverage)
