@@ -34,7 +34,13 @@ class cSPUILayout { public:
 
 void* __cdecl SP_AssetBrowser();                   // 0x00401030
 struct Prop { float* GetFloat(); };                // 0x0041ea70
-void  __cdecl FUN_005c8480(void* a, void* b);      // 0x005c8480
+// 0x005c8480 -- sp_vector<T>::push_back(end, const T& value): the vector comes in ecx and the
+// callee pops both stack arguments (`ret $0x8`), so it is a thiscall member, not a cdecl
+// function; a cdecl spelling left ecx holding the element pointer and it faulted on `[ecx+4]`.
+class Vec {
+ public:
+  void push_back(void* end, void* const& value);   // 0x005c8480
+};
 void  __cdecl FUN_005c8480_g(void* a, void* b);    // placeholder
 
 extern float gF13eb960;   // 0x013eb960
@@ -76,16 +82,18 @@ int __cdecl FUN_0066afd0(ObjA* a, ObjB* b) {
 // @ 0x0066b050  push a refcounted object onto the global vector
 // -----------------------------------------------------------------------------
 void __cdecl FUN_0066b050(void* p) {
-    if (p) ((RefObj*)p)->v0();
+    // Retail refcounts through vtable slot 1 (+0x04, twice: once for the caller's reference and
+    // once for the vector's) and finishes with slot 2 (+0x08), which cl turns into a tail call.
+    if (p) ((RefObj*)p)->Release();
     if (gVecEnd < gVecCap) {
         void** slot = (void**)gVecEnd;
         gVecEnd = (char*)gVecEnd + 4;
         if (slot) {
             *slot = p;
-            if (p) ((RefObj*)p)->v0();
+            if (p) ((RefObj*)p)->Release();
         }
     } else {
-        FUN_005c8480(gVecEnd, &p);
+        ((Vec*)&gVecObj)->push_back(gVecEnd, p);
     }
     if (p) ((RefObj*)p)->Release2();
 }

@@ -1,5 +1,5 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
 0066afd0  101  comparator: complete map-lookup/vtable 0x24 path; map operator[] inlining and register allocation differ
-0066b050  58   global-vector refcounted push: complete AddRef/inline-or-outline path; vector end/cap scheduling differs
+0066b050  73   global-vector refcounted push: complete; the refcount calls are vtable slot 1 (+0x04, called twice) and slot 2 (+0x08, tail-called), not slot 0; the grow path calls 0x005c8480 as a thiscall member of the vector at 0x015fb120 (`ret $0x8`, args end + &value), not as cdecl -- the old spelling left ecx holding the element pointer and faulted on `[ecx+4]`; flags /O2 /MD /Gy /TP /arch:SSE /GS-; equiv WEAK (87 valid < 200, 45.0% cov, no mismatch)
 0066b0c0  47   layout-map reset/reindex: complete DoNukeSubtree + map[] loop; cl hoists the size/pointer reloads
 0066b480  1321  16 refcounted Sporepedia handler registrations: complete; cl keeps the new-result in a register differently (stack reloads)
