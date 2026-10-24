@@ -44,7 +44,7 @@ class FastFirEngine { public:
 
 // Stub owner for the __thiscall ReverbModel1 / ReverbIR1 helpers (real class only partly known).
 struct RevObj {
-    void   F_9e0(int, float);        // 0x011399e0
+    int    F_9e0(int, float);        // 0x011399e0
     bool   F_d60(float*);            // 0x01139d60
     RevObj* F_e10();                 // 0x01139e10
     void   F_eb0();                  // 0x01139eb0
@@ -72,7 +72,7 @@ double log2(double);
 namespace rw { namespace audio { namespace core {
 
 // @ 0x011399e0  ReverbModel1::ConfigureEq (this, outTable, sampleRate)
-void RevObj::F_9e0(int out, float sr)
+int RevObj::F_9e0(int out, float sr)
 {
     void* p = this;
     float blend;
@@ -119,6 +119,7 @@ void RevObj::F_9e0(int out, float sr)
             *(float*)(out + i * 4) = *(float*)(out + i * 4) / A<float>(p, 0x38);
         }
     }
+    return 1;
 }
 
 // @ 0x01139d60  ReverbModel1 (this, out6)
@@ -188,8 +189,11 @@ int RevObj::F_fe0(void* sys)
     void* p = this;
     float sr = A<float>(sys, 0xc0);
     float g = A<float>(p, 0x30);
-    bool b3 = false;
-    bool b4 = false;
+    int* pi;
+    int* q;
+    int b3 = 0;
+    int b4 = 0;
+    float fVar1 = sr;
     if (g == A<float>(p, 0x15c)) {
         if (sr == A<float>(p, 0x154)) {
             if (A<float>(p, 0x38) != A<float>(p, 0x160))
@@ -221,7 +225,7 @@ int RevObj::F_fe0(void* sys)
         F_d60((float*)((char*)p + 0x1c4));
         b4 = true;
     }
-    int* pi = (int*)((char*)p + 0x17c);
+    pi = (int*)((char*)p + 0x17c);
     for (int i = 0; i < 6; i++, pi++) {
         // pi[0xc] loaded as float bits and negated with a sign flip (x87 fchs), so a NaN keeps
         // its payload and only the sign changes -- unlike an SSE 0.0-x.
@@ -235,7 +239,7 @@ int RevObj::F_fe0(void* sys)
             dl->FUN_0114d9d0(*pi + 1);
         }
     }
-    float fVar1 = sr;
+    fVar1 = sr;
     if (A<char>(p, 0x438) == 0 || b3) {
         char c = A<char>(p, 0x21);
         if (c == 1) {
@@ -261,7 +265,7 @@ int RevObj::F_fe0(void* sys)
             fVar1 = sr * 0.0053999997f;
             A<int>(p, 0x430) = _mm_cvtss_si32(_mm_load_ss(&fVar1));
         }
-        int* q = (int*)((char*)p + 0x428);
+        q = (int*)((char*)p + 0x428);
         for (int i = 0; i < (int)A<u8>(p, 0x439); i++, q++) {
             ((AllPassFilter*)((char*)p + 0x40 + i * 0x18))->FUN_0114e210(
                 A<float>(p, 0x41c + i * 4), A<float>(p, 0x434));
@@ -271,7 +275,7 @@ int RevObj::F_fe0(void* sys)
         }
         A<char>(p, 0x438) = 1;
     } else if (b4) {
-        int* q = (int*)((char*)p + 0x428);
+        q = (int*)((char*)p + 0x428);
         for (int i = 0; i < (int)A<u8>(p, 0x439); i++, q++)
             ((DelayLine*)((char*)p + 0x88 + i * 0x3c))->FUN_0114d9d0(*q);
     }
