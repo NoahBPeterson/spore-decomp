@@ -1,0 +1,1 @@
+0116c750  4802  III_stereo ISO dist10 (MPEG-2 LSF, float, in place; flags /O2 /MD /Gy /EHsc /TP /arch:SSE): complete; regalloc/strength-reduction differ and the ms helper 0116c600 is an extern cdecl call (original: same-TU static, xr in EAX); equiv WEAK (no mismatch, 1.9% coverage)

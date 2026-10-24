@@ -1,4 +1,4 @@
-// @ 0x0116c750   MPEG audio Layer III joint-stereo processing, MPEG-2 LSF variant (5653 bytes)
+// MPEG audio Layer III joint-stereo processing, MPEG-2 LSF variant (5653 bytes)
 //
 // This is NOT a terrain brush (the old guess). Evidence:
 //   * 576 (0x240) = SBLIMIT*SSLIMIT = 32*18 spectral lines per granule; xr[1] lives at xr+0x900.
