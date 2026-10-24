@@ -6,8 +6,8 @@
 00c0dfd0 find creature by id -> +0x8c result
 00c0e000 set creature animation slot +8
 00c0e040 ?e040@CCM@@QAEPAXXZ  # CCM::e040 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e070 ?e070@CCM@@QAEDH@Z  # CCM::e070 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e0c0 ?e0c0@CCM@@QAEDH@Z  # CCM::e0c0 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e070 ?e070@CCM@@QAE_NH@Z  # CCM::e070 returns bool (predicate)
+00c0e0c0 ?e0c0@CCM@@QAE_NH@Z  # CCM::e0c0 returns bool (predicate)
 00c0e120 ?e120@CCM@@QAEDH@Z  # CCM::e120 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0e170 animation motion-state gate (current)
 00c0e2c0 animation motion-state gate (by guid)

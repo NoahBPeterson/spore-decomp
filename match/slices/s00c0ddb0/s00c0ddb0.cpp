@@ -35,6 +35,13 @@ struct F_d00a70 { int   __thiscall f(); };            // 0x00d00a70
 struct F_d9b0   { void  __thiscall f(); };            // 0x00c0d9b0 (slice 117)
 struct F_sw     { void __thiscall Ctor(int, int); unsigned long long __thiscall GetElapsedTime(); }; // 0x168db70
 
+// Object reachable at CCM+0xb54: holds a creature-id lookup table at +0x17c and
+// an animating-creature array (id/value records) at +0x8c (count at +0x14c).
+struct CCMInner {
+    uint32_t pad_00[0x17c / 4];  // +0x000
+    void*    mpTable_17c;        // +0x17c  lookup object (find by id)
+};
+
 #define G32(a)  (*(uint32_t*)(a))
 #define GF(a)   (*(float*)(a))
 
@@ -42,13 +49,13 @@ struct CCM {
     void  __thiscall ddb0(float*);
     char  __thiscall de30();
     void  __thiscall de60(int, int);
-    char  __thiscall dee0(int, int*, char);
+    bool  __thiscall dee0(int, int*, char);
     void* __thiscall dfb0(int);
     void* __thiscall dfd0(int);
     char  __thiscall e000(int, int);
     void* __thiscall e040();
-    char  __thiscall e070(int);
-    char  __thiscall e0c0(int);
+    bool  __thiscall e070(int);
+    bool  __thiscall e0c0(int);
     char  __thiscall e120(int);
     char  __thiscall e170(int);
     char  __thiscall e2c0(int);
@@ -65,6 +72,11 @@ struct CCM {
     int   __thiscall e680(int);
     int   __thiscall e6a0();
     char  __thiscall e8d0(int, int);
+
+    uint32_t pad_a94[0xa94 / 4];                 // +0x000 .. +0xa93
+    void*    mpGraspObj_a94;                     // +0xa94  grasped/sound object
+    uint32_t pad_b54[(0xb54 - 0xa94 - 4) / 4];   // +0xa98 .. +0xb53
+    CCMInner* mpInner_b54;                       // +0xb54  animation/creature table
 };
 
 // @ 0x00c0ddb0
@@ -104,7 +116,7 @@ void __thiscall CCM::de60(int param_2, int param_3) {
 }
 
 // @ 0x00c0dee0
-char __thiscall CCM::dee0(int param_2, int* param_3, char param_4) {
+bool __thiscall CCM::dee0(int param_2, int* param_3, char param_4) {
     *param_3 = -1;
     char* base = *(char**)((char*)this + 0xb54);
     unsigned n = G32(base + 0x14c);
@@ -137,16 +149,16 @@ char __thiscall CCM::dee0(int param_2, int* param_3, char param_4) {
 
 // @ 0x00c0dfb0
 void* __thiscall CCM::dfb0(int param) {
-    char* p = *(char**)((char*)this + 0xb54);
-    if (p != 0) return ((F_cab60*)(p + 0x17c))->f(param);
+    CCMInner* p = mpInner_b54;
+    if (p != 0) return ((F_cab60*)p->mpTable_17c)->f(param);
     return 0;
 }
 
 // @ 0x00c0dfd0
 void* __thiscall CCM::dfd0(int param) {
-    char* p = *(char**)((char*)this + 0xb54);
+    CCMInner* p = mpInner_b54;
     if (p != 0) {
-        char* r = (char*)((F_cab60*)(p + 0x17c))->f(param);
+        char* r = (char*)((F_cab60*)p->mpTable_17c)->f(param);
         if (r != 0) return *(void**)(r + 0x8c);
     }
     return 0;
@@ -154,9 +166,9 @@ void* __thiscall CCM::dfd0(int param) {
 
 // @ 0x00c0e000
 char __thiscall CCM::e000(int param_2, int param_3) {
-    char* p = *(char**)((char*)this + 0xb54);
+    CCMInner* p = mpInner_b54;
     if (p != 0) {
-        char* r = (char*)((F_cab60*)(p + 0x17c))->f(param_2);
+        char* r = (char*)((F_cab60*)p->mpTable_17c)->f(param_2);
         if (r != 0 && param_3 != -1) {
             *(int*)(r + 8) = param_3;
             return 1;
@@ -171,13 +183,13 @@ void* __thiscall CCM::e040() {
     uint32_t local_4 = 0;
     if (c == 0) return (void*)local_4;
     void* vt = *(void**)c;
-    (*(void(__thiscall**)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+    ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
         c, &local_4, 0, 0, 0);
     return (void*)local_4;
 }
 
 // @ 0x00c0e070
-char __thiscall CCM::e070(int param_2) {
+bool __thiscall CCM::e070(int param_2) {
     char* c = *(char**)((char*)this + 0xb54);
     if (c != 0 && *(int*)(c + 0x184) != 0) {
         char* r = (char*)FUN_009ff6f0(*(void**)(c + 0x184), (void*)param_2);
@@ -188,15 +200,15 @@ char __thiscall CCM::e070(int param_2) {
 }
 
 // @ 0x00c0e0c0
-char __thiscall CCM::e0c0(int param_2) {
-    char* c = *(char**)((char*)this + 0xb54);
+bool __thiscall CCM::e0c0(int param_2) {
+    CCMInner* c = mpInner_b54;
     if (c == 0) return 0;
     uint32_t local_4 = 0;
     void* vt = *(void**)c;
-    (*(void(__thiscall**)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+    ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
         c, &local_4, 0, 0, 0);
     if ((int)local_4 == param_2) return 1;
-    if (!((F_a02b40*)c)->f((int)local_4)) return 0;
+    if (!((F_a02b40*)c)->f(param_2)) return 0;
     return 1;
 }
 
@@ -268,7 +280,7 @@ void* __thiscall CCM::e370() {
     if (c == 0) return 0;
     uint32_t local_4 = 0;
     void* vt = *(void**)c;
-    (*(void(__thiscall**)(void*, int, int, void*, int))(*(void**)((char*)vt + 0x58)))(
+    ((void(__thiscall*)(void*, int, int, void*, int))(*(void**)((char*)vt + 0x58)))(
         c, 0, 0, &local_4, 0);
     return (void*)local_4;
 }
@@ -280,7 +292,7 @@ float __thiscall CCM::e3a0() {
     float local_4 = 0.0f;
     if (c != 0) {
         void* vt = *(void**)c;
-        (*(void(__thiscall**)(void*, void*, void*, int, int))(*(void**)((char*)vt + 0x58)))(
+        ((void(__thiscall*)(void*, void*, void*, int, int))(*(void**)((char*)vt + 0x58)))(
             c, 0, &local_4, 0, 0);
     }
     return local_4;
@@ -293,11 +305,11 @@ char __thiscall CCM::e3d0() {
     if (c != 0) {
         uint32_t local_4 = 0;
         void* vt = *(void**)c;
-        (*(void(__thiscall**)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+        ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
             c, &local_4, 0, 0, 0);
         if (local_4 != 0) {
             void* lm = FUN_0067cb20();
-            char* r = (char*)(*(void*(__thiscall**)(void*, uint32_t))(*(void**)((char*)lm + 0x40)))(
+            char* r = (char*)((void*(__thiscall*)(void*, uint32_t))(*(void**)((char*)*(void**)lm + 0x40)))(
                 lm, local_4);
             if (r != 0) return *(char*)(r + 0x1d);
         }
@@ -313,10 +325,10 @@ char __thiscall CCM::e420() {
     uint32_t local_4 = 0;
     if (c != 0) {
         void* vt = *(void**)c;
-        (*(void(__thiscall**)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+        ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
             c, &local_4, 0, 0, 0);
     }
-    char* r = (char*)(*(void*(__thiscall**)(void*, uint32_t))(*(void**)((char*)lm + 0x40)))(
+    char* r = (char*)((void*(__thiscall*)(void*, uint32_t))(*(void**)((char*)*(void**)lm + 0x40)))(
         lm, local_4);
     if (r != 0 && *(char*)(r + 0x1c) != 0) return 1;
     return 0;

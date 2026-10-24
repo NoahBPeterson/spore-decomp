@@ -2,3 +2,4 @@
 slices/s00c0ddb0/s00c0ddb0.cpp  ?e5f0@CCM@@QAEXM@Z    00c0e5f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c0ddb0/s00c0ddb0.cpp  ?e640@CCM@@QAEXH@Z    00c0e640  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c0ddb0/s00c0ddb0.cpp  ?e680@CCM@@QAEHH@Z    00c0e680  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0ddb0/s00c0ddb0.cpp  ?e3a0@CCM@@QAEMXZ  00c0e3a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
