@@ -34,6 +34,11 @@
 // 11 complete-but-not-exact (-> nonmatching.txt); 5 approximate (00d58c50, 00d58d50, 00d58ea0,
 // 00d592e0, 00d599a0 -> partial.txt).  Every function below is a complete definition.
 //
+// Equivalence (tools/difftest/equiv.py, nonmatching set): PASS on 00d59170/00d59520/00d596a0;
+// WEAK on 00d58a80/00d590b0/00d59200/00d595d0/00d59630/00d59750; FAIL on 00d58b10 only as an ecx
+// clobber (caller-saved scratch the original never writes - no observable differs); UNSUPPORTED on
+// 00d598d0 (pointer-soup records fault on read).  The 5 approximate functions are not tested.
+//
 // Notes / decisions:
 //  * ABI: thiscall methods are reproduced as `__fastcall(T* self, void* edx, ...)` free functions,
 //    and the external thiscall callees are invoked through the `Thiscall` registry struct so that
