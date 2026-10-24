@@ -1,0 +1,2 @@
+slices/s00d7d370/s00d7d370.cpp  ?ManageInteractiveOrnamentEventSFX@SP@@YAXPAHPAE@Z  00d7d4a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00d7d370/s00d7d370.cpp  ?FUN_00d7d720@SP@@YAMPAUcCreatureBase@1@@Z  00d7d720  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
