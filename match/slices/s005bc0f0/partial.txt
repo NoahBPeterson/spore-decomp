@@ -1,4 +1,4 @@
-005bc0f0 1291 other: stubbed; full logic not reconstructed
+005bc0f0 1291 other: stubbed; only the ABI (thiscall float,float,int returning int) and the `block==0 -> 0` early-out reproduced, full logic not reconstructed. equiv: replay PASS after the ABI fix; fresh FAIL 5/120 valid inputs (only the shallow early-out path is exercised by 4.4% coverage; the 5 inputs that reach the real body mismatch)
 005bc630 436  other: stubbed; full logic not reconstructed
 005bc9b0 206  eastl::vector<cIVisualEffect*>::operator=: stubbed; real EASTL assign not reconstructed
 005bcaa0 529  DoOnMouseDown: stubbed; full logic not reconstructed

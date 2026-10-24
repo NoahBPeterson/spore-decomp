@@ -90,7 +90,7 @@ class cSPEditorManipulationStackingSimple : public cSPEditorManipulationObject, 
   ~cSPEditorManipulationStackingSimple();
   void Init(cSPEditorBlock** block, cSPVector3 offset);
   bool DoOnMouseDown();
-  void Other1();
+  int Other1(float x, float y, int flags);
   void Other2();
 };
 
@@ -126,7 +126,12 @@ cSPEditorManipulationStackingSimple::cSPEditorManipulationStackingSimple() {
 cSPEditorManipulationStackingSimple::~cSPEditorManipulationStackingSimple() {}
 
 // @ 0x005bc0f0 -- PARTIAL
-void cSPEditorManipulationStackingSimple::Other1() {}
+int cSPEditorManipulationStackingSimple::Other1(float x, float y, int flags) {
+  (void)x; (void)y; (void)flags;
+  // Real body is 1291 B (PDB: cSPEditorManipulationStacking::DoOnMouseMove); only the
+  // thiscall/first-arg shape (float,float,int) and the zero return are known here.
+  return 0;
+}
 // @ 0x005bc630 -- PARTIAL
 void cSPEditorManipulationStackingSimple::Other2() {}
 // @ 0x005bcaa0 -- PARTIAL
