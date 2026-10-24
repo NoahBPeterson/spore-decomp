@@ -1,1 +1,2 @@
 009b2340  2473  complete; /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; bbox min/max not kept in xmm4-7 across loops (stack-resident), so regs/frame offsets differ; calls+constants+switch trees match
+009b2e50  318  complete; /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; 28 diff: movss xmm1,[_HK_REAL_ONE] scheduled immediately after the anim_color::Init call instead of after the next two zeroed vectors (size and all other instructions match); equiv PASS 400/400, 100% coverage

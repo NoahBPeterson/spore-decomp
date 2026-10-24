@@ -1,1 +1,5 @@
 00caf650 Simulator::cFlyingLocomotion::ApplyFacing  # called at the end of cFlyingLocomotion::Update (s00cb02f0) with the steer direction and mDeltaTime
+00cb0130 ?ReleaseBuckets@@YGXPAPAUNode@@I@Z  # ReleaseBuckets: walk each bucket's mNext chain, delete every node, then clear the bucket
+00cb01e0 ?CopyBoneSet@@YAXPBUcOrientation@@PAUBoneSet@@@Z  # CopyBoneSet: copy 8 cOrientation bones plus their refcounted mTarget smart pointers
+00cb02a0 ?CopyConstruct@NodeCore@@QAEPAU1@ABU1@@Z  # NodeCore::CopyConstruct: copy field 0, construct 8 orientations and 8 smart pointers via copy-ctor iterators
+00cafe90 ?UpdateSteering@cFlyingLocomotion@@QAEXPAUcCreatureFlyer@@PBUVector3@@PAUSteeringState@@@Z  # cFlyingLocomotion::UpdateSteering: build surface frame, rotate bone axis, rate-limit steer, lerp toward target and normalize by GetSpeed

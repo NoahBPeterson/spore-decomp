@@ -1,2 +1,9 @@
 00ff7530 SP::cSPSimPlanetHighLOD::UpdateGenesisDevice  # symbols/pdb_candidates.json (dev 0x0089cf80, caller-single from OnTick 0x00ffbb20); members match the dev PDB mGenesis* fields
 00fc1fa0 SP::GetTerraformRadius  # descriptive: returns kTerraformRadiusT1/T2/T3 by level
+00ff80b0 SimPool34::Destroy  # descriptive: drains the feedback-object ring list, releasing payload events and recycling pooled nodes / freeing overflow blocks
+00ff8100 SimPool34::AllocNode  # descriptive: fixed-pool node allocation (free-list pop or EASim debug allocator) + payload placement-new
+00ff8170 SimPartition  # descriptive: Hoare partition used by quick_sort_impl<int*,int>
+00ff81b0 SimPartialSort  # descriptive: heap-select partial sort (make_heap / adjust_heap / sort_heap)
+00ff8210 SimPool34::PopFront  # descriptive: unlink + release front feedback node
+00ff8260 SimQuickSortImpl  # descriptive: median-of-three introsort recursion helper
+00ff8300 SP::cSPSimPlanetHighLOD::RemovePortalEffect  # descriptive: erase a feedback event from the +0x1c0 rbtree and stop its rally-portal effect

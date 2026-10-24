@@ -1,1 +1,6 @@
 01092e10 hkPoweredHingeConstraintData::buildJacobian  # havok_names.txt; motor/friction row, 2 angular bilateral rows, ball-socket, optional angular limit
+01093660 ?getConstraintInfo@hkPoweredChainData@@UBEXAAUhkConstraintInfo@@@Z  # chain bookkeeping: jacobian/schema/solver-result sizes from m_infos.m_size
+010936a0 ?getRuntimeInfo@hkPoweredChainData@@UBEXVhkBool@@AAURuntimeInfo@hkConstraintData@@@Z  # 6 solver results per link; external runtime 0x40 per link + 4-aligned
+010936c0 quaternionError  # static quaternion error helper (no PDB name); custom register ABI, nonmatching
+010937e0 ?AdjustCost@cSPToolStrategy@SP@@QAEHH@Z  # SP::cSPToolStrategy::AdjustCost returns its argument
+01093810 ??1hkPoweredChainData@@UAE@XZ  # releases the three motors per link, then m_infos, then the hkReferencedObject vtable

@@ -1,1 +1,3 @@
 01055890 RegisterStaticRegistrations  # 28 function-local cSimRegistration statics (same shape as cSimulatorSystem::Initialize)
+010554c0 SP::cSPDragInputProjectileToolStrategy::OnMouseUp  # retail vtable 0x149b968 slot +0x38; effect release, press-point launch, transform message
+01055790 SP::cSPDeepSpaceProjectileToolStrategy::StartTool  # retail vtable 0x149b6b8 slot +0x34; zero-direction guard, normalised 2000-speed launch

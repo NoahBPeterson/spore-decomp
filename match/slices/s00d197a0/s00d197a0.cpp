@@ -628,3 +628,127 @@ bool cGameEditInputStrategy::HandleUIMessage(IWindow* pWindow, const UIMessage& 
     }
     return false;
 }
+
+#include <intrin.h>
+
+// ---------------------------------------------------------------------------
+// eastl introsort instantiations used by the level editor's property-list name
+// sort.  The 0x28-byte comparator is copied by value into every helper, so each
+// outgoing argument slot is a full cPropertyListNameSort copy.
+// ---------------------------------------------------------------------------
+namespace eastl {
+
+extern void FreeNode(void* p);                       // 0x00F47380
+
+class allocator {
+public:
+    void deallocate(void* p, unsigned int) { FreeNode(p); }
+};
+
+template <class T> struct basic_string {
+    T* mpBegin;                                      // +0x00
+    T* mpEnd;                                        // +0x04
+    T* mpCapacity;                                   // +0x08
+    allocator mAllocator;                            // +0x0c
+    ~basic_string() { DeallocateSelf(); }
+    void DeallocateSelf() {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, (unsigned int)(mpCapacity - mpBegin));
+    }
+    void DoFree(T* p, unsigned int n) {
+        if (p)
+            mAllocator.deallocate(p, n * sizeof(T));
+    }
+};
+
+typedef basic_string<wchar_t> string16;
+}
+
+namespace SP {
+
+struct cPropertyListNameSort {
+    uint32_t            mGroupID;                    // +0x00
+    void*               mpResMan;                    // +0x04
+    eastl::string16     mNameA;                      // +0x08
+    eastl::string16     mNameB;                      // +0x18
+
+    cPropertyListNameSort(const cPropertyListNameSort& x);   // 0x00D18000
+};
+
+}
+
+uint32_t* Median(uint32_t* first, uint32_t* middle, uint32_t* last,
+                 SP::cPropertyListNameSort compare);                 // 0x00D16D60
+uint32_t* GetPartition(uint32_t* first, uint32_t* last, uint32_t pivot,
+                       SP::cPropertyListNameSort compare);           // 0x00D16E00
+void PartialSort(uint32_t* first, uint32_t* last, uint32_t* end,
+                 SP::cPropertyListNameSort compare);                 // 0x00D19610
+void InsertionSort(uint32_t* first, uint32_t* last,
+                   SP::cPropertyListNameSort compare);               // 0x00D16C30
+void InsertionSortSimple(uint32_t* first, uint32_t* last,
+                         SP::cPropertyListNameSort compare);         // 0x00D16CC0
+
+namespace eastl {
+
+// @ 0x00d1a080  eastl::quick_sort_impl<uint32_t*,int,cPropertyListNameSort>
+template <class It, class Size, class Compare>
+void quick_sort_impl(It first, It last, Size kRecursionCount, Compare compare)
+{
+    while ((last - first) > 28 && kRecursionCount > 0) {
+        const It position_partition =
+            GetPartition(first, last, *Median(first, first + (last - first) / 2,
+                                              last - 1, compare), compare);
+        quick_sort_impl(position_partition, last, --kRecursionCount, compare);
+        last = position_partition;
+    }
+    if (kRecursionCount == 0)
+        PartialSort(first, last, last, compare);
+}
+
+inline int Log2(int n)
+{
+    int m = n;
+    n = 0;
+    _ReadWriteBarrier();
+    int i = 0;
+    if (m != 0) {
+        do {
+            m >>= 1;
+            ++i;
+        } while (m != 0);
+    }
+    return i;
+}
+
+// @ 0x00d1a180  eastl::quick_sort<uint32_t*,cPropertyListNameSort>
+template <class It, class Compare>
+void quick_sort(It first, It last, Compare compare)
+{
+    if (first != last) {
+        int count = (int)(last - first);
+        _ReadWriteBarrier();
+        quick_sort_impl(first, last, 2 * Log2(count) - 2, compare);
+        if (count > 28) {
+            InsertionSort(first, first + 28, compare);
+            InsertionSortSimple(first + 28, last, compare);
+        } else {
+            InsertionSort(first, last, compare);
+        }
+    }
+}
+
+// @ 0x00d1a250  eastl::sort<uint32_t*,cPropertyListNameSort>
+template <class It, class Compare>
+void sort(It first, It last, Compare compare)
+{
+    quick_sort(first, last, compare);
+}
+
+template void quick_sort_impl<uint32_t*, int, SP::cPropertyListNameSort>(
+    uint32_t*, uint32_t*, int, SP::cPropertyListNameSort);
+template void quick_sort<uint32_t*, SP::cPropertyListNameSort>(
+    uint32_t*, uint32_t*, SP::cPropertyListNameSort);
+template void sort<uint32_t*, SP::cPropertyListNameSort>(
+    uint32_t*, uint32_t*, SP::cPropertyListNameSort);
+
+}

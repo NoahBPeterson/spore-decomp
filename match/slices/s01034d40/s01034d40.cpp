@@ -67,6 +67,7 @@ struct cViewer
     void SetRenderMode(int mode);                                // 0x007c3c50
     float GetNearPlane();                                        // 0x007c3c90
     float GetFarPlane();                                         // 0x007c3ca0
+    void GetCameraLocationInfo(Vector3* pos, Vector3* dir, Vector3* up, Vector3* right);  // 0x007c3d30
 };
 
 struct RenderStatistics;
@@ -296,4 +297,129 @@ void cSpaceRenderLayer::DrawLayer(int flags, int layerIndex, cViewer** viewers, 
     out[2] = viewers[2];
     out[3] = viewers[3];
     GetLayerTable()->mpLayer2->GetLayer()->DrawLayer(flags, 0x12, out, stats);
+}
+
+// ---- slow-death camera interpolation ---------------------------------------------------------
+struct Curve;
+float FUN_01043150(const Curve* pCurve, float t);                // 0x01043150
+
+struct cCameraHolder;
+struct cCameraLookup;
+struct cCameraValue;
+
+struct cAppCameraAccess
+{
+    VP16(a) VP4(b)
+    virtual cCameraHolder* GetCamera();                          // +0x50
+};
+
+struct cCameraHolder
+{
+    VP4(a) VP1(b) VP1(c) VP1(d)
+    virtual cViewer* GetViewer();                                // +0x1c
+    VP4(e) VP1(f) VP1(g)
+    virtual cCameraLookup* GetLookup();                          // +0x38
+};
+
+struct cCameraLookup
+{
+    VP1(a) VP1(b) VP1(c)
+    virtual cCameraValue* Find(unsigned id);                     // +0x0c
+};
+
+struct cCameraValue
+{
+    VP16(a) VP4(b) VP1(c) VP1(d) VP1(e)
+    virtual float GetValue();                                    // +0x5c
+};
+
+struct CurveSource
+{
+    VP4(a) VP4(b) VP1(c) VP1(d)
+    virtual Curve* GetCurve(unsigned id);                        // +0x28
+};
+
+struct cDeathCameraSink20
+{
+    VP16(a) VP1(b)
+    virtual void Update(int mode, const Vector3* value, int count);  // +0x44
+};
+
+struct cDeathCameraSink80
+{
+    VP4(a)
+    virtual bool IsActive();                                     // +0x10
+    VP4(b) VP4(c) VP4(d)
+    virtual void Update(int mode, const Vector3* value, int count);  // +0x44
+};
+
+cAppCameraAccess* App();                                          // 0x0067dd10 SP::App
+extern const float kCameraFadeRate;                               // 0x013f8370 (0.0016666667f)
+extern const float kDefaultCameraDistance;                        // 0x01473c70 (10.0f)
+
+struct cDeathCameraState
+{
+    char mPad00[0x20];
+    cDeathCameraSink20* mpUpdate20;                              // +0x20
+    char mPad24[0x80 - 0x24];
+    cDeathCameraSink80* mpUpdate80;                              // +0x80
+    char mPad84[0x104 - 0x84];
+    Vector3 mCurrent;                                            // +0x104
+    Vector3 mTarget;                                             // +0x110
+    Vector3 mOrigin;                                             // +0x11c
+    int mElapsed;                                                // +0x128
+    int mDuration;                                               // +0x12c
+    Vector3 mOffset;                                             // +0x130
+    CurveSource* mpTuning;                                       // +0x13c
+
+    void Update(int dt);
+};
+
+// @ 0x01034d40
+void cDeathCameraState::Update(int dt)
+{
+    cViewer* viewer = App()->GetCamera()->GetViewer();
+
+    Vector3 camPos;
+    viewer->GetCameraLocationInfo(&camPos, 0, 0, 0);
+
+    float curveValue = FUN_01043150(mpTuning->GetCurve(0x195f000), fabsf(camPos.x));
+
+    Vector3 update;
+    mpUpdate20->Update(4, &update, 1);
+
+    if (mpUpdate80 != 0 && mpUpdate80->IsActive()) {
+        int duration = mDuration;
+        if (mElapsed < duration) {
+            int elapsed = mElapsed + dt;
+            mElapsed = elapsed;
+            float ratio = (float)(unsigned)elapsed / (float)(unsigned)duration;
+            ratio = Clamp(ratio, 0.0f, 1.0f);
+
+            mCurrent.x = (mTarget.x - mOrigin.x) * ratio + mOrigin.x;
+            mCurrent.y = (mTarget.y - mOrigin.y) * ratio + mOrigin.y;
+            mCurrent.z = (mTarget.z - mOrigin.z) * ratio + mOrigin.z;
+            if (ratio == 1.0f) {
+                mOrigin.x = mTarget.x;
+                mOrigin.y = mTarget.y;
+                mOrigin.z = mTarget.z;
+            }
+        }
+
+        float blend = kDefaultCameraDistance;
+        cCameraLookup* lookup = App()->GetCamera()->GetLookup();
+        if (lookup != 0) {
+            cCameraValue* value = lookup->Find(0x303154cc);
+            if (value != 0)
+                blend = value->GetValue();
+        }
+        float amount = Clamp(blend * kCameraFadeRate, 0.0f, 1.0f);
+        float inverse = 1.0f - amount;
+
+        Vector3 result;
+        result.x = mCurrent.x * inverse + mOffset.x * amount;
+        result.y = mCurrent.y * inverse + mOffset.y * amount;
+        result.z = mCurrent.z * inverse + mOffset.z * amount;
+        mpUpdate80->Update(5, &result, 3);
+    }
 }

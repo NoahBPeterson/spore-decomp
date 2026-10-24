@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
-00d32330  1322  cCreatureModeInputStrategy::UpdateAvatarGoalKeyboard complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same 65 calls/vslots in order, size 0xabf vs 0xab6; frame 0x10 larger, stack slots and move-vector register allocation differ
+00d32330  1297  cCreatureModeInputStrategy::UpdateAvatarGoalKeyboard complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same 65 calls/vslots in order, size 0xabf vs 0xab6; frame 0x10 larger, stack slots and move-vector register allocation differ
+00d32df0  14  same size (448 B) and identical instruction sequence; only the xmm1/xmm2 pair used for the y/z terms of the marker distance is swapped, comiss/jbe form matches; equiv PASS (297 valid inputs, 73.0% coverage)

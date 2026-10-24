@@ -3,3 +3,8 @@
 00ad2a50 cNavigationGoal::InitToward  # thiscall ret 0x10 (pos*, dir*, float, float), 0x74-byte goal (Claude-coined)
 00ad29d0 cNavigationGoal::InitAt  # thiscall ret 0xC (pos*, float, float)
 00b7f250 cPlanetModel::BuildSurfaceOrientation2  # thiscall ret 0xC (sret quat, pos*, dir*)
+00ad3b70 FUN_00ad3b70  # cdecl(EditorAction*, bool); editor toggle, allocates Editor frame and binds world model
+00ad3c30 BehaviorOwner::FUN_00ad3c30  # thiscall ret 4 (void* arg); builds validation summarizer/message/EditorRes and AddMessage
+00ad3e00 Simulator::cVignetteContext::cVignetteContext  # thiscall constructor
+00ad3e50 CastInterface::FUN_00ad3e50  # thiscall ret 4 (uint32 id); returns this for two cast ids, else forwards to 0x00AD72C0
+00ad3e90 HashOwner::FUN_00ad3e90  # thiscall; clears eastl hash buckets and releases node values

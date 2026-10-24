@@ -1,1 +1,2 @@
 00cb2770  1554  complete: creature path-ahead update (trace + waypoint reconcile); /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; register allocation/frame differ
+00cb2480  436  complete: path-ahead clear test (cached trace hits, velocity/fallback direction, one-hit TracePlanetPath probe, scale/kind update, creature flag clear); /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; 719 vs 739 B; loop induction register, object/loco register allocation and call-argument scheduling differ; equiv WEAK (58/400 valid, 68.2% coverage)

@@ -99,7 +99,7 @@ struct cSPTimer {
 struct GameSim { void* GetPlayerInventory(); void Func_ffd830(void* owner); }; // 00a1ad60 / 00ffd830
 
 struct RelMgr { float RecordFoughtEnemyEvent(int a, int b, uint32_t c, float d); };   // 00d06270 (ret 0x10)
-struct NounMgr { int GetPlayerEmpireOrMinus1(); };       // 00b1f9d0
+struct NounMgr { int GetPlayerEmpireOrMinus1(); void* CreateNoun(uint32_t type); };   // 00b1f9d0 / 00b20c60
 struct Tuning { float Func_102a4a0(); };                 // 0102a4a0
 
 // Object at this+0xd0 (aggro / target helper).
@@ -317,4 +317,218 @@ void Combatant::Hit(float dmg, int attacker, int type, uint32_t extra, HitSource
         }
         mpAggro->Func_bd9e50();
     }
+}
+
+// ---------------------------------------------------------------------------
+// Simulator inventory item creation (0x00bcf490) and tribe/building owner setup.
+// ---------------------------------------------------------------------------
+
+struct cObjectInstanceInventoryItem;
+
+struct cInventory
+{
+    VPAD(0); VPAD(1); VPAD(2); VPAD(3); VPAD(4); VPAD(5); VPAD(6); VPAD(7);
+    VPAD(8); VPAD(9); VPAD(10); VPAD(11); VPAD(12); VPAD(13); VPAD(14); VPAD(15);
+    VPAD(16); VPAD(17); VPAD(18); VPAD(19); VPAD(20); VPAD(21); VPAD(22); VPAD(23);
+    VPAD(24); VPAD(25); VPAD(26); VPAD(27); VPAD(28); VPAD(29); VPAD(30); VPAD(31);
+    virtual void AddItem(cObjectInstanceInventoryItem* item, int a, int b);   // +0x80
+};
+
+struct cObjectInstanceInventoryItem
+{
+    virtual void vpad0();                              // +0x00
+    virtual void AddRef();                             // +0x04
+    virtual void Func8();                              // +0x08
+    cObjectInstanceInventoryItem* Construct();         // 0x00c6f3d0
+    void SetOwner(void* owner);                        // 0x00c6f5e0
+};
+
+struct GameGlobalAt78
+{
+    void Func(void* owner, void* param);               // 0x00f1aff0
+};
+
+struct GameGlobal
+{
+    uint8_t m_pad0[0x78];                              // +0x00
+    GameGlobalAt78* m_at78;                            // +0x78
+};
+extern GameGlobal* gpGameGlobal;                       // 0x016c7aa4
+
+struct RefObject
+{
+    virtual void AddRef();                             // +0x00
+    virtual void Release();                            // +0x04
+};
+
+struct BuildingSpatial
+{
+    VPAD(0); VPAD(1); VPAD(2); VPAD(3); VPAD(4); VPAD(5); VPAD(6); VPAD(7);
+    VPAD(8); VPAD(9); VPAD(10);
+    virtual int GetEffectId(float scale);              // +0x2c
+    VPAD(12); VPAD(13);
+    virtual void SetA(void* value);                    // +0x38
+    virtual void SetB(void* value);                    // +0x3c
+};
+
+struct cBuildingObject : RefObject
+{
+    void SetEffectId(int id);                          // 0x00c3f160
+    void SetSomeFloat(float a, float b);               // 0x00c3f1b0
+    void SetOwner(void* owner);                        // 0x00c3f2d0
+};
+
+struct cBuilding
+{
+    uint8_t m_pad0[0x34];                              // +0x000
+    BuildingSpatial m_spatial34;                       // +0x034
+    uint8_t m_pad38[0x114];                            // +0x038
+    float m_field14c;                                  // +0x14c
+    uint8_t m_pad150[8];                               // +0x150
+    float m_field158;                                  // +0x158
+    uint8_t m_pad15c[0x90];                            // +0x15c
+    cInventory* m_inventory1ec;                        // +0x1ec
+    void* m_owner1f0;                                  // +0x1f0
+    uint8_t m_pad1f4[0x150];                           // +0x1f4
+    cBuildingObject* m_object344;                      // +0x344
+    void Func_bcda90();                                // 0x00bcda90
+    void SetGameDataOwner2(void* owner);               // 0x00b18550
+    bool FUN_00bcf490(void* param);
+    void FUN_00bcf530(void* owner);
+};
+
+void* __cdecl operator_new(uint32_t size, const char* name,
+                           int a, int b, int c, int d);   // 0x00f473a0
+
+// @ 0x00bcf490
+bool cBuilding::FUN_00bcf490(void* param)
+{
+    if (m_inventory1ec != 0) {
+        Func_bcda90();
+
+        cObjectInstanceInventoryItem* item = (cObjectInstanceInventoryItem*)
+            operator_new(0x80, "Simulator/cObjectInstanceInventoryItem", 0, 0, 0, 0);
+        if (item != 0) {
+            item = item->Construct();
+            if (item != 0) {
+                item->AddRef();
+                item->SetOwner(param);
+                m_inventory1ec->AddItem(item, 0, 1);
+
+                if (GetCurrentGameMode() == 0x1654c10)
+                    gpGameGlobal->m_at78->Func(this, param);
+
+                item->Func8();
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+// ---------------------------------------------------------------------------
+// Simulator::cBuilding / SP::cTribe owner-city setup (0x00bcf530).
+// ---------------------------------------------------------------------------
+
+struct CitySubobject
+{
+    VPAD(0); VPAD(1); VPAD(2); VPAD(3); VPAD(4); VPAD(5); VPAD(6); VPAD(7);
+    VPAD(8); VPAD(9); VPAD(10);
+    virtual void* GetA();                              // +0x2c
+    virtual void* GetB();                              // +0x30
+};
+
+struct OwnerCity
+{
+    uint8_t m_pad0[0x120];                             // +0x000
+    CitySubobject m_sub120;                            // +0x120
+};
+
+struct cGameNoun
+{
+    VPAD(0); VPAD(1); VPAD(2);
+    virtual void* CreateChild(uint32_t id);            // +0x0c
+};
+
+struct cPropertyValue
+{
+    uint8_t m_pad0[0x12];                              // +0x00
+    uint16_t m_type12;                                 // +0x12
+    float* GetFloat();                                 // 0x0041ea70
+};
+
+struct cProperty
+{
+    virtual void AddRef();                             // +0x00
+    virtual void Release();                            // +0x04
+    VPAD(2); VPAD(3); VPAD(4); VPAD(5); VPAD(6); VPAD(7); VPAD(8);
+    virtual bool GetValue(uint32_t id, cPropertyValue** out);   // +0x24
+};
+
+struct PropertyManager
+{
+    VPAD(0); VPAD(1); VPAD(2); VPAD(3); VPAD(4); VPAD(5); VPAD(6); VPAD(7);
+    VPAD(8); VPAD(9); VPAD(10);
+    virtual bool GetProperty(uint32_t id, int flags, cProperty** out);   // +0x2c
+};
+PropertyManager* GetPropertyManager();                 // 0x0067de30
+
+// @ 0x00bcf530
+void cBuilding::FUN_00bcf530(void* owner)
+{
+    cBuilding* self = this;
+    self->SetGameDataOwner2(owner);
+
+    RefObject* oldOwner = (RefObject*)self->m_owner1f0;
+    if (owner != oldOwner) {
+        if (owner != 0)
+            ((RefObject*)owner)->AddRef();
+        self->m_owner1f0 = owner;
+        if (oldOwner != 0)
+            oldOwner->Release();
+    }
+
+    OwnerCity* city = (OwnerCity*)owner;
+    void* valueA = city->m_sub120.GetA();
+    self->m_spatial34.SetA(valueA);
+    void* valueB = city->m_sub120.GetB();
+    self->m_spatial34.SetB(valueB);
+
+    NounMgr* nounManager = GetNounManager();
+    cGameNoun* noun = (cGameNoun*)nounManager->CreateNoun(0x2e72cae);
+    cBuildingObject* child = 0;
+    if (noun != 0)
+        child = (cBuildingObject*)noun->CreateChild(0x2e71a5a);
+
+    cBuildingObject* oldChild = self->m_object344;
+    if (child != oldChild) {
+        if (child != 0)
+            child->AddRef();
+        self->m_object344 = child;
+        if (oldChild != 0)
+            oldChild->Release();
+    }
+
+    int effectId = self->m_spatial34.GetEffectId(100.0f);
+    self->m_object344->SetEffectId(effectId);
+    self->m_object344->SetSomeFloat(0.0f, 3.402823466e38f);
+    self->m_object344->SetOwner(this);
+
+    float value = self->m_field158;
+    cProperty* property = 0;
+    PropertyManager* propertyManager = GetPropertyManager();
+    if (propertyManager->GetProperty(0xa4c2f6bd, 0, &property)) {
+        if (property != 0) {
+            cPropertyValue* subProperty = 0;
+            if (property->GetValue(0x7d566743, &subProperty) &&
+                subProperty != 0 && subProperty->m_type12 == 0xd)
+                value = *subProperty->GetFloat();
+        }
+        self->m_field14c = value;
+        self->m_field158 = value;
+    }
+
+    if (property != 0)
+        property->Release();
 }

@@ -1,6 +1,3 @@
-008e7230 ?SetMargins@Block@Layout@XHTML@EA@@QAEXAAVStackingContext@234@AAVStyleState@Style@34@@Z  # Block::SetMargins migrated from s008e7230 (verbatim, slice spelling)
-008ef870 EA::XHTML::Layout::SizingContext::SizingContext  # Typesetter ctor + Reset, stores enclosing width at +0x538
-008f01b0 EA::XHTML::Layout::StackingContext::CollapseMargin  # updates mYPos (+0x55c) / mPendingCollapse (+0x560)
-008f0240 EA::XHTML::Layout::StackingContext::ClampWidth  # min(max(w, +0x568), +0x564) = mMinBreak/mMaxBreak (retail offsets)
-008f95c0 EA::XHTML::Style::Length::ToPixels  # thiscall (float ref, const FontMetrics&), called on StyleState edge lengths
-008f9660 EA::XHTML::Style::Length::ToPixelsNonNeg  # max(0, ToPixels(ref, fm))
+008e7da0 SP::EA::XHTML::Layout::Block::GetPickBox  # fills PickBox (border-rect width/height, 0, floor(mVerticalOffset+height+0.5f), width); floor is the double import, the 0.5 comes from the shared float constant 0x01471064
+008e7e00 SP::EA::XHTML::Layout::Block::MoveTo  # protected non-virtual `IAEXMM` in the dev PDB; sets the outer rect origin to (x,y) and shifts mBorderRect/mPaddingRect/mContentRect/mPickRect by the delta
+008e7f90 SP::EA::XHTML::Layout::Block::Block  # ctor (Page*, const DOM::Element*, ItemType) ret 0xc; calls the Item ctor 0x008eae40, empties mChildItems, stores mpElement, vfptr 0x01437c20, zeroes the style/border/background pointers and the four box rects

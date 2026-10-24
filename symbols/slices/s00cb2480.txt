@@ -1,1 +1,2 @@
 00cb2770 UpdatePathAhead  # Claude-coined; traces ahead with TracePlanetPath(SweepTick) and reconciles the creature waypoint path
+00cb2480 IsPathAheadClear  # Claude-coined; checks cached trace objects and probes one hit ahead, updating scale/kind and creature flags

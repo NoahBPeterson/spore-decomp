@@ -1,0 +1,1 @@
+01337610 InitItemAttributes  # Claude-coined; builds the five-record cItem_sAttributes table (mAmountInBundle, mpContainer, mType, mDisplayType, mLoose) at 0x01573038

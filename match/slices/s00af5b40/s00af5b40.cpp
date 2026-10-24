@@ -9,6 +9,7 @@
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <float.h>
+#include <string.h>
 
 struct Vec3 { float x, y, z; };
 
@@ -165,4 +166,126 @@ bool ProbeShape(Shape* s, const Vec3* q, Vec3* p, bool push, char* moved, float 
     }
     }
     return result;
+}
+
+// ---------------------------------------------------------------------------
+// Shape copy assignment (0x00af6250).  The 0xf0-byte record is the same Shape
+// layout used by ProbeShape; the embedded matrix at +0x84 has a non-trivial
+// Assign at 0x0041cb40.
+// ---------------------------------------------------------------------------
+
+struct cSPMatrix3 {
+    float m[9];                                        // +0x00
+    cSPMatrix3& operator=(const cSPMatrix3& other) {
+        Assign(other);
+        return *this;
+    }
+    void Assign(const cSPMatrix3& other);              // 0x0041cb40
+};
+
+struct ShapeCopy {
+    uint32_t m_head[8];                                // +0x00
+    uint32_t m_field20;                                // +0x20
+    uint32_t m_field24;                                // +0x24
+    float m_field28;                                   // +0x28
+    float m_field2c;                                   // +0x2c
+    float m_field30;                                   // +0x30
+    float m_field34;                                   // +0x34
+    float m_field38;                                   // +0x38
+    float m_field3c;                                   // +0x3c
+    uint8_t m_field40;                                 // +0x40
+    uint8_t m_pad41[3];                                // +0x41
+    float m_field44;                                   // +0x44
+    float m_inner0;                                    // +0x48
+    float m_inner1;                                    // +0x4c
+    float m_inner2;                                    // +0x50
+    float m_radius;                                    // +0x54
+    float m_boxMin0;                                   // +0x58
+    float m_boxMin1;                                   // +0x5c
+    float m_boxMin2;                                   // +0x60
+    float m_boxMax0;                                   // +0x64
+    float m_boxMax1;                                   // +0x68
+    float m_boxMax2;                                   // +0x6c
+    uint16_t m_field70;                                // +0x70
+    uint16_t m_field72;                                // +0x72
+    float m_field74;                                   // +0x74
+    float m_field78;                                   // +0x78
+    float m_field7c;                                   // +0x7c
+    float m_field80;                                   // +0x80
+    cSPMatrix3 m_matrix84;                             // +0x84
+    float m_fielda8;                                   // +0xa8
+    float m_fieldac;                                   // +0xac
+    float m_fieldb0;                                   // +0xb0
+    uint32_t m_fieldb4;                                // +0xb4
+    uint32_t m_fieldb8;                                // +0xb8
+    float m_fieldbc;                                   // +0xbc
+    float m_fieldc0;                                   // +0xc0
+    float m_fieldc4;                                   // +0xc4
+    float m_fieldc8;                                   // +0xc8
+    float m_fieldcc;                                   // +0xcc
+    float m_fieldd0;                                   // +0xd0
+    float m_fieldd4;                                   // +0xd4
+    float m_fieldd8;                                   // +0xd8
+    float m_fielddc;                                   // +0xdc
+    float m_fielde0;                                   // +0xe0
+    float m_fielde4;                                   // +0xe4
+    float m_fielde8;                                   // +0xe8
+    float m_fieldec;                                   // +0xec
+    ShapeCopy& operator=(const ShapeCopy& other);
+};
+
+// @ 0x00af6250
+ShapeCopy& ShapeCopy::operator=(const ShapeCopy& other)
+{
+    ShapeCopy* dst = this;
+    const ShapeCopy* src = &other;
+
+    memcpy(dst->m_head, src->m_head, sizeof(dst->m_head));
+
+    dst->m_field20 = src->m_field20;
+    dst->m_field24 = src->m_field24;
+    dst->m_field28 = src->m_field28;
+    dst->m_field2c = src->m_field2c;
+    dst->m_field30 = src->m_field30;
+    dst->m_field34 = src->m_field34;
+    dst->m_field38 = src->m_field38;
+    dst->m_field3c = src->m_field3c;
+    dst->m_field40 = src->m_field40;
+    dst->m_field44 = src->m_field44;
+    dst->m_inner0 = src->m_inner0;
+    dst->m_inner1 = src->m_inner1;
+    dst->m_inner2 = src->m_inner2;
+    dst->m_radius = src->m_radius;
+    dst->m_boxMin0 = src->m_boxMin0;
+    dst->m_boxMin1 = src->m_boxMin1;
+    dst->m_boxMin2 = src->m_boxMin2;
+    dst->m_boxMax0 = src->m_boxMax0;
+    dst->m_boxMax1 = src->m_boxMax1;
+    dst->m_boxMax2 = src->m_boxMax2;
+    dst->m_field70 = src->m_field70;
+    dst->m_field72 = src->m_field72;
+    dst->m_field74 = src->m_field74;
+    dst->m_field78 = src->m_field78;
+    dst->m_field7c = src->m_field7c;
+    dst->m_field80 = src->m_field80;
+    dst->m_matrix84 = src->m_matrix84;
+    dst->m_fielda8 = src->m_fielda8;
+    dst->m_fieldac = src->m_fieldac;
+    dst->m_fieldb0 = src->m_fieldb0;
+    dst->m_fieldb4 = src->m_fieldb4;
+    dst->m_fieldb8 = src->m_fieldb8;
+    dst->m_fieldbc = src->m_fieldbc;
+    dst->m_fieldc0 = src->m_fieldc0;
+    dst->m_fieldc4 = src->m_fieldc4;
+    dst->m_fieldc8 = src->m_fieldc8;
+    dst->m_fieldcc = src->m_fieldcc;
+    dst->m_fieldd0 = src->m_fieldd0;
+    dst->m_fieldd4 = src->m_fieldd4;
+    dst->m_fieldd8 = src->m_fieldd8;
+    dst->m_fielddc = src->m_fielddc;
+    dst->m_fielde0 = src->m_fielde0;
+    dst->m_fielde4 = src->m_fielde4;
+    dst->m_fielde8 = src->m_fielde8;
+    dst->m_fieldec = src->m_fieldec;
+    return *dst;
 }

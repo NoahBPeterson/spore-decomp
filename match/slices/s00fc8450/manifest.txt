@@ -1,2 +1,12 @@
-# source (relative to match/)   symbol   original VA   [cl flags override]
-# no byte-exact functions in this slice yet
+# slice s00fc8450: nine of the eleven gold7 functions are byte-exact; the two that are not
+# (00fc85b0, 00fc9210) are logged in nonmatching.txt -- their own bytes are byte-exact, but the
+# retail PDB size of each symbol also spans the unnamed static function linked right after it.
+slices/s00fc8450/s00fc8450.cpp  ?Seek@BufferedWriter@movie@rw@@QAEXHH@Z  00fc8450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fc8450/s00fc8450.cpp  ?Write@BufferedWriter@movie@rw@@QAEXPBXH@Z  00fc84b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fc8450/s00fc8450.cpp  ?WriteFill@BufferedWriter@movie@rw@@QAEXEH@Z  00fc8500  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fc8450/s00fc8450.cpp  ?Write16@BufferedWriter@movie@rw@@QAEXG@Z  00fc8550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fc8450/s00fc8450.cpp  ?Write32@BufferedWriter@movie@rw@@QAEXI@Z  00fc8580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fc8450/s00fc8450.cpp  ?IsSCChunk@movie@rw@@YA_NPBD@Z  00fc8640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fc8450/s00fc8450.cpp  ?Destroy@RenderableStore@movie@rw@@QAEXXZ  00fc9050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fc8450/s00fc8450.cpp  ??0MovieDecoder@movie@rw@@QAE@PAUICoreAllocator@@@Z  00fc90e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fc8450/s00fc8450.cpp  ?SetStreamTaps@MovieDecoder@movie@rw@@QAEXPAX0@Z  00fc91f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

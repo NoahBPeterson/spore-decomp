@@ -9,6 +9,7 @@
 #define VSLOT(n) virtual void _v##n();
 
 inline void* operator new(size_t, void* p) { return p; }
+void* operator new(size_t size, const char* name, int a, int b, int c, int d);
 
 struct ResourceKey {
     uint32_t instance, type, group;
@@ -31,7 +32,9 @@ struct Property {
     uint32_t* GetValueUInt32() { return (mnFlags & 0x30) ? (uint32_t*)mpData : (uint32_t*)this; }
 };
 struct PropertyList {
-    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6)
+    VSLOT(0)
+    virtual int Release();                                                   // +0x04
+    VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6)
     virtual bool HasProperty(uint32_t id);                                   // +0x1c
     VSLOT(8)
     virtual bool GetProperty(uint32_t id, Property*& out);                   // +0x24
@@ -55,6 +58,10 @@ struct cSpaceInventoryItem {
     virtual uint32_t GetType();                                              // +0x10
     virtual void SetItemID(const ResourceKey& key);                          // +0x14
     virtual const ResourceKey& GetItemID();                                  // +0x18
+    virtual uint32_t GetItemInstanceID();                                    // +0x1c
+
+    cSpaceInventoryItem();                                                   // 0x00c87660
+    void SetPropertyList(PropertyList* list);                                // 0x00c877f0
 
     uint32_t mnRefCount;                                                     // +0x04
     uint32_t pad08[2];
@@ -69,6 +76,69 @@ struct cSpaceInventoryItem {
     int GetUnitValue_006c0200();
     bool IsStackable_0104cbc0();
 };
+
+// Base cSPSpaceInventoryItem (0x7c bytes); tools add mnToolCount at +0x7c.
+struct cSpaceCommodityItem {
+    VSLOT(0)
+    virtual int AddRef();                                                    // +0x04
+    virtual int Release();                                                   // +0x08
+    VSLOT(3)
+    virtual uint32_t GetType();                                              // +0x10
+    virtual void SetItemID(const ResourceKey& key);                          // +0x14
+    virtual const ResourceKey& GetItemID();                                  // +0x18
+    virtual uint32_t GetItemInstanceID();                                    // +0x1c
+
+    cSpaceCommodityItem();                                                   // 0x00c87660
+    void SetPropertyList(PropertyList* list);                                // 0x00c877f0
+
+    uint32_t mnRefCount;                                                     // +0x04
+    uint32_t pad08[2];
+    int mItemCount;                                                          // +0x10
+    uint32_t mItemType;                                                      // +0x14
+    uint32_t mItemCost;                                                      // +0x18
+    uint32_t pad1c[5];
+    PropertyList* mpPropList;                                                // +0x30
+    uint32_t pad34[(0x7c - 0x34) / 4];
+};
+
+// ---- eastl rbtree map used for the rare-commodity bookkeeping (cSPSpaceTrading +0xa0)
+struct RareNode {
+    uint32_t pad00[4];
+    ResourceKey mKey;                                                        // +0x10
+    int mValue;                                                              // +0x1c
+};
+struct RareIterator {
+    RareNode* mpNode;
+    __forceinline RareIterator() {}
+    __forceinline RareIterator(const RareIterator& o) : mpNode(o.mpNode) {}
+};
+struct RareMap {
+    uint32_t pad00[7];                                                       // 0x1c bytes
+    RareIterator find(const ResourceKey* key);                               // 0x00a21dc0 (sret, ret 8)
+    int* insert(const ResourceKey* key);                                     // 0x0103de50 (ret 4)
+    RareNode* end() { return (RareNode*)((char*)this + 4); }
+};
+
+// ---- property manager (0x0067de30)
+struct IPropertyManager {
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9) VSLOT(10)
+    virtual void v2c(uint32_t instance, uint32_t propertyID, PropertyList** out);  // +0x2c
+};
+IPropertyManager* PropertyManager();                                         // 0x0067de30
+
+bool IsItemARare(uint32_t* pItemID);                                         // 0x0103a3c0
+
+// ---- event log / token translator
+struct cEventLog {
+    void PostFeedbackEvent(uint32_t a, uint32_t b, int c, int d, int e, int f);  // 0x00dd8640 (ret 0x18)
+};
+cEventLog* EventLog();                                                       // 0x00b3d3e0
+
+struct Translator {
+    uint32_t pad00[5];
+    cSpaceInventoryItem* mpItem14;                                           // +0x14
+};
+extern Translator* gpTranslator;                                             // 0x016e0d08
 
 template <class T> struct intrusive_ptr {
     T* mpObject;
@@ -225,6 +295,17 @@ struct TradeMessage : MessageBase1 {
     void SetValue(int i, uint32_t v) { *(uint32_t*)&mSlots[i].p = v; }
 };
 
+// Rare-found message: same layout, destructor is out of line in the retail build.
+struct RareMessage : MessageBase1 {
+    struct Slot { IRefSlot* p; uint32_t pad; } mSlots[5];
+    uint32_t mMessageID;                                                     // +0x30
+    uint32_t pad34;
+    uint32_t mRefMask;                                                       // +0x38
+    RareMessage(uint32_t id) { mMessageID = id; mRefMask = 0; }
+    ~RareMessage();                                                          // 0x00421cf0
+    void SetValue(int i, uint32_t v) { *(uint32_t*)&mSlots[i].p = v; }
+};
+
 namespace SP {
 class cSPSpaceTrading {
 public:
@@ -243,7 +324,7 @@ public:
     vector<cTradeEntry*> field_88;                                           // +0x88
     uint32_t pad98;
     int mLastNPCStoreIndex;                                                  // +0x9c
-    uint32_t padA0[(0xbc - 0xa0) / 4];
+    RareMap mRareMap;                                                        // +0xa0
     uvector<RareGroup> mRareGroups;                                          // +0xbc
 
     int GetTradeBalance_01039ca0();
@@ -251,6 +332,8 @@ public:
     void CreateCommodityFromID(cSpaceInventoryItemPtr& dst, const ResourceKey& id, int count, float cost);  // 0x0103a480
     cSpaceInventoryItem* FindStoreItem_01039c00(cSpaceInventoryItem* item);
     uint32_t FindRareGroup_0103a760(uint32_t groupID);
+    void FUN_0103fba0(const ResourceKey* key, int value);
+    void AddCommodityToInventory(const ResourceKey* id, int count);
     void PerformTrade();
 };
 }
@@ -446,4 +529,75 @@ void cSPSpaceTrading::PerformTrade()
     if (avatarEmpire != empire && (balance > 1000 || balance < -1000))
         RelationshipManager()->RecordEvent(avatarEmpire->mPoliticalID, empire->mPoliticalID, 0x526e527, 1.0f);
     GetUFOSimulator()->CalcMaxTravelDistance();
+}
+
+// @ 0x0103fba0
+void cSPSpaceTrading::FUN_0103fba0(const ResourceKey* key, int value)
+{
+    RareNode* node = mRareMap.find(key).mpNode;
+    int old;
+    if (node != mRareMap.end())
+        old = *(int*)((char*)node + 0x1c);
+    else
+        old = 0;
+    if (old != value) {
+        *mRareMap.insert(key) = value;
+        if (value == 1) {
+            uint32_t instance = key->instance;
+            MessageServer()->SendMSG(0x6779f04, &instance, 0);
+        }
+    }
+}
+
+// @ 0x0103fc10
+void cSPSpaceTrading::AddCommodityToInventory(const ResourceKey* id, int count)
+{
+    cSpaceCommodityItem* item = new ("Simulator/cSpaceInventoryItem", 0, 0, 0, 0) cSpaceCommodityItem;
+    if (item == 0)
+        return;
+    item->mItemType = 4;
+    item->SetItemID(*id);
+    item->mItemCount = count;
+
+    PropertyList* pPropList = 0;
+    IPropertyManager* pPropMgr = PropertyManager();
+    if (pPropList) {
+        PropertyList* pOld = pPropList;
+        pPropList = 0;
+        pOld->Release();
+    }
+    pPropMgr->v2c(item->GetItemInstanceID(), 0x34d97fa, &pPropList);
+    item->SetPropertyList(pPropList);
+
+    SpaceGameGet()->GetPlayerInventory()->AddItem((cSpaceInventoryItem*)item, 0, true);
+
+    if (IsItemARare((uint32_t*)id)) {
+        RareNode* node = mRareMap.find((ResourceKey*)&item->GetItemID()).mpNode;
+        if (node == mRareMap.end() || node->mValue != 1) {
+            SpaceGameGet()->GetPlayerStats()->AddStat_00fe5430(0xb, 1);
+            ResourceKey k0 = {0, 0, 0};
+            ResourceKey k1 = {0, 0, 0};
+            ResourceKey k2 = {0, 0, 0};
+            ShowEventLog_00e39ab0(0xdf8b9fc2, 0, &k2, (ResourceKey*)&item->GetItemID(),
+                                  GetActivePlanetRecord()->GetCommContext(), 0, &k1, &k0);
+        }
+
+        ResourceKey* pID2 = (ResourceKey*)&item->GetItemID();
+        RareNode* node2 = mRareMap.find(pID2).mpNode;
+        if (node2 == mRareMap.end() || node2->mValue != 1) {
+            *mRareMap.insert(pID2) = 1;
+            uint32_t instance = pID2->instance;
+            MessageServer()->SendMSG(0x6779f04, &instance, 0);
+        }
+
+        RareMessage msg(0xf46092d4);
+        msg.SetValue(0, item->GetItemID().instance);
+        MessageServer()->SendMSG(msg.mMessageID, &msg, 0);
+        gpTranslator->mpItem14 = (cSpaceInventoryItem*)item;
+        EventLog()->PostFeedbackEvent(0x554fe3de, 0x131a9f54, 0, 0, 1, 0);
+    }
+
+    item->AddRef();
+    if (pPropList)
+        pPropList->Release();
 }

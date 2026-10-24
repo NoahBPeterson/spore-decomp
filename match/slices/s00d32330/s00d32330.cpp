@@ -1,4 +1,4 @@
-// @ 0x00d32330  SP::cCreatureModeInputStrategy::UpdateAvatarGoalKeyboard   (PDB caller-scored name)
+// slice s00d32330 -- creature-mode keyboard input strategy.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast  (cvtsi2ss + float-reassociated sums need /fp:fast; no /EHsc: the navigation-goal locals get no unwind frame).
 //
 // Keyboard (WASD) steering of the creature-stage avatar.  Every frame, while the
@@ -55,6 +55,8 @@ struct cLocomotionRequest {
 struct tNavigationGoal : cLocomotionRequest {
   tNavigationGoal(const Vector3& target, const Vector3& dir, float minDist, float maxDist);   // 0x00ad2a50
 };
+
+class cSpatialObject;
 
 // Retail cLocomotiveObject vtable (slots from ModAPI cSpatialObject / cLocomotiveObject).
 class cLocomotiveObject {
@@ -116,6 +118,16 @@ public:
   virtual void vfd8();
   virtual void RequestMove(const cLocomotionRequest& request);   // 0xdc
   const Vector3& GetVelocity();                       // 0x00d20610
+  cSpatialObject* GetSpatialState();                  // 0x00c41ec0
+};
+
+// Spatial state of the locomotive (at +0x1f4 of it): the current target anchor and the
+// interpolated position.
+class cSpatialObject {
+public:
+  const Vector3* GetPosition();      // 0x00c423c0
+  char pad00[0x5c];
+  void* mpTarget;                    // +0x5c
 };
 
 struct cBehaviorTreeData {
@@ -147,8 +159,22 @@ struct cCreatureAnimal {
 };
 
 class cGameNounManager { public: cCreatureAnimal* GetAvatar(); };   // 0x00b1fdb0
-class cGameInputManager { public:
-  bool IsKeyDown(int key) { return ((bool(__thiscall*)(void*, int))VFUNC(this, 0x18))(this, key); }
+class cGameInputManager {
+public:
+  virtual void vf00();
+  virtual void vf04();
+  virtual void vf08();
+  virtual void vf0c();
+  virtual void vf10();
+  virtual void vf14();
+  virtual bool IsKeyDown(int key);          // +0x18
+  virtual void vf1c();
+  virtual void vf20();
+  virtual void vf24();
+  virtual void vf28();
+  virtual void vf2c();
+  virtual void vf30();
+  virtual void* GetInputDevice();           // +0x34
 };
 class cConfigManager { public:
   void* GetProperty(uint32_t id) { return ((void*(__thiscall*)(void*, uint32_t))VFUNC(this, 0x30))(this, id); }
@@ -222,17 +248,80 @@ static float GetScenarioTurnSpeed(cCreatureAnimal* avatar)
   return g_TurnSpeed * ((ratio - k) + k * expf(speed));
 }
 
-class cCreatureModeInputStrategy {
-public:
-  void UpdateAvatarGoalKeyboard();
-  void UpdateAvatarGoal(bool a, bool b);       // 0x00d31a70
-
-  char pad0[0xc0];
-  bool mbUpdateAvatarGoals;    // +0xc0
-  bool mbAllowWASDGoals;       // +0xc1
+// Frame timer kept by the input strategies (only the running state is queried here).
+struct cSPTimer {
+  char mState[0x20];
+  bool IsRunning();                            // 0x00feba90
 };
 
-// @ 0x00d32330
+// Reference-counted marker the strategy keeps active at +0xe0 while it steers the avatar
+// towards something.
+class cAvatarMarker {
+public:
+  virtual void vf00();
+  virtual void Release();                      // +0x04
+  virtual void vf08();
+  virtual void Activate(bool bEnable);         // +0x0c
+};
+
+// Object a property id (0x2a7ecd2) maps to; only the flag at +0x314 is read.
+class cGoalUser {
+public:
+  char pad00[0x314];
+  bool mb314;                                  // +0x314
+};
+
+class cScenario {
+public:
+  virtual void vf00();
+  virtual void vf04();
+  virtual void vf08();
+  virtual cGoalUser* GetProperty(uint32_t id);  // +0x0c
+};
+
+class cGameModeHost {
+public:
+  virtual void vf00(); virtual void vf04(); virtual void vf08(); virtual void vf0c();
+  virtual void vf10(); virtual void vf14(); virtual void vf18(); virtual void vf1c();
+  virtual void vf20(); virtual void vf24(); virtual void vf28(); virtual void vf2c();
+  virtual void vf30(); virtual void vf34();
+  virtual cScenario* GetActiveScenario();       // +0x38
+};
+
+class cApp {
+public:
+  virtual void vf00(); virtual void vf04(); virtual void vf08(); virtual void vf0c();
+  virtual void vf10(); virtual void vf14(); virtual void vf18(); virtual void vf1c();
+  virtual void vf20(); virtual void vf24(); virtual void vf28(); virtual void vf2c();
+  virtual void vf30(); virtual void vf34(); virtual void vf38(); virtual void vf3c();
+  virtual void vf40(); virtual void vf44(); virtual void vf48(); virtual void vf4c();
+  virtual cGameModeHost* GetGameModeHost();     // +0x50
+};
+
+cApp* App();                                   // 0x0067dd10
+
+extern bool g_bLookModeActive;       // 0x0169e37e  tracks the 0x16 ('V') key mode
+extern bool g_bAcceptKeyboardInput;  // 0x0169e170  gates the keyboard goal steering
+
+class cCreatureModeInputStrategy {
+public:
+  void UpdateInput(cGameInputManager* pInput, uint32_t dtBits);   // 0x00d32df0
+  void Update(uint32_t dtBits);                                   // 0x00d32fb0
+  void UpdateAvatarGoalKeyboard();                         // 0x00d32330
+  void UpdateAvatarGoal(bool a, bool b);                   // 0x00d31a70
+
+  char pad0[0x54];
+  bool mbEnabled;              // +0x54
+  char pad55[0xa0 - 0x55];
+  cSPTimer mUpdateTimer;       // +0xa0
+  bool mbUpdateAvatarGoals;    // +0xc0
+  bool mbAllowWASDGoals;       // +0xc1
+  char padc2[0xe0 - 0xc2];
+  cAvatarMarker* mpMarker;     // +0xe0
+  Vector3 mLastMarkerPos;      // +0xe4
+};
+
+// @ 0x00d32330  (PDB caller-scored name)
 void cCreatureModeInputStrategy::UpdateAvatarGoalKeyboard()
 {
   cCreatureAnimal* avatar = NounManager()->GetAvatar();
@@ -373,6 +462,71 @@ void cCreatureModeInputStrategy::UpdateAvatarGoalKeyboard()
     g_KeyboardGoalActive = 0;
   }
   g_bLastAutoRun = g_bAutoRun;
+}
+
+// @ 0x00d32df0
+// Per-frame update: hands the frame to the keyboard goal steering while the strategy is enabled,
+// drops the steering marker once the avatar has walked away from it, and only re-arms the WASD
+// goals after the camera keys are released.
+void cCreatureModeInputStrategy::UpdateInput(cGameInputManager* pInput, uint32_t dtBits)
+{
+  if (mbEnabled) {
+    cCreatureAnimal* avatar = NounManager()->GetAvatar();
+    if (avatar != 0 && !pInput->IsKeyDown(0x16))
+      g_bLookModeActive = false;
+
+    void* pDevice = GameInputManager()->GetInputDevice();
+    cScenario* pScenario = App()->GetGameModeHost()->GetActiveScenario();
+    cGoalUser* pGoal = pScenario != 0 ? pScenario->GetProperty(0x2a7ecd2) : 0;
+    if ((pDevice == 0 || (pGoal != 0 && pGoal->mb314)) && g_bAcceptKeyboardInput)
+      UpdateAvatarGoalKeyboard();
+
+    if (mUpdateTimer.IsRunning()) {
+      UpdateAvatarGoal(true, false);
+      if (g_bAcceptKeyboardInput)
+        UpdateAvatarGoalKeyboard();
+    }
+
+    if (mpMarker != 0) {
+      bool bLeft = true;
+      cSpatialObject* pSpatial = avatar->mLoco.GetSpatialState();
+      if (pSpatial->mpTarget != 0) {
+        const Vector3* pPos = pSpatial->GetPosition();
+        float dx = pPos->x - mLastMarkerPos.x;
+        float dz = pPos->z - mLastMarkerPos.z;
+        float dy = pPos->y - mLastMarkerPos.y;
+        bLeft = dx * dx + dz * dz + dy * dy > 1.0f;
+      }
+      if (bLeft) {
+        mpMarker->Activate(true);
+        if (mpMarker != 0) {
+          cAvatarMarker* pMarker = mpMarker;
+          mpMarker = 0;
+          pMarker->Release();
+        }
+      }
+    }
+  } else {
+    g_bLastAutoRun = false;
+    g_bAutoRun = false;
+    g_bLookModeActive = false;
+    g_KeyboardGoalActive = 0;
+    g_bKeyboardTurning = false;
+    g_bKeyboardMoving = false;
+  }
+
+  if (!mbAllowWASDGoals && !pInput->IsKeyDown(0x16) && !pInput->IsKeyDown(1) &&
+      !pInput->IsKeyDown(2))
+    mbAllowWASDGoals = true;
+}
+
+// @ 0x00d32fb0
+// The frame delta is forwarded as the raw float it arrived as (bit pattern, not re-normalised).
+void cCreatureModeInputStrategy::Update(uint32_t dtBits)
+{
+  cGameInputManager* pInput = GameInputManager();
+  if (pInput != 0)
+    UpdateInput(pInput, dtBits);
 }
 
 }  // namespace SP

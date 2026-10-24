@@ -1,0 +1,19 @@
+00f16260 PartHolder::Cleanup  # coined class/name; thiscall, releases the holder's parts then tail-calls the member destructor at +0x08
+00f16280 Int64ListVector::AssignFromList  # coined class/name; fixed_vector<int64_t,32>::DoAssignFromIterator over a singly linked list iterator (nodes: next +0x00, value +0x08); copies while both ranges run, then either trims (memcpy tail + shrink) or calls the list insert at mpEnd
+00f16330 ElementVector::EraseRange  # coined class/name; vector<Element>::erase(first,last): move the tail down over [pos,last), destroy the orphaned tail elements through vtable[0](0), shrink mpEnd by the element count, return the first parameter
+00f16390 ElementVector::InsertN  # coined class/name; vector<Element>::insert(position, n, value): grow path (doubling capacity, EASTL allocator `operator new(size, "Simulator", 0, 0, allocator.h, 0xd1)`, block header at mpBegin-4) and in-place paths (uninitialized fill + saved-destination uninitialized copy + copy_backward + fill), 0x70-byte elements
+00f14690 Element::Element(const Element*)  # copy constructor, 264 bytes (refcounted members, sets vptr)
+00f147a0 CopyConstructSaved  # uninitialized copy that also reports the destination through a result pointer (4 args used, a fifth is ignored)
+00f147e0 Element copy helper  # used by the uninitialized copy loops
+00f148c0 CopyConstructRange  # uninitialized_copy(first,last,dst) with a null-destination guard, returns the destination end
+00f14900 MoveElements  # uninitialized_copy over 0x70-byte elements, returns the destination end
+00f14940 CopyConstructBackward  # uninitialized_copy_backward(first,last,dstEnd)
+00f16230 FillUninitialized  # uninitialized_fill_n(dst, n, value) with a null-destination guard
+00f16300 FillAssigned  # assign-fill(first,last,value) over already-constructed elements
+00f120e0 DestroyRange  # destroy(first,last) through vtable[0], reports the destination end
+00f47380 FreeRawBlock  # releases an allocator block
+00f473a0 operator new(size, name, flags, align, file, line)  # EASTL SD allocator entry point
+00e0a400 Element::~Element  # destructor of the 0x70-byte element
+e0a5c0 PartHolder::Part::Destroy
+00f14980 PartHolder::ReleaseParts
+00f143c0 Int64ListVector list insert

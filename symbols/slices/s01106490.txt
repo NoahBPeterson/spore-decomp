@@ -1,1 +1,2 @@
 01106490 hkCollideCapsuleUtilManifoldCapsVsCaps  # card/pdb name; Havok 3.1 capsule-capsule manifold (no calls, inlined closestLineSegLineSeg)
+01106f80 hkCollideCapsuleManifoldCapsVsCapsTol  # no PDB entry; cdecl (capsA, rA, capsB, rB, tolerance, pointsOut) -> int (1 = separated); calls 0x01105940 (closestLineSegLineSeg, 9-float result) and builds the contact normal/position for the capsule pair

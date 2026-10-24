@@ -1,1 +1,4 @@
 00d197a0 SP::cGameEditInputStrategy::HandleUIMessage  # card name DoMessage; IWinProc override (this = full+0x40, ret 8) reading Message type/control id at +8/+0xc, same class as s00d1afe0/s00d1a2b0
+00d1a080 eastl::quick_sort_impl<uint32_t*,int,SP::cPropertyListNameSort>  # introsort implementation, comparator passed by value
+00d1a180 eastl::quick_sort<uint32_t*,SP::cPropertyListNameSort>  # introsort entry; Log2 depth, insertion-sort passes
+00d1a250 eastl::sort<uint32_t*,SP::cPropertyListNameSort>  # sort wrapper forwarding a by-value comparator

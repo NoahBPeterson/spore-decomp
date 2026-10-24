@@ -82,4 +82,30 @@ cFieldDef FIELDS_DT_CELL[] = {
     /*25*/ { 0, sHash(0), -1, 0, Conv(0), Conv(0), 0, Conv(0), 0, 0 },
 };
 
+// ---------------------------------------------------------------------------
+// The dev-build globals list names the two tables below
+//   SP::FIELDS_DT_EAT_DATA          at 0x015a6680
+//   SP::FIELDS_DT_LOCALIZED_STRING  at 0x016b1828
+// Both are ordinary namespace-scope cFieldDef arrays whose aggregate
+// initializers cl 2008 lowers to the compiler-generated dynamic initializers
+// below (the first element's `name` pointer is emitted statically, so the
+// dynamic store sequence starts at that element's hash field).
+// ---------------------------------------------------------------------------
+
+// @ 0x01375ae0
+cFieldDef FIELDS_DT_EAT_DATA[] = {
+    /* 0*/ { "foodValue",  sHash("foodValue"),  0,   0, Conv(1), Conv(0), 0, Conv(10), 2, 0 },
+    /* 1*/ { "hpValue",    sHash("hpValue"),    4,   0, Conv(1), Conv(0), 0, Conv(1),  2, 0 },
+    /* 2*/ { "bomb",       sHash("bomb"),       8,   0, Conv(6), Conv(0), 0, Conv(0),  2, 0 },
+    /* 3*/ { "poisonNova", sHash("poisonNova"), 9,   0, Conv(6), Conv(0), 0, Conv(0),  2, 0 },
+    /* 4*/ { 0,            sHash(0),           -1,   0, Conv(0), Conv(0), 0, Conv(0),  0, 0 },
+};
+
+// @ 0x01375cf0
+cFieldDef FIELDS_DT_LOCALIZED_STRING[] = {
+    /* 0*/ { 0, sHash(0), 0,    0, Conv(10), Conv(0), 0, Conv(0), 0, 0 },
+    /* 1*/ { 0, sHash(0), 0xa0, 0, Conv(1),  Conv(0), 1, Conv(0), 0, 0 },
+    /* 2*/ { 0, sHash(0), -1,   0, Conv(0),  Conv(0), 0, Conv(0), 0, 0 },
+};
+
 } // namespace SP

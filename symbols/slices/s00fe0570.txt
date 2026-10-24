@@ -1,0 +1,3 @@
+00fe0570 ?InitSpaceMode@cAppModeSpace@@QAEXXZ  # cAppModeSpace::InitSpaceMode: space-mode startup (banked nonmatching, see nonmatching.txt)
+00fe0c60 ?CompleteTransitionFromSolarToPlanet@cAppModeSpace@@QAEXXZ  # cAppModeSpace::CompleteTransitionFromSolarToPlanet: unpause, drop bake-time input flags, refresh planet, post solar->planet transition messages
+00fe0e10 ?FUN_00fe0e10@cAppModeSpace@@QAEXXZ  # cAppModeSpace::FUN_00fe0e10 (unnamed in retail): planet-model key handoff, refresh planet, post transition messages (planet->solar teardown)

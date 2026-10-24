@@ -93,6 +93,79 @@ struct FixedVector5 {
 	}
 };
 
+// ---------------------------------------------------------------- shared effect types
+// Intrusive refcounted object: the first four slots are AddRef/Release (the feedback-object
+// pool uses +0, +4); effect handles use Stop at +8 and SetXform at +0x18.
+struct RCObject {
+	virtual void v00();                       // +0x00  AddRef
+	virtual void v04();                       // +0x04  Release
+	virtual void v08(int);                    // +0x08  Stop
+	virtual void* v0c(int);                   // +0x0c
+	virtual void v10();
+	virtual void v14();
+	virtual void v18(const void* pxform);     // +0x18  SetXform
+	virtual void v1c();
+	virtual void v20(const void* pxform);     // +0x20
+};
+
+// Owner handle for an intrusive RCObject (EA::AutoRefCount): copying AddRefs, the
+// destructor Releases.
+struct AutoRef {
+	RCObject* mpObj;                          // +0x00
+	AutoRef() : mpObj(0) {}
+	AutoRef(const AutoRef& other) : mpObj(other.mpObj) { if (mpObj) mpObj->v00(); }
+	~AutoRef() { if (mpObj) mpObj->v04(); }
+	void Release() { if (mpObj) mpObj->v04(); }
+};
+
+struct Matrix3 {
+	float m[9];
+	void Assign(const float* src);            // 0x0041cb40
+};
+
+// Transform message handed to the effects system (0x38 bytes).
+struct XformMsg {
+	uint16_t mFlags;                          // +0x00
+	uint16_t mCount;                          // +0x02
+	Vector3  mPos;                            // +0x04
+	float    mScale;                          // +0x10
+	Matrix3  mRot;                            // +0x14
+};
+
+extern const Matrix3 g_IdentityMatrix;        // 0x016DB9D8 (32-bit identity basis)
+extern const Vector3 g_DefaultPos;            // 0x016DB9FC (zero vector)
+extern const float kOne;                      // 0x01485720 (1.0f)
+
+uint32_t __cdecl FNVHash(const char* s, uint32_t seed, int lowerCase);  // 0x00932E80
+
+// ---------------------------------------------------------------- feedback-event rbtree
+// eastl::rbtree<unsigned, eastl::pair<const unsigned, AutoRef>, ...> subset.  The anchor
+// node sits at +4 (after the empty comparator) and doubles as end(); mnSize is at +0x14.
+struct SimRBNodeBase {
+	SimRBNodeBase* mpNodeRight;               // +0x00
+	SimRBNodeBase* mpNodeLeft;                // +0x04
+	SimRBNodeBase* mpNodeParent;              // +0x08 (anchor: root)
+	unsigned char  mColor;                    // +0x0c
+	unsigned char  mPad0d[3];
+};
+struct SimFBValue {
+	unsigned mKey;                            // node +0x10
+	AutoRef  mValue;                          // node +0x14
+};
+struct SimFBNode : SimRBNodeBase {
+	SimFBValue mValue;
+};
+struct SimFBTree {
+	unsigned char  mCompare;                  // +0x00  eastl::less<unsigned> (empty)
+	unsigned char  mPad01[3];
+	SimRBNodeBase  mAnchor;                   // +0x04
+	unsigned       mnSize;                    // +0x14
+	SimFBNode* end() { return (SimFBNode*)&mAnchor; }
+	void find(SimFBNode** pOut, const unsigned* pKey);              // 0x00E5C780
+};
+SimRBNodeBase* __cdecl RBTreeIncrement(SimRBNodeBase* pNode);       // 0x00921580
+void __cdecl RBTreeErase(SimRBNodeBase* pNode, SimRBNodeBase* pAnchor);  // 0x00921880
+
 namespace SP {
 
 struct cCubeSimIt {                              // 16 bytes
@@ -200,8 +273,11 @@ public:
 	float mGenesisTimeT2;                        // +0x194
 	float mGenesisTimeT3;                        // +0x198
 	SpVector<cCubeSimIt> mGenesisCells;          // +0x19c
+	uint32_t mPad1a8[0x18 / 4];                  // +0x1a8
+	SimFBTree mFeedbackEvents;                   // +0x1c0 feedback-event map
 
 	void UpdateGenesisDevice(uint64_t deltaTime);
+	void RemovePortalEffect(uint32_t key);        // 0x00FF8300
 };
 
 // @ 0x00FF7530
@@ -426,3 +502,231 @@ void cSPSimPlanetHighLOD::UpdateGenesisDevice(uint64_t deltaTime)
 }
 
 }  // namespace SP
+
+// =====================================================================================
+// Simulator feedback-object pool and introsort helpers (same translation unit,
+// 0x00ff6570-0x00ff8300).  Symbols/pdb_candidates.json has no PDB names for these
+// compiler-generated instantiations; the names below are descriptive.
+// =====================================================================================
+#include <new>
+
+// Payload carried by a pooled list node (0x10 bytes).
+struct SimPoolPayload {
+	AutoRef mEvent;                              // +0x00
+	float   mF04;                                // +0x04
+	float   mF08;                                // +0x08
+	float   mF0c;                                // +0x0c
+};
+
+struct SimListNode {
+	SimListNode* mpNext;                         // +0x00
+	SimListNode* mpPrev;                         // +0x04
+};
+
+struct SimPoolNode : SimListNode {
+	SimPoolPayload mData;                        // +0x08
+};
+
+struct FixedPoolBase {
+	void* mpHead;                                // +0x00
+	void* mpUnk04;                               // +0x04
+};
+
+// List sentinel + embedded fixed pool (cSPSimPlanetHighLOD::mPool34).
+struct SimPool34 {
+	SimListNode  mHead;                          // +0x00  sentinel (self-link)
+	FixedPoolBase mPool;                         // +0x08
+	SimPoolNode* mpPoolBegin;                    // +0x10
+	SimPoolNode* mpPoolEnd;                      // +0x14
+	unsigned     mNodeSize;                      // +0x18  (also passed as operator new size)
+
+	void Init();                                 // 0x00ff8460 (previous slice)
+	void Destroy();                              // 0x00ff80b0
+	SimPoolNode* AllocNode(const SimPoolPayload* pData);   // 0x00ff8100
+	void PopFront();                             // 0x00ff8210
+};
+
+// eastl allocator-backed raw allocation (EASTL_allocator_deallocate, 0x00f47380).
+void __cdecl SimDeallocate(void* p);
+// Debug allocator allocate(size, name, flags, debugFlags, allocator, line) (0x00f473a0).
+void* __cdecl SimAllocate(unsigned size, const char* name, int flags, int debugFlags,
+                          void* allocator, int line);
+
+// @ 0x00ff80b0
+void SimPool34::Destroy()
+{
+	SimPoolNode* node = static_cast<SimPoolNode*>(mHead.mpNext);
+	while (node != &mHead) {
+		SimPoolNode* current = node;
+		node = static_cast<SimPoolNode*>(node->mpNext);
+		if (current->mData.mEvent.mpObj != 0)
+			current->mData.mEvent.mpObj->v04();
+		if (current >= mpPoolBegin && current < mpPoolEnd) {
+			current->mpNext = (SimPoolNode*)mPool.mpHead;
+			mPool.mpHead = current;
+		} else {
+			SimDeallocate(current);
+		}
+	}
+}
+
+// @ 0x00ff8100
+SimPoolNode* SimPool34::AllocNode(const SimPoolPayload* pData)
+{
+	SimPoolNode* node = (SimPoolNode*)mPool.mpHead;
+	if (node != 0)
+		mPool.mpHead = node->mpNext;
+	else
+		node = (SimPoolNode*)SimAllocate(mNodeSize, "Simulator", 0, 0, (void*)0x13ebb38, 0xd1);
+	new (&node->mData) SimPoolPayload(*pData);
+	return node;
+}
+
+// @ 0x00ff8210
+void SimPool34::PopFront()
+{
+	SimPoolNode* node = static_cast<SimPoolNode*>(mHead.mpNext);
+	node->mpPrev->mpNext = node->mpNext;
+	node->mpNext->mpPrev = node->mpPrev;
+	if (node->mData.mEvent.mpObj != 0)
+		node->mData.mEvent.mpObj->v04();
+	if (node >= mpPoolBegin && node < mpPoolEnd) {
+		node->mpNext = (SimPoolNode*)mPool.mpHead;
+		mPool.mpHead = node;
+	} else {
+		SimDeallocate(node);
+	}
+}
+
+// ---------------------------------------------------------------- introsort on int*
+// Out-of-line heap helpers of this translation unit.
+void __cdecl SimAdjustHeap(int* first, int top, int len, int hole, int value);  // 0x00ff6570
+void __cdecl SimMakeHeap(int* first, int* last);                               // 0x00ff69c0
+void __cdecl SimSortHeap(int* first, int* last);                               // 0x00ff6a00
+
+template <typename T>
+inline void SimSwap(T& a, T& b)
+{
+	T t = a;
+	a = b;
+	b = t;
+}
+
+// @ 0x00ff8170
+int* SimPartition(int* first, int* last, int pivot)
+{
+	for (;;) {
+		while (*first < pivot)
+			++first;
+		--last;
+		while (pivot < *last)
+			--last;
+		if (!(first < last))
+			return first;
+		const int value = *first;
+		*first = *last;
+		*last = value;
+		++first;
+	}
+}
+
+// @ 0x00ff81b0
+void SimPartialSort(int* first, int* middle, int* last)
+{
+	SimMakeHeap(first, middle);
+	for (int* it = middle; it < last; ++it) {
+		const int value = *it;
+		if (value < *first) {
+			*it = *first;
+			SimAdjustHeap(first, 0, (int)(middle - first), 0, value);
+		}
+	}
+	SimSortHeap(first, middle);
+}
+
+// Median of three iterators (inlined in the original).
+__forceinline int* SimMedian(int* a, int* b, int* c)
+{
+	if (*a < *b) {
+		if (*b < *c)
+			return b;
+		else if (*a < *c)
+			return c;
+		else
+			return a;
+	} else if (*a < *c) {
+		return a;
+	} else if (*b < *c) {
+		return c;
+	} else {
+		return b;
+	}
+}
+
+// @ 0x00ff8260
+void SimQuickSortImpl(int* first, int* last, int depth)
+{
+	while ((((int)last - (int)first) & ~3) > 0x70 && depth > 0) {
+		int* pivot = SimMedian(first, first + (last - first) / 2, last - 1);
+		int* cut = SimPartition(first, last, *pivot);
+		--depth;
+		SimQuickSortImpl(cut, last, depth);
+		last = cut;
+	}
+	if (depth == 0)
+		SimPartialSort(first, last, last);
+}
+
+// ---------------------------------------------------------------- effects manager
+namespace SP {
+
+struct cEffectsManager {
+	virtual void e00();
+	virtual void e04();
+	virtual void e08();
+	virtual void e0c();
+	virtual void e10();
+	virtual void e14();
+	virtual void e18();
+	virtual void e1c();
+	virtual void e20();
+	virtual void e24();
+	virtual void e28();
+	virtual bool CreateEffect(uint32_t hash, int flags, AutoRef* out);   // +0x2c
+};
+
+cEffectsManager* EffectsManager();               // 0x0067DDD0
+
+}
+
+// Removes the feedback event and, when it owns the rally-portal effect, clears that effect
+// through the effects manager before unlinking the tree node.
+// @ 0x00ff8300
+void SP::cSPSimPlanetHighLOD::RemovePortalEffect(uint32_t key)
+{
+	SimFBNode* it;
+	mFeedbackEvents.find(&it, &key);
+	if (it != mFeedbackEvents.end()) {
+		RCObject* pEvent = it->mValue.mValue.mpObj;
+		pEvent->v0c(0);
+		AutoRef fx;
+		if (EffectsManager()->CreateEffect(FNVHash("SG_ufo_raider_rally_portal", 0x811c9dc5, 1), 0, &fx)) {
+			XformMsg xform;
+			xform.mFlags = 0;
+			xform.mCount = 0;
+			xform.mPos = g_DefaultPos;
+			xform.mScale = kOne;
+			xform.mRot.Assign(g_IdentityMatrix.m);
+			pEvent->v20(&xform);
+			fx.mpObj->v18(&xform);
+			fx.mpObj->v08(0);
+		}
+		SimFBNode* pErase = it;
+		--mFeedbackEvents.mnSize;
+		RBTreeIncrement(pErase);
+		RBTreeErase(pErase, &mFeedbackEvents.mAnchor);
+		if (pErase->mValue.mValue.mpObj)
+			pErase->mValue.mValue.mpObj->v04();
+		SimDeallocate(pErase);
+	}
+}

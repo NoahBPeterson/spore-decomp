@@ -1,1 +1,7 @@
+# slice s01375ae0 - dynamic initializers of SP::cFieldDef tables (cl 2008, VC9)
+# 01375ae0  ??__EFIELDS_DT_EAT_DATA@SP@@YAXXZ          ($E171, table at 0x015a6680)
+# 01375cf0  ??__EFIELDS_DT_LOCALIZED_STRING@SP@@YAXXZ  ($E175, table at 0x016b1828)
+# 01375e30  ??__EFIELDS_DT_CELL@SP@@YAXXZ              ($E179, table at 0x015a5fc8)
+01375ae0 ??__EFIELDS_DT_EAT_DATA@SP@@YAXXZ  # dynamic initializer of SP::FIELDS_DT_EAT_DATA (foodValue/hpValue/bomb/poisonNova)
+01375cf0 ??__EFIELDS_DT_LOCALIZED_STRING@SP@@YAXXZ  # dynamic initializer of SP::FIELDS_DT_LOCALIZED_STRING
 01375e30 ??__EFIELDS_DT_CELL@SP@@YAXXZ  # dynamic initializer $E179 of the SP::cFieldDef table at 0x015a5fc8 (cell fields: name/structure/eat/ai/.../pieces); FIELDS_DT_CELL exists in the dev build symbols, absent from retail globals list

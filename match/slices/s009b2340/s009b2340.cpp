@@ -40,8 +40,21 @@ inline vector_3 vmax(const vector_3& a, const vector_3& b) {
 // creature_part_caps lives at +8 of this holder; GetCap looks a FOURCC up in NameFOURCCs[32]
 // (0-terminated) and returns Values[i], or the default if absent.  Retail 0x009b3050 (thiscall).
 struct creature_part_caps_holder {
+  unsigned long mFlags;                        // +0x00: OR of flags for all listed caps
+  unsigned long mFlagsOn;                      // +0x04: OR of flags for enabled caps
+  unsigned long mNames[32];                    // +0x08: FOURCC list (0-terminated)
+  bool mValues[32];                            // +0x88: per-slot enabled byte
+
   bool GetCap(unsigned long fourcc, bool bDefault) const;  // 0x009b3050
+  bool HasCap(unsigned long fourcc) const;                 // 0x009b30e0
+  void SetCap(unsigned long fourcc, bool bValue);          // 0x009b3090
+  unsigned long GetFreeSlot() const;                       // 0x009b3110
+  __declspec(noinline) void Recompute();                   // 0x009b3010
 };
+
+unsigned long CapFlag(unsigned long fourcc);               // 0x009b2f90
+bool SameCaps(const creature_part_caps_holder* a,
+              const creature_part_caps_holder* b);         // 0x009b3150
 
 struct creature_body_static_data {            // retail size 0x468
   char pad_000[0x10c];
@@ -49,8 +62,8 @@ struct creature_body_static_data {            // retail size 0x468
   char pad_118[0x138 - 0x118];
   vector_3 local_half_extents__SCALABLE;       // +0x138
   char pad_144[0x150 - 0x144];
-  creature_part_caps_holder caps;              // +0x150
-  char pad_151[0x210 - 0x151];
+  creature_part_caps_holder caps;              // +0x150 (size 0xa8)
+  char pad_1f8[0x210 - 0x1f8];
   unsigned long context_flags;                 // +0x210 (retail-only; masked with 0x610300)
   char pad_214[0x468 - 0x214];
 };
@@ -102,7 +115,49 @@ inline int FixedUpmult(float f) { return FloorToInt(f * 100.0f); }
 template <typename T> inline const T& min_(const T& a, const T& b) { return (b < a) ? b : a; }
 template <typename T> inline const T& max_(const T& a, const T& b) { return (a < b) ? b : a; }
 
+// Small state object reset by creature_anim_state::Init (retail 0x009b2e50).
+struct anim_vec3 {
+  float x, y, z;
+  anim_vec3() {}
+  anim_vec3(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {}
+};
 
+// The 4-byte packed colour at +0x20: Init writes bytes 04 00 FF FF (0xffff0004).
+struct anim_color {
+  unsigned char r, g, b, a;
+  void Init();                                        // 0x009e6740
+};
+
+struct creature_anim_state {                          // retail size 0xf4
+  char        pad_000[4];                             // +0x000 (not written here)
+  anim_vec3   m004;                                   // +0x004
+  anim_vec3   m010;                                   // +0x010
+  float       m01c;                                   // +0x01c
+  anim_color  m020;                                   // +0x020
+  anim_vec3   m024;                                   // +0x024
+  anim_vec3   m030;                                   // +0x030
+  anim_vec3   m03c;                                   // +0x03c
+  anim_vec3   m048;                                   // +0x048
+  anim_vec3   m054;                                   // +0x054
+  anim_vec3   m060;                                   // +0x060
+  float       m06c;                                   // +0x06c
+  float       m070;                                   // +0x070 (not written here)
+  anim_vec3   m074;                                   // +0x074
+  float       m080;                                   // +0x080
+  char        pad_084[0x08c - 0x084];                 // +0x084
+  anim_vec3   m08c;                                   // +0x08c
+  char        pad_098[0x0bc - 0x098];                 // +0x098
+  anim_vec3   m0bc;                                   // +0x0bc
+  float       m0c8;                                   // +0x0c8 (not written here)
+  anim_vec3   m0cc;                                   // +0x0cc
+  anim_vec3   m0d8;                                   // +0x0d8
+  anim_vec3   m0e4;                                   // +0x0e4
+  float       m0f0;                                   // +0x0f0
+
+  creature_anim_state* Init();                        // 0x009b2e50
+};
+
+// @ 0x009b2340
 unsigned long EvaluateContextTargetQuery(unsigned long* pResult, unsigned long nMaxResults,
                                          const creature_static_data& data, const context_target& target_in,
                                          unsigned long bMirror, bool bNoRecurse) {
@@ -286,6 +341,128 @@ unsigned long EvaluateContextTargetQuery(unsigned long* pResult, unsigned long n
   if (n != 0 && pResult != 0)
     memcpy(pResult, result, n * sizeof(unsigned long));
   return n;
+}
+
+// @ 0x009b2e50
+creature_anim_state* creature_anim_state::Init() {
+  m004.x = m004.y = m004.z = 0.0f;
+  m010.x = m010.y = m010.z = 0.0f;
+  m01c = 1.0f;
+  m020.Init();
+  m024.x = m024.y = m024.z = 0.0f;
+  m030.x = m030.y = m030.z = 0.0f;
+  m03c.x = m03c.y = m03c.z = 0.0f;
+  m048.x = m048.y = m048.z = 0.0f;
+  m054.x = m054.y = m054.z = 0.0f;
+  m060.x = m060.y = m060.z = 0.0f;
+  m06c = 1.0f;
+  m074.x = m074.y = m074.z = 0.0f;
+  m080 = 1.0f;
+  m08c.x = m08c.y = m08c.z = 0.0f;
+  m0bc.x = m0bc.y = m0bc.z = 0.0f;
+  m0cc.x = m0cc.y = m0cc.z = 0.0f;
+  m0d8.x = m0d8.y = m0d8.z = 0.0f;
+  m0e4.x = m0e4.y = m0e4.z = 0.0f;
+  m0f0 = 1.0f;
+  return this;
+}
+
+// @ 0x009b2f90
+unsigned long CapFlag(unsigned long fourcc) {
+  switch (fourcc) {
+  case 0x74667370: return 0x10;
+  case 0x70737267: return 0x40;
+  case 0x626d696c: return 2;
+  case 0x6e697073: return 8;
+  case 0x7274736e: return 0x80;
+  case 0x746f6f66: return 4;
+  case 0x746f6f72: return 1;
+  case 0x74756f6d: return 0x20;
+  default:         return 0;
+  }
+}
+
+// @ 0x009b3050
+bool creature_part_caps_holder::GetCap(unsigned long fourcc, bool bDefault) const {
+  for (unsigned long i = 0; i < 32; ++i) {
+    unsigned long name = mNames[i];
+    if (name == 0)
+      break;
+    if (fourcc == name)
+      return mValues[i];
+  }
+  return bDefault;
+}
+
+// @ 0x009b3090
+void creature_part_caps_holder::SetCap(unsigned long fourcc, bool bValue) {
+  for (unsigned long i = 0; i < 32; ++i) {
+    unsigned long name = mNames[i];
+    if (fourcc == name) {
+      mValues[i] = bValue;
+      Recompute();
+      return;
+    }
+    if (name == 0) {
+      mNames[i] = fourcc;
+      mValues[i] = bValue;
+      Recompute();
+      return;
+    }
+  }
+  Recompute();
+}
+
+// @ 0x009b3010
+void creature_part_caps_holder::Recompute() {
+  mFlagsOn = 0;
+  mFlags = 0;
+  unsigned long i = 0;
+  const unsigned long* p = mNames;
+  for (; i < 32; ++i, ++p) {
+    unsigned long fourcc = *p;
+    if (fourcc == 0)
+      return;
+    unsigned long flag = CapFlag(fourcc);
+    mFlags |= flag;
+    if (mValues[i])
+      mFlagsOn |= flag;
+  }
+}
+
+// @ 0x009b30e0
+bool creature_part_caps_holder::HasCap(unsigned long fourcc) const {
+  for (unsigned long i = 0; i < 32; ++i) {
+    unsigned long name = mNames[i];
+    if (name == 0)
+      break;
+    if (fourcc == name)
+      return true;
+  }
+  return false;
+}
+
+// @ 0x009b3110
+unsigned long creature_part_caps_holder::GetFreeSlot() const {
+  unsigned long i = 0;
+  for (; i < 32; i += 4) {
+    if (mNames[i + 0] == 0) return i + 0;
+    if (mNames[i + 1] == 0) return i + 1;
+    if (mNames[i + 2] == 0) return i + 2;
+    if (mNames[i + 3] == 0) return i + 3;
+  }
+  return i;
+}
+
+// @ 0x009b3150
+bool SameCaps(const creature_part_caps_holder* a, const creature_part_caps_holder* b) {
+  for (unsigned long i = 0; i < 32; ++i) {
+    if (a->mNames[i] == 0)
+      return true;
+    if (a->mNames[i] != b->mNames[i])
+      return false;
+  }
+  return true;
 }
 
 }  // namespace nSPCreatureAnim

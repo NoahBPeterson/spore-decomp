@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+01041090  24  cl15 folds retail's second null test (if (mpServer && mpHandler) where mpHandler == this, 62 vs 66 B); raw-arg/late-bound call shape also differs; equiv PASS (395 inputs)
+01041220  84  cl15 folds the two induction pointers into one plus a constant offset (lea edi,[eax+ebp], 94 vs 96 B) while retail keeps p and q separate; equiv WEAK (50 valid inputs, 67.5% coverage)
+01041280  14  same size (303 B); only register naming and the load order of the two CopyEntries arguments differ; equiv UNSUPPORTED (pool-limit, 0/400 valid inputs)

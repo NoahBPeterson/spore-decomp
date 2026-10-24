@@ -1,2 +1,3 @@
 0083b9d0 ?Parse@cArgumentSpec@ArgScript@EA@@QAEXPAVcArguments@23@PAVcIParser@23@@Z  # EA::ArgScript::cArgumentSpec::Parse (callee of s00a73110, named from the dev publics; slice address comment)
 00a73110 ?ParseLine@cEffectCheat@@QAEXABUcArguments@@@Z  # cEffectCheat::ParseLine migrated from s00a73110 (verbatim, slice spelling)
+00a73c70 ??0cEffectsManagerCheat@Swarm@EA@@QAE@PAVcEffectsManager@12@@Z  # EA::Swarm::cEffectsManagerCheat::cEffectsManagerCheat (constructs the effectsManager cheat and registers its ArgScript options)

@@ -232,6 +232,7 @@ struct IWindow {
     virtual void SetLocation(float x, float y);     // +0x64
     PV4 PV
     virtual void SetFlag(int flag, bool value);     // +0x7c
+    virtual void SetText(const wchar_t* text);      // +0x80
 };
 
 class cSPUILayout { public:
@@ -287,7 +288,9 @@ struct cGameInfo {
 const ResourceKey& GetKeyForID(uint32_t id);   // 0x00b6f0c0
 
 struct cGGEGlobal {
-    uint8_t pad[0x1f5];
+    uint8_t pad0[0x144];
+    cSPUILayout mLayout144;                // +0x144
+    uint8_t pad150[0xa5];
     bool mbAllLevelsUnlocked;              // +0x1f5
     bool IsLevelUnlocked(uint32_t level);  // 0x00de5cb0
 };
@@ -345,6 +348,14 @@ struct cGalaxyGameEntryUIStateMachine {
     void UpdateNavigationControls();                     // 0x00def8c0
 
     void SetupForGame(cGameInfo* gameInfo);
+
+    void FUN_00df5330();
+    void FUN_00df53d0(bool show);
+    void FUN_00df5430(int mode);
+    long double FUN_00df54f0(float offset);
+    void FUN_00df5540();
+    void FUN_00df55b0(int mode);
+    void FUN_00df5610(float t);
 };
 
 // @ 0x00df47b0
@@ -455,4 +466,221 @@ void cGalaxyGameEntryUIStateMachine::SetupForGame(cGameInfo* gameInfo)
             window->SetFlag(2, allUnlocked || gpGGEGlobal->IsLevelUnlocked(kLevelIDs[i]));
     }
     UpdateNavigationControls();
+}
+
+// ---------------------------------------------------------------------------
+// Galaxy game-entry UI helper methods (0x00df5330..0x00df5610).
+// ---------------------------------------------------------------------------
+
+#define VTFN(obj, slot) (*(void***)(obj))[slot]
+
+struct GalaxyLayoutState
+{
+    void SetLayout(const wchar_t* layout);      // 0x00dedda0
+};
+
+struct GalaxyStateBase
+{
+    void FUN_00dee360();                        // state reset
+};
+
+struct GalaxyView
+{
+    uint8_t       m_pad0[8];                    // +0x00
+    GalaxyLayoutState* m_state8;                // +0x08
+    cGameInfo*    m_game0c;                     // +0x0c
+    uint8_t       m_pad10[0x20];                // +0x10
+    void*         m_effect30;                   // +0x30
+    float         m_x34;                        // +0x34
+    float         m_y38;                        // +0x38
+    float         m_z3c;                        // +0x3c
+    float         m_w40;                        // +0x40
+    uint8_t       m_pad44[8];                   // +0x44
+    uint32_t      m_count4c;                    // +0x4c
+    uint32_t      m_value50;                    // +0x50
+    cSPUILayout   mLayout54;                    // +0x54
+};
+
+struct GalaxyView0c
+{
+    uint8_t     m_pad0[0xc];                   // +0x00
+    cSPUILayout mLayout0c;                     // +0x0c
+};
+
+class cSPUIGlobalUI
+{
+public:
+    void SetVisibility(bool visible);           // 0x00e01350
+};
+
+struct cGGEGlobalView
+{
+    uint8_t          m_pad0[0x184];             // +0x00
+    cSPUIGlobalUI*   m_global184;               // +0x184
+};
+
+struct cGGEGlobalLayout
+{
+    uint8_t     m_pad0[0x144];                  // +0x00
+    cSPUILayout mLayout144;                     // +0x144
+};
+
+class cMessageServer
+{
+public:
+    PV4 PV
+    virtual void post(uint32_t message, uint32_t param, int flags);   // +0x14
+};
+cMessageServer* MessageServer();                // 0x0067dcc0
+
+bool __cdecl FUN_00685520(int flag);            // IsWorldLayoutFlagSet
+void __cdecl FUN_008099a0(IWindow* window, int a, int b);   // BeginModal
+void __cdecl FUN_00809c50(IWindow* window, int a, int b);   // EndModal
+
+class cString
+{
+public:
+    uint32_t m_data[5];
+    cString();                                  // 0x006b5060
+    ~cString();                                 // 0x006b5240
+    void Load(uint32_t id, uint32_t group, const wchar_t* text);   // 0x006b54b0
+    const wchar_t* GetText();                   // 0x006b55c0
+};
+
+struct Effect
+{
+    PV8 PV8 PV8
+    virtual void SetValue(const float* value);  // +0x60
+};
+
+// @ 0x00df5330
+void cGalaxyGameEntryUIStateMachine::FUN_00df5330()
+{
+    if (FUN_00685520(2)) {
+        if (!gpGGEGlobal->IsLevelUnlocked(0x2887b6de)) {
+            cMessageServer* server = MessageServer();
+            server->post(0x6579712, 0x2887b6de, 0);
+        }
+    }
+
+    GalaxyView* view = (GalaxyView*)this;
+    view->m_state8->SetLayout(sNewGameFlowLayout);
+    ((cGalaxyGameEntryUIStateMachine*)view->m_state8)->SetupForGame(view->m_game0c);
+
+    IWindow* window = gpGGEGlobal->mLayout144.FindWindowByID(0x615a5ff, true);
+    if (window)
+        window->SetFlag(1, false);
+
+    cSPUIGlobalUI* global = ((cGGEGlobalView*)gpGGEGlobal)->m_global184;
+    global->SetVisibility(false);
+    ((GalaxyStateBase*)this)->FUN_00dee360();
+}
+
+// @ 0x00df53d0
+void cGalaxyGameEntryUIStateMachine::FUN_00df53d0(bool show)
+{
+    GalaxyView* view = (GalaxyView*)this;
+    IWindow* window = view->mLayout54.FindWindowByID(0x431e538, true);
+    if (window) {
+        window->SetFlag(1, show);
+        if (show)
+            FUN_008099a0(window, 0, 1);
+        else
+            FUN_00809c50(window, 0, 1);
+    }
+}
+
+// @ 0x00df5430
+void cGalaxyGameEntryUIStateMachine::FUN_00df5430(int mode)
+{
+    GalaxyView* view = (GalaxyView*)this;
+    IWindow* window = view->mLayout54.FindWindowByID(0x5d2bdf8, true);
+    window->SetFlag(1, true);
+    window->SetFlag(2, true);
+
+    IWindow* textWindow = view->mLayout54.FindWindowByID(0x5006000, true);
+    if (!textWindow)
+        return;
+
+    cString text;
+    switch (mode) {
+    case 0:
+        text.Load(0xd7f9d626, 0x5d65f2c, L"Patch Downloading...(PLACEHOLDER)");
+        break;
+    case 1:
+        text.Load(0xd7f9d626, 0x5ee1440, L"Download Paused (PLACEHOLDER)");
+        break;
+    }
+
+    textWindow->SetText(text.GetText());
+}
+
+// @ 0x00df54f0
+long double cGalaxyGameEntryUIStateMachine::FUN_00df54f0(float offset)
+{
+    GalaxyView* view = (GalaxyView*)this;
+    if (view->m_count4c == 0)
+        return 0.0f;
+    const float count = (float)view->m_count4c;
+    const float value = (float)view->m_value50;
+    return ((long double)1.0 / (long double)count) *
+           ((long double)value + (long double)offset);
+}
+
+// @ 0x00df5540
+void cGalaxyGameEntryUIStateMachine::FUN_00df5540()
+{
+    GalaxyView0c* view = (GalaxyView0c*)this;
+    IWindow* window = view->mLayout0c.FindWindowByID(0x6383590, true);
+    if (window)
+        FUN_008099a0(window, 0, 1);
+}
+
+// @ 0x00df5570
+bool __stdcall FUN_00df5570(void* unused, void* event)
+{
+    (void)unused;
+    if (*(uint32_t*)((char*)event + 8) == 0x287259f6) {
+        void* object = *(void**)event;
+        int result = ((int (__fastcall*)(void*))VTFN(object, 0x1c / 4))(object);
+        if (result == 0x6383360) {
+            cMessageServer* server = MessageServer();
+            server->post(0x6382db7, 0, 0);
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00df55b0
+void cGalaxyGameEntryUIStateMachine::FUN_00df55b0(int mode)
+{
+    FUN_00df5430(mode);
+    GalaxyView* view = (GalaxyView*)this;
+
+    IWindow* window = view->mLayout54.FindWindowByID(0x42e2e38, true);
+    if (window)
+        window->SetText((const wchar_t*)0x013ec468);
+
+    window = view->mLayout54.FindWindowByID(0x431e538, true);
+    if (window)
+        FUN_008099a0(window, 0, 1);
+}
+
+// @ 0x00df5610
+void cGalaxyGameEntryUIStateMachine::FUN_00df5610(float t)
+{
+    GalaxyView* view = (GalaxyView*)this;
+    void* effect = view->m_effect30;
+    if (effect == 0)
+        return;
+
+    float value[4];
+    const float x = view->m_x34;
+    const float y = view->m_y38;
+    value[1] = y;
+    value[0] = x;
+    value[3] = view->m_w40;
+    value[2] = (view->m_z3c - x) * t + x;
+    ((Effect*)effect)->SetValue(value);
 }

@@ -1,1 +1,2 @@
 01336df0  867  complete table of 19 Simulator::Attribute records (same shape as s01335000); cl keeps different callback constants in registers so store scheduling differs (CRT dynamic initializer $E259)
+01337610  260  complete five-record Simulator::Attribute table initializer at 0x01573038 (mAmountInBundle/mpContainer/mType/mDisplayType/mLoose); 509 vs 518 bytes; cl caches Validate_00b1fbf0 in ebx while retail stores immediates, shifting the stack-temp slots; equiv PASS (400/400)
