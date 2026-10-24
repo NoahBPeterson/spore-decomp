@@ -1,0 +1,2 @@
+slices/s00d3b920/s00d3b920.cpp  ?FUN_00d3b970@@YAXPAUcSPVector3@@IPBU1@@Z  00d3b970  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00d3b920/s00d3b920.cpp  ?Deactivate@cCreatureModeStrategy@@QAEXXZ  00d3c380  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
