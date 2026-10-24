@@ -7,7 +7,8 @@ typedef void (__thiscall *TF0)(void*);
 typedef void (__thiscall *TF1)(void*, int);
 
 extern "C" void* __cdecl EA_Allocate(unsigned size, const char* name, int a, int b, const char* file, int line);
-extern "C" void  __cdecl EA_Free(void*);
+extern "C" void  __cdecl FUN_00f47380(void*);   // 0x00f47380 operator delete[]
+#define EA_Free FUN_00f47380
 extern void* gVt13fe518;    // 0x13fe518
 extern void* gVt13fe528;    // 0x13fe528
 extern void* gVt13ec458;    // 0x13ec458
@@ -78,9 +79,6 @@ void* __fastcall FUN_006308d0(void* self, char flag) {
   if (flag & 1) EA_Free(s);
   return self;
 }
-
-// @ 0x00630930
-void __fastcall FUN_00630930(void* self) { (void)self; }
 
 // @ 0x006309e0
 void* __cdecl FUN_006309e0(void* out, const short* lhs, const WStr* rhs) {
@@ -171,11 +169,368 @@ void __fastcall FUN_00630b30(void* self, int* pos, int* val) {
   v[2] = (int)((char*)dst + cap * 4);
 }
 
-// @ 0x00630d10
-void __fastcall FUN_00630d10(void* self) { (void)self; }
 
-// @ 0x00630f20
-void __fastcall FUN_00630f20(void* self) { (void)self; }
 
-// @ 0x006312f0
-void __fastcall FUN_006312f0(void* self) { (void)self; }
+// ---------------------------------------------------------------------------
+// Target functions: browser teardown, photo-count refresh, send-email window
+// and the file-name parser.  Layout offsets are the retail object's.
+// ---------------------------------------------------------------------------
+extern short gEmpty16[];          // 0x01667bac eastl::gEmptyString16 (1 wchar + sentinel)
+extern void* gVt13eb394;          // 0x013eb394 base-vtable after teardown
+extern void* g_015f7cf4;          // 0x015f7cf4 photo-browser UI stats singleton
+extern int   g_01523310;          // 0x01523310 raster group id
+
+static inline void** VTw(void* p) { return *(void***)p; }
+static inline void FreeArray(void* p) { if (p && *(int*)((char*)p - 4)) EA_Free(p); }
+static inline void ReleaseObj(void* p) { if (p) ((RefObj*)p)->s1(); }
+
+// 16-byte eastl wide string with the retail inline empty-string init
+struct WStrI {
+  short* begin; short* end; short* cap; void* alloc;
+  void initEmpty() { begin = gEmpty16; end = gEmpty16; cap = gEmpty16 + 1; }
+  void destroy() {
+    if ((((int)((char*)cap - (char*)begin)) & ~1) > 2 && begin) EA_Free(begin);
+  }
+  WStrI* Substr(WStrI* out, unsigned pos, unsigned n);              // 0x00453d20
+  WStrI* Assign(const short* first, const short* last);             // 0x00423650
+  int    Compare(unsigned pos, unsigned n, const short* p) const;   // 0x00630690
+  unsigned FindFirstOf(const short* set, unsigned pos) const;       // 0x00630630
+  void   Erase(unsigned pos, unsigned n);                           // 0x004228e0
+  void   RangeInit(const short* p);                                 // 0x00579a90
+};
+
+// SP::cString (EASTL wide string owner used by the localized-label helpers)
+struct CString16 {
+  short* begin; short* end; short* cap; void* alloc;
+  void ctor();                                                   // 0x006b5060
+  void ctor(uint32_t a, uint32_t b, const short* text);          // 0x006b5770
+  char Load(uint32_t a, uint32_t b, const short* text);          // 0x006b54b0
+  short* GetText();                                              // 0x006b55c0
+  void dtor();                                                   // 0x006b5240
+};
+
+struct PlayModeUI {                                              // owner at this+0x24
+  void* FindEditorUIWindow(unsigned id);                         // 0x00634e40
+  void* FindPlayModeUIWindow(unsigned id);                       // 0x00634dc0
+  void  SetSendEmailDialogVisibility(char b);                    // 0x00635400
+  void  SetEditorUIGroupVisible(unsigned id, char b);            // 0x00635790
+  void  SetEditorUIEnabled(unsigned id, char b);                 // 0x00634f20
+  void  SetEditorText(unsigned id, const short** text);          // 0x00635010
+};
+
+struct UIHints {
+  char pad[0x4c];
+  int  f4c;                                                      // +0x4c
+  void UpdateHints(char a, char b);                              // 0x0067c350
+  int  SetFlag(int a, int b);                                    // 0x0067c420
+};
+UIHints* __cdecl FUN_0067cac0();                                 // 0x0067cac0
+void*    __cdecl FUN_0067dd60();                                 // 0x0067dd60
+char     __cdecl FUN_008068d0(void* w, int obj, int flag);       // 0x008068d0
+void*    __fastcall GetImageFromRaster(void* self, void* edx, void* raster); // 0x006300d0
+void     __cdecl FUN_006b8f00(const void* s, void* out);         // 0x006b8f00
+void*    __cdecl FUN_00607a60();                                 // 0x00607a60 SP::Pollen::AuthManager
+void     __cdecl SPUIHelpers_BeginModal(void* w, int a, int b);  // 0x008099a0
+void*    __cdecl MessageServer();                                // 0x0067dcc0
+void     __cdecl WStrFormat(WStrI* out, const short* fmt, ...);  // 0x0041e050
+const short* __cdecl FindLastOf(const short* pEnd, const short* pBegin,
+                                const short* setBegin, const short* setEnd);  // 0x005728f0
+struct AutoRefIV { void* mpObject; };                            // 0x00b5f950 Assign (thiscall)
+void* __fastcall FUN_00b5f950(void* self, void* edx, void* p);   // 0x00b5f950
+void  __fastcall FUN_009a9600(void* self, void* edx, void* n);   // 0x009a9600 rbtree DoNukeSubtree
+void  __fastcall FUN_005c7f10(void* self);                       // 0x005c7f10 vector dtor
+
+// @ 0x00630930  cSPPlayModePhotoBrowser::~cSPPlayModePhotoBrowser
+void __fastcall FUN_00630930(void* self) {
+  char* a = (char*)self;
+  *(void**)a = (void*)&gVt13fe528;
+  char* p = a + 0xea4;
+  for (int i = 4; i >= 0; --i) {
+    void* o = *(void**)(p - 4);
+    p -= 4;
+    ReleaseObj(o);
+  }
+  FreeArray(*(void**)(a + 0xe78));
+  char* q = a + 0xe70;
+  for (int i = 0x62; i >= 0; --i) {
+    void* o = *(void**)(q - 0x24);
+    q -= 0x24;
+    FreeArray(o);
+  }
+  FUN_009a9600(a + 0x68, 0, *(void**)(a + 0x74));
+  FreeArray(*(void**)(a + 0x28));
+  FUN_005c7f10(a + 4);
+  *(void**)a = (void*)&gVt13eb394;
+}
+
+// @ 0x00630d10  cSPPlayModePhotoBrowser::UpdatePhotoCountText
+static inline int PhotoCount(char* a) {
+  return (int)(*(int**)(a + 8) - *(int**)(a + 4));
+}
+static inline void SetTextW(void* w, const short* s) {
+  ((void (__thiscall*)(void*, const short*))VTw(w)[0x80 / 4])(w, s);
+}
+
+void __fastcall FUN_00630d10(void* self) {
+  char* const esi = (char*)self;
+  CString16 label;
+  label.ctor();
+  void* w = ((PlayModeUI*)*(void**)(esi + 0x24))->FindEditorUIWindow(0x3f6c990);
+  if (w != 0) {
+    label.Load(0x7518573e, 0x4587552, (const short*)0x13fe548);
+    ((int*)g_015f7cf4)[4] = *(int*)(esi + 0x1c) + 1;
+    ((int*)g_015f7cf4)[5] = PhotoCount(esi);
+    SetTextW(w, label.GetText());
+  }
+
+  w = ((PlayModeUI*)*(void**)(esi + 0x24))->FindEditorUIWindow(0x4474410);
+  if (w != 0) {
+    WStrI text;
+    text.initEmpty();
+    WStrFormat(&text, (const short*)0x13f01bc, PhotoCount(esi));
+    SetTextW(w, text.begin);
+    text.destroy();
+  }
+
+  w = ((PlayModeUI*)*(void**)(esi + 0x24))->FindPlayModeUIWindow(0x4463820);
+  if (w != 0) {
+    WStrI text;
+    text.initEmpty();
+    WStrFormat(&text, (const short*)0x13f01bc, PhotoCount(esi));
+    SetTextW(w, text.begin);
+    text.destroy();
+  }
+
+  w = ((PlayModeUI*)*(void**)(esi + 0x24))->FindPlayModeUIWindow(0x447ca18);
+  if (w != 0) {
+    label.Load(0x7518573e, 0x456f912, (const short*)0x13fe530);
+    int const count = PhotoCount(esi);
+    if ((unsigned)count == 0) {
+      ((int*)g_015f7cf4)[2] = 1;
+      ((int*)g_015f7cf4)[3] = 1;
+    } else {
+      ((int*)g_015f7cf4)[2] = (int)((unsigned)*(int*)(esi + 0x18) / 5) + 1;
+      ((int*)g_015f7cf4)[3] = (int)((unsigned)(count - 1) / 5) + 1;
+    }
+    SetTextW(w, label.GetText());
+  }
+  label.dtor();
+}
+
+// @ 0x00630f20  cSPPlayModePhotoBrowser::ShowSendEmailWindow
+void __fastcall FUN_00630f20(void* self) {
+  char* const a = (char*)self;
+  PlayModeUI* const ui = *(PlayModeUI**)(a + 0x24);
+
+  if (FUN_0067cac0()->f4c != 0)
+    FUN_0067cac0()->UpdateHints(0, 1);
+
+  void* w = ui->FindEditorUIWindow(0x3ffb8cc);
+  if (w != 0) {
+    AutoRefIV view;
+    view.mpObject = 0;
+    unsigned const index = *(unsigned*)(a + 0x1c);
+    int const count = (int)(*(int**)(a + 8) - *(int**)(a + 4));
+    void* photo = 0;
+    if (index < (unsigned)count)
+      photo = *(void**)(*(int*)(a + 4) + index * 4);
+    if (photo != 0) {
+      void* const mgr = FUN_0067dd60();
+      void* const image = ((void* (__thiscall*)(void*, int, int, int))VTw(mgr)[0x20 / 4])
+                            (mgr, *(int*)((char*)photo + 0xc), g_01523310, 0);
+      if (image == 0)
+        return;
+      void* const mgr2 = FUN_0067dd60();
+      ((void (__thiscall*)(void*, void*))VTw(mgr2)[0x68 / 4])(mgr2, image);
+      FUN_00b5f950(&view, 0, GetImageFromRaster(a, 0, image));
+      FUN_008068d0(w, (int)view.mpObject, -1);
+      ReleaseObj(view.mpObject);
+    } else {
+      FUN_008068d0(w, 0, -1);
+    }
+  }
+
+  w = ui->FindEditorUIWindow(0x3f67620);
+  if (w != 0) {
+    ((void (__thiscall*)(void*, int, int))VTw(w)[0x7c / 4])(w, 1, 1);
+    ui->SetSendEmailDialogVisibility(1);
+    SPUIHelpers_BeginModal(w, 0, 0);
+    FUN_0067cac0()->SetFlag(0, 1);
+  }
+
+  void* const auth = FUN_00607a60();
+  WStrI addr;
+  addr.initEmpty();
+  FUN_006b8f00(*(void**)((void* (__thiscall*)(void*))VTw(auth)[0x30 / 4])(auth), &addr);
+  w = ui->FindEditorUIWindow(0x4581d50);
+  ((void (__thiscall*)(void*, const short*))VTw(w)[0x80 / 4])(w, addr.begin);
+
+  CString16 emailLabel;
+  emailLabel.ctor();
+  w = ui->FindEditorUIWindow(0x45adfc8);
+  if (w != 0) {
+    emailLabel.Load(0x7518573e, 0x45ad5b9, (const short*)L"*Email a Friend*");
+    ((void (__thiscall*)(void*, const short*))VTw(w)[0x80 / 4])(w, emailLabel.GetText());
+  }
+  w = ui->FindEditorUIWindow(0x45ae078);
+  if (w != 0) {
+    emailLabel.Load(0x7518573e, 0x45ad62f, (const short*)L"*Your Email*");
+    ((void (__thiscall*)(void*, const short*))VTw(w)[0x80 / 4])(w, emailLabel.GetText());
+  }
+  w = ui->FindEditorUIWindow(0x45ae090);
+  if (w != 0) {
+    emailLabel.Load(0x7518573e, 0x45ad634, (const short*)L"*Recipient's Email*");
+    ((void (__thiscall*)(void*, const short*))VTw(w)[0x80 / 4])(w, emailLabel.GetText());
+  }
+  w = ui->FindEditorUIWindow(0x45ae0c0);
+  if (w != 0) {
+    emailLabel.Load(0x7518573e, 0x45ad63a, (const short*)L"*Your Message*");
+    ((void (__thiscall*)(void*, const short*))VTw(w)[0x80 / 4])(w, emailLabel.GetText());
+  }
+
+  FUN_00630d10(a);
+
+  ui->SetEditorUIGroupVisible(0x447c4e8, 1);
+  ui->SetEditorUIGroupVisible(0x447c040, 1);
+  ui->SetEditorUIGroupVisible(0x447b968, 1);
+  ui->SetEditorUIGroupVisible(0x447b980, 1);
+  ui->SetEditorUIGroupVisible(0x3f6c990, 1);
+  ui->SetEditorUIGroupVisible(0x56be960, 0);
+  ui->SetEditorUIEnabled(0x56be960, 0);
+  ui->SetEditorUIGroupVisible(0x3f67720, 1);
+  if (*(int*)(a + 8) - *(int*)(a + 4) != 0)
+    ui->SetEditorUIEnabled(0x3f67720, 1);
+
+  CString16 subjectLabel;
+  subjectLabel.ctor(0x7518573e, 0x56bce10, 0);
+  {
+    WStrI text;
+    text.begin = 0; text.end = 0; text.cap = 0;
+    text.RangeInit(subjectLabel.GetText());
+    ui->SetEditorText(0x4581d90, (const short**)&text);
+    text.destroy();
+  }
+  {
+    void* const ms = MessageServer();
+    ((void (__thiscall*)(void*, int, int, int))VTw(ms)[0x14 / 4])(ms, 0x52f180, 0x20, 0);
+  }
+  subjectLabel.dtor();
+  emailLabel.dtor();
+  addr.destroy();
+}
+
+// @ 0x006312f0  parse "prefix-<hex>.ext" style photo file names
+
+// @ 0x006312f0  parse "<name>-<hex>.<ext>" and return 1 when the name is "CRE"
+// msvcr90!swscanf through its IAT slot (hex-named global so difftest resolves it)
+extern "C" int (__cdecl* const g_013cc4e0)(const wchar_t* s, const wchar_t* fmt, ...);
+
+char __stdcall FUN_006312f0(short* sBegin, short* sEnd, short* sCap, void* sAlloc,
+                            unsigned* outHex, int* outCode, WStrI* outPath) {
+  WStrI& mid = *(WStrI*)&sBegin;     // the 4 string dwords arrive by value on the stack
+  (void)sAlloc;
+  WStrI ext;
+  WStrI num;
+  ext.initEmpty();
+  num.initEmpty();
+  char ok = 1;
+  unsigned const len = (unsigned)(sEnd - sBegin);
+
+  // extension: 3 chars after the last '.', then drop ".ext" from the working copy
+  if (len == 0) {
+    ok = 0;
+  } else {
+    const short* p = FindLastOf(sEnd, sBegin, (const short*)0x13f5ca8, (const short*)0x13f5caa);
+    if (p == sBegin) {
+      ok = 0;
+    } else {
+      int const i = (int)(p - sBegin) - 1;
+      if (i == -1) {
+        ok = 0;
+      } else {
+        WStrI tmp;
+        tmp.initEmpty();
+        WStrI* const r = mid.Substr(&tmp, (unsigned)(i + 1), 3);
+        ext.Assign(r->begin, r->end);
+        tmp.destroy();
+        mid.Erase((unsigned)i, 0xffffffff);
+      }
+    }
+  }
+
+  // "ful"/"sml" after the last '_'
+  int uscore = -1;
+  if (len != 0) {
+    const short* p = FindLastOf(sEnd, sBegin, (const short*)0x13fe614, (const short*)0x13fe616);
+    if (p != sBegin)
+      uscore = (int)(p - sBegin) - 1;
+  }
+  if (ok && uscore != -1) {
+    if (mid.Compare((unsigned)(uscore + 1), 3, (const short*)0x13fe60c) == 0)
+      *outCode = 0x417b3a7;
+    else if (mid.Compare((unsigned)(uscore + 1), 3, (const short*)0x13fe604) == 0)
+      *outCode = 0x417b3bc;
+    else
+      ok = 0;
+    if (ok) {
+      mid.Erase((unsigned)uscore, 0xffffffff);
+      const short* const expect = (*outCode == 0x417b3a7) ? (const short*)0x13f8ef4
+                                                         : (const short*)0x13f8f14;
+      if (mid.Compare(0, 3, expect) != 0)
+        ok = 0;
+    }
+  } else {
+    ok = 0;
+  }
+
+  // hex tail after the last '-'
+  int dash = -1;
+  if (len != 0) {
+    const short* p = FindLastOf(sEnd, sBegin, (const short*)0x13faf54, (const short*)0x13faf56);
+    if (p != sBegin)
+      dash = (int)(p - sBegin) - 1;
+  }
+  if (ok && dash != -1) {
+    WStrI tail;
+    tail.initEmpty();
+    WStrI* const r = mid.Substr(&tail, (unsigned)(dash + 1), 8);
+    num.Assign(r->begin, r->end);
+    tail.destroy();
+    WStrI tmp;
+    tmp.initEmpty();
+    FUN_006309e0(&tmp, (const short*)0x13fe5fc, (const WStr*)&num);
+    num.Assign(tmp.begin, tmp.end);
+    tmp.destroy();
+    g_013cc4e0((const wchar_t*)num.begin, (const wchar_t*)0x13fe5f4, outHex);
+    mid.Erase((unsigned)dash, 0xffffffff);
+  } else {
+    ok = 0;
+  }
+
+  // remainder after the first '_' goes to outPath
+  int const first = (int)mid.FindFirstOf((const short*)0x13fe614, 0);
+  if (ok && first != -1) {
+    unsigned n = 0;
+    while (sBegin[n] != 0)
+      ++n;
+    WStrI rest;
+    rest.initEmpty();
+    WStrI* const r = mid.Substr(&rest, (unsigned)(first + 1), n - (unsigned)first);
+    WStrI tmp;
+    tmp.initEmpty();
+    tmp.Assign(r->begin, r->end);
+    r->destroy();
+    WStrFormat(outPath, (const short*)0x13f5c04, tmp);
+    tmp.destroy();
+    mid.Erase((unsigned)first, 0xffffffff);
+    ok = ((int)len == 3) && (mid.Compare(0, 3, (const short*)0x13fe5ec) == 0);
+  } else {
+    ok = 0;
+  }
+
+  ext.destroy();
+  num.destroy();
+  if ((((int)((char*)sCap - (char*)sBegin)) & ~1) > 2 && sBegin)
+    EA_Free(sBegin);
+  return ok;
+}
