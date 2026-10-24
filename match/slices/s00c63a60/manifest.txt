@@ -7,3 +7,4 @@ slices/s00c63a60/s00c63a60.cpp  Release@Target2@@QAEXXZ  00c63f40  /O2 /MD /Gy /
 slices/s00c63a60/s00c63a60.cpp  ?ComparePair@@YADPAX00@Z  00c63b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00c63a60/s00c63a60.cpp  ?CopyPair@@YAXPAX0@Z  00c63b90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00c63a60/s00c63a60.cpp  ?FUN_c64400@@YADPAX0@Z  00c64400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c63a60/s00c63a60.cpp  ?FUN_c64590@@YAMPAPAXHPAX1@Z  00c64590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
