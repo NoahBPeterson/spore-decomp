@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01373120/s01373120.cpp  ?InitLineColorBottom@@YAXXZ  01373120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01373120/s01373120.cpp  ?InitLineColorDropShadow@@YAXXZ  013731b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01373120/s01373120.cpp  ?InitLineColorBorder@@YAXXZ  01373220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01373120/s01373120.cpp  ?InitPropTable_16b2c40@@YAXXZ  01373c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01373120/s01373120.cpp  ?InitPropTable_16b1430@@YAXXZ  01373ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01373120/s01373120.cpp  ?InitPropTable_16b2f10@@YAXXZ  01374160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s01373120/s01373120.cpp  ?InitPropTable_15a7948@@YAXXZ  013742c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
