@@ -1,0 +1,28 @@
+00c3ee20 ?Read@cGameplayMarker@@QAE_NPAX@Z  # bool cGameplayMarker::Read (ISimulatorSerializable::Read)
+00c3ef00 ?Shutdown@cGameplayMarker@@QAEXXZ  # void cGameplayMarker::Shutdown (cGameData::RemoveOwner)
+00c3efb0 ??0cGameplayMarker@@QAE@XZ  # cGameplayMarker::cGameplayMarker
+00c3f040 ?InitFromDefinition@cGameplayMarker@@QAE_NPAXHH@Z  # bool cGameplayMarker::InitFromDefinition (cGameData::SetDefinitionID)
+00c3f160 ?SetEffectId@cInteractableObject@@QAEXH@Z  # void cInteractableObject::SetEffectId
+00c3f1d0 ?cGameplayMarkerCast@@YAPAXPAXH@Z  # void* Object::Cast (gameplay marker)
+00c3f1f0 ?Destroy@cGameplayMarker@@QAEXH@Z  # void cGameplayMarker::~cGameplayMarker
+00c3f250 ?Shutdown@cInteractableObject@@QAEXXZ  # void cInteractableObject::Shutdown
+00c3f310 ?RemoveOwner@cGameData@@QAEXXZ  # void cGameData::RemoveOwner
+00c3f340 ?Write@cHitSphere@@QAE_NPAX@Z  # bool cHitSphere::Write (ISimulatorSerializable::Write)
+00c3f4a0 ??0cHitSphere@@QAE@XZ  # cHitSphere::cHitSphere
+00c3f560 ?GetDelegateLowerBound@cHitSphere@@QAEHH@Z  # int cHitSphere::GetDelegateLowerBound
+00c3f6f0 ??0cSolarHitSphere@@QAE@XZ  # cSolarHitSphere::cSolarHitSphere
+00c3f850 ?Cast@cHitSphere@@QAEPAXPAX@Z  # void* cHitSphere::Cast
+00c3f890 ?LoadModelChecked@cInteractableObject@@QAE_NPAX@Z  # bool cInteractableObject::LoadModelChecked
+00c3f8b0 ?SetModelState@cInteractableObject@@QAEXH_N@Z  # void cInteractableObject::SetModelState
+00c3f920 ?GetFieldValues@cInteractableObject@@QAEHH@Z  # int cInteractableObject::GetFieldValues
+00c3f9b0 ??0cInteractableObject@@QAE@XZ  # cInteractableObject::cInteractableObject
+00c3fa70 ?Destroy@cInteractableObject@@QAEXH@Z  # void cInteractableObject::~cInteractableObject
+00c3fad0 ?ClearEffectState@cInteractableObject@@QAEXXZ  # void cInteractableObject::ClearEffectState
+00c3fb00 ?Write@cInteractableObject@@QAE_NPAX@Z  # bool cInteractableObject::Write
+00c3fba0 ?Read@cInteractableObject@@QAE_NPAX@Z  # bool cInteractableObject::Read
+00c3fc80 ?InitFromDefinition@cInteractableObject@@QAE_NPAXHI@Z  # bool cInteractableObject::InitFromDefinition
+00c3fe70 ?ShutdownOrnament@cInteractiveOrnament@@QAEXXZ  # void cInteractiveOrnament::Shutdown
+00c3ff10 ?AttachEffect@cInteractiveOrnament@@QAEXPAX@Z  # void cInteractiveOrnament::AttachEffect
+00c40150 ?cInteractiveOrnamentCast@@YAPAXPAX0@Z  # void* Object::Cast (interactive ornament)
+00c40200 ?SetNextDestructedState@cInteractiveOrnament@@QAEHXZ  # int cInteractiveOrnament::SetNextDestructedState
+00c40270 ?Write@cInteractiveOrnament@@QAE_NPAX@Z  # bool cInteractiveOrnament::Write
