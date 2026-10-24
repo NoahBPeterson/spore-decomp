@@ -1,5 +1,8 @@
 0059ace0 28 complete ctor; float-global load/store scheduling differs from original
 0059ae20 6 complete refcount swap; load of old pointer hoisted above the field store
-0059b060 34 complete axis/angle->quaternion free function; x87/SSE multiply shape differs
+0059b060 68 complete axis/angle->quaternion free function; volatile sin spill changes multiply shape; equiv PASS (400 valid inputs, 100% coverage)
 0059b2f0 54 complete orientation setter; original builds the quaternion through stack temps
-0059b420 87 complete target-position setter; original builds a Vector3 temp on the stack
+0059b420 119 complete target-position setter; orig builds a Vector3 temp on the stack; store reordered before call; equiv PASS (400 valid inputs, 100% coverage)
+0059aed0 343 complete quaternion rotate-vector free function; SSE multiply grouping differs from original; equiv PASS (397 valid inputs, 100% coverage)
+0059b0f0 422 complete target-position/ground clamp with model-world raycast; stack temp construction differs; equiv PASS (315 valid inputs, 100% coverage)
+0059b390 72 complete target-position refresh via free FUN_0059aed0; SSE scheduling/stack temps differ; equiv PASS (318 valid inputs, 100% coverage)

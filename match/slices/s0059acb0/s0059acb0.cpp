@@ -11,14 +11,54 @@ namespace Simulator {
 
 class cAnimatingCreature {
 public:
-    char pad0[0x70];
+    char pad0[4];
+    float mPosition[3];             // +0x04
+    float mOrientation[4];          // +0x10
+    char pad20[0x70 - 0x20];
     uint32_t mFlags;                // +0x70
     char pad74[0x150 - 0x74];
     uint8_t mByte150;               // +0x150
+    char pad151[0x154 - 0x151];
+    int mState154;                  // +0x154
+    char pad158[0x164 - 0x158];
+    float mLookAtPosition[3];       // +0x164
+    char pad170[0x17c - 0x170];
     void AddRef();                  // 0x00a02c30
     void Release();                 // 0x00a05270
     bool IsSomething(int a);        // 0x00a02b20
+    void FUN_00a047d0(int a);       // 0x00a047d0
 };
+
+// Local vector/filter types mirroring the retail model-query interfaces.
+struct CsVector3 { float x, y, z; };
+struct CsFilterSettings {
+    uint64_t requiredGroupFlags;    // +0x00
+    uint64_t excludedGroupFlags;    // +0x08
+    void*    filterFunction;        // +0x10
+    uint8_t  collisionMode;         // +0x14
+    uint8_t  flags;                 // +0x15
+};
+
+class cIModelWorld {
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08();
+    virtual void* FindFirstModelAlongLine(const CsVector3& p1, const CsVector3& p2,
+                                          float* factor, CsVector3* dstPoint,
+                                          CsVector3* dstNormal, CsFilterSettings& settings,
+                                          int* a, int* b);   // +0x24
+};
+
+class cIModelManager {
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09();
+    virtual uint32_t GetGroupFlag(uint32_t groupID, int a);   // +0x28
+};
+
+cIModelManager* ModelManager();     // 0x0067dd80
 
 // Reference-counted pointer wrapper: object pointer at +0.
 struct AnimatingCreatureRef {
@@ -57,10 +97,12 @@ public:
     void* FUN_0059b0b0(char flags);                    // 0x0059b0b0
     void FUN_0059b2f0(float angle, char update);       // 0x0059b2f0
     void FUN_0059b390();                               // 0x0059b390
-    void FUN_0059b420(char b);                         // 0x0059b420
-    void FUN_0059aed0(float* out, const float* q, const float* v);  // 0x0059aed0
-    void SetTargetPosition(int a, float angle);        // 0x0059b0f0
+    void FUN_0059b420(bool b);                         // 0x0059b420
+    void SetTargetPosition(const float* pos, bool updatePosition, bool groundClamp);  // 0x0059b0f0
 };
+
+// Free function (cdecl): rotate vector v by quaternion q.
+void FUN_0059aed0(float* out, const float* v, const float* q);   // 0x0059aed0
 
 }  // namespace Simulator
 
@@ -218,44 +260,104 @@ void cAnimatedData::FUN_0059b390()
 }
 
 // @ 0x0059b420
-void cAnimatedData::FUN_0059b420(char b)
+void cAnimatedData::FUN_0059b420(bool b)
 {
     cAnimatingCreature* p = mpCreature;
     if (p) {
         if (b) {
-            *(int*)((char*)p + 0x154) = 2;
+            p->mState154 = 2;
             if (!mField55) {
-                FUN_0059b390();
                 mField55 = b;
+                FUN_0059b390();
                 return;
             }
         } else {
-            *(int*)((char*)p + 0x154) = 1;
+            p->mState154 = 1;
             cAnimatingCreature* q = mpCreature;
-            *(float*)((char*)q + 0x164) = 0.0f;
-            *(float*)((char*)q + 0x168) = gAnimB0;
-            *(float*)((char*)q + 0x16c) = gAnimB1;
+            q->mLookAtPosition[0] = 0.0f;
+            q->mLookAtPosition[1] = gAnimB0;
+            q->mLookAtPosition[2] = gAnimB1;
         }
         mField55 = b;
     }
 }
 
 // @ 0x0059b0f0
-// PARTIAL: 503 B target-position/ground clamp; skeleton only.
-void cAnimatedData::SetTargetPosition(int a, float angle) { (void)a; (void)angle; }
+void cAnimatedData::SetTargetPosition(const float* pos, bool updatePosition, bool groundClamp)
+{
+    mVec0[0] = pos[0];
+    mVec0[1] = pos[1];
+    mVec0[2] = pos[2];
+    mVec1[0] = pos[0];
+    mVec1[1] = pos[1];
+    mVec1[2] = pos[2];
+
+    float len = sqrtf(mVec1[0] * mVec1[0] + mVec1[1] * mVec1[1] + mVec1[2] * mVec1[2]);
+    if (len > 5.0f) {
+        float inv = 1.0f / len;
+        mVec1[0] = mVec1[0] * inv * 5.0f;
+        mVec1[1] = mVec1[1] * inv * 5.0f;
+        mVec1[2] = mVec1[2] * inv * 5.0f;
+    }
+
+    if (groundClamp)
+        mVec1[2] = 0.0f;
+
+    if (updatePosition) {
+        cAnimatingCreature* p = mpCreature;
+        p->mPosition[0] = mVec1[0];
+        p->mPosition[1] = mVec1[1];
+        p->mPosition[2] = mVec1[2];
+        mVec2[0] = mVec1[0];
+        mVec2[1] = mVec1[1];
+        mVec2[2] = mVec1[2];
+
+        if (groundClamp) {
+            CsVector3 start;
+            start.x = p->mPosition[0];
+            start.y = p->mPosition[1];
+            start.z = 500.0f;
+            CsFilterSettings settings = { 0, 0, 0, 4, 0 };
+            uint32_t group = ModelManager()->GetGroupFlag(0x26f3933, 0);
+            if (group < 64)
+                settings.requiredGroupFlags |= (uint64_t)1 << group;
+            CsVector3 end;
+            end.x = start.x;
+            end.y = start.y;
+            end.z = start.z - 1000.0f;
+            CsVector3 hit;
+            if (((cIModelWorld*)(uint32_t)mField0c)
+                    ->FindFirstModelAlongLine(start, end, 0, &hit, 0, settings, 0, 0))
+                p->mPosition[2] = hit.z;
+        }
+        p->FUN_00a047d0(1);
+    }
+}
 
 // @ 0x0059aed0
-// PARTIAL: 392 B quaternion/matrix transform; skeleton only.
-void cAnimatedData::FUN_0059aed0(float* out, const float* q, const float* v) { (void)out; (void)q; (void)v; }
+// Rotate vector v by quaternion q: out = R(q) * v.
+void FUN_0059aed0(float* out, const float* v, const float* q)
+{
+    float qx = q[0], qy = q[1], qz = q[2], qw = q[3];
+    float vx = v[0], vy = v[1], vz = v[2];
+    out[0] = ((qw * qy + qz * qx) * vz + (qy * qx - qw * qz) * vy) * 2.0f
+             + (1.0f - (qz * qz + qy * qy) * 2.0f) * vx;
+    out[1] = ((qw * qz + qy * qx) * vx + (qz * qy - qw * qx) * vz) * 2.0f
+             + (1.0f - (qz * qz + qx * qx) * 2.0f) * vy;
+    out[2] = ((qz * qx - qw * qy) * vx + (qw * qx + qz * qy) * vy) * 2.0f
+             + (1.0f - (qy * qy + qx * qx) * 2.0f) * vz;
+}
 
 // @ 0x0059b060
 // Axis/angle -> quaternion (free function).
 void SetQuaternionFromAxisAngle(float* out, const float* axis, float angle)
 {
-    float s = sinf(angle * 0.5f);
-    float c = cosf(angle * 0.5f);
-    out[0] = axis[0] * s;
-    out[1] = axis[1] * s;
-    out[2] = axis[2] * s;
-    out[3] = c;
+    float x = axis[0], y = axis[1], z = axis[2];
+    volatile float sc[2];
+    sc[0] = sinf(angle * 0.5f);
+    sc[1] = cosf(angle * 0.5f);
+    out[0] = x * sc[0];
+    out[1] = y * sc[0];
+    out[2] = z * sc[0];
+    out[3] = sc[1];
 }
