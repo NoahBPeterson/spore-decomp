@@ -1,5 +1,5 @@
 // Slice s00798d30 -- split-transform / lighting helpers.
-// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 
 #include <intrin.h>
 #include <math.h>
@@ -33,6 +33,7 @@ extern int V_140f578;
 
 extern void __cdecl FUN_00436ce0(...);
 extern int __cdecl FUN_00f473a0(...);
+extern void __cdecl FUN_00c2e4e0();   // 0x00c2e4e0 default transform-notify callback
 
 struct VObj { virtual void f0(); virtual void f1(int); };
 struct Mat3 { void Assign(void *); };
@@ -41,6 +42,16 @@ struct AllocThing { int *alloc(int n, int extra); };
 struct Mgr { void Notify(int param); };
 struct VCtor { VCtor *c0(int *); VCtor *c1(int *); VCtor *c2(int *); VCtor *c3(int *); VCtor *c4(int *); };
 struct CSplitCtor { int *copy(int *src); };
+// Two-float vector copy used by the split-blend switch (combined into 32-bit moves).
+struct Vec2 { float x, y; };
+// Four-float vector copy used by the 4-wide split-blend switch.
+struct Vec4 { float x, y, z, w; };
+// Three-float vector copy used by the 3-wide split-blend switch.
+struct Vec3 { float x, y, z; };
+// Stub layouts for the x87 ray/plane/cylinder intersection helpers (ecx = this, ret 8).
+struct PlaneQ { float x, y, z, d; long double IntersectRay(float *param_2, float *param_3); };
+struct CylinderQ { float ox, oy, oz, dx, dy, dz, radiusSq; long double Intersect(float *param_2, float *param_3); };
+struct RayQ { float ox, oy, oz, radiusSq; long double IntersectRay(float *param_2, float *param_3); };
 
 // @ 0x00798d30
 void FUN_00798d30(int param_1, int *param_2)
@@ -88,7 +99,7 @@ void FUN_00798d30(int param_1, int *param_2)
     DAT_016342f0[13] = 0.0f;
     DAT_016342f0[14] = 0.0f;
     DAT_016342f0[15] = 0.0f;
-    DAT_01634378 = (int (*)(...)) & V_13ebc60;
+    DAT_01634378 = (int (*)(...)) & FUN_00c2e4e0;
     return;
 }
 
@@ -113,11 +124,11 @@ void FUN_00798e40(int param_1, float param_2, float *param_3, float *param_4, fl
 }
 
 // @ 0x00798ed0
-void FUN_00798ed0(int param_1, float param_2, int *param_3, int *param_4, int *param_5)
+void FUN_00798ed0(int param_1, float param_2, unsigned int *param_3, unsigned int *param_4, unsigned int *param_5)
 {
     float fVar1;
     float fVar2;
-    int local_8;
+    unsigned int local_8;
 
     switch (param_1) {
     case 1:
@@ -129,7 +140,7 @@ void FUN_00798ed0(int param_1, float param_2, int *param_3, int *param_4, int *p
         if (*param_4 < 0) {
             fVar2 = fVar2 + 4.2949673e+09f;
         }
-        local_8 = (int)(long long)(fVar2 * param_2 + fVar1 * (1.0f - param_2));
+        local_8 = (unsigned int)(fVar2 * param_2 + fVar1 * (1.0f - param_2));
         *param_5 = local_8;
         return;
     case 3:
@@ -223,35 +234,28 @@ void FUN_00799110(int param_1, float param_2, float *param_3, float *param_4, fl
     switch (param_1) {
     case 1: {
         float fVar4 = 1.0f - param_2;
-        float fVar5 = param_3[1];
-        float fVar1 = param_3[2];
-        float fVar2 = param_4[1];
-        float fVar3 = param_4[2];
-        *param_5 = *param_4 * param_2 + *param_3 * fVar4;
-        param_5[1] = fVar2 * param_2 + fVar5 * fVar4;
-        param_5[2] = fVar3 * param_2 + fVar1 * fVar4;
+        float fVar0 = *param_3 * fVar4;
+        float fVar5 = param_3[1] * fVar4;
+        float fVar1 = param_3[2] * fVar4;
+        *param_5 = *param_4 * param_2 + fVar0;
+        param_5[1] = param_4[1] * param_2 + fVar5;
+        param_5[2] = param_4[2] * param_2 + fVar1;
         return;
     }
     case 2: {
         float fVar5 = 1.0f - param_2;
-        float local_18 = *param_4 * param_2 + *param_3 * fVar5;
-        float local_14 = param_4[1] * param_2 + param_3[1] * fVar5;
-        float local_10 = param_4[2] * param_2 + param_3[2] * fVar5;
-        float local_c[3];
-        FUN_00436ce0(local_c, &local_18);
-        param_4 = local_c;
+        float blended[3];
+        blended[0] = *param_4 * param_2 + *param_3 * fVar5;
+        blended[1] = param_4[1] * param_2 + param_3[1] * fVar5;
+        blended[2] = param_4[2] * param_2 + param_3[2] * fVar5;
+        float normalized[3];
+        FUN_00436ce0(normalized, blended);
+        param_4 = normalized;
         break;
     }
     case 3:
-        if (param_2 <= 0.5f) {
-            *param_5 = *param_3;
-            param_5[1] = param_3[1];
-            param_5[2] = param_3[2];
-            return;
-        }
-        *param_5 = *param_4;
-        param_5[1] = param_4[1];
-        param_5[2] = param_4[2];
+        if (param_2 <= 0.5f) { *(Vec3 *)param_5 = *(Vec3 *)param_3; return; }
+        *(Vec3 *)param_5 = *(Vec3 *)param_4;
         return;
     case 4:
         param_4 = param_3;
@@ -261,14 +265,12 @@ void FUN_00799110(int param_1, float param_2, float *param_3, float *param_4, fl
     default:
         return;
     }
-    *param_5 = *param_4;
-    param_5[1] = param_4[1];
-    param_5[2] = param_4[2];
+    *(Vec3 *)param_5 = *(Vec3 *)param_4;
     return;
 }
 
 // @ 0x00799290
-void FUN_00799290(int **param_1, int *param_2, int *param_3, int *param_4)
+int **FUN_00799290(int **param_1, int *param_2, int *param_3, int *param_4)
 {
     int *piVar1;
     int iVar2;
@@ -286,7 +288,7 @@ void FUN_00799290(int **param_1, int *param_2, int *param_3, int *param_4)
         }
         *param_1 = (int *)((char *)*param_1 + 8);
     }
-    return;
+    return param_1;
 }
 
 // @ 0x007992e0
@@ -311,16 +313,12 @@ void FUN_007992e0(int *param_1, int *param_2, int *param_3)
 // @ 0x00799320
 void FUN_00799320(float *param_1, float *param_2)
 {
-    float fVar1 = *param_2;
-    float fVar2 = param_2[1];
-    float fVar5 = 1.0f / sqrtf(((fVar1 * fVar1 + param_2[1] * param_2[1]) + param_2[2] * param_2[2]) +
-                               param_2[3] * param_2[3]);
-    float fVar3 = param_2[2];
-    float fVar4 = param_2[3];
-    *param_1 = fVar1 * fVar5;
-    param_1[1] = fVar2 * fVar5;
-    param_1[2] = fVar5 * fVar3;
-    param_1[3] = fVar5 * fVar4;
+    float fVar5 = (float)(1.0 / sqrt(((double)param_2[0] * param_2[0] + (double)param_2[1] * param_2[1]) +
+                                     ((double)param_2[2] * param_2[2] + (double)param_2[3] * param_2[3])));
+    *param_1 = param_2[0] * fVar5;
+    param_1[1] = param_2[1] * fVar5;
+    param_1[2] = fVar5 * param_2[2];
+    param_1[3] = fVar5 * param_2[3];
     return;
 }
 
@@ -371,33 +369,36 @@ int *CSplitCtor::copy(int *param_2)
 void FUN_007994d0(int param_1, float param_2, float *param_3, float *param_4, float *param_5)
 {
     switch (param_1) {
-    case 1:
-        *param_5 = *param_4 * param_2 + *param_3 * (1.0f - param_2);
-        param_5[1] = param_4[1] * param_2 + param_3[1] * (1.0f - param_2);
+    case 1: {
+        float fVar4 = 1.0f - param_2;
+        float fVar0 = *param_3 * fVar4;
+        float fVar1 = param_3[1] * fVar4;
+        *param_5 = *param_4 * param_2 + fVar0;
+        param_5[1] = param_4[1] * param_2 + fVar1;
         return;
+    }
     case 2: {
-        float fVar1 = *param_4 * param_2 + *param_3 * (1.0f - param_2);
-        float fVar2 = param_4[1] * param_2 + param_3[1] * (1.0f - param_2);
-        float fVar3 = 1.0f / sqrtf(fVar1 * fVar1 + fVar2 * fVar2);
+        float fVar4 = 1.0f - param_2;
+        float fVar2 = param_4[1] * param_2 + param_3[1] * fVar4;
+        float fVar1 = *param_4 * param_2 + *param_3 * fVar4;
+        float fVar3 = 1.0f / (float)sqrt((double)fVar1 * fVar1 + (double)fVar2 * fVar2);
         *param_5 = fVar3 * fVar1;
         param_5[1] = fVar3 * fVar2;
         return;
     }
     case 3:
-        if (param_2 <= 0.5f) { *param_5 = *param_3; param_5[1] = param_3[1]; return; }
-        break;
+        if (param_2 <= 0.5f) { *(Vec2 *)param_5 = *(Vec2 *)param_3; return; }
+        *(Vec2 *)param_5 = *(Vec2 *)param_4;
+        return;
     case 4:
-        *param_5 = *param_3;
-        param_5[1] = param_3[1];
+        *(Vec2 *)param_5 = *(Vec2 *)param_3;
         return;
     case 5:
-        break;
+        *(Vec2 *)param_5 = *(Vec2 *)param_4;
+        return;
     default:
         return;
     }
-    *param_5 = *param_4;
-    param_5[1] = param_4[1];
-    return;
 }
 
 // @ 0x00799640
@@ -420,13 +421,14 @@ void FUN_00799640(int param_1, float param_2, float *param_3, float *param_4, fl
     }
     case 2: {
         float fVar7 = 1.0f - param_2;
-        float local_14 = param_4[3] * param_2 + param_3[3] * fVar7;
-        float local_20 = *param_4 * param_2 + *param_3 * fVar7;
-        float local_1c = param_4[1] * param_2 + param_3[1] * fVar7;
-        float local_18 = param_4[2] * param_2 + param_3[2] * fVar7;
-        float local_10[4];
-        FUN_00799320(local_10, &local_20);
-        param_3 = local_10;
+        float blended[4];
+        blended[0] = *param_4 * param_2 + *param_3 * fVar7;
+        blended[1] = param_4[1] * param_2 + param_3[1] * fVar7;
+        blended[2] = param_4[2] * param_2 + param_3[2] * fVar7;
+        blended[3] = param_4[3] * param_2 + param_3[3] * fVar7;
+        float normalized[4];
+        FUN_00799320(normalized, blended);
+        param_3 = normalized;
         break;
     }
     case 3:
@@ -440,10 +442,7 @@ void FUN_00799640(int param_1, float param_2, float *param_3, float *param_4, fl
     default:
         return;
     }
-    *param_5 = *param_3;
-    param_5[1] = param_3[1];
-    param_5[2] = param_3[2];
-    param_5[3] = param_3[3];
+    *(Vec4 *)param_5 = *(Vec4 *)param_3;
     return;
 }
 
@@ -486,14 +485,14 @@ int *AllocThing::alloc(int param_2, int param_3)
 }
 
 // @ 0x007998a0
-long double __fastcall FUN_007998a0(float *param_1, float *param_2, float *param_3)
+long double PlaneQ::IntersectRay(float *param_2, float *param_3)
 {
-    return ((long double)param_1[3] -
-            ((long double)*param_1 * (long double)*param_2 +
-            ((long double)param_1[1] * (long double)param_2[1] + (long double)param_1[2] * (long double)param_2[2]))) /
-            ((long double)param_1[2] * (long double)(param_3[2] - param_2[2]) +
-            ((long double)param_1[1] * (long double)(param_3[1] - param_2[1]) +
-            (long double)*param_1 * (long double)(*param_3 - *param_2)));
+    return ((long double)d -
+            ((long double)x * (long double)*param_2 +
+            ((long double)y * (long double)param_2[1] + (long double)z * (long double)param_2[2]))) /
+            ((long double)z * (long double)(param_3[2] - param_2[2]) +
+            ((long double)y * (long double)(param_3[1] - param_2[1]) +
+            (long double)x * (long double)(*param_3 - *param_2)));
 }
 
 // @ 0x00799940
@@ -517,27 +516,27 @@ VCtor *VCtor::c1(int *param_2)
 }
 
 // @ 0x007999a0
-long double __fastcall FUN_007999a0(float *param_1, float *param_2, float *param_3)
+long double CylinderQ::Intersect(float *param_2, float *param_3)
 {
-    float fVar7 = *param_2 - *param_1;
-    float fVar9 = param_2[2] - param_1[2];
-    float fVar10 = *param_3 - *param_1;
-    float fVar8 = param_2[1] - param_1[1];
-    float fVar11 = param_3[1] - param_1[1];
-    float fVar12 = param_3[2] - param_1[2];
-    float fVar5 = (param_1[5] * fVar9 + param_1[4] * fVar8) + param_1[3] * fVar7;
-    float fVar6 = (param_1[5] * fVar12 + param_1[4] * fVar11) + param_1[3] * fVar10;
-    float fVar1 = (fVar9 - param_1[5] * fVar5);
-    float fVar2 = (fVar8 - param_1[4] * fVar5);
-    float fVar3 = (fVar7 - param_1[3] * fVar5);
-    double dVar1 = ABS(sqrt((double)(fVar3 * fVar3 + (fVar2 * fVar2 + fVar1 * fVar1))) -
-                       sqrt((double)param_1[6]));
-    float fVar4 = (fVar12 - param_1[5] * fVar6);
-    float fVar13 = (fVar11 - param_1[4] * fVar6);
-    float fVar14 = (fVar10 - fVar6 * param_1[3]);
+    float fVar7 = *param_2 - ox;
+    float fVar8 = param_2[1] - oy;
+    float fVar9 = param_2[2] - oz;
+    float fVar10 = *param_3 - ox;
+    float fVar11 = param_3[1] - oy;
+    float fVar12 = param_3[2] - oz;
+    float fVar5 = (dz * fVar9 + dy * fVar8) + dx * fVar7;
+    float fVar6 = (dz * fVar12 + dy * fVar11) + dx * fVar10;
+    float fVar1 = (fVar9 - dz * fVar5);
+    float fVar2 = (fVar8 - dy * fVar5);
+    float fVar3 = (fVar7 - dx * fVar5);
+    double dVar1 = ABS(sqrt((double)fVar3 * fVar3 + (double)fVar2 * fVar2 + (double)fVar1 * fVar1) -
+                       sqrt((double)radiusSq));
+    float fVar4 = (fVar12 - dz * fVar6);
+    float fVar13 = (fVar11 - dy * fVar6);
+    float fVar14 = (fVar10 - fVar6 * dx);
     return (long double)dVar1 /
-           (ABS(sqrt((double)(fVar4 * fVar4 + (fVar13 * fVar13 + fVar14 * fVar14))) -
-                sqrt((double)param_1[6])) + (double)dVar1);
+           (ABS(sqrt((double)fVar4 * fVar4 + (double)fVar13 * fVar13 + (double)fVar14 * fVar14) -
+                sqrt((double)radiusSq)) + (double)dVar1);
 }
 
 // @ 0x00799b00
@@ -558,20 +557,20 @@ VCtor *VCtor::c2(int *param_2)
 }
 
 // @ 0x00799b50
-long double __fastcall FUN_00799b50(float *param_1, float *param_2, float *param_3)
+long double RayQ::IntersectRay(float *param_2, float *param_3)
 {
     float fVar11 = param_3[2] - param_2[2];
     float fVar9 = *param_3 - *param_2;
     float fVar10 = param_3[1] - param_2[1];
-    float fVar6 = param_2[2] - param_1[2];
-    float fVar7 = *param_2 - *param_1;
-    float fVar8 = param_2[1] - param_1[1];
+    float fVar6 = param_2[2] - oz;
+    float fVar7 = *param_2 - ox;
+    float fVar8 = param_2[1] - oy;
     long double fVar5 = (long double)1 / sqrt((long double)((long double)fVar10 * fVar10 +
                           ((long double)fVar9 * fVar9 + (long double)fVar11 * fVar11)));
     long double fVar1 = (long double)(((fVar6 * fVar11 + fVar7 * fVar9) + fVar8 * fVar10) * (float)fVar5);
     return (-fVar1 - sqrt(fVar1 * fVar1 -
                          (((long double)fVar7 * fVar7 + ((long double)fVar8 * fVar8 +
-                         (long double)fVar6 * fVar6)) - (long double)param_1[3]))) * fVar5;
+                         (long double)fVar6 * fVar6)) - (long double)radiusSq))) * fVar5;
 }
 
 // @ 0x00799c30
