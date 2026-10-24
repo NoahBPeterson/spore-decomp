@@ -1,2 +1,3 @@
 # va  diff-bytes  short reason
 00eed840  3    vtable-slot register swap in the release call (behavior complete)
+00eedba0  58   colour-unpack helper reconstructed (ResourceCategoryKey -> (r,g,b)/255 into the out buffer, sentinel remap via cmp/cmove); difftest PASS (384 valid seed 7, 937 seed 11; default corpus WEAK 174/200 valid floor with 100% coverage); residual: cl emits a branch on the sentinel compare instead of cmp/cmove and swaps the out/call-result registers (ecx vs eax), so the x87 unpack schedule shifts
