@@ -183,17 +183,30 @@ void cUIMissionCard::Update()
 // ============================================================ cUIMissionCardPanel
 struct cUIMissionCardPanel {
     void **m_vtbl00;        // +0x00
-    u8    m_pad04[0xc];
-    u32   m_field10;        // +0x10
-    u8    m_pad14[4];
-    void *m_layout;         // +0x18
-    void *m_card;           // +0x1c
-    u8    m_pad20[8];
-    void **m_vec28;         // +0x28 vector begin (embedded handler view)
-    void **m_vec2c;         // +0x2c vector end
-    union {                 // +0x30: layout object / vector capacity
-        void  *m_visObj;
-        void **m_vec30;
+    void  *m_sub04;         // +0x04
+    void  *m_slotVtbl08;    // +0x08
+    void  *m_slotVtbl0c;    // +0x0c
+    u32    m_field10;       // +0x10
+    void  *m_field14;       // +0x14
+    void  *m_layout;        // +0x18
+    void  *m_card;          // +0x1c
+    union {                 // +0x20: message-handler view / card-vector view
+        struct {
+            void *m_handlerObj;  // +0x20
+            void *m_handlerArg1; // +0x24
+            void *m_handlerArg2; // +0x28
+            u32   m_handlerN;    // +0x2c
+            void *m_handlerArg4; // +0x30
+        };
+        struct {
+            u8     m_pad20[8];
+            void **m_vec28;      // +0x28 vector begin
+            void **m_vec2c;      // +0x2c vector end
+            union {              // +0x30: vector capacity / layout object
+                void **m_vec30;
+                void  *m_visObj;
+            };
+        };
     };
     void *m_treeBegin34;    // +0x34
     void *m_curMission;     // +0x38
@@ -215,17 +228,17 @@ struct cUIMissionCardPanel {
     void  UpdateCardDetails(void *mission); // 0x00e17e40
     void  ShutdownA();                   // 0x00e18a30
     void  ShutdownB();                   // 0x00e18b50
-    void  SetSlotAndMission(u32 slot, void *mission); // 0x00e18cb0
+    void  SetSlotAndMission(u32 slot); // 0x00e18cb0
     void *InitHints(void *param);        // 0x00e188b0
     void  DestroyMembers();              // 0x00e18980
-    void *Construct(void *param);        // 0x00e18bb0
+    void *Construct();                   // 0x00e18bb0
     bool  RemoveMissionCard(void *mission); // 0x00e17fb0
     void *AddMissionCard(u32 mission);   // 0x00e18150
     void *SetupMissionCard(void *mission, u32 a, u32 b, char c); // 0x00e18200
     char  HandleMessage(u32 msg, void *arg); // 0x00e18380
     void  RefreshFromMissionList();      // 0x00e184d0
     char  OnMessage(u32 msg, void *arg); // 0x00e18600
-    void  OnNotify(u32 a, u32 b);        // 0x00e186d0
+    void  OnNotify(u32 a, u32 b, u32 c, u32 d); // 0x00e186d0
 };
 
 // @ 0x00e18860
@@ -316,8 +329,8 @@ void cUIMissionCardPanel::ForEach(u32 a, u32 b)
 // @ 0x00e17df0
 void cUIMissionCardPanel::Refresh()
 {
-    u32 n = (u32)(m_vec2c - m_vec28);
-    for (u32 i = 0; i < n; i++) {
+    int n = (int)(m_vec2c - m_vec28);
+    for (int i = 0; i < n; i++) {
         void *card = m_vec28[i];
         if (card == 0) {
             continue;
@@ -419,17 +432,19 @@ void cUIMissionCardList::ReleaseAll()
     }
     ((void (__thiscall *)(void *, void **, void **))FUN_00e25bd0)(&m_vec28, m_vec28, m_vec2c);
     if (m_field54 != 0) {
-        ((void (__thiscall *)(void *, int))FUN_00811ad0)(m_field54, 1);
-        if (m_field54 != 0) {
+        void *lay = m_field54;
+        ((void (__thiscall *)(void *, int))FUN_00811ad0)(lay, 1);
+        if (lay != 0) {
             m_field54 = 0;
-            ((void (__thiscall *)(void *))(*(void ***)m_field54)[2])(0);
+            ((void (__thiscall *)(void *))(*(void ***)lay)[2])(lay);
         }
     }
     if (m_field3c != 0) {
-        FUN_00e492d0(m_field3c);
-        if (m_field3c != 0) {
+        void *h = m_field3c;
+        ((void (__thiscall *)(void *))FUN_00e492d0)(h);
+        if (h != 0) {
             m_field3c = 0;
-            ((void (__thiscall *)(void *))(*(void ***)m_field3c)[3])(0);
+            ((void (__thiscall *)(void *))(*(void ***)h)[3])(h);
         }
     }
 }
@@ -487,7 +502,7 @@ void *cUIMissionCardPanel::InitHints(void *param)
     void *raw = operator_new(0x18, 0x13f6b3c, 0, 0, 0, 0);
     void *obj = 0;
     if (raw != 0) {
-        obj = FUN_00810000(raw);
+        obj = ((void *(__thiscall *)(void *))FUN_00810000)(raw);
     }
     void *old = m_visObj;
     if (obj != old) {
@@ -504,17 +519,16 @@ void *cUIMissionCardPanel::InitHints(void *param)
     key[1] = 0x510a95b;
     key[2] = 0x40464100;
     void *layout = m_visObj;
-    if (FUN_008120d0(layout, key, true, 0x8b96f855)) {
-        FUN_00810590(layout, 0, 1);
-        void *w = FUN_008105b0(m_visObj, -1, true);
-        ((void (__thiscall *)(void *, void *))(*(void ***)w)[0x104 / 4])(w, this);
-        return this;
+    if (((bool (__thiscall *)(void *, u32 *, bool, u32))FUN_008120d0)(layout, key, true, 0x8b96f855)) {
+        ((void (__thiscall *)(void *, int))FUN_00810590)(layout, 0);
+        void *w = ((void *(__thiscall *)(void *, int, bool))FUN_008105b0)(m_visObj, -1, true);
+        return ((void *(__thiscall *)(void *, void *))(*(void ***)w)[0x104 / 4])(w, this);
     }
     if (m_visObj != 0) {
         m_visObj = 0;
-        ((void (__thiscall *)(void *))(*(void ***)layout)[2])(layout);
+        return ((void *(__thiscall *)(void *))(*(void ***)layout)[2])(layout);
     }
-    return this;
+    return 0;
 }
 
 // @ 0x00e18980
@@ -547,45 +561,43 @@ void cUIMissionCardPanel::DestroyMembers()
 }
 
 // @ 0x00e18bb0
-void *cUIMissionCardPanel::Construct(void *param)
+void *cUIMissionCardPanel::Construct()
 {
-    m_field10 = 0xffffffff;
-    *(void **)((u8 *)this + 4) = 0;
-    *(void **)((u8 *)this + 8) = (void *)0x14426a0;
-    *(void **)((u8 *)this + 0xc) = (void *)0x13eb394;
+    m_sub04 = 0;
+    m_slotVtbl08 = (void *)0x14426a0;
+    m_slotVtbl0c = (void *)0x13eb394;
     m_vtbl00 = (void **)0x14800bc;
-    *(void **)((u8 *)this + 8) = (void *)0x14800a0;
-    *(void **)((u8 *)this + 0xc) = (void *)0x1480098;
+    m_slotVtbl08 = (void *)0x14800a0;
+    m_slotVtbl0c = (void *)0x1480098;
     m_field10 = 0xffffffff;
-    *(void **)((u8 *)this + 0x14) = 0;
+    m_field14 = 0;
     m_layout = 0;
     m_card = 0;
     m_treeBegin34 = 0;
     m_curMission = 0;
     m_field3c = 0;
     m_treeBase40 = 0;
-    void *base = (u8 *)this + 0x34;
-    *(void **)base = base;
-    *(void **)((u8 *)base + 4) = base;
-    (void)param;
+    m_treeBegin34 = (u8 *)this + 0x34;
+    m_curMission = (u8 *)this + 0x34;
     u32 hash = 0x65ff54a;
     void *ms = MessageServer();
-    m_treeBase40 = ms;
-    m_field3c = (void *)((u8 *)this + 0xc);
-    m_curMission = &hash;
-    m_field58 = (void *)1;
-    m_field5c = 0;
-    if (ms != 0 && m_field3c != 0) {
-        ((void (__thiscall *)(void *, void *, void *))(*(void ***)ms)[0x24 / 4])(ms, m_field3c, &hash);
+    m_handlerObj = ms;
+    m_handlerArg1 = (void *)((u8 *)this + 0xc);
+    m_handlerArg2 = &hash;
+    m_handlerN = 1;
+    m_handlerArg4 = 0;
+    if (ms != 0 && m_handlerArg1 != 0) {
+        ((void (__thiscall *)(void *, void *, void *))(*(void ***)ms)[0x24 / 4])(ms, m_handlerArg1, &hash);
     }
     return this;
 }
 
 // @ 0x00e18cb0
-void cUIMissionCardPanel::SetSlotAndMission(u32 slot, void *mission)
+void cUIMissionCardPanel::SetSlotAndMission(u32 slot)
 {
     void *out;
-    FUN_00e5c780_find((u8 *)this + 0x3c, &out, &slot);
+    ((void (__thiscall *)(void *, void **, u32 *))FUN_00e5c780)(
+        (u8 *)this + 0x3c, &out, &slot);
     void *base = (u8 *)this + 0x40;
     if (out == base) {
         return;
@@ -595,7 +607,7 @@ void cUIMissionCardPanel::SetSlotAndMission(u32 slot, void *mission)
         return;
     }
     if (m_visObj != 0) {
-        void *w = FUN_008105b0(m_visObj, (int)slot, true);
+        void *w = ((void *(__thiscall *)(void *, int, bool))FUN_008105b0)(m_visObj, (int)slot, true);
         if (w != 0) {
             void *sub = ((void *(__thiscall *)(void *, u32))(*(void ***)w)[0x0c / 4])(w, 0x8ed27e7a);
             if (sub != 0) {
@@ -633,8 +645,8 @@ bool cUIMissionCardPanel::RemoveMissionCard(void *mission)
             continue;
         }
         if (m_field3c != 0) {
-            if (FUN_006c0200(m_field3c) == sub) {
-                FUN_00e49360(m_field3c, 0);
+            if (((void *(__thiscall *)(void *))FUN_006c0200)(m_field3c) == sub) {
+                ((void (__thiscall *)(void *, void *))FUN_00e49360)(m_field3c, 0);
             }
         }
         ((void (__thiscall *)(void *))(*(void ***)sub)[0x1c / 4])(sub);
@@ -647,7 +659,7 @@ bool cUIMissionCardPanel::RemoveMissionCard(void *mission)
         if (tail != 0) {
             ((void (__thiscall *)(void *))(*(void ***)tail)[1])(tail);
         }
-        FUN_00e14b70(this);
+        ((void (__thiscall *)(void *))FUN_00e14b70)(this);
         return true;
     }
     return false;
@@ -659,7 +671,7 @@ void *cUIMissionCardPanel::AddMissionCard(u32 mission)
     void *raw = operator_new(0x9c, 0x13f6b3c, 0, 0, 0, 0);
     void *card = 0;
     if (raw != 0) {
-        card = FUN_00e147a0(raw);
+        card = ((void *(__thiscall *)(void *))FUN_00e147a0)(raw);
     }
     void *addref = card;
     if (card != 0) {
@@ -680,8 +692,8 @@ void *cUIMissionCardPanel::AddMissionCard(u32 mission)
     if (addref != 0) {
         ((void (__thiscall *)(void *))(*(void ***)addref)[1])(addref);
     }
-    FUN_00e168d0(card, mission, 0);
-    FUN_00e14b70(this);
+    ((void (__thiscall *)(void *, u32, u32))FUN_00e168d0)(card, mission, 0);
+    ((void (__thiscall *)(void *))FUN_00e14b70)(this);
     return card;
 }
 
@@ -691,7 +703,7 @@ void *cUIMissionCardPanel::SetupMissionCard(void *mission, u32 a, u32 b, char c)
     void *raw = operator_new(0xa0, 0x13f6b3c, 0, 0, 0, 0);
     void *card = 0;
     if (raw != 0) {
-        card = FUN_00e141a0(raw);
+        card = ((void *(__thiscall *)(void *))FUN_00e141a0)(raw);
     }
     void *addref = card;
     if (card != 0) {
@@ -713,16 +725,16 @@ void *cUIMissionCardPanel::SetupMissionCard(void *mission, u32 a, u32 b, char c)
         ((void (__thiscall *)(void *))(*(void ***)addref)[1])(addref);
     }
     ((cUIMissionCard *)card)->Setup(mission, (char)a, (char)b);
-    FUN_00e18050(m_vec28, m_vec2c, b);
-    FUN_00e14b70(this);
+    ((void (__thiscall *)(void **, void **, u32))FUN_00e18050)(m_vec28, m_vec2c, b);
+    ((void (__thiscall *)(void *))FUN_00e14b70)(this);
     if (c != 0) {
         if (m_field3c != 0) {
-            FUN_00e49360(m_field3c, card);
+            ((void (__thiscall *)(void *, void *))FUN_00e49360)(m_field3c, card);
         } else {
             void *rawObj = operator_new(0xa4, 0x13f09b4, 0, 0, 0, 0);
             void *obj = 0;
             if (rawObj != 0) {
-                obj = FUN_00e4a6e0(rawObj);
+                obj = ((void *(__thiscall *)(void *))FUN_00e4a6e0)(rawObj);
             }
             void *old = m_field3c;
             if (obj != old) {
@@ -734,7 +746,7 @@ void *cUIMissionCardPanel::SetupMissionCard(void *mission, u32 a, u32 b, char c)
                     ((void (__thiscall *)(void *))(*(void ***)old)[3])(old);
                 }
             }
-            FUN_00e49a40(m_field3c, card);
+            ((void (__thiscall *)(void *, void *))FUN_00e49a40)(m_field3c, card);
         }
     }
     return card;
@@ -752,10 +764,10 @@ char cUIMissionCardPanel::HandleMessage(u32 msg, void *arg)
         if (mission == 0) {
             mission = p;
         }
-        if (FUN_00e15cd0(this, mission)) {
-            if (FUN_00c44c80(mission)) {
-                if (FUN_00febe50(GetMissionManager(), mission, 0)
-                    || FUN_00febc70(GetMissionManager()) == mission) {
+        if (((bool (__thiscall *)(void *, void *))FUN_00e15cd0)(this, mission)) {
+            if (((bool (__thiscall *)(void *))FUN_00c44c80)(mission)) {
+                if (((bool (__thiscall *)(void *, void *, u32))FUN_00febe50)(GetMissionManager(), mission, 0)
+                    || ((void *(__thiscall *)(void *))FUN_00febc70)(GetMissionManager()) == mission) {
                     UpdateCardDetails(mission);
                 } else {
                     RemoveMissionCard(mission);
@@ -765,7 +777,7 @@ char cUIMissionCardPanel::HandleMessage(u32 msg, void *arg)
             }
             return 0;
         }
-        if (FUN_00febe50(GetMissionManager(), mission, 0)) {
+        if (((bool (__thiscall *)(void *, void *, u32))FUN_00febe50)(GetMissionManager(), mission, 0)) {
             if ((u32)(unsigned long)SP_GetCurrentGameMode() == 0x1654c05) {
                 SetupMissionCard(mission, 1, 1, 0);
             } else {
@@ -774,7 +786,7 @@ char cUIMissionCardPanel::HandleMessage(u32 msg, void *arg)
             }
             return 0;
         }
-        if (FUN_00febc70(GetMissionManager()) == mission) {
+        if (((void *(__thiscall *)(void *))FUN_00febc70)(GetMissionManager()) == mission) {
             if ((u32)(unsigned long)SP_GetCurrentGameMode() == 0x1654c05) {
                 SetupMissionCard(mission, 1, 1, 0);
             } else {
@@ -790,7 +802,7 @@ char cUIMissionCardPanel::HandleMessage(u32 msg, void *arg)
     }
     if (msg == 0xf46092d0) {
         void *p = *(void **)((u8 *)arg + 8);
-        FUN_00e15c70(this, p);
+        ((void (__thiscall *)(void *, void *))FUN_00e15c70)(this, p);
         return 1;
     }
     return 0;
@@ -802,7 +814,7 @@ void cUIMissionCardPanel::RefreshFromMissionList()
     if ((u32)(unsigned long)SP_GetCurrentGameMode() != 0x1654c05) {
         return;
     }
-    void *list = FUN_00fedd50(GetMissionManager());
+    void *list = ((void *(__thiscall *)(void *))FUN_00fedd50)(GetMissionManager());
     void **begin = *(void ***)list;
     int n = (int)(*(void ***)((u8 *)list + 4) - begin);
     for (int i = 0; i < n; i++) {
@@ -814,11 +826,11 @@ void cUIMissionCardPanel::RefreshFromMissionList()
         if (mission == 0) {
             mission = m;
         }
-        if (FUN_00e15cd0(this, mission)) {
+        if (((bool (__thiscall *)(void *, void *))FUN_00e15cd0)(this, mission)) {
             continue;
         }
-        if ((mission != 0 && FUN_00febe50(GetMissionManager(), mission, 0))
-            || FUN_00febc70(GetMissionManager()) == mission) {
+        if ((mission != 0 && ((bool (__thiscall *)(void *, void *, u32))FUN_00febe50)(GetMissionManager(), mission, 0))
+            || ((void *(__thiscall *)(void *))FUN_00febc70)(GetMissionManager()) == mission) {
             SetupMissionCard(mission, 1, 0, 0);
         }
     }
@@ -831,47 +843,43 @@ void cUIMissionCardPanel::RefreshFromMissionList()
 // @ 0x00e18600
 char cUIMissionCardPanel::OnMessage(u32 msg, void *arg)
 {
+    char visible = 0;
     if (msg != 0x65ff54a || m_layout == 0) {
-        return 0;
+        return visible;
     }
     if (*(u32 *)((u8 *)arg + 0x10) != 0x40464100) {
-        return 0;
+        return visible;
     }
-    char visible = false;
-    u32 v4 = *(u32 *)((u8 *)this + 4);
-    u32 v8 = m_curMission ? 0 : 0;
-    (void)v8;
-    u32 v5 = *(u32 *)((u8 *)this + 8);
-    u32 v6 = m_layout ? 0 : 0;
-    (void)v6;
     void *mission = *(void **)((u8 *)arg + 0x18);
-    void *cur = ((void *(__thiscall *)(void *, u32))(*(void ***)this)[0x30 / 4])(this, v5);
+    u32 key = m_field10;
+    void *cur = ((void *(__thiscall *)(void *, u32))m_vtbl00[0x30 / 4])(this, key);
     if (mission != cur) {
-        return 0;
+        return visible;
     }
+    u32 saved14 = (u32)(unsigned long)m_field14;
     void *layout = m_layout;
-    visible = FUN_00810070(layout);
+    u32 savedCard = (u32)(unsigned long)m_card;
+    u32 r570 = (u32)(unsigned long)((void *(__thiscall *)(void *))FUN_00810570)(layout);
+    visible = ((bool (__thiscall *)(void *))FUN_00810070)(layout) ? 1 : 0;
     if (visible) {
-        ((void (__thiscall *)(void *))(*(void ***)this)[0x20 / 4])(this);
+        ((void (__thiscall *)(void *))m_vtbl00[0x20 / 4])(this);
     }
-    ((void (__thiscall *)(void *))(*(void ***)this)[0x14 / 4])(this);
-    FUN_00810570(m_layout);
-    (void)v4;
+    ((void (__thiscall *)(void *))m_vtbl00[0x14 / 4])(this);
+    ((void (__thiscall *)(void *, u32, u32, u32, u32))m_vtbl00[0x10 / 4])(
+        this, key, saved14, r570, savedCard);
     if (visible) {
-        ((void (__thiscall *)(void *))m_vtbl00[0x1c / 4])(this);
+        ((void (__thiscall *)(void *, u32))m_vtbl00[0x1c / 4])(this, 0);
     }
     return 1;
 }
 
 // @ 0x00e186d0
-void cUIMissionCardPanel::OnNotify(u32 a, u32 b)
+void cUIMissionCardPanel::OnNotify(u32 a, u32 b, u32 c, u32 d)
 {
+    (void)c;
+    (void)d;
     ((void (__thiscall *)(void *))m_vtbl00[0x14 / 4])(this);
-    u32 r = ((u32 (__thiscall *)(void *, u32))m_vtbl00[0x30 / 4])(this, b);
-    u32 h1 = a;
-    u32 h2 = b;
-    (void)h1;
-    (void)h2;
+    u32 r = ((u32 (__thiscall *)(void *, u32))m_vtbl00[0x30 / 4])(this, a);
     u32 key0 = a;
     u32 key1 = 0x510a95b;
     u32 key2 = 0x40464100;
@@ -881,8 +889,10 @@ void cUIMissionCardPanel::OnNotify(u32 a, u32 b)
     void *raw = operator_new(0x18, 0x13f6b3c, 0, 0, 0, 0);
     void *obj = 0;
     if (raw != 0) {
-        obj = FUN_00810000(raw);
+        obj = ((void *(__thiscall *)(void *))FUN_00810000)(raw);
     }
+    m_field10 = a;
+    m_field14 = (void *)(unsigned long)b;
     void *old = m_layout;
     if (obj != old) {
         if (obj != 0) {
@@ -897,20 +907,29 @@ void cUIMissionCardPanel::OnNotify(u32 a, u32 b)
     k[0] = a;
     k[1] = 0x510a95b;
     k[2] = 0x40464100;
-    if (!FUN_008120d0(m_layout, k, true, 0x5b598fa)) {
-        FUN_00811ad0(m_layout, 1);
+    if (!((bool (__thiscall *)(void *, u32 *, bool, u32))FUN_008120d0)(m_layout, k, false, 0x5b598fa)) {
+        ((void (__thiscall *)(void *, u32))FUN_00811ad0)(m_layout, 1);
         if (m_layout != 0) {
             m_layout = 0;
             ((void (__thiscall *)(void *))(*(void ***)obj)[2])(obj);
         }
     }
-    FUN_008121b0(m_layout, (void *)r, true, 0x5b598fa);
-    FUN_00810590(m_layout, 0, 1);
-    void *w = FUN_008105b0(m_layout, (int)((u32 (__thiscall *)(void *, u32))m_vtbl00[0x34 / 4])(this, a), true);
+    ((bool (__thiscall *)(void *, void *, bool, u32))FUN_008121b0)(m_layout, (void *)r, true, 0x5b598fa);
+    ((void (__thiscall *)(void *, int))FUN_00810590)(m_layout, 0);
+    void *w = ((void *(__thiscall *)(void *, int, bool))FUN_008105b0)(
+        m_layout, (int)((u32 (__thiscall *)(void *, u32))m_vtbl00[0x34 / 4])(this, a), true);
     if (w != 0) {
         ((void (__thiscall *)(void *, void *))(*(void ***)w)[0x104 / 4])(w, (u8 *)this + 8);
     }
-    (void)r;
-    (void)key2;
+    void *oldCard = m_card;
+    if ((void *)r != oldCard) {
+        if (r != 0) {
+            ((void (__thiscall *)(void *))(*(void ***)r)[0])((void *)r);
+        }
+        m_card = (void *)r;
+        if (oldCard != 0) {
+            ((void (__thiscall *)(void *))(*(void ***)oldCard)[1])(oldCard);
+        }
+    }
 }
 
