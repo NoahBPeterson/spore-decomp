@@ -328,7 +328,17 @@ void __cdecl SetTimeMod(u32 a, u32 b, int c)
     float f = (float)((double)now / (double)freq);
     Vec4c t(f, kZero, kZero, kOne);
     Vec4 v = t;
-    DEV_SET(a, &v, 1);
+    // The device setters are __stdcall (their `this` is the first stack argument), so retail has no
+    // use for ECX and leaves the register index `a` there -- and that ECX is observed at the call
+    // through the generated vtable.  Call the slot with a __fastcall prototype: the first two
+    // arguments go to ECX/EDX, the rest are pushed in retail's order (device, reg, data, count).
+    typedef long (__fastcall* SetConstFn)(u32 reg, void* vtable, void* dev, u32 regArg,
+                                          const void* data, u32 count);
+    void* vt = *(void**)g_d3dDeviceP;
+    if (c)
+        (*(SetConstFn*)((char*)vt + 0x178))(a, vt, g_d3dDeviceP, a, &v, 1);
+    else
+        (*(SetConstFn*)((char*)vt + 0x1b4))(a, vt, g_d3dDeviceP, a, &v, 1);
 }
 
 // @ 0x011fb1c0
@@ -354,14 +364,17 @@ void __cdecl UnresolveTwo(u32 p, void* arenaHolder)
 void __cdecl NoOp() {}
 
 // @ 0x011fb230
-void __cdecl CalcLightRange(Vec4* v)
+// Retail keeps g_fogType in EAX from the entry load to the ret, so the function really returns it
+// (equiv treats a void body whose original writes EAX as an unknown-kind return and compares EAX).
+int __cdecl CalcLightRange(Vec4* v)
 {
-    if (g_fogType > 0) {
+    int ft = g_fogType;
+    if (ft > 0) {
         Vec4 t = *v;
-        if (g_fogType < 3) {
+        if (ft < 3) {
             t.x = g_fogStart * kLog2e;
             t.y = 0.0f;
-        } else if (g_fogType == 3) {
+        } else if (ft == 3) {
             t.x = kNegOne / (g_fogEnd - g_fogStart);
             *v = t;
             t.y = g_fogEnd / (g_fogEnd - g_fogStart);
@@ -369,11 +382,14 @@ void __cdecl CalcLightRange(Vec4* v)
         *v = t;
     }
 tail:
-    Vec4 u = *v;
-    u.z = 0.0f;
-    Vec4 w = u;
-    w.w = 1.0f;
-    *v = w;
+    {
+        Vec4 u = *v;
+        u.z = 0.0f;
+        Vec4 w = u;
+        w.w = kOne;                 // retail loads the 1.0f word from .rdata, not an immediate in a GPR
+        *v = w;
+    }
+    return ft;
 }
 
 extern const float kEpsilon;   // 0x14f8140 (FLT_EPSILON)
@@ -425,27 +441,36 @@ Mat4* __cdecl Matrix44Invert(Mat4* out, const Mat4* in)
 }
 
 // @ 0x011fb750  (inverse of a rigid matrix: transpose the 3x3, translation = -(t * R^T); w lanes kept)
-void __cdecl Matrix44InvertRigid(Mat4* out, const Mat4* in)
+// Retail loads `out` into EAX at entry and never rewrites it, so EAX at the ret is `out` (equiv
+// compares EAX of a void body whose original writes it): return it.
+Mat4* __cdecl Matrix44InvertRigid(Mat4* out, const Mat4* in)
 {
     float* o = &out->r[0].x;
     const float* m = &in->r[0].x;
     o[0] = m[0]; o[4] = m[1]; o[8] = m[2];
     o[1] = m[4]; o[5] = m[5]; o[9] = m[6];
     o[2] = m[8]; o[6] = m[9]; o[10] = m[10];
-    // translation = -(t . row_i), each dot product in SSE single precision as x*a + (y*b + z*c)
+    // translation = -(t . row_i), each dot product in SSE single precision as x*a + (y*b + z*c).
+    // Written out for rows 0..2: a loop leaves its trip count in EDX, a register the original never
+    // writes (an LTCG caller may keep a live value there).
     __m128 t = in->r[3].m;
     t = _mm_shuffle_ps(_mm_shuffle_ps(t, t, 0x10), t, 0x28);
     __m128 zero = _mm_setzero_ps();
-    for (int i = 0; i < 3; i++) {
-        __m128 r = in->r[i].m;
-        r = _mm_shuffle_ps(_mm_shuffle_ps(r, r, 0x10), r, 0x28);
-        __m128 p = _mm_mul_ps(t, r);
-        __m128 d = _mm_add_ps(p, _mm_add_ps(_mm_shuffle_ps(p, p, 1), _mm_shuffle_ps(p, p, 2)));
-        Vec4 row3;
-        row3.m = out->r[3].m;
-        (&row3.x)[i] = _mm_cvtss_f32(_mm_sub_ss(zero, d));
-        out->r[3].m = row3.m;
-    }
+    __m128 r0 = in->r[0].m, r1 = in->r[1].m, r2 = in->r[2].m;
+    r0 = _mm_shuffle_ps(_mm_shuffle_ps(r0, r0, 0x10), r0, 0x28);
+    r1 = _mm_shuffle_ps(_mm_shuffle_ps(r1, r1, 0x10), r1, 0x28);
+    r2 = _mm_shuffle_ps(_mm_shuffle_ps(r2, r2, 0x10), r2, 0x28);
+    __m128 p0 = _mm_mul_ps(t, r0), p1 = _mm_mul_ps(t, r1), p2 = _mm_mul_ps(t, r2);
+    __m128 d0 = _mm_add_ps(p0, _mm_add_ps(_mm_shuffle_ps(p0, p0, 1), _mm_shuffle_ps(p0, p0, 2)));
+    __m128 d1 = _mm_add_ps(p1, _mm_add_ps(_mm_shuffle_ps(p1, p1, 1), _mm_shuffle_ps(p1, p1, 2)));
+    __m128 d2 = _mm_add_ps(p2, _mm_add_ps(_mm_shuffle_ps(p2, p2, 1), _mm_shuffle_ps(p2, p2, 2)));
+    Vec4 row3;
+    row3.m = out->r[3].m;
+    row3.x = _mm_cvtss_f32(_mm_sub_ss(zero, d0));
+    row3.y = _mm_cvtss_f32(_mm_sub_ss(zero, d1));
+    row3.z = _mm_cvtss_f32(_mm_sub_ss(zero, d2));
+    out->r[3].m = row3.m;
+    return out;
 }
 
 // @ 0x011fb950
