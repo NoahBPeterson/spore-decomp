@@ -3,4 +3,4 @@
 006553b0  828  RefreshAssetStates: complete (all paths and calls); register allocation/frame (0x28 vs 0x10) and block layout differ
 00655840  531  SelectKey: complete; local layout, loop shape and sete/test idiom differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK after fixing the symbol mapping (symbols/slices had descriptions, not names, so the checker tested RefreshAssetStates in place of SelectKey)
 00655b00  800  AddEntries: complete; frame layout and loop shape differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK after fixing the symbol mapping (symbols/slices had descriptions, not names, so the checker tested RefreshAssetStates in place of AddEntries)
-00655ed0  690  Update: complete; frame layout / x87 fabs compare scheduling differ
+00655ed0  690  Update: complete; frame layout / x87 fabs compare scheduling differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (the FAIL was a checker artifact: a marker on the class declaration made find_symbol pick RefreshAssetStates; markers removed from declarations, replay now identical); src/game/SPEditors/SPUIAssetGrid.cpp copy also WEAK via symbols/slices exact name

@@ -295,10 +295,10 @@ struct cSPUIAssetGrid : GB0, GB1, GB2, GB3 {
     bool        mNeedsFocus;                      // +0x1e7
     bool        m1e8;                             // +0x1e8
 
-    void RefreshAssetStates();                                   // @ 0x006553b0
-    bool SelectKey(const Key* key, bool a, bool b, const Rect* rc);   // @ 0x00655840
-    void AddEntries(KeyVec* keys);                               // @ 0x00655b00
-    void Update(int arg);                                        // @ 0x00655ed0
+    void RefreshAssetStates();                                   // 0x006553b0
+    bool SelectKey(const Key* key, bool a, bool b, const Rect* rc);   // 0x00655840
+    void AddEntries(KeyVec* keys);                               // 0x00655b00
+    void Update(int arg);                                        // 0x00655ed0
     void UpdateAll();                                            // 0x0064ecc0
     void FUN_654d00();                                           // 0x00654d00
     void UpdateStatsText();                                      // 0x006528f0
