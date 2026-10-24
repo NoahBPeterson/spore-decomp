@@ -338,3 +338,114 @@ done:
         dB.w = -dB.w;
     }
 }
+
+// closest point between the (point, direction) segments segA/segB: out9[0..3] = closest point on A,
+// out9[4..7] = closestA - closestB, out9[8] = |diff|^2; returns the endpoint-clamp bits 1/2/4/8.
+extern "C" unsigned FUN_01105940(const float* segA, const float* dA,
+                                 const float* segB, const float* dB,
+                                 float* out9);
+
+// @ 0x01106f80
+extern "C" int hkCollideCapsuleManifoldCapsVsCapsTol(const hkVector4* capsA, float capsARadius,
+                                                     const hkVector4* capsB, float capsBRadius,
+                                                     float tolerance, hkContactPoint* pointsOut)
+{
+    // 16-byte aligned locals: the original's frame is `and esp,~15; sub esp,0x68`
+    hkVector4 dA;
+    dA.x = capsA[1].x - capsA[0].x;
+    dA.y = capsA[1].y - capsA[0].y;
+    dA.z = capsA[1].z - capsA[0].z;
+    dA.w = capsA[1].w - capsA[0].w;
+    hkVector4 dB;
+    dB.x = capsB[1].x - capsB[0].x;
+    dB.y = capsB[1].y - capsB[0].y;
+    dB.z = capsB[1].z - capsB[0].z;
+    dB.w = capsB[1].w - capsB[0].w;
+
+    struct Closest {
+        hkVector4 closestA;   // closest point on A
+        hkVector4 diff;       // closestA - closestB
+        float dist2;
+    };
+    Closest cl;
+    unsigned flags = FUN_01105940(&capsA[0].x, &dA.x, &capsB[0].x, &dB.x, (float*)&cl);
+
+    float radiusSum = tolerance + (capsARadius + capsBRadius);
+    if (radiusSum * radiusSum < cl.dist2)
+        return 1;
+
+    float dist = sqrtf(cl.dist2);
+    hkVector4& n0 = pointsOut[0].m_separatingNormal;
+
+    if (flags != 0) {
+        if (cl.dist2 > 0.0f) {
+            n0 = cl.diff;
+            goto normalize;
+        }
+    } else {
+        float cx = dB.z * dA.y - dB.y * dA.z;
+        float cy = dA.z * dB.x - dB.z * dA.x;
+        float cz = dB.y * dA.x - dA.y * dB.x;
+        if (cx * cx + (cy * cy + cz * cz) > HK_REAL_EPSILON) {
+            if (cx * cl.diff.x + (cy * cl.diff.y + cz * cl.diff.z) < 0.0f) {
+                cx = -cx;
+                cy = -cy;
+                cz = -cz;
+            }
+            n0.x = cx;
+            n0.y = cy;
+            n0.z = cz;
+            n0.w = 0.0f;
+            goto normalize;
+        }
+    }
+    {
+        // segments intersect: any normal perpendicular to A, built from the two axes that do not
+        // include A's smallest component
+        const float* dv = &dA.x;
+        float* nv = &n0.x;
+        float ax = fabsf(dA.x);
+        float ay = fabsf(dA.y);
+        float az = fabsf(dA.z);
+        bool b = ax <= ay;
+        float m = b ? ax : ay;
+        int i = !b;
+        int j = 2;
+        if (az < m) {
+            i = 2;
+            j = !b;
+        }
+        nv[i] = 0.0f;
+        float v = dv[j];
+        nv[3] = 0.0f;
+        nv[b] = v;
+        nv[j] = -dv[b];
+    }
+
+normalize:
+    {
+        // the squared length stays on the x87 stack: its exponent range covers the overflow a 32-bit
+        // store would turn into +inf (a 3.4e38 component squares to 1.2e77)
+        hkExtReal len2 = (hkExtReal)n0.z * n0.z + ((hkExtReal)n0.y * n0.y + (hkExtReal)n0.x * n0.x);
+        hkExtReal scale;
+        if (len2 == 0.0f)
+            scale = 0.0f;
+        else
+            scale = 1.0f / sqrt(len2);
+        n0.x = scale * n0.x;
+        n0.y = scale * n0.y;
+        n0.z = scale * n0.z;
+        n0.w = scale * n0.w;
+    }
+    {
+        hkVector4& p0 = pointsOut[0].m_position;
+        float s = capsBRadius - dist;
+        p0 = cl.closestA;
+        p0.x = s * n0.x + cl.closestA.x;
+        p0.y = s * n0.y + cl.closestA.y;
+        p0.z = s * n0.z + cl.closestA.z;
+        p0.w = s * n0.w + cl.closestA.w;
+        n0.w = dist - (capsARadius + capsBRadius);
+    }
+    return 0;
+}
