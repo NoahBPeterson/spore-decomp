@@ -1,0 +1,12 @@
+slices/s01064990/s01064990.cpp  ?Destroy_01064990@cEmpire@@QAEXXZ  01064990  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ?OnWinProcAdd_01064a00@cEmpire@@QAEXH@Z  01064a00  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ??0cEmpire@@QAE@XZ  01064a30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ??1cEmpire@@QAE@XZ  01064ac0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ?Assign_01064d80@cString12@@QAEXPBX0@Z  01064d80  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ?Ret_01065360@cEmpireC@@QAE_NHPAX@Z  01065360  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ?Swap_01065510@cString12@@QAEXPAV1@@Z  01065510  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ?ShowBakeTimeSplash_01065ab0@cSPUISpace@@QAEXXZ  01065ab0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ?HideBakeTimeSplash_01065af0@cSPUISpace@@QAEXXZ  01065af0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ?IsBakeSplashShown_01065b30@cSPUISpace@@QAE_NXZ  01065b30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ?HideStarPlanet_01065b60@@YGXPAXI@Z  01065b60  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s01064990/s01064990.cpp  ?GetTerrainIcon_01065ba0@CTerrainIconOwner@@QAEHH@Z  01065ba0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
