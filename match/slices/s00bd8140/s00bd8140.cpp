@@ -52,6 +52,23 @@ struct cTerraformingMgr
     int  TerraformCount();                              // 0x00bbe5f0 (thiscall)
 };
 
+// The trigger manager returned by FUN_00b3d4d0: current trigger mode at +0x2c.
+struct cTriggerMgr
+{
+    u8  pad00[0x2c];
+    int mMode2c;                                        // +0x2c
+};
+
+// One 0x80-byte entry of the range walked by FUN_00bd8480.
+struct Entry80
+{
+    u8    pad00[0x70];
+    void* mp70;                                         // +0x70
+    u8    pad74[0x78 - 0x74];
+    void* mp78;                                         // +0x78
+    u8    pad7c[0x80 - 0x7c];
+};
+
 // The civ record returned by cPlanet::GetCiv, and the planet itself (GetActivePlanet).
 struct cCivData
 {
@@ -549,11 +566,12 @@ void __fastcall FUN_00bd83c0(void** ecx_this, void* edx)
 void* __cdecl FUN_00bd8480(void* first, void* last, void* out)
 {
     while (first != last) {
-        void* p78 = *(void**)((char*)first + 0x78);
+        Entry80* e = (Entry80*)first;
+        void* p78 = e->mp78;
         if (p78 != 0) {
             (*(void(__fastcall**)(void*))(*(int*)p78 + 0xc0))(p78);
         }
-        void* p70 = *(void**)((char*)first + 0x70);
+        void* p70 = e->mp70;
         if (p70 != 0) {
             (*(void(__fastcall**)(void*))(*(int*)p70 + 0xc0))(p70);
         }
@@ -1115,8 +1133,8 @@ void __fastcall FUN_00bd9060(cCity* ecx_this, void* edx, IObj* other)
 {
     ecx_this->b2e3 = 0;
     FUN_00bebdd0(ecx_this->mp324, 0, (char*)other + 0xc4);
-    void* tm = FUN_00b3d4d0();
-    if (*(int*)((char*)tm + 0x2c) != 1 && *(int*)((char*)tm + 0x2c) != 2) {
+    cTriggerMgr* tm = (cTriggerMgr*)FUN_00b3d4d0();
+    if (tm->mMode2c != 1 && tm->mMode2c != 2) {
         void* r = FUN_00b3d480(ecx_this);
         (void)r;
         char g = FUN_00ac8d60(ecx_this, 0, other);
