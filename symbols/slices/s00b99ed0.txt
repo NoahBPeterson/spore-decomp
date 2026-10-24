@@ -1,1 +1,6 @@
 00b99ed0 CreateCivCity  # (req*, pos*, rot*) cdecl: makes the civ-mode city, labels the player civ from the species profile, calls be8680 to place it; returns the city
+00b9a4d0 cCityData::SelectAll  # iterates game-data nouns of type 0x36be27e, handles definition 0xd18d25cd, aligns/copies keys for matching city-data records
+00b9a5b0 FixedSlotVector::Init  # sets inline begin/end/capacity and initializes the storage allocator
+00b9a630 cCityData::Cleanup  # clears the +8 vector, releases +0x1c/+0x20 refs, frees +0x34/+0x54 and clears +0x2c/+0x30/+0x50
+00b9a750 cCityData::FindSpeciesArchetype  # species-archetype lookup through 0x168890c map, fallback vector query, returns object+0x504 and notifies ObjectTemplateDB
+00b9a8d0 FUN_00b9a8d0  # appends a 0x64-byte CityInfo to SimSingleton's vector and fills continent/npc/water/random/star fields
