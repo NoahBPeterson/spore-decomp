@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00896800/s00896800.cpp  ?ParseFontEffect@TextStyleReader@Text@EA@@QAE_NPAUTextStyle@23@@Z  00896800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Iscratch_s00880170_inc /Iscratch_s00894440_inc
+slices/s00896800/s00896800.cpp  ?Validate@FloatRange@@QAEMXZ  008975c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Iscratch_s00880170_inc /Iscratch_s00894440_inc
+slices/s00896800/s00896800.cpp  ?Store@ValueFlagPair@@QAEPAU1@PAX@Z  00897600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Iscratch_s00880170_inc /Iscratch_s00894440_inc
+slices/s00896800/s00896800.cpp  ?Set@TripleFloat@@QAEXMMM@Z  00897640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Iscratch_s00880170_inc /Iscratch_s00894440_inc
