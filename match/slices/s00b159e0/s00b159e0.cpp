@@ -285,9 +285,12 @@ void FUN_00b16490(float* v, float add)
     float len = sqrtf(z * z + (y * y + x * x));
     float inv = 1.0f / len;
     float s = len + add;
-    v[0] = x * inv * s;
-    v[1] = y * inv * s;
-    v[2] = z * inv * s;
+    float tx = x * inv;
+    float ty = y * inv;
+    float tz = z * inv;
+    v[0] = tx * s;
+    v[1] = ty * s;
+    v[2] = tz * s;
 }
 
 // @ 0x00b16520
