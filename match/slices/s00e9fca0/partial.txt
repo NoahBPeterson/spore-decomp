@@ -1,0 +1,1 @@
+00e9ff20 84 approximate: quadratic ease ((a-b)/(c-b))^2 with an inf/nan-prevention pow() branch; not byte-exact; equivalence FAIL (x87 return-stack depth differs - the pow() branch is reconstructed with the CRT pow(), which leaves two live x87 registers where the original's tail call to _CIpow (0x11e08f0) leaves one) so the reconstruction is not behaviourally verified

@@ -1,0 +1,5 @@
+slices/s00e9fca0/s00e9fca0.cpp  ?FUN_00e9fd70@@YIDPAUcAmbienceLayerManager@@PAX@Z  00e9fd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e9fca0/s00e9fca0.cpp  ?FUN_00e9fe40@@YI_NPAX0II@Z  00e9fe40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e9fca0/s00e9fca0.cpp  ?FUN_00e9ffb0@@YIXPAUcCityMusicEditor@@PAX1@Z  00e9ffb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e9fca0/s00e9fca0.cpp  ?FUN_00ea0350@@YAXPAPAX00@Z  00ea0350  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e9fca0/s00e9fca0.cpp  ?RecursiveButtonSelect@@YAXPAX0@Z  00ea03e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
