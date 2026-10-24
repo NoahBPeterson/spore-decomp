@@ -1,0 +1,14 @@
+00be0020 FUN_00be0020  # nonmatching: builds the candidate link list for a combat group; register allocation / x87-SSE scheduling differ
+00bdfd30 FUN_00bdfd30  # cCommunity bubble emission: AddSpecialBubbles + vt[0x8c] host pos, 5x BubbleVec::push_back of EmptyBubble{pos,8.0f,0}; nonmatching (inlined push_back scheduling)
+00bdff50 FUN_00bdff50  # cCommunity::EmitBubbleAt: GameTime query + IsPlayer, default bubble push_back then fill, else GetPlayerEmpireID/EndThisPlayer; nonmatching
+00be06c0 FUN_00be06c0  # cAnalysisOwner::AddAnalysis(record, int64 delta): push_back(record) then store Now()+delta at element+0x8; nonmatching
+00be0730 FUN_00be0730  # RefVec2::AddDefault: insert default 0xc-byte RefVecElem at end; nonmatching
+00be0790 FUN_00be0790  # IntMap::GetOrInsert(key): std::_Tree lower_bound + InsertNode, returns &node->value(+0x14); nonmatching
+00be0b90 FUN_00be0b90  # RebuildAnalysisFromStream(provider, vec): erase, read count, resize, per-element cVarListSerializer parse, close; nonmatching
+00be0c80 FUN_00be0c80  # RemoveItem(PtrVec2*, int**): linear scan + MoveOverlap shift + end release via vt[0x64]; complete, only register assignment differs (16 bytes)
+00be0d70 ??0InfoRec@@QAE@ABU0@@Z  # InfoRec copy ctor: Vec3 copy + inlined vector copy (DoAllocate 0x4aa350 + memcpy); nonmatching
+00be0dd0 FUN_00be0dd0  # CopyInfoRecs: forward uninitialized copy of 0x20-byte InfoRec via operator_new_simulator + memcpy; nonmatching
+00be0e80 ?CopyInfoRecsFwd@@YAPAUInfoRec@@PAU1@00@Z  # byte-exact: forward memberwise copy (Vec3 block move + FloatVec::operator=)
+00be0ed0 ?CopyInfoRecsBwd@@YAPAUInfoRec@@PAU1@00@Z  # byte-exact: backward memberwise copy (Vec3 block move + FloatVec::operator=)
+00be0f20 Simulator::cGameData::RemoveOwner  # clears two AutoRef vectors, releases m208 noun, clears spatial, tail-calls 0xbfc720; nonmatching
+00be0fc0 FUN_00be0fc0  # SimData::AddOwner: QueryInterface(0x137e8e0), dedupe, refcount add/release, push, then state/update; nonmatching

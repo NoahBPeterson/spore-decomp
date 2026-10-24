@@ -1,1 +1,3 @@
 # source  symbol  original VA
+slices/s00bdfd30/s00bdfd30.cpp  ?CopyInfoRecsFwd@@YAPAUInfoRec@@PAU1@00@Z  00be0e80  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
+slices/s00bdfd30/s00bdfd30.cpp  ?CopyInfoRecsBwd@@YAPAUInfoRec@@PAU1@00@Z  00be0ed0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast

@@ -1,2 +1,13 @@
 # va  diff-bytes  reason
 00be0020  1305  complete; register allocation (this/n/i), stack-slot layout and x87/SSE op scheduling in the normalize steps differ
+00bdfd30  689   complete; inlined BubbleVec push_back scheduling, host vt[0x8c] call setup and the four/temp bubble aggregate init differ
+00bdff50  147   complete; default-construct-then-fill bubble push_back, GameTime query/IsPlayer arg order and the EndThisPlayer tail differ
+00be06c0  95    complete; GameTimeManager->Now() 64-bit add placement vs the rep-movsd push_back and timestamp store differ
+00be0730  92    complete; the 0xc-byte RefVecElem aggregate construction feeding RefVec2::insert (insert path not taken here) differs
+00be0790  111   complete; MSVC std::_Tree lower_bound/insert internals (node layout, sentinel handling, InsertNode call) not reproduced exactly
+00be0b90  190   complete; stream acquisition via vt[0x20]->vt[0x18], erase/resize and the per-element serializer temp layout differ
+00be0c80  16    complete; identical size, only edx/ecx and esi/eax register assignment in the scan and the release tail differ
+00be0d70  78    complete; inlined vector copy (DoAllocate + memcpy) argument setup and register allocation differ
+00be0dd0  160   complete; per-element operator_new_simulator/memcpy path and register allocation differ
+00be0f20  133   complete; memcpy/erase arithmetic, AutoRef vector erase and the tail-call chain register allocation differ
+00be0fc0  228   complete; dedupe loop shape, inlined SPVector push_back vs SPVectorDoInsertPtr, and refcount call scheduling differ
