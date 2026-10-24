@@ -1,0 +1,1 @@
+00fc8330 15 complete 24-byte helper; reconstructed at 30 bytes (movzx/and/or instead of the original shr/mov al,cl peephole)

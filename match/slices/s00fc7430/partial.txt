@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00fc7430  1304  1304-byte weather/terrain update helper; not emitted (large game-logic function, opaque externs and many inlined fields)
+00fc7950  465  465-byte weather-manager teardown/reset (FUN_00fc6d10, globals, SP::CheatManager/SP::ModelManager); not emitted
+00fc7b30  415  415-byte SP::cWeatherManager::UpdateEffects; not emitted (large game-logic update with terrain/weather calls and vector compares)
+00fc81f0  318  symbol extent covers AVIStreamerParseFunc (272 B at 0xfc81f0) plus adjacent FUN_00fc8300 (46 B at 0xfc8300); cannot match as a single function body; not emitted

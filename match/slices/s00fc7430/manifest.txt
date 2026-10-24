@@ -1,0 +1,26 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00fc7430/s00fc7430.cpp  ?Shutdown@StreamA@@QAEXXZ  00fc7ce0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?SetStreamTapHandle@StreamA@@QAEXPAXH@Z  00fc7d20  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ??0StreamA@@QAE@PAX@Z  00fc7dd0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc7e60@StreamA@@QAEHXZ  00fc7e60  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc7e90@StreamA@@QAEIXZ  00fc7e90  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc7eb0@StreamA@@QAEIXZ  00fc7eb0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc7ec0@StreamA@@QAEXPAUAudioSamples@@@Z  00fc7ec0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ??0StreamC@@QAE@XZ  00fc7f30  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?GetCost@cBuilding@Simulator@@QAEMXZ  00fc7f80  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc7f90@StreamB@@QAEMXZ  00fc7f90  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?SetGain@StreamB@@QAEXM@Z  00fc8000  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc8040@StreamB@@QAEXXZ  00fc8040  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc8060@StreamB@@QAEXXZ  00fc8060  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ??0StreamB@@QAE@XZ  00fc8080  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc80b0@StreamB@@QAEXXZ  00fc80b0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc80f0@@YA_NPAPAIPAI1@Z  00fc80f0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc8120@@YA_NPAPAIPAI1@Z  00fc8120  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc8150@@YA_NPAPAEPAIPAUBlob38@@@Z  00fc8150  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc8180@@YA_NPAPAEPAIPAUBlob28@@@Z  00fc8180  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc81b0@@YA_NPAPAIPAIPAUBlob10@@@Z  00fc81b0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ??0StreamD@@QAE@XZ  00fc8350  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?Set@StreamE@@QAEXPAX0@Z  00fc8370  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?Get@StreamF@@QAEPAXXZ  00fc8380  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?SetBuffer@BufferedWriter@movie@rw@@QAEXPAXH@Z  00fc8390  /O2 /MD /Gy /TP /arch:SSE
+slices/s00fc7430/s00fc7430.cpp  ?Flush@Writer@@QAEXXZ  00fc83b0  /O2 /MD /Gy /TP /arch:SSE
