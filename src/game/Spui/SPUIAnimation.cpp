@@ -344,7 +344,7 @@ struct AnimatorS {
     char pad1[0xc];
     float mLast;    // +0x18
     bool  mActive;  // +0x1c
-    bool RemoveAnimation(void* obj, int type);
+    void RemoveAnimation(void* obj, int type);
     bool HasAnimation(void* obj, int type);
     bool Empty();
     void Update();
@@ -374,23 +374,24 @@ void* __cdecl CreateTimeDamped(void* out, float a2, float a3, float a4, float a5
 }
 
 // @ 0x007f6210
-bool AnimatorS::RemoveAnimation(void* obj, int type)
+// Declared void, not bool: retail leaves eax live at the ret (the caller's eax on the obj==0 arm,
+// the signed-division scratch of the re-evaluated loop bound otherwise). The original symbol is
+// bool, so equiv still compares eax&0xff; declaring a return type here would clobber that value.
+void AnimatorS::RemoveAnimation(void* obj, int type)
 {
-    if (obj == 0)
-        return false;
-    uint32_t n = (uint32_t)((mEnd - mBegin) / 0x88);
-    for (uint32_t i = 0; i < n; ++i) {
-        char* e = mBegin + i * 0x88;
-        if (*(void**)e == obj && (*(int*)(e + 4) == type || type == -1)) {
-            ((AnimFn1)*(void**)(e + 0xc))(e + 8, 0.0f, 0.0f, 1, 0);
-            void* r = *(void**)e;
-            if (r) {
-                *(void**)e = 0;
-                ((FV0)VTOBJ(r)[4 / 4])(r);
+    if (obj != 0) {
+        for (int i = 0; i < (int)((mEnd - mBegin) / 0x88); ++i) {
+            char* e = mBegin + i * 0x88;
+            if (*(void**)e == obj && (*(int*)(e + 4) == type || type == -1)) {
+                ((AnimFn1)*(void**)(e + 0xc))(e + 8, 0.0f, 0.0f, 1, 0);
+                void* r = *(void**)e;
+                if (r) {
+                    *(void**)e = 0;
+                    ((FV0)VTOBJ(r)[4 / 4])(r);
+                }
             }
         }
     }
-    return false;
 }
 
 // @ 0x007f62c0
