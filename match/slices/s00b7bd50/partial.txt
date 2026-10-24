@@ -3,5 +3,5 @@
 00b7c290  -  get-or-create path approximated (hashtable iterator/erase semantics inferred)
 00b7c360  -  0x54e8 hash lookup + transform copy approximated
 00b7c480  -  large inlined create-from-model path stubbed after the first branch
-00b7bd50  -  large item-refresh loop body stubbed (only control-flow skeleton)
+00b7bd50  -  large item-refresh loop body stubbed (only control-flow skeleton); the entry calls are now thiscalls on `this-4` (`SpawnerBase::sub_b77b60(table=this+0x2090,0,0)` then `sub_b7a880()`), matching the original's ecx=this-4 and 3/0 stack args [equiv WEAK, 400 inputs, 185 valid, 7.0% coverage, 0 mismatches; replay PASS]
 00b7c8e0  -  screen-position projection path incomplete (outX/outY computation omitted)

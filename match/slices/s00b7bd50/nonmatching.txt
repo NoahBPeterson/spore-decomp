@@ -2,5 +2,5 @@
 00b7c160  56   flag field tested as byte/updated via memory operands; cl kept the word in eax
 00b7c790  61   global pointer load scheduled after push esi (prologue ordering)
 00b7c890  52   loop iterator kept in ecx vs esi; non-tail call for the color update
-00b7c9c0  199  inlined base-class vtable-init ordering (two vptr stores) differs
+00b7c9c0  189  inlined base-class vtable-init ordering (two vptr stores) differs; the base-distance sqrt must not import the CRT: the original keeps the squared deltas/sum in x87 extended precision and inlines `fsqrt`, so the source computes the sum in double and takes it through an SSE2 `_mm_sqrt_pd` scalar (`sqrtpd`/`sqrtsd`, xmm0 only — the original never writes xmm1..7, while `sqrtf`+float conversion flushes zeroish sums to 0). Replay PASS [equiv PASS, 1200 inputs, 392 valid, 100.0% coverage]
 00b7cb20  258  cl promoted the float position deltas to double; x87/SSE mix differs

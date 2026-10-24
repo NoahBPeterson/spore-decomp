@@ -6,6 +6,7 @@ typedef unsigned short u16;
 typedef unsigned int   u32;
 
 extern "C" double sqrt(double);
+#include <emmintrin.h>
 
 static inline void Vv0(void* p, int slot) {
     ((void(__thiscall*)(void*))(*(void***)p)[slot / 4])(p);
@@ -200,8 +201,10 @@ extern "C" void  __cdecl sub_b3d250();
 extern "C" void  __cdecl sub_537dc0(void* a, void* b);
 extern "C" void  __cdecl sub_5f4e10(void* a, void* b, void* c);
 extern "C" void  __cdecl sub_b75240(void* a, void* b, int c);
-extern "C" void  __cdecl sub_b77b60(void* ctx, int a, int b, void* p);
-extern "C" void  __cdecl sub_b7a880(void* ctx);
+struct SpawnerBase {
+    void sub_b77b60(void* table, unsigned a, unsigned b);   // 0x00b77b60
+    void sub_b7a880();                                      // 0x00b7a880
+};
 extern "C" void* __cdecl sub_b74370(void* ctx);
 extern "C" void  __cdecl sub_478db0(void* a);
 extern "C" int   __cdecl sub_703d50(void* a, void* b, void* c);
@@ -471,8 +474,8 @@ void* cSPPieMenu::sub_b7c480(void* model) {
 void cSPPieMenu::sub_b7bd50(int a, int b) {
     (void)a; (void)b;
     char* base = (char*)this - 4;
-    sub_b77b60(base, 0, 0, (char*)this + 0x2090);
-    if (*(u8*)((char*)this + 0x1c) & 4) sub_b7a880(base);
+    ((SpawnerBase*)base)->sub_b77b60((void*)((char*)this + 0x2090), 0, 0);
+    if (*(u8*)((char*)this + 0x1c) & 4) ((SpawnerBase*)base)->sub_b7a880();
 
     RefObj** it = mpModelBegin;
     RefObj** end = mpModelEnd;
@@ -525,6 +528,8 @@ cPieMenuScreenPosition::cPieMenuScreenPosition(cSpatialObject* pObject) {
         float cam[3];
         viewer->GetCameraLocationInfo(cam, 0, 0, 0);
         float dx = cam[0] - px, dy = cam[1] - py, dz = cam[2] - pz;
-        mBaseDistance = (float)sqrt((double)(dx * dx + dy * dy + dz * dz));
+        double sum = (double)dx * dx + (double)dy * dy + (double)dz * dz;
+        __m128d sv = _mm_sqrt_pd(_mm_load_sd(&sum));
+        mBaseDistance = (float)_mm_cvtsd_f64(sv);
     }
 }
