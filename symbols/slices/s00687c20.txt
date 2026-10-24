@@ -1,1 +1,15 @@
-00687c20 ?ProfEnableAffinityMasks@SP@@YAXXZ  # ProfEnableAffinityMasks migrated from s00687c20 (verbatim, slice spelling)
+00687c20 SP::ProfEnableAffinityMasks  # pre-existing committed function (complete, nonmatching)
+006884f0 EntrySet  # g_entryVec entry write: FUN_00687bc0 clamp, set byte + a3, assign the two wstrings
+00688570 cRendererCheat::Execute  # PDB candidate (caller-scored); ArgScript "renderer" cheat
+006886b0 SP::GetDirFromID  # g_dirMap lookup, returns the wstring begin at node+0x14 or 0
+00688700 PairUW::PairUW  # pair<unsigned const,wstring> copy constructor
+00688760 PairUW::PairUW  # pair<unsigned const,wstring> (key,src) constructor
+006887c0 CloneBigPair  # operator new(0x24) + BigPair copy ctor (map node clone helper)
+00688830 SP::GetDirString  # g_dirMap lookup into a caller wstring, returns found flag
+00688ad0 DirMap::OpBr  # eastl::map<unsigned,wstring>::operator[] (insert-if-absent)
+00688bb0 SP::RegisterDirectory  # PDB candidate (caller-scored); normalise slashes and store in g_dirMap
+00688cb0 SP::GetDataDir  # map[] key 0xa02149 -> wstring begin
+00688cd0 SP::GetDir4a214a  # map[] key 0xa0214a -> wstring begin
+00688cf0 SP::GetDir4a2150  # map[] key 0xa02150 -> wstring begin
+00688d20 SP::RefObj688d20::Release  # refcount release (count at +0x18), vcall Destroy(1) at zero
+00688d50 SP::PostNewMessage6bbc90  # operator new(0x20) + FUN_006bbc90 then MessageServer PostMessage(0x24ce124)

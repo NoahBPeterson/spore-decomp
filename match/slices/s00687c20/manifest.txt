@@ -1,0 +1,11 @@
+# s00687c20 manifest
+slices/s00687c20/s00687c20.cpp  ?EntrySet@@YAXHEHPBUWStrRange@@0@Z  006884f0  /O2 /MD /Gy /TP /EHsc /GS-
+slices/s00687c20/s00687c20.cpp  ?Execute@cRendererCheat@@UAEXPAVcArguments@ArgScript@EA@@@Z  00688570  /O2 /MD /Gy /TP /EHsc /GS-
+slices/s00687c20/s00687c20.cpp  ?GetDirFromID@@YAPB_WI@Z  006886b0  /O2 /MD /Gy /TP /EHsc /GS-
+slices/s00687c20/s00687c20.cpp  ?GetDirString@@YA_NIPAUWStr@@@Z  00688830  /O2 /MD /Gy /TP /EHsc /GS-
+slices/s00687c20/s00687c20.cpp  ?RegisterDirectory@@YAXIPB_W@Z  00688bb0  /O2 /MD /Gy /TP /EHsc /GS-
+slices/s00687c20/s00687c20.cpp  ?GetDataDir@@YAPB_WXZ  00688cb0  /O2 /MD /Gy /TP /EHsc /GS-
+slices/s00687c20/s00687c20.cpp  ?GetDir4a214a@@YAPB_WXZ  00688cd0  /O2 /MD /Gy /TP /EHsc /GS-
+slices/s00687c20/s00687c20.cpp  ?GetDir4a2150@@YAPB_WXZ  00688cf0  /O2 /MD /Gy /TP /EHsc /GS-
+slices/s00687c20/s00687c20.cpp  ?Release@RefObj688d20@@UAEIXZ  00688d20  /O2 /MD /Gy /TP /EHsc /GS-
+slices/s00687c20/s00687c20.cpp  ?PostNewMessage6bbc90@@YAXPAX@Z  00688d50  /O2 /MD /Gy /TP /EHsc /GS-

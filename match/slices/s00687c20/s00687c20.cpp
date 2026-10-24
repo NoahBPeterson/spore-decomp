@@ -117,7 +117,7 @@ struct DirMap {
   char pad0[4];
   void Find(void** out, const unsigned* key);   // 0xe5c780 (hidden out-ptr)
   WStr* OpBr(const unsigned* key);              // @ 0x688ad0
-  IterPair Insert(void* pos, PairUW* p, int flags);  // 0x6889e0 (sret)
+  IterPair Insert(void* pos, PairUW* p, const void* keyTag);  // 0x6889e0 (sret)
 };
 extern DirMap g_dirMap;                          // 0x152ba34
 
@@ -303,13 +303,13 @@ PairUW::PairUW(const PairUW& o) : key(o.key), str(o.str.mpBegin, o.str.mpEnd) {}
 // @ 0x00688760
 PairUW::PairUW(const unsigned* k, const WStr& src) : key(*k), str(src.mpBegin, src.mpEnd) {}
 
-// @ 0x006887c0
 struct BigPair {
   char pad[0x10];
   PairUW pair;
   BigPair(const BigPair& o);
 };
 __declspec(noinline) BigPair::BigPair(const BigPair& o) : pair(o.pair) {}
+// @ 0x006887c0
 BigPair* CloneBigPair(const BigPair& o) {
   return new("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) BigPair(o);
 }
@@ -332,10 +332,9 @@ WStr* DirMap::OpBr(const unsigned* key) {
   }
   if (pos == anchor || *key < *(unsigned*)((char*)pos + 0x10)) {
     WStr tmp;
-    int flags = 0;
     PairUW p(key, tmp);
-    *(unsigned char*)&flags = 0;
-    IterPair res = Insert(pos, &p, flags);
+    const void* keyTag = (const void*)((uintptr_t)key & 0xffffff00u);
+    IterPair res = Insert(pos, &p, keyTag);
     pos = res.first;
   }
   return (WStr*)((char*)pos + 0x14);
