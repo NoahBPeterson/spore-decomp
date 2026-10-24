@@ -1,5 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2)
-00755570  77  complete behaviourally (vector fill/relocate via FUN_00429e00/FUN_006df700/FUN_0059c410); inlined helper scheduling differs; equiv FAIL (ours faults at 00429e1c where original returns normally)
+00755570  23  complete behaviourally (vector fill/relocate via FUN_00429e00/FUN_006df700/FUN_0059c410); inlined helper scheduling differs; equiv: PASS (395/600 valid, 100% coverage)
 007553c0  138  CS553::ctor553: complete; EH ctor + member-init AddRefs (m64 via +4, m68 via +0); EH state/register layout differs; equiv: PASS (399/400 valid, 100.0% coverage)
 00755470  130  CS553::dtor554: complete; EH dtor + DestroyRange/refcount teardown; scheduling differs; equiv: PASS (223/400 valid, 100.0% coverage)
 007555d0  533  CGMW::CacheGameModelToDiskJob_KDTree: complete; node/texture temp-vector gather/dedup uses a simplified list; equiv: WEAK (240/400 valid, 17.7% coverage)
