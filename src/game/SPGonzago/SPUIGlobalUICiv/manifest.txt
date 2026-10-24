@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ??4cClassInfo@@QAEAAU0@ABU0@@Z  00bab010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
