@@ -28,9 +28,18 @@ struct VectorIF {
     void DoInsertValues(PairIF* position, uint32_t n, const PairIF& value);   // @ 0x00530db0
 };
 
+// The returned iterator is eastl's generic_iterator wrapper, i.e. a non-POD class (it has its own
+// constructors), which is why the retail function returns it through a hidden pointer: at 0x0053120b
+// it stores the end iterator into `*(ebp+8)` and hands that pointer back in eax. A trivial one-member
+// struct here would be returned in eax instead (cl then returned the raw `dest` value).
+struct PairIter {
+    PairIF* p;
+    PairIter() : p(0) {}
+    PairIter(PairIF* q) : p(q) {}
+};
+
 // ---------------------------------------------------------------- @ 0x005311a0
 // uninitialized_copy: construct [first,last) into dest, returning the end iterator.
-struct PairIter { PairIF* p; };
 PairIter uninitialized_copy(PairIF* first, PairIF* last, PairIF* dest)
 {
     PairIF* p = dest;

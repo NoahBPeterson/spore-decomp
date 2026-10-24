@@ -1,5 +1,5 @@
 00530db0  507  vector DoInsertValues: reimplemented with plain copy loops (orig uses inlined memmove/fill helpers)
-005311a0  45   uninitialized_copy: generic_iterator temp slots missing (orig 122 vs mine 77)
+005311a0  121  uninitialized_copy: the loop is the retail one (while (first != last) { if (dest) *dest = *first; ++first; ++dest; }, then the end iterator goes into the hidden return slot). Equivalence now PASSES (319 valid inputs, 97.8% coverage); the old 6/6 FAIL was a return-convention bug -- PairIter was a trivial one-member struct, so cl returned it in eax and eax ended up as the raw `dest` pointer (orig eax=40020000 = the hidden slot, ours eax=40050000). The retail callee stores the iterator into *(ebp+8) and returns that pointer (0x0053120b), i.e. the type is eastl's non-POD generic_iterator, so PairIter now has its own constructors and is returned through the hidden pointer too. Residual /Od temp-slot scheduling only.
 00531270  20   cSPSkinPaintDistributeEffect ctor: /Od vtable-store temp slot schedule differs
 00531310  38   dtor: EH-free body but /Od temp slot schedule differs
 00531380  37   Clear: /Od temp slot schedule differs
