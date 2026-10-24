@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e02580/s00e02580.cpp  ?FUN_00e02900@UIThing@@QAEXXZ  00e02900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e02580/s00e02580.cpp  ?FUN_00e02950@UIThing@@QAEXXZ  00e02950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e02580/s00e02580.cpp  ?FUN_00e02a20@UIThing@@QAEXXZ  00e02a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e02580/s00e02580.cpp  ?FUN_00e02c40@@YAXXZ  00e02c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e02580/s00e02580.cpp  ?FUN_00e02c60@@YGXPAUElem24@@0@Z  00e02c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e02580/s00e02580.cpp  ?FUN_00e02cc0@@YAPAUElem24@@PAU1@00@Z  00e02cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e02580/s00e02580.cpp  ?FUN_00e02da0@@YAPAUElem24@@PAU1@00@Z  00e02da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e02580/s00e02580.cpp  ?FUN_00e02e80@UIThing@@QAEXXZ  00e02e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
