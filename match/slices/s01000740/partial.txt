@@ -1,0 +1,2 @@
+01000bb0 433   complete: dtor; two-level model-slot calls; equiv UNSUPPORTED (0/400 valid — harness cannot drive a faked teardown)
+01001360 810   incomplete: BuildStarRecords star-record vector/filter tail approximated; equiv UNSUPPORTED (0/400 valid)

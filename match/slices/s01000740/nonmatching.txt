@@ -1,0 +1,4 @@
+01000740 885   complete: ctor (StarPickingSpheres model world + property reads); equiv PASS, register/scheduling differences
+01000dc0 183   complete: UFO-noun tool-selection scan; equiv WEAK (need 200/60%), no mismatch observed
+01000eb0 476   complete: UpdateUFO target acquisition + tool use; equiv WEAK, no mismatch observed
+01001110 520   complete: Shutdown teardown; equiv WEAK, no mismatch observed
