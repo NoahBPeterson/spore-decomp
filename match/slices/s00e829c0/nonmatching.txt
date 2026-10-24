@@ -1,0 +1,21 @@
+00e82a10 464 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 451 bytes - large world fade/layout routine; body not reconstructed (source has a reduced equivalent), so code differs throughout.
+00e82be0 45 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 25 bytes - variant-context lookup in the false branch is not tail-called by MSVC and the pushed arg block is not hoisted identically.
+00e82c10 82 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 155 bytes - retail passes the four already-pushed arguments straight through to the second call (reusing the caller's stack args); C++ cannot express calling two different functions with one argument block.
+00e82c80 53 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 48 bytes - struct field layout of cEditorState guessed; retail copies a different field set/different widths.
+00e82cf0 28 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 17 bytes - controller lookup + flush forward; MSVC schedules the three argument pushes differently than retail.
+00e82d50 71 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 119 bytes - placement-push helper with two by-value 12-byte vectors; argument evaluation/stack block order differs.
+00e82de0 25 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 10 bytes - virtual property setter forward; virtual slot index/argument convention differs.
+00e82e00 561 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 560 bytes - large state-copy routine; body not reconstructed (reduced equivalent), code differs throughout.
+00e83040 339 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 339 bytes - large mode transition routine; body not reconstructed.
+00e831a0 41 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 38 bytes - layout key store; retail writes a different field set.
+00e831d0 376 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 376 bytes - identifier mapping routine; body not reconstructed (modelled as a small switch).
+00e83350 35 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 23 bytes - retail copies the three floats with fld/fstp while /fp:fast vectorises my struct copy into movq/mov.
+00e83380 99 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 94 bytes - entry search over a layout list not reconstructed (fields/stride guessed).
+00e833f0 53 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 35 bytes - double layout call; retail forwards to a different manager entry point.
+00e83430 54 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 54 bytes - world visibility predicate over a different object layout.
+00e83470 83 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 79 bytes - world mode predicate; object layout/call targets differ.
+00e834d0 179 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 172 bytes - state update routine; body not reconstructed.
+00e83590 164 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 161 bytes - state reset routine; body not reconstructed.
+00e83640 175 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 175 bytes - state setter routine; body not reconstructed.
+00e836f0 206 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 197 bytes - layout initialisation routine; body not reconstructed.
+00e837c0 332 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 324 bytes - float query routine; body not reconstructed.

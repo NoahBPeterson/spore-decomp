@@ -1,0 +1,8 @@
+slices/s00e829c0/s00e829c0.cpp  ?FUN_00e829c0@SP@@YAXI_N@Z  00e829c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e829c0/s00e829c0.cpp  ?FUN_00e82c70@SP@@YAXXZ  00e82c70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e829c0/s00e829c0.cpp  ?FUN_00e82cc0@SP@@YAEXZ  00e82cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e829c0/s00e829c0.cpp  ?FUN_00e82cd0@SP@@YAEXZ  00e82cd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e829c0/s00e829c0.cpp  ?FUN_00e82d10@SP@@YAXI@Z  00e82d10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e829c0/s00e829c0.cpp  ?FUN_00e82d30@SP@@YAXXZ  00e82d30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e829c0/s00e829c0.cpp  ?FUN_00e82d30@SP@@YAXXZ  00e82d40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00e829c0/s00e829c0.cpp  ?FUN_00e82d10@SP@@YAXI@Z  00e82dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
