@@ -1,8 +1,8 @@
 # va  diff-bytes  reason
-0112ebf0  525  WAVE decode-buffer/timer setup: complete; /LTCG register/inline scheduling; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (0/400 valid; original faults on garbage buffers)
+0112ebf0  636  WAVE decode-buffer/timer setup: complete; object kept as char* (its +0xa0 decoder id, +0xac decoder and +0xc8 buffer are dereferenced); six float->int conversions use the round-to-nearest cvtss2si helper (retail never truncates); vtable slot +8 called as a thiscall member (retail has no `add $0x4,%esp` after it); decoder ctors are thiscall members; channel-order loop re-reads the count at +0x8e each iteration like retail; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (154 valid < 200; 87.8% cov)
 0112eeb0  338  WAVE packet submit (main): complete; id-slot match + vtable slot0/slot1 submit + SNDPKTPLAY packet (count@+4, offsets@+0xc); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (297 valid, 87.1% cov)
 0112f080  35  set plug-in parameter from scaled float: complete; round-to-nearest cvtss2si asm helper; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (369 valid, 100% cov)
-0112f0f0  71  stop playback with current gain: complete; cvtss2si round; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (400 valid, 100% cov)
+0112f0f0  71  stop playback with current gain: complete; cvtss2si round; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv FAIL (5/5 valid, 100% cov, only mismatch `edx (untouched by the original)`): cl reloads the asm helper's conversion result through its memory home into edx whereas retail keeps it in eax; every intrinsic spelling adds an aligned frame and still uses edx
 0112f130  142  WAVE player shutdown/release: complete; /LTCG scheduling; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (375 valid, 81.3% cov)
 0112f230  54  set plug-in parameter from float: complete; cvtss2si round; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (400 valid, 100% cov)
 0112f2d0  60  playback progress: complete; x87 float division (this TU is x87, not SSE); flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov)

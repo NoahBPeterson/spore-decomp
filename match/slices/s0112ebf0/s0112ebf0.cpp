@@ -49,6 +49,21 @@ struct SndPlayer
     virtual void SubmitOffsets(unsigned* offsets, unsigned blocks);           // vt[1]
 };
 
+// The decoder object parked in the player's +0xac. Its three arms build it in place
+// (__thiscall constructors taking the object in ecx) and the shared tail calls vt[2]
+// with one stack argument. Retail's call site `mov 0xac(%esi),%ecx; mov (%ecx),%edx;
+// mov 0x8(%edx),%eax; push %ebp; call *%eax` is followed by no `add $0x4,%esp`, i.e. the
+// slot pops its own argument -- a member function, not a cdecl function pointer.
+class Decoder
+{
+public:
+    virtual void v0();                 // vt[0]
+    virtual void v1();                 // vt[1]
+    virtual void v2(void* cfg);        // vt[2] (+0x8)
+    Decoder* CtorB00();                // 0x0113fb00
+    Decoder* CtorA50();                // 0x0113fa50
+};
+
 // SNDPKTPLAY_submit reads count at +4 and the per-channel offset table at +0xc.
 struct SndPacket
 {
@@ -86,7 +101,7 @@ void  SNDPKTPLAY_submit(int a, void* b);           // external
 extern const unsigned char g_channelOrder[]; // 0x014cafd2
 
 // @ 0x0112ebf0 -- WAVE decode-buffer/timer setup (called from the player init).
-void FUN_0112ebf0(int p)
+void FUN_0112ebf0(char* p)
 {
     u32 uVar4 = (u32)FUN_0113f1c0(0xc);
     u8* puVar1 = (u8*)(p + 0x18);
@@ -108,7 +123,7 @@ void FUN_0112ebf0(int p)
     *(int*)(p + 0xf4) = 0;
     *(int*)(p + 0xe4) = 0;
 
-    uVar4 = FUN_0113f1d0((void*)&FUN_0112eb70, 0, p, p + 0xf8, uVar4);
+    uVar4 = FUN_0113f1d0((void*)&FUN_0112eb70, 0, (int)p, (int)(p + 0xf8), uVar4);
     *(int*)(p + 0xa0) = (int)uVar4;
     *(u8*)(p + 0x8f) = 8;
     *(u16*)(p + 0x8c) = *(u16*)(p + 0xbc);
@@ -116,16 +131,22 @@ void FUN_0112ebf0(int p)
     *(short*)(p + 0xc2) = (short)(*(short*)(p + 0xc2) / *(short*)(p + 0xc0));
     *(u8*)(p + 0x8e) = *(u8*)(p + 0xc0);
 
-    *(char*)puVar1 = (char)(int)(**(f32**)(p + 0x14) * 127.0f);
-    *(short*)(p + 0x20) = (short)(int)(*(f32*)(*(int*)(p + 0x14) + 4) * 4096.0f);
-    *(char*)(p + 0x1b) = (char)(int)(*(f32*)(*(int*)(p + 0x14) + 8) * 127.0f);
-    *(short*)(p + 0x24) = (short)(int)(*(f32*)(*(int*)(p + 0x14) + 0x10));
-    *(short*)(p + 0x26) = (short)(int)(*(f32*)(*(int*)(p + 0x14) + 0x14));
-    *(char*)(p + 0x1c) = (char)(int)(**(f32**)(*(int*)(p + 0x14) + 0xc) * 127.0f);
+    // Retail converts every one of these floats with `cvtss2si` (round to nearest), never
+    // the truncating `cvttss2si` a plain (int) cast emits, so six negative values came out
+    // one step low with the cast.
+    *(char*)puVar1 = (char)RoundToInt(**(f32**)(p + 0x14) * 127.0f);
+    *(short*)(p + 0x20) = (short)RoundToInt(*(f32*)(*(int*)(p + 0x14) + 4) * 4096.0f);
+    *(char*)(p + 0x1b) = (char)RoundToInt(*(f32*)(*(int*)(p + 0x14) + 8) * 127.0f);
+    *(short*)(p + 0x24) = (short)RoundToInt(*(f32*)(*(int*)(p + 0x14) + 0x10));
+    *(short*)(p + 0x26) = (short)RoundToInt(*(f32*)(*(int*)(p + 0x14) + 0x14));
+    *(char*)(p + 0x1c) = (char)RoundToInt(**(f32**)(*(int*)(p + 0x14) + 0xc) * 127.0f);
 
-    u8 bVar2 = *(u8*)(p + 0x8e);
-    for (int i = 0; i < (int)bVar2; ++i)
-        *(short*)(p + 0x30 + i * 2) = (u16)(g_channelOrder[i + (u32)bVar2 * 6] << 8);
+    // Retail re-reads the channel count from +0x8e on every iteration (`movzbl 0x8e(%esi),%edx`
+    // at the bottom of the loop) while the 6*count table offset is hoisted once, so a count
+    // that the destination array overlaps terminates the loop early. Taking a local copy ran
+    // a full count and wrote over +0xa0 (the decoder id) with channel data.
+    for (int i = 0; i < (int)*(u8*)(p + 0x8e); ++i)
+        *(short*)(p + 0x30 + i * 2) = (u16)(g_channelOrder[i + (u32)*(u8*)(p + 0x8e) * 6] << 8);
 
     uVar4 = FUN_0113f250(*(u32*)(p + 0xa0), (void*)(p + 0x8c), (void*)(p + 0x28), puVar1);
     *(int*)(p + 0xa4) = (int)uVar4;
@@ -133,50 +154,46 @@ void FUN_0112ebf0(int p)
     if (*(int*)(p + 0xc) == 1)
         FUN_0113fba0(uVar4, 0);
 
+    // Switch on the decoder kind. Only the arms that picked a decoder store it into +0xac
+    // (0x112ee59 `mov %eax,0xac(%esi)`); kind 1 and any other value jump straight to the
+    // shared tail at 0x112ee5f, which used to be modelled as storing uVar4 again -- that
+    // wrote the SNDPKTPLAY_start result (often 0xfffffff6) into +0xac and then dereferenced
+    // it, faulting where retail calls through whatever the caller had left there.
     short sVar3 = *(short*)(p + 0xc2);
-    if (sVar3 == 1) goto LAB_ee5f;
-    if (sVar3 == 2)
+    if (sVar3 != 1)
     {
-        int iVar5 = FUN_011402c0(0x18);
-        if (iVar5 == 0) { uVar4 = 0; }
-        else { uVar4 = FUN_0113fb00(); }
+        if (sVar3 == 2)
+        {
+            int iVar5 = FUN_011402c0(0x18);
+            if (iVar5 == 0) uVar4 = 0;
+            else uVar4 = (u32)((Decoder*)iVar5)->CtorB00();
+        }
+        else if (sVar3 == 3)
+        {
+            int iVar5 = FUN_011402c0(0x18);
+            if (iVar5 == 0) uVar4 = 0;
+            else uVar4 = (u32)((Decoder*)iVar5)->CtorA50();
+        }
+        else
+        {
+            goto LAB_ee5f;
+        }
+        *(int*)(p + 0xac) = (int)uVar4;
     }
-    else if (sVar3 == 3)
-    {
-        int iVar5 = FUN_011402c0(0x18);
-        if (iVar5 == 0) goto LAB_ee57;
-        uVar4 = FUN_0113fa50();
-    }
-    else
-    {
-        goto LAB_ee5f;
-    }
-    *(int*)(p + 0xac) = (int)uVar4;
-    {
-        int vt = *(int*)(p + 0xac);
-        (*(void(**)(void*))(*(int*)vt + 8))((void*)(p + 0xc0));
-    }
+LAB_ee5f:
+    ((Decoder*)*(int*)(p + 0xac))->v2((void*)(p + 0xc0));
     {
         u32 uVar7 = *(u32*)(p + 0xa8);
         int iVar5 = 0, iVar8 = 0;
         do
         {
             if ((u32)(*(int*)(p + 0x98) - iVar8) <= uVar7) return;
-            FUN_0112eab0(p);
+            FUN_0112eab0((int)p);
             uVar7 = *(u32*)(p + 0xa8);
             *(int*)(p + 0x9c) += uVar7;
             ++iVar5;
             iVar8 += uVar7;
         } while (iVar5 < 4);
-    }
-    return;
-LAB_ee57:
-    *(int*)(p + 0xac) = 0;
-LAB_ee5f:
-    *(int*)(p + 0xac) = (int)uVar4;
-    {
-        int vt = *(int*)(p + 0xac);
-        (*(void(**)(void*))(*(int*)vt + 8))((void*)(p + 0xc0));
     }
     return;
 }
@@ -248,7 +265,12 @@ int FUN_0112f0c0(int p)
 // @ 0x0112f0f0 -- stop playback (state 0) with the current gain.
 int FUN_0112f0f0(int p, int obj)
 {
-    FUN_0113fba0(*(u32*)(obj + 0xa4), RoundToInt(*(f32*)(p + 4) * 4096.0f));
+    // Same round-to-nearest conversion as retail (cvtss2si, not the truncating cast a plain
+    // (int) emits) and the same call arguments/order; the only codegen difference left is
+    // that cl reloads the conversion result through its memory home into edx, while retail
+    // (an LTCG build) keeps it in eax -- see docs/Papercuts.md "Register footprint".
+    int gain = RoundToInt(*(f32*)(p + 4) * 4096.0f);
+    FUN_0113fba0(*(u32*)(obj + 0xa4), gain);
     *(int*)(obj + 0xc) = 0;
     return 0;
 }
