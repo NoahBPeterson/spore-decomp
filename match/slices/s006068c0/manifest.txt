@@ -21,3 +21,4 @@ slices/s006068c0/s006068c0.cpp  ?find@?$basic_string@D@eastl@@QBEIDI@Z  00607580
 slices/s006068c0/s006068c0.cpp  ?HandleResults@cConnectingDialog@  006075c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s006068c0/s006068c0.cpp  ?OnTick@cConnectingDialog@  00607630  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s006068c0/s006068c0.cpp  ?ShowLogin@cAuthManager@Pollen@SP@@UAEXXZ  006077f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s006068c0/s006068c0.cpp  ?ScalarDeletingDtor@cAuthMessage@@QAEPAXI@Z  00606f30  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

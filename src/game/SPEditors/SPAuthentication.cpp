@@ -35,6 +35,7 @@ extern "C" __declspec(dllimport) int __cdecl tolower(int c);
 #define PV(n) virtual void pv##n();
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
 void operator delete[](void* p);
+void operator delete(void* p);
 inline void* operator new(size_t, void* p) { return p; }
 struct ResourceKey {
   uint32_t mInstance;  // +0x0
@@ -462,8 +463,11 @@ class IUnknownCast {
 };
 }
 }
+// Retail's scalar deleting dtor stores no vtable pointer before deleting, so cl's generated ??_G
+// (which always writes [this] = vftable) cannot be used; it is written out as the equivalent
+// thiscall member: ecx = this, one flags argument, returns this in eax.
 struct cAuthMessage {
-  virtual ~cAuthMessage();
+  void* ScalarDeletingDtor(unsigned flags);
 };
 // ---- items of slice s006068c0 end
 
@@ -1824,8 +1828,11 @@ int CompareI(const char* p1, const char* p2, size_t n)
 }  // namespace eastl
 
 // @ 0x00606f30
-cAuthMessage::~cAuthMessage()
-{}
+void* cAuthMessage::ScalarDeletingDtor(unsigned flags)
+{
+  if (flags & 1) operator delete(this);
+  return this;
+}
 
 // @ 0x00606f60
 namespace SP { namespace Pollen {

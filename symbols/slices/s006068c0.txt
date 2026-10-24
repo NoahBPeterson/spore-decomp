@@ -6,7 +6,7 @@
 00606de0 ?SetLoginDialogVisible@cAuthManager_s0060_68c0@Pollen@SP@@UAEX_N@Z  # cAuthManager_s0060_68c0::SetLoginDialogVisible migrated from s006068c0 (verbatim, slice spelling)
 00606e60 ?make_upper@?$basic_string_s0060_68c0@_W@eastl@@QAEXXZ  # make_upper migrated from s006068c0 (verbatim, slice spelling)
 00606ea0 ?CompareI@eastl@@YAHPBD0I@Z  # CompareI migrated from s006068c0 (verbatim, slice spelling)
-00606f30 ??1cAuthMessage@@UAE@XZ  # cAuthMessage::~cAuthMessage migrated from s006068c0 (verbatim, slice spelling)
+00606f30 ?ScalarDeletingDtor@cAuthMessage@@QAEPAXI@Z  # cAuthMessage scalar deleting dtor, written out (the compiler-generated ??_G adds a vptr store retail does not have)
 00606f60 ?IsReturnKey@cLoginHelpDialog@?A0x2dae62f7@Pollen@SP@@QAE_NPAX0H0@Z  # IsReturnKey migrated from s006068c0 (verbatim, slice spelling)
 00606f80 ?end_dialog@cConnectingDialog@?A0x2dae62f7@Pollen@SP@@QAEX_N@Z  # end_dialog migrated from s006068c0 (verbatim, slice spelling)
 00607050 ?Init@cOfflineConfirmationDialog@?A0x2dae62f7@Pollen@SP@@QAE_NXZ  # Init migrated from s006068c0 (verbatim, slice spelling)

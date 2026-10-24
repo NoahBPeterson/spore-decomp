@@ -10,6 +10,7 @@ typedef unsigned int size_t;
 
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
 void operator delete[](void* p);
+void operator delete(void* p);
 inline void* operator new(size_t, void* p) { return p; }
 
 extern "C" __declspec(dllimport) int __cdecl toupper(int c);
@@ -752,9 +753,14 @@ void cAuthManager::ShowLogin() {
 }  // namespace SP
 
 // @ 0x606f30
-// The original's scalar deleting dtor has no vptr store (likely a novtable interface);
-// declaring it novtable here suppresses the emission entirely, so it stays ordinary.
+// Retail's scalar deleting dtor stores no vtable pointer before deleting (a class whose vtable is
+// never materialised in this object), so cl's generated ??_G -- which always writes `[this] = vftable`
+// -- cannot be used.  Written out as the equivalent thiscall member: ecx = this, one flags
+// argument, returns this in eax.
 struct cAuthMessage {
-  virtual ~cAuthMessage();
+  void* ScalarDeletingDtor(unsigned flags);
 };
-cAuthMessage::~cAuthMessage() {}
+void* cAuthMessage::ScalarDeletingDtor(unsigned flags) {
+  if (flags & 1) operator delete(this);
+  return this;
+}
