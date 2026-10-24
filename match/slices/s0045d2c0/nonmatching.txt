@@ -1,5 +1,5 @@
-0045d3e0  717  recursive Collada <node> writer; local slot layout / expression scheduling differs
-0045d6f0  14  SSO string ctor; frame size and one dead local slot differ
+0045d3e0  616  recursive Collada <node> writer. Fixed the Matrix44 default-ctor reference (mapped ??0Matrix44@@QAE@XZ to the original's empty ctor at 0x402ab0; the annotation match had bound it to the 0x45dca0 copy ctor and the replay faulted there) and corrected the 16 matrix arguments to the original column-major order (m[0],m[4],m[8],m[12],...). Replay matches the one 0x402ab0 call with no memory/return difference; fresh equiv WEAK 335 valid, 11.4% coverage (recursive budget) with no mismatches. Remaining 616 bytes are the original's runtime row/col index arithmetic vs our direct fld offsets (419 vs 717).
+0045d6f0  12  SSO string ctor. Fixed InitHelper's argument: the callee copies *(arg+4) to BigStr+0x10, and the old uninitialised void* tmp made arg+4 land on the saved EBP (wrote 0x0e0b0e0b instead of the buffer pointer). Replaced it with a named 8-byte descriptor whose +4 holds this+0x14, so +0x10 is correct. Replay matches; fresh equiv PASS 400/400, 100% coverage. Remaining 12 diff bytes are the frame (0xc vs 0x10, one dead slot); size 85 vs 85.
 0045d790  698  vector<Elem(0x40)>::assign; EASTL grow/shrink scheduling differs
 0045daf0  3  vector deallocate (8-byte elems); slot order of the deallocate argument temp
 0045db40  3  vector deallocate (0x40-byte elems); slot order of the deallocate argument temp; equiv PASS (933 valid, 100% cov)

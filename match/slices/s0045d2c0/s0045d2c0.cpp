@@ -217,11 +217,19 @@ struct BigStr {
     BigStr* Ctor();
 };
 
+// InitHelper's argument is an 8-byte descriptor: it copies the pointer in
+// the second field to BigStr+0x10.  Keep the first field uninitialised, as
+// the original caller does; only the buffer pointer at +4 is meaningful.
+struct BigStrInit {
+    void* unused;   // +0
+    char* buf;      // +4
+};
+
 BigStr* BigStr::Ctor()
 {
-    char* b = (char*)this + 0x14;
-    void* tmp;
-    InitHelper(&tmp);
+    BigStrInit init;
+    init.buf = (char*)this + 0x14;
+    InitHelper(&init);
     end = (char*)this + 0x14;
     begin = end;
     cap = begin + 0x300;
@@ -267,10 +275,10 @@ void WriteNode(int out, char** names, int* parents, Matrix44* mats,
                   names[i], i, names[i], i, names[i], i);
         VecWriterLines(out, depth);
         WriterFmt(out, "  <matrix>%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f</matrix>\n",
-                  tmp.m[0], tmp.m[1], tmp.m[2], tmp.m[3],
-                  tmp.m[4], tmp.m[5], tmp.m[6], tmp.m[7],
-                  tmp.m[8], tmp.m[9], tmp.m[10], tmp.m[11],
-                  tmp.m[12], tmp.m[13], tmp.m[14], tmp.m[15]);
+                  tmp.m[0], tmp.m[4], tmp.m[8], tmp.m[12],
+                  tmp.m[1], tmp.m[5], tmp.m[9], tmp.m[13],
+                  tmp.m[2], tmp.m[6], tmp.m[10], tmp.m[14],
+                  tmp.m[3], tmp.m[7], tmp.m[11], tmp.m[15]);
         WriteNode(out, names, parents, mats, count, (int)i, depth + 1);
         VecWriterLines(out, depth);
         WriterStr(out, "</node>\n");

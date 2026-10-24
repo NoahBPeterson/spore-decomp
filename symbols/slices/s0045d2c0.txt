@@ -1,0 +1,2 @@
+# va  Name  # evidence
+00402ab0  ??0Matrix44@@QAE@XZ  # Matrix44 default ctor (empty, returns this); original 0x45d3e0 calls it once at entry
