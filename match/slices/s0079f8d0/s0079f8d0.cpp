@@ -13,10 +13,6 @@
 typedef unsigned int uint;
 typedef unsigned char uchar;
 
-// 0x11e0744 is the CRT byte-range copy thunk the 0x14-byte element vectors use for
-// their prefix/suffix moves in the grow path.
-extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, uint32_t);
-
 // ---------------------------------------------------------------------------
 // types
 // ---------------------------------------------------------------------------
@@ -111,27 +107,8 @@ struct Tc {
   void  m_0079f4e0(int a, int b);                // push_back (2 stack args)
   int   m_0079ae00(int n, int a, int b);         // allocate n (3 stack args, ret 0xc)
   void  m_0079b0d0(int a, int b);                // destroy range (2 stack args)
-  // --- free cdecl helpers: all arguments on the stack, no ecx ---
-  void  m_0079a710(int a, int b, int c, int d, int e);
-  void  m_0079a800(int a, int b, int c, int d);
-  void  m_0079a8f0(int a, int b, int c);
-  void  m_0079aaa0(int a, int b, int c);
-  int   m_0079ab00(int a, int b, int c);
-  void  m_0079ab40(int a, int b, int c);
-  void  m_0079b150(int a);
-  void  m_0079b190(int a, int b, int c);
-  void  m_0079b1c0(int a, int b, int c, int d);
-  void  m_0079b2a0(int a, int b, int c, int d);
-  void  m_0079b470(int a, int b, int c);
-  void  m_0079b6b0(int a, int b);
-  int   m_0079f730(int a, int b, int c);         // returns dst
-  void  m_0079f770(int a, int b, int c);
-  void  m_01023030(int a, int b);                // destroy [a,b) 0x14-elements (thiscall)
-  void  m_0079f7b0(int a);
-  void  m_0079fcc0(int a, int b, int c);
-  void  m_0799dc0(int a, int b, int c);
-  void  m_0799d60(int a, int b, int c);
-  int   m_00424cf0(int src, int nbytes);   // thiscall DoInsertValue: move nbytes to `this`
+  void  m_01023030(int a, int b);                // destroy [a,b) 0x14-elements (2 stack args)
+  int   m_00424cf0(int src, int nbytes);         // DoInsertValue: move nbytes to `this`
   // --- direct thiscall helpers on the target objects ---
   void  m_0537dc0(void* a);                 // cSPTransform::operator= (1 stack arg)
   void  m_07993a0();                        // cSplitInstance() (0 stack args)
@@ -142,16 +119,33 @@ struct Tc {
   void  m_0079fa70(int pos, int n, int value);
   __declspec(noinline) void m_007a0010(int n);
   void  m_007a0110(void* pos, int n, void* value);
-  void  m_007a0460(void* other);
+  void* m_007a0460(void* other);
   void  m_007a0600(void* pos, void* value);
   int   m_0079ff40(void* src);
 };
+
+// --- free cdecl helpers: all arguments on the stack, no ecx, caller cleans ---
+void  FUN_0079a710(int a, int b, int c, int d, int e);
+void  FUN_0079a800(int a, int b, int c, int d);
+void  FUN_0079a8f0(int a, int b, int c);
+void  FUN_0079aaa0(int a, int b, int c);
+int   FUN_0079ab00(int a, int b, int c);
+void  FUN_0079ab40(int a, int b, int c);
+void  FUN_0079b150(int a);
+void  FUN_0079b190(int a, int b, int c);
+void  FUN_0079b1c0(int a, int b, int c, int d);
+void  FUN_0079b2a0(int a, int b, int c, int d);
+void  FUN_0079b470(int a, int b, int c);
+int   FUN_0079f730(int a, int b, int c);         // returns dst
+void  FUN_0079f770(int a, int b, int c);
+void  FUN_0079fcc0(int a, int b, int c);
+void  FUN_0799dc0(int a, int b, int c);
 
 // cdecl callees
 extern "C" void* operator_new(unsigned int size, const char* area, int a, int b,
                               const char* allocatorPath, int line);   // 0x00f473a0
 extern "C" void  operator_delete(void* p);                            // 0x00f47380
-extern "C" void* memmove_(void* dst, const void* src, unsigned int n); // 0x011e0744
+void* FUN_011e0744(void* dst, const void* src, unsigned int n);       // 0x011e0744 byte-range copy
 extern "C" const char g_allocatorPath[];                              // 0x013eb8a4
 extern "C" const char g_allocatorFile[];                              // 0x013ebb38
 
@@ -192,8 +186,8 @@ void Tc::m_0079f8d0(int firstArg, int lastArg) {
     else { cap = units * 2; if (cap == 0) cap = 0; }
     char* nb;
     if (cap == 0) nb = 0;
-    else nb = (char*)operator_new(cap * 0x78, "Graphics", 0, 0, g_allocatorPath, 0xd1);
-    ((Tc*)0)->m_0799dc0((int)v->mpBegin, (int)first, (int)nb);   // uninitialized_move [begin,first)
+    else nb = (char*)operator_new(cap * 0x78, "Graphics", 0, 0, g_allocatorFile, 0xd1);
+    FUN_0799dc0((int)v->mpBegin, (int)first, (int)nb);   // uninitialized_move [begin,first)
     char* p = first;
     if (p != nb) { /* (only used for its side effect) */ }
     // the destination of the moved prefix is nb; the new element goes after it
@@ -203,7 +197,7 @@ void Tc::m_0079f8d0(int firstArg, int lastArg) {
       ((Tc*)(dst + 4))->m_0799450(last + 4);                     // cSplitInstance copy ctor
     }
     char* moved = dst + 0x78;
-    ((Tc*)0)->m_0799dc0((int)first, (int)v->mpEnd, (int)moved);  // uninitialized_move [first,end)
+    FUN_0799dc0((int)first, (int)v->mpEnd, (int)moved);  // uninitialized_move [first,end)
     if (spNeedsDelete(v->mpBegin)) operator_delete(v->mpBegin);
     v->mpEnd = moved + ((char*)v->mpEnd - first);
     v->mpBegin = nb;
@@ -215,7 +209,7 @@ void Tc::m_0079f8d0(int firstArg, int lastArg) {
     *(int*)end = *(int*)(end - 0x78);
     ((Tc*)(end + 4))->m_0799450(end - 0x74);
   }
-  ((Tc*)0)->m_0079aaa0((int)first, (int)v->mpEnd + -0x78, (int)v->mpEnd);
+  FUN_0079aaa0((int)first, (int)v->mpEnd + -0x78, (int)v->mpEnd);
   *(int*)first = *(int*)last;
   first[4] = last[4];
   ((Tc*)(first + 8))->m_0537dc0(last + 8);
@@ -240,13 +234,13 @@ void Tc::m_0079fa70(int pos, int n, int value) {
     if (newCap == 0) newCap = 1;
     char* nb = 0;
     if (newCap != 0)
-      nb = (char*)operator_new(newCap * 0x14, "Graphics", 0, 0, g_allocatorPath, 0xd1);
+      nb = (char*)operator_new(newCap * 0x14, "Graphics", 0, 0, g_allocatorFile, 0xd1);
     char* begin = (char*)v->mpBegin;
     int   pre   = count14(begin, p);
-    ((Tc*)0)->m_0799dc0((int)begin, (int)p, (int)nb);
+    FUN_0799dc0((int)begin, (int)p, (int)nb);
     char* dst = nb + pre * 0x14;
-    ((Tc*)0)->m_0079a8f0(n, value, (int)p);                      // fill n value-ish elements
-    ((Tc*)0)->m_0799dc0((int)p, (int)v->mpEnd, (int)(dst + n * 0x14));
+    FUN_0079a8f0(n, value, (int)p);                      // fill n value-ish elements
+    FUN_0799dc0((int)p, (int)v->mpEnd, (int)(dst + n * 0x14));
     if (spNeedsDelete(begin)) operator_delete(begin);
     v->mpBegin = nb;
     v->mpEnd = dst + n * 0x14 + count14(p, v->mpEnd) * 0x14;
@@ -258,16 +252,16 @@ void Tc::m_0079fa70(int pos, int n, int value) {
     uint num = (uint)n;
     if (num < tail) {
       char* hole = end - num * 0x14;
-      ((Tc*)0)->m_0079a800(value, (int)hole, (int)end, (int)end);
+      FUN_0079a800(value, (int)hole, (int)end, (int)end);
       v->mpEnd = (char*)v->mpEnd + num * 0x14;
-      ((Tc*)0)->m_0079ab40((int)p, (int)hole, (int)end);
-      ((Tc*)0)->m_0079b190((int)p, (int)(p + num * 0x14), 0);
+      FUN_0079ab40((int)p, (int)hole, (int)end);
+      FUN_0079b190((int)p, (int)(p + num * 0x14), 0);
     } else {
-      ((Tc*)0)->m_0079a8f0((int)(num - tail), 0, (int)p);
+      FUN_0079a8f0((int)(num - tail), 0, (int)p);
       v->mpEnd = (char*)v->mpEnd + (num - tail) * 0x14;
-      ((Tc*)0)->m_0079a800((int)p, (int)p, (int)end, (int)v->mpEnd);
+      FUN_0079a800((int)p, (int)p, (int)end, (int)v->mpEnd);
       v->mpEnd = (char*)v->mpEnd + tail * 0x14;
-      ((Tc*)0)->m_0079b190((int)p, (int)end, 0);
+      FUN_0079b190((int)p, (int)end, 0);
     }
   }
 }
@@ -278,7 +272,7 @@ void Tc::m_0079fa70(int pos, int n, int value) {
 // @ 0x0079fa20
 void Tc::m_0079fa20(int first, int last) {
   VecBase* v = (VecBase*)this;
-  char* res = (char*)((Tc*)0)->m_0079ab00(last, (int)v->mpEnd, first);  // relink tail
+  char* res = (char*)FUN_0079ab00(last, (int)v->mpEnd, first);  // relink tail
   ((Tc*)this)->m_01023030((int)res, (int)v->mpEnd);                     // destroy range
   v->mpEnd = (char*)v->mpEnd + ((last - first) / 0x14) * 0x14;
 }
@@ -429,35 +423,35 @@ void Tc::m_007a0110(void* pos, int n, void* value) {
     uint newCap = grow < cap ? cap : grow;
     char* nb = 0;
     if (newCap != 0)
-      nb = (char*)operator_new(newCap * 0x14, "Graphics", 0, 0, g_allocatorPath, 0xd1);
+      nb = (char*)operator_new(newCap * 0x14, "Graphics", 0, 0, g_allocatorFile, 0xd1);
     char* begin = (char*)v->mpBegin;
     uint preBytes = (uint)(p - begin);
-    char* dst = (char*)memmove(nb, begin, preBytes);                     // move prefix
+    char* dst = (char*)FUN_011e0744(nb, begin, preBytes);                // move prefix
     dst = dst + (preBytes / 0x14) * 0x14;
-    ((Tc*)0)->m_0079b2a0((int)dst, (int)n, (int)value, (int)p);
+    FUN_0079b2a0((int)dst, (int)n, (int)value, (int)p);
     uint tailBytes = (uint)((char*)v->mpEnd - p);
-    char* moved = (char*)memmove(dst + n * 0x14, p, tailBytes);          // move suffix
+    char* moved = (char*)FUN_011e0744(dst + n * 0x14, p, tailBytes);      // move suffix
     if (spNeedsDelete(begin)) operator_delete(begin);
     v->mpBegin = nb;
     v->mpEnd = moved + (tailBytes / 0x14) * 0x14;
     v->mpCapacity = nb + newCap * 0x14;
   } else if (n != 0) {
-    ((Tc*)0)->m_0079b150((int)value);
+    FUN_0079b150((int)value);
     char* end = (char*)v->mpEnd;
     uint tail = (uint)count14(p, end);
     uint num = (uint)n;
     if (num < tail) {
       char* hole = end - num * 0x14;
-      ((Tc*)0)->m_0079b1c0((int)value, (int)hole, (int)end, (int)end);
+      FUN_0079b1c0((int)value, (int)hole, (int)end, (int)end);
       v->mpEnd = (char*)v->mpEnd + num * 0x14;
-      ((Tc*)0)->m_0079b470((int)p, (int)hole, (int)end);
-      ((Tc*)0)->m_0079fcc0((int)p, (int)(p + num * 0x14), 0);
+      FUN_0079b470((int)p, (int)hole, (int)end);
+      FUN_0079fcc0((int)p, (int)(p + num * 0x14), 0);
     } else {
-      ((Tc*)0)->m_0079b2a0((int)end, (int)(num - tail), 0, (int)p);
+      FUN_0079b2a0((int)end, (int)(num - tail), 0, (int)p);
       v->mpEnd = (char*)v->mpEnd + (num - tail) * 0x14;
-      ((Tc*)0)->m_0079b1c0((int)p, (int)p, (int)end, (int)v->mpEnd);
+      FUN_0079b1c0((int)p, (int)p, (int)end, (int)v->mpEnd);
       v->mpEnd = (char*)v->mpEnd + tail * 0x14;
-      ((Tc*)0)->m_0079fcc0((int)p, (int)end, 0);
+      FUN_0079fcc0((int)p, (int)end, 0);
     }
   }
 }
@@ -503,10 +497,10 @@ void FUN_007a0410(void* self) {
 // @ 0x007a0460  Elem14-vector::operator=(Elem14-vector const&)
 // ---------------------------------------------------------------------------
 // @ 0x007a0460
-void Tc::m_007a0460(void* other_) {
+void* Tc::m_007a0460(void* other_) {
   VecBase* self = (VecBase*)this;
   VecBase* other = (VecBase*)other_;
-  if (other == self) return;
+  if (other == self) return self;
   char* oBegin = (char*)other->mpBegin;
   char* oEnd   = (char*)other->mpEnd;
   uint uVar2 = (uint)count14(oBegin, oEnd);
@@ -517,21 +511,22 @@ void Tc::m_007a0460(void* other_) {
     self->mpCapacity = nb + uVar2 * 0x14;
     self->mpBegin = nb;
     self->mpEnd = nb + uVar2 * 0x14;
-    return;
+    return self;
   }
   uint uVar3 = (uint)count14(self->mpBegin, self->mpEnd);
   if (uVar3 < uVar2) {
-    ((Tc*)0)->m_0079f730((int)oBegin, (int)(oBegin + uVar3 * 0x14), (int)self->mpBegin);
+    FUN_0079f730((int)oBegin, (int)(oBegin + uVar3 * 0x14), (int)self->mpBegin);
     char* p = (char*)other->mpEnd;
-    ((Tc*)0)->m_0079a710((int)&p,
+    FUN_0079a710((int)&p,
                          (int)(oBegin + count14(self->mpBegin, self->mpEnd) * 0x14),
                          (int)p, (int)self->mpEnd, (int)p);
     self->mpEnd = (char*)self->mpBegin + uVar2 * 0x14;
-    return;
+    return self;
   }
-  char* dst = (char*)((Tc*)0)->m_0079f730((int)oBegin, (int)oEnd, (int)self->mpBegin);
+  char* dst = (char*)FUN_0079f730((int)oBegin, (int)oEnd, (int)self->mpBegin);
   ((Tc*)self)->m_0079b0d0((int)dst, (int)self->mpEnd);
   self->mpEnd = (char*)self->mpBegin + uVar2 * 0x14;
+  return self;
 }
 
 // ---------------------------------------------------------------------------
@@ -545,7 +540,7 @@ void Tc::m_007a0600(void* pos, void* value) {
   if (end != (char*)v->mpCapacity) {
     if (p <= (char*)value && (char*)value < end) value = (char*)value + 0x14;
     if (end != 0) ((Tc*)end)->m_0079a4a0((int)end - 0x14);
-    ((Tc*)0)->m_0079f770((int)p, (int)v->mpEnd + -0x14, (int)v->mpEnd);
+    FUN_0079f770((int)p, (int)v->mpEnd + -0x14, (int)v->mpEnd);
     ((Tc*)p)->m_0079f640((int)value);
     v->mpEnd = (char*)v->mpEnd + 0x14;
     return;
@@ -555,14 +550,14 @@ void Tc::m_007a0600(void* pos, void* value) {
   if (units == 0) cap = 1;
   else { cap = units * 2; if (cap == 0) cap = 0; }
   char* nb = 0;
-  if (cap != 0) nb = (char*)operator_new(cap * 0x14, "Graphics", 0, 0, g_allocatorPath, 0xd1);
+  if (cap != 0) nb = (char*)operator_new(cap * 0x14, "Graphics", 0, 0, g_allocatorFile, 0xd1);
   char* begin = (char*)v->mpBegin;
   uint preBytes = (uint)(p - begin);
-  char* dst = (char*)memmove(nb, begin, preBytes);                       // move prefix
+  char* dst = (char*)FUN_011e0744(nb, begin, preBytes);                  // move prefix
   dst = dst + (preBytes / 0x14) * 0x14;
   if (dst != 0) ((Tc*)dst)->m_0079a4a0((int)value);
   uint tailBytes = (uint)((char*)v->mpEnd - p);
-  char* moved = (char*)memmove(dst + 0x14, p, tailBytes);                // move suffix
+  char* moved = (char*)FUN_011e0744(dst + 0x14, p, tailBytes);            // move suffix
   if (spNeedsDelete(begin)) operator_delete(begin);
   v->mpEnd = moved + (tailBytes / 0x14) * 0x14;
   v->mpBegin = nb;
