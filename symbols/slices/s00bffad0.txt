@@ -1,0 +1,10 @@
+00bffad0 ?func18h@Simulator_ISS@@QAEXMIHIPAX@Z  # partial (see partial.txt): thiscall ret 0x14, Simulator::ISimulatorSerializable vfunc; sub-objects A at this-0x108 and D at this-0xd4
+00c004a0 ?FUN_00c004a0@@YAXXZ  # no PDB entry; cdecl no args, tail-jumps to EA::Audio::Eapd::sys_gui (0x00c2e4e0) when the app mode (0x0168d248) is 4 and not the transient 1/2; also tail-called from 0x00bd8200
+00c004c0 ?FUN_00c004c0@@YI_NPAX0H@Z  # no PDB entry; __fastcall (ecx = this, stack: index), bool; game time via 0x00b3d380/0x00b316c0 Ticks, 64-bit 20000-tick window against the stamp array at this+0x98
+00c00510 ?FUN_00c00510@@YIXPAX0H@Z  # no PDB entry; __fastcall (ecx = this, stack: index); clears the 64-bit stamp at this+0x98+index*8 (xor edx,edx + two stores)
+00c00590 ?FUN_00c00590@@YIHPAX0@Z  # retail SP::cCommunity::GetInhabitantCount, vtable slot 28 (+0x70): size of the returned 4-byte-element vector
+00c005b0 ?FUN_00c005b0@@YIXPAX00@Z  # no PDB entry; __fastcall (ecx = this, stream) Write: interface id 0x17f243b via 0x0093aa70, cached COM slot at +0x11c reset, cVarListSerializer (0x00692f90/0x00692900, 0x015710b8, 0x1a80d26)
+00c00850 ?FUN_00c00850@@YAXPAUElem20@@00@Z  # no PDB entry; cdecl (first, last, dst), copies 32-byte elements (7 floats + uint32) into raw storage; the uninitialized-copy helper for the vector grown at 0x00c00f20
+00c008c0 ?FUN_00c008c0@@YAXPAI@Z  # no PDB entry; cdecl (uint32 out[8]) fills the cached fourcc table 0x0168d228 from the property list: 0x016d4dff8 then the seven sub-properties 0x01905e43..0x01905e49, type 9 strings hashed to fourcc by 0x0041e990
+00c00aa0 ?FUN_00c00aa0@@YAHH@Z  # no PDB entry; cdecl (int value); refreshes 0x0168d228 through 0x00c008c0 then returns the first index whose id is >= value, else 0
+00c00ad0 ?FUN_00c00ad0@@YAIH@Z  # no PDB entry; cdecl (int index); refreshes 0x0168d228 through 0x00c008c0 then returns the cached id at index, else 0
