@@ -1,0 +1,6 @@
+00fed430 SP::cSPMissionManager::GetMissionWeightForColony  # PDB card
+00fed640 SP::cSPMissionManager::GetMissionWeightForEmpire  # PDB card
+00fed890 SP::cSPMissionManager::AddRecentMissionA  # PDB card
+00feda00 RecentListRead  # no PDB name; eastl list<tRecentMission> read helper
+00fedb50 SP::cSPMissionManager::InitForGame  # PDB card
+00fedca0 SP::cSPMissionManager::RemoveMission  # PDB card

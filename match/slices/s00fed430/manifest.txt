@@ -1,0 +1,16 @@
+slices/s00fed430/s00fed430.cpp  ?GetMissionList@cSPMissionManager@@QAEPAXXZ  00fedd50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?GetNumNonEventMissions@cSPMissionManager@@QAEHD@Z  00fedd80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?GetNumEventMissions@cSPMissionManager@@QAEHXZ  00feddf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?SetTutorialMissionState1@cSPMissionManager@@QAEXI@Z  00fede40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?SetTutorialMissionState2@cSPMissionManager@@QAEXI@Z  00fede60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?SetTutorialMissionState3@cSPMissionManager@@QAEXI@Z  00fede80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?DoMissionsPreventHostility@cSPMissionManager@@QAE_NPAX0@Z  00fedea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?FindListWeightA@cSPMissionManager@@QAEMI@Z  00fedf20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?FindListWeightB@cSPMissionManager@@QAEMI@Z  00fedfe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?ForEachActiveSetTargetPlanet@cSPMissionManager@@QAEXPAX@Z  00fee0a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?AnyActiveMatchA@cSPMissionManager@@QAE_NPAX@Z  00fee110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?AnyActiveMatchB@cSPMissionManager@@QAE_NPAX@Z  00fee190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?FindMissionByTargetPlanet@cSPMissionManager@@QAEPAUcSPMission@@PAX@Z  00fee220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?CopyRecords@@YAPAURecord38@@PAU1@00@Z  00fee2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?PostLoad@cSPMissionManager@@QAEXXZ  00fee310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fed430/s00fed430.cpp  ?RemoveMission@cSPMissionManager@@QAE_NPAUcSPMission@@@Z  00fedca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

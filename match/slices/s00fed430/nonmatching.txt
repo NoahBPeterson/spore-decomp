@@ -1,0 +1,5 @@
+00fed430 446 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (3 unresolved SPVector template refs)
+00fed640 521 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (3 unresolved SPVector template refs)
+00fed890 166 complete; flags /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast; equiv WEAK (184 valid, 14.5% cov)
+00feda00 226 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (0 valid inputs)
+00fedb50 1 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (3 unresolved SPVector refs); 1-byte jump-displacement diff (shared vs else-only destructor)
