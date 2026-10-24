@@ -34,8 +34,12 @@ struct ObjB {
 struct TerrainSphere {
     void Func_C77BF0(uint32_t id);  // 0x00c77bf0
 };
+struct GameDataList;
+struct cCivilization;
 struct NounMgr {
     TerrainSphere* GetCurrentTerrainSphere();  // 0x00f67d90
+    GameDataList*  GetGameDataVector(void* f1, void* f2, void* f3, void* f4, uint32_t id);  // 0x00b21340
+    cCivilization* GetPlayerCivilization();    // 0x00b25fb0
 };
 struct IdSource {
     int NextId();  // 0x00ac15e0
@@ -92,11 +96,19 @@ struct VehVec {                    // eastl::vector<AutoRefCount<cVehicle>, sp_v
     void DoInsertValue(Vehicle** pos, Vehicle** v);       // 0x00aea5d0
 };
 
+struct cRelationshipRollover {
+    void Func_E35350();                                   // 0x00e35350
+};
+
 struct CityInputStrategy {
-    char   pad[0xe8];
+    char   pad[0xe4];
+    cRelationshipRollover* mpRollover;                    // +0xe4
     VehVec mSelected;                                     // +0xe8
     void Func_CF30B0(Obj* target, Vec3 pos, int flag);    // 0x00cf30b0
     int  DoObjectInteraction(Obj* pObj, int arg2);
+    bool HandleMenuItem(uint32_t messageId);              // 0x00cf31f0
+    int  FUN_00cf4440(uint32_t arg1, uint32_t messageId);  // 0x00cf4440
+    bool FUN_00cf44c0(const Vec3* pPos);                  // 0x00cf44c0
 };
 
 // @ 0x00cf3bf0
@@ -313,4 +325,156 @@ int CityInputStrategy::DoObjectInteraction(Obj* pObj, int arg2)
     if (objects.mpBegin && ((int*)objects.mpBegin)[-1])
         operator delete[](objects.mpBegin);
     return 0;
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x00cf4440 / 0x00cf44c0: the city input strategy's menu-item hook and its selection reset.
+// ---------------------------------------------------------------------------------------------
+
+struct CVecHost {                                          // what FUN_00fd9c60 hands back (0x016d9938)
+    uint8_t mPad00[0x7c];                                  // +0x00
+    Vec3    mVec;                                          // +0x7c
+};
+CVecHost* __cdecl FUN_00fd9c60();                          // 0x00fd9c60
+
+struct cGameTimeManager {
+    void DecPauseGate(uint32_t gate);                      // 0x00b32250
+    int  GetPauseGateCount(uint32_t gate);                 // 0x00b320d0
+    void TogglePauseGate(uint32_t gate);                   // 0x00b32280
+};
+cGameTimeManager* __cdecl GameTimeManager();               // 0x00b3d380
+
+struct cGameInputManager {
+    uint32_t mPad000[0x110 / 4];                           // +0x000
+    int32_t  mField110;                                    // +0x110
+};
+cGameInputManager* __cdecl GameInputManager();             // 0x00b3d250
+
+struct cCameraControl {
+    uint32_t mPad000[0x364 / 4];                           // +0x000
+    bool     mbFlag364;                                    // +0x364
+};
+cCameraControl* __cdecl GetCameraCtl();                    // 0x00b3d280
+
+struct DataEntrySub {                                      // the sub-object at +0x120 of a game-data entry
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();   // +0x00
+    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();   // +0x10
+    virtual void s8(); virtual void s9(); virtual void sA(); virtual void sB();   // +0x20
+    virtual void sC(); virtual void sD(); virtual void sE(); virtual void sF();   // +0x30
+    virtual void sG(); virtual void sH(); virtual void sI(); virtual void sJ();   // +0x40
+    virtual void sK(); virtual void sL();                                         // +0x50
+    virtual bool IsLive();                                 // +0x58
+};
+
+struct GameDataEntry {
+    uint8_t      mPad000[0x120];                           // +0x000
+    DataEntrySub mSub;                                     // +0x120
+    void Func_BD9BB0();                                    // 0x00bd9bb0
+};
+
+struct GameDataVec {
+    GameDataEntry** mpBegin;                               // +0x00
+    GameDataEntry** mpEnd;                                 // +0x04
+};
+
+struct GameDataList {
+    uint32_t    mPad00;                                    // +0x00
+    GameDataVec mEntries;                                  // +0x04
+};
+
+struct cCivilization {
+    void* GetSpeciesProfile();                             // 0x00bef950
+};
+
+struct SpeciesProfileKey {
+    uint32_t mWords[4];
+};
+
+struct cSpeciesProfile {
+    uint8_t           mPad000[0x504];                      // +0x000
+    SpeciesProfileKey mKey;                                // +0x504
+};
+
+struct cPollinator {
+    void UpdateProperty(uint32_t propertyId, const SpeciesProfileKey* key);   // 0x0060d860
+};
+cPollinator* __cdecl FUN_0067cb30();                       // 0x0067cb30
+
+struct cAppGlobal {
+    void Func_B1E410(uint32_t tag);                        // 0x00b1e410
+};
+cAppGlobal* __cdecl FUN_00b3d320();                        // 0x00b3d320
+extern uint32_t gAppNameTag;                               // 0x01654c05
+
+void* __cdecl operator new(uint32_t size, const char* name, int, int, int, int);  // 0x00f473a0
+
+struct cSimSingleton {
+    void Func_AE37C0(int mode, Vec3 v);                    // 0x00ae37c0 (Vec3 by value, ret 0x10)
+    void Construct();                                      // 0x00ae5c30
+    static cSimSingleton* Instance();                      // inlined accessor over 0x0167a60c
+};
+extern cSimSingleton* gpSimSingleton;                      // 0x0167a60c
+extern Vec3 gSelectionPoint;                               // 0x0169cc8c
+
+inline cSimSingleton* cSimSingleton::Instance()
+{
+    if (!gpSimSingleton) {
+        cSimSingleton* p = (cSimSingleton*)::operator new(0xc8, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (p)
+            p->Construct();
+        else
+            p = 0;
+        gpSimSingleton = p;
+    }
+    return gpSimSingleton;
+}
+
+// ---------------------------------------------------------------------------------------------
+// @ 0x00CF4440
+int CityInputStrategy::FUN_00cf4440(uint32_t arg1, uint32_t messageId)
+{
+    (void)arg1;
+    int handled = 0;
+    if (!HandleMenuItem(messageId))
+        handled = 1;
+    if (messageId != 0x000001f6 && messageId != 0x037e95bb && messageId != 0x037e95b9 &&
+        messageId != 0x037e95ba && messageId != 0x037e95bc && messageId != 0x037e95bd &&
+        messageId != 0x051b40a4 && messageId != 0x046ee610 && messageId != 0x051b4174) {
+        VC0<void>(GetGameTerrainCursor(), 0x64);
+    }
+    return handled;
+}
+
+// ---------------------------------------------------------------------------------------------
+// @ 0x00CF44C0
+bool CityInputStrategy::FUN_00cf44c0(const Vec3* pPos)
+{
+    Vec3 pos = *pPos;
+    FUN_00fd9c60()->mVec = pos;
+    mpRollover->Func_E35350();
+
+    GameTimeManager()->DecPauseGate(0x4bf38a6);
+    if (GameTimeManager()->GetPauseGateCount(0x4bf38a8) > 0)
+        GameTimeManager()->TogglePauseGate(0x4bf38a8);
+
+    GameInputManager()->mField110--;
+    cCameraControl* cam = GetCameraCtl();
+    if (cam)
+        cam->mbFlag364 = true;
+
+    GameDataList* list = NounManager()->GetGameDataVector((void*)0x00cd7d10, (void*)0x00d3d420,
+                                                          (void*)0x00acdff0, (void*)0x00b1e500,
+                                                          0x18c43e8);
+    for (uint32_t i = 0; i < (uint32_t)(list->mEntries.mpEnd - list->mEntries.mpBegin); ++i) {
+        GameDataEntry* entry = list->mEntries.mpBegin[i];
+        if (entry->mSub.IsLive())
+            entry->Func_BD9BB0();
+    }
+
+    cSimSingleton::Instance()->Func_AE37C0(10, gSelectionPoint);
+
+    void* profile = NounManager()->GetPlayerCivilization()->GetSpeciesProfile();
+    FUN_0067cb30()->UpdateProperty(0x3d1afc95, &((cSpeciesProfile*)profile)->mKey);
+    FUN_00b3d320()->Func_B1E410(gAppNameTag);
+    return true;
 }

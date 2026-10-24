@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00cf3bf0/s00cf3bf0.cpp  ?FUN_00cf4440@CityInputStrategy@@QAEHII@Z  00cf4440  /O2 /MD /Gy /TP /arch:SSE
