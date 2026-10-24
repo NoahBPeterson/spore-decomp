@@ -79,13 +79,13 @@ extern "C" void __cdecl FUN_00bc2670(float len);
 // @ 0x00bc2570 — remove the `dir` component from two vectors, then hand off.
 void FUN_00bc2570(float* a, float* b, float* dir)
 {
-    float d1 = dir[0] * a[0] + dir[1] * a[1] + dir[2] * a[2];
+    float d1 = (dir[0] * a[0] + dir[1] * a[1]) + dir[2] * a[2];
     float r1[3];
     r1[0] = a[0] - dir[0] * d1;
     r1[1] = a[1] - dir[1] * d1;
     r1[2] = a[2] - dir[2] * d1;
 
-    float d2 = b[1] * dir[1] + b[2] * dir[2] + b[0] * dir[0];
+    float d2 = (b[1] * dir[1] + b[2] * dir[2]) + b[0] * dir[0];
     float r2[3];
     r2[0] = b[0] - dir[0] * d2;
     r2[1] = b[1] - dir[1] * d2;
