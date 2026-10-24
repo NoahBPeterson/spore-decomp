@@ -1,8 +1,8 @@
 00476dd0 - complete source; refcount-vector realloc (allocate+copy), NOT byte-exact; equiv UNSUPPORTED (now a member, ECX=this): only 0/1200 inputs valid (alloc/copy faults)
 00477200 - complete source; uninitialized_copy+destruct<4-byte>, eastl::copy tag/frame differs
 004772a0 - complete source; vector<16-byte>::erase, NOT byte-exact; equiv WEAK (member Vec16::EraseV16): 373 valid inputs, 54.5% coverage
-00477380 - complete source; vector<32-byte>::erase, NOT byte-exact; equiv FAIL (member Vec32::EraseV32): 5/5 valid inputs mismatched, memory pool @40010004
-00477460 - complete source; vector<0x8c-byte>::DoInsertValue, NOT byte-exact; equiv FAIL (member VecBig8c::InsertValue): 5/5 valid inputs mismatched, memory pool @40010004
-00477700 - complete source; 0x8c-byte element assignment, NOT byte-exact; equiv FAIL (member Big8c::Assign): 5/5 valid inputs mismatched, execution
+00477380 - complete source; vector<32-byte>::erase; equiv WEAK 115 valid, 54.5% coverage, 0 mismatches (the original's unreachable dealloc arm caps coverage); not byte-exact (/Od vs /O2). Fixed: element stride 0x20 (refcount ptr +0x1c) and the thiscall 0x424f10 move.
+00477460 - complete source; vector<0x8c-byte>::DoInsertValue (copy-insert path + growth via 0x47b310/0x42dee0); equiv UNSUPPORTED 0/400: no dev-PDB class for this, so the generator leaves mpEnd/mpCapacity as pointer soup and the original faults on every input; the growth path matches byte-for-byte on a replay (work/difftest/fail_inputs/s00476dd0_00477460.pkl)
+00477700 - complete source; 0x8c-byte element assignment (0x424f70 member 0, m10, vec14 erase+DoAssign, vec44 erase+DoAssign); equiv WEAK 110 valid, 100% coverage, 0 mismatches; not byte-exact (/O2 folds the unused tag argument)
 004777e0 - complete source; destructor loop over 0x7c-byte elements, NOT byte-exact; equiv WEAK (member Range7c::DestroyRange7c): 529 valid inputs, 45.8% coverage
-00477820 - complete source; Matrix33 element extraction, NOT byte-exact
+00477820 - complete source; 3x3 matrix scale (three 0x41de40 calls; the third argument is a by-value float whose address is taken); equiv PASS 356 valid, 100% coverage; not byte-exact (/O2 folds the three row temporaries into direct stores)
