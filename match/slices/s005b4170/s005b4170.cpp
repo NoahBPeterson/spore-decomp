@@ -285,6 +285,17 @@ void Stub_005b4170() {}
 // @ 0x005b4bf0
 void Stub_005b4bf0() {}
 // @ 0x005b4f20
-void Stub_005b4f20() {}
+// Angle wrap into (-pi, pi].  The period lives in a mutable global (0x15e9fd8, 0 in the
+// emulated image, so the fmod yields NaN and the wraps are skipped - the same as retail);
+// retail keeps the fmod result in st0 and reloads the global for each correction.
+float Stub_005b4f20(float angle)
+{
+  float r = (float)fmod(angle, *(volatile float*)0x15e9fd8);
+  if (r > 3.1415927410125732f)
+    return r - *(volatile float*)0x15e9fd8;
+  if (r < -3.1415927410125732f)
+    return r + *(volatile float*)0x15e9fd8;
+  return r;
+}
 // @ 0x005b4fa0
 void Stub_005b4fa0() {}
