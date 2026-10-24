@@ -241,7 +241,8 @@ void cSPUIAssetVerbs::UpdatePos(void* p) {
         v[1] = mVec[1];
         v[2] = mVec[2];
         v[3] = mVec[3];
-        float r = vcfp(mWin3, 0x38)[2] - vcfp(mWin3, 0x38)[0];
+        float* rect = vcfp(mWin3, 0x38);
+        float r = rect[2] - rect[0];
         v[0] = v[0] - r * (float)(n - 5);
         vc1p(mWinRoot, 0x6c, v);
     }
