@@ -316,22 +316,18 @@ bool Stub_754110::FUN_00754110(int arg) {
 
 // @ 0x007541b0  (158 bytes) find-or-insert into a 0x20-stride table
 void FUN_007541b0(int param_1, int param_2, int param_3) {
-  int local_20 = -1;
-  int local_1c = -1;
-  int local_18 = 2;
-  int local_14 = 2;
-  int local_10 = param_2;
-  int local_c = param_3;
-  int local_8 = 8;
-  int local_4 = 8;
-  char c = (char)FUN_0071ded0(param_1, 2, &local_20, &local_8, &local_10, &local_18, 0);
+  int found[2] = { -1, -1 };
+  int limits[2] = { 2, 2 };
+  int keys[2] = { param_2, param_3 };
+  int span[2] = { 8, 8 };
+  char c = (char)FUN_0071ded0(param_1, 2, found, span, keys, limits, 0);
   if (c != 0) {
-    *(int*)(local_1c * 0x20 + 4 + *(int*)(param_1 + 8)) = param_2;
-    FUN_00738610(param_1, 1, &local_20);
+    *(int*)(found[1] * 0x20 + 4 + *(int*)(param_1 + 8)) = param_2;
+    FUN_00738610(param_1, 1, found);
     return;
   }
-  if (local_1c >= 0) {
-    *(int*)(local_1c * 0x20 + 4 + *(int*)(param_1 + 8)) = param_2;
+  if (found[1] >= 0) {
+    *(int*)(found[1] * 0x20 + 4 + *(int*)(param_1 + 8)) = param_2;
   }
 }
 
@@ -342,10 +338,11 @@ struct S_754250 {
   uint16_t m12;
   S_754250* FUN_00754250(int param_2);
 };
+typedef void (__thiscall* ConstructVariantFn)(void* self, int, int, int, int, int);
 S_754250* S_754250::FUN_00754250(int param_2) {
   m10 = 2;
   m12 = 0x39;
-  FUN_0093dd80_754250(0x39, 0, param_2, 0x18, 1);
+  ((ConstructVariantFn)FUN_0093dd80_754250)(this, 0x39, 0, param_2, 0x18, 1);
   return this;
 }
 

@@ -926,11 +926,12 @@ void BakeSpriteTextureMips(void* out, int level, int arg, BakeTarget* target)
 }
 
 // @ 0x00754250
+typedef void (__thiscall* ConstructVariantFn_754250)(void* self, int, int, int, int, int);
 S_754250* S_754250::FUN_00754250(int param_2)
 {
   m10 = 2;
   m12 = 0x39;
-  FUN_0093dd80_754250(0x39, 0, param_2, 0x18, 1);
+  ((ConstructVariantFn_754250)FUN_0093dd80_754250)(this, 0x39, 0, param_2, 0x18, 1);
   return this;
 }
 
