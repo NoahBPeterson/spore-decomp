@@ -1,6 +1,8 @@
 // Slice 8: nSPSkinner vector/normalize helpers and a small packed-value unpacker.
-// Unoptimized editor module: /Od /Ob1 /MD /Gy /TP /arch:SSE (no /EHsc).
+// Flags: /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc); /Oi is required for sqrtf to
+// lower to the x87 _CIsqrt import and /fp:fast for the scalar SSE dot product.
 #include "types.h"
+#include <math.h>
 
 void* FUN_0050a880(void* out, int p);          // 0x0050a880
 int   FUN_004fddb0(void* v);                   // 0x004fddb0
@@ -21,26 +23,25 @@ unsigned FUN_00520110(int p, unsigned v)
     return v;
 }
 
+struct V3_s0051_fb90 { float x, y, z; };
+
 // @ 0x00520140
 void FUN_00520140(int p, int flags, float* outDir, float* outVal)
 {
-    float local_10, local_c, local_8;
-    FUN_0044e460(&local_10, &g_1485720, p);
-    (void)flags;
-    float len2 = (local_10 * local_10 + local_c * local_c) + local_8 * local_8;
+    V3_s0051_fb90 vec;
+    FUN_0044e460(&vec, (float*)p, (float*)flags);
+    float len2 = (vec.x * vec.x + vec.y * vec.y) + vec.z * vec.z;
     if (len2 <= g_1485378) {
         FUN_00520220(p, outDir, outVal);
     } else {
-        float inv = FUN_011e0738(len2);
-        FUN_004a9d20(&local_10, &inv);
-        outVal[0] = local_10;
-        outVal[1] = local_c;
-        outVal[2] = local_8;
-        void* t = FUN_0044e460(&local_10, &local_10, p);
-        float* n = (float*)FUN_00436ce0(&local_10, t);
-        outDir[0] = n[0];
-        outDir[1] = n[1];
-        outDir[2] = n[2];
+        float inv = sqrtf(len2);
+        FUN_004a9d20(&vec, &inv);
+        *(V3_s0051_fb90*)outVal = vec;
+        V3_s0051_fb90 cross;
+        V3_s0051_fb90* t = (V3_s0051_fb90*)FUN_0044e460(&cross, &vec, (float*)p);
+        V3_s0051_fb90 nrm;
+        V3_s0051_fb90* n = (V3_s0051_fb90*)FUN_00436ce0(&nrm, t);
+        *(V3_s0051_fb90*)outDir = *n;
     }
 }
 

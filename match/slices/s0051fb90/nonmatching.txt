@@ -1,4 +1,4 @@
 # <va>  <diff-bytes>  <reason>
 00520110  9    one dead jump in the bit-unpack helper differs; complete
-00520140  197  /Od x87-sqrt normalize schedule differs; complete
+00520140  182  flags /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE /fp:fast. Complete: the vector local is one contiguous 12-byte Vec3Pod (three separate float locals let the out= pointer write past the group and overwrite the saved ebp, leaving ebp=0xffc00000 and a dirty x87 stack); the dot product is scalar SSE with the len2<=0 early-out; sqrtf lowers to the x87 _CIsqrt import with the st0 argument/result ABI; the second Cross and the Normalize use distinct 12-byte temporaries and 12-byte struct copies into outVal/outDir. Default gate PASS 400 valid inputs / 100% coverage (73/73); remaining diff is the /Od stack-slot and scheduling order (frame 0x38 vs 0xd4; ours 226 vs 223 bytes)
 00520220  170  /Od temp-frame / helper return schedule differs; complete

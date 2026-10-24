@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <math.h>
 #include "SP/cJobManager.h"
 #include "nSPSkinner/cMeshAORender.h"
 #include "EA/Random/RandomLinearCongruential.h"
@@ -128,7 +129,10 @@ extern "C" double __cdecl fabs(double);
 #pragma intrinsic(fabs)
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
 void* FUN_00507c70(void* p);              // 0x00507c70
-void* FUN_00529d30(void* p);              // 0x00529d30
+// The converter takes the destination first and the RGB triple by value;
+// the old one-argument declaration dropped the 12-byte argument.
+struct V3 { float x, y, z; };
+void* FUN_00529d30(float* out, V3 rgb);    // 0x00529d30
 struct PaintReq {
     void Set(int a2, int a3, int a4, int a5, char a6, char a7, char a8);
 };
@@ -460,7 +464,7 @@ struct Y {
 
 // ---- items of slice s00524a50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct sp_vector_allocator {
-    uint32_t mFlags[2];
+    uint32_t mFlags;                 // 4-byte allocator state (vector header is 0x10 bytes)
 };
 template <typename T> struct VectorBase {
     T* mpBegin;
@@ -535,9 +539,9 @@ struct cMesh : DefaultRefCounted {      // retail size 0x1d0
     VectorVec2 mTexCoords;              // +0x30
     uint32_t pad40[6];
     VectorU32 mVertexIndices;           // +0x58
-    uint32_t pad6c[5];
+    uint32_t pad68[6];                  // +0x68..+0x80
     VectorU32 mTexIndices;              // +0x80
-    uint32_t pad94[0x3f];
+    uint32_t pad90[0x40];               // +0x90..+0x190
     VectorU32 m190;                     // +0x190
     uint32_t pad1a0[1];
     VectorU32 m1a4;                     // +0x1a4
@@ -546,9 +550,9 @@ struct cMesh : DefaultRefCounted {      // retail size 0x1d0
 };
 struct cSkinnerResult : DefaultRefCounted {
     VectorElemC m08;                                    // +0x08
-    uint32_t pad18[0x10];
+    uint32_t pad18[0x10];                               // +0x18..+0x58
     VectorU32 m58;                                      // +0x58
-    uint32_t pad6c[0x1e];
+    uint32_t pad68[0x1f];                               // +0x68..+0xe4
     VectorBase<cMeshAORenderObj*> mE4;                  // +0xe4
     uint32_t padf4[7];
     VectorU32 m110;                                     // +0x110
@@ -646,23 +650,20 @@ unsigned FUN_00520110(int p, unsigned v)
 // @ 0x00520140
 void FUN_00520140(int p, int flags, float* outDir, float* outVal)
 {
-    float local_10, local_c, local_8;
-    FUN_0044e460(&local_10, &g_1485720, p);
-    (void)flags;
-    float len2 = (local_10 * local_10 + local_c * local_c) + local_8 * local_8;
+    Vec3Pod vec;
+    FUN_0044e460(&vec, (float*)p, (float*)flags);
+    float len2 = (vec.x * vec.x + vec.y * vec.y) + vec.z * vec.z;
     if (len2 <= g_1485378) {
         FUN_00520220(p, outDir, outVal);
     } else {
-        float inv = FUN_011e0738(len2);
-        FUN_004a9d20(&local_10, &inv);
-        outVal[0] = local_10;
-        outVal[1] = local_c;
-        outVal[2] = local_8;
-        void* t = FUN_0044e460(&local_10, &local_10, p);
-        float* n = (float*)FUN_00436ce0(&local_10, t);
-        outDir[0] = n[0];
-        outDir[1] = n[1];
-        outDir[2] = n[2];
+        float inv = sqrtf(len2);
+        FUN_004a9d20(&vec, &inv);
+        *(Vec3Pod*)outVal = vec;
+        Vec3Pod cross;
+        Vec3Pod* t = (Vec3Pod*)FUN_0044e460(&cross, &vec, (float*)p);
+        Vec3Pod nrm;
+        Vec3Pod* n = (Vec3Pod*)FUN_00436ce0(&nrm, t);
+        *(Vec3Pod*)outDir = *n;
     }
 }
 
@@ -955,11 +956,12 @@ void FUN_005229c0(int idx, float* v)
     g1[0] = *(int*)&v[0];
     g1[1] = *(int*)&v[1];
     g1[2] = *(int*)&v[2];
-    float tmp[3];
-    tmp[0] = v[0];
-    tmp[1] = v[1];
-    tmp[2] = v[2];
-    int* r = (int*)FUN_00529d30(tmp);
+    float hsv[3];
+    V3 rgb;
+    rgb.x = v[0];
+    rgb.y = v[1];
+    rgb.z = v[2];
+    int* r = (int*)FUN_00529d30(hsv, rgb);
     int* g2 = (int*)((char*)g_userColors2 + idx * 0xc);
     g2[0] = r[0];
     g2[1] = r[1];
@@ -1316,8 +1318,9 @@ bool __cdecl BuildMeshJobCallback(SPcJob* job, BuildMeshContext* ctx)
         result->Finish();
         ctx->m80.clear();
         ctx->m80.resize((uint32_t)(result->m08.size()), (uint32_t)-1);
-        for (uint32_t i = 0; i < result->m58.size(); i++)
-            ctx->m80.mpBegin[result->m58.mpBegin[i]] = i;
+        int n58 = (int)result->m58.size();
+        for (int i = 0; i < n58; i++)
+            ctx->m80.mpBegin[result->m58.mpBegin[i]] = (uint32_t)i;
         return true;
     }
     cRigBlock* pBlock = &blocks[slot];
