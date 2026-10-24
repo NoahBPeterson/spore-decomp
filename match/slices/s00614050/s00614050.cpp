@@ -299,6 +299,12 @@ struct cPollinator {
 };
 cPollinator* GetPollinator();   // 0x0067cb30
 
+// the data subobject at +0x20 (SetData is called with this pointer)
+struct cPollenAssetData {
+    char mData[0x130 - 0x20];
+    void SetData(uint32_t a, uint32_t b, void* c);   // 0x00613140
+};
+
 // a loaded Pollinator asset resource (0x130 bytes)
 struct cPollenAsset : IRefCounted {
     int mnRef;                      // +4
@@ -306,10 +312,9 @@ struct cPollenAsset : IRefCounted {
     int pad14;
     u64 mId;                        // +0x18
     u64 GetId() const { return mId; }
-    char mData[0x130 - 0x20];       // +0x20
+    cPollenAssetData mData;         // +0x20
     cPollenAsset(u64 id);           // 0x00612f00
     static void* operator new(size_t n, const char* name, int a, int b, int c, int d);   // 0x00f473a0
-    void SetData(uint32_t a, uint32_t b, void* c);   // 0x00613140
 };
 void* GetSaveArea(uint32_t id);    // SP::GetSaveArea 0x006b1f90
 
@@ -479,7 +484,7 @@ void cAssetCache::AddAsset(u64 id, const void* data)
         }
     }
     if (a) {
-        a->SetData(((uint32_t*)data)[0], ((uint32_t*)data)[1], (void*)data);
+        a->mData.SetData(((uint32_t*)data)[0], ((uint32_t*)data)[1], (void*)data);
         void* area = GetSaveArea(0x11ac19d);
         GetManager()->WriteResource(a, 0, area, 0, 0);
         GetManager()->CacheResource(a, true);
@@ -754,7 +759,7 @@ StrMapIter StrMap::DoInsertValueImpl(RBNode* pNodeParent, const StrPair& value, 
         side = 0;
     else
         side = 1;
-    StrNode* n = (StrNode*)EASTL_alloc(0x30, "Editor", 0, 0, "UTFKernel\\EASTL\\rbtree.h", 0xd1);
+    StrNode* n = (StrNode*)EASTL_alloc(0x30, "Editor", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     if (&n->mValue) new (&n->mValue) StrPair(value);
     RBTreeInsert(n, pNodeParent, &mAnchor, side);
     ++mnSize;

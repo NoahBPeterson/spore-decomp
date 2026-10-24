@@ -690,7 +690,7 @@ StrMapIter StrMap::DoInsertValueImpl(RBNode* pNodeParent, const StrPair& value, 
         side = 0;
     else
         side = 1;
-    StrNode* n = (StrNode*)EASTL_alloc(0x30, "Editor", 0, 0, "UTFKernel\\EASTL\\rbtree.h", 0xd1);
+    StrNode* n = (StrNode*)EASTL_alloc(0x30, "Editor", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     if (&n->mValue) new (&n->mValue) StrPair(value);
     RBTreeInsert(n, pNodeParent, &mAnchor, side);
     ++mnSize;
