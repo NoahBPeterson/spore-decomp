@@ -26,8 +26,8 @@ public:
     int64_t mnSeconds;   // +0x00
 
     __declspec(noinline) int GetParameter(int which);                 // 0x92df80
-    void SetDate(unsigned int year, unsigned int month, int day, int hour,
-                 int minute, unsigned int second);                    // 0x92e200
+    unsigned SetDate(unsigned int year, unsigned int month, int day, int hour,
+                     int minute, unsigned int second);                // 0x92e200
 };
 static inline int Hi(int64_t v) { return *((const int*)&v + 1); }
 int __cdecl FUN_0092df40(unsigned int year);  // 0x0092df40 (defined below; used by a stub's inline body)
@@ -121,7 +121,7 @@ static inline int Lo(int64_t v)
 { return *(const int*)&v; }
 
 // @ 0x0092e200
-void DateTime::SetDate(unsigned int year, unsigned int month, int day, int hour, int minute, unsigned int second)
+unsigned DateTime::SetDate(unsigned int year, unsigned int month, int day, int hour, int minute, unsigned int second)
 {
     if (year == 0xffffffff || year == 0)
         year = (unsigned int)GetParameter(1);
@@ -156,10 +156,11 @@ void DateTime::SetDate(unsigned int year, unsigned int month, int day, int hour,
     uint32_t mdpls = (uint32_t)(md + day);
     uint32_t carry = (mdpls + days < mdpls) ? 1u : 0u;
     uint64_t secs = (uint64_t)_allmul((int)(mdpls + days), (int)carry, 0x15180, 0);
-    uint64_t res = secs + (uint64_t)(uint32_t)(hour * 0xe10);
-    res += (uint64_t)(uint32_t)(minute * 0x3c);
-    res += (uint64_t)second;
-    mnSeconds = (int64_t)res;
+    mnSeconds = (int64_t)secs;
+    mnSeconds += (int64_t)(uint32_t)(hour * 0xe10);
+    mnSeconds += (int64_t)(uint32_t)(minute * 0x3c);
+    mnSeconds += (int64_t)second;
+    return second;
 }
 
 // @ 0x0092e3d0
