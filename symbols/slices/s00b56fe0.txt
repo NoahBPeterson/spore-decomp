@@ -1,1 +1,8 @@
 00b56fe0 BuildConstraint  # physics constraint builder dispatching on entity type pair (1,2,3)
+00b57680 HkPtrConverter::Convert  # resolves two Havok relative pointers, then dispatches through vtable +0x14
+00b576d0 HkNodePool::AddNode  # pops/allocates a 0xd1-byte node and copies a three-dword payload
+00b57720 HkContainerOwner::Destroy  # clears two hashtable/allocator members and installs vtable 0x13f8990
+00b57840 HkSelectOwner::Select  # refcounts an entity pair, checks handle types and sets pair flag +0x1c
+00b579b0 HkRefOwner::Remove  # decrements pair refcount and erases the range from the table
+00b57a50 ClearTextStyleGlobals  # clears text-style hashtable, pointer vector, rbtree and phantom vector globals
+00b57bf0 AddResolvedHkPair  # resolves two objects and adds the pair to the global hkWorld
