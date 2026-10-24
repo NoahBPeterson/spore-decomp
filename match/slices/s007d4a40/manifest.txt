@@ -2,3 +2,4 @@
 slices/s007d4a40/s007d4a40.cpp  ?CopyElem38@@YAPAXPAX0PBX@Z  007d5590  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s007d4a40/s007d4a40.cpp  ??1cEffectParams@@QAE@XZ  007d4ae0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s007d4a40/s007d4a40.cpp  ??0cEffectParams@@QAE@XZ  007d55e0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007d4a40/s007d4a40.cpp  ??0Elem40@@QAE@ABU0@@Z  007d5300  /O2 /MD /Gy /EHsc /TP /GS-

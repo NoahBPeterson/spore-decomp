@@ -34,6 +34,9 @@ void  operator delete[](void* p) throw();
 void  operator delete(void* p);
 struct Matrix3 { float m[9]; void Assign(const Matrix3& o); };     // 0x41cb40
 void ElemCtor(void* self, const void* src);                       // 0x79a0d0
+// cLabelOps::Propagate(const void*) @ 0x79a0d0: thiscall, the label object is
+// passed in ecx and the single stack argument is the source blob.
+struct cLabelOps { void Propagate(const void* src); };
 struct TransformInit { void* Init(const void* src, void* a, char flag); };
 struct IUnk32 { virtual int AddRef(); virtual int Release(); };
 struct UnkRef {
@@ -169,9 +172,9 @@ void* TransformInit::Init(const void* src, void* a, char flag)
     *(uint16_t*)(s + 4) = *(const uint16_t*)(o);
     *(uint16_t*)(s + 6) = *(const uint16_t*)(o + 2);
     *(float*)(s + 8) = *(const float*)(o + 4);
-    *(float*)(s + 0xc) = *(const float*)(o + 0xc + 8);   // (o+0x14)-0xc
-    *(float*)(s + 0x10) = *(const float*)(o + 0x14 - 8);
-    *(float*)(s + 0x14) = *(const float*)(o + 0x14 - 4);
+    *(float*)(s + 0xc) = *(const float*)(o + 8);
+    *(float*)(s + 0x10) = *(const float*)(o + 0xc);
+    *(float*)(s + 0x14) = *(const float*)(o + 0x10);
     ((Matrix3*)(s + 0x18))->Assign(*(const Matrix3*)(o + 0x14));
     *(uint16_t*)(s + 0x3e) = 0;
     *(uint16_t*)(s + 0x3c) = 0;
@@ -180,7 +183,7 @@ void* TransformInit::Init(const void* src, void* a, char flag)
     *(float*)(s + 0x48) = *(const float*)0x1637120;
     *(float*)(s + 0x4c) = 1.0f;
     ((Matrix3*)(s + 0x50))->Assign(*(const Matrix3*)0x163725c);
-    ElemCtor(s, a);
+    ((cLabelOps*)self)->Propagate(a);
     return self;
 }
 

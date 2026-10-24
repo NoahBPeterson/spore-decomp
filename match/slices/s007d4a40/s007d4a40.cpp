@@ -17,6 +17,47 @@ struct Obj {
     virtual void AddRef();    // +0x34
     virtual void Release();   // +0x38
 };
+// Reference-counted object stored at cEffectParams+0x38: vtable at +0, flags at
+// +4 (bit 31 selects the destroy flag), refcount at +0x40. Release decrements
+// and, at <=1, dispatches the destroying destructor at vtable+0x170. An
+// AutoRefCount-based handle lives at +0x64 (used by Handle2 kind 1).
+struct AddRefObj {
+    virtual void AddRef();          // vtable[0]
+    virtual void Release();         // vtable[1]
+};
+struct AutoRefCountH {
+    AddRefObj* mpObject;
+    AutoRefCountH& operator=(AddRefObj* p) {
+        if (p != mpObject) {
+            AddRefObj* old = mpObject;
+            if (p) p->AddRef();
+            mpObject = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+struct RefCounted {
+    virtual void v0();          // +0x00 vtable
+    uint32_t mFlags;            // +0x04
+    uint32_t mPad[0x38 / 4];    // +0x08 ..
+    int32_t mRefCount;          // +0x40
+    uint32_t mPad2[0x20 / 4];   // +0x44 ..
+    AutoRefCountH mHandle;      // +0x64
+    void Release();
+};
+typedef void(__cdecl* VDestroy)(RefCounted*, int);
+inline void RefCounted::Release() {
+    int32_t c = mRefCount;
+    if (c > 1) { mRefCount = c - 1; return; }
+    // The destroying destructor is reached through two indirections
+    // ([[vtbl]] + 0x170) and takes (this, destroy-flag) on the stack. The flag
+    // is formed first so the indirect load keeps the inner table in ecx.
+    char flag = (char)(mFlags >> 31);
+    void** vtbl = *(void***)this;
+    VDestroy dtor = *(VDestroy*)((char*)*(void**)vtbl + 0x170);
+    dtor(this, (int)flag);
+}
 struct AutoRefCount {
     Obj* mpObject;
     AutoRefCount& operator=(Obj* p) {
@@ -39,7 +80,13 @@ struct cSPTransform {   // size 0x38
 };
 struct Matrix3 { float m[9]; void Assign(const Matrix3& o); };     // 0x41cb40
 struct ElemPart { void Init(void* a); };                           // 0x537f40
-void ElemCtor(void* self, const void* src);                       // 0x79a0d0
+// cLabelOps::Propagate(const void*) @ 0x79a0d0: thiscall, the label object is
+// passed in ecx and the single stack argument is the source blob.
+struct cLabelOps { void Propagate(const void* src); };
+typedef void(__thiscall* VCall1)(void*, int);
+typedef char(__thiscall* VCall3)(Obj*, int, void*, int);
+typedef char(__thiscall* VCall2)(Obj*, int, void*);
+typedef int(__thiscall* VCall1i)(void*, int);
 
 struct TransformInit { void* Init(const void* src, void* a, char flag); };
 // @ 0x007d4a40
@@ -50,9 +97,9 @@ void* TransformInit::Init(const void* src, void* a, char flag) {
     *(uint16_t*)(s + 4) = *(const uint16_t*)(o);
     *(uint16_t*)(s + 6) = *(const uint16_t*)(o + 2);
     *(float*)(s + 8) = *(const float*)(o + 4);
-    *(float*)(s + 0xc) = *(const float*)(o + 0xc + 8);   // (o+0x14)-0xc
-    *(float*)(s + 0x10) = *(const float*)(o + 0x14 - 8);
-    *(float*)(s + 0x14) = *(const float*)(o + 0x14 - 4);
+    *(float*)(s + 0xc) = *(const float*)(o + 8);
+    *(float*)(s + 0x10) = *(const float*)(o + 0xc);
+    *(float*)(s + 0x14) = *(const float*)(o + 0x10);
     ((Matrix3*)(s + 0x18))->Assign(*(const Matrix3*)(o + 0x14));
     *(uint16_t*)(s + 0x3e) = 0;
     *(uint16_t*)(s + 0x3c) = 0;
@@ -61,7 +108,7 @@ void* TransformInit::Init(const void* src, void* a, char flag) {
     *(float*)(s + 0x48) = *(const float*)0x1637120;
     *(float*)(s + 0x4c) = 1.0f;
     ((Matrix3*)(s + 0x50))->Assign(*(const Matrix3*)0x163725c);
-    ElemCtor(s, a);
+    ((cLabelOps*)self)->Propagate(a);
     return self;
 }
 
@@ -93,6 +140,28 @@ struct cEffectParams {
     bool Handle(int kind, void* a, int b);
     char Handle2(int kind, void* a);
     void Tick(void* arg);
+    // Swap the (lo,hi) parameter pair while honouring the visibility flag at
+    // +0x14 and dropping the previous referenced object at +0x38. The original
+    // inlines this block into Handle/Handle2, so keep it inline here too.
+    void SetPairVisible(int lo, int hi) {
+        char* s = (char*)this;
+        char oldVisible = s[0x14];
+        if (oldVisible) {
+            void** vt = *(void***)s;
+            ((VCall1)vt[0xc / 4])(s, 1);
+        }
+        RefCounted* p = *(RefCounted**)(s + 0x38);
+        if (p) {
+            *(void**)(s + 0x38) = 0;
+            p->Release();
+        }
+        *(int*)(s + 0x18) = lo;
+        *(int*)(s + 0x1c) = hi;
+        if (oldVisible) {
+            void** vt = *(void***)s;
+            ((VCall1)vt[8 / 4])(s, 1);
+        }
+    }
 };
 // @ 0x007d4ae0
 cEffectParams::~cEffectParams() {
@@ -107,19 +176,26 @@ bool cEffectParams::Handle(int kind, void* pa, int n) {
     if (kind == 6) {
         if (*(int*)(s + 0x18) != a[0] || (n == 2 && *(int*)(s + 0x1c) != a[1])) {
             oldVisible = s[0x14];
-            if (oldVisible) { /* vcall slot 0xc(1) */ }
-            Obj* p = *(Obj**)(s + 0x38);
-            if (p) { *(void**)(s + 0x38) = 0; /* release or dec */ }
+            if (oldVisible) {
+                ((VCall1)(*(void***)s)[0xc / 4])(s, 1);
+            }
+            RefCounted* p = *(RefCounted**)(s + 0x38);
+            if (p) {
+                *(void**)(s + 0x38) = 0;
+                p->Release();
+            }
             *(int*)(s + 0x18) = a[0];
             if (n >= 2) *(int*)(s + 0x1c) = a[1];
-            if (oldVisible) { /* vcall slot 8(1) */ }
+            if (oldVisible) {
+                ((VCall1)(*(void***)s)[8 / 4])(s, 1);
+            }
         }
         changed = 1;
     }
     unsigned cnt = (unsigned)((*(int*)(s + 0xb0) - *(int*)(s + 0xac)) >> 6);
     for (unsigned i = 0; i < cnt; ++i) {
         Obj* c = *(Obj**)(*(int*)(s + 0xac) + i * 0x40 + 0x3c);
-        char r = (*(char(__thiscall**)(Obj*, int, void*, int))((*(void***)c)[0x20 / 4]))(c, kind, pa, n);
+        char r = ((VCall3)(*(void***)c)[0x20 / 4])(c, kind, pa, n);
         if (r || changed) changed = 1;
     }
     return changed != 0;
@@ -131,30 +207,49 @@ char cEffectParams::Handle2(int kind, void* pa) {
     int* a = (int*)pa;
     char changed = 0;
     if (kind == 1) {
-        if (*(void**)(s + 0x38)) { AutoRefCount* r = (AutoRefCount*)(s + 0x38); r->operator=((Obj*)a); changed = 1; }
+        if (*(void**)(s + 0x38)) {
+            ((RefCounted*)*(void**)(s + 0x38))->mHandle.operator=((AddRefObj*)a);
+            changed = 1;
+        }
     } else if (kind == 3) {
-        unsigned n = (unsigned)a[3];
-        unsigned i;
+        int n = a[3];
+        int i;
         for (i = 0; i < n; ++i) {
             if (*(int*)((char*)a + 0x18 + i * 0x10) == (int)*(uint8_t*)(*(int*)(s + 0xc) + 0x85)) break;
         }
         if (i < n) {
-            int lo = *(int*)((char*)a + i * 0x10);
-            int hi = *(int*)((char*)a + i * 0x10 + 4);
+            // The matched key sits at record+8, so the (lo,hi) pair lives one
+            // stride on from the key slot.
+            int lo = *(int*)((char*)a + (i + 1) * 0x10);
+            int hi = *(int*)((char*)a + (i + 1) * 0x10 + 4);
             if ((lo & hi) != -1) {
+                char oldVisible = s[0x14];
+                if (oldVisible) {
+                    void** vt = *(void***)s;
+                    ((VCall1)vt[0xc / 4])(s, 1);
+                }
+                RefCounted* p = *(RefCounted**)(s + 0x38);
+                if (p) {
+                    *(void**)(s + 0x38) = 0;
+                    p->Release();
+                }
                 *(int*)(s + 0x18) = lo;
                 *(int*)(s + 0x1c) = hi;
+                if (oldVisible) {
+                    void** vt = *(void***)s;
+                    ((VCall1)vt[8 / 4])(s, 1);
+                }
             }
         }
         return 1;
     } else if (kind == 6 && *(int*)(*(int*)(s + 0xc) + 0x2c) == 0) {
-        int r = (*(int(__thiscall**)(void*, int))((*(void***)a)[0xc / 4]))(a, 0);
+        int r = ((VCall1i)(*(void***)a)[0xc / 4])(a, 0);
         if (r) *(int*)(s + 0xc4) = r;
     }
     unsigned cnt = (unsigned)((*(int*)(s + 0xb0) - *(int*)(s + 0xac)) >> 6);
     for (unsigned i = 0; i < cnt; ++i) {
         Obj* c = *(Obj**)(*(int*)(s + 0xac) + i * 0x40 + 0x3c);
-        char r = (*(char(__thiscall**)(Obj*, int, void*))((*(void***)c)[0x24 / 4]))(c, kind, pa);
+        char r = ((VCall2)(*(void***)c)[0x24 / 4])(c, kind, pa);
         if (r || changed) changed = 1;
     }
     return changed;
@@ -167,10 +262,10 @@ void cEffectParams::Tick(void* arg) {
 }
 
 struct TransformBig { void* Init(int a, unsigned pair, float f1, float f2, float f3, float f4,
-                       const Matrix3* m, Obj* obj); };
+                       Matrix3 m, Obj* obj); };
 // @ 0x007d5240
 void* TransformBig::Init(int a, unsigned pair, float f1, float f2, float f3, float f4,
-                       const Matrix3* m, Obj* obj) {
+                       Matrix3 m, Obj* obj) {
     void* self = this;
     char* s = (char*)self;
     *(uint16_t*)(s) = (uint16_t)pair;
@@ -179,8 +274,9 @@ void* TransformBig::Init(int a, unsigned pair, float f1, float f2, float f3, flo
     *(float*)(s + 8) = f2;
     *(float*)(s + 0xc) = f3;
     *(float*)(s + 0x10) = f4;
-    ((Matrix3*)(s + 0x14))->Assign(*m);
+    ((Matrix3*)(s + 0x14))->Assign(m);
     *(int*)(s + 0x38) = a;
+    *(void**)(s + 0x3c) = 0;
     ((AutoRefCount*)(s + 0x3c))->operator=(obj);
     return self;
 }
@@ -199,7 +295,11 @@ Elem40::Elem40(const Elem40& o) {
     f4 = o.f4; f8 = o.f8; fc = o.fc; f10 = o.f10;
     mat.Assign(o.mat);
     f38 = o.f38;
-    ref = o.ref.mpObject;
+    // The copy ctor stores the source pointer first (no release of the
+    // not-yet-constructed member) and then takes its own reference.
+    Obj* p = o.ref.mpObject;
+    ref.mpObject = p;
+    if (p) p->AddRef();
 }
 
 // @ 0x007d53a0
