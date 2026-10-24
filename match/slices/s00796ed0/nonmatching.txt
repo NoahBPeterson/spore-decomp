@@ -1,1 +1,1 @@
-00796ed0 1408 complete Ghidra transcription of FUN_00796ed0; hand-scheduled SSE matrix kernel (emits 4290 bytes vs 2882); equiv FAIL (5/40 inputs mismatched, ours faults where original succeeds)
+00796ed0 9279 complete reconstruction of FUN_00796ed0; hand-scheduled SSE matrix kernel (emits 6301 bytes vs 2882); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; difftest PASS (240 valid inputs, 98.0% coverage, no mismatch; replay None)

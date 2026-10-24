@@ -201,8 +201,14 @@ FUN_00796ed0(int *param_1,int *param_2,int param_3,int *param_4,float *param_5,f
   float fStack_142c;
   float fStack_1428;
   float fStack_1424;
-  float local_1400 [268];
-  float local_fd0 [1007];
+  struct CacheInverse {
+    float guard[32];
+    float data[268];
+  } cacheInverse;
+  struct CacheMatrix {
+    float guard[128];
+    float data[1007];
+  } cacheMatrix;
   int uStack_14;
   
   uStack_14 = 0x796ee0;
@@ -225,7 +231,12 @@ FUN_00796ed0(int *param_1,int *param_2,int param_3,int *param_4,float *param_5,f
   fStack_1674 = param_5[0xf];
   local_1704 = *(unsigned int *)(param_3 + 0x14);
   uVar6 = 0;
-  local_1734 = local_1400;
+  {
+    unsigned int fill = 0xCCCCCCCCu;
+    for (int i = 0; i < 32; i++) ((unsigned int *)cacheInverse.guard)[i] = fill;
+    for (int i = 0; i < 128; i++) ((unsigned int *)cacheMatrix.guard)[i] = fill;
+  }
+  local_1734 = cacheInverse.data;
   local_1670 = 1.0;
   fStack_166c = 1.0;
   fStack_1668 = 1.0;
@@ -248,9 +259,10 @@ FUN_00796ed0(int *param_1,int *param_2,int param_3,int *param_4,float *param_5,f
     fStack_1718 = 1.0;
     fStack_1714 = 1.0;
     local_1730 = 0;
-    pfVar4 = local_fd0;
+    pfVar4 = cacheMatrix.data;
     do {
-      pfVar2 = (float *)FUN_011fda50(uVar6);
+      typedef float *(__thiscall *FrameAtFn)(void *, unsigned int);
+      pfVar2 = ((FrameAtFn)FUN_011fda50)((void *)param_3, uVar6);
       local_172c = pfVar2[7];
       local_1728 = pfVar2[8];
       local_1724 = pfVar2[9];
