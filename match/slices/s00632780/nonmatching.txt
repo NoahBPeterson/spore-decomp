@@ -5,6 +5,6 @@
 00632c60 16 DeleteOne: complete; scheduling of a dead mov ecx,esi vs the selected-flag store
 00632ce0 16 MoveOne: complete; same as DeleteOne
 00632e40 63 ResetPhotoMap: complete; original keeps 0 in ebx across the tree reset and returns via cl/al
-00632e90 103 PhotoTypeMap::operator[] (find-or-insert): complete; original passes iterator and value_type by value to DoInsertKey; equiv FAIL (ours faults reading unmapped memory where original returns); marker/symbol now resolves
-00633230 125 MarkPhotoTypeForGuid: complete; find() out-param shape and operator[] call shape differ
-00633440 193 CapturePixels: complete; same entry-address folding as CopyPixelsToRaster
+00632e90 111 PhotoTypeMap::operator[] (find-or-insert): complete; equiv PASS (311 valid, 100% cov, including the saved failing input); DoInsertKey is a hidden-return call: the retail prototype is (iterator out, RBNode* hint, const value_type& pair, integral_constant<bool,1>), so the callee is entered with a stack out slot, the hint and a 20-byte key+info pair by reference; chk 139 vs 152
+00633230 119 MarkPhotoTypeForGuid: complete; equiv PASS (318 valid, 88.7% cov, including the saved failing input); find() also returns its iterator through a hidden out slot (out, const key&), so the old one-arg call fed the key pointer as the out slot and faulted; chk 149 vs 143
+00633440 232 CapturePixels: complete; equiv WEAK (400 valid, 31.3% cov, including the saved failing input); the retail parameter order is (void* stream, int idx, uint32_t arg3), so the old (idx, stream, arg3) opened arg2 instead of arg1; chk 238 vs 277

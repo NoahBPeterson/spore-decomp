@@ -191,14 +191,30 @@ struct RBNode : RBAnchor {
     uint32_t key;
     PhotoTypeInfo value;
 };
+struct PhotoTypePair {              // value_type: key + its info, 20 bytes
+    uint32_t key;
+    PhotoTypeInfo info;
+};
+struct InsertUniqueTag {            // the trailing by-value integral_constant<bool,1>
+    uint8_t mValue;
+};
+// A non-POD iterator: a class with a destructor is returned through a hidden pointer (retail
+// passes the out slot as the first stack argument for both find and DoInsertKey).
+struct PhotoTypeMapIterator {
+    RBNode* mpNode;
+    PhotoTypeMapIterator() : mpNode(0) {}
+    PhotoTypeMapIterator(const PhotoTypeMapIterator& o) : mpNode(o.mpNode) {}
+    ~PhotoTypeMapIterator() {}
+};
+
 struct PhotoTypeMap {
     uint32_t mCompare;
     RBAnchor mAnchor;
     uint32_t mnSize;
     void DoNuke(RBNode* n);                                   // 0x009a9600
-    RBNode* find(const uint32_t& key);
+    PhotoTypeMapIterator find(const uint32_t& key);
     PhotoTypeInfo& operator[](const uint32_t& key);
-    RBNode* DoInsertKey(RBNode* hint, uint32_t key, PhotoTypeInfo v);
+    PhotoTypeMapIterator DoInsertKey(RBNode* hint, const PhotoTypePair& value, InsertUniqueTag tag);
     void clear() {
         DoNuke(mAnchor.mpNodeParent);
         mAnchor.mpNodeRight = (RBNode*)&mAnchor;
@@ -284,7 +300,7 @@ struct cSPPlayModePhotoBrowser {
     bool LoadPhotoThumb(uint32_t idx);
     bool MarkPhotoTypeForGuid(uint32_t guid, int kind, ResourceKey key);
     bool LoadPhotoByKey(const ResourceKey* key);
-    void CapturePixels(int idx, void* stream, uint32_t arg3);
+    void CapturePixels(void* stream, int idx, uint32_t arg3);
 
     // external members
     bool FUN_00631810(HeaderInfo* hdr, uint32_t u, int kind, wstring16 s);
@@ -520,12 +536,14 @@ PhotoTypeInfo& PhotoTypeMap::operator[](const uint32_t& key)
         }
     }
     if (pLowerBound == (RBNode*)&mAnchor || key < pLowerBound->key) {
-        PhotoTypeInfo empty;
-        empty.bits = 0;
-        empty.key[0] = 0;
-        empty.key[1] = 0;
-        empty.key[2] = 0;
-        pLowerBound = DoInsertKey(pLowerBound, key, empty);
+        PhotoTypePair entry;
+        entry.key = key;
+        entry.info.bits = 0;
+        entry.info.key[0] = 0;
+        entry.info.key[1] = 0;
+        entry.info.key[2] = 0;
+        PhotoTypeMapIterator it = DoInsertKey(pLowerBound, entry, InsertUniqueTag());
+        pLowerBound = it.mpNode;
     }
     return pLowerBound->value;
 }
@@ -631,7 +649,8 @@ bool cSPPlayModePhotoBrowser::MarkPhotoTypeForGuid(uint32_t guid, int kind, Reso
 {
     uint32_t bits = 0;
     ResourceKey k = { 0, 0, 0 };
-    RBNode* it = mPhotoTypeMap.find(guid);
+    PhotoTypeMapIterator found = mPhotoTypeMap.find(guid);
+    RBNode* it = found.mpNode;
     if (it != (RBNode*)&mPhotoTypeMap.mAnchor) {
         bits = it->value.bits;
         k.instance = it->value.key[0];
@@ -680,7 +699,7 @@ bool cSPPlayModePhotoBrowser::LoadPhotoByKey(const ResourceKey* key)
 }
 
 // @ 0x00633440
-void cSPPlayModePhotoBrowser::CapturePixels(int idx, void* stream, uint32_t arg3)
+void cSPPlayModePhotoBrowser::CapturePixels(void* stream, int idx, uint32_t arg3)
 {
     PixEntry* e = &((PixView*)((char*)this + idx * 0x24))->e;
     if (stream) {
