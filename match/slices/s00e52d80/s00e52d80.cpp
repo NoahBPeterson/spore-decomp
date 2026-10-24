@@ -18,11 +18,12 @@ extern "C" {
   void     __cdecl FUN_00e82d10(int);
   int      __cdecl FUN_00e84490(int, int);
   void     __cdecl FUN_00e848c0(int);
-  int      __cdecl FUN_00e4ee60(int);
+  int      __fastcall FUN_00e4ee60(int unusedEcx, int levelInEdx);   // 0x00e4ee60: level in EDX
   void     __cdecl FUN_00e7ce10(int, int);
   void*    __cdecl FUN_00b721d0(int);
   void*    __cdecl FUN_00b3d400(void*);
   void*    __cdecl FUN_00b3d3f0(int);
+  void*    __cdecl FUN_00b3d3f0_get();   // 0x00b3d3f0 (really takes no arguments)
   void     __cdecl FUN_00e190c0(void*);
   void     __cdecl FUN_00e19010(void*);
   void*    __cdecl FUN_00b3d4d0(int);
@@ -54,6 +55,55 @@ struct cAlloc17 { cSPUILayout17* GetAllocator(); };   // 0x7f54d0
 struct cMgr94 { void f(); };                          // 0xe28a00 (float ignored)
 struct cCellSub54 { void* Get(); void* Add(void*); }; // 0xb72160 / 0xb72210
 
+// ---- cell-game singletons: 0x16b3c04 / 0x16b3c0c / 0x16b3c08 hold POINTERS ----
+struct cCellSub17 { void* Fn_b721d0(int key); };      // 0x00b721d0
+struct SlotRec17 { int mType; int mValue; int mPad0; int mPad1; };   // 16-byte slot record
+struct cSlotData17 {                       // pointed to by cCellGame17::mpSlotData_5190
+  char      pad_00[0x1c];
+  int       mField_1c;
+  char      pad_20[0x34 - 0x20];
+  int       mCounts_34[14];                // +0x34 .. +0x6c
+  int       mField_6c;
+  int       mField_70;
+  int       mField_74;
+  int       mField_78;
+  int       mField_7c;
+  SlotRec17 mRecords_80[8];                // +0x80
+};
+struct cCellGame17 {
+  char       pad_00[0x1c];
+  cCellSub17 mSub_1c;
+  char       pad_20[0x411c - 0x20];
+  int        mField_411c;
+  char       pad_4120[0x5158 - 0x4120];
+  int        mField_5158;
+  int        mField_515c;
+  char       pad_5160[0x5190 - 0x5160];
+  cSlotData17* mpSlotData_5190;
+  char       pad_5194[0x51bc - 0x5194];
+  float      mField_51bc;
+  unsigned char mField_51c0;
+  char       pad_51c1[0x51dc - 0x51c1];
+  unsigned char mField_51dc;
+};
+struct cCellGfx17 {                        // gspCellGfx
+  char           pad_00[0x90];
+  cSPUILayout17* mpLayout_90;
+  void*          mpMgr_94;
+  cAlloc17*      mpAlloc_98;
+};
+struct cGfxObj17 {                         // gspCellGfx's render objects
+  char  pad_00[0x161c4];
+  void* mpA_161c4;
+  char  pad_161c8[0x161d0 - 0x161c8];
+  void* mpB_161d0;
+};
+struct cPanel17 { void Fn_190c0(int a); }; // 0x00e190c0
+
+static inline cCellGame17* CellGame17() { return *(cCellGame17**)g_16b3c04; }
+static inline cCellGfx17*  CellGfx17()  { return *(cCellGfx17**)g_16b3c0c; }
+static inline cGfxObj17*   GfxObj17()   { return *(cGfxObj17**)g_16b3c08; }
+
 static void* FindWin(int id) {
   char* st = g_16b3c0c;
   cSPUILayout17* layout = *(cSPUILayout17**)(st + 0x90);
@@ -73,13 +123,12 @@ int FUN_00e530e0() {
   int n = FUN_00e4fd30(local);
   int count = 0;
   if (n > 0) {
-    int off = 0x34;
+    cSlotData17* d = CellGame17()->mpSlotData_5190;
     for (int i = 0; i < n; ++i) {
       if (local[i] != 0) {
-        int v = *(int*)(off + *(int*)(g_16b3c04 + 0x5190));
+        int v = d->mCounts_34[i];
         if (v != 1 && v != 2) ++count;
       }
-      off += 4;
     }
   }
   return count;
@@ -88,27 +137,30 @@ int FUN_00e530e0() {
 // @ 0x00e53130
 void FUN_00e53130() {
   FUN_00e82d10(0xde776d90);
-  int esi = *(int*)(g_16b3c04 + 0x5190);
+  cSlotData17* d = CellGame17()->mpSlotData_5190;
   int r = FUN_00e84490(0xd0d8ca6, 0x5bef305);
-  if (*(int*)(esi + 0x74) < r) FUN_00e82d10(0xd0d8ca6);
-  if (*(int*)(*(int*)(g_16b3c04 + 0x5190) + 0x6c) == 0) FUN_00e82d10(0x662732af);
-  if (*(int*)(*(int*)(g_16b3c04 + 0x5190) + 0x7c) == 2) FUN_00e82d10(0x20b852b8);
-  FUN_00e848c0(*(int*)(*(int*)(g_16b3c04 + 0x5190) + 0x78));
+  if (d->mField_74 < r) FUN_00e82d10(0xd0d8ca6);
+  if (CellGame17()->mpSlotData_5190->mField_6c == 0) FUN_00e82d10(0x662732af);
+  if (CellGame17()->mpSlotData_5190->mField_7c == 2) FUN_00e82d10(0x20b852b8);
+  FUN_00e848c0(CellGame17()->mpSlotData_5190->mField_78);
 }
 
 // @ 0x00e531c0
 bool cSlotOwner17::F_00e531c0() { int* self = (int*)this;
   if (self[0x24] == 4 || self[0x24] == 5) self[0x24] = 0;
-  int v = *(int*)((self[0x24] + 8) * 0x10 + *(int*)(g_16b3c04 + 0x5190));
-  return v == 2 || v == 3;
+  int v = CellGame17()->mpSlotData_5190->mRecords_80[self[0x24]].mType;
+  if (v != 2 && v != 3) return false;
+  return true;
 }
 
 // @ 0x00e53210
 int cSlotOwner17::F_00e53210() { int* self = (int*)this;
   int v = self[0x24];
-  if (v == 1) return 6 - FUN_00e530e0();
-  if (v > 3 && v <= 5) v = 0;
-  return *(int*)(*(int*)(g_16b3c04 + 0x5190) + 0x84 + v * 0x10);
+  if (v != 1) {
+    if (v > 3 && v < 6) v = 0;
+    return CellGame17()->mpSlotData_5190->mRecords_80[v].mValue;
+  }
+  return 6 - FUN_00e530e0();
 }
 
 // @ 0x00e53250
@@ -122,20 +174,21 @@ void FUN_00e53250(int idx) {
 
 // @ 0x00e53280
 bool FUN_00e53280() {
-  char* esi = g_16b3c04;
-  int edi = *(int*)(*(int*)(esi + 0x5190) + 0x7c);
+  cCellGame17* esi = CellGame17();
+  int edi = esi->mpSlotData_5190->mField_7c;
   if (edi == 0) return false;
-  if (esi[0x51dc] != 0) return false;
-  int lvl = FUN_00e4ee60(*(int*)(*(int*)(esi + 0x5190) + 0x1c));
+  if (esi->mField_51dc != 0) return false;
+  int lvl = FUN_00e4ee60(0, esi->mpSlotData_5190->mField_1c);
   if (lvl < 3) return false;
-  if (esi[0x51c0] != 0 && edi == 1) return false;
-  if (!(*(float*)(esi + 0x51bc) <= 0.0f)) return false;
+  if (esi->mField_51c0 != 0 && edi == 1) return false;
+  if (!(esi->mField_51bc <= 0.0f)) return false;
   return true;
 }
 
 // @ 0x00e532e0
 bool FUN_00e532e0(char* flag, float dt) {
-  void* o = FUN_00b721d0(*(int*)(g_16b3c04 + 0x411c));
+  cCellGame17* game = CellGame17();
+  void* o = game->mSub_1c.Fn_b721d0(game->mField_411c);
   if (o) {
     *(char*)((char*)o + 0x17c) = 1;
     *(char*)((char*)o + 0x17b) = 1;
@@ -222,11 +275,13 @@ void FUN_00e53580() {
 // @ 0x00e53860
 void FUN_00e53860(char flag) {
   if (flag) {
-    void* w = SubWindow(FindWin(0x6244208));
+    cSPUILayout17* layout = CellGfx17()->mpLayout_90;
+    void* w = layout->FindWindowByID(0x6244208, 1);
+    w = SubWindow(w);
     Vis(w, 1);
   }
-  void* o = FUN_00b3d3f0(0);
-  FUN_00e190c0(o);
+  void* o = FUN_00b3d3f0_get();
+  ((cPanel17*)o)->Fn_190c0(0);
 }
 
 // @ 0x00e538b0
@@ -282,7 +337,7 @@ void FUN_00e53a20() {
 
 // @ 0x00e53a80
 void FUN_00e53a80() {
-  cSPUILayout17* layout = ((cAlloc17*)(*(int*)(g_16b3c0c + 0x98)))->GetAllocator();
+  cSPUILayout17* layout = CellGfx17()->mpAlloc_98->GetAllocator();
   void* w = layout->FindWindowByID(0x43b72d0, 1);
   w = SubWindow(w);
   Vis(w, 0);
@@ -296,9 +351,9 @@ void FUN_00e53ad0() {
 
 // @ 0x00e53b00
 void FUN_00e53b00(float v) {
-  void* a = *(void**)(g_16b3c08 + 0x161c4);
+  void* a = GfxObj17()->mpA_161c4;
   (*(void(__thiscall**)(void*, float, int))((char*)Vt(a) + 0x24))(a, v, 0);
-  void* b = *(void**)(g_16b3c08 + 0x161d0);
+  void* b = GfxObj17()->mpB_161d0;
   (*(void(__thiscall**)(void*, float, int))((char*)Vt(b) + 0x24))(b, v, 0);
 }
 
