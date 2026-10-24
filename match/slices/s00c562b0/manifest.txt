@@ -1,0 +1,14 @@
+slices/s00c562b0/s00c562b0.cpp  ?OnComplete@cSPGenericPressureEvent@SP@@QAEXXZ  00c562b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?Update@cSPMissionHappinessEvent@SP@@QAEHI@Z  00c56850  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?OnCompleteMission@cSPMissionHappinessEvent@SP@@QAEXXZ  00c568d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?Construct@cMissionMakeAlly@SP@@QAEPAV12@XZ  00c56970  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?Init@cMissionMakeAlly@SP@@QAE_NXZ  00c56ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?HandleMessage@cMsgHandler@SP@@UAEXIPAX@Z  00c56b20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?Update@cSPMissionMultiDelivery@SP@@QAEHI@Z  00c56b90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?UpdateItemName@cSPMissionMultiDelivery@SP@@QAEXXZ  00c56d90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ??5SP@@YAAAUIArchiver@0@AAU10@AAUtItemInfo@0@@Z  00c56de0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?IsItemTargetPlanet@cSPMissionMultiDelivery@SP@@QAE_NPAX@Z  00c57070  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?DeliveredToAllBuyers@cSPMissionMultiDelivery@SP@@QAE_NXZ  00c57270  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?GetTotalTravelCost@cSPMissionMultiDelivery@SP@@QAEHXZ  00c57320  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?GetTotalTravelDistance@cSPMissionMultiDelivery@SP@@QAEMXZ  00c57420  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c562b0/s00c562b0.cpp  ?SetItemPropertyList@cSPMissionMultiDelivery@SP@@QAEXXZ  00c57520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
