@@ -1,0 +1,1 @@
+0134f690 SP::cPlanet attribute-table initialiser  # 12 x 0x3c Simulator::Attribute descriptors (name, hash, offset, callbacks) copied into 0x01578890.. with inlined rep movsd
