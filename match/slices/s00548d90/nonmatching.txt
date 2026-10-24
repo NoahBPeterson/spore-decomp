@@ -7,5 +7,5 @@
 005497e0  79   complete; /Od find_first_of loop schedule differs
 00549840  80   complete; /Od find_last_of loop schedule differs
 00549940  820  complete; /Od vector<0x34> assign/copy schedule differs
-00549d20  132  complete; /Od vector<0x14> insert-one schedule differs
+00549d20  15  complete; the equivalence FAIL was the calling convention. Both helpers are thiscall members: the vector's insert is 0x0054a920 (this=the vector, two stack args, the old free-function extern sent ecx=0 and it dereferenced a null begin pointer) and the element's insert-one helper is 0x0054a470 (this=the old element pointer, one stack arg). The body now also computes the element index n before the branch (the original hoists the idiv) and tests the inverted condition (param_2 != end || end == endOfStorage) so the two-call path is laid out first, with the old element copied to a second temp before the null test, exactly like the original. Replay clean, equiv PASS (411 valid inputs, 88.9% coverage). The remaining 15 bytes are stack-slot displacements only: the original keeps this at -0x18 and the dead result temp at -0x1c with two unused slots at -0x10/-0x14 (frame 0x1c), ours packs this at -0x14 (frame 0x14)
 00549dc0  103  complete; /Od lower_bound schedule differs
