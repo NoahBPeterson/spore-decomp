@@ -363,8 +363,16 @@ HOT_SLOTS = 8          # slots 0..7 hold the argument / `this` objects
 class InputGen:
     """Random inputs ('pointer soup' objects + typed arguments) and their mutations."""
 
-    def __init__(self, t, alias=0.0, nan=False, code=()):
+    def __init__(self, t, alias=0.0, nan=False, code=(), layout=0.0):
         self.t = t
+        # layout-driven `this` objects (tools/difftest/layout_inputs.py): a share of fresh inputs get a consistent
+        # object of the function's dev-PDB class (vectors over real arrays, empty lists/maps, typed pointers)
+        self.layout_p, self.layout_cls = layout, None
+        if layout and t.reg_kinds.get("ecx") == "this":
+            import layout_inputs
+            self.layout_cls = layout_inputs.class_of(t.va if isinstance(t.va, int) else int(str(t.va), 16),
+                                                     getattr(t, "sym", None))
+            t.layout_notes.append("layout inputs: %s" % (self.layout_cls or "no dev-PDB class found"))
         self.alias = alias
         self.nan = nan
         # Generated values never point into real code (image .text, our object's code): a soup
@@ -560,6 +568,14 @@ class InputGen:
                 v |= f2u(rng.uniform(-10, 10)) << (32 * j)
             inp.xmm.append(v)
         inp.overrides = {}
+        if self.layout_cls and rng.random() < self.layout_p:
+            import layout_inputs
+            this = M.POOL_BASE + M.SLOT * 1
+            inp.regs["ecx"] = this
+            over = layout_inputs.build_this(rng, self.fin, self.layout_cls, this, M.POOL_BASE, M.SLOT)
+            inp.pool_over.update(over)
+            inp.touched = sorted(set(a & ~0xFFF for a in over))
+            inp.origin = "layout"
         return inp
 
     def mutate(self, parent, rng, corpus):
@@ -673,7 +689,7 @@ class Runner:
         self.run_blocks = set()
         self.page_cache = {}
         code = [(a, a + n) for nm, a, n, ch in self.img.sections if ch & 0x20000000]
-        self.gen = InputGen(t, opts.alias, opts.nan, code + list(obj["code"]))
+        self.gen = InputGen(t, opts.alias, opts.nan, code + list(obj["code"]), getattr(opts, "layout", 0.0))
         self.cov_on = False
         self.reads = None
         self.hooks.append(m.uc.hook_add(UC_HOOK_BLOCK, self._on_block, begin=t.orig_lo, end=t.orig_hi - 1))
@@ -961,7 +977,7 @@ class Runner:
         for k in range(n):
             args.append(self.norm_key(m.u32(esp + 4 + 4 * k)))
         ecx = self.norm_key(uc.reg_read(UC_X86_REG_ECX))
-        h = zlib.crc32(repr((target, ecx, args)).encode())
+        h = zlib.crc32(repr((target, ecx, args, getattr(self, "fake_salt", 0))).encode())
         k = h % 4
         eax = (0, 1, h % 9, M.POOL_BASE + M.SLOT * (HOT_SLOTS + (h >> 8) % (NSLOTS - HOT_SLOTS)))[k]
         self.fakes.append((target, n, ecx, tuple(args)))
@@ -1131,6 +1147,11 @@ class Runner:
         m.trace_imports = []
         m.fake_handler = (getattr(self, "fake_override", None) or self.fake_call) if self.opts.fake_calls else None
         self.fakes = []
+        # salt the fake-call results with the input: the original and ours run the same input, so they still see
+        # the same results, but different inputs see different ones. Unsalted, a call that depends only on `this`
+        # (Init: `if (!ReadTuningValues()) return false;`) returned the same value for every input and the rest
+        # of the function was never reached (2026-10-23)
+        self.fake_salt = 0 if getattr(self.opts, "fixed_fakes", False) else inp.seed
         self.calls = []
         self.cur = side
         self.cov_on = side is self.orig
@@ -1866,6 +1887,10 @@ def parse_args(argv=None):
                     help="x87 control word both sides run under (hex; default %04X = 24-bit D3D device-thread state, "
                          "027F = CRT 53-bit state of worker threads)" % M.FPCW)
     ap.add_argument("--alias", type=float, default=0.0, help="probability that a generated pointer aliases an argument object")
+    ap.add_argument("--fixed-fakes", action="store_true",
+                    help="fake-call results depend only on the call (pre-2026-10-23 behaviour), not on the input")
+    ap.add_argument("--layout", type=float, default=0.5,
+                    help="share of fresh inputs whose `this` is built from the dev-PDB class layout (0 = off)")
     ap.add_argument("--mutate", type=float, default=0.6, help="share of inputs mutated from the coverage corpus")
     ap.add_argument("-v", "--verbose", action="store_true")
     ap.add_argument("--replay", help="re-run one saved failing input (first_mismatch.input_file) and print details")
