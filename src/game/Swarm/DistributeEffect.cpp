@@ -83,8 +83,11 @@ static __forceinline Vector3 SampleCurve3(const SpVector<Vector3>& c, float t)
     int idx = (int)t;
     float frac = t - (float)idx;
     const Vector3* a = c.mpBegin + idx;
-    if (frac > 0.0f)
-        return a[0] + (a[1] - a[0]) * frac;
+    if (frac > 0.0f) {
+        Vector3 d = a[1] - a[0];
+        _ReadWriteBarrier();   // make cl reload a[0] for the add (the original does not CSE it)
+        return Vector3(d.x * frac + a[0].x, d.y * frac + a[0].y, d.z * frac + a[0].z);
+    }
     return a[0];
 }
 static __forceinline float SampleCurve1(const SpVector<float>& c, float t)
@@ -667,7 +670,7 @@ static inline void FastSinCos_s00a8_dea0(float a, float& s, float& c) {
   float r = a - (float)(bits - 0x4b400000) * gSinCosStep;
   int i = (bits & 0xf) * 2;
   float s0 = gSinCosTable[i];
-  float c0 = gSinCosTable[i + 1];
+  volatile float c0 = gSinCosTable[i + 1];
   c = c0 - (r * c0 * 0.5f + s0) * r;
   s = (c0 - r * s0 * 0.5f) * r + s0;
 }

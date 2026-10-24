@@ -169,8 +169,11 @@ static __forceinline Vector3 SampleCurve3(const SpVector<Vector3>& c, float t)
     int idx = (int)t;
     float frac = t - (float)idx;
     const Vector3* a = c.mpBegin + idx;
-    if (frac > 0.0f)
-        return a[0] + (a[1] - a[0]) * frac;
+    if (frac > 0.0f) {
+        Vector3 d = a[1] - a[0];
+        _ReadWriteBarrier();   // make cl reload a[0] for the add (the original does not CSE it)
+        return Vector3(d.x * frac + a[0].x, d.y * frac + a[0].y, d.z * frac + a[0].z);
+    }
     return a[0];
 }
 
