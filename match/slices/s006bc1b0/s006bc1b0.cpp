@@ -159,7 +159,7 @@ bool DatabasePackedFile::FUN_006bc310(uint32 p2, uint32 p3, uint32 p4, uint32 p5
 }
 
 // @ 0x006bc4d0
-bool DatabasePackedFile::FUN_006bc4d0(uint32 desiredAccess, int createDisposition, int bAutoOpen)
+bool DatabasePackedFile::FUN_006bc4d0(uint32 desiredAccess, int createDisposition, bool bAutoOpen)
 {
     char bl = 0;
     if (bAutoOpen != 0) {
@@ -339,12 +339,12 @@ bool DatabasePackedFile::DecompressData(uint32 a, uint32 b, uint32 c, uint32 d, 
 {
     CompressionRefpack refpack;
     refpack.field_c = 0;
-    if (!refpack.IsValidHeader((const void*)a, b))
+    if (!refpack.IsValidHeader((const void*)b, c))
         return false;
-    int n = refpack.Decompress((const void*)a, b, 0, 0, 1);
-    if (n == (int)c) {
-        if (b != 0 && n != 0) {
-            if (refpack.Decompress((const void*)a, b, (void*)e, d, 1) == 0)
+    int n = refpack.Decompress((const void*)b, c, 0, 0, 1);
+    if (n == (int)d) {
+        if (c != 0 && n != 0) {
+            if (refpack.Decompress((const void*)b, c, (void*)e, d, 1) == 0)
                 return false;
         }
         return true;
@@ -353,15 +353,15 @@ bool DatabasePackedFile::DecompressData(uint32 a, uint32 b, uint32 c, uint32 d, 
 }
 
 // @ 0x006bccb0
-bool DatabasePackedFile::DecompressRecord(uint32 a, uint32 b, uint32 c, uint32 d, uint32 name)
+bool DatabasePackedFile::DecompressRecord(uint32 a, uint32 b, uint32 c, uint32 d, uint32 e, uint32 f)
 {
     bool result = false;
     if (b != 0 || c != 0) {
         void* buf = ((void*(__thiscall*)(void*, uint32, const char*, int))(*(void***)mpAllocator)[8 / 4])
-            (mpAllocator, name, "Resource/Raw", 0);
+            (mpAllocator, d, "Resource/Raw", 0);
         if (buf != 0) {
-            if (ReadFileSpan((uint32)buf, a, b, c)) {
-                result = DecompressData((uint32)buf, name, d, c, b);
+            if (ReadFileSpan((uint32)buf, b, c, d)) {
+                result = DecompressData(a, (uint32)buf, d, e, f);
             }
             ((void(__thiscall*)(void*, void*, int))(*(void***)mpAllocator)[0xc / 4])(mpAllocator, buf, 0);
         }

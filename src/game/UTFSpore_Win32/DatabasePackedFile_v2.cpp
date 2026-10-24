@@ -162,7 +162,7 @@ struct DatabasePackedFile {
     bool FUN_006bc3a0(uint32 flags, float ratio); // 0x6bc3a0
     int  FUN_006bc3e0(uint32 a, int n);       // 0x6bc3e0
     char FUN_006bc420(char p2, void* p3, char p4); // 0x6bc420
-    bool FUN_006bc4d0(uint32 p2, int p3, int p4); // 0x6bc4d0
+    bool FUN_006bc4d0(uint32 p2, int p3, bool p4); // 0x6bc4d0
     bool DeleteRecord();                      // 0x6bc5f0
     void* FUN_006bc6f0(uint32 a, uint32 b);   // 0x6bc6f0
     bool FUN_006bc7a0();                      // 0x6bc7a0
@@ -173,7 +173,7 @@ struct DatabasePackedFile {
     bool ReadFileSpan(uint32 a, uint32 b, uint32 c, uint32 d); // 0x6bca90
     bool FUN_006bcb50(uint32 a, uint32 b, uint32 c, uint32 d); // 0x6bcb50
     bool DecompressData(uint32 a, uint32 b, uint32 c, uint32 d, uint32 e); // 0x6bcc10
-    bool DecompressRecord(uint32 a, uint32 b, uint32 c, uint32 d, uint32 e); // 0x6bccb0
+    bool DecompressRecord(uint32 a, uint32 b, uint32 c, uint32 d, uint32 e, uint32 f); // 0x6bccb0
     bool FUN_006bcd30();                      // 0x6bcd30
     bool FUN_006bcd70(uint32 key);            // 0x6bcd70
     bool FUN_006bcea0();                      // 0x6bcea0
@@ -565,7 +565,7 @@ char DatabasePackedFile::FUN_006bc420(char p2, void* p3, char p4)
 }
 
 // @ 0x006bc4d0
-bool DatabasePackedFile::FUN_006bc4d0(uint32 desiredAccess, int createDisposition, int bAutoOpen)
+bool DatabasePackedFile::FUN_006bc4d0(uint32 desiredAccess, int createDisposition, bool bAutoOpen)
 {
     char bl = 0;
     if (bAutoOpen != 0) {
@@ -771,12 +771,12 @@ bool DatabasePackedFile::DecompressData(uint32 a, uint32 b, uint32 c, uint32 d, 
 {
     CompressionRefpack_s006b_c1b0 refpack;
     refpack.field_c = 0;
-    if (!refpack.IsValidHeader((const void*)a, b))
+    if (!refpack.IsValidHeader((const void*)b, c))
         return false;
-    int n = refpack.Decompress((const void*)a, b, 0, 0, 1);
-    if (n == (int)c) {
-        if (b != 0 && n != 0) {
-            if (refpack.Decompress((const void*)a, b, (void*)e, d, 1) == 0)
+    int n = refpack.Decompress((const void*)b, c, 0, 0, 1);
+    if (n == (int)d) {
+        if (c != 0 && n != 0) {
+            if (refpack.Decompress((const void*)b, c, (void*)e, d, 1) == 0)
                 return false;
         }
         return true;
@@ -785,15 +785,15 @@ bool DatabasePackedFile::DecompressData(uint32 a, uint32 b, uint32 c, uint32 d, 
 }
 
 // @ 0x006bccb0
-bool DatabasePackedFile::DecompressRecord(uint32 a, uint32 b, uint32 c, uint32 d, uint32 name)
+bool DatabasePackedFile::DecompressRecord(uint32 a, uint32 b, uint32 c, uint32 d, uint32 e, uint32 f)
 {
     bool result = false;
     if (b != 0 || c != 0) {
         void* buf = ((void*(__thiscall*)(void*, uint32, const char*, int))(*(void***)mpAllocator)[8 / 4])
-            (mpAllocator, name, "Resource/Raw", 0);
+            (mpAllocator, d, "Resource/Raw", 0);
         if (buf != 0) {
-            if (ReadFileSpan((uint32)buf, a, b, c)) {
-                result = DecompressData((uint32)buf, name, d, c, b);
+            if (ReadFileSpan((uint32)buf, b, c, d)) {
+                result = DecompressData(a, (uint32)buf, d, e, f);
             }
             ((void(__thiscall*)(void*, void*, int))(*(void***)mpAllocator)[0xc / 4])(mpAllocator, buf, 0);
         }

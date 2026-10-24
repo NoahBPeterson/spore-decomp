@@ -189,7 +189,7 @@ struct DatabasePackedFile {
     bool FUN_006bc3a0(uint32 flags, float ratio); // 0x6bc3a0
     int  FUN_006bc3e0(uint32 a, int n);       // 0x6bc3e0
     char FUN_006bc420(char p2, void* p3, char p4); // 0x6bc420
-    bool FUN_006bc4d0(uint32 p2, int p3, int p4); // 0x6bc4d0
+    bool FUN_006bc4d0(uint32 p2, int p3, bool p4); // 0x6bc4d0
     bool DeleteRecord();                      // 0x6bc5f0
     void* FUN_006bc6f0(uint32 a, uint32 b);   // 0x6bc6f0
     bool FUN_006bc7a0();                      // 0x6bc7a0
@@ -200,7 +200,7 @@ struct DatabasePackedFile {
     bool ReadFileSpan(uint32 a, uint32 b, uint32 c, uint32 d); // 0x6bca90
     bool FUN_006bcb50(uint32 a, uint32 b, uint32 c, uint32 d); // 0x6bcb50
     bool DecompressData(uint32 a, uint32 b, uint32 c, uint32 d, uint32 e); // 0x6bcc10
-    bool DecompressRecord(uint32 a, uint32 b, uint32 c, uint32 d, uint32 e); // 0x6bccb0
+    bool DecompressRecord(uint32 a, uint32 b, uint32 c, uint32 d, uint32 e, uint32 f); // 0x6bccb0
     bool FUN_006bcd30();                      // 0x6bcd30
     bool FUN_006bcd70(uint32 key);            // 0x6bcd70
     bool FUN_006bcea0();                      // 0x6bcea0
