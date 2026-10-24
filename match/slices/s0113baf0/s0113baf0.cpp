@@ -573,18 +573,27 @@ bool FUN_0113c9d0(uint8_t* p)
 }
 
 // @ 0x0113ca00
+struct ListEntry {
+    void*  fn;      // +0x00
+    void*  self;    // +0x04
+    double d;       // +0x08
+    float  f0;      // +0x10
+    float  f1;      // +0x14
+    int    i;       // +0x18
+};
+
 void Ctx::FUN_0113ca00(int param_2, uint8_t* param_3)
 {
     uint8_t* sys = (uint8_t*)P(this, 4);
     if (param_2 == 0) {
-        uint8_t* q = (uint8_t*)(W(sys, 0x20) + W(sys, 0xb4));
+        ListEntry* q = (ListEntry*)((char*)W(sys, 0x20) + W(sys, 0xb4));
         W(sys, 0xb4) += 0x20;
-        W(q, 0) = (uint32_t)&FUN_0113c950;
-        W(q, 4) = (uint32_t)this;
-        *(double*)(q + 8) = *(double*)(param_3 + 0);
-        F(q, 0x10) = F(param_3, 8);
-        F(q, 0x14) = F(param_3, 0xc);
-        W(q, 0x18) = (uint32_t)_mm_cvtt_ss2si(_mm_set_ss(F(param_3, 0x10)));
+        q->fn = (void*)&FUN_0113c950;
+        q->d = *(double*)(param_3 + 0);
+        q->f0 = *(float*)(param_3 + 8);
+        q->f1 = *(float*)(param_3 + 0xc);
+        q->i = (int)*(float*)(param_3 + 0x10);
+        q->self = this;
     }
 }
 
