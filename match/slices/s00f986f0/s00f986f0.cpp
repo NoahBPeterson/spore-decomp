@@ -170,3 +170,246 @@ void SkyState::Update()
         }
     }
 }
+
+// =====================================================================
+// SP::cTerrainSphere helpers
+// =====================================================================
+struct Vec3 {
+    float x, y, z;
+};
+
+struct cTerrainMapSet {
+    char  pad00[0x34];      // +0x00..0x33
+    float mRadius34;        // +0x34
+    float mRadius38;        // +0x38
+    float mRadius3c;        // +0x3c
+    float GetHeightAt(Vec3* p);   // 0xf927c0
+};
+
+struct TerrainModelObj {
+    void** vtbl;            // +0x00
+};
+
+struct TerrainModel {
+    TerrainModelObj* mpObj;     // +0x00
+    unsigned char mFlags;       // +0x04
+    char pad05[3];              // +0x05..0x07
+    unsigned short mFlags2;     // +0x08
+    unsigned short mCounter;    // +0x0a
+    float x;                    // +0x0c
+    float y;                    // +0x10
+    float z;                    // +0x14
+};
+
+// Cone / lighting snapshot written by FUN_00f992e0.
+struct ConeBlock {
+    unsigned mConeCos;      // +0x00 (object +0x638)
+    unsigned mConeA;        // +0x04 (object +0x63c)
+    unsigned mConeB;        // +0x08 (object +0x640)
+    unsigned mConeC;        // +0x0c (object +0x644)
+    unsigned mBlockA[4];    // +0x10 (object +0x648)
+    unsigned mBlockD[4];    // +0x20 (object +0x658)
+    unsigned mBlockC[4];    // +0x30 (object +0x668)
+    unsigned mBlockB[4];    // +0x40 (object +0x678)
+    unsigned mBlockG[4];    // +0x50 (object +0x688)
+    unsigned mBlockF[4];    // +0x60 (object +0x698)
+    unsigned mBlockE[4];    // +0x70 (object +0x6a8)
+    unsigned mConeInvB;     // +0x80 (object +0x6b8)
+    unsigned mConeInvA;     // +0x84 (object +0x6bc)
+    unsigned mConeNB;       // +0x88 (object +0x6c0)
+    unsigned mConeNA;       // +0x8c (object +0x6c4)
+};
+
+struct TerrainSphere {
+    char pad000[0x2c];              // +0x000..0x02b
+    cTerrainMapSet* mMap;           // +0x02c
+    char pad030[0x2b8 - 0x030];     // +0x030..0x2b7
+    void** mDecalBegin;             // +0x2b8
+    void** mDecalEnd;               // +0x2bc
+    char pad2c0[0x32c - 0x2c0];     // +0x2c0..0x32b
+    float mConeX;                   // +0x32c
+    float mConeY;                   // +0x330
+    float mConeZ;                   // +0x334
+    char pad338[0x434 - 0x338];     // +0x338..0x433
+    float mTrail[24];               // +0x434..0x493
+    char pad494[0x638 - 0x494];     // +0x494..0x637
+    ConeBlock mCone;                // +0x638..0x6c7
+    char pad6c8[0x7d8 - 0x6c8];     // +0x6c8..0x7d7
+    TerrainModel** mModels;         // +0x7d8
+    TerrainModel** mModelsEnd;      // +0x7dc
+    char pad7e0[0x8ac - 0x7e0];     // +0x7e0..0x8ab
+    unsigned char mFlag8ac;         // +0x8ac
+    char pad8ad[0xa2c - 0x8ad];     // +0x8ad..0xa2b
+    Vec4 mTarget;                   // +0xa2c..0xa3b
+};
+
+typedef void (__thiscall* RemoveDecalFn)(void* self, int index);
+typedef char* (__thiscall* GetRecordFn)(void* self);
+typedef void (__thiscall* PinModelFn)(TerrainModelObj* self, TerrainModel* m, int arg);
+
+// @ 0x00f986f0
+int __fastcall FUN_00f986f0(TerrainSphere* self, void* dummy, int index)
+{
+    Vec4 zero = {0.0f, 0.0f, 0.0f, 0.0f};
+    if (index < 0) {
+        for (int i = 0; i < 6; ++i) {
+            self->mTrail[i * 4 + 0] = zero.x;
+            self->mTrail[i * 4 + 1] = zero.y;
+            self->mTrail[i * 4 + 2] = zero.z;
+            self->mTrail[i * 4 + 3] = zero.w;
+        }
+        return index;
+    } else {
+        float* p = &self->mTrail[index * 4];
+        p[0] = zero.x;
+        p[1] = zero.y;
+        p[2] = zero.z;
+        p[3] = zero.w;
+        return (int)p;
+    }
+}
+
+// @ 0x00f987f0  ?GetRadius@cTerrainSphere@@QAEMXZ
+float __fastcall FUN_00f987f0(TerrainSphere* self, void* dummy)
+{
+    cTerrainMapSet* m = self->mMap;
+    return m->mRadius3c * m->mRadius38 + m->mRadius34;
+}
+
+// @ 0x00f98800  SP::cTerrainSphere::DirectionToSurfacePosition
+void __fastcall FUN_00f98800(TerrainSphere* self, void* dummy, Vec3* out, Vec3* dir)
+{
+    float h = self->mMap->GetHeightAt(dir);
+    float inv = (float)(1.0 / sqrt((double)dir->x * dir->x + (double)dir->y * dir->y + (double)dir->z * dir->z + 1e-8));
+    float x = dir->x;
+    float y = dir->y;
+    float z = dir->z;
+    float rx = x * inv;
+    float ry = y * inv;
+    float rz = z * inv;
+    out->x = rx * h;
+    out->y = ry * h;
+    out->z = rz * h;
+}
+
+// @ 0x00f98890
+void __fastcall FUN_00f98890(TerrainSphere* self, void* dummy, int unused, Vec3* p, float w)
+{
+    Vec4 v = {p->x, p->y, p->z, w};
+    self->mTarget = v;
+}
+
+// @ 0x00f988f0  SP::cTerrainSphere::RemoveDecalSegList
+void __fastcall FUN_00f988f0(TerrainSphere* self, void* dummy, int id)
+{
+    void** p = self->mDecalBegin;
+    for (int i = 0; i < (int)((char*)self->mDecalEnd - (char*)self->mDecalBegin) >> 2; ++i, ++p) {
+        void* e = *p;
+        if (e != 0 && *(int*)e == id) {
+            ((RemoveDecalFn)(*(void***)self)[0xc0 / 4])(self, i);
+            return;
+        }
+    }
+}
+
+// @ 0x00f992e0
+void __fastcall FUN_00f992e0(TerrainSphere* self, void* dummy)
+{
+    char* rec = ((GetRecordFn)(*(void***)self)[0x10 / 4])(self);
+    char* r = rec + 0x2f4;
+    const float kDegToRad = 0.017453292f;
+
+    float c1 = (float)cos(*(float*)(r + 0xcc) * kDegToRad);
+    float c2 = (float)cos(*(float*)(r + 0xd0) * kDegToRad);
+    float c3 = (float)cos(*(float*)(r + 0xd4) * kDegToRad);
+    float invA = 1.0f / (c2 - c3);
+    float c0 = (float)cos(*(float*)(r + 0xc8) * kDegToRad);
+
+    float cx = self->mConeX;
+    self->mCone.mConeCos = *(unsigned*)&cx;
+    float invB = 1.0f / (c0 - c1);
+    float cy = self->mConeY;
+    self->mCone.mConeA = *(unsigned*)&cy;
+    float cz = self->mConeZ;
+    self->mCone.mConeB = *(unsigned*)&cz;
+    self->mCone.mConeC = *(unsigned*)&c2;
+    self->mCone.mConeInvB = *(unsigned*)&invB;
+    self->mCone.mConeInvA = *(unsigned*)&invA;
+    float nb = -(invB * c1);
+    self->mCone.mConeNB = *(unsigned*)&nb;
+    float na = -(invA * c3);
+    self->mCone.mConeNA = *(unsigned*)&na;
+
+    self->mCone.mBlockA[0] = *(unsigned*)(r + 0x58);
+    self->mCone.mBlockA[1] = *(unsigned*)(r + 0x5c);
+    self->mCone.mBlockA[2] = *(unsigned*)(r + 0x60);
+    self->mCone.mBlockA[3] = *(unsigned*)(r + 0x64);
+    self->mCone.mBlockB[0] = *(unsigned*)(r + 0x68);
+    self->mCone.mBlockB[1] = *(unsigned*)(r + 0x6c);
+    self->mCone.mBlockB[2] = *(unsigned*)(r + 0x70);
+    self->mCone.mBlockB[3] = *(unsigned*)(r + 0x74);
+    self->mCone.mBlockC[0] = *(unsigned*)(r + 0x78);
+    self->mCone.mBlockC[1] = *(unsigned*)(r + 0x7c);
+    self->mCone.mBlockC[2] = *(unsigned*)(r + 0x80);
+    self->mCone.mBlockC[3] = *(unsigned*)(r + 0x84);
+    self->mCone.mBlockD[0] = *(unsigned*)(r + 0x88);
+    self->mCone.mBlockD[1] = *(unsigned*)(r + 0x8c);
+    self->mCone.mBlockD[2] = *(unsigned*)(r + 0x90);
+    self->mCone.mBlockD[3] = *(unsigned*)(r + 0x94);
+    self->mCone.mBlockE[0] = *(unsigned*)(r + 0x98);
+    self->mCone.mBlockE[1] = *(unsigned*)(r + 0x9c);
+    self->mCone.mBlockE[2] = *(unsigned*)(r + 0xa0);
+    self->mCone.mBlockE[3] = *(unsigned*)(r + 0xa4);
+    self->mCone.mBlockF[0] = *(unsigned*)(r + 0xa8);
+    self->mCone.mBlockF[1] = *(unsigned*)(r + 0xac);
+    self->mCone.mBlockF[2] = *(unsigned*)(r + 0xb0);
+    self->mCone.mBlockF[3] = *(unsigned*)(r + 0xb4);
+    self->mCone.mBlockG[0] = *(unsigned*)(r + 0xb8);
+    self->mCone.mBlockG[1] = *(unsigned*)(r + 0xbc);
+    self->mCone.mBlockG[2] = *(unsigned*)(r + 0xc0);
+    self->mCone.mBlockG[3] = *(unsigned*)(r + 0xc4);
+}
+
+// @ 0x00f99520  SP::cTerrainSphere::PinModelsToTerrain
+void __fastcall FUN_00f99520(TerrainSphere* self, void* dummy)
+{
+    cTerrainMapSet* map = self->mMap;
+    float radius = map->mRadius3c * map->mRadius38 + map->mRadius34;
+    int count = (int)((char*)self->mModelsEnd - (char*)self->mModels) >> 2;
+
+    for (int i = 0; i < count; ++i) {
+        TerrainModel* m = self->mModels[i];
+        if (m == 0)
+            continue;
+        if ((m->mFlags & 1) == 0)
+            continue;
+
+        Vec3 v;
+        v.x = m->x;
+        v.y = m->y;
+        v.z = m->z;
+        float len = (float)sqrt((double)v.x * v.x + (double)v.y * v.y + (double)v.z * v.z);
+
+        int arg;
+        if (len <= 1e-6) {
+            arg = 0;
+        } else {
+            float h = map->GetHeightAt(&v);
+            if (self->mFlag8ac == 0 && h < radius) {
+                arg = 0;
+            } else {
+                float s = h / len;
+                v.x *= s;
+                v.y *= s;
+                v.z *= s;
+                m->x = v.x;
+                m->y = v.y;
+                m->z = v.z;
+                m->mFlags2 |= 4;
+                m->mCounter += 1;
+                arg = 1;
+            }
+        }
+        ((PinModelFn)(*(void***)m->mpObj)[0x16c / 4])(m->mpObj, m, arg);
+    }
+}
