@@ -51,6 +51,42 @@ cSPTransform& cSPTransform::operator=(const cSPTransform& x)
     return *this;
 }
 
+// @ 0x00537dc0
+// The retail symbol for this VA is ?Assign@cSPTransformOps@@QAEPAU1@PBX@Z (Ghidra guesses operator=):
+// same layout as cSPTransform, but the source is an untyped pointer.
+struct cSPTransformOps {
+    uint16_t mFlags;        // +0x00
+    uint16_t mModCount;     // +0x02
+    float mTranslation[3];  // +0x04
+    float mScale;           // +0x10
+    float mRotation[9];     // +0x14
+    cSPTransformOps* Assign(const void* x);   // 0x00537dc0
+};
+cSPTransformOps* cSPTransformOps::Assign(const void* xv)
+{
+    const cSPTransformOps* x = (const cSPTransformOps*)xv;
+    bool bCopy = false;
+    if (mFlags != x->mFlags)
+        bCopy = true;
+    else if (VectorNotEqual(mTranslation, x->mTranslation))
+        bCopy = true;
+    else if (!(mScale == x->mScale))
+        bCopy = true;
+    else if ((mFlags & 2) != 0 && RotationNotEqual(mRotation, x->mRotation))
+        bCopy = true;
+    if (bCopy) {
+        mModCount = mModCount + 1;
+        mFlags = x->mFlags;
+        mTranslation[0] = x->mTranslation[0];
+        mTranslation[1] = x->mTranslation[1];
+        mTranslation[2] = x->mTranslation[2];
+        mScale = x->mScale;
+        for (int i = 0; i < 9; ++i)
+            mRotation[i] = x->mRotation[i];
+    }
+    return this;
+}
+
 // ---------------------------------------------------------------- @ 0x005372f0
 struct CBlockCommandBase28 {
     char pad[0x30];
@@ -94,14 +130,13 @@ struct Vec16 {
     Elem16* mpCapacity;
     uint32_t mAlloc[2];
     Vec16() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-    void resize(uint32_t n);                                // @ 0x005370b0
+    void resize(uint32_t n, const Elem16& v);               // @ 0x005370b0
     Elem16* erase(Elem16* first, Elem16* last);             // 0x00548690
     void DoInsert(Elem16* position, uint32_t n, const Elem16& v);   // 0x005375d0
 };
-void Vec16::resize(uint32_t n)
+void Vec16::resize(uint32_t n, const Elem16& v)
 {
     if ((uint32_t)(mpEnd - mpBegin) < n) {
-        Elem16 v;
         DoInsert(mpEnd, n - (uint32_t)(mpEnd - mpBegin), v);
     } else {
         erase(mpBegin + n, mpEnd);
@@ -124,6 +159,7 @@ Elem20* uninitialized_copy20(Elem20* first, Elem20* last, Elem20* dest)
 
 // ---------------------------------------------------------------- @ 0x00537c10
 struct Big50 {
+    char m_pad[0x50];
     Big50(void* a, void* b);   // @ 0x00537c90
 };
 Big50* CreateBig50(void* a, void* b)
@@ -180,15 +216,14 @@ bool Host537ea0::IsUsable()
 struct Host537ef0 {
     char pad0[0xc];
     cSPTransform mTransform;   // +0x0c
-    void Set(void* a, void* b, void* c);
+    void Set(void* a, void* b);
 };
-void Host537ef0::Set(void* a, void* b, void* c)
+void Host537ef0::Set(void* a, void* b)
 {
-    (void)c;
     cSPTransform t1(*(const cSPTransform*)b);
     t1.Compound(*(const cSPTransform*)a);
     cSPTransform t2(t1);
-    mTransform = t2;
+    ((cSPTransformOps*)((char*)this + 0xc))->Assign(&t2);
 }
 
 // ---------------------------------------------------------------- stubs (partial)

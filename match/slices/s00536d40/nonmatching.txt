@@ -1,7 +1,7 @@
-005370b0  70   vector<16-byte>::resize: DoInsert/erase reserved frame differs
+005370b0  97   vector<16-byte>::resize(n, v): pass the caller's `v` straight to DoInsert (the retail symbol is ?resize@Vec16@@QAEXIABUElem16@@@Z, i.e. resize(uint, const Elem16&)); grow when count < n, else erase(begin+n,end). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS (289 valid, 100% cov; the old source invented an uninitialized local instead of taking the third argument)
 00537240  77   uninitialized_copy<20-byte>: generic_iterator temp slots missing
-00537c10  45   Big50 factory: EH frame / new-expression shape (size 73 vs 124)
+00537c10  96   Big50 factory: operator new(0x50,"Swarm",0,0,0,0) then call the Big50 ctor; the old struct was empty so sizeof was 1, now a 0x50-byte body makes the allocation size right (the /Od SEH frame still differs). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS (292 valid, 97.4% cov)
 00537d90  26   Host::Init: local cSPTransform construction schedule differs
-00537dc0  255  cSPTransform::operator=: condition tree / float compare schedule differs; equiv: FAIL (5/448 mismatched, float compare memory)
+00537dc0  335  cSPTransformOps::Assign(source): the retail marker is ?Assign@cSPTransformOps@@QAEPAU1@PBX@Z (Ghidra guesses operator=); condition tree = flags equal, VectorNotEqual false, scale equal (NaN treated as unequal), then only when flags&2 RotationNotEqual false; otherwise bump modCount and copy flags/translation/scale/rotation. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS (400 valid, 72.5% cov; exercises the operator= symbol, identical body)
 00537ea0  13   Host::IsUsable: minor /Od slot difference
-00537ef0  46   Host::Set: local cSPTransform construction/copy schedule differs
+00537ef0  55   Host::Set(a, b): two args only (ret 8, the original has no third parameter); copy-construct t1 from b, t1.Compound(a), copy t2 from t1, then Assign(this+0xc, &t2) (the retail call goes to ?Assign@cSPTransformOps@@). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS (346 valid, 100% cov)
