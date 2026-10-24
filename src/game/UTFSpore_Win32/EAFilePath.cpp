@@ -107,12 +107,12 @@ bool EA::IO::FilePath::SafeReplace(const unsigned short* arg0, const unsigned sh
     unsigned extra = (ch0 != 0) ? 1 : 0;
     if (ch1 != 0) extra++;
     int base = (int)((arg0 - mPath) ) ;
-    if ((int)(extra + n1 + base + 1 + n2) > 0x208) return false;
+    if ((unsigned)(extra + n1 + base + 1 + n2) > 0x208) return false;
     unsigned short* dst = (unsigned short*)arg0 + extra + n2;
     memmove(dst, arg1, n1 * 2 + 2);
     if (ch0) { *(unsigned short*)arg0 = ch0; arg0++; }
     extern void WString_insert2(void*, const void*, unsigned);
-    WString_insert2((void*)&arg0, arg2, n2 * 2);
+    WString_insert2((void*)arg0, arg2, n2 * 2);
     if (ch1) dst[-1] = ch1;
     return true;
 }
