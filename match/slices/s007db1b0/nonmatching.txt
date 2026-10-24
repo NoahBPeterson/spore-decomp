@@ -1,8 +1,8 @@
 007db5e0  7    PtrVec::Find; loop index/pointer register assignment swapped (ecx/edx)
-007db8b0  96   cPackInfoVec::Clear; free-loop and vector-erase schedule differ
-007dbe50  68   cSmoothCameraController::StopMotion; x87/SSE field-copy schedule differs
-007dbea0  92   cSmoothCameraController::SaveCameraPosition; saved-camera field mapping/schedule differs
-007dc140  98   cSmoothCameraController::SetCurrentDiscreteOrientation; loop shape differs
+007db8b0  96   cPackInfoVec::Clear; free-loop and vector-erase schedule differ; fixed tail to element-count arithmetic ((end-begin)>>2)*-4 [equiv: PASS]
+007dbe50  68   cSmoothCameraController::StopMotion; x87/SSE field-copy schedule differs; fixed mSteps to float (raw fld/fstp bit copy, not float->int) [equiv: PASS]
+007dbea0  92   cSmoothCameraController::SaveCameraPosition; saved-camera field mapping/schedule differ; record starts at &mCameraPositions[i].mPitchParam and returns &mSubjectPosition, removed spurious floor/wall zero writes [equiv: PASS]
+007dc140  98   cSmoothCameraController::SetCurrentDiscreteOrientation; loop shape differs; fixed index field to int at +0x160, vector at +0x14c/+0x150, _ReadWriteBarrier pins store [equiv: PASS]
 007db650  458  cPackManager::Init complete (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast); stack-slot order (keys/filter/key temp) and local spill layout differ [equiv: WEAK 22.9% coverage]
 007dbf20  5  RestoreCameraPosition complete (retail offsets); only vtable fn-pointer register swap (eax/edx) [equiv: PASS]
 007dbfe0  279  SetCurrentZoomLevel complete (retail offsets); size() CSE and lea residue differ [equiv: UNSUPPORTED fake-arity]

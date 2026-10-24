@@ -4,6 +4,7 @@
 #include "types.h"
 #include <stdio.h>
 #include <string.h>
+#include <intrin.h>
 
 typedef void* HMODULE;
 typedef const char* LPCSTR;
@@ -19,10 +20,10 @@ struct cSPVector3 { float x, y, z; };
 struct cSPQuaternion { float x, y, z, w; };
 
 namespace SP2 {
-struct tLerpAngle   { float mCurrent; float mTarget; uint32_t mSteps; float mMinChange; };
-struct tLerpScalar  { float mCurrent; float mTarget; uint32_t mSteps; float mMinChange; };
-struct tLerpVector3 { cSPVector3 mCurrent; cSPVector3 mTarget; uint32_t mSteps; float mMinChange; };
-struct tLerpQuaternion { cSPQuaternion mCurrent; cSPQuaternion mTarget; uint32_t mSteps; float mMinChange; };
+struct tLerpAngle   { float mCurrent; float mTarget; float mSteps; float mMinChange; };
+struct tLerpScalar  { float mCurrent; float mTarget; float mSteps; float mMinChange; };
+struct tLerpVector3 { cSPVector3 mCurrent; cSPVector3 mTarget; float mSteps; float mMinChange; };
+struct tLerpQuaternion { cSPQuaternion mCurrent; cSPQuaternion mTarget; float mSteps; float mMinChange; };
 struct tSavedCameraPosition {
     bool mValid;                // +0x0
     int mCurrentZoomLevel;      // +0x4
@@ -97,7 +98,7 @@ struct cPackInfoVec {
 
 bool cPackInfoVec::Clear()
 {
-    int n = (int)(mpEnd - mpBegin);
+    int n = (int)((char*)mpEnd - (char*)mpBegin) >> 2;
     for (int i = 0; i < n; ++i) {
         char* p = (char*)mpBegin[i];
         if (p) {
@@ -108,7 +109,8 @@ bool cPackInfoVec::Clear()
     void* end = mpEnd;
     void* begin = mpBegin;
     SP_VecDoInsert(begin, end, 0);
-    mpEnd = (void**)((char*)mpEnd + (int)((char*)mpEnd - (char*)mpBegin) * -1);
+    int m = (int)((char*)mpEnd - (char*)mpBegin) >> 2;
+    mpEnd = (void**)((char*)mpEnd - m * 4);
     return true;
 }
 
@@ -139,10 +141,14 @@ struct cSmoothCameraController {
     Vec16 mFOVLevels;               // +0x120
     Vec16 mOrientations;            // +0x130
     int mCurrentOrientation;        // +0x140
-    cSPVector3 mDraggedVelocity;    // +0x144
-    uint32_t mPositionInterpolationSteps; // +0x150
+    int mPad144;                    // +0x144
+    int mPad148;                    // +0x148
+    void** mpOrientationBegin_14c;  // +0x14c (retail orientation vector begin)
+    void** mpOrientationEnd_150;    // +0x150 (retail orientation vector end)
     float mTranslationInputVelocity;// +0x154
-    cSPVector3 mxyzSubjectOffset;   // +0x158
+    float mxyzSubjectOffsetX_158;   // +0x158
+    float mxyzSubjectOffsetY_15c;   // +0x15c
+    int   mOrientationIndex_160;    // +0x160 (retail: discrete orientation index, int)
     tLerpQuaternion mRelativeOrientation;  // +0x164
     float mHeadingRelative;         // +0x18c
     bool mTracking;                 // +0x190
@@ -172,7 +178,7 @@ struct cSmoothCameraController {
     void* GetSavedCamera();                          // 007dbdd0
     void SetSavedCamera(float* src);                 // 007dbdf0
     void StopMotion();                               // 007dbe50
-    void SaveCameraPosition(int index);              // 007dbea0
+    cSPVector3* SaveCameraPosition(int index);       // 007dbea0
     void RestoreCameraPosition(int index);           // 007dbf20
     void SetCurrentZoomLevel(int level);             // 007dbfe0
     void SetCurrentDiscreteOrientation(int orient);  // 007dc140
@@ -252,37 +258,36 @@ void cSmoothCameraController::SetSavedCamera(float* src)
 
 void cSmoothCameraController::StopMotion()
 {
-    mBufferedDistanceAlongCurve.mSteps = (uint32_t)mBufferedDistanceAlongCurve.mMinChange;
+    mBufferedDistanceAlongCurve.mSteps = mBufferedDistanceAlongCurve.mMinChange;
     float y = mBufferedLookAtPosition.mCurrent.y;
-    mBufferedNearClip.mSteps = (uint32_t)mBufferedNearClip.mMinChange;
-    mBufferedSubjectPosition.mSteps = (uint32_t)y;
-    mBufferedFarClip.mSteps = (uint32_t)mBufferedFarClip.mMinChange;
-    mBufferedFOV.mSteps = (uint32_t)mBufferedFOV.mMinChange;
+    mBufferedNearClip.mSteps = mBufferedNearClip.mMinChange;
+    mBufferedSubjectPosition.mSteps = y;
+    mBufferedFarClip.mSteps = mBufferedFarClip.mMinChange;
+    mBufferedFOV.mSteps = mBufferedFOV.mMinChange;
     mBufferedSubjectPosition.mMinChange = mBufferedLookAtPosition.mCurrent.z;
     mBufferedLookAtPosition.mCurrent.x = mBufferedLookAtPosition.mTarget.x;
-    mBufferedPitchParam.mSteps = (uint32_t)mBufferedPitchParam.mMinChange;
+    mBufferedPitchParam.mSteps = mBufferedPitchParam.mMinChange;
     mBufferedSubjectPosition.mCurrent.z = mBufferedSubjectPosition.mTarget.x;
 }
 
-void cSmoothCameraController::SaveCameraPosition(int index)
+cSPVector3* cSmoothCameraController::SaveCameraPosition(int index)
 {
-    if (index >= 7)
-        return;
-    tSavedCameraPosition* p = &mCameraPositions[index];
+    if ((unsigned)index > 6)
+        return (cSPVector3*)(size_t)index;
+    tSavedCameraPosition* p = (tSavedCameraPosition*)&mCameraPositions[index].mPitchParam;
     p->mValid = 1;
-    p->mCurrentZoomLevel = (int)mContinuousZoomDistance;
-    p->mDistance = (float)mBufferedNearClip.mSteps;
-    p->mCurrentOrientation = (int)mxyzSubjectOffset.z;
-    p->mHeading = (float)mBufferedDistanceAlongCurve.mSteps;
-    p->mNearClip = (float)mBufferedFarClip.mSteps;
-    p->mFarClip = (float)mBufferedFOV.mSteps;
-    p->mFOV = (float)mBufferedPitchParam.mSteps;
+    p->mCurrentZoomLevel = *(int*)&mContinuousZoomDistance;
+    p->mDistance = mBufferedNearClip.mSteps;
+    p->mCurrentOrientation = mOrientationIndex_160;
+    p->mHeading = mBufferedDistanceAlongCurve.mSteps;
+    p->mNearClip = mBufferedFarClip.mSteps;
+    p->mFarClip = mBufferedFOV.mSteps;
+    p->mFOV = mBufferedPitchParam.mSteps;
     p->mPitchParam = mBufferedSubjectPosition.mCurrent.z;
-    p->mSubjectPosition.x = (float)mBufferedSubjectPosition.mSteps;
+    p->mSubjectPosition.x = mBufferedSubjectPosition.mSteps;
     p->mSubjectPosition.y = mBufferedSubjectPosition.mMinChange;
     p->mSubjectPosition.z = mBufferedLookAtPosition.mCurrent.x;
-    p->mFloorLevel = 0;
-    p->mWallMode = 0;
+    return &p->mSubjectPosition;
 }
 
 // Retail field offsets differ from the 2008 PDB layout above in this region, so the two
@@ -356,14 +361,15 @@ void cSmoothCameraController::SetCurrentZoomLevel(int level)
 
 void cSmoothCameraController::SetCurrentDiscreteOrientation(int orient)
 {
-    mxyzSubjectOffset.z = (float)orient;
-    int n = (int)((char*)mOrientations.mpEnd - (char*)mOrientations.mpBegin) >> 2;
+    mOrientationIndex_160 = orient;
+    _ReadWriteBarrier();
+    int n = (int)((char*)mpOrientationEnd_150 - (char*)mpOrientationBegin_14c) >> 2;
     if (n <= 0)
         return;
-    while ((int)mxyzSubjectOffset.z < 0)
-        mxyzSubjectOffset.z += (float)n;
-    while ((int)mxyzSubjectOffset.z >= n)
-        mxyzSubjectOffset.z -= (float)n;
+    while (mOrientationIndex_160 < 0)
+        mOrientationIndex_160 += n;
+    while (mOrientationIndex_160 >= n)
+        mOrientationIndex_160 -= n;
 }
 
 // ---------------------------------------------------------------------------
