@@ -1,8 +1,5 @@
-00577130  125  complete: 3 sound events; original loads param to ecx before test, cl folds ours to cmp mem (shifts all branch offsets)
-005771f0  123  complete: same as 00577130, without counter increment
 005772b0  28   complete: manual double-deref vtable slots 0x16c/0x170; register/const-folding differs
-005774f0  19   complete: forwards param to a member at +0xf8 then DoSomeOther(0,-1); param lives in edi not ebx
 00577520  57   complete: block-state update; original uses shr/test vs our bit-test, and a different entry register
 00577650  709  complete SaveSomething (save model/thumbnail/metadata + vehicle part summaries); register allocation (this/mgr/model/key regs) and stack-slot layout differ from original, meta pointer spilled [equiv: WEAK]
-00577b20  18  complete HasAnyResource (cdecl free function, was mis-declared as member): loop keeps begin/index in different registers (esi/edx vs edi/esi) [equiv: WEAK]
+00577b20  18   complete HasAnyResource (cdecl free function, was mis-declared as member): loop keeps begin/index in different registers (esi/edx vs edi/esi) [equiv: WEAK]
 00577c40  103  complete LoadSomething: only block layout differs (cl places the xor ebp,ebp null arm of the cursor new out of line) [equiv: WEAK]

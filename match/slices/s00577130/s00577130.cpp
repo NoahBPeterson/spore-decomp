@@ -79,9 +79,14 @@ cPropMgr* PropertyManager();                      // 0x0067de30
 bool GetPropertyAsKeyInstance(IRC* list, uint32_t id, uint32_t* out);   // 0x006a12a0 (cdecl)
 bool GetPropertyAsKey(IRC* list, uint32_t id, ResKey3* out);            // 0x006a1250 (cdecl)
 extern uint32_t g_preloadGroup;                   // 0x0150cdd4
-struct cSPEditorBlock {
+namespace SP {
+class cSPEditorBlock {
+public:
     ResKey3 GetMirroredKey(int type, int sub);    // 0x00438f20 (thiscall, hidden return, ret 0xc)
+    void* F40b90(void* out);                      // 0x440b90 (copies 12 bytes at +0x5f8)
 };
+}
+using SP::cSPEditorBlock;
 struct Block {                                    // creature part, 0x1d8 bytes
     uint32_t pad0;
     uint32_t id;                                  // +4
@@ -213,8 +218,8 @@ class cAppModeEditorBase {
 public:
     char pad[0x458];
 
-    void SetSoundBlockAdded(int);                 // 0x577130
-    void SetSoundBlockRemoved(int);               // 0x5771f0
+    void SetSoundBlockAdded(cSPEditorBlock*);     // 0x577130
+    void SetSoundBlockRemoved(cSPEditorBlock*);   // 0x5771f0
     void RemoveTorsoFromEffectsMask();            // 0x5772b0
     void PreloadResources(int key);               // 0x577310
     void SetSomeBlock(int);                       // 0x5774f0
@@ -235,13 +240,13 @@ public:
 using SP::cAppModeEditorBase;
 
 // @ 0x00577130
-void cAppModeEditorBase::SetSoundBlockAdded(int param)
+void cAppModeEditorBase::SetSoundBlockAdded(cSPEditorBlock* param)
 {
-    int p = param;
+    int p = (int)param;
     if (Ref<char>(this, 0x20e) != 0) {
         if (p != 0) {
             int local[3];
-            SomeGuardCall(local);
+            param->F40b90(local);
             int n = g_soundBlockCounter + 1;
             g_soundBlockCounter = n;
             SP::EditorUtils::PlayEditorSound(0x1d6253c0, 0xc8b0416e, (float)n, 0);
@@ -258,13 +263,13 @@ void cAppModeEditorBase::SetSoundBlockAdded(int param)
 }
 
 // @ 0x005771f0
-void cAppModeEditorBase::SetSoundBlockRemoved(int param)
+void cAppModeEditorBase::SetSoundBlockRemoved(cSPEditorBlock* param)
 {
-    int p = param;
+    int p = (int)param;
     if (Ref<char>(this, 0x20e) != 0) {
         if (p != 0) {
             int local[3];
-            SomeGuardCall(local);
+            param->F40b90(local);
             SP::EditorUtils::PlayEditorSound(0x1d6253c0, 0xbb98bc04, (float)g_soundBlockCounter, 0);
         }
         if (Ref<char>(this, 0x20e) != 0) {
@@ -305,7 +310,7 @@ void cAppModeEditorBase::RemoveTorsoFromEffectsMask()
 void cAppModeEditorBase::SetSomeBlock(int param)
 {
     ((ObjF8*)((char*)this + 0xf8))->SomeMethod(param);
-    if (param == 0)
+    if ((unsigned char)param == 0)
         DoSomeOther(0, -1);
 }
 

@@ -1792,6 +1792,7 @@ namespace EditorUtils {
 }
 }
 void   __stdcall SomeGuardCall(void* p);          // 0x440b90
+struct cBlockF40b90 { void* F40b90(void* out); };  // 0x440b90 (copies 12 bytes at +0x5f8)
 void   __cdecl PlayEditorEvent(uint32_t id);      // 0x4a88d0
 int    __cdecl g_soundBlockCounter;               // 0x15e4eec
 struct IObject_s0057_7130 {
@@ -9046,7 +9047,7 @@ void SP::cAppModeEditorBase::SetSoundBlockAdded(SP::cSPEditorBlock * param)
     if (Ref<char>(this, 0x20e) != 0) {
         if (p != 0) {
             int local[3];
-            SomeGuardCall(local);
+            ((cBlockF40b90*)param)->F40b90(local);
             int n = g_soundBlockCounter + 1;
             g_soundBlockCounter = n;
             SP::EditorUtils::PlayEditorSound(0x1d6253c0, 0xc8b0416e, (float)n, 0);
@@ -9070,7 +9071,7 @@ void SP::cAppModeEditorBase::SetSoundBlockRemoved(SP::cSPEditorBlock * param)
     if (Ref<char>(this, 0x20e) != 0) {
         if (p != 0) {
             int local[3];
-            SomeGuardCall(local);
+            ((cBlockF40b90*)param)->F40b90(local);
             SP::EditorUtils::PlayEditorSound(0x1d6253c0, 0xbb98bc04, (float)g_soundBlockCounter, 0);
         }
         if (Ref<char>(this, 0x20e) != 0) {
@@ -9154,7 +9155,7 @@ void SP::cAppModeEditorBase_s0057_7130::PreloadResources(int key)
 void SP::cAppModeEditorBase_s0057_7130::SetSomeBlock(int param)
 {
     ((ObjF8*)((char*)this + 0xf8))->SomeMethod(param);
-    if (param == 0)
+    if ((unsigned char)param == 0)
         DoSomeOther(0, -1);
 }
 
