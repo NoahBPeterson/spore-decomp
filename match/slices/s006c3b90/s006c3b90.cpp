@@ -19,9 +19,23 @@ void SortHeap(Rec24* first, Rec24* last);                              // 0x006c
 
 struct Mat4 {
   float m[16];
-  void SetRows(const float* r0, const float* r1, const float* r2, const float* r3); // 0x006c2740
+  void SetRows(const float* r0, const float* r1, const float* r2, const float* r3);
+  void Assign(const float* a, const float* b, const float* c, const float* d); // 0x006c2740
 };
 float* ScaleMatrixReversed(float* out, const float* m, float s); // 0x006c2cd0
+
+inline void Mat4::SetRows(const float* r0, const float* r1, const float* r2, const float* r3) {
+  Assign(r0, r1, r2, r3);
+}
+
+// @ 0x006c2740
+void Mat4::Assign(const float* a, const float* b, const float* c, const float* d)
+{
+  for (int i = 0; i < 4; ++i) m[i] = a[i];
+  for (int i = 0; i < 4; ++i) m[4 + i] = b[i];
+  for (int i = 0; i < 4; ++i) m[8 + i] = c[i];
+  for (int i = 0; i < 4; ++i) m[12 + i] = d[i];
+}
 
 // ---------------------------------------------------------------------------
 // EASTL get_partition, instantiated for Rec24 (pivot passed by value).
@@ -77,28 +91,34 @@ static void BakeWeighted(float* outA, float* outB, const float* base, const floa
   for (int k = 1; k <= count; ++k) {
     const float* q = (const float*)(seg + stride * idx[k]);
     float w = s[k];
+    float zw = w * 0.0f;
     sm[0]  += q[0]  * w; sm[1]  += q[1]  * w; sm[2]  += q[2]  * w; sm[3]  += q[3]  * w;
     sm[4]  += q[4]  * w; sm[5]  += q[5]  * w; sm[6]  += q[6]  * w; sm[7]  += q[7]  * w;
     sm[8]  += q[8]  * w; sm[9]  += q[9]  * w; sm[10] += q[10] * w; sm[11] += q[11] * w;
+    sm[12] += zw; sm[13] += zw; sm[14] += zw; sm[15] += w;
   }
 
-  outB[0] = sm[0] * dir[0] + sm[4] * dir[1] + sm[8] * dir[2];
-  outB[1] = sm[1] * dir[0] + sm[5] * dir[1] + sm[9] * dir[2];
-  outB[2] = sm[2] * dir[0] + sm[6] * dir[1] + sm[10] * dir[2];
+  float d0 = dir[0], d1 = dir[1], d2 = dir[2];
+  float b0 = base[0], b1 = base[1], b2 = base[2];
 
-  outA[0] = sm[0] * base[0] + sm[4] * base[1] + sm[8] * base[2] + sm[12];
-  outA[1] = sm[1] * base[0] + sm[5] * base[1] + sm[9] * base[2] + sm[13];
-  outA[2] = sm[2] * base[0] + sm[6] * base[1] + sm[10] * base[2] + sm[14];
+  outB[0] = ((d2 * sm[8] + d0 * sm[0]) + d1 * sm[4]) + sm[12] * 0.0f;
+  outB[1] = ((d1 * sm[5] + d2 * sm[9]) + d0 * sm[1]) + sm[13] * 0.0f;
+  outB[2] = ((d1 * sm[6] + d2 * sm[10]) + d0 * sm[2]) + sm[14] * 0.0f;
+
+  outA[0] = ((b2 * sm[8] + b0 * sm[0]) + b1 * sm[4]) + sm[12];
+  outA[1] = ((b1 * sm[5] + b2 * sm[9]) + b0 * sm[1]) + sm[13];
+  outA[2] = ((b1 * sm[6] + b2 * sm[10]) + b0 * sm[2]) + sm[14];
 }
-
 // @ 0x006c3b90
-void FUN_006c3b90(float* outA, float* outB, const float* base, const float* dir,
-                  const float* s, const int* idx, int layout) {
+float* FUN_006c3b90(float* outA, float* outB, const float* base, const float* dir,
+                    const float* s, const int* idx, int layout) {
   BakeWeighted(outA, outB, base, dir, s, idx, layout, 2);
+  return outA;
 }
 
 // @ 0x006c4200
-void FUN_006c4200(float* outA, float* outB, const float* base, const float* dir,
-                  const float* s, const int* idx, int layout) {
+float* FUN_006c4200(float* outA, float* outB, const float* base, const float* dir,
+                    const float* s, const int* idx, int layout) {
   BakeWeighted(outA, outB, base, dir, s, idx, layout, 3);
+  return outA;
 }

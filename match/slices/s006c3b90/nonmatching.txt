@@ -1,2 +1,3 @@
-006c3b90 1293  complete source (BakeWeighted N=2); original is SSE-scalar prebuilt codegen, cl15 emits x87
-006c4200 1293  complete source (BakeWeighted N=3); original is SSE-scalar prebuilt codegen, cl15 emits x87
+# va  diff-bytes  reason
+006c3b90  42  complete source (BakeWeighted N=2): equivalence WEAK (189 valid inputs, 100.0% coverage). Needs /fp:fast: without it cl15 compiles the weighted-sum chains with x87 and the extended-precision intermediates flip the sign of the zero written to outA/outB (+0.0 vs -0.0); with it cl emits the original's SSE scalar sequence. The wrapper stays a call to the out-of-line BakeWeighted, so the original's inlined body is not reproduced byte-for-byte.  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006c4200  42  complete source (BakeWeighted N=3): equivalence WEAK (162 valid inputs, 100.0% coverage). Same /fp:fast requirement as 006c3b90 - the N=3 weighted sum only matches the original's scalar-SSE codegen (and its zero signs) when x87 is disabled; the body is shared with 006c3b90 through BuyWeighted, so byte-exactness is out of reach.  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
