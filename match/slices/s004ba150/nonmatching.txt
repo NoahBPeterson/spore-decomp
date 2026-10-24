@@ -1,5 +1,5 @@
 004bab30  92  cEditorResource ctor; vtable/field stores present, /Od frame and LOCK schedule differ
-004babe0  41  Apply wrapper (7-arg cdecl helper); argument-build frame differs
-004bac30  45  Apply wrapper (extra args); argument-build frame differs
+004babe0  44  Apply wrapper (7-arg cdecl helper); equivalence PASS (400 inputs, 293 valid, 100.0% coverage); the original is a __thiscall-style wrapper that reads the object pointer from [ebp+8] and the char from [ebp+0xc] before forwarding 7 args, so ours declares a dummy second __fastcall register arg and takes (a, c) from the stack; the helper's by-value 16-byte bitset is still built with four pushes instead of sub esp,0x10+stores (69 vs 75 bytes, 44 diff)
+004bac30  56  Apply wrapper (extra args); equivalence PASS (400 inputs, 267 valid, 100.0% coverage); same dummy-register-arg fix as 004babe0 so a/c..f/g come from the stack slots the original reads; argument build differs (58 vs 65 bytes, 56 diff)
 004bad50  103  resource dtor; releases/loops present, inlined release frames differ
 004ba150  1286  cEditorResource cell-upgrade copy (PDB cand. EditorValidity::AddCellUpgradeForBlockPropList): complete (copy+retype, 3 block loops, bbox/transform min-z, static axis Vector3s, prop bools, key remap, detach); size 2512 vs 2513, same call/vcall sequence; /Od frame 0x14c vs 0x1dc (slot layout/holes) and one Matrix3 result-pointer slot differ; equiv: WEAK (2.8% cov, 1200 valid)

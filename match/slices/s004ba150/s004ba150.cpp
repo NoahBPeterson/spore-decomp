@@ -57,17 +57,17 @@ extern void* g_vtbl;
 extern void* g_vtbl;
 
 // @ 0x4babe0
-void* __fastcall FUN_004babe0(void* self, void* b, char c)
+void* __fastcall FUN_004babe0(void* self, void* unused, void* a, char c)
 {
-    FUN_004f3de0(b, self, DAT_015da860, DAT_015da864, DAT_015da868, DAT_015da86c, c);
-    return b;
+    FUN_004f3de0(a, self, DAT_015da860, DAT_015da864, DAT_015da868, DAT_015da86c, c);
+    return a;
 }
 
 // @ 0x4bac30
-void* __fastcall FUN_004bac30(void* self, void* b, void* c, void* d, void* e, void* f, char g)
+void* __fastcall FUN_004bac30(void* self, void* unused, void* a, void* c, void* d, void* e, void* f, char g)
 {
-    FUN_004f3de0(b, self, (int)c, (int)d, (int)e, (int)f, g);
-    return b;
+    FUN_004f3de0(a, self, (int)c, (int)d, (int)e, (int)f, g);
+    return a;
 }
 
 // @ 0x4bac80
