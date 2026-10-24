@@ -37,7 +37,7 @@ struct GridEntry {
     float m18;
     bool  m1c;
     bool  m1d;
-    GridEntry() {}
+    GridEntry() : m00(0), m04(0), m08(0) {}
     GridEntry& operator=(const GridEntry&);   // 0x0064f450
 };
 
@@ -65,8 +65,6 @@ void       AdjustHeapA(GridEntry* first, int top, int heapSize, int pos, GridEnt
 void       SortHeapA(GridEntry* first, GridEntry* last);                               // 0x653470
 void       PartialSortB(GridEntry* first, GridEntry* middle, GridEntry* last);         // 0x653230
 GridEntry  MedianA(GridEntry a, GridEntry b, GridEntry c);                             // 0x6515a0
-void       DoInsertValuesEx(GridEntry* position, unsigned n, const GridEntry& value);  // 0x652c90
-void __fastcall FUN_0064f4e0(void* self, int, unsigned n, void* alloc);               // 0x0064f4e0 (this=out)
 GridEntry** FUN_0064f730(GridEntry** pOut, GridEntry* first, GridEntry* last,
                          GridEntry* initial, unsigned count);                           // 0x0064f730
 
@@ -79,9 +77,25 @@ struct GridVec {
     void DoDestroyValues(GridEntry* first, GridEntry* last);                      // 0x0064f410
     GridEntry* ReallocateAndCopy(unsigned n, GridEntry* first, GridEntry* last);  // 0x00651540
     void DoInsertValue(GridEntry* position, const GridEntry& value);              // 0x006535b0
+    void f_00652c90(GridEntry* position, unsigned n, const GridEntry& value);     // 0x00652c90
+    void f_0064f4e0(unsigned n, void* alloc);                                     // 0x0064f4e0 (ecx = the vector)
     void resize(unsigned n);                                                      // 0x00653e40
     void reserve(unsigned n);                                                     // 0x00654490
     void swap(GridVec& other);                                                    // 0x00653510
+
+    void* mpAllocator;   // +0xc: allocator identity the rebuild helpers take by address
+};
+
+// Stubs for the thiscall helpers these methods release their members through.
+struct LayoutStub {
+    void f_00811ad0(unsigned flags);      // 0x00811ad0 (ecx = layout)
+};
+struct AssetObjStub {
+    void f_00659340();                    // 0x00659340 (ecx = object)
+    void f_0065fa20();                    // 0x0065fa20 (ecx = object)
+};
+struct SearchBoxStub {
+    void f_00671c00();                    // 0x00671c00 (ecx = search box)
 };
 
 // @ 0x006535b0  vector::DoInsertValue(position, value)
@@ -124,17 +138,18 @@ void GridVec::resize(unsigned n) {
     const unsigned cur = (unsigned)(mpEnd - mpBegin);
     if (cur < n) {
         GridEntry empty;
-        DoInsertValuesEx(mpEnd, n - cur, empty);
+        f_00652c90(mpEnd, n - cur, empty);
     } else {
         GridEntry* pos = mpBegin + n;
-        CopyRange(mpEnd, mpEnd, pos);
-        DestroyRange(pos, mpEnd, pos);
+        DoDestroyValues(CopyRange(mpEnd, mpEnd, pos), mpEnd);
         mpEnd -= (unsigned)(mpEnd - pos);
     }
 }
 
 // @ 0x00654490  vector::reserve(n)
 void GridVec::reserve(unsigned n) {
+    if (n == (unsigned)-1)
+        return;
     const unsigned cur = (unsigned)(mpEnd - mpBegin);
     if (n > cur) {
         GridEntry* pNewData = n
@@ -144,17 +159,26 @@ void GridVec::reserve(unsigned n) {
                                                    "EASTL/allocator.h",
                                                    0xd1)
             : 0;
-        GridEntry* pEnd = UninitializedCopy(mpBegin, mpEnd, pNewData);
+        UninitializedCopy(mpBegin, mpEnd, pNewData);
         DestroyRange(mpBegin, mpEnd, pNewData);
         if (mpBegin && ((unsigned*)mpBegin)[-1])
             EASTL_allocator_deallocate(mpBegin);
-        mpCapacity = pNewData + n;
+        GridEntry* pEnd = pNewData + (unsigned)(mpEnd - mpBegin);
         mpBegin = pNewData;
+        mpCapacity = pNewData + n;
         mpEnd = pEnd;
     } else {
         if (n < cur)
             resize(n);
-        DoInsertValuesEx(mpBegin, 0, (const GridEntry&)*(GridEntry*)0);
+        GridVec temp;
+        temp.f_0064f4e0((unsigned)(mpEnd - mpBegin), &mpAllocator);
+        GridEntry* pWritten;
+        FUN_0064f730(&pWritten, mpBegin, mpEnd, temp.mpBegin, n);
+        temp.mpEnd = pWritten;
+        swap(temp);
+        temp.DoDestroyValues(temp.mpBegin, temp.mpEnd);
+        if (temp.mpBegin && ((unsigned*)temp.mpBegin)[-1])
+            EASTL_allocator_deallocate(temp.mpBegin);
     }
 }
 
@@ -227,12 +251,8 @@ extern "C" void* FUN_0065f810(int);                    // 0x0065f810
 extern "C" void* cSPUIAssetView_InitVerbCollection(void*);  // 0x004bb860
 extern "C" void  fixed_vector_DoInsertValue(void*, void*, void*);  // 0x0060a600
 extern "C" void* AppSystem();                          // 0x0067dd00
-extern "C" void  cSPUILayout_Shutdown(void*, int);     // 0x00811ad0
 extern "C" void  FUN_0065aeb0();                       // 0x0065aeb0
-extern "C" void  FUN_0065fa20(void*);                  // 0x0065fa20
-extern "C" void  cSPUISearchBox_Shutdown(void*);       // 0x00671c00
 extern "C" void  Messaging_RemoveHandler(void*, void*, void*, void*, void*);  // 0x00571db0
-extern "C" void  FUN_00659340(void*);                  // 0x00659340
 extern "C" void  cSPUIAssetView_SelectAsset(void*, int, int, int, int, int);  // 0x00657a30
 extern "C" void  SPUIHelpers_UpdateMouseFocus(int);    // 0x00804f50
 extern "C" void  FUN_00671c50(void*);                  // 0x00671c50
@@ -351,7 +371,7 @@ void cSPUIAssetGrid::GridClear() {
     if (p) {
         void* q = *(void**)((char*)p + 0x10);
         if (q)
-            FUN_00659340(q);
+            ((AssetObjStub*)q)->f_00659340();
         *(void**)(s + 0xfc) = 0;
     }
     s[0x100] = 0;
@@ -362,8 +382,9 @@ void cSPUIAssetGrid::GridClear() {
         if (obj)
             (*(void(__thiscall**)(void*))((char*)*(void**)obj + 0x20))(obj);
     }
+    const unsigned n = (unsigned)(v->mpEnd - v->mpBegin);
     v->DoDestroyValues(v->mpBegin, v->mpEnd);
-    v->mpEnd = v->mpBegin;
+    v->mpEnd -= n;
     *(float*)(s + 0x180) = 0.0f;
     *(float*)(s + 0x184) = 0.0f;
     *(int*)(s + 0x198) = 1;
@@ -387,7 +408,7 @@ void cSPUIAssetGrid::GridShutdown() {
     FUN_0065aeb0();
     void* layout = *(void**)(s + 0x18);
     if (layout) {
-        cSPUILayout_Shutdown(layout, 1);
+        ((LayoutStub*)layout)->f_00811ad0(1);
         void* p = *(void**)(s + 0x18);
         if (p) {
             *(void**)(s + 0x18) = 0;
@@ -396,7 +417,7 @@ void cSPUIAssetGrid::GridShutdown() {
     }
     void* e0 = *(void**)(s + 0xe0);
     if (e0) {
-        FUN_0065fa20(e0);
+        ((AssetObjStub*)e0)->f_0065fa20();
         void* p = *(void**)(s + 0xe0);
         if (p) {
             *(void**)(s + 0xe0) = 0;
@@ -405,7 +426,7 @@ void cSPUIAssetGrid::GridShutdown() {
     }
     void* e4 = *(void**)(s + 0xe4);
     if (e4) {
-        cSPUISearchBox_Shutdown(e4);
+        ((SearchBoxStub*)e4)->f_00671c00();
         void* p = *(void**)(s + 0xe4);
         if (p) {
             *(void**)(s + 0xe4) = 0;

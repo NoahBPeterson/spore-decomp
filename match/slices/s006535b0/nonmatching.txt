@@ -6,8 +6,7 @@
 00653960  484  eastl::partial_sort<GridEntry*,CompareA>: make_heap/adjust_heap/sort_heap shape complete; by-value comparator copies differ
 00653b80  169  cSPUIAssetGrid forward index scan: full loop + comparison implemented; equiv: UNSUPPORTED (0/1200 inputs valid, fault(read); ECX fixed)
 00653c40  134  cSPUIAssetGrid reverse index scan: full loop + comparison implemented; equiv: UNSUPPORTED (0/1200 inputs valid, fault(read); ECX fixed)
-00653e40  137  eastl::vector<GridEntry>::resize: grow/shrink paths complete; helper schedule differs
+00653e40  103  eastl::vector<GridEntry>::resize: grow path calls DoInsertValues (0x00652c90) as a member with the zero-initialised element template; shrink path is CopyRange(mpEnd, mpEnd, mpBegin+n), DoDestroyValues(CopyRange(...), mpEnd), mpEnd -= count; size 161 vs 160; only register allocation and the stack-pop order differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (replay, first difference None; 82.1% coverage)
 00653f50  206  eastl::quick_sort_impl<GridEntry*,int,CompareA>: loop complete; median A call shape differs
-006543a0  195  cSPUIAssetGrid::Clear: all releases/field resets complete; equiv: FAIL (5/5 valid mismatched; memory pool @400100ec)
-00654490  248  eastl::vector<GridEntry>::reserve: grow path complete; shrink/swap fallback approximated
-00654650  190  cSPUIAssetGrid::Shutdown: all release paths complete; equiv: FAIL (5/23 valid mismatched; execution)
+006543a0  216  cSPUIAssetGrid::Clear: releases the 0xfc field through the 0x00659340 member stub, calls per-entry vtable+0x20, then DoDestroyValues followed by mpEnd -= count; the original also carries a 30-byte compact loop that never executes (cmp esi,esi), hence size 181 vs 232; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (replay, first difference None; 72.2% coverage)
+00654490  203  eastl::vector<GridEntry>::reserve: n == -1 early out; grow path reallocates and uninitialized-copies; shrink path resize(n) then rebuilds through the 0x0064f4e0 vector ctor and 0x0064f730 UninitCopyOut(holder, first, last, dest, n), swaps and frees the old buffer; size 291 vs 306; register allocation (ebx/edi, frame 0x10 vs 0x14) differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (replay, first difference None; 94.8% coverage, 426/1500 valid)
