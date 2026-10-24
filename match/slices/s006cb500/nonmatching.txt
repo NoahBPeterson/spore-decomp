@@ -1,4 +1,4 @@
-006cb500  816  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006cb830  839  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006cbb80  785  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006cbea0  839  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
+006cb500  850  complete source via shared BakeCore (XF_POINT/CF_USHORT4, tail trio x=outA[2], dy=outA[0], dz=outA[1]); equivalence PASS 535 valid inputs with default flags /O2 /MD /Gy /EHsc /TP; byte diff is cl15 codegen of the inlined core (EH prologue, stack-array layout, +64 bytes)
+006cb830  981  complete source via shared BakeCore (XF_OFFSET/CF_BYTE4, tail trio 2/0/1); equivalence PASS 516 valid inputs with default flags /O2 /MD /Gy /EHsc /TP; byte diff is cl15 codegen of the inlined core (EH prologue, stack-array layout)
+006cbb80  929  complete source via shared BakeCore (XF_OFFSET/CF_USHORT2, tail trio 2/0/1); equivalence PASS 453 valid inputs with default flags /O2 /MD /Gy /EHsc /TP; byte diff is cl15 codegen of the inlined core (EH prologue, stack-array layout)
+006cbea0  980  complete source via shared BakeCore (XF_OFFSET/CF_USHORT4, tail trio 2/0/1); equivalence PASS 522 valid inputs with default flags /O2 /MD /Gy /EHsc /TP; byte diff is cl15 codegen of the inlined core (EH prologue, stack-array layout)
