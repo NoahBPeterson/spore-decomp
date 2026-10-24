@@ -68,39 +68,52 @@ char __fastcall Func69cf0(void* self, int, void* stream, void* a2, void* a3) {
 // ===========================================================================
 // @ 0x00769d80  SP::cGraphicsResourceFactory::ReadResourceFromStream
 // ===========================================================================
-char __fastcall ReadResourceFromStream(void* self, int, int* obj1, int* obj2, void* a4) {
-    (void)self;
+// The reader is a cGraphicsResourceFactory member: the original takes `this` in ecx and four
+// stack arguments (it ends with `ret 0x10`), and every dispatch target is a __thiscall on the
+// same factory (ecx = the factory, three stack arguments).
+struct cGraphicsResourceFactory {
+    char ReadResourceFromStream(int* src, void* a2, int* obj, uint32_t kind);
+
+    char ReadPCAWeights(void* holder, void* a2, void* obj);            // 0x763950
+    char ReadVia69cf0(void* holder, void* a2, void* obj);              // 0x769cf0
+    char ReadMaterialList_(void* holder, void* a2, void* obj);         // 0x767c80
+    char ReadVia64ce0(void* holder, void* a2, void* obj);              // 0x764ce0
+    char ReadVia637d0(void* holder, void* a2, int four, void* obj);    // 0x7637d0
+    char ReadVia67170(void* holder, void* a2, void* obj);              // 0x767170
+};
+
+char cGraphicsResourceFactory::ReadResourceFromStream(int* src, void* a2, int* obj, uint32_t kind) {
     int* holder = 0;
-    int local = 0;
-    (void)holder; (void)local;
-    if (obj1 && ((int(__thiscall**)(int*))*(void***)obj1)[3](obj1) == 0x34722300) {
+    int* arg = src;
+    if (src && ((int(__thiscall**)(int*))*(void***)src)[3](src) == 0x34722300) {
         void* p = Alloc6(0x34, "Graphics", 0, 0, 0, 0);
         if (p)
-            p = FUN_0093b530(0x2000, 0, obj1);
+            p = FUN_0093b530(0x2000, 0, src);
         if (p) {
             ((void(__thiscall**)(void*))*(void***)p)[1](p);
             holder = (int*)p;
         }
+        arg = holder;
     }
-    uint32_t type = *(uint32_t*)((char*)obj2 + 4);
+    uint32_t type = *(uint32_t*)((char*)obj + 4);
     char r = 0;
     bool handled = true;
-    if (type < 0x2cb4f30) {
+    if (type <= 0x2cb4f2f) {
         if (type == 0x2cb4f2f)
-            r = ReadResourcePCAWeights(holder, obj2, obj1);
+            r = ReadPCAWeights(arg, a2, obj);
         else if (type == 0xe6bce5)
-            r = FUN_00769cf0(holder, obj2, obj1);
+            r = ReadVia69cf0(arg, a2, obj);
         else if (type == 0x1c135da)
-            r = ReadMaterialList(holder, obj2, obj1);
+            r = ReadMaterialList_(arg, a2, obj);
         else
             handled = false;
     } else if (type == 0x2f4e681b) {
-        r = FUN_00764ce0(holder, obj2, obj1);
-    } else if (type == 0x2f4e681c && (uint32_t)(size_t)a4 <= 0x2f7d0004) {
-        if ((size_t)a4 == 0x2f7d0004)
-            r = FUN_007637d0(holder, obj2, 4, obj1);
-        else if ((size_t)a4 != 0x2f4e681b && (size_t)a4 == 0x2f4e681c)
-            r = FUN_00767170(holder, obj2, obj1);
+        r = ReadVia64ce0(arg, a2, obj);
+    } else if (type == 0x2f4e681c && kind <= 0x2f7d0004) {
+        if (kind == 0x2f7d0004)
+            r = ReadVia637d0(arg, a2, 4, obj);
+        else if (kind != 0x2f4e681b && kind == 0x2f4e681c)
+            r = ReadVia67170(arg, a2, obj);
         else
             handled = false;
     } else {

@@ -1,2 +1,2 @@
 00769cf0  101  stream header check + two-phase read: vcall/helper scheduling differs
-00769d80  n/a  ReadResourceFromStream dispatch: wrapper/type-switch schedule differs
+00769d80  363  ReadResourceFromStream: complete source in the original's member (thiscall) model - `this` in ecx, four stack args (ret 0x10) and every dispatch target a __thiscall on the same factory; the pointer passed to the dispatch calls is arg1 (src) unless the 0x34722300 tag block replaces it with the new holder; remaining diff is the omitted SEH/smart-pointer frame and the tag-compare chain shape; equiv WEAK 50.3% cov (the tag block is unreachable for the fuzzer, fake vcalls never return 0x34722300), no mismatch over 20k/40k/60k slice inputs and 12k hybrid --src inputs
