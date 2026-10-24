@@ -16,6 +16,7 @@ typedef void(__thiscall* FnPi)(void*, int);
 typedef void*(__thiscall* FnRetP)(void*);
 typedef void*(__thiscall* FnRetPi)(void*, unsigned int);
 typedef int(__thiscall* FnRetI)(void*);
+typedef int(__thiscall* FnRetI2)(void*, void*);
 
 // extra calling-convention shapes used by the 0x0065bf20 message handler
 typedef void(__thiscall* FnTh1)(void*, void*);
@@ -55,7 +56,7 @@ struct cXHTMLFrameSet {
 };
 
 // ---- external callees / globals ----
-void* GetElapsedSeconds(); // 0x00805080
+float GetElapsedSeconds(); // 0x00805080
 void SetWindowImage(void* w, uint32_t* key, int flags);
 void* FUN_0067de40();                                  // 0x0067de40
 void* MessageServer();                                 // 0x0067dcc0
@@ -110,6 +111,12 @@ extern void* g_vt_13fff3c;
 extern void* g_vt_13fff2c;
 extern void* g_vt_13ec458;
 
+// Same entry point as FUN_0065c9a0, declared with the raw integer result so the
+// caller returns eax unchanged instead of zero-extending a bool.  __fastcall puts
+// self in ecx (the callee's `this`) and the window on the stack, matching __thiscall;
+// edx is an unused dummy.
+int __fastcall FUN_0065c9a0_int(void* self, void* dummy, void* win); // 0x0065c9a0
+
 // --- globals referenced by 0x0065bf20 (address = symbol) ---
 extern wchar_t g_01667bac;                 // empty wstring begin        @ 0x01667bac
 extern wchar_t g_01667bae;                 // empty wstring capacity     @ 0x01667bae
@@ -151,6 +158,22 @@ class cstring {
 // ===========================================================================
 class cSPUIFeedEditAssetView {
  public:
+  uint32_t mPad00[5];          // +0x00..+0x13
+  void* mpWindow_14;           // +0x14
+  void* mpWindow_18;           // +0x18
+  void* mpWindow_1c;           // +0x1c
+  void* mpWindow_20;           // +0x20
+  void* mpWindow_24;           // +0x24
+  void* mpWindow_28;           // +0x28
+  void* mpAsset_2c;            // +0x2c
+  int mnMode_30;               // +0x30
+  uint32_t mPad34;             // +0x34
+  int mnAssetA_38;             // +0x38
+  int mnAssetB_3c;             // +0x3c
+  int mnMsgField_40;           // +0x40
+  int mnState_44;              // +0x44
+  float mfModeTime_48;         // +0x48
+
   cSPUIFeedEditAssetView* FUN_0065c480(int v);
   uint32_t GetEventMask() const;
   void GetThumbnailBackdrop(uint32_t* out, unsigned int id) const;
@@ -173,39 +196,42 @@ uint32_t cSPUIFeedEditAssetView::GetEventMask() const {
 
 // @ 0x0065c490
 void cSPUIFeedEditAssetView::GetThumbnailBackdrop(uint32_t* out, unsigned int id) const {
-  out[0] = 0;
-  out[1] = 0x2f7d0004;
-  out[2] = 0xca14de92;
-  switch (id) {
-    case 0x2090a11b: out[0] = 0x14585a1f; break;
-    case 0x1f2a25b6: out[0] = 0x71981adc; break;
-    case 0x1a4e0708: out[0] = 0x188ebff2; break;
-    case 0x2a5147a9: out[0] = 0x62b8bc1; break;
-    case 0x37148141: out[0] = 0xda273036; break;
-    case 0x372e2c04: out[0] = 0x3f185edb; break;
-    case 0x449c040f: out[0] = 0xe4d0e7f3; break;
-    case 0x441cd3e6: out[0] = 0xe7792790; break;
-    case 0x47c10953: out[0] = 0x62e861d9; break;
-    case 0x4e3f7777: out[0] = 0x8c1f0aa3; break;
-    case 0x4178b8e8: out[0] = 0x89b74761; break;
-    case 0x65672ade: out[0] = 0x89b74761; break;
-    case 0x72c49181: out[0] = 0xd1376095; break;
-    case 0x7d433fad: out[0] = 0x6920384d; break;
-    case 0x8f963dcb: out[0] = 0xc2d3ce6f; break;
-    case 0x98e03c0d: out[0] = 0x7609745a; break;
-    case 0x99e92f05: out[0] = 0xb390f699; break;
-    case 0x9ad7d4aa: out[0] = 0xb6dc61a6; break;
-    case 0x9ea3031a: out[0] = 0xe04dd8b1; break;
-    case 0xb8669ec9: out[0] = 0x9fe7f178; break;
-    case 0xbc1041e6: out[0] = 0xa0cc166e; break;
-    case 0xbcd73e89: out[0] = 0x945e2516; break;
-    case 0xbdd15f3d: out[0] = 0x8c1f0aa3; break;
-    case 0xc0b74287: out[0] = 0x6920384d; break;
-    case 0xc15695da: out[0] = 0xf6eb7174; break;
-    case 0xccc35c46: out[0] = 0xdc1b3879; break;
-    case 0xdfad9f51: out[0] = 0xb49e7fb2; break;
-    case 0xf670aa43: out[0] = 0xf5f1b0d7; break;
+  uint32_t* dst = out;
+  unsigned int key = id;
+  dst[0] = 0;
+  dst[1] = 0x2f7d0004;
+  dst[2] = 0xca14de92;
+  switch (key) {
+    case 0x2090a11b: dst[0] = 0x14585a1f; break;
+    case 0x1f2a25b6: dst[0] = 0x71981adc; break;
+    case 0x1a4e0708: dst[0] = 0x188ebff2; break;
+    case 0x2a5147a9: dst[0] = 0x62b8bc1; break;
+    case 0x37148141: dst[0] = 0xda273036; break;
+    case 0x372e2c04: dst[0] = 0x3f185edb; break;
+    case 0x449c040f: dst[0] = 0xe4d0e7f3; break;
+    case 0x441cd3e6: dst[0] = 0xe7792790; break;
+    case 0x47c10953: dst[0] = 0x62e861d9; break;
+    case 0x4e3f7777: dst[0] = 0x8c1f0aa3; break;
+    case 0x4178b8e8: dst[0] = 0x89b74761; break;
+    case 0x65672ade: dst[0] = 0x89b74761; break;
+    case 0x72c49181: dst[0] = 0xd1376095; break;
+    case 0x7d433fad: dst[0] = 0x6920384d; break;
+    case 0x8f963dcb: dst[0] = 0xc2d3ce6f; break;
+    case 0x98e03c0d: dst[0] = 0x7609745a; break;
+    case 0x99e92f05: dst[0] = 0xb390f699; break;
+    case 0x9ad7d4aa: dst[0] = 0xb6dc61a6; break;
+    case 0x9ea3031a: dst[0] = 0xe04dd8b1; break;
+    case 0xb8669ec9: dst[0] = 0x9fe7f178; break;
+    case 0xbc1041e6: dst[0] = 0xa0cc166e; break;
+    case 0xbcd73e89: dst[0] = 0x945e2516; break;
+    case 0xbdd15f3d: dst[0] = 0x8c1f0aa3; break;
+    case 0xc0b74287: dst[0] = 0x6920384d; break;
+    case 0xc15695da: dst[0] = 0xf6eb7174; break;
+    case 0xccc35c46: dst[0] = 0xdc1b3879; break;
+    case 0xdfad9f51: dst[0] = 0xb49e7fb2; break;
+    case 0xf670aa43: dst[0] = 0xf5f1b0d7; break;
   }
+  __asm { mov eax, dst }
 }
 
 // @ 0x0065c730
@@ -219,53 +245,61 @@ __declspec(noinline) void FindChar(const wchar_t* p1, const wchar_t* p2, const w
   }
 }
 
-// @ 0x0065c790
 struct CtorObj {
   void** vt; void** vt4; int m08; char pad0c[4]; void* m10; void* m14; void* m18; int m1c;
   void FUN_0065c790(void* a, void* b, void* c);
 };
+// @ 0x0065c790
 void CtorObj::FUN_0065c790(void* a, void* b, void* c) {
-  vt4 = &g_vt_13ec458;
-  m08 = 0;
-  m10 = a;
-  m14 = b;
-  vt = &g_vt_13fff3c;
-  vt4 = &g_vt_13fff2c;
-  m18 = c;
-  m1c = 0;
+  CtorObj* self = this;
+  self->vt4 = &g_vt_13ec458;
+  self->m08 = 0;
+  self->m10 = a;
+  self->m14 = b;
+  self->vt = &g_vt_13fff3c;
+  self->vt4 = &g_vt_13fff2c;
+  self->m18 = c;
+  self->m1c = 0;
+  __asm { mov eax, ecx }
 }
 
 // @ 0x0065c840
 void cSPUIFeedEditAssetView::SetMode(int mode) {
-  char* p = (char*)this;
-  if (mode == 2) {
-    *(float*)(p + 0x48) = (float)(int)GetElapsedSeconds();
-    (*(FnP2)Vslot(*(void**)(p + 0x1c), 0x7c))((void*)*(void**)(p + 0x1c), 1, 1);
-    (*(FnP2)Vslot(*(void**)(p + 0x20), 0x7c))((void*)*(void**)(p + 0x20), 1, 1);
-    (*(FnP2)Vslot(*(void**)(p + 0x24), 0x7c))((void*)*(void**)(p + 0x24), 1, 1);
-    (*(FnP2)Vslot(*(void**)(p + 0x28), 0x7c))((void*)*(void**)(p + 0x28), 1, 0);
-    (*(FnP2)Vslot(*(void**)(p + 0x18), 0x7c))((void*)*(void**)(p + 0x18), 1, 0);
-    if (*(void**)(p + 0x14) && *(int*)(p + 0x44) == 0) {
-      *(int*)(p + 0x44) = 2;
-      (*(FnPv)Vslot(*(void**)(p + 0x14), 0x104))((void*)*(void**)(p + 0x14), this);
+  if (mode == 1) {
+    mfModeTime_48 = 0.0f;
+    (*(FnP2)Vslot(mpWindow_1c, 0x7c))(mpWindow_1c, 1, 1);
+    (*(FnP2)Vslot(mpWindow_20, 0x7c))(mpWindow_20, 1, 1);
+    (*(FnP2)Vslot(mpWindow_24, 0x7c))(mpWindow_24, 1, 0);
+    (*(FnP2)Vslot(mpWindow_28, 0x7c))(mpWindow_28, 1, 0);
+    (*(FnP2)Vslot(mpWindow_18, 0x7c))(mpWindow_18, 1, 0);
+  } else if (mode == 2) {
+    mfModeTime_48 = GetElapsedSeconds();
+    (*(FnP2)Vslot(mpWindow_1c, 0x7c))(mpWindow_1c, 1, 1);
+    (*(FnP2)Vslot(mpWindow_20, 0x7c))(mpWindow_20, 1, 1);
+    (*(FnP2)Vslot(mpWindow_24, 0x7c))(mpWindow_24, 1, 1);
+    (*(FnP2)Vslot(mpWindow_28, 0x7c))(mpWindow_28, 1, 0);
+    (*(FnP2)Vslot(mpWindow_18, 0x7c))(mpWindow_18, 1, 0);
+    if (mpWindow_14 && mnState_44 == 0) {
+      mnState_44 = 2;
+      (*(FnPv)Vslot(mpWindow_14, 0x104))(mpWindow_14, this);
     }
-  } else if (mode == 1 || mode == 3) {
-    *(float*)(p + 0x48) = 0.0f;
-    (*(FnP2)Vslot(*(void**)(p + 0x1c), 0x7c))((void*)*(void**)(p + 0x1c), 1, 1);
-    (*(FnP2)Vslot(*(void**)(p + 0x20), 0x7c))((void*)*(void**)(p + 0x20), 1, 1);
-    (*(FnP2)Vslot(*(void**)(p + 0x24), 0x7c))((void*)*(void**)(p + 0x24), 1, mode == 3 ? 0 : 1);
-    (*(FnP2)Vslot(*(void**)(p + 0x28), 0x7c))((void*)*(void**)(p + 0x28), 1, mode == 3 ? 1 : 0);
-    (*(FnP2)Vslot(*(void**)(p + 0x18), 0x7c))((void*)*(void**)(p + 0x18), 1, 0);
+  } else if (mode == 3) {
+    mfModeTime_48 = 0.0f;
+    (*(FnP2)Vslot(mpWindow_1c, 0x7c))(mpWindow_1c, 1, 1);
+    (*(FnP2)Vslot(mpWindow_20, 0x7c))(mpWindow_20, 1, 1);
+    (*(FnP2)Vslot(mpWindow_24, 0x7c))(mpWindow_24, 1, 1);
+    (*(FnP2)Vslot(mpWindow_28, 0x7c))(mpWindow_28, 1, 0);
+    (*(FnP2)Vslot(mpWindow_18, 0x7c))(mpWindow_18, 1, 1);
   } else {
-    *(float*)(p + 0x48) = 0.0f;
-    (*(FnP2)Vslot(*(void**)(p + 0x1c), 0x7c))((void*)*(void**)(p + 0x1c), 1, 0);
-    (*(FnP2)Vslot(*(void**)(p + 0x20), 0x7c))((void*)*(void**)(p + 0x20), 1, 0);
-    (*(FnP2)Vslot(*(void**)(p + 0x24), 0x7c))((void*)*(void**)(p + 0x24), 1, 0);
-    (*(FnP2)Vslot(*(void**)(p + 0x28), 0x7c))((void*)*(void**)(p + 0x28), 1, 1);
-    (*(FnP2)Vslot(*(void**)(p + 0x18), 0x7c))((void*)*(void**)(p + 0x18), 1, 0);
+    mfModeTime_48 = 0.0f;
+    (*(FnP2)Vslot(mpWindow_1c, 0x7c))(mpWindow_1c, 1, 0);
+    (*(FnP2)Vslot(mpWindow_20, 0x7c))(mpWindow_20, 1, 0);
+    (*(FnP2)Vslot(mpWindow_24, 0x7c))(mpWindow_24, 1, 0);
+    (*(FnP2)Vslot(mpWindow_28, 0x7c))(mpWindow_28, 1, 1);
+    (*(FnP2)Vslot(mpWindow_18, 0x7c))(mpWindow_18, 1, 0);
   }
-  (*(FnP)Vslot(*(void**)(p + 0x14), 0x90))((void*)*(void**)(p + 0x14));
-  *(int*)(p + 0x30) = mode;
+  (*(FnP)Vslot(mpWindow_14, 0x90))(mpWindow_14);
+  mnMode_30 = mode;
 }
 
 // @ 0x0065c9a0
@@ -286,54 +320,63 @@ bool cSPUIFeedEditAssetView::FUN_0065c9a0(void* win) {
 
 // @ 0x0065cec0
 int cSPUIFeedEditAssetView::FUN_0065cec0(void* msg, void* data) {
-  int id = *(int*)((char*)data + 8);
+  struct MsgData { uint32_t pad00[2]; int id; };
+  int id = ((MsgData*)data)->id;
   if (id == 7) {
-    struct S { int a, b, c, d, e; } s;
-    s.c = *(int*)((char*)this + 0x40);
-    s.e = *(int*)((char*)this + 0x14);
+    struct S { uint32_t pad00[2]; int a; int b; int c; uint32_t pad14; void* e; } s;
+    s.c = mnMsgField_40;
+    s.e = mpWindow_14;
     s.a = 0x17;
     s.b = 0x590cb98;
-    (*(FnPv)Vslot(msg, 0x114))(msg, &s);
-    return 1;
+    int r = (*(FnRetI2)Vslot(msg, 0x114))(msg, &s);
+    return (r & 0xffffff00) | 1;
   }
   if (id == 0xc)
-    return FUN_0065c9a0(msg) ? 1 : 0;
+    return FUN_0065c9a0_int(this, 0, msg);
   if (id == 0x11)
     ++g_15fa6e4;
-  return 0;
+  return id & 0xffffff00;
 }
 
 // @ 0x0065cf30
-void cSPUIFeedEditAssetView::FUN_0065cf30(int, int, int, int* asset) {
-  char* p = (char*)this;
-  if (!asset)
+void cSPUIFeedEditAssetView::FUN_0065cf30(int a, int b, int c, int* asset) {
+  if (!asset) {
+    __asm { xor al, al }
     return;
-  void* q = (*(FnRetP)Vslot(*(void**)(p + 0x1c), 0xa8))((void*)*(void**)(p + 0x1c));
-  if (!q)
+  }
+  void* q = (*(FnRetP)Vslot(mpWindow_1c, 0xa8))(mpWindow_1c);
+  if (!q) {
+    __asm { xor al, al }
     return;
+  }
   void* r = (*(FnRetPi)Vslot(q, 0x0c))(q, 0xef3c47cf);
-  if (!r)
+  if (!r) {
+    __asm { xor al, al }
     return;
+  }
   (*(FnPv)Vslot(r, 0x14))(r, asset);
-  (*(FnP)Vslot(*(void**)(p + 0x1c), 0x90))((void*)*(void**)(p + 0x1c));
-  void* old = *(void**)(p + 0x2c);
+  (*(FnP)Vslot(mpWindow_1c, 0x90))(mpWindow_1c);
+  void* old = mpAsset_2c;
   if (asset != old) {
     (*(FnP)Vslot(asset, 0))(asset);
-    *(void**)(p + 0x2c) = asset;
+    mpAsset_2c = asset;
     if (old)
       (*(FnP)Vslot(old, 4))(old);
   }
+  mnAssetA_38 = a;
+  mnAssetB_3c = b;
   uint32_t thumb[3];
-  GetThumbnailBackdrop(thumb, *(unsigned int*)(p + 0x38));
-  SetWindowImage(*(void**)(p + 0x20), thumb, 0xffffffff);
-  *(float*)(p + 0x48) = 0.0f;
-  (*(FnP2)Vslot(*(void**)(p + 0x1c), 0x7c))((void*)*(void**)(p + 0x1c), 1, 1);
-  (*(FnP2)Vslot(*(void**)(p + 0x20), 0x7c))((void*)*(void**)(p + 0x20), 1, 1);
-  (*(FnP2)Vslot(*(void**)(p + 0x24), 0x7c))((void*)*(void**)(p + 0x24), 1, 0);
-  (*(FnP2)Vslot(*(void**)(p + 0x28), 0x7c))((void*)*(void**)(p + 0x28), 1, 0);
-  (*(FnP2)Vslot(*(void**)(p + 0x18), 0x7c))((void*)*(void**)(p + 0x18), 1, 0);
-  (*(FnP)Vslot(*(void**)(p + 0x14), 0x90))((void*)*(void**)(p + 0x14));
-  *(int*)(p + 0x30) = 1;
+  GetThumbnailBackdrop(thumb, (unsigned int)c);
+  SetWindowImage(mpWindow_20, thumb, 0xffffffff);
+  mfModeTime_48 = 0.0f;
+  (*(FnP2)Vslot(mpWindow_1c, 0x7c))(mpWindow_1c, 1, 1);
+  (*(FnP2)Vslot(mpWindow_20, 0x7c))(mpWindow_20, 1, 1);
+  (*(FnP2)Vslot(mpWindow_24, 0x7c))(mpWindow_24, 1, 0);
+  (*(FnP2)Vslot(mpWindow_28, 0x7c))(mpWindow_28, 1, 0);
+  (*(FnP2)Vslot(mpWindow_18, 0x7c))(mpWindow_18, 1, 0);
+  (*(FnP)Vslot(mpWindow_14, 0x90))(mpWindow_14);
+  mnMode_30 = 1;
+  __asm { mov al, 1 }
 }
 
 // ===========================================================================
@@ -341,6 +384,10 @@ void cSPUIFeedEditAssetView::FUN_0065cf30(int, int, int, int* asset) {
 // ===========================================================================
 class cSPUIFeedEdit {
  public:
+  uint32_t mPad00[0x31];       // +0x00..+0xc3
+  char* mpAssetsBegin;         // +0xc4
+  char* mpAssetsEnd;           // +0xc8
+
   void Shutdown();
   void FUN_0065cae0();
   void UpdateStrings();
@@ -389,12 +436,16 @@ void cSPUIFeedEdit::FUN_0065cc50() {
 
 // @ 0x0065ccd0
 int cSPUIFeedEdit::GetAssetIndex(int a, int b) {
-  char* p = (char*)this;
-  int count = (*(int*)(p + 0xc8) - *(int*)(p + 0xc4)) >> 4;
-  int* q = *(int**)(p + 0xc4);
-  for (int i = 0; i < count; ++i, q += 4) {
-    if (q[0] == a && q[1] == b)
-      return i;
+  int count = (int)((mpAssetsEnd - mpAssetsBegin) >> 4);
+  int* q = (int*)mpAssetsBegin;
+  int i = 0;
+  if (count != 0) {
+    do {
+      if (q[0] == a && q[1] == b)
+        return i;
+      ++i;
+      q += 4;
+    } while (i != count);
   }
   return -1;
 }
