@@ -132,7 +132,7 @@ public:
     void  Reset();  // 0x004b2710 (SP::cSPEditorPaintTheme::Reset)
     void  Reset2();  // 0x004b27c0 (SP::cSPEditorPaintTheme::Reset2)
     uint32_t ReadFromAsset(Asset* asset);
-    uint32_t ReadFromProp2(int prop, char useColors);  // 0x004b29b0 (SP::cSPEditorPaintTheme::ReadFromProp2)
+    bool ReadFromProp2(int prop, char useColors);  // 0x004b29b0 (SP::cSPEditorPaintTheme::ReadFromProp2)
     bool ReadFromProp(uint32_t prop);  // 0x004b2bb0 (SP::cSPEditorPaintTheme::ReadFromProp)
     void  WriteToProp(Asset* asset, int resourceType);
     void  ApplyToAsset(int asset, int view);  // 0x004b3190 (SP::cSPEditorPaintTheme::ApplyToAsset)
@@ -515,7 +515,7 @@ uint32_t SP::cSPEditorPaintTheme_s004b_2320::ReadFromAsset(Asset* asset)
 }
 
 // @ 0x004b29b0
-uint32_t SP::cSPEditorPaintTheme_s004b_2320::ReadFromProp2(int prop, char useColors)
+bool SP::cSPEditorPaintTheme_s004b_2320::ReadFromProp2(int prop, char useColors)
 {
     PropObj* list = 0;
     char ok = ((PropMgr*)SP_PropertyManager())->GetPropertyList(prop, DAT_015d6cc8, (void**)&list);
