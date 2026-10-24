@@ -1,0 +1,80 @@
+# slice s00d16f40 - SP::cGameEditInputStrategy: the gameplay-marker editing and
+# commit path.  Inferred from the disassembly only (the dev-PDB headers under
+# src/game/include/SP do NOT describe this build; every offset below is observed).
+#
+# Functions:
+#   0x00d16f40  cGameEditInputStrategy::FUN_00d16f40(Vector3* target)
+#               - unnamed in the image.  Re-aims the selected marker: takes the ring
+#                 object's position, normalizes (target - ringPos), and unless the new
+#                 direction is within 0.99f of the current facing, rebuilds a rotation
+#                 quaternion from acos(dot) about an axis, pushes it into the marker
+#                 transform, then walks the marker's gameplay handler.
+#   0x00d17250  SP::cGameEditInputStrategy::Activate()            [byte-exact]
+#               - clears the manipulator, sets the planet, installs the message-handler
+#                 registration struct and hands the 0x23 handler ids to the server.
+#   0x00d172d0  SP::cGameEditInputStrategy::CommitChangesToGameplayMarker(
+#                   cGameEditModeStrategy* scenario, char apply)
+#               - reads the level editor's marker type/class/value from the property
+#                 manager and the UI, folds the per-element values back into the
+#                 scenario, then optionally reloads it.
+#   0x00d17550  SP::cGameEditInputStrategy::AddGameplayMarkerValue(
+#                   int type, uint32_t color, int* value, float* posX, float* posY)
+#               - either toggles the true/false text of an existing marker or builds a
+#                 fresh WinTextEdit label showing the marker's value.
+#
+# Modelled types (retail member offsets):
+#   Vector3     {float x@0x00, y@0x04, z@0x08}
+#   Quaternion  {float x@0x00, y@0x04, z@0x08, w@0x0c}
+#   cUiObject   single vptr, 58 virtual slots 0x00..0xe4.  Only the slots this slice
+#               calls are named; the rest exist so each named slot lands on its retail
+#               offset.  Used slots: +0x00 v00, +0x04 Release, +0x0c GetWindowByID(uint),
+#               +0x10 sub-object getter, +0x18 set-by-id(uint), +0x1c tag getter,
+#               +0x20 set colour/text(1 arg), +0x24 AddMessageHandler(target,uint),
+#               +0x2c geometry getter, +0x30 float getter, +0x3c set transform(void*),
+#               +0x40 value getter, +0x44 set(2 ints), +0x50 SetStyleColor(uint),
+#               +0x54 GetText, +0x58 manipulator getter, +0x60 SetRect(const float*),
+#               +0x64 SetSub(float,float), +0x7c set(2 ints), +0x80 SetText(const wchar_t*),
+#               +0x90 commit, +0x94 set(2 ints), +0xb8 lookup(uint), +0xc0 set(int),
+#               +0xcc/+0xd0 iterator getters, +0xd8 add item(void*), +0xe4 relayout.
+#   cUiObjectB  the same layout for the objects handed back by cUiObject::v10 and by a
+#               marker handler's +0x0c lookup: there the same slots take an extra
+#               argument, and MSVC passes defaulted parameters, so the argument counts
+#               have to be spelled out (+0x20 (uint32,uint32), +0x2c (void*),
+#               +0x30 (float), +0x40 (int), +0x54 (uint32)).
+#   cPropertyManager  13 virtual slots 0x00..0x30; +0x30 (uint hash, cUiObject** out)
+#               -> char is the property lookup used for the "LevelEditor" id.
+#   WString     eastl::basic_string<wchar_t>: mpBegin@0x00, mpEnd@0x04, mpCapacity@0x08,
+#               mAllocator@0x0c; sprintf(const wchar_t*, ...) 0x0041e050.
+#   AutoRefCount {cUiObject* mpObject@0x00}, Assign() = operator= 0x00b5f950.
+#   cMarkerInfo  gameplay marker object: cUiObject mSub34@0x34, cUiObject* mpField1a4@0x1a4.
+#   cSPUILayout  FindWindowByID(uint,int) 0x008105b0.
+#   EA::UTFWinControls::WinTextEdit  raw storage with the embedded IWinText at +0x20c;
+#               Construct() is retail's WinTextEdit::WinTextEdit 0x0098c110.
+#   cGameEditModeStrategy  mMarkerType@0x108, mMarkerClassId@0x10c, mField110@0x110,
+#               mMarkerValue@0x114, mMarkerValues[]@0x11c (indexed by the element's own
+#               id, `value & 0x543fffff`); static LoadScenario(self,-1,-1) 0x00b931c0.
+#   cGameEditInputStrategy  cUiObject mHandler@0x3c, mpSelectedObjectManipulator@0x54,
+#               mpUIA4@0xa4, mpScrollBarA8@0xa8, mFacing@0xc4, mFrameD0@0xd0,
+#               mLayout@0xe0, and the handler registration {mpServer@0x104,
+#               mpHandlerTarget@0x108, mpHandlerTable@0x10c = 0x01479b60,
+#               mHandlerCount@0x110 = 0x23, mField114@0x114}.
+#
+# Callees declared but not defined here (hex names are the image's own labels):
+#   SP::MessageServer 0x0067dcc0, SP::PropertyManager 0x0067de30,
+#   SP::PlanetModel 0x00b3d350, SP::cPlanetModel::GetPlanetKey 0x00b7e380,
+#   SP::QuaternionFromDirections 0x00698180, FNV1_String16 0x00932f30,
+#   GetGameplayMarkerClassId 0x00d15b30, GetGameplayMarkerTypes 0x00d16620,
+#   FUN_00d15350 0x00d15350, FUN_00d15780 0x00d15780, FUN_00d16820 0x00d16820,
+#   cGameEditInputStrategy::GetGameplayMarkerTypeFromUI 0x00d15fb0,
+#   SetPlanet 0x00d16b90, FUN_007dcb00 0x007dcb00 (transform builder),
+#   cPlanetModel::FUN_00b7f1f0 0x00b7f1f0, FUN_009512c0 0x009512c0,
+#   FUN_009512d0 0x009512d0 (WinTextEdit factory), operator_delete__ 0x00f47380.
+#   wcstoul / acos / sinf / cosf stay as plain calls resolved against the
+#   vendor's own targets.
+#
+# Globals: g_01479b60 handler-id table, g_01667bac eastl::gEmptyString16 (+2 = terminator,
+#           observable as the +1 wchar_t store), g_01440aec element container base.
+#           Float constants: 0x99 -> 0x013ef480, axis 0x0169dc7c/80/84, half-angle
+#           0x01471064 / 0x013ec488, rect 0x013ebc4c / 0x013eecd8, 0.25f 0x013eb8a0,
+#           80.0f 0x014763c4, %d 0x013f01bc, %f 0x013f3aa8, L"false" 0x013f0270,
+#           L"true" 0x013f023c, L"LevelEditor" 0x01479b30, "UI/WinTextEdit" string in .rdata.
