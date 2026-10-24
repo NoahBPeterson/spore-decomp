@@ -1,13 +1,13 @@
 # va  diff-bytes  short reason
 00edd020  131  switch compare-tree / block layout differs (behavior complete)
 00edd130  148  switch compare-tree / block layout differs (behavior complete)
-00edd240  56   member-copy scheduling in two branches (behavior complete)
+00edd240  51   f00edd240: the second argument of the 0x00f25190 call was wrong. That callee fills the V3 at its first stack argument and writes ONE BYTE (sete %al) through its second (`mov %al,(%edx)` at 0xf2519b), so the parameter is a bool* out-flag; the slice declared `V3* F25190(void*, V3*)` and passed `out`, which both handed the caller's pool vector to a byte store and made the harness report `call #1 (depth 1) ... args=[STK, STK]` vs ours `[STK, 40020000]`. Retail passes the address of a stack flag (`lea 0x14(%esp),%edx` = the dead home slot of the enregistered `out` parameter, reused for the new address-taken local), so the call is now `v->F25190(&tmp, &flag)` with `bool flag;`. Verdict PASS, 342 valid inputs, 72.1% coverage (was FAIL 5/30). Residual: the member-copy (three dword stores) is scheduled slightly differently in the two branches.
 00edd370  40   callee-saved register swap esi/edi (behavior complete)
 00edd440  282  SSE field interpretation approximate (behavior complete)
 00edd580  148  MI base-vtable store order (behavior complete)
 00edd6b0  129  MI base-vtable store order (behavior complete)
 00edd810  158  virtual-call expansion differs (behavior complete)
-00edd8f0  227  vcall/argument scheduling (behavior complete); equiv: FAIL (ours faults reading unmapped 0x30000027 where original returns)
+00edd8f0  185  f00edd8f0: the recorded FAIL was our own fault -- `Invalid memory read at eip=30000027`, i.e. our `mov 0x74(%ecx)` right after the id vcall. Our version hoisted `Mgr* m = MGR();` above the id compare, so the global reference sat at a different position than retail's and the resolver's order-alignment paired it with the wrong original slot, so the relocated pointer led to unmapped memory. Retail re-loads it inside each arm (`mov 0x16c7aa4,%eax; mov 0x74(%eax),%ecx` at 0xedd924, 0xedd982 and 0xedd9b1), so the body now calls MGR() inline in each of the three places (the extern also carries its 0x016c7aa4 annotation on the declaration line). Verdict WEAK: 371 valid inputs, no mismatch, 21.4% coverage (the interesting arms need the fake vcalls to return non-null, which the generator seldom produces). Residual: vcall/argument scheduling and the two branch arms still differ (185 of 289 bytes).
 00edda20  164  complete; virtual-call expansion differs; difftest PASS (279 valid, 100% cov): saved-this frame slot modelled (low byte = per-block bool, read back as the VC2 second arg and the final ecx) so cl reproduces the original slot aliasing
 00eddb00  118  x87/SSE float-constant and call layout (behavior complete)
 00edde30  27   arg-materialisation order in loop (behavior complete)

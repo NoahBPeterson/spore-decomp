@@ -16,7 +16,7 @@ typedef unsigned short u16;
 typedef unsigned int   u32;
 
 // ---------------------------------------------------------------- globals
-extern void* DAT_016c7aa4;          // outer app object (-> mgr at +0x74, srv at +0x7c)
+extern void* DAT_016c7aa4;          // 0x016c7aa4 outer app object (-> mgr at +0x74, srv at +0x7c)
 extern int   DAT_0148a518[];        // table of element indices
 extern int   DAT_0148a544[];        // table of element ids
 extern int   DAT_0148a574[];
@@ -213,7 +213,9 @@ lab215:
 
 // ============================================================ 0x00edd240
 struct V3 { int x, y, z; };
-struct PropObj { V3* F25190(void* a, V3* b); };
+// 0x00f25190 fills the V3 at its first stack argument and writes ONE BYTE (sete %al) through its
+// second (`mov %al,(%edx)` at 0xf2519b), so the second argument is a bool* out-flag, not a V3*.
+struct PropObj { V3* F25190(V3* vec, bool* flag); };
 // @ 0x00edd240
 V3* __cdecl f00edd240(V3* out, int id)
 {
@@ -229,7 +231,8 @@ V3* __cdecl f00edd240(V3* out, int id)
         PropObj* v = (PropObj*)MGR()->F3e8a0(id);
         if (v != 0) {
             V3 tmp;
-            V3* r = v->F25190(&tmp, out);
+            bool flag;
+            V3* r = v->F25190(&tmp, &flag);
             *out = *r;
         }
     }
@@ -484,14 +487,16 @@ void __stdcall f00edd8f0(void* p)
     if (p != 0)
         VC2(p, 0x7c, 1, 1);
     int id = VC0(p, 0x1c);
-    Mgr* m = MGR();
     int val;
     void* z;
+    // The manager is fetched inside each arm (retail re-loads 0x16c7aa4 -> +0x74 at 0xedd924,
+    // 0xedd982 and 0xedd9b1); hoisting it above the compare also confuses the relocation
+    // alignment, which then maps the global reference to the wrong original slot.
     if (id == 0x71725b0) {
-        val = ((Base*)((char*)m->f10 + 0x7c))->F26360();
+        val = ((Base*)((char*)MGR()->f10 + 0x7c))->F26360();
         z = VCP2(p, 0xf0, 0x7172970, 1);
     } else if (id == 0x7172600) {
-        int v0 = ((Base*)((char*)m->f10 + 0xb8))->F26360();
+        int v0 = ((Base*)((char*)MGR()->f10 + 0xb8))->F26360();
         void* q = VCP2(p, 0xf0, 0x7172950, 1);
         if (q != 0) {
             void* r = VCP1(q, 0xc, 0xcf428691);
@@ -500,7 +505,7 @@ void __stdcall f00edd8f0(void* p)
                 VC2(r, 0x60, v0, 0);
             }
         }
-        val = ((Base*)((char*)m->f10 + 0xf4))->F26360();
+        val = ((Base*)((char*)MGR()->f10 + 0xf4))->F26360();
         z = VCP2(p, 0xf0, 0x7172960, 1);
     } else {
         return;
