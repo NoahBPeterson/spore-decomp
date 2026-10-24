@@ -259,3 +259,243 @@ miss:
     HK_TIMER_END();
     return false;
 }
+
+// =====================================================================================
+// hkConvexTransformShape (vtable 0x014a4134): statistics, deleting dtor and the
+// transform-wrapping shape virtuals.
+// =====================================================================================
+
+// hkStatisticsCollector vtable slots used by calcStatistics.
+class hkStatisticsCollector {
+public:
+    virtual void s0();
+    virtual void beginObject(const char* name, int mode, const void* obj);        // +0x04
+    virtual void s2();
+    virtual void addReferencedObject(const char* name, int mode, const void* o);  // +0x0c
+    virtual void s4();
+    virtual void s5();
+    virtual void endObject();                                                     // +0x18
+};
+
+class hkRefObj {                                    // hkReferencedObject
+public:
+    virtual void* dtor(unsigned int flags);         // +0x00
+    unsigned short m_memSizeAndFlags;               // +0x04
+    unsigned short m_referenceCount;                // +0x06
+};
+
+class hkShapeBase {                                 // hkShape subobject as seen by this slice
+public:
+    void*          m_vtable;                        // +0x00
+    unsigned short m_memSizeAndFlags;               // +0x04
+    unsigned short m_referenceCount;                // +0x06
+    int            m_userData;                      // +0x08
+};
+
+struct hkTransform {                                // size 0x40
+    float m[16];
+    void setMul(const hkTransform& a, const hkTransform& b);   // 0x01080ef0
+};
+
+struct hkRotation {                                 // first 3 columns of hkTransform
+    float m[12];
+};
+
+struct hkAabb {                                     // size 0x20
+    hkVector4Mem m_min;                             // +0x00
+    hkVector4Mem m_max;                             // +0x10
+};
+
+struct hkCdVertex {                                 // collision-dispatch vertex (w carries the vertex id)
+    float x, y, z, w;
+};
+
+// The retail hkShapeRayCastInput is 0x30 bytes; this slice's cylinder ray-cast only names the
+// two vectors, so the full layout is spelled out here for the structural copy in castRay.
+struct hkShapeRayCastInputFull {
+    hkVector4Mem m_from;                            // +0x00
+    hkVector4Mem m_to;                              // +0x10
+    hkVector4Mem m_extra;                           // +0x20
+};
+
+// Havok's real ray-cast input holds 16-byte-aligned lanes; the local copy in castRay is one of
+// these, which is why retail aligns the frame with `and esp,-16`.
+struct hkShapeRayCastInputAligned {
+    hkVector4 m_from;                               // +0x00
+    hkVector4 m_to;                                 // +0x10
+    hkVector4 m_extra;                              // +0x20
+};
+
+struct hkBoolValue {                                 // layout view of hkBool (m_bool is private above)
+    char m_bool;
+};
+
+struct hkVector4Ops {                                // layout view of hkVector4 member functions
+    hkVector4Mem m_v;
+    void setRotatedDir(const hkRotation& r, const hkVector4Mem& d);   // 0x010814a0
+};
+
+// Transform helpers. Retail evaluates the x87 sums in z, y, x order with the products grouped
+// left-associatively, so the parentheses below reproduce its arithmetic order.
+static __forceinline hkVector4& convexRotateInverse(hkVector4& out, const float* m, const hkVector4& v)
+{
+    float vx = v.x, vy = v.y, vz = v.z;
+    out.x = (vz * m[2] + vy * m[1]) + vx * m[0];
+    out.y = (vz * m[6] + vy * m[5]) + vx * m[4];
+    out.z = (vz * m[10] + vy * m[9]) + vx * m[8];
+    out.w = 0.0f;
+    return out;
+}
+
+static __forceinline hkVector4& convexTransformPosition(hkVector4& out, const float* m, const hkVector4& p)
+{
+    float a = p.x;
+    float b = p.y;
+    float c = p.z;
+    out.x = ((c * m[8] + b * m[4]) + a * m[0]) + m[12];
+    out.y = ((c * m[9] + b * m[5]) + a * m[1]) + m[13];
+    out.z = ((c * m[10] + b * m[6]) + a * m[2]) + m[14];
+    out.w = 0.0f;
+    return out;
+}
+
+static __forceinline void convexScale(hkVector4& v, float s)
+{
+    v.x = v.x * s;
+    v.y = v.y * s;
+    v.z = v.z * s;
+}
+
+static __forceinline void convexInversePosition(hkVector4& out, const float* m, const hkVector4Mem& v)
+{
+    float dx = v.x - m[12];
+    float dy = v.y - m[13];
+    float dz = v.z - m[14];
+    out.x = (dz * m[2] + dy * m[1]) + dx * m[0];
+    out.y = (dz * m[6] + dy * m[5]) + dx * m[4];
+    out.z = (dz * m[10] + dy * m[9]) + dx * m[8];
+    out.w = 0.0f;
+}
+
+// hkShape vtable slots reached through the child shape.
+struct hkShapeChildVtbl {
+    virtual void  d0();                                                          // +0x00
+    virtual void  d1();                                                          // +0x04
+    virtual void  d2();                                                          // +0x08
+    virtual void  getAabb(const hkTransform& t, float tol, hkAabb& out);         // +0x0c
+    virtual float getMaximumProjection(const hkVector4& dir) const;              // +0x10
+    virtual hkBool castRay(const hkShapeRayCastInputFull& in, hkShapeRayCastOutput& out) const;  // +0x14
+    virtual void  d3();                                                          // +0x18
+    virtual void  d4();                                                          // +0x1c
+    virtual void  d5();                                                          // +0x20
+    virtual void  getSupportingVertex(const hkVector4& dir, hkCdVertex& out) const;  // +0x24
+};
+
+struct hkMemoryVtbl {
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
+    virtual void deallocate(void* p, unsigned int size, unsigned int align);     // +0x14
+};
+
+extern void* g_hkMemoryInstance;        // hkMemory::s_instance @ 0x016e4178
+
+class hkConvexTransformShape : public hkShapeBase {   // size 0x60
+public:
+    int                m_pad0c;         // +0x0c
+    hkShapeChildVtbl*  m_childShape;    // +0x10
+    int                m_pad14[3];      // +0x14
+    hkTransform        m_transform;     // +0x20
+
+    void  calcStatistics(hkStatisticsCollector* c) const;                  // 0x010ca580
+    void* scalarDeletingDtor(unsigned int flags);                          // 0x010ca5c0
+    void  getAabb(const hkTransform& t, float tol, hkAabb& out) const;     // 0x010ca630
+    float getMaximumProjection(const hkVector4& dir) const;                // 0x010ca670
+    hkBool castRay(const hkShapeRayCastInput& in, hkShapeRayCastOutput& out) const;  // 0x010ca760
+    void  getSupportingVertex(const hkVector4& dir, hkCdVertex& out) const; // 0x010ca940
+};
+
+// @ 0x010ca580
+void hkConvexTransformShape::calcStatistics(hkStatisticsCollector* c) const
+{
+    c->beginObject("CvxTransform", 1, this);
+    c->addReferencedObject("Child", 1, m_childShape);
+    c->endObject();
+}
+
+// @ 0x010ca5c0
+void* hkConvexTransformShape::scalarDeletingDtor(unsigned int flags)
+{
+    hkRefObj* child = (hkRefObj*)m_childShape;
+    *(void**)this = (void*)0x014a4134;
+    if (child->m_memSizeAndFlags != 0) {
+        if (--child->m_referenceCount == 0)
+            child->dtor(1);
+    }
+    *(void**)this = (void*)0x013ef094;
+    if ((flags & 1) != 0) {
+        hkMemoryVtbl* mem = *(hkMemoryVtbl**)&g_hkMemoryInstance;
+        mem->deallocate(this, m_memSizeAndFlags, 0x24);
+    }
+    return this;
+}
+
+// @ 0x010ca630
+void hkConvexTransformShape::getAabb(const hkTransform& t, float tol, hkAabb& out) const
+{
+    __declspec(align(16)) hkTransform local;
+    local.setMul(t, m_transform);
+    m_childShape->getAabb(local, tol, out);
+}
+
+// @ 0x010ca670
+float hkConvexTransformShape::getMaximumProjection(const hkVector4& dir) const
+{
+    const float* m = m_transform.m;
+
+    hkVector4 d;
+    float proj = m_childShape->getMaximumProjection(convexRotateInverse(d, m, dir));
+    convexScale(d, proj);
+    hkVector4 sp;
+    convexTransformPosition(sp, m, d);
+    return sp.z * dir.z + sp.x * dir.x + sp.y * dir.y;
+}
+
+// @ 0x010ca760
+hkBool hkConvexTransformShape::castRay(const hkShapeRayCastInput& in, hkShapeRayCastOutput& out) const
+{
+    HK_TIMER_BEGIN("TtrcConvTransl");
+
+    hkShapeRayCastInputAligned local = *(const hkShapeRayCastInputAligned*)&in;
+    const float* m = m_transform.m;
+
+    convexInversePosition(local.m_from, m, in.m_from);
+    convexInversePosition(local.m_to, m, in.m_to);
+
+    hkBool hit = m_childShape->castRay(*(const hkShapeRayCastInputFull*)&local, out);
+    if (((const hkBoolValue&)hit).m_bool != 0) {
+        hkVector4Mem v = out.m_normal;
+        ((hkVector4Ops&)out.m_normal).setRotatedDir(*(const hkRotation*)&m_transform, v);
+    }
+
+    HK_TIMER_END();
+    return hit;
+}
+
+// @ 0x010ca940
+void hkConvexTransformShape::getSupportingVertex(const hkVector4& dir, hkCdVertex& out) const
+{
+    const float* m = m_transform.m;
+
+    hkCdVertex v;
+    hkVector4 local;
+    m_childShape->getSupportingVertex(convexRotateInverse(local, m, dir), v);
+
+    hkVector4& o = *(hkVector4*)&out;
+    float c = v.z;
+    float b = v.y;
+    float a = v.x;
+    o.x = ((c * m[8] + b * m[4]) + a * m[0]) + m[12];
+    o.y = ((c * m[9] + b * m[5]) + a * m[1]) + m[13];
+    o.z = ((c * m[10] + b * m[6]) + a * m[2]) + m[14];
+    *(volatile float*)&o.w = 0.0f;
+    out.w = v.w;
+}

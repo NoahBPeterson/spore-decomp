@@ -1,3 +1,9 @@
 010c9c70 hkCylinderShape::castRay  # vtable slot 5; TtrcCylinder timer, shrinks the axis by the convex radius, then capsule-style ray test + end caps
 010c2ad0 hkCapsuleShape::closestPointLineSeg  # cdecl(point, a, b, out) per havok_names; called with (ray from, A', B', closest)
 010c2890 hkCapsuleShape::closestInfLineSegInfLineSeg  # cdecl, 9 args (a, da, b, db, distSq&, t&, u&, closestA&, closestB&)
+010ca580 SP::hkConvexTransformShape::calcStatistics  # hkStatisticsCollector: beginObject("CvxTransform") + addReferencedObject("Child") + endObject
+010ca5c0 SP::hkConvexTransformShape::scalarDeletingDtor  # releases the child (hkReferencedObject refcount) then frees this through hkMemory::deallocate when flags&1
+010ca630 SP::hkConvexTransformShape::getAabb  # concatenates the query transform with the local transform, then forwards to the child shape
+010ca670 SP::hkConvexTransformShape::getMaximumProjection  # direction into child space, child projection scaled along the direction and transformed back, dotted with the original direction
+010ca760 SP::hkConvexTransformShape::castRay  # TtrcConvTransl; maps both ray endpoints into child space, forwards, rotates the hit normal back
+010ca940 SP::hkConvexTransformShape::getSupportingVertex  # local supporting vertex transformed back into world space, vertex id preserved in w
