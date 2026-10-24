@@ -1,0 +1,2 @@
+slices/s00c6b660/s00c6b660.cpp  ?FUN_00c6bd10@@YAPAPAXPAPAX0P6ADPAX@Z@Z  00c6bd10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c6b660/s00c6b660.cpp  ?GetWateringHolePosition@cHerd@SP@@QAEPAUVec3@2@XZ  00c6bdc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
