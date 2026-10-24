@@ -56,11 +56,11 @@ struct H_00c0f780 {
 struct H_00c0f8a0 {
     void* __thiscall At(int idx);
 };
-// @ 0x00bc96a0
+// 0x00bc96a0  foreign view of the stimulus table used by the evaluators below
 struct H_00bc96a0 {
     void* __thiscall Play(int a, int flags);
 };
-// @ 0x00bc97f0
+// 0x00bc97f0
 void*  __cdecl FUN_00bc97f0(void* o, int a, int b, float f, void* c);
 // @ 0x008e7f80
 struct H_008e7f80 {
@@ -530,4 +530,99 @@ double __cdecl FUN_00ec17f0(void* self) {
         }
     }
     return 0.0;
+}
+
+// ================================================================ stimulus slots
+// The subsystem at *(creature+0xb4c) starts with eight 0x38-byte stimulus slots; the
+// two active-bit masks follow the array at +0x1c0/+0x1c4.  Play()/queue() above reach
+// this table through (char*)*(void**)(self+0xb4c) + 8.
+struct IRefCounted {
+    virtual void AddRef();    // +0x00
+    virtual void Release();   // +0x04
+};
+
+struct Stimulus {
+    uint         id;          // +0x00
+    uint         mask;        // +0x04
+    float        duration;    // +0x08
+    uint         pad0c[8];    // +0x0c
+    IRefCounted* object;      // +0x2c
+    uint         pad30[2];    // +0x30
+};
+
+struct Stimuli {
+    void SetStimulus(Stimulus* s, uint a, uint b, float c, IRefCounted* obj); // 0x00bc9700
+    void* Find(uint a, uint b);
+    Stimulus* Add(uint a, uint b, float c, IRefCounted* obj);
+
+    Stimulus slot[8];         // +0x000
+    uint     mMask0;          // +0x1c0
+    uint     mMask1;          // +0x1c4
+};
+
+extern void (*g_0168b550)(void*);   // 0x0168b550  slot-changed callback
+extern void (*g_0168b54c)(void*);   // 0x0168b54c  stimulus-set callback
+
+// @ 0x00bc96a0
+void* Stimuli::Find(uint a, uint b)
+{
+    if (((mMask0 & a) | (mMask1 & b)) == 0)
+        return 0;
+    for (uint i = 0; i < 8; ++i)
+    {
+        Stimulus* s = &slot[i];
+        if ((s->id & a) | (s->mask & b))
+        {
+            if (g_0168b550)
+                g_0168b550(s);
+            return s;
+        }
+    }
+    return 0;
+}
+
+// @ 0x00bc97f0
+Stimulus* Stimuli::Add(uint a, uint b, float c, IRefCounted* obj)
+{
+    float best = 3.402823466e+38f;
+    uint bestIndex = 0xffffffff;
+    Stimulus* s = slot;
+    for (uint i = 0; i < 8; ++i, ++s)
+    {
+        if ((s->id | s->mask) == 0)
+        {
+            best = 0.0f;
+            bestIndex = i;
+        }
+        else if (s->id == a && s->mask == b)
+        {
+            SetStimulus(s, a, b, c, obj);
+            return s;
+        }
+        else if (s->duration < best)
+        {
+            best = s->duration;
+            bestIndex = i;
+        }
+    }
+    s = &slot[bestIndex];
+    mMask0 &= ~s->id;
+    mMask0 |= a;
+    mMask1 &= ~s->mask;
+    mMask1 |= b;
+    s->id = a;
+    s->mask = b;
+    s->duration = c;
+    IRefCounted* old = s->object;
+    if (obj != old)
+    {
+        if (obj)
+            obj->AddRef();
+        s->object = obj;
+        if (old)
+            old->Release();
+    }
+    if (g_0168b54c)
+        g_0168b54c(s);
+    return s;
 }
