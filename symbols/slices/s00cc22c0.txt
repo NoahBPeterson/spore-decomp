@@ -1,0 +1,13 @@
+00cc22c0 ?Explode@cDefaultToolProjectile@@QAEXHPAX@Z  # void cDefaultToolProjectile::Explode
+00cc26a0 ?FindNearestCreature@@YAHMMM_N0@Z  # int FindNearestCreature
+00cc27f0 ?UpdateState@cSpatialObjectView@@QAEHXZ  # int cSpatialObjectView::UpdateState
+00cc28c0 ??0cDefaultBeamProjectileView@@QAE@XZ  # cDefaultBeamProjectileView::cDefaultBeamProjectileView
+00cc28f0 ?MakeFlakProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # cSpatialObjectView* MakeFlakProjectileView
+00cc2980 ?MakeDefaultToolProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # cSpatialObjectView* MakeDefaultToolProjectileView
+00cc2b60 ?MakeDeepSpaceProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # cSpatialObjectView* MakeDeepSpaceProjectileView
+00cc2c90 ??0cSpaceDefenseMissileView@@QAE@XZ  # cSpaceDefenseMissileView::cSpaceDefenseMissileView
+00cc2cb0 ??1cSpaceDefenseMissileView@@QAE@XZ  # cSpaceDefenseMissileView::~cSpaceDefenseMissileView
+00cc2d30 ?HandleSimulationUpdate@cSpaceDefenseMissileView@@QAEXHH@Z  # void cSpaceDefenseMissileView::HandleSimulationUpdate
+00cc2d70 ?MakeDefaultBeamProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # cSpatialObjectView* MakeDefaultBeamProjectileView
+00cc3000 ?MakeDefaultAoEAreaView@@YAPAVcSpatialObjectView@@PAX@Z  # cSpatialObjectView* MakeDefaultAoEAreaView
+00cc3140 ?MakeView@cCulturalProjectileView@@SAPAVcSpatialObjectView@@PAX@Z  # cSpatialObjectView* cCulturalProjectileView::MakeView
