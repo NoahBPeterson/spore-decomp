@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+#
+# Slice s00dd4b20.  2/3 byte-exact (00dd5950, 00dd5990).  DoMessage is a complete reconstruction
+# (no stubs, no naked/asm bodies) but the retail stack/register shape is not reproduced.
+#
+00dd5160  DoMessage: two-stage dispatch — first the UI message kinds (0x8ef0c8dd pre-hook, 0xe close-button, 0x13 sibling radio-button state copy through the child-list iterator, 0xa target AddRef/Release + audio re-arm, 0x1b/0x1c civ-relationship rollover for game modes 0x1654c04/0x1654c05), then the control ID (money read-outs 0x57df5c8/9 using the economy tuning and SetMoneyString, background 0x4b417d4 index lookup, and the 0x5dff098/0x5e4f770/0x5e4f778/0x5e4f788/0x5e51d28/0x5e51d30 comm-event open/close paths with GetCommContext(0xc8fbf7d7|event+0x38, key, 0, 0) and ReleaseSelected). Every call and constant is present in order; the divergences are register assignment (retail edi=this, ebx=msg), the message-kind switch shape, and stack-slot reuse (frame 0x2c vs 0x28). Equivalence WEAK: 399 valid inputs, 7.6% coverage.
