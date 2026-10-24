@@ -42,9 +42,12 @@ struct ObjC {                                                   // id 0xce9f6639
 struct ObjB {                                                   // id 0x4f176642
     int FUN_00c22dc0();                                         // 0x00c22dc0
 };
+struct IWinObj;                                                 // a tooltip/label window (see below)
 struct Obj {                                                    // the thing a queue entry refers to
     PV(00) PV(01) PV(02)
     virtual void* Cast(uint32_t id);                            // +0x0c
+    PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
+    virtual bool IsLabelAlive();                                // +0x2c
 };
 
 void __cdecl EA_Free(void* p);                                    // 0x00f47380 (operator delete[])
@@ -67,13 +70,28 @@ struct cEmpire { Vec3 GetColor(); };                            // 0x00c32cd0 (s
 cEmpire* GetPlayerEmpire();                                     // 0x01021300 (cdecl)
 
 struct Event {
-    char pad00[4];
+    int mKey;                                                   // +0x00
     Obj* mpObj;                                                 // +0x04
     char mFlag;                                                 // +0x08
     float mX;                                                   // +0x0c
     float mY;                                                   // +0x10
-    char pad14[0x50 - 0x14];
+    char pad14[4];
+    float mLimitY;                                              // +0x18
+    char pad1c[0x50 - 0x1c];
     int mArmed;                                                 // +0x50
+    IWinObj* mpWin54;                                           // +0x54
+    IWinObj* mpWin58;                                           // +0x58
+    char pad5c[0x70 - 0x5c];
+    IWinObj* mpWin70;                                           // +0x70
+    char pad74[0x90 - 0x74];
+    Obj* mpField90;                                             // +0x90
+    char pad94[0xb8 - 0x94];
+    IWinObj* mpLayout;                                          // +0xb8
+    IWinObj* mpWinBC;                                           // +0xbc
+    char padC0[0x120 - 0xc0];
+    IWinObj* mpWin120;                                          // +0x120
+    char pad124[4];
+    int mState128;                                              // +0x128
 };
 
 struct Mgr {
@@ -233,4 +251,321 @@ void ProcessLabelEvents(float dt)
             break;
         }
     }
+}
+
+// ---------------------------------------------------------------------------------------------------
+// 0x00b6dbd0 .. 0x00b6e2d0: the per-frame pass over the UI context records of the label system (retire
+// dead contexts, re-anchor the live ones' label windows and scroll them into the visible area), the
+// ring-buffer slot helpers and the var-list save helper of the same manager.  Names are Claude-coined.
+// ---------------------------------------------------------------------------------------------------
+
+#define PVCAT(a, b) a##b
+#define PVCAT2(a, b) PVCAT(a, b)
+#define PVQ virtual void PVCAT2(pvq_, __COUNTER__)();
+#define PVQ8 PVQ PVQ PVQ PVQ PVQ PVQ PVQ PVQ
+
+struct IHostObj;
+
+struct IWinObj {                                                // a label/tooltip window of a context record
+    PVQ PVQ PVQ PVQ
+    virtual IHostObj* GetHost();                                // +0x10
+    PVQ PVQ PVQ PVQ PVQ
+    virtual int V0A();                                          // +0x28
+    PVQ PVQ PVQ
+    virtual float* GetPos();                                    // +0x38
+    PVQ8 PVQ PVQ PVQ PVQ PVQ
+    virtual void SetPos(float x, float y);                      // +0x70
+};
+
+struct IHostObj {                                               // the host of a label window
+    PVQ8 PVQ8 PVQ8 PVQ8 PVQ8 PVQ8 PVQ8 PVQ PVQ
+    virtual void V3A(IWinObj* w);                               // +0xe8
+};
+
+struct IWindowMgr {
+    PVQ8 PVQ8 PVQ8 PVQ8 PVQ
+    virtual int V21();                                          // +0x84
+};
+
+struct CTriggerMgr {
+    char pad00[0x2c];
+    int mMode;                                                  // +0x2c
+};
+
+struct CState {
+    bool ShouldShow();                                          // 0x00e18c70
+};
+
+void* GetTriggerMgr();                                          // 0x00b3d4d0 (cdecl)
+IWindowMgr* WindowManager();                                    // 0x0067caa0 (cdecl)
+void* CommManager();                                            // 0x00b3d4a0 (cdecl)
+bool CommManagerIsActive();                                     // 0x00ae9390 (thiscall, ecx = CommManager())
+void* FUN_00b3d3f0(int a);                                      // 0x00b3d3f0 (cdecl)
+void FUN_00b6c200(int key);                                     // 0x00b6c200 (cdecl, RemoveUICtx)
+void FUN_00b686a0(int key);                                     // 0x00b686a0 (key in EAX originally)
+void FUN_00b6a610(Event* e);                                    // 0x00b6a610 (cdecl)
+void FUN_00b6c710(float dt);                                    // 0x00b6c710 (cdecl, UpdateUIContexts)
+void FUN_00b69890();                                            // 0x00b69890 (cdecl)
+void AnchorWindowToWindow(IWinObj* win, IWinObj* base, int mode, IWinObj* p4);   // 0x00807340
+float* SPUIHelpers_GetBoundingScreenRect(float* out, IWinObj* win, char flag);   // 0x00808d20
+
+// @ 0x00b6dbd0
+void FUN_00b6dbd0(float dt)
+{
+    // retire the contexts whose label died, drop the slots of the ones that cannot be shown any more
+    int cookie = FUN_00e31100();
+    for (Event* e = g_pMgr->FUN_00b72230(&cookie); e != 0; e = g_pMgr->FUN_00b72230(&cookie)) {
+        if (e->mpObj->IsLabelAlive()) {
+            FUN_00b6c200(e->mKey);
+            continue;
+        }
+        if (e->mArmed) {
+            int mode = ((CTriggerMgr*)GetTriggerMgr())->mMode;
+            if (mode == 1 || mode == 2
+                || WindowManager()->V21() != 0
+                || CommManagerIsActive()
+                || ((CState*)FUN_00b3d3f0(0))->ShouldShow())
+                FUN_00b686a0(e->mKey);
+        }
+        if (e->mArmed) {
+            FUN_00b6a610(e);
+        }
+        else if (e->mpLayout == 0 && e->mpWin120 == 0) {
+            FUN_00b6c200(e->mKey);
+        }
+        else {
+            FUN_00b6a610(e);
+        }
+    }
+
+    ProcessLabelEvents(dt);
+    FUN_00b6c710(dt);
+    FUN_00b69890();
+
+    // anchor the label windows of the live records
+    cookie = FUN_00e31100();
+    Event* e;
+    while ((e = g_pMgr->FUN_00b72230(&cookie)) != 0) {
+        if (!e->mFlag)
+            continue;
+        if (e->mArmed) {
+            if (e->mpWin120 != 0 && e->mState128 == 2) {
+                IWinObj* base = e->mpWin58;
+                if (base == 0)
+                    base = e->mpWin70;
+                if (base != 0)
+                    AnchorWindowToWindow(e->mpWin120, base, 0x102, e->mpWin54);
+                float* pos = e->mpWin54->GetPos();
+                e->mpWin54->SetPos(pos[0], pos[1] - 12.0f);
+            }
+            if (e->mpLayout != 0) {
+                IWinObj* target = 0;
+                if (e->mpField90 != 0)
+                    target = (IWinObj*)e->mpField90->Cast(0xeeee8218);
+                e->mpWinBC->GetHost()->V3A(e->mpWinBC);
+                if (target != 0) {
+                    if ((target->V0A() & 1) != 0)
+                        AnchorWindowToWindow(target, e->mpWinBC, 0x220, 0);
+                    else
+                        AnchorWindowToWindow(target, e->mpWinBC, 0x300, 0);
+                }
+                else if (e->mpWin58 != 0 && (e->mpWin58->V0A() & 1) != 0) {
+                    AnchorWindowToWindow(e->mpWin58, e->mpWinBC, 0x102, 0);
+                }
+                else if (e->mpWin70 != 0 && (e->mpWin58->V0A() & 1) != 0) {
+                    AnchorWindowToWindow(e->mpWin70, e->mpWinBC, 0x102, 0);
+                }
+            }
+        }
+        else if (e->mpLayout != 0 && e->mpWin120 != 0 && e->mpWinBC != 0 && e->mState128 == 2) {
+            AnchorWindowToWindow(e->mpWin120, e->mpWinBC, 0x102, 0);
+        }
+    }
+
+    // scroll the visible records so their label windows stay inside the screen
+    cookie = FUN_00e31100();
+    while ((e = g_pMgr->FUN_00b72230(&cookie)) != 0) {
+        if (!e->mFlag)
+            continue;
+        float off;
+        if (e->mpLayout != 0) {
+            float rect[4];
+            SPUIHelpers_GetBoundingScreenRect(rect, e->mpWinBC, 0);
+            off = 20.0f - rect[2];
+        }
+        else if (e->mArmed != 0) {
+            float rect[4];
+            SPUIHelpers_GetBoundingScreenRect(rect, e->mpWin58, 0);
+            off = 20.0f - rect[2];
+        }
+        else {
+            if (e->mpWin120 == 0)
+                continue;
+            float rect[4];
+            SPUIHelpers_GetBoundingScreenRect(rect, e->mpWin120, 0);
+            off = 20.0f - rect[2];
+        }
+        if (off > 0.0f) {
+            float y = e->mY + off;
+            float over = y - e->mLimitY;
+            if (over > 0.0f) {
+                off -= over;
+                y -= over;
+            }
+            e->mY = y;
+            if (e->mArmed != 0 && e->mpWin54 != 0) {
+                float* pos = e->mpWin54->GetPos();
+                e->mpWin54->SetPos(pos[0], pos[1] + off);
+            }
+            if (e->mpLayout != 0 && e->mpWinBC != 0) {
+                float* pos = e->mpWinBC->GetPos();
+                e->mpWinBC->SetPos(pos[0], pos[1] + off);
+            }
+            if (e->mpWin120 != 0) {
+                float* pos = e->mpWin120->GetPos();
+                e->mpWin120->SetPos(pos[0], pos[1] + off);
+            }
+        }
+    }
+}
+
+// ---- ring buffer of the 12 UI slot ids (0x53dbcf3 .. 0x53dbcfe) ----
+extern uint32_t g_slot01687968;                                 // 0x01687968 (last handed out slot id)
+extern char g_slots0168795c[];                                  // 0x0168795c (occupied flags, 12 entries)
+
+struct SimState {                                               // the simulator's global state object
+    char pad00[0x28];
+    int mField28;                                               // +0x28
+    int mField2c;                                               // +0x2c
+    int mField30;                                               // +0x30
+};
+extern SimState* g_pSimState;                                   // 0x01687978
+extern int g_flag0156b0cc;                                      // 0x0156b0cc
+extern int g_dataset0156b0d8;                                   // 0x0156b0d8
+
+// One ring step: advance the slot id (wrapping at the last slot) and leave if the reached slot is free.
+#define NEXT_SLOT(cur)                                                   \
+    do {                                                                 \
+        ++(cur);                                                         \
+        g_slot01687968 = (cur);                                          \
+        int index;                                                       \
+        if ((cur) > 0x53dbcfe) {                                         \
+            (cur) = 0x53dbcf3;                                           \
+            g_slot01687968 = (cur);                                      \
+            index = (int)((cur) - 0x53dbcf3);                            \
+        }                                                                \
+        else if ((cur) >= 0x53dbcf3) {                                   \
+            index = (int)((cur) - 0x53dbcf3);                            \
+        }                                                                \
+        else {                                                           \
+            index = 0;                                                   \
+        }                                                                \
+        if (g_slots0168795c[index] == 0)                                 \
+            return;                                                      \
+    } while (0)
+
+// @ 0x00b6e050
+void FUN_00b6e050()
+{
+    uint32_t cur = g_slot01687968;
+    if (cur < 0x53dbcf3)
+        cur = 0x53dbcf2;
+    int remaining = 12;
+    do {
+        NEXT_SLOT(cur);
+        NEXT_SLOT(cur);
+        NEXT_SLOT(cur);
+        NEXT_SLOT(cur);
+        NEXT_SLOT(cur);
+        NEXT_SLOT(cur);
+        remaining -= 6;
+    } while (remaining > 0);
+}
+
+// @ 0x00b6e1e0
+char FUN_00b6e1e0(int index)
+{
+    return g_slots0168795c[index];
+}
+
+struct cSimUIObject {
+    void* GetInterface(uint32_t id);                            // 0x00b6e210
+};
+
+// @ 0x00b6e210
+void* cSimUIObject::GetInterface(uint32_t id)
+{
+    void* result = 0;
+    if (id == 0x5593a1a)
+        result = this;
+    return result;
+}
+
+// @ 0x00b6e250
+int FUN_00b6e250()
+{
+    if (g_pSimState != 0 && g_flag0156b0cc != 0)
+        return 1;
+    return 0;
+}
+
+// @ 0x00b6e270
+int FUN_00b6e270(int value)
+{
+    int old = g_pSimState->mField28;
+    g_pSimState->mField28 = value;
+    return old;
+}
+
+// @ 0x00b6e290
+int FUN_00b6e290(int value)
+{
+    int old = g_pSimState->mField2c;
+    g_pSimState->mField2c = value;
+    return old;
+}
+
+// @ 0x00b6e2b0
+int FUN_00b6e2b0(int value)
+{
+    int old = g_pSimState->mField30;
+    g_pSimState->mField30 = value;
+    return old;
+}
+
+// ---- saving: the record id goes out as a Uint32, then the whole record through a var-list serializer ----
+struct IStreamObj {
+    PVQ PVQ PVQ PVQ PVQ PVQ
+    virtual void* V6();                                         // +0x18
+};
+
+struct IStreamHost {
+    PVQ8
+    virtual IStreamObj* V8();                                   // +0x20
+};
+
+struct cVarListSerializer {                                     // 0xa14-byte serializer, built on the stack
+    uint8_t mData[0xa14];
+    void Init(void* owner, void* dataset, uint32_t tag);         // 0x00692f90
+    void Serialize(void* obj);                                  // 0x00692900
+};
+
+namespace EA { namespace IO {
+void WriteUint32(void* stream, const uint32_t* value, int count, int mode);   // 0x0093aa70
+} }
+
+struct cSimulatorUIStore {
+    void Save(IStreamHost* owner);                              // 0x00b6e2d0
+};
+
+// @ 0x00b6e2d0
+void cSimulatorUIStore::Save(IStreamHost* owner)
+{
+    IStreamObj* streamObj = owner->V8();
+    uint32_t id = 0x5593a1a;
+    void* stream = streamObj->V6();
+    EA::IO::WriteUint32(stream, &id, 1, 0);
+    cVarListSerializer ser;
+    ser.Init(this, &g_dataset0156b0d8, 0x1a80d26);
+    ser.Serialize(owner);
 }

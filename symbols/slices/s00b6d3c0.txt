@@ -1,1 +1,10 @@
 00b6d3c0 ProcessLabelEvents  # per-frame dispatcher over the label event queue, switch on FUN_00b67c70 kind (0..16)
+00b6dbd0 ?FUN_00b6dbd0@@YAXM@Z  # nonmatching (802) - per-frame UI-context pass: retire/unanchor/scroll the label records
+00b6e050 ?FUN_00b6e050@@YAXXZ  # nonmatching (253) - ring scan over the 12 UI slot ids 0x53dbcf3..0x53dbcfe
+00b6e1e0 ?FUN_00b6e1e0@@YADH@Z  # MATCH - occupancy flag of ring slot N
+00b6e210 ?GetInterface@cSimUIObject@@QAEPAXI@Z  # MATCH - interface id 0x5593a1a -> this
+00b6e250 ?FUN_00b6e250@@YAHXZ  # MATCH - g_pSimState && g_flag0156b0cc
+00b6e270 ?FUN_00b6e270@@YAHH@Z  # MATCH - exchange SimState+0x28, return old
+00b6e290 ?FUN_00b6e290@@YAHH@Z  # MATCH - exchange SimState+0x2c, return old
+00b6e2b0 ?FUN_00b6e2b0@@YAHH@Z  # MATCH - exchange SimState+0x30, return old
+00b6e2d0 ?Save@cSimulatorUIStore@@QAEXPAUIStreamHost@@@Z  # nonmatching (15) - write record id then serialize the record
