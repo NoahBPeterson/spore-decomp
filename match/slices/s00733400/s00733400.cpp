@@ -18,10 +18,10 @@ struct VecHolder
     int* mBegin; int* mEnd; int* mCap;
     int* ZeroFill(int param_2, int param_3);
     void Insert(void* param_2, void* param_3);
+    void FUN_006fa770(int param_2, int param_3);   // 006FA770 DoAllocate (thiscall, ret 8)
 };
 
 // external callees (masked relocations)
-void  FUN_006fa770(int, int);
 void  FUN_00733070(int, void*);
 void  FUN_006a46a0(int, void*);
 void  FUN_006a4600(int, void*);
@@ -31,6 +31,7 @@ int   FUN_00a11310(int, int, int);
 void* EAAlloc(int, const char*, int, int, const char*, int);
 void  EAFree(void*);
 void  FUN_00733a50(void*);
+void  FUN_00733a50_ext(void*);   // 0x00733A50 (external view of the same callee)
 void  FUN_00733f20(void*);
 
 // @ 0x00733400
@@ -148,17 +149,18 @@ void VecHolder::Insert(void* param_2, void* param_3)
 void FUN_00733e90(int param_1, int param_2, int param_3)
 {
     for (int i = 0; i < param_2; i++)
-        FUN_00733a50((void*)(*(int*)(param_3 + i * 4) * 0x20 + *(int*)(param_1 + 8)));
+        FUN_00733a50_ext((void*)(*(int*)(param_3 + i * 4) * 0x20 + *(int*)(param_1 + 8)));
 }
 
 // @ 0x00733ed0
 void FUN_00733ed0(int param_1)
 {
-    for (int i = 0; i < (*(int*)(param_1 + 0xc) - *(int*)(param_1 + 8) >> 5); i += 0x20)
+    int count = (*(int*)(param_1 + 0xc) - *(int*)(param_1 + 8)) >> 5;
+    for (int i = 0; i < count; ++i)
     {
-        int v = *(int*)(*(int*)(param_1 + 8) + i);
+        int v = *(int*)(*(int*)(param_1 + 8) + i * 0x20);
         if (((v == 8) || (v == 2)) || (v == 3) || (v == 10))
-            FUN_00733a50((void*)(*(int*)(param_1 + 8) + i));
+            FUN_00733a50_ext((void*)(*(int*)(param_1 + 8) + i * 0x20));
     }
 }
 
