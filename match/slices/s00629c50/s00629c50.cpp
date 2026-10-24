@@ -680,28 +680,26 @@ void __stdcall FUN_00629d90(int arg1, int arg2) {
 
 // @ 0x0062ab80
 void cSPPlayMode::SetAllBabySitState() {
-  cSPPlayMode* m = this;
-  char* cm = *(char**)((char*)m + 0x3610);
-  int n = (*(int*)(cm + 0x370) - *(int*)(cm + 0x36c)) / 0x30;
+  cEditorState* ed = mEditor;
+  int n = (int)(ed->mBabiesEnd - ed->mBabiesBegin);
   for (int i = 0; i < n; ++i) SetBabySitState((unsigned)i);
 }
 
 // @ 0x0062a360
 bool cSPPlayMode::HasActivePath(int creatureID) {
-  cSPPlayMode* m = this;
-  char* cm = *(char**)((char*)m + 0x3610);
-  int n = (*(int*)(cm + 0x370) - *(int*)(cm + 0x36c)) / 0x30;
-  char* begin = *(char**)(cm + 0x36c);
-  int i = 0;
-  while (*(int*)(*(char**)(begin + i * 4) + 0x1c) != creatureID) {
+  cSPPlayMode_Creature** begin = mCreaturesBegin;
+  unsigned n = (unsigned)(mCreaturesEnd - mCreaturesBegin);
+  if (n == 0) return false;
+  unsigned i = 0;
+  while (begin[i]->mCreatureID != (uint32_t)creatureID) {
     ++i;
-    if ((unsigned)i >= (unsigned)n) return false;
+    if (i >= n) return false;
   }
-  if ((unsigned)i < (unsigned)n) {
-    char* c = *(char**)(begin + i * 4);
-    if (*(float*)(c + 0x34) > 0.0f) return true;
-    char* c0 = *(char**)begin;
-    if (*(char*)(c0 + 0x24) != 0 && *(char*)(c + 0x24) != 0) return true;
+  if (i < n) {
+    cSPPlayMode_Creature* c = begin[i];
+    if (c->mField34 > 0.0f) return true;
+    cSPPlayMode_Creature* c0 = begin[0];
+    if (c0->mCollision != 0 && c->mCollision != 0) return true;
   }
   return false;
 }
