@@ -10,6 +10,7 @@
 #include "types.h"
 #include <string.h>
 #include <math.h>
+#include <xmmintrin.h>
 
 struct Vec3 { float x, y, z; };
 struct Vec4 { float x, y, z, w; };
@@ -298,6 +299,16 @@ void FUN_00e5ba10(float* out, float* box, float* src)
     else if (out[2] > box[5]) out[2] = box[5];
 }
 
+// SSE float update for FUN_00e5ba90. Kept out of line so the reciprocal stays an x87 value while
+// the per-component multiply/add keeps SSE single-precision rounding (the float denormal grid).
+static __declspec(noinline) float* MovePointSSE(float* p, float dx, float dy, float dz, float inv, float d)
+{
+    p[0] = p[0] + (dx * inv) * d;
+    p[1] = p[1] + (dy * inv) * d;
+    p[2] = p[2] + (dz * inv) * d;
+    return p;
+}
+
 // ---------------------------------------------------------------- 0x00e5ba90
 // Move point p1 toward p2 by (speed*dt); if the remaining distance is already smaller, snap to p2.
 // @ 0x00e5ba90
@@ -315,10 +326,9 @@ void FUN_00e5ba90(float* p1, float* p2, float speed, float dt)
             p1[2] = p2[2];
             return;
         }
-        float inv = 1.0f / (float)(double)sqrt((double)(sum + gK_13ec4b8));
-        p1[0] = p1[0] + (dx * inv) * d;
-        p1[1] = p1[1] + (dy * inv) * d;
-        p1[2] = p1[2] + (dz * inv) * d;
+        volatile double ddx = dx, ddy = dy, ddz = dz;
+        volatile float inv = 1.0f / (float)sqrt(ddx * ddx + (ddz * ddz + ddy * ddy) + gK_13ec4b8);
+        MovePointSSE(p1, dx, dy, dz, inv, d);
     }
 }
 
@@ -335,18 +345,20 @@ float FUN_00e5bbc0(float* p)
     float dx = p[0] - mx;
     float dy = p[1] - my;
     float dz = p[2] - mz;
-    float sum = dx * dx + (dy * dy + dz * dz);
-    float inv = 1.0f / (float)(double)sqrt((double)(sum + gK_13ec4b8));
+    volatile double ddx = dx, ddy = dy, ddz = dz;
+    double sum = ddx * ddx + (ddy * ddy + ddz * ddz);
+    volatile float inv = 1.0f / (float)sqrt(sum + gK_13ec4b8);
 
     float nx = ((gExt_16b3c94 - gExt_16b3c88) * (dx * inv)) * gK_13ec434 + mx;
     float ny = ((gExt_16b3c98 - gExt_16b3c8c) * (dy * inv)) * gK_13ec434 + my;
     float rx = nx - mx;
     float ry = ny - my;
     float rd = (float)(double)sqrt((double)(rx * rx + (ry * ry + 0.0f)));
-    if (rd <= (float)(double)sqrt((double)sum)) {
+    float dist = (float)(double)sqrt(sum);
+    if (rd <= dist) {
         p[0] = nx; p[1] = ny; p[2] = mz;
     }
-    return rd;
+    return dist;
 }
 
 // ---------------------------------------------------------------- 0x00e5bd30
@@ -413,12 +425,14 @@ float FUN_00e5be80(void)
 float FUN_00e5bfa0(void)
 {
     int lvl = *(int*)(*(char**)(gCellGame + 0x5190) + 0x1c);
-    if (lvl < 200)  return FUN_01041cd0(0.0f, gLvl_1477fbc, (float)lvl) * gK_13ec480;
-    if (lvl < 400)  return (FUN_01041cd0(gLvl_1477fbc, gLvl_13f0e84, (float)lvl) + gK_1485720) * gK_13ec480;
-    if (lvl < 600)  return FUN_01041cd0(gLvl_13f0e84, gLvl_13fdcf8, (float)lvl) * gK_13ec480 + gK_13ec434;
-    if (lvl < 800)  return FUN_01041cd0(gLvl_13fdcf8, gLvl_13fdcf4, (float)lvl) * gK_13ec480 + gK_13ec4b0;
-    if (lvl < 1000) return FUN_01041cd0(gLvl_13fdcf4, gK_13ec5b4, (float)lvl) * gK_13ec480 + gK_1486374;
-    return gK_1485720;
+    float r;
+    if (lvl < 200)  r = FUN_01041cd0(0.0f, gLvl_1477fbc, (float)lvl) * gK_13ec480;
+    else if (lvl < 400)  r = (FUN_01041cd0(gLvl_1477fbc, gLvl_13f0e84, (float)lvl) + gK_1485720) * gK_13ec480;
+    else if (lvl < 600)  r = FUN_01041cd0(gLvl_13f0e84, gLvl_13fdcf8, (float)lvl) * gK_13ec480 + gK_13ec434;
+    else if (lvl < 800)  r = FUN_01041cd0(gLvl_13fdcf8, gLvl_13fdcf4, (float)lvl) * gK_13ec480 + gK_13ec4b0;
+    else if (lvl < 1000) r = FUN_01041cd0(gLvl_13fdcf4, gK_13ec5b4, (float)lvl) * gK_13ec480 + gK_1486374;
+    else r = gK_1485720;
+    return r;
 }
 
 // ---------------------------------------------------------------- 0x00e5c0f0
