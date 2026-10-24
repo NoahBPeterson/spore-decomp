@@ -1,14 +1,14 @@
 00747920  85 deque pop_back shape differs; equiv: WEAK 67.5% cov
 00747ac0 111 0x38-record copy ctor register shape differs; equiv: PASS 1200 inputs 100% cov
 00747b70 179 uninitialized_copy of refcounted 0x3c elements shape differs
-00747c90 128 uninitialized_fill_n shape differs
+00747c90 128 uninitialized_fill_n shape differs; equiv PASS (303 valid inputs, 0 mismatches, 100.0% coverage)
 00747eb0  61 make_heap<cOccluder*> schedule/copy flavour differs
-00747f30  86 sort_heap<cOccluder*> shape differs
-00748010  46 make_heap pair (greater) schedule differs
-00748060  89 sort_heap pair (greater) shape differs; equiv: FAIL call #0 mismatch (by-value compare arg size)
-007480c0  46 make_heap pair (less) schedule differs
-00748110  89 sort_heap pair (less) shape differs; equiv: FAIL call #0 mismatch (by-value compare arg size)
+00747f30  86 sort_heap<cOccluder*> shape differs; equiv WEAK (461 valid inputs, 0 mismatches, 29.6% coverage at --inputs 800; unchanged)
+00748010  46 make_heap pair (greater) schedule differs; equiv PASS (361 valid inputs, 0 mismatches, 100.0% coverage)
+00748060  89 sort_heap pair (greater) shape differs; equiv PASS (396 valid inputs, 0 mismatches, 100.0% coverage)
+007480c0  46 make_heap pair (less) schedule differs; equiv PASS (368 valid inputs, 0 mismatches, 100.0% coverage)
+00748110  89 sort_heap pair (less) shape differs; equiv PASS (396 valid inputs, 0 mismatches, 100.0% coverage)
 00748170 127 uninitialized_copy of plain 0x3c elements shape differs
-00748280 121 deque uninitialized_copy shape differs
-00748380 119 deque copy_backward shape differs
+00748280 121 deque uninitialized_copy shape differs; equiv WEAK (264 valid inputs, 0 mismatches, 20.7% coverage at --inputs 600; unchanged at 1500)
+00748380 119 deque copy_backward shape differs; equiv WEAK (290 valid inputs, 0 mismatches, 16.9% coverage at --inputs 600; unchanged at 1500)
 00748470 137 copy_backward of refcounted 0x1c elements shape differs

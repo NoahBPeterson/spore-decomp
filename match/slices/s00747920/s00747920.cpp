@@ -4,6 +4,10 @@
 #include <new>
 #include <string.h>
 
+typedef unsigned int   u32;
+typedef unsigned short u16;
+typedef unsigned char  u8;
+
 struct Vec3 { float x, y, z; };
 struct cSPTransform {
     unsigned short mFlags; unsigned short mModificationCount;
@@ -17,8 +21,8 @@ void  FUN_007457a0(int a, int b);
 void  RBTreeInsert(void* node, void* parent, void* anchor, int flag);
 void  cSPTransform_Assign(void* dst, const void* src);
 void* FUN_00743fb0(void* p, float f, void* box);
-void  FUN_00745e00(void* first, int top, int size, int pos, float vx, float vy, void* cmp);
-void  FUN_00745e80(void* first, int top, int size, int pos, float vx, float vy, void* cmp);
+void  FUN_00745e00(void* first, int top, int size, int pos, float vx, float vy, u32 cmp);
+void  FUN_00745e80(void* first, int top, int size, int pos, float vx, float vy, u32 cmp);
 void  adjust_heap_occluder(void* first, int top, int size, int pos, float a, float b, float c,
                            float d, float e, float f, void* cmp);
 void  translateTransform(void* out, void* a, const void* b);
@@ -157,26 +161,24 @@ void FUN_00747b70(E3CResult* res, E3C* first, E3C* last, E3C* dst)
 }
 
 // @ 0x00747c90 : uninitialized_fill_n of 0x3c-byte elements
-void FUN_00747c90(E3C* dst, int n, E3C* value)
+// The element is a plain POD: dword key, two words, then 13 floats (+8..+0x38).
+struct Plain3C { u32 key; u16 a, b; float f[13]; };
+void* FUN_00747c90(E3C* dst, int n, E3C* value)
 {
-    for (; n != 0; --n, dst += 1) {
-        dst->key = value->key;
-        RCObj* o = value->obj;
-        if (o) (*(void(__thiscall**)(RCObj*))(*(void**)o))(o);
-        dst->obj = o;
-        dst->a = value->a;
-        dst->b = value->b;
-        dst->d = value->d;
-        dst->e = value->e;
-        dst->f = value->f;
-        dst->g = value->g;
-        dst->h = value->h;
-        dst->i = value->i;
-        dst->j = value->j;
-        dst->k = value->k;
-        dst->l = value->l;
-        dst->m = value->m;
+    // the original only computes eax after the n>0 test, so an n==0 call returns
+    // the caller's incoming eax unchanged
+    u32 entryEax;
+    __asm { mov entryEax, eax }
+    if ((u32)n == 0)
+        return (void*)entryEax;
+    Plain3C* d = (Plain3C*)dst;
+    Plain3C* v = (Plain3C*)value;
+    for (u32 i = (u32)n; i != 0; --i, ++d) {
+        if (d == 0) break;
+        *d = *v;
     }
+    // the original keeps the cursor pre-biased by +0x10 and hands it back in eax
+    return (char*)d + 0x10;
 }
 
 // ===========================================================================
@@ -201,16 +203,16 @@ void MakeHeapOccluder(Occluder* first, Occluder* last, OccluderCmp compare)
 struct Occluder4 { float a, b, c, d, e, f; };
 void PopHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
 {
-    Occluder4 temp(*(last - 1));
-    *(last - 1) = *first;
-    int n = (int)(last - first) - 1;
-    if (n > 0)
+    for (; (last - first) > 1; --last) {
+        Occluder4 temp(*(last - 1));
+        *(last - 1) = *first;
+        int n = (int)(last - first) - 1;
         AdjustHeapOccluder((Occluder*)first, 0, n, 0, *(Occluder*)&temp, compare);
+    }
 }
 void SortHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
 {
-    for (; (last - first) > 1; --last)
-        PopHeapOccluder(first, last, compare);
+    PopHeapOccluder(first, last, compare);
 }
 
 // make_heap (0x00748010) / sort_heap (0x00748060) for the 8-byte pair (greater)
@@ -218,7 +220,7 @@ struct FKP { float x, y; FKP() {} FKP(const FKP& v) { x = v.x; y = v.y; } };
 struct CmpGt { bool operator()(const FKP& a, const FKP& b) const { return a.y > b.y; } };
 struct CmpLt { bool operator()(const FKP& a, const FKP& b) const { return a.y < b.y; } };
 // @ 0x00748010
-void MakeHeapGt(FKP* first, FKP* last, CmpGt compare)
+void MakeHeapGt(FKP* first, FKP* last, u32 compare)
 {
     int heapSize = (int)(last - first);
     if (heapSize >= 2) {
@@ -226,22 +228,22 @@ void MakeHeapGt(FKP* first, FKP* last, CmpGt compare)
         do {
             --parentPosition;
             FUN_00745e00(first, parentPosition, heapSize, parentPosition,
-                         first[parentPosition].x, first[parentPosition].y, &compare);
+                         first[parentPosition].x, first[parentPosition].y, compare);
         } while (parentPosition != 0);
     }
 }
 // @ 0x00748060
-void SortHeapGt(FKP* first, FKP* last, CmpGt compare)
+void SortHeapGt(FKP* first, FKP* last, u32 compare)
 {
     for (; (last - first) > 1; --last) {
         FKP temp(*(last - 1));
         *(last - 1) = *first;
-        FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
+        FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, compare);
     }
 }
 // make_heap (0x007480c0) / sort_heap (0x00748110) for the 8-byte pair (less)
 // @ 0x007480c0
-void MakeHeapLt(FKP* first, FKP* last, CmpLt compare)
+void MakeHeapLt(FKP* first, FKP* last, u32 compare)
 {
     int heapSize = (int)(last - first);
     if (heapSize >= 2) {
@@ -249,17 +251,17 @@ void MakeHeapLt(FKP* first, FKP* last, CmpLt compare)
         do {
             --parentPosition;
             FUN_00745e80(first, parentPosition, heapSize, parentPosition,
-                         first[parentPosition].x, first[parentPosition].y, &compare);
+                         first[parentPosition].x, first[parentPosition].y, compare);
         } while (parentPosition != 0);
     }
 }
 // @ 0x00748110
-void SortHeapLt(FKP* first, FKP* last, CmpLt compare)
+void SortHeapLt(FKP* first, FKP* last, u32 compare)
 {
     for (; (last - first) > 1; --last) {
         FKP temp(*(last - 1));
         *(last - 1) = *first;
-        FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
+        FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, compare);
     }
 }
 
@@ -288,46 +290,107 @@ void FUN_00748170(int* first, int* last, int* dst)
     }
 }
 
-// @ 0x00748280 : deque uninitialized_copy
-void FUN_00748280(int* out, int* first, int* a, int* last, int* mapFirst, int* mapLast)
+// deque iterator passed by value: {current, block begin, block end, map slot}
+struct DequeIter { char* cur; char* begin; char* end; char** map; };
+// 0x1c-byte refcounted element: key, object (+4), five dwords (+8..+0x18)
+struct RCElem3C { u32 key; RCObj* obj; u32 f0, f1, f2, f3, f4; };
+static inline void AddRefRaw(RCObj* o)
 {
-    (void)a; (void)mapFirst; (void)mapLast;
-    int* dst = (int*)out[0];
-    for (; first != last; first += 7) {
-        int* o = dst;
-        o[0] = first[0];
-        RCObj* src = (RCObj*)first[1];
-        RCObj* d = (RCObj*)o[1];
-        if (src != d) {
-            if (src) (*(void(__thiscall**)(RCObj*))(*(void**)src))(src);
-            o[1] = (int)src;
-            if (d) RelObj(d);
-        }
-        o[2] = first[2]; o[3] = first[3]; o[4] = first[4]; o[5] = first[5]; o[6] = first[6];
-        dst = o + 7;
+    if (o) (*(void(__thiscall**)(RCObj*))(*(void***)o)[0])(o);
+}
+static inline void ReleaseRaw(RCObj* o)
+{
+    if (o) (*(void(__thiscall**)(RCObj*))(*(void***)o)[1])(o);
+}
+static inline void CopyElem3C(RCElem3C* d, const RCElem3C* s)
+{
+    d->key = s->key;
+    RCObj* o = s->obj;
+    RCObj* old = d->obj;
+    if (o != old) {
+        AddRefRaw(o);
+        d->obj = o;
+        ReleaseRaw(old);
     }
-    out[1] = (int)dst;
+    d->f0 = s->f0;
+    d->f1 = s->f1;
+    d->f2 = s->f2;
+    d->f3 = s->f3;
+    d->f4 = s->f4;
+}
+
+// @ 0x00748280 : deque uninitialized_copy
+// three iterators are passed by value: {current, block begin, block end, map slot}
+DequeIter* FUN_00748280(DequeIter* out,
+                        char* fcur, char* fbeg, char* fend, char** fmap,
+                        char* lcur, char* lbeg, char* lend, char** lmap,
+                        char* rcur, char* rbeg, char* rend, char** rmap)
+{
+    DequeIter first = { fcur, fbeg, fend, fmap };
+    DequeIter last = { lcur, lbeg, lend, lmap };
+    DequeIter result = { rcur, rbeg, rend, rmap };
+    while (first.cur != last.cur) {
+        CopyElem3C((RCElem3C*)result.cur, (const RCElem3C*)first.cur);
+        result.cur += 0x1c;
+        if (result.cur == result.end) {
+            result.map += 1;
+            char* nb = *result.map;
+            result.cur = nb;
+            result.begin = nb;
+            result.end = nb + 0xe0;
+        }
+        first.cur += 0x1c;
+        if (first.cur == first.end) {
+            first.map += 1;
+            char* nb = *first.map;
+            first.cur = nb;
+            first.begin = nb;
+            first.end = nb + 0xe0;
+        }
+    }
+    out->cur = result.cur;
+    out->begin = result.begin;
+    out->end = result.end;
+    out->map = result.map;
+    return out;
 }
 
 // @ 0x00748380 : deque copy_backward
-void FUN_00748380(int* out, int* last)
+DequeIter* FUN_00748380(DequeIter* out,
+                        char* fcur, char* fbeg, char* fend, char** fmap,
+                        char* lcur, char* lbeg, char* lend, char** lmap,
+                        char* rcur, char* rbeg, char* rend, char** rmap)
 {
-    int* dst = (int*)out[0];
-    while (dst != last) {
-        int* s = dst;
-        int* d = s - 7;
-        d[0] = s[-7];
-        RCObj* src = (RCObj*)s[-6];
-        RCObj* old = (RCObj*)d[1];
-        if (src != old) {
-            if (src) (*(void(__thiscall**)(RCObj*))(*(void**)src))(src);
-            d[1] = (int)src;
-            if (old) RelObj(old);
+    DequeIter first = { fcur, fbeg, fend, fmap };
+    DequeIter src = { lcur, lbeg, lend, lmap };
+    DequeIter dst = { rcur, rbeg, rend, rmap };
+    if (src.cur != first.cur) {
+        for (;;) {
+            if (src.cur == src.begin) {
+                src.map -= 1;
+                char* nb = *src.map;
+                src.begin = nb;
+                src.end = nb + 0xe0;
+                src.cur = src.end;
+            }
+            src.cur -= 0x1c;
+            if (dst.cur == dst.begin) {
+                dst.map -= 1;
+                char* nb = *dst.map;
+                dst.begin = nb;
+                dst.end = nb + 0xe0;
+                dst.cur = dst.end;
+            }
+            dst.cur -= 0x1c;
+            CopyElem3C((RCElem3C*)dst.cur, (const RCElem3C*)src.cur);
+            if (src.cur == first.cur) break;
         }
-        d[2] = s[-5]; d[3] = s[-4]; d[4] = s[-3]; d[5] = s[-2]; d[6] = s[-1];
-        dst = d;
     }
-    out[1] = (int)dst;
+    out->cur = dst.cur;
+    out->begin = dst.begin;
+    out->end = dst.end;
+    out->map = dst.map;
+    return out;
 }
 
 // @ 0x00748470 : copy_backward of 0x1c-byte refcounted elements
