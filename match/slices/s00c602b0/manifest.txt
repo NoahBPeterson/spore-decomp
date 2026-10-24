@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c602b0/s00c602b0.cpp  ??0cMissionTerraform@Simulator@@QAE@XZ  00c606e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c602b0/s00c602b0.cpp  ?OnTerraformSphereChange@cSPMissionTerraform@@QAEXH@Z  00c60850  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c602b0/s00c602b0.cpp  ?RegisterMessages@cSPMissionTerraform@@QAEXXZ  00c608d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c602b0/s00c602b0.cpp  ?UnregisterMessages@cSPMissionTerraform@@QAEXXZ  00c60930  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c602b0/s00c602b0.cpp  ?HasAnyRequiredTool@cSPMissionTerraform@@QAE_NXZ  00c609d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c602b0/s00c602b0.cpp  ?GetTargetPlanetScore@cSPMissionTerraform@@QAEHXZ  00c60a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c602b0/s00c602b0.cpp  ?GetTargetTerraformScore@cSPMissionTerraform@@QAEHXZ  00c60ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c602b0/s00c602b0.cpp  ?IsStageOneComplete@cSPMissionTerraform@@QAE_NXZ  00c60af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c602b0/s00c602b0.cpp  ?Init@cSPMissionTerraform@@QAE_NXZ  00c60e90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c602b0/s00c602b0.cpp  ?GetTagString@cSPMissionTerraform@@QAE_NIPAUwstring@@@Z  00c61300  /O2 /MD /Gy /TP /arch:SSE /fp:fast
