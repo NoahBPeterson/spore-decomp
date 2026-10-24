@@ -1,0 +1,7 @@
+slices/s00d4bc60/s00d4bc60.cpp  ?FUN_00d4bd10@cDramaEventInstanceData@SP@@QAEEXZ  00d4bd10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4bc60/s00d4bc60.cpp  ?FUN_00d4c470@@YAXXZ  00d4c470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4bc60/s00d4bc60.cpp  ?FUN_00d4c5e0@@YAXXZ  00d4c5e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4bc60/s00d4bc60.cpp  ?FUN_00d4ca70@cDramaEventInstanceData@SP@@QAEPAU12@E@Z  00d4ca70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4bc60/s00d4bc60.cpp  ?IsDramaEventActive@cSPDramaManager@SP@@QAE_NI@Z  00d4cb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4bc60/s00d4bc60.cpp  ?GetActiveEventTuning@cSPDramaManager@SP@@QAEPAXI@Z  00d4cb50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d4bc60/s00d4bc60.cpp  ?PostLoadEvent@cDramaEventInstanceData@SP@@QAEXPAX@Z  00d4d180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

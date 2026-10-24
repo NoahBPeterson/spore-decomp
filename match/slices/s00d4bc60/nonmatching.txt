@@ -1,0 +1,12 @@
+00d4bc60 140 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (391 valid, 80.0% cov); float args built with x87 fld/fstp for the FUN_00fc6f00 call (Vec3 by value + float)
+00d4c1b0 302 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid, fault(read)); UFO spawn helper: arg/dest register allocation + float sqrt sequence
+00d4c650 269 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid, fault(read)); ShouldActivate continent/raycast ordering, pm visited-array + property lookups
+00d4cad0 57 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (305 valid, 100.0% cov); equal_range end iterator kept in esi vs ecx (one extra mov ecx,esi)
+00d4cf10 82 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (387 valid, 100.0% cov); map find register allocation (this in ecx rather than esi, so end spills to esi)
+00d4cf70 63 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid, fault(read)); map-find register allocation + loop alignment nop
+00d4d030 114 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest FAIL (5/6 valid mismatch; return 1 in eax vs al); map-find register allocation + result-width codegen
+00d4d0b0 191 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (312 valid, 85.5% cov); property lookup and RandomDoubleUniform call scheduling
+00d4d220 152 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest FAIL (5/176 valid mismatch; return 1 in eax vs al); game-data flagged branch layout
+00d4d2b0 68 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (362 valid, 100.0% cov); map-find register allocation (this in ecx rather than esi)
+00d4d340 71 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest FAIL (2/376 valid mismatch; return register garbage); loop result kept in dl and returned via al
+00d4d530 130 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest FAIL (5/12 valid; 1-ulp float rounding in pool); TriggerEvent bitmask update + event vtable slot-0x30 dispatch
