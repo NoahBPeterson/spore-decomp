@@ -69,24 +69,27 @@ float __fastcall SegmentLength(void* p) {
 }
 
 // @ 0x005D5200
+// The retail body forms both scaled deltas first and only then re-reads x0/y0 from the object
+// (movss 0x4(%ecx),%xmm2 after the multiplies, then addss), so it needs just xmm0..xmm2. Writing the
+// offset last keeps x0 out of a register: with x0 first, cl hoisted the load into xmm1 and burned a
+// fourth register (xmm3), which the harness flags as a write to a register the original never touches.
 void Curve2D::Lerp(float* out, float t) {
-  float dx = x1 - x0;
-  float dy = y1 - y0;
-  dx *= t;
-  dy *= t;
-  out[0] = x0 + dx;
-  out[1] = y0 + dy;
+  out[0] = (x1 - x0) * t + x0;
+  out[1] = (y1 - y0) * t + y0;
 }
 
 // @ 0x005D5160
+// Same shape: the deltas stay live while cos/sin come back from x87 on the stack, the products are
+// formed first and x0/y0 are re-read afterwards (movss 0x4(%ecx),%xmm1 / movss 0x8(%ecx),%xmm2).
 void Curve2D::Arc(float* out, float t) {
-  float dx = x1 - x0;
-  float dy = y1 - y0;
   float a = -(angle * t);
   float c = cosf(a);
   float s = sinf(a);
-  out[0] = x0 + (dx * c - dy * s);
-  out[1] = y0 + (dx * s + dy * c);
+  float dyc = (y1 - y0) * c;
+  float dxc = (x1 - x0) * c;
+  float dxs = (x1 - x0) * s;
+  out[1] = dxs + dyc + y0;
+  out[0] = dxc - (y1 - y0) * s + x0;
 }
 
 // --- skeletons for the remaining slice functions (partial; see partial.txt) ---
