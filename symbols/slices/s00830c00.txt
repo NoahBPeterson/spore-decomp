@@ -1,13 +1,13 @@
 00830c00 ?GetImageInfo@Drawable_s0083_0c00@@QAEPAXH@Z  # Drawable_s0083_0c00::GetImageInfo migrated from s00830c00 (verbatim, slice spelling)
 00830c60 ?GetFieldC@DSub@@QAEHH@Z  # DSub::GetFieldC migrated from s00830c00 (verbatim, slice spelling)
-00830c80 ?GetField14@DSub@@QAEHH@Z  # DSub::GetField14 migrated from s00830c00 (verbatim, slice spelling)
-00830c90 ?GetPair28@DSub@@QAEXPAMH@Z  # DSub::GetPair28 migrated from s00830c00 (verbatim, slice spelling)
-00830cc0 ?GetPair30@DSub@@QAEXPAMH@Z  # DSub::GetPair30 migrated from s00830c00 (verbatim, slice spelling)
-00830cf0 ?GetField10@DSub@@QAEHH@Z  # DSub::GetField10 migrated from s00830c00 (verbatim, slice spelling)
-00830d10 ?GetField18@DSub@@QAEHH@Z  # DSub::GetField18 migrated from s00830c00 (verbatim, slice spelling)
-00830d20 ?GetField20@DSub@@QAEHH@Z  # DSub::GetField20 migrated from s00830c00 (verbatim, slice spelling)
-00830d30 ?GetPair38@DSub@@QAEXPAMH@Z  # DSub::GetPair38 migrated from s00830c00 (verbatim, slice spelling)
-00830d60 ?GetPair40@DSub@@QAEXPAMH@Z  # DSub::GetPair40 migrated from s00830c00 (verbatim, slice spelling)
+00830c80 ?GetField14@Drawable_s0083_0c00@@QAEHH@Z  # Drawable::GetField14 (this at +0, no DSub adjust) s00830c00
+00830c90 ?GetPair28@Drawable_s0083_0c00@@QAEPAMPAMH@Z  # Drawable::GetPair28 returns out s00830c00
+00830cc0 ?GetPair30@Drawable_s0083_0c00@@QAEPAMPAMH@Z  # Drawable::GetPair30 s00830c00
+00830cf0 ?GetField10@Drawable_s0083_0c00@@QAEHH@Z  # Drawable::GetField10 s00830c00
+00830d10 ?GetField18@Drawable_s0083_0c00@@QAEHH@Z  # Drawable::GetField18 s00830c00
+00830d20 ?GetField20@Drawable_s0083_0c00@@QAEHH@Z  # Drawable::GetField20 s00830c00
+00830d30 ?GetPair38@Drawable_s0083_0c00@@QAEPAMPAMH@Z  # Drawable::GetPair38 s00830c00
+00830d60 ?GetPair40@Drawable_s0083_0c00@@QAEPAMPAMH@Z  # Drawable::GetPair40 s00830c00
 00830d90 ?FUN_00830d90@@YAXPAX000H@Z  # FUN_00830d90 migrated from s00830c00 (verbatim, slice spelling)
 00831030 ?ScalarDtor@ImageInfo2@@QAEPAXI@Z  # ImageInfo2::ScalarDtor migrated from s00830c00 (verbatim, slice spelling)
 008310a0 ?CopyFrom@ImageInfo2@@QAEXPBU1@@Z  # ImageInfo2::CopyFrom migrated from s00830c00 (verbatim, slice spelling)

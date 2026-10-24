@@ -6,12 +6,12 @@
 extern char g_vtblEditorResource;
 extern char g_vtblContentValidation;
 
-extern "C" int  __cdecl FUN_00920090(int, void *, int, int);   // 0x920090
+extern "C" void *__cdecl FUN_00920090(void);                 // 0x920090 (returns registry singleton)
 extern "C" void __cdecl MultiHeap_delete(void *);              // 0x951330
 
 struct FactoryRegistry {
     void *vptr;
-    int  *CreateInstance(int **out, int a1, int a2, int a3);   // 0x008304c0
+    int  *CreateInstance(int type, void **out, int a2, int a3);   // 0x008304c0
 };
 
 struct ShadowDesc { char pad[0x28]; };
@@ -30,6 +30,14 @@ struct Drawable {
     uint8_t  mbHasUserDefaults;  // +0x134
 
     __declspec(noinline) void *GetImageInfo(int index);   // 0x00830c00
+    int   GetField14(int index);                    // 0x00830c80
+    float *GetPair28(float *out, int index);        // 0x00830c90
+    float *GetPair30(float *out, int index);        // 0x00830cc0
+    int   GetField10(int index);                    // 0x00830cf0
+    int   GetField18(int index);                    // 0x00830d10
+    int   GetField20(int index);                    // 0x00830d20
+    float *GetPair38(float *out, int index);        // 0x00830d30
+    float *GetPair40(float *out, int index);        // 0x00830d60
     void  SetImageColor(int index, int color);        // 0x00831170
     void  SetField18At(int index, int v);             // 0x008311f0
     void  SetField20At(int index, int v);             // 0x00831270
@@ -38,18 +46,29 @@ struct Drawable {
     void *PickImageInfo(int flags, void *dst);        // 0x00831410
     bool  GetNaturalSize(float *out, int index);      // 0x00831530
     bool  HitTest(int a, int b);                      // 0x008315c0
-    void  EnsureImageInfo0();                         // 0x00831650
+    __declspec(noinline) void EnsureImageInfo0();      // 0x00831650
     void  SetImageIcon(int index, void *img);         // 0x00831760
 };
 
 // ---------------------------------------------------------------- cSPUIStdDrawableImageInfo (scalar dtor)
+struct Vec2f { float x; float y; };
+
 struct ImageInfo2 {
     void    *vptr0;   // +0x00
     void    *vptr4;   // +0x04
     uint32_t r8;      // +0x08
     void    *mpImage; // +0x0c
     void    *mpIcon;  // +0x10
-    char     pad14[0x84];
+    uint32_t mField14;// +0x14
+    uint32_t mField18;// +0x18
+    uint32_t pad1c;   // +0x1c
+    uint32_t mField20;// +0x20
+    uint32_t pad24;   // +0x24
+    Vec2f    mPair28;    // +0x28
+    Vec2f    mPair30;    // +0x30
+    Vec2f    mPair38;    // +0x38
+    Vec2f    mPair40;    // +0x40
+    uint32_t pad48[0x14]; // +0x48 .. +0x98
     void *ScalarDtor(unsigned flags); // 0x00831030
     void  CopyFrom(const ImageInfo2 *src); // 0x008310a0
 };
@@ -78,14 +97,6 @@ void *Drawable::GetImageInfo(int index)
 struct DSub {
     char pad[0xc];
     int  GetFieldC(int index);    // 0x00830c60
-    int  GetField14(int index);   // 0x00830c80
-    void GetPair28(float *out, int index);  // 0x00830c90
-    void GetPair30(float *out, int index);  // 0x00830cc0
-    int  GetField10(int index);   // 0x00830cf0
-    int  GetField18(int index);   // 0x00830d10
-    int  GetField20(int index);   // 0x00830d20
-    void GetPair38(float *out, int index);  // 0x00830d30
-    void GetPair40(float *out, int index);  // 0x00830d60
     void SetImage(int index, void *img);    // 0x008316b0
 };
 
@@ -96,59 +107,67 @@ int DSub::GetFieldC(int index)
 }
 
 // @ 0x00830c80
-int DSub::GetField14(int index)
+int Drawable::GetField14(int index)
 {
-    return *(int *)((char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index) + 0x14);
+    ImageInfo2 *p = (ImageInfo2 *)GetImageInfo(index);
+    return p->mField14;
 }
 
 // @ 0x00830c90
-void DSub::GetPair28(float *out, int index)
+float *Drawable::GetPair28(float *out, int index)
 {
-    char *p = (char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index);
-    out[0] = *(float *)(p + 0x28);
-    out[1] = *(float *)(p + 0x2c);
+    ImageInfo2 *p = (ImageInfo2 *)GetImageInfo(index);
+    out[0] = p->mPair28.x;
+    out[1] = p->mPair28.y;
+    return out;
 }
 
 // @ 0x00830cc0
-void DSub::GetPair30(float *out, int index)
+float *Drawable::GetPair30(float *out, int index)
 {
-    char *p = (char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index);
-    out[0] = *(float *)(p + 0x30);
-    out[1] = *(float *)(p + 0x34);
+    ImageInfo2 *p = (ImageInfo2 *)GetImageInfo(index);
+    out[0] = p->mPair30.x;
+    out[1] = p->mPair30.y;
+    return out;
 }
 
 // @ 0x00830cf0
-int DSub::GetField10(int index)
+int Drawable::GetField10(int index)
 {
-    return *(int *)((char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index) + 0x10);
+    ImageInfo2 *p = (ImageInfo2 *)GetImageInfo(index);
+    return (int)(size_t)p->mpIcon;
 }
 
 // @ 0x00830d10
-int DSub::GetField18(int index)
+int Drawable::GetField18(int index)
 {
-    return *(int *)((char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index) + 0x18);
+    ImageInfo2 *p = (ImageInfo2 *)GetImageInfo(index);
+    return p->mField18;
 }
 
 // @ 0x00830d20
-int DSub::GetField20(int index)
+int Drawable::GetField20(int index)
 {
-    return *(int *)((char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index) + 0x20);
+    ImageInfo2 *p = (ImageInfo2 *)GetImageInfo(index);
+    return p->mField20;
 }
 
 // @ 0x00830d30
-void DSub::GetPair38(float *out, int index)
+float *Drawable::GetPair38(float *out, int index)
 {
-    char *p = (char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index);
-    out[0] = *(float *)(p + 0x38);
-    out[1] = *(float *)(p + 0x3c);
+    ImageInfo2 *p = (ImageInfo2 *)GetImageInfo(index);
+    out[0] = p->mPair38.x;
+    out[1] = p->mPair38.y;
+    return out;
 }
 
 // @ 0x00830d60
-void DSub::GetPair40(float *out, int index)
+float *Drawable::GetPair40(float *out, int index)
 {
-    char *p = (char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index);
-    out[0] = *(float *)(p + 0x40);
-    out[1] = *(float *)(p + 0x44);
+    ImageInfo2 *p = (ImageInfo2 *)GetImageInfo(index);
+    out[0] = p->mPair40.x;
+    out[1] = p->mPair40.y;
+    return out;
 }
 
 // ---------------------------------------------------------------- 0x00831030
@@ -198,8 +217,7 @@ void ImageInfo2::CopyFrom(const ImageInfo2 *src)
 // ---------------------------------------------------------------- color/point setters
 static __forceinline void *MakeInfoAt(Drawable *self, unsigned index, void *slot)
 {
-    void *fr = (void *)FUN_00920090(0x540037e, slot, 0, 0);
-    int *p = ((FactoryRegistry *)fr)->CreateInstance((int **)slot, 0x540037e, (int)slot, 0);
+    int *p = ((FactoryRegistry *)FUN_00920090())->CreateInstance(0x540037e, (void **)slot, 0, 0);
     ((ImageInfo2 *)p)->CopyFrom((const ImageInfo2 *)((char *)self + 0x7c));
     return p;
 }
@@ -346,7 +364,7 @@ void Drawable::EnsureImageInfo0()
                 ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
         }
     }
-    ((ImageInfo2 *)mImageInfos[0])->CopyFrom((ImageInfo2 *)def);
+    ((ImageInfo2 *)def)->CopyFrom((ImageInfo2 *)mImageInfos[0]);
 }
 
 // ---------------------------------------------------------------- 0x008316b0
@@ -393,7 +411,7 @@ void Drawable::SetImageIcon(int index, void *img)
         if (old)
             ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
     }
-    uint8_t v;
+    int v;
     if (mbHasUserDefaults == 0 && index != 8)
         v = 0;
     else

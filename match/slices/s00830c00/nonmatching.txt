@@ -1,21 +1,17 @@
 # va  diff-bytes  reason
-00830c00  86  Drawable::GetImageInfo: register allocation (this/def swap) and branch layout differ; equiv WEAK: 1200 valid inputs (need 200), 89.5% coverage (need 100%% (all insns))
+00830c00  80  Drawable::GetImageInfo: register allocation (this/def swap) and branch layout differ; equiv WEAK: 1200 valid inputs (need 200), 89.5% coverage (need 100%% (all insns))
 00830c60  7   DSub::GetFieldC: cl folds (+0xc) into the load instead of add-then-load; equiv PASS: 1007 valid inputs, 100.0% coverage (all insns)
-00830c80  13  DSub::GetField14: same address-fold difference; equiv FAIL: 5/5 valid inputs mismatched; first: eax
-00830c90  20  DSub::GetPair28: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: memory pool @40020000
-00830cc0  20  DSub::GetPair30: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: memory pool @40020000
-00830cf0  10  DSub::GetField10: same address-fold difference; equiv FAIL: 5/6 valid inputs mismatched; first: eax
-00830d10  13  DSub::GetField18: same address-fold difference; equiv FAIL: 5/5 valid inputs mismatched; first: eax
-00830d20  13  DSub::GetField20: same address-fold difference; equiv FAIL: 5/5 valid inputs mismatched; first: execution
-00830d30  20  DSub::GetPair38: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: memory pool @40020000
-00830d60  20  DSub::GetPair40: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: execution
-008310a0  191 ImageInfo2::CopyFrom: refcount + rep movsd block schedule differs; equiv PASS: 1120 valid inputs, 100.0% coverage (all insns)
-00831170  122 SetImageColor: factory/create + CopyFrom inlining schedule differs
-008311f0  122 SetField18At: factory/create path now force-inlined (as in original), removing the edx clobber the original never writes (callerdeps depth-8 SAFE); equiv WEAK: 348 valid inputs, 73.3% coverage (need 100% all insns); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00831270  122 SetField20At: same clone-of-template schedule differs
-008312f0  130 SetPair38At: same clone-of-template schedule differs
-00831380  130 SetPair40At: same clone-of-template schedule differs
-00831410  284 PickImageInfo: switch lowering + default-info copy schedule differs; equiv WEAK: 1113 valid inputs (need 200), 94.2% coverage (need 100%% (all insns))
-00831650  76  EnsureImageInfo0: refcount swap + CopyFrom schedule differs; equiv FAIL: 5/8 valid inputs mismatched; first: memory pool @40010090
-008316b0  145 DSub::SetImage: factory/create + refcount swap schedule differs; equiv FAIL: 5/24 valid inputs mismatched; first: memory pool @4001007c
-00831760  143 Drawable::SetImageIcon: factory/create + refcount swap schedule differs; equiv FAIL: 5/37 valid inputs mismatched; first: memory pool @40010088
+00830c90  16  Drawable::GetPair28: pair copy returns out via eax; equiv PASS: 393 valid inputs, 100.0% coverage (all insns)
+00830cc0  16  Drawable::GetPair30: pair copy returns out via eax; equiv PASS: 394 valid inputs, 100.0% coverage (all insns)
+00830cf0  7   Drawable::GetField10: same address-fold difference; equiv PASS: 344 valid inputs, 100.0% coverage (all insns)
+00830d30  16  Drawable::GetPair38: pair copy returns out via eax; equiv PASS: 396 valid inputs, 100.0% coverage (all insns)
+00830d60  16  Drawable::GetPair40: pair copy returns out via eax; equiv PASS: 393 valid inputs, 100.0% coverage (all insns)
+008310a0  191 ImageInfo2::CopyFrom: refcount + rep movsd block schedule differs; equiv PASS: 377 valid inputs, 100.0% coverage (all insns)
+00831170  92  SetImageColor: factory/create + CopyFrom inlining schedule differs; equiv PASS: 381 valid inputs, 73.3% coverage
+008311f0  92  SetField18At: factory/create path force-inlined (as in original); equiv PASS: 348 valid inputs, 73.3% coverage
+00831270  92  SetField20At: same clone-of-template schedule differs; equiv PASS: 356 valid inputs, 73.3% coverage
+008312f0  99  SetPair38At: same clone-of-template schedule differs; equiv PASS: 367 valid inputs, 75.0% coverage
+00831380  99  SetPair40At: same clone-of-template schedule differs; equiv PASS: 380 valid inputs, 75.0% coverage
+00831410  251 PickImageInfo: switch lowering + default-info copy schedule differs; equiv WEAK: 1113 valid inputs (need 200), 94.2% coverage (need 100%% (all insns))
+00831650  64  EnsureImageInfo0: refcount swap + CopyFrom schedule differs; equiv PASS: 381 valid inputs, 87.9% coverage
+008316b0  158 DSub::SetImage: factory/create + refcount swap schedule differs; equiv PASS: 316 valid inputs, 81.0% coverage

@@ -42,7 +42,7 @@ struct DrawableTail {
 struct StdBase { void ctor(); void dtor(); };
 struct FactoryRegistry {
     void *vptr;   // +0
-    int *CreateInstance(int **out, int a1, int a2, int a3);   // 0x008304c0
+    int *CreateInstance(int type, void **out, int a2, int a3);   // 0x008304c0
 };
 struct ImageInfo {
     void    *vptr0;   // +0x00
@@ -77,7 +77,7 @@ struct Drawable {
 // unnamed retail callees and globals that name local stubs (address in the comment)
 
 // ---- items of slice s00830c00 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" int  __cdecl FUN_00920090(int, void *, int, int);   // 0x920090
+extern "C" void *__cdecl FUN_00920090(void);                  // 0x920090 (returns registry singleton)
 extern "C" void __cdecl MultiHeap_delete(void *);              // 0x951330
 struct ShadowDesc_s0083_0c00 { char pad[0x28]; };
 void FillDefaults(ShadowDesc_s0083_0c00 *dst, const ShadowDesc_s0083_0c00 *src);   // 0x00830380
@@ -129,8 +129,7 @@ struct DSub {
 };
 static __forceinline void *MakeInfoAt(Drawable_s0083_0c00 *self, unsigned index, void *slot)
 {
-    void *fr = (void *)FUN_00920090(0x540037e, slot, 0, 0);
-    int *p = ((FactoryRegistry *)fr)->CreateInstance((int **)slot, 0x540037e, (int)slot, 0);
+    int *p = ((FactoryRegistry *)FUN_00920090())->CreateInstance(0x540037e, (void **)slot, 0, 0);
     ((ImageInfo2 *)p)->CopyFrom((const ImageInfo2 *)((char *)self + 0x7c));
     return p;
 }
@@ -661,7 +660,7 @@ void Drawable_s0083_0c00::SetImageIcon(int index, void *img)
         if (old)
             ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
     }
-    uint8_t v;
+    int v;
     if (mbHasUserDefaults == 0 && index != 8)
         v = 0;
     else
