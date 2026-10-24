@@ -103,8 +103,8 @@ struct Window_s0095_ff20 {
     void GetChild(void* out, void* node);       // 0x009601E0
     void RemoveChild(void* node);               // 0x00960230
     void ClearChildren();                       // 0x00960280
-    int  Dispatch14(void* p);                   // 0x009602C0
-    int  Dispatch(void* p);                     // 0x009602F0
+    bool Dispatch14(void* p);                   // 0x009602C0
+    bool Dispatch(void* p);                     // 0x009602F0
     void OnPaint();                             // 0x00960310 (partial)
     void DoMessage();                           // 0x00960410 (partial)
     void SetPhysicalArea();                     // 0x009608C0 (partial)
@@ -112,6 +112,13 @@ struct Window_s0095_ff20 {
 };
 extern "C" void __cdecl FUN_009580B0(void*);
 extern "C" void __cdecl FUN_009588C0(void*);
+// The window manager (Window::mpWinMgr) methods the three wrappers below tail into: all three take
+// ecx = manager and a window pointer on the stack.
+struct WinMgr_s0095_ff20 {
+    void FUN_009580B0(void* w);          // 0x009580B0
+    void FUN_009588C0(void* w);          // 0x009588C0
+    bool FUN_0095A0B0(void* w, int p);   // 0x0095A0B0 (bool result in al)
+};
 // ---- items of slice s0095ff20 end
 
 // ---- items of slice s00960be0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -557,10 +564,10 @@ void Window_s0095_ff20::MoveBy2(float dx, float dy)
 // @ 0x00960020
 void EA::UTFWin::Window::SetCursor(unsigned int v)
 {
-    if (mLocalXform.mTransform.yAxis.y != v) {
-        mLocalXform.mTransform.yAxis.y = v;
+    if (*(unsigned int*)&mLocalXform.mTransform.yAxis.y != v) {
+        *(unsigned int*)&mLocalXform.mTransform.yAxis.y = v;
         if (mpWinMgr != 0) {
-            FUN_009580B0(this);
+            ((WinMgr_s0095_ff20*)mpWinMgr)->FUN_009580B0((char*)this - 4);
         }
     }
 }
@@ -596,7 +603,7 @@ void Window_s0095_ff20::OnPaint2()
 void EA::UTFWin::Window::InvalidateTransform()
 {
     if (mpWinMgr != 0)
-        FUN_009588C0(this);
+        ((WinMgr_s0095_ff20*)mpWinMgr)->FUN_009588C0((char*)this - 4);
 }
 
 // @ 0x00960100
@@ -659,20 +666,22 @@ void Window_s0095_ff20::ClearChildren()
 }
 
 // @ 0x009602c0
-int Window_s0095_ff20::Dispatch14(void* p)
+bool Window_s0095_ff20::Dispatch14(void* p)
 {
-    if (m30 != 0)
-        return (*(int(__thiscall**)(int, int, void*))((char*)*(void**)m30 + 0x14))(
-            m30, *(int*)p, p);
-    return 0;
+    if (m30 != 0) {
+        Window_s0095_ff20* self = ((char*)this - 4) ? this : 0;
+        return (*(bool(__thiscall**)(int, int, Window_s0095_ff20*, void*))((char*)*(void**)m30 + 0x14))(
+            m30, *(int*)p, self, p);
+    }
+    return false;
 }
 
 // @ 0x009602f0
-int Window_s0095_ff20::Dispatch(void* p)
+bool Window_s0095_ff20::Dispatch(void* p)
 {
     if (m30 != 0)
-        return FUN_0095A0B0((char*)this - 4, (int)p);
-    return 0;
+        return ((WinMgr_s0095_ff20*)m30)->FUN_0095A0B0((char*)this - 4, (int)p);
+    return false;
 }
 
 // @ 0x00960310
