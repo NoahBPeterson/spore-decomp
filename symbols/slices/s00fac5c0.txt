@@ -1,0 +1,11 @@
+00fac5c0 ?Build@StrandMesh@@QAEXXZ  # StrandMesh::Build (pre-existing committed reconstruction): one quad per strand segment, flushed into the six face trees
+00facef0 ?AddStrand@StrandMesh@@QAEIPAUStrand@@@Z  # strand slot allocator + store + BuildRibbon(index); AllocStrandIndex is 0x00fa3ba0
+00facf20 ?RemoveStrand@StrandMesh@@QAEXI@Z  # virtual 0xc4 lookup returns the strand record, its vertex vector and the record are released, slot zeroed, index pushed on the +0x2cc free vector, then Build()
+00facfc0 ?AttachDecal@DecalHost@@QAEXXZ  # six face quads at mpMesh(+0x78)->mFaces(+0x118) each get AddDecal(0x00fb4a50); sets +0xb8 bit 0x10
+00fad000 ?DetachDecal@DecalHost@@QAEXXZ  # same six quads get RemoveDecal(0x00fb3660) when non-null; clears +0xb8 bit 0x10
+00fad040 ?CopyBoxElemsChecked@@YAXPBUBoxElem@@0PAU1@@Z  # 0x14-byte {u32,float[4]} copy with a per-iteration null-destination guard
+00fad0a0 ?CopyBoxElems@@YAXPBUBoxElem@@0PAU1@@Z  # 0x14-byte {u32,float[4]} forward copy
+00fad0f0 ?CopyBoxElemsBackward@@YAXPBUBoxElem@@0PAU1@@Z  # 0x14-byte {u32,float[4]} backward (decrement-then-copy) copy
+00fad140 ?GetBBoxForFace@cTerrainSphereDecal@SP@@QAE_NIPAM@Z  # pdb_names SP::cTerrainSphereDecal::GetBBoxForFace; 0x14-byte face records at +0x80, copies the 4-float box of the matching face
+00fad1d0 ?DecalNode_UpdateBasis@@YAXPAUDecalNode@@@Z  # cdecl(DecalNode*): copies the +0x14 basis, replaces its third row with the unit +0x04 normal, rebuilds the two remaining rows from the more perpendicular one, sets flag 2 and bumps the +0x2 stamp
+00fad4f0 ?Destroy@DecalOwner@@QAEXXZ  # stores vtable 0x01491090, atomic release of the +0x128 record (count at +8), frees the +0x80 block, stores base vtable 0x013ef094
