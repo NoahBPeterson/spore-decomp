@@ -1,0 +1,1 @@
+00d45530 366 partial: PostGameModeTransition source incomplete (faithful translation; 451 vs 436 bytes; remaining diff is block layout, register allocation and the float->int idiom); equivalence UNSUPPORTED (0/400 valid; discards fake-arity=397, fault(write-prot)=2, fault=1); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
