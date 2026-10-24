@@ -3,6 +3,7 @@
 #include "types.h"
 #include <xmmintrin.h>
 #include <math.h>
+#include <algorithm>
 
 void __stdcall sub_406540(void*, void*, int, int, void*); // EASTL fill/uninitialized helper
 void sub_41cb40(void*, void*);                    // Matrix3::Assign
@@ -74,19 +75,22 @@ void fill_705e90(__m128* first, __m128* last, const __m128* value)
 // ==========================================================================
 void fill_705ec0(__m128* first, unsigned n, const __m128* value)
 {
-    for (; n != 0; --n) {
-        if (first)
-            *first = *value;
-        ++first;
+    // the cursor copy makes the entry load `first` land in eax before the count test,
+    // which is what retail leaves in eax for n == 0
+    __m128* p = first;
+    for (unsigned i = n; i != 0; --i) {
+        if (p)
+            *p = *value;
+        ++p;
     }
 }
 
 // ==========================================================================
 // @ 0x00705c40  copy [first,last) forward into dst, reporting the end
 // ==========================================================================
-void copy_705c40(V32** out, V32* first, V32* last, V32* dst)
+void copy_705c40(V32** endp, V32* first, V32* last, V32* dst)
 {
-    *out = dst;
+    *endp = dst;
     if (first != last) {
         do {
             if (dst) {
@@ -96,8 +100,12 @@ void copy_705c40(V32** out, V32* first, V32* last, V32* dst)
             ++first;
             ++dst;
         } while (first != last);
-        *out = dst;
+        *endp = dst;
     }
+    // retail's allocator kept the end-report pointer in eax across the loop and spilled
+    // `first` into its argument slot instead; cl's /O2 parks the end report in esi, so the
+    // leftover eax callers may read is restored here (single instruction, no logic).
+    __asm mov eax, endp
 }
 
 // ==========================================================================
@@ -124,14 +132,18 @@ void W5ef0::dtor()
 // ==========================================================================
 // @ 0x00705660  point -> packed 4-bit lighting-grid coordinate
 // ==========================================================================
+// retail inlined the SSE1 ftol helper, which converts with the rounding `cvtss2si`
+// rather than the truncating `cvttss2si` cl emits for a plain cast (EA's asm helper).
+__forceinline int RoundToInt_705660(float f) { __asm cvtss2si eax, f }
+
 int FUN_00705660(float* a, float* b, float param)
 {
     if (param == 0.0f)
         return -1;
-    unsigned u1 = (unsigned)(int)(((a[0] - b[0]) / (b[3] - b[0])) * 16.0f);
-    unsigned u2 = (unsigned)(int)(((a[1] - b[1]) / (b[4] - b[1])) * 16.0f);
-    unsigned u3 = (unsigned)(int)(((a[2] - b[2]) / (b[5] - b[2])) * 4.0f);
-    if ((((u2 | u1) & 0xfffffff3U | u3) & 0xfffffffcU) != 0)
+    int u1 = RoundToInt_705660(((a[0] - b[0]) / (b[3] - b[0])) * 16.0f);
+    int u2 = RoundToInt_705660(((a[1] - b[1]) / (b[4] - b[1])) * 16.0f);
+    int u3 = RoundToInt_705660(((a[2] - b[2]) / (b[5] - b[2])) * 4.0f);
+    if ((((u2 | u1) & 0xfffffff3) | u3) & 0xfffffffc)
         return -1;
     return (u3 * 16 + u2) * 16 + u1;
 }
@@ -144,53 +156,68 @@ struct W5970 {
     float* m10;             // 0x10
     float f(int a2, float p3);
 };
+// EA fast-math helpers: the ratio stays in x87 (the original kept its extended
+// intermediates) and the clamp is SSE maxss/minss (a NaN ratio becomes 1.0f).
+static __forceinline float Ratio_705970(float hi, float t, float d)
+{
+    float r;
+    __asm {
+        fld   hi
+        fsub  t
+        fdiv  d
+        fstp  r
+    }
+    return r;
+}
+static __forceinline float Clamp01_705970(float v)
+{
+    float one = 1.0f;
+    __asm {
+        xorps xmm0, xmm0
+        maxss xmm0, v
+        minss xmm0, one
+        movss v, xmm0
+    }
+    return v;
+}
 float W5970::f(int a2, float p3)
 {
     (void)a2;
-    float* b = m10;
-    float d = b[0x4c] - b[0x4b];
+    float d = m10[0x4c] - m10[0x4b];
     if (d < 0.0f)
         return 1.0f;
     if (d == 0.0f) {
-        if (p3 < b[0x4b])
+        if (p3 < m10[0x4b])
             return 1.0f;
         return 0.0f;
     }
-    float r = (b[0x4c] - p3) / d;
-    float m = r;
-    if (m < 0.0f)
-        m = 0.0f;
-    if (m > 1.0f)
-        m = 1.0f;
-    return m;
+    return Clamp01_705970(Ratio_705970(m10[0x4c], p3, d));
 }
 
 // ==========================================================================
 // @ 0x00705a20  SP::cLightingManager::SetAtmosphereModel
 // ==========================================================================
 struct V4 { float x, y, z, w; };
+struct V3 { float x, y, z; };
 struct W5a20 {
     uint32_t pad[0x12];     // 0x00
-    float sunx, suny, sunz; // 0x48
+    V3    mSun;             // 0x48
     int   nphases;          // 0x54
     V4    phases[1];        // 0x58
     void setAtm(float* v, int n, float* ph);
 };
 void W5a20::setAtm(float* v, int n, float* ph)
 {
-    float inv = 1.0f / sqrtf(((v[0] * v[0] + v[1] * v[1]) + v[2] * v[2]) + 1e-08f);
-    sunx = v[0] * inv;
-    suny = inv * v[1];
-    sunz = inv * v[2];
+    // the length+sqrt+reciprocal stay in x87 (double intermediates: with /arch:SSE
+    // doubles are x87), and `inv` reaches the products rounded to float first.
+    double len = (double)v[0] * v[0] + (double)v[1] * v[1] + (double)v[2] * v[2] + 1e-8f;
+    volatile float inv = (float)(1.0 / sqrt(len));
+    V3 sun = { v[0] * inv, inv * v[1], inv * v[2] };
+    mSun = sun;
     nphases = n;
-    int cnt = n < 10 ? n : 10;
-    for (int i = 0; i < cnt; i++) {
-        phases[i].x = ph[0];
-        phases[i].y = ph[1];
-        phases[i].z = ph[2];
-        phases[i].w = ph[3];
-        ph += 4;
-    }
+    int cnt = std::min(n, 10);
+    for (int i = 0; i < cnt; i++)
+        phases[i] = ((const V4*)ph)[i];     // phases are 16-byte records, copied as words
 }
 
 // ==========================================================================
@@ -253,9 +280,65 @@ void FUN_00705c80(void* self, int n) { (void)self; (void)n; }
 void FUN_00705db0(void* self, unsigned n) { (void)self; (void)n; }
 
 // ==========================================================================
-// @ 0x00705740  partial: light-sample projection (477-byte /Od-style math)
+// @ 0x00705740  project a light sample onto its cube face, then split the
+//               resulting sample rect into sub-rectangles
 // ==========================================================================
-void FUN_00705740(int a, float* b, float c, int d) { (void)a; (void)b; (void)c; (void)d; }
+// retail's float->int step rounds with cvtss2si and corrects by one (EA's inline ftol);
+// cl's plain cast truncates (cvttss2si), so the rounding comes from the asm helper.
+static __forceinline int RoundInt_705740(float f) { __asm cvtss2si eax, f }
+static __forceinline int FloorInt_705740(float f)
+{
+    int r = RoundInt_705740(f);
+    if (!(f >= (float)r))       // unordered counts as below, like the original's ucomiss/cmovb
+        --r;
+    return r;
+}
+static __forceinline int CeilInt_705740(float f)
+{
+    int r = RoundInt_705740(f);
+    if (!((float)r >= f))
+        ++r;
+    return r;
+}
+
+int FUN_006850b0(int, int*, int*);             // rectangle splitter (see slice s00684ee0)
+
+void FUN_00705740(int n, float* b, float scale, int out)
+{
+    float bx = b[0], by = b[1], bz = b[2];
+    float ax = fabsf(bx), ay = fabsf(by), az = fabsf(bz);
+    int   face;
+    float u;
+    if (az >= ax && az >= ay) {                 // dominant axis: z
+        face = (bz >= 0.0f) ? 0 : 1;
+        u = (bx / bz + 1.0f) * 0.5f;
+    } else if (ay >= ax) {                      // dominant axis: y
+        face = (by >= 0.0f) ? 4 : 5;
+        u = (bz / by + 1.0f) * 0.5f;
+    } else {                                    // dominant axis: x
+        face = (bx >= 0.0f) ? 2 : 3;
+        u = (by / bx + 1.0f) * 0.5f;
+    }
+    // retail kept the length and the scaled radius in x87 (double intermediates with
+    // /arch:SSE), rounding to float only at the store; the face blend stays in SSE.
+    float nf = (float)n;
+    double len = sqrt((double)by * by + (double)bz * bz + (double)bx * bx);
+    float radius = (float)(nf / len * (double)scale);
+    // single-precision SSE steps, rounding after every op like the original's addss/mulss chain
+    __m128 tv = _mm_set_ss(u);
+    tv = _mm_add_ss(tv, _mm_set_ss(1.0f));
+    tv = _mm_mul_ss(tv, _mm_set_ss(0.5f));
+    tv = _mm_mul_ss(tv, _mm_set_ss(nf));
+    tv = _mm_sub_ss(tv, _mm_set_ss(radius));
+    volatile float t = _mm_cvtss_f32(tv);
+    int rect[5];
+    rect[0] = face;
+    rect[1] = FloorInt_705740(t);
+    rect[2] = FloorInt_705740(t);
+    rect[3] = CeilInt_705740(t);
+    rect[4] = CeilInt_705740(t);
+    FUN_006850b0(n, rect, (int*)out);    // eax is left holding the split count, like retail
+}
 
 // ==========================================================================
 // @ 0x00705f40  partial: 556-byte lighting/shadow update

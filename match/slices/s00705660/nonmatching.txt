@@ -1,6 +1,7 @@
-00705660  213  complete lighting-grid packer; (int)(x*16) lowered via x87 not cvtss2si
-00705970  103  complete distance-range blend factor; x87/SSE mix and min/max helpers differ
-00705a20  276  complete SetAtmosphereModel; x87 sqrt normalize and phase copy differ
+00705660  206  complete lighting-grid packer; (int)(x*16) is retail's rounding cvtss2si (EA ftol helper), cl truncates with cvttss2si
+00705740  615  complete cube-face projection + rect split; rebuilt: x87 length/radius, SSE blend, cvtss2si floor/ceil, call to FUN_006850b0 (codegen is not byte-identical)
+00705970  175  complete distance-range blend factor; x87 ratio (fld/fsub/fdiv) with SSE maxss/minss clamp reproduced by two asm helpers
+00705a20  175  complete SetAtmosphereModel; x87 length/sqrt/reciprocal from double intermediates, volatile reciprocal, V4 phase copies
 00705af0   66  complete 0x144-stride linear search; register allocation differs
-00705c40   53  complete forward copy with destination end-report; first spilled to param slot
-00705ec0   16  complete fill-n with null check; only loop back-edge (dec/test/ja) differs
+00705c40   69  complete forward copy with destination end-report; cl's /O2 keeps the end report in esi (retail kept it in eax and spilled first to its arg slot), restored with a one-instruction eax fix-up
+00705ec0    8  complete fill-n with null check; cursor copy keeps first in eax for n == 0, loop back-edge (sub/jne vs dec/test/ja) differs
