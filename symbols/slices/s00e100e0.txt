@@ -1,1 +1,5 @@
 00e10580 cSPUIMinimapWin::AddIcon  # caller s00d425f0 names it AddIcon; Ghidra real name
+00e100e0 VecRec14::DoInsertValue  # nonmatching, diff 174 (EASTL vector insert-grow helper)
+00e10220 CMinimapWin::HandleNotification  # nonmatching, diff 695 (feedback-message handler)
+00e10c10 VecRec14::insert  # MATCH (EASTL vector insert at iterator)
+00e10c80 CMinimapWin::Shutdown  # nonmatching, diff 166 (minimap window teardown)
