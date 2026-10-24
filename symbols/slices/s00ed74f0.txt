@@ -1,1 +1,7 @@
 00ed7a10 ?DoMessage@PanelHandler@@UAE_NPAUIWindow_s00ed_74f0@@PBUMessage@@@Z  # PanelHandler::DoMessage migrated from s00ed74f0 (verbatim, slice spelling)
+00ed74f0 ?Dispatch@PanelCallout@@QAEXII@Z  # PanelCallout::Dispatch (callout key switch -> flag set)
+00ed76e0 ?FUN_00ed76e0@Panel@@QAEXH@Z  # Panel::FUN_00ed76e0 (callout mode/selection dispatch)
+00ed8130 ?FUN_00ed8130@Panel@@QAE_NHHH@Z  # Panel::FUN_00ed8130 (scenario-editor message filter)
+00ed82e0 ?FUN_00ed82e0@@YAXPAUcPropStore@@PAX1DMD@Z  # prop-store remove helper
+00ed8350 ?FUN_00ed8350@@YAXPAUcPropStore@@PAXIIDMD@Z  # prop-store set/remove with id value
+00ed83f0 ?FUN_00ed83f0@@YAPAXPAUcEditorNoun@@@Z  # editor noun positive/negative icon block select
