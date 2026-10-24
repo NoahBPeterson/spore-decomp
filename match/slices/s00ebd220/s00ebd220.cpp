@@ -46,7 +46,7 @@ struct EffectHandle {
     virtual void v0();
     virtual void Release();              // +4
     virtual void Stop(int);              // +8
-    virtual void v3();
+    virtual void Destroy(int flags);      // +0x0c
     virtual void v4();
     virtual void v5();
     virtual void SetTransform(const Transform*);   // +0x18
@@ -105,6 +105,7 @@ struct EntryVec {
     Entry* mpEnd;                        // +4
     void Append();                       // 0x00ebd190 (grows by one uninitialised Entry)
     void PopBack();                      // 0x00ebbb10 (destroys the last Entry)
+    void DestroyRange(Entry* begin, Entry* end);   // 0x00ebb820
 };
 
 struct PlanetModel {
@@ -301,4 +302,162 @@ void Effects::PreUpdate(float dt)
         }
     next:;
     }
+}
+
+// ---------------------------------------------------------------------------
+// cAppModeCreatureAnimViewer helpers (0x00ebd220 / 0x00ebd340).
+// ---------------------------------------------------------------------------
+
+#define VPAD(n) virtual void vpad##n()
+
+struct ShaderEntry { uint8_t m_pad[0x54]; };
+
+struct ShaderData
+{
+    uint8_t m_pad0[0x18];                              // +0x00
+    ShaderEntry* m_begin;                              // +0x18
+    ShaderEntry* m_end;                                // +0x1c
+    void RegisterShaderDataInfo();                     // 0x010414c0
+};
+ShaderData* FUN_010408b0();                            // 0x010408b0
+
+struct TimerArray
+{
+    Timer* m_timers;                                   // +0x00
+    void EnsureElementCount(int count);                // 0x00bf7760
+};
+
+struct cPropertyValue
+{
+    uint8_t m_pad0[0x12];                              // +0x00
+    uint16_t m_type12;                                 // +0x12
+    float* GetFloat();                                 // 0x0041ea70
+};
+
+struct PropertyOwner
+{
+    VPAD(0); VPAD(1); VPAD(2); VPAD(3); VPAD(4); VPAD(5); VPAD(6); VPAD(7); VPAD(8);
+    virtual bool GetProperty(uint32_t id, cPropertyValue** out);   // +0x24
+};
+
+struct GameModeMgr
+{
+    PropertyOwner* GetPropertyOwner();                 // 0x00b1daf0
+};
+void* __stdcall FUN_00b3d320(uint32_t mode, int flags); // 0x00b3d320
+
+struct RbNode
+{
+    uint32_t m_key;                                    // +0x00
+    RbNode* m_next;                                    // +0x04
+};
+
+struct RbTree
+{
+    uint32_t m_pad0;                                   // +0x00
+    uint32_t m_headKey;                                // +0x04
+    RbNode* m_head;                                    // +0x08
+    RbNode* m_root;                                    // +0x0c
+    uint8_t m_flag;                                    // +0x10
+    uint8_t m_pad11[3];                                // +0x11
+    uint32_t m_alloc;                                  // +0x14
+    void DoNukeSubtree(uint32_t key);                  // 0x009a9600
+};
+void __cdecl FreeNode(void* node);                     // 0x00f47380
+
+struct cAnimViewer
+{
+    uint8_t m_pad0[8];                                 // +0x000
+    EntryVec mEntries;                                 // +0x008
+    uint8_t m_pad10[0xc];                              // +0x010
+    TimerArray m_timers1c;                             // +0x01c
+    uint8_t m_pad20[0x10];                             // +0x020
+    RbTree mTree30;                                    // +0x030
+    uint8_t m_pad48[8];                                // +0x048
+    uint8_t m_tree50[0x20];                            // +0x050
+    void FUN_00ebd220();
+    void FUN_00ebd340();
+    void FUN_00ebbf60();                               // 0x00ebbf60
+};
+
+extern float g_ebd220_0;                               // 0x015a95e8
+extern float g_ebd220_1;                               // 0x015a95ec
+
+// @ 0x00ebd220
+void cAnimViewer::FUN_00ebd220()
+{
+    ShaderData* shaderData = FUN_010408b0();
+    shaderData->RegisterShaderDataInfo();
+
+    int count = (int)(shaderData->m_end - shaderData->m_begin);
+    m_timers1c.EnsureElementCount(count);
+
+    if (count > 0) {
+        int offset = 0;
+        do {
+            Timer* timer = (Timer*)((char*)m_timers1c.m_timers + offset);
+            timer->Restart();
+            offset += 0x20;
+            count--;
+        } while (count != 0);
+    }
+
+    switch (GetCurrentGameMode()) {
+    case 0x1654c05:
+        g_ebd220_0 = 0.2f;
+        g_ebd220_1 = 0.8f;
+        break;
+
+    case 0x1654c10: {
+        GameModeMgr* manager = (GameModeMgr*)FUN_00b3d320(0x1654c10, 0);
+        PropertyOwner* owner = manager->GetPropertyOwner();
+        if (owner != 0) {
+            cPropertyValue* value;
+            if (owner->GetProperty(0x7a8f88b, &value) &&
+                value->m_type12 == 0xd)
+                g_ebd220_0 = *value->GetFloat();
+
+            if (owner->GetProperty(0x7a8f88d, &value) &&
+                value->m_type12 == 0xd)
+                g_ebd220_1 = *value->GetFloat();
+        }
+        break;
+    }
+    }
+}
+
+// @ 0x00ebd340
+void cAnimViewer::FUN_00ebd340()
+{
+    Entry* entry = mEntries.mpBegin;
+    while (entry != mEntries.mpEnd) {
+        if (entry->effect1 != 0)
+            entry->effect1->Destroy(1);
+        if (entry->effect2 != 0)
+            entry->effect2->Destroy(1);
+        entry += 1;
+    }
+
+    Entry* oldBegin = mEntries.mpBegin;
+    Entry* oldEnd = mEntries.mpEnd;
+    mEntries.DestroyRange(oldBegin, oldEnd);
+    mEntries.mpEnd = (Entry*)((char*)mEntries.mpEnd +
+                              ((char*)oldEnd - (char*)oldBegin));
+
+    RbTree* tree = &mTree30;
+    RbNode* node = tree->m_root;
+    while (node != 0) {
+        tree->DoNukeSubtree(node->m_key);
+        RbNode* next = node->m_next;
+        FreeNode(node);
+        node = next;
+    }
+
+    tree->m_head = (RbNode*)&tree->m_headKey;
+    tree->m_headKey = (uint32_t)(uintptr_t)&tree->m_headKey;
+    tree->m_root = 0;
+    tree->m_flag = 0;
+    tree->m_alloc = 0;
+
+    FUN_00ebbf60();
 }
