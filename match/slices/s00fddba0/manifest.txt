@@ -1,2 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-# No byte-exact functions yet: 00fde180 is the closest (2 bytes, last edit unmeasured).
+slices/s00fddba0/s00fddba0.cpp  ?Shutdown@cAppModeSpace@@QAE_NXZ  00fde180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

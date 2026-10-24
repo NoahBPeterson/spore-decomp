@@ -1,0 +1,4 @@
+# va  verdict  notes
+00fddba0  WEAK  183 valid (< 200), 74.8% coverage; list-builder frame/register layout differs
+00fddfa0  WEAK  198 valid (< 200), 74.7% coverage; same divergence as 00fddba0
+00fde230  FAIL  5/5 valid inputs mismatched at call #3: retail calls FUN_00bb9b80 with the sort object in ecx, our SortBanners() model passes a different receiver (bf800000)
