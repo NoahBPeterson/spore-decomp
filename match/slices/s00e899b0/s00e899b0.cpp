@@ -162,6 +162,12 @@ struct IP70 {                       // vehicle-ish object reached through cCrowd
     virtual void   pB0(); virtual void pB4(); virtual void* pB8(u32);
 };
 
+// object returned by IP70::pB8 -- vehicle class word at +0xb1c (1 and 2 pick effect ids)
+struct VehicleLike {
+    u8  pad00[0xb1c];
+    int m1c;                                        // +0xb1c
+};
+
 // world / simulation object owning the effect lookup helpers
 class CWorld {
 public:
@@ -582,7 +588,7 @@ void SP::cCulturalTargetView::HandleSimulationUpdate(u32 a, u32 b) {
     }
     if (eff == 0) {
         u32 id = 0x251bc7a8;
-        int t = *(int*)((char*)veh + 0xb1c);
+        int t = ((VehicleLike*)veh)->m1c;
         if (t == 1)
             id = 0xa1185324;
         else if (t == 2)
