@@ -527,8 +527,12 @@ bool C_8017f0::Set(void* p) {
         if (t) {
           m48 = p;
           ((void (__thiscall*)(void*, void*))VFN(m4c, 0xd8))(m4c, t);
-          ((void (__thiscall*)(void*, int, int))VFN(t, 0x7c))(t, 1, 1);
+          ((void (__thiscall*)(void*, float, float))VFN(t, 0x64))(t, 0.0f, 0.0f);
           ((void (__thiscall*)(void*, int, int))VFN(m4c, 0x7c))(m4c, 1, 1);
+          ((void (__thiscall*)(void*, int, int))VFN(t, 0x7c))(t, 1, 1);
+          float x, y;
+          f_804ed0(&x, &y);
+          ((void (__thiscall*)(void*, float, float))VFN(this, 0x38))(this, x, y);
           return true;
         }
         ((void (__thiscall*)(void*))VFN(p, 0x10))(p);
