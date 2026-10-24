@@ -1,3 +1,8 @@
+00679630  1003  SP::cPropertyUI::ModifyBool: complete behaviour; equiv WEAK (339 valid, 28.3% cov); stack frame 0x30 vs 0x2c and the manager/property-lookup + visitor block schedule differ
+00679b40  292  cPropertyUI element copy-construct: complete behaviour; equiv WEAK (117 valid, 100% cov); inline-vector init order and refcount AddRef schedule differ
+00679c90  363  cPropertyUI element assign: complete behaviour; equiv WEAK (114 valid, 100% cov); vector erase+assign and refcount swap scheduling differ
+00679e50  342  cPropertyUI container reset: complete behaviour; equiv WEAK (192 valid, 56.2% cov); modal teardown/tree-walk block scheduling and call attribution differ
 00679ff0  32  container push: complete behaviour; cl reuses the new-element value for [this+0x18] instead of reloading [this+0x1c], and lea vs add for +0x4d0
 0067a090  21  SP::Achievements::Controller::Shutdown: complete behaviour; cl shrink-wraps the epilogue (pops edi/esi early) shifting the local by 8 bytes
 0067a120  100  destroy-every-element: complete behaviour; same early-epilogue shrink-wrap plus FUN_00679e50 call scheduling differs
+0067a1b0  741  property UI update: complete behaviour; x87 easing + property reads reconstructed; equiv UNSUPPORTED (0/400 valid - the original 0x0067a1b0 faults on every generated input, confirmed with a trivial stub source)
