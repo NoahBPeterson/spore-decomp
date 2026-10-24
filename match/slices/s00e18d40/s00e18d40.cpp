@@ -153,7 +153,7 @@ void  SPUIHelpers_BeginModal(void* win, int a, int b);  // 0x008099a0 (cdecl)
 void  SPUIHelpers_EndModal(void* win, int a, int b);    // 0x00809c50 (cdecl)
 void  SP_cSPUISpace_KillSetiEffects(int hash, void* a);  // 0x00435ed0 (cdecl)
 void  EA_Messaging_RemoveHandler(void* s, void* a, void* b, void* c, void* d); // 0x00571db0
-void* eastl_RBTreeInsert(void* node, void* pos, void* header, int flag); // 0x009216a0
+void  eastl_RBTreeInsert(void* node, void* pos, void* header, int flag); // 0x009216a0
 void* eastl_RBTreeIncrement(void* node);                // 0x00921580
 void* eastl_RBTreeDecrement(void* node);                // 0x009215c0
 void  FUN_00c58360(void* key);                          // 0x00c58360
@@ -170,7 +170,7 @@ void* FUN_00e31050();   // cUIFlashWindowManager ctor (0xe31050)
 // =====================================================================
 void cFeedbackTree::FUN_00e18d40(void** out, void* pos, int* value, char flag)
 {
-    char b = 0;
+    int b = 0;
     if (flag == 0 && pos != &mAnchor && (unsigned)*value >= *(unsigned*)((char*)pos + 0x10))
         b = 1;
     char* node = (char*)operator new(0x18, "Simulator", 0, 0,
