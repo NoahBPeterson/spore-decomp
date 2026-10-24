@@ -276,3 +276,340 @@ void hkPointToPathConstraintData::buildJacobian(const hkConstraintQueryIn& in, h
 		hk1dLinearLimitBuildJacobian(limit, in, out);
 	}
 }
+
+// ---------------------------------------------------------------------------
+// Curve / stream-proxy / array-container classes reached from this slice.
+
+struct cArrayRef
+{
+	void** m_data;                 // +0x00
+	int    m_size;                 // +0x04
+	int    m_capacityAndFlags;     // +0x08
+};
+
+struct cRefObj
+{
+	virtual void Release(int flags);   // +0x00
+	unsigned short m_memSize;          // +0x04
+	short m_refCount;                  // +0x06
+};
+
+struct cCurveElem
+{
+	void Release();                    // 0x0109ae60
+};
+
+class cHeap
+{
+public:
+	void Dealloc(void* p, int nBytes, int tag);   // 0x0107db10
+};
+
+struct cDeallocator
+{
+	virtual void v00();
+	virtual void v04();
+	virtual void v08();
+	virtual void v0c();
+	virtual void v10();
+	virtual void Dealloc(void* p, int nBytes, int tag);   // +0x14
+};
+
+extern cDeallocator* gDeallocator;    // 0x016e4178
+extern void* gAllocator;              // 0x016e4174
+typedef void* (__stdcall* cGetHeapFn)(void*);
+extern cGetHeapFn gGetHeap;           // 0x013cc2bc (function-pointer variable)
+
+class cCurveContainer
+{
+public:
+	void* mpVtbl;              // +0x00
+	unsigned short m_memSize;  // +0x04
+	unsigned short m_refCount; // +0x06
+	cArrayRef m_arrays[4];     // +0x08 / +0x14 / +0x20 / +0x2c
+
+	void Destroy();            // 0x01094bc0
+};
+
+class cStream : public cRefObj
+{
+public:
+	virtual void v04();
+	virtual void* v08(void* arg);         // +0x08
+	virtual void v0c();
+	virtual void v10();
+	virtual void v14();
+	virtual void v18();
+	virtual void v1c(void* a, void* b);   // +0x1c
+	virtual void v20(void* s);            // +0x20
+};
+
+struct cCmdState
+{
+	unsigned int m00;
+	unsigned int m04;
+	unsigned int m08;
+	unsigned int m0c;
+};
+
+struct cBlob48
+{
+	float m00, m04, m08, m0c, m10, m14;
+	float m18;
+	float m1c, m20, m24, m28, m2c, m30, m34, m38, m3c, m40, m44;
+};
+
+class cStreamProxy
+{
+public:
+	void* mpVtbl;              // +0x00
+	unsigned short m_memSize;  // +0x04
+	unsigned short m_refCount; // +0x06
+	unsigned int m08;          // +0x08
+	cStream* mpStream;         // +0x0c
+	float m_scale;             // +0x10
+
+	void To20(cCmdState* s);              // 0x01094d50
+	void To1c(cBlob48* src, void* arg);   // 0x01094d90
+	void* To08(void* arg);                // 0x01094dd0
+	void* Destroy(int flags);             // 0x01094e10
+};
+
+class cKeyFrameCurve
+{
+public:
+	virtual void v00();                                   // +0x00
+	virtual void v04();                                   // +0x04
+	virtual void v08();                                   // +0x08
+	virtual hkReal NearestPoint(hkReal t, const hkVector4& pos, hkVector4& out);  // +0x0c
+
+	unsigned short m_memSize;  // +0x04
+	unsigned short m_refCount; // +0x06
+	unsigned int m08;          // +0x08
+	unsigned char m_closed;    // +0x0c
+	char m0d[3];               // +0x0d
+	float m10;                 // +0x10
+	char m14[0x0c];            // +0x14
+	hkVector4* m_keys;         // +0x20
+	int m_keyCount;            // +0x24
+
+	char* IsClosed(char* out);                                            // 0x01094e60
+	void GetPoint(hkReal t, hkVector4& out);                              // 0x01094e80
+};
+
+extern "C" int CurveIndex(hkReal t);   // 0x0120ad30
+
+// @ 0x01094bc0
+void cCurveContainer::Destroy()
+{
+	this->mpVtbl = (void*)0x014a1b88;
+	int i;
+	int n = this->m_arrays[0].m_size;
+	for (i = 0; i < n; ++i)
+		((cCurveElem*)this->m_arrays[0].m_data[i])->Release();
+	n = this->m_arrays[3].m_size;
+	for (i = 0; i < n; ++i)
+		((cCurveElem*)this->m_arrays[3].m_data[i])->Release();
+	n = this->m_arrays[1].m_size;
+	for (i = 0; i < n; ++i) {
+		cRefObj* p = (cRefObj*)this->m_arrays[1].m_data[i];
+		if (p->m_memSize != 0) {
+			if (--p->m_refCount == 0)
+				p->Release(1);
+		}
+	}
+	n = this->m_arrays[2].m_size;
+	for (i = 0; i < n; ++i) {
+		cRefObj* p = (cRefObj*)this->m_arrays[2].m_data[i];
+		if (p != 0) {
+			if (p->m_memSize != 0) {
+				if (--p->m_refCount == 0)
+					p->Release(1);
+			}
+		}
+	}
+
+	cGetHeapFn getHeap = gGetHeap;
+	int mask = (int)0x80000000;
+	int flags = this->m_arrays[3].m_capacityAndFlags;
+	if (!(flags & mask)) {
+		cHeap* heap = (cHeap*)getHeap(gAllocator);
+		heap->Dealloc(this->m_arrays[3].m_data,
+		              (this->m_arrays[3].m_capacityAndFlags & 0x3fffffff) * 4, 0x14);
+	}
+	if (!(this->m_arrays[2].m_capacityAndFlags & mask)) {
+		cHeap* heap = (cHeap*)getHeap(gAllocator);
+		heap->Dealloc(this->m_arrays[2].m_data,
+		              (this->m_arrays[2].m_capacityAndFlags & 0x3fffffff) * 4, 0x14);
+	}
+	if (!(this->m_arrays[1].m_capacityAndFlags & mask)) {
+		cHeap* heap = (cHeap*)getHeap(gAllocator);
+		heap->Dealloc(this->m_arrays[1].m_data,
+		              (this->m_arrays[1].m_capacityAndFlags & 0x3fffffff) * 4, 0x14);
+	}
+	if (!(this->m_arrays[0].m_capacityAndFlags & mask)) {
+		cHeap* heap = (cHeap*)getHeap(gAllocator);
+		heap->Dealloc(this->m_arrays[0].m_data,
+		              (this->m_arrays[0].m_capacityAndFlags & 0x3fffffff) * 4, 0x14);
+	}
+	this->mpVtbl = (void*)0x013ef094;
+}
+
+// @ 0x01094d50
+void cStreamProxy::To20(cCmdState* s)
+{
+	this->mpStream->v20(s);
+	s->m08 += 0x40;
+	s->m0c += 2;
+}
+
+// @ 0x01094d90
+void cStreamProxy::To1c(cBlob48* src, void* arg)
+{
+	cBlob48 local = *src;
+	local.m18 = local.m18 * this->m_scale;
+	this->mpStream->v1c(&local, arg);
+}
+
+// @ 0x01094dd0
+void* cStreamProxy::To08(void* arg)
+{
+	this->mpStream->v08(arg);
+	return arg;
+}
+
+// @ 0x01094e10
+void* cStreamProxy::Destroy(int flags)
+{
+	cRefObj* p = (cRefObj*)this->mpStream;
+	this->mpVtbl = (void*)0x014a1b90;
+	if (p->m_memSize != 0) {
+		if (--p->m_refCount == 0)
+			p->Release(1);
+	}
+	this->mpVtbl = (void*)0x013ef094;
+	if (flags & 1)
+		gDeallocator->Dealloc(this, this->m_memSize, 0x29);
+	return this;
+}
+
+// @ 0x01094e60
+char* cKeyFrameCurve::IsClosed(char* out)
+{
+	*out = (char)this->m_closed;
+	return out;
+}
+
+// @ 0x01094e80
+void cKeyFrameCurve::GetPoint(hkReal t, hkVector4& out)
+{
+	int idx;
+	if (t < kZero)
+		idx = 0;
+	else
+		idx = CurveIndex(t);
+	if (idx + 1 < this->m_keyCount) {
+		int i1 = idx + 1;
+		hkReal frac = t - (hkReal)idx;
+		hkReal u = 1 - frac;
+		const hkVector4& a = this->m_keys[idx];
+		const hkVector4& b = this->m_keys[i1];
+		out.x = u * a.x + frac * b.x;
+		out.y = u * a.y + frac * b.y;
+		out.z = u * a.z + frac * b.z;
+		out.w = u * a.w + frac * b.w;
+	} else {
+		out = this->m_keys[idx];
+	}
+}
+
+// @ 0x01094f40
+hkReal cKeyFrameCurve::NearestPoint(hkReal t, const hkVector4& pos, hkVector4& out)
+{
+	if (t < kZero)
+		t = 0;
+	int idx = CurveIndex(t);
+	int count = this->m_keyCount;
+	int i1 = idx + 1;
+	int i0 = idx;
+	if (i1 >= count) {
+		i1 = count - 1;
+		i0 = i1 - 1;
+	}
+	int nxt = i1 + 1;
+	hkVector4* keys = this->m_keys;
+	hkReal u = 0;
+	for (;;) {
+		hkVector4 D;
+		D.x = keys[i1].x - keys[i0].x;
+		D.y = keys[i1].y - keys[i0].y;
+		D.z = keys[i1].z - keys[i0].z;
+		hkReal ex = pos.x - keys[i0].x;
+		hkReal ey = pos.y - keys[i0].y;
+		hkReal ez = pos.z - keys[i0].z;
+		hkReal dot = ez * D.z + ey * D.y + ex * D.x;
+		hkReal den = D.z * D.z + D.y * D.y + D.x * D.x;
+		u = dot / den;
+		if (u < kZero) {
+			if (i0 == 0)
+				break;
+			--i0;
+			--i1;
+			--nxt;
+			continue;
+		}
+		hkReal fx = pos.x - keys[i1].x;
+		hkReal fy = pos.y - keys[i1].y;
+		hkReal fz = pos.z - keys[i1].z;
+		hkReal dot2 = fz * D.z + fy * D.y + fx * D.x;
+		if (dot2 <= kZero)
+			break;
+		if (nxt >= count)
+			break;
+		hkVector4 D2;
+		D2.x = keys[nxt].x - keys[i1].x;
+		D2.y = keys[nxt].y - keys[i1].y;
+		D2.z = keys[nxt].z - keys[i1].z;
+		hkReal dot3 = fz * D2.z + fy * D2.y + fx * D2.x;
+		if (dot3 > kZero) {
+			++i0;
+			++i1;
+			++nxt;
+			continue;
+		}
+		hkReal len1 = D.z * D.z + D.y * D.y + D.x * D.x;
+		hkReal inv1 = (len1 == 0) ? 0 : 1 / hkSqrt(len1);
+		hkReal len2 = D2.z * D2.z + D2.y * D2.y + D2.x * D2.x;
+		hkReal inv2 = (len2 == 0) ? 0 : 1 / hkSqrt(len2);
+		hkReal side = (fz * (D.z * inv1) + fy * (D.y * inv1) + fx * (D.x * inv1))
+		            + (fz * (D2.z * inv2) + fy * (D2.y * inv2) + fx * (D2.x * inv2));
+		if (side >= 0) {
+			++i0;
+			++i1;
+			u = 0.01f;
+		} else {
+			u = 0.99f;
+		}
+		break;
+	}
+
+	hkReal param = (hkReal)i0 + u;
+	if (param == kZero)
+		param = kZero;
+	hkReal v = 1 - u;
+	const hkVector4& a = keys[i0];
+	const hkVector4& b = keys[i1];
+	out.x = v * a.x + u * b.x;
+	out.y = v * a.y + u * b.y;
+	out.z = v * a.z + u * b.z;
+	out.w = v * a.w + u * b.w;
+
+	if (this->m_closed) {
+		hkReal last = (hkReal)(this->m_keyCount - 1);
+		if (param < 0.25f)
+			return this->NearestPoint(last - (1 - param), pos, out);
+		if (param > last - 0.25f)
+			return this->NearestPoint(1 - (last - param), pos, out);
+	}
+	return param;
+}
