@@ -46,7 +46,11 @@ struct rbtree_node_base {
     rbtree_node_base* mpNodeRight;
     rbtree_node_base* mpNodeLeft;
     rbtree_node_base* mpNodeParent;
-    char mColor;
+    union {
+        uint32_t mColorWord;
+        char mColor;
+    };
+    rbtree_node_base() : mpNodeRight(0), mpNodeLeft(0), mpNodeParent(0), mColorWord(0) {}
 };
 rbtree_node_base* RBTreeIncrement(const rbtree_node_base* pNode);              // 0x921580
 void RBTreeErase(rbtree_node_base* pNode, rbtree_node_base* pNodeAnchor);     // 0x921880
@@ -178,11 +182,59 @@ cCommManager* __cdecl CommManager();                                            
 
 extern const int kMerchantSchedule[10];                                          // 0x14999e0
 
+// ---- serializer stream objects -----------------------------------------------------
+class cStreamInterface {
+public:
+    void* mpVtable;                                  // +0x00
+    void* GetRawStream()                             // vtable slot 0x18
+    {
+        return ((void* (__thiscall*)(cStreamInterface*))((void**)mpVtable)[0x18 / 4])(this);
+    }
+};
+
+class cStreamHandle {
+public:
+    void* mpVtable;                                  // +0x00
+    cStreamInterface* GetStreamInterface()           // vtable slot 0x20
+    {
+        return ((cStreamInterface* (__thiscall*)(cStreamHandle*))((void**)mpVtable)[0x20 / 4])(this);
+    }
+    void EndEntry()                                  // vtable slot 0x1c
+    {
+        ((void (__thiscall*)(cStreamHandle*))((void**)mpVtable)[0x1c / 4])(this);
+    }
+};
+
+void EA_IO_ReadInt32(void* pStream, uint32_t* pValue, int nCount, int nFlags);   // 0x93a780
+
+// Reads one uint32 through the stream handle's interface (the per-field pattern).
+static __forceinline void ReadUint32FromStream(cStreamHandle* pStream, uint32_t* pValue)
+{
+    void* pRaw = pStream->GetStreamInterface()->GetRawStream();
+    EA_IO_ReadInt32(pRaw, pValue, 1, 0);
+}
+
 // ---- trade route data / manager ----------------------------------------------------
 struct cTradeRouteData {
     virtual ~cTradeRouteData() {}
     virtual bool Write(void* stream);
     virtual bool Read(void* stream);
+
+    cTradeRouteData()
+        : mPoliticalID1(0xffffffffu), mPoliticalID2(0xffffffffu),
+          mStarID1(0xffffffffu), mStarID2(0xffffffffu),
+          mTradeRouteProgress(0.0f), mInDetectableRange(false),
+          mTimeSinceLastUFOMS(0), mTimeSinceLastSimMS(0),
+          mRouteLength(0.0f), mLastMerchantVoyage(9) {}
+    cTradeRouteData(const cTradeRouteData& src)
+        : mPoliticalID1(src.mPoliticalID1), mPoliticalID2(src.mPoliticalID2),
+          mStarID1(src.mStarID1), mStarID2(src.mStarID2),
+          mTradeRouteProgress(src.mTradeRouteProgress),
+          mInDetectableRange(src.mInDetectableRange),
+          mTimeSinceLastUFOMS(src.mTimeSinceLastUFOMS),
+          mTimeSinceLastSimMS(src.mTimeSinceLastSimMS),
+          mRouteLength(src.mRouteLength),
+          mLastMerchantVoyage(src.mLastMerchantVoyage) {}
 
     uint32_t mPoliticalID1;          // +0x04
     uint32_t mPoliticalID2;          // +0x08
@@ -197,16 +249,53 @@ struct cTradeRouteData {
 };
 
 struct TradeKey { uint32_t first, second; };
+
+// The stored value_type: key first, then the route data (pair layout).
+struct TradeRoutePair {
+    TradeKey mKey;                   // +0x00
+    cTradeRouteData mValue;          // +0x08
+    TradeRoutePair() {}
+    explicit TradeRoutePair(const TradeKey& k) : mKey(k) {}
+    TradeRoutePair(const TradeKey& k, const cTradeRouteData& v) : mKey(k), mValue(v) {}
+};
+
+struct InsertResult {
+    struct TradeRouteNode* node;     // +0x00
+    bool inserted;                   // +0x04
+};
 struct TradeRouteNode : eastl::rbtree_node_base {
     TradeKey mKey;                   // +0x10
     cTradeRouteData mValue;          // +0x18
 };
 
 struct TradeRouteMap {
-    uint32_t mCompare;               // +0x04 (empty less<>)
-    eastl::rbtree_node_base mAnchor; // +0x08
-    uint32_t mnSize;                 // +0x18
-    uint32_t mAllocator;             // +0x1c
+    uint32_t mCompare;               // +0x00 (empty less<>)
+    eastl::rbtree_node_base mAnchor; // +0x04
+    uint32_t mnSize;                 // +0x14
+    uint32_t mAllocator;             // +0x18
+
+    TradeRouteMap()
+    {
+        mAnchor.mpNodeRight = (eastl::rbtree_node_base*)&mAnchor;
+        mAnchor.mpNodeLeft = (eastl::rbtree_node_base*)&mAnchor;
+        mAnchor.mpNodeParent = 0;
+        mAnchor.mColor = 0;
+        mnSize = 0;
+    }
+    ~TradeRouteMap()
+    {
+        Clear((TradeRouteNode*)mAnchor.mpNodeParent);
+    }
+
+    void Clear(TradeRouteNode* pRoot);                                       // 0x10380b0
+    void InsertNode(TradeRouteNode** ppOut, TradeRouteNode* pParent,
+                    const TradeRoutePair* pValue, uint8_t bSide);            // 0x10380f0
+    InsertResult* DoInsertValue(InsertResult* pOut, const TradeRoutePair* pValue,
+                                int nUnused);                                // 0x1038180
+    TradeRouteNode** ReadSTLMapT(TradeRouteNode** ppOut, TradeRouteNode* position,
+                                 const TradeRoutePair* pValue, int nUnused); // 0x1038f50
+    bool Find(TradeRouteNode** ppOut, const TradeKey* pKey);                 // 0x9a3760
+    cTradeRouteData* GetOrInsertDefault(const TradeKey& key);                // 0x10392f0
 
     TradeRouteNode* begin() { return (TradeRouteNode*)mAnchor.mpNodeLeft; }
     TradeRouteNode* end() { return (TradeRouteNode*)&mAnchor; }
@@ -227,7 +316,10 @@ struct TradeRouteMap {
 };
 
 struct cSpaceTradeRouteManager {
-    virtual ~cSpaceTradeRouteManager();
+    cSpaceTradeRouteManager();
+    virtual ~cSpaceTradeRouteManager()
+    {
+    }
     TradeRouteMap mTradeRoutes;      // +0x04
     uint32_t mLastStarID;            // +0x20
 
@@ -239,6 +331,12 @@ static __forceinline void OrientTowardDestination(cSPGameDataUFO* ufo)
 {
     Vector3 dir = (ufo->mDestination - ufo->mPosition).Normalized();
     ufo->mOrientation = QuaternionFromFacingAndUp(dir, kZAxis);
+}
+
+// eastl::less<pair<uint32,uint32>> for the route keys.
+static __forceinline bool KeyLess(const TradeKey& a, const TradeKey& b)
+{
+    return (a.first < b.first) || (!(b.first < a.first) && (a.second < b.second));
 }
 
 // @ 0x01038410
@@ -470,4 +568,89 @@ void cSpaceTradeRouteManager::Update(uint32_t deltaMS)
 
         it = (TradeRouteNode*)eastl::RBTreeIncrement(it);
     }
+}
+
+// @ 0x01038f50
+TradeRouteNode** TradeRouteMap::ReadSTLMapT(TradeRouteNode** ppOut, TradeRouteNode* position,
+                                            const TradeRoutePair* pValue, int nUnused)
+{
+    TradeRouteNode* rightmost = (TradeRouteNode*)mAnchor.mpNodeRight;
+    if (position == rightmost || position == (TradeRouteNode*)&mAnchor) {
+        if (mnSize != 0 && KeyLess(rightmost->mKey, pValue->mKey)) {
+            InsertNode(ppOut, rightmost, pValue, 0);
+            return ppOut;
+        }
+    } else {
+        TradeRouteNode* next = (TradeRouteNode*)eastl::RBTreeIncrement(position);
+        if (KeyLess(position->mKey, pValue->mKey) && KeyLess(pValue->mKey, next->mKey)) {
+            if (position->mpNodeRight != 0)
+                InsertNode(ppOut, next, pValue, 1);
+            else
+                InsertNode(ppOut, position, pValue, 0);
+            return ppOut;
+        }
+    }
+
+    InsertResult result;
+    DoInsertValue(&result, pValue, 0);
+    *ppOut = result.node;
+    return ppOut;
+}
+
+// @ 0x01039070
+cSpaceTradeRouteManager::cSpaceTradeRouteManager()
+{
+    mLastStarID = 0;
+}
+
+// @ 0x010390d0
+void __cdecl ReadTradeRouteMap(cStreamHandle* pStream, TradeRouteMap* pMap)
+{
+    pMap->Clear((TradeRouteNode*)pMap->mAnchor.mpNodeParent);
+    pMap->mAnchor.mpNodeRight = (eastl::rbtree_node_base*)&pMap->mAnchor;
+    pMap->mAnchor.mpNodeLeft = (eastl::rbtree_node_base*)&pMap->mAnchor;
+    pMap->mAnchor.mpNodeParent = 0;
+    pMap->mAnchor.mColor = 0;
+    pMap->mnSize = 0;
+
+    uint32_t count = 0;
+    ReadUint32FromStream(pStream, &count);
+    for (uint32_t i = 0; i < count; i++) {
+        cTradeRouteData data;
+        TradeKey key = { 0, 0 };
+        ReadUint32FromStream(pStream, &key.first);
+        ReadUint32FromStream(pStream, &key.second);
+        pStream->EndEntry();
+        data.Read(pStream);
+        pStream->EndEntry();
+
+        TradeRoutePair value(key, data);
+        InsertResult result;
+        pMap->DoInsertValue(&result, &value, 0);
+        if (!result.inserted)
+            result.node->mValue = data;
+    }
+    pStream->EndEntry();
+}
+
+// @ 0x010392f0
+cTradeRouteData* TradeRouteMap::GetOrInsertDefault(const TradeKey& key)
+{
+    TradeRouteNode* found;
+    Find(&found, &key);
+    if (found == (TradeRouteNode*)&mAnchor)
+        goto doInsert;
+    if (found->mKey.first > key.first)
+        goto doInsert;
+    if (found->mKey.first < key.first)
+        goto skipInsert;
+    if (key.second >= found->mKey.second)
+        goto skipInsert;
+doInsert:
+    {
+        TradeRoutePair value(key);
+        ReadSTLMapT(&found, found, &value, 0);
+    }
+skipInsert:
+    return &found->mValue;
 }

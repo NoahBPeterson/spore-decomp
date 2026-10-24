@@ -1,0 +1,2 @@
+# slice s01038410 - space trade route manager (gold7 worker 10)
+slices/s01038410/s01038410.cpp  ??_GcSpaceTradeRouteManager@@UAEPAXI@Z  010390a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
