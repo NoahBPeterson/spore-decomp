@@ -8,6 +8,7 @@
 // Layouts are the 32-bit offsets seen in the binary (Havok 2013 hkp3AxisSweep.h used for names only).
 #include "types.h"
 #include <intrin.h>
+#include <xmmintrin.h>
 #include <stddef.h>
 #pragma intrinsic(__rdtsc)
 
@@ -200,6 +201,20 @@ namespace hkAlgorithm
 	};
 }
 
+// ---- statistics collector --------------------------------------------------------------------------------------
+class hkStatisticsCollector
+{
+public:
+	virtual void v00();                                                            // +0x00
+	virtual void addObject(const char* name, int size, const void* object);        // +0x04
+	virtual void addArray(const char* name, int elemSize, const void* data,
+	                      int sizeBytes, int capacityBytes);                       // +0x08
+	virtual void v0c();                                                            // +0x0c
+	virtual void v10();                                                            // +0x10
+	virtual void v14();                                                            // +0x14
+	virtual void end();                                                            // +0x18
+};
+
 // ---- hk3AxisSweep -----------------------------------------------------------------------------------------------
 class hkBroadPhaseHandle;
 class hkBroadPhaseHandlePair
@@ -263,6 +278,9 @@ public:
 	};
 
 	virtual void querySingleAabb(const hkAabb& aabb, hkArray<hkBroadPhaseHandlePair>& pairsOut) const;
+	void calcStatistics(hkStatisticsCollector* collector) const;                 // 0x010f6bb0
+	void shiftAllObjects(const hkVector4& delta, hkVector4& newDelta,
+	                     hkArray<hkBroadPhaseHandle*>& changedHandles);           // 0x010f6ce0
 
 	hkVector4 m_offsetLow;              // +0x10
 	hkVector4 m_offsetHigh;             // +0x20
@@ -422,4 +440,229 @@ void hk3AxisSweep::querySingleAabb(const hkAabb& aabb, hkArray<hkBroadPhaseHandl
 	}
 	}
 	hkTimerSplitList(hkMonitorListEndTag);
+}
+
+// ---- statistics ----------------------------------------------------------------------------------------------------
+// @ 0x010f6bb0
+void hk3AxisSweep::calcStatistics(hkStatisticsCollector* collector) const
+{
+	collector->addObject("3AxisSweep", 4, this);
+	if (!(m_nodes.m_capacityAndFlags & (int)0x80000000))
+		collector->addArray("Nodes", 4, m_nodes.m_data, m_nodes.m_size * 16,
+		                    (m_nodes.m_capacityAndFlags & hkArray<hkBpNode>::CAPACITY_MASK) * 16);
+	if (!(m_axis[0].m_endPoints.m_capacityAndFlags & (int)0x80000000))
+		collector->addArray("Axis", 4, m_axis[0].m_endPoints.m_data, m_axis[0].m_endPoints.m_size * 4,
+		                    (m_axis[0].m_endPoints.m_capacityAndFlags & hkArray<hkBpEndPoint>::CAPACITY_MASK) * 4);
+	if (!(m_axis[1].m_endPoints.m_capacityAndFlags & (int)0x80000000))
+		collector->addArray("Axis", 4, m_axis[1].m_endPoints.m_data, m_axis[1].m_endPoints.m_size * 4,
+		                    (m_axis[1].m_endPoints.m_capacityAndFlags & hkArray<hkBpEndPoint>::CAPACITY_MASK) * 4);
+	if (!(m_axis[2].m_endPoints.m_capacityAndFlags & (int)0x80000000))
+		collector->addArray("Axis", 4, m_axis[2].m_endPoints.m_data, m_axis[2].m_endPoints.m_size * 4,
+		                    (m_axis[2].m_endPoints.m_capacityAndFlags & hkArray<hkBpEndPoint>::CAPACITY_MASK) * 4);
+	if (m_numMarkers != 0)
+		collector->addArray("Markers", 4, m_markers, m_numMarkers * 16, 0);
+	for (int i = 0; i < m_numMarkers; i++)
+	{
+		hkArray<BpInt>& arr = m_markers[i].m_overlappingObjects;
+		if (!(arr.m_capacityAndFlags & (int)0x80000000))
+			collector->addArray("Markers", 8, arr.m_data, arr.m_size * 2,
+			                    (arr.m_capacityAndFlags & hkArray<BpInt>::CAPACITY_MASK) * 2);
+	}
+	collector->end();
+}
+
+// ---- shift all objects ---------------------------------------------------------------------------------------------
+// Rounds like the x87 fistp the original uses (round to nearest, ties to even).
+static __forceinline int hkFloatToInt(hkReal f)
+{
+	int i;
+	__asm
+	{
+		fld f
+		fistp i
+	}
+	return i;
+}
+
+// @ 0x010f6ce0
+void hk3AxisSweep::shiftAllObjects(const hkVector4& delta, hkVector4& newDelta,
+                                   hkArray<hkBroadPhaseHandle*>& changedHandles)
+{
+	hkUint32 offsets[3];
+	hkVector4 local;
+	local.x = delta.x;
+	local.y = delta.y;
+	local.z = delta.z;
+	local.w = delta.w;
+	for (int i = 0; i < 3; i++)
+	{
+		hkReal* d = &local.x + i;
+		const hkReal* s = &m_scale.x + i;
+		const hkUint32 u = hkUint32(hkFloatToInt(*d * *s)) & 0xfffffffeu;
+		offsets[i] = u;
+		*d = hkReal(int(u)) / *s;
+	}
+	newDelta.x = local.x;
+	newDelta.y = local.y;
+	newDelta.z = local.z;
+	newDelta.w = local.w;
+
+	for (int axis = 0; axis < 3; axis++)
+	{
+		hkArray<hkBpEndPoint>& eps = m_axis[axis].m_endPoints;
+		const hkUint32 offset = offsets[axis];
+		for (int i = 1; i < eps.m_size - 1; i++)
+		{
+			hkBpEndPoint& ep = eps.m_data[i];
+			const hkUint32 v = ep.m_value;
+			if ((int)v <= 1 || (int)v >= 0xfffc)
+				continue;
+			const int nv = (int)offset + (int)v;
+			if (nv < 0)
+			{
+				changedHandles.pushBack(m_nodes.m_data[ep.m_nodeIndex].m_handle);
+				ep.m_value = BpInt(v & 1);
+			}
+			else if (nv >= 0xfffc)
+			{
+				changedHandles.pushBack(m_nodes.m_data[ep.m_nodeIndex].m_handle);
+				ep.m_value = BpInt((v & 1) | 0xfffc);
+			}
+			else
+			{
+				ep.m_value = BpInt(nv);
+			}
+		}
+	}
+}
+
+// ---- axis endpoint update ------------------------------------------------------------------------------------------
+typedef hk3AxisSweep::hkBpEndPoint hkBpEndPoint;
+typedef hk3AxisSweep::hkBpNode hkBpNode;
+typedef hk3AxisSweep::hkBpMarker hkBpMarker;
+
+void __fastcall beginOverlapCheckMarker(hkBpMarker* markers, const hkBpNode* node, hkUint32 nodeIndex,
+                                        const hkBpNode* other, hkArray<hkBroadPhaseHandlePair>& pairs);   // 0x010f5500
+void __fastcall endOverlapCheckMarker(hkBpMarker* markers, const hkBpNode* node, hkUint32 nodeIndex,
+                                      const hkBpNode* other, hkArray<hkBroadPhaseHandlePair>& pairs);     // 0x010f5590
+
+// @ 0x010f6ea0
+void _updateAxis(hk3AxisSweep* sweep, hkBpNode* nodes, hkBpNode& node, hkUint32 nodeIndex,
+                 hkUint32 newMin, hkUint32 newMax,
+                 hkArray<hkBroadPhaseHandlePair>& beginPairs, hkArray<hkBroadPhaseHandlePair>& endPairs)
+{
+	hkBpEndPoint* eps = sweep->m_axis[0].m_endPoints.m_data;
+
+	// Phase A: move the min endpoint down.
+	int idx = node.min_x;
+	{
+		BpInt v = eps[idx - 1].m_value;
+		while (newMin < v)
+		{
+			hkBpNode* other = &nodes[eps[idx - 1].m_nodeIndex];
+			eps[idx].m_value = v;
+			eps[idx].m_nodeIndex = eps[idx - 1].m_nodeIndex;
+			if (v & 1)
+			{
+				other->max_x = BpInt(idx);
+				if (!node.yzDisjoint(*other))
+					beginOverlapCheckMarker(sweep->m_markers, &node, nodeIndex, other, beginPairs);
+			}
+			else
+			{
+				other->min_x = BpInt(idx);
+			}
+			eps[idx - 1].m_nodeIndex = BpInt(nodeIndex);
+			idx--;
+			v = eps[idx - 1].m_value;
+		}
+	}
+	node.min_x = BpInt(idx);
+	eps[idx].m_value = BpInt(newMin);
+
+	// Phase B: move the max endpoint up.
+	idx = node.max_x;
+	int count = 0;
+	{
+		BpInt v = eps[idx + 1].m_value;
+		while (newMax > v)
+		{
+			count++;
+			hkBpNode* other = &nodes[eps[idx + 1].m_nodeIndex];
+			eps[idx].m_value = v;
+			eps[idx].m_nodeIndex = eps[idx + 1].m_nodeIndex;
+			eps[idx + 1].m_nodeIndex = BpInt(nodeIndex);
+			if (!(v & 1))
+			{
+				other->min_x--;
+				if (!node.yzDisjoint(*other))
+					beginOverlapCheckMarker(sweep->m_markers, &node, nodeIndex, other, beginPairs);
+			}
+			else
+			{
+				other->max_x--;
+			}
+			idx++;
+			v = eps[idx + 1].m_value;
+		}
+	}
+	node.max_x += BpInt(count);
+
+	// Phase C: move the max endpoint down.
+	idx = node.max_x;
+	count = 0;
+	{
+		BpInt v = eps[idx - 1].m_value;
+		while (newMax < v)
+		{
+			count--;
+			hkBpNode* other = &nodes[eps[idx - 1].m_nodeIndex];
+			eps[idx].m_value = v;
+			eps[idx].m_nodeIndex = eps[idx - 1].m_nodeIndex;
+			eps[idx - 1].m_nodeIndex = BpInt(nodeIndex);
+			if (v & 1)
+			{
+				other->max_x++;
+			}
+			else
+			{
+				other->min_x++;
+				if (!node.yzDisjoint(*other))
+					endOverlapCheckMarker(sweep->m_markers, &node, nodeIndex, other, endPairs);
+			}
+			idx--;
+			v = eps[idx - 1].m_value;
+		}
+	}
+	node.max_x += BpInt(count);
+	eps[idx].m_value = BpInt(newMax);
+
+	// Phase D: move the min endpoint up.
+	idx = node.min_x;
+	count = 0;
+	{
+		BpInt v = eps[idx + 1].m_value;
+		while (newMin > v)
+		{
+			count++;
+			hkBpNode* other = &nodes[eps[idx + 1].m_nodeIndex];
+			eps[idx].m_value = v;
+			eps[idx].m_nodeIndex = eps[idx + 1].m_nodeIndex;
+			eps[idx + 1].m_nodeIndex = BpInt(nodeIndex);
+			if (v & 1)
+			{
+				other->max_x--;
+				if (!node.yzDisjoint(*other))
+					endOverlapCheckMarker(sweep->m_markers, &node, nodeIndex, other, endPairs);
+			}
+			else
+			{
+				other->min_x--;
+			}
+			idx++;
+			v = eps[idx + 1].m_value;
+		}
+	}
+	node.min_x += BpInt(count);
+	eps[idx].m_value = BpInt(newMin);
 }
