@@ -1,0 +1,4 @@
+00c66760 Ctrl::FrameUpdate  # orbit-ring camera controller: camera ray vs target plane -> differential rotation -> normalised output orientation (+0x1a4)
+00c66c10 Ctrl::FlushOrientation  # publish accumulated orientation to the +0x34 sub-object; state 0/1 pick sin/cos-table quaternions, state 2 passes +0x1a4 through
+00c66e60 Ctrl::Approach  # approach update: ray/sphere test -> offset direction -> plane constrain -> rotate -> publish via +0x34 and notify when changed
+00c67440 Vector4Array::insert  # eastl::vector<Vector4,sp_vector_allocator>::insert(pos,value): shift last element, copy_backward, grow-to-2x path
