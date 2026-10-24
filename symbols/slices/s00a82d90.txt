@@ -4,3 +4,5 @@
 00a78d90 EA::Swarm::FastAtan2  # coined: polynomial atan2 (0.9817/0.1963 coefficients), args (y, x)
 007d5590 EA::Swarm::operator*(cTransform,cTransform)  # r = b; r.PreTransformBy(a); returns sret
 00832dc0 EA::Swarm::cTransform::Reset  # identity rotation, zero offset, scale 1, flags/modcount 0 (thiscall, no args)
+00a83940 EA::Swarm::cVisualEffect::ApplyEffect  # card name (PDB caller-scored); cIComponent vtable slot 5, body runs on the cComponentBase subobject (object+4)
+00a83bd0 EA::Swarm::cVisualEffect::SetTransforms  # card name (PDB caller-single); cIComponent vtable slot 6, byte-exact

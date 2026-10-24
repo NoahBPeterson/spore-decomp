@@ -1,0 +1,1 @@
+slices/s00a82d90/s00a82d90_effect.cpp  ?SetTransforms@cVisualEffect@Swarm@EA@@UAEXABUcTransform@23@0@Z  00a83bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
