@@ -1,0 +1,3 @@
+slices/s00dd30d0/s00dd30d0.cpp  ?Hide@cSPUICommScreen@@QAEXXZ  00dd30d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd30d0/s00dd30d0.cpp  ??1cSPUICommScreen@@UAE@XZ  00dd3b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00dd30d0/s00dd30d0.cpp  ?Shutdown@cSPUICommScreen@@QAEXXZ  00dd3d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast

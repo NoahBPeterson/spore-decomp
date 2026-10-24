@@ -1,0 +1,100 @@
+# slice s00dd30d0 - SP::cSPUICommScreen (the comm-screen window) plus its helper
+# methods.  Inferred from the disassembly only (the dev-PDB headers under
+# src/game/include/SP do NOT describe this build; every offset below is observed).
+#
+# Modelled types (retail member offsets):
+#   Vector4     {float x@0x00, y@0x04, z@0x08, w@0x0c}
+#   cRGB        {uchar r@0x00, g@0x01, b@0x02, a@0x03}
+#   MsgData     {uint mValue@0x00, uint mPad04@0x04}
+#   cUIWindow   single vptr, 61 virtual slots (0x00..0xf0).  Slots used here:
+#               +0x04 Release(), +0x08 FUN_0008(int), +0x0c FUN_000c(uint) -> void*,
+#               +0x10 v10() -> cUIWindow*, +0x14 v14(int),
+#               +0x2c FUN_002c(uint,int,void*) -> bool, +0x34 GetPos(),
+#               +0x44 FUN_0044, +0x5c FUN_005c(uint), +0x60 SetPos(const Vector4*),
+#               +0x64 SetSub(float,float), +0x7c SetState(int,bool),
+#               +0x80 SetText(const void*), +0xac FUN_00ac(uint),
+#               +0xf0 vF0(uint,int) -> cUIWindow*
+#               Non-virtual, called directly and deliberately left undefined in the
+#               .cpp so the out-of-line call is emitted: SetCardsVisibility(bool)
+#               0x00e14c10, FUN_00e2f270() 0x00e2f270, clear() 0x007b1950.
+#   cSPUILayout (standalone, NOT derived from cUIWindow) +0x00 v00, +0x04 Release,
+#               +0x08 FUN_0008(); FindWindowByID(uint,int) 0x008105b0,
+#               SetParentWin(cUIWindow*,bool,int) 0x008121b0, Shutdown(uint) 0x00811ad0
+#   cUIWindowPtr {cUIWindow* mPtr} - Release-on-destroy smart pointer; its
+#               GetPtrRef() clears mPtr and returns its address.  This exact shape
+#               is what made Hide byte-exact.
+#   cUIWindowFinder  FindWindowByID(uint) 0x00e012b0
+#   cGlobalUI   +0x224 cUIWindowFinder* mpFinder224; accessor FUN_010666a0 0x010666a0
+#   cUIList     +0x00 mpNext, +0x04 mpPrev (a self-looping head node); erase()
+#               0x0075f3f0; embedded in cSPUICommScreen at +0x34
+#   cListNode   {cListNode* mpNext@0x00, cListNode* mpPrev@0x04, cUIWindow* mpObj@0x08}
+#   cString     0x14 bytes; Destroy() 0x006b5240
+#   cUIHints    SetFlag(char,int) 0x0067c420; accessor FUN_0067cac0 0x0067cac0
+#   cRBTree     cRBNode** find(cRBNode** pOut, const unsigned int& key) 0x00e5c780;
+#               both pushed pointer arguments are the same 4-byte scratch slot in
+#               retail, so a union {uint mKey; cRBNode* mpNode;} is used at the call
+#               site; embedded in cCity at +0x44
+#   cRBNode     +0x14 uint mValue
+#   cCity       FUN_00bf0f40() -> int, FUN_00bf1e20() -> int, FUN_00bd99e0() -> const
+#               cRGB*, GetCivilization() 0x00bd9bf0; cRGB mColorC4@0x0c4,
+#               cRBTree mTree44@0x044
+#   cMsgServer  virtual +0x14 vf14(uint id, const void* msg, int flags);
+#               GetMessagingServer() 0x00883860
+#   IMessageRC  base of MsgBasicRC5; its destructor is kept NON-virtual so MSVC does
+#               not emit dtor calls at the message scopes
+#   MsgBasicRC5 0x40 bytes: +0x00 vptr, +0x04 volatile int mRefCount (reset through a
+#               locked xchg), +0x08 MsgData mData[5], +0x30 uint mId,
+#               +0x38 uint mRCFlags; Destruct() 0x00421cf0 (left undefined)
+#   ITracerBase / cPaintSystem  the two polymorphic bases of cSPUICommScreen
+#   cSPUICommScreen  (data begins at +0x08, object size 0xf8)
+#               +0x08 mpCity (cCity*)
+#               +0x0c mpLayout (cSPUILayout*)
+#               +0x10..+0x30 mp10..mp30 (cUIWindow*)
+#               +0x34 mList (cUIList)
+#               +0x40 mbShown40 (bool)
+#               +0x44..+0xa8 mStr44..mStrA8 (six cString)
+#               +0xbc mpBc, +0xc0 mpC0 (cUIWindow*)
+#               +0xc4..+0xd4 mHandlerC4/C8/Cc/D0/D4 (message-handler ids)
+#               +0xd8..+0xe8 mHandlerD8/Dc/E0/E4/E8
+#               +0xec/+0xf0/+0xf4 mpArrayEc/F0/F4 (unsigned short* array span)
+#
+# Functions (this slice):
+00dd30d0  cSPUICommScreen::Hide() -> void  # if mbShown40: clear it, look the screen
+          # window up through the global finder, fetch the 0x3d6f60f effect object
+          # from the effects manager (vtable +0x2c), attach the window through a
+          # cUIWindowPtr smart pointer, call FUN_0008(0) on it and let the smart
+          # pointer release it.  BYTE-EXACT.
+00dd32a0  cSPUICommScreen::LayoutCommButtons() -> void  # place the six comm buttons,
+          # hide/show the per-city button windows and re-lay the comm strip
+00dd35c0  cSPUICommScreen::SetCivilizationInfo(cCity*) -> void  # store mpCity, hide
+          # the four per-city windows, take the main window and its 0x49382e8 panel,
+          # set the image key from the city score pair, tint the 0x6243260 colour
+          # window with mColorC4, publish the rbtree entry as the panel text, tint
+          # the 0x2cf324c window and set the three tier markers, then refresh the
+          # 0x4a4504f window through FUN_00dd2240
+00dd3810  cSPUICommScreen::SetCityInfoForWindow(cCity*) -> void  # show the info image
+          # only when a city is supplied; for a non-null city adopt its civilization
+          # as mpCity, set the image key and tints from the civilization colour,
+          # publish the rbtree text, set the tier markers and finally forward the
+          # 0x4a4504f window plus mpCity to FUN_00dd2240
+00dd3a00  cSPUICommScreen::SetSourceAndTarget(cUIWindow*, cCity*) -> void  # resolve the
+          # source window's civilization (id 0x901f1362) and city (0xee9b2232), then
+          # send the 0x58b8f28 "civilization" or 0x58b8189 "city" SlotMessage and the
+          # 0x58b817b "target" SlotMessage unless the target already matches
+00dd3b60  cSPUICommScreen::~cSPUICommScreen() -> void  # virtual destructor: free the
+          # 0xec..0xf4 ushort array, remove both messaging handlers, release the
+          # 0xbc/0xc0 windows, destroy the six strings, erase the list head, release
+          # the ten 0x10..0x30 windows and shut the layout down
+00dd3d30  cSPUICommScreen::Shutdown() -> void  # hide the screen if shown, remove the
+          # two messaging handlers, self-loop and erase the list, clear mpCity,
+          # release the 0x14/0x18/0x1c/0x20/0x24/0x28/0x2c/0x30 windows (calling
+          # FUN_008076f0 on 0x14 and 0x1c first) and clear the 0x30 layout entry
+#
+# Helpers / constants used by this slice:
+#   FUN_00dd2a10, FUN_00dd1ce0(int,int), FUN_00dd2240(cUIWindow*,cCity*), FUN_00dd2d30
+#     - the other cSPUICommScreen methods (declared, not defined here)
+#   FUN_00b3d400, FUN_00b3d4f0(int) __stdcall, FUN_0067ddc0, EffectsManager 0x0067ddd0,
+#   GetCurrentGameMode 0x00b5b800, FUN_00bef920(int) cdecl, FUN_00807690(void*,int),
+#   FUN_008076f0(void*), SetImageFromKey(cUIWindow*,int), ColorRGBToU32(const void*),
+#   FUN_00f47380(void*), EA_Messaging_RemoveHandler 0x00571db0,
+#   g_01654c05 (extern char), kEighteen 0x013ebc68 (float), kTwo 0x01470f1c (float)
