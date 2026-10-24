@@ -1,1 +1,10 @@
 00fd0f10 Idct8x8_MMX  # hand-written MMX 8x8 inverse DCT (in, quant, out), table 0x016d91a0; Claude-coined name
+00fd0d20 vp6_filter_row_sse2  # SSE2 row/grid blit selector; packed 0x015b3460 / unpacked 0x015b3360 tile tables; Claude-coined name
+00fd0eb0 vp6_dc_fill_mmx  # MMX DC-only prediction fill (word product -> 16-bit broadcast, 0x80 bytes); Claude-coined name
+00fd1610 vp6_filter_4tap_mmx  # MMX 4-tap sparse filter / IDCT using table 0x016d91a0; Claude-coined name
+00fd1a20 vp6_dither_row_mmx  # MMX pack + dither mask 0x015b3680, 8 stride rows; Claude-coined name
+00fd1a60 vp6_add_rows_mmx  # MMX byte residual + signed-word prediction, packuswb; Claude-coined name
+00fd1ab0 vp6_edge_table_a  # fill object +0x10 from index table 0x015b3788 and table 0x015b3888; exact
+00fd1ae0 vp6_edge_table_b  # fill object +0x10 from index table 0x015b3788 and table 0x015b3988; exact
+00fd1b10 vp6_idct_table_init  # initialise the runtime IDCT/rounding table at 0x016d91a0; Claude-coined name
+00fd1ba0 vp6_cpu_features  # CPU feature query (MMX, 3DNow!, SSE2) via WillametteNewInstructionHWSupport; Claude-coined name
