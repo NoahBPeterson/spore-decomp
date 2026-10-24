@@ -1,0 +1,8 @@
+00fe6fb0 ?HandleMessage@cCachedEventData@@QAE_NIPAX@Z  # cCachedEventData message handler: switch over 0x43f2583/0x43f2585/0x43f2586/0x55bd8f7; byte-exact MATCH
+00fe7020 ?Flush@cCachedEventData@@QAEXXZ  # cCachedEventData::Flush (clears the four cached eastl sets); byte-exact MATCH
+00fe7100 ?Prime@cCachedEventData@@QAEXXZ  # cCachedEventData::Prime (seeds the four cached eastl sets); byte-exact MATCH
+00fe71c0 ?Shutdown@cCachedEventData@@QAEXXZ  # cCachedEventData::Shutdown (removes the AutoHandler if registered); byte-exact MATCH
+00fe73c0 ?RefreshNumbers_73c0@@YAXXZ  # unnamed UI refresh helper (locale SetNumberString into a single 0x80 buffer); byte-exact MATCH
+00fe74a0 ?RefreshPips_74a0@@YAXXZ  # unnamed UI refresh helper (pip count bracket); byte-exact MATCH
+00fe7590 ?ForwardWindowMessage_7590@@YAXII@Z  # unnamed helper forwarding a window message via FindWindowByID; byte-exact MATCH
+00fe7680 ?Destroy@cSimOwner@@QAEPAXH@Z  # EA::Simulator owner teardown slot (block+0x30 call, block+4 vtable call at slot 8, conditional operator_delete); byte-exact MATCH
