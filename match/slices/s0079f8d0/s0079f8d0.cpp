@@ -107,6 +107,7 @@ struct Tc {
   void  m_0079f4e0(int a, int b);                // push_back (2 stack args)
   int   m_0079ae00(int n, int a, int b);         // allocate n (3 stack args, ret 0xc)
   void  m_0079b0d0(int a, int b);                // destroy range (2 stack args)
+  void  m_0079b150(int a);                       // construct a vector temp into this (1 stack arg, ret 4)
   void  m_01023030(int a, int b);                // destroy [a,b) 0x14-elements (2 stack args)
   int   m_00424cf0(int src, int nbytes);         // DoInsertValue: move nbytes to `this`
   // --- direct thiscall helpers on the target objects ---
@@ -126,14 +127,13 @@ struct Tc {
 
 // --- free cdecl helpers: all arguments on the stack, no ecx, caller cleans ---
 void  FUN_0079a710(int a, int b, int c, int d, int e);
-void  FUN_0079a800(int a, int b, int c, int d);
+void  FUN_0079a800(int a, int b, int c, int d, int e);
 void  FUN_0079a8f0(int a, int b, int c);
 void  FUN_0079aaa0(int a, int b, int c);
 int   FUN_0079ab00(int a, int b, int c);
 void  FUN_0079ab40(int a, int b, int c);
-void  FUN_0079b150(int a);
 void  FUN_0079b190(int a, int b, int c);
-void  FUN_0079b1c0(int a, int b, int c, int d);
+void  FUN_0079b1c0(int a, int b, int c, int d, int e);
 void  FUN_0079b2a0(int a, int b, int c, int d);
 void  FUN_0079b470(int a, int b, int c);
 int   FUN_0079f730(int a, int b, int c);         // returns dst
@@ -246,30 +246,30 @@ void Tc::m_0079fa70(int pos, int n, int value) {
     v->mpEnd = dst + n * 0x14 + count14(p, v->mpEnd) * 0x14;
     v->mpCapacity = nb + newCap * 0x14;
   } else if (n != 0) {
-    ((Tc*)0)->m_0079a6c0(value);
+    Elem14 tmp;
+    ((Tc*)&tmp)->m_0079a6c0(value);
     char* end = (char*)v->mpEnd;
     uint tail = (uint)count14(p, end);
     uint num = (uint)n;
     if (num < tail) {
       char* hole = end - num * 0x14;
-      FUN_0079a800(value, (int)hole, (int)end, (int)end);
+      FUN_0079a800((int)&value, (int)hole, (int)end, (int)end, (int)p);
       v->mpEnd = (char*)v->mpEnd + num * 0x14;
       FUN_0079ab40((int)p, (int)hole, (int)end);
-      FUN_0079b190((int)p, (int)(p + num * 0x14), 0);
+      FUN_0079b190((int)p, (int)(p + num * 0x14), (int)&tmp);
     } else {
-      FUN_0079a8f0((int)(num - tail), 0, (int)p);
+      FUN_0079a8f0((int)end, (int)(num - tail), (int)&tmp);
       v->mpEnd = (char*)v->mpEnd + (num - tail) * 0x14;
-      FUN_0079a800((int)p, (int)p, (int)end, (int)v->mpEnd);
+      FUN_0079a800((int)&p, (int)p, (int)end, (int)v->mpEnd, (int)p);
       v->mpEnd = (char*)v->mpEnd + tail * 0x14;
-      FUN_0079b190((int)p, (int)end, 0);
+      FUN_0079b190((int)p, (int)end, (int)&tmp);
     }
   }
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0079fa20  destroy [first,last) and shrink the vector to end at `first`.
+// helper: destroy [first,last) and shrink the vector to end at `first`.
 // ---------------------------------------------------------------------------
-// @ 0x0079fa20
 void Tc::m_0079fa20(int first, int last) {
   VecBase* v = (VecBase*)this;
   char* res = (char*)FUN_0079ab00(last, (int)v->mpEnd, first);  // relink tail
@@ -436,22 +436,23 @@ void Tc::m_007a0110(void* pos, int n, void* value) {
     v->mpEnd = moved + (tailBytes / 0x14) * 0x14;
     v->mpCapacity = nb + newCap * 0x14;
   } else if (n != 0) {
-    FUN_0079b150((int)value);
+    Elem14 tmp;
+    ((Tc*)&tmp)->m_0079b150((int)value);
     char* end = (char*)v->mpEnd;
     uint tail = (uint)count14(p, end);
     uint num = (uint)n;
     if (num < tail) {
       char* hole = end - num * 0x14;
-      FUN_0079b1c0((int)value, (int)hole, (int)end, (int)end);
+      FUN_0079b1c0((int)&value, (int)hole, (int)end, (int)end, (int)p);
       v->mpEnd = (char*)v->mpEnd + num * 0x14;
       FUN_0079b470((int)p, (int)hole, (int)end);
-      FUN_0079fcc0((int)p, (int)(p + num * 0x14), 0);
+      FUN_0079fcc0((int)p, (int)(p + num * 0x14), (int)&tmp);
     } else {
-      FUN_0079b2a0((int)end, (int)(num - tail), 0, (int)p);
+      FUN_0079b2a0((int)end, (int)(num - tail), (int)&tmp, (int)p);
       v->mpEnd = (char*)v->mpEnd + (num - tail) * 0x14;
-      FUN_0079b1c0((int)p, (int)p, (int)end, (int)v->mpEnd);
+      FUN_0079b1c0((int)&p, (int)p, (int)end, (int)v->mpEnd, (int)p);
       v->mpEnd = (char*)v->mpEnd + tail * 0x14;
-      FUN_0079fcc0((int)p, (int)end, 0);
+      FUN_0079fcc0((int)p, (int)end, (int)&tmp);
     }
   }
 }
