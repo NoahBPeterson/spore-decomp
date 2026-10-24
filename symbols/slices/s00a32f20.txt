@@ -1,1 +1,6 @@
-00a33600 ??0System_s00a3_2f20@@QAE@XZ  # System_s00a3_2f20::System migrated from s00a32f20 (verbatim, slice spelling)
+# Exact decorated name of the definition under each slice VA marker (s00a32f20).
+00a32f20  ?Update@System@@QAEXPAXM@Z
+00a33500  ??0fixed_hash_map_u32_nested@eastl@@QAE@ABUhash_tag@1@ABUequal_to_tag@1@@Z
+00a33dc0  ?CommitBoundProperties@VoiceContainer@Audio@EA@@QAEXXZ
+00a33e90  ?HasPropertyBinding@VoiceContainer@Audio@EA@@QAE_NI@Z
+00a33600  ??0System@@QAE@XZ

@@ -1,0 +1,2 @@
+# Byte-exact functions for slice s00a32f20. None of the four VAs could be matched;
+# see nonmatching.txt. Rows (when any) are copied verbatim from chk.py.

@@ -33,6 +33,16 @@ struct Q0fd
 {
     Q0fd(); // 0xa0fdf0
     ~Q0fd(); uint32_t d;
+    bool FunF980();             // 0xa0f980  pending work?
+    bool FunF9a0();             // 0xa0f9a0  one dispatcher step
+    int  FunF990();             // 0xa0f990  shutdown state
+    void FunFdd0();             // 0xa0fdd0
+    void FunFdc0();             // 0xa0fdc0
+    void FunF940();             // 0xa0f940
+    void FunFee0(void* msg);    // 0xa0fee0  push a command
+    void* GetArg();             // 0x9892e0
+    void Fun102e0(uint32_t tag);                 // 0xa102e0
+    void Fun10120(uint32_t tag, uint32_t value); // 0xa10120
 };
 struct TA210
 {
@@ -77,12 +87,20 @@ struct T32220
 struct T570
 {
     T570(const TagA&, const TagB&); // 0xa2a570
-    ~T570(); uint32_t d;
+    ~T570();
+    uint32_t  m0;            // +0x0
+    uint32_t* mpBuckets;     // +0x4  bucket array
+    uint32_t  mBucket;       // +0x8  bucket index used as the end() marker
+    uint32_t  mOpCode;       // +0xc
+    void* Find(void* out, const uint32_t* key); // 0xa23ef0
+    void  Erase(const uint32_t* key);           // 0xa23d20
 };
 struct T1040
 {
     T1040(int n); // 0xa31040
-    ~T1040(); uint32_t d;
+    ~T1040();
+    void* mpFirst;           // +0x0  ring buffer begin
+    void* mpLimit;           // +0x4  ring buffer end
 };
 struct T1e320
 {
@@ -102,12 +120,19 @@ struct T770
 struct T26990
 {
     T26990(); // 0xa26990
-    ~T26990(); uint32_t d;
+    ~T26990();
+    T26990* pNext;           // +0x00  list next
+    T26990* pPrev;           // +0x04  list prev
+    void*   pObj;            // +0x08  bound audio object
 };
 struct TF410
 {
     TF410(const TagA&, const TagB&); // 0xa2f410
-    ~TF410(); uint32_t d;
+    ~TF410();
+    uint32_t  m0;            // +0x0
+    void**    mpBuckets;     // +0x4  node bucket array
+    uint32_t  mBucket;       // +0x8  bucket index used as the end() marker
+    void Begin(void** out);  // 0x594410
 };
 struct Channel
 {
@@ -162,6 +187,10 @@ public:
     virtual void Init();
     virtual ~System();
     virtual void HandleMsg();
+
+    void Update(void* ctx, float dt);       // 0x00a32f20
+    void MuteAll(bool muted, bool immediate); // 0x00a233b0
+    void MaintainLRU();                     // 0x00a28810
 
     AutoHandler       mAutoMsg;          // +0x08
     int               mRefCount;         // +0x1c
@@ -241,17 +270,20 @@ public:
     T32220          mSubscriptions;    // +0x1277b4
     PAD(pad_r, 0x1277b4 + 4, 0x128ae0);
     T570          mPolyA;            // +0x128ae0
-    PAD(pad_s, 0x128ae0 + 4, 0x12c9ac);
+    PAD(pad_s, 0x128ae0 + 0x10, 0x12c9ac);
     T1040          mPoolA;            // +0x12c9ac
-    PAD(pad_t, 0x12c9ac + 4, 0x12d974);
+    PAD(pad_t, 0x12c9ac + 8, 0x12d974);
     T570          mPolyB;            // +0x12d974
-    PAD(pad_u, 0x12d974 + 4, 0x131840);
+    PAD(pad_u, 0x12d974 + 0x10, 0x131840);
     T1040          mPoolB;            // +0x131840
-    PAD(pad_v, 0x131840 + 4, 0x132808);
+    PAD(pad_v, 0x131840 + 8, 0x1327fc);
+    uint32_t*         mIdRead;          // +0x1327fc
+    uint32_t*         mIdWrite;         // +0x132800
+    uint32_t          mIdDropped;       // +0x132804
     T570          mPolyC;            // +0x132808
-    PAD(pad_w, 0x132808 + 4, 0x1366d4);
+    PAD(pad_w, 0x132808 + 0x10, 0x1366d4);
     T1040          mPoolC;            // +0x1366d4
-    PAD(pad_x, 0x1366d4 + 4, 0x13769c);
+    PAD(pad_x, 0x1366d4 + 8, 0x13769c);
     uint32_t*         fv0;               // +0x13769c
     uint32_t*         fv1;               // +0x1376a0
     uint32_t*         fv2;               // +0x1376a4
@@ -269,11 +301,11 @@ public:
     TF310          mHT2b;             // +0x157440
     PAD(pad_ac, 0x157440 + 4, 0x157c60);
     T26990          mObj157c60;        // +0x157c60
-    PAD(pad_ad, 0x157c60 + 4, 0x158f48);
+    PAD(pad_ad, 0x157c60 + 0xc, 0x158f48);
     T26990*         pObj;              // +0x158f48
     uint32_t          z158f4c;
     TF410          mHT3;              // +0x158f50
-    PAD(pad_ae, 0x158f50 + 4, 0x15b6b0);
+    PAD(pad_ae, 0x158f50 + 0xc, 0x15b6b0);
     uint32_t          z6b0, z6b4, z6b8, z6bc;     // +0x15b6b0
     PAD(pad_af, 0x15b6bc + 4, 0x15b6d8);
     float             posA[3];           // +0x15b6d8
@@ -415,3 +447,399 @@ System::System()
     for (int i = 0; i < 9; ++i) { mat0[i] = (i % 4 == 0) ? 1.0f : 0.0f; }
     for (int i = 0; i < 9; ++i) { mat1[i] = (i % 4 == 0) ? 1.0f : 0.0f; }
 }
+
+// ---------------------------------------------------------------------------
+// EA::Audio::VoiceContainer bound-property bookkeeping (0x00a33dc0, 0x00a33e90).
+// The container keeps a fixed vector of 0x24-byte bindings at +0x184: the live
+// range is [mpBindingsBegin, mpBindingsEnd) and every entry caches one audio
+// object command (id at +0x0c, two candidate float values at +0x1c/+0x10, the
+// liveness pointer at +0x14 and two flag bytes at +0x18/+0x20).
+// ---------------------------------------------------------------------------
+namespace EA { namespace Audio {
+
+struct Binding
+{
+    uint32_t mProperty;      // +0x00  property id the binding answers
+    uint32_t mPad04;         // +0x04
+    uint32_t mPad08;         // +0x08
+    uint32_t mCommand;       // +0x0c  audio-object command id
+    float    mValueB;        // +0x10  second candidate value (flag +0x20 bit 1)
+    uint32_t mpVoice;        // +0x14  non-null when the binding is live
+    uint8_t  mbAltPath;      // +0x18  selects the +0x1c value when set
+    uint8_t  mPad19[3];
+    float    mValueA;        // +0x1c  default value
+    uint8_t  mFlags20;       // +0x20  bit 0 = use mValueB, bit 1 = keep mValueA
+    uint8_t  mPad21[3];
+};
+
+// rw::audio::core::System singleton: only the global lock is used here.
+struct CoreSystem
+{
+    void Lock();             // 0x0112c600
+    void Unlock();           // 0x0112c620
+};
+extern CoreSystem* gpCoreSystem;    // 0x016e61a8
+
+// The audio object the bindings belong to: 0x0112ccf0 is a __thiscall command setter.
+struct Voice
+{
+    void SetCommandComplete(uint32_t command, float value);   // 0x0112ccf0
+};
+
+struct VoiceContainer
+{
+    uint8_t  mPad0000[0x184];
+    Binding* mpBindingsBegin;    // +0x184
+    Binding* mpBindingsEnd;      // +0x188
+
+    void CommitBoundProperties();               // 0x00a33dc0
+    bool HasPropertyBinding(uint32_t property); // 0x00a33e90
+};
+
+// @ 0x00a33e90
+bool VoiceContainer::HasPropertyBinding(uint32_t property)
+{
+    int count = (int)(mpBindingsEnd - mpBindingsBegin);
+    int i = 0;
+    if (count > 0) {
+        Binding* pBinding = mpBindingsBegin;
+        do {
+            if (pBinding->mProperty == property)
+                return true;
+            ++i;
+            ++pBinding;
+        } while (i < count);
+    }
+    return false;
+}
+
+// @ 0x00a33dc0
+void VoiceContainer::CommitBoundProperties()
+{
+    int count = (int)((char*)mpBindingsEnd - (char*)mpBindingsBegin) / 36;
+    if (count == 0)
+        return;
+    if (gpCoreSystem)
+        gpCoreSystem->Lock();
+    __try {
+        int offset = 0;
+        if (count > 0) {
+            do {
+                Binding* pBinding = (Binding*)((char*)mpBindingsBegin + offset);
+                if (pBinding->mpVoice) {
+                    if (!pBinding->mbAltPath && !(pBinding->mFlags20 & 2))
+                        ((Voice*)pBinding->mpVoice)->SetCommandComplete(pBinding->mCommand, pBinding->mValueA);
+                    else if (pBinding->mFlags20 & 1)
+                        ((Voice*)pBinding->mpVoice)->SetCommandComplete(pBinding->mCommand, pBinding->mValueB);
+                }
+                offset += 36;
+            } while (--count != 0);
+        }
+    } __finally {
+        if (gpCoreSystem)
+            gpCoreSystem->Unlock();
+    }
+}
+
+}} // namespace EA::Audio
+
+// ---------------------------------------------------------------------------
+// EA::Audio::System::Update (0x00a32f20): one audio-server tick.
+//   1. start the frame stopwatch, flush the command queue when the mixer asks
+//      for it (flag +0x3f4), otherwise spin on the dispatcher while it has work
+//   2. recompute the "muted" aggregate and push it through MuteAll
+//   3. advance the per-object property ramp (pObj list at +0x157c60 / +0x158f48)
+//   4. sweep the +0x158f50 hash table, notify every bound object, maintain the
+//      LRU set and run the deferred command list
+// ---------------------------------------------------------------------------
+#define AVS(p, off) (*(void**)((char*)(*(void**)(p)) + (off)))
+
+namespace EA {
+
+struct Stopwatch
+{
+    Stopwatch(int units, bool highRes);      // 0x0093a560
+    void Start();                            // inlined in the original
+    uint32_t mnUnits;                        // +0x00
+    uint32_t mnStartLo;                      // +0x04
+    uint32_t mnStartHi;                      // +0x08
+    uint32_t mnTotalLo;                      // +0x0c
+    uint32_t mnTotalHi;                      // +0x10
+};
+
+struct LimitStopwatch : Stopwatch
+{
+    LimitStopwatch(int units, bool highRes); // 0x0093a560
+    void SetTimeLimit(uint32_t units, bool b);  // 0x0093a480
+    bool HasTimeLeft();                         // inlined in the original
+    uint32_t mnEndLo;                        // +0x14
+    uint32_t mnEndHi;                        // +0x18
+};
+
+} // namespace EA
+
+namespace rt {
+struct MsgObj            // object with a virtual command interface
+{
+    virtual void Slot0();
+    virtual void Slot4();
+    virtual void Slot18(int, int);
+    virtual void Slot24(uint32_t);
+};
+struct cmdStub           // 0x0166d9f4: mixer/notification sink with two vtable slots
+{
+    virtual void SlotC0();
+    virtual void SlotC4();
+};
+extern cmdStub* gpCmdStub;          // 0x0166d9f4
+extern void* gpCoreSys166 ;          // (unused placeholder)
+
+struct CmdRecord
+{
+    uint32_t mType;         // +0x00
+    uint32_t mArg1;         // +0x04
+    uint32_t mArg2;         // +0x08
+    uint32_t mArg3;         // +0x0c
+    uint32_t mArg4;         // +0x10
+};
+
+struct CmdList
+{
+    uint32_t* mpBegin;      // +0x00
+    uint32_t* mpEnd;        // +0x04
+    uint32_t* mpGuard;      // +0x08
+    uint32_t* mpCap;        // +0x0c
+    void Assign(const uint32_t* begin, const uint32_t* end); // 0x00a32320
+    void EraseRange(uint32_t* begin, uint32_t* end);         // 0x00a2ae90
+};
+extern CmdList   gDeferredCmds;     // 0x0166da90
+extern uint32_t  gDeferredGuard;    // 0x0166de90
+extern uint32_t  gDeferredStorage[];// 0x0166daa8
+} // namespace rt
+
+extern "C" int atexit(void (*fn)());
+void DeferredListInit();            // 0x013c1810 (atexit target)
+
+// @ 0x00a32f20
+void System::Update(void* ctx, float dt)
+{
+    EA::Stopwatch watch(4, false);
+    watch.Start();
+
+    if (q2.FunF980() && s3f4) {
+        if (rt::gpCmdStub)
+            ((void (__thiscall*)(void*))AVS(rt::gpCmdStub, 0xc0))(rt::gpCmdStub);
+        s3f4 = 0;
+        q2.FunFee0(&q1);
+        if (rt::gpCmdStub)
+            ((void (__thiscall*)(void*))AVS(rt::gpCmdStub, 0xc4))(rt::gpCmdStub);
+        q2.FunFdc0();
+    }
+
+    if (!q2.FunF980()) {
+        uint32_t spins = 0;
+        EA::LimitStopwatch dispatchTimer(3, false);
+        dispatchTimer.SetTimeLimit(cq0, true);
+        do {
+            ++spins;
+            if ((spins & 3) == 0 && !dispatchTimer.HasTimeLeft())
+                break;
+            if (!q2.FunF9a0())
+                break;
+            ((void (__thiscall*)(System*, void*))AVS(this, 0x130))(this, q2.GetArg());
+        } while (true);
+        if (q2.FunF990() == 0) {
+            q2.FunFdd0();
+            ++s3f8;
+        }
+    }
+
+    bool muted = (mbMutedForSilence || mbMuted || mbMutedForFocus || mbMutedByProperty);
+    if (muted != (b9a != 0))
+        MuteAll(muted, false);
+
+    if (mObj157c60.pNext != (void*)&mObj157c60) {
+        float delta = dt - cqName;
+        if (delta < 0.0f)
+            delta = 0.0f;
+
+        if (pObj == (T26990*)&mObj157c60) {
+            ((void (__thiscall*)(System*, float, uint32_t))AVS(this, 0x208))(this, delta, z6b0);
+            cqName = dt;
+            pObj = (T26990*)mObj157c60.pNext;
+        }
+
+        uint32_t spins = 0;
+        EA::LimitStopwatch bindTimer(3, false);
+        bindTimer.SetTimeLimit(cq2, true);
+        do {
+            ++spins;
+            if ((spins & 3) == 0 && !bindTimer.HasTimeLeft())
+                break;
+            if (pObj == (T26990*)&mObj157c60)
+                break;
+            T26990* pCur = pObj;
+            ((void (__thiscall*)(void*, float, float))AVS(pCur->pObj, 8))(pCur->pObj, dt, delta);
+            if (pObj == pCur)
+                pObj = (T26990*)pCur->pNext;
+        } while (true);
+
+        if (pObj == (T26990*)&mObj157c60) {
+            void* it[2];
+            mHT3.Begin(it);
+            void* pEnd = mHT3.mpBuckets[mHT3.mBucket];
+            void* pNode = it[0];
+            void** ppBucket = (void**)it[1];
+            while (pNode != pEnd) {
+                void* pValue = *(void**)((char*)pNode + 4);
+                ((void (__thiscall*)(void*, uint32_t))AVS(pValue, 0x24))(pValue, z6b0);
+                pNode = *(void**)((char*)pNode + 8);
+                while (pNode == 0) {
+                    pNode = *++ppBucket;
+                }
+            }
+            ((void (__thiscall*)(System*))AVS(this, 0x13c))(this);
+            MaintainLRU();
+            ((void (__thiscall*)(System*))AVS(this, 0x20c))(this);
+        }
+    }
+
+    ((void (__thiscall*)(System*))AVS(this, 0x204))(this);
+
+    while (rb0 != rb1) {
+        if (!(rt::gDeferredGuard & 1)) {
+            rt::gDeferredGuard |= 1;
+            rt::gDeferredCmds.mpBegin = rt::gDeferredStorage;
+            rt::gDeferredCmds.mpEnd = rt::gDeferredStorage;
+            rt::gDeferredCmds.mpCap = rt::gDeferredStorage;
+            rt::gDeferredCmds.mpGuard = &rt::gDeferredGuard;
+            atexit(DeferredListInit);
+        }
+        rt::gDeferredCmds.Assign(rb0, rb1);
+
+        uint32_t* pRec = rt::gDeferredCmds.mpBegin;
+        uint32_t* pEnd = rt::gDeferredCmds.mpEnd;
+        if (pRec != pEnd) {
+            do {
+                rt::CmdRecord* pCmd = (rt::CmdRecord*)pRec;
+                if (pCmd->mType == 0x3a0fd6e) {
+                    rt::MsgObj* pObj2 = (rt::MsgObj*)((void* (__thiscall*)(System*, uint32_t))AVS(this, 0x1d4))(this, pCmd->mArg1);
+                    if (pObj2)
+                        ((void (__thiscall*)(rt::MsgObj*))AVS(pObj2, 0))(pObj2);
+                    if (pObj2)
+                        ((void (__thiscall*)(rt::MsgObj*, int, int))AVS(pObj2, 0x18))(pObj2, 0, 1);
+                    if (pObj2)
+                        ((void (__thiscall*)(rt::MsgObj*))AVS(pObj2, 4))(pObj2);
+                } else if (pCmd->mType == 0x3a129ee) {
+                    if (pCmd->mArg1 >= 0x7d1 && pCmd->mArg1 <= 0xbb8) {
+                        void* found;
+                        mPolyB.Find(&found, &pCmd->mArg1);
+                        if (found != (void*)mPolyB.mpBuckets[mPolyB.mBucket]) {
+                            mPolyB.Erase(&pCmd->mArg1);
+                            *mIdWrite++ = pCmd->mArg1;
+                            if (mIdWrite == (uint32_t*)mPoolB.mpLimit)
+                                mIdWrite = (uint32_t*)mPoolB.mpFirst;
+                            if (mIdWrite == mIdRead) {
+                                if (++mIdRead == (uint32_t*)mPoolB.mpLimit)
+                                    mIdRead = (uint32_t*)mPoolB.mpFirst;
+                            } else {
+                                ++mIdDropped;
+                            }
+                        }
+                    }
+                } else if (pCmd->mType == 0x63e3de7) {
+                    if (pCmd->mArg3) {
+                        ((void (__thiscall*)(void*, uint32_t, int))AVS((void*)pCmd->mArg3, 0x18))((void*)pCmd->mArg3, pCmd->mArg2, pCmd->mArg2 != 0);
+                        void* pRelease = (void*)pCmd->mArg3;
+                        pCmd->mArg3 = 0;
+                        ((void (__thiscall*)(void*))AVS(pRelease, 4))(pRelease);
+                    }
+                }
+                q5.Fun102e0(0x3a0fcce);
+                q5.Fun10120(0x3a0fce5, pCmd->mType);
+                q5.Fun10120(0x3475385, pCmd->mArg1);
+                q5.Fun10120(0x39e3c9f, pCmd->mArg2);
+                q5.Fun10120(0x39e3ca6, pCmd->mArg3);
+                q5.FunF940();
+                pRec += 5;
+            } while (pRec != pEnd);
+        }
+        rt::gDeferredCmds.EraseRange(rt::gDeferredCmds.mpBegin, rt::gDeferredCmds.mpEnd);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// eastl::fixed_hash_map<uint32_t, eastl::fixed_hash_map<uint32_t,float,20,21,1,
+// eastl::hash<uint32_t>,eastl::equal_to<uint32_t>,0>, 100,101,1,
+// eastl::hash<uint32_t>,eastl::equal_to<uint32_t>,0> constructor (0x00a33500).
+// The map is the nested "big" property table: 100 node slots of 0x1e8 bytes
+// carved out of the object itself at +0x1cc, 101 buckets right after them.
+// ---------------------------------------------------------------------------
+namespace eastl {
+
+// Only the free-list head and the init entry point matter for construction.
+struct fixed_pool_base
+{
+    void* mpHead;   // +0x00  first free node
+    void init(void* pMemory, uint32_t nSize, uint32_t nNodeSize, uint32_t nAlignment, uint32_t nOffset); // 0x00921260
+};
+
+// Pool description the hashtable base constructor consumes.
+struct node_pool_desc
+{
+    void*    mpMap;       // +0x00  map being constructed
+    uint8_t* mpNodes;     // +0x04  first node slot
+    uint8_t* mpNodesEnd;  // +0x08  one past the last node slot
+    uint32_t mnNodeSize;  // +0x0c  bytes per node
+};
+
+// Instantiated map type: 101 buckets, 100 node slots of 0x1e8 bytes.
+struct fixed_hash_map_u32_nested
+{
+    void*    mpBegin;                   // +0x000
+    void*    mpEnd;                     // +0x004
+    uint32_t mnBucketCount;             // +0x008  buckets currently allocated
+    void*    mpBucketArray;             // +0x00c
+    float    mLoadFactor;               // +0x010
+    float    mGrowthFactor;             // +0x014
+    uint32_t mnElementCount;            // +0x018
+    uint8_t  mPad1c[0x1cc - 0x1c];      // +0x01c  rest of the hashtable state
+    uint8_t  mNodeStorage[0xbea0];      // +0x1cc  100 slots * 0x1e8 bytes
+
+    fixed_hash_map_u32_nested(const struct hash_tag&, const struct equal_to_tag&); // 0x00a33500
+    void BaseInit(void* pAllocator, const node_pool_desc& desc);  // 0x00a23a40
+    void Rehash(uint32_t nBucketCount);                           // 0x00a22060
+};
+
+struct hash_tag {};
+struct equal_to_tag {};
+
+// 0x00921340: tagged allocation of the node pool bookkeeping (tag 0x65).
+void* RequestPoolBookkeeping(uint32_t tag);
+// 0x009213c0: bucket count of an existing bucket array.
+uint32_t BucketCount(void* pBucketArray);
+
+// @ 0x00a33500
+fixed_hash_map_u32_nested::fixed_hash_map_u32_nested(const hash_tag&, const equal_to_tag&)
+{
+    fixed_pool_base pool;
+    pool.mpHead = 0;
+    pool.init(mNodeStorage, sizeof(mNodeStorage), 0x1e8, 4, 0);
+
+    node_pool_desc desc;
+    desc.mpMap      = this;
+    desc.mpNodes    = mNodeStorage;
+    desc.mpNodesEnd = mNodeStorage + sizeof(mNodeStorage);
+    desc.mnNodeSize = 0x1e8;
+    BaseInit(RequestPoolBookkeeping(0x65), desc);
+
+    mLoadFactor    = 10000.0f;
+    mGrowthFactor  = 2.0f;
+    mnElementCount = 0;
+
+    uint32_t nBucketCount = BucketCount(mpBucketArray);
+    if (mnBucketCount < nBucketCount)
+        Rehash(nBucketCount);
+}
+
+} // namespace eastl
