@@ -1,0 +1,32 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast
+# Source: slices/s00c91a40/s00c91a40.cpp
+#
+# Slice s00c91a40 = three __thiscall members of the space-stage tribe tool view
+# (0x00c91a40..0x00c91c99):
+#   ?UpdateModel@cTribeToolView@SP@@QAEXXZ        0x00c91a40  (273 bytes)  MATCH
+#   ?ChooseNewHutModel@cTribeToolView@SP@@QAEPAXXZ 0x00c91b60  (285 bytes)  see below
+#   ?GetWaterOrHeight@cTribeToolView@SP@@QAEMXZ   0x00c91c80  ( 25 bytes)  MATCH
+#
+# Nonmatching row:
+00c91b60  245  (size 282 vs 285)  ?ChooseNewHutModel@cTribeToolView@SP@@QAEPAXXZ
+#   Full reconstruction with the recovered control flow (definition IsActive
+#   gate at +0x120 slot 0x58; hut-model-id selection from the +0x18cc state's
+#   flags +0x608/+0x60c -> 0x654e036 / 0x654e034 / 0x654e035; a PropertyManager
+#   Query(0xc42e83f6, 0x2be764e2, &out) through vtable slot 0x2c; the model-list
+#   fill helper at 0x6a0ae0 and the mode-variant selection GetModeVariant()-1
+#   indexing 12-byte list entries; intrusive refcounts around the queried
+#   object), but the emitted code differs in shape: the original keeps `this`
+#   in ebp for the whole body and materialises the state-flag tests as
+#   `seta cl; cmp cl, bl; je`, whereas the reconstruction spills `this` and
+#   emits `jle`/`jg` straight comparisons.  The exact expression forms and the
+#   4-argument shape of the eastl `reserve`-mangled helper (0x6a0ae0) could not
+#   be recovered, so byte-exactness is out of reach.
+#
+# Equivalence gate (nonmatched VAs only):
+#   00c91b60  UNSUPPORTED  (0/400 inputs valid: fake-arity 200, fault(read) 199,
+#             fault(write-prot) 1; 0/107 insns covered) -- random `this` values
+#             fault before any code executes, so no behavioural comparison is
+#             possible.  See work/match/scratch_s00c91a40_equiv.json.
+#
+# MATCHes (2/3): 00c91a40 and 00c91c80 are byte-exact (diff 0).

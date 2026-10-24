@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+# No incomplete/stub functions.  All three slice targets
+# (00c91a40, 00c91b60, 00c91c80) carry a col-0 `// @ 0x<VA>` marker and a full,
+# named body.  00c91b60 is a complete behavioural reconstruction that does not
+# reach byte-exactness (recorded in nonmatching.txt); 00c91a40 and 00c91c80 are
+# byte-exact and recorded in manifest.txt.
