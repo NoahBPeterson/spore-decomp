@@ -4,6 +4,12 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+// The original EA code calls the kernel32 entry points, not the compiler intrinsics.
+#undef InterlockedCompareExchange
+#undef InterlockedExchangeAdd
+extern "C" __declspec(dllimport) LONG __stdcall InterlockedCompareExchange(volatile LONG*, LONG, LONG);
+extern "C" __declspec(dllimport) LONG __stdcall InterlockedExchangeAdd(volatile LONG*, LONG);
+
 typedef unsigned int uint32;
 
 // ---------------------------------------------------------------------------
@@ -17,7 +23,7 @@ struct EASemaphoreData {
     int    mnCancelCount;   // +0x08
     bool   mbIntraProcess;  // +0x0c
 
-    void UpdateCancelCount(int n);   // @ 0x00922570
+    void UpdateCancelCount(int n);   // 0x00922570
 };
 
 struct SemaphoreData {
@@ -25,34 +31,94 @@ struct SemaphoreData {
     bool  mbIntraProcess;   // +0x04
     char  mName[0x10];      // +0x05
 
-    SemaphoreData(int count, bool intra, const char* name); // @ 0x009225d0
+    SemaphoreData(int count, bool intra, const char* name); // 0x009225d0
 };
 
 class Semaphore {
 public:
     EASemaphoreData mSemaphoreData;   // +0x00
 
-    bool Init(int* pData);      // @ 0x00922620
-    uint32 Wait(uint32* pTimeout); // @ 0x00922690
-    uint32 Post(int count);     // @ 0x00922740
-    Semaphore(int count, bool intra);            // @ 0x00922820
-    Semaphore(int count);                        // @ 0x00922880
-    static Semaphore* Create(Semaphore* p);      // @ 0x009228c0
+    bool Init(int* pData);      // 0x00922620
+    uint32 Wait(const uint32& timeout); // 0x00922690
+    uint32 Post(int count);     // 0x00922740
+    Semaphore(int count, bool intra);            // 0x00922820
+    Semaphore(int count);                        // 0x00922880
+    static Semaphore* Create(Semaphore* p);      // 0x009228c0
 };
 
 struct EAThreadDynamicData {
-    void*    mhThread;      // +0x00
-    uint32   mnThreadId;    // +0x04
-    char     pad0[0x18];    // +0x08
-    int      mnRefCount;    // +0x20
-    char     mName[0x40];   // +0x24
+    void*    mhThread;             // +0x00
+    uint32   mnThreadId;           // +0x04
+    int      mnStatus;             // +0x08  (0=idle, 1=running, 2=ended)
+    int      mnReturnValue;        // +0x0c
+    void*    mpStartContext0;      // +0x10  thread function pointer
+    void*    mpStartContext1;      // +0x14  thread function argument
+    void*    mpStartContext2;      // +0x18  thread handle (SetCurrentThreadHandle arg)
+    void*    mpBeginThreadUserWrapper; // +0x1c  optional user wrapper callback
+    volatile long mnRefCount;      // +0x20
+    char     mName[0x40];          // +0x24
+
+    void Release();                                       // 0x00922e10 (conditional)
+    static EAThreadDynamicData* Alloc();                  // 0x00922d30
+};
+
+struct ThreadParameters {                                 // passed by pointer to Start
+    int   mnStackSize;      // +0x00
+    uint32 mnStackSize2;    // +0x04  (stack size passed to _beginthreadex)
+    int   mnPriority;       // +0x08
+    int   mnProcessor;      // +0x0c
+    void* mpFunction;       // +0x10
+    const char* mpName;     // +0x14
+};
+
+class Mutex {                                   // size 0x30
+public:
+    Mutex(const void* params, bool b);          // 0x009222a0
+    unsigned int mData[0x0c];
+};
+
+class Event {                                   // size 0x60
+public:
+    Event(const void* params, bool b);          // 0x00921f00
+    unsigned int mData[0x18];
+};
+
+struct SuspendedParams {                        // 2-byte default parameter block
+    bool mbStartSuspended;                      // +0x00
+    bool mbPad;                                 // +0x01
 };
 
 class Thread {
 public:
+    enum Status { kStatusNone = 0, kStatusRunning = 1, kStatusComplete = 2 };
+
     EAThreadDynamicData* mpData;   // +0x00
-    void SetName(const char* name);      // @ 0x00922b30
+    void*    mpContext[3];         // +0x04
+    Mutex    mRunMutex;            // +0x10
+    Event    mRunEvent;            // +0x40
+    Event    mExitEvent;           // +0xa0
+
+    Thread(const void* params, bool bStartSuspended);   // 0x00922500
+    void SetParameters(const void* params);            // 0x00922330
+    void SetName(const char* name);      // 0x00922b30
+    bool SetPriority(int prio);          // 0x00922ab0
+    void SetIdealProcessor(int proc);    // 0x00922c40
+    Status WaitForEnd(const uint32& timeout, int* pValue);        // 0x00922940
+    Status GetStatus(int* pValue) const;                          // 0x00922a10
+    void* Start(void* fn, void* arg, const ThreadParameters* params, void* wrapper);      // 0x00922f30
+    void* Start2(void* fn, void* arg, const ThreadParameters* params, void* wrapper);     // 0x009231a0
 };
+
+void SetCurrentThreadHandle(void* h, bool b);             // 0x00921c50
+unsigned __stdcall EAThreadEntryPlain(void* p);           // 0x00922e30
+unsigned __stdcall EAThreadEntryWrapped(void* p);         // 0x009230a0
+
+extern long g_ThreadDataLocks[32];                        // 0x016688a8
+extern char g_ThreadDataPool[];                           // 0x01667c18
+extern long g_ThreadCount;                                // 0x016688a0
+extern long g_DefaultProcessor;                           // 0x0154df60
+extern long g_ProcessorCount;                             // 0x01668928
+extern long g_ProcessorCountInit;                         // 0x0166892c
 
 uint32 GetThreadTime();                 // 0x0094d340
 void   ThreadSleep(uint32* ms);         // 0x00921df0
@@ -62,6 +128,9 @@ void* operator_new_6abeb0(unsigned size); // 0x006abeb0
 void  operator_delete_f47380(void* p);    // 0x00f47380
 }}
 
+extern "C" unsigned long __cdecl _beginthreadex(void* lpSecurity, unsigned cbStack,
+        unsigned (__stdcall* pfnStart)(void*), void* pArg, unsigned nFlags, unsigned* pThreadId);
+
 namespace EA { namespace Trace {
 void* GetTracer();               // 0x009250f0
 void* GetTraceHelperTable();     // 0x009250e0
@@ -69,7 +138,7 @@ void* GetServer();
 void  UpdateLogFilters();
 }}
 
-void* FUN_00922da0(void* p);     // @ 0x00922da0
+void FUN_00922da0(void* p);      // 0x00922da0
 
 // ---------------------------------------------------------------------------
 // Semaphore helpers
@@ -84,7 +153,7 @@ void EA::Thread::EASemaphoreData::UpdateCancelCount(int n)
             int ex = cmp + n;
             if (ex > 0)
                 ex = 0;
-            LONG old = _InterlockedCompareExchange((volatile long*)&mnCount, ex, cmp);
+            LONG old = InterlockedCompareExchange((volatile LONG*)&mnCount, ex, cmp);
             if (old == cmp) {
                 n = n + (old - ex);
                 break;
@@ -94,7 +163,7 @@ void EA::Thread::EASemaphoreData::UpdateCancelCount(int n)
                 break;
         }
         if (n > 0)
-            _InterlockedExchangeAdd((volatile long*)&mnCancelCount, n);
+            InterlockedExchangeAdd((volatile LONG*)&mnCancelCount, n);
     }
 }
 
@@ -150,13 +219,13 @@ bool EA::Thread::Semaphore::Init(int* pData)
 }
 
 // @ 0x00922690
-uint32 EA::Thread::Semaphore::Wait(uint32* pTimeout)
+uint32 EA::Thread::Semaphore::Wait(const uint32& timeout)
 {
-    uint32 t = *pTimeout;
+    uint32 t = timeout;
     if (t != 0xffffffff && t != 0) {
         uint32 now = GetThreadTime();
-        if (now < *pTimeout)
-            t = *pTimeout - now;
+        if (now < timeout)
+            t = timeout - now;
         else
             t = 0;
     }
@@ -218,10 +287,17 @@ EA::Thread::Semaphore::Semaphore(int count, bool intra)
     mSemaphoreData.mnCancelCount = 0;
     mSemaphoreData.mbIntraProcess = true;
     if (count == 0 && intra) {
-        SemaphoreData local(0, true, 0);
+        struct LocalData {
+            int  mnCount;
+            bool mbIntraProcess;
+            char mName[0x10];
+        } local;
+        local.mnCount = 0;
+        local.mbIntraProcess = true;
+        local.mName[0] = 0;
         Init((int*)&local);
     } else {
-        Init(&count);
+        Init((int*)count);
     }
 }
 
@@ -260,6 +336,7 @@ void __fastcall FUN_00922900(int* p)
     p[3] = -1;
     *((char*)p + 0x10) = 0;
     p[5] = 0x013ec47c;
+    __asm { mov eax, p }
 }
 
 // ---------------------------------------------------------------------------
@@ -280,27 +357,22 @@ int __fastcall FUN_00922a90(void** p)
 }
 
 // @ 0x00922ab0
-bool __fastcall FUN_00922ab0(void** p, int prio)
+bool EA::Thread::Thread::SetPriority(int prio)
 {
-    if (*p == 0)
+    if (mpData == 0)
         return false;
-    BOOL ok = SetThreadPriority((HANDLE)*(void**)*p, prio);
-    bool r = ok != 0;
-    if (!r) {
+    HANDLE h = (HANDLE)mpData->mhThread;
+    if (!SetThreadPriority(h, prio)) {
         while (prio < 0xf) {
-            if (prio < -0xe) {
-                BOOL ok2 = SetThreadPriority((HANDLE)*(void**)*p, -0xf);
-                return ok2 != 0;
-            }
-            BOOL ok2 = SetThreadPriority((HANDLE)*(void**)*p, prio);
-            prio++;
-            if (ok2 != 0)
+            if (prio <= -0xf)
+                return SetThreadPriority(h, -0xf) != 0;
+            if (SetThreadPriority(h, prio))
                 return true;
+            ++prio;
         }
-        BOOL ok3 = SetThreadPriority((HANDLE)*(void**)*p, 0xf);
-        r = ok3 != 0;
+        return SetThreadPriority(h, 0xf) != 0;
     }
-    return r;
+    return true;
 }
 
 // @ 0x00922b30
@@ -348,28 +420,41 @@ void C22c20::Copy(void** src)
     void* q = *src;
     p = q;
     _InterlockedExchangeAdd((volatile long*)((char*)q + 0x20), 1);
+    C22c20* self = this;
+    __asm { mov eax, self }
 }
 
 // @ 0x00922c40
-struct C22c40 { void* h; void SetIdeal(int proc); };
-void C22c40::SetIdeal(int proc)
+void EA::Thread::Thread::SetIdealProcessor(int proc)
 {
-    if (h != 0) {
-        if ((_InterlockedCompareExchange((volatile long*)0x0166892c, 1, 0)) != 0) { }
-        if (_InterlockedExchangeAdd((volatile long*)0x01668928, 0) == 0) {
-            SYSTEM_INFO si;
-            GetSystemInfo(&si);
-            _InterlockedExchange((volatile long*)0x01668928, si.dwNumberOfProcessors);
-        }
-        if (proc < 0) {
-            SetThreadIdealProcessor((HANDLE)h, 0x20);
-            return;
-        }
-        int n = _InterlockedExchangeAdd((volatile long*)0x01668928, 0);
-        if (n <= proc)
-            proc = proc % n;
-        SetThreadIdealProcessor((HANDLE)h, proc);
+    if (mpData == 0)
+        return;
+    if ((g_ProcessorCountInit & 1) == 0) {
+        g_ProcessorCountInit |= 1;
+        _InterlockedExchange((volatile long*)&g_ProcessorCount, 0);
     }
+    if (_InterlockedExchangeAdd((volatile long*)&g_ProcessorCount, 0) == 0) {
+        SYSTEM_INFO si;
+        si.dwOemId = 0;
+        si.dwPageSize = 0;
+        si.lpMinimumApplicationAddress = 0;
+        si.lpMaximumApplicationAddress = 0;
+        si.dwActiveProcessorMask = 0;
+        si.dwNumberOfProcessors = 0;
+        si.dwProcessorType = 0;
+        si.dwAllocationGranularity = 0;
+        si.wProcessorLevel = 0;
+        si.wProcessorRevision = 0;
+        GetSystemInfo(&si);
+        _InterlockedExchange((volatile long*)&g_ProcessorCount, si.dwNumberOfProcessors);
+    }
+    if (proc < 0) {
+        SetThreadIdealProcessor((HANDLE)mpData->mhThread, 0x20);
+        return;
+    }
+    if (proc >= _InterlockedExchangeAdd((volatile long*)&g_ProcessorCount, 0))
+        proc = proc % _InterlockedExchangeAdd((volatile long*)&g_ProcessorCount, 0);
+    SetThreadIdealProcessor((HANDLE)mpData->mhThread, proc);
 }
 
 // @ 0x00922d10
@@ -382,21 +467,20 @@ void __fastcall FUN_00922d10(void*** p)
 
 // ---------------------------------------------------------------------------
 // @ 0x00922da0
-void* FUN_00922da0(void* p)
+void FUN_00922da0(void* p)
 {
     if ((unsigned)p >= 0x01667c18u && (unsigned)p < 0x01668898u) {
         unsigned idx = ((unsigned)p - 0x01667c18u) / 100u;
         ((long*)0x016688a8)[idx] = 0;
         if (*(HANDLE*)p != 0)
             CloseHandle(*(HANDLE*)p);
-        return p;
+        return;
     }
     if (p != 0) {
         if (*(HANDLE*)p != 0)
             CloseHandle(*(HANDLE*)p);
         EA::Thread::operator_delete_f47380(p);
     }
-    return p;
 }
 
 // @ 0x00922e10
@@ -410,8 +494,14 @@ void __fastcall FUN_00922e10(void** p)
 // @ 0x00923310
 void FUN_00923310(void** p)
 {
-    if (*p != 0 && _InterlockedExchangeAdd((volatile long*)((char*)*p + 0x20), -1) == 1)
-        FUN_00922da0(*p);
+    void* d = *p;
+    if (d != 0) {
+        if (_InterlockedExchangeAdd((volatile long*)((char*)d + 0x20), -1) == 1) {
+            FUN_00922da0(d);
+            return;
+        }
+    }
+    __asm { mov eax, d }
 }
 
 // @ 0x00923330
@@ -481,55 +571,263 @@ void EA::Trace::UpdateLogFilters()
 }
 
 // ===========================================================================
-// Large functions: behaviourally-shaped skeletons (marked partial).
+// Thread lifetime: ctor, wait/status, dynamic-data allocator, start.
 // ===========================================================================
 
 // @ 0x00922500
-void FUN_00922500(void* self, void* a2, char a3)
+EA::Thread::Thread::Thread(const void* params, bool bStartSuspended)
+    : mRunMutex(0, true), mRunEvent(0, true), mExitEvent(0, true)
 {
-    (void)self; (void)a2; (void)a3;
+    mpData = 0;
+    mpContext[0] = 0;
+    mpContext[1] = 0;
+    mpContext[2] = 0;
+    SuspendedParams sp;
+    if (params == 0 && bStartSuspended) {
+        sp.mbStartSuspended = true;
+        sp.mbPad = false;
+        params = &sp;
+    }
+    SetParameters(params);
 }
 
 // @ 0x00922940
-int FUN_00922940(void* self, void* a2, void* a3)
+EA::Thread::Thread::Status EA::Thread::Thread::WaitForEnd(const uint32& timeout, int* pValue)
 {
-    (void)self; (void)a2; (void)a3;
-    return 0;
+    int* pOut = pValue;
+    while (mpData == 0) {
+        while ((mpData == 0 || mpData->mhThread == 0) && GetThreadTime() < timeout) {
+            uint32 ms = 1;
+            ThreadSleep(&ms);
+        }
+        if (mpData == 0)
+            return kStatusNone;
+        pOut = 0;
+        if (mpData == 0)
+            continue;
+    }
+    if (mpData->mhThread != 0) {
+        uint32 t = timeout;
+        if (t != 0xffffffff && t != 0) {
+            uint32 now = GetThreadTime();
+            t = (now < timeout) ? timeout - now : 0;
+        }
+        DWORD r = WaitForSingleObject((HANDLE)mpData->mhThread, t);
+        if (r == 0x102)
+            return kStatusRunning;
+        CloseHandle((HANDLE)mpData->mhThread);
+        mpData->mhThread = 0;
+        mpData->mnStatus = kStatusComplete;
+    }
+    if (pOut != 0)
+        *pOut = mpData->mnReturnValue;
+    return kStatusComplete;
 }
 
 // @ 0x00922a10
-int FUN_00922a10(void* self, void* a2)
+EA::Thread::Thread::Status EA::Thread::Thread::GetStatus(int* pValue) const
 {
-    (void)self; (void)a2;
-    return 0;
+    if (mpData == 0)
+        return kStatusNone;
+    if (mpData->mhThread != 0) {
+        DWORD code;
+        if (GetExitCodeThread((HANDLE)mpData->mhThread, &code) != 0) {
+            if (code == 0x103)
+                return kStatusRunning;
+            CloseHandle((HANDLE)mpData->mhThread);
+            mpData->mhThread = 0;
+        }
+    }
+    if (pValue != 0)
+        *pValue = mpData->mnReturnValue;
+    mpData->mnStatus = kStatusComplete;
+    return kStatusComplete;
 }
 
 // @ 0x00922d30
-void* FUN_00922d30()
+EA::Thread::EAThreadDynamicData* EA::Thread::EAThreadDynamicData::Alloc()
 {
-    return 0;
+    unsigned i = 0;
+    for (; i < 0x20; i++) {
+        if (_InterlockedCompareExchange(&g_ThreadDataLocks[i], 1, 0) == 0)
+            break;
+    }
+    if (i < 0x20) {
+        EAThreadDynamicData* p = (EAThreadDynamicData*)(g_ThreadDataPool + i * 100);
+        p->mhThread = 0;
+        p->mnThreadId = 0;
+        p->mnStatus = 0;
+        p->mnReturnValue = 0;
+        p->mpBeginThreadUserWrapper = 0;
+        _InterlockedExchange(&p->mnRefCount, 0);
+        return p;
+    }
+    EAThreadDynamicData* p = (EAThreadDynamicData*)operator_new_6abeb0(0x64);
+    if (p == 0)
+        return 0;
+    p->mhThread = 0;
+    p->mnThreadId = 0;
+    p->mnStatus = 0;
+    p->mnReturnValue = 0;
+    p->mpBeginThreadUserWrapper = 0;
+    _InterlockedExchange(&p->mnRefCount, 0);
+    return p;
 }
 
 // @ 0x00922e30
-void FUN_00922e30(void* self)
+unsigned __stdcall EA::Thread::EAThreadEntryPlain(void* arg)
 {
-    (void)self;
+    EAThreadDynamicData* p = (EAThreadDynamicData*)arg;
+    void* pfn = p->mpStartContext0;
+    void* pctx = p->mpStartContext1;
+    SetCurrentThreadHandle(p->mpStartContext2, false);
+    p->mnStatus = 1;
+    if (p->mName[0] != 0) {
+        struct { DWORD a; const char* b; uint32 c; DWORD d; } info;
+        info.a = 0x1000;
+        info.b = p->mName;
+        info.c = p->mnThreadId;
+        info.d = 0;
+        __try {
+            RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&info);
+        } __except (1) {
+        }
+    }
+    unsigned r;
+    if (p->mpBeginThreadUserWrapper != 0)
+        r = ((unsigned (__cdecl*)(void*, void*))p->mpBeginThreadUserWrapper)(pfn, pctx);
+    else
+        r = ((unsigned (__stdcall*)(void*))pfn)(pctx);
+    p->mnReturnValue = r;
+    SetCurrentThreadHandle(0, false);
+    p->mnStatus = 2;
+    if (_InterlockedExchangeAdd(&p->mnRefCount, -1) == 1)
+        FUN_00922da0(p);
+    return r;
 }
 
 // @ 0x00922f30
-void FUN_00922f30(void* self)
+void* EA::Thread::Thread::Start(void* fn, void* arg, const ThreadParameters* params, void* wrapper)
 {
-    (void)self;
+    if (mpData != 0 && _InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
+        FUN_00922da0(mpData);
+    EAThreadDynamicData* p = EAThreadDynamicData::Alloc();
+    mpData = p;
+    _InterlockedExchangeAdd(&p->mnRefCount, 1);
+    _InterlockedExchangeAdd(&mpData->mnRefCount, 1);
+    p->mhThread = 0;
+    p->mpStartContext0 = fn;
+    p->mpStartContext1 = arg;
+    p->mpBeginThreadUserWrapper = wrapper;
+    unsigned stackSize = (params != 0) ? params->mnStackSize2 : 0;
+    mpData->mhThread = (void*)_beginthreadex(0, stackSize, EAThreadEntryPlain, mpData, 4,
+                                            (unsigned*)&mpData->mnThreadId);
+    if (mpData->mhThread == 0) {
+        if (_InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
+            FUN_00922da0(mpData);
+        if (_InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
+            FUN_00922da0(mpData);
+        mpData = 0;
+        return 0;
+    }
+    if (params != 0)
+        SetName(params->mpName);
+    mpData->mpStartContext2 = mpData->mhThread;
+    if (params != 0) {
+        if (params->mnPriority != 0)
+            SetPriority(params->mnPriority);
+        int proc = params->mnProcessor;
+        if (proc >= 0) {
+            if (proc == _InterlockedExchangeAdd(&g_ThreadCount, 0))
+                _InterlockedExchangeAdd(&g_ThreadCount, 1);
+            SetIdealProcessor(proc);
+            ResumeThread((HANDLE)mpData->mhThread);
+            return mpData->mhThread;
+        }
+    }
+    int proc2 = g_DefaultProcessor;
+    if (g_DefaultProcessor < 0)
+        proc2 = _InterlockedExchangeAdd(&g_ThreadCount, 1) + 1;
+    SetIdealProcessor(proc2);
+    ResumeThread((HANDLE)mpData->mhThread);
+    return mpData->mhThread;
 }
 
 // @ 0x009230a0
-void FUN_009230a0(void* self)
+unsigned __stdcall EA::Thread::EAThreadEntryWrapped(void* arg)
 {
-    (void)self;
+    EAThreadDynamicData* p = (EAThreadDynamicData*)arg;
+    void* pfn = p->mpStartContext0;
+    void* pctx = p->mpStartContext1;
+    SetCurrentThreadHandle(p->mpStartContext2, false);
+    p->mnStatus = 1;
+    if (p->mName[0] != 0 && p->mhThread != 0) {
+        struct { DWORD a; const char* b; uint32 c; DWORD d; } info;
+        info.a = 0x1000;
+        info.b = p->mName;
+        info.c = p->mnThreadId;
+        info.d = 0;
+        __try {
+            RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&info);
+        } __except (1) {
+        }
+    }
+    unsigned r;
+    if (p->mpBeginThreadUserWrapper != 0)
+        r = ((unsigned (__cdecl*)(void*, void*))p->mpBeginThreadUserWrapper)(pfn, pctx);
+    else
+        r = (*(unsigned (__thiscall**)(void*, void*))((char*)*(void**)pfn + 4))(pfn, pctx);
+    p->mnReturnValue = r;
+    SetCurrentThreadHandle(0, false);
+    p->mnStatus = 2;
+    if (_InterlockedExchangeAdd(&p->mnRefCount, -1) == 1)
+        FUN_00922da0(p);
+    return r;
 }
 
 // @ 0x009231a0
-void FUN_009231a0(void* self)
+void* EA::Thread::Thread::Start2(void* fn, void* arg, const ThreadParameters* params, void* wrapper)
 {
-    (void)self;
+    if (mpData != 0 && _InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
+        FUN_00922da0(mpData);
+    EAThreadDynamicData* p = EAThreadDynamicData::Alloc();
+    mpData = p;
+    _InterlockedExchangeAdd(&p->mnRefCount, 1);
+    _InterlockedExchangeAdd(&mpData->mnRefCount, 1);
+    p->mhThread = 0;
+    p->mpStartContext0 = fn;
+    p->mpStartContext1 = arg;
+    p->mpBeginThreadUserWrapper = wrapper;
+    unsigned stackSize = (params != 0) ? params->mnStackSize2 : 0;
+    mpData->mhThread = (void*)_beginthreadex(0, stackSize, EAThreadEntryWrapped, mpData, 4,
+                                            (unsigned*)&mpData->mnThreadId);
+    if (mpData->mhThread == 0) {
+        if (_InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
+            FUN_00922da0(mpData);
+        if (_InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
+            FUN_00922da0(mpData);
+        mpData = 0;
+        return 0;
+    }
+    if (params != 0)
+        SetName(params->mpName);
+    mpData->mpStartContext2 = mpData->mhThread;
+    if (params != 0) {
+        if (params->mnPriority != 0)
+            SetPriority(params->mnPriority);
+        int proc = params->mnProcessor;
+        if (proc >= 0) {
+            if (proc == _InterlockedExchangeAdd(&g_ThreadCount, 0))
+                _InterlockedExchangeAdd(&g_ThreadCount, 1);
+            SetIdealProcessor(proc);
+            ResumeThread((HANDLE)mpData->mhThread);
+            return mpData->mhThread;
+        }
+    }
+    int proc2 = g_DefaultProcessor;
+    if (g_DefaultProcessor < 0)
+        proc2 = _InterlockedExchangeAdd(&g_ThreadCount, 1) + 1;
+    SetIdealProcessor(proc2);
+    ResumeThread((HANDLE)mpData->mhThread);
+    return mpData->mhThread;
 }

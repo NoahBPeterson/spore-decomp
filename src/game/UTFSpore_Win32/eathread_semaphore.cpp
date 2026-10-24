@@ -9,6 +9,12 @@
 #include <intrin.h>
 #include <windows.h>
 
+// The original EA code calls the kernel32 entry points, not the compiler intrinsics.
+#undef InterlockedCompareExchange
+#undef InterlockedExchangeAdd
+extern "C" __declspec(dllimport) LONG __stdcall InterlockedCompareExchange(volatile LONG*, LONG, LONG);
+extern "C" __declspec(dllimport) LONG __stdcall InterlockedExchangeAdd(volatile LONG*, LONG);
+
 // ---- items of slice s00922500 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int uint32;
 namespace EA {
@@ -70,7 +76,7 @@ void EASemaphoreData::UpdateCancelCount(int n)
             int ex = cmp + n;
             if (ex > 0)
                 ex = 0;
-            LONG old = _InterlockedCompareExchange((volatile long*)&mnCount, ex, cmp);
+            LONG old = InterlockedCompareExchange((volatile LONG*)&mnCount, ex, cmp);
             if (old == cmp) {
                 n = n + (old - ex);
                 break;
@@ -80,7 +86,7 @@ void EASemaphoreData::UpdateCancelCount(int n)
                 break;
         }
         if (n > 0)
-            _InterlockedExchangeAdd((volatile long*)&mnCancelCount, n);
+            InterlockedExchangeAdd((volatile LONG*)&mnCancelCount, n);
     }
 }
 
