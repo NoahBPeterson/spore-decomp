@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e282d0/s00e282d0.cpp  ?Init@cPropertyDoc@@QAEPAU1@PAXPAI@Z  00e28a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e282d0/s00e282d0.cpp  ?DtorBody@cPropertyDoc@@QAEXXZ  00e28a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e282d0/s00e282d0.cpp  ?DeletingDtor@cPropertyDoc@@QAEPAXE@Z  00e28ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e282d0/s00e282d0.cpp  ?FUN_00e28be0@@YAXPAXPAUVariant@@1@Z  00e28be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e282d0/s00e282d0.cpp  ?FUN_00e28d60@@YAXPAXPAUVariant@@1@Z  00e28d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e282d0/s00e282d0.cpp  ?RefreshInt@cPropertyBinding@@QAE_NPAUVariant@@@Z  00e28df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
