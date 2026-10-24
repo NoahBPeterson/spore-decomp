@@ -84,10 +84,6 @@ extern int   DAT_0170a6b4;
 extern "C" {
 void  FUN_004746c0(int n, void* p);
 void  FUN_004cea40(void* dst, uint n, void* value);
-void  FUN_0041ebe0(int* p);
-void  FUN_007b00d0();
-void  FUN_007b0fa0(int a, int b);
-int   FUN_007b1e70(int a, int b);
 int   FUN_0071ddc0(int a, int b, int c, int d, int e);
 void  FUN_006dec60(int obj, float f);
 char  FUN_006de710(int obj);
@@ -103,7 +99,7 @@ struct Elem16VecMem {
 };
 void  VecBoolDoInsertValue(void* a, void* b, int c);
 void  ThreadSleep(void* p);
-void  operator_delete__(void* p);
+void  FUN_00f47380(void* p);
 void  QuickSortCRExtern(void* first, void* last, int cmp);
 }
 
@@ -404,13 +400,29 @@ int ChartSet::RectPackCharts(int flag) {
 // ---------------------------------------------------------------------------
 // @ 0x006e09d0  SP::RectPackCharts
 // ---------------------------------------------------------------------------
+// 0x7b00d0 is the constructor and 0x7b0fa0 (C20::AddNode) / 0x7b1e70 are methods of a C20 node
+// pool that the original keeps on the stack (all three calls get the same frame slot in ecx).
+// The pool owns two EASTL vectors: (begin,end,capacity) at +0 and at +0x14.
+struct C20Pool {
+    void* mBegin;                       // +0x00  node array
+    void* mEnd;                         // +0x04
+    void* mCapacity;                    // +0x08
+    int   mPad0c;                       // +0x0c
+    int   mPad10;                       // +0x10
+    void* mBegin2;                      // +0x14  second node array
+    void* mEnd2;                        // +0x18
+    void* mCapacity2;                   // +0x1c
+    void FUN_007b00d0();                // @ 0x7b00d0 (ctor)
+    void FUN_007b0fa0(int a, int b);    // @ 0x7b0fa0 (C20::AddNode)
+    int  FUN_007b1e70(int a, int b);    // @ 0x7b1e70
+};
+
 void SP_RectPackCharts(int* param_1, int* param_2, float param_3, int param_4) {
     uint local_74 = 0;
-    int local_48 = 0;
-    int local_34 = 0;
-    FUN_007b00d0();
+    C20Pool pool;
+    pool.FUN_007b00d0();
     float fVar17 = (float)param_4;
-    FUN_007b0fa0(param_4, param_4);
+    pool.FUN_007b0fa0(param_4, param_4);
 
     int first = *param_2;
     param_3 = 1.0f / param_3;
@@ -480,7 +492,7 @@ void SP_RectPackCharts(int* param_1, int* param_2, float param_3, int param_4) {
                 float sc = *(float*)(o + 0x28) *
                            ((0.9f - f16 * 0.01f) / ((fVar19 + fVar20) + fVar18));
                 *(float*)(o + 0x30) = sc;
-                int r = FUN_007b1e70(
+                int r = pool.FUN_007b1e70(
                     (int)(((*(float*)(o + 0x18) - *(float*)(o + 0x10)) * sc) * fVar17 + 0.5f),
                     (int)(((*(float*)(o + 0x1c) - *(float*)(o + 0x14)) * fVar17) * sc + 0.5f));
                 *(int*)(o + 0x2c) = r;
@@ -500,7 +512,7 @@ void SP_RectPackCharts(int* param_1, int* param_2, float param_3, int param_4) {
         uint off = 0;
         do {
             uint* pu = (uint*)(*param_2 + off);
-            int* pi = (int*)(pu[0xb] * 0x20 + local_48);
+            int* pi = (int*)(pu[0xb] * 0x20 + (int)pool.mBegin);
             int i12 = *pi;
             int i11 = pi[1];
             int i9 = FUN_0071ddc0(*(int*)(*param_1 + pu[3] * 4), 8, 1, 2, 0xe);
@@ -531,10 +543,10 @@ void SP_RectPackCharts(int* param_1, int* param_2, float param_3, int param_4) {
     }
 
 done:
-    if (local_34 != 0 && *(int*)(local_34 - 4) != 0)
-        operator_delete__((void*)local_34);
-    if (local_48 != 0 && *(int*)(local_48 - 4) != 0)
-        operator_delete__((void*)local_48);
+    if (pool.mBegin2 != 0 && *(int*)((char*)pool.mBegin2 - 4) != 0)
+        FUN_00f47380((void*)pool.mBegin2);
+    if (pool.mBegin != 0 && *(int*)((char*)pool.mBegin - 4) != 0)
+        FUN_00f47380((void*)pool.mBegin);
 }
 
 // ---------------------------------------------------------------------------
@@ -559,12 +571,18 @@ void Elem16VecMem::Resize(uint n) {
 // ---------------------------------------------------------------------------
 // @ 0x006e0ea0
 // ---------------------------------------------------------------------------
+// 0x41ebe0 is a thiscall on the object embedded at context+4; the vertex array it resizes is
+// the Elem16 vector at context+0x18.
+struct ChartBase41 {
+    void FUN_0041ebe0(int* list);       // @ 0x41ebe0
+};
+
 void ChartSet::FillVertices(int* list) {
     int* self = (int*)this;
     *(char*)self = 1;
     *(int*)((char*)self + 0x230) = 0;
-    FUN_0041ebe0(list);
-    ((Elem16VecMem*)list)->Resize((list[1] - *list) >> 2);
+    ((ChartBase41*)((char*)self + 4))->FUN_0041ebe0(list);
+    ((Elem16VecMem*)((char*)self + 0x18))->Resize((list[1] - *list) >> 2);
     int i = 0;
     int n = list[1] - *list >> 2;
     if (0 < n) {

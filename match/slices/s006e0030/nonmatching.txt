@@ -1,7 +1,7 @@
 # va  diff-bytes  reason (complete, not byte-exact)
 006e0030  1042  chart vertical-span builder; all scanline/ABS branches, the two clamped raster loops and the max pass translated, vector<bool> helper and float ROUND schedule differ
 006e04d0  n/a  rect-pack charts; weighted-area accumulation, 0x20-iteration retry loop, UV scale/bias and zeroing paths all present (transliterated), register/helper schedule differs; equiv: UNSUPPORTED (0/1200 valid inputs; now ChartSet member for ECX this)
-006e09d0  958  SP::RectPackCharts; area scaling, quick_sort, fit-retry loop and UV snap/transform translated, EH frame and scheduling differ
+006e09d0  969  SP::RectPackCharts: complete, equivalence WEAK (95 valid inputs, 35.1% coverage, 0 mismatches). 0x7b00d0/0x7b0fa0/0x7b1e70 are three thiscall methods of one C20 node pool the original keeps on the stack; the pool owns two EASTL vectors at +0 and +0x14 and its two begin pointers are released through 0xf47380 at the end, which is what the pool-memory comparison caught. EH frame and scheduling still differ.
 006e0e00  n/a  Elem16 vector resize; grow (FUN_006dfd90) and shrink (FUN_006dfca0) paths both present, helper ABI approximated; equiv: PASS (785 valid, 100% coverage)
-006e0ea0  219  chart vertex fill; per-element model copy incl. intrusive-ptr assign translated, schedule/vtable anchor differs; equiv: FAIL (5/5 valid inputs mismatched, execution)
+006e0ea0  215  chart vertex fill: complete, equivalence WEAK (102 valid inputs, 39.5% coverage, 0 mismatches). 0x41ebe0 is a thiscall on the object embedded at context+4 (not on the context itself) and the resized Elem16 vector lives at context+0x18; the per-element model copy incl. intrusive-ptr assign is translated, schedule/vtable anchor differs.
 006e0f90  26  visit-all-charts + virtual dispatch; identical nesting/offsets, register assignment differs
