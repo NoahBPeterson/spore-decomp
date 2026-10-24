@@ -3,6 +3,7 @@
 
 #include <intrin.h>
 #include <math.h>
+#include <xmmintrin.h>
 
 const char *const ALLOC_PATH =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
@@ -11,7 +12,94 @@ extern int DAT_0153b208[];
 extern float DAT_01634510;
 extern float DAT_01634514;
 extern float DAT_01634518;
-extern int DAT_01634650;
+extern float DAT_01634650[9];
+
+// ----------------------------------------------------------------------------------------------
+// Split-transform combine (0079a0d0): `combine` folds a source transform into a destination one.
+// ----------------------------------------------------------------------------------------------
+struct SplitSource {
+    unsigned int flags;         // +0x00  bit1: orientation, bit2: offset
+    float    offset[3];         // +0x04
+    float    scale;             // +0x10
+    float    matrix[9];         // +0x14  row-major 3x3
+};
+
+struct SplitState {
+    unsigned int flags;         // +0x00  bit0: fold the source scale, bit1: fold the orientation
+    unsigned char orientFlags;  // +0x04  bit1: orientation, bit2: position
+    unsigned char pad05[3];
+    float    position[3];       // +0x08
+    float    scaleFactor;       // +0x14
+    float    matrix[9];         // +0x18  row-major 3x3
+    unsigned short mask;        // +0x3c  fields folded so far
+    unsigned short count;       // +0x3e
+    float    outPosition[3];    // +0x40
+    float    outScale;          // +0x4c
+    float    outMatrix[9];      // +0x50
+    SplitState * __thiscall combine(const SplitSource *src);
+};
+
+// ----------------------------------------------------------------------------------------------
+// EASTL vector storage (begin / end / capacity) of the split-transform lists. `reserve` grows the
+// buffer; retail leaves the element count in eax when it returns early and the new capacity-end
+// pointer after a reallocation, so the return value reproduces that.
+// ----------------------------------------------------------------------------------------------
+struct SplitElem20Vector {      // 20-byte elements (0079a4f0)
+    void *mBegin;               // +0x00
+    void *mEnd;                 // +0x04
+    void *mCapacityEnd;         // +0x08
+    void * __thiscall reserve(unsigned int count);
+};
+
+struct SplitElem8Vector {       // 8-byte elements (0079af80)
+    void *mBegin;               // +0x00
+    void *mEnd;                 // +0x04
+    void *mCapacityEnd;         // +0x08
+    void * __thiscall reserve(unsigned int count);
+};
+
+// ----------------------------------------------------------------------------------------------
+// Refcounted objects and the records that own them (0079ac70 / 0079aeb0).
+// ----------------------------------------------------------------------------------------------
+struct SharedObject {           // vtable pointer, then the shared count
+    void **mVtable;             // +0x00
+    int mRefCount;              // +0x04
+};
+
+struct SplitInner {             // destroyed by 0079ac70
+    SharedObject *mOwner;       // +0x00
+    SharedObject *mList;        // +0x04
+    unsigned int pad08[4];      // +0x08
+    void *mBufferBegin;         // +0x18
+    void *mBufferEnd;           // +0x1c
+    void *mBufferCapacityEnd;   // +0x20
+    unsigned int pad24[7];      // +0x24
+    void __thiscall destroy();
+};
+
+struct SplitRecord {            // torn down by 0079aeb0
+    SharedObject *mOwner;       // +0x00
+    SharedObject *mResource;    // +0x04
+    SplitInner mInner;          // +0x08
+    void *mBufferBegin;         // +0x48
+    void *mBufferEnd;           // +0x4c
+    unsigned int pad50;         // +0x50
+    void __thiscall destroy();
+};
+
+// Drop a shared reference; the last owner calls the object's first vtable slot with `delete`.
+static __forceinline void ReleaseShared(SharedObject *object)
+{
+    if (object == 0) {
+        return;
+    }
+    int refs = object->mRefCount;
+    object->mRefCount = refs - 1;
+    if (refs == 1) {
+        object->mRefCount = 1;
+        ((void (__thiscall *)(SharedObject *, int))object->mVtable[0])(object, 1);
+    }
+}
 
 extern int V_13ebc60;
 extern int V_140f580;
@@ -20,11 +108,19 @@ extern int V_140f58c;
 extern int V_13ef094;
 
 extern int FUN_00f473a0(...);
-extern int FUN_00f47380(...);
+extern void FUN_00f47380(void *block);
 extern int FUN_011e0744(...);
-extern int FUN_01023030(...);
+extern void __stdcall FUN_01023030(void *begin, void *end);   // SP::nSpaceCheats::vector_dtor_IntVector
 extern int FUN_00537dc0(...);
 extern int FUN_008def80(...);
+
+// EASTL's debug heap keeps a 4-byte marker in front of every block; 0 means "never allocated".
+static __forceinline void FreeDebugBlock(void *block)
+{
+    if ((block != 0) && (((const int *)block)[-1] != 0)) {
+        FUN_00f47380(block);
+    }
+}
 
 extern void FUN_00798e40(int, float, void *, void *, void *);
 extern void FUN_007994d0(int, float, void *, void *, void *);
@@ -119,120 +215,93 @@ void FUN_00799e70(int param_1, int param_2, float param_3, void *param_4, void *
 }
 
 // @ 0x0079a0d0
-void __fastcall FUN_0079a0d0(unsigned char *param_1, unsigned char *param_2)
+SplitState *SplitState::combine(const SplitSource *src)
 {
-    int iVar14;
-    float local_24, local_20, local_1c, local_18, local_14, local_10, local_c, local_8, local_4;
-    float *pfVar16;
-    int *puVar15 = &DAT_01634650;
-    unsigned char *pbVar17 = param_1 + 0x50;
-    for (iVar14 = 9; iVar14 != 0; iVar14 = iVar14 + -1) {
-        *(int *)pbVar17 = *puVar15;
-        puVar15 = puVar15 + 1;
-        pbVar17 = pbVar17 + 4;
+    const float *mat = matrix;
+    const float *srcMat = src->matrix;
+    float product[9];
+    int i;
+    for (i = 0; i != 9; i = i + 1) {
+        outMatrix[i] = DAT_01634650[i];
     }
-    param_1[0x4c] = 0;
-    param_1[0x4d] = 0;
-    param_1[0x4e] = 0x80;
-    param_1[0x4f] = 0x3f;
-    *(int *)(param_1 + 0x40) = *(int *)&DAT_01634510;
-    *(int *)(param_1 + 0x44) = *(int *)&DAT_01634514;
-    *(int *)(param_1 + 0x48) = *(int *)&DAT_01634518;
-    *(short *)(param_1 + 0x3e) = 0;
-    *(short *)(param_1 + 0x3c) = 0;
-    int uVar13 = *(int *)(param_2 + 0x10);
-    *(short *)(param_1 + 0x3e) = *(short *)(param_1 + 0x3e) + 1;
-    *(int *)(param_1 + 0x4c) = uVar13;
-    if ((*param_1 & 1) != 0) {
-        *(unsigned short *)(param_1 + 0x3c) = *(unsigned short *)(param_1 + 0x3c) | 1;
-        *(short *)(param_1 + 0x3e) = *(short *)(param_1 + 0x3e) + 1;
-        *(float *)(param_1 + 0x4c) = *(float *)(param_1 + 0x14) * *(float *)(param_1 + 0x4c);
+    outScale = 1.0f;
+    outPosition[0] = DAT_01634510;
+    outPosition[1] = DAT_01634514;
+    outPosition[2] = DAT_01634518;
+    count = 0;
+    mask = 0;
+    outScale = src->scale;
+    count = count + 1;
+    if ((flags & 1) != 0) {
+        outScale = scaleFactor * outScale;
+        mask = mask | 1;
+        count = count + 1;
     }
-    if (((param_1[4] >> 2) & 1) != 0) {
-        *(int *)(param_1 + 0x40) = *(int *)(param_1 + 8);
-        *(int *)(param_1 + 0x44) = *(int *)(param_1 + 0xc);
-        *(unsigned short *)(param_1 + 0x3c) = *(unsigned short *)(param_1 + 0x3c) | 4;
-        *(short *)(param_1 + 0x3e) = *(short *)(param_1 + 0x3e) + 1;
-        *(int *)(param_1 + 0x48) = *(int *)(param_1 + 0x10);
+    if ((orientFlags & 4) != 0) {
+        outPosition[0] = position[0];
+        outPosition[1] = position[1];
+        outPosition[2] = position[2];
+        mask = mask | 4;
+        count = count + 1;
     }
-    if (((*param_1 & 2) != 0) && (((*param_2 >> 2) & 1) != 0)) {
-        float fVar1 = *(float *)(param_2 + 8);
-        float fVar2 = *(float *)(param_2 + 0xc);
-        *(float *)(param_1 + 0x40) = *(float *)(param_1 + 0x40) + *(float *)(param_2 + 4);
-        *(float *)(param_1 + 0x44) = fVar1 + *(float *)(param_1 + 0x44);
-        *(float *)(param_1 + 0x48) = fVar2 + *(float *)(param_1 + 0x48);
-        *(unsigned short *)(param_1 + 0x3c) = *(unsigned short *)(param_1 + 0x3c) | 4;
-        *(short *)(param_1 + 0x3e) = *(short *)(param_1 + 0x3e) + 1;
+    if (((flags & 2) != 0) && ((src->flags & 4) != 0)) {
+        outPosition[0] = outPosition[0] + src->offset[0];
+        outPosition[1] = src->offset[1] + outPosition[1];
+        outPosition[2] = src->offset[2] + outPosition[2];
+        mask = mask | 4;
+        count = count + 1;
     }
-    if (((*param_1 >> 1) & 1) == 0) {
-        if (((*param_2 >> 1) & 1) == 0) return;
-        pfVar16 = (float *)(param_2 + 0x14);
-    } else if (((*param_2 >> 1) & 1) == 0) {
-        pfVar16 = (float *)(param_1 + 0x18);
+    if ((orientFlags & 2) == 0) {
+        if ((src->flags & 2) == 0) {
+            return this;
+        }
+        mat = srcMat;
+    } else if ((src->flags & 2) == 0) {
+        mat = matrix;
     } else {
-        float fVar1 = *(float *)(param_1 + 0x1c);
-        float fVar2 = *(float *)(param_2 + 0x20);
-        float fVar3 = *(float *)(param_2 + 0x14);
-        float fVar4 = *(float *)(param_2 + 0x2c);
-        local_24 = (fVar3 * *(float *)(param_1 + 0x18) + fVar2 * fVar1) +
-                   fVar4 * *(float *)(param_1 + 0x20);
-        float fVar5 = *(float *)(param_2 + 0x30);
-        float fVar6 = *(float *)(param_2 + 0x24);
-        float fVar7 = *(float *)(param_2 + 0x18);
-        float fVar8 = *(float *)(param_2 + 0x34);
-        local_20 = (fVar7 * *(float *)(param_1 + 0x18) + fVar6 * fVar1) +
-                   fVar5 * *(float *)(param_1 + 0x20);
-        float fVar9 = *(float *)(param_2 + 0x28);
-        float fVar10 = *(float *)(param_2 + 0x1c);
-        local_1c = (fVar10 * *(float *)(param_1 + 0x18) + fVar9 * fVar1) +
-                   fVar8 * *(float *)(param_1 + 0x20);
-        local_18 = (fVar3 * *(float *)(param_1 + 0x24) + fVar2 * *(float *)(param_1 + 0x28)) +
-                   fVar4 * *(float *)(param_1 + 0x2c);
-        local_14 = (fVar7 * *(float *)(param_1 + 0x24) + fVar6 * *(float *)(param_1 + 0x28)) +
-                   fVar5 * *(float *)(param_1 + 0x2c);
-        local_10 = (fVar10 * *(float *)(param_1 + 0x24) + fVar9 * *(float *)(param_1 + 0x28)) +
-                   fVar8 * *(float *)(param_1 + 0x2c);
-        fVar1 = *(float *)(param_1 + 0x34);
-        float fVar11 = *(float *)(param_1 + 0x30);
-        float fVar12 = *(float *)(param_1 + 0x38);
-        local_c = (fVar3 * fVar11 + fVar2 * fVar1) + fVar4 * fVar12;
-        local_8 = (fVar7 * fVar11 + fVar6 * fVar1) + fVar5 * fVar12;
-        local_4 = (fVar10 * fVar11 + fVar9 * fVar1) + fVar8 * fVar12;
-        pfVar16 = &local_24;
+        // retail multiplies with scalar SSE: (a0*b0 + a1*b1) + a2*b2, so the rounding of the
+        // source's per-column products is reproduced only with the _mm_*_ss intrinsics.
+        for (i = 0; i != 3; i = i + 1) {
+            __m128 c0 = _mm_set_ss(srcMat[i]);
+            __m128 c1 = _mm_set_ss(srcMat[3 + i]);
+            __m128 c2 = _mm_set_ss(srcMat[6 + i]);
+            for (int row = 0; row != 3; row = row + 1) {
+                __m128 p = _mm_mul_ss(c0, _mm_set_ss(matrix[row * 3]));
+                p = _mm_add_ss(p, _mm_mul_ss(c1, _mm_set_ss(matrix[row * 3 + 1])));
+                p = _mm_add_ss(p, _mm_mul_ss(c2, _mm_set_ss(matrix[row * 3 + 2])));
+                product[row * 3 + i] = _mm_cvtss_f32(p);
+            }
+        }
+        mat = product;
     }
-    float *pfVar18 = (float *)(param_1 + 0x50);
-    for (iVar14 = 9; iVar14 != 0; iVar14 = iVar14 + -1) {
-        *pfVar18 = *pfVar16;
-        pfVar16 = pfVar16 + 1;
-        pfVar18 = pfVar18 + 1;
+    for (i = 0; i != 9; i = i + 1) {
+        outMatrix[i] = mat[i];
     }
-    *(unsigned short *)(param_1 + 0x3c) = *(unsigned short *)(param_1 + 0x3c) | 2;
-    *(short *)(param_1 + 0x3e) = *(short *)(param_1 + 0x3e) + 1;
-    return;
+    mask = mask | 2;
+    count = count + 1;
+    return this;
 }
 
 // @ 0x0079a4f0
-void __fastcall FUN_0079a4f0(int *param_1, unsigned int param_2)
+void *SplitElem20Vector::reserve(unsigned int count)
 {
-    int iVar1;
-    int _Dst;
-    if ((unsigned int)((param_1[2] - *param_1) / 0x14) < param_2) {
-        if (param_2 == 0) {
-            _Dst = 0;
-        } else {
-            _Dst = FUN_00f473a0(param_2 * 0x14, "Graphics", 0, 0, ALLOC_PATH, 0xd1);
-        }
-        FUN_011e0744(_Dst, *param_1, param_1[1] - *param_1, 0);
-        iVar1 = *param_1;
-        if ((iVar1 != 0) && (*(int *)(iVar1 - 4) != 0)) {
-            FUN_00f47380(iVar1);
-        }
-        iVar1 = *param_1;
-        *param_1 = _Dst;
-        param_1[1] = _Dst + ((param_1[1] - iVar1) / 0x14) * 0x14;
-        param_1[2] = _Dst + param_2 * 0x14;
+    unsigned int capacity = (unsigned int)(((char *)mCapacityEnd - (char *)mBegin) / 20);
+    if (capacity >= count) {
+        return (void *)capacity;
     }
-    return;
+    char *fresh = 0;
+    if (count != 0) {
+        fresh = (char *)FUN_00f473a0(count * 20, "Graphics", 0, 0, ALLOC_PATH, 0xd1);
+    }
+    FUN_011e0744(fresh, mBegin, (int)((char *)mEnd - (char *)mBegin));
+    // retail re-reads the storage after the copy: a source pointer that aliases the vector
+    // itself makes the copy move the object, not just its elements
+    FreeDebugBlock(mBegin);
+    unsigned int used = (unsigned int)(((char *)mEnd - (char *)mBegin) / 20);
+    mBegin = fresh;
+    mEnd = fresh + used * 20;
+    mCapacityEnd = fresh + count * 20;
+    return mCapacityEnd;
 }
 
 // @ 0x0079a5a0
@@ -440,30 +509,16 @@ int *FUN_0079ac10(int param_1, int param_2)
 }
 
 // @ 0x0079ac70
-void __fastcall FUN_0079ac70(int *param_1)
+void SplitInner::destroy()
 {
-    FUN_01023030(param_1[6], param_1[7]);
-    int iVar2 = param_1[6];
-    if ((iVar2 != 0) && (*(int *)(iVar2 - 4) != 0)) {
-        FUN_00f47380(iVar2);
-    }
-    iVar2 = param_1[1];
-    if ((iVar2 != 0) && (*(int *)(iVar2 - 4) != 0)) {
-        FUN_00f47380(iVar2);
-    }
-    int *puVar3 = (int *)*param_1;
-    if (puVar3 != 0) {
-        long *piVar1 = (long *)(puVar3 + 1);
-        int iVar4 = (int)*piVar1;
-        *piVar1 = *piVar1 + -1;
-        if (iVar4 == 1) {
-            *piVar1 = 1;
-            if (puVar3 != 0) {
-                (*(void (__thiscall **)(int *, int)) * puVar3)(puVar3, 1);
-            }
-        }
-    }
-    return;
+    SplitInner *const self = this;
+    FUN_01023030(mBufferBegin, mBufferEnd);
+    FreeDebugBlock(mBufferBegin);
+    FreeDebugBlock(mList);
+    ReleaseShared(mOwner);
+    // retail brackets the body with push ecx / pop ecx (stack scratch), so the caller's ecx holds
+    // the incoming `this` again when the function returns
+    __asm { mov ecx, self }
 }
 
 // @ 0x0079ae60
@@ -480,62 +535,38 @@ int __stdcall FUN_0079ae60(int param_1, void *param_2, int param_3)
 }
 
 // @ 0x0079aeb0
-void __fastcall FUN_0079aeb0(int *param_1)
+void SplitRecord::destroy()
 {
-    FUN_01023030(param_1[0x12], param_1[0x13]);
-    int iVar2 = param_1[0x12];
-    if ((iVar2 != 0) && (*(int *)(iVar2 - 4) != 0)) {
-        FUN_00f47380(iVar2);
-    }
-    FUN_0079ac70(param_1 + 2);
-    int *puVar3 = (int *)param_1[1];
-    if (puVar3 != 0) {
-        long *piVar1 = (long *)(puVar3 + 1);
-        int iVar4 = (int)*piVar1;
-        *piVar1 = *piVar1 + -1;
-        if (iVar4 == 1) {
-            *piVar1 = 1;
-            if (puVar3 != 0) {
-                (*(void (__thiscall **)(int *, int)) * puVar3)(puVar3, 1);
-            }
-        }
-    }
-    puVar3 = (int *)*param_1;
-    if (puVar3 != 0) {
-        long *piVar1 = (long *)(puVar3 + 1);
-        int iVar4 = (int)*piVar1;
-        *piVar1 = *piVar1 + -1;
-        if (iVar4 == 1) {
-            *piVar1 = 1;
-            if (puVar3 != 0) {
-                (*(void (__thiscall **)(int *, int)) * puVar3)(puVar3, 1);
-            }
-        }
-    }
-    return;
+    FUN_01023030(mBufferBegin, mBufferEnd);
+    FreeDebugBlock(mBufferBegin);
+    mInner.destroy();
+    ReleaseShared(mResource);
+    ReleaseShared(mOwner);
 }
 
 // @ 0x0079af80
-void __fastcall FUN_0079af80(int *param_1, unsigned int param_2)
+void *SplitElem8Vector::reserve(unsigned int count)
 {
-    if ((unsigned int)(param_1[2] - *param_1) >> 3 < param_2) {
-        int iVar3;
-        if (param_2 == 0) iVar3 = 0;
-        else iVar3 = FUN_00f473a0(param_2 * 8, "Graphics", 0, 0, ALLOC_PATH, 0xd1);
-        int iVar1 = param_1[1];
-        int iVar2 = *param_1;
-        FUN_007992e0((int *)iVar2, (int *)iVar1, (int *)iVar3);
-        FUN_008def80((void *)iVar2, (void *)iVar1, (void *)iVar3);
-        iVar1 = *param_1;
-        if ((iVar1 != 0) && (*(int *)(iVar1 - 4) != 0)) {
-            FUN_00f47380(iVar1);
-        }
-        iVar1 = *param_1;
-        *param_1 = iVar3;
-        param_1[1] = iVar3 + ((param_1[1] - iVar1) >> 3) * 8;
-        param_1[2] = iVar3 + param_2 * 8;
+    // retail shifts the byte difference (8-byte elements) instead of dividing, so a garbage
+    // storage range (capacity end below begin) rounds towards -inf
+    unsigned int capacity = (unsigned int)((int)((char *)mCapacityEnd - (char *)mBegin) >> 3);
+    if (capacity >= count) {
+        return (void *)count;
     }
-    return;
+    char *fresh = 0;
+    if (count != 0) {
+        fresh = (char *)FUN_00f473a0(count * 8, "Graphics", 0, 0, ALLOC_PATH, 0xd1);
+    }
+    FUN_007992e0((int *)mBegin, (int *)mEnd, (int *)fresh);
+    FUN_008def80(mBegin, mEnd, fresh);
+    // retail re-reads the storage after the copy: a source pointer that aliases the vector
+    // itself makes the copy move the object, not just its elements
+    FreeDebugBlock(mBegin);
+    unsigned int used = (unsigned int)(((char *)mEnd - (char *)mBegin) / 8);
+    mBegin = fresh;
+    mEnd = fresh + used * 8;
+    mCapacityEnd = fresh + count * 8;
+    return mEnd;                // retail leaves the new end pointer in eax on this path
 }
 // --- equivalence checker address annotations
 
