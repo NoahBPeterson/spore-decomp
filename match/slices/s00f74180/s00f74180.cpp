@@ -330,9 +330,15 @@ void ApplyLoopBox(cEffectObject* effect, cParticlesDescription* desc, Vector3* p
         *alpha = SampleCurve(desc->mLoopBoxAlphaCurve.mpBegin,
                              desc->mLoopBoxAlphaCurve.size() - 1, t) * *alpha;
 
-    pos->x = origin.x + (box.mMin.x + (box.mMax.x - box.mMin.x) * fx);
-    pos->y = origin.y + (box.mMin.y + (box.mMax.y - box.mMin.y) * fy);
-    pos->z = origin.z + (box.mMin.z + (box.mMax.z - box.mMin.z) * fz);
+    Vector3 result;
+    result.x = origin.x + (box.mMin.x + (box.mMax.x - box.mMin.x) * fx);
+    result.y = origin.y + (box.mMin.y + (box.mMax.y - box.mMin.y) * fy);
+    result.z = origin.z + (box.mMin.z + (box.mMax.z - box.mMin.z) * fz);
+    *pos = result;
+    // The original hands the computed frame vector's x component back in eax (a hidden
+    // return value: the routine is declared void, but LTCG callers may still read eax).
+    u32 eaxOut = *(const u32*)&result.x;
+    __asm { mov eax, eaxOut }
 }
 
 // @ 0x00f74480
