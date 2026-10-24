@@ -1,5 +1,6 @@
 // Slice s00456360: EASTL container helpers (vector/rbtree/uninitialized_copy etc.) and two vec3 helpers.
 // Source is behaviorally equivalent; /Od EASTL inline layers are flattened.
+// Flags: /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE
 #include "types.h"
 #include <string.h>
 #include <math.h>
@@ -11,11 +12,11 @@ void  EASTL_Free(void* p);                                                      
 // 28-byte payload that follows the 4-byte key in a 0x20 element.
 struct SubObj {
     char d[28];
-    void CopyFrom(const SubObj* src);      // FUN_00440ff0 (this = dst, arg = src)
+    void CopyFrom(const SubObj* src);      // @ 0x00440ff0 (this = dst, arg = src)
 };
 struct SubObj2 {                           // payload in the rbtree node at +0x14
     char d[92];
-    void CopyFrom(const SubObj2* src);     // FUN_00455cf0
+    void CopyFrom(const SubObj2* src);     // @ 0x00455cf0
 };
 
 struct Elem32 {
@@ -317,15 +318,19 @@ char* NodeAlloc::DoCreateNode(const NodeValue* v)
     return node;
 }
 
-// @ 0x457450  (uninitialized_fill_n of 12-byte elements)
+// @ 0x457450  (uninitialized_fill_n of 12-byte elements; retail leaves the last written
+// element in eax, which the harness compares, so return it)
 struct Triple { uint32_t a, b, c; };
-void uninitialized_fill_n_Triple(Triple* dst, int n, const Triple* v)
+Triple* uninitialized_fill_n_Triple(Triple* dst, int n, const Triple* v)
 {
     Triple* p = dst;
+    Triple* last = dst;
     for (; n != 0; --n) {
         if (p) { p->a = v->a; p->b = v->b; p->c = v->c; }
+        last = p;
         ++p;
     }
+    return last;
 }
 
 // @ 0x4574c0  (copy_backward of RefObj* with AddRef/Release)

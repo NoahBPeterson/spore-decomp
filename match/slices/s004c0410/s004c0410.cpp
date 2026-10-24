@@ -3,8 +3,12 @@
 #include "types.h"
 
 // 004c0410  resize a pointer-range container (element stride is implicit in the args).
-extern void FUN_004c10e0(void* dst, int n, void* def);   // 0x4c10e0
-extern void FUN_00514750(void* first, void* last);       // 0x514750
+// The callees are thiscall members of the same vector object (the original sets ecx = this
+// before each call), so declare them as members so cl emits the thiscall sequence.
+struct VecOps {
+    void FUN_004c10e0(void* end, int n, void* value);   // 0x4c10e0
+    void FUN_00514750(void* first, void* last);         // 0x514750
+};
 
 struct VecPtr { int m[4]; void FUN_004c0410(uint32_t n); };
 // @ 0x004c0410
@@ -12,9 +16,9 @@ void VecPtr::FUN_004c0410(uint32_t n) {
     int* self = (int*)this;
     if ((uint32_t)(self[1] - self[0]) < n) {
         char local_5 = 0;
-        FUN_004c10e0((void*)self[1], n - (self[1] - self[0]), &local_5);
+        ((VecOps*)this)->FUN_004c10e0((void*)self[1], (int)(n - (self[1] - self[0])), &local_5);
     } else {
-        FUN_00514750((void*)(self[0] + n), (void*)self[1]);
+        ((VecOps*)this)->FUN_00514750((void*)(self[0] + n), (void*)self[1]);
     }
 }
 
@@ -61,13 +65,17 @@ Elem38* Container::FUN_004c0730(Elem38* first, Elem38* last) {
     }
     for (Elem38* p = dst; p < (Elem38*)mEnd; p = (Elem38*)((char*)p + 0x38)) {
     }
-    mEnd = (int*)((char*)mEnd - ((char*)last - (char*)first));
+    // Retail rounds the byte delta down to whole 0x38-byte elements (idiv then imul).
+    int nMove = (int)((char*)last - (char*)first) / (int)sizeof(Elem38);
+    mEnd = (int*)((char*)mEnd - nMove * 0x38);
     (void)bOutputIsPointer; (void)bInputIsPointer; (void)bHasTrivialCopy;
     return first;
 }
 
 // 004c0570  initialize an XML text writer with a 0x400-byte inline buffer.
-extern void FUN_0042bfa0(uint32_t a, uint32_t* b);   // 0x42bfa0
+struct WriterOps {
+    void FUN_0042bfa0(uint32_t a, uint32_t* b);   // 0x42bfa0
+};
 extern void EASTL_allocator_deallocate(void* p);     // 0xf47380
 
 struct StrWriter {
@@ -92,7 +100,7 @@ int* StrWriter::Init(uint32_t a, uint32_t b) {
     mBegin = mEnd;
     mCapacity = (int*)((char*)mBegin + 0x400);
     uint32_t local_18 = b;
-    FUN_0042bfa0(a, &local_18);
+    ((WriterOps*)this)->FUN_0042bfa0(a, &local_18);
     (void)local_14;
     return (int*)this;
 }

@@ -56,11 +56,17 @@ int __cdecl GridCellRects(int size, const int* cell, int radius, int* out);
 
 extern const unsigned char g_faceAxes[];     // 0x014653b8: 4 bytes per face pair
 
+// Start of the per-cell normal accumulation (see RayCellNormal).
+extern const float g_cellAccumX;              // 0x016881f0
+extern const float g_cellAccumY;              // 0x016881f4
+extern const float g_cellAccumZ;              // 0x016881f8
+
 static const float kMaxDist = 500.0f;     // address taken below, so it gets its own storage
 
 class cPlanetModel {
 public:
     bool RayCast(const Vec3* pos, float maxDist, Vec3* out, float step, bool wantFlag, unsigned minVal);
+    bool RayCellNormal(const Vec3* dir, float maxDist, Vec3* out);
 
     void  Rebuild();                                   // 0x00b87dc0
     Vec3* ToSurface(Vec3* ret, const Vec3* p);         // 0x00b81630 (ret 8)
@@ -240,4 +246,113 @@ bool cPlanetModel::RayCast(const Vec3* pos, float maxDist, Vec3* out, float step
     out->y = k * oy * sea2;
     out->z = k * oz * sea2;
     return true;
+}
+
+// One cell rectangle reported by GridCellRects: `face` selects one of the cube-map faces and
+// [uBegin,uEnd) x [vBegin,vEnd) is the covered cell range on that face.
+struct CellRect {
+    int face;       // cube face (0..5)
+    int vBegin;     // first covered column
+    int uBegin;     // first covered row
+    int vEnd;       // one past the last covered column
+    int uEnd;       // one past the last covered row
+};
+
+// @ 0x00b88f60
+//
+// Walks every planet-grid cell within `maxDist` of the ray `dir` (from the planet centre) and
+// accumulates, for the cells flagged as land, the direction from the cell's point on the unit
+// cube-sphere to the normalised ray direction.  The accumulated direction is written normalised
+// to `out`; the result tells whether any flagged cell was hit at all.
+bool cPlanetModel::RayCellNormal(const Vec3* dir, float maxDist, Vec3* out)
+{
+    if (mDirty) {
+        mDirty = 0;
+        Rebuild();
+    }
+
+    float c[3];
+    c[0] = dir->x;
+    c[1] = dir->y;
+    c[2] = dir->z;
+    float len = (float)sqrt(c[2] * c[2] + (c[0] * c[0] + c[1] * c[1]));
+    if (len <= 1.5258789e-05f)
+        return false;
+
+    float inv = 1.0f / len;
+    int radius = CeilToInt(inv * 128.0f * maxDist);
+    if (radius < 1)
+        radius = 1;
+
+    c[0] = c[0] * inv;
+    c[1] = c[1] * inv;
+    c[2] = c[2] * inv;
+
+    float ax = (float)fabs(c[0]);
+    float ay = (float)fabs(c[1]);
+    float az = (float)fabs(c[2]);
+
+    int cell[3];
+    if (az < ax || az < ay) {
+        if (ay < ax) {
+            cell[0] = FloatToInt((c[1] / c[0] + 1.0f) * 64.0f);
+            cell[1] = FloatToInt((c[2] / ax + 1.0f) * 64.0f);
+            cell[2] = (c[0] < 0.0f) ? 3 : 2;
+        } else {
+            cell[0] = FloatToInt((c[2] / c[1] + 1.0f) * 64.0f);
+            cell[1] = FloatToInt((c[0] / ay + 1.0f) * 64.0f);
+            cell[2] = (c[1] < 0.0f) ? 5 : 4;
+        }
+    } else {
+        cell[0] = FloatToInt((c[0] / c[2] + 1.0f) * 64.0f);
+        cell[1] = FloatToInt((c[1] / az + 1.0f) * 64.0f);
+        cell[2] = (c[2] < 0.0f) ? 1 : 0;
+    }
+    if (cell[0] == 128)
+        cell[0] = 127;
+    if (cell[1] == 128)
+        cell[1] = 127;
+
+    float accX = g_cellAccumX;
+    float accY = g_cellAccumY;
+    float accZ = g_cellAccumZ;
+    bool found = false;
+
+    CellRect rects[5];
+    int n = GridCellRects(128, cell, radius, (int*)rects);
+    for (int i = 0; i < n; ++i) {
+        const CellRect* r = &rects[i];
+        for (int u = r->uBegin; u < r->uEnd; ++u) {
+            for (int v = r->vBegin; v < r->vEnd; ++v) {
+                if ((int)mpCells[(r->face * 128 + u) * 128 + v] < 0) {
+                    unsigned axes = (unsigned)(r->face >> 1) * 4;
+                    float fv = ((float)v + 0.5f) * 0.015625f - 1.0f;
+                    float fu = ((float)u + 0.5f) * 0.015625f - 1.0f;
+                    float t = 1.0f / (float)sqrt(fu * fu + fv * fv + 1.0f);
+                    float s = (r->face & 1) ? -t : t;
+                    float pt[3];
+                    pt[g_faceAxes[axes + 0]] = s * fv;
+                    pt[g_faceAxes[axes + 1]] = t * fu;
+                    pt[g_faceAxes[axes + 2]] = s;
+                    float dx = c[0] - pt[0];
+                    float dy = c[1] - pt[1];
+                    float dz = c[2] - pt[2];
+                    found = true;
+                    float k = 1.0f / (float)sqrt(dx * dx + dz * dz + dy * dy + 1e-08f);
+                    accX = k * dx + accX;
+                    accY = k * dy + accY;
+                    accZ = k * dz + accZ;
+                }
+            }
+        }
+    }
+
+    if (found) {
+        float k = 1.0f / (float)sqrt(accY * accY + (accZ * accZ + accX * accX) + 1e-08f);
+        out->x = k * accX;
+        out->y = k * accY;
+        out->z = k * accZ;
+        return true;
+    }
+    return false;
 }

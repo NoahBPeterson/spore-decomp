@@ -1,4 +1,4 @@
-006c9ab0  884  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006c9e30  833  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006ca180  884  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
-006ca500  851  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
+006c9ab0  884  complete source via shared BakeCore (XF_WEIGHT3/CF_BYTE4); equivalence WEAK (104 valid, 100% cov, no mismatch found); byte diff is cl15 codegen (original SSE-scalar + EH prologue, ours x87, sizes 963 vs 884)
+006c9e30  833  complete source via shared BakeCore (XF_WEIGHT3/CF_USHORT2); equivalence FAIL-KEPT: 1/80 inputs mismatch by exactly 0 ulp (out[1] +0.0 vs -0.0). Out[1] = (1 - scalePair[1]*outA[cos])*k with k=+0.0 read through the aliased params==out buffer; the sign of (1-x) tracks the *uninitialised* outA the original and ours read back from the faked FUN_006c4200 out-parameter, so the difference is a stack-garbage artifact of the faked callee, not a source defect. byte diff is cl15 codegen (901 vs 833)
+006ca180  884  complete source via shared BakeCore (XF_WEIGHT3/CF_USHORT4); equivalence WEAK (25 valid, 100% cov, no mismatch found); byte diff is cl15 codegen (original SSE-scalar + EH prologue, ours x87, sizes 948 vs 884)
+006ca500  851  complete source via shared BakeCore (XF_WEIGHT3/CF_BYTE4); equivalence WEAK (101 valid, 100% cov, no mismatch found); byte diff is cl15 codegen (original SSE-scalar + EH prologue, ours x87, sizes 966 vs 851)

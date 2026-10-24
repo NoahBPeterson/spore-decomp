@@ -1,5 +1,5 @@
-00509f50  245  edge insert into slot map: complete behaviour; /Od schedule differs
-0050a730   40  per-face helper: complete behaviour; /Od frame/argument handling differs
+00509f50  288  edge insert into slot map: pushes a onto the SimpleVector<unsigned> at key+8, then links the two edge slots through mSlots/mIndices and marks the face (mFaceMark[a] = ~*key); /Od register/frame schedule differs; chk diff 288; difftest PASS (631 valid at --inputs 2000, 100% coverage)
+0050a730  293  per-face helper: edge2 = v2-v0, edge1 = v1-v0, cross = edge1 x edge2, dominant absolute axis from AbsV3, sign from the signed cross component; returns axis*2 + (cross[axis] < 0); /Od frame/argument order differs; chk diff 293; difftest PASS (822 valid at --inputs 2000, 100% coverage)
 0050a880   58  component-wise vector abs (x87 fabs): complete behaviour; /Od temporary order differs
-0050a920  127  triangle adjacency test: complete behaviour; /Od bool materialisation differs
+0050a920  162  triangle adjacency test: t = mCornerVerts (vector at +0x6c); compares t[a*3+b] == t[c*3+(d+1)%3] and t[a*3+(b+1)%3] == t[c*3+d] with unsigned modulo; keeps retail's al-only return (the high eax byte is the last comparison value); /Od frame/schedule differs; chk diff 162; difftest PASS (1251 valid at --inputs 2000, 100% coverage)
 0050a9e0  167  record copy-insert: complete behaviour; /Od schedule differs

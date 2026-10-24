@@ -17,6 +17,10 @@ V3* __cdecl AbsV3(V3* out, const V3* in)
     return out;
 }
 
+V3* __cdecl SubV3(V3* out, const V3* a, const V3* b);          // @ 0x0041db10  out = a - b
+V3* __cdecl CrossV3(V3* out, const V3* a, const V3* b);        // @ 0x0044e460  out = a x b
+int __cdecl DominantAxis(const V3* v);                          // @ 0x004fddb0  index of largest component
+
 // ---------------------------------------------------------------------------
 int TableInsert(int self, int idx, uint32_t* key, int slot);   // 0x00509c80
 extern const signed char gCode3[3];                            // 0x013f18d0
@@ -53,6 +57,7 @@ struct VecU {
     unsigned int& operator[](unsigned int i) { return mpBegin[i]; }
     unsigned int* erase(unsigned int* first, unsigned int* last);               // 0x004769b0
     void insert(unsigned int* pos, unsigned int n, const unsigned int& value);  // 0x004cea40
+    void push_back(const unsigned int& v);                                      // @ 0x00454860
     void resize(unsigned int n)                                // 0x004cd3c0
     {
         if (n > size()) {
@@ -127,7 +132,7 @@ struct SlotTable {
     VecV mVerts;            // +0x08
     char pad1c[0x58 - 0x1c];
     VecU mIndices;          // +0x58
-    char pad6c[0x80 - 0x6c];
+    VecU mCornerVerts;      // +0x6c  per-corner vertex index, read by Adjacent
     VecU mEdgeSlots;        // +0x80
     VecU mAdjacent;         // +0x94
     char padA8[0xe4 - 0xa8];
@@ -138,20 +143,14 @@ struct SlotTable {
     VecE mSlots;            // +0x1b8
     char pad1cc[0x200 - 0x1cc];
 
-    // @ 0x00509f50
-    void InsertEdge(int a, int b, uint32_t* key);
-
-    // @ 0x0050a920
-    uint8_t Adjacent(int a, int b, int c, int d);
-
-    // @ 0x0050a730
-    int FaceHelper(int face);
+    void InsertEdge(int a, int b, uint32_t* key);          // @ 0x00509f50
+    uint8_t Adjacent(int a, int b, int c, int d);          // @ 0x0050a920
+    int FaceHelper(int face);                              // @ 0x0050a730
 
     // @ 0x0050a9e0
     void* CopyRecord(void** src);
 
-    // @ 0x00509c80
-    int Insert(int idx, SkinBuildData* key, int slot);
+    int Insert(int idx, SkinBuildData* key, int slot);      // @ 0x00509c80
 
     // @ 0x0052e640
     uint8_t Check(int face, int edge, SkinBuildData* group);
@@ -162,6 +161,8 @@ struct SlotTable {
 
 void SlotTable::InsertEdge(int a, int b, uint32_t* key)
 {
+    unsigned int av = (unsigned int)a;
+    ((VecU*)((char*)key + 8))->push_back(av);
     uint32_t idx = (uint32_t)(a * 3 + b);
     signed char c = gCode3[idx % 3];
     int i = (int)(signed char)gOff3[idx % 3] + (int)idx;
@@ -169,7 +170,7 @@ void SlotTable::InsertEdge(int a, int b, uint32_t* key)
     if (*e == *key)
         *(uint32_t*)(*(int*)((char*)this + 0x80) + i * 4) = e[1];
     else
-        TableInsert((int)this, i, key, -1);
+        Insert(i, (SkinBuildData*)key, -1);
     *(uint32_t*)(*(int*)((char*)this + 0x80) + idx * 4) =
         *(uint32_t*)(*(int*)((char*)this + 0x1b8) + *(int*)(*(int*)((char*)this + 0x58) + idx * 4) * 8 + 4);
     *(uint32_t*)(*(int*)((char*)this + 0x80) + ((int)c + (int)idx) * 4) =
@@ -179,26 +180,36 @@ void SlotTable::InsertEdge(int a, int b, uint32_t* key)
 
 uint8_t SlotTable::Adjacent(int a, int b, int c, int d)
 {
-    int i = d * 3 + (c + 1) % 3;
-    int* t = *(int**)((char*)this + 0x6c);
-    uint8_t result;
-    if (t[(a * 3 + b)] == t[i]) {
-        int j = t[(a * 3 + (b + 1) % 3)];
-        if (j == t[(d * 3 + c)])
-            result = 1;
-        else
-            result = 0;
-    } else {
-        result = 0;
-    }
-    return result;
+    unsigned int x1 = (unsigned int)(a * 3 + b);
+    unsigned int x2 = (unsigned int)(a * 3 + (int)(((unsigned int)b + 1u) % 3u));
+    unsigned int x3 = (unsigned int)(c * 3 + d);
+    unsigned int x4 = (unsigned int)(c * 3 + (int)(((unsigned int)d + 1u) % 3u));
+    unsigned int* t = mCornerVerts.mpBegin;
+    // Retail writes only al; the high byte of eax is whatever the last comparison left there
+    // (index x4 when the first test fails, t[x2] when the second test runs).  Keep v2 in a
+    // local so the /Od codegen leaves it in eax, reproducing the caller-visible eax&0xffff.
+    if (t[x1] != t[x4])
+        return 0;
+    unsigned int v2 = t[x2];
+    unsigned int r = (v2 == t[x3]) ? 1u : 0u;
+    return (uint8_t)((v2 & 0xffffff00u) | r);
 }
 
 int SlotTable::FaceHelper(int face)
 {
-    int base = *(int*)((char*)this + 8);
-    int tab = *(int*)((char*)this + 0x58);
-    return *(int*)(tab + (base + face * 0xc));
+    const V3* base = (const V3*)mVerts.mpBegin;
+    unsigned int* tab = mIndices.mpBegin;
+    const V3* p0 = base + tab[face * 3];
+    const V3* p1 = base + tab[face * 3 + 1];
+    const V3* p2 = base + tab[face * 3 + 2];
+    V3 d2, d1, cross, abs;
+    SubV3(&d2, p2, p0);
+    SubV3(&d1, p1, p0);
+    CrossV3(&cross, &d1, &d2);
+    AbsV3(&abs, &cross);
+    int idx = DominantAxis(&abs);
+    float c = idx == 0 ? cross.x : (idx == 1 ? cross.y : cross.z);
+    return idx * 2 + (c < 0.0f ? 1 : 0);
 }
 
 void CopyRangeA(const void* src);   // vector<float>::operator=

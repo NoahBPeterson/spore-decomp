@@ -14,6 +14,9 @@ void Func5470(void* p);                        // 0x00540470
 void Func73f30(void* p);                       // 0x00473f30
 void CleanupElement(void* p);                  // 0x00507b30
 
+// __thiscall element cleanup (the retail CleanupElement: pointer in ecx).
+typedef void (__thiscall* CleanupElementFn)(void* self);
+
 extern const signed char gTriOffset[3];        // @ 0x013f18d0 (triangle step table)
 
 // ---------------------------------------------------------------------------
@@ -25,11 +28,7 @@ struct Key {
 };
 uint8_t Key::Equals(int x, int y)
 {
-    int result;
-    if (a == x && b == y)
-        result = 1;
-    else
-        result = 0;
+    int result = (a == x) && (b == y);
     return (uint8_t)result;
 }
 
@@ -78,53 +77,118 @@ void Range::Expand(float* p)
 // ---------------------------------------------------------------------------
 // @ 0x00509c80  (insert an entry into a slot table, returns slot index)
 // ---------------------------------------------------------------------------
+
+// The two intrusive vectors the body touches: +0x58 is the id list (u32 per
+// entry), +0x30 and +0x124 are 8-byte {a,b} pair lists.
+struct IdVecU32 {
+    uint32_t* mBegin;   // +0x00
+    uint32_t* mEnd;     // +0x04
+    uint32_t* mCap;     // +0x08
+};
+struct PairVec8 {
+    uint32_t* mBegin;   // +0x00
+    uint32_t* mEnd;     // +0x04
+    uint32_t* mCap;     // +0x08
+};
+
+// __thiscall helpers: the pair-list append (this = the list itself) and the
+// key-range widen (this = the id list at +0x30, argument is the freshly built
+// pair).
+typedef void (__thiscall* Func73f30Fn)(void* self, void* pair);      // va 00473f30
+typedef void (__thiscall* Func5402c0Fn)(void* self, const void* v);  // va 005402c0
+
 struct Table {
-    char pad[0x200];
+    char      pad00[0x08];   // +0x00
+    int       mIdBase;       // +0x08  (MakePair base for the id block)
+    char      pad0c[0x24];   // +0x0c
+    PairVec8  mPairs30;      // +0x30  (widen target for Expand)
+    char      pad3c[0x1c];   // +0x3c
+    IdVecU32  mIds;          // +0x58  (per-index runtime id)
+    char      pad64[0x1c];   // +0x64
+    uint32_t* mSlotOfIdx;    // +0x80  (idx -> slot map)
+    char      pad84[0xa0];   // +0x84
+    PairVec8  mPairs124;     // +0x124 (slot -> {key, idx} entries)
+    char      pad130[0x88];  // +0x130
+    int*      mBaseTab;      // +0x1b8 (id -> base pair)
+
     int Insert(int idx, uint32_t* key, int slot);
 };
+
 int Table::Insert(int idx, uint32_t* key, int slot)
 {
-    int* base = (int*)(*(int*)((char*)this + 0x1b8) + *(int*)(*(int*)((char*)this + 0x58) + idx * 4) * 8);
-    uint32_t k = *key;
+    int* base = (int*)((char*)mBaseTab + (int)mIds.mBegin[idx] * 8);
+    uint32_t k = key[0];
     if (slot == -1) {
-        uint8_t tmp[8];
-        uint32_t* r = MakePair((uint32_t*)tmp, *(int*)(*(int*)((char*)this + 0x58) + idx * 4) * 0xc + *(int*)((char*)this + 8), key[1]);
-        Func73f30(r);
-        Func5402c0(&k);
-        slot = ((*(int*)((char*)this + 0x34) - *(int*)((char*)this + 0x30)) >> 3) - 1;
-        *(int*)(*(int*)((char*)this + 0x80) + idx * 4) = slot;
+        uint32_t tmp[2];
+        uint32_t* r = MakePair(tmp, (int)mIds.mBegin[idx] * 0xc + mIdBase, key[1]);
+        ((Func73f30Fn)Func73f30)(&mPairs30, r);
+        ((Func5402c0Fn)Func5402c0)(&mPairs124, &k);
+        slot = (int)(((char*)mPairs30.mEnd - (char*)mPairs30.mBegin) >> 3) - 1;
+        mSlotOfIdx[idx] = (uint32_t)slot;
     } else {
-        int t = *(int*)((char*)this + 0x124);
-        *(uint32_t*)(t + slot * 8) = k;
-        *(int*)(t + 4 + slot * 8) = idx;
+        mPairs124.mBegin[slot * 2] = k;
+        mPairs124.mBegin[slot * 2 + 1] = (uint32_t)idx;
     }
-    base[0] = *key;
+    base[0] = (int)key[0];
     base[1] = slot;
+    ((Range*)key)->Expand((float*)((char*)mPairs30.mBegin + slot * 8));
     return slot;
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x00509b20  (table teardown)
 // ---------------------------------------------------------------------------
-void __fastcall TableTeardown(int self)
+
+// Intrusive u32 vector (SP::SimpleVector<unsigned>): fill-to-n and erase are
+// __thiscall, so they are modelled as members and reached through a pointer to
+// the member at its real offset.
+struct TVecU32 {
+    uint32_t* mBegin;   // +0x00
+    uint32_t* mEnd;     // +0x04
+    uint32_t* mCap;     // +0x08
+    void Assign(uint32_t n, const uint32_t* value);   // va 004746c0
+    uint32_t* Erase(uint32_t* first, uint32_t* last); // va 004769b0
+};
+
+// Intrusive pointer vector (the +0xe4 element list).
+struct TVecPtr {
+    int* mBegin;        // +0x00
+    int* mEnd;          // +0x04
+    int* mCap;          // +0x08
+    int* Erase(int* first, int* last);   // va 004769b0
+};
+
+// The teardown target; only the touched members are named.
+struct TableCtx {
+    char    pad00[0x58];    // +0x00
+    TVecU32 mIds;           // +0x58  (count drives the fill)
+    char    pad64[0x1c];    // +0x64
+    TVecU32 mSlots;         // +0x80  (filled to n with 0xffffffff)
+    char    pad8c[0x58];    // +0x8c
+    TVecPtr mElems;         // +0xe4  (elements deleted in the loop)
+    char    padf0[0x20];    // +0xf0
+    TVecU32 mThirds;        // +0x110 (filled to n/3 with 0)
+};
+
+void __fastcall TableTeardown(TableCtx* self)
 {
-    uint32_t n = (uint32_t)(*(int*)(self + 0x5c) - *(int*)(self + 0x58)) >> 2;
+    uint32_t n = (uint32_t)(self->mIds.mEnd - self->mIds.mBegin);
     uint32_t third = n / 3;
     uint32_t a = 0xffffffffu;
-    rangeC0(n, &a);
+    self->mSlots.Assign(n, &a);
 
-    uint32_t end = (uint32_t)(*(int*)(self + 0xe8) - *(int*)(self + 0xe4)) >> 2;
+    uint32_t end = (uint32_t)(self->mElems.mEnd - self->mElems.mBegin);
     for (uint32_t i = 0; i < end; ++i) {
-        int p = *(int*)(*(int*)(self + 0xe4) + i * 4);
+        int p = self->mElems.mBegin[i];
         if (p != 0) {
-            CleanupElement((void*)p);
+            ((CleanupElementFn)CleanupElement)((void*)p);
             ea_delete((void*)p);
         }
     }
-    rangeErase((void*)(self + 0xe4), (void*)(self + 0xe8));
-    rangeErase((void*)(self + 0x110), (void*)(self + 0x114));
+    self->mElems.Erase(self->mElems.mBegin, self->mElems.mEnd);
+    self->mThirds.Erase(self->mThirds.mBegin, self->mThirds.mEnd);
     uint32_t b = 0;
-    rangeC0(third, &b);
+    self->mThirds.Assign(third, &b);
 }
 
 // ---------------------------------------------------------------------------

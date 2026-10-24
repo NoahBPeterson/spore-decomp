@@ -1,0 +1,5 @@
+# source  symbol  original VA
+slices/s00fa1bc0/s00fa1bc0.cpp  ?FUN_00fa2620@@YGXPAUDecalArrayElem@@0@Z  00fa2620  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fa1bc0/s00fa1bc0.cpp  ?FreeDecalIndex@cTerrainSphere@@QAEXI@Z  00fa2850  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fa1bc0/s00fa1bc0.cpp  ?NewDecal@cTerrainSphere@@QAEPAUcTerrainSphereDecal@@IPBUcSPTransform@@M@Z  00fa28b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fa1bc0/s00fa1bc0.cpp  ?NewDecalLayer@cTerrainSphere@@QAEPAUcTerrainSphereDecal@@IPBUcSPTransform@@MI@Z  00fa2920  /O2 /MD /Gy /TP /arch:SSE /fp:fast

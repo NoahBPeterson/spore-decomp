@@ -1,1 +1,4 @@
-# byte-exact functions for slice s00eaa9a0 (none)
+slices/s00eaa9a0/s00eaa9a0.cpp  ?ClearPosition@cNPCCityMusic@Audio@SP@@QAEXXZ  00eab390  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00eaa9a0/s00eaa9a0.cpp  ?SetVector@cNPCCityMusic@Audio@SP@@QAEXPBUVector3@23@@Z  00eab3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00eaa9a0/s00eaa9a0.cpp  ?ClearChannelMaps@cNPCCityMusicManager@Audio@SP@@QAEXXZ  00eab520  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00eaa9a0/s00eaa9a0.cpp  ?SetGonzagoEnabled@cNPCCityMusic@Audio@SP@@QAEX_N@Z  00eab860  /O2 /MD /Gy /TP /arch:SSE /fp:fast

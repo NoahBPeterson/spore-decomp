@@ -9,6 +9,7 @@
 // 0xf/0x11 selection, 0x10/0x13 etc., 0x14 callout message box, 0x1b move to a planet position, 0x1c
 // hold-to-move handling (timer + UpdateAvatarGoal).
 #include "types.h"
+#include <new>
 
 #pragma warning(disable : 4238)
 
@@ -126,12 +127,27 @@ extern char g_CalloutA[];             // 0x01582d00
 extern char g_CalloutB[];             // 0x01582d0c
 extern bool g_bShowAvatarGoal;        // 0x0169e37e
 
+// Command entry stored in the strategy's command map at +0x6c.  The real object is
+// 0x20 bytes and is constructed by 0x00b63890.
+struct Command {
+  void Init();               // 0x00b63890
+  char mData[0x20];
+};
+
+// Opaque command map (retail size 0x34); insertion is 0x00ba8420.
+struct CommandMap {
+  void AddCommand(uint32_t id, Command* command, bool flag);   // 0x00ba8420
+  char mStorage[0x34];
+};
+
 class cCreatureModeInputStrategy {
 public:
   void InteractWithObject(void* obj);   // 0x00d32fd0
   void UpdateAvatarGoal(bool a, bool b);   // 0x00d31a70
+  void RegisterCommandHandlers();       // 0x00d33c30
 
-  char pad0[0xa0];
+  char pad0[0x6c];
+  CommandMap mCommandMap;    // +0x6c
   cSPTimer mMouseDownTime;   // +0xa0
   bool mbMoveOnRelease;      // +0xc0
   bool mbMouseMoved;         // +0xc1
@@ -355,6 +371,168 @@ void cCreatureModeInputStrategy::InteractWithObject(void* obj)
   }
   avatar->PlayAnimation(0x0004000000000000ULL, kFloatMax, anim, 0, target, 0);
   SpawnAcknowledgementEffect(0x0004000000000000ULL, target);
+}
+
+// ---------------------------------------------------------------------------------------------------
+// Ref-counted-pointer sort helpers used by the creature-mode object list.  The comparator is a
+// 0x1c-byte by-value object; Less is the out-of-line predicate at 0x00d2f3c0.
+// ---------------------------------------------------------------------------------------------------
+
+struct SortRef {
+  void* mpObject;                    // +0x00
+};
+
+struct SortCompare {
+  float mFields[7];                  // +0x00 .. +0x18
+  bool Less(const SortRef& a, const SortRef& b);   // 0x00d2f3c0
+};
+
+static void AddRefRaw(void* p) {
+  if (p)
+    ((void (__thiscall*)(void*))((void**)p)[0xbc / 4])(p);
+}
+
+static void ReleaseRaw(void* p) {
+  if (p)
+    ((void (__thiscall*)(void*))((void**)p)[0xc0 / 4])(p);
+}
+
+static void AssignSortRef(SortRef& dst, void* src) {
+  if (dst.mpObject != src) {
+    AddRefRaw(src);
+    void* old = dst.mpObject;
+    dst.mpObject = src;
+    ReleaseRaw(old);
+  }
+}
+
+static void SwapSortRefs(SortRef& a, SortRef& b) {
+  if (a.mpObject == b.mpObject)
+    return;
+  void* oldA = a.mpObject;
+  void* oldB = b.mpObject;
+  AddRefRaw(oldB);
+  a.mpObject = oldB;
+  ReleaseRaw(oldA);
+  AddRefRaw(oldA);
+  b.mpObject = oldA;
+  ReleaseRaw(oldB);
+}
+
+static void AdjustHeap(SortRef* first, int hole, int len, void* value, SortCompare& comp) {
+  SortRef v;
+  v.mpObject = value;
+  int child = hole * 2 + 2;
+  while (child < len) {
+    if (comp.Less(first[child], first[child - 1]))
+      --child;
+    if (!comp.Less(v, first[child]))
+      break;
+    AssignSortRef(first[hole], first[child].mpObject);
+    hole = child;
+    child = hole * 2 + 2;
+  }
+  if (child == len) {
+    if (comp.Less(v, first[child - 1])) {
+      AssignSortRef(first[hole], first[child - 1].mpObject);
+      hole = child - 1;
+    }
+  }
+  AssignSortRef(first[hole], value);
+}
+
+// @ 0x00d33930
+void __cdecl MakeHeap(SortRef* first, SortRef* last, SortCompare comp) {
+  int count = (int)(last - first);
+  if (count < 2)
+    return;
+  for (int hole = (count - 2) / 2; hole >= 0; --hole) {
+    void* value = first[hole].mpObject;
+    AddRefRaw(value);
+    AdjustHeap(first, hole, count, value, comp);
+    ReleaseRaw(value);
+  }
+}
+
+// @ 0x00d339d0
+void __cdecl SortHeap(SortRef* first, SortRef* last, SortCompare comp) {
+  while (last - first > 1) {
+    --last;
+    void* value = last->mpObject;
+    AddRefRaw(value);
+    AssignSortRef(*last, first->mpObject);
+    AssignSortRef(*first, value);
+    ReleaseRaw(value);
+    AdjustHeap(first, 0, (int)(last - first), first->mpObject, comp);
+  }
+}
+
+// @ 0x00d33a60
+void __cdecl PartialSort(SortRef* first, SortRef* middle, SortRef* last, SortCompare comp) {
+  MakeHeap(first, middle, comp);
+  for (SortRef* i = middle; i < last; ++i) {
+    if (comp.Less(*i, *first)) {
+      void* value = i->mpObject;
+      AddRefRaw(value);
+      AssignSortRef(*i, first->mpObject);
+      AssignSortRef(*first, value);
+      ReleaseRaw(value);
+      AdjustHeap(first, 0, (int)(middle - first), first->mpObject, comp);
+    }
+  }
+  SortHeap(first, middle, comp);
+}
+
+static SortRef* MedianOfThree(SortRef* a, SortRef* b, SortRef* c, SortCompare& comp) {
+  if (comp.Less(*b, *a)) {
+    if (comp.Less(*c, *b))
+      return b;
+    return comp.Less(*c, *a) ? c : a;
+  }
+  if (comp.Less(*c, *a))
+    return a;
+  return comp.Less(*c, *b) ? c : b;
+}
+
+static SortRef* Partition(SortRef* first, SortRef* last, SortCompare& comp) {
+  SortRef* mid = first + (last - first) / 2;
+  SortRef* pivot = MedianOfThree(first, mid, last - 1, comp);
+  SwapSortRefs(*pivot, *(last - 1));
+  SortRef* p = last - 1;
+  SortRef* i = first;
+  for (SortRef* j = first; j < p; ++j) {
+    if (comp.Less(*j, *p)) {
+      SwapSortRefs(*i, *j);
+      ++i;
+    }
+  }
+  SwapSortRefs(*i, *p);
+  return i;
+}
+
+// @ 0x00d33ce0
+void __cdecl IntrosortLoop(SortRef* first, SortRef* last, int depth, SortCompare comp) {
+  while (last - first > 28) {
+    if (depth == 0) {
+      PartialSort(first, last, last, comp);
+      return;
+    }
+    --depth;
+    SortRef* pivot = Partition(first, last, comp);
+    IntrosortLoop(pivot + 1, last, depth, comp);
+    last = pivot;
+  }
+}
+
+// @ 0x00d33c30
+void cCreatureModeInputStrategy::RegisterCommandHandlers() {
+  Command* cmd16 = (Command*)::operator new(sizeof(Command));
+  cmd16->Init();
+  mCommandMap.AddCommand(0x16, cmd16, false);
+
+  Command* cmd18 = (Command*)::operator new(sizeof(Command));
+  cmd18->Init();
+  mCommandMap.AddCommand(0x18, cmd18, false);
 }
 
 }  // namespace SP

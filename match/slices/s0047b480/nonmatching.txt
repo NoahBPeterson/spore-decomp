@@ -1,7 +1,7 @@
-0047b7b0 - complete source; insertion sort over 8-byte float pairs, NOT byte-exact
+0047b7b0 218 complete source; returns first for 0/1 pairs and last otherwise; sort/frame differs from original
 0047b890 - complete source; insertion sort over 8-byte float pairs, NOT byte-exact
-0047bb70 - complete source; 0x2c-byte element copy ctor, NOT byte-exact; equiv FAIL (5/5; original calls sub-object copy ctor at +0x14)
-0047bf30 - complete source; basic_string<char>::resize, NOT byte-exact
+0047bb70 112 complete source; copies five leading dwords then calls cSPMatrix3::Assign at +0x14; frame/layout differs
+0047bf30 212 complete source; two-arg resize(n,fill) grows via reserve(0x47c600), memsets n-1 bytes, null-terminates; frame differs
 0047c010 - complete source; refcounted-pointer range copy (AddRef), NOT byte-exact
 0047c0d0 - complete source; refcounted-pointer range assign, NOT byte-exact
 0047c140 - complete source; vector<0x29c> uninitialized_copy, NOT byte-exact

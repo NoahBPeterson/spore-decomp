@@ -1,2 +1,5 @@
-008f0740 ?LayoutRows@Table@@QAEXPAUStackingContext@@PAUStyleState@@@Z  # Table::LayoutRows migrated from s008f0740 (verbatim, slice spelling)
-0x008f0740 EA::XHTML::Layout::Table::LayoutRows  # retail table layout: column widths, cell rects, row heights, row y positions, vertical alignment; ctx +0x55c = y cursor
+008f0740 Table::LayoutRows  # pre-existing committed function (complete, nonmatching); distribute table width over columns, place cells, size rows
+008f1120 Table_Layout_XHTML_EA constructor  # base Block::Layout ctor (kind 6) + table vtable 0x1437ed8 and zeroed table fields
+008f11b0 Table_Layout_XHTML_EA deleting destructor  # free rows/cols vectors, ~IntrusiveList, reset vptr to 0x1437c00, conditional delete
+008f1210 Table_Layout_XHTML_EA::ResizeRows  # EASTL vector grow/compact of the row-pointer/column-slot array (reallocate or shift)
+008f13f0 Table_Layout_XHTML_EA::Sizing  # block/box layout pass, copy resolved width/height, convert style lengths to pixels via iat_floor

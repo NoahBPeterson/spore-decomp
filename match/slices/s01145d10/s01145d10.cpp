@@ -18,6 +18,7 @@
 #include "types.h"
 #include <string.h>
 #include <malloc.h>
+#include <xmmintrin.h>
 
 // Data tables (C linkage so the equivalence annotator sees them).
 extern "C" const float    g_cs[8];             // 0x014cb788 antialias cosine coefficients
@@ -127,14 +128,17 @@ void CMpegLayer3Base::Antialias(int gr, int ch, float* xr)
     } else {
         end = xr + 558;
     }
-    for (float* p = xr + 18; p <= end; p += 18) {
+    float* p = xr + 18;
+    unsigned n = (unsigned)(((char*)end - (char*)xr) - 1) / 0x48u + 1;
+    do {
         for (int ss = 0; ss < 8; ss++) {
             float u = p[-1 - ss];
             float v = p[ss];
             p[-1 - ss] = u * g_cs[ss] - v * g_ca[ss];
             p[ss]      = v * g_cs[ss] + u * g_ca[ss];
         }
-    }
+        p += 18;
+    } while (--n);
 }
 
 // Local bit-faithful transcription of the LTCG scalar helper (eax=out, in on the stack, plain
@@ -291,28 +295,49 @@ void CMpegLayer3Base::Imdct36X4(int gr, int ch, float* xr)
 }
 
 // @ 0x01146940
+#define SIGNFLIP(off) _mm_store_ps(p + (off), _mm_mul_ps(_mm_load_ps(p + (off)), mask));
+#define SIGNFLIP9(b) SIGNFLIP((b) + 4)  SIGNFLIP((b) + 12) SIGNFLIP((b) + 20) \
+                     SIGNFLIP((b) + 28) SIGNFLIP((b) + 36) SIGNFLIP((b) + 44) \
+                     SIGNFLIP((b) + 52) SIGNFLIP((b) + 60) SIGNFLIP((b) + 68)
 void HELPER_SignFlip(float* p)
 {
-    for (int b = 0; b < 8; b++) {
-        for (int g = 0; g < 9; g++) {
-            float* q = p + (0x10 + g * 0x20) / 4;
-            q[0] = q[0] * 1.0f;
-            q[1] = q[1] * -1.0f;
-            q[2] = q[2] * 1.0f;
-            q[3] = q[3] * -1.0f;
-        }
-        p += 0x120 / 4;
-    }
+    __m128 mask = _mm_set_ps(-1.0f, 1.0f, -1.0f, 1.0f);   // memory order [+1,-1,+1,-1]
+    SIGNFLIP9(0);
+    SIGNFLIP9(72);
+    SIGNFLIP9(144);
+    SIGNFLIP9(216);
+    SIGNFLIP9(288);
+    SIGNFLIP9(360);
+    SIGNFLIP9(432);
+    SIGNFLIP9(504);
+    // The original (LTCG) leaves its loop counter (8) in eax; keep that value live past the stores.
+    p = (float*)(size_t)8;
+    const float* volatile keepP = p;
+    (void)keepP;
 }
+#undef SIGNFLIP9
+#undef SIGNFLIP
 
 // @ 0x01146a10
+#define GATHER(b, k) _mm_store_ps(dst + (b) * 32 + (k) * 4, _mm_load_ps(src + (b) * 4 + (k) * 72));
+#define GATHER_ROW(b) \
+    GATHER(b, 0) GATHER(b, 1) GATHER(b, 2) GATHER(b, 3) \
+    GATHER(b, 4) GATHER(b, 5) GATHER(b, 6) GATHER(b, 7)
 void HELPER_GatherHistories(float* src, float* dst)
 {
-    for (int i = 0; i < 18; i++)
-        for (int k = 0; k < 8; k++)
-            for (int j = 0; j < 4; j++)
-                dst[i * 32 + k * 4 + j] = src[i * 4 + k * 72 + j];
+    // The original (LTCG) unrolls all 18 groups and leaves the counter (18) in eax while never
+    // touching edx; keep only the two pointers live and hand eax the counter value at the end.
+    GATHER_ROW(0)  GATHER_ROW(1)  GATHER_ROW(2)  GATHER_ROW(3)
+    GATHER_ROW(4)  GATHER_ROW(5)  GATHER_ROW(6)  GATHER_ROW(7)
+    GATHER_ROW(8)  GATHER_ROW(9)  GATHER_ROW(10) GATHER_ROW(11)
+    GATHER_ROW(12) GATHER_ROW(13) GATHER_ROW(14) GATHER_ROW(15)
+    GATHER_ROW(16) GATHER_ROW(17)
+    dst = (float*)(size_t)18;
+    const float* volatile keepDst = dst;
+    (void)keepDst;
 }
+#undef GATHER_ROW
+#undef GATHER
 
 // @ 0x01146a90
 void CMpegLayer3Base::InitHuffTables()
@@ -333,14 +358,22 @@ void CMpegLayer3Base::InitHuffTables()
     mHuffTables[13].tableSize = 0x570;   mHuffTables[13].pEntries = (int16_t*)0x15c1a80;
     mHuffTables[14].tableSize = 0;       mHuffTables[14].pEntries = 0;
     mHuffTables[15].tableSize = 0x4d6;   mHuffTables[15].pEntries = (int16_t*)0x15c2000;
-    for (int i = 16; i < 24; i++) {
-        mHuffTables[i].tableSize = 0x56a;
-        mHuffTables[i].pEntries = (int16_t*)0x15c2500;
-    }
-    for (int i = 24; i < 32; i++) {
-        mHuffTables[i].tableSize = 0x46c;
-        mHuffTables[i].pEntries = (int16_t*)0x15c2a80;
-    }
+    mHuffTables[16].tableSize = 0x56a;   mHuffTables[16].pEntries = (int16_t*)0x15c2500;
+    mHuffTables[17].tableSize = 0x56a;   mHuffTables[17].pEntries = (int16_t*)0x15c2500;
+    mHuffTables[18].tableSize = 0x56a;   mHuffTables[18].pEntries = (int16_t*)0x15c2500;
+    mHuffTables[19].tableSize = 0x56a;   mHuffTables[19].pEntries = (int16_t*)0x15c2500;
+    mHuffTables[20].tableSize = 0x56a;   mHuffTables[20].pEntries = (int16_t*)0x15c2500;
+    mHuffTables[21].tableSize = 0x56a;   mHuffTables[21].pEntries = (int16_t*)0x15c2500;
+    mHuffTables[22].tableSize = 0x56a;   mHuffTables[22].pEntries = (int16_t*)0x15c2500;
+    mHuffTables[23].tableSize = 0x56a;   mHuffTables[23].pEntries = (int16_t*)0x15c2500;
+    mHuffTables[24].tableSize = 0x46c;   mHuffTables[24].pEntries = (int16_t*)0x15c2a80;
+    mHuffTables[25].tableSize = 0x46c;   mHuffTables[25].pEntries = (int16_t*)0x15c2a80;
+    mHuffTables[26].tableSize = 0x46c;   mHuffTables[26].pEntries = (int16_t*)0x15c2a80;
+    mHuffTables[27].tableSize = 0x46c;   mHuffTables[27].pEntries = (int16_t*)0x15c2a80;
+    mHuffTables[28].tableSize = 0x46c;   mHuffTables[28].pEntries = (int16_t*)0x15c2a80;
+    mHuffTables[29].tableSize = 0x46c;   mHuffTables[29].pEntries = (int16_t*)0x15c2a80;
+    mHuffTables[30].tableSize = 0x46c;   mHuffTables[30].pEntries = (int16_t*)0x15c2a80;
+    mHuffTables[31].tableSize = 0x46c;   mHuffTables[31].pEntries = (int16_t*)0x15c2a80;
 }
 
 } } }

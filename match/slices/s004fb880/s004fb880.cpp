@@ -9,6 +9,14 @@ struct Vector3 {
     Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
     Vector3& operator=(const Vector3& v) { x = v.x; y = v.y; z = v.z; return *this; }
 };
+
+static float AbsFloat(float v)
+{
+    union { float f; unsigned int u; } bits;
+    bits.f = v;
+    bits.u &= 0x7fffffffu;
+    return bits.f;
+}
 Vector3 operator*(const Vector3& a, const Vector3& b)
 {
     Vector3 r;
@@ -74,7 +82,7 @@ Matrix33* InvertScaled(Matrix33* out, const float* in, float* pDet)
                      *(const float*)((const char*)in + i1 * 0xc + j2 * 4)) / *pDet;
             }
         }
-        Matrix33_ctor(out, inv);
+        ((void(__thiscall*)(Matrix33*, const void*))Matrix33_ctor)(out, inv);
     }
     return out;
 }
@@ -127,7 +135,7 @@ Vector3* ScaleVec(Vector3* out, const float* s, const Vector3* v);     // 0x0041
 Vector3* AddV(Vector3* out, const Vector3* a, const Vector3* b);       // 0x0041dc10
 Vector3* MulScalarV(Vector3* out, const Vector3* v, const float* s);   // 0x0041dca0
 Vector3* SubV(Vector3* out, const Vector3* a, const Vector3* b);       // 0x0041db10
-void ScaleInPlace(Vector3* v, float s);                                // 0x0041dba0
+void ScaleInPlace(Vector3* v, const float* s);                        // 0x0041dba0
 void FUN_004f89a0();                                                   // 0x004f89a0
 void operator_new__(void* p, int a, int n);                            // placement helper
 extern "C" double __cdecl sqrt(double);
@@ -179,7 +187,7 @@ struct FieldGrid {
     char pad44[0x0c];
     void* mField50;
     void* mField54;
-    int MarchToSurface(float radius, Vector3* pPoint, Vector3* pStart, Matrix33* pOut);
+    bool MarchToSurface(float radius, Vector3* pPoint, Vector3* pStart, Matrix33* pOut);
     void Reset(char clear);
 };
 
@@ -191,7 +199,7 @@ struct RayField {
 Vector3* BuildOBB(FieldGrid* self, const Vector3* a, const Vector3* b, float* pMat, uint32_t* pFlags, float* pCorner); // 0x004fa6c0
 
 // @ 0x004fbcc0
-int FieldGrid::MarchToSurface(float radius, Vector3* pPoint, Vector3* pStart, Matrix33* pOut)
+bool FieldGrid::MarchToSurface(float radius, Vector3* pPoint, Vector3* pStart, Matrix33* pOut)
 {
     const float kEps = 1e-10f;
     Vector3 cur = pStart ? *pStart : *pPoint;
@@ -200,25 +208,26 @@ int FieldGrid::MarchToSurface(float radius, Vector3* pPoint, Vector3* pStart, Ma
     for (int iter = 0; iter < 0x28; ++iter) {
         Vector3 delta;
         float mat[9];
-        BuildOBB(this, pPoint, &cur, mat, (uint32_t*)&delta, (float*)pOut);
+        ((Vector3*(__thiscall*)(FieldGrid*, const Vector3*, Vector3*, float*, uint32_t*, float*))BuildOBB)(this, pPoint, &cur, mat, (uint32_t*)&delta, (float*)pOut);
         if (delta.x * delta.x + delta.y * delta.y + delta.z * delta.z < kEps)
-            return 1;
+            return true;
         float d = Determinant(mat);
         if (d == 0.0f)
-            return 0;
-        if (!(fabsf(d) < 3.402823466e+38f))
-            return 0;
+            return false;
+        if (!(AbsFloat(d) < 3.402823466e+38f))
+            return false;
         Matrix33 inv;
         InvertMatrix(&inv, mat);
         Vector3 move;
         MulMatVec(&move, (const float*)&inv, &delta.x);
         float lenSq = move.x * move.x + move.y * move.y + move.z * move.z;
         if (stepSq < lenSq) {
-            ScaleInPlace(&move, step / (float)sqrt((double)lenSq));
+            float scale = step / sqrt(lenSq);
+            ScaleInPlace(&move, &scale);
         }
         SubInPlace(pPoint, &move);
     }
-    return 0;
+    return false;
 }
 
 // @ 0x004fc100
@@ -235,7 +244,7 @@ Vector3* RayField::Bisect(Vector3* pOut, const Vector3* pFrom, const Vector3* pT
     Vector3 pos = *pFrom;
     float t = 0.0f;
     int guard = 0x14;
-    float value = 0.0f;
+    float value;
     do {
         t = (lo + hi) * 0.5f;
         Vector3 off;
@@ -243,15 +252,14 @@ Vector3* RayField::Bisect(Vector3* pOut, const Vector3* pFrom, const Vector3* pT
         Vector3 p;
         AddV(&p, &base, &off);
         pos = p;
-        value = 0.0f;
-        typedef void (*Fn)(const Vector3*, float*);
+        typedef void (__thiscall *Fn)(void*, const Vector3*, float*);
         Fn fn = *(Fn*)((char*)this + 8);
-        fn(&pos, &value);
+        fn(this, &pos, &value);
         if (value < 0.0f)
             hi = t;
         else
             lo = t;
-    } while (bound < fabsf(value) && (--guard > 0));
+    } while (bound < AbsFloat(value) && (--guard > 0));
     if (pT)
         *pT = t;
     *pOut = pos;

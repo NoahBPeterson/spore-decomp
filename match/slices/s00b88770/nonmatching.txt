@@ -1,1 +1,2 @@
 00b88770  1796  complete: planet cube-map ray cast; /O2 /MD /Gy /TP /arch:SSE /fp:fast; frame/register allocation differ
+00b88f60  1140  complete: cell-normal accumulation; /O2 /MD /Gy /TP /arch:SSE /fp:fast; cl15 spills `this` to [esp+0x4c] and keeps several locals in x87 vs retail's edi/esi frame (1277 vs 1329 bytes)

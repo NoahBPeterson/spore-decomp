@@ -1,10 +1,10 @@
 005680a0  107  complete range destroy helper; /Od loop shape differs
-00568110  250  complete rbtree copy constructor; /Od frame differs; equiv: FAIL (callee 005699f0 ecx mismatch)
+00568110  271  complete rbtree copy constructor; callee 0x5699f0 is a thiscall member (ecx = this), declared via RBTreeOps; equiv PASS (232 valid, 89.2% cov, 0 mismatches); /Od frame differs
 005681f0  121  complete rbtree insert unique (int); /Od frame differs
 00568320  250  complete rbtree copy constructor (float); /Od frame differs; equiv: WEAK (89.2% coverage)
-00568400    0  complete rbtree insert (float mode); /Od frame differs; equiv: FAIL (memory pool mismatch)
+00568400  140  complete rbtree insert (float mode); 0x569b10 is a thiscall member (ecx = this), RBTreeInsert's side flag is the inverse of the key test, and 0x566c50 stores the node through its ecx (the first arg, an out slot); equiv WEAK (170 valid/200 needed, 70.4% cov, 0 mismatches); /Od frame differs
 005684b0   71  complete node-owner deleting destructor; frame differs
 00568590   67  complete node deleting destructor; frame differs
 00568680    0  complete range destroy of 0x28-stride elements; frame differs
 00568740   95  complete vector range constructor; frame differs; equiv: WEAK (75% coverage)
-005687d0   90  complete hashtable DoFreeNodes; /Od frame differs; equiv: FAIL (ours faults at 00927111)
+005687d0   49  complete hashtable DoFreeNodes; the chain link is at node+8 (not node+0) and each bucket is cleared (pArr[i] = 0) after its chain is freed; equiv WEAK (177 valid/200 needed, 100% cov, 0 mismatches); /Od frame differs

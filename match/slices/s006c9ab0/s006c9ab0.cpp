@@ -1,4 +1,7 @@
 // Slice s006c9ab0: per-vertex bake helpers (see ../s006c5940/bake.h).
+// The object cache keys on the slice source + headers in this directory only, so this
+// comment also serves as a cache-buster: any edit to the shared ../s006c5940/bake.h
+// needs a byte change here to force a fresh compile.
 #include "../s006c5940/bake.h"
 
 // @ 0x006c9ab0

@@ -24,6 +24,8 @@ void     FUN_0113ae50(uint8_t* p);      // 0x113ae50  Pause timer callback
 // ---------------------------------------------------------------------------------------
 // constants / globals referenced by the original (addresses shown for the equivalence mapper)
 extern float g_015bc9e4;                 // 0x15bc9e4  Pan3D default angle X (degrees)
+extern float g_negmask;                  // 0x13eb8b0  sign-bit mask (0x80000000 x4); first lane = -0.0f
+extern float g_real_one;                 // 0x1485720  _HK_REAL_ONE (1.0f)
 extern float g_015bc9e8;                 // 0x15bc9e8  Pan3D default angle Y (degrees)
 extern float g_015bc9ec;                 // 0x15bc9ec  Pan3D default spread mode
 extern float g_015bcd9c;                 // 0x15bcd9c  rotator default angle X
@@ -92,6 +94,10 @@ static inline float NegF(float x)
     v.u ^= 0x80000000u;
     return v.f;
 }
+
+// xmm-only sign-bit flip (retail: `xorps xmmN, xmm1` with xmm1 = the -0.0f mask).  FUN_0113b330
+// must not write eax/edx, so the matrix terms go through this instead of the union above.
+#define XNEG(v) _mm_xor_ps(_mm_set_ss(v), _mm_set_ss(g_negmask))
 
 // @ 0x0113a8b0
 // ReverbIR1 IR handler: unpacks 9 big-endian coefficient dwords from the request data, runs
@@ -247,8 +253,16 @@ void Ctx::FUN_0113ae30()
 // @ 0x0113ae50
 void FUN_0113ae50(uint8_t* p)
 {
-    float fv = ((Ctx*)P(p, 8))->VoiceDecayRate() * F((uint8_t*)P(p, 4), 0xc0) + 1.0f;
-    *(int*)(p + 0x4c) = _mm_cvt_ss2si(_mm_set_ss(fv));
+    // The original keeps the product and the +1.0 in x87 extended precision and rounds once,
+    // when it stores the float (fstp dword).  /arch:SSE is needed only for the cvttss2si
+    // conversion, so the arithmetic stays x87; the addend is the image's own 1.0f constant
+    // (0x1485720) so the relocation lands on the same address the original uses.
+    float fv = ((Ctx*)P(p, 8))->VoiceDecayRate() * F((uint8_t*)P(p, 4), 0xc0) + g_real_one;
+    // The original's `cvtss2si eax, [esp+8]` rounds to nearest-even (MXCSR), while our xmm-free
+    // conversion is `cvttss2si` (truncate); on half-integer inputs the two differ (e.g. -1.5 -> -2
+    // vs -1).  Use the rounding SSE convert, which reproduces the original instruction exactly.
+    F(p, 0x4c) = fv;
+    *(int*)(p + 0x4c) = _mm_cvt_ss2si(_mm_load_ss(&F(p, 0x4c)));
 }
 
 // @ 0x0113aeb0
@@ -409,15 +423,15 @@ void Ctx::FUN_0113b330()
     F(this, 0x88) = (float)(cos(a) * 2.0);
     F(this, 0x13c) = (float)cos(a);
     F(this, 0x140) = (float)sin(a);
-    float na = NegF(a);
-    F(this, 0x14c) = (float)cos(na);
-    F(this, 0x150) = (float)sin(na);
+    _mm_store_ss((float*)((char*)this + 0x14c), XNEG(a));
+    F(this, 0x150) = (float)sin(F(this, 0x14c));
+    F(this, 0x14c) = (float)cos(F(this, 0x14c));
     float b = F(this, 0x80);
     F(this, 0x154) = (float)cos(b);
     F(this, 0x158) = (float)sin(b);
-    float nb = NegF(b);
-    F(this, 0x15c) = (float)cos(nb);
-    F(this, 0x160) = (float)sin(nb);
+    _mm_store_ss((float*)((char*)this + 0x15c), XNEG(b));
+    F(this, 0x160) = (float)sin(F(this, 0x15c));
+    F(this, 0x15c) = (float)cos(F(this, 0x15c));
     F(this, 0x148) = 0.0f;
     F(this, 0x144) = 1.0f;
 
@@ -425,30 +439,30 @@ void Ctx::FUN_0113b330()
     float c2 = F(this, 0x14c), s2 = F(this, 0x150);
     float i1 = 1.0f / (c1 * s2 - s1 * c2);
     F(this, 0x8c) = i1 * c1;
-    F(this, 0x90) = NegF(i1 * s1);
+    _mm_store_ss((float*)((char*)this + 0x90), XNEG(i1 * s1));
     F(this, 0x98) = i1 * s2;
-    F(this, 0x94) = NegF(i1 * c2);
+    _mm_store_ss((float*)((char*)this + 0x94), XNEG(i1 * c2));
 
     float c3 = F(this, 0x154), s3 = F(this, 0x158);
     float i2 = 1.0f / (c3 * s1 - s3 * c1);
     F(this, 0xbc) = i2 * c3;
-    F(this, 0xc0) = NegF(i2 * s3);
-    F(this, 0xc4) = NegF(i2 * c1);
+    _mm_store_ss((float*)((char*)this + 0xc0), XNEG(i2 * s3));
+    _mm_store_ss((float*)((char*)this + 0xc4), XNEG(i2 * c1));
     F(this, 0xc8) = i2 * s1;
 
     float c4 = F(this, 0x15c), s4 = F(this, 0x160);
     float i3 = 1.0f / (c4 * s3 - s4 * c3);
     F(this, 0xac) = i3 * c4;
-    F(this, 0xb0) = NegF(i3 * s4);
-    F(this, 0xb4) = NegF(i3 * c3);
+    _mm_store_ss((float*)((char*)this + 0xb0), XNEG(i3 * s4));
+    _mm_store_ss((float*)((char*)this + 0xb4), XNEG(i3 * c3));
     F(this, 0xb8) = i3 * s3;
 
     float c2b = F(this, 0x14c), s2b = F(this, 0x150);
     float c3b = F(this, 0x15c), s3b = F(this, 0x160);
     float i4 = 1.0f / (c2b * s3b - s2b * c3b);
     F(this, 0x9c) = i4 * c2b;
-    F(this, 0xa0) = NegF(i4 * s2b);
-    F(this, 0xa4) = NegF(i4 * c3b);
+    _mm_store_ss((float*)((char*)this + 0xa0), XNEG(i4 * s2b));
+    _mm_store_ss((float*)((char*)this + 0xa4), XNEG(i4 * c3b));
     F(this, 0xa8) = i4 * s3b;
 }
 

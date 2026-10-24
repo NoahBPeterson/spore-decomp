@@ -1,13 +1,13 @@
-009a2c90 42 complete float+double add thunk; x87 value forwarding differs; equiv FAIL: 5/882 valid inputs mismatched; first: call #0 (depth 1)
-009a2cc0 94 complete animation-object init; x87/register scheduling differs; equiv FAIL: 5/5 valid inputs mismatched; first: execution
+009a2c90 42 complete float+double add thunk; float return forwarded in st0; equiv PASS: 318 valid inputs, 100.0% coverage (all insns)
+009a2cc0 94 complete animation-object init; float return discarded via (void) call; equiv PASS: 221 valid inputs, 100.0% coverage (all insns)
 009a2f80 44 complete element erase; division-by-0x1f0 sequence differs; equiv UNSUPPORTED: 2 unresolved reference(s): ?f@S9a1b00@@QAEHHH@Z, __allshr
-009a34a0 172 complete animation-object field init; needs /arch:SSE, store order differs; equiv FAIL: 5/5 valid inputs mismatched; first: execution
+009a34a0 172 complete animation-object field init; calls partial 009a3080 via undefined symbol resolved to original image; equiv PASS: 400 valid inputs, 100.0% coverage (all insns)
 009a3630 51 complete refcount-descend; stack-local selection differs; equiv UNSUPPORTED: 4 unresolved reference(s): ?f@S9a1b00@@QAEHHH@Z, ?f@S99f0b0@@QAEXXZ, ?f@S9c4cc0@@QAEXXZ, ?
 009a36a0 77 complete binary-heap sift up; register allocation differs; equiv PASS: 1115 valid inputs, 100.0% coverage (all insns)
-009a3760 47 complete rbtree lower_bound; key/register hoisting differs; equiv FAIL: 5/72 valid inputs mismatched; first: execution
+009a3760 47 complete rbtree lower_bound; key load under null-root guard; equiv PASS: 361 valid inputs, 100.0% coverage (all insns)
 009a37a0 33 complete rbtree find; register allocation differs; equiv PASS: 1122 valid inputs, 100.0% coverage (all insns)
 009a37e0 40 complete rbtree count; induction variable ordering differs; equiv WEAK: 300 valid inputs (need 200), 34.5% coverage (need 100%% (all insns))
-009a3820 78 complete rbtree lower_bound(<=); register allocation differs; equiv FAIL: 5/22 valid inputs mismatched; first: execution
+009a3820 78 complete rbtree lower_bound(<=); key load under null-root guard; equiv PASS: 373 valid inputs, 100.0% coverage (all insns)
 009a3890 61 complete rbtree node allocate; scheduling differs; equiv UNSUPPORTED: 3 unresolved reference(s): ?operator_new@@YAPAXHPBDHH0H@Z, ?f@S9b3450@@QAEXXZ, ?f@S99c980@
 009a38f0 78 complete rbtree find+release; frame/register layout differs; equiv UNSUPPORTED: 2 unresolved reference(s): ?f@S9c26a0@@QAEXXZ, ?f@S99c980@@QAEXXZ
 009a3980 104 complete rbtree insert; scheduling differs; equiv UNSUPPORTED: 2 unresolved reference(s): ?operator_new@@YAPAXHPBDHH0H@Z, ?f@S99c660@@QAEXXZ

@@ -4,3 +4,4 @@ slices/s011e3ac0/s011e3ac0.cpp  ?Arena_FUN_011e4670@@YAXHH@Z  011e4670  /vc71 /O
 slices/s011e3ac0/s011e3ac0.cpp  ?Data@ArenaManager@@QAEPAXXZ  011e3e70  /vc71 /O2 /MD /Gy /TP
 slices/s011e3ac0/s011e3ac0.cpp  ?rw_HashString@@YAIPBDI@Z  011e4590  /vc71 /O2 /MD /Gy /TP
 slices/s011e3ac0/s011e3ac0.cpp  ?rw_BaseResourceSetupTypeRegPtrs@@YAXPAH@Z  011e45c0  /vc71 /O2 /MD /Gy /TP
+slices/s011e3ac0/s011e3ac0.cpp  ?ObjectToId@Arena@@QAEHH@Z  011e3c30  /vc71 /O2 /MD /Gy /TP

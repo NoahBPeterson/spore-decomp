@@ -16,6 +16,7 @@ struct TreeHeader {
     char        pad0[4];
     TreeHeader* mpAnchor;            // +0x04 (anchor self-reference)
     TreeHeader* mpRoot;              // +0x08
+    void  find(void** out, int* key); // 0x00e5c780 thiscall
 };
 struct TreeNode {
     char  pad0[0x10];
@@ -25,6 +26,7 @@ struct TreeNode {
 extern TreeHeader* g_pEventLog;      // 0x016c8318
 extern void*       g_pSimulator;     // 0x016c7aa4  (Simulator*)
 extern void*       g_pSimCtor;       // 0x016c831c
+extern int         g_evtPropKey_16c83cc; // 0x016c83cc (global property key)
 
 // ---------------------------------------------------------------------------
 // free callees (targets are masked relocations; only signature/convention
@@ -44,9 +46,7 @@ void  __cdecl   sub_f20620(int* a, int* b, void* c, float d);
 void  __cdecl   sub_f20350(void* p);
 void  __cdecl   sub_f20a20(int* a, int b);
 void  __cdecl   sub_f211f0(int* self, int arg2);
-void* __cdecl   sub_c0f8a0(int i);
-int   __cdecl   sub_c0f4f0();void* __cdecl   sub_rbtinc(void* n);
-void  __cdecl   sub_find_e5c780(void* out, int* key);
+void* __cdecl   sub_rbtinc(void* n);
 void  __cdecl   sub_c889c0(int e, int b);
 void* __cdecl   sub_6bb640();
 void* __cdecl   sub_new(int, const char*, int, int, int, int);
@@ -216,7 +216,7 @@ struct Property {
 void* __cdecl FUN_00f20be0(void* out, V24* prop, int key,
                            void* d4, void* d5, void* d6) {
     if (prop) {
-        Property* found = 0;
+        Property* found = (Property*)prop;
         if (prop->q(key, (void**)&found)) {
             void** p;
             if (found->type == 0x20 || found->type == 0x10) {
@@ -283,7 +283,7 @@ void* __cdecl FUN_00f20d20(void* p) {
     void* keep = p;
     void* found;
     if (p) ((void(__cdecl*)(void*))(*(void***)p)[0])(p);
-    sub_find_e5c780(&found, (int*)&keep);
+    g_pEventLog->find(&found, (int*)&keep);
     if (p) ((void(__cdecl*)(void*))(*(void***)p)[1])(p);
     TreeHeader* g = g_pEventLog;
     if (found == (void*)((char*)g + 4)) return 0;
@@ -452,7 +452,7 @@ void __cdecl FUN_00f211f0(int* self) {
 // @ 0x00f212c0
 int __cdecl FUN_00f212c0(float* a, float r, float* b) {
     if ((r + 1.0f) * 3.0f <
-        sqrtf((a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2]) + (a[0]-b[0])*(a[0]-b[0])))
+        sqrtf((a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2])))
         return 1;
     return 0;
 }
@@ -506,27 +506,35 @@ void __cdecl FUN_00f21760(V0c* self, int arg2) {
 // ===========================================================================
 // 0x00f217a0 -- reset one event entry's property.
 // ===========================================================================
+struct EvtEntity { char pad0[0x18]; void* mpProp; };   // +0x18 property pointer
 // @ 0x00f217a0
-void __cdecl FUN_00f217a0(int* self) {
-    sub_ac8fa0((void*)self[6], 0x016c83cc, 0);
+void __cdecl FUN_00f217a0(EvtEntity* self) {
+    void* prop = self->mpProp;
+    sub_ac8fa0(prop, g_evtPropKey_16c83cc, 0);
 }
 
 // ===========================================================================
 // 0x00f217c0 -- find the event marker whose property matches self.
 // ===========================================================================
+struct CombatList {
+    int   GetCount();                // 0x00c0f4f0 thiscall
+    void* GetAt(unsigned i);         // 0x00c0f8a0 thiscall
+};
 // @ 0x00f217c0
 int __cdecl FUN_00f217c0(int* self) {
-    if (!self) return 0;
-    int h = (int)((V0c*)self)->q(0xce9f6639);
-    if (!h) return 0;
-    int n = (int)sub_c0f4f0();
-    for (int i = 0; i < n; i++) {
-        int* o = (int*)sub_c0f8a0(i);
-        if (o) {
-            int r = (int)((Vb8P*)o)->q(0x3a25119);
-            if (r && *(int*)((char*)r + 0x134) == 0xc) {
-                int* q = (int*)sub_ac8fa0(*(void**)((char*)r + 0x148), 0x016c83cc, 0);
-                if (q == self) return r;
+    if (self) {
+        CombatList* h = (CombatList*)((V0c*)self)->q(0xce9f6639);
+        if (h) {
+            int n = h->GetCount();
+            for (int i = 0; i < n; i++) {
+                int* o = (int*)h->GetAt(i);
+                if (o) {
+                    int r = (int)((Vb8P*)o)->q(0x3a25119);
+                    if (r && *(int*)((char*)r + 0x134) == 0xc) {
+                        int* q = (int*)sub_ac8fa0(*(void**)((char*)r + 0x148), g_evtPropKey_16c83cc, 0);
+                        if (q == self) return r;
+                    }
+                }
             }
         }
     }

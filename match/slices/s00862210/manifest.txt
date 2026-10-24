@@ -1,2 +1,12 @@
 # source  symbol  va  flags
 slices/s00862210/s00862210.cpp  _jpeg_idct_4x4  00862210  /O2 /arch:SSE /MD /Gy /TC
+slices/s00862210/s00862210.cpp  _jpeg_idct_2x2  008628a0  /O2 /arch:SSE /MD /Gy /TC
+slices/s00862210/s00862210.cpp  _jpeg_idct_1x1  00862d20  /O2 /arch:SSE /MD /Gy /TC
+slices/s00862210/s00862210.cpp  _jpeg_mem_available  00862d80  /O2 /arch:SSE /MD /Gy /TC
+slices/s00862210/s00862210.cpp  _read_backing_store  00862d90  /O2 /arch:SSE /MD /Gy /TC
+slices/s00862210/s00862210.cpp  _write_backing_store  00862e00  /O2 /arch:SSE /MD /Gy /TC
+slices/s00862210/s00862210.cpp  _close_backing_store  00862e70  /O2 /arch:SSE /MD /Gy /TC
+slices/s00862210/s00862210.cpp  _jpeg_open_backing_store  00862e80  /O2 /arch:SSE /MD /Gy /TC
+slices/s00862210/s00862210.cpp  _alloc_small  00862ef0  /O2 /arch:SSE /MD /Gy /TC
+slices/s00862210/s00862210.cpp  _alloc_sarray  00863100  /O2 /arch:SSE /MD /Gy /TC
+slices/s00862210/s00862210.cpp  _alloc_barray  008631b0  /O2 /arch:SSE /MD /Gy /TC

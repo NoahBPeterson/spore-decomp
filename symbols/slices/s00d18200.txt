@@ -1,0 +1,5 @@
+00d18200 ?Init@cGameEditInputStrategy@@QAEXXZ  # nonmatching (pre-existing, 1070) - level-editor strategy start-up: layout, root window, commands, control bindings
+00d18860 ?SetButtonHighlight@cGameEditInputStrategy@@QAEXPAUIWindow@@@Z  # nonmatching (655) - clear the highlight of every property row of the four placement windows, then highlight the button
+00d18b40 ?GetSaveFileName@cGameEditInputStrategy@@QAE_NPAU?$basic_string@_W@eastl@@_N@Z  # nonmatching (680) - strip the extension from the level name, reject <> and either format "<name>.lvl" back into the edit box or return the stem
+00d18cd0 ?FUN_00d18cd0@@YAXPAI0UcPropertyListNameSort@@@Z  # nonmatching (139) - eastl::make_heap<unsigned int*, cPropertyListNameSort>
+00d18d60 ?FUN_00d18d60@@YAXPAI0UcPropertyListNameSort@@@Z  # nonmatching (111) - eastl::pop_heap<unsigned int*, cPropertyListNameSort>

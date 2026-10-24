@@ -10,6 +10,7 @@
 #include <wchar.h>
 
 // unnamed retail callees and globals (address in the comment)
+struct StreamObject;
 extern void* GetManager();  // 0x67dcd0
 extern uint32_t EA_Hash_FNV1_String16(const void* s, uint32_t hash, int);  // 0x932f30
 extern void FUN_004c07e0(void* begin, void* end, char flag);               // 0x4c07e0
@@ -23,9 +24,9 @@ extern int FUN_004bd9f0(int);                                      // 0x4bd9f0
 extern bool FUN_004bdc60(int a, int b, bool c);                    // 0x4bdc60
 extern bool FUN_004be5d0();                                        // 0x4be5d0
 extern bool ReadRuntimeCreatureData(int data, uint32_t handle);    // 0x4bf430
-extern bool WriteRuntimeCreatureData(int* data);                   // 0x4bf770
+extern bool WriteRuntimeCreatureData(int* data, int handle);       // 0x4bf770
 extern int WriteBinaryEditorModel(int data);                       // 0x4b0010
-extern bool ReadBinaryEditorModel(int* a, int b);                  // 0x4bf9f0
+extern bool ReadBinaryEditorModel(StreamObject* stream, uint32_t key); // 0x4bf9f0
 extern bool SetAssetData(uint32_t type, uint8_t flag);             // 0x4bbe20
 extern void SetCachingType2(int, void*);                           // 0x6ac040
 extern void DestroyFixedBufferShared(void*);                       // 0x4bca10
@@ -60,7 +61,7 @@ struct cSPEditorResourceFactory {
     bool CreateResource(StreamObject* obj, int* out, uint32_t param_4, int typeHash);   // 004bc300
     bool ReadResource(StreamObject* stream, uint32_t param_2, uint32_t param_3, int typeHash);   // 004bc540
     bool WriteResource(StreamObject* stream, uint32_t param_1, uint32_t param_2, int typeHash);  // 004bc620
-    bool ReadResourceFromStream(StreamObject* stream, uint32_t key, int typeHash);               // 004bc6d0
+    static bool ReadResourceFromStream(StreamObject* stream, uint32_t key, int typeHash);               // 004bc6d0
 };
 struct TypeEntry {
     uint32_t mHash;        // +0
@@ -82,6 +83,13 @@ virtual void v1C();
 struct RefCounted_s004b_bfb0 {
     virtual void v0();       // +0
     virtual void Release();  // +4
+    RefCounted_s004b_bfb0* FUN_004b9c70();  // 0x4b9c70 (thiscall ctor, ecx = raw allocation)
+    RefCounted_s004b_bfb0* FUN_004b9da0();  // 0x4b9da0 (thiscall ctor, ecx = raw allocation)
+};
+struct WriteTarget_s004b_bfb0 {
+    virtual void w0(); virtual void w4(); virtual void w8(); virtual void wC();
+    virtual void w10(); virtual void w14();
+    virtual int v18(int a, ...);                         // +0x18 (caller-cleanup)
 };
 struct StreamObject {
 virtual void v0();
@@ -473,6 +481,7 @@ struct cEditorModelParser {
     void FUN_004bd9f0(int param);                   // 004bd9f0
     int FUN_004bdc00(int param);                    // 004bdc00
     bool FUN_004bdc60(int a, int b, uint8_t c);     // 004bdc60
+    bool FUN_004be5d0();                            // 004be5d0
     bool ReadULong(unsigned long* out);   // 004be380
     bool ReadFloat(float* out);           // 004be2e0
 };
@@ -632,14 +641,14 @@ bool cSPEditorResourceFactory::CreateResource(StreamObject* obj, int* out, uint3
             return false;
         EditorCreature* c = (EditorCreature*)EditorAlloc(0x128, "Editor", 0, 0, 0, 0);
         if (c)
-            c = (EditorCreature*)FUN_004b9da0(c);
+            c = (EditorCreature*)c->FUN_004b9da0();
         if (c)
             c->v0();
         local_8 = c;
     } else {
         RefCounted_s004b_bfb0* local_28 = (RefCounted_s004b_bfb0*)EditorAlloc(0xac, "Editor", 0, 0, 0, 0);
         if (local_28)
-            local_28 = FUN_004b9c70(local_28);
+            local_28 = local_28->FUN_004b9c70();
         if (local_28)
             local_28->v0();
         SetCachingType2(10, local_28);
@@ -687,20 +696,23 @@ bool cSPEditorResourceFactory::ReadResource(StreamObject* stream, uint32_t param
 // @ 0x004bc620
 bool cSPEditorResourceFactory::WriteResource(StreamObject* stream, uint32_t param_1, uint32_t param_2, int typeHash)
 {
-    if (typeHash != 0xf43029a) {
-        bool bakeable = SetAssetData((uint32_t)typeHash, 0);
-        if (!bakeable && typeHash != 0x1a99b06b)
-            return false;
-        int data = stream->v18((int)param_1, typeHash);
-        return WriteRuntimeCreatureData((int*)data) != 0;
+    (void)param_2;
+    WriteTarget_s004b_bfb0* target = (WriteTarget_s004b_bfb0*)(uint32_t)param_1;
+    if (typeHash == 0xf43029a) {
+        int handle = (int)FUN_004c0500((uint32_t)stream);
+        bool ok = false;
+        if (handle != 0) {
+            int data = target->v18(handle);
+            if (WriteRuntimeCreatureData((int*)data, handle))
+                ok = true;
+        }
+        return ok;
     }
-    int handle = (int)FUN_004c0500(param_1);
-    if (handle != 0) {
-        int data = stream->v18(handle, 0);
-        if (WriteRuntimeCreatureData((int*)data))
-            return true;
-    }
-    return false;
+    bool bakeable = SetAssetData((uint32_t)typeHash, 0);
+    if (!bakeable && typeHash != 0x1a99b06b)
+        return false;
+    int data = target->v18((int)stream, typeHash);
+    return SP::cSPEditorResourceFactory_s004b_cc50::WriteResourceToStream((IStream*)data, (int)stream, typeHash) != 0;
 }
 
 // @ 0x004bc6d0
@@ -710,30 +722,32 @@ bool cSPEditorResourceFactory::ReadResourceFromStream(StreamObject* stream, uint
     if (data == 0)
         return false;
     if (typeHash == 0x1a99b06b)
-        return ReadBinaryEditorModel((int*)data, key);
-    char buffer[17076];
-    EA::Allocator::FixedBufferAllocator_s004b_bfb0 fba;
-    fba.mpBufferInfo = 0;
-    fba.Create(((EA::Allocator::FixedBufferAllocator_s004b_bfb0::buffer_info*)buffer), 15000, 0);
-    FUN_004bd9f0(data);
+        return ReadBinaryEditorModel(stream, key);
+    cEditorModelParser parser;
+    EA::Allocator::FixedBufferAllocator_s004b_bfb0* fba =
+        (EA::Allocator::FixedBufferAllocator_s004b_bfb0*)&parser;
+    fba->mpBufferInfo = 0;
+    fba->Create((char*)&parser + 4, 15000, 0);
+    parser.FUN_004bd9f0(data);
     bool ok = true;
     bool done = false;
     while (ok && !done) {
-        int n = FUN_004bdc00(0x200);
+        int n = parser.FUN_004bdc00(0x200);
         if (n == 0) {
             ok = false;
         } else {
             int got = stream->v30((int*)n, 0x200);
             done = got != 0x200;
-            if (got == -1 || !FUN_004bdc60(n, got, done))
+            if (got == -1 || !parser.FUN_004bdc60(n, got, (uint8_t)done))
                 ok = false;
         }
     }
     if (ok)
-        ok = FUN_004be5d0();
-    FUN_004bdae0();
-    if (fba.mpBufferInfo != 0 && (fba.mpBufferInfo[1].mSignature & 0x40000000) != 0)
-        DestroyFixedBufferShared(&fba);
+        ok = parser.FUN_004be5d0();
+    parser.FUN_004bdae0();
+    if (fba->mpBufferInfo != 0 && (fba->mpBufferInfo[1].mSignature & 0x40000000) != 0)
+        fba->destroy_shared();
+    fba->mpBufferInfo = 0;
     return ok;
 }
 

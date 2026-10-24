@@ -98,11 +98,7 @@ static __forceinline void BakeCore(float* out, int count, int res, const int* da
     }
 
     const float* q = (const float*)(*(int*)(vtx + 4) + (uint32_t)*(uint16_t*)(vtx + 0xa) * data[0]);
-    // The original copies the three vertex floats into a stack local and passes that
-    // local's address as the transform's `base` argument (not the arena pointer), so
-    // the pointer reaching the call is a stack slot, not a heap address.
-    float vcopy[3] = {q[0], q[1], q[2]};
-    float* v = vcopy;
+    float v[3] = {q[0], q[1], q[2]};
     // Transform-specific offset vector: point transforms use a constant, the
     // others take 2 (offset), 3 (weighted x2) or 4 (weighted x3) floats from the
     // assigned companion block.
@@ -117,8 +113,7 @@ static __forceinline void BakeCore(float* out, int count, int res, const int* da
       }
     }
     float dir[3] = {1.0f, 0.0f, 0.0f};
-    float outA[3] = {0.0f, 0.0f, 0.0f};
-    float outB[3] = {0.0f, 0.0f, 0.0f};
+    float outA[3], outB[3];
     switch (xf) {
       case XF_POINT:   FUN_006c3550(outA, outB, v, dir, s, col, layout); break;
       case XF_OFFSET:  FUN_006c3780(outA, outB, v, dir, s, col, layout); break;

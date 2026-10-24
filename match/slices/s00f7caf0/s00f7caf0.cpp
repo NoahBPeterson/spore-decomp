@@ -9,6 +9,8 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
+
 namespace EA { namespace Swarm {
 
 struct Vector3
@@ -40,8 +42,9 @@ struct cBoundingBox
     Vector3 mMax;
     void Reset()
     {
-        mMin = Vector3(kFXMaxFloat, kFXMaxFloat, kFXMaxFloat);
-        mMax = Vector3(-kFXMaxFloat, -kFXMaxFloat, -kFXMaxFloat);
+        float v = kFXMaxFloat;
+        mMin = Vector3(v, v, v);
+        mMax = Vector3(-v, -v, -v);
     }
     void AddPoint(const Vector3& p)
     {
@@ -63,6 +66,7 @@ struct cTransform
     float mScale;                                                 // +0x10
     float mRotation[9];                                           // +0x14
     void TransformPoint(Vector3& v) const;                        // 0x007CDEE0
+    void InverseTransformPoint(Vector3& v) const;                 // 0x007CDA70
     void BackTransformVector(Vector3& v) const;                   // 0x00A78E90
 };
 
@@ -82,12 +86,118 @@ template<class T> struct vector
     T& operator[](uint32_t n) { return mpBegin[n]; }
     T* begin() const { return mpBegin; }
     T* end() const { return mpEnd; }
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
 };
 
 struct Color3 { float r, g, b; };
 struct Color4 { float a; Color3 rgb; };
-struct cIParam { virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-                 virtual uint32_t GetValue(); };                  // +0x10
+
+// 32-byte state block stored at cParticlesDescription::mStateBlock (+0x110).
+struct cEffectStateBlock
+{
+    uint32_t mField00;                                            // +0x00
+    uint32_t mField04;                                            // +0x04
+    uint8_t mStatus;                                              // +0x08
+    uint8_t mType;                                                // +0x09
+    uint8_t pad_0a[2];
+    uint32_t mField0c;                                            // +0x0C
+    uint32_t mField10;                                            // +0x10
+    uint32_t mField14;                                            // +0x14
+    uint32_t mField18;                                            // +0x18
+    uint32_t mField1c;                                            // +0x1C
+};
+
+// One 0x58-byte surface-parameter record in cParticlesDescription::mSurfaceParams.
+struct cSurfaceParam
+{
+    uint32_t mFlags;                                              // +0x00
+    uint32_t pad_04;
+    uint32_t mIdA;                                                // +0x08
+    uint32_t mIdB;                                                // +0x0C
+    uint32_t pad_10[18];
+};
+
+struct cEffectRef
+{
+    uint32_t mField00;
+    uint32_t mField04;
+    uint32_t mField08;
+    uint32_t mField0c;
+    uint32_t mField10;
+    uint32_t mField14;
+};
+
+// Surface-record vector at cParticlesEffectCore +0x1D4 (EffectVector::erase @ 0x00A8D020).
+struct cEffectVector
+{
+    cEffectRef* mpBegin;
+    cEffectRef* mpEnd;
+    cEffectRef* mpCapacity;
+    uint32_t mAllocator[2];
+    cEffectRef* __thiscall erase(cEffectRef* first, cEffectRef* last);   // 0x00A8D020
+};
+
+// Byte-per-element bool vector at cParticlesEffectCore +0x1EC (eastl vector<bool>).
+struct cBoolVector
+{
+    uint8_t* mpBegin;
+    uint8_t* mpEnd;
+    uint8_t* mpCapacity;
+    uint32_t mAllocator[2];
+
+    void erase_range(uint8_t* first, uint8_t* last)
+    {
+        memcpy(first, last, (unsigned int)(mpEnd - last));
+        mpEnd -= last - first;
+    }
+    void clear() { erase_range(mpBegin, mpEnd); }
+    void DoInsertValues(uint8_t* position, uint32_t count, const bool& value);   // 0x004C10E0
+    void resize(uint32_t n)
+    {
+        uint32_t cur = (uint32_t)(mpEnd - mpBegin);
+        if (n > cur)
+            DoInsertValues(mpEnd, n - cur, false);
+        else
+            erase_range(mpBegin + n, mpEnd);
+    }
+};
+
+struct cIParam { virtual void AddRef(); virtual void Release(); virtual void v08(); virtual void v0c();
+                 virtual uint32_t GetValue();                         // +0x10
+                 virtual void v14(); virtual void v18(); virtual bool IsReady();   // +0x1C
+                 virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+                 virtual void v30(); };
+
+// Particle-stream interface returned by cIEffectsWorld::GetRenderer and cParamFactory::v14.
+struct cIParticleStream
+{
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual void s10(uint8_t flags, uint8_t* out);                        // +0x10
+    virtual void s14();
+    virtual void s18(void* object, void* block, int* out);                // +0x18
+    virtual void s1c();
+    virtual void s20();
+    virtual uint8_t s24(uint32_t a, uint32_t b, int c);                   // +0x24
+    virtual void s28();
+    virtual void s2c(void* base2, void* block, int* out);                 // +0x2C
+};
+
+// Parameter/resource manager passed to cParticlesEffectCore::F7d3d0.
+struct cParamFactory
+{
+    virtual void p00(); virtual void p04(); virtual void p08(); virtual void p0c();
+    virtual void p10();
+    virtual cIParticleStream* p14();                                      // +0x14
+    virtual void p18(); virtual void p1c(); virtual void p20(); virtual void p24();
+    virtual void p28(); virtual void p2c(); virtual void p30(); virtual void p34();
+    virtual void p38(); virtual void p3c(); virtual void p40(); virtual void p44();
+    virtual void p48(); virtual void p4c(); virtual void p50(); virtual void p54();
+    virtual void p58(); virtual void p5c(); virtual void p60(); virtual void p64();
+    virtual void p68(); virtual void p6c(); virtual void p70(); virtual void p74();
+    virtual void p78(); virtual void p7c(); virtual void p80(); virtual void p84();
+    virtual void p88();
+    virtual cIParam* CreateParam(uint32_t idA, uint32_t idB);             // +0x8C
+};
 
 enum
 {
@@ -107,19 +217,38 @@ struct cParticlesDescription
     bitset<34> mFlags;                                            // +0x08
     Vector2 mParticleLifetime;                                    // +0x10
     float mPrerollTime;                                           // +0x18
-    uint32_t pad_1c[(0x68 - 0x1C) / 4];
+    uint32_t pad_1c[(0x4C - 0x1C) / 4];
+    Vector3 mColorParams1;                                        // +0x4C
+    Vector3 mColorParams2;                                        // +0x58
+    uint32_t pad_64;
     vector<float> mRateCurve;                                     // +0x68
     float mRateCurveTime;                                         // +0x7C
-    uint32_t pad_80[(0x130 - 0x80) / 4];
+    uint32_t pad_80[(0x88 - 0x80) / 4];
+    vector<float> mSizeCurve;                                     // +0x88
+    uint32_t pad_9c[(0x110 - 0x9C) / 4];
+    cEffectStateBlock mStateBlock;                                // +0x110
     uint8_t mPhysicsType;                                         // +0x130
-    uint8_t pad_131[0x13C - 0x131];
+    uint8_t pad_131[0x135 - 0x131];
+    uint8_t mPhysicsSubtype;                                      // +0x135
+    uint8_t pad_136[0x13C - 0x136];
     Vector3 mDirectionalForcesSum;                                // +0x13C
     float mWindStrength;                                          // +0x148
     float mGravityStrength;                                       // +0x14C
     float mRadialForce;                                           // +0x150
     Vector3 mRadialForceLocation;                                 // +0x154
     float mDrag;                                                  // +0x160
-    uint32_t pad_164[(0x200 - 0x164) / 4];
+    uint32_t pad_164[(0x1AC - 0x164) / 4];
+    vector<cSurfaceParam> mSurfaceParams;                         // +0x1AC
+    uint32_t pad_1c0[(0x1DC - 0x1C0) / 4];
+    uint32_t mField1dc;                                           // +0x1DC
+    uint32_t mField1e0;                                           // +0x1E0
+    uint32_t pad_1e4;
+    uint32_t mParamMask0A;                                        // +0x1E8
+    uint32_t mParamMask0B;                                        // +0x1EC
+    uint32_t mParamMask1A;                                        // +0x1F0
+    uint32_t mParamMask1B;                                        // +0x1F4
+    uint32_t mParamMask2A;                                        // +0x1F8
+    uint32_t mParamMask2B;                                        // +0x1FC
     uint32_t pad_200[(0x234 - 0x200) / 4];
     Vector3 mAttractorOrigin;                                     // +0x234
 };
@@ -179,6 +308,9 @@ class cIEffectsWorld
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual cIRenderer* GetRenderer();                                                     // +0x20
+    virtual void v24(); virtual void v28();
+    virtual cGlobalParams* GetGlobalParams();                                              // +0x2C
+    virtual cParamFactory* GetParamFactory();                                              // +0x30
 };
 
 struct cSurfaceInfo;
@@ -208,6 +340,7 @@ struct cStats
 };
 
 class cParticlesEffect;
+class cParticlesEffectCore;
 typedef bool (*PhysicsUpdateFn)(cParticle* p, float dt, cParticlesDescription* desc, cParticlesEffect* effect);
 extern PhysicsUpdateFn sPhysicsUpdate[];                          // 0x015B0EBC
 bool UpdatePhysicsTimeStep(cParticle* p, float dt, cParticlesDescription* desc, cParticlesEffect* effect); // 0x00AAE900
@@ -294,6 +427,224 @@ public:
     void GenerateNewParticles(float deltaTime);                   // 0x00AB1840
     virtual void ApplyEffect(float deltaTime, float lodFactor, cStats* stats);
 };
+
+// Complete-object view of the same effect (this = component - 8); the second base subobject sits at +4.
+struct cParticleBase0 { virtual void b00(); };
+struct cParticleBase1 { virtual void b10(); };
+
+class cParticlesEffectCore : public cParticleBase0, public cParticleBase1
+{
+public:
+    uint32_t pad_08[(0x24 - 0x08) / 4];
+    cParticlesDescription* mDesc;                                 // +0x24
+    uint32_t pad_28[(0x58 - 0x28) / 4];
+    double mRateCurveTimeInv;                                     // +0x58
+    uint32_t pad_60[(0x74 - 0x60) / 4];
+    Vector3 mAttractorLocation;                                   // +0x74
+    float mAttractorIntensity;                                    // +0x80
+    uint32_t pad_84[(0xA0 - 0x84) / 4];
+    float mMaxParticleSize;                                       // +0xA0
+    uint32_t pad_a4[(0xE8 - 0xA4) / 4];
+    cTransform mRigidTransform;                                   // +0xE8
+    uint32_t pad_120[(0x168 - 0x120) / 4];
+    uint32_t mPhysicsType;                                        // +0x168
+    uint32_t mPhysicsField16c;                                    // +0x16C
+    uint32_t mPhysicsField170;                                    // +0x170
+    uint32_t pad_174[(0x194 - 0x174) / 4];
+    cIParam* mParam0;                                             // +0x194
+    cIParam* mParamA;                                             // +0x198
+    cIParam* mParamB;                                             // +0x19C
+    bool mParam0Ready;                                            // +0x1A0
+    bool mParamAReady;                                            // +0x1A1
+    bool mParamBReady;                                            // +0x1A2
+    uint8_t pad_1a3;
+    uint32_t mCachedParamA;                                       // +0x1A4
+    uint32_t mCachedParamB;                                       // +0x1A8
+    Vector3 mColorParams1;                                        // +0x1AC
+    Vector3 mColorParams2;                                        // +0x1B8
+    uint32_t pad_1c4[(0x1D4 - 0x1C4) / 4];
+    cEffectVector mSurfaceRecs;                                   // +0x1D4
+    bool mSurfaceStateDataValid;                                  // +0x1E8
+    uint8_t pad_1e9[3];
+    cBoolVector mSurfaceStateData;                                // +0x1EC
+    bool mStateDirty;                                             // +0x200
+
+    void F7d3d0(cParamFactory* mgr);                              // 0x00F7D3D0
+};
+
+// Component-subobject view of the effect (this = complete object + 8). All member offsets are the
+// class offsets in cParticlesEffect minus 8, which is the convention both original functions use.
+class cParticlesEffectView
+{
+public:
+    virtual void v00();                                           // +0x00 component vftable
+    uint32_t mRefCount[2];                                        // +0x04 (cComponentBase::mRefCountBase)
+    uint32_t pad_0c[(0x1C - 0x0C) / 4];
+    cParticlesDescription* mDesc;                                 // +0x1C
+    uint32_t pad_20;
+    cIEffectsWorld* mWorld;                                       // +0x24
+    cGlobalParams* mGlobalParams;                                 // +0x28
+    uint32_t pad_2c[(0x80 - 0x2C) / 4];
+    cBoundingBox mBoundingBox;                                    // +0x80
+    uint32_t pad_98[(0x1C0 - 0x98) / 4];
+    uint32_t mSurfaceParamMaskA;                                  // +0x1C0
+    uint32_t mSurfaceParamMaskB;                                  // +0x1C4
+    uint32_t pad_1c8[(0x218 - 0x1C8) / 4];
+    int mModelParticlesID;                                        // +0x218
+    int mTextureParticlesID;                                      // +0x21C
+    uint8_t mStreamState[5];                                      // +0x220
+    uint8_t pad_225;
+    uint8_t mStreamFlag;                                          // +0x226
+
+    cParticlesEffectCore* core() { return (cParticlesEffectCore*)((char*)this - 8); }
+    void F7d7a0(cIEffectsWorld* world, cParamFactory* mgr, void* unused);  // 0x00F7D7A0
+    void F7d990(cParticlesDescription* desc);                     // 0x00F7D990
+};
+
+extern Vector3 gZeroVector;                                       // 0x016C9B28
+void BuildSurfaceRecs(cParamFactory* mgr, vector<cSurfaceParam>* params, cEffectVector* recs,
+                      int* size0, int* size1, bool* dirty);       // 0x00A7FC10
+
+// @ 0x00F7D3D0
+void __thiscall cParticlesEffectCore::F7d3d0(cParamFactory* mgr)
+{
+    const float minRate = 1e-6f;
+    const float& rate = mDesc->mRateCurveTime > minRate ? mDesc->mRateCurveTime : minRate;
+    mRateCurveTimeInv = 1.0 / rate;
+
+    mPhysicsField16c = mDesc->mField1dc;
+    mPhysicsField170 = mDesc->mField1e0;
+    mPhysicsType = mDesc->mPhysicsSubtype;
+
+    if (mDesc->mFlags.test(kParticleFlagAttractor)) {
+        mAttractorLocation = mDesc->mAttractorOrigin;
+        mRigidTransform.InverseTransformPoint(mAttractorLocation);
+        mAttractorIntensity = 1.0f;
+    } else {
+        mAttractorLocation = gZeroVector;
+        mAttractorIntensity = 0.0f;
+    }
+
+    mColorParams2 = mDesc->mColorParams2;
+    mColorParams1 = mDesc->mColorParams1;
+
+    mMaxParticleSize = mDesc->mSizeCurve[0];
+    for (uint32_t i = 1; i < mDesc->mSizeCurve.size(); ++i) {
+        if (mMaxParticleSize < mDesc->mSizeCurve[i])
+            mMaxParticleSize = mDesc->mSizeCurve[i];
+    }
+
+    if ((mDesc->mParamMask0A & mDesc->mParamMask0B) != 0xffffffff) {
+        cIParam* p = mgr->CreateParam(mDesc->mParamMask0A, mDesc->mParamMask0B);
+        cIParam* old = mParam0;
+        if (p != old) {
+            if (p) p->AddRef();
+            mParam0 = p;
+            if (old) old->Release();
+        }
+    }
+    if ((mDesc->mParamMask1A & mDesc->mParamMask1B) != 0xffffffff) {
+        cIParam* p = mgr->CreateParam(mDesc->mParamMask1A, mDesc->mParamMask1B);
+        cIParam* old = mParamA;
+        if (p != old) {
+            if (p) p->AddRef();
+            mParamA = p;
+            if (old) old->Release();
+        }
+    }
+    if ((mDesc->mParamMask2A & mDesc->mParamMask2B) != 0xffffffff) {
+        cIParam* p = mgr->CreateParam(mDesc->mParamMask2A, mDesc->mParamMask2B);
+        cIParam* old = mParamB;
+        if (p != old) {
+            if (p) p->AddRef();
+            mParamB = p;
+            if (old) old->Release();
+        }
+    }
+
+    if (mParam0) {
+        mParam0->v08();
+        mParam0Ready = mParam0->IsReady();
+    }
+    if (mParamA) {
+        mParamA->v08();
+        mParamAReady = mParamA->IsReady();
+        mCachedParamA = mParamA->GetValue();
+    }
+    if (mParamB) {
+        mParamB->v08();
+        mParamBReady = mParamB->IsReady();
+        mCachedParamB = mParamB->GetValue();
+    }
+
+    mSurfaceRecs.erase(mSurfaceRecs.mpBegin, mSurfaceRecs.mpEnd);
+
+    vector<cSurfaceParam>& params = mDesc->mSurfaceParams;
+    if (!params.empty()) {
+        int size0 = 0;
+        int size1 = 0;
+        BuildSurfaceRecs(mgr, &params, &mSurfaceRecs, &size0, &size1, &mStateDirty);
+        mSurfaceStateDataValid = false;
+        mSurfaceStateData.resize((uint32_t)size0);
+    } else {
+        mSurfaceStateData.clear();
+        mStateDirty = false;
+    }
+}
+
+// @ 0x00F7D7A0
+void __thiscall cParticlesEffectView::F7d7a0(cIEffectsWorld* world, cParamFactory* mgr, void* unused)
+{
+    mWorld = world;
+    mGlobalParams = world->GetGlobalParams();
+    mBoundingBox.Reset();
+    core()->F7d3d0(mgr);
+
+    cIParticleStream* p6 = mgr->p14();
+    cIParticleStream* p7 = (cIParticleStream*)world->GetRenderer();
+    if (!p7)
+        return;
+
+    cParticlesDescription* desc = mDesc;
+    cEffectStateBlock block = desc->mStateBlock;
+    uint32_t maskA = mSurfaceParamMaskA;
+    uint32_t maskB = mSurfaceParamMaskB;
+    if ((maskB & maskA) != 0xffffffff) {
+        block.mField00 = maskA;
+        block.mField04 = maskB;
+    }
+
+    if (desc->mFlags.test(kParticleFlagModelStats)) {
+        if (block.mType == 0x0f)
+            block.mStatus = p6->s24(block.mField18, block.mField1c, 9);
+        else
+            block.mStatus = 9;
+        p7->s2c(static_cast<cParticleBase1*>(core()), &block, &mModelParticlesID);
+        p7->s10(block.mStatus, &mStreamState[0]);
+    } else {
+        if (block.mType == 0x0f) {
+            block.mStatus = 0x10;
+            mStreamState[0] = 0;
+            mStreamState[1] = 0x10;
+            mStreamState[2] = 0x20;
+            mStreamState[3] = 0x24;
+            mStreamState[4] = 0x28;
+        } else {
+            block.mStatus = 0;
+            p7->s10(0, &mStreamState[0]);
+        }
+        p7->s18(core(), &block, &mTextureParticlesID);
+    }
+    mStreamFlag = block.mStatus;
+}
+
+// @ 0x00F7D990
+void __thiscall cParticlesEffectView::F7d990(cParticlesDescription* desc)
+{
+    mDesc = desc;
+    cParamFactory* mgr = mWorld->GetParamFactory();
+    core()->F7d3d0(mgr);
+}
 
 // Inlined here (dev: EA::Swarm::UpdatePhysicsSimple).
 __forceinline bool UpdatePhysicsSimple(cParticle* p, float dt, cParticlesDescription* desc, cParticlesEffect* effect)

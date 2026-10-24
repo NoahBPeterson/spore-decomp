@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a3bc70/s00a3bc70.cpp  ?Init@cListener@@QAE_NXZ  00a3c710  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a3bc70/s00a3bc70.cpp  ?SetTuningId@cListener@@QAEXI@Z  00a3c800  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a3bc70/s00a3bc70.cpp  ??0cListener@@QAE@XZ  00a3c970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a3bc70/s00a3bc70.cpp  ?FUN_00a3cac0@@YAXPAUcMapDescription@@PAUIWriter@IO@EA@@@Z  00a3cac0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a3bc70/s00a3bc70.cpp  ??_GcListener@@UAEPAXI@Z  00a3ca60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a3bc70/s00a3bc70.cpp  ?FUN_00a3cb20@@YAPAUcMapDescription@@PAUIReader@IO@EA@@H@Z  00a3cb20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

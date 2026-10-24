@@ -25,6 +25,15 @@ struct RBTreeFloatStub { int CopyCtor(void* src); int InsertFloat(int retval, vo
 struct HashFreeStub { void DoFreeNodes(void** pArr, unsigned n); };
 struct VecRangeStub { void RangeCtor(int* first, int* last, int flag); };
 
+// Callees that are thiscall members: the original loads ecx before each call.
+struct RBTreeOps {
+    void* FUN_005699f0(void* src, void* dst);   // 0x5699f0
+    void* FUN_00569b10(void* key);              // 0x569b10
+};
+struct NodeSlot {
+    void FUN_00566c50(void* node);              // 0x566c50
+};
+
 // @ 0x00567a90  (large vector DoInsertValue helper)
 void* FUN_00567a90(void* this_, void* pos, int n, void* value) {
     (void)this_; (void)pos; (void)n; (void)value;
@@ -62,7 +71,7 @@ int RBTreeIntStub::CopyCtor(void* src) {
     *(char*)((char*)this_ + 0x10) = 0;
     *(int*)((char*)this_ + 0x14) = 0;
     if (*(int*)((char*)src + 0xc) != 0) {
-        void* u = FUN_005699f0(*(void**)((char*)src + 0xc), (char*)this_ + 4);
+        void* u = ((RBTreeOps*)this_)->FUN_005699f0(*(void**)((char*)src + 0xc), (char*)this_ + 4);
         *(void**)((char*)this_ + 0xc) = u;
         int* local_8;
         for (local_8 = *(int**)((char*)this_ + 0xc); *local_8 != 0; local_8 = (int*)*local_8) {
@@ -124,14 +133,14 @@ int RBTreeFloatStub::CopyCtor(void* src) {
 int RBTreeFloatStub::InsertFloat(int retval, void* pos, float* key, char flag) {
     void* this_ = this;
     int local;
-    if (flag == 0 && pos != (char*)this_ + 4 && *key < *(float*)((char*)pos + 0x10))
+    if (flag == 0 && pos != (char*)this_ + 4 && *(float*)((char*)pos + 0x10) <= *key)
         local = 1;
     else
         local = 0;
-    void* node = FUN_00569b10(key);
+    void* node = ((RBTreeOps*)this_)->FUN_00569b10(key);
     RBTreeInsert(node, pos, (char*)this_ + 4, (char)local);
     *(int*)((char*)this_ + 0x14) += 1;
-    FUN_00566c50(node);
+    ((NodeSlot*)retval)->FUN_00566c50(node);
     return retval;
 }
 
@@ -184,10 +193,11 @@ void HashFreeStub::DoFreeNodes(void** pArr, unsigned n) {
     for (unsigned i = 0; i < n; ++i) {
         void* node = pArr[i];
         while (node) {
-            void* next = *(void**)node;
+            void* next = *(void**)((char*)node + 8);
             EASTL_allocator_deallocate(node);
             node = next;
         }
+        pArr[i] = 0;
     }
 }
 

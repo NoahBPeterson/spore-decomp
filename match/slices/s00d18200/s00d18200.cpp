@@ -77,6 +77,9 @@ template <class T> struct basic_string {
     }
     const T* c_str() const { return mpBegin; }
     int size() const { return (int)(mpEnd - mpBegin); }
+    basic_string substr(int pos, int count) const;          // 0x00453d20
+    basic_string& assign(const basic_string& x);            // 0x00423650
+    int find(T c, int start) const;                         // 0x008364c0
 };
 typedef basic_string<wchar_t> string16;
 }  // namespace eastl
@@ -150,7 +153,11 @@ struct IWindow : IObject {
 };
 
 struct IWinTextEdit : IObject {
-    PV4 PV4 PV4 PV4 PV4                                           // +0x10..+0x5c
+    PV16                                                          // +0x10..+0x4c
+    virtual int IsVisible();                                      // +0x50
+    PV                                                            // +0x54
+    virtual void GetText(eastl::string16* pText, int arg);        // +0x58
+    PV                                                            // +0x5c
     virtual int SetText(const wchar_t* pText, int arg);           // +0x60
 };
 
@@ -225,6 +232,8 @@ public:
 
     void Init();
     void HotloadLevelEditorProp();                       // 0x00d160c0
+    void SetButtonHighlight(IWindow* pButton);           // 0x00d18860
+    bool GetSaveFileName(eastl::string16* pOutName, bool bAppendExtension);   // 0x00d18b40
 };
 
 // @ 0x00d18200
@@ -295,4 +304,193 @@ void cGameEditInputStrategy::Init()
     mGameplayMarkerScrollbar->SetMaxValue(RoundToInt(area.y2 - area.y1), 1);
 
     HotloadLevelEditorProp();
+}
+
+// ------------------------------------------------------------------ editor property lists
+wchar_t* WStr_Format(wchar_t* pDestination, const wchar_t* pFormat, ...);   // 0x0041e050
+
+// Object holding slot +0x5c: the "highlight" of a property row, also used on the button window.
+class IHighlightable {
+public:
+    PV16 PV4 PV2 PV                                   // +0x00 .. +0x58
+    virtual void SetHighlight(int value);             // +0x5c
+};
+
+// Property row of one of the editor's lists: a singly linked list threaded through +0x00.
+class cPropertyRow : public IHighlightable {
+public:
+    cPropertyRow* mpNext;                             // +0x00
+};
+
+// Window slots used to walk the property rows of a window.
+class IWindowProperties {
+public:
+    PV16 PV16 PV8 PV8 PV2 PV                          // +0x00 .. +0xc8 (51 slots)
+    virtual cPropertyRow* GetFirstProperty();         // +0xcc
+    virtual cPropertyRow* GetLastProperty();          // +0xd0
+};
+
+// Node of the temporary eastl::list<IWindow*> the highlight pass walks.
+struct cWindowListNode {
+    cWindowListNode* mpNext;                          // +0x00
+    cWindowListNode* mpPrev;                          // +0x04
+    IWindow* mpWindow;                                // +0x08
+};
+
+// eastl::list node allocation (operator new[] with the editor's allocator tag).
+static cWindowListNode* NewWindowListNode()
+{
+    return (cWindowListNode*)operator new[](0xc, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1);
+}
+
+// Clears the highlight of every property row the editor's four placement windows own and then
+// highlights the button window (or removes it when pButton is null).
+// @ 0x00d18860
+void cGameEditInputStrategy::SetButtonHighlight(IWindow* pButton)
+{
+    static const uint32_t kWindowIDs[4] = { 0xf005f487, 0x15cfe1c, 0xf005f487, 0x147adb6 };
+
+    cWindowListNode head;                             // list sentinel
+    head.mpNext = &head;
+    head.mpPrev = &head;
+    head.mpWindow = 0;
+
+    IWindow* pWindows[4];
+    cWindowListNode* pTail = &head;
+    for (int i = 0; i < 4; ++i)
+    {
+        IWindow* pWindow = mLayout.FindWindowByID(kWindowIDs[i], true);
+        pWindows[i] = pWindow;
+        if (pWindow)
+            pWindow->AddRef();
+        cWindowListNode* pNode = NewWindowListNode();
+        pNode->mpWindow = pWindow;
+        pNode->mpNext = &head;
+        pNode->mpPrev = pTail;
+        pTail->mpNext = pNode;
+        pTail = pNode;
+    }
+
+    for (cWindowListNode* pNode = head.mpNext; pNode != &head; pNode = pNode->mpNext)
+    {
+        IWindow* pWindow = pNode->mpWindow;
+        if (pWindow == 0)
+            continue;
+        pWindow->AddRef();
+        IWindowProperties* pProperties = (IWindowProperties*)pWindow;
+        cPropertyRow* pLastRow = pProperties->GetLastProperty();
+        for (cPropertyRow* pRow = pProperties->GetFirstProperty(); pRow != pLastRow; pRow = pRow->mpNext)
+            pRow->SetHighlight(-1);
+        pWindow->Release();
+    }
+
+    if (pButton != 0)
+        ((IHighlightable*)pButton)->SetHighlight(0xffffc4ec);
+    for (int i = 3; i >= 0; --i)
+    {
+        if (pWindows[i] != 0)
+            pWindows[i]->Release();
+    }
+
+    // free the temporary list
+    cWindowListNode* pNode = head.mpNext;
+    while (pNode != &head)
+    {
+        cWindowListNode* pNext = pNode->mpNext;
+        if (pNode->mpWindow != 0)
+            pNode->mpWindow->Release();
+        operator delete(pNode);
+        pNode = pNext;
+    }
+
+    if (pButton != 0)
+        pButton->Release();
+}
+
+// Takes the name typed into the level-name edit box, drops everything from the first '.' on,
+// rejects names that still contain '<' or '>' and either formats "<name>.lvl" back into the edit
+// box or returns the bare name.
+// @ 0x00d18b40
+bool cGameEditInputStrategy::GetSaveFileName(eastl::string16* pOutName, bool bAppendExtension)
+{
+    IWinTextEdit* pEdit = mLevelNameTextEdit;
+    if (!pEdit->IsVisible())
+        return false;
+
+    eastl::string16 text;
+    pEdit->GetText(&text, 0);
+
+    int dot = -1;
+    for (const wchar_t* p = text.mpBegin; p != text.mpEnd; ++p)
+    {
+        if (*p == L'.')
+        {
+            dot = (int)(p - text.mpBegin);
+            break;
+        }
+    }
+
+    eastl::string16 stem;
+    if (dot != -1)
+    {
+        eastl::string16 head = text.substr(0, dot);
+        stem.assign(head);
+        if (head.find(L'<', 0) != -1 || head.find(L'>', 0) != -1)
+            return false;
+    }
+    else
+        stem.assign(text);
+
+    if (bAppendExtension)
+    {
+        WStr_Format(pOutName->mpBegin, L"%s.lvl", stem.mpBegin);
+        pEdit->SetText(pOutName->mpBegin, 0);
+    }
+    else
+        pOutName->assign(stem);
+
+    return true;
+}
+
+// ------------------------------------------------------------------ heap builders
+// Comparator carrying the two names a property list is sorted by; it is passed by value, so the
+// callees destroy their own copies.
+struct cPropertyListNameSort {
+    eastl::string16 mNameA;                           // +0x00
+    eastl::string16 mNameB;                           // +0x10
+};
+
+// eastl::adjust_heap<unsigned int*, int, unsigned int, cPropertyListNameSort>
+void FUN_00d180c0(uint32_t* pFirst, int parent, int count, int child, uint32_t value, cPropertyListNameSort compare);   // 0x00d180c0
+// eastl::adjust_heap<unsigned int*, int, unsigned int, cPropertyListNameSort> from pop_heap
+void FUN_00d18180(uint32_t* pFirst, uint32_t* pLast, cPropertyListNameSort compare);                                   // 0x00d18180
+
+// eastl::make_heap<unsigned int*, cPropertyListNameSort>: sift every parent of the implicit tree
+// down from the last one that has children.
+// @ 0x00d18cd0
+void FUN_00d18cd0(uint32_t* pFirst, uint32_t* pLast, cPropertyListNameSort compare)
+{
+    const int count = (int)(pLast - pFirst);
+    if (count >= 2)
+    {
+        int parent = (count - 2) / 2;
+        do
+        {
+            FUN_00d180c0(pFirst, parent, count, parent, pFirst[parent], compare);
+        } while (parent-- != 0);
+    }
+}
+
+// eastl::pop_heap<unsigned int*, SP::`anonymous namespace'::cPropertyListNameSort>: move the top
+// element to the end and restore the heap, one element shorter each time.
+// @ 0x00d18d60
+void FUN_00d18d60(uint32_t* pFirst, uint32_t* pLast, cPropertyListNameSort compare)
+{
+    for (int count = (int)(pLast - pFirst); count > 1; --count)
+    {
+        FUN_00d18180(pFirst, pLast, compare);
+        --pLast;
+    }
 }

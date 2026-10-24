@@ -1,0 +1,5 @@
+slices/s0086d090/s0086d090.cpp  ?png_set_filter_heuristics@@YAXPAUpng_struct_def@@HHPAN1@Z  0086d090  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast
+slices/s0086d090/s0086d090.cpp  ?png_create_write_struct_2@@YAPAUpng_struct_def@@PBDPAXP6AXPAU1@0@Z31P6APAX2I@ZP6AX21@Z@Z  0086d3c0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast
+slices/s0086d090/s0086d090.cpp  ?png_create_struct_2@@YAPAXHP6APAXPAUpng_struct_def@@I@ZPAX@Z  0086d690  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast
+slices/s0086d090/s0086d090.cpp  ?png_destroy_struct_2@@YAXPAXP6AXPAUpng_struct_def@@0@Z0@Z  0086d710  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast
+slices/s0086d090/s0086d090.cpp  ?png_destroy_struct@@YAXPAX@Z  0086d7d0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast

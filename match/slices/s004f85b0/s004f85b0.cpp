@@ -46,28 +46,63 @@ void __fastcall FUN_004f87f0(int* self)
 }
 
 // ===========================================================================
+// Shared types for the ability object at 0x4f8880..0x4f8d80.
+// The retail functions are __thiscall (ecx = this, callee pops the stack args).
+// ===========================================================================
+struct SPMemPool {                                    // the global pool at 0x016c8b44
+    void  FUN_009276c0(void* p);                      // 0x009276c0  free (ret 4)
+    void* FUN_00928a30(uint32_t size, uint32_t align,
+                       int a, int b, int c, int d, int e, int f);  // 0x00928a30 (ret 0x20)
+};
+extern SPMemPool* g_pSPMemPool;                       // 0x016c8b44
+
+struct SimpleVectorU32 {                              // begin/end/capacity at +0/+4/+8
+    void** mpBegin;                                   // +0
+    void** mpEnd;                                     // +4
+    void** mpCapacity;                                // +8
+    void   FUN_004fc610(void** value);                // 0x004fc610  push_back(&value) (ret 4)
+    void** erase(void** first, void** last);          // 0x004769b0  (ret 8)
+};
+
+struct AbilityEntry {                                 // 0x80-byte entry of the table
+    float FUN_004f8e20(int arg1);                     // 0x004f8e20  (ret 4)
+};
+
+struct SkinnerAbility {
+    char            mPad0[0xc];
+    float           mfCost;                           // +0x0c  negated as the sum seed
+    char            mPad10[0x58 - 0x10];
+    SimpleVectorU32 mChunks;                          // +0x58  allocated pool chunks
+    char            mPad64[0xf0 - 0x64];
+    char*           mpBump;                           // +0xf0  bump pointer in the current chunk
+    unsigned int    mnRemaining;                      // +0xf4  bytes left in the current chunk
+
+    void* FUN_004f8880(int size, int param3);         // 0x004f8880
+    void  FUN_004f89a0();                             // 0x004f89a0
+    void* FUN_004f8f70(int arg1);                     // 0x004f8f70  (ret 4)
+    void  FUN_004f8d80(int arg1, float* out);         // 0x004f8d80
+};
+
+// ===========================================================================
 // @ 0x004f8880  (complete; not byte-exact)  aligned pool allocator.
 // ===========================================================================
-void* FUN_00928a30(int, int, int, int, int, int, int, int);
-void FUN_004fc610(void* pool, int* p);
-
-void* __fastcall FUN_004f8880(int* self, int, int size, int param3)
+void* SkinnerAbility::FUN_004f8880(int size, int param3)
 {
     size = (size + 0x10 + 0xf) & 0xfffffff0;
-    int local8 = self[0xf0 / 4];
-    if ((uint32_t)self[0xf4 / 4] < (uint32_t)size) {
-        int chunk = (size > 0x8000) ? size : 0x8000;
-        local8 = (int)FUN_00928a30(chunk, 0x10, 0, 0, 0, 0, 0, 0);
-        FUN_004fc610((char*)self + 0x58, &local8);
-        self[0xf0 / 4] = local8;
-        self[0xf4 / 4] = chunk;
+    char* base = mpBump;
+    if ((uint32_t)size > mnRemaining) {
+        uint32_t chunk = (uint32_t)size > 0x8000 ? (uint32_t)size : 0x8000;
+        base = (char*)g_pSPMemPool->FUN_00928a30(chunk, 0x10, 0, 0, 0, 0, 0, 0);
+        mChunks.FUN_004fc610((void**)&base);
+        mpBump = base;
+        mnRemaining = chunk;
     }
-    self[0xf0 / 4] += size;
-    self[0xf4 / 4] -= size;
-    int* p = (int*)((local8 + 0xf) & 0xfffffff0);
+    mpBump += size;
+    mnRemaining -= size;
+    uint32_t* p = (uint32_t*)((uint32_t)(base + 0xf) & 0xfffffff0);
     p[0] = 0xd6d6d6d6;
-    p[1] = local8;
-    p[2] = param3;
+    p[1] = (uint32_t)base;
+    p[2] = (uint32_t)param3;
     p[3] = 0x29292929;
     return p + 4;
 }
@@ -75,38 +110,27 @@ void* __fastcall FUN_004f8880(int* self, int, int size, int param3)
 // ===========================================================================
 // @ 0x004f89a0  (complete; not byte-exact)  local-light vector destructor.
 // ===========================================================================
-void FUN_004769b0(void* first, void* last);
-extern void* g_16c8b44;
-struct Light { void Destroy(); };
-
-void __fastcall FUN_004f89a0(int self)
+void SkinnerAbility::FUN_004f89a0()
 {
-    int i;
-    int count = (*(int*)(self + 0x5c) - *(int*)(self + 0x58)) >> 2;
-    for (i = 0; i < count; i++) {
-        int* p = *(int**)(self + 0x58);
-        ((Light*)g_16c8b44)->Destroy();
-        (void)p;
-    }
-    FUN_004769b0(*(void**)(self + 0x58), *(void**)(self + 0x5c));
-    *(int*)(self + 0xf0) = 0;
-    *(int*)(self + 0xf4) = 0;
+    int count = (int)(mChunks.mpEnd - mChunks.mpBegin);
+    for (int i = 0; i < count; i++)
+        g_pSPMemPool->FUN_009276c0(mChunks.mpBegin[i]);
+    mChunks.erase(mChunks.mpBegin, mChunks.mpEnd);
+    mpBump = 0;
+    mnRemaining = 0;
 }
 
 // ===========================================================================
 // @ 0x004f8d80  (complete; not byte-exact)  weighted distance sum.
 // ===========================================================================
-float FUN_004f8e20(int, void*);
-void* FUN_004f8f70(int this_, int p2);
-
-void __fastcall FUN_004f8d80(int self, int, int p2, float* out)
+void SkinnerAbility::FUN_004f8d80(int arg1, float* out)
 {
-    float sum = -*(float*)(self + 0xc);
-    void* table = FUN_004f8f70(self, p2);
+    float sum = -mfCost;
+    void* table = FUN_004f8f70(arg1);
     if (table != 0) {
         uint32_t n = *(uint32_t*)((char*)table - 8);
         for (uint32_t i = 0; i < n; i++)
-            sum += FUN_004f8e20((int)((char*)table + (i << 7)), (void*)p2);
+            sum += ((AbilityEntry*)((char*)table + (i << 7)))->FUN_004f8e20(arg1);
     }
     *out = sum;
 }

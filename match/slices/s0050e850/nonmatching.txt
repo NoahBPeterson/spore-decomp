@@ -6,9 +6,9 @@
 0050eb40   136  UninitCopy12: complete placement-copy loop; frame slots differ
 0050ebe0   131  SortCmp: complete sort driver (quick_sort + insertion sorts); callee slots differ
 0050eca0   201  Vec100::EraseRange: complete copy+destroy tail; frame slot layout differs
-0050ed90   659  Vec100::DoInsertValue: complete insert-at-position (grow and in-place paths); frame slots differ
+0050ed90   674  Vec100::DoInsertValue: complete insert-at-position (grow and in-place paths); grow path calls the retail helpers (Alloc100 0x00511810, UninitRelocate100 0x00510080, move 0x00511d50 + commit 0x00511880); equiv WEAK (27 valid, 59.6% cov); /Od frame slots differ (537 vs 736)
 0050f070     6  VectorBase::~VectorBase: complete; three locals in different /Od hash slots
-0050f0d0   145  SortDefault: complete sort driver; callee slots differ
-0050f210    67  Elem100::operator=: complete; inlined FixedVec::operator= frame layout differs; equiv FAIL (5/5 mismatched, execution) after symbol fix
+0050f0d0    80  SortDefault: complete sort driver; element count is last-first (pointer subtraction) and QuickSort1E takes 3 args (no cmp); equiv PASS (296 valid, 89.8% cov); /Od frame slots differ (162 == 162)
+0050f210    64  Elem100::operator=: complete; FixedVec::operator= now calls SimpleVector::erase (0x004769b0) and DwordVector::assign (0x0042c750) as members (ecx = this); equiv WEAK (177 valid, 100% cov); inlined frame layout differs (109 vs 121)
 0050f290  1186  Vec24Full::DoInsertValues: complete insert-n path (grow and in-place); frame slots differ; equiv UNSUPPORTED (unresolved ref ??0Vector3 copy ctor) after marker fix
 0050f7f0   156  UninitCopy20: complete uninitialized_copy with out-param; frame slots differ

@@ -38,10 +38,25 @@ void Matrix33_Convert(M33* out, const M33* in);    // 0x0041ded0 (cdecl)
 
 #define PAD(n) virtual void pad##n() {}
 
+extern "C" void __cdecl FUN_00f47380(void* pBuffer);   // 0x00f47380 operator delete
+
+class IConfiguration;
+
+// EA::Audio::ResponseCurve (0x364 bytes): 13-entry inline array at +0, spill buffer at +0x10
 struct ResponseCurve {
+    ResponseCurve();                               // 0x00a1aa50 thiscall
+    ~ResponseCurve() { if (mpBegin != 0 && mpBegin != mpCapacity) FUN_00f47380(mpBegin); }
+    bool InitFromConfiguration(IConfiguration* pConfig, uint32_t tag);   // 0x00a1a9d0 thiscall ret 8
     float GetOutputValue(float x);                 // 0x00a1a110
     bool GetMinInput(float* out);                  // 0x00a1a1c0
     bool GetMaxInput(float* out);                  // 0x00a1a1a0
+    void*    mpBegin;                              // +0x00
+    void*    mpEnd;                                // +0x04
+    uint32_t m08;                                  // +0x08
+    uint32_t m0c;                                  // +0x0c
+    void*    mpCapacity;                           // +0x10
+    uint32_t m14;                                  // +0x14
+    uint8_t  pad18[0x364 - 0x18];                  // +0x18
 };
 
 struct AudioListenerSet {
@@ -56,10 +71,13 @@ struct AudioSystem {
     virtual void pad12() {} virtual void pad13() {}
     virtual int GetMode();                         // slot 14 (+0x38)
 };
+class IHandler;
 struct MessageServer {
     virtual void pad0() {} virtual void pad1() {} virtual void pad2() {} virtual void pad3() {}
     virtual void pad4() {}
     virtual void Post(uint32_t id, const void* msg, int flag);   // slot 5 (+0x14)
+    virtual void pad6() {} virtual void pad7() {} virtual void pad8() {}
+    virtual void AddHandler(IHandler* pHandler, uint32_t id);    // slot 9 (+0x24)
 };
 struct CamObj2 {
     virtual void p0() {} virtual void p1() {} virtual void p2() {} virtual void p3() {} virtual void p4() {}
@@ -96,20 +114,42 @@ struct cViewer {
     void GetCameraLocationInfo(V3* pos, V3* a, V3* b, V3* c);   // 0x007c3d30
 };
 
-struct cListener {
-    uint32_t pad0[5];
+// reference-counted base: vtable at +0x00, count at +0x04
+class cRefCountBase {
+public:
+    virtual void Release();
+    virtual ~cRefCountBase() {}
+    int32_t mRefCount;                             // +0x04
+    cRefCountBase() : mRefCount(0) {}
+};
+
+// message handler base at +0x08
+class IHandler {
+public:
+    virtual bool HandleMessage(uint32_t id, void* pMsg);   // 0x00a3c830
+    virtual ~IHandler() {}
+};
+
+class cListener : public cRefCountBase, public IHandler {
+public:
+    cListener();                                   // 0x00a3c970
+    bool Init();                                   // 0x00a3c710
+    void ReadTuningValues();                       // 0x00a3c5a0
+    void SetTuningId(uint32_t id);                 // 0x00a3c800
+    uint32_t mTuningId;                            // +0x0c
+    uint32_t mPendingId;                           // +0x10
     bool mbStaticMic;                              // +0x14
     bool mbEnableBoom;                             // +0x15
-    char pad16[2];
-    char mCurveBoomDistanceBuf[0x37c - 0x18];      // +0x18 ResponseCurve
-    char mCurveListenerOffsetBuf[0x6e0 - 0x37c];   // +0x37c ResponseCurve
+    uint8_t pad16[2];                              // +0x16
+    ResponseCurve mCurveBoom;                      // +0x18
+    ResponseCurve mCurveOffset;                    // +0x37c
     V3 mListenerOffset;                            // +0x6e0
     V3 mListenerPosition;                          // +0x6ec
     M33 mListenerMatrix;                           // +0x6f8
     V3 mCellMicrophonePos;                         // +0x71c
     V3 mAnchorPos;                                 // +0x728
-    ResponseCurve* CurveBoom() { return (ResponseCurve*)mCurveBoomDistanceBuf; }
-    ResponseCurve* CurveOffset() { return (ResponseCurve*)mCurveListenerOffsetBuf; }
+    ResponseCurve* CurveBoom() { return &mCurveBoom; }
+    ResponseCurve* CurveOffset() { return &mCurveOffset; }
     void Update(cViewer* viewer);
 };
 
@@ -219,4 +259,228 @@ void cListener::Update(cViewer* viewer)
         ls->SetListener(0, &p, &conv);
         ls->SetListener(1, &camPos, &conv);
     }
+}
+
+// ---------------------------------------------------------------------------------
+// tuning / message plumbing
+// ---------------------------------------------------------------------------------
+
+extern "C" void* __cdecl FUN_00f473a0(uint32_t nSize, const char* pName,
+                                      int32_t a1, int32_t a2, int32_t a3, int32_t a4);  // 0x00f473a0 operator new
+
+// AutoRefCount<T>: one reference-counted pointer, released on destruction
+template <class T>
+class AutoRefCount {
+public:
+    T* mpPtr;                                      // +0x00
+    AutoRefCount() : mpPtr(0) {}
+    ~AutoRefCount() { if (mpPtr) { T* p = mpPtr; mpPtr = 0; p->Release(); } }
+    T* operator->() const { return mpPtr; }
+};
+
+// audio configuration object handed out by the audio system
+class IConfiguration {
+public:
+    virtual void v00();
+    virtual void Release();                                                   // slot 1 (+0x04)
+    virtual void v08() {} virtual void v0c() {} virtual void v10() {}
+    virtual void GetConfiguration(uint32_t id, AutoRefCount<IConfiguration>* pOut, uint32_t tag);  // +0x14
+    virtual bool GetBool(uint32_t id);                                        // +0x18
+    virtual void v1c() {} virtual void v20() {}
+    virtual void SetPointer(uint32_t id, void* pValue);                       // +0x24
+    virtual void v28() {} virtual void v2c() {} virtual void v30() {} virtual void v34() {}
+    virtual void v38() {} virtual void v3c() {} virtual void v40() {}
+    virtual bool QueryValue(uint32_t id, void* pOutA, void* pOutB);           // +0x44
+};
+
+namespace EA { namespace Audio {
+struct IAudioSystem {
+    virtual void v00() {} virtual void v04() {} virtual void v08() {}
+    virtual void v0c() {} virtual void v10() {}
+    virtual void GetConfiguration(uint32_t id, AutoRefCount<IConfiguration>* pOut, uint32_t tag);  // +0x14
+};
+IAudioSystem* GetSystemAT();                       // 0x00a206f0
+}}
+
+// payload of the cell microphone message (one value every 8 bytes)
+struct cMicrophoneMessage {
+    uint32_t mA;                                   // +0x00
+    uint32_t mB;                                   // +0x04
+    float    mX;                                   // +0x08
+    uint32_t mXTag;                                // +0x0c
+    float    mY;                                   // +0x10
+    uint32_t mYTag;                                // +0x14
+    float    mZ;                                   // +0x18
+    uint32_t mZTag;                                // +0x1c
+};
+
+namespace EA { namespace IO {
+struct IWriter;
+struct IReader;
+void WriteUint32(IWriter* pWriter, const void* pValue, int32_t nCount, int32_t nFlags);   // 0x0093aa70
+void ReadInt32(IReader* pReader, void* pValue, int32_t nCount, int32_t nFlags);           // 0x0093a780
+}}
+
+// Swarm::MapDescription record (vtable 0x01453948), 0x14 bytes
+struct cMapDescription {
+    void*    mpVt00;                               // +0x00
+    uint32_t m04;                                  // +0x04
+    uint32_t m08;                                  // +0x08
+    float    m0c;                                  // +0x0c
+    float    m10;                                  // +0x10
+};
+
+// @ 0x00a3c5a0
+void cListener::ReadTuningValues()
+{
+    mListenerOffset = V3(0.0f, 0.0f, 0.0f);
+    mbStaticMic = false;
+    mbEnableBoom = false;
+    if (mTuningId == 0)
+        return;
+    AutoRefCount<IConfiguration> cfg;
+    EA::Audio::IAudioSystem* pSystem = EA::Audio::GetSystemAT();
+    pSystem->GetConfiguration(mTuningId, &cfg, 0x21407ee);
+    if (cfg.mpPtr) {
+        cfg->SetPointer(0xfd5197b0, &mbStaticMic);
+        uint32_t nPad = 0;
+        float* pValue = 0;
+        if (cfg->QueryValue(0x64d7be3c, &nPad, &pValue))
+            mListenerOffset = *(const V3*)pValue;
+        mCurveOffset.InitFromConfiguration(cfg.mpPtr, 0xb0f0b4a5);
+        bool bBoom = false;
+        if (!mbStaticMic)
+            bBoom = cfg->GetBool(0x16074fa6);
+        mbEnableBoom = bBoom;
+        if (bBoom)
+            mCurveBoom.InitFromConfiguration(cfg.mpPtr, 0x16074fa6);
+    }
+}
+
+// @ 0x00a3c710
+bool cListener::Init()
+{
+    MessageServer* pServer = GetMessageServer();
+    if (pServer) {
+        pServer->AddHandler(this, 0x02b0c259);
+        pServer->AddHandler(this, 0x022d1adc);
+        pServer->AddHandler(this, 0x0248975f);
+        pServer->AddHandler(this, 0x02489766);
+        pServer->AddHandler(this, 0x0248976a);
+        pServer->AddHandler(this, 0x052d9bab);
+        pServer->AddHandler(this, 0x0539a4ce);
+        pServer->AddHandler(this, 0x0539a4cf);
+    }
+    ReadTuningValues();
+    return true;
+}
+
+// @ 0x00a3c800
+void cListener::SetTuningId(uint32_t id)
+{
+    uint32_t nOld = mTuningId;
+    if (id == nOld)
+        return;
+    if (nOld == 0x96ccccb8) {
+        mPendingId = id;
+        return;
+    }
+    mPendingId = nOld;
+    mTuningId = id;
+    ReadTuningValues();
+}
+
+// @ 0x00a3c830
+bool IHandler::HandleMessage(uint32_t id, void* pMsg)
+{
+    cListener& listener = static_cast<cListener&>(*this);
+    if (id == 0x052d9bab) {
+        const cMicrophoneMessage* pMic = (const cMicrophoneMessage*)pMsg;
+        listener.mCellMicrophonePos = V3(pMic->mX, pMic->mY, pMic->mZ);
+        return true;
+    }
+    if (id == 0x02b0c259) {
+        listener.ReadTuningValues();
+        return true;
+    }
+    uint32_t nCurrent = listener.mTuningId;
+    uint32_t nNew = nCurrent;
+    if (id > 0x0248976a) {
+        if (id == 0x0539a4ce)
+            nNew = 0x96ccccb8;
+        else if (id == 0x0539a4cf)
+            nNew = listener.mPendingId;
+    } else if (id == 0x0248976a) {
+        nNew = 0x12ef46b8;
+    } else if (id == 0x022d1adc) {
+        switch (*(const uint32_t*)((const uint8_t*)pMsg + 8)) {
+        case 0x01654c00: nNew = 0xbba5a414; break;
+        case 0x01654c01: nNew = 0x1f401827; break;
+        case 0x01654c02: nNew = 0x13a11a34; break;
+        case 0x01654c04: nNew = 0xa21a6196; break;
+        case 0x01654c10: nNew = 0xdb193f1e; break;
+        case 0x02ccd1d2: nNew = 0x12ef46b8; break;
+        }
+    } else if (id == 0x0248975f) {
+        nNew = 0x608310c6;
+    } else if (id == 0x02489766) {
+        nNew = 0xa602a723;
+    }
+    if (nNew == nCurrent)
+        return true;
+    if (nCurrent == 0x96ccccb8 && id != 0x0539a4cf) {
+        listener.mPendingId = nNew;
+        return true;
+    }
+    listener.mPendingId = nCurrent;
+    listener.mTuningId = nNew;
+    listener.ReadTuningValues();
+    return true;
+}
+
+// @ 0x00a3c970
+cListener::cListener()
+    : mTuningId(0), mPendingId(0), mbStaticMic(false), mbEnableBoom(false),
+      mCellMicrophonePos(kZeroVec), mAnchorPos(kZeroVec)
+{
+}
+
+// @ 0x00a3cac0
+void FUN_00a3cac0(cMapDescription* pDesc, EA::IO::IWriter* pWriter)
+{
+    {
+        uint32_t nValue = pDesc->m08;
+        EA::IO::WriteUint32(pWriter, &nValue, 1, 0);
+    }
+    {
+        float fValue = pDesc->m0c;
+        EA::IO::WriteUint32(pWriter, &fValue, 1, 0);
+    }
+    {
+        float fValue = pDesc->m10;
+        EA::IO::WriteUint32(pWriter, &fValue, 1, 0);
+    }
+}
+
+// @ 0x00a3cb20
+cMapDescription* FUN_00a3cb20(EA::IO::IReader* pReader, int32_t nVersion)
+{
+    cMapDescription* pDesc;
+    void* pMemory = FUN_00f473a0(0x14, "Swarm", 0, 0, 0, 0);
+    if (pMemory != 0) {
+        cMapDescription* pNew = (cMapDescription*)pMemory;
+        pNew->m0c = 1.0f;
+        pNew->m04 = 0;
+        pNew->mpVt00 = (void*)0x01453948;
+        pNew->m08 = 0;
+        pNew->m10 = 0.0f;
+        pDesc = pNew;
+    } else {
+        pDesc = 0;
+    }
+    EA::IO::ReadInt32(pReader, &pDesc->m08, 1, 0);
+    EA::IO::ReadInt32(pReader, &pDesc->m0c, 1, 0);
+    if (nVersion > 1)
+        EA::IO::ReadInt32(pReader, &pDesc->m10, 1, 0);
+    return pDesc;
 }

@@ -1,1 +1,11 @@
 00fa1bc0 SP::cTerrainSphere::cTerrainSphere  # constructor: five bases (+0..+0x10), 3 generation-step members at +0x30/+0x74/+0xb8, singleton g_pTerrainSphere (0x016c9e5c), memset +0x6d8 len 0x80
+00fa23d0 SP::cTerrainSphere::RemoveListEntry  # removes one value from the +0x1bc dword list (memmove the tail down) and marks the +0x1d4 dirty byte
+00fa2440 SP::DecalPtrVec::Insert  # smart-pointer (8-byte element) vector insert: addref copy/shift/assign with release, capacity doubles via the EA name allocator
+00fa25c0 SP::DecalPtrVec::EraseRange  # releases the pointers left in [shiftResult,end) and shrinks the vector by last-first
+00fa2620 FUN_00fa2620  # __stdcall array pass over 0x110-byte elements: delete element->mPtr unless null or equal to element->mAlt (+0x10)
+00fa26e0 EA::Audio::ResponseCurve::ResponseCurveData_ vector assign  # (Rec20Vector) reallocate when short, else copy prefix + construct tail
+00fa27d0 SP::cTerrainSphere::AllocDecalIndex  # pops mFreeLayer[layer] or appends a 0 slot to mDecalLayer[layer] and returns the old length
+00fa2850 SP::cTerrainSphere::FreeDecalIndex  # clears the decal slot and pushes its index onto mFreeLayer[layer]
+00fa28b0 SP::cTerrainSphere::NewDecal  # allocates a 0x12c cTerrainSphereDecal, refs it, SetupDecal(...,layer 0, false) and stores it in layer 0
+00fa2920 SP::cTerrainSphere::NewDecalLayer  # same as NewDecal for an explicit layer; packs layer<<24|index into SetupDecal, flag true
+00fa29b0 SP::cTerrainSphere::ReleaseDecal  # unlink, drop refcount, vtable slot 0 with flags=1 at zero, then FreeDecalIndex

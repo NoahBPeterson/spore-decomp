@@ -14,7 +14,6 @@ extern void* FUN_00456cb0(void* a, void* b, void* c);
 extern void  FUN_0044d960(void* a);
 extern void  FUN_004ae250(void* a);
 extern void* FUN_0042dee0(void* a, int n, int sz, int z);
-extern void* FUN_00533740(void* a, void* b);
 extern void* FUN_005701b0(void* a, void* b, void* c, unsigned char d);
 extern void* EASTL_allocator_deallocate(void* p, int n); // 0x00f47380
 extern float FUN_004565f0(int s);
@@ -91,10 +90,13 @@ struct Iter;
 struct HT {
     int* mpBegin;              // +0
     int* mpEnd;                // +4
-    char pad8[0x118 - 8];
-    unsigned char mField118;   // +0x118
+    char pad8[0x98 - 8];
+    unsigned char mField98;    // +0x98  (used by insert)
+    char pad99[0x118 - 0x99];
+    unsigned char mField118;   // +0x118 (used by find)
     Iter* Find(Iter* out, int* key);
     int* Insert(int* pos, int* value);
+    int* FUN_00533740(int* node, int* value);   // 0x00533740, thiscall
 };
 
 struct Iter { int* first; int* second; };
@@ -125,7 +127,7 @@ void NodeOwner::FreeTree(Node* node) {
         FreeTree(node->p0);
         Node* next = node->p1;
         ((NodeOwner*)node)->FUN_00456bb0(0);
-        EASTL_allocator_deallocate(node, 0);
+        FUN_00f47380_dealloc(node);
         node = next;
     }
 }
@@ -148,12 +150,12 @@ void* DoFreeNodes(void* first, void* last, void* dest) {
 int* HT::Insert(int* pos, int* value) {
     HT* self = this;
     int* node;
-    if (pos == self->mpEnd || *pos <= *value)
-        node = (int*)FUN_005701b0(pos, self->mpEnd, value, self->mField118);
+    if (pos == self->mpEnd || !((unsigned)*value < (unsigned)*pos))
+        node = (int*)FUN_005701b0(pos, self->mpEnd, value, self->mField98);
     else
-        node = (int*)FUN_005701b0(self->mpBegin, pos, value, self->mField118);
-    if (node == self->mpEnd || *value < *node)
-        node = (int*)FUN_00533740(node, value);
+        node = (int*)FUN_005701b0(self->mpBegin, pos, value, self->mField98);
+    if (node == self->mpEnd || (unsigned)*value < (unsigned)*node)
+        node = FUN_00533740(node, value);
     return node;
 }
 
@@ -179,15 +181,12 @@ void* Vec14::Move14(void* param2, void* param3) {
 
 // @ 0x00455c00
 void* ParseVec3(void* out, const char* s) {
-    float v = 0.0f;
-    (void)v;
-    FUN_004565f0((int)s);
-    // FUN_00456650 writes the parsed vector to a local, then copied out.
-    char local[12];
-    FUN_00456650(local, (int)s, 0.0f);
-    *(int*)((char*)out + 0) = *(int*)(local + 0);
-    *(int*)((char*)out + 4) = *(int*)(local + 4);
-    *(int*)((char*)out + 8) = *(int*)(local + 8);
+    float f = FUN_004565f0((int)s);
+    float local[3];
+    FUN_00456650(local, (int)s, f);
+    ((float*)out)[0] = local[0];
+    ((float*)out)[1] = local[1];
+    ((float*)out)[2] = local[2];
     return out;
 }
 extern float FUN_004565f0(int s);

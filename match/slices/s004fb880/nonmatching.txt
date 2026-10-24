@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 004fb880 571 complete behavioural reconstruction of SphereFields::Accumulate (field accumulation); /Od frame (0x70) not reproduced
-004fbcc0 536 complete behavioural reconstruction of the Newton surface-march; /Od frame not reproduced; equiv: FAIL (5/5 mismatched, now FieldGrid::MarchToSurface member; _sqrt resolution conflict)
+004fbcc0 501 complete behavioural reconstruction of the Newton surface-march; equiv: PASS 553/600 valid, 100% cov; flags /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE /fp:fast (/Oi selects the _CIsqrt import); /Od frame not reproduced
 004fbf20 484 complete behavioural reconstruction of the 3x3 matrix-vector multiply; original pre-loads 12 components into named slots that are not reproduced
-004fc100 446 complete behavioural reconstruction of the ray bisection; /Od frame and indirect call schedule not reproduced; equiv: FAIL (5/5 mismatched, now RayField::Bisect member)
+004fc100 494 complete behavioural reconstruction of the ray bisection; equiv: PASS 600/600 valid, 97.9% cov; /Od frame and indirect call schedule not reproduced
 004fc320 164 complete behavioural reconstruction of the grid reset; /Od frame/vector-copy schedule not reproduced; equiv: WEAK (248 valid, 79.8% cov, now FieldGrid::Reset member)
-004fc990 256 complete behavioural reconstruction of the adjugate/scale inverse; /Od frame (0x70) and name-hashed slots not reproduced
+004fc990 313 complete behavioural reconstruction of the adjugate/scale inverse; equiv: PASS 600/600 valid, 100% cov; /Od frame (0x70) and name-hashed slots not reproduced

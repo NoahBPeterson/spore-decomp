@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-006da360 687  attribute bake dispatch (acos projection, weight component 0); /O2 register/switch layout differs; equiv: FAIL 5/5 mismatched (memory pool)
-006da690 687  attribute bake dispatch (acos projection, weight component 1); /O2 register/switch layout differs; equiv: FAIL 5/5 mismatched (memory pool)
-006da9c0 685  attribute bake dispatch (acos projection, weight component 2); /O2 register/switch layout differs; equiv: FAIL 5/5 mismatched (import call #0)
-006dacf0 565  attribute bake dispatch (dot projection, 4x unrolled fallback); /O2 scheduling + unroll differ; equiv: FAIL 5/7 mismatched (memory pool)
+006da360 1006  attribute bake dispatch (acos projection, weight component 0); /O2 register/switch layout differs (972 vs 808 bytes); equiv WEAK 457 valid, 33.1% coverage (no mismatch; the switch cases need findStreamEntry to find types 9/0x13/10, which the generator never produces)
+006da690 1006  attribute bake dispatch (acos projection, weight component 1); /O2 register/switch layout differs (972 vs 808 bytes); equiv WEAK 305 valid, 33.1% coverage (no mismatch; the switch cases need findStreamEntry to find types 9/0x13/10, which the generator never produces)
+006da9c0 1004  attribute bake dispatch (acos projection, weight component 2); /O2 register/switch layout differs (972 vs 808 bytes); equiv WEAK 215 valid, 33.8% coverage (no mismatch; the switch cases need findStreamEntry to find types 9/0x13/10, which the generator never produces)
+006dacf0 1134  attribute bake dispatch (dot projection, 4x unrolled fallback; ours is a rolled loop, 1008 vs 1244 bytes); /O2 scheduling + unroll differ; equiv WEAK 609 valid, 53.0% coverage (no mismatch; the switch cases need findStreamEntry to find types 9/0x13/10, which the generator never produces)

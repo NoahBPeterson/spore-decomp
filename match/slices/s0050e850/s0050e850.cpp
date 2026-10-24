@@ -11,6 +11,7 @@ inline void* operator new(unsigned int, void* p) { return p; }
 inline void operator delete(void*, void*) {}
 
 void* EASTL_Allocate(void* alloc, unsigned int n, unsigned int align, unsigned int offset);  // 0x0042dee0
+void* Alloc100(void* alloc, unsigned int n, unsigned int align, unsigned int offset);        // 0x00511810
 void EASTL_allocator_deallocate(void* p);                                                    // 0x00f47380
 
 // ---------------------------------------------------------------------------
@@ -139,12 +140,14 @@ struct FixedVec {
     uint32_t mAlloc[3];
     uint32_t mBuf[16];
     void Destroy();   // 0x004c0b80
+    uint32_t* erase(uint32_t* first, uint32_t* last);                    // 0x004769b0
+    void assign(uint32_t* first, uint32_t* last, uint8_t tag);           // 0x0042c750
     FixedVec& operator=(const FixedVec& o)
     {
         if (this != &o) {
-            FixedVec_erase(mpBegin, mpEnd);
+            erase(mpBegin, mpEnd);
             uint8_t tag;
-            DwordVector_assign(o.mpBegin, o.mpEnd, tag);
+            assign(o.mpBegin, o.mpEnd, tag);
         }
         return *this;
     }
@@ -204,7 +207,9 @@ VecBase::~VecBase()
 
 void EraseHelper(Elem100* first, Elem100* last);   // 0x0050f210 alias (operator=)
 void CopyBackward100(Elem100* first, Elem100* last, Elem100* resultEnd);  // 0x00511d00
-Elem100* UninitRelocate100(Elem100* first, Elem100* last, Elem100* dest);  // 0x00511880
+Elem100* UninitRelocate100(Elem100* first, Elem100* last, Elem100* dest);       // 0x00510080
+Elem100* UninitRelocateMove100(Elem100* first, Elem100* last, Elem100* dest);   // 0x00511d50
+void     UninitRelocateCommit100(Elem100* first, Elem100* last, Elem100* dest); // 0x00511880
 
 struct Vec100 : VecBase {
     Elem100* EraseRange(Elem100* first, Elem100* last);   // 0x0050eca0
@@ -243,10 +248,13 @@ void Vec100::DoInsertValue(Elem100* position, const Elem100& value)
     } else {
         const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
         const uint32_t nNewSize = (nPrevSize > 0) ? (2 * nPrevSize) : 1;
-        Elem100* const pNewData = (Elem100*)EASTL_Allocate(&mAlloc, nNewSize * sizeof(Elem100), 4, 0);
+        Elem100* const pNewData = (Elem100*)Alloc100(&mAlloc, nNewSize * sizeof(Elem100), 4, 0);
         Elem100* pNewEnd = UninitRelocate100(mpBegin, position, pNewData);
         ::new (pNewEnd) Elem100(value);
-        pNewEnd = UninitRelocate100(position, mpEnd, ++pNewEnd);
+        Elem100* pNext = pNewEnd + 1;
+        Elem100* pMoved = UninitRelocateMove100(position, mpEnd, pNext);
+        UninitRelocateCommit100(position, mpEnd, pNext);
+        pNewEnd = pMoved;
         if (mpBegin && mpBegin != mFixed) {
             void* q = mpBegin;
             EASTL_allocator_deallocate(q);
@@ -298,7 +306,7 @@ void __cdecl UninitCopy20(void** out, T20* first, T20* last, T20* dest, uint8_t 
 // sort drivers
 // ---------------------------------------------------------------------------
 void QuickSort0E(int* first, int* last, int n, uint8_t cmp);   // 0x0050f950
-void QuickSort1E(int* first, int* last, int n, uint8_t cmp);   // 0x005100c0
+void QuickSort1E(int* first, int* last, int n);                 // 0x005100c0
 void InsertionSortA(int* first, int* last, uint8_t cmp);       // 0x0050fa10
 void InsertionSortB(int* first, int* last, uint8_t cmp);       // 0x0050fb30
 void InsertionSortC(int* first, int* last);                    // 0x00510240
@@ -326,10 +334,10 @@ void SortDefault(int* first, int* last)
 {
     if (first != last) {
         int i = 0;
-        for (int n = (int)((last - first) >> 2); n != 0; n >>= 1)
+        for (int n = (int)(last - first); n != 0; n >>= 1)
             ++i;
-        QuickSort1E(first, last, i * 2 - 2, 0);
-        if ((int)((last - first) >> 2) < 0x1d) {
+        QuickSort1E(first, last, i * 2 - 2);
+        if ((int)(last - first) < 0x1d) {
             InsertionSortC(first, last);
         } else {
             InsertionSortC(first, first + 0x1c);

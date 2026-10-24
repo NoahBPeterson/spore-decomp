@@ -20,10 +20,22 @@ unsigned int GetTerraformPlanetType(float f)
 }
 }  // namespace SP
 
+// The original computes the whole falloff in x87 and takes the root with an inline fsqrt.
+// cl only inlines sqrt under /fp:fast, which this module's flags do not use, so do the root
+// with x87 directly (double keeps enough precision that the float result matches).
+static inline double SqrtX87(double v)
+{
+    __asm fld v
+    __asm fsqrt
+    __asm fstp v
+    return v;
+}
 // @ 0x00fc2040
 float __cdecl FUN_00fc2040(float x, float y)
 {
-    float f = 1.0f - sqrtf((y - 0.5f) * (y - 0.5f) + (x - 0.5f) * (x - 0.5f)) * 1.4142135f;
+    double dx = (double)x - 0.5;
+    double dy = (double)y - 0.5;
+    float f = (float)(1.0 - SqrtX87(dy * dy + dx * dx) * (double)1.4142135f);
     float r = 0.0f;
     if (0.0f <= f) r = f;
     return r;

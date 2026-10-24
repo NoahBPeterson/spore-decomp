@@ -1,1 +1,6 @@
 # source  symbol  original VA  [flags override]
+slices/s00bcf6f0/cost.cpp  ?GetCost_A@CostObj@@QAEMXZ  00bcff00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00bcf6f0/cost.cpp  ?GetCost_B@CostObj@@QAEMXZ  00bcff40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00bcf6f0/cost.cpp  ?GetCost_C@CostObj@@QAEMXZ  00bcff80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00bcf6f0/cost.cpp  ?GetCost_D@CostObj@@QAEMXZ  00bd0110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00bcf6f0/ufoinit.cpp  ?RefreshTools@UFOObject@@QAEXXZ  00bd0000  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

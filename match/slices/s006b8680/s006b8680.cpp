@@ -35,6 +35,12 @@ int __cdecl FUN_WriteUint16(void*, void*, int, int);   // 0x93a9d0
 int __cdecl FUN_WriteUint32(void*, void*, int, int);   // 0x93aa70
 int __cdecl FUN_IO_Field1(void*, void*);               // 0x6980c0
 int __cdecl FUN_IO_Field2(void*, void*);               // 0x6980e0
+int __cdecl FUN_ReadUint16_93a700(void*, void*, int, int);  // 0x93a700
+int __cdecl FUN_ReadInt32(void*, void*, int, int);          // 0x93a780
+int __cdecl FUN_IO_ReadField1(void*, void*);                // 0x698120
+int __cdecl FUN_IO_ReadField2(void*, void*);                // 0x698140
+extern float DAT_016063f8[9];
+extern float DAT_016062b8, DAT_016062bc, DAT_016062c0;
 extern "C" bool __cdecl FUN_006b82a0(char, uint32_t*);
 struct CBig;
 extern "C" void __cdecl FUN_006b8680(CBig*);
@@ -218,37 +224,56 @@ void MatX::Rotate(float a)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006b9190 / @ 0x006b9230  serialize / deserialize a rotation struct
+// basis struct in the retail layout (m10 at +0x10, rows at +0x14/+0x20/+0x2c)
 // ---------------------------------------------------------------------------
-struct RotSerial {
-    uint16_t flags;
-    uint16_t count;
-    float    m4, m8, mc, m10, m14, m18;
+struct BasisM {
+    uint16_t flags;      // +0x00
+    uint16_t count;      // +0x02
+    float    f4;         // +0x04
+    float    f8;         // +0x08
+    float    mc;         // +0x0c
+    float    m10;        // +0x10
+    float    row0[3];    // +0x14
+    float    row1[3];    // +0x20
+    float    row2[3];    // +0x2c
     uint32_t Save(void* io);
     uint32_t Load(void* io);
+    void     Build(float* out);
 };
-uint32_t RotSerial::Save(void* io)
+// @ 0x006b9190
+uint32_t BasisM::Save(void* io)
 {
-    bool b = (m10 != 1.0f);
-    if (b) flags |= 1;
-    else   flags &= 0xfffe;
-    uint32_t local = flags | 8;
+    uint16_t f = flags;
+    if (m10 == 1.0f) f &= 0xfffe;
+    else             f |= 1;
+    uint32_t local = (uint32_t)(f | 8);
     FUN_WriteUint16(io, &local, 1, 0);
-    if (flags & 1) {
-        uint32_t v = *(uint32_t*)&m10;
+    if (f & 1) {
+        float v = m10;
         FUN_WriteUint32(io, &v, 1, 0);
     }
-    if (flags & 2) FUN_IO_Field1(io, &m14);
-    if (flags & 4) FUN_IO_Field2(io, &m4);
+    if (f & 2) FUN_IO_Field1(io, &row0[0]);
+    if (f & 4) FUN_IO_Field2(io, &f4);
     return (uint32_t)io;
 }
-uint32_t RotSerial::Load(void* io)
+// @ 0x006b9230
+uint32_t BasisM::Load(void* io)
 {
-    (void)io;
-    return 0;
+    row0[0] = DAT_016063f8[0]; row0[1] = DAT_016063f8[1]; row0[2] = DAT_016063f8[2];
+    row1[0] = DAT_016063f8[3]; row1[1] = DAT_016063f8[4]; row1[2] = DAT_016063f8[5];
+    row2[0] = DAT_016063f8[6]; row2[1] = DAT_016063f8[7]; row2[2] = DAT_016063f8[8];
+    m10 = 1.0f;
+    f4 = DAT_016062b8;
+    f8 = DAT_016062bc;
+    mc = DAT_016062c0;
+    flags = 0;
+    count = 0;
+    FUN_ReadUint16_93a700(io, this, 1, 0);
+    if (flags & 1) FUN_ReadInt32(io, &m10, 1, 0);
+    if (flags & 2) FUN_IO_ReadField1(io, &row0[0]);
+    if (flags & 4) FUN_IO_ReadField2(io, &f4);
+    return (uint32_t)io;
 }
-uint32_t __cdecl FUN_006b9190(RotSerial* p, void* io) { return p->Save(io); }
-uint32_t __cdecl FUN_006b9230(RotSerial* p, void* io) { return p->Load(io); }
 
 // ---------------------------------------------------------------------------
 // @ 0x006b92d0  normalize 3x3 basis
@@ -263,7 +288,6 @@ struct Basis3 {
     float    row1[3];   // 0x20
     float    row2[3];   // 0x2c
     void Normalize(const float* src);
-    void Build(float* out);
 };
 void Basis3::Normalize(const float* src)
 {
@@ -286,13 +310,13 @@ void Basis3::Normalize(const float* src)
 // ---------------------------------------------------------------------------
 // @ 0x006b9440  build matrix from basis
 // ---------------------------------------------------------------------------
-void Basis3::Build(float* out)
+void BasisM::Build(float* out)
 {
     float s = m10;
     out[0] = row0[0] * s; out[1] = row0[1] * s; out[2] = row0[2] * s;
     out[4] = row1[0] * s; out[5] = row1[1] * s; out[6] = row1[2] * s;
     out[8] = row2[0] * s; out[9] = row2[1] * s; out[10] = row2[2] * s;
-    out[12] = f4; out[13] = f8; out[14] = 1.0f;
+    out[12] = f4; out[13] = f8; out[14] = mc;
     out[3] = 0.0f; out[7] = 0.0f; out[11] = 0.0f; out[15] = 1.0f;
 }
 

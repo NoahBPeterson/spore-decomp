@@ -1,10 +1,9 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-011e3c30  19  Arena::ObjectToId: tail/arg-slot schedule differs
 011e3c50  4   Arena::RefixStart wrapper: epilogue uses pop ecx instead of add esp,4
-011e3e10  53  arena iterator lookup: register/stack schedule differs
+011e3e10  14  arena iterator lookup: 8-byte local frame fixed the callee overrun (the callee reads the dword past the result) and f is reloaded for the end pointer; only the base/elem register choice differs [equiv: WEAK 102 valid, 100% coverage, no mismatch]
 011e3ed0  48  arena insert helper: call/register schedule differs
 011e4540  71  rw_HashUInt: expression/register schedule differs
-011e4640  20  ArenaSectionManifest::set: load schedule differs
-011e4910  55  ArenaSectionManifest::Initialize: memset frame and store order differ
-011e4970  56  arena manifest expand: vcall sequence differs
-011e49d0  59  arena manifest init: store order differs
+011e4640  14  ArenaSectionManifest::set: dict is reloaded for the second slot as in the original; only the dict/param load order and register names differ [equiv: PASS 400 inputs, 100% coverage]
+011e4910  80  ArenaSectionManifest::Initialize: memset frame and store order differ
+011e4970  72  arena manifest expand: vtable slot 1 called with the object as an explicit stack argument (2 dwords, caller-cleaned); the remaining difference is that our code uses the caller-saved edx for the header sum while the original leaves edx untouched (the original reserves a 0x20-byte local frame we could not reproduce) [equiv: FAIL, edx only]
+011e49d0  69  arena manifest init: store order differs

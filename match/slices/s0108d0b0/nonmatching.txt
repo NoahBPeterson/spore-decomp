@@ -1,4 +1,4 @@
-0108d0b0 265 havok-equivalent
+0108d0b0 265 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv WEAK (192 valid, 100% cov, no mismatches); chk 255 vs 265 (219 diff): x87 fistp emulated with integer ops so xmm0 stays untouched; schedule/size differ
 0108d1c0 605 havok-equivalent
 0108d420 299 havok-equivalent
 0108d590 700 havok-equivalent
@@ -11,9 +11,8 @@
 0108dd40 78 havok-equivalent
 0108dd90 66 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov): original leaves the out pointer in EAX (void_hides_eax), so calcAabb now returns hkAabb& and returns the out reference
 0108dde0 65 havok-equivalent
-0108de30 57 havok-equivalent
-0108de70 104 havok-equivalent
+0108de70 104 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (336 valid, 100% cov); chk 105 vs 104 (74 diff): hkBool by-value temp built in a local slot and pushed; retail pushes a scratch register and writes the byte in place
 0108dee0 72 havok-equivalent
 0108df30 93 havok-equivalent
-0108df90 75 havok-equivalent
+0108df90 75 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov); chk 71 vs 75 (53 diff): retail materialises the base flag with mov eax,1/push eax and schedules mov eax,0x80000000 after the first two stores
 0108dfe0 148 havok-equivalent

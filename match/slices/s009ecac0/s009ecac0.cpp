@@ -296,3 +296,128 @@ void IkSolver::UpdateBone(Bone* b)
 
     UpdatePivot(this, b);
 }
+
+// ============================================================================================
+// 0x009ed370 / 0x009ed560 -- two IK-solver helpers that MSVC gave an internal register ABI
+// (they are static helpers in ik_solver.cpp; the caller at 0x009f3af0 passes the record in EAX and
+// keeps its other arguments in registers).  Both are reconstructed here as ordinary functions with
+// the same arguments in a natural order; the register assignment itself is not reproducible from C++
+// source, so neither is byte-exact.
+// ============================================================================================
+
+// creature_body_static_data, the two fields the helpers read (same record as BoneDef above).
+struct IkBodyDef {
+    u8   pad000[0x150];
+    u32  flags;                       // +0x150 (bit 2 = "heavy" weight)
+};
+
+// creature_body_instance_data (700 bytes) seen through its particle fields
+// (same record as Bone above, +0x1b0 .. +0x1fc).
+struct IkBody {
+    IkBodyDef* def;                   // +0x000
+    u8   pad004[0x1b0 - 4];
+    Vec3 pos;                         // +0x1b0 current particle position
+    Vec3 rest;                        // +0x1bc rest particle position
+    Vec3 goal;                        // +0x1c8 goal particle position
+    u8   pad1d4[0x1fc - 0x1d4];
+    u8   valid;                       // +0x1fc particle has a valid current position
+};
+
+extern float g_ikHeavyWeight;         // 0x01550a04 (same constant as slice s009f09a0)
+
+// @ 0x009ed370
+void AccumulateReference(IkBody* other, IkBody* self, float* ratio,
+                         Vec3* sumGoal, Vec3* sumCur, float* weight)
+{
+    Vec3 g;
+    g.x = other->goal.x - self->goal.x;
+    g.y = other->goal.y - self->goal.y;
+    g.z = other->goal.z - self->goal.z;
+    Vec3 c;
+    if (other->valid == 0) {
+        c.x = other->rest.x - self->rest.x;
+        c.y = other->rest.y - self->rest.y;
+        c.z = other->rest.z - self->rest.z;
+    } else {
+        c.x = other->pos.x - self->pos.x;
+        c.y = other->pos.y - self->pos.y;
+        c.z = other->pos.z - self->pos.z;
+    }
+    float invC = 1.0f / (float)(sqrt(c.x * c.x + (c.y * c.y + c.z * c.z)) + 1e-08);
+    float lenG = sqrtf(g.x * g.x + (g.z * g.z + g.y * g.y));
+    float invG = 1.0f / (float)(lenG + 1e-08);
+    float w = (other->def->flags & 4) ? g_ikHeavyWeight : 1.0f;
+    float k = w * invG;
+    sumGoal->x += g.x * k;
+    sumGoal->y += g.y * k;
+    sumGoal->z += g.z * k;
+    k = w * invC;
+    sumCur->z = c.z * k + sumCur->z;
+    sumCur->x += c.x * k;
+    sumCur->y += c.y * k;
+    *ratio = (w * lenG) * invC + *ratio;
+    *weight += w;
+}
+
+// creature_instance_data, the fields 0x009ed560 reads.  The full record is the "world" of
+// IKContext (see slice s009f1990): scale at +0x70, particle array at +0x2e4, enabled at +0x168c.
+struct IkWorldInfo {
+    u8   pad000[0x18];
+    Vec3 offset;                      // +0x18
+    u8   pad024[0x3c - 0x24];
+    Quat orientation;                 // +0x3c (world -> local rotation, applied inverted)
+    u8   pad04c[0xe8 - 0x4c];
+    Vec3 position;                    // +0xe8
+    Vec3 up;                          // +0xf4 (world-space plane normal)
+};
+
+// Filled by 0x009ed560 and handed to IKSolveParticles (0x009f2a00); the layout is that of the
+// IKContext of slice s009f1990 (world +0, rootQuat +4, plane normal +8, plane offset +0x20).
+struct IkContext {
+    IkWorldInfo* world;               // +0x00
+    Quat*        rootQuat;            // +0x04
+    Vec3         planeNormal;         // +0x08
+    Vec3         planePoint;          // +0x14
+    float        d;                   // +0x20 (planeNormal . planePoint)
+};
+
+// Rotate v by the inverse of q.  The original keeps the expanded form
+// 2 * (off-diagonal terms) + v instead of folding the identity into the diagonal.
+static __forceinline Vec3 RotateByInverse(const Quat& q, const Vec3& v)
+{
+    float x = q.x, y = q.y, z = q.z, w = q.w;
+    Vec3 r;
+    r.x = 2.0f * (-(y * y + z * z) * v.x + (x * y + z * w) * v.y + (x * z - y * w) * v.z) + v.x;
+    r.y = 2.0f * ((x * y - z * w) * v.x - (x * x + z * z) * v.y + (y * z + x * w) * v.z) + v.y;
+    r.z = 2.0f * ((x * z + y * w) * v.x + (y * z - x * w) * v.y - (x * x + y * y) * v.z) + v.z;
+    return r;
+}
+
+// @ 0x009ed560
+IkContext* BuildIKContext(IkContext* ctx, IkWorldInfo* world, Quat* rootQuat)
+{
+    ctx->world = world;
+    ctx->rootQuat = rootQuat;
+
+    ctx->planeNormal.x = 0.0f;
+    ctx->planeNormal.y = 0.0f;
+    ctx->planeNormal.z = 0.0f;
+    ctx->planePoint.x = 0.0f;
+    ctx->planePoint.y = 0.0f;
+    ctx->planePoint.z = 0.0f;
+
+    // Plane normal: the world up direction in the creature's frame.
+    ctx->planeNormal = RotateByInverse(world->orientation, world->up);
+
+    // Plane point: where the creature's frame sits, in the same frame.
+    Vec3 delta;
+    delta.x = world->position.x - world->offset.x;
+    delta.y = world->position.y - world->offset.y;
+    delta.z = world->position.z - world->offset.z;
+    ctx->planePoint = RotateByInverse(world->orientation, delta);
+
+    ctx->d = (ctx->planeNormal.z * ctx->planePoint.z
+              + ctx->planeNormal.y * ctx->planePoint.y)
+             + ctx->planeNormal.x * ctx->planePoint.x;
+    return ctx;
+}

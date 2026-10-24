@@ -1,2 +1,4 @@
 # va  diff-bytes  reason
 00bcf6f0  -1  cBuilding cCombatant::TakeDamage override: complete; block layout and register allocation differ
+00bd0390  379  UFOSlice::GetTransformedPosition: complete; flags kept in memory instead of si and the 3x3 transform schedule differs
+00bd0140  586  cGameData::FireAtTarget: complete; vtable-temp register roles and stack slots differ

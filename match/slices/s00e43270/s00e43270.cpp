@@ -14,6 +14,7 @@
 //   then plain fields, seven EASTL maps (rbtree, 0x1c bytes each), a fixed_vector of six
 //   ref-counted pointers, Stopwatch/LimitStopwatch timers and nineteen EASTL string16s.
 #include "../../include/types.h"
+#include <new>
 
 // Status: complete and behaviourally equivalent; same size (2512 bytes), same instruction multiset,
 // same call order. Not byte-exact: the /O2 scheduler places a few stores/pushes differently
@@ -77,8 +78,39 @@ struct string16 {
 };
 }  // namespace eastl
 
-// Ref-counted object held by the fixed_vector below (slot 0 = AddRef).
-struct RefObject;
+// Ref-counted object held by the fixed_vector below (slot +0x04 = Release, slot +0x24 = the
+// stop/flush hook called by Reset).
+struct RefObject {
+    virtual void Slot00();                 // +0x00
+    virtual void Release();                // +0x04
+    virtual void Slot08();
+    virtual void Slot0c();
+    virtual void Slot10();
+    virtual void Slot14();
+    virtual void Slot18();
+    virtual void Slot1c();
+    virtual void Slot20();
+    virtual void Slot24();                 // +0x24
+};
+
+// Object held by the +0x184 vector and by +0x1c8; released through vtable slot +0x04.
+struct cTimelineTrack {
+    virtual void Slot00();                 // +0x00
+    virtual void Release();                // +0x04
+    void Flush();                          // 0x00e48f60 (thiscall, no arguments)
+};
+
+// eastl::vector<cTimelineTrack*>: begin/end/capacity at +0x184/+0x188/+0x18c.
+struct TraceVector {
+    cTimelineTrack** mpBegin;              // +0x00
+    cTimelineTrack** mpEnd;                // +0x04
+    cTimelineTrack** mpCapacity;           // +0x08
+    int size() const { return (int)(mpEnd - mpBegin); }
+    void erase(cTimelineTrack** first, cTimelineTrack** last);   // 0x00e25bd0 (thiscall, pops 8)
+};
+
+// eastl CopyImpl::do_copy(srcFirst, srcLast, dest) -> end of dest (0x006782c0, cdecl).
+RefObject** DoCopyRefPtrs(RefObject** srcFirst, RefObject** srcLast, RefObject** dest);
 
 // eastl::fixed_vector<intrusive_ptr<RefObject>, 6, true> (0x30 bytes).
 struct fixed_vector_allocator {
@@ -105,6 +137,18 @@ struct RefPtrFixedVector6 {
         else
             mpEnd = mpBegin + n;
     }
+    // eastl::vector::erase(first, last): shift the tail down, release the tail slots, fix the end.
+    void erase(RefObject** first, RefObject** last) {
+        RefObject** pCursor = DoCopyRefPtrs(last, mpEnd, first);
+        while (pCursor < mpEnd) {
+            RefObject* pOld = *pCursor;
+            if (pOld != 0)
+                pOld->Release();
+            ++pCursor;
+        }
+        mpEnd -= (last - first);
+    }
+    void clear() { erase(mpBegin, mpEnd); }
 
     explicit RefPtrFixedVector6(uint32_t n) : mAllocator(&mBuffer[0]) {
         mpBegin = mpEnd = &mBuffer[0];
@@ -178,6 +222,7 @@ class cUITimelineSubsystem
       public SP::cStringTokenTranslator {
 public:
     cUITimelineSubsystem();
+    void Reset();                            // 0x00e43280
     virtual void Ifc0Slot0();
     virtual void Ifc0Slot1();
     virtual void Ifc1Slot0();
@@ -312,4 +357,275 @@ cUITimelineSubsystem::cUITimelineSubsystem()
       m580(0), m584(0), m588(0), m58c(0), m590(0), m594(0), m598(0), m59c(0), m5a0(0),
       m5a4(0), m5a8(0), m5ac(0), m5b0(0), m5b4(0), m5b8(0), m5bc(0), m5c0(0), m5c4(0),
       m5c8(0), m5cc(0), m5d0(0) {
+}
+
+// ------------------------------------------------------------------ page interface
+// The timeline page (SP::cSPPalettePageUI) whose Update (0x00e423a0) is forwarded to.
+struct cSPPalettePageUI {
+    void Update(uint32_t deltaMs);         // 0x00e423a0 (thiscall, pops 4)
+};
+
+// The +0x08-side interface of the page host: its `this` sits 8 bytes past the cSPPalettePageUI
+// base, so the shim below calls the page with this - 8. (Vtable-slot adjustor shim.)
+struct cTimelinePageHost {
+    void Update(uint32_t arg0, uint32_t arg1);
+};
+
+// @ 0x00e43270
+void cTimelinePageHost::Update(uint32_t arg0, uint32_t)
+{
+    cSPPalettePageUI* page = (cSPPalettePageUI*)((char*)this - 8);
+    page->Update(arg0);
+}
+
+// Sink object kept at +0x5c: virtual slot +0x7c takes two ints.
+struct TimelineHintSink {
+    void Notify(int a, int b) {
+        uint32_t* pVtable = *(uint32_t**)this;
+        typedef void (__thiscall* Fn)(TimelineHintSink*, int, int);
+        ((Fn)pVtable[0x7c / 4])(this, a, b);
+    }
+};
+
+// Six 0xc-byte entries at +0x29c (three 32-bit fields each).
+struct TimelineEntry {
+    uint32_t m00, m04, m08;
+};
+
+// @ 0x00e43280
+void cUITimelineSubsystem::Reset()
+{
+    m284 = 0;
+    m28c = 0.0f;
+    m290 = 0.0f;
+    m294 = 0;
+
+    if (m0a8 != 0) {
+        cTimelineTrack* pOld = (cTimelineTrack*)(void*)m0a8;
+        m0a8 = 0;
+        pOld->Release();
+    }
+    if (m1c8 != 0)
+        ((cTimelineTrack*)(void*)m1c8)->Flush();
+    if (m1c8 != 0) {
+        cTimelineTrack* pOld = (cTimelineTrack*)(void*)m1c8;
+        m1c8 = 0;
+        pOld->Release();
+    }
+
+    TraceVector* tracks = (TraceVector*)&m184;
+    int nTracks = tracks->size();
+    for (int i = 0; i < nTracks; ++i)
+        tracks->mpBegin[i]->Flush();
+    tracks->erase(tracks->mpBegin, tracks->mpEnd);
+
+    TimelineEntry* entries = (TimelineEntry*)&m29c;
+    for (int i = 0; i < 6; ++i) {
+        entries[i].m00 = 0;
+        entries[i].m04 = 0;
+        entries[i].m08 = 0;
+    }
+
+    for (int i = 0; i < 6; ++i) {
+        RefObject* pSlot = mRefVec198.mpBegin[i];
+        if (pSlot != 0)
+            pSlot->Slot24();
+    }
+
+    // fixed_vector::clear() followed by fixed_vector::resize(6), both inlined.
+    mRefVec198.clear();
+    if (mRefVec198.size() < 6) {
+        RefObject* value = 0;
+        mRefVec198.DoInsertValues(mRefVec198.mpEnd, 6 - mRefVec198.size(), value);
+    } else {
+        mRefVec198.erase(mRefVec198.mpBegin + 6, mRefVec198.mpEnd);
+    }
+
+    if (m05c != 0)
+        ((TimelineHintSink*)(void*)m05c)->Notify(2, 0);
+
+    if (m030 != 0) {
+        m300 = -1;
+        m304 = -1;
+        m308 = 0;
+        m30c = 0;
+        m310 = 0;
+        m314 = 0;
+        m318 = 0;
+        m31c = 0;
+        m320 = 0;
+        m324 = 0;
+        m328 = 0;
+        m32c = -1;
+    }
+}
+
+// ------------------------------------------------------------------ key collection
+// EA::ResourceMan::Key (0xc bytes).
+struct ResourceKey {
+    uint32_t mTypeID;                      // +0x00
+    uint32_t mInstanceID;                  // +0x04
+    uint32_t mGroupID;                     // +0x08
+};
+
+void SortKeys(ResourceKey* first, ResourceKey* last);              // 0x004f6b70 (eastl::sort)
+ResourceKey* UniqueKeys(ResourceKey* first, ResourceKey* last);    // 0x004f6830 (eastl::unique)
+
+// eastl::vector<ResourceKey, eastl::sp_vector_allocator>.
+struct KeyVector {
+    ResourceKey* mpBegin;                  // +0x00
+    ResourceKey* mpEnd;                    // +0x04
+    ResourceKey* mpCapacity;               // +0x08
+    int size() const { return (int)(mpEnd - mpBegin); }
+    ResourceKey* end() const { return mpEnd; }
+    void reserve(int n);                   // 0x0041e4d0 (thiscall, pops 4)
+    void DoInsertKey(ResourceKey* position, const ResourceKey& key);   // 0x004e3e10
+    void push_back(const ResourceKey& key) {
+        if (mpEnd < mpCapacity)
+            ::new (mpEnd++) ResourceKey(key);
+        else
+            DoInsertKey(mpEnd, key);
+    }
+    void erase(ResourceKey* first, ResourceKey* last);
+};
+
+void KeyVector::erase(ResourceKey* first, ResourceKey* last)
+{
+    ResourceKey* pOldEnd = mpEnd;
+    ResourceKey* pTarget = first;
+    for (ResourceKey* pSource = last; pSource != pOldEnd; ++pSource)
+        *pTarget++ = *pSource;
+    ResourceKey* pNewEnd = pTarget;
+    for (ResourceKey* pIt = pNewEnd; pIt != mpEnd; ++pIt) {
+        // ResourceKey is a POD: nothing to destroy.
+    }
+    mpEnd -= (last - first);
+}
+
+struct cSpeciesProfile {
+    uint8_t mPad00[0x504];                 // +0x000
+    ResourceKey mModelKey;                 // +0x504
+};
+
+// One entry of the noun manager's game-data vector.
+struct cGameNoun {
+    uint8_t mPad00[0xa4];                  // +0x000
+    cSpeciesProfile* mpProfile;            // +0x0a4
+    bool HasProperty(uint32_t propertyID);              // 0x00bf2cb0 (thiscall, pops 4)
+    ResourceKey* GetModelTypeKey(uint32_t propertyID);  // 0x00bf9770 (thiscall, pops 4)
+};
+
+// The game-data vector of a noun type: eastl::vector with the SP allocator as a base class, so the
+// 4-byte allocator comes first and begin/end/capacity land at +4/+8/+0xc.
+struct SpVectorAllocatorBase {
+    void* mpAllocator;                     // +0x00
+};
+struct GameDataVector : SpVectorAllocatorBase {
+    cGameNoun** mpBegin;                   // +0x04
+    cGameNoun** mpEnd;                     // +0x08
+    cGameNoun** mpCapacity;                // +0x0c
+    int count() const { return (int)(mpEnd - mpBegin); }
+};
+
+struct cTerrainSphere {
+    uint8_t mPad00[0x1168];                // +0x0000
+    ResourceKey mKey1168;                  // +0x1168
+};
+
+class cGameNounManager {
+public:
+    SpVectorAllocatorBase* GetGameDataVector(void* p0, void* p1, void* p2, void* p3, void* p4);  // 0x00b21340
+    cTerrainSphere* GetCurrentTerrainSphere();             // 0x00f67d90 (thiscall)
+};
+cGameNounManager* NounManager();                           // 0x00b3d300
+
+// 0x00e48f60-free helper objects used by the collectors.
+struct cKeyCollector { void FUN_00acc800(); };             // 0x00acc800 (thiscall, no arguments)
+cKeyCollector* __stdcall FUN_00b3d480(KeyVector* keys);    // 0x00b3d480 (callee pops its argument)
+
+class cSPEditorSpeciesManager {
+public:
+    cSpeciesProfile* GetAvatarProfile();                   // 0x004df420 (thiscall)
+};
+cSPEditorSpeciesManager* GetSpeciesManager();              // 0x00401090 (cdecl)
+
+// 0x01021260 returns the active planet (null when the player has none yet).
+void* GetActivePlanet();
+
+class cSimSingleton {
+public:
+    uint8_t mData[0x100];                  // +0x000 (0x100-byte singleton)
+    cSimSingleton();                       // 0x00cc5a70
+    void FUN_00cc5bc0(KeyVector* keys);    // 0x00cc5bc0 (thiscall, pops 4)
+};
+extern cSimSingleton* gSimSingleton;       // 0x0169b054
+
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
+
+// 0x015a5a68: seven creature property ids queried by the civilization key collector.
+const uint32_t gCreaturePropertyIDs[7] = {
+    0x99e92f05, 0x4e3f7777, 0x47c10953, 0x72c49181, 0x2090a11b, 0xbc1041e6, 0xc15695da
+};
+
+// @ 0x00e434a0
+void CollectSpeciesModelKeys(KeyVector* keys)
+{
+    cGameNounManager* pManager = NounManager();
+    GameDataVector* nouns = static_cast<GameDataVector*>(pManager->GetGameDataVector(
+        (void*)0x00cd7d10, (void*)0x00d3d420, (void*)0x00accc30, (void*)0x00b1e500, (void*)0x01be418e));
+    keys->reserve(nouns->count() + keys->size());
+    cSpeciesProfile* avatarProfile = GetSpeciesManager()->GetAvatarProfile();
+    for (cGameNoun** pNoun = nouns->mpBegin, ** pNounEnd = nouns->mpEnd; pNoun != pNounEnd;
+         ++pNoun) {
+        cSpeciesProfile* profile = (*pNoun)->mpProfile;
+        if (profile != 0 && profile != avatarProfile)
+            keys->push_back(profile->mModelKey);
+    }
+    SortKeys(keys->mpBegin, keys->mpEnd);
+    ResourceKey* pNewEnd = UniqueKeys(keys->mpBegin, keys->mpEnd);
+    keys->erase(pNewEnd, keys->mpEnd);
+}
+
+// @ 0x00e435c0
+void CollectAllSpeciesModelKeys(KeyVector* keys)
+{
+    cGameNounManager* pManager = NounManager();
+    GameDataVector* nouns = static_cast<GameDataVector*>(pManager->GetGameDataVector(
+        (void*)0x00cd7d10, (void*)0x00d3d420, (void*)0x00accc30, (void*)0x00b1e500, (void*)0x01be418e));
+    keys->reserve(nouns->count() + keys->size());
+    for (cGameNoun** pNoun = nouns->mpBegin, ** pNounEnd = nouns->mpEnd; pNoun != pNounEnd;
+         ++pNoun) {
+        cSpeciesProfile* profile = (*pNoun)->mpProfile;
+        if (profile != 0)
+            keys->push_back(profile->mModelKey);
+    }
+    if (gSimSingleton == 0)
+        gSimSingleton = new ("Simulator/SimSingleton", 0, 0, 0, 0) cSimSingleton();
+    gSimSingleton->FUN_00cc5bc0(keys);
+    SortKeys(keys->mpBegin, keys->mpEnd);
+    ResourceKey* pNewEnd = UniqueKeys(keys->mpBegin, keys->mpEnd);
+    keys->erase(pNewEnd, keys->mpEnd);
+}
+
+// @ 0x00e43710
+void CollectCivilizationModelKeys(KeyVector* keys)
+{
+    if (GetActivePlanet() == 0)
+        return;
+    FUN_00b3d480(keys)->FUN_00acc800();
+    cGameNounManager* pManager = NounManager();
+    GameDataVector* nouns = static_cast<GameDataVector*>(pManager->GetGameDataVector(
+        (void*)0x00b21080, (void*)0x00d3d420, (void*)0x00b236c0, (void*)0x00b1e500, (void*)0x018c816a));
+    if (nouns->mpBegin != nouns->mpEnd) {
+        cGameNoun* pCiv = *nouns->mpBegin;
+        for (uint32_t i = 0; i < 7; ++i) {
+            if (pCiv->HasProperty(gCreaturePropertyIDs[i]))
+                keys->push_back(*pCiv->GetModelTypeKey(gCreaturePropertyIDs[i]));
+        }
+    }
+    cTerrainSphere* pSphere = NounManager()->GetCurrentTerrainSphere();
+    keys->push_back(pSphere->mKey1168);
+    SortKeys(keys->mpBegin, keys->mpEnd);
+    ResourceKey* pNewEnd = UniqueKeys(keys->mpBegin, keys->mpEnd);
+    keys->erase(pNewEnd, keys->mpEnd);
 }
