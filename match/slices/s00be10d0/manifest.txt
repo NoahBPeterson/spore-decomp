@@ -1,0 +1,2 @@
+# s00be10d0 manifest
+slices/s00be10d0/s00be10d0.cpp  ?OnNoun@cSPPlanetNoun@@QAEXH@Z  00be1820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
