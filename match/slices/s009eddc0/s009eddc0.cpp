@@ -16,7 +16,7 @@
 //
 // Module is /arch:SSE /fp:fast (inline fsqrt/fpatan, fsin/fcos in Matrix3::RotateY).
 //
-// @ 0x009eddc0
+// 0x009eddc0 (definition marker below)
 
 #include <math.h>
 #include <stddef.h>
@@ -376,8 +376,8 @@ void __stdcall FUN_009eddc0(ScaleOwner* so, SplineCtx* ctx)
         step.m[1] = 0.0f; step.m[2] = 0.0f; step.m[3] = 0.0f;
         step.m[5] = 0.0f; step.m[6] = 0.0f; step.m[7] = 0.0f;
         step.m[8] = 1.0f; step.m[4] = 1.0f; step.m[0] = 1.0f;
-        double y = (axis.y * tan1.y + axis.z * tan1.z) + tan1.x * axis.x;
-        double x = up1.x * up0.x + (up1.y * up0.y + up1.z * up0.z);
+        f32 y = axis.y * tan1.y + axis.z * tan1.z + tan1.x * axis.x;
+        f32 x = up1.x * up0.x + (up1.y * up0.y + up1.z * up0.z);
         step.RotateY((f32)(atan2(y, x) / ctx->count));
         Mat3 accum = step;
 
