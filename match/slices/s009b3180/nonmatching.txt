@@ -1,1 +1,4 @@
 009b3460  5  complete; recursive pointer-walk; outer/inner register allocation (eax vs ecx) differs
+009b3970  127  complete; power-curve helper, input arrives in xmm0 (by-value __m128 parameter); gate PASS 400/400, 92.6% coverage
+009b39e0  258  complete; by-value __m128 return in xmm0 plus two lazy static initialisers; gate PASS 400/400, 95.5% coverage; retail leaves the init flag word in eax, reproduced with a one-instruction asm read
+009b3c10  261  complete; SSE wrap-around with cvttss2si and an x87 final combine; gate PASS 400/400, 100% coverage
