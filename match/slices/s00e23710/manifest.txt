@@ -1,0 +1,8 @@
+slices/s00e23710/s00e23710.cpp  ?FUN_00e23870@@YGXPAX0@Z  00e23870  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e23710/s00e23710.cpp  ?FUN_00e23ae0@@YIHPAX0I@Z  00e23ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e23710/s00e23710.cpp  ?FUN_00e23b70@@YIHPAX00H@Z  00e23b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e23710/s00e23710.cpp  ?FUN_00e23c00@@YAIPAPAX0@Z  00e23c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e23710/s00e23710.cpp  ?FUN_00e23ca0@@YIEPAX0@Z  00e23ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e23710/s00e23710.cpp  ?FUN_00e23e30@@YAPAXPAX00P6AE00@Z@Z  00e23e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e23710/s00e23710.cpp  ?FUN_00e23e80@@YIPAXPAX0PAPAX@Z  00e23e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e23710/s00e23710.cpp  ?FUN_00e24220@@YAXPAX00@Z  00e24220  /O2 /MD /Gy /TP /arch:SSE /fp:fast

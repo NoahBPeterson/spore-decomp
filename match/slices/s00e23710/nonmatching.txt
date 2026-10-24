@@ -1,0 +1,18 @@
+# Slice s00e23710 nonmatching functions (compiled; behaviourally faithful but not byte-exact).
+# Format: <va> <difftest-verdict> <reason>
+00e23710 FAIL 5/5 valid inputs mismatched (esp); cSPUIPosseItem hit/selection feedback; switch arm layout and thiscall helper plumbing differ, esp frame shape mismatch (225 diff; 336 vs 340 bytes)
+00e238b0 PASS 318/318 valid inputs, 100.0% coverage; uninitialized_fill_n of AutoRefCount pairs; MSVC prologue/register order (dst/n/src) and `je/jne` vs unsigned `jbe/ja` loop compare tie (19 diff; 65 bytes)
+00e23900 UNSUPPORTED only 0/400 inputs valid (fault(read) 335, fault(pool-limit) 49, fault(write) 14); copy range of AutoRefCount pairs; pointee deref on synthetic inputs faults, plus copy-loop code layout tie (76 diff; 82 vs 76 bytes)
+00e23950 UNSUPPORTED only 0/400 inputs valid (fault(read) 344, fault(pool-limit) 49, fault(write) 2); destroy range returning end; synthetic refcounted pointees fault before completion (58 diff; 75 vs 69 bytes)
+00e239a0 UNSUPPORTED 1 unresolved reference (?SetBlinkerMotive@PosseItemC); cSPUIPosseItem::SetDistress; member-modeled thiscall call target (00e21cf0) not defined for link + distress/blinker float-constant reconstruction (244 diff; 282 vs 305 bytes)
+00e23d50 UNSUPPORTED only 0/400 inputs valid (fake-arity 290, fault(read) 104); cSPUIPosse::toggle_select_all; audio-system vtable chain with fake-arity and deferred-branch scheduling tie (GetSystem test / vtable slot fetch order) (102 diff; 123 vs 136 bytes)
+00e23de0 WEAK 310 valid inputs (need 200), 31.0% coverage; clear transient items from list; iterator-vs-pointer loop register allocation (end/begin esi/edi vs edi/ebx) and per-iteration [it-4] reload (56 diff; 76 vs 75 bytes)
+00e23ee0 FAIL 5/7 valid inputs mismatched (eax); lower_bound by u32 key (stride 16); argument load order/scheduling and half-index register choice (20 diff; 68 bytes)
+00e23f30 WEAK 42 valid inputs (need 200), 14.0% coverage; insertion sort (move variant) over AutoRefCount pairs; move/copy-assign inlining and register scheduling differ widely (357 diff; 352 vs 376 bytes)
+00e240b0 UNSUPPORTED only 0/400 inputs valid (fault(read) 341, fault(pool-limit) 53); insertion sort variant 2; refcounted-pair deref faults on synthetic inputs plus sort-codegen reconstruction (336 diff; 314 vs 357 bytes)
+00e24290 WEAK 69 valid inputs (need 200), 12.7% coverage; copy range of pairs returning end; early-return branch layout (je fallthrough vs jne) and copy-loop codegen (105 diff; 117 bytes)
+00e24310 WEAK 119 valid inputs (need 200), 25.6% coverage; fill range via output-iterator pointer; prologue/register allocation and out-pointer store scheduling tie (79 diff; 85 vs 89 bytes)
+00e24370 UNSUPPORTED only 0/400 inputs valid (fault(read) 333, fault(pool-limit) 61); backwards copy range returning end; synthetic refcounted pointees fault plus backward copy-loop layout (137 diff; 129 vs 118 bytes)
+00e243f0 FAIL 5/5 valid inputs mismatched (dword); sift-down/heap-adjust; predicate compare and child/index register reconstruction, differing dword at two addresses (283 diff; 273 vs 310 bytes)
+00e245c0 FAIL 5/5 valid inputs mismatched (fault READ_UNMAPPED @00e23e99); swap two pairs via temporaries; thiscall addref/release sequencing via modeled move-assign causes invalid read where original succeeds (101 diff; 93 vs 112 bytes)
+00e24630 UNSUPPORTED 2 unresolved references (?Free@Vec2bC, ?Dtor@LayoutDtorC); cSPUIPosseItem::~cSPUIPosseItem; member-modeled thiscall dtors not defined for link + first-load scheduling hoist above vtable stores (13 diff; 142 bytes)
