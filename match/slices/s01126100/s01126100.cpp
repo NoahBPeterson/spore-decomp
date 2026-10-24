@@ -1,9 +1,15 @@
-// Havok 3.1.0: hkInertiaTensorComputer::computeCylinderVolumeMassProperties (0x01126B40).
-// A cylinder is represented as one hkMassElement placed at the midpoint of its axis: the frame
-// rotates the canonical Z axis onto (endAxis - startAxis), the volume is pi*r^2*length, and the
-// diagonal inertia is (r^2/4 + length^2/12, r^2/4 + length^2/12, r^2/2) scaled by mass.
-// Reconstructed from the binary; no Havok 3.1 source is available. Conventions and layouts follow
-// match/slices/s01126f80 and the capsule slice.
+// Havok 3.1.0 hkInertiaTensorComputer volume/mass-properties helpers:
+//   computeCapsuleVolumeMassProperties  (0x01126100)
+//   computeCylinderVolumeMassProperties (0x01126B40)
+// A capsule = a cylinder plus two hemispheres: the frame rotates the canonical Z axis onto
+// (endAxis - startAxis) and is centred halfway between the ends; the cylinder's diagonal inertia and
+// each hemisphere's (half a sphere, shifted to its centre of mass 3/8 r from the flat face) become
+// hkMassElements that combineMassProperties() merges into `result`.
+// A cylinder is one hkMassElement at the midpoint of its axis, with volume pi*r^2*length and
+// diagonal inertia (r^2/4 + length^2/12, same, r^2/2) scaled by mass.
+// No Havok 3.1 source is available; reconstructed from the binary. Names from symbols/havok_names.txt
+// and the Havok 6.x header (hkpInertiaTensorComputer.h). Conventions as in match/slices/s0111b170 /
+// s01125560 / s01126f80.
 // Built /vc71 /O2 /MD /Gy /TP (Havok module, x87, no /EHsc).
 #include "types.h"
 #include <math.h>
@@ -14,6 +20,7 @@ typedef float hkReal;
 enum hkResult { HK_SUCCESS = 0, HK_FAILURE = 1 };
 enum { HK_MEMORY_CLASS_ARRAY = 0x14 };
 
+// Havok 3.1 loads 0.0f/1.0f from the constant pool (0x01485378 / 0x01485720).
 extern const float kZero;   // 0x01485378
 extern const float kOne;    // 0x01485720
 __forceinline float hkMath_sqrt(float r) { return (float)sqrt((double)r); }
@@ -24,7 +31,7 @@ struct hkMath
 	static __forceinline float fabs(float r) { return (float)::fabs((double)r); }
 };
 
-extern unsigned long g_hkThreadMemoryTlsIndex;   // 0x016E4174
+extern unsigned long g_hkThreadMemoryTlsIndex;   // 0x016E4174 (hkThreadMemory::s_threadMemoryInstance TLS slot)
 class hkThreadMemory
 {
 public:
@@ -96,18 +103,20 @@ public:
 		y = ny;
 		z = nz;
 	}
-	__forceinline hkReal dot3(const hkVector4& a) const { return z * a.z + y * a.y + x * a.x; }
-	__forceinline hkReal lengthSquared3() const { return z * z + y * y + x * x; }
+	__forceinline hkReal dot3(const hkVector4& a) const { return x * a.x + y * a.y + z * a.z; }
+	__forceinline hkReal lengthSquared3() const { return x * x + y * y + z * z; }
 	__forceinline hkReal length3() const { return hkMath_sqrt(lengthSquared3()); }
 	static __forceinline hkReal invSqrtOrZero(hkReal len2) { return (len2 == kZero) ? kZero : kOne / hkMath_sqrt(len2); }
 	__forceinline void normalize3() { mul4(invSqrtOrZero(lengthSquared3())); }
+	void setRotatedDir(const class hkRotation& r, const hkVector4& v);   // 0x010814A0
 };
 
 class hkMatrix3
 {
 public:
 	hkVector4 m_col0, m_col1, m_col2;
-	void mul(hkReal s);   // 0x01081BB0
+	void operator=(const hkMatrix3& m);   // 0x0044A8C0
+	void mul(hkReal s);                   // 0x01081BB0
 	__forceinline void setZero()
 	{
 		m_col0.setZero4();
@@ -147,6 +156,9 @@ public:
 	hkRotation m_rotation;
 	hkVector4 m_translation;
 	void operator=(const hkTransform& t);   // 0x01088410
+	__forceinline hkRotation& getRotation() { return m_rotation; }
+	__forceinline hkVector4& getTranslation() { return m_translation; }
+	__forceinline void setTranslation(const hkVector4& t) { m_translation = t; }
 };
 
 struct hkMassProperties
@@ -160,6 +172,7 @@ struct hkMassProperties
 		m_centerOfMass.setZero4();
 		m_inertiaTensor.setZero();
 	}
+	void operator=(const hkMassProperties& p);   // 0x00B4D3F0
 };
 
 struct hkMassElement
@@ -172,7 +185,11 @@ struct hkMassElement
 class hkInertiaTensorComputer
 {
 public:
-	static hkResult __cdecl combineMassProperties(const hkArray<hkMassElement>& elements, hkMassProperties& result);   // 0x011249C0
+	static hkResult __cdecl computeSphereVolumeMassProperties(hkReal radius, hkReal sphereMass, hkMassProperties& result);   // 0x01124060
+	static void __cdecl shiftInertiaToCom(hkVector4& shift, hkReal mass, hkMatrix3& inertia);                                // 0x011241E0
+	static hkResult __cdecl combineMassProperties(const hkArray<hkMassElement>& elements, hkMassProperties& result);          // 0x011249C0
+	static hkResult __cdecl computeCapsuleVolumeMassProperties(const hkVector4& startAxis, const hkVector4& endAxis,
+	                                                           hkReal radius, hkReal mass, hkMassProperties& result);
 	static hkResult __cdecl computeCylinderVolumeMassProperties(const hkVector4& startAxis, const hkVector4& endAxis,
 	                                                            hkReal radius, hkReal mass, hkMassProperties& result);
 };
@@ -180,6 +197,134 @@ public:
 extern const hkVector4 hkZAxis;   // 0x015B9B40 = (0,0,1,0)
 
 #define HK_REAL_PI 3.14159265358979f
+
+// @ 0x01126100
+hkResult __cdecl hkInertiaTensorComputer::computeCapsuleVolumeMassProperties(const hkVector4& startAxis, const hkVector4& endAxis,
+                                                                             hkReal radius, hkReal mass, hkMassProperties& result)
+{
+	if (mass <= kZero)
+		return HK_FAILURE;
+	if (radius <= kZero)
+		return HK_FAILURE;
+
+	// The capsule frame: canonical Z rotated onto the axis, centred between the ends.
+	hkVector4 axis;
+	axis.setSub4(endAxis, startAxis);
+	const hkReal height = axis.length3();
+
+	hkTransform capsuleToLocal;
+	if (height > kZero)
+	{
+		axis.normalize3();
+
+		hkVector4 canonicalZ;
+		canonicalZ.set(kZero, kZero, kOne, kZero);
+		const hkReal axisDot = axis.dot3(canonicalZ);
+		if (hkMath::fabs(axisDot) < 1.0f - 1e-5f)
+		{
+			hkVector4 rotAxis;
+			rotAxis.setCross(canonicalZ, axis);
+			rotAxis.normalize3();
+
+			hkQuaternion q;
+			q.setAxisAngle(rotAxis, hkMath::acos(axisDot));
+			capsuleToLocal.getRotation().set(q);
+		}
+		else
+		{
+			capsuleToLocal.getRotation().setIdentity();
+		}
+	}
+	else
+	{
+		capsuleToLocal.getRotation().setIdentity();
+	}
+
+	{
+		hkVector4 centre;
+		centre.setAdd4(startAxis, endAxis);
+		centre.mul4(0.5f);
+		capsuleToLocal.setTranslation(centre);
+	}
+
+	// Volumes and the mass split between the cylinder and the two hemispheres.
+	const hkReal radius2 = radius * radius;
+	const hkReal sphereVolume = radius2 * radius * (4.0f / 3.0f * HK_REAL_PI);
+	const hkReal cylinderVolume = height * radius * radius * HK_REAL_PI;
+	const hkReal invTotalVolume = 1.0f / (cylinderVolume + sphereVolume);
+	const hkReal sphereMass = sphereVolume * invTotalVolume * mass;
+	const hkReal cylinderMass = invTotalVolume * cylinderVolume * mass;
+
+	hkInplaceArray<hkMassElement, 3> elements;
+
+	// Cylinder (along local Z)
+	{
+		hkMassElement cylinderElement;
+		cylinderElement.m_transform = capsuleToLocal;
+		hkMassProperties& props = cylinderElement.m_properties;
+		props.m_centerOfMass.setZero4();
+		hkMatrix3& inertia = props.m_inertiaTensor;
+		inertia.m_col0.set(radius2 * 0.25f + height * height * 0.25f * (1.0f / 3.0f), 0.0f, 0.0f, 0.0f);
+		inertia.m_col1.set(0.0f, inertia.m_col0.x, 0.0f, 0.0f);
+		inertia.m_col2.set(0.0f, 0.0f, radius2 * 0.5f, 0.0f);
+		inertia.mul(cylinderMass);
+		props.m_mass = cylinderMass;
+		props.m_centerOfMass.setZero4();
+		props.m_volume = cylinderVolume;
+		elements.pushBack(cylinderElement);
+	}
+
+	const hkReal halfHeight = height * 0.5f;
+	const hkReal hemisphereMass = sphereMass * 0.5f;
+	const hkReal hemisphereVolume = sphereVolume * 0.5f;
+
+	// Hemisphere at the end (+Z)
+	{
+		hkMassElement hemisphereElement;
+		hemisphereElement.m_transform = capsuleToLocal;
+		hkVector4 shift;
+		shift.set(0.0f, 0.0f, halfHeight, 0.0f);
+		shift.setRotatedDir(capsuleToLocal.getRotation(), shift);
+		shift.setAdd4(hemisphereElement.m_transform.getTranslation(), shift);
+		hemisphereElement.m_transform.setTranslation(shift);
+
+		hkMassProperties& props = hemisphereElement.m_properties;
+		props.m_centerOfMass.set(0.0f, 0.0f, radius * 0.375f, 0.0f);
+		hkMassProperties sphereProps;
+		computeSphereVolumeMassProperties(radius, sphereMass, sphereProps);
+		props.m_inertiaTensor = sphereProps.m_inertiaTensor;
+		props.m_inertiaTensor.mul(0.5f);
+		shiftInertiaToCom(props.m_centerOfMass, hemisphereMass, props.m_inertiaTensor);
+		props.m_mass = hemisphereMass;
+		props.m_volume = hemisphereVolume;
+		elements.pushBack(hemisphereElement);
+	}
+
+	// Hemisphere at the start (-Z)
+	{
+		hkMassElement hemisphereElement;
+		hemisphereElement.m_transform = capsuleToLocal;
+		hkVector4 shift;
+		shift.set(0.0f, 0.0f, -halfHeight, 0.0f);
+		shift.setRotatedDir(capsuleToLocal.getRotation(), shift);
+		shift.setAdd4(hemisphereElement.m_transform.getTranslation(), shift);
+		hemisphereElement.m_transform.setTranslation(shift);
+
+		hkMassProperties& props = hemisphereElement.m_properties;
+		props.m_centerOfMass.set(0.0f, 0.0f, radius * -0.375f, 0.0f);
+		hkMassProperties sphereProps;
+		computeSphereVolumeMassProperties(radius, sphereMass, sphereProps);
+		props.m_inertiaTensor = sphereProps.m_inertiaTensor;
+		props.m_inertiaTensor.mul(0.5f);
+		shiftInertiaToCom(props.m_centerOfMass, hemisphereMass, props.m_inertiaTensor);
+		props.m_mass = hemisphereMass;
+		props.m_volume = hemisphereVolume;
+		elements.pushBack(hemisphereElement);
+	}
+
+	combineMassProperties(elements, result);
+	return HK_SUCCESS;
+}
 
 // @ 0x01126B40
 hkResult __cdecl hkInertiaTensorComputer::computeCylinderVolumeMassProperties(const hkVector4& startAxis, const hkVector4& endAxis,
