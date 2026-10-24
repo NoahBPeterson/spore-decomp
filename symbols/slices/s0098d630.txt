@@ -1,0 +1,2 @@
+0098d630 ?OnRebuild@WinTextEdit@UTFWinControls@EA@@QAEXPAVIRenderMode@UTFWin@3@@Z  # EA::UTFWinControls::WinTextEdit::OnRebuild
+0098dff0 ?FUN_0098dff0@WinTextEdit@UTFWinControls@EA@@QAEXXZ  # EA::UTFWinControls::WinTextEdit::FUN_0098dff0
