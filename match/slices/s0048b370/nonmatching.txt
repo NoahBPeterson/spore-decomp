@@ -1,6 +1,6 @@
 0048bae0  105  /Od; complete. SetFeetTargets: F_485b90 out-vector + 0x448e90 chain; frame slot layout differs
 0048bbb0  240  /Od; complete. SetHandsTargets: F_485eb0 / F_485b90 chain; frame slot layout differs
-0048bca0  43  /Od; complete. max (baseJoint->0x3c - joint->0x3c) over hands/feet; frame ~43 bytes off
+0048bca0  7   /Od; complete. max of mPositionAtCreation[2] (joint+0x3c) over hands/feet; second loop's counter/size slots swapped. equiv PASS 300 inputs, 100% coverage
 0048bdd0  135  /Od; complete. feet-target update loop + wrappers; frame/temp layout differs
 0048c050  8  /Od; complete. 0x451330 by-value arg copy uses one extra frame slot (near miss)
 0048b370 1664 /Od; complete UpdateLimbScaleRange (scale range from siblings, clamp, 4860b0 on parent/children, 43eb50 on blocks); 1704 vs 1896 bytes, local slot layout differs

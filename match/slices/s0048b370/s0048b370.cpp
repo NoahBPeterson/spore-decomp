@@ -231,14 +231,14 @@ void cSPEditorLimbStructure::SetHandsTargets(bool b)
 // @ 0x48bca0
 float cSPEditorLimbStructure::GetMaxDistanceFromBase()
 {
-    float base = mBaseJoint->mField40;
+    float base = mBaseJoint->mPositionAtCreation[2];
     float best = 0.0f;
     for (int i = 0, n = mHands.size(); i < n; i++) {
-        float d = base - mHands[i]->mField40;
+        float d = base - mHands[i]->mPositionAtCreation[2];
         if (best < d) best = d;
     }
     for (int i = 0, n = mFeet.size(); i < n; i++) {
-        float d = base - mFeet[i]->mField40;
+        float d = base - mFeet[i]->mPositionAtCreation[2];
         if (best < d) best = d;
     }
     return best;
