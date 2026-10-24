@@ -26,12 +26,51 @@ void setT2KScaleFactors(int ppem, int upem, void* out);           // 0x008cd1b0
 void GetFontWideSbitMetrics(void* a, void* b, int xppem, int yppem, void* hor, void* ver);   // 0x008c4f40
 void FUN_008cf460(void* sfnt, void* hor, void* ver);              // 0x008cf460
 void FUN_008ccbb0(void* a, int b, int c);                         // 0x008ccbb0
+void Delete_GlyphClass(void* p);                                  // 0x008b0280
+void tsi_DeAllocMem(void* mem, void* p);                          // 0x008d1440
+int setjmp3(void* buf, int count);                                // 0x011e0cac
 void T2K_TransformXFunits(void* t, short units, int* outScaled, int* outRounded);   // 0x008bfdb0
 void T2K_TransformYFunits(void* t, short units, int* outScaled, int* outRounded);   // 0x008bfe10
 }
 
+// @ 0x008bfdb0
+// Scale one x-axis FUnit run through the x scale factor and, for an untransformed matrix, the
+// first matrix row.
+void T2K_TransformXFunits(void* t, short units, int* outScaled, int* outRounded)
+{
+    int scaled = util_FixMul((int)units << 16, I32(t, 0x138));
+    int rounded = 0;
+    if (I32(t, 0x1c) == 0) {
+        int a = util_FixMul(I32(t, 8), scaled);
+        rounded = util_FixMul(I32(t, 0x10), scaled);
+        *outScaled = a;
+        *outRounded = rounded;
+    } else {
+        *outScaled = scaled;
+        *outRounded = rounded;
+    }
+}
+
+// @ 0x008bfe10
+// Same as T2K_TransformXFunits for the y axis (second matrix row).
+void T2K_TransformYFunits(void* t, short units, int* outScaled, int* outRounded)
+{
+    int scaled = util_FixMul((int)units << 16, I32(t, 0x13c));
+    int rounded = 0;
+    if (I32(t, 0x1c) == 0) {
+        int a = util_FixMul(I32(t, 0xc), scaled);
+        rounded = util_FixMul(I32(t, 0x14), scaled);
+        *outScaled = a;
+        *outRounded = rounded;
+    } else {
+        *outScaled = rounded;
+        *outRounded = scaled;
+    }
+}
+
 // Same-TU static helpers: cl gives them register calling conventions, as in the original.
 
+// @ 0x008bfc10
 // 0x008bfc10: register arg esi = t.  Pushes the new ppem size to the hinting object when it changed.
 static void FUN_008bfc10(char* t)
 {
@@ -47,6 +86,7 @@ static void FUN_008bfc10(char* t)
     }
 }
 
+// @ 0x008bfd50
 // 0x008bfd50: register args ecx = t, eax = matrix.
 static void T2K_NewTransformationInternal(char* t, int* m, int arg, int x, int y)
 {
@@ -78,6 +118,7 @@ static char* FUN_008bf2b0(int n, void* mem)
     return p;
 }
 
+// @ 0x008bfe80
 // 0x008bfe80: register args esi = matrix, edi = sfnt.  Concatenates the font's own matrices
 // (sfnt +0x20 / +0x24 sub-objects) onto the caller's 2x2 16.16 matrix.
 static void ConcatFontMatrix(int* m, char* sfnt)
@@ -88,8 +129,7 @@ static void ConcatFontMatrix(int* m, char* sfnt)
         m[0] = util_FixMul(A20(0x20c), m[1]) + util_FixMul(A20(0x204), m[0]);
         m[2] = util_FixMul(A20(0x20c), m[3]) + util_FixMul(A20(0x204), m[2]);
         int t1 = util_FixMul(A20(0x208), m[0]);
-        t1 += util_FixMul(A20(0x210), m[1]);
-        m[1] = t1;
+        m[1] = t1 + util_FixMul(A20(0x210), m[1]);
         m[3] = util_FixMul(A20(0x210), m[3]) + util_FixMul(A20(0x208), m[2]);
     }
     if (PTR(sfnt, 0x24) != 0) {
@@ -267,4 +307,46 @@ void T2K_NewTransformation(char* t, int arg, int ptSizeX, int ptSizeY, int* matr
     } else {
         tsi_EmergencyShutDown(PTR(t, 4));
     }
+}
+
+// @ 0x008c0650
+// Release the glyph cache and the optional purgeable sfnt buffers owned by the transform.
+static void T2K_PurgeMemoryInternal(char* t, int level)
+{
+    Delete_GlyphClass(PTR(t, 0x104));
+    I32(t, 0x104) = 0;
+    if (level > 0) {
+        void* p = PTR(t, 0x118);
+        if (p != 0 && I32(t, 0x30) != 0) {
+            char* mem = PTR(t, 4);
+            if (p == PTR(mem, 0x64))
+                I32(mem, 0x9c) = 1;
+            else
+                tsi_DeAllocMem(mem, p);
+            I32(t, 0x118) = 0;
+            if (level > 99 && (unsigned)I32(mem, 0x80) > 0x100) {
+                tsi_DeAllocMem(mem, PTR(mem, 0x64));
+                I32(PTR(t, 4), 0x64) = 0;
+                I32(PTR(t, 4), 0x80) = 0;
+                I32(PTR(t, 4), 0x9c) = 1;
+            }
+        }
+        if (I32(t, 0x11c) != 0 && I32(t, 0x34) != 0) {
+            tsi_DeAllocMem(PTR(t, 4), PTR(t, 0x11c));
+            I32(t, 0x11c) = 0;
+        }
+    }
+}
+
+// @ 0x008c0710
+// Purge entry point: installs the setjmp handler in the sfnt, then drops the allocated buffers.
+void T2K_PurgeMemory(char* t, int level, int* errOut)
+{
+    int err = setjmp(*(jmp_buf*)(PTR(t, 4) + 0x10));
+    *errOut = err;
+    if (err == 0) {
+        T2K_PurgeMemoryInternal(t, level);
+        return;
+    }
+    tsi_EmergencyShutDown(PTR(t, 4));
 }
