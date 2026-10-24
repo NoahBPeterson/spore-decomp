@@ -1,0 +1,13 @@
+slices/s00c52080/s00c52080.cpp  ?GetTagValue@cSPMissionFetch@@QAE_NHPAX@Z  00c52080  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?GetConversationGroupID@cSPMissionFetch@@QAEHXZ  00c520d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?GetProgressTextID@cSPMissionFetch@@QAEHXZ  00c52130  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?GetUIMediumDescription@cSPMissionFetch@@QAEXPAX@Z  00c52160  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?GetUILongDescription@cSPMissionFetch@@QAEXPAX@Z  00c521c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?ReadDropOffFields@cSPMissionFetch@@QAEXXZ  00c52580  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?IsHighlighted@cSPMissionFetch@@QAE_NXZ  00c52600  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?FindVec3@@YAPAMPAM0PBM@Z  00c52d30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?EnterConversationState@cSPMissionFetch@@QAEXXZ  00c52e30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?EnterStateTwo@cSPMissionFetch@@QAEXXZ  00c52ea0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?FindPlayerItem@@YA_NPAUcVec3Vector@@PAUcVec3@@@Z  00c52f20  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?SP_SetMissionFlagDefault@@YAXPAX0@Z  00c52f80  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?Destroy@cSPMissionFetch@@QAEPAU1@D@Z  00c53120  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
