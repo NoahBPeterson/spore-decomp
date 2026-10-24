@@ -1,1 +1,5 @@
 00d100b0 SP::cCommunityEditor::Deactivate  # PDB name; retail layout
+00d0fcc0 SP::cCommunityEditor::StartObjectPlacement  # PDB name; Any* argument, ret 4
+00d0fee0 V3Map::FindOrAdd  # coined: eastl map<Any*,V3>::operator[] of the map at +0x114
+00d0ff80 Key2Map::GetOrCreate  # coined: 8-byte-key map find-or-insert
+00d10720 SP::cCommunityEditor::HandleSwapObject  # PDB name

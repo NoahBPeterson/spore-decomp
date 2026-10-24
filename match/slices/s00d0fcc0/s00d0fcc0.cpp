@@ -117,6 +117,79 @@ Cam* FUN_00b3d280();                                    // 0x00b3d280
 extern Any* g_PropList;                                 // 0x015fd918
 extern int g_169d580;                                   // 0x0169d580
 
+// ---- cActionCircle slot ------------------------------------------------
+struct cGameData;
+struct cPlanetModelM;
+
+struct Slot {                     // SP::cActionCircle::tSlot (0x18 bytes)
+  char pad0[0xc];
+  V3   mPos;                      // +0x0c
+  int  SlotId();                  // 0x00fcc210 (reads ecx)
+  void Clear();                   // 0x00afa0a0
+  void Reserve(cGameData* d);     // 0x00afa030 (ret 4)
+};
+
+struct ActionCircle {
+  char pad0[0x50];
+  Slot* mSlots;                   // +0x50
+  int ReserveSlot(void* data);    // 0x00afab70 (ret 4)
+};
+
+// ---- eastl rbtree anchor + node (map<Key, V3> at cCommunityEditor+0x114)
+struct MapBase {                  // rbtree anchor
+  void* mpNodeLeft;               // +0x00
+  void* mpNodeRight;              // +0x04
+  void* mpNodeParent;             // +0x08 (root)
+  int   mColor;                   // +0x0c
+};
+
+struct MapNodeV3 {
+  MapNodeV3* mLeft;               // +0x00
+  MapNodeV3* mRight;              // +0x04
+  MapNodeV3* mParent;             // +0x08
+  int        mColor;              // +0x0c
+  unsigned   mKey;                // +0x10
+  V3         mValue;              // +0x14
+};
+
+struct V3Map {
+  void*    mAlloc;                // +0x00
+  MapBase  mAnchor;               // +0x04
+  int      mSize;                 // +0x14
+  V3* FindOrAdd(Any* const& key);                        // 0x00d0fee0 (ret 4)
+  void InsertNode(MapNodeV3** out, MapNodeV3* hint, const unsigned* key, unsigned keyAsInt);  // 0x00d0d010 (ret 0x10)
+};
+
+// ---- eastl rbtree node for the 8-byte-key map (find-or-insert at 0x00d0ff80)
+struct MapKey2 { unsigned lo, hi; };
+
+struct MapNodeK2 {
+  MapNodeK2* mLeft;               // +0x00
+  MapNodeK2* mRight;              // +0x04
+  MapNodeK2* mParent;             // +0x08
+  int        mColor;              // +0x0c
+  MapKey2    mKey;                // +0x10
+  char       mValue[0x20];        // +0x18
+};
+
+struct Key2Map {
+  void*    mAlloc;                // +0x00
+  MapBase  mAnchor;               // +0x04
+  int      mSize;                 // +0x14
+  MapNodeK2* FindLowerBound(MapNodeK2** out, const MapKey2* key);   // 0x00d0a630
+  void BuildValue(void* dst);                                       // 0x00d0a670
+  void InsertPair(MapNodeK2** out, MapNodeK2* hint, const MapKey2* key);   // 0x00d0d0e0
+  void* GetOrCreate(const MapKey2& key);                                   // 0x00d0ff80 (ret 4)
+};
+
+struct cPlanetModel {
+  void DirectionToSurfacePosition(V3* out, const V3* pos);   // 0x00b815a0 (ret 8)
+};
+
+cPlanetModel* PlanetModel();                            // 0x00b3d350
+Any* FUN_00b33e60(Any* obj);                            // 0x00b33e60
+void* FUN_00ae66d0(Any* obj);                           // 0x00ae66d0
+
 struct CE {
   char pad0[0x14];
   void* ahServer;         // +0x14 AutoHandler
@@ -142,9 +215,18 @@ struct CE {
   Any* selected;          // +0xb4
   char padb8[4];
   unsigned nounId;        // +0xbc
-  char padc0[4];
+  Any* placementObj;      // +0xc0
   int fieldC4;            // +0xc4
-  char padc8[0x130 - 0xc8];
+  Any* swapObject;        // +0xc8
+  char padcc[0xf4 - 0xcc];
+  ActionCircle* actionCircle;   // +0xf4
+  int slotIndex;          // +0xf8
+  int slotA;              // +0xfc
+  int slotB;              // +0x100
+  int curSlotIndex;       // +0x104
+  char pad108[0x114 - 0x108];
+  V3Map swapMap;          // +0x114
+  char pad128[0x130 - 0x128];
   VecStub vA;             // +0x130
   char pad13c[0x144 - 0x13c];
   VecStub vB;             // +0x144
@@ -169,6 +251,15 @@ struct CE {
   void D0cec0();          // 0x00d0cec0
   void D0bf80();          // 0x00d0bf80
   void __thiscall Deactivate(int reasonArg, bool flag);   // 0x00d100b0 (ret 8)
+  void SetManipulatedObject(Any* obj);    // 0x00d09f60 (ret 4)
+  void SetObjectSpecificData();           // 0x00d09ad0
+  void ComputeMouseOffset(Any* obj);      // 0x00d0a040 (ret 4)
+  V3*  GetCommunityCenter(int a);         // 0x00d09960 (ret 4)
+  void SetPlacementAnchor(V3 v);          // 0x00d08aa0 (ret 0xc, V3 by value)
+  void ResetPlacement();                  // 0x00d0db30
+  void RebuildPlacement();                // 0x00d0a540
+  int  StartObjectPlacement(Any* obj);    // 0x00d0fcc0 (ret 4)
+  void HandleSwapObject();                // 0x00d10720
 };
 
 // @ 0x00d100b0
@@ -362,4 +453,123 @@ void CE::Deactivate(int reasonArg, bool flag) {
   AddBoundingBox(winRoot)->F80dc50();
   g_169d580 = 0;
   }
+}
+
+// @ 0x00d0fcc0
+int CE::StartObjectPlacement(Any* obj) {
+  SetManipulatedObject(0);
+  unsigned noun = nounId;
+  fieldC4 = 0;
+  if (noun != 0) {
+    NounManager()->RemoveNoun(noun);
+    nounId = 0;
+  }
+  swapObject = 0;
+  slotIndex = -1;
+  slotA = -1;
+  slotB = -1;
+  curSlotIndex = -1;
+  if (community != 0)
+    (void)VCALL1(void*, unsigned, community, 0xc, 0xee9b2232);
+  Any* q;
+  if (community != 0)
+    q = (Any*)VCALL1(void*, unsigned, community, 0xc, 0x4f396a66);
+  else
+    q = 0;
+  if (obj == 0)
+    return 2;
+  if (!VCALL0(char, obj, 0x58))
+    return 2;
+  Any* info = (Any*)VCALL1(void*, unsigned, obj, 0xb8, 0xe89adf71);
+  if (info == 0)
+    return 2;
+  char flag = VCALL0(char, info, 0x10);
+  Any* data = (Any*)VCALL1(void*, unsigned, obj, 0xb8, 0x17f243b);
+  if (q != 0 && data != 0 && (unsigned)VCALL0(int, data, 0x38) == 0x175cdc9)
+    return 2;
+  if (!flag)
+    return 2;
+  if (FUN_00b33e60(obj) == 0) {
+    V3* c = GetCommunityCenter(0);
+    SetPlacementAnchor(*c);
+  }
+  SetManipulatedObject(obj);
+  SetObjectSpecificData();
+  ComputeMouseOffset(placementObj);
+  slotIndex = actionCircle->ReserveSlot(VCALL0(void*, placementObj, 0x2c));
+  Slot* slot = &actionCircle->mSlots[slotIndex];
+  if (slot->SlotId() != (int)VCALL1(void*, unsigned, placementObj, 0xb8, 0x17f243b))
+    slotIndex = -1;
+  actionCircle->mSlots[slotIndex].Clear();
+  ResetPlacement();
+  actionCircle->mSlots[slotIndex].Reserve((cGameData*)FUN_00ae66d0(placementObj));
+  slotA = slotIndex;
+  slotB = slotIndex;
+  RebuildPlacement();
+  return 0;
+}
+
+// @ 0x00d10720
+void CE::HandleSwapObject() {
+  if (swapObject == 0)
+    return;
+  V3& p = actionCircle->mSlots[curSlotIndex].mPos;
+  V3 pos;
+  pos.x = p.x;
+  pos.y = p.y;
+  pos.z = p.z;
+  V3 out;
+  if (VCALL1(void*, unsigned, swapObject, 0xb8, 0x436f315)) {
+    out.x = pos.x;
+    out.y = pos.y;
+    out.z = pos.z;
+  } else {
+    PlanetModel()->DirectionToSurfacePosition(&out, &pos);
+  }
+  *swapMap.FindOrAdd(swapObject) = out;
+  actionCircle->mSlots[curSlotIndex].Reserve(
+      (cGameData*)(swapObject ? VCALL1(void*, unsigned, swapObject, 0xb8, 0x17f243b) : 0));
+  swapObject = 0;
+  curSlotIndex = -1;
+}
+
+// @ 0x00d0fee0
+V3* V3Map::FindOrAdd(Any* const& key) {
+  unsigned k = (unsigned)key;
+  MapNodeV3* n = (MapNodeV3*)mAnchor.mpNodeParent;
+  MapNodeV3* lb = (MapNodeV3*)&mAnchor;
+  while (n != 0) {
+    if (n->mKey < k)
+      n = n->mLeft;
+    else {
+      lb = n;
+      n = n->mRight;
+    }
+  }
+  if (lb != (MapNodeV3*)&mAnchor && k >= lb->mKey)
+    return &lb->mValue;
+  unsigned kk = k;
+  float f = *(float*)&k;
+  V3 v;
+  v.x = f;
+  v.y = f;
+  v.z = f;
+  MapNodeV3* out;
+  InsertNode(&out, lb, &kk, k);
+  return &out->mValue;
+}
+
+// @ 0x00d0ff80
+void* Key2Map::GetOrCreate(const MapKey2& key) {
+  MapNodeK2* n;
+  FindLowerBound(&n, &key);
+  if (n != (MapNodeK2*)&mAnchor) {
+    if (n->mKey.lo < key.lo)
+      return n->mValue;
+    if (n->mKey.lo == key.lo && key.hi >= n->mKey.hi)
+      return n->mValue;
+  }
+  MapNodeK2* out;
+  InsertPair(&out, n, &key);
+  return out->mValue;
 }
