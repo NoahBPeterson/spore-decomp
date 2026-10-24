@@ -324,3 +324,20 @@ void hkContinuousSimulation::collideEntitiesBroadPhaseContinuous(hkEntity** enti
     HK_TIMER_END_LIST();
     // delPairs, then newPairs are destroyed here (stack pop + optional heap free)
 }
+
+typedef void (__stdcall *hkCollideFunc)(void* agent, const hkProcessCollisionInput& input, void* output);
+void __stdcall FUN_01099be0(hkEntity** entities, int numEntities, void* input,
+                            hkCollideFunc collideFunc);                 // 0x01099be0
+
+class hkDiscreteSimulation {
+protected:
+    void collideEntitiesNarrowPhaseDiscrete(hkEntity** entities, int numEntities,
+                                            const hkProcessCollisionInput& input);
+};
+
+// @ 0x010f25d0
+void hkDiscreteSimulation::collideEntitiesNarrowPhaseDiscrete(hkEntity** entities, int numEntities,
+                                                             const hkProcessCollisionInput& input)
+{
+    FUN_01099be0(entities, numEntities, (void*)&input, (hkCollideFunc)0x010f1cc0);
+}

@@ -1,0 +1,2 @@
+010f1df0 hkContinuousSimulation::collideEntitiesBroadPhaseContinuous  # preserved; nonmatching
+010f25d0 hkDiscreteSimulation::collideEntitiesNarrowPhaseDiscrete  # newly claimed; nonmatching; Havok identical-code name
