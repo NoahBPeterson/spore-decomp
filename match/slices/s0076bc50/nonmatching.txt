@@ -1,2 +1,5 @@
 0076c660  75  ctor: member stores complete; EH frame and base-ctor vptr stores do not line up
 0076c710  142 dtor: member releases/vptr resets complete; nested vector/EH frame differ
+0076bc50  1233 TakeSnapshot: complete body (RTT tiling, scene-view job dispatch, 8 EH scopes); difftest WEAK 283 valid/0 mismatches, 4.7% coverage (21/449) because App-global paths fault on null globals; flags /O2 /MD /Gy /EHsc /TP
+0076c210  892  HandleCaptureMessage: complete body (two-ctor job path, type dispatch, message send); difftest WEAK 273 valid/0 mismatches, 9.9% coverage (34/344); flags /O2 /MD /Gy /EHsc /TP
+0076c7c0  859  IHandlerRC::HandleMessage: complete body (switch over capture message ids, vtable slot dispatch); difftest WEAK 395 valid/0 mismatches, 11.5% coverage (43/373); flags /O2 /MD /Gy /EHsc /TP
