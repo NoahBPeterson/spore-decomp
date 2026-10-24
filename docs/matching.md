@@ -152,6 +152,14 @@ Writing matchable source:
 - Calling conventions are visible in the epilogue: `ret N` with ECX used as `this` = `__thiscall`
   member (declare a local stub class with fields at the right offsets, `char pad[N]` gaps);
   `ret N` without ECX = `__stdcall`; ECX+EDX args = `__fastcall`; plain `ret` = `__cdecl`.
+- **A marker binds the VA to the next function definition** (2026-10-24). chk.py and equiv.py take the first
+  definition after `// @ 0x<va>` (and they match the marker anywhere on a line), so put it at column 0 directly above
+  the function's own definition: never after a declaration (`void Init();  // @ 0x005ec7c0` bound 005ec7c0 to
+  whatever was defined next), never above helper types or inline methods (0059dc70 bound to an inline
+  `Property::GetItemCount`). Either turns the equivalence check into a test of the wrong function: in part1 both
+  showed up as false FAILs, and the same mistake can make a buggy function look equivalent. Write a callee's address
+  as `// 0x<va>` (no `@`). `tools/matching/marker_check.py <source>` lists markers that bind to a different name
+  than the slice's symbols file; the commit check prints the count before and after.
 - **Name every field you touch; no raw-offset casts** (2026-10-23). Declare the members you read or write at their
   offsets in the class (gaps as `uint32_t padN[...]`) and access them by name: `herd->mpLeader->mFlags &= ~0x400000`,
   never `*(u32*)((char*)(*(void**)((char*)p + 0xb4c)) + 0x5fc) &= 0xffbfffff`. Same bytes, but the cast chain hides
