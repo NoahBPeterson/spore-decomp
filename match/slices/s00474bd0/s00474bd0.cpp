@@ -203,16 +203,22 @@ void Vec32::reserve(uint n)
 }
 
 // ---- vector<T(0x8c)> -----------------------------------------------------------------------
+// The 0x8c-byte element type carries three __thiscall operations (construct in place,
+// post-insert fixup, copy from an existing element); modelling them as members puts the
+// element in ecx exactly like the original call sites.
+struct Elem8c {
+    char mData[0x8c];
+    void* Construct();                 // 0x46f1b0
+    void Fixup();                      // 0x41f940
+    void* CopyFrom(void* src);         // 0x42cba0
+};
 struct Vec8c {
     char* mpBegin; char* mpEnd; char* mpCapacity;
     int size();
     void push_back_default();
     void push_back(void* v);
+    void DoInsert(char* pos, void* v);     // 0x477460 (thiscall on the vector)
 };
-void* Construct8c();                                   // 0x46f1b0
-void DoInsert8c(char* pos, void* v);                   // 0x477460
-void Fixup8c();                                        // 0x41f940
-void Copy8c(void* src);                                // 0x42cba0
 
 // @ 0x00475410
 int Vec8c::size() { return (mpEnd - mpBegin) / 0x8c; }
@@ -220,14 +226,14 @@ int Vec8c::size() { return (mpEnd - mpBegin) / 0x8c; }
 // @ 0x00475430
 void Vec8c::push_back_default()
 {
+    Elem8c tmp;
     if (mpEnd < mpCapacity) {
-        char* p = mpEnd;
+        Elem8c* p = (Elem8c*)mpEnd;
         mpEnd += 0x8c;
-        if (p) Construct8c();
+        void* r = p ? p->Construct() : 0;
     } else {
-        void* tmp = Construct8c();
-        DoInsert8c(mpEnd, tmp);
-        Fixup8c();
+        DoInsert(mpEnd, tmp.Construct());
+        tmp.Fixup();
     }
 }
 
@@ -235,11 +241,11 @@ void Vec8c::push_back_default()
 void Vec8c::push_back(void* v)
 {
     if (mpEnd < mpCapacity) {
-        char* p = mpEnd;
+        Elem8c* p = (Elem8c*)mpEnd;
         mpEnd += 0x8c;
-        if (p) Copy8c(v);
+        void* r = p ? p->CopyFrom(v) : 0;
     } else {
-        DoInsert8c(mpEnd, v);
+        DoInsert(mpEnd, v);
     }
 }
 
@@ -271,35 +277,43 @@ RangeRef* RangeRef::Init(Vec48* range, int* obj)
 }
 
 // ---- vector<8-byte T>::push_back ------------------------------------------------------------
+struct Pair8 { uint a, b; };
 struct Vec8 {
     uint* mpBegin; uint* mpEnd; uint* mpCapacity;
     void push_backA(uint* v);
     void push_backB(uint* v);
+    void DoInsertA(uint* pos, uint* v);    // 0x478390 (thiscall on the vector)
+    void DoInsertB(uint* pos, uint* v);    // 0x4786e0 (thiscall on the vector)
 };
-void DoInsert8A(uint* pos, uint* v);                   // 0x478390
-void DoInsert8B(uint* pos, uint* v);                   // 0x4786e0
 
 // @ 0x00475670
 void Vec8::push_backA(uint* v)
 {
+    uint* p;
+    uint* snap;
     if (mpEnd < mpCapacity) {
-        uint* p = mpEnd;
+        snap = mpEnd;
         mpEnd += 2;
-        if (p) { p[0] = v[0]; p[1] = v[1]; }
+        p = snap;
+        p ? (*(float*)p = *(float*)v,
+             *(float*)(p + 1) = *(float*)(v + 1), p) : 0;
     } else {
-        DoInsert8A(mpEnd, v);
+        DoInsertA(mpEnd, v);
     }
 }
 
 // @ 0x00475800
 void Vec8::push_backB(uint* v)
 {
+    uint* p;
+    uint* snap;
     if (mpEnd < mpCapacity) {
-        uint* p = mpEnd;
+        snap = mpEnd;
         mpEnd += 2;
-        if (p) { p[0] = v[0]; p[1] = v[1]; }
+        p = snap;
+        p ? (*(unsigned long long*)p = *(unsigned long long*)v, p) : 0;
     } else {
-        DoInsert8B(mpEnd, v);
+        DoInsertB(mpEnd, v);
     }
 }
 

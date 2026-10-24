@@ -6,11 +6,9 @@
 00475240 0 complete source, byte-exactness not attempted (no variant rounds run); equiv PASS (1200 inputs)
 00475320 0 complete source, byte-exactness not attempted (no variant rounds run)
 00475410 0 complete source, byte-exactness not attempted (no variant rounds run)
-00475430 0 complete source, byte-exactness not attempted (no variant rounds run)
-004754e0 0 complete source, byte-exactness not attempted (no variant rounds run)
-00475670 0 complete source, byte-exactness not attempted (no variant rounds run)
+00475430 49 complete source; equiv PASS (281 inputs, 100% cov) under /Od /Ob1: push_back_default now constructs in place via the 0x8c-byte element's __thiscall Construct and uses the thiscall DoInsert/Fixup on the insert path; the remaining bytes are the original's extra ~0x38-byte local slot that shifts this/result offsets
+004754e0 42 complete source; equiv WEAK (180 inputs, 100% cov) under /Od /Ob1: push_back now copies via the element's __thiscall CopyFrom and uses the thiscall DoInsert; only the original's extra ~0x30-byte local slot shifts the this/result frame offsets
 004756f0 0 complete source, byte-exactness not attempted (no variant rounds run)
-00475800 0 complete source, byte-exactness not attempted (no variant rounds run)
 00475880 0 complete source, byte-exactness not attempted (no variant rounds run)
 00475930 0 complete source, byte-exactness not attempted (no variant rounds run)
 00475ab0 0 complete source, byte-exactness not attempted (no variant rounds run)
