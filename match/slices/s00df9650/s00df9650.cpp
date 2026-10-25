@@ -83,7 +83,7 @@ extern int  DAT_015da7c4, DAT_015da7c8, DAT_015da7cc, DAT_015da7d0;
 
 // 0x0147ebc8: four 3-entry window-id rows.
 extern int  kIDs[4][3];                            // 0x0147ebc8
-extern char LAB_00ad0e52;                          // a code label stored as a value
+extern char LAB_00ad0e52;                          // 0x00ad0e52 a code label stored as a value
 
 struct RandomLCG { unsigned RandomUint32Uniform(unsigned n); };  // 0x00a68fb0
 extern RandomLCG _sMathRandom;                     // 0x01601760
@@ -134,7 +134,9 @@ struct LD2 {
     void* m30;                                      // +0x30
     char  pad34[0x04];                              // +0x34..+0x37
     void* m38;                                      // +0x38
-    char  pad3C[0x0c];                              // +0x3c..+0x47
+    void* m3c;                                      // +0x3c
+    void* m40;                                      // +0x40
+    void* m44;                                      // +0x44
 
     void Fn4b10();                                  // 0x00644b10 (ctr)
     void Fn4b60();                                  // 0x00644b60 (dtor)
@@ -200,7 +202,7 @@ struct Obj4C {                   // object filled by FUN_006447c0 (used by 00dfa
     virtual void FnV0();
     virtual void FnV4();
     virtual void FnV8();
-    char  pad0c[0x18];           // +0x0c..+0x23
+    char  pad04[0x20];           // +0x04..+0x23
     int   m24;                   // +0x24
     int   m28;                   // +0x28
     int   m2c;                   // +0x2c
@@ -783,9 +785,17 @@ void GGUI::FUN_00dfa460(int* param_2, unsigned char param_3)
     d.m1c = param_2[1];
     d.m20 = param_2[2];
     d.m00 = 0x32ece105;
-    d.m30 = &LAB_00ad0e52;
+    d.m30 = (void*)0x00ad0e52;
     d.m11 = 1;
     d.m24 = param_3;
+    if (obj != (Obj4C*)d.m44) {
+        if (obj != 0)
+            obj->FnV4();
+        Obj4C* prev = (Obj4C*)d.m44;
+        d.m44 = obj;
+        if (prev != 0)
+            prev->FnV8();
+    }
     FUN_0064a990(&d);
     FUN_00ef7d90();
     d.Fn4b60();
