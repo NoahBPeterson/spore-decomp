@@ -12,6 +12,8 @@
 00e5c860  114  copy range of 0x2c-byte structs: complete; branch/element schedule differs
 00e5c8e0  146  spawn marker for a creature: complete; local struct/arg slots approximated
 00e5c9d0  108  pick message id from source level vs thresholds: complete; thresholds come from the value returned by 0x00e4ce40, equiv PASS 100%; x87 schedule differs
+00e5cac0  3  this-return accessor: now DEFINED as `void* __fastcall FUN_00e5cac0(void* self) { return self; }` -- the previous `__stdcall FUN_00e5cac0(void*, int)` declaration in this file was not the function (callers are `__fastcall` with the object in ecx).  3 vs 5 bytes: we emit `mov eax,ecx; ret`, retail emits `mov eax,ecx; ret 4` (pops the ignored stack argument).
+00e5cb60  337  fluid ray/AABB cast: NOW RECONSTRUCTED (415 vs 404 bytes); the previous `return 0` stub is gone.  `if (level == target)` leaf: AABB midpoint from m[5..10] as float (cvtsi2ss), optional rotation by the box 3x3 column transform (+0x14/+0x20/+0x2c), scale by box[0x10], add box origin (+4/+8/+0xc), FUN_00e4dbc0(gCellGame+0x4108 fluid, point, dir, 1.0f, target), store the hit dword and advance the output cursor by 4; otherwise walk the four child slots at m[1..4] recursing with level+1.  Residual: register choice and FP schedule.  equiv FAIL 5/5 (execution fault at 00e4dc27 -- the real FUN_00e4dbc0 callee runs and dereferences a synthetic fluid volume).
 00e5cae0  106  normalize a random direction: complete; x87 sqrt schedule differs
 00e5cd00  144  distance-to-box vs radius test: complete; SSE branch schedule differs
 00e5cde0  134  cell-visibility predicate: complete; float schedule and helper-arg slots differ

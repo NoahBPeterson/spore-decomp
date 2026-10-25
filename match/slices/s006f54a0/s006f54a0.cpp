@@ -1,5 +1,5 @@
 // Slice s006f54a0: state-dispatcher helpers around the large FUN_006f54a0 routine, a
-// state-struct constructor and two vector assignments.
+// state-struct constructor, a ushort-vector insert and two vector assignments.
 // Region 0x6f54a0-0x6f6430. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 #include "types.h"
 
@@ -20,7 +20,9 @@ void  __cdecl FUN_00b84c80(int a, int b, int c);
 void  __cdecl FUN_00951740(void** a, int b, int c, int d, int e);
 void  __cdecl FUN_00ac4440(int a, int b, int c);
 void  __cdecl FUN_00714bc0(void** a, int b, int c, int d, int e);
-void  __cdecl memmove_(void* d, const void* s, unsigned n);
+extern "C" __declspec(dllimport) void* __cdecl memmove(void* d, const void* s, unsigned n);
+void* __cdecl FUN_00f473a0(unsigned n, void* name, int a, int b, void* file, int line);  // eastl operator new
+void  __cdecl FUN_00f47380(void* p);                                                     // eastl operator delete
 
 struct cColorCtx {
     char pad0[0x10];
@@ -412,7 +414,38 @@ int* __fastcall FUN_006f5ed0(int* self) {
 
 // ---- dynamic vector operator= (3-pointer eastl::vector with refcounted allocator) ---------
 // @ 0x006f5bc0
-void FUN_006f5bc0(void* self, void* a, void* b) { (void)self; (void)a; (void)b; }
+struct VecU16 {
+    unsigned short* mpBegin;
+    unsigned short* mpEnd;
+    unsigned short* mpCapacity;
+    void Insert(unsigned short* pos, const unsigned short& value);
+};
+
+void VecU16::Insert(unsigned short* pos, const unsigned short& value)
+{
+    if (mpEnd != mpCapacity) {
+        unsigned short* v = (unsigned short*)&value;
+        if (v >= pos && v < mpEnd) v += 1;
+        if (mpEnd) *mpEnd = mpEnd[-1];
+        memmove(pos + 1, pos, (unsigned)(mpEnd - pos - 1) * sizeof(unsigned short));
+        *pos = *v;
+        mpEnd += 1;
+        return;
+    }
+    unsigned n = (unsigned)(mpEnd - mpBegin);
+    if (n == 0) n = 1;
+    n *= 2;
+    unsigned short* p = (unsigned short*)FUN_00f473a0(n * 2, (void*)0x13eb8a4, 0, 0, (void*)0x13ebb38, 0xd1);
+    memmove(p, mpBegin, (unsigned)(pos - mpBegin) * 2);
+    unsigned short* dest = p + (pos - mpBegin);
+    *dest = value;
+    memmove(dest + 1, pos, (unsigned)(mpEnd - pos) * 2);
+    if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+        FUN_00f47380(mpBegin);
+    mpCapacity = p + n;
+    mpBegin = p;
+    mpEnd = dest + 1 + (mpEnd - pos);
+}
 
 struct Elem0C { unsigned d[3]; };   // Text::AnalysisInfo, 0xc bytes
 

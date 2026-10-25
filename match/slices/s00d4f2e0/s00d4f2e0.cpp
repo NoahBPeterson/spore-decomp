@@ -28,7 +28,21 @@ typedef unsigned long long u64;
 
 // ------------------------------------------------------------------ small types
 struct cSPVector2 { float x, y; };      // SP::cSPVector2 (struct, 8 bytes)
-struct Vec3       { float x, y, z; };
+struct Vec3 {
+    float x, y, z;
+    Vec3() {}
+    Vec3(const Vec3& o) { x = o.x; y = o.y; z = o.z; }
+};
+inline Vec3 operator*(const Vec3& v, float s)
+{
+    Vec3 r;
+    r.x = v.x * s;
+    r.y = v.y * s;
+    r.z = v.z * s;
+    return r;
+}
+
+
 
 // eastl::vector_map<u32,u32>: {begin,end,capacity}; operator[] (0x00564a10)
 // returns a pointer to the value slot of the (key,value) pair.
@@ -121,7 +135,7 @@ extern "C" {
     void* __cdecl SP_PropertyManager();              // 0x0067de30
     void* __cdecl GetSystemAT();                     // 0x00a206f0
     void* __cdecl SP_SetGameDataOwner2(void* d, void* o);  // 0x00bfc5f0
-    void* __cdecl SP_PlanetModel(void* a = 0, ...);   // 0x00b3d350
+    void* __cdecl SP_PlanetModel();                   // 0x00b3d350
     void* __cdecl SP_EffectsManager();               // 0x0067ddd0
     void  __cdecl SetGlobalProperty(u32 id, float v);     // 0x005ca880
     void* __cdecl MapLowerBound(void* first, void* last, const u32* key, u32 flag); // 0x00d01260
@@ -137,8 +151,6 @@ extern "C" {
     void* __cdecl FUN_00b3d440(void* a);             // 0x00b3d440
     void  __cdecl FUN_00b09340(void* self, void* a, void* b, u32 c, u32 d); // 0x00b09340
     void* __cdecl SP_Matrix3FromQuaternion(void* out, void* q);  // 0x0059c190
-    void* __cdecl FUN_00b7f190(void* self, void* a, void* b);    // 0x00b7f190
-    void* __cdecl FUN_00b81780(void* self, void* a, void* b, float c, float d, ...); // 0x00b81780
     void  __cdecl FUN_00d4e950(void* self);                      // 0x00d4e950 Clear
     void  __cdecl FUN_00d4af80(void* self, int flag);            // 0x00d4af80 InitFromTuning
     void  __cdecl FUN_00a35070(void* dst, void* end, void* src); // 0x00a35070
@@ -151,7 +163,7 @@ typedef void (__thiscall *ClearThunk)(void*);
 extern "C" void FUN_0042f530(void*, void*, void*);   // 0x0042f530 eastl vector erase
 
 // 0x00d50040: create a meteor visual effect at `pos`; returns a ref-counted ptr.
-extern "C" void* FUN_00d50040(u32 effectKey, float* pos, float a, float b);
+extern "C" void* FUN_00d50040(u32 effectKey, const Vec3& pos, float radius, float maxDist);
 // 0x00d502f0: drop the finished meteors from both streams.
 extern "C" void  __fastcall FUN_00d502f0(void* self);
 
@@ -527,70 +539,111 @@ bool SP::cMeteorStrikeEvent::ShouldActivate()
 
 // =============================================================================
 // @ 0x00d50040
-// The effect holder's transform record: a translation + a 3x3 basis.
-struct Matrix3 { float m[9]; };
+// The effect holder's transform record: change flags, a revision counter, the
+// homogeneous translation, the scale and the 3x3 basis (retail layout, 0x38 B).
+struct Matrix3 {
+    float m[9];
+    Matrix3() {}
+    Matrix3(const Matrix3& src);            // 0x0041cb40 copy ctor
+};
+struct EffectHolder;
+struct Quaternion { float x, y, z, w; };    // SP::Quaternion, 16 bytes
+
+extern const Vec3    gZeroVec;              // 0x0169e494 default translation
+extern const Matrix3 gIdentityMat;          // 0x0169e4d4 default basis
+
 struct Transform {
-    u16     mFlags;   // +0x00
-    u16     mRev;     // +0x02
-    float   mScale;   // +0x04
-    float   mX;       // +0x08
-    float   mY;       // +0x0c
-    float   mZ;       // +0x10
-    Matrix3 mMat;     // +0x14
+    u16     mFlags;      // +0x00
+    u16     mRevision;   // +0x02
+    Vec3    mPos;        // +0x04
+    float   mW;          // +0x10
+    Matrix3 mBasis;      // +0x14
+    Transform()
+        : mFlags(0), mRevision(0), mPos(gZeroVec), mW(1.0f),
+          mBasis(gIdentityMat) {}
 };
+
 struct EffectHolder {
-    virtual void h00();
-    virtual void h04();                                   // release
-    virtual void h08(u32 arg);                            // +0x08
-    virtual void h0c(); virtual void h10(); virtual void h14();
-    virtual void SetTransform(Transform* t);              // +0x18
+    virtual void AddRef();                                 // +0x00
+    virtual void Release();                                // +0x04
+    virtual void h08(u32 arg);                             // +0x08
+    virtual void h0c();                                    // +0x0c
+    virtual void h10();                                    // +0x10
+    virtual void h14();                                    // +0x14
+    virtual void SetTransform(Transform* t);               // +0x18
 };
 
-void* FUN_00d50040(u32 effectKey, float* pos, float a, float b)
-{
-    (void)a;
-    EffectHolder* holder = 0;
-    void* em = SP_EffectsManager();
-    if (holder != 0) {
-        EffectHolder* old = holder;
-        holder = 0;
-        old->h04();
+// Effects manager: only the create-effect slot is used.
+struct EffectsManager {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual bool CreateEffect(u32 key, u32 flags, void** out);   // +0x2c
+};
+
+// The engine's ref-counting smart pointer (EA::AutoRefCount).
+template <class T>
+struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount() : mpObject(0) {}
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+    void** AsPPVoidParam() {
+        if (mpObject) {
+            T* pTemp = mpObject;
+            mpObject = 0;
+            pTemp->Release();
+        }
+        return (void**)&mpObject;
     }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
 
-    bool ok = ((bool (*)(void*, u32, u32, EffectHolder**))((void**)*(void**)em)[0x2c / 4])
-                  (em, effectKey, 0, &holder);
+// 0x00b81780: Vec3 cPlanetModel::MakeRandomWorldPosition(const Vec3& pos, float min, float max)
+// 0x00b7f190: Quaternion cPlanetModel::BuildSurfaceOrientation(const Vec3& pos)
+namespace SP {
+struct cPlanetModel {
+    Vec3       MakeRandomWorldPosition(const Vec3& pos, float minD, float maxD);  // 0x00b81780
+    Quaternion BuildSurfaceOrientation(const Vec3& pos);                          // 0x00b7f190
+};
+}
+
+void* FUN_00d50040(u32 effectKey, const Vec3& pos, float radius, float maxDist)
+{
+    AutoRefCount<EffectHolder> holder;
+
+    EffectsManager* mgr = (EffectsManager*)SP_EffectsManager();
+    bool ok = mgr->CreateEffect(effectKey, 0, holder.AsPPVoidParam());
     if (ok) {
-        Vec3 p;
-        p.x = pos[0]; p.y = pos[1]; p.z = pos[2];
+        Vec3 p = pos;
+        p = ((SP::cPlanetModel*)SP_PlanetModel())->MakeRandomWorldPosition(p, 0.0f, maxDist);
 
-        // A random world position near `p`, then the surface orientation there.
-        Vec3 rp;
-        float* rnd = (float*)FUN_00b81780(SP_PlanetModel(), &rp, &p, 0.0f, 0.0f, pos);
-        Vec3 q; q.x = rnd[0]; q.y = rnd[1]; q.z = rnd[2];
+        Quaternion quat = ((SP::cPlanetModel*)SP_PlanetModel())->BuildSurfaceOrientation(p);
 
-        void* orient = FUN_00b7f190(SP_PlanetModel(), &q, &p);
+        Matrix3 mat;
 
-        // Scale the surface normal by (1/len + b).
-        float inv = 1.0f / (float)sqrt((double)(q.x * q.x + (q.y * q.y + q.z * q.z)));
-        float len = 1.0f / inv + b;
+        float fLength = (float)sqrt((double)(p.x * p.x + p.y * p.y + p.z * p.z));
+        float fInv    = 1.0f / fLength;
+        float fScale  = fLength + radius;
+
+        p.x = p.x * fInv;
+        p.y = p.y * fInv;
+        p.z = p.z * fInv;
+        p.x = p.x * fScale;
+        p.y = p.y * fScale;
+        p.z = p.z * fScale;
 
         Transform t;
-        t.mFlags = 0; t.mRev = 0;
-        t.mScale = 1.0f;
-        t.mX = q.x * inv * len;
-        t.mY = q.y * inv * len;
-        t.mZ = q.z * inv * len;
-
-        SP_Matrix3FromQuaternion(&t.mMat, orient);
-
+        t.mPos = p;
         t.mFlags |= 4;
-        t.mRev += 1;
+        t.mRevision++;
+        SP_Matrix3FromQuaternion(&mat, &quat);
+        t.mBasis = mat;
+        t.mRevision++;
         t.mFlags |= 2;
+
         holder->SetTransform(&t);
         holder->h08(0);
-    }
-    if (holder != 0) {
-        holder->h04();
     }
     return holder;
 }

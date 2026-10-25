@@ -112,6 +112,7 @@ static __forceinline uint32_t Rd(BitDecoder* d, int n)
     return v;
 }
 
+// @ 0x011577d0
 void BitDecoder::ReadBlock(int block, int sub)
 {
     BlockEntry* e = &mEntries[sub + block * 2];

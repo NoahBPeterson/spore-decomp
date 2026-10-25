@@ -7,8 +7,15 @@
 
 #pragma warning(disable: 4100)
 
+#define SP_NOINLINE __declspec(noinline)
+
 extern "C" double __cdecl sin(double);
 extern "C" double __cdecl cos(double);
+extern "C" float  __cdecl sinf(float);
+extern "C" float  __cdecl cosf(float);
+extern "C" float  __cdecl tanf(float);
+extern "C" double __cdecl sqrt(double);
+extern "C" double __cdecl fmod(double, double);
 extern "C" float  __cdecl sqrtf(float);
 
 // ---------------------------------------------------------------------------
@@ -38,14 +45,29 @@ extern "C" void  __cdecl FUN_01021740(void*);
 extern "C" void* __cdecl operator_new(int size, const char* name, int a, int b,
                                       const char* file, int line);
 extern "C" void  __cdecl operator_delete(void* p);
-extern "C" float* __cdecl SP_Matrix3FromQuaternion(float* out, const void* q);
-extern "C" void*  __cdecl FUN_007dcb00(void* out, const void* q);
-extern "C" void   __cdecl FUN_0069b760(float* a, float* b, float* dir);
-extern "C" char   __cdecl FUN_00bc2520(void* p);
-
 struct Matrix3 {
     float m[9];
     void Assign(const float* src);      // 0x41cb40
+};
+
+struct Quat {
+    float x, y, z, w;
+};
+
+extern "C" Matrix3* __cdecl SP_Matrix3FromQuaternion(Matrix3* out, const void* q);
+extern "C" void*  __cdecl FUN_007dcb00(void* out, const void* a, const void* b);
+extern "C" float  __cdecl FUN_0069b760(float* a, float* b, float* dir);
+extern "C" char   __cdecl FUN_00bc2520(void* p);
+
+extern Matrix3 g_identity;              // 0x168aa8c
+
+struct cSPTransform {
+    uint16_t mFlags;                    // +0x00
+    uint16_t mModCount;                 // +0x02
+    float    mTranslation[3];           // +0x04
+    float    mScale;                    // +0x10
+    Matrix3  mRotation;                 // +0x14
+    cSPTransform& invert();             // 0x40efa0
 };
 
 struct cPlanet {
@@ -77,7 +99,7 @@ struct cTimeOfDay {
 extern "C" void __cdecl FUN_00bc2670(float len);
 
 // @ 0x00bc2570 — remove the `dir` component from two vectors, then hand off.
-void FUN_00bc2570(float* a, float* b, float* dir)
+SP_NOINLINE float FUN_00bc2570(float* a, float* b, float* dir)
 {
     float d1 = (dir[0] * a[0] + dir[1] * a[1]) + dir[2] * a[2];
     float r1[3];
@@ -91,7 +113,7 @@ void FUN_00bc2570(float* a, float* b, float* dir)
     r2[1] = b[1] - dir[1] * d2;
     r2[2] = b[2] - dir[2] * d2;
 
-    FUN_0069b760(r1, r2, dir);
+    return FUN_0069b760(r1, r2, dir);
 }
 
 // @ 0x00bc2670 — reposition the active planet's rotation for a new day length.
@@ -160,24 +182,29 @@ void cTimeOfDay::FUN_00bc28c0(float len)
 // @ 0x00bc2900 — build the (inverse-transformed) rotation matrix of a planet.
 void* FUN_00bc2900(void* out, cPlanet* p)
 {
-    Matrix3 ident;
-    ident.Assign(g_dir);           // identity seed (DAT_0168aa8c)
+    cSPTransform xf;
+    xf.mModCount = 0;
+    xf.mFlags = 0;
+    xf.mScale = 1.0f;
+    xf.mRotation.Assign(g_identity.m);
 
-    void* v = (*(void* (__thiscall**)(cPlanet*))((char*)*(void**)p + 0x2c))(p);
-    float pos[3];
-    pos[0] = ((float*)v)[0];
-    pos[1] = ((float*)v)[1];
-    pos[2] = ((float*)v)[2];
+    float* pos = (float*)(*(void* (__thiscall**)(cPlanet*))((char*)*(void**)p + 0x2c))(p);
+    xf.mFlags |= 4;
+    xf.mModCount++;
+    xf.mTranslation[0] = pos[0];
+    xf.mTranslation[1] = pos[1];
+    xf.mTranslation[2] = pos[2];
 
     void* q = (*(void* (__thiscall**)(cPlanet*))((char*)*(void**)p + 0x30))(p);
-    float mat[9];
-    float* r = SP_Matrix3FromQuaternion(mat, q);
-    for (int i = 0; i < 9; ++i) ident.m[i] = r[i];
-    ident.Assign(r);
+    Matrix3 tmp;
+    xf.mRotation = *SP_Matrix3FromQuaternion(&tmp, q);
+    xf.mFlags |= 2;
+    xf.mModCount++;
+    xf.invert();
 
-    *(float*)out = pos[0];
-    *(float*)((char*)out + 4) = pos[1];
-    *(float*)((char*)out + 8) = pos[2];
+    ((float*)out)[0] = xf.mTranslation[0];
+    ((float*)out)[1] = xf.mTranslation[1];
+    ((float*)out)[2] = xf.mTranslation[2];
     return out;
 }
 
@@ -188,20 +215,20 @@ float FUN_00bc29c0(void* a, cPlanet* p)
 
     float local[3];
     FUN_00bc2900(local, p);
-    FUN_00bc2570(local, (float*)a, axis);
+    float ang = FUN_00bc2570(local, (float*)a, axis);
 
-    float v = local[0] * axis[0] + local[1] * axis[1] + local[2] * axis[2];
-    if (v > g_halfCircle)
-        v = v - g_fullCircle;
-    else if (v < -g_halfCircle)
-        v = g_fullCircle + v;
-    v = v / g_fullCircle + 0.5f;
+    float r = fmod(ang, g_fullCircle);
+    if (r > g_halfCircle)
+        r -= g_fullCircle;
+    else if (r < -g_halfCircle)
+        r += g_fullCircle;
+    float v = r / g_fullCircle + 0.5f;
 
-    float dot = axis[0] * g_dir[0] + axis[1] * g_dir[1] + axis[2] * g_dir[2];
-    if (!p->IsSomething() && dot >= 0.0f) {
-        if (p->GetRotationAngle() <= *(float*)((char*)p->GetOrbit() + 0x20))
-            return v;
-    }
+    bool neg = axis[2] * g_dir[2] + axis[1] * g_dir[1] + axis[0] * g_dir[0] < 0.0f;
+    if (p->IsSomething() || neg)
+        return 1.0f - v;
+    if (p->GetRotationAngle() <= *(float*)((char*)p->GetOrbit() + 0x20))
+        return v;
     return 1.0f - v;
 }
 
@@ -267,41 +294,37 @@ int FUN_00bc2c50(float frac, float* dir, cPlanet* p)
     if (FUN_00bc2520(p))
         return 2;
 
-    float* axis;
-    if (p->IsSomething())
-        axis = g_dir;
-    else
-        axis = (float*)p->GetRotationAxis();
+    float* axis = p->IsSomething() ? g_dir : (float*)p->GetRotationAxis();
+    bool neg = axis[1] * g_dir[1] + axis[0] * g_dir[0] + axis[2] * g_dir[2] < 0.0f;
+    if (p->IsSomething() || neg ||
+        p->GetRotationAngle() > *(float*)((char*)p->GetOrbit() + 0x20))
+        frac = 1.0f - frac;
 
-    float dot = axis[0] * g_dir[0] + axis[1] * g_dir[1] + axis[2] * g_dir[2];
-    float orbit = *(float*)((char*)p->GetOrbit() + 0x20);
-    if (!(!p->IsSomething() && dot >= 0.0f)) {
-        if (p->GetRotationAngle() <= orbit || !p->IsSomething())
-            frac = 1.0f - frac;
-    }
+    float t = (frac - 0.5f) * g_fullCircle;
 
     float local[3];
     FUN_00bc2900(local, p);
-    FUN_00bc2570(local, dir, axis);
+    float proj = FUN_00bc2570(local, dir, axis);
+    float ang = (t - proj) * 0.5f;
 
-    float ang = (frac - 0.5f) * g_fullCircle * 0.5f;
-    float sn = (float)sin(ang);
-    float cs = (float)cos(ang);
-    float q[4];
-    q[0] = axis[0] * sn;
-    q[1] = axis[1] * sn;
-    q[2] = axis[2] * sn;
-    q[3] = cs;
+    Quat delta;
+    float sn = sinf(ang);
+    float cs = cosf(ang);
+    delta.x = axis[0] * sn;
+    delta.y = axis[1] * sn;
+    delta.z = axis[2] * sn;
+    delta.w = cs;
 
-    void* gq = (*(void* (__thiscall**)(cPlanet*, void*))((char*)*(void**)p + 0x30))(p, q);
-    float* nq = (float*)FUN_007dcb00(q, gq);
-    float inv = 1.0f / sqrtf(nq[0] * nq[0] + nq[1] * nq[1] + nq[2] * nq[2] + nq[3] * nq[3]);
-    float out[4];
-    out[0] = inv * nq[0];
-    out[1] = nq[1] * inv;
-    out[2] = nq[2] * inv;
-    out[3] = nq[3] * inv;
-    (*(void (__thiscall**)(cPlanet*, void*))((char*)*(void**)p + 0x3c))(p, out);
+    void* cur = (*(void* (__thiscall**)(cPlanet*))((char*)*(void**)p + 0x30))(p);
+    Quat res;
+    FUN_007dcb00(&res, cur, &delta);
+    float inv = 1.0f / (float)sqrt(res.x * res.x + res.y * res.y + res.z * res.z + res.w * res.w);
+    Quat out;
+    out.x = res.x * inv;
+    out.y = res.y * inv;
+    out.z = res.z * inv;
+    out.w = res.w * inv;
+    (*(void (__thiscall**)(cPlanet*, void*))((char*)*(void**)p + 0x3c))(p, &out);
     FUN_01021740(p);
     return 0;
 }
@@ -474,22 +497,133 @@ cSPTimer* cSPTimer::FUN_00bc31c0(SPTimeFn fn)
     return this;
 }
 
-// @ 0x00bc32a0 — typed-value string comparison helper.
-extern "C" void  __cdecl FUN_00694f40(void*, int);
-extern "C" void  __cdecl FUN_0056e2d0(void*, const void*);
-extern "C" void* __cdecl FUN_0093c5a0(void*, int, int);
-extern "C" void* __cdecl FUN_0093c6d0(void*, const void*);
-extern "C" void  __cdecl FUN_0093c6d0b();
+// ---------------------------------------------------------------------------
+// 0x00bc32a0: WriteTypedValue<signed char> (the XML typed-value writer template)
+// ---------------------------------------------------------------------------
+#include <string.h>
 
-struct cTypedValue {
-    virtual char FUN_00bc32a0_0(int);
-    virtual char FUN_00bc32a0_4(int);
-    virtual char FUN_00bc32a0_8(const wchar_t*, int);
-    virtual char FUN_00bc32a0_c(int);
+void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+void  operator delete[](void* p);
+
+namespace eastl {
+
+class allocator { public:
+    void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, 0, 0); }
+    void deallocate(void* p) { operator delete[](p); }
 };
 
-bool FUN_00bc32a0(cTypedValue* cb, int param_2, int param_3, int param_4)
+extern wchar_t gEmptyString16[2];   // 0x01667BAC
+extern char    gEmptyString8[1];
+
+template <typename T> struct EmptyStr;
+template <> struct EmptyStr<wchar_t> { static wchar_t* Get() { return gEmptyString16; } };
+template <> struct EmptyStr<char>    { static char*    Get() { return (char*)gEmptyString16; } };
+
+template <typename T>
+inline size_t CharStrlen(const T* p) { const T* q = p; while (*q) ++q; return (size_t)(q - p); }
+template <>
+inline size_t CharStrlen<char>(const char* p) { return strlen(p); }
+
+template <typename T>
+inline T* CharStringUninitializedCopy(const T* pSource, const T* pEnd, T* pDest)
 {
-    (void)cb; (void)param_2; (void)param_3; (void)param_4;
-    return true;
+    memcpy(pDest, pSource, (size_t)(pEnd - pSource) * sizeof(T));
+    return pDest + (pEnd - pSource);
 }
+
+template <typename T, typename Allocator = allocator>
+class basic_string {
+public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    Allocator mAllocator;
+
+    basic_string() : mpBegin(EmptyStr<T>::Get()), mpEnd(EmptyStr<T>::Get()), mpCapacity(EmptyStr<T>::Get() + 1) {}
+    basic_string(const basic_string& x);
+    struct CtorDoNotInitialize {};
+    basic_string(CtorDoNotInitialize, size_t n) : mpBegin(0), mpEnd(0), mpCapacity(0) { AllocateSelf(n + 1); *mpEnd = 0; }
+    basic_string(const T* p) : mpBegin(0), mpEnd(0), mpCapacity(0) { RangeInitialize(p); }
+    ~basic_string() { DeallocateSelf(); }
+
+    basic_string& operator=(const basic_string& x);
+
+    bool empty() const { return mpBegin == mpEnd; }
+    const T* c_str() const { return mpBegin; }
+    T* data() { return mpBegin; }
+    size_t size() const { return (size_t)(mpEnd - mpBegin); }
+
+    void AllocateSelf(size_t n);
+    void RangeInitialize(const T* pBegin, const T* pEnd)
+    {
+        const size_t n = (size_t)(pEnd - pBegin);
+        AllocateSelf(n + 1);
+        mpEnd = CharStringUninitializedCopy(pBegin, pEnd, mpBegin);
+        *mpEnd = 0;
+    }
+    void RangeInitialize(const T* pBegin);
+    void DeallocateSelf()
+    {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin);
+    }
+    void DoFree(T* p) { if (p) mAllocator.deallocate(p); }
+    basic_string& assign(const T* pBegin, const T* pEnd);
+    basic_string& append(const T* pBegin, const T* pEnd);
+    int sprintf(const char* fmt, ...);
+};
+
+typedef basic_string<char> string;
+typedef basic_string<wchar_t> string16;
+
+} // namespace eastl
+
+template <typename T, typename A>
+eastl::basic_string<T, A>::basic_string(const eastl::basic_string<T, A>& x) : mpBegin(0), mpEnd(0), mpCapacity(0)
+{
+    RangeInitialize(x.mpBegin, x.mpEnd);
+}
+template eastl::basic_string<char>::basic_string(const eastl::basic_string<char>&);
+
+namespace EA {
+eastl::string16 ConvertToString16(const char* p, int length = -1);   // 0x0093C5A0
+eastl::string16 ConvertToString16(const eastl::string& s);           // 0x0093C6D0
+}
+
+class IXmlWriter {
+public:
+    virtual bool BeginElement(const wchar_t* name) = 0;
+    virtual bool EndElement(const wchar_t* name) = 0;
+    virtual bool WriteAttribute(const wchar_t* name, const wchar_t* value) = 0;
+    virtual bool WriteCharacters(const wchar_t* text) = 0;
+};
+
+template <typename T>
+struct cTypedValueToStringT {
+    static bool sbWriteType;
+    static void Write(eastl::string& out, const T& value);
+};
+
+template <typename T>
+bool WriteTypedValue(IXmlWriter* writer, const char* name, const T& value, const wchar_t* typeName)
+{
+    bool result = true;
+    eastl::string str;
+    cTypedValueToStringT<T>::Write(str, value);
+    if (!str.empty()) {
+        eastl::string16 name16(name ? EA::ConvertToString16(name) : eastl::string16());
+        eastl::string16 text(EA::ConvertToString16(str));
+        const wchar_t* element = name16.empty() ? typeName : name16.c_str();
+        if (writer->BeginElement(element) &&
+            (name16.empty() || !cTypedValueToStringT<T>::sbWriteType || writer->WriteAttribute(L"type", typeName)) &&
+            writer->WriteCharacters(text.c_str()) &&
+            writer->EndElement(element))
+            result = true;
+        else
+            result = false;
+    }
+    return result;
+}
+
+// @ 0x00bc32a0  ??$WriteTypedValue@C
+template bool WriteTypedValue<signed char>(IXmlWriter*, const char*, const signed char&, const wchar_t*);

@@ -1,6 +1,7 @@
 // Slice s00eceab0 (bfs3 slice 24) -- SP editor dev/scenario swatch UI helpers.
 // Module flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
+#include <intrin.h>
 
 #define C0(p, off)      ((void(__thiscall*)(void*))((*(void***)(p))[(off) / 4]))(p)
 #define C1(p, off, a)   ((void(__thiscall*)(void*, int))((*(void***)(p))[(off) / 4]))(p, a)
@@ -49,7 +50,9 @@ struct ValueSink {
 void  __cdecl FUN_00834fa0(int a, int b, int c, int d, int e, int f, int g);
 int*  __cdecl cSPUILayout_FindWindowByID3(void* l, int id);
 void  __cdecl FUN_00808230(int a, void* b);
-void  __fastcall FUN_00834a00(int self, int arg);   // ecx=this, one stack arg
+struct H834a00 { void fn(int arg); };               // 0x00834a00: ecx=this, one stack arg
+// 0x008105b0 cSPUILayout::FindWindowByID(unsigned, bool) const -- layout pointer is `this`.
+struct LayoutQuery { void* FindWindowByID(unsigned id, bool flag) const; };
 int   __cdecl FUN_00834c60(int a);
 int   __cdecl FUN_00834e30();
 int   __cdecl FUN_00ece410(void* a);
@@ -307,33 +310,41 @@ bool SwatchMsgHandler::FUN_00ecf6d0(int msg, int arg2, int arg3)
     (void)arg2; (void)arg3;
     char* param_1 = (char*)this;
     if (K0((int*)msg, 0x1c) == (int)0x4a1cb6e) {
-        ((ValueSink*)FUN_00401020())->SetValue(*(int*)(param_1 - 0x20), *(float*)0x13f9bb0);
+        int u = *(int*)(param_1 - 0x20);
+        _ReadWriteBarrier();
+        ((ValueSink*)FUN_00401020())->SetValue(u, *(float*)0x13f9bb0);
     }
     char* base = param_1 - 0x6c;
-    bool flag = true;
-    if (K0(base, 0x28) == (int)0x867a9ee9)
-        flag = false;
-    bool c = *(int*)(base + 0x10) != -1;
+    int b;
+    int c;
+    *(char*)&b = 1;
+    if (K0((int*)base, 0x28) == (int)0x867a9ee9)
+        *(char*)&b = 0;
+    *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
     if (*(char*)(base + 0x79) == 0) {
-        int* w = (int*)((cSPUILayout*)*(void**)(base + 0x50))->FindWindowByID(0x7b6b2cd, true);
+        *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
+        int* w = (int*)((LayoutQuery*)*(void**)(base + 0x50))->FindWindowByID(0x7b6b2cd, true);
         if (w) C2(w, 0x7c, 1, c);
     }
-    c = *(int*)(base + 0x10) != -1;
+    *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
     if (*(char*)(base + 0x79) == 0) {
-        int* w = (int*)((cSPUILayout*)*(void**)(base + 0x50))->FindWindowByID(0x4a1cb6d, true);
+        *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
+        int* w = (int*)((LayoutQuery*)*(void**)(base + 0x50))->FindWindowByID(0x4a1cb6d, true);
         if (w) C2(w, 0x7c, 1, c);
         if (*(char*)(base + 0x79) == 0) {
-            w = (int*)((cSPUILayout*)*(void**)(base + 0x50))->FindWindowByID(0x73272b0, true);
-            if (w) C2(w, 0x7c, 1, flag);
+            *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
+            w = (int*)((LayoutQuery*)*(void**)(base + 0x50))->FindWindowByID(0x73272b0, true);
+            if (w) C2(w, 0x7c, 1, b);
         }
     }
-    c = *(int*)(base + 0x10) != -1;
+    *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
     if (*(char*)(base + 0x79) == 0) {
-        int* w = (int*)((cSPUILayout*)*(void**)(base + 0x50))->FindWindowByID(0x7464588, true);
+        *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
+        int* w = (int*)((LayoutQuery*)*(void**)(base + 0x50))->FindWindowByID(0x7464588, true);
         if (w) C2(w, 0x7c, 1, c);
     }
     if (!*(char*)(param_1 + 0xc))
-        FUN_00834a00(*(int*)(param_1 + 0x10), 0);
+        ((H834a00*)*(int*)(param_1 + 0x10))->fn(0);
     *(char*)(param_1 + 0xc) = 1;
     return false;
 }

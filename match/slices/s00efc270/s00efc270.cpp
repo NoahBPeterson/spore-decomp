@@ -81,7 +81,7 @@ int  __cdecl FUN_00ef7280(void);
 void* __cdecl FUN_00eeca30(void*);
 void* __cdecl FUN_00b3d250();
 
-// 0x00efc520
+// @ 0x00efc520
 int __cdecl FUN_00efc520()
 {
     if (g_016c7b88 != 0)
@@ -115,7 +115,7 @@ void __cdecl FUN_00efc850()
     char* o = *(char**)(sim + 0x18);
     ((TutorialsTarget*)o)->Update();
 }
-// 0x00efc860
+// @ 0x00efc860
 void __cdecl FUN_00efc860()
 {
     if (*(int*)((char*)g_016c7b88 + 0xc) != 0) {
@@ -124,7 +124,7 @@ void __cdecl FUN_00efc860()
     }
 }
 
-// 0x00efc890
+// @ 0x00efc890
 void __cdecl FUN_00efc890()
 {
     char* g = (char*)g_016c7b88;
@@ -156,7 +156,7 @@ int __cdecl FUN_00efc8f0()
     return r;
 }
 
-// 0x00efc910
+// @ 0x00efc910
 int __cdecl FUN_00efc910()
 {
     int r = 0;
@@ -535,12 +535,6 @@ bool __cdecl FUN_00efc9c0()
     v.x = r->x; v.y = r->y; v.z = r->z;
     if (v.x != g_16c7b98 || v.y != g_16c7b9c || v.z != g_16c7ba0)
         return 1;
-    return 0;
-}
-
-// @ 0x00efc9e0
-int __cdecl FUN_00efc9e0()
-{
     return 0;
 }
 

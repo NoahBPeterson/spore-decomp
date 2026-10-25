@@ -9,3 +9,6 @@ slices/s0104bcc0/s0104bcc0.cpp  ??1cSPSpaceToolData@SP@@QAE@XZ  0104c910  /O2 /M
 slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104cbd0@cSPSpaceToolData@SP@@QAEXH@Z  0104cbd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104cc00@cSPSpaceToolData@SP@@QAEXH@Z  0104cc00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s0104bcc0/s0104bcc0.cpp  ?FUN_0104cc90@cSPSpaceToolData@SP@@QAEEXZ  0104cc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?UpdateTuning@cSPSpaceInventoryItem@SP@@SAXIPAI@Z  0104c120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?Register@cSPEditorVerbIconTray@SP@@QAEXXZ  0104c220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0104bcc0/s0104bcc0.cpp  ?Dispatch@cSPEditorVerbIconTray@SP@@QAEPAXIIPAPAXI@Z  0104c510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
