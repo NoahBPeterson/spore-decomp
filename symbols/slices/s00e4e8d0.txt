@@ -1,5 +1,5 @@
 00e4e8d0  SP::sFluidUpdate
-00e4ebe0  SP::FluidParticlesUpdate
+00e4ebe0 ?FluidParticlesUpdate@SP@@YAXPAUcSPFluidParticles@1@M@Z  # SP::FluidParticlesUpdate migrated from s00e4e8d0
 00e4ec30  CellGameExtents_AddCell
 00e4ecc0 ?FUN_00e4ecc0@@YAHXZ  # FUN_00e4ecc0 migrated from s00e4e8d0 (verbatim, slice spelling)
 00e4ee30 ?FUN_00e4ee30@@YAHH@Z  # FUN_00e4ee30 migrated from s00e4e8d0 (verbatim, slice spelling)

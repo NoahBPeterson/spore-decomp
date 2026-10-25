@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE)
+00e4dc90 69 position->cell index: parameter passed in ESI by the original static fn; floor intrinsic frame [equiv: UNSUPPORTED 0/1200 valid, fault(read): arg in ESI (custom reg ABI)]
+00e4dd20 79 clamp-to-cell: original uses register pair (ECX in, EAX out) and min/max stack temps [equiv: UNSUPPORTED original reads eax at entry (custom reg ABI)]
+00e4e170 132 fractional-cell split: cvtss2si (round-nearest) + cmovb needed; SSE temp forced a frame [equiv: PASS 1200 inputs, 100% cov]
+00e4ebe0 38 FluidParticlesUpdate; complete. difftest: UNSUPPORTED (0/400 valid)
