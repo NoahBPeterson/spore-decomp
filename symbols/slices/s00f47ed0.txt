@@ -3,3 +3,18 @@
 00f48850 ?EAMain@@YAHPAUCommandLine@@@Z  # EAMain migrated from s00f47ed0 (verbatim, slice spelling)
 00f48a20 FUN_00f48a20  # __stdcall(4): constructs CommandLine, calls EAMain
 00f48b00 `anonymous_namespace'::cTerrainBrushState::~cTerrainBrushState  # 2008 dev-build PDB name
+0092b1b0 ?GetArg@CommandLine@EA@@QAEPAVWString@2@H@Z  # EA::CommandLine::GetArg(int), 16-byte WString vector element
+00921e00 EA::Thread::MutexParameters::MutexParameters  # (bool exclusive, const char* name); copies name to +1, +0x10=0
+009222a0 ?Mutex@Thread@EA@@QAE@PBUMutexParameters@12@_N@Z  # EA::Thread::Mutex::Mutex(params, createdLocked)
+00922150 ?Init@Mutex@Thread@EA@@QAE_NPBUMutexParameters@23@@Z  # EA::Thread::Mutex::Init(params)
+009221b0 ?Lock@Mutex@Thread@EA@@QAEHI@Z  # EA::Thread::Mutex::Lock(const int* timeout) returns -2 on timeout
+00922270 ?Unlock@Mutex@Thread@EA@@QAEHXZ  # EA::Thread::Mutex::Unlock
+00922130 EA::Thread::Mutex::~Mutex  # dtor; frees handle at +0 or the OS object
+0091e810 EA::Debug::ExceptionHandler::ExceptionHandler  # ctor at frame +0x48
+0091e8d0 EA::Debug::ExceptionHandler::~ExceptionHandler  # dtor at frame +0x48
+0091e650 ?SetBuildDescription@ExceptionHandler@@QAEXPBD@Z  # "Spore" (0x0140a598)
+0091e040 ?SetReportDirectory@ExceptionHandler@@QAEXPA_W@Z  # wide report directory buffer
+0091e020 ?Set@Holder@@QAEXHH@Z  # exception-handler holder Set(2, -1)
+00930f60 ?SetPath@FilePath@IO@EA@@QAEPA_WPB_W@Z  # EA::IO::FilePath::SetPath(exe path)
+00930d20 ?GetDriveAndDirectory@FilePath@IO@EA@@QAEIPAGI@Z  # EA::IO::FilePath::GetDriveAndDirectory(wchar_t*, size)
+006baff0 SP::SporeAlert  # (message, 1000, 2)

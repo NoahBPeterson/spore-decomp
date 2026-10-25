@@ -10,6 +10,7 @@ struct CommandLine {
     ~CommandLine() throw();
     int FindSwitch(const wchar_t* name, int a = 0, WString* value = 0, int c = 0);   // 0x0092b300
     uint32_t* GetArgs();                                                              // 0x0092b6c0
+    WString* GetArg(int index);                                                       // 0x0092b1b0
     uint32_t pad[0x38 / 4];
 };
 
@@ -545,66 +546,107 @@ struct cSporeApp {
     void Fn47550();                         // 0x00f47550
 };
 
-struct Mutex {
-    Mutex() throw();
-    ~Mutex() throw();
-    void Init();
-    int Lock();
-    void Unlock();
+// ---------------------------------------------------------------------------
+// EA runtime objects used by EAMain.  Only the members actually called are
+// declared; the trailing pad keeps each object at the size of its original
+// stack slot so the imported methods stay in bounds.
+// ---------------------------------------------------------------------------
+
+struct MutexParameters {                                            // EA::Thread::MutexParameters
+    MutexParameters(bool exclusive, const char* name);              // 0x00921e00
+    char pad[0x14];
 };
 
-struct ExceptionHandler {
-    ExceptionHandler();
-    ~ExceptionHandler();
-    void SetReportDirectory(const char* dir);
+struct Mutex {                                                      // EA::Thread::Mutex
+    Mutex(const MutexParameters* params, bool createdLocked);       // 0x009222a0
+    ~Mutex();                                                       // 0x00922130
+    bool Init(const MutexParameters* params);                       // 0x00922150
+    int Lock(const int* timeout);                                   // 0x009221b0 (-1 == forever)
+    int Unlock();                                                   // 0x00922270
+    char pad[0x30];
 };
 
-struct FilePath {
-    static void GetDriveAndDirectory(char* buffer, uint32_t size);
+struct Holder {                                                     // EA::Debug::Holder (base of ExceptionHandler)
+    void Set(int a, int b);                                         // 0x0091e020
 };
 
-void NamedMutexCreate();
-void SporeAlert(const char* message, int priority, int timeout);
-void InitExceptionHandler(const char* name);
-void InitSearchPath();
-void InitModules(int a, int b);
+struct ExceptionHandler : Holder {                                  // EA::Debug::ExceptionHandler
+    ExceptionHandler();                                             // 0x0091e810
+    ~ExceptionHandler();                                            // 0x0091e8d0
+    void SetBuildDescription(const char* description);              // 0x0091e650
+    void SetReportDirectory(const wchar_t* directory);              // 0x0091e040
+    char pad[0x24b];
+};
+
+struct FilePath {                                                   // EA::IO::FilePath
+    wchar_t* SetPath(const wchar_t* path);                          // 0x00930f60
+    uint32_t GetDriveAndDirectory(wchar_t* buffer, uint32_t size);  // 0x00930d20
+    char pad[0x410];
+};
+
+extern int gMutexTimeout;                                           // 0x0148d758, -1 == wait forever
+void SporeAlert(const char* message, int timeout, int priority);    // 0x006baff0
 
 // @ 0x00f48850
-// PARTIAL: EA runtime object types (Mutex, ExceptionHandler, FilePath, the
-// cSporeApp inlined constructor) were not reconstructed.
 int EAMain(CommandLine* cmdLine) throw()
 {
-    int multipleInstances = cmdLine->FindSwitch(L"multipleInstances", 0, 0, 0);
-    Mutex mutex;
-    if (multipleInstances == -1) {
-        NamedMutexCreate();
-        mutex.Init();
-        if (mutex.Lock() == -2) {
-            SporeAlert("Another instance of the game is already running", 2, 1000);
+    // Optional switch that lets a second instance bypass the single-instance mutex.
+    bool multipleInstances = cmdLine->FindSwitch(L"multipleInstances", 0, 0, 0) != -1;
+    Mutex mutex(0, true);
+    if (!multipleInstances) {
+        MutexParameters params(false, "SporeMutex");    // literal at 0x0148da30
+        mutex.Init(&params);
+        if (mutex.Lock(&gMutexTimeout) == -2) {
+            SporeAlert("Another instance of the game is already running", 1000, 2);
             return -1;
         }
     }
 
     ExceptionHandler handler;
-    InitExceptionHandler("Spore");
-    InitSearchPath();
-    char reportDirectory[0x104];
-    FilePath::GetDriveAndDirectory(reportDirectory, 0x104);
+    handler.SetBuildDescription("Spore");               // literal at 0x0140a598
+    FilePath filePath;
+    filePath.SetPath(cmdLine->GetArg(0)->mpBegin);
+    wchar_t reportDirectory[0x104];
+    filePath.GetDriveAndDirectory(reportDirectory, 0x104);
     handler.SetReportDirectory(reportDirectory);
-    InitModules(2, -1);
+    handler.Set(2, -1);
 
-    cSporeApp* app = new cSporeApp();
-    if (app != 0) {
-        if (app->Init(cmdLine)) {
-            app->Run();
-            app->Shutdown();
-        }
+    cSporeApp* p = (cSporeApp*)operator new(0x48, "App", 0, 0, 0, 0);
+    if (p != 0) {
+        // Inlined cSporeApp constructor (0x00f4...): both base vptrs, refcount,
+        // timing fields and the nine system pointers are initialised in this order.
+        *(volatile void**)&p->mVtbl4 = (void*)0x13ec458;
+        p->mRefCount = 0;
+        p->mVtbl0 = (void*)0x148d81c;
+        p->mAppRunning = false;
+        p->mFlag0d = false;
+        p->mReferenceCycle = 0;
+        p->mMSPerCycle = 0.0f;
+        p->mCyclesPerMS = 0.0f;
+        p->mVtbl4 = (void*)0x148d80c;
+        p->mAppSystem.mpObject = 0;
+        p->mFactoryRegistry = 0;
+        p->mUIMainWin.mpObject = 0;
+        p->mAudioSystem.mpObject = 0;
+        p->mMovieSystem = 0;
+        p->mEditorSystem.mpObject = 0;
+        p->mTerrainSystem.mpObject = 0;
+        p->mGonzagoSystem.mpObject = 0;
+        p->mExitCode = 0;
+        void** ctorVt = (void**)(*(volatile void**)&p->mVtbl4);
+        ((void(__thiscall*)(void*))ctorVt[1])(&p->mVtbl4);
+    }
+    cSporeApp* app = p;
+    if (app->Init(cmdLine)) {
+        app->Run();
+        app->Shutdown();
     }
     int exitCode = app->mExitCode;
-    app->Release();
-    if (multipleInstances == -1)
+    // Second virtual slot of the RefCountVTemplate base at +0x04 releases the app.
+    void** refVtbl = *(void***)&app->mVtbl4;
+    ((void(__thiscall*)(void*))refVtbl[2])(&app->mVtbl4);
+    if (!multipleInstances)
         mutex.Unlock();
-    handler.~ExceptionHandler();
     return exitCode;
 }
 
