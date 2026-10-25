@@ -72,19 +72,178 @@ int Host5383c0::Release()
     return ((RefCountPrimary*)((char*)this - 8))->Release();
 }
 
-// ---------------------------------------------------------------- stubs (partial)
+// ---------------------------------------------------------------- vectors/matrices used by cTransform
+struct V3_538 { float v[3]; };
+struct M9_538 { float m[9]; };
+V3_538* MulVecFloat(V3_538* out, const V3_538& a, const float& s);   // 0x0041dca0
+V3_538* MulVecMat(V3_538* out, const V3_538& a, const M9_538& b);    // 0x0041daf0
+void VecAdd(V3_538* dst, const V3_538& src);                          // 0x0041ddb0
+M9_538* MulMat(M9_538* out, const M9_538& a, const M9_538& b);        // 0x0041de20
+void* operator new(size_t, const char* name, int flags, unsigned debugFlags, const char* file, int line);
+
+namespace EA { namespace Swarm {
+struct cTransform {
+    uint16_t mFlags;        // +0x00
+    uint16_t mModCount;     // +0x02
+    float mTranslation[3];  // +0x04
+    float mScale;           // +0x10
+    float mRotation[9];     // +0x14
+    void PreTransformBy(const cTransform& x);
+};
+} }
+
 // @ 0x00537f40
-void TransformCompoundStub() {}
+void EA::Swarm::cTransform::PreTransformBy(const EA::Swarm::cTransform& x)
+{
+    // One aggregate so the /Od slot order (v2 at -0x18, mm at -0x3c) is fixed.
+    struct PreTemps { M9_538 mm; V3_538 v2; V3_538 v; };
+    PreTemps t;
+    VecAdd((V3_538*)mTranslation,
+           *MulVecMat(&t.v2, *MulVecFloat(&t.v, *(const V3_538*)x.mTranslation, mScale),
+                      *(const M9_538*)mRotation));
+    *(M9_538*)mRotation = *MulMat(&t.mm, *(const M9_538*)x.mRotation, *(const M9_538*)mRotation);
+    mScale = mScale * x.mScale;
+    mFlags |= x.mFlags;
+    mModCount++;
+}
+
+// ---------------------------------------------------------------- particle effect object update
+struct V3Pass538 {                                  // 12-byte vector passed by value
+    float x, y, z;
+    V3Pass538() {}
+    V3Pass538(const V3Pass538& v) { x = v.x; y = v.y; z = v.z; }
+};
+struct PaintSystem538080 {
+    void Spawn(void* target, V3Pass538 v, uint32_t rnd);   // 0x00524150 (this, ret 0x14)
+};
+struct EffectComp538080 { char pad[0xb4]; int mB4; };        // object reached through +0x48
+struct EffectObj538080 {
+    char pad0[0x10];
+    V3Pass538 mVec;                                         // +0x10
+    char pad1[0x44 - 0x1c];
+    unsigned char mReady;                                   // +0x44
+    char pad2[3];
+    EffectComp538080* mpComp;                               // +0x48
+    int m4c;                                                // +0x4c
+    void Update(int a, int b, int c);
+};
+namespace EA { namespace Random {
+struct RandomLinearCongruential {
+    uint32_t RandomUint32Uniform();                         // 0x009360b0
+};
+} namespace Swarm {
+extern Random::RandomLinearCongruential sRandom;            // 0x016778dc
+} }
+
 // @ 0x00538080
-void EffectUpdateStub() {}
-// @ 0x00538180
-void EffectDtorStub() {}
-// @ 0x00538200
-void EffectCreateStub() {}
+void EffectObj538080::Update(int, int, int)
+{
+    PaintSystem538080* ps = (PaintSystem538080*)GetPaintSystem();
+    if (!mReady) {
+        EffectComp538080* comp = mpComp;
+        comp->mB4 = m4c;
+        ps->Spawn(mpComp ? (char*)mpComp + 8 : 0, mVec, EA::Swarm::sRandom.RandomUint32Uniform());
+        mReady = 1;
+    }
+}
+
+// ---------------------------------------------------------------- particle description (0xb8) family
+// vtable addresses are literal: they are .rdata image addresses of this build.
+struct EvalList538 {                    // nSPSkinner::cPaintVarEvalList (0x40 bytes)
+    char mData[0x40];
+    void Construct();                   // 0x005355e0
+    void Destroy();                     // 0x00535660
+};
+struct U32VecHead {                     // 4-byte-element eastl vector head
+    uint32_t* mpBegin;                  // +0x00
+    uint32_t* mpEnd;                    // +0x04
+    uint32_t* mpCapacity;               // +0x08
+    void Free();                        // 0x00425990
+};
+struct PaintBlock538 {                  // subobject embedded at Desc538+0x08 (0xac bytes)
+    void* m0;                           // +0x00  (vtable 0x013f2f58)
+    U32VecHead mVec;                    // +0x04
+    char pad[0x6c - 0x10];
+    EvalList538 mList;                  // +0x6c
+    ~PaintBlock538();                   // 0x00538320
+};
+struct Desc538 {                        // 0xb8-byte particle description
+    void* m0;                           // +0x00
+    int   m4;                           // +0x04
+    void* m8;                           // +0x08
+    uint32_t* mVecBegin;                // +0x0c
+    uint32_t* mVecEnd;                  // +0x10
+    uint32_t* mVecCap;                  // +0x14
+    char pad[0x74 - 0x18];
+    EvalList538 mList;                  // +0x74
+    int mB4;                            // +0xb4
+    Desc538();                          // 0x00538260
+    ~Desc538();                         // 0x00538180
+};
+
 // @ 0x00538260
-void EffectCtorStub() {}
+Desc538::Desc538()
+{
+    m0 = (void*)0x13ef094;
+    m4 = 0;
+    m0 = (void*)0x13ef094;
+    struct CtorLocals { PaintBlock538* sub; int pad[3]; U32VecHead* vec; int tail; };
+    CtorLocals L;
+    L.sub = (PaintBlock538*)((char*)this + 8);
+    L.sub->m0 = (void*)0x13f2f58;
+    L.vec = &L.sub->mVec;
+    L.vec->mpBegin = 0;
+    L.vec->mpEnd = 0;
+    L.vec->mpCapacity = 0;
+    L.sub->mList.Construct();
+    m0 = (void*)0x13f2f54;
+    m8 = (void*)0x13f2f44;
+    mB4 = -1;
+}
+
+// ---------------------------------------------------------------- GmeIComponent-style object destructor
+struct Prim538 { virtual void p0(); int m4; };
+struct Sec538 { virtual void s0(); virtual void s1(); };
+struct Multi538 : Prim538, Sec538 { int mPad; };   // secondary vtable at +0x08
+struct Dtor538180 {
+    void* m0;                   // +0x00 (vtable 0x013f21d4)
+    void* m4;                   // +0x04 (secondary vtable)
+    char pad[0x40];
+    Multi538* mp48;             // +0x48
+    int m4c;                    // +0x4c
+    ~Dtor538180();
+};
+
+// @ 0x00538180
+Dtor538180::~Dtor538180()
+{
+    if (mp48)
+        mp48->s1();
+    m0 = (void*)0x13f21d4;
+    m4 = (void*)0x13f2194;
+    m4 = (void*)0x13ef094;
+}
+
 // @ 0x00538320
-void EvalListDtorStub() {}
+PaintBlock538::~PaintBlock538()
+{
+    m0 = (void*)0x13f2f58;
+    mList.Destroy();
+    U32VecHead* head = &mVec;
+    for (uint32_t* p = head->mpBegin; p < head->mpEnd; p++) {}
+    head->Free();
+}
+
+// ---------------------------------------------------------------- 0x00538200 factory
+void ReadDesc538(void* stream, void* name, Desc538* desc);   // 0x0053acc0
+
+// @ 0x00538200
+Desc538* CreateDesc538(void* stream, void* name)
+{
+    Desc538* const p = new("Swarm", 0, 0, 0, 0) Desc538();
+    ReadDesc538(stream, name, p);
+    return p;
+}
 // ---------------------------------------------------------------- particle effect block command
 // The ArgScript block "SPSkinPaintParticle" (OnRegister) and some of its line commands.
 extern "C" __declspec(dllimport) int __cdecl _strnicmp(const char*, const char*, size_t);
@@ -95,6 +254,7 @@ extern "C" __declspec(dllimport) long __cdecl atol(const char*);
 void* operator new[](size_t size, const char* name, int flags, unsigned debugFlags, const char* file, int line); // 0xf473a0
 inline void* operator new(size_t size, const char* name, int flags, unsigned debugFlags, const char* file, int line)
 { return operator new[](size, name, flags, debugFlags, file, line); }
+inline void* operator new(size_t, void* p) { return p; }
 
 struct Vector3T {                               // rw::math::fpu::Vector3Template<float,0>
     float x, y, z;
