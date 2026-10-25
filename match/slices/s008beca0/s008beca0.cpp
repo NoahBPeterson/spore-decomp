@@ -1,5 +1,6 @@
 // 13x13x13 byte lookup table filler (table pointer arrives in EAX: static register convention)
 #include "types.h"
+#include <setjmp.h>
 
 static __declspec(noinline) void FillTable(uint8_t* t)
 {
@@ -91,180 +92,436 @@ static __declspec(noinline) void FillTable(uint8_t* t)
 void InitColorTable(uint8_t* t) { FillTable(t); }
 
 // ---------------------------------------------------------------------------
-// CFF class factory and T2K stream reader.
-// _tsi_NewCFFClass receives its CFF context in EAX (custom register ABI) and
-// FUN_008bf2b0 receives size in EAX and context in EDI, so those entry points
-// cannot be expressed as ordinary C++ calls; they are implemented here with
-// the register values named as parameters and are recorded as partial.
+// CFF class construction (T2K / Font Fusion).
+//
+// The retail object code delivers the InputStream context of _tsi_NewCFFClass
+// in EAX, and the size/memory context of FUN_008bf2b0 in EAX/EDI.  Those two
+// are translation-unit-local helpers whose parameters the original compiler
+// passed in registers; a plain C declaration cannot reproduce that ABI, so
+// they take ordinary parameters here and are recorded as non-matching.
+//
+// Layouts are the 2008 dev-PDB structs (CFFClass, InputStream_t,
+// TopDictInfo, CFFIndexClass), checked against the retail disassembly.
 
-struct T2KOwnerX { uint8_t pad[0xa8]; int fielda8; };
+typedef struct tsiMemObject tsiMemObject;
+typedef struct hashClass    hashClass;
 
-struct T2KCfgX
+/* The allocator's memory object starts with its own header and keeps the
+ * setjmp environment NewT2K arms at +0x10. */
+typedef struct T2KMemHeader {
+    uint8_t pad00[0x10];
+    jmp_buf jmpBuf;                       /* +0x10 */
+} T2KMemHeader;
+
+typedef int (*PF_READ_TO_RAM)(void* id, uint8_t* dest_ram,
+                              unsigned long offset, long numBytes);
+
+typedef struct InputStream {              /* InputStream_t, size 0x23c */
+    uint8_t*        privateBase;          /* +0x000 */
+    PF_READ_TO_RAM  ReadToRamFunc;        /* +0x004 */
+    void*           nonRamID;             /* +0x008 */
+    uint8_t         tmp_ch;               /* +0x00c */
+    uint8_t         cacheBase[512];       /* +0x00d */
+    long            bytesLeftToPreLoad;   /* +0x210 */
+    unsigned long   cacheCount;           /* +0x214 */
+    unsigned long   cachePosition;        /* +0x218 */
+    unsigned long   pos;                  /* +0x21c */
+    unsigned long   maxPos;               /* +0x220 */
+    unsigned long   posZero;              /* +0x224 */
+    char            constructorType;      /* +0x228 */
+    tsiMemObject*   mem;                  /* +0x22c */
+    unsigned long   bitBufferIn;          /* +0x230 */
+    unsigned long   bitCountIn;           /* +0x234 */
+    uint8_t         decrypted;            /* +0x238 */
+} InputStream;
+
+typedef struct CFFIndexClass {            /* size 0x14 */
+    tsiMemObject*   mem;                  /* +0x00 */
+    unsigned long   baseDataOffset;       /* +0x04 */
+    uint8_t         offSize;              /* +0x08 */
+    unsigned long*  offsetArray;          /* +0x0c */
+    uint16_t        count;                /* +0x10 */
+} CFFIndexClass;
+
+typedef struct TopDictInfo {              /* size 0x170 */
+    uint16_t    version;                  /* +0x00 */
+    uint16_t    Notice;                   /* +0x02 */
+    uint16_t    FullName;                 /* +0x04 */
+    uint16_t    FamilyName;               /* +0x06 */
+    uint16_t    Weight;                   /* +0x08 */
+    long        UniqueId;                 /* +0x0c */
+    long        bbox_xmin;                /* +0x10 */
+    long        bbox_ymin;                /* +0x14 */
+    long        bbox_xmax;                /* +0x18 */
+    long        bbox_ymax;                /* +0x1c */
+    unsigned long isFixedPitch;           /* +0x20 */
+    long        italicAngle;              /* +0x24 */
+    int         UnderlinePosition;        /* +0x28 */
+    int         UnderlineThickness;       /* +0x2c */
+    uint8_t     CharstringType;           /* +0x30 */
+    long        charset;                  /* +0x34 */
+    long        Encoding;                 /* +0x38 */
+    long        Charstrings;              /* +0x3c */
+    long        PrivateDictSize;          /* +0x40 */
+    long        PrivateDictOffset;        /* +0x44 */
+    int         numAxes;                  /* +0x48 */
+    int         numMasters;               /* +0x4c */
+    int         lenBuildCharArray;        /* +0x50 */
+    long*       buildCharArray;           /* +0x54 */
+    long        defaultWeight[16];        /* +0x58 */
+    uint16_t    NDV;                      /* +0x98 */
+    uint16_t    CDV;                      /* +0x9a */
+    long        reg_WeightVector[16];     /* +0x9c */
+    long        reg_NormalizedDesignVector[16]; /* +0xdc */
+    long        reg_UserDesignVector[16]; /* +0x11c */
+    long        m00, m01, m10, m11;       /* +0x15c */
+    uint8_t     isCIDKeyed;               /* +0x16c */
+} TopDictInfo;
+
+typedef struct PrivateDictInfo {          /* size 0x10 */
+    long Subr;                            /* +0x0 */
+    long SubrOffset;                      /* +0x4 */
+    long defaultWidthX;                   /* +0x8 */
+    long nominalWidthX;                   /* +0xc */
+} PrivateDictInfo;
+
+typedef struct CFFClass {                 /* size 0x520 */
+    tsiMemObject*   mem;                  /* +0x000 */
+    InputStream*    in;                   /* +0x004 */
+    unsigned long   cffOffset;            /* +0x008 */
+    long            NumCharStrings;       /* +0x00c */
+    uint16_t        charCodeToSID[256];   /* +0x010 */
+    struct sidCode* T2_CMAPTable;         /* +0x210 */
+    hashClass*      T2_StringsHash;       /* +0x214 */
+    hashClass*      T2_SIDToCharCodeHash; /* +0x218 */
+    long            upem;                 /* +0x21c */
+    long            maxPointCount;        /* +0x220 */
+    long            ascent;               /* +0x224 */
+    long            descent;              /* +0x228 */
+    long            lineGap;              /* +0x22c */
+    long            advanceWidthMax;      /* +0x230 */
+    long            italicAngle;          /* +0x234 */
+    long            fontNum;              /* +0x238 */
+    uint8_t         pad23c[0x36c - 0x23c];
+    uint16_t        seed;                 /* +0x36c */
+    uint8_t         major;                /* +0x36e */
+    uint8_t         minor;                /* +0x36f */
+    uint8_t         hdrSize;              /* +0x370 */
+    uint8_t         offSize;              /* +0x371 */
+    CFFIndexClass*  name;                 /* +0x374 */
+    CFFIndexClass*  topDict;              /* +0x378 */
+    TopDictInfo     topDictData;          /* +0x37c */
+    CFFIndexClass*  string;               /* +0x4ec */
+    CFFIndexClass*  gSubr;                /* +0x4f0 */
+    long            gSubrBias;            /* +0x4f4 */
+    CFFIndexClass*  CharStrings;          /* +0x4f8 */
+    PrivateDictInfo privateDictData;      /* +0x4fc */
+    CFFIndexClass*  lSubr;                /* +0x50c */
+    long            lSubrBias;            /* +0x510 */
+    unsigned long   isFixedPitch;         /* +0x514 */
+    uint16_t        firstCharCode;        /* +0x518 */
+    uint16_t        lastCharCode;         /* +0x51a */
+    int             glyphExists;          /* +0x51c */
+} CFFClass;
+
+/* ---- callees (address in the comment) ---- */
+void Seek_InputStream(InputStream* t, unsigned long offset);              // 0x008cc580
+void PrimeT2KInputStream(InputStream* t);                                 // 0x008cc0b0
+void tsi_Error(tsiMemObject* mem, int code);                              // 0x008d10c0
+void* tsi_AllocMem(tsiMemObject* mem, unsigned long size);                // 0x008d1260
+void tsi_EmergencyShutDown(tsiMemObject* mem);                            // 0x008d1210
+void tsi_DeAllocMem(tsiMemObject* mem, void* p);                          // 0x008d1440
+CFFIndexClass* tsi_NewCFFIndexClass(tsiMemObject* mem, InputStream* in);  // 0x008bad10
+void tsi_ParseCFFTopDict(InputStream* in, CFFIndexClass* topDict,
+                         TopDictInfo* dict, int index);                   // 0x008bb0d0
+void tsi_ParsePrivateDictData(CFFClass* t);                               // 0x008baf10
+void BuildT2CMAP(CFFClass* t);                                            // 0x008be260
+void BuildT2MetricsEtc_Standin(CFFClass* t);                              // 0x008be080
+hashClass* New_hashClass(tsiMemObject* mem, unsigned long size,
+                         void* callback, void* param);                    // 0x008d1a00
+void put_hashClass(hashClass* h, uint16_t key, uint16_t key2,
+                   void* value);                                          // 0x008d1c50
+long Tell_InputStream(InputStream* t);                                    // 0x008cc5b0
+int  PeekInt16(InputStream* t, void* buf, int len);                       // 0x008cc220
+int  util_FixDiv(int a, int b);                                           // 0x008d16d0
+void FUN_008bdab0(void);                                                  // 0x008bdab0
+extern char* StdSIDStrings[];                                             // 0x1434ac8
+
+/* One byte from the stream; the original inlines this at every call site. */
+static __forceinline uint8_t T2KReadByte(InputStream* s)
 {
-    uint8_t  pad00[0x28];
-    T2KOwnerX* field28;                   // +0x28
-    uint8_t  pad2c[0x88 - 0x2c];
-    uint16_t w88;                         // +0x88
-    uint16_t w8a;                         // +0x8a
-    uint8_t  pad8c[0x90 - 0x8c];
-    int      field90;                     // +0x90
-    uint16_t w94;                         // +0x94
-    uint16_t w96;                         // +0x96
-    uint8_t  pad98[0xf4 - 0x98];
-    int      fieldf4;                     // +0xf4
-};
+    if (s->privateBase == 0) {
+        unsigned long pos = s->pos;
+        s->pos = pos + 1;
+        if (s->ReadToRamFunc(s->nonRamID, &s->tmp_ch, pos, 1) < 0) {
+            tsi_Error(s->mem, 0x2728);
+            return 0;
+        }
+        return s->tmp_ch;
+    }
+    if (s->ReadToRamFunc == 0)
+        return s->privateBase[s->pos++];
+    if ((unsigned long)(s->pos - s->cachePosition + 1) > s->cacheCount)
+        PrimeT2KInputStream(s);
+    return s->privateBase[s->pos++ - s->cachePosition];
+}
 
-struct T2KCtxX
+/* Subroutine-index bias from the number of entries. */
+static long CFFIndexBias(uint16_t count)
 {
-    uint8_t  pad00[0x10];
-    uint32_t field10;                     // +0x10
-};
+    if (count < 0x4d8)
+        return 0x6b;
+    return (count < 0x846c) ? 0x46b : 0x8000;
+}
 
-struct T2KObjX
+// @ 0x008beca0
+CFFClass* _tsi_NewCFFClass(InputStream* in, tsiMemObject* mem, int fontNum,
+                           int flag, unsigned long pos)
 {
-    uint32_t magic;                       // +0x00
-    T2KCtxX* field04;                     // +0x04
-    uint8_t  pad08[0x18 - 0x08];
-    uint32_t field18;                     // +0x18
-    uint8_t  pad1c[0x20 - 0x1c];
-    uint32_t field20;                     // +0x20
-    uint32_t field24;                     // +0x24
-    uint8_t  pad28[0x30 - 0x28];
-    uint32_t field30;                     // +0x30
-    uint32_t field34;                     // +0x34
-    uint32_t field38;                     // +0x38
-    uint32_t field3c;                     // +0x3c
-    uint32_t field40;                     // +0x40
-    uint32_t field44;                     // +0x44
-    uint32_t field48;                     // +0x48
-    uint32_t field4c;                     // +0x4c
-    uint32_t field50;                     // +0x50
-    uint32_t field54;                     // +0x54
-    int      field58;                     // +0x58
-    int      field5c;                     // +0x5c
-    uint16_t w60;                         // +0x60
-    uint16_t w62;                         // +0x62
-    uint8_t  pad64[0x104 - 0x64];
-    uint32_t field104;                    // +0x104
-    uint16_t w108;                        // +0x108
-    uint8_t  pad10a[0x118 - 0x10a];
-    uint32_t field118;                    // +0x118
-    uint32_t field11c;                    // +0x11c
-    uint8_t  pad120[0x16c - 0x120];
-    uint32_t field16c;                    // +0x16c
-    uint32_t field170;                    // +0x170
-    uint8_t  pad174[0x184 - 0x174];
-    T2KCfgX* field184;                    // +0x184
-    uint32_t field188;                    // +0x188
-    uint32_t field18c;                    // +0x18c
-    uint32_t field190;                    // +0x190
-    uint32_t field194;                    // +0x194
-    uint8_t  table[0xa30 - 0x198];        // +0x198
-    uint32_t fielda30;                    // +0xa30
-};
+    CFFClass* t;
+    int major;
+    int i;
+    void* buf;
+    long len, save;
+    CFFIndexClass* ix;
 
-struct T2KReaderX
-{
-    T2KCtxX* field00;                     // +0x00
-    int      field04;                     // +0x04
-    int      field08;                     // +0x08
-    int      field0c;                     // +0x0c
-    void*    field10;                     // +0x10
-    int      field14;                     // +0x14
-};
+    Seek_InputStream(in, pos);
+    major = T2KReadByte(in);
+    if (major != 1)
+        tsi_Error(mem, 0x2726);
 
-void _tsi_NewCFFClass(int a, int b, int c, int d);   // 0x8beca0
-void* tsi_AllocMem(T2KCtxX* ctx, uint32_t size);      // 0x8d1260
-int  FUN_011e0cac(uint32_t* p, int flag);             // 0x11e0cac
-void tsi_EmergencyShutDown(T2KCtxX* ctx);             // 0x8d1210
-void FUN_008bf300(uint8_t* table);                    // 0x8bf300
+    t = (CFFClass*)tsi_AllocMem(mem, 0x520);
+    t->mem = mem;
+    t->major = (uint8_t)major;
+    t->minor = T2KReadByte(in);
+    t->hdrSize = T2KReadByte(in);
+    t->offSize = T2KReadByte(in);
+    t->fontNum = fontNum;
+    t->cffOffset = pos;
+    Seek_InputStream(in, pos + t->hdrSize);
+    t->in = in;
+
+    t->name = tsi_NewCFFIndexClass(mem, in);
+    t->topDict = tsi_NewCFFIndexClass(mem, in);
+    t->string = tsi_NewCFFIndexClass(mem, in);
+    t->gSubr = tsi_NewCFFIndexClass(mem, in);
+    t->gSubrBias = CFFIndexBias(t->gSubr->count);
+
+    t->firstCharCode = 0;
+    t->isFixedPitch = 0;
+    t->lastCharCode = 0xffff;
+    tsi_ParseCFFTopDict(in, t->topDict, &t->topDictData, fontNum);
+
+    Seek_InputStream(in, t->topDictData.Charstrings + t->cffOffset);
+    t->CharStrings = tsi_NewCFFIndexClass(mem, in);
+    tsi_ParsePrivateDictData(t);
+
+    t->lSubr = 0;
+    t->lSubrBias = 0;
+    if (t->privateDictData.Subr != 0) {
+        Seek_InputStream(in, t->privateDictData.SubrOffset);
+        t->lSubr = tsi_NewCFFIndexClass(mem, in);
+        t->lSubrBias = CFFIndexBias(t->lSubr->count);
+    }
+
+    BuildT2CMAP(t);
+    BuildT2MetricsEtc_Standin(t);
+
+    t->T2_StringsHash = 0;
+    t->T2_SIDToCharCodeHash = 0;
+    if (flag == 0) {
+        t->T2_StringsHash = New_hashClass(mem,
+                                          t->CharStrings->count + 0x187,
+                                          (void*)FUN_008bdab0, t);
+        for (i = 0; i < 0x187; i++)
+            put_hashClass(t->T2_StringsHash, (uint16_t)i, (uint16_t)i,
+                          StdSIDStrings[i]);
+
+        Seek_InputStream(in, t->topDictData.charset);
+        for (i = 0; i < (int)t->CharStrings->count; i++) {
+            ix = t->string;
+            if (i >= 0 && i < (int)ix->count) {
+                save = Tell_InputStream(in);
+                Seek_InputStream(in, ix->offsetArray[i] + ix->baseDataOffset);
+                len = (long)(ix->offsetArray[i + 1] - ix->offsetArray[i]);
+                buf = tsi_AllocMem(ix->mem, (unsigned long)(len + 2));
+                PeekInt16(in, buf, (int)len);
+                ((uint8_t*)buf)[len] = 0;
+                ((uint8_t*)buf)[len + 1] = 0;
+                Seek_InputStream(in, (unsigned long)save);
+                if (buf != 0) {
+                    put_hashClass(t->T2_StringsHash, (uint16_t)(i + 0x187),
+                                  (uint16_t)(i + 0x187), buf);
+                    tsi_DeAllocMem(t->mem, buf);
+                }
+            }
+        }
+
+        t->T2_SIDToCharCodeHash = New_hashClass(mem, 0x100, 0, t);
+        for (i = 0; i < 0x100; i++)
+            put_hashClass(t->T2_SIDToCharCodeHash, t->charCodeToSID[i],
+                          (uint16_t)i, 0);
+
+        t->upem = util_FixDiv(0x3e80000, (int)t->topDictData.m00) >> 16;
+        t->maxPointCount = 0x20;
+        t->NumCharStrings = t->CharStrings->count;
+    }
+    return t;
+}
 
 // @ 0x008bf270
-void FUN_008bf270(int a, int ctx, int c, int d)
+void FUN_008bf270(tsiMemObject* mem, InputStream* in, int fontNum,
+                  unsigned long pos)
 {
-    (void)ctx;
-    _tsi_NewCFFClass(a, c, 1, d);
+    _tsi_NewCFFClass(in, mem, fontNum, 1, pos);
 }
 
 // @ 0x008bf290
-void FUN_008bf290(int a, int ctx, int c)
+void FUN_008bf290(tsiMemObject* mem, InputStream* in, int fontNum)
 {
-    (void)ctx;
-    _tsi_NewCFFClass(a, c, 0, 0);
+    _tsi_NewCFFClass(in, mem, fontNum, 0, 0);
 }
 
+typedef struct T2KReader {                /* size 0x18 */
+    tsiMemObject* mem;                    /* +0x00 */
+    int           field04;                /* +0x04 (-1) */
+    int           field08;                /* +0x08 (-1) */
+    int           size;                   /* +0x0c */
+    uint8_t*      buffer;                 /* +0x10 */
+    uint8_t*      cache;                  /* +0x14 */
+} T2KReader;
+
 // @ 0x008bf2b0
-T2KReaderX* FUN_008bf2b0(T2KCtxX* ctx, uint32_t size)
+void* FUN_008bf2b0(int n, tsiMemObject* mem)
 {
-    T2KReaderX* r = (T2KReaderX*)tsi_AllocMem(ctx, 0x18);
-    r->field00 = ctx;
+    T2KReader* r = (T2KReader*)tsi_AllocMem(mem, 0x18);
+    r->mem = mem;
     r->field08 = -1;
     r->field04 = -1;
-    if ((int)size > 0x800)
-        size = 0x800;
-    r->field0c = ((int)(size + 7) >> 3) * 2;
-    r->field10 = tsi_AllocMem(ctx, (uint32_t)r->field0c);
-    r->field14 = (r->field0c >> 1) + (int)r->field10;
+    if (n > 0x800)
+        n = 0x800;
+    r->size = ((n + 7) >> 3) * 2;
+    r->buffer = (uint8_t*)tsi_AllocMem(mem, (unsigned long)r->size);
+    r->cache = r->buffer + (r->size >> 1);
     return r;
 }
 
+typedef struct T2KOwner {                 /* font owner back-link target */
+    uint8_t pad00[0xa8];
+    int     field0xa8;                    /* +0xa8 */
+} T2KOwner;
+
+typedef struct T2KConfig {                /* sfnt/config object handed to NewT2K */
+    uint8_t   pad00[0x28];
+    T2KOwner* owner;                      /* +0x28 */
+    uint8_t   pad2c[0x88 - 0x2c];
+    uint16_t  w88;                        /* +0x88 */
+    uint16_t  w8a;                        /* +0x8a */
+    uint8_t   pad8c[0x90 - 0x8c];
+    int       field90;                    /* +0x90 */
+    uint16_t  w94;                        /* +0x94 */
+    uint16_t  w96;                        /* +0x96 */
+    uint8_t   pad98[0xf4 - 0x98];
+    int       fieldf4;                    /* +0xf4 */
+} T2KConfig;
+
+typedef struct T2K {                      /* size 0xa34 */
+    uint32_t      magic;                  /* +0x00 (0x5a1234a5) */
+    tsiMemObject* mem;                    /* +0x04 */
+    uint8_t       pad08[0x18 - 0x08];
+    uint32_t      field18;                /* +0x18 */
+    uint8_t       pad1c[0x20 - 0x1c];
+    uint32_t      field20;                /* +0x20 */
+    uint32_t      field24;                /* +0x24 */
+    uint8_t       pad28[0x30 - 0x28];
+    uint32_t      field30;                /* +0x30 */
+    uint32_t      field34;                /* +0x34 */
+    uint32_t      field38;                /* +0x38 */
+    uint32_t      field3c;                /* +0x3c */
+    uint32_t      field40;                /* +0x40 */
+    uint32_t      field44;                /* +0x44 */
+    uint32_t      field48;                /* +0x48 */
+    uint32_t      field4c;                /* +0x4c */
+    uint32_t      field50;                /* +0x50 */
+    uint32_t      field54;                /* +0x54 */
+    int           field58;                /* +0x58 */
+    int           field5c;                /* +0x5c */
+    uint16_t      w60;                    /* +0x60 */
+    uint16_t      w62;                    /* +0x62 */
+    uint8_t       pad64[0x104 - 0x64];
+    uint32_t      field104;               /* +0x104 */
+    uint16_t      w108;                   /* +0x108 */
+    uint8_t       pad10a[0x118 - 0x10a];
+    uint32_t      field118;               /* +0x118 */
+    uint32_t      field11c;               /* +0x11c */
+    uint8_t       pad120[0x16c - 0x120];
+    uint32_t      field16c;               /* +0x16c */
+    uint32_t      field170;               /* +0x170 */
+    uint8_t       pad174[0x184 - 0x174];
+    T2KConfig*    config;                 /* +0x184 */
+    uint32_t      field188;               /* +0x188 */
+    uint32_t      field18c;               /* +0x18c */
+    uint32_t      field190;               /* +0x190 */
+    uint32_t      field194;               /* +0x194 */
+    uint8_t       table[0xa30 - 0x198];   /* +0x198 (13x13x13 lookup) */
+    uint32_t      fielda30;               /* +0xa30 (0xa5fedc5a) */
+} T2K;
+
 // @ 0x008bfac0
-T2KObjX* NewT2K(T2KCtxX* ctx, T2KCfgX* cfg, int* err)
+T2K* NewT2K(tsiMemObject* mem, T2KConfig* cfg, int* err)
 {
-    if (ctx == 0)
-    {
+    T2K* t;
+    T2KOwner* owner;
+    int created;
+
+    if (mem == 0) {
         *err = 0x2710;
         return 0;
     }
 
-    int created = FUN_011e0cac(&ctx->field10, 0);
+    created = setjmp(((T2KMemHeader*)mem)->jmpBuf);
     *err = created;
-    if (created != 0)
-    {
-        tsi_EmergencyShutDown(ctx);
-        return 0;
+    if (created == 0) {
+        t = (T2K*)tsi_AllocMem(mem, 0xa34);
+        t->config = cfg;
+        t->mem = mem;
+        t->magic = 0x5a1234a5;
+        t->field58 = cfg->fieldf4;
+        t->w108 = 0;
+        t->field170 = 0xffffffff;
+        t->field16c = 0xffffffff;
+        t->fielda30 = 0xa5fedc5a;
+        t->field104 = 0;
+        t->field188 = 0;
+        t->field118 = 0;
+        t->field11c = 0;
+        t->field30 = 0;
+        t->field34 = 0;
+        t->field50 = 0;
+        t->field54 = 0;
+        t->field20 = 0;
+        t->field24 = 0;
+        t->field38 = 0;
+        t->field3c = 0;
+        t->field40 = 0;
+        t->field44 = 0;
+        t->field48 = 0;
+        t->field4c = 0;
+        t->field5c = cfg->field90;
+        t->w60 = cfg->w94;
+        t->w62 = cfg->w96;
+        cfg->w88 = 0xffff;
+        t->config->w8a = 0xffff;
+        owner = t->config->owner;
+        if (owner != 0)
+            owner->field0xa8 = (int)cfg;
+        t->field18 = 0;
+        t->field18c = 0;
+        t->field190 = 0;
+        t->field194 = 0;
+        FillTable(t->table);
+        return t;
     }
-
-    T2KObjX* t = (T2KObjX*)tsi_AllocMem(ctx, 0xa34);
-    t->field184 = cfg;
-    t->field04 = ctx;
-    t->magic = 0x5a1234a5;
-    int f4 = cfg->fieldf4;
-    uint16_t zero = 0;
-    t->w108 = zero;
-    t->field58 = f4;
-    t->field170 = 0xffffffff;
-    t->field16c = 0xffffffff;
-    t->fielda30 = 0xa5fedc5a;
-    t->field104 = 0;
-    t->field188 = 0;
-    t->field118 = 0;
-    t->field11c = 0;
-    t->field30 = 0;
-    t->field34 = 0;
-    t->field50 = 0;
-    t->field54 = 0;
-    t->field20 = 0;
-    t->field24 = 0;
-    t->field38 = 0;
-    t->field3c = 0;
-    t->field40 = 0;
-    t->field44 = 0;
-    t->field48 = 0;
-    t->field4c = 0;
-    t->field5c = cfg->field90;
-    t->w60 = cfg->w94;
-    t->w62 = cfg->w96;
-    cfg->w88 = 0xffff;
-    t->field184->w8a = 0xffff;
-    T2KOwnerX* owner = t->field184->field28;
-    if (owner != 0)
-        owner->fielda8 = (int)cfg;
-    uint8_t* table = t->table;
-    t->field18 = 0;
-    t->field18c = 0;
-    t->field190 = 0;
-    t->field194 = 0;
-    FUN_008bf300(table);
-    return t;
+    tsi_EmergencyShutDown(mem);
+    return 0;
 }
