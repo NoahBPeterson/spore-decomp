@@ -9,6 +9,8 @@
 // Flags: /O2 /MD /Gy /EHsc /TP.
 
 #include "types.h"
+#include <float.h>
+#include <stdlib.h>
 
 namespace eastl { struct string8; }
 typedef eastl::string8 string8;
@@ -311,3 +313,65 @@ void InitSPCreatureAnimalAttributes()
 }
 
 }  // namespace Simulator
+
+// --------------------------------------------------------------- gameplay static initializers
+// Two anonymous dynamic initializers of gameplay tables: the "Scenario_Overrides" resource key
+// and the six creature-action records at 0x0168d998 (each 0x44 bytes, torn down by 0x013c3550).
+
+unsigned int FNVHash(const char* pText, unsigned int nSeed, int nMode);   // 0x00932e80
+void __cdecl FUN_013c3550(void);                                          // 0x013c3550  action-array destructor
+
+// Enter/update/leave callbacks stored in the action records (+0x30/+0x34/+0x38 by SetupAction).
+void __cdecl FUN_00c19e30(void);   // 0x00c19e30  damage-over-time start
+void __cdecl FUN_00c160c0(void);   // 0x00c160c0  damage-over-time update
+void __cdecl FUN_00c0ccc0(void);   // 0x00c0ccc0  damage-over-time stop
+void __cdecl FUN_00c10f80(void);   // 0x00c10f80  speed boost start
+void __cdecl FUN_00c10fc0(void);   // 0x00c10fc0  speed boost update
+void __cdecl FUN_00c11030(void);   // 0x00c11030  speed boost stop
+void __cdecl FUN_00c16100(void);   // 0x00c16100  manage body effects
+void __cdecl FUN_00c11090(void);   // 0x00c11090  manage speed boost
+void __cdecl FUN_00c19ee0(void);   // 0x00c19ee0  update animation target
+void __cdecl FUN_00c1a270(void);   // 0x00c1a270  set animation event control
+void __cdecl FUN_00c148a0(void);   // 0x00c148a0  apply damage over time
+void __cdecl FUN_00c110e0(void);   // 0x00c110e0  disable animation overlay
+
+// One 0x44-byte action record; SetupAction fills kind/state/sub/f0c and the three callbacks.
+struct ActionRecord
+{
+    void SetupAction(float fMaxTime, void* pStart, void* pUpdate, void* pStop, const char* pName);  // 0x00bc9e30
+};
+
+extern char g_ActionRecords[];    // 0x0168d998  six 0x44-byte records
+
+// Eight-byte resource key: name hash and resource-type hash.
+struct ResourceKey
+{
+    unsigned int mnNameHash;          // +0x00
+    unsigned int mnTypeHash;          // +0x04
+};
+extern ResourceKey g_ScenarioOverridesKey;   // 0x01572038
+
+// @ 0x01334ee0
+void FUN_01334ee0(void)
+{
+    g_ScenarioOverridesKey.mnNameHash = FNVHash("Scenario_Overrides", 0x811c9dc5, 1);
+    g_ScenarioOverridesKey.mnTypeHash = 0x623d3400;
+}
+
+// @ 0x01334f10
+void FUN_01334f10(void)
+{
+    ((ActionRecord*)(g_ActionRecords + 0x00))->SetupAction(FLT_MAX, (void*)&FUN_00c19e30,
+        (void*)&FUN_00c160c0, (void*)&FUN_00c0ccc0, "DamageOverTime");
+    ((ActionRecord*)(g_ActionRecords + 0x44))->SetupAction(FLT_MAX, (void*)&FUN_00c10f80,
+        (void*)&FUN_00c10fc0, (void*)&FUN_00c11030, "SpeedBoost");
+    ((ActionRecord*)(g_ActionRecords + 0x88))->SetupAction(FLT_MAX, 0,
+        0, (void*)&FUN_00c16100, "ManageBodyEffects");
+    ((ActionRecord*)(g_ActionRecords + 0xCC))->SetupAction(FLT_MAX, 0,
+        (void*)&FUN_00c11090, (void*)&FUN_00c19ee0, "SetAnimationTarget");
+    ((ActionRecord*)(g_ActionRecords + 0x110))->SetupAction(FLT_MAX, 0,
+        0, (void*)&FUN_00c1a270, "SetAnimEventControl");
+    ((ActionRecord*)(g_ActionRecords + 0x154))->SetupAction(FLT_MAX, 0,
+        (void*)&FUN_00c148a0, (void*)&FUN_00c110e0, "DisableAnimationOverlay");
+    atexit(&FUN_013c3550);
+}

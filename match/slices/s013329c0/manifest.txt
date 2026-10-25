@@ -1,3 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s013329c0/s013329c0.cpp  ?InitCommunityAttributes@Simulator@@YAXXZ  013342f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s013329c0/s013329c0.cpp  ?InitSPCreatureAnimalAttributes@Simulator@@YAXXZ  01334790  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s013329c0/s013329c0.cpp  ?FUN_01334ee0@@YAXXZ  01334ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s013329c0/s013329c0.cpp  ?FUN_01334f10@@YAXXZ  01334f10  /O2 /MD /Gy /EHsc /TP /arch:SSE2
