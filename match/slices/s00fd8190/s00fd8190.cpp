@@ -1,5 +1,5 @@
 // SP::cMovieSystem recording/playback entry points plus the anonymous-namespace
-// "movie" cheat command.  Retail layout; flags /O2 /MD /Gy /TP /arch:SSE.
+// "movie" cheat command.  Retail layout; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-.
 #include "types.h"
 
 // ---- calling-convention aliases for indirect (vtable) calls -----------------
@@ -29,6 +29,7 @@ int   FUN_009309b0(void* buf, int a, int b, int c);         // 0x009309b0
 void  EAMutex_Lock_Unused(void* p, void* tag);
 void  EAMutex_Unlock_Unused(void* p);
 void* GetDefaultAllocator();                                // 0x0041df40
+void* ICoreAllocator_GetDefaultAllocator();                 // 0x00925cb0
 void* operator_new(unsigned int size, const char* group, int, int, int, int); // 0x00f473a0
 void  operator_delete(void* p);
 void* SP_MessageServer();                                   // 0x0067dcc0
@@ -37,40 +38,100 @@ void* FUN_0067dda0();                                       // 0x0067dda0
 void* EA_ResourceMan_GetManager();                          // 0x0067dcd0
 void* EA_Audio_GetSystemAT();                               // 0x00a206f0
 void* LockedAlloc(int,int,int,int,int,int);                 // 0x009289f0
-void  MemPool_Free(void* thisp, void* p);                   // 0x009276c0
+void __fastcall MemPool_Free(void* thisp, int edx, void* p); // 0x009276c0 (edx = dummy)
 void* FUN_00fca2c0(void* p, int a);                         // 0x00fca2c0
+
+// eastl::basic_string<char>::sprintf(this, fmt, ...) — cdecl, `this` pushed first
+void __cdecl eastl_basic_string_sprintf_char(void* self, const char* fmt, ...); // 0x00472fe0
 
 extern void* g_pMutexTag;                                   // 0x01493900
 extern void* g_defaultCameraRaster;                         // 0x015d0838
 extern void* g_spMemPool;                                   // 0x016c8b44
 extern void* g_appProperties;                               // 0x015fd918
+extern void* g_audioConfig;                                 // 0x016e61a8
 extern float kFloat_13f0620;                                // 0x013f0620
 extern float kFloat_1485720;                                // 0x01485720
 extern float kFloat_1486374;                                // 0x01486374
 extern float kFloat_14007f4;                                // 0x014007f4
 
-// ---- cMovieSystem (retail offsets, see slice s00fd71e0) ---------------------
+// ---- cMovieSystem (retail layout; see slice s00fd71e0) ----------------------
+struct BasicString {
+    void* mpBegin;              // +0x00
+    void* mpEnd;                // +0x04
+    void* mpCapacity;           // +0x08
+};
+
+struct MoviePlayerLayout {
+    char          mPad00[0xac];
+    unsigned int  mFieldAC;     // +0xac
+    unsigned int  mFieldB0;     // +0xb0
+};
+
+struct MovieLetterbox {
+    char  mPad00[0xc];
+    void* mLayout;              // +0x0c
+};
+
+struct HudSourceRect {
+    int mWidth;                 // +0x00
+    int mHeight;                // +0x04
+};
+
+struct AudioConfig {
+    char  mPad00[0xc0];
+    float mFieldC0;             // +0xc0
+};
+
 class cMovieSystem {
 public:
-    char  mHead[0x64];          // +0x00
+    void* mVtbl0;               // +0x00
+    void* mVtbl1;               // +0x04
+    void* mVtbl2;               // +0x08
+    void* mVideoDecoder;        // +0x0c
+    void* mVideoOps;            // +0x10
+    void* mAudioDecoder;        // +0x14
+    void* mAudioRenderer;       // +0x18
+    void* mField1c;             // +0x1c
+    bool  mField20;             // +0x20
+    char  mPad21[3];
+    void* mMaterials[4];        // +0x24
+    void* mPlayer;              // +0x34
+    int   mField38;             // +0x38
+    float mFadeInTime;          // +0x3c
+    float mFadeOutTime;         // +0x40
+    float mField44;             // +0x44
+    int   mField48;             // +0x48
+    union {
+        int mField4cWord;       // +0x4c
+        struct {
+            bool mField4c;      // +0x4c
+            bool mField4d;      // +0x4d
+            char mPad4e[2];
+        };
+    };
+    BasicString mPath0;         // +0x50  (eastl::basic_string<char>)
+    int   mField5c;             // +0x5c
+    float mFadeAlpha;           // +0x60
     void* mVideoEncoder;        // +0x64
-    void* mAudioRenderer;       // +0x68
-    char  mPad6c[4];            // +0x6c
+    void* mAudioOutput;         // +0x68
+    int   mField6c;             // +0x6c
     char  mRecordMutex[0x30];   // +0x70
     bool  mRecording;           // +0xa0
     bool  mFieldA1;             // +0xa1
     char  mPadA2[2];
-    char  mPathString[0x10];    // +0xa4
-    int   mWidth;               // +0xb4
-    int   mHeight;              // +0xb8
-    int   mFPS;                 // +0xbc
-    float mFieldC0;             // +0xc0
+    BasicString mRecordName;    // +0xa4  (eastl::basic_string<wchar_t>)
+    int   mFieldB0;             // +0xb0
+    void* mRecorder;            // +0xb4
+    int   mWidth;               // +0xb8
+    int   mHeight;              // +0xbc
+    float mFPS;                 // +0xc0
     float mFieldC4;             // +0xc4
     float mFieldC8;             // +0xc8
     bool  mAudio;               // +0xcc
     bool  mExcludeUI;           // +0xcd
     char  mPadCe[2];
     char  mRecordStream[0x228]; // +0xd0
+    int   mField2f8;            // +0x2f8
     int   mField2fc;            // +0x2fc
     int   mCapturedFrames;      // +0x300
     int   mField304;            // +0x304
@@ -80,31 +141,34 @@ public:
     float mField314;            // +0x314
     void* mLetterbox;           // +0x318
     void* mPacketList;          // +0x31c
+    void* mPacketListTail;      // +0x320
+    int   mField324;            // +0x324
     int   mAudioSampleRate;     // +0x328
+    bool  mField32c;            // +0x32c
+    char  mPad32d[3];
 
-    bool RecordMovie(int unused, int* pInfo);       // 0x00fd8190
+    bool RecordMovie(int pName, int* pInfo);        // 0x00fd8190
     void SubmitFrame(int param);                    // 0x00fd86f0
-    bool PlayMovie(int unused, int* pInfo);         // 0x00fd87c0
+    bool PlayMovie(int pMovieInfo, int* pPlayParams); // 0x00fd87c0
 };
 
 inline char* B(void* p) { return (char*)p; }
 
 // @ 0x00fd8190
-bool cMovieSystem::RecordMovie(int /*unused*/, int* pInfo)
+bool cMovieSystem::RecordMovie(int pName, int* pInfo)
 {
-    char* p = (char*)this;
-    if (*(bool*)(p + 0xa0)) return false;
-    if (!*(bool*)(p + 0xa1)) return false;
+    if (mRecording) return false;
+    if (!mFieldA1) return false;
 
-    void* mx = p + 0x70;
-    ((EAMutex*)mx)->Lock((void*)0x01493900);
+    EAMutex* mx = (EAMutex*)mRecordMutex;
+    mx->Lock((void*)0x01493900);
 
     void* sa = GetSaveArea((const char*)0x011ac197);
     int id = ((Fi0)Vt(sa)[0x28 / 4])(sa);
 
     wchar_t name[0x100];
-    if (FUN_009309b0(name, (int)pInfo, id, 4) == 0) {
-        ((EAMutex*)mx)->Unlock();
+    if (FUN_009309b0(name, pName, id, 4) == 0) {
+        mx->Unlock();
         return false;
     }
 
@@ -117,16 +181,15 @@ bool cMovieSystem::RecordMovie(int /*unused*/, int* pInfo)
         do { c = *s++; *d++ = c; } while (c != 0);
     }
 
-    void* fs = p + 0xd0;
-    int local;
-    ((Fv)Vt(fs)[0x3c / 4])(fs, &local);
-    if (!((Fi4)Vt(fs)[0x4c / 4])(fs, 0, 7, 2, 2)) {
-        ((EAMutex*)mx)->Unlock();
+    void* fs = mRecordStream;
+    ((Fv)Vt(fs)[0x3c / 4])(fs, (void*)name);
+    if (!((Fi4)Vt(fs)[0x4c / 4])(fs, 2, 2, 7, 0)) {
+        mx->Unlock();
         return false;
     }
 
     for (int i = 0; i < 6; ++i)
-        ((int*)(p + 0xb8))[i] = pInfo[i];
+        ((int*)((char*)this + 0xb8))[i] = pInfo[i];
 
     if (((char*)pInfo)[0x16] != 0) {
         char* cam = (char*)g_defaultCameraRaster;
@@ -134,166 +197,273 @@ bool cMovieSystem::RecordMovie(int /*unused*/, int* pInfo)
         unsigned short w = *(unsigned short*)(cam + 0xe);
         int x = pInfo[1] * h;
         int y = pInfo[0] * w;
-        if (x < y)      *(int*)(p + 0xb8) = x / w;
-        else if (x > y) *(int*)(p + 0xbc) = y / h;
+        if (x < y)      mWidth = x / w;
+        else if (x > y) mHeight = y / h;
     }
 
-    void* enc = *(void**)(p + 0x64);
-    int rate = (int)(*(float*)(p + 0xc8) * kFloat_13f0620);
+    void* enc = mVideoEncoder;
+    int rate = (int)(mFieldC8 * kFloat_13f0620);
     ((F1)Vt(enc)[0x44 / 4])(enc, rate);
-    ((Ff1)Vt(enc)[0x34 / 4])(enc, *(float*)(p + 0xc0));
-    ((F1)Vt(enc)[0x24 / 4])(enc, *(int*)(p + 0xb8));
-    ((F1)Vt(enc)[0x2c / 4])(enc, *(int*)(p + 0xbc));
-    ((Fv)Vt(enc)[0x04 / 4])(enc, GetDefaultAllocator());
+    ((Ff1)Vt(enc)[0x34 / 4])(enc, mFPS);
+    ((F1)Vt(enc)[0x24 / 4])(enc, mWidth);
+    ((F1)Vt(enc)[0x2c / 4])(enc, mHeight);
+    ((Fv)Vt(enc)[0x04 / 4])(enc, ICoreAllocator_GetDefaultAllocator());
 
     void* rec = operator_new(0x74, "Graphics", 0, 0, 0, 0);
-    if (rec) rec = FUN_00fca2c0(rec, 0x4000);
-    *(void**)(p + 0xb4) = rec;
+    if (rec) rec = ((void* (__thiscall*)(void*, int))0x00fca2c0)(rec, 0x4000);
+    mRecorder = rec;
 
-    ((Fvv)Vt(rec)[0x1c / 4])(rec, (void*)0x00fd71e0, p + 0xd0);
-    ((Fvv)Vt(rec)[0x14 / 4])(rec, (void*)"MovieEncoder", (void*)0x00c2e4e0);
-    ((Fv)Vt(rec)[0x24 / 4])(rec, *(void**)(p + 0x64));
+    ((Fvv)Vt(rec)[0x1c / 4])(rec, (void*)0x00fd71e0, (void*)mRecordStream);
+    ((Fvv)Vt(rec)[0x14 / 4])(rec, (void*)0x00c2e4e0, (void*)0x01493a70);
+    ((Fv)Vt(rec)[0x24 / 4])(rec, mVideoEncoder);
 
-    if (*(bool*)(p + 0xcc)) {
+    if (mAudio) {
         void* au = EA_Audio_GetSystemAT();
         if (au) {
+            AudioConfig* cfg = (AudioConfig*)g_audioConfig;
+            if (cfg) {
+                int sr = (int)cfg->mFieldC0;
+                if (sr > 0x5622) sr >>= 1;
+                mAudioSampleRate = sr;
+            }
+
+            void* bufs[200];
             for (int i = 0; i < 200; ++i)
-                ((void**)(p + 0x224))[i] = LockedAlloc(0, 0, 0, 0, 0, 0x800);
+                bufs[i] = ((void* (__thiscall*)(void*, int, int, int, int, int, int))0x009289f0)
+                          (g_spMemPool, 0x800, 0, 0, 0, 0, 0);
+
             ((F1)Vt(au)[0x38 / 4])(au, 0x04640907);
             ((F2)Vt(au)[0x40 / 4])(au, 0x04501144, 0x52de7b41);
-            ((F2)Vt(au)[0x4c / 4])(au, 0x04501150, 0);
-            ((Fvv)Vt(au)[0x48 / 4])(au, (void*)0x00fd7730, (void*)0x045705b8);
-            ((Fvv)Vt(au)[0x48 / 4])(au, (void*)0x00fd7730, this);
+            ((F3)Vt(au)[0x4c / 4])(au, 0x04501150, (int)bufs, 0x320);
+            ((Fvv)Vt(au)[0x48 / 4])(au, (void*)0x045705b8, (void*)0x00fd7730);
+            ((Fvv)Vt(au)[0x48 / 4])(au, (void*)0x045706c7, (void*)this);
             ((F0)Vt(au)[0x58 / 4])(au);
             ((F1)Vt(au)[0x38 / 4])(au, 0x045010e7);
             ((F2)Vt(au)[0x40 / 4])(au, 0x04501144, 0x52de7b41);
             ((F2)Vt(au)[0x40 / 4])(au, 0x04502374, 0x800);
-            ((F2)Vt(au)[0x40 / 4])(au, 0x04597e49, *(int*)(p + 0x328));
-            ((Fvv)Vt(au)[0x48 / 4])(au, (void*)0x00fd7730, (void*)0x045705b8);
-            ((Fvv)Vt(au)[0x48 / 4])(au, (void*)0x00fd7730, this);
+            ((F2)Vt(au)[0x40 / 4])(au, 0x04597e49, mAudioSampleRate);
+            ((Fvv)Vt(au)[0x48 / 4])(au, (void*)0x045705b8, (void*)0x00fd7730);
+            ((Fvv)Vt(au)[0x48 / 4])(au, (void*)0x045706c7, (void*)this);
             ((F0)Vt(au)[0x58 / 4])(au);
 
-            void* ar = *(void**)(p + 0x68);
-            ((Fv)Vt(ar)[0x04 / 4])(ar, GetDefaultAllocator());
-            ((F1)Vt(ar)[0x24 / 4])(ar, *(int*)(p + 0x328));
+            void* ar = mAudioOutput;
+            ((Fv)Vt(ar)[0x04 / 4])(ar, ICoreAllocator_GetDefaultAllocator());
+            ((F1)Vt(ar)[0x24 / 4])(ar, mAudioSampleRate);
             ((F1)Vt(ar)[0x2c / 4])(ar, 2);
-            ((Fv)Vt(rec)[0x2c / 4])(rec, *(void**)(p + 0x68));
+            ((Fv)Vt(rec)[0x2c / 4])(rec, mAudioOutput);
         }
     }
 
-    {
-        void* ar2 = *(void**)(p + 0x68);
-        ((Fv)Vt(ar2)[0x04 / 4])(ar2, GetDefaultAllocator());
-        ((Fv)Vt(rec)[0x04 / 4])(rec, GetDefaultAllocator());
-    }
+    ((Fv)Vt(rec)[0x04 / 4])(rec, ICoreAllocator_GetDefaultAllocator());
 
     void* fb = FUN_0067dda0();
     int probe[2];
-    void* r = ((Fp7)Vt(fb)[0x10 / 4])(fb, (int)&probe,
-                                      *(int*)(p + 0xb8), *(int*)(p + 0xbc),
-                                      0x15, 0, -1, 0);
-    (void)r;
-
-    {
-        int w2 = *(int*)(p + 0xbc) * *(int*)(p + 0xb8);
-        *(void**)(p + 0x30c) = operator_new((unsigned)(w2 * 4), "Graphics", 0, 0, 0, 0);
-    }
-    *(int*)(p + 0x300) = 0;
-    *(int*)(p + 0x2fc) = 0;
+    int* ret = (int*)((Fp7)Vt(fb)[0x10 / 4])(fb, (int)&probe,
+                                              mWidth, mHeight,
+                                              0x15, 0, -1, 0);
+    mField304 = ret[0];
+    mField308 = ret[1];
+    mFramePixels = operator_new((unsigned)(mHeight * mWidth * 4), "Graphics", 0, 0, 0, 0);
+    mCapturedFrames = 0;
+    mField2fc = 0;
     ((F0)Vt(rec)[0x0c / 4])(rec);
 
-    *(float*)(p + 0x310) = 0.0f;
-    *(float*)(p + 0x314) = kFloat_1485720;
-    *(int*)(p + 0x300) = 0;
-    *(int*)(p + 0x2fc) = 0;
-    *(bool*)(p + 0xa0) = true;
+    mField310 = 0.0f;
+    mField314 = 1.0f;
+    mField2fc = 0;
+    mRecording = true;
 
-    // eastl::basic_string<wchar_t>::append(this+0xa4, info)
-    ((WAppendFn)0x005c3d90)((void*)(p + 0xa4), (const wchar_t*)pInfo);
+    ((void (__thiscall*)(void*, const wchar_t*))0x005c3d90)
+        ((void*)&mRecordName, (const wchar_t*)pName);
 
-    if (!*(bool*)(p + 0xcd)) {
+    if (!mExcludeUI) {
         void* hud = FUN_0067dd50();
-        ((F3)Vt(hud)[0x4c / 4])(hud, (int)(p + 4), 0x25, 0);
-    } else if (*(void**)(p + 0x34) == 0) {
+        ((F3)Vt(hud)[0x4c / 4])(hud, (int)&mVtbl1, 0x25, 0);
+    } else if (mPlayer == 0) {
         void* hud = FUN_0067dd50();
-        ((F3)Vt(hud)[0x4c / 4])(hud, (int)(p + 4), 0x1b, 0);
+        ((F3)Vt(hud)[0x4c / 4])(hud, (int)&mVtbl1, 0x1b, 0);
     }
 
-    ((EAMutex*)mx)->Unlock();
-    ((F3)Vt(SP_MessageServer())[0x14 / 4])(SP_MessageServer(), 0x062ff413, 0, 0);
-    ((EAMutex*)mx)->Lock((void*)0x01493900);
-    ((EAMutex*)mx)->Unlock();
+    mx->Unlock();
+    void* ms = SP_MessageServer();
+    ((F3)Vt(ms)[0x14 / 4])(ms, 0x062ff413, 0, 0);
+    mx->Lock((void*)0x01493900);
+    mx->Unlock();
     return true;
 }
 
 // @ 0x00fd86f0
 void cMovieSystem::SubmitFrame(int param)
 {
-    char* p = (char*)this;
-    void* mx = p + 0x70;
-    ((EAMutex*)mx)->Lock((void*)0x01493900);
-    if (*(bool*)(p + 0xa0)) {
+    EAMutex* mx = (EAMutex*)mRecordMutex;
+    mx->Lock((void*)0x01493900);
+    if (mRecording) {
         int vals[5];
+        void* rec = mRecorder;
+        vals[1] = mAudioSampleRate;
         vals[0] = 1;
-        vals[1] = *(int*)(p + 0x328);
         vals[2] = 2;
         vals[3] = 0x200;
         vals[4] = param;
 
-        void* rec = *(void**)(p + 0xb4);
         ((Fv)Vt(rec)[0x38 / 4])(rec, (void*)vals);
 
+        int* head = (int*)&mPacketList;
         int* node = (int*)operator_new(0xc, "EASTL", 0, 0,
                                        (int)0x013ebb38, 0xd1);
         if (node + 2 != 0)
             node[2] = param;
-        node[0] = (int)(p + 0x31c);
-        node[1] = *(int*)(p + 0x320);
-        *(int**)(*(void**)(p + 0x320)) = node;
-        *(int**)(p + 0x320) = node;
-        ((EAMutex*)mx)->Unlock();
+        node[0] = (int)head;
+        node[1] = head[1];
+        *(int**)(head[1]) = node;
+        head[1] = (int)node;
+        mx->Unlock();
         return;
     }
-    MemPool_Free(*(void**)&g_spMemPool, (void*)param);
-    ((EAMutex*)mx)->Unlock();
+    MemPool_Free(g_spMemPool, 0, (void*)param);
+    mx->Unlock();
 }
 
 // @ 0x00fd87c0
-bool cMovieSystem::PlayMovie(int /*unused*/, int* pInfo)
+bool cMovieSystem::PlayMovie(int pMovieInfo, int* pPlayParams)
 {
-    char* p = (char*)this;
-    if (*(void**)(p + 0x34) != 0) return false;
+    if (mPlayer != 0) return false;
 
     void* rm = EA_ResourceMan_GetManager();
-    void* res = ((Fp1)Vt(rm)[0x58 / 4])(rm, (int)pInfo);
-    if (!res) return false;
+    void* res = ((void* (__thiscall*)(void*, void*))Vt(rm)[0x58 / 4])(rm, (void*)pMovieInfo);
+    if (res == 0) return false;
 
-    char namebuf[0x200];
-    int n1 = 0, n2 = 0;
-    if (((Fi0)Vt(res)[0x0c / 4])(res) == 0x034728492) {
-        if (!((Fi2)Vt(res)[0x64 / 4])(res, (int)pInfo, (int)namebuf)) return false;
-        ((Fp0)Vt(res)[0x28 / 4])(res);
+    int w = 0, h = 0;
+    int type = ((int (__thiscall*)(void*))Vt(res)[0x0c / 4])(res);
+    if (type == 0x034728492) {
+        wchar_t wname[0x100];
+        if (!((char (__thiscall*)(void*, int*, wchar_t*))Vt(res)[0x64 / 4])
+                (res, (int*)pMovieInfo, wname))
+            return false;
+        const wchar_t* nm =
+            ((const wchar_t* (__thiscall*)(void*))Vt(res)[0x28 / 4])(res);
+        eastl_basic_string_sprintf_char((void*)&mPath0, "%ls%ls", nm, wname);
     } else {
-        if (!((Fi2)Vt(res)[0x34 / 4])(res, (int)pInfo, (int)namebuf)) return false;
-        if (n1 != 0) return false;
-        ((Fp0)Vt(res)[0x28 / 4])(res);
+        int out[4];
+        if (!((char (__thiscall*)(void*, int*, int, int, int, int, int*))
+                Vt(res)[0x34 / 4])(res, (int*)pMovieInfo, 0, 1, 6, 1, out))
+            return false;
+        if (out[3] != 0) return false;
+        w = out[0];
+        h = out[1];
+        const wchar_t* nm =
+            ((const wchar_t* (__thiscall*)(void*))Vt(res)[0x28 / 4])(res);
+        eastl_basic_string_sprintf_char((void*)&mPath0, "%ls", nm);
     }
 
-    void* alloc = GetDefaultAllocator();
+    void* alloc = ICoreAllocator_GetDefaultAllocator();
     void* player = operator_new(0x248, "Graphics", 0, 0, 0, 0);
-    *(void**)(p + 0x34) = player;
-    (void)alloc; (void)n2; (void)namebuf;
-    if (!player) return false;
+    if (player)
+        player = ((void* (__thiscall*)(void*, void*))0x00fca720)(player, alloc);
+    mPlayer = player;
 
-    if (((Fi0)Vt(res)[0x0c / 4])(res) == 0x041e19be) {
-        ((F1)Vt(res)[0x0c / 4])(res, 0);
-    } else if (((Fi0)Vt(res)[0x0c / 4])(res) == 0x0376840d7) {
+    int ptype = ((int*)pMovieInfo)[1];
+    if (ptype == 0x041e19be) {
+        ((void (__thiscall*)(void*, void*))0x00fca950)(player, (void*)0x00fc81f0);
+        ((void (__thiscall*)(void*, void*))0x00fca970)(player, (void*)0x00fc8300);
+        ((void (__thiscall*)(void*, void*))0x00fca990)(player, (void*)0x00fc8330);
+    } else if (ptype == 0x0376840d7) {
+        ((void (__thiscall*)(void*, void*))0x00fca950)(player, (void*)0x00fc85b0);
+        ((void (__thiscall*)(void*, void*))0x00fca970)(player, (void*)0x00fc8620);
+        ((void (__thiscall*)(void*, void*))0x00fca990)(player, (void*)0x00fc8640);
         if (EA_Audio_GetSystemAT() != 0) {
-            *(bool*)(p + 0x20) = true;
+            ((void (__cdecl*)(int))0x01133120)(0);
+            ((void (__cdecl*)(void))0x01133250)();
+            ((void (__thiscall*)(void*, void*))0x00fca9d0)(player, mAudioRenderer);
+            mField20 = true;
+            ((void (__thiscall*)(void*, void*))0x00fcaa10)(player, mField1c);
         }
     } else {
         return false;
     }
+
+    ((void (__thiscall*)(void*, void*))0x00fca9b0)(player, mVideoDecoder);
+    ((void (__thiscall*)(void*, void*))0x00fca9f0)(player, mVideoOps);
+    ((void (__thiscall*)(void*, void*))0x00fcaa40)(player, mAudioDecoder);
+
+    int ok = ((int (__thiscall*)(void*, void*, unsigned __int64, unsigned __int64))
+              0x00fcaa70)(player, mPath0.mpBegin,
+                          (unsigned __int64)w, (unsigned __int64)h);
+    if (ok != 0) {
+        ((void (__thiscall*)(void*))0x00fcb740)(player);
+        if (mPlayer != 0) {
+            ((void (__thiscall*)(void*))0x00fcb860)(mPlayer);
+            ((void (__cdecl*)(void*))0x00f47380)(mPlayer);
+        }
+        mPlayer = 0;
+        return false;
+    }
+
+    ((void (__thiscall*)(void*, int, int))0x00fcab70)(player, 0x400000, 0);
+    if (!((char (__thiscall*)(void*, int))0x00fcb920)(player, 1)) {
+        ((void (__thiscall*)(void*))0x00fcb740)(player);
+        if (mPlayer != 0) {
+            ((void (__thiscall*)(void*))0x00fcb860)(mPlayer);
+            ((void (__cdecl*)(void*))0x00f47380)(mPlayer);
+        }
+        mPlayer = 0;
+        return false;
+    }
+
+    if (mFadeInTime > 0.0f) {
+        ((void (__thiscall*)(void*, float))0x00fcb1b0)(player, mFadeInTime);
+        ((void (__thiscall*)(void*, float))0x00fcb1e0)(player, mFadeInTime);
+    } else {
+        void* hud = FUN_0067dd50();
+        HudSourceRect* src =
+            (HudSourceRect*)((void* (__thiscall*)(void*))Vt(hud)[0x1c / 4])(hud);
+        MoviePlayerLayout* pl = (MoviePlayerLayout*)player;
+        float ratioY = (float)src->mHeight / (float)pl->mFieldB0;
+        float ratioX = (float)src->mWidth / (float)pl->mFieldAC;
+        float mn = (ratioX > ratioY) ? ratioY : ratioX;
+        ((void (__thiscall*)(void*, float))0x00fcb1b0)(player, mn);
+        ((void (__thiscall*)(void*, float))0x00fcb1e0)(player, ratioY);
+        float r1 = (float)src->mWidth - (float)pl->mFieldAC * ratioY;
+        if (r1 < 0.0f) r1 = 0.0f;
+        ((void (__thiscall*)(void*, float))0x00fcb150)(player, r1 * 0.5f);
+        float r2 = (float)src->mHeight - (float)pl->mFieldB0 * ratioY;
+        if (r2 < 0.0f) r2 = 0.0f;
+        ((void (__thiscall*)(void*, float))0x00fcb180)(player, r2 * 0.5f);
+    }
+
+    mField38 = pPlayParams[0];
+    *(int*)&mFadeInTime = pPlayParams[1];
+    *(int*)&mFadeOutTime = pPlayParams[2];
+    *(int*)&mField44 = pPlayParams[3];
+    mField48 = pPlayParams[4];
+    mField4cWord = pPlayParams[5];
+
+    if (mField4c) {
+        if (mLetterbox == 0) {
+            void* lb = operator_new(0x10, "App", 0, 0, 0, 0);
+            if (lb) lb = ((void* (__thiscall*)(void*))0x00fd7ab0)(lb);
+            ((void (__thiscall*)(void*, void*))0x00b5f950)(&mLetterbox, lb);
+        }
+        if (mLetterbox != 0) {
+            ((void (__thiscall*)(void*))0x00fd7750)(mLetterbox);
+            ((void (__thiscall*)(void*, int))0x00810590)
+                (((MovieLetterbox*)mLetterbox)->mLayout, 1);
+        }
+    }
+
+    ((void (__thiscall*)(void*, void*))0x00fccdd0)
+        (mVideoOps, mMaterials[mField38]);
+
+    void* hud = FUN_0067dd50();
+    ((void (__thiscall*)(void*, void*, int, int))Vt(hud)[0x4c / 4])
+        (hud, (void*)&mVtbl1, 0x1b, 0);
+    if (mField4d) {
+        hud = FUN_0067dd50();
+        ((void (__thiscall*)(void*, int, int))Vt(hud)[0x5c / 4])(hud, 0x1b, 2);
+    }
+
+    mFadeAlpha = 0.0f;
+    mField32c = false;
     return true;
 }
 
