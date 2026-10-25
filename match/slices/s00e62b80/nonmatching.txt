@@ -1,1 +1,3 @@
 00e62b80 1757 animation-group placement: complete; heavy inlined transform/matrix code, block layout and register allocation differ
+00e639d0 211 effect-visibility branch: complete; original clamps via asm-block maxss/minss with memory operands, intrinsics add an aligned frame; equiv WEAK 183 valid, 14.9% cov, no mismatch; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00e63560 763 SP::sUpdateEffectMap: complete; register/induction-variable assignment and block layout differ, 1156 vs 1136 B; equiv WEAK 169 valid, 35.3% cov, no mismatch; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

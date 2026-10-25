@@ -18,6 +18,7 @@ extern "C" {
     __declspec(dllimport) int  __stdcall CoLockObjectExternal(void*, int, int);
     __declspec(dllimport) void __stdcall OleUninitialize(void);
     __declspec(dllimport) int  __stdcall OleInitialize(void*);
+    __declspec(dllimport) unsigned __stdcall DragQueryFileW(void* hdrop, unsigned iFile, wchar_t* buf, unsigned cch);
 }
 void __cdecl EASTL_dealloc(void*) throw();
 void __cdecl FUN_00688dd0(void*);
@@ -373,6 +374,7 @@ struct Str16 {
     wchar16* mpEnd;
     wchar16* mpCapacity;
     int mAlloc;
+    void assign(const wchar16* first, const wchar16* last);          // 0x00423650
     Str16()
     {
         mpBegin    = (wchar16*)g_emptyStr_1667bac;
@@ -384,6 +386,8 @@ struct Str16Vec {
     Str16* mpBegin;
     Str16* mpEnd;
     Str16* mpCapacity;
+    void Reserve(unsigned count);                                   // 0x006953b0
+    void DoDestroyValues(Str16* first, Str16* last);                // 0x0084aad0
     void push_back()
     {
         if (mpEnd < mpCapacity) {
@@ -400,7 +404,7 @@ struct Str16Vec {
         }
     }
 };
-void __fastcall FUN_006bbbf0(Str16Vec* vec)
+__declspec(noinline) void __fastcall FUN_006bbbf0(Str16Vec* vec)
 {
     vec->push_back();
 }
@@ -492,15 +496,208 @@ void __cdecl FUN_006bb1c0(const char* src, unsigned id, unsigned arg2, const cha
 }
 
 // ---------------------------------------------------------------------------
-// Not yet assigned to this batch (left as skeletons).
+// Drag/drop file-list message, DBPF record factories and drive-mount queries.
 // ---------------------------------------------------------------------------
-void __cdecl FUN_006bbc90(void* self) { (void)self; }
-void __cdecl FUN_006bbd80(void* self) { (void)self; }
-void __cdecl FUN_006bbde0(void* self) { (void)self; }
-void __cdecl FUN_006bbe80(void* self) { (void)self; }
-void __cdecl FUN_006bbf10(void* self) { (void)self; }
-void __cdecl FUN_006bbfa0(void* self) { (void)self; }
-void __cdecl FUN_006bc020(void* self) { (void)self; }
-void __cdecl FUN_006bc0a0(void* self) { (void)self; }
-void __cdecl FUN_006bc0f0(void* self) { (void)self; }
-void __cdecl FUN_006bc130(void* self) { (void)self; }
+struct DropSource {
+    void*  mpUnknown0;      // +0x00
+    void*  mHDrop;          // +0x04
+};
+
+struct VecBlockPrefix { uint32_t mField0; };  // EA sp_vector block header word
+
+struct FileVec : Str16Vec {
+    FileVec() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; }
+    ~FileVec();
+};
+
+FileVec::~FileVec()
+{
+    DoDestroyValues(mpBegin, mpEnd);
+    if (mpBegin && ((VecBlockPrefix*)mpBegin)[-1].mField0 != 0)
+        EA_Free2(mpBegin);
+}
+
+struct FileListMsg {
+    void*    mpVtable;      // +0x00
+    FileVec  mFiles;        // +0x04
+    void*    mpField10;     // +0x10
+    void*    mpField14;     // +0x14
+    unsigned mField18;      // +0x18
+    void*    mpField1c;     // +0x1c
+    FileListMsg(DropSource* src);       // 0x006bbc90
+    FileListMsg* Destroy(char flags);   // 0x006bbd80
+};
+
+extern void* g_vtbl_140a07c;     // 0x0140a07c FileListMsg vtable
+extern void* g_vtbl_13eb918;     // 0x013eb918 BaseA2 vtable
+
+// @ 0x006bbc90  drag/drop file-list message constructor
+FileListMsg::FileListMsg(DropSource* src) : mpVtable(&g_vtbl_140a07c)
+{
+    mField18 = 0;
+    mpField1c = src;
+    wchar16 buf[260];
+    unsigned count = DragQueryFileW(src->mHDrop, 0xffffffff, buf, 0x208);
+    mFiles.Reserve(count);
+    for (unsigned i = 0; i < count; ++i) {
+        DragQueryFileW(src->mHDrop, i, buf, 0x208);
+        FUN_006bbbf0(&mFiles);
+        const wchar16* p = buf;
+        while (*p)
+            ++p;
+        (mFiles.mpEnd - 1)->assign(buf, p);
+    }
+}
+
+// @ 0x006bbd80  drag/drop file-list message deleting destructor
+FileListMsg* FileListMsg::Destroy(char flags)
+{
+    mFiles.DoDestroyValues(mFiles.mpBegin, mFiles.mpEnd);
+    if (mFiles.mpBegin && ((VecBlockPrefix*)mFiles.mpBegin)[-1].mField0 != 0)
+        EA_Free2(mFiles.mpBegin);
+    mpVtable = &g_vtbl_13eb918;
+    if (flags & 1)
+        EA_Free2(this);
+    return this;
+}
+
+// ---------------------------------------------------------------------------
+// Drive-session state (DBPF shutdown / mount queries). Vtable +0x00,
+// +0x0c flag byte, +0x14 flags word, +0x18 mount object, +0x4d8 mount handle.
+// ---------------------------------------------------------------------------
+struct Session {
+    void*    mpVtable;          // +0x000
+    uint32_t pad004[2];         // +0x004
+    uint8_t  mField0c;          // +0x00c
+    uint8_t  pad00d[7];         // +0x00d
+    uint32_t mField14;          // +0x014
+    void*    mpField18;         // +0x018
+    uint32_t pad01c[303];       // +0x01c .. +0x4d7
+    void*    mpField4d8;        // +0x4d8
+    char Shutdown();            // 0x006bbde0
+    char CheckMount();          // 0x006bc0a0
+    char EnsureMounted();       // 0x006bc0f0
+};
+
+// @ 0x006bbde0  DatabasePackedFile shutdown
+char Session::Shutdown()
+{
+    if (mField0c) {
+        if (mField14)
+            (*(void(__thiscall**)(Session*))((char*)mpVtable + 0x1c))(this);
+        (*(void(__thiscall**)(Session*, void*))((char*)mpVtable + 0x80))(this, mpField4d8);
+        mpField4d8 = 0;
+        mField0c = 0;
+    }
+    return 1;
+}
+
+// @ 0x006bc0a0  drive-mount state query
+char Session::CheckMount()
+{
+    if (mField14 == 0) {
+        if (!mpField18)
+            return 0;
+        char c = (*(char(__thiscall**)(Session*, void*, int, int))((char*)mpVtable + 0x18))(this, mpField18, 0, 0);
+        if (c)
+            return c;
+        if ((mField14 & 3) == 3)
+            return (*(char(__thiscall**)(Session*, int, int, int))((char*)mpVtable + 0x18))(this, 1, 0, 0);
+        return 0;
+    }
+    return 1;
+}
+
+// @ 0x006bc0f0  drive-mount helper
+char Session::EnsureMounted()
+{
+    if (!(*(char(__thiscall**)(Session*))((char*)mpVtable + 0x60))(this)) {
+        if (!mpField4d8)
+            mpField4d8 = (*(void*(__thiscall**)(Session*, int))((char*)mpVtable + 0x7c))(this, 3);
+        return 0;
+    }
+    return (*(char(__thiscall**)(Session*))((char*)mpVtable + 0x70))(this) != 0;
+}
+
+// ---------------------------------------------------------------------------
+// DatabasePackedFile record/index factories. Allocator at +0x10.
+// ---------------------------------------------------------------------------
+struct PFRecordWrite {
+    void* Construct(void* a, void* b, void* c, void* d, void* owner);     // 0x006c0c40
+};
+struct PFRecordWriteShared {
+    void* Construct(void* a, void* b, int one, void* c, void* owner);     // 0x006c0db0
+};
+struct PFRecordRead {
+    void* Construct(void* a, void* b, void* owner);                        // 0x006c09c0
+};
+struct PFRecordReadShared {
+    void* Construct(void* a, void* b, void* owner);                        // 0x006c0b20
+};
+struct PFIndexModifiable {
+    void* Ctor(void* alloc);                                              // 0x006bf370
+};
+
+void* __cdecl ZoneAlloc_Named(int size, void* alloc, const char* name);   // 0x00925fe0
+
+struct ZoneFactory {
+    uint32_t pad000[4];     // +0x00
+    void*    mpAlloc;       // +0x10
+    void* CreateRecordWrite(unsigned char flags, void* a, void* b, void* c, void* d);   // 0x006bbe80
+    void* CreateRecordWriteShared(unsigned char flags, void* a, void* b, void* c);      // 0x006bbf10
+    void* CreateRecordRead(void* unused, void* a, void* b);                             // 0x006bbfa0
+    void* CreateRecordReadShared(void* unused, void* a, void* b);                       // 0x006bc020
+    void* CreateIndex(unsigned unused);                                                 // 0x006bc130
+};
+
+// @ 0x006bbe80  allocate + construct a PFRecordWrite
+void* ZoneFactory::CreateRecordWrite(unsigned char flags, void* a, void* b, void* c, void* d)
+{
+    if (flags & 2) {
+        void* mem = ZoneAlloc_Named(0x27c, mpAlloc, "Resource/PFRecordWrite");
+        if (mem)
+            return ((PFRecordWrite*)mem)->Construct(a, b, c, d, this);
+    }
+    return 0;
+}
+
+// @ 0x006bbf10  allocate + construct a shared PFRecordWrite
+void* ZoneFactory::CreateRecordWriteShared(unsigned char flags, void* a, void* b, void* c)
+{
+    if (flags & 2) {
+        void* mem = ZoneAlloc_Named(0x27c, mpAlloc, "Resource/PFRecordWrite");
+        if (mem)
+            return ((PFRecordWriteShared*)mem)->Construct(a, b, 1, c, this);
+    }
+    return 0;
+}
+
+// @ 0x006bbfa0  allocate + construct a PFRecordRead
+void* ZoneFactory::CreateRecordRead(void* unused, void* a, void* b)
+{
+    (void)unused;
+    void* mem = ZoneAlloc_Named(0x78, mpAlloc, "Resource/PFRecordRead");
+    if (mem)
+        return ((PFRecordRead*)mem)->Construct(a, b, this);
+    return 0;
+}
+
+// @ 0x006bc020  allocate + construct a shared PFRecordRead
+void* ZoneFactory::CreateRecordReadShared(void* unused, void* a, void* b)
+{
+    (void)unused;
+    void* mem = ZoneAlloc_Named(0x78, mpAlloc, "Resource/PFRecordRead");
+    if (mem)
+        return ((PFRecordReadShared*)mem)->Construct(a, b, this);
+    return 0;
+}
+
+// @ 0x006bc130  allocate + construct a modifiable PFIndex
+void* ZoneFactory::CreateIndex(unsigned unused)
+{
+    (void)unused;
+    void* mem = ZoneAlloc_Named(0x4c, mpAlloc, "Resource/PFIndexModifiable");
+    if (mem)
+        return ((PFIndexModifiable*)mem)->Ctor(mpAlloc);
+    return 0;
+}

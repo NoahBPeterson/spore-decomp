@@ -1,6 +1,7 @@
 // Slice s00e62b80: cell-game animation-group placement (poses the group's parts from a base transform).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /GS-.
 #include "types.h"
+#include <xmmintrin.h>
 
 // ------------------------------------------------------------------ transform stubs
 extern float gTransPos[3];   // 0x016b3c28 default translation
@@ -32,6 +33,7 @@ struct Matrix3 {
     Matrix3() {}
     void Assign(const Matrix3* src);                     // 0x0041cb40
     Matrix3(const Matrix3& o) { Assign(&o); }
+    Matrix3& operator=(const Matrix3& o) { Assign(&o); return *this; }
 };
 
 struct cSwarmTransform {                                 // EA::Swarm::cTransform, 0x38 bytes
@@ -110,11 +112,26 @@ struct cWinObj {
     virtual void SetParam(int id, const void* p, int n); // 0x44
 };
 
+struct cEffectMap {                                      // object returned by 0x00b721d0
+    char  mUnk00[0x4c];
+    float mCenter[3];                                    // +0x4c
+};
+
+struct cEffectMapMgr {
+    cEffectMap* FindMap(int handle);                     // 0x00b721d0
+};
+
 struct cCellGame {
-    char pad0[0x40fc];
-    int  mCurrent;                                       // +0x40fc
-    char pad4100[0x5190 - 0x4100];
-    char* mpLevel;                                       // +0x5190
+    char          mUnk00[0x1c];
+    cEffectMapMgr mMaps;                                 // +0x1c
+    char          mUnk20[0x40fc - 0x20];
+    int           mCurrent;                              // +0x40fc
+    char          mUnk4100[0x411c - 0x4100];
+    int           mEffectMapHandle;                      // +0x411c
+    char          mUnk4120[0x514c - 0x4120];
+    float         mTime;                                 // +0x514c
+    char          mUnk5150[0x5190 - 0x5150];
+    char*         mpLevel;                               // +0x5190
 };
 struct cCellGfx {
     char pad0[0x161c0];
@@ -353,3 +370,284 @@ void cMWModelRefSet::Destroy()
             FreeRawBlock(mModels.mpBegin);
     }
 }
+
+// ===========================================================================
+// 0x00e63480: compose two part transforms and hand the result to a target.
+// ===========================================================================
+struct cXfCopy {                                       // cSPTransform layout, matrix member
+    uint16_t mFlags;                                   // +0x00
+    uint16_t mModCount;                                // +0x02
+    float    mPos[3];                                  // +0x04
+    float    mScale;                                   // +0x10
+    Matrix3  mRot;                                     // +0x14
+    cXfCopy(const cXfCopy& o)
+    {
+        mFlags = o.mFlags;
+        mModCount = o.mModCount;
+        mPos[0] = o.mPos[0];
+        mPos[1] = o.mPos[1];
+        mPos[2] = o.mPos[2];
+        mScale = o.mScale;
+        mRot = o.mRot;
+    }
+    void Invert();                                     // 0x00a7d770
+};
+
+struct cSwarmCopy {                                    // EA::Swarm::cTransform layout
+    uint16_t mFlags;                                   // +0x00
+    uint16_t mModCount;                                // +0x02
+    float    mPos[3];                                  // +0x04
+    float    mScale;                                   // +0x10
+    Matrix3  mRot;                                     // +0x14
+    cSwarmCopy(const cSwarmCopy& o)
+    {
+        mFlags = o.mFlags;
+        mModCount = o.mModCount;
+        mPos[0] = o.mPos[0];
+        mPos[1] = o.mPos[1];
+        mPos[2] = o.mPos[2];
+        mScale = o.mScale;
+        mRot = o.mRot;
+    }
+    void PostTransformBy(const void* m);               // 0x00a8a140
+};
+
+// @ 0x00e63480
+namespace SP {
+void sPartIntersectTarget(cWinObj* target, const cXfCopy* partA, const cSwarmCopy* partB)
+{
+    cXfCopy inv(*partA);
+    inv.Invert();
+    cSwarmCopy t(*partB);
+    t.PostTransformBy(&inv);
+    target->SetTransform((const cSwarmTransform*)&t);
+    target->SetTransformRaw(partA);
+}
+}  // namespace SP
+
+// ===========================================================================
+// 0x00e639d0: spawn/update a part effect and push its fade parameters.
+// ===========================================================================
+extern float gZero_1485378;                                   // 0x01485378
+extern float gScale_1473c70;                                  // 0x01473c70
+extern float gCap_13f0e80;                                    // 0x013f0e80
+extern "C" int __cdecl CreateEffectSafe(int id, void* effect, int unused, void** out); // 0x00628450
+
+// The retail helper clamps with scalar SSE max/min (maxss/minss, NaN yields lo).
+inline void ClampSS(float* dst, const float* lo, const float* hi)
+{
+    _mm_store_ss(dst, _mm_min_ss(_mm_max_ss(_mm_load_ss(dst), _mm_load_ss(lo)),
+                                 _mm_load_ss(hi)));
+}
+
+// @ 0x00e639d0
+void FUN_00e639d0(int id, void** effectPtr, const void* partA, const void* partB,
+                  float param5, float param6, void* effect)
+{
+    if (param6 < gZero_1485378) {
+        if (*effectPtr == 0)
+            return;
+    } else if (*effectPtr == 0) {
+        CreateEffectSafe(id, effect, 0, effectPtr);
+        ((cWinObj*)*effectPtr)->SetHidden(0);
+    }
+
+    float v = param6 * gScale_1473c70;
+    float tmp[3];
+    tmp[0] = v;
+    tmp[2] = v;
+    tmp[1] = 0.0f;
+    float cap = gCap_13f0e80;
+    ClampSS(&tmp[2], &tmp[1], &cap);
+    tmp[0] = tmp[2];
+
+    ((cWinObj*)*effectPtr)->SetTransformRaw(partA);
+    ((cWinObj*)*effectPtr)->SetParam(3, &tmp[0], 1);
+    ((cWinObj*)*effectPtr)->SetParam(4, &param5, 1);
+    SP::sPartIntersectTarget((cWinObj*)*effectPtr, (const cXfCopy*)partA,
+                             (const cSwarmCopy*)partB);
+}
+
+// ===========================================================================
+// 0x00e63560: per-frame cell-game effect-map update.
+// ===========================================================================
+struct cHandleGuard {
+    void* mp;
+    cHandleGuard();                                    // 0x00743b50
+    ~cHandleGuard();                                   // 0x00e82130
+};
+
+struct cEffectKey {                                    // piecewise timing, at entry+8
+    float mStart;                                      // +0x00
+    float mUnk04;                                      // +0x04
+    float mUnk08;                                      // +0x08
+    float mEnd;                                        // +0x0c
+};
+
+struct cEffectEntry {                                  // 0x1c bytes
+    const char* mpName;                                // +0x00
+    int         mType;                                 // +0x04
+    cEffectKey  mKey;                                  // +0x08
+    int         mArg18;                                // +0x18
+};
+
+struct cEffectList {
+    int           mCount;                              // +0x00
+    cEffectEntry* mpEntries;                           // +0x04
+};
+
+struct cEffectCatalog {
+    char mUnk00[0x3c];
+    int  mHandle;                                      // +0x3c
+};
+
+struct cCellState {
+    char  mUnk00[0x48];
+    float mPos[3];                                     // +0x48
+};
+
+struct cEffectSlotTable {
+    char  mUnk00[0x4c];
+    float mScale;                                      // +0x4c
+    char  mUnk50[0x0c];
+    void* mpSlots[0x5856];                             // +0x5c (stride 4)
+    void* mpTemplate4;                                 // +0x161b4
+    char  mUnk161b8[4];
+    void* mpTemplate13;                                // +0x161bc
+    char  mUnk161c0[8];
+    void* mpTemplate02;                                // +0x161c8
+};
+
+extern cCellState* gspCellState;                       // 0x016b3c0c
+extern float   gDefaultPos[3];                         // 0x016b3c54
+extern Matrix3 gDefaultRot;                            // 0x016b3c60
+extern float   gOne_1485720;                           // 0x01485720
+extern float   gHalf_1471064;                          // 0x01471064
+extern float   gBoxMin[3];                             // 0x016b3c88
+extern float   gBoxMax[3];                             // 0x016b3c94
+
+struct cEffectXf {                                     // cSPTransform / Swarm cTransform, 0x38
+    uint16_t mFlags;                                   // +0x00
+    uint16_t mModCount;                                // +0x02
+    float    mPos[3];                                  // +0x04
+    float    mScale;                                   // +0x10
+    Matrix3  mRot;                                     // +0x14
+    cEffectXf()
+    {
+        mFlags = 0;
+        mModCount = 0;
+        mPos[0] = gDefaultPos[0];
+        mPos[1] = gDefaultPos[1];
+        mPos[2] = gDefaultPos[2];
+        mScale = gOne_1485720;
+        mRot.Assign(&gDefaultRot);
+    }
+    void Transform(float* v);                          // 0x007cdee0
+};
+
+void* __cdecl FUN_00e4ce40(void* out);                              // 0x00e4ce40
+void* __cdecl FUN_00e4cc40(int handle, void* out);                  // 0x00e4cc40
+float __cdecl FUN_00e50220(float t, const cEffectKey* key);         // 0x00e50220
+void  __cdecl FUN_00e5e2c0(cEffectEntry* e, float f, int arg);      // 0x00e5e2c0
+void  __cdecl FUN_00e84e40(const char* fmt, ...);                   // 0x00e84e40
+cEffectXf* __cdecl FUN_007d5590(cEffectXf* out, const cEffectXf* lhs,
+                                const cEffectXf* rhs);              // 0x007d5590
+
+static cEffectSlotTable* EffectSlots()
+{
+    return (cEffectSlotTable*)gspCellGfx;
+}
+
+// Release the effect held in slot i and clear the slot.
+static void ClearEffectSlot(int i)
+{
+    cWinObj* p = (cWinObj*)EffectSlots()->mpSlots[i];
+    if (p) {
+        EffectSlots()->mpSlots[i] = 0;
+        p->v04();
+    }
+}
+
+// @ 0x00e63560
+namespace SP {
+void sUpdateEffectMap()
+{
+    cHandleGuard catalogGuard;
+    cEffectCatalog* catalog = (cEffectCatalog*)FUN_00e4ce40(&catalogGuard);
+    cHandleGuard listGuard;
+    cEffectList* list = (cEffectList*)FUN_00e4cc40(catalog->mHandle, &listGuard);
+
+    float time = gspCellGame->mTime;
+    for (int i = 0; i < list->mCount; ++i) {
+        cEffectEntry* entry = &list->mpEntries[i];
+        cWinObj* effect = (cWinObj*)EffectSlots()->mpSlots[i];
+        float f = FUN_00e50220(time, &entry->mKey);
+        if (entry->mType == 5) {
+            FUN_00e5e2c0(entry, f, entry->mArg18);
+            continue;
+        }
+        if (effect && !effect->IsReady()) {
+            ClearEffectSlot(i);
+            effect = 0;
+        }
+        if (f == 0.0f) {
+            if (effect) {
+                effect->SetShown(1);
+                ClearEffectSlot(i);
+            }
+            continue;
+        }
+        if (!effect) {
+            int id;
+            switch (entry->mType) {
+            case 0:
+            case 2:  id = (int)EffectSlots()->mpTemplate02; break;
+            case 1:
+            case 3:  id = (int)EffectSlots()->mpTemplate13; break;
+            case 4:  id = (int)EffectSlots()->mpTemplate4; break;
+            default: id = 0; break;
+            }
+            ClearEffectSlot(i);
+            CreateEffectSafe(id, (void*)entry->mpName, 0, &EffectSlots()->mpSlots[i]);
+            effect = (cWinObj*)EffectSlots()->mpSlots[i];
+            if (!effect) {
+                FUN_00e84e40("couldn't start effect %s", entry->mpName);
+                continue;
+            }
+            effect->SetHidden(1);
+        }
+        effect->SetParam(4, &f, 1);
+
+        cEffectXf partXf;
+        if (entry->mType == 2 || entry->mType == 3) {
+            float s = gOne_1485720 / EffectSlots()->mScale;
+            partXf.mPos[0] = gspCellState->mPos[0] * s;
+            partXf.mPos[1] = gspCellState->mPos[1] * s;
+            partXf.mPos[2] = gspCellState->mPos[2] * s;
+            partXf.mFlags |= 4;
+            ++partXf.mModCount;
+        }
+        effect->SetTransform((const cSwarmTransform*)&partXf);
+
+        cEffectXf drawXf;
+        if ((unsigned)entry->mType <= 4) {
+            drawXf.mScale = EffectSlots()->mScale;
+            ++drawXf.mModCount;
+        }
+        effect->SetTransformRaw(&drawXf);
+
+        cEffectMap* map = gspCellGame->mMaps.FindMap(gspCellGame->mEffectMapHandle);
+        if (map) {
+            cEffectXf placed;
+            FUN_007d5590(&placed, &drawXf, &partXf);
+            float v[3];
+            v[0] = map->mCenter[0] - (gBoxMax[0] + gBoxMin[0]) * gHalf_1471064;
+            v[1] = map->mCenter[1] - (gBoxMax[1] + gBoxMin[1]) * gHalf_1471064;
+            v[2] = map->mCenter[2] - (gBoxMax[2] + gBoxMin[2]) * gHalf_1471064;
+            placed.Transform(v);
+            effect->SetParam(9, v, 3);
+            effect->SetParam(10, &gOne_1485720, 1);
+        }
+    }
+}
+}  // namespace SP

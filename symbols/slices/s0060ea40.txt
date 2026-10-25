@@ -1,12 +1,12 @@
-0060ea40 ?MakeNode@@YAPAUQValue@@PBU1@@Z  # MakeNode migrated from s0060ea40 (verbatim, slice spelling)
-0060eab0 ?GetEmptyQueueSingleton@@YAPAUEmptyQueue@@XZ  # GetEmptyQueueSingleton migrated from s0060ea40 (verbatim, slice spelling)
-0060eaf0 ?PushSlow@?$deque@UTransactionPtr@@$0EA@@@QAEXABUTransactionPtr@@_N@Z  # PushSlow migrated from s0060ea40 (verbatim, slice spelling)
-0060ec20  UploadQueue::DoInsertValue  # vector growth + in-place insert
-0060ee90 ?HandlePollinateRequest@@YAXPAUcPollinatorReal@@PAUQValue@@@Z  # HandlePollinateRequest migrated from s0060ea40 (verbatim, slice spelling)
-0060f010 ?NextIDReady@@YAXPAUcPollinatorReal@@@Z  # NextIDReady migrated from s0060ea40 (verbatim, slice spelling)
-0060f080 ?push_back@UploadQueue@@QAEXABUQValue@@@Z  # UploadQueue::push_back migrated from s0060ea40 (verbatim, slice spelling)
-0060f370 ?UpdateAssetVariant@@YAXPAX0I@Z  # UpdateAssetVariant migrated from s0060ea40 (verbatim, slice spelling)
-0060f4a0 ?erase@?$deque@UTransactionPtr@@$0EA@@@QAEXU?$DequeIterator_s0060_ea40@UTransactionPtr@@$0EA@@@0@Z  # erase migrated from s0060ea40 (verbatim, slice spelling)
-0060f700 ?insert@?$deque@UTransactionPtr@@$0EA@@@QAE?AU?$DequeIterator_s0060_ea40@UTransactionPtr@@$0EA@@@U2@ABUTransactionPtr@@@Z  # insert migrated from s0060ea40 (verbatim, slice spelling)
-0060f820 ?RbTreeEraseNode@@YAPAURbNode@@PAURbTree@@PAU1@@Z  # RbTreeEraseNode migrated from s0060ea40 (verbatim, slice spelling)
-0060f8a0 ?RbTreeNukeSubtree@@YAXPAURbTree@@PAURbNode@@@Z  # RbTreeNukeSubtree migrated from s0060ea40 (verbatim, slice spelling)
+0060ea40 ?MakeNode@@YGPAXPBUNodeValue@@@Z  # MakeNode (__stdcall): allocate a 0x20 rbnode and placement-copy the 16-byte node value
+0060eab0 ?GetEmptyQueueSingleton@@YAPAUEmptyQueue@@XZ  # GetEmptyQueueSingleton: function-local static empty 12-byte queue with onexit dtor
+0060eaf0 ?Add@?$deque@U?$AutoRefCount@UcITransaction@@@@$0EA@@@QAE_NPAUcITransaction@@_N@Z  # deque<AutoRefCount<cITransaction>,64>::Add: wrap the transaction in AutoRefCount and push_front/push_back
+0060ec20 ?DoInsertValue@UploadQueue@@QAEXPAUQValue@@PBU2@@Z  # UploadQueue::DoInsertValue: overlapping tail insert + doubling growth
+0060ee90 ?HandlePollinateRequest@cPollinator@@QAEXABUResourceKey@@_N1@Z  # SP::cPollinator::HandlePollinateRequest
+0060f010 ?NextIDReady@cPollinator@@QAEXXZ  # SP::cPollinator::NextIDReady
+0060f080 ?push_back@UploadQueue@@QAEXABUQValue@@@Z  # UploadQueue::push_back
+0060f370 ?UpdateAssetVariant@cPollinator@@QAEXIPBUResourceKey@@_K@Z  # SP::cPollinator::UpdateAssetVariant
+0060f4a0 ?erase@?$deque@U?$AutoRefCount@UcITransaction@@@@$0EA@@@QAE?AU?$DequeIterator@U?$AutoRefCount@UcITransaction@@@@$0EA@@@U2@0@Z  # eastl deque<AutoRefCount<cITransaction>,64>::erase(first,last)
+0060f700 ?erase@?$deque@U?$AutoRefCount@UcITransaction@@@@$0EA@@@QAE?AU?$DequeIterator@U?$AutoRefCount@UcITransaction@@@@$0EA@@@U2@@Z  # eastl deque<AutoRefCount<cITransaction>,64>::erase(position)
+0060f820 ?erase@RbTree@@QAE?AURbIter@@U2@@Z  # RbTree::erase(RbIter)
+0060f8a0 ?DoNukeSubtree@RbTree@@QAEXPAURbNode@@@Z  # RbTree::DoNukeSubtree

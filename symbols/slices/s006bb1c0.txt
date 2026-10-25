@@ -9,14 +9,16 @@
 006bb9b0 ?FUN_006bb9b0@@YAXPAX@Z  # FUN_006bb9b0 migrated from s006bb1c0 (verbatim, slice spelling)
 006bba40 ?FUN_006bba40@@YGHPAX@Z  # FUN_006bba40 migrated from s006bb1c0 (verbatim, slice spelling)
 006bba70 ?FUN_006bba70@@YAXPAX@Z  # FUN_006bba70 migrated from s006bb1c0 (verbatim, slice spelling)
+006bbc90 ??0FileListMsg@@QAE@PAUDropSource@@@Z  # FileListMsg::FileListMsg (drag/drop file-list ctor)
+006bbd80 ?Destroy@FileListMsg@@QAEPAU1@D@Z  # FileListMsg deleting-destructor body
 006bbdd0 ?Init@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::DatabasePackedFile::Init migrated from s006bb1c0
-006bbde0 ?FUN_006bbde0@@YAXPAX@Z  # FUN_006bbde0 migrated from s006bb1c0 (verbatim, slice spelling)
+006bbde0 ?Shutdown@Session@@QAEDXZ  # DatabasePackedFile-style session shutdown
 006bbe20 EA::ResourceMan::DatabasePackedFile::AsInterface  # PDB gap-align
 006bbe50 ?LockOrUnlock@MutexOwner@@QAEX_N@Z  # MutexOwner::LockOrUnlock migrated from s006bb1c0 (verbatim, slice spelling)
-006bbe80 ?FUN_006bbe80@@YAXPAX@Z  # FUN_006bbe80 migrated from s006bb1c0 (verbatim, slice spelling)
-006bbf10 ?FUN_006bbf10@@YAXPAX@Z  # FUN_006bbf10 migrated from s006bb1c0 (verbatim, slice spelling)
-006bbfa0 ?FUN_006bbfa0@@YAXPAX@Z  # FUN_006bbfa0 migrated from s006bb1c0 (verbatim, slice spelling)
-006bc020 ?FUN_006bc020@@YAXPAX@Z  # FUN_006bc020 migrated from s006bb1c0 (verbatim, slice spelling)
-006bc0a0 ?FUN_006bc0a0@@YAXPAX@Z  # FUN_006bc0a0 migrated from s006bb1c0 (verbatim, slice spelling)
-006bc0f0 ?FUN_006bc0f0@@YAXPAX@Z  # FUN_006bc0f0 migrated from s006bb1c0 (verbatim, slice spelling)
-006bc130 ?FUN_006bc130@@YAXPAX@Z  # FUN_006bc130 migrated from s006bb1c0 (verbatim, slice spelling)
+006bbe80 ?CreateRecordWrite@ZoneFactory@@QAEPAXEPAX000@Z  # alloc 0x27c + PFRecordWrite ctor
+006bbf10 ?CreateRecordWriteShared@ZoneFactory@@QAEPAXEPAX00@Z  # alloc 0x27c + shared PFRecordWrite ctor
+006bbfa0 ?CreateRecordRead@ZoneFactory@@QAEPAXPAX00@Z  # alloc 0x78 + PFRecordRead ctor
+006bc020 ?CreateRecordReadShared@ZoneFactory@@QAEPAXPAX00@Z  # alloc 0x78 + shared PFRecordRead ctor
+006bc0a0 ?CheckMount@Session@@QAEDXZ  # drive-mount state query
+006bc0f0 ?EnsureMounted@Session@@QAEDXZ  # drive-mount helper
+006bc130 ?CreateIndex@ZoneFactory@@QAEPAXI@Z  # alloc 0x4c + PFIndexModifiable ctor

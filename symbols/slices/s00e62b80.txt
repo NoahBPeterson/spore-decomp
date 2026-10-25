@@ -1,2 +1,5 @@
 00e62b80 cAnimGroup::Place  # poses root/second object and per-part transforms from a base cSPTransform; part types 0/1/3 switch
 00e63400 ?Destroy@cMWModelRefSet@@QAEXXZ  # thiscall; releases +0x3c object, frees +0x28 block, destroys two eastl vectors (+0x14, +0x00) and frees their blocks
+00e63480 ?sPartIntersectTarget@SP@@YAXPAUcWinObj@@PBUcXfCopy@@PBUcSwarmCopy@@@Z  # cdecl; computes an intersection transform from a source cXfCopy and a swarm copy into the win object
+00e63560 ?sUpdateEffectMap@SP@@YAXXZ  # cdecl; drives per-map effect instances: evaluates key curves, creates/hides effects, sets transforms and offsets positions into map space
+00e639d0 ?FUN_00e639d0@@YAXHPAPAXPBX1MMPAX@Z  # cdecl; clamps a scalar against a low/high range and creates/hides the target effect via the global effect manager

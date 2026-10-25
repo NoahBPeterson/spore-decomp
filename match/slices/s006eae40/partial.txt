@@ -1,2 +1,0 @@
-006eb8c0  115  EH copy-ctor; refcount/Matrix33-assign/EH-frame detail approximated
-006ec000  37  EH destructor; vector-dtor call and unwind funclet omitted

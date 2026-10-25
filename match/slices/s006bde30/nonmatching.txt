@@ -5,3 +5,11 @@
 006bea90  96   complete; hashtable walk computing max data end (64-bit)
 006beb00  75   complete; hashtable walk summing on-disk size (64-bit)
 006bed90  69   complete; hashtable walk setting isSaved flag
+006bde30  964  complete; full OpenRecord (open-record rbtree, record factory, refpack decompression); size 996 vs 916; equiv FAIL 5/8 valid, first mismatch memory pool @40030000 (fake DBP layout)
+006be1d0  337  complete; index image read/rebuild path; size 314 vs 374; equiv FAIL 5/34 valid, fault at eip=3000001c (fake object/import limitation)
+006be350  659  complete; temporary record create/write/erase helper (5 stack args); size 505 vs 752; equiv FAIL 5/5 valid, import argument mismatch
+006be820  99   complete; hashtable node unlink/free returning iterator; size 107; equiv UNSUPPORTED 0/400
+006be890  59   complete; rbtree lower-bound; size 59 vs 55; equiv FAIL 5/220 valid, result pointer/memory pool differs
+006be8d0  98   complete; hashtable rehash/rebucket; size 171 vs 172; equiv UNSUPPORTED 0/400
+006be980  128  complete; heap sift-down; size 135 vs 116; equiv PASS 341 valid / 100% coverage
+006beb60  515  complete; 4-argument PF index image writer; size 476 vs 556; equiv WEAK 179 valid / 90.1%

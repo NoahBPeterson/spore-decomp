@@ -62,10 +62,125 @@ extern float g_fillValue;   // 0x01533c74 (equiv t3)
 // Bodies
 // ===========================================================================
 
-// @ 0x006e6100  SP::cDirectShader::Write  (partial skeleton)
-char ShaderHost::Write(void*)
+// @ 0x006e6100  SP::cDirectShader::Write  (serialization)
+extern "C" char FUN_00777760(void* self, void* stream);          // 0x00777760
+extern "C" char FUN_00777740(const void* name);                  // 0x00777740 -> length
+extern "C" void FUN_00777720(const void* name, int n, void* buf);// 0x00777720 -> copy
+extern "C" void StreamWrite(void* stream, const void* p, int n);// 0x93a9a0 operator<<
+extern "C" void WriteUint32(void* stream, const void* v, int a, int b);  // 0x93aa70
+extern "C" void WriteUint16(void* stream, const void* v, int a, int b);  // 0x93a9d0
+extern "C" void* eastl_alloc(unsigned int, const char*, int, int, const char*, int); // 0xf473a0
+extern "C" void  eastl_free(void*);                              // 0xf47380
+extern "C" void  FUN_006e5a30(char*, int, char*);                // 0x006e5a30
+
+// cDirectShader retail layout: a 16-slot name table at +0x48 (dword stride)
+// paired with 16 0x14-byte records at +0x20c, and two 0xc-byte vectors.
+struct ShaderNameSlot {
+    const void* pName;         // +0x00
+    unsigned int pad[4];
+    const void* pName2;        // +0x40 -> this+0x40 within the 0x44 stride? (see body)
+};
+
+char ShaderHost::Write(void* stream)
 {
-    return 0;
+    if (!FUN_00777760(this, stream))
+        return 0;
+
+    // scratch string buffer (vector<char>): [begin, end, cap]
+    char* bufBegin = 0;
+    char* bufEnd = 0;
+    char* bufCap = 0;
+
+    unsigned char* base = (unsigned char*)this;
+    for (int slot = 0; slot < 0x10; ++slot) {
+        const void* name = *(const void**)(base + 0x48 + slot * 4);
+        if (name == 0)
+            continue;
+
+        ShaderNameSlot* rec = (ShaderNameSlot*)(base + 0x20c + slot * 0x14);
+
+        // write slot index
+        {
+            char idx = (char)slot;
+            StreamWrite(stream, &idx, 1);
+        }
+
+        // --- first name ---
+        int len = FUN_00777740(name);
+        if ((int)(bufEnd - bufBegin) < len) {
+            char z = 0;
+            FUN_006e5a30(bufBegin, len, &z);
+            bufEnd = bufBegin + len;
+        } else {
+            bufEnd = bufBegin + len;
+        }
+        FUN_00777720(name, len, bufBegin);
+        WriteUint32(stream, &len, 1, 0);
+        StreamWrite(stream, bufBegin, len);
+
+        // --- second name (rec+0x40) ---
+        const void* name2 = *(const void**)((unsigned char*)rec + 0x40);
+        int len2 = FUN_00777740(name2);
+        if ((int)(bufEnd - bufBegin) < len2) {
+            char z = 0;
+            FUN_006e5a30(bufBegin, len2, &z);
+            bufEnd = bufBegin + len2;
+        } else {
+            bufEnd = bufBegin + len2;
+        }
+        FUN_00777720(name2, len2, bufBegin);
+        WriteUint32(stream, &len2, 1, 0);
+        StreamWrite(stream, bufBegin, len2);
+
+        // --- vector at this+0xc8 (0xc-byte records) ---
+        {
+            unsigned char* v = (unsigned char*)this;
+            unsigned int count = (*(unsigned int*)(v + 0xcc) - *(unsigned int*)(v + 0xc8)) / 0xc;
+            WriteUint32(stream, &count, 1, 0);
+            const unsigned char* p = *(const unsigned char**)(v + 0xc8);
+            for (unsigned int i = 0; i < count; ++i, p += 0xc) {
+                unsigned int w0 = *(const unsigned short*)(p + 0);
+                unsigned int w1 = *(const unsigned short*)(p + 2);
+                unsigned int w2 = *(const unsigned short*)(p + 4);
+                unsigned int w3 = *(const unsigned short*)(p + 6);
+                unsigned int d4 = *(const unsigned int*)(p + 8);
+                WriteUint16(stream, &w0, 1, 0);
+                WriteUint16(stream, &w1, 1, 0);
+                WriteUint16(stream, &w2, 1, 0);
+                WriteUint16(stream, &w3, 1, 0);
+                WriteUint32(stream, &d4, 1, 0);
+            }
+        }
+
+        // --- vector at this+0x208 (0xc-byte records) ---
+        {
+            unsigned char* v = (unsigned char*)this;
+            unsigned int count = (*(unsigned int*)(v + 0x20c) - *(unsigned int*)(v + 0x208)) / 0xc;
+            WriteUint32(stream, &count, 1, 0);
+            const unsigned char* p = *(const unsigned char**)(v + 0x208);
+            for (unsigned int i = 0; i < count; ++i, p += 0xc) {
+                unsigned int w0 = *(const unsigned short*)(p + 0);
+                unsigned int w1 = *(const unsigned short*)(p + 2);
+                unsigned int w2 = *(const unsigned short*)(p + 4);
+                unsigned int w3 = *(const unsigned short*)(p + 6);
+                unsigned int d4 = *(const unsigned int*)(p + 8);
+                WriteUint16(stream, &w0, 1, 0);
+                WriteUint16(stream, &w1, 1, 0);
+                WriteUint16(stream, &w2, 1, 0);
+                WriteUint16(stream, &w3, 1, 0);
+                WriteUint32(stream, &d4, 1, 0);
+            }
+        }
+    }
+
+    {
+        unsigned char term = 0xff;
+        StreamWrite(stream, &term, 1);
+    }
+
+    if (bufBegin != 0)
+        eastl_free(bufBegin);
+    return 1;
 }
 
 // @ 0x006e6500
@@ -107,10 +222,47 @@ void __stdcall CallManager3(int a, int b)
     fn(m, a, b, 0);
 }
 
-// @ 0x006e6600  rw::graphics::EmbeddedState::SetDeviceState  (partial skeleton)
+// @ 0x006e6600  rw::graphics::EmbeddedState::SetDeviceState
+extern "C" void* operator_new_graphics(unsigned int, const char*, int, int, int, int); // 0xf473a0
+extern "C" void  operator_delete_graphics(void*);                                       // 0xf47380
+extern "C" void  Raster_SetMipLevelData(void*, void*, int);                             // 0x11f0270
+
 void* EmbeddedState_SetDeviceState()
 {
-    return 0;
+    void* mgr = FUN_0067dd60();
+    typedef void*(__thiscall* CreateRasterFn)(void*, int, int, int, int, int, int);
+    CreateRasterFn create = (CreateRasterFn)(*(void***)mgr)[0x40 / 4];
+    void* raster = create(mgr, 0x100, 0x100, 1, 8, 0x15, 0);
+
+    unsigned int* pixels = (unsigned int*)operator_new_graphics(0x40000, "Graphics", 0, 0, 0, 0);
+
+    int rowBase = -0x100;
+    unsigned int* dst = pixels;
+    for (int rows = 0x100; rows != 0; --rows) {
+        for (int col = 0; col < 0x100; ++col) {
+            int a = col < 0 ? -col : col;
+            int t = rowBase + col;
+            int b = t < 0 ? -t : t;
+            if (a >= 0x40 && b >= 0x40)
+                dst[col] = 0xffffff;
+            else if (a >= 0x10 && b >= 0x10)
+                dst[col] = 0xffffffff;
+            else
+                dst[col] = 0xffff0000;
+        }
+        dst += 0x100;
+        rowBase += 1;
+    }
+
+    if (((*(unsigned char*)((char*)raster + 4)) & 1) == 0) {
+        void* m2 = FUN_0067dd60();
+        typedef void(__thiscall* Fn)(void*, void*);
+        Fn f = (Fn)(*(void***)m2)[0x34 / 4];
+        f(m2, raster);
+    }
+    Raster_SetMipLevelData(*(void**)raster, pixels, 0);
+    operator_delete_graphics(pixels);
+    return raster;
 }
 
 // @ 0x006e6710
@@ -434,15 +586,74 @@ void AbsArray9(const float* in, float* out)
     }
 }
 
-// @ 0x006e6ee0  (partial skeleton)
-void BuildMatrix4x4(void*, int, int, int)
+// @ 0x006e6ee0
+// Six basis rows are expanded from the 6-float source matrix `m` into a
+// 24-float table, then 6 output records (0x10 bytes each) are emitted.
+extern "C" char FUN_006ddcc0(int, int, void*, void*);        // 0x006ddcc0
+extern "C" void FUN_006ddd40(int, void*, void*);             // 0x006ddd40
+
+void BuildMatrix4x4(float* m, void* a2, int a3, void* a4)
 {
+    float tab[24];
+    tab[0]  = m[0];
+    tab[1]  = m[1];
+    tab[2]  = m[2];
+    tab[3]  = m[3];
+    tab[4]  = m[4];
+    tab[5]  = m[5];
+    tab[6]  = tab[1];
+    tab[7]  = tab[2];
+    tab[8]  = tab[0];
+    tab[9]  = tab[2];
+    tab[10] = tab[3];
+    tab[11] = tab[4];
+    tab[12] = tab[2];
+    tab[13] = tab[0];
+    tab[14] = tab[1];
+    tab[15] = tab[3];
+    tab[16] = tab[1];
+    tab[17] = tab[5];
+    tab[18] = tab[0];
+    tab[19] = tab[4];
+    tab[20] = tab[5];
+    tab[21] = tab[3];
+    tab[22] = tab[4];
+    tab[23] = tab[5];
+
+    char ok = FUN_006ddcc0(0, 0x18, (void*)&m, tab);
+    if (ok != 0) {
+        static const int kRows[6] = { 0, 1, 2, 3, 4, 5 };
+        float* out = m;
+        for (int r = 0; r < 6; ++r) {
+            int base = kRows[r] * 3;
+            out[0] = tab[base + 0];
+            out[1] = tab[base + 1];
+            out[2] = tab[base + 2];
+            *(int*)(out + 3) = a3;
+            out += 4;
+        }
+        FUN_006ddd40(1, a2, a4);
+    }
 }
 
-// @ 0x006e7020  (partial skeleton)
-void WriteScaledMatrix(float, float, float, float, float, float, float, float,
-                       float, float, float, float, float, float, float*)
+// @ 0x006e7020
+void WriteScaledMatrix(float f0, float f1, float f2, float f3, float f4, float f5,
+                       float f6, float f7, float f8, float f9, float f10, float f11,
+                       float f12, float* out)
 {
+    // f3 is the uniform scale; out[] is the 16-float matrix.
+    out[0]  = f4 * f3;
+    out[1]  = f5 * f3;
+    out[4]  = f7 * f3;
+    out[2]  = f6 * f3;
+    out[5]  = f8 * f3;
+    out[6]  = f9 * f3;
+    out[8]  = f10 * f3;
+    out[9]  = f11 * f3;
+    out[10] = f12 * f3;
+    out[12] = f0;
+    out[13] = f1;
+    out[14] = f2;
 }
 // --- equivalence checker address annotations
 

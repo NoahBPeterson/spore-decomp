@@ -1,3 +1,5 @@
-006ea030  907  complete; render pass A, all four culling loops present but SSE schedule/loop shape differ
-006ea9e0  393  complete; entity box setter (vtable pool alloc + transform), schedule and compare layout differ
-006ead40  200  complete; transform setter, cSPTransform call and update-index schedule differ
+006ea030  907  complete; render pass A, all four culling loops present but SSE schedule/loop shape differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (7 unresolved externs: f67dd70/f7c4fd0/f777bf0/f6e6ee0/f6e95a0)
+006ea470  980  complete; render pass B, walks the 8-byte {tag,entity} list for bucket a, filters by mask/frustum, lazily flushes shader+texture+shader-data state and dispatches each entity through the direct or state-batched path (batch c, viewer arg); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (11 unresolved externs: f7c4fd0/f777bf0/f777c10/f6ddde0/f6ddef0 + setters)
+006ea920  164  complete; releases [this+0x6c] through vtable+8, then atomically decrements and (when the result drops below 1) restores the refcounts at [this+0x2c]+8 and [this+0x28]+8; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (319 valid inputs, 100% coverage); the retail body also carries an SEH frame/funclet that the rebuilt body omits
+006ea9e0  393  complete; entity box setter (vtable pool alloc + transform), schedule and compare layout differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (367 valid inputs, 95.5% coverage)
+006ead40  200  complete; transform setter, cSPTransform call and update-index schedule differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (251 valid inputs, 100% coverage)

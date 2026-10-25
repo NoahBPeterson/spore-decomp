@@ -1,2 +1,6 @@
+006960f0  245  SP::BroadcastLocaleChange (__stdcall, 274B ours vs 307B target): the target keeps `list` in ebx and the message pointer in a head slot 4 bytes away from ours, and emits the guarded node->mValue store with one extra test; register assignment and frame layout cannot be reproduced from plain C++ here
 006963d0  19  compiler-generated scalar deleting dtor (??_G) is 30 bytes and calls an out-of-line ??1; original is 72 bytes with the destructor body inlined
 00696420  49  cLocaleManager ctor: EH-state stores and list-init store scheduling (lea ecx vs lea eax/esi disp) differ
+006964c0  520  SP::cLocaleManager::Init (1072B ours vs 1069B target): frame is 0x140 vs the target's 0x148 (two 4-byte gaps around the `tmp` object) and the per-call EH-state stores take a different form, so the exception-handling frame shape differs
+006968f0  147  SP::cLocaleManager::SetFromMatch (195B ours vs 185B target): the target spills `this` to the stack and keeps `&id` in ebp (frame 0x38) while ours keeps `this` in ebp (frame 0x34); register allocation differs
+00696a60  525  SP::cLocaleManager::GetDefaultLanguage (643B ours vs 530B target): the target lets WString/scope lifetimes elide two empty-string destructor copies and share a single epilogue

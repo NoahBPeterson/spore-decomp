@@ -1,16 +1,16 @@
-006bde30 ?OpenRecord@DatabasePackedFile_s006b_de30@@QAE_NPAXPAPAXIHD0@Z  # DatabasePackedFile_s006b_de30::OpenRecord migrated from s006bde30 (verbatim, slice spelling)
-006be1d0 ?FUN_006be1d0@DatabasePackedFile_s006b_de30@@QAE_NXZ  # DatabasePackedFile_s006b_de30::FUN_006be1d0 migrated from s006bde30 (verbatim, slice spelling)
-006be640 ?DoFreeNodes@HT@@QAEXPAII@Z  # HT::DoFreeNodes migrated from s006bde30 (verbatim, slice spelling)
-006be690 ?FUN_006be690@@YAXPAI0@Z  # FUN_006be690 migrated from s006bde30 (verbatim, slice spelling)
-006be6e0 ?FUN_006be6e0@@YAXPAI0@Z  # FUN_006be6e0 migrated from s006bde30 (verbatim, slice spelling)
-006be730 ?FUN_006be730@@YAPAXPAPAI00@Z  # FUN_006be730 migrated from s006bde30 (verbatim, slice spelling)
-006be7c0 ?FUN_006be7c0@@YAXPAIHHI@Z  # FUN_006be7c0 migrated from s006bde30 (verbatim, slice spelling)
-006be820 ?eraseNode@HT@@QAEPAIPAII0@Z  # HT::eraseNode migrated from s006bde30 (verbatim, slice spelling)
-006be890 ?lowerBound@HT@@QAEXPAI0@Z  # HT::lowerBound migrated from s006bde30 (verbatim, slice spelling)
-006be8d0 ?rehash@HT@@QAEXI@Z  # HT::rehash migrated from s006bde30 (verbatim, slice spelling)
-006be980 ?heapSiftDown@HT@@QAEXHHHH@Z  # HT::heapSiftDown migrated from s006bde30 (verbatim, slice spelling)
-006bea90 ?GetFarthestFileExtent@PFIndexModifiable@ResourceMan@EA@@UBE_KXZ  # EA::ResourceMan::PFIndexModifiable::GetFarthestFileExtent migrated from s006bde30
-006beb00 ?GetAllocatedBytes@PFIndexModifiable@ResourceMan@EA@@UBE_KXZ  # EA::ResourceMan::PFIndexModifiable::GetAllocatedBytes migrated from s006bde30
-006beb60 ?WriteToMemory@PFIndexModifiable@ResourceMan@EA@@UAE_NAAPAXAAII_N@Z  # EA::ResourceMan::PFIndexModifiable::WriteToMemory migrated from s006bde30
-006bed90 ?SetIsSaved@PFIndexModifiable@ResourceMan@EA@@UAEXXZ  # EA::ResourceMan::PFIndexModifiable::SetIsSaved migrated from s006bde30
+006bde30 ?OpenRecord@DatabasePackedFile@@QAE_NPAXPAPAXIHD0@Z  # DatabasePackedFile::OpenRecord (reconstructed; full open-record tree/decompress path)
+006be1d0 ?FUN_006be1d0@DatabasePackedFile@@QAE_NXZ  # DatabasePackedFile::FUN_006be1d0 (index image read/rebuild)
+006be640 ?DoFreeNodes@HT@@QAEXPAII@Z  # HT::DoFreeNodes
+006be690 ?FUN_006be690@@YAXPAI0@Z  # FUN_006be690
+006be6e0 ?FUN_006be6e0@@YAXPAI0@Z  # FUN_006be6e0
+006be730 ?FUN_006be730@@YAPAXPAPAI00@Z  # FUN_006be730
+006be7c0 ?FUN_006be7c0@@YAXPAIHHI@Z  # FUN_006be7c0
+006be820 ?eraseNode@HT@@QAEPAUHTIterator@@PAU2@PAI1@Z  # HT::eraseNode (returns iterator by out parameter)
+006be890 ?lowerBound@RBTree@@QAEPAXPAPAXPBI@Z  # RBTree::lowerBound (returns out pointer like the binary)
+006be8d0 ?rehash@HT@@QAEXI@Z  # HT::rehash
+006be980 ?FUN_006be980@@YAXPAIHHHII@Z  # FUN_006be980 (heap sift-down, 6 args)
+006bea90 ?GetFarthestFileExtent@PFIndexModifiable@ResourceMan@EA@@UBE_KXZ  # EA::ResourceMan::PFIndexModifiable::GetFarthestFileExtent
+006beb00 ?GetAllocatedBytes@PFIndexModifiable@ResourceMan@EA@@UBE_KXZ  # EA::ResourceMan::PFIndexModifiable::GetAllocatedBytes
+006beb60 ?Write@PFIndexWriter@@QAE_NPAPAXPAIID@Z  # PFIndexWriter::Write (4-argument writer; 006beb60)
+006bed90 ?SetIsSaved@PFIndexModifiable@ResourceMan@EA@@UAEXXZ  # EA::ResourceMan::PFIndexModifiable::SetIsSaved
 0092c9f0 ?CompressData@CompressionRefpack@EA@@UAEIPBXIPAXIH@Z  # EA::CompressionRefpack::CompressData (callee of s006bde30, named from the dev publics; slice address comment)

@@ -62,6 +62,7 @@ struct HoleTree {
     void DoNukeSubtree(void* p);   // 0x9a9600
     HoleIter DoInsertValueImpl(HoleNodeBase* pNodeParent, const HoleValue& value, bool bForceToLeft);
     HolePairIB DoInsertValue(const HoleValue& value, true_type);
+    void DoInsertValueHint(uint32* outIter, HoleNode* hintNode, const HoleValue* value); // 0x6bf8f0
 };
 
 // @ 0x006bef70
@@ -218,7 +219,29 @@ struct PFItemsMap {
     HashIter begin() { HashIter i(mpBucketArray); if (!i.mpNode) i.increment_bucket(); return i; }
     HashIter end()   { return HashIter(mpBucketArray + mnBucketCount); }
     InsertRet DoInsertValue(const HashValue& value, true_type);
+    void* FindOrInsert(const Key* key);   // 0x6bf7d0
 };
+
+extern void __cdecl HT_find(const void* key, void* outIter);   // 0x6befb0
+
+// @ 0x006bf7d0  find-or-insert a typed record, returning node+0x10
+void* PFItemsMap::FindOrInsert(const Key* key)
+{
+    void* it[4];
+    HT_find(key, it);
+    if (it[0] == mpBucketArray[mnBucketCount]) {
+        HashValue hv;
+        hv.mKey          = *key;
+        hv.mPad          = 0;
+        hv.mInfo.mOffset = 0;
+        hv.mInfo.mSize   = 0;
+        hv.mInfo.mA      = 0;
+        hv.mInfo.mB      = 0;
+        InsertRet r = DoInsertValue(hv, true_type());
+        it[0] = r.first.mpNode;
+    }
+    return (char*)it[0] + 0x10;
+}
 
 // @ 0x006bf030
 InsertRet PFItemsMap::DoInsertValue(const HashValue& value, true_type) {
@@ -360,10 +383,17 @@ bool PFIndex::ValidateFreeSpace(uint64 begin, uint64 size)
     }
     return true;
 }
+// ---------------------------------------------------------------------------
+// The item map reached from the index object (+0x28) — same layout as the
+// standalone PFItemsMap above.
+// ---------------------------------------------------------------------------
+inline PFItemsMap& itemsMapOf(PFIndexModifiable* p) {
+    return *(PFItemsMap*)((char*)p + 0x28);
+}
 
-// ---------------------------------------------------------------------------
-// Non-target skeletons (kept for the module picture; tracked in partial.txt).
-// ---------------------------------------------------------------------------
+// vtable-slot helper (vptr occupies slot 0).
+#define VT(p) (*(void***)(p))
+
 // The retail initialiser returns the object pointer in eax (mov eax, ecx at
 // 0x006bf5a0).  A plain C++ body leaves ecx holding it; route the initial
 // pointer through a tiny noinline identity so cl copies `this` into eax and
@@ -387,66 +417,352 @@ void PFHoleTable::FUN_006bf5a0()
     a[7] = 0;
 }
 
-// @ 0x006bfc50
-int64_t PFHoleTable::FUN_006bfc50(uint32 a, uint32 b)
-{
-    // TODO(partial): find largest hole fitting (size, offset).
-    return 0;
-}
+// ===========================================================================
+// PFHoleTable's rbtree view (HoleRecord-keyed).  The tree object lives at
+// PFHoleTable+0xc, so its member functions take ecx = that address.
+// ===========================================================================
+struct HoleTreeNode {
+    HoleTreeNode* mpNodeRight;   // +0x00
+    HoleTreeNode* mpNodeLeft;    // +0x04
+    HoleTreeNode* mpNodeParent;  // +0x08
+    uint8         mColor;        // +0x0c
+    char          pad0d[3];      // +0x0d
+    uint32        mField10;      // +0x10
+    uint32        mField14;      // +0x14
+    uint32        mOffsetLo;     // +0x18
+    uint32        mOffsetHi;     // +0x1c
+};
 
-// @ 0x006bf4e0
+// The whole PFHoleTable (0x28 bytes); the tree object is the +0xc view below.
+struct HoleTable {
+    uint64       mTotal;         // +0x00  running size/offset
+    HoleTreeNode mAnchor;        // +0x0c  map base (squid) node
+    uint32       mnSize;         // +0x1c
+    uint32       unk20;          // +0x20
+    uint32       unk24;          // +0x24
+};
+
+struct HoleTreeC {
+    HoleTreeNode mAnchor;        // +0x00 (== PFHoleTable+0xc)
+    uint32       mnSize;         // +0x10
+    uint32       unk14;          // +0x14
+
+    uint64 FindHole(uint32 a, uint32 b);
+};
+
+// ---------------------------------------------------------------------------
+// external helpers (callees, not slice targets)
+// ---------------------------------------------------------------------------
+extern void  __cdecl HT_find(const void* key, void* outIter);          // 0x6befb0
+extern void  __cdecl HT_eraseNode(const void* it, const void* a, void* b); // 0x6be820
+extern void* __cdecl HoleTree_median3(HoleNode** a, HoleNode** b, HoleNode** c, HoleLess cmp); // 0x6be730
+extern void* __cdecl RBTreeIncrement(void* node);                      // 0x921580
+extern void  __cdecl RBTreeErase(void* a, void* b);                    // 0x921880
+extern void  __cdecl DeleteTreeNode(void* node);                       // 0xf47380 (operator delete)
+extern void  __cdecl VecOfKey_DoInsertKey(void* vec, Key* slot, const void* value); // 0x4e3e10
+extern void  __cdecl QuickSortPairs(void* first, void* last, uint32 cmp); // 0x6bf870
+
+// ---------------------------------------------------------------------------
+// @ 0x006bf4e0  PFIndexModifiable::FindRecord (header spelling: GetFileInfo)
+// ---------------------------------------------------------------------------
 void* PFIndexModifiable::GetFileInfo(const Key* key)
 {
-    // TODO(partial): hashtable find + return &entry.info.
+    PFItemsMap& map = itemsMapOf(this);
+    void* it[2];
+    HT_find(key, it);
+    if (it[0] != map.mpBucketArray[map.mnBucketCount])
+        return (char*)it[0] + 0x10;
     return 0;
-}
-
-// @ 0x006bf520
-bool PFIndexModifiable::RemoveFile(const Key* key, void* out)
-{
-    // TODO(partial): hashtable find + erase.
-    return false;
-}
-
-// @ 0x006bfa00
-void* PFIndexModifiable::GetFiles(void* dst, void* filter)
-{
-    // TODO(partial): iterate records matching an IKeyFilter.
-    return 0;
-}
-
-// @ 0x006bfac0
-void* PFIndexModifiable::GetAllFiles(void* dst)
-{
-    // TODO(partial): append every key to the destination vector.
-    return 0;
-}
-
-// @ 0x006bfbc0
-void* PFIndexModifiable::PutFileInfo(const Key* key, const void* info)
-{
-    // TODO(partial): insert-or-find then copy the record info.
-    return 0;
-}
-
-// @ 0x006bf660
-bool PFIndexModifiable::Read(void* data, uint32 size, uint32 count, int flag)
-{
-    // TODO(partial): parse DBPF index records into the map.
-    return false;
 }
 
 // ---------------------------------------------------------------------------
-void FUN_006bf5d0(void* a, void* b, void* c, void* d); // 0x6bf5d0
-void* FUN_006bf7d0(void* a, void* b);                // 0x6bf7d0
-void FUN_006bf8f0(void* a, void* b, void* c, void* d); // 0x6bf8f0
-void* FUN_006bfc20(void* a, void* b, void* c);       // 0x6bfc20
+// @ 0x006bf520  PFIndexModifiable::DeleteRecord (header spelling: RemoveFile)
+// ---------------------------------------------------------------------------
+bool PFIndexModifiable::RemoveFile(const Key* key, void* out)
+{
+    PFItemsMap& map = itemsMapOf(this);
+    void* it[2];
+    HT_find(key, it);
+    void* node = it[0];
+    if (node == map.mpBucketArray[map.mnBucketCount])
+        return false;
 
-// @ 0x006bf5d0
-void FUN_006bf5d0(void*, void*, void*, void*) {}
-// @ 0x006bf7d0
-void* FUN_006bf7d0(void*, void*) { return 0; }
-// @ 0x006bf8f0
-void FUN_006bf8f0(void*, void*, void*, void*) {}
-// @ 0x006bfc20
-void* FUN_006bfc20(void* a, void*, void*) { return a; }
+    uint32* dst = (uint32*)out;
+    dst[0] = *(uint32*)((char*)node + 0x10);
+    dst[1] = *(uint32*)((char*)node + 0x14);
+    dst[2] = *(uint32*)((char*)node + 0x18);
+    dst[3] = *(uint32*)((char*)node + 0x1c);
+    dst[4] = *(uint32*)((char*)node + 0x20);
+    dst[5] = *(uint32*)((char*)node + 0x24);
+
+    HT_eraseNode(node, node, it[1]);
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x006bfbc0  PFIndexModifiable::AddRecord / PutFileInfo
+// ---------------------------------------------------------------------------
+void* PFIndexModifiable::PutFileInfo(const Key* key, const void* info)
+{
+    PFItemsMap& map = itemsMapOf(this);
+    void* dst = map.FindOrInsert(key);
+    *(PFRecordInfo*)dst = *(const PFRecordInfo*)info;
+    return dst;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x006bfa00  PFIndexModifiable::GetKeyList (header spelling: GetFiles)
+// ---------------------------------------------------------------------------
+struct VecOfKey {
+    Key* mpBegin;   // +0x00
+    Key* mpEnd;     // +0x04
+    Key* mpCap;     // +0x08
+};
+struct KeyFilterVtbl { virtual void f0(); virtual char Accept(const void* node); };
+struct KeyFilter { KeyFilterVtbl* vtbl; };
+
+void* PFIndexModifiable::GetFiles(void* dst, void* filter)
+{
+    PFItemsMap& map = itemsMapOf(this);
+    HashNode** pBucket = map.mpBucketArray;
+    HashNode*  pNode   = *pBucket;
+    uint32     count   = 0;
+    if (!pNode) {
+        do { ++pBucket; } while (!*pBucket);
+        pNode = *pBucket;
+    }
+    HashNode* const pEnd = (HashNode*)map.mpBucketArray[map.mnBucketCount];
+    VecOfKey* vec = (VecOfKey*)dst;
+    KeyFilter* f = (KeyFilter*)filter;
+
+    while (pNode != pEnd) {
+        if (!f || f->vtbl->Accept(pNode)) {
+            if (vec) {
+                Key* slot = vec->mpEnd;
+                if (slot < vec->mpCap) {
+                    vec->mpEnd = slot + 1;
+                    if (slot) {
+                        slot[0] = pNode->mValue.mKey;
+                    }
+                } else {
+                    VecOfKey_DoInsertKey(vec, slot, &pNode->mValue.mKey);
+                }
+            }
+            ++count;
+        }
+        pNode = pNode->mpNext;
+        while (!pNode) pNode = *++pBucket;
+    }
+    return (void*)count;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x006bfac0  PFIndexModifiable::GetKeysSortedByPosition (header: GetAllFiles)
+// ---------------------------------------------------------------------------
+void* PFIndexModifiable::GetAllFiles(void* dst)
+{
+    PFItemsMap& map = itemsMapOf(this);
+    const uint32 n = map.mnElementCount;
+
+    ICoreAllocator* alloc = mpAllocator;
+    void* const pBase = ((void* (__thiscall*)(ICoreAllocator*, uint32, const char*, uint32))
+                             VT(alloc)[8 / 4])(alloc, n * 4, "Resource/PFIndex", 0);
+
+    HashNode** pBucket = map.mpBucketArray;
+    HashNode*  pNode   = *pBucket;
+    if (!pNode) {
+        do { ++pBucket; } while (!*pBucket);
+        pNode = *pBucket;
+    }
+    HashNode* const pEnd = (HashNode*)map.mpBucketArray[map.mnBucketCount];
+
+    void** pOut = (void**)pBase;
+    while (pNode != pEnd) {
+        *pOut++ = pNode;
+        pNode = pNode->mpNext;
+        while (!pNode) pNode = *++pBucket;
+    }
+
+    QuickSortPairs(pBase, pOut, 0);
+
+    VecOfKey* vec = (VecOfKey*)dst;
+    for (void** i = (void**)pBase; i < pOut; ++i) {
+        HashNode* node = (HashNode*)*i;
+        Key* slot = vec->mpEnd;
+        if (slot < vec->mpCap) {
+            vec->mpEnd = slot + 1;
+            if (slot) slot[0] = node->mValue.mKey;
+        } else {
+            VecOfKey_DoInsertKey(vec, slot, &node->mValue.mKey);
+        }
+    }
+
+    ((void (__thiscall*)(ICoreAllocator*, void*, uint32))VT(alloc)[0xc / 4])(alloc, pBase, 0);
+    return (void*)n;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x006bf660  PFIndexModifiable::ReadFromMemory (header spelling: Read)
+// ---------------------------------------------------------------------------
+bool PFIndexModifiable::Read(void* data, uint32 a, uint32 count, int b)
+{
+    (void)a; (void)b;
+    const uint32* p = (const uint32*)data;
+    const uint32 flags = p[0];
+    if (((flags >> 2) & 1) == 0)
+        return false;
+
+    uint32 i = 1;
+    uint32 defA = 0xffffffff;
+    if (flags & 1) { defA = p[1]; i = 2; }
+    uint32 defB = 0xffffffff;
+    if ((flags >> 1) & 1) { defB = p[i]; ++i; }
+    if (p[i] != 0)
+        return false;
+
+    if (count != 0) {
+        const uint32* q = p + i + 1;
+        PFItemsMap& map = itemsMapOf(this);
+        do {
+            HashValue hv;
+            hv.mPad          = 0;
+            hv.mKey.group    = (flags & 1) ? defA : *q++;
+            hv.mKey.instance = ((flags >> 1) & 1) ? defB : *q++;
+            hv.mKey.type     = q[0];
+            hv.mInfo.mOffset = (uint64)q[1];
+            hv.mInfo.mSize   = q[2];
+            hv.mInfo.mA      = q[3];
+            hv.mInfo.mB      = q[4] & 1;
+            q += 6;
+            map.DoInsertValue(hv, true_type());
+        } while (--count != 0);
+    }
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x006bf5d0  eastl::quick_sort_impl<HoleNode**> (recursive quicksort driver)
+// ---------------------------------------------------------------------------
+void FUN_006bf5d0(HoleNode** first, HoleNode** last, int depth, HoleLess cmp)
+{
+    while ((int)((char*)last - (char*)first) > 0x70 && depth > 0) {
+        HoleNode** mid = first + ((last - first) >> 1);
+        HoleNode** pivot = (HoleNode**)HoleTree_median3(first, mid, last - 1, cmp);
+        HoleNode** cut = get_partition<HoleNode**, HoleNode*, HoleLess>(first, last, *pivot, cmp);
+        --depth;
+        FUN_006bf5d0(cut, last, depth, cmp);
+        last = cut;
+    }
+    if (depth == 0) {
+        partial_sort(first, last, last, cmp);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x006bf8f0  HoleTree::DoInsertValueHint (rbtree insert with a hint node)
+// ---------------------------------------------------------------------------
+void HoleTree::DoInsertValueHint(uint32* outIter, HoleNode* hintNode, const HoleValue* value)
+{
+    HoleNodeBase* const pAnchor = &mAnchor;
+    HoleNode* const pFirst = (HoleNode*)mAnchor.mpNodeParent;
+
+    if ((HoleNodeBase*)hintNode == pAnchor || hintNode == pFirst) {
+        if (mnSize != 0 && value->mOffset >= pFirst->mValue.mOffset &&
+            (value->mOffset > pFirst->mValue.mOffset ||
+             pFirst->mValue.mA < value->mA)) {
+            HoleIter r = DoInsertValueImpl(pFirst, *value, false);
+            *outIter = (uint32)r.mpNode;
+            return;
+        }
+        HolePairIB r = DoInsertValue(*value, true_type());
+        *outIter = (uint32)r.first.mpNode;
+        return;
+    }
+
+    HoleNode* const pNext = (HoleNode*)RBTreeIncrement(hintNode);
+    if (hintNode->mValue.mOffset <= value->mOffset &&
+        (hintNode->mValue.mOffset < value->mOffset || hintNode->mValue.mA < value->mA) &&
+        value->mOffset <= pNext->mValue.mOffset &&
+        (value->mOffset < pNext->mValue.mOffset || value->mA < pNext->mValue.mA)) {
+        const bool useHint = (hintNode->mValue.mOffset != 0);
+        HoleIter r = DoInsertValueImpl(useHint ? (HoleNode*)pNext : hintNode, *value, useHint);
+        *outIter = (uint32)r.mpNode;
+        return;
+    }
+
+    HolePairIB r = DoInsertValue(*value, true_type());
+    *outIter = (uint32)r.first.mpNode;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x006bfc20  rbtree insert wrapper (returns the out-iter)
+// ---------------------------------------------------------------------------
+void* FUN_006bfc20(HoleTree* tree, uint32* outIter, HoleNode* hintNode, const HoleValue* value)
+{
+    tree->DoInsertValueHint(outIter, hintNode, value);
+    return outIter;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x006bfc50  HoleTreeC::FindHole
+//   Find the smallest hole able to hold (a, b); on success carve it out (erase,
+//   then re-insert the leftover tail) and return the hole's start offset.
+// ---------------------------------------------------------------------------
+uint64 HoleTreeC::FindHole(uint32 a, uint32 b)
+{
+    HoleTreeNode* const pAnchor = &mAnchor;
+    HoleTreeNode* pNode = (HoleTreeNode*)mAnchor.mpNodeParent;
+    HoleTreeNode* pBest = pAnchor;
+    uint32 bestLo = 0xffffffff;
+    uint32 bestHi = 0xffffffff;
+
+    if (pNode != pAnchor) {
+        do {
+            const uint32 hi = *(uint32*)((char*)pNode + 0x1c);
+            const uint32 lo = *(uint32*)((char*)pNode + 0x18);
+            if (b <= hi && (hi != b || a <= lo) && hi <= bestHi &&
+                (hi < bestHi || lo < bestLo)) {
+                bestHi = hi;
+                bestLo = lo;
+                pBest = pNode;
+                if (lo == a && hi == b) break;
+            }
+            pNode = (HoleTreeNode*)RBTreeIncrement(pNode);
+        } while (pNode != pAnchor);
+
+        if (pBest != pAnchor) {
+            const uint64 oldStart = *(uint64*)((char*)pBest + 0x10);
+            const uint32 holeLo = *(uint32*)((char*)pBest + 0x18);
+            const uint32 holeHi = *(uint32*)((char*)pBest + 0x1c);
+            const uint32 newLo  = holeLo + a;
+            const uint32 newHi  = holeHi + b + (newLo < holeLo ? 1 : 0);
+            const uint32 tailLo = holeLo - a;
+            const uint32 tailHi = holeHi - b - (holeLo < a ? 1 : 0);
+
+            --mnSize;
+            RBTreeErase(pBest, pAnchor);
+            DeleteTreeNode(pBest);
+
+            if (tailLo != 0 || tailHi != 0) {
+                HoleValue v;
+                v.mOffset = ((uint64)newHi << 32) | newLo;
+                v.mA      = tailLo;
+                v.mB      = tailHi;
+                uint32 outIter = 0;
+                // Route through the shared insert helper on the tree view.
+                ((HoleTree*)((char*)this - 8))->DoInsertValueHint(&outIter, 0, &v);
+            }
+            return oldStart;
+        }
+    }
+
+    {
+        // No hole fits: grow the table by (a, b) and return the previous total.
+        const uint64 old = *(uint64*)this;
+        const uint32 newLo = *(uint32*)this + a;
+        const uint32 newHi = *(uint32*)((char*)this + 4) + b + (newLo < a ? 1 : 0);
+        *(uint32*)((char*)this + 4) = newHi;
+        *(uint32*)this = newLo;
+        return old;
+    }
+}

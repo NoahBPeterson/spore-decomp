@@ -10,7 +10,7 @@ volatile int g_opaqueGlobal;
 // External helpers (call targets are masked relocations).
 // ---------------------------------------------------------------------------
 __declspec(dllimport) void* __cdecl SteamApps();
-void __cdecl EA_Free(void* p);
+void __cdecl EA_Free(void* p);   // 0x00f47380
 void* __cdecl FUN_0067de50();   // returns cStringManager* (global 0x15fd8fc)
 void* __cdecl FUN_0067de40();   // returns resource manager (global 0x15fd8f8)
 
@@ -118,7 +118,7 @@ void CSink::FUN_006b5000()
     }
 }
 
-extern bool g_ColorLocalized;
+extern bool g_ColorLocalized;   // 0x01605354
 
 // @ 0x006b5030
 void __cdecl SP_cString_SetColorLocalized(bool b)
@@ -143,11 +143,21 @@ class cStringDetokenizer;
 class cStringManager;
 struct IRefCounted;
 
+extern wchar16 gEmptyString16[];   // 0x01667bac
+void* __cdecl AllocDbg(int nSize, const void* pTag, int a, int b, int c, int d); // 0x00f473a0
+
 struct string16 {
     wchar16* mpBegin;      // +0
     wchar16* mpEnd;        // +4
     wchar16* mpCapacity;   // +8
     int      mAllocator;   // +0xc
+    string16() : mpBegin(gEmptyString16), mpEnd(gEmptyString16), mpCapacity(gEmptyString16 + 1) {}
+    void* operator new(size_t n, const char* pName, int a = 0, int b = 0, int c = 0, int d = 0)
+    {
+        return AllocDbg((int)n, pName, a, b, c, d);
+    }
+    string16& operator=(const string16& other);   // 0x0057cb60
+    ~string16() throw();                          // 0x00933960
 };
 
 // EA::AutoRefCount: plain pointer + user destructor (this is what makes the
@@ -211,8 +221,10 @@ class cStringManager { public:
     virtual cStringDetokenizer* GetStringDetokenizer();         // +0x10
 };
 
-extern wchar16 sDefaultCStr[];
+extern wchar16 sDefaultCStr[];      // 0x01409b1c
 extern char g_placeholderMap[];   // eastl hash_map<uint32_t, string16> @ 0x15308a8
+
+string16 __cdecl FUN_006b53a0(wchar16 ch, string16* src);                      // 0x006b53a0
 
 struct HashMap {
     void erase_key(uint32_t* key);
@@ -230,7 +242,7 @@ class cString { public:
     cString();
     cString(const cString& other);
     ~cString();
-    bool Load(uint32_t tableID, uint32_t instanceID, int group);
+    int Load(uint32_t tableID, uint32_t instanceID, int group);
     cString& operator=(const cString& other);
     void set_source_string(const wchar16* src, bool alloc);
     const wchar16* GetText();
@@ -346,15 +358,16 @@ struct IResource {
 };
 
 // @ 0x006b54b0
-bool cString::Load(uint32_t tableID, uint32_t instanceID, int group)
+int cString::Load(uint32_t tableID, uint32_t instanceID, int group)
 {
+    string16* local = mpLocalString;
     mField11 = false;
-    if (mpLocalString != 0) {
-        wchar16* p = mpLocalString->mpBegin;
-        int n = ((int)(size_t)mpLocalString->mpCapacity - (int)(size_t)p) & 0xfffffffe;
+    if (local != 0) {
+        wchar16* p = local->mpBegin;
+        int n = ((int)(size_t)local->mpCapacity - (int)(size_t)p) & 0xfffffffe;
         if (n > 2 && p != 0)
             EA_Free(p);
-        EA_Free(mpLocalString);
+        EA_Free(local);
     }
     IRefCounted* t = mpTableResource.mpObject;
     mpLocalString = 0;
@@ -387,11 +400,11 @@ after_load:
     mbHasTokens = false;
     mpSourceCStr = sDefaultCStr;
     if (res != 0) {
-        const wchar16* s = ((IResource*)res)->q5(group);
-        if (s == 0 || s[0] == 0)
-            s = 0;
-        else
+        const wchar16* s = ((IResource*)res)->q5(instanceID);
+        if (s[0] != 0)
             set_source_string(s, false);
+        else
+            s = 0;
         if (mpTableResource.mpObject != 0 && s != 0)
             return true;
     }
@@ -401,16 +414,21 @@ after_load:
 // @ 0x006b55c0
 const wchar16* cString::GetText()
 {
+    const wchar16* src = mpSourceCStr;
     if (mField11) {
         string16* s0 = mpLocalString;
         if (s0 == 0)
-            return 0;
+            return src;
         return s0->mpBegin;
     }
     if (!mbHasTokens && !g_ColorLocalized)
-        return mpLocalString->mpBegin;
+        return src;
+    if (mpLocalString == 0)
+        mpLocalString = new ("UI/SP::cString") string16;
     cStringDetokenizer* d = ((cStringManager*)FUN_0067de50())->GetStringDetokenizer();
     d->ProcessString(mpSourceCStr, *mpLocalString);
+    if (g_ColorLocalized && mpSourceCStr != sDefaultCStr && mPlaceholderId == 0)
+        *mpLocalString = FUN_006b53a0(0xffff, mpLocalString);
     return mpLocalString->mpBegin;
 }
 

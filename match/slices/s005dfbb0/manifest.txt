@@ -1,1 +1,5 @@
 # source  symbol  original VA  [cl flags override]
+slices/s005dfbb0/s005dfbb0.cpp  ?OnFileDrop@cSPEditorUI@SP@@QAEXABUKey@2@@Z  005dfbb0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s005dfbb0/s005dfbb0.cpp  ?DoCommand@cSPEditorUI@SP@@QAE_NH@Z  005dfd00  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s005dfbb0/s005dfbb0.cpp  ??0cSPRolloverModelData@SP@@QAE@ABUKey@1@0III@Z  005e0370  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s005dfbb0/s005dfbb0.cpp  ??1cSPRolloverModelData@SP@@UAE@XZ  005e0440  /O2 /MD /Gy /TP /arch:SSE /GS-

@@ -1,4 +1,4 @@
-00673c50 ?Ctor@Detokenizer_s0067_3c50@@QAEXXZ  # Detokenizer_s0067_3c50::Ctor migrated from s00673c50 (verbatim, slice spelling)
+00673c50 ??0Detokenizer@@QAE@PAVcPropertyList@@@Z  # Detokenizer::Detokenizer(cPropertyList*) (cBuildXHTMLDetokenizer ctor)
 00674170 ?FillN@@YAPAXPAGIG@Z  # FillN migrated from s00673c50 (verbatim, slice spelling)
 006741b0 ?FindRange@@YAHPAHPAG@Z  # FindRange migrated from s00673c50 (verbatim, slice spelling)
 00674230 ?FillInsert@FillVec@@QAEPAIII@Z  # FillVec::FillInsert migrated from s00673c50 (verbatim, slice spelling)
@@ -6,5 +6,5 @@
 00674340 ?UninitCopy@@YAPAUEStr@@PAU1@00@Z  # UninitCopy migrated from s00673c50 (verbatim, slice spelling)
 006743a0 ?DestroyValues@@YAPAUEStr@@PAU1@00@Z  # DestroyValues migrated from s00673c50 (verbatim, slice spelling)
 006743f0 ?Construct@EStr@@QAEPAU1@PBG@Z  # EStr::Construct migrated from s00673c50 (verbatim, slice spelling)
-00674440 ?DoInsertValueSkeleton@EStrVec@@QAEXPAUEStr@@PBU2@@Z  # EStrVec::DoInsertValueSkeleton migrated from s00673c50 (verbatim, slice spelling)
+00674440 ?DoInsertValue@EStrVec@@QAEXPAUEStr@@PBU2@@Z  # EStrVec::DoInsertValue(EStr*, const EStr*)
 006745d0 ?push_back@EStrVec@@QAEXABUEStr@@@Z  # EStrVec::push_back migrated from s00673c50 (verbatim, slice spelling)

@@ -15,3 +15,10 @@
 006b2350 ?SP_SomethingAllSaveAreas@@YAXXZ  # SP_SomethingAllSaveAreas migrated from s006b18c0 (verbatim, slice spelling)
 006b2400 ?FUN_006b2400@@YAXXZ  # FUN_006b2400 migrated from s006b18c0 (verbatim, slice spelling)
 006b2620 ?FUN_006b2620@@YAXXZ  # FUN_006b2620 migrated from s006b18c0 (verbatim, slice spelling)
+006b18c0 CacheMgr::Notify  # LRU cache event dispatch: key build, map find, touch / add-from-event / add-from-stream and the 64-bit byte counter
+006b19e0 CacheMgr::ReleaseArea  # map erase (RBTreeIncrement/Erase + EAFree), intrusive unlink, owned-buffer free, mb15 = 1
+006b1ab0 CacheMgr::Destructor  # Shutdown, sub-destruct, job/stream release, list free, map nuke, owner refcount release, base vtable reset
+006b1b80 CacheMgr::Update  # event pump, byte budget from the App property list, eviction loop, tracer scope and job restart
+006b2110 ReadExtensionMappingsFromPropFile  # property-file 'extension mapping' array import plus the trailing key variant
+006b2400 FUN_006b2400  # save-area key lookup, 12-byte element collect/destroy loop with the buffer freed through the EA header refcount
+006b2620 FUN_006b2620  # SP::CreateDirectorySave: dir id -> wstring path, 0x168-byte DatabaseDirectoryFiles, extension import, resource-manager insert

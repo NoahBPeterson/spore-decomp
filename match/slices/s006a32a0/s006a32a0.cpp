@@ -280,7 +280,8 @@ typedef IVtRef* (*GetInfoFn)(void* self);  // vfn at info vtbl +0x10
 
 struct Resource {
     virtual void AddRef();          // +0 (slot 0)
-    virtual void Release(int);      // +4 (slot 1)
+    virtual void Release();         // +4 (slot 1)
+    virtual void ReleaseAndFree(int);   // +8 (slot 2)
     void*    mRef;                  // +4
     uint32_t mKey0;                 // +8
     uint32_t mKey1;                 // +0xc
@@ -288,12 +289,21 @@ struct Resource {
     Resource* Ctor(const char* name);   // 0x006a1b90
 };
 
+// Owns a ref-counted object whose Release takes no argument (the editor's
+// generic interface: vtable slot 1 is `void Release()`).
+struct AutoVtRef {
+    IVtRef* mp;
+    AutoVtRef() : mp(0) {}
+    ~AutoVtRef() { if (mp) mp->Release(); }
+    IVtRef** operator&() { return &mp; }
+};
+
 template<class T>
 struct Ref {
     T* mp;
     void* mk;
     Ref(T* p) : mp(p), mk(0) {}
-    ~Ref() { if (mp) mp->Release(1); }
+    ~Ref() { if (mp) mp->ReleaseAndFree(1); }
     T* operator->() const { return mp; }
     T* release() { T* t = mp; mp = 0; return t; }
 };
@@ -312,23 +322,24 @@ struct cPropertyListCommand {
 // @ 0x006a3ac0
 void cPropertyListCommand::Execute(void* args)
 {
-    char* edi = (char*)((EA::ArgScript::cArguments*)args)->MainArguments(1);
-    Ref<Resource> pl((Resource*)EA_Alloc2(0x38, (const char*)0x13ebc58, 0, 0, 0, 0));
+    const char** edi = (const char**)((EA::ArgScript::cArguments*)args)->MainArguments(1);
+    AutoVtRef pl;
+    pl.mp = (IVtRef*)EA_Alloc2(0x38, (const char*)0x13ebc58, 0, 0, 0, 0);
     if (pl.mp)
-        pl.mp = (Resource*)FUN_006a1b90(pl.mp, *(const char**)edi);
+        pl.mp = (IVtRef*)FUN_006a1b90(pl.mp, edi[0]);
     Resource* old = (Resource*)mPropList;
-    if (pl.mp != old) {
+    if (pl.mp != (IVtRef*)old) {
         if (pl.mp)
-            pl.mp->AddRef();
+            pl.mp->Slot0();
         mPropList = pl.mp;
         if (old)
-            old->Release(1);
+            old->Release();
     }
     unsigned char buf[0xc];
     *(void**)&buf[0] = 0;
     *(void**)&buf[4] = 0;
     *(unsigned int*)&buf[8] = 0;
-    FUN_0068d5a0(buf, *(unsigned int*)mTxn, 0xb1b104);
+    FUN_0068d5a0(buf, (unsigned)edi[0], 0xb1b104);
     unsigned int* dst = (unsigned int*)((char*)mPropList + 8);
     dst[0] = *(unsigned int*)&buf[0];
     dst[1] = *(unsigned int*)&buf[4];
@@ -340,7 +351,7 @@ void cPropertyListCommand::Execute(void* args)
     }
     void* owner = mOwner;
     ((void (__thiscall*)(void*, void*, const void*))(*(void***)owner)[0x90 / 4])(owner, this, (const void*)0x1408db4);
-    pl.release();
+    pl.mp = 0;      // the command now owns the property list
 }
 
 // @ 0x006a3c30
@@ -349,12 +360,10 @@ void cPropertyListCommand::OnEndParse(int b)
     if (b == 0) {
         ++*(unsigned int*)((char*)mPropList + 0x34);
         void* p = FUN_0067dcd0();
-        void* prop = 0;
-        if (((bool (__thiscall*)(void*, void*, void**))(*(void***)p)[0x14 / 4])(p, (char*)mPropList + 8, &prop))
-            FUN_006ad050(prop);
+        AutoVtRef prop;
+        if (((bool (__thiscall*)(void*, void*, IVtRef**))(*(void***)p)[0x14 / 4])(p, (char*)mPropList + 8, &prop))
+            FUN_006ad050(prop.mp);
         FUN_006ad010(mPropList);
-        if (mPropList)
-            (*(IVtRef**)mPropList)->Release();
     }
     void* pl = mPropList;
     if (pl) {
@@ -372,13 +381,12 @@ struct cPropsSelf {
 // @ 0x006a3dd0
 void cPropsSelf::Apply(void* prop)
 {
-    unsigned int c;
     if (prop == 0)
-        goto cleanup;
+        return;
     if (!((bool (__thiscall*)(void*, unsigned))(*(void***)prop)[0x1c / 4])(prop, 0xb2cccb)) {
         if (*(void**)((char*)prop + 0x30))
             FUN_006a1710(prop, 0);
-        goto cleanup;
+        return;
     }
     {
         void* var = ((void* (__thiscall*)(void*, unsigned))(*(void***)prop)[0x28 / 4])(prop, 0xb2cccb);
@@ -392,31 +400,25 @@ void cPropsSelf::Apply(void* prop)
         } else {
             data = FUN_006bb640();
         }
-        unsigned int lo = *(unsigned int*)((char*)data + 4);
+        AutoVtRef sub;
+        sub.mp = *(IVtRef**)((char*)data + 4);
         unsigned int a = *(unsigned int*)data;
         unsigned int hi = *(unsigned int*)((char*)data + 8);
         if (hi == 0)
             hi = *(unsigned int*)((char*)prop + 0x10);
-        unsigned int tmp = lo;
         void* cur = *(void**)((char*)prop + 0x30);
         if (cur && *(unsigned int*)((char*)cur + 8) == a
             && *(unsigned int*)((char*)cur + 0xc) == 0xb1b104
             && *(unsigned int*)((char*)cur + 0x10) == hi)
-            goto cleanup;
+            return;
         {
-            void* out = 0;
+            AutoVtRef out;
             void* vt = *(void**)this;
-            if (((bool (__thiscall*)(void*, unsigned, unsigned, void**))(*(void***)vt)[0x2c / 4])(this, a, hi, &out)) {
-                FUN_006a1710(prop, out);
+            if (((bool (__thiscall*)(void*, unsigned, unsigned, IVtRef**))(*(void***)vt)[0x2c / 4])(this, a, hi, &out)) {
+                FUN_006a1710(prop, out.mp);
             }
-            if (tmp)
-                ((IVtRef*)tmp)->Release();
         }
     }
-cleanup:
-    c = *(unsigned int*)((char*)prop + 0x30);
-    if (c)
-        ((IVtRef*)c)->Release();
 }
 
 
@@ -541,7 +543,7 @@ struct InfoObj {
 template <class T> struct AutoPtr {
     T* mp;
     AutoPtr(T* p) : mp(p) {}
-    ~AutoPtr() { if (mp) mp->Release(1); }
+    ~AutoPtr() { if (mp) mp->ReleaseAndFree(1); }
     T* operator->() const { return mp; }
     T* release() { T* t = mp; mp = 0; return t; }
 };
@@ -551,6 +553,7 @@ struct cPropertyManager2 {
     bool CreateResource(int* info, void** out, int a, int b);   // 0x006a3330
 };
 
+// @ 0x006a3330
 bool cPropertyManager2::CreateResource(int* info, void** out, int a, int b)
 {
     AutoPtr<Resource> pl((Resource*)EA_Alloc(0x38, (const char*)0x1408b44, 0, 0, 0, 0));
@@ -694,20 +697,28 @@ unsigned int __stdcall FUN_006a4190(void* a, cArgParser* p)
 }
 
 // ---------------------------------------------------------------------------
-// 006a4240 / 006a42d0  hashtable lookups
+// 006a4240 / 006a42d0 / 006a43b0 / 006a4450  EA::HashMap<uint64,int>
+// The manager keeps one of these at +0x74: bucket array at +4, bucket count at
+// +8, element count at +0xc. A node carries an 8-byte key, a ref to the value
+// and a next link at +0x10.
 // ---------------------------------------------------------------------------
-// An opaque intrinsic-map-like hashtable at cPropertyManager+0x74. Lookup takes
-// a composed 64-bit key and returns an iterator (pointer to a bucket link).
-struct THashTable {
-    uint8_t  pad0[4];
-    uint8_t** mpBucketArray;   // +0x4  (points at array of bucket-end pointers)
-    uint32_t  mBucketIndex;    // +0x8
+struct HashNode {
+    uint32_t  mKey0;        // +0
+    uint32_t  mKey1;        // +4
+    IVtRef*   mpRef;        // +8
+    uint32_t  mPadC;        // +0xc
+    HashNode* mpNext;       // +0x10
 };
-// 0x0041fb20: Find(outIter, key, table) — thiscall on the table.
-struct THashFind { void Find(void* out, const void* key); };
-inline void poi_ht_find(void* out, const void* key, void* table) {
-    ((THashFind*)table)->Find(out, key);
-}
+
+struct HashMap8 {
+    void*      mpVt;            // +0
+    HashNode** mppBuckets;      // +4
+    uint32_t   mBucketCount;    // +8
+    uint32_t   mSize;           // +0xc
+    void Find(HashNode** out, const void* key);              // 0x0041fb20
+    int  Erase(const uint32_t* key);                         // 0x006a43b0
+    int* EraseNode(void** out, void* node, void** root);     // 0x006a4450
+};
 
 // thiscall wrappers exposing the +0x74 hashtable at the observed offsets.
 struct cPropertyManagerThunk {
@@ -719,77 +730,106 @@ struct cPropertyManagerThunk {
 bool cPropertyManagerThunk::HasKey(unsigned int a, unsigned int b)
 {
     char* const base = (char*)this;
-    THashTable* const ht = (THashTable*)(base + 0x74);
-    struct Key64 { unsigned int lo, hi; } key;
-    key.lo = a;
-    key.hi = b;
-    void* it;
-    poi_ht_find(&it, &key, ht);
-    if (it != (void*)ht->mpBucketArray[ht->mBucketIndex])
-        return *(unsigned int*)((char*)it + 8) != 0;
+    HashMap8* const ht = (HashMap8*)(base + 0x74);
+    // one scratch block: the 8-byte lookup key, the iterator, the 12-byte
+    // {key, property-list magic, property} query handed to the manager object
+    struct Scratch {
+        uint64_t  key;          // +0
+        HashNode* it;           // +8
+        uint32_t  pad;          // +0xc
+        uint32_t  query[3];     // +0x10
+    } s;
+    s.key = (uint64_t)a | ((uint64_t)b << 32);
+    ht->Find(&s.it, &s.key);
+    if (s.it != ht->mppBuckets[ht->mBucketCount])
+        return s.it->mpRef != 0;
     void* const obj = *(void**)(base + 0x18);
-    struct KeyC { unsigned int a, magic, b; } k;
-    k.a = a; k.magic = 0xb1b104; k.b = b;
-    return ((bool (__thiscall*)(void*, void*, int))((void**)*(void**)obj)[3])(obj, &k, 0);
+    s.query[1] = 0xb1b104;
+    s.query[2] = b;
+    s.query[0] = a;
+    return ((bool (__thiscall*)(void*, uint32_t*, int, int, int, int, int))
+            ((void**)*(void**)obj)[3])(obj, s.query, 0, 0, 0, 0, 0);
 }
 
 // @ 0x006a42d0
 bool cPropertyManagerThunk::ReleaseKeys(int n, const void* values)
 {
     char* const base = (char*)this;
-    THashTable* const ht = (THashTable*)(base + 0x74);
+    HashMap8* const ht = (HashMap8*)(base + 0x74);
+    struct Scratch {
+        uint64_t  key;
+        HashNode* it;
+        HashNode* end;
+    } s;
+    s.end = ht->mppBuckets[ht->mBucketCount];
     const unsigned char* v = (const unsigned char*)values;
     for (int i = 0; i < n; ++i, v += 0xc) {
-        struct Key64 { unsigned int lo, hi; } key;
-        key.lo = *(const unsigned int*)(v + 0);
-        key.hi = *(const unsigned int*)(v + 8);
-        void* it;
-        poi_ht_find(&it, &key, ht);
-        if (it != (void*)ht->mpBucketArray[ht->mBucketIndex]) {
-            long* const rc = (long*)*(void**)((char*)it + 8);
-            if (rc) {
-                long old = _InterlockedExchangeAdd(rc + 1, 0);
-                if ((old >> 1) - 1 > 1)
-                    return true;
-            }
+        s.key = (uint64_t)*(const uint32_t*)(v + 0)
+              | ((uint64_t)*(const uint32_t*)(v + 8) << 32);
+        ht->Find(&s.it, &s.key);
+        if (s.it != s.end && s.it->mpRef) {
+            HashNode* it = s.it;
+            long old = _InterlockedExchangeAdd((long*)it->mpRef + 1, 0);
+            if ((old >> 1) - 1 > 1)
+                return true;
         }
     }
     return false;
 }
 
-// ---------------------------------------------------------------------------
-// 006a43b0  hashtable erase-by-key
-// ---------------------------------------------------------------------------
-int FUN_006a43b0(char* self, const uint32_t* key)
+// @ 0x006a43b0
+int HashMap8::Erase(const uint32_t* key)
 {
-    uint32_t before = *(uint32_t*)(self + 0xc);
-    uint32_t b = key[0] % *(uint32_t*)(self + 8);
-    uint32_t** slot = (uint32_t**)(*(int*)(self + 4) + b * 4);
+    uint32_t const before = mSize;
+    HashNode** slot = &mppBuckets[key[0] % mBucketCount];
     if (*slot) {
-        // find node then unlink
-        while (*slot) {
-            uint32_t* node = *slot;
-            if (node[0] == key[0] && node[1] == key[1]) {
-                *slot = *(uint32_t**)((char*)node + 0x10);
-                if (*(int*)((char*)node + 8))
-                    (**(void (__thiscall***)(void*))(*(int*)((char*)node + 8)))((void*)(*(int*)((char*)node + 8)));
-                EA_Dealloc(node);
-                --*(uint32_t*)(self + 0xc);
+        HashNode* node;
+        for (;;) {
+            node = *slot;
+            if (node->mKey0 == key[0] && node->mKey1 == key[1])
                 break;
-            }
-            slot = (uint32_t**)((char*)node + 0x10);
+            slot = &node->mpNext;
+            if (!*slot)
+                break;
+        }
+        while (*slot) {
+            node = *slot;
+            if (node->mKey0 != key[0] || node->mKey1 != key[1])
+                break;
+            *slot = node->mpNext;
+            if (node->mpRef)
+                node->mpRef->Release();
+            EA_Dealloc(node);
+            --mSize;
         }
     }
-    return (int)(before - *(uint32_t*)(self + 0xc));
+    return (int)(before - mSize);
 }
 
-// ---------------------------------------------------------------------------
-// 006a4450  rbtree erase-node
-// ---------------------------------------------------------------------------
-void* FUN_006a4450(char* tree, void** it, int node, void** root)
+// @ 0x006a4450
+int* HashMap8::EraseNode(void** out, void* node, void** root)
 {
-    (void)tree; (void)it; (void)node; (void)root;
-    return it;
+    void* first = *(void**)((char*)node + 0x10);
+    out[1] = root;
+    *out = first;
+    while (*out == 0) {
+        out[1] = (char*)out[1] + 4;
+        *out = *(void**)out[1];
+    }
+    if (*root == node) {
+        *root = *(void**)((char*)node + 0x10);
+    } else {
+        void* prev = *root;
+        while (*(void**)((char*)prev + 0x10) != node)
+            prev = *(void**)((char*)prev + 0x10);
+        *(void**)((char*)prev + 0x10) = *(void**)((char*)node + 0x10);
+    }
+    IVtRef* ref = *(IVtRef**)((char*)node + 8);
+    if (ref)
+        ref->Release();
+    EA_Dealloc(node);
+    --mSize;
+    return (int*)out;
 }
 
 // ---------------------------------------------------------------------------

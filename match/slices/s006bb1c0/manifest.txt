@@ -10,3 +10,6 @@ slices/s006bb1c0/s006bb1c0.cpp  ??1DebugMessage@@UAE@XZ  006bb690  /O2 /MD /Gy /
 slices/s006bb1c0/s006bb1c0.cpp  ?FUN_006bb7b0@@YAHPBX0@Z        006bb7b0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
 slices/s006bb1c0/s006bb1c0.cpp  ?FUN_006bb830@@YGJPAXPBXPAPAX@Z  006bb830  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
 slices/s006bb1c0/s006bb1c0.cpp  ?FUN_006bba70@@YGJPAXIIIIPAI@Z   006bba70  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+slices/s006bb1c0/s006bb1c0.cpp  ?Destroy@FileListMsg@@QAEPAU1@D@Z  006bbd80  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+slices/s006bb1c0/s006bb1c0.cpp  ?Shutdown@Session@@QAEDXZ  006bbde0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+slices/s006bb1c0/s006bb1c0.cpp  ?EnsureMounted@Session@@QAEDXZ  006bc0f0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE

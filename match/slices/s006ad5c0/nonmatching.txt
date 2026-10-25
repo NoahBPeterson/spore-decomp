@@ -1,16 +1,16 @@
 # complete behaviourally-equivalent source, not byte-exact (yet)
 # slice s006ad5c0 (resource manager / LRU cache module)
 # flags "/O2 /MD /Gy /EHsc /TP"; diff byte counts from `run_all.py`
-006ad5c0  330  LRU-cache flush (EASTL vector build + callback filter + GC); skeleton only, see partial.txt
+006ad5c0  461  LRU-cache flush: complete (bucket walk, tri-state ref filter, callback filter, per-entry release + RegTable::erase append, lock xadd count edits, OnRegister loop, AutoRefVec teardown); the original's local is a real eastl::vector whose EH frame replaces the /GS cookie cl emits for the raw local, so the tail differs and cl keeps the loop body in different registers (313 vs 507 bytes)
 006ada20  157  cLRUCache::Do resize/GC: body mirrors the original but the /GS- `mov fs:[0],esp` EH frame is not reproduced
 006adb40  122  singleton ctor: EH-guard frame kept across the 0x6ad890 temp; cl drops/reshapes it under /O2 /O1 /Ox /Os
 006adc90   46  singleton creation: dst-dtor EH cleanup frame for `if (p) X(p)` not reproduced
 006add30   37  SList::Init: body byte-identical; the 3-DWORD fs:[0] EH prolog + `[esp+4]=esi` is missing (non-POD guard yields the /GS form instead)
-006adda0   62  pool node alloc: -> nonmatching, see partial.txt (approximate)
+006adda0  92  pool node alloc: complete (operator new 0x40 in the "App" zone, *n = a[0], FUN_006add30(n+4, a+4) sub-list init, *(n+0x3c) = 0); the original's old-style fs:[0] SEH prolog is not reproduced and cl inlines the FUN_006add30 call; difftest WEAK 170 valid / 100% cov (inline-calls tolerated)
 006adee0  142  hash_map::operator[] find+insert; skeleton, see partial.txt
 006ae3f0   72  RegistryHost::Find: /O2 body + EH cleanup; tail/dtor masks differ
 006ae590   85  rbtree::Remove: original spills the call result to the outgoing-arg slot; cl hoists it into ebx (/O1 /O2 /Ox /Oy /Ob1)
-006ae880   88  RequestComplete: iterator erase + EH cleanup frame; skeleton, see partial.txt
+006ae880  145  RequestComplete: complete (copy p[0..2] into rec+8/0xc/0x10, hand rec to ResourceMan::GetManager's vtable+0x6c with flag 1, lock this+0x10, map find at this+0x40, erase via FUN_006ae590 when found != this+0x44, unlock); difftest PASS 233 valid / 88.5% cov; the SEH prolog and frame layout differ
 006ad800   10  loop prologue: cl tests the parameter directly in edi instead of eax/shrink-wrapped prologue
 006ad890   93  ctor: now __fastcall(self, unused, a) so `a` is the 1-stack-arg (ret 4) the original reads at [esp+0x14] and the ctor returns this in eax; EH prologue + /arch:SSE constant-pool (0x1485720/0x1470f1c) loads not reproduced; difftest PASS 1200 valid / 100% cov
 006adbf0   73  scalar deleting dtor: now __fastcall(self, unused, flag) so the delete flag comes from the stack (ret 4) instead of edx (old form read edx=0x13 and called zone_delete on a stack object) and the dtor returns this; old-style EH prolog not reproduced; difftest PASS 812 valid / 100% cov
@@ -23,4 +23,4 @@
 006ae2f0   13  callback setter: extra pop esi moved to the end of the function
 006ae4c0   31  getter: duplicated tail / xor eax scheduling differs
 006ae510   88  Resource::Async ctor: source comes from the stack (ret 4) and the ctor returns this; EH prologue + the xchg zero store at +8 not reproduced; difftest PASS 966 valid / 100% cov
-006ae660    -  pool node alloc from freelist: approximate, see partial.txt
+006ae660  126  pool node alloc from freelist: complete (pop the +0x18 free list, else operator new *(self+0x28) in the "App" zone, build the +0x10 sub-object by copying four dwords and AddRef'ing the embedded ref, return the node); __thiscall ret 4; difftest PASS 343 valid / 100% cov; the SEH prolog and register allocation differ from the original
