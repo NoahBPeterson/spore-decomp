@@ -71,23 +71,32 @@ public:
     tSlot24* mpCapacity;                                 // +0x08
 };
 
-// Ref-counted object used by the 16-byte slot vector (Release lives in slot +0x08).
+// Ref-counted object used by the 16-byte slot vector: the created tool / model.
 class cRefObj16 {
 public:
     virtual void v000();                                 // +0x00
-    virtual void v004();                                 // +0x04
+    virtual void AddRef();                               // +0x04
     virtual void Release();                              // +0x08
+    u8    pad004[0x144 - 0x04];                          // +0x04 .. +0x143
+    float m_field144;                                    // +0x144
+    float m_field148;                                    // +0x148
+    float m_field14c;                                    // +0x14c
+    u8    m_field150;                                    // +0x150
 };
 
 struct tSlot16 {
     cRefObj16* mpObj;                                    // +0x00
-    u8         pad004[0x0c];                             // +0x04 .. +0x0f
+    u32        mIndex;                                   // +0x04
+    u32        mParts;                                   // +0x08
+    u8         mFlags;                                   // +0x0c
+    u8         pad00d[3];                                // +0x0d .. +0x0f
 };
 
 // Vector of 16-byte slots (erase helper at 0x00ca9cc0).
 class cSlotVector16 {
 public:
     tSlot16* Erase(tSlot16* pFirst, tSlot16* pLast);     // 0x00ca9cc0
+    void     Insert(tSlot16* pWhere, tSlot16* pValue);   // 0x00ca9d20
 
     tSlot16* mpBegin;                                    // +0x00
     tSlot16* mpEnd;                                      // +0x04
@@ -131,6 +140,94 @@ public:
     virtual void v01c();
     virtual void v020();
     virtual char HasProperty(u32 key, Property** out);   // +0x24
+};
+
+// 12-byte resource key handed to the asset manager.
+struct ResourceKey {
+    u32 m0;
+    u32 m1;
+    u32 m2;
+};
+
+// 12-byte weapon-part record used for the tool lookup.
+struct WeaponParts {
+    u32 m0;
+    u32 m1;
+    u32 m2;
+};
+
+// Asset interface: AddRef +0x00, Release +0x04, metadata lookup +0x0c.
+class cAsset {
+public:
+    virtual void AddRef();                               // +0x00
+    virtual void Release();                              // +0x04
+    virtual void v008();                                 // +0x08
+    virtual void* GetSub(u32 key);                       // +0x0c
+};
+
+// Asset metadata: AddRef +0x00, Release +0x04.
+class cAssetMetadata {
+public:
+    virtual void AddRef();                               // +0x00
+    virtual void Release();                              // +0x04
+};
+
+// Resource manager returned by 0x0067dcd0.
+class cAssetManager {
+public:
+    virtual void v000(); virtual void v004(); virtual void v008();
+    virtual char GetAsset(ResourceKey* key, cAsset** out,
+                          int a4, int a5, int a6, int a7);   // +0x0c
+};
+
+// Property manager returned by 0x0067de30.
+class cPropertyManager {
+public:
+    virtual void v000(); virtual void v004(); virtual void v008(); virtual void v00c();
+    virtual void v010(); virtual void v014(); virtual void v018(); virtual void v01c();
+    virtual void v020(); virtual void v024(); virtual void v028(); virtual void v02c();
+    virtual char GetProperty(u32 key, cPropertyList** out);     // +0x30
+};
+
+// AddRef / Release via the appropriate vtable slot (cPropertyList releases in slot 1).
+template <class T> inline void RefAddRef(T* p) { p->AddRef(); }
+template <class T> inline void RefRelease(T* p) { p->Release(); }
+inline void RefAddRef(cPropertyList* p) {
+    ((void (__thiscall*)(void*))((void**)p)[0])(p);
+}
+inline void RefRelease(cPropertyList* p) {
+    ((void (__thiscall*)(void*))((void**)p)[1])(p);
+}
+
+// EA::AutoRefCount-style intrusive pointer.
+template <class T>
+struct AutoRef {
+    T* mpObject;
+
+    AutoRef() : mpObject(0) {}
+    ~AutoRef() { if (mpObject) RefRelease(mpObject); }
+
+    T** AsPointer() {
+        if (mpObject) {
+            T* pOld = mpObject;
+            mpObject = 0;
+            RefRelease(pOld);
+        }
+        return &mpObject;
+    }
+
+    T* get() const { return mpObject; }
+    T* operator->() const { return mpObject; }
+
+    AutoRef& operator=(T* pObject) {
+        if (pObject != mpObject) {
+            T* pOld = mpObject;
+            if (pObject) RefAddRef(pObject);
+            mpObject = pObject;
+            if (pOld) RefRelease(pOld);
+        }
+        return *this;
+    }
 };
 
 // Holder hanging off a game object; the live property list sits at +0x90.
@@ -200,7 +297,10 @@ struct cVehicle {
     void**          m_vtbl;                              // +0x000
     u8              m_pad004[0x34 - 0x04];               // +0x004
     cVehicleSpatial m_spatial;                           // +0x034
-    u8              m_pad038[0xd0 - 0x38];               // +0x038
+    u8              m_pad038[0xc4 - 0x38];               // +0x038 .. +0xc3
+    u32             m_fieldC4;                           // +0x0c4
+    u8              m_padC8[0xcc - 0xc8];                // +0x0c8 .. +0xcb
+    u32             m_fieldCC;                           // +0x0cc
     cPropHolder*    m_pPropHolder;                       // +0x0d0
     u8              m_padD4[0x218 - 0xd4];               // +0x0d4
     float           m_field218;                          // +0x218
@@ -291,12 +391,13 @@ extern "C" {
     char  FUN_006a0ae0();                                   // 0x006a0ae0  reserve
     void  FUN_0040cf10();                                   // 0x0040cf10  GetPropertyT<int>
     void  FUN_00423650();                                   // 0x00423650  eastl wstring assign
-    int   FUN_0067dcd0();                                   // 0x0067dcd0  GetManager
+    int   FUN_0067dcd0();                                   // 0x0067dcd0  ResourceManager::GetManager
     void* FUN_0067de30();                                   // 0x0067de30  PropertyManager
     u32   FUN_00b5b800();                                   // 0x00b5b800  GetCurrentGameMode
-    void* FUN_00b3d390(void* a, void* b);                   // 0x00b3d390  vector erase
+    void* FUN_00b3d390();                                   // 0x00b3d390  cSPToolManager::Get
     void  FUN_0104e340();                                   // 0x0104e340  CreateToolFromToolID
     void  FUN_00ceec10();                                   // 0x00ceec10
+    const wchar_t* FUN_00414e10();                          // 0x00414e10  cAssetMetadata::GetName
     void  FUN_00c893f0();                                   // 0x00c893f0  cSpatialObject::func93F0
     void  FUN_00c8a550();                                   // 0x00c8a550  cSpatialObject::LoadModel
     void  FUN_00c9f650();                                   // 0x00c9f650
@@ -304,6 +405,9 @@ extern "C" {
     extern float DAT_0157c714;                              // 0x0157c714  1.0f
     extern float DAT_0157c718;                              // 0x0157c718  1.0f
     extern float DAT_0157c71c;                              // 0x0157c71c  1.0f
+    extern float DAT_0157c708;                              // 0x0157c708  1.0f  game-mode scale
+    extern float HK_REAL_ONE;                               // 0x01485720  1.0f
+    extern float HK_REAL_NEG_ONE;                           // 0x013eb1bc  -1.0f
 }
 
 // Convenience call shims with the real conventions.
@@ -321,16 +425,16 @@ inline char  Call693e10(cVarListSerializer* s, void* stream) {
     return ((char (__thiscall*)(cVarListSerializer*, void*))FUN_00693e10)(s, stream);
 }
 inline void  Call6a1400(void* pl, u32 key, WString* out) {
-    ((void (__thiscall*)(void*, u32, WString*))FUN_006a1400)(pl, key, out);
+    ((void (__cdecl*)(void*, u32, WString*))FUN_006a1400)(pl, key, out);
 }
 inline char  Call6a07d0(void* pl, u32 key, int* count, int** out) {
-    return ((char (__thiscall*)(void*, u32, int*, int**))FUN_006a07d0)(pl, key, count, out);
+    return ((char (__cdecl*)(void*, u32, int*, int**))FUN_006a07d0)(pl, key, count, out);
 }
-inline char  Call6a0ae0(void* pl, u32 key, void* a, void* b) {
-    return ((char (__thiscall*)(void*, u32, void*, void*))FUN_006a0ae0)(pl, key, a, b);
+inline char  Call6a0ae0(void* pl, u32 key, int* count, void** out) {
+    return ((char (__cdecl*)(void*, u32, int*, void**))FUN_006a0ae0)(pl, key, count, out);
 }
 inline void  Call40cf10(void* pl, u32 key, void* out) {
-    ((void (__thiscall*)(void*, u32, void*))FUN_0040cf10)(pl, key, out);
+    ((void (__cdecl*)(void*, u32, void*))FUN_0040cf10)(pl, key, out);
 }
 inline void  Call423650(WString* s, const wchar_t* first, const wchar_t* last) {
     ((void (__thiscall*)(WString*, const wchar_t*, const wchar_t*))FUN_00423650)(s, first, last);
@@ -344,15 +448,15 @@ inline void  CallC9f650(void* self, Vec3* out) {
 inline char  CallC8a550(void* self, int modelType) {
     return ((char (__thiscall*)(void*, int))FUN_00c8a550)(self, modelType);
 }
-inline void  CallCeec10(void* a1, float a2, float a3, float a4, void* a5, void* a6, void* a7, void* a8) {
-    ((void (__thiscall*)(void*, float, float, float, void*, void*, void*, void*))FUN_00ceec10)
-        (a1, a2, a3, a4, a5, a6, a7, a8);
+inline void  CallCeec10(u32 faction, float a2, float a3, float a4, float* a5, float* a6, float* a7) {
+    ((void (__thiscall*)(void*, u32, float, float, float, float*, float*, float*))FUN_00ceec10)
+        ((void*)0x169c9c8, faction, a2, a3, a4, a5, a6, a7);
 }
 inline void  Call6a0ca0(void* pl, u32 key, int n, void* v) {
     ((void (__thiscall*)(void*, u32, int, void*))FUN_006a0ca0)(pl, key, n, v);
 }
-inline void  Call104e340(void* mgr, u32 toolID) {
-    ((void (__thiscall*)(void*, u32))FUN_0104e340)(mgr, toolID);
+inline char  Call104e340(void* mgr, u32* pToolID, void** outTool) {
+    return ((char (__thiscall*)(void*, u32*, void**))FUN_0104e340)(mgr, pToolID, outTool);
 }
 
 // Vtable dispatch helpers.
@@ -494,180 +598,178 @@ void __fastcall SP_cVehicle_ReadWeaponsFromPropList(cVehicle* this_)
     CallC9f250(this_);
     this_->m_slotsC64.Erase(this_->m_slotsC64.mpBegin, this_->m_slotsC64.mpEnd);
 
-    cPropHolder* holder = propHolder(this_);
-    if (holder->mpPropertyList == 0)
+    if (this_->m_pPropHolder->mpPropertyList == 0)
         return;
 
-    void* resMgr = (void*)FUN_0067dcd0();
+    AutoRef<cAsset> asset;
+    AutoRef<cAssetMetadata> named;
+    cAssetManager* mgr = (cAssetManager*)FUN_0067dcd0();
 
-    // Resolve the named weapon; otherwise read the name property into the string at +0xcc8.
-    {
-        void* holder0 = 0;
-        u32 tag = 0x30bdee3;
-        char found = ((char (__thiscall*)(void*, void**, u32*))VFN(resMgr)[0x0c / 4])
-            (resMgr, &holder0, &tag);
-        void* named = 0;
-        if (found != 0 && holder0 != 0)
-            named = (void*)((void* (__thiscall*)(void*, u32))VFN(holder0)[0x0c / 4])(holder0, 0x30bdee3);
-        if (found != 0 && holder0 != 0 && named != 0) {
-            ((void (__thiscall*)(void*))VFN(named)[0])(named);
-            wchar_t* name = (wchar_t*)((void* (__thiscall*)(void*))VFN(named)[0x0c / 4])(named);
-            const wchar_t* end = name;
-            while (*end != 0)
-                ++end;
-            Call423650(&this_->m_nameCC8, name, end);
-        } else {
-            Call6a1400(holder->mpPropertyList, 0x043afa7e, &this_->m_nameCC8);
-        }
+    ResourceKey key;
+    key.m0 = this_->m_fieldC4;
+    key.m1 = 0x30bdee3;
+    key.m2 = this_->m_fieldCC;
+
+    cAssetMetadata* meta;
+    if (mgr->GetAsset(&key, asset.AsPointer(), 0, 0, 0, 0) &&
+        asset.get() != 0 &&
+        (meta = (cAssetMetadata*)asset->GetSub(0x30bdee3)) != 0) {
+        named = meta;
+        const wchar_t* name = ((const wchar_t* (__thiscall*)(void*))FUN_00414e10)(meta);
+        int len = 0;
+        while (name[len] != 0)
+            ++len;
+        Call423650(&this_->m_nameCC8, name, name + len);
+    } else {
+        Call6a1400(this_->m_pPropHolder->mpPropertyList, 0x043afa7e, &this_->m_nameCC8);
     }
 
-    cPropertyList* pl = holder->mpPropertyList;
-
     Property* prop;
-    prop = 0;
-    if (pl != 0 && pl->HasProperty(0x720be500, &prop) && prop->mType == 0x0d)
+    if (this_->m_pPropHolder->mpPropertyList != 0 &&
+        this_->m_pPropHolder->mpPropertyList->HasProperty(0x720be500, &prop) &&
+        prop->mType == 0x0d)
         this_->m_fieldC58 = *prop->GetFloat();
-    prop = 0;
-    if (pl != 0 && pl->HasProperty(0x720be501, &prop) && prop->mType == 0x0d)
+    if (this_->m_pPropHolder->mpPropertyList != 0 &&
+        this_->m_pPropHolder->mpPropertyList->HasProperty(0x720be501, &prop) &&
+        prop->mType == 0x0d)
         this_->m_fieldC50 = *prop->GetFloat();
-    prop = 0;
-    if (pl != 0 && pl->HasProperty(0x720be502, &prop) && prop->mType == 0x0d)
+    if (this_->m_pPropHolder->mpPropertyList != 0 &&
+        this_->m_pPropHolder->mpPropertyList->HasProperty(0x720be502, &prop) &&
+        prop->mType == 0x0d)
         this_->m_fieldC54 = *prop->GetFloat();
-    prop = 0;
-    if (pl != 0 && pl->HasProperty(0x46d0560, &prop) && prop->mType == 0x0a)
+    if (this_->m_pPropHolder->mpPropertyList != 0 &&
+        this_->m_pPropHolder->mpPropertyList->HasProperty(0x46d0560, &prop) &&
+        prop->mType == 0x0a)
         this_->m_fieldD64 = *prop->GetUInt();
-    prop = 0;
-    if (pl != 0 && pl->HasProperty(0x46d0572, &prop) && prop->mType == 0x0d)
+    if (this_->m_pPropHolder->mpPropertyList != 0 &&
+        this_->m_pPropHolder->mpPropertyList->HasProperty(0x46d0572, &prop) &&
+        prop->mType == 0x0d)
         this_->m_fieldD68 = *prop->GetFloat();
-    prop = 0;
-    if (pl != 0 && pl->HasProperty(0x5b567d1, &prop) && prop->mType == 0x0a)
+    if (this_->m_pPropHolder->mpPropertyList != 0 &&
+        this_->m_pPropHolder->mpPropertyList->HasProperty(0x5b567d1, &prop) &&
+        prop->mType == 0x0a)
         this_->m_fieldAf8 = *prop->GetUInt();
 
     if (this_->m_factionB1c == 0) {
-        this_->m_field224 = ((((u32)(u8)this_->m_fieldAf8) & 4) | 10) >> 1;
+        this_->m_field224 = (((u32)(u8)this_->m_fieldAf8 & 4) | 10) >> 1;
     }
 
-    Vec3 mount;
-    CallCeec10(this_, this_->m_fieldC50, this_->m_fieldC54, this_->m_fieldC58,
-               &mount, 0, 0, 0);
+    float mountY;                                        // S+0x10 (facing out)
+    float mountX;                                        // S+0x24
+    float mountZ;                                        // S+0x2c
+    CallCeec10(this_->m_factionB1c, this_->m_fieldC50, this_->m_fieldC54, this_->m_fieldC58,
+               &mountX, &mountZ, &mountY);
 
     cVehicleSpatial* sp = &this_->m_spatial;
-    this_->m_fieldC5c = mount.x;
+    this_->m_fieldC5c = mountX;
 
-    float face = ((float (__thiscall*)(cVehicleSpatial*))sp->mpVtbl[0xc8 / 4])(sp);
-    if (face == this_->m_field218) {
-        float cur = ((float (__thiscall*)(cVehicleSpatial*))sp->mpVtbl[0xc8 / 4])(sp);
-        if (mount.y > cur)
-            ((void (__thiscall*)(cVehicleSpatial*, float, int))sp->mpVtbl[0xc4 / 4])(sp, mount.y, 0);
-    }
-    this_->m_field218 = mount.y;
+    if (((float (__thiscall*)(cVehicleSpatial*))sp->mpVtbl[0xc8 / 4])(sp) == this_->m_field218 ||
+        mountY < ((float (__thiscall*)(cVehicleSpatial*))sp->mpVtbl[0xc8 / 4])(sp))
+        ((void (__thiscall*)(cVehicleSpatial*, float, int))sp->mpVtbl[0xc4 / 4])(sp, mountY, 0);
+    this_->m_field218 = mountY;
 
-    if ((u32)FUN_00b5b800() == 0x01654c10u) {
-        this_->m_field218 = this_->m_field218 * 1.0f;
-    }
+    if (FUN_00b5b800() == 0x01654c10u)
+        this_->m_field218 = this_->m_field218 * DAT_0157c708;
 
     {
         float f540 = this_->m_field540;
         float f534 = this_->m_field534;
-        this_->m_field534 = mount.z;
-        this_->m_fieldB18 = mount.z;
-        if (f540 == -1.0f) {
+        this_->m_field534 = mountZ;
+        this_->m_fieldB18 = mountZ;
+        if (f540 == HK_REAL_NEG_ONE) {
         doClamp:
             this_->m_field540 = ((float (__thiscall*)(void*))VFN(&this_->m_weapon508)[0x58 / 4])
                 (&this_->m_weapon508);
         } else {
             float denom = f534;
             if (denom <= 0.0f)
-                denom = 1.0f;
-            float nv = (f540 / denom) * mount.z;
+                denom = HK_REAL_ONE;
+            float nv = (f540 / denom) * mountZ;
             this_->m_field540 = nv;
-            if (nv > mount.z)
+            if (nv > mountZ)
                 goto doClamp;
         }
     }
 
-    // Behaviour-tree-driven part selection.
-    {
-        void* pm = FUN_0067de30();
-        int bee = 0;
-        char ok = ((char (__thiscall*)(void*, u32, void*))VFN(pm)[0x30 / 4])(pm, 0xa4c2f6bd, &bee);
-        if (ok != 0) {
-            u32 key = 0;
-            switch (this_->m_factionB1c) {
-            case 0: key = 0x97e02ab9; break;
-            case 1: key = 0xc930af25; break;
-            case 2: key = 0xc9ce9128; break;
-            default: break;
-            }
-            if (this_->m_factionB1c <= 2)
-                Call40cf10((void*)bee, key, &bee);
+    AutoRef<cPropertyList> propList;
+    cPropertyManager* pm = (cPropertyManager*)FUN_0067de30();
+    float scale = HK_REAL_ONE;
+    if (pm->GetProperty(0xa4c2f6bd, propList.AsPointer())) {
+        switch (this_->m_factionB1c) {
+        case 0: Call40cf10(propList.get(), 0x97e02ab9, &scale); break;
+        case 1: Call40cf10(propList.get(), 0xc930af25, &scale); break;
+        case 2: Call40cf10(propList.get(), 0xc9ce9128, &scale); break;
+        default: break;
         }
-        this_->m_fieldC60 = *(float*)&bee;
     }
+    this_->m_fieldC60 = scale;
 
-    // Weapon list: reserve, read the int array, then append a 24-byte slot per entry.
-    {
-        Vec3 scratch;
-        int count = 0;
-        int* array = 0;
-        char ok = Call6a0ae0(pl, 0xf1fae962u, &scratch, 0);
-        if (ok != 0) {
-            if (Call6a07d0(pl, 0x04caccce, &count, &array) == 0)
-                count = 0;
+    int nIter;
+    void* data;
+    if (Call6a0ae0(this_->m_pPropHolder->mpPropertyList, 0xf1fae962, &nIter, &data)) {
+        int count;
+        int* array;
+        if (!Call6a07d0(this_->m_pPropHolder->mpPropertyList, 0x04caccce, &count, &array))
+            count = 0;
 
-            int nIter = (this_->m_modelB20 != 0) ? 1 : 0;
-            if (nIter == 0)
-                nIter = count;
-            for (int i = 0; i < nIter; ++i) {
-                u32 weaponID = (i < count) ? (u32)array[i] : 0;
-                u32 parts[3];
-                parts[0] = 0; parts[1] = 0; parts[2] = 0;
-                if (this_->m_modelB20 == 0) {
-                    for (int slot = 0; slot < 4; ++slot) {
-                        for (int j = 0; j < 4; ++j) {
-                            u32 idx = kWeaponTable[j + slot * 4];
-                            const u32* rec = &kWeaponParts[idx * 3];
-                            if (rec[0] == weaponID && rec[1] == 0 && rec[2] == 0) {
-                                parts[0] = rec[0];
-                                parts[1] = rec[1];
-                                parts[2] = rec[2];
-                                goto haveParts;
-                            }
+        if (this_->m_modelB20 != 0)
+            nIter = 1;
+
+        for (int i = 0; i < nIter; ++i) {
+            AutoRef<cRefObj16> tool;
+            u32 weaponID = ((const u32*)data)[i * 3];
+
+            WeaponParts parts;
+            parts.m0 = weaponID;
+            parts.m1 = 0;
+            parts.m2 = 0;
+            if (this_->m_modelB20 == 0) {
+                for (int row = 0; row < 3; ++row) {
+                    for (int col = 0; col < 4; ++col) {
+                        const u32* rec = &kWeaponParts[kWeaponTable[row * 4 + col] * 3];
+                        if (rec[0] == weaponID && rec[1] == 0 && rec[2] == 0) {
+                            if (row != (int)this_->m_factionB1c)
+                                parts = *(const WeaponParts*)
+                                    &kWeaponParts[kWeaponTable[this_->m_factionB1c * 4 + col] * 3];
+                            goto haveParts;
                         }
                     }
-                    {
-                        const u32* rec = &kWeaponParts[kWeaponTable[this_->m_factionB1c * 4] * 3];
-                        parts[0] = rec[0];
-                        parts[1] = rec[1];
-                        parts[2] = rec[2];
-                    }
-                } else {
-                    const u32* rec = &kWeaponParts[kWeaponTable[i + this_->m_factionB1c * 4] * 3];
-                    parts[0] = rec[0];
-                    parts[1] = rec[1];
-                    parts[2] = rec[2];
                 }
-            haveParts:
-                tSlot24* dst = this_->m_slotsB68.mpEnd;
-                if (dst < this_->m_slotsB68.mpCapacity) {
-                    this_->m_slotsB68.mpEnd = dst + 1;
-                    if (dst != 0)
-                        dst->mpObj = 0;
-                } else {
-                    tSlot24 tmp;
-                    tmp.mpObj = 0;
-                    this_->m_slotsB68.Insert(dst, &tmp);
-                }
-                {
-                    tWeaponRec* rec = (tWeaponRec*)(this_->m_slotsB68.mpEnd - 1);
-                    rec->m_id = (u32)i;
-                    rec->m_parts = (i < count) ? parts[0] : 0xffffffffu;
-                    rec->m_flags = 0;
-                }
-                if (array != 0) {
-                    u32 toolID = parts[0];
-                    void* mgr = FUN_00b3d390(&toolID, &toolID);
-                    Call104e340(mgr, toolID);
+                parts = *(const WeaponParts*)
+                    &kWeaponParts[kWeaponTable[this_->m_factionB1c * 4] * 3];
+            }
+        haveParts:
+            tSlot16* first = this_->m_slotsC64.mpEnd;
+            if (first < this_->m_slotsC64.mpCapacity) {
+                this_->m_slotsC64.mpEnd = first + 1;
+                if (first != 0)
+                    first->mpObj = 0;
+            } else {
+                tSlot16 temp;
+                temp.mpObj = 0;
+                this_->m_slotsC64.Insert(first, &temp);
+                if (temp.mpObj != 0)
+                    temp.mpObj->Release();
+            }
+
+            tSlot16* slot = this_->m_slotsC64.mpEnd - 1;
+            slot->mIndex = (u32)i;
+            slot->mParts = (i < count) ? (u32)array[i] : 0xffffffffu;
+            slot->mFlags = 0;
+
+            Call104e340(FUN_00b3d390(), &parts.m0, (void**)tool.AsPointer());
+            if (tool.get() != 0) {
+                tool->m_field144 = mountX;
+                tool->m_field148 = scale;
+                tool->m_field14c = this_->m_fieldC50;
+                tool->m_field150 = (this_->m_factionB1c != 2);
+                tSlot16* last = this_->m_slotsC64.mpEnd - 1;
+                cRefObj16* pOld = last->mpObj;
+                if (tool.get() != pOld) {
+                    tool->AddRef();
+                    last->mpObj = tool.get();
+                    if (pOld != 0)
+                        pOld->Release();
                 }
             }
         }
