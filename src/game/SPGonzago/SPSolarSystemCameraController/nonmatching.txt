@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+01017290 18 SP::cSPCameraControllerSolarSystem::Write: complete behaviour; writer vcall/WriteUint32 scheduling and register choice differ (cVarListSerializer construction identical)
+01017300 13 SP::cSPCameraControllerSolarSystem::Read: complete behaviour; reader vcall + version gate + vector copy identical in shape; version-vcall register choice (eax vs edx) differs
+010175b0 287 table lookup/interpolation source shape; x87 vs SSE math and lookup loop layout differ
+01017790 188 stack-local high/low selection and clamp lowering differ; cl15 branches instead of maxss/minss
+01017bb0 184 sqrtf lowered to external call/SSE while original uses x87 fsqrt; clamp lowering differs
+01017e80 51 b+1.0f lowered via x87 instead of SSE addss; result spill/tail-copy differs
+01018810 2028 ConeTangentSolve complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 2/2 calls (_CIacos, QuaternionRotate), equiv PASS 300 inputs 100% coverage; not exact: x87/SSE operand scheduling and frame of the inlined vector math
+01019090 1831 SP::cSPSpacePlanetCameraController::UpdateYaw complete (29/29 calls, same vtable slots and order; 2186 vs 2226 bytes; equiv PASS 247 valid, 93.7% coverage); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. Not exact: frame 0x38 vs 0x44, register allocation and x87/SSE operand scheduling of the inlined vector math
+01019950 1425 SP::cSPSpacePlanetCameraController::UpdateCameraPitchRotation complete (13/13 calls, same vtable slots and order; 1595 vs 1525 bytes; equiv PASS 390 valid, 100% coverage); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. Not exact: frame/register and x87/SSE operand scheduling of the inlined vector math. Fixed 2026-10-18: x87 sum-of-squares association/order (ax.y^2+(ax.z^2+ax.x^2), q.y^2+(q.z^2+(q.x^2+c^2)), d/l inv) to kill the 7-ulp float-rounding FAIL
+0101fb40 72 complete; second vector resize inlines erase with reassociated pointer math; eax/edx vcall register alternation differs after it
+013a0c40 348 equiv PASS (400 valid, 100.0% cov); not byte-exact (869 vs 878: property-table init field/store scheduling differs). flags /O2 /MD /Gy /TP /arch:SSE

@@ -1,2 +1,2 @@
-01019090 SP::cSPSpacePlanetCameraController::UpdateYaw  # sibling slice s0101d130 names it; keeps the eye direction tangent and applies the yaw input
-01019950 SP::cSPSpacePlanetCameraController::UpdateCameraPitchRotation  # PDB name; pitch lerp/clamp then rotate eye about lookAt
+01019090 ?UpdateYaw@cSPSpacePlanetCameraController_s0101_9090@SP@@QAEXM@Z  # cSPSpacePlanetCameraController_s0101_9090::UpdateYaw migrated from s01019090 (verbatim, slice spelling)
+01019950 ?UpdateCameraPitchRotation@cSPSpacePlanetCameraController_s0101_9090@SP@@QAEXMMPAUVector3@@0@Z  # cSPSpacePlanetCameraController_s0101_9090::UpdateCameraPitchRotation migrated from s01019090 (verbatim, slice spelling)

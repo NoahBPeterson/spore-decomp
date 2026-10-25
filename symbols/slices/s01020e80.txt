@@ -1,8 +1,7 @@
-# va  symbol  # evidence
-01020e80 ?f20e80@Cam@@QAEDHPAH@Z            # ReadProperties message hook (this-4 = cDefaultCameraController)
+01020e80 ?f20e80@Cam@@QAEDHPAH@Z  # Cam::f20e80 migrated from s01020e80 (verbatim, slice spelling)
 01020eb0 ?FUN_01020eb0@@YAXPAXHH@Z          # camera mouse-wheel
 01020fc0 ?FUN_01020fc0@@YAXPAX@Z            # camera ctor tail / MessageServer registration
-01021020 ?FUN_01021020@@YAXPAX@Z            # camera property init
+01021020 ?f21020@Cam@@QAEXXZ  # Cam::f21020 migrated from s01020e80 (verbatim, slice spelling)
 010210a0 ?FUN_010210a0@@YGXH@Z              # PDB SP::cSPLivingUniverse::Write
 010210e0 ?FUN_010210e0@@YAXPAX@Z            # PDB candidate SP::FloodFillPlants
 01021110 ?FUN_01021110@@YAHPAX0@Z           # planet float-order comparator
