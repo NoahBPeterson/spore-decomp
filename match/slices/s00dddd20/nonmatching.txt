@@ -12,6 +12,8 @@
 00dde540  32  cvtss2si zoom expression differs difftest PASS after asm rewrite (400 valid, 100% cov).
 00dde590  11  release: vtable indirection vs tail jmp differs
 00dde7f0  41  x87 easing helper ordering differs difftest PASS after asm rewrite (400 valid, 100% cov).
-00dde860  74  camera per-frame update scheduling differs difftest PASS after asm rewrite (400 valid, 100% cov).
+00dde860  21  camera per-frame update: __stdcall(ms, unused) so the epilogue is ret 8, unsigned ms converted via fild/fadd 2^32; retail batches the three g_cc* SSE chains (all loads, then subs/muls/adds) while ours fuses each chain; difftest PASS (200 valid, 100% cov) under /fp:fast (116 bytes with the default flags).
 00dde900  43  preset init store ordering differs difftest PASS after asm rewrite (400 valid, 100% cov).
 00dde9e0  43  preset reset store ordering differs difftest PASS after asm rewrite (400 valid, 100% cov).
+00dddfd0  408  cGalaxyGameEntryAppMode::Init complete (SimObject allocated on the "Simulator" pool with ctor eax reuse, byte +0x100 cleared, 6 GetPropertyAsString16 copies into manually managed WStringBufs, sim setup, cheat-manager bootstrap); 705 vs 726 bytes under /fp:fast: 0x10 vs 0x14 frame (retail keeps a dead slot), this in ebp vs edi (retail edi/es i), property-call and store scheduling differ; difftest UNSUPPORTED (0/400 inputs valid: fault read/write in callees).
+00dde5d0  381  CamCtl::Integrate complete; 542 vs 536 bytes under /fp:fast: the retail rounds each yaw product/vs add in SSE (mulss/addss) while the x87 pow result keeps ours in extended precision (volatile temporaries force per-op rounding) and the pitch block calls pow before computing the f40-f4c delta; difftest FAIL 4/400 valid inputs, all denormal-range 1-2 ulp float differences (x87 vs SSE denormal handling).

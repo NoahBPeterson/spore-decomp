@@ -16,8 +16,8 @@ extern "C" void* __cdecl SP_CheatManager();                      // 0x67de20
 extern "C" double __cdecl CRT_pow();                             // 0x11e08f0
 extern "C" char  __cdecl FUN_006bb5e0();
 extern "C" char  __cdecl FUN_006a1400(void*, uint32_t, void**);
-extern "C" void  __cdecl FUN_00685520();
-extern "C" void  __cdecl FUN_006895b0();
+extern "C" char  __cdecl FUN_00685520(int mode);
+extern "C" void* __cdecl FUN_006895b0();
 extern "C" void  __cdecl FUN_00de6be0();
 extern "C" void  __cdecl FUN_00de76b0();
 extern "C" void  __cdecl FUN_00ddfec0();
@@ -38,6 +38,7 @@ extern "C" void* __cdecl operator_new_prop();
 // references are masked relocations).
 // ---------------------------------------------------------------------------
 float g_15a3000, g_15a3004, g_15a3008, g_15a3014, g_15a3018, g_15a301c;
+extern float g_neg0p1_13eb964;        // 0x13eb964 = -0.1f (yaw-velocity threshold)
 float g_15a308c, g_15a3090;
 float g_1f4;                          // placeholder
 float g_camera_roll;                  // 0x15a30a0
@@ -194,14 +195,127 @@ void ArgCmd::Parse(void* arg) {
 // ===========================================================================
 //  0x00dddfd0  SP::cGalaxyGameEntryAppMode::Init
 // ===========================================================================
+struct SimObject {                                  // galaxy-entry simulator (0x274 bytes)
+    uint8_t  mPad00[0xf0];
+    void*    mpField0f0;                            // +0x0f0
+    uint8_t  mPad0f4[0x100 - 0xf4];
+    uint8_t  mByte100;                              // +0x100
+    uint8_t  mPad101[0x1ec - 0x101];
+    uint32_t mField1ec;                             // +0x1ec
+    SimObject* ctor();                              // 0x00de6be0 (returns this)
+    void setup();                                   // 0x00de76b0
+};
+
+struct PropTarget {                                 // property target object at 0x15a2ff8
+    char Fetch(int id, int value);                  // 0x00ddddf0
+};
+
+struct WStringBuf {                                 // eastl string: begin / end / capacity
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpEndCap;
+    void assign(wchar_t* first, wchar_t* last);     // 0x00423650
+};
+
+struct SimRef { void update(); };                   // 0x00c2e4e0
+struct LevelCheats { void Construct(void* owner); };// 0x00dddf30
+
+class cGalaxyGameEntryAppMode {
+public:
+    uint8_t mPad00[0x0c];
+    void*   mpField0c;                              // +0x0c
+    char Init(void* mode);
+};
+
+static inline void** VtableOf(void* p) { return *(void***)p; }
+
+bool __cdecl GetPropertyAsString16(void* list, uint32_t id, WStringBuf* out);  // 0x006a1400
+
+extern const char kSimulatorAllocName[];    // 0x013f09b4 "Simulator"
+
+WStringBuf g_galaxyProp0;    // 0x16a0cf8
+WStringBuf g_galaxyProp1;    // 0x16a0d08
+WStringBuf g_galaxyProp2;    // 0x16a0d24
+WStringBuf g_galaxyProp3;    // 0x16a0d44
+WStringBuf g_galaxyProp4;    // 0x16a109c
+WStringBuf g_galaxyProp5;    // 0x16a10ac
+
 // @ 0x00dddfd0
-char GalaxyGameEntry_Init(void* self, void* mode) {
-    // Large body: simulator creation, message registration, property reads and
-    // cheat registration.  See partial.txt.
-    (void)self; (void)mode;
-    FUN_00de6be0();
-    FUN_00de76b0();
-    *(int*)((char*)g_16a1344 + 0x1ec) = 1;
+char cGalaxyGameEntryAppMode::Init(void* mode) {
+    (void)mode;
+    SimObject* sim = (SimObject*)EA_Allocate(0x274, kSimulatorAllocName, 0, 0, 0, 0);
+    if (sim != 0)
+        sim = sim->ctor();
+    else
+        sim = 0;
+    g_16a1344 = sim;
+    sim->mByte100 = 0;
+    ((SimObject*)g_16a1344)->mpField0f0 = mpField0c;
+
+    // 0x00685520: game-mode/property-list availability probe.
+    if (FUN_00685520(2) != 0)
+        g_15a2df8 = 0x48f7da6b;
+
+    // Register the galaxy-entry message handler with the app message server.
+    void* app = SP_App();
+    void* msgReg = ((void* (__thiscall*)(void*))VtableOf(app)[0x50 / 4])(app);
+    ((void (__thiscall*)(void*, uint32_t, void*))VtableOf(msgReg)[0x20 / 4])(
+        msgReg, 0x43c6e06, (void*)0xddfec0);
+
+    // Attach the current property target to the galaxy entry mode.
+    ((PropTarget*)0x15a2ff8)->Fetch(g_15a2df8, 0);
+
+    // Read the six localised galaxy-entry strings from the property list.
+    void* out = 0;
+    void* pm = SP_PropertyManager();
+    char found = ((char (__thiscall*)(void*, int, void*, void**))VtableOf(pm)[0x2c / 4])(
+        pm, g_15a2df8, 0, &out);
+    if (found) {
+        WStringBuf str;
+        str.mpBegin = (wchar_t*)0x1667bac;
+        str.mpEnd = (wchar_t*)0x1667bac;
+        str.mpEndCap = (wchar_t*)0x1667bae;
+        if (GetPropertyAsString16(out, 0x21d994c5, &str))
+            g_galaxyProp0.assign(str.mpBegin, str.mpEnd);
+        if (GetPropertyAsString16(out, 0x90be803e, &str))
+            g_galaxyProp1.assign(str.mpBegin, str.mpEnd);
+        if (GetPropertyAsString16(out, 0xaf963138, &str))
+            g_galaxyProp2.assign(str.mpBegin, str.mpEnd);
+        if (GetPropertyAsString16(out, 0xd6f8f4a4, &str))
+            g_galaxyProp3.assign(str.mpBegin, str.mpEnd);
+        if (GetPropertyAsString16(out, 0x9e64a562, &str))
+            g_galaxyProp4.assign(str.mpBegin, str.mpEnd);
+        if (GetPropertyAsString16(out, 0xab444460, &str))
+            g_galaxyProp5.assign(str.mpBegin, str.mpEnd);
+        if ((int)(((uint32_t)str.mpEndCap - (uint32_t)str.mpBegin) & ~1u) > 2 && str.mpBegin != 0)
+            EA_Free(str.mpBegin);
+    }
+
+    ((SimObject*)g_16a1344)->setup();
+    ((SimObject*)g_16a1344)->mField1ec = 1;
+
+    // 0x006895b0: register the galaxy entry state with its manager.
+    void* mgr = FUN_006895b0();
+    ((void (__thiscall*)(void*, uint32_t, uint32_t, int))VtableOf(mgr)[0x1c / 4])(
+        mgr, 0x4530082, 0x147d434, 0);
+
+    ((SimRef*)mpField0c)->update();
+
+    // Register the level-cheat console command once per process.
+    void* cheat = SP_CheatManager();
+    if (cheat != 0 && g_16a0c80 == 0) {
+        LevelCheats* cheats = (LevelCheats*)EA_Allocate(0xdc, kSimulatorAllocName, 0, 0, 0, 0);
+        if (cheats != 0)
+            cheats->Construct(this);
+        else
+            cheats = 0;
+        ((void (__thiscall*)(void*, uint32_t, void*, int))VtableOf(cheat)[0x18 / 4])(
+            cheat, 0x147d2e4, cheats, 1);
+        g_16a0c80 = 1;
+    }
+
+    if (out != 0)
+        ((void (__thiscall*)(void*))VtableOf(out)[1])(out);
     return 1;
 }
 
@@ -213,11 +327,13 @@ struct CamCtl {
     int f04, f08;
     float f0c;
     float f10, f14, f18, f1c;
-    float f20, f24, f28, f2c;
+    union { float f20; uint8_t mFlag20; };   // +0x20: float payload / low-byte flag
+    float f24, f28, f2c;
     float f30, f34, f38, f3c;
     float f40, f44, f48, f4c;
     float f50, f54, f58, f5c, f60, f64, f68;
     void init(void* arg2, const Vec3* v);
+    void Integrate(float dt);
     void Update(int dt, int unused);
     char Set2(int a, float v1, float v2, int unused);
     char Reset2(int a, int b, int c, int d);
@@ -347,9 +463,62 @@ void __stdcall CamCtl_SetFlag(uint8_t v) {
 //  0x00dde5d0  camera-controller physics integration
 // ===========================================================================
 // @ 0x00dde5d0
-void CamCtl_Integrate(CamCtl* self, float dt) {
-    // Large x87 body; see partial.txt.
-    (void)self; (void)dt;
+void CamCtl::Integrate(float dt) {
+    // Target pitch approach: f58 is the pitch velocity, f4c the pitch angle.
+    float a = (f40 - f4c) * g_15a3004;
+    f58 = (float)((double)a * (double)dt + pow((double)g_15a3000, (double)dt) * (double)f58);
+    f4c = f4c + f58 * dt;
+    if (f38 > f4c)
+        f4c = f38;
+    if (f4c > f3c)
+        f4c = f3c;
+
+    // Yaw velocity f60: damped by the pow curve, with two configuration gains.
+    float old5c = f5c;
+    double p;
+    if (g_neg0p1_13eb964 > old5c * f60)
+        p = pow((double)g_15a3008, (double)dt) * (double)g_15a3018;
+    else {
+        p = pow((double)g_15a3008, (double)dt);
+        if (mFlag20)
+            p = p * (double)g_15a301c;
+    }
+    // The retail code rounds each product to float (mulss/addss); the volatile
+    // temporaries force the same per-operation rounding out of the x87 unit.
+    volatile float v1 = old5c * dt;
+    volatile float v2 = (float)p * f60;
+    f60 = v1 + v2;
+
+    // Yaw angle, wrapped below by the full turn range.
+    float new44 = f44 + f60 * dt;
+    f44 = new44;
+
+    // Roll limit: positive band, otherwise the mirrored negative band.
+    float lim = 0.0f;
+    if (f48 >= 0.0f && f24 > f48 && f64 >= 0.0f && f28 > f64)
+        lim = f28;
+    else if (f48 <= 0.0f && f48 > -f24 && f64 > -f28 && f64 <= 0.0f)
+        lim = -f28;
+
+    // Roll velocity and angle with the two-sided clamps.
+    f68 = (float)(pow((double)g_15a3014, (double)dt) * (double)f68
+                  + ((double)f64 + (double)lim) * (double)dt);
+    f48 = f48 + f68 * dt;
+    if (f48 > f34) {
+        f48 = f34;
+        if (f68 > 0.0f)
+            f68 = 0.0f;
+    }
+    if (f30 > f48) {
+        f48 = f30;
+        if (0.0f > f68)
+            f68 = 0.0f;
+    }
+
+    if (new44 > g_16a10d8)
+        f44 = new44 - g_16a10d8;
+    if (0.0f > f44)
+        f44 = f44 + g_16a10d8;
 }
 
 // ===========================================================================
@@ -370,12 +539,17 @@ double Ease(double t, double p) {
 //  0x00dde860  camera-controller per-frame update
 // ===========================================================================
 // @ 0x00dde860
-void CamCtl_Tick(int ms) {
-    float f = (float)ms * *(float*)0x13f9428;
-    CamCtl_Integrate((CamCtl*)0x15a3048, f);
-    g_cc0 += (g_cct0 - g_cc0) * *(float*)0x147da80;
-    g_cc4 += (g_cct4 - g_cc4) * *(float*)0x147da80;
-    g_cc8 += (g_cct8 - g_cc8) * *(float*)0x147da80;
+void __stdcall CamCtl_Tick(int ms, int unused) {
+    (void)unused;
+    float f = (float)(unsigned int)ms * *(float*)0x13f9428;
+    ((CamCtl*)0x15a3048)->Integrate(f);
+    float k = *(float*)0x147da80;
+    float d0 = g_cct0 - g_cc0;
+    float d1 = g_cct4 - g_cc4;
+    float d2 = g_cct8 - g_cc8;
+    g_cc0 += d0 * k;
+    g_cc4 += d1 * k;
+    g_cc8 += d2 * k;
 }
 
 // ===========================================================================
