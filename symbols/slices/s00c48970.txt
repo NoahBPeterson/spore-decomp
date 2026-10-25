@@ -1,0 +1,7 @@
+00c48d40 ?GetUITitle@SPObject@@QAEXPAUWStr@@@Z  # SPObject::GetUITitle migrated from s00c48970 (verbatim, slice spelling)
+00c48db0 ?FUN_00c48db0@SPObject@@QAEXPAUWStr@@@Z  # SPObject::FUN_00c48db0 migrated from s00c48970 (verbatim, slice spelling)
+00c48e00 ?FUN_00c48e00@SPObject@@QAEXPAUWStr@@@Z  # SPObject::FUN_00c48e00 migrated from s00c48970 (verbatim, slice spelling)
+00c495c0 ?PickRewardUnlockTools@SPObject@@QAEXXZ  # SPObject::PickRewardUnlockTools migrated from s00c48970 (verbatim, slice spelling)
+00c49800 ?FUN_00c49800@SPObject@@QAEXPAUWStr@@@Z  # SPObject::FUN_00c49800 migrated from s00c48970 (verbatim, slice spelling)
+00c49840 ?FUN_00c49840@SPObject@@QAEXPAUWStr@@@Z  # SPObject::FUN_00c49840 migrated from s00c48970 (verbatim, slice spelling)
+00c49890 ?FUN_00c49890@SPObject@@QAEXPAUWStr@@@Z  # SPObject::FUN_00c49890 migrated from s00c48970 (verbatim, slice spelling)

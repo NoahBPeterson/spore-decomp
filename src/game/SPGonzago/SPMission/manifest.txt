@@ -15,3 +15,5 @@
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c486f0@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  00c486f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48740@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  00c48740  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48790@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  00c48790  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48db0@SPObject@@QAEXPAUWStr@@@Z  00c48db0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48e00@SPObject@@QAEXPAUWStr@@@Z  00c48e00  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

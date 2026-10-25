@@ -1,0 +1,6 @@
+00c498e0 ?ShowStarMapDestinationIndicator@cSPMission_s00c4_98e0@@QAEXD@Z  # cSPMission_s00c4_98e0::ShowStarMapDestinationIndicator migrated from s00c498e0 (verbatim, slice spelling)
+00c49d10 ?ShowStarMapStarClues@cSPMission@SP@@UAEXXZ  # SP::cSPMission::ShowStarMapStarClues migrated from s00c498e0
+00c49f90 ?FUN_00c49f90@cSPMission_s00c4_98e0@@QAEXXZ  # cSPMission_s00c4_98e0::FUN_00c49f90 migrated from s00c498e0 (verbatim, slice spelling)
+00c4a0c0 ?PickRewards@cSPMission@SP@@QAEXXZ  # SP::cSPMission::PickRewards migrated from s00c498e0
+00c4a220 ?PickStarClue@cSPMission@SP@@UAE_NXZ  # SP::cSPMission::PickStarClue migrated from s00c498e0
+00c4a6b0 ?HandleMessage@cSPMission@SP@@UAE_NIPAX@Z  # SP::cSPMission::HandleMessage migrated from s00c498e0
