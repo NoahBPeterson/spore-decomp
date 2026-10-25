@@ -2,5 +2,6 @@
 00432a50 Object::AddRef  # lock xadd +1 on [this+4]
 00432a70 Object::Release  # decrement, delete this via vtable+8
 00432ad0 ?Cast@Queryable@@QAEPAXI@Z  # Queryable::Cast migrated from s00432830 (verbatim, slice spelling)
-00432b50 ResourceList::Release  # -2 decrement, delete this at 0
-00432be0 PropertyList::AddRef  # refcount kept shifted (+2)
+00432b50 ?Release@ResourceList@@QAEHXZ  # ResourceList::Release migrated from s00432830 (verbatim, slice spelling)
+00432be0 ?AddRef@PropertyList_s0043_2830@@QAEHXZ  # PropertyList_s0043_2830::AddRef migrated from s00432830 (verbatim, slice spelling)
+00432c00 ?ReleaseThunk@SpriteGrid@@QAEHXZ  # SpriteGrid::ReleaseThunk migrated from s00432830 (verbatim, slice spelling)

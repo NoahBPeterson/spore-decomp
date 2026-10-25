@@ -1,3 +1,4 @@
+005f3810 ?Update@cSwatch3DView@SP@@QAEXI@Z  # SP::cSwatch3DView::Update (callee of s005f6df0, named from the dev publics; slice address comment)
 005f6df0 SP::cSPSwatch::~cSPSwatch  # PDB caller-single candidate; member teardown matches retail layout
 005f6f40 SP::cSPSwatch::Update  # calls LoadModel/OnModelLoad/FrameModel, per-frame lerp of viewport/angle/scale
 005f7870 eastl::Compare  # memcmp wrapper used by basic_string::compare

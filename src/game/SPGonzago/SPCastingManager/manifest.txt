@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCastingManager.cpp  ?GetFloatProperty@@YA_NPAVPropertyList@@IAAM@Z  0040cf10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCastingManager.cpp  ?Release@ResourceList@@QAEHXZ  00432b50  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCastingManager.cpp  ?AddRef@PropertyList_s0043_2830@@QAEHXZ  00432be0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCastingManager.cpp  ?ReleaseThunk@SpriteGrid@@QAEHXZ  00432c00  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCastingManager.cpp  ?normalized_safe@@YAPAMPAMPBM@Z  00449c20  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPGonzago/SPCastingManager.cpp  ?GetPropertyFloat@@YAMPAUPropertyHolder@@HM@Z  004e1c70  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPCastingManager.cpp  ??0?$basic_string_s0056_df80@_WVallocator_s0056_df80@eastl@@@eastl@@QAE@ABV01@@Z  0056e2d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
