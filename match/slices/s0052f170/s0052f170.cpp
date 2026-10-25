@@ -17,13 +17,15 @@ class cArguments { public:
 class cBlockCommandBase { public: virtual ~cBlockCommandBase(); };
 struct cEffectsParser;
 }}
+#include <math.h>
+#pragma intrinsic(cos)
 
 using EA::ArgScript::cArguments;
 using EA::ArgScript::cBlockCommandBase;
 
 void  ErrorString(void* out, const char* fmt, ...);           // 0x0052df30
-void  CxxThrowException(void*, void*);                        // _CxxThrowException
-extern void* g_TI_cError;                                     // ThrowInfo
+void  CxxThrowException(void*, void*);                        // 0x011e0912 _CxxThrowException
+extern void* g_TI_cError;                                     // 0x014f9174 ThrowInfo
 void  EastlStringAssign(void* str, const char* first, const char* last); // 0x00454cb0
 void  FUN_0047d390(void* first, void* last);
 void* FUN_0052ea60();
@@ -41,9 +43,11 @@ struct cDistributeCmd {
 };
 // The original cArguments helpers are thiscall members, not static functions.
 struct cArgumentsThis {
-    void*         MainArguments(int count);       // 0x00838320
-    unsigned char HasFlag(const char* name);      // 0x008380b0
+    void*         MainArguments(int count);                    // 0x00838320
+    unsigned char HasFlag(const char* name);                   // 0x008380b0
+    void**        OptionArguments(const char* name, int count); // 0x00838330
 };
+float ParseRangedFloat(void* self, void* arg, float lo, float hi); // 0x00840d50
 // Direct thiscall targets used by the destructor/copy helpers.
 struct CmdDtor { void Dtor(); };                                  // 0x0083cd90
 struct DistributeDescription { void Dtor(); };                    // 0x0052eb40
@@ -53,9 +57,9 @@ void  FUN_00530870(void*);
 void  FUN_00530770(void*);
 void  FUN_00a6f9c0(void*, int, void*);
 int   GetInheritedDescription(void* parser, void* args, int n, int id);
-void  AddAnonDescription(void* parser, void* args, int id, void* obj, int flag);
-void  AddDescription(void* parser, void* args, void* name, int id, int flag);
-void  ReleaseObj(void* p);
+void  AddAnonDescription(void* parser, void* args, int id, void* obj, int flag);   // 0x00a6fd40
+void  AddDescription(void* parser, void* args, void* name, int id, int flag);      // 0x00a6fc30
+void  ReleaseObj(void* p);                                                         // 0x00453540
 int   ParseRangedFloatI(void* self, void* arg, int lo, int hi);   // returns int/float
 float ParseRangedFloatF(void* self, void* arg, int lo, int hi);
 void  CosI(float x);
@@ -64,6 +68,8 @@ float GetCos();
 // raw thiscall helpers for the many virtuals used here
 typedef void* (__thiscall *VFn1)(void*, void*);
 typedef int   (__thiscall *VFnI)(void*, void*);
+typedef float (__thiscall *ParseRangedFn)(void*, void*, float, float);
+typedef float (__cdecl  *CosFn)(float);
 
 // @ 0x0052f170  cSPSkinPaintDistributeParticlesCommand::OnEndParse
 void DistributeParticles_OnEndParse(int param_1)
@@ -128,41 +134,50 @@ void cDistributeCmd::LimitExecute(cArguments* args)
     *(int*)(*(int*)(param_1 + 0xc) + 0x58) = v;
 }
 
-// @ 0x0052f3f0  cSPSkinPaintDistributeRegionCommand::Execute
-void DistributeRegion_Execute(int param_1, cArguments* args)
+// @ 0x0052f3f0  DistributeRegion_Execute  cSPSkinPaintDistributeRegionCommand::Execute
+struct DistributeRegionCmd {
+    void DistributeRegion_Execute(cArguments* args);
+};
+void DistributeRegionCmd::DistributeRegion_Execute(cArguments* args)
 {
-    cArguments::MainArguments(args, 0);
-    int cmd = *(int*)(param_1 + 0xc);
-    *(uint32_t*)(cmd + 0x5c) = 0;
-    if (cArguments::HasFlag(args, "torso")) *(uint32_t*)(cmd + 0x5c) |= 1;
-    if (cArguments::HasFlag(args, "limbs")) *(uint32_t*)(cmd + 0x5c) |= 2;
-    if (cArguments::HasFlag(args, "parts")) *(uint32_t*)(cmd + 0x5c) |= 4;
-    if (cArguments::HasFlag(args, "joints")) *(uint32_t*)(cmd + 0x5c) |= 0x20;
-    void** o = (void**)cArguments::OptionArguments(args, (const char*)0x013f251c, 1);
+    ((cArgumentsThis*)args)->MainArguments(0);
+    *(uint32_t*)(*(int*)((char*)this + 0xc) + 0x5c) = 0;
+    if (((cArgumentsThis*)args)->HasFlag("torso"))
+        *(uint32_t*)(*(int*)((char*)this + 0xc) + 0x5c) |= 1;
+    if (((cArgumentsThis*)args)->HasFlag("limbs"))
+        *(uint32_t*)(*(int*)((char*)this + 0xc) + 0x5c) |= 2;
+    if (((cArgumentsThis*)args)->HasFlag("parts"))
+        *(uint32_t*)(*(int*)((char*)this + 0xc) + 0x5c) |= 4;
+    if (((cArgumentsThis*)args)->HasFlag("joints"))
+        *(uint32_t*)(*(int*)((char*)this + 0xc) + 0x5c) |= 0x20;
+    void** o = ((cArgumentsThis*)args)->OptionArguments((const char*)0x013f251c, 1);
     if (o) {
-        *(uint32_t*)(cmd + 0x5c) |= 8;
-        ParseRangedFloatI(*(void**)(param_1 + 4), *o, 0, 0x40000000);
-        CosI(0);
-        *(float*)(cmd + 0x60) = GetCos();
+        *(uint32_t*)(*(int*)((char*)this + 0xc) + 0x5c) |= 8;
+        float t = ParseRangedFloat(*(void**)((char*)this + 4), *o, 0.0f, *(float*)0x01470f1c)
+                  * *(float*)0x015e0e54;
+        float c = cos((double)t);
+        *(float*)(*(int*)((char*)this + 0xc) + 0x60) = c;
     }
-    o = (void**)cArguments::OptionArguments(args, "belly", 1);
+    o = ((cArgumentsThis*)args)->OptionArguments("belly", 1);
     if (o) {
-        *(uint32_t*)(cmd + 0x5c) |= 0x10;
-        ParseRangedFloatI(*(void**)(param_1 + 4), *o, 0, 0x40000000);
-        CosI(0);
-        *(float*)(cmd + 0x64) = -GetCos();
+        *(uint32_t*)(*(int*)((char*)this + 0xc) + 0x5c) |= 0x10;
+        float t = ParseRangedFloat(*(void**)((char*)this + 4), *o, 0.0f, *(float*)0x01470f1c)
+                  * *(float*)0x015e0e54;
+        float c = cos((double)t);
+        *(float*)(*(int*)((char*)this + 0xc) + 0x64) = -c;
     }
-    o = (void**)cArguments::OptionArguments(args, "bodyRange", 2);
+    o = ((cArgumentsThis*)args)->OptionArguments("bodyRange", 2);
     if (o == 0) {
-        *(uint32_t*)(cmd + 0x68) = 0;
-        *(uint32_t*)(cmd + 0x6c) = 0x3f800000;
+        *(uint32_t*)(*(int*)((char*)this + 0xc) + 0x68) = 0;
+        *(uint32_t*)(*(int*)((char*)this + 0xc) + 0x6c) = 0x3f800000;
     } else {
-        *(float*)(cmd + 0x68) = ParseRangedFloatF(*(void**)(param_1 + 4), *o, 0, 0x3f800000);
-        int cmd2 = *(int*)(param_1 + 0xc);
-        *(float*)(cmd2 + 0x6c) = ParseRangedFloatF(*(void**)(param_1 + 4), o[1], 0, 0x3f800000);
+        float* p = &((float*)(*(int*)((char*)this + 0xc) + 0x68))[0];
+        *p = ParseRangedFloat(*(void**)((char*)this + 4), *o, 0.0f, 1.0f);
+        float* q = &((float*)(*(int*)((char*)this + 0xc) + 0x68))[1];
+        *q = ParseRangedFloat(*(void**)((char*)this + 4), o[1], 0.0f, 1.0f);
     }
-    *(unsigned char*)(cmd + 0x71) = cArguments::HasFlag(args, "centerOnly");
-    *(unsigned char*)(cmd + 0x70) = cArguments::HasFlag(args, "inverse");
+    *(unsigned char*)(*(int*)((char*)this + 0xc) + 0x71) = ((cArgumentsThis*)args)->HasFlag("centerOnly");
+    *(unsigned char*)(*(int*)((char*)this + 0xc) + 0x70) = ((cArgumentsThis*)args)->HasFlag("inverse");
 }
 
 // @ 0x0052f6b0  SWARM_SPSkinPaintDistributeAddCommands
@@ -313,16 +328,35 @@ void __fastcall Distribute_CommandDtor(cBlockCommandBase* p)
     ((CmdDtor*)p)->Dtor();
 }
 
-// @ 0x0052fe20  cSPSkinPaintDistributeInlineCommand::Execute
-void DistributeInline_Execute(int param_1, cArguments* args)
+// @ 0x0052fe20  DistributeInline_Execute  cSPSkinPaintDistributeInlineCommand::Execute
+struct cArgs3 {
+    void*         MainArguments(int* out, int a, int b);   // 0x00838020
+    void**        OptionArguments(const char* name, int count); // 0x00838330
+    unsigned char HasFlag(const char* name);               // 0x008380b0
+};
+// Local smart-pointer guard: retail holds the freshly built effect in a local
+// object whose destructor Releases it (that is what builds the SEH frame at
+// 0x52fe20, tryLevel 0 -> 1 -> -1).
+struct EffectGuard {
+    void* mpEffect;
+    EffectGuard() : mpEffect(0) {}
+    ~EffectGuard();
+};
+EffectGuard::~EffectGuard() { if (mpEffect) ReleaseObj(mpEffect); }
+struct DistInlineCmd {
+    void DistributeInline_Execute(cArguments* args);
+};
+void DistInlineCmd::DistributeInline_Execute(cArguments* args)
 {
-    int n = 0;
-    void** p = (void**)cArguments::MainArguments(args, &n, 0, 1);
+    int n;
+    void** p = (void**)((cArgs3*)args)->MainArguments(&n, 0, 1);
     if (n < 1) {
+        EffectGuard guard;
         int obj = (int)operator new(0x54, "Skinner/Swarm", 0, 0, 0, 0);
         void* made = obj ? FUN_0052ea60() : 0;
+        guard.mpEffect = made;
         if (made) *(int*)((char*)made + 4) = *(int*)((char*)made + 4) + 1;
-        void** pp = (void**)cArguments::OptionArguments(args, "effect", 1);
+        void** pp = ((cArgs3*)args)->OptionArguments("effect", 1);
         if (pp == 0) {
             char buf[16];
             ErrorString(buf, "must specify block name or use inline -effect ... syntax");
@@ -332,22 +366,26 @@ void DistributeInline_Execute(int param_1, cArguments* args)
         char* e = s;
         while (*e) e++;
         EastlStringAssign((void*)*pp, s, e);
-        void** sp = (void**)cArguments::OptionArguments(args, "spacing", 1);
+        void** sp = ((cArgs3*)args)->OptionArguments("spacing", 1);
         if (sp) {
-            VFnI fn = *(VFnI*)(*(int*)(param_1 + 4) + 0x98);
-            *(float*)((char*)made + 0x34) = (float)fn((void*)*(int*)(param_1 + 4), *sp);
+            void* inner = *(void**)((char*)this + 4);
+            typedef float (__thiscall *VFnF)(void*, void*);
+            VFnF fn = (VFnF)(*(void***)inner)[0x98 / 4];
+            float fv = fn(inner, *sp);
+            *(float*)((char*)made + 0x1c) = fv;
         }
-        void** lp = (void**)cArguments::OptionArguments(args, "limit", 1);
+        void** lp = ((cArgs3*)args)->OptionArguments("limit", 1);
         if (lp) {
-            VFnI fn = *(VFnI*)(*(int*)(param_1 + 4) + 0x9c);
-            *(int*)((char*)made + 0x38) = fn((void*)*(int*)(param_1 + 4), *lp);
+            void* inner = *(void**)((char*)this + 4);
+            VFnI fn = (VFnI)(*(void***)inner)[0x9c / 4];
+            int iv = fn(inner, *lp);
+            *(int*)((char*)made + 0x20) = iv;
         }
-        *(unsigned char*)((char*)made + 0x72) = cArguments::HasFlag(args, "cover");
-        *(unsigned char*)((char*)made + 0x73) = cArguments::HasFlag(args, "ordered");
-        AddAnonDescription(*(void**)(param_1 + 0xc), args, 0x23, made, 0);
-        if (made) ReleaseObj(made);
+        *(unsigned char*)((char*)made + 0x3a) = ((cArgs3*)args)->HasFlag("cover");
+        *(unsigned char*)((char*)made + 0x3b) = ((cArgs3*)args)->HasFlag("ordered");
+        AddAnonDescription(*(void**)((char*)this + 0xc), args, 0x23, made, 0);
     } else {
-        AddDescription(*(void**)(param_1 + 0xc), args, *p, 0x23, 0);
+        AddDescription(*(void**)((char*)this + 0xc), args, *p, 0x23, 0);
     }
 }
 // --- equivalence checker address annotations
