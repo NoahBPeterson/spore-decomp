@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00c3ed20 230 cGameplayMarker::Write: complete; serializer + optional-ptr teardown and WriteUint16/Write tail differ
+00c3ee20 150 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker read; the type dword, base reads and field serializer all go through unresolved serializer services so the typed block copy collapses; equiv UNSUPPORTED (unresolved serializer helpers)
+00c3ef00 106 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker shutdown; the trigger releases are modelled on named members but the noun removal and extension teardown are unresolved; equiv UNSUPPORTED (only 0/40 inputs valid)
+00c3efb0 67 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker constructor; the vtable stores and the zero-fill order differ from retail; equiv FAIL (first mismatch memory .data @0167be2c)
+00c3f040 149 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker definition init; the property queries are unresolved so the branch bodies are simplified; equiv UNSUPPORTED (unresolved property helpers)

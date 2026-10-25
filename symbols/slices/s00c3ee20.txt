@@ -1,7 +1,7 @@
-00c3ee20 ?Read@cGameplayMarker@@QAE_NPAX@Z  # bool cGameplayMarker::Read (ISimulatorSerializable::Read)
-00c3ef00 ?Shutdown@cGameplayMarker@@QAEXXZ  # void cGameplayMarker::Shutdown (cGameData::RemoveOwner)
-00c3efb0 ??0cGameplayMarker@@QAE@XZ  # cGameplayMarker::cGameplayMarker
-00c3f040 ?InitFromDefinition@cGameplayMarker@@QAE_NPAXHH@Z  # bool cGameplayMarker::InitFromDefinition (cGameData::SetDefinitionID)
+00c3ee20 ?Read@cGameplayMarker@@QAE_NPAX@Z  # cGameplayMarker::Read migrated from s00c3ee20 (verbatim, slice spelling)
+00c3ef00 ?Shutdown@cGameplayMarker@@QAEXXZ  # cGameplayMarker::Shutdown migrated from s00c3ee20 (verbatim, slice spelling)
+00c3efb0 ??0cGameplayMarker@@QAE@XZ  # cGameplayMarker::cGameplayMarker migrated from s00c3ee20 (verbatim, slice spelling)
+00c3f040 ?InitFromDefinition@cGameplayMarker@@QAE_NPAXHH@Z  # cGameplayMarker::InitFromDefinition migrated from s00c3ee20 (verbatim, slice spelling)
 00c3f160 ?SetEffectId@cInteractableObject@@QAEXH@Z  # void cInteractableObject::SetEffectId
 00c3f1d0 ?cGameplayMarkerCast@@YAPAXPAXH@Z  # void* Object::Cast (gameplay marker)
 00c3f1f0 ?Destroy@cGameplayMarker@@QAEXH@Z  # void cGameplayMarker::~cGameplayMarker
