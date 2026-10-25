@@ -13,6 +13,7 @@
 //   0x00b38d00  intrusive-list walk into a local map                            (308 B, thiscall, ret 0)
 // flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
+#include <EASTL/map.h>
 
 // Skip N virtual slots.  Every use needs a unique prefix p.
 #define VS1(p)  virtual void p##_a();
@@ -24,9 +25,20 @@
 #define VS64(p) VS32(p##0) VS32(p##1)
 
 extern "C" {
-void* EAAllocate(unsigned int size, const char* name, int a, int b, int c, int d); // 0xf473a0
+void* EAAllocate(unsigned int size, const char* name, int a, int b,
+                 const char* file, int line);                                      // 0xf473a0
 void  operator_delete(void* p);                                                    // 0xf47380
 }
+
+// Repeated declarations of the EASTL tree-maintenance entry points that the inlined map
+// insertion below calls out to, so the equivalence harness can bind them to the original code.
+namespace eastl {
+rbtree_node_base* RBTreeDecrement(const rbtree_node_base* pNode);                  // 0x9215c0
+void RBTreeInsert(rbtree_node_base* pNode, rbtree_node_base* pNodeParent,
+                  rbtree_node_base* pNodeAnchor, RBTreeSide insertionSide);        // 0x9216a0
+}
+void* operator new[](unsigned int size, const char* pName, int flags, unsigned int debugFlags,
+                     const char* pFile, int line);                                 // 0x00f473a0
 
 // ------------------------------------------------------------------ ref-counted handle model
 // A handle's first field points at its owner object; the owner's wide vtable has the release
@@ -196,21 +208,53 @@ struct RefPairVec {
 // The list sentinel is embedded at this+0x20 (the nodes' link fields sit at +0x24).  Every node
 // stores, at node+4, the address of the next node's link field, so the walk converts a link back
 // to a node by subtracting 4.  Both walkers query each node (slot 0x0c -> slot 0x38/0x20) and
-// count the resulting key into an eastl::map<unsigned int,unsigned int>, whose red-black
-// lower_bound walk the original inlined.  That walk is not reconstructed here.
+// count the resulting key into an eastl::map<unsigned int,unsigned int>.
+typedef eastl::map<unsigned int, unsigned int> KeyCountMap;
+
+struct SpatialKeyObject {
+    VS8(k0)                                                 // +0x00 .. +0x1c
+    virtual unsigned int GetKey();                          // +0x20
+};
+struct SpatialNodeLink {
+    SpatialNodeLink* mpNext;                                // +0x00
+};
+struct SpatialNode {
+    virtual void n00();                                     // +0x00
+    virtual void n04();                                     // +0x04
+    virtual void n08();                                     // +0x08
+    virtual SpatialKeyObject* GetKeyObject();               // +0x0c
+    SpatialNodeLink mNextLink;                              // +0x04
+};
+
+inline SpatialNode* NodeFromLink(SpatialNodeLink* pLink)
+{
+    return pLink ? (SpatialNode*)((char*)pLink - sizeof(void*)) : 0;
+}
+
 struct SpatialObjectSet {
     unsigned int mPad00[0x20 / 4];                          // +0x00 .. +0x1f
-    unsigned int mHeadLink;                                 // +0x20
-    unsigned int mFirstLink;                                // +0x24
+    SpatialNodeLink mHead;                                  // +0x20
+    SpatialNodeLink mFirst;                                 // +0x24
 
-    void FUN_00b38190(void* pMap);
+    void FUN_00b38190(KeyCountMap& map);
     void FUN_00b38d00();
 };
 
-// ------------------------------------------------------------------ 0x00b38190 (stub)
+// ------------------------------------------------------------------ 0x00b38190
 // @ 0x00b38190
-void SpatialObjectSet::FUN_00b38190(void*)
+void SpatialObjectSet::FUN_00b38190(KeyCountMap& map)
 {
+    SpatialNode* node = NodeFromLink(mFirst.mpNext);
+    SpatialNode* end = NodeFromLink(&mFirst);
+    while (node != end) {
+        unsigned int key = node->GetKeyObject()->GetKey();
+        KeyCountMap::iterator it = map.lower_bound(key);
+        if ((it == map.end()) || (key < it->first))
+            map.insert(KeyCountMap::value_type(key, 1u));
+        else
+            ++it->second;
+        node = NodeFromLink(node->mNextLink.mpNext);
+    }
 }
 
 // ------------------------------------------------------------------ 0x00b38260
@@ -374,10 +418,98 @@ bool SortCmp::FUN_00b385d0(RefPair* a, RefPair* b) const
     return a->mValue > b->mValue;
 }
 
-// ------------------------------------------------------------------ 0x00b38690 (stub)
-// @ 0x00b38690
-void RefPairVec::FUN_00b38690(RefPair*, unsigned int, const RefPair*)
+// ------------------------------------------------------------------ 0x00b38690
+// The out-of-line range helpers this instantiation calls.  The 5-argument copy helper
+// returns its result through the first argument; the 4-argument fill helper ignores its
+// trailing tag argument.
+extern "C" RefPair* UninitCopyImpl(RefPair* first, RefPair* last, RefPair* dest);        // 0xb36280
+extern "C" void UninitCopyOut(RefPair** out, RefPair* first, RefPair* last,
+                              RefPair* dest, unsigned int extra);                        // 0xb36200
+extern "C" void UninitFillN(RefPair* first, unsigned int n, const RefPair* value,
+                            unsigned int extra);                                        // 0xb36250
+extern "C" RefPair* DestroyRange(RefPair* first, RefPair* last, RefPair* dest);          // 0xb362c0
+extern "C" void FillAssign(RefPair* first, RefPair* last, const RefPair* value);         // 0xb364c0
+extern "C" RefPair* CopyBackward(RefPair* first, RefPair* last, RefPair* dest);          // 0xb365a0
+
+static __forceinline void ReleaseHandle(RefHandle* h)
 {
+    if (h->mRefCount > 1)
+        --h->mRefCount;
+    else
+        h->mpOwner->Release(h, (bool)(((unsigned int)h->mFlags) >> 31));
+}
+
+// @ 0x00b38690
+void RefPairVec::FUN_00b38690(RefPair* position, unsigned int n, const RefPair* value)
+{
+    if (n <= (unsigned int)(mpCapacity - mpEnd)) {
+        if (n != 0) {
+            RefPair temp;
+            temp.mpHandle = value->mpHandle;
+            if (temp.mpHandle != 0) ++temp.mpHandle->mRefCount;
+            temp.mValue = value->mValue;
+
+            RefPair* const destPosition = position;
+            const unsigned int nExtra = (unsigned int)(mpEnd - destPosition);
+            RefPair* const pEnd = mpEnd;
+
+            if (n < nExtra) {
+                const unsigned int nBytes = n * 8;
+                RefPair* const pCopyFrom = (RefPair*)((char*)mpEnd - nBytes);
+                RefPair* pCopied;
+                UninitCopyOut(&pCopied, pCopyFrom, mpEnd, mpEnd, (unsigned int)pCopyFrom);
+                mpEnd = (RefPair*)((char*)mpEnd + nBytes);
+                CopyBackward(destPosition, pCopyFrom, pEnd);
+                FillAssign(destPosition, (RefPair*)((char*)destPosition + nBytes), &temp);
+            } else {
+                const unsigned int nFill = n - nExtra;
+                const unsigned int nFillBytes = nFill * 8;
+                UninitFillN(mpEnd, nFill, &temp, nFill);
+                mpEnd = (RefPair*)((char*)mpEnd + nFillBytes);
+                RefPair* pCopied;
+                UninitCopyOut(&pCopied, destPosition, pEnd, mpEnd, nFill);
+                mpEnd = (RefPair*)((char*)mpEnd + nExtra * 8);
+                FillAssign(destPosition, pEnd, &temp);
+            }
+
+            if (temp.mpHandle != 0) ReleaseHandle(temp.mpHandle);
+        }
+    } else {
+        unsigned int nPrevSize = (unsigned int)(mpEnd - mpBegin);
+        unsigned int nGrowSize;
+        if (nPrevSize != 0)
+            nGrowSize = nPrevSize * 2;
+        else
+            nGrowSize = 1;
+        unsigned int nNewSize;
+        if (nGrowSize > nPrevSize + n)
+            nNewSize = nGrowSize;
+        else
+            nNewSize = nPrevSize + n;
+
+        RefPair* pNewData;
+        if (nNewSize != 0) {
+            pNewData = (RefPair*)EAAllocate(
+                nNewSize * 8, "Simulator", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                0xd1);
+        } else {
+            pNewData = 0;
+        }
+
+        RefPair* pNewEnd = UninitCopyImpl(mpBegin, position, pNewData);
+        DestroyRange(mpBegin, position, pNewData);
+        UninitFillN(pNewEnd, n, value, (unsigned int)pNewEnd);
+        RefPair* pSuffix = pNewEnd + n;
+        pNewEnd = UninitCopyImpl(position, mpEnd, pSuffix);
+        DestroyRange(position, mpEnd, pSuffix);
+
+        if (mpBegin != 0 && mpBegin != mpBuffer) operator_delete(mpBegin);
+
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
 }
 
 // ------------------------------------------------------------------ 0x00b388a0
@@ -476,8 +608,41 @@ void FUN_00b38bf0(RefPair* base, int first, int hole, RefPair value, SortCmp cmp
     if (value.mpHandle) value.mpHandle->Decrement();
 }
 
-// ------------------------------------------------------------------ 0x00b38d00 (stub)
+// ------------------------------------------------------------------ 0x00b38d00
+// Same walk, but the key comes from the object's slot 0x38 and the map is local.
+struct SpatialKeyObject38 {
+    VS8(j0) VS4(j1) VS2(j2)                                 // +0x00 .. +0x34
+    virtual unsigned int GetKey();                          // +0x38
+};
+struct SpatialNode38 {
+    virtual void n00();                                     // +0x00
+    virtual void n04();                                     // +0x04
+    virtual void n08();                                     // +0x08
+    virtual SpatialKeyObject38* GetKeyObject();             // +0x0c
+    SpatialNodeLink mNextLink;                              // +0x04
+};
+
+inline SpatialNode38* Node38FromLink(SpatialNodeLink* pLink)
+{
+    return pLink ? (SpatialNode38*)((char*)pLink - sizeof(void*)) : 0;
+}
+
 // @ 0x00b38d00
 void SpatialObjectSet::FUN_00b38d00()
 {
+    KeyCountMap map;
+
+    SpatialNode38* node = Node38FromLink(mFirst.mpNext);
+    while (node != Node38FromLink(&mFirst)) {
+        unsigned int key = node->GetKeyObject()->GetKey();
+        KeyCountMap::iterator it = map.lower_bound(key);
+        if ((it == map.end()) || (key < it->first))
+            map[node->GetKeyObject()->GetKey()] = 1;
+        else
+            ++it->second;
+        node = Node38FromLink(node->mNextLink.mpNext);
+    }
+
+    for (KeyCountMap::iterator it = map.begin(); it != map.end(); ++it) {
+    }
 }
