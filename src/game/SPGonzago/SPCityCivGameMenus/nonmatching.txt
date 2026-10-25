@@ -1,0 +1,3 @@
+# va diff flags difftest
+00ce8160 373 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (unresolved-import faults)
+00ce8370 858 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution (ours faults at 0x00ad92d4; helper ABI/loop reconstruction)

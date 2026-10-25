@@ -1,0 +1,2 @@
+00ce8160 ?FUN_00ce8160@@YIXPAX0@Z  # FUN_00ce8160 migrated from s00ce8160 (verbatim, slice spelling)
+00ce8370 ?FUN_00ce8370@@YIEPAX00@Z  # FUN_00ce8370 migrated from s00ce8160 (verbatim, slice spelling)
