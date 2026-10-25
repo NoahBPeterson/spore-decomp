@@ -8,5 +8,5 @@
 0061dfa0 eastl::find_last_not_of  # backward scan
 0061dfe0 PollenNotifyHelper  # MessageServer + release two members
 0061e180 guarded bool getter  # EnterCriticalSection/LeaveCriticalSection around flag at +0x68
-0061e200 eastl::basic_string<char>::erase(position,n)  # memmove tail +1
+0061e200 ?erase@String8@Pollen@SP@@QAEPAU123@II@Z  # String8::erase migrated from s0061d240 (verbatim, slice spelling)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0061d240, named from the dev publics; slice address comment)
