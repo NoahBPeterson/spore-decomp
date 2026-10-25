@@ -1,1 +1,17 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b328e0@@YAXH@Z  00b328e0  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b32970@@YAXIH@Z  00b32970  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b32a10@@YAXII@Z  00b32a10  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b32aa0@@YAXXZ  00b32aa0  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b32b20@@YAXXZ  00b32b20  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b32c60@@YAXH@Z  00b32c60  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b32ce0@@YAXXZ  00b32ce0  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b32dd0@@YAXI@Z  00b32dd0  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b32e80@@YAXH@Z  00b32e80  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b32f60@@YAXH@Z  00b32f60  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b33030@@YAXH@Z  00b33030  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b330e0@@YAXI@Z  00b330e0  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b33130@@YAXH@Z  00b33130  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b33350@@YAXH@Z  00b33350  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b334e0@@YAXXZ  00b334e0  /O2 /MD /Gy /EHsc /TP
+slices/s00b328e0/s00b328e0.cpp  ?FUN_00b33540@@YAXXZ  00b33540  /O2 /MD /Gy /EHsc /TP
