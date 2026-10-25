@@ -1,5 +1,5 @@
-00542b80 EA::Variant::operator=  # existing name; byte-exact
-00542c30 EA::Variant::Construct  # dev PDB has an inline Construct(const Variant&, flags) overload; byte-exact
+00542b80 ??4Variant@EA@@QAEAAU01@ABU01@@Z  # EA::Variant::operator= migrated from s00542980
+00542c30 ?Construct@Variant_s0054_2980@EA@@QAEXABU12@G@Z  # Variant_s0054_2980::Construct migrated from s00542980 (verbatim, slice spelling)
 00543110 SP::Feed::AtomParser::EndTitle  # dev PDB method; entry->mTitle / doc->mTitle = mCharacterData
 005431a0 SP::Feed::AtomParser::EndSubtitle  # dev PDB method
 005431f0 SP::Feed::AtomParser::EndSubcount  # dev PDB method; wcstoul into doc subcount

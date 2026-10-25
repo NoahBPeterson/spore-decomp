@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGameInputManager.cpp  ?SetInt@Variant@@QAEPAU1@PBH@Z  00427fd0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPGameInputManager.cpp  ??4Variant@EA@@QAEAAU01@ABU01@@Z  00542b80  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPGameInputManager.cpp  ?Construct@Variant_s0054_2980@EA@@QAEXABU12@G@Z  00542c30  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
