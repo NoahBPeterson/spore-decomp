@@ -6,6 +6,8 @@
 0094fed0  206  SSLManager_Init: complete (register SSL mem funcs, THREAD_setup, RAND_seed, build SSL_CTX, set ciphers/verify/purpose/tmp_dh); large OpenSSL control flow, regalloc differ; difftest WEAK (269 valid, 7.6% coverage)
 00950080  43  SSLSocketBIOShutdown: complete (notify socket, clear flags/obj); regalloc differ; difftest PASS (331 valid, 100% coverage)
 009500c0  234  SSLSocketBIOControl: complete (switch cmd 1/8/9/0xb/0xc/0x68/0x69); regalloc/jump-table layout differ; difftest WEAK (395 valid, 48.8% coverage)
+00950280  132  Fn00950280 (StreamSSLSocket::InitConnection): complete (reset +0x90/+0xcc, create SSL, BIO_new, SSL_set_bio, ctrl 0x21); block order/regalloc differ; equiv UNSUPPORTED (0/400 valid: socket import not modelled, fake-method arity mismatches)
+009503c0  94  Sock::Accept (StreamSSLSocket::Accept): complete (inner e650, SSL_accept, NetSSLVerifyConnection, teardown on fail); regalloc/order differ; equiv UNSUPPORTED (0/400 valid: accept import not modelled)
 00950450  36  Sock::Read (StreamSSLSocket::Read): complete (SSL_read, on error map SSL_get_error + curve flag to state); regalloc differs; difftest PASS (381 valid, 100% coverage)
 009504d0  37  Sock::Write (StreamSSLSocket::Write): complete (SSL_write, on error map SSL_get_error + curve flag to state); regalloc differs; difftest PASS (353 valid, 100% coverage)
 00950540  40  Fn00950540 (SSLSocketBIO::Write): complete (b!=0 -> inner e3a0(b,c,0), BIO_clear_flags); regalloc differs; difftest PASS (290 valid, 100% coverage)
@@ -17,4 +19,5 @@
 00950970  121  StreamSSLSocket::Connect: complete (if session: get name, RestoreClientSession, free session); control flow/regalloc differ; difftest WEAK (335 valid, 42.1% coverage)
 00950a20  112  StreamSSLSocket::SaveClientSession: complete (if session: find+release stored session, SSL_set_session); control flow/regalloc differ; difftest WEAK (311 valid, 20.8% coverage)
 00950ad0  24  Sock::SetStr (fixed_string::assign): complete (if begin!=str: reset then copy [str,str+len) via 0x45f430); strlen idiom/regalloc differ; difftest PASS (397 valid, 100% coverage)
+00950b10  109  Sock::DoPostConnectionCheck: complete (inner e4b0, SaveClientSession, SSL_connect, verify, Connect, teardown + *out=0 on fail); regalloc/order differ; equiv UNSUPPORTED (0/400 valid: connect import + fake-method reads fault)
 0094fd20  52  COMPLETE SSLManager::RestoreClientSession; third arg of map insert is the dead name arg slot with low byte cleared (bool temp over it), original stores byte 0 + dword reload [equiv: WEAK 184 valid inputs, 100% coverage, no mismatch]
