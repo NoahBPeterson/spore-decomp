@@ -1,0 +1,7 @@
+00c3daa0 ?func3daa0@UFO@@QAEXM@Z  # UFO::func3daa0 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3dac0 ?func3dac0@UFO@@QAEXPAX@Z  # UFO::func3dac0 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3dae0 ?func3dae0@UFO@@QAEXPAM@Z  # UFO::func3dae0 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3db50 ?func3db50@UFO@@QAEXPAX0@Z  # UFO::func3db50 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3dba0 ?InitNPC@cSPGameDataUFO@SP@@QAEXPAVcEmpire@2@H@Z  # SP::cSPGameDataUFO::InitNPC migrated from s00c3daa0
+00c3e010 ?func3e010@UFO@@QAEXPAX@Z  # UFO::func3e010 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3e0b0 ?Init@cSPGameDataUFO@SP@@QAEXW4eUFOType@2@PAVcEmpire@2@@Z  # SP::cSPGameDataUFO::Init migrated from s00c3daa0

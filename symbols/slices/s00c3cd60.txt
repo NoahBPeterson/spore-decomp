@@ -1,1 +1,1 @@
-00c3cd60 SP::cSPGameDataUFO::TakeHit  # PDB name; cCombatant slot 0x18 override (this = cCombatant subobject at +0x508)
+00c3cd60 ?TakeHit@cSPGameDataUFO_s00c3_cd60@SP@@UAEXMHHABUVector3_s00c3_cd60@@PAVcCombatant_s00c3_cd60@2@@Z  # cSPGameDataUFO_s00c3_cd60::TakeHit migrated from s00c3cd60 (verbatim, slice spelling)
