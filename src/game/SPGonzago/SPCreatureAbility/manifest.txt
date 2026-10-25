@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureAbility.cpp  ?FUN_00d1e5c0@@YAHPAUIVtbl@@H@Z  00d1e5c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureAbility.cpp  ?FUN_00d1e7f0@@YAMPAUFlagSetObj@@H@Z  00d1e7f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

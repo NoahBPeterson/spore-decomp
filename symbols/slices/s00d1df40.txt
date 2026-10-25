@@ -1,0 +1,5 @@
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00d1df40, named from the dev publics; slice address comment)
+00d1e5c0 ?FUN_00d1e5c0@@YAHPAUIVtbl@@H@Z  # FUN_00d1e5c0 migrated from s00d1df40 (verbatim, slice spelling)
+00d1e6c0 ?AbilityIsBeingTaughtToBaby@SP@@YA_NH@Z  # SP::AbilityIsBeingTaughtToBaby migrated from s00d1df40
+00d1e7f0 ?FUN_00d1e7f0@@YAMPAUFlagSetObj@@H@Z  # FUN_00d1e7f0 migrated from s00d1df40 (verbatim, slice spelling)
+00d1e8d0 ?FUN_00d1e8d0@@YA_NPAUFlagSetObj@@I@Z  # FUN_00d1e8d0 migrated from s00d1df40 (verbatim, slice spelling)
