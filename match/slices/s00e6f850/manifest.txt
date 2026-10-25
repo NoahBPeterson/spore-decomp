@@ -1,0 +1,2 @@
+slices/s00e6f850/s00e6f850.cpp  ?FUN_00e6f940@@YAXPAUcEntity@@IMMIHM@Z  00e6f940  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00e6f850/s00e6f850.cpp  ?FUN_00e6fce0@@YAXPAUcEntity@@M@Z  00e6fce0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
