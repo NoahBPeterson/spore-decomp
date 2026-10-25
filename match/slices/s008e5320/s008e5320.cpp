@@ -8,6 +8,11 @@
 
 typedef unsigned int   uint32;
 typedef unsigned short wchar16;
+typedef unsigned char  uint8;
+
+// MSVC's __declspec(noinline) contains a '(' before the function name, which
+// upsets the marker/definition scanner; the macro hides it.
+#define NOINLINE __declspec(noinline)
 
 extern "C" void  operator_delete__(void* p);
 
@@ -40,32 +45,59 @@ void  FUN_0090a870(void*, int);                 // 0x0090a870
 }
 void* __cdecl Fn11e0744(void* dst, const void* src, unsigned n);  // 0x011e0744 (memcpy thunk)
 
+// Expat handlers referenced (not defined) by this slice.
+extern "C" void Fn8e5930(void* userData, const wchar16* name);         // 0x008e5930
+extern "C" void ReadText_00c2e4e0(void* userData, const wchar16* s);   // 0x00c2e4e0
+
 // ---------------------------------------------------------------------------
 // forward structs
 // ---------------------------------------------------------------------------
 struct Flusher { void Fn8e4350(void* node); };  // 0x008e4350
 struct DomNodeIface { virtual void fn0(); };
 struct DomNodeBase  { void* Parent(); };   // 0x00ff0420 (thiscall)
+// Sink the external-entity handler asks for the entity's bytes.
+struct XhtmlEntitySink {
+    virtual void  v0();
+    virtual void  v1();
+    virtual void  v2();
+    virtual void  v3();
+    virtual void  v4();
+    virtual void* OpenStream(int length, int* pLength);   // vtable +0x14
+};
+
 struct Doc {
+    uint32           pad_0[0x34 / 4];      // +0x00 .. +0x33
+    XhtmlEntitySink* mpEntitySink_34;      // +0x34
+    uint32           pad_38[2];            // +0x38
+    int              mOpenFlags_40;        // +0x40
+    void*            mpTagSink_44;         // +0x44
+    void*            mpUri_48;             // +0x48
+
     void* Fn8e26e0(wchar16* s, int n, int flag);                         // 0x008e26e0
     void* Fn8e2c10(wchar16* name, const wchar16** attrs, int n, int f);  // 0x008e2c10
     void  Fn8e2800(void* elem);                                          // 0x008e2800
 };
-void* __cdecl FUN_0090ac10(void*, void*, int);  // 0x0090ac10
+void* __cdecl XML_ExternalEntityParserCreate(void*, void*, int);  // 0x0090ac10
 
 struct XmlParser {
-    // +0    vftable
-    // +4    mpDocument
-    // +8/+0xc/+0x10  string begin/end/capacity
-    // +0x18 pool begin
-    // +0x21c mpParserNode
-    // +0x220 mpXmlParser
-    // +0x224 mbSpace
-    // +0x228 mOffset
-    // +0x22c..+0x42b  wchar buffer[256]
-    // +0x430 counter
-    // +0x434 index
-    // +0x438 flag
+    void*    mpVtbl_0;                 // +0x000
+    void*    mpDocument_4;             // +0x004
+    wchar16* mpTextBegin_8;            // +0x008  shared string begin
+    wchar16* mpTextEnd_c;              // +0x00c
+    wchar16* mpTextCapacity_10;        // +0x010  == mpInlinePool (aliased)
+    uint32   pad_14;                   // +0x014
+    wchar16* mpInlinePool_18;          // +0x018
+    wchar16  mInlinePool_1c[0x100];    // +0x01c .. +0x21b (inline buffer)
+    void*    mpParserNode_21c;         // +0x21c
+    void*    mpXmlParser_220;          // +0x220
+    uint8    mbSpace_224;              // +0x224
+    uint8    pad_225[3];               // +0x225
+    int      mOffset_228;              // +0x228
+    wchar16  mBuffer_22c[0x100];       // +0x22c .. +0x42b
+    uint32   pad_42c;                  // +0x42c
+    int      mCount_430;               // +0x430
+    int      mIndex_434;               // +0x434
+    uint8    mbFlag_438;               // +0x438
 
     void  Fn8e5600(short* p, int n);                 // 0x008e5600
     int   Fn8e5a20(const char* s, int len, unsigned char fin); // 0x008e5a20
@@ -139,9 +171,14 @@ char* Fn8e5410(char* begin, char* end, const void* key)
 // 0x008e5480  eastl::equal_range<StaticDefinition> (hidden return slot)
 // ---------------------------------------------------------------------------
 struct StaticDef { const wchar16* mpName; unsigned short mValue; unsigned short mPad; };
-struct StaticRange { StaticDef* first; StaticDef* second; };
+struct StaticRange {
+    StaticDef* first;
+    StaticDef* second;
+    StaticRange() {}
+    StaticRange(const StaticRange& o) : first(o.first), second(o.second) {}
+};
 // @ 0x008e5480
-void Fn8e5480(StaticRange* out, StaticDef* begin, StaticDef* end, const wchar16** key)
+StaticRange Fn8e5480(StaticDef* begin, StaticDef* end, const wchar16** key)
 {
     int count = (int)((char*)end - (char*)begin) >> 3;
     if (count > 0) {
@@ -161,17 +198,20 @@ void Fn8e5480(StaticRange* out, StaticDef* begin, StaticDef* end, const wchar16*
                 const wchar16* q2 = k;
                 while (*q2 != 0 && *q2 == *p2) { q2++; p2++; }
                 if (*p2 <= *q2) {
-                    out->second = (StaticDef*)Fn8e5410((char*)(mid + 1), (char*)end, key);
-                    out->first = (StaticDef*)Fn8e53a0((char*)begin, (char*)mid, key);
-                    return;
+                    StaticRange range;
+                    range.second = (StaticDef*)Fn8e5410((char*)(mid + 1), (char*)end, key);
+                    range.first = (StaticDef*)Fn8e53a0((char*)begin, (char*)mid, key);
+                    return range;
                 }
                 end = mid;
                 count = half;
             }
         } while (count > 0);
     }
-    out->first = begin;
-    out->second = begin;
+    StaticRange range;
+    range.first = begin;
+    range.second = begin;
+    return range;
 }
 
 // ---------------------------------------------------------------------------
@@ -181,11 +221,10 @@ extern "C" char gEntityTable[];    // 0x0154c740
 extern "C" char gEntityNumbers[];  // 0x0154cf28
 
 // @ 0x008e5580
-__declspec(noinline) unsigned short Fn8e5580(int entity)
+NOINLINE unsigned short Fn8e5580(int entity)
 {
     const wchar16* key = (const wchar16*)entity;
-    StaticRange result;
-    Fn8e5480(&result, (StaticDef*)gEntityTable, (StaticDef*)gEntityNumbers, &key);
+    StaticRange result = Fn8e5480((StaticDef*)gEntityTable, (StaticDef*)gEntityNumbers, &key);
     if ((char*)result.first + 8 == (char*)result.second)
         return *(unsigned short*)((char*)result.first + 4);
     return 0;
@@ -235,7 +274,7 @@ void Fn8e5980(void* self, short* p, int n)
 extern "C" void* Fn8e26e0(wchar16* s, int n, int flag);   // 0x008e26e0 (thiscall on Doc)
 
 // @ 0x008e59a0
-__declspec(noinline) void XmlParser::Fn8e59a0(char param2)
+NOINLINE void XmlParser::Fn8e59a0(char param2)
 {
     char* c = (char*)this;
     if (*(void**)(c + 0x21c) == 0) return;
@@ -427,24 +466,23 @@ void* GuiThing2::Fn8e55d0(int a, int b, int c)
 }
 
 // @ 0x008e5670
-__declspec(noinline) wchar16* XmlParser::Fn8e5670()
+NOINLINE wchar16* XmlParser::Fn8e5670()
 {
-    char* s = (char*)this;
-    if (*(char*)(s + 0x438) != 0) {
-        int idx = *(int*)(s + 0x434) - 0x40;
-        if (idx < 0) {
-            Fn11e0744(s + (0x116 - idx) * 2, s + 0x22c, idx * 2 + 0x80);
-            Fn11e0744(s + 0x22c, s + idx * 2 + 0x42c, idx * -2);
+    if (mbFlag_438 != 0) {
+        int idx = mIndex_434 - 0x40;
+        if (idx >= 0) {
+            Fn11e0744(mBuffer_22c, mBuffer_22c + idx, 0x80);
         } else {
-            Fn11e0744(s + 0x22c, s + idx * 2 + 0x22c, 0x80);
+            Fn11e0744(mBuffer_22c - idx, mBuffer_22c, idx * 2 + 0x80);
+            Fn11e0744(mBuffer_22c, (wchar16*)((char*)mBuffer_22c + idx * 2 + 0x200), idx * -2);
         }
-        *(int*)(s + 0x434) = 0x40;
-    } else if (*(unsigned int*)(s + 0x434) > 0x40) {
-        Fn11e0744(s + 0x22c, s + *(unsigned int*)(s + 0x434) * 2 + 0x1ac, 0x80);
-        *(int*)(s + 0x434) = 0x40;
+        mIndex_434 = 0x40;
+    } else if ((unsigned int)mIndex_434 > 0x40) {
+        Fn11e0744(mBuffer_22c, (wchar16*)((char*)mBuffer_22c + mIndex_434 * 2 - 0x80), 0x80);
+        mIndex_434 = 0x40;
     }
-    *(short*)(s + 0x22c + *(int*)(s + 0x434) * 2) = 0;
-    return (wchar16*)(s + 0x22c);
+    mBuffer_22c[mIndex_434] = 0;
+    return mBuffer_22c;
 }
 
 // ---------------------------------------------------------------------------
@@ -507,46 +545,47 @@ int XmlParser::Fn8e5730(void* parser, void* uri)
 // 0x008e5a70  ExternalEntityRefHandler (cdecl callback)
 // ---------------------------------------------------------------------------
 // @ 0x008e5a70
-bool Fn8e5a70(void* top, void* entity, const char* base, const char* sysid, int ctx)
+int Fn8e5a70(void** top, void* entity, int base, int sysid, int length)
 {
-    char* c = *(char**)top;
-    char* doc = *(char**)(c + 4);
-    if (*(void**)(c + 0x21c) != 0) {
-        int n = (int)(*(wchar16**)(c + 0xc) - *(wchar16**)(c + 8));
-        if (n != 0) {
-            void* r = ((Doc*)doc)->Fn8e26e0(*(wchar16**)(c + 8), n, 1);
-            ((Flusher*)*(void**)(c + 0x21c))->Fn8e4350(r);
-        }
-        if (*(void**)(c + 8) != *(void**)(c + 0xc)) {
-            **(wchar16**)(c + 8) = 0;
-            *(void**)(c + 0xc) = *(void**)(c + 8);
+    XmlParser* p = (XmlParser*)*top;
+    Doc* doc = (Doc*)p->mpDocument_4;
+    if (p->mpParserNode_21c != 0) {
+        if ((int)(p->mpTextEnd_c - p->mpTextBegin_8) != 0) {
+            if ((int)(p->mpTextEnd_c - p->mpTextBegin_8) != 0) {
+                void* r = doc->Fn8e26e0(p->mpTextBegin_8,
+                                        (int)(p->mpTextEnd_c - p->mpTextBegin_8), 1);
+                ((Flusher*)p->mpParserNode_21c)->Fn8e4350(r);
+            }
+            if (p->mpTextBegin_8 != p->mpTextEnd_c) {
+                *p->mpTextBegin_8 = 0;
+                p->mpTextEnd_c = p->mpTextBegin_8;
+            }
         }
     }
-    if (ctx == 0) {
-        *(char*)(c + 0x224) = 0;
+    if (length == 0) {
+        p->mbSpace_224 = 0;
         return false;
     }
-    int* sink = *(int**)(doc + 0x34);
+    XhtmlEntitySink* sink = *(XhtmlEntitySink**)((char*)doc + 0x34);
     if (sink == 0)
         return true;
-    void* stream = (*(void* (__thiscall**)(int*, int, void**))(*sink + 0x14))(sink, ctx, &entity);
+    void* stream = sink->OpenStream(length, &length);
     if (stream == 0)
         return true;
 
-    char* parser = (char*)FUN_0090ac10(top, entity, 0);
-    if (parser == 0)
-        return true;
-
-    FUN_00903300(parser, 0, 0);
-    FUN_00903320(parser, 0);
-    FUN_00903340(parser, 0);
-    FUN_00903370(parser, 0, 0);
-    FUN_009032e0(parser, c);
-    FUN_009033d0(parser, 2);
     int rc = 0;
-    if (XML_Parse(parser, (const char*)stream, (int)base, 1) == 0)
-        rc = FUN_00903b40(parser);
-    XML_ParserFree(parser);
+    void* parser = XML_ExternalEntityParserCreate(top, entity, 0);   // 0x0090ac10
+    if (parser != 0) {
+        FUN_00903300(parser, 0, 0);
+        FUN_00903320(parser, 0);
+        FUN_00903340(parser, 0);
+        FUN_00903370(parser, 0, 0);
+        FUN_009032e0(parser, p);
+        FUN_009033d0(parser, 2);
+        if (XML_Parse(parser, (const char*)stream, length, 1) == 0)
+            rc = FUN_00903b40(parser);
+        XML_ParserFree(parser);
+    }
     return rc == 0;
 }
 
@@ -556,35 +595,38 @@ bool Fn8e5a70(void* top, void* entity, const char* base, const char* sysid, int 
 // @ 0x008e5b90
 void Fn8e5b90(void* parser, const wchar16* name, const wchar16** attrs)
 {
-    char* c = (char*)parser;
-    char* doc = *(char**)(c + 4);
-    if (*(void**)(c + 0x21c) != 0) {
-        if (*(wchar16**)(c + 0xc) - *(wchar16**)(c + 8) != 0) {
-            if (*(wchar16**)(c + 0xc) - *(wchar16**)(c + 8) != 0) {
-                void* r = ((Doc*)doc)->Fn8e26e0(*(wchar16**)(c + 8),
-                                                 *(wchar16**)(c + 0xc) - *(wchar16**)(c + 8), 1);
-                ((Flusher*)*(void**)(c + 0x21c))->Fn8e4350(r);
+    XmlParser* p = (XmlParser*)parser;
+    Doc* doc = (Doc*)p->mpDocument_4;
+    if (p->mpParserNode_21c != 0) {
+        if ((int)(p->mpTextEnd_c - p->mpTextBegin_8) != 0) {
+            if ((int)(p->mpTextEnd_c - p->mpTextBegin_8) != 0) {
+                void* r = doc->Fn8e26e0(p->mpTextBegin_8,
+                                        (int)(p->mpTextEnd_c - p->mpTextBegin_8), 1);
+                ((Flusher*)p->mpParserNode_21c)->Fn8e4350(r);
             }
-            if (*(void**)(c + 8) != *(void**)(c + 0xc)) {
-                **(wchar16**)(c + 8) = 0;
-                *(void**)(c + 0xc) = *(void**)(c + 8);
+            if (p->mpTextBegin_8 != p->mpTextEnd_c) {
+                *p->mpTextBegin_8 = 0;
+                p->mpTextEnd_c = p->mpTextBegin_8;
             }
         }
     }
 
     int count = 0;
-    const wchar16** p = attrs;
-    while (*p != 0) { p++; count++; }
-    void* elem = ((Doc*)doc)->Fn8e2c10((wchar16*)name, attrs, count / 2, 1);
-    if (elem != 0) {
-        if (*(int*)(doc + 0x40) == 0)
-            ((Doc*)doc)->Fn8e2800(elem);
-        else
-            ((Flusher*)*(void**)(c + 0x21c))->Fn8e4350(elem);
-        *(void**)(c + 0x21c) = elem;
+    const wchar16** ppAttr = attrs;
+    while (*ppAttr != 0) {
+        ppAttr++;
+        count++;
     }
-    *(char*)(c + 0x224) = 1;
-    XML_DefaultCurrent(*(void**)(c + 0x220));
+    void* elem = doc->Fn8e2c10((wchar16*)name, attrs, count / 2, 1);
+    if (elem != 0) {
+        if (doc->mOpenFlags_40 == 0)
+            doc->Fn8e2800(elem);
+        else
+            ((Flusher*)p->mpParserNode_21c)->Fn8e4350(elem);
+        p->mpParserNode_21c = elem;
+    }
+    p->mbSpace_224 = 1;
+    XML_DefaultCurrent(p->mpXmlParser_220);
 }
 
 // ---------------------------------------------------------------------------
@@ -594,32 +636,32 @@ void Fn8e5b90(void* parser, const wchar16* name, const wchar16** attrs)
 void* XmlParser::Fn8e5ea0(void* doc)
 {
     char* c = (char*)this;
-    *(void**)(c + 4) = doc;
-    *(void**)c = (void*)0x1437be4;
-    void** p = (void**)(c + 0x1c);
-    *(void**)(c + 0x18) = p;
-    *(void**)(c + 0xc) = p;
-    *(void**)(c + 8)  = p;
-    *(void**)(c + 0x10) = (void**)((char*)p + 0x200);
-    *(wchar16*)p = 0;
-    *(void**)(c + 0x21c) = 0;
-    *(void**)(c + 0x220) = 0;
-    *(char*)(c + 0x224) = 1;
-    *(void**)(c + 0x228) = 0;
-    *(void**)(c + 0x430) = 0;
-    *(void**)(c + 0x434) = 0;
-    *(char*)(c + 0x438) = 0;
-    *(void**)(c + 0x220) = FUN_0090af20(0);
-    FUN_00903300(*(void**)(c + 0x220), (void*)&Fn8e5b90, (void*)&Fn8e5c50);
-    FUN_00903320(*(void**)(c + 0x220), (void*)&Fn8e5e20);
-    FUN_00903340(*(void**)(c + 0x220), (void*)0x8e5930);
-    FUN_00903370(*(void**)(c + 0x220), (void*)0xc2e4e0, (void*)0xc2e4e0);
-    FUN_009033b0(*(void**)(c + 0x220), (void*)&Fn8e5a70);
-    FUN_00903350(*(void**)(c + 0x220), (void*)&Fn8e5980);
-    FUN_009033c0(*(void**)(c + 0x220), (void*)&Fn8e5e50);
-    FUN_009032e0(*(void**)(c + 0x220), c);
-    FUN_009033d0(*(void**)(c + 0x220), 1);
-    *(char*)(c + 0x224) = 1;
+    mpDocument_4 = doc;
+    wchar16* p = mInlinePool_1c;
+    mpVtbl_0 = (void*)0x1437be4;
+    mpInlinePool_18 = p;
+    mpTextEnd_c = p;
+    mpTextBegin_8 = p;
+    mpTextCapacity_10 = p + 0x100;
+    *p = 0;
+    mpParserNode_21c = 0;
+    mpXmlParser_220 = 0;
+    mbSpace_224 = 1;
+    mOffset_228 = 0;
+    mCount_430 = 0;
+    mIndex_434 = 0;
+    mbFlag_438 = 0;
+    mpXmlParser_220 = FUN_0090af20(0);
+    FUN_00903300(mpXmlParser_220, (void*)&Fn8e5b90, (void*)&Fn8e5c50);
+    FUN_00903320(mpXmlParser_220, (void*)&Fn8e5e20);
+    FUN_00903340(mpXmlParser_220, (void*)0x8e5930);
+    FUN_00903370(mpXmlParser_220, (void*)0xc2e4e0, (void*)0xc2e4e0);
+    FUN_009033b0(mpXmlParser_220, (void*)&Fn8e5a70);
+    FUN_00903350(mpXmlParser_220, (void*)&Fn8e5980);
+    FUN_009033c0(mpXmlParser_220, (void*)&Fn8e5e50);
+    FUN_009032e0(mpXmlParser_220, this);
+    FUN_009033d0(mpXmlParser_220, 1);
+    mbSpace_224 = 1;
     return this;
 }
 
@@ -629,24 +671,22 @@ void* XmlParser::Fn8e5ea0(void* doc)
 // @ 0x008e5fb0
 void XmlParser::Fn8e5fb0()
 {
-    char* c = (char*)this;
-    void* xp = *(void**)(c + 0x220);
-    if (xp == 0)
+    if (mpXmlParser_220 == 0)
         return;
-    int status[2] = { 0, 0 };
-    FUN_009035d0(xp, status);
+    int status[2];
+    FUN_009035d0(mpXmlParser_220, status);
     if (status[0] == 0)
         return;
-    FUN_0090a870(xp, 0);
-    FUN_00903300(xp, (void*)&Fn8e5b90, (void*)&Fn8e5c50);
-    FUN_00903320(xp, (void*)&Fn8e5e20);
-    FUN_00903340(xp, (void*)0x8e5930);
-    FUN_00903370(xp, (void*)0xc2e4e0, (void*)0xc2e4e0);
-    FUN_009033b0(xp, (void*)&Fn8e5a70);
-    FUN_00903350(xp, (void*)&Fn8e5980);
-    FUN_009033c0(xp, (void*)&Fn8e5e50);
-    FUN_009032e0(xp, c);
-    FUN_009033d0(xp, 1);
+    FUN_0090a870(mpXmlParser_220, 0);
+    FUN_00903300(mpXmlParser_220, (void*)&Fn8e5b90, (void*)&Fn8e5c50);
+    FUN_00903320(mpXmlParser_220, (void*)&Fn8e5e20);
+    FUN_00903340(mpXmlParser_220, (void*)0x8e5930);
+    FUN_00903370(mpXmlParser_220, (void*)0xc2e4e0, (void*)0xc2e4e0);
+    FUN_009033b0(mpXmlParser_220, (void*)&Fn8e5a70);
+    FUN_00903350(mpXmlParser_220, (void*)&Fn8e5980);
+    FUN_009033c0(mpXmlParser_220, (void*)&Fn8e5e50);
+    FUN_009032e0(mpXmlParser_220, this);
+    FUN_009033d0(mpXmlParser_220, 1);
 }
 
 // ---------------------------------------------------------------------------
@@ -655,22 +695,25 @@ void XmlParser::Fn8e5fb0()
 // @ 0x008e60a0
 int XmlParser::Fn8e60a0(void* stream)
 {
-    char* c = (char*)this;
     int rc = 0;
     Fn8e5fb0();
     for (;;) {
-        char* buf = (char*)FUN_00903400(*(void**)(c + 0x220), 0x1000);
-        if (buf == 0)
+        char* buf = (char*)FUN_00903400(mpXmlParser_220, 0x1000);
+        bool bBuffer = buf != 0;
+        if (bBuffer) {
+            int n = (*(int (__thiscall**)(void*, char*, int))(*(int*)stream + 0x30))(stream, buf, 0x1000);
+            int bFinal = n != 0x1000;
+            if (n == -1)
+                break;
+            if (FUN_00904580(mpXmlParser_220, n, bFinal) != 1)
+                break;
+            if (bFinal)
+                return rc;
+        } else {
             break;
-        int n = (*(int (__thiscall**)(void*, char*, int))(*(int*)stream + 0x30))(stream, buf, 0x1000);
-        if (n == -1)
-            break;
-        if (FUN_00904580(*(void**)(c + 0x220), n, n != 0x1000) != 1)
-            break;
-        if (n != 0x1000)
-            return rc;
+        }
     }
-    return Fn8e5730(*(void**)(c + 0x220), *(void**)(*(int*)(c + 4) + 0x48));
+    return Fn8e5730(mpXmlParser_220, ((Doc*)mpDocument_4)->mpUri_48);
 }
 
 // ---------------------------------------------------------------------------

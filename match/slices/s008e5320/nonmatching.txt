@@ -1,8 +1,15 @@
 # va  diff-bytes  reason
 008e53a0  52  eastl::lower_bound; complete; register allocation differs; now returns the iterator in eax (declared char*); difftest PASS (/O2 /MD /Gy /EHsc /TP /arch:SSE, --require-all, 383 valid, 100% coverage); callerdeps: eax DEPENDS, read at 008e556b after the call at 008e5559 in 008e5480
 008e5410  91  eastl::upper_bound; complete; register allocation differs; now returns the iterator in eax (declared char*); difftest PASS (/O2 /MD /Gy /EHsc /TP /arch:SSE, --require-all, 383 valid, 100% coverage); callerdeps: eax DEPENDS, read at 008e5551 after the call at 008e554b in 008e5480
-008e5580  35  LookupStandardHTMLEntity; local frame/arg arrange differ (equiv WEAK: 87% coverage)
+008e5480  110  eastl::equal_range; complete; hidden return slot now matches (StaticRange made non-POD with a copy ctor, so cl uses the sret pointer like the original); remaining residue is register allocation (count in ebx instead of edi); difftest PASS (375 valid, 100% coverage)
+008e5580  49  LookupStandardHTMLEntity; local frame/arg arrange differ (equiv PASS: 400 valid, 87% coverage)
 008e5600  82  XmlParser::Fn8e5600 buffer walk; codegen differs (equiv PASS)
+008e5670  131  XmlParser::Fn8e5670 text-buffer shift; complete (second memmove destination was 0x22c too high - fixed); three memcpy call sites are not tail-merged and register allocation differs; difftest PASS (345 valid, 100% coverage)
 008e59a0  89  XmlParser::FlushText; codegen differs (equiv WEAK: 22% coverage)
+008e5a70  214  ExternalEntityRefHandler; complete; codegen differs; difftest WEAK (211 valid, 22.2% coverage)
+008e5b90  142  entity-reference handler; complete; codegen differs; difftest WEAK (44 valid, 63.9% coverage)
 008e5c50  11  EndElementHandler; tail-call/virtual dispatch differ (equiv UNSUPPORTED: unresolved externs)
 008e5e50  84  SkippedEntityHandler; inlined entity lookup/arg arrange differ (equiv PASS)
+008e5ea0  13  XmlParser constructor; complete; only the vftable-store/lea/xor scheduling order differs (not source-controllable); difftest PASS (400 valid, 100% coverage)
+008e60a0  146  XmlParser::Parse(stream); complete; codegen differs; difftest PASS (240 valid, 100% coverage)
+008e61b0  395  GUI rect scatter; complete; SSE scalar codegen not reproduced (x87 at /arch:SSE; /arch:SSE2 /fp:fast gives 226 diff); difftest WEAK (382 valid, 51% coverage)
