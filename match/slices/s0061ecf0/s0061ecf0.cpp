@@ -415,8 +415,9 @@ bool cFeedManager::Pump(void* pA) {
 
 // @ 0x0061f670
 bool cFeedManager::Load(void* arg) {
-  char path[0x220];
+  char path[0x214];   // wide-path scratch (local_608 + guards)
   if (!FUN_0061e040(path, 0)) return true;
+
   void* fs = EA_Allocate(0x22c, "Pollinator", 0, 0, 0, 0);
   if (fs) fs = FileStream_ctor(fs, path);
   void* old = mpStream;
@@ -425,6 +426,7 @@ bool cFeedManager::Load(void* arg) {
     mpStream = fs;
     if (old) RefRelease(old);
   }
+
   void* es = EA_Allocate(0xb0, "Pollinator", 0, 0, 0, 0);
   if (es) es = EncryptedStream_ctor(es, mpStream);
   old = mpOut;
@@ -433,58 +435,91 @@ bool cFeedManager::Load(void* arg) {
     mpOut = es;
     if (old) RefRelease(old);
   }
-  char marker[0x18];
-  marker[0] = 0;
-  FUN_0061e430(marker, path);
-  if (!(*(bool(__thiscall*)(void*, void*))Vt(mpOut)[15])(mpOut, marker)) goto fail;  // +0x3c
-  if (!((FBool_VIIII)Vt(mpStream)[19])(mpStream, 3, 3, 1, 0)) goto fail;             // +0x4c
+
+  // Decoded stream name: wide-path -> char buffer.
+  char name[0x1c];
+  FUN_0061e430(name, path);
+  bool ok = (*(bool(__thiscall*)(void*, void*))Vt(mpOut)[15])(mpOut, name);  // +0x3c
+  if (!ok) goto fail;
+  ok = ((FBool_VIIII)Vt(mpStream)[19])(mpStream, 3, 3, 1, 0);                // +0x4c
+  if (!ok) goto fail;
 
   {
-    const char* pat = "<event>";
+    // Build the "</event>" marker string as an eastl string (global, else heap).
+    const char* pat = g_pEventClose;   // "<event>" pattern (masked global 0x152070c)
     uint32_t patLen = 0;
-    { const char* p = pat; while (*p++) ++patLen; }
-    char*   strBeg = (char*)0x1667bac;   // empty-string global (masked)
-    char*   strEnd;
-    if (patLen + 1 > 1) {
-      strBeg = (char*)EA_Allocate(patLen + 1, "Editor", 0, 0,
+    { const char* p = pat; while (*p) ++p; patLen = (uint32_t)(p - pat); }
+
+    char* strBeg = (char*)0x1667bac;   // eastl::gEmptyString16 (masked)
+    char* strCap;
+    uint32_t allocLen = patLen + 1;
+    if (allocLen > 1) {
+      strBeg = (char*)EA_Allocate(allocLen, "Editor", 0, 0,
                   "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
                   0xd1);
-      strEnd = strBeg + patLen + 1;
+      strCap = strBeg + allocLen;
     } else {
-      strEnd = strBeg + 1;
+      strCap = strBeg + 1;
     }
     for (uint32_t i = 0; i < patLen; ++i) strBeg[i] = pat[i];
     strBeg[patLen] = 0;
-    // (the original builds this through eastl::vector<bool,...>::DoInsertValue; masked target)
-    FUN_0061eba0();
-    FUN_0061ec30();
+    FUN_0061eba0();     // TrimLeft on the marker
+    FUN_0061ec30();     // TrimRight on the marker
 
+    // Scan the stream for the marker.  `match` is the running match offset into
+    // the marker; `lastMatch` records the byte offset one past the match.
     char readbuf[0x400];
-    uint32_t total = 0;
-    uint32_t got = ((FUInt_VPV)Vt(mpOut)[12])(mpOut, readbuf, 0x400);  // +0x30
     int found = 0;
-    while (got > 0) {
-      for (uint32_t i = 0; i < got; ++i) {
-        if (strBeg[total + i - total] == readbuf[i]) {
-          ++total;
-          if (total == patLen) { found = (int)(i + 1); break; }
-        } else {
-          total = 0;
+    uint32_t match = 0;
+    int consumed = 0;
+    uint32_t got = ((FUInt_VPV)Vt(mpOut)[12])(mpOut, readbuf, 0x400);   // +0x30
+    if (got != 0) {
+      do {
+        uint32_t i = 0;
+        do {
+          uint16_t m = (uint16_t)match;
+          ++match;
+          if (strBeg[m] == readbuf[i]) {
+            if ((uint16_t)match == (uint16_t)(-(int)strBeg)) {  // == patLen
+              found = (int)(i + 1) + consumed;
+              match = 0;
+            }
+          } else {
+            match = 0;
+          }
+          ++i;
+        } while (i < got);
+        consumed += got;
+        got = ((FUInt_VPV)Vt(mpOut)[12])(mpOut, readbuf, 0x400);
+      } while (got != 0);
+
+      if (found != 0) {
+        ok = ((FBool_VI)Vt(mpStream)[8])(mpStream, found);     // +0x20
+        if (ok) {
+          ok = ((FBool_VII)Vt(mpOut)[10])(mpOut, 0, 0);         // +0x28
+          if (ok) {
+            for (;;) {
+              if (((FUInt_VPV)Vt(mpOut)[12])(mpOut, readbuf, 0x400) == 0) break;
+            }
+            ((FInt_V)Vt(mpStream)[6])(mpStream);                // +0x18
+            EA_Free(strBeg);                                    // (eastl string dtor)
+            return true;
+          }
         }
+        ((FInt_V)Vt(mpOut)[6])(mpOut);                          // +0x18
+        File_Remove(name);
+        if (strCap - strBeg > 1 && strBeg != 0) EA_Free(strBeg);
+        goto fail;
       }
-      got = ((FUInt_VPV)Vt(mpOut)[12])(mpOut, readbuf, 0x400);
     }
-    if (found == 0) goto fail;
-    if (!((FBool_VI)Vt(mpStream)[8])(mpStream, found)) goto fail;      // +0x20
-    if (!((FBool_VII)Vt(mpOut)[10])(mpOut, 0, 0)) goto fail;           // +0x28
-    for (;;) { if (((FUInt_VPV)Vt(mpOut)[12])(mpOut, readbuf, 0x400) == 0) break; }
-    ((FInt_V)Vt(mpStream)[6])(mpStream);                              // +0x18
-    EA_Free(strBeg);
+    ((FInt_V)Vt(mpOut)[6])(mpOut);                              // +0x18
+    File_Remove(name);
+    if (mpStream) { void* p = mpStream; mpStream = 0; RefRelease(p); }
+    if (mpOut)    { void* p = mpOut;    mpOut = 0;    RefRelease(p); }
+    if (strCap - strBeg > 1 && strBeg != 0) EA_Free(strBeg);
     return true;
   }
 fail:
-  if (mpOut) ((FInt_V)Vt(mpOut)[6])(mpOut);
-  File_Remove(path);
   if (mpStream) { void* p = mpStream; mpStream = 0; RefRelease(p); }
   if (mpOut)    { void* p = mpOut;    mpOut = 0;    RefRelease(p); }
   return false;
