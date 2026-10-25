@@ -518,3 +518,31 @@ void cCreatureCamera::FUN_00d26030()
 clear:
     mb19C = false;
 }
+
+// @ 0x00d266c0
+// Builds an identity transform translated by *translation, marks it modified and
+// accumulates it onto `out`.
+void BuildTransformFromTranslation(cSPTransformOps* out, const Vec3* translation)
+{
+    cTransform xf;
+    xf.mFlags = 0;
+    xf.mModificationCount = 0;
+    xf.mScale = 1.0f;
+    xf.mRotation.Assign(g_169df20);
+    xf.mTranslation = *translation;
+
+    xf.mFlags |= 4;
+    xf.mModificationCount++;
+
+    cTransform copy;
+    copy.mFlags = xf.mFlags;
+    copy.mModificationCount = xf.mModificationCount;
+    copy.mTranslation.x = xf.mTranslation.x;
+    copy.mTranslation.y = xf.mTranslation.y;
+    copy.mTranslation.z = xf.mTranslation.z;
+    copy.mScale = xf.mScale;
+    copy.mRotation.Assign(xf.mRotation);
+
+    ((cTransformCompose*)&copy)->ComposeTransforms(out);
+    out->Assign(&copy);
+}
