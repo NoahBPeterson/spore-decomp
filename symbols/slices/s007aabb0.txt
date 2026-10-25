@@ -2,7 +2,7 @@
 006926b0 ?Wait@cJob@SP@@QAEXXZ  # SP::cJob::Wait (callee of s007aabb0, named from the dev publics; slice address comment)
 007aabb0 ?CreateTextureRaster@cTextureManager_s007a_abb0@@QAEHPAXH_NH@Z  # cTextureManager_s007a_abb0::CreateTextureRaster migrated from s007aabb0 (verbatim, slice spelling)
 007aaf90 ?UnregisterArena@cTextureManager_s007a_abb0@@QAEXPAX@Z  # cTextureManager_s007a_abb0::UnregisterArena migrated from s007aabb0 (verbatim, slice spelling)
-007aafc0 ?StallFinishBackgroundLoad@cTextureManager_s007a_abb0@@QAE_NPAUResourceKey@@@Z  # cTextureManager_s007a_abb0::StallFinishBackgroundLoad migrated from s007aabb0 (verbatim, slice spelling)
+007aafc0 ?StallFinishBackgroundLoad@cTextureManager@@QAEXPAVcTextureAsyncInfo@@@Z  # cTextureManager::StallFinishBackgroundLoad (complete, nonmatching)
 007ab090 ?ClearEntries@cLoadQueue@@QAEXXZ  # cLoadQueue::ClearEntries migrated from s007aabb0 (verbatim, slice spelling)
 007ab0d0 ?DoInsertValue@TextureInstanceMap@@QAE?AUInsertResult@1@ABUTextureValue@1@Utrue_type@1@@Z  # TextureInstanceMap::DoInsertValue migrated from s007aabb0 (verbatim, slice spelling)
 007ab2f0 SP::cTextureManager::~cTextureManager  # PDB gap-align
