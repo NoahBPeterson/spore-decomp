@@ -87,9 +87,6 @@ void* __fastcall FUN_0062cdb0(void* self, char flag) {
   return self;
 }
 
-// @ 0x0062ce00
-void __fastcall FUN_0062ce00(void* self, void*, char) { (void)self; }
-
 // ---- 0x0062d0f0 (cSPPlayMode_Creature: walk / dodge-around-other-creature controller) ----
 
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* pFile, int line);
@@ -155,6 +152,7 @@ struct PlayMode {
   char pad[0x7c];
   struct { ARC<PlayModeCreature>* mpBegin; ARC<PlayModeCreature>* mpEnd; } mCreatures;
   void StopWalk(AnimCreature* c, unsigned id);  // 0x62a1a0
+  void FUN_00628960(AnimCreature* c, unsigned id);  // 0x00628960
 };
 struct CasualPath {
   void SetPositionOffset(float x, float y);                      // 0x62da00
@@ -162,7 +160,13 @@ struct CasualPath {
   void StartPath();                                              // 0x62dbf0
   bool GetNextPathPoint(Vec3* out);                              // 0x62de30
 };
-struct PathVec { ARC<PathT>* mpBegin; ARC<PathT>* mpEnd; ARC<PathT>* mpCap; void EraseFirst(ARC<PathT>* it); /* 0x6b5990 */ };
+struct PathVec {
+  ARC<PathT>* mpBegin;
+  ARC<PathT>* mpEnd;
+  ARC<PathT>* mpCap;
+  void EraseFirst(ARC<PathT>* it);                              // 0x6b5990
+  void PushBack(ARC<PathT>* end, ARC<PathT>* value);            // 0x5c8480
+};
 
 struct PlayModeCreature : RefCountObj {
   AnimCreature* mAnimCreature;   // +8
@@ -183,7 +187,7 @@ struct PlayModeCreature : RefCountObj {
   PathT* NewPath(const Vec3* pos, float speed, char type, float reached);  // 0x62cb20
   bool AtFirstTarget(const Vec3* p);                                      // 0x62cbc0
   void BlockOthers();                                                      // 0x62ca80
-  void AddPathTarget(PathT* p, int replace);                               // 0x62ce00
+  void AddPathTarget(PathT* p, bool replace);                              // 0x62ce00
 
   bool MoveTo(int unused, int unused2, bool go, bool follow);  // @ 0x0062d0f0
 };
@@ -250,6 +254,45 @@ void __fastcall FUN_0062cc20(void* self, int unused, const Vec3* p, int unused2)
   dir.z = p->z - pos.z;
   float angle = -SignedDot(&dir, &fwd, &kUp);
   d->SetTargetAngle(angle, 0);
+}
+
+// Part ids in the creature's animation data that leave the walker running.
+enum { kPathIdA = 0x452b634, kPathIdB = 0x452b64a };
+
+// @ 0x0062CE00  SP::cSPPlayMode_Creature::AddPathTarget
+void PlayModeCreature::AddPathTarget(PathT* p, bool replace) {
+  if (replace) FUN_0062cb90(this);
+  if (Empty(mPathList)) {
+    unsigned id;
+    void* vt = *(void**)mAnimCreature;
+    typedef void (__thiscall* PartIdFn)(void*, unsigned*, int, int, int);
+    ((PartIdFn)(*(void**)((char*)vt + 0x58)))(mAnimCreature, &id, 0, 0, 0);
+    if (id == kPathIdA || id == kPathIdB) {
+      FUN_0062cc20(this, 0, &p->mTarget, 0);
+    } else {
+      FUN_0062cc20(this, 0, &p->mTarget, 0);
+      mPlayMode->FUN_00628960(mAnimCreature, mCreatureID);
+    }
+    int* dst = (int*)&p->mTarget;
+    const int* src = (const int*)&mData->mTargetPosition;
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+  }
+  ARC<PathT> tmp;
+  tmp.p = p;
+  if (p != 0) p->AddRef();
+  if (mPathList.mpEnd < mPathList.mpCap) {
+    ARC<PathT>* slot = mPathList.mpEnd;
+    mPathList.mpEnd = slot + 1;
+    if (slot != 0) {
+      slot->p = p;
+      if (p != 0) p->AddRef();
+    }
+  } else {
+    mPathList.PushBack(mPathList.mpEnd, &tmp);
+  }
+  if (tmp.p != 0) tmp.p->Release();
 }
 
 // @ 0x0062cef0  SP::cSPPlayMode_Creature::UpdateMovement
@@ -448,5 +491,60 @@ bool PlayModeCreature::MoveTo(int, int, bool go, bool follow) {
   }
 }
 
-// @ 0x0062d8a0
-void __fastcall FUN_0062d8a0(void* self, float, float) { (void)self; }
+// ---- 0x0062d8a0 (64x64 navigation-grid neighbour table) ----
+
+extern const float kGridStep;  // 0x013fe21c  (1/63)
+extern const float kNegHalf;   // 0x013ec488  (-0.5)
+
+struct GridCell {
+  float x;                 // +0x00
+  float y;                 // +0x04
+  GridCell* n[8];          // +0x08  [0]=left [2]=down [4]=right [6]=up; odd slots null
+  char pad28[8];           // +0x28
+  unsigned char flag;      // +0x30
+  char pad31[0x0f];        // +0x31
+};
+
+struct GridTable {
+  char pad00[8];           // +0x00
+  float mWidth;            // +0x08
+  float mHeight;           // +0x0c
+  float mStepX;            // +0x10
+  float mStepY;            // +0x14
+  float mOriginX;          // +0x18
+  float mOriginY;          // +0x1c
+  char pad20[0x18];        // +0x20
+  GridCell mCells[64 * 64];  // +0x38
+
+  void Build(float width, float height);  // 0x0062d8a0
+};
+
+// @ 0x0062D8A0
+void GridTable::Build(float width, float height) {
+  mStepX = width * kGridStep;
+  mWidth = width;
+  mHeight = height;
+  mStepY = height * kGridStep;
+  mOriginX = width * kNegHalf;
+  mOriginY = height * kNegHalf;
+  for (int row = 0; row < 64; ++row) {
+    for (int col = 0; col < 64; ++col) {
+      GridCell* c = &mCells[row * 64 + col];
+      c->x = (float)row * mStepX + mOriginX;
+      c->y = (float)col * mStepY + mOriginY;
+      c->flag = 0;
+      for (int k = 0; k < 8; ++k) {
+        switch (k) {
+          case 0: c->n[0] = col > 0 ? c - 1 : 0; break;
+          case 1:
+          case 3:
+          case 5:
+          case 7: c->n[k] = 0; break;
+          case 2: c->n[2] = row < 63 ? c + 64 : 0; break;
+          case 4: c->n[4] = col < 63 ? c + 1 : 0; break;
+          case 6: c->n[6] = row > 0 ? c - 64 : 0; break;
+        }
+      }
+    }
+  }
+}
