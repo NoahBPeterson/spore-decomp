@@ -28,7 +28,52 @@ struct BaseManip : EA::COM::IUnknown32 {
   float mInitialY;       // +0x10
   BaseManip();
 };
+
+// eastl::sp_vector<AutoRefCount<cSPEditorBlock> > layout: three pointers followed by the
+// 8-byte retail sp_vector_allocator.  Elements are reference-counted block pointers.
+struct PileList {
+  RefA** mpBegin;
+  RefA** mpEnd;
+  RefA** mpCapacity;
+  uint32_t mAllocator[2];
+  PileList() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  void erase(RefA** first, RefA** last);                        // 0x00454280
+  void DoInsertValueEnd(RefA** position, RefA* const& value);   // 0x00454ee0
+};
+
+struct IObject {
+  virtual void* Cast(uint32_t id);   // +0x00
+  virtual int AddRef();              // +0x04
+  virtual int Release();             // +0x08
+};
+
+// Handle object whose vtable slot 0x30 takes two ints.
+struct RefHandle {
+  virtual void* Cast(uint32_t id);   // +0x00
+  virtual int AddRef();              // +0x04
+  virtual int Release();             // +0x08
+  virtual void v3();                 // +0x0c
+  virtual void v4();                 // +0x10
+  virtual void v5();                 // +0x14
+  virtual void v6();                 // +0x18
+  virtual void v7();                 // +0x1c
+  virtual void v8();                 // +0x20
+  virtual void v9();                 // +0x24
+  virtual void v10();                // +0x28
+  virtual void v11();                // +0x2c
+  virtual void SetState(int a, int b);   // +0x30
+};
 }  // namespace
+
+namespace SP {
+class cSPEditorAnimatedEventInfo : public IObject {
+ public:
+  uint32_t mData[11];
+  cSPEditorAnimatedEventInfo();   // 0x0059d960
+  void MessagePost(uint32_t id, void* block, void* model, uint32_t a, bool b, float c, int d, int e,
+                   float f);   // 0x0059d840
+};
+}  // namespace SP
 
 
 // ---------------------------------------------------------------- 0x005b4340
@@ -48,10 +93,14 @@ struct M3 {
 struct BBox {
   V3 mn, mx;
 };
+struct Blk;
 struct Model {
-  float GetScale();             // 0x004adaa0
-  float GetFloorZ();            // 0x004adb00
-  void SetUsingSymmetry(bool);  // 0x004adc20
+  float GetScale();                  // 0x004adaa0
+  float GetFloorZ();                 // 0x004adb00
+  void SetUsingSymmetry(bool);       // 0x004adc20
+  bool UsingSymmetry();              // 0x004adc40
+  unsigned GetBlockCount();          // 0x004accf0
+  Blk* GetBlock(unsigned index);     // 0x004accb0
 };
 struct Blk {
   char pad0[0x28];
@@ -72,6 +121,9 @@ struct Blk {
   BBox* GetBBox(BBox* out, int a, int b, int c);  // 0x0044ae00
   void SetPosition(const V3& p, bool notify);     // 0x00448e90
   void SetOrientation(const M3& m, bool notify);  // 0x00449420
+  void SetSymmetrySign(int sign);                 // 0x0044e980
+  void AddToEffectsMask(cSPVector3 pos, bool flag);   // 0x00448690
+  void F3cad0();                                  // 0x0043cad0
 };
 struct Viewer {
   void GetWorldRayFromScreenCoords(float x, float y, V3& origin, V3& dir);  // 0x007c4730
@@ -87,33 +139,52 @@ struct App {
 App* GetApp();  // 0x0067dd10
 struct MsgMgr {
   void SetTransform(uint32_t id, Blk* b);  // 0x0045b080
+  void Remove(uint32_t key);               // 0x0045b150
+  void PlayFrom(uint32_t key, int mode, char* src, int key2);   // 0x0045ae40
 };
 MsgMgr* GetMsgMgr();  // 0x00401050
 V3 Mirror(const V3& v);                // 0x004a8f40 (x -> -x)
 M3 MirrorMatrix(const M3& m, int axis);  // 0x004a8e10
 void MoveBlockAndPile(Blk* block, void* pile, V3 pos, M3 orient);  // 0x0049ecf0
 void UpdateBlockAndPile(Blk* block, void* pile, int a, int b, int c, int d, int e, int f);  // 0x004a6d20
+void BuildPileList(Blk* block, void* pile, int depth);   // 0x0048c790
+void RecordBlockAndPileHistory(Blk* block, void* pile);  // 0x004961d0
+void ReleaseRefs(Blk* block, void* pile);                // 0x004a8860
+void SetSymmetricBlocksUIState(Blk* block, void* pile, int state);  // 0x004a7f30
+void DeleteInvalidBlocks(Blk* block, void* pile);        // 0x004a6f10
+RefA** RemoveCopyBlocks(RefA** first, RefA** last, RefA** result, RefA* const* value);  // 0x005aa740
 }  // namespace PM
+
+// Inlined eastl::remove over the pile: locate `block`, then shift the tail down with
+// remove_copy (0x005aa740).  Returns end when the block is not present.
+inline RefA** RemoveBlockFromPile(RefA** first, RefA** last, RefA* const& block) {
+  while (first != last && *first != block)
+    ++first;
+  if (first != last) {
+    RefA** next = first + 1;
+    return PM::RemoveCopyBlocks(next, last, first, &block);
+  }
+  return first;
+}
 
 // @ 0x005b4b40
 class PlanarInter : public BaseManip, public EA::RefCountVTemplate<int> {
  public:
-  RefA* m1c;   // +0x1c
-  void* m20;   // +0x20
-  void* m24;   // +0x24
-  void* m28;   // +0x28
-  void* m2c;   // +0x2c
-  char pad_30[0x38 - 0x30];
+  RefA* m1c;     // +0x1c
+  void* m20;     // +0x20
+  PileList mPile;  // +0x24 (eastl sp_vector<AutoRefCount<block> >)
   cSPVector3 mV;  // +0x38
   bool m44;       // +0x44
   bool m45;       // +0x45
   bool m46;       // +0x46 originally-used-symmetry
   PlanarInter();
+  bool OnMouseUp(int button, float x, float y, int mods);      // 0x005b4170
   bool DoOnMouseMove(float x, float y, int mods);   // 0x005b4340
+  bool DoOnMouseDown(int button, float x, float y, int mods);  // 0x005b4bf0
   void SetBlock(RefA** src, uint32_t a, uint32_t b, uint32_t c, bool d, bool e);
 };
 PlanarInter::PlanarInter()
-    : m1c(0), m20(0), m24(0), m28(0), m2c(0), mV(), m44(false), m45(false) {
+    : m1c(0), m20(0), mPile(), mV(), m44(false), m45(false) {
   mChangedObject = false;
 }
 
@@ -201,7 +272,7 @@ bool PlanarInter::DoOnMouseMove(float x, float y, int mods) {
       }
     }
     block->model->SetUsingSymmetry(false);
-    MoveBlockAndPile(block, &m24, H, block->orient);
+    MoveBlockAndPile(block, &mPile, H, block->orient);
     if (!block->socket && block->sym && (((char*)block->kidsEnd - (char*)block->kidsBegin) & ~3) == 0) {
       Blk* sym = block->sym;
       sym->SetPosition(Mirror(H), false);
@@ -222,11 +293,11 @@ bool PlanarInter::DoOnMouseMove(float x, float y, int mods) {
       doUpdate = true;
     }
     if (doUpdate)
-      MoveBlockAndPile(block, &m24, H, block->orient);
+      MoveBlockAndPile(block, &mPile, H, block->orient);
     block->model->SetUsingSymmetry(m46);
   }
   ((Blk*)m1c)->model->SetUsingSymmetry(false);
-  UpdateBlockAndPile((Blk*)m1c, &m24, 0, 0, 0, outside, 1, 1);
+  UpdateBlockAndPile((Blk*)m1c, &mPile, 0, 0, 0, outside, 1, 1);
   ((Blk*)m1c)->model->SetUsingSymmetry(m46);
   if (!mChangedObject)
     mChangedObject = true;
@@ -279,11 +350,116 @@ bool SPin50::DoOnMouseMove(float x, float y, int z) {
   return false;
 }
 
-// ---- not translated ----
+// ---- planar interpenetration: mouse up / mouse down ----
+
+// Posts the editor event selected by the block's flags, records the pile transform, drops
+// blocks that lost their socket and notifies the message map.
 // @ 0x005b4170
-void Stub_005b4170() {}
+bool PlanarInter::OnMouseUp(int button, float x, float y, int mods) {
+  (void)button; (void)x; (void)y; (void)mods;
+  if (mChangedObject) {
+    using namespace PM;
+    Blk* block = (Blk*)m1c;
+    uint32_t flags = block->flags;
+    uint32_t id = 0;
+    bool post = true;
+    if ((flags >> 1) & 1)
+      id = 0x428e920;
+    else if ((flags >> 2) & 1)
+      post = false;
+    else if (m44)
+      id = 0x8e04ce1a;
+    else
+      id = 0xda95baa5;
+    if (post) {
+      cSPEditorAnimatedEventInfo* msg = new ("Editor", 0, 0, 0, 0) cSPEditorAnimatedEventInfo();
+      if (msg)
+        msg->AddRef();
+      Blk* target = (Blk*)m1c;
+      Model* model = target ? target->model : 0;
+      msg->MessagePost(id, target, model, 0, false, 0.0f, 0, -1, 1.0f);
+      if (msg)
+        msg->Release();
+    }
+  }
+  {
+    using namespace PM;
+    Blk* block = (Blk*)m1c;
+    Model* model = block->model;
+    if (model) {
+      int count = (int)model->GetBlockCount();
+      for (int i = 0; i < count; ++i) {
+        if (model->GetBlock(i)->socket == 0)
+          model->GetBlock(i)->SetSymmetrySign(-2);
+      }
+    }
+    DeleteInvalidBlocks(block, &mPile);
+  }
+  PM::GetMsgMgr()->Remove(0x16d0daed);
+  return true;
+}
+
+// Rebuilds the pile around the manipulated block, optionally snaps the block onto the
+// x = 0 symmetry plane, then refreshes symmetry bookkeeping and posts the transform.
 // @ 0x005b4bf0
-void Stub_005b4bf0() {}
+bool PlanarInter::DoOnMouseDown(int button, float x, float y, int mods) {
+  (void)button; (void)mods;
+  using namespace PM;
+  Blk* block = (Blk*)m1c;
+  Model* model = block->model;
+
+  mPile.erase(mPile.mpBegin, mPile.mpEnd);
+  m46 = model->UsingSymmetry();
+
+  if (m45) {
+    int count = (int)model->GetBlockCount();
+    for (int i = 0; i < count; ++i) {
+      if (model->GetBlock(i)->socket == 0) {
+        BuildPileList(model->GetBlock(i), &mPile, 0);
+        RefA* child = (RefA*)model->GetBlock(i);
+        if (child)
+          child->AddRef();
+        mPile.DoInsertValueEnd(mPile.mpEnd, child);
+        if (child)
+          child->Release();
+      }
+    }
+  } else {
+    BuildPileList(block, &mPile, 0);
+    Blk* sym = block->sym;
+    if (sym) {
+      BuildPileList(sym, &mPile, 0);
+      RefA* child = (RefA*)sym;
+      child->AddRef();
+      mPile.DoInsertValueEnd(mPile.mpEnd, child);
+      child->Release();
+    }
+  }
+
+  RefA** end = mPile.mpEnd;
+  RefA** it = RemoveBlockFromPile(mPile.mpBegin, end, m1c);
+  mPile.erase(it, end);
+  RecordBlockAndPileHistory(block, &mPile);
+
+  V3 origin, dir;
+  GetApp()->GetViewer()->GetWorldRayFromScreenCoords(x, y, origin, dir);
+
+  float vx = -origin.x;
+  float vy = -origin.y;
+  float inv = 1.0f / SqrtF(vx * vx + vy * vy);
+  float alignment = fabsf((inv * vy + inv * 0.0f) * 0.0f + inv * vx);
+  if (alignment > 0.5f && (block->flags & 1) == 0) {
+    block->model->SetUsingSymmetry(false);
+    MoveBlockAndPile(block, &mPile, V3(0.0f, block->pos.y, block->pos.z), block->orient);
+    block->model->SetUsingSymmetry(m46);
+  }
+
+  if (!model->UsingSymmetry())
+    ReleaseRefs(block, &mPile);
+  SetSymmetricBlocksUIState(block, &mPile, 0);
+  GetMsgMgr()->PlayFrom(0x16d0daed, 1, (char*)block, 0);
+  return true;
+}
 // @ 0x005b4f20
 // Angle wrap into (-pi, pi].  The period lives in a mutable global (0x15e9fd8, 0 in the
 // emulated image, so the fmod yields NaN and the wraps are skipped - the same as retail);
@@ -297,5 +473,35 @@ float Stub_005b4f20(float angle)
     return r + *(volatile float*)0x15e9fd8;
   return r;
 }
+// ---- rotation handle ----
+
+class RotationHandle : public BaseManip, public EA::RefCountVTemplate<int> {
+ public:
+  RefHandle* m1c;   // +0x1c rotation handle
+  PM::Blk* m20;     // +0x20 rotated block
+  PileList mPile;   // +0x24
+  bool OnMouseUp(int button, float x, float y, int mods);
+};
+
+// Clears the handle effects and posts the block-changed event when anything moved.
 // @ 0x005b4fa0
-void Stub_005b4fa0() {}
+bool RotationHandle::OnMouseUp(int button, float x, float y, int mods) {
+  (void)button; (void)x; (void)y; (void)mods;
+  if (m1c && m20) {
+    m20->AddToEffectsMask(cSPVector3(1.0f, 1.0f, 1.0f), false);
+    m1c->SetState(3, 1);
+    m20->F3cad0();
+    if (mChangedObject) {
+      cSPEditorAnimatedEventInfo* msg = new ("Editor", 0, 0, 0, 0) cSPEditorAnimatedEventInfo();
+      if (msg)
+        msg->AddRef();
+      PM::Blk* block = m20;
+      PM::Model* model = block ? block->model : 0;
+      msg->MessagePost(0x211685f7, block, model, 0, false, 0.0f, 0, -1, 1.0f);
+      if (msg)
+        msg->Release();
+    }
+    PM::DeleteInvalidBlocks(m20, &mPile);
+  }
+  return true;
+}
