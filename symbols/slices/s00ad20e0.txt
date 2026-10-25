@@ -9,4 +9,4 @@
 00ad2880 triggerCallbackA  # cActionTarget-based trigger callback (vt[3] lookup 0x55aa4e6)
 00ad2910 triggerCallbackB  # cActionTarget-based trigger callback (vt[3] lookup 0x60b4546)
 00ad29d0 SP::tNavigationGoal::tNavigationGoal  # init-at: dest +20 bytes, stop distance +0x60, flags +0x5c=1
-00ad2a50 SP::tNavigationGoal::tNavigationGoal  # init-toward: dest (p) + aim (q), stop distance +0x60, flags +0x5c=3
+00ad2a50 ?InitToward@tNavigationGoal@@QAEPAU1@PAM0MM@Z  # tNavigationGoal::InitToward kept in the slice (equiv PASS; canonical ctor conversion emits unresolved cSPVector3/tNavigationWaypoint ctors)
