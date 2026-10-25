@@ -15,3 +15,10 @@
 00639bd0 ?Init@cSPPlayModeSubModeAction@SP@@UAEXPAUSubModeParams_t@2@@Z  # SP::cSPPlayModeSubModeAction::Init migrated from s00639bd0
 00639ec0 ?OnKeyDown@cSPPlayModeSubModeAction_s0063_9bd0@@QAE_NHH@Z  # cSPPlayModeSubModeAction_s0063_9bd0::OnKeyDown migrated from s00639bd0 (verbatim, slice spelling)
 0063a0a0 ?Update@cSPPlayModeSubModeAction_s0063_9bd0@@QAEXI@Z  # cSPPlayModeSubModeAction_s0063_9bd0::Update migrated from s00639bd0 (verbatim, slice spelling)
+0063b270 ?Init@cSPPlayModeSubModeBase@@QAEXPAUSubModeParams_t@@@Z  # SP::cSPPlayModeSubModeBase::Init (callee of Init)
+0059ca70 ?GetCreature@cCreatureAnimMgr@@QAEPAUcAnimatingCreature@@I@Z  # SP::cSPEditorAnimatedCreatureManager::GetCreature (callee of Init)
+00638e90 ?HasRequiredPart@cSPPlayModeSubModeAction@@QAE_NH@Z  # cSPPlayModeSubModeAction::HasRequiredPart (callee of Init)
+00628a80 ?GetMouthPartIdx@cSPPlayMode@@QAEIXZ  # SP::cSPPlayMode::GetMouthPartIdx (callee of Init)
+00634ef0 ?SetEnabled@cSPPlayModeUIAction@@QAEXI_N@Z  # SP::cSPPlayModeUI::SetEnabled (callee of Init)
+0067cab0 ?GetCursorTable@@YAPAUCursorTable@@XZ  # CursorTable accessor (callee of Init)
+00802050 ?AddCursor@CursorTable@@QAEIIPB_WDHH@Z  # CursorTable::AddCursor (callee of Init)

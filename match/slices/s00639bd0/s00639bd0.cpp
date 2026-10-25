@@ -25,11 +25,13 @@ struct IAnimCreature {
 };
 struct cCreatureStructure;
 struct Vector3;
+struct cAnimatingCreature;
 struct cCreatureAnimMgr {
     bool IsAnimationPlaying(uint32_t creatureID, uint32_t animID);   // 0x0059CC40
     cCreatureStructure* GetCreatureStructure(uint32_t id);                    // 0x0059CAC0
     void GetCreaturePosition(uint32_t id, Vector3* out);                      // 0x0059D110
     void SetCreatureTargetPosition(uint32_t id, Vector3 pos, int a, int b);   // 0x0059CF00
+    cAnimatingCreature* GetCreature(uint32_t id);                             // 0x0059CA70
 };
 struct Vector3 {
     float x, y, z;
@@ -98,9 +100,46 @@ struct cIVisualEffect {
     virtual void e03(); virtual void e04(); virtual void e05();
     virtual void SetTransform(const XformMsg& x);              // +0x18
 };
+// The "movement cursor" effect object used by Init's effect block.  Only the slots it
+// calls are modelled (7, 30, 33, 40).
+struct IMovementCursorEffect {
+    virtual void f00();  virtual void f01();  virtual void f02();  virtual void f03();
+    virtual void f04();  virtual void f05();  virtual void f06();  virtual void f07();
+    virtual void f08();  virtual void f09();  virtual void f10();  virtual void f11();
+    virtual void f12();  virtual void f13();  virtual void f14();  virtual void f15();
+    virtual void f16();  virtual void f17();  virtual void f18();  virtual void f19();
+    virtual void f20();  virtual void f21();  virtual void f22();  virtual void f23();
+    virtual void f24();  virtual void f25();  virtual void f26();  virtual void f27();
+    virtual void f28();  virtual void f29();
+    virtual void f30(int a);                                   // +0x78
+    virtual void f31();  virtual void f32();
+    virtual void f33(void* viewer, int b);                     // +0x84
+    virtual void f34();  virtual void f35();  virtual void f36();  virtual void f37();
+    virtual void f38();  virtual void f39();
+    virtual void* f40(int a, int b);                           // +0xA0
+};
 struct IEffectWorld {
     virtual void w00(); virtual void w01();
     virtual bool CreateVisualEffect(uint32_t id, int a, cIVisualEffect** out);   // +0x08
+};
+// Effect-world object returned by FUN_0067dd50 (slots 7 and 19 are used by Init).
+struct IEffectWorldObj {
+    virtual void h00(); virtual void h01(); virtual void h02(); virtual void h03();
+    virtual void h04(); virtual void h05(); virtual void h06();
+    virtual void h07(void* arg);                              // +0x1c
+    virtual void h08(); virtual void h09(); virtual void h10(); virtual void h11();
+    virtual void h12(); virtual void h13(); virtual void h14(); virtual void h15();
+    virtual void h16(); virtual void h17(); virtual void h18();
+    virtual void h19(void* arg);                              // +0x4c
+};
+// Effects manager (slot 19 = CreateEffectWorld).
+struct IEffectsManagerObj {
+    virtual void k00(); virtual void k01(); virtual void k02(); virtual void k03();
+    virtual void k04(); virtual void k05(); virtual void k06(); virtual void k07();
+    virtual void k08(); virtual void k09(); virtual void k10(); virtual void k11();
+    virtual void k12(); virtual void k13(); virtual void k14(); virtual void k15();
+    virtual void k16(); virtual void k17(); virtual void k18();
+    virtual void* k19(uint32_t id, const char* name);         // +0x4c
 };
 struct IEffectsManager {
     virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03(); virtual void m04();
@@ -128,6 +167,36 @@ struct IModelManager {
     virtual uint32_t GetGroupIndex(uint32_t id, int a);        // +0x28
 };
 IModelManager* ModelManager();                                 // 0x0067DD80
+
+// ---- Init-only declarations -------------------------------------------------------------
+// Params block passed to Init; the base Init caches the animation living at +0x20.
+struct SubModeParams_t {
+    char pad00[0x20];
+    IAnimCreature* mAnim;              // +0x20
+};
+struct cSPUICursorTable;
+
+// Base of every play-mode sub-mode.  Only the vtable is modelled; the derived class's
+// fields start immediately after it.
+struct cSPPlayModeSubModeBase {
+    virtual ~cSPPlayModeSubModeBase();
+    virtual void b1();
+    void Init(SubModeParams_t* params);                        // 0x0063B270
+};
+
+// Local view of cSPPlayModeUI used only for the SetEnabled call (the shared header's
+// cSPPlayModeUI is a different, larger layout).
+struct cSPPlayModeUIAction {
+    void SetEnabled(uint32_t id, bool on);                     // 0x00634EF0
+};
+struct CursorTable {
+    uint32_t AddCursor(uint32_t id, const wchar_t* name, char load, int a, int b);  // 0x00802050
+};
+CursorTable* GetCursorTable();                                 // 0x0067CAB0
+extern float gNextRandomIdleTime;                              // 0x01470F1C (2.0f)
+void* FUN_0067dd50();                                          // 0x0067DD50 (world/camera accessor)
+void* FUN_006eea10();                                          // 0x0066EEA10 (camera accessor)
+// cSPPlayMode::GetMouthPartIdx is a thiscall on the play mode.
 struct IMessageServer {
     virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03(); virtual void s04();
     virtual void PostMSG(uint32_t a, uint32_t b, int c);       // +0x14
@@ -172,9 +241,12 @@ struct cSPPlayMode_Creature {
 };
 
 struct cSPPlayMode {
-    char pad00[0x14];
+    char pad00[0x0c];
+    cSPPlayModeUIAction* mUI;          // +0x0C
+    char pad10[0x14 - 0x10];
     float mSleepTimer;                 // +0x14
-    char pad18[0x1d - 0x18];
+    float mIdleTime;                   // +0x18
+    char pad1c;
     uint8_t mSleepState;               // +0x1D
     uint8_t mCallState;                // +0x1E
     uint8_t mCelebrateState;           // +0x1F
@@ -208,6 +280,7 @@ struct cSPPlayMode {
     void ForceBabiesToIdle(int idx);                           // 0x006296E0
     void SetAllBabyPhotoModes(int on);                         // 0x006288A0
     bool SwitchToCrouchAnim();                                 // 0x00629590
+    uint32_t GetMouthPartIdx();                                // 0x00628A80
 };
 
 struct cCreatureStructure { char pad[0x4c]; float mRotateAccel; float mRotateSpeed; };  // +0x4C/+0x50
@@ -238,8 +311,7 @@ struct cEditorBase {
     uint32_t EmitEmotion(uint32_t event, int a, float b, float c);   // 0x00574110
 };
 
-struct cSPPlayModeSubModeAction {
-    char pad04[0x4];
+struct cSPPlayModeSubModeAction : cSPPlayModeSubModeBase {
     cEditorBase*   mEditorBase;        // +0x04
     IAnimCreature* mAnim;              // +0x08
     char pad0c[0x4];
@@ -247,43 +319,58 @@ struct cSPPlayModeSubModeAction {
     bool mIsMouseDown;                 // +0x14
     bool mIsFirstClick;                // +0x15
     bool mIsPickingUp;                 // +0x16
-    char pad17[0x1a - 0x17];
+    bool mIsGoingToPickUp;             // +0x17
+    bool mIsThrowing;                  // +0x18
+    bool mHoopsModeOn;                 // +0x19
     bool mIsWalking;                   // +0x1A
-    char pad1b[0x30 - 0x1b];
+    char pad1b[0x1c - 0x1b];
+    void* mCurrItemInAir;              // +0x1C
+    char pad20[0x24 - 0x20];
+    uint8_t mActionButtonAnimRotation; // +0x24
+    uint8_t mEmotionButtonAnimRotation;// +0x25
+    char pad26[0x30 - 0x26];
     float mX;                          // +0x30
     float mY;                          // +0x34
     EA::AutoRefCount<cIVisualEffect> mCursorEffect;   // +0x38
     float mClickTime;                  // +0x3C
     float mKeyClickTime;               // +0x40
-    char pad44[0x48 - 0x44];
+    EA::AutoRefCount<cIVisualEffect> mHitEffect;      // +0x44
     cCreatureAnimMgr* mAnimCreatureMgr; // +0x48
     uint32_t mCreatureID;              // +0x4C
     cAnimatingCreature* mAnimCreature; // +0x50
     char pad54[0x68 - 0x54];
     int  mCurrIdleAnimState;           // +0x68
-    char pad6c[0x70 - 0x6c];
+    uint32_t mMagicAnimID;             // +0x6c
     Vector3 mCurrTargetPosition;       // +0x70
     bool mMouthBidx;                   // +0x7C
     char pad7d[0x80 - 0x7d];
     uint32_t mSocCallEffectID;         // +0x80
     uint32_t mLastLookAroundIdleID;    // +0x84
-    char pad88[0x90 - 0x88];
+    uint32_t mKeyInputButtonState[2];  // +0x88 (both initialised to 0xffffffff)
     float mRandomIdleTimer;            // +0x90
     float mRandomIdleSwitchTimer;      // +0x94
     float mNextRandomIdleTime;         // +0x98
     uint32_t mQueuedBoredAnimID;       // +0x9C
-    char padA0[0xb8 - 0xa0];
+    uint32_t mBabyActionEventIDs[6];   // +0xA0
     uint32_t mBabyEmotionEventIDS[6];  // +0xB8
-    char padD0[0xdd - 0xd0];
-    bool mbDD;                         // +0xDD
-    char padDE;
-    bool mbDF;                         // +0xDF
-    char padE0[0xe8 - 0xe0];
+    uint32_t mKeyInputButtonStateD0[2];// +0xD0 (second key-input state pair)
+    uint32_t mMagicD8;                 // +0xD8
+    union {
+        uint32_t mMagicDC;             // +0xDC
+        struct { uint8_t mDC0; uint8_t mbDD; uint8_t mDC2; uint8_t mDC3; };
+    };
+    union {
+        uint16_t mMagicE0;             // +0xE0
+        struct { uint8_t mE00; uint8_t mbDF; };
+    };
+    char padE2[0xe8 - 0xe2];
     EA::Stopwatch mFaceUserTimer;      // +0xE8
-    char pad100[4];
+    void* mEffectWorldUnk100;          // +0x100
     IEffectWorld* mEffectWorld;        // +0x104
+    cViewer* mViewer;                  // +0x108
+    EA::AutoRefCount<void> mEffectRef; // +0x10c
 
-    void Init();
+    void Init(SubModeParams_t* params);
     bool OnKeyDown(int keyCode, int arg2);
     void Update(uint32_t deltaTime);
     void UpdateKeyInput();               // 0x00639350
@@ -294,6 +381,7 @@ struct cSPPlayModeSubModeAction {
     float SetIdleAnimation(cAnimatingCreature* c, uint32_t id, int a, int b);  // 0x00638FD0
     void MarkKeyInputKeyDown(int idx);   // 0x006398F0
     void CaptureGIF();                   // 0x00639A10
+    bool HasRequiredPart(int idx);       // 0x00638E90
 };
 
 // @ 0x00639EC0
@@ -342,8 +430,113 @@ bool cSPPlayModeSubModeAction::OnKeyDown(int keyCode, int arg2)
     return false;
 }
 
-// @ 0x00639BD0  PARTIAL
-void cSPPlayModeSubModeAction::Init() {}
+// @ 0x00639BD0  SP::cSPPlayModeSubModeAction::Init(SubModeParams_t*)
+// Resets the action's per-submode state, calls the base Init, caches the creature /
+// editor references, wires the pickup/throw cursors and the movement-cursor effect.
+void cSPPlayModeSubModeAction::Init(SubModeParams_t* params) {
+    cSPPlayModeSubModeAction* self = this;
+
+    self->mClickTime = 0.0f;
+    self->mIsMouseDown = false;
+    self->mIsFirstClick = false;
+    self->mIsPickingUp = false;
+    self->mIsGoingToPickUp = false;
+    self->mIsThrowing = false;
+    self->mHoopsModeOn = false;
+    self->mIsWalking = false;
+    self->mEffectWorldUnk100 = 0;
+    self->mActionButtonAnimRotation = 5;
+    self->mEmotionButtonAnimRotation = 10;
+    self->mCurrItemInAir = 0;
+
+    // Release the two effect handles held by the action.
+    if (self->mCursorEffect.mpObject) {
+        cIVisualEffect* p = self->mCursorEffect.mpObject; self->mCursorEffect.mpObject = 0; p->Release();
+    }
+    if (self->mHitEffect.mpObject) {
+        cIVisualEffect* p = self->mHitEffect.mpObject; self->mHitEffect.mpObject = 0; p->Release();
+    }
+
+    self->mFaceUserTimer.mnStartTime = 0;
+    self->mFaceUserTimer.mnTotalElapsedTime = 0;
+
+    // Base Init: caches the animation and editor references.
+    self->cSPPlayModeSubModeBase::Init(params);
+
+    cEditorBase* eb = self->mEditorBase;
+    self->mAnimCreatureMgr = *(cCreatureAnimMgr**)((char*)eb + 0x360);
+    self->mCreatureID = *(uint32_t*)((char*)eb + 0x364);
+    self->mAnimCreature = self->mAnimCreatureMgr->GetCreature(self->mCreatureID);
+
+    // cSPPlayModeUI lives at cSPPlayMode+0xc.
+    if (self->HasRequiredPart(1))
+        self->mPlayMode->mUI->SetEnabled(0x3e99d8c, true);
+    else
+        self->mPlayMode->mUI->SetEnabled(0x3e99d8c, false);
+    self->mSocCallEffectID = self->mPlayMode->GetMouthPartIdx();
+    self->mLastLookAroundIdleID = 0xffffffff;
+    self->mCurrIdleAnimState = 0;
+    self->mMagicAnimID = 0x4330667;
+    self->mAnim = *(IAnimCreature**)((char*)params + 0x20);
+    self->mMouthBidx = false;
+
+    // Register the two interaction cursors.
+    GetCursorTable()->AddCursor(0x3b360dc, L"cursor-crg-pickup", 1, 0, 0);
+    GetCursorTable()->AddCursor(0x3b360e4, L"cursor-crg-throw", 1, 0, 0);
+
+    self->mRandomIdleTimer = 0.0f;
+    self->mNextRandomIdleTime = gNextRandomIdleTime;
+    self->mRandomIdleSwitchTimer = 0.0f;
+    self->mKeyInputButtonState[0] = 0xffffffff;
+    self->mKeyInputButtonState[1] = 0xffffffff;
+    self->mQueuedBoredAnimID = 0xffffffff;
+    self->mPlayMode->mIdleTime = 0.0f;
+
+    self->mBabyActionEventIDs[0] = 0x3bd9a6f8;
+    self->mBabyActionEventIDs[1] = 0xbac2d74f;
+    self->mBabyActionEventIDs[2] = 0x8b2f58fe;
+    self->mBabyActionEventIDs[3] = 0x167d2885;
+    self->mBabyActionEventIDs[4] = 0x5c4d694c;
+    self->mBabyActionEventIDs[5] = 0xf77c2e23;
+    self->mBabyEmotionEventIDS[0] = 0x1d9547b2;
+    self->mBabyEmotionEventIDS[1] = 0xb0a9f0f9;
+    self->mBabyEmotionEventIDS[2] = 0x9e341470;
+    self->mBabyEmotionEventIDS[3] = 0x43773b7b;
+    self->mBabyEmotionEventIDS[4] = 0x622c20c4;
+    self->mBabyEmotionEventIDS[5] = 0xe646113d;
+    self->mKeyInputButtonStateD0[0] = 0x22b31636;
+    self->mKeyInputButtonStateD0[1] = 0xe7782027;
+    self->mMagicD8 = 0x6035c10;
+    self->mMagicDC = 0;
+    self->mMagicE0 = 0;
+
+    if (self->mEffectRef.mpObject != 0)
+        return;
+
+    self->mViewer = App()->GetViewer();
+    void* cam = FUN_006eea10();
+    void* old = self->mEffectRef.mpObject;
+    if (cam != old) {
+        if (cam) (*(void(__thiscall**)(void*))*(void**)cam)(cam);
+        self->mEffectRef.mpObject = (void*)cam;
+        if (old) (*(void(__thiscall**)(void*))((*(void***)old)[1]))(old);
+    }
+    ((IMovementCursorEffect*)self->mEffectRef.mpObject)->f30(0);
+    ((IMovementCursorEffect*)self->mEffectRef.mpObject)->f33(self->mViewer, 0);
+    IMovementCursorEffect* eff = (IMovementCursorEffect*)self->mEffectRef.mpObject;
+    IEffectWorldObj* world = (IEffectWorldObj*)FUN_0067dd50();
+    void* arg = eff->f40(0x1c, 0);
+    world->h19(arg);
+
+    if (self->mEffectWorld != 0)
+        return;
+
+    IEffectsManagerObj* em = (IEffectsManagerObj*)EffectsManager();
+    IEffectWorldObj* newWorld = (IEffectWorldObj*)em->k19(0x61c8236, "Movement Cursor Effects World");
+    self->mEffectWorld = (IEffectWorld*)newWorld;
+    // Tail call: world->slot7(effectRef).
+    newWorld->h07(self->mEffectRef.mpObject);
+}
 // @ 0x0063A0A0
 void cSPPlayModeSubModeAction::Update(uint32_t deltaTime)
 {
