@@ -1,2 +1,13 @@
-004484f0 ?A84f0@Blk_s0044_8380@@QAE_NXZ  # Blk_s0044_8380::A84f0 migrated from s00448380 (verbatim, slice spelling)
-004485d0 ?A85d0@Blk_s0044_8380@@QAEXXZ  # Blk_s0044_8380::A85d0 migrated from s00448380 (verbatim, slice spelling)
+00448380 ?GetEffectsMaskScale@cSPEditorBlock@SP@@QAEMXZ  # SP::cSPEditorBlock::GetEffectsMaskScale: 0.04f*mField33c?1.0f:0.6f*scale, *2.0f when mFlags.test(0x22); complete (nonmatching, difftest PASS)
+00448480 ?RecordHandlePositionAt@cSPEditorBlock@SP@@QAE_NHD@Z  # SP::cSPEditorBlock::RecordHandlePositionAt(int index, char flag): bounds-check mItems then RecordHandlePosition(flag); byte-exact
+004484f0 ?RecordAllHandlePositions@cSPEditorBlock@SP@@QAE_NXZ  # SP::cSPEditorBlock::RecordAllHandlePositions: skip when mFlags.test(0x0b), AND every item's RecordHandlePositionAt; byte-exact
+004485d0 ?UpdateAllHandles@cSPEditorBlock@SP@@QAEXXZ  # SP::cSPEditorBlock::UpdateAllHandles: skip when mFlags.test(0x0b), Update() every deform handle; byte-exact
+00448690 ?AddToEffectsMask@cSPEditorBlock@SP@@QAEXUcSPVector3@2@_N@Z  # SP::cSPEditorBlock::AddToEffectsMask(cSPVector3 pos, bool): CreateEffectsMask(mInstance,mGroup,6), set mOffset, group bit and mOwner, then UpdateEffectsMask; complete (nonmatching, difftest PASS)
+004488c0 ?UpdateEffectsMask@cSPEditorBlock@SP@@QAEXXZ  # SP::cSPEditorBlock::UpdateEffectsMask: copy model xform, SetEffectsModel, InitDeformAnimationsB(1), remap every deform handle between GetModelHandleRange lo/hi; complete (nonmatching, difftest WEAK)
+00448a80 ?RemoveFromEffectsMask@cSPEditorBlock@SP@@QAEXXZ  # SP::cSPEditorBlock::RemoveFromEffectsMask: SetInWorld(mask,0), release mEffectsMaskObject, clear mFieldde0; complete (nonmatching, difftest PASS)
+00448b10 ?InitDeformAnimationsA@cSPEditorBlock@SP@@QAEXXZ  # SP::cSPEditorBlock::InitDeformAnimationsA: sub_458f60(mModel, mModelWorld, {mInstance,0,mGroup}, 1); complete (nonmatching, difftest PASS)
+00448b80 ?InitDeformAnimationsB@cSPEditorBlock@SP@@QAEX_N@Z  # SP::cSPEditorBlock::InitDeformAnimationsB(bool flag): same with mEffectsMaskObject when flag; byte-exact
+00448c10 ?HasChildWithFlag@cSPEditorBlock@SP@@QAE_NXZ  # SP::cSPEditorBlock::HasChildWithFlag: true when a child has mFlags.test(0x0c) and not mFlags.test(0x14); complete (nonmatching, difftest PASS)
+00448d60 ?ResetSymmetryBlocks@cSPEditorBlock@SP@@QAEXXZ  # SP::cSPEditorBlock::ResetSymmetryBlocks: AddRef cached mSymmetricBlock, ClearSymmetryRecursive, recurse into the symmetric block when UsingSymmetry(), Release; complete (nonmatching, difftest PASS)
+00448dd0 ?ClearSymmetryRecursive@cSPEditorBlock@SP@@QAEXXZ  # SP::cSPEditorBlock::ClearSymmetryRecursive: SetFlag(0x39,true), drop mSymmetricBlock, recurse through mChildBlockList; byte-exact
+00448e90 ?SetPosition@cSPEditorBlock@SP@@QAEXABUcSPVector3@2@_N@Z  # SP::cSPEditorBlock::SetPosition(const cSPVector3&, bool): A48fa0 then mirrored A48fa0 with negated x when UsingSymmetry(); byte-exact

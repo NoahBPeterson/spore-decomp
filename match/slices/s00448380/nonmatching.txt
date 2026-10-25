@@ -1,5 +1,8 @@
 # va  diff-bytes  reason
-00448480  61   complete behaviour; /Od frame and vector-size local differ
-004485d0  68   complete behaviour; /Od frame and vector-size local differ
-00448b10  60   complete behaviour; /Od slot order for the by-value Key3 temp differs
-00448b80  64   complete behaviour; /Od slot order for the by-value Key3 temp differs
+00448380  186  GetEffectsMaskScale - /Od frame/slot layout differs (retail declares the float result first, a/b after it, and keeps the mField33c test in a pointer slot); equiv PASS
+00448690  517  AddToEffectsMask - complete but retail inlines a two-branch mGroups set-bit (or/and form, +159 bytes) and copies pos through cSPVector3::operator[]; /Od frame differs; equiv PASS
+004488c0  386  UpdateEffectsMask - complete; /Od temp slots and call-argument load order differ; equiv WEAK (263 valid inputs, 40.3% coverage)
+00448a80  16   RemoveFromEffectsMask - complete; /Od frame is 8 bytes larger in retail (two unnamed operator= temps) and the mEffectsMaskObject condition copy sits in the higher slot; equiv PASS
+00448c10  293  HasChildWithFlag - complete; retail materialises the empty()==false comparison (neg/sbb/add) and re-indexes mChildBlockList[i] for the second flag test, growing the /Od frame to 0x30; equiv PASS
+00448d60  10   ResetSymmetryBlocks - complete; only the /Od register-load order around the virtual AddRef/Release dispatch differs; equiv PASS
+00448b10  10   InitDeformAnimationsA - complete; only the /Od slot order of the by-value Key3 temp (retail keeps key at -0xc..-4, model temp at -0x10) differs; equiv PASS
