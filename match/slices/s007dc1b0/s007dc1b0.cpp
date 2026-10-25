@@ -81,66 +81,26 @@ void FUN_007dcb00(float* out, const float* a, const float* b)
 // ===========================================================================
 // 0x007dc1b0  Zoom
 // ===========================================================================
-// 0x007dc1b0
-// l mZoomLevels.mpEnd   -> end;  l mZoomLevels.mpCapacity -> cap (orig eax/edx = +0x34/+0x30)
-// mBufferedNearClip.mSteps -> probe (+0xa8);  return is an x87 st(0) value
-__declspec(naked) float SmZoom007dc1b0(void* self)
-{
-    __asm {
-        mov   eax, dword ptr [ecx + 0x30]
-        sub   esp, 8
-        cmp   eax, dword ptr [ecx + 0x34]
-        je    L_fmt_one
-        mov   edx, eax
-        mov   eax, dword ptr [ecx + 0x34]
-        fld   dword ptr [edx]
-        fsub  dword ptr [eax - 4]
-        fabs
-        fld   st(0)
-        fldz
-        fld   st(0)
-        fxch  st(2)
-        fucomp
-        lahf
-        test  ah, 0x44
-        jp    L_lied
-        fstp  st(1)
-        fstp  st(0)
-L_fmt_one:
-        fld1
-        add   esp, 8
-        ret
-    L_lied:
-        movss xmm1, dword ptr [ecx + 0xa8]
-        comiss xmm1, dword ptr [edx]
-        movss dword ptr [esp], xmm1
-        jbe   L_tle_hi
-        fstp  st(1)
-        add   esp, 8
-        ret
-    L_tle_hi:
-        movss xmm0, dword ptr [ecx + 0x34]
-        mov   eax, dword ptr [ecx + 0x34]
-        fstp  st(0)
-        movss xmm0, dword ptr [eax - 4]
-        comiss xmm0, xmm1
-        movss dword ptr [esp + 4], xmm0
-        ja    L_fmt_one
-        fld   dword ptr [esp]
-        fsub  dword ptr [esp + 4]
-        fdivr
-        fld1
-        fsubr
-        add   esp, 8
-        ret
-    }
-}
-
+// 0x007dc1b0  cSmoothCameraController::Zoom
+// mZoomLevels.mpEnd (+0x30) -> end;  mZoomLevels.mpCapacity (+0x34) -> cap
+// mBufferedNearClip.mSteps (+0xa8) -> probe
 float cSmoothCameraController::Zoom()
 {
-    return SmZoom007dc1b0(this);
+    float* end = (float*)mZoomLevels.mpEnd;
+    float* cap = (float*)mZoomLevels.mpCapacity;
+    if (end == cap)
+        return 1.0f;
+    float range = fabsf(end[0] - cap[-1]);
+    if (range == 0.0f)
+        return 1.0f;
+    float probe = (float)mBufferedNearClip.mSteps;
+    if (probe > end[0])
+        return 0.0f;
+    float c = cap[-1];
+    if (c > probe)
+        return 1.0f;
+    return 1.0f - (probe - c) / range;
 }
-
 // ===========================================================================
 // 0x007dc230  ZoomRange
 // ===========================================================================
@@ -276,7 +236,9 @@ void cSmoothCameraController::ZoomInterpolationParamsFromDistanceAlongCurve
     float* p = (float*)mZoomLevels.mpEnd;
     float v = p[i];
     float r = (v - d) / (v - p[j]);
-    if (r < 0.0f || r > 1.0f)
+    if (r < 0.0f)
+        r = 0.0f;
+    else if (r > 1.0f)
         r = 1.0f;
     *a = i; *b = j; *t = r;
 }
@@ -432,42 +394,50 @@ cSmoothCameraController::~cSmoothCameraController()
 // 0x007dca30  OnUpdateTargetSet
 // ===========================================================================
 // Retail keeps the orientation-level array at +0x14c and the current level index
-// at +0x160, and the "adjustable pitch" byte at +0x1b1; the migrated dev layout in
-// the class above puts those fields elsewhere, so use a named retail overlay.
+// at +0x160, the "adjustable pitch" byte at +0x1b1 and the two buffered positions as
+// Vec3 blocks at +0xf8 and +0x104; the migrated dev layout in the class above puts
+// those fields elsewhere, so use a named retail overlay.
+extern cSPVector3 g_kVec3Zero3;   // 0x016389dc
+
 struct SmOnUpdateTargetSetFields {
-    char   _pad00[0x14c];
-    float* mOrientationLevels;   // +0x14c
-    char   _pad150[0x10];        // +0x150..+0x15f
-    int    mOrientationIndex;    // +0x160
-    char   _pad164[0x4d];        // +0x164..+0x1b0
-    bool   mAdjustablePitch;     // +0x1b1
+    char   _pad00[0x28];
+    int    mCurrentZoomLevel;        // +0x28
+    char   _pad2c[0x6c];             // +0x2c..+0x97
+    float  mBufferedHeadingCurrent;  // +0x98
+    float  mBufferedHeadingTarget;   // +0x9c
+    char   _pada0[0x8];              // +0xa0..+0xa7
+    float  mBufferedNearClipSteps;   // +0xa8 (float: fstp in the original)
+    char   _padac[0x4c];             // +0xac..+0xf7
+    cSPVector3 mBufferedSubjectPosition; // +0xf8
+    cSPVector3 mBufferedLookAtPosition;  // +0x104
+    char   _pad110[0x3c];            // +0x110..+0x14b
+    float* mOrientationLevels;       // +0x14c
+    char   _pad150[0x10];            // +0x150..+0x15f
+    int    mOrientationIndex;        // +0x160
+    char   _pad164[0x4d];            // +0x164..+0x1b0
+    bool   mAdjustablePitch;         // +0x1b1
 };
 
 void cSmoothCameraController::OnUpdateTargetSet()
 {
     SmOnUpdateTargetSetFields* rf = (SmOnUpdateTargetSetFields*)this;
-    if (false && !rf->mAdjustablePitch) {
-        mBufferedSubjectPosition.mSteps = 0;
-        mBufferedLookAtPosition.mCurrent.y = 0.0f;
-        mBufferedSubjectPosition.mMinChange = 0.0f;
-        mBufferedLookAtPosition.mCurrent.z = 0.0f;
-        mBufferedLookAtPosition.mCurrent.x = 0.0f;
-        mBufferedLookAtPosition.mTarget.x = 0.0f;
+    if (!rf->mAdjustablePitch) {
+        cSPVector3 zero;
+        zero.x = g_kVec3Zero3.x;
+        zero.y = g_kVec3Zero3.y;
+        zero.z = g_kVec3Zero3.z;
+        rf->mBufferedSubjectPosition = zero;
+        rf->mBufferedLookAtPosition = zero;
     }
     float* end = (float*)mZoomLevels.mpEnd;
     if (end != (float*)mZoomLevels.mpCapacity) {
         void* volatile fn = ((void**)*(void***)this)[0x74 / 4];
-        float d = *end;
-        mBufferedNearClip.mSteps = *(uint32_t*)&d;
+        rf->mBufferedNearClipSteps = *end;
         unsigned n = (unsigned)(((char*)mZoomLevels.mpCapacity - (char*)end) >> 2);
-        // ((void(__thiscall*)(void*, unsigned))fn)(this, n / 2);
-        (void)fn; (void)n;
+        ((void(__thiscall*)(void*, unsigned))fn)(this, n >> 1);
     }
     void* volatile fn2 = ((void**)*(void***)this)[0x74 / 4];
-    float v = rf->mOrientationLevels[rf->mOrientationIndex];
-    mBufferedDistanceAlongCurve.mSteps = *(uint32_t*)&v;
-    mBufferedDistanceAlongCurve.mMinChange = v;
-    // ((void(__thiscall*)(void*, float))fn2)(this, mContinuousZoomDistance);
-    (void)fn2;
-    // final call disabled for diagnosis
+    rf->mBufferedHeadingCurrent = rf->mOrientationLevels[rf->mOrientationIndex];
+    rf->mBufferedHeadingTarget = rf->mOrientationLevels[rf->mOrientationIndex];
+    ((void(__thiscall*)(void*, int))fn2)(this, rf->mCurrentZoomLevel);
 }
