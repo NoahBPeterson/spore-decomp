@@ -219,10 +219,32 @@ class hkAgentBase
 public:
     virtual void destroy(int flags);                         // vtable slot 0
 };
+// 0x30-byte cd point handed to the linear-cast wrapper: three hkVector4 lanes.
+// The wrapper flips the second lane (the contact normal) before the cast.
+struct hkCdPoint3
+{
+    hkVector4 m_v0;              // +0x00
+    hkVector4 m_v1;              // +0x10
+    hkVector4 m_v2;              // +0x20
+};
+// Cd-point collector with a child collector: vtable 0x014a43ac, early-out at +0x04,
+// the (aligned) point lane at +0x10 and the child collector at +0x20.
+#define HK_REAL_MAX 3.40282e+38f      // 0x7f7fffee in this build (not FLT_MAX)
+struct hkCdPointCollectorChild
+{
+    void*     m_vtable;          // +0x00
+    float     m_earlyOut;        // +0x04 (0x7f7fffee)
+    uint32_t  m_pad08[2];        // +0x08
+    hkVector4 m_point;           // +0x10
+    void*     m_child;           // +0x20
+};
 struct hkMultiRayConvexAgentBase
 {
     void getClosestPoints(const hkCdBody& bodyA, const hkCdBody& bodyB,
                           const hkCollisionInput& input, void* collector);   // 0x010cf0d0
+    void linearCast(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                    const hkCdPoint3& point, void* collector,
+                    void* childCollector);                               // 0x010ec0a0
 };
 class hkMultiRayConvexAgent
 {
@@ -339,9 +361,33 @@ after_deallocate:
 // @ 0x010cfe10
 void hkAgentWrapper::FUN_010cfe10(void* a1, void* a2, void* a3, void* a4, void* a5)
 {
-    // Five-argument iterative-linear-cast wrapper.  The start/end point
-    // collectors and the negated cd-point copy are not reconstructed yet.
-    (void)a1; (void)a2; (void)a3; (void)a4; (void)a5;
+    const hkCdPoint3& src = *(const hkCdPoint3*)a3;
+
+    hkCdPoint3 point = src;
+    point.m_v1.x = -src.m_v1.x;
+    point.m_v1.y = -src.m_v1.y;
+    point.m_v1.z = -src.m_v1.z;
+    point.m_v1.w = -src.m_v1.w;
+
+    hkCdPointCollectorChild collector;
+    collector.m_vtable = (void*)0x014a43ac;
+    collector.m_earlyOut = HK_REAL_MAX;
+    collector.m_point = src.m_v1;
+    collector.m_child = a4;
+
+    hkCdPointCollectorChild* childCollector = 0;
+    hkCdPointCollectorChild secondCollector;
+    if (a5 != 0)
+    {
+        secondCollector.m_vtable = (void*)0x014a43ac;
+        secondCollector.m_earlyOut = HK_REAL_MAX;
+        secondCollector.m_point = src.m_v1;
+        secondCollector.m_child = a5;
+        childCollector = &secondCollector;
+    }
+
+    ((hkMultiRayConvexAgentBase*)this)->linearCast(*(const hkCdBody*)a2, *(const hkCdBody*)a1,
+                                                   point, &collector, childCollector);
 }
 
 // @ 0x010cff30
@@ -351,9 +397,7 @@ void* __cdecl FUN_010cff30(const hkCdBody& bodyA, const hkCdBody& bodyB,
     void* mem = ((hkMemory*)g_hkMemoryInstance)->allocate(0x20, 0x1c);
     hkAgent44* node = (hkAgent44*)mem;
     node->m_size = 0x20;
-    const hkCdBody& second = bodyB;
-    const hkCdBody& first = bodyA;
-    FUN_010cf850(node, second, first, input, mgr);
+    FUN_010cf850(node, bodyB, bodyA, input, mgr);
     node->m_vtable = (void*)0x014a44bc;
     return node;
 }
