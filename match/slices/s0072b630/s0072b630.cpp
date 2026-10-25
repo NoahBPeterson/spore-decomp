@@ -462,9 +462,39 @@ void __declspec(noinline) FUN_0072b630(void* pMesh, void* pTextures, void* pMesh
     }
 }
 
-// @ 0x0072c1e0  (PARTIAL: eastl fixed_vector ctor with EH)
-void* FUN_0072c1e0(void* self, int n, void* a)
+// eastl::fixed_vector<bool, 16>: a 0x18-byte head (begin/end/capacity/overflow/pool/pad) followed by the
+// 16-byte inline pool the capacity points into.
+struct FixedBoolVector {
+    char* mpBegin;                       // +0x00
+    char* mpEnd;                         // +0x04
+    char* mpCapacity;                    // +0x08
+    int   mOverflow;                     // +0x0c
+    char* mpPoolBegin;                   // +0x10
+    int   mPad;                          // +0x14
+    char  mBuffer[16];                   // +0x18
+
+    void insert(char* position, int count, int value);      // 0x004c6560 vector<bool>::insert(pos,count,value)
+    __declspec(noinline) FixedBoolVector* FUN_0072c1e0(unsigned count, int value);
+};
+
+// @ 0x0072c1e0
+FixedBoolVector* FixedBoolVector::FUN_0072c1e0(unsigned count, int value)
 {
-    (void)self; (void)n; (void)a;
-    return self;
+    char* buf = mBuffer;
+
+    mpBegin = buf;
+    mpEnd = buf;
+    mpCapacity = buf + 16;
+    mpPoolBegin = buf;
+    if (count > 0) {
+        insert(mpEnd, count, value);
+        return this;
+    }
+    // count == 0: the inlined tail of vector<bool>::insert is the empty range copy of the elements
+    // after the insertion point (always empty here, the point is the end) plus the end adjustment.
+    char* src = mpEnd;
+    char* dst = src + count;
+    FUN_0011e0744(dst, src, src - dst + count);
+    mpEnd = mpEnd + count;
+    return this;
 }
