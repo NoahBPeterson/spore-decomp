@@ -6,6 +6,13 @@
 #include <math.h>
 #include "types.h"
 
+// The retail Op3 tail contains the x87 CRT square-root and arc-cosine: `fld arg; call
+// _CIsqrt` / `call _CIacos` with the argument and result on the x87 stack (retail 0x5714d4:
+// fld [ebp-0x14]; call 0x11e0738 ... call 0x11e08c8).  Under /arch:SSE (no SSE2) cl lowers
+// sqrt(double)/acos(double) to those x87 intrinsics, whereas sqrtf/acosf become cdecl SSE
+// libm calls -- so the tail below uses the double forms with a float(result) narrowing, the
+// same shape as retail (`fstp tmp; fld tmp`).
+
 // ---------------------------------------------------------------------------
 // 12-byte key: {cID (2 x uint32), float}
 // ---------------------------------------------------------------------------
@@ -305,7 +312,7 @@ float cTraitQuery::Op3(cFeatureVector* a, cFeatureVector* b)
         ++itB;
     }
 
-    float nA = sqrtf(fB);
-    float nB = sqrtf(fC);
-    return acosf(fA / (nA * nB));
+    float nA = (float)sqrt((double)fB);
+    float nB = (float)sqrt((double)fC);
+    return (float)acos((double)(fA / (nA * nB)));
 }
