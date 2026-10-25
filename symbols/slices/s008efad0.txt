@@ -1,0 +1,10 @@
+008efde0 ?AddFloats@StackingContext@@QAEXPAULineLayout@@@Z  # walks ValueFlagPair over LineLayout's run/box arrays, Block::MoveTo per box
+008efe80 ?FlushLines@StackingContext@@QAEXH@Z  # flushes up to N lines through the Typesetter, then advances NextLine
+008f0010 ?FlushAllLines@StackingContext@@QAEXXZ  # flushes every line until Typesetter::GetType()==2, then Reset(1)
+00897600 ?Store@ValueFlagPair@@QAEPAU1@PAX@Z  # store value, clear flag, return this
+00897620 ?Assign@ValueFlagPair@@QAEXPAX@Z  # clear flag, store non-null value
+00897640 ?Set@TripleFloat@@QAEXMMM@Z  # stores three floats at +0x3c0/+0x3c4/+0x3c8
+00897680 EA::Text::Typesetter::GetType
+008976a0 EA::Text::Typesetter::GetLineLayout  # returns this+0x418
+008981a0 ValueFlagPair::Next  # next run-array index whose flags byte has 0x10
+0089cf10 EA::Text::Typesetter::ProcessLine
