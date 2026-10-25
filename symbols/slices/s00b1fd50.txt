@@ -26,4 +26,4 @@
 00b20c60 SP::cGameNounManager::CreateNoun  # PDB
 00b20d30 cGameNounManager::PostRemove  # dc: message 0x1a0219e, unlink node
 00b20e40 cGameNounManager::CreateDebugNoun  # dc: CreateNoun(0x52aa6122), PlanetModel helpers
-00b20ee0 SP::UpdateDebugUI  # PDB; switch enum -> string assign
+00b20ee0 ?UpdateDebugUI@@YGPAUByteString@@PAU1@I@Z  # UpdateDebugUI migrated from s00b1fd50 (verbatim, slice spelling)

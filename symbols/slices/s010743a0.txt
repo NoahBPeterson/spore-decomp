@@ -1,1 +1,1 @@
-010743a0 SP::cSPUISpace::Update  # per-frame UI update; PDB name, retail layout
+010743a0 ?Update@cSPUISpace_s0107_43a0@SP@@QAEXI@Z  # Update migrated from s010743a0 (verbatim, slice spelling)

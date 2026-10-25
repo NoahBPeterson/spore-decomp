@@ -1,0 +1,4 @@
+01077990 ?FUN_01077990@cSPUISpaceTrading@SP@@QAEXPAX@Z  # cSPUISpaceTrading::FUN_01077990 migrated from s01077470 (verbatim, slice spelling)
+010779e0 ?FUN_010779e0@cSPUISpaceTrading@SP@@QAEXXZ  # cSPUISpaceTrading::FUN_010779e0 migrated from s01077470 (verbatim, slice spelling)
+01077b40 ?FUN_01077b40@@YAIPAX@Z  # FUN_01077b40 migrated from s01077470 (verbatim, slice spelling)
+01077b70 ?FUN_01077b70@cSPUISpaceTrading@SP@@QAE_NPAXPAI@Z  # cSPUISpaceTrading::FUN_01077b70 migrated from s01077470 (verbatim, slice spelling)

@@ -1,0 +1,4 @@
+01068800 ?FUN_01068800@@YGXPAXI0I@Z  # FUN_01068800 migrated from s01068800 (verbatim, slice spelling)
+01068970 ?FUN_01068970@@YG_NPAXI0@Z  # FUN_01068970 migrated from s01068800 (verbatim, slice spelling)
+01068d30 ?FUN_01068d30@@YGXIPAUVec3@@EEII@Z  # FUN_01068d30 migrated from s01068800 (verbatim, slice spelling)
+01068f70 ?FUN_01068f70@Space@@QAEXXZ  # Space::FUN_01068f70 migrated from s01068800 (verbatim, slice spelling)

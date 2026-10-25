@@ -1,0 +1,35 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUISpace.cpp  ?RecordEvent2@@YAXII@Z  00435ed0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?UpdateDebugUI@@YGPAUByteString@@PAU1@I@Z  00b20ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?Store3@KeySink@@QAEXHHH@Z  00bbc410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?StoreEmpty@KeySink@@QAIXXZ  00bbc4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?ShowBakeTimeSplash_01065ab0@cSPUISpace@@QAEXXZ  01065ab0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?HideBakeTimeSplash_01065af0@cSPUISpace@@QAEXXZ  01065af0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?IsBakeSplashShown_01065b30@cSPUISpace@@QAE_NXZ  01065b30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?HideStarPlanet_01065b60@@YGXPAXI@Z  01065b60  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?GetTerrainIcon_01065ba0@CTerrainIconOwner@@QAEHH@Z  01065ba0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_010679f0@cSPUISpace_s0106_78e0@@QAEXXZ  010679f0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_010681e0@cSPUISpace_s0106_78e0@@QAEXHH@Z  010681e0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_010682a0@cSPUISpace_s0106_78e0@@QAEXI@Z  010682a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01068300@cSPUISpace_s0106_78e0@@QAEXXZ  01068300  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01068330@cSPUISpace_s0106_78e0@@QAEXXZ  01068330  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01068350@cSPUISpace_s0106_78e0@@QAE_NXZ  01068350  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?CopyCtor@Blk28@@QAEPAU1@ABU1@@Z  01068450  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ??4Blk28@@QAEAAU0@ABU0@@Z  010685a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?Destroy@Blk28@@QAEPAU1@E@Z  010687d0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01068f70@Space@@QAEXXZ  01068f70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_0106a970@cSPUISpace_s0106_a0a0@@QAEXXZ  0106a970  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_0106aab0@cSPUISpace_s0106_a0a0@@QAEXI@Z  0106aab0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_0106b9b0@cSPUISpace_s0106_ada0@@QAEHHH@Z  0106b9b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ??0cSPUIBase@@QAE@XZ  0106da70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?PushToolWindowId@cSPUISpace_s0106_da70@@QAEXI@Z  0106dcd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?OnContextDeactivate@cSPUISpace_s0106_da70@@QAEXXZ  0106e270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_0106f120@cSPUISpace_s0106_ea40@@QAEXI@Z  0106f120  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_0106f160@cSPUISpace_s0106_ea40@@QAEXI@Z  0106f160  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_0106f380@cSPUISpace_s0106_ea40@@QAEXXZ  0106f380  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01077990@cSPUISpaceTrading@SP@@QAEXPAX@Z  01077990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_010779e0@cSPUISpaceTrading@SP@@QAEXXZ  010779e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01077b40@@YAIPAX@Z  01077b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01077b70@cSPUISpaceTrading@SP@@QAE_NPAXPAI@Z  01077b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_0107ab20@cToolWidget@SP@@QAEXH@Z  0107ab20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_0107abb0@cToolWidget@SP@@QAEXXZ  0107abb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

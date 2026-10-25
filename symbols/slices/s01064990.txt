@@ -1,0 +1,5 @@
+01065ab0 ?ShowBakeTimeSplash_01065ab0@cSPUISpace@@QAEXXZ  # cSPUISpace::ShowBakeTimeSplash_01065ab0 migrated from s01064990 (verbatim, slice spelling)
+01065af0 ?HideBakeTimeSplash_01065af0@cSPUISpace@@QAEXXZ  # cSPUISpace::HideBakeTimeSplash_01065af0 migrated from s01064990 (verbatim, slice spelling)
+01065b30 ?IsBakeSplashShown_01065b30@cSPUISpace@@QAE_NXZ  # cSPUISpace::IsBakeSplashShown_01065b30 migrated from s01064990 (verbatim, slice spelling)
+01065b60 ?HideStarPlanet_01065b60@@YGXPAXI@Z  # HideStarPlanet_01065b60 migrated from s01064990 (verbatim, slice spelling)
+01065ba0 ?GetTerrainIcon_01065ba0@CTerrainIconOwner@@QAEHH@Z  # CTerrainIconOwner::GetTerrainIcon_01065ba0 migrated from s01064990 (verbatim, slice spelling)
