@@ -1,6 +1,7 @@
 // s00e7e7f0: SP::sExecuteCollisionResult (0x00e7e7f0), the dispatcher that applies one collision
 // result record (type 1..0x15) to the two participating entities.
 #include "types.h"
+#include <math.h>
 
 struct Vec3 { float x, y, z; };
 
@@ -60,14 +61,32 @@ struct Registry {
 struct Registry54 {
     Entity* GetOwner(uint32_t id);    // 0x00b721d0
 };
-struct CellGame { char pad[0x74]; int time; };
-struct Game {
+struct CellGame {
     char pad0[0x1c];
+    int  level;                       // +0x1c
+    char pad20[0x74 - 0x20];
+    int  time;                        // +0x74
+};
+struct Game {
+    char pad0[0x8];
+    float f08;                        // +0x08
+    float fc;                         // +0x0c
+    float f10;                        // +0x10
+    float f14;                        // +0x14
+    float f18;                        // +0x18
     Registry reg;                     // +0x1c
     Registry54 reg54;                 // +0x54
-    char pad1[0x5190 - 0x55];
+    char pad1[0x4104 - 0x55];
+    void* grid;                       // +0x4104
+    char pad4108[0x411c - 0x4108];
+    uint32_t mField411c;              // +0x411c
+    char pad4120[0x4128 - 0x4120];
+    uint32_t field4128;               // +0x4128
+    char pad412c[0x5190 - 0x412c];
     CellGame* cell;                   // +0x5190
     uint32_t mField5194;              // +0x5194
+    char pad5198[0x51da - 0x5198];
+    uint8_t b51da;                    // +0x51da
 };
 extern Game* g_016b3c04;              // 0x016b3c04
 
@@ -366,7 +385,9 @@ struct GfxObject {
 };
 
 struct CellGfx {
-    char       pad00[0x98];
+    char       pad00[0x48];
+    float      rect[2];               // +0x48 screen rect
+    char       pad50[0x98 - 0x50];
     GfxObject* mpObject;              // +0x98
     char       pad9c[0x936 - 0x9c];
     uint8_t    b936;                  // +0x936
@@ -379,7 +400,7 @@ void __fastcall FUN_00e82130(Handle* h);                    // 0x00e82130 releas
 void __cdecl FUN_00e73dd0(CollisionResult* r, Entity* a, Entity* b,
                           Entity* ea, Entity* eb);          // 0x00e73dd0
 void __cdecl FUN_00e7e130(float f, int a, int b);           // 0x00e7e130
-void __cdecl FUN_00e7f550();                                // 0x00e7f550
+bool __cdecl FUN_00e7f550();                                // 0x00e7f550
 TriggerMgr* __cdecl FUN_00b3d4d0();                         // 0x00b3d4d0 GetTriggerMgr
 bool __cdecl FUN_00e00ac0();                                // 0x00e00ac0
 void __cdecl toggle(int control, bool value);               // 0x00e53660
@@ -441,4 +462,149 @@ void __cdecl FUN_00e7f5a0()
 
     gfx->mpObject->FUN_00e02e80();
     toggle(2, FUN_00e00ac0());
+}
+
+// ---------------------------------------------------------------------------
+// Collision-pair sweep (00e7f260), the per-frame cell-game update (00e7f3a0)
+// and the rollover chain (00e7f550).
+// ---------------------------------------------------------------------------
+
+extern uint32_t __cdecl FUN_00bbb110(void* grid);                    // 0x00bbb110 StarGridCount
+extern void*    __cdecl FUN_00bbbe20(void* grid, uint32_t* cursor);  // 0x00bbbe20 StarGridNextFree
+extern void     __cdecl FUN_00e654d0();                              // 0x00e654d0
+extern "C" void FUN_00e6d790();                                      // 0x00e6d790  esi = e, edi = out vec, stack: out radius
+
+// Plain-C view of 0x00e6d790 (real ABI: ESI = entity, EDI = Vec3 out, radius pointer on the stack).
+void __cdecl EntityPosRadius(Entity* e, Vec3* outPos, float* outRadius);
+
+// @ 0x00e7f260
+void __cdecl FUN_00e7f260(float dt)
+{
+    uint32_t count = FUN_00bbb110(g_016b3c04->grid);
+    uint32_t* p = (uint32_t*)FUN_00bbbe20(g_016b3c04->grid, &count);
+
+    while (p != 0) {
+        Entity* a = g_016b3c04->reg.GetOwner(p[0]);
+        if (a != 0) {
+            Entity* b = g_016b3c04->reg.GetOwner(p[1]);
+            if (b != 0) {
+                Vec3 pa, pb;
+                float ra, rb;
+                // 0x00e6d790 takes the entity in ESI and the position output in EDI (register ABI); called
+                // through a plain-C view, so these two call sites differ from the original's
+                EntityPosRadius(a, &pa, &ra);
+                EntityPosRadius(b, &pb, &rb);
+                float dx = pa.x - pb.x;
+                float dy = pa.y - pb.y;
+                float dz = pa.z - pb.z;
+                float s = rb + ra;
+                if (dx * dx + dy * dy + dz * dz < s * s)
+                    FUN_00e7f140(a, b, dt);
+            }
+        }
+        p = (uint32_t*)FUN_00bbbe20(g_016b3c04->grid, &count);
+    }
+
+    FUN_00e654d0();
+}
+
+// @ 0x00e7f550
+bool __cdecl FUN_00e7f550()
+{
+    uint32_t id = g_016b3c04->mField5194;
+    Entity* e = g_016b3c04->reg54.GetOwner(id);
+    g_016b3c04->mField5194 = 0;
+
+    if (e != 0) {
+        FUN_00e7e130(0.0f, 1, 0);
+        FUN_00e7f550();
+    }
+
+    return e != 0;
+}
+
+extern float g_16b3dd0;                    // 0x016b3dd0 360.0f
+extern int   g_1483c34[];                  // 0x01483c34 level threshold table (stride 7 dwords)
+extern int   g_1483c14[];                  // 0x01483c14 level value table
+extern int   g_1483e60;                    // 0x01483e60 special level row
+
+extern void __cdecl FUN_00e5ff70(float dt);            // 0x00e5ff70
+extern void __cdecl FUN_00e73e50(float dt);            // 0x00e73e50
+extern "C" void __cdecl FUN_00e50810();                // 0x00e50810 (rect passed in esi)
+extern "C" void __cdecl FUN_00e59ee0(float dt);        // 0x00e59ee0 SP::sUpdateFluidParticles
+extern void __cdecl FUN_00e7d370(int key, void* grid, int zero); // 0x00e7d370
+extern void __cdecl FUN_00e87000();                    // 0x00e87000
+extern void __cdecl thunk_FUN_00bbb2e0(void* grid);    // 0x00bbbdf0 StarGridMeasure
+extern void __cdecl FUN_00e52ae0(float dt);            // 0x00e52ae0
+extern void __cdecl FUN_00e59e80();                    // 0x00e59e80
+extern void __cdecl FUN_00e7e7a0(float dt);            // 0x00e7e7a0
+extern void __cdecl FUN_00e7c8c0(float dt);            // 0x00e7c8c0 SP_sUpdateCells
+extern void __cdecl FUN_00e5af30();                    // 0x00e5af30
+extern void __cdecl FUN_00e7ad70(float dt);            // 0x00e7ad70
+extern void __cdecl FUN_00e5d5b0(float dt);            // 0x00e5d5b0 pickup
+extern void __cdecl FUN_00e78d10();                    // 0x00e78d10
+extern void __cdecl FUN_00e697e0(float dt);            // 0x00e697e0 HUD
+
+// @ 0x00e7f3a0  SP::sUpdateGame
+namespace SP {
+void __cdecl sUpdateGame(float dt);
+}
+
+void __cdecl SP::sUpdateGame(float dt)
+{
+    g_016b3c04->reg.GetOwner(g_016b3c04->mField411c);
+    g_016b3c04->b51da = 0;
+    FUN_00e5ff70(dt);
+
+    float* period = &g_016b3c04->f14;
+    if (*period == 0.0f) {
+        g_016b3c04->f08 = g_016b3c04->fc;
+    } else {
+        float* phase = &g_016b3c04->f18;
+        *phase = *phase + dt;
+        if (*period < *phase) {
+            do {
+                *phase = *phase - *period;
+            } while (*period < *phase);
+        }
+        g_016b3c04->f08 = (float)(sin((double)(*phase / *period) * 360.0) * g_016b3c04->f10
+                                  + g_016b3c04->fc);
+    }
+
+    FUN_00e73e50(dt);
+
+    __asm {
+        mov esi, dword ptr [g_016b3c0c]
+        add esi, 0x48
+        call FUN_00e50810
+    }
+
+    FUN_00e59ee0(dt);
+
+    int level = g_016b3c04->cell->level;
+    int* row;
+    if (level == 1000) {
+        row = &g_1483e60;
+    } else {
+        int i = 0;
+        if (level >= 0) {
+            int* p = g_1483c34;
+            do { p += 7; ++i; } while (level >= *p);
+        }
+        row = &g_1483c14[i * 7];
+    }
+    FUN_00e7d370(*row, &g_016b3c04->field4128, 0);
+    FUN_00e87000();
+    thunk_FUN_00bbb2e0(g_016b3c04->grid);
+
+    FUN_00e52ae0(dt);
+    FUN_00e59e80();
+    FUN_00e7e7a0(dt);
+    FUN_00e7c8c0(dt);
+    FUN_00e5af30();
+    FUN_00e7ad70(dt);
+    FUN_00e7f260(dt);
+    FUN_00e5d5b0(dt);
+    FUN_00e78d10();
+    FUN_00e697e0(dt);
 }

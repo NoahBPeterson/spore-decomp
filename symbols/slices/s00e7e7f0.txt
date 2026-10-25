@@ -1,3 +1,6 @@
 00e7e7f0 SP::sExecuteCollisionResult  # collision-result dispatcher; 21 result types, LTCG register-convention callees
 00e7f140 SP::PrepareCollisionPair  # collision pair setup: two resource handles, both-order sExecuteCollisionResult, handle release
+00e7f260 ?FUN_00e7f260@@YAXM@Z  # cdecl; collision-pair sweep over the star grid (StarGridCount/NextFree), registry resolution and sphere-overlap test into PrepareCollisionPair; LTCG entity-in-esi / out-Vec3-in-edi callees called from asm blocks
+00e7f3a0 ?sUpdateGame@SP@@YAXM@Z  # cdecl; SP::sUpdateGame per-frame cell-game update: owner lookup, oscillation phase, screen-rect update (rect in esi), fluid particles, level-table selection, then the fixed cell-system call sequence
+00e7f550 ?FUN_00e7f550@@YA_NXZ  # cdecl; rollover chain: resolve+clear mField5194, call FUN_00e7e130(0.0f,1,0) and recurse while entities are found, return whether one was
 00e7f5a0 SP::cCellGame::UpdateRollover  # cell-game rollover tick; entity in edi for FUN_00e7e130, TriggerMgr/gspCellGfx wait-toggle path
