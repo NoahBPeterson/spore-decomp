@@ -1,0 +1,3 @@
+00e39de0 ?ApplyTo@KeyValue@@QAEXPAUChangeMessage@@@Z  # KeyValue::ApplyTo migrated from s00e39ab0 (verbatim, slice spelling)
+00e39e60 ?SetValue@IntPropertyBinding@@QAE_NPAVIPropertyList@@@Z  # IntPropertyBinding::SetValue migrated from s00e39ab0 (verbatim, slice spelling)
+00e3a270 ?OnChange@cBigEditorObject@@QAEXIPAUChangeMessage@@@Z  # cBigEditorObject::OnChange migrated from s00e39ab0 (verbatim, slice spelling)

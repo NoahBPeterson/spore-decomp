@@ -1,0 +1,4 @@
+00e3c100 ?FUN_00e3c100@cUIManager@@QAEMM@Z  # cUIManager::FUN_00e3c100 migrated from s00e3b9e0 (verbatim, slice spelling)
+00e3c1a0 ?FUN_00e3c1a0@cUIManager@@QAEDPAIPAM01IIDM@Z  # cUIManager::FUN_00e3c1a0 migrated from s00e3b9e0 (verbatim, slice spelling)
+00e3c6f0 ?FUN_00e3c6f0@@YAXDI@Z  # FUN_00e3c6f0 migrated from s00e3b9e0 (verbatim, slice spelling)
+00e3c760 ?FUN_00e3c760@@YAXXZ  # FUN_00e3c760 migrated from s00e3b9e0 (verbatim, slice spelling)

@@ -1,0 +1,4 @@
+005ff1a0 ?GetElapsedTimeFloat@Stopwatch@EA@@QBEMXZ  # EA::Stopwatch::GetElapsedTimeFloat (callee of s00e3a990, named from the dev publics; slice address comment)
+00e3afb0 ?UpdateState@cSPUITimeline_s00e3_a990@@QAEXXZ  # cSPUITimeline_s00e3_a990::UpdateState migrated from s00e3a990 (verbatim, slice spelling)
+00e3b0b0 ?ShowNextPlayItem@cSPUITimeline_s00e3_a990@@QAE_NXZ  # cSPUITimeline_s00e3_a990::ShowNextPlayItem migrated from s00e3a990 (verbatim, slice spelling)
+00e3b180 ?RestorePlayback@cSPUITimeline_s00e3_a990@@QAEXXZ  # cSPUITimeline_s00e3_a990::RestorePlayback migrated from s00e3a990 (verbatim, slice spelling)

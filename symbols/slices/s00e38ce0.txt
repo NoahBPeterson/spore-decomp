@@ -1,0 +1,8 @@
+00e38ce0 ?FUN_00e38ce0@@YIXPAUTimeline_s00e3_8ce0@@PAXI@Z  # FUN_00e38ce0 migrated from s00e38ce0 (verbatim, slice spelling)
+00e38fd0 ?FUN_00e38fd0@@YIXPAUTimeline_s00e3_8ce0@@PAX@Z  # FUN_00e38fd0 migrated from s00e38ce0 (verbatim, slice spelling)
+00e390d0 ?FUN_00e390d0@@YIXPAUTimeline_s00e3_8ce0@@PAX@Z  # FUN_00e390d0 migrated from s00e38ce0 (verbatim, slice spelling)
+00e39200 ?FUN_00e39200@@YIXPAUTimeline_s00e3_8ce0@@PAX@Z  # FUN_00e39200 migrated from s00e38ce0 (verbatim, slice spelling)
+00e39300 ?FUN_00e39300@@YIXPAUTimeline_s00e3_8ce0@@PAXH@Z  # FUN_00e39300 migrated from s00e38ce0 (verbatim, slice spelling)
+00e39350 ?FUN_00e39350@@YIXPAUTimeline_s00e3_8ce0@@PAXH@Z  # FUN_00e39350 migrated from s00e38ce0 (verbatim, slice spelling)
+00e393e0 ?FUN_00e393e0@@YAXPAXHPAUVec3@@@Z  # FUN_00e393e0 migrated from s00e38ce0 (verbatim, slice spelling)
+00e39420 ?FUN_00e39420@@YAXPAXHPAUVec3@@@Z  # FUN_00e39420 migrated from s00e38ce0 (verbatim, slice spelling)
