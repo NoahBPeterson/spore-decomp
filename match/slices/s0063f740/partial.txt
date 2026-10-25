@@ -1,3 +1,2 @@
-0063f740  -  WritePhotoWithComment: PARTIAL skeleton (765 B)
-0063fa40  -  FUN_0063fa40: PARTIAL skeleton (726 B)
-0063fda0  -  FUN_0063fda0: PARTIAL skeleton (1868 B)
+0063f740  -  WritePhotoWithComment: PARTIAL skeleton (765 B; photo write job: GetSaveArea path build, FileStream of the thumbnail, writer scope 0x87cf40/0x87cf60/0x87d2a0/0x87d030/0x87cff0/0x87d260, ~0x2dd8 frame with a 0x2a70 memset block - not reconstructed)
+0063fda0  -  FUN_0063fda0: PARTIAL skeleton (1868 B; ~40-case message-id dispatcher over the photo sub-mode, not reconstructed)
