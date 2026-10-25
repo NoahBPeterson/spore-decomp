@@ -1,3 +1,6 @@
 # va  diff-bytes  reason
-00ec3520 59 State::Init rand clamp: x87 double ordering (fxch/jb vs fcomi/jbe) differs; equiv PASS (400/400)
-00ec3ed0 523 CNode::Compare: property-bag float/int compare paths and branch layout not reconstructed; equiv WEAK (252 valid, 44.6% cov)
+00ec30e0  1356  jump-command update: 8-arg action reconstructed with every branch/call present but the nav/value dispatch is not fully recovered and our body is 1333 vs retail 1078 bytes (extra inlined move/goal blocks). The GetDamageState callee annotation was corrected to 0x008e7f80 (the old 0x0041e0d0 was wrong; GetFileCount was not this function), resolving the equiv symbol conflict. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv: FAIL 5/5 valid (call #0 to 00ec02e0 arg 40020000 vs 40030000)
+00ec3520  84  State::Init rand clamp: x87 double ordering (fxch/jb vs fcomi/jbe) differs, size 100 vs 95. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv: PASS 400 valid, 79.5% coverage
+00ec35a0  527  navigation goal-request stack object not reconstructed: our body is 145 vs retail 585 bytes (the GoalRequest init/fill, the nav-goal VC1(sp,0xdc) payload and the release path are stubs). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv: UNSUPPORTED (Init@GoalRequest unresolved)
+00ec3880  568  jump target scan/collector loop: the two collector push blocks, the planet-record transform loop and the mode switch are present but the scheduling/frame differs, size 565 vs 636. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec3ed0  580  CNode::Compare: property-bag float/int compare paths and branch layout not reconstructed, size 556 vs 465. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
