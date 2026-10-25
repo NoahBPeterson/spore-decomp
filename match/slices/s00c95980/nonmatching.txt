@@ -1,1 +1,12 @@
 # Slice s00c95980 nonmatching -- none (no function was proven equivalent).
+00c95af0 416 nonmatching: cTribe::SetupChatAreas; 288 vs 456 bytes. Reservation-grid id churn + chat-area vector resize/loop approximated. difftest FAIL 5/6 valid (execution fault at 00cc708b); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
+00c95cc0 183 nonmatching: cTribe::AddChatArea_5cc0; 181 vs 171 bytes. AutoRefCount roster push with vtable[0xbc]/[0xc0] approximated. difftest FAIL 5/92 (execution fault at 00ad8246); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
+00c95d70 319 nonmatching: cTribe::AddExistingCreatureInternal; 208 vs 368 bytes. Roster insert + refcount/EH subobject path approximated. difftest FAIL 5/5 (esp after return +0xc vs +0x8); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
+00c95ee0 200 nonmatching: cTribe::RemoveCreature; 233 vs 248 bytes. Count/packing guard and behaviour/planar detach approximated. difftest WEAK (139 valid, 21.6% coverage); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
+00c95fe0 353 nonmatching: cTribe::SpawnHut_5fe0; 22 vs 362 bytes. Noun creation + vtable dispatch body approximated. difftest UNSUPPORTED (0/400 valid; fault(read)=350); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
+00c96150 339 nonmatching: cTribe::AddTool_6150; 14 vs 339 bytes. Tool AutoRefCount insertion not equivalent. difftest FAIL 5/5 (eax&0xff orig 0, ours 1); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
+00c962b0 316 nonmatching: cTribe::UpdateHut_62b0; 275 vs 344 bytes. Noun/vtable handle refresh + surface orientation approximated. difftest FAIL 5/5 (eax&0xff orig 1, ours 0); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
+00c96410 657 nonmatching: cTribe::Read; 129 vs 691 bytes. cVarListSerializer + grid resolution + string reset approximated. difftest UNSUPPORTED (0/400 valid; fault(read)=386, fake-arity=14); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
+00c966d0 176 nonmatching: cTribe::GetStructures; 163 vs 193 bytes. Roster erase + AutoRefCount push + FUN_00bdefa0 not equivalent. difftest FAIL 5/5 (fake-arity at cccccccc); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
+00c967a0 133 nonmatching: cTribe::GetInhabitants; 154 vs 160 bytes. Roster filter loop and container return not equivalent. difftest FAIL 5/5 (eax return 400100e4 vs 40010340); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
+00c96840 175 nonmatching: cTribe::CopyFrom_6840; 269 vs 266 bytes. Chunked struct copy + vector assign + refcount swap approximated. difftest FAIL 5/5 (execution fault at 0050d51c); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.
