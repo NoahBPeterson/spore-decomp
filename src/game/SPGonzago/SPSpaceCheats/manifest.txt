@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceCheats.cpp  ?Init@cObjectKey@@QAEAAV1@PAX0@Z  01022990  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCheats.cpp  ?CopyFrom@cStarVisualParams@@QAEAAV1@ABV1@@Z  01022bb0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCheats.cpp  ?resize@VecSet@@QAEXI@Z  01025750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
