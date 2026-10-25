@@ -64,8 +64,8 @@ struct SpawnOut {
     int32_t zero1;                                        // +0x14
 };
 
-// Clamp to [1,2]. Not NaN-safe in the same way as the original's branch order, but the RNG never yields NaN.
-static inline double ClampRadius(double v)
+// Clamp to [1,2].
+static double ClampRadius(double v)
 {
     if (2.0 <= v)
         return 2.0;
@@ -168,7 +168,7 @@ struct cCreatureV0 {
     virtual void AddRef();                                          // +0x00
     virtual void Release();                                         // +0x04
     virtual void pv2();                                             // +0x08
-    virtual void* GetAnimEvent();                                   // +0x0c
+    virtual void* GetAnimEvent(uint32_t eventId);                    // +0x0c
     PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
     virtual bool IsTargetable();                                    // +0x2c
 };
@@ -230,6 +230,7 @@ public:
     uint8_t  mb5a8;                                                 // +0x5a8  handed to Notify
     uint8_t  pad5a9[0xb4c - 0x5a9];                                 // +0x5a9..+0xb4b
     nSPBehaviorTree* mpBehavior;                                    // +0xb4c
+    uint32_t padB50;                                                // +0xb50
     cTargetQuery* mpB54;                                            // +0xb54
     uint8_t  padB58[0xfd0 - 0xb58];                                 // +0xb58..+0xfcf
     cSPTimer mTimer;                                                // +0xfd0
@@ -354,21 +355,21 @@ struct nSPBehaviorTree {
 
 // ---- lookup / economy helpers (manager objects keyed by a raw word) -------------------
 struct cSomeMgr {
-    cVecRange* FUN_00bc7610();                                      // 0x00bc7610
+    cVecRange* FUN_00bc7610(uint32_t key, int zero);                // 0x00bc7610 (ret 8)
     uint32_t   FUN_00bc65f0();                                      // 0x00bc65f0
     bool       FUN_00bc3df0(uint32_t id);                           // 0x00bc3df0 (ret 4)
-    bool       FUN_00bc3df0();                                      // 0x00bc3df0 (no stack args)
-    void       FUN_00bc5040();                                      // 0x00bc5040 (no stack args)
+    void       FUN_00bc5040(uint32_t id);                           // 0x00bc5040 (ret 4)
     uint32_t   FUN_00bc4900(uint32_t id);                           // 0x00bc4900 (ret 4)
-    uint32_t   FUN_00bc4900(void* id, void* c, bool flag);          // 0x00bc4900 (ret 0xc)
+    uint32_t   FUN_00bc4900(void* id, void* c, uint32_t flagWord);  // 0x00bc4900 (ret 0xc)
     uint32_t   FUN_00bc64a0(uint32_t a, uint32_t b, void* x, void* y);  // 0x00bc64a0
     int32_t    FUN_00bc3db0(uint32_t x);                            // 0x00bc3db0
 };
 
-// 0x00b3d4e0 is one helper reached with several different argument counts here.
-cSomeMgr* __stdcall FUN_00b3d4e0_a(uint32_t id);                     // (id)
-cSomeMgr* __stdcall FUN_00b3d4e0_b(uint32_t id, void* b);            // (id, ptr)
-cSomeMgr* FUN_00b3d4e0_d();                                         // (handle left in ecx)
+// 0x00b3d4e0 is a no-argument global getter (mov eax,[global]; ret).  Callers that push
+// arguments before it are scheduling the next real call early.
+cSomeMgr* FUN_00b3d4e0_a();                                          // (no stack args)
+cSomeMgr* FUN_00b3d4e0_b();                                          // (no stack args)
+cSomeMgr* FUN_00b3d4e0_d();                                          // (no stack args)
 
 struct cRelationshipMgr {
     uint32_t FUN_00d00a70(uint32_t a, uint32_t b, int one);         // 0x00d00a70
@@ -458,12 +459,13 @@ bool AWARENESS_ATTACK_Tick(cSPCreatureBase* c, int, int, int, int, AwarenessAtta
         return false;
 
     if (c->mLoco.IsNearGoal()) {
-        st->mId = 0;
-        st->mCount = 0;
-        c->mpB54->Query((int*)&st->mId, 0, &st->mCount, 0);
-        if (st->mId == 0x4cff8) {
-            if (st->mCount >= 3) {
-                c->mpBehavior->mStimuli.SetStimulus(0, 0x80, g_1486110, blk->GetAnimEvent());
+        uint32_t id = 0;
+        int count = 0;
+        c->mpB54->Query((int*)&id, 0, &count, 0);
+        if (id == 0x4cff8) {
+            if (count >= 3) {
+                c->mpBehavior->mStimuli.SetStimulus(0, 0x80, g_1486110,
+                                                    blk->GetAnimEvent(0xee3f516e));
                 return false;
             }
         }
@@ -619,19 +621,24 @@ uint32_t TRIBE_VIGNETTE_Activate(cSPCreatureBase* c, int, int, int, int, Vignett
 
     uint32_t index = req->mIndex & 0xffff;
     uint32_t key = req->mKey;
-    bool flag = (req->mIndex & 0xffff0000) != 0;
+    // The original stores only the low byte (the flag) into an uninitialised stack dword, so
+    // its upper three bytes are the 0xcc stack-fill pattern.  Reproduce the whole word: the
+    // callee can observe it (a plain dword test reads a "false" flag as true).
+    uint32_t flagWord = 0xcccccc00u | (uint32_t)((req->mIndex & 0xffff0000) != 0);
 
     cTribe* tribe = c->GetTribe();
     if (tribe->m26c == -1) {
-        cVecRange* list = FUN_00b3d4e0_b(key, 0)->FUN_00bc7610();
+        cVecRange* list = FUN_00b3d4e0_a()->FUN_00bc7610(key, 0);
         if (list != 0) {
             uint32_t count = (uint32_t)((char*)list->end - (char*)list->begin) / 0x7b4;
             if (index < count) {
-                uint32_t elem = (uint32_t)((char*)list->begin + index * 0x7b4);
                 Vec3 tmp;
                 void* a = tribe->mSub.Slot5c(&tmp);
                 void* b = tribe->mSub.Slot2c(a);
-                tribe->m26c = (int32_t)FUN_00b3d4e0_b(elem, b)->FUN_00bc65f0();
+                uint32_t elem = (uint32_t)((char*)list->begin + index * 0x7b4);
+                tribe->m26c = (int32_t)FUN_00b3d4e0_b()->FUN_00bc65f0();
+                (void)elem;
+                (void)b;
             }
         }
         if (tribe->m26c == -1)
@@ -640,19 +647,21 @@ uint32_t TRIBE_VIGNETTE_Activate(cSPCreatureBase* c, int, int, int, int, Vignett
 
     cBundleObj* bundle = (cBundleObj*)c->mBundle.FUN_00cee330();
     if (bundle != 0) {
+        float v = bundle->mf134;
         cTribe* t1 = c->GetTribe();
-        t1->FUN_00c94b50(bundle->mf134);
+        t1->FUN_00c94b50(v);
         cTribe* t2 = c->GetTribe();
         void* arg = t2 != 0 ? (void*)&t2->m20c : 0;
         FUN_00b3d2b0()->FUN_00ac7eb0(bundle, arg);
     }
 
     c->mLoco.NotifyEc();
-    FUN_00b3d310(&c->mLoco)->FUN_00b45410();
+    void* loco = &c->mLoco;
+    FUN_00b3d310(loco)->FUN_00b45410();
 
     uint32_t id = (uint32_t)tribe->m26c;
     st->mVignette = (int32_t)id;
-    return FUN_00b3d4e0_d()->FUN_00bc4900((void*)id, c, flag);
+    return FUN_00b3d4e0_d()->FUN_00bc4900((void*)id, c, flagWord);
 }
 
 // =====================================================================================
@@ -737,7 +746,7 @@ bool FUN_00dae630(cSPCreatureBase* c, int, int, int, int, DomesticationBlock* st
     if (node != 0) {
         uint32_t id = node->GetId1(0);
         st->mId = id;
-        if (!FUN_00b3d4e0_a(id)->FUN_00bc3df0()) {
+        if (!FUN_00b3d4e0_a()->FUN_00bc3df0(id)) {
             st->mb4 = 1;
             return true;
         }
@@ -757,7 +766,7 @@ void FUN_00dae680(cSPCreatureBase* c, int, int, int, int, DomesticationBlock* st
         uint32_t id = st->mId;
         if (node->GetId1(0) == id) {
             if (node->mState == 1) {
-                FUN_00b3d4e0_a(id)->FUN_00bc5040();
+                FUN_00b3d4e0_a()->FUN_00bc5040(id);
                 if (st->mb4 != 0) {
                     cTribe* tribe = c->GetTribe();
                     if (tribe != 0) {

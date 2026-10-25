@@ -1,1 +1,5 @@
-00d28e60 SP_cCreatureCamera_ctor  # PDB cCreatureCamera; retail offsets = PDB-8 from +0x200, -0x10 from +0x2cc; equiv PASS
+00d28e60 SP_cCreatureCamera_ctor  # PDB cCreatureCamera; retail offsets = PDB-8 from +0x200, -0x10 from +0x2cc
+00d28900 UpdateDesiredLookAt      # SP::cCreatureCamera::UpdateDesiredLookAt (aim interpolation toward mV114)
+00d28e10 MapIterateErase          # RbTreeAnchor::MapIterateErase ([first,last) erase walk)
+00d29570 SP_cCreatureCamera_dtor  # PDB cCreatureCamera::~cCreatureCamera; equiv PASS (manifest)
+00d29610 CollectMessageHandlers   # collect registered message handlers into the map

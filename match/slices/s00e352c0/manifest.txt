@@ -1,1 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e352c0/s00e352c0.cpp  @FUN_00e352c0@4  00e352c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e352c0/s00e352c0.cpp  ?FUN_00e35350@@YIXPAUPauseOwner@@@Z  00e35350  /O2 /MD /Gy /TP /arch:SSE /fp:fast

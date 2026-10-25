@@ -573,24 +573,32 @@ bool __cdecl FUN_00de3d00(Layout* layout, u32 id, u32 which)
 void __cdecl FUN_00de3d40(Vec3i* out, Vec3iList* list, Vec3i* exclude)
 {
     s32* base = (s32*)list->mpBegin;
-    if (base != (s32*)list->mpEnd) {
+    s32* end = (s32*)list->mpEnd;
+    if (base != end) {
         if ((list->mpEnd - list->mpBegin) / 12 == 1) {
-            out->x = base[0];
-            out->y = base[1];
-            out->z = base[2];
+            s32 x = base[0];
+            s32 y = base[1];
+            s32 z = base[2];
+            out->x = x;
+            out->y = y;
+            out->z = z;
             return;
         }
+        s32* pCur;
         u32 i;
         do {
             i = ((RandomLCG*)0x1601760)->RandomUint32Uniform(
                     (u32)((list->mpEnd - list->mpBegin) / 12));
-            base = (s32*)list->mpBegin;
-        } while (base[i * 3] == exclude->x &&
-                 base[i * 3 + 1] == exclude->y &&
-                 base[i * 3 + 2] == exclude->z);
-        out->x = base[i * 3];
-        out->y = base[i * 3 + 1];
-        out->z = base[i * 3 + 2];
+            pCur = (s32*)list->mpBegin;
+        } while (pCur[i * 3] == exclude->x &&
+                 pCur[i * 3 + 1] == exclude->y &&
+                 pCur[i * 3 + 2] == exclude->z);
+        s32 x = pCur[i * 3];
+        s32 y = pCur[i * 3 + 1];
+        s32 z = pCur[i * 3 + 2];
+        out->x = x;
+        out->y = y;
+        out->z = z;
         return;
     }
     out->x = 0;

@@ -206,6 +206,7 @@ void FUN_00eaeb60(int* v, int* pos, unsigned n, int* val)
     while (k--) *w2++ = value;
 }
 
+// @ 0x00eaed40
 // 0x00eaed40  vector<float,SP_STL_Sound>::insert_n(pos, n, val)
 void FUN_00eaed40(int* v, int* pos, unsigned n, float* val)
 {
@@ -345,6 +346,7 @@ struct cPlayerCityMusic {
     void RemoveNote(unsigned idx);
 };
 
+// @ 0x00eae0f0
 // 0x00eae0f0  SP::Audio::cPlayerCityMusic::DeselectAmbience
 void cPlayerCityMusic::DeselectAmbience(float value, unsigned* idx, float* out)
 {
@@ -445,21 +447,22 @@ void __cdecl FUN_00eadf40(int* at, int* val);
 void __cdecl FUN_00ea9440(int* at, int* val);
 int* __cdecl FUN_00b968b0(unsigned n, int* src, int end);
 
+// @ 0x00eae8a0
 // 0x00eae8a0  SP::ReadSTLSequenceT<eastl::fixed_vector<float,3,0>>
 void FUN_00eae8a0(IReader* reader, int* v)
 {
-    int* begin = (int*)v[0];
-    int* end = (int*)v[1];
-    v[1] = (int)end - ((int)end - (int)begin);
+    FUN_11e0744_memcpy((void*)v[0], (void*)v[1], 0);
+    v[1] += -((int)(v[1] - v[0]) >> 2) * 4;
     int count = 0;
     IStream* s = reader->v20()->s18();
     ReadInt32(s, &count, 1, 0);
     unsigned n = (unsigned)count;
     if ((unsigned)(v[2] - v[0]) >> 2 < n) {
-        delete[] (int*)v[0];
+        FUN_11e0744_memcpy((void*)0, (void*)v[0], (unsigned)(v[1] - v[0]));
+        int old = v[0];
         v[0] = 0;
-        v[1] = 0;
-        v[2] = v[0] + n * 4;
+        v[1] = ((v[1] - old) >> 2) * 4;
+        v[2] = (int)n * 4;
     }
     for (unsigned i = 0; i < n; ++i) {
         IStream* s2 = reader->v20()->s18();
@@ -473,12 +476,12 @@ void FUN_00eae8a0(IReader* reader, int* v)
     reader->v1c();
 }
 
+// @ 0x00eae9b0
 // 0x00eae9b0
 void FUN_00eae9b0(IReader* reader, int* v)
 {
-    int* begin = (int*)v[0];
-    int* end = (int*)v[1];
-    v[1] = (int)end - ((int)end - (int)begin);
+    FUN_11e0744_memcpy((void*)v[0], (void*)v[1], 0);
+    v[1] += -((int)(v[1] - v[0]) >> 2) * 4;
     int count = 0;
     IStream* s = reader->v20()->s18();
     ReadInt32(s, &count, 1, 0);
@@ -495,12 +498,12 @@ void FUN_00eae9b0(IReader* reader, int* v)
     reader->v1c();
 }
 
+// @ 0x00eaea80
 // 0x00eaea80  SP::ReadSTLSequenceT<eastl::vector<float,SP_STL_Sound>>
 void FUN_00eaea80(IReader* reader, int* v)
 {
-    int* begin = (int*)v[0];
-    int* end = (int*)v[1];
-    v[1] = (int)end - ((int)end - (int)begin);
+    FUN_11e0744_memcpy((void*)v[0], (void*)v[1], 0);
+    v[1] += -((int)(v[1] - v[0]) >> 2) * 4;
     int count = 0;
     IStream* s = reader->v20()->s18();
     ReadInt32(s, &count, 1, 0);

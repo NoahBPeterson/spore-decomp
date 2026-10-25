@@ -494,7 +494,7 @@ struct FleeSpatial {
     PV(18) PV(19) PV(1a) PV(1b) PV(1c) PV(1d) PV(1e) PV(1f)
     PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29) PV(2a) PV(2b) PV(2c) PV(2d) PV(2e) PV(2f)
     PV(30) PV(31) PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38)
-    virtual void MoveTo(const Vector3& dst, float speed, FleeSpatial* self);   // +0xe4
+    virtual void MoveTo(const Vector3& dst, float speed);   // +0xe4
 
     bool IsNearGoal();                                             // 0x00c42e20
 };
@@ -543,16 +543,16 @@ bool FleeToClosestCity_Tick(FleeVehicle* self, int, int, int, int,
 bool FleeToClosestCity_Init(FleeVehicle* self, int, int, int, int,
                             int* timer, int, int)
 {
-    if (--*timer > 0)
-        return true;
+    if (--*timer <= 0) {
+        Vector3 local;
 
-    Vector3 local;
-    if (FUN_00dc8f30(self, &local)) {
-        self->mLoco.MoveTo(local, 1.0f, &self->mLoco);
-        return false;
+        if (FUN_00dc8f30(self, &local)) {
+            self->mLoco.MoveTo(local, 1.0f);
+            return false;
+        }
+
+        *timer = (int)g_MathRandom.RandomUint32Uniform(6) + 2;
     }
-
-    *timer = (int)g_MathRandom.RandomUint32Uniform(6) + 2;
     return true;
 }
 

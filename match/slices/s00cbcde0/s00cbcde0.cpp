@@ -32,6 +32,24 @@ static inline Vector3 NormalizedSafeArc(const Vector3& a) {
     return inv * a;
 }
 
+// pi/4 lives in the game's shared constant pool; the 64-segment arc's pi/8 step is a
+// module-level global that the original lazily initialises from it on first use, with a
+// separate guard dword (MSVC's function-local static pattern).
+extern const float kPiOver4;                                            // 0x0157d35c
+extern float g_flightArcPiOver8;                                        // 0x0169aa6c
+extern unsigned int g_flightArcPiOver8Guard;                            // 0x0169aa70
+static const float kPi = 3.1415927f;                                    // 0x0157d364
+static const float kTwoPi = 6.2831855f;                                 // 0x0169aa28
+
+// The original's x87 sums run x*x + z*z + y*y at every normalisation/|v| site.
+static inline float LengthXZY(const Vector3& a) {
+    return sqrtf(a.x * a.x + a.z * a.z + a.y * a.y);
+}
+static inline Vector3 NormalizedXZY(const Vector3& a) {
+    float inv = 1.0f / sqrtf(a.x * a.x + a.z * a.z + a.y * a.y + 1e-8f);
+    return inv * a;
+}
+
 struct sp_alloc { unsigned int d[2]; };
 
 struct SpVectorV3 {                    // eastl::vector<Vector3, sp_vector_allocator>
@@ -48,7 +66,7 @@ struct SpVectorV3 {                    // eastl::vector<Vector3, sp_vector_alloc
 
 struct PlanetModel {
     float GetRadius();                                                  // 0x00b7e4d0 (thiscall, float in st0)
-    float GetArcRadius(const Vector3* pA, const Vector3* pB);           // 0x00b81470
+    float DistanceBetweenPoints(const Vector3* pA, const Vector3* pB);  // 0x00b81470
 };
 PlanetModel* __cdecl GetPlanetModel();                                  // 0x00b3d350 (SP::PlanetModel)
 
@@ -63,23 +81,40 @@ struct IPositioned {
 bool BuildFlightArcPathFromObjects(IPositioned* pA, IPositioned* pB, SpVectorV3* out,
                                    float ox, float oy, float oz)
 {
-    Vector3 a = *pA->GetPosition();
-    Vector3 b;
-    if (pB)
-        b = *pB->GetPosition() + Vector3(ox, oy, oz);
-    else
-        b = Vector3(ox, oy, oz);
+    if (!(g_flightArcPiOver8Guard & 1)) {   // 0x0169aa70 guard
+        g_flightArcPiOver8 = kPiOver4 * 0.5f;
+        g_flightArcPiOver8Guard |= 1;
+    }
+    float s_piOver8 = g_flightArcPiOver8;    // 0x0169aa6c
 
-    float arcRadius = GetPlanetModel()->GetArcRadius(&a, &b);
-    if (arcRadius < 300.0f)
+    Vector3 start = *pA->GetPosition();
+    Vector3 end = pB ? *pB->GetPosition() + Vector3(ox, oy, oz)
+                     : Vector3(ox, oy, oz);
+
+    if (GetPlanetModel()->DistanceBetweenPoints(&start, &end) < 200.0f)
         return false;
 
-    float R = arcRadius + 80.0f;
+    Vector3 d = end - start;
+    Vector3 mid = start + d * 0.5f;
+    Vector3 dir = NormalizedXZY(d);
+    Vector3 normal = NormalizedXZY(mid);
+    float halfDist = LengthXZY(mid - start);
+
+    float arcLen = atan2f(s_piOver8, 1.0f) * halfDist;
+    Vector3 center = mid + normal * arcLen;
+    float angle = kPi + s_piOver8;
+    float step = (kPi + s_piOver8 * 2.0f) * 0.015625f;
+    float cosScale = halfDist / cosf(s_piOver8);
+    float sinScale = arcLen / sinf(s_piOver8);
+
     for (int i = 0; i < 64; ++i) {
-        float t = (float)i * (1.0f / 64.0f);
-        Vector3 p = a * (1.0f - t) + b * t;
-        p = NormalizedSafe(p) * R;
+        float f1 = cosf(angle) * cosScale;
+        float f2 = sinf(angle) * sinScale;
+        Vector3 p = dir * f1 + center + normal * f2;
         out->push_back(p);
+        angle -= step;
+        if (angle < 0.0f)
+            angle += kTwoPi;
     }
     return true;
 }

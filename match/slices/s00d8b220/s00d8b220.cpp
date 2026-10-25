@@ -116,6 +116,19 @@ struct cNearbyEntry {                         // element of creature +0x1124
 };
 #define PRIORITY(pEntry) ((pEntry)->mfPriority0c)
 
+// Behaviour anchors embedded in the game objects: the stimuli keeps a pointer
+// to the anchor, which sits at one of a few fixed offsets depending on the
+// object family (noun list vs queried component).  Only its address is taken.
+struct cBehaviorAnchor { u32 mUnused; };
+struct cNounBehaviorAnchor {
+    u8 mPad[0x588];
+    cBehaviorAnchor mAnchor;                  // +0x588
+};
+struct cComponentBehaviorAnchor {
+    u8 mPad[0x120];
+    cBehaviorAnchor mAnchor;                  // +0x120
+};
+
 // Entry validators.  Both are members of the iterator context object that
 // lives at iterator + 0x08 (the callee never reads `this` for 0x00c02600).
 struct cNeighbourFilter {
@@ -340,8 +353,9 @@ void ReloadModifierTuning()
 
     float valueA = GetPropFloat(pModifiers, 0x4247bf2b, DAT_01486110);
     float valueB = GetPropFloat(pModifiers, 0x703b9a9d, DAT_013f0e84);
+    float valueC = GetPropFloat(pModifiers, 0x7d10c1b8, DAT_01486110);
 
-    DAT_0169f0f0 = GetPropFloat(pModifiers, 0x7d10c1b8, DAT_01486110);
+    DAT_0169f0f0 = valueC;
     DAT_0169f0f4 = valueA;
     DAT_0169f0f8 = valueB;
     DAT_0169f0fc = 0.0f;
@@ -564,7 +578,7 @@ float FUN_00d8ba20(cCreatureBase* self, i32 a1, i32 a2, u32 a3, cBehaviorStimuli
                 if (pStimuli != 0)
                     pStimuli->GetAny();
                 *pOut = 1;
-                *(void**)((u8*)pStimuli + 4) = (u8*)pComp + 0x588;
+                *(void**)((u8*)pStimuli + 4) = (void*)&((cNounBehaviorAnchor*)pComp)->mAnchor;
                 return 1.0f;
             }
             cNearbyComponent* pOther = (cNearbyComponent*)pEntry->mpCreature08;
@@ -575,7 +589,7 @@ float FUN_00d8ba20(cCreatureBase* self, i32 a1, i32 a2, u32 a3, cBehaviorStimuli
                     if (pStimuli != 0)
                         pStimuli->GetAny();
                     *pOut = 1;
-                    *(void**)((u8*)pStimuli + 4) = (u8*)pOther + 0x120;
+                    *(void**)((u8*)pStimuli + 4) = (void*)&((cComponentBehaviorAnchor*)pOther)->mAnchor;
                     return 1.0f;
                 }
             }

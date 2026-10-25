@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00dfe460/s00dfe460.cpp  ?DoMessage@cSPUISpace@@QAEDHPAUGGUIMsg@@@Z  00dfe460  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -2,8 +2,9 @@
 // (SporeApp.exe 0x00df2d80..0x00df3bdc): the random-asset pickers that feed the
 // "New Game" flow plus the editor->game transition helper.
 //
-// Two very large siblings in this slice (SetLevel 0x00df2ea0, Init 0x00df32d0)
-// are categorised partial / no source.
+// The two large siblings (SetLevel 0x00df2ea0, Init 0x00df32d0) are complete
+// behavioural ports; the inlined eastl hashtable probe and the cString temporaries
+// keep them from being byte-exact (recorded in nonmatching.txt).
 //
 // Frozen batch gold6.  32-bit x86, MSVC 2008 SP1, flags
 // /O2 /MD /Gy /TP /arch:SSE /GS- (no /EHsc).
@@ -27,6 +28,7 @@ struct IWindow {                                   // a cSPUIWindow / cSPUILayou
     virtual unsigned Slot2C();                     // +0x2c  -> state value
     PV8 PV8 PV2 PV                                 // +0x30..+0x78  (unused slots)
     virtual void     Slot7C(int a, int b);         // +0x7c  SetVisible/flag
+    virtual void     Slot80(const wchar_t* s);     // +0x80  set label text
 };
 
 struct SPUILayout {
@@ -37,6 +39,8 @@ struct SPUILayout {
 struct GGE {                                        // kGUI_PanelIDs
     char pad00[0x103];
     char m103;                                      // +0x103
+    char pad104[0xb0];                              // +0x104..+0x1b3
+    int  mPanelIds[8];                              // +0x1b4  panel-id table indexed by mode/level
     void Fn53d0(int);                               // 0x00de53d0
 };
 extern GGE* kGUI_PanelIDs;                          // 0x016a1344
@@ -47,11 +51,72 @@ void* __cdecl operator_new(unsigned size, const char* name, int, int, int, int);
 // 12-byte resource key.
 struct Key { int a; int b; int c; };
 
+// An eastl hashtable (0x1c bytes).  The bucket array lives at +0x04 and the
+// bucket count at +0x08; each node stores its key at +0x00 and its chain link
+// at +0x08 (matching the inlined lookup in SetLevel/Init).
+struct Hashtable {
+    unsigned   m00;              // +0x00
+    unsigned** mBuckets;         // +0x04
+    unsigned   mBucketCount;     // +0x08
+    unsigned   m0c;              // +0x0c
+    unsigned   m10;              // +0x10
+    unsigned   m14;              // +0x14
+    unsigned   m18;              // +0x18
+    unsigned*  LookupOrInsert(const void* key);  // 0x00de7630
+};
+
+// SP::cString (0x1c bytes).
+class cString {
+public:
+    cString();                                             // 0x006b5060
+    cString(unsigned table, unsigned instance, const wchar_t* def); // 0x006b5770
+    cString& operator=(const cString& rhs);                // 0x006b5430
+    ~cString();                                            // 0x006b5240
+    const wchar_t* GetText();                              // 0x006b55c0
+private:
+    unsigned mData[7];
+};
+
+// One entry of the state machine's NewGame flow array (stride 0xc0, base +0x84).
+struct tNewGameFlow {
+    char      pad00[0x20];       // +0x00..+0x1f
+    Hashtable mMap20;            // +0x20  key -> value map used by SetLevel
+    char      pad3c[0x10];       // +0x3c..+0x4b
+    Key       m4c;               // +0x4c
+    char      pad58[0x08];       // +0x58..+0x5f
+    unsigned* m60;               // +0x60  begin of {id, textId} pairs
+    unsigned* m64;               // +0x64  end
+    char      pad68[0x20];       // +0x68..+0x87
+    unsigned  m88;               // +0x88  number of enabled flags
+    char      pad8c[0x34];       // +0x8c..+0xbf  (stride is 0xc0)
+};
+
+extern const unsigned kUIFlagIds[5];        // 0x0147e530
+extern const unsigned kUIPanelButtonIds[5]; // 0x0147e4d8
+
+// Hashtable probe matching the inlined chain walk (key at node[0], next at node[2]).
+static bool HashHasKey(Hashtable* t, unsigned key)
+{
+    if (t->mBucketCount == 0)
+        return false;
+    unsigned* node = (unsigned*)t->mBuckets[key % t->mBucketCount];
+    while (node != 0) {
+        if (node[0] == key)
+            return true;
+        node = (unsigned*)node[2];
+    }
+    return false;
+}
+
+
 // ---------------------------------------------------------------------------
 // The UI state machine and its embedded impl sub-object
 // ---------------------------------------------------------------------------
 struct GameEntry {                                  // object at StateMachine+0x628
-    char pad00[0x4c];
+    char pad00[0x20];                               // +0x00..+0x1f
+    unsigned short* m20;                            // +0x20  begin of a 16-bit vector
+    unsigned short* m24;                            // +0x24  end
+    char pad28[0x24];                               // +0x28..+0x4b
     Key  m4c;                                       // +0x4c
     char pad58[0x0c];                               // +0x58..+0x63
     Key  m64;                                       // +0x64
@@ -64,9 +129,17 @@ struct GameEntry {                                  // object at StateMachine+0x
 };
 
 struct StateMachine {
-    char pad00[0x28];
+    char pad00[0x28];                               // +0x00..+0x27
     SPUILayout mLayout;                             // +0x28
-    char pad40[0x5e8];                              // +0x40..+0x627
+    char pad40[0x41];                               // +0x40..+0x80
+    unsigned char m81;                              // +0x81  "herbivore layout chosen" flag
+    char pad82[0x02];                               // +0x82..+0x83
+    tNewGameFlow mFlow[6];                          // +0x84  stride 0xc0
+    char pad504[0x1c];                              // +0x504..+0x51f
+    Hashtable mHash[7];                             // +0x520  stride 0x1c
+    int m5e4;                                       // +0x5e4
+    int m5e8;                                       // +0x5e8  last panel id applied
+    char pad5ec[0x3c];                              // +0x5ec..+0x627
     GameEntry* mEntry;                              // +0x628
 
     void PickRandomVehicle();                       // 0x00df2d80
@@ -75,6 +148,14 @@ struct StateMachine {
     void PickRandomCreature();                      // 0x00df2bb0
     void PickRandomAssets(char flag);               // 0x00df3ab0  (ret 4)
     void PickRandomByMode(unsigned id, int tag, Key* key); // 0x00df2a60  (ret 0xc)
+    void SetLevel(int level);                       // 0x00df2ea0  (ret 4)
+    void Init(int flowId);                          // 0x00df32d0  (ret 4)
+    void SelectTheme(int theme);                    // 0x00defdd0
+    void ShowSkin(unsigned skinId);                 // 0x00dec6d0
+    void SetStateSummaryText(int a, unsigned b, const wchar_t* text); // 0x00defd10
+    void ResetAssetButtons(int a, int b, int c);    // 0x00ded140
+    int  FnEE890(Key* key);                         // 0x00dee890
+    void FnEF20(int a, Hashtable* table, unsigned panelId); // 0x00deef20
 };
 
 // cGalaxyGameEntryImpl lives at StateMachine+8 and owns the layout at +0x20.
@@ -185,5 +266,115 @@ void StateMachine::PickRandomAssets(char flag)
     }
 }
 
-// @ 0x00df2ea0  (partial / no source: SP::cGalaxyGameEntryUIStateMachine::SetLevel, 1068 bytes)
-// @ 0x00df32d0  (partial / no source: SP::cGalaxyGameEntryUIStateMachine::Init, 1940 bytes)
+// @ 0x00df2ea0
+void StateMachine::SetLevel(int level)
+{
+    GameEntry* p = this->mEntry;
+    if (p != 0) {
+        p->mA8 = level;
+        p->mA4 = level;
+        if (p->m20 != p->m24) {
+            *p->m20 = 0;
+            p->m24 = p->m20;
+        }
+        p->m70.a = 0;
+        p->m70.b = 0;
+        p->m70.c = 0;
+        p->m4c = p->m70;
+        p->m64 = p->m4c;
+        this->SelectTheme(0);
+    }
+
+    unsigned ids[5];
+    ids[0] = 0x5a72f76;
+    ids[1] = 0x6149c87;
+    ids[2] = 0x5a72f77;
+    ids[3] = 0x5a72f78;
+    ids[4] = 0x5a72f79;
+    for (int i = 0; i < 5; i++)
+        this->mLayout.FindWindowByID(ids[i], 1)->Slot7C(1, 0);
+
+    IWindow* w = this->mLayout.FindWindowByID(0x62f1f94, 1);
+    if (w != 0)
+        w->Slot7C(1, 0);
+
+    cString summary;
+
+    tNewGameFlow* flow = &this->mFlow[level];
+    if (!HashHasKey(&flow->mMap20, 8) && !HashHasKey(&flow->mMap20, 3))
+        this->PickRandomCreature();
+
+    switch (level) {
+    case 0: summary = cString(0x2b7a0311, 0x5b08702, 0); this->ShowSkin(0x5b218d1); break;
+    case 1: summary = cString(0x2b7a0311, 0x5b08703, 0); this->ShowSkin(0x5b218c9); break;
+    case 2: summary = cString(0x2b7a0311, 0x5b08704, 0); this->ShowSkin(0x5adf8e2); break;
+    case 4: summary = cString(0x2b7a0311, 0x5b08705, 0); this->ShowSkin(0x5b8a143); break;
+    case 5: summary = cString(0x2b7a0311, 0x5b08706, 0); this->ShowSkin(0x5b218d9); break;
+    }
+
+    this->SetStateSummaryText(1, 0x5b08739, summary.GetText());
+    this->SelectNextState();
+
+    this->mLayout.FindWindowByID(0x5af2b91, 1);
+
+    for (unsigned i = 0; i < 5; i++) {
+        IWindow* flagW = this->mLayout.FindWindowByID(kUIFlagIds[i], 1);
+        if (flagW != 0)
+            flagW->Slot7C(1, i < flow->m88);
+        IWindow* btnW = this->mLayout.FindWindowByID(kUIPanelButtonIds[i], 1);
+        if (btnW != 0)
+            btnW->Slot7C(1, i < flow->m88);
+    }
+
+    unsigned* begin = flow->m60;
+    unsigned count = (unsigned)(flow->m64 - flow->m60) >> 2;
+    for (unsigned i = 0; i < count; i += 2) {
+        unsigned* e = begin + i;
+        IWindow* lw = this->mLayout.FindWindowByID(e[0], 1);
+        cString text(0x2b7a0311, e[1], 0);
+        if (lw != 0)
+            lw->Slot80(text.GetText());
+    }
+
+    this->ResetAssetButtons(1, 1, 1);
+}
+
+// @ 0x00df32d0
+void StateMachine::Init(int flowId)
+{
+    int mode = this->mEntry->mA4;
+    if (mode == 0) {
+        int want = (flowId == 0x6775e23 || flowId == 0x6775e20) ? 1 : 0;
+        do {
+            this->PickRandomCreature();
+        } while (this->FnEE890(&this->mEntry->m4c) != want);
+        this->SelectNextState();
+        return;
+    }
+
+    bool herbivore = (this->m81 != 0) && (mode == 1);
+
+    int sel = 0;
+    Hashtable* table = 0;
+    switch (flowId) {
+    case 0x6775e1f:
+    case 0x6775e22:
+        sel = 1;
+        table = herbivore ? &this->mHash[4] : &this->mHash[1];
+        break;
+    case 0x6775e20:
+    case 0x6775e23:
+        sel = 0;
+        table = herbivore ? &this->mHash[5] : &this->mHash[2];
+        break;
+    case 0x6775e21:
+        sel = 2;
+        table = herbivore ? &this->mHash[6] : &this->mHash[3];
+        break;
+    }
+
+    int row = (mode == 1) ? 1 : (mode == 2) ? 2 : 0;
+    unsigned panelId = kGUI_PanelIDs->mPanelIds[sel + 3 * row];
+    this->m5e8 = 0x54045ce;
+    this->FnEF20(this->mEntry->mA8, table, panelId);
+}

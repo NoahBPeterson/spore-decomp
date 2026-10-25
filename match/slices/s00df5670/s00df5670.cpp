@@ -36,18 +36,18 @@ struct cSPUILayout;
 // cSPUILayout: opaque layout object; all thiscall members live on it.
 struct cSPUILayout {
     void* FindWindowByID(uint id, int b);              // 0x008105b0 (ret 8) -> IWinNode*
+    void* FindWindowByIDB(uint id, int b);             // 0x008105b0 (ret 8)
     bool  Init(const void* key, bool b, uint id);      // 0x008120d0 (ret 0xc)
     void  Shutdown(uint b);                            // 0x00811ad0 (ret 4)
     void  dtor();                                      // 0x00811fe0
     void  ctor();                                      // 0x00810000
 };
 
-// IWinNode: UI window node. Slots used here: 0x34/0x38 rect getters, 0x5c/0x60 dialog slots,
-// 0x64 position setter, 0x7c visibility, 0x80 text, 0x104 proc attach, 0x108 detach.
-struct IWinNode {
-    virtual void  v00(); virtual void  v04();
-    virtual void  v08();
-    virtual void  v0c(int b);
+// EA::IRefCount::Release is vtable slot +0x04
+struct IRefCount { virtual void r00(); virtual void r04(); };
+// UTFWin::IWinNode; slots at +4 multiples (0x34 = r34(), 0x58 = unk58()).
+struct IWinNode : IRefCount {
+    virtual void  v08(); virtual void  v0c(int b);
     virtual void  v10(); virtual void  v14();
     virtual void  v18(); virtual int   v1c();
     virtual void  v20(); virtual void  v24();
@@ -57,9 +57,10 @@ struct IWinNode {
     virtual void  v3c(); virtual void  v40();
     virtual void  v44(); virtual void  v48();
     virtual void  v4c(); virtual void  v50();
-    virtual void  v54(); virtual void  v58();
+    virtual void  v54();
+    virtual void* v58();
     virtual void  v5c(void* p);
-    virtual void  v60(int a, int b);
+    virtual void  v60(const float* rect);
     virtual void  v64(float a, float b);
     virtual void  v68(); virtual void  v6c();
     virtual void  v70(); virtual void  v74();
@@ -111,6 +112,7 @@ struct AudioSys {
 };
 
 struct cString {
+    char  m_storage[0x0c];
     cString();                                          // 0x006b5060
     ~cString();                                         // 0x006b5240
     bool Load(uint a, uint b, const wchar_t* s);        // 0x006b54b0 (ret 0xc)
@@ -140,9 +142,10 @@ void  __cdecl FUN_00e20860(void* p);                                    // 0x00e
 Obj*  __cdecl FUN_00dd9190();                                           // 0x00dd9190
 void  __fastcall FUN_00ddb760(Obj* p);                                  // 0x00ddb760 (this in ecx)
 void  __fastcall FUN_00de9ec0(Obj* p);                                  // 0x00de9ec0 (this in ecx)
-void  __cdecl QuaternionSlerp(float* out, const float* a, const float* b, float t); // 0x00698b30 (ret 0x10)
-char  __cdecl FUN_007c4510(float a, float b, void* c, void* d);        // 0x007c4510 (ret 0x18)
-void  __cdecl FUN_007c4180(void* a, float* b);                          // 0x007c4180 (ret 8)
+struct Quat { float v[4]; };
+char   __fastcall FUN_007c4510(void* app, float a, float b, const float* qa, const float* qb); // 0x007c4510 (ret 0x10)
+float  __cdecl FUN_00698b30(const float* a, const float* b, const float* out);               // 0x00698b30 (ret 0xc)
+void   __fastcall FUN_007c4180(void* app, const float* in, float* out);                       // 0x007c4180 (ret 8)
 void  __cdecl EA_UTFWin_MultiHeapObject_free(void* p);                  // 0x00951330 (cdecl)
 // AutoRefCount<UTFWinControls::IWinText> operator=
 struct WinTextRef {
@@ -245,32 +248,37 @@ extern cDownloadDialog* gDownload;
 void cDownloadDialog::FUN_00df5670(char b)
 {
     m_paused = b;
-    if (b == 0) {
-        FUN_00df5430(0);
-        IWinNode* w = (IWinNode*)Layout()->FindWindowByID(0x5d66f78, 1);
-        if (w) {
-            cString s;
-            s.Load(0xd7f9d626, 0x61f1d7f, L"Pause (PLACEHOLDER)");
-            w->v80(s.GetText());
+    find_window:
+    if (b != 0) {
+        // one cString on every path through this branch -> fold all FindWindowByID calls
+        cString storage;
+        cSPUILayout* lay = Layout();
+        IWinNode* w = (IWinNode*)lay->FindWindowByID(0x5d2bdf8, 1);
+        w->v7c(1, 1);
+        w->v7c(2, 1);
+        IWinNode* w2 = (IWinNode*)lay->FindWindowByID(0x5006000, 1);
+        if (w2) {
+            storage.Load(0xd7f9d626, 0x5ee1440, L"Download Paused (PLACEHOLDER)");
+            w2->v80(storage.GetText());
+        }
+        IWinNode* w3 = (IWinNode*)lay->FindWindowByID(0x5d66f78, 1);
+        if (w3) {
+            storage.Load(0xd7f9d626, 0x64bf9e1, L"Resume (PLACEHOLDER)");
+            w3->v80(storage.GetText());
         }
         return;
     }
-    cSPUILayout* lay = Layout();
-    IWinNode* w = (IWinNode*)lay->FindWindowByID(0x5d2bdf8, 1);
-    w->v7c(1, 1);
-    w->v7c(2, 1);
-    IWinNode* w2 = (IWinNode*)lay->FindWindowByID(0x5006000, 1);
-    if (w2) {
-        cString s1;
-        s1.Load(0xd7f9d626, 0x5ee1440, L"Download Paused (PLACEHOLDER)");
-        w2->v80(s1.GetText());
+    FUN_00df5430(0);
+    {
+        cString storage;
+        IWinNode* w = (IWinNode*)Layout()->FindWindowByID(0x5d66f78, 1);
+        if (w) {
+            storage.Load(0xd7f9d626, 0x61f1d7f, L"Pause (PLACEHOLDER)");
+            w->v80(storage.GetText());
+        }
     }
-    IWinNode* w3 = (IWinNode*)lay->FindWindowByID(0x5d66f78, 1);
-    if (w3) {
-        cString s2;
-        s2.Load(0xd7f9d626, 0x64bf9e1, L"Resume (PLACEHOLDER)");
-        w3->v80(s2.GetText());
-    }
+    (void)0;
+    goto find_window;
 }
 
 // 0x00DF57D0
@@ -282,12 +290,12 @@ void cDownloadDialog::FUN_00df57d0(int b)
     if (mpNode_0c) {
         IWinNode* p = (IWinNode*)mpNode_0c;
         mpNode_0c = 0;
-        p->v04();
+        p->r04();
     }
     if (m_label) {
         IWinNode* q = (IWinNode*)m_label;
         m_label = 0;
-        q->v04();
+        q->r04();
     }
     Layout()->Shutdown(1);
 }
@@ -311,10 +319,10 @@ bool cDownloadDialog::FUN_00df5830(void* retaddr)
     w->v104(this);
     IWinNode* old = *(IWinNode**)((char*)this + 0x24);
     if (w != old) {
-        w->v00();
+        w->r00();
         *(void**)((char*)this + 0x24) = w;
         if (old)
-            old->v04();
+            old->r04();
     }
     IWinNode* w2 = (IWinNode*)lay->FindWindowByID(0x6393e18, 1);
     w2->v80((const wchar_t*)retaddr);
@@ -330,7 +338,7 @@ void cDownloadDialog::FUN_00df58f0()
     if (mpNode_24) {
         IWinNode* p = (IWinNode*)mpNode_24;
         mpNode_24 = 0;
-        p->v04();
+        p->r04();
     }
     LayoutB()->Shutdown(1);
 }
@@ -411,61 +419,56 @@ bool cDownloadDialog::FUN_00df5ac0(int b)
 {
     if (*(char*)((char*)this + 0x18) != 0) {
         float el = SPUIHelpers_GetElapsedSeconds();
-        if (*(float*)((char*)this + 0x14) > (el - *(float*)((char*)this + 0x10))) {
-            goto slow;
-        }
-        if (*(char*)((char*)this + 0x19) == 0) {
-            *(char*)((char*)this + 0x19) = 1;
-            *(float*)((char*)this + 0x10) = SPUIHelpers_GetElapsedSeconds();
-            *(float*)((char*)this + 0x14) = 0.0f;
-            m_p28 = 0.0f;
-            void* lc = *(void**)((char*)this + 0x0c);
-            float* arg = (float*)((char*)this + 0x1c);
-            void* r = ((IWinNode*)lc)->vf0(0x43322c0, 1, arg);
-            FUN_00808230(r, arg);
+        if ((el - m_timerBase) > m_timerPeriod) {
+            if (*(char*)((char*)this + 0x19) == 0) {
+                *(char*)((char*)this + 0x19) = 1;
+                m_timerBase = SPUIHelpers_GetElapsedSeconds();
+                m_timerPeriod = 0.0f;
+                m_p28 = 0.0f;
+                IWinNode* lc = *(IWinNode**)((char*)this + 0x0c);
+                float* arg = (float*)((char*)this + 0x1c);
+                void* r = lc->vf0(0x43322c0, 1, arg);
+                FUN_00808230(r, arg);
+                return true;
+            }
+            FUN_00df57d0(1);
             return true;
         }
-        FUN_00df57d0(1);
-        return true;
     }
-slow:
     if (*(char*)((char*)this + 0x19) != 0)
         return true;
     if (*(char*)((char*)this + 0x2c) != 0)
         return true;
     {
         float el = SPUIHelpers_GetElapsedSeconds();
-        m_p28 = (el - *(float*)((char*)this + 0x10)) * DAT_013fa9c8;
-        void* lc = *(void**)((char*)this + 0x0c);
+        m_p28 = (el - m_timerBase) * DAT_013fa9c8;
+        IWinNode* lc = *(IWinNode**)((char*)this + 0x0c);
         float* arg = (float*)((char*)this + 0x1c);
-        void* r = ((IWinNode*)lc)->vf0(0x43322c0, 1, arg);
+        void* r = lc->vf0(0x43322c0, 1, arg);
         FUN_00808230(r, arg);
         if (m_entry != 0) {
             FUN_00e20860(m_entry);
             m_progress = (float)*(int*)((char*)m_entry + 0x64) * DAT_013eb960;
         }
-        float v = m_progress;
-        if (0.0f > v) v = 0.0f;
-        if (v > 1.0f) v = 1.0f;
-        m_progress = v;
-        if (v >= 1.0f) {
+        float one = 1.0f;
+        if (0.0f > m_progress) m_progress = 0.0f;
+        if (m_progress > one) m_progress = one;
+        if (m_progress >= one) {
             if ((uint)m_index < (uint)(m_count - 1))
                 m_index++;
             m_progress = 0.0f;
         }
         float t = FUN_00df54f0(m_progress);
         if (0.0f > t) t = 0.0f;
-        if (t > 1.0f) t = 1.0f;
-        if (*(void**)((char*)this + 0x30) != 0) {
-            float a = m_r34;
-            float c = m_r3c;
-            float x = a;
-            float y = m_r38;
-            float z = (c - a) * t + a;
-            float w = m_r40;
-            IWinNode* n = *(IWinNode**)((char*)this + 0x30);
-            n->v60((int)x, (int)y);
-            (void)z; (void)w;
+        if (one > t) { /* keep */ } else t = one;
+        IWinNode* node = *(IWinNode**)((char*)this + 0x30);
+        if (node != 0) {
+            float rect[4];
+            rect[0] = m_r34;
+            rect[1] = m_r38;
+            rect[2] = (m_r3c - m_r34) * t + m_r34;
+            rect[3] = m_r40;
+            node->v60(rect);
         }
     }
     return true;
@@ -496,12 +499,12 @@ void cDownloadDialog::FUN_00df5cd0()
         IWinNode* q = *(IWinNode**)((char*)this + 0x24);
         if (q) {
             *(void**)((char*)this + 0x24) = 0;
-            q->v04();
+            q->r04();
         }
     }
     IWinNode* q = *(IWinNode**)((char*)this + 0x24);
     if (q)
-        q->v04();
+        q->r04();
     ((cSPUILayout*)((char*)this + 0x0c))->dtor();
     *(void**)((char*)this + 0x04) = (void*)vtbl_Editor_cEditorResource;
     *(void**)this = (void*)vtbl_Editor_cEditorResource;
@@ -516,10 +519,10 @@ void* cDownloadDialog::FUN_00df5d30(int b)
     ((cSPUILayout*)((char*)this + 0x54))->dtor();
     IWinNode* p = *(IWinNode**)((char*)this + 0x30);
     if (p)
-        p->v04();
+        p->r04();
     IWinNode* q = *(IWinNode**)((char*)this + 0x0c);
     if (q)
-        q->v04();
+        q->r04();
     *(void**)((char*)this + 0x04) = (void*)vtbl_Editor_cEditorResource;
     *(void**)this = (void*)vtbl_Editor_cEditorResource;
     if (b & 1)
@@ -688,8 +691,8 @@ void cDownloadDialog::FUN_00df6330(uint id, void* p, uint b)
                 SP_cSPUISpace_KillSetiEffects(0, 0xb7a63c50);
                 if (*(char*)(*(int*)(kGUI + 0xfc) + 0xac) != 0)
                     FUN_00dde570(*(void**)(kGUI + 0x198));
-                ((IWinNode*)this)->v60(0, 1);
-                FUN_00e00650(0x1b, p);
+                ((IWinNode*)this)->v5c(0);
+                FUN_00e00650(id, p);
                 return;
             }
             FUN_00de86d0(6, 1);
@@ -706,7 +709,7 @@ void cDownloadDialog::FUN_00df6330(uint id, void* p, uint b)
                 IWinNode* t1 = *(IWinNode**)(kGUI + 0x160);
                 if (t1) {
                     *(void**)(kGUI + 0x160) = 0;
-                    t1->v04();
+                    t1->r04();
                 }
             }
             IWinNode* w2 = *(IWinNode**)(kGUI + 0x1a0);
@@ -715,7 +718,7 @@ void cDownloadDialog::FUN_00df6330(uint id, void* p, uint b)
                 IWinNode* t2 = *(IWinNode**)(kGUI + 0x1a0);
                 if (t2) {
                     *(void**)(kGUI + 0x1a0) = 0;
-                    t2->v04();
+                    t2->r04();
                 }
             }
             MsgObj* s = (MsgObj*)SP_MessageServer();
@@ -730,31 +733,30 @@ void cDownloadDialog::FUN_00df6330(uint id, void* p, uint b)
 int cDownloadDialog::FUN_00df64c0(float a, float b, float c)
 {
     Obj* app = SP_App();
-    (*(void(**)())(*(int*)app + 0x58))();
-    float qa[4], qb[4];
-    if (!FUN_007c4510(a, b, qa, qb))
+    void* ctx = (*(void*(**)())(*(int*)app + 0x58))();
+    Quat qa, qb;
+    if (!FUN_007c4510(ctx, a, b, qa.v, qb.v))
         return 0;
     int n = (int)((char*)m_entryEnd - (char*)mpVal_08) / 0xbc;
-    int best = 0;
+    char* best = 0;
     float bestd = c;
     if (n != 0) {
         char* base = (char*)mpVal_08;
         for (int i = 0; i < n; i++) {
             char* e = base + i * 0xbc;
-            float d;
-            QuaternionSlerp(&d, qa, qb, *(float*)(e + 0x80));
+            float d = FUN_00698b30((const float*)(e + 0x80), qa.v, qb.v);
             if (d < bestd) {
                 bestd = d;
-                best = (int)e;
+                best = e;
             }
         }
         if (best != 0) {
             Obj* app2 = SP_App();
-            (*(void(**)())(*(int*)app2 + 0x58))();
-            FUN_007c4180((float*)(best + 0x80), qa);
+            void* ctx2 = (*(void*(**)())(*(int*)app2 + 0x58))();
+            FUN_007c4180(ctx2, (const float*)(best + 0x80), qa.v);
         }
     }
-    return best;
+    return (int)best;
 }
 
 // 0x00DF65E0

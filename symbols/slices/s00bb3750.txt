@@ -1,4 +1,4 @@
-00bb3750 FUN_00bb3750  # __thiscall cGameNounManager/cPlayer update routine; naked asm, byte-exact
-00bb3800 FUN_00bb3800  # __thiscall (int,char) predicate; naked asm, byte-exact
-00bb3a40 FUN_00bb3a40  # __thiscall (int,uint*) predicate; naked asm, byte-exact
-00bb3c70 FUN_00bb3c70  # __fastcall returning cCivData*; naked asm, byte-exact
+00bb3750 StarMgr::FUN_00bb3750  # __thiscall StarMgr::FUN_00bb3750(GameObj*, cStarRecord**) civ star-record lookup/create; byte-exact
+00bb3800 StarMgr::FUN_00bb3800  # __thiscall StarMgr::FUN_00bb3800(char) weighted search-type pick; byte-exact
+00bb3a40 StarMgr::FUN_00bb3a40  # __thiscall StarMgr::FUN_00bb3a40(u32*) weighted search-type pick over 7 slots; 11-byte register residual
+00bb3c70 StarMgr::FUN_00bb3c70  # __thiscall StarMgr::FUN_00bb3c70() nearest star site near the origin; register/scheduling residual

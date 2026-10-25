@@ -31,7 +31,9 @@ struct V4e0 {
     void  Destroy(void* f, void* l);                 // 0x00dfc660 ret 8
 };
 struct CStr {
+    uint8_t mData[0x3c];                             // own storage, 0x3c bytes
     void Assign(void* o);                            // 0x006b5430 thiscall ret 4
+    void Destroy();                                  // 0x00f280f0 thiscall, ??1CStr@@QAE@XZ
 };
 struct ElemA {                                       // 0x2788-class
     void* CopyAssign(void* o);                       // 0x00dfedb0 ret 4
@@ -52,16 +54,261 @@ extern "C" void  __cdecl FUN_00dfae50();
 extern "C" void  __cdecl FUN_00dfab20();
 extern "C" void  __cdecl FUN_00dfa460();
 extern "C" void  __cdecl FUN_00685a30(void*, void*);
-extern "C" void* __cdecl FUN_00435e90();        // GetRecorderState
-extern "C" void  __cdecl FUN_00435ed0();
+extern "C" uint32_t __cdecl FUN_00435e90();     // GetRecorderState
+extern "C" void  __cdecl FUN_00435ed0(uint32_t id, uint32_t value);  // RecordEvent2
+extern "C" void* __cdecl FUN_00a206f0();        // EA::Audio::GetSystemAT
 
 // ===========================================================================
 //  0x00dfe460  SP::cSPUISpace message/command handler (big prologue switch)
 // ===========================================================================
+struct Any3 {                                       // three-word command payload
+    uint32_t a, b, c;
+};
+struct CmdObj {                                     // command object carried by a message
+    virtual uint32_t Vf00();
+    virtual uint32_t Vf01();
+    virtual uint32_t Vf02();
+    virtual uint32_t Vf03();
+    virtual uint32_t Vf04();
+    virtual uint32_t Vf05();
+    virtual uint32_t Vf06();
+    virtual uint32_t CommandId();                   // +0x1c
+    virtual uint32_t Vf08();
+    virtual uint32_t Vf09();
+    virtual uint8_t  Flags();                       // +0x28
+};
+struct GGUIMsg {
+    CmdObj*  mpObj;                                 // +0x00
+    uint32_t mPad004;                               // +0x04
+    uint32_t mType08;                               // +0x08
+};
+struct AudioSys {
+    virtual uint32_t Vf00();
+    virtual uint32_t Vf01();
+    virtual uint32_t Vf02();
+    virtual uint32_t Vf03();
+    virtual uint32_t Vf04();
+    virtual uint32_t Vf05();
+    virtual uint32_t Vf06();
+    virtual uint32_t Vf07();
+    virtual uint32_t EventId();                     // +0x20
+};
+struct cSPUIWindow {                                // window object
+    virtual uint32_t Vf00();
+    virtual uint32_t Vf01();
+    virtual uint32_t Vf02();
+    virtual cSPUIWindow* FindChild(uint32_t id);    // +0x0c
+    virtual uint32_t Vf04();
+    virtual uint32_t Vf05();
+    virtual uint32_t Vf06();
+    virtual uint32_t Vf07();
+    virtual uint32_t Vf08();
+    virtual uint32_t Vf09();
+    virtual uint32_t Vf10();
+    virtual uint32_t Vf11();
+    virtual uint32_t Vf12();
+    virtual uint32_t Vf13();
+    virtual uint32_t Vf14();
+    virtual uint32_t Vf15();
+    virtual uint32_t Vf16();
+    virtual uint32_t Vf17();
+    virtual uint32_t Vf18();
+    virtual uint32_t Vf19();
+    virtual uint32_t Vf20();
+    virtual void*    GetText();                     // +0x54
+    virtual uint32_t Vf22();
+    virtual uint32_t Vf23();
+    virtual void     SetText(void* text, int b);    // +0x60
+};
+struct cSPUILayout {                                // layout anchored at space+0x48
+    uint8_t mData[0x36];
+    cSPUIWindow* FindWindowByID(uint32_t id, int flag);   // 0x008105b0 ret 8
+};
+struct WString {
+    wchar_t* mpData;                                // +0x00
+    void Append(void* text);                        // 0x005c3d90 ret 4
+};
+struct SomeActive {                                 // object behind globals+0x1c
+    char IsActive();                                // 0x00ec4320
+};
+struct cEditorGlobals {                             // object behind 0x016c7aa4
+    uint32_t    mPad000[7];
+    SomeActive* mpActive1c;                         // +0x001c
+};
+struct IfcStateSub {                                // object behind ifcstate+0x198
+    void NotifySequence();                          // 0x00de0890
+};
+struct cInterfaceState {                            // object behind 0x016a1344
+    uint32_t    mPad000[0x198 / 4];
+    IfcStateSub* mpSub198;                          // +0x198
+    void SetSlotMode(uint32_t a, uint32_t b);       // 0x00de86d0
+    void SetEntryFlag(char v);                      // 0x00de5330
+};
+extern "C" cEditorGlobals*    g_pEditorGlobals;    // 0x016c7aa4
+extern "C" cInterfaceState*   g_pInterfaceState;   // 0x016a1344
+
+struct cSPUISpace {
+    uint32_t     mPad000[(0x20 - 0x00) / 4];
+    int32_t      mMode20;                           // +0x20  current editor mode
+    uint32_t     mPad024[(0x48 - 0x24) / 4];
+    cSPUILayout  mLayout48;                         // +0x48
+    uint8_t      mFlag7e;                           // +0x7e
+    uint8_t      mPad07f[0xa4 - 0x7f];
+    Any3         mAny3A4;                           // +0x0a4
+    uint32_t     mPad0b0[(0x168 - 0xb0) / 4];
+    WString      mStr168;                           // +0x168
+    char DoMessage(int arg1, GGUIMsg* msg);         // 0x00dfe460 ret 8
+    void Fn9990();                                  // 0x00df9990
+    void Fn9ef0();                                  // 0x00df9ef0
+    void Fn9e60();                                  // 0x00df9e60
+    void Fn9a70();                                  // 0x00df9a70
+    void Fn9a00();                                  // 0x00df9a00
+    void Fn9ad0();                                  // 0x00df9ad0
+    void SetModeEnabled(int on);                    // 0x00dfab20 ret 4
+    void FnAe50();                                  // 0x00dfae50
+    void FnA460(Any3* p, int b);                    // 0x00dfa460 ret 8
+    void LaunchAssetBrowser(int kind);              // 0x00dfa5c0 ret 4
+    void FnAf80();                                  // 0x00dfaf80
+    void FnD5b0();                                  // 0x00dfd5b0
+    void FnDc50();                                  // 0x00dfdc50
+    void FnDe90();                                  // 0x00dfde90
+    void FnE220();                                  // 0x00dfe220
+    char CheckX();                                  // 0x00dfc500
+};
+
+static __forceinline void RecordEvent(uint32_t id) { // 0x00435ed0 wrapper
+    FUN_00435ed0(id, FUN_00435e90());
+}
+
+static __forceinline uint32_t AudioEventValue() {   // audio system event tag
+    AudioSys* p = (AudioSys*)FUN_00a206f0();
+    return p ? p->EventId() : 0;
+}
+
 // @ 0x00dfe460
-char UISpace_Handle(void* self, void* msg, int arg2) {
-    // Large switch over hashed command ids; see partial.txt.
-    (void)self; (void)msg; (void)arg2;
+char cSPUISpace::DoMessage(int arg1, GGUIMsg* msg) {
+    (void)arg1;
+    if (msg->mType08 == 0x287259f6) {
+        if (mMode20 != 0xb && !g_pEditorGlobals->mpActive1c->IsActive()) {
+            switch (msg->mpObj->CommandId()) {
+            case 0x54045ce:
+                Fn9990();
+                return 1;
+            case 0x5384d05:
+            case 0x5384d06:
+            case 0x5384d07:
+            case 0x5384d08:
+                RecordEvent(0x8e82b51c);
+                Fn9ef0();
+                return 1;
+            case 0x5933fe0:
+            case 0x5933fe1:
+            case 0x5933fe2:
+            case 0x5933fe3:
+                RecordEvent(0x8e82b51c);
+                Fn9e60();
+                return 1;
+            case 0x5951103:
+            case 0x5951104:
+                RecordEvent(0xddd740f9);
+                FnAe50();
+                return 1;
+            case 0x733b57f:
+                SetModeEnabled(0);
+                mMode20 = 9;
+                return 1;
+            case 0x733fe09: {
+                Any3 t;
+                t.a = 0;
+                t.b = 0;
+                t.c = 0;
+                FnA460(&t, 0);
+                mMode20 = 6;
+                SetModeEnabled(0);
+                return 1;
+            }
+            case 0x733fe08:
+                RecordEvent(0x8e82b51c);
+                FnE220();
+                return 1;
+            case 0x73bba58:
+                mMode20 = 5;
+                SetModeEnabled(0);
+                Fn9a70();
+                return 1;
+            case 0x74d0932:
+                Fn9a00();
+                mMode20 = 7;
+                SetModeEnabled(0);
+                return 1;
+            case 0x7c683f0:
+                LaunchAssetBrowser(0);
+                return 1;
+            case 0x7bfb76e:
+            case 0x7bfcff8:
+                if (mMode20 == 0) {
+                    SetModeEnabled(0);
+                    RecordEvent(0xebadb118);
+                    g_pInterfaceState->mpSub198->NotifySequence();
+                    g_pInterfaceState->SetSlotMode(2, 0);
+                    g_pInterfaceState->SetEntryFlag(1);
+                } else {
+                    RecordEvent(0x8e82b51c);
+                    Fn9ad0();
+                    mMode20 = 0;
+                }
+                return 1;
+            case 0x7c683f1:
+                LaunchAssetBrowser(1);
+                return 1;
+            case 0x7c683f2:
+                LaunchAssetBrowser(2);
+                return 1;
+            case 0x7ca4119:
+                FnA460(&mAny3A4, 0);
+                return 1;
+            case 0x7ccc126:
+                RecordEvent(0x91be3241);
+                FnD5b0();
+                return 1;
+            case 0x7ccc115:
+                FnDe90();
+                return 1;
+            case 0x7ccc133:
+                RecordEvent(0x91be3241);
+                FnDc50();
+                return 1;
+            case 0x7ccc2a4:
+                RecordEvent(0x91be3241);
+                FnAf80();
+                return 1;
+            default:
+                break;
+            }
+        }
+    } else if (msg->mType08 == 0x9b1552d8) {
+        FUN_00435ed0(0x1ac6d1af, AudioEventValue());
+        uint32_t cmd = msg->mpObj->CommandId();
+        if (cmd == 0x5400fa5) {
+            cSPUIWindow* w = mLayout48.FindWindowByID(cmd, 1);
+            if (w != 0) {
+                cSPUIWindow* child = w->FindChild(0xcf428691);
+                if (child != 0) {
+                    mStr168.Append(child->GetText());
+                    if (CheckX())
+                        child->SetText(mStr168.mpData, 0);
+                }
+            }
+            mFlag7e = 1;
+            return 1;
+        }
+    } else if (msg->mType08 == 0x1b) {
+        uint32_t cmd = msg->mpObj->CommandId();
+        if (cmd == 0x73bba58 || cmd == 0x733fe08 || cmd == 0x74d0932) {
+            if ((msg->mpObj->Flags() & 2) != 0)
+                FUN_00435ed0(0xd607a5a7, AudioEventValue());
+        }
+    }
     return 1;
 }
 
@@ -262,11 +509,84 @@ void* ElemB::CopyCtor(void* o) {
 // ===========================================================================
 //  0x00dfef70  large destructor
 // ===========================================================================
+// An eastl vector of unknown element type: only the range and the begin pointer
+// (which owns its allocation, hence the [-4] ownership flag) are touched here.
+struct VecAny {
+    void* mpBegin;                                   // +0x00
+    void* mpEnd;                                     // +0x04
+    void* mpCapacity;                                // +0x08
+    void DestroyRange(void* first, void* last);           // 0x00dfdf70 ret 8
+    void DestroyRangeUnk(void* first, void* last);        // 0x00dfd300 ret 8
+    void DestroyRange27e8(void* first, void* last);       // 0x00dfe910 ret 8
+    void DestroyRange534(void* first, void* last);        // 0x00dfdf10 ret 8
+    void DestroyRangeVariant(void* first, void* last);    // 0x00685a30 ret 8
+};
+
+// 0x2c84-byte editor resource: message handler, vectors, three strings and a
+// tracer object.  Handles for the original member offsets.
+struct cUISpaceRes {
+    void*     mpVtbl00;                              // +0x0000
+    uint32_t  mPad04[(0x18 - 0x04) / 4];
+    void*     mpVtbl18;                              // +0x0018
+    uint32_t  mPad1c[(0x30 - 0x1c) / 4];
+    VecAny    mVec30;                                // +0x0030  EA::Variant vector
+    uint32_t  mPad3c[(0x48 - 0x3c) / 4];
+    void*     mpTracer48;                            // +0x0048  object with a virtual dtor
+    uint32_t  mPad4c[(0x7c - 0x4c) / 4];
+    CStr      mStr7c;                                // +0x007c
+    CStr      mStrB8;                                // +0x00b8
+    CStr      mStrF4;                                // +0x00f4
+    uint32_t  mPad130[(0x178 - 0x130) / 4];
+    void*     mpOwned178;                            // +0x0178  owned allocation ([-4] flag)
+    uint32_t  mPad17c[(0x23c - 0x17c) / 4];
+    VecAny    mPod23c;                               // +0x023c  eastl::pod_array<0x534>
+    uint32_t  mPad248[(0x2bf4 - 0x248) / 4];
+    VecAny    mVec2bf4;                              // +0x2bf4  vector of 0x27e8 elements
+    uint32_t  mPad2c00[(0x2c10 - 0x2c00) / 4];
+    VecAny    mVec2c10;                              // +0x2c10  vector of unnamed elements
+    uint32_t  mPad2c1c[(0x2c54 - 0x2c1c) / 4];
+    void*     mpRaw2c54;                             // +0x2c54  raw allocation
+    uint32_t  mPad2c58[(0x2c6c - 0x2c58) / 4];
+    VecAny    mVec2c6c;                              // +0x2c6c  vector of 0x27e0 elements
+    uint32_t  mPad2c78[(0x2c80 - 0x2c78) / 4];
+    void*     mpOwned2c80;                           // +0x2c80  owned allocation ([-4] flag)
+    void Destroy();                                  // 0x00dfef70  destructor body
+};
+
+// eastl frees an element block only when the four bytes before it (the
+// "owned" flag) are set; a raw new/delete block has no such flag.
+static inline void OwnedFree(void* p) {
+    if (p && ((int*)p)[-1] != 0)
+        EA_Free(p);
+}
+
+static inline void RawFree(void* p) {
+    if (p)
+        EA_Free(p);
+}
+
 // @ 0x00dfef70
-void UISpace_Dtor(void* s) {
-    // Large destructor; see partial.txt.
-    *(void**)((char*)s + 0x18) = (void*)0x13eb938;
-    *(void**)s = (void*)0x13eb938;
+void cUISpaceRes::Destroy() {
+    OwnedFree(mpOwned2c80);
+    mVec2c6c.DestroyRange(mVec2c6c.mpBegin, mVec2c6c.mpEnd);       // 0x00dfdf70
+    OwnedFree(mVec2c6c.mpBegin);
+    RawFree(mpRaw2c54);
+    mVec2c10.DestroyRangeUnk(mVec2c10.mpBegin, mVec2c10.mpEnd);    // 0x00dfd300
+    RawFree(mVec2c10.mpBegin);
+    mVec2bf4.DestroyRange27e8(mVec2bf4.mpBegin, mVec2bf4.mpEnd);   // 0x00dfe910
+    RawFree(mVec2bf4.mpBegin);
+    mPod23c.DestroyRange534(mPod23c.mpBegin, mPod23c.mpEnd);       // 0x00dfdf10
+    OwnedFree(mPod23c.mpBegin);
+    OwnedFree(mpOwned178);
+    mStrF4.Destroy();
+    mStrB8.Destroy();
+    mStr7c.Destroy();
+    if (mpTracer48)
+        ((void (__thiscall*)(void*))(*(void***)mpTracer48)[1])(mpTracer48);
+    mVec30.DestroyRangeVariant(mVec30.mpBegin, mVec30.mpEnd);      // 0x00685a30
+    RawFree(mVec30.mpBegin);
+    mpVtbl00 = (void*)0x13eb938;
+    mpVtbl18 = (void*)0x13eb938;
 }
 
 // ===========================================================================
@@ -316,11 +636,90 @@ void* ElemA::CopyCtor(void* o) {
 }
 
 // ===========================================================================
-//  0x00dff330  (see partial.txt)
+//  0x00dff330  vector assign, stride 0x238
 // ===========================================================================
+// eastl vector assign: if the destination has no room, allocate and copy the
+// whole source range; if it has room, copy the elements that fit and then
+// move the rest; otherwise copy and destroy the tail of the old range.
+struct V238 {
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    V238* Assign(V238* other);                       // 0x00dff330 ret 4
+    void* Alloc(uint32_t n, void* f, void* l);       // 0x00dff0d0 ret 0xc
+    void  DestroyRange(void* f, void* l);            // 0x00dfd300 ret 8
+};
+struct V534 {
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    V534* Assign(V534* other);                       // 0x00dff650 ret 4
+    void* Alloc(uint32_t n, void* f, void* l);       // 0x00dff530 ret 0xc
+    void  DestroyRange(void* f, void* l);            // 0x00dfdf10 ret 8
+};
+extern "C" void* __cdecl FUN_00dfe9a0(void* f, void* l, void* d);                 // 0x00dfe9a0
+extern "C" void* __cdecl FUN_00dff270(void* f, void* l, void* d);                 // 0x00dff270
+extern "C" void  __cdecl FUN_00dfeaa0(void** out, void* f, void* l, void* d, void* o); // 0x00dfeaa0
+extern "C" void  __cdecl FUN_00dff460(void** out, void* f, void* l, void* d, void* o); // 0x00dff460
+
 // @ 0x00dff330
-void UISpace_330(void* s) {
-    (void)s;
+V238* V238::Assign(V238* other) {
+    if (other == this)
+        return this;
+    char* oEnd = (char*)other->mpEnd;
+    char* oBeg = (char*)other->mpBegin;
+    uint32_t nOther = (uint32_t)((oEnd - oBeg) / 0x238);
+    char* sBeg = (char*)mpBegin;
+    if (nOther > (uint32_t)(((char*)mpCapacity - sBeg) / 0x238)) {
+        char* p = (char*)Alloc(nOther, oBeg, oEnd);
+        DestroyRange(mpBegin, mpEnd);
+        if (mpBegin)
+            EA_Free(mpBegin);
+        mpBegin = p;
+        mpCapacity = p + nOther * 0x238;
+    } else {
+        uint32_t nHave = (uint32_t)(((char*)mpEnd - sBeg) / 0x238);
+        if (nOther > nHave) {
+            FUN_00dfe9a0(oBeg, oBeg + nHave * 0x238, sBeg);
+            FUN_00dfeaa0((void**)&other,
+                         (char*)other->mpBegin +
+                             (((char*)mpEnd - (char*)mpBegin) / 0x238) * 0x238,
+                         other->mpEnd, mpEnd, other);
+        } else {
+            void* e = FUN_00dfe9a0(oBeg, oEnd, sBeg);
+            DestroyRange(e, mpEnd);
+        }
+    }
+    mpEnd = (char*)mpBegin + nOther * 0x238;
+    return this;
+}
+
+// @ 0x00dff650
+V534* V534::Assign(V534* other) {
+    if (other == this)
+        return this;
+    char* oEnd = (char*)other->mpEnd;
+    char* oBeg = (char*)other->mpBegin;
+    uint32_t nOther = (uint32_t)((oEnd - oBeg) / 0x534);
+    char* sBeg = (char*)mpBegin;
+    if (nOther > (uint32_t)(((char*)mpCapacity - sBeg) / 0x534)) {
+        char* p = (char*)Alloc(nOther, oBeg, oEnd);
+        DestroyRange(mpBegin, mpEnd);
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            EA_Free(mpBegin);
+        mpBegin = p;
+        mpCapacity = p + nOther * 0x534;
+    } else {
+        uint32_t nHave = (uint32_t)(((char*)mpEnd - sBeg) / 0x534);
+        if (nOther > nHave) {
+            FUN_00dff270(oBeg, oBeg + nHave * 0x534, sBeg);
+            FUN_00dff460((void**)&other,
+                         (char*)other->mpBegin +
+                             (((char*)mpEnd - (char*)mpBegin) / 0x534) * 0x534,
+                         other->mpEnd, mpEnd, other);
+        } else {
+            void* e = FUN_00dff270(oBeg, oEnd, sBeg);
+            DestroyRange(e, mpEnd);
+        }
+    }
+    mpEnd = (char*)mpBegin + nOther * 0x534;
+    return this;
 }
 
 // ===========================================================================
@@ -341,10 +740,5 @@ void** UninitCopy27e8(void** dstp, int* first, int* last, int val) {
     return dstp;
 }
 
-// ===========================================================================
-//  0x00dff650  (see partial.txt)
-// ===========================================================================
-// @ 0x00dff650
-void UISpace_650(void* s) {
-    (void)s;
-}
+// 0x00dff650 is the same assign for stride 0x534; its body is next to the
+// 0x238 version above (V534::Assign).

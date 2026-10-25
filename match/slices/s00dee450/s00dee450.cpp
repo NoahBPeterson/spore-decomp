@@ -54,8 +54,9 @@ void      FUN_00ded920(unsigned a, unsigned b);              // 0x00ded920
 char __stdcall FUN_00de5cb0(unsigned a);                     // 0x00de5cb0
 uint32_t  FUN_00dec990(void* p);                             // 0x00dec990
 uint32_t  FUN_004bafc0(void* a, void** b);                   // 0x004bafc0
-void*     FUN_004010a0(void* a, unsigned b);                 // 0x004010a0
-void*     FUN_005ecf80(void* a);                             // 0x005ecf80
+void* __stdcall FUN_004010a0(void* a, unsigned b);           // 0x004010a0 (callee pops the 2 args)
+struct NameGen;
+void*     FUN_005ecf80(void* a);                             // 0x005ecf80 (unused: reached as NameGen::GetName)
 void*     EffectsManagerPtr();                               // 0x0067ddd0
 void*     APP_Ptr();                                         // 0x0067dd10
 void*     MessageServerPtr();                                // 0x0067dcc0
@@ -64,7 +65,17 @@ char      Editor_Launch();                                   // 0x005a9200
 void*     NukeSubtreeImpl(void* tree);                       // 0x009a9600
 struct RBNode;
 RBNode*   RBTreeIncrement(RBNode* n);                        // 0x00921580
-void*     WStr_Assign(void* self, void* first, void* last);  // 0x00423650
+void*     WStr_Assign(void* self, void* first, void* last);  // 0x00423650 (kept for ranged callers)
+// eastl::basic_string<wchar_t> prefix used here: Assign(first,last) is a thiscall member (ret 8)
+struct WString {
+    void* mpBegin;                                             // +0x00
+    void* mpEnd;                                               // +0x04
+    void* mCap;                                                // +0x08
+    void* Assign(void* first, void* last);                     // 0x00423650
+};
+struct NameGen {
+    void* GetName();                                           // 0x005ecf80
+};
 void*     WStr_Append(void* self, void* a, void* b);         // 0x00429580
 void*     WStr_RangeInit(void* self, void* str);             // 0x00579a90
 void*     WStr_AssignRange(void* self, void* first, void* last); // 0x00423650
@@ -533,9 +544,16 @@ void GalaxyUI::FUN_00deede0()
 {
     GridObj* g = this->mpGrid;
     if (g == 0) return;
-    // NOTE: the retail prologue rebuilds the localized display name through
-    // eastl::wstring/collate helpers (FUN_004010a0 / FUN_005ecf80); this
-    // reimplementation only performs the window-update half.
+    // rebuild the grid's display name from the localized id, then (when the generator
+    // handed back a different string object) copy that range over the grid's name
+    void* tmp[3];                                      // eastl::wstring temp (begin/end/cap)
+    void* gen  = FUN_004010a0(tmp, 0x51aa76bb);
+    void* name = ((NameGen*)gen)->GetName();
+    if (name != (void*)&g->mpName)
+        ((WString*)(void*)&g->mpName)->Assign(((void**)name)[0], ((void**)name)[1]);
+    int tmpBytes = (int)((char*)tmp[1] - (char*)tmp[0]) & ~1;
+    if (tmpBytes > 2 && tmp[0] != 0)
+        operator delete[](tmp[0]);
     void* w = mLayout.FindWindowByID(0x7d275bb, 1);
     if (w == 0) return;
     void** wvt = *(void***)w;

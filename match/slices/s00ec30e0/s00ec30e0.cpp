@@ -114,8 +114,7 @@ void* __cdecl FUN_006c0200(void* self);                        // 0x006c0200
 void* __cdecl FUN_00c04750(void* self);                        // 0x00c04750
 char __cdecl FUN_006135d0(uint32_t id, float* out);            // 0x006135d0
 char __cdecl FUN_00613660(uint32_t id, float* out);            // 0x00613660
-int __cdecl GetFileCount(void* res);                           // 0x008e7f80
-int __cdecl GetDamageState(void* c);                           // 0x0041e0d0
+int __cdecl GetDamageState(void* c);                           // 0x008e7f80
 void* __cdecl AssignTarget(void* self, void* obj);             // 0x00c70110
 
 extern char g_1601760;                  // 0x01601760  sMathRandom

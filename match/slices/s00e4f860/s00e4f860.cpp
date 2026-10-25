@@ -272,20 +272,21 @@ void FUN_00e4f860(char* obj, int arg2) {
       int a = *(int*)(e + 0x18);
       int b = *(int*)(e + 0x14);
       int* v = (int*)out[i];
+      void** vt = Vt(v);
       if (b < 0) {
         if (a >= 0 && a < arg2)
-          (*(void(__thiscall**)(int*, int))((char*)Vt(v) + 0xc))(v, 0);
-        else if ((*(bool(__thiscall**)(int*))((char*)Vt(v) + 0x10))(v))
-          (*(void(__thiscall**)(int*, int))((char*)Vt(v) + 8))(v, 0);
+          (*(void(__thiscall**)(int*, int))(vt + 3))(v, 0);
+        else if ((*(bool(__thiscall**)(int*))(vt + 4))(v))
+          (*(void(__thiscall**)(int*, int))(vt + 2))(v, 0);
       } else if (a < 0) {
         if (b > arg2) {
-          if (!(*(bool(__thiscall**)(int*))((char*)Vt(v) + 0x10))(v))
-            (*(void(__thiscall**)(int*, int))((char*)Vt(v) + 0xc))(v, 0);
+          if (!(*(bool(__thiscall**)(int*))(vt + 4))(v))
+            (*(void(__thiscall**)(int*, int))(vt + 3))(v, 0);
         }
       } else if (b < arg2 || arg2 <= a) {
-        (*(void(__thiscall**)(int*, int))((char*)Vt(v) + 0xc))(v, 0);
-      } else if (!(*(bool(__thiscall**)(int*))((char*)Vt(v) + 0x10))(v)) {
-        (*(void(__thiscall**)(int*, int))((char*)Vt(v) + 8))(v, 0);
+        (*(void(__thiscall**)(int*, int))(vt + 3))(v, 0);
+      } else if (!(*(bool(__thiscall**)(int*))(vt + 4))(v)) {
+        (*(void(__thiscall**)(int*, int))(vt + 2))(v, 0);
       }
     }
   }
@@ -327,25 +328,23 @@ float FUN_00e4f9d0(int handle) {
   char* r = (char*)FUN_00e823a0(handle, &g);
   int hi = *(int*)(r + 0xbc);
   int lo = *(int*)(r + 0xb4);
-  char* o = (char*)FUN_00e4ce40(&g);
-  int off;
+  cGuard16 g2;
+  char* o = (char*)FUN_00e4ce40(&g2);
   switch (hi) {
     case 0:
       switch (lo) {
-        case 1:  off = 0x58; break;
-        case 2: case 6: off = 0x5c; break;
-        case 3: case 5: case 7: off = 0x60; break;
-        case 4:  off = 100; break;
+        case 1:  return *(float*)(o + 0x58);
+        case 2: case 6: return *(float*)(o + 0x5c);
+        case 3: case 5: case 7: return *(float*)(o + 0x60);
+        case 4:  return *(float*)(o + 100);
         default: return 1.0f;
       }
-      break;
-    case 1: off = 0x60; break;
-    case 2: off = 100; break;
-    case 3: off = 0x5c; break;
-    case 4: off = 0x58; break;
+    case 1: return *(float*)(o + 0x60);
+    case 2: return *(float*)(o + 100);
+    case 3: return *(float*)(o + 0x5c);
+    case 4: return *(float*)(o + 0x58);
     default: return 1.0f;
   }
-  return *(float*)(o + off);
 }
 
 // @ 0x00e4fac0  configure collectable items for the current state
@@ -505,17 +504,25 @@ void __fastcall FUN_00e4f920(void* unused, float* v, float period) {
 
 // @ 0x00e4fd30  fill 13 bytes from a fixed 1/0 pattern
 int FUN_00e4fd30(unsigned char* p) {
-  for (int j = 0; j < 13; ++j) {
-    int key = j - 2;
-    int set = (key == 0 || key == 2 || key == 3 || key == 4 ||
-               key == 5 || key == 6 || key == 8);
-    p[j] = set ? 1 : 0;
-  }
+  unsigned char* q = p;
+  int key = -2;
+  int i = 13;
+  do {
+    switch (key) {
+      case 0: case 2: case 3: case 4: case 5: case 6: case 8:
+        *q = 1;
+        break;
+      default:
+        *q = 0;
+    }
+    ++q;
+    ++key;
+  } while (--i);
   return 13;
 }
 
 // @ 0x00e50400  reset collectables mode (self arrives in ESI)
-void FUN_00e50400(void* self, char flag) {
+void __fastcall FUN_00e50400(void* self, int /*edx*/, char flag) {
   FUN_00b3d4d0(0);
   FUN_00ad7e40(0);
   g_16b3c0c[0x936] = 0;
@@ -524,6 +531,13 @@ void FUN_00e50400(void* self, char flag) {
   (*(void(__thiscall**)(void*))((char*)Vt(self) + 4))(self);
 }
 // --- equivalence checker address annotations
+
+// --- jump-table pigeonholes (tail bytes of the original FUN_00e4fd30 switch) ---
+namespace __equiv_ann2 {
+static const unsigned char __unused_pigeonholed_switch[] =
+    { 0x57, 0xfd, 0xe4, 0x00, 0x5c, 0xfd, 0xe4, 0x00,
+      0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00 };
+}
 
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
