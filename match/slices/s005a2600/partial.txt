@@ -1,5 +1,1 @@
-005a2600  1313  cTerrainUI init/update: skeleton
-005a2b30  177   cTerrainUI screen-angle helper: implemented; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; bails when this+0xe8 (viewer) is null, else transforms g_015e6a6c through FUN_007c4180 (thiscall, ret 8: this in ecx, out/src pushed) and reads the viewport rect with FUN_007c4010 (thiscall, ret 4), then r = atan2((pt[0]+1)*(v2-v0)*0.5 - this+0xcc, (1-pt[1])*(v3-v1)*0.5 - this+0xd0) evaluated in double (x87 under /arch:SSE) so the single float rounding matches the original's fpatan chain. `flag` is a char (the original tests only the low byte: 0x80000000 must take the false branch); true stores r to this+0x94 and copies this+0x44 to this+0x98, false stores (r-this+0x94)+this+0x98 to this+0x30. equiv PASS 395/395 valid, 100% coverage. Residual frame diff, size 207 vs 200
-005a2ed0  79    scalar deleting destructor: skeleton
-005a3080  408   transform compose + rotate: skeleton
-005a3220  404   cTerrainUI constructor: skeleton
+# va  reason
