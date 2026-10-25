@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGamePlantManager.cpp  ??4cTypeInfo@@QAEAAU0@ABU0@@Z  00b2b150  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
