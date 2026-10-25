@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00dbab60  13792  oversized tribe behaviour-tree tick (>13 KB): opcode-switch skeleton only; per-case animation/locomotion bodies summarised
+00dbab60  13690  /O2 /MD /Gy /EHsc /TP  oversized tribe behaviour-tree tick (13792 bytes, ~3400 insns): 348-byte opcode-switch skeleton only (guards + call list); per-case animation/locomotion/score bodies summarised, not reconstructed. equiv UNSUPPORTED (8 invented helper symbols unresolved + FUN_00da6270 hex/aligned resolution conflict); chk 348 vs 13792 bytes, diff 13690.
