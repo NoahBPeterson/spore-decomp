@@ -205,17 +205,59 @@ float __cdecl SqrDistancePointTriangle(const Vector3* rkPoint, const Vector3* rk
 // ---------------------------------------------------------------------------
 struct cRTTBuffer { cRTTBuffer(int w, int h); };            // 100-byte object
 
+struct Owner54;
+void __fastcall OwnerDestroy54(Owner54* p);            // 0x00512330
+
+// 0x54-byte ref-counted object stored at +0x08 / +0x0c (Owner in s00511670).
+struct Owner54 {
+    char pad[0x54];
+    Owner54();                                            // 0x005122c0
+};
+
+__forceinline Owner54* ReleaseSlot(Owner54* p)
+{
+    if (p) {
+        OwnerDestroy54(p);
+        if (1 & 1) ea_free(p);
+        return p;
+    }
+    return 0;
+}
+
+// Large cache object at +0x3c (fixed pool + string map).
+struct AbilityCache {
+    char pad[0x300];
+    void Init(char* begin, char* end);                    // 0x00506aa0
+    void Destroy();                                       // 0x00506cd0
+};
+
 struct cCreatureAbility {
-    virtual void v0();      // vtbl_Simulator::cCreatureAbility[0]
+    void* mVtbl;            // +0x00
     int*  mField4;          // +0x04
-    void* mObj;             // +0x08
-    void* mObj2;            // +0x0c
+    Owner54* mObj;          // +0x08
+    Owner54* mObj2;         // +0x0c
     void* mSlots[3];        // +0x10
     int   mParam;           // +0x1c
     float mF20, mF24, mF28, mF2c, mF30;
     uint32_t mKey;          // +0x34
     void* mHandle;          // +0x38
+    AbilityCache mCache;    // +0x3c
+
+    __forceinline void InitCache()
+    {
+        char empty[2];
+        empty[0] = 0;
+        mCache.Init(&empty[0], &empty[1]);
+        char dead[0x38];
+    }
 };
+
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);
+
+void CleanupResource(void* p);         // 0x00762a00
+uint32_t HashName(const char* s);      // 0x007c3af0
+void* Lookup(uint32_t k, int a, int b, int c);  // 0x00762b70
+void __fastcall cCreatureAbility_Cleanup(cCreatureAbility* self);
 
 void* CreateRTT(int param)
 {
@@ -227,40 +269,43 @@ void* CreateRTT(int param)
 // @ 0x005062f0  (constructor)
 cCreatureAbility* __fastcall cCreatureAbility_ctor(cCreatureAbility* self)
 {
+    int i;
+    self->mVtbl = (void*)0x13ef094u;
     self->mField4 = 0;
-    self->mObj = ea_new(0x54, "Skinner", 0, 0, 0, 0);
-    self->mObj2 = ea_new(0x54, "Skinner", 0, 0, 0, 0);
-    self->mSlots[0] = 0;
-    self->mSlots[1] = 0;
-    self->mSlots[2] = 0;
+    self->mVtbl = (void*)0x13f188cu;
+    self->mObj = new ("Skinner", 0, 0, 0, 0) Owner54();
+    self->mObj2 = new ("Skinner", 0, 0, 0, 0) Owner54();
+    self->mParam = 0;
     self->mF20 = 0.5f;
     self->mF24 = 1.0f;
     self->mF28 = 20.0f;
     self->mF2c = 1.0f;
     self->mF30 = 1.0f;
-    self->mKey = 0;
-    self->mHandle = 0;
+    self->InitCache();
+    for (i = 0; i < 3; ++i) {
+        self->mSlots[i] = 0;
+    }
+    self->mKey = HashName("V2FC4BC4BT2FT1F");
+    self->mHandle = Lookup(self->mKey, 0x8ca1, 1, 0);
     return self;
 }
-
-void CleanupResource(void* p);         // 0x00762a00
-uint32_t HashName(const char* s);      // 0x007c3af0
-void* Lookup(uint32_t k, int a, int b, int c);  // 0x00762b70
 
 // @ 0x005064a0  (destructor)
 void __fastcall cCreatureAbility_dtor(cCreatureAbility* self)
 {
+    self->mVtbl = (void*)0x13f188cu;
+    cCreatureAbility_Cleanup(self);
     CleanupResource(self->mHandle);
     self->mHandle = 0;
     self->mKey = 0;
-    if (self->mObj) {
-        ea_delete(self->mObj);
-        self->mObj = 0;
-    }
-    if (self->mObj2) {
-        ea_delete(self->mObj2);
-        self->mObj2 = 0;
-    }
+    Owner54* p = self->mObj;
+    ReleaseSlot(p);
+    self->mObj = 0;
+    Owner54* q = self->mObj2;
+    ReleaseSlot(q);
+    self->mObj2 = 0;
+    self->mCache.Destroy();
+    self->mVtbl = (void*)0x13ef094u;
 }
 
 // @ 0x00506590  (Setup)

@@ -1,2 +1,5 @@
+# va  diff-bytes  reason
 005066d0   43  cCreatureAbility cleanup loop: complete behaviour (destroy+free+null each of 3 slots); /Od delete-inline schedule differs
 00506590   118  cCreatureAbility Setup: complete behaviour (allocs 3 x cRTTBuffer + sets fields); allocation/vtable schedule differs
+005062f0   115  cCreatureAbility ctor: complete behaviour port (368 vs 369 bytes); both vtable stores, two Owner54 new-expressions, field inits, cache Init, slot loop and HashName/Lookup all present; only /Od frame layout differs (0x58 vs 0x50, inline-helper empty-buffer slot 2 bytes lower); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED: only 0/400 inputs valid (faults writing unmodelled resource state)
+005064a0   150  cCreatureAbility dtor: complete behaviour port (193 vs 237 bytes); vtable reset, Cleanup, CleanupResource, two Owner54 release+null blocks and cache Destroy all present; only /Od inlined release-guard temp slots differ (frame 0xc vs 0x30); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK 133 valid (82.6% cov), no mismatch
