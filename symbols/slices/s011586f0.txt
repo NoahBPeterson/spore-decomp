@@ -4,11 +4,11 @@
 01158ad0 CSubbandDecoder::ScalarDeletingDtor  # sets vftable=0x14ce868, frees +0x1b8 via the global free fn ptr 0x16f16f4, calls 0x1163dc0, operator delete when flags&1; byte-exact
 01158b10 GrowScratch  # grow a 4-byte-stride scratch buffer: double *count until >= needed, System::Alloc, copy oldCount*stride bytes, System::Free the old block
 01158b90 FindStream  # linear scan of the byte count at 0x16e7bfe over the pointer table at 0x16e7fcc, matching 0x1141150(*(int*)entry)==h; returns index or -1; byte-exact
-01158be0 ScaleAccumX87  # out[i] += in[i]*scale, x87 4-wide unrolled hand-scheduled loop (fxch blocks)
-01158c60 ScaleAccumSSE  # out[i] += in[i]*scale, SSE 16-float-per-pass vectorized loop (mulps/addps) with a scalar alignment/tail prologue
-01158d00 WidenI16  # out[i] = (float)in[i], x87 8-wide hand-scheduled loop (grouped fild + fxch st(7))
-01158d80 Reconstruct  # windowed overlap-add reconstruction; LTCG register ABI (src in EAX, offset in EDX, rest on the stack)
-01159030 FlushScratch  # flush/roll the bit-allocation scratch; LTCG register ABI (this in ESI, count in EDI, out as the first stack arg); calls 0x1158d80
+01158be0 ScaleAccumX87  # out[i] += in[i]*scale, x87 4-wide unrolled hand-scheduled loop (fxch blocks); nonmatching (281 @ size 205 vs 125), equiv FAIL(clobber only, 5/5 valid, 100% cov)
+01158c60 ScaleAccumSSE  # out[i] += in[i]*scale, SSE 16-float-per-pass vectorized loop (mulps/addps) with a scalar alignment/tail prologue; nonmatching (246 @ 205 vs 159), equiv FAIL(clobber only, 5/5 valid, 100% cov)
+01158d00 WidenI16  # out[i] = (float)in[i], x87 8-wide hand-scheduled loop (grouped fild + fxch st(7)); nonmatching (180 @ 150 vs 114), equiv FAIL(clobber only, 5 valid, 100% cov)
+01158d80 Reconstruct  # windowed overlap-add reconstruction; LTCG register ABI (src in EAX, offset in EDX, rest on the stack); nonmatching (677 @ 714 vs 682), equiv UNSUPPORTED (entry ABI: eax source buffer not modelled)
+01159030 FlushScratch  # flush/roll the bit-allocation scratch; LTCG register ABI (this in ESI, count in EDI, out as the first stack arg); calls 0x1158d80; nonmatching (256 @ 271 vs 256), equiv UNSUPPORTED (0/400 valid, fault(read)=400)
 01159130 CSubbandDecoder::BitsFor  # bits the Huffman allocation walk will consume for n samples (quantizer scale in +0x24/+0x28, code bytes at +0x1c), minus mBitCount
 011592c0 CSubbandDecoder::TakeSamples  # copy up to n samples out of the +0x838 scratch, rolling more bit-allocations in via 0x1159030 as needed
 011594e0 FUN_011594e0  # set a float scale field at this+0x24 from a sample count: (float)n * (1/4096.0); byte-exact
