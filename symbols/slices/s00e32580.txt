@@ -1,0 +1,6 @@
+00e32580 ?FUN_00e32580@@YAXPAUcSPUISocialRainbow_s00e3_2580@@PAXE@Z  # FUN_00e32580 migrated from s00e32580 (verbatim, slice spelling)
+00e32b20 ?FUN_00e32b20@@YAXPAXMMMIIM0@Z  # FUN_00e32b20 migrated from s00e32580 (verbatim, slice spelling)
+00e32c80 ?FUN_00e32c80@cSPUISocialRainbow_s00e3_2580@@QAEXXZ  # cSPUISocialRainbow_s00e3_2580::FUN_00e32c80 migrated from s00e32580 (verbatim, slice spelling)
+00e32de0 ?FUN_00e32de0@cSPUISocialRainbow_s00e3_2580@@QAEEXZ  # cSPUISocialRainbow_s00e3_2580::FUN_00e32de0 migrated from s00e32580 (verbatim, slice spelling)
+00e32f00 ?FUN_00e32f00@cSPUISocialRainbow_s00e3_2580@@QAEXXZ  # cSPUISocialRainbow_s00e3_2580::FUN_00e32f00 migrated from s00e32580 (verbatim, slice spelling)
+00e330c0 ?FUN_00e330c0@cSPUISocialRainbow_s00e3_2580@@QAEPAU1@XZ  # cSPUISocialRainbow_s00e3_2580::FUN_00e330c0 migrated from s00e32580 (verbatim, slice spelling)

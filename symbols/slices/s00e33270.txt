@@ -1,7 +1,9 @@
+005f68a0 ?Shutdown@cSPSwatch@SP@@UAEXXZ  # SP::cSPSwatch::Shutdown (callee of s00e33270, named from the dev publics; slice address comment)
+00e33270 ?DoMessage@cSPUISocialRainbow_s00e3_3270@@UAE_NPAUIWindow@@PAX@Z  # cSPUISocialRainbow_s00e3_3270::DoMessage migrated from s00e33270 (verbatim, slice spelling)
+00e33d40 SetSporepediaLargeAssetValue  # free __stdcall helper (ret 4) that sets property 0x120b89ce
 00e33de0 UI::cUISporepediaPlanetLargeAssetView::cUISporepediaPlanetLargeAssetView  # descriptive name; retail vtables 0x1481a88/0x1481a6c/0x1481a5c are unnamed
 00e33e70 UI::cUISporepediaPlanetLargeAssetView::~cUISporepediaPlanetLargeAssetView  # descriptive name; base vtables 0x13eb938 (+0x04) and 0x13ec458 (+0x08) restored on exit
 00e33f30 UI::cUISporepediaPlanetLargeAssetView::Destroy  # descriptive name
 00e33f90 UI::cUISporepediaPlanetLargeAssetView::ReleaseWindows  # descriptive name
 00e34020 UI::cUISporepediaPlanetLargeAssetView::LoadLayout  # descriptive name
 00e34220 SP::cSPUISwatchView::cSPUISwatchView  # descriptive name; vtable 0x1481ab8 unnamed, derived from SP::cSPSwatch
-00e33d40 SetSporepediaLargeAssetValue  # free __stdcall helper (ret 4) that sets property 0x120b89ce

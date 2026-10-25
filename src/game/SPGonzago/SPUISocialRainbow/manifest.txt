@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUISocialRainbow.cpp  ?sGetWindowImage@@YAPAXPAX@Z  00e232b0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISocialRainbow.cpp  ?Fwd@cSPUISocialRainbow@@QAEXXZ  00e31c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISocialRainbow.cpp  ?Mode@cSPUISocialRainbow@@QAEXH@Z  00e31cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISocialRainbow.cpp  ?FUN_00e32de0@cSPUISocialRainbow_s00e3_2580@@QAEEXZ  00e32de0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
