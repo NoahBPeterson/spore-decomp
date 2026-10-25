@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGamePersistenceManager.cpp  ?InitGameSnapshotAttributes@Simulator@@YAXXZ  0131b210  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
