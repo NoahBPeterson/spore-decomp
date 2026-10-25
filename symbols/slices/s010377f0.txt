@@ -1,3 +1,5 @@
+010377f0 ?UpdateForSpaceGame@cSPSpaceGfx_s0103_77f0@@QAEXH@Z  # cSPSpaceGfx_s0103_77f0::UpdateForSpaceGame migrated from s010377f0 (verbatim, slice spelling)
+010378f0 ??0cSPSpaceGfx_s0103_77f0@@QAE@XZ  # cSPSpaceGfx_s0103_77f0::cSPSpaceGfx migrated from s010377f0 (verbatim, slice spelling)
 01037a60 ??0cTradeRoutePair@@QAE@ABV0@@Z  # cTradeRoutePair::cTradeRoutePair migrated from s010377f0 (verbatim, slice spelling)
 01037ae0 ?Write@cTradeRouteData@@QAE_NPAVcStreamHandle@@@Z  # cTradeRouteData::Write migrated from s010377f0 (verbatim, slice spelling)
 01037b50 ?Read@cTradeRouteData@@QAE_NPAVcStreamHandle@@@Z  # cTradeRouteData::Read migrated from s010377f0 (verbatim, slice spelling)
