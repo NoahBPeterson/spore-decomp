@@ -1,0 +1,7 @@
+00e99f90 ?UpdateAOERepairEffect@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  # cSPUFOGfx_s00e9_98d0::UpdateAOERepairEffect migrated from s00e998d0 (verbatim, slice spelling)
+00e9a0c0 ?UpdateRallyCallEffect@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  # cSPUFOGfx_s00e9_98d0::UpdateRallyCallEffect migrated from s00e998d0 (verbatim, slice spelling)
+00e9a1f0 ?UpdateE9A1F0@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  # cSPUFOGfx_s00e9_98d0::UpdateE9A1F0 migrated from s00e998d0 (verbatim, slice spelling)
+00e9a360 ?UpdateShieldEffect@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  # cSPUFOGfx_s00e9_98d0::UpdateShieldEffect migrated from s00e998d0 (verbatim, slice spelling)
+00e9a470 ?UpdateE9A470@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  # cSPUFOGfx_s00e9_98d0::UpdateE9A470 migrated from s00e998d0 (verbatim, slice spelling)
+00e9a590 ?UpdateCloakEffect@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  # cSPUFOGfx_s00e9_98d0::UpdateCloakEffect migrated from s00e998d0 (verbatim, slice spelling)
+00e9a6a0 ?UpdateE9A6A0@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  # cSPUFOGfx_s00e9_98d0::UpdateE9A6A0 migrated from s00e998d0 (verbatim, slice spelling)

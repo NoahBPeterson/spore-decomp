@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?FUN_00e98f60@@YAPAXPAVcNounVector@@PBUVector3@@P6ADPAX@Z@Z  00e98f60  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?FUN_00e990f0@@YAPAUcEffectInfo@@PAU1@00@Z  00e990f0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?FUN_00e99140@@YAPAUcEffectRecord@@PAU1@00@Z  00e99140  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?FUN_00e994f0@@YGPAVcSPUFOGfx@@PAX@Z  00e994f0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?UpdateAOERepairEffect@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  00e99f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?UpdateRallyCallEffect@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  00e9a0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?UpdateE9A1F0@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  00e9a1f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?UpdateShieldEffect@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  00e9a360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?UpdateE9A470@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  00e9a470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?UpdateCloakEffect@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  00e9a590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPViewObjectUFO.cpp  ?UpdateE9A6A0@cSPUFOGfx_s00e9_98d0@@QAEXPAUcSpatialObj@@@Z  00e9a6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
