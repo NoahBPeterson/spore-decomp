@@ -7,3 +7,11 @@
 007aa620  52   empty 16-byte ctor: EH frame shape; equiv: PASS (now Empty16 ctor, ECX fixed)
 007aa800  76   cNodeAllocator::Create: retail does xchg [chunk+0x10],1 not add; chk diff 73; equiv PASS 460/500 valid (100% cov); src PASS
 007aa850  76   deque push_back with block alloc: map-growth schedule; equiv: PASS (now DequeMap::PushBack, ECX fixed)
+007a9f30  331  placeholder-texture one-time init (FUN_007a9f30 __fastcall, ecx=self): builds both placeholder textures through the manager's own vtable; chk diff 331 (size 410 vs 402); equiv WEAK 297/400 valid (6.0% cov, need 60%) — the two texture-creation paths are rarely reachable from generated inputs
+007aa0d0  268  AddTextureLoadDependency (FUN_007aa0d0 __fastcall, ecx=self): chk diff 268 (size 250 vs 302); equiv WEAK 220/400 valid (33.3% cov)
+007aa200  262  ReloadTexture (FUN_007aa200 __fastcall, ecx=self): chk diff 262 (size 162 vs 279); equiv WEAK 171/400 valid (30.2% cov)
+007aa430  163  job-descriptor submit (FUN_007aa430 __fastcall, ecx=self): chk diff 163 (size 243 vs 241); equiv WEAK 156/400 valid (42.0% cov)
+007aa530  220  TextureJob release/cleanup (FUN_007aa530 __fastcall, ecx=self): chk diff 220 (size 190 vs 239); equiv PASS 370/400 valid (88.0% cov)
+007aa660  155  texture job slot destructor (FUN_007aa660 __fastcall, ecx=self): chk diff 155 (size 91 vs 165); equiv PASS 282/400 valid (100% cov)
+007aa710  213  eastl hashtable find-or-insert (FUN_007aa710 __fastcall, ecx=self): chk diff 213 (size 248 vs 226); equiv PASS 225/400 valid (100% cov)
+007aaa00  373  build + submit job descriptor (FUN_007aaa00 __fastcall, ecx=self; args slot/refArg/flag/kind): chk diff 373 (size 356 vs 429); equiv PASS 202/400 valid (95.5% cov)
