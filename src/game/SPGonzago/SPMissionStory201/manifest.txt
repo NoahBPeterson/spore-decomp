@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5eed0@Mission@@QAEXH@Z  00c5eed0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5efb0@Mission@@QAEXH@Z  00c5efb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5f090@Mission@@QAEHXZ  00c5f090  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5f0f0@Mission@@QAEHHH@Z  00c5f0f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5f150@Mission@@QAEHXZ  00c5f150  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ??0MissionStory201@@QAE@XZ  00c5f1b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5f250@Mission@@QAEXXZ  00c5f250  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5f280@Mission@@QAEXXZ  00c5f280  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5f360@Mission@@QAEXXZ  00c5f360  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5f3d0@Mission@@QAEHXZ  00c5f3d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5f4e0@Mission@@QAEHH@Z  00c5f4e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?GetTagString@cSPMissionStory201@@QAE_NIPAVwstring@@@Z  00c5f640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5fcf0@cSPMissionStory201@@QAE_NXZ  00c5fcf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

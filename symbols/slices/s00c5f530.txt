@@ -1,0 +1,7 @@
+00bb59b0 ?GetOrActivatePlanet@cStarManager@SP@@QAEXPAVcPlanetRecord@2@PAPAVcPlanet@2@@Z  # SP::cStarManager::GetOrActivatePlanet (callee of s00c5f530, named from the dev publics; slice address comment)
+00c4a0c0 ?PickRewards@cSPMission@SP@@IAEXXZ  # SP::cSPMission::PickRewards (callee of s00c5f530, named from the dev publics; slice address comment)
+00c4ad50 ?Init@cSPMission@SP@@UAE_NXZ  # SP::cSPMission::Init (callee of s00c5f530, named from the dev publics; slice address comment)
+00c5f530 ?PickUFOWreckPlanet@cSPMissionStory201@@QAE_NXZ  # cSPMissionStory201::PickUFOWreckPlanet migrated from s00c5f530 (verbatim, slice spelling)
+00c5f5f0 ?FUN_00c5f5f0@cSPMissionStory201@@QAEXXZ  # cSPMissionStory201::FUN_00c5f5f0 migrated from s00c5f530 (verbatim, slice spelling)
+00c5f640 ?GetTagString@cSPMissionStory201@@QAE_NIPAVwstring@@@Z  # cSPMissionStory201::GetTagString migrated from s00c5f530 (verbatim, slice spelling)
+00c5fcf0 ?FUN_00c5fcf0@cSPMissionStory201@@QAE_NXZ  # cSPMissionStory201::FUN_00c5fcf0 migrated from s00c5f530 (verbatim, slice spelling)
