@@ -1,0 +1,1 @@
+00cd1750 ?Destroy@cScenarioEditModeInputStrategy@Simulator@@QAEPAXE@Z  # cScenarioEditModeInputStrategy::Destroy migrated from s00cd16a0 (verbatim, slice spelling)

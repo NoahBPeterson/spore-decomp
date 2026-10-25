@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Destroy@cScenarioEditModeInputStrategy@Simulator@@QAEPAXE@Z  00cd1750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15100@@YGXHH@Z  00d15100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15600@cGameEditInputStrategy_s00d1_5440@SP@@QAEXXZ  00d15600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?StartSelection@cGameEditInputStrategy@SP@@QAEHPAVcGameData@2@HABUcSPVector3@@@Z  00d15ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15af0@cGameEditInputStrategy_s00d1_5440@SP@@QAEIPAXEI@Z  00d15af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?cStrCmp_Destroy@@YIXPAUcStrCmp@@@Z  00d167e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?SetPlanet@cGameEditInputStrategy@@QAEXPBUcVec3i@@@Z  00d16b90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?SortInsertBounded@@YAXPAI0UcStrCmp@@@Z  00d16c30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?SortInsert@@YAXPAI0UcStrCmp@@@Z  00d16cc0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?SiftUp@@YAXPAIHHIUcStrCmp@@@Z  00d16eb0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Activate@cGameEditInputStrategy_s00d1_6f40@@QAEXXZ  00d17250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

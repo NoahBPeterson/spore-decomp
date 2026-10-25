@@ -1,0 +1,8 @@
+00d16760 ??RcStrCmp@@QAE_NII@Z  # cStrCmp::operator() migrated from s00d160c0 (verbatim, slice spelling)
+00d167e0 ?cStrCmp_Destroy@@YIXPAUcStrCmp@@@Z  # cStrCmp_Destroy migrated from s00d160c0 (verbatim, slice spelling)
+00d16b90 ?SetPlanet@cGameEditInputStrategy@@QAEXPBUcVec3i@@@Z  # cGameEditInputStrategy::SetPlanet migrated from s00d160c0 (verbatim, slice spelling)
+00d16c30 ?SortInsertBounded@@YAXPAI0UcStrCmp@@@Z  # SortInsertBounded migrated from s00d160c0 (verbatim, slice spelling)
+00d16cc0 ?SortInsert@@YAXPAI0UcStrCmp@@@Z  # SortInsert migrated from s00d160c0 (verbatim, slice spelling)
+00d16d60 ?Median3@@YAPAIPAI00UcStrCmp@@@Z  # Median3 migrated from s00d160c0 (verbatim, slice spelling)
+00d16e00 ?Partition@@YAPAIPAI0IUcStrCmp@@@Z  # Partition migrated from s00d160c0 (verbatim, slice spelling)
+00d16eb0 ?SiftUp@@YAXPAIHHIUcStrCmp@@@Z  # SiftUp migrated from s00d160c0 (verbatim, slice spelling)

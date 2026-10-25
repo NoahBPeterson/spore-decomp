@@ -1,0 +1,3 @@
+00d15600 ?FUN_00d15600@cGameEditInputStrategy_s00d1_5440@SP@@QAEXXZ  # cGameEditInputStrategy_s00d1_5440::FUN_00d15600 migrated from s00d15440 (verbatim, slice spelling)
+00d15ab0 ?StartSelection@cGameEditInputStrategy@SP@@QAEHPAVcGameData@2@HABUcSPVector3@@@Z  # SP::cGameEditInputStrategy::StartSelection migrated from s00d15440
+00d15af0 ?FUN_00d15af0@cGameEditInputStrategy_s00d1_5440@SP@@QAEIPAXEI@Z  # cGameEditInputStrategy_s00d1_5440::FUN_00d15af0 migrated from s00d15440 (verbatim, slice spelling)

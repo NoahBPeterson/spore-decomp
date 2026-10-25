@@ -1,0 +1,7 @@
+00837ff0 ??0cArguments@ArgScript@EA@@QAE@XZ  # EA::ArgScript::cArguments::cArguments (callee of s00d14460, named from the dev publics; slice address comment)
+0083a2f0 ?HelpString@cArgumentSpec@ArgScript@EA@@QBEPBDPBDW4tHelpType@23@@Z  # EA::ArgScript::cArgumentSpec::HelpString (callee of s00d14460, named from the dev publics; slice address comment)
+0083a9f0 ??0cArgumentSpec@ArgScript@EA@@QAE@_N@Z  # EA::ArgScript::cArgumentSpec::cArgumentSpec (callee of s00d14460, named from the dev publics; slice address comment)
+0083b9d0 ?Parse@cArgumentSpec@ArgScript@EA@@QAEXPAVcArguments@23@PAVcIParser@23@@Z  # EA::ArgScript::cArgumentSpec::Parse (callee of s00d14460, named from the dev publics; slice address comment)
+00b22640 ?CreateNoun@cGameNounManager@SP@@QAEPAVcGameData@2@W4ClassId@COM@EA@@@Z  # SP::cGameNounManager::CreateNoun (callee of s00d14460, named from the dev publics; slice address comment)
+00d15100 ?FUN_00d15100@@YGXHH@Z  # FUN_00d15100 migrated from s00d14460 (verbatim, slice spelling)
+00d15350 ?FUN_00d15350@@YAXPAUcNoun@@HHPB_W@Z  # FUN_00d15350 migrated from s00d14460 (verbatim, slice spelling)
