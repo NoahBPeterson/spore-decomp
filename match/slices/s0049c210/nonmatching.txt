@@ -1,3 +1,5 @@
 0049ce40  243  complete; /Od frame 0x100 vs 0xa8, temp/slot layout differs
 0049cb90  509  complete; /Od frame/slot layout and tracker call shapes differ
 0049c210  630  complete; matrix-from-direction builder, equivalent (WEAK 399 valid, 0 mismatches, 23.4% coverage; /Od frame and slot layout differ). The in-function fast path needs |1-|dot|| == 0 exactly, but the axis global at 0x15d6324 sits in the image gap past .data and reads as a zero vector, so dot is always 0 and only the null-block / F_43c510 / general-builder paths can run
+0049c630  540  complete; spine-ancestor surface snap (GetBlockOnSkin, symmetric-spine walk, PartDeque of blocks, per-edge DistancePointSegment/ClosestPointOnSegment), equivalent (WEAK 241 valid, 17.3% coverage; /Od frame 0x2c0 vs 0x240, container/iterator codegen and slot layout differ)
+0049c8f0  493  complete; recursive symmetric-block transform accumulation into a TrackerRecord vector, equivalent (WEAK 381 valid, 18.2% coverage; /Od frame 0x280 vs 0x260, deque/vector iterator codegen and slot layout differ)

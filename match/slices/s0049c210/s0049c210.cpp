@@ -47,6 +47,7 @@ struct cSPTransform {
     cSPMatrix3 mRotation;
     cSPTransform();                                              // @ 0x409930
     cSPTransform(const cSPTransform& t);                         // @ 0x40ce80
+    cSPTransform& operator=(const cSPTransform& t);              // 0x537dc0
 };
 struct TrackerRecord {
     cSPEditorBlock* block;
@@ -58,7 +59,7 @@ template<class T> struct vector {
     T* mpCapacity;
     int size() const { return (int)(mpEnd - mpBegin); }
     T& operator[](int i) { return mpBegin[i]; }
-    void push_back(const T& v);                                  // @ 0x4a9fa0
+    void push_back(const T& v);                                  // 0x4a9fa0
 };
 
 // ---- class stub ----
@@ -99,15 +100,15 @@ struct cSPEditorBlock {
     void GetOffsetA(cSPVector3* out, bool f);    // @ 0x438120
     void GetOffsetB(cSPVector3* out, bool f);    // @ 0x4381e0
     void Place(cSPVector3 a, cSPVector3 b);      // @ 0x437b00
+    bool FUN_435c80();                           // 0x435c80
 };
 
 // ---- engine helpers ----
 Vector3T operator-(const Vector3T& a, const Vector3T& b);      // @ 0x41db10
 float VectorLength(const Vector3T& v);                         // @ 0x40ae50
-cSPVector3 operator*(const cSPVector3& v, const cSPMatrix3& m);  // @ 0x41daf0
+cSPVector3 MatVecMul(const cSPVector3& v, const cSPMatrix3& m);  // 0x41daf0
 cSPVector3 operator+(const cSPVector3& a, const cSPVector3& b);  // @ 0x41dc10
-cSPMatrix3 operator*(const cSPMatrix3& a, const cSPMatrix3& b);  // @ 0x41de20
-cSPVector3 operator*(const cSPMatrix3& m, const cSPVector3& v);  // @ 0x41ded0
+cSPMatrix3 MatMatMul(const cSPMatrix3& a, const cSPMatrix3& b);  // 0x41de20
 void RepinBlockToTorso(cSPEditorBlock* block, cSPVector3 t, cSPMatrix3 r, int flags);  // @ 0x49fbd0
 
 namespace SP { namespace EditorUtils {
@@ -145,15 +146,28 @@ void RepinBlocks(vector<TrackerRecord>* list)
         cSPTransform local(rec.transform);
         cSPEditorBlock* parent = block->mParentBlock;
         if (parent) {
-            cSPVector3 pos = local.mTranslation * parent->mOrientation + parent->mPosition;
-            cSPMatrix3 rot = local.mRotation * parent->mOrientation;
+            cSPVector3 pos = MatVecMul(local.mTranslation, parent->mOrientation) + parent->mPosition;
+            cSPMatrix3 rot = MatMatMul(local.mRotation, parent->mOrientation);
             RepinBlockToTorso(block, pos, rot, 0);
         }
     }
 }
 
-bool FUN_435c80(cSPEditorBlock* block);   // @ 0x435c80
-struct cSPEditorModel;
+// ---- editor-part deque + model (FUN_49c630) ----
+struct cSPEditorModel {
+    cSPEditorBlock* GetBlockOnSkin(int id, cSPVector3 v);   // 0x4c4d30
+};
+struct PartDeque {
+    uint32_t mStorage[11];                                  // opaque SP::deque body
+    PartDeque();                                            // 0x4aa100
+    ~PartDeque();                                           // 0x4aa120
+    void push_back(cSPEditorBlock* const& v);               // 0x501e40
+    void push_front(cSPEditorBlock* const& v);              // 0x4aa230
+    unsigned int GetSize() const;                           // 0x4aa170
+    cSPEditorBlock*& operator[](unsigned int i);            // 0x4aa1d0
+};
+float DistancePointSegment(const cSPVector3* p, const cSPVector3* a, const cSPVector3* b);   // 0x698b30
+void ClosestPointOnSegment(cSPVector3* out, const cSPVector3* p, const cSPVector3* a, const cSPVector3* b);  // 0x698e00
 
 // ---- matrix-from-direction helpers (FUN_49c210) ----
 extern const cSPVector3 g_axis;                       // @ 0x15d6324
@@ -169,24 +183,36 @@ cSPMatrix3* FUN_4a89e0(cSPMatrix3* out, const cSPVector3* dir, const cSPVector3*
 void BuildBlockTransforms(cSPEditorBlock* block, vector<TrackerRecord>* out, bool recurse)
 {
     if (!block) return;
-    if (FUN_435c80(block)) return;
+    if (block->FUN_435c80()) return;
     vector<AutoRefCount<cSPEditorBlock> >* syms = &block->mSymmetricBlocks;
+    int i = 0;
     int count = syms->size();
-    for (int i = 0; i < count; i++) {
-        cSPEditorBlock* sym = syms->mpBegin[i];
-        if (!FUN_435c80(sym) && sym->mSkin == 0) {
+    for (; i < count; i++) {
+        AutoRefCount<cSPEditorBlock>& item = syms->mpBegin[i];
+        cSPEditorBlock* sym = item;
+        if (sym->FUN_435c80() && sym->mSkin == 0) {
             cSPMatrix3 orient = block->mOrientation;
             cSPVector3 rel = sym->mPosition - block->mPosition;
-            cSPVector3 a = orient * rel;
-            cSPVector3 b = orient * sym->mRestPose;
+            cSPVector3 a = MatVecMul(rel, orient);
+            cSPMatrix3 restAxes;
+            restAxes.xAxis = sym->mRestPose;
+            restAxes.yAxis = sym->mRestPoseB;
+            restAxes.zAxis = sym->mRestPoseC;
+            cSPMatrix3 b = MatMatMul(restAxes, orient);
+            cSPTransform t;
+            t.mTranslation = a;
+            t.mFlags |= 4;
+            t.mModificationCount++;
+            t.mRotation = b;
+            t.mFlags |= 2;
+            t.mModificationCount++;
             TrackerRecord rec;
-            rec.block = block;
-            rec.transform = cSPTransform();
-            rec.transform.mTranslation = a + b;
-            rec.transform.mRotation = orient;
+            rec.block = sym;
+            rec.transform = t;
             out->push_back(rec);
+        } else {
+            if (recurse) BuildBlockTransforms(sym, out, recurse);
         }
-        if (recurse) BuildBlockTransforms(sym, out, recurse);
     }
 }
 
@@ -201,8 +227,8 @@ void FUN_49cb90(vector<TrackerRecord>* list)
         cSPTransform local(rec.transform);
         cSPEditorBlock* target = block->mParentBlock->mPinTarget;
         if (target) {
-            cSPVector3 pos = local.mTranslation * target->mOrientation + target->mPosition;
-            cSPMatrix3 rot = local.mRotation * target->mOrientation;
+            cSPVector3 pos = MatVecMul(local.mTranslation, target->mOrientation) + target->mPosition;
+            cSPMatrix3 rot = MatMatMul(local.mRotation, target->mOrientation);
             RepinBlockToTorso(block, pos, rot, 0);
             target->FUN_438700(block);
             if (!block->mFlags.test(10)) {
@@ -217,11 +243,40 @@ void FUN_49cb90(vector<TrackerRecord>* list)
 }
 
 // @ 0x49c630
-cSPVector3* FUN_49c630(cSPVector3* out, float x, float y, float z, cSPEditorModel* model)
+cSPVector3* FUN_49c630(cSPVector3* out, cSPVector3 point, cSPEditorModel* model)
 {
-    out->x = x;
-    out->y = y;
-    out->z = z;
+    cSPEditorBlock* block = model->GetBlockOnSkin(0, point);
+    if (!block || !block->mFlags.test(7)) {
+        *out = point;
+        return out;
+    }
+    PartDeque syms;
+    syms.push_back(block);
+    cSPEditorBlock* p = block;
+    for (int i = 0; p != 0 && i < 2; i++) {
+        p = FindSymmetricSpine(p);
+        if (p) syms.push_back(p);
+    }
+    p = block;
+    for (int i = 0; p != 0 && i < 2; i++) {
+        p = p->mParentBlock;
+        if (p) syms.push_front(p);
+    }
+    float best = FLT_MAX;
+    cSPVector3 result = GetSkinTip(block);
+    int n = (int)syms.GetSize() - 1;
+    for (int i = 0; i < n; i++) {
+        cSPVector3 tipA = GetSkinTip(syms[i]);
+        cSPVector3 tipB = GetSkinTip(syms[i + 1]);
+        float v = DistancePointSegment(&point, &tipA, &tipB);
+        if (best > v) {
+            best = v;
+            cSPVector3 closest;
+            ClosestPointOnSegment(&closest, &point, &tipA, &tipB);
+            result = closest;
+        }
+    }
+    *out = result;
     return out;
 }
 
