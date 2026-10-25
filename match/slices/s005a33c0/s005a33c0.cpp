@@ -1,6 +1,28 @@
 // Slice s005a33c0 -- SP::cEditorCameraController::UpdateAutoZoom (0x005a33c0), a wrapper and a large UI function.
 // Module flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast.
 #include "types.h"
+#include <math.h>
+
+extern "C" double __cdecl fabs(double);
+#pragma intrinsic(fabs)
+inline float Abs(float x) { float r = (float)fabs(x); return r; }
+
+// Retail float constants (address in the comment).
+extern float kRate_13f6a30;      // 0x013f6a30  0.008f
+extern float kClampLo_13eb960;   // 0x013eb960  0.01f
+extern float kOne_1485720;       // 0x01485720  1.0f
+extern float kNegTurn_13f6a3c;   // 0x013f6a3c -0.2f
+extern float kPosTurn_13f69ac;   // 0x013f69ac  0.2f
+extern float kNegZoom_13f6a38;   // 0x013f6a38 -0.05f
+extern float kPosZoom_13ec478;   // 0x013ec478  0.05f
+extern float kHalfPi_150f2c4;    // 0x0150f2c4  1.5707964f
+extern float kHalf_1471064;      // 0x01471064  0.5f
+extern float kPointOne_1488874;  // 0x01488874  0.1f
+extern float kSmooth_13f6a34;    // 0x013f6a34  0.37f
+
+// Angle helpers (cdecl, float in / float out).
+extern "C" float WrapAngle(float base, float value);                  // 0x00699730
+extern "C" float SP_AngleClamp(float cur, float base, float delta);   // 0x0069b840
 
 typedef unsigned int size_t;
 
@@ -82,6 +104,39 @@ struct cSPVector3 {
     const float& operator[](int i) const { return (&x)[i]; }
 };
 
+// GameInput: only the key bitset (8*32) is touched here (ModAPI Input.h layout).
+struct GameInput {
+    uint32_t keys[8];                    // +0x00 bitset<8*32>
+    uint8_t  pad_020[0x48 - 0x20];
+    bool IsKeyDown(int vkey) const { return (keys[vkey >> 5] >> (vkey & 31)) & 1; }
+};
+
+// rw::math::fpu::Vector3Template<float,0>: three floats, memberwise copy.
+struct cSwarmVec3 {
+    float x, y, z;
+    cSwarmVec3& operator=(const cSwarmVec3& o) { x = o.x; y = o.y; z = o.z; return *this; }
+};
+
+struct cSPMatrix3 {
+    float m[9];
+    void Assign(const void* src);        // 0x0041cb40
+};
+
+namespace EA { namespace Swarm {
+// PDB EA::Swarm::cTransform (see src/game/include/EA/Swarm/cTransform.h).
+struct cTransform {
+    uint16_t    mFlags;                  // +0x00
+    uint16_t    mModificationCount;      // +0x02
+    cSwarmVec3  mTranslation;            // +0x04
+    float       mScale;                  // +0x10
+    cSPMatrix3  mRotation;               // +0x14
+};
+}}  // namespace EA::Swarm
+
+// Runtime BSS state the editor camera inherits from (readable only in the shipped game).
+extern cSwarmVec3 gDefaultTranslation;   // 0x015e6a6c
+extern cSPMatrix3 gDefaultRotation;      // 0x015e6b9c
+
 struct cSPTransform;
 
 struct cSPBoundingBox {
@@ -154,28 +209,42 @@ namespace App {
 struct cViewer {
     uint32_t   pad_000[0xc0 / 4];
     cSPMatrix4 mViewProjection;                        // +0xc0 (name guessed)
-    void SetViewAngle(float angle);                    // cViewer_SetViewAngle 0x007c5350
+    void SetViewAngle(float angle);                    // 0x007c5350
+    void SetNearClip(float clip);                      // 0x007c4ba0
+    void SetFarClip(float clip);                       // 0x007c4bc0
+    void SetBasis(void* basis);                        // 0x007c4d00
 };
 }  // namespace App
 
 namespace SP {
 class cEditorCameraController {
 public:
-    uint32_t pad_000[0x28 / 4];
-    float    mInitialCameraZoom;                       // +0x28
-    uint32_t pad_02c[(0x38 - 0x2c) / 4];
-    float    mTargetCameraZoom;                        // +0x38
-    uint32_t pad_03c[(0x58 - 0x3c) / 4];
-    float    mCameraMinZoomDistance;                   // +0x58
-    float    mCameraMaxZoomDistance;                   // +0x5c
-    uint32_t pad_060[(0x70 - 0x60) / 4];
-    float    mFieldOfView;                             // +0x70
-    uint32_t pad_074[(0x8c - 0x74) / 4];
-    float    mEditorScale;                             // +0x8c
-    uint32_t pad_090[(0x9c - 0x90) / 4];
-    bool     mbFOVisCurrent;                           // +0x9c
-    uint8_t  pad_09d[3];
-    uint32_t pad_0a0[(0xe8 - 0xa0) / 4];
+    uint32_t   pad_000[0x28 / 4];
+    float      mInitialCameraZoom;                     // +0x28
+    uint32_t   pad_02c[(0x30 - 0x2c) / 4];
+    float      mInitialHeading;                        // +0x30
+    float      mInitialPitch;                          // +0x34
+    float      mTargetCameraZoom;                      // +0x38
+    float      mTargetOffsetX;                         // +0x3c
+    float      mTargetOffsetY;                         // +0x40
+    float      mHeading;                               // +0x44
+    float      mPitch;                                 // +0x48
+    float      mZoom;                                  // +0x4c
+    float      mOffsetX;                               // +0x50
+    float      mOffsetY;                               // +0x54
+    float      mCameraMinZoomDistance;                 // +0x58
+    float      mCameraMaxZoomDistance;                 // +0x5c
+    uint32_t   pad_060[(0x68 - 0x60) / 4];
+    float      mfNearClip;                             // +0x68
+    float      mfFarClip;                              // +0x6c
+    float      mFieldOfView;                           // +0x70
+    cSPVector3 mCameraPosition;                        // +0x74
+    cSPVector3 mTargetPosition;                        // +0x80
+    float      mEditorScale;                           // +0x8c
+    uint32_t   pad_090[(0x9c - 0x90) / 4];
+    bool       mbFOVisCurrent;                         // +0x9c
+    uint8_t    pad_09d[3];
+    GameInput  mInput;                                 // +0xa0
     App::cViewer* mpViewer;                            // +0xe8
 
     void ClampTargetZoom()
@@ -187,6 +256,8 @@ public:
     }
 
     void UpdateAutoZoom(cSPEditorModel* model, uint32_t deltaMs);
+    void Update(int nDeltaTime, App::cViewer* pViewer);
+    void FUN_005a3080(EA::Swarm::cTransform* xf);      // 0x005a3080
 };
 
 // @ 0x005a33c0
@@ -282,10 +353,67 @@ void cEditorCameraController::UpdateAutoZoom(cSPEditorModel* model, uint32_t del
         mTargetCameraZoom = mInitialCameraZoom;
     ClampTargetZoom();
 }
-}  // namespace SP
 
 // @ 0x005a3e10
-void FUN_005a3e10(void* self)
+// Per-frame editor camera update: turns/zooms from the numpad/OEM keys, damps the
+// heading/pitch/offset/position towards their targets, then hands the resulting
+// transform to the viewer.
+void cEditorCameraController::Update(int nDeltaTime, App::cViewer* pViewer)
 {
-    (void)self;
+    float fDelta = (float)(uint32_t)nDeltaTime;
+    mpViewer = pViewer;
+
+    float rate = Clamp(fDelta * 0.008f, 0.01f, 1.0f);
+
+    if (mfNearClip > 0.0f)
+        pViewer->SetNearClip(mfNearClip);
+    if (mfFarClip > 0.0f)
+        pViewer->SetFarClip(mfFarClip);
+
+    float zoomDelta = 0.0f;
+    float headingDelta = 0.0f;
+    if (mInput.IsKeyDown(188))                 // VK_OEM_COMMA
+        headingDelta = rate * kNegTurn_13f6a3c;
+    if (mInput.IsKeyDown(190))                 // VK_OEM_PERIOD
+        headingDelta = rate * kPosTurn_13f69ac;
+    if (mInput.IsKeyDown(187) || mInput.IsKeyDown(107)) {   // VK_OEM_PLUS / VK_ADD
+        zoomDelta = rate * kNegZoom_13f6a38;
+        mbFOVisCurrent = 1;
+    }
+    if (mInput.IsKeyDown(189) || mInput.IsKeyDown(109)) {   // VK_OEM_MINUS / VK_SUBTRACT
+        zoomDelta = rate * kPosZoom_13ec478;
+        mbFOVisCurrent = 1;
+    }
+
+    mInitialHeading += headingDelta;
+    mTargetCameraZoom = (zoomDelta + kOne_1485720) * mTargetCameraZoom;
+    ClampTargetZoom();
+
+    mZoom = (mTargetCameraZoom - mZoom) * rate + mZoom;
+
+    float pitchOffset = (kPointOne_1488874 - (Abs(mPitch) / kHalfPi_150f2c4) * kHalf_1471064) * mEditorScale;
+
+    mPitch = SP_AngleClamp(mPitch, mInitialPitch, WrapAngle(mInitialPitch, mPitch) * rate);
+    mHeading = SP_AngleClamp(mHeading, mInitialHeading, WrapAngle(mInitialHeading, mHeading) * rate);
+
+    mOffsetX = (mTargetOffsetX - mOffsetX) * rate + mOffsetX;
+    mOffsetY = ((mTargetOffsetY + pitchOffset) - mOffsetY) * rate + mOffsetY;
+
+    float dx = (mTargetPosition.x - mCameraPosition.x) * rate;
+    float dy = (mTargetPosition.y - mCameraPosition.y) * rate;
+    float dz = (mTargetPosition.z - mCameraPosition.z) * rate;
+    mCameraPosition.x += dx * kSmooth_13f6a34;
+    mCameraPosition.y += dy * kSmooth_13f6a34;
+    mCameraPosition.z += dz * kSmooth_13f6a34;
+
+    EA::Swarm::cTransform xf;
+    xf.mFlags = 0;
+    xf.mModificationCount = 0;
+    xf.mTranslation = gDefaultTranslation;
+    xf.mScale = kOne_1485720;
+    xf.mRotation.Assign(&gDefaultRotation);
+
+    FUN_005a3080(&xf);
+    pViewer->SetBasis(&xf);
 }
+}  // namespace SP

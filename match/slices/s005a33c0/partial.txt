@@ -1,1 +1,0 @@
-005a3e10  819   large UI/editor function: skeleton
