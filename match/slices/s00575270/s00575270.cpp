@@ -392,7 +392,104 @@ void cAppModeEditorBase::UpdateSpineVertebra(uint32_t ms)
         Field<cSpineHelper>(this, 0x14c)->SetEnabled(0);
 }
 
-void cAppModeEditorBase::ToggleCameraMode() {}
+// ---------------------------------------------------------------------------
+// Camera mode toggle (0x575f70)
+// ---------------------------------------------------------------------------
+struct IModeHost {                               // object at *[self+0x20]
+    PV16 PV4
+    virtual void* GetCameraHost();               // +0x50
+};
+struct ICameraHostA {                            // result of GetCameraHost()
+    PV8 PV4 PV2
+    virtual void* GetActiveCamera();             // +0x38
+};
+namespace SP { class cEditorCameraController; }
+struct ICameraHostB {                            // result of GetActiveCamera()
+    PV2 PV
+    virtual SP::cEditorCameraController* QueryCamera(uint32_t id);   // +0x0c
+};
+struct IMessageManager {                         // singleton returned by MessageManager() 0x401050
+    int  HasPending(uint32_t id);                // 0x45b210
+    void Flush(uint32_t id);                     // 0x45b150
+    void Deactivate(uint32_t id, int flag);      // 0x45ae10
+};
+IMessageManager* __cdecl MessageManager();       // 0x401050
+
+namespace SP {
+class cEditorCameraController {                  // camera object returned by QueryCamera()
+public:
+    void SetCenterCameraOffset();                // 0x5a2370
+    void SetPartModeCameraOffset();              // 0x5a2400
+    void SetPaintModeCameraOffset();             // 0x5a24c0
+};
+}
+
+struct cCameraHandle {                           // object at *[self+0xa0/0xa4/0xa8]
+    char     pad0[4];
+    uint32_t mFlags;                             // +0x04
+};
+struct cAppModeEditorLayout {                    // named view of the SP editor object
+    char           pad00[0x20];
+    IModeHost*     mpModeHost;                   // +0x20
+    char           pad24[0x50];
+    unsigned char  mCameraMode;                  // +0x74
+    char           pad75[0x2b];
+    cCameraHandle* mpCameraA;                    // +0xa0
+    cCameraHandle* mpCameraB;                    // +0xa4
+    cCameraHandle* mpCameraC;                    // +0xa8
+    char           padAC[0x1d0];
+    uint32_t       mMsgId1;                      // +0x27c
+    uint32_t       mMsgId2;                      // +0x280
+    char           pad284[0x2c];
+    unsigned char  mCameraModeActive;            // +0x2b0
+    char           pad2b1[0x6b];
+    int            mCameraTargetMode;            // +0x31c
+};
+
+// @ 0x00575f70
+void cAppModeEditorBase::ToggleCameraMode()
+{
+    cAppModeEditorLayout* s = (cAppModeEditorLayout*)this;
+    if (s->mCameraModeActive == 0)
+        return;
+    ICameraHostA* a = (ICameraHostA*)s->mpModeHost->GetCameraHost();
+    ICameraHostB* b = (ICameraHostB*)a->GetActiveCamera();
+    if (b == 0)
+        return;
+    SP::cEditorCameraController* cam = b->QueryCamera(0x29da727);
+    if (cam == 0)
+        return;
+    int mode = s->mCameraTargetMode;
+    if (mode != 1 && mode != 0)
+        return;
+    if (s->mCameraMode != 0) {
+        cam->SetCenterCameraOffset();
+        if (s->mpCameraA) s->mpCameraA->mFlags &= ~1u;
+        if (s->mpCameraC) s->mpCameraC->mFlags &= ~1u;
+        if (s->mpCameraB) s->mpCameraB->mFlags &= ~1u;
+        if (MessageManager()->HasPending(s->mMsgId1))
+            MessageManager()->Flush(s->mMsgId1);
+        if (MessageManager()->HasPending(s->mMsgId2))
+            MessageManager()->Flush(s->mMsgId2);
+    } else {
+        if (mode == 0)
+            cam->SetPartModeCameraOffset();
+        else if (mode == 1)
+            cam->SetPaintModeCameraOffset();
+        if (s->mpCameraA) s->mpCameraA->mFlags |= 1u;
+        if (s->mpCameraC) s->mpCameraC->mFlags |= 1u;
+        if (s->mpCameraB) s->mpCameraB->mFlags |= 1u;
+        if (MessageManager()->HasPending(s->mMsgId1))
+            MessageManager()->Flush(s->mMsgId1);
+        if (MessageManager()->HasPending(s->mMsgId2))
+            MessageManager()->Flush(s->mMsgId2);
+        if (s->mMsgId1)
+            MessageManager()->Deactivate(s->mMsgId1, 1);
+        if (s->mMsgId2)
+            MessageManager()->Deactivate(s->mMsgId2, 1);
+    }
+    s->mCameraMode = (s->mCameraMode == 0);
+}
 
 // @ 0x00575810
 // Editor condition test: `id` is the FNV hash of a condition name.
