@@ -204,6 +204,15 @@ struct MS {                                        // SP::MessageServer object
 };
 struct VecErase { void erase(void*, void*); };
 
+struct cSPCreatureBase {
+    int  FUN_00c22dc0();                                        // 0x00c22dc0
+    int  InterruptAnimation(int nId, int nUnused, int nFlags);  // 0x00c12310
+    void FUN_00c17350(int nId, int nUnused);                    // 0x00c17350
+};
+
+extern "C" void* FUN_006782c0(void* first, void* last, void* dst);  // 0x006782c0
+extern "C" float gDAT_158131c;                                   // 0x0158131c
+
 struct X {
     void  FUN_00bc9b60();
     void  FUN_00c0ba10();
@@ -216,6 +225,8 @@ struct X {
     void  FUN_00d9ff00();
     void  FUN_00da0070(int*);
     void  FUN_00da0120(int*);
+    void  FUN_00da01a0();
+    void  FUN_00d9ccc0(float fValue, float fUnused);
     bool  FUN_00c232d0();
     X*    FUN_00d9eb70(int);
     void  FUN_00d9ebc0(u32);
@@ -319,6 +330,152 @@ void X::FUN_00da0120(int* param_2)
         ((X*)mgr)->FUN_00bc9b60();
     *(int*)((char*)param_2 + 0xb58) |= 0x20;
     ((X*)FUN_00b3d310((char*)param_2 + 0xc0))->FUN_00b453a0();
+}
+
+// ------------------------------------------------------------------ 0x00da01a0
+// @ 0x00da01a0
+void X::FUN_00da01a0()
+{
+    char* self = (char*)this;
+    *(char*)(self + 0x58) = 1;
+    *(char*)(self + 0x51) = 0;
+
+    unsigned nA = 0;
+    unsigned nB = 0;
+    unsigned nC = 0;
+
+    // pass 1: interrupt the animations named by the state query of every tracked object
+    int* pEndA = *(int**)(self + 0x68);
+    for (int* it = *(int**)(self + 0x64); it != pEndA; ++it) {
+        if (*it == 0)
+            continue;
+        void* pObj = ((VObj*)*it)->p3(0x4f176642);
+        if (pObj == 0)
+            continue;
+        cSPCreatureBase* pCreature = (cSPCreatureBase*)pObj;
+        char* pBase = *(char**)((char*)pCreature + 0xb4c);
+        char* pRec = pBase + 0x160 + *(int*)(pBase + 0x1dc) * 0xac;
+        int nState = pCreature->FUN_00c22dc0();
+        if (*(char*)(pRec + 0x10) != 0) {
+            *(char*)(pRec + 0x10) = 0;
+            switch (nState) {
+            case 4:
+                *(int*)(pRec + 4) = pCreature->InterruptAnimation(0x5508f836, -1, 0);
+                ++nA;
+                break;
+            case 5:
+                *(int*)(pRec + 4) = pCreature->InterruptAnimation(0x7508f905, -1, 0);
+                ++nB;
+                break;
+            case 6:
+                *(int*)(pRec + 4) = pCreature->InterruptAnimation(0xb508f8da, -1, 0);
+                ++nC;
+                break;
+            }
+        }
+        if (*(float*)(self + 0x54) > 0.0f) {
+            *(char*)(pRec + 0x10) = 0;
+            *(float*)(self + 0x54) = 0.0f;
+        }
+    }
+
+    AT* at = (AT*)EA_Audio_GetSystemAT();
+    if (at != 0) {
+        at->v38(0x3cdd1a9);
+        at->v40(0x34753a7, 0x3415c241);
+        at->v3c(0x34753aa, (float)nB);
+        at->v58();
+    }
+    at = (AT*)EA_Audio_GetSystemAT();
+    if (at != 0) {
+        at->v38(0x3cdd1a9);
+        at->v40(0x34753a7, 0xe3f56950);
+        at->v3c(0x34753aa, (float)nC);
+        at->v58();
+    }
+    at = (AT*)EA_Audio_GetSystemAT();
+    if (at != 0) {
+        at->v38(0x3cdd1a9);
+        at->v40(0x34753a7, 0x29e31a31);
+        at->v3c(0x34753aa, (float)nA);
+        at->v58();
+    }
+
+    unsigned nSel = 0;
+    switch (*(int*)(self + 0x1dc)) {
+    case 0: nSel = nB; break;
+    case 1: nSel = nC; break;
+    case 2: nSel = nA; break;
+    }
+
+    unsigned nThreshold = *(unsigned*)(self + 0x1e0);
+    unsigned nTotal = nA + nB + nC;
+
+    if (nSel >= nThreshold) {
+        this->FUN_00d9ccc0(*(float*)(self + 0x3c), 1.0f);
+        at = (AT*)EA_Audio_GetSystemAT();
+        if (at != 0) {
+            at->v38(0x3cdd1a9);
+            at->v40(0x34753a7, 0x52fb8f90);
+            at->v3c(0x34753aa, 1.0f);
+            at->v58();
+        }
+    } else if (nSel <= 0) {
+        if (nTotal != 0)
+            this->FUN_00d9ccc0((float)nTotal * gDAT_158131c, 1.0f);
+    } else {
+        this->FUN_00d9ccc0(((float)nSel / (float)nThreshold) * *(float*)(self + 0x3c), 1.0f);
+        at = (AT*)EA_Audio_GetSystemAT();
+        if (at != 0) {
+            at->v38(0x3cdd1a9);
+            at->v40(0x34753a7, 0x52fb8f90);
+            at->v3c(0x34753aa, 1.0f);
+            at->v58();
+        }
+    }
+
+    // pass 2: restart the animation of every object that is still in the live set
+    int* pEndB = *(int**)(self + 0x7c);
+    for (int* it = *(int**)(self + 0x78); it != pEndB; ++it) {
+        cSPCreatureBase* pCreature = (cSPCreatureBase*)*it;
+        char* pBase = *(char**)((char*)pCreature + 0xb4c);
+        char* pRec = pBase + 0x160 + *(int*)(pBase + 0x1dc) * 0xac;
+        int* pLiveBegin = *(int**)(self + 0x8c);
+        int* pLiveEnd = *(int**)(self + 0x90);
+        int* pFound = pLiveBegin;
+        while (pFound != pLiveEnd && *pFound != (int)pCreature)
+            ++pFound;
+        int nId;
+        if (pFound != pLiveEnd) {
+            pCreature->FUN_00c17350(0x950a2438, 0);
+            if (nSel < nThreshold) {
+                if (nSel != 0) {
+                    *(int*)(pRec + 4) = 2;
+                    nId = 0xd50923db;
+                } else {
+                    *(int*)(pRec + 4) = 1;
+                    nId = 0x95092408;
+                }
+            } else {
+                *(int*)(pRec + 4) = 3;
+                nId = 0xf50923e7;
+            }
+        } else {
+            nId = 0x750923cf;
+        }
+        *(int*)(pRec + 8) = pCreature->InterruptAnimation(nId, -1, 0);
+    }
+
+    // clear the live-set vector and release its ref-counted entries (inlined erase(begin, end))
+    Rel** pBeginLive = *(Rel***)(self + 0x8c);
+    Rel** pEndLive = *(Rel***)(self + 0x90);
+    Rel** p = (Rel**)FUN_006782c0(pEndLive, pEndLive, pBeginLive);
+    for (; p < *(Rel***)(self + 0x90); ++p) {
+        Rel* pRef = *p;
+        if (pRef != 0)
+            pRef->v4();
+    }
+    *(Rel***)(self + 0x90) -= (pEndLive - pBeginLive);
 }
 
 // ------------------------------------------------------------------ 0x00da05f0
