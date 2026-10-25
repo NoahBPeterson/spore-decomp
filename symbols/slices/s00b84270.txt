@@ -16,3 +16,4 @@
 00b850c0  UninitCopy1C(const Elem1C* first, const Elem1C* last, Elem1C* dst) -> Elem1C*  # eastl uninitialised_copy of 0x1c-byte elements (placement copy-ctor @8)
 00b85110  ScalarList::~ScalarList() -> void  # thiscall: frees the two IntVector members + the +8 object, resets the vtable
 00b85220  Vec18Vec::insert(Elem18* pos, const Elem18* pVal) -> void  # eastl vector<0x18-byte> insert-one (ret 8)
+00b84730  cPlanetModel::FindSurfacePosition(Vector3* out) -> void  # thiscall ret 4, SP::cPlanetModel random-surface-point walk (gold8)
