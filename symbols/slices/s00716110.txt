@@ -13,5 +13,5 @@
 0x007170e0 cMeshBuilder::addDiff134_hi
 0x00717200 cMeshBuilder::addDiff134_lo1
 0x007172f0 cMeshBuilder::addDiff134_hi1
-0x00716110 cMeshBuilder::cMeshBuilder(const cMeshBuilder&)
-0x007162b0 cMeshBuilder::cMeshBuilder(const cMeshBuilder&)  # 2nd copy-ctor path
+0x00716110 cBuilderSection::cBuilderSection(const cBuilderSection&)  # copy ctor of the 0xd0-byte element
+0x007162b0 cMorphTarget::cMorphTarget(const cMorphTarget&)  # copy ctor of the 0x50-byte element

@@ -43,6 +43,7 @@ template <class T> struct AutoRefCount {
 };
 
 struct cSPEditorBlock;
+class cSPEditorSkinManager;
 typedef AutoRefCount<cSPEditorBlock> BlockRef;
 
 // eastl::vector<AutoRefCount<cSPEditorBlock>, sp_vector_allocator>
@@ -96,25 +97,29 @@ struct cSPEditorBlock {
     virtual void _v0();
     uint32_t pad04[(0x28 - 0x04) / 4];
     struct cSPEditorModel* mpModel;                                 // +0x028
-    uint32_t pad2c[(0x3e0 - 0x2c) / 4];
+    uint32_t pad2c[(0x340 - 0x2c) / 4];
+    BlockVector mChildren;                                          // +0x340
+    uint32_t pad354[(0x3e0 - 0x354) / 4];
     BlockRef mSymmetricBlock;                                       // +0x3e0
     uint32_t pad3e4[(0xdc8 - 0x3e4) / 4];
     bitset<60> mFlags;                                              // +0xdc8
 
     cSPEditorModel* GetEditorModel() { return mpModel; }
     cSPEditorBlock* GetSymmetricBlock() { return mSymmetricBlock; }
-    bool FUN_43fc20(int a, int b);               // @ 0x43fc20
-    void SetValid(bool v);                       // @ 0x43f6b0
+    bool FUN_43fc20(int a, int b);                                  // 0x43fc20
+    bool FUN_43fc20(void* p);                                       // 0x43fc20
+    void SetValid(bool v);                                          // 0x43f6b0
+    void SetValid(bool v, cSPEditorSkinManager* skin);              // 0x43f6b0
     void SetCollisionGroup(int group);                              // 0x00451e50
     bool IsFlagSet(unsigned i) { return mFlags.test(i); }
     bool HasRelevantPoints2(cSPEditorBlock* other);                 // 0x00438420
     int GetSkinIdentifierForPicking();                              // 0x0043a870
 };
 struct cSPEditorModel : cSPEditorModelBase, RefCountTemplate {      // RefCountTemplate at +4
-    cSPEditorBlock* GetBlock(int i);                                // @ 0x4accb0
-    int GetBlockCount();                                            // @ 0x4accf0
-    bool FUN_4adc40();                                              // @ 0x4adc40
-    void FUN_4adc20(int v);                                         // @ 0x4adc20
+    cSPEditorBlock* GetBlock(int i);                                // 0x4accb0
+    int GetBlockCount();                                            // 0x4accf0
+    bool FUN_4adc40();                                              // 0x4adc40
+    void FUN_4adc20(int v);                                         // 0x4adc20
     cSPEditorPhysicsWorld* GetPhysicsWorld();                       // 0x004ad450
 };
 
@@ -191,4 +196,29 @@ void AssignCollisionGroups(cSPEditorBlock* block, BlockVector* list, int grpAll,
 }
 
 // @ 0x4a6d20
-void FUN_4a6d20(cSPEditorBlock* block) { (void)block; }
+// Re-validates `block` (and, recursively, its symmetric partner, a supplied list of blocks and its
+// children), with the model's symmetry switch off while the flags are recomputed.
+void FUN_4a6d20(cSPEditorBlock* block, BlockVector* blocks, bool param3, cSPEditorSkinManager* skin,
+                int param5, bool invalid, bool recurseChildren, bool recurseSymmetric)
+{
+    AutoRefCount<cSPEditorModel> model(block->GetEditorModel());
+    if (model) {
+        bool valid;
+        bool symmetry = model->FUN_4adc40();
+        model->FUN_4adc20(0);
+        valid = invalid ? false : block->FUN_43fc20(0);
+        block->SetValid(valid, skin);
+        if (recurseSymmetric && block->GetSymmetricBlock())
+            FUN_4a6d20(block->GetSymmetricBlock(), 0, param3, skin, 0, invalid, 0, 0);
+        if (blocks) {
+            int nList = blocks->size();
+            for (int i = 0; i < nList; i++)
+                FUN_4a6d20((*blocks)[i], 0, param3, skin, 0, invalid, 0, 1);
+        } else if (recurseChildren) {
+            BlockVector& children = block->mChildren;
+            for (int i = 0, n = children.size(); i < n; i++)
+                FUN_4a6d20(children[i], 0, param3, skin, 0, invalid, 1, 1);
+        }
+        model->FUN_4adc20(symmetry);
+    }
+}

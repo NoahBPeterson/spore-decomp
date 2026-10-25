@@ -1,2 +1,0 @@
-0047ae60 - original is vector<32-byte>::insert (large); ours is a tiny forwarder to the 16-byte insert, not a reconstruction
-0047b3d0 - original is a 0x14-byte-element uninitialized_copy loop (not an insert); ours is a tiny forwarder to InsertM44, not a reconstruction

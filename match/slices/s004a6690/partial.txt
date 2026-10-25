@@ -1,1 +1,0 @@
-004a6d20  -  skeleton: block-validity helper

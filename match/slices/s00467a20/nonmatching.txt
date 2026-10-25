@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (none: all 2 functions byte-exact)
+00467a20  1068  BuildModel (/Od /Ob1 /MD /Gy /TP /arch:SSE): complete C++; frame 0x7c vs original 0x14c — original keeps per-access array-reference temps and larger inline-callee slots (element writes repeated through lea temps); equiv WEAK, 197 valid inputs, no mismatch
+00467ef0  229  MeshUploadJob::Prep (/Od /Ob1 /MD /Gy /TP /arch:SSE): complete C++; frame 0xcc matches and Elem7c is align(4); remaining: pParts/nParts reversed slots, the two Elem7c ctor-address temps and mE4 arg temp sit 0x20 below the reproduced 8-dword hole, and the break arm is laid out je+jmp vs the original jne+stub; equiv WEAK, 119 valid inputs, no mismatch

@@ -1,3 +1,5 @@
 # source  symbol  va
-slices/s00469bb0/s00469bb0.cpp  ??0S630@@  0046a630  /Od /Ob1 /MD /Gy /TP
-slices/s00469bb0/s00469bb0.cpp  ??0M18real@@  0046a7c0  /Od /Ob1 /MD /Gy /TP
+slices/s00469bb0/s00469bb0.cpp  ??0C4610c0@@QAE@ABU0@@Z  0046a510  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00469bb0/s00469bb0.cpp  ??0S630@@QAE@ABU0@@Z  0046a630  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00469bb0/s00469bb0.cpp  ??0B750@@QAE@ABU0@@Z  0046a750  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00469bb0/s00469bb0.cpp  ??0M18real@@QAE@ABU0@@Z  0046a7c0  /Od /Ob1 /MD /Gy /TP /arch:SSE

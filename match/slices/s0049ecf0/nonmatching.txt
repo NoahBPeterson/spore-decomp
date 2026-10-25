@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+0049ecf0  382  FUN_49ecf0 (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): instruction stream and call order match (transpose, mat*mat, vec-vec, vec*mat, vec+vec, SetPosition/SetOrientation), size 577 vs 655; diff is /Od local-name-hash slot permutation (named locals land at different ebp offsets, e.g. offset -0x8c vs -0x98) plus the original's per-use child-pointer temp slots for each of the four `(*blocks)[i]` evaluations; difftest WEAK (174 valid, 0 mismatch, 40.0% coverage)

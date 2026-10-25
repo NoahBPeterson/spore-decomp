@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
 00469bb0  1351  complete (all 52 calls in order, same constants); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS-; /Od temp-slot layout and register choice differ (frame 0xf1c vs 0xf9c)
+0046a8a0  247  MakeBabyRuntimeCreature: complete behaviour port (541 bytes, instruction stream identical) but /Od temp-slot layout differs (six float/int init temporaries plus loop locals hold different stack slots; the six temps are block-scoped here and allocated after the loop locals in the original); flags /Od /Ob1 /MD /Gy /TP /arch:SSE; equiv WEAK 312 valid (59.4% cov), no mismatch

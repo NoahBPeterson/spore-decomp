@@ -27,25 +27,65 @@ bool IsNAN(const float* v)
     return n35;
 }
 
-struct cSPEditorBlock;
+// cSPMatrix3 (3x3 basis); a struct, not a char buffer, so no /GS cookie
+struct Mat3 { float m[9]; };
 
-struct RotHandle {
+// cSPTransform -- dev size 0x38, layout confirmed by s0043cad0.
+struct cSPTransform {
+    uint16_t mFlags;               // +0x00
+    uint16_t mModificationCount;   // +0x02
+    Vector3  mTranslation;         // +0x04
+    float    mScale;               // +0x10
+    Mat3     mRotation;            // +0x14
+    cSPTransform(const cSPTransform& src);     // 0x0040ce80 (copy ctor)
+    void Invert();                             // 0x0040efa0
+    void TransformPoint(Vector3& p);           // 0x0044d4f0
+    // cSPTransform::SetTranslation / SetRotation (inline in the original)
+    void SetTranslation(const Vector3& v)
+    { mTranslation = v; mFlags |= 0x4; mModificationCount++; }   // kHasTranslation
+    void SetRotation(const Mat3& r)
+    { mRotation = r; mFlags |= 0x2; mModificationCount++; }      // kHasRotation
+};
+
+// cMWModel -- the model node whose cSPTransform sits at +0x08 (see s0043cad0).
+struct cMWModel {
+    char pad0[0x08];
+    cSPTransform mTransform;      // +0x08
+};
+
+// cSPEditorBlock -- only the model slot at +0x10 (AutoRefCount<cMWModel>) is used here.
+struct cSPEditorBlock {
     char pad0[0x10];
-    void* mBlock;                  // +0x10
-    char pad14[0x7c];
+    cMWModel* mModel;              // +0x10
+};
+
+// RotHandle -- cSPEditorHandleDeform layout (size 0x1d8); vtable slot 19 is GetHandlePos.
+#define RH_VIRT(n) virtual void vpad##n();
+struct RotHandle {
+    RH_VIRT(0) RH_VIRT(1) RH_VIRT(2) RH_VIRT(3) RH_VIRT(4) RH_VIRT(5) RH_VIRT(6)
+    RH_VIRT(7) RH_VIRT(8) RH_VIRT(9) RH_VIRT(10) RH_VIRT(11) RH_VIRT(12)
+    RH_VIRT(13) RH_VIRT(14) RH_VIRT(15) RH_VIRT(16) RH_VIRT(17) RH_VIRT(18)
+    virtual Vector3* GetHandlePos(Vector3* out, float t);   // slot 19 (vptr+0x4c)
+
+    uint32_t pad04[3];             // +0x04 (RefCountVTemplate vptr/refcount)
+    cSPEditorBlock* mBlock;        // +0x10
+    cMWModel* mModel;              // +0x14 (AutoRefCount<cMWModel>)
+    cMWModel* mOverdrawModel;      // +0x18 (AutoRefCount<cMWModel>)
+    char pad1c[0x74];              // +0x1c .. +0x8f
     Vector3 mP0;                   // +0x90
     Vector3 mP1;                   // +0x9c
-    char padA8[0xd8];
+    char padA8[0xc0];              // +0xa8 .. +0x167
+    Vector3 mTriangleRelativeDirection;  // +0x168
+    Vector3 mBasePositionOffset;         // +0x174
     float  mRadius;                // +0x180
-    char pad184[0x4c];
-    uint8_t mDone;                 // +0x1d5
+    char pad184[0x51];             // +0x184 .. +0x1d4
+    uint8_t mDoNotPlaceHandle;     // +0x1d5
 
-    Vector3* GetHandlePos(Vector3* out, float t);
     Vector3* GetDir(Vector3* out, bool useParent);
     Vector3* GetP0(Vector3* out, bool transform);
     Vector3* GetP1(Vector3* out, bool transform);
     void*    GetOrientation(void* out);
-    void     Update();             // 0x4823b0, partial
+    void     Update();
 };
 
 struct EntityXform {
@@ -119,9 +159,6 @@ Vector3* RotHandle::GetP1(Vector3* out, bool transform)
     return out;
 }
 
-// 3x3 basis (cSPMatrix3 rotation part); a struct, not a char buffer, so no /GS cookie
-struct Mat3 { float m[9]; };
-
 // cSPMatrix3 is assigned into via __thiscall (this = destination)
 struct MatOut {
     void Assign(const Mat3* src);   // @ 0x0041cb40
@@ -140,15 +177,29 @@ void* RotHandle::GetOrientation(void* out)
     return out;
 }
 
-// @ 0x004823b0 -- PARTIAL: handle-sync update; only the early-out and the local
-// transform fetch are reproduced, the rest of the body is omitted.
+// @ 0x004823b0
 void RotHandle::Update()
 {
-    if (this->mDone)
-        return;
-    char xform[0x38];
-    void GetLocalTransform(void*, void*);              // @ 0x0040ce80
-    GetLocalTransform(*(char**)((char*)this->mBlock + 0x10) + 8, xform);
-    void PartTransformInvert(void*);                   // @ 0x0040efa0
-    PartTransformInvert(xform);
+    if (!mDoNotPlaceHandle) {
+        Vector3 pos;
+        mTriangleRelativeDirection = *GetHandlePos(&pos, mRadius);
+
+        cSPTransform xform(mBlock->mModel->mTransform);
+        xform.Invert();
+
+        mBasePositionOffset = mTriangleRelativeDirection;
+        xform.TransformPoint(mBasePositionOffset);
+
+        Mat3 basis;
+        GetOrientation(&basis);
+
+        if (mModel) {
+            mModel->mTransform.SetTranslation(mTriangleRelativeDirection);
+            mModel->mTransform.SetRotation(basis);
+        }
+        if (mOverdrawModel) {
+            mOverdrawModel->mTransform.SetTranslation(mTriangleRelativeDirection);
+            mOverdrawModel->mTransform.SetRotation(basis);
+        }
+    }
 }

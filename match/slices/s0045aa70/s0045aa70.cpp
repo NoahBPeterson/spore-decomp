@@ -42,6 +42,7 @@ struct Node {               // hash node: key, value, next
     Node*    next;
 };
 struct Iter { Node* node; Node** bucket; };
+inline bool operator!=(const Iter& a, const Iter& b) { return a.node != b.node; }
 
 struct EffectTable {        // lives at cSummarizer+8
     uint32_t pad0;          // +0 (unused here)
@@ -73,6 +74,8 @@ struct HTable {
     uint32_t nbuckets;  // +8
     uint32_t count;     // +0xc
     void  find(Iter* out, int* key);                    // @0x421950
+    void  begin(Iter* out);                             // 0x564140
+    Iter  end() { Iter i; i.node = *(&buckets[nbuckets]); i.bucket = &buckets[nbuckets]; return i; }
     Iter* erase(Iter* out, Iter it);                    // @0x45b3e0
     void  clearBuckets(Node** b, uint32_t n);           // @0x45b750
     Node** at(int* key);                                // @0x45b290
@@ -137,14 +140,13 @@ cContentValidationSummarizer::~cContentValidationSummarizer()
 void cContentValidationSummarizer::ClearAll()
 {
     Iter it;
-    table.find(&it, 0);            // begin() (0x564140)
-    for (;;) {
-        Node** end = &table.buckets[table.nbuckets];
-        Node* endNode = *end;
-        if (it.node == endNode) break;
-        it.node->value->Stop(1);
-        Iter tmp, cur = it;
-        it = *table.erase(&tmp, cur);
+    table.begin(&it);              // 0x564140
+    while (it != table.end()) {
+        Node* node = it.node;
+        IEffect* pEffect = node->value;
+        pEffect->Stop(1);
+        Iter tmp;
+        it = *table.erase(&tmp, it);
     }
     table.clearBuckets(table.buckets, table.nbuckets);
     table.count = 0;
@@ -362,81 +364,97 @@ void HTable::clearBuckets(Node** b, uint32_t n)
     }
 }
 
-// Large aggregate: simple vectors/strings. Sub-object helpers are thiscalls.
-struct Sub { void ctor(char* tag); void init(); void dtor(); void dtor2(); void dtor3(); };
-struct Vec { void* b; void* e; void* c; };
-struct BigObj {
-    uint32_t a, b, c;                // +0
-    void Hdr_ctor();                 // @0x45dac0 on this+? (this)
+// ---------------------------------------------------------------------------
+// ColladaExport (0x150 bytes), layout shared with slice s004629e0.
+// ---------------------------------------------------------------------------
+struct VAlloc { char b; };              // empty allocator tag (distinct temp per member)
+
+struct AllocObj {                       // allocator sub-object at +0xc of a vector
+    uint32_t mA, mB;                    // +0x00, +0x04
+    void ctor(const VAlloc& alloc);     // 0x429360
 };
-extern void  F45dac0(void* p);       // thiscall @0x45dac0
-extern void  F540470(void* p, char* t);
-extern void  F429360(void* p, char* t);
-extern void  F45d750(void* p);
-extern void  F425990(void* p);
-extern void  F554b10(void* p);
-extern void  F45daf0(void* p);
-extern void  F5156b0(void* p);
-extern void  F540520(void* p);
-extern void  WString_FreeBuffer(void* p);
+
+struct VecHdr {                         // vector header + sp_vector_allocator (0x14 bytes)
+    void*    mpBegin;                   // +0x00
+    void*    mpEnd;                     // +0x04
+    void*    mpCapacity;                // +0x08
+    AllocObj mAllocator;                // +0x0c
+    VecHdr() { ctor(VAlloc()); }
+    VecHdr(const VAlloc& alloc) { ctor(alloc); }
+    void ctor(const VAlloc& alloc);     // 0x540470  (empty the three pointers)
+    void dtor4();                       // 0x425990  (4-byte elements: int/uint32/pointer)
+    void dtor8();                       // 0x45daf0  (8-byte elements)
+    void dtor12();                      // 0x5156b0  (12-byte elements: Vector3)
+    void dtor16();                      // 0x554b10  (16-byte elements: Vector4f)
+    void dtor64();                      // 0x45d750  (64-byte elements: Matrix4)
+    void dtorVec3();                    // 0x540520  (out-of-line vector<Vector3> dtor)
+};
+
+struct PadVec {                         // 0x14: vector whose allocator is constructed separately
+    void*    mpBegin;                   // +0x00
+    void*    mpEnd;                     // +0x04
+    void*    mpCapacity;                // +0x08
+    AllocObj mAllocator;                // +0x0c
+    PadVec() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; mAllocator.ctor(VAlloc()); }
+    void dtor64();                      // 0x45d750
+};
+
+struct WString {
+    void*    mpBegin;                   // +0x00
+    void*    mpEnd;                     // +0x04
+    void*    mpCapacity;                // +0x08
+    uint32_t mAllocator;                // +0x0c
+    WString() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; SetEmpty(); }
+    void SetEmpty();                    // 0x45dac0
+    void Free();                        // 0x4237d0
+};
+
+struct ColladaExport {
+    WString  mName;                     // +0x000
+    VecHdr   mPositions;                // +0x010
+    VecHdr   mNormals;                  // +0x024
+    VecHdr   mUVs;                      // +0x038
+    VecHdr   mTangents;                 // +0x04c
+    VecHdr   mBinormals;                // +0x060
+    VecHdr   mBoneIndices;              // +0x074
+    VecHdr   mBoneWeights;              // +0x088
+    VecHdr   mPosIndices;               // +0x09c
+    VecHdr   mNormalIndices;            // +0x0b0
+    VecHdr   mUVIndices;                // +0x0c4
+    VecHdr   mBoneNames;                // +0x0d8
+    VecHdr   mBoneParents;              // +0x0ec
+    VecHdr   mBindMatrices;             // +0x100
+    PadVec   mPad114;                   // +0x114
+    VecHdr   mBoneMatrices;             // +0x128
+    PadVec   mPad13c;                   // +0x13c
+
+    ColladaExport();
+    ~ColladaExport();
+};
 
 // @ 0x45b7c0
-void* BigObj_ctor(uint32_t* p)
+ColladaExport::ColladaExport()
 {
-    char t[17];
-    p[0] = 0; p[1] = 0; p[2] = 0;
-    F45dac0(p);
-    F540470((char*)p + 0x10, &t[0]);
-    F540470((char*)p + 0x24, &t[1]);
-    F540470((char*)p + 0x38, &t[2]);
-    F540470((char*)p + 0x4c, &t[3]);
-    F540470((char*)p + 0x60, &t[4]);
-    F540470((char*)p + 0x74, &t[5]);
-    F540470((char*)p + 0x88, &t[6]);
-    F540470((char*)p + 0x9c, &t[7]);
-    F540470((char*)p + 0xb0, &t[8]);
-    F540470((char*)p + 0xc4, &t[9]);
-    F540470((char*)p + 0xd8, &t[10]);
-    F540470((char*)p + 0xec, &t[11]);
-    F540470((char*)p + 0x100, &t[12]);
-    p[0x45] = 0; p[0x46] = 0; p[0x47] = 0;
-    F429360((char*)p + 0x10c, &t[13]);
-    F540470((char*)p + 0x114, &t[14]);
-    p[0x4f] = 0; p[0x50] = 0; p[0x51] = 0;
-    F429360((char*)p + 0x13c, &t[15]);
-    return p;
 }
 
 // @ 0x45b9a0
-void BigObj_dtor(char* p)
+ColladaExport::~ColladaExport()
 {
-    F45d750(p + 0x13c);
-    F45d750(p + 0x128);
-    F45d750(p + 0x114);
-    F45d750(p + 0x100);
-    uint32_t x;
-    for (x = *(uint32_t*)(p + 0xec); x < *(uint32_t*)(p + 0xf0); x += 4) {}
-    F425990((void*)x);
-    for (x = *(uint32_t*)(p + 0xd8); x < *(uint32_t*)(p + 0xdc); x += 4) {}
-    F425990((void*)x);
-    for (x = *(uint32_t*)(p + 0xc4); x < *(uint32_t*)(p + 0xc8); x += 4) {}
-    F425990((void*)x);
-    for (x = *(uint32_t*)(p + 0xb0); x < *(uint32_t*)(p + 0xb4); x += 4) {}
-    F425990((void*)x);
-    for (x = *(uint32_t*)(p + 0x9c); x < *(uint32_t*)(p + 0xa0); x += 4) {}
-    F425990((void*)x);
-    for (x = *(uint32_t*)(p + 0x88); x < *(uint32_t*)(p + 0x8c); x += 0x10) {}
-    F554b10((void*)x);
-    for (x = *(uint32_t*)(p + 0x74); x < *(uint32_t*)(p + 0x78); x += 8) {}
-    F45daf0((void*)x);
-    for (x = *(uint32_t*)(p + 0x60); x < *(uint32_t*)(p + 0x64); x += 0xc) {}
-    F5156b0((void*)x);
-    for (x = *(uint32_t*)(p + 0x4c); x < *(uint32_t*)(p + 0x50); x += 0xc) {}
-    F5156b0((void*)x);
-    for (x = *(uint32_t*)(p + 0x38); x < *(uint32_t*)(p + 0x3c); x += 8) {}
-    F45daf0((void*)x);
-    for (x = *(uint32_t*)(p + 0x24); x < *(uint32_t*)(p + 0x28); x += 0xc) {}
-    F5156b0((void*)x);
-    F540520(p + 0x10);
-    WString_FreeBuffer(p);
+    mPad13c.dtor64();
+    mBoneMatrices.dtor64();
+    mPad114.dtor64();
+    mBindMatrices.dtor64();
+    mBoneParents.dtor4();
+    mBoneNames.dtor4();
+    mUVIndices.dtor4();
+    mNormalIndices.dtor4();
+    mPosIndices.dtor4();
+    mBoneWeights.dtor16();
+    mBoneIndices.dtor8();
+    mBinormals.dtor12();
+    mTangents.dtor12();
+    mUVs.dtor8();
+    mNormals.dtor12();
+    mPositions.dtorVec3();
+    mName.Free();
 }

@@ -2,3 +2,4 @@
 008881e0 RT2::HashWordBreakString  # retail-only UTF-16 word-break hash helper (hash*33 + Char, seed 0x1505 at call sites); no dev-PDB symbol; byte-exact under this descriptive symbol
 008883a0 EA::Text::ParagraphBreakIterator::GetNextParagraphBreak  # exact name from dev PDB (18053088, size 127 vs retail 130); byte-exact
 00888480 EA::Text::InitWordBreakDictionary  # EATextBreak dictionary allocator init used by cSPUITooltipManager::Init; retail-only body; byte-exact
+00887f80 EA::Text::BmpFont::Open  # card.py PDB candidate; EATextBmpFont.cpp Open with retail changes (kGlyphIdZeroWidth inserted into the metrics map and the polygon map at +0x14c); written as RT2::RBmpFont::Open

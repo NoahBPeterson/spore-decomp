@@ -5,3 +5,5 @@
 0043ffa0  81   FFa0 (SetUserOrientation) - Matrix3 by-value copy + /Od slots differ; F404f0 takes Matrix3 by value, BuildFacingMatrix result is its arg temp; flags /Od /MD /Gy /EHsc /TP /fp:fast [equiv: PASS]
 00440020  81   F4020 - mirror-to-link - /Od accessor slots differ
 00440090  83   F4090 - mirror-to-link - /Od accessor slots differ
+0043f6b0  1130 SetValid - complete; /Od local-slot layout differs (bbox/transform/message flow reconstructed); flags /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv: WEAK 23.9% coverage, 0 mismatch]
+0043fc20  831  F3fc20 - complete; /Od local-slot layout differs (symmetry classify + bit guards); flags /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv: PASS]

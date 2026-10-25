@@ -1,2 +1,3 @@
 # va  Name  # evidence
 00402ab0  ??0Matrix44@@QAE@XZ  # Matrix44 default ctor (empty, returns this); original 0x45d3e0 calls it once at entry
+0045de10  ?SprintfCore@Str@@QAEPAU1@PBDPAX@Z  # eastl basic_string<char> append_sprintf_va_list shape; calls Vsnprintf8 (0x938400) and resize (0x45ebd0)

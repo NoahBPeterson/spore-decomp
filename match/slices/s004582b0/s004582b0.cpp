@@ -50,7 +50,51 @@ void Budget2::SetTooltip(void* p) {
     }
 }
 
-extern void* g_layout;   // 0x015d2dbc
+namespace EA { namespace ResourceMan {
+struct Key {
+    unsigned int mInstance;   // +0x0
+    unsigned int mType;       // +0x4
+    unsigned int mGroup;      // +0x8
+    Key() : mInstance(0), mType(0), mGroup(0) {}
+};
+}}
+
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);
+
+class cSPUILayout {
+ public:
+    cSPUILayout();                                                   // 0x00810000
+    virtual ~cSPUILayout();                                          // slot 0
+    virtual int AddRef();                                            // slot 1
+    virtual int Release();                                           // slot 2
+    bool Init(const EA::ResourceMan::Key& key, bool visible, unsigned int parentID); // 0x008120d0
+    void Shutdown(bool destroy);                                     // 0x00811ad0
+
+ public:
+    unsigned int mnRefCount;         // +0x4
+    unsigned int mResourceKey[3];    // +0x8
+    void* mpObjectCollection;        // +0x14
+};
+
+template <class T> class AutoRefCount {
+ public:
+    T* mpObject;
+    AutoRefCount& operator=(T* p) {
+        if (p != mpObject) {
+            T* const pTemp = mpObject;
+            if (p)
+                p->AddRef();
+            mpObject = p;
+            if (pTemp)
+                pTemp->Release();
+        }
+        return *this;
+    }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
+
+extern AutoRefCount<cSPUILayout> g_layout;   // 0x015d2dbc
 
 // @ 0x00458c00
 typedef void (__thiscall* Fn_00422c80)(void* self, void* out);
@@ -302,8 +346,19 @@ void Budget::Update(unsigned int dt) {
     }
 }
 
-// @ 0x00458c60 -- PreloadLayout (only outlined)
-char FUN_00458c60(unsigned int param) {
-    (void)param;
-    return 0;
+namespace SPUIHelpers { bool PreloadLayout(unsigned int param); }
+
+// @ 0x00458c60 -- PreloadLayout (loads the editor layout for a resource instance id)
+bool SPUIHelpers::PreloadLayout(unsigned int param) {
+    EA::ResourceMan::Key key;
+    key.mInstance = param;
+    key.mGroup = 0x40464100;
+    key.mType = 0x0510a95b;
+    g_layout = new ("Editor", 0, 0, 0, 0) cSPUILayout();
+    bool result = g_layout->Init(key, false, 0x5b598fa);
+    if (!result) {
+        g_layout->Shutdown(true);
+        g_layout = 0;
+    }
+    return result;
 }
