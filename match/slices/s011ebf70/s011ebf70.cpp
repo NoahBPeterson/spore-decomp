@@ -7,6 +7,8 @@
 #include "types.h"
 #include <intrin.h>
 
+#define EXCEPTION_EXECUTE_HANDLER 1
+
 void FUN_011eca90(int*);
 
 extern "C" {
@@ -28,6 +30,25 @@ __declspec(dllimport) unsigned long __stdcall TlsAlloc(void);
 __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long, void*);
 __declspec(dllimport) int   __stdcall SetThreadPriority(void*, int);
+__declspec(dllimport) unsigned int __stdcall SetThreadIdealProcessor(void*, unsigned int);
+__declspec(dllimport) void  __stdcall GetSystemInfo(void*);
+__declspec(dllimport) void  __stdcall RaiseException(unsigned long, unsigned long, unsigned long, const unsigned long*);
+__declspec(dllimport) unsigned long __stdcall ResumeThread(void*);
+
+// SYSTEM_INFO: only the processor count (the low word) is read here.
+struct SYSTEM_INFO
+{
+    unsigned int  dwOemId;            // +0x00 (union with dwProcessorArchitecture)
+    unsigned int  dwPageSize;         // +0x04
+    void*         lpMinimumApplicationAddress;  // +0x08
+    void*         lpMaximumApplicationAddress;  // +0x0c
+    unsigned int  dwActiveProcessorMask;        // +0x10
+    unsigned int  dwNumberOfProcessors;         // +0x14
+    unsigned int  dwProcessorType;              // +0x18
+    unsigned int  dwAllocationGranularity;      // +0x1c
+    unsigned short wProcessorLevel;             // +0x20
+    unsigned short wProcessorRevision;          // +0x22
+};
 }
 
 // out-of-slice helpers.
@@ -35,12 +56,52 @@ void* FUN_011e6d20(unsigned int);                    // 0x011e6d20  operator new
 void  FUN_011eba20(char* dst, const char* src, int n);   // 0x011eba20  stdc::StringnCopy
 unsigned int GetThreadTime();                        // 0x011ec7f0
 void FUN_011ed3f0(void*);                            // stream/list teardown
+void* f_011eca10(unsigned int);                      // 0x011eca10  rw::core::thread local allocator
+void  f_011ec820();                                  // 0x011ec820  thread-name slot accessor
+void  f_011ec750(void* handle, char add);            // 0x011ec750  TLS thread hook
+void  operator_del(void*);                           // 0x00f47380
+int   sprintf(char* dst, const char* fmt, ...);      // 0x011ea770  stream-path formatter
+void* __stdcall _beginthreadex(void*, unsigned int, unsigned int (__stdcall*)(void*),
+                               void*, unsigned int, unsigned int*);   // 0x013cc3d4
 
-// The process-wide thread scheduler object and its TLS index.
+// The package state singleton and the per-slot stream records.
 struct ThreadObj;
+struct StreamFile;
+struct StreamHandle;
+struct PackageStreamEntry
+{
+    void*        mName;   // +0x00
+    StreamFile*  mFile;   // +0x04
+};
+struct PackageState
+{
+    int                  mField00;   // +0x00
+    int                  mField04;   // +0x04
+    int                  mField08;   // +0x08
+    int                  mField0C;   // +0x0c
+    StreamFile*          mFile;      // +0x10
+    int                  mField14;   // +0x14
+    int                  mField18;   // +0x18
+    unsigned int         mCount;     // +0x1c
+    PackageStreamEntry*  mEntries;   // +0x20
+};
+PackageState* GetPackageState();                     // 0x011e58f0
 extern ThreadObj g_016f4e18;                         // 0x016f4e18
 extern unsigned long g_015d0690;                     // 0x015d0690
 extern unsigned int g_014f70f8;                      // 0x014f70f8
+extern long g_016f5bc0;                              // 0x016f5bc0  processor count / affinity mask
+extern int  g_016f5bc4;                              // 0x016f5bc4  mask initialised flag
+extern int  g_016f5b38;                              // 0x016f5b38  processor round-robin counter
+extern int  g_015d0694;                              // 0x015d0694  requested processor
+
+// The descriptor of the thread being started (system THREADNAME_INFO layout).
+struct THREADNAME_INFO
+{
+    unsigned long dwType;      // +0x00
+    const char*   szName;      // +0x04
+    unsigned long dwThreadID;  // +0x08
+    unsigned long dwFlags;     // +0x0c
+};
 
 // ----- object layouts -------------------------------------------------------
 
@@ -101,12 +162,66 @@ struct Semaphore
 
 struct StreamList { void teardown(); };
 
+// A spawned thread's control block (returned by the allocator, owned by ThreadObj::mRecord).
+struct ThreadRecord
+{
+    void*        mHandle;       // +0x00  OS thread handle
+    unsigned int mThreadId;     // +0x04
+    int          mState;        // +0x08  0 = new, 1 = starting, 2 = start routine done
+    int          mResult;       // +0x0c
+    int          mContext;      // +0x10
+    int          mArg;          // +0x14
+    void*        mOwnerHandle;  // +0x18  handle given to the thread-local hook
+    int          mStart;        // +0x1c  start routine (0 = call the context directly)
+    long         mRefCount;     // +0x20
+    char         mName[0x40];   // +0x24  name buffer (terminator at +0x63)
+};
+
+// The descriptor a caller passes to ThreadObj::createThread.
+struct ThreadDesc
+{
+    int         mField00;     // +0x00
+    int         mStackSize;   // +0x04
+    int         mPriority;    // +0x08
+    int         mProcessor;   // +0x0c
+    int         mField10;     // +0x10
+    const char* mName;        // +0x14
+};
+
+// A streamed package file record: the owner object (with its vtable) lives at +0x120.
+struct StreamFile
+{
+    int   mField00;              // +0x00
+    char  mOpened;               // +0x04
+    char  pad05[0x120 - 0x05];   // +0x05 .. +0x11f
+    void* mOwner;                // +0x120
+
+    __declspec(noinline) void openRecord();           // 0x011e62b0
+};
+
+// A file-system stream handle bound to a package slot or opened by path.
+struct StreamHandle
+{
+    void*       mHandle;    // +0x00
+    void*       mBase;      // +0x04  owning object (or the returned slot)
+    int         mStatus;    // +0x08
+    StreamFile* mRecord;    // +0x0c
+    void*       mOwner;     // +0x10
+    int         mField14;   // +0x14
+    int         mField18;   // +0x18
+    int         mField1C;   // +0x1c
+    int         mField20;   // +0x20
+    int         mField24;   // +0x24
+
+    __declspec(noinline) StreamHandle* open(const char* path, int flags, StreamFile* record);  // 0x011ecdf0
+};
+
 // The scheduler condition object: a count @+0, waiter count @+4, spin count @+8,
 // two semaphores @+0xc/@+0x1c, an embedded Mutex @+0x2c, and a thread table
 // (32 handles @+0x0, its critical section @+0x80).
 struct ThreadObj
 {
-    void* mField0;            // +0x00
+    ThreadRecord* mField0;    // +0x00  the thread record this object owns
     int   mField4;            // +0x04
     int   mField8;            // +0x08
     char  pad0C[0x80 - 0x0c]; // +0x0c .. +0x7f
@@ -119,6 +234,9 @@ struct ThreadObj
     __declspec(noinline) void threadCleanup(char force);          // 0x011ec5d0
     __declspec(noinline) void threadAdd(void* handle, char add);  // 0x011ec650
     __declspec(noinline) char setPriority(int prio);              // 0x011ec840
+    __declspec(noinline) int  setName(const char* name);          // 0x011ec8c0
+    __declspec(noinline) void setIdealProcessor(int value);       // 0x011ec960
+    __declspec(noinline) void* createThread(int ctx, int arg, ThreadDesc* desc, int start);  // 0x011ecc20
 };
 
 #define FUNC(va) void f_##va() {}
@@ -640,11 +758,308 @@ void __fastcall f_011ecf40(int* p)
     p[1] = 0; p[2] = 0; p[3] = 0; p[4] = 0; p[0] = 0;
 }
 
-FUNC(011ec8c0)
-FUNC(011ec960)
-FUNC(011eca30)
-FUNC(011eca90)
-FUNC(011ecb20)
-FUNC(011ecba9)
-FUNC(011ecc20)
-FUNC(011ecdf0)
+// @ 0x011ec8c0
+// Set the thread name (SEH-guarded): copy the requested name into the thread record and
+// hand it to the debugger through RaiseException.
+int __thiscall ThreadObj::setName(const char* name)
+{
+    int result = 0;
+    __try
+    {
+        if (mField0 != 0 && name != 0)
+        {
+            strncpy(mField0->mName, name, 0x40);
+            mField0->mName[0x3f] = 0;
+            if (mField0->mHandle != 0)
+            {
+                THREADNAME_INFO info;
+                info.dwType = 0x1000;
+                info.szName = mField0->mName;
+                info.dwThreadID = mField0->mThreadId;
+                info.dwFlags = 0;
+                RaiseException(0x406d1388, 0, 4, (unsigned long*)&info);
+            }
+        }
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return -1;
+    }
+    return result;
+}
+
+// @ 0x011ec960
+// Pick the processor for this thread: initialise the processor-count word from
+// GetSystemInfo on first use, map the requested index (negative wraps to 0x20) into it,
+// and hand it to SetThreadIdealProcessor.
+void __thiscall ThreadObj::setIdealProcessor(int value)
+{
+    if (mField0 == 0) return;
+    if (g_016f5bc4 & 1)
+    {
+    }
+    else
+    {
+        g_016f5bc4 |= 1;
+        _InterlockedExchange((volatile long*)&g_016f5bc0, 0);
+    }
+    if (_InterlockedExchangeAdd((volatile long*)&g_016f5bc0, 0) == 0)
+    {
+        SYSTEM_INFO si = {0};
+        GetSystemInfo(&si);
+        _InterlockedExchange((volatile long*)&g_016f5bc0, si.dwNumberOfProcessors);
+    }
+    int n = value;
+    if (value >= _InterlockedExchangeAdd((volatile long*)&g_016f5bc0, 0))
+        n = value % _InterlockedExchangeAdd((volatile long*)&g_016f5bc0, 0);
+    if (value < 0)
+        n = 0x20;
+    SetThreadIdealProcessor(mField0->mHandle, n);
+}
+
+// @ 0x011eca30
+// Allocate a refcounted object: claim one of the 0x20 lock words at 0x16f5b40 with a
+// cmpxchg and return the matching entry of the 0x16f4eb0 table (stride 0x64), or a
+// freshly zeroed block when every lock word is taken.
+int* AllocThreadRecord()
+{
+    int i = 0;
+    int* lock = (int*)0x016f5b40;
+    do
+    {
+        if (_InterlockedCompareExchange((volatile long*)lock, 1, 0) == 0)
+            return (int*)(0x016f4eb0 + i * 0x64);
+        i++;
+        lock++;
+    } while ((unsigned int)i < 0x20);
+    ThreadRecord* block = (ThreadRecord*)f_011eca10(0x64);
+    if (block != 0)
+    {
+        block->mHandle = 0;
+        block->mThreadId = 0;
+        block->mState = 0;
+        block->mResult = 0;
+        block->mStart = 0;
+        _InterlockedExchange(&block->mRefCount, 0);
+        return (int*)block;
+    }
+    return 0;
+}
+
+// @ 0x011eca90
+// Release a refcounted object: inside the 0x16f4eb0 table clear its lock word and close
+// the handle it holds, outside it close the handle and free the block.
+void f_011eca90(int* p)
+{
+    if (p >= (int*)0x016f4eb0 && p < (int*)0x016f5b30)
+    {
+        int i = (int)((unsigned int)p - 0x016f4eb0) / 0x64;
+        _InterlockedExchange((volatile long*)(0x016f5b40 + i * 4), 0);
+        p = (int*)*p;
+        if (p == 0) return;
+        CloseHandle(p);
+        return;
+    }
+    if (p != 0)
+    {
+        if (*p != 0) CloseHandle((void*)*p);
+        operator_del(p);
+    }
+}
+
+// @ 0x011ecb20
+// Render-thread entry point (SEH-guarded setup): install the thread-local hook, publish
+// the running state and optional thread name, then run the record's start routine,
+// publish its result and release the record.
+unsigned int __stdcall f_011ecb20(void* arg)
+{
+    ThreadRecord* self = (ThreadRecord*)arg;
+    int ctx = self->mContext;
+    int startArg = self->mArg;
+    __try
+    {
+        f_011ec750(self->mOwnerHandle, 0);
+        self->mState = 1;
+        if (self->mName[0] != 0)
+        {
+            THREADNAME_INFO info;
+            info.dwType = 0x1000;
+            info.szName = self->mName;
+            info.dwThreadID = self->mThreadId;
+            info.dwFlags = 0;
+            RaiseException(0x406d1388, 0, 4, (unsigned long*)&info);
+        }
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return (unsigned int)-1;
+    }
+    int r;
+    if (self->mStart != 0)
+        r = ((int (*)(int, int))self->mStart)(startArg, ctx);
+    else
+        r = ((int (*)(int))ctx)(startArg);
+    self->mResult = r;
+    f_011ec750(0, 0);
+    self->mState = 2;
+    if (_InterlockedExchangeAdd(&self->mRefCount, -1) == 0)
+        f_011eca90((int*)self);
+    return r;
+}
+
+// @ 0x011ecba9
+// SEH continuation of 0x011ecb20: run the record's start routine, publish its result and
+// release the record.
+int f_011ecba9(ThreadRecord* self)
+{
+    int ctx = self->mContext;
+    int startArg = self->mArg;
+    int r;
+    if (self->mStart != 0)
+        r = ((int (*)(int, int))self->mStart)(startArg, ctx);
+    else
+        r = ((int (*)(int))ctx)(startArg);
+    self->mResult = r;
+    f_011ec750(0, 0);
+    self->mState = 2;
+    if (_InterlockedExchangeAdd(&self->mRefCount, -1) == 0)
+        f_011eca90((int*)self);
+    return r;
+}
+
+// @ 0x011ecc20
+// Create the render thread: release the previous record, take a refcounted record, fill
+// in its start routine/arguments, spawn it with _beginthreadex, then set the thread
+// name, priority and processor from the descriptor before resuming it.
+void* __thiscall ThreadObj::createThread(int ctx, int arg, ThreadDesc* desc, int start)
+{
+    ThreadRecord* old = mField0;
+    if (old != 0 && _InterlockedExchangeAdd(&old->mRefCount, -1) == 0)
+        f_011eca90((int*)old);
+    ThreadRecord* obj = (ThreadRecord*)AllocThreadRecord();
+    if (obj != 0)
+    {
+        obj->mHandle = 0;
+        obj->mThreadId = 0;
+        obj->mState = 0;
+        obj->mResult = 0;
+        obj->mStart = 0;
+        _InterlockedExchange(&obj->mRefCount, 0);
+    }
+    else
+    {
+        obj = 0;
+    }
+    mField0 = obj;
+    _InterlockedExchangeAdd(&obj->mRefCount, 1);
+    _InterlockedExchangeAdd(&mField0->mRefCount, 1);
+    ThreadRecord* o = mField0;
+    o->mHandle = 0;
+    o->mContext = ctx;
+    o->mArg = arg;
+    o->mStart = start;
+    void* handle = _beginthreadex(0, desc != 0 ? desc->mStackSize : 0, f_011ecb20, o, 4,
+                                  &o->mThreadId);
+    *mField0 = o[1];
+    o->mHandle = handle;
+    if (handle == 0)
+    {
+        if (_InterlockedExchangeAdd(&o->mRefCount, -1) == 0)
+            f_011eca90((int*)o);
+        if (_InterlockedExchangeAdd(&mField0->mRefCount, -1) == 0)
+            f_011eca90((int*)mField0);
+        mField0 = 0;
+        return 0;
+    }
+    if (desc != 0) setName(desc->mName);
+    o->mOwnerHandle = handle;
+    if (desc != 0)
+    {
+        if (desc->mPriority != 0)
+            setPriority(desc->mPriority);
+        if (desc->mProcessor >= 0)
+        {
+            int proc = desc->mProcessor;
+            if (proc == _InterlockedExchangeAdd((volatile long*)&g_016f5b38, 0))
+                _InterlockedExchangeAdd((volatile long*)&g_016f5b38, 1);
+            setIdealProcessor(proc);
+        }
+        else if (g_015d0694 < 0)
+        {
+            int proc = (int)_InterlockedExchangeAdd((volatile long*)&g_016f5b38, 1) + 1;
+            setIdealProcessor(proc);
+        }
+    }
+    ResumeThread(handle);
+    return handle;
+}
+
+// @ 0x011ecdf0
+// File-system stream handle: bind to a streamed-file slot of the package (opening the
+// slot record and formatting its "%s/%s" path), or open a standalone record by path.
+StreamHandle* __thiscall StreamHandle::open(const char* path, int flags, StreamFile* record)
+{
+    void* unused = 0;
+    mHandle = 0;
+    mBase = 0;
+    mStatus = 0;
+    mRecord = record;
+    mOwner = record->mOwner;
+    mField18 = 0;
+    mField1C = 0;
+    mField20 = 0;
+    mField24 = 0;
+
+    StreamFile* file = record;
+    if (record == GetPackageState()->mFile)
+    {
+        if (GetPackageState()->mCount != 0)
+        {
+            unsigned int i = 0;
+            do
+            {
+                void* name = GetPackageState()->mEntries[i].mName;
+                if (name == 0) break;
+                file = GetPackageState()->mEntries[i].mFile;
+                if (file->mOpened == 0) file->openRecord();
+                char buf[0x100];
+                sprintf(buf, "%s/%s", (const char*)name, path);
+                void* owner = file->mOwner;
+                void** vtbl = *(void***)owner;
+                int (__thiscall* openFn)(void*, const char*, int, void*) =
+                    (int (__thiscall*)(void*, const char*, int, void*))vtbl[3];
+                mStatus = openFn(owner, buf, flags, &unused);
+                if (mStatus != 0) break;
+                i++;
+            } while (i < GetPackageState()->mCount);
+        }
+    }
+    else
+    {
+        void* owner = record->mOwner;
+        void** vtbl = *(void***)owner;
+        int (__thiscall* openFn)(void*, int, StreamFile*, void*) =
+            (int (__thiscall*)(void*, int, StreamFile*, void*))vtbl[3];
+        mStatus = openFn(owner, flags, record, &unused);
+    }
+
+    if (mStatus == 0) return this;
+    mRecord = file;
+    mOwner = file->mOwner;
+    {
+        void* owner = mOwner;
+        void** vtbl = *(void***)owner;
+        long long (__thiscall* seekFn)(void*, int) =
+            (long long (__thiscall*)(void*, int))vtbl[8];
+        long long pos = seekFn(owner, mStatus);
+        mField18 = (int)pos;
+        mField1C = (int)(pos >> 32);
+    }
+    mBase = this;
+    if (unused != 0)
+    {
+        mBase = unused;
+        mRecord = *(StreamFile**)((char*)unused + 0xc);
+    }
+    return this;
+}

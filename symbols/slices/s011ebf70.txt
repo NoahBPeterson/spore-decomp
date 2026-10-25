@@ -26,17 +26,18 @@
 011ec830 refcounted-object init
 011ec840 ?setPriority@ThreadObj@@QAEDH@Z  # ThreadObj::setPriority(int)
 011ec8c0 stream wait/timed
-011ec960 stream wait/timed
-011eca30 refcounted object init
-011eca90 refcounted object destroy
+011ec8c0 ?setName@ThreadObj@@QAEHPBD@Z  # ThreadObj::setName(const char*)
+011ec960 ?setIdealProcessor@ThreadObj@@QAEXH@Z  # ThreadObj::setIdealProcessor(int)
+011eca30 AllocThreadRecord  # refcounted ThreadRecord allocator (0x20 lock words, 0x16f4eb0 table)
+011eca90 ?f_011eca90@@YAXPAH@Z  # refcounted ThreadRecord release
 011ecb00 refcounted object release (lock xadd)
-011ecb20 refcounted object copy
+011ecb20 ?f_011ecb20@@YGIPAX@Z  # render-thread entry point
 011ecba5 return -1
-011ecba9 EH cleanup continuation
-011ecc20 filesystem stream read
+011ecba9 ?f_011ecba9@@YAHPAUThreadRecord@@@Z  # SEH continuation of 0x011ecb20
+011ecc20 ?createThread@ThreadObj@@QAEPAXHHPAUThreadDesc@@H@Z  # ThreadObj::createThread(int,int,ThreadDesc*,int)
 011ecd90 critical-section init wrapper
 011ecdb0 critical-section destroy wrapper
 011ecdd0 critical-section enter wrapper
 011ecde0 critical-section leave wrapper
-011ecdf0 rw::core::filesys::Handle::Handle  # dev-PDB symbol
+011ecdf0 ?open@StreamHandle@@QAEPAU1@PBDHPAUStreamFile@@@Z  # StreamHandle::open(const char*,int,StreamFile*)
 011ecf40 stream-list teardown
