@@ -3890,8 +3890,15 @@ extern "C" void  __cdecl FUN_00b3d4c0();
 extern "C" void  __cdecl FUN_00b3d4e0(void* a, int b);
 extern "C" void* __cdecl FUN_00bc7610(void* a, int b);
 extern "C" void* __cdecl FUN_00bc30b0(void* a);
+extern "C" bool  __cdecl FUN_0041dd30(void* a, void* b);
+extern "C" bool  __cdecl FUN_004232c0(void* a, void* b);
+extern "C" int   __cdecl FUN_00a1ad10();
 extern "C" void  __cdecl FUN_00d7a070(void* a, void* b);
 extern "C" void  __stdcall FUN_00bf3420(void* a);
+extern "C" void* __cdecl FUN_00d40b40(int a);
+extern "C" int   __cdecl FUN_00d39f70(u32 tag, void* out);
+extern "C" int   __cdecl FUN_00d39dc0(u32 tag, void* out);
+extern "C" void* __cdecl FUN_00d38840_s00d8_e8d0();
 struct RandomLCG {
     u32    UniformU32(u32 n);            // 0x00a68fb0
     double UniformDouble();              // 0x009360d0
@@ -3938,6 +3945,9 @@ struct CreatureContext {                 // object returned by cCreature::Get()
     void*        mp168;           // +0x168
     u8           mPad16C[0x44];   // +0x16c
 
+    void* GetPosition();          // 0x00c6acc0
+};
+struct Herd {
     void* GetPosition();          // 0x00c6acc0
 };
 struct TimeOfDay {
@@ -4026,6 +4036,32 @@ struct TickStatePlay {       // FUN_00d8e8d0 state
     void* mpOwner;           // +0x00
     u32   mnPhase;           // +0x04
     u32   mnAnim;            // +0x08
+};
+struct TickStateLocate {     // LOCATING_CALL_Tick state
+    u32   mnPhase;           // +0x00
+    u32   mn04;              // +0x04
+    float mf08;              // +0x08
+    float mf0C;              // +0x0c
+    float mf10;              // +0x10
+    u32   mn14;              // +0x14
+    u8    mPad18[4];         // +0x18
+    u8    mb1C;              // +0x1c
+    u8    mPad1D[3];         // +0x1d
+    u32   mn20;              // +0x20
+    u32   mn24;              // +0x24
+    u32   mn28;              // +0x28
+    u8    mPad2C[0x14];      // +0x2c
+    u32   mn40;              // +0x40
+    u32   mn44;              // +0x44
+    u32   mn48;              // +0x48
+    u8    mPad4C[0x0c];      // +0x4c
+    u32   mn58;              // +0x58
+    u32   mn5C;              // +0x5c
+    u32   mn60;              // +0x60
+    u8    mPad64[0x0c];      // +0x64
+    float mf70;              // +0x70
+    float mf74;              // +0x74
+    float mf78;              // +0x78
 };
 struct TickStateRelease {    // FUN_00d8f170 state
     u8          mPad00[0x0c]; // +0x00
@@ -9409,6 +9445,131 @@ bool __cdecl FUN_00d8e8d0(cCreature_s00d8_e8d0* c, u32 a2, u32 a3, u32 a4, u32 a
     if (st->mnPhase == 3)
         return false;
     return true;
+}
+
+// @ 0x00d8ed40
+u32 __cdecl SP_LOCATING_CALL_Tick(cCreature_s00d8_e8d0* c, u32 a2, u32 a3, u8 flags, u32 a5, TickStateLocate* st)
+{
+    u32 handle = ((u32(__fastcall*)(void*))(*(void***)c->mSpatial)[0x2c / 4])(c->mSpatial);
+    u32 phase = st->mnPhase;
+
+    if (phase == 0) {
+        if ((c->mnFlags >> 9 & 1) == 0)
+            ((void(__fastcall*)(void*))(*(void***)c->mSpatial)[0xec / 4])(c->mSpatial);
+
+        if (st->mb1C != 0) {
+            st->mn14 = 0xe1b24ddb;
+            c->CreateBodyEffect((void*)st->mn04, 0xe1b24ddb, 0xe1b24ddb);
+        }
+
+        st->mnPhase = 1;
+        c->InterruptAnimation(0x265d18b, -1, 0);
+        c->PlayAnimation(0x265d18c, 1, -1);
+        return 1;
+    }
+
+    if (phase == 1) {
+        c->GetTime();
+        c->SetStealthed(0, 0);
+        void* drama = c->Drama();
+        float now = (float)c->GetTime();
+        if (0.1f < now - st->mf10) {
+            SpatialVec vec;
+            u8 buf[1024];
+            vec.mpBegin = (void**)buf;
+            vec.mpEnd   = (void**)buf;
+            vec.mpCap   = (void**)(buf + 1024);
+
+            u32* holder = (u32*)FUN_00b3d240();
+            void* mgr = (void*)*holder;
+            ((void(__fastcall*)(void*, u32, float, SpatialVec*, int, int, int))
+             (*(void***)mgr)[0x48 / 4])(mgr, handle, c->mfTurnRate, &vec, 0, 0, 0);
+
+            u32 n0 = st->mn20, n1 = (st->mn28 - st->mn24) >> 2;
+            u32 n2 = st->mn40, n3 = (st->mn48 - st->mn44) >> 2;
+            u32 n4 = st->mn58, n5 = (st->mn60 - st->mn5C) >> 2;
+
+            u32 count = (u32)(vec.mpEnd - vec.mpBegin);
+            for (u32 i = 0; i < count; ++i) {
+                void* sp = vec.mpBegin[i];
+                if (sp == 0)
+                    continue;
+                cCreature_s00d8_e8d0* cr = (cCreature_s00d8_e8d0*)
+                    ((void*(__fastcall*)(void*, u32))(*(void***)sp)[0xb8 / 4])(sp, 0xd0036e08);
+                if (cr == 0 || cr == c)
+                    continue;
+
+                u32* pa = c->FUN_c0bc00();
+                u32* pb = cr->FUN_c0bc00();
+                if ((pa[0] == pb[0] && pa[1] == pb[1] &&
+                     (pa[2] == pb[2] && (n1 != n0))) ||
+                    (n3 != n2 || n5 != n4)) {
+                    ((BehaviorTree*)((char*)cr->mpBt + 8))->Stim(0x800, 0, 0.5f, c);
+                }
+            }
+
+            if ((c->mnFlags >> 9 & 1) != 0 && drama != 0) {
+                int x = FUN_00a1ad10();
+                if (x == 0) {
+                    if (c->FUN_c0b770())
+                        *(float*)((char*)drama + 0x3c) = 0.0f;
+                } else {
+                    ((BehaviorTree*)((char*)c->mpBt + 8))->Stim(0x800, 0, 2.0f, c);
+                }
+            }
+
+            st->mf10 = (float)c->GetTime();
+            vec.Destroy();
+        }
+
+        void* FUN_00d38840_s00d8_e8d0();
+        void* strategy = FUN_00d38840_s00d8_e8d0();
+        if ((c->mnFlags >> 9 & 1) != 0 && st->mb1C != 0 && strategy != 0 &&
+            (flags & 8) != 0) {
+            Herd* herd = (Herd*)FUN_00d40b40(0);
+            void* pos = herd->GetPosition();
+            u32 src[3];
+            src[0] = ((u32*)pos)[0];
+            src[1] = ((u32*)pos)[1];
+            src[2] = ((u32*)pos)[2];
+            if (FUN_0041dd30(src, (void*)0x0169f03c)) {
+                if (FUN_004232c0(&st->mf70, (void*)0x0169f03c)) {
+                    float vis[3];
+                    vis[0] = 0.0f;
+                    vis[1] = 0.0f;
+                    vis[2] = 0.0f;
+                    void* res = ((void*(__fastcall*)(void*, void*, void*, float))
+                                 (*(void***)strategy)[0x00 / 4])(strategy, vis, &st->mf70, 30.0f);
+                    st->mf70 = ((float*)res)[0];
+                    st->mf74 = ((float*)res)[1];
+                    st->mf78 = ((float*)res)[2];
+                }
+                if (st->mf0C * 0.45f + st->mf08 < (float)c->GetTime() &&
+                    ((st->mn28 - st->mn24) & 0xfffffffc) == 0) {
+                    FUN_00d39f70(0x2f5e1db4, &st->mf70);
+                }
+                u32 tag = (*(u32*)((char*)c->mpB20 + 0x618) == 0) ? 0x4b6d9fa0 : 0xdf70858a;
+                FUN_00d39dc0(tag, &st->mf70);
+            }
+        }
+
+        float now2 = (float)c->GetTime();
+        if (st->mf0C + st->mf08 < now2 ||
+            (c->GetCurrentAnimationGUID() != (void*)0x265d18c &&
+             c->GetCurrentAnimationGUID() != (void*)0x265d18b)) {
+            st->mnPhase = 2;
+            ((BehaviorTree*)((char*)c->mpBt + 8))->ClearAll(0x800, 0);
+            return 1;
+        }
+        return 1;
+    }
+
+    if (phase == 2 && c->AnimationFinished(0)) {
+        st->mnPhase = 3;
+        c->PlayAnimation(0x265d18d, 1, -1);
+        return 0;
+    }
+    return 1;
 }
 
 // @ 0x00d8f170
