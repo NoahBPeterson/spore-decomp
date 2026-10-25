@@ -1,360 +1,120 @@
-// Slice s00c2b030: Spore engine routines (naked transcription).
+// Slice s00c2b030: trace-cache hash map instantiation (node copy, find-or-insert, get-or-create).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+//
+// The map key is a 32-bit id (an owning object's address); the mapped value is a 0x820-byte trace cache
+// made of 8 cached hit records (0x100 bytes each) followed by 8 cached object pointers.  Callees that are
+// __thiscall are modelled as members of placeholder structs (MSVC rejects __thiscall on free functions).
 #include "types.h"
 
-extern "C" void FUN_00406540();
-extern "C" void FUN_00c296b0();
-extern "C" void FUN_00c2b030();
-extern "C" void FUN_00c2b080();
-extern "C" void FUN_00cadb00();
-extern "C" void FUN_00cadb50();
-extern "C" void FUN_00cb00d0();
-extern "C" void FUN_00cb1110();
-extern "C" void FUN_011e0700();
+struct Node;
+struct TraceCache;
 
-// @ 0x00c2b030  (75 bytes)
-__declspec(naked) void FUN_00c2b030()
+// Range fill helper: for n = count; n > 0; --n { fn(dst, src); dst += stride; src += stride; }
+// (0x00406540, stdcall; it enters the copy functor with dst in ecx and src on the stack).
+extern "C" void __stdcall FUN_00406540(void* dst, const void* src, int stride, int count, void* fn);
+
+struct Hit
 {
-    __asm {
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x04
-        // mov eax, dword ptr [esp + 4]
-        _emit 0x53
-        // push ebx
-        _emit 0x8B
-        _emit 0x5C
-        _emit 0x24
-        _emit 0x0C
-        // mov ebx, dword ptr [esp + 0xc]
-        _emit 0x56
-        // push esi
-        _emit 0x57
-        // push edi
-        _emit 0x68
-        _emit 0xB0
-        _emit 0x9A
-        _emit 0xC2
-        _emit 0x00
-        // push 0xc29ab0
-        _emit 0x6A
-        _emit 0x08
-        // push 8
-        _emit 0x8B
-        _emit 0xF1
-        // mov esi, ecx
-        _emit 0x8B
-        _emit 0x08
-        // mov ecx, dword ptr [eax]
-        _emit 0x68
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        // push 0x100
-        _emit 0x53
-        // push ebx
-        _emit 0x8D
-        _emit 0x7E
-        _emit 0x04
-        // lea edi, [esi + 4]
-        _emit 0x57
-        // push edi
-        _emit 0x89
-        _emit 0x0E
-        // mov dword ptr [esi], ecx
-        call FUN_00406540
-        _emit 0x68
-        _emit 0x80
-        _emit 0x89
-        _emit 0xAC
-        _emit 0x00
-        // push 0xac8980
-        _emit 0x6A
-        _emit 0x08
-        // push 8
-        _emit 0x6A
-        _emit 0x04
-        // push 4
-        _emit 0x81
-        _emit 0xC3
-        _emit 0x00
-        _emit 0x08
-        _emit 0x00
-        _emit 0x00
-        // add ebx, 0x800
-        _emit 0x53
-        // push ebx
-        _emit 0x81
-        _emit 0xC7
-        _emit 0x00
-        _emit 0x08
-        _emit 0x00
-        _emit 0x00
-        // add edi, 0x800
-        _emit 0x57
-        // push edi
-        call FUN_00406540
-        _emit 0x5F
-        // pop edi
-        _emit 0x8B
-        _emit 0xC6
-        // mov eax, esi
-        _emit 0x5E
-        // pop esi
-        _emit 0x5B
-        // pop ebx
-        _emit 0xC2
-        _emit 0x08
-        _emit 0x00
-        // ret 8
-    }
+	char mBytes[0x100];          // cached trace entry; only its size matters to this slice
+};
+
+struct TraceCache
+{
+	Hit   hits[8];               // +0x000 .. +0x7ff
+	void* objects[8];            // +0x800 .. +0x81f
+	TraceCache* Init();          // 0x00c296b0
+	void        Destroy();       // 0x00cadb00
+};
+
+// 0x00cadb50: zero the eight hit records, then release the eight cached objects.
+extern "C" void __cdecl FUN_00cadb50(TraceCache* cache);
+
+struct Value                   // what the table stores: the key plus the mapped cache
+{
+	unsigned   mKey;             // +0x000
+	TraceCache mValue;           // +0x004 .. +0x823
+	__declspec(noinline) Value* CopyFrom(const unsigned* key, TraceCache* src);   // 0x00c2b030
+};
+
+struct Node : Value            // 0x828-byte bucket node; only the allocated nodes carry the link
+{
+	Node* mpNext;                // +0x824
+};
+
+struct Iter                    // eastl hash iterator (8 bytes)
+{
+	Node*  mpNode;               // +0x00
+	Node** mpBucket;             // +0x04
+};
+
+struct InsertResult : Iter     // eastl insert() result, the iterator plus the "already present" flag
+{
+	bool mInserted;              // +0x08
+};
+
+struct Ht                      // global instance at 0x01572460
+{
+	void*    mField00;           // +0x00 (hash functor)
+	Node**   mpBuckets;          // +0x04
+	unsigned mBucketCount;       // +0x08
+	unsigned mSize;              // +0x0c
+	void*    mAllocator;         // +0x10
+	void Find(Iter* out, const unsigned* key);                          // 0x00cb00d0
+	// 0x00cb1110 only tests the low byte of `existing` (cmp byte [esp+0x10], 0).
+	void Insert(InsertResult* out, const Value* value, unsigned existing);
+	__declspec(noinline) TraceCache* FindOrInsert(const unsigned* key);  // 0x00c2b080
+};
+
+// @ 0x00c2b030
+Value* Value::CopyFrom(const unsigned* key, TraceCache* src)
+{
+	mKey = *key;
+	// the helper walks byte offsets: the eight hit records (stride 0x100), then the eight object slots
+	char*       pDst = (char*)&mValue;
+	const char* pSrc = (const char*)src;
+	FUN_00406540(pDst, pSrc, 0x100, 8, (void*)0x00c29ab0);
+	FUN_00406540(pDst + 0x800, pSrc + 0x800, 4, 8, (void*)0x00ac8980);
+	return this;
 }
 
-// @ 0x00c2b080  (132 bytes)
-__declspec(naked) void FUN_00c2b080()
+// @ 0x00c2b080
+TraceCache* Ht::FindOrInsert(const unsigned* key)
 {
-    __asm {
-        _emit 0xB8
-        _emit 0x50
-        _emit 0x10
-        _emit 0x00
-        _emit 0x00
-        // mov eax, 0x1050
-        call FUN_011e0700
-        _emit 0x56
-        // push esi
-        _emit 0x57
-        // push edi
-        _emit 0x8B
-        _emit 0xBC
-        _emit 0x24
-        _emit 0x5C
-        _emit 0x10
-        _emit 0x00
-        _emit 0x00
-        // mov edi, dword ptr [esp + 0x105c]
-        _emit 0x57
-        // push edi
-        _emit 0x8D
-        _emit 0x44
-        _emit 0x24
-        _emit 0x0C
-        // lea eax, [esp + 0xc]
-        _emit 0x50
-        // push eax
-        _emit 0x8B
-        _emit 0xF1
-        // mov esi, ecx
-        call FUN_00cb00d0
-        _emit 0x8B
-        _emit 0x4E
-        _emit 0x08
-        // mov ecx, dword ptr [esi + 8]
-        _emit 0x8B
-        _emit 0x56
-        _emit 0x04
-        // mov edx, dword ptr [esi + 4]
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x08
-        // mov eax, dword ptr [esp + 8]
-        _emit 0x3B
-        _emit 0x04
-        _emit 0x8A
-        // cmp eax, dword ptr [edx + ecx*4]
-        _emit 0x75
-        _emit 0x47
-        // jne 0xc2b0f6
-        _emit 0x8D
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x14
-        // lea ecx, [esp + 0x14]
-        call FUN_00c296b0
-        _emit 0x50
-        // push eax
-        _emit 0x57
-        // push edi
-        _emit 0x8D
-        _emit 0x8C
-        _emit 0x24
-        _emit 0x3C
-        _emit 0x08
-        _emit 0x00
-        _emit 0x00
-        // lea ecx, [esp + 0x83c]
-        call FUN_00c2b030
-        _emit 0xC6
-        _emit 0x44
-        _emit 0x24
-        _emit 0x08
-        _emit 0x00
-        // mov byte ptr [esp + 8], 0
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x08
-        // mov ecx, dword ptr [esp + 8]
-        _emit 0x51
-        // push ecx
-        _emit 0x50
-        // push eax
-        _emit 0x8D
-        _emit 0x54
-        _emit 0x24
-        _emit 0x10
-        // lea edx, [esp + 0x10]
-        _emit 0x52
-        // push edx
-        _emit 0x8B
-        _emit 0xCE
-        // mov ecx, esi
-        call FUN_00cb1110
-        _emit 0x8D
-        _emit 0x8C
-        _emit 0x24
-        _emit 0x38
-        _emit 0x08
-        _emit 0x00
-        _emit 0x00
-        // lea ecx, [esp + 0x838]
-        call FUN_00cadb00
-        _emit 0x8D
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x14
-        // lea ecx, [esp + 0x14]
-        call FUN_00cadb00
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x08
-        // mov eax, dword ptr [esp + 8]
-        _emit 0x5F
-        // pop edi
-        _emit 0x83
-        _emit 0xC0
-        _emit 0x04
-        // add eax, 4
-        _emit 0x5E
-        // pop esi
-        _emit 0x81
-        _emit 0xC4
-        _emit 0x50
-        _emit 0x10
-        _emit 0x00
-        _emit 0x00
-        // add esp, 0x1050
-        _emit 0xC2
-        _emit 0x04
-        _emit 0x00
-        // ret 4
-    }
+	// The "already present" flag is passed through the first slot of the insert result: the original
+	// stores it as a byte and reloads it as a dword, so the two share the slot.
+	union InsertSlot
+	{
+		InsertResult res;        // +0x00
+		unsigned     flags;      // +0x00 (low byte: the flag)
+		bool         bExisting;  // +0x00
+	} out;
+	TraceCache temp;
+	Value      value;
+
+	Find(&out.res, key);
+	if (out.res.mpNode != mpBuckets[mBucketCount])
+		return &out.res.mpNode->mValue;
+
+	Value* pValue = value.CopyFrom(key, temp.Init());
+	out.bExisting = false;
+	Insert(&out.res, pValue, out.flags);
+	value.mValue.Destroy();
+	temp.Destroy();
+	return &out.res.mpNode->mValue;
 }
 
-// @ 0x00c2b110  (84 bytes)
-__declspec(naked) void FUN_00c2b110()
+// @ 0x00c2b110
+TraceCache* __cdecl FUN_00c2b110(unsigned key)
 {
-    __asm {
-        _emit 0x83
-        _emit 0xEC
-        _emit 0x08
-        // sub esp, 8
-        _emit 0x8D
-        _emit 0x44
-        _emit 0x24
-        _emit 0x0C
-        // lea eax, [esp + 0xc]
-        _emit 0x50
-        // push eax
-        _emit 0x8D
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x04
-        // lea ecx, [esp + 4]
-        _emit 0x51
-        // push ecx
-        _emit 0xB9
-        _emit 0x60
-        _emit 0x24
-        _emit 0x57
-        _emit 0x01
-        // mov ecx, 0x1572460
-        call FUN_00cb00d0
-        _emit 0x8B
-        _emit 0x04
-        _emit 0x24
-        // mov eax, dword ptr [esp]
-        _emit 0x8B
-        _emit 0x15
-        _emit 0x68
-        _emit 0x24
-        _emit 0x57
-        _emit 0x01
-        // mov edx, dword ptr [0x1572468]
-        _emit 0x8B
-        _emit 0x0D
-        _emit 0x64
-        _emit 0x24
-        _emit 0x57
-        _emit 0x01
-        // mov ecx, dword ptr [0x1572464]
-        _emit 0x3B
-        _emit 0x04
-        _emit 0x91
-        // cmp eax, dword ptr [ecx + edx*4]
-        _emit 0x75
-        _emit 0x22
-        // jne 0xc2b15d
-        _emit 0x56
-        // push esi
-        _emit 0x8D
-        _emit 0x54
-        _emit 0x24
-        _emit 0x10
-        // lea edx, [esp + 0x10]
-        _emit 0x52
-        // push edx
-        _emit 0xB9
-        _emit 0x60
-        _emit 0x24
-        _emit 0x57
-        _emit 0x01
-        // mov ecx, 0x1572460
-        call FUN_00c2b080
-        _emit 0x8B
-        _emit 0xF0
-        // mov esi, eax
-        _emit 0x56
-        // push esi
-        call FUN_00cadb50
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x04
-        // add esp, 4
-        _emit 0x8B
-        _emit 0xC6
-        // mov eax, esi
-        _emit 0x5E
-        // pop esi
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x08
-        // add esp, 8
-        _emit 0xC3
-        // ret 
-        _emit 0x83
-        _emit 0xC0
-        _emit 0x04
-        // add eax, 4
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x08
-        // add esp, 8
-        _emit 0xC3
-        // ret 
-    }
+	Ht* ht = (Ht*)0x01572460;
+	Iter it;
+
+	ht->Find(&it, &key);
+	if (it.mpNode == ht->mpBuckets[ht->mBucketCount])
+	{
+		TraceCache* cache = ht->FindOrInsert(&key);
+		FUN_00cadb50(cache);
+		return cache;
+	}
+	return &it.mpNode->mValue;
 }
