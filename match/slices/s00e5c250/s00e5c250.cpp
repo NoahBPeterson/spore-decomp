@@ -319,7 +319,14 @@ bool __stdcall FUN_00e5ca60(float* p) {
 }
 
 // @ 0x00e5cac0
-void* __stdcall FUN_00e5cac0(void* self, int);
+// 5-byte `this`-return accessor (`mov eax,ecx; ret 4`).  The second stack
+// argument is ignored; the object pointer is returned.  The earlier
+// `__stdcall FUN_00e5cac0(void*, int)` spelling in this file was not the
+// function (the callers are `__fastcall` with the object in ecx), so replace it
+// with the real accessor definition.
+void* __fastcall FUN_00e5cac0(void* self) {
+  return self;
+}
 
 // @ 0x00e5cae0
 float* FUN_00e5cae0(float* v) {
@@ -333,19 +340,62 @@ float* FUN_00e5cae0(float* v) {
 }
 
 // @ 0x00e5cb60
-int FUN_00e5cb60(float* m, int a, int b, char* box, int d, char* flags, int e) {
-  if (a != d) return 0;
-  float hx = m[5] + m[2];
-  float hy = m[6] + m[3];
-  float hz = m[7] + m[4];
-  float half = gK_1470f1c;
-  (void)flags; (void)b; (void)e;
-  float ox, oy, oz;
-  if (box[0] & 2) {
-    ox = 0; oy = 0; oz = 0;  // approximate; see partial.txt
-    (void)ox; (void)oy; (void)oz;
-  } else {
-    ox = hx * half; oy = hy * half; oz = hz * half;
+// 404-byte fluid ray/AABB cast driver.
+//
+// Parameters (retail values at the two call sites):
+//   m      0x016ae800      cell-game AABB float array (int-typed in the
+//                         decompile; the halves are averaged as floats)
+//   outp   &local_c        output cursor, advanced by one dword per emitted
+//                         hit; the caller turns the delta into a hit count
+//   p       puVar3+0x12    source cell
+//   box    puVar3+0x24    target box (0x40 bytes: flags byte, 3 pad, a 3x3
+//                         transform at +4..+0x2c, scale at +0x10, origin)
+//   dir    param_1         ray direction key
+//   level  iVar5           0..3 recursion depth
+//   target 0               walks the source cell's four child slots
+//
+// The driver is otherwise self-contained: a depth-3 tree walk whose leaf
+// builds the box midpoint, transforms it by `box`, scales by box[0x10], adds
+// the box origin, and resolves the hit point against the fluid volume
+// (0x016b3c04 + 0x4108) through FUN_00e4dbc0(fluid, point, dir, 1.0f, target);
+// the result dword is written to `outp`.
+#define FLUID_CELL(__cell) (*(int*)((__cell) + 0x4108))
+
+int FUN_00e5cb60(float* m, int* outp, void* p, void* boxRaw, int dir,
+                 int level, int target) {
+  unsigned char* box = (unsigned char*)boxRaw;
+  if (level == target) {
+    // Midpoint of the AABB (int views are all re-used as floats by retail).
+    float mx = ((float)((int*)m)[5] + (float)((int*)m)[6]) * 0.5f;
+    float my = ((float)((int*)m)[7] + (float)((int*)m)[8]) * 0.5f;
+    float mz = ((float)((int*)m)[9] + (float)((int*)m)[10]) * 0.5f;
+    if (box[0] & 2) {
+      // Rotate the midpoint into box space with the 3x3 column transform.
+      float tx = (*(float*)(box + 0x2c) * my + *(float*)(box + 0x20) * mz) +
+                 mx * *(float*)(box + 0x14);
+      float ty = (*(float*)(box + 0x30) * my + *(float*)(box + 0x24) * mz) +
+                 *(float*)(box + 0x18) * mx;
+      float tz = (*(float*)(box + 0x34) * my + *(float*)(box + 0x28) * mz) +
+                 *(float *)(box + 0x1c) * mx;
+      mx = tx; my = ty; mz = tz;
+    }
+    float s = *(float*)(box + 0x10);
+    float point[3];
+    point[0] = *(float*)(box + 4) + s * mx;
+    point[1] = *(float*)(box + 8) + s * my;
+    point[2] = *(float*)(box + 12) + s * mz;
+    int hit = FUN_00e4dbc0((void*)FLUID_CELL((char*)gCellGame_16b3c04), point,
+                           (float*)dir, 1.0f, target);
+    *outp = hit;
+    *outp += 4;
+    return hit;
+  }
+  float* cell = m;
+  for (int i = 0; i < 4; ++i) {
+    cell += 1;
+    int child = *(int*)cell;
+    if (child != 0)
+      FUN_00e5cb60((float*)child, outp, p, boxRaw, dir, level, target + 1);
   }
   return 0;
 }
