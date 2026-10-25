@@ -10,3 +10,4 @@
 00f2b040  274  FIXED BigObj begin/end at +0x2bf4 (pad1/pad2) and reserve/DoInsertKey4 thiscall calls; equiv WEAK (136 valid, 29.5% coverage, no mismatch). flags /O2 /MD /Gy /TP
 00f2b270  156  FIXED MatchObj begin/end at +0x2bf4 (pad2); equiv WEAK (167 valid, 37.2% coverage, no mismatch). flags /O2 /MD /Gy /TP
 00f2b340  126  FIXED local vector is a 3-pointer object so collect's writes to begin/end/cap are not constant-folded; ac30/259b0 are real extern calls; equiv WEAK (190 valid, 75.4% coverage, no mismatch). flags /O2 /MD /Gy /TP
+00f2ac30  317  command-list reconcile (3-arg cdecl): complete - SetAssetData gate, cAssetDirectory::GetServerId fast path, FUN_00552300 mode gate, 6-arg resource-manager vtable[3] resolve, metadata id write-back, DeclareParam push_back fallback and AutoRef release; equiv WEAK (400 valid, 20.0% coverage, no mismatch). flags /O2 /MD /Gy /TP

@@ -6,6 +6,7 @@
 typedef unsigned int   uint32_t;
 typedef unsigned int   uint;
 typedef unsigned char  uint8_t;
+typedef unsigned long long uint64_t;
 
 struct Sub { void assign(Sub* other); };          // 0x00473500
 struct Elem34 { float f; int d[12]; };            // 0x34
@@ -260,13 +261,122 @@ TutCmds* TutCmds::Build_00f2aac0()
 }
 
 // ---------------------------------------------------------------------------
-// 0x00f2ac30
+// 0x00f2ac30  reconcile one declared-parameter entry
 // ---------------------------------------------------------------------------
+// 12-byte resource key (Pollen::cAssetDirectory Key_s0054_dd30).
+struct ResKey {
+    int mId;      // +0x00
+    int mType;    // +0x04
+    int mSub;     // +0x08
+};
+
+// One element of vector<SP::FunctionalMatch::DeclareParam>.
+struct DeclareParam {
+    int      mId;          // +0x00
+    int      mAssetData;   // +0x04
+    int      mSub;         // +0x08
+    int      mPad0c;       // +0x0c
+    uint64_t mAssetId;     // +0x10
+};
+
+struct AssetDirectory {
+    bool GetServerId(const ResKey* key, uint64_t* out, int flag);   // 0x0054e530
+};
+
+struct Pollinator {
+    char pad0[0x58];
+    AssetDirectory* mDirectory;      // +0x58
+};
+
+struct AssetMeta {
+    uint64_t* GetAssetID();          // 0x005507a0
+};
+
+// EA::AutoRefCount: a single object pointer; AsPPTypeParam clears it and
+// returns &this (it is the pointer-to-pointer out-parameter conversion).
+struct AutoRef {
+    void* mpObject;                  // +0x00
+    AutoRef* AsPPTypeParam();        // 0x00a16f40
+};
+
+struct DeclareVec {
+    void push_back(const DeclareParam* value);   // 0x004e19a0
+};
+
+extern "C" {
+bool  __cdecl FUN_004bbe20(int assetData, int unused);   // 0x004bbe20 SetAssetData
+void* __cdecl FUN_0067cb30();                            // 0x0067cb30
+int   __cdecl FUN_00552300(int* key);                    // 0x00552300
+void* __cdecl FUN_0067dcd0();                            // 0x0067dcd0 GetManager
+void* __cdecl FUN_00421f60(AutoRef* ref);                // 0x00421f60
+}
+
+// manager->vtbl[3](&key, &ref, 0, 0, 0, 0); callee cleans 0x18.
+typedef char (__thiscall* ResolveFn)(void*, const ResKey*, AutoRef*, int, int, int, int);
+
 // @ 0x00f2ac30
-__declspec(noinline) bool FUN_00f2ac30(void* self, int* a, int b)
+bool __cdecl FUN_00f2ac30(DeclareParam* param_1, int* param_2, DeclareVec* param_3)
 {
-    (void)self; (void)a; (void)b;
-    return 0;
+    uint64_t* out = (uint64_t*)param_2;
+
+    if (param_1->mId != 0)
+        *out = (uint64_t)-1;
+
+    if (!FUN_004bbe20(param_1->mAssetData, 0))
+        return true;
+
+    if (param_1->mId == 0)
+        return true;
+
+    Pollinator* poll = (Pollinator*)FUN_0067cb30();
+    uint64_t local;
+    if (poll->mDirectory->GetServerId((const ResKey*)param_1, &local, 0)) {
+        param_1->mId = 0;
+        *out = local;
+        return true;
+    }
+
+    int mode = FUN_00552300((int*)param_1);
+    if (mode == 0)
+        return true;
+    if (mode < 0 || mode > 2)
+        return false;
+
+    ResKey key;
+    key.mId = param_1->mId;
+    key.mType = 0x30bdee3;
+    key.mSub = param_1->mSub;
+
+    AutoRef ref;
+    ref.mpObject = 0;
+
+    void* manager = FUN_0067dcd0();
+    char ok = (*(ResolveFn*)(*(void***)manager + 3))(
+        manager, &key, ref.AsPPTypeParam(), 0, 0, 0, 0);
+
+    bool result = false;
+    if (ok) {
+        AssetMeta* meta = (AssetMeta*)FUN_00421f60(&ref);
+        if (meta) {
+            uint64_t* id = meta->GetAssetID();
+            uint32_t lo = *(uint32_t*)id;
+            uint32_t hi = *((uint32_t*)id + 1);
+            if ((lo & hi) != 0xffffffff) {
+                param_1->mId = 0;
+                uint64_t* id2 = meta->GetAssetID();
+                *out = *id2;
+                result = true;
+            }
+        }
+    }
+    if (!result && (mode == 1 || mode == 2) && param_3)
+        param_3->push_back(param_1);
+
+    if (ref.mpObject) {
+        void** vt = *(void***)ref.mpObject;
+        ((void(__thiscall*)(void*))vt[1])(ref.mpObject);
+    }
+    return result;
 }
 
 // ---------------------------------------------------------------------------
@@ -581,7 +691,7 @@ bool BigObj::check()
     bool ok = true;
     for (uint32_t i = 0; i < n; ++i) {
         int e = p[i];
-        if (!FUN_00f2ac30((void*)e, (int*)(e + 0x10), 0)) {
+        if (!FUN_00f2ac30((DeclareParam*)e, (int*)(e + 0x10), 0)) {
             if (!FUN_00f259b0((void*)e, (int*)(e + 0xc)))
                 ok = false;
         }
