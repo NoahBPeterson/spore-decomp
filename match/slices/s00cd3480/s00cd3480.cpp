@@ -15,6 +15,55 @@ extern const float g_fltmax;   // 0x01477430
 extern const char g_StrTRGMac[];    // 0x01477468
 extern const char g_StrTRG[];       // 0x01477458
 extern const char g_StrTRGBegin[];  // 0x014774a4
+extern const float g_fltOne;        // 0x01485720
+extern const float g_fltTwo;        // 0x01470f1c
+
+// ---- shared stand-ins -------------------------------------------------------
+struct WString {                    // eastl::basic_string<wchar_t>, 12 bytes
+    wchar_t* mBegin;
+    wchar_t* mEnd;
+    wchar_t* mCap;
+    void F_0056e2d0(const WString* src);   // copy ctor
+    void F_00579a90(const wchar_t* s);     // range_initialize
+};
+struct HashNode {
+    uint32_t  mKey;     // +0x00
+    void*     mValue;   // +0x04
+    HashNode* mNext;    // +0x08
+};
+struct HashIter { HashNode* mNode; void* mBucket; };
+struct HashTable {
+    void*      mp00;           // +0x00
+    HashNode** mppBuckets;     // +0x04
+    uint32_t   mnBucketCount;  // +0x08
+    uint32_t   mnElementCount; // +0x0c
+    void  F_00961d60(HashNode** buckets, uint32_t count);   // 0x961d60
+    void  find(HashIter* out, const uint32_t* key);         // 0x645ed0
+    void  insert(void* out, void* pair, int flag);          // 0xb6f940
+    void** operator[](const uint32_t* key);                 // 0xb6ff20
+};
+struct SPVector {
+    void* mBegin;  // +0x00
+    void* mEnd;    // +0x04
+    void* mCap;    // +0x08
+    void DoInsertPtr(void* pos, void* value);               // 0xaea5d0
+};
+struct InsertOut { HashNode* mNode; int mPad; unsigned char mSecond; };
+struct MissionPair { uint32_t mKey; void* mValue; };
+struct MissionMgrBase {
+    unsigned char Write(void* stream);                      // 0xb6f570
+    unsigned char Read(void* stream);                       // 0xb6f5e0
+};
+struct cVarListSerializer {
+    char mData[0xa14];
+    void Ctor(void* obj, void* list, unsigned int sig);     // 0x692f90 (ret 0xc)
+    bool Serialize(void* stream);                           // 0x692900
+    bool Read(void* stream);                                // 0x693e10
+};
+struct TribeMissionMgr {
+    unsigned char Write(void* stream);                      // 0x00cd3480
+    unsigned char Read(void* stream);                       // 0x00cd3530
+};
 
 // ---- cdecl external callees --------------------------------------------------
 void*         FUN_00b3d400(void);                            // 0x00b3d400
@@ -22,20 +71,28 @@ void*         NounManager();                                 // 0x00b3d300
 void*         GetGameTerrainCursor();                        // 0x00b30d70
 void*         GetGameInputManager();                         // 0x00b3d250
 void          FUN_00adf390(int a);                           // 0x00adf390
-void*         GetTriggerMgr(int a);                          // 0x00b3d4d0
+void*         GetTriggerMgr();                               // 0x00b3d4d0
 void          FUN_00c77380(void*, int);                      // unused
 void          FUN_00c79f00(void*, int, int);                 // unused
 void          FUN_00e18200(void* a, void* b, int c, int d, int e); // 0x00e18200
 int           FNV1_String8(const char* s, uint32_t h, int a); // 0x00932e80
 unsigned char GetPropertyAsUint32Array(void* a, int b, void* c, void* d); // 0x006a0840
 void          WriteUint32(void* s, void* p, int a, int b);   // 0x0093aa70
-
+int           ReadInt32(void* s, void* p, int c, int f);     // 0x0093a780
+void*         FUN_00401010();                                // 0x00401010
+void*         GetCursorTable();                              // 0x0067cab0
+void*         AchievementsController();                      // 0x00675250
+void          F_00f47380(void* p);                           // 0x00f47380
+unsigned char ToXml_00ac8050(void* s, int a, void* value);   // 0x00ac8050
+WString*      F_0093c5a0(WString* out, const char* s, int n); // 0x0093c5a0
 struct CActTarget {
-    char pad[0x20];
-    void Ctor(void* t, int a);
-    void Dtor();
+    int mA, mB, mC, mD, mE, mF, mG, mH, mI, mJ, mK, mL;  // 0x30 bytes
+    void Ctor(void* t);                                            // 0xad7a30 (ret 4)
+    void Dtor();                                                   // 0xad7ad0
 };
 struct CTerrain {
+    char pad[0x1150];
+    int mCityHallPos[3];                                         // +0x1150
     unsigned char F772c0(int key);       // 0x00c772c0
     void F77300(int a);                  // 0x00c77300
     void F77380(int key, int* out);      // 0x00c77380
@@ -46,29 +103,67 @@ struct CMgr {
     CTerrain* GetCurrentTerrainSphere(); // 0x00f67d90
     void* GetPlayerTribe();              // 0x00bfc5f0
 };
-struct CTribe { unsigned int GetAdultPopulation(); };  // 0x00c8f370
+struct CTribe {
+    unsigned int GetAdultPopulation();                                    // 0x00c8f370
+    void* GetToolOfType(int type);                                        // 0x00c8f6e0
+};
 struct CProps { unsigned char GetDesc(int id); }; // 0x006a25a0
 struct C9630 { void M(); };              // 0x00cc9630
 struct CUnk { virtual void AddRef(); virtual void Release(); };
 // SP::cLocalInputState is embedded at cTribeModeStrategy+0x1e0; these are *direct* (non-virtual)
 // calls in the original, unlike the GameInputManager vtable calls that follow them.
 struct LocalInputState {
+    char mPad[0x10];                                             // +0x1e0 .. +0x1ef
     void OnMouseDown(int button, float x, float y, int state);   // 0x00697ab0
     void OnMouseUp(int button, float x, float y, int state);     // 0x00697af0
     void OnMouseWheel(float x, float y, int button);             // 0x00697b20
 };
-struct CTrig { void PostAction(int id, void* tgt, void* c); }; // 0x00ae09b0
+struct CTrig {
+    void PostAction(int id, void* tgt, void* trigger);            // 0x00ae09b0 (ret 0xc)
+    void* PostTrigger(const char* name, int a, int b, int c, int d, int e); // 0x00ae0930 (ret 0x18)
+    void SetEnabled(int v);                                      // 0x00adf390
+    void ObjectMessage(int id, void* data, void* trigger);        // 0x00adde90 (ret 0xc)
+};
 struct CPanel {
     unsigned char HasMissionCard(void* card);   // 0x00e15cd0 thiscall ret 4
     void RemoveMissionCard(void* card);          // 0x00e17fb0 thiscall ret 4
     void ExpandMissionCard(void* card);          // 0x00e15b90 thiscall ret 4
     void AddMissionCard(void* card, int a, int b, int c); // 0x00e18200 thiscall ret 0x10
+    void SetupMissionCard(void* card, int a, int b, int c); // 0x00e18200 thiscall ret 0x10
 };
-struct CAch { void F(int a, int b); };   // 0x00676ed0
+struct CAch { void F(int a, int b, int c); };   // 0x00676ed0
+
+struct CGameNounMgr { void* CreateNoun(unsigned int id); };       // 0xb20c60
+struct CCitizen { void* GetTribe(); };                            // 0xc22f50
+struct CMission {
+    void* GetTribe();                                             // 0x00c2f680
+    void  SetTribe(void* tribe);                                  // 0x00c30270
+};
+struct Msg3 { int a, b, c; };
+struct Msg8 { int a; short b, c; };
+struct CursorTable { bool FindLocal(unsigned int id); };          // 0x801bb0
+struct CTool {
+    char mPad[0x34];
+    void* mTarget;                                                // +0x34
+};
 
 struct TM {
-    char pad00[0x1e0];           // +0x000 .. +0x1df
+    char pad00[0x14];            // +0x000 .. +0x013
+    SPVector mVector;            // +0x014
+    char pad20[0x48];            // +0x020 .. +0x067
+    void* mp68;                  // +0x068
+    void* mp6c;                  // +0x06c
+    unsigned char m70;           // +0x070
+    char pad71[3];               // +0x071 .. +0x073
+    void* mp74;                  // +0x074
+    HashTable mTable;            // +0x078 (count @+0x80, elementCount @+0x84)
+    float mf88;                  // +0x088
+    float mf8c;                  // +0x08c
+    int32_t m90;                 // +0x090
+    char pad94[0x1e0 - 0x94];    // +0x094 .. +0x1df
     LocalInputState mInput;      // +0x1e0 SP::cLocalInputState
+    char pad2[0x3a0 - 0x1f0];    // +0x1f0 .. +0x39f
+    unsigned char m3a0;          // +0x3a0
 
     void M_b6f7d0();
     void M_b6f650(int a, int b);
@@ -76,6 +171,8 @@ struct TM {
     void M_b70070();
     void M_b6f820(void* a);
     void M_b6f4e0(void* a);
+    void M_b705a0();
+    void M_b70820();
 
     void F_cd35c0(int a, int b);
     void F_cd3610();
@@ -93,8 +190,17 @@ struct TM {
     unsigned int F_cd4460(int a);
     unsigned int F_cd44a0();
     unsigned int F_cd44e0(void* a, void* b);
-    void F_cd3ff0(int kind, void* tgt);
+    // PostTerrainAction is a free cdecl function (see below).
     void F_cd3e60();
+
+    // Tribe-mission / strategy members
+    unsigned char WriteTribe(void* stream);            // 0x00cd3480
+    unsigned char ReadTribe(void* stream);             // 0x00cd3530
+    ~TM();                                             // 0x00cd3ab0
+    TM();                                              // 0x00cd3b60
+    void SetMission(void* a);                          // 0x00cd3bf0
+    void StartTribe();                                 // 0x00cd4280
+    void RegisterCityHallAndStartCinematic(int* pos);  // 0x00cd43e0
 };
 void F_cd3f20(uint32_t idx);
 void F_cd3fb0(int a);
@@ -157,9 +263,11 @@ void TM::F_cd3760(int a)
 {
     M_b6f4e0((void*)a);
     if (a != 0) {
-        int it0 = 0;
-        if (it0 != *(int*)(*(int*)((char*)this + 0x7c) + *(int*)((char*)this + 0x80) * 4)) {
-            int p = *(int*)(it0 + 4);
+        HashTable* t = (HashTable*)((char*)this + 0x78);
+        HashIter it;
+        t->find(&it, (const uint32_t*)&a);
+        if (it.mNode != (HashNode*)t->mppBuckets[t->mnBucketCount]) {
+            void* p = *(void**)((char*)it.mNode + 4);
             ((void(__thiscall*)(void*))(*(void***)p)[0x80 / 4])((void*)p);
         }
     }
@@ -337,7 +445,7 @@ void F_cd3fd0(int a)
 }
 
 // @ 0x00cd3ff0
-void TM::F_cd3ff0(int kind, void* tgt)
+void PostTerrainAction(int kind, void* tgt)
 {
     int id;
     switch (kind) {
@@ -349,8 +457,8 @@ void TM::F_cd3ff0(int kind, void* tgt)
     default: return;
     }
     CActTarget t;
-    t.Ctor(tgt, 0);
-    CTrig* mgr = (CTrig*)GetTriggerMgr(0);
+    t.Ctor(tgt);
+    CTrig* mgr = (CTrig*)GetTriggerMgr();
     mgr->PostAction(id, &t, 0);
     t.Dtor();
 }
@@ -372,24 +480,374 @@ ThemeMgr::ThemeMgr()
     } while (n >= 0);
 }
 
-// ---- complex: best-effort / partial ------------------------------------------
 // @ 0x00cd3480
-void F_cd3480(int* s) { (void)s; }
+unsigned char TM::WriteTribe(void* stream)
+{
+    uint32_t sig = 0xf4336f3c;
+    {
+        void* o = ((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+        void* s = ((void*(__thiscall*)(void*))(*(void***)o)[0x18 / 4])(o);
+        WriteUint32(s, &sig, 1, 0);
+    }
+    unsigned char b = ((MissionMgrBase*)this)->Write(stream);
+    if (*(void**)((char*)this + 0x6c) != 0) {
+        void* o = *(void**)((char*)this + 0x6c);
+        if (((unsigned int(__thiscall*)(void*))(*(void***)o)[0x60 / 4])(o) == 5)
+            ((void(__thiscall*)(void*, void*))(*(void***)((char*)this - 8))[0x30 / 4])((char*)this - 8, o);
+    }
+    cVarListSerializer ser;
+    ser.Ctor((char*)this - 8, (void*)0x0157ee90, 0x1a80d26);
+    if (b) {
+        if (ser.Serialize(stream))
+            return 1;
+    }
+    return 0;
+}
+
 // @ 0x00cd3530
-void F_cd3530(int* s) { (void)s; }
+unsigned char TM::ReadTribe(void* stream)
+{
+    {
+        void* o = ((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+        void* s = ((void*(__thiscall*)(void*))(*(void***)o)[0x18 / 4])(o);
+        uint32_t sig = 0;
+        ReadInt32(s, &sig, 1, 0);
+    }
+    unsigned char b = ((MissionMgrBase*)this)->Read(stream);
+    cVarListSerializer ser;
+    ser.Ctor((char*)this - 8, (void*)0x0157ee90, 0x1a80d26);
+    if (b) {
+        if (ser.Read(stream))
+            return 1;
+    }
+    return 0;
+}
+
 // @ 0x00cd36f0
-unsigned char F_cd36f0(void* a, void* b) { (void)a; (void)b; return 1; }
+bool ForEachStructure(void* visitor, HashTable* t)
+{
+    HashNode* i = *(HashNode**)t->mppBuckets;
+    HashNode** slot = t->mppBuckets;
+    if (i == 0) {
+        if (*slot != 0) {
+            ++slot;
+        } else {
+            do { ++slot; } while (*slot == 0);
+        }
+        i = *slot;
+    }
+    HashNode* end = t->mppBuckets[t->mnBucketCount];
+    while (i != end) {
+        void* v = i->mValue;
+        if (v != 0)
+            ((void(__thiscall*)(void*, void*))(*(void***)v)[0x1c / 4])(v, visitor);
+        i = i->mNext;
+        if (i == 0) {
+            do { i = *++slot; } while (i == 0);
+        }
+    }
+    return 1;
+}
+
 // @ 0x00cd37b0
-void F_cd37b0(void* a, void* b) { (void)a; (void)b; }
+void ReadSTLMapT(void* stream, HashTable* map)
+{
+    map->F_00961d60(map->mppBuckets, map->mnBucketCount);
+    int count = 0;
+    map->mnElementCount = 0;
+    {
+        void* o = ((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+        void* s = ((void*(__thiscall*)(void*))(*(void***)o)[0x18 / 4])(o);
+        ReadInt32(s, &count, 1, 0);
+    }
+    for (int n = 0; n < count; ++n) {
+        void* node = 0;
+        uint32_t key = 0;
+        {
+            void* o = ((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+            void* s = ((void*(__thiscall*)(void*))(*(void***)o)[0x18 / 4])(o);
+            ReadInt32(s, &key, 1, 0);
+        }
+        ((void(__thiscall*)(void*))(*(void***)stream)[0x1c / 4])(stream);
+        if (node != 0) {
+            node = 0;
+            ((void(__thiscall*)(void*))(*(void***)node)[0x4 / 4])(node);
+        }
+        void* val = 0;
+        ((void(__thiscall*)(void*, unsigned int, void**, int))(*(void***)stream)[0x28 / 4])(
+            stream, 0x34364118, &val, 0);
+        ((void(__thiscall*)(void*))(*(void***)stream)[0x1c / 4])(stream);
+        MissionPair pair;
+        pair.mKey = key;
+        pair.mValue = val;
+        if (val != 0)
+            ((void(__thiscall*)(void*))(*(void***)val)[0])(val);
+        InsertOut out;
+        out.mSecond = 0;
+        map->insert(&out, &pair, 0);
+        if (pair.mValue != 0) {
+            ((void(__thiscall*)(void*))(*(void***)pair.mValue)[0x4 / 4])(pair.mValue);
+        }
+        if (out.mSecond == 0) {
+            void** slot = (void**)((char*)out.mNode + 4);
+            void* old = *slot;
+            if (val != old) {
+                if (val != 0)
+                    ((void(__thiscall*)(void*))(*(void***)val)[0])(val);
+                *slot = val;
+                if (old != 0)
+                    ((void(__thiscall*)(void*))(*(void***)old)[0x4 / 4])(old);
+            }
+        }
+        if (val != 0)
+            ((void(__thiscall*)(void*))(*(void***)val)[0x4 / 4])(val);
+    }
+    ((void(__thiscall*)(void*))(*(void***)stream)[0x1c / 4])(stream);
+}
+
 // @ 0x00cd3920
-unsigned char F_cd3920(void* a, int b, int c) { (void)a; (void)b; (void)c; return 1; }
+bool WriteSTLMapT(void* stream, const char* name, HashTable* map)
+{
+    uint32_t flags = 0;
+    bool ok = true;
+    if (map->mnElementCount == 0)
+        return ok;
+    WString wname;
+    uint32_t fb = 1;
+    if (name != 0) {
+        F_0093c5a0(&wname, name, -1);
+        fb = 3;
+    } else {
+        wname.mBegin = 0; wname.mEnd = 0; wname.mCap = 0;
+        wname.F_00579a90(0);
+        fb = 2;
+    }
+    WString key;
+    key.F_0056e2d0(&wname);
+    if (fb & 2) {
+        if (((unsigned)((char*)wname.mEnd - (char*)wname.mBegin) & 0xfffffffe) > 2 && wname.mBegin != 0)
+            F_00f47380(wname.mBegin);
+    }
+    if (fb & 1) {
+        if (((unsigned)((char*)key.mEnd - (char*)key.mBegin) & 0xfffffffe) > 2 && key.mBegin != 0)
+            F_00f47380(key.mBegin);
+    }
+    {
+        void* a = key.mBegin;
+        if (a == key.mEnd)
+            a = (void*)0x013f6254;
+        ((void(__thiscall*)(void*, void*))(*(void***)stream)[0])(stream, a);
+    }
+    HashNode* i = *(HashNode**)map->mppBuckets;
+    HashNode** slot = map->mppBuckets;
+    if (i == 0) {
+        if (*slot != 0) {
+            ++slot;
+        } else {
+            do { ++slot; } while (*slot == 0);
+        }
+        i = *slot;
+    }
+    HashNode* end = map->mppBuckets[map->mnBucketCount];
+    bool flag = ok;
+    while (i != end) {
+        if (flag) {
+            if (!ToXml_00ac8050(stream, 0, &i->mValue))
+                flag = false;
+            else
+                flag = true;
+        } else {
+            flag = false;
+        }
+        i = i->mNext;
+        if (i == 0) {
+            do { i = *++slot; } while (i == 0);
+        }
+    }
+    {
+        void* a = key.mBegin;
+        if (a == key.mEnd)
+            a = (void*)0x013f6254;
+        ((void(__thiscall*)(void*, void*))(*(void***)stream)[0x4 / 4])(stream, a);
+    }
+    if (((unsigned)((char*)key.mEnd - (char*)key.mBegin) & 0xfffffffe) > 2 && key.mBegin != 0)
+        F_00f47380(key.mBegin);
+    return ok;
+}
+
 // @ 0x00cd3ab0
-void F_cd3ab0(void* self) { (void)self; }
+TM::~TM()
+{
+    *(void**)this = g_vt147734c;
+    *(void**)((char*)this + 8) = g_vt1477328;
+    *(void**)((char*)this + 0x10) = g_vt1477318;
+    HashTable* t = (HashTable*)((char*)this + 0x78);
+    g_169b27c = 0;
+    t->F_00961d60(t->mppBuckets, t->mnBucketCount);
+    t->mnElementCount = 0;
+    if (t->mnBucketCount > 1)
+        F_00f47380(t->mppBuckets);
+    void* p = *(void**)((char*)this + 0x74);
+    if (p != 0)
+        ((void(__thiscall*)(void*))(*(void***)p)[0x4 / 4])(p);
+    M_b705a0();
+}
+
 // @ 0x00cd3b60
-void* F_cd3b60(void* self) { (void)self; return 0; }
+TM::TM()
+{
+    M_b70820();
+    *(void**)this = g_vt147734c;
+    *(void**)((char*)this + 8) = g_vt1477328;
+    *(void**)((char*)this + 0x10) = g_vt1477318;
+    *(int*)((char*)this + 0x74) = 0;
+    *(float*)((char*)this + 0x88) = g_fltOne;
+    *(float*)((char*)this + 0x8c) = g_fltTwo;
+    *(int*)((char*)this + 0x84) = 0;
+    *(int*)((char*)this + 0x90) = 0;
+    *(int*)((char*)this + 0x80) = 1;
+    *(void**)((char*)this + 0x7c) = g_vt154df28;
+    g_169b27c = (uint32_t)this;
+}
+
 // @ 0x00cd3bf0
-void F_cd3bf0(void* self, void* a) { (void)self; (void)a; }
+void TM::SetMission(void* a)
+{
+    void* panel = FUN_00b3d400();
+    if (a == 0) {
+        ((void(__thiscall*)(void*, int))(*(void***)this)[0x28 / 4])(this, 0);
+        return;
+    }
+    void* citizen = ((void*(__thiscall*)(void*, unsigned int))(*(void***)a)[0xc / 4])(a, 0xd0036e08);
+    void* c2 = ((void*(__thiscall*)(void*, unsigned int))(*(void***)a)[0xc / 4])(a, 0x4f176642);
+    void* tribe = ((void*(__thiscall*)(void*, unsigned int))(*(void***)a)[0xc / 4])(a, 0x4f396a66);
+    if (tribe == 0) {
+        if (c2 == 0) { ((void(__thiscall*)(void*, int))(*(void***)this)[0x28 / 4])(this, 0); return; }
+        tribe = ((CCitizen*)c2)->GetTribe();
+        if (tribe == 0) { ((void(__thiscall*)(void*, int))(*(void***)this)[0x28 / 4])(this, 0); return; }
+    }
+    uint32_t key = ((unsigned int(__thiscall*)(void*))(*(void***)tribe)[0x4c / 4])(tribe);
+    HashTable* t = (HashTable*)((char*)this + 0x78);
+    HashIter it;
+    t->find(&it, &key);
+    if (it.mNode == (HashNode*)t->mppBuckets[t->mnBucketCount]) {
+        void* noun = ((CGameNounMgr*)NounManager())->CreateNoun(0x5436411a);
+        ((CMission*)noun)->SetTribe(tribe);
+        void** slot = t->operator[](&key);
+        void* old = *slot;
+        if (noun != old) {
+            if (noun != 0)
+                ((void(__thiscall*)(void*))(*(void***)noun)[0])(noun);
+            *slot = noun;
+            if (old != 0)
+                ((void(__thiscall*)(void*))(*(void***)old)[0x4 / 4])(old);
+        }
+        void* ref = noun;
+        if (noun != 0)
+            ((void(__thiscall*)(void*))(*(void***)noun)[0])(noun);
+        {
+            SPVector* vec = (SPVector*)((char*)this + 0x14);
+            if ((char*)vec->mEnd >= (char*)vec->mCap) {
+                vec->DoInsertPtr(vec->mEnd, &ref);
+            } else {
+                char* pos = (char*)vec->mEnd;
+                vec->mEnd = pos + 4;
+                if (pos != 0) {
+                    *(void**)pos = ref;
+                    if (ref != 0)
+                        ((void(__thiscall*)(void*))(*(void***)ref)[0])(ref);
+                }
+            }
+        }
+        if (ref != 0)
+            ((void(__thiscall*)(void*))(*(void***)ref)[0x4 / 4])(ref);
+    }
+    if (*(void**)((char*)this + 0x74) != 0) {
+        void* r = ((CMission*)*(void**)((char*)this + 0x74))->GetTribe();
+        if (r == tribe)
+            goto tail;
+    }
+    if (*(void**)((char*)this + 0x74) != 0) {
+        if (panel != 0)
+            ((CPanel*)panel)->RemoveMissionCard(*(void**)((char*)this + 0x74));
+        void* p = *(void**)((char*)this + 0x74);
+        if (p != 0) {
+            *(void**)((char*)this + 0x74) = 0;
+            ((void(__thiscall*)(void*))(*(void***)p)[0x4 / 4])(p);
+        }
+    }
+    {
+        void** slot = t->operator[](&key);
+        void* nv = *slot;
+        void* old = *(void**)((char*)this + 0x74);
+        if (nv != old) {
+            if (nv != 0)
+                ((void(__thiscall*)(void*))(*(void***)nv)[0])(nv);
+            *(void**)((char*)this + 0x74) = nv;
+            if (old != 0)
+                ((void(__thiscall*)(void*))(*(void***)old)[0x4 / 4])(old);
+        }
+    }
+    {
+        void* m = *(void**)((char*)this + 0x74);
+        if (((unsigned int(__thiscall*)(void*))(*(void***)m)[0x60 / 4])(m) == 5)
+            goto tail;
+    }
+    if (panel != 0) {
+        if (!((CPanel*)panel)->HasMissionCard(*(void**)((char*)this + 0x74))) {
+            ((CPanel*)panel)->SetupMissionCard(*(void**)((char*)this + 0x74), 0, 1, 0);
+            ((CPanel*)panel)->ExpandMissionCard(*(void**)((char*)this + 0x74));
+        }
+    }
+tail:
+    ((void(__thiscall*)(void*, int))(*(void***)this)[0x28 / 4])(this, 0);
+}
+
 // @ 0x00cd4280
-void F_cd4280() {}
+void TM::StartTribe()
+{
+    ((CTrig*)GetTriggerMgr())->SetEnabled(1);
+    void* tribe = ((CMgr*)NounManager())->GetPlayerTribe();
+    void* obj = ((void*(__thiscall*)(void*))(*(void***)tribe)[0xac / 4])(tribe);
+    void* tool = ((CTribe*)tribe)->GetToolOfType(10);
+    void* trig = ((CTrig*)GetTriggerMgr())->PostTrigger(g_StrTRGBegin, 1, 1, 0, 0, 0);
+    {
+        CActTarget t;
+        t.Ctor((char*)tribe + 0x120);
+        ((CTrig*)GetTriggerMgr())->PostAction(0x3d7f90a, &t, trig);
+        t.Dtor();
+    }
+    {
+        CActTarget t;
+        t.Ctor(obj != 0 ? (char*)obj + 0x34 : 0);
+        ((CTrig*)GetTriggerMgr())->PostAction(0xaa227986, &t, trig);
+        t.Dtor();
+    }
+    {
+        CActTarget t;
+        t.Ctor(tool != 0 ? (char*)tool + 0x34 : 0);
+        ((CTrig*)GetTriggerMgr())->PostAction(0x60ed02ef, &t, trig);
+        t.Dtor();
+    }
+    {
+        Msg3 msg;
+        msg.a = 0x200; msg.b = 0; msg.c = 0x934dcce7;
+        ((CTrig*)GetTriggerMgr())->ObjectMessage(0xe6311d5a, &msg, trig);
+    }
+    ((CAch*)AchievementsController())->F(0xd082675a, 4, 1);
+}
+
 // @ 0x00cd43e0
-void F_cd43e0(void* self, void* v) { (void)self; (void)v; }
+void TM::RegisterCityHallAndStartCinematic(int* pos)
+{
+    CTerrain* te = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
+    te->mCityHallPos[0] = pos[0];
+    te->mCityHallPos[1] = pos[1];
+    te->mCityHallPos[2] = pos[2];
+    Msg8 msg;
+    msg.a = 0x2ea8fb98; msg.b = 0; msg.c = 0;
+    void* o = FUN_00401010();
+    ((void(__thiscall*)(void*, int*, void*))(*(void***)o)[0x4c / 4])(o, pos, &msg);
+    ((CursorTable*)GetCursorTable())->FindLocal(0x1003);
+    *(unsigned char*)((char*)this + 0x3a0) = 1;
+}
