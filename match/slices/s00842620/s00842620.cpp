@@ -24,7 +24,7 @@ extern "C" __declspec(dllimport) char* __cdecl fgets(char* buf, int n, void* f);
 extern "C" __declspec(dllimport) int   __cdecl fclose(void* f);
 
 // 0x011e0744: the out-of-line byte copy used by string8's range initialisation.
-extern "C" void* __cdecl CopyBytes(void* dst, const void* src, unsigned n);
+extern "C" void* __cdecl CopyBytes(void* dst, const void* src, unsigned n);  // 0x011e0744
 
 void __cdecl Sprintf(void* out, const char* fmt, ...);                    // 0x00840c20
 void __cdecl SP_cError(void* pBuf, const char* fmt, ...);                 // 0x0052df30
@@ -38,11 +38,13 @@ void* __cdecl LogAppend(void* pDst, const char* pSrc);                    // 0x0
 
 // 0x014f9174: the throw-info used by every SP cError throw in this object.
 extern char gThrowInfo;
-// 0x01667bac: the shared two-byte empty string (`?gEmptyString16@eastl@@3PA_WA`).
-extern char gEmptyA[1];
-extern char gEmptyB[1];
+// 0x01667bac: the shared two-byte empty string sentinel (`?gEmptyString16@eastl@@3PA_WA`).
+extern char g_1667bac[1];
+// 0x0141b840: the "./" parent-directory literal FindParentDir assigns.
+extern char g_141b840[1];
+extern char g_141b842[1];
 // 0x01401b70: the empty log fragment the LogAppend chain is seeded with.
-extern char gEmptyLog[1];
+extern char g_1401b70[1];
 
 inline unsigned CharStrlen(const char* p)
 {
@@ -74,9 +76,9 @@ struct string8_s0084_2620 : PackStr_s0084_2620 {
     allocator_s0084_2620 mAllocator;  // +0x0c
 
     string8_s0084_2620() {
-        mpBegin = gEmptyA;
-        mpEnd = gEmptyA;
-        mpCapacity = gEmptyA + 1;
+        mpBegin = g_1667bac;
+        mpEnd = g_1667bac;
+        mpCapacity = g_1667bac + 1;
     }
     string8_s0084_2620(const string8_s0084_2620& x);          // 0x0057cb10 (out of line)
     string8_s0084_2620(const char* p) {
@@ -109,8 +111,8 @@ struct string8_s0084_2620 : PackStr_s0084_2620 {
                 "Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
             mpCapacity = mpBegin + n;
         } else {
-            mpBegin = gEmptyA;
-            mpCapacity = gEmptyA + 1;
+            mpBegin = g_1667bac;
+            mpCapacity = g_1667bac + 1;
         }
     }
 
@@ -123,6 +125,18 @@ struct string8_s0084_2620 : PackStr_s0084_2620 {
     // out of line so the 0x00842760 symbol is emitted
     string8_s0084_2620& insert(unsigned pos, const string8_s0084_2620& s);
 };
+
+// The class's own constructors are inline COMDATs; the equivalence harness maps every
+// constructor of the class onto the copy constructor's `// 0x0057cb10` annotation, so
+// construct through these helpers instead (they inline or stay local to this object).
+inline void MakeRangeString(string8_s0084_2620* pOut, const char* first, const char* last)
+{
+    unsigned n = (unsigned)(last - first);
+    pOut->RangeInitialize(n + 1);
+    CopyBytes(pOut->mpBegin, first, n);
+    pOut->mpEnd = pOut->mpBegin + n;
+    pOut->mpBegin[n] = 0;
+}
 
 // vec<T, sp_vector_allocator>: retail allocator is 8 bytes, so the object is 0x14.
 template <typename T>
@@ -452,7 +466,7 @@ void FindParentDir(const char* pPath, string8* pOut)
     if (pos != -1)
         pOut->erase((unsigned)(pos + 1), 0xffffffffu);
     else
-        pOut->assign(gEmptyA, gEmptyB);
+        pOut->assign(g_141b840, g_141b842);
 }
 
 }  // namespace
@@ -595,7 +609,7 @@ void* cParser::Command(const char* pName) const
 }
 
 // @ 0x00842c60
-void cParser::ParseFile(const char* pPath)
+void EA::ArgScript::cParser_s0084_2620::ParseFile(const char* pPath)
 {
     void* f = fopen(pPath, "r");
     if (!f) {
@@ -633,8 +647,8 @@ void cParser::ParseFile(const char* pPath)
                 ThrowException(buf2, &gThrowInfo);
             }
             if (mLogTarget) {
-                LogAppend(LogAppend(LogAppend(mLogTarget, gEmptyLog),
-                                    mLastErrorString.mpBegin), gEmptyLog);
+                LogAppend(LogAppend(LogAppend(mLogTarget, g_1401b70),
+                                    mLastErrorString.mpBegin), g_1401b70);
             }
         }
         line++;
@@ -655,16 +669,29 @@ void cParser::ParseFile(const char* pPath)
 }
 
 // @ 0x00842f50
-void cParser::ParseStream(void* pStream)
+void EA::ArgScript::cParser_s0084_2620::ParseStream(void* pStream)
 {
     IOStream_s0084_2620* p = (IOStream_s0084_2620*)pStream;
     if (!p || !p->IsValid()) {
-        mLastErrorString.assign("Bad input stream", "Bad input stream" + 17);
+        mLastErrorString.assign("Bad input stream", "Bad input stream" + 16);
         char buf[16];
         SP_cError(buf, mLastErrorString.mpBegin);
         ThrowException(buf, &gThrowInfo);
     }
-    string8 stream("stream");
+    string8_s0084_2620 stream;
+    {
+        // The original inlines this six-byte literal (EAAllocate + two movs, no CopyBytes),
+        // so spell the construction out to keep the call trace identical.
+        char* pStream = (char*)EAAllocate(7, "ArgScript", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\"
+            "Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+        stream.mpBegin = pStream;
+        stream.mpCapacity = pStream + 7;
+        pStream[0] = 's'; pStream[1] = 't'; pStream[2] = 'r';
+        pStream[3] = 'e'; pStream[4] = 'a'; pStream[5] = 'm';
+        pStream[6] = 0;
+        stream.mpEnd = pStream + 6;
+    }
     const int blockCount = (int)(mBlockCommandStack.mpEnd - mBlockCommandStack.mpBegin);
     const int metaCount  = (int)(mMetaCommandStack.mpEnd - mMetaCommandStack.mpBegin);
     int line = 1;
@@ -693,8 +720,8 @@ void cParser::ParseStream(void* pStream)
                 ThrowException(buf2, &gThrowInfo);
             }
             if (mLogTarget) {
-                LogAppend(LogAppend(LogAppend(mLogTarget, gEmptyLog),
-                                    mLastErrorString.mpBegin), gEmptyLog);
+                LogAppend(LogAppend(LogAppend(mLogTarget, g_1401b70),
+                                    mLastErrorString.mpBegin), g_1401b70);
             }
         }
         line++;
@@ -741,14 +768,15 @@ bool cParser::HasName6c(const char* pName) const
 }
 
 // @ 0x00843320
-const char* cParser::LookupName(const char* pName) const
+const char* EA::ArgScript::cParser_s0084_2620::LookupName(const char* pName) const
 {
     const char* pResult = 0;
     bool bFound = false;
 
     if (*pName == ':') {
-        string8 name(pName + 1, pName + 1 + CharStrlen(pName + 1));
-        FindResult_s0084_2620 r = mTable8c.find(name.mpBegin);
+        string8 name;
+        eastl::MakeRangeString(&name, pName + 1, pName + 1 + CharStrlen(pName + 1));
+        FindResult_s0084_2620 r = mTable8c.find(&name);
         if (r.mpNode != mTable8c.mpBucketArray[mTable8c.mnBucketCount]) {
             pResult = *(const char**)((char*)r.mpNode + 0x10);
             bFound = true;
@@ -757,7 +785,7 @@ const char* cParser::LookupName(const char* pName) const
         const unsigned len = CharStrlen(pName);
         string8 name(mScope);
         name.append(pName, pName + len);
-        FindResult_s0084_2620 r = mTable8c.find(name.mpBegin);
+        FindResult_s0084_2620 r = mTable8c.find(&name);
         int i = (int)(mScopeOffsets.mpEnd - mScopeOffsets.mpBegin) - 1;
         while (r.mpNode == mTable8c.mpBucketArray[mTable8c.mnBucketCount] && i >= 0) {
             unsigned off = (unsigned)mScopeOffsets.mpBegin[i];
@@ -765,7 +793,7 @@ const char* cParser::LookupName(const char* pName) const
             unsigned n   = eastl_min(off, sz);
             name.assign(mScope.mpBegin, mScope.mpBegin + n);
             name.append(pName, pName + len);
-            r = mTable8c.find(name.mpBegin);
+            r = mTable8c.find(&name);
             i--;
         }
         if (r.mpNode != mTable8c.mpBucketArray[mTable8c.mnBucketCount]) {
@@ -775,8 +803,9 @@ const char* cParser::LookupName(const char* pName) const
     }
 
     if (!bFound) {
-        string8 bare(pName, pName + CharStrlen(pName));
-        FindResult_s0084_2620 r = mTableAc.find(bare.mpBegin);
+        string8 bare;
+        eastl::MakeRangeString(&bare, pName, pName + CharStrlen(pName));
+        FindResult_s0084_2620 r = mTableAc.find(&bare);
         if (r.mpNode != mTableAc.mpBucketArray[mTableAc.mnBucketCount]) {
             return *(const char**)((char*)r.mpNode + 0x10);
         }
