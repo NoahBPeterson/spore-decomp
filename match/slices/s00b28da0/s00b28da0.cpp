@@ -4,6 +4,8 @@
 // Flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 #include "s00b28da0.h"
 
+extern "C" void _ReadWriteBarrier(void);
+
 // ---------------------------------------------------------------------------
 // typed views of the (opaque) game objects the two big paths walk
 // ---------------------------------------------------------------------------
@@ -92,6 +94,11 @@ struct PropMgrIface {               // SP::PropertyManager
 // ===========================================================================
 // 0x00b28da0 - rebuild the simulator tribe / sim-object data vectors
 // ===========================================================================
+struct VecView {
+    uint32_t* mBegin;
+    uint32_t* mEnd;
+};
+
 // @ 0x00b28da0
 void __cdecl FUN_00b28da0(void* self)
 {
@@ -105,12 +112,22 @@ void __cdecl FUN_00b28da0(void* self)
                                                (void*)&FUN_00accbb0,
                                                (void*)&FUN_00b1e500,
                                                (void*)&g_18c6d19);
-    int n = (int)(vec->mEnd - vec->mBegin);
-    for (int i = 0; i < n; ++i)
-    {
-        TribeData* raw = (TribeData*)FUN_00f473a0(0x18, "Simulator", 0, 0, 0, 0);
-        void* made = raw ? (void*)raw->Ctor(vec->mBegin[i]) : 0;
-        o->FUN_00c710f0(made);
+    VecView* view = (VecView*)&vec->mBegin;
+    int n = (int)(view->mEnd - view->mBegin);
+    int i = 0;
+    if (n > 0) {
+        do {
+            TribeData* raw = (TribeData*)FUN_00f473a0(0x18, "Simulator", 0, 0, 0, 0);
+            void* made;
+            if (raw) {
+                uint32_t owner = view->mBegin[i];
+                made = (void*)raw->Ctor(owner);
+            } else {
+                made = 0;
+            }
+            o->FUN_00c710f0(made);
+            ++i;
+        } while (i < n);
     }
 
     NounMgr* nm2 = NounManager();
@@ -119,18 +136,27 @@ void __cdecl FUN_00b28da0(void* self)
                                                  (void*)&FUN_00b236c0,
                                                  (void*)&FUN_00b1e500,
                                                  (void*)&g_18c816a);
-    int n2 = (int)(vec2->mEnd - vec2->mBegin);
-    for (int j = 0; j < n2; ++j)
-    {
-        SimObjData* raw = (SimObjData*)FUN_00f473a0(0x50, "Simulator", 0, 0, 0, 0);
-        void* made = raw ? (void*)raw->Ctor(vec2->mBegin[j]) : 0;
-        o->FUN_00c710b0(made);
+    VecView* view2 = (VecView*)&vec2->mBegin;
+    int n2 = (int)(view2->mEnd - view2->mBegin);
+    int j = 0;
+    if (n2 > 0) {
+        do {
+            SimObjData* raw = (SimObjData*)FUN_00f473a0(0x50, "Simulator", 0, 0, 0, 0);
+            void* made;
+            if (raw) {
+                uint32_t owner = view2->mBegin[j];
+                made = (void*)raw->Ctor(owner);
+            } else {
+                made = 0;
+            }
+            o->FUN_00c710b0(made);
+            ++j;
+        } while (j < n2);
     }
 
-    void* v = FUN_010212f0();
-    StarMgr* sm = StarManager();
-    C4F030Obj* r = sm->FUN_00c4f030((uint32_t)v);
+    C4F030Obj* r = StarManager()->FUN_00c4f030((uint32_t)FUN_010212f0());
     r->FUN_00d056c0();
+    _ReadWriteBarrier();
 }
 
 // ===========================================================================
