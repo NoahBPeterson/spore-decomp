@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPFormationUtilities.cpp  ?ClearSlots@cActionCircle_s00af_ab70@SP@@QAEXXZ  00afafd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPFormationUtilities.cpp  ?CopyAllocNode@@YGXPBUAllocNode@@@Z  00afb1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPFormationUtilities.cpp  ?ShuffleSlots@@YAXPAH0PAX@Z  00afb8a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPFormationUtilities.cpp  ??1cActionCircle_s00af_ab70@SP@@QAE@XZ  00afbad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
