@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00e8d1e0 87 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) effect scale update; the retrieval is modelled as a plain virtual dispatch through the object table while retail reads the animating creature slot and the float accessor; equiv UNSUPPORTED (no valid inputs)
+00e8d260 384 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) plant simulation update; the game mode, plant stage, effect manager and creature services are unresolved so both effect binding arms reduce to calls; equiv UNSUPPORTED (unresolved plant services)
+00e8d4f0 243 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) plant view factory; the allocation, construction, world lookup and stage services are unresolved so the selection between the model binding calls can not be reproduced; equiv UNSUPPORTED (unresolved factory services)

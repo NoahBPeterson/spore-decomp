@@ -1,8 +1,8 @@
 00e8d0e0 ??0cGamePlantView@@QAE@XZ  # cGamePlantView::cGamePlantView
 00e8d160 ??1cGamePlantView@@QAE@XZ  # cGamePlantView::~cGamePlantView
-00e8d1e0 ?UpdateEffectScale@cGamePlantView@@QAEXXZ  # void cGamePlantView::UpdateEffectScale
-00e8d260 ?HandleSimulationUpdate@cGamePlantView@@QAEXPAXI@Z  # void cGamePlantView::HandleSimulationUpdate
-00e8d4f0 ?Create@cGamePlantView@@QAEPAV1@PAVcSpatialObject@@@Z  # cGamePlantView::Create
+00e8d1e0 ?UpdateEffectScale@cGamePlantView@@QAEXXZ  # cGamePlantView::UpdateEffectScale migrated from s00e8d0e0 (verbatim, slice spelling)
+00e8d260 ?HandleSimulationUpdate@cGamePlantView@@QAEXPAXI@Z  # cGamePlantView::HandleSimulationUpdate migrated from s00e8d0e0 (verbatim, slice spelling)
+00e8d4f0 ?Create@cGamePlantView@@QAEPAV1@PAVcSpatialObject@@@Z  # cGamePlantView::Create migrated from s00e8d0e0 (verbatim, slice spelling)
 00e8d6b0 ?PackColor@@YAIMMMM@Z  # PackColor migrated from s00e8d0e0 (verbatim, slice spelling)
 00e8d740 ?SetFlag@cGameTerrainCursorView@@QAEXD@Z  # cGameTerrainCursorView::SetFlag migrated from s00e8d0e0 (verbatim, slice spelling)
 00e8d760 ?GetFlag@cGameTerrainCursorView@@QAEDXZ  # cGameTerrainCursorView::GetFlag migrated from s00e8d0e0 (verbatim, slice spelling)
