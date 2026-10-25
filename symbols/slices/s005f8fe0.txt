@@ -9,5 +9,5 @@
 005f95a0 ?DoInsertValue@MapKW@@QAE?AU?$pair@UIterKW@@_N@eastl@@ABU?$pair@UKey@eastl@@UWStr@2@@3@Ufalse_type@3@@Z  # MapKW::DoInsertValue (multimap insert)
 005f9680 ??0?$DequeBase@UDequeItem@eastl@@Ucore_allocator_adapter@2@$03@eastl@@QAE@ABUcore_allocator_adapter@1@@Z  # eastl::DequeBase<DequeItem,core_allocator_adapter,4>::DequeBase
 005f96c0 ??1?$DequeBase@UDequeItem@eastl@@Ucore_allocator_adapter@2@$03@eastl@@QAE@XZ  # eastl::DequeBase<DequeItem,core_allocator_adapter,4>::~DequeBase
-005f9760 ?FUN_005f9760@@YAXXZ  # FUN_005f9760 (out of slice range; skeleton only)
-005f97c0 ?FUN_005f97c0@@YAXXZ  # FUN_005f97c0 (out of slice range; skeleton only)
+005f9760 ?FUN_005f9760@@YGXPAPAUNodeW@@I@Z  # hashtable bucket-chain teardown (destroy each node's WStr value, free node)
+005f97c0 ?FUN_005f97c0@StringProps@eastl@@QAE_NPB_WIPAUWStr@2@H0@Z  # eastl::StringProps::FUN_005f97c0 (thumbnail output-filename builder)
