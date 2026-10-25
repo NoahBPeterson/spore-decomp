@@ -1,4 +1,1 @@
-# va  diff-bytes  reason   flags /O2 /MD /Gy /TP /arch:SSE /GS-
-0061e5b0  -   SP::Pollen::HeaderHandler::operator() not implemented (stub); a refcounted transaction builder (operator new + vtbl-based Assign/Release chain + ConvertToString8 + message post id 0x5fff3ff)
-0061e740  -   Pollen helper (886 bytes) not implemented (stub); virtual-heavy text compare + message build, called from 0061eac0 on text mismatch
-0061ec30  111  eastl::basic_string<char>::TrimRight: approximated; the body trims via the FindLastNotOf primitive instead of the original's find_last_not_of(0061e3c0) wrapper, so the wrapper's clamp/position handling is not reproduced
+# va  reason
