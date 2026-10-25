@@ -6,6 +6,7 @@
 typedef unsigned int   uint32;
 typedef unsigned short uint16;
 typedef unsigned char  byte;
+typedef unsigned char  uint8;
 
 // ---------------------------------------------------------------------------
 // A minimal view of the EASTL hashtable used at cSystem +0x320 / +0x15bf38.
@@ -24,6 +25,9 @@ struct HashTable {
     void**   mpBucketArray;    // +0x04
     uint32   mnBucketCount;    // +0x08
     void  hashFind(Iterator* out, const void* pKey);      // 0xb41b30
+    void  find(Iterator* out, const void* pKey);          // 0x645ed0
+    void  insert(Iterator* out, const void* value, uint32 extra);  // 0xa43bd0
+    void  insertSymbol(Iterator* out, const void* value, bool flag); // 0xa26ce0
     Iterator erase(Iterator it);                      // 0xa443c0
     void     eraseVoid(Iterator it);                  // 0xa443c0
 };
@@ -41,6 +45,21 @@ struct IHandler6 {                // any object with a vtable slot at +0x14
     virtual void h0c();
     virtual void h10();
     virtual void h14();           // +0x14
+};
+
+// command object handed to cSystem::DoCommandMainThread
+struct Command {
+    uint32 Type();                                // 0xfc7e50 (Node::Type)
+    bool   GetUint32(uint32 id, uint32* out);     // 0xa0fab0
+};
+
+// 0x10-byte message built by cEapdMessage::Init
+struct cEapdMessage {
+    Command* mCommand;                            // +0x00
+    uint32   m04;                                 // +0x04
+    uint32   m08;                                 // +0x08
+    uint32   m0c;                                 // +0x0c
+    bool   Init(Command* cmd);                    // 0xa34dc0
 };
 
 // object placed at cSystem - 4 (the primary base subobject of the complete
@@ -132,6 +151,7 @@ struct cSystem {
     void SetCurrentContext(int ctx);                // 0xa426f0
     void AddSymbolList(uint32 id);                  // 0xa43580
     void System_HandleMessage(uint32 msgId, int* pData);  // 0xa21710
+    bool SysDoCommandMainThread(void* cmd);         // 0xa31f20
 };
 
 // ---- helpers specific to FUN_00a45610 --------------------------------------
@@ -140,6 +160,20 @@ struct DbgObject {
     virtual void d04();
     virtual void d08();
     virtual bool CreateObject(int* a, void** out, int c, int d, int e, int f); // +0x0c
+    virtual void d10();
+    virtual void d14();
+    virtual void d18();
+    virtual void d1c();
+    virtual void d20();
+    virtual void d24();
+    virtual void d28();
+    virtual void d2c();
+    virtual void d30();
+    virtual void d34();
+    virtual void d38();
+    virtual void d3c();
+    virtual void d40();
+    virtual void d44(int a, void* b, int c);       // +0x44
 };
 
 struct NodeObject {
@@ -189,19 +223,35 @@ extern "C" void SP_Pixie_Register();       // 0xa3edb0
 extern "C" void SP_Mixer_Register();       // 0xa3d380
 extern "C" void SP_Trixie_Register();      // 0xa40e80
 extern "C" void SP_SendGame_Register();    // 0xa3f000
-extern "C" void* SP_ConstructcEmitterModelSound();        // 0xa465b0
-extern "C" void* SP_ConstructcEmitterSndPlayer();         // 0xa398d0
-extern "C" int   FUN_00a68e90(void* p);                   // 0xa68e90
-extern "C" void  FUN_00a466d0(void* p);                   // 0xa466d0
+// 0x40-byte EAPD singleton descriptor passed by value to FUN_00a68e90.
+struct SoundConfig {
+    uint32 m00;            // +0x00
+    uint32 m04;            // +0x04
+    uint32 m08;            // +0x08
+    uint32 m0c;            // +0x0c
+    uint32 m10;            // +0x10
+    uint32 m14;            // +0x14
+    uint8  m18;            // +0x18
+    char   pad19[3];
+    uint32 m1c;            // +0x1c
+    uint8  m20;            // +0x20
+    char   pad21[3];
+    uint32 m24;            // +0x24
+    void*  m28;            // +0x28
+    uint32 m2c;            // +0x2c
+    void*  m30;            // +0x30
+    uint32 m34;            // +0x34
+    uint32 m38;            // +0x38
+    uint32 m3c;            // +0x3c
+};
+
+extern "C" void* SPAudioVoiceManagerEAPD_ctor(void* self); // 0xa465b0
+extern "C" void* __fastcall SP_ConstructcEmitterSndPlayer(void* self); // 0xa398d0
+extern "C" int   FUN_00a68e90(void* dest, SoundConfig cfg); // 0xa68e90
 extern "C" void* __fastcall FUN_0092b1d0(void* self);     // 0x92b1d0
 extern "C" void  __fastcall FUN_005d7450(void* self);     // 0x5d7450
-extern "C" void  FUN_00a31f20(void* cmd);                 // 0xa31f20
-extern "C" int   FUN_00a34dc0(void* msg, void* node);     // 0xa34dc0
-extern "C" int   FUN_00fc7e50(void* node);                // 0xfc7e50 (Node::Type)
-extern "C" int   FUN_00a0fab0(void* cmd, uint32 id, uint32* out); // 0xa0fab0 GetUint32
-extern "C" int   FUN_00a43580_helper();                   // 0xa43580
 extern "C" double FUN_00a41fc0();                         // 0xa41fc0
-extern "C" int   FUN_00a31170(void* self);                // 0xa31170 cSystem::InitAT
+extern "C" bool  __fastcall FUN_00a31170(void* self);     // 0xa31170 cSystem::InitAT
 extern "C" long  atol(const char*);                       // msvcr90
 extern "C" char* strchr(const char*, int);                // msvcr90
 extern "C" uint32 EA_Sockets_IPAddress_LookupName(void* self, int flags); // 0x94c1b0
@@ -210,7 +260,6 @@ extern void cSystem_SetCurrentContext(cSystem* self, int ctx);
 void cSystem_SetCurrentContext(cSystem* self, int ctx);  // 0xa426f0
 
 extern void* EA_ResourceMan_Manager_v38(void* mgr, void* out, void* key, int zero);
-extern void cEventModifier_Init(void* m);
 extern void EA_ResourceMan_Resource_Init(void* r);
 
 // ---------------------------------------------------------------------------
@@ -302,17 +351,42 @@ void cSystem::HandleMessage(uint32 msgId, int* pData)
 }
 
 // ===========================================================================
-// @ 0x00a44e80
+// FUN_00a44e80: insert a default record into mTable320
 // ===========================================================================
+extern "C" const float g_fSoundMapRate;   // 0x1453edc  (14.285714f)
+
+// Value stored in cSystem::mTable320; layout mirrors the copy performed by the
+// eastl hashtable node constructor at 0x00a43790.
+struct SoundMapValue {
+    uint32      mKey;       // +0x00
+    uint32      mPad04;     // +0x04
+    uint32      mField08;   // +0x08
+    uint32      mPad0c;     // +0x0c
+    double      mField10;   // +0x10
+    float       mField18;   // +0x18
+    float       mField1c;   // +0x1c
+    float       mField20;   // +0x20
+    RefCounted* mpObject;   // +0x24
+};
+
+// @ 0x00a44e80
 void cSystem::FUN_00a44e80(uint32 key)
 {
     HashTable& t = mTable320;
     Iterator it;
     t.hashFind(&it, &key);
     if (it.mpNode == t.mpBucketArray[t.mnBucketCount]) {
-        uint32 built = 0;
-        FUN_00a43580_helper();
-        (void)built;
+        SoundMapValue v;
+        v.mKey     = key;
+        v.mField08 = 0;
+        v.mField10 = 0.0;
+        v.mField18 = g_fSoundMapRate;
+        v.mField1c = 0.0f;
+        v.mField20 = 0.0f;
+        v.mpObject = 0;
+        t.insert(&it, &v, key & 0xffffff00);
+        if (v.mpObject)
+            v.mpObject->Release();
     }
 }
 
@@ -328,6 +402,27 @@ void cSystem::FUN_00a44f70(int key)
         it = t.erase(it);
     }
 }
+
+// ---------------------------------------------------------------------------
+// EASTL fixed_pool_base (init at 0x921260) and the prime_rehash_policy copy
+// used by the hashtable constructor.
+// ---------------------------------------------------------------------------
+struct FixedPoolBase {
+    void*  mpHead;             // +0x00
+    void*  mpTail;             // +0x04
+    void*  mpBlock;            // +0x08
+    void*  mpBlockEnd;         // +0x0c
+    uint32 mNodeSize;          // +0x10
+    void*  mpOwner;            // +0x14
+    void   init(void* p, unsigned count, unsigned blockSize, unsigned align, unsigned extra); // 0x921260
+};
+
+struct PrimeRehashPolicy {
+    float  mfMaxLoadFactor;    // +0x00
+    float  mfGrowthFactor;     // +0x04
+    uint32 mnNextResize;       // +0x08
+    uint32 GetBucketCount(uint32 n);   // 0x9213c0
+};
 
 // ===========================================================================
 struct FixedHashtable {
@@ -345,37 +440,35 @@ struct FixedHashtable {
     char* mpEnd;               // +0x1cc
     void* ctor(int a, int b);  // 0xa44fc0
     void  erase(int n);        // 0xa42e90
+    // eastl::hashtable constructor (thiscall, seven stack arguments)
+    void  hashtableCtor(int bucketCount, int a, int* pb1, int* pb2, int b, int* pb3,
+                        FixedPoolBase* pool);                 // 0xa43690
 };
 
-struct FixedPoolBase {
-    void* mpHead;              // +0x00
-    void* mpNext;              // +0x04
-    void* mpEnd;               // +0x08
-    int   mNodeSize;           // +0x0c
-};
-
-extern "C" void  eastl_fixed_pool_base_init(void* self, void* p, int n, int size, int a, int b); // 0x921260
-extern "C" void* FUN_00921340(int n);            // 0x921340
-extern "C" uint32 FUN_009213c0(uint32 n);          // 0x9213c0
-extern "C" void  eastl_hashtable_ctor(void* self, void* poolEnd, int a, void* b, void* c, void* d, void* e); // 0xa43690
+extern "C" int FUN_00921340(unsigned n);          // 0x921340
 
 // @ 0x00a44fc0
-static void* FixedHashtable_ctor(FixedHashtable* self, int a, int b)
+void* FixedHashtable::ctor(int a, int b)
 {
     FixedPoolBase pool;
     pool.mpHead = 0;
-    eastl_fixed_pool_base_init(&pool, (char*)self + 0x8c, 0x140, 0x10, 4, 0);
-    void* this8c = (char*)self + 0x8c;
-    void* this34 = (char*)self + 0x34;
-    void* poolEnd = (char*)self + 0x8c + 0x140;
-    void* p = FUN_00921340(0x15);
-    eastl_hashtable_ctor(self, poolEnd, 0x10, this34, this8c, p, (void*)0);
-    self->m10 = 0x461c4000;
-    self->m14 = 0x40000000;
-    self->m18 = 0;
-    uint32 n = FUN_009213c0(self->m0c);
-    if ((uint32)self->m08 < n) self->erase(n);
-    return self;
+    pool.init((char*)this + 0x8c, 0x140, 0x10, 4, 0);
+    pool.mpBlock    = (char*)this + 0x8c;
+    pool.mpBlockEnd = (char*)this + 0x1cc;
+    pool.mNodeSize  = 0x10;
+    pool.mpOwner    = (char*)this + 0x34;
+    int bucketCount = FUN_00921340(0x15);
+    hashtableCtor(bucketCount, a, &b, &b, b, &b, &pool);
+    m10 = 0x461c4000;   // 10000.0f
+    m14 = 0x40000000;   // 2.0f
+    m18 = 0;
+    PrimeRehashPolicy policy;
+    policy.mfMaxLoadFactor = 10000.0f;
+    policy.mfGrowthFactor  = 2.0f;
+    policy.mnNextResize    = 0;
+    uint32 n = policy.GetBucketCount((uint32)m0c);
+    if ((uint32)m08 < n) erase((int)n);
+    return this;
 }
 
 // ===========================================================================
@@ -453,40 +546,42 @@ void cSystem::FUN_00a45610(int a, int b)
 // ===========================================================================
 // @ 0x00a45780
 // ===========================================================================
-void cSystem::DoCommandMainThread(void* cmd)
+void cSystem::DoCommandMainThread(void* cmdRaw)
 {
-    int type = FUN_00fc7e50(cmd);
+    Command* cmd = (Command*)cmdRaw;
+    uint32 type = cmd->Type();
     if (type == 0x3a0fcce) {
         uint32 key;
-        if (FUN_00a0fab0(cmd, 0x3475385, &key)) {
+        if (cmd->GetUint32(0x3475385, &key)) {
             HashTable& t = mTable15bf38;
             Iterator it;
             t.hashFind(&it, &key);
             if (it.mpNode != t.mpBucketArray[t.mnBucketCount]) {
-                uint32 sub = 0, val = 0;
-                FUN_00a0fab0(cmd, 0x3a0fce5, &sub);
-                FUN_00a0fab0(cmd, 0x39e3c9f, &val);
+                uint32 sub, val;
+                cmd->GetUint32(0x3a0fce5, &sub);
+                cmd->GetUint32(0x39e3c9f, &val);
                 if (sub == 0x3a0fd6e) {
-                    FUN_00a44f70(key);
+                    FUN_00a44f70((int)key);
                 } else if (sub == 0x617208b) {
-                    FUN_00a45610((int)it.mpNode, val);
-                    FUN_00a31f20(cmd);
+                    FUN_00a45610((int)key, (int)val);
+                    SysDoCommandMainThread(cmdRaw);
                     return;
                 }
             }
         }
     } else if (type == 0x40fdf2f) {
+        cEapdMessage msg;
+        msg.mCommand = 0;
         Server* srv = EA_Messaging_GetServer();
         if (srv) {
-            char msg[0x20];
-            if (FUN_00a34dc0(msg, cmd)) {
-                srv->s14(0x41638ca, msg, 0);
-                FUN_00a31f20(cmd);
+            if (msg.Init(cmd)) {
+                srv->s14(0x41638ca, &msg, 0);
+                SysDoCommandMainThread(cmdRaw);
                 return;
             }
         }
     }
-    FUN_00a31f20(cmd);
+    SysDoCommandMainThread(cmdRaw);
 }
 
 // ===========================================================================
@@ -516,9 +611,16 @@ void cSystem::FUN_00a458b0(char* s, char* t)
 }
 
 // ===========================================================================
+// @ 0x00a45130
+// ===========================================================================
+extern "C" uint32 g_resourceGroupId;   // 0x15541dc
+
 struct ResKey { uint32 id; uint32 group; uint32 extra; };
 
-struct FixedVector3 { ResKey* mpBegin; ResKey* mpEnd; ResKey* mpCapEnd; };
+struct ResKeyList { ResKey* mpBegin; ResKey* mpEnd; ResKey* mpCapEnd; };
+
+// 4-byte refcount header that precedes an eastl allocator-owned buffer.
+struct AllocBlockHeader { int32_t mRefCount; };
 
 struct EA_ResourceMan_Manager {
     virtual void r00(); virtual void r04(); virtual void r08(); virtual void r0c();
@@ -528,8 +630,29 @@ struct EA_ResourceMan_Manager {
     virtual void r38(void* out, void* key, int c);   // +0x38
 };
 
-struct EmitterModel {
-    void* mpPool; // placeholder
+// refcounted object whose AddRef/Release live at vtable slots +4/+8.
+struct RefCounted4 {
+    virtual void v00();
+    virtual void AddRef();      // +0x04
+    virtual void Release();     // +0x08
+};
+
+// SPAudioVoiceManagerEAPD: AddRef/Release at vtable slots +0x24/+0x28.
+struct VoiceManager {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void AddRef();     // +0x24
+    virtual void Release();                        // +0x28
+};
+
+struct SockSub {
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
+    virtual void s20(); virtual void s24();        // +0x24
+};
+struct DatagramSocketObj {
+    char    pad00[8];
+    SockSub mSub;                                  // +0x08
 };
 
 struct EAPD_System {
@@ -538,62 +661,84 @@ struct EAPD_System {
 };
 
 struct ResourceObj {
-    virtual void pf00();
-    virtual void pf04();
+    void* mpVtbl;      // +0x00
+    int   mRefCount;   // +0x04
 };
 
-struct DatagramSocket {
-    virtual void d00(); virtual void d04(); virtual void d08();
-    virtual void d0c(); virtual void d10(); virtual void d14();
-    virtual void d18(); virtual void d1c(); virtual void d20();
-    virtual void d24();                 // +0x24
-};
-
-extern "C" void* Eapd_Debug_ObjectError2();          // 0x8de1a0
-extern "C" void* SP_MessageServer();
-
-struct cEventModifierStub {
-    void Init();      // 0xa3a180
-};
+extern "C" void* __fastcall UTF_Sockets_Sockets_ctor(void* self);       // 0x94e920
+extern "C" void  __fastcall FUN_00a466d0(void* self);                   // 0xa466d0
+extern "C" void  __fastcall cEventModifier_Init(void* self);            // 0xa3a180
 
 // @ 0x00a45130
 bool cSystem::FUN_00a45130()
 {
     if (!FUN_00a31170(this)) return false;
 
-    FixedVector3 list;
+    ResKeyList list;
     list.mpBegin = 0; list.mpEnd = 0; list.mpCapEnd = 0;
 
     ResKey key;
     key.id    = 0x1402ee0;
-    key.group = *(uint32*)0x15541dc;
+    key.group = g_resourceGroupId;
     key.extra = 0;
 
     EA_ResourceMan_Manager* mgr = (EA_ResourceMan_Manager*)EA_ResourceMan_GetManager();
     mgr->r38(&list, &key, 0);
 
-    for (ResKey* it = list.mpBegin; it != list.mpEnd; it += 1) {
-        this->AddSymbolList(it->id);
+    for (ResKey* p = list.mpBegin; p != list.mpEnd; ++p)
+        this->AddSymbolList(p->id);
+
+    RefCounted4* em = (RefCounted4*)operator_new6(0x38, "Audio", 0, 0, 0, 0);
+    if (em) em = (RefCounted4*)SP_ConstructcEmitterSndPlayer(em);
+    RefCounted4* oldEm = (RefCounted4*)mpEventModifier;
+    if (em != oldEm) {
+        if (em) em->AddRef();
+        mpEventModifier = (RefCounted*)em;
+        if (oldEm) oldEm->Release();
     }
+    cEventModifier_Init(mpEventModifier);
 
-    mpEventModifier = (RefCounted*)operator_new6(0x38, "Audio", 0, 0, 0, 0);
-    if (mpEventModifier) cEventModifier_Init(mpEventModifier);
-
-    // register emitter constructors
+    // register the three emitter constructors in the symbol table
     uint32 ids[3] = { 0x1a527db, 0x22d2c83, 0x7c05b331 };
-    void*   fns[3] = { (void*)0xa420d0, (void*)0xa42130, SP_ConstructcEmitterModelSound };
+    uint32 fns[3] = { 0xa420d0, 0xa42130, 0xa42190 };
     for (int i = 0; i < 3; i++) {
         Iterator it;
-        mSymbolTable.hashFind(&it, &ids[i]);
-        *(void**)((char*)it.mpNode + 4) = fns[i];
+        mSymbolTable.find(&it, &ids[i]);
+        if (it.mpNode == mSymbolTable.mpBucketArray[mSymbolTable.mnBucketCount]) {
+            uint32 kv[2] = { ids[i], 0 };
+            mSymbolTable.insertSymbol(&it, kv, false);
+        }
+        *(uint32*)((char*)it.mpNode + 4) = fns[i];
     }
 
-    mp15bc80 = (RefCounted*)operator_new6(0x2c, "Audio", 0, 0, 0, 0);
-    if (mp15bc80) FUN_00a466d0(mp15bc80);
+    VoiceManager* vm = (VoiceManager*)operator_new6(0x2c, "Audio", 0, 0, 0, 0);
+    if (vm) vm = (VoiceManager*)SPAudioVoiceManagerEAPD_ctor(vm);
+    VoiceManager* oldVm = (VoiceManager*)mp15bc80;
+    if (vm != oldVm) {
+        if (vm) vm->AddRef();
+        mp15bc80 = (RefCounted*)vm;
+        if (oldVm) oldVm->Release();
+    }
+    FUN_00a466d0(mp15bc80);
 
-    char cfg[0x40];
-    for (int i = 0; i < 0x40; i++) cfg[i] = 0;
-    bool ok = FUN_00a68e90(&mField15bc34) != 0;
+    SoundConfig cfg;
+    cfg.m00 = 0x80;
+    cfg.m04 = 0x400;
+    cfg.m08 = 0x80;
+    cfg.m0c = 0x100;
+    cfg.m10 = 0x100;
+    cfg.m14 = 0x2000;
+    cfg.m18 = 1;
+    cfg.m1c = 0;
+    cfg.m20 = 1;
+    cfg.m24 = 0x20;
+    cfg.m28 = mp15bc80;
+    cfg.m2c = 0;
+    cfg.m30 = (void*)0xa42200;      // StaticConvertSymbolToId
+    cfg.m34 = 0;
+    cfg.m38 = 0;
+    cfg.m3c = 0;
+    bool ok = FUN_00a68e90(&mField15bc34, cfg) != 0;
 
     if (ok) {
         EAPD_System* sys = (EAPD_System*)Eapd_ISystem_GetSingletonPtr();
@@ -604,15 +749,50 @@ bool cSystem::FUN_00a45130()
             SP_Mixer_Register();
             SP_Trixie_Register();
             SP_SendGame_Register();
+
             ResourceObj* res = (ResourceObj*)ZoneObject_operator_new6(8, "Audio", 0, 0, 0, 0);
-            if (res) { }
-            mp15bc7c = (RefCounted*)res;
-            ((IHandler6*)Eapd_Debug_ObjectError2())->h14();
-            DatagramSocket* sock = (DatagramSocket*)operator_new6(0x84, "Audio", 0, 0, 0, 0);
-            mpSocket15bce0 = (RefCounted*)sock;
-            if (sock) sock->d24();
+            if (res) {
+                res->mpVtbl = (void*)0x1453ee0;
+                res->mRefCount = 0;
+            }
+            ResourceObj* oldRes = (ResourceObj*)mp15bc7c;
+            if (res != oldRes) {
+                if (res) {
+                    typedef void (__thiscall *Fn)(void*);
+                    Fn add = *(Fn*)((char*)res->mpVtbl + 4);
+                    add(res);
+                }
+                mp15bc7c = (RefCounted*)res;
+                if (oldRes) {
+                    typedef void (__thiscall *Fn)(void*);
+                    Fn rel = *(Fn*)((char*)oldRes->mpVtbl + 8);
+                    rel(oldRes);
+                }
+            }
+            Eapd_Debug_ObjectError()->d44(1, mp15bc7c, 0);
+
+            DatagramSocketObj* sock = (DatagramSocketObj*)operator_new6(0x84, "Audio", 0, 0, 0, 0);
+            if (sock) sock = (DatagramSocketObj*)UTF_Sockets_Sockets_ctor(sock);
+            DatagramSocketObj* oldSock = (DatagramSocketObj*)mpSocket15bce0;
+            if (sock != oldSock) {
+                if (sock) sock->mSub.s00();
+                mpSocket15bce0 = (RefCounted*)sock;
+                if (oldSock) oldSock->mSub.s04();
+            }
+            ((DatagramSocketObj*)mpSocket15bce0)->mSub.s24();
+
+            if (list.mpBegin) {
+                AllocBlockHeader* hdr = (AllocBlockHeader*)list.mpBegin - 1;
+                if (hdr->mRefCount != 0)
+                    operator_delete(list.mpBegin);
+            }
             return true;
         }
+    }
+    if (list.mpBegin) {
+        AllocBlockHeader* hdr = (AllocBlockHeader*)list.mpBegin - 1;
+        if (hdr->mRefCount != 0)
+            operator_delete(list.mpBegin);
     }
     return false;
 }
