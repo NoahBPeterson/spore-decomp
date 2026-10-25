@@ -4,8 +4,8 @@
 00e82130 ?FUN_00e82130@@YIXPAH@Z  # FUN_00e82130 migrated from s00e819b0 (verbatim, slice spelling)
 00e82140 SP::sCellResourceLoadFailure
 00e821d0 FUN_00e821d0  # load resource by id (returns bool)
-00e82280 FUN_00e82280  # Release every node ref in the global list
-00e822c0 SP::LoadResource
+00e82280 ?FUN_00e82280@@YAXXZ  # FUN_00e82280 migrated from s00e819b0 (verbatim, slice spelling)
+00e822c0 ?LoadResource@SP@@YAXPAH@Z  # LoadResource migrated from s00e819b0 (verbatim, slice spelling)
 00e82340 FUN_00e82340  # allocate list node (0x18) and copy key
 00e823a0 SP::ResourceGetFromHandle
 00e82420 FUN_00e82420  # find-or-insert key in intrusive list, return value ptr
