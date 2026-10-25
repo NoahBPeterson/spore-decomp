@@ -1,1 +1,2 @@
-00cfd3a0 SP::cCivModeStrategy::HandleMessage  # PDB caller-scored; IMessageListener override at +0x24 (this-0x24 for strategy calls)
+00b25c30 ?GetPlayerCity@cGameNounManager@SP@@QBEPAVcCity@2@XZ  # SP::cGameNounManager::GetPlayerCity (callee of s00cfd3a0, named from the dev publics; slice address comment)
+00cfd3a0 ?HandleMessage@cCivModeStrategy_s00cf_d3a0@SP@@UAE_NIPAX@Z  # HandleMessage migrated from s00cfd3a0 (verbatim, slice spelling)

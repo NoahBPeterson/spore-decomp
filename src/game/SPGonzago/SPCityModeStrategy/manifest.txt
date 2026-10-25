@@ -1,0 +1,20 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?ShutdownGonzagoSubsystem@@YAXXZ  00cf7360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?OnMouseDown@cCivModeStrategy@@QAEXIMMI@Z  00cf7380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?OnMouseMove@cCivModeStrategy@@QAEXMMI@Z  00cf73d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?OnMouseUp@cCivModeStrategy@@QAEXIMMI@Z  00cf7420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?AsInterface@cCivModeStrategy@@QAEPAXI@Z  00cf7490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?CanBuildSeaVehicles@cCivModeStrategy@@QAE_NXZ  00cf75d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?CanBuildAirVehicles@cCivModeStrategy@@QAE_NXZ  00cf7600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?DoCVGCompletionAchievements@cCivModeStrategy@@QAEXXZ  00cf7630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?MarkCivEventAsOccurred@@YGXI@Z  00cf77f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?HasCivTutorialOccurred@cCivModeStrategy@@QAEHI@Z  00cf7830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?SetDialogueTimed@cCivModeStrategy@@QAEXI@Z  00cf7a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?ClearDialogue@cCivModeStrategy@@QAEXXZ  00cf7a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?IsNotCivEventA@cCivModeStrategy@@QAE_NXZ  00cf7a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?FindBuildableVehicle@cCivModeStrategy@@QAEPAXI@Z  00cf7d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?ShowOptionWindows@cCivModeStrategy_s00cf_8d70@SP@@QAEXXZ  00cf8e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?FUN_00cfa0c0@@YIDPAX@Z  00cfa0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?DoNext@Strat@@QAEXHD@Z  00cfa990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?SignalCivEvent@Strat@@QAEXHMMH@Z  00cfaab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?GetNumberedCity@cCivModeStrategy_s00cf_ab90@@QAEPAXH@Z  00cfb610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

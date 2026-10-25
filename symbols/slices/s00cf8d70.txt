@@ -1,0 +1,3 @@
+00cf8e00 ?ShowOptionWindows@cCivModeStrategy_s00cf_8d70@SP@@QAEXXZ  # cCivModeStrategy_s00cf_8d70::ShowOptionWindows migrated from s00cf8d70 (verbatim, slice spelling)
+00cf94b0 ?HasActiveTrack@cCivModeStrategy_s00cf_8d70@SP@@QAE_NXZ  # cCivModeStrategy_s00cf_8d70::HasActiveTrack migrated from s00cf8d70 (verbatim, slice spelling)
+00cf94e0 ?ForEachNode@SP@@YAXPAUcRangeOut@1@PAI1P6IXPAX@ZI@Z  # ForEachNode migrated from s00cf8d70 (verbatim, slice spelling)

@@ -1,0 +1,1 @@
+00cfb610 ?GetNumberedCity@cCivModeStrategy_s00cf_ab90@@QAEPAXH@Z  # cCivModeStrategy_s00cf_ab90::GetNumberedCity migrated from s00cfab90 (verbatim, slice spelling)

@@ -1,0 +1,2 @@
+00cfe160 ?FUN_00cfe160@@YAXXZ  # FUN_00cfe160 migrated from s00cfe160 (verbatim, slice spelling)
+00cfe5b0 ?FUN_00cfe5b0@@YAXXZ  # FUN_00cfe5b0 migrated from s00cfe160 (verbatim, slice spelling)
