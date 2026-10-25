@@ -1,7 +1,7 @@
 // Slice s00b2f870 - Simulator::cGameTerrainCursor and neighbours.
 // Reconstructed from the Ghidra decompilation + disassembly. No assembly is transcribed.
 
-extern "C" float sqrtf(float);
+#include <math.h>
 
 typedef void* (__thiscall *TCP0)(void*);
 typedef void* (__thiscall *TCP1)(void*, int);
@@ -23,8 +23,8 @@ typedef char  (__thiscall *TCC0)(void*);
 #define DAT_0167e7a4 (*(int**)0x0167e7a4u)
 #define DAT_0167e898 (*(int**)0x0167e898u)
 #define F_0167e770   (*(float*)0x0167e770u)
-#define F_0167e76c   (*(float*)0x0167e76cu)
-#define F_0167e768   (*(float*)0x0167e768u)
+#define I_0167e76c   (*(int*)0x0167e76cu)
+#define I_0167e768   (*(int*)0x0167e768u)
 #define F_0167e74c   (*(float*)0x0167e74cu)
 #define F_0167e774   (*(float*)0x0167e774u)
 #define F_0167e778   (*(float*)0x0167e778u)
@@ -35,6 +35,17 @@ typedef char  (__thiscall *TCC0)(void*);
 
 struct Vector3 { float x, y, z; };
 struct Vector4 { float x, y, z, w; };
+
+struct Matrix33 { float m00, m01, m02, m10, m11, m12, m20, m21, m22; };
+
+struct DirtyTransform {
+  unsigned short flags;      // +0
+  unsigned short dirty;      // +2
+  Vector3        pos;        // +4
+  float          w;          // +0x10
+  Matrix33       mat;        // +0x14  Matrix33
+  void FUN_00409930();       // 0x00409930  ctor
+};
 
 struct VarMap {
   void  SetVar(const char* name, float value);   // 0x007f25c0 (ret 8)
@@ -54,10 +65,18 @@ void  __cdecl FUN_00b2fbe0();                    // 0x00b2fbe0
 char  __stdcall FUN_00b301c0(int, void*);        // 0x00b301c0
 void  __cdecl FUN_0093aa70(void*, void*, int, int);   // 0x0093aa70 EA::IO::WriteUint32
 void  __cdecl FUN_0093a780(void*, void*, int, int);   // 0x0093a780 EA::IO::ReadInt32
-void  __cdecl FUN_00409930();                    // 0x00409930 Transform_Ctor
-void* __cdecl FUN_00fb8db0(void*);               // 0x00fb8db0
+char  __cdecl FUN_008d2f30(int*, int*);               // 0x008d2f30 GetCursorPosition
 
-struct CVLS { char b[0xa00]; };                  // cVarListSerializer storage
+struct Timer {
+  unsigned long long GetElapsedTime();             // 0x00bc3190 (ret 0)
+};
+#define TIMER ((Timer*)0x0167e7c0u)
+#define V_0167e774 (*(Vector3*)0x0167e774u)
+
+typedef void (__thiscall *TF1)(void*, float);
+typedef void (__thiscall *TFV3)(void*, Vector3*, int, Vector3);
+
+struct CVLS { unsigned b[0x285]; };               // cVarListSerializer storage (0xa14)
 
 struct S {
   // helper members (this-call, bodies supplied by the original; declared only)
@@ -71,15 +90,15 @@ struct S {
   bool  FUN_00b18600(void*);                     // 0x00b18600  cGameData::Read
   bool  FUN_00c88a90(void*);                     // 0x00c88a90  cSpatialObject::Write
   bool  FUN_00c88b00(void*);                     // 0x00c88b00
-  void  FUN_00692f90(void*, int);                // 0x00692f90  cVarListSerializer::ctor
+  void  FUN_00692f90(const void*, void*, unsigned);  // 0x00692f90  cVarListSerializer::ctor
   bool  FUN_00692900(void*);                     // 0x00692900  cVarListSerializer::Serialize
   bool  FUN_00693e10(void*);                     // 0x00693e10  cVarListSerializer::Serialize
   void  FUN_00b0f240(void*, void*, void*);       // 0x00b0f240  InputHost::GetAnglesB
   void  FUN_00b22650();                          // 0x00b22650  RemoveNounsOfType
   void  FUN_007c40f0(void*);                     // 0x007c40f0
   void  FUN_007f20d0(const char*);               // 0x007f20d0
-  void  FUN_008d2f30(void*, void*);              // 0x008d2f30
-  int   FUN_00b3d240();                          // (unused placeholder)
+  void  FUN_00409930();                          // 0x00409930  Transform_Ctor
+  void  FUN_00fb8db0(void*);                     // 0x00fb8db0
 
   void FUN_00b2f870(void*);
   void* FUN_00b2fa00(void*);
@@ -98,40 +117,42 @@ struct S {
   void FUN_00b30360();
   void FUN_00b303e0();
   void FUN_00b30550();
-  void FUN_00b307e0(void*, void*);
+  void FUN_00b307e0(void*, char);
 };
 
 // ---------------------------------------------------------------------------
 // @ 0x00b2f870
 // ---------------------------------------------------------------------------
 void S::FUN_00b2f870(void* param_2) {
-  void* piVar1 = FUN_0067ddc0();
-  if (piVar1 == 0) return;
-  if (((TCI0)(VTO(piVar1))[0x4c / 4])(piVar1) != *(int*)this) return;
+  void* cam = FUN_0067ddc0();
+  if (cam == 0) return;
+  if (((TCI0)(VTO(cam))[0x4c / 4])(cam) != *(int*)this) return;
 
+  Vector3 n;
   float* p = (float*)param_2;
-  float f50 = p[0];
-  float f4c = p[1];
-  float f48 = p[2];
-  float inv = 1.0f / sqrtf(f50 * f50 + f4c * f4c + f48 * f48 + 1e-8f);
-  f50 = f50 * inv;
-  f4c = f4c * inv;
-  f48 = f48 * inv;
-  ((TCV2)(VTO(piVar1))[0x38 / 4])(piVar1, (int)param_2, (int)&f50);
+  float inv = 1.0f / sqrtf(p[0] * p[0] + p[1] * p[1] + p[2] * p[2] + 1e-8f);
+  n.x = p[0] * inv;
+  n.y = p[1] * inv;
+  n.z = p[2] * inv;
+  ((TCV2)(VTO(cam))[0x38 / 4])(cam, (int)param_2, (int)&n);
 
   void* app = FUN_0067d10();
   void* app2 = ((TCP0)(VTO(app))[0x50 / 4])(app);
-  int* r = (int*)((TCP0)(VTO(app2))[0x1c / 4])(app2);
-  if (r != 0) {
-    FUN_00409930();
-    ((S*)r)->FUN_007c40f0((void*)0);
-    ((TCV1)(VTO(piVar1))[0x3c / 4])(piVar1, (int)&f50);
+  void* obj = ((TCP0)(VTO(app2))[0x1c / 4])(app2);
+  if (obj != 0) {
+    DirtyTransform xf;
+    xf.FUN_00409930();
+    ((S*)obj)->FUN_007c40f0(&xf);
+    ((TCV1)(VTO(cam))[0x3c / 4])(cam, (int)&xf.pos);
   }
-  int* pm = (int*)FUN_00b3d350();
-  void* sub = ((TCP0)(VTO(*(void**)((char*)pm + 0x24)))[0x10 / 4])(*(void**)((char*)pm + 0x24));
-  FUN_00fb8db0(sub);
-  ((TCV1)(VTO(piVar1))[0x30 / 4])(piVar1, (int)&f50);
-  ((TCV0)(VTO(piVar1))[0x0c / 4])(piVar1);
+
+  Vector3 planetPos;
+  void* pm = FUN_00b3d350();
+  void* sub = *(void**)((char*)pm + 0x24);
+  void* world = ((TCP0)(VTO(sub))[0x10 / 4])(sub);
+  ((S*)world)->FUN_00fb8db0(&planetPos);
+  ((TCV1)(VTO(cam))[0x30 / 4])(cam, (int)&planetPos);
+  ((TCV0)(VTO(cam))[0x0c / 4])(cam);
 }
 
 // ---------------------------------------------------------------------------
@@ -324,9 +345,8 @@ char S::FUN_00b30010(void* param_2) {
   bool bv = !(cVar3 == 0 || cVar2 == 0);
 
   CVLS cvs;
-  ((S*)&cvs)->FUN_00692f90(this, 0x1a80d26);
+  ((S*)&cvs)->FUN_00692f90(this, (void*)0x1568e18, 0x1a80d26);
   char cVar4 = ((S*)&cvs)->FUN_00692900(param_2);
-  (void)0x1568e18;
   if (cVar4 != 0 && bv) return 1;
   return 0;
 }
@@ -335,28 +355,27 @@ char S::FUN_00b30010(void* param_2) {
 // @ 0x00b300c0  ISimulatorSerializable::Read
 // ---------------------------------------------------------------------------
 char S::FUN_00b300c0(void* param_2) {
-  int* piVar5 = (int*)((TCP0)(VTO(param_2))[0x20 / 4])(param_2);
-  int local = 0;
+  void* p = param_2;
+  int* piVar5 = (int*)((TCP0)(VTO(p))[0x20 / 4])(p);
+  int local;
   void* uVar6 = ((TCP0)(VTO(piVar5))[0x18 / 4])(piVar5);
   FUN_0093a780(uVar6, &local, 1, 0);
-  char cVar3 = ((S*)this)->FUN_00b18600(param_2);
-  char cVar4 = ((S*)((char*)this + 0x34))->FUN_00c88b00(param_2);
-  bool bv = !(cVar4 == 0 || cVar3 == 0);
+  char ok = this->FUN_00b18600(p);
+  char cVar4 = ((S*)((char*)this + 0x34))->FUN_00c88b00(p);
+  if (cVar4 == 0 || ok == 0) ok = 0; else ok = 1;
 
   CVLS cvs;
-  ((S*)&cvs)->FUN_00692f90(this, 0x1a80d26);
-  char cVar5 = ((S*)&cvs)->FUN_00693e10(param_2);
-  (void)0x1568e18;
+  ((S*)&cvs)->FUN_00692f90(this, (void*)0x1568e18, 0x1a80d26);
+  char cVar5 = ((S*)&cvs)->FUN_00693e10(p);
+  if (cVar5 == 0 || ok == 0) ok = 0; else ok = 1;
   int* prev = DAT_0167e7a4;
-  bool ok = !(cVar5 == 0 || !bv);
-  if ((void*)this != (void*)DAT_0167e7a4) {
+  if ((void*)this != (void*)prev) {
     if (this != 0)
-      ((TCV0)(VTO(this))[0x0c / 4])(this);   // AddRef
+      ((TCV0)(VTO(this))[0x00 / 4])(this);   // AddRef
     DAT_0167e7a4 = (int*)this;
     if (prev != 0)
       ((TCV0)(VTO(prev))[0x04 / 4])(prev);   // Release
-  }
-  return ok ? 1 : 0;
+  }  return ok;
 }
 
 // ---------------------------------------------------------------------------
@@ -433,42 +452,40 @@ void S::FUN_00b30360() {
 // @ 0x00b303e0  UpdateSelectedObjects
 // ---------------------------------------------------------------------------
 void S::FUN_00b303e0() {
-  void* mp = *(void**)((char*)this + 0x164);
-  if (mp == 0) {
-    ((TCV0)(VTO(this))[0x70 / 4])(this);
-    return;
-  }
-  float radius = *(float*)((char*)this + 0x148) + 0.2f;
-  Vector3 origin;
-  ((TCV1)(VTO((char*)this + 0x34))[0x2c / 4])((char*)this + 0x34, (int)&origin);
-  float rsq = radius * radius;
-
-  bool touched = false;
-  int* begin = *(int**)mp;
-  int* end = (int*)*((int**)mp + 1);
-  for (int* it = begin; it != end; it++) {
-    void* o = (void*)*it;
-    if (!((TCB)(VTO(o))[0x50 / 4])(o)) {
-      Vector3 pos;
-      ((TCV1)(VTO(o))[0x2c / 4])(o, (int)&pos);
-      float dz = pos.z - origin.z;
-      float dy = pos.y - origin.y;
-      float dx = pos.x - origin.x;
-      if ((dz * dz + dy * dy) + dx * dx < rsq) {
-        ((TCV1)(VTO(o))[0x54 / 4])(o, 1);
-        touched = true;
-        int* col = (int*)FUN_00b3d240();
-        Vector3 gp;
-        ((TCV1)(VTO(o))[0x2c / 4])(o, (int)&gp);
-        ((TCV2)(VTO(*(void**)col))[0x60 / 4])(col, 0x903427bf, (int)&gp);
-      }
+  char touched = 0;
+  if (*(void**)((char*)this + 0x164) != 0) {
+    float radius = *(float*)((char*)this + 0x148) + 0.2f;
+    float rsq = radius * radius;
+    Vector3* org = (Vector3*)((TCP0)(VTO((char*)this + 0x34))[0x2c / 4])((char*)this + 0x34);
+    float ox = org->x;
+    float oy = org->y;
+    float oz = org->z;
+    void** it = (void**)*(void***)((char*)this + 0x164);
+    if (it != (void**)((*(void***)((char*)this + 0x164))[1])) {
+      do {
+        void* o = *it;
+        if (!((TCB)(VTO(o))[0x50 / 4])(o)) {
+          Vector3* pos = (Vector3*)((TCP0)(VTO(o))[0x2c / 4])(o);
+          float dz = pos->z - oz;
+          float dy = pos->y - oy;
+          float dx = pos->x - ox;
+          if ((dz * dz + dy * dy) + dx * dx < rsq) {
+            ((TCV1)(VTO(o))[0x54 / 4])(o, 1);
+            touched = 1;
+            void* col = FUN_00b3d240();
+            Vector3* gp = (Vector3*)((TCP1)(VTO(o))[0x2c / 4])(o, (int)0x0167e89c);
+            ((TCV2)(VTO(*(void**)col))[0x60 / 4])(col, 0x903427bf, (int)gp);
+          }
+        }
+        ++it;
+      } while (it != (void**)((*(void***)((char*)this + 0x164))[1]));
     }
-  }
-  if (touched) {
-    ((TCV0)(VTO(this))[0x74 / 4])(this);
-    ((TCV0)(VTO(this))[0xc8 / 4])(this);
-    void* ms = FUN_0067dcc0();
-    ((TCV3)(VTO(ms))[0x14 / 4])(ms, 0x52f1544, 0, 0);
+    if (touched) {
+      ((TCV0)(VTO(this))[0x74 / 4])(this);
+      ((TCV0)(VTO(this))[0xc8 / 4])(this);
+      void* ms = FUN_0067dcc0();
+      ((TCV3)(VTO(ms))[0x14 / 4])(ms, 0x52f1544, 0, 0);
+    }
   }
   ((TCV0)(VTO(this))[0x70 / 4])(this);
 }
@@ -477,33 +494,32 @@ void S::FUN_00b303e0() {
 // @ 0x00b30550  funcC8h_
 // ---------------------------------------------------------------------------
 void S::FUN_00b30550() {
-  int* piVar4 = (int*)FUN_00b3d240();
-  float vx = F_0167e774, vy = F_0167e778, vz = F_0167e77c;
-  Vector3 out;
-  ((TCV1)(VTO(piVar4))[0x38 / 4])(piVar4, (int)&out);
-  float d2 = out.x * out.x + out.y * out.y + out.z * out.z;
-  if (d2 <= *(float*)0x01485378u) return;
+  void* obj = FUN_00b3d240();
+  Vector3 dir = V_0167e774;
+  Vector3 pos;
+  ((TFV3)(VTO(obj))[0x38 / 4])(obj, &pos, 0, dir);
+
+  float d2 = pos.x * pos.x + pos.y * pos.y + pos.z * pos.z;
+  if (d2 <= 0.0f) return;
 
   int sel = ((TCI0)(VTO(this))[0x70 / 4])(this);
   float fsel = (float)sel;
-  float dx = out.x - F_0167e7b4;
-  F_0167e7b4 = out.x;
-  float dy = out.y - F_0167e7b8;
-  F_0167e7b8 = out.y;
-  float dz = out.z - F_0167e7bc;
-  F_0167e7bc = out.z;
-  F_0167e770 = sqrtf((dz * dz + dy * dy) + dx * dx) + F_0167e770;
+  float dx = pos.x - F_0167e7b4;
+  F_0167e7b4 = pos.x;
+  float dy = pos.y - F_0167e7b8;
+  F_0167e7b8 = pos.y;
+  float dz = pos.z - F_0167e7bc;
+  F_0167e7bc = pos.z;
+  F_0167e770 = sqrtf(dx * dx + dy * dy + dz * dz) + F_0167e770;
 
-  // elapsed time (seconds) since the selection timer started
-  long long t = 0;   // placeholder captured by GetElapsedTime at a fixed address
-  float secs = (float)(t & 0x7fffffffffffffffULL) * 0.001f;
+  unsigned long long t = TIMER->GetElapsedTime();
+  float secs = (float)t * 0.001f;
 
-  float zx = 0.0f, zy = 0.0f;
-  Vector3 dummy;
-  ((S*)&dummy)->FUN_008d2f30(&zx, (void*)&vy);
-  float ax = (float)((int)vx - *(int*)0x0167e76cu);
-  float ay = (float)((int)vy - *(int*)0x0167e768u);
-  float dist = (float)((int)ax * (int)ax) + (float)((int)ay * (int)ay);
+  int cx, cy;
+  FUN_008d2f30(&cx, &cy);
+  int ddx = cx - I_0167e76c;
+  int ddy = cy - I_0167e768;
+  float dist = (float)(ddx * ddx) + (float)(ddy * ddy);
 
   g_VarMap->SetVar("num_selected_creatures", fsel);
   g_VarMap->SetVar("total_cursor_travel_distance", F_0167e770);
@@ -519,54 +535,41 @@ void S::FUN_00b30550() {
   float cr = g_VarMap->GetVar("cursor_radius");
   if (cr < 1.0f) cr = 1.0f;
   float alpha = g_VarMap->GetVar("alpha");
-  ((TCV1)(VTO(this))[0xac / 4])(this, (int)&cr);
-  ((TCV1)(VTO(this))[0xb0 / 4])(this, (int)&alpha);
+  ((TF1)(VTO(this))[0xac / 4])(this, cr);
+  ((TF1)(VTO(this))[0xb0 / 4])(this, alpha);
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x00b307e0  func80h_
 // ---------------------------------------------------------------------------
-void S::FUN_00b307e0(void* param_2, void* param_3) {
-  int* arr = (int*)param_2;
-  int* p = (int*)arr[0];
-  int* end = (int*)arr[1];
-  char touched = *(char*)&param_3;
-  bool anyTouched = false;
-  void* self = this;
-  for (; p != end; p++) {
-    void* mp = *(void**)((char*)self + 0x164);
-    int* b = *(int**)mp;
-    int* e = (int*)*((int**)mp + 1);
-    void* obj = (void*)*p;
-    int* it = b;
-    while (it != e && (void*)*it != obj) it++;
-    if (it == e) continue;
-    if (touched) {
-      bool sel = ((TCB)(VTO(obj))[0x50 / 4])(obj);
-      anyTouched = true;
-      ((TCV1)(VTO(obj))[0x54 / 4])(obj, !sel);
-    } else {
-      if (!anyTouched) {
-        bool sel = ((TCB)(VTO(obj))[0x50 / 4])(obj);
-        if (sel) {
-          anyTouched = true;
-          ((TCV1)(VTO(obj))[0x54 / 4])(obj, 1);
-        } else {
-          ((TCV1)(VTO(obj))[0x54 / 4])(obj, 1);
-        }
+void S::FUN_00b307e0(void* param_2, char param_3) {
+  void** p = (void**)*(void***)param_2;
+  void** endp = (void**)((void***)param_2)[1];
+  char touched = 0;
+  while (p != endp) {
+    void* obj = *p;
+    void** mp = (void**)*(void***)((char*)this + 0x164);
+    void** e = (void**)mp[1];
+    void** it = (void**)*mp;
+    while (it != e && *it != obj) ++it;
+    if (it != e) {
+      if (param_3 != 0) {
+        touched = 1;
+        ((TCV1)(VTO(obj))[0x54 / 4])(obj, !((TCB)(VTO(obj))[0x50 / 4])(obj));
       } else {
+        if (!touched) touched = !((TCB)(VTO(obj))[0x50 / 4])(obj);
         ((TCV1)(VTO(obj))[0x54 / 4])(obj, 1);
       }
+      void* col = FUN_00b3d240();
+      Vector3* gp = (Vector3*)((TCP1)(VTO(obj))[0x2c / 4])(obj, (int)0x0167e89c);
+      ((TCV2)(VTO(*(void**)col))[0x60 / 4])(col, 0x903427bf, (int)gp);
     }
-    int* col = (int*)FUN_00b3d240();
-    Vector3 gp;
-    ((TCV1)(VTO(obj))[0x2c / 4])(obj, (int)&gp);
-    ((TCV2)(VTO(*(void**)col))[0x60 / 4])(col, 0x903427bf, (int)&gp);
+    ++p;
   }
-  ((TCV0)(VTO(self))[0x74 / 4])(self);
-  if (anyTouched) {
+  ((TCV0)(VTO(this))[0x74 / 4])(this);
+  if (touched) {
     void* ms = FUN_0067dcc0();
     ((TCV3)(VTO(ms))[0x14 / 4])(ms, 0x52f1544, 0, 0);
   }
-  *(char*)&param_3 = touched;
 }
+
