@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00c50c30 152 complete: cSPMissionExplore::MarkCityVisitedInMiniMap; not byte-exact (frame/inline schedule) flags /O2 /MD /Gy /EHsc /TP
+00c50e70 28 complete: copy 0x14-byte records forwards; not byte-exact (cl register tie: src->ecx/dst->eax in retail vs ours) flags /O2 /MD /Gy /EHsc /TP
+00c50eb0 3 complete: predicate reading a uint property; not byte-exact (retail tail-jmps 0xc4c2b0, ours calls+ret) flags /O2 /MD /Gy /EHsc /TP
+013413f0 426 explore-mission registrar, 9 records (/O2 /MD /Gy /EHsc /TP): body complete; the original keeps only 0x692ca0 in edx (simple esi/edi frame, temp at [esp+8]) while ours hoists three constants, so the prologue, the temp base and every store displacement differ (size 872 vs 918); difftest PASS (400/400 valid, 100% coverage)

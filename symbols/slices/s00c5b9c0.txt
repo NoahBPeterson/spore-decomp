@@ -1,0 +1,2 @@
+00c48e90 ??0cSPMission@SP@@QAE@XZ  # SP::cSPMission::cSPMission (callee of s00c5b9c0, named from the dev publics; slice address comment)
+00c5bd00 ?FUN_00c5bd00@@YIPAXPAUcRaidPlunderEvent@@PAXI@Z  # FUN_00c5bd00 migrated from s00c5b9c0 (verbatim, slice spelling)

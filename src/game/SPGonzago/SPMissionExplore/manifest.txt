@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionExplore.cpp  ?FUN_00c50a80@@YIHPAX0@Z  00c50a80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPMissionExplore.cpp  ?FUN_00c50aa0@@YIHPAX0@Z  00c50aa0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPMissionExplore.cpp  ?FUN_00c50ac0@@YI_NPAX0@Z  00c50ac0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPMissionExplore.cpp  ?FUN_00c50dd0@@YIXPAX00@Z  00c50dd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPMissionExplore.cpp  ?FUN_00c5bd00@@YIPAXPAUcRaidPlunderEvent@@PAXI@Z  00c5bd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
