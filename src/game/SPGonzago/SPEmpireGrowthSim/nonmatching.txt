@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00fea240 82 RuleVector::erase: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest FAIL (5/5 valid inputs mismatched; memory pool @40010004); size 94 vs 96, compiler folds dst into src+delta instead of keeping the retail dst register; tail uses add (vector grows)
+00fea510 629 cEmpireGrowthSim::OnTick: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (400 valid, 3.5% cov); size 779 vs 808, timer/threshold and star-pass bodies reduced
