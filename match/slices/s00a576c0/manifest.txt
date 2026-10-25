@@ -1,1 +1,2 @@
 slices/s00a576c0/s00a576c0.cpp  ?CollSetKey@Eapd@Audio@EA@@YAXPAUCollObject@123@II@Z  00a57730  /O2 /MD /Gy /EHsc /TP
+slices/s00a576c0/s00a576c0.cpp  ?FreeList@CollTable@Eapd@Audio@EA@@QAEXPAPAUCollNode@234@I@Z  00a57af0  /O2 /MD /Gy /EHsc /TP
