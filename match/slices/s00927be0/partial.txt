@@ -1,2 +1,0 @@
-009282e0  900  pool aligned-alloc core; alignment/segment handling approximated
-00928730  600  pool realloc core; shrink/grow paths approximated
