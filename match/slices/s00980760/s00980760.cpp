@@ -64,6 +64,16 @@ extern void* vt_1442170[];
 extern void* vt_async_13fa72c[];
 extern void* vt_gme_13eb938[];
 
+// iterator node -> object offset used by the UI object iterators (value -4)
+extern int g_1440aec;   // 0x01440AEC
+
+typedef void* (__thiscall *Nav_ItFn)(void*, int);       // vt[0x48]
+typedef void* (__thiscall *Nav_GetFn)(void*);           // vt[0x10]
+typedef void** (__thiscall *Nav_IterFn)(void*, void*);  // vt[0xcc]/vt[0xd0]
+typedef void  (__thiscall *Nav_SetIterFn)(void*, void*, void*);  // vt[0xd4]
+typedef int   (__thiscall *Nav_FlagFn)(void*);          // vt[0x28]
+typedef void  (__thiscall *Nav_VisitFn)(void*, int, void*);      // vt[0x4c]
+
 // ---------------------------------------------------------------- Navigator (0x980330..0x980b60)
 class Navigator { public:
     void* vt0;                                                         // +0x00
@@ -196,32 +206,129 @@ using namespace EA::UTFWinControls;
 
 // @ 0x980760
 bool Navigator::Navigate(void* mgr, int cmd) {
-    void* it = VSLOT(void*(__thiscall*)(void*, int), mgr, 0x48)(mgr, cmd);
+    void* it = VSLOT(Nav_ItFn, mgr, 0x48)(mgr, cmd);
     if (!it) return false;
-    void* p;
+
+    void* found;
     switch (mode) {
     case 0: case 1: case 2: case 3: {
-        void* list = VSLOT(void*(__thiscall*)(void*), it, 0x10)(it);
+        void* list = VSLOT(Nav_GetFn, it, 0x10)(it);
         if (!list) return false;
-        void** a = (void**)VSLOT(void*(__thiscall*)(void*, void*), list, 0xd0)(list, (char*)this - 0x30 + 0x30);
-        void** b = (void**)VSLOT(void*(__thiscall*)(void*, void*), list, 0xcc)(list, (char*)this - 0x30 + 0x30);
-        if (*a == *b) return false;
-        VSLOT(void(__thiscall*)(void*, void*, void*), list, 0xd4)(list, (char*)this - 0x30 + 0x30, it);
-        void** c = (void**)VSLOT(void*(__thiscall*)(void*, void*), list, 0xd0)(list, (char*)this - 0x30 + 0x30);
-        if ((void*)this == 0) {}
-        if (*c == (void*)this) { (void)0; }
-        p = 0;
+
+        // vt[0xcc]/vt[0xd0] are begin()/end(): they build an iterator in the
+        // caller's slot and return a pointer to it; *ret is the node.
+        void* ib0;
+        void* ib1;
+        void** pend = VSLOT(Nav_IterFn, list, 0xd0)(list, &ib0);
+        void** pbeg = VSLOT(Nav_IterFn, list, 0xcc)(list, &ib1);
+        if (*pend == *pbeg) return false;
+
+        void* start;
+        VSLOT(Nav_SetIterFn, list, 0xd4)(list, &start, it);
+
+        void* ib2;
+        if (start == *VSLOT(Nav_IterFn, list, 0xd0)(list, &ib2)) return false;
+
+        switch (mode) {
+        case 0: {
+            void* ib;
+            if (start == *VSLOT(Nav_IterFn, list, 0xcc)(list, &ib)) return false;
+            for (;;) {
+                void* node = *(void**)((char*)start + 4);
+                start = node;
+                void* obj = (char*)node + g_1440aec;
+                if (VSLOT(Nav_FlagFn, obj, 0x28)(obj) & 2) { found = obj; break; }
+                void* ib3;
+                if (start == *VSLOT(Nav_IterFn, list, 0xcc)(list, &ib3)) return false;
+            }
+            break;
+        }
+        case 1: {
+            void* cur = *(void**)start;
+            start = cur;
+            void* ib;
+            if (cur == *VSLOT(Nav_IterFn, list, 0xd0)(list, &ib)) return false;
+            for (;;) {
+                void* obj = (char*)cur + g_1440aec;
+                if (VSLOT(Nav_FlagFn, obj, 0x28)(obj) & 2) { found = obj; break; }
+                cur = *(void**)cur;
+                start = cur;
+                void* ib2b;
+                if (cur == *VSLOT(Nav_IterFn, list, 0xd0)(list, &ib2b)) return false;
+            }
+            break;
+        }
+        case 2: {
+            void* cur = start;
+            for (;;) {
+                void* ib;
+                if (cur == *VSLOT(Nav_IterFn, list, 0xcc)(list, &ib)) {
+                    void* ie;
+                    cur = *VSLOT(Nav_IterFn, list, 0xd0)(list, &ie);
+                }
+                void* node = *(void**)((char*)cur + 4);
+                cur = node;
+                if (cur == start) return false;
+                void* obj = (char*)node + g_1440aec;
+                if (VSLOT(Nav_FlagFn, obj, 0x28)(obj) & 2) { found = obj; break; }
+            }
+            break;
+        }
+        case 3: {
+            void* cur = start;
+            for (;;) {
+                cur = *(void**)cur;
+                void* ie;
+                if (cur == *VSLOT(Nav_IterFn, list, 0xd0)(list, &ie)) {
+                    void* ib;
+                    cur = *VSLOT(Nav_IterFn, list, 0xcc)(list, &ib);
+                }
+                if (cur == start) return false;
+                void* obj = (char*)cur + g_1440aec;
+                if (VSLOT(Nav_FlagFn, obj, 0x28)(obj) & 2) { found = obj; break; }
+            }
+            break;
+        }
+        }
+        break;
+    }
+    case 4: {
+        void* cur;
+        void* ib;
+        VSLOT(Nav_IterFn, it, 0xcc)(it, &cur);
+        if (cur == *VSLOT(Nav_IterFn, it, 0xd0)(it, &ib)) return false;
+        for (;;) {
+            void* obj = (char*)cur + g_1440aec;
+            if (VSLOT(Nav_FlagFn, obj, 0x28)(obj) & 2) { found = obj; break; }
+            cur = *(void**)cur;
+            void* ie;
+            if (cur == *VSLOT(Nav_IterFn, it, 0xd0)(it, &ie)) return false;
+        }
+        break;
+    }
+    case 5: {
+        void* cur;
+        void* ib;
+        VSLOT(Nav_IterFn, it, 0xd0)(it, &cur);
+        if (cur == *VSLOT(Nav_IterFn, it, 0xcc)(it, &ib)) return false;
+        for (;;) {
+            void* node = *(void**)((char*)cur + 4);
+            cur = node;
+            void* obj = (char*)node + g_1440aec;
+            if (VSLOT(Nav_FlagFn, obj, 0x28)(obj) & 2) { found = obj; break; }
+            void* ib2;
+            if (cur == *VSLOT(Nav_IterFn, it, 0xcc)(it, &ib2)) return false;
+        }
         break;
     }
     case 6: {
-        p = VSLOT(void*(__thiscall*)(void*), it, 0x10)(it);
+        found = VSLOT(Nav_GetFn, it, 0x10)(it);
         break;
     }
     default:
         return true;
     }
-    if (p) VSLOT(void(__thiscall*)(void*, void*, void*), mgr, 0x4c)(mgr, p, it);
-    (void)mgr;
+    if (found) VSLOT(Nav_VisitFn, mgr, 0x4c)(mgr, cmd, found);
     return true;
 }
 
@@ -467,7 +574,7 @@ bool WinScrollbar::OnTick() {
     if (*tstamp == 0) return true;
     if ((sb.flags & 1) && (sb.selComp == 1 || sb.selComp == 6)) {
         int64_t e = ((XStopwatch*)((char*)this + 0x248))->GetElapsedFloat();
-        float f = (float)(int)e * *(float*)((char*)this + 0x25c);
+        float f = (float)((double)e * (double)*(float*)((char*)this + 0x25c));
         float arrow = (float)sb.arrowDelta;
         float v = arrow * f * 0.001f;
         if (1.0f > v) return true;
@@ -478,7 +585,7 @@ bool WinScrollbar::OnTick() {
             VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, (int)v + sb.current, 1);
     } else {
         int64_t e = ((XStopwatch*)((char*)this + 0x248))->GetElapsed();
-        if ((int)(e >> 32) <= 0 && (uint32_t)e <= 0x96) return true;
+        if ((uint32_t)((uint64_t)e >> 32) == 0 && (uint32_t)e <= 0x96) return true;
         if (sb.selComp != sb.hlComp) goto notify;
         switch (sb.selComp) {
         case 1:

@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008beca0/s008beca0.cpp  _NewT2K  008bfac0  /O2 /MD /Gy /TC

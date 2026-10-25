@@ -5,20 +5,28 @@
 #include "types.h"
 #include <new>
 #include <math.h>
+#include <string.h>
+#include <intrin.h>
+
+extern char g_sfvVtbl0;        // 0x141a0f4
+extern char g_sfvVtbl1;        // 0x141a0e4
+extern char g_sfvBase0Vtbl;    // 0x13eb938
+extern char g_sfvBase1Vtbl;    // 0x13ec458
 
 struct Rect { float left, top, right, bottom; };
 
 // Generic COM-ish object: m0 = AddRef (+0x00), m1 = Release (+0x04).
+// Slot N lives at vtable offset N*4; only the slots this slice reaches are typed.
 struct ObjT1 {
-  virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3(); virtual ObjT1* m4(); virtual void m5(); virtual void m6(); virtual void m7();
-  virtual void m8(); virtual void m9(); virtual void m10(); virtual void m11(); virtual void m12(); virtual void m13(); virtual Rect* m14(); virtual void m15();
+  virtual void m0(); virtual void m1(); virtual void m2(); virtual void* m3(unsigned id); virtual ObjT1* m4(); virtual void m5(); virtual void m6(); virtual void m7();
+  virtual void m8(); virtual void m9(); virtual int m10(); virtual void m11(); virtual void m12(); virtual void m13(); virtual Rect* m14(); virtual void m15();
   virtual void m16(); virtual void m17(); virtual void m18(); virtual void m19(); virtual void m20(); virtual void m21(); virtual void m22(); virtual void m23();
-  virtual void m24(); virtual void m25(); virtual void m26(); virtual void m27(); virtual void m28(); virtual void m29(); virtual void m30(); virtual void m31();
+  virtual void m24(); virtual void m25(); virtual void m26(); virtual void m27(Rect* area); virtual void m28(); virtual void m29(); virtual void m30(); virtual void m31(int a, int b);
   virtual void m32(); virtual void m33(); virtual void m34(); virtual void m35(); virtual void m36(); virtual void m37(); virtual void m38(); virtual void m39();
-  virtual void m40(); virtual void m41(); virtual void m42(); virtual void m43(); virtual void m44(); virtual void m45(); virtual void m46(); virtual void m47();
+  virtual void m40(); virtual void m41(); virtual void m42(); virtual void m43(int a); virtual void m44(); virtual void m45(); virtual void m46(); virtual void m47();
   virtual void m48(); virtual void m49(); virtual void m50(); virtual void m51(); virtual void m52(); virtual void m53(); virtual void m54(ObjT1*); virtual void m55(ObjT1*);
   virtual void m56(); virtual void m57(); virtual void m58(); virtual void m59(); virtual void m60(); virtual void m61(); virtual void m62(); virtual void m63();
-  virtual void m64(); virtual void m65(); virtual void m66(); virtual void m67();
+  virtual void m64(); virtual void m65(void* p); virtual void m66(void* p); virtual void m67();
 };
 
 // Asset/com interface whose AddRef is at +0x04 and Release at +0x08.
@@ -32,6 +40,31 @@ struct ObjT2 {
   virtual void m48(); virtual void m49(); virtual void m50(); virtual void m51(); virtual void m52(); virtual void m53(); virtual void m54(ObjT1*); virtual void m55(ObjT1*);
   virtual void m56(); virtual void m57(); virtual void m58(); virtual void m59(); virtual void m60(); virtual void m61(); virtual void m62(); virtual void m63();
   virtual void m64(); virtual void m65(); virtual void m66(); virtual void m67();
+};
+
+// EA::UTFWinControls::IWinScrollbar, acquired through IWindow::AsInterface(0x2ef0c885).
+// Slot numbering follows the vtable byte offset / 4 (m0 = AddRef, m1 = Release, ...).
+struct ScrollBar {
+  virtual void m0(); virtual void m1(); virtual void m2(); virtual void* m3(unsigned id);
+  virtual void m4(); virtual void m5(); virtual void m6(); virtual void m7();
+  virtual void m8(); virtual void m9(int value, int notify); virtual int m10(); virtual void m11(int value, int notify);
+  virtual int m12(); virtual void m13(int value, int notify); virtual int m14(); virtual void m15(int value, int notify);
+  virtual void m16(); virtual void m17(); virtual void m18(); virtual void m19(); virtual int m20();
+  virtual void m21(); virtual void m22(); virtual void m23(); virtual void m24();
+};
+
+// Handler interface stored at SFV::m24; slot 0 rescales a scroll extent.
+struct ScrollHost { virtual float m0(float value); };
+
+// EA::UTFWin::Message (0x1c bytes); mArgs union starts at +0x0c.
+struct Msg {
+  ObjT1* mSrc;       // +0x00
+  ObjT1* mDst;       // +0x04
+  unsigned mType;    // +0x08
+  int mArg1;         // +0x0c
+  int mArg2;         // +0x10
+  int mArg3;         // +0x14
+  union { int mArg4; ObjT1* mArg4p; };   // +0x18
 };
 
 // ---- UTFWinControls effect hierarchy (from the 2008 dev-build PDB) ----
@@ -100,7 +133,7 @@ void cSPUIRotateEffect_::UpdateTransform(Mat* pMat, int defaultAxis, float t) {
 template<class T>
 struct AutoRef {
   T* mpObject;
-  AutoRef() : mpObject(0) {}
+  AutoRef() {}
   T* operator->() const { return mpObject; }
   AutoRef(T* p) { mpObject = p; if (p) p->m0(); }
   AutoRef(const AutoRef<T>& o) { mpObject = o.mpObject; if (mpObject) mpObject->m0(); }
@@ -264,57 +297,93 @@ uint32_t __stdcall TableLookup(Table* t, const unsigned short* key) {
 }
 
 // ---- byte allocator (0x82abd0) ----
-struct Blk { Blk* pNext; int m4; uint32_t mPad8; uint32_t mSize; uint32_t mPad10; void* mData; };
+struct Blk {
+  Blk* pNext;         // +0x00
+  uint32_t mTag;      // +0x04
+  uint32_t mPad8;     // +0x08
+  const void* mData;  // +0x0c
+  uint32_t mPad10;    // +0x10
+  uint32_t mCount;    // +0x14
+};
+struct StackAllocator {
+  char pad0[0x08];
+  uint32_t mCap;    // +0x08
+  uint32_t mBase;   // +0x0c
+  uint32_t mCur;    // +0x10
+  bool AllocateNewBlock(unsigned size);   // 0x928ba0
+};
 struct Alloc {
   char pad0[0x10];
-  uint32_t mLimit;    // +0x10?  (used as cap)
-  uint32_t mStart;    // +0x14
-  uint32_t mEnd;      // +0x18
-  uint32_t mLimit2;   // +0x1c
-  uint32_t mCur;      // +0x20
+  StackAllocator mAlloc;   // +0x10
   uint32_t AddBlock(Blk* b);
 };
+extern unsigned short g_abWord;   // 0x141a154
 
 // @ 0x0082ABD0
 uint32_t Alloc::AddBlock(Blk* b) {
-  uint32_t old = 0;
-  if (!b || b->m4 != 4) return b ? b->mSize : 0;
+  if (!b->pNext || b->pNext->mTag != 4) return (uint32_t)b->mData;
+  // Access mAlloc through `this` (retail rebuilds &mAlloc after the loop and spills the
+  // incoming ecx to a home slot; cl keeps `this` in esi instead).
   while (b) {
-    if (b->m4 != 4) break;
-    uint32_t n = b->mSize * 2;
-    void* src = b->mData;
-    (void)src; (void)n;
+    if (b->mTag != 4) break;
+    unsigned n = b->mCount * 2;
+    if (mAlloc.mCur + n <= mAlloc.mCap || mAlloc.AllocateNewBlock(n)) {
+      memcpy((void*)mAlloc.mCur, b->mData, n);
+      mAlloc.mCur += n;
+    }
     b = b->pNext;
   }
-  return old;
+  if (mAlloc.mCur != mAlloc.mBase) {
+    uint32_t old = mAlloc.mBase;
+    if (mAlloc.mCur + 2 <= mAlloc.mCap || mAlloc.AllocateNewBlock(2)) {
+      *(unsigned short*)mAlloc.mCur = g_abWord;
+      mAlloc.mCur += 2;
+    }
+    unsigned aligned = (mAlloc.mCur + 7) & ~7u;
+    mAlloc.mCur = aligned;
+    if (aligned > mAlloc.mCap) mAlloc.mCur = mAlloc.mCap;
+    mAlloc.mBase = mAlloc.mCur;
+    return old;
+  }
+  return 0;
 }
 
 // ---------------------------------------------------------------------------
 
 unsigned FNV1_String16(const unsigned short* s, unsigned seed, int mode);
 
+// Resource key handed to the layout loader (12 bytes).
+struct Key { int mId; uint32_t mType; uint32_t mGroup; };
+
 // UI layout object; AddRef at +0x04, Release at +0x08.
 struct SPUILayout : ObjT2 {
-  bool Init(void* desc, int a, int b);
-  ObjT1* FindWindowByID(unsigned id, int a);
-  void SetParentWin(ObjT1* parent, int a, unsigned id);
+  uint32_t mRefCount;          // +0x04
+  uint32_t mResourceKey[3];    // +0x08
+  void* mpObjectCollection;    // +0x14
+  SPUILayout();                               // 0x00810000
+  bool Init(const Key* key, bool a, int b);
+  ObjT1* FindWindowByID(unsigned id, bool a);
+  bool SetParentWin(ObjT1* parent, bool a, unsigned id);
   void Shutdown(int a);
 };
+
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);
+Rect* AccumulateBounds(Rect* out, ObjT1* node, bool a, bool b);   // 0x00e36670
 
 // A window/UI element (AddRef @0, Release @4, many virtuals covered by ObjT1).
 typedef ObjT1 Win;
 
 struct SFV {
-  ObjT1* vtbl0;      // +0x00
-  ObjT1* vtbl1;      // +0x04
+  volatile ObjT1* vtbl0;      // +0x00
+  volatile ObjT1* vtbl1;      // +0x04
   uint32_t m8;       // +0x08
   SPUILayout* mLayout;  // +0x0c
   AutoRef<ObjT1> m10;   // +0x10
   AutoRef<ObjT1> m14;   // +0x14
   AutoRef<ObjT1> m18;   // +0x18
   AutoRef<ObjT1> m1c;   // +0x1c
-  AutoRef<ObjT1> m20;   // +0x20
-  uint32_t m24;      // +0x24
+  AutoRef<ScrollBar> m20;   // +0x20
+  ScrollHost* m24;   // +0x24
   float m28;         // +0x28
   float m2c;         // +0x2c
   float m30;         // +0x30
@@ -325,13 +394,13 @@ struct SFV {
   uint32_t m44;      // +0x44
 
   SFV();
-  __declspec(noinline) bool Create(int a, unsigned b, unsigned c);
+  __declspec(noinline) bool Create(int a, bool b, unsigned c);
   void Destroy();
   float GetScrollOffset();
-  bool CreateFromName(const unsigned short* name, unsigned a, unsigned b);
+  bool CreateFromName(const unsigned short* name, bool a, bool b);
   void Shutdown();
-  void Update();
-  bool OnMessage(Win* pSender, void* pMsg);
+  void Update(bool force);
+  bool OnMessage(Win* pSender, Msg* pMsg);
 };
 
 // @ 0x0082A4E0
@@ -341,27 +410,43 @@ float SFV::GetScrollOffset() {
 }
 
 // @ 0x0082AA20
-bool SFV::CreateFromName(const unsigned short* name, unsigned a, unsigned b) {
+bool SFV::CreateFromName(const unsigned short* name, bool a, bool b) {
   unsigned h = FNV1_String16(name, 0x811c9dc5, 1);
   return Create((int)h, a, b);
 }
 
 // @ 0x0082A040  (constructor)
 SFV::SFV() {
+  vtbl1 = (ObjT1*)&g_sfvBase1Vtbl;
   m8 = 0;
+  _ReadWriteBarrier();
+  vtbl0 = (ObjT1*)&g_sfvVtbl0;
+  vtbl1 = (ObjT1*)&g_sfvVtbl1;
   mLayout = 0;
-  m10 = (ObjT1*)0; m14 = (ObjT1*)0; m18 = (ObjT1*)0; m1c = (ObjT1*)0; m20 = (ObjT1*)0;
-  m24 = 0;
+  m10.mpObject = 0;
+  m14.mpObject = 0;
+  m18.mpObject = 0;
+  m1c.mpObject = 0;
+  m20.mpObject = 0;
+  SPUILayout* pNew = new ("UI", 0, 0, 0, 0) SPUILayout();
+  SPUILayout* pOld = mLayout;
+  if (pNew != pOld) {
+    if (pNew) ((ObjT2*)pNew)->m1();
+    mLayout = pNew;
+    if (pOld) ((ObjT2*)pOld)->m2();
+  }
 }
 
 // @ 0x0082A0D0  (destructor body)
 void SFV::Destroy() {
-  m20 = (ObjT1*)0;
-  m1c = (ObjT1*)0;
-  m18 = (ObjT1*)0;
-  m14 = (ObjT1*)0;
-  m10 = (ObjT1*)0;
-  mLayout = 0;
+  if (m20.mpObject) m20.mpObject->m1();
+  if (m1c.mpObject) m1c.mpObject->m1();
+  if (m18.mpObject) m18.mpObject->m1();
+  if (m14.mpObject) m14.mpObject->m1();
+  if (m10.mpObject) m10.mpObject->m1();
+  if (mLayout) ((ObjT2*)mLayout)->m2();
+  vtbl1 = (ObjT1*)&g_sfvBase1Vtbl;
+  vtbl0 = (ObjT1*)&g_sfvBase0Vtbl;
 }
 
 // @ 0x0082A450
@@ -374,25 +459,184 @@ void SFV::Shutdown() {
   m14 = (ObjT1*)0;
   m18 = (ObjT1*)0;
   m1c = (ObjT1*)0;
-  m20 = (ObjT1*)0;
+  m20 = (ScrollBar*)0;
   mLayout->Shutdown(1);
 }
 
 // @ 0x0082A140
-bool SFV::Create(int a, unsigned b, unsigned c) {
-  // Reconstruction of the layout lookup + window setup; see disassembly for the
-  // complete call sequence.  Returns the failure parameter on any missing window.
-  (void)a; (void)b; (void)c;
-  return false;
+bool SFV::Create(int a, bool b, unsigned c) {
+  Key key;
+  key.mId = a;
+  key.mType = 0x510a95b;
+  key.mGroup = 0x40464100;
+  if (!mLayout->Init(&key, true, 0)) return b;
+
+  m10 = mLayout->FindWindowByID(0x4ab5e60, false);
+  m14 = mLayout->FindWindowByID(0x4ab5e50, true);
+  m18 = mLayout->FindWindowByID(0x580a910, true);
+  m1c = mLayout->FindWindowByID(0x4ab5e70, true);
+  m20 = m1c.mpObject ? (ScrollBar*)m1c.mpObject->m3(0x2ef0c885) : 0;
+
+  if (!m10.mpObject || !m14.mpObject || !m18.mpObject || !m1c.mpObject || !m20.mpObject) {
+    mLayout->Shutdown(1);
+    return b;
+  }
+
+  m20.mpObject->m9(0, 0);
+
+  Rect* p14 = m14.mpObject->m14();
+  Rect client;
+  client.left = p14->left;
+  client.top = p14->top;
+  client.right = p14->right;
+  client.bottom = p14->bottom;
+
+  Rect view;
+  view.left = 0.0f;
+  view.top = 0.0f;
+  view.right = client.right - client.left;
+  view.bottom = client.bottom - client.top;
+  m18.mpObject->m27(&view);
+
+  Rect* p1c = m1c.mpObject->m14();
+
+  m28 = client.left;
+  m2c = client.top;
+
+  Rect* p10 = m10.mpObject->m14();
+  m34 = (p10->bottom - p10->top) - client.bottom;
+  p10 = m10.mpObject->m14();
+  m30 = (p10->right - p10->left) - p1c->right;
+  m38 = p1c->left - client.right;
+  m3c = 0;
+  m40 = 0;
+
+  m10.mpObject->m43(0);
+  m14.mpObject->m43(0);
+  m18.mpObject->m43(0);
+
+  mLayout->SetParentWin(0, false, 0x5b598fa);
+  m44 = b ? 0xc1 : 0x80;
+  m10.mpObject->m65(this);
+  m24 = (ScrollHost*)c;
+  return true;
 }
 
 // @ 0x0082A500
-void SFV::Update() {
-  // Recomputes the scroll extents from the layout/window rectangles.
+void SFV::Update(bool force) {
+  Rect* p10 = m10.mpObject->m14();
+  Rect rView;
+  rView.left = m28;
+  rView.top = m2c;
+  rView.right = (p10->right - p10->left) - m30;
+  rView.bottom = (p10->bottom - p10->top) - m34;
+
+  Rect rClip = rView;
+  Rect* p1c = m1c.mpObject->m14();
+  rClip.right = rClip.right - (p1c->right - p1c->left);
+  m1c.mpObject->m27(&rClip);
+
+  float viewH = rView.bottom - rView.top;
+  float content;
+  float best;
+  // Retail keeps the accumulation target 16-byte aligned (prologue does and esp,-16).
+  __declspec(align(16)) Rect area;
+  if (m24) {
+    content = m24->m0(rView.right - rView.left);
+    best = m24->m0((rView.right - rView.left) - (rClip.right - rClip.left) - m38);
+  } else {
+    AccumulateBounds(&area, m18.mpObject, true, true);
+    if (area.left == area.right || area.top == area.bottom) {
+      content = rView.bottom - rView.top;
+    } else {
+      content = area.bottom - area.top;
+    }
+    best = content;
+  }
+
+  bool scroll = false;
+  float page = content;
+  if (content > viewH) {
+    rView.right = rView.right - ((rClip.right - rClip.left) + m38);
+    scroll = true;
+    page = best;
+  }
+
+  ScrollBar* bar = m1c.mpObject ? (ScrollBar*)m1c.mpObject->m3(0x2ef0c885) : 0;
+  int range = (int)page;
+  int visible = (int)(rView.bottom - rView.top);
+  int oldVal = m1c.mpObject->m10();
+  m1c.mpObject->m31(1, scroll);
+  m14.mpObject->m27(&rView);
+  m14.mpObject->m31(0x400, scroll);
+
+  Rect* p18 = m18.mpObject->m14();
+  area.left = p18->left;
+  area.top = p18->top;
+  area.right = p18->left + (rView.right - rView.left);
+  area.bottom = p18->top + page;
+  m18.mpObject->m27(&area);
+
+  if (scroll) {
+    if ((oldVal & 1) && m3c == (uint32_t)range && m40 == (uint32_t)visible) {
+      if (force) bar->m9(bar->m12(), 1);
+    } else {
+      bar->m11(0, 1);
+      m3c = range;
+      bar->m13(range, 1);
+      m40 = visible;
+      bar->m15(visible, 1);
+      int val = bar->m10();
+      if (force || val < bar->m12() || val > bar->m14()) val = bar->m12();
+      bar->m9(val, 1);
+    }
+  } else {
+    if (oldVal & 1) bar->m9(bar->m12(), 1);
+  }
+  if (!scroll) {
+    bar->m11(0, 1);
+    bar->m15(0, 1);
+  }
+  m1c.mpObject->m36();
 }
 
 // @ 0x0082A8A0
-bool SFV::OnMessage(Win* pSender, void* pMsg) {
-  (void)pSender; (void)pMsg;
-  return false;
+bool SFV::OnMessage(Win* pSender, Msg* pMsg) {
+  bool handled = false;
+  switch (pMsg->mType) {
+    case 0x1c:
+      if (pSender == m10.mpObject && pMsg->mArg4p != m10.mpObject) {
+        pMsg->mArg4p->m66(this);
+      }
+      break;
+    case 9: {
+      int step = pMsg->mArg4 / -120;
+      ScrollBar* bar = m20.mpObject;
+      int inc = bar->m20();
+      int val = bar->m10();
+      bar->m9(val + inc * step * 2, 1);
+      handled = true;
+      break;
+    }
+    case 0x1b:
+      if (pSender == m10.mpObject && pMsg->mArg4p != m10.mpObject) {
+        pMsg->mArg4p->m65(this);
+      }
+      break;
+    case 0x8ef0c8dd:
+      if (pSender == m10.mpObject && pMsg->mSrc == m1c.mpObject) {
+        Rect* r = m18.mpObject->m14();
+        Rect area;
+        area.left = r->left;
+        area.top = r->top;
+        area.right = r->right;
+        area.bottom = r->bottom;
+        float delta = -(float)pMsg->mArg3 - area.top;
+        area.top = area.top + delta;
+        area.bottom = area.bottom + delta;
+        m18.mpObject->m27(&area);
+      }
+      break;
+  }
+  return handled;
 }

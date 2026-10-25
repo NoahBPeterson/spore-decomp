@@ -10,6 +10,7 @@ extern int g_13ec468;
 // ===========================================================================
 // 0081cd50  cSPUIPopupMenuScrollButton::ScrollButtonSelected  (MATCH)
 // ===========================================================================
+// @ 0x0081cd50
 struct LimitStopwatch2 { void SetTimeLimit(int, int); };
 struct SB {
   char pad00[0x888];
@@ -35,6 +36,7 @@ void SB::ScrollButtonSelected(int arg) {
 // ===========================================================================
 // 0081ce60  cSPUIPopupMenuScrollButton::OnButtonClicked  (MATCH)
 // ===========================================================================
+// @ 0x0081ce60
 struct ScrollBtn2 {
   char pad[0x8a9 - 0];
   void ScrollButtonSelected(int);
@@ -49,6 +51,7 @@ void ScrollBtn2::OnButtonClicked2(int arg) {
 // ===========================================================================
 // 0081dce0  SP::cSPUIPropertyEditor::Shutdown  (MATCH)
 // ===========================================================================
+// @ 0x0081dce0
 struct Layout { void Shutdown(int); };
 extern void* MessageServer();
 extern int g_15bbbf3;
@@ -391,7 +394,214 @@ void** PUI::FindPropertyUIWindow(void** out, int id) {
 }
 
 // ===========================================================================
-// Not reconstructed -- see partial.txt
-// 0081c9c0, 0081ca60, 0081cbe0, 0081cc60, 0081cdb0, 0081ce80,
-// 0081cf50, 0081d020, 0081d0f0, 0081d480, 0081d510, 0081d5e0, 0081df10
+// 0081cf50  copy a list of reference-counted objects
 // ===========================================================================
+struct CopySrc  { char pad00[4]; void** mpItems; };              // +0x04
+struct CopyDst  { char pad00[4]; char*  mpBase; };               // +0x04
+struct CopySpec { char pad00[0x10]; int mOffset; int mCount; };  // +0x10 / +0x14
+// @ 0x0081cf50
+bool __cdecl CopyObjectList(CopyDst* dst, CopySrc* src, CopySpec* spec) {
+  void** out;
+  void** in = src->mpItems;
+  out = (void**)(dst->mpBase + spec->mOffset);
+  for (unsigned i = 0; i < (unsigned)spec->mCount; i++) {
+    void* old = *out;
+    void* r = 0;
+    if (old != 0) ((void (__thiscall*)(void*))VTSLOT(old, 4))(old);
+    void* s = *in;
+    if (s != 0) {
+      r = ((void* (__thiscall*)(void*, int))VTSLOT(s, 0xc))(s, 0x1be6ab3);
+      if (r != 0) ((void (__thiscall*)(void*))VTSLOT(r, 0))(r);
+    }
+    *out = r;
+    out++;
+    in++;
+  }
+  return true;
+}
+
+// ===========================================================================
+// UTFWin progress-bar windows (constructors + Draw)
+// ===========================================================================
+struct S962a10 { S962a10* f(); };
+struct RenderCtx {
+  void* f95bc10(int mode);   // 0x0095bc10 Begin2D
+  void  f95bb20();           // 0x0095bb20 End2D
+};
+unsigned __cdecl ColorLerp(unsigned from, unsigned to, float t);   // 0x007f5eb0 Color::Lerp
+
+namespace UTFWin {
+
+struct cSPUIProgressBarWin {
+  void*  mVtbl0;                 // +0x000
+  void*  mVtbl4;                 // +0x004
+  char   pad00[0x88 - 8];
+  float  mX1;                    // +0x088
+  float  mY1;                    // +0x08c
+  float  mX2;                    // +0x090
+  float  mY2;                    // +0x094
+  char   pad01[0x20c - 0x98];
+  void* volatile mIfaceVtbl20c;  // +0x20c
+  int   volatile mUnknown210;    // +0x210
+  void* volatile mIfaceVtbl214;  // +0x214
+  float  mValue218;              // +0x218
+  cSPUIProgressBarWin();
+  bool Draw(RenderCtx* ctx);     // 0x0081d5e0
+};
+
+struct cSPUIProgressBarGradientWin {
+  void*  mVtbl0;                 // +0x000
+  void*  mVtbl4;                 // +0x004
+  char   pad00[0x88 - 8];
+  float  mX1;                    // +0x088
+  float  mY1;                    // +0x08c
+  float  mX2;                    // +0x090
+  float  mY2;                    // +0x094
+  char   pad01[0x20c - 0x98];
+  void* volatile mIfaceVtbl20c;  // +0x20c
+  int   volatile mUnknown210;    // +0x210
+  void* volatile mIfaceVtbl214;  // +0x214
+  float  mValue218;              // +0x218
+  unsigned mColorMin21c;         // +0x21c
+  unsigned mColorMax220;         // +0x220
+  unsigned mColorLine224;        // +0x224
+  void* volatile mpGradientImage228;     // +0x228
+  int    mMode22c;               // +0x22c
+  cSPUIProgressBarGradientWin();
+  bool Draw(RenderCtx* ctx);     // 0x0081d0f0
+};
+
+}  // namespace UTFWin
+
+// @ 0x0081d020
+UTFWin::cSPUIProgressBarGradientWin::cSPUIProgressBarGradientWin() {
+  ((S962a10*)this)->f();
+  mIfaceVtbl20c = (void*)0x13ec458;
+  mUnknown210 = 0;
+  mIfaceVtbl214 = (void*)0x140af70;
+  mpGradientImage228 = 0;
+  mVtbl0 = (void*)0x1419a40;
+  mVtbl4 = (void*)0x1419920;
+  mIfaceVtbl20c = (void*)0x141990c;
+  mIfaceVtbl214 = (void*)0x1419b34;
+  mValue218 = 100.0f;
+  mColorMin21c = 0xffff0000;
+  mColorMax220 = 0xff00ff00;
+  mColorLine224 = 0xffffffff;
+  mMode22c = 1;
+}
+
+// @ 0x0081d510
+UTFWin::cSPUIProgressBarWin::cSPUIProgressBarWin() {
+  ((S962a10*)this)->f();
+  mIfaceVtbl20c = (void*)0x13ec458;
+  mUnknown210 = 0;
+  mIfaceVtbl214 = (void*)0x140af70;
+  mVtbl0 = (void*)0x1419c70;
+  mVtbl4 = (void*)0x1419b50;
+  mIfaceVtbl20c = (void*)0x1419b3c;
+  mIfaceVtbl214 = (void*)0x1419b34;
+  mValue218 = 100.0f;
+}
+
+// ===========================================================================
+// 0081d480  value interface setter (this = object + 0x214)
+// ===========================================================================
+struct ProgressValueIface {
+  void* mVtbl;        // +0x00
+  float mValue;       // +0x04
+  bool SetValue(float v);
+};
+// @ 0x0081d480
+bool ProgressValueIface::SetValue(float v) {
+  if (mValue == v) return false;
+  if (!(v >= 0.0f)) return false;
+  if (!(v <= 100.0f)) return false;
+  void* notify = (char*)this - 0x210;
+  ((void (__thiscall*)(void*))VTSLOT(notify, 0x90))(notify);
+  mValue = v;
+  return false;
+}
+
+struct ImgRect { float x, y, w, h; };
+struct ImgColor { unsigned r, g, b, a; };
+
+// @ 0x0081d5e0
+bool UTFWin::cSPUIProgressBarWin::Draw(RenderCtx* ctx) {
+  void* batch = ctx->f95bc10(0);
+  void* obj = ((void* (__thiscall*)(void*))VTSLOT((char*)this + 4, 0xa8))((char*)this + 4);
+  if (obj != 0) {
+    void* fn = VTSLOT(obj, 0x10);
+    ImgRect rect = {0.0f, 0.0f, (mX2 - mX1) * mValue218 * 0.01f, mY2 - mY1};
+    ImgColor color = {0, 0, 0, 0xffffffff};
+    ((void (__thiscall*)(void*, RenderCtx*, ImgRect*, ImgColor*))fn)(
+        obj, ctx, &rect, &color);
+  } else {
+    void* fn = VTSLOT(batch, 0x38);
+    ((void (__thiscall*)(void*, float, float, float, float))fn)(
+        batch, 0.0f, 0.0f, mX2 - mX1, mY2 - mY1);
+  }
+  ctx->f95bb20();
+  return true;
+}
+
+// ===========================================================================
+// 0081d0f0  gradient window Draw
+// ===========================================================================
+// @ 0x0081d0f0
+bool UTFWin::cSPUIProgressBarGradientWin::Draw(RenderCtx* ctx) {
+  float w = mX2 - mX1;
+  float h = mY2 - mY1;
+  float t = mValue218 * 0.01f;
+  RenderCtx* volatile rc = ctx;
+  void* batch = rc->f95bc10(0);
+  if (mpGradientImage228 != 0) {
+    float ct = t;
+    if (ct < 0.01f) ct = 0.01f;
+    else if (ct > 0.99f) ct = 0.99f;
+    ImgRect uv;
+    uv.x = 0.0f; uv.y = ct; uv.w = 1.0f; uv.h = ct;
+    ImgRect dst;
+    dst.x = 0.0f; dst.y = 0.0f; dst.w = w; dst.h = h;
+    ((void (__thiscall*)(void*, ImgRect*, void*, ImgRect*))VTSLOT(batch, 0x58))(
+        batch, &dst, mpGradientImage228, &uv);
+    ((void (__thiscall*)(void*, unsigned))VTSLOT(batch, 4))(batch, mColorLine224);
+    float half = w * 0.5f;
+    ((void (__thiscall*)(void*, float, float, float, float))VTSLOT(batch, 0x38))(
+        batch, half - 0.5f, 0.0f, half + 0.5f, h);
+  } else {
+    void* obj = ((void* (__thiscall*)(void*))VTSLOT((char*)this + 4, 0xa4))((char*)this + 4);
+    if (obj != 0) {
+      obj = ((void* (__thiscall*)(void*))VTSLOT((char*)this + 4, 0xa4))((char*)this + 4);
+      ((void (__thiscall*)(void*, void*))VTSLOT(batch, 4))(batch, obj);
+      ((void (__thiscall*)(void*, float, float, float, float))VTSLOT(batch, 0x38))(
+          batch, 0.0f, 0.0f, w, h);
+    }
+    unsigned col = ColorLerp(mColorMin21c, mColorMax220, t);
+    ((void (__thiscall*)(void*, unsigned))VTSLOT(batch, 4))(batch, col);
+    if (mMode22c == 1) {
+      ((void (__thiscall*)(void*, float, float, float, float))VTSLOT(batch, 0x38))(
+          batch, 0.0f, 0.0f, t * w, h);
+    } else if (mMode22c == 2) {
+      ((void (__thiscall*)(void*, float, float, float, float))VTSLOT(batch, 0x38))(
+          batch, (1.0f - t) * w, 0.0f, w, h);
+    } else if (mMode22c == 3) {
+      float half = w * 0.5f;
+      if (t > 0.5f) {
+        ((void (__thiscall*)(void*, float, float, float, float))VTSLOT(batch, 0x38))(
+            batch, half, 0.0f, t * w, h);
+      } else if (t >= 0.5f) {
+        ((void (__thiscall*)(void*, float, float, float, float))VTSLOT(batch, 0x38))(
+            batch, half - 0.1f, 0.0f, half + 0.1f, h);
+      } else {
+        ((void (__thiscall*)(void*, float, float, float, float))VTSLOT(batch, 0x38))(
+            batch, t * w, 0.0f, half, h);
+      }
+      ((void (__thiscall*)(void*, unsigned))VTSLOT(batch, 4))(batch, mColorLine224);
+      ((void (__thiscall*)(void*, float, float, float, float))VTSLOT(batch, 0x38))(
+          batch, half - 0.5f, 0.0f, half + 0.5f, h);
+    }
+  }
+  rc->f95bb20();
+  return true;
+}

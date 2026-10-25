@@ -1,5 +1,9 @@
 // Slice s00832790 -- SPUI subtitles overlay + UTFWin cSPUISwarmEffect + UI::Image.
 // Region flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+
+// math.h with a plain (non-dllimport) floor(): calls go through the local CRT thunk 0x011e0906.
+#define _CRTIMP
+#include <math.h>
 #include "types.h"
 
 typedef void*  (__thiscall *VFi)(void*);
@@ -23,6 +27,10 @@ extern char g_vtblImg8;       // 0x141aa9c
 extern char g_vtblX0;         // 0x141aabc
 extern char g_vtblX4;         // 0x141aab8
 extern uint32_t g_imgCounter; // 0x164efec
+extern char g_vtblMsg0;       // 0x13eb90c  (UI::BehaviorMessage)
+extern char g_vtblMsg1;       // 0x13eb844
+extern char g_allocTag;       // 0x13f6b3c  EASTL allocator name
+extern char g_allocTagImg;    // 0x13ffd40  "UI/Image"
 
 extern "C" void  FUN_004c1c80(void);          // string assign/reset
 extern "C" void  FUN_007f8f00(void);          // animator stop
@@ -57,25 +65,16 @@ extern "C" void  FUN_008975c0(void);
 extern "C" void  FUN_0089dc00(void);
 extern "C" void* FUN_00885bd0(void);          // EA::Text::GetStyleManager
 extern "C" void  FUN_00894670(void);          // StyleManager::GetStyle
-extern "C" void* FUN_00f473a0(void);          // EASTL allocator allocate
+extern "C" void* __cdecl FUN_00f473a0(uint32_t size, const char* name, int a, int b, int c, int d); // EASTL allocator
 extern "C" void  FUN_0011e073e(void);         // operator new[]
-extern "C" void  FUN_00887cde0(void);
-extern "C" void  FUN_0087ce00(void);
-extern "C" void  FUN_0087d070(void);
-extern "C" void  FUN_0087d0b0(void);
-extern "C" void  FUN_00887ced0(void);
-extern "C" void  FUN_005725b0(void);
-extern "C" void  FUN_0046f260(void);
-extern "C" void  FUN_011ef750(void);
-extern "C" void  FUN_00887cf00(void);
-extern "C" void  FUN_011ef880(void);
-extern "C" void  FUN_00887cef0(void);
-extern "C" void  FUN_00576620(void);
-extern "C" void  FUN_009579f0(void);          // UI::Image::Image(tex,...)
+extern "C" int   memcmp(const void*, const void*, unsigned);
+extern "C" int   strcmp(const char*, const char*);
+extern "C" void* __cdecl FUN_009579f0(void);  // UI image-view ctor (thiscall); see call site
 
 extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
 extern "C" long __cdecl _InterlockedIncrement(volatile long*);
-#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement)
+extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement, _InterlockedExchange)
 
 // ---------------------------------------------------------------- SPUI subtitles
 struct Anim2 { char pad[0x20]; };
@@ -146,6 +145,7 @@ struct UI_Image {
 
     UI_Image(void* img);
     void  Dtor();
+    static int __stdcall GetImage(void* out1, void* out2, void* req);
 };
 
 // ---------------------------------------------------------------- misc small classes
@@ -159,6 +159,57 @@ struct RefHolder {
     uint32_t GetC();
     uint32_t GetE();
 };
+
+struct Rect { float left, top, right, bottom; };
+
+// ---------------------------------------------------------------- image file loading
+struct HeaderFileInfo {
+    uint32_t pad[4];
+    uint32_t width;    // +0x10
+    uint32_t height;   // +0x14
+    uint32_t bpp;      // +0x18
+};
+
+struct HeaderReader {                                 // opaque DDS/header stream
+    uint32_t pad[5];
+    HeaderReader();                                    // 0x0087cde0
+    ~HeaderReader();                                   // 0x0087d070
+    bool Open(void* p);                                // 0x0087ce00
+    bool Get(int kind, uint32_t* count);               // 0x0087d0b0
+    HeaderFileInfo* Item(int idx);                     // 0x0087ced0
+    void Free(void* p);                                // 0x0087cef0
+    bool Read(HeaderFileInfo* info, void* dst, uint32_t n);  // 0x0087cf00
+};
+
+struct ImageResObj {                                   // raster resource object
+    void*    mpPixels;   // +0x00
+    uint32_t mFlags;     // +0x04
+    void* GetPixels();                                 // 0x0046f260
+};
+
+struct ImageResPtr {                                   // atomic refcounted pointer to ImageResObj
+    ImageResObj* mpObject;   // +0x00
+    ImageResPtr(ImageResObj* x);                       // 0x005725b0
+    ~ImageResPtr();                                    // 0x00576620
+};
+
+struct TextureInstance {                               // cTextureInstanceWrapper
+    uint32_t f0, f4, f8;
+    uint16_t width;    // +0x0c
+    uint16_t height;   // +0x0e
+    int  Lock(int mode, int z, void** out);            // 0x011ef750
+    void Unlock(void** out);                           // 0x011ef880
+};
+
+struct ImageLockInfo { void* mpData; uint32_t f4, f8; uint32_t cbData; };
+
+extern const char* g_pszImageBmp;    // 0x01547df4  "image/bmp"
+extern const char* g_pszImageGif;    // 0x01547df8  "image/gif"
+extern const char* g_pszImageJpeg;   // 0x01547dfc  "image/jpeg"
+extern const char* g_pszImagePng;    // 0x01547e00  "image/png"
+extern const char* g_pszImageTarga;  // 0x01547e04  "image/targa"
+
+inline void* operator new(unsigned int, void* p) { return p; }
 
 struct Mat33 { float m[9]; };
 struct Xform {
@@ -263,7 +314,7 @@ Subtitles::Subtitles()
     *(uint16_t*)((char*)this + 0x9c) = 0;
 }
 
-// @ 0x008329b0 -- SetWindow (large; partial)
+// @ 0x008329b0
 bool Subtitles::SetWindow(void* window)
 {
     if (window == 0)
@@ -283,15 +334,76 @@ bool Subtitles::SetWindow(void* window)
         *(void**)win = &g_vtblSubWin0;
         *(void**)((char*)win + 4) = &g_vtblSubWin4;
     }
-    void* textWin = win ? win : 0;
-    ((void (__thiscall*)(void*, void*))FUN_00b5f950)((char*)this + 0x60, textWin);
-    ((void (__thiscall*)(void*, int))VT(*(void**)((char*)this + 0x60))[0x5c / 4])
-        (*(void**)((char*)this + 0x60), -1);
-    ((void (__thiscall*)(void*, int, int))VT(*(void**)((char*)this + 0x60))[0x7c / 4])
-        (*(void**)((char*)this + 0x60), 0x400, 1);
-    ((void (__thiscall*)(void*, int, int))VT(*(void**)((char*)this + 0x60))[0x7c / 4])
-        (*(void**)((char*)this + 0x60), 0x10, 1);
-    // remaining layout/text-typesetter work: see partial.txt
+    ((void (__thiscall*)(void*, void*))FUN_00b5f950)((char*)this + 0x60, win);
+    void* tw = *(void**)((char*)this + 0x60);
+    ((void (__thiscall*)(void*, int))VT(tw)[0x5c / 4])(tw, -1);
+    ((void (__thiscall*)(void*, int, int))VT(tw)[0x7c / 4])(tw, 0x400, 1);
+    ((void (__thiscall*)(void*, int, int))VT(tw)[0x7c / 4])(tw, 0x10, 1);
+
+    void* c = ((VFi)VT(mpWindow)[0x10 / 4])(mpWindow);
+    float* r = ((float* (__thiscall*)(void*))VT(c)[0x38 / 4])(c);
+    v68 = r[0];
+    v6c = r[1];
+    v70 = r[2];
+    v74 = r[3];
+    ((void (__thiscall*)(void*, float*, float*, float*, float*))VT(mpWindow)[0x34 / 4])
+        (mpWindow, &v78, &v7c, &v80, &v84);
+    void* d = ((VFi)VT(c)[0x10 / 4])(c);
+    ((void (__thiscall*)(void*, void*))VT(d)[0xd8 / 4])(d, *(void**)((char*)this + 0x60));
+    void* e = ((VFi)VT(c)[0x10 / 4])(c);
+    ((void (__thiscall*)(void*, void*))VT(e)[0xdc / 4])(e, c);
+    ((void (__thiscall*)(void*, void*))VT(*(void**)((char*)this + 0x60))[0xd8 / 4])
+        (*(void**)((char*)this + 0x60), c);
+
+    char* winBase = mpWindow ? (char*)mpWindow - 0x20c : 0;
+
+    char tsMem[0x540];
+    char llMem[0xb0];
+    wchar_t txt[2];
+    txt[0] = 0x37;
+    txt[1] = 0;
+    ((void (__thiscall*)(void*, int))FUN_0089d820)(tsMem, 0);
+    ((void (__thiscall*)(void*, int))FUN_00898bd0)(llMem, 0);
+    uint32_t styleId = ((uint32_t (__thiscall*)(void*))VT(winBase + 4)[0x40 / 4])(winBase + 4);
+    void* sm = ((void* (__cdecl*)(int))FUN_00885bd0)(0);
+    const void* style = ((const void* (__thiscall*)(void*, uint32_t, void*))FUN_00894670)(sm, styleId, 0);
+    ((void (__thiscall*)(void*, const wchar_t*, uint32_t, float, float, float, float,
+                         const void*, void*, int))FUN_0089dc00)
+        (tsMem, txt, 2, 0.0f, 0.0f, 100.0f, 100.0f, style, llMem, 2);
+    float hgt = ((float (__thiscall*)(void*))FUN_008975c0)(llMem);
+    f28 = hgt;
+    Rect rc;
+    rc.left = v68 + v78;
+    rc.top = v6c + v7c;
+    rc.right = v70 - v80;
+    rc.bottom = v74 - v84;
+    rc.bottom = (float)floor((double)((rc.bottom - rc.top) / hgt)) * hgt + rc.top;
+    ((void (__thiscall*)(void*, Rect*))VT(tw)[0x6c / 4])(tw, &rc);
+    ((void (__thiscall*)(void*, float, float, float, float))VT(mpWindow)[0x38 / 4])
+        (mpWindow, 0.0f, 0.0f, 0.0f, 0.0f);
+    Rect rc2;
+    rc2.left = 0.0f;
+    rc2.top = 0.0f;
+    rc2.right = rc.right - rc.left;
+    rc2.bottom = rc.bottom - rc.top;
+    ((void (__thiscall*)(void*, Rect*))VT(c)[0x6c / 4])(c, &rc2);
+
+    void* srv = FUN_00883860();
+    ((void (__thiscall*)(void*, void*, int))VT(srv)[0x20 / 4])(srv, (char*)this + 8, 0x61dd1b7);
+    void* m = FUN_00f473a0(0x40, &g_allocTag, 0, 0, 0, 0);
+    if (m) {
+        *(uint32_t*)((char*)m + 0x30) = 0;
+        *(void**)m = &g_vtblMsg0;
+        _InterlockedExchange((volatile long*)((char*)m + 4), 0);
+        *(void**)m = &g_vtblMsg1;
+        *(uint32_t*)((char*)m + 0x38) = 0;
+    }
+    *(void**)((char*)m + 8) = this;
+    srv = FUN_00883860();
+    ((void (__thiscall*)(void*, int, void*, int, int))VT(srv)[0x18 / 4])
+        (srv, 0x61dd1b7, m, 0, 0);
+    ((void (__thiscall*)(void*))FUN_008323d0)(llMem);
+    ((void (__thiscall*)(void*))FUN_0089c540)(tsMem);
     return true;
 }
 
@@ -334,35 +446,46 @@ uint32_t cSPUISwarmEffect::GetEventMask()
     return ((uint32_t (__thiscall*)(void*))FUN_009634c0)(this) | 0x288;
 }
 
-// @ 0x00832e70 -- PositionSwarm (partial)
+// @ 0x00832e70
 void cSPUISwarmEffect::PositionSwarm(void* window)
 {
     if (mpVisualEffect == 0)
         return;
     float* r = ((float* (__thiscall*)(void*))VT(window)[0x38 / 4])(window);
-    float dx = (r[2] - r[0]) * 0.5f;
-    float dy = (r[3] - r[1]) * 0.5f;
-    float* q = ((float* (__thiscall*)(void*, float, float))VT(window)[0xc0 / 4])(window, dx, dy);
+    float scratch[2];
+    float* q = ((float* (__thiscall*)(void*, float*, float, float))VT(window)[0xc0 / 4])
+        (window, scratch, (r[2] - r[0]) * 0.5f, (r[3] - r[1]) * 0.5f);
     float f1 = q[0];
     float f2 = q[1];
     void* app = FUN_0067dd10();
     void* viewer = ((VFi)VT(app)[0x50 / 4])(app);
-    float p1 = 0, p2 = 0;
-    viewer = ((void* (__thiscall*)(void*, float, float, float*, float*))VT(viewer)[0x1c / 4])
-        (viewer, f1, f2, &p1, &p2);
-    ((void (__thiscall*)(void*, float*, float*))FUN_007c4730)(viewer, &p1, &p2);
+    float a[3];
+    float b[3];
+    void* ray = ((void* (__thiscall*)(void*, float, float, float*, float*))VT(viewer)[0x1c / 4])
+        (viewer, f1, f2, a, b);
+    ((void (__thiscall*)(void*))FUN_007c4730)(ray);
     app = FUN_0067dd10();
     viewer = ((VFi)VT(app)[0x50 / 4])(app);
     void* r2 = ((VFi)VT(viewer)[0x1c / 4])(viewer);
     float d = ((float (__thiscall*)(void*))FUN_007c3c90)(r2) + 10.0f;
-    p1 += 0.0f * d;
-    p2 += 0.0f * d;
-    float x = p1, y = p2;
-    void* vfx = mpVisualEffect;
-    ((void (__thiscall*)(void*, float, float, float, float))VT(vfx)[0x18 / 4])
-        (vfx, x, y + 0.0f, x + 0.0f, y);
-    ((void (__thiscall*)(void*, float, float, float, float))VT(mpVisualEffect)[0x14 / 4])
-        (mpVisualEffect, x, y, 0.0f, 0.0f);
+    a[0] = b[0] * d + a[0];
+    a[1] = a[1] + b[1] * d;
+    a[2] = a[2] + b[2] * d;
+    Xform xf;
+    xf.w0 = 0;
+    xf.w2 = 0;
+    xf.f4 = g_v3[0];
+    xf.f8 = g_v3[1];
+    xf.fc = g_v3[2];
+    xf.f10 = 1.0f;
+    xf.mat = g_m33;
+    ((void (__thiscall*)(void*, Xform*))VT(mpVisualEffect)[0x18 / 4])(mpVisualEffect, &xf);
+    xf.w0 |= 4;
+    xf.w2 += 1;
+    xf.f4 = a[0];
+    xf.f8 = a[1];
+    xf.fc = a[2];
+    ((void (__thiscall*)(void*, Xform*))VT(mpVisualEffect)[0x14 / 4])(mpVisualEffect, &xf);
 }
 
 // @ 0x00833080
@@ -538,17 +661,77 @@ void UI_Image::Dtor()
     *(void* volatile*)((char*)this + 0x00) = &g_vtblImgBase;
 }
 
-// @ 0x00833460 -- UI::Image::GetImage(filename) (partial)
-struct ImageReq { char pad[0x34]; };
-bool UI_Image_GetImage(ImageReq* out, void* out2, void* req)
+// @ 0x00833460
+int __stdcall UI_Image::GetImage(void* out1, void* out2, void* req)
 {
     const char* name = *(const char**)((char*)req + 0x10);
-    if (name == 0 || name[0] != 'i' || name[1] != 'm' || name[2] != 'a' || name[3] != 'g' ||
-        name[4] != 'e' || name[5] != '/')
-        return false;
-    // full loader (extension match + texture manager lookup) not reproduced; see partial.txt
-    (void)out; (void)out2;
-    return false;
+    if (memcmp(name, "image/", 6) != 0)
+        return 3;
+
+    int ext;
+    if (strcmp(name, g_pszImageBmp) == 0)
+        ext = 5;
+    else if (strcmp(name, g_pszImageGif) == 0)
+        ext = 7;
+    else if (strcmp(name, g_pszImageJpeg) == 0)
+        ext = 2;
+    else if (strcmp(name, g_pszImagePng) == 0)
+        ext = 4;
+    else if (strcmp(name, g_pszImageTarga) == 0)
+        ext = 6;
+    else
+        return 3;
+
+    int flag = 1;
+    HeaderReader reader;
+    void* res = *(void**)((char*)req + 0x3c);
+    *(void**)out2 = ((void* (__thiscall*)(void*))VT(res)[0x1c / 4])(res);
+
+    if (!reader.Open(res))
+        return 1;
+
+    uint32_t count;
+    if (reader.Get(ext, &count)) {
+        HeaderFileInfo* info = reader.Item(0);
+        if (info) {
+            void* mgr = FUN_0067dd60();
+            ImageResObj* tex = (ImageResObj*)((void* (__thiscall*)(void*, uint32_t, uint32_t,
+                                 int, int, int, int))VT(mgr)[0x40 / 4])
+                (mgr, info->width, info->height, 1, 8, 0x15, 0);
+            ImageResPtr holder(tex);
+            ImageResObj* obj = holder.mpObject;
+            if (obj != 0) {
+                TextureInstance* surface = (TextureInstance*)obj->GetPixels();
+                if (surface != 0) {
+                    ImageLockInfo li;
+                    if (surface->Lock(2, 0, (void**)&li)) {
+                        if (!reader.Read(info, li.mpData, li.cbData))
+                            flag = 0;
+                        ((TextureInstance*)obj->GetPixels())->Unlock((void**)&li);
+                    }
+                }
+            }
+            reader.Free(info);
+            if (!flag) {
+                UI_Image* img = (UI_Image*)FUN_00f473a0(0x14, &g_allocTag, 0, 0, 0, 0);
+                if (img != 0)
+                    img = new (img) UI_Image(obj);
+                void* view = FUN_00f473a0(0x2c, &g_allocTagImg, 0, 0, 0, 0);
+                if (view == 0) {
+                    view = 0;
+                } else {
+                    uint32_t h = ((TextureInstance*)obj->GetPixels())->height;
+                    uint32_t w = ((TextureInstance*)obj->GetPixels())->width;
+                    view = ((void* (__thiscall*)(void*, UI_Image*, uint32_t, uint32_t,
+                             int, int, float, float, int))FUN_009579f0)
+                        (view, img, w, h, 0, 0, 1.0f, 1.0f, 0);
+                }
+                ((void (__thiscall*)(void*))VT(view)[0])(view);
+                *(void**)out1 = view;
+            }
+        }
+    }
+    return flag;
 }
 
 // @ 0x00833790

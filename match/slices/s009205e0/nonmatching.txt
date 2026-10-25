@@ -12,3 +12,7 @@
 00921300   38  LowerBound: 50 bytes vs 63 (loop/register form differs)
 00921440  243  RangeMapper::Map: equiv PASS 100% (900 valid); remaining bytes are the x87 stack-slot/compare-operand ordering (297 vs 315)
 00921580   41  RBTreeIncrement: parameter register (eax vs ecx) and loop layout differ
+009205e0   36  complete; HashTable::insert has identical size/order but this cl keeps idx*4 in edi (`add edi,edi` x2) where retail uses `lea edx,[edi*4]`, and rotates one entry `jmp`/nop before the chain loop; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv PASS (224 valid, 96.5% cov)
+00920780  501  complete; EapdSymbolTable::LoadSymbols full port (symbol pass plus group pass with Find/erase iterators); local-slot/register scheduling differs (514 vs 562); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, lock imports WaitForSingleObject/GetCurrentThread)
+00920b30  187  complete; EapdSymbolTable::LoadGroups full port; our frame is 0x23c vs retail 0x244 (8 bytes of unused locals missing) and owner/i registers are swapped (207 vs 232); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, lock imports WaitForSingleObject/GetCurrentThread)
+00920f30  463  complete; FUN_00920f30 path canonicalizer full port (separator run, `:` branch, `.`/`..` collapse, epilogue memmove); control-flow shape and scheduling differ (517 vs 515); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (147 valid, 17.0% cov)

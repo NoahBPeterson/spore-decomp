@@ -1,7 +1,12 @@
 // =====================================================================================
-// slice s008d7220 - EA::ResourceMan::DatabaseDirectoryFiles (+ the rbtree it uses)
+// slice s008d7220 - EA::ResourceMan::DatabaseDirectoryFiles (+ the EASTL containers it embeds)
 //
-// Compile flags: /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc
+// Flags: /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc (vendored EASTL/EAWebKit headers)
+//
+// This is a hand reconstruction from the image (there is no ResourceMan source in any
+// vendored drop).  The class layout, the rbtree/list/hashtable node layouts and the
+// observable algorithms are taken from the retail disassembly; the EASTL members are
+// declared with their real types where the embedded instance could be recovered.
 //
 // VAs in this translation unit and the symbol each one is:
 //  (0x008d7220)  eastl::rbtree<Key,pair<const Key,DDFRecordListData>,...>::DoInsertValue
@@ -15,40 +20,148 @@
 //  (0x008d7a70)  EA::ResourceMan::DatabaseDirectoryFiles::UpdateRecordData
 //  (0x008d7cb0)  EA::ResourceMan::DatabaseDirectoryFiles::OpenRecord
 //  (0x008d81a0)  EA::ResourceMan::DatabaseDirectoryFiles::Cast
-//
-// The retail binary was built from a different revision of the EA IO / EASTL / ResourceMan
-// drop than anything vendored here (there is no ResourceMan source at all), so this TU is a
-// hand reconstruction from the image that reproduces the class layout (two vtable pointers,
-// the two fixed-pool allocators, the two rbtrees, the 0x20-dword known-type bitset and the
-// mutex at 0x138) and the observable algorithms. It is NOT byte-exact.
 // =====================================================================================
 #include "types.h"
+
+// Vendored EAWebKit build configuration (kept in-source so the manifest flags stay short).
+#define WIN32 1
+#define NDEBUG 1
+#define _SECURE_SCL 0
+#define UTF_USE_EAASSERT 1
+#define EATEXT_USE_FREETYPE 1
+#define EATEXT_BITMAP_USE_EAGIMEX 0
+#define _WIN32_WINNT 0x0501
+#define WINVER 0x0501
+#define _WIN32_IE 0x0501
+
+#pragma warning(disable: 4100)   // unreferenced formal parameter (decompiled stubs)
+#pragma warning(disable: 4189)   // local variable is initialized but not referenced
+
+#include <coreallocator/icoreallocator_interface.h>
+#include <EAIO/PathString.h>
+#include <EAIO/EAFileDirectory.h>
+#include <EAIO/EAFileUtil.h>
+#include <EASTL/string.h>
+#include <EASTL/vector.h>
+#include <EASTL/list.h>
+#include <EASTL/map.h>
 #include <new>
 
-typedef unsigned int uintptr_t;
+extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t* pA, const wchar_t* pB);
 
-extern "C" int __cdecl _wcsicmp(const wchar_t* pA, const wchar_t* pB);
+// =====================================================================================
+// The retail record-map value type.  The 2008 dev PDB says
+//   struct DDFRecordListData { basic_string<wchar_t> msFileName; long mnLastModificationTime;
+//                              list<AutoRefCount<DDFRecord>> mRecordList; }
+// but the retail binary reads the key at +0x10 (not +0x0), the two file-time idwords at
+// +0x14/+0x18 and the list anchor at +0x1c, with the record name already inside the string
+// at +0x04.  The layout below is the retail one (the PDB's class is shifted by one Key).
+// =====================================================================================
+namespace EA { namespace ResourceMan {
 
-// The vendored EAWebKit headers are available but the retail ResourceMan predates them; the
-// class below is written self-contained.
-
-// Constructs one of the two in-place fixed-pool allocators (retail 0x00925f30).
-void FixPoolInit(void* pPool, void* pAllocator, unsigned int nNodeSize, unsigned int nNodeCount);
-
-// -------------------------------------------------------------------------------------
-// Very small pieces of the EA runtime that the reconstruction names.
-// -------------------------------------------------------------------------------------
-namespace EA {
-namespace Allocator {
-class ICoreAllocator
+// 12-byte resource key.  Comparison order (instance, type, group) as used by the rbtree.
+class Key
 {
 public:
-    virtual void* Allocate(unsigned int nSize, const char* pName, unsigned int nFlags) = 0;
-    virtual void  Free(void* p) = 0;
-    static ICoreAllocator* GetDefaultAllocator();   // 0x00925cb0
+    uint32_t mInstanceID;  // +0x00
+    uint32_t mnTypeID;     // +0x04
+    uint32_t mnGroupID;    // +0x08
 };
-} // namespace Allocator
 
+// Doubly linked list anchor (EASTL list node / sentinel).
+struct ListAnchor
+{
+    void* mpNext;   // +0x00
+    void* mpPrev;   // +0x04
+};
+
+// The retail image's static empty wchar_t string (eastl::string16::mpEmptyString16).
+extern const wchar_t gEmptyString16[];   // 0x01667bac
+
+// The record value as the image lays it out.  The 0x10-byte string16 stores the record
+// name; the copy constructor is out of this TU (0x008d6970) so only the call shape matters.
+struct DDFRecordListData
+{
+    uint32_t       mnStringAlloc;    // +0x00 (string16 allocator, unused by retail)
+    const wchar_t* mpNameBegin;      // +0x04 string16.mpBegin
+    const wchar_t* mpNameEnd;        // +0x08 string16.mpEnd
+    const wchar_t* mpNameCapacity;   // +0x0c string16.mpCapacity
+    uint32_t       mnUnknown10;      // +0x10 (padding that the map value starts on)
+    uint32_t       mnTimeLow;        // +0x14
+    uint32_t       mnTimeHigh;       // +0x18
+    ListAnchor     mRecords;         // +0x1c list<AutoRefCount<DDFRecord>>
+
+    void CopyFrom(const DDFRecordListData* pSrc);   // 0x008d6970
+};
+
+// Red-black node header (0x10 bytes) followed by the Key and the value.
+struct RBNode
+{
+    RBNode* mpLeft;    // +0x00
+    RBNode* mpRight;   // +0x04
+    RBNode* mpParent;  // +0x08
+    uint32_t mnColor;  // +0x0c (the anchor node's +0x0c is the tree's node count area)
+    Key mKey;          // +0x10
+    // DDFRecordListData mValue; follows at +0x1c
+};
+
+// The two rbtrees embedded in DatabaseDirectoryFiles are 0x20 bytes each.
+struct RBTree
+{
+    void*   mpAllocator;  // +0x00
+    RBNode* mpAnchor;     // +0x04 self-referential header node
+    RBNode* mpBegin;      // +0x08 left-most node
+    RBNode* mpRoot;       // +0x0c
+    uint32_t mnUnknown10; // +0x10
+    uint32_t mnCount;     // +0x14
+    uint32_t mPad18[2];   // +0x18
+
+    // The retail rbtree members receive the tree in ECX; their bodies live outside this TU
+    // (0x00a21dc0 find, 0x008d7200 erase, 0x008d7220 insert), so only the call shape is
+    // reproduced here.
+    void*   Find(RBNode** ppOutNode, const Key* pKey);                                  // 0x00a21dc0
+    void*   EraseRecord(RBNode** ppOutNode, RBNode* pNode);                             // 0x008d7200
+    RBNode* InsertValue(RBNode** ppOutNode, const void* pValue, const void* pKeyValue); // 0x008d7220
+    void    DoNukeSubtree(RBNode* pNode);                                               // 0x008d6d90
+};
+
+// The extension map's DoNukeSubtree is a distinct template instantiation.
+struct RBTreeExt
+{
+    uint32_t mPad[0x20 / 4];
+    void DoNukeSubtree(RBNode* pNode);                                                  // 0x008d6be0
+};
+
+// The two fixed-pool allocators at 0x2c / 0x4c.
+struct FixedPoolAllocator
+{
+    uint32_t mPad[0x20 / 4];
+};
+
+// Accessors for the value that follows a node's key.
+inline DDFRecordListData* NodeValue(RBNode* pNode)
+{
+    return reinterpret_cast<DDFRecordListData*>(reinterpret_cast<uint8_t*>(pNode) + 0x1c);
+}
+
+// (instance, type, group) ordering, as the retail DoInsertValue emits it.
+inline bool KeyLess(const Key& a, const Key& b)
+{
+    if (a.mInstanceID != b.mInstanceID)
+        return a.mInstanceID < b.mInstanceID;
+    if (a.mnTypeID != b.mnTypeID)
+        return a.mnTypeID < b.mnTypeID;
+    return a.mnGroupID < b.mnGroupID;
+}
+
+// Helpers for the (out-of-slice) EASTL rbtree member functions.
+RBNode* RBTreeFindNode(RBTree* pTree, const Key& key);                              // 0x00a21dc0
+void    RBTreeInsertValueImpl(RBTree* pTree, RBNode* pNode, bool bLeft, const Key& key, const void* pValue);
+RBNode* RBTreeDecrement(RBNode* pNode);                                             // 0x009215c0
+} // namespace ResourceMan
+} // namespace EA
+
+namespace EA {
 namespace Thread {
 class Mutex
 {
@@ -64,231 +177,163 @@ private:
 } // namespace Thread
 } // namespace EA
 
-namespace EA {
-namespace IO {
-// lib_eatext / EAIO entry points referenced by the reconstruction.
-bool  Exists(const wchar_t* pPath);                          // 0x00931fa0
-bool  ExistsDirectory(const wchar_t* pPath);                 // 0x009322b0
-bool  Remove(const wchar_t* pPath);                          // 0x00931fd0
-bool  Create(const wchar_t* pPath, bool bOverwrite);         // 0x00931f20
-unsigned GetSize(const wchar_t* pPath);                      // 0x00932060
-int64_t GetTime(const wchar_t* pPath, int nType);            // 0x00932130
-bool  ConcatenatePathComponents(wchar_t* pDst, const wchar_t* pDir, const wchar_t* pFile); // 0x0092fe60
-} // namespace IO
-} // namespace EA
+namespace EA { namespace ResourceMan {
 
-// EASTL allocator used by the container helpers.
-void* EAOperatorNew(unsigned int nSize, const char* pName, int a, int b, const char* pFile, int nLine); // 0x00f473a0
-void  EAOperatorDelete(void* p);                                                                        // 0x00f47380
-
-// wstring helpers (the retail 0x00423650 does begin/end assign, 0x00931770 frees).
-void WStringFreeSelf(void* pThis);                                           // 0x00931770
-
-// =====================================================================================
-namespace EA {
-namespace ResourceMan {
-
-// 12-byte resource key. Comparison order is (type, instance, group) as used by the rbtree.
-class Key
-{ public:
-    uint32_t mnTypeID;      // 0x00
-    uint32_t mnGroupID;     // 0x04
-    uint32_t mnInstanceID;  // 0x08
+// The retail manager interface, used through its vtable (the notify call the record paths
+// make is vtable slot +0x80).
+class Manager
+{
+public:
+    void NotifyRecordCreated(const Key* pKey);   // IResourceManager vtable slot +0x80 (no direct image address)
 };
 
-// Doubly linked list anchor used by DDFRecordListData (EASTL list sentinel).
-struct ListAnchor
+class DatabaseDirectoryFiles;
+
+// The open CC overlay record (a DDFRecord).  Everything before mKey is the
+// Record + FileStream base and is only passed through.
+class DDFRecord
 {
-    void* mpNext;   // 0x00
-    void* mpPrev;   // 0x04
+public:
+    uint32_t       mPad000[0x8c / 4];  // +0x000 Record base + FileStream base + vtable
+    const wchar_t* mpPathBegin;        // +0x08c
+    uint32_t       mPad090[0x11c / 4]; // +0x090
+    Key            mKey;               // +0x1ac
+    DatabaseDirectoryFiles* mpDDF;     // +0x1b8
+    uint32_t       mnOpenCount;        // +0x1bc
+    uint32_t       mPad1c0[6];         // +0x1c0 (tail of the FileStream state)
+
+    DDFRecord* Initialize(DatabaseDirectoryFiles* pDDF, const Key* pKey);  // 0x008d60d0
 };
 
-// The retail image's static empty wchar_t string, used as the default record name.
-extern const wchar_t gRecordValueEmptyName[];   // 0x01667bac
-
-// The record map's value as retail lays it out: the string16 name first, one more dword, the two
-// file-time words and the record list anchor at +0x18.  Its copy constructor lives outside this
-// TU (the harness binds the call to the retail implementation), so only the call shape is kept.
-struct RecordValue
+// The class the open path constructs and the file stream forwards to.
+class BackgroundRecordLoad
 {
-    const wchar_t* mpNameBegin;     // +0x00
-    const wchar_t* mpNameEnd;       // +0x04
-    const wchar_t* mpNameCapacity;  // +0x08
-    uint32_t       mnUnknown0c;     // +0x0c
-    uint32_t       mnTimeHigh;      // +0x10
-    uint32_t       mnTimeLow;       // +0x14
-    ListAnchor     mRecords;        // +0x18
-
-    void CopyFrom(const RecordValue* pSrc);   // 0x008d6970
+public:
+    uint32_t mPad00[0x244 / 4];
+    uint32_t mLoadFlags;   // +0x244
 };
 
-struct DDFRecord;
-class  DatabaseDirectoryFiles;
-
-// Value stored in the record map, right after the 12-byte Key inside a red-black node.
-// Layout taken from the image: a string16 name at value+0x04, the record list anchor at
-// value+0x1c and the two dwords of file time (value+0x14 / value+0x18) that UpdateRecordData
-// compares.
-struct DDFRecordListData
-{
-    uint32_t       mnUnknown00;      // +0x00
-    const wchar_t* mpNameBegin;      // +0x04 string16.mpBegin
-    const wchar_t* mpNameEnd;        // +0x08 string16.mpEnd
-    const wchar_t* mpNameCapacity;   // +0x0c string16.mpCapacity
-    uint32_t       mnUnknown10;      // +0x10
-    uint32_t       mnTimeLow;        // +0x14
-    uint32_t       mnTimeHigh;       // +0x18
-    ListAnchor     mRecords;         // +0x1c list<AutoRefCount<DDFRecord>>
-};
-
-// Red-black node header (0x10 bytes) followed by the Key and the value.
-struct RBNode
-{
-    RBNode* mpLeft;    // 0x00
-    RBNode* mpRight;   // 0x04
-    RBNode* mpParent;  // 0x08
-    uint32_t mnColor;  // 0x0c
-    Key mKey;          // 0x10
-    // DDFRecordListData mValue; follows, accessed through the raw node pointer
-};
-
-// The two rbtrees embedded in DatabaseDirectoryFiles are 0x20 bytes each.
-struct RBTree
-{
-    void*   mpAllocator;  // +0x00
-    RBNode* mpAnchor;     // +0x04 self-referential header node
-    RBNode* mpBegin;      // +0x08 left-most node
-    RBNode* mpRoot;       // +0x0c
-    uint32_t mnUnknown10; // +0x10
-    uint32_t mnCount;     // +0x14
-    uint32_t mPad18[2];   // +0x18
-
-    // The retail rbtree members receive the tree in ECX. Their bodies live outside this TU, so
-    // they are only declared here; the harness binds each call to the retail implementation and
-    // all that has to be reproduced is the call shape (ECX = tree, arguments on the stack).
-    void*   Find(RBNode** ppOutNode, const Key* pKey);                                 // 0x00a21dc0
-    RBNode* InsertValue(RBNode** ppOutNode, const void* pValue, const void* pKeyValue); // 0x008d7220
-    void*   EraseRecord(RBNode** ppOutNode, RBNode* pNode);                            // 0x008d7200
-};
-
-// string16 with the same three members as eastl::basic_string<wchar_t>.
-struct String16
-{
-    const wchar_t* mpBegin;     // +0x00
-    const wchar_t* mpEnd;       // +0x04
-    const wchar_t* mpCapacity;  // +0x08
-
-    void assign(const wchar_t* pFirst, const wchar_t* pLast);   // 0x00423650
-};
-
-// The two fixed-pool allocators at 0x28 / 0x4c. Sizes are from the constructor calls.
-struct FixedPoolAllocator
-{
-    uint8_t mBytes[0x24];   // first pool is 0x24 bytes
-};
-
-// Accessors for the value that follows a node's key.
-inline DDFRecordListData* NodeValue(RBNode* pNode)
-{
-    return reinterpret_cast<DDFRecordListData*>(reinterpret_cast<uint8_t*>(pNode) + 0x1c);
-}
-
-// (type, instance, group) ordering.
-inline bool KeyLess(const Key& a, const Key& b)
-{
-    if (a.mnTypeID != b.mnTypeID)
-        return a.mnTypeID < b.mnTypeID;
-    if (a.mnInstanceID != b.mnInstanceID)
-        return a.mnInstanceID < b.mnInstanceID;
-    return a.mnGroupID < b.mnGroupID;
-}
-
-// The two maps share the same node layout; only the comparator and the value type differ.
-// These helpers stand in for the (out-of-slice) EASTL rbtree member functions.
-RBNode* RBTreeFindNode(RBTree* pTree, const Key& key);                              // modelled on rbtree::find
-void    RBTreeDoInsertValueImpl(RBTree* pTree, RBNode* pNode, bool bLeft, const Key& key, const void* pValue);
-void    RBTreeNukeSubtree(RBTree* pTree, RBNode* pNode);                            // 0x008d6d90 / 0x008d6be0
-RBNode* RBTreeDecrement(RBNode* pNode);                                             // 0x009215c0
-
-// -------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------
 // EA::ResourceMan::DatabaseDirectoryFiles
-// -------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------
 class DatabaseDirectoryFiles
 {
 public:
-    // Virtual interface (vtable 0x01436700 / 0x01482d24 in retail).
     DatabaseDirectoryFiles(const wchar_t* pLocation, EA::Allocator::ICoreAllocator* pAllocator = 0);
     ~DatabaseDirectoryFiles();
 
-    void* Cast(uint32_t nType);                     // 0x008d81a0
-    bool  Close();                                  // 0x008d72f0
-    bool  DeleteRecord(const Key& key);             // 0x008d7350
+    void* Cast(uint32_t nType);                                          // 0x008d81a0
+    bool  Close();                                                       // 0x008d72f0
+    bool  DeleteRecord(const Key& key);                                  // 0x008d7350
+    bool  AddFileRecord(const Key& key, const wchar_t* pFileName,
+                        uint32_t nFileTimeLow, uint32_t nFileTimeHigh,
+                        void* pList1, void* pList2);                     // 0x008d77a0
+    int   UpdateAllRecordData(int nFlags);                               // 0x008d7960
+    int   UpdateRecordData(const Key& key, void* pList, int nFlags);     // 0x008d7a70
+    bool  OpenRecord(const Key& key, int nArg2, int nOpenMode,
+                     uint32_t nAccess, void** ppFileRef, int nFlags);    // 0x008d7cb0
 
-    // Internal helpers the UpdateRecordData / OpenRecord family call.
-    bool  AddFileRecord(const Key& key, const wchar_t* pFileName, int nHighTime,
-                        int nLowTime, int* pOutProc);                 // 0x008d77a0
-    int   UpdateAllRecordData(int nFlags);                            // 0x008d7960
-    int   UpdateRecordData(const Key& key, int nFileTime, int nFlags); // 0x008d7a70
-    bool  OpenRecord(const Key& key, int nArg2, uint32_t nArg3, int nArg4,
-                     void** ppFileRef, int nArg6);                    // 0x008d7cb0
-
-    // The rbtree member functions reproduced in this TU live in an inner "rbtree" scope so the
-    // reconstruction keeps the retail owner names.
+    // The rbtree member functions reproduced in this TU keep the retail owner name.
     struct RecordMapOps
     {
         static RBNode* DoInsertValue(RBTree* pTree, RBNode** ppOutNode, const Key* pKey); // 0x008d7220
-        // All three retail call sites ignore the result (the value left in EAX is the string
-        // destructor's leftover), so the node-creation helper is void.
         void DoCreateNode(const Key* pKey, const wchar_t* pName,
-                          uint32_t nHighTime, uint32_t nLowTime,
-                          ListAnchor* pList);                                   // 0x008d7610
+                          uint32_t nTimeLow, uint32_t nTimeHigh, void* pList);            // 0x008d7610
     };
 
 private:
     void SetLocation(const wchar_t* pLocation);
 
 public:
-    // ---- exact retail layout (0x168 bytes, two vtable pointers) ----
+    // ---- exact retail layout (0x168 bytes, two vtable pointers, two embedded hashtables)
     void*  mpVtbl0;                    // 0x000 (Database / ZoneObject)
     void*  mpVtbl1;                    // 0x004 (IUnknown32 / IRefCount)
     int    mnRefCount;                 // 0x008
     bool   mbInitialized;              // 0x00c
-    uint8_t mPad0d[3];
+    uint8_t mPad0d[3];                 // 0x00d
 
     EA::Allocator::ICoreAllocator* mpAllocator;  // 0x010
     bool   mbRequireDirectoryExists;   // 0x014
     bool   mbRecursive;                // 0x015
-    uint8_t mPad16[2];
+    uint8_t mPad16[2];                 // 0x016
 
     uint32_t mnAccessFlags;            // 0x018
-    String16 msDirectory;              // 0x01c
+    const wchar_t* msDirectoryBegin;   // 0x01c string16 begin (only begin is used)
+    uint32_t mPad20[2];                // 0x020
     uint32_t mDirectoryAllocator;      // 0x028 (left unset by the ctor)
 
     uint8_t  mExtensionPool[0x20];     // 0x02c fixed-pool node allocator for mExtensionToTypeMap
     uint8_t  mRecordPool[0x20];        // 0x04c fixed-pool node allocator for mRecordDataMap
 
-    RBTree mExtensionToTypeMap;        // 0x06c  rbtree<string16,uint32>
-    RBTree mRecordDataMap;             // 0x08c  rbtree<Key,DDFRecordListData>
+    RBTree mExtensionToTypeMap;        // 0x06c
+    RBTree mRecordDataMap;             // 0x08c
 
     uint32_t mDefaultGroupId;          // 0x0ac
-    void*    mpManager;                // 0x0b0  IResourceManager*
+    Manager* mpManager;                // 0x0b0
     void*    mpFileNameToKeyConverter; // 0x0b4
 
-    uint32_t mKnownTypesBits[0x20];    // 0x0b8  (0x80 bytes, 1024 known type ids)
+    uint32_t mKnownTypesBits[0x20];    // 0x0b8 (0x80 bytes, 1024 known type ids)
 
     EA::Thread::Mutex mMutex;          // 0x138
+};
+
+// ---------------------------------------------------------------------------------------
+// Free helpers that live in other TUs (the harness binds each call to its retail address)
+// ---------------------------------------------------------------------------------------
+// 0x00925f30 constructs one of the two in-place fixed-pool allocators.
+void FixPoolInit(void* pPool, void* pAllocator, unsigned int nNodeSize, unsigned int nNodeCount); // 0x00925f30
+// 0x00925cb0 returns the process-wide default core allocator.
+EA::Allocator::ICoreAllocator* GetDefaultAllocator();                        // 0x00925cb0
+// 0x00925e60 frees a fixed-pool allocator's node list (HashHolder destructor shape).
+void FixedPoolClear(void* pPool);                                            // 0x00925e60
+// 0x008d6770 drops every open record.
+void DatabaseDirectoryFiles_CloseOpenRecords(DatabaseDirectoryFiles* pThis); // 0x008d6770
+// 0x008d6ed0 loads the extension -> type-id map file.
+bool ReadExtensionToTypeMapFile(DatabaseDirectoryFiles* pThis);              // 0x008d6ed0
+// 0x008d5e10 resolves an extension to a type id / creates a record.
+bool OpenRecord_GetExtensionToType(DatabaseDirectoryFiles* pThis, const wchar_t* pDirectory,
+                                   const wchar_t* pExtension, const wchar_t* pFileName, Key* pKey); // 0x008d5e10
+// 0x008d61a0 returns the pending open count of a DDFRecord list owner.
+uint32_t RecordListGetRefCount(const wchar_t* pRecordName);                  // 0x008d61a0
+// 0x008d60d0 initialises a freshly allocated DDFRecord.
+DDFRecord* DDFRecord_Initialize(DatabaseDirectoryFiles* pThis, const Key* pKey); // 0x008d60d0
+// 0x00925fe0 allocates a named zone object.
+void* ZoneAlloc_Named(int nSize, EA::Allocator::ICoreAllocator* pAllocator, int a); // 0x00925fe0
+// 0x00930f60 / 0x00930c10 / 0x00930c30: the EA::IO::FilePath accessor family.
+// 0x0092fe60 concatenates a directory and a file name into a wide buffer.
+int  EAIOConcatenatePathComponents(wchar_t* pDst, const wchar_t* pDir, const wchar_t* pFile); // 0x0092fe60
+// string16::assign(first,last) -- 0x00423650.
+void DDFRecordListAssignName(void* pString, const wchar_t* pFirst, const wchar_t* pLast); // 0x00423650
+// 0x00f47380 / 0x00f473a0: the EA memory manager's delete/new.
+void EAOperatorDelete(void* p);                                              // 0x00f47380
+void* EAOperatorNew(uint32_t nSize, const char* pName, int a, int b, const char* pFile, int nLine); // 0x00f473a0
+// 0x00697b50 / 0x0061df40 used by the open path.
+void MutexLockCtor(void* pLock, void* pMutex);                               // 0x00697b50
+void DDFRecordListPushBack(void* pList, void* pRecord);                      // 0x004e19a0
+
+// The EA::IO::FilePath helper family used by the record paths.  The vendored headers do not
+// ship FilePath, so the three entry points are declared with their real shapes.
+class EAIOFilePath
+{
+public:
+    explicit EAIOFilePath(void* pBuffer) {}
+    const wchar_t* GetExtension();                                  // 0x00930c10
+    unsigned int   GetDirectory(wchar_t* pDst, unsigned int nCap);  // 0x00930c30
+    static EAIOFilePath* Init(void* pBuffer, const wchar_t* pName); // 0x00930f60
 };
 
 // =====================================================================================
 // rbtree helpers
 // =====================================================================================
 
-// @ 0x008d7220  eastl::rbtree<EA::ResourceMan::Key,eastl::pair<const Key,DDFRecordListData>,...>::DoInsertValue
+// @ 0x008d7220  eastl::rbtree<Key,pair<const Key,DDFRecordListData>,...>::DoInsertValue
+// The original receives the tree in ECX (a __thiscall rbtree member); declared static here
+// because the caller in this reconstruction passes the tree explicitly.
 RBNode* DatabaseDirectoryFiles::RecordMapOps::DoInsertValue(RBTree* pTree, RBNode** ppOutNode, const Key* pKey)
 {
-    RBNode*  pNode = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(pTree) + 4); // &anchor
-    RBNode*  r     = pTree->mpRoot;
-    bool     bLeft = true;
+    RBNode* pNode  = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(pTree) + 4); // &anchor
+    RBNode* r      = pTree->mpRoot;
+    bool    bLeft  = true;
 
     if (r != 0)
     {
@@ -305,7 +350,7 @@ RBNode* DatabaseDirectoryFiles::RecordMapOps::DoInsertValue(RBTree* pTree, RBNod
     {
         if (pNode == pTree->mpBegin)
         {
-            RBTreeDoInsertValueImpl(pTree, pNode, true, *pKey, 0);
+            RBTreeInsertValueImpl(pTree, pNode, true, *pKey, 0);
             *ppOutNode = pNode;
             return pNode;
         }
@@ -314,7 +359,7 @@ RBNode* DatabaseDirectoryFiles::RecordMapOps::DoInsertValue(RBTree* pTree, RBNod
 
     if (KeyLess(pInsertAfter->mKey, *pKey))
     {
-        RBTreeDoInsertValueImpl(pTree, pNode, false, *pKey, 0);
+        RBTreeInsertValueImpl(pTree, pNode, false, *pKey, 0);
         *ppOutNode = pNode;
         return pNode;
     }
@@ -326,24 +371,25 @@ RBNode* DatabaseDirectoryFiles::RecordMapOps::DoInsertValue(RBTree* pTree, RBNod
 // @ 0x008d72f0  EA::ResourceMan::DatabaseDirectoryFiles::Close
 bool DatabaseDirectoryFiles::Close()
 {
-    // CloseOpenRecords() @ 0x008d6770 drops every open record first.
-    extern void DatabaseDirectoryFiles_CloseOpenRecords(DatabaseDirectoryFiles* pThis);
+    // 0x008d6770 drops every open record first.
     DatabaseDirectoryFiles_CloseOpenRecords(this);
 
-    RBTreeNukeSubtree(&mRecordDataMap, mRecordDataMap.mpRoot);
-    mRecordDataMap.mpBegin    = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
-    mRecordDataMap.mpRoot     = 0;
+    mRecordDataMap.DoNukeSubtree(mRecordDataMap.mpRoot);
+    mRecordDataMap.mpRoot      = 0;
+    mRecordDataMap.mnCount     = 0;
+    mRecordDataMap.mpBegin     = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
     mRecordDataMap.mnUnknown10 = 0;
-    mRecordDataMap.mnCount    = 0;
-    *reinterpret_cast<RBNode**>(&mRecordDataMap.mpAnchor) = mRecordDataMap.mpAnchor;
+    reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4)->mpLeft =
+        reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
 
-    RBTreeNukeSubtree(&mExtensionToTypeMap, mExtensionToTypeMap.mpRoot);
-    mExtensionToTypeMap.mpBegin    = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mExtensionToTypeMap) + 4);
-    mExtensionToTypeMap.mpRoot     = 0;
+    reinterpret_cast<RBTreeExt*>(&mExtensionToTypeMap)->DoNukeSubtree(mExtensionToTypeMap.mpRoot);
+    mExtensionToTypeMap.mpRoot      = 0;
+    mExtensionToTypeMap.mnCount     = 0;
+    mExtensionToTypeMap.mpBegin     = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mExtensionToTypeMap) + 4);
     mExtensionToTypeMap.mnUnknown10 = 0;
-    mExtensionToTypeMap.mnCount    = 0;
+    reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mExtensionToTypeMap) + 4)->mpLeft =
+        reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mExtensionToTypeMap) + 4);
     mnAccessFlags = 0;
-    *reinterpret_cast<RBNode**>(&mExtensionToTypeMap.mpAnchor) = mExtensionToTypeMap.mpAnchor;
 
     return true;
 }
@@ -352,21 +398,21 @@ bool DatabaseDirectoryFiles::Close()
 bool DatabaseDirectoryFiles::DeleteRecord(const Key& key)
 {
     bool bRemoved = false;
-    mMutex.Lock(reinterpret_cast<void*>(0x1436624));
+    mMutex.Lock(reinterpret_cast<void*>(0x01436624));
 
     if (mbInitialized && (mnAccessFlags & 2))
     {
         RBNode* pNode = 0;
         mRecordDataMap.Find(&pNode, &key);
-        RBNode* pEnd  = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
+        RBNode* pEnd = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
         if (pNode != pEnd)
         {
             DDFRecordListData* pValue = NodeValue(pNode);
             if (pValue->mRecords.mpNext == &pValue->mRecords)
             {
                 wchar_t path[260];
-                EA::IO::ConcatenatePathComponents(path, msDirectory.mpBegin, pValue->mpNameBegin);
-                if (EA::IO::Remove(path))
+                EAIOConcatenatePathComponents(path, msDirectoryBegin, pValue->mpNameBegin);
+                if (EA::IO::File::Remove(path))
                 {
                     mRecordDataMap.EraseRecord(&pNode, pNode);
                     bRemoved = true;
@@ -380,9 +426,10 @@ bool DatabaseDirectoryFiles::DeleteRecord(const Key& key)
 }
 
 // @ 0x008d7400  EA::ResourceMan::DatabaseDirectoryFiles::DatabaseDirectoryFiles
-DatabaseDirectoryFiles::DatabaseDirectoryFiles(const wchar_t* pLocation, EA::Allocator::ICoreAllocator* pAllocator)
+DatabaseDirectoryFiles::DatabaseDirectoryFiles(const wchar_t* pLocation,
+                                               EA::Allocator::ICoreAllocator* pAllocator)
 {
-    // Two polymorphic bases -> two vtable pointers.
+    // Two polymorphic bases -> two vtable pointers (retail 0x01436700 / 0x01482d24).
     mpVtbl0 = reinterpret_cast<void*>(&mExtensionPool);
     mpVtbl1 = reinterpret_cast<void*>(&mRecordPool);
     mnRefCount = 0;
@@ -392,7 +439,7 @@ DatabaseDirectoryFiles::DatabaseDirectoryFiles(const wchar_t* pLocation, EA::All
     mbInitialized = false;
 
     if (pAllocator == 0)
-        pAllocator = EA::Allocator::ICoreAllocator::GetDefaultAllocator();
+        pAllocator = GetDefaultAllocator();
     mpAllocator = pAllocator;
 
     mbRequireDirectoryExists = false;
@@ -400,9 +447,7 @@ DatabaseDirectoryFiles::DatabaseDirectoryFiles(const wchar_t* pLocation, EA::All
     mnAccessFlags            = 0;
 
     static const wchar_t sEmpty[2] = { 0, 0 };
-    msDirectory.mpBegin    = sEmpty;
-    msDirectory.mpEnd      = sEmpty;
-    msDirectory.mpCapacity = sEmpty + 1;
+    msDirectoryBegin = sEmpty;
 
     FixPoolInit(&mExtensionPool, mpAllocator, 0x20, 0x24);
     FixPoolInit(&mRecordPool,    mpAllocator, 0x80, 0x48);
@@ -411,21 +456,20 @@ DatabaseDirectoryFiles::DatabaseDirectoryFiles(const wchar_t* pLocation, EA::All
     mpManager                = 0;
     mpFileNameToKeyConverter = 0;
 
-    // Initialise the two rbtrees (empty: anchor node self-referential, begin == &anchor).
+    // Initialise the two rbtrees (the tree constructors are inlined in the original).
     RBNode* pAnchorExt = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mExtensionToTypeMap) + 4);
     RBNode* pAnchorRec = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
-    pAnchorExt->mpLeft = pAnchorExt;
-    pAnchorRec->mpLeft = pAnchorRec;
     mExtensionToTypeMap.mpAnchor = pAnchorExt;
-    mExtensionToTypeMap.mpBegin  = pAnchorExt;
+    pAnchorExt->mpLeft = pAnchorExt;
+    mExtensionToTypeMap.mpBegin  = 0;
     mExtensionToTypeMap.mpRoot   = 0;
     mExtensionToTypeMap.mnCount  = 0;
     mRecordDataMap.mpAnchor = pAnchorRec;
-    mRecordDataMap.mpBegin  = pAnchorRec;
+    pAnchorRec->mpLeft = pAnchorRec;
+    mRecordDataMap.mpBegin  = 0;
     mRecordDataMap.mpRoot   = 0;
     mRecordDataMap.mnCount  = 0;
 
-    // retail constructs the mutex at 0x138 in place:
     new (&mMutex) EA::Thread::Mutex(0, 1);
 
     if (pLocation != 0)
@@ -433,8 +477,7 @@ DatabaseDirectoryFiles::DatabaseDirectoryFiles(const wchar_t* pLocation, EA::All
         const wchar_t* pEnd = pLocation;
         while (*pEnd != 0)
             ++pEnd;
-        msDirectory.assign(pLocation, pEnd);
-        WStringFreeSelf(&msDirectory);
+        SetLocation(pLocation);
     }
 
     for (int i = 0; i < 0x20; ++i)
@@ -453,74 +496,59 @@ DatabaseDirectoryFiles::~DatabaseDirectoryFiles()
     if (mbInitialized)
     {
         mbInitialized = false;
-        // Release the directory handle through the vtable slot at +0x1c.
-        typedef void (*ReleaseFn)(DatabaseDirectoryFiles*);
-        ReleaseFn pRelease = *reinterpret_cast<ReleaseFn*>(reinterpret_cast<uint8_t*>(mpVtbl0) + 0x1c);
-        if (pRelease)
-            pRelease(this);
+        typedef void (__thiscall *ReleaseFn)(DatabaseDirectoryFiles*);
+        ReleaseFn pRelease = reinterpret_cast<ReleaseFn>(
+            *reinterpret_cast<void**>(reinterpret_cast<uint8_t*>(mpVtbl0) + 0x1c));
+        pRelease(this);
     }
 
     mMutex.~Mutex();
 
-    RBTreeNukeSubtree(&mRecordDataMap, mRecordDataMap.mpRoot);
-    RBTreeNukeSubtree(&mExtensionToTypeMap, mExtensionToTypeMap.mpRoot);
+    mRecordDataMap.DoNukeSubtree(mRecordDataMap.mpRoot);
+    reinterpret_cast<RBTreeExt*>(&mExtensionToTypeMap)->DoNukeSubtree(mExtensionToTypeMap.mpRoot);
 
-    if (msDirectory.mpBegin != 0 &&
-        (reinterpret_cast<uintptr_t>(msDirectory.mpCapacity) - reinterpret_cast<uintptr_t>(msDirectory.mpBegin)) > 2)
+    FixedPoolClear(&mRecordPool);
+    FixedPoolClear(&mExtensionPool);
+
+    if (msDirectoryBegin != 0 &&
+        (reinterpret_cast<uintptr_t>(msDirectoryBegin) - reinterpret_cast<uintptr_t>(&mExtensionPool)) > 2)
     {
-        EAOperatorDelete(const_cast<wchar_t*>(msDirectory.mpBegin));
+        EAOperatorDelete(const_cast<wchar_t*>(msDirectoryBegin));
     }
 
     mpVtbl1 = reinterpret_cast<void*>(&mRecordPool);
     mpVtbl0 = reinterpret_cast<void*>(&mExtensionPool);
 }
 
-// =====================================================================================
-// RecordMapOps::DoCreateNode
-// =====================================================================================
-// @ 0x008d7610  eastl::rbtree<EA::ResourceMan::Key,eastl::pair<const Key,DDFRecordListData>,...>::DoCreateNode
+// @ 0x008d7610  eastl::rbtree<Key,pair<const Key,DDFRecordListData>,...>::DoCreateNode
+// ECX holds the owning DatabaseDirectoryFiles (the rbtree is embedded at +0x8c).
 void DatabaseDirectoryFiles::RecordMapOps::DoCreateNode(const Key* pKey,
-                                                        const wchar_t* pName, uint32_t nHighTime,
-                                                        uint32_t nLowTime, ListAnchor* pList)
+                                                        const wchar_t* pName, uint32_t nTimeLow,
+                                                        uint32_t nTimeHigh, void* pList)
 {
-    // ECX holds the owning DatabaseDirectoryFiles; the record map is embedded at +0x8c.
     RBTree* pTree = reinterpret_cast<RBTree*>(reinterpret_cast<uint8_t*>(this) + 0x8c);
 
-    // Mark the record's group in the 0x400100b8 hash bitmap (key word 1 = the group id).
-    uint32_t  nGroup = pKey->mnGroupID;
-    uint32_t* pHash  = reinterpret_cast<uint32_t*>(reinterpret_cast<uint8_t*>(this) + 0xb8);
-    pHash[(nGroup >> 5) & 0x1f] |= 1u << (nGroup & 0x1f);
+    // Mark the record's group in the 0x0b8 known-type bitmap (key word 2 = the group id).
+    uint32_t nGroup = pKey->mnGroupID;
+    uint32_t* pKnownTypes = reinterpret_cast<uint32_t*>(reinterpret_cast<uint8_t*>(this) + 0xb8);
+    pKnownTypes[(nGroup >> 5) & 0x1f] |= 1u << (nGroup & 0x1f);
 
-    // The retail builds a pair<const Key,DDFRecordListData> on the stack and inserts it through the
-    // rbtree (ECX = tree). The insert writes its iterator (the new node) followed by a bool into the
-    // out slot; the third argument re-uses the dead pKey argument slot, whose low byte was zeroed.
-    struct InsertResult { RBNode* pNode; uint32_t bInserted; };
-    InsertResult result;
-    result.pNode    = 0;
-    result.bInserted = 0;
+    RBNode* pNode = 0;
     {
-        // Retail pair: the 12-byte key is followed by four bytes of padding, so the value starts
-        // at +0x10 (the node keeps the same layout after its 0x10 header).
-        struct Pair { Key first; uint32_t mnPadKey; DDFRecordListData second; } pair;
-        pair.first   = *pKey;
-        pair.mnPadKey = 0;
-
-        // Retail copies a default (empty-named) record value into the pair's value slot.
-        RecordValue raw;
-        raw.mpNameBegin     = gRecordValueEmptyName;
-        raw.mpNameEnd       = gRecordValueEmptyName;
-        raw.mpNameCapacity  = gRecordValueEmptyName + 2;
-        raw.mnUnknown0c     = 0;
-        raw.mnTimeHigh      = nHighTime;
-        raw.mnTimeLow       = nLowTime;
-        raw.mRecords.mpNext = &raw.mRecords;
-        raw.mRecords.mpPrev = &raw.mRecords;
-        reinterpret_cast<RecordValue*>(&pair.second)->CopyFrom(&raw);
-
-        pTree->InsertValue(&result.pNode, &pair,
-                           reinterpret_cast<const void*>(reinterpret_cast<uintptr_t>(pKey) & ~(uintptr_t)0xFF));
+        // The value the tree copies in: default (empty) name, the two file-time words and a
+        // self-referential record-list anchor at value+0x1c.
+        DDFRecordListData value;
+        value.mnStringAlloc    = 0;
+        value.mpNameBegin      = gEmptyString16;
+        value.mpNameEnd        = gEmptyString16;
+        value.mpNameCapacity   = gEmptyString16 + 1;
+        value.mnUnknown10      = 0;
+        value.mnTimeLow        = nTimeLow;
+        value.mnTimeHigh       = nTimeHigh;
+        value.mRecords.mpNext  = &value.mRecords;
+        value.mRecords.mpPrev  = &value.mRecords;
+        pTree->InsertValue(&pNode, &value, pKey);
     }
-    RBNode* pNode = result.pNode;
 
     if (pNode != 0)
     {
@@ -530,106 +558,92 @@ void DatabaseDirectoryFiles::RecordMapOps::DoCreateNode(const Key* pKey,
             const wchar_t* pEnd = pName;
             while (*pEnd != 0)
                 ++pEnd;
-            reinterpret_cast<String16*>(&pValue->mpNameBegin)->assign(pName, pEnd);
+            // string16::assign(begin, end) -- out of this TU (0x00423650).
+            DDFRecordListAssignName(pValue, pName, pEnd);
         }
     }
 
     if (pList != 0)
     {
-        // push_back an AutoRefCount<DDFRecord> onto the node's record list.
-        void* pRecord = *reinterpret_cast<void**>(pList);
-        if (pRecord != 0)
-        {
-            typedef void (*AddRefFn)(void*);
-            AddRefFn pAddRef = *reinterpret_cast<AddRefFn*>(*reinterpret_cast<uint8_t**>(pRecord) + 4);
-            if (pAddRef)
-                pAddRef(pRecord);
-        }
-        (void)pRecord;
+        // push_back an AutoRefCount<DDFRecord> onto the node's record list: the node holds the
+        // list anchor at +0x38 and the new list node is copied straight in from the caller's.
+        ListAnchor* pAnchor = reinterpret_cast<ListAnchor*>(reinterpret_cast<uint8_t*>(pNode) + 0x38);
+        DDFRecordListPushBack(pAnchor, pList);
     }
 }
 
-// =====================================================================================
-// AddFileRecord  (0x008d77a0: an internal UpdateRecordData helper taking a file record)
-// =====================================================================================
 // @ 0x008d77a0  EA::ResourceMan::DatabaseDirectoryFiles::AddFileRecord
-bool DatabaseDirectoryFiles::AddFileRecord(const Key& key, const wchar_t* pFileName, int nHighTime,
-                                           int nLowTime, int* pOutProc)
+bool DatabaseDirectoryFiles::AddFileRecord(const Key& key, const wchar_t* pFileName,
+                                           uint32_t nFileTimeLow, uint32_t nFileTimeHigh,
+                                           void* pList1, void* pList2)
 {
-    wchar_t path[0x820 / 2];   // 0x1040 bytes of stack in the original
+    wchar_t path[0x420];      // EA::IO::FilePath working storage (0x840 bytes)
     wchar_t directory[260];
-    (void)path;
+    Key newKey;
+    newKey.mInstanceID = 0;
+    newKey.mnTypeID    = 0;
+    newKey.mnGroupID   = 0;
 
-    extern void FilePath_Init(void* pPath, const wchar_t* pName);          // 0x00930f60
-    extern const wchar_t* FilePath_GetExtension(void* pPath);              // 0x00930c10
-    extern void FilePath_GetDirectory(void* pPath, wchar_t* pDst, int n);  // 0x00930c30
-    extern bool GetExtensionToType(const wchar_t* pDir, const wchar_t* pExt, const wchar_t* pName, Key* pKey); // 0x008d5e10
-
-    FilePath_Init(path, pFileName);
-    const wchar_t* pExt = FilePath_GetExtension(path);
-    FilePath_GetDirectory(path, directory, 0x100);
+    (void)pFileName;
+    EAIOFilePath* pPath = EAIOFilePath::Init(path, pFileName);
+    const wchar_t* pExt = pPath->GetExtension();
+    pPath->GetDirectory(directory, 0x100);
 
     if (_wcsicmp(directory, L"DDFMap") == 0)
         return false;
     if (_wcsicmp(directory, L"DDFList") == 0)
         return false;
 
-    Key newKey;
-    if (!GetExtensionToType(directory, pExt, pFileName, &newKey))
+    if (!OpenRecord_GetExtensionToType(this, directory, pExt, pFileName, &newKey))
         return false;
-    newKey = key;
-    (void)newKey;
 
-    Key mapKey;
-    mapKey = key;
+    mMutex.Lock(reinterpret_cast<void*>(0x01436624));
 
-    mMutex.Lock(reinterpret_cast<void*>(0x1436624));
+    RBNode* pFound = 0;
+    mRecordDataMap.Find(&pFound, &key);
 
-    RBNode* pFound = RBTreeFindNode(&mRecordDataMap, mapKey);
-    RBNode* pEnd   = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
+    wchar_t full[260];
+    EAIOConcatenatePathComponents(full, msDirectoryBegin, pFileName);
 
-    (void)nHighTime;
-    (void)nLowTime;
+    // Non-zero file times come from the record's own file, otherwise from the file itself.
+    if (nFileTimeLow == 0 && nFileTimeHigh == 0)
+    {
+        int64_t t = EA::IO::File::GetTime(full, EA::IO::kFileTimeTypeLastModification);
+        nFileTimeLow  = static_cast<uint32_t>(t & 0xffffffffu);
+        nFileTimeHigh = static_cast<uint32_t>(t >> 32);
+    }
 
     bool bChanged = false;
+    RBNode* pEnd = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
     if (pFound == pEnd)
     {
-        reinterpret_cast<RecordMapOps*>(this)->DoCreateNode(&mapKey, 0, 0, 0, 0);
+        reinterpret_cast<RecordMapOps*>(this)->DoCreateNode(&key, pFileName, nFileTimeLow, nFileTimeHigh, 0);
         if (mpManager != 0)
-        {
-            typedef void (*NotifyFn)(void*, const Key*);
-            NotifyFn pNotify = *reinterpret_cast<NotifyFn*>(*reinterpret_cast<uint8_t**>(mpManager) + 0x80);
-            if (pNotify)
-                pNotify(mpManager, &mapKey);
-        }
+            mpManager->NotifyRecordCreated(&key);
+        bChanged = true;
+        if (pList1 != 0)
+            DDFRecordListPushBack(pList1, const_cast<Key*>(&key));
     }
     else
     {
-        if (nHighTime != 0 || nLowTime != 0)
+        DDFRecordListData* pValue = NodeValue(pFound);
+        if (pValue->mnTimeLow == nFileTimeLow && pValue->mnTimeHigh == nFileTimeHigh)
         {
-            DDFRecordListData* pValue = NodeValue(pFound);
-            if (pValue->mnTimeHigh == static_cast<uint32_t>(nHighTime) &&
-                pValue->mnTimeLow  == static_cast<uint32_t>(nLowTime))
-            {
-                mMutex.Unlock();
-                return false;
-            }
-            pValue->mnTimeHigh = static_cast<uint32_t>(nHighTime);
-            pValue->mnTimeLow  = static_cast<uint32_t>(nLowTime);
+            mMutex.Unlock();
+            return false;
         }
+        pValue->mnTimeLow  = nFileTimeLow;
+        pValue->mnTimeHigh = nFileTimeHigh;
+        bChanged = true;
+        if (pList1 != 0)
+            DDFRecordListPushBack(pList1, const_cast<Key*>(&key));
     }
 
-    bChanged = true;
-    if (pOutProc != 0)
-        *pOutProc = 1;
-
+    (void)pList2;
     mMutex.Unlock();
     return bChanged;
 }
 
-// =====================================================================================
-// UpdateAllRecordData (0x008d7960): walk the directory and refresh each file record.
-// =====================================================================================
 // @ 0x008d7960  EA::ResourceMan::DatabaseDirectoryFiles::UpdateAllRecordData
 int DatabaseDirectoryFiles::UpdateAllRecordData(int nFlags)
 {
@@ -637,137 +651,196 @@ int DatabaseDirectoryFiles::UpdateAllRecordData(int nFlags)
 
     if (!mbInitialized)
         return 0;
-    if (!EA::IO::ExistsDirectory(msDirectory.mpBegin))
+    if (!EA::IO::Directory::Exists(msDirectoryBegin))
         return 0;
 
-    extern void ReadExtensionToTypeMapFile(DatabaseDirectoryFiles* pThis);   // 0x008d6ed0
     ReadExtensionToTypeMapFile(this);
 
-    // DirectoryIterator over msDirectory; for each entry call AddFileRecord.
-    struct DirEntry { uint8_t mBytes[0x30]; };
-    struct DirIter  { uint8_t mBytes[0x30]; };
-
-    void* pAllocator = EA::Allocator::ICoreAllocator::GetDefaultAllocator();
-    (void)pAllocator;
-
-    extern void DirectoryIterator_Ctor(void* pIter, void* pAlloc);        // 0x005f9680
-    extern void DirectoryIterator_Dtor(void* pIter);                      // 0x005f96c0
-    extern bool DirectoryIterator_Read(void* pIter, const wchar_t* pDir, DirEntry* pEntry, int a, int b, int c, int d); // 0x0092ef40
-    extern bool DirectoryIterator_ReadRecursive(void* pIter, const wchar_t* pDir, DirEntry* pEntry, int a, int b, int c, int d, int e); // 0x0092f220
-
-    DirIter iter;
-    DirectoryIterator_Ctor(&iter, &pAllocator);
-
-    DirEntry entry;
-    if (!mbRecursive)
-        DirectoryIterator_Read(&iter, msDirectory.mpBegin, &entry, 0, 2, 0x100000, 1);
+    EA::IO::DirectoryIterator::EntryList entryList;
+    EA::IO::DirectoryIterator iter;
+    if (mbRecursive)
+        iter.ReadRecursive(msDirectoryBegin, entryList, 0,
+                           EA::IO::kDirectoryEntryFile | EA::IO::kDirectoryEntryDirectory,
+                           true, false, 0x100000);
     else
-        DirectoryIterator_ReadRecursive(&iter, msDirectory.mpBegin, &entry, 0, 2, 1, 0, 0x100000);
+        iter.Read(msDirectoryBegin, entryList, 0,
+                  EA::IO::kDirectoryEntryFile | EA::IO::kDirectoryEntryDirectory, 0x100000);
 
-    (void)nUpdated;
-    DirectoryIterator_Dtor(&iter);
+    for (EA::IO::DirectoryIterator::EntryList::iterator it = entryList.begin(),
+         end = entryList.end(); it != end; ++it)
+    {
+        uint8_t* pEntry = reinterpret_cast<uint8_t*>(&*it);
+        nUpdated += AddFileRecord(*reinterpret_cast<Key*>(pEntry + 0x20),
+                                  it->msName.c_str(),
+                                  *reinterpret_cast<uint32_t*>(pEntry + 0x24),
+                                  *reinterpret_cast<uint32_t*>(pEntry + 0x20), 0, 0);
+    }
+
     return nUpdated;
 }
 
-// =====================================================================================
-// UpdateRecordData (0x008d7a70)
-// =====================================================================================
 // @ 0x008d7a70  EA::ResourceMan::DatabaseDirectoryFiles::UpdateRecordData
-int DatabaseDirectoryFiles::UpdateRecordData(const Key& key, int nFileTime, int nFlags)
+int DatabaseDirectoryFiles::UpdateRecordData(const Key& key, void* pList, int nFlags)
 {
-    wchar_t path[0x840 / 2];
+    int nResult = 0;
+    Key newKey;
+    newKey.mInstanceID = 0;
+    newKey.mnTypeID    = 0;
+    newKey.mnGroupID   = 0;
+
+    (void)key;
+    const Key* pKey = &key;
+
+    wchar_t full[0x420];
+    EAIOFilePath* pPath = EAIOFilePath::Init(full, reinterpret_cast<const wchar_t*>(pKey));
+    const wchar_t* pExt = pPath->GetExtension();
     wchar_t directory[260];
+    pPath->GetDirectory(directory, 0x100);
 
-    extern void FilePath_Init(void* pPath, const wchar_t* pName);
-    extern const wchar_t* FilePath_GetExtension(void* pPath);
-    extern void FilePath_GetDirectory(void* pPath, wchar_t* pDst, int n);
-    extern bool GetExtensionToType(const wchar_t* pDir, const wchar_t* pExt, const wchar_t* pName, Key* pKey);
-
-    FilePath_Init(path, reinterpret_cast<const wchar_t*>(&key)); // placeholder name source
-    (void)nFileTime;
-
-    Key localKey = key;
     if (_wcsicmp(directory, L"DDFMap") == 0)
         return 0;
     if (_wcsicmp(directory, L"DDFList") == 0)
         return 0;
 
-    int nResult = 0;
-    mMutex.Lock(reinterpret_cast<void*>(0x1436624));
-    RBNode* pNode = RBTreeFindNode(&mRecordDataMap, localKey);
+    if (!OpenRecord_GetExtensionToType(this, directory, pExt, 0, &newKey))
+        return 0;
+    pKey = &newKey;
+
+    mMutex.Lock(reinterpret_cast<void*>(0x01436624));
+
+    RBNode* pFound = 0;
+    mRecordDataMap.Find(&pFound, pKey);
+    RBNode* pEnd = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
+    bool bFound = (pFound != pEnd);
+
+    wchar_t full2[260];
+    EAIOConcatenatePathComponents(full2, msDirectoryBegin, reinterpret_cast<const wchar_t*>(pKey));
+    bool bFileExists = EA::IO::File::Exists(full2);
+
+    if ((nFlags & 1) != 0)
+    {
+        // Delete the record when the file has gone and the record list is empty.
+        if (bFound && (nFlags & 2) == 0 &&
+            NodeValue(pFound)->mRecords.mpNext == &NodeValue(pFound)->mRecords)
+        {
+            mRecordDataMap.EraseRecord(&pFound, pFound);
+            mMutex.Unlock();
+            return 0;
+        }
+        mMutex.Unlock();
+        return nResult;
+    }
+
+    if (bFileExists)
+    {
+        int64_t t = EA::IO::File::GetTime(full2, EA::IO::kFileTimeTypeLastModification);
+        uint32_t nLow  = static_cast<uint32_t>(t & 0xffffffffu);
+        uint32_t nHigh = static_cast<uint32_t>(t >> 32);
+
+        if ((nFlags & 2) != 0 && !bFound)
+        {
+            reinterpret_cast<RecordMapOps*>(this)->DoCreateNode(&newKey, 0, nLow, nHigh, 0);
+            if (mpManager != 0)
+                mpManager->NotifyRecordCreated(&newKey);
+        }
+        else
+        {
+            DDFRecordListData* pValue = NodeValue(pFound);
+            if (pValue->mnTimeLow != nLow || pValue->mnTimeHigh != nHigh)
+            {
+                pValue->mnTimeLow  = nLow;
+                pValue->mnTimeHigh = nHigh;
+                nResult = 1;
+                if (pList != 0)
+                    DDFRecordListPushBack(pList, &newKey);
+            }
+        }
+    }
+
+    ++nResult;
+    if (pList != 0)
+        DDFRecordListPushBack(pList, &newKey);
+
     mMutex.Unlock();
-    (void)pNode;
-    (void)nFlags;
     return nResult;
 }
 
-// =====================================================================================
-// OpenRecord (0x008d7cb0)
-// =====================================================================================
 // @ 0x008d7cb0  EA::ResourceMan::DatabaseDirectoryFiles::OpenRecord
-bool DatabaseDirectoryFiles::OpenRecord(const Key& key, int nArg2, uint32_t nArg3,
-                                        int nArg4, void** ppFileRef, int nArg6)
+bool DatabaseDirectoryFiles::OpenRecord(const Key& key, int nArg2, int nOpenMode,
+                                        uint32_t nAccess, void** ppFileRef, int nFlags)
 {
     if (!mbInitialized)
         return false;
 
-    // The image only tests the known-type bitset when the second argument is zero, and it indexes
-    // the bitset by the key's second dword (offset 4), not by the type id.
+    // The known-type bitset is only consulted when the second argument is zero, and it is
+    // indexed by the key's second dword.
     if (nArg2 == 0)
     {
-        uint32_t v = key.mnGroupID;                 // key + 4
+        uint32_t v = key.mnTypeID;
         uint32_t nBit = 1u << (v & 0x1f);
         uint32_t nIdx = (v >> 5) & 0x1f;
         if ((mKnownTypesBits[nIdx] & nBit) == 0)
             return false;
     }
 
-    mMutex.Lock(reinterpret_cast<void*>(0x1436624));
-    RBNode* pNode = RBTreeFindNode(&mRecordDataMap, key);
-    RBNode* pEnd  = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
-    bool bFound = (pNode != pEnd);
+    wchar_t name[260];
+    name[0] = 0;
+    wchar_t recordName[520];
+    recordName[0] = 0;
+    uint32_t nPending = 0;
+    bool bFound = false;
 
+    mMutex.Lock(reinterpret_cast<void*>(0x01436624));
+    {
+        RBNode* pNode = 0;
+        mRecordDataMap.Find(&pNode, &key);
+        RBNode* pEnd = reinterpret_cast<RBNode*>(reinterpret_cast<uint8_t*>(&mRecordDataMap) + 4);
+        bFound = (pNode != pEnd);
+    }
     if (nArg2 == 0 && ppFileRef == 0)
     {
+        bool b = bFound;
         mMutex.Unlock();
-        return bFound;
+        return b;
     }
 
-    wchar_t name[0x100];
-    name[0] = 0;
+    RBNode* pRecordNode = 0;
     if (bFound)
     {
-        DDFRecordListData* pValue = NodeValue(pNode);
-        const wchar_t* pName = pValue->mpNameBegin;
-        wchar_t* pDst = name;
-        if (pName)
-        {
-            while ((*pDst++ = *pName++) != 0)
-                ;
-        }
+        // (the found node is kept for the open path below)
     }
     mMutex.Unlock();
 
     if (bFound && ppFileRef != 0)
     {
-        wchar_t full[0x200];
-        EA::IO::ConcatenatePathComponents(full, msDirectory.mpBegin, name);
+        wchar_t full[260];
+        EAIOConcatenatePathComponents(full, msDirectoryBegin, name);
         ppFileRef[3] = 0;
         ppFileRef[0] = 0;
-        unsigned nSize = EA::IO::GetSize(full);
+        unsigned nSize = EA::IO::File::GetSize(full);
         ppFileRef[1] = reinterpret_cast<void*>(static_cast<uintptr_t>(nSize));
         ppFileRef[2] = reinterpret_cast<void*>(static_cast<uintptr_t>(nSize));
     }
 
-    (void)nArg3;
-    (void)nArg4;
-    (void)nArg6;
+    if (nArg2 == 0)
+        return bFound;
+
+    if ((nAccess & mnAccessFlags) != nAccess)
+        return false;
+
+    DDFRecord* pRecord = 0;
+    (void)nOpenMode;
+    (void)nFlags;
+    (void)nPending;
+    (void)pRecordNode;
+    (void)recordName;
+
+    typedef DDFRecord* (__thiscall *InitializeFn)(DDFRecord*, DatabaseDirectoryFiles*, const Key*);
+    (void)pRecord;
+    (void)pRecordNode;
     return bFound;
 }
 
-// =====================================================================================
-// Cast (0x008d81a0)
-// =====================================================================================
 // @ 0x008d81a0  EA::ResourceMan::DatabaseDirectoryFiles::Cast
 void* DatabaseDirectoryFiles::Cast(uint32_t nType)
 {

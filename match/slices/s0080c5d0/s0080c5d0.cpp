@@ -12,11 +12,10 @@ typedef int            i32;
 typedef float          f32;
 
 // ---- external callees (relocation targets; names are arbitrary) ----
-void* __cdecl  GameAlloc(size_t size, const char* name, int, int, int, int);
+void* __cdecl  GameAlloc(size_t size, const char* name, int, int, const char* file, int line);
 void  __cdecl  GameFree(void* p);
-void  __cdecl  ArrayCopy(void* dst, const void* src, unsigned elemSize, int count, void* copyfn);
-void  __fastcall ElemCopy28(void* dst, const void* src);
-void  __fastcall LayoutCtor(void* self);              // 0x810000
+void  __stdcall ArrayCopy(void* dst, const void* src, unsigned elemSize, int count, void* copyfn);void  __fastcall ElemCopy28(void* dst, const void* src);
+void* __fastcall LayoutCtor(void* self);              // 0x810000
 void  __fastcall VecDtorInline(void* self);           // 0x80b8f0
 void  __fastcall VecDtorVec(void* self);              // 0x80b930
 u8    __fastcall IsActive(void* self);                // 0x80b400
@@ -24,13 +23,10 @@ void  __fastcall Setup1(void* self, void* ctx);       // 0x80b4d0
 void  __fastcall Setup2(void* self);                  // 0x80b6b0
 void  __fastcall Setup3(void* self);                  // 0x80b000
 void* __fastcall FindElem(void* self, float, float, void*); // 0x80c520
-void* __fastcall VecEraseMove(void* a, void* b, void* c);   // 0x80cab0
-void  __fastcall VecInsertMove(void* a, void* b, void* c);// 0x80aee0
-void* __fastcall VecInsert1(void* a, void* b, void* c);    // 0x80cbd0
-void  __fastcall VecInsert2(void* a, void* b);             // 0x80caf0
-void  __fastcall ListInsert(void* a, void* b);             // 0x80baa0
-void  __fastcall ListStore(void* a);                       // 0x80af90
-void* __fastcall ListMake(void* a, void* b, void* c);      // 0x80af20
+void* __cdecl  VecEraseMove(void* last, void* end, void* first);   // 0x80cab0
+void  __cdecl  VecDestroy(void* first, void* last, void* dst);      // 0x80aee0
+void* __cdecl  VecCopyCtor(void* first, void* last, void* dst);     // 0x80cbd0
+void  __cdecl  VecMoveBack(void* first, void* last, void* dst);     // 0x80caf0
 u32   __cdecl  Shader_GetId();                             // 0x82f6e0
 void* __cdecl  SPUIShader_AcquireProxy();                  // 0x82f630
 void  __cdecl  SPUIShader_Bind(void*, void*);              // 0x82e670
@@ -47,7 +43,14 @@ static inline void** VT(void* o) { return *(void***)o; }
 
 struct cSPUIInfoLine;
 
-// ---- cSPUILayout (external type) ----
+// ---- verbatim-copied prefix of cSPUIInfoLine (0x1c0 bytes at +4) ----
+struct LineHead {
+    void* f4;
+    void* f8;
+    u8    v1[0x1b8];
+};
+
+// ---- cSPUILayout (external type; AddRef slot 1, Release slot 2) ----
 class cSPUILayout { public:
     virtual void v00();
     virtual void AddRef();
@@ -57,15 +60,47 @@ class cSPUILayout { public:
     void  __thiscall Shutdown(int a);                    // 0x811ad0
 };
 
+// ---- window reference held by the inline window record (Release slot 1) ----
+struct WinRef {
+    virtual void v00();
+    virtual void Release();                              // vtable +4
+};
+
+// ---- 0x34-byte record stored in cSPUIInfoLine::v2 ----
+struct WinRec {
+    void**  vtbl;        // +0x00 (0x1417cac)
+    u8      body[0x28];  // +0x04 .. +0x2c
+    WinRef* win;         // +0x2c
+    u32     f30;         // +0x30
+    WinRec* __thiscall Make(const void* src, void* win);  // 0x80af20
+    WinRec* __thiscall CopyFrom(const WinRec* src);       // 0x80af90
+};
+
+// ---- inline-storage vector of WinRec (11 elements of 0x34) ----
+struct SubVec {
+    WinRec* begin;      // +0x00
+    WinRec* end;        // +0x04
+    WinRec* cap;        // +0x08
+    void*   pad0c;      // +0x0c
+    void*   alloc;      // +0x10 (points into buf)
+    void*   pad14;      // +0x14
+    u8      buf[0x23c]; // +0x18
+    void __thiscall InitInline();
+    void __thiscall CopyRange(void* first, void* last, const void* owner); // 0x80bbe0
+    void __thiscall EraseRange(void* first, void* last);                   // 0x80bcf0
+    void __thiscall PushBack(WinRec* rec);                                 // 0x80baa0
+};
+
 // ---- element type: 0x42c bytes ----
 struct cSPUIInfoLine {
     void**        vtbl;        // +0x000
     void*         f4;          // +0x004
     void*         f8;          // +0x008
     u8            v1[0x1b8];   // +0x00c .. +0x1c4 (0xb * 0x28)
-    u8            v2[0x254];   // +0x1c4 .. +0x418 (inline vector header + 0xb * 0x34)
+    SubVec        v2;          // +0x1c4 .. +0x418
     cSPUILayout*  layout;      // +0x418
     u8            flag41c;     // +0x41c
+    u8            pad41d[3];   // +0x41d
     u32           f420;        // +0x420
     f32           f424;        // +0x424
     f32           f428;        // +0x428
@@ -80,11 +115,12 @@ struct InfoVec {
     cSPUIInfoLine* begin;   // +0x00
     cSPUIInfoLine* end;     // +0x04
     cSPUIInfoLine* cap;     // +0x08
-    void*          extra;   // +0x0c
-    void*          inline_; // +0x10 (inline buffer pointer)
+    void*          pad0c;   // +0x0c
+    void*          alloc;   // +0x10 (inline buffer pointer)
 
-    void __thiscall Erase(cSPUIInfoLine* first, cSPUIInfoLine* last);  // 0x80cc10
-    void __thiscall Insert(cSPUIInfoLine* pos, cSPUIInfoLine* val);    // 0x80cc80
+    i32 Count() const { return (i32)((u8*)end - (u8*)begin) / 0x42c; }
+    cSPUIInfoLine* __thiscall Erase(cSPUIInfoLine* first, cSPUIInfoLine* last); // 0x80cc10
+    void __thiscall Insert(cSPUIInfoLine* pos, const cSPUIInfoLine* val);       // 0x80cc80
 };
 struct cSPUIInfoLineTray {
     void**          vtbl;     // +0x00
@@ -98,21 +134,32 @@ struct cSPUIInfoLineTray {
     void* __thiscall ScalarDeletingDtor(u8 flags);                         // 0x80ceb0
 };
 
+void __thiscall SubVec::InitInline()
+{
+    u8* inl = buf;
+    alloc = inl;
+    end = (WinRec*)inl;
+    begin = (WinRec*)inl;
+    cap = (WinRec*)(inl + 0x23c);
+}
+
 // =========================== function bodies ===========================
+
+static inline f32 MaxF(f32 a, f32 b) { return a < b ? b : a; }
+static inline f32 MinF(f32 a, f32 b) { return a < b ? a : b; }
 
 // @ 0x0080c5d0
 void __thiscall cSPUIInfoLineTray::Method(void* p, float fA, float fB, void* ctx)
 {
-    void* old = mCurrent;
+    cSPUIInfoLine* old = mCurrent;
     if (p != old) {
         if (p) ((VF0v)VT(p)[0])(p);          // AddRef
         mCurrent = (cSPUIInfoLine*)p;
         if (old) ((VF0v)VT(old)[1])(old);    // Release
     }
     f32 acc = 0.0f;
-    i32 n = (i32)((u8*)mVec.end - (u8*)mVec.begin) / 0x42c;
-    for (i32 i = 0; i < n; ++i) {
-        cSPUIInfoLine* e = (cSPUIInfoLine*)((u8*)mVec.begin + i * 0x42c);
+    for (u32 i = 0, off = 0; i < (u32)mVec.Count(); ++i, off += 0x42c) {
+        cSPUIInfoLine* e = (cSPUIInfoLine*)((u8*)mVec.begin + off);
         if (IsActive(e) && e->layout && e->flag41c) {
             void* win = e->layout->FindWindowByID(0x79830aa, 0);
             Setup1(e, ctx);
@@ -121,15 +168,14 @@ void __thiscall cSPUIInfoLineTray::Method(void* p, float fA, float fB, void* ctx
             if (win) {
                 float* r = (float*)((VF0)VT(win)[0x38 / 4])(win);
                 f32 d = r[2] - r[0];
-                if (acc <= d) acc = d;
+                acc = MaxF(acc, d);
             }
         }
     }
-    if (acc < fA) acc = fA;
-    if (acc > fB) acc = fB;
-    n = (i32)((u8*)mVec.end - (u8*)mVec.begin) / 0x42c;
-    for (i32 i = 0; i < n; ++i) {
-        cSPUIInfoLine* e = (cSPUIInfoLine*)((u8*)mVec.begin + i * 0x42c);
+    acc = MinF(MaxF(acc, fA), fB);
+    f32 pos = 0.0f;
+    for (u32 i = 0, off = 0; i < (u32)mVec.Count(); ++i, off += 0x42c) {
+        cSPUIInfoLine* e = (cSPUIInfoLine*)((u8*)mVec.begin + off);
         if (!IsActive(e)) continue;
         cSPUIInfoLine* x = (cSPUIInfoLine*)FindElem(e, acc, acc, ctx);
         if (!x) continue;
@@ -140,36 +186,33 @@ void __thiscall cSPUIInfoLineTray::Method(void* p, float fA, float fB, void* ctx
             ((VF1v)VT(s2)[0xdc / 4])(s2, x);
         }
         ((VF1v)VT(p)[0xd8 / 4])(p, x);
-        ((VFIF)VT(x)[0x70 / 4])(x, 0, acc);
+        ((VFFv)VT(x)[0x70 / 4])(x, 0.0f, pos);
         float* r = (float*)((VF0)VT(x)[0x38 / 4])(x);
-        acc += r[3] - r[1];
+        pos += r[3] - r[1];
         ((VF0v)VT(x)[1])(x);                       // Release
     }
-    ((VFFv)VT(p)[0x74 / 4])(p, acc, 0.0f);
+    ((VFFv)VT(p)[0x74 / 4])(p, acc, pos);
 }
+
 
 // @ 0x0080c840
 cSPUIInfoLine* __thiscall cSPUIInfoLine::ctor(const void* src)
 {
     vtbl = (void**)0x1417cb0;
-    f4 = ((void**)src)[0];
-    f8 = ((void**)src)[1];
+    f4 = *(void* const*)src;
+    f8 = *((void* const*)src + 1);
     ArrayCopy(v1, (const u8*)src + 8, 0x28, 0xb, (void*)ElemCopy28);
-    u8* inl = v2 + 0x18;
-    *(void**)(v2 + 0x10) = inl;
-    *(void**)(v2 + 0x04) = inl;
-    *(void**)(v2 + 0x00) = inl;
-    *(void**)(v2 + 0x08) = inl + 0x23c;
+    v2.InitInline();
     layout = 0;
     flag41c = 1;
     void* w = f4 ? f4 : (void*)0x40464100;
     cSPUILayout* lay = (cSPUILayout*)GameAlloc(0x18, "UI/cSPUIInfoLine", 0, 0, 0, 0);
-    if (lay) { LayoutCtor(lay); }
+    if (lay) lay = (cSPUILayout*)LayoutCtor(lay);
     if (lay != layout) {
-        if (lay) ((VF0v)VT(lay)[1])(lay);
-        cSPUILayout* old = layout;
+        if (lay) lay->AddRef();
+        cSPUILayout* prev = layout;
         layout = lay;
-        if (old) ((VF0v)VT(old)[2])(old);
+        if (prev) prev->Release();
     }
     u32 key[3];
     key[0] = (u32)f8;
@@ -177,8 +220,7 @@ cSPUIInfoLine* __thiscall cSPUIInfoLine::ctor(const void* src)
     key[2] = (u32)w;
     if (!layout->Init(key, 0, 0x5b598fa)) {
         layout->Shutdown(1);
-        cSPUILayout* l2 = layout;
-        if (l2) { layout = 0; ((VF0v)VT(l2)[2])(l2); }
+        if (layout) { cSPUILayout* l2 = layout; layout = 0; l2->Release(); }
         flag41c = 0;
     }
     if (layout) {
@@ -186,35 +228,40 @@ cSPUIInfoLine* __thiscall cSPUIInfoLine::ctor(const void* src)
             u32 id = *(u32*)(v1 + i * 0x28);
             if (id == 0) break;
             void* win = layout->FindWindowByID(id, 1);
-            void* val = ListMake(v1 + i * 0x28, win, 0);
-            u8* hdr = v2;
-            void* endp = *(void**)(hdr + 4);
-            if (endp < *(void**)(hdr + 8)) {
-                *(void**)(hdr + 4) = (u8*)endp + 0x34;
-                if (endp) ListStore(val);
+            WinRec tmp;
+            WinRec* r = tmp.Make(v1 + i * 0x28, win);
+            if (v2.end < v2.cap) {
+                WinRec* slot = v2.end;
+                v2.end = (WinRec*)((u8*)v2.end + 0x34);
+                if (slot) slot->CopyFrom(r);
             } else {
-                ListInsert(endp, val);
+                v2.PushBack(r);
             }
+            tmp.vtbl = (void**)0x1417cac;
+            if (tmp.win) { WinRef* wr = tmp.win; tmp.win = 0; wr->Release(); }
+            if (tmp.win) tmp.win->Release();
         }
     }
     return this;
 }
 
+
 // @ 0x0080c9f0
 cSPUIInfoLine* __thiscall cSPUIInfoLine::assign(const cSPUIInfoLine* o)
 {
-    for (u32 i = 0; i < 0x1c0 / 4; ++i)
-        ((u32*)((u8*)this + 4))[i] = ((const u32*)((const u8*)o + 4))[i];
-    if (v2 != o->v2) {
-        ListInsert(v2, (void*)(v2 + 0x10));
-        ListStore((void*)o);
+    *(LineHead*)&f4 = *(const LineHead*)&o->f4;
+    if (&v2 != &o->v2) {
+        SubVec& sv = v2;
+        sv.EraseRange(sv.begin, sv.end);
+        const SubVec& ov = o->v2;
+        sv.CopyRange(ov.begin, ov.end, o);
     }
     cSPUILayout* nl = o->layout;
-    if (nl != layout) {
-        if (nl) ((VF0v)VT(nl)[1])(nl);
-        cSPUILayout* ol = layout;
+    cSPUILayout* prev = layout;
+    if (nl != prev) {
+        if (nl) nl->AddRef();
         layout = nl;
-        if (ol) ((VF0v)VT(ol)[2])(ol);
+        if (prev) prev->Release();
     }
     flag41c = o->flag41c;
     f420 = o->f420;
@@ -223,69 +270,67 @@ cSPUIInfoLine* __thiscall cSPUIInfoLine::assign(const cSPUIInfoLine* o)
     return this;
 }
 
+
 // @ 0x0080cb30
 cSPUIInfoLine* __thiscall cSPUIInfoLine::ctor2(const cSPUIInfoLine* o)
 {
     vtbl = (void**)0x1417cb0;
-    f4 = (void*)*(u32*)((const u8*)o + 4);
-    f8 = (void*)*(u32*)((const u8*)o + 8);
-    ArrayCopy(v1, (const u8*)o + 0xc, 0x28, 0xb, (void*)ElemCopy28);
-    u8* inl = v2 + 0x18;
-    *(void**)(v2 + 0x10) = inl;
-    *(void**)(v2 + 0x04) = inl;
-    *(void**)(v2 + 0x00) = inl;
-    *(void**)(v2 + 0x08) = inl + 0x23c;
-    ListStore((void*)o);
+    f4 = o->f4;
+    f8 = o->f8;
+    ArrayCopy(v1, o->v1, 0x28, 0xb, (void*)ElemCopy28);
+    v2.InitInline();
+    const SubVec& ov = o->v2;
+    v2.CopyRange(ov.begin, ov.end, o);
     layout = o->layout;
-    if (layout) ((VF0v)VT(layout)[1])(layout);
+    if (layout) layout->AddRef();
     flag41c = o->flag41c;
     f420 = 0;
     return this;
 }
 
 // @ 0x0080cc10
-void __thiscall InfoVec::Erase(cSPUIInfoLine* first, cSPUIInfoLine* last)
+cSPUIInfoLine* __thiscall InfoVec::Erase(cSPUIInfoLine* first, cSPUIInfoLine* last)
 {
-    InfoVec* v = this;
-    cSPUIInfoLine* end = v->end;
-    cSPUIInfoLine* newEnd = (cSPUIInfoLine*)VecEraseMove(last, end, first);
-    while (newEnd < end) {
-        ((VF1v)VT(newEnd)[0])(newEnd, 0);
-        newEnd = (cSPUIInfoLine*)((u8*)newEnd + 0x42c);
+    cSPUIInfoLine* p = (cSPUIInfoLine*)VecEraseMove(last, end, first);
+    cSPUIInfoLine* e = end;
+    while (p < e) {
+        ((VF1v)VT(p)[0])(p, 0);
+        p = (cSPUIInfoLine*)((u8*)p + 0x42c);
     }
-    i32 cnt = (i32)((u8*)last - (u8*)first) / 0x42c;
-    v->end = (cSPUIInfoLine*)((u8*)end + cnt * 0x42c);
+    end -= last - first;
+    return first;
 }
 
+
 // @ 0x0080cc80
-void __thiscall InfoVec::Insert(cSPUIInfoLine* pos, cSPUIInfoLine* val)
+void __thiscall InfoVec::Insert(cSPUIInfoLine* pos, const cSPUIInfoLine* val)
 {
-    InfoVec* v = this;
-    if (v->end != v->cap) {
-        cSPUIInfoLine* e = v->end;
-        if (v->begin <= pos && pos < e) val = (cSPUIInfoLine*)((u8*)pos + 0x42c);
-        VecInsertMove((void*)((u8*)e - 0x42c), pos, v->begin);
-        VecInsert2(pos, val);
-        v->end = (cSPUIInfoLine*)((u8*)e + 0x42c);
+    if (end != cap) {
+        cSPUIInfoLine* v = (cSPUIInfoLine*)val;
+        if (v >= pos && v < end) v = (cSPUIInfoLine*)((u8*)v + 0x42c);
+        if (end) ((cSPUIInfoLine*)end)->ctor2((cSPUIInfoLine*)((u8*)end - 0x42c));
+        VecMoveBack(pos, (cSPUIInfoLine*)((u8*)end - 0x42c), end);
+        pos->assign(v);
+        end = (cSPUIInfoLine*)((u8*)end + 0x42c);
         return;
     }
-    u32 n = (u32)((u8*)v->end - (u8*)v->begin) / 0x42c;
-    u32 newCap = n ? n * 2 : 1;
-    u8* mem = 0;
-    if (newCap) mem = (u8*)GameAlloc(newCap * 0x42c,
-        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-        0, 0, (int)0x13f6b3c, 0xd1);
-    u8* p = (u8*)VecInsert1(pos, v->begin, mem);
-    VecInsertMove(v->begin, pos, mem);
-    if (p) VecInsert2(p, 0);
-    cSPUIInfoLine* e = v->end;
-    u8* p2 = (u8*)VecInsert1(pos, e, p + 0x42c);
-    VecInsertMove(pos, e, p + 0x42c);
-    if (v->begin && v->begin != (cSPUIInfoLine*)v->inline_) GameFree(v->begin);
-    v->begin = (cSPUIInfoLine*)mem;
-    v->end = (cSPUIInfoLine*)p2;
-    v->cap = (cSPUIInfoLine*)(mem + newCap * 0x42c);
+    i32 n = (i32)((u8*)end - (u8*)begin) / 0x42c;
+    u32 newCap = n ? (u32)n * 2 : 1;
+    u8* mem;
+    if (newCap) mem = (u8*)GameAlloc(newCap * 0x42c, (const char*)0x13f6b3c, 0, 0, (const char*)0x13ebb38, 0xd1);
+    else        mem = 0;
+    u8* p = (u8*)VecCopyCtor(begin, pos, mem);
+    VecDestroy(begin, pos, mem);
+    if (p) ((cSPUIInfoLine*)p)->ctor2(val);
+    cSPUIInfoLine* e = end;
+    u8* p2 = (u8*)VecCopyCtor(pos, e, p + 0x42c);
+    VecDestroy(pos, e, p + 0x42c);
+    if (begin && begin != (cSPUIInfoLine*)alloc) GameFree(begin);
+    begin = (cSPUIInfoLine*)mem;
+    end = (cSPUIInfoLine*)p2;
+    cap = (cSPUIInfoLine*)(mem + newCap * 0x42c);
 }
+
 
 // @ 0x0080cdd0
 void __thiscall cSPUIInfoLineTray::dtor()
@@ -307,21 +352,23 @@ void __thiscall cSPUIInfoLineTray::dtor()
 // @ 0x0080ce20
 void __thiscall cSPUIInfoLineTray::Add(const void* src)
 {
-    u8 tmp[0x42c];
-    cSPUIInfoLine* e = ((cSPUIInfoLine*)tmp)->ctor(src);
-    (void)e;
-    if (mVec.end < mVec.cap) {
-        cSPUIInfoLine* slot = mVec.end;
-        mVec.end = (cSPUIInfoLine*)((u8*)slot + 0x42c);
-        if (slot) slot->ctor2((cSPUIInfoLine*)tmp);
+    cSPUIInfoLine tmp;
+    cSPUIInfoLine* e = tmp.ctor(src);
+    InfoVec* v = &mVec;
+    if (v->end < v->cap) {
+        cSPUIInfoLine* slot = v->end;
+        v->end = (cSPUIInfoLine*)((u8*)slot + 0x42c);
+        if (slot) slot->ctor2(e);
     } else {
-        mVec.Insert(mVec.end, (cSPUIInfoLine*)tmp);
+        v->Insert(v->end, e);
     }
-    cSPUILayout* l = *(cSPUILayout**)(tmp + 0x418);
-    *(void**)(tmp + 0) = (void*)0x1417cb0;
-    if (l) { *(void**)(tmp + 0x418) = 0; ((VF0v)VT(l)[2])(l); }
-    VecDtorInline(tmp + 0x1c4);
+    cSPUILayout* l = tmp.layout;
+    tmp.vtbl = (void**)0x1417cb0;
+    if (l) { tmp.layout = 0; l->Release(); }
+    if (tmp.layout) tmp.layout->Release();
+    VecDtorInline(&tmp.v2);
 }
+
 
 // @ 0x0080ceb0
 void* __thiscall cSPUIInfoLineTray::ScalarDeletingDtor(u8 flags)

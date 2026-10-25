@@ -4,3 +4,5 @@ slices/s00830c00/s00830c00.cpp  ?GetField14@Drawable@@QAEHH@Z      00830c80  /O2
 slices/s00830c00/s00830c00.cpp  ?GetField18@Drawable@@QAEHH@Z      00830d10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00830c00/s00830c00.cpp  ?GetField20@Drawable@@QAEHH@Z      00830d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00830c00/s00830c00.cpp  ?SetImageIcon@Drawable@@QAEXHPAX@Z 00831760  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00830c00/s00830c00.cpp  ?GetNaturalSize@Drawable@@QAE_NPAMHH@Z  00831530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00830c00/s00830c00.cpp  ?HitTest@Drawable@@QAE_NHHH@Z  008315c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

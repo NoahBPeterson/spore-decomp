@@ -1,2 +1,3 @@
-00928ad0  13  global pool alloc; result-to-zero uses eax instead of the original edx copy; equiv: PASS (now returns the block in eax: it is StackAllocator's alloc callback; hybrid crash 2026-10-12)
 00927be0  1684  complete pool malloc core (PPMalloc GeneralAllocator::MallocInternal); register allocation / block layout differ
+009282e0  1289  complete pool aligned-alloc core (dlmalloc memalign with offset/flags: unsorted+bin scan, SplitChunk, top-tail split, leading-remainder split/free, tail coalesce); 1289 of 1098 bytes differ due to register allocation/inlining choices; flags /O2 /MD /Gy /EHsc /TP /GS-; equiv WEAK (184 valid, 50% cov)
+00928730  552  complete pool realloc core (dlmalloc realloc: in-place shrink/grow, top grow, next-chunk coalesce, unrolled small copy, mmapped re-alloc/copy); 552 of 676 bytes differ due to register allocation; flags /O2 /MD /Gy /EHsc /TP /GS-; equiv WEAK (181 valid, 74% cov)

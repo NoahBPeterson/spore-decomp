@@ -1,2 +1,3 @@
-0082e670 16  complete translation; cl merges the two signed range checks for the new layer index
-0082eba0 18  complete translation; register allocation of the read-modify-write differs
+# va  diff-bytes  reason
+0082e7a0 35 complete; child-window setter. Only diff is MSVC dropping the redundant null check on `this` before Query (8 bytes: test/je/jmp/xor); every other instruction matches.
+0082ebd0 10 complete; cSPUILayerIdWinProc ctor. Size exact (42); `mov dl,1` is scheduled three instructions later than retail.

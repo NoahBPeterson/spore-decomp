@@ -16,3 +16,9 @@
 00923310  43   release helper: complete; eax=*p preserved on the no-call path, xadd-flags schedule differs; equiv PASS (290 valid, 81.8% cov)
 00923330  29   release+delete helper: complete; same xadd-flags issue
 009233f0  12   ILogFilter::IsFiltered tail-call thunk: complete; register order differs
+00922500 83   Thread ctor: complete; member-zero stores after Mutex/Event ctors + frame/temp block differs (97 vs 101); flags /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (import:CreateSemaphoreA)
+00922940 103  WaitForEnd: complete; schedule differs (191 vs 199); flags /O2 /MD /Gy /EHsc /TP /GS-; difftest WEAK (259 valid, 44.3% cov)
+00922e30 5    EAThreadEntryPlain: complete; only `mov [esi+0xc],eax; mov edi,eax` vs `mov edi,eax; mov [esi+0xc],edi`; flags /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (TlsAlloc)
+00922f30 229  Start: complete; inline Alloc-init/AddRef scheduling + shared processor tail (349 vs 364); flags /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (_beginthreadex)
+009230a0 5    EAThreadEntryWrapped: complete; same 5-byte store-order diff; flags /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (TlsAlloc)
+009231a0 229  Start2: complete; same as Start (inline Alloc-init/AddRef + shared processor tail); flags /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (_beginthreadex)

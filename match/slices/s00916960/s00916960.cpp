@@ -11,7 +11,24 @@
 typedef unsigned long XML_Size;
 
 // ---- unnamed retail callees and globals (address in the comment)
-extern int streqci(const char *s1, const char *s2);              // 0x00916060
+// Local copy of Expat's streqci (0x00916060).  It is defined in this translation unit so the
+// /O2 in-TU register convention matches the retail callee used by the calls below.
+__declspec(noinline)
+static int streqci(const char *s1, const char *s2)
+{
+  for (;;) {
+    char c1 = *s1++;
+    char c2 = *s2++;
+    if (c1 >= 'a' && c1 <= 'z')
+      c1 -= 0x20;
+    if (c2 >= 'a' && c2 <= 'z')
+      c2 -= 0x20;
+    if (c1 != c2)
+      return 0;
+    if (c1 == 0)
+      return 1;
+  }
+}
 extern const unsigned char namePages[256];                       // 0x0143b428
 extern const unsigned char nmstrtPages[256];                     // 0x0143b328
 extern const unsigned int  namingBitmap[];                       // 0x0143ae28
@@ -60,9 +77,15 @@ struct encoding_s0091_6960 {
   void (PTRCALL *utf8Convert)(const ENCODING *enc, const char **fromP, const char *fromLim, char **toP, const char *toLim);
   void (PTRCALL *utf16Convert)(const ENCODING *enc, const char **fromP, const char *fromLim, XML_Char **toP, const XML_Char *toLim);
   int minBytesPerChar;
-  char isUtf8;
   char isUtf16;
-  void *userData;   // NOTE: appended for the XmlInitEncoding(NS) stores at +0x4c
+  char isUtf8;
+};
+
+// INIT_ENCODING is an ENCODING followed by the caller's output slot (retail writes
+// that slot pointer at +0x4c).
+struct init_encoding_s0091_6960 {
+  ENCODING enc;
+  ENCODING **out;
 };
 
 struct normal_encoding_6960 {
@@ -90,6 +113,12 @@ struct unknown_encoding_6960 {
 extern const struct normal_encoding_6960 latin1_encoding_6960;   // 0x0143bc60
 extern const struct normal_encoding_6960 utf8_encoding_6960;     // 0x0143b6a0
 
+extern int doParseXmlDecl(const ENCODING *(*encodingFinder)(const ENCODING *, const char *, const char *),
+                          int isGeneralTextEntity, const ENCODING *enc, const char *ptr,
+                          const char *end, const char **badPtr, const char **versionPtr,
+                          const char **versionEndPtr, const char **encodingName,
+                          const ENCODING **encoding, int *standalone);   // 0x00916460
+
 #define UCS2_GET_NAMING_6960(pages, hi, lo) \
    (namingBitmap[((pages)[lo] << 3) + ((hi) >> 5)] & (1u << ((hi) & 0x1F)))
 
@@ -110,9 +139,9 @@ static int PTRCALL checkCharRefNumber(int result)
   case 0xDC: case 0xDD: case 0xDE: case 0xDF:
     return -1;
   case 0:
-    if (latin1_type[result] != BT_NONXML)
-      return result;
-    return -1;
+    if (latin1_type[result] == BT_NONXML)
+      return -1;
+    break;
   case 0xFF:
     switch (result) {
     case 0xFFFE: case 0xFFFF:
@@ -305,125 +334,142 @@ static int unknown_encodingIndex(const char *name)
   return -1;
 }
 
-// @ 0x00916cf0 -- shared prolog scanner body (BOM/encoding detection).
-// Retail ABI: the encoding prefix table in EAX, ptr in EDI, end on the stack and the
-// general-text-entity flag in EDX.  Written as a plain helper; the callers below forward to it.
-// @ 0x00916cf0 -- little2_scanProlog/big2_scanProlog shared body (BOM/encoding detection).
-// Retail ABI: ptr in EAX, end in EDI, isGeneralTextEntity in EDX, enc at [esp+0x14] after the
-// prologue and nextTokPtr in EBP.  Expressed with a __fastcall signature carrying the two
-// register arguments; the remaining two come from the stack.
-int __fastcall unknown_scanProlog_body(const char *ptr, int isGeneralTextEntity, const char *end,
-                                       const ENCODING *enc, const char **nextTokPtr)
+// @ 0x00916cf0 -- little2/big2 prolog scanner body (BOM/encoding detection).
+// Retail ABI: ptr in EAX, end in EDI, isGeneralTextEntity in EDX, and (table, init-encoding,
+// nextTokPtr) on the stack.  The register part cannot be expressed by a C++ declaration, so this
+// helper takes the same six values as ordinary arguments; the wrappers below pass them.
+static int unknown_scanProlog_body(const void *const *table, init_encoding_s0091_6960 *p,
+                                   const char *ptr, const char *end,
+                                   const char **nextTokPtr, int isGeneralTextEntity)
 {
-  int *nextTok;
+  const ENCODING *enc = &p->enc;
+  ENCODING **out;
+  const ENCODING *e2;
+  SCANNER scan;
+  unsigned int c;
   if (ptr == end)
     return -4;
-  nextTok = (int *)((const char *)enc + 0x4c);
+  out = p->out;
   if (ptr + 1 == end) {
-    switch (enc->isUtf8 - 3) {
-    case 0: case 1: case 2:
-      break;
-    default:
-      switch ((unsigned char)*ptr) {
-      case 0xEF: case 0xFE: case 0xFF:
-        if (enc->isUtf8 == 0 && isGeneralTextEntity == 1)
-          goto Ldispatch;
-        break;
-      case 0x00: case '<':
-        break;
-      default:
-        goto Ldispatch;
-      }
-      break;
+    unsigned char isUtf8 = (unsigned char)enc->isUtf8;
+    if ((unsigned char)(isUtf8 - 3) <= 2)
+      return -1;
+    c = (unsigned char)ptr[0];
+    if (c <= 0xEF) {
+      if (c == 0xEF)
+        goto oneLead;
+      if (c == 0)
+        return -1;
+      if (c == 0x3C)
+        return -1;
+      goto dispatch;
     }
+    if ((unsigned int)(c - 0xFE) > 1)
+      goto dispatch;
+  oneLead:
+    if (enc->isUtf8 != 0)
+      return -1;
+    if (isGeneralTextEntity == 1)
+      goto dispatch;
     return -1;
   }
-  {
-    unsigned int c = ((unsigned char)ptr[0] << 8) | (unsigned char)ptr[1];
-    if (c == 0xFEFF) {
-      if (enc->isUtf8 != 0 || isGeneralTextEntity != 1) {
-        *nextTokPtr = ptr + 2;
-        *nextTok = *(int *)((const char *)enc + 0x10);
-        return 0x0e;
-      }
-      goto Ldispatch;
-    }
-    if (c == 0x3C00) {
-      if ((enc->isUtf8 != 4 && enc->isUtf8 != 3) || isGeneralTextEntity != 1) {
-        int t = *(int *)((const char *)enc + 0x14);
-        *nextTok = t;
-        return ((int(__thiscall *)(int))*(int *)(t + isGeneralTextEntity * 4))(t);
-      }
-      goto Ldispatch;
-    }
-    if (c == 0xEFBB) {
-      if (isGeneralTextEntity != 1 || (enc->isUtf8 != 0 && enc->isUtf8 != 3 && enc->isUtf8 != 4 && enc->isUtf8 != 5)) {
-        if (ptr + 2 == end)
-          return -1;
-        if ((unsigned char)ptr[2] == 0xBF) {
-          *nextTokPtr = ptr + 3;
-          *nextTok = *(int *)((const char *)enc + 8);
-          return 0x0e;
-        }
-      }
-      goto Ldispatch;
-    }
-    if (c == 0xFFFE) {
-      if (enc->isUtf8 != 0 || isGeneralTextEntity != 1) {
-        *nextTokPtr = ptr + 2;
-        *nextTok = *(int *)((const char *)enc + 0x14);
-        return 0x0e;
-      }
-      goto Ldispatch;
-    }
-    if ((unsigned char)ptr[0] == 0) {
-      if (isGeneralTextEntity != 1 || enc->isUtf8 != 5) {
-        int t = *(int *)((const char *)enc + 0x10);
-        *nextTok = t;
-        return ((int(__thiscall *)(int))*(int *)(t + isGeneralTextEntity * 4))(t);
-      }
-    }
-    else if ((unsigned char)ptr[1] == 0 && isGeneralTextEntity != 1) {
-      int t = *(int *)((const char *)enc + 0x14);
-      *nextTok = t;
-      return ((int(__thiscall *)(int))*(int *)(t + isGeneralTextEntity * 4))(t);
-    }
-    else if ((unsigned char)ptr[1] == 0) {
-      if (isGeneralTextEntity == 1 && enc->isUtf8 == 5)
-        goto Ldispatch;
-      {
-        int t = *(int *)((const char *)enc + 0x10);
-        *nextTok = t;
-        return ((int(__thiscall *)(int))*(int *)(t + isGeneralTextEntity * 4))(t);
-      }
-    }
-    if (c == 0xFFFE)
-      return -1;
+  c = ((unsigned int)(unsigned char)ptr[0] << 8) | (unsigned char)ptr[1];
+  if (c > 0xFEFF)
+    goto gtFEFF;
+  if (c == 0xFEFF)
+    goto feff;
+  if (c == 0x3C00)
+    goto c3c00;
+  if (c != 0xEFBB)
+    goto def2;
+  if (isGeneralTextEntity == 1) {
+    int u = (signed char)enc->isUtf8;
+    if (u == 0 || u == 3 || u == 4 || u == 5)
+      goto dispatch;
   }
-Ldispatch:
-  {
-    int t = *(int *)((const char *)enc + enc->isUtf8 * 4);
-    *nextTok = t;
-    return ((int(__thiscall *)(int))*(int *)(t + isGeneralTextEntity * 4))(t);
+  if (ptr + 2 == end)
+    return -1;
+  if ((unsigned char)ptr[2] != 0xBF)
+    goto dispatch;
+  *nextTokPtr = ptr + 3;
+  *out = (ENCODING *)table[2];
+  return 0x0e;
+
+c3c00:
+  if (enc->isUtf8 == 3 || enc->isUtf8 == 4) {
+    if (isGeneralTextEntity == 1)
+      goto dispatch;
   }
+  goto scan5;
+
+feff:
+  if (enc->isUtf8 == 0) {
+    if (isGeneralTextEntity == 1)
+      goto dispatch;
+  }
+  *nextTokPtr = ptr + 2;
+  *out = (ENCODING *)table[4];
+  return 0x0e;
+
+gtFEFF:
+  if (c == 0xFFFE)
+    goto fffe;
+def2:
+  if ((unsigned char)ptr[0] == 0) {
+    if (!(isGeneralTextEntity == 1 && enc->isUtf8 == 5))
+      goto scan4;
+    goto dispatch;
+  }
+  if ((unsigned char)ptr[1] == 0) {
+    if (isGeneralTextEntity != 1)
+      goto scan5;
+  }
+  goto dispatch;
+
+fffe:
+  if (enc->isUtf8 == 0 && isGeneralTextEntity == 1)
+    goto dispatch;
+  *nextTokPtr = ptr + 2;
+  *out = (ENCODING *)table[5];
+  return 0x0e;
+
+scan4:
+  e2 = (const ENCODING *)table[4];
+  *out = (ENCODING *)e2;
+  scan = e2->scanners[isGeneralTextEntity];
+  return ((int (PTRCALL *)(const ENCODING *, const char *, const char *, const char **))scan)(e2, ptr, end, nextTokPtr);
+
+scan5:
+  e2 = (const ENCODING *)table[5];
+  *out = (ENCODING *)e2;
+  scan = e2->scanners[isGeneralTextEntity];
+  return ((int (PTRCALL *)(const ENCODING *, const char *, const char *, const char **))scan)(e2, ptr, end, nextTokPtr);
+
+dispatch:
+  e2 = (const ENCODING *)table[(signed char)enc->isUtf8];
+  *out = (ENCODING *)e2;
+  scan = e2->scanners[isGeneralTextEntity];
+  return ((int (PTRCALL *)(const ENCODING *, const char *, const char *, const char **))scan)(e2, ptr, end, nextTokPtr);
 }
 
 // @ 0x00916f10
 static int PTRCALL unknown_scanS_default(const ENCODING *enc, const char *ptr, const char *end,
                                          const char **nextTokPtr)
 {
-  return unknown_scanProlog_body(ptr, 0, end, enc, nextTokPtr);
+  return unknown_scanProlog_body((const void *const *)encodingListDefault,
+                                 (init_encoding_s0091_6960 *)enc, ptr, end, nextTokPtr, 0);
 }
 
 // @ 0x00916f40
 static int PTRCALL unknown_scanS_ns(const ENCODING *enc, const char *ptr, const char *end,
                                     const char **nextTokPtr)
 {
-  return unknown_scanProlog_body(ptr, 0, end, enc, nextTokPtr);
+  return unknown_scanProlog_body((const void *const *)encodingListDefault,
+                                 (init_encoding_s0091_6960 *)enc, ptr, end, nextTokPtr, 1);
 }
 
 // @ 0x00916f70
-int XmlInitEncoding(ENCODING *enc, ENCODING **encoding, const char *name)
+int XmlInitEncoding(init_encoding_s0091_6960 *p, ENCODING **encoding, const char *name)
 {
   int i;
   if (name == 0)
@@ -435,47 +481,61 @@ int XmlInitEncoding(ENCODING *enc, ENCODING **encoding, const char *name)
     if (i == 6)
       return 0;
   }
-  enc->isUtf8 = (char)i == (char)6;
-  enc->scanners[0] = (SCANNER)unknown_scanS_default;
-  enc->scanners[1] = (SCANNER)unknown_scanS_ns;
-  enc->updatePosition = pushPosition;
-  enc->userData = 0;
-  *encoding = enc;
+  p->enc.isUtf8 = (char)i;
+  p->enc.scanners[0] = (SCANNER)unknown_scanS_default;
+  p->enc.scanners[1] = (SCANNER)unknown_scanS_ns;
+  p->enc.updatePosition = pushPosition;
+  p->out = encoding;
+  *encoding = &p->enc;
   return 1;
 }
 
 // @ 0x00916fe0
 const ENCODING *findEncodingDefault(const ENCODING *enc, const char *ptr, const char *end)
 {
-  const ENCODING *encoding = 0;
   char name[128];
-  name[127] = 0;
-  enc->nameMatchesAscii(enc, ptr, end, kUTF16Name);
-  return encoding;
+  char *nameEnd = name;
+  enc->utf8Convert(enc, &ptr, end, &nameEnd, name + sizeof(name) - 1);
+  if (ptr == end) {
+    int i;
+    *nameEnd = 0;
+    if (streqci(name, kUTF16Name) != 0 && enc->minBytesPerChar == 2)
+      return enc;
+    i = unknown_encodingIndex(name);
+    if (i != -1)
+      return (const ENCODING *)encodingListDefault[i];
+  }
+  return 0;
 }
 
 // @ 0x00917080
-const ENCODING *XmlInitEncodingNS_x(const ENCODING *enc, const char *ptr, const char *end)
+int XmlInitEncodingNS_x(int isGeneralTextEntity, const ENCODING *enc, const char *ptr,
+                        const char *end, const char **badPtr, const char **versionPtr,
+                        const char **versionEndPtr, const char **encodingName,
+                        const ENCODING **encoding, int *standalone)
 {
-  return findEncodingDefault(enc, ptr, end);
+  return doParseXmlDecl(findEncodingDefault, isGeneralTextEntity, enc, ptr, end, badPtr,
+                        versionPtr, versionEndPtr, encodingName, encoding, standalone);
 }
 
 // @ 0x009170d0
 static int PTRCALL unknown_scanPD_default(const ENCODING *enc, const char *ptr, const char *end,
                                           const char **nextTokPtr)
 {
-  return unknown_scanProlog_body(ptr, 0, end, enc, nextTokPtr);
+  return unknown_scanProlog_body((const void *const *)encodingListNS,
+                                 (init_encoding_s0091_6960 *)enc, ptr, end, nextTokPtr, 0);
 }
 
 // @ 0x00917100
 static int PTRCALL unknown_scanPD_ns(const ENCODING *enc, const char *ptr, const char *end,
                                      const char **nextTokPtr)
 {
-  return unknown_scanProlog_body(ptr, 0, end, enc, nextTokPtr);
+  return unknown_scanProlog_body((const void *const *)encodingListNS,
+                                 (init_encoding_s0091_6960 *)enc, ptr, end, nextTokPtr, 1);
 }
 
 // @ 0x00917130
-int XmlInitEncodingNS(ENCODING *enc, ENCODING **encoding, const char *name)
+int XmlInitEncodingNS(init_encoding_s0091_6960 *p, ENCODING **encoding, const char *name)
 {
   int i;
   if (name == 0)
@@ -487,29 +547,41 @@ int XmlInitEncodingNS(ENCODING *enc, ENCODING **encoding, const char *name)
     if (i == 6)
       return 0;
   }
-  enc->isUtf8 = (char)i == (char)6;
-  enc->scanners[0] = (SCANNER)unknown_scanPD_default;
-  enc->scanners[1] = (SCANNER)unknown_scanPD_ns;
-  enc->updatePosition = pushPosition;
-  enc->userData = 0;
-  *encoding = enc;
+  p->enc.isUtf8 = (char)i;
+  p->enc.scanners[0] = (SCANNER)unknown_scanPD_default;
+  p->enc.scanners[1] = (SCANNER)unknown_scanPD_ns;
+  p->enc.updatePosition = pushPosition;
+  p->out = encoding;
+  *encoding = &p->enc;
   return 1;
 }
 
 // @ 0x009171a0
 const ENCODING *findEncodingNS(const ENCODING *enc, const char *ptr, const char *end)
 {
-  const ENCODING *encoding = 0;
   char name[128];
-  name[127] = 0;
-  enc->nameMatchesAscii(enc, ptr, end, kUTF16Name);
-  return encoding;
+  char *nameEnd = name;
+  enc->utf8Convert(enc, &ptr, end, &nameEnd, name + sizeof(name) - 1);
+  if (ptr == end) {
+    int i;
+    *nameEnd = 0;
+    if (streqci(name, kUTF16Name) != 0 && enc->minBytesPerChar == 2)
+      return enc;
+    i = unknown_encodingIndex(name);
+    if (i != -1)
+      return (const ENCODING *)encodingListNS[i];
+  }
+  return 0;
 }
 
 // @ 0x00917240
-const ENCODING *XmlInitEncodingNS_x2(const ENCODING *enc, const char *ptr, const char *end)
+int XmlInitEncodingNS_x2(int isGeneralTextEntity, const ENCODING *enc, const char *ptr,
+                         const char *end, const char **badPtr, const char **versionPtr,
+                         const char **versionEndPtr, const char **encodingName,
+                         const ENCODING **encoding, int *standalone)
 {
-  return findEncodingNS(enc, ptr, end);
+  return doParseXmlDecl(findEncodingNS, isGeneralTextEntity, enc, ptr, end, badPtr,
+                        versionPtr, versionEndPtr, encodingName, encoding, standalone);
 }
 
 // @ 0x00917280
@@ -529,16 +601,11 @@ int PTRFASTCALL unknown_charRefNumber_little(const ENCODING *enc, const char *pt
   ptr += 2;
   if (*ptr == 'x') {
     for (;;) {
-      int c;
-      const char *p = ptr;
+      char c;
       ptr += 1;
-      if (p[1] == 0) {
-        if (*ptr == ';')
-          break;
-        c = (unsigned char)*ptr;
-      }
-      else
-        c = -1;
+      c = *ptr;
+      if (c == ';')
+        break;
       switch (c) {
       case '0': case '1': case '2': case '3': case '4':
       case '5': case '6': case '7': case '8': case '9':
@@ -550,26 +617,21 @@ int PTRFASTCALL unknown_charRefNumber_little(const ENCODING *enc, const char *pt
       case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
         result = result * 16 + c - 'a' + 10;
         break;
-      default:
-        return -1;
       }
-      if (result > 0x10FFFF)
+      if (result >= 0x110000)
         return -1;
     }
   }
-  for (;;) {
-    int c;
-    if (ptr[1] == 0) {
-      if (*ptr == ';')
+  else {
+    for (;;) {
+      char c = *ptr;
+      if (c == ';')
         break;
-      c = (unsigned char)*ptr;
+      result = result * 10 + c - '0';
+      if (result >= 0x110000)
+        return -1;
+      ptr += 1;
     }
-    else
-      c = -1;
-    result = result * 10 + c - '0';
-    if (result > 0x10FFFF)
-      return -1;
-    ++ptr;
   }
   return checkCharRefNumber(result);
 }

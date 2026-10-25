@@ -4,3 +4,4 @@ slices/s0092abb0/s0092abb0.cpp  ?DestroyPlatform@Clipboard@@QAE_NXZ  0092ad10  /
 slices/s0092abb0/s0092abb0.cpp  ?SetClipboardText@@YA_NPAUClipboard@@PB_WH@Z  0092acb0  /O2 /MD /Gy /EHsc /TP
 slices/s0092abb0/s0092abb0.cpp  ?FUN_0092b0f0@Clipboard@@QAEXH@Z  0092b0f0  /O2 /MD /Gy /EHsc /TP
 slices/s0092abb0/s0092abb0.cpp  ?Erase@WStringVector@@QAEPAUWString@@PAU2@@Z  0092b700  /O2 /MD /Gy /EHsc /TP
+slices/s0092abb0/s0092abb0.cpp  ?SetClipboardData@Clipboard@@QAE_NPAUIData@@_N@Z  0092abb0  /O2 /MD /Gy /EHsc /TP

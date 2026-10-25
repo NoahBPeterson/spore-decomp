@@ -45,7 +45,7 @@ static int byteType(const void* enc, const char* p) {
   return unicode_byte_type(p[1], p[0]);
 }
 
-// 0x00911ae0
+// @ 0x00911ae0
 static int little2_scanPercent(const void* enc, const char* p, const char* e, const char** nextTokPtr)
 {
   int t;

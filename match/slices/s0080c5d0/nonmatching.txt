@@ -3,3 +3,9 @@
 0080d5f0   7  complete; null arm missing the redundant xor eax,eax
 0080d620  23  complete; virtual call shapes (slot 0x4c/0x8c/0x90) and register use differ
 0080cf80  -  complete; all six message paths; frame and float temp layout differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080c5d0  548  complete; both tray passes (clamp/measure and position/emit) with layout lookup and window slot calls; loop temp layout and register allocation differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv FAIL (5/5 valid mismatched, xmm1 clobber)
+0080c840  411  complete; element ctor: prefix copy, layout alloc/init, failure cleanup, 11-slot WinRec build; register allocation and temp layout differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv UNSUPPORTED (3 unresolved: ElemCopy28, ArrayCopy, GameAlloc)
+0080c9f0  119  complete; prefix copy, vector erase+copy-range, layout refcount swap, scalar tail; operand reload and scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv WEAK (138/200 valid, 100% cov)
+0080cb30  102  complete; copy ctor: prefix copy, inline vector copy-range, layout addref; argument evaluation and register use differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv UNSUPPORTED (1 unresolved: ElemCopy28)
+0080cc10   23  complete; erase: helper move, element destroy loop, end adjustment; prologue parameter load order differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv WEAK (96/200 valid, 80.5% cov)
+0080cc80   60  complete; inline insert plus grow/reallocate path; register allocation of grow-path temporaries differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv UNSUPPORTED (0/400 valid: helper fakes fault)

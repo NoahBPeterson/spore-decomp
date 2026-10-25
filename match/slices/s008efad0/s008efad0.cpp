@@ -24,19 +24,8 @@ struct PickingContext;
 struct ListNode { ListNode* mpNext; ListNode* mpPrev; };
 
 // ---- retail callees (address in the comment) ----
-extern void   FUN_00897600(void* buf);                              // 0x00897600
-extern void   FUN_00897620(int);                                    // 0x00897620
-extern void   FUN_00897640(float, float, float);                    // 0x00897640
-extern void   FUN_00897680(void);                                   // 0x00897680
-extern char   FUN_008981a0(int*);                                   // 0x008981a0
-extern void   FUN_0089b360(void*);                                  // 0x0089b360  (Typesetter sub-ctor)
-extern char   FUN_0089cf10(void);                                   // 0x0089cf10
-extern void   FUN_0089d9a0(void);                                   // 0x0089d9a0  (FinalizeLine)
-extern void   FUN_0089c5d0(int);                                    // 0x0089c5d0  (NextLine)
-extern void   FUN_0089cdf0(int);                                    // 0x0089cdf0  (Reset)
-extern void   FUN_008e7e00(float, float);                           // 0x008e7e00
-extern double ceil(double);                                         // 0x013cc4bc  msvcr90!ceil
-extern float  iat_floor(double);                                    // 0x011e0906  msvcr90!floor
+extern void   FUN_008e7e00(float, float);                           // 0x008e7e00  (RegisterFloat's two-float callee)
+extern double iat_floor(double);                                    // 0x011e0906  msvcr90!floor (?iat_floor@@YANN@Z)
 
 struct RenderingContext {
     void SetContextRectRelative(RectF r);    // 0x008eedb0
@@ -63,15 +52,76 @@ struct Item {
     int   mItemType;                       // +0x10
 };
 
-// ---- StackingContext: 0x584 bytes ----
-struct Typesetter {
-    char  pad00[0x530];
+// ---- EA::Text layout data (retail LineLayout, embedded in the Typesetter) ----
+struct Block {
+    void MoveTo(float x, float y);      // 0x008e7e00  EA::XHTML::Layout::Block::MoveTo
 };
 
-extern void   Typesetter_Construct(Typesetter* t, int b);
+// 8-byte entry of LineLayout's +0x40 run array; bit 0x10 starts a run.
+struct RunRecord {
+    u32 mFlags;                         // +0x00
+    u32 mValue;                         // +0x04
+};
+
+// 0x20-byte entry of LineLayout's +0x54 box array; the first dword is an Item*
+// whose low two bits carry flags.
+struct InlineBox {
+    u32   mpItemAndFlags;               // +0x00
+    u32   pad04[3];
+    float mfX;                          // +0x10
+    float mfY;                          // +0x14
+    u32   pad18[2];
+};
+
+struct LineLayout {                     // +0x418 inside the Typesetter, 0x118 bytes
+    u32        pad00[0x40 / 4];
+    RunRecord* mpRunsBegin;             // +0x40
+    RunRecord* mpRunsEnd;               // +0x44
+    u32        pad48[(0x54 - 0x48) / 4];
+    InlineBox* mpBoxes;                 // +0x54
+    u32        pad58[(0xa0 - 0x58) / 4];
+    float      mfHeight;                // +0xa0
+    float      mfDescent;               // +0xa4
+    u32        padA8;
+    int        miFlagAC;                // +0xac
+    u32        padB0[(0x118 - 0xb0) / 4];
+};
+
+// The Typesetter's position triple (EA::Text::TripleFloat; retail members at +0x3c0).
+struct TripleFloat {
+    u32   pad00[0x3c0 / 4];
+    float mfA;                          // +0x3c0
+    float mfB;                          // +0x3c4
+    float mfC;                          // +0x3c8
+    void Set(float a, float b, float c);   // 0x00897640
+};
+
+// Typesetter: 0x530 bytes, embedded at +0x04 of the context.  The dev PDB's
+// TripleFloat carries 0x3c0 bytes before its three floats, so it is the base.
+struct Typesetter : TripleFloat {
+    u32         pad3cc[(0x414 - 0x3cc) / 4];
+    unsigned    mType;                  // +0x414
+    LineLayout  mLineLayout;            // +0x418
+    unsigned    GetType();              // 0x00897680
+    LineLayout* GetLineLayout();        // 0x008976a0
+    unsigned    ProcessLine();          // 0x0089cf10
+    void        FinalizeLine();         // 0x0089d9a0
+    void        NextLine(int a);        // 0x0089c5d0
+    void        Reset(int a);           // 0x0089cdf0
+};
+
 struct TypesetterCtor : Typesetter {
-    void Construct(int b);              // @ 0x0089d820  EA::Text::Typesetter::Typesetter
-    void SetSomething(void* p);         // @ 0x0089b360
+    void Construct(int b);              // 0x0089d820  EA::Text::Typesetter::Typesetter
+    void SetSomething(void* p);         // 0x0089b360
+};
+
+// Cursor over LineLayout's run array (EA::Text::ValueFlagPair).
+struct ValueFlagPair {
+    void* mpValue;                      // +0x00  the LineLayout
+    void* mpFlag;                       // +0x04  current run index
+    void* Store(void* pValue);          // 0x00897600
+    void  Assign(void* pValue);         // 0x00897620
+    bool  Next(int* pIndex);            // 0x008981a0
 };
 
 struct FloatEntry {                     // 0x74 stride
@@ -116,7 +166,7 @@ struct StackingContext {
     void  SetContextRect(const RectF& r);             // @ 0x008efc80
     void  InsertFloat(int kind);                      // @ 0x008efcd0
     void  RecomputeFloatLimits();                     // @ 0x008efd50
-    void  AddFloats(int ctx);                         // @ 0x008efde0
+    void  AddFloats(LineLayout* line);                // @ 0x008efde0
     void  FlushLines(int count);                      // @ 0x008efe80
     void  FlushAllLines();                            // @ 0x008f0010
     void  CollapseMargin(float margin);               // @ 0x008f01b0
@@ -209,30 +259,91 @@ void StackingContext::RecomputeFloatLimits()
 }
 
 // @ 0x008efde0
-void StackingContext::AddFloats(int ctx)
+void StackingContext::AddFloats(LineLayout* line)
 {
-    int scratch[18];
-    FUN_00897600(scratch);
-    FUN_00897620(0);
-    while (FUN_008981a0(scratch)) {
-        u32* e = (u32*)(scratch[0] * 0x20 * 0 + ctx);
-        (void)e;
+    ValueFlagPair it;
+    it.Store(line);
+    it.Assign(0);
+    int index;
+    while (it.Next(&index)) {
+        InlineBox* e = (InlineBox*)((char*)line->mpBoxes + (index << 5));
+        u32 v = e->mpItemAndFlags;
+        if ((v & 3u) == 0)
+            ((Block*)(v & ~3u))->MoveTo((float)ceil((double)(e->mfX - mf534)),
+                                        (float)ceil((double)e->mfY));
     }
 }
 
 // @ 0x008efe80
 void StackingContext::FlushLines(int count)
 {
-    char frame[0x34];
-    (void)frame;
-    (void)count;
+    LineLayout* line = mTypesetter.GetLineLayout();
+    TripleFloat* tf = &mTypesetter;
+    tf->Set(mf558 - mf554, mf554, mf55c);
+    while (count != 0) {
+        if (mTypesetter.ProcessLine() != 1)
+            break;
+        --count;
+        mTypesetter.FinalizeLine();
+        if (line->miFlagAC == 0) {
+            mf56c = line->mfHeight;
+            mf570 = line->mfHeight - line->mfDescent;
+        }
+        float h = (float)ceil((double)line->mfHeight);
+        float descent = line->mfDescent;
+        AddFloats(line);
+        mf55c += h - (float)iat_floor((double)descent);
+        FloatEntry** pp = &mpFloatsHead;
+        bool changed = false;
+        while (*pp != 0) {
+            FloatEntry* p = *pp;
+            if (mf55c >= p->mTop) {
+                *pp = p->mpNext;
+                changed = true;
+                continue;
+            }
+            pp = &p->mpNext;
+        }
+        if (changed)
+            RecomputeFloatLimits();
+        tf->Set(mf558 - mf554, mf554, mf55c);
+        mTypesetter.NextLine(0);
+    }
 }
 
 // @ 0x008f0010
 void StackingContext::FlushAllLines()
 {
-    char frame[0x34];
-    (void)frame;
+    LineLayout* line = mTypesetter.GetLineLayout();
+    TripleFloat* tf = &mTypesetter;
+    tf->Set(mf558 - mf554, mf554, mf55c);
+    while (mTypesetter.GetType() != 2) {
+        mTypesetter.FinalizeLine();
+        if (line->miFlagAC == 0) {
+            mf56c = line->mfHeight;
+            mf570 = line->mfHeight - line->mfDescent;
+        }
+        float h = (float)ceil((double)line->mfHeight);
+        float descent = line->mfDescent;
+        AddFloats(line);
+        mf55c += h - (float)iat_floor((double)descent);
+        FloatEntry** pp = &mpFloatsHead;
+        bool changed = false;
+        while (*pp != 0) {
+            FloatEntry* p = *pp;
+            if (mf55c >= p->mTop) {
+                *pp = p->mpNext;
+                changed = true;
+                continue;
+            }
+            pp = &p->mpNext;
+        }
+        if (changed)
+            RecomputeFloatLimits();
+        tf->Set(mf558 - mf554, mf554, mf55c);
+        mTypesetter.NextLine(0);
+    }
+    mTypesetter.Reset(1);
 }
 
 // @ 0x008f01b0

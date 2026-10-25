@@ -1,6 +1,10 @@
+# va  diff-bytes  reason
 00962ff0 96  faithful GetResourceDescriptor+factory helper; argument/register layout differs
 00963060 92  faithful CreateIndexBuffer<cMallocAlloc>; argument/register layout differs; equiv: UNSUPPORTED (symbol found; all inputs fake-arity)
 009634f0 202 faithful easing curve (mode 0/1/2); x87/SSE mix and constant pooling differ
 00963630 25  faithful OnlyWhenVisible; outgoing message-frame store scheduling differs
 00963f70 24  faithful flag set/clear; vtable-load scheduling differs
 00963db0 101 faithful FadeEffect constructor; field-store ordering differs
+009630e0  718 complete; ImmediateModeEx::Init reconstructed: allocate/finalize vertex descriptor, set element fields, create vertex buffer via 0x962ff0, index buffer via 0x963060, fill 0x1000-vertex index pattern, create sampler state, build BuildState, set sampler/render/raster/soft state, D3D9SetVertexDescriptor, optional shader data, get compiled state and free BuildState; /LTCG expansion means 952 vs 944 bytes and different scheduling. [equiv: UNSUPPORTED 0/400 valid, fault(write)/VirtualAlloc]
+00963780  1535 partial; IWinProc::HandleUIMessage dispatch skeleton only (returns the message code masked); the retail 1536-byte /LTCG body has per-message fade/visibility state writes and virtual callbacks not yet transcribed. [equiv: FAIL 5/15 valid, scratch return only]
+00964040  213 complete; WinButton::SelectCaptionColor reconstructed: query vfunc+0x28, derive bits 1..4 from +0xac, select caption colour from +0x260..+0x27c into +0x224, then tail-call vfunc+0x90; branch/register layout differs (220 vs 227 bytes). [equiv: UNSUPPORTED 0/400 valid, fake-arity]

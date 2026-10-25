@@ -2,3 +2,4 @@
 slices/s008f3530/s008f3530.cpp  Fn8f3530  008f3530  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s008f3530/s008f3530.cpp  Fn8f3580  008f3580  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s008f3530/s008f3530.cpp  Fn8f39e0  008f39e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008f3530/s008f3530.cpp  ?Fn8f3790@@YAPAPAXPAPAXPAD1PAX@Z  008f3790  /O2 /MD /Gy /EHsc /TP /arch:SSE

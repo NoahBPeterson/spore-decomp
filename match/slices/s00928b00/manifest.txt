@@ -3,3 +3,5 @@ slices/s00928b00/s00928b00.cpp  ?FUN_00928de0@Allocator@EA@@  00928de0
 slices/s00928b00/s00928b00.cpp  ?FUN_00928df0@Allocator@EA@@  00928df0
 slices/s00928b00/s00928b00.cpp  ?FUN_00928f80@BigFile@Allocator@EA@@  00928f80
 slices/s00928b00/s00928b00.cpp  ?FUN_00929220@BigFile@Allocator@EA@@  00929220
+slices/s00928b00/s00928b00.cpp  ?FUN_00928f00@BigFile@Allocator@EA@@QAEXPA_WIH@Z  00928f00  /O2 /MD /Gy /TP
+slices/s00928b00/s00928b00.cpp  ?FUN_009290a0@BigFile@Allocator@EA@@QAEXXZ  009290a0  /O2 /MD /Gy /TP

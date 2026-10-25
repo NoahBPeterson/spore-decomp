@@ -2,3 +2,13 @@
 0080e980 152  complete; refcount release/call schedule differs
 0080ed50  41  complete; null-return block placement + store ordering differ
 0080edb0  59  complete; ctor store schedule / this-in-eax shape differs (now returns this in eax); equiv PASS 400/400; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080e6b0 370  complete Render; box/message/render loop full; equiv FAIL (read-fault on harness-injected fake BoxList, see fixlog); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080e850 113  complete ctor; viewer/winproc/Matrix3 full; equiv WEAK 190 valid; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080ead0 192  complete dtor; viewer/window/winproc/model teardown full; equiv WEAK 167 valid; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080ebc0  68  complete renderer ctor; inline-vec + viewer + memset full; equiv WEAK 163 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080efe0 284  complete Insert1; copy/destroy + grow/reinsert full; equiv UNSUPPORTED 0 valid; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080f140 363  complete Insert12; 12-byte copy/destroy + grow/reinsert full; equiv WEAK 82 valid; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080f2e0 119  complete AddLayer; append/grow + addref/release full; equiv FAIL (ours-abi-broken, fastcall-4 compromise for 0080f360 MATCH, see fixlog); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080f380 399  complete MethodF380; model bind + layer/effect setup full; equiv UNSUPPORTED 0 valid; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080f530 445  complete Init; model world + 15 layer slots + objvec reserve + light mask full; equiv PASS 266 valid; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0080f730 100  complete AddObject; alloc/ctor/addref/insert/release full; equiv WEAK 182 valid; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2

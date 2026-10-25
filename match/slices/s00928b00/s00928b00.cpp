@@ -8,6 +8,9 @@
 #include <wchar.h>
 
 typedef unsigned int uint32;
+typedef unsigned char u8;
+typedef unsigned int u32;
+typedef unsigned __int64 u64;
 
 namespace EA { namespace Allocator {
 
@@ -44,17 +47,52 @@ public:
 
 extern "C" void* SP_Pool_AllocGlobal(uint32 size, uint32* pActual, void* ctx); // 0x00928ad0
 extern "C" void  operator_delete__f47410(void* p, void* ctx);                  // 0x00f47410
+void EA_Text_ConvertEncoding(const wchar_t* src, int enc, int dstEnc, void* dst, uint32* pLen,
+                             int a6);                                          // 0x0093c950
+
+// EA::Allocator::BigFile -- stores a simple vector of open FileStream pointers plus
+// the base name / directory / extension split and a resume offset.
 struct BigFile {
-    char mData[0x448];
-    void FUN_00928e20();   // 0x00928e20
+    void**  mpBegin;      // +0x000 vector begin (FileStream*)
+    void**  mpEnd;        // +0x004 vector end
+    void**  mpCapacity;   // +0x008 vector capacity
+    u8      mPad0C[8];    // +0x00c
+    int     mnIndex;      // +0x014 current stream slot + 1
+    u32     mnOffset;     // +0x018 byte offset inside current stream
+    wchar_t mName[0x104]; // +0x01c full file name
+    wchar_t mBase[0x104]; // +0x224 base part (no extension)
+    void*   mpExt;        // +0x42c pointer into mName at extension, or 0
+    u8      mPad430[4];   // +0x430
+    u32     mnFlags;      // +0x434 open flags
+    u32     mPad438[1];   // +0x438
+    u32     mnArg0;       // +0x43c
+    u32     mnArg1;       // +0x440
+    u32     mnLastError;  // +0x444
+
+    void FUN_00928e20();
+    void FUN_00928f00(wchar_t* dst, unsigned n, int index);
+    __int64 FUN_00928fc0();
+    char FUN_00929000();
+    void FUN_009290a0();
+    int  FUN_00929100(void* buf, unsigned n);
+    char FUN_00929310();
+    char FUN_00929470(void* buf, unsigned a2, u32 a3, u32 a4);
+    char FUN_009297a0(unsigned lo, int hi);
+    char FUN_00929900(unsigned lo, int hi, int whence);
     int  FUN_00929220(const wchar_t* name);
     char FUN_00929290();
     void FUN_00929450();
     void FUN_00928f80(const wchar_t* name);
     char FUN_009290c0();
 };
-void EA_Text_ConvertEncoding(const wchar_t* src, int enc, int dstEnc, void* dst, uint32* pLen,
-                             int a6);                                          // 0x0093c950
+
+char EA_File_Exists(const wchar_t* name);                  // 0x00931fa0
+void EA_File_Remove(const wchar_t* name);                  // 0x00931fd0
+uint32 EA_File_GetSize(const wchar_t* name);               // 0x00932060
+int  EA_Snprintf16(wchar_t* dst, unsigned n, const wchar_t* fmt, ...); // 0x00939a30
+void* EA_FileStream_Ctor(void* self, const wchar_t* name); // 0x00931e10
+void FUN_00997b10(void* p);                                // 0x00997b10 stream add
+void FUN_00a80dd0(void** pos, void** val);                 // 0x00a80dd0 vector insert
 
 // @ 0x00928b00
 void StackAllocator::Init(Block* pBlock, uint32 blockSize, CoreAllocFn alloc, CoreFreeFn free,
@@ -311,18 +349,442 @@ char BigFile::FUN_009290c0()
 }
 
 // ===========================================================================
-// big functions: behaviourally-shaped skeletons (partial)
+// big-file helpers: full bodies
 // ===========================================================================
-// Kept out of line: the original call site makes a real call to 0x00928e20.
-__declspec(noinline) void BigFile::FUN_00928e20() { volatile int keep = 0; (void)keep; }
-void FUN_00928f00(wchar_t* dst, unsigned n, int idx) { (void)dst; (void)n; (void)idx; }
-int  FUN_00928fc0(void* self) { (void)self; return -1; }
-int  FUN_00929000(void* self) { (void)self; return 0; }
-int  FUN_009290a0(void* self) { (void)self; return 0; }
-int  FUN_00929100(void* self, int a, unsigned b) { (void)self; (void)a; (void)b; return -1; }
-int  FUN_00929310(void* self) { (void)self; return 0; }
-int  FUN_00929470(void* self) { (void)self; return 0; }
-int  FUN_009297a0(void* self) { (void)self; return 0; }
-int  FUN_00929900(void* self) { (void)self; return 0; }
+extern "C" void* operator_new(size_t size, const char* name, int, int, int, int); // 0x00f473a0
+
+// @ 0x00928e20
+void __thiscall BigFile::FUN_00928e20()
+{
+    wchar_t* name = mName;
+    wchar_t* scan = name;
+    do { } while (*scan++ != 0);
+    u32 len = (u32)((scan - (name + 1)));
+    if (len > 0xff)
+        *name = 0;
+    if (*name == 0) { mpExt = 0; return; }
+    // copy name into base
+    wchar_t* bp = mBase;
+    wchar_t* src = name;
+    wchar_t c;
+    do { c = *src; *bp = c; ++src; ++bp; } while (c != 0);
+    // length of base
+    wchar_t* bs = mBase;
+    wchar_t* bscan = bs;
+    do { } while (*bscan++ != 0);
+    u32 blen = (u32)(bscan - (mBase + 1));
+    wchar_t* p = &mBase[blen - 1];   // last base char == param_1 + 0x222 + blen*2
+    mpExt = p;
+    if ((wchar_t*)mpExt < mBase) {
+        mpExt = 0; return;
+    }
+    for (;;) {
+        wchar_t* e = (wchar_t*)mpExt;
+        wchar_t ch = *e;
+        if (ch == 0x5c || ch == 0x2f || ch == 0x2e) break;
+        e = e - 1;
+        mpExt = e;
+        if (e < mBase) break;
+    }
+    {
+        wchar_t* e = (wchar_t*)mpExt;
+        if (e >= mBase && *e == 0x2e) {
+            *e = 0;
+            mpExt = (char*)mpExt + 2;
+            return;
+        }
+    }
+    mpExt = 0;
+}
+
+// @ 0x00928f00
+void __thiscall BigFile::FUN_00928f00(wchar_t* dst, unsigned n, int index)
+{
+    if (index == 0) {
+        wcsncpy(dst, mName, n);
+        return;
+    }
+    if (mpExt != 0) {
+        EA_Snprintf16(dst, n, L"%ls.%03d.%ls", mBase, index, (const wchar_t*)mpExt);
+        return;
+    }
+    EA_Snprintf16(dst, n, L"%ls.%03d", mName, index);
+}
+
+// @ 0x00928fc0
+__int64 __thiscall BigFile::FUN_00928fc0()
+{
+    if (mpBegin == mpEnd)
+        return (__int64)0xffffffffu;
+    void** e = mpEnd;
+    u32 n = (u32)((e - mpBegin)) - 1;
+    void* obj = e[-1];
+    u32 sz = (*(u32(__thiscall**)(void*))((char*)*(void**)obj + 0x1c))(obj);
+    return (__int64)((unsigned __int64)n * 0x40000000u) + (unsigned __int64)sz;
+}
+
+// @ 0x00929000
+char __thiscall BigFile::FUN_00929000()
+{
+    u32 n = (u32)(mpEnd - mpBegin);
+    if ((mnFlags & 2) == 0) {
+        mnLastError = 0xcfde0006;
+        return 0;
+    }
+    if (n < 2) {
+        mnLastError = 0xcfde000d;
+        return 0;
+    }
+    void* obj = mpEnd[-1];
+    (*(void(__thiscall**)(void*))((char*)*(void**)obj + 0x34))(obj);
+    void* obj2 = mpEnd[-1];
+    (*(void(__thiscall**)(void*))((char*)*(void**)obj2 + 0x18))(obj2);
+    void* obj3 = mpEnd[-1];
+    (*(void(__thiscall**)(void*))((char*)*(void**)obj3 + 8))(obj3);
+    mpEnd -= 1;
+    wchar_t buf[0x104];
+    FUN_00928f00(buf, 0x104, n - 1);
+    EA_File_Remove(buf);
+    return 1;
+}
+
+// @ 0x009290a0
+void __thiscall BigFile::FUN_009290a0()
+{
+    void* obj = mpBegin[mnIndex];
+    u32 off = (*(u32(__thiscall**)(void*, int))((char*)*(void**)obj + 0x24))(obj, 0);
+    mnOffset = off;
+}
+
+// @ 0x00929100
+int __thiscall BigFile::FUN_00929100(void* buf, unsigned n)
+{
+    if (mpBegin == mpEnd)
+        return -1;
+    int written = 0;
+    for (;;) {
+        if (!(n > 0x40000000u || mnOffset + n > 0x40000000u))
+            break;
+        u32 room = 0x40000000u - mnOffset;
+        if (room != 0) {
+            void* obj = mpBegin[mnIndex];
+            u32 got = (*(u32(__thiscall**)(void*, void*, u32))((char*)*(void**)obj + 0x30))(obj, buf, room);
+            if (got == 0xffffffffu) {
+                void* o = mpBegin[mnIndex];
+                mnLastError = (*(u32(__thiscall**)(void*))((char*)*(void**)o + 0x14))(o);
+                mnOffset = (*(u32(__thiscall**)(void*, int))((char*)*(void**)mpBegin[mnIndex] + 0x24))(mpBegin[mnIndex], 0);
+                return -1;
+            }
+            mnOffset += got;
+            written += got;
+            n -= got;
+            buf = (char*)buf + got;
+            if (got < room)
+                return written;
+        }
+        if (&mpBegin[mnIndex + 1] == mpEnd)
+            return written;
+        mnIndex += 1;
+        mnOffset = 0;
+        void* o = mpBegin[mnIndex];
+        (*(void(__thiscall**)(void*, int, int))((char*)*(void**)o + 0x28))(o, 0, 0);
+    }
+    void* obj = mpBegin[mnIndex];
+    int got = (*(int(__thiscall**)(void*, void*, unsigned))((char*)*(void**)obj + 0x30))(obj, buf, n);
+    if (got != -1) {
+        mnOffset += got;
+        return got + written;
+    }
+    {
+        void* o = mpBegin[mnIndex];
+        mnLastError = (*(u32(__thiscall**)(void*))((char*)*(void**)o + 0x14))(o);
+        mnOffset = (*(u32(__thiscall**)(void*, int))((char*)*(void**)mpBegin[mnIndex] + 0x24))(mpBegin[mnIndex], 0);
+    }
+    return -1;
+}
+
+// @ 0x00929310
+char __thiscall BigFile::FUN_00929310()
+{
+    u32 n = (u32)(mpEnd - mpBegin);
+    if (n == 0) {
+        mnLastError = 0xfffffffe;
+        return 0;
+    }
+    if (n > 0x3e6) {
+        mnLastError = 0xcfde0009;
+        return 0;
+    }
+    if ((mnFlags & 2) == 0) {
+        mnLastError = 0xcfde0006;
+        return 0;
+    }
+    wchar_t buf[0x104];
+    FUN_00928f00(buf, 0x104, (int)n);
+    void* fs = operator_new(0x22c, "BigFileStream", 0, 0, 0, 0);
+    if (fs) fs = EA_FileStream_Ctor(fs, buf);
+    if (mpEnd < mpCapacity) {
+        void** slot = mpEnd;
+        mpEnd = slot + 1;
+        if (slot) *slot = fs;
+    } else {
+        FUN_00a80dd0(mpEnd, &fs);
+    }
+    void* obj = mpEnd[-1];
+    (*(void(__thiscall**)(void*))((char*)*(void**)obj + 4))(obj);
+    void* obj2 = mpEnd[-1];
+    char ok = (*(char(__thiscall**)(void*, u32, int, u32, u32))((char*)*(void**)obj2 + 0x4c))(
+        obj2, mnFlags, 2, mnArg0, mnArg1);
+    if (!ok) {
+        void* obj3 = mpEnd[-1];
+        mnLastError = (*(u32(__thiscall**)(void*))((char*)*(void**)obj3 + 0x14))(obj3);
+        void* obj4 = mpEnd[-1];
+        (*(void(__thiscall**)(void*))((char*)*(void**)obj4 + 8))(obj4);
+        mpEnd -= 1;
+        return 0;
+    }
+    return 1;
+}
+
+// @ 0x00929470
+char __thiscall BigFile::FUN_00929470(void* buf, unsigned a2, u32 a3, u32 a4)
+{
+    if (mpBegin == mpEnd || buf == 0)
+        return (char)((mpBegin != mpEnd));
+    if (a3 == 6)
+        a3 = ((int)(size_t)buf & 2) ? 4 : 3;
+    if (mName[0] == 0) {
+        mnLastError = 0xcfde0003;
+        return 0;
+    }
+    {
+        wchar_t* s = mName;
+        do { } while (*s++ != 0);
+        u32 len = (u32)((s - (mName + 1)));
+        if (len > 0xfe) {
+            mnLastError = 0xcfde0003;
+            return 0;
+        }
+    }
+    int count = 0;
+    if (!EA_File_Exists(mName)) {
+    do_open:
+        if (a3 == 3 || a3 == 5) {
+            mnLastError = 0xcfde0004;
+            return 0;
+        }
+    } else {
+        int idx = 1;
+        count = 1;
+        for (;;) {
+            wchar_t tmp[0x104];
+            FUN_00928f00(tmp, 0x104, idx);
+            if (!EA_File_Exists(tmp))
+                break;
+            count = count + 1;
+            u32 sz = EA_File_GetSize(tmp);
+            if (sz != 0x40000000u)
+                break;
+            idx = idx + 1;
+            if (idx >= 0x3e7) {
+                count = idx;
+                break;
+            }
+        }
+        if (count == 0)
+            goto do_open;
+        if (a3 == 1) {
+            mnLastError = 0xcfde000a;
+            return 0;
+        }
+    }
+    void* fs = operator_new(0x22c, "BigFileStream", 0, 0, 0, 0);
+    if (fs) fs = EA_FileStream_Ctor(fs, mName);
+    if (mpEnd < mpCapacity) {
+        void** slot = mpEnd;
+        mpEnd = slot + 1;
+        if (slot) *slot = fs;
+    } else {
+        FUN_00a80dd0(mpEnd, &fs);
+    }
+    {
+        void* obj = mpEnd[-1];
+        (*(void(__thiscall**)(void*))((char*)*(void**)obj + 4))(obj);
+        void* obj2 = mpEnd[-1];
+        char ok = (*(char(__thiscall**)(void*, void*, u32, u32, u32))((char*)*(void**)obj2 + 0x4c))(
+            obj2, buf, a3, a3, a4);
+        if (!ok) {
+        fail:
+            void* obj3 = mpEnd[-1];
+            mnLastError = (*(u32(__thiscall**)(void*))((char*)*(void**)obj3 + 0x14))(obj3);
+            FUN_00929290();
+            return 0;
+        }
+        if (a3 == 2 || a3 == 5) {
+            int i = 1;
+            if (count > 1) {
+                do {
+                    wchar_t tmp[0x104];
+                    FUN_00928f00(tmp, 0x104, i);
+                    EA_File_Remove(tmp);
+                    i = i + 1;
+                } while (i < count);
+            }
+        } else {
+            int i = 1;
+            if (count > 1) {
+                do {
+                    wchar_t tmp[0x104];
+                    FUN_00928f00(tmp, 0x104, i);
+                    void* nf = operator_new(0x22c, "BigFileStream", 0, 0, 0, 0);
+                    if (nf) nf = EA_FileStream_Ctor(nf, tmp);
+                    FUN_00997b10(&nf);
+                    void* obj4 = mpEnd[-1];
+                    (*(void(__thiscall**)(void*))((char*)*(void**)obj4 + 4))(obj4);
+                    void* obj5 = mpEnd[-1];
+                    char ok2 = (*(char(__thiscall**)(void*, void*, u32, u32, u32))((char*)*(void**)obj5 + 0x4c))(
+                        obj5, buf, 3, a3, a4);
+                    if (!ok2)
+                        goto fail;
+                    i = i + 1;
+                } while (i < count);
+            }
+        }
+    }
+    mnFlags = a3;
+    mPad438[0] = a3;
+    mnArg0 = a3;
+    mnArg1 = a4;
+    mnLastError = 0;
+    mnIndex = 0;
+    mnOffset = 0;
+    return (char)(mpBegin != mpEnd);
+}
+
+// @ 0x009297a0
+char __thiscall BigFile::FUN_009297a0(unsigned lo, int hi)
+{
+    if (mpBegin == mpEnd)
+        return 0;
+    u32 want;
+    u32 wantOff;
+    if (lo == 0 && hi == 0) {
+        want = 1;
+        wantOff = 0;
+    } else {
+        u32 a = lo + 0x3fffffff;
+        u32 b = (u32)hi + (lo > 0xc0000000u ? 1u : 0u);
+        want = (a >> 0x1e) | (b * 4);
+        wantOff = ((lo - 1) & 0x3fffffff) + 1;
+    }
+    u32 n = (u32)(mpEnd - mpBegin);
+    if (want < n) {
+        u32 u = n;
+        do {
+            u32 prev = u;
+            if (!FUN_00929000()) {
+                void* o = mpBegin[mnIndex];
+                mnOffset = (*(u32(__thiscall**)(void*, int))((char*)*(void**)o + 0x24))(o, 0);
+                return 0;
+            }
+            u = prev - 1;
+        } while (want < u);
+        if (u <= (u32)mnIndex) {
+            mnIndex = (int)(u - 1);
+            mnOffset = 0x40000000;
+        }
+    } else {
+        while (n < want) {
+            void* o = mpBegin[n - 1];
+            char ok = (*(char(__thiscall**)(void*, u32))((char*)*(void**)o + 0x20))(o, 0x40000000);
+            if (!ok) {
+                void* o2 = mpBegin[n - 1];
+                mnLastError = (*(u32(__thiscall**)(void*))((char*)*(void**)o2 + 0x14))(o2);
+                FUN_009290a0();
+                return 0;
+            }
+            if (!FUN_00929310()) {
+                FUN_009290a0();
+                return 0;
+            }
+            n = n + 1;
+        }
+    }
+    {
+        void* o = mpBegin[n - 1];
+        if ((*(char(__thiscall**)(void*, u32))((char*)*(void**)o + 0x20))(o, wantOff)) {
+            if (wantOff < mnOffset)
+                mnOffset = wantOff;
+            void* o2 = mpBegin[mnIndex];
+            mnOffset = (*(u32(__thiscall**)(void*, int))((char*)*(void**)o2 + 0x24))(o2, 0);
+            return 1;
+        }
+        void* o3 = mpBegin[n - 1];
+        mnLastError = (*(u32(__thiscall**)(void*))((char*)*(void**)o3 + 0x14))(o3);
+        void* o4 = mpBegin[mnIndex];
+        mnOffset = (*(u32(__thiscall**)(void*, int))((char*)*(void**)o4 + 0x24))(o4, 0);
+    }
+    return 0;
+}
+
+// @ 0x00929900
+char __thiscall BigFile::FUN_00929900(unsigned lo, int hi, int whence)
+{
+    if (mpBegin == mpEnd)
+        return 0;
+    // current end segment (64-bit): base of last segment + its current size
+    unsigned __int64 base =
+        (unsigned __int64)((u32)(mpEnd - mpBegin) - 1) * 0x40000000u;
+    base += (*(u32(__thiscall**)(void*))((char*)*(void**)mpEnd[-1] + 0x1c))(mpEnd[-1]);
+    unsigned __int64 arg = (unsigned __int64)lo | ((unsigned __int64)(u32)hi << 32);
+    unsigned __int64 target;
+    if (whence == 0) {
+        target = arg;
+    } else if (whence == 2) {
+        target = base + arg;
+    } else {
+        unsigned __int64 curPos = 0;
+        if (mpBegin != mpEnd)
+            curPos = (unsigned __int64)mnIndex * 0x40000000u + mnOffset;
+        target = curPos + arg;
+    }
+    u32 want;
+    u32 wantOff;
+    if ((__int64)target < 0 || target == 0) {
+        want = 0; wantOff = 0;
+    } else {
+        unsigned __int64 m = target - 1;
+        want = (u32)(m >> 0x1e);
+        wantOff = (u32)(m & 0x3fffffff) + 1;
+    }
+    while (want >= (u32)(mpEnd - mpBegin)) {
+        u32 idx = (u32)(mpEnd - mpBegin) - 1;
+        mnIndex = (int)idx;
+        void* o = mpBegin[idx];
+        if (!(*(char(__thiscall**)(void*, u32, int))((char*)*(void**)o + 0x28))(o, 0x40000000, 0))
+            goto fail;
+        {
+            void* o2 = mpBegin[mnIndex];
+            if (!(*(char(__thiscall**)(void*, int, int))((char*)*(void**)o2 + 0x38))(o2, 0, 0))
+                goto fail;
+        }
+        FUN_00929310();
+    }
+    mnIndex = (int)want;
+    mnOffset = wantOff;
+    {
+        void* o = mpBegin[want];
+        if ((*(char(__thiscall**)(void*, u32, int))((char*)*(void**)o + 0x28))(o, wantOff, 0))
+            return 1;
+    }
+fail:
+    {
+        void* o = mpBegin[mnIndex];
+        mnLastError = (*(u32(__thiscall**)(void*))((char*)*(void**)o + 0x14))(o);
+        void* o2 = mpBegin[mnIndex];
+        mnOffset = (*(u32(__thiscall**)(void*, int))((char*)*(void**)o2 + 0x24))(o2, 0);
+    }
+    return 0;
+}
 
 }}

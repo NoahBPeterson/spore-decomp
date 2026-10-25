@@ -479,74 +479,110 @@ bool MemoryStream::InitA(void* holder)
 }
 
 // @ 0x00918350
+struct ScanHolder {
+    char     pad0[0x284];
+    unsigned dataStart;   // +0x284
+    unsigned dataEnd;     // +0x288
+    unsigned base28c;     // +0x28c
+    unsigned base290;     // +0x290
+};
+
 void* MemoryStream::ScanExtra(const void* holder, void* out)
 {
-    MemoryStream* scan = this;
-    unsigned char flag = 0;
-    unsigned v = 0;
-    if (!scan->SetPosition(0, 0))
+    bool found = false;
+    unsigned dataSize;
+    unsigned version;
+
+    if (!SetPosition(0, 0))
         return 0;
-    unsigned char* end = (unsigned char*)holder + 4;
+
     for (;;) {
-        const Rgba5* pos = (const Rgba5*)scan->GetPosition(0);
-        if (!(pos < (const Rgba5*)holder + *(const unsigned*)((const char*)holder + 0x20))) {
-            if (flag == 0)
-                goto done;
+        int pos = GetPosition(0);
+        int size = GetSize();
+        if (pos >= size) {
+            if (!found)
+                return 0;
             break;
         }
-        unsigned u;
-        unsigned short w;
-        if (scan->Read(&u, 4) != 4)
-            return 0;
-        if (scan->Read(&w, 2) != 2)
-            return 0;
-        if (w != *(const unsigned short*)((const char*)holder + 4))
-            return 0;
-        if (scan->Read(&v, 4) != 4)
-            return 0;
+
+        unsigned short magic;
         unsigned char fmt;
-        if (scan->Read(&fmt, 1) != 1)
-            return 0;
         unsigned char sub;
-        if (scan->Read(&sub, 1) != 1)
+        if (Read(&dataSize, 4) != 4)
             return 0;
-        unsigned n = (unsigned)fmt * 2;
-        n = n - (0xc % n);
-        if (!scan->SetPosition((int)n, 1))
+        if (Read(&magic, 2) != 2)
             return 0;
-        unsigned char* p = (unsigned char*)u + 0xc;
-        while (p < end) {
+        if (magic != 2)
+            return 0;
+        if (Read(&version, 4) != 4)
+            return 0;
+        if (Read(&fmt, 1) != 1)
+            return 0;
+        if (Read(&sub, 1) != 1)
+            return 0;
+
+        unsigned stride = (unsigned)fmt * 2;
+        stride -= 0xc % stride;
+        if (!SetPosition((int)stride, 1))
+            return 0;
+
+        unsigned offset = stride + 0xc;
+        while (offset < dataSize + 4) {
+            unsigned lo;
+            unsigned hi;
             if (fmt == 4) {
-                if (scan->Read(&u, 4) != 4)
+                if (Read(&lo, 4) != 4)
                     return 0;
-                if (scan->Read(&sub, 4) != 4)
+                if (Read(&hi, 4) != 4)
                     return 0;
-                u = 0;
-                sub = 0;
+            } else if (fmt == 8) {
+                unsigned long long a;
+                unsigned long long b;
+                if (Read(&a, 8) != 8)
+                    return 0;
+                if (Read(&b, 8) != 8)
+                    return 0;
+                lo = (unsigned)a;
+                hi = (unsigned)b;
             } else {
-                if (fmt != 8)
-                    return 0;
-                if (scan->Read(&u, 8) != 8)
-                    return 0;
-                if (scan->Read(&sub, 8) != 8)
-                    return 0;
+                return 0;
             }
-            if ((size_t)(p + n) < (size_t)end)
-                p = p + n;
-            else
+
+            if (lo <= (unsigned)holder &&
+                lo + hi > (unsigned)holder) {
+                found = true;
                 break;
+            }
+            offset += stride;
         }
-        (void)v;
-        if (!scan->SetPosition((int)((char*)end - (char*)p), 1))
+
+        if (!SetPosition((int)(dataSize + 4 - offset), 1))
             return 0;
+        if (!found)
+            continue;
+        break;
     }
-    {
-        char* base = *(char**)((char*)holder + 8);
-        *(unsigned*)((char*)out + 8) = (unsigned)*(unsigned*)(base + 0x28c) + v;
-        *(unsigned*)((char*)out + 0xc) = *(const unsigned*)((const char*)holder + 0x14) + 0;
-    }
-done:
-    return (void*)(flag != 0);
+
+    ScanHolder* mh = (ScanHolder*)mpHolder;
+    IStream* hs = (IStream*)((char*)mpHolder + 4);
+    int base = (int)mh->base28c + (int)version;
+    if (!hs->SetPosition(base, 0))
+        return 0;
+    if (hs->Read(out, 4) != 4)
+        return 0;
+    if (hs->Read((char*)out + 4, 2) != 2)
+        return 0;
+    if (*(unsigned short*)((char*)out + 4) != 2)
+        return 0;
+    unsigned x;
+    if (hs->Read(&x, 4) != 4)
+        return 0;
+    if (hs->Read((char*)out + 6, 1) != 1)
+        return 0;
+
+    *(int*)((char*)out + 8) = (int)mh->base28c + (int)version;
+    *(int*)((char*)out + 0xc) = (int)mh->base290 + (int)x;
+    return (void*)1;
 }
 
 // @ 0x00918620

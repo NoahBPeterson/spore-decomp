@@ -411,7 +411,7 @@ void TooltipHelper::Attach(void* param) {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00835fe0  cSPUIVariableWidthDrawable::Draw (complete approximation)
+// cSPUIVariableWidthDrawable
 // ---------------------------------------------------------------------------
 struct IDrawable { virtual void d0(); };
 struct ISerializable2 { virtual void s0(); };
@@ -420,57 +420,85 @@ struct CustomDrawable : IDrawable, ISerializable2, MultiHeapObject {
     CustomDrawable() : mRefCount(0) {}
 };
 struct RenderContext {
-    void* Begin2D(int);
-    void  End2D();
+    void* Begin2D(int);   // 0x0095bc10
+    void  End2D();        // 0x0095bb20
 };
+
+// drawable image header (only the width field is used here)
+struct DrawableImage {
+    uint32_t pad0[7];   // +0x00
+    int32_t  mWidth;    // +0x1c
+};
+
 class cSPUIVariableWidthDrawable : public CustomDrawable { public:
     void* mpImage;       // +0xc
     uint32_t mFillColor; // +0x10
     cSPUIVariableWidthDrawable();
-    void Draw(RenderContext* ctx, float* rect);
+    void Draw(RenderContext* ctx, float* rect, int unused);
 };
 
-void cSPUIVariableWidthDrawable::Draw(RenderContext* ctx, float* rect) {
+// @ 0x00835fe0
+void cSPUIVariableWidthDrawable::Draw(RenderContext* ctx, float* rect, int) {
     void* painter = ctx->Begin2D(0);
     if (mpImage == 0) {
-        VFn<void(__thiscall*)(void*, int)>(painter, 4)(painter, (int)mFillColor);
+        VFn<void(__thiscall*)(void*, uint32_t)>(painter, 4)(painter, mFillColor);
         VFn<void(__thiscall*)(void*, float, float, float, float)>(painter, 0x38)(
             painter, rect[0], rect[1], rect[2], rect[3]);
     } else {
-        float* img = (float*)mpImage;
-        if (img) VFn<void(__thiscall*)(void*, void*)>(painter, 4)(painter, img);
-        float x0 = rect[0];
-        float w = rect[2] - x0;
-        float iw = (float)*(int*)((char*)img + 0x1c);
-        if (w < iw) {
-            float uv[8];
-            uv[0] = 0.0f; uv[1] = 0.0f;
-            uv[2] = (iw - (iw - w) * 0.5f) / iw;
-            uv[3] = 1.0f;
-            uv[4] = rect[1];
-            uv[5] = rect[3];
-            uv[6] = w - w * 0.5f;
-            VFn<void(__thiscall*)(void*, float*)>(painter, 0x58)(painter, uv);
-            VFn<void(__thiscall*)(void*, float*, void*, void*)>(painter, 0x58)(painter, uv, mpImage, 0);
+        if (mFillColor)
+            VFn<void(__thiscall*)(void*, uint32_t)>(painter, 4)(painter, mFillColor);
+        const float x0 = rect[0];
+        const float y0 = rect[1];
+        const float x1 = rect[2];
+        const float y1 = rect[3];
+        const float iw = (float)((DrawableImage*)mpImage)->mWidth;
+        const float w = x1 - x0;
+        if (iw > w) {
+            // narrower than the image: draw the left and right slices, cropping the centre
+            const float crop = (iw - w) * 0.5f;
+            float uv1[4] = { 0.0f, 0.0f, (iw * 0.5f - crop) / iw, 1.0f };
+            float d1[4] = { x0, y0, x1 - w * 0.5f, y1 };
+            VFn<void(__thiscall*)(void*, float*, void*, float*)>(painter, 0x58)(
+                painter, d1, mpImage, uv1);
+            float uv2[4] = { (crop + iw * 0.5f) / iw, 0.0f, 1.0f, 1.0f };
+            float d2[4] = { x0 + w * 0.5f, y0, x1, y1 };
+            VFn<void(__thiscall*)(void*, float*, void*, float*)>(painter, 0x58)(
+                painter, d2, mpImage, uv2);
         } else if (w == iw) {
-            float uv[4] = {0.0f, 0.0f, 1.0f, 1.0f};
-            VFn<void(__thiscall*)(void*, float*)>(painter, 0x58)(painter, uv);
+            float uv[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+            VFn<void(__thiscall*)(void*, float*, void*, float*)>(painter, 0x58)(
+                painter, rect, mpImage, uv);
         } else {
-            float uv[8];
-            uv[0] = 0.0f; uv[1] = 0.0f; uv[2] = 0.5f; uv[3] = 1.0f;
-            uv[4] = rect[1]; uv[5] = rect[3]; uv[6] = rect[2];
-            VFn<void(__thiscall*)(void*, float*)>(painter, 0x58)(painter, uv);
-            VFn<void(__thiscall*)(void*, float*, void*, void*)>(painter, 0x58)(painter, uv, mpImage, 0);
-            float step = 0.0f;
-            float y1 = rect[1];
-            float x = x0 + step;
-            float xEnd = rect[2] - step;
-            while (x < xEnd) {
-                float w2 = xEnd;
-                if (step < xEnd - x) w2 = step + x;
-                float q[4] = { x, y1, w2, rect[3] };
-                VFn<void(__thiscall*)(void*, float*, void*, void*)>(painter, 0x58)(painter, q, mpImage, 0);
-                x += step;
+            // wider than the image: draw the left/right slices and tile the centre strip
+            const float half = iw * 0.5f;
+            const float quarter = iw * 0.25f;
+            float uvL[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
+            float dL[4] = { x0, y0, half, y1 };
+            VFn<void(__thiscall*)(void*, float*, void*, float*)>(painter, 0x58)(
+                painter, dL, mpImage, uvL);
+            float uvR[4] = { 0.5f, 0.0f, 1.0f, 1.0f };
+            float dR[4] = { x1 - half, y0, x1, y1 };
+            VFn<void(__thiscall*)(void*, float*, void*, float*)>(painter, 0x58)(
+                painter, dR, mpImage, uvR);
+            float left = x0 + half;
+            const float right = x1 - half;
+            float uvM[4] = { 0.375f, 0.0f, 0.625f, 1.0f };
+            float dM[4] = { left, y0, right, y1 };
+            if (left < right) {
+                do {
+                    const float span = right - left;
+                    dM[0] = left;
+                    if (span > quarter) {
+                        dM[2] = left + quarter;
+                        uvM[2] = 0.625f;
+                    } else {
+                        dM[2] = right;
+                        uvM[2] = 0.375f + span / iw;
+                    }
+                    VFn<void(__thiscall*)(void*, float*, void*, float*)>(painter, 0x58)(
+                        painter, dM, mpImage, uvM);
+                    left += quarter;
+                } while (right > left);
             }
         }
     }
@@ -576,39 +604,56 @@ struct String8 {
     char* mpBegin;
     char* mpEnd;
     char* mpCapacity;
+    uint32_t mAllocator;
 };
 
-extern "C" wchar_t* __cdecl wcsrchr(const wchar_t*, wchar_t);
-extern "C" char* __cdecl strstr(const char*, const char*);
+extern "C" __declspec(dllimport) wchar_t* __cdecl wcsrchr(const wchar_t*, wchar_t);
+extern "C" __declspec(dllimport) char* __cdecl strstr(const char*, const char*);
 void __cdecl ConvertToString8(String8* out, const wchar_t* s, int len); // 0x93c440
-void __cdecl FUN_00594410(void* it);                                     // map begin iterator
 
-struct MapNode { uint32_t mValue; char* mKey; MapNode* mLeft; MapNode* mRight; };
-struct ResFinder { uint32_t FindByExt(wchar_t* name); };
+struct MapNode { uint32_t mValue; char* mKey; MapNode* mpNext; };
+struct MapIterator { MapNode* mpNode; MapNode** mpBucket; };
+struct ExtMap {
+    uint32_t   mUnk0;         // +0x0
+    MapNode**  mpBuckets;     // +0x4
+    uint32_t   mBucketCount;  // +0x8
+    void Begin(MapIterator* it); // 0x594410
+};
+struct ResFinder {
+    uint32_t mPad[3];         // +0x0
+    ExtMap   mMap;            // +0xc
+    uint32_t FindByExt(wchar_t* name);
+};
 
 // @ 0x00836740
 uint32_t ResFinder::FindByExt(wchar_t* name) {
     wchar_t* dot = wcsrchr(name, L'.');
     if (dot) {
         wchar_t* p = dot;
-        while (*p) ++p;
-        if ((int)(p - (dot + 1)) > 1) {
+        wchar_t c;
+        do { c = *p; ++p; } while (c);
+        if ((uint32_t)(p - (dot + 1)) > 1) {
+            MapIterator it;
             String8 ext;
             ConvertToString8(&ext, dot + 1, -1);
-            MapNode* it;
-            FUN_00594410(&it);
-            MapNode** root = (MapNode**)(*(int*)((char*)this + 0x10) +
-                                         *(int*)((char*)this + 0x14) * 4);
-            while (it != *root) {
-                if (strstr(it->mKey, ext.mpBegin)) {
-                    uint32_t v = it->mValue;
-                    if (ext.mpBegin && (int)(ext.mpCapacity - ext.mpBegin) > 1)
+            ExtMap* map = &mMap;
+            map->Begin(&it);
+            MapNode* node = it.mpNode;
+            MapNode** bucket = it.mpBucket;
+            while (node != map->mpBuckets[map->mBucketCount]) {
+                if (strstr(node->mKey, ext.mpBegin)) {
+                    uint32_t v = node->mValue;
+                    if ((int)(ext.mpCapacity - ext.mpBegin) > 1 && ext.mpBegin)
                         operator_delete__(ext.mpBegin);
                     return v;
                 }
-                it = it->mLeft ? it->mLeft : it->mRight;
+                node = node->mpNext;
+                while (node == 0) {
+                    ++bucket;
+                    node = *bucket;
+                }
             }
-            if (ext.mpBegin && (int)(ext.mpCapacity - ext.mpBegin) > 1)
+            if ((int)(ext.mpCapacity - ext.mpBegin) > 1 && ext.mpBegin)
                 operator_delete__(ext.mpBegin);
         }
     }

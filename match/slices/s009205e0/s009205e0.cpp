@@ -25,6 +25,7 @@ __forceinline int TruncToInt(float f) { __asm cvttss2si eax, f }
 
 extern "C" __declspec(dllimport) void __stdcall OutputDebugStringA(const char*);
 extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, size_t);
+extern "C" int __cdecl strcmp(const char*, const char*);
 
 void* EASTL_allocator_allocate(uint32_t n, const char* name, int flags, unsigned dbg,
                                const char* file, int line);   // 0x00f473a0
@@ -33,6 +34,7 @@ void  EASTL_allocator_deallocate(void* p);                     // 0x00f47380
 void FUN_009223a0(int a, void* b);      // 0x9223a0 lock
 void FUN_00922480();                    // 0x922480 unlock
 struct EapdLock {
+    int  mLockWord;                      // +0
     int  Lock(int reason, void* name);   // 0x9223a0
     void Unlock();                       // 0x922480
 };
@@ -60,7 +62,7 @@ struct Range {
     void append(const wchar_t* first, const wchar_t* last);   // 0x672750
     void appendChar(wchar_t c);                               // 0x8e3f10
 };
-void FUN_00920f30(Range* r, char flag);
+Range* FUN_00920f30(Range* r, char flag);
 wchar_t* FindExtension(wchar_t* first, wchar_t* last);
 
 // @ 0x00920c20
@@ -383,34 +385,94 @@ RBNode* RBTreeIncrement(RBNode* n) {
     return n;
 }
 // ---------------------------------------------------------------- Eapd hash tables
-struct HashNode { unsigned mKey; unsigned mValue; void* pad08; HashNode* mpNext; };
+struct HashNode;
+struct SymbolNode;
+
+// 8-byte hash iterator; non-POD so the compiler returns it through a hidden pointer,
+// exactly like the original (member call with `this` + 3 stack words, `ret 0xc`).
+struct HashIter {
+    HashNode*  mpNode;      // +0
+    HashNode** mpSlot;      // +4
+    HashIter() {}
+    HashIter(const HashIter& o) : mpNode(o.mpNode), mpSlot(o.mpSlot) {}
+};
+struct SymbolIter {
+    SymbolNode*  mpNode;    // +0
+    SymbolNode** mpSlot;    // +4
+    SymbolIter() {}
+    SymbolIter(const SymbolIter& o) : mpNode(o.mpNode), mpSlot(o.mpSlot) {}
+};
+
+// Group entries are keyed by an interned name pointer and hashed on its contents.
+struct HashValue {
+    const char* mpName;     // +0
+    void*       mpStream;   // +4
+    void*       mpOwner;    // +8
+    unsigned    mKey;       // +0xc
+};
+struct HashNode {
+    const char* mpName;     // +0
+    void*       mpStream;   // +4
+    void*       mpOwner;     // +8
+    unsigned    mKey;       // +0xc
+    HashNode*   mpNext;     // +0x10
+};
+
+// Symbol entries are keyed by a plain integer id.
+struct SymbolValue {
+    unsigned    mKey;       // +0
+    void*       mpStream;   // +4
+    void*       mpOwner;    // +8
+};
+struct SymbolNode {
+    unsigned    mKey;       // +0
+    void*       mpStream;   // +4
+    void*       mpOwner;    // +8
+    SymbolNode* mpNext;     // +0xc
+};
+
 struct HashTable {
-    HashNode** mpBuckets;   // +0
-    unsigned mnBucketCount; // +4
-    unsigned mnSize;        // +8
-    void* pad0c;
-    void* insert(void* out, HashNode* src);   // @ 009205e0
-    unsigned lookup(unsigned key);            // @ 009209c0
-    unsigned find2(unsigned key, unsigned* out); // @ 00920a70
+    void*        mpUnknown0;    // +0
+    HashNode**   mpBuckets;     // +4
+    unsigned     mnBucketCount; // +8
+    unsigned     mnSize;        // +0xc
+    RangeMapper  mRangeMap;     // +0x10
+    HashIter     insert(const HashValue& value, bool bFlag);  // @ 009205e0
+    void         rehash(unsigned newSize);                    // 0x920340
+    void         find(HashIter* out, const char* const* key); // 0x920560
+    HashIter     erase(HashIter pos);                         // 0xb4f930
+    unsigned     lookup(unsigned key);                        // @ 009209c0
+    unsigned     find2(unsigned key, unsigned* out);          // @ 00920a70
+};
+
+struct SymbolHashTable {
+    char         pad0[4];       // +0
+    SymbolNode** mpBuckets;     // +4
+    unsigned     mnBucketCount; // +8
+    unsigned     mnSize;        // +0xc
+    RangeMapper  mRangeMap;     // +0x10
+    SymbolIter   insert(const SymbolValue& value, bool bFlag); // 0x920490
+    SymbolIter   erase(SymbolIter pos);                        // 0x6859b0
+};
+
+struct EapdStream {
+    virtual void        Unused0();                          // +0
+    virtual unsigned    Read(void* buffer, unsigned size);  // +4
+    virtual void        Unused1();                          // +8
+    virtual const char* GetName(unsigned key);              // +0xc
 };
 
 struct EapdSymbolTable {
-    char pad00[0x10c];
-    void* mpEapdSymbols;   // +0x10c
-    unsigned mnBuckets1;   // +0x110
-    char pad114[0x1c];
-    void* mpGroups;        // +0x12c
-    unsigned mnBuckets2;   // +0x130
-    void ctor();                                  // @ 009206d0
-    bool LoadSymbols(void* stream);               // @ 00920780
-    bool LoadGroups(void* stream, void* owner);   // @ 00920b30
+    char            pad00[8];    // +0
+    EapdLock        mLock;       // +8
+    char            pad0c[0xfc]; // +0xc
+    SymbolHashTable symbols;     // +0x108
+    char            pad124[4];   // +0x124
+    HashTable       groups;      // +0x128
+    void ctor();                                       // @ 009206d0
+    bool LoadSymbols(EapdStream* stream);              // @ 00920780
+    bool LoadGroups(EapdStream* stream, void* owner);  // @ 00920b30
 };
-
-extern HashNode* FUN_006859b0_ret(void* a, void* b, void* c);
-void FUN_00920560(void* out, void* key);                    // 0x920560
-extern HashNode* FUN_00920560_get(void* ht, unsigned key);  // 0x920560
-extern HashNode* FUN_00922500_get(void* p);                 // 0x922500
-extern HashNode* FUN_00685f30_find(void* ht, unsigned key); // 0x685f30
 
 // ---- the two Eapd hash tables whose find wrappers live at 009209c0 / 00920a70 ----
 struct EapdNode {
@@ -450,47 +512,52 @@ struct EapdGroupTable {
     void Find(EapdGroupFind* out, const unsigned* key);   // 0x920560
 };
 
+// Result of RangeMapper::Map: a validity byte followed by the mapped value.
+struct MapOut {
+    bool mValid;   // +0
+    int  mKey;     // +4
+};
+
 // @ 0x009205e0
-void* HashTable::insert(void* out, HashNode* src) {
-    bool bDummy;
-    ((RangeMapper*)((char*)this + 0x10))->Map((unsigned char*)&bDummy, mnBucketCount, mnSize, 1);
-    if (bDummy)
-        FUN_00920340(mnSize);
-    const unsigned char* s = (const unsigned char*)(size_t)src->mKey;
+HashIter HashTable::insert(const HashValue& value, bool bFlag) {
+    MapOut mo;
+    mRangeMap.Map((unsigned char*)&mo, mnBucketCount, mnSize, 1);
+    if (mo.mValid)
+        rehash(mo.mKey);
+    const unsigned char* s = (const unsigned char*)value.mpName;
     unsigned h = 0x811c9dc5;
-    unsigned char c = *s;
+    unsigned c = *s;
     while (c != 0) {
         ++s;
         h = h * 0x1000193 ^ c;
         c = *s;
     }
-    unsigned idx = h % mnSize;
+    unsigned idx = h % mnBucketCount;
     HashNode* n = (HashNode*)EASTL_allocator_allocate(0x14, "EASTL", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     if (n != 0) {
-        *(unsigned*)((char*)n + 0) = *(unsigned*)((char*)src + 0);
-        *(unsigned*)((char*)n + 4) = *(unsigned*)((char*)src + 4);
-        *(unsigned*)((char*)n + 8) = *(unsigned*)((char*)src + 8);
-        *(unsigned*)((char*)n + 0xc) = *(unsigned*)((char*)src + 0xc);
+        n->mpName = value.mpName;
+        n->mpStream = value.mpStream;
+        n->mpOwner = value.mpOwner;
+        n->mKey = value.mKey;
     }
     n->mpNext = 0;
     HashNode* head = mpBuckets[idx];
-    if (head != 0) {
-        for (HashNode* p = head; p != 0; p = p->mpNext) {
-            if (p->mKey == src->mKey) {
-                n->mpNext = p->mpNext;
-                p->mpNext = n;
-                goto done;
-            }
-        }
+    HashNode* p = head;
+    while (p != 0 && p->mpName != value.mpName)
+        p = p->mpNext;
+    if (p == 0) {
+        n->mpNext = head;
+        mpBuckets[idx] = n;
+    } else {
+        n->mpNext = p->mpNext;
+        p->mpNext = n;
     }
-    n->mpNext = head;
-    mpBuckets[idx] = n;
-done:
     ++mnSize;
-    *(HashNode**)out = n;
-    *(void**)((char*)out + 4) = &mpBuckets[idx];
-    return out;
+    HashIter result;
+    result.mpNode = n;
+    result.mpSlot = &mpBuckets[idx];
+    return result;
 }
 
 // @ 0x009206d0
@@ -511,20 +578,81 @@ void EapdSymbolTable::ctor() {
 }
 
 // @ 0x00920780
-bool EapdSymbolTable::LoadSymbols(void* stream) {
-    FUN_009223a0(2, (void*)0x143d820);
-    unsigned char buf[0x80];
-    unsigned n = 0;
-    (void)buf;
-    for (unsigned i = 0; i < n; ++i) {
-        HashNode* sym = FUN_00922500_get(&buf[i * 4]);
-        if (sym != 0) {
-            HashNode* node = FUN_00920560_get(&buf[i * 4], 0);
-            (void)node;
+bool EapdSymbolTable::LoadSymbols(EapdStream* stream) {
+    bool ok = true;
+    mLock.Lock(2, (void*)0x143d820);
+    unsigned keys[0x80];
+    unsigned count = stream->Read(keys, 0x80);
+    for (unsigned i = 0; i < count; ++i) {
+        unsigned key = keys[i];
+        unsigned idx = key % symbols.mnBucketCount;
+        SymbolNode* node = symbols.mpBuckets[idx];
+        SymbolNode** slot = &symbols.mpBuckets[idx];
+        if (node != 0) {
+            while (node->mKey != key) {
+                node = node->mpNext;
+                if (node == 0)
+                    break;
+            }
+        }
+        SymbolIter it;
+        if (node == 0) {
+            it.mpNode = symbols.mpBuckets[symbols.mnBucketCount];
+            it.mpSlot = &symbols.mpBuckets[symbols.mnBucketCount];
+        } else {
+            it.mpNode = node;
+            it.mpSlot = slot;
+        }
+        SymbolNode* end = symbols.mpBuckets[symbols.mnBucketCount];
+        while (it.mpNode != end) {
+            if (it.mpNode->mKey != key) {
+                ok = false;
+                break;
+            }
+            if (it.mpNode->mpStream == stream) {
+                symbols.erase(it);
+                break;
+            }
+            if (it.mpNode->mpNext != 0) {
+                it.mpNode = it.mpNode->mpNext;
+            } else {
+                do {
+                    ++it.mpSlot;
+                    it.mpNode = *it.mpSlot;
+                } while (it.mpNode == 0);
+            }
+            if (it.mpNode == end)
+                break;
+        }
+        const char* name = stream->GetName(key);
+        if (name != 0) {
+            HashIter git;
+            groups.find(&git, &name);
+            HashNode* gend = groups.mpBuckets[groups.mnBucketCount];
+            while (git.mpNode != gend) {
+                if (strcmp(git.mpNode->mpName, name) != 0) {
+                    ok = false;
+                    break;
+                }
+                if (git.mpNode->mpStream == stream) {
+                    groups.erase(git);
+                    break;
+                }
+                if (git.mpNode->mpNext != 0) {
+                    git.mpNode = git.mpNode->mpNext;
+                } else {
+                    do {
+                        ++git.mpSlot;
+                        git.mpNode = *git.mpSlot;
+                    } while (git.mpNode == 0);
+                }
+                if (git.mpNode == gend)
+                    break;
+            }
         }
     }
-    FUN_00922480();
-    return true;
+    mLock.Unlock();
+    return ok;
 }
 
 // @ 0x009209c0
@@ -601,47 +729,101 @@ unsigned HashTable::find2(unsigned key, unsigned* out) {
 }
 
 // @ 0x00920b30
-bool EapdSymbolTable::LoadGroups(void* stream, void* owner) {
-    FUN_009223a0(2, (void*)0x143d820);
-    (void)stream;
-    (void)owner;
-    FUN_00922480();
+bool EapdSymbolTable::LoadGroups(EapdStream* stream, void* owner) {
+    mLock.Lock(2, (void*)0x143d820);
+    unsigned keys[0x80];
+    unsigned count = stream->Read(keys, 0x80);
+    for (unsigned i = 0; i < count; ++i) {
+        unsigned key = keys[i];
+        SymbolValue sv;
+        sv.mKey = key;
+        sv.mpStream = stream;
+        sv.mpOwner = owner;
+        bool bSymFlag = false;
+        symbols.insert(sv, bSymFlag);
+        const char* name = stream->GetName(key);
+        if (name != 0) {
+            HashValue gv;
+            gv.mpName = name;
+            gv.mpStream = stream;
+            gv.mpOwner = owner;
+            gv.mKey = key;
+            bool bGroupFlag = false;
+            groups.insert(gv, bGroupFlag);
+        }
+    }
+    mLock.Unlock();
     return true;
 }
 
-// @ 0x00920f30  (normalize a path range: collapse separators, "." and "..")
-void FUN_00920f30(Range* r, char flag) {
+// @ 0x00920f30  (canonicalize a path range: separators, "." and "..")
+Range* FUN_00920f30(Range* r, char flag) {
     wchar_t* src = r->begin;
     wchar_t* last = r->end;
     wchar_t* dst = src;
-    bool bAbsolute = (src + 2 <= last && (src[0] == L'\\' || src[0] == L'/') &&
-                      (src[1] == L'\\' || src[1] == L'/'))
-                     || HasAltSeparator(src, last);
+    bool bAbsolute = false;
+    if (src + 2 <= last && (src[0] == L'\\' || src[0] == L'/') &&
+        (src[1] == L'\\' || src[1] == L'/'))
+        bAbsolute = true;
+    if (HasAltSeparator(src, last))
+        bAbsolute = true;
+    // leading run of separators is copied verbatim (UNC prefix)
     while (src < last) {
         wchar_t c = *src;
-        if (c == L'\\' || c == L'/') {
-            *dst++ = flag ? L'\\' : c;
-            ++src;
-            continue;
-        }
-        if (src + 2 <= last && src[0] == L'.' && (src[1] == L'\\' || src[1] == L'/')) {
+        if (c != L'\\' && c != L'/')
+            break;
+        if (flag)
+            c = L'\\';
+        *dst++ = c;
+        ++src;
+    }
+    while (src < last) {
+        if (src + 1 < last && src[0] == L'.' && (src[1] == L'\\' || src[1] == L'/')) {
             src += 2;
+            while (src < last && (*src == L'\\' || *src == L'/'))
+                ++src;
             continue;
         }
-        if (src + 3 <= last && src[0] == L'.' && src[1] == L'.' &&
+        if (src + 2 < last && src[0] == L'.' && src[1] == L'.' &&
             (src[2] == L'\\' || src[2] == L'/')) {
-            if (dst > r->begin) {
-                wchar_t* p = SkipComponentBack(r->begin, dst);
-                if (p > r->begin || !bAbsolute)
+            wchar_t* begin = r->begin;
+            if (dst > begin) {
+                wchar_t* p = SkipComponentBack(begin, dst);
+                if (p > begin || !bAbsolute) {
+                    src += 3;
                     dst = p;
+                    while (src < last && (*src == L'\\' || *src == L'/'))
+                        ++src;
+                    continue;
+                }
             }
-            src += 3;
-            continue;
         }
-        *dst++ = *src++;
+        while (src < last) {
+            wchar_t c = *src++;
+            if (c == L'\\' || c == L'/') {
+                if (flag)
+                    c = L'\\';
+                *dst++ = c;
+                while (src < last && (*src == L'\\' || *src == L'/'))
+                    ++src;
+                break;
+            }
+            if (c == L':') {
+                *dst++ = c;
+                if (src >= last)
+                    goto done;
+                if (*dst == L'\\' || *dst == L'/')
+                    continue;
+                break;
+            }
+            *dst++ = c;
+        }
     }
+done:
     if (dst != last) {
-        memmove(dst, last, 2);
-        r->end = (wchar_t*)((char*)r->end + ((char*)last - (char*)dst));
+        wchar_t* e = r->end;
+        memmove(dst, last, (size_t)(e - last + 1) * sizeof(wchar_t));
+        r->end = dst + (e - last);
     }
+    return r;
 }

@@ -19,7 +19,7 @@ void SplitPathPtrs(const wchar_t* path, const wchar_t** pDir, const wchar_t** pN
 bool IsFilePathSeparator(wchar_t c);
 void GetCurrentWorkingDirectory(wchar_t* buf);          // Directory::
 
-void FullPath(wchar_t* dest, const wchar_t* src, uint32 unused, int mode);
+wchar_t* FullPath(wchar_t* dest, const wchar_t* src, uint32 maxLen, int mode);
 wchar_t* FullPath(wchar_t* dest, const wchar_t* src, const wchar_t* base, int mode);
 
 class FilePath
@@ -169,84 +169,41 @@ LAB_00930361:
 }
 
 // @ 0x00930480
-void FullPath(wchar_t* dest, const wchar_t* src, uint32 unused, int mode)
+wchar_t* FullPath(wchar_t* dest, const wchar_t* src, uint32 flags, int mode)
 {
     wchar_t buf[522];
     size_t n;
     buf[0] = 0;
 
-    if ((uint32)(mode - 3) > 2) {
-        GetCurrentWorkingDirectory(buf);
-        n = wcslen(buf);
-        if (!IsFilePathSeparator(buf[n - 1])) {
-            buf[n] = L'\\';
-            buf[n + 1] = 0;
-        }
-        goto LAB_00930645;
-    }
-
-    {
-        wchar_t c0 = src[0];
-        if (c0 == 0 || src[1] == 0)
-            goto LAB_00930537;
-        if (c0 == L'\\' || c0 == L'/' || c0 == L':') {
-            if (IsFilePathSeparator(src[1])) {
-                buf[0] = L'\\';
-                buf[1] = L'\\';
-                buf[2] = 0;
-                src += 2;
-                goto LAB_00930645;
-            }
-        }
-        if (src[1] != L':')
-            goto LAB_00930537;
+    uint32 m = (uint32)(mode - 3);
+    if (m <= 2) {
+        int drive;
         {
-            wchar_t w = (wchar_t)towlower(c0);
-            if ((unsigned)(w - 0x61) > 0x19)
-                goto LAB_00930537;
-            w = (wchar_t)towlower(src[0]);
-            {
-                uint32 drive = (uint32)(w - 0x61);
-                wchar_t c1 = src[2];
-                src += 2;
-                if ((c1 == L'\\' || c1 == L'/' || c1 == L':') && (int)drive >= 0) {
-                    if (drive < 0x1a)
-                        buf[0] = (wchar_t)(drive + L'a');
-                    else
-                        buf[0] = L'c';
-                    buf[1] = L':';
-                    buf[2] = L'\\';
-                    buf[3] = 0;
-                    src += 1;
-                    goto LAB_00930645;
+            wchar_t c0 = src[0];
+            wchar_t c1 = src[1];
+            if (c0 != 0 && c1 != 0) {
+                if ((c0 == L'\\' || c0 == L'/' || c0 == L':') && IsFilePathSeparator(c1)) {
+                    buf[0] = L'\\';
+                    buf[1] = L'\\';
+                    buf[2] = 0;
+                    src += 2;
+                    goto done;
                 }
-                if (c1 == L'\\' || c1 == L'/' || c1 == L':') {
-                    if (drive < 0x1a)
-                        buf[0] = (wchar_t)(drive + L'a');
-                    else
-                        buf[0] = L'c';
-                    buf[1] = L':';
-                    buf[2] = L'\\';
-                    buf[3] = 0;
-                    src += 1;
-                    goto LAB_00930645;
+                if (c1 == L':') {
+                    unsigned d0 = (unsigned)towlower(c0) - 0x61;
+                    if (d0 <= 0x19) {
+                        drive = (int)((unsigned)towlower(c0) - 0x61);
+                        src += 2;
+                        goto have_drive;
+                    }
                 }
-                // _wgetdcwd(drive+1, buf, 0x209)
-                if (_wgetdcwd((int)drive + 1, buf, 0x209) == 0)
-                    GetCurrentWorkingDirectory(buf);
-                n = wcslen(buf);
-                if (!IsFilePathSeparator(buf[n - 1])) {
-                    buf[n] = L'\\';
-                    buf[n + 1] = 0;
-                }
-                goto LAB_00930645;
             }
+            drive = _getdrive() - 1;
         }
-LAB_00930537:
+have_drive:
         {
-            int drive = _getdrive() - 1;
-            wchar_t c1 = src[0];
-            if ((c1 == L'\\' || c1 == L'/' || c1 == L':') && drive >= 0) {
+            wchar_t c = src[0];
+            if ((c == L'\\' || c == L'/' || c == L':') && drive >= 0) {
                 if ((unsigned)drive < 0x1a)
                     buf[0] = (wchar_t)(drive + L'a');
                 else
@@ -255,20 +212,28 @@ LAB_00930537:
                 buf[2] = L'\\';
                 buf[3] = 0;
                 src += 1;
-                goto LAB_00930645;
+                goto done;
             }
             if (_wgetdcwd(drive + 1, buf, 0x209) == 0)
                 GetCurrentWorkingDirectory(buf);
             n = wcslen(buf);
-            if (!IsFilePathSeparator(buf[n - 1])) {
+            wchar_t last2 = buf[n - 1];
+            if (last2 != L'\\' && last2 != L'/' && last2 != L':') {
                 buf[n] = L'\\';
                 buf[n + 1] = 0;
             }
         }
+    } else {
+        GetCurrentWorkingDirectory(buf);
+        n = wcslen(buf);
+        wchar_t last = buf[n - 1];
+        if (last != L'\\' && last != L'/' && last != L':') {
+            buf[n] = L'\\';
+            buf[n + 1] = 0;
+        }
     }
-
-LAB_00930645:
-    FullPath(dest, src, buf, mode);
+done:
+    return FullPath(dest, src, buf, mode);
 }
 
 // @ 0x00930670
@@ -277,38 +242,39 @@ wchar_t* FullPath(wchar_t* dest, const wchar_t* src, const wchar_t* base, int mo
     if (src == 0)
         return 0;
     if (base == 0)
-        return (wchar_t*)FullPath(dest, (const wchar_t*)src, (const wchar_t*)0x104, mode);
+        return FullPath(dest, src, 0x104, mode);
 
-    const wchar_t* pEnd = src + wcslen(src);
+    const wchar_t* pSrc = base;
+    const wchar_t* pSrcEnd = base + wcslen(base);
     const wchar_t* pSeek = src;
+    const wchar_t* nameOut;
+    const wchar_t* dirStart;
     wchar_t* out = dest;
 
-    const wchar_t* b0 = base;
-    const wchar_t* b1 = base;
-    const wchar_t* b2 = base;
-    if (pSeek == pEnd) {
-        SplitPathPtrs((const wchar_t*)base, &b0, &b1, &b2);
-        const wchar_t* q = b0;
-        if (*b0 == L'\\' || *b0 == L'/' || *b0 == L':')
-            q = b0 + 1;
+    if (pSrc == pSrcEnd) {
+        SplitPathPtrs(src, &src, &dirStart, &nameOut);
+        const wchar_t* q = src;
+        if (*q == L'\\' || *q == L'/' || *q == L':')
+            q = q + 1;
+        pSrc = pSeek;
+        pSrcEnd = q;
         pSeek = q;
-        if (base == q) {
+        if (pSrc == pSrcEnd)
             goto LAB_0093076c;
-        }
     }
 
     do {
-        wchar_t* prev = out;
-        wchar_t c = *b2++;
+        wchar_t c = *pSrc;
+        pSrc = pSrc + 1;
         if (c == L'/')
             c = L'\\';
-        if (prev == dest + 0x104) {
+        if (out == dest + 0x104) {
             dest[0x103] = 0;
             return 0;
         }
-        *prev = c;
-        out = prev + 1;
-    } while (b2 != pSeek);
+        *out = c;
+        out = out + 1;
+    } while (pSrc != pSrcEnd);
 
     if (!IsFilePathSeparator(out[-1])) {
         if (out == dest + 0x104) {
@@ -321,75 +287,75 @@ wchar_t* FullPath(wchar_t* dest, const wchar_t* src, const wchar_t* base, int mo
 
 LAB_0093076c:
     if (out == dest + 0x104) {
-LAB_00930937:
         dest[0x103] = 0;
         return 0;
     }
     *out = 0;
 
-    // now append src with . and .. processing
-    {
-        const wchar_t* dirStart;
-        const wchar_t* nameStart;
-        const wchar_t* extStart;
-        SplitPathPtrs(dest, &dirStart, &nameStart, &extStart);
-        bool bVar11 = (dirStart == dest);
-        const wchar_t* cur = dirStart;
-        if (*cur == L'\\' || *cur == L'/' || *cur == L':')
-            cur = cur + 1;
-        bool skip = false;
-        char atStart = 1;
+    SplitPathPtrs(dest, &dirStart, &nameOut, &src);
+    bool bVar11 = (dirStart == dest);
+    wchar_t d0 = *dirStart;
+    if (d0 == L'\\' || d0 == L'/' || d0 == L':')
+        dirStart = dirStart + 1;
+    bool bVar2 = bVar11;
+    bool atStart = true;
 
-        do {
-            wchar_t c = *pSeek++;
-            if (c == L'\\' || c == L'/' || c == L':') {
-                if (atStart == 0) {
-                    atStart = 1;
-                    if (c == L'/')
-                        c = L'\\';
-                    if (out == dest + 0x104)
-                        goto LAB_00930937;
-                    *out++ = c;
-                }
+    for (;;) {
+        wchar_t c = *pSeek;
+        pSeek = pSeek + 1;
+        if (c == L'\\' || c == L'/' || c == L':') {
+            if (atStart)
                 continue;
+            atStart = true;
+            if (c == L'/')
+                c = L'\\';
+            if (out == dest + 0x104) {
+                dest[0x103] = 0;
+                return 0;
             }
-            if (c == L'.') {
-                if (atStart != 0) {
-                    wchar_t nx = *pSeek;
-                    if (nx == 0 || IsFilePathSeparator(nx)) {
-                        if (dirStart < out && IsFilePathSeparator(out[-1]))
-                            continue;
-                    } else if (nx == L'.' &&
-                               ((pSeek[1] == 0 || IsFilePathSeparator(pSeek[1])) && !skip)) {
+            *out = c;
+            out = out + 1;
+        } else {
+            if (c == L'.' && atStart) {
+                wchar_t n1 = *pSeek;
+                if (n1 == 0 || IsFilePathSeparator(n1)) {
+                    if (out > dest && IsFilePathSeparator(out[-1]))
+                        continue;
+                } else if (n1 == L'.') {
+                    wchar_t n2 = pSeek[1];
+                    if ((n2 == 0 || IsFilePathSeparator(n2)) && !bVar2) {
                         const wchar_t* ps = out;
                         if (dirStart < out) {
                             int i = 0;
                             do {
-                                if (IsFilePathSeparator(ps[-1]) && (++i > 1))
+                                if (IsFilePathSeparator(ps[-1]) && ++i > 1)
                                     break;
-                                ps--;
+                                ps = ps - 1;
                             } while (dirStart < ps);
                         }
-                        if (!((*ps == L'.' && ps[1] == L'.') &&
-                              !(ps[2] != 0 && !IsFilePathSeparator(ps[2])))) {
+                        if (!(ps[0] == L'.' && ps[1] == L'.' &&
+                              (ps[2] == 0 || IsFilePathSeparator(ps[2])))) {
                             if (ps == dirStart)
-                                skip = bVar11;
+                                bVar2 = bVar11;
                             out = (wchar_t*)ps;
-                            continue;   // loop back with pSeek already advanced
+                            pSeek = pSeek + 1;
+                            continue;
                         }
                     }
                 }
-                skip = false;
-            } else {
-                skip = false;
+            } else if (c != L'.') {
+                bVar2 = false;
             }
-            atStart = 0;
-            if (out == dest + 0x104)
-                goto LAB_00930937;
-            *out++ = c;
+            atStart = false;
+            if (out == dest + 0x104) {
+                dest[0x103] = 0;
+                return 0;
+            }
+            *out = c;
+            out = out + 1;
             if (c == 0)
                 return dest;
-        } while (true);
+        }
     }
 }
 

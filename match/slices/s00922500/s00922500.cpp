@@ -627,33 +627,33 @@ EA::Thread::Thread::Status EA::Thread::Thread::WaitForEnd(const uint32& timeout,
 // @ 0x00922a10
 EA::Thread::Thread::Status EA::Thread::Thread::GetStatus(int* pValue) const
 {
-    if (mpData == 0)
-        return kStatusNone;
-    if (mpData->mhThread != 0) {
-        DWORD code;
-        if (GetExitCodeThread((HANDLE)mpData->mhThread, &code) != 0) {
-            if (code == 0x103)
-                return kStatusRunning;
-            CloseHandle((HANDLE)mpData->mhThread);
-            mpData->mhThread = 0;
+    if (mpData != 0) {
+        if (mpData->mhThread != 0) {
+            DWORD code;
+            if (GetExitCodeThread((HANDLE)mpData->mhThread, &code) != 0) {
+                if (code == 0x103)
+                    return kStatusRunning;
+                CloseHandle((HANDLE)mpData->mhThread);
+                mpData->mhThread = 0;
+            }
         }
+        if (pValue != 0)
+            *pValue = mpData->mnReturnValue;
+        mpData->mnStatus = kStatusComplete;
+        return kStatusComplete;
     }
-    if (pValue != 0)
-        *pValue = mpData->mnReturnValue;
-    mpData->mnStatus = kStatusComplete;
-    return kStatusComplete;
+    return kStatusNone;
 }
 
 // @ 0x00922d30
 EA::Thread::EAThreadDynamicData* EA::Thread::EAThreadDynamicData::Alloc()
 {
-    unsigned i = 0;
-    for (; i < 0x20; i++) {
+    for (unsigned i = 0; i < 0x20; i++) {
         if (_InterlockedCompareExchange(&g_ThreadDataLocks[i], 1, 0) == 0)
-            break;
+            return (EAThreadDynamicData*)(g_ThreadDataPool + i * 100);
     }
-    if (i < 0x20) {
-        EAThreadDynamicData* p = (EAThreadDynamicData*)(g_ThreadDataPool + i * 100);
+    EAThreadDynamicData* p = (EAThreadDynamicData*)operator_new_6abeb0(0x64);
+    if (p != 0) {
         p->mhThread = 0;
         p->mnThreadId = 0;
         p->mnStatus = 0;
@@ -662,16 +662,7 @@ EA::Thread::EAThreadDynamicData* EA::Thread::EAThreadDynamicData::Alloc()
         _InterlockedExchange(&p->mnRefCount, 0);
         return p;
     }
-    EAThreadDynamicData* p = (EAThreadDynamicData*)operator_new_6abeb0(0x64);
-    if (p == 0)
-        return 0;
-    p->mhThread = 0;
-    p->mnThreadId = 0;
-    p->mnStatus = 0;
-    p->mnReturnValue = 0;
-    p->mpBeginThreadUserWrapper = 0;
-    _InterlockedExchange(&p->mnRefCount, 0);
-    return p;
+    return 0;
 }
 
 // @ 0x00922e30
@@ -690,18 +681,18 @@ unsigned __stdcall EA::Thread::EAThreadEntryPlain(void* arg)
         info.d = 0;
         __try {
             RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&info);
-        } __except (1) {
+        } __except (EXCEPTION_CONTINUE_EXECUTION) {
         }
     }
     unsigned r;
     if (p->mpBeginThreadUserWrapper != 0)
         r = ((unsigned (__cdecl*)(void*, void*))p->mpBeginThreadUserWrapper)(pfn, pctx);
     else
-        r = ((unsigned (__stdcall*)(void*))pfn)(pctx);
+        r = ((unsigned (__cdecl*)(void*))pfn)(pctx);
     p->mnReturnValue = r;
     SetCurrentThreadHandle(0, false);
     p->mnStatus = 2;
-    if (_InterlockedExchangeAdd(&p->mnRefCount, -1) == 1)
+    if (_InterlockedDecrement(&p->mnRefCount) == 0)
         FUN_00922da0(p);
     return r;
 }
@@ -709,9 +700,18 @@ unsigned __stdcall EA::Thread::EAThreadEntryPlain(void* arg)
 // @ 0x00922f30
 void* EA::Thread::Thread::Start(void* fn, void* arg, const ThreadParameters* params, void* wrapper)
 {
-    if (mpData != 0 && _InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
-        FUN_00922da0(mpData);
+    EAThreadDynamicData* pOld = mpData;
+    if (pOld != 0 && _InterlockedDecrement(&pOld->mnRefCount) == 0)
+        FUN_00922da0(pOld);
     EAThreadDynamicData* p = EAThreadDynamicData::Alloc();
+    if (p != 0) {
+        p->mhThread = 0;
+        p->mnThreadId = 0;
+        p->mnStatus = 0;
+        p->mnReturnValue = 0;
+        p->mpBeginThreadUserWrapper = 0;
+        _InterlockedExchange(&p->mnRefCount, 0);
+    }
     mpData = p;
     _InterlockedExchangeAdd(&p->mnRefCount, 1);
     _InterlockedExchangeAdd(&mpData->mnRefCount, 1);
@@ -722,35 +722,35 @@ void* EA::Thread::Thread::Start(void* fn, void* arg, const ThreadParameters* par
     unsigned stackSize = (params != 0) ? params->mnStackSize2 : 0;
     mpData->mhThread = (void*)_beginthreadex(0, stackSize, EAThreadEntryPlain, mpData, 4,
                                             (unsigned*)&mpData->mnThreadId);
-    if (mpData->mhThread == 0) {
-        if (_InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
-            FUN_00922da0(mpData);
-        if (_InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
-            FUN_00922da0(mpData);
-        mpData = 0;
-        return 0;
-    }
-    if (params != 0)
-        SetName(params->mpName);
-    mpData->mpStartContext2 = mpData->mhThread;
-    if (params != 0) {
-        if (params->mnPriority != 0)
-            SetPriority(params->mnPriority);
-        int proc = params->mnProcessor;
-        if (proc >= 0) {
-            if (proc == _InterlockedExchangeAdd(&g_ThreadCount, 0))
-                _InterlockedExchangeAdd(&g_ThreadCount, 1);
-            SetIdealProcessor(proc);
-            ResumeThread((HANDLE)mpData->mhThread);
-            return mpData->mhThread;
+    if (mpData->mhThread != 0) {
+        if (params != 0)
+            SetName(params->mpName);
+        mpData->mpStartContext2 = mpData->mhThread;
+        int proc;
+        if (params != 0) {
+            if (params->mnPriority != 0)
+                SetPriority(params->mnPriority);
+            proc = params->mnProcessor;
+            if (proc >= 0) {
+                if (proc == _InterlockedExchangeAdd(&g_ThreadCount, 0))
+                    _InterlockedExchangeAdd(&g_ThreadCount, 1);
+                goto setProcessor;
+            }
         }
+        proc = g_DefaultProcessor;
+        if (proc < 0)
+            proc = _InterlockedExchangeAdd(&g_ThreadCount, 1) + 1;
+    setProcessor:
+        SetIdealProcessor(proc);
+        ResumeThread((HANDLE)mpData->mhThread);
+        return mpData->mhThread;
     }
-    int proc2 = g_DefaultProcessor;
-    if (g_DefaultProcessor < 0)
-        proc2 = _InterlockedExchangeAdd(&g_ThreadCount, 1) + 1;
-    SetIdealProcessor(proc2);
-    ResumeThread((HANDLE)mpData->mhThread);
-    return mpData->mhThread;
+    if (_InterlockedDecrement(&mpData->mnRefCount) == 0)
+        FUN_00922da0(mpData);
+    if (_InterlockedDecrement(&mpData->mnRefCount) == 0)
+        FUN_00922da0(mpData);
+    mpData = 0;
+    return 0;
 }
 
 // @ 0x009230a0
@@ -769,7 +769,7 @@ unsigned __stdcall EA::Thread::EAThreadEntryWrapped(void* arg)
         info.d = 0;
         __try {
             RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&info);
-        } __except (1) {
+        } __except (EXCEPTION_CONTINUE_EXECUTION) {
         }
     }
     unsigned r;
@@ -780,7 +780,7 @@ unsigned __stdcall EA::Thread::EAThreadEntryWrapped(void* arg)
     p->mnReturnValue = r;
     SetCurrentThreadHandle(0, false);
     p->mnStatus = 2;
-    if (_InterlockedExchangeAdd(&p->mnRefCount, -1) == 1)
+    if (_InterlockedDecrement(&p->mnRefCount) == 0)
         FUN_00922da0(p);
     return r;
 }
@@ -788,9 +788,18 @@ unsigned __stdcall EA::Thread::EAThreadEntryWrapped(void* arg)
 // @ 0x009231a0
 void* EA::Thread::Thread::Start2(void* fn, void* arg, const ThreadParameters* params, void* wrapper)
 {
-    if (mpData != 0 && _InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
-        FUN_00922da0(mpData);
+    EAThreadDynamicData* pOld = mpData;
+    if (pOld != 0 && _InterlockedDecrement(&pOld->mnRefCount) == 0)
+        FUN_00922da0(pOld);
     EAThreadDynamicData* p = EAThreadDynamicData::Alloc();
+    if (p != 0) {
+        p->mhThread = 0;
+        p->mnThreadId = 0;
+        p->mnStatus = 0;
+        p->mnReturnValue = 0;
+        p->mpBeginThreadUserWrapper = 0;
+        _InterlockedExchange(&p->mnRefCount, 0);
+    }
     mpData = p;
     _InterlockedExchangeAdd(&p->mnRefCount, 1);
     _InterlockedExchangeAdd(&mpData->mnRefCount, 1);
@@ -801,33 +810,33 @@ void* EA::Thread::Thread::Start2(void* fn, void* arg, const ThreadParameters* pa
     unsigned stackSize = (params != 0) ? params->mnStackSize2 : 0;
     mpData->mhThread = (void*)_beginthreadex(0, stackSize, EAThreadEntryWrapped, mpData, 4,
                                             (unsigned*)&mpData->mnThreadId);
-    if (mpData->mhThread == 0) {
-        if (_InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
-            FUN_00922da0(mpData);
-        if (_InterlockedExchangeAdd(&mpData->mnRefCount, -1) == 1)
-            FUN_00922da0(mpData);
-        mpData = 0;
-        return 0;
-    }
-    if (params != 0)
-        SetName(params->mpName);
-    mpData->mpStartContext2 = mpData->mhThread;
-    if (params != 0) {
-        if (params->mnPriority != 0)
-            SetPriority(params->mnPriority);
-        int proc = params->mnProcessor;
-        if (proc >= 0) {
-            if (proc == _InterlockedExchangeAdd(&g_ThreadCount, 0))
-                _InterlockedExchangeAdd(&g_ThreadCount, 1);
-            SetIdealProcessor(proc);
-            ResumeThread((HANDLE)mpData->mhThread);
-            return mpData->mhThread;
+    if (mpData->mhThread != 0) {
+        if (params != 0)
+            SetName(params->mpName);
+        mpData->mpStartContext2 = mpData->mhThread;
+        int proc;
+        if (params != 0) {
+            if (params->mnPriority != 0)
+                SetPriority(params->mnPriority);
+            proc = params->mnProcessor;
+            if (proc >= 0) {
+                if (proc == _InterlockedExchangeAdd(&g_ThreadCount, 0))
+                    _InterlockedExchangeAdd(&g_ThreadCount, 1);
+                goto setProcessor;
+            }
         }
+        proc = g_DefaultProcessor;
+        if (proc < 0)
+            proc = _InterlockedExchangeAdd(&g_ThreadCount, 1) + 1;
+    setProcessor:
+        SetIdealProcessor(proc);
+        ResumeThread((HANDLE)mpData->mhThread);
+        return mpData->mhThread;
     }
-    int proc2 = g_DefaultProcessor;
-    if (g_DefaultProcessor < 0)
-        proc2 = _InterlockedExchangeAdd(&g_ThreadCount, 1) + 1;
-    SetIdealProcessor(proc2);
-    ResumeThread((HANDLE)mpData->mhThread);
-    return mpData->mhThread;
+    if (_InterlockedDecrement(&mpData->mnRefCount) == 0)
+        FUN_00922da0(mpData);
+    if (_InterlockedDecrement(&mpData->mnRefCount) == 0)
+        FUN_00922da0(mpData);
+    mpData = 0;
+    return 0;
 }

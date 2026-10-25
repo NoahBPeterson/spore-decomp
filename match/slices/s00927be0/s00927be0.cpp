@@ -42,7 +42,9 @@ struct cLocalLightInfo {
     uint32_t fence;                  // +0x468 (high fence)
     uint8_t  fenceDisabled;          // +0x46c
     uint8_t  sysAllocEnabled;        // +0x46d
-    uint8_t  pad46e[0x488 - 0x46e];
+    uint8_t  pad46e[0x478 - 0x46e];
+    uint32_t freeGuard;              // +0x478 (cleared around internal frees)
+    uint8_t  pad47c[0x488 - 0x47c];
     int      mmapCount;              // +0x488
     uint8_t  pad48c[4];
     int      mmapMaxAllowed;         // +0x490
@@ -57,8 +59,13 @@ struct cLocalLightInfo {
     Chunk* Bin(uint32_t i) { return (Chunk*)((char*)this + 0x28 + i * 8); }
 
     __declspec(noinline) void* AllocCore(uint32_t size, uint32_t flags);   // 0x00927be0
-    __declspec(noinline) void* AllocAligned(void* p, int sz, int a3, int a4); // 0x009282e0
+    __declspec(noinline) void* AlignedAllocCore(uint32_t nBytes, uint32_t alignment, uint32_t offset, uint32_t flags); // 0x009282e0
     __declspec(noinline) void* ReallocCore(void* p, int sz, int a3);    // 0x00928730
+
+    uint32_t BinIndex(uint32_t size);                  // 0x009267f0
+    Chunk*   SplitChunk(Chunk* p, int size, uint32_t align, uint32_t a5, uint32_t a6, char flag); // 0x00926af0
+    void     SetTop(Chunk* p, uint32_t size);          // 0x009268b0
+    void     Free(void* mem);                          // 0x00926fd0
 
     __declspec(noinline) void* LockedAlloc(int a1, int a2, int a3, int a4, int a5, int a6);               // 0x009289f0
     __declspec(noinline) void* LockedAligned(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8); // 0x00928a30
@@ -71,6 +78,7 @@ struct cLocalLightInfo {
 };
 
 uint32_t __cdecl RequestToSize(uint32_t req);          // 0x009267a0
+void* __cdecl memcpy(void* dst, const void* src, unsigned count);      // 0x011e0744
 
 extern cLocalLightInfo* g_pool;   // 0x016c8b44
 
@@ -98,7 +106,7 @@ void* cLocalLightInfo::LockedAligned(int a1, int a2, int a3, int a4, int a5, int
         EnterCriticalSection(cs);
         cs->ref++;
     }
-    void* r = AllocAligned((void*)a1, a2, a3, a4);
+    void* r = AlignedAllocCore((uint32_t)a1, (uint32_t)a2, (uint32_t)a3, (uint32_t)a4);
     if (cs != 0) {
         cs->ref--;
         LeaveCriticalSection(cs);
@@ -452,16 +460,270 @@ big:
     return BigAlloc(req);
 }
 
-// @ 0x009282e0  (pool aligned-alloc core - approximated)
-void* cLocalLightInfo::AllocAligned(void* p, int sz, int a3, int a4)
+// @ 0x009282e0  pool aligned-alloc core (dlmalloc memalign with offset/flags)
+void* cLocalLightInfo::AlignedAllocCore(uint32_t nBytes, uint32_t alignment, uint32_t offset, uint32_t flags)
 {
-    (void)p; (void)sz; (void)a3; (void)a4;
-    return 0;
+    if (alignment <= 8 && offset == 0 && (flags & 0x400) == 0)
+        return AllocCore(nBytes, flags);
+
+    uint32_t align = alignment;
+    if (align < 0x10)
+        align = 0x10;
+    if ((align & (align - 1)) != 0) {
+        uint32_t a = align - 1;
+        a |= a >> 1;
+        a |= a >> 2;
+        a |= a >> 4;
+        a |= a >> 8;
+        align = (a >> 16 | a) + 1;
+    }
+    if ((offset & 7) != 0)
+        offset = (offset + 7) & 0xfffffff8u;
+
+    uint32_t nb = nBytes + 0xb;
+    if (nb <= 0x10)
+        nb = 0x10;
+    else
+        nb &= 0xfffffff8u;
+    uint32_t rev = flags & 1;
+
+    if ((flags & 4) != 0 && (flags & 2) != 0) {
+        uint32_t minChunk = 0;
+        uint32_t maxChunk = 0;
+        uint32_t idx = (nb < 0x200) ? (nb >> 3) : BinIndex(nb);
+
+        Chunk* unsorted = Bin(1);
+        for (Chunk* q = unsorted->bk; q != unsorted; q = q->bk) {
+            uint32_t sz = q->size & 0x7ffffff8;
+            if (nb <= sz) {
+                uint32_t cand = (((uint32_t)q + align + 7 + offset) & (uint32_t)(-(int)align)) - offset - 8;
+                if (cand + nb <= (uint32_t)q + sz && cand != 0) {
+                    if ((uint32_t)q < (uint32_t)top - 0x1400000 &&
+                        (minChunk == 0 || (uint32_t)q < minChunk))
+                        minChunk = (uint32_t)q;
+                    if ((uint32_t)top <= (uint32_t)q && maxChunk < (uint32_t)q)
+                        maxChunk = (uint32_t)q;
+                }
+            }
+        }
+        for (uint32_t i = idx; i < 0x80; i++) {
+            Chunk* bin = Bin(i);
+            for (Chunk* q = bin->bk; q != bin; q = q->bk) {
+                uint32_t sz = q->size & 0x7ffffff8;
+                if (nb <= sz) {
+                    uint32_t cand = (((uint32_t)q + align + 7 + offset) & (uint32_t)(-(int)align)) - offset - 8;
+                    if (cand + nb <= (uint32_t)q + sz && cand != 0) {
+                        if ((uint32_t)q < (uint32_t)top - 0x1400000 &&
+                            (minChunk == 0 || (uint32_t)q < minChunk))
+                            minChunk = (uint32_t)q;
+                        if ((uint32_t)top <= (uint32_t)q && maxChunk < (uint32_t)q)
+                            maxChunk = (uint32_t)q;
+                    }
+                }
+            }
+        }
+
+        if (maxChunk != 0 && rev != 0) {
+            Chunk* q = (Chunk*)maxChunk;
+            return (char*)SplitChunk(q, (int)(q->size & 0x7ffffff8), align, nb, offset, 1) + 8;
+        }
+
+        Chunk* t = top;
+        uint32_t tsz = t->size & 0x7ffffff8;
+        if (tsz > 0x1400000)
+            flags &= 0xfffffeffu;
+        if (minChunk != 0 && (rev == 0 || (flags & 0x100) != 0)) {
+            Chunk* q = (Chunk*)minChunk;
+            return (char*)SplitChunk(q, (int)(q->size & 0x7ffffff8), align, nb, offset, 0) + 8;
+        }
+        if ((flags & 0x100) == 0 && tsz >= nb + align + 0x10 + offset && (flags & 1) != 0) {
+            uint32_t delta = (((uint32_t)t + tsz - nb + offset + 8) & (uint32_t)(-(int)align)) - offset - 8;
+            delta -= (uint32_t)t;
+            uint32_t rem = tsz - delta;
+            Chunk* ret = (Chunk*)((char*)t + delta);
+            ret->size = rem;
+            *(uint32_t*)((char*)ret + rem + 4) |= 1;
+            *(uint32_t*)((char*)ret + rem) = rem;
+            top = t;
+            SetTop(t, delta);
+            return (char*)ret + 8;
+        }
+    }
+
+    void* p = AllocCore(nb + align + 0x10 + offset, flags);
+    if (p == 0)
+        return 0;
+
+    Chunk* q = (Chunk*)((char*)p - 8);
+    if (((uint32_t)p + offset) % align != 0) {
+        q = (Chunk*)(((((uint32_t)p + align + offset - 1) & (uint32_t)(-(int)align)) - offset) - 8);
+        Chunk* base = (Chunk*)((char*)p - 8);
+        if ((uint32_t)((char*)q - (char*)base) < 0x10)
+            q = (Chunk*)((char*)q + align);
+        uint32_t delta = (uint32_t)q - (uint32_t)base;
+        uint32_t newsize = (base->size & 0x7ffffff8) - delta;
+        if ((base->size & 2) != 0) {
+            q->prevSize = base->prevSize + delta;
+            q->size = newsize | 2;
+            *(uint32_t*)((char*)q + newsize) = newsize;
+            return (char*)q + 8;
+        }
+        q->size = newsize | 1;
+        *(uint32_t*)((char*)q + newsize + 4) |= 1;
+        *(uint32_t*)((char*)q + newsize) = newsize;
+        base->size = (base->size & 0x80000007) | delta;
+        q->prevSize = delta;
+        uint32_t saved = freeGuard;
+        freeGuard = 0;
+        Free((char*)base + 8);
+        freeGuard = saved;
+    }
+
+    uint32_t qsize = q->size;
+    if ((qsize & 2) != 0)
+        return (char*)q + 8;
+    qsize &= 0x7ffffff8;
+    if (qsize <= nb + 0x10)
+        return (char*)q + 8;
+
+    uint32_t rem = qsize - nb;
+    Chunk* tail = (Chunk*)((char*)q + nb);
+    tail->size = rem | 1;
+    *(uint32_t*)((char*)tail + rem + 4) |= 1;
+    *(uint32_t*)((char*)tail + rem) = rem;
+    q->size = (q->size & 0x80000007) | nb;
+
+    if ((*(uint32_t*)((char*)tail + rem + 4) & 1) == 0) {
+        Chunk* nx = (Chunk*)((char*)tail + rem);
+        uint32_t nxSize = nx->size & 0x7ffffff8;
+        nx->fd->bk = nx->bk;
+        nx->bk->fd = nx->fd;
+        uint32_t total = rem + nxSize;
+        tail->size = total | 1;
+        *(uint32_t*)((char*)tail + total) = total;
+        if (tail == top || nx == top) {
+            top = tail;
+            SetTop(tail, total);
+        } else {
+            Chunk* unsorted = Bin(1);
+            Chunk* bk = unsorted->bk;
+            tail->fd = unsorted;
+            tail->bk = bk;
+            unsorted->bk = tail;
+            bk->fd = tail;
+        }
+    } else {
+        uint32_t saved = freeGuard;
+        freeGuard = 0;
+        Free((char*)tail + 8);
+        freeGuard = saved;
+    }
+    return (char*)q + 8;
 }
 
-// @ 0x00928730  (pool realloc core - approximated)
+// @ 0x00928730  pool realloc core (dlmalloc realloc)
 void* cLocalLightInfo::ReallocCore(void* p, int sz, int a3)
 {
-    (void)p; (void)sz; (void)a3;
-    return 0;
+    if (p == 0)
+        return AllocCore((uint32_t)sz, (uint32_t)a3);
+
+    uint32_t nb = (uint32_t)sz + 0xb;
+    if (nb <= 0x10)
+        nb = 0x10;
+    else
+        nb &= 0xfffffff8u;
+    Chunk* c = (Chunk*)((char*)p - 8);
+    uint32_t head = c->size;
+    uint32_t csize = head & 0x7ffffff8;
+
+    if ((head & 2) != 0) {
+        if (nb + 4 <= csize)
+            return p;
+        void* np = AllocCore(nb - 7, (uint32_t)a3);
+        if (np == 0)
+            return 0;
+        uint32_t saved = freeGuard;
+        freeGuard = 0;
+        memcpy(np, p, csize - 8);
+        Free(p);
+        freeGuard = saved;
+        return np;
+    }
+
+    uint32_t total = 0;
+    if (nb <= csize) {
+        total = csize;
+    } else {
+        Chunk* nx = (Chunk*)((char*)c + csize);
+        if (nx == top) {
+            uint32_t nsz = nx->size & 0x7ffffff8;
+            if (csize + nsz >= nb + 0x10) {
+                c->size = (head & 0x80000007) | nb;
+                Chunk* nt = (Chunk*)((char*)c + nb);
+                top = nt;
+                SetTop(nt, csize + nsz - nb);
+                return p;
+            }
+        }
+        if (nx != top) {
+            uint32_t nsz = nx->size & 0x7ffffff8;
+            if ((*(uint32_t*)((char*)nx + nsz + 4) & 1) == 0) {
+                if (nsz + csize >= nb) {
+                    nx->fd->bk = nx->bk;
+                    nx->bk->fd = nx->fd;
+                    total = csize + nsz;
+                }
+            }
+        }
+        if (total == 0) {
+            void* np = AllocCore(nb - 7, (uint32_t)a3);
+            if (np == 0)
+                return 0;
+            Chunk* nc = (Chunk*)((char*)np - 8);
+            if (nc == nx) {
+                total = csize + (nc->size & 0x7ffffff8);
+            } else {
+                uint32_t copySize = csize - 4;
+                uint32_t saved = freeGuard;
+                freeGuard = 0;
+                if (copySize > 0x20) {
+                    memcpy(np, p, copySize);
+                } else {
+                    uint32_t* d = (uint32_t*)np;
+                    const uint32_t* s = (const uint32_t*)p;
+                    switch (copySize >> 2) {
+                    case 8: *d++ = *s++;
+                    case 7: *d++ = *s++;
+                    case 6: *d++ = *s++;
+                    case 5: *d++ = *s++;
+                    case 4: *d++ = *s++;
+                    case 3: *d++ = *s++;
+                    case 2: *d++ = *s++;
+                    case 1: *d = *s;
+                    default: break;
+                    }
+                }
+                Free(p);
+                freeGuard = saved;
+                return np;
+            }
+        }
+    }
+
+    uint32_t remaining = total - nb;
+    if (remaining < 0x10) {
+        c->size = (c->size & 0x80000007) | total;
+        *(uint32_t*)((char*)c + total + 4) |= 1;
+        return p;
+    }
+    c->size = (c->size & 0x80000007) | nb;
+    Chunk* tail = (Chunk*)((char*)c + nb);
+    tail->size = remaining | 1;
+    *(uint32_t*)((char*)tail + remaining + 4) |= 1;
+    *(uint32_t*)((char*)tail + remaining) = remaining;
+    uint32_t saved = freeGuard;
+    freeGuard = 0;
+    Free((char*)tail + 8);
+    freeGuard = saved;
+    return p;
 }

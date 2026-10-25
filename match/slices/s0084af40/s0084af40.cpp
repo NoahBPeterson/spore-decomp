@@ -10,13 +10,14 @@ typedef unsigned char  uint8;
 typedef uint8          GifByteType;
 typedef __int64        int64;
 
-void* __cdecl EAAllocate(uint32 n, const char* pName, int a, int b, const char* pFile, int line);
-void  __cdecl PoolFree(void* p);
+void* __cdecl EAAllocate(uint32 n, const char* pName, int a, int b, const char* pFile, int line); // 0x00f473a0
+void  __cdecl PoolFree(void* p);                                                               // 0x00f47380
 inline void operator delete(void* p) throw() { PoolFree(p); }
 
-extern "C" __declspec(dllimport) void* __cdecl memcpy(void*, const void*, unsigned int);
-extern "C" __declspec(dllimport) int   __cdecl memcmp(const void*, const void*, unsigned int);
-extern "C" __declspec(dllimport) unsigned int __cdecl wcslen(const wchar_t*);
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);   // 0x011e0744
+extern "C" void* __cdecl memset(void*, int, unsigned int);           // 0x011e073e
+extern "C" int   __cdecl memcmp(const void*, const void*, unsigned int);
+extern "C" unsigned int __cdecl wcslen(const wchar_t*);
 
 // ---------------------------------------------------------------------------------------------
 // giflib runtime I/O (GifFilePrivateType's callbacks)
@@ -87,6 +88,34 @@ struct WString {
     wchar_t* mpBegin;    // +0x00
     wchar_t* mpEnd;      // +0x04
     wchar_t* mpCapacity; // +0x08
+    unsigned mAllocator; // +0x0c (empty eastl::allocator padding; element stride 0x10)
+
+    WString() {}                                                 // trivial
+    WString(wchar_t c);                                          // 0x0084aa60
+    __forceinline WString(const wchar_t* p, unsigned n)
+    {
+        unsigned nAlloc = n + 1;
+        if (nAlloc > 1) {
+            mpBegin = (wchar_t*)EAAllocate(nAlloc * 2, "EASTL", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                0xd1);
+            mpEnd = mpBegin + n;
+            mpCapacity = mpBegin + nAlloc;
+            memcpy(mpBegin, p, n * 2);
+            *mpEnd = 0;
+        } else {
+            mpBegin = (wchar_t*)0x01667bac;
+            mpEnd = (wchar_t*)0x01667bac;
+            mpCapacity = (wchar_t*)0x01667bae;
+        }
+    }
+    WString& assign(const wchar_t* first, const wchar_t* last);  // 0x00423650
+    WString& operator=(const WString& o)
+    {
+        if (this != &o)
+            assign(o.mpBegin, o.mpEnd);
+        return *this;
+    }
 };
 
 // eastl::vector<WString, sp_vector_allocator>: 16-byte elements, 3 pointers.
@@ -97,16 +126,27 @@ struct WStringVec {
 };
 
 struct CharPtrVec {
-    void** mpBegin;      // +0x00
-    void** mpEnd;        // +0x04
-    void** mpCapacity;   // +0x08
+    wchar_t** mpBegin;   // +0x00
+    wchar_t** mpEnd;     // +0x04
+    wchar_t** mpCapacity;// +0x08
 };
 
 // ---------------------------------------------------------------------------------------------
 // IMECompositionStringDataEx -- the composition string state at +0xc of the server
 // ---------------------------------------------------------------------------------------------
 struct IMECompositionStringDataEx {
-    char       mHead[0x24];    // +0x00 .. +0x23 (owned by the base class)
+    // The candidate vector lives at +0x90 absolute, i.e. at +0x24 of this object.  The two vector
+    // helpers (ResizeCandidates / InsertCandidates) are given the vector itself as `this`, so this
+    // alias names the vector's three pointers when the object is viewed from its start.
+    union {
+        struct {
+            wchar_t**  mpStringDataArray;       // +0x00
+            unsigned   mnStringDataArrayLength; // +0x04
+            unsigned   mnSelectionPosition;     // +0x08
+        };
+        WStringVec mVectorAtZero;  // +0x00 (view used by ResizeCandidates/InsertCandidates)
+    };
+    wchar_t    mLocale[12];    // +0x0c
     WStringVec mCandidates;    // +0x24 (wstring vector that FUN_0084af40 rebuilds)
     int        mPad30;
     int        mPad34;
@@ -121,14 +161,26 @@ struct IMECompositionStringDataEx {
     void* InsertCandidates(WString* pWhere, unsigned nCount, const WString* pValue);  // 0x0084afc0
 };
 
-// The full object view starting at the IMEServerWin32 base (so +0xc lands on the IME data).
+// winuser.h CANDIDATELIST (the IMM32 candidate-list buffer).
+struct CANDIDATELIST {
+    unsigned dwSize;       // +0x00
+    unsigned dwStyle;      // +0x04
+    unsigned dwCount;      // +0x08
+    unsigned dwSelection;  // +0x0c
+    unsigned dwPageStart;  // +0x10
+    unsigned dwPageSize;   // +0x14
+    unsigned dwOffset[1];  // +0x18
+};
+
+// The full object view starting at the IMEServerWin32 base (so +0x6c lands on the IME data).
 struct IMEServerWin32 {
     void*   mpVtbl0;          // +0x00
     char    mByte04;          // +0x04
     char    mByte05;          // +0x05
+    short   mPad06;           // +0x06
     int     mInt08;           // +0x08
     char    mCompData[0x60];  // +0x0c .. +0x6b
-    char    mCandidateData[0x50];  // +0x6c .. +0xbb
+    IMECompositionStringDataEx mCandidateData;  // +0x6c .. +0xbb
     void*   mpHandlerVtbl;    // +0xbc
     int     mIntC0;           // +0xc0
     int     mIntC4;           // +0xc4
@@ -136,9 +188,8 @@ struct IMEServerWin32 {
     int     mIntCc;           // +0xcc
     int     mIntD0;           // +0xd0
     char    mByteD4;          // +0xd4
-    void*   mHWnd;            // (not the retail offset; only used as a placeholder)
 
-    void SetIMECandidateListData(unsigned nFlags);          // 0x0084b390
+    void SetIMECandidateListData(void* hWnd, unsigned uMsg, unsigned nFlags, unsigned lParam); // 0x0084b390
     long WinProc(void* hWnd, unsigned uMsg, unsigned wParam, long lParam);   // 0x0084b600
 };
 
@@ -153,9 +204,9 @@ void  __cdecl VectorWStringDoDestroyValues(void* pVec, void* pFirst, void* pLast
 void  __cdecl CopyBytes(void* pDst, const void* pSrc, unsigned n);        // 0x011e0744
 void  __cdecl IMECompositionStringDataExCtor(void* pThis);                // 0x0084a700
 
-extern "C" __declspec(dllimport) void* __stdcall ImmGetContext(void* hWnd);                 // IMM32
-extern "C" __declspec(dllimport) int   __stdcall ImmReleaseContext(void* hWnd, void* hIMC); // IMM32
-extern "C" __declspec(dllimport) unsigned __stdcall ImmGetCandidateListW(void* hIMC, unsigned nIndex, void* pBuf, unsigned nBufLen);
+extern "C" void* __stdcall ImmGetContext(void* hWnd);                                        // 0x012094f2
+extern "C" int   __stdcall ImmReleaseContext(void* hWnd, void* hIMC);                        // 0x012094e6
+extern "C" unsigned __stdcall ImmGetCandidateListW(void* hIMC, unsigned nIndex, void* pBuf, unsigned nBufLen); // 0x01209528
 extern "C" __declspec(dllimport) int   __stdcall ImmSetOpenStatus(void* hIMC, int bOpen);
 extern "C" __declspec(dllimport) int   __stdcall ImmNotifyIME(void* hIMC, unsigned dwAction, unsigned dwIndex, unsigned dwValue);
 extern "C" __declspec(dllimport) int   __stdcall ImmDisableTextFrameService(unsigned dwThreadId);
@@ -274,21 +325,21 @@ int DGifDecompressInput(GifFileType* pGifFile, int* pCode)
 void IMECompositionStringDataEx::RebuildCandidates()
 {
     if (mCandidates.mpEnd == mCandidates.mpCapacity) {
-        *(int*)((char*)this + 0x00) = 0;
-        *(int*)((char*)this + 0x04) = 0;
+        mpStringDataArray = 0;
+        mnStringDataArrayLength = 0;
         return;
     }
     unsigned nCount = (unsigned)(mCandidates.mpEnd - mCandidates.mpBegin);
-    *(int*)((char*)this + 0x04) = (int)nCount;
+    mnStringDataArrayLength = nCount;
     eastl_VectorResize(&mPtrs, nCount);
 
-    for (unsigned i = 0; i < (unsigned)*(int*)((char*)this + 0x04); ++i) {
+    for (unsigned i = 0; i < mnStringDataArrayLength; ++i) {
         WString* pStr = &mCandidates.mpBegin[i];
         if (pStr->mpEnd == pStr->mpBegin || pStr->mpBegin[(pStr->mpEnd - pStr->mpBegin) - 1] != 0)
             WStringPushBack(pStr, 0);
         mPtrs.mpBegin[i] = pStr->mpBegin;
     }
-    *(int*)((char*)this + 0x00) = (int)(long)mPtrs.mpBegin;
+    mpStringDataArray = mPtrs.mpBegin;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -304,10 +355,10 @@ void IMECompositionStringDataEx::Reset()
     mPtrs.mpEnd = 0;
     mPtrs.mpCapacity = 0;
     mFlag4c = 0;
-    *(int*)((char*)this + 0x08) = 0;
+    mnSelectionPosition = 0;
 
     const wchar_t* pSrc = L"en-us";
-    wchar_t* pDst = (wchar_t*)((char*)this + 0x0c);
+    wchar_t* pDst = mLocale;
     while ((*pDst++ = *pSrc++) != 0) {}
 
     RebuildCandidates();
@@ -335,18 +386,18 @@ void IMECompositionStringDataEx::Clear()
 // @ 0x0084b260
 void IMECompositionStringDataEx::ResizeCandidates(unsigned nCount)
 {
-    unsigned nHave = (unsigned)(mCandidates.mpEnd - mCandidates.mpBegin);
+    unsigned nHave = (unsigned)(mVectorAtZero.mpEnd - mVectorAtZero.mpBegin);
     if (nCount > nHave) {
         WString empty;
         empty.mpBegin = (wchar_t*)0x01667bac;
         empty.mpEnd = (wchar_t*)0x01667bac;
         empty.mpCapacity = (wchar_t*)0x01667bae;
-        InsertCandidates(mCandidates.mpEnd, nCount - nHave, &empty);
+        InsertCandidates(mVectorAtZero.mpEnd, nCount - nHave, &empty);
     } else {
-        WString* pPos = mCandidates.mpBegin + nCount;
-        WString* pNewEnd = (WString*)CopyWStrings(mCandidates.mpBegin, mCandidates.mpEnd, pPos);
-        VectorWStringDoDestroyValues(&mCandidates, pNewEnd, mCandidates.mpEnd);
-        mCandidates.mpEnd = mCandidates.mpEnd - (mCandidates.mpEnd - pNewEnd);
+        WString* pPos = mVectorAtZero.mpBegin + nCount;
+        WString* pNewEnd = (WString*)CopyWStrings(mVectorAtZero.mpBegin, mVectorAtZero.mpEnd, pPos);
+        VectorWStringDoDestroyValues(&mVectorAtZero, pNewEnd, mVectorAtZero.mpEnd);
+        mVectorAtZero.mpEnd = mVectorAtZero.mpEnd - (mVectorAtZero.mpEnd - pNewEnd);
     }
 }
 
@@ -386,16 +437,16 @@ void* IMEServerWin32Ctor(void* pThis)
 // @ 0x0084afc0
 void* IMECompositionStringDataEx::InsertCandidates(WString* pWhere, unsigned nCount, const WString* pValue)
 {
-    WString* pOldEnd = mCandidates.mpEnd;
+    WString* pOldEnd = mVectorAtZero.mpEnd;
     if (pWhere == pOldEnd) {
         for (unsigned i = 0; i < nCount; ++i) {
-            mCandidates.mpEnd[i] = *pValue;
-            ++mCandidates.mpEnd;
+            mVectorAtZero.mpEnd[i] = *pValue;
+            ++mVectorAtZero.mpEnd;
         }
     } else {
         WString* pPos = pWhere + nCount;
         CopyWStrings(pPos, pWhere, pOldEnd);
-        mCandidates.mpEnd = pOldEnd + nCount;
+        mVectorAtZero.mpEnd = pOldEnd + nCount;
         for (unsigned i = 0; i < nCount; ++i) pWhere[i] = *pValue;
     }
     return pWhere;
@@ -405,18 +456,68 @@ void* IMECompositionStringDataEx::InsertCandidates(WString* pWhere, unsigned nCo
 // 0x0084b390 EA::App::IMEServerWin32::SetIMECandidateListData
 // ---------------------------------------------------------------------------------------------
 // @ 0x0084b390
-void IMEServerWin32::SetIMECandidateListData(unsigned nFlags)
+void IMEServerWin32::SetIMECandidateListData(void* hWnd, unsigned uMsg, unsigned nFlags, unsigned lParam)
 {
-    void* hIMC = ImmGetContext(mHWnd);
-    if (hIMC == 0)
-        return;
-    for (unsigned i = 0; i < 32; ++i) {
-        if ((nFlags & (1u << i)) != 0) {
+    (void)uMsg;
+    (void)lParam;
+
+    void* hIMC = ImmGetContext(hWnd);
+    if (hIMC != 0) {
+        for (unsigned i = 0; i < 0x20; ++i) {
+            if ((nFlags & (1u << i)) == 0)
+                continue;
+
             unsigned nSize = ImmGetCandidateListW(hIMC, i, 0, 0);
-            (void)nSize;
+            if (nSize == 0)
+                continue;
+
+            CANDIDATELIST* pList = (CANDIDATELIST*)EAAllocate(nSize, "EAApp/IME/pCandidateListData", 0, 0, 0, 0);
+            memset(pList, 0, nSize);
+            ImmGetCandidateListW(hIMC, i, pList, nSize);
+
+            unsigned nSelection = pList->dwSelection;
+            if (nSelection < pList->dwPageStart ||
+                pList->dwCount + pList->dwPageStart <= nSelection) {
+                if (pList->dwCount == 0)
+                    pList->dwPageStart = 0;
+                else
+                    pList->dwPageStart = (nSelection / pList->dwCount) * pList->dwCount;
+            }
+
+            if (pList->dwStyle == 2 && pList->dwCount == 1) {
+                ((IMECompositionStringDataEx*)&mCandidateData.mCandidates)->ResizeCandidates(1);
+
+                WString string((wchar_t)pList->dwOffset[0]);
+                mCandidateData.mCandidates.mpBegin[0] = string;
+
+                int nSpare = (int)((char*)string.mpCapacity - (char*)string.mpBegin) & 0xfffffffe;
+                if (nSpare > 2 && string.mpBegin != 0)
+                    PoolFree(string.mpBegin);
+            } else {
+                ((IMECompositionStringDataEx*)&mCandidateData.mCandidates)->ResizeCandidates(pList->dwCount);
+
+                for (unsigned j = 0; j < pList->dwCount; ++j) {
+                    const wchar_t* pSrc = (const wchar_t*)((const char*)pList + pList->dwOffset[j]);
+                    const wchar_t* pEnd = pSrc;
+                    while (*pEnd != 0)
+                        ++pEnd;
+
+                    WString string(pSrc, (unsigned)(pEnd - pSrc));
+                    mCandidateData.mCandidates.mpBegin[j] = string;
+
+                    int nSpare = (int)((char*)string.mpCapacity - (char*)string.mpBegin) & 0xfffffffe;
+                    if (nSpare > 2 && string.mpBegin != 0)
+                        PoolFree(string.mpBegin);
+                }
+            }
+
+            mCandidateData.mnSelectionPosition = pList->dwSelection;
+            PoolFree(pList);
         }
+        ImmReleaseContext(hWnd, hIMC);
     }
-    ImmReleaseContext(mHWnd, hIMC);
+
+    mCandidateData.RebuildCandidates();
 }
 
 // ---------------------------------------------------------------------------------------------

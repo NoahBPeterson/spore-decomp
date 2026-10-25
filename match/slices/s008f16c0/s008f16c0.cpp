@@ -131,6 +131,7 @@ struct VectorOps {
     void* mpCapacity;
     uint32_t mAllocator[2];
     void F_8f1210(void* pos, int n, void* val);  // 0x008f1210
+    void DoInsertValue(void** pos, void* const& value);   // 0x00a80dd0
 };
 
 void FUN_011e0744(void* first, void* last, int zero);   // 0x011e0744
@@ -138,13 +139,33 @@ void FUN_00951bf0(void* first, void* last, void* dst);  // 0x00951bf0
 
 class Table;
 
+// Child list anchor inherited from ContainerItem (Item::mpNext/mpPrev pairs).
+struct ItemList {
+    Item* mpNext;                          // +0x18
+    Item* mpPrev;                          // +0x1c
+};
+
+// Item types stored in Item::mItemType.
+enum { kItemTableCell = 7 };
+
 class TableRow {
 public:
-    uint32_t pad000[0x5c / 4];             // InlineItem base
+    uint32_t pad000[0x18 / 4];             // InlineItem head
+    ItemList mChildItems;                  // +0x18
+    uint32_t pad020[0x3c / 4];             // +0x20..+0x5c
     Vector<TableCell*> mCells;             // +0x5c
     void Dispose();                        // 0x008f16c0
     void Build(Table* pTable);             // 0x008f1700
 };
+
+namespace DOM {
+class Element {
+public:
+    const wchar_t* GetAttrValue(const wchar_t* pName);   // 0x008e45b0
+};
+}  // namespace DOM
+
+extern "C" long __cdecl _wtol(const wchar_t* s);
 
 class TableColumn { public:
     float mMinWidth;                       // +0x0
@@ -257,6 +278,8 @@ public:
     uint32_t mField14;                     // +0x14
     uint32_t mField18;                     // +0x18
     uint32_t mField1c;                     // +0x1c
+
+    void F_8f25b0(int offset);             // 0x008f25b0
 };
 
 PoolNodeX* FUN_008f2550(PoolX* pool, uint32_t a, uint32_t b, uint32_t c, uint32_t d);
@@ -546,6 +569,77 @@ PoolNodeX* FUN_008f25f0(PoolX* pool, uint32_t a, uint32_t b, uint32_t c, uint32_
     node->mField14 = d;
     node->mField18 = e;
     return node;
+}
+
+// @ 0x008F1700
+// Register the row with the table, clear the cell list and rebuild it: every
+// table-cell child contributes its colspan/rowspan attributes (clamped to at
+// least one) and is appended to mCells.
+void TableRow::Build(Table* pTable)
+{
+    if (pTable->mRows.mpEnd < pTable->mRows.mpCapacity) {
+        TableRow** slot = pTable->mRows.mpEnd;
+        pTable->mRows.mpEnd = slot + 1;
+        if (slot)
+            *slot = this;
+    } else {
+        void* pv = this;
+        reinterpret_cast<VectorOps*>(&pTable->mRows)->DoInsertValue((void**)pTable->mRows.mpEnd, pv);
+    }
+
+    // clear: move the tail (zero cells) down and rewind the end pointer
+    FUN_011e0744(mCells.mpBegin, mCells.mpEnd, 0);
+    int removed = (int)(mCells.mpEnd - mCells.mpBegin);
+    mCells.mpEnd -= removed;
+
+    Item* pEnd = (Item*)((char*)&mChildItems - 4);
+    Item* pItem = mChildItems.mpNext ? (Item*)((char*)mChildItems.mpNext - 4) : 0;
+    while (pItem != pEnd) {
+        if (pItem->mItemType == kItemTableCell) {
+            TableCell* pCell = (TableCell*)pItem;
+            ContainerItem* pBase = (ContainerItem*)pItem;
+            DOM::Element* pElement = (DOM::Element*)pBase->mpElement;
+            if (pElement != 0) {
+                const wchar_t* pAttr = pElement->GetAttrValue(L"colspan");
+                if (pAttr != 0) {
+                    int span = (int)_wtol(pAttr);
+                    pCell->mColSpan = (span < 1) ? 1 : span;
+                }
+                pAttr = pElement->GetAttrValue(L"rowspan");
+                if (pAttr != 0) {
+                    int span = (int)_wtol(pAttr);
+                    pCell->mRowSpan = (span < 1) ? 1 : span;
+                }
+            }
+            if (mCells.mpEnd < mCells.mpCapacity) {
+                TableCell** slot = mCells.mpEnd;
+                mCells.mpEnd = slot + 1;
+                if (slot)
+                    *slot = pCell;
+            } else {
+                void* pv = pCell;
+                reinterpret_cast<VectorOps*>(&mCells)->DoInsertValue((void**)mCells.mpEnd, pv);
+            }
+        }
+        void* pNext = pItem->mpNext;
+        pItem = pNext ? (Item*)((char*)pNext - 4) : 0;
+    }
+}
+
+// @ 0x008F25B0
+// Resolve the node's byte index for a packed offset and tail-call its handler
+// slot (+0x08) with that index in ecx and the node's +0x18 payload argument.
+void PoolNodeX::F_8f25b0(int offset)
+{
+    int index;
+    if (mField14 == 0) {
+        index = mField0c + offset;
+    } else {
+        char* entry = *(char**)(mField10 + offset);
+        index = *(int*)(entry + mField14) + mField0c + mField10 + offset;
+    }
+    typedef void (__thiscall *Handler)(void* self, int arg);
+    ((Handler)mField08)((void*)index, mField18);
 }
 
 }  // namespace Layout

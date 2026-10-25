@@ -55,21 +55,34 @@ struct string8_s0084_6280 {
     allocator_s0084_6280 mAllocator;   // +0x0c
 
     string8_s0084_6280() { mpBegin = gEmptyA; mpEnd = gEmptyA; mpCapacity = gEmptyA + 1; }
-    string8_s0084_6280(const char* p) {
-        unsigned n = CharStrlen(p);
-        if (n + 1 > 1) {
-            mpBegin = (char*)EAAllocate(n + 1, "ArgScript", 0, 0, kAllocFile, 0xd1);
-            mpCapacity = mpBegin + n + 1;
+    __forceinline string8_s0084_6280(const char* p)
+        : mpBegin(0), mpEnd(0), mpCapacity(0)
+    {
+        RangeInitialize(p, p + CharStrlen(p));
+    }
+    __forceinline void RangeInitialize(const char* pBegin, const char* pEnd) {
+        unsigned n = (unsigned)(pEnd - pBegin);
+        AllocateSelf(n + 1);
+        mpEnd = CharStringUninitializedCopy(pBegin, pEnd, mpBegin);
+        *mpEnd = 0;
+    }
+    __forceinline void AllocateSelf(unsigned n) {
+        if (n > 1) {
+            mpBegin = (char*)EAAllocate(n, "ArgScript", 0, 0, kAllocFile, 0xd1);
+            mpCapacity = mpBegin + n;
         } else {
             mpBegin = gEmptyA;
             mpCapacity = gEmptyA + 1;
         }
-        if (n) CopyBytes(mpBegin, p, n);
-        mpEnd = mpBegin + n;
-        *mpEnd = 0;
     }
-    ~string8_s0084_6280() {
-        if (mpCapacity - mpBegin > 1 && mpBegin) ::operator delete(mpBegin);
+    __forceinline static char* CharStringUninitializedCopy(const char* pSource,
+                                                           const char* pSourceEnd,
+                                                           char* pDestination) {
+        CopyBytes(pDestination, pSource, (unsigned)(pSourceEnd - pSource));
+        return pDestination + (pSourceEnd - pSource);
+    }
+    __forceinline ~string8_s0084_6280() {
+        if (mpCapacity - mpBegin > 1 && mpBegin) ::PoolFree(mpBegin);
     }
     string8_s0084_6280& assign(const char* first, const char* last);   // 0x00454cb0
     string8_s0084_6280& append(const char* first, const char* last);   // 0x00455d60
@@ -292,7 +305,7 @@ struct EA::ArgScript::cParser_s0084_6280 {
     void SubstituteVariables(string8_s0084_6280* pLine, int bFlag);          // 0x00843650
     void Shutdown();                                          // 0x00846db0
     void ParseBegin();                                        // 0x00846f10
-    bool DefineMacroLine(const char* pLine);                  // 0x00846b00
+    void DefineMacroLine(const char* pName, const char* pLine);   // 0x00846b00
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -498,12 +511,11 @@ const char* EA::ArgScript::cParser_s0084_6280::LookupMacroText(const char* pName
 // 0x00846b00 cParser::DefineMacro (with substitution) -- define <name> <text>
 // ---------------------------------------------------------------------------------------------
 // @ 0x00846b00
-bool EA::ArgScript::cParser_s0084_6280::DefineMacroLine(const char* pLine)
+void EA::ArgScript::cParser_s0084_6280::DefineMacroLine(const char* pName, const char* pLine)
 {
     string8 key(pLine);
-    SubstituteVariables(&key, 1);
-    SetVariableNoSubstitution(key.mpBegin, key.mpBegin);
-    return true;
+    SubstituteVariables(&key, 0);
+    SetVariableNoSubstitution(pName, key.mpBegin);
 }
 
 // ---------------------------------------------------------------------------------------------

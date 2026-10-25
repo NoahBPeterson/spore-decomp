@@ -24,10 +24,23 @@ struct Drawable {
     void    *f8;         // +0x08
     void    *vptrC;      // +0x0c
     void    *f10;        // +0x10
-    char     pad14[0x7c - 0x14];
+    char     pad14[0x1c];// +0x14 .. +0x2f
+    int      mMode30;    // +0x30
+    float    f34;        // +0x34
+    float    f38;        // +0x38
+    float    f3c;        // +0x3c
+    float    f40;        // +0x40
+    float    f44;        // +0x44
+    float    f48;        // +0x48
+    char     pad4c[0x7c - 0x4c];
     char     mInfo[0x98];    // +0x7c mDefaultImageInfo
     void    *mImageInfos[8]; // +0x114
     uint8_t  mbHasUserDefaults;  // +0x134
+    char     pad135[3];          // +0x135
+    int      mIndex138;          // +0x138
+    char     pad13c[0x158 - 0x13c];
+    float    f158;       // +0x158
+    float    f15c;       // +0x15c
 
     __declspec(noinline) void *GetImageInfo(int index);   // 0x00830c00
     int   GetField14(int index);                    // 0x00830c80
@@ -44,10 +57,12 @@ struct Drawable {
     void  SetPair38At(int index, float *v);           // 0x008312f0
     void  SetPair40At(int index, float *v);           // 0x00831380
     void *PickImageInfo(int flags, void *dst);        // 0x00831410
-    bool  GetNaturalSize(float *out, int index);      // 0x00831530
-    bool  HitTest(int a, int b);                      // 0x008315c0
+    bool  GetNaturalSize(float *out, int index, int unused);  // 0x00831530
+    bool  HitTest(int a, int b, int unused);                  // 0x008315c0
     __declspec(noinline) void EnsureImageInfo0();      // 0x00831650
     void  SetImageIcon(int index, void *img);         // 0x00831760
+    void  DrawWithImageInfo(void *canvas, void *rect, void *info,
+                            int arg4, int mode);     // 0x00830d90
 };
 
 // ---------------------------------------------------------------- cSPUIStdDrawableImageInfo (scalar dtor)
@@ -69,9 +84,30 @@ struct ImageInfo2 {
     Vec2f    mPair38;    // +0x38
     Vec2f    mPair40;    // +0x40
     uint32_t pad48[0x14]; // +0x48 .. +0x98
-    void *ScalarDtor(unsigned flags); // 0x00831030
+    ImageInfo2 *Construct();              // 0x00830810
+    void *ScalarDtor(unsigned flags);     // 0x00831030
     void  CopyFrom(const ImageInfo2 *src); // 0x008310a0
 };
+
+// ---------------------------------------------------------------- image draw helpers
+struct StdDrawableBase {
+    bool HitTest(float *rect, int a, int *b);      // 0x009880e0
+};
+float *__cdecl FUN_008306e0(float *out, void *a, float *b, float *c); // 0x008306e0
+void __cdecl BltEdgeStretch(void *canvas, float *src, float *dst, void *image,
+                            float *uv, float a, float b);              // 0x0095d000
+void __cdecl FUN_0095c5f0(void *canvas, float *rect, float *dst, void *image,
+                          float a, float b, int zero0, int zero1);      // 0x0095c5f0
+void __cdecl FUN_0095ca40(void *canvas, float *rect, float *dst, void *image,
+                          float *uv, float a, float b);                 // 0x0095ca40
+double iat_floor(double v);                                              // 0x011e0906
+
+static inline void Vv1(void *p, int off, int a) {
+    ((void (__thiscall *)(void *, int))(*(void ***)p)[off / 4])(p, a);
+}
+static inline void Vv3p(void *p, int off, void *a, void *b, void *c) {
+    ((void (__thiscall *)(void *, void *, void *, void *))(*(void ***)p)[off / 4])(p, a, b, c);
+}
 
 // ---------------------------------------------------------------- 0x00830c00
 // @ 0x00830c00
@@ -421,22 +457,100 @@ void Drawable::SetImageIcon(int index, void *img)
 }
 
 // ---------------------------------------------------------------- 0x00830d90
-// draw_with_image_info: full draw dispatch is a large switch over the image mode.
-// Translation not completed.
-void FUN_00830d90(void * /*this*/, void * /*a*/, void * /*b*/, void * /*c*/, int /*mode*/)
+// @ 0x00830d90
+void Drawable::DrawWithImageInfo(void *canvas, void *rectParam, void *infoPtr,
+                                 int arg4, int mode)
 {
+    ImageInfo2 *info = (ImageInfo2 *)infoPtr;
+    float dst[4] = { f34, f38, 1.0f - f3c, 1.0f - f40 };
+    float src[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+    float rect[4];
+    float iconRect[4];
+
+    Vv1(canvas, 4, arg4);
+
+    if (mode == 0) {
+        void *image = info->mpImage;
+        FUN_008306e0(rect, rectParam, &info->mPair28.x, &info->mPair30.x);
+        switch (mMode30) {
+        case 1:
+            Vv3p(canvas, 0x58, rect, image, dst);
+            return;
+        case 2:
+            BltEdgeStretch(canvas, rect, src, image, dst, f44, f48);
+            return;
+        case 3:
+            FUN_0095c5f0(canvas, rect, src, image, f44, f48, 0, 0);
+            return;
+        case 4:
+            FUN_0095ca40(canvas, rect, src, image, dst, f44, f48);
+            return;
+        default:
+            return;
+        }
+    }
+
+    if (mode == 1) {
+        void *icon = info->mpIcon;
+        register int flags = (int)info->pad1c;
+        iconRect[0] = info->mPair38.x * info->mPair28.x;
+        iconRect[1] = info->mPair38.y * info->mPair28.y;
+        iconRect[2] = info->mPair40.x + info->mPair30.x;
+        iconRect[3] = info->mPair40.y + info->mPair30.y;
+        if (flags == 0) {
+            iconRect[0] = (float)*(int *)((char *)icon + 0x1c) * f158 * iconRect[0];
+            iconRect[1] = (float)*(int *)((char *)icon + 0x20) * f15c * iconRect[1];
+        }
+        FUN_008306e0(rect, rectParam, &iconRect[0], &iconRect[2]);
+        if (flags == 0) {
+            rect[2] = (float)iat_floor((double)rect[0]);
+            src[0] = (float)iat_floor((double)src[0]);
+            rect[3] = (float)iat_floor((double)rect[3]);
+            src[1] = (float)iat_floor((double)src[1]);
+        }
+        Vv3p(canvas, 0x58, rect, icon, src);
+    }
 }
 
-// ---------------------------------------------------------------- 0x00831530 / 0x008315c0
-float *FUN_00831530(void * /*this*/, float *out, int /*index*/)
+// ---------------------------------------------------------------- 0x00831530
+// @ 0x00831530
+bool Drawable::GetNaturalSize(float *out, int index, int /*unused*/)
 {
-    out[0] = 0.0f;
-    out[1] = 0.0f;
-    return out;
-}
+    ImageInfo2 info;
+    info.Construct();
+    PickImageInfo(index, &info);
 
-bool FUN_008315c0(void * /*this*/, int /*a*/, int /*b*/)
-{
+    void *img = *(void * volatile *)&info.mpImage;
+    void *icon = *(void * volatile *)&info.mpIcon;
+    if (img) {
+        out[0] = (float)*(int *)((char *)img + 0x1c);
+        out[1] = (float)*(int *)((char *)img + 0x20);
+        if (icon)
+            ((void (__thiscall *)(void *))(*(void ***)icon)[1])(icon);
+        ((void (__thiscall *)(void *))(*(void ***)img)[1])(img);
+        return true;
+    }
+    if (icon)
+        ((void (__thiscall *)(void *))(*(void ***)icon)[1])(icon);
     return false;
+}
+
+// ---------------------------------------------------------------- 0x008315c0
+// @ 0x008315c0
+bool Drawable::HitTest(int a, int b, int /*unused*/)
+{
+    ImageInfo2 info;
+    info.Construct();
+    PickImageInfo(mIndex138, &info);
+
+    float rect[4];
+    FUN_008306e0(rect, (void *)a, &info.mPair28.x, &info.mPair30.x);
+    bool hit = ((StdDrawableBase *)this)->HitTest(rect, b, &mIndex138);
+
+    if (info.mpIcon)
+        ((void (__thiscall *)(void *))(*(void ***)info.mpIcon)[1])(info.mpIcon);
+    if (info.mpImage)
+        ((void (__thiscall *)(void *))(*(void ***)info.mpImage)[1])(info.mpImage);
+    return hit;
 }
 
