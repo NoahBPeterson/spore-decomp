@@ -8,3 +8,11 @@
                 /fp:fast hit test (ucomiss/lahf/test/jnp) matches, but fVar1/fVar2 are spilled to
                 [esp+4]/[esp+8] by the original whereas ours keeps one in a register and lays the
                 16-byte GetMainWindowArea local at [esp+8] (frame 0x18 vs 0x14).
+00b6a420  26  FAIL-KEPT: eax/ecx/edx (FUN_00b69cf0 uses object in eax and args in ecx/edx, not C++ thiscall).  Full drawing-dispatch switch is otherwise byte-identical; 263 vs 264 bytes.  difftest UNSUPPORTED 0/400 valid (fake-arity 398).
+00b6a720  493 FAIL-KEPT: eax (float pair) + edi (label) + caller stack operands.  Widget/tooltip sequence reconstructed but the entry convention is not expressible in C++; 589 vs 585 bytes.  difftest UNSUPPORTED (original reads eax at entry).
+00b6a970  72  FAIL-KEPT: eax (label) + esi (FUN_00b69010 arg).  Stand-in takes the label as arg1; 86 vs 89 bytes.  difftest UNSUPPORTED (eax at entry).
+00b6a9d0  243 FAIL-KEPT: eax (label) + esi (FUN_00b69010 arg).  Stand-in takes the label as arg1; 219 vs 269 bytes.  difftest FAIL 5/5, fault at 00b6a720.
+00b6aae0  194 FAIL-KEPT: eax (label) + esi (FUN_00b69010 arg).  Stand-in takes the label as arg1; 167 vs 217 bytes.  difftest FAIL 5/5, fault at 00b6a720.
+00b6abc0  521 FAIL-KEPT: eax (label) + esi (FUN_00b69010 arg).  The source marker currently resolves to ModeFromValue (60 bytes) rather than the 552-byte retail function, so the body is reconstructed under the wrong symbol; 552 vs 552 target size.  difftest UNSUPPORTED 0/400 valid.
+00b6adf0  536 FAIL-KEPT: eax (label) + esi (FUN_00b69010 arg); tooltip cTribe/eastl-string/cString path modelled with opaque calls.  574 vs 687 bytes.  difftest UNSUPPORTED (eastl_string::operator=/cString dtor unresolved).
+00b6b0a0  212 FAIL-KEPT: eax (label) + esi (FUN_00b69010 arg).  Stand-in takes the label as arg1; 214 vs 253 bytes.  difftest FAIL 5/5, write fault at 0042d3a3.
