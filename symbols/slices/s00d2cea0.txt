@@ -1,0 +1,1 @@
+00d2d560 ?Append@cRoundedQueue@SP@@QAEXM@Z  # cRoundedQueue::Append migrated from s00d2cea0 (verbatim, slice spelling)

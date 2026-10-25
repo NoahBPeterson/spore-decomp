@@ -1,3 +1,4 @@
+00d2dd20 ?DrawLayer@cCreatureDisplayStrategy_s00d2_dd20@@QAEXIH@Z  # cCreatureDisplayStrategy_s00d2_dd20::DrawLayer migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e2e0  cCreatureModeEventSink::Update(float) -> void  # forward the event amount to the bar sub-object's FUN_00d2d560
 00d2e360  GetTerrainHeight() -> double  # current terrain sphere height promoted to double (st0 result)
 00d2e380  GetTierHeight(int) -> double  # -1 asks the avatar's combat target chain (vtable +0xd8) for the tier, else the shell level; 0..3 selects the tier height

@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureDisplayStrategy.cpp  ?SetBarPosition@cCreatureTimerBar@@QAEXM@Z  00d2beb0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureDisplayStrategy.cpp  ?Advance@cPool@@QAEXXZ  00d2c9b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
