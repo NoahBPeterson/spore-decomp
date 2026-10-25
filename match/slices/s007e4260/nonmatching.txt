@@ -16,3 +16,5 @@
 007e4760  293  cLoadResourceCommand::Execute; no SEH frame + register allocation [equiv: UNSUPPORTED]
 007e4e00  124  cStateHash::EnumStrings; bucket skip-loop shape + register allocation [equiv: WEAK]
 007e4e90  62   SP::cAppStateCheat::cAppStateCheat; missing base-ctor call + EH state stores [equiv: UNSUPPORTED]
+007e4bc0  428  SP::cAppStateManager::~cAppStateManager; explicit field teardown in the retail order; no SEH frame/EH-state stores (states 0xf..3) and member cleanup helpers stay out of line; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: WEAK 153 valid inputs, 70.8% coverage]
+007e4f40  443  SP::cAppStateCheat::Execute; reconstructed with if/else layout, flag shifts, EnumStrings list branch and both cError throws; stack-slot assignment (EStringVec/AMVecU32 swapped), alpha-branch name push hoisting, throw-temp slot and register allocation differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: UNSUPPORTED 0/400 valid inputs]
