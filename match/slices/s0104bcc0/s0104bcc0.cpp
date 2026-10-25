@@ -79,7 +79,8 @@ struct cToolRef {
     { return ((void* (__thiscall*)(void*, void*))mpVftbl[0xb8 / 4])(this, arg); }
     __forceinline u32 ActivateFlag(u32 flag)                    // 0x00c38990
     { return ((u32 (__thiscall*)(void*, u32))mpVftbl[-1])(this, flag); }
-    u32 OnActivate(u32 flag);                                   // 0x00c38990
+    // Only the low byte (AL) is consumed here, exactly as the original u8 flag does.
+    bool OnActivate(u32 flag);                                  // 0x00c38990
 };
 
 // generic "object with a vtable at 0" used for the target / stream interfaces
@@ -96,12 +97,16 @@ typedef cIface cOutStream;
 struct cMessagingServer {
     void** mpVftbl;                                             // +0x00
     __forceinline void RegisterEvent(void* self, u32 evt)       // vtable +0x24
-    { ((void (__thiscall*)(void*, u32))mpVftbl[0x24 / 4])(self, evt); }
+    { ((void (__thiscall*)(void*, void*, u32))mpVftbl[0x24 / 4])(this, self, evt); }
 };
 
-struct cTerrainSphere { u32 Check(); };                         // 0x00c75650
+struct cTerrainSphere { bool Check(); };                        // 0x00c75650
 struct cTerrainEditor {
     cTerrainSphere* GetCurrentTerrainSphere();                   // 0x00f67d90
+};
+
+struct cSPSimulatorSpaceGame {
+    void* GetPlayerInventory();                                  // 0x00a1ad60
 };
 
 // ----------------------------------------------------------------------- dtor helpers
@@ -126,12 +131,12 @@ u32   __cdecl GetPlayerEmpireID();                            // 0x01021090
 void* __cdecl FUN_01021260();                                 // 0x01021260
 bool  __cdecl IsHostileToAll(void* p);                        // 0x0102c600
 void* __cdecl FUN_00b67740(void* p);                          // 0x00b67740
-void* __cdecl GetUFOSimulator(u32 p);                         // 0x00ffbe50
+void* __cdecl GetUFOSimulator();                             // 0x00ffbe50
 bool  __cdecl cSPSpaceCommCanTarget(void* a, void* b);        // 0x0102aa50
 void  __cdecl GetPropertyAsIntArray(u32 id, u32 tag, i32* pCount, void** ppArr); // 0x006a07d0
 void* __cdecl EA_Messaging_GetServer();                       // 0x00883860
 void  __cdecl RegisterStaticRegistrations();                  // 0x01055890
-u32   __fastcall FUN_00bfc480(void* self);                    // 0x00bfc480
+bool  __fastcall FUN_00bfc480(void* self);                    // 0x00bfc480
 void  __cdecl WriteUint32(void* s, const u32* v, int n, int flag); // 0x0093aa70
 
 // --------------------------------------------------------------- referenced globals
@@ -290,7 +295,7 @@ struct cSPSpaceToolData {
     i32  FUN_0104bfa0();                                       // 0x0104bfa0
     u8   FUN_0104bff0();                                       // 0x0104bff0
     u8   FUN_0104c010();                                       // 0x0104c010
-    u8   func48h();                                            // 0x0104ca20
+    bool func48h();                                            // 0x0104ca20
     bool IsInContext();                                        // 0x0104cb70
     void FUN_0104cbd0(i32 delta);                              // 0x0104cbd0
     void FUN_0104cc00(i32 amount);                             // 0x0104cc00
@@ -300,7 +305,9 @@ struct cSPSpaceToolData {
 };
 
 struct cSPSpaceInventoryItem {
-    void UpdateTuning(u32 propId, u32* out);                   // 0x0104c120
+    // Retail reads both arguments from the stack and ends in a plain `ret`,
+    // so this is a static (cdecl) member despite the stale PDB `thiscall` name.
+    static void UpdateTuning(u32 propId, u32* out);            // 0x0104c120
 };
 
 // ===========================================================================
@@ -571,12 +578,12 @@ u8 SP::cSPSpaceToolData::FUN_0104c010()
 // @ 0x0104c120
 void SP::cSPSpaceInventoryItem::UpdateTuning(u32 propId, u32* out)
 {
-    i32  count = 0;
-    void* arr  = 0;
     *out = 0;
+    void* arr  = 0;
+    i32  count = 0;
     GetPropertyAsIntArray(propId, 0x5e51b17, &count, &arr);
     for (i32 i = 0; i < count; i++) {
-        u32 v = ((i32*)arr)[i];
+        i32 v = ((i32*)arr)[i];
         switch (v) {
         case 0xe7ca2d90: *out |= 0x20;   break;
         case 0xa13abc9f: *out |= 2;      break;
@@ -600,8 +607,9 @@ void SP::cSPSpaceInventoryItem::UpdateTuning(u32 propId, u32* out)
 void SP::cSPEditorVerbIconTray::Register()
 {
     RegisterStaticRegistrations();
-    void* self = 0;
+    void* self;
     if (this != 0) self = (void*)&mSelfObj1c;
+    else self = 0;
     cMessagingServer* server = (cMessagingServer*)EA_Messaging_GetServer();
     mpServer = server;
     mpSelf = self;
@@ -658,60 +666,68 @@ void SP::cSPEditorVerbIconTray::GetTextAt(u32 index)
 // @ 0x0104c510
 void* SP::cSPEditorVerbIconTray::Dispatch(u32 a, u32 b, void** ppOut, u32 d)
 {
-    void* nv = ((void* (__thiscall*)(void*, u32, u32, u32))mpVftbl[0x20 / 4])(this, a, 0x24a4ac5, d);
-    void* old = *ppOut;
-    if (nv == old) return old;
-    if (nv != 0) ((void (__thiscall*)(void*))((void**)nv)[0])(nv);
-    *ppOut = nv;
-    if (old != 0) {
-        ((void (__thiscall*)(void*))((void**)old)[1])(old);
-        return *ppOut;
+    // The virtual at slot 0x20 takes (a, 0x24a4ac5, ppOut, d); the result is
+    // exchanged into the pointer whose address arrives in the second slot.
+    void** out = (void**)b;
+    void* nv = ((void* (__thiscall*)(void*, u32, u32, void*, u32))mpVftbl[0x20 / 4])
+                   (this, a, 0x24a4ac5, (void*)ppOut, d);
+    void* old = *out;
+    if (nv != old) {
+        if (nv != 0) {
+            cIface* o = (cIface*)nv;
+            ((void (__thiscall*)(void*))o->mpVftbl[0])(o);
+        }
+        *out = nv;
+        if (old != 0) {
+            cIface* p = (cIface*)old;
+            ((void (__thiscall*)(void*))p->mpVftbl[1])(p);
+            return *out;
+        }
+        return nv;
     }
-    return nv;
+    return old;
 }
 
 // ===========================================================================
 // SP::cSPSpaceToolData::func48h
 // ===========================================================================
 // @ 0x0104ca20
-u8 SP::cSPSpaceToolData::func48h()
+bool SP::cSPSpaceToolData::func48h()
 {
-    if (mItemID.instanceID == gShieldItemID.instanceID &&
-        mItemID.typeID == gShieldItemID.typeID &&
-        mItemID.groupID == gShieldItemID.groupID) {
-        if (mEffect114 != 0) {
-            void* o = mEffect114->ActivateVfx(&gChargePropertyId_013f94d4);
-            return (u8)FUN_00bfc480(o);
-        }
-        return (u8)FUN_00bfc480(0);
+    bool result = false;
+    if (gShieldItemID.instanceID == mItemID.instanceID &&
+        gShieldItemID.typeID == mItemID.typeID &&
+        gShieldItemID.groupID == mItemID.groupID) {
+        if (mEffect114 != 0)
+            return FUN_00bfc480(mEffect114->ActivateVfx(&gChargePropertyId_013f94d4));
+        return FUN_00bfc480(0);
     }
-    if (mItemID.instanceID == gCloakItemID.instanceID &&
-        mItemID.typeID == gCloakItemID.typeID &&
-        mItemID.groupID == gCloakItemID.groupID) {
-        if (mEffect114 != 0) {
-            cToolRef* o = (cToolRef*)mEffect114->ActivateVfx((void*)0xb033b403);
-            return (u8)o->OnActivate(1);
-        }
-        return (u8)((cToolRef*)0)->OnActivate(1);
+    if (gCloakItemID.instanceID == mItemID.instanceID &&
+        gCloakItemID.typeID == mItemID.typeID &&
+        gCloakItemID.groupID == mItemID.groupID) {
+        if (mEffect114 != 0)
+            return ((cToolRef*)mEffect114->ActivateVfx((void*)0xb033b403))->OnActivate(1);
+        return ((cToolRef*)0)->OnActivate(1);
     }
-    if (mItemID.instanceID == gRallyCallItemID.instanceID &&
-        mItemID.typeID == gRallyCallItemID.typeID &&
-        mItemID.groupID == gRallyCallItemID.groupID) {
+    if (gRallyCallItemID.instanceID == mItemID.instanceID &&
+        gRallyCallItemID.typeID == mItemID.typeID &&
+        gRallyCallItemID.groupID == mItemID.groupID) {
         if (mIsInUse.IsRunning()) {
             i32 t = (i32)(mField1c0 * 1000.0f);
             if (t < 0) t = -1;
             u64 e = mIsInUse.GetElapsedTime();
-            if (e < (u64)(i64)t) return 1;
+            if (e < (u64)(i64)t) return true;
         }
-        return 0;
+        result = false;
+        return result;
     }
-    if (mItemID.instanceID == gSoothingSongItemID.instanceID &&
-        mItemID.typeID == gSoothingSongItemID.typeID &&
-        mItemID.groupID == gSoothingSongItemID.groupID) {
+    if (gSoothingSongItemID.instanceID == mItemID.instanceID &&
+        gSoothingSongItemID.typeID == mItemID.typeID &&
+        gSoothingSongItemID.groupID == mItemID.groupID) {
         cTerrainEditor* te = (cTerrainEditor*)NounManager();
-        return (u8)te->GetCurrentTerrainSphere()->Check();
+        return te->GetCurrentTerrainSphere()->Check();
     }
-    return 0;
+    return result;
 }
 
 // ===========================================================================
@@ -802,38 +818,39 @@ u8 SP::cSPSpaceToolData::FUN_0104cdb0(cIface* target)
         if ((u32)target->Call(0x4c) == GetPlayerEmpireID()) return 0;
     }
     if (mStrategyClassID == 0) return 1;
-    u8 result;
     bool tookCase = false;
+    u8 result;
     if (target != 0) {
-        u32 t = (u32)target->Call(0x38);
-        switch (t) {
-        case 0x137e8e0:  result = (u8)(mStrategyClassID >> 3);  tookCase = true; break;
-        case 0xb033b403: result = (u8)(mStrategyClassID >> 2);  tookCase = true; break;
-        case 0xd0036e08: result = (u8)(mStrategyClassID);       tookCase = true; break;
-        case 0xee9b2232: result = (u8)(mStrategyClassID >> 5);  tookCase = true; break;
-        case 0x436f315:  result = (u8)(mStrategyClassID >> 4);  tookCase = true; break;
-        case 0x4e3faaf:  result = (u8)(mStrategyClassID >> 10); tookCase = true; break;
-        case 0x4f176642: result = (u8)(mStrategyClassID >> 1);  tookCase = true; break;
+        tookCase = true;
+        switch ((i32)target->Call(0x38)) {
+        case 0x137e8e0:  result = (u8)(mStrategyClassID >> 3);  break;
+        case 0xb033b403: result = (u8)(mStrategyClassID >> 2);  break;
+        case 0xd0036e08: result = (u8)(mStrategyClassID);       break;
+        case 0xee9b2232: result = (u8)(mStrategyClassID >> 5);  break;
+        case 0x436f315:  result = (u8)(mStrategyClassID >> 4);  break;
+        case 0x4e3faaf:  result = (u8)(mStrategyClassID >> 10); break;
+        case 0x4f176642: result = (u8)(mStrategyClassID >> 1);  break;
         default:
+            tookCase = false;
             if (target->Call1(0xc, 0xe9cb8ba) != 0) {
                 result = (u8)(mStrategyClassID >> 6);
                 tookCase = true;
-            } else {
-                result = (u8)(mStrategyClassID >> 7);
             }
             break;
         }
-    } else {
-        result = (u8)(mStrategyClassID >> 7);
     }
-    if (GetUniverseContext() != 0) return result & 1;
-    if (!tookCase) return result & 1;
-    if ((result & 1) == 0) return 0;
-    if ((mStrategyClassID & 0x200) == 0) return 0;
-    u8 b = (u8)IsHostileToAll(FUN_01021260());
-    void* s = FUN_00b67740(target);
-    if (s != 0) {
-        b = (u8)cSPSpaceCommCanTarget(s, GetUFOSimulator(0));
+    if (!tookCase) result = (u8)(mStrategyClassID >> 7);
+
+    result &= 1;
+    u8 b = result;
+    if (GetUniverseContext() == 0 && tookCase && result != 0 &&
+        (mStrategyClassID & 0x200) != 0) {
+        b = (u8)IsHostileToAll(FUN_01021260());
+        void* s = FUN_00b67740(target);
+        cSPSimulatorSpaceGame* sim = (cSPSimulatorSpaceGame*)GetUFOSimulator();
+        result = b;
+        if (s != 0)
+            result = (u8)cSPSpaceCommCanTarget(s, sim->GetPlayerInventory());
     }
-    return b;
+    return result;
 }

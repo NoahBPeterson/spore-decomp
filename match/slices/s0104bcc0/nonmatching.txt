@@ -2,3 +2,6 @@
 0104bfa0 44 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest FAIL (5/5 valid mismatch; ecx clobbered by helper); float->__int64 uses the _ftol2 helper instead of the inlined x87 fnstcw/or/fldcw/fistp sequence
 0104cb70 22 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (400 valid, 52.0% cov); IsInContext bool result codegen: original keeps the false value in bl and shares a single mov al,1 epilogue
 0104cc40 23 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (397 valid, 90.6% cov); IsDeselectedAfterUse flags bit-15 test strength-reduced to test dword,0x8000 instead of shr ecx,0xf/test cl,1
+0104c570 662 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (400 valid, 97.1% cov); constructor approximated: float-constant hoisting and store interleaving differ from the retail sequence
+0104ca20 190 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (397 valid, 47.2% cov); func48h approximated: the u8 flag passes a callee's pointer through in AL, so bool return + bool callees keep the pass-through without normalization
+0104cdb0 46 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (382 valid, 79.2% cov); FUN_0104cdb0 approximated: signed switch tree matches, but the trailing GetUFOSimulator argument slot and return-0 tail merging differ
