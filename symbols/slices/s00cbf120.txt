@@ -1,1 +1,1 @@
-00cbf120 FindProjectilePath  # PDB candidate (caller-scored), dev 007ace50
+00cbf120 ?FindProjectilePath@@YAXPAUIObj@@0PAUVecList@@MMMHM@Z  # FindProjectilePath migrated from s00cbf120 (verbatim, slice spelling)

@@ -1,0 +1,2 @@
+00cb7b50 ?virtual_dtor@@YAXXZ  # virtual_dtor migrated from s00cb7310 (verbatim, slice spelling)
+00cb7ce0 ?Read@@YAXXZ  # Read migrated from s00cb7310 (verbatim, slice spelling)

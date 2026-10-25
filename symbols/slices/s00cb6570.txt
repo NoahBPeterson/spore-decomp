@@ -1,0 +1,5 @@
+00cb6960 ?FUN_00cb6960@@YAXPAX0M00PAUCtxObj@@0D@Z  # FUN_00cb6960 migrated from s00cb6570 (verbatim, slice spelling)
+00cb69e0 ?SP_CombatLineTest@@YAXPAX0M00PAUCtxObj@@0@Z  # SP_CombatLineTest migrated from s00cb6570 (verbatim, slice spelling)
+00cb6ca0 ?DestroyRefs@GameObject@@QAEXXZ  # GameObject::DestroyRefs migrated from s00cb6570 (verbatim, slice spelling)
+00cb6d20 ?RemoveOwner@GameObject@@QAEXXZ  # GameObject::RemoveOwner migrated from s00cb6570 (verbatim, slice spelling)
+00cb6fe0 ?_virtual_dtor@GameObject@@QAEPAU1@E@Z  # GameObject::_virtual_dtor migrated from s00cb6570 (verbatim, slice spelling)

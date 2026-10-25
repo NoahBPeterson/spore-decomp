@@ -1,4 +1,4 @@
-00cc22c0 ?Explode@cDefaultToolProjectile@@QAEXHPAX@Z  # void cDefaultToolProjectile::Explode
+00cc22c0 ?Explode@cDefaultToolProjectile@@QAEXHPAX@Z  # cDefaultToolProjectile::Explode migrated from s00cc22c0 (verbatim, slice spelling)
 00cc26a0 ?FindNearestCreature@@YAHMMM_N0@Z  # int FindNearestCreature
 00cc27f0 ?UpdateState@cSpatialObjectView@@QAEHXZ  # int cSpatialObjectView::UpdateState
 00cc28c0 ??0cDefaultBeamProjectileView@@QAE@XZ  # cDefaultBeamProjectileView::cDefaultBeamProjectileView

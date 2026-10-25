@@ -1,0 +1,6 @@
+00cb91d0 ?FUN_00cb91d0@TObj@@QAEXXZ  # TObj::FUN_00cb91d0 migrated from s00cb91d0 (verbatim, slice spelling)
+00cb94b0 ?FUN_00cb94b0@TObj@@QAEPAV1@XZ  # TObj::FUN_00cb94b0 migrated from s00cb91d0 (verbatim, slice spelling)
+00cb9600 ?_virtual_dtor@TObj@@QAEPAXE@Z  # TObj::_virtual_dtor migrated from s00cb91d0 (verbatim, slice spelling)
+00cb9650 ?FUN_00cb9650@TObj@@QAEXXZ  # TObj::FUN_00cb9650 migrated from s00cb91d0 (verbatim, slice spelling)
+00cb9780 ?FUN_00cb9780@TObj@@QAEXPAPAXPAX0D@Z  # TObj::FUN_00cb9780 migrated from s00cb91d0 (verbatim, slice spelling)
+00cb9b90 ?FUN_00cb9b90@TObj@@QAEPAXE@Z  # TObj::FUN_00cb9b90 migrated from s00cb91d0 (verbatim, slice spelling)

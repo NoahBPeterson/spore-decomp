@@ -1,0 +1,24 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPWeapons.cpp  ?SP_PathPrefsForTool@@YAHPAUcSPSpaceToolData@@@Z  00cb36e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Cast@CObj3760@@QAEPAXH@Z  00cb3760  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Read@CArtilleryProjectileR@@QAE_NPAUIStream@@@Z  00cb3850  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Cast@CObj3ad0@@QAEPAXH@Z  00cb3ad0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Cast@CObj3c80@@QAEPAXH@Z  00cb3c80  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Cast@CObj3e20@@QAEPAXH@Z  00cb3e20  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTarget@cLocomotionBase@@QAE_NXZ  00cb4a40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTarget14@cLocomotionObj14@@QAE_NXZ  00cb4ca0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTargetDC@cLocomotionObjDC@@QAE_NXZ  00cb5560  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5620@cCommunity@@QAEXI@Z  00cb5620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5670@cGameData_s00cb_5620@@QAEXXZ  00cb5670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb56f0@cGameData_s00cb_5620@@QAEXPAXHMM@Z  00cb56f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5930@cDefaultBeamProjectile@@QAEXPAM@Z  00cb5930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5b70@cDefaultBeamProjectile@@QAEIXZ  00cb5b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5bd0@cDefaultAoEArea@@QAEXXZ  00cb5bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5cf0@cDefaultAoEArea@@QAEXPAX@Z  00cb5cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb6960@@YAXPAX0M00PAUCtxObj@@0D@Z  00cb6960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?SP_CombatLineTest@@YAXPAX0M00PAUCtxObj@@0@Z  00cb69e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?DestroyRefs@GameObject@@QAEXXZ  00cb6ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?RemoveOwner@GameObject@@QAEXXZ  00cb6d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?_virtual_dtor@GameObject@@QAEPAU1@E@Z  00cb6fe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?_virtual_dtor@TObj@@QAEPAXE@Z  00cb9600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb9b90@TObj@@QAEPAXE@Z  00cb9b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

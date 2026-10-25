@@ -1,0 +1,2 @@
+00bc3170 ?Reset@cSPTimer@SP@@QAEXXZ  # SP::cSPTimer::Reset (callee of s00cbb020, named from the dev publics; slice address comment)
+00cbb790 ?RemoveOwner@cGameData_s00cb_b020@Simulator@@QAEXXZ  # cGameData_s00cb_b020::RemoveOwner migrated from s00cbb020 (verbatim, slice spelling)

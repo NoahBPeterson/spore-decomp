@@ -1,1 +1,1 @@
-00cbda10 Simulator::cCulturalProjectile::LaunchProjectile  # ModAPI cCulturalProjectile.h (LaunchProjectile, fields 0x518-0x560 match; cast ids cCulturalTarget/cBuilding/cTurret/cVehicle/cCreatureAnimal)
+00cbda10 ?LaunchProjectile@cCulturalProjectile@@QAEXPAUcGameData_s00cb_da10@@0PAUcSpaceToolData@@PAUcCombatant@@ABUVector3_s00cb_da10@@M_N4@Z  # cCulturalProjectile::LaunchProjectile migrated from s00cbda10 (verbatim, slice spelling)

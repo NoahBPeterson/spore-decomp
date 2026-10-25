@@ -1,0 +1,57 @@
+# va  diff-bytes  reason
+00cb37d0
+00cb3940
+00cb3b70
+00cb3d20
+00cb3e90
+00cb41c0
+00cb4350
+00cb44b0
+00cb4670
+00cb46f0
+00cb4950
+00cb49e0
+00cb4a70
+00cb4ae0
+00cb4bd0
+00cb4cc0
+00cb4d40
+00cb5050
+00cb5090
+00cb5140
+00cb52c0
+00cb5330
+00cb5420
+00cb5450
+00cb54a0
+00cb5580
+00cb5770 338 large complex function; register allocation and scheduling diverge throughout
+00cb5980 13 pointer load folds to [eax+0x114]; original materializes eax + add eax,imm (not source-forceable)
+00cb59b0 327 free-function reconstruction needs live-in esi/edi; modelled with explicit params
+00cb5d80 114 shared failure epilogue, addss operand order, integer vs x87 orientation copy
+00cb5e10 342 large complex function; register allocation and scheduling diverge throughout
+00cb5fe0 34 pointer load folds to [eax+0x118]; original materializes eax + add eax,imm
+00cb6020 48 pointer load folds to [eax+0x114]; original materializes eax + add eax,imm
+00cb6060 30 pointer load folds to [eax+0x114]; original materializes eax + add eax,imm
+00cb6090 238 repeated item lookups materialize eax + add eax,imm; large function
+00cb61d0 214 repeated item lookups materialize eax + add eax,imm; large function
+00cb6310 112 callee-saved push/epilogue layout and branch layout diverge
+00cb63c0 2 thunk loads pointer into ecx; original uses eax (allocator choice, not source-forceable)
+00cb63e0 2 thunk loads pointer into ecx; original uses eax (allocator choice, not source-forceable)
+00cb6400 145 callee-saved push/epilogue layout and branch layout diverge
+00cb64c0 2 thunk loads pointer into ecx; original uses eax (allocator choice, not source-forceable)
+00cb64e0 2 thunk loads pointer into ecx; original uses eax (allocator choice, not source-forceable)
+00cb6500 111 compiler re-pushes args for second call; original reuses stack args
+00cb7b50 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - scalar deleting destructor: release of 0x518 through virtual +0x08, sub-object destructor on +0x34, cGameData destructor, then operator_delete_array when bit 0 of the flag is set; MSVC emits this shape only for a compiler-generated deleting destructor, which cannot be spelled from source.
+00cb7ce0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 358 bytes - ISimulatorSerializable::Read not reconstructed.
+00cb91d0 565 complete SP::cResourceProjectile::Explode reconstruction (EffectsManager vtable[0x54](0x3701a5c) -> vtable[8](tag,0,&ref) with the tag chosen from PlanetModel F_b7e3e0 and this+0x554 / (this+0x51c)+0x224 vs DAT_013ec4d0 over {0xba78f977,0x95938523,0x971fa14,0x96a1703,0x63fbd7f4}, the 0x3c-byte spatial Rec seeded from DAT_0169aa18/1c/20 + Matrix3::Assign(DAT_0169a9f4), the this+0x34 vtable[0x2c]/[0x5c] position+facing queries, Matrix3FromFacingAndUp, flags|=4|2, vtable[0x18](&rec), NounManager(+0x550)->F_b25f40() position copied into vtable[0x44](5,pos,3), vtable[8](0), the +0x51c follow-up via FUN_00bff2d0 or +0x1e8=1, and the vtable[4] reference release); not byte-exact: ours 685 vs 721 — the x87 Matrix3::Assign/Matrix3FromFacingAndUp stack records and the arg-slot materialisation are scheduled differently and cl keeps fewer temporaries live; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv FAIL (5/5 valid inputs mismatched, first difference execution — the unmodelled EffectsManager/PlanetModel receivers fault in the harness)
+00cb94b0 58 complete Simulator::cICBM::cICBM constructor reconstruction (base ctor F_18660 on this, cLocomotiveObject ctor F_c43860 on this+0x34, cProjectile vtable 0x145dca8 at this+0x504, three zero floats at +0x508/50c/510, the +0x514 bool, then the multi-inheritance vftables 0x1475ff8/0x1475fe4/0x1475ee8/0x1475edc/0x1475eb4 and the +0x520 target pointer); not byte-exact: ours 104 vs 114 — cl's scheduler reorders the independent vtable stores (hoists [edi]=0x1475ee8 and [esi+0x520] above the three `movss` zero stores and folds `mov eax,esi` differently), whereas the original keeps the strict base-ctor / subobject-ctor / +0x504 / float / bool / derived-vtable emission order of the real class hierarchy; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv PASS (400 valid inputs, 100.0% coverage)
+00cb9650 342 complete SP::cICBM::Explode reconstruction (same EffectsManager spatial-record pattern as 0x00cb91d0 with the fixed tag 0x27e375b3: vtable[0x54](0x3701a5c)->vtable[8](tag,0,&ref), Rec seeded from DAT_0169aa18/1c/20 + Matrix3::Assign, this+0x34 vtable[0x2c]/[0x5c], Matrix3FromFacingAndUp copy, flags, vtable[0x18](&rec), vtable[8](0), vtable[4] release); not byte-exact: ours 420 vs 303 — the original writes the Rec fields with interleaved `movss`/word stores and folds some of the ref handling, cl emits a larger, differently-ordered frame; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (239 valid inputs, 28.3% coverage)
+00cb9780 8 complete eastl red-black-tree insert helper (side select from param_5/param_3/param_4 with a `jb` from `<`, operator_new(0x14,"Simulator",0,0,allocator,0xd1), placement store of *param_4 into node+0x10 plus a vtable[0xbc] AddRef, RBTreeInsert(node,parent,this+4,side), ++count, *param_2=node); not byte-exact: ours 135 == 135 — registers and instructions all match (this=esi, node=edi, side=ebx) except cl loads `*param_2` into edx after `inc dword ptr [esi+0x14]`, while the original hoists it into eax before the increment; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv FAIL (5/5 valid inputs mismatched, first difference eax — the original leaves its out-parameter eax live at exit, ours does not)
+00cbb790 24 Simulator::cGameData::RemoveOwner: releases the space tool (+0x518, vtable slot 8, cleared first) and the locomotion (+0x51c, slot 4, cleared first), clears/reinitialises the intrusive list at +0x570 (m_cbae20 0x00cbae20 then sentinel-prev/count/m14/flag/sentinel-next), releases +0x5cc, +0x5d4 and the owner +0x2c through slot 4 (each cleared first), and tail-calls cLocomotiveObject::Shutdown (0x00c43f90) on the embedded block at +0x34. Identical size and instruction sequence (164 bytes); the only difference is the callee-saved register assignment -- the original keeps `this` in edi and the list pointer in esi, while our allocator keeps `this` in esi and the list pointer in edi (pure esi/edi swap, 24 differing bytes). difftest PASS (223 valid inputs, 100% coverage).
+00cbda10 2656 cCulturalProjectile::LaunchProjectile: complete (all branches: ring/nearest-point spin path, aim-point path, pushed-out target path, 32-point arc, 60-point spiral, locomotion + speed); ordered calls/vtable slots/type-id and string pushes identical (32 calls, 41 items), size 3217 vs 3113; x87/SSE scheduling and stack-slot layout differ (frame 0xb4 vs 0x88)
+00cbf120 3612 large /O2 x87+SSE trajectory simulator (5597 B); all branches/callees reproduced, but the original's inlined x87 math becomes libm calls and class semantics are reconstructed from signatures, so code size/scheduling differ and chk.py cannot size-match it; equiv: UNSUPPORTED (14 unresolved references, e.g. _eastl_copy_range, _PlanetModelCtor4)
+00cc22c0 763 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) tool projectile explosion; the effect id selection, the orientation sources and the camera shake are all modelled through unresolved effect helpers so the long body collapses; equiv UNSUPPORTED (unresolved effect helpers)
+0135ae10 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 2244 bytes - compiler-generated static initialiser $E422; the attribute registry records (names, hashes, offsets, parse/write/init callbacks) are not reconstructed.
+0135b6f0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 802 bytes - compiler-generated static initialiser $E426; it fills 15-dword attribute records (mpTool, mSourceOffset, mDamageRadius, ...) and copies them with rep movsd into the registry at 0x157e358/0x157e394; records not reconstructed.
+0135ba30 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 700 bytes - compiler-generated static initialiser $E431; same record-registration pattern for the remaining attributes; not reconstructed.
