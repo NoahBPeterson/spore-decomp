@@ -3,6 +3,8 @@
 // This region (SporeEP1_RL) is not in the 2008 dev PDB; the class layout was read
 // from the constructor's member stores and the accessors below.
 #include <stddef.h>
+#include <string.h>
+#include <new>
 #include <xmmintrin.h>
 
 typedef unsigned int   u32;
@@ -70,10 +72,6 @@ struct MeshBuilder {
     int           n16c;              // +0x16c
     char pad170[0x188 - 0x170];      // +0x170
     VecSlot<u32>  v188[8];           // +0x188 .. +0x228
-
-    // copy ctors (EH, partial bodies)
-    void copyFrom410(const MeshBuilder& src);
-    void copyFrom2b0(const MeshBuilder& src);
 
     // accessors / helpers in this slice
     void pushV8(const Vec3& v);                 // 0x716700
@@ -314,34 +312,6 @@ void MeshBuilder::addDiff134_hi1(int slot, int index, const Vec3* pt)
     e.v3c.push_back(d);
 }
 
-// ---------------------------------------------------------------------------
-// EH copy constructors (partial reconstructions)
-// ---------------------------------------------------------------------------
-
-// @ 0x00716110
-void MeshBuilder::copyFrom410(const MeshBuilder& src)
-{
-    // Approximate: the original copies each vector with EH vector-copy-constructor
-    // iterators.  See partial.txt.
-    *(u32*)&pad0[0] = *(u32*)&src.pad0[0];
-    v8.v.mpBegin = 0;
-    v8.v.mpEnd = 0;
-    v8.v.mpCapacity = 0;
-    v1c.v.mpBegin = 0;
-    v1c.v.mpEnd = 0;
-    v1c.v.mpCapacity = 0;
-}
-
-// @ 0x007162b0
-void MeshBuilder::copyFrom2b0(const MeshBuilder& src)
-{
-    v8.v.mpBegin = 0;
-    v8.v.mpEnd = 0;
-    v8.v.mpCapacity = 0;
-    v1c.v.mpBegin = 0;
-    v1c.v.mpEnd = 0;
-    v1c.v.mpCapacity = 0;
-}
 // --- equivalence checker address annotations
 
 // --- equivalence checker address annotations (dummy declarations) ---
@@ -366,4 +336,90 @@ namespace __equiv_ann2 {   // address annotations for the equivalence checker; n
 struct I {
     void reserve();   // 0x00714cd0 (equiv t2)
 };
+}
+
+// ===========================================================================
+// The two functions this slice still owes are compiler-generated copy
+// constructors of the two element types of SP::cMeshBuilder's arrays:
+//   0x00716110  cBuilderSection::cBuilderSection(const cBuilderSection&)   (0xd0-byte element)
+//   0x007162b0  cMorphTarget::cMorphTarget(const cMorphTarget&)             (0x50-byte element)
+// They are the functions the 0xd0- and 0x50-stride uninitialized_copy /
+// fill helpers around 0x007163c0 call.  Both are plain member-wise copies:
+// scalars, inlined eastl-vector copies for the int vectors, out-of-line
+// eastl-vector copies for the cSPVector3 ones, and
+// __eh_vector_copy_constructor_iterator_ runs for the section's two arrays.
+//
+// Residual (see nonmatching.txt): cl's register allocator colours two short-lived
+// memcpy/address temps opposite to retail, so 0x007162b0 is 205 == 205 bytes with a
+// 6-byte register swap and 0x00716110 is 402 vs 403 bytes.  The shape below (named
+// destination local, count + byte-count locals) is the closest of ~25 source variants.
+// ===========================================================================
+
+struct cSPVector2 { float x, y; };
+struct cSPVector3 { float x, y, z; };
+struct tMDUByte4  { u32 mValue; };
+
+// 8-byte allocator carried inside every vector of this region
+// (eastl::sp_vector_allocator : eastl::allocator, whose mpName sits at +0x0)
+struct spVectorAlloc { u32 mpName; u32 mExtra; };
+
+// 0x14-byte eastl::vector<T, sp_vector_allocator>.  The original inlines the copy ctor of
+// the int instantiation -- whose allocation helper stays an out-of-line call (0x004aa350) --
+// but calls the cSPVector3 one out of line (0x00473460), so the two are modelled separately.
+template<class T> struct spVecInl {
+    T*            mpBegin;      // +0x00
+    T*            mpEnd;        // +0x04
+    T*            mpCapacity;   // +0x08
+    spVectorAlloc mAlloc;       // +0x0c
+    void DoAlloc(int n, const spVectorAlloc& a);   // 0x004aa350
+    spVecInl() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~spVecInl();                                   // non-trivial: the buffer is freed
+    spVecInl(const spVecInl& x) {
+        int n = (int)(x.mpEnd - x.mpBegin);
+        DoAlloc(n, x.mAlloc);
+        int bytes = (int)((char*)x.mpEnd - (char*)x.mpBegin);
+        T* d = mpBegin;
+        mpEnd = (T*)memcpy(d, x.mpBegin, (size_t)bytes) + (bytes >> 2);
+    }
+};
+
+template<class T> struct spVecExt {
+    T*            mpBegin;      // +0x00
+    T*            mpEnd;        // +0x04
+    T*            mpCapacity;   // +0x08
+    spVectorAlloc mAlloc;       // +0x0c
+    spVecExt(const spVecExt& x);   // 0x00473460: out of line in the original
+    ~spVecExt();
+};
+
+// element of SP::cMeshBuilder::mSections
+struct cBuilderSection {
+    u32                  mVertexFormat;      // +0x00
+    int                  mNumVertices;       // +0x04
+    spVecInl<int>        mPositionIndices;   // +0x08
+    spVecInl<int>        mNormalIndices;     // +0x1c
+    spVecExt<cSPVector2> mTexCoordIndices[4];// +0x30
+    spVecExt<tMDUByte4>  mColorIndices[2];   // +0x80
+    spVecInl<int>        mAttribIndices;     // +0xa8
+    spVecInl<int>        mVertIndices;       // +0xbc
+};
+
+// element of SP::cMeshBuilder::mMorphTargets
+struct cMorphTarget {
+    spVecInl<int>        mPositionIndices;   // +0x00
+    spVecExt<cSPVector3> mPositionDeltas;    // +0x14
+    spVecInl<int>        mNormalIndices;     // +0x28
+    spVecExt<cSPVector3> mNormalDeltas;      // +0x3c
+};
+
+// These exist only so the compiler emits the two implicit copy constructors under test.
+// 0x00716110 cBuilderSection::cBuilderSection
+__declspec(noinline) void* ForceCopySection(void* p, const cBuilderSection& x)
+{
+    return new (p) cBuilderSection(x);
+}
+// 0x007162b0 cMorphTarget::cMorphTarget
+__declspec(noinline) void* ForceCopyMorph(void* p, const cMorphTarget& x)
+{
+    return new (p) cMorphTarget(x);
 }
