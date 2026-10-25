@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00d70ab0 22 complete SP::PUKE_Activate; size 92 vs 94; flags bit 9 orig materializes `mov edx,[b58]; shr edx,9; test dl,1` vs folded `test dword [b58],0x200`; tail call differs; equiv WEAK (no mismatch)
+00d70b10 148 complete SP::FUN_00d70b10; size 223 vs 210; same calls/slots, float codegen scheduling and stack frame differ; equiv PASS
+00d70c70 410 complete SP::WAIT_FOR_CARCASS_BABY_Tick; size 609 vs 606; same calls/slots, switch layout and float/Vec3 temp slots differ; equiv WEAK (no mismatch)
+00d70ed0 114 complete SP::FUN_00d70ed0; size 269 vs 267; same calls/slots, stack frame and AssignInteractor/vtable scheduling differ; equiv PASS

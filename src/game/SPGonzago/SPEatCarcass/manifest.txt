@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPEatCarcass.cpp  ?WAIT_FOR_CARCASS_Activate@SP@@YA_NPAVcSPCreatureBase_s00d7_0080@1@HHHHHPAUTargetHolder@1@@Z  00d70bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
