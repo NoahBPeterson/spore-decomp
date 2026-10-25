@@ -14,3 +14,4 @@
 00bdf920 ?RemoveByPointer@CreatureHost@@QAEXPAX@Z  # remove-by-pointer from the +0x55c vector and tear down
 00bdf9e0 ?RemoveById@CreatureHost@@QAEPAXI@Z  # remove-by-id from the +0x55c vector, returns the object
 00bdfb00 ?DamageCombatantsInRadius@@YIIPAX00@Z  # pick a combatant in radius and emit a surface transform
+00bdf600 ?do_assign@LogReporterVec@@QAEXPAPAX0Ufalse_type@@@Z  # eastl::vector<AutoRefCount<ILogReporter>*>::assign (first,last)

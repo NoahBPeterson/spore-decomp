@@ -835,3 +835,58 @@ cleanup_false:
         operator_delete2(begin);
     return 0;
 }
+
+// ===========================================================================
+// 0x00bdf600 -- eastl::vector<EA::AutoRefCount<EA::Trace::ILogReporter>*,
+// sp_vector_allocator>::do_assign(first, last, false_type).  ecx = vector,
+// two iterator args plus the (unused) tag, hence ret 0xc.  The three paths are
+// the classic assign split: grow, tail-append and plain copy.
+// ===========================================================================
+struct false_type {};
+
+// Copies a refcounted element range into fresh storage (AddRef per element) and
+// returns the new end.  Args: (out slot, first, last, dest, current value).
+void   FUN_00829110(void* out, void* first, void* last, void* dest, void* cur); // 0x00829110
+// Copy-assign a refcounted element range, returns the new end: (first, last, dest).
+void** FUN_006782c0(void** first, void** last, void** dest);    // 0x006782c0
+
+struct LogReporterVec {
+    void**   mpBegin;                                           // +0x00
+    void**   mpEnd;                                             // +0x04
+    void**   mpCapacity;                                        // +0x08
+    uint32_t mAllocator;                                        // +0x0c
+    void**   mpInline;                                          // +0x10
+
+    void** DoAllocateAndCopy(int n, void** first, void** last); // 0x00b95280
+    void   DoDestroyElements(void** first, void** last);        // 0x00b007f0
+    void   do_assign(void** first, void** last, false_type tag);
+};
+
+// @ 0x00bdf600
+void LogReporterVec::do_assign(void** first, void** last, false_type)
+{
+    void** begin = mpBegin;
+    int n = (int)(last - first);
+    if ((unsigned)n > (unsigned)(int)(mpCapacity - begin)) {
+        void** buf = DoAllocateAndCopy(n, first, last);
+        DoDestroyElements(mpBegin, mpEnd);
+        if (mpBegin != 0 && mpBegin != mpInline)
+            operator_delete2(mpBegin);
+        void** e = buf + n;
+        mpBegin = buf;
+        mpEnd = e;
+        mpCapacity = e;
+        return;
+    }
+    int have = (int)(mpEnd - begin);
+    if ((unsigned)n <= (unsigned)have) {
+        void** newEnd = FUN_006782c0(first, last, begin);
+        DoDestroyElements(newEnd, mpEnd);
+        mpEnd = newEnd;
+        return;
+    }
+    void** mid = (void**)((char*)first + have * 4);
+    FUN_006782c0(first, mid, begin);
+    FUN_00829110(mid, &last, last, mpEnd, last);
+    mpEnd = last;
+}
