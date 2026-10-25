@@ -16,6 +16,7 @@ extern float  DAT_013ec4b8;                                   // 1e-08f
 extern float  DAT_013ef480;                                   // forced ambience value
 extern uint8  DAT_01687ad0;                                   // force-ambience flag
 extern float  DAT_01687ad4, DAT_01687ad8, DAT_01687adc;       // origin
+extern float  DAT_013f9428;                                   // 0.001f seconds-per-millisecond
 extern char   DAT_0156b478[];                                 // cVarListSerializer name
 extern char   DAT_013eb394[];                                 // base vtable
 extern char   DAT_014650cc[], DAT_014650e8[], DAT_014650c8[]; // manager vtables
@@ -53,6 +54,10 @@ struct Ext {
     void   FUN_00a1b6c0(uint32 a, uint32 b);               // 0x00a1b6c0  hashtable::DoFreeNodes
     void   FUN_00ae6970();                                 // 0x00ae6970  ~vector<AutoRefCount<cStarRecord>>
     void   FUN_00b5b9a0();                                 // 0x00b5b9a0  ~cGonzagoSubsystem
+    void   FUN_00b77780(const void* hasher, const void* equal);  // 0x00b77780  SpawnTable ctor
+    void   FUN_00b74f80(void* node, float a, float b);     // 0x00b74f80  per-node effect update
+    void   FUN_00b74590(void* node);                       // 0x00b74590  per-node effect release
+    void   FUN_00a887b0(uint32 index, float alpha);        // 0x00a887b0  Model::SetAlpha
 };
 
 // virtual interfaces walked by the per-frame pass
@@ -373,11 +378,246 @@ void Mgr::Destroy()
 }
 
 // ======================================================================
-// @ 0x00b7ba50  pooled-object update (INCOMPLETE -- see partial.txt)
+// pooled-object update: run the ambience pass, retire the pool entries
+// it consumed and refresh the pool from the spawn table
 // ======================================================================
+// vtable calls through a slot byte offset (see Obj/Shared in s00b76f10)
+#define VCALL0(p, off)  ((void(__thiscall*)(void*))(*(void***)(p))[(off) / 4])(p)
+#define VCALL2(p, off, a, b) \
+    ((void(__thiscall*)(void*, void*, int))(*(void***)(p))[(off) / 4])(p, a, b)
+#define VCALLR0(p, off) ((char(__thiscall*)(void*))(*(void***)(p))[(off) / 4])(p)
+
+// One node of the fixed 12-byte-node hashtables (key, AutoRefCount value, chain link).
+struct HtNode {
+    uint32  mKey;      // +0x00
+    uint32  mValue;    // +0x04  AutoRefCount<T>: 4-byte handle
+    HtNode* mpNext;    // +0x08
+};
+struct HtIter {
+    HtNode*  mpNode;   // +0x00
+    HtNode** mpBucket; // +0x04
+};
+inline bool operator==(const HtIter& l, const HtIter& r) { return l.mpNode == r.mpNode; }
+
+// eastl::fixed_hashtable<u32, AutoRefCount<cIVisualEffect>, 6, 12, 4, 4, 0, 1>
+// (SpawnTable from s00b76f10).  Only the fields this pass touches are named;
+// the two inline storage areas account for the rest of the 0x43c-byte object.
+struct SpawnTable {
+    uint32   mUnk00;            // +0x000
+    HtNode** mpBucketArray;     // +0x004
+    uint32   mBucketCount;      // +0x008
+    uint32   mElementCount;     // +0x00c
+    uint32   mMaxLoadFactor;    // +0x010
+    uint32   mGrowthFactor;     // +0x014
+    uint32   mNextResize;       // +0x018
+    uint32   mFreeHead;         // +0x01c
+    uint32   mUnk20;            // +0x020
+    void*    mpAllocBegin;      // +0x024
+    void*    mpAllocEnd;        // +0x028
+    uint32   mUnk2c;            // +0x02c
+    void*    mpInlineBuckets;   // +0x030
+    HtNode*  mpBuckets[6];      // +0x034
+    uint8    mPad04c[0x13c - 0x04c];
+    uint8    mNodePool[0x300];  // +0x13c
+    // The compiler gives the type a 0x550-byte footprint even though the constructor only
+    // initialises up to the end of the node pool at +0x43c (frames of both SpawnTable
+    // locals in the image are sized from 0x550).
+    uint8    mTail[0x114];      // +0x43c
+    HtIter Find(uint32 key) const;
+    HtIter End() const;
+};
+
+__forceinline HtIter SpawnTable::End() const
+{
+    HtIter it = { mpBucketArray[mBucketCount], &mpBucketArray[mBucketCount] };
+    return it;
+}
+
+__forceinline HtIter SpawnTable::Find(uint32 key) const
+{
+    uint32  h = key % mBucketCount;
+    HtNode* p = mpBucketArray[h];
+    while (p != 0 && p->mKey != key) p = p->mpNext;
+    if (p != 0) {
+        HtIter it = { p, &mpBucketArray[h] };
+        return it;
+    }
+    return End();
+}
+
+// The manager's pool at +0x4f2c: the same node shape, but a cNodeList-style
+// container header with the fixed-allocator bookkeeping the erase path uses.
+struct PoolList {
+    uint32   mUnk00;            // +0x00
+    HtNode** mpBucketArray;     // +0x04
+    uint32   mBucketCount;      // +0x08
+    uint32   mElementCount;     // +0x0c
+    uint32   mPad10[3];         // +0x10
+    uint32   mFreeHead;         // +0x1c
+    uint32   mUnk20;            // +0x20
+    void*    mpAllocBegin;      // +0x24
+    void*    mpAllocEnd;        // +0x28
+    uint32   mUnk2c;            // +0x2c
+    void*    mpInlineBuckets;   // +0x30
+    HtIter*  Erase(HtIter* out, HtNode* node, HtNode** bucket);  // 0x00d2c9f0 ret 0xc
+    uint32*  FindOrInsert(const uint32* key);                    // 0x00b76460 ret 4
+};
+
+// The manager fields this function reaches; the rest of the giant object is padding.
+struct MgrPoolView {
+    uint8    mPad[0x4f2c];
+    PoolList mPool;             // +0x4f2c
+};
+
+// Per-node obect layout (Obj in s00b76f10); only the fields touched here.
+struct Model;
+struct Shared { void* mpOwner; uint32 mFlags; };            // +0x00 / +0x04
+struct Vec3f  { float x, y, z; };
+struct PoolObj {
+    void**   vt;                // +0x00
+    uint32   mPad04[0x34 / 4 - 1];
+    uint32   mFlags;            // +0x34
+    Vec3f    mPos;              // +0x38
+    float    mSize[3];          // +0x44
+    uint32   mExtra;            // +0x50
+    Model*   mpModel;           // +0x54
+    void*    mpSource;          // +0x58
+    int      mIndex;            // +0x5c
+    uint32   mPad60;            // +0x60
+    int      mGridSlot;         // +0x64
+    float    mScale;            // +0x68
+    uint32   mId;               // +0x6c
+    Shared*  mpA;               // +0x70
+    uint32   mValue;            // +0x74
+    Shared*  mpB;               // +0x78
+    Vec3f    mDefPos;           // +0x7c
+    uint32   mKind;             // +0x88
+    void AddRef()  { VCALL0(this, 0x00); }
+    void Release() { VCALL0(this, 0x04); }
+};
+
+struct SgEntry;
+struct SgEntryList {
+    SgEntry* FUN_00b2a690(uint32 id, uint32 extra, uint32 index);  // 0x00b2a690 thiscall
+};
+SgEntryList* FUN_00b3d3b0(void);   // 0x00b3d3b0  plant-entry list accessor
+
+// The stack frame of UpdatePooled: the dummy byte the ctor tags and the local block the
+// compiler packs right below the 0x550-byte SpawnTable local (dummy byte at frame +0x13).
+#pragma pack(push, 1)
+struct UpdatePooledLocals {
+    Mgr*      mgr;
+    PoolList* pool;
+    float     sec;
+    HtIter    found;
+    HtIter    end;
+    HtNode*   endNode;
+    PoolObj*  obj;
+    HtIter    erased;
+};
+#pragma pack(pop)
+
+// @ 0x00b7ba50
 void Mgr::UpdatePooled(int a, int b)
 {
-    (void)this;
-    (void)a;
+    char      dummy;
+    UpdatePooledLocals loc;
+    SpawnTable spawn;
+    HtNode*   node;
+    HtNode**  slot;
+
     (void)b;
+    loc.sec = (float)(uint32)a * DAT_013f9428;
+
+    ((Ext*)&spawn)->FUN_00b77780(&dummy, &dummy);
+    loc.mgr = (Mgr*)((char*)this - 4);
+    loc.mgr->Update((int)&spawn, loc.sec);
+
+    // Retire every live pool entry that the ambience pass did not claim.
+    loc.pool = &((MgrPoolView*)(void*)this)->mPool;
+    slot = loc.pool->mpBucketArray;
+    node = *slot;
+    if (node == 0) {
+        do {
+            ++slot;
+            node = *slot;
+        } while (node == 0);
+    }
+    if (node != loc.pool->mpBucketArray[loc.pool->mBucketCount]) {
+        do {
+            loc.end = spawn.End();
+            loc.endNode = loc.end.mpNode;
+            loc.found = spawn.Find(node->mKey);
+            if (loc.found.mpNode == loc.endNode
+                || (loc.obj = (PoolObj*)node->mValue) == 0
+                || VCALLR0(loc.obj, 0x2c) != 0
+                || (((Ext*)loc.mgr)->FUN_00b74f80(loc.obj, 1.0f, loc.sec),
+                    loc.obj->mScale < DAT_01485720)) {
+                node = node->mpNext;
+                if (node == 0) {
+                    do {
+                        ++slot;
+                        node = *slot;
+                    } while (node == 0);
+                }
+            } else {
+                uint32 id;
+                SgEntry* entry;
+
+                ((Ext*)loc.mgr)->FUN_00b74590(loc.obj);
+                switch (loc.obj->mKind) {
+                case 0:  id = 0x3a8be428; break;
+                case 1:  id = 0x029c388a; break;
+                case 2:  id = 0x6d60a1cc; break;
+                default: id = 0;          break;
+                }
+                entry = FUN_00b3d3b0()->FUN_00b2a690(id, loc.obj->mExtra, loc.obj->mIndex);
+                if (entry == 0) {
+                    loc.obj->mFlags &= ~1u;
+                    if (loc.obj->mpModel != 0) {
+                        ((Ext*)loc.obj->mpModel)->FUN_00a887b0(loc.obj->mIndex, 1.0f);
+                    } else if (loc.obj->mpA != 0) {
+                        loc.obj->mpA->mFlags |= 1u;
+                        VCALL2(loc.obj->mpA->mpOwner, 0x16c, loc.obj->mpA, 1);
+                    }
+                }
+                HtIter* next = loc.pool->Erase(&loc.erased, node, slot);
+                node = next->mpNode;
+                slot = next->mpBucket;
+            }
+        } while (node != loc.pool->mpBucketArray[loc.pool->mBucketCount]);
+    }
+
+    // Re-seed the pool from the spawn table built by the ambience pass.
+    slot = spawn.mpBucketArray;
+    node = *slot;
+    if (node == 0) {
+        do {
+            ++slot;
+            node = *slot;
+        } while (node == 0);
+    }
+    if (node != spawn.mpBucketArray[spawn.mBucketCount]) {
+        do {
+            uint32  key = node->mKey;
+            PoolObj* value = (PoolObj*)node->mValue;
+            uint32* dst = loc.pool->FindOrInsert(&key);
+            uint32  old = *dst;
+
+            if ((uint32)value != old) {
+                if (value != 0) value->AddRef();
+                *dst = (uint32)value;
+                if (old != 0) ((PoolObj*)old)->Release();
+            }
+            node = node->mpNext;
+            if (node == 0) {
+                do {
+                    ++slot;
+                    node = *slot;
+                } while (node == 0);
+            }
+        } while (node != spawn.mpBucketArray[spawn.mBucketCount]);
+    }
+
+    RELEASE(&spawn, FUN_00a24480);
 }
