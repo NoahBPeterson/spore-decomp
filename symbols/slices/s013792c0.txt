@@ -1,0 +1,3 @@
+013792c0 ?InitPropTable_15a68b4@@YAXXZ  # InitPropTable_15a68b4 migrated from s013792c0 (verbatim, slice spelling)
+01379970 ?InitPropTable_16b1a0c@@YAXXZ  # InitPropTable_16b1a0c migrated from s013792c0 (verbatim, slice spelling)
+01379c40 ?InitPropTable_15a78e4@@YAXXZ  # InitPropTable_15a78e4 migrated from s013792c0 (verbatim, slice spelling)
