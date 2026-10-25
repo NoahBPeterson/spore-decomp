@@ -1,7 +1,1 @@
 # va  diff-bytes  reason
-00f3cb60  219  incomplete: stub
-00f3cc40  139  incomplete: content-validation summarizer ctor stub
-00f3cd10   66  incomplete: scalar deleting dtor stub
-00f3cd60  131  incomplete: wide-string member setter stub
-00f3cdf0  131  incomplete: wide-string member setter stub
-00f3ce80  131  incomplete: wide-string member setter stub
