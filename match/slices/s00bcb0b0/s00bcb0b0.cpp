@@ -519,80 +519,85 @@ cAnimalTrap* cAnimalTrap::ScalarDeletingDtor(unsigned flags)
 // ---- 0x00bcb730: read the serialized list records -------------------------------------
 // The retail build builds a 0x90-byte stack record (cGonzagoTimer + four EA::Variants +
 // a Vector3 seed + a refcounted pointer), hands the serializer that record, then copies it
-// into a fresh 0x234-byte list node.  Engine types are opaque here.
+// into a fresh list node whose entry (node+8) has exactly the same layout.  The record is
+// byte-packed: the seed vector ends at 0x38, one flag byte follows, and the four variants
+// start unaligned at 0x39/0x4d/0x61/0x75 (each 0x14 bytes, flags word at +0x10).
 struct cGonzagoTimer {
-    uint32_t m[0x40 / 4];
+    uint32_t m[0x20 / 4];                                                       // vptr + 7 words
     cGonzagoTimer();                                                            // 0x00b63890
     ~cGonzagoTimer();                                                           // 0x00b638b0
 };
-struct Variant { uint32_t m[5]; void Destruct(bool free); };                    // 0x0093db80
-struct Vector3f { float x, y, z; };
-struct ListRecord {
-    int mIndex;                 // +0x00
-    uint32_t m04;               // +0x04
-    cGonzagoTimer mTimer;       // +0x08
-    uint32_t m48;               // +0x48
-    Vector3f mVec;              // +0x2c (seed vector)
-    void* mpRef;                // +0x28 (refcounted payload)
-    Variant mV0, mV1, mV2, mV3;
+struct Variant {                // 0x14 bytes; flags/type words live at +0x10/+0x12
+    uint32_t m[4];              // +0x00  (payload, left untouched)
+    uint16_t mFlags;            // +0x10
+    uint16_t mTypeId;           // +0x12
+    Variant() : mFlags(0), mTypeId(0) {}
+    ~Variant() { if (mFlags & 4) Destruct(false); }
+    void Destruct(bool free);                                                   // 0x0093db80
 };
+struct Vector3f { float x, y, z; };
+struct RefPtr {                 // refcounted payload holder (released by its dtor)
+    void* mp;                   // +0x00
+    RefPtr() : mp(0) {}
+    ~RefPtr() { if (mp) ((FnThis0)(*(void***)mp)[1])(mp); }
+};
+#pragma pack(push, 1)
+struct ListRecord {             // 0x90 bytes
+    int mIndex;                 // +0x00
+    uint32_t m04;               // +0x04  (left untouched)
+    cGonzagoTimer mTimer;       // +0x08
+    RefPtr mRef;                // +0x28
+    Vector3f mVec;              // +0x2c
+    uint8_t m38;                // +0x38
+    Variant mV0;                // +0x39
+    Variant mV1;                // +0x4d
+    Variant mV2;                // +0x61
+    Variant mV3;                // +0x75
+    uint8_t mPad89[0x90 - 0x89];// +0x89
+    ListRecord() : mIndex(-1), m38(0) {}
+};
+#pragma pack(pop)
 extern Vector3f g_readVecSeed;                                                  // 0x0168b580
 extern int s_serializerGenericList;                                             // 0x0156d2a8
 bool __cdecl ReadInt32_93a780(void* stream, void* dst, int count, int flags);   // 0x0093a780
 
-static bool RecordVariantNeedsFree(const Variant& v)
-{
-    return (((const uint8_t*)&v)[5] & 4) != 0;
-}
-
 // @ 0x00bcb730
 void __cdecl ReadListProperty(void* stream, RawList* list)
 {
-    uint32_t count = 0;
     list->Clear();
     list->mpNext = (ListNode*)list;
     list->mpPrev = (ListNode*)list;
+    uint32_t count = 0;
     void* a = ((void* (__thiscall*)(void*))(*(void***)stream)[8])(stream);
     void* s = ((void* (__thiscall*)(void*))(*(void***)a)[6])(a);
     ReadInt32_93a780(s, &count, 1, 0);
     for (uint32_t i = 0; i < count; i++) {
         ListRecord rec;
-        rec.mIndex = -1;
-        rec.mVec = g_readVecSeed;
-        rec.mpRef = 0;
-        rec.m48 = 0;
-        rec.mV0.m[0] = rec.mV1.m[0] = rec.mV2.m[0] = rec.mV3.m[0] = 0;
-        rec.mV0.m[1] = rec.mV1.m[1] = rec.mV2.m[1] = rec.mV3.m[1] = 0;
+        rec.mVec.x = g_readVecSeed.x;
+        rec.mVec.y = g_readVecSeed.y;
+        rec.mVec.z = g_readVecSeed.z;
         cVarListSerializer ser;
         ser.Construct(&rec, &s_serializerGenericList, 0x1a80d26);
         ser.Serialize(stream);
 
         ListNode* node;
-        for (;;) {
-            if (list->mAlloc.mFields[4]) {
-                node = (ListNode*)list->mAlloc.mFields[4];
-                list->mAlloc.mFields[4] = *(uint32_t*)node;
-                break;
+        FixedAllocatorBase* const alloc = &list->mAlloc;
+        do {
+            if (alloc->mFields[4]) {
+                node = (ListNode*)alloc->mFields[4];
+                alloc->mFields[4] = *(uint32_t*)node;
+                goto have;
             }
-            if (!list->mAlloc.AddCore(0, 0)) {
-                node = 0;
-                break;
-            }
-        }
-        if (node) {
-            node->mEntry.Construct(&rec);
-            node->mpNext = (ListNode*)list;
-            node->mpPrev = list->mpPrev;
-            list->mpPrev->mpNext = node;
-            list->mpPrev = node;
-        }
-
-        if (RecordVariantNeedsFree(rec.mV3)) rec.mV3.Destruct(false);
-        if (RecordVariantNeedsFree(rec.mV1)) rec.mV1.Destruct(false);
-        if (RecordVariantNeedsFree(rec.mV0)) rec.mV0.Destruct(false);
-        if (RecordVariantNeedsFree(rec.mV2)) rec.mV2.Destruct(false);
-        if (rec.mpRef)
-            ((FnThis0)(*(void***)rec.mpRef)[1])(rec.mpRef);
+        } while (alloc->AddCore(0, 0));
+        node = 0;
+    have:
+        ListEntry* entry = (ListEntry*)((char*)node + 8);
+        if (entry)
+            entry->Construct(&rec);
+        node->mpNext = (ListNode*)list;
+        node->mpPrev = list->mpPrev;
+        list->mpPrev->mpNext = node;
+        list->mpPrev = node;
     }
     ((void (__thiscall*)(void*))(*(void***)stream)[7])(stream);
 }
@@ -600,15 +605,28 @@ void __cdecl ReadListProperty(void* stream, RawList* list)
 // ---- 0x00bcbc80: cAnimalTrap state update ----------------------------------------------
 struct Matrix3 { float m[9]; };
 struct PtrVec { void** mpBegin; void** mpEnd; void** mpCap; };
+struct EffectParams {           // 0x14 bytes
+    uint16_t mFlags;            // +0x00
+    uint16_t mRefCount;         // +0x02
+    Vector3f mPos;              // +0x04
+    float mScale;               // +0x10
+};
 extern float g_matrixSeed;                                                      // 0x0168b5fc
+extern Vector3f g_vecZero;                                                      // 0x0168b5f0
+extern float g_eps0;                                                            // 0x013ec4b8
+extern float g_one;                                                             // 0x01485720
+extern float g_defaultRadius;                                                   // 0x01473c70
+extern float g_bigDistance;                                                     // 0x01466bac
 void Matrix3Assign(Matrix3* self, const void* src);                             // 0x0041cb40
 Matrix3* Matrix3FromFacingAndUp(Matrix3* out, const Vector3f* up, const Vector3f* facing); // 0x0069b440
 void* EffectsManager();                                                         // 0x0067ddd0
-void* NounManagerCall(int a, void* b, void* c);                                 // 0x00b3d300
+void* NounManager();                                                            // 0x00b3d300
 int GetPlayerEmpireOrMinus1();                                                  // 0x00b1f9d0
 float GetPropertyFloat(void* list, uint32_t key, float def);                    // 0x004e1c70
 void* FUN_00d1e660();                                                           // 0x00d1e660
 void* FUN_00b3d240();                                                           // 0x00b3d240
+void* GetPlayerTribe(void* mgr);                                                // 0x00bfc5f0
+void* GetChieftain(void* tribe);                                                // 0x00c8fd30
 
 // @ 0x00bcbc80
 void cAnimalTrap::Update()
@@ -616,20 +634,41 @@ void cAnimalTrap::Update()
     if (mp114 && ((bool (__thiscall*)(void*))(*(void***)mp114)[4])(mp114))
         return;
 
+    EffectParams ep;
+    ep.mFlags = 0;
+    ep.mRefCount = 0;
+    ep.mPos.x = g_vecZero.x;
+    ep.mPos.y = g_vecZero.y;
+    ep.mPos.z = g_vecZero.z;
+
     Matrix3 mtx;
     Matrix3Assign(&mtx, &g_matrixSeed);
 
     void* spatial = &mSpatial;
-    Vector3f* pos = (Vector3f*)((void* (__thiscall*)(void*))(*(void***)spatial)[0x2c / 4])(spatial);
+    ep.mPos = *(const Vector3f*)((void* (__thiscall*)(void*))(*(void***)spatial)[0x2c / 4])
+                  (spatial);
+    ep.mFlags |= 4;
+    ep.mRefCount++;
 
+    Vector3f up;
+    ((void (__thiscall*)(void*, Vector3f*))(*(void***)spatial)[0x5c / 4])(spatial, &up);
+
+    const Vector3f* pos = (const Vector3f*)((void* (__thiscall*)(void*))
+                            (*(void***)spatial)[0x2c / 4])(spatial);
     Vector3f facing;
-    float inv = 1.0f / sqrtf((pos->x * pos->x + pos->y * pos->y + pos->z * pos->z) + 1e-8f);
+    float inv = 1.0f / sqrtf(pos->x * pos->x + pos->y * pos->y + pos->z * pos->z + g_eps0);
     facing.x = pos->x * inv;
     facing.y = pos->y * inv;
     facing.z = pos->z * inv;
+
     Matrix3 tmp;
-    Matrix3FromFacingAndUp(&tmp, (const Vector3f*)&mtx.m[6], &facing);
+    Matrix3FromFacingAndUp(&tmp, &up, &facing);
     mtx = tmp;
+
+    ep.mFlags |= 2;
+    ep.mRefCount++;
+    ep.mRefCount++;
+    ep.mScale = g_one;
 
     void* em = EffectsManager();
     if (mp114) {
@@ -639,7 +678,7 @@ void cAnimalTrap::Update()
     }
     if (((bool (__thiscall*)(void*, uint32_t, int, void**))(*(void***)em)[0x2c / 4])
             (em, 0x39897926, 0, &mp114)) {
-        ((void (__thiscall*)(void*, Matrix3*))(*(void***)mp114)[6])(mp114, &mtx);
+        ((void (__thiscall*)(void*, EffectParams*))(*(void***)mp114)[6])(mp114, &ep);
         ((void (__thiscall*)(void*, int))(*(void***)mp114)[2])(mp114, 0);
     }
     if (mState == 4) {
@@ -651,25 +690,27 @@ void cAnimalTrap::Update()
         }
         if (((bool (__thiscall*)(void*, uint32_t, int, void**))(*(void***)em2)[0x2c / 4])
                 (em2, 0x2cb92f84, 0, &mp114)) {
-            ((void (__thiscall*)(void*, Matrix3*))(*(void***)mp114)[6])(mp114, &mtx);
+            ((void (__thiscall*)(void*, EffectParams*))(*(void***)mp114)[6])(mp114, &ep);
             ((void (__thiscall*)(void*, int))(*(void***)mp114)[2])(mp114, 0);
         }
     }
 
     void* propOwner = FUN_00d1e660();
     float radius = GetPropertyFloat(*(void**)(*(uint32_t*)((char*)propOwner + 0x1c) + 0x130),
-                                    0xb1112498, 10.0f);
+                                    0xb1112498, g_defaultRadius);
 
-    void* buf[32];
+    struct BufHolder { uint32_t mOwner; void* mItems[32]; };
+    BufHolder holder;
     PtrVec vec;
-    vec.mpBegin = buf;
-    vec.mpEnd = buf;
-    vec.mpCap = buf + 32;
+    holder.mOwner = 0;
+    vec.mpBegin = holder.mItems;
+    vec.mpEnd = holder.mItems;
+    vec.mpCap = holder.mItems + 32;
     void* hits = FUN_00b3d240();
-    uint32_t q = ((uint32_t (__thiscall*)(void*, float, PtrVec*, int, int))
-                  (*(void***)spatial)[0x2c / 4])(spatial, radius, &vec, 0, 0);
-    unsigned n = (unsigned)(vec.mpEnd - vec.mpBegin);
+    uint32_t q = ((uint32_t (__thiscall*)(void*, float, PtrVec*, int, int, int))
+                  (*(void***)spatial)[0x2c / 4])(spatial, radius, &vec, 0, 0, 0);
     if (((bool (__thiscall*)(void*, uint32_t))(*(void***)hits)[0x48 / 4])(hits, q)) {
+        unsigned n = (unsigned)(vec.mpEnd - vec.mpBegin);
         for (unsigned i = 0; i < n; i++) {
             void* obj = vec.mpBegin[i];
             if (!obj)
@@ -678,18 +719,21 @@ void cAnimalTrap::Update()
                               (obj, 0xd0036e08);
             if (!found)
                 continue;
-            void* tool = *(void**)((char*)found + 0x5a8);
-            NounManagerCall(0x11, &mtx, 0);
+            void* chief = GetChieftain(GetPlayerTribe(NounManager()));
+            void* tool = (void*)((char*)found + 0x5a8);
+            void* chiefTool = chief ? (void*)((char*)chief + 0x5a8) : 0;
+            NounManager();
             int empire = GetPlayerEmpireOrMinus1();
-            ((void (__thiscall*)(void*, float, int))(*(void***)tool)[6])(tool, 10.0f, empire);
+            ((void (__thiscall*)(void*, float, int, int, const Vector3f*, void*))
+                (*(void***)tool)[6])(tool, g_bigDistance, empire, 0x11, &up, chiefTool);
         }
     }
 
     mState++;
     if (mState == 5)
         m110 = 0;
-    for (unsigned i = 0; i < n; i++) {
-        void* obj = vec.mpBegin[i];
+    for (void** it = vec.mpBegin; it < vec.mpEnd; ++it) {
+        void* obj = *it;
         if (obj)
             ((void (__thiscall*)(void*))(*(void***)obj)[0xc0 / 4])(obj);
     }
