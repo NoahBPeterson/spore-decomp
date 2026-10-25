@@ -96,6 +96,7 @@ struct AssetObjStub {
 };
 struct SearchBoxStub {
     void f_00671c00();                    // 0x00671c00 (ecx = search box)
+    void OnSearchChanged();               // 0x00671c50 (ecx = search box)
 };
 
 // @ 0x006535b0  vector::DoInsertValue(position, value)
@@ -248,7 +249,7 @@ extern "C" int   FUN_00646030(void*, void*, void*, char);  // 0x00646030
 extern "C" char  SetAssetData(void*, int);             // 0x004bbe20
 extern "C" int*  FUN_00555a20(int*, int*, int*, char); // 0x00555a20
 extern "C" void* FUN_0065f810(int);                    // 0x0065f810
-extern "C" void* cSPUIAssetView_InitVerbCollection(void*);  // 0x004bb860
+extern "C" uint32_t cSPUIAssetView_InitVerbCollection(uint32_t);  // 0x004bb860
 extern "C" void  fixed_vector_DoInsertValue(void*, void*, void*);  // 0x0060a600
 extern "C" void* AppSystem();                          // 0x0067dd00
 extern "C" void  FUN_0065aeb0();                       // 0x0065aeb0
@@ -307,6 +308,8 @@ struct cSPUIAssetGrid {
     int GridScanRev();
     void GridClear();
     void GridShutdown();
+    bool CheckFlag();                     // 0x0064f320 (this = the grid)
+    char HandleMessage(int wparam, unsigned lparam);
 };
 
 // @ 0x00653b80  forward index scan
@@ -441,9 +444,14 @@ void cSPUIAssetGrid::GridShutdown() {
     }
 }
 
-// @ 0x00653cf0  cSPUIAssetView verb collection (PARTIAL: fixed_vector ctor +
-// collect loop; the lower_bound/insert path is a skeleton).
-void* VerbCollect(void* self, unsigned enabled) {
+// cSPUIAssetView itself only needs the collection entry point here.
+struct cSPUIAssetView {
+    void* VerbCollect(unsigned enabled);
+};
+
+// @ 0x00653cf0  cSPUIAssetView verb collection (fixed_vector of verb ids).
+void* cSPUIAssetView::VerbCollect(unsigned enabled) {
+    void* self = this;
     char* s = (char*)self;
     *(void**)(s + 0x10) = s + 0x18;
     *(void**)(s + 4) = s + 0x18;
@@ -453,18 +461,20 @@ void* VerbCollect(void* self, unsigned enabled) {
         return self;
     void* v = FUN_0065f810(1);
     char* begin = *(char**)v;
-    int n = (int)((*(char**)v + 4) - begin);
-    for (unsigned i = 0; i < (unsigned)(n / 0x34); ++i) {
-        void* verb = cSPUIAssetView_InitVerbCollection(*(void**)(begin + i * 0x34));
+    for (unsigned i = 0; i < (unsigned)((*(char**)((char*)v + 4) - begin) / 0x34); ++i) {
+        uint32_t verb = cSPUIAssetView_InitVerbCollection(*(uint32_t*)(begin + i * 0x34));
         if (verb) {
             char* end = *(char**)(s + 4);
             int* lo = FUN_00555a20((int*)*(void**)s, (int*)end, (int*)&verb, s[0x90]);
             if (lo == (int*)end) {
-                // append
-                *(char**)(s + 4) = end + 4;
-                if (end)
-                    *(void**)end = verb;
-            } else if (verb < (void*)*lo) {
+                if (end == *(char**)(s + 8)) {
+                    fixed_vector_DoInsertValue((void*)s, lo, &verb);
+                } else {
+                    *(char**)(s + 4) = end + 4;
+                    if (end)
+                        *(uint32_t*)end = verb;
+                }
+            } else if (verb < (uint32_t)*lo) {
                 fixed_vector_DoInsertValue((void*)s, lo, &verb);
             }
         }
@@ -472,10 +482,97 @@ void* VerbCollect(void* self, unsigned enabled) {
     return self;
 }
 
-// @ 0x00654100  cSPUIAssetGrid::HandleMessage (PARTIAL: large input switch).
-char GridHandleMessage(void* self, int wparam, unsigned lparam) {
-    (void)self; (void)wparam; (void)lparam;
-    return 0;
+// @ 0x00654100  cSPUIAssetGrid::HandleMessage
+char cSPUIAssetGrid::HandleMessage(int wparam, unsigned lparam) {
+    char* s = (char*)this;
+    if (s[0x1e4] != 0)
+        return 0;
+    if (lparam == 2 && wparam == 0x46) {
+        if (*(void**)(s + 0xe4) != 0)
+            ((SearchBoxStub*)*(void**)(s + 0xe4))->OnSearchChanged();
+        return 1;
+    }
+
+    if ((lparam & 0xffffffbf) == 0) {
+        if (wparam == 0x21 || wparam == 0x22) {
+            void* window = *(void**)((char*)*(void**)(s + 0x18c) + 0x20);
+            int visible = (*(int(__thiscall**)(void*))((char*)*(void**)window + 0x40))(window);
+            int total = (*(int(__thiscall**)(void*))((char*)*(void**)window + 0x48))(window);
+            int step;
+            if (total < visible)
+                step = visible - total;
+            else
+                step = 1;
+            if (wparam == 0x21)
+                step = -step;
+            float offset = (float)step + *(float*)(s + 0x180);
+            if (!(offset > 0.0f))
+                offset = 0.0f;
+            if (*(float*)(s + 0x188) <= offset)
+                offset = *(float*)(s + 0x188);
+            *(float*)(s + 0x180) = offset;
+            s[0x190] = 1;
+            SPUIHelpers_UpdateMouseFocus(1);
+            return 1;
+        }
+        if (wparam == 0x25 || wparam == 0x26 || wparam == 0x27 || wparam == 0x28) {
+            int index = (wparam == 0x25 || wparam == 0x26) ? GridScanFwd() : GridScanRev();
+            char* grid = *(char**)(s + 0xe8);
+            if (index != -1 && *(void**)(grid + index * 0x20 + 0x10) != 0) {
+                const int columns = *(int*)(s + 0x110);
+                const int count = (int)((*(char**)(s + 0xec) - grid) >> 5);
+                int next = index;
+                switch (wparam) {
+                case 0x25:
+                    if (index % columns != 0)
+                        next = index - 1;
+                    break;
+                case 0x26:
+                    if (columns <= index)
+                        next = index - columns;
+                    break;
+                case 0x27:
+                    if (index != count - 1 && index % columns != columns - 1)
+                        next = index + 1;
+                    break;
+                case 0x28:
+                    if (index < count - columns)
+                        next = columns + index;
+                    break;
+                }
+                void* entry = *(void**)(grid + next * 0x20 + 0x10);
+                if (next != index && entry != 0 && *(char*)((char*)entry + 0xf4) != 0)
+                    cSPUIAssetView_SelectAsset(entry, 0, 1, 0, 0, 0);
+            }
+            return 1;
+        }
+    }
+
+    if (lparam != 0)
+        return 0;
+    int index;
+    if (wparam == 0x24) {
+        if (*(int*)(s + 0x1b0) <= 0)
+            return 0;
+        index = CheckFlag() ? 1 : 0;
+    } else if (wparam == 0x23) {
+        const int count = *(int*)(s + 0x1b0);
+        if (count <= 0)
+            return 0;
+        index = CheckFlag() ? count : count - 1;
+    } else {
+        return 0;
+    }
+    if (index < 0)
+        return 0;
+    void* entry = *(void**)(*(char**)(s + 0xe8) + index * 0x20 + 0x10);
+
+    if (entry == 0)
+        return 1;
+    if (*(char*)((char*)entry + 0xf4) == 0)
+        return 1;
+    cSPUIAssetView_SelectAsset(entry, 0, 1, 0, 0, 0);
+    return 1;
 }
 // --- equivalence checker address annotations
 
