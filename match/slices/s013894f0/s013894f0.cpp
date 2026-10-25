@@ -1,10 +1,16 @@
-// Slice s013894f0: initializer of the Simulator::cScenarioClassAct attribute table (0x0138a710, 2420 bytes).
+// Slice s013894f0. Five compiler-generated dynamic initializers:
+//   0x013894f0  "Simulator/ScearioMode/UI" global object (new + ctor) and an auxiliary
+//               object at 0x015ad328, plus an atexit destructor registration.
+//   0x01389680  global array of 10 list/vector heads at 0x016c7df0 (stride 0x20), heads zeroed.
+//   0x0138a250  4-record attribute table at 0x015adbd0 (mKey / mMachineId / mServerId / mModelType).
+//   0x0138a400  8-record attribute table at 0x015add00 (SensorTag condition/action fields).
+//   0x0138a710  25-record Simulator::cScenarioClassAct attribute table at 0x015adf20 (2420 bytes).
 //
-// Builds 25 Simulator::Attribute records (60 bytes each, globals 0x15adf20..0x15ae4fc) through the
-// inline Attribute constructor; cl builds every element in one stack temporary and copies it into
-// the table with `rep movsd` (15 dwords). Offsets are cScenarioClassAct member offsets (ModAPI
-// cScenarioClassAct.h). The original is a compiler-generated dynamic initializer; this plain function with
-// per-element assignments is shape-equivalent (same bytes), so a relinked build must run it at startup.
+// Builds Attribute records (60 bytes each) through the inline Attribute constructor; cl builds
+// every element in one stack temporary and copies it into the table with `rep movsd` (15 dwords).
+// Offsets are member offsets from the matching ModAPI headers. The originals are compiler-generated
+// dynamic initializers; these plain functions with per-element assignments are shape-equivalent
+// (same bytes), so a relinked build must run them at startup.
 //
 // The callbacks are separate extern symbols per attribute type group (u64/int, float-like double, bool):
 // the retail linker folded identical template instances to one address (e.g. 0xb1fbf0 serves all three
@@ -111,6 +117,49 @@ void wt_00694ee0_g1(char*, void*);
 void wt_00694fa0_g3(char*, void*);
 void wt_00694fc0_g2(char*, void*);
 
+// ---------------------------------------------------------------------------
+// 0x013894f0: dynamic initializer of the "Simulator/ScearioMode/UI" global
+// object at 0x015ad334 and of an auxiliary object at 0x015ad328.
+// ---------------------------------------------------------------------------
+void* operator_new(unsigned size, const char* name, int, int, int, int);   // 0x00f473a0
+extern "C" int atexit(void (__cdecl*)(void));                             // 0x011e07ef
+void AtExit013c9070();                                                    // 0x013c9070
+
+extern void* g_spScenarioModeUI;    // 0x015ad334 (the constructed UI object)
+extern char  g_spScenarioModeAux[]; // 0x015ad328 (0x0c bytes before the UI pointer)
+
+// The retail constructor returns `this` in EAX after consuming it in ECX
+// (thiscall); modelling it as a returning member reproduces the `mov ecx,eax;
+// call; mov <global>,eax` sequence.
+struct SceneModeUI { void* Construct(); };        // 0x00f2aac0
+struct SceneModeAux { void  Init(); };            // 0x00f03290
+
+// @ 0x013894f0
+void InitScenarioModeUI() {
+  SceneModeUI* p = (SceneModeUI*)operator_new(0x234, "Simulator/ScearioMode/UI", 0, 0, 0, 0);
+  g_spScenarioModeUI = p ? p->Construct() : 0;
+  ((SceneModeAux*)g_spScenarioModeAux)->Init();
+  atexit(&AtExit013c9070);
+}
+
+// ---------------------------------------------------------------------------
+// 0x01389680: dynamic initializer of a global array of 10 list/vector heads at
+// 0x016c7df0 (stride 0x20). Only the two leading pointer members of each head
+// are cleared; a static destructor is registered afterwards.
+// ---------------------------------------------------------------------------
+struct ListHead { void* mpBegin; void* mpEnd; char pad[0x18]; };
+extern ListHead g_spHeadArray[10];   // 0x016c7df0
+void AtExit013c9140();               // 0x013c9140
+
+// @ 0x01389680
+void InitHeadArray() {
+  for (int i = 0; i < 10; ++i) {
+    g_spHeadArray[i].mpBegin = 0;
+    g_spHeadArray[i].mpEnd = 0;
+  }
+  atexit(&AtExit013c9140);
+}
+
 // @ 0x0138a710
 Attribute gScenarioClassActAttributes[25];
 
@@ -140,4 +189,72 @@ void InitScenarioClassActAttributes() {
   gScenarioClassActAttributes[22] = Attribute("descriptionDEPRECATED", 0x7114edf, 0x448, rd_00f293f0, wr_00f268b0, rt_00c2e4e0, wt_00692fb0, uk_00f25b60, u2_00f28880);
   gScenarioClassActAttributes[23] = Attribute("customBehavior", 0x7b787ea, 0x4c8, rd_00ac8750_g3, wr_00ac8780_g3, rt_00693090_g3, wt_00694fa0_g3, uk_00b1fbf0_g3, u2_0057ce00_g3);
   gScenarioClassActAttributes[24] = Attribute("customBehaviorEntries", 0x7b787fd, 0x4cc, rd_00f29560, wr_00f269d0, rt_00c2e4e0, wt_00692fb0, uk_00f26a60, u2_00f29650);
+}
+
+// ---------------------------------------------------------------------------
+// 0x0138a250: dynamic initializer of a 4-record attribute table at 0x015adbd0
+// (records 0x3c bytes apart: 015adbd0, 015adc0c, 015adc48, 015adc84).
+//   idx0 mKey       off 0x00 KEY_ATTR
+//   idx1 mMachineId off 0x0c u32
+//   idx2 mServerId  off 0x10 i64
+//   idx3 mModelType off 0x18 u32
+// ---------------------------------------------------------------------------
+Attribute gServerIdAttributes[4];   // 0x015adbd0
+
+// Per-record callback aliases: distinct object symbols stop cl from hoisting a
+// shared callback into a callee-saved register (retail keeps every callback as a
+// direct memory immediate and hoists only DefaultOffset).
+bool rd_00ae3430_r0(void*, void*);
+bool wr_00ae3450_r0(void*, void*);
+void rt_00693150_r0(const void*, void*);
+void wt_00695080_r0(char*, void*);
+bool uk_00b1fbf0_r0();
+bool u2_00ae5720_r0(void*, const char*, int);
+
+bool rd_00572810_r1(void*, void*);
+bool wr_00572840_r1(void*, void*);
+void rt_00693090_r1(const void*, void*);
+void wt_00694f00_r1(char*, void*);
+bool uk_00b1fbf0_r1();
+bool u2_00675ca0_r1(void*, const char*, int);
+
+bool rd_00aff840_r2(void*, void*);
+bool wr_00aff870_r2(void*, void*);
+void rt_00692fd0_r2(const void*, void*);
+void wt_00694ec0_r2(char*, void*);
+bool uk_00b1fbf0_r2();
+bool u2_00595a70_r2(void*, const char*, int);
+
+bool rd_00572810_r3(void*, void*);
+bool wr_00572840_r3(void*, void*);
+void rt_00693090_r3(const void*, void*);
+void wt_00694f00_r3(char*, void*);
+bool uk_00b1fbf0_r3();
+bool u2_00675ca0_r3(void*, const char*, int);
+
+// @ 0x0138a250
+void InitServerIdAttributes() {
+  gServerIdAttributes[0] = Attribute("mKey",       0x62b74270, 0x00, rd_00ae3430_r0, wr_00ae3450_r0, rt_00693150_r0, wt_00695080_r0, uk_00b1fbf0_r0, u2_00ae5720_r0);
+  gServerIdAttributes[1] = Attribute("mMachineId", 0x62b74271, 0x0c, rd_00572810_r1, wr_00572840_r1, rt_00693090_r1, wt_00694f00_r1, uk_00b1fbf0_r1, u2_00675ca0_r1);
+  gServerIdAttributes[2] = Attribute("mServerId",  0x62b74272, 0x10, rd_00aff840_r2, wr_00aff870_r2, rt_00692fd0_r2, wt_00694ec0_r2, uk_00b1fbf0_r2, u2_00595a70_r2);
+  gServerIdAttributes[3] = Attribute("mModelType", 0x62b74273, 0x18, rd_00572810_r3, wr_00572840_r3, rt_00693090_r3, wt_00694f00_r3, uk_00b1fbf0_r3, u2_00675ca0_r3);
+}
+
+// ---------------------------------------------------------------------------
+// 0x0138a400: dynamic initializer of an 8-record attribute table at 0x015add00
+// (records 0x3c bytes apart: 015add00 .. 015adea4). All rows share the int
+// u64/u32 callback pair; offsets 0x00,0x04,0x08,0x0c,0x10,0x14,0x18,0x1c.
+// ---------------------------------------------------------------------------
+Attribute gSensorTagAttributes[8];   // 0x015add00
+
+// @ 0x0138a400
+void InitSensorTagAttributes() {
+  gSensorTagAttributes[0] = Attribute("condition.conditionType",       0x7b78783, 0x00, rd_00572810, wr_00572840, rt_00692ff0, wt_00694ee0, uk_00b1fbf0, u2_0057cde0);
+  gSensorTagAttributes[1] = Attribute("condition.target.type",         0x7b7a2f2, 0x04, rd_00572810, wr_00572840, rt_00692ff0, wt_00694ee0, uk_00b1fbf0, u2_0057cde0);
+  gSensorTagAttributes[2] = Attribute("condition.target.value",        0x7b7a2f3, 0x08, rd_00572810, wr_00572840, rt_00692ff0, wt_00694ee0, uk_00b1fbf0, u2_0057cde0);
+  gSensorTagAttributes[3] = Attribute("action.actionType",             0x7b78786, 0x0c, rd_00572810, wr_00572840, rt_00692ff0, wt_00694ee0, uk_00b1fbf0, u2_0057cde0);
+  gSensorTagAttributes[4] = Attribute("action.target.type",            0x7bd3fae, 0x10, rd_00572810, wr_00572840, rt_00692ff0, wt_00694ee0, uk_00b1fbf0, u2_0057cde0);
+  gSensorTagAttributes[5] = Attribute("action.target.value",           0x7bd3fb4, 0x14, rd_00572810, wr_00572840, rt_00692ff0, wt_00694ee0, uk_00b1fbf0, u2_0057cde0);
+  gSensorTagAttributes[6] = Attribute("action.secondaryTarget.type",   0x7bd3fb8, 0x18, rd_00572810, wr_00572840, rt_00692ff0, wt_00694ee0, uk_00b1fbf0, u2_0057cde0);
+  gSensorTagAttributes[7] = Attribute("action.secondaryTarget.value",  0x7bd3fbd, 0x1c, rd_00572810, wr_00572840, rt_00692ff0, wt_00694ee0, uk_00b1fbf0, u2_0057cde0);
 }
