@@ -56,6 +56,10 @@ struct DequeIterator {
         return *this;
     }
 };
+template <class T, int N>
+inline bool operator==(const DequeIterator<T, N>& a, const DequeIterator<T, N>& b) { return a.mpCurrent == b.mpCurrent; }
+template <class T, int N>
+inline bool operator!=(const DequeIterator<T, N>& a, const DequeIterator<T, N>& b) { return a.mpCurrent != b.mpCurrent; }
 
 void DequeCtor31(void* allocator, int n);  // 0x0060d4f0 (allocator-adapter ctor)
 void PushFrontSlow(void* value);           // 0x0060db40
@@ -91,12 +95,52 @@ struct deque {
     void CancelId(int id);   // 0x00610df0
     void PopFront();         // 0x00610e90
     void PushSlow(void* value, bool flag);  // 0x0060eaf0
+    void erase(iterator first, iterator last);  // 0x0060f4a0
 };
 typedef deque<AutoRefCount<cITransaction>, 64> TransactionDeque;
+
+// remove_if / erase instantiations (bodies live in sibling slices). Declared with the
+// raw retail ABI (out-ptr + two by-value 16-byte iterators) and annotated so equivalence
+// runs the shipped code.
+// remove_if / erase instantiations (bodies live in sibling slices), declared with the
+// retail by-value ABI and annotated so equivalence runs the shipped code.
+typedef DequeIterator<AutoRefCount<cITransaction>, 64> TxnIterator;
+TxnIterator RemoveIfByIdTxn(TxnIterator first, TxnIterator last, int id, void* self);   // 0x0060e6e0
+TxnIterator RemoveIfCancelledTxn(TxnIterator first, TxnIterator last, void* self);      // 0x0060e800
+struct TxnDeque { TxnIterator Erase(TxnIterator first, TxnIterator last); };            // 0x0060f4a0
+
+// @ 0x610df0
+template <class T, int N>
+void deque<T, N>::CancelId(int id) {
+    TxnIterator first = RemoveIfByIdTxn((TxnIterator)mItBegin, (TxnIterator)mItEnd, id, this);
+    ((TxnDeque*)this)->Erase(first, (TxnIterator)mItEnd);
+}
+
+// @ 0x610e90
+template <class T, int N>
+void deque<T, N>::PopFront() {
+    TxnIterator first = RemoveIfCancelledTxn((TxnIterator)mItBegin, (TxnIterator)mItEnd, this);
+    ((TxnDeque*)this)->Erase(first, (TxnIterator)mItEnd);
+}
 
 struct RbNodeBase { RbNodeBase* mpRight; RbNodeBase* mpLeft; RbNodeBase* mpParent; char mColor; };
 RbNodeBase* RBTreeIncrementNode(RbNodeBase* node);  // 0x00921580
 struct IFeedRemover { void Remove(void* p); };       // 0x00943910
+// rbtree<unsigned, cActiveTransaction> helpers used by HandleTransactionResult.
+// find/erase are thiscall members (ecx = the tree at this+0x34); model the receiver.
+struct TxnTree {
+    void* find(void* resultOut, void* key);   // 0x00e5c780 (ecx = tree)
+    void* erase(void* node);                  // 0x0060f820 (ecx = tree)
+};
+void* AuthManager();                                                 // 0x00607a60
+void* MessageServer();                                               // 0x0067dcc0
+void  PostBehaviorFloat(float f);                                    // 0x0060e540
+int   ClassifyCommand(short a, void* src);                           // 0x0060ce10
+bool  FeedHelper00610070(void* node);                                // 0x00610070
+void  NextIDReady(void* self);                                       // 0x0060f010
+void  FUN_005648c0(void* p);                                         // 0x005648c0
+void* FUN_00564960(void* a, void* b);                                // 0x00564960
+void  FUN_00c53a90(void* p);                                         // 0x00c53a90
 // ---------------------------------------------------------------------------
 // FeedDescription records: an eastl::vector<FeedDescription> whose element is 0x70 bytes;
 // the erase helper (0x0060ee50) relocates the tail and the dtor (0x00547840) destroys the last.
@@ -125,15 +169,30 @@ void DequeCancelIdHelper(void* self, int id); // 0x00610df0
 void* __cdecl Alloc0x18(size_t);   // 0x00615970
 void* __cdecl Alloc0x10(size_t);   // 0x006159a0
 void* __cdecl Alloc0x110(size_t);  // 0x00615910
+void* __cdecl Alloc0xf0(size_t);   // 0x006158b0
+// A minimal eastl::string good enough for the "%I64u" key formatting at 0x6108a0; the
+// real ctor is the templated basic_string at 0x00472f50.
+namespace eastl {
+struct string {
+    char* mpBegin;       // +0
+    char* mpEnd;         // +4
+    char* mpCap;         // +8
+    string(int flags, const char* fmt, ...);   // 0x00472f50 (basic_string format ctor)
+    ~string();
+};
+}
 // Poster constructors run in place on the freshly allocated block (this = block).
 struct TxnFab {
     cITransaction* Make0x18(void* a, void* b, void* c);                        // 0x00616260
     cITransaction* Make0x10(unsigned long long id);                            // 0x006162d0
     cITransaction* Make0xa8(void* a, void* b, void* c, void* d, void* e, void* f); // 0x0061be80
+    cITransaction* Make0xf0(int kind, unsigned int keyLo, int zero);           // 0x00618da0
 };
 struct IAssetDir {
     bool GetServerId(void* key, unsigned long long* out, bool flag);  // 0x0054e530
     void AddPending2(unsigned long long id);                          // 0x0054e870
+    bool GetLocalKey(unsigned int keyLo, unsigned int keyHi, void* out);  // 0x0054e460
+    bool IsPending(unsigned int keyLo, unsigned int keyHi);               // 0x0054e740
 };
 int AssetDirCount(void* key);  // 0x00552300 (cdecl)
 struct TxnMem { cITransaction* GetAssetFeedEx(void* a, void* b); };  // 0x0061a8b0
@@ -165,6 +224,8 @@ class cPollinator { public:
     void PostTxn0x18(void* a, void* b, void* c);      // 0x00610cb0
     void PostTxn0xa8(void* a, void* b, void* c);      // 0x00611480
     void PostAddPending(void* key);                   // 0x00610d40
+    void DownloadAsset(unsigned int keyLo, unsigned int keyHi);  // 0x006108a0
+    void HandleTransactionResult(void* txn);          // 0x006111c0
     void ProcessTransactionQueue();                   // 0x00610140
 };
 
@@ -234,6 +295,151 @@ void cPollinator::PostAddPending(void* key) {
     if (AssetDirCount(key) != 1)
         ((IAssetDir*)mField58)->AddPending2(id);
 }
+
+// @ 0x6108a0  cPollinator::DownloadAsset(unsigned long long key)
+// ABI: a 64-bit key arrives as two 32-bit stack slots (thiscall ecx=this).
+void cPollinator::DownloadAsset(unsigned int keyLo, unsigned int keyHi) {
+    if (mEnabled == 0) return;
+
+    eastl::string name(0, "%I64u", keyLo, keyHi);
+
+    // Three-dword key copy consulted by the two deque walks below.
+    unsigned int key0 = 0, key1 = 0, key2 = 0;
+    if (!((IAssetDir*)mField58)->GetLocalKey(keyLo, keyHi, &key0)) return;
+    if (!((IAssetDir*)mField58)->IsPending(keyLo, keyHi)) return;
+
+    // Two passes over the transaction queue, removing finished transactions whose
+    // GetId() is one of the two feedback ids and whose stored key matches.
+    for (int pass = 0; pass < 2; pass++) {
+        const unsigned int wantId = pass == 0 ? 0x030d7c0b : 0x030d6f6b;
+        for (TransactionDeque::iterator it = mTransactionQueue.mItBegin;
+             it != mTransactionQueue.mItEnd; ++it) {
+            cITransaction* txn = it.mpCurrent->mpObject;
+            if (txn->GetId() != (int)wantId) continue;
+            if (*(unsigned int*)((char*)txn + 0x14) != key0) continue;
+            if (*(unsigned int*)((char*)txn + 0x18) != key1) continue;
+            if (*(unsigned int*)((char*)txn + 0x1c) != key2) continue;
+            *it.mpCurrent = 0;                       // drop the held reference
+            mTransactionQueue.erase(it, mTransactionQueue.mItEnd);
+            break;
+        }
+    }
+
+    // Allocate and post the 0xf0-byte feedback transaction for this key.
+    void* const mem = Alloc0xf0(0xf0);
+    cITransaction* t = mem ? ((TxnFab*)mem)->Make0xf0(3, keyLo, 0) : 0;
+    if (t) {
+        AutoRefCount<cITransaction> ref(t);
+        mTransactionQueue.push_front(ref);
+    }
+    ProcessTransactionQueue();
+}
+
+// @ 0x6111c0  HandleTransactionResult  cPollinator::HandleTransactionResult(cFeedbackEvent* txn)
+// The transaction-result type switch: looks the event up in mActiveTransactions
+// (rbtree at +0x34), dispatches on its 64-bit id and posts the result.
+void cPollinator::HandleTransactionResult(void* txn) {
+    if (txn) (*(void(__thiscall**)(void*))(*(int*)txn + 4))(txn);   // AddRef
+
+    void* found = 0;
+    void* node = ((TxnTree*)((char*)this + 0x34))->find(&found, (char*)txn + 0xc);
+    node = found;
+    if (node == (char*)this + 0x38) goto done;
+
+    {
+        void* slot = (char*)node + 0x14;
+        void* ev = *(void**)slot;
+        unsigned int id = (*(unsigned int(__thiscall**)(void*))(*(int*)ev + 0x10))(ev);
+
+        if (*(int*)((char*)txn + 0x10) == 10 && id != 0x03c88992u) {
+            void* auth = AuthManager();
+            if (*(unsigned short*)((char*)slot + 8) > 0) {
+                mEnabled = 0;
+                *(unsigned char*)((char*)this + 0xb0) = 0;
+                (*(void(__thiscall**)(void*, int))(*(int*)auth + 0x20))(auth, 1);
+            } else if (auth) {
+                void* sub = (*(void*(__thiscall**)(void*))(*(int*)auth + 0x60))(auth);
+                if ((*(unsigned char(__thiscall**)(void*, void*))(*(int*)sub + 4))(sub, *(void**)((char*)slot + 4))) {
+                    if (FeedHelper00610070(slot)) goto erase;
+                }
+            }
+        }
+
+        {
+            void* ev2 = *(void**)((char*)slot + 4);
+            void* p = *(void**)((char*)ev2 + 0xd8c);
+            if (p) (*(void(__thiscall**)(void*))(*(int*)p + 0x18))(p);
+        }
+        {
+            void* evA = *(void**)slot;
+            unsigned int ok = (*(unsigned int(__thiscall**)(void*, void*, void*, void*))(*(int*)evA + 0x18))(evA,
+                *(void**)((char*)txn + 0x10), *(void**)((char*)txn + 0x14), &mTransactionQueue);
+            ok &= 0xff;
+            unsigned int key[2]; key[0] = id; key[1] = ok;
+            void* cell = FUN_00564960(&key, 0);
+            int flag = (*(int*)((char*)cell + 4) != 0) && ok != 0 ? 1 : 0;
+            *(int*)((char*)cell + 4) = flag;
+
+            if (id == 0x030d7c0b) {
+                PostBehaviorFloat(1.0f);
+            } else if (id == 0x0165fea3) {
+                unsigned int lo = *(unsigned int*)((char*)slot + 0x20);
+                unsigned int hi = *(unsigned int*)((char*)slot + 0x24);
+                *(unsigned int*)((char*)this + 0x60) = lo;
+                *(unsigned int*)((char*)this + 0x64) = hi;
+                if ((lo & hi) != 0xffffffffu) {
+                    FUN_005648c0((char*)slot + 8);
+                    NextIDReady(this);
+                }
+            } else if (id == 0x01774a64) {
+                PostBehaviorFloat(1.0f);
+            } else if (id == 0x03c88992) {
+                if (ok != 0) {
+                    *(void**)((char*)this + 0x10c) = *(void**)((char*)slot + 0x70);
+                    *(unsigned int*)((char*)this + 0x60) = *(unsigned int*)((char*)slot + 0x60);
+                    *(unsigned int*)((char*)this + 0x64) = *(unsigned int*)((char*)slot + 0x64);
+                    NextIDReady(this);
+                }
+                void* auth = AuthManager();
+                if (auth && *(int*)((char*)txn + 0x10) != 8) {
+                    int r = ClassifyCommand(*(short*)((char*)txn + 0x10), *(void**)((char*)txn + 0x14));
+                    (*(void(__thiscall**)(void*, int))(*(int*)auth + 0x50))(auth, r);
+                }
+            } else if (id == 0x068caf64) {
+                void* evB = *(void**)slot;
+                *(unsigned int*)((char*)this + 0x60) = *(unsigned int*)((char*)evB + 0x20);
+                *(unsigned int*)((char*)this + 0x64) = *(unsigned int*)((char*)evB + 0x24);
+                if (ok == 0) {
+                    mEnabled = 0;
+                    *(unsigned char*)((char*)this + 0xb0) = 0;
+                    void* auth = AuthManager();
+                    (*(void(__thiscall**)(void*, int))(*(int*)auth + 0x20))(auth, 1);
+                    FUN_005648c0((char*)evB + 8);
+                    FUN_00c53a90((char*)this + 0x68);
+                } else if (*(char*)((char*)evB + 0x30) != 0) {
+                    FUN_005648c0((char*)evB + 8);
+                    NextIDReady(this);
+                }
+            }
+
+            {
+                void* held = *(void**)slot;
+                if (held) (*(void(__thiscall**)(void*))(*(int*)held + 4))(held);
+                void* ms = MessageServer();
+                unsigned int local[2]; local[0] = (unsigned int)0x1dd7bda9;
+                (*(void(__thiscall**)(void*, void*, void*))(*(int*)ms + 0x14))(ms, local, 0);
+                if (*(void**)&key) {
+                    void* k = *(void**)&key;
+                    (*(void(__thiscall**)(void*))(*(int*)k + 8))(k);
+                }
+            }
+        }
+erase:
+        ((TxnTree*)((char*)this + 0x34))->erase((char*)txn);
+    }
+done:
+    if (txn) (*(void(__thiscall**)(void*))(*(int*)txn + 8))(txn);   // Release
+}
 }  // namespace SP
 
 // ---------------------------------------------------------------------------
@@ -244,15 +450,6 @@ namespace SP {
 // @ 0x610140 (declared in this TU only; body lives in slice 17)
 __declspec(noinline) void cPollinator::ProcessTransactionQueue() { ProcessTransactionQueueGlobal(); }
 }  // namespace SP
-// @ 0x610df0
-void FUN_00610df0(void* self, int id) { (void)self; (void)id; }
-// @ 0x610e90
-void FUN_00610e90(void* self, void* a) { (void)self; (void)a; }
-// @ 0x6108a0
-void FUN_006108a0(void* self, void* a, void* b) { (void)self; (void)a; (void)b; }
-// @ 0x6111c0
-void FUN_006111c0(void* self, void* a) { (void)self; (void)a; }
-
 // ---------------------------------------------------------------------------
 // cPollinator ctor / dtor (0x00611580 / 0x006116c0).
 namespace SP {

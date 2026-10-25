@@ -1,4 +1,0 @@
-006108a0  881  SP::FUN_006108a0 (881 B): media-key transaction poster; skeleton only (1-byte ret stub), not reconstructed. flags /O2 /MD /Gy /TP /GS- /arch:SSE
-006111c0  696  SP::FUN_006111c0 (696 B): transaction-result type-switch handler; skeleton only (1-byte ret stub), not reconstructed. flags /O2 /MD /Gy /TP /GS- /arch:SSE
-00610df0  157  -  deque CancelId (157 B): out of slice target list; not reconstructed.
-00610e90  150  -  deque PopFront (150 B): out of slice target list; not reconstructed.
