@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCachedEventData.cpp  ?HandleMessage@cCachedEventData@@QAE_NIPAX@Z  00fe6fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCachedEventData.cpp  ?Flush@cCachedEventData@@QAEXXZ  00fe7020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCachedEventData.cpp  ?Prime@cCachedEventData@@QAEXXZ  00fe7100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCachedEventData.cpp  ?Shutdown@cCachedEventData@@QAEXXZ  00fe71c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
