@@ -1,20 +1,20 @@
-00dc67d0 SP::VehicleTree::IsOpportunityTarget  # behavior-tree node: is target a fire opportunity; 448 vs 461 bytes, marker name
-00dc69a0 SP::VehicleTree::GetBestOpportunityTarget  # behavior-tree node: best opportunity target; 138 vs 120 bytes
-00dc6a20 SP::RemoveVehicles  # byte-exact
-00dc6a70 SP::DefendCityOrder_Tick  # behavior-tree node: defend city order tick; 628 vs 618 bytes
-00dc6ce0 SP::VehicleTree::Node6ce0  # byte-exact (release slot +0x04)
-00dc6d60 SP::VehicleTree::Node6d60  # behavior-tree node: distance test; 198 vs 193 bytes, x87 scheduling
-00dc6e30 SP::VehicleTree::Node6e30  # bounds() over-extends over the unindexed twin at 00dc6eb0 (581 incl.); real body 00dc6e30..00dc6eaf
-00dc7080 SP::VehicleTree::Node7080  # byte-exact
-00dc7130 SP::VehicleTree::Node7130  # byte-exact
-00dc7150 SP::VehicleTree::Node7150  # bounds() over-extends (503); real body ~432
-00dc7300 SP::VehicleTree::Node7300  # byte-exact
-00dc7350 SP::VehicleTree::Node7350  # byte-exact
-00dc7370 SP::VehicleTree::Node7370  # byte-exact
-00dc7390 SP::VehicleTree::Node7390  # behavior-tree node: 386 vs 376 bytes
-00dc7510 SP::VehicleTree::Node7510  # byte-exact
-00dc7540 SP::VehicleTree::Node7540  # fastcall list drain; 62 vs 65, register choice for begin/end
-00dc7590 SP::cVehicle::PopToNearestValidSpot  # cdecl spot scan; 298 vs 324, loop index materialization
-00dc76e0 SP::VehicleTree::Node76e0  # byte-exact
+00dc67d0 ?IsOpportunityTarget@@YA_NPAUcVehicle@@PAX1_N2@Z  # IsOpportunityTarget migrated from s00dc67d0 (verbatim, slice spelling)
+00dc69a0 ?GetBestOpportunityTarget@@YAPAXPAUcVehicle@@PAX11D@Z  # GetBestOpportunityTarget migrated from s00dc67d0 (verbatim, slice spelling)
+00dc6a20 ?RemoveVehicles@SP@@YAXXZ  # SP::RemoveVehicles migrated from s00dc67d0
+00dc6a70 ?DefendCityOrder_Tick@@YA_NPAUcVehicle@@HHHHPAMPAUcCity@@M@Z  # DefendCityOrder_Tick migrated from s00dc67d0 (verbatim, slice spelling)
+00dc6ce0 ?Node6ce0@@YAXPAUcVehicle@@HHHHPAUNodeState6ce0@@@Z  # Node6ce0 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc6d60 ?Node6d60@@YAMPAUcVehicle@@HHI@Z  # Node6d60 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc6e30 ?Node6e30@@YA_NPAUcVehicle@@HHHH@Z  # Node6e30 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc7080 ?Node7080@@YA_NPAUcVehicle@@HHHHPAUNodeState7080@@@Z  # Node7080 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc7130 ?Node7130@@YAXHHHHHPAPAUcRefObj@@@Z  # Node7130 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc7150 ?Node7150@@YA_NPAUcVehicle@@HPAUNodeState7150@@@Z  # Node7150 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc7300 ?Node7300@@YAXPAUcVehicle@@HHHHPAUNodeState7300@@@Z  # Node7300 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc7350 ?Node7350@@YA_NHHHHHPAPAX@Z  # Node7350 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc7370 ?Node7370@@YAXHHHHHPAPAUcRefBase@@@Z  # Node7370 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc7390 ?Node7390@@YA_NPAUcVehicle@@@Z  # Node7390 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc7510 ?Node7510@@YAXPAUcVehicle@@HHHHPAPAUcRefObj@@@Z  # Node7510 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc7540 ?Node7540@@YIXPAURemoveList@@@Z  # Node7540 migrated from s00dc67d0 (verbatim, slice spelling)
+00dc7590 ?PopToNearestValidSpot@@YAXPAUSpotHolder@@PAUcActionCircle@@_N@Z  # PopToNearestValidSpot migrated from s00dc67d0 (verbatim, slice spelling)
+00dc76e0 ?Node76e0@@YAXPAURefHolder76e0@@@Z  # Node76e0 migrated from s00dc67d0 (verbatim, slice spelling)
 00dc7780 SP::FindClosestVehicleWrap  # 21 vs 28, bool argument materialization idiom
-00dc77a0 SP::VehicleTree::Node77a0  # byte-exact
+00dc77a0 ?Node77a0@@YAXPAUcVehicle@@HHHHPAUBufHolder@@@Z  # Node77a0 migrated from s00dc67d0 (verbatim, slice spelling)

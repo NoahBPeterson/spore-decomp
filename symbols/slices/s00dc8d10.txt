@@ -1,0 +1,2 @@
+00dc95b0 ?StandardVehicleMoveTick@@YA_NPAUCVehicle@@@Z  # StandardVehicleMoveTick migrated from s00dc8d10 (verbatim, slice spelling)
+00dc9680 ?FUN_00dc9680@@YAXPAUIRefCounted@@@Z  # FUN_00dc9680 migrated from s00dc8d10 (verbatim, slice spelling)

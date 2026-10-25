@@ -1,0 +1,1 @@
+00dd0230 ?VehicleTree_AttackCityOrder_Activate@@YA_NPAVcVehicle_s00dd_0230@@IIIIPAPAVcMilitaryAttackCityOrder@@@Z  # VehicleTree_AttackCityOrder_Activate migrated from s00dd0230 (verbatim, slice spelling)

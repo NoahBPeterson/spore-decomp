@@ -1,0 +1,5 @@
+00dc4c40 ?Match3DF@KeyLookup@@QAEPAXH@Z  # KeyLookup::Match3DF migrated from s00dc48e0 (verbatim, slice spelling)
+00dc4d40 ?FUN_00dc4d40@@YADPAUObj@@0@Z  # FUN_00dc4d40 migrated from s00dc48e0 (verbatim, slice spelling)
+00dc4e20 ?IsValidFireTarget@@YADPAUObj@@0@Z  # IsValidFireTarget migrated from s00dc48e0 (verbatim, slice spelling)
+00dc4ed0 ?FUN_00dc4ed0@@YAPAXPAM0PAUObj@@1@Z  # FUN_00dc4ed0 migrated from s00dc48e0 (verbatim, slice spelling)
+00dc4f90 ?FUN_00dc4f90@@YADPAUObj@@@Z  # FUN_00dc4f90 migrated from s00dc48e0 (verbatim, slice spelling)

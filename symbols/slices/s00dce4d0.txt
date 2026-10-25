@@ -1,0 +1,5 @@
+00dce970 ?FUN_00dce970@TObj@@QAEXPAX@Z  # TObj::FUN_00dce970 migrated from s00dce4d0 (verbatim, slice spelling)
+00dcea90 ?FUN_00dcea90@TObj@@QAEPAXPAX@Z  # TObj::FUN_00dcea90 migrated from s00dce4d0 (verbatim, slice spelling)
+00dceca0 ?FUN_00dceca0@TObj@@QAEXXZ  # TObj::FUN_00dceca0 migrated from s00dce4d0 (verbatim, slice spelling)
+00dced90 ?FUN_00dced90@TObj@@QAEXXZ  # TObj::FUN_00dced90 migrated from s00dce4d0 (verbatim, slice spelling)
+00dcf180 ?FUN_00dcf180@TObj@@QAEPAXPAXII@Z  # TObj::FUN_00dcf180 migrated from s00dce4d0 (verbatim, slice spelling)
