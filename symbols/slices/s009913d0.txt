@@ -7,13 +7,13 @@
 00991580 ?ChildInsert@TreeNode@UTFWinControls@EA@@QAEXPAUintrusive_list_node@eastl@@PAU123@@Z  # TreeNode::ChildInsert
 00991600 ?ChildRemoveAll@TreeNode@UTFWinControls@EA@@QAEXXZ  # TreeNode::ChildRemoveAll
 009916b0 ?SerUpdate@@YAXPAUTreeNode@UTFWinControls@EA@@@Z  # free helper: CalcVisibleLines + window notify
-009916f0 ?TreeNode_Expand@@YAXPAUTreeNode@UTFWinControls@EA@@@Z  # FUN_009916f0 -> SetFlag(2,true) wrapper
-00991700 ?TreeNode_Collapse@@YAXPAUTreeNode@UTFWinControls@EA@@@Z  # FUN_00991700 -> SetFlag(2,false) wrapper
+009916f0 ?TreeNode_Expand@@YIXPAVTreeNode@UTFWinControls@EA@@@Z  # FUN_009916f0 -> SetFlag(2,true) wrapper (__fastcall: node in ecx)
+00991700 ?TreeNode_Collapse@@YIXPAVTreeNode@UTFWinControls@EA@@@Z  # FUN_00991700 -> SetFlag(2,false) wrapper (__fastcall: node in ecx)
 00991710 ?Read@TreeNodeListMarshaller@UTFWinControls@EA@@QAE_NPAX00@Z  # TreeNodeListMarshaller::Read
 009917b0 ?InvalidateLayout@WinTreeView@UTFWinControls@EA@@QAEXXZ  # FUN_009917b0 -> TreeViewExtra::CalculateVisibleArea
 009917f0 ?SetBorders@WinTreeView@UTFWinControls@EA@@QAEXPAURectF@UTFWin@3@@Z  # WinTreeView::SetBorders
 00991860 ?ClearSelection@WinTreeView@UTFWinControls@EA@@QAEXXZ  # WinTreeView::ClearSelection
-009918b0 ?OnMouseDown@WinTreeView@UTFWinControls@EA@@QAEXXZ  # WinTreeView::OnMouseDown
+009918b0 ?OnMouseDown@WinTreeView@UTFWinControls@EA@@QAE_NHHHH@Z  # WinTreeView::OnMouseDown (ret 0x10, returns false)
 00991930 ?SetScrollbarDrawable@WinTreeView@UTFWinControls@EA@@QAEXHPAX@Z  # WinTreeView::SetScrollbarDrawable
 00991990 ?SetScrollbarEnabled@WinTreeView@UTFWinControls@EA@@QAEXHH@Z  # WinTreeView::SetScrollbarEnabled
 009919e0 ?CreateInstance@BasicFactory_TreeNode@UTFWinControls@EA@@QAEPAXPAX0@Z  # BasicFactory_TreeNode::CreateInstance (__stdcall ret 8)
