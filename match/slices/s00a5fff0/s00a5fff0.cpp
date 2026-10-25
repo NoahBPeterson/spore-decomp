@@ -570,6 +570,17 @@ bool g_bng_setup()
 }
 
 // --------------------------------------------------------- toggle object
+struct Toggle {
+    uint32_t  pad0[3];        // +0x00
+    t_outlet* mpOutlet;       // +0x0c
+    uint32_t  pad10[6];       // +0x10
+    bool      mLoadbangFlag;  // +0x28
+    t_symbol  mSym;           // +0x2c
+    t_symbol  mSymTo;         // +0x34
+    bool      mState;         // +0x3c
+    float     mValue;         // +0x40
+};
+
 // @ 0x00a60ce0  EA::Audio::Eapd::toggle_new
 void* toggle_new(void* a, void* b, int argc, t_atom* argv)
 {
@@ -598,27 +609,27 @@ void* toggle_new(void* a, void* b, int argc, t_atom* argv)
 }
 
 // @ 0x00a60df0  EA::Audio::Eapd::toggle_output
-void toggle_output(char* x)
+void __fastcall toggle_output(Toggle* x)
 {
-    float v = *(char*)(x + 0x3c) ? *(float*)(x + 0x40) : 0.0f;
+    float v = x->mState ? x->mValue : 0.0f;
 
     if (++gOutletCount < 1000) {
-        t_outlet* o = *(t_outlet**)(x + 0xc);
+        t_outlet* o = x->mpOutlet;
         for (t_outconnect* oc = o->o_connections; oc != 0; oc = oc->oc_next)
             outlet_float(oc->oc_to, v);
     }
     gOutletCount--;
 
-    int sym = *(int*)(x + 0x2c);
-    if (sym != sGuiEmptySymbol.mHash && sym != *(int*)(x + 0x34))
-        pd_send_float(sym, *(int*)(x + 0x30), v);
+    int sym = x->mSym.mHash;
+    if (sym != sGuiEmptySymbol.mHash && sym != x->mSymTo.mHash)
+        pd_send_float(sym, (int)x->mSym.mpName, v);
 }
 
 // @ 0x00a60e70  EA::Audio::Eapd::toggle_bang
 void toggle_bang(char* x)
 {
     *(char*)(x + 0x3c) = *(char*)(x + 0x3c) == 0;
-    toggle_output(x);
+    toggle_output((Toggle*)x);
 }
 
 // @ 0x00a60e90  EA::Audio::Eapd::toggle_float
@@ -627,10 +638,10 @@ void toggle_float(char* x, float f)
     if (0.0f != f) {
         *(char*)(x + 0x3c)  = 1;
         *(float*)(x + 0x40) = f;
-        toggle_output(x);
+        toggle_output((Toggle*)x);
     } else {
         *(char*)(x + 0x3c) = 0;
-        toggle_output(x);
+        toggle_output((Toggle*)x);
     }
 }
 
@@ -638,7 +649,7 @@ void toggle_float(char* x, float f)
 void toggle_loadbang(char* x)
 {
     if (*(char*)(x + 0x28) != 0)
-        toggle_output(x);
+        toggle_output((Toggle*)x);
 }
 
 } } }  // namespace EA::Audio::Eapd
