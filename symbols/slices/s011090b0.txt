@@ -1,1 +1,1 @@
-011090b0 FUN_011090b0  # void __thiscall (undefined4*,int,undefined4,ushort,float) float/vector routine; naked asm, byte-exact
+011090b0  ?Place@SlotScatter@@QAEXPAUSlotSet@@HIM@Z  # void __thiscall(SlotSet*, int, unsigned, float), ret 0x10: 7-mask group scan, slot-ring dedupe, QuerySlot 0x1108ac0, extents gate, matrix transform + clearance reject, Reserve 0x10ec540, Commit 0x1108a10/0x1108b80/0x1108c30, neighbour dot 0x1485378, sink vtable +0x08

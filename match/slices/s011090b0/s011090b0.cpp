@@ -1,1248 +1,218 @@
-// Slice s011090b0: Spore engine routines (naked transcription).
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+// Slice s011090b0: cSlotScatter::Place -- slot-ring scatter builder.
+// Replaces the earlier byte-transcription shim with real C++.
+// Flags: /O2 /MD /Gy /TP /fp:fast /GS- (no /EHsc, no /arch:SSE -- the original
+// is pure x87 and carries no /GS cookie).
 #include "types.h"
+#include <math.h>
 
-extern "C" void FUN_010ec4a0();
-extern "C" void FUN_010ec540();
-extern "C" void FUN_01108a10();
-extern "C" void FUN_01108ac0();
-extern "C" void FUN_01108b80();
-extern "C" void FUN_01108c30();
+// 4-byte entry of the fixed 8-slot ring.
+struct Slot {
+    uint8_t  m00;       // +0x00  slot kind (0..6 selects the matrix / commit helper)
+    uint8_t  m01;       // +0x01  slot flags (hashed from the entry mask)
+    uint16_t m02;       // +0x02  handle returned by the sink
+};
 
-// @ 0x011090b0  (943 bytes)
-__declspec(naked) void FUN_011090b0()
+struct Req {
+    uint8_t  m00;       // +0x00  kind (low byte of the caller key)
+    uint8_t  m01;       // +0x01  flags
+    uint16_t m02;       // +0x02  id (high word of the caller key)
+    int32_t  m04;       // +0x04  reserved handle
+};
+
+// the four header bytes are filled from the raw 32-bit caller key in one move
+union Key {
+    int32_t mKey;
+    Req     mReq;
+};
+
+struct SlotSet {
+    Slot    mSlots[8];                                     // +0x00
+    uint8_t m20;                                           // +0x20  added counter
+    uint8_t m21;                                           // +0x21  used slot count
+    int32_t Reserve(uint32_t a, uint32_t b, Req* req);      // 0x010ec540
+    void    Release(int32_t handle);                        // 0x010ec4a0
+};
+
+// 0x30-byte spatial node. A node's position is its own +0x00 triple; the
+// triple at +0x10 is what the neighbouring dot product uses.
+struct Node {
+    float    m00;       // +0x00
+    float    m04;       // +0x04
+    float    m08;       // +0x08
+    uint8_t  pad0C[4];  // +0x0c
+    float    m10;       // +0x10
+    float    m14;       // +0x14
+    float    m18;       // +0x18
+    uint8_t  pad1C[4];  // +0x1c
+    uint16_t m20;       // +0x20
+    uint8_t  pad22[0x0e];
+};
+
+struct Cursor {
+    Node* mpNode;       // +0x00
+};
+
+// 3x4 affine matrix (rows of 4 floats) followed by the 3 translation floats.
+struct Mat34 {
+    float m[15];
+};
+
+// record filled by QuerySlot (0x01108ac0). 16-byte aligned: its four-float
+// components are aligned vectors, which is what forces the aligned frame.
+struct __declspec(align(16)) Hit {
+    float   m00[4];     // +0x00
+    float   m10[4];     // +0x10
+    float   m20[4];     // +0x20
+    float   m30;        // +0x30
+    float   m34;        // +0x34
+    int32_t m38;        // +0x38  index into m00 / the m60 table
+    uint8_t pad3C[4];   // +0x3c
+};
+
+struct SlotScatter {
+    uint32_t m00;       // +0x00
+    uint32_t m04;       // +0x04
+    uint32_t m08;       // +0x08
+    void*    m0C;       // +0x0c  sink object, vtable slot +0x08 adds a node
+    Cursor*  m10;       // +0x10
+    Mat34*   m14;       // +0x14  matrix for slot kinds 3..6
+    Mat34*   m18;       // +0x18  matrix for slot kinds 0..2
+    uint8_t  pad1C[0x60 - 0x1c];
+    float    m60[4];    // +0x60  per-component offsets
+    uint8_t  pad70[0xa0 - 0x70];
+    float    mA0[4];    // +0xa0  per-component extents
+    float    mB0;       // +0xb0  clearance radius
+
+    void Place(SlotSet* set, int32_t key, uint32_t mask, float limit);   // 0x011090b0
+    void QuerySlot(Hit* out, Req* req);                                  // 0x01108ac0
+    void CommitA(Node* node, int32_t* handle, Hit* out);                 // 0x01108a10
+    void CommitB(Node* node, int32_t* handle, Hit* out);                 // 0x01108b80
+    void CommitC(Node* node, int32_t* handle, Hit* out);                 // 0x01108c30
+};
+
+// group masks tested against the caller's mask, in scan order
+extern const uint16_t g_14a5f70[7];   // 0x014a5f70
+extern float          g_14a5f80;      // 0x014a5f80  epsilon
+extern float          g_1485378;      // 0x01485378  neighbour dot threshold
+
+// @ 0x011090b0
+void SlotScatter::Place(SlotSet* set, int32_t key, uint32_t mask, float limit)
 {
-    __asm {
-        _emit 0x55
-        // push ebp
-        _emit 0x8B
-        _emit 0xEC
-        // mov ebp, esp
-        _emit 0x83
-        _emit 0xE4
-        _emit 0xF0
-        // and esp, 0xfffffff0
-        _emit 0x83
-        _emit 0xEC
-        _emit 0x74
-        // sub esp, 0x74
-        _emit 0x53
-        // push ebx
-        _emit 0x56
-        // push esi
-        _emit 0xB8
-        _emit 0x70
-        _emit 0x5F
-        _emit 0x4A
-        _emit 0x01
-        // mov eax, 0x14a5f70
-        _emit 0x57
-        // push edi
-        _emit 0x8B
-        _emit 0x7D
-        _emit 0x08
-        // mov edi, dword ptr [ebp + 8]
-        _emit 0x8B
-        _emit 0xF1
-        // mov esi, ecx
-        _emit 0x89
-        _emit 0x44
-        _emit 0x24
-        _emit 0x1C
-        // mov dword ptr [esp + 0x1c], eax
-        _emit 0x8D
-        _emit 0x9B
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // lea ebx, [ebx]
-        _emit 0x0F
-        _emit 0xB7
-        _emit 0x00
-        // movzx eax, word ptr [eax]
-        _emit 0x8B
-        _emit 0x5D
-        _emit 0x10
-        // mov ebx, dword ptr [ebp + 0x10]
-        _emit 0x8B
-        _emit 0xC8
-        // mov ecx, eax
-        _emit 0x23
-        _emit 0xCB
-        // and ecx, ebx
-        _emit 0x66
-        _emit 0x85
-        _emit 0xC9
-        // test cx, cx
-        _emit 0x0F
-        _emit 0x85
-        _emit 0x5D
-        _emit 0x03
-        _emit 0x00
-        _emit 0x00
-        // jne 0x1109440
-        _emit 0x8B
-        _emit 0x4D
-        _emit 0x0C
-        // mov ecx, dword ptr [ebp + 0xc]
-        _emit 0x89
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x14
-        // mov dword ptr [esp + 0x14], ecx
-        _emit 0x32
-        _emit 0xC5
-        // xor al, ch
-        _emit 0x8A
-        _emit 0xCD
-        // mov cl, ch
-        _emit 0x80
-        _emit 0xE1
-        _emit 0x0F
-        // and cl, 0xf
-        _emit 0x0A
-        _emit 0xC1
-        // or al, cl
-        _emit 0x8A
-        _emit 0xC8
-        // mov cl, al
-        _emit 0x0F
-        _emit 0xB6
-        _emit 0x47
-        _emit 0x21
-        // movzx eax, byte ptr [edi + 0x21]
-        _emit 0x48
-        // dec eax
-        _emit 0x88
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x15
-        // mov byte ptr [esp + 0x15], cl
-        _emit 0x78
-        _emit 0x16
-        // js 0x1109116
-        _emit 0x8A
-        _emit 0x54
-        _emit 0x24
-        _emit 0x14
-        // mov dl, byte ptr [esp + 0x14]
-        _emit 0x38
-        _emit 0x14
-        _emit 0x87
-        // cmp byte ptr [edi + eax*4], dl
-        _emit 0x75
-        _emit 0x0A
-        // jne 0x1109113
-        _emit 0x38
-        _emit 0x4C
-        _emit 0x87
-        _emit 0x01
-        // cmp byte ptr [edi + eax*4 + 1], cl
-        _emit 0x0F
-        _emit 0x84
-        _emit 0x2D
-        _emit 0x03
-        _emit 0x00
-        _emit 0x00
-        // je 0x1109440
-        _emit 0x48
-        // dec eax
-        _emit 0x79
-        _emit 0xEE
-        // jns 0x1109104
-        _emit 0x8D
-        _emit 0x54
-        _emit 0x24
-        _emit 0x14
-        // lea edx, [esp + 0x14]
-        _emit 0x52
-        // push edx
-        _emit 0x8D
-        _emit 0x44
-        _emit 0x24
-        _emit 0x44
-        // lea eax, [esp + 0x44]
-        _emit 0x50
-        // push eax
-        _emit 0x8B
-        _emit 0xCE
-        // mov ecx, esi
-        call FUN_01108ac0
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x50
-        // mov ecx, dword ptr [esp + 0x50]
-        _emit 0x8B
-        _emit 0x54
-        _emit 0x24
-        _emit 0x54
-        // mov edx, dword ptr [esp + 0x54]
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x58
-        // mov eax, dword ptr [esp + 0x58]
-        _emit 0x89
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x20
-        // mov dword ptr [esp + 0x20], ecx
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x20
-        // fld dword ptr [esp + 0x20]
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x5C
-        // mov ecx, dword ptr [esp + 0x5c]
-        _emit 0xD9
-        _emit 0xE1
-        // fabs 
-        _emit 0x89
-        _emit 0x54
-        _emit 0x24
-        _emit 0x24
-        // mov dword ptr [esp + 0x24], edx
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x24
-        // fld dword ptr [esp + 0x24]
-        _emit 0xD9
-        _emit 0xE1
-        // fabs 
-        _emit 0x89
-        _emit 0x44
-        _emit 0x24
-        _emit 0x28
-        // mov dword ptr [esp + 0x28], eax
-        _emit 0xD9
-        _emit 0x5C
-        _emit 0x24
-        _emit 0x24
-        // fstp dword ptr [esp + 0x24]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x28
-        // fld dword ptr [esp + 0x28]
-        _emit 0x89
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x2C
-        // mov dword ptr [esp + 0x2c], ecx
-        _emit 0xD9
-        _emit 0xE1
-        // fabs 
-        _emit 0xD9
-        _emit 0x5C
-        _emit 0x24
-        _emit 0x28
-        // fstp dword ptr [esp + 0x28]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x2C
-        // fld dword ptr [esp + 0x2c]
-        _emit 0xD9
-        _emit 0xE1
-        // fabs 
-        _emit 0xD9
-        _emit 0x5C
-        _emit 0x24
-        _emit 0x2C
-        // fstp dword ptr [esp + 0x2c]
-        _emit 0xD8
-        _emit 0x9E
-        _emit 0xA0
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // fcomp dword ptr [esi + 0xa0]
-        _emit 0xDF
-        _emit 0xE0
-        // fnstsw ax
-        _emit 0xF6
-        _emit 0xC4
-        _emit 0x05
-        // test ah, 5
-        _emit 0x7A
-        _emit 0x04
-        // jp 0x110917c
-        _emit 0xB2
-        _emit 0x01
-        // mov dl, 1
-        _emit 0xEB
-        _emit 0x02
-        // jmp 0x110917e
-        _emit 0x32
-        _emit 0xD2
-        // xor dl, dl
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x24
-        // fld dword ptr [esp + 0x24]
-        _emit 0xD8
-        _emit 0x9E
-        _emit 0xA4
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // fcomp dword ptr [esi + 0xa4]
-        _emit 0xDF
-        _emit 0xE0
-        // fnstsw ax
-        _emit 0xF6
-        _emit 0xC4
-        _emit 0x05
-        // test ah, 5
-        _emit 0x7A
-        _emit 0x04
-        // jp 0x1109193
-        _emit 0xB3
-        _emit 0x01
-        // mov bl, 1
-        _emit 0xEB
-        _emit 0x02
-        // jmp 0x1109195
-        _emit 0x32
-        _emit 0xDB
-        // xor bl, bl
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x28
-        // fld dword ptr [esp + 0x28]
-        _emit 0xD8
-        _emit 0x9E
-        _emit 0xA8
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // fcomp dword ptr [esi + 0xa8]
-        _emit 0xDF
-        _emit 0xE0
-        // fnstsw ax
-        _emit 0xF6
-        _emit 0xC4
-        _emit 0x05
-        // test ah, 5
-        _emit 0x7A
-        _emit 0x04
-        // jp 0x11091aa
-        _emit 0xB1
-        _emit 0x01
-        // mov cl, 1
-        _emit 0xEB
-        _emit 0x02
-        // jmp 0x11091ac
-        _emit 0x32
-        _emit 0xC9
-        // xor cl, cl
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x2C
-        // fld dword ptr [esp + 0x2c]
-        _emit 0xD8
-        _emit 0x9E
-        _emit 0xAC
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // fcomp dword ptr [esi + 0xac]
-        _emit 0xDF
-        _emit 0xE0
-        // fnstsw ax
-        _emit 0xF6
-        _emit 0xC4
-        _emit 0x05
-        // test ah, 5
-        _emit 0x7A
-        _emit 0x04
-        // jp 0x11091c1
-        _emit 0xB0
-        _emit 0x01
-        // mov al, 1
-        _emit 0xEB
-        _emit 0x02
-        // jmp 0x11091c3
-        _emit 0x32
-        _emit 0xC0
-        // xor al, al
-        _emit 0xD1
-        _emit 0xE1
-        // shl ecx, 1
-        _emit 0xC1
-        _emit 0xE3
-        _emit 0x02
-        // shl ebx, 2
-        _emit 0x0B
-        _emit 0xCB
-        // or ecx, ebx
-        _emit 0xF7
-        _emit 0xDA
-        // neg edx
-        _emit 0xC1
-        _emit 0xE2
-        _emit 0x03
-        // shl edx, 3
-        _emit 0x0B
-        _emit 0xCA
-        // or ecx, edx
-        _emit 0x0B
-        _emit 0xC8
-        // or ecx, eax
-        _emit 0x83
-        _emit 0xE1
-        _emit 0x0E
-        // and ecx, 0xe
-        _emit 0x80
-        _emit 0xF9
-        _emit 0x0E
-        // cmp cl, 0xe
-        _emit 0x0F
-        _emit 0x85
-        _emit 0x61
-        _emit 0x02
-        _emit 0x00
-        _emit 0x00
-        // jne 0x1109440
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x78
-        // mov eax, dword ptr [esp + 0x78]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x70
-        // fld dword ptr [esp + 0x70]
-        _emit 0xD8
-        _emit 0x4C
-        _emit 0x84
-        _emit 0x40
-        // fmul dword ptr [esp + eax*4 + 0x40]
-        _emit 0xD9
-        _emit 0xE0
-        // fchs 
-        _emit 0xD8
-        _emit 0x64
-        _emit 0x86
-        _emit 0x60
-        // fsub dword ptr [esi + eax*4 + 0x60]
-        _emit 0xD9
-        _emit 0x54
-        _emit 0x24
-        _emit 0x74
-        // fst dword ptr [esp + 0x74]
-        _emit 0xD9
-        _emit 0x45
-        _emit 0x14
-        // fld dword ptr [ebp + 0x14]
-        _emit 0xD8
-        _emit 0x25
-        _emit 0x80
-        _emit 0x5F
-        _emit 0x4A
-        _emit 0x01
-        // fsub dword ptr [0x14a5f80]
-        _emit 0xD9
-        _emit 0xC9
-        // fxch st(1)
-        _emit 0xDE
-        _emit 0xD9
-        // fcompp 
-        _emit 0xDF
-        _emit 0xE0
-        // fnstsw ax
-        _emit 0xF6
-        _emit 0xC4
-        _emit 0x01
-        // test ah, 1
-        _emit 0x0F
-        _emit 0x85
-        _emit 0x33
-        _emit 0x02
-        _emit 0x00
-        _emit 0x00
-        // jne 0x1109440
-        _emit 0x8A
-        _emit 0x44
-        _emit 0x24
-        _emit 0x14
-        // mov al, byte ptr [esp + 0x14]
-        _emit 0x3C
-        _emit 0x06
-        // cmp al, 6
-        _emit 0x0F
-        _emit 0x87
-        _emit 0x1D
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        // ja 0x1109336
-        _emit 0x3C
-        _emit 0x02
-        // cmp al, 2
-        _emit 0x77
-        _emit 0x50
-        // ja 0x110926d
-        _emit 0x8B
-        _emit 0x46
-        _emit 0x18
-        // mov eax, dword ptr [esi + 0x18]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x58
-        // fld dword ptr [esp + 0x58]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x20
-        // fmul dword ptr [eax + 0x20]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x54
-        // fld dword ptr [esp + 0x54]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x10
-        // fmul dword ptr [eax + 0x10]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x50
-        // fld dword ptr [esp + 0x50]
-        _emit 0xD8
-        _emit 0x08
-        // fmul dword ptr [eax]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD8
-        _emit 0x40
-        _emit 0x30
-        // fadd dword ptr [eax + 0x30]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x58
-        // fld dword ptr [esp + 0x58]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x24
-        // fmul dword ptr [eax + 0x24]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x54
-        // fld dword ptr [esp + 0x54]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x14
-        // fmul dword ptr [eax + 0x14]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x50
-        // fld dword ptr [esp + 0x50]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x04
-        // fmul dword ptr [eax + 4]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD8
-        _emit 0x40
-        _emit 0x34
-        // fadd dword ptr [eax + 0x34]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x58
-        // fld dword ptr [esp + 0x58]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x28
-        // fmul dword ptr [eax + 0x28]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x54
-        // fld dword ptr [esp + 0x54]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x18
-        // fmul dword ptr [eax + 0x18]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x50
-        // fld dword ptr [esp + 0x50]
-        _emit 0xEB
-        _emit 0x4E
-        // jmp 0x11092bb
-        _emit 0x8B
-        _emit 0x46
-        _emit 0x14
-        // mov eax, dword ptr [esi + 0x14]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x48
-        // fld dword ptr [esp + 0x48]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x20
-        // fmul dword ptr [eax + 0x20]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x44
-        // fld dword ptr [esp + 0x44]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x10
-        // fmul dword ptr [eax + 0x10]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x40
-        // fld dword ptr [esp + 0x40]
-        _emit 0xD8
-        _emit 0x08
-        // fmul dword ptr [eax]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD8
-        _emit 0x40
-        _emit 0x30
-        // fadd dword ptr [eax + 0x30]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x48
-        // fld dword ptr [esp + 0x48]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x24
-        // fmul dword ptr [eax + 0x24]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x44
-        // fld dword ptr [esp + 0x44]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x14
-        // fmul dword ptr [eax + 0x14]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x40
-        // fld dword ptr [esp + 0x40]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x04
-        // fmul dword ptr [eax + 4]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD8
-        _emit 0x40
-        _emit 0x34
-        // fadd dword ptr [eax + 0x34]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x48
-        // fld dword ptr [esp + 0x48]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x28
-        // fmul dword ptr [eax + 0x28]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x44
-        // fld dword ptr [esp + 0x44]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x18
-        // fmul dword ptr [eax + 0x18]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x40
-        // fld dword ptr [esp + 0x40]
-        _emit 0xD8
-        _emit 0x48
-        _emit 0x08
-        // fmul dword ptr [eax + 8]
-        _emit 0x33
-        _emit 0xC9
-        // xor ecx, ecx
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD8
-        _emit 0x40
-        _emit 0x38
-        // fadd dword ptr [eax + 0x38]
-        _emit 0x8A
-        _emit 0x47
-        _emit 0x21
-        // mov al, byte ptr [edi + 0x21]
-        _emit 0x84
-        _emit 0xC0
-        // test al, al
-        _emit 0xD9
-        _emit 0x5C
-        _emit 0x24
-        _emit 0x38
-        // fstp dword ptr [esp + 0x38]
-        _emit 0x76
-        _emit 0x62
-        // jbe 0x1109332
-        _emit 0x33
-        _emit 0xD2
-        // xor edx, edx
-        _emit 0x80
-        _emit 0x3C
-        _emit 0x8F
-        _emit 0x06
-        // cmp byte ptr [edi + ecx*4], 6
-        _emit 0x77
-        _emit 0x4E
-        // ja 0x1109326
-        _emit 0x8B
-        _emit 0x46
-        _emit 0x10
-        // mov eax, dword ptr [esi + 0x10]
-        _emit 0xD9
-        _emit 0xC1
-        // fld st(1)
-        _emit 0xD8
-        _emit 0x64
-        _emit 0x10
-        _emit 0x30
-        // fsub dword ptr [eax + edx + 0x30]
-        _emit 0x8D
-        _emit 0x44
-        _emit 0x10
-        _emit 0x30
-        // lea eax, [eax + edx + 0x30]
-        _emit 0xD9
-        _emit 0xC1
-        // fld st(1)
-        _emit 0xD8
-        _emit 0x60
-        _emit 0x04
-        // fsub dword ptr [eax + 4]
-        _emit 0xD9
-        _emit 0x44
-        _emit 0x24
-        _emit 0x38
-        // fld dword ptr [esp + 0x38]
-        _emit 0xD8
-        _emit 0x60
-        _emit 0x08
-        // fsub dword ptr [eax + 8]
-        _emit 0xD9
-        _emit 0x86
-        _emit 0xB0
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // fld dword ptr [esi + 0xb0]
-        _emit 0xD9
-        _emit 0xC1
-        // fld st(1)
-        _emit 0xD8
-        _emit 0xCA
-        // fmul st(2)
-        _emit 0xD9
-        _emit 0xC3
-        // fld st(3)
-        _emit 0xD8
-        _emit 0xCC
-        // fmul st(4)
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD9
-        _emit 0xC4
-        // fld st(4)
-        _emit 0xD8
-        _emit 0xCD
-        // fmul st(5)
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD9
-        _emit 0xC1
-        // fld st(1)
-        _emit 0xD8
-        _emit 0xCA
-        // fmul st(2)
-        _emit 0xD8
-        _emit 0x05
-        _emit 0x80
-        _emit 0x5F
-        _emit 0x4A
-        _emit 0x01
-        // fadd dword ptr [0x14a5f80]
-        _emit 0xDE
-        _emit 0xD9
-        // fcompp 
-        _emit 0xDD
-        _emit 0xD8
-        // fstp st(0)
-        _emit 0xDD
-        _emit 0xD8
-        // fstp st(0)
-        _emit 0xDF
-        _emit 0xE0
-        // fnstsw ax
-        _emit 0xDD
-        _emit 0xD8
-        // fstp st(0)
-        _emit 0xF6
-        _emit 0xC4
-        _emit 0x01
-        // test ah, 1
-        _emit 0xDD
-        _emit 0xD8
-        // fstp st(0)
-        _emit 0x0F
-        _emit 0x84
-        _emit 0x16
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        // je 0x110943c
-        _emit 0x0F
-        _emit 0xB6
-        _emit 0x47
-        _emit 0x21
-        // movzx eax, byte ptr [edi + 0x21]
-        _emit 0x41
-        // inc ecx
-        _emit 0x83
-        _emit 0xC2
-        _emit 0x30
-        // add edx, 0x30
-        _emit 0x3B
-        _emit 0xC8
-        // cmp ecx, eax
-        _emit 0x7C
-        _emit 0xA0
-        // jl 0x11092d2
-        _emit 0xDD
-        _emit 0xD8
-        // fstp st(0)
-        _emit 0xDD
-        _emit 0xD8
-        // fstp st(0)
-        _emit 0x80
-        _emit 0x7F
-        _emit 0x21
-        _emit 0x08
-        // cmp byte ptr [edi + 0x21], 8
-        _emit 0x0F
-        _emit 0x83
-        _emit 0x00
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        // jae 0x1109440
-        _emit 0x8B
-        _emit 0x56
-        _emit 0x04
-        // mov edx, dword ptr [esi + 4]
-        _emit 0x8B
-        _emit 0x06
-        // mov eax, dword ptr [esi]
-        _emit 0x8D
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x14
-        // lea ecx, [esp + 0x14]
-        _emit 0x51
-        // push ecx
-        _emit 0x52
-        // push edx
-        _emit 0x50
-        // push eax
-        _emit 0x8B
-        _emit 0xCF
-        // mov ecx, edi
-        call FUN_010ec540
-        _emit 0x85
-        _emit 0xC0
-        // test eax, eax
-        _emit 0x89
-        _emit 0x44
-        _emit 0x24
-        _emit 0x18
-        // mov dword ptr [esp + 0x18], eax
-        _emit 0x0F
-        _emit 0x8C
-        _emit 0xE1
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // jl 0x1109440
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x78
-        // mov eax, dword ptr [esp + 0x78]
-        _emit 0x83
-        _emit 0xF8
-        _emit 0x02
-        // cmp eax, 2
-        _emit 0x8B
-        _emit 0x4E
-        _emit 0x10
-        // mov ecx, dword ptr [esi + 0x10]
-        _emit 0x8B
-        _emit 0x19
-        // mov ebx, dword ptr [ecx]
-        _emit 0x7F
-        _emit 0x14
-        // jg 0x1109381
-        _emit 0x8D
-        _emit 0x54
-        _emit 0x24
-        _emit 0x40
-        // lea edx, [esp + 0x40]
-        _emit 0x52
-        // push edx
-        _emit 0x8D
-        _emit 0x44
-        _emit 0x24
-        _emit 0x18
-        // lea eax, [esp + 0x18]
-        _emit 0x50
-        // push eax
-        _emit 0x53
-        // push ebx
-        _emit 0x8B
-        _emit 0xCE
-        // mov ecx, esi
-        call FUN_01108a10
-        _emit 0xEB
-        _emit 0x2B
-        // jmp 0x11093ac
-        _emit 0x83
-        _emit 0xF8
-        _emit 0x06
-        // cmp eax, 6
-        _emit 0x7F
-        _emit 0x14
-        // jg 0x110939a
-        _emit 0x8D
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x40
-        // lea ecx, [esp + 0x40]
-        _emit 0x51
-        // push ecx
-        _emit 0x8D
-        _emit 0x54
-        _emit 0x24
-        _emit 0x18
-        // lea edx, [esp + 0x18]
-        _emit 0x52
-        // push edx
-        _emit 0x53
-        // push ebx
-        _emit 0x8B
-        _emit 0xCE
-        // mov ecx, esi
-        call FUN_01108b80
-        _emit 0xEB
-        _emit 0x12
-        // jmp 0x11093ac
-        _emit 0x8D
-        _emit 0x44
-        _emit 0x24
-        _emit 0x40
-        // lea eax, [esp + 0x40]
-        _emit 0x50
-        // push eax
-        _emit 0x8D
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x18
-        // lea ecx, [esp + 0x18]
-        _emit 0x51
-        // push ecx
-        _emit 0x53
-        // push ebx
-        _emit 0x8B
-        _emit 0xCE
-        // mov ecx, esi
-        call FUN_01108c30
-        _emit 0x80
-        _emit 0x7F
-        _emit 0x21
-        _emit 0x01
-        // cmp byte ptr [edi + 0x21], 1
-        _emit 0x76
-        _emit 0x38
-        // jbe 0x11093ea
-        _emit 0x8B
-        _emit 0x56
-        _emit 0x10
-        // mov edx, dword ptr [esi + 0x10]
-        _emit 0x8B
-        _emit 0x02
-        // mov eax, dword ptr [edx]
-        _emit 0xD9
-        _emit 0x40
-        _emit 0xE8
-        // fld dword ptr [eax - 0x18]
-        _emit 0x83
-        _emit 0xE8
-        _emit 0x20
-        // sub eax, 0x20
-        _emit 0xD8
-        _emit 0x4B
-        _emit 0x18
-        // fmul dword ptr [ebx + 0x18]
-        _emit 0xD9
-        _emit 0x40
-        _emit 0x04
-        // fld dword ptr [eax + 4]
-        _emit 0xD8
-        _emit 0x4B
-        _emit 0x14
-        // fmul dword ptr [ebx + 0x14]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD9
-        _emit 0x00
-        // fld dword ptr [eax]
-        _emit 0xD8
-        _emit 0x4B
-        _emit 0x10
-        // fmul dword ptr [ebx + 0x10]
-        _emit 0xDE
-        _emit 0xC1
-        // faddp st(1)
-        _emit 0xD8
-        _emit 0x1D
-        _emit 0x78
-        _emit 0x53
-        _emit 0x48
-        _emit 0x01
-        // fcomp dword ptr [0x1485378]
-        _emit 0xDF
-        _emit 0xE0
-        // fnstsw ax
-        _emit 0xF6
-        _emit 0xC4
-        _emit 0x41
-        // test ah, 0x41
-        _emit 0x7A
-        _emit 0x0E
-        // jp 0x11093ea
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x18
-        // mov eax, dword ptr [esp + 0x18]
-        _emit 0x50
-        // push eax
-        _emit 0x8B
-        _emit 0xCF
-        // mov ecx, edi
-        call FUN_010ec4a0
-        _emit 0xEB
-        _emit 0x56
-        // jmp 0x1109440
-        _emit 0x8B
-        _emit 0x46
-        _emit 0x08
-        // mov eax, dword ptr [esi + 8]
-        _emit 0x8B
-        _emit 0x4E
-        _emit 0x0C
-        // mov ecx, dword ptr [esi + 0xc]
-        _emit 0x8B
-        _emit 0x11
-        // mov edx, dword ptr [ecx]
-        _emit 0x53
-        // push ebx
-        _emit 0x50
-        // push eax
-        _emit 0x8B
-        _emit 0x46
-        _emit 0x04
-        // mov eax, dword ptr [esi + 4]
-        _emit 0x50
-        // push eax
-        _emit 0x8B
-        _emit 0x06
-        // mov eax, dword ptr [esi]
-        _emit 0x50
-        // push eax
-        _emit 0xFF
-        _emit 0x52
-        _emit 0x08
-        // call dword ptr [edx + 8]
-        _emit 0x66
-        _emit 0x3D
-        _emit 0xFF
-        _emit 0xFF
-        // cmp ax, 0xffff
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x18
-        // mov ecx, dword ptr [esp + 0x18]
-        _emit 0x66
-        _emit 0x89
-        _emit 0x44
-        _emit 0x8F
-        _emit 0x02
-        // mov word ptr [edi + ecx*4 + 2], ax
-        _emit 0x75
-        _emit 0x0A
-        // jne 0x1109417
-        _emit 0x51
-        // push ecx
-        _emit 0x8B
-        _emit 0xCF
-        // mov ecx, edi
-        call FUN_010ec4a0
-        _emit 0xEB
-        _emit 0x29
-        // jmp 0x1109440
-        _emit 0x8B
-        _emit 0x46
-        _emit 0x10
-        // mov eax, dword ptr [esi + 0x10]
-        _emit 0x83
-        _emit 0x00
-        _emit 0x30
-        // add dword ptr [eax], 0x30
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x54
-        _emit 0x8F
-        _emit 0x02
-        // mov dx, word ptr [edi + ecx*4 + 2]
-        _emit 0x66
-        _emit 0x89
-        _emit 0x54
-        _emit 0x24
-        _emit 0x16
-        // mov word ptr [esp + 0x16], dx
-        _emit 0x66
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x8F
-        _emit 0x02
-        // mov ax, word ptr [edi + ecx*4 + 2]
-        _emit 0x66
-        _emit 0x89
-        _emit 0x43
-        _emit 0x20
-        // mov word ptr [ebx + 0x20], ax
-        _emit 0x80
-        _emit 0x7C
-        _emit 0x24
-        _emit 0x14
-        _emit 0x06
-        // cmp byte ptr [esp + 0x14], 6
-        _emit 0x77
-        _emit 0x09
-        // ja 0x1109440
-        _emit 0xFE
-        _emit 0x47
-        _emit 0x20
-        // inc byte ptr [edi + 0x20]
-        _emit 0xEB
-        _emit 0x04
-        // jmp 0x1109440
-        _emit 0xDD
-        _emit 0xD8
-        // fstp st(0)
-        _emit 0xDD
-        _emit 0xD8
-        // fstp st(0)
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x1C
-        // mov eax, dword ptr [esp + 0x1c]
-        _emit 0x83
-        _emit 0xC0
-        _emit 0x02
-        // add eax, 2
-        _emit 0x3D
-        _emit 0x7E
-        _emit 0x5F
-        _emit 0x4A
-        _emit 0x01
-        // cmp eax, 0x14a5f7e
-        _emit 0x89
-        _emit 0x44
-        _emit 0x24
-        _emit 0x1C
-        // mov dword ptr [esp + 0x1c], eax
-        _emit 0x0F
-        _emit 0x8C
-        _emit 0x7A
-        _emit 0xFC
-        _emit 0xFF
-        _emit 0xFF
-        // jl 0x11090d0
-        _emit 0x5F
-        // pop edi
-        _emit 0x5E
-        // pop esi
-        _emit 0x5B
-        // pop ebx
-        _emit 0x8B
-        _emit 0xE5
-        // mov esp, ebp
-        _emit 0x5D
-        // pop ebp
-        _emit 0xC2
-        _emit 0x10
-        _emit 0x00
-        // ret 0x10
+    for (int32_t g = 0; g < 7; ++g) {
+        uint16_t group = g_14a5f70[g];
+        if (((uint32_t)group & mask) != 0)
+            continue;
+
+        Key keyhdr;
+        keyhdr.mKey = key;
+        Req& req = keyhdr.mReq;
+        {
+            uint8_t hi = (uint8_t)(((uint32_t)key >> 8) & 0xff);
+            req.m01 = (uint8_t)((uint8_t)(group & 0xff) ^ hi) | (hi & 0x0f);
+        }
+
+        // already recorded in the ring?
+        bool present = false;
+        for (int32_t i = (int32_t)set->m21 - 1; i >= 0; --i) {
+            if (set->mSlots[i].m00 == req.m00 && set->mSlots[i].m01 == req.m01) {
+                present = true;
+                break;
+            }
+        }
+        if (present)
+            continue;
+
+        Hit hit;
+        QuerySlot(&hit, &req);
+
+        // req.m10[3] is compared by the original as well, but its flag is
+        // masked out of the branch, so only the first three components gate.
+        if (!(fabsf(hit.m10[0]) < mA0[0] &&
+              fabsf(hit.m10[1]) < mA0[1] &&
+              fabsf(hit.m10[2]) < mA0[2]))
+            continue;
+
+        float depth = -(hit.m30 * hit.m00[hit.m38]) - m60[hit.m38];
+        hit.m34 = depth;
+        if (depth < limit - g_14a5f80)
+            continue;
+
+        bool transformed = false;
+        float rx = 0.0f, ry = 0.0f, rz = 0.0f;
+        if ((uint8_t)key <= 2) {
+            const float* p = hit.m10;
+            const Mat34* m = m18;
+            rx = p[0] * m->m[0] + p[1] * m->m[4] + p[2] * m->m[8] + m->m[12];
+            ry = p[0] * m->m[1] + p[1] * m->m[5] + p[2] * m->m[9] + m->m[13];
+            rz = p[0] * m->m[2] + p[1] * m->m[6] + p[2] * m->m[10] + m->m[14];
+            transformed = true;
+        } else if ((uint8_t)key <= 6) {
+            const float* p = hit.m00;
+            const Mat34* m = m14;
+            rx = p[0] * m->m[0] + p[1] * m->m[4] + p[2] * m->m[8] + m->m[12];
+            ry = p[0] * m->m[1] + p[1] * m->m[5] + p[2] * m->m[9] + m->m[13];
+            rz = p[0] * m->m[2] + p[1] * m->m[6] + p[2] * m->m[10] + m->m[14];
+            transformed = true;
+        }
+        if (transformed) {
+            // reject the placement when it lands inside the radius of an
+            // already committed node
+            Node* node = m10->mpNode;
+            float clearance = mB0 * mB0;
+            bool blocked = false;
+            for (uint32_t i = 0; i < set->m21; ++i) {
+                if (set->mSlots[i].m00 > 6)
+                    continue;
+                const Node* nb = node + 1 + i;
+                float dx = rx - nb->m00;
+                float dy = ry - nb->m04;
+                float dz = rz - nb->m08;
+                if (dx * dx + dy * dy + dz * dz <= clearance + g_14a5f80) {
+                    blocked = true;
+                    break;
+                }
+            }
+            if (blocked)
+                continue;
+        }
+
+        if (set->m21 >= 8)
+            continue;
+
+        req.m04 = set->Reserve(m00, m04, &req);
+        if (req.m04 < 0)
+            continue;
+
+        Node* node = m10->mpNode;
+        if (hit.m38 <= 2)
+            CommitA(node, &req.m04, &hit);
+        else if (hit.m38 <= 6)
+            CommitB(node, &req.m04, &hit);
+        else
+            CommitC(node, &req.m04, &hit);
+
+        if (set->m21 > 1) {
+            const Node* prev = node - 1;
+            float dot = prev->m10 * node->m10 +
+                        prev->m14 * node->m14 +
+                        prev->m18 * node->m18;
+            if (!(dot > g_1485378)) {
+                set->Release(req.m04);
+                continue;
+            }
+        }
+
+        uint16_t handle = ((uint16_t(__thiscall*)(void*, uint32_t, uint32_t, uint32_t, Node*))
+                           (*((char**)*(void**)m0C + 2)))(m0C, m00, m04, m08, node);
+        set->mSlots[req.m04].m02 = handle;
+        if (handle == 0xffff) {
+            set->Release(req.m04);
+            continue;
+        }
+
+        m10->mpNode = node + 1;
+        node->m20 = set->mSlots[req.m04].m02;
+        if (req.m00 <= 6)
+            ++set->m20;
     }
 }
