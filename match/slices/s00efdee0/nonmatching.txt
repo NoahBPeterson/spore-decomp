@@ -3,6 +3,12 @@
 00efe4a0  115  toggle window: vtable chain (App+0x50+0x38) and tail-jump not reproduced
 00efe510  72   set visibility: vtable chain + cvttss2si float->int path not matched
 00efe5d0  37   list membership: bounds/pointer-increment schedule differs
-00efe610  0    FIXED FUN_00eebf80 then tail-call FUN_00efe5d0: FUN_00efe5d0 must be __declspec(noinline) so the call survives (it inlined away), and the function returns bool so the original's al-only upper-eax bits are masked; byte-exact MATCH, moved to manifest.txt; equiv PASS (388 valid, 100% coverage)
 00efe630  101  FIXED can-trigger predicate: __cdecl (the original ends in a plain ret) and the spurious 0x5b3d1d0a case removed (only 0x5b3d1d0d is tested); equiv PASS (390 valid, 94.3% coverage); chk ~size 104 vs 99 (schedule)
 00efe870  76   FIXED find surface point: the 0x27e8-stride scan compares the key against element +0x8/+0xc/+0x10 (p[2]/p[3]/p[4], not p[0..2]) and returns element[0] of the matched record, not its index; equiv PASS (200 valid, 100% coverage); chk ~size 76 vs 94 (schedule)
+00efdee0  404  planet placement: complete SSE path (call chain, vec3 copy, equality branch, placement/orient/radius calls), register allocation and stack layout differ; equiv UNSUPPORTED (0/400 valid, 396 read faults: the unmodelled simulator object at gSimulator+0x74 is dereferenced unconditionally)
+00efe110  212  camera/view state: complete; x87 instead of the original's SSE int->float chain and different regalloc; equiv FAIL (layout-shifted call site -> fake-arity)
+00efe310  284  stopwatch state machine: complete (both flag branches, reset/visibility-tail paths); vtable chain and SSE schedule differ; equiv WEAK (208 valid, 12.4% coverage)
+00efe6a0  294  rating computation: complete (scale, camera frame extraction, dot products, predicate chain); x87 vs SSE dot-product schedule differs; equiv UNSUPPORTED (0/400 valid, 399 read faults through unmodelled objects)
+00efe8d0  73   window toggle: complete; original keeps b in esi and this in edi and materialises the bool in bl, ours assigns registers differently; equiv UNSUPPORTED (0/400 valid, fake-arity)
+00efeae0  143  object permission check: complete (first predicate + 0x20-stride reference loop); the original passes the bool argument through the dead incoming-argument home slot, so its upper 24 stack bits are the old argument value while the callee reads al only; equiv FAIL (raw stack argument dword differs: 48a50000 vs 0)
+00efec90  312  release/select object: complete (early-out chain, refcount assign, id-based hint calls, ref-list update); vtable chain and register schedule differ; equiv PASS (245 valid, 81.2% coverage)
