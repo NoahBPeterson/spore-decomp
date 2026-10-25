@@ -1,1 +1,6 @@
-# va  diff-bytes  reason   (none: all reconstructed functions byte-exact)
+# va  diff-bytes  reason
+005cc120  853   cSPEditorSellBackDetachedRollover::Show: complete translation (953 vs 1018 bytes); float layout math and vtable scheduling differ. difftest FAIL (18 valid, 10.6% coverage; harness faults in the stubbed layout helper 0x005994b0 at eip=30000040)
+005cc520  66    cSPEditorSellBackRollover::cSPEditorSellBackRollover: complete (113 vs 115 bytes); only the three MI vptr stores are scheduled after the first two loads instead of at function entry. difftest UNSUPPORTED (0/400 valid; every input discarded as import:iswctype)
+005cc750  914   cSPEditorSellBackRollover::Show: complete translation (1066 vs 1120 bytes); same float layout/vtable scheduling delta as 005cc120. difftest FAIL (10 valid, 10.3% coverage; harness faults in the stubbed layout helper 0x005994b0)
+005ccbb0  19    cSPEditorShoppingTokenTranslator::cSPEditorShoppingTokenTranslator: complete (69 vs 69 bytes); only the hand-installed vptr store is scheduled late. difftest PASS (337 valid inputs, 100.0% coverage)
+005ccc00  12    cSPEditorShoppingTokenTranslator::~cSPEditorShoppingTokenTranslator: complete (102 vs 104 bytes); only the vptr store position differs. difftest PASS (331 valid inputs, 100.0% coverage)
