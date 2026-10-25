@@ -7,5 +7,8 @@
 00da7900 ?FUN_00da7900@@YA_NPAUCreature@@HHHHPAI@Z  # FUN_00da7900 migrated from s00da7780 (verbatim, slice spelling)
 00da7940 ?FUN_00da7940@@YAXPAUCreature@@@Z  # FUN_00da7940 migrated from s00da7780 (verbatim, slice spelling)
 00da7970 ?FUN_00da7970@@YA_NPAUCreature@@HHHHPAUOut9@@@Z  # FUN_00da7970 migrated from s00da7780 (verbatim, slice spelling)
-00da80f0  eastl::list<EA::COM::AutoRefCount<SP::Pollen::cCookie>,eastl::allocator>::erase  # symbols/pdb_names.json key 0060a5a0, dev 00da80f0, how gap-align
+00da80f0 ?FUN_00da80f0@@YA_NPAUCreature@@0@Z  # FUN_00da80f0 migrated from s00da7780 (verbatim, slice spelling)
+00da8120 ?FUN_00da8120@@YAXPAUCreature@@HHHHPAUS28@@@Z  # FUN_00da8120 migrated from s00da7780 (verbatim, slice spelling)
+00da8150 ?GrowUp@@YA_NPAUCreature@@HHHHPAI@Z  # GrowUp migrated from s00da7780 (verbatim, slice spelling)
+00da8190 ?FUN_00da8190@@YAMPAUCreature@@@Z  # FUN_00da8190 migrated from s00da7780 (verbatim, slice spelling)
 00da8580  SP::Pollen::CookieHandler::Filter  # symbols/pdb_names.json key 0060aa40, dev 00da8580, how anchor

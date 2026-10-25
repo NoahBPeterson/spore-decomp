@@ -1,0 +1,36 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22530@cInteractionAgent@@QAEMXZ  00c22530  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c226c0@cLocomotiveObject@@QAEXD@Z  00c226c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?GetBaseMaxHitPoints@cSPCreatureBase@@QAEMXZ  00c22720  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22750@cSPCreatureBase@@QAEDXZ  00c22750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c227c0@cSPCreatureBase@@QAEXXZ  00c227c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c227f0@cSPCreatureBase@@QAEXHHH@Z  00c227f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22830@cSPCreatureBase@@QAEHH@Z  00c22830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22870@cSPCreatureBase@@QAEXXZ  00c22870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22930Read@cSPCreatureBase@@QAEXPAX@Z  00c22930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c229a0@cSPCreatureBase@@QAEDXZ  00c229a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22a30@cSPCreatureBase@@QAEXXZ  00c22a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22c40@@YGHH@Z  00c22c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22ca0@cSPCreatureBase@@QAEDH@Z  00c22ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22cb0@cSPCreatureBase@@QAEXI@Z  00c22cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22dd0@cSPCreatureBase@@QAEHXZ  00c22dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22ee0@cSPCreatureBase@@QAEXPAX@Z  00c22ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22f60@cInteractionAgent@@QAEXPAX@Z  00c22f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?GetActiveTool@cCreatureBase@@QAEPAXXZ  00c23290  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c24280@@YAXPAUcCreatureBase_s00c2_3f80@@@Z  00c24280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c242b0@cCreatureBase_s00c2_3f80@@QAEXI@Z  00c242b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c24400@cCreatureBase_s00c2_3f80@@QAEPAXI@Z  00c24400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c245e0@cCreatureBase_s00c2_3f80@@QAEIIIMIII@Z  00c245e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c24680@cCreatureBase_s00c2_3f80@@QAEIIIMIPAXI@Z  00c24680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c24700@cCreatureBase_s00c2_3f80@@QAEXIII@Z  00c24700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c24750@cCreatureBase_s00c2_3f80@@QAEHXZ  00c24750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?IsWaitingForTool@cSPCreatureCitizen_s00c2_5a50@@QAE_NH@Z  00c26380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?SetToolOnAnimEvent@cSPCreatureCitizen_s00c2_5a50@@QAEXH@Z  00c263e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c26730@cOrderData@@QAEPAV1@PBV1@@Z  00c26730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?CreateLocomotionStrategy@cCreatureCitizen@@QAEXXZ  00c26c10  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?RebuildCitizenOrderListDefault@@YAXXZ  00c26c80  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00da80f0@@YA_NPAUCreature@@0@Z  00da80f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00da8120@@YAXPAUCreature@@HHHHPAUS28@@@Z  00da8120  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?GrowUp@@YA_NPAUCreature@@HHHHPAI@Z  00da8150  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00da8190@@YAMPAUCreature@@@Z  00da8190  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_01335fe0@@YAXXZ  01335fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

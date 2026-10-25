@@ -1,16 +1,16 @@
-00c22fc0 ?SetBundlePlacement@cSPCreatureCitizen@@QAEXPAVcBundle@@@Z  # void cSPCreatureCitizen::SetBundlePlacement
-00c23110 ?GetBundlePosition@cSPCreatureCitizen@@QAEPAUVec3@@PAU2@@Z  # Vec3* cSPCreatureCitizen::GetBundlePosition
-00c23200 ?GetIdentityColor@cCreatureBase@@QAEPAUVec3@@XZ  # Vec3* cCreatureBase::GetIdentityColor
-00c23230 ?GetToolById@cCreatureBase@@QAEPAXH@Z  # void* cCreatureBase::GetToolById
-00c23290 ?GetActiveTool@cCreatureBase@@QAEPAXXZ  # void* cCreatureBase::GetActiveTool
-00c232d0 ?IsLeader@cSPCreatureCitizen@@QAE_NXZ  # bool cSPCreatureCitizen::IsLeader
-00c23300 ?PerformSocialAction@cSPCreatureBase@@QAEXHI@Z  # void cSPCreatureBase::PerformSocialAction
-00c234a0 ?SetToolTarget@cCreatureBase@@QAEXMMM@Z  # void cCreatureBase::SetToolTarget
-00c23570 ?SetCasted@cCreatureBase@@QAEX_N@Z  # void cCreatureBase::SetCasted
-00c235e0 ?GetToolEffect@cSPCreatureCitizen@@QAEHI@Z  # int cSPCreatureCitizen::GetToolEffect
-00c236e0 ?HasSpecializedTool@cSPCreatureCitizen@@QAE_NH@Z  # bool cSPCreatureCitizen::HasSpecializedTool
-00c23750 ?GetCreatureToolInteraction@@YAIXZ  # uint32_t GetCreatureToolInteraction
-00c238b0 ?UpdateCreatureToolInteractions@@YAXPAX@Z  # void UpdateCreatureToolInteractions
-00c23cf0 ?CalculateScale@cCreatureBase@@QAEMXZ  # float cCreatureBase::CalculateScale
-00c23da0 ?IsBefriended@cSPCreatureCitizen@@QAE_NXZ  # bool cSPCreatureCitizen::IsBefriended
-00c23e90 ?ApplyAttack@cCreatureBase@@QAEDPAX00@Z  # char cCreatureBase::ApplyAttack
+00c22fc0 ?SetBundlePlacement@cSPCreatureCitizen@@QAEXPAVcBundle@@@Z  # cSPCreatureCitizen::SetBundlePlacement migrated from s00c22fc0 (verbatim, slice spelling)
+00c23110 ?GetBundlePosition@cSPCreatureCitizen@@QAEPAUVec3@@PAU2@@Z  # cSPCreatureCitizen::GetBundlePosition migrated from s00c22fc0 (verbatim, slice spelling)
+00c23200 ?GetIdentityColor@cCreatureBase@@QAEPAUVec3@@XZ  # cCreatureBase::GetIdentityColor migrated from s00c22fc0 (verbatim, slice spelling)
+00c23230 ?GetToolById@cCreatureBase@@QAEPAXH@Z  # cCreatureBase::GetToolById migrated from s00c22fc0 (verbatim, slice spelling)
+00c23290 ?GetActiveTool@cCreatureBase@@QAEPAXXZ  # cCreatureBase::GetActiveTool migrated from s00c22fc0 (verbatim, slice spelling)
+00c232d0 ?IsLeader@cSPCreatureCitizen@@QAE_NXZ  # cSPCreatureCitizen::IsLeader migrated from s00c22fc0 (verbatim, slice spelling)
+00c23300 ?PerformSocialAction@cSPCreatureBase_s00c2_2fc0@@QAEXHI@Z  # cSPCreatureBase_s00c2_2fc0::PerformSocialAction migrated from s00c22fc0 (verbatim, slice spelling)
+00c234a0 ?SetToolTarget@cCreatureBase@@QAEXMMM@Z  # cCreatureBase::SetToolTarget migrated from s00c22fc0 (verbatim, slice spelling)
+00c23570 ?SetCasted@cCreatureBase@@QAEX_N@Z  # cCreatureBase::SetCasted migrated from s00c22fc0 (verbatim, slice spelling)
+00c235e0 ?GetToolEffect@cSPCreatureCitizen@@QAEHI@Z  # cSPCreatureCitizen::GetToolEffect migrated from s00c22fc0 (verbatim, slice spelling)
+00c236e0 ?HasSpecializedTool@cSPCreatureCitizen@@QAE_NH@Z  # cSPCreatureCitizen::HasSpecializedTool migrated from s00c22fc0 (verbatim, slice spelling)
+00c23750 ?GetCreatureToolInteraction@@YAIXZ  # GetCreatureToolInteraction migrated from s00c22fc0 (verbatim, slice spelling)
+00c238b0 ?UpdateCreatureToolInteractions@@YAXPAX@Z  # UpdateCreatureToolInteractions migrated from s00c22fc0 (verbatim, slice spelling)
+00c23cf0 ?CalculateScale@cCreatureBase@@QAEMXZ  # cCreatureBase::CalculateScale migrated from s00c22fc0 (verbatim, slice spelling)
+00c23da0 ?IsBefriended@cSPCreatureCitizen@@QAE_NXZ  # cSPCreatureCitizen::IsBefriended migrated from s00c22fc0 (verbatim, slice spelling)
+00c23e90 ?ApplyAttack@cCreatureBase@@QAEDPAX00@Z  # cCreatureBase::ApplyAttack migrated from s00c22fc0 (verbatim, slice spelling)
