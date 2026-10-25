@@ -1,6 +1,6 @@
-00b86500 SP::cGraphEditor::AddNode  # newly claimed; partial: insert 0x18-byte node at +0x80
-00b86590 SP::cGraphEditor::SelectNode  # newly claimed; partial: select node by object ID and invoke +0xa8 callback
-00b86650 SP::cGraphEditor::AddEdgeA  # newly claimed; partial: add sorted pair to +0xac edge vector
-00b866f0 SP::cGraphEditor::AddEdgeB  # newly claimed; partial: add sorted pair to +0xc0 edge vector
+00b86500 SP::cGraphEditor::AddNode  # match: append 0x18-byte node to the +0x80 vector (0xb85220 insert path takes an uninitialized stack node), then patch ID=-1/value/flag
+00b86590 SP::cGraphEditor::SelectNode  # match: destroy the caller list range (0x50f740), scan +0x80 nodes for the +0x4c ID, invoke +0xa8->+0x24 callback at the requested match index
+00b86650 SP::cGraphEditor::AddEdgeA  # nonmatching: complete add of a sorted pair to +0xac (duplicate scan, direct store vs 0xb534c0 insert, +0xe8); 32-byte value-pair register-allocation diff (153 vs 153 B)
+00b866f0 SP::cGraphEditor::AddEdgeB  # nonmatching: complete add of a sorted pair scanned in +0xac and appended to +0xc0 (+0xe9); begin-load hoisted above the count test (149 vs 153 B)
 00b86790 SP::cGraphEditor::RemoveEdge  # newly claimed; nonmatching: remove pair from +0xac/+0xc0 and matching +0xd4 record
 00b86a10 SP::BuildPathRibbonOnShell  # preserved; constant-radius path ribbon builder

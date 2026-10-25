@@ -115,7 +115,7 @@ struct GraphNodeVector {
     GraphNode* mpEnd;
     GraphNode* mpCapacity;
     uint32_t mAllocator;
-    void InsertAt(GraphNode* position, const GraphNodeValue* value); // 0x00b85220
+    void InsertAt(GraphNode* position, const GraphNode* value); // 0x00b85220
 };
 
 struct GraphEdge {
@@ -146,9 +146,11 @@ struct GraphExtraVector {
     uint32_t mAllocator;
 };
 
+class cGraphList;
+
 class cGraphCallback {
 public:
-    void Invoke(void* list, int value);     // 0x00b859c0
+    void Invoke(int index, cGraphList* list);     // 0x00b859c0
 };
 
 class cGraphA8 {
@@ -192,7 +194,7 @@ public:
     uint8_t padEB;
 
     int AddNode(const GraphNodeValue* value, bool flag);       // 0x00b86500
-    int SelectNode(void* object, cGraphList* list, int index); // 0x00b86590
+    int SelectNode(void* object, int index, cGraphList* list); // 0x00b86590
     void AddEdgeA(uint32_t a, uint32_t b);                     // 0x00b86650
     void AddEdgeB(uint32_t a, uint32_t b);                     // 0x00b866f0
     void RemoveEdge(uint32_t a, uint32_t b);                   // 0x00b86790
@@ -203,11 +205,15 @@ extern "C" void __cdecl FreeAllocation(void* p);                 // 0x00f47380
 // @ 0x00b86500
 int cGraphEditor::AddNode(const GraphNodeValue* value, bool flag)
 {
-    GraphNode* end = mNodes.mpEnd;
-    if (end < mNodes.mpCapacity)
-        mNodes.mpEnd = end + 1;
+    // The growth path hands the (uninitialized) new node storage to the insert
+    // helper; the inserted element is overwritten below from the caller value.
+    GraphNode pending;
+    GraphNodeVector& nodes = mNodes;
+    GraphNode* end = nodes.mpEnd;
+    if (end < nodes.mpCapacity)
+        nodes.mpEnd = end + 1;
     else
-        mNodes.InsertAt(end, value);
+        nodes.InsertAt(end, &pending);
 
     GraphNode* node = mNodes.mpEnd - 1;
     node->mID = -1;
@@ -217,11 +223,11 @@ int cGraphEditor::AddNode(const GraphNodeValue* value, bool flag)
     node->mFlag10 = flag;
     node->mFlag11 = 0;
     node->mField14 = 0;
-    return (int)(mNodes.mpEnd - mNodes.mpBegin) - 1;
+    return (int)(nodes.mpEnd - nodes.mpBegin) - 1;
 }
 
 // @ 0x00b86590
-int cGraphEditor::SelectNode(void* object, cGraphList* list, int index)
+int cGraphEditor::SelectNode(void* object, int index, cGraphList* list)
 {
     uint32_t id = ((IGraphObject*)object)->GetID();
     list->DestroyRange(list->mpBegin, list->mpEnd);
@@ -232,9 +238,9 @@ int cGraphEditor::SelectNode(void* object, cGraphList* list, int index)
         GraphNode* node = mNodes.mpBegin + i;
         if (node->mID == (int)id) {
             if (found == index) {
-                cGraphA8* a8 = mpA8;
-                if (a8->mpCallback)
-                    a8->mpCallback->Invoke(list, 0);
+                cGraphCallback* callback = mpA8->mpCallback;
+                if (callback)
+                    callback->Invoke(i, list);
             }
             ++found;
         }
@@ -245,24 +251,27 @@ int cGraphEditor::SelectNode(void* object, cGraphList* list, int index)
 // @ 0x00b86650
 void cGraphEditor::AddEdgeA(uint32_t a, uint32_t b)
 {
-    uint32_t lo = a < b ? a : b;
-    uint32_t hi = a < b ? b : a;
+    if (b < a) {
+        uint32_t tmp = a;
+        a = b;
+        b = tmp;
+    }
+
     int count = (int)(mEdgesA.mpEnd - mEdgesA.mpBegin);
+    GraphEdgeVector& edges = mEdgesA;
     for (int i = 0; i < count; ++i) {
-        GraphEdge* e = mEdgesA.mpBegin + i;
-        if (e->mLow == lo && e->mHigh == hi)
+        GraphEdge* e = edges.mpBegin + i;
+        if (e->mLow == a && e->mHigh == b)
             return;
     }
 
-    GraphEdge value;
-    value.mLow = lo;
-    value.mHigh = hi;
-    if (mEdgesA.mpEnd < mEdgesA.mpCapacity) {
-        mEdgesA.mpEnd->mHigh = hi;
-        mEdgesA.mpEnd->mLow = lo;
-        ++mEdgesA.mpEnd;
+    GraphEdge value = { a, b };
+    if (edges.mpEnd < edges.mpCapacity) {
+        GraphEdge* p = edges.mpEnd++;
+        if (p)
+            *p = value;
     } else {
-        mEdgesA.InsertAt(mEdgesA.mpEnd, &value);
+        edges.InsertAt(edges.mpEnd, &value);
     }
     mDirtyA = 1;
 }
@@ -270,24 +279,33 @@ void cGraphEditor::AddEdgeA(uint32_t a, uint32_t b)
 // @ 0x00b866f0
 void cGraphEditor::AddEdgeB(uint32_t a, uint32_t b)
 {
-    uint32_t lo = a < b ? a : b;
-    uint32_t hi = a < b ? b : a;
-    int count = (int)(mEdgesB.mpEnd - mEdgesB.mpBegin);
-    for (int i = 0; i < count; ++i) {
-        GraphEdge* e = mEdgesB.mpBegin + i;
-        if (e->mLow == lo && e->mHigh == hi)
+    if (b < a) {
+        uint32_t tmp = a;
+        a = b;
+        b = tmp;
+    }
+
+    GraphEdgeVector& edgesA = mEdgesA;
+    int i = 0;
+    int count = (int)(edgesA.mpEnd - edgesA.mpBegin);
+    for (; i < count; ++i) {
+        GraphEdge* e = edgesA.mpBegin + i;
+        if (e->mLow == a && e->mHigh == b)
             return;
     }
 
+    GraphEdgeVector& edges = mEdgesB;
     GraphEdge value;
-    value.mLow = lo;
-    value.mHigh = hi;
-    if (mEdgesB.mpEnd < mEdgesB.mpCapacity) {
-        mEdgesB.mpEnd->mHigh = hi;
-        mEdgesB.mpEnd->mLow = lo;
-        ++mEdgesB.mpEnd;
+    value.mLow = a;
+    value.mHigh = b;
+    if (edges.mpEnd < edges.mpCapacity) {
+        GraphEdge* p = edges.mpEnd++;
+        if (p) {
+            p->mHigh = b;
+            p->mLow = a;
+        }
     } else {
-        mEdgesB.InsertAt(mEdgesB.mpEnd, &value);
+        edges.InsertAt(edges.mpEnd, &value);
     }
     mDirtyB = 1;
 }
