@@ -1,0 +1,2 @@
+004ff660 ?FUN_004ff660@@YAPAUVec3f@@PAU1@PAUcSPTransform_s004f_e8c0@@0@Z  # FUN_004ff660 migrated from s004fe8c0 (verbatim, slice spelling)
+004ff6d0 ?BackTransformPoint@cSPTransform_s004f_e8c0@@QAEXPAUVec3@@@Z  # cSPTransform_s004f_e8c0::BackTransformPoint migrated from s004fe8c0 (verbatim, slice spelling)
