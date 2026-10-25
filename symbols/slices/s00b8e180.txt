@@ -1,0 +1,10 @@
+00b8e180 cPropertyList::Ctor  # default constructor (vtable 0x14655a0, empty wstrings, scalar defaults)
+00b8e3f0 cPropertyList::AssignRange  # assign the +0x18 wide string from a Vec4 range
+00b8e590 TypedMatcherMatch  # 4-argument __cdecl typed-value/key matcher (see wrapper 0xb8e840)
+00b8e760 cPropertyList::PurgeEmptyRules  # drop rule entries whose +0x3c/+0x40 range is empty
+00b8e7d0 cPropertyList::EraseRule  # erase the 0x2c-byte rule whose key matches
+00b8e830 cPropertyList::EraseAllRules  # erase the whole +0x134 rule vector
+00b8e860 cPropertyList::Dtor  # destructor: clear three vectors, release owned buffers, reset vtable
+00b8eaa0 cPropertyList::Serialize  # deserialize the property list from a stream
+00b8ef40 PtrVec::assignSlow  # pointer-vector copy assignment with growth path
+00b8f030 cPropertyList::AssignCopy  # member-wise copy assignment

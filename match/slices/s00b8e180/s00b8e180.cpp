@@ -113,18 +113,24 @@ struct Deser {
 void __stdcall WString_Assign(const void* b, const void* e);                  // 0x00423650
 
 // cTypedValueToStringT<unsigned char>::Write(self, value)
-void __stdcall TypedValueWrite(void* self, int value);                        // 0x00694f60
+void __cdecl TypedValueWrite(void* self, const void* value);                  // 0x00694f60
 // EA::ConvertToString16Impl(dst, src, len)
 void __cdecl ConvertToString16Impl(void* dst, const char* src, unsigned len); // 0x0093c5a0
 // EA::ConvertToString16(dst, src)
 void* __cdecl ConvertToString16(void* dst, const void* src);                  // 0x0093c6d0
-// eastl::basic_string<wchar_t> ctor(self, other)
-void __stdcall WStrCtor(void* self, void* other);                             // 0x0056e2d0
 
 struct Vec4 {
     void** mpBegin;   // +0
     void** mpEnd;     // +4
     void** mpCap;     // +8
+};
+
+// eastl::basic_string<wchar_t> (3 pointers)
+struct WString16 {
+    void* mpBegin;      // +0
+    void* mpEnd;        // +4
+    void* mpCapacity;   // +8
+    void CopyFrom(const WString16& src);   // 0x0056e2d0 (__thiscall)
 };
 
 // range of 0x2c-byte rules
@@ -258,98 +264,80 @@ void cPropertyList::AssignRange(const Vec4& r)
 // ---------------------------------------------------------------------------
 // @ 0x00b8e590
 // ---------------------------------------------------------------------------
-// Typed-value to string, then match against the entry key.
-struct TypedMatcher {
-    bool Match(int num, int type, int value);
+// Typed-value to string, then match the value/key pair against a matcher entry.
+// The original is a four-argument __cdecl helper (see its 0x00b8e840 wrapper).
+struct IMatcher {
+    virtual char M0(const void* key);                 // vtable +0x0
+    virtual char M1(const void* key);                 // vtable +0x4
+    virtual char M2(const void* a, const void* b);    // vtable +0x8
+    virtual char M3(const void* value);               // vtable +0xc
 };
-bool TypedMatcher::Match(int num, int type, int value)
+
+bool __cdecl TypedMatcherMatch(IMatcher* self, const char* key,
+                               const void* value, const void* typeName)
 {
-    int* self = (int*)this;
     void* gEmpty = (void*)0x01667bac;
-    void* begin = gEmpty, *end = gEmpty, *cap = (void*)0x01667bad;
+    WString16 valueStr;
+    valueStr.mpBegin = gEmpty;
+    valueStr.mpEnd = gEmpty;
+    valueStr.mpCapacity = (void*)0x01667bad;
+    TypedValueWrite(&valueStr, value);
     bool result = true;
-
-    TypedValueWrite(&begin, type);
-    if (begin == end)
-        goto cleanup;
+    if (valueStr.mpBegin == valueStr.mpEnd)
+        goto cleanup_value;
 
     {
-        void* name[3];
-        bool isNull = (num == 0);
-        if (isNull) {
-            name[0] = gEmpty; name[1] = gEmpty; name[2] = (void*)0x01667bae;
+        WString16 keyTmp;
+        WString16 keyCopy;
+        if (key == 0) {
+            keyTmp.mpBegin = gEmpty;
+            keyTmp.mpEnd = gEmpty;
+            keyTmp.mpCapacity = (void*)0x01667bae;
         } else {
-            ConvertToString16(name, (const void*)num);
+            ConvertToString16Impl(&keyTmp, key, 0xffffffff);
         }
-        void* nb = name[0], *ne = name[1];
-        WStrCtor(&begin, name);
-        if (isNull) {
-            if (((((int)ne - (int)nb) & 0xfffffffe) > 2) && nb != 0)
-                operator_delete(nb);
-        } else {
-            int b = ((int*)name)[0], e = ((int*)name)[2];
-            if (((((e - b) & 0xfffffffe) > 2)) && b != 0)
-                operator_delete((void*)b);
-        }
-    }
+        keyCopy.CopyFrom(keyTmp);
+        if ((int)(((int)keyTmp.mpCapacity - (int)keyTmp.mpBegin) & 0xfffffffe) > 2
+                && keyTmp.mpBegin != 0)
+            operator_delete(keyTmp.mpBegin);
 
-    {
-        void* k[3];
-        ConvertToString16(k, &begin);
-        int k0 = ((int*)k)[0], k1 = ((int*)k)[1];
-        int v = value;
+        WString16 valueCopy;
+        ConvertToString16(&valueCopy, &valueStr);
+
         bool matched = false;
-        if (k0 == k1) {
-            if (((char(__thiscall**)(int*, int))(*self))[0](self, v) != 0) {
-                if (((char(__thiscall**)(int*, int))(*self))[3](self, k0) == 0)
-                    goto after;
+        if (keyCopy.mpBegin == keyCopy.mpEnd) {
+            if (self->M0(typeName) != 0 && self->M3(valueCopy.mpBegin) != 0)
                 matched = true;
-            }
         } else {
-            char c = ((char(__thiscall**)(int*, int))(*self))[0](self, k0);
+            char c = self->M0(keyCopy.mpBegin);
             if (g_flag15d8b4c == 0) {
-                if (c != 0) {
-                    if (((char(__thiscall**)(int*, int))(*self))[3](self, k0) == 0)
-                        goto after;
+                if (c != 0 && self->M3(valueCopy.mpBegin) != 0)
                     matched = true;
-                }
             } else if (c != 0) {
-                if (((char(__thiscall**)(int*, const char*, int))(*self))[2]
-                        (self, "type", v) == 0)
-                    goto after;
-                if (((char(__thiscall**)(int*, int))(*self))[3](self, k0) == 0)
-                    goto after;
-                matched = true;
+                if (self->M2((const void*)0x013f36bc, typeName) != 0
+                        && self->M3(valueCopy.mpBegin) != 0)
+                    matched = true;
             }
         }
-after:
-        if (k0 == k1) {
-            if (matched) {
-                if (((char(__thiscall**)(int*, int))(*self))[1](self, v) == 0)
-                    result = false;
-            } else {
+        if (keyCopy.mpBegin == keyCopy.mpEnd) {
+            if (!matched || self->M1(typeName) == 0)
                 result = false;
-            }
         } else {
-            v = k0;
-            if (matched) {
-                if (((char(__thiscall**)(int*, int))(*self))[1](self, v) == 0)
-                    result = false;
-            } else {
+            if (!matched || self->M1(keyCopy.mpBegin) == 0)
                 result = false;
-            }
         }
-        {
-            int b = k[0] ? ((int*)k)[0] : 0;
-            int e = ((int*)k)[2];
-            if (((((e - b) & 0xfffffffe) > 2)) && b != 0)
-                operator_delete((void*)b);
-        }
+        if ((int)(((int)valueCopy.mpCapacity - (int)valueCopy.mpBegin) & 0xfffffffe) > 2
+                && valueCopy.mpBegin != 0)
+            operator_delete(valueCopy.mpBegin);
+        if ((int)(((int)keyCopy.mpCapacity - (int)keyCopy.mpBegin) & 0xfffffffe) > 2
+                && keyCopy.mpBegin != 0)
+            operator_delete(keyCopy.mpBegin);
     }
 
-cleanup:
-    if (((((int)cap - (int)begin) & 0xfffffffe) > 2) && begin != 0)
-        operator_delete(begin);
+cleanup_value:
+    if ((int)(((int)valueStr.mpCapacity - (int)valueStr.mpBegin) & 0xfffffffe) > 2
+            && valueStr.mpBegin != 0)
+        operator_delete(valueStr.mpBegin);
     return result;
 }
 
@@ -437,7 +425,7 @@ void cPropertyList::Dtor()
         }
         int end = a[0x174 / 4], beg = a[0x170 / 4];
         VectorInsert((void*)beg, (void*)end, 0);
-        a[0x174 / 4] = end + ((end - beg) >> 2) * -4;
+        a[0x174 / 4] += ((end - beg) >> 2) * -4;
     }
     // +0x15c: vector of RuleObj*
     {
@@ -448,7 +436,7 @@ void cPropertyList::Dtor()
         }
         int end = a[0x160 / 4], beg = a[0x15c / 4];
         VectorInsert((void*)beg, (void*)end, 0);
-        a[0x160 / 4] = end + ((end - beg) >> 2) * -4;
+        a[0x160 / 4] += ((end - beg) >> 2) * -4;
     }
     // +0xe4: vector of raw pointers
     {
@@ -457,7 +445,7 @@ void cPropertyList::Dtor()
             operator_delete((void*)((int*)a[0xe4 / 4])[i]);
         int end = a[0xe8 / 4], beg = a[0xe4 / 4];
         VectorInsert((void*)beg, (void*)end, 0);
-        a[0xe8 / 4] = end + ((end - beg) >> 2) * -4;
+        a[0xe8 / 4] += ((end - beg) >> 2) * -4;
     }
 #define FREE_OWNED(off) { int v = a[(off) / 4]; \
         if (v != 0 && *(int*)(v - 4) != 0) operator_delete((void*)v); }
@@ -467,7 +455,7 @@ void cPropertyList::Dtor()
 #undef FREE_OWNED
     {
         int b = a[0x18 / 4], e = a[0x20 / 4];
-        if ((((e - b) & 0xfffffffe) > 2) && b != 0)
+        if ((int)((e - b) & 0xfffffffe) > 2 && b != 0)
             operator_delete((void*)b);
     }
     mvtbl = (void*)0x013eb938;   // GmeEditorResBase vtable
