@@ -14,9 +14,9 @@ void* __cdecl SP_MessageServer();                         // 0x67dcc0
 void* __cdecl SP_App();                                   // 0x67dd10
 void* __cdecl SP_GetCurrentGameMode();                    // 0xb5b800
 void  __cdecl FUN_00572660(void*);                        // 0x572660
-void  __cdecl SP_GetPropertyAsKey(void*, uint32_t, void*);// 0x6a1250
-uint32_t __cdecl FUN_00c713e0();                          // 0xc713e0
-void* __cdecl FUN_00d61ce0(void*, void*, void*, void*);   // 0xd61ce0
+bool  __cdecl SP_GetPropertyAsKey(void*, uint32_t, void*);// 0x6a1250
+struct ListNode;
+ListNode** __cdecl FUN_00d61ce0(ListNode**, ListNode*, ListNode*, void**); // 0xd61ce0
 void  __stdcall FUN_007a4420(int,int,int,int);            // 0x7a4420
 bool  __cdecl FUN_00f678a0();                             // 0xf678a0
 bool  __cdecl FUN_00f678c0();                             // 0xf678c0
@@ -24,7 +24,7 @@ void  __cdecl FUN_00f6bc10();                             // 0xf6bc10
 void  __cdecl FUN_00f67890(int);                          // 0xf67890
 void  __cdecl FUN_00f678b0(int);                          // 0xf678b0
 void  __cdecl FUN_00b8c0f0();                             // 0xb8c0f0
-void* __cdecl operator_new(unsigned, const char*, int, int, const char*, int); // 0xf473a0
+void* __cdecl operator_new(unsigned, const char*, int, int, int, int); // 0xf473a0
 void  __cdecl operator_delete__(void*);                   // 0xf47380
 void  __cdecl Memset32(void*, int, unsigned);             // 0x92cb00
 void  __cdecl FUN_00a16f40(void*, int);                   // 0xa16f40
@@ -41,7 +41,7 @@ extern char  gMode_1654c10;   // 0x1654c10
 extern float gF_1688270;      // 0x1688270
 extern float gF_156b5d4;      // 0x156b5d4
 extern float gF_1465414;      // 0x1465414 = 500.0f
-extern void* g_156b588;       // 0x156b588
+extern uint32_t g_156b588;    // 0x156b588
 extern void* g_16c9e5c;       // 0x16c9e5c
 
 struct S15ddc84 { void __thiscall FUN_007a4420(int,int,int,int); };
@@ -82,7 +82,6 @@ struct cPlanetModel {
   void  __thiscall FUN_00b7e1d0(uint32_t mask);
   void  __thiscall FUN_00b7e360(int arg);
   void  __thiscall FUN_00b7dec0();
-  void  __thiscall FUN_00b7daf0();
   float __thiscall GetWaterHeight();
   uint32_t __thiscall FUN_00b7e3b0(uint32_t a, uint32_t b);
   bool  __thiscall FUN_00b7e3e0(float* p);
@@ -517,18 +516,165 @@ int* __cdecl FUN_00b7e220(uint32_t param_1, int* param_2, int* param_3, int* par
   return param_2;
 }
 
-// @ 0x00b7daf0  (terrain/impostor property setup; large, partial translation)
-void __thiscall cPlanetModel::FUN_00b7daf0() {
-  // Translated control flow is incomplete; see partial.txt.
-  void* ctx = SP_GetUniverseContext();
-  if (ctx == 0) {
-    if (SP_GetActivePlanet() == this) {
-      void* pm = SP_PlanetModel();
-      if (pm && *(void**)((char*)pm + 0x24))
-        (*(void(__thiscall*)(void*))((*(void***)*(void**)((char*)pm + 0x24))[2]))(*(void**)((char*)pm + 0x24));
-    }
-  }
+// -----------------------------------------------------------------------
+// Planet registry / impostor property setup.
+// The receiver is the global planet registry (SP::GetPlanetRegistry == 0x00b3d360):
+// +0x20 holds an intrusive list head and +0x34 the currently registered planet.
+struct PlanetCtx {
+  uint32_t instance;   // +0x00 resource instance id
+  uint32_t groupA;     // +0x04 (read but unused by the original)
+  uint32_t state;      // +0x08 group/state bits
+};
+
+struct CtxSource {
+  PlanetCtx* __thiscall GetCtx();               // 0xc713e0
+};
+
+struct ListNode {
+  ListNode* next;      // +0x00
+  ListNode* prev;      // +0x04
+  void*     obj;       // +0x08
+};
+
+struct ListHead {
+  ListNode* next;      // +0x00
+  ListNode* prev;      // +0x04
+  void __thiscall push_back(ListHead* self, void** obj);   // 0xb7d750
+};
+
+struct IPlanet {
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+  virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+  virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+  virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+  virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+  virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+  virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+  virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+  virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+  virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
+  virtual void v44(); virtual void v45(); virtual void v46();
+  virtual void AddRef();        // +0xbc
+  virtual void Release();       // +0xc0
+};
+
+struct cPropertyList {
+  virtual void AddRef();                         // +0x00
+  virtual void Release();                        // +0x04
+  char pad08[0x34];                              // +0x08..0x37
+  cPropertyList(const char* name);               // 0x6a1b90
+  void __thiscall SetParent(cPropertyList* parent); // 0x6a1710
+};
+
+struct PropRef {
+  cPropertyList* p;                              // +0x00
+  PropRef() : p(0) {}
+  PropRef(cPropertyList* obj);                   // 0x572660
+  cPropertyList** AsPPTypeParam();               // 0xa16f40
+  ~PropRef() { if (p) p->Release(); }
+  cPropertyList* operator->() const { return p; }
+  operator cPropertyList*() const { return p; }
+};
+
+struct PropKey {
+  uint32_t f0;   // +0x00 instance
+  uint32_t f4;   // +0x04 group
+  uint32_t f8;   // +0x08
+};
+
+struct IPropertyManager {
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+  virtual void v08(); virtual void v09();
+  virtual bool HasResource(uint32_t instance, uint32_t group);                    // +0x28
+  virtual bool OpenProperties(uint32_t instance, uint32_t group, cPropertyList** out); // +0x2c
+  virtual void v12();
+  virtual void StoreProperties(cPropertyList* list, uint32_t instance, uint32_t group); // +0x34
+};
+
+inline IPropertyManager* PMgr() { return (IPropertyManager*)SP_PropertyManager(); }
+
+inline void* operator new(size_t size, const char* tag, int a, int b, int c, int d) {
+  return operator_new((unsigned)size, tag, a, b, c, d);
 }
+
+struct cPlanetRegistry {
+  char     pad00[0x20];
+  ListHead mList;        // +0x20
+  char     pad28[0x0c];
+  IPlanet* mCurrent;     // +0x34
+  void __thiscall FUN_00b7daf0(IPlanet* planet);
+};
+
+// @ 0x00b7daf0
+void __thiscall cPlanetRegistry::FUN_00b7daf0(IPlanet* planet) {
+  if (((CtxSource*)planet)->GetCtx()->instance == 0)
+    return;
+  if (((CtxSource*)planet)->GetCtx()->state == 0)
+    return;
+
+  PlanetCtx* ctx = ((CtxSource*)planet)->GetCtx();
+  uint32_t key = ctx->instance;
+  uint32_t s1 = (ctx->state & 0xffff28ff) | 0x2800;
+  uint32_t s2 = (s1 & 0xe7ffffff) | 0x7000000;
+  s1 &= 0xe0ffffff;
+
+  if (SP_GetUniverseContext() != 0 || SP_GetActivePlanet() != (void*)planet) {
+    if (PMgr()->HasResource(key, s1) &&
+        PMgr()->HasResource(key, s2)) {
+      PropRef propsA;
+      PMgr()->OpenProperties(key, s1, propsA.AsPPTypeParam());
+      PropRef propsB;
+      PMgr()->OpenProperties(0x752f1cd8, g_156b588, propsB.AsPPTypeParam());
+      if (propsA && propsB) {
+        PropKey k1 = { 0, 0, 0 };
+        PropKey k2 = { 0, 0, 0 };
+        bool ok1 = SP_GetPropertyAsKey(propsA, 0xf9efbb, &k1);
+        bool ok2 = SP_GetPropertyAsKey(propsB, 0xf9efbb, &k2);
+        if (ok1 && ok2 && k1.f0 != k2.f0)
+          return;
+      }
+    }
+  } else {
+    if (SP_PlanetModel() && ((cPlanetModel*)SP_PlanetModel())->mpISphere)
+      ((cPlanetModel*)SP_PlanetModel())->mpISphere->c();
+  }
+
+  if (mCurrent == planet)
+    return;
+  ListNode* found;
+  if (*FUN_00d61ce0(&found, mList.next, (ListNode*)&mList, (void**)&planet) != (ListNode*)&mList)
+    return;
+
+  PropRef props;
+  PMgr()->OpenProperties(0x752f1cd8, g_156b588, props.AsPPTypeParam());
+
+  if (!PMgr()->HasResource(key, s1)) {
+    cPropertyList* list = new ("Terrain/PlanetImpostor/ImpostorPropertyList", 0, 0, 0, 0)
+        cPropertyList("PlanetImpostor");
+    PropRef ref(list);
+    if (props != 0)
+      ref->SetParent(props);
+    PMgr()->StoreProperties(ref, key, s1);
+  }
+
+  if (!PMgr()->HasResource(key, s2)) {
+    cPropertyList* list = new ("Terrain/PlanetImpostor/AtmospherePropertyList", 0, 0, 0, 0)
+        cPropertyList("PlanetImpostorAtmosphere");
+    PropRef ref(list);
+    if (props != 0)
+      ref->SetParent(props);
+    PMgr()->StoreProperties(ref, key, s2);
+  }
+
+  if (planet)
+    planet->AddRef();
+  mList.push_back(&mList, (void**)&planet);
+  if (planet)
+    planet->Release();
+}
+
 // --- equivalence checker address annotations
 
 // --- equivalence checker address annotations (dummy declarations) ---
