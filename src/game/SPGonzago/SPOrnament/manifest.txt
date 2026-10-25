@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPOrnament.cpp  ?LoadModel_00c407d0@cInteractiveOrnament_s00c4_04c0@@QAE_NPAX@Z  00c407d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnament.cpp  ?Attach_00c40800@cInteractiveOrnament_s00c4_04c0@@QAEXPAX@Z  00c40800  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnament.cpp  ??0cMovableDestructibleOrnament@@QAE@XZ  00c68e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnament.cpp  ?Ef30@COrn@@QAEHH@Z  00c68f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnament.cpp  ??0cTotemPole@@QAE@XZ  00c8d6c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnament.cpp  ?resize@Vec0C@@QAEXIABUVec3_s00c8_db30@@@Z  00c8de50  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPOrnament.cpp  ?PostDataLoad@TotemPole@@QAE_NI@Z  00c8df10  /O2 /MD /Gy /TP /Isrc/game/include

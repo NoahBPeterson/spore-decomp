@@ -1,0 +1,6 @@
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s00c8c9d0, named from the dev publics; slice address comment)
+00c8d330 ?Write@cTotemPole@@QAE_NPAVcOutStream@@@Z  # cTotemPole::Write migrated from s00c8c9d0 (verbatim, slice spelling)
+00c8d460 ?FUN_00c8d460@cSimObject@@QAEXMM@Z  # cSimObject::FUN_00c8d460 migrated from s00c8c9d0 (verbatim, slice spelling)
+00c8d6c0 ??0cTotemPole@@QAE@XZ  # cTotemPole::cTotemPole migrated from s00c8c9d0 (verbatim, slice spelling)
+00c8d800 ??1cTotemPole@@UAE@XZ  # cTotemPole::~cTotemPole migrated from s00c8c9d0 (verbatim, slice spelling)
+00c8d940 ?Insert@tAnalysisVector@@QAEXPAUtAnalysisInfo@@IABU2@@Z  # tAnalysisVector::Insert migrated from s00c8c9d0 (verbatim, slice spelling)

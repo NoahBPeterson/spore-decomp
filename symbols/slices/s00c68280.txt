@@ -13,9 +13,9 @@
 00c68c00  FUN_00c68c00  # create noun 0x76f6e64 and insert
 00c68d20  FUN_00c68d20  # find noun index and create
 00c68d70  FUN_00c68d70  # restore vector + position
-00c68e30  SP::cMovableDestructibleOrnament::cMovableDestructibleOrnament  # PDB name
+00c68e30 ??0cMovableDestructibleOrnament@@QAE@XZ  # cMovableDestructibleOrnament::cMovableDestructibleOrnament migrated from s00c68280 (verbatim, slice spelling)
 00c68ed0  SP::cMovableDestructibleOrnament::~cMovableDestructibleOrnament  # resets 6 vtables
-00c68f30  FUN_00c68f30  # interface query (0x283d961 + 4 fallbacks)
+00c68f30 ?Ef30@COrn@@QAEHH@Z  # COrn::Ef30 migrated from s00c68280 (verbatim, slice spelling)
 00c69030  FUN_00c69030  # shutdown: cLocomotiveObject::Shutdown + release +0x2c
 00c69090  FUN_00c69090  # alloc cGroundLocomotion and register with BehaviorManager
 00c69110  FUN_00c69110  # static-local accessor with atexit guard

@@ -1,9 +1,9 @@
-00c8db30  F8db30  # eastl::vector<Vector3> stream reader (read count then n entries)
-00c8dc10  TP_AddSegment  # cTotemPole: append segment id + colour, recompute extents / bounding radius
-00c8de50  eastl::vector<cSPColorRGB>::resize  # Vec0C::resize(n, value) [MATCH]
-00c8deb0  SP::cGameData::RemoveOwner  # cTotemPole teardown of the model vector + owner + spatial body
-00c8df10  SP::cTotemPole::PostDataLoad  # base load + default-red colour-vector resize [MATCH]
-00c8df60  TP_ResetModels  # per-model slot 0x16c reset, owner release, vector clear, spatial release
+00c8db30 ?F8db30@@YAXPAUIOObject@@PAUVec0C@@@Z  # F8db30 migrated from s00c8db30 (verbatim, slice spelling)
+00c8dc10 ?TP_AddSegment@@YIXPAUTotemPole@@HIABUVec3_s00c8_db30@@@Z  # TP_AddSegment migrated from s00c8db30 (verbatim, slice spelling)
+00c8de50 ?resize@Vec0C@@QAEXIABUVec3_s00c8_db30@@@Z  # Vec0C::resize migrated from s00c8db30 (verbatim, slice spelling)
+00c8deb0 ?TP_RemoveOwner@@YIXPAUTotemPole@@@Z  # TP_RemoveOwner migrated from s00c8db30 (verbatim, slice spelling)
+00c8df10 ?PostDataLoad@TotemPole@@QAE_NI@Z  # TotemPole::PostDataLoad migrated from s00c8db30 (verbatim, slice spelling)
+00c8df60 ?TP_ResetModels@@YIXPAUSpatialBody@@@Z  # TP_ResetModels migrated from s00c8db30 (verbatim, slice spelling)
 00c8e000  Spatial::LoadModel  # cSpatialObject::LoadModel (this = cTotemPole+0x34) [partial]
 00c8e310  F8e310  # stream writer: 3 x EA::IO::WriteUint32 via v08()->v06()
 00c8e3a0  F8e3a0  # stream reader: 3 x EA::IO::ReadInt32 via v08()->v06()

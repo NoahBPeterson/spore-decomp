@@ -23,6 +23,6 @@
 00c3fc80 ?InitFromDefinition@cInteractableObject@@QAE_NPAXHI@Z  # bool cInteractableObject::InitFromDefinition
 00c3fe70 ?ShutdownOrnament@cInteractiveOrnament@@QAEXXZ  # void cInteractiveOrnament::Shutdown
 00c3ff10 ?AttachEffect@cInteractiveOrnament@@QAEXPAX@Z  # void cInteractiveOrnament::AttachEffect
-00c40150 ?cInteractiveOrnamentCast@@YAPAXPAX0@Z  # void* Object::Cast (interactive ornament)
-00c40200 ?SetNextDestructedState@cInteractiveOrnament@@QAEHXZ  # int cInteractiveOrnament::SetNextDestructedState
-00c40270 ?Write@cInteractiveOrnament@@QAE_NPAX@Z  # bool cInteractiveOrnament::Write
+00c40150 ?cInteractiveOrnamentCast@@YAPAXPAX0@Z  # cInteractiveOrnamentCast migrated from s00c3ee20 (verbatim, slice spelling)
+00c40200 ?SetNextDestructedState@cInteractiveOrnament@@QAEHXZ  # cInteractiveOrnament::SetNextDestructedState migrated from s00c3ee20 (verbatim, slice spelling)
+00c40270 ?Write@cInteractiveOrnament@@QAE_NPAX@Z  # cInteractiveOrnament::Write migrated from s00c3ee20 (verbatim, slice spelling)
