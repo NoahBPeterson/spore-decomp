@@ -145,42 +145,53 @@ Matrix44* CopyMatrixRange(char* first, char* last, Matrix44* dest)
 }
 
 // =====================================================================
-// @ 0x45de10  string SprintfCore
+// string SprintfCore
 // =====================================================================
-struct Str {
+struct DStr {
     char* begin;
     char* end;
     char* cap;
-    void grow(unsigned int n);                          // 0x45ebd0
+    void resize(unsigned int n);                        // 0x45ebd0
+};
+
+struct Str : public DStr {
     Str* SprintfCore(const char* fmt, void* args);
     void ResetAndFormat(const char* fmt, void* args);   // 0x45da50
 };
 
+template <typename T>
+static inline const T& max_alt(const T& a, const T& b)
+{
+    return a < b ? b : a;
+}
+
+static inline int Vsnprintf(char* dst, unsigned int count, const char* fmt, void* args)
+{
+    return Vsnprintf8(dst, count, fmt, args);
+}
+
+// @ 0x45de10
 Str* Str::SprintfCore(const char* fmt, void* args)
 {
-    int used = (int)(end - begin);
-    int len;
+    unsigned int nInitialSize = (unsigned int)(end - begin);
+    int nReturnValue;
     if (begin == &g_sentinel) {
-        len = Vsnprintf8(end, 0, fmt, args);
+        nReturnValue = Vsnprintf(end, 0, fmt, args);
     } else {
-        len = Vsnprintf8(end, (unsigned int)(cap - end), fmt, args);
+        nReturnValue = Vsnprintf(end, (unsigned int)(cap - end), fmt, args);
     }
-    if (len < (int)(cap - end)) {
-        if (len < 0) {
-            unsigned int cap2 = (unsigned int)((end - begin) * 2);
-            unsigned int cap7 = 7;
-            unsigned int* chosen = cap2 < 8 ? &cap7 : &cap2;
-            for (unsigned int c = *chosen; len < 0 && c < 1000000; c = c << 1) {
-                grow(c);
-                len = Vsnprintf8(begin + used, (c + 1) - used, fmt, args);
-            }
+    if (nReturnValue >= (int)(cap - end)) {
+        resize(nInitialSize + nReturnValue);
+        nReturnValue = Vsnprintf(begin + nInitialSize, nReturnValue + 1, fmt, args);
+    } else if (nReturnValue < 0) {
+        unsigned int n = max_alt((unsigned int)7, (unsigned int)((end - begin) * 2));
+        for (; nReturnValue < 0 && n < 1000000; n = n * 2) {
+            resize(n);
+            nReturnValue = Vsnprintf(begin + nInitialSize, (n + 1) - nInitialSize, fmt, args);
         }
-    } else {
-        grow(used + len);
-        len = Vsnprintf8(begin + used, len + 1, fmt, args);
     }
-    if (len >= 0) {
-        end = begin + used + len;
+    if (nReturnValue >= 0) {
+        end = begin + nInitialSize + nReturnValue;
     }
     return this;
 }
@@ -191,8 +202,6 @@ void Str::ResetAndFormat(const char* fmt, void* args)
     SprintfCore(fmt, args);
     return;
 }
-
-void Str::grow(unsigned int) {}
 
 // =====================================================================
 // @ 0x45da80  small wrapper around the big node function
