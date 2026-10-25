@@ -1,10 +1,7 @@
-# va  diff-bytes  reason
-00ef7d90  -  partial: preference save/restore; Variant construction and property calls stubbed
-00ef7ec0  -  partial: large key dispatcher (0x4D2 bytes); dispatch skeleton only
-00ef8390  -  partial: 7-arg editor setup; FUN_0067caf0/FUN_0067aaf0 call shape stubbed
-00ef8550  -  partial: toggle handler; ConfigManager branch stubbed
-00ef8590  -  partial: perf-counter stopwatch; SetBoolProperty call stubbed
-00ef8600  -  partial: window/audio setup; audio GetSystemAT sequence stubbed
-00ef8770  -  partial: fixed_pool ctor; init call substituted
-00ef8a10  -  partial: large UI key switch; several cases and jump-table targets omitted
-00ef8cc0  -  partial: eastl::hashtable::DoInsertKey; allocator/hash tail stubbed
+# va  reason
+00ef7d90  preference save/restore: Variant construction, the property-set call chain and the HasProperty/CompareKey branches are stubbed; only the frame differs - needs a full pass over 0x016c7aa4 auth/account objects
+00ef7ec0  large key dispatcher (1231 bytes): only the dispatch skeleton exists, individual key handlers are not reconstructed
+00ef8390  7-arg editor setup: FUN_0067caf0/FUN_0067aaf0 call shape and the two window lookups are stubbed
+00ef8770  fixed_pool ctor: field init reproduced but the pool-init call (0x00ef7c50 family) is substituted
+00ef8a10  large UI key switch (680 bytes): several cases and jump-table targets are omitted
+00ef8cc0  eastl::hashtable::DoInsertKey (242 bytes): bucket/allocator/hash tail is stubbed

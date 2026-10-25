@@ -6,4 +6,6 @@
 00ef8820  CEditor::FUN_00ef8820  # hashtable find returning bool (bucket at +0x60/+0x64)
 00ef8860  CEditor::FUN_00ef8860  # step-table walk over DAT_0148b450/0148b510 + FUN_00ef7ec0 x0xad
 00ef8940  ?FUN_00ef8940@CEditor@@QAEHH@Z  # hashtable occupancy/gap count over two table modes (+0x4a8/+0x4ac)
-00ef8cc0  FUN_00ef8cc0  # eastl::hashtable::DoInsertKey (operator_new "Simulator", pool at +0x1c)
+00ef8cc0  FUN_00ef8cc0  # eastl::hashtable::DoInsertKey (operator_new "Simulator", pool at +0x1c)00ef8550 ?Toggle@CGadget@@QAEXH@Z  # CGadget::Toggle (approx name; slice spelling)
+00ef8590 ?FUN_00ef8590@@YAXXZ  # FUN_00ef8590 perf-counter stopwatch check (slice spelling)
+00ef8600 ?AudioToggle@CGadget@@QAEXH@Z  # CGadget::AudioToggle (approx name; slice spelling)
