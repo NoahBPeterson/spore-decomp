@@ -8,7 +8,7 @@
 00830d20 ?GetField20@Drawable_s0083_0c00@@QAEHH@Z  # Drawable::GetField20 s00830c00
 00830d30 ?GetPair38@Drawable_s0083_0c00@@QAEPAMPAMH@Z  # Drawable::GetPair38 s00830c00
 00830d60 ?GetPair40@Drawable_s0083_0c00@@QAEPAMPAMH@Z  # Drawable::GetPair40 s00830c00
-00830d90 ?FUN_00830d90@@YAXPAX000H@Z  # FUN_00830d90 migrated from s00830c00 (verbatim, slice spelling)
+00830d90 ?DrawWithImageInfo@Drawable@@QAEXPAX00HH@Z  # cSPUIStdDrawable::draw_with_image_info reconstructed
 00831030 ?ScalarDtor@ImageInfo2@@QAEPAXI@Z  # ImageInfo2::ScalarDtor migrated from s00830c00 (verbatim, slice spelling)
 008310a0 ?CopyFrom@ImageInfo2@@QAEXPBU1@@Z  # ImageInfo2::CopyFrom migrated from s00830c00 (verbatim, slice spelling)
 00831170 ?SetImageColor@Drawable_s0083_0c00@@QAEXHH@Z  # Drawable_s0083_0c00::SetImageColor migrated from s00830c00 (verbatim, slice spelling)
@@ -17,8 +17,8 @@
 008312f0 ?SetPair38At@Drawable_s0083_0c00@@QAEXHPAM@Z  # Drawable_s0083_0c00::SetPair38At migrated from s00830c00 (verbatim, slice spelling)
 00831380 ?SetPair40At@Drawable_s0083_0c00@@QAEXHPAM@Z  # Drawable_s0083_0c00::SetPair40At migrated from s00830c00 (verbatim, slice spelling)
 00831410 ?PickImageInfo@Drawable_s0083_0c00@@QAEPAXHPAX@Z  # Drawable_s0083_0c00::PickImageInfo migrated from s00830c00 (verbatim, slice spelling)
-00831530 ?FUN_00831530@@YAPAMPAXPAMH@Z  # FUN_00831530 migrated from s00830c00 (verbatim, slice spelling)
-008315c0 ?FUN_008315c0@@YA_NPAXHH@Z  # FUN_008315c0 migrated from s00830c00 (verbatim, slice spelling)
+00831530 ?GetNaturalSize@Drawable@@QAE_NPAMHH@Z  # cSPUIStdDrawable::GetNaturalSize reconstructed
+008315c0 ?HitTest@Drawable@@QAE_NHHH@Z  # cSPUIStdDrawable::HitTest reconstructed
 00831650 ?EnsureImageInfo0@Drawable_s0083_0c00@@QAEXXZ  # Drawable_s0083_0c00::EnsureImageInfo0 migrated from s00830c00 (verbatim, slice spelling)
 008316b0 ?SetImage@DSub@@QAEXHPAX@Z  # DSub::SetImage migrated from s00830c00 (verbatim, slice spelling)
 00831760 ?SetImageIcon@Drawable_s0083_0c00@@QAEXHPAX@Z  # Drawable_s0083_0c00::SetImageIcon migrated from s00830c00 (verbatim, slice spelling)
