@@ -45,6 +45,12 @@ static inline void VCall0(void* self, int off) {
 static inline void VCall1(void* self, int off, int arg) {
     ((void(__thiscall*)(void*, int))(*(void***)self)[off / 4])(self, arg);
 }
+static inline void VCall3(void* self, int off, int a, int b, int c) {
+    ((void(__thiscall*)(void*, int, int, int))(*(void***)self)[off / 4])(self, a, b, c);
+}
+static inline void VCallA(void* self, int off, int a, int b, int c, int d, int e) {
+    ((void(__thiscall*)(void*, int, int, int, int, int))(*(void***)self)[off / 4])(self, a, b, c, d, e);
+}
 
 // globals
 extern unsigned char g_flags1630180;   // 0x01630180
@@ -61,7 +67,7 @@ class cGraphicsResourceFactory {
 public:
     bool Shutdown();                                                  // 00763520
     unsigned int GetSupportedTypes(uint32_t* types, unsigned int n);  // 00763550
-    bool ReadResourcePCAWeights(void* a, void* b);                    // 00763950
+    bool ReadResourcePCAWeights(void* stream, void* resource, const void* key);  // 00763950
 };
 
 struct cRasterFromGimexLoadState {
@@ -73,9 +79,49 @@ struct cRasterFromGimexLoadState {
 using SP::cRasterFromGimexLoadState;
 
 // ===========================================================================
-// @ 0x00762d70  (container teardown for arrays of local-light records)
+// @ 0x00762d70  container teardown for arrays of local-light records (SEH)
+extern "C" void* __cdecl F_11f3130(void* vtable);   // 0x011f3130 add-ref vtable
+extern "C" void* __cdecl F_11f3580(void* item);     // 0x011f3580 release
+extern "C" void* __cdecl F_11f4e90(void* obj);      // 0x011f4e90 release
+extern "C" void  __cdecl F_9276c0(void* mgr, void* p); // 0x009276c0
+extern "C" void  __cdecl F_762890(void* slot, void* out); // 0x00762890
+extern "C" void  __cdecl F_6c1570(void* vec, void* pos, void* val); // 0x006c1570 vector push
+extern void* g_mgr16c8b44;                          // 0x016c8b44
+
 void __cdecl TeardownLightArrays(int count, void** arrays) {
-    (void)count; (void)arrays;
+    void*  vec[3] = { 0, 0, 0 };   // scratch set of already-seen items
+    for (int i = 0; i < count; i++) {
+        int* arr = (int*)arrays[i];
+        int  n   = arr[4];
+        for (int j = 0; j < n; j++) {
+            void* item = *(void**)((char*)arr + 0x24 + j * 4);
+            bool found = false;
+            for (void** it = (void**)vec[0]; it != (void**)vec[1]; ++it)
+                if (*it == item) { found = true; break; }
+            if (found)
+                continue;
+            F_11f3130(*(void**)item);                     // add-ref
+            F_9276c0(g_mgr16c8b44, *(void**)item);
+            void* tmp = item;
+            F_762890((void*)0x1538ff0, &tmp);
+            F_11f3580(item);                              // release
+            F_9276c0(g_mgr16c8b44, item);
+            if (vec[1] == vec[2]) {
+                F_6c1570(vec, vec[1], &item);
+            } else {
+                *(void**)vec[1] = item;
+                vec[1] = (char*)vec[1] + 4;
+            }
+        }
+        void* obj8 = *(void**)((char*)arr + 8);
+        void* tmp8 = obj8;
+        F_762890((void*)0x1539010, &tmp8);
+        F_11f4e90(obj8);
+        F_9276c0(g_mgr16c8b44, obj8);
+        F_9276c0(g_mgr16c8b44, arr);
+    }
+    if (vec[0] != 0 && vec[0] != (void*)0)
+        EA_Delete(vec[0]);
 }
 
 // ===========================================================================
@@ -109,16 +155,68 @@ void* __stdcall MakeObj762f30(const int* src) {
 }
 
 // ===========================================================================
-// @ 0x00762fa0  locked map insert (partial)
+// @ 0x00762fa0  locked map insert (thiscall, ret 8); 64-bit lock-free counter
 struct Map762fa0 {
-    void* Insert(void* out, const void* key);
-    void Append(int v);
+    int field0; int field4; int field8; int fieldC;
+    void* Insert(void* out, const void* key);   // 0x00762fa0
+    void  Append(const void* key);              // 0x00763130
 };
-void* Map762fa0::Insert(void* out, const void* key) { (void)out; (void)key; return 0; }
+extern "C" void* __fastcall F_68c140(const void* key8);                       // 0x0068c140 AtomicRead64
+extern "C" void  __fastcall F_68c1b0(const void* key8, unsigned __int64 val); // 0x0068c1b0 AtomicExchange64
+
+void* Map762fa0::Insert(void* out, const void* key) {
+    unsigned __int64 node8 = *(const unsigned __int64*)((char*)this + 0);
+    void* slot = F_68c140(&node8);
+    if (slot == 0) {
+        void* obj = MakeObj762f30((const int*)key);
+        F_68c1b0(out, (unsigned __int64)(size_t)obj);
+        return out;
+    }
+    for (;;) {
+        void* e = F_68c140(&node8);
+        unsigned __int64 inner = *(unsigned __int64*)((char*)e + 8);
+        void* cur = F_68c140(&inner);
+        unsigned __int64 oldv = *(unsigned __int64*)&node8;
+        (void)cur; (void)oldv;
+        unsigned __int64 nw = node8 + 1;
+        unsigned __int64 prev = *(volatile unsigned __int64*)((char*)this + 0);
+        if (_InterlockedCompareExchange64((volatile __int64*)((char*)this + 0),
+                (__int64)nw, (__int64)prev) == (__int64)prev) {
+            unsigned __int64 z = 0;
+            F_68c1b0(&z, 0);
+            void* e3 = F_68c140(&node8);
+            *(int*)((char*)e3 + 8)  = (int)(nw & 0xffffffffu);
+            *(int*)((char*)e3 + 0xc) = (int)(nw >> 32);
+            if (key) {
+                *(int*)((char*)e3 + 0) = *(const int*)key;
+                *(int*)((char*)e3 + 4) = *((const int*)key + 1);
+            }
+            *(unsigned __int64*)out = node8;
+            return out;
+        }
+    }
+}
 
 // ===========================================================================
-// @ 0x00763130  locked map append (partial)
-void Map762fa0::Append(int v) { (void)v; }
+// @ 0x00763130  locked map append (thiscall, ret 4)
+void Map762fa0::Append(const void* key) {
+    int out[2];
+    Insert(out, key);
+    const int* k = (const int*)key;
+    unsigned __int64 node8 = *(const unsigned __int64*)k;
+    for (;;) {
+        void* e = F_68c140(&node8);
+        unsigned __int64 inner = *(unsigned __int64*)((char*)e + 8);
+        void* e2 = F_68c140(&inner);
+        *(int*)((char*)e2 + 8) = k[0];
+        *(int*)((char*)e2 + 0xc) = k[1];
+        unsigned __int64 nw = node8 + 1;
+        unsigned __int64 prev = *(volatile unsigned __int64*)((char*)this + 8);
+        if (_InterlockedCompareExchange64((volatile __int64*)((char*)this + 8),
+                (__int64)nw, (__int64)prev) == (__int64)prev)
+            return;
+    }
+}
 
 // ===========================================================================
 // @ 0x00763100  ctor: base vptr + zeroed fields, then derived vptr
@@ -149,20 +247,28 @@ void DeleteEditorRes(CEditorRes* p) { delete p; }
 // ===========================================================================
 // @ 0x00763250  interlocked refcount release with deferred deletion
 int __fastcall Release763250(void* self) {
-    volatile int* rc = (volatile int*)((char*)self + 4);
+    void* p = self;
+    volatile int* rc = (volatile int*)((char*)p + 4);
     int n = _InterlockedExchangeAdd((volatile long*)rc, -2) - 2;
     if (n == 0) {
         _InterlockedExchange((volatile long*)rc, 2);
-        if (g_flags1630180 != 0 || g_word160077c != *(int*)__readfsdword(0x18)) {
-            void* o = GetGlobal67de80();
-            (void)o; (void)self;
-        } else if (self != 0) {
-            ((IObj*)self)->s2(1);
+        int tid = (int)__readfsdword(0x18);
+        if (g_flags1630180 != 0 || g_word160077c != tid) {
+            Map762fa0* map = (Map762fa0*)GetGlobal67de80();
+            int key[2];
+            key[0] = (int)p;
+            key[1] = 0x762f10;
+            map->Append(key);
+        } else if (p != 0) {
+            ((IObj*)p)->s2(1);
         }
     } else if (n == 3) {
-        void* p = *(void**)((char*)self + 0x14);
-        if (p != 0)
-            (*(void(__thiscall**)(void*, void*))p)(*(void**)p, self);
+        char* slot = (char*)p + 0x14;
+        if (*(void**)slot != 0) {
+            void* cb = *(void**)slot;
+            void* fn = *(void**)*(void**)cb;
+            ((void(__thiscall*)(void*, void*))fn)(cb, p);
+        }
     }
     return n;
 }
@@ -284,9 +390,47 @@ struct EhHolder { char pad[0x44]; EhItem a[4]; EhItem b[4]; ~EhHolder(); };
 EhHolder::~EhHolder() {}
 
 // ===========================================================================
-// @ 0x00763620  Gimex raster header load
-bool __cdecl LoadRasterHeader(cRasterFromGimexLoadState* s, const char* name, void* unused) {
-    (void)s; (void)name; (void)unused; return false;
+// @ 0x00763620  Gimex raster header load (thiscall, ret 0xc)
+extern "C" void  __cdecl F_87cde0(void* stream);                                  // 0x0087cde0 stream ctor
+extern "C" bool  __cdecl F_87ce00(void* stream, const char* name);                // 0x0087ce00 open
+extern "C" bool  __cdecl F_87d0b0(void* stream, void* a, void* b);                // 0x0087d0b0 read header
+extern "C" void* __cdecl F_87ced0(void* stream, int flags);                       // 0x0087ced0 get record
+extern "C" bool  __cdecl F_87cf00(void* stream, void* rec, void* dst, int size);  // 0x0087cf00 decompress
+extern "C" void  __cdecl F_87cef0(void* stream, void* rec);                       // 0x0087cef0 release record
+extern "C" void  __cdecl F_87ce90(void* stream);                                  // 0x0087ce90
+extern "C" void  __cdecl F_87d070(void* stream);                                  // 0x0087d070 dtor/closer
+
+struct GimexRecord { char pad[0x10]; int mWidth; int mHeight; int mBpp; };
+struct StreamObj { char pad[0x20]; };
+
+bool __stdcall LoadRasterHeader(cRasterFromGimexLoadState* s, const char* name, void* unused) {
+    StreamObj stream;
+    F_87cde0(&stream);
+    if (!F_87ce00(&stream, name)) {
+        F_87d070(&stream);
+        return false;
+    }
+    char inner[4];
+    if (!F_87d0b0(&stream, (void*)name, inner)) {
+        F_87d070(&stream);
+        return false;
+    }
+    GimexRecord* rec = (GimexRecord*)F_87ced0(&stream, 0);
+    bool ok = false;
+    if (rec != 0 && rec->mBpp == 0x20) {
+        s->mWidth  = rec->mWidth;
+        s->mHeight = rec->mHeight;
+        s->mBpp    = 0x20;
+        s->mPitch  = rec->mWidth * 4;
+        s->mSize   = s->mPitch * s->mHeight;
+        s->mData   = (unsigned char*)EA_New(s->mSize, (const char*)0x140e02c, 0, 0, 0, 0);
+        ok = F_87cf00(&stream, rec, s->mData, s->mSize);
+        F_87cef0(&stream, rec);
+    }
+    F_87ce90(&stream);
+    F_87d070(&stream);
+    (void)unused;
+    return ok;
 }
 
 // ===========================================================================
@@ -305,9 +449,25 @@ bool __stdcall CreateRasterFromState(cRasterFromGimexLoadState* s, int unused, O
 }
 
 // ===========================================================================
-// @ 0x007637d0
-bool __stdcall LoadAndCreateRaster(cRasterFromGimexLoadState* src, int a, int b, int* out3) {
-    (void)src; (void)a; (void)b; (void)out3; return false;
+// @ 0x007637d0  load header + create raster (thiscall, ret 0x10)
+struct RasterFactory {
+    bool LoadAndCreateRaster(cRasterFromGimexLoadState* state, int a, int b, void* out3);
+};
+
+bool RasterFactory::LoadAndCreateRaster(cRasterFromGimexLoadState* state, int a, int b, void* out3) {
+    char  buf[0x1c];
+    *(int*)(buf + 0x10) = 0;
+    if (!LoadRasterHeader((cRasterFromGimexLoadState*)buf, 0, 0))
+        return false;
+    // NB: the original allocates a small scratch vector at [esp+0x24] here
+    if (!CreateRasterFromState((cRasterFromGimexLoadState*)buf, 0, 0))
+        return false;
+    int* src = (int*)out3;
+    ((int*)b)[2] = src[0];
+    ((int*)b)[3] = src[1];
+    ((int*)b)[4] = src[2];
+    (void)state; (void)a;
+    return true;
 }
 
 // ===========================================================================
@@ -331,19 +491,94 @@ bool __stdcall ReadTriplets(void* stream, int, int, int) {
 }
 
 // ===========================================================================
-// @ 0x00763950
-bool SP::cGraphicsResourceFactory::ReadResourcePCAWeights(void* a, void* b) {
-    (void)a; (void)b; return false;
+// @ 0x00763950  read the Gimex PCA-weight header (thiscall, ret 0xc)
+bool SP::cGraphicsResourceFactory::ReadResourcePCAWeights(void* stream, void* resource, const void* key) {
+    (void)key;
+    char* res = (char*)resource;
+    int   hdr[6];
+    int   flag = 0;
+    int   tag;
+    if (!EA_IO_ReadInt32(stream, &tag, 1, flag))
+        return false;
+    if (tag == (int)0xeeffeeff)      flag = 1;
+    else if (tag == (int)0xffeeffee) flag = 0;
+    else return false;
+    if (!EA_IO_ReadInt32(stream, &hdr[1], 1, flag)) return false;
+    if (hdr[1] != 2) return false;
+    if (!EA_IO_ReadInt32(stream, &hdr[0], 1, flag)) return false;
+    if (hdr[0] > 4) return false;
+    int* pGroup = (int*)(res + 0x18);
+    if (!EA_IO_ReadInt32(stream, pGroup, 1, flag)) return false;
+    if (*pGroup > 0x3c) return false;
+    if (!EA_IO_ReadInt32(stream, &hdr[2], 1, flag)) return false;
+    if (hdr[2] != 0x10) return false;
+    if (!EA_IO_ReadInt32(stream, &hdr[3], 1, flag)) return false;
+    if (hdr[3] != 2) return false;
+    int count = (*pGroup * 0x110) >> 2;
+    if (!EA_IO_ReadInt32(stream, res + 0x24, count, flag)) return false;
+    *(float*)(res + 4) = *(float*)0x14853e0;
+    *(unsigned char*)(res + 8) = 1;
+    return true;
 }
 
 // ===========================================================================
-// @ 0x00763a80  arena refix
-bool __stdcall WriteResourceArena(void* a, void* b) { (void)a; (void)b; return false; }
+// @ 0x00763a80  resource arena write (stdcall-ish; thiscall in ecx folds the resource)
+extern "C" void* __cdecl F_11e2fe0(void* scope);                       // 0x011e2fe0 scope ctor
+extern "C" bool  __cdecl F_11e3350(void* stream, void* out, int flags);// 0x011e3350 begin
+extern "C" bool  __cdecl F_11e34d0(void* scope);                       // 0x011e34d0 advance
+extern "C" bool  __cdecl F_11e3c50(void* scope, void* cb);             // 0x011e3c50 set callback
+extern "C" bool  __cdecl F_11e3940(void* scope);                       // 0x011e3940 advance
+extern "C" void  __cdecl F_11e2690(void* scope);                       // 0x011e2690 scope dtor
+
+bool __stdcall WriteResourceArena(int* res, int flags) {
+    void* stream = *(void**)((char*)res + 0x18);
+    char  scope[0x130];
+    F_11e2fe0(scope);
+    void* arena = 0;
+    if (!F_11e3350(stream, &arena, 0)) {
+        F_11e2690(scope);
+        return false;
+    }
+    while (F_11e34d0(scope)) { }
+    g_arena16303f0 = arena;
+    if (!F_11e3c50(scope, (void*)0x763490)) {
+        F_11e2690(scope);
+        return false;
+    }
+    while (F_11e3940(scope)) { }
+    g_arena16303f0 = 0;
+    F_11e2690(scope);
+    (void)flags;
+    return true;
+}
 
 // ===========================================================================
-// @ 0x00763b80  draw raster
+// @ 0x00763b80  draw/upload raster (cdecl, 4 args)
+extern "C" void* __cdecl F_11e0744(void* dst, void* src, int n);       // 0x011e0744 memcpy-ish
+extern void* g_dev16f89d0;                                            // 0x016f89d0 device singleton
+
 bool __cdecl DrawRaster(void* a, int b, int c, unsigned char d) {
-    (void)a; (void)b; (void)c; (void)d; return true;
+    char* p = (char*)a;
+    void* tex = *(void**)(p + 8);
+    int   v0  = 0;
+    ((void(__thiscall*)(void*, int, int, int))((*(void***)tex)[0x48 / 4]))(
+        tex, *(unsigned char*)(p + 0x12), (int)d, (int)&v0);
+    void* obj = (void*)v0;
+    int   width  = *(unsigned short*)(p + 0xc);
+    int   height = *(unsigned short*)(p + 0xe);
+    char  local[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    ((void(__thiscall*)(void*, void*))((*(void***)obj)[0x30 / 4]))(obj, local);
+    void* dev = *(void**)g_dev16f89d0;
+    ((void(__thiscall*)(void*, int, int, int, int, int))((*(void***)dev)[0x90 / 4]))(
+        dev, width, height, *(int*)local, 2, (int)local);
+    ((void(__thiscall*)(void*, int))((*(void***)dev)[0x80 / 4]))(dev, v0);
+    ((void(__thiscall*)(void*, void*, int, int))((*(void***)obj)[0x34 / 4]))(obj, local, 0, 0x10);
+    F_11e0744((void*)b, (void*)*(int*)(local + 4), *(int*)local * height);
+    ((void(__thiscall*)(void*))((*(void***)obj)[0x38 / 4]))(obj);
+    ((void(__thiscall*)(void*))((*(void***)obj)[8 / 4]))((void*)v0);
+    ((void(__thiscall*)(void*))((*(void***)tex)[8 / 4]))(tex);
+    (void)c;
+    return true;
 }
 
 // ===========================================================================
