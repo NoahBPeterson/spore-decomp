@@ -5,3 +5,7 @@
 006c12e0  52   vector<0x38> destructor-iterator helper; CRT helper call shape differs
 006c1380  101  vector<0x38> clear; EH frame + dealloc schedule differ; equiv: PASS (now Vec38::Clear member, 748 valid inputs)
 006c1c80  35   make stream from a 2-word descriptor; complete, equiv PASS (216/400 valid, 100% coverage). Calls SP::cSPMemPool::LockedAligned through the [0x16c8b44] singleton receiver in ECX; the function returns `out` in EAX like the original (declared to return u32).
+006c13f0  363  eastl vector<0x38>::insert; complete, size 388 vs 369. Reallocation path reconstructed (double-capacity growth, allocator tag EASTL/allocator.h:0xd1, sub_f25ea0 copy + tail). The original reads ECX at entry, so the stand-in signature is not register-ABI compatible: equiv UNSUPPORTED (custom/LTCG register ABI).
+006c1570  268  eastl vector<4>::insert; complete, size 250 vs 268. Same double-capacity growth path with sub_11e0744 copy. Original reads ECX at entry: equiv UNSUPPORTED (custom/LTCG register ABI).
+006c1680  1110 arena skin-sink collection; complete, size 193 vs 1110. Object-vector build (0x38-stride arena entries seeded by sub_11e0b85) plus FUN_006c24b0 merge; equiv UNSUPPORTED (only 0/400 inputs valid: import _decode_pointer + faults).
+006c1ae0  333  SP::cAnimationBaker::GetBakedAnimations; complete, size 236 vs 333. Bit-field gate on the +0x10 pool handle, manager lookup, arena collection and caching-type set; equiv UNSUPPORTED (2 unresolved references: EAGetManager, IDGenerator).
