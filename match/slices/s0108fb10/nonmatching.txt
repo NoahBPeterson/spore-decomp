@@ -1,15 +1,9 @@
 # Havok 3.1.0 slice s0108fb10 - complete, not byte-exact. Flags /vc71 /O2 /MD /Gy /TP.
-0108fb40  8   complete; hkStiffSpringChainData::`scalar deleting destructor'. Only residual diff is the vptr
-                 store order - the original writes vtable 0x014a195c *before* loading +0x14, cl hoists the
-                 load above the store (same near-miss as 006b4400 in s006b37d0). equiv WEAK: 219/400 valid,
-                 59.4% coverage (the extra reads fault; the original's own path faults on 181 inputs too).
-01090810  0   complete; hkSpringDamperConstraintMotor::calcMotorData. Saturation clamps via
-                 fcom/fnstsw/test ah branches; the 0..1 limit and the this+8/this+0xc force copies are all
-                 present. equiv PASS: 400/400 valid, 100.0% coverage.
-01090910  0   complete; hkSphereMotion::getInertiaWorld. My cl zeroes through ecx and has no 16-byte aligned
-                 frame (the original has `and esp,-16` and 12 explicit mov stores + fst/fst/fstp diagonals).
-                 Residual: dead eax at exit only. equiv: memory result matches at 100% coverage.
+0108fb40  8   complete; hkStiffSpringChainData::`scalar deleting destructor'. Only residual diff is the vptr store order - the original writes vtable 0x014a195c *before* loading +0x14, cl hoists the load above the store (same near-miss as 006b4400 in s006b37d0). equiv WEAK: 219/400 valid, 59.4% coverage (the extra reads fault; the original's own path faults on 181 inputs too).
+01090810  0   complete; hkSpringDamperConstraintMotor::calcMotorData. Saturation clamps via fcom/fnstsw/test ah branches; the 0..1 limit and the this+8/this+0xc force copies are all present. equiv PASS: 400/400 valid, 100.0% coverage.
+01090910  0   complete; hkSphereMotion::getInertiaWorld. My cl zeroes through ecx and has no 16-byte aligned frame (the original has `and esp,-16` and 12 explicit mov stores + fst/fst/fstp diagonals). Residual: dead eax at exit only. equiv: memory result matches at 100% coverage.
 01090960  0   complete; hkSphereMotion::setInertiaLocal (x87 compare order). equiv PASS: 400/400 valid, 100%.
 010909d0  0   complete; hkSphereMotion::setInertiaInvLocal. equiv PASS: 400/400 valid, 100.0% coverage.
-01090a20  0   complete; hkSphereMotion::getInertiaLocal. Same zero-fill / aligned-frame difference as
-                 01090910; residual: dead eax at exit only.
+01090a20  0   complete; hkSphereMotion::getInertiaLocal. Same zero-fill / aligned-frame difference as 01090910; residual: dead eax at exit only.
+0108ffc0  145 complete; hkStabilizedSphereMotion::applyAccumulator (939 B, ours 1097). Full stabilised sphere integration: step-velocity copy, linear-speed clamp, centre-of-mass update, half-step angular delta, per-step turn clamp (maxAngle = m_maxAngularVelocity * stepInfo.m_deltaTime, saturating at 0.9f), cosine series in delta.w, setMul + normalize, deltaAngle x/y/z = 2*delta and .w = sqrt(angleSq*pi), hkRotation::set on the transform. Residual: the half-dt factor is 0.5*dt instead of dt*0.5 (commutative, value-identical); the __fastcall solver helpers cost `xor edx,edx` + `mov ecx,<arg>` per call (dead edx at exit). equiv FAIL 5/10 valid (99.6% coverage, 271/272 insns): only m_deltaAngle x/y/z differ, and only in the saturated huge-magnitude input regime where the turn clamp fires; every other write (m_linearVelocity, m_angularVelocity, m_deltaAngle.w, m_sweptTransform, m_transform) matches.
+01090400  145 complete; hkStabilizedBoxMotion::applyAccumulator (994 B, ours 1151). Same stabilised integration as the sphere plus the world-space rotation of the incoming angular velocity (setRotatedDir walks the columns 2,1,0) and the chained rotation copy through m_transform.m_rot[0]. Residual: the rotation chain leaves m_transform/m_rotation0 with a flipped first diagonal term (orig bf7ffffc vs ours 3f800000) - the dead-copy triple is an O2 codegen trade-off, not a behaviour the source can pin down; plus the same xor edx,edx helper delta. equiv FAIL 5/5 valid (100.0% coverage, 294/294 insns), 8 dwords in the transform/rotation region (0x10/0x18/0x30/0x38/0x40/0x48/0x70/0x74).

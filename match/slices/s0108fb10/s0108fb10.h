@@ -15,17 +15,14 @@ class hkString
 };
 
 // ---------------------------------------------------------------------------------------------------------
-// hkQuaternion helpers (FUN_01082210 = hkQuaternion::setMul, FUN_010821a0 = normalize).
+// hkQuaternion / hkRotation / hkVector4 helpers. They are __thiscall members in Havok (receiver in ecx, the
+// arguments on the stack and popped by the callee), declared __fastcall with a dummy edx slot so the call
+// sites keep the callee-pops shape the retail code uses.
 // ---------------------------------------------------------------------------------------------------------
-struct hkQuaternionOps
-{
-	static void setMul(hkQuaternion& out, const hkQuaternion& a, const hkQuaternion& b);   // 0x01082210
-	static void normalize(hkQuaternion& q);                                               // 0x010821A0
-};
-struct hkRotationOps
-{
-	static void set(hkRotation& out, const hkQuaternion& q);                              // 0x010824A0
-};
+void __fastcall hkQuaternion_setMul(hkQuaternion* out, int, const hkQuaternion* a, const hkQuaternion* b);   // 0x01082210
+void __fastcall hkQuaternion_normalize(hkQuaternion* q, int);                                               // 0x010821A0
+void __fastcall hkRotation_set(hkRotation* out, int, const hkQuaternion* q);                                // 0x010824A0
+void __fastcall hkVector4_setTransformedPos(hkVector4* out, int, const hkTransform* t, const hkVector4* p); // 0x01081360
 
 // ---------------------------------------------------------------------------------------------------------
 // thread memory (hkThreadMemory) - deallocateChunk is a non-virtual member called through TLS.
@@ -41,19 +38,142 @@ extern "C" void* __stdcall TlsGetValue(unsigned long i);
 #endif
 
 // ---------------------------------------------------------------------------------------------------------
-// constraints
+// x87 math constants read by the stabilised motions (absolute addresses of the retail image). The two
+// 1/12 < x < 1 values at 0x0149E060 / 0x0149E05C are *derived* constants: the compiler folded
+// 2*pi/24 and (2*pi/24)^2, so their initialiser has to come from sqrtf() to land on the same bits.
 // ---------------------------------------------------------------------------------------------------------
-struct hkConstraintQueryIn;         // opaque here (hkConstraintQueryIn fields only used by buildJacobian)
-struct hkConstraintQueryOut;
+extern "C" const float g_hkOne_01485720;        // 0x01485720 = 1.0f
+extern "C" const float g_hkHalf_0149e064;       // 0x0149E064 = 0.5f
+extern "C" const float g_hkStepScale_0149e060;  // 0x0149E060 = (2*pi/24)^2
+extern "C" const float g_hkStepScale2_0149e05c; // 0x0149E05C = 2*pi/24
+extern "C" const float g_hkAngleScale_0149e068; // 0x0149E068 = 1/((2*pi/24)^2)
+extern "C" const float g_hkMaxAngle_013ec4b4;   // 0x013EC4B4 = 0.9f
+extern "C" const float g_hkPi_014a1984;         // 0x014A1984 = pi (stabilised sphere)
+extern "C" const float g_hkPi_014a1988;         // 0x014A1988 = pi (stabilised box)
 
-// hkBeginConstraints(in, out, numSolverResults, maxExtra) / hkReplacePreviousRhs / chain build-jacobian
-extern "C" void _hkBeginConstraints(hkConstraintQueryIn* in, hkConstraintQueryOut* out, int num, int max);   // 0x010AA080
-extern "C" void _hkReplacePreviousRhs(hkConstraintQueryIn* in, hkConstraintQueryOut* out, float rhs, int);    // 0x010AA050
-extern "C" void _hkFinalizeConstraints(hkConstraintQueryOut* out, hkConstraintQueryIn* in);                   // 0x010AD0B0
-extern "C" void _hk1dLinearBilateralConstraintBuildJacobian(hkConstraintQueryIn* in, hkConstraintQueryOut* out,
-                                                            int* numSolverResults);                           // 0x010AA890
+// ---------------------------------------------------------------------------------------------------------
+// step info / velocity accumulator (layouts from the dev PDB; the accumulator is read by applyAccumulator)
+// ---------------------------------------------------------------------------------------------------------
+struct hkStepInfo
+{
+	float m_startTime;      // +0x00
+	float m_endTime;        // +0x04
+	float m_deltaTime;      // +0x08
+	float m_invDeltaTime;   // +0x0c
+};
 
-// hkStiffSpringChainData: the per-link parameters copied out of the query input.
+class hkVelocityAccumulator
+{
+public:
+	unsigned char m_type;              // +0x00
+	unsigned char m_pad01[3];
+	int16_t m_deactivationClass;       // +0x04
+	unsigned char m_pad06[6];
+	unsigned char m_flag0c;            // +0x0c
+	unsigned char m_pad0d[3];
+	hkVector4 m_linearVelocity;        // +0x10
+	hkVector4 m_angularVelocity;       // +0x20
+	hkVector4 m_deltaPosition;         // +0x30
+	hkVector4 m_linearVelocity2;       // +0x40
+	hkVector4 m_angularVelocity2;      // +0x50
+	hkVector4 m_deltaPosition2;        // +0x60
+	unsigned int m_pad70[4];           // +0x70
+	hkVector4 m_centerOfMass;          // +0x80
+};
+
+// ---------------------------------------------------------------------------------------------------------
+// constraint solver queries: hkConstraintQueryStepInfo (0x20) + hkConstraintQueryIn (0x48, dev PDB layout)
+// ---------------------------------------------------------------------------------------------------------
+struct hkConstraintQueryStepInfo
+{
+	float m_substepDeltaTime;       // +0x00
+	float m_substepInvDeltaTime;    // +0x04
+	float m_frameDeltaTime;         // +0x08
+	float m_frameInvDeltaTime;      // +0x0c
+	float m_invNumSteps;            // +0x10
+	float m_rhsFactor;              // +0x14
+	float m_virtMassFactor;         // +0x18
+	float m_frictionRhsFactor;      // +0x1c
+};
+
+class hkConstraintQueryIn : public hkConstraintQueryStepInfo
+{
+public:
+	hkVelocityAccumulator* m_accumulatorBufferRoot;   // +0x20
+	void* m_jacobianBufferRoot;                       // +0x24
+	hkVelocityAccumulator* m_bodyA;                   // +0x28
+	hkVelocityAccumulator* m_bodyB;                   // +0x2c
+	hkTransform* m_transformA;                        // +0x30
+	hkTransform* m_transformB;                        // +0x34
+	float m_tau;                                      // +0x38
+	float m_damping;                                  // +0x3c
+	void* m_constraintInstance;                       // +0x40
+	void* m_constraintRuntime;                        // +0x44
+};
+
+// Both members are cursors into the solver's output buffers, advanced by the row builders.
+class hkConstraintQueryOut
+{
+public:
+	void* m_jacobians;          // +0x00
+	void* m_jacobianSchemas;    // +0x04
+};
+
+class hk1dLinearBilateralConstraintInfo
+{
+public:
+	hkVector4 m_pivotA;            // +0x00
+	hkVector4 m_pivotB;            // +0x10
+	hkVector4 m_constrainedDofW;   // +0x20
+};
+
+// hkConstraintInstance / hkConstraintChainInstance (dev PDB layouts, 32-bit pointers). Only the entity array
+// of the chain instance is read by buildJacobian.
+class hkConstraintInstance : public hkReferencedObject
+{
+public:
+	void* m_owner;                     // +0x08
+	void* m_data;                      // +0x0c
+	hkEntity* m_entities[2];           // +0x10
+	unsigned char m_priority;          // +0x18
+	unsigned char m_wantRuntime;       // +0x19
+	unsigned char m_pad1a[2];
+	char* m_name;                      // +0x1c
+	unsigned int m_userData;           // +0x20
+	void* m_internal;                  // +0x24
+};
+
+class hkConstraintChainInstance : public hkConstraintInstance
+{
+public:
+	hkArray<hkEntity*> m_chainedEntities;   // +0x28
+	void* m_action;                         // +0x34
+};
+
+// Solver helpers called by the chain buildJacobian (cdecl, caller cleans the stack).
+extern "C" void _hkBeginConstraints(const hkConstraintQueryIn& in, hkConstraintQueryOut& out,
+                                    const void* solverResults, int solverResultStriding);       // 0x010AA080
+extern "C" void _hk1dLinearBilateralConstraintBuildJacobian(const hk1dLinearBilateralConstraintInfo& info,
+                                                            const hkConstraintQueryIn& in,
+                                                            hkConstraintQueryOut& out);         // 0x010AA890
+extern "C" void _hkReplacePreviousRhs(float rhs, const hkConstraintQueryIn& in,
+                                      hkConstraintQueryOut& out, int index);                    // 0x010AA050
+extern "C" void _hkFinalizeConstraints(int numRows, float tau, float damping, float cfm,
+                                       const int* bodyIndices, const void* rowBase, void* jacobianRows,
+                                       const hkConstraintQueryIn& in, hkConstraintQueryOut& out); // 0x010AD0B0
+// Bare `ret` in this build: an empty hook the solver still calls with the query.
+extern "C" void _hkConstraintQueryBegin(hkConstraintQueryIn& in);                               // 0x00C2E4E0
+
+// hkStiffSpringChainData: the per-link atoms (pivot pair + rest length) and the stiffness parameters.
+class hkStiffSpringChainAtom
+{
+public:
+	hkVector4 m_pivotA;        // +0x00 (in the previous body's local frame)
+	hkVector4 m_pivotB;        // +0x10 (in the next body's local frame)
+	float m_length;            // +0x20 rest length of the link
+	float m_pad24[3];
+};
+
 class hkStiffSpringChainData : public hkReferencedObject
 {
 public:
@@ -63,13 +183,11 @@ public:
 	void* scalarDeletingDtor(unsigned int flags);                                             // ??_G body
 
 	int16_t m_pad08[2];                                        // +8
-	uint32_t m_atoms[2];                                       // +0xc / +0x10 (chunk pointer + cookie)
-	int32_t m_numLinksAndFlags;                                // +0x14 (bits 30..31 are flag bits)
+	hkArray<hkStiffSpringChainAtom> m_atoms;                   // +0xc (data / size / capacityAndFlags)
+	float m_tau;                                               // +0x18
+	float m_damping;                                           // +0x1c
+	float m_cfm;                                               // +0x20
 };
-
-// motion step input / accumulator returned by applyAccumulator (opaque: only read by the base class).
-class hkStepInfo { public: uint32_t m_pad[0x14]; };            // fields used: +8 deltaTime, +0x40..+0x5f velocities
-struct hkVelocityAccumulator;
 
 // This slice owns hkStabilizedSphereMotion::clone/applyAccumulator and hkStabilizedBoxMotion::clone/
 // applyAccumulator. The shared b005 header (s010869e0/hk31_world.h) declares those classes with only their
