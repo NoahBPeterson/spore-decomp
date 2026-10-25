@@ -1,3 +1,12 @@
 0082bfa0 105 complete translation; EASTL fixed-allocator allocate call not reproduced exactly [equiv: PASS]
 0082cc60 65  complete translation; vector(n) zero-fill schedule differs [equiv: PASS]
 0082ccb0 62  complete translation; push_back(NULL) grow path not identical [equiv: PASS]
+0082b9c0 1496  SerializeHelperProcessTokens2: 1496-byte token serializer (jump table over 19 token types, per-type vtable reads) not reconstructed [equiv: UNSUPPORTED, skeleton has no behaviour to compare]
+0082c000 102  RBTree::Insert: RBTreeInsert(node,parent,header,side) call order + node[0x10] key copy + count bump; complete [equiv: PASS 321/400 valid, 100% coverage] (chk size 109 vs 121)
+0082c190 19  RLEHitMask constructor: base/secondary vtable stores (0x13ef094/0x141a380/0x141a37c) + member zeroing; complete [equiv: PASS 400/400 valid, 100% coverage] (chk size 30 vs 37)
+0082c210 519  WriteHitmaskInline: 528-byte token-emit body (output-interface vtable writes) not reconstructed [equiv: UNSUPPORTED, skeleton has no behaviour to compare]
+0082c420 283  SerializeHelperWrite2: header write + 0x20-stride ProcessTokens2 loop + rollback; complete translation [equiv: UNSUPPORTED 0/400 valid inputs (fake-arity=386) — the harness cannot resolve the arity of the faked output-interface vtable calls from the reconstructed call sites]
+0082c550 52  SerializeHelperNuke: 3 subobject dtors + buffer dtor + interface release tail-call; complete [equiv: PASS 238/400 valid, 84.2% coverage] (chk size 77 vs 69)
+0082c5a0 139  SerializeHelperNuke2: 6 rbtree-backed container dtors (0x9a9600) + 2 allocator frees + subobject dtor + vtable store + release tail-call; complete [equiv: WEAK 183/400 valid (need 200), 83.0% coverage] (chk size 190 vs 176)
+0082c770 76  SerializeHelperWrite3: 3 subobject ctors + vtable stores + initial virtual call; complete [equiv: PASS 399/400 valid, 100% coverage] (chk size 154 vs 148)
+0082c810 267  SerializeHelperWrite4: subobject ctor + 6 rbtree-backed container inits; complete [equiv: PASS 398/400 valid, 100% coverage] (chk size 262 vs 352)
