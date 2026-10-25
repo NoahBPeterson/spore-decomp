@@ -1,0 +1,6 @@
+00d6aa30 ?FreakOut@SP@@YAIPAVcSPCreatureBase_s00d6_aa30@1@D@Z  # FreakOut migrated from s00d6aa30 (verbatim, slice spelling)
+00d6aa80 ?FUN_00d6aa80@SP@@YAXPAVcSPCreatureBase_s00d6_aa30@1@@Z  # FUN_00d6aa80 migrated from s00d6aa30 (verbatim, slice spelling)
+00d6aac0 ?FUN_00d6aac0@SP@@YAXPAVcSPCreatureBase_s00d6_aa30@1@@Z  # FUN_00d6aac0 migrated from s00d6aa30 (verbatim, slice spelling)
+00d6ab00 ?PlayScaredAnimation@SP@@YAXPAVcSPCreatureBase_s00d6_aa30@1@PAUThreatOwner@1@PAH@Z  # PlayScaredAnimation migrated from s00d6aa30 (verbatim, slice spelling)
+00d6ab50 ?FUN_00d6ab50@SP@@YA_NPAVcSPCreatureBase_s00d6_aa30@1@HHHHPAUScaredState@1@PAURefObj@1@@Z  # FUN_00d6ab50 migrated from s00d6aa30 (verbatim, slice spelling)
+00d6ad60 ?FUN_00d6ad60@SP@@YA_NPAVcSPCreatureBase_s00d6_aa30@1@HHIEPAUScaredState@1@PAURefObj@1@@Z  # FUN_00d6ad60 migrated from s00d6aa30 (verbatim, slice spelling)
