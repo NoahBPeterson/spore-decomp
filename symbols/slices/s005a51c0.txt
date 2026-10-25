@@ -2,6 +2,6 @@
 005a5960 ?MainColorSelected@cSPColorSwatch_s005a_51c0@@QAEXXZ  # cSPColorSwatch_s005a_51c0::MainColorSelected migrated from s005a51c0 (verbatim, slice spelling)
 005a5a50 ??0cX@@QAE@XZ  # cX::cX migrated from s005a51c0 (verbatim, slice spelling)
 005a5ae0 ?SetFromSwatch@cSPColorSwatch_s005a_51c0@@QAEXPAV1@@Z  # cSPColorSwatch_s005a_51c0::SetFromSwatch migrated from s005a51c0 (verbatim, slice spelling)
-005a5b10 ??1cX@@UAE@XZ  # cX::~cX migrated from s005a51c0 (verbatim, slice spelling)
+005a5b10 ??_GcX@@UAEPAXI@Z  # cX scalar deleting destructor (vtable-referenced ??_G; the plain ??1cX is not emitted)
 005a5b70 ?DoMessage@cSPColorSwatch@SP@@UAE_NPAVIWindow@UTFWin@EA@@ABVMessage@45@@Z  # SP::cSPColorSwatch::DoMessage migrated from s005a51c0
 005a5db0 ?Cleanup@cSPColorSwatch_s005a_51c0@@QAEXXZ  # cSPColorSwatch_s005a_51c0::Cleanup migrated from s005a51c0 (verbatim, slice spelling)

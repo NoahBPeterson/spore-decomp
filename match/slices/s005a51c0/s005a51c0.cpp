@@ -3,6 +3,7 @@
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include <math.h>
 #include <intrin.h>
+#include <string.h>
 #include "types.h"
 
 #define PV(n) virtual void pv##n();
@@ -32,7 +33,7 @@ class AutoRefCount {
 public:
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
-    AutoRefCount(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    __declspec(noinline) AutoRefCount(T* p);
     AutoRefCount(const AutoRefCount& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }
     AutoRefCount& operator=(T* pObject) {
@@ -53,11 +54,19 @@ public:
     operator T*() const { return mpObject; }
 };
 
-// operator=(T*) is called out of line (0x00b5f950, COMDAT-folded with AutoRefCount<IWinText>)
+// operator=(T*) is called out of line (0x00b5f950, COMDAT-folded with AutoRefCount<IWinText>);
+// teardown still clears the member inline through Clear().
 template <typename T>
 class AutoRefCountOOL : public AutoRefCount<T> {
 public:
     __declspec(noinline) AutoRefCountOOL& operator=(T* pObject);
+    void Clear() {
+        if (this->mpObject) {
+            T* const pTemp = this->mpObject;
+            this->mpObject = 0;
+            pTemp->Release();
+        }
+    }
 };
 
 template <typename T>
@@ -139,7 +148,9 @@ public:
     virtual EA::Point ToScreen(float, float);     // +0xc4
     PV(50) PV(51) PV(52) PV(53)
     virtual void AddWindow(IWindow*);             // +0xd8
-    PV(55) PV(56) PV(57)
+    PV(55)
+    virtual void RemoveWindow(IWindow*);          // +0xe0
+    virtual void Detach();                        // +0xe4
     virtual void pv58(void*);                     // +0xe8
     PV(59) PV(60) PV(61) PV(62) PV(63) PV(64)
     virtual void AddWinProc(struct IWinProc*);    // +0x104
@@ -229,10 +240,17 @@ public:
     T* begin() { return mpBegin; }
     T* end() { return mpEnd; }
     T& operator[](unsigned int i) { return mpBegin[i]; }
+    T* erase(T* first, T* last);
 };
 template <typename T>
 __declspec(noinline) sp_vector<T>::~sp_vector() {
     if (mpBegin) mAllocator.deallocate(mpBegin, (char*)mpCapacity - (char*)mpBegin);
+}
+template <typename T>
+__declspec(noinline) T* sp_vector<T>::erase(T* first, T* last) {
+    memmove(first, last, (char*)mpEnd - (char*)last);
+    mpEnd -= (last - first);
+    return first;
 }
 }
 
@@ -265,6 +283,9 @@ using SP::cSPColorRGB;
 
 struct ColorPOD { float r, g, b; };
 uint32_t ColorRGBToU32(const cSPColorRGB* c);  // 0x00458a40
+
+struct MessageU;
+struct cSPEditorColorPicker;
 
 class cSPColorSwatch : public EA::UTFWin::IWinProc, public EA::RefCountVTemplate<int> {
 public:
@@ -304,10 +325,10 @@ public:
     void SetColor(const ColorPOD& color);        // 0x005a45d0
     void CollapseExpansion();                       // 0x005a4630
     void SetExpansionArea(bool b);                  // 0x005a4990
-    void SetSelectedColor(void* param);             // 0x005a4b80
+    void SetSelectedColor();                        // 0x005a4b80
     __declspec(noinline) void MainColorSelected();  // 0x005a5960
     void SetFromSwatch(cSPColorSwatch* other);      // 0x005a5ae0
-    int  DoMessage(uint32_t wParam, void* message); // 0x005a5b70
+    bool DoMessage(IWindow* pWindow, const MessageU& msg);  // 0x005a5b70
     void Cleanup();                                 // 0x005a5db0
     void SetArea(EA::RectT area, bool b);          // 0x005a4500
     void Init(cPropertyList* config, ColorPOD color,
@@ -325,12 +346,13 @@ public:
 class cEditorResource : public cContentValidationSummarizer {
 public:
     cEditorResource() : mField4(0) {}
+    virtual ~cEditorResource() {}
     virtual int v0();
     virtual int v1();
     int mField4;   // +0x4
 };
 }
-class cXBase { public: virtual int v0(); };
+class cXBase { public: virtual int v0(); virtual ~cXBase() {} };
 class cX : public SP::cEditorResource, public cXBase {
 public:
     EA::AutoRefCount<EA::COM::IUnknown32> mPtrC;  // +0xc
@@ -501,7 +523,7 @@ struct SwatchMsg5 {
 };
 struct SwatchMsgServer {
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void MessageSend(uint32_t id, SwatchMsg5* msg, int flag);   // +0x14
+    virtual void MessageSend(uint32_t id, void* msg, int flag);   // +0x14
 };
 SwatchMsgServer* MessageServer();                // 0x0067dcc0
 
@@ -549,29 +571,139 @@ void cSPColorSwatch::SetFromSwatch(cSPColorSwatch* other) {
     }
 }
 
-// @ 0x005a5b70  SP::cSPColorSwatch::DoMessage (abridged behaviour)
-int cSPColorSwatch::DoMessage(uint32_t, void*) {
-    return 0;
+// @ 0x005a5b70  SP::cSPColorSwatch::DoMessage
+
+struct MessageU {
+    void*    mpSrc;    // +0x00
+    void*    mpDst;    // +0x04
+    uint32_t mType;    // +0x08
+    uint32_t mArgs[4]; // +0x0c
+};
+
+// The 0x40-byte MessageBasicRC<5> posted on mouse-down (out-of-line ctor 0x00421c80).
+struct MsgRC5 {
+    virtual void v0();                            // +0x00
+    virtual int AddRef();                         // +0x04
+    virtual int Release();                        // +0x08
+    long refcount;                                // +0x04
+    uint32_t mData[10];                           // +0x08 .. +0x2f
+    uint32_t mId;                                 // +0x30
+    uint32_t pad34;                               // +0x34
+    uint32_t mRCFlags;                            // +0x38
+    uint32_t pad3c;                               // +0x3c
+    MsgRC5(int);                                  // 0x00421c80
+    void SetIRefCount(int idx, EA::COM::IUnknown32* p);   // 0x005726e0
+};
+
+// Local ref-counted holder for the posted message; ctor is out of line
+// (0x0061df40, COMDAT-folded with AutoRefCount<T>).
+
+struct WinMgr {
+    virtual void s0(); virtual void s1(); virtual void s2();
+    virtual void s3(); virtual void s4(); virtual void s5();
+    virtual void SendToWindow(IWindow* pWindow, IWindow* target, const MessageU* msg);  // +0x18
+};
+WinMgr* WindowManager();                           // 0x0067caa0
+
+cSPEditorColorPicker* GetOwnerPicker(EA::AutoRefCount<EA::COM::IUnknown32>* owner);  // 0x005a4950
+cSPColorSwatch* GetOwnerSwatch(EA::AutoRefCount<EA::COM::IUnknown32>* owner);        // 0x005a4970
+extern float gRollOverTime;                        // 0x01485378
+
+bool cSPColorSwatch::DoMessage(IWindow* pWindow, const MessageU& msg) {
+    if (!mRespondToInput)
+        return false;
+    if (mExpanded) {
+        if (msg.mType == 10 && msg.mArgs[0] == 1) {
+            IWindow* w = (IWindow*)msg.mArgs[3];
+            bool notSub = true;
+            int n = (int)mExpansionSwatches.size();
+            for (int i = 0; i < n; i++) {
+                if (w == mExpansionSwatches.mpBegin[i]->mWinRoot)
+                    notSub = false;
+            }
+            if (w != (IWindow*)mWinExpansion && notSub) {
+                mWinRoot->SetFlag(1, true);
+                CollapseExpansion();
+            }
+            return true;
+        }
+        return false;
+    }
+    switch (msg.mType) {
+    case 10: {
+        if (msg.mArgs[0] != 1)
+            return false;
+        if ((IWindow*)msg.mArgs[3] == (IWindow*)mWinRoot) {
+            mRolledOver = true;
+            if (mWinRoot)
+                mWinRoot->GetParent()->pv58(mWinRoot);
+        } else {
+            mRolledOver = false;
+            mMouseDown = false;
+            mLastMouseDownTime = 0;
+            mCurrMouseDownTime = 0;
+        }
+        cSPColorSwatch* s = GetOwnerSwatch(&mOwner);
+        if (s && s->mExpanded && s->mWinExpansion)
+            WindowManager()->SendToWindow(pWindow, s->mWinExpansion, &msg);
+        return true;
+    }
+    case 7: {
+        if (msg.mArgs[3] != 0x3e8)
+            return false;
+        if (!(mRollOverTimer > gRollOverTime))
+            return false;
+        mMouseDown = false;
+        cSPEditorColorPicker* picker = GetOwnerPicker(&mOwner);
+        cSPColorSwatch* sw = GetOwnerSwatch(&mOwner);
+        if (picker) {
+            MainColorSelected();
+        } else if (sw) {
+            SetSelectedColor();
+            sw->SetFromSwatch(this);
+        }
+        return true;
+    }
+    case 6: {
+        if (msg.mArgs[3] != 0x3e8)
+            return false;
+        MsgRC5* pMsg = new("UI", 0, 0, 0, 0) MsgRC5(0);
+        EA::AutoRefCount<MsgRC5> hold(pMsg);
+        if (pMsg) {
+            pMsg->mId = 0x568f4754;
+            pMsg->SetIRefCount(0, this);
+            MessageServer()->MessageSend(pMsg->mId, pMsg, 0);
+        }
+        if (mWinExpansion) {
+            mLastMouseDownTime = mCurrMouseDownTime;
+            mMouseDown = true;
+            mCurrMouseDownTime = mTimerDoubleClick.GetElapsedTime();
+        }
+        return true;
+    }
+    default:
+        return false;
+    }
 }
 
 // @ 0x005a5db0  SP::cSPColorSwatch::Cleanup
 void cSPColorSwatch::Cleanup() {
-    int n = (int)(mExpansionSwatches.mpEnd - mExpansionSwatches.mpBegin);
+    eastl::sp_vector<EA::AutoRefCount<cSPColorSwatch> >& swatches = mExpansionSwatches;
+    int n = (int)(swatches.mpEnd - swatches.mpBegin);
     for (int i = 0; i < n; i++)
-        mExpansionSwatches.mpBegin[i]->Cleanup();
+        swatches.mpBegin[i]->Cleanup();
     if (mWinRoot) {
-        mWinRoot->pv58(0);
-        IWindow* p = mWinRoot->GetParent();
-        if (p) {
+        mWinRoot->Detach();
+        if (mWinRoot->GetParent()) {
             if (mWinExpansion)
-                mWinExpansion->GetParent()->pv58(mWinExpansion);
-            mWinRoot->GetParent()->pv58(mWinRoot);
+                mWinExpansion->GetParent()->RemoveWindow(mWinExpansion);
+            mWinRoot->GetParent()->RemoveWindow(mWinRoot);
         }
     }
     mWinRoot = (IWindow*)0;
     mWinShine = (IWindow*)0;
     mWinFrame = (IWindow*)0;
     mWinFrameGlow = (IWindow*)0;
-    mWinExpansion = (IWindow*)0;
-    mExpansionSwatches.mpEnd = mExpansionSwatches.mpBegin;
+    mWinExpansion.Clear();
+    swatches.erase(swatches.begin(), swatches.end());
 }

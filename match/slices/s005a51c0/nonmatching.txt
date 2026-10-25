@@ -1,2 +1,3 @@
 005a51c0  1611  Init: complete; zero-reg/test-vs-cmp ebp schedule and param-slot reuse differ
 005a5960  13  MainColorSelected complete (picker query, SetDefault/SetColor, heap MessageBasicRC<5> build+send+Release); lea reg eax vs ecx and store schedule after SetIRefCount [equiv: WEAK (8% coverage)]
+005a5b70  420  DoMessage complete (respond-to-input gate; expanded rollover path with SetFlag+CollapseExpansion; MouseDown/MouseUp/MouseMove dispatch; heap MessageBasicRC<5> build+SetIRefCount+MessageSend+Release; double-click timing); /O2 return-block tail merge differs (one shared `mov al,1` tail vs 5 local epilogue copies) and the default-false block is ordered before case 6; equiv WEAK (400/400 valid, 15.8% cov)
