@@ -1,3 +1,8 @@
-00e0e840 cSPUIMinimapWin::build_edge_offsets  # Ghidra real name
-00e0eab0 cSPUIMinimapWin::Init  # Ghidra real name
-00e0e9f0 eastl::lower_bound<SP::cDataSerializationInfo*,SP::cDataSerializationInfo,cDataSerializationInfoLessCompare>  # Ghidra real name
+00e0df70 ?FindIcon@MinimapWin@@QAE_NIPBM_N@Z  # MinimapWin::FindIcon migrated from s00e0df70 (verbatim, slice spelling)
+00e0e0e0 ?GetInverseOffset@@YAXPAMPAUIXfObj@@@Z  # GetInverseOffset migrated from s00e0df70 (verbatim, slice spelling)
+00e0e1a0 ?Update@MinimapWin@@QAEXXZ  # MinimapWin::Update migrated from s00e0df70 (verbatim, slice spelling)
+00e0e840 ?build_edge_offsets@MinimapWin@@QAEXXZ  # MinimapWin::build_edge_offsets migrated from s00e0df70 (verbatim, slice spelling)
+00e0e9a0 ?e0e9a0@@YGXII@Z  # e0e9a0 migrated from s00e0df70 (verbatim, slice spelling)
+00e0e9f0 ?lower_bound_DataInfo@@YAPAUDataInfo@@PAU1@0PAI@Z  # lower_bound_DataInfo migrated from s00e0df70 (verbatim, slice spelling)
+00e0ea40 ?Assign@RefHolder@@QAEPAU1@ABU1@@Z  # RefHolder::Assign migrated from s00e0df70 (verbatim, slice spelling)
+00e0eab0 ?Init@MinimapWin@@QAE_NXZ  # MinimapWin::Init migrated from s00e0df70 (verbatim, slice spelling)

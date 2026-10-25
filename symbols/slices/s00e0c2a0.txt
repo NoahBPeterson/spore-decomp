@@ -1,0 +1,6 @@
+00e0c610 ?Copy@cRec28Copy@@QAEPAXPBI0@Z  # cRec28Copy::Copy migrated from s00e0c2a0 (verbatim, slice spelling)
+00e0c670 ?Copy@cRec14Copy@@QAEPAXPBUcRec14@@@Z  # cRec14Copy::Copy migrated from s00e0c2a0 (verbatim, slice spelling)
+00e0c6b0 ?Copy@cRec28CopyB@@QAEPAXPBUcRec28@@@Z  # cRec28CopyB::Copy migrated from s00e0c2a0 (verbatim, slice spelling)
+00e0c710 ?CopyRecRange@@YAPAXPAX00@Z  # CopyRecRange migrated from s00e0c2a0 (verbatim, slice spelling)
+00e0c780 ?DestroyRecRange@@YAPAXPAX00@Z  # DestroyRecRange migrated from s00e0c2a0 (verbatim, slice spelling)
+00e0c7d0 ?Destroy@cTerrainRenderer@@QAEPAXE@Z  # cTerrainRenderer::Destroy migrated from s00e0c2a0 (verbatim, slice spelling)

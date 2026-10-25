@@ -1,0 +1,16 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0a9a0@@YAXPBUFloat3@@II@Z  00e0a9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0aba0@@YIXPAUcPaletteGrid@@PAX1@Z  00e0aba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0abc0@@YI_NPAUcPaletteGrid@@PAXIII1@Z  00e0abc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0b230@@YIXPAUcPaletteGrid2@@PAXPAUISlot@@@Z  00e0b230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0b290@@YI_NPAUcPaletteGrid2@@PAX1@Z  00e0b290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0b970@cSPUIMinimapWin@@QAEXXZ  00e0b970  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0bd70@ObjB@@QAEPAU1@ABU1@@Z  00e0bd70  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0be50@cSPUIMinimapWin@@QAEXXZ  00e0be50  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?Copy@cRec28Copy@@QAEPAXPBI0@Z  00e0c610  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?Copy@cRec14Copy@@QAEPAXPBUcRec14@@@Z  00e0c670  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?Copy@cRec28CopyB@@QAEPAXPBUcRec28@@@Z  00e0c6b0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?DestroyRecRange@@YAPAXPAX00@Z  00e0c780  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?Destroy@cTerrainRenderer@@QAEPAXE@Z  00e0c7d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?lower_bound_DataInfo@@YAPAUDataInfo@@PAU1@0PAI@Z  00e0e9f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0f1a0@cIconTree@@QAEXPAPAUcIconNode@@PAU2@@Z  00e0f1a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
