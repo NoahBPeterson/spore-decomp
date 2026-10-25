@@ -1,1 +1,14 @@
 00b48110 Steering::Update  # locomotive steering: velocity/orientation update toward queued targets
+00b46df0 Steering::AimSlopeStep  # stdcall(obj, target, dt, speed, turnRate) -> applied fraction, ret 0x14 (called at 0xb485d5)
+00b7f250 cPlanetModel::BuildSurfaceOrientation2  # thiscall(quatOut, pos, up) -> quatOut, ret 0xc
+00b815a0 cPlanetModel::DirectionToSurfacePosition  # thiscall(vecOut, dir) -> vecOut, ret 8
+00b3d350 PlanetModel  # cdecl() -> cPlanetModel*
+00c41ec0 cLocomotionObject::GetRequest  # thiscall() -> cLocomotionRequest* at obj+0x1f4
+00c44080 cLocomotionObject::GetSteerDirection  # thiscall(Vec3* out)
+00d20610 cLocomotionObject::GetVelocity  # thiscall() -> Vec3* at obj+0x1c8
+00449c20 NormalizedSafe  # cdecl(out, in) -> out; 1/sqrt(len2+1e-8)
+005b2500 Slerp  # cdecl(const quat&, const quat&, float) -> cSPQuaternion by value
+00ac9850 cLocomotionRequest::cLocomotionRequest  # default ctor (this at 0xac9850)
+00b46d90 cLocomotionRequest::cLocomotionRequest  # copy ctor, thiscall ret 4
+00b47520 cLocomotionRequest::EraseWaypoint  # thiscall(waypoint*), ret 4
+00f47380 operator_delete__  # cdecl heap free, guarded by the array cookie

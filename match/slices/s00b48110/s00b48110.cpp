@@ -477,3 +477,278 @@ void __cdecl FUN_00b48ea0(float dt)
         } while (it != g_167eb70->mpIceEnd);
     }
 }
+
+// ===========================================================================
+// 0x00b48110 -- Steering::Update
+//
+// Recomputes the steering velocity written at state+0x00. While the object is
+// not grounded (byte +0x77) it forwards its own velocity and aligns its
+// orientation to the surface; otherwise it consumes the current locomotion
+// request: walk toward the next waypoint projected on the planet surface,
+// brake / re-request when the waypoint is reached and hand the result to the
+// aim-slope follower (0x00b46df0) which returns the fraction of the requested
+// speed actually applied.
+// ===========================================================================
+#pragma intrinsic(sqrt)
+
+extern const float g_1488874;    // 0x01488874  0.1f
+extern const float g_13eb8a0;    // 0x013eb8a0  0.25f
+extern const float g_13f7344;    // 0x013f7344  0.95f
+extern const float g_1470f1c;    // 0x01470f1c  2.0f
+extern const float g_1471064;    // 0x01471064  0.5f
+
+extern void __cdecl operator_delete__(void* p);                  // 0x00f47380
+
+struct Quat { float x, y, z, w; };
+
+struct Waypoint { float f[15]; };                                 // 0x3c bytes
+
+// locomotion request (0x74 bytes): waypoint vector plus goal data
+struct cLocomotionRequest {
+    Waypoint* mpBegin;                                           // +0x00
+    Waypoint* mpEnd;                                             // +0x04
+    char      mPad08[0x14 - 0x08];                               // +0x08
+    Vec3      mDst;                                              // +0x14 (head of the 0x3c-byte
+                                                                 //       current waypoint)
+    float     mGoalStopDistance;                                 // +0x20
+    char      mPad24[0x50 - 0x24];                               // +0x24
+    Vec3      mField50;                                          // +0x50 reference direction
+    int       mType;                                             // +0x5c (0 none, 1/3 follow, 2 hold)
+    float     mAcceptableStopDistance;                           // +0x60
+    float     mField64;                                          // +0x64 alignment threshold
+    float     mPrevDistance;                                     // +0x68
+    float     mElapsed;                                          // +0x6c
+    int       mField70;                                          // +0x70
+
+    cLocomotionRequest();                                        // 0x00ac9850
+    cLocomotionRequest(const cLocomotionRequest& o);             // 0x00b46d90 (ret 4)
+    void EraseWaypoint(const Waypoint* pWhere);                  // 0x00b47520 (ret 4)
+    ~cLocomotionRequest()
+    {
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            operator_delete__(mpBegin);
+    }
+};
+
+// locomotive driven by the steering step
+class cSteerLoco {
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v0a();
+    virtual const Vec3* GetPosition();                           // +0x2c
+    virtual Quat* GetOrientation();                              // +0x30
+    virtual void v0d(); virtual void v0e();                      // +0x34 +0x38
+    virtual void SetOrientation(const Quat* pQ);                 // +0x3c
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+    virtual void v14(); virtual void v15(); virtual void v16();  // +0x40 .. +0x58
+    virtual const Vec3* GetDirection(Vec3* pOut);                // +0x5c
+    virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b();
+    virtual void v1c(); virtual void v1d(); virtual void v1e(); virtual void v1f();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v2a(); virtual void v2b();
+    virtual void v2c(); virtual void v2d();                      // +0x60 .. +0xb4
+    virtual void FnB8(const void* pArg);                         // +0xb8
+    virtual void v2f(); virtual void v30();                      // +0xbc +0xc0
+    virtual void SetDesiredSpeed(float fSpeed, int nFlag);       // +0xc4
+    virtual float GetDesiredSpeed();                             // +0xc8
+    virtual void v33();                                          // +0xcc
+    virtual float FnD0();                                        // +0xd0
+    virtual void v35(); virtual void v36();                      // +0xd4 +0xd8
+    virtual void SetRequest(const cLocomotionRequest& r);        // +0xdc
+
+    char  mPad04[0x77 - 0x04];                                   // +0x04
+    uchar mFlag77;                                               // +0x77
+    char  mPad78[0x1e8 - 0x78];                                  // +0x78
+    float mTurnRate;                                             // +0x1e8
+
+    Vec3* GetVelocity();                                         // 0x00d20610
+    void  GetSteerDirection(Vec3* pOut);                         // 0x00c44080
+    cLocomotionRequest* GetRequest();                            // 0x00c41ec0
+};
+
+// steering state written by Update
+struct cSteerState {
+    Vec3        mVelocity;                                       // +0x00
+    char        mPad0c[0x10 - 0x0c];                             // +0x0c
+    float       mDt;                                             // +0x10
+    cSteerLoco* mpObject;                                        // +0x14
+};
+
+struct cPlanetModel {
+    Quat* BuildSurfaceOrientation2(Quat* pOut, const Vec3* pPos, const Vec3* pUp);  // 0x00b7f250 ret 0xc
+    Vec3* DirectionToSurfacePosition(Vec3* pOut, const Vec3* pDir);                 // 0x00b815a0 ret 8
+};
+
+extern cPlanetModel* __cdecl PlanetModel();                      // 0x00b3d350
+extern Vec3* __cdecl NormalizedSafe(Vec3* pOut, const Vec3* pIn);// 0x00449c20
+extern Quat __cdecl Slerp(const Quat& a, const Quat& b, float t); // 0x005b2500
+extern float __stdcall Fn_00b46df0(cSteerLoco* pObj, const Vec3* pTarget, float dt, float fSpeed, float fTurn);  // 0x00b46df0
+
+struct Steering {
+    void Update(cSteerState* pState);                            // 0x00b48110 (ret 4)
+};
+
+// @ 0x00b48110
+void Steering::Update(cSteerState* pState)
+{
+    pState->mpObject->FnD0();
+    pState->mpObject->GetVelocity();
+    pState->mpObject->FnB8((const void*)0x0137e8e0);
+
+    Vec3 vDir;
+    pState->mpObject->GetSteerDirection(&vDir);
+    float fLen = (float)sqrt(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
+    if (g_1461154 <= fLen) {
+        float fInv = 1.0f / fLen;
+        vDir.x = fInv * vDir.x;
+        vDir.y = vDir.y * fInv;
+        vDir.z = vDir.z * fInv;
+    } else {
+        Vec3 vTmp;
+        const Vec3* pv = pState->mpObject->GetDirection(&vTmp);
+        vDir.x = pv->x * g_1488874;
+        vDir.y = pv->y * g_1488874;
+        vDir.z = pv->z * g_1488874;
+    }
+
+    const Vec3* pp = pState->mpObject->GetPosition();
+    Vec3 vPos;
+    vPos.x = pp->x;
+    vPos.y = pp->y;
+    vPos.z = pp->z;
+    Vec3 vUp;
+    pState->mpObject->GetDirection(&vUp);
+    float fSpeed = pState->mpObject->GetDesiredSpeed();
+    float fTurn  = pState->mpObject->mTurnRate;
+    cLocomotionRequest* pReq = pState->mpObject->GetRequest();
+    cPlanetModel* pPlanet = PlanetModel();
+
+    int   nType = pReq->mType;
+    float fDist;
+    if (nType == 0) {
+        fDist = 0.0f;
+    } else {
+        float dz = vPos.z - pReq->mDst.z;
+        float dy = vPos.y - pReq->mDst.y;
+        float dx = vPos.x - pReq->mDst.x;
+        fDist = (float)sqrt(dz * dz + dy * dy + dx * dx);
+    }
+
+    if (pState->mpObject->mFlag77 == 0) {
+        const Vec3* pv = pState->mpObject->GetVelocity();
+        pState->mVelocity = *pv;
+        const Vec3* pPos = pState->mpObject->GetPosition();
+        Vec3 vGround;
+        pState->mpObject->GetDirection(&vGround);
+        Quat q;
+        pPlanet->BuildSurfaceOrientation2(&q, pPos, &vGround);
+        q = Slerp(*pState->mpObject->GetOrientation(), q, pState->mDt);
+        pState->mpObject->SetOrientation(&q);
+        return;
+    }
+
+    float fGoalStop = pReq->mGoalStopDistance;
+    bool  notHold3  = nType != 3;
+    bool  bStop     = false;
+    if (nType == 0) {
+        fSpeed = 0.0f;
+    } else if (nType != 2) {
+        bool bProgressed;
+        if (fDist < pReq->mPrevDistance) {
+            bProgressed = false;
+        } else {
+            float fElapsed = pState->mDt + pReq->mElapsed;
+            pReq->mElapsed = fElapsed;
+            bProgressed = true;
+            if (g_13eb8a0 < fElapsed) {
+                Vec3 vSurf;
+                Vec3* pv = pPlanet->DirectionToSurfacePosition(&vSurf, &pReq->mDst);
+                pReq->mDst = *pv;
+            }
+        }
+        if (fGoalStop > fDist) {
+            bStop = true;
+        } else if (pState->mDt * fSpeed < fDist) {
+            if (bProgressed && fDist < pReq->mAcceptableStopDistance)
+                bStop = true;
+        } else {
+            fSpeed = (fDist / pState->mDt) * g_13f7344;
+        }
+        pReq->mPrevDistance = fDist;
+        if (bStop) {
+            if (pReq->mpBegin == pReq->mpEnd) {
+                fSpeed = 0.0f;
+            } else {
+                pReq->mElapsed = 0.0f;
+                Waypoint* pFirst = pReq->mpBegin;
+                *(Waypoint*)&pReq->mDst = *pFirst;
+                pReq->EraseWaypoint(pFirst);
+                bStop = false;
+            }
+        }
+    }
+
+    if (nType != 0 && fDist < (fSpeed / fTurn) * g_1470f1c) {
+        Vec3 vDelta;
+        vDelta.x = pReq->mDst.x - vPos.x;
+        vDelta.y = pReq->mDst.y - vPos.y;
+        vDelta.z = pReq->mDst.z - vPos.z;
+        Vec3 vNorm;
+        const Vec3* pn = NormalizedSafe(&vNorm, &vDelta);
+        float fDot = pn->y * vUp.y + pn->z * vUp.z + pn->x * vUp.x;
+        if (fDot < g_1471064) {
+            float fCap = (fDist * fTurn) * g_1471064;
+            const float* pf = &fCap;
+            if (fSpeed <= fCap)
+                pf = &fSpeed;
+            fSpeed = *pf;
+        }
+    }
+
+    Vec3 vTarget;
+    vTarget.x = vPos.x + vDir.x;
+    vTarget.y = vPos.y + vDir.y;
+    vTarget.z = vPos.z + vDir.z;
+    float fAmount = Fn_00b46df0(pState->mpObject, &vTarget, pState->mDt, fSpeed, fTurn);
+    if (fAmount > 0.0f) {
+        pState->mVelocity.x = vDir.x * fSpeed;
+        pState->mVelocity.y = vDir.y * fSpeed;
+        pState->mVelocity.z = vDir.z * fSpeed;
+    } else {
+        pState->mVelocity.x = 0.0f;
+        pState->mVelocity.y = 0.0f;
+        pState->mVelocity.z = 0.0f;
+    }
+
+    if (!notHold3) {
+        Vec3 vTmp;
+        const Vec3* pv = pState->mpObject->GetDirection(&vTmp);
+        float fAlign = pv->z * pReq->mField50.z
+                     + pv->y * pReq->mField50.y
+                     + pv->x * pReq->mField50.x;
+        notHold3 = true;
+        if (!(fAlign > pReq->mField64))
+            notHold3 = false;
+    }
+
+    if (bStop) {
+        if (notHold3) {
+            {
+                cLocomotionRequest goal;
+                pState->mpObject->SetRequest(goal);
+            }
+            pState->mpObject->SetDesiredSpeed(0.0f, 1);
+            pState->mVelocity.x = 0.0f;
+            pState->mVelocity.y = 0.0f;
+            pState->mVelocity.z = 0.0f;
+        } else {
+            {
+                cLocomotionRequest goal(*pState->mpObject->GetRequest());
+                goal.mDst = vPos;
+                pState->mpObject->SetRequest(goal);
+            }
+        }
+    }
+}
