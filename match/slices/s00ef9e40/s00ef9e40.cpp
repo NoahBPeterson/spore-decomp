@@ -36,9 +36,169 @@ extern int      g_catTableB[];         // 0x0148b510
 extern uint8_t  g_16c7b50[2];          // 0x016c7b50
 
 // ---------------------------------------------------------------------------
+// eastl hash_set pieces used by the two completed-group sets.
+// ---------------------------------------------------------------------------
+struct PrimeRehashPolicyData {
+    float mfMaxLoadFactor;   // +0
+    float mfGrowthFactor;    // +4
+    uint32_t mnNextResize;   // +8
+};
+
+struct HashLink { HashLink* mpNext; };
+
+struct FixedPoolBase {
+    HashLink* mpHead;        // +0
+    HashLink* mpNext;        // +4
+    void init(void* memory, uint32_t size, uint32_t nodeSize, uint32_t align, uint32_t offset); // 0x00921260
+};
+
+struct FixedPool : FixedPoolBase {
+    void* mpPoolBegin;       // +8
+    void* mpPoolEnd;         // +0c
+    uint32_t mnNodeSize;     // +10
+    void deallocate(void* p)
+    {
+        if ((p >= mpPoolBegin) && (p < mpPoolEnd)) {
+            ((HashLink*)p)->mpNext = mpHead;
+            mpHead = (HashLink*)p;
+        } else {
+            delete[] (char*)p;
+        }
+    }
+};
+
+struct FixedHashtableAllocator {
+    FixedPool mPool;          // +0
+    void* mpBucketBuffer;     // +14
+};
+
+struct StepNode {
+    int mKey;                 // +0
+    StepNode* mpNext;         // +4
+};
+
+struct StepIterator {
+    StepNode* mpNode;
+    StepNode** mpBucket;
+    StepIterator(StepNode* node, StepNode** bucket) : mpNode(node), mpBucket(bucket) {}
+};
+
+struct StepInsertResult {
+    StepNode* mpNode;
+    StepNode** mpBucket;
+    bool second;
+};
+
+struct HashFn {};
+struct EqFn {};
+struct true_type {};
+
+// hash_set<int> with the small fixed allocator used by each completed-group set.
+struct StepSetSmall {
+    uint32_t mHashCodeBase;                 // +00
+    StepNode** mpBucketArray;               // +04
+    uint32_t mnBucketCount;                 // +08
+    uint32_t mnElementCount;                // +0c
+    PrimeRehashPolicyData mRehashPolicy;    // +10
+    FixedHashtableAllocator mAllocator;     // +1c
+    StepNode* mBuckets[0x48 / 4];           // +34
+    char mNodes[0x80];                      // +7c
+
+    StepSetSmall(const HashFn& h = HashFn(), const EqFn& e = EqFn()); // 0x00ef9950
+
+    void DoFreeNodes(StepNode** buckets, uint32_t count);              // 0x0068fb70
+    void DoInsertRange(StepNode* first, StepNode** firstBucket,
+                       StepNode* last, StepNode** lastBucket);         // 0x00ef9a20
+    StepInsertResult DoInsertValue(const int& key, true_type);         // 0x00ef8cc0
+
+    StepIterator begin() const
+    {
+        StepNode** bucket = mpBucketArray;
+        StepNode* node = *bucket;
+        while (node == 0)
+            node = *++bucket;
+        return StepIterator(node, bucket);
+    }
+    StepIterator end() const
+    {
+        StepNode** bucket = mpBucketArray + mnBucketCount;
+        return StepIterator(*bucket, bucket);
+    }
+    void DoFreeBuckets(StepNode** buckets, uint32_t count)
+    {
+        if (count > 1 && buckets != mAllocator.mpBucketBuffer)
+            mAllocator.mPool.deallocate(buckets);
+    }
+    StepSetSmall& operator=(const StepSetSmall& other)
+    {
+        if (this != &other) {
+            DoFreeNodes(mpBucketArray, mnBucketCount);
+            mnElementCount = 0;
+            StepIterator first = other.begin();
+            StepIterator last = other.end();
+            DoInsertRange(first.mpNode, first.mpBucket, last.mpNode, last.mpBucket);
+        }
+        return *this;
+    }
+    ~StepSetSmall()
+    {
+        DoFreeNodes(mpBucketArray, mnBucketCount);
+        mnElementCount = 0;
+        DoFreeBuckets(mpBucketArray, mnBucketCount);
+    }
+};
+
+struct StepGroup {
+    StepSetSmall mSet;         // +000
+    uint32_t mUnknown[0x50 / 4]; // +0fc
+};
+
+// EA::Variant / property list access used for the saved completion counts.
+struct EA_Variant {
+    char mValue[0x10];         // +00
+    uint16_t mFlags;           // +10
+    uint16_t mTypeId;          // +12
+};
+
+struct IPropertyList {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual bool GetProperty(uint32_t id, EA_Variant** out); // +0x24
+};
+
+struct MessageServer {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual void Register(void* owner, uint32_t name); // +0x24
+};
+
+struct MessageHandlerRef {
+    void* mpServer;            // +00
+    void* mpOwner;             // +04
+    uint32_t* mpNames;         // +08
+    int mnCount;               // +0c
+    int mField10;              // +10
+};
+
+// ---------------------------------------------------------------------------
 // cScenarioTutorials -- base at +0 is cContentValidationSummarizer.
 // ---------------------------------------------------------------------------
 struct cScenarioTutorials {
+    char pad0[0x10];
+    char mTimer[0x20];         // +10
+    int mCurStep;              // +30
+    int mCurLesson;            // +34
+    uint8_t mCurrentBits[3];   // +38
+    uint8_t mFlag3b;           // +3b
+    char pad3c[4];             // +3c
+    uint8_t mFlag40;           // +40
+    char pad41[7];             // +41
+    MessageHandlerRef mHandler; // +48
+    char mSeenSteps[0x4a8 - 0x5c];
+    StepGroup mGroups[2];      // +4a8, +5f4
+
     char* self() { return (char*)this; }
     void Reset();                              // 0x00ef9e40
     void UpdateAll();                          // 0x00efa040
@@ -49,65 +209,58 @@ struct cScenarioTutorials {
 // @ 0x00ef9e40
 void cScenarioTutorials::Reset()
 {
-    char* self = (char*)this;
-    *(uint16_t*)(self + 0x38) = 0;
-    *(uint8_t*)(self + 0x3a) = 0;
-    char* step = self + 0x4a8;
+    *(uint16_t*)&mCurrentBits[0] = 0;
+    mCurrentBits[2] = 0;
+
+    StepGroup* group = mGroups;
     int n = 2;
     do {
-        unsigned char tmp[0x14c];
-        ((HashCtor*)tmp)->ctor(0, 0);
-        ((HashClear*)step)->clear(*(void**)(step + 4), *(void**)(step + 8));
-        *(int*)(step + 0xc) = 0;
-        ((HashErase*)step)->erase(0, 0, 0, 0);
-        ((HashClear*)0)->clear(0, 0);
-        if (*(uint32_t*)(step + 0x38) > 1 && *(void**)(step + 0x34) != 0) {
-            void* q = *(void**)(step + 0x34);
-            if ((char*)q < *(char**)(step + 0x54) || (char*)q >= *(char**)(step + 0x58))
-                operator_delete_(q);
-        }
-        step += 0x14c;
-        n -= 1;
-    } while (n != 0);
+        StepGroup temp;
+        group->mSet = temp.mSet;
+        group = (StepGroup*)((char*)group + 0x14c);
+    } while (--n != 0);
 
     void* ms = SP_MessageServer();
-    *(void**)(self + 0x48) = ms;
-    *(void**)(self + 0x4c) = self;
-    *(void**)(self + 0x50) = g_msgNames;
-    *(int*)(self + 0x54) = 0xb;
-    *(int*)(self + 0x58) = 0;
-    if (ms != 0 && self != 0) {
-        unsigned i = 0;
-        do {
-            void** vt = *(void***)ms;
-            void (__thiscall *f)(void*, void*, int) = (void(__thiscall*)(void*, void*, int))vt[0x24 / 4];
-            f(ms, self, g_msgNames[i / 4]);
-            i += 4;
-        } while (i < 0x2c);
+    mHandler.mpServer = ms;
+    mHandler.mpOwner = this;
+    mHandler.mpNames = g_msgNames;
+    mHandler.mnCount = 0xb;
+    mHandler.mField10 = 0;
+    if (ms != 0 && this != 0) {
+        for (uint32_t i = 0; i < 0xb; ++i)
+            ((MessageServer*)ms)->Register(this, g_msgNames[i]);
     }
-    void* prefs = g_AppPreferences;
-    int v0 = 0, v1 = 0;
+
+    int counts[2] = { 0, 0 };
+    IPropertyList* prefs = (IPropertyList*)g_AppPreferences;
     if (prefs != 0) {
-        void** vt = *(void***)prefs;
-        int (__thiscall *getprop)(void*, int, void*) = (int(__thiscall*)(void*, int, void*))vt[0x24 / 4];
-        if (getprop(prefs, 0x7abf095, &v0) != 0) {
-            // property value
+        EA_Variant* value;
+        if (prefs->GetProperty(0x7abf095, &value) && value->mTypeId == 10) {
+            if (value->mFlags & 0x30)
+                value = *(EA_Variant**)value;
+            counts[0] = *(int*)value;
         }
-        getprop(prefs, 0x7abf09d, &v1);
+        if (prefs->GetProperty(0x7abf09d, &value) && value->mTypeId == 10) {
+            if (value->mFlags & 0x30)
+                value = *(EA_Variant**)value;
+            counts[1] = *(int*)value;
+        }
     }
+
+    group = mGroups;
     int i = 0;
     do {
-        int cnt = (&v0)[i];
-        g_16c7b50[i] = (cnt != 0);
-        if (cnt > 0) {
-            unsigned char local = 0;
+        int count = counts[i];
+        g_16c7b50[i] = (count != 0);
+        if (count > 0) {
             int k = 0;
             do {
-                ((HashInsert*)self)->insert(&local, 0);
-                k++;
-            } while (k < cnt);
+                group->mSet.DoInsertValue(k, true_type());
+                k += 1;
+            } while (k < count);
         }
-        i++;
+        i += 1;
+        group = (StepGroup*)((char*)group + 0x14c);
     } while (i < 2);
 }
 
