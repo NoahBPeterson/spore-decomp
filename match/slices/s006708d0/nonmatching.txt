@@ -1,3 +1,5 @@
 006715d0  37  ctor: multiple-inheritance base/member vptr-store scheduling differs (cl sinks the derived vptr stores past the member ctor)
 00671690  137  Init: register allocation (original this->esi, param->edi) and early-return layout differ; behaviour complete
 00671440  340  message handler: complete behaviour (vcall id checks + sscanf + pollinator debug); vcall/sscanf scheduling differs
+006708d0  1309  SP::cGalaxyGameEntryImpl::DeleteGame: complete behaviour (key scan, 0x118-record walk, 3-way state machine, ResourceMan resync); original keeps the layout cursor in ebx and builds the pollinator-debug temp inline, cl here keeps fewer values live and orders the vcall/copy sequence differently
+00670eb0  1252  SP::cGalaxyGameEntryImpl::SetupPage: complete behaviour (meta swap + MessageServer subscription + 17 FindWindowByID refcount swaps + state init); original holds the layout in edi with a 0x28 frame and reloads slots, cl emits a shorter frame with the swaps inlined in a different order
