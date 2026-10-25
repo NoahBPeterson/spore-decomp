@@ -1,0 +1,8 @@
+00c7ff90 ?cSimPlanetLowLODCtorSTUB@@YIXPAXH@Z  # cSimPlanetLowLODCtorSTUB migrated from s00c7ff90 (verbatim, slice spelling)
+00c80110 ?FUN_00c80110@cSpeciesKeyTable@SP@@QAEPAHPAUtSpeciesKey@@@Z  # cSpeciesKeyTable::FUN_00c80110 migrated from s00c7ff90 (verbatim, slice spelling)
+00c80180 ?FUN_00c80180@cSimPlanetLowLOD_s00c7_ff90@SP@@QAEXXZ  # cSimPlanetLowLOD_s00c7_ff90::FUN_00c80180 migrated from s00c7ff90 (verbatim, slice spelling)
+00c805b0 ?FUN_00c805b0@cSimPlanetLowLOD_s00c7_ff90@SP@@QAEXXZ  # cSimPlanetLowLOD_s00c7_ff90::FUN_00c805b0 migrated from s00c7ff90 (verbatim, slice spelling)
+00c80680 ?FUN_00c80680@cSimPlanetLowLOD_s00c7_ff90@SP@@QAEXXZ  # cSimPlanetLowLOD_s00c7_ff90::FUN_00c80680 migrated from s00c7ff90 (verbatim, slice spelling)
+00c80780 ?FUN_00c80780@cSimPlanetLowLOD_s00c7_ff90@SP@@QAEXXZ  # cSimPlanetLowLOD_s00c7_ff90::FUN_00c80780 migrated from s00c7ff90 (verbatim, slice spelling)
+00c809d0 ?AddPlantSpecies@cSimPlanetLowLOD_s00c7_ff90@SP@@QAE_NPAUtSpeciesKey@@@Z  # cSimPlanetLowLOD_s00c7_ff90::AddPlantSpecies migrated from s00c7ff90 (verbatim, slice spelling)
+00c80a80 ?FUN_00c80a80@cSimPlanetLowLOD_s00c7_ff90@SP@@QAEXXZ  # cSimPlanetLowLOD_s00c7_ff90::FUN_00c80a80 migrated from s00c7ff90 (verbatim, slice spelling)

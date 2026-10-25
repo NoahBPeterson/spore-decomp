@@ -1,0 +1,4 @@
+00c81ab0 ?FUN_00c81ab0@@YIIPAX00PAMD@Z  # FUN_00c81ab0 migrated from s00c81ab0 (verbatim, slice spelling)
+00c81f40 ?FUN_00c81f40@@YIXPAX00@Z  # FUN_00c81f40 migrated from s00c81ab0 (verbatim, slice spelling)
+00c82870 ?FUN_00c82870@@YIXPAX0@Z  # FUN_00c82870 migrated from s00c81ab0 (verbatim, slice spelling)
+00c82900 ?FUN_00c82900@@YIXPAX00@Z  # FUN_00c82900 migrated from s00c81ab0 (verbatim, slice spelling)

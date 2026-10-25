@@ -1,0 +1,7 @@
+00c829e0 ?FUN_00c829e0@cSimPlanetLowLOD_s00c8_29e0@SP@@QAEXXZ  # cSimPlanetLowLOD_s00c8_29e0::FUN_00c829e0 migrated from s00c829e0 (verbatim, slice spelling)
+00c82ea0 ?FUN_00c82ea0@cSimPlanetLowLOD_s00c8_29e0@SP@@QAEXXZ  # cSimPlanetLowLOD_s00c8_29e0::FUN_00c82ea0 migrated from s00c829e0 (verbatim, slice spelling)
+00c82f80 ?FUN_00c82f80@cSimPlanetLowLOD_s00c8_29e0@SP@@QAEXXZ  # cSimPlanetLowLOD_s00c8_29e0::FUN_00c82f80 migrated from s00c829e0 (verbatim, slice spelling)
+00c83050 ?FUN_00c83050@cSimPlanetLowLOD_s00c8_29e0@SP@@QAEXPAVcPlanet_s00c8_29e0@2@0_N@Z  # cSimPlanetLowLOD_s00c8_29e0::FUN_00c83050 migrated from s00c829e0 (verbatim, slice spelling)
+00c83090 ?FUN_00c83090@cSimPlanetLowLOD_s00c8_29e0@SP@@QAEXUtPlanetKey@2@_N@Z  # cSimPlanetLowLOD_s00c8_29e0::FUN_00c83090 migrated from s00c829e0 (verbatim, slice spelling)
+00c830b0 ?FUN_00c830b0@cSimPlanetLowLOD_s00c8_29e0@SP@@QAE_NUtPlanetKey@2@@Z  # cSimPlanetLowLOD_s00c8_29e0::FUN_00c830b0 migrated from s00c829e0 (verbatim, slice spelling)
+00c830d0 ?FUN_00c830d0@cSimPlanetLowLOD_s00c8_29e0@SP@@QAEXUtPlanetKey@2@_N@Z  # cSimPlanetLowLOD_s00c8_29e0::FUN_00c830d0 migrated from s00c829e0 (verbatim, slice spelling)

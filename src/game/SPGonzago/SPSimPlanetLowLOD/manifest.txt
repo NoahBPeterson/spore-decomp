@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7f300@@YIEPAX0PAIMMM@Z  00c7f300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7f430@@YIEPAX0PAHPAM@Z  00c7f430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7f560@@YIPAPAXPAX0PAPAXPAI@Z  00c7f560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7ff00@@YIXPAX0@Z  00c7ff00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7ff60@@YIPAXPAX00@Z  00c7ff60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c83050@cSimPlanetLowLOD_s00c8_29e0@SP@@QAEXPAVcPlanet_s00c8_29e0@2@0_N@Z  00c83050  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c83090@cSimPlanetLowLOD_s00c8_29e0@SP@@QAEXUtPlanetKey@2@_N@Z  00c83090  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c830b0@cSimPlanetLowLOD_s00c8_29e0@SP@@QAE_NUtPlanetKey@2@@Z  00c830b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c830d0@cSimPlanetLowLOD_s00c8_29e0@SP@@QAEXUtPlanetKey@2@_N@Z  00c830d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
