@@ -1,0 +1,3 @@
+00d998d0 ?QueryStimulus@@YAHPAUcStimulusContext@@I@Z  # QueryStimulus migrated from s00d990a0 (verbatim, slice spelling)
+00d99980 ?GetAnimalFromStimulus@@YAPAVcSPCreatureBase@@PAUcStimulusContext@@@Z  # GetAnimalFromStimulus migrated from s00d990a0 (verbatim, slice spelling)
+00d999d0 ?WatchMemoryBlock@@YAPAVcSPCreatureBase@@PAUcStimulusContext@@@Z  # WatchMemoryBlock migrated from s00d990a0 (verbatim, slice spelling)

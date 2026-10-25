@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCommonBehaviorTreeUtil.cpp  ?QueryStimulus@@YAHPAUcStimulusContext@@I@Z  00d998d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommonBehaviorTreeUtil.cpp  ?GetAnimalFromStimulus@@YAPAVcSPCreatureBase@@PAUcStimulusContext@@@Z  00d99980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommonBehaviorTreeUtil.cpp  ?WatchMemoryBlock@@YAPAVcSPCreatureBase@@PAUcStimulusContext@@@Z  00d999d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
