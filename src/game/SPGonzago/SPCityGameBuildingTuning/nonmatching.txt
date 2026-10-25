@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00cecf10 2584 complete; diffs: const-register choice (ebp=13/edi=9 vs edi=9/ebp=edi+4), and cl drops the null test before delete[] of the temp string buffer
