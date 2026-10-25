@@ -1,9 +1,9 @@
-00620bd0 SP::Pollen::cRegistrationDialog::SubmitRegistrationForm  # PDB caller-single
+00620bd0 ?SubmitRegistrationForm@cRegDialog@@QAEXXZ  # SP::Pollen::cRegistrationDialog::SubmitRegistrationForm
 00620dc0 ?OnModalEnd@DialogSub@@QAEXPAXH@Z  # DialogSub::OnModalEnd migrated from s00620bd0 (verbatim, slice spelling)
-00620e50 SP::Pollen::cRegistrationDialog  # dialog UI-notify helper (this = dialog)
-00620ef0 ?TOSDialog_DoMessage@@YAHHPAXPAH@Z  # TOSDialog_DoMessage migrated from s00620bd0 (verbatim, slice spelling)
-00621460 SP::Pollen::MapLookup  # id -> URL map lookup, optional string out
+00620e50 ?DialogUiNotify@cRegDialog@@QAEXXZ  # SP::Pollen::cRegistrationDialog::DialogUiNotify (this = dialog)
+00620ef0 ?DoMessage@cTOSDialog@@QAEHPAXPAH@Z  # SP::Pollen::cTOSDialog::DoMessage (this = dialog, 2 stack args, ret 8)
+00621460 ?MapLookup@@YA_NIPAUString8@@@Z  # id -> URL map lookup, optional string out
 006214c0 ?GetURL@@YA_NIPAUString8@@@Z  # GetURL migrated from s00620bd0 (verbatim, slice spelling)
-00621540 ?SanitizeURL@@YAXPAXPAD@Z  # SanitizeURL migrated from s00620bd0 (verbatim, slice spelling)
+00621540 ?SanitizeURL@@YAXIPAD@Z  # SanitizeURL (map key, url)
 006216b0 ?RegisterURL@@YA_NIIPBD@Z  # RegisterURL migrated from s00620bd0 (verbatim, slice spelling)
 00621770 ?RegisterInsecureURL@@YA_NIIPBD@Z  # RegisterInsecureURL migrated from s00620bd0 (verbatim, slice spelling)
