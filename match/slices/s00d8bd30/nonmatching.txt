@@ -1,1 +1,5 @@
 00d8bd30 1244 complete (31 vs 33 calls: cl tail-merges the 15.0f stimulus Play and a predicate call); prologue not shrink-wrapped, register allocation and loop layout differ
+00d8c3e0 776 complete WEAK 142 valid inputs, 13.6% coverage. Fruit-idle test: 15.0f stimulus Play tail-merge, held-fruit branch and planet-surface search; the 927-byte analysis symbol spans the neighbouring foreign function at 0xd8c690, so only the real 644-byte body is compared. Same branch tree and call order; frame/register deltas.
+00d8c850 251 complete WEAK 243 valid inputs, 28.6% coverage. Dual-entry fruit search + five-candidate filter chain; only the reply tail (add/lea spelling), the busy-bit test shaping and one prelude register differ.
+00d8c9c0 174 complete WEAK 207 valid inputs, 21.2% coverage. Dual city/fruit list walk with the FUN_00d38a30/FUN_00c0b780/FUN_00c0b860 filter chain; reply tail add/lea spelling and register allocation differ.
+00d8cab0 243 complete WEAK 200 valid inputs, 18.5% coverage. Fruit filter chain and claim path; reply tail add/lea spelling and register allocation differ.
