@@ -1,0 +1,2 @@
+# source  symbol  va  [flags]
+slices/s004ab690/s004ab690.cpp  ?GetNearestBlockPointToPoint@cSPEditorModel@SP@@QAE?AUcSPVector3@@U3@PAVcSPEditorBlock@2@_N20@Z  004abbc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

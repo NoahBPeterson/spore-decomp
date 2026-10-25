@@ -12,10 +12,23 @@ template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 struct BaseCmp {
     unsigned char* SetEq(unsigned char* out, int a, int b);   // 0x4b8950
 };
+struct NodeKeyPos {                                               // 12-byte aggregate in a node key
+    uint32_t v[3];
+};
+struct NodeKey {                                                  // 20-byte key copied by value
+    uint32_t mId;                                                 // +0x00
+    NodeKeyPos mPos;                                              // +0x04
+    float mW;                                                     // +0x10
+};
+struct Node {                                                     // node of the compared tree
+    uint32_t pad0[3];                                             // +0x00
+    Node* mpNext;                                                 // +0x0c
+    NodeKey mKey;                                                 // +0x10
+};
 struct DerivedCmp {
     char pad[8];
     unsigned char* SetEqFromNodes(unsigned char* out, int a, int b);  // 0x4b8980
-    unsigned char* SetEqFromRoots(unsigned char* out, int u, int a, int b);  // 0x4b89c0
+    unsigned char* SetEqFromRoots(unsigned char* out, int p2, int a, int b, int p5, int p6);  // 0x4b89c0
 };
 
 // @ 0x4b8950
@@ -36,15 +49,18 @@ unsigned char* DerivedCmp::SetEqFromNodes(unsigned char* out, int a, int b)
 }
 
 // @ 0x4b89c0
-unsigned char* DerivedCmp::SetEqFromRoots(unsigned char* out, int unused, int a, int b)
+unsigned char* DerivedCmp::SetEqFromRoots(unsigned char* out, int p2, int a, int b, int p5, int p6)
 {
-    int r = b;
-    while (*(int*)(r + 0xc) != 0)
-        r = *(int*)(r + 0xc);
-    int l = a;
-    while (*(int*)(l + 0xc) != 0)
-        l = *(int*)(l + 0xc);
-    ((BaseCmp*)((char*)this - 8))->SetEq(out, *(int*)(l + 0x1c), *(int*)(r + 0x1c));
+    (void)p2; (void)p5; (void)p6;
+    Node* r = (Node*)b;
+    while (r->mpNext != 0)
+        r = r->mpNext;
+    NodeKey k = r->mKey;
+    uint32_t key = k.mPos.v[2];
+    Node* l = (Node*)a;
+    while (l->mpNext != 0)
+        l = l->mpNext;
+    ((BaseCmp*)((char*)this - 0xc))->SetEq(out, (int)l->mKey.mPos.v[2], (int)key);
     return out;
 }
 
@@ -82,6 +98,8 @@ extern "C" {
     void* FUN_005c7b80(void);
     void  FUN_004e8a30(void* a);
     void* operator_new_ea(uint32_t n, const char* tag, int a, int b, int c, int d);
+    void  SP_GetPropertyAsKeyInstance(void* list, uint32_t key, uint32_t* out);  // 0x6a12a0
+    bool  SP_GetPropertyT(void* list, uint32_t key, float* out);                 // 0x40cf10
 }
 
 // ---------------------------------------------------------------------------
@@ -91,6 +109,7 @@ extern "C" {
 void* operator new(size_t size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
 
 struct V3;
+struct Vec3f { float x, y, z; };                 // same layout as V3 (rw Vector3)
 struct Col3 {                                    // three floats passed by value
     float v[3];
     Col3() {}
@@ -110,6 +129,20 @@ struct Color4 {
     float r, g, b, a;
     Color4(float r_, float g_, float b_, float a_);             // 0x0044e410 (ret 0x10)
 };
+
+// rw::math::fpu::Vector3Template<float,0> / Col4 (Color4) helpers used by the paint-material builder.
+extern float _HK_REAL_ONE;                                       // 0x01485720
+extern float _HK_REAL_ZERO;                                      // 0x01485378
+extern float g_halfConst;                                        // 0x01471064 (0.5f)
+extern float g_sixtyConst;                                       // 0x013ebc4c (60.0f)
+extern float g_epsilonConst;                                     // 0x013ebca0 (0.0001f)
+extern Vec3f g_blackColor;                                       // 0x01514eb8 (kSwatchColor)
+
+V3* Vector3_SubOut(V3* out, const V3* a, const V3* b);           // 0x0041db10
+V3* Vector3_ScaleOut(V3* out, const V3* a, const float* s);      // 0x0041dba0
+V3* Vector3_AddOut(V3* out, const V3* a, const V3* b);           // 0x0041dc10
+// out = a + (b - a) * t   (0x00413cc0; the trailing float is []-indexed off the parameters)
+V3* Vector3_LerpOut(V3* out, const V3* a, const V3* b, const float& t);   // 0x00413cc0
 
 struct PropVal {
     char pad[0x12];
@@ -173,6 +206,60 @@ struct AbilityItem : AbilityBase {                               // 0xc bytes
     }
 };
 
+// ---------------------------------------------------------------------------
+// 0x4b8180's support types
+// ---------------------------------------------------------------------------
+struct SwatchMaterial {                                          // cSwatchMaterial
+    uint32_t mFlags;                                             // +0x04
+    char pad8[0x4c - 8];
+    Vec3f mColor;                                                // +0x4c
+    float mAlpha;                                                // +0x58
+    char mLayer;                                                 // +0x5c
+    void SetColor(const Vec3f& color) { mFlags |= 2; mColor = color; }
+    void SetAlpha(float alpha) { mAlpha = alpha; mFlags |= 8; }
+};
+struct ModelTypeObject {                                         // arg +0x24: carries GetModelType
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual int GetModelType(int paint);                         // +0x2c (slot 11)
+};
+struct PropListV {                                               // cPropertyList (arg +0x28)
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual int GetByKey(int key, void** out);                   // +0x2c (slot 11)
+};
+struct ShaderStateV {                                            // 0x70 bytes; header + 0x10-byte slots
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void* GetRes(int a, int b);                          // +0x20 (slot 8)
+    void InsertResource(unsigned a, unsigned b);                 // 0x0077cb10
+    void setSlotU0(int idx, char v);                             // 0x00777a60
+    void setSlotU1(int idx, char v);                             // 0x00777a80
+    void setSlotV0(int idx, char v);                             // 0x00777aa0
+};
+struct AbilityHost1c {                                           // cCreatureAbility-lookalike, 0x1c bytes
+    virtual void v04();
+    char pad4[4];
+    ItemVec mItems;                                              // +0x08
+    AbilityHost1c();                                             // 0x0077d1d0
+};
+struct SwatchAbility {                                           // 0x3c bytes = the paint ability
+    virtual void v04();
+    char pad4[0xc - 4];
+    Color4 mColorA;                                              // +0x0c
+    Color4 mColorB;                                              // +0x1c
+    float mAlphaA;                                               // +0x2c
+    float mScaleA;                                               // +0x30
+    float mAlphaB;                                               // +0x34
+    float mScaleB;                                               // +0x38
+    SwatchAbility();                                             // 0x004b8860
+};
+
+ShaderStateV* ResourceManager();                                 // 0x0067dd60
+void* FUN_0040d010();                                            // 0x0040d010
+
 static inline void ReadFloatProp(PropList* list, uint32_t key, float& out)
 {
     if (list) {
@@ -216,10 +303,74 @@ void FUN_004b7b80(uint32_t instId, Col3 colA, Col3 colB, void* owner, int arg1, 
 }
 
 // @ 0x4b8180
-int FUN_004b8180(void* self, void* a, void* b, void* c, void* d, void* e)
+void FUN_004b8180(uint32_t instId, Col3 colA, Col3 colB, ModelTypeObject* owner, int self, int paint)
 {
-    (void)self; (void)a; (void)b; (void)c; (void)d; (void)e;
-    return 0;
+    if (paint == 4 || paint == 2 || paint == 1 || paint == 0xa || paint == 0x12 || paint == 0x13 ||
+        paint == 0x19 || paint == 0x1a || paint == 0x20 || paint == 0x21 || paint == 0x11) {
+        FUN_004b7b80(instId, colA, colB, owner, self, paint);
+        return;
+    }
+    if (paint == 0x32)
+        return;
+
+    uint32_t unused0 = 0;
+    uint32_t c1Id = 0;
+    uint32_t c2Id = 0;
+    float alphaA = _HK_REAL_ONE;
+    float alphaB = g_sixtyConst;
+    float alphaScale = _HK_REAL_ONE;
+    float t = g_halfConst;
+    float tHigh = g_halfConst;
+    float tLow = g_halfConst;
+
+    PropList* list = 0;
+    if (SP_PropertyManager_()->GetPropertyList(instId, g_PaintGroupId, (void**)&list)) {
+        SP_GetPropertyAsKeyInstance(list, 0xb0e066a4, &c1Id);
+        SP_GetPropertyAsKeyInstance(list, 0xb0e066a5, &c2Id);
+        SP_GetPropertyAsKeyInstance(list, 0xb0e066a6, &unused0);
+        SP_GetPropertyT(list, 0x562a3b7, &alphaA);
+        SP_GetPropertyT(list, 0x226c551, &alphaB);
+        SP_GetPropertyT(list, 0x55d3d82, &alphaScale);
+        if (SP_GetPropertyT(list, 0x562a106, &t))
+            t = _HK_REAL_ONE / (t + g_epsilonConst);
+        else
+            SP_GetPropertyT(list, 0x2327a87, &t);
+        SP_GetPropertyT(list, 0x25e49bb, &tHigh);
+        SP_GetPropertyT(list, 0x265fb07, &tLow);
+    }
+
+    if (self != 0 && owner != 0 && c1Id != 0 && c2Id != 0) {
+        AbilityHost1c* host = new ("Editor", 0, 0, 0, 0) AbilityHost1c();
+        void* shaderMem = new ("Editor", 0, 0, 0, 0) char[0x70];
+        ShaderStateV* shader = 0;
+        if (shaderMem)
+            shader = (ShaderStateV*)FUN_0040d010();
+        ShaderStateV* mgr1 = ResourceManager();
+        mgr1->InsertResource(0, (unsigned)mgr1->GetRes(c1Id, 0));
+        ShaderStateV* mgr2 = ResourceManager();
+        mgr2->InsertResource(1, (unsigned)mgr2->GetRes(c2Id, 0));
+        shader->setSlotU0(0, 1);
+        shader->setSlotU1(0, 2);
+        shader->setSlotV0(0, 2);
+        shader->setSlotU0(1, 1);
+        shader->setSlotU1(1, 2);
+        shader->setSlotV0(1, 2);
+
+        SwatchAbility* ability = new ("Editor", 0, 0, 0, 0) SwatchAbility();
+        ability->mColorA = Color4(colA[0], colA[1], colA[2], tHigh);
+        ability->mColorB = Color4(colB[0], colB[1], colB[2], tLow);
+        ability->mAlphaA = alphaA;
+        ability->mScaleA = alphaB;
+        ability->mAlphaB = alphaScale;
+        ability->mScaleB = t;
+        host->mItems.resize(2);
+        host->mItems[0] = (uint32_t*)shader;
+        host->mItems[1] = (uint32_t*)ability;
+        (*(void(__thiscall**)(int, AbilityHost1c*, int))(*(int*)owner + 0xa4))(self, host, paint);
+    }
+
+    if (list)
+        list->Release();
 }
 
 // @ 0x4b8750
@@ -286,11 +437,25 @@ double FUN_004b8900(void* rng, double lo, double hi)
     return hi;
 }
 
+struct ModelTypeObj {                                             // object carrying a model-type virtual
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual int GetModelType(int e);                              // +0x2c (slot 11)
+};
+struct CmpArg {                                                   // compared operand (key at +0x20)
+    uint32_t pad0[8];
+    int mModelKey;                                                // +0x20
+};
+struct ModelCmp {
+    char pad[0x10];
+    unsigned char* SetEqFromModel(unsigned char* out, CmpArg* a, ModelTypeObj* b, int c);  // 0x4b8a70
+};
+
 // @ 0x4b8a70
-int FUN_004b8a70(int self, int out, int a, int* b, int e)
+unsigned char* ModelCmp::SetEqFromModel(unsigned char* out, CmpArg* a, ModelTypeObj* b, int c)
 {
-    (void)self;
-    int u = (*(int(__thiscall**)(int*, int, int))(*b + 0x2c))(b, e, self);
-    FUN_004b8950((void*)out, (void*)*(int*)(a + 0x20), (void*)u);
+    int u = b->GetModelType(c);
+    ((BaseCmp*)((char*)this - 0x10))->SetEq(out, a->mModelKey, u);
     return out;
 }

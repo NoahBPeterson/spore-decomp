@@ -1,0 +1,6 @@
+004b0490 Vec24_Erase24  # 0x18-byte element erase-range, empty destructor loop
+004b0560 Vec24_Wrapper  # forwards (a,b) to FUN_004b2030 through a 2-slot local
+004b09b0 AutoRef_Set  # intrusive ref swap: AddRef vtable+4, Release vtable+8
+004b0590 AutoRefVector_DoInsertValues  # eastl::vector<AutoRef>::DoInsertValues; alloc 4-byte elems, ConstructArray + fill helpers
+004b0a10 FloatVector_DoInsertValues  # eastl::vector<float>::DoInsertValues; uninitialized_fill (0x42efc0) + memmove shift
+004b0ef0 Record1d8Vector_Assign  # eastl::vector<0x1d8-byte record>::operator=; DoAllocateAndCopy (0x4b1f50) + UninitCopy24 (0x4b1760)

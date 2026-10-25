@@ -4,5 +4,5 @@
 00483070  SP::cSPEditorHandleRotationBall::AsInterface  # ids 0xee3f516e / 0x050a1fe5 / 0x050a510e
 004830c0  SP::cSPEditorHandleRotationBall::UpdateOffset  # vcall slot9 -> model+0xc, flags|4, ++count
 00483140 ?CalculateBallOffset@cSPEditorHandleRotationBall@SP@@QAEXXZ  # SP::cSPEditorHandleRotationBall::CalculateBallOffset migrated from s00482670
-00483350 ?Init@RotationBall@@QAEXPAX0MMM_N@Z  # RotationBall::Init migrated from s00482670 (verbatim, slice spelling)
+00483350 ?Init@RotationBall@@QAEXPAUIModelManager@@PAUcSPEditorBlock@@UcSPVector3@@_N@Z  # RotationBall::Init: base init + offset + CalculateBallOffset + group-flag set
 00483490  SP::cSPEditorHandleRotationBall::GetTuningOffset  # EditorTuning()+0x9c

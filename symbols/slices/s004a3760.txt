@@ -1,4 +1,4 @@
-004a3760 ?FUN_4a3760@@YAXHPAM0@Z  # FUN_4a3760 migrated from s004a3760 (verbatim, slice spelling)
-004a37f0 ?FUN_4a37f0@@YAXPAUcSPEditorBlock_s004a_3760@@@Z  # FUN_4a37f0 migrated from s004a3760 (verbatim, slice spelling)
-004a3920 ?FUN_4a3920@@YAXPAUcSPEditorBlock_s004a_3760@@@Z  # FUN_4a3920 migrated from s004a3760 (verbatim, slice spelling)
-004a3c70 ?FUN_4a3c70@@YAPAUcSPEditorBlock_s004a_3760@@PAU1@@Z  # FUN_4a3c70 migrated from s004a3760 (verbatim, slice spelling)
+004a3760 ?FUN_4a3760@@YAXPBUVec3@@PAM1@Z  # FUN_4a3760: screen-space position helper
+004a37f0 ?FUN_4a37f0@@YA?AUBlockVector@@PAVcSPEditorModel@@I@Z  # FUN_4a37f0: post effect on every transformable block
+004a3920 ?FUN_4a3920@@YA?AUEaVector@@PAVcSPEditorModel@@_N@Z  # FUN_4a3920: collect eligible blocks
+004a3c70 ?FUN_4a3c70@@YAPAVcSPEditorBlock@@PAV1@UVec3@@@Z  # FUN_4a3c70: nearest eligible block

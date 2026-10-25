@@ -147,21 +147,192 @@ void* FUN_004c0020(void* p, uint32_t size) {
 }
 
 // ---------------------------------------------------------------------------
-// (De)serialization entry points: reproduced as skeletons (see partial.txt).
+// Runtime creature block (magic 0xabb455b7): an 8-byte header, a 0x10-byte count
+// block, an RLE-compressed blob and six parallel arrays. Version 9 stops after
+// the first three counts, version 10 appends a 0x38-byte bone array.
+// ---------------------------------------------------------------------------
+extern "C" void* __cdecl memset(void* dst, int value, uint32_t size);
+
+// Byte stream: Read is vtable slot 12 (+0x30) and returns the byte count,
+// Write is vtable slot 14 (+0x38) and returns whether all bytes went out.
+struct IStream {
+    virtual void Unk00(); virtual void Unk04(); virtual void Unk08(); virtual void Unk0C();
+    virtual void Unk10(); virtual void Unk14(); virtual void Unk18(); virtual void Unk1C();
+    virtual void Unk20(); virtual void Unk24(); virtual void Unk28(); virtual void Unk2C();
+    virtual int  Read(void* dst, uint32_t size);              // +0x30
+    virtual void Unk34();
+    virtual bool Write(const void* src, uint32_t size);       // +0x38
+};
+
+struct ChunkHeader {              // 8-byte block header
+    uint32_t mMagic;              // 0xabb455b7
+    uint32_t mVersion;            // 9 or 10
+};
+
+struct ChunkCounts {              // 0x10-byte element counts (0xc at version 9)
+    uint32_t mNumElements;        // 0x8c-byte element records
+    uint32_t mNumValues;          // 4-byte values, plus one byte each
+    uint32_t mNumFloats;          // floats, spread over three arrays
+    uint32_t mNumBones;           // 0x38-byte bone records (version 10 only)
+};
+
+struct Element8c { uint32_t mData[0x8c / 4]; };
+struct Bone38    { uint32_t mData[0x38 / 4]; };
+
+// Stack-frame filler: the original reserved a slot block at each resize() call site
+// for locals of the inlined helper cl declined (0x28 bytes per call).
+template <int N> inline void ScratchSlots() { uint32_t slots[N]; }
+
+// Growable three-pointer vector; resize() is out of line for every element type.
+template <class T> struct SpVector {
+    T* mpBegin; T* mpEnd; T* mpCapacity;
+    T* begin() const { return mpBegin; }
+    int size() const { return (int)(mpEnd - mpBegin); }
+    void resize(uint32_t n);
+};
+template <> void SpVector<Element8c>::resize(uint32_t n);   // 0x4c0350
+template <> void SpVector<uint32_t>::resize(uint32_t n);    // 0x4cd3c0
+template <> void SpVector<uint8_t>::resize(uint32_t n);     // 0x4c0410
+template <> void SpVector<float>::resize(uint32_t n);       // 0x4afc80
+template <> void SpVector<Bone38>::resize(uint32_t n);      // 0x4c0480
+
+struct CreatureData {
+    uint32_t mPad00[6];                  // 0x00
+    uint8_t  mPayload[0x80];             // 0x18 RLE-compressed block
+    SpVector<Element8c> mElements;       // 0x98
+    uint32_t mPadA4[2];                  // 0xa4
+    SpVector<uint32_t>  mValues;         // 0xac
+    uint32_t mPadB8[2];                  // 0xb8
+    SpVector<uint8_t>   mValueBytes;     // 0xc0
+    uint32_t mPadCC[2];                  // 0xcc
+    SpVector<uint32_t>  mScalars;        // 0xd4
+    uint32_t mPadE0[2];                  // 0xe0
+    SpVector<float>     mFloats0;        // 0xe8
+    uint32_t mPadF4[2];                  // 0xf4
+    SpVector<float>     mFloats1;        // 0xfc
+    uint32_t mPad108[2];                 // 0x108
+    uint32_t mFlags;                     // 0x110
+    SpVector<Bone38>    mBones;          // 0x114
+};
+
+extern bool ReadRLE(IStream* stream, uint8_t* data, uint32_t size);        // 0x4bf2a0
+extern bool WriteRLE(IStream* stream, const uint8_t* data, uint32_t size); // 0x4bf0a0
+
+// @ 0x004bf430
+bool FUN_004bf430(int* stream, int data)
+{
+    ChunkHeader header;
+    uint32_t nPayload;
+    ChunkCounts counts;
+
+    if (((IStream*)stream)->Read(&header, 8) != 8
+        || header.mMagic != 0xabb455b7 || header.mVersion < 9 || header.mVersion > 10)
+        return false;
+    if (header.mVersion >= 10) {
+        if (((IStream*)stream)->Read(&counts, 0x10) != 0x10)
+            return false;
+    } else {
+        if (((IStream*)stream)->Read(&counts, 0xc) != 0xc)
+            return false;
+        counts.mNumBones = 0;
+    }
+    if (counts.mNumElements > 0x100 || counts.mNumValues > 0x1000 || counts.mNumFloats > 0x400)
+        return false;
+    ScratchSlots<10>();
+    ((CreatureData*)data)->mElements.resize(counts.mNumElements);
+    ScratchSlots<10>();
+    ((CreatureData*)data)->mValues.resize(counts.mNumValues);
+    ScratchSlots<10>();
+    ((CreatureData*)data)->mValueBytes.resize(counts.mNumValues);
+    ScratchSlots<10>();
+    ((CreatureData*)data)->mScalars.resize(counts.mNumFloats);
+    ScratchSlots<10>();
+    ((CreatureData*)data)->mFloats0.resize(counts.mNumFloats);
+    ScratchSlots<10>();
+    ((CreatureData*)data)->mFloats1.resize(counts.mNumFloats);
+    ScratchSlots<10>();
+    ((CreatureData*)data)->mBones.resize(counts.mNumBones);
+    memset(((CreatureData*)data)->mPayload, 0, 0x80);
+    nPayload = 0x80;
+    if (header.mVersion < 8)
+        nPayload -= 0x3c;
+    if (!ReadRLE((IStream*)stream, ((CreatureData*)data)->mPayload, nPayload))
+        return false;
+    if (((IStream*)stream)->Read(((CreatureData*)data)->mElements.begin(),
+                                 counts.mNumElements * 0x8c) != counts.mNumElements * 0x8c)
+        return false;
+    if (((IStream*)stream)->Read(((CreatureData*)data)->mValues.begin(),
+                                 counts.mNumValues * 4) != counts.mNumValues * 4)
+        return false;
+    if (((IStream*)stream)->Read(((CreatureData*)data)->mValueBytes.begin(),
+                                 counts.mNumValues) != counts.mNumValues)
+        return false;
+    if (((IStream*)stream)->Read(((CreatureData*)data)->mScalars.begin(),
+                                 counts.mNumFloats * 4) != counts.mNumFloats * 4)
+        return false;
+    if (((IStream*)stream)->Read(((CreatureData*)data)->mFloats0.begin(),
+                                 counts.mNumFloats * 4) != counts.mNumFloats * 4)
+        return false;
+    if (((IStream*)stream)->Read(((CreatureData*)data)->mFloats1.begin(),
+                                 counts.mNumFloats * 4) != counts.mNumFloats * 4)
+        return false;
+    if (((IStream*)stream)->Read(&((CreatureData*)data)->mFlags, 4) != 4)
+        return false;
+    if (header.mVersion >= 10) {
+        if (((IStream*)stream)->Read(((CreatureData*)data)->mBones.begin(),
+                                     counts.mNumBones * 0x38) != counts.mNumBones * 0x38)
+            return false;
+    }
+    return true;
+}
+
+// @ 0x004bf770
+bool FUN_004bf770(int* stream, int data)
+{
+    ChunkHeader header;
+    ChunkCounts counts;
+
+    header.mMagic = 0xabb455b7;
+    header.mVersion = 10;
+    counts.mNumElements = ((CreatureData*)data)->mElements.size();
+    counts.mNumValues = ((CreatureData*)data)->mValues.size();
+    counts.mNumFloats = ((CreatureData*)data)->mFloats0.size();
+    counts.mNumBones = ((CreatureData*)data)->mBones.size();
+    if (!((IStream*)stream)->Write(&header, 8)
+        || !((IStream*)stream)->Write(&counts, 0x10))
+        return false;
+    if (!WriteRLE((IStream*)stream, ((CreatureData*)data)->mPayload, 0x80))
+        return false;
+    if (!((IStream*)stream)->Write(((CreatureData*)data)->mElements.begin(),
+                                   counts.mNumElements * 0x8c))
+        return false;
+    if (!((IStream*)stream)->Write(((CreatureData*)data)->mValues.begin(),
+                                   counts.mNumValues * 4))
+        return false;
+    if (!((IStream*)stream)->Write(((CreatureData*)data)->mValueBytes.begin(),
+                                   counts.mNumValues))
+        return false;
+    if (!((IStream*)stream)->Write(((CreatureData*)data)->mScalars.begin(),
+                                   counts.mNumFloats * 4))
+        return false;
+    if (!((IStream*)stream)->Write(((CreatureData*)data)->mFloats0.begin(),
+                                   counts.mNumFloats * 4))
+        return false;
+    if (!((IStream*)stream)->Write(((CreatureData*)data)->mFloats1.begin(),
+                                   counts.mNumFloats * 4))
+        return false;
+    if (!((IStream*)stream)->Write(&((CreatureData*)data)->mFlags, 4))
+        return false;
+    if (!((IStream*)stream)->Write(((CreatureData*)data)->mBones.begin(),
+                                   counts.mNumBones * 0x38))
+        return false;
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// Editor model (de)serialization entry points.
 // ---------------------------------------------------------------------------
 extern int WriteBinaryEditorModel(int data);   // 0x4b0010
-
-// 004bf430  `anonymous namespace'::ReadRuntimeCreatureData (PARTIAL skeleton)
-bool FUN_004bf430(int* stream, int data) {
-    (void)stream; (void)data;
-    return false;
-}
-
-// 004bf770  `anonymous namespace'::WriteRuntimeCreatureData (PARTIAL skeleton)
-bool FUN_004bf770(int* stream, int data) {
-    (void)stream; (void)data;
-    return false;
-}
 
 // 004bfb20 (near-complete; stream header + two data segments)
 struct StreamWriter {

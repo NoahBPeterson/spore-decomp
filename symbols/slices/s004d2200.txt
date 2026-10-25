@@ -1,1 +1,2 @@
-004d2200 ?GetMatchingCreatureKeys@@YAHPAIIHID0@Z  # GetMatchingCreatureKeys migrated from s004d2200 (verbatim, slice spelling)
+004df420 ?GetAvatarProfile@cSPEditorSpeciesManager@SP@@QAEPBUcSpeciesProfile@2@XZ  # avatar profile, called on the 0x401090 singleton
+004df550 ?GetProfile@cSPEditorSpeciesManager@SP@@QAEPBUcSpeciesProfile@2@ABVKey@ResourceMan@EA@@@Z  # profile lookup by resource key

@@ -6,6 +6,7 @@
 // byte-exact reconstruction is below.  The three large mesh builders are reconstructed
 // from their annotated disassembly (their Ghidra decompiles carry lost frame locals).
 #include "types.h"
+#include <intrin.h>
 
 #pragma pack(push, 4)
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
@@ -68,6 +69,18 @@ extern float g_014854c8;                                                 // 0x01
 extern float g_013ec434;                                                 // 0x013ec434
 extern float g_013ef550;                                                 // 0x013ef550
 extern float g_013f059c;                                                 // 0x013f059c
+
+extern "C" void     FUN_00921df0(const int* pTime);                      // 0x921df0 EA::Thread::ThreadSleep
+extern uint32_t     g_01600778;                                          // 0x1600778 render-thread TEB id
+
+// The mesh builders yield to the render thread whenever they are not running
+// on it (the original emits this check before each mesh-target phase call).
+static inline void RenderThreadYield() {
+    if (g_01600778 != __readfsdword(0x18)) {
+        int zero = 0;
+        FUN_00921df0(&zero);
+    }
+}
 
 struct VectorU32 {
     uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCapacity;
@@ -139,6 +152,8 @@ struct PairIF;
 struct VectorIF {
     void* mpBegin;                                   // +0x00
     void* mpEnd;                                     // +0x04
+    void* mpCapacity;                                // +0x08
+    uint32_t mAllocator[2];                          // +0x0c
     PairIF* FUN_00530c80(PairIF* first, PairIF* last);// 0x00530c80 erase(first, last)
 };
 
@@ -263,9 +278,8 @@ bool cSkinObject::BuildMesh()
 
 // ---------------------------------------------------------------------------
 // 0x004CB820: build the per-element bone-weight records for the paint target.
-// The original also carries the /GS stack-cookie checks (with EA::Thread::
-// ThreadSleep on the failure path); those are unconditional no-ops and are
-// omitted here because the slice is compiled /GS-.
+// Before each mesh-target phase call the original yields to the render thread
+// (RenderThreadYield: sleep while g_01600778 != fs:[0x18]).
 // ---------------------------------------------------------------------------
 // @ 0x004CB820
 int SP::cSkinObject::BuildBones()
@@ -275,6 +289,7 @@ int SP::cSkinObject::BuildBones()
         mesh->FUN_00509450();
     if (mesh->mIndexList.empty())
         mesh->FUN_005098a0();
+    RenderThreadYield();
 
     mesh->FUN_00509b20();
 
@@ -308,10 +323,10 @@ int SP::cSkinObject::BuildBones()
             p->SkinBuildData::SkinBuildData();
         p->mIndex = (uint32_t)partCount;
         p->mf04 = 0;
-        p->mf58 = g_01485378;
         p->mf60 = g_01485378;
-        p->mf5c = d;
+        p->mf58 = g_01485378;
         p->mf64 = d;
+        p->mf5c = d;
         p->mf68 = 0;
         mesh->mParts.FUN_00454860(&p);
         ++partCount;
@@ -325,9 +340,12 @@ int SP::cSkinObject::BuildBones()
         mesh->FUN_0050a0a0();
         mesh->mState = 0;
     }
+    RenderThreadYield();
 
     mesh->FUN_0050aac0(g_013f059c);
+    RenderThreadYield();
     mesh->FUN_005087b0();                             // TangentBuilder::BuildTangents
+    RenderThreadYield();
     mesh->mState = 3;
     mesh->FUN_00508fd0();
     mesh->mState = 0;

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+004e7610  739  complete (per-entry icon records via PropertyManager, value clamp, kind split by property hash, NormalizePercents, ScaleColorForKind, FillRefVec18); only /Od name-hash slot permutation differs (frame 0x50 vs 0x58) - instruction stream and switch tree match, size 889 vs 887; difftest UNSUPPORTED (0/400 valid: random entries->mBegin faults in the loop)

@@ -4,3 +4,7 @@
 004ab4d0  80   complete copy range (stride 0x34) via placement copy-ctor
 004ab530  109  complete copy range (stride 0x3c) with nested assign
 004ab5b0  107  complete Item range copy (x87 float member copies); V3 copy flavour + pointer temps differ
+004aa760  798  eastl::vector<SP::OrientedPoint(0x34)>::DoInsertValue (in-place rep movsd 13 + realloc via 0x4ab4d0/0x4ab640): equiv UNSUPPORTED (0/400 valid; random `this` soup faults the original's vector pointers, EASTL container layout not in the dev PDB); /Od /Ob1 /MD /Gy /TP
+004aaac0  798  eastl::vector<TransformKey(0x3c)>::DoInsertValue (copy ranges 0x4ab530, ctor 0x40ce80, cSPTransformOps::Assign 0x537dc0): equiv UNSUPPORTED (0/400 valid; same random-`this` fault class); /Od /Ob1 /MD /Gy /TP
+004aae30  612  eastl::vector<cSPMatrix3(0x24)>::DoInsertValue (copy range 0x4ab280, Assign 0x41cb40, rep movsd 9): equiv UNSUPPORTED (0/400 valid; same random-`this` fault class); /Od /Ob1 /MD /Gy /TP
+004ab130  11   DequeBase::PushFront (deque emplace_front tail): equiv PASS (345 valid, 97.9% cov); instruction-identical except a trailing 3-byte `mov eax,[ret-temp]` (original's void return); /Od /Ob1 /MD /Gy /TP

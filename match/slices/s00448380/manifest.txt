@@ -1,1 +1,7 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00448380/s00448380.cpp  ?RecordAllHandlePositions@cSPEditorBlock@SP@@QAE_NXZ  004484f0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+slices/s00448380/s00448380.cpp  ?ClearSymmetryRecursive@cSPEditorBlock@SP@@QAEXXZ  00448dd0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+slices/s00448380/s00448380.cpp  ?SetPosition@cSPEditorBlock@SP@@QAEXABUcSPVector3@2@_N@Z  00448e90  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+slices/s00448380/s00448380.cpp  ?RecordHandlePositionAt@cSPEditorBlock@SP@@QAE_NHD@Z  00448480  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+slices/s00448380/s00448380.cpp  ?UpdateAllHandles@cSPEditorBlock@SP@@QAEXXZ  004485d0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+slices/s00448380/s00448380.cpp  ?InitDeformAnimationsB@cSPEditorBlock@SP@@QAEX_N@Z  00448b80  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-

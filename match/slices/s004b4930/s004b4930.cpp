@@ -375,30 +375,154 @@ bool PaintTheme::ExtractRegionPaintData(AssetView* asset, void* palette, uint32_
     return true;
 }
 
-// @ 0x4b5080  hashtable find/insert (4-byte value)
-int __fastcall FUN_004b5080(void* self, uint32_t* key)
+// ---- 0x4b5080..0x4b5370 eastl rbtree wrappers ----------------------------------------------------
+struct RbNode;
+struct RbNodeBase {
+    RbNodeBase* mpLeft;                 // +0x00
+    RbNodeBase* mpRight;                // +0x04
+    RbNodeBase* mpParent;               // +0x08
+    char        mColor;                 // +0x0c
+    char        pad0d[3];
+};
+struct RbIter {
+    RbNodeBase* mpNode;                 // +0x00 (null == end)
+    RbIter() {}
+    RbIter(const RbIter& src);          // 0x5673e0  out-of-line copy ctor (retail keeps it non-trivial)
+    RbIter*  assign(RbNodeBase* node);  // 0x566c50  *this = node; returns this
+    uint32_t* value();                  // 0x564f50  &node->mValue (the stored key pair)
+};
+// rbtree base: anchor/sentinel node at +0x04 (mpParent at +0x0c is the root)
+struct RbTree {
+    char        pad0[4];
+    RbNodeBase  mAnchor;                // +0x04
+    RbIter* lower_bound(RbIter* out, const uint32_t* key);          // 0x4b5e90
+    RbIter* insert_v4(RbIter* out, RbIter pos, const void* value);  // 0x4b59e0 (4-byte value)
+    RbIter* insert_v28(RbIter* out, RbIter pos, const void* value); // 0x4b5e50 (0x1c-byte value)
+    RbIter* insert_float(RbIter* out, RbIter pos, const void* value); // 0x4b5f00 (float key)
+    RbIter* lower_bound_key16(RbIter* out, const void* key);        // 0x4b5f40
+
+    int* find_or_insert4(const uint32_t* key);      // 0x4b5080
+    int* find_or_insert28(const uint32_t* key);     // 0x4b5160
+    RbIter* find_iter(RbIter* out, const float* key);// 0x4b5210
+    int* find_or_insert_float(const float* key);    // 0x4b5370
+};
+// small eastl vector with a fixed inline 8-byte node buffer, built around the insert call
+struct NodeVec8 {
+    void* mpBegin;                      // +0x00
+    void* mpEnd;                        // +0x04
+    void* mpCapacity;                   // +0x08
+    char  mAlloc[8];                    // +0x0c
+    void* mpOverflow;                   // +0x14
+    NodeVec8* Construct();                       // 0x4727a0
+    NodeVec8* ConstructFrom(const NodeVec8& s);  // 0x455cf0
+    void      Destroy();                         // 0x45daf0
+};
+// value type of the 0x1c-byte tree: pair<uint32, Trans>
+struct TransBody { char m[0xc]; };      // SP::Trans (12 bytes here)
+struct Val16 { uint32_t mKey; TransBody mVal; };
+void Value_DefaultCtor16(void* v);      // 0x4b63b0
+void Trans_CopyCtor(void* self, const void* src);   // 0x440ff0 (SP::Trans::Trans(const Trans&))
+struct Val04 { uint32_t mKey; uint32_t mVal; };
+void Fun_004b5610(void* v);             // 0x4b5610 (NodeVec8 destructor helper)
+
+// forward decls of types/functions defined earlier in this file
+struct Float3Cmp;
+
+// @ 0x4b5080  map<uint32,pair>::find_or_insert -> pointer to the 4-byte value (+4)
+int* RbTree::find_or_insert4(const uint32_t* key)
 {
-    (void)self; (void)key;
-    return 0;
+    RbIter found;
+    lower_bound(&found, key);
+    RbIter end;
+    end.assign(&mAnchor);
+    if (found.mpNode == end.mpNode || *key < *found.value()) {
+        NodeVec8 scratchA;
+        scratchA.Construct();
+        Val04 value;
+        value.mKey = *key;
+        value.mVal = 0;
+        NodeVec8 scratchB;
+        scratchB.ConstructFrom(scratchA);
+        RbIter out;
+        insert_v4(&out, found, &value);
+        found = out;
+        for (char* p = (char*)scratchB.mpBegin; p < (char*)scratchB.mpEnd; p += 8) {}
+        scratchB.Destroy();
+        for (char* p = (char*)scratchA.mpBegin; p < (char*)scratchA.mpEnd; p += 8) {}
+        scratchA.Destroy();
+    }
+    return (int*)(found.value() + 1);
 }
 
-// @ 0x4b5160  hashtable find/insert (0x1c-byte value)
-int __fastcall FUN_004b5160(void* self, uint32_t* key)
+// @ 0x4b5160  map<uint32,pair>::find_or_insert -> pointer to the 0x1c-byte value (+0x1c)
+int* RbTree::find_or_insert28(const uint32_t* key)
 {
-    (void)self; (void)key;
-    return 0;
+    RbIter found;
+    lower_bound(&found, key);
+    RbIter end;
+    end.assign(&mAnchor);
+    if (found.mpNode == end.mpNode || *key < *found.value()) {
+        Val16 value;
+        value.mKey = 0;
+        Trans_CopyCtor(&value.mVal, (const void*)key);  // 0x440ff0 (SP::Trans copy ctor into the value)
+        RbIter out;
+        insert_v28(&out, found, &value);
+        found = out;
+    }
+    return (int*)((char*)found.value() + 0x1c);
 }
 
-// @ 0x4b5210  rbtree lower_bound-ish search
-void* __fastcall FUN_004b5210(void* self, void* out, void* key)
+// @ 0x4b5210  rbtree lower_bound/find -> iterator out (returns the out pointer)
+RbIter* RbTree::find_iter(RbIter* out, const float* key)
 {
-    (void)self; (void)out; (void)key;
+    int slot;                              // retail reserves one extra 4-byte slot here
+    RbNodeBase* node = mAnchor.mpParent;   // root
+    RbNodeBase* prev = &mAnchor;
+    while (node != 0) {
+        if (!((Float3Cmp*)((char*)node + 0x10))->FUN_004b52b0((float*)key)) {
+            prev = node;
+            node = node->mpRight;
+        } else {
+            node = node->mpLeft;
+        }
+    }
+    if (prev == &mAnchor || !((Float3Cmp*)key)->FUN_004b52b0((float*)((char*)prev + 0x10))) {
+        out->assign(prev);
+    } else {
+        out->assign(&mAnchor);
+    }
     return out;
 }
 
-// @ 0x4b5370  rbtree insert with float key
-int __fastcall FUN_004b5370(void* self, void* out, void* key)
+// @ 0x4b5370  map<Key16,pair>::find_or_insert -> pointer to value (+0xc)
+int* RbTree::find_or_insert_float(const float* key)
 {
-    (void)self; (void)out; (void)key;
-    return 0;
+    RbIter found;
+    lower_bound_key16(&found, key);
+    RbIter end;
+    end.assign(&mAnchor);
+    if (found.mpNode == end.mpNode || ((Float3Cmp*)key)->FUN_004b52b0((float*)found.value())) {
+        struct Key16Val {
+            float    mKey;               // +0x00 = 0
+            float    v[3];               // +0x04 = key[0..2]
+            float    mTail;              // +0x10 = 0
+        };
+        float zero = 0.0f;
+        Key16Val value;
+        value.mKey = zero;
+        value.v[0] = key[0];
+        value.v[1] = key[1];
+        value.v[2] = key[2];
+        value.mTail = zero;
+        RbIter out;
+        insert_float(&out, found, &value);
+        found = out;
+    }
+    return (int*)((char*)found.value() + 0xc);
 }
+
+// --- out-of-line iterator helpers (retail has these at 0x5673e0 / 0x566c50 / 0x564f50; defined here so the
+//     slice links standalone for the difftest harness) ---------------------------------------------------
+RbIter::RbIter(const RbIter& src) { mpNode = src.mpNode; }
+RbIter* RbIter::assign(RbNodeBase* node) { mpNode = node; return this; }
+uint32_t* RbIter::value() { return (uint32_t*)((char*)mpNode + 0x10); }

@@ -1,7 +1,20 @@
 // Slice s00482670: SP::cSPEditorHandleRotationBall, /Od /Ob1 /arch:SSE.
 #include "types.h"
 
-struct Vector3 { float x, y, z; };
+template<int N> inline void ScratchSlots() { uint32_t s[N]; }
+
+struct Vector3 { float x, y, z;                  // rw::math::fpu::Vector3Template<float,0>
+    Vector3() {}
+    Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
+    float& operator[](int i) { return (&x)[i]; }
+    const float& operator[](int i) const { return (&x)[i]; }
+};
+struct cSPVector3 : Vector3 {                       // cSPVector3 (12 bytes)
+    cSPVector3() {}
+    cSPVector3(const Vector3& v) : Vector3(v) {}
+    cSPVector3& operator=(const Vector3& v) { x = v.x; y = v.y; z = v.z; return *this; }
+};
+struct cSPMatrix3 { Vector3 xAxis, yAxis, zAxis; }; // 36 bytes, copied with rep movsd
 
 // base-class entry points (defined in other slices; masked relocations)
 void* EditorTuning();          // @ 0x00401070
@@ -9,12 +22,72 @@ void* EditorTuning();          // @ 0x00401070
 extern Vector3 g_offset;
 extern void* g_ballVtbl0;
 extern void* g_ballVtbl1;
+extern const cSPMatrix3 kMatrix_15d53d8;   // @ 0x15d53d8
+extern const cSPVector3 kZeroVec_15d5508;  // @ 0x15d5508
+
+float VectorLength(const Vector3& v);                       // @ 0x40ae50
+Vector3 operator*(const Vector3& v, const float& s);        // @ 0x41dca0
+Vector3 operator/(const Vector3& v, const float& s);        // @ 0x453880
+
+struct cSPTransform {                               // 0x38 bytes
+    uint16_t mFlags;                                // +0x00
+    uint16_t mModificationCount;                    // +0x02
+    Vector3 mTranslation;                           // +0x04
+    float mScale;                                   // +0x10
+    cSPMatrix3 mRotation;                           // +0x14
+    cSPTransform();                                 // @ 0x409930
+    void SetRotation(const cSPMatrix3& m) { mRotation = m; mFlags |= 2; mModificationCount++; }
+    void SetScale(float s) { mScale = s; mModificationCount++; }
+    void SetTranslation(const Vector3& v) { mTranslation = v; mFlags |= 4; mModificationCount++; }
+};
+struct cSPBoundingBox {                             // 0x18 bytes
+    cSPVector3 mMin, mMax;
+    void Transform(const cSPTransform& t);          // @ 0x409dd0
+};
+bool SegmentBoxIntersect(const Vector3& dir, const Vector3& origin,
+                         const cSPBoundingBox& box, float* t);   // @ 0x6989d0
+
+template<int N> struct bitset {                     // eastl::bitset<N>
+    uint32_t mWord[(N + 31) / 32];
+    __forceinline uint32_t& DoGetWord(uint32_t i) { return mWord[i >> 5]; }
+    __forceinline void set(uint32_t n, bool value) {
+        if (n < N) {
+            if (value)
+                DoGetWord(n) |= 1u << (n % 32);
+            else
+                DoGetWord(n) &= ~(1u << (n % 32));
+        }
+    }
+};
+
+template<class T> struct AutoRefCount {             // EA::AutoRefCount<T>: one pointer
+    T* mpObject;
+    T* get() const { return mpObject; }
+    operator T*() const { return mpObject; }
+    T* operator->() const { return mpObject; }
+};
+
+struct cIModelWorld;                                // only used as a pointer here
+
+struct cSPEditorBlock {
+    char pad00[0x18];
+    AutoRefCount<cIModelWorld> mModelWorld;         // +0x18
+    cSPBoundingBox GetBBox(int mode, bool a, bool b);   // @ 0x44ae00
+};
+
+#define PV(n) virtual void _v##n();
+struct IModelManager {
+    virtual int AddRef(); virtual int Release();
+    PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+    virtual unsigned int GetGroupFlag(uint32_t groupID, int arg);   // +0x28
+};
 
 struct cMWModel {
     void* mWorld;              // +0x00
     uint32_t mFlags;           // +0x04
-    char pad08[0x3c];
+    char pad08[0x38];
     int mRefCount;             // +0x40
+    bitset<64> mGroups;        // +0x44
 };
 
 struct RotationBall {
@@ -22,22 +95,22 @@ struct RotationBall {
     void** vptr2;              // +0x04
     int    mUnk8;              // +0x08
     void*  mPropList;          // +0x0c
-    void*  mBlock;             // +0x10
-    cMWModel* mModel;          // +0x14
+    cSPEditorBlock* mBlock;    // +0x10
+    AutoRefCount<cMWModel> mModel;  // +0x14
     cMWModel* mOverdrawModel;  // +0x18
     char   pad1c[0x34];        // +0x1c .. +0x4f
-    Vector3 mOffset;           // +0x50
+    cSPVector3 mOffset;        // +0x50
     bool   mExists;            // +0x5c
     bool   mIsHidden;          // +0x5d
     char   pad5e[2];
-    float  mDistance;          // +0x60
+    float  mDistanceFromBoundingBox;  // +0x60
 
     RotationBall* Construct();
     void Destroy();
     void* AsInterface(uint32_t id);
     void UpdateOffset();
     void CalculateBallOffset();
-    void Init(void* o, void* block, float x, float y, float z, bool flag);
+    void Init(IModelManager* o, cSPEditorBlock* block, cSPVector3 offset, bool flag);
     Vector3* GetTuningOffset(Vector3* out);
 
     // base-class entry points (defined in other slices; masked relocations)
@@ -87,49 +160,57 @@ void RotationBall::UpdateOffset()
     if (this->mModel) {
         char local[12];
         void* r = ((void*(__thiscall*)(RotationBall*, void*))this->vptr[9])(this, local);
-        *(Vector3*)((char*)this->mModel + 0xc) = *(Vector3*)r;
-        *(uint16_t*)((char*)this->mModel + 8) |= 4;
-        ++*(uint16_t*)((char*)this->mModel + 0xa);
+        *(Vector3*)((char*)(cMWModel*)this->mModel + 0xc) = *(Vector3*)r;
+        *(uint16_t*)((char*)(cMWModel*)this->mModel + 8) |= 4;
+        ++*(uint16_t*)((char*)(cMWModel*)this->mModel + 0xa);
     }
 }
 
-// @ 0x00483140 -- behaviourally complete; local slots / helper shapes not byte-exact.
+// @ 0x00483140
 void RotationBall::CalculateBallOffset()
 {
-    if (!this->mBlock)
-        return;
-    char bbox[0x28];
-    void GetBBox(void*, void*, int, int, int);      // @ 0x00480e90 region helper
-    GetBBox(this->mBlock, bbox, 2, 0, 0);
-    void TransformBBox(void*, void*);               // @ 0x00409930
-    TransformBBox(bbox, (void*)0x15d53d8);
-    float len = this->mOffset.x * this->mOffset.x + this->mOffset.y * this->mOffset.y + this->mOffset.z * this->mOffset.z;
-    (void)len;
-    this->mDistance = 0.0f;
-    (void)bbox;
+    if (this->mBlock) {
+        cSPBoundingBox chunk = this->mBlock->GetBBox(2, false, false);
+        cSPTransform p15;
+        p15.SetRotation(kMatrix_15d53d8);
+        p15.SetTranslation(kZeroVec_15d5508);
+        p15.SetScale(1.0f);
+        chunk.Transform(p15);
+        ScratchSlots<40>();
+        float length = VectorLength(this->mOffset);
+        cSPVector3 v32 = this->mOffset / length;
+        float tmp = 100.0f;
+        cSPVector3 n25 = kZeroVec_15d5508;
+        cSPVector3 u = v32 * tmp;
+        float v4;
+        if (SegmentBoxIntersect(u, n25, chunk, &v4))
+            this->mDistanceFromBoundingBox = length - (1.0f - v4) * tmp;
+        else
+            this->mDistanceFromBoundingBox = 0.0f;
+    }
 }
 
 // @ 0x00483350
-void RotationBall::Init(void* o, void* block, float x, float y, float z, bool flag)
+void RotationBall::Init(IModelManager* o, cSPEditorBlock* block, cSPVector3 offset, bool flag)
 {
     this->BaseInit(block, flag, 0, 0);
-    this->mOffset.x = x;
-    this->mOffset.y = y;
-    this->mOffset.z = z;
+    this->mOffset = offset;
     this->CalculateBallOffset();
     this->mExists = true;
     this->mIsHidden = false;
-    void* b = this->mBlock;
-    (void)b;
-    if (!flag) {
-        this->mExists = false;
-    } else if (this->mModel) {
-        void** vt = *(void***)o;
-        uint32_t id = ((uint32_t(__thiscall*)(void*, uint32_t, int))vt[0xa])(o, 0x31390733, 0);
-        if (id < 0x40) {
-            uint32_t* word = (uint32_t*)((char*)this->mModel + 0x44 + (id >> 5) * 4);
-            *word |= (1u << (id % 0x20));
+    cIModelWorld* worldConv = this->mBlock->mModelWorld;
+    cIModelWorld* world = worldConv;
+    (void)world;
+    if (flag) {
+        cMWModel* modelConv = this->mModel;
+        if (modelConv) {
+            cMWModel* mpModel = this->mModel;
+            uint32_t nID = o->GetGroupFlag(0x31390733, 0);
+            bitset<64>& groups = mpModel->mGroups;
+            groups.set(nID, true);
         }
+    } else {
+        this->mExists = false;
     }
     if (!this->mExists)
         ((void(__thiscall*)(RotationBall*))this->vptr[0x4c / 4])(this);
@@ -204,8 +285,6 @@ struct TrianglePinningInfo {                                // at +0x188
     void* GetTriangle() { return mTriangle; }
     void GetPose(Vec3* pos, Mat33* rot);                    // 0x004e95e0
 };
-
-template <int N> inline void ScratchSlots() { uint32_t s[N]; }   // stands in for the frame of a declined inline
 
 static inline float Dot(const Vec3& a, const Vec3& b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
 

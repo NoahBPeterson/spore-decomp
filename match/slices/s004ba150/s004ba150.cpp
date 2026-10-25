@@ -32,7 +32,7 @@ public:
 class cRuntimeCreatureResource {
 public:
     cResourceBase* AsInterface(int type);   // 0x4bac80
-    void zero();                             // 0x4bacc0
+    void* zero();                            // 0x4bacc0
 };
 
 // @ 0x4bab30
@@ -79,11 +79,22 @@ cResourceBase* cRuntimeCreatureResource::AsInterface(int type)
 }
 
 // @ 0x4bacc0
-void cRuntimeCreatureResource::zero()
+void* cRuntimeCreatureResource::zero()
 {
-    int* p = (int*)this;
-    p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0; p[4] = 0; p[5] = 0;
-    p[8] = 0; p[9] = 0; p[10] = 0;
+    *(int*)this = 0;
+    int* p4 = (int*)((char*)this + 4);
+    *p4 = 0;
+    int* p8 = (int*)((char*)this + 8);
+    *p8 = 0;
+    int* pc = (int*)((char*)this + 0xc);
+    pc[0] = 0;
+    pc[1] = 0;
+    pc[2] = 0;
+    int* p20 = (int*)((char*)this + 0x20);
+    p20[0] = 0;
+    p20[1] = 0;
+    p20[2] = 0;
+    return this;
 }
 
 // @ 0x4bad50
@@ -102,10 +113,101 @@ void __fastcall FUN_004bad50(int* p)
         (*(void(__thiscall**)(int))(*p + 4))(*p);
 }
 
-// @ 0x4badd0  SP::cSPEditorPaintTheme::Apply (large)
-int FUN_004badd0(void* self, int* a, void* b)
+// ---------------------------------------------------------------------------
+// 0x004badd0: create a model resource from a resource key.
+//   GetManager() -> GetResource(key, &arc) -> new cSPEditorModel -> LoadResource,
+//   then accept it only when hash(model type) matches the requested type (or when
+//   the cell-stage alias 0x2b978c46 was requested and the model hashes to
+//   0x438f6347).  On success hands the model to *outModel and optionally fills the
+//   16-byte descriptor from the resource's cEditorResource_ interface.
+// ---------------------------------------------------------------------------
+extern "C" void* GetManager();                                  // 0x0067dcd0
+uint32_t FUN_004bb860(uint32_t modelType);                      // 0x004bb860
+extern const char kEditorAllocName[];                           // 0x013eb430
+
+void* operator new(unsigned int size, const char* pName, int flags, unsigned debugFlags,
+                   const char* pFile, int line);                                      // 0xf473a0
+
+struct ResourceManager {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual bool GetResource(const void* key, void** out, int a, int b, int c, int d);  // +0x0c
+};
+struct Resource {
+    virtual void v0();
+    virtual int Release();                                      // +0x04
+};
+struct RefCount {
+    void Release();                                             // 0x00453540
+};
+class cEditorResource_;
+cEditorResource_* InterfaceCast(void** arc);                    // 0x00421eb0
+
+class cSPEditorModel {
+public:
+    char pad00[0x58];
+    uint32_t mModelType;                                        // +0x58
+    char pad5c[0xe0 - 0x5c];
+    cSPEditorModel();                                           // 0x004ab690
+    int AddRef() { return ++*(int*)((char*)this + 8); }
+    bool LoadResource(const void* resource);                    // 0x004ae3b0
+};
+
+// @ 0x004badd0  FUN_004badd0
+int FUN_004badd0(void* key, int* outModel, void* outDesc)
 {
-    (void)self; (void)a; (void)b;
+    ResourceManager* manager = (ResourceManager*)GetManager();
+    Resource* res = 0;
+    if (manager == 0)
+        goto fail;
+
+    if (res != 0) {
+        Resource* old = res;
+        res = 0;
+        old->Release();
+    }
+    if (!manager->GetResource(key, (void**)&res, 0, 0, 0, 0))
+        goto fail;
+
+    {
+        cSPEditorModel* model = new (kEditorAllocName, 0, 0, 0, 0) cSPEditorModel();
+        if (model != 0)
+            model->AddRef();
+
+        if (model->LoadResource(res)) {
+            uint32_t hash = FUN_004bb860(model->mModelType);
+            uint32_t wanted = *(uint32_t*)((char*)key + 4);
+            if (hash == wanted || (hash == 0x438f6347 && wanted == 0x2b978c46)) {
+                cSPEditorModel* result = model;
+                model = 0;
+                *outModel = (int)result;
+                if (outDesc != 0) {
+                    cEditorResource_* resource = InterfaceCast((void**)&res);
+                    if (resource != 0) {
+                        char tmp[16];
+                        void* p = FUN_004babe0(resource, 0, tmp, 0);
+                        ((uint32_t*)outDesc)[0] = ((uint32_t*)p)[0];
+                        ((uint32_t*)outDesc)[1] = ((uint32_t*)p)[1];
+                        ((uint32_t*)outDesc)[2] = ((uint32_t*)p)[2];
+                        ((uint32_t*)outDesc)[3] = ((uint32_t*)p)[3];
+                    }
+                }
+                if (model != 0)
+                    ((RefCount*)((char*)model + 4))->Release();
+                if (res != 0)
+                    res->Release();
+                return 1;
+            }
+        }
+
+        if (model != 0)
+            ((RefCount*)((char*)model + 4))->Release();
+    }
+
+fail:
+    if (res != 0)
+        res->Release();
     return 0;
 }
 

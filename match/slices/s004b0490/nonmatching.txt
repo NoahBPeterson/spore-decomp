@@ -1,1 +1,4 @@
 004b0490  184  complete vector erase-range (0x18); missing the three EASTL copy tag bools/temp slots
+004b0590  973  AutoRefVector::DoInsertValues complete (alloc/grow, temp AddRef, copy_backward via Set, fill); original inlines the generic_iterator-wrapper/tag scaffolding of uninitialized_copy/copy_backward (698 vs 1044 bytes); equiv WEAK
+004b0a10  1174  FloatVector::DoInsertValues complete (alloc/grow, uninitialized_fill, memmove shift, fill loop); original inlines the wrapper/tag scaffolding of eastl::copy/uninitialized_copy (679 vs 1236 bytes); equiv WEAK
+004b0ef0  727  Record1d8Vector::Assign (operator=) complete (allocate-and-copy, element-wise rep movsd loops, empty destruct loops, mpEnd fixup); original inlines the two-level iterator temps + 3 tag bytes per copy loop (517 vs 760 bytes); equiv WEAK

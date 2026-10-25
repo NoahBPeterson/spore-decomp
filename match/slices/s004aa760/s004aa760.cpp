@@ -3,39 +3,76 @@
 #include <new>
 
 // ---------- shared stub types ----------
-struct V3 { float x, y, z; };
+struct V3 { float x, y, z; V3(const V3& src); };            // copy ctor 0x4098a0
 struct Item { float a; V3 b; };
 
-struct Matrix3Like { char pad[0x24]; Matrix3Like(const Matrix3Like&); };
+struct cSPMatrix3 {
+    float m[9];
+    void Assign(const cSPMatrix3& src);                     // 0x41cb40
+};
+
+// A 0x34-byte point: matrix33, position, w.
+struct OrientedPoint {
+    cSPMatrix3 m;   // +0x00
+    V3 p;           // +0x24
+    float w;        // +0x30
+    OrientedPoint(const OrientedPoint& src);                // 0x4aa2f0
+};
+
+struct cSPTransformOps {
+    void* Assign(const void* src);                          // 0x537dc0
+};
+
+// 0x38-byte transform keyed by a leading dword (0x3c-byte vector element).
+struct cSPTransform : public cSPTransformOps {
+    unsigned short mFlags;              // +0x00
+    unsigned short mModificationCount;  // +0x02
+    V3 mTranslation;                    // +0x04
+    float mScale;                       // +0x10
+    cSPMatrix3 mRotation;               // +0x14
+    cSPTransform(const cSPTransform& src);                  // 0x40ce80
+};
+
+struct TransformKey {
+    uint32_t id;            // +0x00
+    cSPTransform xform;     // +0x04
+    TransformKey& operator=(const TransformKey& o)
+    {
+        id = o.id;
+        xform.Assign(&o.xform);
+        return *this;
+    }
+};
 
 struct DequeIt {
     uint8_t* cur;    // +0x0
     uint8_t* first;  // +0x4
     uint8_t* last;   // +0x8
     uint8_t** node;  // +0xc
+    void SetSubarray(void** subarray);  // 0x569340
     DequeIt* Inc();  // 0x4ab210
 };
 
 struct DequeBase {
-    void* p0;      // +0x0
-    uint32_t p1;   // +0x4
-    void* p2;      // +0x8
-    void* p3;      // +0xc
-    char pad[0x18 - 0x10];
-    char* p18;     // +0x18
-    char* p1c;     // +0x1c
-    char pad2[0x28 - 0x20];
-    char alloc[8]; // +0x28
-    void* AllocNode();  // 0x4ab320
-    void* DequeAlloc(unsigned int n);  // 0x4ab350
+    void* map;        // +0x0
+    uint32_t mapSize; // +0x4
+    DequeIt begin_;   // +0x8
+    DequeIt end_;     // +0x18
+    uint32_t alloc[8];// +0x28 allocator storage
+    void* AllocNode();                    // 0x4ab320
+    void  DequeAlloc(unsigned int n);     // 0x4ab350
+    void  ReallocNodeMap(unsigned int n, int flag);  // 0x503470
+    void* DoAllocatePtrArray(int n);      // 0x56a240
+    void* PushFront(void* value);         // 0x4ab130
 };
 
-extern void* FUN_0056a240(unsigned int n);
-extern void* FUN_00569340(void* p);
-extern void* FUN_0042dee0(void* p, int size, int align, int flags);
-extern void FUN_00503470(int a, int b);
-extern void FUN_0040ce80(void* p);
-extern void FUN_004aa2f0(void* dst, void* src);
+struct Matrix3Like { char pad[0x24]; Matrix3Like(const Matrix3Like&); };
+
+extern void* EASTL_Allocate(void* alloc, int size, int align, int flags); // 0x42dee0
+extern void  FreeRawBlock(void* p);                       // 0xf47380
+extern void  FUN_0040ce80(void* p);
+extern OrientedPoint* CopyOrientedRange(OrientedPoint* first, OrientedPoint* last,
+                                        OrientedPoint* out); // 0x4ab640
 
 // @ 0x004ab210
 DequeIt* DequeIt::Inc()
@@ -53,7 +90,7 @@ DequeIt* DequeIt::Inc()
 // @ 0x004ab320
 void* DequeBase::AllocNode()
 {
-    return FUN_0042dee0((char*)this + 0x28, 0x100, 4, 0);
+    return EASTL_Allocate((char*)this + 0x28, 0x100, 4, 0);
 }
 
 // @ 0x004ab450
@@ -136,59 +173,205 @@ M36* CopyM36Range(M36* param_1, M36* param_2, M36* param_3)
 }
 
 // @ 0x004ab130
-struct RefC {
-    void* p0;    // +0x0
-    char pad0[4];
-    void* p8;    // +0x8
-    void* p10;   // +0x10
-    void* p14;   // +0x14
-    void* p18;   // +0x18
-    void* p1c;   // +0x1c
-    void* AllocNode();  // 0x4ab320
-    void* Func(void* param_2);
-};
-void* RefC::Func(void* param_2)
+void* DequeBase::PushFront(void* param_2)
 {
     void* v = *(void**)param_2;
-    if (p14 == p0) {
-        FUN_00503470(1, 0);
+    if (begin_.node == map) {
+        ReallocNodeMap(1, 0);
     }
-    void* a = AllocNode();
-    *(void**)((char*)p14 - 4) = a;
-    FUN_00569340((char*)p14 - 4);
-    p8 = (char*)p10 - 4;
-    void* r = p8;
-    if (r != 0) {
-        *(void**)r = v;
-    }
-    return r;
+    begin_.node[-1] = (uint8_t*)AllocNode();
+    begin_.SetSubarray((void**)(begin_.node - 1));
+    begin_.cur = begin_.last - 4;
+    void* r = begin_.cur;
+    return r ? (*(void**)r = v, r) : 0;
+}
+
+static inline const unsigned int& max_alt(const unsigned int& a, const unsigned int& b)
+{
+    return a < b ? b : a;
 }
 
 // @ 0x004ab350
-void* DequeBase::DequeAlloc(unsigned int param_2)
+void DequeBase::DequeAlloc(unsigned int n)
 {
-    unsigned int local_18 = (param_2 >> 6) + 1;
-    unsigned int local_8 = 8;
-    unsigned int local_1c = (param_2 >> 6) + 3;
-    unsigned int* local_28;
-    if (local_1c < 9) local_28 = &local_8;
-    else local_28 = &local_1c;
-    p1 = *local_28;
-    void* node = FUN_0056a240(p1);
-    p0 = node;
-    uint32_t* local_10 = (uint32_t*)((char*)node + (((p1 - local_18) >> 1) * 4));
-    uint32_t* local_14 = local_10 + local_18;
-    for (uint32_t* local_c = local_10; local_c < local_14; ++local_c) {
-        *local_c = (uint32_t)AllocNode();
-    }
-    FUN_00569340(local_10);
-    p2 = p3;
-    FUN_00569340(local_14 - 1);
-    p18 = p1c + (param_2 % 0x40) * 4;
-    return this;
+    const unsigned int nNewPtrArraySize = (n >> 6) + 1;
+    const unsigned int kMinPtrArraySize_ = 8;
+
+    mapSize = max_alt(kMinPtrArraySize_, (nNewPtrArraySize + 2));
+    map = DoAllocatePtrArray((int)mapSize);
+
+    uint32_t** const pPtrArrayBegin = (uint32_t**)((char*)map + ((mapSize - nNewPtrArraySize) >> 1) * 4);
+    uint32_t** const pPtrArrayEnd = pPtrArrayBegin + nNewPtrArraySize;
+    uint32_t** pPtrArrayCurrent = pPtrArrayBegin;
+
+    while (pPtrArrayCurrent < pPtrArrayEnd)
+        *pPtrArrayCurrent++ = (uint32_t*)AllocNode();
+
+    begin_.SetSubarray((void**)pPtrArrayBegin);
+    begin_.cur = begin_.first;
+    end_.SetSubarray((void**)(pPtrArrayEnd - 1));
+    end_.cur = end_.first + (n % 0x40) * 4;
 }
 
-// ---------- large routines (not reconstructed) ----------
-void FUN_004aa760(void* a) { (void)a; }
-void FUN_004aaac0(void* a) { (void)a; }
-void FUN_004aae30(void* a) { (void)a; }
+// =====================================================================
+// vector<T>::insert (DoInsertValue) for three element types
+// =====================================================================
+struct VecOP {
+    OrientedPoint* begin;
+    OrientedPoint* end;
+    OrientedPoint* cap;
+    uint32_t alloc;
+    void Insert(OrientedPoint* position, const OrientedPoint& value);
+};
+
+struct VecTK {
+    TransformKey* begin;
+    TransformKey* end;
+    TransformKey* cap;
+    uint32_t alloc;
+    void Insert(TransformKey* position, const TransformKey& value);
+};
+
+struct VecM33 {
+    cSPMatrix3* begin;
+    cSPMatrix3* end;
+    cSPMatrix3* cap;
+    uint32_t alloc;
+    void Insert(cSPMatrix3* position, const cSPMatrix3& value);
+};
+
+// @ 0x004aa760
+void VecOP::Insert(OrientedPoint* position, const OrientedPoint& value)
+{
+    if (end != cap) {
+        OrientedPoint* destPosition = position;
+        const OrientedPoint* pValue = &value;
+        if (pValue >= destPosition && pValue < end) {
+            pValue = pValue + 1;
+        }
+        OrientedPoint* oldEnd = end;
+        if (oldEnd != 0) {
+            OrientedPoint* src = oldEnd - 1;
+            oldEnd->m.Assign(src->m);
+            new (&oldEnd->p) V3(src->p);
+            oldEnd->w = src->w;
+        }
+        OrientedPoint* dstCur = end;
+        OrientedPoint* srcCur = end - 1;
+        while (srcCur != destPosition) {
+            srcCur = srcCur - 1;
+            dstCur = dstCur - 1;
+            *dstCur = *srcCur;
+        }
+        *destPosition = *pValue;
+        end = end + 1;
+    } else {
+        unsigned int nPrevSize = (unsigned int)(end - begin);
+        unsigned int nNewSize = nPrevSize > 0 ? nPrevSize * 2 : 1;
+        OrientedPoint* pNewData = nNewSize
+            ? (OrientedPoint*)EASTL_Allocate(&alloc, nNewSize * 0x34, 4, 0) : 0;
+        OrientedPoint* pNewEnd = (OrientedPoint*)CopyMatrixRange(
+            (Matrix3Like*)begin, (Matrix3Like*)position, (Matrix3Like*)pNewData);
+        if (pNewEnd != 0) {
+            new (pNewEnd) OrientedPoint(value);
+        }
+        pNewEnd = pNewEnd + 1;
+        pNewEnd = CopyOrientedRange(position, end, pNewEnd);
+        if (begin != 0 && *(int*)((char*)begin - 4) != 0) {
+            FreeRawBlock(begin);
+        }
+        begin = pNewData;
+        end = pNewEnd;
+        cap = pNewData + nNewSize;
+    }
+}
+
+// @ 0x004aaac0
+void VecTK::Insert(TransformKey* position, const TransformKey& value)
+{
+    if (end != cap) {
+        TransformKey* destPosition = position;
+        const TransformKey* pValue = &value;
+        if (pValue >= destPosition && pValue < end) {
+            pValue = pValue + 1;
+        }
+        TransformKey* oldEnd = end;
+        if (oldEnd != 0) {
+            TransformKey* src = oldEnd - 1;
+            oldEnd->id = src->id;
+            new (&oldEnd->xform) cSPTransform(src->xform);
+        }
+        TransformKey* dstCur = end;
+        TransformKey* srcCur = end - 1;
+        while (srcCur != destPosition) {
+            srcCur = srcCur - 1;
+            dstCur = dstCur - 1;
+            *dstCur = *srcCur;
+        }
+        *destPosition = *pValue;
+        end = end + 1;
+    } else {
+        unsigned int nPrevSize = (unsigned int)(end - begin);
+        unsigned int nNewSize = nPrevSize > 0 ? nPrevSize * 2 : 1;
+        TransformKey* pNewData = nNewSize
+            ? (TransformKey*)EASTL_Allocate(&alloc, nNewSize * 0x3c, 4, 0) : 0;
+        TransformKey* pNewEnd = (TransformKey*)CopyBig34Range(
+            (Big34*)begin, (Big34*)position, (Big34*)pNewData);
+        if (pNewEnd != 0) {
+            pNewEnd->id = value.id;
+            new (&pNewEnd->xform) cSPTransform(value.xform);
+        }
+        pNewEnd = pNewEnd + 1;
+        pNewEnd = (TransformKey*)CopyBig34Range(
+            (Big34*)position, (Big34*)end, (Big34*)pNewEnd);
+        if (begin != 0 && *(int*)((char*)begin - 4) != 0) {
+            FreeRawBlock(begin);
+        }
+        begin = pNewData;
+        end = pNewEnd;
+        cap = pNewData + nNewSize;
+    }
+}
+
+// @ 0x004aae30
+void VecM33::Insert(cSPMatrix3* position, const cSPMatrix3& value)
+{
+    if (end != cap) {
+        cSPMatrix3* destPosition = position;
+        const cSPMatrix3* pValue = &value;
+        if (pValue >= destPosition && pValue < end) {
+            pValue = pValue + 1;
+        }
+        if (end != 0) {
+            end->Assign(*(end - 1));
+        }
+        cSPMatrix3* dstCur = end;
+        cSPMatrix3* srcCur = end - 1;
+        while (srcCur != destPosition) {
+            srcCur = srcCur - 1;
+            dstCur = dstCur - 1;
+            *dstCur = *srcCur;
+        }
+        *destPosition = *pValue;
+        end = end + 1;
+    } else {
+        unsigned int nPrevSize = (unsigned int)(end - begin);
+        unsigned int nNewSize = nPrevSize > 0 ? nPrevSize * 2 : 1;
+        cSPMatrix3* pNewData = nNewSize
+            ? (cSPMatrix3*)EASTL_Allocate(&alloc, nNewSize * 0x24, 4, 0) : 0;
+        cSPMatrix3* pNewEnd = (cSPMatrix3*)CopyM36Range(
+            (M36*)begin, (M36*)position, (M36*)pNewData);
+        if (pNewEnd != 0) {
+            pNewEnd->Assign(value);
+        }
+        pNewEnd = pNewEnd + 1;
+        pNewEnd = (cSPMatrix3*)CopyM36Range(
+            (M36*)position, (M36*)end, (M36*)pNewEnd);
+        if (begin != 0 && *(int*)((char*)begin - 4) != 0) {
+            FreeRawBlock(begin);
+        }
+        begin = pNewData;
+        end = pNewEnd;
+        cap = pNewData + nNewSize;
+    }
+}
