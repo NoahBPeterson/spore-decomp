@@ -19,8 +19,9 @@ struct Ext {
     float r6f4010(int);
     float r6f4000(int);
     void  r6f4190(void*);
-    void  r6f3fb0(int);
+    void* r6f3fb0(int);
     void  r7c4010(void*);
+    void  r7c50b0(int, int, int);
     void  r7c4ad0(float, float);
     void  r7c4ba0(float);
     void  r7c4bc0(float);
@@ -41,12 +42,12 @@ struct Ext {
     char  r7775a0(unsigned int, int, int, int);
 };
 
-extern void*  f67dd50();
-extern void*  f67dd70();   // SP::MaterialManager
-extern void*  f67dd40();
-extern float  f67ddb0();
+extern void*  F_67dd50();
+extern void*  F_67dd70();   // SP::MaterialManager
+extern void*  F_67dd40();
+extern void*  F_67ddb0();
 extern void*  f6f4170();
-extern void   f777ae0(int, void*, int);
+extern void   F_777ae0(int, void*, int);
 extern void   f76d5c0();
 extern void   f76d6e0();
 
@@ -77,8 +78,8 @@ struct CCreature {
     // 0x006e8810
     void m8810(uint* flags, void** p3, uint* p4);
     // 0x006e8d70 / 0x006e8dd0 forwarders
-    void m8d70(int, int, void*, int, int, int, int, int, int, int);
-    void m8dd0(int, int, int, int, void*, int, int, int, int, int, int, int, int);
+    void m8d70(int, int, void*, int, int, int, int, int, int);
+    void m8dd0(int, int, int, int, void*, int, int, int, int, int, int, int);
     // 0x006e8e40
     void m8e40(int a, int b);
     // 0x006e8ee0
@@ -110,7 +111,7 @@ void CCreature::m80d0(int idx, int a, int b)
         *(uint*)((char*)*(void**)(self + 0x1b8) + off + 0x58) = *(uint*)((char*)r + 4);
         return;
     }
-    void* mm = f67dd70();
+    void* mm = F_67dd70();
     void* base = (char*)*(void**)(self + 0x1b8) + off;
     int v = ((int(__thiscall*)(void*, int))VFN(mm, 0x28))(mm, a);
     *(uint*)((char*)base + 0x54) = (uint)v;
@@ -137,7 +138,7 @@ char CCreature::m8200(char* p, int a)
 {
     char* self = (char*)this;
     if (*(char*)(self + 0x368)) {
-        void* m = f67dd50();
+        void* m = F_67dd50();
         ((void(__thiscall*)(void*, int, int))VFN(m, 0x60))(m, 0x16, 2);
         *(char*)(self + 0x368) = 0;
     }
@@ -212,7 +213,7 @@ void CCreature::m8360(int a)
     }
 done:
     {
-        void* m = f67dd50();
+        void* m = F_67dd50();
         ((void(__thiscall*)(void*, int, int))VFN(m, 0x60))(m, 0x16, 2);
         *(char*)(self + 0x368) = 0;
     }
@@ -356,93 +357,178 @@ void CCreature::m8480(void* b)
 
 // ---------------------------------------------------------------------------
 // @ 0x006e8810
-// NOTE: large debug-render path; reproduced in full from the Ghidra decompile.
+// Large body-part material/debug-render helper: resolve the part handle, run
+// the property-list-driven viewer setup, then emit the Format draws.
+// ---------------------------------------------------------------------------
+extern void*  g_15fd918;          // 0x15fd918  SP::sAppProperties<cDirectPropertyList>
+
+// property-list accessors on g_15fd918 (thiscall; 32-bit property key)
+struct PropList {
+    float F_6a2710(int key);      // 0x6a2710 GetFloatProperty
+    int   F_6a2660(int key);      // 0x6a2660 GetIntProperty
+    uchar F_6a25a0(int key);      // 0x6a25a0 GetDescription (byte)
+};
+
 void CCreature::m8810(uint* flags, void** p3, uint* p4)
 {
     char* self = (char*)this;
-    void* m = f67dd50();
-    float ddb0 = f67ddb0();
+    uint  fv = (uint)(intptr_t)flags;   // the flag word is the argument value itself
+    void* m = F_67dd50();
+    int   ddb0 = (int)(intptr_t)F_67ddb0();
+    (void)ddb0;
+#define MGR_0040(...)  ((void(__thiscall*)(void*, void*, int, int, void*, int, uint))VFN(m, 0x40))(m, __VA_ARGS__)
     if (*(void**)(self + 0x35c) == 0 ||
         ((Ext*)(*(void**)(self + 0x35c)))->r6f4170() != 0 ||
-        ((*flags) & 0x20) == 0) {
+        (fv & 0x20) == 0) {
         if (*(void**)(self + 0x360) == 0)
             return;
-        if (((*flags) & 8) == 0)
+        if ((fv & 8) == 0)
             return;
-        ((Ext*)(*(void**)(self + 0x360)))->r776a60((int)*flags, p3, p4);
+        ((Ext*)(*(void**)(self + 0x360)))->r776a60((int)fv, p3, p4);
         return;
     }
-    void* handle = ((Ext*)(*(void**)(self + 0x35c)))->r6f41e0((int)*p3);
+
+    void* handle = ((Ext*)(*(void**)(self + 0x35c)))->r6f41e0((int)(intptr_t)p3[0]);
     if (!handle)
         return;
-    uint v40 = (uint)(int)handle;
-    uint a3_1 = (uint)p3[1];
-    uint a3_2 = (uint)p3[2];
-    uint a3_3 = (uint)p3[3];
-    if (*(void**)(self + 0x360) != 0 && ((*flags) & 8) != 0) {
+    uint v40    = (uint)(int)handle;
+    uint a3_1   = (uint)(intptr_t)p3[1];
+    uint a3_2   = (uint)(intptr_t)p3[2];
+    uint a3_3   = (uint)(intptr_t)p3[3];
+    void* viewer = *(void**)(self + 0x254);
+
+    if (*(void**)(self + 0x360) != 0 && (fv & 8) != 0) {
         void* q = *(void**)(self + 0x25c);
-        if (!((char(__thiscall*)(void*))VFN(q, 0x104))(q)) {
-            ((Ext*)(*(void**)(self + 0x360)))->r776a60((int)*flags, (void*)&v40, p4);
-        }
+        if (!((char(__thiscall*)(void*))VFN(q, 0x104))(q))
+            ((Ext*)(*(void**)(self + 0x360)))->r776a60((int)fv, (void*)&v40, p4);
     }
+
     if (((Ext*)(*(void**)(self + 0x35c)))->r6f3fe0()) {
-        ((void(__thiscall*)(void*, int, int, void*, int, int, void*))VFN(m, 0x40))(
-            m, 0x15, 4, &v40, 1, 0, p4);
-        f777ae0(0x223, 0, 1);
-        uint h3 = (uint)(int)((Ext*)(*(void**)(self + 0x35c)))->r6f3f20((int)*p3);
-        float f3ff0 = ((Ext*)(*(void**)(self + 0x35c)))->r6f3ff0((int)*p3);
-        float f4010 = ((Ext*)(*(void**)(self + 0x35c)))->r6f4010((int)*p3);
-        float f4000 = ((Ext*)(*(void**)(self + 0x35c)))->r6f4000((int)*p3);
-        struct { float f; uint u[3]; } tmp;
-        tmp.f = f3ff0;
-        tmp.u[0] = a3_1;
-        tmp.u[1] = a3_2;
-        tmp.u[2] = a3_3;
-        f777ae0(0x231, &f3ff0, 0);
-        ((void(__thiscall*)(void*, int, int, void*, int, uint))VFN(m, 0x40))(
-            m, 8, 8, &h3, 1, 0x1000000);
-        ((void(__thiscall*)(void*, int, int, void*, int, uint))VFN(m, 0x40))(
-            m, 10, 10, &h3, 1, 0x1000000);
-        ((void(__thiscall*)(void*, int, int, void*, int, uint))VFN(m, 0x40))(
-            m, 0xc, 0xf, &h3, 1, 0x1000000);
-        ((void(__thiscall*)(void*, int, int, void*, int, uint))VFN(m, 0x40))(
-            m, 0x12, 0x12, &h3, 1, 0x1000000);
-        f777ae0(0x231, 0, 0);
-        f777ae0(0x223, &h3, 1);
+        MGR_0040(p4, 4, 0x15, &v40, 1, 0);
+        F_777ae0(0x223, 0, 1);
+        uint  h3    = (uint)(int)((Ext*)(*(void**)(self + 0x35c)))->r6f3f20((int)(intptr_t)p3[0]);
+        float f3ff0 = ((Ext*)(*(void**)(self + 0x35c)))->r6f3ff0((int)(intptr_t)p3[0]);
+        float f4010 = ((Ext*)(*(void**)(self + 0x35c)))->r6f4010((int)(intptr_t)p3[0]);
+        float f4000 = ((Ext*)(*(void**)(self + 0x35c)))->r6f4000((int)(intptr_t)p3[0]);
+        (void)f4010; (void)f4000;
+        F_777ae0(0x231, &f3ff0, 0);
+        MGR_0040(p4, 8, 8, &h3, 1, 0x1000000);
+        MGR_0040(p4, 0xa, 0xa, &h3, 1, 0x1000000);
+        MGR_0040(p4, 0xc, 0xf, &h3, 1, 0x1000000);
+        MGR_0040(p4, 0x12, 0x12, &h3, 1, 0x1000000);
+        F_777ae0(0x231, 0, 0);
+        F_777ae0(0x223, &h3, 1);
         goto done;
     }
-    {
+
+    if (!((char(__thiscall*)(void*))VFN(*(void**)(self + 0x25c), 0x104))(*(void**)(self + 0x25c))) {
+        MGR_0040(p4, 4, 0x15, &v40, 1, 0);
+    } else {
         void* c = *(void**)(self + 0x25c);
-        if (!((char(__thiscall*)(void*))VFN(c, 0x104))(c)) {
-            ((void(__thiscall*)(void*, int, int, void*, int, int))VFN(m, 0x40))(
-                m, 0x15, 4, &v40, 1, 0);
-        } else {
-            (void)((int(__thiscall*)(void*))VFN(c, 0x10c))(c);
+        int  iVar5 = (int)((int(__thiscall*)(void*))VFN(c, 0x10c))(c);
+        PropList* pl = (PropList*)g_15fd918;
+        float  fVar17 = pl->F_6a2710(0x637fee8);
+        int    iVar6  = pl->F_6a2660(0x628708c);
+        uint   bVar2  = pl->F_6a25a0(0x6395f06);
+        uint   bVar3  = pl->F_6a25a0(0x6395efa);
+        uint   uVar15 = (bVar3 << 0x18) | (bVar2 << 0x10);
+        if (*(void**)(self + 0x360) != 0 && (fv & 8) != 0)
+            uVar15 = (uVar15 & 0xffff0000) | 0x100;
+        else
+            uVar15 = uVar15 & 0xffff0000;
+
+        int slot0[2] = { -1, -1 };   // uStack_d4 / uStack_d0
+        if (iVar6 == 3) {
+            void* o = F_67dd40();
+            ((void(__thiscall*)(void*, int, void*, int))VFN(o, 0xa8))(o, 0, slot0, 0);
+        } else if (iVar6 == 2) {
+            void* o = F_67dd40();
+            ((void(__thiscall*)(void*, int, void*, int))VFN(o, 0xa8))(o, 3, slot0, 0);
         }
+
+        int slot1[2] = { -1, -1 };   // ppuStack_c4 / uStack_c0
+        ((Ext*)(*(void**)(self + 0x35c)))->r6f4190(slot1);
+        ((Ext*)viewer)->r7c50b0((int)(intptr_t)p3[0], 0, 0);
+        ((Ext*)viewer)->r7c4be0(slot0, 1);
+        ((Ext*)viewer)->r7c3c50(7);
+        uint vvec[4];
+        vvec[0] = (uint)(intptr_t)p3[1];
+        vvec[1] = (uint)(intptr_t)viewer;
+        vvec[2] = (uint)(intptr_t)p3[2];
+        vvec[3] = (uint)(intptr_t)p3[3];
+        float* pfVar8 = (float*)((Ext*)(*(void**)(self + 0x35c)))->r6f3fb0((int)(intptr_t)p3[0]);
+        uint pvec[4];
+        pvec[0] = (uint)(intptr_t)p3[1];
+        pvec[1] = (uint)(intptr_t)p3[2];
+        pvec[2] = (uint)(intptr_t)p3[3];
+        pvec[3] = (uint)(intptr_t)pfVar8;
+        ((Ext*)viewer)->r7c4be0(slot0, 1);
+        float fCur = ((float(__thiscall*)(void*))VFN(c, 0xf8))(c);
+        ((Ext*)viewer)->r7c4ba0(fCur - fVar17);
+
+        if (((uVar15 >> 0x10) & 0xff) != 0) {
+            if (((uVar15 >> 8) & 0xff) != 0)
+                ((Ext*)(*(void**)(self + 0x360)))->r776a60((int)fv, (void*)&vvec[1], p4);
+            MGR_0040(p4, 4, 7, (void*)&pvec[0], 1, 0);
+            if (iVar5 == 0) {
+                MGR_0040(p4, 8, 8, (void*)&pvec[0], 1, 0x4000000);
+                MGR_0040(p4, 0xa, 0xa, (void*)&slot1[1], 1, 0x4000000);
+                MGR_0040(p4, 0xc, 0x15, (void*)&slot0[1], 1, 0x4000000);
+            }
+            if (iVar6 > 0)
+                ((void(__thiscall*)(void*, int*, int*, int))VFN(slot0, 0x5c))(
+                    slot0, slot0, slot1, 0);
+        }
+        if (((uVar15 >> 0x18) & 0xff) == 0 || iVar5 != 0) {
+            if (iVar5 != 1)
+                goto done;
+            MGR_0040(p4, 8, 0x15, (void*)&vvec[0], 1, 0);
+            goto done;
+        }
+        float fCur2 = ((float(__thiscall*)(void*))VFN(c, 0xf8))(c);
+        ((Ext*)viewer)->r7c4bc0(fCur2 + fVar17);
+        ((Ext*)viewer)->r7c3c50(6);
+        MGR_0040(p4, 8, 0x15, (void*)&pvec[0], 1, 0x2000000);
     }
 done:
-    if (*(char*)(self + 0x368)) {
+    if (*(char*)(self + 0x368))
         ((void(__thiscall*)(void*, int, int))VFN(m, 0x5c))(m, 0x16, 2);
-    }
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x006e8d70
-void CCreature::m8d70(int a2, int a3, void* a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11)
+// Forwarder to vector<0x28>::push_back (0x76d5c0): the Vector3* argument is
+// passed by value (three floats), so cl copies it into a caller temp.
+struct Vec3 { float x, y, z; };
+struct Vec28Sink {
+    void push76d5c0(int a2, int a3, Vec3 v, int a5, int a6, int a7, int a8, int a9, int a10);
+};
+
+void CCreature::m8d70(int a2, int a3, void* a4, int a5, int a6, int a7, int a8, int a9, int a10)
 {
-    (void)a2; (void)a3; (void)a4; (void)a5; (void)a6; (void)a7; (void)a8; (void)a9; (void)a10; (void)a11;
-    void* o = *(void**)((char*)this + 0x24);
-    if (o)
-        f76d5c0();
+    Vec28Sink* o = (Vec28Sink*)*(void**)((char*)this + 0x24);
+    if (o) {
+        Vec3 v = *(Vec3*)a4;
+        o->push76d5c0(a2, a3, v, a5, a6, a7, a8, a9, a10);
+    }
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x006e8dd0
-void CCreature::m8dd0(int, int, int, int, void*, int, int, int, int, int, int, int, int)
+// Forwarder to the three-call helper at 0x76d6e0, also Vector3-by-value.
+struct Vec3Sink {
+    void push76d6e0(int a2, int a3, int a4, int a5, Vec3 v, int a7, int a8, int a9, int a10,
+                    int a11, int a12, int a13);
+};
+
+void CCreature::m8dd0(int a2, int a3, int a4, int a5, void* a6, int a7, int a8, int a9,
+                      int a10, int a11, int a12, int a13)
 {
-    void* o = *(void**)((char*)this + 0x24);
-    if (o)
-        f76d6e0();
+    Vec3Sink* o = (Vec3Sink*)*(void**)((char*)this + 0x24);
+    if (o) {
+        Vec3 v = *(Vec3*)a6;
+        o->push76d6e0(a2, a3, a4, a5, v, a7, a8, a9, a10, a11, a12, a13);
+    }
 }
 
 // ---------------------------------------------------------------------------
