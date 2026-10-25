@@ -4,5 +4,5 @@
 00d9e570 ?RunTargetBehavior@@YADPAVcSimCreature@@PAX111PAUcBehaviorTask@@@Z  # char RunTargetBehavior(cSimCreature*, void*, void*, void*, void*, cBehaviorTask*)
 00d9ea30 ?StartFindTargetBehavior@@YADPAVcSimCreature@@PAX11PAUcFoundTarget@@@Z  # char StartFindTargetBehavior(cSimCreature*, void*, void*, void*, cFoundTarget*)
 00d9eb20 ?CancelBehaviorTask@@YAXPAVcSimCreature@@PAX111PAUcBehaviorCallback@@@Z  # void CancelBehaviorTask(cSimCreature*, void*, void*, void*, void*, cBehaviorCallback*)
-00d9eb70 ?GetObject@cSocialBandPool@@QAEPAVcPoolObject@@I@Z  # cPoolObject* cSocialBandPool::GetObject(unsigned int)
-00d9ebc0 ?ReleaseObject@cSocialBandPool@@QAEXI@Z  # void cSocialBandPool::ReleaseObject(unsigned int)
+00d9eb70 ?GetObject@cSocialBandPool@@QAEPAVcPoolObject@@I@Z  # cSocialBandPool::GetObject migrated from s00d9dce0 (verbatim, slice spelling)
+00d9ebc0 ?ReleaseObject@cSocialBandPool@@QAEXI@Z  # cSocialBandPool::ReleaseObject migrated from s00d9dce0 (verbatim, slice spelling)

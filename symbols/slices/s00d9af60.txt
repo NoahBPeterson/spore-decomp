@@ -1,0 +1,2 @@
+00d9b7f0 ?FUN_00d9b7f0@@YAPADPAD00@Z  # FUN_00d9b7f0 migrated from s00d9af60 (verbatim, slice spelling)
+00d9bc70 ?RewardPlayer@SocialProposeBlock@@QAEHPAUCreature@@I@Z  # SocialProposeBlock::RewardPlayer migrated from s00d9af60 (verbatim, slice spelling)

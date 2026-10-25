@@ -1,1 +1,5 @@
+00d9bee0 ?MoveToTarget@SOCIAL_RESPOND_memory_block@@SAIPAUcSPCreatureBase@@IPAH1@Z  # SOCIAL_RESPOND_memory_block::MoveToTarget migrated from s00d9bee0 (verbatim, slice spelling)
+00d9c020 ?CalculateGroupContribution@SOCIAL_RESPOND_memory_block@@QAEHPAUcSPCreatureBase@@@Z  # SOCIAL_RESPOND_memory_block::CalculateGroupContribution migrated from s00d9bee0 (verbatim, slice spelling)
+00d9c100 ?FUN_00d9c100@SOCIAL_RESPOND_memory_block@@QAEMPAUcSPCreatureBase@@PAUcAbility@@@Z  # SOCIAL_RESPOND_memory_block::FUN_00d9c100 migrated from s00d9bee0 (verbatim, slice spelling)
+00d9c1a0 ?SOCIAL_RESPOND_Tick@@YA_NPAUcSPCreatureBase@@HHHHPAUSOCIAL_RESPOND_memory_block@@HM@Z  # SOCIAL_RESPOND_Tick migrated from s00d9bee0 (verbatim, slice spelling)
 00d9c9c0 ?EAT_BUNDLE_Tick@@YA_NPAUcSPCreatureBase_s00d9_bee0@@HHHHPAUEAT_BUNDLE_state@@PA_N@Z  # EAT_BUNDLE_Tick migrated from s00d9bee0 (verbatim, slice spelling)

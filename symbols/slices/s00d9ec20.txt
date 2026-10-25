@@ -1,0 +1,1 @@
+00d9ef40 ?Fd9ef40@@YAXPAH0UVector3@@@Z  # Fd9ef40 migrated from s00d9ec20 (verbatim, slice spelling)
