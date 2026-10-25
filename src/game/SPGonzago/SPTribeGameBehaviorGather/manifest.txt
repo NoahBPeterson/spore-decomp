@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPTribeGameBehaviorGather.cpp  ?SP_DropFruitTarget@@YAXPAXPAUFruitState@@@Z  00d75700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

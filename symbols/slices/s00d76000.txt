@@ -1,0 +1,1 @@
+00d76000 ?TRIBE_GATHER_Tick@SP@@YA_NPAVcSPCreatureCitizen_s00d7_6000@1@HHIIPAUTribeGatherState@@HM@Z  # TRIBE_GATHER_Tick migrated from s00d76000 (verbatim, slice spelling)
