@@ -7,3 +7,8 @@
 0x00718520 assign forward over 0x50-byte 4-vector elements
 0x00718600 copy forward over 0x28-byte 2-vector elements
 0x00718370 EH copy ctor (vectors at +0/+0x14)
+007173e0 FUN_007173e0  # selection-definition pass: three per-vertex count arrays (0x38 word groups, xyz-normalised 0x50 pairs), then the 0xd0 usage records get the 0x100/0x200/0x400 used bits
+00717bd0 FUN_00717bd0  # remap a 0x14-record index vector through the group map (temp vector + eastl swap)
+00717ce0 FUN_00717ce0  # build the per-record group ids from the three sorted index vectors, remap the 0xbc array and rewrite the record's index vectors
+00718050 FUN_00718050  # collect the per-record attribute spans (tag 0..9, inner key) from the 0xe4 entries into the record's span vector
+00718370 FUN_00718370  # EH copy ctor of an object holding two 0x14-record index vectors
