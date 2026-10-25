@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSolarSystem.cpp  ??0ByteBuffer@@QAE@IPBUAllocator@@@Z  00423be0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPSolarSystem.cpp  ?FUN_013526b0@@YAXXZ  013526b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
