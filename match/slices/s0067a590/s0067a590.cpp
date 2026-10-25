@@ -4,6 +4,8 @@
 
 static inline void** VT(void* p) { return *(void***)p; }
 
+inline void* __cdecl operator new(unsigned int, void* p) { return p; }   // placement new
+
 // ---- masked callees (addresses are relocations) ----
 extern "C" void* __cdecl ConfigManager();     // FUN_0067dd30
 extern "C" void* __cdecl MessageServer();     // FUN_0067dcc0
@@ -69,9 +71,23 @@ struct HM590;
 // @ 0x0067A590  PossiblyStartSpiceTutorial
 // ===========================================================================
 struct Elem134 {
-    char data[0x134];
-    Elem134(Elem134* src);   // 679b40
-    ~Elem134();              // 678f70
+    unsigned char mFlag0;      // +0x00
+    char pad01[7];
+    unsigned char mFlag8;      // +0x08
+    int mInt0c;                // +0x0c
+    char pad10[0xa0];
+    int* mPtrB0;               // +0xb0
+    char padB4[4];             // +0xb4  (unused by this function; keeps mPtrB8 at +0xb8)
+    int* mPtrB8;               // +0xb8
+    float mFloatBc;            // +0xbc
+    float mFloatC0;            // +0xc0
+    float mFloatC4;            // +0xc4
+    char padC8[0x64];
+    unsigned char mFlag12c;    // +0x12c
+    int mInt130;               // +0x130
+    Elem134(int a, int b, int c, int d);   // 0x00679080
+    Elem134(Elem134* src);                 // 0x00679b40
+    ~Elem134();                            // 0x00678f70
 };
 
 struct Sub10 {
@@ -90,7 +106,7 @@ struct HM590 {
     char pad0[0x10];
     Sub10 sub;               // +0x10
     char pad1[0x1cc];
-    void Start();            // 67a120
+    void Start();            // 0x0067a120
     bool Check(Elem134*);    // 67a1b0
     void Add(Elem134*);      // 679e50
     void possibly(char a, char b);
@@ -445,18 +461,18 @@ bool HM6e0::handle(HintWin* win, HMsg* msg)
 }
 
 // ===========================================================================
-// @ 0x0067A880  hint-manager window/timer setup
+// ---- [0x0067a880] hint-manager window/timer setup
 // ===========================================================================
 extern "C" void* __cdecl FUN_009512c0();
 extern "C" void* __cdecl FUN_009512d0(int, int, const char*, void*);
 extern "C" void __cdecl FUN_00929da0(void*, void*, void*);
 
 struct SmoothRamp {
-    SmoothRamp* init(float a, float b);   // 7fd570
+    SmoothRamp* init(float a, float b);   // 0x007fd570
 };
 
 struct Sub1b4 {
-    void Register(void* cb, void* a, void* b);   // 929da0
+    void Register(void* cb, void* a, void* b);   // 0x00929da0
 };
 
 struct HM880 {
@@ -469,7 +485,7 @@ struct HM880 {
     char pad1d8[0x24];
     char pad1fc[4];
     void setup();
-    void Start();
+    void Start();            // 0x0067a120
 };
 
 static SmoothRamp* MakeCallout_67a880(float a, float b)
@@ -493,11 +509,12 @@ static void SetTimer_67a880(SmoothRamp** slot, SmoothRamp* nv)
     }
 }
 
+// @ 0x0067a880
 void HM880::setup()
 {
-    ((Sub1b4*)((char*)this + 0x1b4))->Register((void*)0x678670, this, (char*)this + 8);
-    ((Sub1b4*)((char*)this + 0x1d8))->Register((void*)0x678910, this, (char*)this + 8);
-    ((Sub1b4*)((char*)this + 0x1fc))->Register((void*)0x67a850, this, (char*)this + 8);
+    ((Sub1b4*)((char*)this + 0x1b4))->Register((void*)0x678670, this, this ? (char*)this + 8 : 0);
+    ((Sub1b4*)((char*)this + 0x1d8))->Register((void*)0x678910, this, this ? (char*)this + 8 : 0);
+    ((Sub1b4*)((char*)this + 0x1fc))->Register((void*)0x67a850, this, this ? (char*)this + 8 : 0);
     SetTimer_67a880(&t1, MakeCallout_67a880(0.0f, 0.1f));
     ((void (__thiscall*)(void*, int, float))VT(t1)[0x40 / 4])(t1, 0, 0.2f);
     SetTimer_67a880(&t2, MakeCallout_67a880(0.1f, 0.1f));
@@ -512,38 +529,87 @@ void HM880::setup()
 }
 
 // ===========================================================================
-// @ 0x0067AAF0  insert a hint element (ret 0x28)
+// ---- [0x0067aaf0] insert a hint element into the manager's element deque (ret 0x28)
 // ===========================================================================
+struct Deque134 {
+    void*  mpMap;         // +0x00
+    int    mnMapSize;     // +0x04
+    char*  mpBegin;       // +0x08
+    char   pad0c[4];      // +0x0c  (unused by this function; keeps mpBlockEnd0 at +0x10)
+    char*  mpBlockEnd0;   // +0x10
+    int*   mpMapIter;     // +0x14
+    char*  mpEnd;         // +0x18
+    char*  mpBlockStart;  // +0x1c
+    char*  mpBlockEnd;    // +0x20
+    int*   mpMapEnd;      // +0x24
+    void GrowPush(Elem134* src);   // 0x00679ff0
+};
+
 struct HMAdd {
     char pad0[0x10];
-    int* e10; int* e14; int* e18;
-    int* e1c;
-    int* e20; int* e24;
-    int* e28; int* e2c;
-    int* e30; int* e34;
-    char pad38[4];
-    void add(int a, int b, int c, int d, void* e, int f, int g, int h, int i, void* j);
+    Deque134 mElems;   // +0x10
+    void add(int a, int b, int c, int d, int* p6, float f7, float f8, float f9, int i10, int* p11);
 };
 
-struct Elem134b {
-    char data[0x134];
-};
-
-void HMAdd::add(int a, int b, int c, int d, void* e, int f, int g, int h, int i, void* j)
+// @ 0x0067aaf0
+void HMAdd::add(int a, int b, int c, int d, int* p6, float f7, float f8, float f9, int i10, int* p11)
 {
-    (void)a; (void)b; (void)c; (void)d; (void)e; (void)f; (void)g; (void)h; (void)i; (void)j;
-    Elem134b tmp;
-    // NOTE: incomplete reconstruction (bookkeeping-heavy container insert).
-    (void)tmp;
+    {
+        Elem134 tmp(a, b, c, d);                      // 0x00679080
+        char* oldEnd = mElems.mpEnd;
+        char* newEnd = oldEnd + 0x134;
+        if (newEnd == mElems.mpBlockEnd) {
+            mElems.GrowPush(&tmp);                    // 0x00679ff0
+        } else {
+            mElems.mpEnd = newEnd;
+            if (oldEnd != 0)
+                new (oldEnd) Elem134(&tmp);           // 0x00679b40
+        }
+    }                                                 // 0x00678f70 tmp.~Elem134()
+
+    char* e = mElems.mpEnd;
+    if (e == mElems.mpBlockStart)
+        e = *(char**)((char*)mElems.mpMapEnd - 4) + 0x4d0;
+    Elem134* el = (Elem134*)(e - 0x134);
+
+    int* oldB0 = el->mPtrB0;
+    if (p6 != oldB0) {
+        if (p6)
+            ((void (__thiscall*)(void*))VT(p6)[0])(p6);
+        el->mPtrB0 = p6;
+        if (oldB0)
+            ((void (__thiscall*)(void*))VT(oldB0)[1])(oldB0);
+    }
+    el->mFloatBc = f7;
+    el->mFloatC0 = f8;
+    el->mFloatC4 = f9;
+    el->mFlag12c = 1;
+    el->mFlag0 = 0;
+    el->mInt130 = i10;
+    int* oldB8 = el->mPtrB8;
+    if (p11 != oldB8) {
+        if (p11)
+            ((void (__thiscall*)(void*))VT(p11)[0])(p11);
+        el->mPtrB8 = p11;
+        if (oldB8)
+            ((void (__thiscall*)(void*))VT(oldB8)[1])(oldB8);
+    }
+
+    int size = (int)((mElems.mpEnd - mElems.mpBlockStart) / 0x134)
+             + (int)((((char*)mElems.mpMapEnd - (char*)mElems.mpMapIter) >> 2) * 4)
+             - 4
+             + (int)((mElems.mpBlockEnd0 - mElems.mpBegin) / 0x134);
+    if (size == 1)
+        ((HM590*)this)->possibly(0, 1);               // 0x0067a590
 }
 
 // ===========================================================================
-// @ 0x0067AD00  cUIHints::UpdateVisibleHint
+// ---- [0x0067ad00] cUIHints::UpdateVisibleHint
 // ===========================================================================
 extern "C" float __cdecl sinf_f(float);
 
 struct LayoutD {
-    void* FindWindowByID(unsigned int id, int mode);   // 8105b0
+    void* FindWindowByID(unsigned int id, int mode);   // 0x008105b0
 };
 
 struct cUIHintsD {
@@ -557,6 +623,7 @@ struct cUIHintsD {
     void update(int b, float dt);
 };
 
+// @ 0x0067ad00
 void cUIHintsD::update(int b, float dt)
 {
     if (p4c && *(void**)((char*)p4c + 0x6c)) {
@@ -580,7 +647,7 @@ void cUIHintsD::update(int b, float dt)
         f = *(float*)(b + 0x94) / *(float*)(b + 0x54);
     else if ((unsigned)(t - 6) < 2)
         f = 1.0f - *(float*)(b + 0x94) / *(float*)(b + 0x58);
-    unsigned hi = (unsigned)(int)(f * 255.0f) << 24;
+    unsigned hi = (unsigned)(int)(long long)(f * 255.0f) << 24;
     void* w1 = p3c->FindWindowByID(0x52432e0, 1);
     void* w2 = p3c->FindWindowByID(0x5244c68, 1);
     void* w3 = p3c->FindWindowByID(0x5244c08, 1);
@@ -591,16 +658,17 @@ void cUIHintsD::update(int b, float dt)
 }
 
 // ===========================================================================
-// @ 0x0067B030 / 0x0067B370  eastl vector inserts (template instantiations)
+// ---- [0x0067b030] / [0x0067b370] eastl vector inserts (template instantiations)
 // ===========================================================================
-extern "C" int* __cdecl EASTL_alloc16(unsigned int, const char*, int, int, const char*, int); // f473a0
-extern "C" void __cdecl DoInsertValueVec(int*, void*, unsigned int);  // 11e0744
-extern "C" void __cdecl FUN_00a690d0(void*, void*, void*);           // a690d0
+extern "C" int* __cdecl EASTL_alloc16(unsigned int, const char*, int, int, const char*, int); // 0x00f473a0
+extern "C" void __cdecl DoInsertValueVec(int*, void*, unsigned int);  // 0x011e0744
+extern "C" void __cdecl FUN_00a690d0(void*, void*, void*);           // 0x00a690d0
 
 struct Vec16 {
     char* begin; char* end; char* cap;
     char* insert(char* pos, unsigned short v);
 };
+// @ 0x0067b030
 char* Vec16::insert(char* pos, unsigned short v)
 {
     char* next = end + 2;
@@ -622,6 +690,7 @@ char* Vec16::insert(char* pos, unsigned short v)
     *(unsigned short*)p = v;
     DoInsertValueVec((int*)(p + 2), pos, (unsigned)(end - pos));
     char* newEnd = p + 2 + (end - pos);
+    *(unsigned short*)newEnd = 0;
     if (begin && (int)((cap - begin) & 0xfffffffe) > 2)
         EASTL_deallocate(begin);
     begin = mem;
@@ -637,12 +706,13 @@ struct VecRef {
     int* begin; int* end; int* cap;
     void insert(int* pos, int** value);
 };
+// @ 0x0067b370
 void VecRef::insert(int* pos, int** value)
 {
     int* e = end;
     if (e != cap) {
-        if (pos <= *value && *value < e)
-            *value += 1;
+        if ((int*)pos <= (int*)value && (int*)value < e)
+            value += 1;
         if (e) {
             int v = e[-1];
             *e = v;
@@ -650,7 +720,7 @@ void VecRef::insert(int* pos, int** value)
                 (*(int*)(v + 4))++;
         }
         FUN_00a690d0(pos, end - 1, end);
-        int nv = **value;
+        int nv = (int)*value;
         int ov = *pos;
         if (nv != ov) {
             if (nv)
@@ -672,10 +742,10 @@ void VecRef::insert(int* pos, int** value)
     unsigned capNew = n ? n * 2 : 1;
     int* mem = (int*)EASTL_alloc16(capNew * 4, "Editor", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-    DoInsertValueVec(mem, begin, (unsigned)(pos - begin));
+    DoInsertValueVec(mem, begin, (unsigned)((char*)pos - (char*)begin));
     int* p = (int*)((char*)mem + ((char*)pos - (char*)begin));
     if (p) {
-        int v = **value;
+        int v = (int)*value;
         *p = v;
         if (v)
             (*(int*)(v + 4))++;

@@ -8,3 +8,8 @@
 0067b270  55  complete: cl CSEs the first secondary-vtable store (base ctor vptr) that the original keeps
 0067b2f0  55  complete: vtable stores/clear-arg load order differs; the deallocate callee (0x00f47380) needed the full 8-digit annotation, with a 6-digit one it resolved elsewhere; equiv PASS 369/600, 100% cov
 0067a6e0  174  HintManager::HandleHintMessage complete; branch layout (End block out of line, redundant cur!=win test) and ebx/esi/edi allocation differ [equiv: WEAK 22% coverage]
+0067a880  89  complete: CalloutTimer smooth-ramp timers + MessageServer handler registered; pool-new and vtable-call scheduling differ [equiv: UNSUPPORTED 0/400 valid, the original's allocator/MessageServer path faults on every generated input]
+0067aaf0  357  complete: deque element insert + field writes reconstructed (Elem134/Deque134 had unencoded +0xb4/+0x0c holes; now encoded); the inlined ctor/dtor and register allocation differ [equiv: PASS 400/400, 85% coverage]
+0067ad00  314  complete: UpdateVisibleHint; flash + three window colors reconstructed, but the trig/alpha path uses an external sinf where the original inlines x87 fsin/fistp [equiv: UNSUPPORTED _sinf_f unresolved]
+0067b030  228  complete: eastl vector<unsigned short> insert; DoInsertValue replacement hand-written (grow path, null terminator, deallocate) [equiv: WEAK 74/400 valid, 76.8% coverage, no mismatch]
+0067b370  271  complete: eastl vector<AutoRefCount<cHint>> insert; DoInsertValue replacement hand-written (slot-pointer advance, byte sizes) [equiv: WEAK 123/400 valid, 53.8% coverage, no mismatch]
