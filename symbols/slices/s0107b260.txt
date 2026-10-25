@@ -1,1 +1,3 @@
 0107b6f0 ?PopulateLeft@cToolsPanelLeft@@QAE_NIPAVcToolsEvent@@@Z  # cToolsPanelLeft::PopulateLeft migrated from s0107b260 (verbatim, slice spelling)
+0107c0b0 ??0cWalkAroundInputStrategy_s0107_b260@@QAE@XZ  # cWalkAroundInputStrategy_s0107_b260::cWalkAroundInputStrategy migrated from s0107b260 (verbatim, slice spelling)
+0107c160 ??1cWalkAroundInputStrategy_s0107_b260@@UAE@XZ  # cWalkAroundInputStrategy_s0107_b260::~cWalkAroundInputStrategy migrated from s0107b260 (verbatim, slice spelling)
