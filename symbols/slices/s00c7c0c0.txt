@@ -1,5 +1,5 @@
-00c7c220 Simulator::cGameData::RemoveOwner  # PDB
-00c7c6d0 Simulator::cGameData::SetGameDataOwner  # PDB
-00c7c7c0 Simulator::ISimulatorSerializable::Read  # PDB
+00c7c220 ?RemoveOwner@cPlayer_s00c7_c0c0@@QAEXXZ  # cPlayer_s00c7_c0c0::RemoveOwner migrated from s00c7c0c0 (verbatim, slice spelling)
+00c7c6d0 ?SetGameDataOwner@cPlayer_s00c7_c0c0@@QAEXH@Z  # cPlayer_s00c7_c0c0::SetGameDataOwner migrated from s00c7c0c0 (verbatim, slice spelling)
+00c7c7c0 ?Read@cPlayer_s00c7_c0c0@@QAE_NPAX@Z  # cPlayer_s00c7_c0c0::Read migrated from s00c7c0c0 (verbatim, slice spelling)
 00c7cde0 Simulator::cRock::cRock  # vtable/PDB
 00c7d090 Simulator::cRock compare  # vtable candidate

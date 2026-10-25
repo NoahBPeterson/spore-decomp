@@ -1,0 +1,3 @@
+00c754e0 ?FUN_00c754e0@@YGXPAUcGameNounManager@@@Z  # FUN_00c754e0 migrated from s00c74d30 (verbatim, slice spelling)
+00c755c0 ?Increment@cDepthCounter@@QAEX_N@Z  # cDepthCounter::Increment migrated from s00c74d30 (verbatim, slice spelling)
+00c755f0 ?Decrement@cDepthCounter@@QAEX_N@Z  # cDepthCounter::Decrement migrated from s00c74d30 (verbatim, slice spelling)

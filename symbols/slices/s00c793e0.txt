@@ -1,0 +1,6 @@
+00801920 ?AddRef@cGameNounManager@SP@@UAEHXZ  # SP::cGameNounManager::AddRef (callee of s00c793e0, named from the dev publics; slice address comment)
+00c798a0 ?erase@tPairVec@@QAEPAUtPair28@@PAU2@0@Z  # tPairVec::erase migrated from s00c793e0 (verbatim, slice spelling)
+00c79e20 ?SetBanModePickPriorities@cPlayer@@QAEXIPAVtUintVec@@@Z  # cPlayer::SetBanModePickPriorities migrated from s00c793e0 (verbatim, slice spelling)
+00c79f20 ?FUN_00c79f20@cPlayer@@QAEXPAVcPlayerInner@@@Z  # cPlayer::FUN_00c79f20 migrated from s00c793e0 (verbatim, slice spelling)
+00c79fa0 ?FUN_00c79fa0@cPlayer@@QAEXPAVcPlayerInner@@@Z  # cPlayer::FUN_00c79fa0 migrated from s00c793e0 (verbatim, slice spelling)
+00c7a160 ?FUN_00c7a160@cPlayer@@QAEXPAVcPlayerInner@@@Z  # cPlayer::FUN_00c7a160 migrated from s00c793e0 (verbatim, slice spelling)

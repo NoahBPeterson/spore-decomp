@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPPlayer.cpp  ?Increment@cDepthCounter@@QAEX_N@Z  00c755c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?Decrement@cDepthCounter@@QAEX_N@Z  00c755f0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?FUN_00c79f20@cPlayer@@QAEXPAVcPlayerInner@@@Z  00c79f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?FUN_01351ae0@@YAXXZ  01351ae0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?FUN_01351e60@@YAXXZ  01351e60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
