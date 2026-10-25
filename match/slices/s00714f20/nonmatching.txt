@@ -3,3 +3,11 @@
 007150d0  63  eastl sort_heap; cl strength-reduces the end pointer, original keeps a running count
 00715900  90  eastl partial_sort; heap-helper codegen differences propagate
 00716080  86  quick_sort_impl; loop bound compares an aligned byte diff (and ~3) not element count
+00715120  249  eastl::fixed_vector<ResponseCurveData,42,1>::assign; helper roles (0x774980 alloc, 0x8f05f0 uninit) inferred; equiv UNSUPPORTED (4 unresolved masked callees)
+00715250  229  vector<4-byte>::assign; uninit helper (0x7eb060) argument order inferred; equiv UNSUPPORTED (4 unresolved masked callees)
+00715350  261  vector<4-byte>::insert(pos,value); grow path reimplemented approximately; equiv UNSUPPORTED (2 unresolved masked callees)
+00715470  456  vector<Matrix34>::insert(pos,n,value); Matrix34 copy/fill/move helper roles inferred; equiv UNSUPPORTED (9 unresolved masked callees)
+00715630  352  vector<8-byte>::insert_range(pos,first,last,?); 4th stack arg unused in original, helper roles inferred; equiv UNSUPPORTED (1 unresolved masked callee)
+00715ec0  362  vector<4-byte>::insert_range(pos,first,last); DoInsertValue/memmove split approximated; equiv UNSUPPORTED (unresolved masked callees)
+00715980  330  SP::cMeshBuilder::cMeshBuilder; EH vector-constructor-iterator body reconstructed with named fields; equiv UNSUPPORTED (unresolved masked callees)
+00715bb0  424  SP::cMeshBuilder::~cMeshBuilder; EH destructor-iterator body reconstructed with named fields; equiv UNSUPPORTED (unresolved masked callees)
