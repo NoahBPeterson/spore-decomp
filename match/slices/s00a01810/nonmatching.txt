@@ -4,3 +4,5 @@
 00a01c10  4    anim_qb::anim_qb; one store/push scheduling swap
 00a01cd0  574  anim_qb::UpdateQuery; complete/behaviourally equivalent (PASS 595 valid, 77.3% coverage)
 00a02440  191  anim_qb::Bar; register allocation / store scheduling differs
+00a01f40  1099  anim_qb::Update complete: per-frame query activation/blend update (arg4 tested as a byte; GetScale/Evaluate emitted as one outer call expression so the callee-pops cleanup matches); x87 codegen/register allocation and loop scheduling differ; equiv PASS (235 valid inputs, 99.0% coverage); Flags /O2 /MD /Gy /EHsc /TP
+00a02530  476  RaySlab complete: ray/box slab test (t = (half[ax] - o·m + p·m) * (-1/denom), inclusive 1e-6 epsilon, tNear=+FLT_MAX/tFar=-FLT_MAX, normals -m0/-m1/-m2, return (tNear-tFar)>1e-6); x87 codegen/register allocation differs; equiv PASS (399 valid inputs, 97.4% coverage); Flags /O2 /MD /Gy /EHsc /TP

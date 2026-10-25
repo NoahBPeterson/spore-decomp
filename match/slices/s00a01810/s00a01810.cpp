@@ -72,8 +72,8 @@ public:
     void  Rel9ae1c0();
     void  Rel9a3630();
     void  Rel9c4cc0();
-    float Ac2b0(void* p, RefObj* f0, float v, int a, int b, int c);
-    void  Acac0(float v);
+    float Ac2b0();                                                   // 0x9ac2b0
+    void  Acac0(float scale, void* cid, RefObj* f0, float blend, int a, int b, int c);  // 0x9acac0
 };
 
 class anim_qb {
@@ -469,19 +469,19 @@ void anim_qb::Update(float dt, bool b, int a, int c)
     if (g_1550b78 > 0.0f && dt > 0.0f) {
         float t = f_9b01e0(0.0f, g_1550b78, w);
         notW = 1.0f - t;
-        field_FAC = (notW > 0.0f);
+        field_FAC = (w > 0.0f);
     } else {
         if (!b) {
+            notW = 0.0f;
             field_FC4 = g_1550b78;
             field_FAC = true;
         } else {
+            notW = 1.0f;
             field_FC4 = 0.0f;
             field_FAC = false;
         }
     }
 
-    if (p_anim_cid == 0)
-        return;
     if (*(char*)((char*)p_anim_cid + 0x261) == 0) {
         float x = field_FC8 + dt;
         if (x > g_1550b74)
@@ -502,7 +502,7 @@ void anim_qb::Update(float dt, bool b, int a, int c)
         if ((unsigned)qi < 16) {
             anim_query& qq = queries[qi];
             if (qq.field_0 != 0 ||
-                (qq.field_68 < 8 && qq.anims[qq.field_68].animID != 0)) {
+                ((unsigned)qq.field_68 < 8 && qq.anims[qq.field_68].animID != 0)) {
                 qq.field_94 = 0.0f;
                 qq.field_98 = 0.0f;
                 if (qq.field_6C != 0)
@@ -514,11 +514,11 @@ void anim_qb::Update(float dt, bool b, int a, int c)
                         float f = 1.0f;
                         if (qq.field_C0 == 1) {
                             float x = qq.blendInTime;
-                            f = (x > 0.0f) ? f_9b01e0(0.0f, x, qq.field_B4) : 0.0f;
+                            f = (x > 0.0f) ? f_9b01e0(0.0f, x, qq.field_C4) : 0.0f;
                             f = 1.0f - f;
                         } else if (qq.field_C0 == 3) {
-                            float x = qq.field_70;
-                            f = (x > 0.0f) ? f_9b01e0(0.0f, x, qq.field_B4) : 0.0f;
+                            float x = qq.field_78;
+                            f = (x > 0.0f) ? f_9b01e0(0.0f, x, qq.field_C4) : 0.0f;
                         }
                         f = qq.field_90 * qq.field_8C * f;
                         if (f < g_15517d0)
@@ -553,12 +553,12 @@ void anim_qb::Update(float dt, bool b, int a, int c)
                     f_99e110(qq.field_94, p_anim_cid, qq.field_0, 1, 0, qq.field_9C ? 0 : 1);
                     qq.field_9C = true;
                 }
-                if (!c || qq.field_98 <= 0.0f || qq.field_4 == 0) {
+                if (!(char)c || qq.field_98 <= 0.0f || qq.field_4 == 0) {
                     qq.field_9D = false;
                 } else {
-                    float r = qq.field_4->Ac2b0(p_anim_cid, qq.field_0, qq.field_98, 1, 0,
-                                                qq.field_9D ? 0 : 1);
-                    qq.field_4->Acac0(r * qq.field_B8);
+                    RefObj* o = qq.field_4;
+                    o->Acac0(o->Ac2b0() * qq.field_B8, p_anim_cid, qq.field_0, qq.field_98, 1, 0,
+                             qq.field_9D ? 0 : 1);
                     qq.field_9D = true;
                 }
             }
@@ -625,17 +625,17 @@ extern "C" int __cdecl RaySlab(float* p, float* d, float* o, float* m, float ex,
         float m2 = m[6 + ax] * sgn;
         float denom = d[2] * m2 + d[1] * m1 + d[0] * m0;
         float t;
-        if (denom > -1e-06f && denom < 1e-06f) {
+        if (denom >= -1e-06f && denom <= 1e-06f) {
             t = 3.402823466e+38F;
         } else {
-            float dotO = p[2] * m2;
-            dotO = dotO + p[1] * m1;
-            dotO = dotO + p[0] * m0;
+            float dotO = o[2] * m2;
+            dotO = dotO + o[1] * m1;
+            dotO = dotO + o[0] * m0;
             t = half[ax] - dotO;
-            t = t + o[2] * m2;
-            t = t + o[1] * m1;
-            t = t + o[0] * m0;
-            t = t * (1.0f / denom);
+            t = t + p[2] * m2;
+            t = t + p[1] * m1;
+            t = t + p[0] * m0;
+            t = t * (-1.0f / denom);
         }
         if (denom < 0.0f) {
             if (t < tNear)
