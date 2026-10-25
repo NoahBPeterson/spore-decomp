@@ -196,7 +196,7 @@ int __cdecl ResampleProcess(Resample* self, AudioProcessContext* ctx, s32 a3)
         if (end > cap)
             end = cap;
 
-        u32 pos = (u32)self->miAcc16_16;
+        u32 pos = 0;
         f32* dstLast = 0;
         f32* lastDstEnd = 0;
 
@@ -206,13 +206,16 @@ int __cdecl ResampleProcess(Resample* self, AudioProcessContext* ctx, s32 a3)
             f32* dst = dstBuf->mpSamples + dstBuf->muStride * ch;
             f32* dstEnd = dst + maxOut;
             lastDstEnd = dstEnd;
+            // the original re-reads the accumulator for every channel (it only writes the
+            // object field back after the whole channel loop)
+            u32 p = (u32)self->miAcc16_16;
 
-            if (dst != dstEnd && pos + 0x20000 <= 0x10000)
+            if (dst != dstEnd && p + 0x20000 <= 0x10000)
             {
                 const f32 prev = self->mfRampPrev;
                 const f32 cur  = self->mfRampCur;
                 const f32 diff = cur - prev;
-                u32 p = pos + 0x20000;
+                p += 0x20000;
                 do
                 {
                     *dst = ((f32)(s32)p * kFrac) * diff + prev;
@@ -221,7 +224,7 @@ int __cdecl ResampleProcess(Resample* self, AudioProcessContext* ctx, s32 a3)
                     if (p > 0x10000)
                         break;
                 } while (dst != dstEnd);
-                pos = p - 0x20000;
+                p -= 0x20000;
             }
 
             if ((s32)numSamples > 0)
@@ -238,11 +241,11 @@ int __cdecl ResampleProcess(Resample* self, AudioProcessContext* ctx, s32 a3)
                     self->mfRampCur = src[numSamples - 1];
                 }
 
-                if (dst != dstEnd && pos > 0xFFFF0000)
+                if (dst != dstEnd && p > 0xFFFF0000)
                 {
                     const f32 first = src[0];
                     const f32 diff = first - oldCur;
-                    u32 p = pos + 0x10000;
+                    p += 0x10000;
                     do
                     {
                         *dst = ((f32)(s32)p * kFrac) * diff + oldCur;
@@ -251,13 +254,16 @@ int __cdecl ResampleProcess(Resample* self, AudioProcessContext* ctx, s32 a3)
                         if (p > 0xFFFF)
                             break;
                     } while (dst != dstEnd);
-                    pos = p - 0x10000;
+                    p -= 0x10000;
                 }
 
-                PosDst r = InterpRamp(pos, step, end, src, dst);
-                pos = r.pos;
-                dstLast = r.dst;
+                PosDst r = InterpRamp(p, step, end, src, dst);
+                p = r.pos;
+                dst = r.dst;
             }
+
+            pos = p;
+            dstLast = dst;
         }
 
         s32 acc = (s32)pos - (s32)numSamples * 0x10000;
@@ -267,9 +273,10 @@ int __cdecl ResampleProcess(Resample* self, AudioProcessContext* ctx, s32 a3)
 
         const s32 written = maxOut - (s32)((lastDstEnd - dstLast) >> 2);
 
-        AudioChannelBuffer* tmp = ctx->mpSrcBuffer;
-        ctx->mpSrcBuffer = ctx->mpDstBuffer;
-        ctx->mpDstBuffer = tmp;
+        AudioChannelBuffer* in = ctx->mpSrcBuffer;
+        AudioChannelBuffer* out = ctx->mpDstBuffer;
+        ctx->mpDstBuffer = in;
+        ctx->mpSrcBuffer = out;
         ctx->mNumSamples = written;
         ctx->mfSampleRate = fmtRate;
 
@@ -320,29 +327,27 @@ int __cdecl RawPuller2Process(RawPuller2* self, AudioProcessContext* ctx)
 
     if (self->mbRestart)
     {
-        ctx->mbChannelCount = ch;
+        ctx->mbChannelCount = (u8)ch;
         ctx->mNumSamples = 0;
         ctx->mfSampleRate = self->mfRate;
         self->mbRestart = 0;
         return 1;
     }
 
-    const f32 gain = ctx->mfResampleGain;
-    AudioChannelBuffer* oldDst = ctx->mpDstBuffer;
-    AudioChannelBuffer* oldSrc = ctx->mpSrcBuffer;
-
-    ctx->mbChannelCount = ch;
-    ctx->mpSrcBuffer = oldDst;
-    ctx->mpDstBuffer = oldSrc;
+    AudioChannelBuffer* in = ctx->mpSrcBuffer;
+    AudioChannelBuffer* out = ctx->mpDstBuffer;
+    ctx->mpDstBuffer = in;
+    ctx->mpSrcBuffer = out;
+    ctx->mbChannelCount = (u8)ch;
     ctx->mNumSamples = (s32)self->muFrameCount;
     ctx->mfSampleRate = self->mfRate;
 
-    if (self->mpCallback(self->muFrameCount, g_mixScratch, gain, self->mpContext))
+    if (self->mpCallback(self->muFrameCount, g_mixScratch, ctx->mfResampleGain, self->mpContext))
     {
-        const AudioChannelBuffer* out = ctx->mpSrcBuffer;
-        const u32 frames = self->muFrameCount;
         for (u32 i = 0; i < ch; ++i)
-            memcpy(out->mpSamples + out->muStride * i, g_mixScratch + 4 * frames * i, 4 * frames);
+            memcpy(out->mpSamples + out->muStride * i,
+                   (f32*)g_mixScratch + self->muFrameCount * i,
+                   4 * self->muFrameCount);
         return 1;
     }
     return 0;
@@ -476,7 +481,9 @@ int __cdecl PeakingIir2Process(PeakingIir2* self, AudioProcessContext* ctx)
     const f32 KF_Q_MIN = 0.2f;
     const f32 KF_Q_MAX = 20.0f;
 
-    f32 omega = (self->mfCutoffFreq / ((AudioFormat*)ctx->mpFormat)->mfSampleRate) * KF_TWO_PI;
+    // The coefficient builder (0x114ee60) uses xmm6/xmm5 as scratch, so omega has to live in
+    // memory across that call (the original spills it to a frame slot and keeps it in xmm7).
+    volatile f32 omega = (self->mfCutoffFreq / ((AudioFormat*)ctx->mpFormat)->mfSampleRate) * KF_TWO_PI;
     if (omega < KF_OMEGA_LO)
         omega = KF_OMEGA_LO;
     if (omega > KF_OMEGA_HI)
