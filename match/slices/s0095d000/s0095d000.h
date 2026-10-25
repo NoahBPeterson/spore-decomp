@@ -6,8 +6,7 @@
 
 namespace EA { namespace UTFWin {
 
-class Image { public: char pad0[0x1c]; int width; int height; };   // +0x1c w, +0x20 h
-struct Vec2 { float x, y; };
+struct Image { char pad0[0x1c]; int width; int height; };   // +0x1c w, +0x20 h
 
 struct Canvas {
     virtual void v00();
@@ -15,12 +14,14 @@ struct Canvas {
     virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05();
     virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
     virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(float, float, float, float);                     // +0x38
-    virtual void FillQuad();                                          // +0x3c
-    virtual void v16(); virtual void v17();
-    virtual void DrawQuad(const void*, float, const void*, float,
-                          const void*, float, const void*, float);    // +0x48
-    virtual void v19(); virtual void v20(); virtual void v21();
+    virtual void FillRectangle(uint32_t color, float x0, float y0, float x1); // +0x38
+    virtual void v15();                                               // +0x3c
+    virtual void v16(); virtual void v17();                           // +0x40 +0x44
+    virtual void FillQuadGradient(const float* topRight, uint32_t topRightColor,
+                                  const float* topLeft, uint32_t topLeftColor,
+                                  const float* bottomLeft, uint32_t bottomLeftColor,
+                                  const float* bottomRight, uint32_t bottomRightColor); // +0x48
+    virtual void v19(); virtual void v20(); virtual void v21();        // +0x4c..+0x54
     virtual void DrawImage(const float* rect, Image* img, const float* uv); // +0x58
 };
 
