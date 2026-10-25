@@ -49,6 +49,10 @@ struct cTransform {                    // 0x38 bytes
     Vector3  mTranslation;             // +0x04
     float    mScale;                   // +0x10
     Matrix3  mRotation;                // +0x14
+
+    void PreRotateX(float angle);      // 0x005a2d90
+    void RotateY(float angle);         // 0x006b9050
+    void RotateZ(float angle);         // 0x007d1ac0
 };
 
 template <class T> struct SpVector {   // eastl::vector with sp_vector_allocator (retail 0x14 bytes)
@@ -60,6 +64,24 @@ template <class T> struct SpVector {   // eastl::vector with sp_vector_allocator
     unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
     bool empty() const { return mpBegin == mpEnd; }
 };
+
+extern "C" double RandomRange(float lo, float hi);   // 0x007d45d0
+double RandomSymmetric(float range);                 // 0x00a78f80
+
+static __forceinline float SampleCurve1(const SpVector<float>& c, float t)
+{
+    unsigned n = c.size() - 1;
+    if (n == 0)
+        return c.mpBegin[0];
+    t = (float)n * t;
+    int idx = (int)t;
+    float frac = t - (float)idx;
+    if (frac > 0.0f) {
+        float a = c.mpBegin[idx];
+        return (c.mpBegin[idx + 1] - a) * frac + a;
+    }
+    return c.mpBegin[idx];
+}
 
 struct cDistributeSample {             // 0x4c bytes
     cTransform mTransform;             // +0x00
@@ -88,28 +110,23 @@ struct cDrawInfo {                     // 0x20 bytes
     uint64_t mResourceID2;             // +0x18
 };
 
-// cGlobalParams (retail offsets; only fields touched by this slice are named)
-struct cGlobalParams {                 // 0x120 bytes
-    char     pad00[0x60];
-    float*   mpSizeCurve;              // +0x60
-    float*   pSizeCurveEnd;            // +0x64
-    char     pad68[0x74 - 0x68];
-    float    mPitchVary;               // +0x74
-    float*   mpPitchCurve;             // +0x78
-    float*   pPitchCurveEnd;           // +0x7c
-    char     pad80[0x8c - 0x80];
-    float*   mpRollCurve;              // +0x8c
-    float*   pRollCurveEnd;            // +0x90
-    char     pad94[0xa0 - 0x94];
-    float*   mpHeadingCurve;           // +0xa0
-    float*   pHeadingCurveEnd;         // +0xa4
-    char     pada8[0xb4 - 0xa8];
-    float    mPitchOffset;             // +0xb4
-    float    mPitchAmount;             // +0xb8
-    float    mRollOffset;              // +0xbc
-    float    mRollAmount;              // +0xc0
-    float    mHeadingOffset;           // +0xc4
-    float    mHeadingAmount;           // +0xc8
+// cDistributeDescription (retail offsets; only fields touched by this slice are named)
+struct cDistributeDescription {        // 0x120 bytes
+    char     pad00[8];
+    uint32_t mFlags;                   // +0x08
+    char     pad0c[0x60 - 0x0c];
+    SpVector<float> mSizeCurve;        // +0x60
+    float    mSizeVary;                // +0x74
+    SpVector<float> mPitchCurve;       // +0x78
+    SpVector<float> mRollCurve;        // +0x8c
+    SpVector<float> mHeadingCurve;     // +0xa0
+    float    mPitchVary;               // +0xb4
+    float    mRollVary;                // +0xb8
+    float    mHeadingVary;             // +0xbc
+    float    mPitchOffset;             // +0xc0
+    float    mRollOffset;              // +0xc4
+    float    mHeadingOffset;           // +0xc8
+    char     padcc[0x120 - 0xcc];
 };
 
 // cIEffectsWorld : vtable only
@@ -133,10 +150,10 @@ struct IWorldThing {
 // cDistributeEffect (retail offsets)
 struct cDistributeEffect {
     char        pad00[0x14];
-    void*       mDesc;                 // +0x14
+    cDistributeDescription* mDesc;     // +0x14
     int         mCollectionIndex;      // +0x18
     cIEffectsWorld* mWorld;            // +0x1c
-    cGlobalParams*  mGlobalParams;     // +0x20
+    void*       mGlobalParams;         // +0x20
     void*       mChildParams;          // +0x24
     uint32_t    mFlags;                // +0x28
     cTransform  mSourceTransform;      // +0x2c
@@ -180,6 +197,7 @@ struct cDistributeEffect {
     int  FUN_00a88390(int count, void** outBegin, void** outStride);  // 0x00a88390
     void FUN_00a886f0(int visible);                                   // 0x00a886f0
     void FUN_00a887b0(int index, float value);                        // 0x00a887b0
+    void RigidTransformRange(int first, int last);                    // 0x00a88800
 };
 
 // @ 0x00a87fb0
@@ -374,7 +392,7 @@ void cDistributeEffect::FUN_00a886f0(int visible)
         else {
             b = 0;
         }
-        int flag = (*(uint32_t*)((char*)mDesc + 8) >> 8) & 1;
+        int flag = (mDesc->mFlags >> 8) & 1;
         IWorldThing* thing = (IWorldThing*)mWorld->v20();
         if (flag)
             thing->SetVisibleA(*(int*)((char*)this + 0xec), b);
@@ -400,5 +418,64 @@ void cDistributeEffect::FUN_00a887b0(int index, float value)
     }
     else {
         *(float*)(index * 0x4c + 0x44 + *(int*)((char*)this + 0xbc)) = value;
+    }
+}
+
+// @ 0x00a88800
+void cDistributeEffect::RigidTransformRange(int first, int last)
+{
+    if (mSamples.empty())
+        return;
+
+    cDistributeDescription* desc = mDesc;
+    uint32_t flags = desc->mFlags;
+    float invCount = 1.0f / (float)mTargetSampleCount;
+
+    if (flags & 0x40) {
+        for (int i = first; i < last; ++i) {
+            cDistributeSample* s = &mSamples.mpBegin[i];
+            float t = ((float)s->mNumber + 0.5f) * invCount;
+            if (!desc->mSizeCurve.empty()) {
+                float size = SampleCurve1(desc->mSizeCurve, t);
+                double scaled = RandomRange(1.0f, desc->mSizeVary) * size;
+                _ReadWriteBarrier();
+                s->mTransform.mScale = (float)(scaled * s->mTransform.mScale);
+                s->mTransform.mFlags |= 1;
+                s->mTransform.mModificationCount += 1;
+            }
+
+            if (!desc->mRollCurve.empty()) {
+                float angle = SampleCurve1(desc->mRollCurve, t) + desc->mRollOffset;
+                if (desc->mRollVary > 0.0f)
+                    angle = (float)(RandomSymmetric(desc->mRollVary) * angle);
+                s->mTransform.RotateY(DAT_01678314 * angle);
+            }
+
+            if (!desc->mPitchCurve.empty()) {
+                float angle = SampleCurve1(desc->mPitchCurve, t) + desc->mPitchOffset;
+                if (desc->mPitchVary > 0.0f)
+                    angle = (float)(RandomSymmetric(desc->mPitchVary) * angle);
+                s->mTransform.PreRotateX(DAT_01678314 * angle);
+            }
+
+            if (!desc->mHeadingCurve.empty()) {
+                float angle = SampleCurve1(desc->mHeadingCurve, t) + desc->mHeadingOffset;
+                if (desc->mHeadingVary > 0.0f)
+                    angle = (float)(RandomSymmetric(desc->mHeadingVary) * angle);
+                s->mTransform.RotateZ(DAT_01678314 * angle);
+            }
+        }
+    }
+    else if (flags & 0x10) {
+        for (int i = first; i < last; ++i) {
+            cDistributeSample* s = &mSamples.mpBegin[i];
+            float t = ((float)s->mNumber + 0.5f) * invCount;
+            float size = SampleCurve1(desc->mSizeCurve, t);
+            double scaled = RandomRange(1.0f, desc->mSizeVary) * size;
+            _ReadWriteBarrier();
+            s->mTransform.mScale = (float)(scaled * s->mTransform.mScale);
+            s->mTransform.mFlags |= 1;
+            s->mTransform.mModificationCount += 1;
+        }
     }
 }
