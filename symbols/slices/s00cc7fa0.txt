@@ -1,2 +1,7 @@
+00cc7fa0 ?FilterRCluster@@YGXPAUMap121@@PBUMap100@@@Z  # FilterRCluster migrated from s00cc7fa0 (verbatim, slice spelling)
+00cc8040 ?Get@Map100@@QAEAAUcReservedSpot@@ABI@Z  # Map100::Get migrated from s00cc7fa0 (verbatim, slice spelling)
+00cc80c0 ?Get@Map121@@QAEAAUcReservedSpot@@ABI@Z  # Map121::Get migrated from s00cc7fa0 (verbatim, slice spelling)
+00cc8140 ?ReserveRCoord@cReservationGrid@@QAE_NI@Z  # cReservationGrid::ReserveRCoord migrated from s00cc7fa0 (verbatim, slice spelling)
+00cc8670 ?GetRCluster@cReservationGrid@@QAEXPAXPAUMap121@@I@Z  # cReservationGrid::GetRCluster migrated from s00cc7fa0 (verbatim, slice spelling)
 00cc8810 ?FUN_00cc8810@CameraCtl@@QAE_NXZ  # CameraCtl::FUN_00cc8810 migrated from s00cc7fa0 (verbatim, slice spelling)
 00cc88e0 ?FUN_00cc88e0@TribeStrategy@@QAEII@Z  # TribeStrategy::FUN_00cc88e0 migrated from s00cc7fa0 (verbatim, slice spelling)

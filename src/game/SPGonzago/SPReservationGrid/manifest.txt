@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPReservationGrid.cpp  ?Get@Map100@@QAEAAUcReservedSpot@@ABI@Z  00cc8040  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPReservationGrid.cpp  ?Get@Map121@@QAEAAUcReservedSpot@@ABI@Z  00cc80c0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPReservationGrid.cpp  ?GetRCluster@cReservationGrid@@QAEXPAXPAUMap121@@I@Z  00cc8670  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
