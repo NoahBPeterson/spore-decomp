@@ -1,7 +1,7 @@
 008a2a00 EA::Text::SetupArabicGsubLookup  # byte-exact (retail FeatureLookupArray 10x0x60 fixed buffer)
-008a2b10 EA::Text::Typesetter::ShapeArabic  # complete, retail layout; pOTF/glyphCount stack slots swapped and FeatureLookupArray init store order differs
+008a2b10 EA::Text::Typesetter::ShapeArabic  # complete, retail layout; pOTF/glyphCount stack slots swapped and FeatureLookupArray init store order differs; equiv UNSUPPORTED (0/400 valid: the harness cannot build a callable Typesetter, fault(read))
 008a2d60 EA::Text::Typesetter::PlaceGeneralGlyphCluster  # byte-exact
 008a2ee0 EA::Text::Typesetter::GetGeneralCharCluster  # byte-exact
-008a2fe0 EA::Text::GlyphLayoutVector::DoInsertValue  # complete; append path byte-identical, grow path register/slot assignment differs
-008a3110 EA::Text::Typesetter::AppendGeneralGlyphCluster  # complete; retail inlines GlyphLayoutInfo push_back, this build outlines it
+008a2fe0 EA::Text::GlyphLayoutVector::DoInsertValue  # complete; append path byte-identical, grow path register/slot assignment differs; equiv WEAK (12 valid, 39.0% coverage)
+008a3110 EA::Text::Typesetter::AppendGeneralGlyphCluster  # complete; retail inlines GlyphLayoutInfo push_back, this build outlines it; equiv WEAK (174 valid, 23.8% coverage)
 008a3480 EA::Text::Typesetter::AppendHangulCharCluster  # byte-exact (incl. retail password-mode branch)
