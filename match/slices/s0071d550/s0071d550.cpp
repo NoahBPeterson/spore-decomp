@@ -3,6 +3,7 @@
 // a polymorphic RenderWare-style stream writer (vtable slots 3,4,6,7,8,14,19,...).
 // Optimized module: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast.
 #include "types.h"
+#include <intrin.h>
 
 extern "C" double __cdecl sin(double);
 extern "C" double __cdecl cos(double);
@@ -613,8 +614,67 @@ bool __cdecl MatchingIndices(const IntVec* v, int limit, const int* keys, int* o
 }
 
 // ---------------------------------------------------------------------------
-// Not part of this slice's work list: kept as skeletons for the next agent.
+// Serialized stream-header readers (the two layout variants used by the mesh
+// loader: split count/format reads for format >= 4, one 0x10-byte header read
+// for older formats).
+// ---------------------------------------------------------------------------
+bool __cdecl ReadInt32(void* s, void* p, int n, int flags);     // 0x0093a780
+bool __cdecl ReadUint16(void* s, uint16_t* p, int n, int flags); // 0x0093a700
+bool __cdecl ReadBytes(void* s, void* p, uint32_t n);           // 0x0093a6c0
+bool __cdecl HasRoom(void* s, int elemSize, int count);         // 0x0093a890
+void __cdecl Obj15_Init(void* p);                               // 0x00720070
+
+// Reads the count and format fields separately, then the payload.
 // @ 0x0071e290
-void Obj13_e290(void* self, void* a) { (void)self; (void)a; }
+char __cdecl Obj13_e290(void* stream, void* self)
+{
+    int* p = (int*)self;
+    if (ReadInt32(stream, p, 1, 0)) {
+        uint16_t* format = (uint16_t*)(p + 2);
+        if (ReadUint16(stream, format, 1, 0)) {
+            *(uint16_t*)((char*)p + 10) = *format;
+            p[3] = 0;
+            _ReadWriteBarrier();
+            int count = p[0];
+            p[1] = 0;
+            if (count > 0) {
+                if (HasRoom(stream, *format, count)) {
+                    Obj15_Init(p);
+                    uint32_t c = (uint32_t)p[0];
+                    uint32_t n = (uint32_t)*format;
+                    self = (void*)p[1];
+                    if (ReadBytes(stream, self, n * c))
+                        return 1;
+                }
+            } else {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+// Reads the whole 0x10-byte header, then the payload.
 // @ 0x0071e320
-void Obj13_e320(void* self, void* a, void* b) { (void)self; (void)a; (void)b; }
+char __cdecl Obj13_e320(void* stream, void* self)
+{
+    int* p = (int*)self;
+    if (!ReadBytes(stream, p, 0x10))
+        return 0;
+    p[3] = 0;
+    _ReadWriteBarrier();
+    int count = p[0];
+    p[1] = 0;
+    if (count > 0) {
+        uint16_t* format = (uint16_t*)(p + 2);
+        if (!HasRoom(stream, *format, count))
+            return 0;
+        Obj15_Init(p);
+        uint32_t c = (uint32_t)p[0];
+        uint32_t n = (uint32_t)*format;
+        self = (void*)p[1];
+        if (!ReadBytes(stream, self, n * c))
+            return 0;
+    }
+    return 1;
+}
