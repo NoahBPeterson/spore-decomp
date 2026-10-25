@@ -1,6 +1,7 @@
 // Slice s00703700: SP::cHierGrid construction / lifetime and cGrid-vector helpers (retail build).
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+#include <string.h>
 
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line); // 0x00f473a0
 inline void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line)
@@ -21,7 +22,8 @@ void __cdecl SlotVectorDestroy(void* self, unsigned index);               // 0x0
 // spstl slot_vector_base::create(void const*) — 0x00703470, this = &cHierGrid::mObjInfoSlots
 struct SlotVectorStub { unsigned create(const void* value); };
 void __cdecl HashMapFindIdx(void* self, void* key);                       // 0x00703360
-unsigned __cdecl CellFromPos(void* self, float x, float y, float z, unsigned char level); // 0x00700da0
+// SP::cHierGrid::CellFromPos(position, level) — 0x00700da0, `this` in ecx.
+struct CellFromPosT { unsigned calc(float x, float y, float z, unsigned char level); };
 
 // ---- layouts ----
 struct ObjListNode { ObjListNode* pNext; ObjListNode* pPrev; void* mObj; };
@@ -45,8 +47,32 @@ struct cGrid {
     cGrid* CopyConstruct(const cGrid& src);
 };
 
+// Intrusive list head used by the per-cell object lists and the out-of-grid list.
+struct ListHead { void* mpNext; void* mpPrev; };
+
+// Cell map entry: the object list head, the node pointer and the octant-propagation bytes.
+struct CellInfo_s0070_2980 {
+    ListHead mHead;           // +0x00  self-linked when the cell exists
+    void*    mNode;           // +0x08
+    unsigned char mFlags;     // +0x0c
+    char     _pad0[3];
+    unsigned char mOctant;    // +0x10  per-octant "child present" mask
+};
+
 // CellMap::Assign(CellMap const&) — 0x00702f60
-struct CellMap { char raw[0x20]; CellMap& Assign(const CellMap& src); };
+struct CellMap {
+    void*    mpSomething;      // +0x00
+    void**   mpBuckets;        // +0x04
+    unsigned mBucketCount;     // +0x08
+    void*    mpEnd;            // +0x0c (guess; unused here)
+    char     raw[0x10];        // +0x10
+    CellMap& Assign(const CellMap& src);
+    CellInfo_s0070_2980* Index(unsigned* pKey);   // 0x00703360  find-or-insert the cell entry
+};
+
+// Intrusive-list insert: allocate a 0xc-byte node holding `*obj` and splice it in before `pos`;
+// returns the node through `out`.  Callee cleans the stack (`ret 0xc`).
+void __stdcall list_insert_before(void** out, void* pos, void** obj);      // 0x00701050
 
 struct GridVec {                 // eastl::vector<cGrid,sp_vector_allocator> at cHierGrid+0x24
     cGrid* mpBegin;
@@ -104,33 +130,159 @@ cGrid* __cdecl grid_uninit_copy(cGrid** out, cGrid* first, cGrid* last, const cG
 void __cdecl grid_fill_count(unsigned n, cGrid* dst, const cGrid* value); // 0x703160
 cGrid* __cdecl grid_copy_construct(cGrid* first, cGrid* last, cGrid* dst); // 0x703210
 cGrid* __cdecl grid_destroy_range(cGrid* first, cGrid* last, cGrid* ended); // 0x7032e0
-void __cdecl grid_fill_n(unsigned n, cGrid* dst, const cGrid* value);     // fill_n
+void __cdecl grid_fill_n(cGrid* dst, unsigned n, const cGrid* value);   // 0x703160
 void __cdecl grid_assign_backward(cGrid* first, cGrid* last, cGrid* dstEnd); // 0x703690
 cGrid* __cdecl grid_assign_fill(cGrid* first, cGrid* last, const cGrid* src); // 0x703c80
 
+// A per-object slot record inside `mObjInfoSlots`.  Blocks are `void*[128]` and each index is a
+// 0x10-byte record whose first dword is unused here; the fields live at +0x04/+0x08/+0x0c.
+struct SlotRec26 {
+    unsigned     mUnused0;    // +0x00
+    int          mLevel;      // +0x04  level the object was filed at (-1 = out of grid)
+    int          mCell;       // +0x08  cell id at that level     (-1 = out of grid)
+    void*        mNode;       // +0x0c  list node owning the object
+    unsigned char mFlags;     // +0x10  octant propagation flag (written via +0x0c relative to mNode)
+};
+// The record as the original addresses it: the base pointer handed around points at +0x04, so the
+// three named dwords sit at relative +0/+4/+8 and the flag byte at relative +0x0c.
+struct SlotRef { int mLevel; int mCell; void* mNode; unsigned char mFlags; char _pad[3]; };
+
+// The cell map's inlined hash-table find returns an entry whose octant mask byte lives at +0x10.
+typedef CellInfo_s0070_2980 CellEntry;
+
+short __cdecl CellHash(unsigned id);                                          // 0x00700c00
+
+// The inlined eastl::hashtable find the original performs when walking ancestor levels: look the
+// key up in the map's bucket chain and return the entry, or 0 when absent. Node layout: the key
+// is the first dword after the intrusive links and the cell entry follows it.
+struct CellMapNode {
+    CellMapNode* mpNext;   // +0x00
+    unsigned*    mpBucket; // +0x04
+    unsigned     mKey;     // +0x08
+    CellEntry    mEntry;   // +0x0c
+};
+inline CellEntry* FindCell(CellMap* map, unsigned key)
+{
+    unsigned idx = key % map->mBucketCount;
+    CellMapNode* n = (CellMapNode*)map->mpBuckets[idx];
+    CellMapNode* end = (CellMapNode*)map->mpBuckets[map->mBucketCount];
+    while (n != end) {
+        if (n->mKey == key)
+            return &n->mEntry;
+        n = n->mpNext;
+    }
+    return 0;
+}
 // @ 0x00703700  (insert one object into the hierarchy)
 void __thiscall cHierGrid::Add(unsigned index, float radius, const Vec3& pos, unsigned extra)
 {
     float thresh = (*(const float*)0x1535500 * radius) * 2.0f;
     int level = 0;
     if (mGrids.mpBegin[0].mHalfCellSize > thresh) {
-        level = 0;
-        int maxl = mMaxLevel;
-        while (level < maxl && mGrids.mpBegin[level].mCellRadius > thresh)
+        // Walk up while the next level's half-cell size still exceeds the radius threshold; the
+        // grid the object lands in is the first level that is fine enough (at most mMaxLevel).
+        while (level < mMaxLevel && mGrids.mpBegin[level + 1].mHalfCellSize > thresh)
             level++;
     }
-    unsigned cellID = CellFromPos(this, pos.x, pos.y, pos.z, (unsigned char)level);
-    if (cellID == 0xffffffff) {
-        // out-of-grid object
-        ObjListNode node;
-        node.pNext = &mOutOfGrid;
-        node.mObj = (void*)extra;
-        (void)index; (void)node;
+    unsigned cellID = ((CellFromPosT*)this)->calc(pos.x, pos.y, pos.z, (unsigned char)level);
+    int   iLevel = level;
+
+    unsigned block = *(unsigned*)((char*)m60 + (index >> 7) * 4);
+    // The record is the 0x10-byte slot starting 4 bytes into the block-resident record; the three
+    // named dwords (level / cell / node) therefore land at block offsets +0x04/+0x08/+0x0c.
+    SlotRef* slot = (SlotRef*)(block + (index & 0x7f) * 0x10 + 4);
+
+    if ((int)cellID == -1) {
+        // Out-of-grid object: record the -1 sentinel and append the object to the out-of-grid list.
+        slot->mLevel = -1;
+        slot->mCell  = -1;
+        void* obj = (void*)(uintptr_t)extra;
+        void* out = 0;
+        list_insert_before(&out, (void*)&mOutOfGrid, &obj);
+        slot->mNode = out;
         return;
     }
-    cGrid* g = mGrids.mpBegin + level;
-    HashMapFindIdx((char*)g->mCellMap, &cellID);
-    (void)index;
+
+    slot->mLevel = iLevel;
+    slot->mCell  = (int)cellID;
+
+    cGrid* g = mGrids.mpBegin + iLevel;
+    CellInfo_s0070_2980* entry = ((CellMap*)g->mCellMap)->Index(&cellID);
+    bool created = (*((void**)&entry->mHead) == (void*)entry);
+    void* obj = (void*)(uintptr_t)extra;
+    void* out = 0;
+    list_insert_before(&out, entry, &obj);
+    slot->mNode = out;
+
+    if (!created)
+        return;
+
+    if ((int)iLevel > mLeafLevel) mLeafLevel = iLevel;
+    if ((int)iLevel < mTopLevel)  mTopLevel  = iLevel;
+
+    if (iLevel < 7) {
+        if (g->mMask == 0) {
+            unsigned sz = (iLevel == 0) ? 4u
+                        : (((1u << ((iLevel * 3 - 3) & 0x1f)) + 3u) & ~3u);
+            g->mMask      = (unsigned char*)operator new(sz, "Graphics", 0, 0, 0, 0);
+            memset(g->mMask, 0, sz);
+            g->mChildMask = (unsigned char*)operator new(sz, "Graphics", 0, 0, 0, 0);
+            memset(g->mChildMask, 0, sz);
+
+            for (int j = iLevel - 1; j >= 0; --j) {
+                if (mGrids.mpBegin[j].mMask != 0)
+                    break;
+                unsigned s2 = (j == 0) ? 4u
+                            : (((1u << ((j * 3 - 3) & 0x1f)) + 3u) & ~3u);
+                mGrids.mpBegin[j].mMask      = (unsigned char*)operator new(s2, "Graphics", 0, 0, 0, 0);
+                mGrids.mpBegin[j].mChildMask = (unsigned char*)operator new(s2, "Graphics", 0, 0, 0, 0);
+                memset(mGrids.mpBegin[j].mMask, 0, s2);
+                memset(mGrids.mpBegin[j].mChildMask, 0, s2);
+            }
+        }
+
+        short h = CellHash(cellID);
+        unsigned byteIdx = (unsigned)h >> 3;
+        unsigned char bit = (unsigned char)(1u << (h & 7));
+        bool wasUnset = (g->mMask[byteIdx] == 0) && (g->mChildMask[byteIdx] == 0);
+        g->mMask[byteIdx] |= bit;
+
+        if (wasUnset) {
+            int j = iLevel - 1;
+            int bi = (int)byteIdx;
+            bool probe = true;
+            while (probe && j >= 0) {
+                cGrid* gp = mGrids.mpBegin + j;
+                if (gp->mMask == 0)
+                    break;
+                unsigned i2 = (unsigned)(bi >> 3);
+                unsigned char b2 = (unsigned char)(1u << (bi & 7));
+                probe = (gp->mMask[i2] == 0) && (gp->mChildMask[i2] == 0);
+                gp->mChildMask[i2] |= b2;
+                --j;
+            }
+        }
+    }
+
+    // Propagate the cell into the ancestor levels: walk one grid up at a time and, for each
+    // ancestor whose cell map does not already contain this cell, set the octant bit on the
+    // parent cell entry (and record the propagation flag on this level's slot).
+    unsigned octantIdx = (unsigned)(((cellID >> 18) & 4u) | ((cellID >> 9) & 1u) | (cellID & 1u));
+    for (int lv = iLevel - 1; lv >= 0; --lv) {
+        cGrid* gp = mGrids.mpBegin + lv;
+        CellInfo_s0070_2980* found = FindCell((CellMap*)gp->mCellMap, cellID);
+        if (found == 0)
+            break;
+        unsigned char b = (unsigned char)(1u << (octantIdx & 7));
+        if ((int)iLevel < mLeafLevel && (found->mOctant & b) != 0) {
+            entry->mFlags = 0xff;
+            found->mOctant |= b;
+            return;
+        }
+        entry->mFlags = 0;
+        found->mOctant |= b;
+    }
+    (void)thresh;
 }
 
 // @ 0x00703b60
@@ -146,7 +298,7 @@ void __thiscall cHierGrid::Update(unsigned index, float radius, const Vec3& pos)
     float thresh = (*(const float*)0x1535500 * radius) * 2.0f;
     if ((g->mHalfCellSize > thresh) || (mMaxLevel <= level)) {
         if ((thresh < g->mCellSize) || (level < 1)) {
-            unsigned id = CellFromPos(this, pos.x, pos.y, pos.z, (unsigned char)level);
+            unsigned id = ((CellFromPosT*)this)->calc(pos.x, pos.y, pos.z, (unsigned char)level);
             if (*(int*)(data + 4) == (int)id)
                 return;
         }
@@ -218,30 +370,52 @@ cGrid* __thiscall GridVec::erase(cGrid* first, cGrid* last)
 // @ 0x00703df0  (vector<cGrid>::insert)
 void __thiscall GridVec::insert(cGrid* pos, unsigned n, const cGrid* value)
 {
-    unsigned have = (unsigned)(mpEnd - mpBegin);
-    if (n > (unsigned)(mpCap - mpEnd)) {
-        cGrid* newBegin = (cGrid*)operator new((have + n) * 0x44, "Graphics", 0, 0, ALLOC_FILE, 0xd1);
-        cGrid* p = grid_copy_construct(mpBegin, pos, newBegin);
-        cGrid* q = grid_uninit_copy(&p, pos, mpEnd, 0);
-        grid_fill_count(n, p, value);
-        grid_destroy_range(mpBegin, pos, 0);
-        grid_destroy_range(pos, mpEnd, 0);
-        mpBegin = newBegin;
-        mpEnd = q + n;
-        mpCap = newBegin + have + n;
-    } else {
+    if ((unsigned)(mpCap - mpEnd) < n) {
+        // ---- grow path ----
+        unsigned len = (unsigned)(mpEnd - mpBegin);
+        unsigned doubled = len * 2;
+        if (len == 0)
+            doubled = 1;
+        unsigned total = len + n;
+        if (total < doubled)
+            total = doubled;
+        cGrid* buf = total
+            ? (cGrid*)operator new(total * 0x44, "Graphics", 0, 0, ALLOC_FILE, 0xd1)
+            : 0;
+        cGrid* oldBegin = mpBegin;
+        cGrid* p = grid_copy_construct(oldBegin, pos, buf);
+        grid_destroy_range(oldBegin, pos, buf);
+        grid_fill_n(p, n, value);
+        cGrid* mid = p + n;
+        cGrid* oldEnd = mpEnd;
+        cGrid* q = grid_copy_construct(pos, oldEnd, mid);
+        grid_destroy_range(pos, oldEnd, mid);
+        if (oldBegin != 0 && *(int*)((char*)oldBegin - 4) != 0)
+            operator delete(oldBegin);
+        mpEnd = q;
+        mpBegin = buf;
+        mpCap = buf + total;
+    } else if (n != 0) {
+        // ---- in-place path ----
+        cGrid tmp;
+        tmp.CopyConstruct(*value);
         unsigned tail = (unsigned)(mpEnd - pos);
         if (n < tail) {
-            grid_copy_construct(mpEnd - n, mpEnd, mpEnd);
-            grid_assign_backward(pos, mpEnd - n, mpEnd);
-            grid_assign_fill(pos, pos + n, value);
+            cGrid* src = mpEnd - n;
+            cGrid* out = 0;
+            grid_uninit_copy(&out, src, mpEnd, mpEnd);
             mpEnd += n;
+            grid_assign_backward(pos, src, mpEnd);
+            grid_assign_fill(pos, pos + n, &tmp);
         } else {
-            grid_uninit_copy(&mpEnd, pos, mpEnd, value);   // extend
-            grid_fill_n(n - tail, mpEnd, value);
-            mpEnd += n;
-            grid_assign_fill(pos, pos + tail, value);
+            grid_fill_n(mpEnd, n - tail, &tmp);
+            mpEnd += n - tail;
+            cGrid* out = 0;
+            grid_uninit_copy(&out, pos, mpEnd - (n - tail), &tmp);
+            mpEnd += tail;
+            grid_assign_fill(pos, mpEnd - tail, &tmp);
         }
+        tmp.Destroy();
     }
 }
 

@@ -1,10 +1,26 @@
-00703700 ?Add@cHierGrid_s0070_3700@@QAEXIMABUVec3@@I@Z  # cHierGrid_s0070_3700::Add migrated from s00703700 (verbatim, slice spelling)
-00703b60 ?Update@cHierGrid_s0070_3700@@QAEXIMABUVec3@@@Z  # cHierGrid_s0070_3700::Update migrated from s00703700 (verbatim, slice spelling)
-00703c80 ?grid_assign_fill@@YAPAUcGrid_s0070_3700@@PAU1@0PBU1@@Z  # grid_assign_fill migrated from s00703700 (verbatim, slice spelling)
-00703ce0 ??0cHierGrid_s0070_3700@@QAE@XZ  # cHierGrid_s0070_3700::cHierGrid migrated from s00703700 (verbatim, slice spelling)
-00703d50 ?CreateEntry@cHierGrid_s0070_3700@@QAEIIIM@Z  # cHierGrid_s0070_3700::CreateEntry migrated from s00703700 (verbatim, slice spelling)
-00703da0 ?erase@GridVec@@QAEPAUcGrid_s0070_3700@@PAU2@0@Z  # GridVec::erase migrated from s00703700 (verbatim, slice spelling)
-00703df0 ?insert@GridVec@@QAEXPAUcGrid_s0070_3700@@IPBU2@@Z  # GridVec::insert migrated from s00703700 (verbatim, slice spelling)
-00704060 ?Shutdown@cHierGrid_s0070_3700@@QAE_NXZ  # cHierGrid_s0070_3700::Shutdown migrated from s00703700 (verbatim, slice spelling)
-00704140 ?Resize@cHierGrid_s0070_3700@@QAEXI@Z  # cHierGrid_s0070_3700::Resize migrated from s00703700 (verbatim, slice spelling)
-00704260 ?Init@cHierGrid_s0070_3700@@QAE_NABUVec3@@MH@Z  # cHierGrid_s0070_3700::Init migrated from s00703700 (verbatim, slice spelling)
+00703700 ?Add@cHierGrid@@QAEXIMABUVec3@@I@Z  # SP::cHierGrid::Add (insert one object)
+00703b60 ?Update@cHierGrid@@QAEXIMABUVec3@@@Z  # SP::cHierGrid::Update
+00703c80 ?grid_assign_fill@@YAPAUcGrid@@PAU1@0PBU1@@Z  # assign-copy a cGrid range from one source
+00703ce0 ??0cHierGrid@@QAE@XZ  # SP::cHierGrid constructor
+00703d50 ?CreateEntry@cHierGrid@@QAEIMPBUVec3@@I@Z  # SP::cHierGrid::CreateEntry
+00703da0 ?erase@GridVec@@QAEPAUcGrid@@PAU2@0@Z  # GridVec::erase
+00703df0 ?insert@GridVec@@QAEXPAUcGrid@@IPBU2@@Z  # GridVec::insert (vector<cGrid>::insert)
+00704060 ?Shutdown@cHierGrid@@QAE_NXZ  # SP::cHierGrid::Shutdown
+00704140 ?Resize@cHierGrid@@QAEXI@Z  # SP::cHierGrid::Resize
+00704260 ?Init@cHierGrid@@QAE_NABUVec3@@MH@Z  # SP::cHierGrid::Init
+007043b0 ?Get@PropStub@@QAEXPAH00@Z  # property accessor
+007043d0 ?PropDtor@@YIXPAX@Z  # property object destructor
+00704400 ?Image_Read@@YA_NPAXPAUImageData@@@Z  # cImageData read
+00704500 ?Image_Write@@YA_NPAXPAUImageData@@I@Z  # cImageData write
+007045d0 ?Image_ReadV2@@YA_NPAXPAUImageData@@@Z  # cImageData read (v2: +pitch)
+00704620 ?Image_WriteV1@@YA_NPAXPAUImageData@@@Z  # cImageData write (v1: height*pitch)
+00704670 ?Image_WriteV2@@YA_NPAXPAUImageData@@@Z  # cImageData write (v2: 6*height*pitch)
+007046c0 ?Image_WriteV0@@YA_NPAXPAUImageData@@@Z  # cImageData write (v0: height*width)
+# ---- out-of-slice callees referenced by the reconstructions above ----
+00703050 ?CopyConstruct@cGrid@@QAEPAU1@ABU1@@Z  # cGrid copy-construct into this
+00700da0 ?calc@CellFromPosT@@QAEIMMME@Z  # SP::cHierGrid::CellFromPos (this in ecx)
+00703360 ?Index@CellMap@@QAEPAUCellInfo_s0070_2980@@PAI@Z  # CellMap find-or-insert
+00701050 ?list_insert_before@@YGXPAPAXPAX0@Z  # intrusive-list insert (allocates the 0xc-byte node)
+00700c00 ?CellHash@@YAFI@Z  # cell-id hash (32-entry table at 0x15352a8)
+00703470 ?create@SlotVectorStub@@QAEIPBX@Z  # slot_vector_base::create
+00702f60 ?Assign@CellMap@@QAEAAU1@ABU1@@Z  # CellMap copy assignment
