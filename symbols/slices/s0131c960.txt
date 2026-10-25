@@ -1,0 +1,1 @@
+0131c960 ?InitGameTerrainCursorAttributes@Simulator@@YAXXZ  # InitGameTerrainCursorAttributes migrated from s0131c960 (verbatim, slice spelling)

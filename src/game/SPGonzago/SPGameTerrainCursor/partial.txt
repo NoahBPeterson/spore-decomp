@@ -1,0 +1,1 @@
+# All 1 function in this slice byte-matches (see manifest.txt); run_all reports 1 / 1.

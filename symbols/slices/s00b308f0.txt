@@ -1,5 +1,5 @@
-00b30d70  SP::GetGameTerrainCursor  # PDB name on the card
-00b30e80  Simulator::cGameTerrainCursor::func9Ch_  # PDB name on the card
+00b30d70 ?SP_GetGameTerrainCursor@@YAPAXXZ  # SP_GetGameTerrainCursor migrated from s00b308f0 (verbatim, slice spelling)
+00b30e80 ?func9Ch_@cGameTerrainCursor@@QAEX_NPAX@Z  # cGameTerrainCursor::func9Ch_ migrated from s00b308f0 (verbatim, slice spelling)
 00b30f10  Simulator::cGameTerrainCursor::func60h_  # PDB name on the card
 00b30fb0  Simulator::cGameTerrainCursor::func5Ch_  # PDB name on the card
 00b31030  Simulator::cGameTerrainCursor::func7Ch_  # PDB name on the card

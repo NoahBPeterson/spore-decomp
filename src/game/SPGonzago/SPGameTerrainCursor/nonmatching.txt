@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00b30d70 141 SP::GetGameTerrainCursor; complete behavior, but extern-global references carry no reloc in the object and the new-object field stores are not dead-store-eliminated like the original
+00b30e80 60 cGameTerrainCursor::func9Ch_; complete behavior; loop-bound reload is CSE'd where the original reloads mpEnd-mpBegin every iteration; equiv=WEAK (331 valid, 51.9% cov)
