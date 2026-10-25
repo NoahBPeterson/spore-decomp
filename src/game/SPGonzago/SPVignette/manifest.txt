@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPVignette.cpp  ?CopyPtrs@@YAPAPAUIRefCounted@@PAPAU1@00@Z  0042f530  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
