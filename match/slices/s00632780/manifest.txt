@@ -7,3 +7,4 @@ slices/s00632780/s00632780.cpp  ?SaveThumbnail@cSPPlayModePhotoBrowser@@QAE_NPAX
 slices/s00632780/s00632780.cpp  ?Shutdown@cSPPlayModePhotoBrowser@@QAEXXZ  00632f30  /O2 /MD /Gy /TP /GS-
 slices/s00632780/s00632780.cpp  ?Deactivate@cSPPlayModePhotoBrowser@@QAEXXZ  00632fe0  /O2 /MD /Gy /TP /GS-
 slices/s00632780/s00632780.cpp  ?SetToLastPage@cSPPlayModePhotoBrowser@@QAEXXZ  00633080  /O2 /MD /Gy /TP /GS-
+slices/s00632780/s00632780.cpp  ?LoadPhotoThumb@cSPPlayModePhotoBrowser@@QAE_NI@Z  006330b0  /O2 /MD /Gy /TP /GS-
