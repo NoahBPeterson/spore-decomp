@@ -1,5 +1,17 @@
+# va  diff-bytes  reason
 007d01d0  32    W2::f wrapper; original is call+ret 8, mine tail-jumps (cl TCO) or schedules differently
 007d01f0  2     serialization Ser1F0; fixed by copying the uint16/float through local temporaries so both writer calls take stack temps (replay matches; fresh PASS 355/100%); only the float temp's outgoing-arg slot is 4 bytes lower (lea 0x24 vs 0x28, movss 0x2c vs 0x30). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
 007d0250  81    serialization Ser250; float vector writer, prologue/register schedule differs; equiv: WEAK (99 valid, 66.7% coverage)
 007d02b0  49    serialization Ser2B0; pair writer, by-value byte temps passed directly instead of via stack copy; equiv: WEAK (520 valid, 48.3% coverage)
 007d0360  114   serialization Ser360; register schedule differs; equiv: UNSUPPORTED (only 0/235 inputs valid: fault(fetch), fake-arity)
+007cf310  308   Vec16::insert(pos,n,value): complete growth/relocate path (DoInsertN fill + copy_backward + uninitialized copy of the tail, free of the old block); the retail helper calls (_UninitCopy16, _eastl_copy_backward, _eastl_fill/_eastl_fill_n, _EAlloc) and their register schedules differ; equiv: UNSUPPORTED (7 unresolved references)
+007cf4e0  115   Big2::~Big2: store set reproduced, EH frame and unwind funclet (catch-all around the two vector destroys) not reproduced; equiv: FAIL 5/5 valid inputs (first execution fault)
+007cf690  79    MapX::findOrInsert result: complete find-or-insert via the two helper calls, retail's helper boundaries (insertPair + node search) and result register differ; equiv: FAIL 5/7 valid inputs (first: memory pool @40010004)
+007cf760  294   MapY::insertPair: complete realloc/relocate path (allocate, copy pairs, addref each element, free old block, move-assign the value over the slot); retail copy-constructor call (RefField::ctor) and _EAlloc schedule differ; equiv: UNSUPPORTED (2 unresolved references: RefField::ctor, _EAlloc)
+007cf8d0  206   MapZ::setSlot: complete slot setter with the grow path; retail keeps the searched slot index live in a different register (mine leaves ecx modified); equiv: FAIL 5/96 valid inputs (first: ecx untouched by the original)
+007cf9b0  199   ObjX2::clear: complete body (two vector destroys, string reset, the four flag/queue clears); retail inlines more of the vector destroy loops; equiv: WEAK (70 valid inputs, 32.5% coverage)
+007cfb40  8     MapW::tryInsert: complete; only the interlocked addref intrinsic's micro-schedule differs (retail emits `add ecx,8` before `mov eax,1`, cl emits them in the opposite order); equiv: WEAK (75 valid inputs, 60.0% coverage)
+007cfbb0  121   InnerC::clear: complete body, retail's vector<bool> clear and the 0x50/0x54 pair handling are inlined differently; equiv: FAIL 5/5 valid inputs
+007cfc70  79    MapV::findOrInsert2: complete find-or-insert; helper split differs by 2 bytes; equiv: PASS (240 valid inputs, 100% coverage)
+007cfcd0  943   PMOwner::compile: complete property-model compile (element walk, kind dispatch, property writes), the retail loop bodies and _SP_GetPropertyAsKey call schedule differ; equiv: UNSUPPORTED (1 unresolved reference: _SP_GetPropertyAsKey)
+007d00e0  239   PMOwner::allegianceUpdate: complete update body; retail's two-pass element update differs in register allocation; equiv: FAIL 5/6 valid inputs
