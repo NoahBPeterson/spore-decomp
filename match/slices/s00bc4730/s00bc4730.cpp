@@ -188,23 +188,32 @@ Vector3* __stdcall BuildOffset(void* out, Entry* e, const float* vec2, float sca
 Vector3* __cdecl normalized_safe(void* scratch, const Vector3* v);   // 0x00449c20
 void* __cdecl QuatMulVec3(void* out, const void* q, const Vector3* v); // 0x0059aed0
 void __cdecl SetSkinFlag(Entry* e, int on);        // 0x00c0d950
-void __cdecl E1C7F0(Creature** ref);                  // 0x00e1c7f0
+void __fastcall E1C7F0(EntryVec32* vec, int unused, Creature** ref);  // 0x00e1c7f0
 
 // the registry object
+// free-list pool: EA fixed allocator whose head sits at +0x10 (i.e. Reg+0x18)
 struct FixedAlloc {
+    char     mPad00[0x10];                            // +0x00
+    Node*    mpFree;                                  // +0x10
     bool __thiscall AddCore(void* block, unsigned flags);   // 0x00926650
 };
 
+// the intrusive list root newNode appends to (shared with 0x00bc4820 call sites)
+struct NodeRoot {
+    Node* mpNext;                                     // +0x00
+    Node* mpPrev;                                     // +0x04
+};
+
 struct Reg {
-    uint32_t mPad00[6];                               // +0x00
-    Node*    mpFree;                                  // +0x18
+    NodeRoot  mRoot;                                  // +0x00 (node owner/append root)
+    FixedAlloc mAlloc;                                // +0x08 (mpFree at +0x18)
     Node     mSentinel;                               // +0x1c
 
     void resetEntry(Entry* e);                        // 0x00bc4bf0
     void resetAll();                                  // 0x00bc4d60
     void resetByKey(uint32_t key);                    // 0x00bc5040
     void enable(uint32_t key, Creature* c);           // 0x00bc52a0
-    int  tryMove(Creature* c, Creature* dest, int flag); // 0x00bc4900
+    bool tryMove(Creature* c, Creature* dest, int flag); // 0x00bc4900
     Node* newNode();                                  // 0x00bc51c0
     void teardown();                                  // 0x00bc53f0
 };
@@ -462,13 +471,13 @@ ElemVec* ElemVec::assign(const ElemVec& src)
     }
     unsigned cur = size();
     if (cur < n) {
-        ElemVecAssignRange(mpBegin, sfirst + cur, sfirst);
-        mpEnd = mpBegin + (n - cur);
-        ElemVecInsertCopy(0, sfirst + cur, src.mpEnd, mpEnd);
-        mpEnd = mpEnd + cur;
-        ElemVecFillRange(mpBegin, sfirst + cur, sfirst);
+        // assign the overlapping prefix, then copy-construct the tail into the spare slots
+        ElemVecAssignRange(sfirst, sfirst + cur, mpBegin);
+        void* sret;
+        ElemVecInsertCopy(&sret, sfirst + cur, src.mpEnd, mpEnd);
+        mpEnd = mpBegin + n;
     } else {
-        ElemVec* r = (ElemVec*)ElemVecAssignRange(mpBegin, sfirst + n, sfirst);
+        ElemVec* r = (ElemVec*)ElemVecAssignRange(sfirst, sfirst + n, mpBegin);
         ElemVecOps* self = (ElemVecOps*)this;
         self->destroyRange((Elem98*)r, mpEnd);
         mpEnd = mpBegin + n;
@@ -505,36 +514,54 @@ void ElemVec::resize(unsigned n)
 // @ 0x00bc4bf0
 void Reg::resetEntry(Entry* e)
 {
-    for (void** p = e->mSounds.mpBegin; p < e->mSounds.mpEnd; ++p) {
-        void* sys = GetAudioSystem();
-        if (sys) {
-            (*(void (__thiscall**)(void*, int))**(void***)sys)(sys, 0x347536b);
-            (*(void (__thiscall**)(void*, int, void*))((*(void***)sys)[0x10]))(sys, 0x3475385, *p);
-            (*(void (__thiscall**)(void*, int, int))((*(void***)sys)[0x10]))(sys, 0x34753a0, 0);
-            (*(void (__thiscall**)(void*))((*(void***)sys)[0x16]))(sys);
+    // every pass below is an eastl erase(begin, end): a byte-count guard, the release loop and
+    // then `end() -= (last - first)`; the byte form matters because the compiler truncates the
+    // difference before it is turned back into elements.
+    char* soundBase = (char*)e->mSounds.mpBegin;
+    int soundBytes = (int)((char*)e->mSounds.mpEnd - soundBase);
+    if ((soundBytes & ~3) > 0) {
+        int soundCount = soundBytes >> 2;
+        for (int i = 0; i < soundCount; ++i) {
+            void* snd = ((void**)soundBase)[i];
+            void* sys = GetAudioSystem();
+            if (sys) {
+                (*(void (__thiscall**)(void*, int))((*(void***)sys)[0x0e]))(sys, 0x347536b);
+                (*(void (__thiscall**)(void*, int, void*))((*(void***)sys)[0x10]))(sys, 0x3475385, snd);
+                (*(void (__thiscall**)(void*, int, int))((*(void***)sys)[0x10]))(sys, 0x34753a0, 0);
+                (*(void (__thiscall**)(void*))((*(void***)sys)[0x16]))(sys);
+            }
         }
     }
-    for (void** p = e->mFx.mpBegin; p < e->mFx.mpEnd; ++p) {
-        if (*p)
-            (*(void (__thiscall**)(void*, int))**(void***)*p)(*p, 1);
+
+    void** fxBegin = e->mFx.mpBegin;
+    void** fxEnd = e->mFx.mpEnd;
+    int fxBytes = (int)((char*)fxEnd - (char*)fxBegin);
+    if ((fxBytes & ~3) > 0) {
+        int fxCount = fxBytes >> 2;
+        for (int i = 0; i < fxCount; ++i) {
+            void* fx = fxBegin[i];
+            if (fx)
+                (*(void (__thiscall**)(void*, int))((*(void***)fx)[3]))(fx, 1);
+        }
     }
-    void** rEnd = e->mFx.mpEnd;
-    void** r = VectorErasePtr(rEnd, rEnd, e->mFx.mpBegin);
+    void** r = VectorErasePtr(fxEnd, fxEnd, fxBegin);
     for (; r < e->mFx.mpEnd; ++r) {
         if (*r)
             (*(void (__thiscall**)(void*))((*(void***)*r)[1]))(*r);
     }
-    e->mFx.mpEnd = e->mFx.mpBegin;
+    e->mFx.mpEnd = (void**)((char*)e->mFx.mpEnd - ((fxBytes >> 2) * 4));
 
     e->mDisabled = 1;
 
-    void** cEnd = e->mCreatures.mpEnd;
-    void** c = VectorCopyPtr(cEnd, cEnd, e->mCreatures.mpBegin);
+    void** crBegin = e->mCreatures.mpBegin;
+    void** crEnd = e->mCreatures.mpEnd;
+    int crBytes = (int)((char*)crEnd - (char*)crBegin);
+    void** c = VectorCopyPtr(crEnd, crEnd, crBegin);
     for (; c < e->mCreatures.mpEnd; ++c) {
         if (*c)
             (*(void (__thiscall**)(void*))((*(void***)*c)[1]))(*c);
     }
-    e->mCreatures.mpEnd = e->mCreatures.mpBegin;
+    e->mCreatures.mpEnd = (void**)((char*)e->mCreatures.mpEnd - ((crBytes >> 2) * 4));
 }
 
 // @ 0x00bc4d60
@@ -583,26 +610,24 @@ void Reg::enable(uint32_t key, Creature* c)
 // @ 0x00bc51c0
 Node* Reg::newNode()
 {
-    char* p;
-    for (;;) {
-        if (mpFree) {
-            p = (char*)mpFree;
-            mpFree = mpFree->mpNext;
-            break;
-        }
-        if (!((FixedAlloc*)((char*)this + 8))->AddCore(0, 0))
+    Node* p;
+    while (mAlloc.mpFree == 0) {
+        if (!mAlloc.AddCore(0, 0)) {
             p = 0;
-        else
-            continue;
-        break;
+            goto construct;
+        }
     }
-    Node* node = (Node*)(p + 8);
-    node->mEntry.init();
-    node->mpNext = (Node*)this;
-    node->mpPrev = *(Node**)((char*)this + 4);
-    node->mpPrev->mpNext = node;
-    *(Node**)((char*)this + 4) = node;
-    return node;
+    p = mAlloc.mpFree;
+    mAlloc.mpFree = p->mpNext;
+construct:
+    Entry* e = 0;
+    if (p != 0)
+        e = p->mEntry.init();
+    p->mpNext = (Node*)(void*)&mRoot;
+    p->mpPrev = mRoot.mpPrev;
+    mRoot.mpPrev->mpNext = p;
+    mRoot.mpPrev = p;
+    return (Node*)(void*)e;
 }
 
 // @ 0x00bc53f0
@@ -626,14 +651,14 @@ void Reg::teardown()
         }
         freeBuf(e->mCreatures.mpBegin);
         e->rec.destroy();
-        n->mpNext = mpFree;
-        mpFree = n;
+        n->mpNext = mAlloc.mpFree;
+        mAlloc.mpFree = n;
         n = next;
     }
 }
 
 // @ 0x00bc4900
-int Reg::tryMove(Creature* c, Creature* dest, int flag)
+bool Reg::tryMove(Creature* c, Creature* dest, int flag)
 {
     Node* end = &mSentinel;
     Node* node = mSentinel.mpNext;
@@ -654,7 +679,7 @@ int Reg::tryMove(Creature* c, Creature* dest, int flag)
     if (dest) {
         (*(void (__thiscall**)(Creature*))**(void***)dest)(dest);
     }
-    E1C7F0(&dest);
+    E1C7F0(&e->mCreatures, 0, &dest);
     if (dest)
         (*(void (__thiscall**)(Creature*))((*(void***)dest)[1]))(dest);
 

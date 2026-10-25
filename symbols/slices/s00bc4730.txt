@@ -1,0 +1,9 @@
+00bc4900 Reg::tryMove  # move the creature found in the registry to its destination pose (planet branch vs direct MoveToPointAndFacingAtSpeed, mBusy decrement) -- PARTIAL tail
+00bc4bf0 Reg::resetEntry  # release an entry: sound commands, mFx erase, mDisabled = 1, mCreatures copy+release
+00bc4d60 Reg::resetAll  # walk the sentinel list and reset every entry
+00bc5040 Reg::resetByKey  # find the node with the key and reset that entry
+00bc5070 ElemVec::assign  # fixed_vector<Elem98,8> operator= with the capacity/in-place branches
+00bc51c0 Reg::newNode  # pop a node block from the free list (AddCore on empty), construct its Entry and append it to the root list
+00bc5250 ElemVec::erase  # erase [first,last) by copy-back and shrink
+00bc5340 ElemVec::resize  # grow via insert(end, n-size, default Elem98), shrink via erase
+00bc4df0 ElemVec::insert  # insert n copies of val at pos (grow + in-place shift paths)
