@@ -1,6 +1,21 @@
-00d59b00 FUN_00d59b00  # float-returning (int*,float,float,float); naked asm, byte-exact
-00d59d00 FUN_00d59d00  # (int*,int*,int*) routine; naked asm, byte-exact
-00d59da0 FUN_00d59da0  # 6-arg routine; naked asm, byte-exact
-00d59f00 FUN_00d59f00  # __thiscall (int*,undefined4*,undefined4*); naked asm, byte-exact
-00d5a010 FUN_00d5a010  # __thiscall (int*,int*); naked asm, byte-exact
-00d5a140 FUN_00d5a140  # __thiscall (int*,undefined4*,undefined4*); naked asm, byte-exact
+00d59b00 ?cFollowBehavior_Approach@@YGMPAXPBXMMM@Z  # cFollowBehavior::Approach; partial (equiv FAIL: acos/dot/slerp argument path not fully recovered), 370 B vs 504 B
+00d59d00 ?FUN_00d59d00@@YAPAHPAH0UIntrusivePtr@@UVec3@@@Z  # distance-keyed partition over IntrusivePtr slots; byte-exact (manifest)
+00d59da0 ?FUN_00d59da0@@YAXPAH00UVec3@@@Z  # eastl partial_sort: make_heap + scan + adjust_heap + sort_heap; nonmatching (regalloc), equiv WEAK 155/400
+00d59f00 ?Insert8@VecHeader@@QAEPAXPAUElem8@@PBU2@@Z  # eastl vector<8-byte>::Insert(pos,value); byte-exact (manifest)
+00d5a010 ?Assign12@VecHeader@@QAEPAXPAPAX@Z  # eastl vector<12-byte>::Assign; nonmatching (regalloc), equiv WEAK 151/400
+00d5a140 ?Insert16@VecHeader@@QAEPAXPAUElem16@@PBU2@@Z  # eastl vector<16-byte>::Insert(pos,value); nonmatching (x87 hoist), equiv WEAK 71/400
+00ac0730 ?Compare@OriginCompare@@QAE_NPAX0@Z  # thiscall distance comparator: ECX = &origin Vec3, args = element positions (+0xc0)
+00d58510 FUN_00d58510  # __stdcall (ret 0xc) fill 4-float target quat from cFollowBehavior + target
+0059aed0 FUN_0059aed0  # rotate a Vec3 by a quaternion/axis constant, out is first arg
+005b2500 FUN_005b2500  # QuatPair slerp(a, b, t) returning by value
+00b3d550 FUN_00b3d550  # quaternion validity test
+00b2af00 FUN_00b2af00  # swap two IntrusivePtr slots
+00d592e0 FUN_00d592e0  # eastl adjust_heap(first, comp, len, hole, value, origin)
+00d597b0 FUN_00d597b0  # eastl make_heap(first, last, origin)
+00d59820 FUN_00d59820  # eastl sort_heap(first, last, origin)
+00d59410 VecHeader::Grow12  # grow the 12-byte-element buffer to n elements
+00b84c80 FUN_00b84c80  # 12-byte element copy loop
+00951740 FUN_00951740  # overlapping 12-byte move
+00edba80 FUN_00edba80  # 16-byte element copy_backward
+00d577b0 FUN_00d577b0  # 16-byte element copy loop
+004554f0 FUN_004554f0  # 8-byte element copy loop
