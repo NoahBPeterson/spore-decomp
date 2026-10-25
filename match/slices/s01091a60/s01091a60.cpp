@@ -247,7 +247,7 @@ void hkRelativeOrientationConstraintData::buildJacobian(
         float b1 = (cz * pfVar5[0] - cx * pfVar5[2]) * cw +
                    (cy * fVar2 + (fVar1 - 0.5f) * pfVar5[1]);
         float b2 = v48 * cw + (cz * fVar2 + v68 * pfVar5[2]);
-        float b3 = (fVar2 * cw + v64 * pfVar5[3]) + cw * hk_zero;
+        float b3 = (fVar2 * cw + v64 * pfVar5[3]) + hk_zero;
         axes[0] = b0 + b0;
         axes[1] = b1 + b1;
         axes[2] = b2 + b2;
