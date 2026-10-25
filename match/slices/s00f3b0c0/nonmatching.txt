@@ -10,3 +10,9 @@
 00f3bec0  42  complete reconstruction; register allocation of the nested call differs
 00f3bf00  81  complete reconstruction; register allocation of the nested call differs
 00f3bfc0  195  complete reconstruction; returns b in eax for clobber match; equiv PASS (370 valid)
+00f3b0c0  392  complete reconstruction (HUD refresh: window-manager lookups, percent conversions, m00f3a4e0 text sets, drag flag + m00f3aa30); cl calls _ftol2 where retail inlines the fistp sequence, so the 0xc frame is absent (399 vs 458 bytes); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid: fault read 315, fault write 67, fake-arity 17)
+00f3b440  169  outlined helper with live-in ESI object (custom register ABI); reconstructed with an explicit cSim* self, so the arg-passing prologue cannot match (227 vs 223 bytes); equiv UNSUPPORTED (0/400 valid: fault read)
+00f3b520   74  outlined helper with live-in ESI object (custom register ABI); reconstructed with an explicit cSim* self (90 vs 98 bytes); equiv UNSUPPORTED (0/400 valid: fault read)
+00f3b5e0  225  complete reconstruction (planet-model random world position, random range, noun creation + pose transform + posse add); retail thiscall/x87 arg cleanup differs (312 vs 304 bytes); equiv FAIL (5/5 valid, esp +0x4 vs +0x8)
+00f3b800  260  complete reconstruction (placement position normalize/scale, world adjust via FUN_00eec2b0, flag byte at +0x209); cl hoists the cfg init and keeps p in a different register (264 vs 287 bytes); equiv FAIL (5/5 valid, execution: fake-arity from local alloca path)
+00f3b9e0  119  complete reconstruction (8 corners from the bound object's 6-float box, radius reject via PlanetModel, optional edge distance compare); only register/arg-order differences remain (493 vs 495 bytes); equiv PASS (317 valid, 77.2% coverage)
