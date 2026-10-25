@@ -25,7 +25,6 @@ struct Self {
 // FUN_00dc4ed0: cdecl helper, args (float*, float*, Self*, Obj*)
 void Helper(float* a, float* b, Self* self, Obj* obj);
 
-typedef Vec3f* (__thiscall *Vfn1)(Obj* self, float a);          // vslot 11, one float arg
 typedef Vec3f* (__thiscall *Vfn2)(Obj* self, float a, float b); // vslot 11, two float args
 
 // @ 0x00dc59d0
@@ -42,10 +41,10 @@ int ComputeAndApply(Self* self, uint32 a2, uint32 a3, uint32 a4, uint32 a5, floa
     float fLo = self->mSub.Get() - 1.0f;
     Helper(&f8, &f1, self, obj);
     void** vt = *(void***)obj;
-    Vec3f* p1 = ((Vfn1)vt[11])(obj, f8);
+    Vec3f* p1 = ((Vfn2)vt[11])(obj, f8, f1);
     self->Take(p1);
     vt = *(void***)obj;
-    Vec3f* p2 = ((Vfn2)vt[11])(obj, fLo, f1);
+    Vec3f* p2 = ((Vfn2)vt[11])(obj, f8, fLo);
     self->Apply(*p2);
     return 1;
 }
