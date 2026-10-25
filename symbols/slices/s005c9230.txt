@@ -1,6 +1,7 @@
-005c9230 ?Init@cSPPalettePageUI_s005c_9230@@QAE_NHHHH@Z  # cSPPalettePageUI_s005c_9230::Init migrated from s005c9230 (verbatim, slice spelling)
+005c9230 ?Init@cSPPalettePageUI@@QAE_NPAVcSPPalettePage@@PAXHPAM@Z  # cSPPalettePageUI::Init(page,parent,flag,rect): bind model, scale, layout Init, per-item class-id dispatch to item-UI ctors
 005c9810  ?SetWindowFlag@cUIMissionCard@@QAEXH@Z  # if (mWindow @+0x10) mWindow->SetFlag(1, value)
 005c9830  ?GetCurrent@cUIMissionCard@@QAEPAVcFeedCategory@@XZ  # bounds-check mSelectedIndex @+0x14 against vector @+0x6c
+005c98a0  ?Update@cSPPaletteSubCategoryUI@@QAEXI@Z  # cSPPaletteSubCategoryUI::Update(deltaMs): slide/lerp entries, stretch+fade windows, refresh icons
 005c9c70  ??0cUIMissionCard@@QAE@XZ  # ctor: 3 base vtables + 5 vectors (+0x30/+0x44/+0x58/+0x6c/+0x80)
 005c9d10  ??1cUIMissionCard@@UAE@XZ  # dtor: free vectors, release mWindow, reset base vtables
-005c9dd0 ?cUIMissionCardDoMessageStub@@YA_NHPAX@Z  # cUIMissionCardDoMessageStub migrated from s005c9230 (verbatim, slice spelling)
+005c9dd0 ?DoMessage@cUIMissionCard@@QAE_NHPAX@Z  # cUIMissionCard::DoMessage(msgType,void*): select feed index on msg 0x287259f6, update highlight, dispatch override message
