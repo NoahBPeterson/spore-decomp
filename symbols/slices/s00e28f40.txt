@@ -1,1 +1,1 @@
-00e28f40 SP::cSPUINewProgressBar::UpdateLevelWindows  # PDB name (pdb_names.json anchor); retail adds a trailing bool (ret 0x14)
+00e28f40 ?UpdateLevelWindows@cSPUINewProgressBar_s00e2_8f40@SP@@QAEXPAUIWindow@@MMM_N@Z  # cSPUINewProgressBar_s00e2_8f40::UpdateLevelWindows migrated from s00e28f40 (verbatim, slice spelling)
