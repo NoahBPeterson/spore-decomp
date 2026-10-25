@@ -1,0 +1,4 @@
+007c4dd0 ?Init@cSPEditorPhysicsWorld@SP@@QAEXXZ  # SP::cSPEditorPhysicsWorld::Init (callee of s00b35300, named from the dev publics; slice address comment)
+00b35300 ?Setup@Owner@@QAEXXZ  # Owner::Setup migrated from s00b35300 (verbatim, slice spelling)
+00b35860 ?Teardown@Owner@@QAEXXZ  # Owner::Teardown migrated from s00b35300 (verbatim, slice spelling)
+00b35af0 ?OnRemove@Owner@@QAEXPAUListed@@@Z  # Owner::OnRemove migrated from s00b35300 (verbatim, slice spelling)

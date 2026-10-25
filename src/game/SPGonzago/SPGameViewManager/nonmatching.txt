@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00b35300 734 complete; register allocation differs (this in edi vs ebx, t/gp swapped); flags /O2 /MD /Gy /TP /arch:SSE
+00b35af0 92 complete; sel compare reloads member in original, unlink loads +8 before +4

@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGameViewManager.cpp  ?FUN_00b34ff0@@YIXPAUCAct@@PAX@Z  00b34ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameViewManager.cpp  ?Teardown@Owner@@QAEXXZ  00b35860  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
