@@ -27,10 +27,94 @@ struct cResourceBase;
 class cEditorResource;
 struct cResourceBase { cResourceBase* AsInterface(int type); };
 
-// @ 0x4b9960  eastl::vector<T>::DoInsertValue (element 0x4c bytes)
-void FUN_004b9960(void* self, void* pos, void* value)
+extern "C" void* memcpy(void*, const void*, uint32_t);   // @ 0x11e0744
+inline void* operator new(unsigned int, void* p) { return p; }
+
+// ---- EA::AutoRefCount<SP::cSPEditorModel> ------------------------------------------------
+// Refcounted model object: the count lives in the RefCounted sub-object at +0x04, so the
+// integer that AddRef bumps is at +0x08.
+struct EditorRefCount {
+    void*    mpVtbl;      // +0x00
+    int32_t  mCount;      // +0x04
+    void AddRef() { ++mCount; }
+};
+struct cSPEditorModel {
+    void*          mpVtbl;        // +0x00
+    EditorRefCount mRefCount;     // +0x04 (mCount at +0x08)
+};
+
+// 4-byte smart pointer, the element type of the model vector.
+struct EditorModelRef {
+    cSPEditorModel* mpObject;                                    // +0x00
+    EditorModelRef() : mpObject(0) {}
+    EditorModelRef(const EditorModelRef& r) : mpObject(r.mpObject) { if (mpObject) mpObject->mRefCount.AddRef(); }
+    EditorModelRef& operator=(cSPEditorModel* p);                // @ 0x41d980
+    EditorModelRef& operator=(const EditorModelRef& r) { return operator=(r.mpObject); }
+};
+
+// Block header EASTL stores in front of every allocation (owner id at -0x04).
+struct EastlBlockHeader {
+    int32_t mPad;         // -0x08
+    int32_t mOwner;       // -0x04
+};
+
+struct EditorModelVector {
+    EditorModelRef* mpBegin;      // +0x00
+    EditorModelRef* mpEnd;        // +0x04
+    EditorModelRef* mpCapacity;   // +0x08
+    char            mAllocator[4];// +0x0c
+    void DoInsertValue(EditorModelRef* position, const EditorModelRef* value);  // @ 0x4b9960
+};
+
+extern "C" {
+    void* EASTL_Allocate(void* pAllocator, uint32_t size, uint32_t alignment, int flags); // @ 0x42dee0
+    void  FreeRawBlock(void* p);                                                          // @ 0xf47380
+}
+
+// @ 0x4b9960
+void EditorModelVector::DoInsertValue(EditorModelRef* position, const EditorModelRef* value)
 {
-    (void)self; (void)pos; (void)value;
+    if (mpEnd == mpCapacity) {
+        // grow: copy head and tail around the inserted element, then swap the buffer
+        const int count = (int)(mpEnd - mpBegin);
+        const int capacity = (count > 0) ? count * 2 : 1;
+        EditorModelRef* pNew = capacity
+            ? (EditorModelRef*)EASTL_Allocate(mAllocator, (uint32_t)(capacity * 4), 4, 0)
+            : 0;
+        const EditorModelRef* pOld = mpBegin;
+        const int headCount = (int)(position - mpBegin);
+        EditorModelRef* pMid = (EditorModelRef*)memcpy(pNew, pOld, (uint32_t)((const char*)position - (const char*)pOld)) + headCount;
+        if (pMid)
+            new (pMid) EditorModelRef(*value);
+        const int tailCount = (int)(mpEnd - position);
+        EditorModelRef* pNewEnd = (EditorModelRef*)memcpy(pMid + 1, position,
+                            (uint32_t)((const char*)mpEnd - (const char*)position)) + tailCount;
+        if (mpBegin) {
+            EastlBlockHeader* pHeader = ((EastlBlockHeader*)mpBegin) - 1;
+            if (pHeader->mOwner)
+                FreeRawBlock(mpBegin);
+        }
+        mpBegin = pNew;
+        mpEnd = pNewEnd;
+        mpCapacity = pNew + capacity;
+    } else {
+        // in place: keep a pointer to the value if it aliases the vector itself
+        const EditorModelRef* pValue = value;
+        if (!(pValue < position) && pValue < mpEnd)
+            pValue = value + 1;
+        EditorModelRef* pLast = mpEnd;
+        if (pLast)
+            new (pLast) EditorModelRef(mpEnd[-1]);
+        EditorModelRef* pDest = mpEnd;
+        EditorModelRef* pSrc = mpEnd - 1;
+        while (pSrc != position) {
+            --pSrc;
+            --pDest;
+            pDest->operator=(pSrc->mpObject);
+        }
+        position->operator=(pValue->mpObject);
+        ++mpEnd;
+    }
 }
 
 // @ 0x4b9c70
