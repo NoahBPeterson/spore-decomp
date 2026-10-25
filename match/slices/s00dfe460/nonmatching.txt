@@ -9,3 +9,6 @@
 00dff130  90  0x27e8-element init: SBO/vector init differs difftest UNSUPPORTED after ecx fix (0/1200 valid: faults).
 00dff1a0  164  0x2788-element copy-ctor member-by-member differs difftest PASS after ecx fix (362 valid, 100% cov).
 00dff4e0  77  uninitialized_copy stride 0x27e8 scheduling differs
+00dfef70  4  cUISpaceRes destructor teardown: identical except `pop edi` scheduled before the final two vtbl stores instead of between them; complete, equiv WEAK (177 valid, 90.1% cov, no mismatch)
+00dff330  101  vector assign stride 0x238: grow/medium branches match; initialised-copy call block keeps pre-pushed args (register/scheduling order only); complete, equiv WEAK (178 valid, 53.8% cov, no mismatch)
+00dff650  101  vector assign stride 0x534: same shape as 0x238 version, initialised-copy call block scheduling differs; complete, equiv WEAK (165 valid, 52.9% cov, no mismatch)
