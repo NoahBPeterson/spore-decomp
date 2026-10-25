@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00d6e3a0 543 SP::PLAY_FIGHT_Tick (743 vs 724): 8-arg creature tick; full behavioural reconstruction, but the frame size and the per-condition instruction scheduling (shift/test byte-extraction, spill placement) diverge; equiv FAIL (5/13 valid inputs mismatched, all only in the undefined upper byte of the byte return: original 0xff01 vs ours 0x0001, low byte equal)
+00d6e680 258 FUN_00d6e680 (321 vs 318): noun/avatar lookup + velocity/position dot-product gate; cl saves one extra register (push ecx), shifting the frame and every argument offset by 4, and reassigns the argument loads (lea edi/eax vs ecx) plus the SSE load ordering; semantics preserved; equiv WEAK (coverage 17% < 60%, no mismatch)
+00d6f1c0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 622 bytes - party behaviour packet body not reconstructed.
+00d6f430 15 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 347 bytes - PATROL_TOOFAR_Decide body not reconstructed.

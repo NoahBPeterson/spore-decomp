@@ -1,3 +1,5 @@
+00d6f1c0 ?FUN_00d6f1c0@SP@@YIXPAVcBehaviorActor@1@H@Z  # FUN_00d6f1c0 migrated from s00d6f1c0 (verbatim, slice spelling)
+00d6f430 ?PATROL_TOOFAR_Decide@SP@@YA_NPAVcBehaviorActor@1@HPAH@Z  # PATROL_TOOFAR_Decide migrated from s00d6f1c0 (verbatim, slice spelling)
 00d6f800 ?CRY_TO_AVATAR_Tick@SP@@YAXPAVcBehaviorActor@1@PAUcActionStatus@1@@Z  # CRY_TO_AVATAR_Tick migrated from s00d6f1c0 (verbatim, slice spelling)
 00d6f910 ?AVATAR_PARTY_Tick@SP@@YAXPAVcBehaviorActor@1@PAUcActionStatus@1@@Z  # AVATAR_PARTY_Tick migrated from s00d6f1c0 (verbatim, slice spelling)
 00d6fa60 ?POSSE_PARTY_Tick@SP@@YAXPAVcBehaviorActor@1@PAUcActionStatus@1@@Z  # POSSE_PARTY_Tick migrated from s00d6f1c0 (verbatim, slice spelling)

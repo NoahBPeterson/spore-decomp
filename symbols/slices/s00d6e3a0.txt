@@ -1,0 +1,5 @@
+00d6e3a0 ?PLAY_FIGHT_Tick@@YAEPAUCreature@@HHHHHHM@Z  # PLAY_FIGHT_Tick migrated from s00d6e3a0 (verbatim, slice spelling)
+00d6e680 ?FUN_00d6e680@@YAMPAUCreature@@HHHPAUStimuli@@PAD@Z  # FUN_00d6e680 migrated from s00d6e3a0 (verbatim, slice spelling)
+00d6eeb0 ?FUN_00d6eeb0@@YAMPAUCreature@@@Z  # FUN_00d6eeb0 migrated from s00d6e3a0 (verbatim, slice spelling)
+00d6ef50 ?FUN_00d6ef50@@YAMPAUCreature@@@Z  # FUN_00d6ef50 migrated from s00d6e3a0 (verbatim, slice spelling)
+00d6f090 ?FUN_00d6f090@@YAMPAUCreature@@@Z  # FUN_00d6f090 migrated from s00d6e3a0 (verbatim, slice spelling)
