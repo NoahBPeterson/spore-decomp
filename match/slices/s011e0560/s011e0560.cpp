@@ -27,6 +27,9 @@ extern void* FUN_011eb180(void*);
 extern void  FUN_011eaaa0(void);
 extern void  FUN_011eaad0(void);
 extern void  FUN_011eaef0(void*);
+extern void* FUN_011eb5a0(void* scratch, void* entry, void* dictionary);
+extern void* FUN_011eb790(void* scratch, void* entry, void* dictionary);
+extern "C" __declspec(dllimport) double __cdecl floor(double);
 
 // RenderWare arena objects reached through these pointers are called as members (ecx = object):
 // the accessors/updaters never take a stack 'self' and never pop one.
@@ -90,8 +93,9 @@ void crt_unlock_8_helper() { crt_unlock_8(8); }
 // @ 0x011e0810  CRT float->long helper (ftol2).  PARTIAL.
 long crt_ftol2_stub(double x) { return (long)x; }
 
-// @ 0x011e0906  IAT thunk to floor().  PARTIAL.
-double iat_floor(double x) { return x; }
+// @ 0x011e0906  IAT thunk to floor(): complete equivalent wrapper (the retail jmp [IAT] is
+// linker-generated; the compiler emits a call/return here).
+double iat_floor(double x) { return floor(x); }
 
 // @ 0x011e0912 / @ 0x011e0b6d / @ 0x011e0bd2 / @ 0x011e0c47  CRT EH helpers.  PARTIAL.
 void crt_eh_stub_0912(void* p, unsigned n, int flags) { (void)p; (void)n; (void)flags; }
@@ -390,8 +394,6 @@ struct ArenaSelf {
     void alignTo(uint32_t a);                      // 0x011e24b0
     Blob32* copyBlob(Blob32* out);                 // 0x011e2670 (returns out in eax)
     ArenaSelf* initRange(int* data, int n);        // 0x011e29c0 (returns this; see definition)
-    void writeDictionary(void* p2);                // 0x011e2760 PARTIAL
-    int getExportedObjectByIndex(unsigned index, void* out); // 0x011e28e0 PARTIAL
 };
 
 // @ 0x011e2240
@@ -475,21 +477,183 @@ ArenaSelf* ArenaSelf::initRange(int* data, int n)
     return this;
 }
 
-// @ 0x011e2760  Arena::WriteDictionary.  PARTIAL.
-void ArenaSelf::writeDictionary(void* p2) { (void)p2; }
+// ---------------------------------------------------------------------------
+// Arena dictionary I/O (0x011e2760 / 0x011e28e0) and resource appending (0x011e2a00).
+// ---------------------------------------------------------------------------
+struct ArenaDictEntry {
+    uint32_t data;       // +0x00
+    uint32_t field04;    // +0x04
+    uint32_t field08;    // +0x08
+    uint32_t field0C;    // +0x0c
+    uint32_t field10;    // +0x10
+    uint32_t typeId;     // +0x14
+};
 
-// @ 0x011e28e0  Arena::GetExportedObjectByIndex.  PARTIAL.
-int ArenaSelf::getExportedObjectByIndex(unsigned index, void* out)
+struct ArenaTypeEntry {
+    int typeId;
+};
+
+struct ArenaTypeList {
+    char pad[8];
+    ArenaTypeEntry** entries;
+};
+
+struct ArenaStream {
+    char pad00[0x2c];
+    void (__cdecl* writeSmall)(void* buf, int size, int arg);        // +0x2c
+    void (__cdecl* writeFull)(void* buf, int size, int arg, void* user); // +0x30
+    void* user;                                                     // +0x34
+    char pad38[0x44];
+    uint32_t position;  // +0x7c
+    char pad80[0x20];
+    uint32_t limit;     // +0xa0
+    char padA4[0x1c];
+    uint32_t fieldC0;   // +0xc0
+    uint32_t alignment; // +0xc4
+};
+
+struct ExportedObject {
+    uint32_t field00;   // +0x00
+    uint32_t field04;   // +0x04
+    uint32_t info0;     // +0x08
+    uint32_t info1;     // +0x0c
+    uint32_t info2;     // +0x10
+    uint32_t info3;     // +0x14
+    Blob32 tail;        // +0x18
+};
+
+struct Arena {
+    char pad00[0x24];
+    uint32_t numUsed;               // +0x24
+    char pad28[8];
+    ArenaDictEntry* dictionary;     // +0x30
+    ArenaManifestApi* manifest;     // +0x34
+
+    static void WriteDictionary(Arena* self, ArenaStream* stream);
+    int GetExportedObjectByIndex(unsigned index, ExportedObject* out);
+};
+
+// @ 0x011e2760  Arena::WriteDictionary (cdecl: arena in the first stack slot, stream in the second)
+void Arena::WriteDictionary(Arena* self, ArenaStream* stream)
 {
-    (void)index; (void)out;
-    return 0;
+    uint32_t size = stream->limit - stream->position;
+    if (stream->writeSmall != 0)
+        stream->writeSmall(0, 0, (int)size);
+    else
+        stream->writeFull(0, 0, (int)size, stream->user);
+
+    for (uint32_t i = 0; i < self->numUsed; ++i) {
+        ArenaDictEntry* entry = &self->dictionary[i];
+        ArenaDictEntry record;
+        record.data = entry->data;
+        record.field04 = entry->field04;
+        record.field08 = entry->field08;
+        record.field0C = entry->field0C;
+        record.field10 = entry->field10;
+        record.typeId = entry->typeId;
+
+        int index = 0;
+        for (;;) {
+            ArenaTypeList* types = (ArenaTypeList*)self->manifest->FUN_011e4600();
+            if (types->entries[index]->typeId == (int)entry->typeId)
+                break;
+            ++index;
+        }
+        record.data = entry->field04;
+        record.field04 = 0;
+        record.field10 = (uint32_t)index;
+
+        if (stream->writeSmall == 0)
+            stream->writeFull(&record, 0x18, 0, stream->user);
+        else
+            stream->writeSmall(&record, 0x18, 0);
+    }
+
+    stream->position = (stream->position + 3) & ~3u;
+    stream->fieldC0 = (stream->fieldC0 + 3) & ~3u;
+    if (stream->alignment < 4)
+        stream->alignment = 4;
+    uint32_t bytes = self->numUsed * 0x18;
+    stream->position += bytes;
+    uint32_t a = stream->alignment;
+    uint32_t used = stream->fieldC0;
+    if (a < 2)
+        a = 1;
+    stream->alignment = a;
+    stream->fieldC0 = used + bytes;
 }
 
-// @ 0x011e2a00  AddResourceToArena<Adder>.  PARTIAL: template body approximated.
-void rw_AddResourceToArena_stub(void* a, void* b, int c, int* d)
+// @ 0x011e28e0  Arena::GetExportedObjectByIndex
+int Arena::GetExportedObjectByIndex(unsigned index, ExportedObject* out)
 {
-    (void)a; (void)b; (void)c; (void)d;
+    if (index >= this->numUsed)
+        return 0;
+
+    ArenaDictEntry* entry = &this->dictionary[index];
+    int local[8];
+    ArenaManager mgr;
+    mgr.vftable = &PTR_FUN_0140a578;
+    void** data = (void**)((void*(__thiscall*)(ArenaManager*))FUN_0140a57c)(&mgr);
+    mgr.vftable = &PTR_FUN_0140a578;
+    ArenaTypeEntry* type = (ArenaTypeEntry*)((ArenaTypeRegistryApi*)*data)->FUN_011eb0a0((int)entry->typeId);
+
+    out->field04 = entry->data;
+    uint32_t* first = (uint32_t*)FUN_011eb5a0(local, entry, this->dictionary);
+    out->info0 = first[0];
+    out->info1 = first[1];
+    out->info2 = first[2];
+    out->info3 = first[3];
+    void* second = FUN_011eb790(local, entry, this->dictionary);
+    out->tail = *(Blob32*)second;
+    out->field00 = type ? (uint32_t)type->typeId : 0;
+    return 1;
 }
+
+// ---------------------------------------------------------------------------
+// AddResourceToArena<Adder>
+// ---------------------------------------------------------------------------
+struct Adder {
+    uint32_t ids[4];
+};
+
+struct ArenaResourceSource {
+    uint32_t extents[8];
+};
+
+struct ArenaResourceOut {
+    uint32_t* cursor;    // +0x00
+    uint32_t* counter;   // +0x04
+    uint32_t pad08;      // +0x08
+    uint32_t lastIndex;  // +0x0c
+};
+
+static uint32_t ArenaEmitResource(ArenaResourceOut* out, uint32_t id, uint32_t a, uint32_t b, uint32_t tag)
+{
+    uint32_t* record = out->cursor;
+    record[0] = id;
+    record[1] = 0;
+    record[2] = a;
+    record[3] = b;
+    record[4] = 0xffffffffu;
+    record[5] = tag;
+    out->cursor = record + 6;
+    out->lastIndex = *out->counter;
+    return ++*out->counter;
+}
+
+// @ 0x011e2a00  rw::core::arena::AddResourceToArena (body of the Adder instantiation)
+namespace rw { namespace core { namespace arena {
+uint32_t AddResourceToArena(Adder* adder, ArenaResourceSource* source, uint32_t tag, ArenaResourceOut* out)
+{
+    if (adder->ids[1] != 0)
+        ArenaEmitResource(out, adder->ids[1], source->extents[2], source->extents[3], 0x10030u);
+    if (adder->ids[2] != 0)
+        ArenaEmitResource(out, adder->ids[2], source->extents[4], source->extents[5], 0x10031u);
+    if (adder->ids[3] != 0)
+        ArenaEmitResource(out, adder->ids[3], source->extents[6], source->extents[7], 0x10032u);
+    return ArenaEmitResource(out, adder->ids[0], source->extents[0], source->extents[1], tag);
+}
+}}}
 // --- equivalence checker address annotations
 
 // --- equivalence checker address annotations (dummy declarations) ---
