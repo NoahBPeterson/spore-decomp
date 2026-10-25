@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00bbd0a0 37 complete reconstruction of the clamped time accumulator (`?FUN_00bbd0a0@TObj@@QAEXH@Z`, 55 bytes): FUN_00b3d350(), m = *(int*)(this+0x64)+delta, m = min(m,2000); not byte-exact: ours 58 bytes vs 55, 40 diff bytes — the reference-returning MinT materialises the literal 2000 in a stack temporary and caps through lea/register in one arm, whereas cl keeps the immediate and inverts the branch layout; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv PASS (400 valid inputs, 100.0% coverage)
