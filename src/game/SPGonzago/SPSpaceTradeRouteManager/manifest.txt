@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ??0cTradeRoutePair@@QAE@ABV0@@Z  01037a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?SP_SerializeTradeRouteList@@YA_NPAXPAVcTradeRouteTree@@@Z  01037ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?IsTradeRouteBetween@cSpaceTradeRouteManager@@QAE_NII@Z  01037d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?HasTradeRouteWithPlayer@cSpaceTradeRouteManager@@QAE_NI@Z  01037d90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?SystemHasTradeRouteWithPlayer@cSpaceTradeRouteManager@@QAEMII@Z  01037dd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?GetPlayerProgressOnTradeRoute@cSpaceTradeRouteManager@@QAEXII@Z  01037e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?ResetPlayerProgressOnTradeRoute@cSpaceTradeRouteManager@@QAEXIIM@Z  01037eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?GetNumberOfPlayerTradeRoutes@cSpaceTradeRouteManager@@QAEHXZ  01037f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?erase@cTradeRouteTree@@QAEXPAUcRBNodeBase@@@Z  010380b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
