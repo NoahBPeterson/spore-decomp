@@ -1,2 +1,4 @@
 008f1960 EA::XHTML::Layout::Table::Build  # PDB candidate; thiscall no args, run once (mBuilt flag at +0x108)
 008f1c40 ?MeasureContent@Table_s008f_16c0@Layout@XHTML@EA@@UAEXAAVSizingContext@234@AAVStyleState_s008f_16c0@Style@34@@Z  # Table_s008f_16c0::MeasureContent migrated from s008f16c0 (verbatim, slice spelling)
+008f25b0 ?F_8f25b0@PoolNodeX@Layout@XHTML@EA@@QAEXH@Z  # resolves a packed byte offset (table[offset] -> +0x14 stride, +0x0c base, +0x10 table) and tail-calls the +0x08 handler with the index in ecx and the +0x18 payload as its argument; byte-exact
+008f1700 ?Build@TableRow@Layout@XHTML@EA@@QAEXPAVTable@234@@Z  # TableRow::Build(Table*): appends the row, rebuilds mCells from the table-cell children (colspan/rowspan clamped to >=1)
