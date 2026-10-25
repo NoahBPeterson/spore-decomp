@@ -1,0 +1,1 @@
+00d77510 ?TRIBE_MATE_Activate@SP@@YA_NPAUCreature@@HHHHPAUHolder@@@Z  # TRIBE_MATE_Activate migrated from s00d77360 (verbatim, slice spelling)
