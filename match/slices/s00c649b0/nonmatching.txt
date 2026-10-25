@@ -3,3 +3,11 @@
 00c653e0   29   cSimpleRotationRing dtor: complete; vptr/dtor store schedule differs (cl 15 vs 14), vtable + 0x118 stores kept by volatile. difftest PASS
 00c65540   29   cSimpleRotationBall dtor: complete; same vptr/dtor store schedule difference. difftest PASS
 00c658e0   9    set position + dirty: complete; only the trailing call to the in-TU empty stub 0xc64db0 is folded away. difftest PASS
+00c649b0 180 nonmatching: morph-handle apply; body stubbed (`FUN_00c649b0` fastcall stub, 8 bytes vs 180). difftest UNSUPPORTED (our symbol not found; no marker/name matched). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c64bf0 302 nonmatching: Simulator::cArrowMorphHandle ctor; body stubbed (`cArrowMorphHandle_ctor`, returns self). difftest UNSUPPORTED (symbol name not matched). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c64db0 336 nonmatching: arrow world-position update; body stubbed (`A::FUN_00c64db0` empty noinline). difftest UNSUPPORTED (symbol name not matched). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c64f00 456 nonmatching: arrow quaternion update; body stubbed (`FUN_00c64f00` 4 bytes vs 456). difftest UNSUPPORTED (symbol name not matched). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c650d0 777 nonmatching: arrow placement/stopwatch solve; body stubbed (`FUN_00c650d0` returns a). difftest UNSUPPORTED (symbol name not matched). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c65610 152 nonmatching: simple-rotation-ball update; body stubbed (`FUN_00c65610` 4 bytes vs 167 target). difftest UNSUPPORTED (symbol name not matched). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c656c0 180 nonmatching: LoadModel flag setup; body stubbed (`FUN_00c656c0` returns 0). difftest UNSUPPORTED (symbol name not matched). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c65780 344 nonmatching: morph-handle target set; body stubbed (`FUN_00c65780` empty). difftest UNSUPPORTED (symbol name not matched). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
