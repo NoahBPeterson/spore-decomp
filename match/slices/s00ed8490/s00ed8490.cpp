@@ -5,6 +5,22 @@
 typedef void  (__thiscall *FV_v)(void*);
 typedef void* (__thiscall *FV_p)(void*);
 
+// noun-id lookup vector used by the collector at +0x74 (20 bytes; guard follows it at +0x14)
+struct NounVec8a30 { int* begin; int* end; int* cap; int* pad0; int* pad1; };
+struct GData8a30;
+struct Holder8a30 {
+    GData8a30* GetData(int);                      // 0x00f3e8a0
+    char*      GetPlayer(int);                    // 0x00f3be60 (0x534-byte records)
+    void       GetAllNouns(int, NounVec8a30*);    // 0x00f40d00 thiscall, ret 8
+};
+struct Game8a30 { char pad[0x74]; Holder8a30* holder; };
+extern Game8a30* g_game8a30;                      // 0x016c7aa4
+void __cdecl operator_delete(void*);              // 0x00f47380
+
+// lazily-initialised noun vector used by 0x00ed9040
+NounVec8a30 g_nounVec;          // 0x016c7708
+int         g_nounVecGuard;     // 0x016c771c
+
 // ================================================================ 0x00ed8490
 // @ 0x00ed8490
 int __cdecl FUN_00ed8490(int p)
@@ -123,8 +139,6 @@ void* __cdecl FUN_00b3d300(void);                 // SP::NounManager
 void* __cdecl FUN_00b1f9b0(void*);                // cGameNounManager::GetAllNouns
 void* __cdecl SP_EffectsManager(void);            // 0x67ddd0
 int   __cdecl FUN_006c0200(void*);                // 0x6c0200
-int   __cdecl FUN_00f40d00(void*);                // 0xf40d00
-void* __cdecl FUN_013c8830(void);                 // atexit callback
 extern int __cdecl atexit(void*);
 
 typedef void  (__thiscall *FVf_v)(void*);
@@ -233,14 +247,31 @@ void Obj8780::f(unsigned char b)
 }
 
 // ================================================================ 0x00ed8950
-void FUN_00ed8950(int a, int b)
+// @ 0x00ed8950
+void __cdecl FUN_00ed8950(int id, int effect)
 {
-    int* local = 0;
-    int* local10 = 0;
-    int cap = 0;
-    FUN_00f40d00((void*)a);
-    (void)local; (void)local10; (void)cap;
-    // Placeholder: the real body iterates a noun vector and pushes float params.
+    NounVec8a30 vec;
+    vec.begin = 0;
+    vec.end = 0;
+    vec.cap = 0;
+    g_game8a30->holder->GetAllNouns(id, &vec);
+    int** end = (int**)vec.end;
+    for (int** it = (int**)vec.begin; it != end; ++it) {
+        int* noun = *it;
+        int* fx = noun ? (int*)((int(__thiscall*)(void*, int))(*(void***)noun)[3])(noun, 0x1186577) : 0;
+        ((S_c8b210*)(void*)fx)->f(effect);
+        ((S_c88a00*)(void*)fx)->f(effect, 3.402823466e+38f);
+        ((S_c8a200*)(void*)fx)->f(effect, 1.0f);
+    }
+    end = (int**)vec.end;
+    for (int** it = (int**)vec.begin; it < end; ++it) {
+        int* noun = *it;
+        if (noun)
+            ((FV_v)(*(void***)noun)[1])(noun);
+    }
+    int* base = vec.begin;
+    if (base != 0 && base[-1] != 0)
+        operator_delete(base);
 }
 
 // ================================================================ 0x00ed8a30
@@ -264,10 +295,6 @@ struct GData8a30 {                                // per-player data holder (SP:
     bool IsKind1();                               // 0x00f25330
     bool IsKind2();                               // 0x00f25470
 };
-struct Holder8a30 {
-    GData8a30* GetData(int);                      // 0x00f3e8a0
-    char*      GetPlayer(int);                    // 0x00f3be60 (0x534-byte records)
-};
 struct Noun8a30 {
     virtual void v0(); virtual void v1(); virtual void v2();
     virtual Fx8a30* GetComponent(unsigned id);
@@ -275,8 +302,6 @@ struct Noun8a30 {
     GData8a30* GetGameData();                     // 0x00b18530
 };
 struct NounMgr8a30 { int* GetAllNouns(); };      // 0x00b1f9b0
-struct Game8a30 { char pad[0x74]; Holder8a30* holder; };
-extern Game8a30* g_game8a30;                      // 0x016c7aa4
 NounMgr8a30* __cdecl NounManager8a30(void);       // 0x00b3d300
 int* __cdecl FUN_00efc910(void);                  // 0x00efc910 current-selection owner
 void __cdecl FUN_00ed82e0(Fx8a30*, unsigned id, unsigned hi, int enable, float scale, int vis);
@@ -472,27 +497,34 @@ void __cdecl FUN_00ed8a30(int a, int b)
 }
 
 // ================================================================ 0x00ed9040
+// @ 0x00ed9040
 void* __cdecl FUN_00ed9040(int id, float* pos)
 {
     float best = 3.402823466e+38f;
     int* found = 0;
-    if (id == -1) return 0;
-    void* nm = FUN_00b3d300();
-    int* v = (int*)FUN_00b1f9b0(nm);
-    int* end = (int*)((char*)v - 0xc);
-    int* it = (*v == 0) ? 0 : (int*)((char*)*v - 0xc);
-    while (it != end) {
-        int esi = 0;
-        if (it != 0)
-            esi = ((int(__thiscall*)(void*, int))(*(void***)it)[3])(it, 0x1186577);
-        float* p = (float*)((FVf_p)(*(void***)esi)[0x2c / 4])((void*)esi);
+    if (id == -1)
+        return 0;
+    if ((g_nounVecGuard & 1) == 0) {
+        g_nounVecGuard |= 1;
+        g_nounVec.begin = 0;
+        g_nounVec.end = 0;
+        g_nounVec.cap = 0;
+        atexit((void*)0x013c8830);
+    }
+    g_game8a30->holder->GetAllNouns(id, &g_nounVec);
+    int** end = (int**)g_nounVec.end;
+    for (int** it = (int**)g_nounVec.begin; it != end; ++it) {
+        int* noun = *it;
+        int* comp = noun ? (int*)((int(__thiscall*)(void*, int))(*(void***)noun)[3])(noun, 0x1186577) : 0;
+        float* p = (float*)((FVf_p)(*(void***)comp)[0x2c / 4])(comp);
         float dx = p[0] - pos[0];
         float dy = p[1] - pos[1];
         float dz = p[2] - pos[2];
         float d = dx * dx + dy * dy + dz * dz;
-        if (d < best) { best = d; found = (int*)esi; }
-        int* nxt = (int*)it[3];
-        it = (nxt == 0) ? 0 : (int*)((char*)nxt - 0xc);
+        if (d < best) {
+            best = d;
+            found = comp;
+        }
     }
     return found;
 }

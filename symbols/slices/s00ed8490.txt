@@ -1,0 +1,10 @@
+00ed8490 ?FUN_00ed8490@@YAHH@Z  # array scan: matched-state 3/2 lookup; nonmatching (cl hoists the span computation)
+00ed8500 ?FUN_00ed8500@@YAHH@Z  # array scan variant 2; nonmatching (same hoisting)
+00ed8570 ?FUN_00ed8570@@YAHH@Z  # array scan variant 3; nonmatching (same hoisting)
+00ed85e0 ?f@Obj85e0@@QAEPAXXZ  # MATCH byte-exact
+00ed8610 ?f@Obj8610@@QAEXXZ  # destructor; nonmatching (release loop register/branch shape)
+00ed8690 ?FUN_00ed8690@@YAXXZ  # noun iteration + effect setters; nonmatching
+00ed8780 ?f@Obj8780@@QAEXE@Z  # effect grab/clear; nonmatching (field-address scheduling)
+00ed8950 ?FUN_00ed8950@@YAXHH@Z  # MATCH byte-exact: collect nouns by id, push effect params, release
+00ed8a30 ?FUN_00ed8a30@@YAXHH@Z  # noun-effect loop; nonmatching (whole-program reuse/inlining)
+00ed9040 ?FUN_00ed9040@@YAPAXHPAM@Z  # nearest-noun search; nonmatching (255 vs 270 bytes)
