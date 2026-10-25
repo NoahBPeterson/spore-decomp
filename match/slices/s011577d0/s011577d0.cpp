@@ -434,7 +434,7 @@ void BitDecoder::FUN_01158160(int block, int sub, float* out, int bits)
     }
     const TailCodebook* tc = &gTailCb[e->b0f];
     int32_t used = (int32_t)(mpRead - mpBegin) * 8 - mBitCount;
-    float* q = out + j + 2;
+    float* q = out + j;
     while (used < total) {
         if (j >= 0x240)
             break;
