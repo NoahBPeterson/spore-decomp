@@ -537,7 +537,6 @@ void __fastcall FUN_011f39b0(int par)
 {
   u8* p = (u8*)par;
   int* slot = (int*)(p + 0x40);
-  void* dev = ActiveState::m_d3d9Device;
 
   for (u32 i = 0; i < 4; ++i) {
     int rtObj = *slot;
@@ -573,6 +572,7 @@ void __fastcall FUN_011f39b0(int par)
       if ((ActiveState::m_renderTarget[i].flags & 9) == 9) {
         (*(void(__stdcall**)(void*))(*(u32*)cur + 8))(cur);
       }
+      void* dev = ActiveState::m_d3d9Device;
       (*(void(__stdcall**)(void*, u32, void*))(*(u32*)dev + 0x94))(dev, i, raster);
       ActiveState::m_renderTarget[i].flags = flags;
       ActiveState::m_renderTarget[i].raster = raster;
@@ -584,6 +584,7 @@ void __fastcall FUN_011f39b0(int par)
   if (*(int*)(p + 0x50) != 0)
     zbuf = *(int*)(*(int*)(p + 0x50) + 8);
   if (ActiveState::m_zBufferShadow != (void*)zbuf) {
+    void* dev = ActiveState::m_d3d9Device;
     (*(void(__stdcall**)(void*, u32))(*(u32*)dev + 0x9c))(dev, (u32)zbuf);
     ActiveState::m_zBufferShadow = (void*)zbuf;
   }
