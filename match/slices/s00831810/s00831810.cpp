@@ -33,19 +33,203 @@ struct ImageInfo2 {
 struct Stopwatch { double GetElapsed(); };  // 0x93a3a0
 struct Animator  { void Dtor(); };          // 0x7f8c20
 
+// The console's timer slot (+0x10): the low/high pair is tested as a unit and the
+// same object provides the restart / property-flush helpers the retail code calls.
+struct ConsoleTimer {
+    uint32_t mLow;                  // +0x00
+    uint32_t mHigh;                 // +0x04
+    uint32_t mExtra8;               // +0x08
+    uint32_t mExtraC;               // +0x0c
+    void Start();                   // 0x00435480
+    void SetBoolProperty();         // 0x0093a2e0
+    long long GetElapsedTicks();    // 0x0093a3a0
+};
+
+// Rect view handed out by a view root (only the left/right edges are read here).
+struct ViewRect {
+    float mPad0;                    // +0x00
+    float mLeft;                    // +0x04
+    float mPad8;                    // +0x08
+    float mRight;                   // +0x0c
+};
+
+struct Vec2 { float x, y; };
+
+// Interface views of the console target object (DebugConsole+0x64).  The same
+// object is seen through two views because the retail code calls vtable slot 4
+// both with and without the window-build arguments.
+struct IViewRoot {
+    virtual void Unk00();
+    virtual void Unk01();
+    virtual void Unk02();
+    virtual void Unk03();
+    virtual void Unk04();
+    virtual void Unk05();
+    virtual void Unk06();
+    virtual void Unk07();
+    virtual void Unk08();
+    virtual void Unk09();
+    virtual void Unk0a();
+    virtual void Unk0b();
+    virtual void Unk0c();
+    virtual void Unk0d();
+    virtual ViewRect *GetRect();                    // +0x38
+    virtual void Unk0f();
+    virtual void Unk10();
+    virtual void Unk11();
+    virtual void Unk12();
+    virtual void Unk13();
+    virtual void Unk14();
+    virtual void Unk15();
+    virtual void Unk16();
+    virtual void Unk17();
+    virtual void Unk18();
+    virtual void Unk19();
+    virtual void Unk1a();
+    virtual void Unk1b();
+    virtual void SetPosition(float x, float y);     // +0x70
+    virtual void SetSize(float w, float h);         // +0x74
+    virtual void Unk1e();
+    virtual void Unk1f();
+    virtual void SetOwnerWidth(void *p);            // +0x80
+};
+
+struct IConsoleTarget {
+    virtual void Unk00();
+    virtual void Unk01();
+    virtual void Unk02();
+    virtual void Unk03();
+    virtual IViewRoot *GetRoot();                   // +0x10
+    virtual void Unk05();
+    virtual void Unk06();
+    virtual void Unk07();
+    virtual void RefreshRect(int a, int b, Vec2 *out);   // +0x20
+    virtual void Unk09();
+    virtual void Unk0a();
+    virtual void Unk0b();
+    virtual void Unk0c();
+    virtual void Unk0d();
+    virtual void Unk0e();
+    virtual void Unk0f();
+    virtual void Unk10();
+    virtual void Unk11();
+    virtual void Unk12();
+    virtual void Unk13();
+    virtual void Unk14();
+    virtual void Unk15();
+    virtual void Unk16();
+    virtual void Unk17();
+    virtual void Unk18();
+    virtual void Unk19();
+    virtual void Unk1a();
+    virtual void Unk1b();
+    virtual void SetPosition(float x, float y);     // +0x70
+    virtual void SetSize(float w, float h);         // +0x74
+    virtual void Unk1e();
+    virtual void Unk1f();
+    virtual void SetOwnerWidth(void *p);            // +0x80
+};
+
+// Second view of the same target: slot 4 builds the window animation target.
+struct IWindowBuilder {
+    virtual void Unk00();
+    virtual void Unk01();
+    virtual void Unk02();
+    virtual void Unk03();
+    virtual void *BuildWindow(Vec2 anchor, void *work);    // +0x10
+};
+
+struct IRefCounted {
+    virtual void Unk00();
+    virtual void Release();                         // +0x04
+};
+
+// Console behaviour ramp (cSPUIBehaviorTimeFunctionSmoothRamp, 0x007f60d0).
+struct BehaviorRamp {
+    void *mpVtbl;                   // +0x00
+    void *mpRef;                    // +0x04
+    void *mpRef2;                   // +0x08
+    float mValue;                   // +0x0c
+    float mSpan;                    // +0x10
+    char  pad14[0x1c];              // +0x14..+0x30
+    void  Build(float duration, float a, float b, float c, float d);   // 0x007f60d0
+};
+
+// Message object posted to the UI messaging server (0x0040 bytes).
+struct UiBehaviorMessage {
+    void    *mpVtbl;                // +0x00
+    uint32_t mRefCount;             // +0x04
+    void    *mpOwner;               // +0x08
+    void    *mpUnk0c;               // +0x0c
+    uint32_t mBehaviour;            // +0x10
+    char     pad14[0x1c];           // +0x14..+0x30
+    uint32_t mMessageId;            // +0x30
+    char     pad34[4];              // +0x34
+    uint32_t mFlags38;              // +0x38
+    uint32_t mPad3c;                // +0x3c
+};
+
+namespace EA { namespace Messaging {
+struct IMessageServer {
+    virtual void Unk00();
+    virtual void Unk01();
+    virtual void Unk02();
+    virtual void Unk03();
+    virtual void Unk04();
+    virtual void Unk05();
+    virtual void PostMessage(uint32_t id, void *msg, int a, int b);   // +0x18
+};
+
+IMessageServer *GetServer();   // 0x00883860
+} }   // namespace EA::Messaging
+extern "C" void *__cdecl FUN_00f473a0(uint32_t size, const char *name, int a, int b, int c, int d);   // 0x00f473a0
+extern "C" void *__cdecl SPUICreateWindowAnimationTargetPosition(void *window, void *work);            // 0x007f7050
+
+// EA::Allocator::FixedBufferAllocator lives inline at DebugConsole+0x0c.
+struct FixedBufInfo {
+    uint32_t mSize;                 // +0x00
+    uint32_t mCapacity;             // +0x04
+    uint32_t mOffset;               // +0x08
+    uint32_t mLink;                 // +0x0c
+    uint32_t mSignature;            // +0x10
+};
+struct FixedBufferAllocator {
+    FixedBufInfo *mpInfo;           // +0x00
+    void Free(void *p);             // 0x004bcab0
+    void destroy_shared();          // 0x004bca10
+};
+
+// cSPUIAnimator lives inline at DebugConsole+0x40.
+struct AnimatorS {
+    bool HasAnimation(void *ref, unsigned int id);   // 0x007f62c0
+    bool RemoveAnimation(void *ref, int id);         // 0x007f6210
+    void Update();                                   // 0x007f63b0
+    void Dtor();                                     // 0x007f8c20
+    void AddAnimation(void *target, void *ref, int id);   // 0x007f8d10
+};
+
 struct DebugConsole {
     void    *vptr0;        // +0x000
     void    *vptr4;        // +0x004
     uint32_t r8;           // +0x008
     void    *mpAlloc;      // +0x00c
-    char     pad10[0x24];  // +0x010..+0x034 (stopwatch at +0x10)
+    ConsoleTimer mTimer;   // +0x010..+0x020
+    char     pad20[4];     // +0x020
+    float    fAnimScale;   // +0x024
+    char     pad28[8];     // +0x028..+0x030
+    float    fDuration;    // +0x030
     float    f34;          // +0x034
     uint8_t  b38;          // +0x038
-    char     pad39[7];
-    char     mAnimator[0x24]; // +0x040
+    uint8_t  mbFlag39;     // +0x039
+    char     pad3a[2];     // +0x03a
+    uint32_t mBehaviourId; // +0x03c
+    char     mAnimator[0x20]; // +0x040..+0x060
+    void    *mpRectProvider;  // +0x060
     void    *f64;          // +0x064
-    char     pad68[0x14];
-    char     mInfo[0x98];  // +0x07c
+    char     pad68[0x14];  // +0x068..+0x07c
+    char     mInfoInline[0xc];  // +0x07c
+    void    *mpOwnerWidth;      // +0x088
+    char     mInfoTail[0x88];   // +0x08c..+0x114
     void    *mImageInfos[8]; // +0x114
     uint8_t  mbHasUserDefaults; // +0x134
     char     pad135[0xdb];  // +0x135..+0x210
@@ -58,6 +242,9 @@ struct DebugConsole {
     bool  SetTextProperty(struct PropOut *out, int kind, const struct StrVal *val);   // 0x00832010
     bool  StateCheck();       // 0x00832370
     void  Update();           // 0x008326c0
+    bool  LayoutCheck(int mode);    // 0x00832230
+    void  RefreshValues();          // 0x008324d0
+    void  ApplyPending();           // 0x00832580
     void  Dtor2();            // 0x00832710
     void *GetImageInfo(int index);   // 0x00830c00 (other TU)
 };
@@ -135,12 +322,19 @@ DebugConsole *DebugConsole::Ctor()
 }
 
 // ---------------------------------------------------------------- 0x00832160
+// The console owns its text through the inline fixed-buffer allocator at +0x0c:
+// release the text, drop the shared buffer when its signature marks it shared,
+// then clear the buffer link and restore the base tables.
+// @ 0x00832160
 void DebugConsole::Dtor()
 {
+    FixedBufferAllocator *alloc = reinterpret_cast<FixedBufferAllocator *>(&mpAlloc);
     vptr0 = (void *)0x141a830;
     vptr4 = (void *)0x141a82c;
-    EA_Free(mpText);
-    mpAlloc = 0;
+    alloc->Free(mpText);
+    if (alloc->mpInfo != 0 && (alloc->mpInfo->mSignature & 0x40000000) != 0)
+        alloc->destroy_shared();
+    alloc->mpInfo = 0;
     vptr4 = (void *)&g_vtblCreatureAbility;
     vptr0 = (void *)&g_vtblEditorResource;
 }
@@ -160,17 +354,44 @@ bool DebugConsole::CheckTimeout()
 }
 
 // ---------------------------------------------------------------- 0x00832370
+// A live timer value means the console is already armed; otherwise re-run the
+// layout check, restart the timer when it reports work, and when the timer still
+// reads zero flush the property and drop the running animation.
+// @ 0x00832370
 bool DebugConsole::StateCheck()
 {
-    void *p = (char *)this + 0x10;
-    if (*(uint32_t *)p != 0 || *(uint32_t *)((char *)p + 4) != 0)
+    ConsoleTimer *timer = &mTimer;
+    if ((timer->mLow | timer->mHigh) != 0)
+        return true;
+    if (LayoutCheck(1))
+        timer->Start();
+    if ((timer->mLow | timer->mHigh) == 0) {
+        timer->SetBoolProperty();
+        reinterpret_cast<AnimatorS *>(mAnimator)->RemoveAnimation(f64, 0x61ee327);
+    }
+    if (timer->mLow | timer->mHigh)
         return true;
     return false;
 }
 
 // ---------------------------------------------------------------- 0x008326c0
+// Idle tick: while no console animation runs, apply a pending refresh and then
+// poll the timeout (refreshing the values when it expires); the animator is
+// updated last, by tail call.
+// @ 0x008326c0
 void DebugConsole::Update()
 {
+    AnimatorS *anim = reinterpret_cast<AnimatorS *>(mAnimator);
+    if (!anim->HasAnimation(f64, 0x61ee329)) {
+        if (b38 != 0)
+            ApplyPending();
+        uint32_t elapsed = mTimer.mLow | mTimer.mHigh;
+        if (elapsed != 0) {
+            if (CheckTimeout())
+                RefreshValues();
+        }
+    }
+    anim->Update();
 }
 
 // ---------------------------------------------------------------- 0x00832710
@@ -397,8 +618,127 @@ void StdDrawable::Draw(RenderContext *ctx, const RectF *area, const DrawParams *
     }
 }
 
-// ---------------------------------------------------------------- unfinished big functions
-void FUN_00832230(void *) {}
+// ---------------------------------------------------------------- 0x00832230
+// Re-arm the console's animation: bail out while the timeout has not expired
+// (or while the named animation still runs when the caller is not forcing), then
+// rebuild the ramp from the remaining time and the target's width and push it
+// into the animator.
+// @ 0x00832230
+bool DebugConsole::LayoutCheck(int animate)
+{
+    if (CheckTimeout())
+        return false;
+    AnimatorS *anim = reinterpret_cast<AnimatorS *>(mAnimator);
+    if (animate == 0 && anim->HasAnimation(f64, 0x61ee327))
+        return false;
+
+    // remaining time scaled by the console's animation speed
+    float remaining = fDuration - (float)mTimer.GetElapsedTicks() * fAnimScale;
+
+    IConsoleTarget *target = reinterpret_cast<IConsoleTarget *>(f64);
+    IViewRoot *root = target->GetRoot();
+    ViewRect *rect = root->GetRect();
+    float span = rect->mLeft - rect->mRight;
+
+    BehaviorRamp ramp;
+    ramp.Build(remaining, 0.0f, 0.0f, 0.0f, 0.0f);
+
+    Vec2 anchor;
+    anchor.x = 0.0f;
+    anchor.y = ramp.mValue;
+    void *window = reinterpret_cast<IWindowBuilder *>(f64)->BuildWindow(anchor, &span);
+    void *targetPos = SPUICreateWindowAnimationTargetPosition(window, &span);
+    anim->AddAnimation(targetPos, f64, 0x61ee327);
+
+    // the builder handed back two owned references
+    ramp.mpVtbl = (void *)0x013f6400;
+    ramp.mpRef2 = (void *)0x013f63fc;
+    if (ramp.mSpan == 0.0f && ramp.mpRef2 != 0)
+        static_cast<IRefCounted *>(ramp.mpRef2)->Release();
+    ramp.mpVtbl = (void *)0x013f63fc;
+    if (ramp.mpRef != 0)
+        static_cast<IRefCounted *>(ramp.mpRef)->Release();
+    return true;
+}
+
+// ---------------------------------------------------------------- 0x008324d0
+// Refresh the console values: stop the named animations, reset the timer block
+// and post a behaviour message so the UI re-reads the console's behaviour id.
+// @ 0x008324d0
+void DebugConsole::RefreshValues()
+{
+    ConsoleTimer *timer = &mTimer;
+    if ((timer->mLow | timer->mHigh) != 0) {
+        if (!CheckTimeout())
+            reinterpret_cast<AnimatorS *>(mAnimator)->RemoveAnimation(f64, 0x61ee329);
+    }
+    timer->SetBoolProperty();
+    reinterpret_cast<AnimatorS *>(mAnimator)->RemoveAnimation(f64, 0x61ee327);
+    timer->mLow = 0;
+    timer->mHigh = 0;
+    timer->mExtra8 = 0;
+    timer->mExtraC = 0;
+
+    UiBehaviorMessage *msg = static_cast<UiBehaviorMessage *>(
+        FUN_00f473a0(0x40, (const char *)0x013f6b3c, 0, 0, 0, 0));
+    if (msg == 0) {
+        msg = 0;
+    } else {
+        msg->mMessageId = 0x0620837e;
+        msg->mpVtbl = (void *)0x013eb90c;
+        msg->mRefCount = 0;
+        msg->mpVtbl = (void *)0x013eb844;
+        msg->mFlags38 = 0;
+    }
+    msg->mpOwner = this;
+    msg->mBehaviour = mBehaviourId;
+    EA::Messaging::IMessageServer *server = EA::Messaging::GetServer();
+    server->PostMessage(msg->mMessageId, msg, 0, 0);
+}
+
+// ---------------------------------------------------------------- 0x00832580
+// Finish the pending layout change: push the target's rect onto the view root,
+// restart the fade animation and notify the messaging server that the console
+// was laid out again.
+// @ 0x00832580
+void DebugConsole::ApplyPending()
+{
+    IConsoleTarget *target = reinterpret_cast<IConsoleTarget *>(f64);
+    IViewRoot *root = target->GetRoot();
+    root->SetOwnerWidth(mpOwnerWidth);
+
+    ViewRect *rect = reinterpret_cast<IViewRoot *>(mpRectProvider)->GetRect();
+    float extent = rect->mRight - rect->mLeft;
+
+    Vec2 rect2;
+    target->RefreshRect(1, 1, &rect2);
+    root->SetSize(rect2.y - rect2.x, 0.0f);
+    root->SetPosition(0.0f, extent);
+
+    AnimatorS *anim = reinterpret_cast<AnimatorS *>(mAnimator);
+    anim->RemoveAnimation(f64, 0x61ee328);
+    mTimer.SetBoolProperty();
+    anim->RemoveAnimation(f64, 0x61ee327);
+    if (mbFlag39)
+        StateCheck();
+    b38 = 0;
+
+    UiBehaviorMessage *msg = static_cast<UiBehaviorMessage *>(
+        FUN_00f473a0(0x40, (const char *)0x013f6b3c, 0, 0, 0, 0));
+    if (msg == 0) {
+        msg = 0;
+    } else {
+        msg->mMessageId = 0x0620837e;
+        msg->mpVtbl = (void *)0x013eb90c;
+        msg->mRefCount = 0;
+        msg->mpVtbl = (void *)0x013eb844;
+        msg->mFlags38 = 0;
+    }
+    msg->mpOwner = this;
+    msg->mBehaviour = mBehaviourId;
+    EA::Messaging::IMessageServer *server = EA::Messaging::GetServer();
+    server->PostMessage(msg->mMessageId, msg, 0, 0);
+}
+
+// ---------------------------------------------------------------- 0x008323d0
 void FUN_008323d0(void *) {}
-void FUN_008324d0(void *) {}
-void FUN_00832580(void *) {}

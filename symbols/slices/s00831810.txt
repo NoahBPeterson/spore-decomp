@@ -1,2 +1,8 @@
 00831810 SP::cSPUIStdDrawable::Draw  # PDB candidate (CreateRenderables); layout = PDB cSPUIStdDrawable (mDrawParams +0x138, mDrawArea +0x148); draws 6 image/icon passes with drop shadows
 00832010 SetTextProperty@DebugConsole  # kind 0x12: copies a cString into the console's FixedBufferAllocator buffer (slice name; byte-exact)
+00832160 ?Dtor@DebugConsole@@QAEXXZ  # releases mpText through FixedBufferAllocator::Free (0x004bcab0), drops the shared buffer when buffer_info[1].mSignature has 0x40000000, then restores the base vtables
+00832230 ?LayoutCheck@DebugConsole@@QAE_NH@Z  # rebuilds the smooth-ramp animation for the console; animate==0 requires no running 0x61ee327 animation
+00832370 ?StateCheck@DebugConsole@@QAE_NXZ  # timer armed check; restarts/refreshes the console when the timer pair is zero
+008324d0 ?RefreshValues@DebugConsole@@QAEXXZ  # stops the console animations, clears the timer block, posts message 0x0620837e
+00832580 ?ApplyPending@DebugConsole@@QAEXXZ  # applies the pending layout, restarts animations, posts message 0x0620837e
+008326c0 ?Update@DebugConsole@@QAEXXZ  # idle tick: pending refresh, timeout poll, animator update
