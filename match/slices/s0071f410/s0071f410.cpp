@@ -585,9 +585,57 @@ fail:
 }
 
 // ---------------------------------------------------------------------------
-// Remaining out-of-slice skeletons (kept verbatim).
+// Ref-counted (owning) view of a cEltArrayRef: copy AddRefs, dtor Releases.
+// ---------------------------------------------------------------------------
+struct cIndexArrayRef {
+    int            mNumElts;    // +0x00
+    unsigned char* mData;       // +0x04
+    unsigned short mEltSize;    // +0x08
+    unsigned short mEltStride;  // +0x0a
+    IRefCount*     mDataRC;     // +0x0c
+    cIndexArrayRef(const cEltArrayRef& s)
+        : mNumElts(s.mNumElts), mData(s.mData), mEltSize(s.mEltSize),
+          mEltStride(s.mEltStride), mDataRC(s.mDataRC)
+    {
+        if (mDataRC)
+            mDataRC->AddRef();
+    }
+    ~cIndexArrayRef()
+    {
+        if (mDataRC)
+            mDataRC->Release();
+    }
+};
+
 // ---------------------------------------------------------------------------
 // @ 0x007200f0
-void Obj15_200f0(void* a, void* b, void* c) { (void)a; (void)b; (void)c; }
+// cEltArrayRef::Compact: retighten the element stride in a fresh buffer,
+// keeping the source alive through a held reference while it is copied over.
+// ---------------------------------------------------------------------------
+void Obj15_200f0(void* dstv, void* b, void* c)
+{
+    (void)b;
+    (void)c;
+    cEltArrayRef* self = (cEltArrayRef*)dstv;
+    if (self->mData) {
+        cIndexArrayRef tmp(*self);
+        Obj15_Init(self);
+        Obj15_Assign(&tmp, self, 0);
+    }
+}
+
+// ---------------------------------------------------------------------------
 // @ 0x00720200
-void Obj15_20200(void* a, void* b) { (void)a; (void)b; }
+// Copy a range of 0x18-byte elements (null destination tolerated).
+// ---------------------------------------------------------------------------
+void Obj15_20200(Vertex3D* first, Vertex3D* last, Vertex3D* dest)
+{
+    if (first == last)
+        return;
+    do {
+        if (dest)
+            *dest = *first;
+        ++first;
+        ++dest;
+    } while (first != last);
+}
