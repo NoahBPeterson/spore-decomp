@@ -1,9 +1,0 @@
-# va  diff-bytes  reason
-0068f0b0  170  cJob holder SetJob: mutex/job swap present but EH frame + refcount scheduling omitted
-0068f180  50   attach-job wrapper: continuation path guessed, not faithful
-0068f1d0  158  job-lock ctor: vtables/refcount/member init omitted
-0068f2b0  128  job-lock dtor: refcount release + job release below/to be verified (EH omitted)
-0068f350  204  try-lock two jobs + create JobLock: body omitted
-0068f4e0  91   mutex/semaphore member ctor helper: only field zeroing present
-0068f5d0  46   list drain / semaphore post: body approximated
-0068f600  109  semaphore-list container ctor: mutex/semaphore init omitted

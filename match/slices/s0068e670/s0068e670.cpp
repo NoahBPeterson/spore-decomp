@@ -42,7 +42,14 @@ extern "C" u32 gTailTag;       // 0x14036b4
 extern "C" u32 gHNMagic;       // 0x152ca8c  CRC32 name-hash seed
 
 // non-target member of the job-lock helper class (still referenced below)
-struct Mutex { uint32_t _[12]; void Lock(void*); void Unlock(); };
+namespace EA { namespace Thread {
+struct Mutex {
+    uint32_t _[12];
+    void Lock(unsigned int nameId);   // ?Lock@Mutex@Thread@EA@@QAEXI@Z   0x09221b0
+    void Unlock();                    // ?Unlock@Mutex@Thread@EA@@QAEXXZ 0x0922270
+};
+}}
+typedef EA::Thread::Mutex Mutex;
 
 // =====================================================================
 // eastl byte vector (begin/end/capacity)
@@ -463,33 +470,52 @@ RefObj::~RefObj() {
 }
 
 // =====================================================================
-// @ 0x0068f0b0  swap/replace a cJob under mutex
+// @ 0x0068f0b0  swap/replace a cJob under mutex  (CJobHolder::SetJob)
 // =====================================================================
+extern "C" int  AddRef_68F950(void* job);          // 0x068f950  cJob::AddRef
+extern "C" int  Release_690120(void* job);         // 0x0690120  cJob::Release
+extern "C" void AddWeakDependency_6913C0(void* self, void* other); // 0x06913c0
+
+typedef int (__thiscall *FnAddRef)(void*);
+typedef int (__thiscall *FnRelease)(void*);
+typedef void (__thiscall *FnAddWeak)(void*, void*);
+
+// small smart-pointer that holds a strong reference to a cJob and releases it on
+// scope exit (the source of the SEH unwind state in the original).
 struct CJobHolder {
     uint32_t pad0[2];
     Mutex mMutex;           // +0x08 (0x30 bytes)
     void* mJob;             // +0x38
-    void SetJob(void* job, void* arg2);
+    bool SetJob(void* target, void* job);
 };
-void CJobHolder::SetJob(void* job, void* arg2) {
-    (void)arg2;
-    mMutex.Lock((void*)0x014036f0);
+bool CJobHolder::SetJob(void* target, void* job) {
+    struct JobPtr {
+        void* mJob;
+        __forceinline JobPtr(void* p) : mJob(p) {
+            if (mJob) ((FnAddRef)AddRef_68F950)(mJob);
+        }
+        __forceinline ~JobPtr() {
+            if (mJob) ((FnRelease)Release_690120)(mJob);
+        }
+    };
+    mMutex.Lock((unsigned)0x014036f0);
     void* old = mJob;
-    if (old) FUN_0068f950(old);
+    JobPtr held(old);                                   // strong ref to the old job
     if (job != mJob) {
-        if (job) FUN_0068f950(job);
+        JobPtr add(job);                                // (acquire, freed below)
         mJob = job;
-        if (mJob) GetStatus(mJob);
+        if (old) ((FnRelease)Release_690120)(old);
     }
     mMutex.Unlock();
-    FUN_006913c0(old);
-    if (old) GetStatus(old);
+    ((FnAddWeak)AddWeakDependency_6913C0)(target, old);
+    return true;
 }
 
 // =====================================================================
-// @ 0x0068f180  set job + continuation if it succeeded
+// @ 0x0068f180  set job + continuation if it succeeded  (CJobHolder2::Attach)
 // =====================================================================
-struct CJob180 { void* Continuation(void* fn, void* arg); };
+extern "C" bool Continuation_68F9F0(void* job, void* fn, void* arg);  // 0x068f9f0
+typedef bool (__thiscall *FnContinuation)(void*, void*, void*);
 struct CJobHolder2 {
     uint32_t f0, f4, f8;
     CJobHolder* mHolder;    // +0x0c
@@ -497,55 +523,88 @@ struct CJobHolder2 {
     bool Attach(void* job);
 };
 bool CJobHolder2::Attach(void* job) {
-    mHolder->SetJob(job, mArg);
-    if (mHolder != 0) {
-        ((CJob180*)job)->Continuation((void*)0x00753fb0, this);
-        return true;
+    CJobHolder* holder = mHolder;
+    if (holder->SetJob(mArg, job)) {
+        return ((FnContinuation)Continuation_68F9F0)(job, (void*)0x00753fb0, this);
     }
     return false;
 }
 
 // =====================================================================
-// @ 0x0068f1d0  ctor of a job-lock object (partial: vtables/refcounts)
+// @ 0x0068f1d0  ctor of a job-lock object  (JobLock::JobLock)
 // =====================================================================
+extern "C" int  LockDec_68F9B0(void* lock);        // 0x068f9b0
+typedef int (__thiscall *FnLockDec)(void*);
 struct JobLock {
     void* vtbl0;            // +0x00
     void* vtbl1;            // +0x04
-    void* f08;              // +0x08
-    void* mRefObj;          // +0x0c
+    volatile long mRef;     // +0x08 refcount (lock xchg/xadd)
+    void* mRefObj;          // +0x0c intrusive refcounted object
     void* mJob;             // +0x10
-    JobLock(void* a, int b, void* c);
+    JobLock(void* out, void* job, void* refObj);
+    ~JobLock();
 };
-JobLock::JobLock(void* a, int b, void* c) {
-    (void)a; (void)b; (void)c;
+JobLock::JobLock(void* out, void* job, void* refObj) {
+    vtbl0 = (void*)0x013f1ab0;
+    vtbl1 = (void*)0x013ef094;
+    _InterlockedExchange(&mRef, 0);
+    vtbl0 = (void*)0x014036fc;
+    vtbl1 = (void*)0x014036f8;
+    mRefObj = refObj;
+    if (refObj)
+        _InterlockedIncrement((volatile long*)((char*)refObj + 4));
+    mJob = job;
+    if (job) ((FnAddRef)AddRef_68F950)(job);
+    *(void**)out = (void*)0x0068f1c0;
+    *((void**)out + 1) = this;
+    ((FnLockDec)LockDec_68F9B0)(this);
 }
 
 // =====================================================================
-// @ 0x0068f2b0  dtor of the job-lock object (partial)
+// @ 0x0068f2b0  dtor of the job-lock object  (JobLock::~JobLock)
 // =====================================================================
-extern "C" void Dtor_68F2B0(JobLock* p) {
-    if (p->mJob) GetStatus(p->mJob);
-    void* r = p->mRefObj;
+JobLock::~JobLock() {
+    if (mJob) ((FnRelease)Release_690120)(mJob);
+    void* r = mRefObj;
     if (r) {
-        long* rc = (long*)((char*)r + 4);
-        long n = _InterlockedExchangeAdd(rc, -1);
-        if (n == 1) {
+        volatile long* rc = (volatile long*)((char*)r + 4);
+        long n = _InterlockedDecrement(rc);
+        if (n == 0) {
             _InterlockedExchange(rc, 1);
             ((void (__thiscall*)(void*, int))VT(r)[0])(r, 1);
         }
     }
+    vtbl0 = (void*)0x013eb938;
+    vtbl1 = (void*)0x013ef094;
 }
 
 // =====================================================================
-// @ 0x0068f350  try-lock two jobs; on success create a JobLock (partial)
+// @ 0x0068f350  try-lock two jobs; on success create a JobLock  (TryLockJobs)
 // =====================================================================
-extern "C" int TryLockJobs(void* a, void* b, JobLock** out) {
-    (void)a; (void)b; (void)out;
-    int* p = FUN_0068f4d0();
-    if (!((char (__thiscall*)(void*, void*))VT(p)[0x10 / 4])(p, b)) return 0;
-    p = FUN_0068f4d0();
-    if (!((char (__thiscall*)(void*, void*))VT(p)[0x10 / 4])(p, b)) return 0;
-    return 1;
+extern "C" void* NewJobLock(unsigned size, const char* name, int a, int b, const char* f, int l); // 0x0f473a0
+
+// The original takes its receiver in ecx (__thiscall). Model it as a member of the
+// singleton it operates on so the calling convention survives.
+struct JobLockTable {
+    bool TryLockJobs(void* a, void* b);
+};
+bool JobLockTable::TryLockJobs(void* a, void* b) {
+    int* p = (int*)FUN_0068f4d0();
+    if (!((char (__thiscall*)(void*, void*))VT(p)[0x10 / 4])(p, a)) return false;
+    p = (int*)FUN_0068f4d0();
+    if (!((char (__thiscall*)(void*, void*))VT(p)[0x10 / 4])(p, b)) return false;
+    void* mem = NewJobLock(0x14, "App/JobLock", 0, 0, 0, 0);
+    JobLock* lock = 0;
+    if (mem) {
+        // JobLock(out=*a, job=*b, refObj=this)
+        lock = (JobLock*)mem;
+        lock->JobLock::JobLock(*(void**)a, *(void**)b, this);
+    }
+    if (lock) {
+        ((void (__thiscall*)(void*))VT(lock)[0])(lock);
+        ((void (__thiscall*)(void*))VT(lock)[1])(lock);
+    }
+    return true;
 }
 
 // =====================================================================
@@ -575,13 +634,27 @@ void ClsF4A0::Reset() {
 }
 
 // =====================================================================
-// @ 0x0068f4e0  ctor/dtor helper (partial, EH)
+// @ 0x0068f4e0  mutex/semaphore member ctor helper
 // =====================================================================
-extern "C" void FUN_68F4E0(void* p) {
-    void* o = *(void**)((char*)p + 0x20);
-    (void)o;
-    *(uint32_t*)((char*)p + 8) = 0;
-    *(uint32_t*)((char*)p + 0xc) = 0;
+extern "C" void FUN_00922e10(void* p);             // 0x0922e10
+extern "C" void FUN_00922610(void* p);             // 0x0922610
+// Two member subobjects: a Thread mutex at +0x10 (ctor 0x922610) and a
+// semaphore-ish object at +0x20 (ctor 0x922e10). The original builds +0x20 first
+// (EH-guarded) then zeroes the +8/+0xc words then builds +0x10.
+struct ClsF4E0Ctor {
+    uint32_t f0, f4;
+    uint32_t f8;            // +0x08
+    uint32_t fc;            // +0x0c
+    char     m10[0x10];     // +0x10
+    char     m20[0x10];     // +0x20
+    void ctorHelper();      // 0x0068f4e0
+};
+// The +0x20 subobject is built first; the EH arm covers the +0x10 one.
+void ClsF4E0Ctor::ctorHelper() {
+    ((void (__thiscall*)(void*))FUN_00922e10)(m20);
+    f8 = 0;
+    fc = 0;
+    ((void (__thiscall*)(void*))FUN_00922610)(m10);
 }
 
 // =====================================================================
@@ -589,7 +662,7 @@ extern "C" void FUN_68F4E0(void* p) {
 // =====================================================================
 struct ClsF540 { uint32_t f0, f4; Mutex m; int count; void Acquire(); void Release(); };
 void ClsF540::Acquire() {
-    m.Lock((void*)0x01403750);
+    m.Lock((unsigned)0x01403750);
     ++count;
 }
 
@@ -622,12 +695,12 @@ extern "C" int FUN_68F570(Outer570* p) {
 // @ 0x0068f5a0  invoke slot 0 of *b with a
 // =====================================================================
 struct Callable68F5A0 { virtual void f(void* a); };
-extern "C" void FUN_68F5A0(void* a, Callable68F5A0* b) {
+extern "C" void _FUN_68F5A0(void* a, Callable68F5A0* b) {
     b->f(a);
 }
 
 // =====================================================================
-// @ 0x0068f5b0  replace pointer, release old
+// @ 0x0068f5b0  replace pointer, release old  (ClsF5B0::Set)
 // =====================================================================
 struct VObj { virtual void v0(); virtual void v1(); };
 struct ClsF5B0 { VObj* m; void Set(VObj* p); };
@@ -639,35 +712,69 @@ void ClsF5B0::Set(VObj* p) {
 }
 
 // =====================================================================
-// @ 0x0068f5d0  drain a list posting a semaphore for each detached node
+// @ 0x0068f5d0  SP::JobCondition::Signal - drain the node list, posting each
 // =====================================================================
-struct ListNode { ListNode* next; ListNode* prev; uint32_t pad[2]; };
-struct SemHolder { uint32_t pad[2]; };
-extern "C" void FUN_68F5D0(ListNode* h) {
-    while (h->next != h) {
-        ListNode* n = h->next;
-        ListNode* p = n->next;
-        if (p != n) {
-            ListNode* q = n->prev;
-            p->prev = q;
-            q->next = p;
-            n->next = n;
-            n->prev = n;
-            SemaphorePost((char*)n + 0x10, 1);
+extern "C" int SemaphorePost_922740(void* sem, int n);   // 0x0922740
+typedef int (__thiscall *FnSemPost)(void*, int);
+namespace SP {
+struct JobCondition {
+    void* mHead;                    // +0x00
+    void* mTail;                    // +0x04
+    void Signal();
+};
+}
+void SP::JobCondition::Signal() {
+    int* self = (int*)this;
+    int* n = (int*)self[1];
+    while (n != self) {
+        n = (int*)self[0];
+        int* pNext = (int*)n[1];
+        if (pNext != n) {
+            int* q = (int*)n[0];
+            *pNext = (int)q;
+            *(int**)((char*)q + 4) = pNext;
+            void* sem = (char*)n + 8;
+            *n = (int)n;
+            n[1] = (int)n;
+            ((FnSemPost)SemaphorePost_922740)(sem, 1);
         }
+        n = (int*)self[1];
     }
 }
 
 // =====================================================================
-// @ 0x0068f600  ctor of a semaphore-list container (partial, EH)
+// @ 0x0068f600  ctor of a semaphore-list container  (_FUN_68F600)
 // =====================================================================
-extern "C" void* FUN_68F600(void* p) {
-    *(uint32_t*)((char*)p + 4) = 0;
-    *(uint32_t*)((char*)p + 0) = 0;
-    char* s = (char*)p + 8;
-    *(uint32_t*)(s + 4) = 0;
-    *(uint32_t*)(s + 0) = 0;
-    *(void**)(s) = s;
-    *(void**)(s + 4) = s;
+extern "C" void  Semaphore_ctor_922880(void* sem, int n);  // 0x0922880
+extern "C" void  FUN_00743b50(void* p);                    // 0x0743b50
+typedef void (__thiscall *FnSemCtor)(void*, int);
+
+// The +0x10 subobject is an EA::Thread::Semaphore built by the external ctor at
+// 0x00922880. Declaring (not defining) ctor+dtor makes the compiler emit an
+// external call plus an EH unwind arm without any local COMDAT.
+struct EA_Semaphore {
+    char raw[0x10];
+    EA_Semaphore(int n);                          // 0x00922880 (external)
+    ~EA_Semaphore();                              // external
+};
+struct ClsF600 {
+    uint32_t f0, f4;        // +0x00, +0x04
+    void*    listNext;      // +0x08 (self-referential list head)
+    void*    listPrev;      // +0x0c
+    EA_Semaphore sem;       // +0x10
+    char     vec[0x10];     // +0x20
+    ClsF600();
+};
+ClsF600::ClsF600() : sem(0) {
+    f0 = 0;
+    f4 = 0;
+    listNext = 0;
+    listPrev = 0;
+    listNext = &listNext;
+    listPrev = &listNext;
+    FUN_00743b50(vec);
+}
+extern "C" ClsF600* FUN_68F600(ClsF600* p) {
+    p->ClsF600::ClsF600();
     return p;
 }
