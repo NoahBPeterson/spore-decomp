@@ -1,4 +1,5 @@
-00e094f0 FUN_00e094f0  # Ghidra FUN; free function: forward a Gonzago hint condition test to the shared condition dispatcher; byte-exact
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00e094f0, named from the dev publics; slice address comment)
+00e094f0 ?FUN_00e094f0@@YGHH@Z  # FUN_00e094f0 migrated from s00e094f0 (verbatim, slice spelling)
 00e09560 FUN_00e09560  # Ghidra FUN; message filter: accept the "spyglass entered" message when the payload type is 0x452c168 and post the mode message; byte-exact
 00e09590 FUN_00e09590  # Ghidra FUN; mode entry/leave: mode value 8 takes the plain notify path, everything else posts the mode-change message with the value clamped to 8-or-0; not byte-exact
 00e09600 FUN_00e09600  # Ghidra FUN; create (once) the spyglass UI: register the two cursors, build the layout, hook up the two child windows and autosize the text window; byte-exact
