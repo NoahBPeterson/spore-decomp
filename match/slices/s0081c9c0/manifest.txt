@@ -6,3 +6,7 @@ slices/s0081c9c0/s0081c9c0.cpp  ?OnAttach@PMW@@QAEXXZ  0081c9c0  /O2 /MD /Gy /EH
 slices/s0081c9c0/s0081c9c0.cpp  ?OnMouseUp@PMW@@QAEXMMHH@Z  0081ca60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s0081c9c0/s0081c9c0.cpp  ?OnChar@PMW@@QAEXHI@Z  0081cbe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s0081c9c0/s0081c9c0.cpp  ?OnTick@PSB@@QAEEXZ  0081ce80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081c9c0/s0081c9c0.cpp  ?CopyObjectList@@YA_NPAUCopyDst@@PAUCopySrc@@PAUCopySpec@@@Z  0081cf50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081c9c0/s0081c9c0.cpp  ??0cSPUIProgressBarGradientWin@UTFWin@@QAE@XZ  0081d020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081c9c0/s0081c9c0.cpp  ?SetValue@ProgressValueIface@@QAE_NM@Z  0081d480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081c9c0/s0081c9c0.cpp  ??0cSPUIProgressBarWin@UTFWin@@QAE@XZ  0081d510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
