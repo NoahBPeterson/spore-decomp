@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCelestialBody.cpp  ?FUN_0132b6b0@@YAXXZ  0132b6b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
