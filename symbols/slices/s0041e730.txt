@@ -4,7 +4,7 @@
 0041e920 Property::GetBool  # type 1 or 0x10 else default
 0041e990 ?GetInt@Property@@QAEPAHXZ  # Property::GetInt migrated from s0041e730 (verbatim, slice spelling)
 0041ea00 Property::GetUInt  # type 10
-0041ea70 Property::GetFloat  # type 13
+0041ea70 ?GetFloat@Property@@QAEPAMXZ  # Property::GetFloat migrated from s0041e730 (verbatim, slice spelling)
 0041eae0 RefVector::RefVector  # copy ctor, vector of ThreadedObject refs
 0041eb80 RefVector::~RefVector  # calls Resource::ThreadedObject::Release per element
 0041ebe0 ?4RefVector  # EASTL vector assignment
