@@ -1,2 +1,9 @@
+00603820  197  cGraphicsTab global-option sync loop: complete; retail keeps &mData in ebp and reuses esi for mpEnd, our allocator drops `this` and keeps it in ecx (size 244 vs 243).
+00603920  201  cGraphicsTab::init_lmh_control: complete; list iterator walk + register allocation differ (size 222 vs 225).
+00603a10  799  cGraphicsTab::on_data_changed: complete; large UI refresh (labels, menu rebuild, button state); template/API inlining and register allocation differ (size 946 vs 968).
+00603de0  223  cGraphicsTab::SaveSettings: complete; config-compare + option-index rebuild + Variant/FNVHash codegen differs (size 316 vs 304).
 00603f10  40  cGraphicsTab checkbox->canvas sync (setne variant): complete; the key-temp scheduling above the Canvas call does not converge.
 00603fe0  40  cGraphicsTab checkbox->canvas sync (sete variant): complete; same key-temp scheduling difference.
+00604260  424  cGraphicsTab::Init: complete; cSPUILayout/Pollinator float-path inlining and register allocation differ (size 509 vs 584).
+006044b0  31  cGraphicsTab::load_list_options: complete; pure register allocation swap (loop pointer edi vs retail esi, value temp esi vs edi).
+006045c0  429  cGraphicsTab::DoMessageTab: complete; large message dispatch; template/API inlining and register allocation differ (size 710 vs 671).
