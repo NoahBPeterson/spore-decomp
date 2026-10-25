@@ -33,6 +33,7 @@
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
+#include <math.h>
 
 typedef unsigned char  uint8;
 typedef unsigned short uint16;
@@ -43,7 +44,7 @@ extern void*  EA_Audio_GetSystemAT();                 // 0x00a206f0
 extern void*  SP_AudioSystem();                       // 0x0067cb00
 extern void*  SP_EffectsManager();                    // 0x0067ddd0
 extern void   FUN_009fb830(void* self, float v);      // 0x009fb830
-extern void   FUN_009b3010(void* self);               // 0x009b3010
+struct FUN_009b3010 { void reset(); };                // 0x009b3010 (thiscall)
 extern void   Matrix3_Assign(void* dst, void* src);   // 0x0041cb40
 extern uint32 EA_Hash_FNV1_String8(const char* s, uint32 seed, int len);   // 0x00932e80
 extern void*  eastl_rbtree_find(void* tree, void* key, void* node);        // 0x00e5c780
@@ -64,6 +65,7 @@ extern uint8  g_166cb6c;   // 0x0166cb6c  matrix literal
 extern float  g_166ca38;   // 0x0166ca38
 extern float  g_166ca3c;   // 0x0166ca3c
 extern float  g_166ca40;   // 0x0166ca40
+extern float  g_1485720;   // 0x01485720 (1.0f)
 extern void*  g_1551774;   // 0x01551774  "deform"
 extern void*  g_14487f4;   // 0x014487f4  vftable
 extern uint8  g_1667bac;   // 0x01667bac  empty-string sentinel
@@ -77,7 +79,10 @@ typedef int   (__thiscall *vt_i_i)(void*, int);
 typedef float (__thiscall *vt_f_i)(void*, int);
 typedef void  (__thiscall *vt_v_ff)(void*, int, float);
 typedef void  (__thiscall *vt_v_if)(void*, int, float);
+typedef void  (__thiscall *vt_v_p)(void*, void*);
 typedef void  (__thiscall *vt_v_pi)(void*, int*, int);
+typedef char  (__thiscall *vt_c_pii)(void*, void*, int, void**);
+typedef void* (__thiscall *vt_p0)(void*);
 
 #define VT(obj, off)  (*(void***)(obj))[(off) / 4]
 
@@ -86,53 +91,27 @@ typedef void  (__thiscall *vt_v_pi)(void*, int*, int);
 // @ 0x009fb8e0
 void ResetBodyRenderState(int inst)
 {
-    char* base = *(char**)(inst + 0x2e4);
-    int count = (int)((*(char**)(inst + 0x2e8) - base) / 700);
+    float* base = (float*)*(void**)(inst + 0x2e4);
+    int count = (int)(((char*)*(void**)(inst + 0x2e8) - (char*)base) / 700);
     for (int i = 0; i < count; ++i) {
-        char* e = base + i * 700;
-        *(float*)(e + 0x164) = 0.0f;
-        *(float*)(e + 0x168) = 0.0f;
-        *(float*)(e + 0x16c) = 0.0f;
-        *(float*)(e + 0x170) = *(float*)(e + 0x190);
-        *(float*)(e + 0x174) = *(float*)(e + 0x194);
-        *(float*)(e + 0x178) = *(float*)(e + 0x198);
-        *(float*)(e + 0x17c) = *(float*)(e + 0x19c);
-        *(float*)(e + 0x180) = *(float*)(e + 0x1a0);
-        *(float*)(e + 0x184) = *(float*)(e + 0x1a4);
-        *(float*)(e + 0x188) = *(float*)(e + 0x1a8);
-        *(float*)(e + 0x420) = 0.0f;
-        *(float*)(e + 0x424) = 0.0f;
-        *(float*)(e + 0x428) = 0.0f;
-        *(float*)(e + 0x42c) = *(float*)(e + 0x44c);
-        *(float*)(e + 0x430) = *(float*)(e + 0x450);
-        *(float*)(e + 0x434) = *(float*)(e + 0x454);
-        *(float*)(e + 0x438) = *(float*)(e + 0x458);
-        *(float*)(e + 0x43c) = *(float*)(e + 0x45c);
-        *(float*)(e + 0x440) = *(float*)(e + 0x460);
-        *(float*)(e + 0x444) = *(float*)(e + 0x464);
-        *(float*)(e + 0x6dc) = 0.0f;
-        *(float*)(e + 0x6e0) = 0.0f;
-        *(float*)(e + 0x6e4) = 0.0f;
-        *(float*)(e + 0x6e8) = *(float*)(e + 0x708);
-        *(float*)(e + 0x6ec) = *(float*)(e + 0x70c);
-        *(float*)(e + 0x6f0) = *(float*)(e + 0x710);
-        *(float*)(e + 0x6f4) = *(float*)(e + 0x714);
-        *(float*)(e + 0x6f8) = *(float*)(e + 0x718);
-        *(float*)(e + 0x6fc) = *(float*)(e + 0x71c);
-        *(float*)(e + 0x700) = *(float*)(e + 0x720);
-        *(float*)(e + 0x998) = 0.0f;
-        *(float*)(e + 0x99c) = 0.0f;
-        *(float*)(e + 0x9a0) = 0.0f;
-        *(float*)(e + 0x9a4) = *(float*)(e + 0x9c4);
-        *(float*)(e + 0x9a8) = *(float*)(e + 0x9c8);
-        *(float*)(e + 0x9ac) = *(float*)(e + 0x9cc);
-        *(float*)(e + 0x9b0) = *(float*)(e + 0x9d0);
-        *(float*)(e + 0x9b4) = *(float*)(e + 0x9d4);
-        *(float*)(e + 0x9b8) = *(float*)(e + 0x9d8);
-        *(float*)(e + 0x9bc) = *(float*)(e + 0x9dc);
-        *(float*)(e + 0x9c0) = *(float*)(e + 0x9e0);
+        float* e = base + i * 175;
+        float* z = e + (0x164 / 4);
+        float* d = e + (0x170 / 4);
+        float* s = e + (0x190 / 4);
+        z[0] = 0.0f;
+        z[1] = 0.0f;
+        z[2] = 0.0f;
+        d[0] = s[0];
+        d[1] = s[1];
+        d[2] = s[2];
+        d[3] = s[3];
+        d[4] = s[4];
+        d[5] = s[5];
+        d[6] = s[6];
     }
 }
+
+static const float& minf(const float& a, const float& b) { return a > b ? b : a; }
 
 // ================================================================== @ 0x009fbb80
 
@@ -145,25 +124,23 @@ void AdvanceTimer(void* self, float dt)
         return;
 
     float* pf = (float*)((char*)self + 0x1798);
-    float v = *pf + dt;
-    *pf = v;
-    if (v > g_166c978)
-        v = g_166c978;
-    *pf = v;
+    *pf = *pf + dt;
+    *pf = minf(*pf, g_166c978);
+    float v = *pf;
 
     int n;
-    float carry;
+    float step;
     if (g_166c974 > v) {
         n = 1;
-        carry = v;
+        step = v;
         *pf = 0.0f;
     } else {
-        n = (int)(v / (g_166c974 + g_13ec4b8));
-        carry = (float)(v - (float)n * g_166c974);
-        *pf = carry;
+        step = g_166c974;
+        *pf = fmod(v, step);
+        n = (int)(v / (step + g_13ec4b8));
     }
     for (int i = 0; i < n; ++i) {
-        FUN_009fb830(self, carry);
+        FUN_009fb830(self, step);
         ResetBodyRenderState((int)self);
     }
 }
@@ -274,73 +251,89 @@ void AudioSetListener3v(int a1, float* v)
 // ================================================================== @ 0x009fbe80
 
 // @ 0x009fbe80
-void EffectsEmitEvent(void* self, int group, void* pos, void* mat)
+struct FUN_0041cb40 { void ctor(void* src); };   // 0x0041cb40 (thiscall, ret 4)
+
+struct EventDesc {
+    uint16 flags;      // +0x00
+    uint16 count;      // +0x02
+    float  f04;        // +0x04
+    float  f08;        // +0x08
+    float  f0c;        // +0x0c
+    float  f10;        // +0x10
+    float  m[9];       // +0x14
+};
+
+struct V3 { float x, y, z; };
+struct M9 { float m[9]; };
+
+void EffectsEmitEvent(void* self, int group, void* mat)
 {
     if (!self)
         return;
 
-    uint8 buf[0x60];
-    *(float*)(buf + 0x2c) = g_166ca38;
-    *(float*)(buf + 0x30) = g_166ca3c;
-    *(float*)(buf + 0x34) = g_166ca40;
-    *(uint16*)(buf + 0x04) = 0;
-    *(uint16*)(buf + 0x06) = 0;
-    *(float*)(buf + 0x08) = 1.0f;
-    Matrix3_Assign(buf + 0x1c, &g_166cb6c);
+    M9 tmp;
+    EventDesc desc;
+    desc.flags = 0;
+    desc.count = 0;
+    desc.f04 = g_166ca38;
+    desc.f08 = g_166ca3c;
+    desc.f0c = g_166ca40;
+    desc.f10 = g_1485720;
+    ((FUN_0041cb40*)desc.m)->ctor(&g_166cb6c);
 
-    ((vt_v_pi)VT(self, 0x20))(self, (int*)(buf + 0x04), 0);
+    ((vt_v_p)VT(self, 0x20))(self, &desc);
 
     if (group) {
-        *(uint16*)(buf + 0x04) |= 4;
-        *(uint16*)(buf + 0x06) += 1;
-        *(uint32*)(buf + 0x08) = *(uint32*)group;
-        *(uint32*)(buf + 0x0c) = *(uint32*)((char*)group + 4);
-        *(uint32*)(buf + 0x10) = *(uint32*)((char*)group + 8);
+        desc.flags |= 4;
+        desc.count += 1;
+        *(V3*)&desc.f04 = *(V3*)group;
     }
     if (mat) {
-        *(float*)(buf + 0x00) = *(float*)((char*)mat + 0x00);
-        *(float*)(buf + 0x0c) = *(float*)((char*)mat + 0x04);
-        *(float*)(buf + 0x18) = *(float*)((char*)mat + 0x08);
-        *(float*)(buf + 0x04) = *(float*)((char*)mat + 0x0c);
-        *(float*)(buf + 0x10) = *(float*)((char*)mat + 0x10);
-        *(float*)(buf + 0x1c) = *(float*)((char*)mat + 0x14);
-        *(float*)(buf + 0x08) = *(float*)((char*)mat + 0x18);
-        *(float*)(buf + 0x14) = *(float*)((char*)mat + 0x1c);
-        *(float*)(buf + 0x20) = *(float*)((char*)mat + 0x20);
-        *(uint16*)(buf + 0x04) |= 2;
-        *(uint16*)(buf + 0x06) += 1;
+        float* s = (float*)mat;
+        tmp.m[0] = s[0]; tmp.m[3] = s[1]; tmp.m[6] = s[2];
+        tmp.m[1] = s[3]; tmp.m[4] = s[4]; tmp.m[7] = s[5];
+        tmp.m[2] = s[6]; tmp.m[5] = s[7]; tmp.m[8] = s[8];
+        *(M9*)desc.m = tmp;
+        desc.flags |= 2;
+        desc.count += 1;
     }
-    ((vt_v_pi)VT(self, 0x18))(self, (int*)(buf + 0x04), 0);
+    ((vt_v_p)VT(self, 0x18))(self, &desc);
 }
 
 // ================================================================== @ 0x009fbfc0
 
+__declspec(noinline)
 // @ 0x009fbfc0
-int EffectsSpawn(void* a, int b, void* c, int d, int e, void** out)
+bool EffectsSpawn(void* a, int b, void* c, int d, int e, void** out)
 {
-    int local = 0;
+    void* local = 0;
     if (!out)
-        out = (void**)&local;
+        out = &local;
     if (!SP_EffectsManager())
         goto fail;
     {
         void* mgr = a;
-        if (!mgr)
-            mgr = (void*)0;   // (original: default effects manager)
+        if (!mgr) {
+            void* sys = SP_EffectsManager();
+            mgr = ((vt_p0)VT(sys, 0x5c))(sys);
+        }
         if (b)
-            return 0;
-        if (((char(__thiscall*)(void*, void*, int, void**))VT(mgr, 8))(mgr, c, 0, out)) {
-            EffectsEmitEvent(*out, (int)c, 0, 0);
-            return 1;
+            return false;
+        if (((vt_c_pii)VT(mgr, 8))(mgr, c, 0, out)) {
+            EffectsEmitEvent(*out, d, (void*)e);
+            ((vt_v_i)VT(*out, 8))(*out, 0);
+            if (local)
+                ((vt_v0)VT(local, 4))(local);
+            return true;
         }
     }
 fail:
     *out = 0;
-    return 0;
+    return false;
 }
 
 // @ 0x009fc050
-int EffectsSpawnThunk(int a, int b, int c, int d, int e)
+bool EffectsSpawnThunk(int a, int b, int c, int d, int e)
 {
     return EffectsSpawn((void*)a, 0, (void*)b, c, d, (void**)e);
 }
@@ -353,10 +346,9 @@ uint32 PackFourCC(const char* p)
     char buf[4] = {0, 0, 0, 0};
     if (p) {
         for (int i = 0; i < 4; ++i) {
-            char ch = p[i];
-            if (ch == 0)
+            if (p[i] == 0)
                 break;
-            buf[i] = ch;
+            buf[i] = p[i];
         }
     }
     return (uint32)(uint8)buf[3] << 24 | (uint32)(uint8)buf[2] << 16
@@ -388,38 +380,42 @@ void BehaviorTableExpand(int self)
 {
     char* p = (char*)self;
     int i = 0;
-    while (i < 0x20 && *(int*)(p + 8 + i * 4) != 0)
+    while (*(int*)(p + 8 + i * 4) != 0) {
         ++i;
-    int dst = 0;
+        if (i >= 0x20)
+            break;
+    }
+    int j = 0;
     char* flags = p + 0x88;
-    while (dst < 0x20) {
-        uint32 key = *(uint32*)(p + 8 + dst * 4);
+    for (; j < 0x20; ++j) {
+        uint32 key = *(uint32*)(p + 8 + j * 4);
         if (key == 0)
             break;
-        void* head = (void*)((char*)g_166c080 + 4);
-        void* node = *(void**)((char*)g_166c080 + 0xc);
-        void* parent = head;
+        char* tree = (char*)g_166c080;
+        char* head = tree + 4;
+        char* node = *(char**)(tree + 0xc);
+        char* parent = head;
         while (node) {
-            if (*(uint32*)((char*)node + 0x10) < key) {
-                node = *(void**)node;
+            if (*(uint32*)(node + 0x10) < key) {
+                node = *(char**)node;
             } else {
                 parent = node;
-                node = *(void**)((char*)node + 4);
+                node = *(char**)(node + 4);
             }
         }
-        if (parent == head || key < *(uint32*)((char*)parent + 0x10))
+        if (parent == head || key < *(uint32*)(parent + 0x10))
             parent = head;
         if (parent != head) {
-            uint32 cnt = (uint32)((*(char**)((char*)parent + 0x18) - *(char**)((char*)parent + 0x14)) >> 2);
+            uint32 cnt = (uint32)((*(char**)(parent + 0x18) - *(char**)(parent + 0x14)) >> 2);
+            char* vb = *(char**)(parent + 0x14);
             for (uint32 k = 0; k < cnt; ++k) {
-                *(uint32*)(p + 8 + i * 4) = *(uint32*)(*(char**)((char*)parent + 0x14) + k * 4);
-                *(char*)(p + 0x88 + i) = flags[dst];
+                *(uint32*)(p + 8 + i * 4) = *(uint32*)(vb + k * 4);
+                *(char*)(p + 0x88 + i) = flags[j];
                 ++i;
             }
         }
-        ++dst;
     }
-    FUN_009b3010(p);
+    ((FUN_009b3010*)p)->reset();
 }
 
 // ================================================================== @ 0x009fc220
@@ -434,11 +430,11 @@ void BehaviorTableDedup(int self)
     for (int n = 0; n < 0x20; ++n) {
         int v = slots[n];
         if (v == 0)
-            break;
+            continue;
         for (int k = n + 1; k < 0x20; ++k) {
             if (slots[k] != 0 && slots[k] == v) {
                 slots[k] = 0;
-                if (flags[k] < flags[n])
+                if ((uint8)flags[n] < (uint8)flags[k])
                     flags[n] = flags[k];
             }
         }
@@ -457,7 +453,7 @@ void BehaviorTableDedup(int self)
             }
         }
     }
-    FUN_009b3010(p);
+    ((FUN_009b3010*)p)->reset();
 }
 
 // ================================================================== @ 0x009fc310
@@ -545,15 +541,24 @@ Elem14* Elem14::ElemCopy(const Elem14* src)
 // ================================================================== @ 0x009fc4a0
 
 // @ 0x009fc4a0
-void RBTreeInsertIdx(void* self, void** out, void* where, uint32* key, int hint)
+struct RBTreeX {
+    char pad0[4];
+    char head[0x10];
+    int  count;
+    void InsertIdx(void** out, void* where, uint32* key, char hint);
+};
+void RBTreeX::InsertIdx(void** out, void* where, uint32* key, char hint)
 {
-    int left = (hint == 0 && where != (char*)self + 4 && *(uint32*)((char*)where + 0x10) <= *key) ? 1 : 0;
-    void* node = operator_new(0x1c, "Anim/partscaps/untagged", 0, 0, 0, 0xd1);
-    *(uint32*)((char*)node + 0x10) = key[0];
-    *(uint32*)((char*)node + 0x14) = key[1];
-    *(uint32*)((char*)node + 0x18) = key[2];
-    RBTreeInsert(node, where, (char*)self + 4, left);
-    ++*(int*)((char*)self + 0x14);
+    int left = (hint == 0 && where != (void*)((char*)this + 4) && *key >= *(uint32*)((char*)where + 0x10)) ? 1 : 0;
+    void* node = operator_new(0x1c, (const char*)0x1448758, 0, 0, (const char*)0x13ebb38, 0xd1);
+    uint32* dst = (uint32*)((char*)node + 0x10);
+    if (dst) {
+        dst[0] = key[0];
+        dst[1] = key[1];
+        dst[2] = key[2];
+    }
+    RBTreeInsert(node, where, (char*)this + 4, left);
+    count = count + 1;
     *out = node;
 }
 
@@ -583,10 +588,31 @@ void ElemAssignFrom(Elem14* a, Elem14* b, Elem14* c)
 // ================================================================== @ 0x009fc6c0
 
 // @ 0x009fc6c0
-void ElemFill(Elem14* dst, int n, Elem14* src)
+void ElemFill(Elem14* dst, unsigned n, Elem14* src)
 {
-    for (int i = 0; i < n; ++i)
-        ((Elem14*)((char*)dst + i * 0x14))->ElemCopy(src);
+    for (; n > 0; --n, dst = (Elem14*)((char*)dst + 0x14)) {
+        if (dst) {
+            dst->b = 0;
+            dst->e = 0;
+            dst->c = 0;
+            unsigned len = (unsigned)((char*)src->e - (char*)src->b);
+            unsigned sz = len + 1;
+            if (sz > 1) {
+                char* p = (char*)operator_new(sz, (const char*)0x13ebb38, 0, 0, (const char*)0x1448758, 0xd1);
+                dst->b = p;
+                dst->e = p;
+                dst->c = p + sz;
+            } else {
+                dst->b = (void*)0x1667bac;
+                dst->e = (void*)0x1667bac;
+                dst->c = (void*)0x1667bad;
+            }
+            DoInsertValue(dst->b, src->b, len);
+            dst->e = (char*)dst->b + len;
+            *((char*)dst->b + len) = 0;
+            dst->val = src->val;
+        }
+    }
 }
 
 // ================================================================== @ 0x009fc8b0
@@ -594,8 +620,33 @@ void ElemFill(Elem14* dst, int n, Elem14* src)
 // @ 0x009fc8b0
 Elem14* ElemCopyRange(Elem14* a, Elem14* b, Elem14* c)
 {
-    for (; a != b; a = (Elem14*)((char*)a + 0x14), c = (Elem14*)((char*)c + 0x14))
-        c->ElemCopy(a);
+    if (a == b)
+        return c;
+    do {
+        if (c) {
+            c->b = 0;
+            c->e = 0;
+            c->c = 0;
+            unsigned len = (unsigned)((char*)a->e - (char*)a->b);
+            unsigned sz = len + 1;
+            if (sz > 1) {
+                char* p = (char*)operator_new(sz, (const char*)0x13ebb38, 0, 0, (const char*)0x1448758, 0xd1);
+                c->b = p;
+                c->e = p;
+                c->c = p + sz;
+            } else {
+                c->b = (void*)0x1667bac;
+                c->e = (void*)0x1667bac;
+                c->c = (void*)0x1667bad;
+            }
+            DoInsertValue(c->b, a->b, len);
+            c->e = (char*)c->b + len;
+            *((char*)c->b + len) = 0;
+            c->val = a->val;
+        }
+        a = (Elem14*)((char*)a + 0x14);
+        c = (Elem14*)((char*)c + 0x14);
+    } while (a != b);
     return c;
 }
 
@@ -615,24 +666,26 @@ Elem14* ElemMove(Elem14* a, Elem14* b, Elem14* c)
 // ================================================================== @ 0x009fc9c0
 
 // @ 0x009fc9c0
-void ElemHeapSiftUp(int base, int pos, int end, uint8* value, int (*cmp)(void*, void*))
+void ElemHeapSiftUp(int base, int pos, int end, Elem14 v, bool (*cmp)(Elem14*, Elem14*))
 {
-    while (pos < end) {
-        int parent = (end - 1) >> 1;
-        Elem14* pe = (Elem14*)(base + parent * 0x14);
-        if (!cmp(pe, value))
-            break;
-        Elem14* endE = (Elem14*)(base + end * 0x14);
-        if (pe != endE)
-            endE->assign(pe->b, pe->e);
-        endE->val = pe->val;
-        end = parent;
+    int parent = (end - 1) >> 1;
+    if (end > pos) {
+        do {
+            Elem14* pe = (Elem14*)(base + parent * 0x14);
+            if (!cmp(pe, &v))
+                break;
+            Elem14* endE = (Elem14*)(base + end * 0x14);
+            if (pe != endE)
+                endE->assign(pe->b, pe->e);
+            endE->val = pe->val;
+            end = parent;
+            parent = (parent - 1) >> 1;
+        } while (end > pos);
     }
     Elem14* slot = (Elem14*)(base + end * 0x14);
-    Elem14* v = (Elem14*)value;
-    if (v != slot)
-        slot->assign(v->b, v->e);
-    slot->val = v->val;
-    if ((int)((char*)v->e - (char*)v->b) > 1 && v->b)
-        operator delete[](v->b);
+    if (&v != slot)
+        slot->assign(v.b, v.e);
+    slot->val = v.val;
+    if ((int)((char*)v.c - (char*)v.b) > 1 && v.b)
+        operator delete[](v.b);
 }
