@@ -1,0 +1,5 @@
+00ff8460 ?FUN_00ff8460@PooledRegion@@QAEPAU1@XZ  # PooledRegion::FUN_00ff8460 migrated from s00ff8460 (verbatim, slice spelling)
+00ff8780 ??1cSPSimPlanetHighLOD_s00ff_8460@@QAE@XZ  # cSPSimPlanetHighLOD_s00ff_8460::~cSPSimPlanetHighLOD migrated from s00ff8460 (verbatim, slice spelling)
+00ff88c0 ?AddToList@cSPSimPlanetHighLOD_s00ff_8460@@QAEXPBIPAURCObject@@@Z  # cSPSimPlanetHighLOD_s00ff_8460::AddToList migrated from s00ff8460 (verbatim, slice spelling)
+00ff8970 ?cSPSimPlanetHighLOD_ctor@@YIPAUcSPSimPlanetHighLOD_s00ff_8460@@PAU1@@Z  # cSPSimPlanetHighLOD_ctor migrated from s00ff8460 (verbatim, slice spelling)
+00ff9070 ?FUN_00ff9070@@YAXXZ  # FUN_00ff9070 migrated from s00ff8460 (verbatim, slice spelling)

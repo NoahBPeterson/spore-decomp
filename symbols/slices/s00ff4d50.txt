@@ -1,0 +1,4 @@
+00ff5a90 ?Write@cSPSimPlanetHighLOD@@QAE_NPAUIStream@@@Z  # cSPSimPlanetHighLOD::Write migrated from s00ff4d50 (verbatim, slice spelling)
+00ff5ba0 ?FUN_00ff5ba0@@YAXPAH0@Z  # FUN_00ff5ba0 migrated from s00ff4d50 (verbatim, slice spelling)
+00ff5be0 ?FUN_00ff5be0@@YAXPAH0@Z  # FUN_00ff5be0 migrated from s00ff4d50 (verbatim, slice spelling)
+00ff5c50 ?Read@cSPSimPlanetHighLOD@@QAEDPAUIStream@@@Z  # cSPSimPlanetHighLOD::Read migrated from s00ff4d50 (verbatim, slice spelling)

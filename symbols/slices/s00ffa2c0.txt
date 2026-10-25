@@ -1,0 +1,6 @@
+00ffa2c0 ?FUN_00ffa2c0@cSPSimPlanetHighLOD_s00ff_a2c0@SP@@QAEXXZ  # cSPSimPlanetHighLOD_s00ff_a2c0::FUN_00ffa2c0 migrated from s00ffa2c0 (verbatim, slice spelling)
+00ffa690 ?FUN_00ffa690@SP@@YAXXZ  # FUN_00ffa690 migrated from s00ffa2c0 (verbatim, slice spelling)
+00ffa780 ?CreateReplacement@cSPSimPlanetHighLOD_s00ff_a2c0@SP@@QAEXXZ  # cSPSimPlanetHighLOD_s00ff_a2c0::CreateReplacement migrated from s00ffa2c0 (verbatim, slice spelling)
+00ffa900 ?BlowUpCity@cSPSimPlanetHighLOD_s00ff_a2c0@SP@@QAEXPAXH@Z  # cSPSimPlanetHighLOD_s00ff_a2c0::BlowUpCity migrated from s00ffa2c0 (verbatim, slice spelling)
+00ffaa90 ?FUN_00ffaa90@cSPSimPlanetHighLOD_s00ff_a2c0@SP@@QAEXH@Z  # cSPSimPlanetHighLOD_s00ff_a2c0::FUN_00ffaa90 migrated from s00ffa2c0 (verbatim, slice spelling)
+00ffab60 ?FUN_00ffab60@SP@@YAXXZ  # FUN_00ffab60 migrated from s00ffa2c0 (verbatim, slice spelling)

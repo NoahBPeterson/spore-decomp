@@ -1,0 +1,4 @@
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s00ffb180, named from the dev publics; slice address comment)
+00c3e0b0 ?Init@cSPGameDataUFO@SP@@QAEXW4eUFOType@2@PAVcEmpire@2@@Z  # SP::cSPGameDataUFO::Init (callee of s00ffb180, named from the dev publics; slice address comment)
+00d06240 ?RecordEvent@cRelationshipManager@SP@@QAEMIIW4eRelationshipEvents@2@M@Z  # SP::cRelationshipManager::RecordEvent (callee of s00ffb180, named from the dev publics; slice address comment)
+00ffbb20 ?OnTick@cSPSimPlanetHighLOD_s00ff_b180@@QAEXII@Z  # cSPSimPlanetHighLOD_s00ff_b180::OnTick migrated from s00ffb180 (verbatim, slice spelling)

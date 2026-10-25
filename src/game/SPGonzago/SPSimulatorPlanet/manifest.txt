@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ff5ba0@@YAXPAH0@Z  00ff5ba0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ff5be0@@YAXPAH0@Z  00ff5be0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?ShowUFOForTransition@cSPSimPlanetHighLOD_s00ff_5d20@@QAEXXZ  00ff60d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ff6190@cSPSimPlanetHighLOD_s00ff_5d20@@QAEXXZ  00ff6190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ff6200@cSPSimPlanetHighLOD_s00ff_5d20@@QAEXXZ  00ff6200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ff6290@cSPSimPlanetHighLOD_s00ff_5d20@@QAEXXZ  00ff6290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ff62d0@cSPSimPlanetHighLOD_s00ff_5d20@@QAEXXZ  00ff62d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ff6380@@YAXXZ  00ff6380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ff63e0@@YAXXZ  00ff63e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ff6450@cSPSimPlanetHighLOD_s00ff_5d20@@QAEXPAUVec3@@@Z  00ff6450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ff6520@cSPSimPlanetHighLOD_s00ff_5d20@@QAEXPAXM@Z  00ff6520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
