@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+012138a0 10 complete leaf that clears bit 0 of the global flag at 0x01633b78 (`mov eax,[0x1633b78]; and eax,0xfffffffe; mov [0x1633b78],eax; ret` = 14 bytes, reproduced byte-for-byte); the remaining 10 bytes of the 24-byte symbol are the compiler's trailing rethrow funclet `mov eax,0x1501788; jmp __CxxThrowException`, which only an EH-region-bearing wrapper can emit and is not reachable from the source of this leaf; flags /O2 /MD /Gy /EHsc /TP; equivalence PASS (400/400 valid inputs, 100% coverage)
