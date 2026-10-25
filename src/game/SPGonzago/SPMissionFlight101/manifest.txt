@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionFlight101.cpp  ?Shutdown@cSPMissionFlight101@@QAEXXZ  00c557f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionFlight101.cpp  ?Init@cSPMissionFlight101@@QAE_NXZ  00c55ec0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionFlight101.cpp  ?PostLoad@cSPMissionFlight101@@QAEXXZ  00c55ef0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionFlight101.cpp  ?Destroy@cSPMissionFlight101@@QAEPAXD@Z  00c55fc0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionFlight101.cpp  ?OnSubMissionComplete@cSPMissionFlight101@@QAEXXZ  00c56170  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
