@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009bc580/s009bc580.cpp  ?FUN_009bd2b0@nSPCreatureAnim@@YAXPAUcreature_instance_data@1@@Z  009bd2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -309,12 +309,13 @@ void __cdecl FUN_009bd2b0(creature_instance_data* c)
     c->saved_orientation[1] = c->orientation.y;
     c->saved_orientation[2] = c->orientation.z;
     c->saved_orientation[3] = c->orientation.w;
-    if (c->mpAnimState == 0) {
-        ((anim_state_x*)&c->mpAnimState)->F_9e3f70(6, 4);
+    int* p = (int*)&c->mpAnimState;
+    if (*p == 0) {
+        ((anim_state_x*)p)->F_9e3f70(6, 4);
         c->F_9b7b10(0, 0);
     }
     if (c->gameData.GetPoliticalID() != 0)
-        c->gameData.F_9d33a0((int*)&c->mpAnimState);
+        c->gameData.F_9d33a0(p);
 }
 
 }  // namespace nSPCreatureAnim
