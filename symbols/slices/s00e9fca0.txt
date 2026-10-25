@@ -1,3 +1,5 @@
+00e9fca0 ?FUN_00e9fca0@@YI_NPAUcAmbienceLayerManager@@PAX@Z  # FUN_00e9fca0 migrated from s00e9fca0 (verbatim, slice spelling)
+00e9fd70 ?FUN_00e9fd70@@YIDPAUcAmbienceLayerManager@@PAX@Z  # FUN_00e9fd70 migrated from s00e9fca0 (verbatim, slice spelling)
 00e9fe40 ?FUN_00e9fe40@@YI_NPAX0II@Z  # FUN_00e9fe40 migrated from s00e9fca0 (verbatim, slice spelling)
 00e9fe90 ?FUN_00e9fe90@@YIXPAUcWindowPulse@@PAXPAUIWnd@@@Z  # FUN_00e9fe90 migrated from s00e9fca0 (verbatim, slice spelling)
 00e9ffb0 ?FUN_00e9ffb0@@YIXPAUcCityMusicEditor@@PAX1@Z  # FUN_00e9ffb0 migrated from s00e9fca0 (verbatim, slice spelling)

@@ -1,0 +1,5 @@
+00e9e290 ?Shutdown@cAmbLayer@@QAE_NXZ  # cAmbLayer::Shutdown migrated from s00e9e290 (verbatim, slice spelling)
+00e9e2f0 ?RemoveTag@cAmbLayer@@QAE_NI@Z  # cAmbLayer::RemoveTag migrated from s00e9e290 (verbatim, slice spelling)
+00e9e350 ?DestroyCubeMap@cAmbLayer@@QAEXXZ  # cAmbLayer::DestroyCubeMap migrated from s00e9e290 (verbatim, slice spelling)
+00e9e3a0 ?Destroy@cAmbLayer@@QAEXXZ  # cAmbLayer::Destroy migrated from s00e9e290 (verbatim, slice spelling)
+00e9ed00 ?FUN_00e9ed00@cAmbLayer@@QAE_NPAUcAmbienceTag@@@Z  # cAmbLayer::FUN_00e9ed00 migrated from s00e9e290 (verbatim, slice spelling)

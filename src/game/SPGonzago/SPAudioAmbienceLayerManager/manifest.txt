@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAudioAmbienceLayerManager.cpp  ?Shutdown@cAmbLayer@@QAE_NXZ  00e9e290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioAmbienceLayerManager.cpp  ?DestroyCubeMap@cAmbLayer@@QAEXXZ  00e9e350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioAmbienceLayerManager.cpp  ?FUN_00e9fd70@@YIDPAUcAmbienceLayerManager@@PAX@Z  00e9fd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
