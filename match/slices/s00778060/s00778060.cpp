@@ -45,25 +45,24 @@ __forceinline int FloorToInt(float f)
 }
 
 // @ 0x00778060  Matrix4 invert; flags bit2 = copy through, (flags&3)==3 = affine special case
-void FUN_00778060(float* out, const float* m, unsigned flags) {
+float* FUN_00778060(float* out, const float* m, unsigned flags) {
     if (flags & 4) {
         for (int i = 0; i < 16; ++i)
             out[i] = m[i];
-        return;
+        return out;
     }
     if ((flags & 3) == 3) {
-        float a0 = m[0], a1 = m[1], a2 = m[2], a3 = m[3];
+        float a0 = m[0], a1 = m[1], a2 = m[2];
         float b0 = m[4], b1 = m[5], b2 = m[6];
         float c0 = m[8], c1 = m[9], c2 = m[10];
         float t0 = m[12], t1 = m[13], t2 = m[14];
-        out[0] = a0;  out[1] = b0;  out[2]  = c0;  out[3]  = 0.0f;
-        out[4] = a1;  out[5] = b1;  out[6]  = c1;  out[7]  = 0.0f;
-        out[8] = a2;  out[9] = b2;  out[10] = c2;  out[11] = 0.0f;
+        out[0] = a0;  out[1] = b0;  out[2]  = c0;  out[3]  = c0;
+        out[4] = a1;  out[5] = b1;  out[6]  = c1;  out[7]  = c0;
+        out[8] = a2;  out[9] = b2;  out[10] = c2;  out[11] = c0;
         out[12] = -(a0 * t0 + a1 * t1 + a2 * t2);
         out[13] = -(b0 * t0 + b1 * t1 + b2 * t2);
         out[14] = -(c0 * t0 + c1 * t1 + c2 * t2);
-        out[15] = 1.0f;
-        return;
+        return out;
     }
     float i0  =  m[5]*m[10]*m[15] - m[5]*m[11]*m[14] - m[9]*m[6]*m[15] + m[9]*m[7]*m[14] + m[13]*m[6]*m[11] - m[13]*m[7]*m[10];
     float i4  = -m[4]*m[10]*m[15] + m[4]*m[11]*m[14] + m[8]*m[6]*m[15] - m[8]*m[7]*m[14] - m[12]*m[6]*m[11] + m[12]*m[7]*m[10];
@@ -87,6 +86,7 @@ void FUN_00778060(float* out, const float* m, unsigned flags) {
     out[13] = ( m[0]*m[9]*m[14]  - m[0]*m[10]*m[13] - m[8]*m[1]*m[14] + m[8]*m[2]*m[13] + m[12]*m[1]*m[10] - m[12]*m[2]*m[9])  * id;
     out[14] = (-m[0]*m[5]*m[14]  + m[0]*m[6]*m[13]  + m[4]*m[1]*m[14] - m[4]*m[2]*m[13] - m[12]*m[1]*m[6]  + m[12]*m[2]*m[5])  * id;
     out[15] = ( m[0]*m[5]*m[10]  - m[0]*m[6]*m[9]   - m[4]*m[1]*m[10] + m[4]*m[2]*m[9]  + m[8]*m[1]*m[6]   - m[8]*m[2]*m[5])   * id;
+    return out;
 }
 
 // @ 0x007789d0  rw::graphics::ShaderDataState list -> active-state commit (pushes old values)
