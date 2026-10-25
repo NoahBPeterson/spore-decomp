@@ -217,6 +217,7 @@ struct cDirectPropertyList {
 
 // The terrain / map-set header at this+0x2c.
 struct PlanetHeader {
+    uint8_t pad00[0x08];
     void*   mpMap0;      // +0x08
     void*   mpMap1;      // +0x0c
     void*   mpMap2;      // +0x10
@@ -261,7 +262,6 @@ struct IEffectsManager {
     virtual void v6c();
     virtual void v70();
     virtual void v74();
-    virtual void v78();
     virtual void  SetEffect(uint32_t id, int b, void* obj);        // +0x78 ret 0xc
     virtual void* GetEffect(uint32_t id, int b, int c);            // +0x7c ret 0xc
 };
@@ -381,8 +381,8 @@ public:
     virtual void  v0c();
     virtual void  v10();
     virtual void  v14();
-    virtual int   RunEffect(uint32_t cmd, float t, void* a, void* mgr, void* b,
-                            int c, int d);                        // +0x18 ret 0x1c
+    virtual int   RunEffect(uint32_t cmd, float t, void* mgr, void* vec,
+                            void* a, void* b);                    // +0x18 ret 0x18
 };
 typedef char cTS_props_off[(offsetof(cTerrainSphere, mpProps)     == 0x028) ? 1 : -1];
 typedef char cTS_planet_off[(offsetof(cTerrainSphere, mpPlanet)   == 0x02c) ? 1 : -1];
@@ -399,25 +399,25 @@ void cTerrainSphere::EffectSurfacePass(void* a, void* outT, void* outObj)
     void* mgr = SP_EffectsManager();
     OfflineEffect* eff = (OfflineEffect*)SP_CreateOfflineEffect(mgr);
     void* capture = 0;
-    if (!eff->Query(0xf3cfbb40u, 0, &capture)) {
-        if (eff)
-            eff->v04();
-        return;
+    if (eff->Query(0xf3cfbb40u, 0, &capture)) {
+        Vec4 v;
+        v.x = mpProps->mVector.x;
+        v.y = mpProps->mVector.y;
+        v.z = mpProps->mVector.z;
+        v.w = 0.0f;
+        ((OfflineEffect*)capture)->Fill(6, &v, 3);
+        int h = RunEffect(0x21, G_15b1174, mgr, &v, 0, 0);
+        int r = SP_RunOfflineWorld(eff, capture, h);
+        if (outObj)
+            *(int*)outObj = r;
+        if (outT)
+            *(float*)outT = 0.0f;
     }
-    Vec4 v;
-    v.x = mpProps->mVector.x;
-    v.y = mpProps->mVector.y;
-    v.z = mpProps->mVector.z;
-    v.w = 0.0f;
-    ((OfflineEffect*)capture)->Fill(6, &v, 3);
-    int h = RunEffect(0x21, G_15b1174, &v, mgr, &v, 0, 0);
-    int r = SP_RunOfflineWorld(eff, capture, h);
-    if (outObj)
-        *(int*)outObj = r;
-    if (outT)
-        *(float*)outT = 0.0f;
-    if (capture)
-        ((OfflineEffect*)capture)->v04();
+    if (capture) {
+        void* old = capture;
+        capture = 0;
+        ((OfflineEffect*)old)->v04();
+    }
     (void)a;
 }
 
@@ -428,23 +428,30 @@ void cTerrainSphere::RefreshModelEffects(void* arg)
     AppObj* app = (AppObj*)SP_App();
     if (app->v38() == (void*)0x01654c10)
         return;
-    IEffectsManager* em = (IEffectsManager*)SP_EffectsManager();
-    OfflineEffect* eff = (OfflineEffect*)SP_CreateOfflineEffect(em);
+    void* mgr = SP_EffectsManager();
+    OfflineEffect* eff = (OfflineEffect*)SP_CreateOfflineEffect(mgr);
     int n = 0;
-    void* out = 0;
-    if (ResolveModels(mpProps, 0x6875cfd, &n, &out) && n > 0) {
-        char* p = (char*)out;
+    void* array = 0;
+    void* capture = 0;
+    if (ResolveModels(mpProps, 0x6875cfd, &n, &array) && n > 0) {
+        char* p = (char*)array;
         for (int i = 0; i < n; ++i, p += 0xc) {
-            void* ref = 0;
-            if (eff->Query(*(uint32_t*)p, *(uint32_t*)(p + 8), &ref)) {
-                int h = RunEffect(0x21, G_15b1174, 0, em, 0, 0, 0);
-                SP_RunOfflineWorld(eff, ref, h);
+            if (capture) {
+                void* old = capture;
+                capture = 0;
+                ((OfflineEffect*)old)->v04();
+            }
+            if (eff->Query(*(uint32_t*)p, *(uint32_t*)(p + 8), &capture)) {
+                RunEffect(0x21, G_15b1174, mgr, 0, 0, 0);
+                SP_RunOfflineWorld(eff, capture, 0);
             }
         }
     }
-    if (out)
-        ((OfflineEffect*)out)->v04();
-    void* capture = 0;
+    if (capture) {
+        void* old = capture;
+        capture = 0;
+        ((OfflineEffect*)old)->v04();
+    }
     if (eff->Query(0xf3cfbb40u, 0, &capture)) {
         Vec4 v;
         v.x = mpProps->mVector.x;
@@ -452,11 +459,11 @@ void cTerrainSphere::RefreshModelEffects(void* arg)
         v.z = mpProps->mVector.z;
         v.w = 1.0f;
         ((OfflineEffect*)capture)->Fill(6, &v, 3);
-        int h = RunEffect(0x21, G_15b1174, em, 0, 0, 0, 0);
+        int h = RunEffect(0x21, G_15b1174, mgr, &v, 0, 0);
         SP_RunOfflineWorld(eff, capture, h);
     }
-    if (eff)
-        eff->v04();
+    if (capture)
+        ((OfflineEffect*)capture)->v04();
     (void)arg;
 }
 
@@ -683,8 +690,6 @@ void cTerrainSphere::UpdateEffectSurfaces()
     float t = mpStateMgr->GetTime() * G_1471064;
     void* ref = mpPlanet->mpMap0;
     void* map1 = mpPlanet->mpMap1;
-    (void)map1;
-    (void)t;
 
     EventModifier* m0 = (EventModifier*)EA_Allocate(
         0x1c, "Terrain/Sphere/cTerrainEffectSurfaceHeight", 0, 0, 0, 0);
@@ -720,7 +725,7 @@ void cTerrainSphere::UpdateEffectSurfaces()
 
     void* m2 = EA_Allocate(
         0x20, "Terrain/Sphere/cTerrainEffectSurfaceHeightAndNormal", 0, 0, 0, 0);
-    void* m2c = m2 ? FUN_00f9b0f0(m2, h0, h1, -h1, ref, map1) : 0;
+    void* m2c = m2 ? FUN_00f9b0f0(m2, t, h1, -h1, ref, map1) : 0;
     em->SetEffect(0x2e89292bu, 0, m2c);
 
     EventModifier* s0 = (EventModifier*)EA_Allocate(
