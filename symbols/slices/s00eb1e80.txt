@@ -1,13 +1,13 @@
-00eb2370 SP::cGameCinematicsAppMode::OnKeyDown  # 'M' toggles something, ESC exits
-00eb2440 SP::cGameCinematicsAppMode::AsInterface
-00eb25d0 SP::cGameCinematicsAppMode::Shutdown
-00eb28e0 SP::cGameCinematicsAppMode::cGameCinematicsAppMode (ctor body)
-00eb23d0 SP::cGameCinematicsAppMode::HandleSimulationUpdate
-00eb2470 SP::cGameCinematicsAppMode::~cGameCinematicsAppMode
-00eb2520 SP::cGameCinematicsAppMode::Init
-00eb2600 SP::cGameCinematicsAppMode::HandleMessage
-00eb2990 SP::cGameCinematicsAppMode::Activate
-00eb2c70 SP::cGameCinematicsAppMode::Deactivate
-00eb20d0 SP::Audio::cFactoryCityMusic::ReadResource
 00eb1e80 FUN_00eb1e80  # vector insert (eastl vector<bool>)
 00eb2070 FUN_00eb2070  # vector resize
+00eb20d0 SP::Audio::cFactoryCityMusic::ReadResource
+00eb2370 ?OnKeyDown@cGameCinematicsAppMode@SP@@QAE_NHH@Z  # OnKeyDown migrated from s00eb1e80 (verbatim, slice spelling)
+00eb23d0 ?HandleSimulationUpdate@cGameCinematicsAppMode@SP@@QAEXMM@Z  # HandleSimulationUpdate migrated from s00eb1e80 (verbatim, slice spelling)
+00eb2440 ?AsInterface@cGameCinematicsAppMode@SP@@QAEIH@Z  # AsInterface migrated from s00eb1e80 (verbatim, slice spelling)
+00eb2470 ?DtorBody@cGameCinematicsAppMode@SP@@QAEXXZ  # DtorBody migrated from s00eb1e80 (verbatim, slice spelling)
+00eb2520 ?Init@cGameCinematicsAppMode@SP@@QAE_NPAH@Z  # Init migrated from s00eb1e80 (verbatim, slice spelling)
+00eb25d0 ?Shutdown@cGameCinematicsAppMode@SP@@QAE_NXZ  # Shutdown migrated from s00eb1e80 (verbatim, slice spelling)
+00eb2600 ?HandleMessage@cGameCinematicsAppMode@SP@@QAEIII@Z  # HandleMessage migrated from s00eb1e80 (verbatim, slice spelling)
+00eb28e0 ?CtorBody@cGameCinematicsAppMode@SP@@QAEPAV12@XZ  # CtorBody migrated from s00eb1e80 (verbatim, slice spelling)
+00eb2990 ?Activate@cGameCinematicsAppMode@SP@@QAE_NXZ  # Activate migrated from s00eb1e80 (verbatim, slice spelling)
+00eb2c70 ?Deactivate@cGameCinematicsAppMode@SP@@QAEXXZ  # Deactivate migrated from s00eb1e80 (verbatim, slice spelling)

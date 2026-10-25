@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGameCinematics.cpp  ?OnKeyDown@cGameCinematicsAppMode@SP@@QAE_NHH@Z  00eb2370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameCinematics.cpp  ?Init@cGameCinematicsAppMode@SP@@QAE_NPAH@Z  00eb2520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameCinematics.cpp  ?Shutdown@cGameCinematicsAppMode@SP@@QAE_NXZ  00eb25d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
