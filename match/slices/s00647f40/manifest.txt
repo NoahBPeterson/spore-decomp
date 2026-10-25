@@ -1,2 +1,5 @@
-slices/s00647f40/s00647f40.cpp  ?EraseAt@GridVec 00648af0  /O2 /MD /Gy /TP
-slices/s00647f40/s00647f40.cpp  ?Insert@GridVec  00648b40  /O2 /MD /Gy /TP
+slices/s00647f40/s00647f40.cpp  ?ClearAssetViews@GridVec@@QAEXXZ  00648aa0  /O2 /MD /Gy /TP
+slices/s00647f40/s00647f40.cpp  ?EraseAt@GridVec@@QAEPAUEntry14@@PAU2@@Z  00648af0  /O2 /MD /Gy /TP
+slices/s00647f40/s00647f40.cpp  ?Insert@GridVec@@QAEPAUEntry14@@PAU2@ABU2@@Z  00648b40  /O2 /MD /Gy /TP
+slices/s00647f40/s00647f40.cpp  ?GrowTo@GridVec@@QAEXI@Z  00648bb0  /O2 /MD /Gy /TP
+slices/s00647f40/s00647f40.cpp  ?InsertSorted@GridVec@@QAEPAUEntry14@@PAU2@ABU2@@Z  00648c60  /O2 /MD /Gy /TP
