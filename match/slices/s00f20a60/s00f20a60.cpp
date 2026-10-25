@@ -319,8 +319,8 @@ void __cdecl FUN_00f20d80(IdObj* self) {
 struct World {
     char  pad0[0x1e8];
     float x1e8, y1ec, z1f0;
-    char  pad1f8[0x204 - 0x1f8];
-    float k204;
+    float q1f4[4];                       // +0x1f4 orientation used by sub_59aed0
+    float k204;                          // +0x204 scale
 };
 struct Node48 { char pad[0x48]; int v48; };
 
@@ -482,12 +482,103 @@ char __cdecl FUN_00f21310(int* self, float* out, float* info) {
 }
 
 // ===========================================================================
-// 0x00f213f0 -- build a feedback-event marker (large).
+// 0x00f20de0 -- sample the terrain marker position for the event marker.
+//
+// retail: the *ctx vtable slot +4 returns the world-source object; 0x006c0200
+// resolves it to the world (position at +0x1e8, orientation at +0x1f4, scale
+// at +0x204) and 0x00b18530 resolves it to a node whose +0x48 flags "no model".
+// vtable slot +8 returns the radius-source object, whose own vtable slot +0xac
+// returns the model and +0x84 of that is the planet radius.
 // ===========================================================================
-void __cdecl FUN_00f213f0(int* self, int* data, int arg3) {
-    (void)self; (void)data; (void)arg3;
+struct RadiusInfo {                      // object returned by the +0xac getter
+    char  pad0[0x84];
+    float radius;                        // +0x84
+};
+struct ModelVtbl {
+    void*  slot[0x2b];                                    // +0x00 .. +0xa8
+    RadiusInfo* (__thiscall *GetRadiusInfo)(void*);       // +0xac
+};
+struct RadiusSource { ModelVtbl* mpVtbl; };               // +0x00
+struct MarkerCtx {
+    virtual void          p0();                           // +0x00
+    virtual Ctx*          WorldSource();                  // +0x04 (receiver of 0x006c0200 / 0x00b18530)
+    virtual RadiusSource* RadiusSourceObj();              // +0x08
+};
+
+// @ 0x00f20de0
+void __cdecl FUN_00f20de0(float* out, MarkerCtx* ctx) {
+    Ctx* src = ctx->WorldSource();
+    World* w = (World*)src->getWorld();
+    Node48* node = (Node48*)src->getNode();
+    if (node->v48 == 0) {
+        RadiusSource* rs = ctx->RadiusSourceObj();
+        RadiusInfo* pm = rs->mpVtbl->GetRadiusInfo(rs);
+        float radius = pm->radius;
+        float buf[4];
+        float* qv = sub_59aed0(buf, (void*)0x015ada7c, w->q1f4);
+        out[0] = w->x1e8 + w->k204 * (qv[0] * radius);
+        out[1] = w->y1ec + w->k204 * (qv[1] * radius);
+        out[2] = w->z1f0 + w->k204 * (qv[2] * radius);
+    } else {
+        out[0] = w->x1e8;
+        out[1] = w->y1ec;
+        out[2] = w->z1f0;
+    }
 }
 
+// ===========================================================================
+// 0x00f213f0 -- build the feedback-event marker (877 bytes).
+//
+// Outer dispatch only: the marker record comes from Simulator::+0x74, the
+// style comes from the event property, then either the "effects" noun
+// (0x3a2511e) is created or the ornament noun (0x018c88e4) plus the transform
+// block.  The per-style transform writes, the two AutoRefCount assignments at
+// noun+0x50/+0x54 and the remaining property blocks are not reconstructed.
+// ===========================================================================
+struct MarkerRec {
+    char pad0[0x48];
+    int  v48;                            // +0x48 marker kind
+};
+struct XformTarget {                     // noun+0x70 sub-object vtable
+    virtual void p0();  virtual void p1(); virtual void p2(); virtual void p3();
+    virtual void p4();  virtual void p5(); virtual void p6(); virtual void p7();
+    virtual void p8();  virtual void p9(); virtual void p10(); virtual void p11();
+    virtual void p12(); virtual void p13(); virtual void p14();
+    virtual void SetPos(void*);          // +0x3c
+    virtual void SetRot(void*);          // +0x40
+    virtual void SetScale(float);        // +0x44
+};
+
+// @ 0x00f213f0
+void __cdecl FUN_00f213f0(void* arg1, int* arg2) {
+    void* sim = *(void**)0x016c7aa4;                       // Simulator
+    MarkerRec* rec = (MarkerRec*)((void* (__thiscall*)(void*, int))0x00f3e8a0)(
+        *(void**)((char*)sim + 0x74), *arg2);
+    int style = (int)sub_ac8fa0(arg1, *(int*)0x016c83b8, 0);
+    void* noun;
+    if (style == 0xa || style == 0xd || style == 0xc) {
+        noun = ((void* (__thiscall*)(void*))0x00b20c60)(sub_b3d300_id(0x3a2511e));
+        (*(void (__thiscall**)(void*))(*(void***)noun + 0x5c))(noun);   // +0x5c init
+        *(int*)((char*)noun + 0x110) = 8;
+        if (*(int*)((char*)rec + 0x24) == 1 && *(int*)((char*)sim + 0xcc) == 2)
+            (*(void (__thiscall**)(void*, int))(*(void***)noun + 0x60))(noun, 0);
+        return;
+    }
+    noun = ((void* (__thiscall*)(void*))0x00b20c60)(sub_b3d300_id(0x018c88e4));
+    sub_c6f770((int)noun, 1, 0);
+    if (style == 8 && rec->v48 != 1) {
+        void* inner = ((void* (__thiscall*)(void*))0x00b20c60)(sub_b3d300_id(0x018c88e4));
+        sub_c6f770((int)inner, 1, 0);
+        int pos[3];
+        FUN_00f20c60(pos, arg2, *(int*)0x016c83d4);
+        int scale = rec->v48;
+        (void)scale;
+        XformTarget* xf = (XformTarget*)((char*)inner + 0x70);
+        xf->SetPos((char*)arg2 + 0x1e8);
+        xf->SetRot((char*)arg2 + 0x1f4);
+        xf->SetScale(*(float*)((char*)arg2 + 0x204));
+    }
+}
 // ===========================================================================
 // 0x00f21760 -- if noun type 0x3a25119 & sub==0xa, tail-call refresh.
 // ===========================================================================
