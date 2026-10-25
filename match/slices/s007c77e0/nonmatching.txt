@@ -7,6 +7,7 @@
 007c7cd0  77  CSE of mResBegin across the bounds check changes register allocation
 007c7d70  123 missing compiler EH frame around the AddRef'd uninitialized copy
 007c7e10  11  dest->mRC load hoisted above the two field stores
+007c7ec0  505 cSetResolutionCommand::Execute (thiscall modelled as __fastcall self/unused): option search for id 0x46170a1, per-resolution scoring loop using keyed property getters 0x38d0a06/0x38d0a07/0xd77e98 with the test-al + tagged-pointer unwrap, score = |ratio - w/h|*300000 + |w*h - id| + |monitor-60|, best index stored to op->mDefault, initial bestIdx 0; residual diff is the register/frame schedule (cl shrink-wraps ebx/ebp in mine), the bestScore constant move and the dead D3DDISPLAYMODE field copies cl materialised; equiv WEAK (114 valid, 41.1% cov, no mismatch among valid - the rest are discarded by the unresolved stubbed callees)
 007c80c0  97  missing compiler EH frame around the element Release loop
 007c8160  64  binary-search register allocation differs; equiv: PASS (now returns the position in eax as the original does; void left garbage: hybrid crash 2026-10-12)
 007c8270  354 command registration new-expression/EH scheduling differs; equiv: PASS (201 valid, 96.6% cov)

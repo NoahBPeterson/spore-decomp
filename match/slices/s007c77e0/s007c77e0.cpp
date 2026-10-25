@@ -368,11 +368,42 @@ void cConfigScriptState::DumpAll(void* args)
     }
 }
 
-// @ 0x007c7ec0
-void SetResolutionCommand_Execute(void* self, void* args)
+#include <math.h>       // fabsf -> x87 fabs
+#include <stdlib.h>     // abs  -> cdq/xor/sub
+
+// ---- cSetResolutionCommand::Execute (anonymous-namespace class, thiscall -> __fastcall self/unused)
+struct cArguments {
+    void* MainArguments(int which);         // 0x00838320
+};
+
+struct DisplayMode {                        // D3DDISPLAYMODE
+    uint32_t mWidth;                        // +0x00
+    uint32_t mHeight;                       // +0x04
+    uint32_t mRefresh;                      // +0x08
+    uint32_t mFormat;                       // +0x0c
+};
+
+typedef int  (__thiscall *VFnI1u)(void*, uint32_t);
+typedef bool (__thiscall *VFnProp)(void*, unsigned, void**);
+
+// bool vfn(void* self, unsigned key, void** out) followed by the tagged-pointer unwrap.
+static __forceinline uint32_t PropQueryU32(void* prop, unsigned key)
 {
-    int id = ((VFnI1)VSLOT((void*)*(uint32_t*)((char*)self + 4), 0x9c))(
-        (void*)*(uint32_t*)((char*)self + 4), *(void**)args);
+    void* out = 0;
+    if (((VFnProp)VSLOT(prop, 0x24))(prop, key, &out) && *(uint16_t*)((char*)out + 0x12) == 9) {
+        if (((uint8_t*)out)[0x10] & 0x30)
+            out = *(void**)out;
+        return *(uint32_t*)out;
+    }
+    return 0;
+}
+
+// @ 0x007c7ec0
+void __fastcall SetResolutionCommand_Execute(void* self, int /*unused*/, void* args)
+{
+    void* mainArg = ((cArguments*)args)->MainArguments(1);
+    void* parser  = *(void**)((char*)self + 4);
+    int id = ((VFnI1u)VSLOT(parser, 0x9c))(parser, *(uint32_t*)mainArg);
     cConfigScriptState* st = *(cConfigScriptState**)((char*)self + 0xc);
     cOption* op = st->mOptionsBegin;
     cOption* end = st->mOptionsEnd;
@@ -384,29 +415,25 @@ void SetResolutionCommand_Execute(void* self, void* args)
     return;
 found:
     {
-        float ratio;
-        uint32_t desktopW;
-        uint32_t desktopH;
-        uint8_t dmod[8];
-        uint32_t best = 0;
-        void* disp = DesktopDisplayMode(dmod);
-        uint32_t* dm = (uint32_t*)disp;
-        desktopW = dm[0];
-        desktopH = dm[1];
-        ratio = (float)desktopW / (float)desktopH;
-        int count = (int)((op->mResEnd - op->mResBegin) >> 2);
         float bestScore = 3.4028234663852886e38f;
-        int bestIdx = -1;
+        int bestIdx = 0;
+        DisplayMode dm;
+        DisplayMode* mode = (DisplayMode*)DesktopDisplayMode(&dm);
+        uint32_t desktopW = mode->mWidth;
+        uint32_t desktopH = mode->mHeight;
+        float ratio = (float)desktopW / (float)desktopH;
+        int count = (int)((op->mResEnd - op->mResBegin) >> 2);
         for (int i = 0; i < count; i++) {
             uint32_t prop = ((uint32_t*)op->mResBegin)[i];
             uint32_t w = 0, h = 0, monitor = 0;
             if (prop != 0) {
-                ((VFn1)VSLOT((void*)prop, 0x24))((void*)prop, &w);
-                ((VFn1)VSLOT((void*)prop, 0x24))((void*)prop, &h);
-                ((VFn1)VSLOT((void*)prop, 0x24))((void*)prop, &monitor);
+                w       = PropQueryU32((void*)prop, 0x38d0a06u);
+                h       = PropQueryU32((void*)prop, 0x38d0a07u);
+                monitor = PropQueryU32((void*)prop, 0xd77e98u);
             }
-            float score = (float)((int)(desktopH - w) < 0 ? w - desktopH : desktopH - w) * 300000.0f
-                        + (float)(int)monitor;
+            float score = fabsf(ratio - (float)w / (float)h) * 300000.0f
+                        + abs((int)(w * h) - id)
+                        + abs((int)monitor - 60);
             if (score < bestScore) {
                 bestScore = score;
                 bestIdx = i;
