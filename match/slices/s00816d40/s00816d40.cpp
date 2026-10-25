@@ -140,21 +140,23 @@ void MsgBoxD::rebind() {
 }
 
 // ===========================================================================
-// 008177e0 : release on shutdown, or tail-call rebind
+// 008177e0 : layout reload callback (release on shutdown, or tail-call rebind)
 struct MsgBoxE {
     char  pad_00[0x14];
     void* mW1;   // +0x14
     void* mW2;   // +0x18
     void* mW3;   // +0x1c
-    void release();
-    void rebind();  // 00817720
 };
 // @ 0x008177e0
-void MsgBoxE::release() {
-    void* p;
-    p = mW2; if (p) { mW2 = 0; Vv0(p, 0x04); }
-    p = mW3; if (p) { mW3 = 0; Vv0(p, 0x04); }
-    if (mW1) Vv1(mW1, 0x108, (int)this);
+void FUN_008177e0(MsgBoxE* self, void* layout, bool flag) {
+    if (!flag) {
+        void* p;
+        p = self->mW2; if (p) { self->mW2 = 0; Vv0(p, 0x04); }
+        p = self->mW3; if (p) { self->mW3 = 0; Vv0(p, 0x04); }
+        if (self->mW1) Vv1(self->mW1, 0x108, (int)self);
+    } else {
+        ((MsgBoxD*)self)->rebind();
+    }
 }
 
 // ===========================================================================
@@ -582,18 +584,205 @@ bool cSPUIMessageBoxW::Init(const ResourceKeyW* key, bool flag) {
   return ok;
 }
 
-struct cSPUIMessageBoxStub {
-    char pad_00[0x2000];
-    void reload() { *(volatile int*)pad_00 = 0; }              // 008178b0
-    void reloadIcons() { *(volatile int*)pad_00 = 0; }         // 00817b00
-};
-void stub_8178b0(cSPUIMessageBoxStub* p) { p->reload(); }
-void stub_817b00(cSPUIMessageBoxStub* p) { p->reloadIcons(); }
+// ===========================================================================
+// cSPUIMovieRecordUI (008178b0 / 00817a40 / 00817b00)
+// ===========================================================================
+extern "C" void* MsgServerW();              // 0x0067dcc0  SP::MessageServer
+extern "C" void  MemFreeW(void*);           // 0x00f47380  operator delete
+extern const u32 gMsgIds[4];                // 0x01418e40
+extern const ResourceKeyW gLayoutKey;       // 0x01545b10
 
-// 00817a40 : ctor
-void stub_817a40(void* p) {
-    *(void**)((char*)p + 0) = (void*)0x1418e70;
-    *(void**)((char*)p + 4) = (void*)0x1418e68;
-    *(void**)((char*)p + 8) = (void*)0x1418e50;
-    for (int i = 0x10; i < 0x88; i += 4) *(u32*)((char*)p + i) = 0;
+void* __cdecl operator new(unsigned int, const char*, int, int, int, int);  // 0x00f473a0
+
+struct cSPUILayoutR {
+    char pad_00[0x18];
+    cSPUILayoutR();                                           // 0x00810000
+    bool Init(const ResourceKeyW& key, bool b, u32 flags);    // 0x008120d0
+    bool SetParentWin(void* win, bool b, u32 flags);          // 0x008121b0
+    void SetReloadCallback(void (__cdecl* fn)(void*, void*, bool), void* data); // 0x00810090
+};
+
+struct LayoutMgrW {
+    void  Activate(u32 id, bool b);           // 0x00810660
+    void* GetWorldMainWindow(u32 id);         // 0x00810620
+};
+LayoutMgrW* GetLayoutManagerW();              // 0x00805070
+
+struct Str16 {
+    void* mBegin;   // +0
+    void* mEnd;     // +4
+    void* mCap;     // +8
+    u32   pad;      // +0xc
+};
+
+struct cTokBase {
+    void* mVt;      // +0
+    int   mRef;     // +4
+    void  Construct();   // 0x006b5870
+    void  Destroy();     // 0x005725a0
+};
+
+struct cSPUIMovieRecordUI {
+    void*      mVt0;           // +0x00
+    void*      mVt1;           // +0x04
+    char       pad_08[8];      // +0x08 (base vptr + refcount)
+    void*      mLayout;        // +0x10
+    void*      mW1;            // +0x14
+    void*      mW2;            // +0x18
+    void*      mW3;            // +0x1c
+    void*      mHandler;       // +0x20
+    void*      mHandlerUser;   // +0x24
+    const u32* mHandlerIds;    // +0x28
+    int        mHandlerCount;  // +0x2c
+    int        mHandlerFlags;  // +0x30
+    u8         b34;            // +0x34
+    bool       b35;            // +0x35
+    char       pad_36[2];      // +0x36
+    u32        f38, f3c, f40, f44;  // +0x38
+    Str16      s48;            // +0x48
+    Str16      s58;            // +0x58
+    Str16      s68;            // +0x68
+    Str16      s78;            // +0x78
+    void reload(int arg);      // 0x008178b0
+};
+
+static inline void FreeStrW(Str16* s) {
+    if ((int)(((u32)s->mCap - (u32)s->mBegin) & 0xfffffffe) > 2 && s->mBegin)
+        MemFreeW(s->mBegin);
 }
+static inline void InitStrW(Str16* s) {
+    s->mBegin = (void*)0x1667bac;
+    s->mEnd   = (void*)0x1667bac;
+    s->mCap   = (void*)0x1667bae;
+}
+// explicit-temporary variants: keep the vtable in eax and the slot in edx, like the originals
+static inline void Vv0c(void* p, int off) {
+    void** vt = *(void***)p;
+    void (__thiscall* fn)(void*) = (void (__thiscall*)(void*))vt[off / 4];
+    fn(p);
+}
+static inline void Vv1c(void* p, int off, int a) {
+    void** vt = *(void***)p;
+    void (__thiscall* fn)(void*, int) = (void (__thiscall*)(void*, int))vt[off / 4];
+    fn(p, a);
+}
+static inline void Vv2c(void* p, int off, int a, int b) {
+    void** vt = *(void***)p;
+    void (__thiscall* fn)(void*, int, int) = (void (__thiscall*)(void*, int, int))vt[off / 4];
+    fn(p, a, b);
+}
+static inline char Vb2c(void* p, int off, int a, int b) {
+    void** vt = *(void***)p;
+    char (__thiscall* fn)(void*, int, int) = (char (__thiscall*)(void*, int, int))vt[off / 4];
+    return fn(p, a, b);
+}
+static inline void* Vcp0c(void* p, int off) {
+    void** vt = *(void***)p;
+    void* (__thiscall* fn)(void*) = (void* (__thiscall*)(void*))vt[off / 4];
+    return fn(p);
+}
+
+// @ 0x008178b0
+void cSPUIMovieRecordUI::reload(int arg) {
+    (void)arg;
+    void* user = this ? (void*)((char*)this + 4) : 0;
+    void* server = MsgServerW();
+    mHandler = server;
+    mHandlerUser = user;
+    mHandlerIds = gMsgIds;
+    mHandlerCount = 4;
+    mHandlerFlags = 0;
+    if (server && user) {
+        for (u32 i = 0; i < 0x10; i += 4)
+            Vv2c(server, 0x24, (int)user, (int)*(const u32*)((const char*)gMsgIds + i));
+    }
+    LayoutMgrW* lm = GetLayoutManagerW();
+    lm->Activate(0x62efc8c, true);
+    void* world = GetLayoutManagerW()->GetWorldMainWindow(0x62efc8c);
+    cSPUILayoutR* lay = new ("UI/cSPUIMovieRecordUI", 0, 0, 0, 0) cSPUILayoutR();
+    void* old = mLayout;
+    if (lay != old) {
+        if (lay) Vv0c(lay, 0x04);
+        mLayout = lay;
+        if (old) Vv0c(old, 0x08);
+    }
+    ((cSPUILayoutR*)mLayout)->Init(gLayoutKey, false, 0x5b598fa);
+    ((cSPUILayoutR*)mLayout)->SetParentWin(world, true, 0x5b598fa);
+    ((cSPUILayoutR*)mLayout)->SetReloadCallback((void (__cdecl*)(void*, void*, bool))FUN_008177e0, this);
+    ((MsgBoxD*)this)->rebind();
+    Vv2c(mW1, 0x7c, 1, 0);
+    Vv2c(mW2, 0x7c, 1, 0);
+    Vv2c(mW3, 0x7c, 1, 0);
+    b34 = 0;
+    b35 = 1;
+    void* props = *(void**)0x15fd918;
+    if (props) {
+        Prop* pr;
+        if (Vb2c(props, 0x24, 0x641021a, (int)&pr) && pr->mType == 1)
+            b35 = *pr->GetBool();
+    }
+    void* base8 = (char*)this + 8;
+    void* o = FUN_0067de40();
+    o = Vcp0(o, 0x20);
+    Vv1(o, 0x1c, (int)base8);
+}
+
+// @ 0x00817a40
+cSPUIMovieRecordUI* __fastcall FUN_00817a40raw(cSPUIMovieRecordUI* p) {
+    void** slot = (void**)((char*)p + 0x10);
+    *(void**)0x164d858 = (void*)slot;
+    p->mVt0 = (void*)0x14426a0;
+    p->mVt1 = (void*)0x13eb394;
+    cTokBase& base = *(cTokBase*)((char*)p + 8);
+    base.Construct();
+    p->mVt0 = (void*)0x1418e70;
+    p->mVt1 = (void*)0x1418e68;
+    base.mVt = (void*)0x1418e50;
+    *slot = 0;
+    p->mW1 = 0;
+    p->mW2 = 0;
+    p->mW3 = 0;
+    p->mHandler = 0;
+    p->mHandlerUser = 0;
+    p->mHandlerIds = 0;
+    p->mHandlerCount = 0;
+    p->mHandlerFlags = 0;
+    p->b34 = 0;
+    p->f38 = 0;
+    p->f3c = 0;
+    p->f40 = 0;
+    p->f44 = 0;
+    p->b35 = 1;
+    InitStrW(&p->s48);
+    InitStrW(&p->s58);
+    InitStrW(&p->s68);
+    InitStrW(&p->s78);
+    return p;
+}
+
+// @ 0x00817b00
+void __fastcall FUN_00817b00raw(cSPUIMovieRecordUI* p) {
+    cTokBase& base = *(cTokBase*)((char*)p + 8);
+    p->mVt0 = (void*)0x1418e70;
+    p->mVt1 = (void*)0x1418e68;
+    base.mVt = (void*)0x1418e50;
+    FreeStrW(&p->s78);
+    FreeStrW(&p->s68);
+    FreeStrW(&p->s58);
+    FreeStrW(&p->s48);
+    if (p->mHandler) {
+        void* h = p->mHandler;
+        p->mHandler = 0;
+        EA_Messaging_RemoveHandler((int)h, (int)p->mHandlerUser, (int)p->mHandlerIds,
+                                   p->mHandlerCount, p->mHandlerFlags);
+    }
+    if (p->mW3) Vv0(p->mW3, 0x04);
+    if (p->mW2) Vv0(p->mW2, 0x04);
+    if (p->mW1) Vv0(p->mW1, 0x04);
+    if (p->mLayout) Vv0(p->mLayout, 0x08);
+    base.Destroy();
+    p->mVt1 = (void*)0x13eb394;
+    p->mVt0 = (void*)0x13eb938;
+    *(void**)0x164d858 = 0;
+}
+

@@ -2,3 +2,6 @@
 00817670  150  app-property lookups + three window visibility calls not byte-exact
 00817840  86  movie-system branch/compare tree not byte-exact
 00817c40  61  hash dispatch compare tree and register allocation (esi vs eax) not byte-exact
+008178b0  17  cSPUIMovieRecordUI::reload: message-server registration, layout creation/init/parent/reload-callback, OnShow, three window calls, app-property bool read, and end-of-frame chain complete; only the bool load register (mov cl vs mov al) and the late `add esi,8` schedule differ [equiv: UNSUPPORTED] (0/400 valid, fault(read) on the global property pointer)
+00817a40  13  cSPUIMovieRecordUI ctor: global registrar slot, both vptr phases, token-base Construct, field zeroing, string init complete; only `mov ecx,ebx` placement before the first vptr store and the `xor eax,eax` hoist differ [equiv: PASS] (400 valid, 100.0% coverage)
+00817b00  8  cSPUIMovieRecordUI dtor: vptr phases, four string frees, handler removal, window/layout releases, token-base Destroy, registrar clear complete; only `lea ebx,[esi+8]` placement after the two vptr stores differs [equiv: PASS] (262 valid, 100.0% coverage)
