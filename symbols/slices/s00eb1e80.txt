@@ -1,6 +1,6 @@
 00eb1e80 FUN_00eb1e80  # vector insert (eastl vector<bool>)
 00eb2070 FUN_00eb2070  # vector resize
-00eb20d0 SP::Audio::cFactoryCityMusic::ReadResource
+00eb20d0 ?ReadResource@cGameCinematicsAppMode@SP@@QAE_NPAX0HH@Z  # ReadResource migrated from s00eb1e80 (verbatim, slice spelling)
 00eb2370 ?OnKeyDown@cGameCinematicsAppMode@SP@@QAE_NHH@Z  # OnKeyDown migrated from s00eb1e80 (verbatim, slice spelling)
 00eb23d0 ?HandleSimulationUpdate@cGameCinematicsAppMode@SP@@QAEXMM@Z  # HandleSimulationUpdate migrated from s00eb1e80 (verbatim, slice spelling)
 00eb2440 ?AsInterface@cGameCinematicsAppMode@SP@@QAEIH@Z  # AsInterface migrated from s00eb1e80 (verbatim, slice spelling)

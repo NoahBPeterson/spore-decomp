@@ -5,6 +5,6 @@
 00eb12a0 ?HandleMessage@cPlayerCityMusic_s00eb_0ea0@@QAE_NHPAVcEapdMessage@@@Z  # cPlayerCityMusic_s00eb_0ea0::HandleMessage migrated from s00eb0ea0 (verbatim, slice spelling)
 00eb14c0 ?Reload@cPlayerCityMusicConfig@@QAE_NIII@Z  # bool cPlayerCityMusicConfig::Reload(uint, uint, uint)
 00eb19e0 ??0cPlayerCityMusicConfig@@QAE@XZ  # cPlayerCityMusicConfig::cPlayerCityMusicConfig()
-00eb1c10 ?WriteResource@cFactoryCityMusic@@QAE_NPAVcResourceCityMusic@@PAVcWriter@@PAX2@Z  # bool cFactoryCityMusic::WriteResource(cResourceCityMusic*, cWriter*, void*, void*)
+00eb1c10 ?WriteResource@cFactoryCityMusic@@QAE_NPAVcResourceCityMusic@@PAVcWriter@@PAX2@Z  # cFactoryCityMusic::WriteResource migrated from s00eb0ea0 (verbatim, slice spelling)
 00eb1d70 ??0cResourceCityMusic@@QAE@XZ  # cResourceCityMusic::cResourceCityMusic()
-00eb1dc0 ?CreateResource@cFactoryCityMusic@@QAE_NPAXPAPAXII@Z  # bool cFactoryCityMusic::CreateResource(void*, void**, uint, uint)
+00eb1dc0 ?CreateResource@cFactoryCityMusic@@QAE_NPAXPAPAXII@Z  # cFactoryCityMusic::CreateResource migrated from s00eb0ea0 (verbatim, slice spelling)
