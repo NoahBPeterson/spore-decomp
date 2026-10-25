@@ -45,6 +45,9 @@ unsigned int* __cdecl cpuid_version_info(int);
 int* __cdecl cpuid_basic_info(int);
 unsigned int* __cdecl cpuid_cache_params(int, int);
 
+extern "C" void __cpuid(int regs[4], int functionId);   // MSVC intrinsic
+#pragma intrinsic(__cpuid)
+
 // external state
 extern uint8_t  DAT_01530ffc;
 extern uint8_t  DAT_01530ff8_pad;
@@ -241,38 +244,110 @@ float __cdecl GetWindowsCPUSpeed(void)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006b7d50  CPU topology / logical-processor grouping
+// CPU topology / logical-processor grouping
 // ---------------------------------------------------------------------------
-int __cdecl FUN_006b7d50(unsigned int* pLogical, unsigned int* pCores, unsigned int* pPackages)
+extern "C" void ApplyThreadAffinity(uint32_t* mask);   // 0x921df0 cdecl
+
+// Number of bits needed to represent x-1 (0 for x <= 1), i.e. bsr(x-1)+1.
+static unsigned int BitsFor(unsigned int x)
+{
+    unsigned int bits = 0;
+    for (unsigned int v = x - 1; v != 0; v >>= 1)
+        bits++;
+    return bits;
+}
+
+// Walk every logical processor in the current affinity mask, derive its core
+// and package id from the initial APIC id and count the distinct combinations.
+// *pCount gets the number of processors seen, *pCorePairs / *pCoreIds the
+// numbers of distinct core/package pairs and of distinct logical processors.
+// @ 0x006b7d50
+int __cdecl FUN_006b7d50(unsigned int* pCount, unsigned int* pCorePairs, unsigned int* pCoreIds)
 {
     uint32_t procMask = 0, sysMask = 0;
-    int nCores = 0;
-    *pLogical = 1;
-    *pCores = 1;
-    GetProcessAffinityMask(GetCurrentProcess(), &procMask, &sysMask);
-    if (procMask != sysMask) return 0;
+    int regs[4];
 
-    unsigned int regs[4];
-    regs[0] = 0;
-    __asm { mov eax, 1
-        cpuid
-        mov dword ptr [regs+4], ebx }
-    unsigned int logicalPerCore = (regs[1] >> 16) & 0xff;
-    unsigned int cacheReg = 0;
-    int basic[4];
-    __asm { xor eax, eax
-        cpuid
-        mov dword ptr [basic], eax }
-    if (basic[0] >= 4) {
-        __asm { mov eax, 4
-            xor ecx, ecx
-            cpuid
-            mov dword ptr [cacheReg], eax }
+    *pCorePairs = 1;
+    *pCoreIds = 1;
+    GetProcessAffinityMask(GetCurrentProcess(), &procMask, &sysMask);
+    if (procMask != sysMask) return false;
+
+    __cpuid(regs, 1);
+    uint32_t logicalPerCore = ((uint32_t)regs[1] >> 16) & 0xff;
+    uint32_t cacheReg = 0;
+    __cpuid(regs, 0);
+    if ((uint32_t)regs[0] >= 4) {
+        __cpuid(regs, 4);
+        cacheReg = (uint32_t)regs[0];
     }
-    unsigned int cores = logicalPerCore / ((cacheReg >> 26) + 1);
-    (void)cores;
-    // full topology loops omitted
-    return 0;
+    uint32_t cores = logicalPerCore / ((cacheReg >> 26) + 1);
+
+    uint8_t  coreId[256];
+    uint8_t  pkgId[256];
+    uint8_t  lpcId[256];
+    uint32_t count = 0;
+    uint32_t apicTmp = 0;
+    for (unsigned int i = 0, bit = 1; bit <= sysMask && bit != 0; i++, bit <<= 1) {
+        if (SetThreadAffinityMask(GetCurrentThread(), bit) == 0)
+            continue;
+        ApplyThreadAffinity(&apicTmp);
+        __cpuid(regs, 1);
+        uint8_t apic = (uint8_t)((uint32_t)regs[1] >> 24);
+        coreId[i] = (uint8_t)(apic & (uint8_t)((0xffu << BitsFor(cores & 0xff)) ^ 0xffu));
+        pkgId[i] = (uint8_t)((apic >> BitsFor(cores)) &
+                             (uint8_t)((0xffu << BitsFor((cacheReg >> 26) + 1)) ^ 0xffu));
+        lpcId[i] = (uint8_t)(apic & (uint8_t)((0xffu << BitsFor(logicalPerCore)) ^ 0xffu));
+        count++;
+    }
+    SetThreadAffinityMask(GetCurrentThread(), procMask);
+    {
+        uint32_t tmp = 0;
+        ApplyThreadAffinity(&tmp);
+    }
+
+    uint32_t seen[256];                // bitmask of the processors per signature
+    uint8_t  sigs[256];                // distinct (package, logical) signatures
+    *pCount = count;
+    sigs[0] = (uint8_t)(pkgId[0] | lpcId[0]);
+    seen[0] = 1;
+    if (count > 1) {
+        unsigned int sig = 2;
+        for (uint32_t i = 1; i < count; i++, sig <<= 1) {
+            uint8_t s = (uint8_t)(pkgId[i] | lpcId[i]);
+            unsigned int n = *pCorePairs;
+            unsigned int j = 0;
+            while (j < n && sigs[j] != s)
+                j++;
+            if (j == n) {
+                sigs[j] = s;
+                seen[j] = sig;
+                *pCorePairs = n + 1;
+            } else {
+                seen[j] |= sig;
+            }
+        }
+    }
+
+    sigs[0] = lpcId[0];
+    seen[0] = 1;
+    if (count > 1) {
+        unsigned int sig = 2;
+        for (uint32_t i = 1; i < count; i++, sig <<= 1) {
+            uint8_t s = lpcId[i];
+            unsigned int n = *pCoreIds;
+            unsigned int j = 0;
+            while (j < n && sigs[j] != s)
+                j++;
+            if (j == n) {
+                sigs[j] = s;
+                seen[j] = sig;
+                *pCoreIds = n + 1;
+            } else {
+                seen[j] |= sig;
+            }
+        }
+    }
+    return cores > 1 && count > *pCorePairs;
 }
 
 // ---------------------------------------------------------------------------
@@ -280,22 +355,12 @@ int __cdecl FUN_006b7d50(unsigned int* pLogical, unsigned int* pCores, unsigned 
 // ---------------------------------------------------------------------------
 bool __cdecl FUN_006b8080(void)
 {
-    unsigned int regs[4] = { 0xffffffff, 0, 0, 0 };
-    __asm { push eax
-        push ebx
-        push ecx
-        push edx
-        xor eax, eax
-        add al, 1
-        cpuid
-        mov dword ptr [regs], eax
-        pop edx
-        pop ecx
-        pop ebx
-        pop eax }
-    int v = (int)regs[0];
-    if (((v >> 4) & 0xf) <= 6u && (v & 0xf00) == 0xf00) return true;
-    return false;
+    int regs[4];
+    __cpuid(regs, 1);
+    int v = regs[0];
+    if ((v & 0xf00) != 0xf00) return false;
+    if (((v >> 4) & 0xf) > 6) return false;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -303,36 +368,21 @@ bool __cdecl FUN_006b8080(void)
 // ---------------------------------------------------------------------------
 bool __cdecl FUN_006b80e0(void)
 {
-    unsigned int edxOut, ebxOut;
-    __asm { push eax
-        push ebx
-        push ecx
-        push edx
-        xor eax, eax
-        add al, 1
-        cpuid
-        mov edxOut, edx
-        mov ebxOut, ebx
-        pop edx
-        pop ecx
-        pop ebx
-        pop eax }
-    unsigned int local_c = ebxOut;
-    unsigned char b = (unsigned char)(local_c >> 24);
-    bool ht = (b & 1) != 0;
-    unsigned int logical = ht ? ((ebxOut >> 16) & 0xff) : 1;
+    int regs[4];
+    __cpuid(regs, 1);
+    unsigned int ebx = (unsigned int)regs[1];
+    unsigned int edx = (unsigned int)regs[3];
+    bool ht = ((edx >> 28) & 1) != 0;
+    unsigned int logical = ht ? ((ebx >> 16) & 0xff) : 1;
     unsigned int cores = 1;
     if (ht) {
         unsigned int cacheReg = 0;
         int basic[4];
-        __asm { xor eax, eax
-            cpuid
-            mov dword ptr [basic], eax }
+        __cpuid(basic, 0);
         if (basic[0] >= 4) {
-            __asm { mov eax, 4
-                xor ecx, ecx
-                cpuid
-                mov dword ptr [cacheReg], eax }
+            int leaf4[4];
+            __cpuid(leaf4, 4);
+            cacheReg = (unsigned int)leaf4[0];
         }
         cores = (cacheReg >> 26) + 1;
     }
@@ -408,12 +458,62 @@ extern int __cdecl FUN_011e1fa0(void);
 // ---------------------------------------------------------------------------
 // @ 0x006b82a0  hashes a fixed drive's volume identity
 // ---------------------------------------------------------------------------
+extern "C" uint32_t __cdecl HashBytes(const void* data, unsigned len, uint32_t seed); // 0x932e50
+
+struct DiskExtent {                      // DISK_EXTENT, 0x18 bytes
+    uint32_t mDiskNumber;
+    uint32_t mPad;
+    uint64_t mStartingOffset;
+    uint64_t mExtentLength;
+};
+struct VolumeDiskExtents {               // VOLUME_DISK_EXTENTS
+    uint32_t    mNumberOfDiskExtents;
+    uint32_t    mPad;
+    DiskExtent  mExtents[32];
+};
+
+// Hash the serial number and the disk extents of a fixed drive into *pHash.
 bool __cdecl FUN_006b82a0(char driveLetter, uint32_t* pHash)
 {
-    char root[8];
-    root[0] = (char)0x5c; root[1] = (char)0x3a; root[2] = driveLetter; root[3] = 0;
-    return false;
-    (void)pHash;
+    bool ok = false;
+    char root[4] = "X:\\";
+    root[0] = driveLetter;
+    if (GetDriveTypeA(root) != 3)            // DRIVE_FIXED
+        return false;
+
+    char path[0x104];
+    sprintf(path, "%c:\\", (int)driveLetter);
+
+    char     volumeName[0x104];
+    char     fsName[0x104];
+    uint32_t serial = 0;
+    uint32_t maxComponent = 0;
+    uint32_t fsFlags = 0;
+    if (!GetVolumeInformationA(path, volumeName, 0x104, &serial, &maxComponent,
+                               &fsFlags, fsName, 0x104))
+        return false;
+
+    *pHash = HashBytes(&serial, 4, *pHash);
+
+    char device[0x104];
+    sprintf(device, "\\\\.\\%c:", (int)driveLetter);
+    HANDLE h = CreateFileA(device, 0, 3, 0, 3, 0, 0);
+    if (h == (HANDLE)-1)
+        return false;
+
+    VolumeDiskExtents extents;
+    uint32_t bytesReturned = 0;
+    if (DeviceIoControl(h, 0x560000u, 0, 0, &extents, 0x400, &bytesReturned, 0)) {
+        for (uint32_t i = 0; i < extents.mNumberOfDiskExtents; i++) {
+            DiskExtent* e = &extents.mExtents[i];
+            *pHash = HashBytes(&extents.mNumberOfDiskExtents, 4, *pHash);
+            *pHash = HashBytes(&e->mDiskNumber, 8, *pHash);
+            *pHash = HashBytes(&e->mStartingOffset, 8, *pHash);
+        }
+        ok = true;
+    }
+    CloseHandle(h);
+    return ok;
 }
 
 // ---------------------------------------------------------------------------
