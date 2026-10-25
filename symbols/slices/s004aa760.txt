@@ -1,0 +1,6 @@
+# va  Name  # evidence
+004aa760  ?Insert@VecOP@@QAEXPAUOrientedPoint@@ABU2@@Z  # eastl::vector<SP::OrientedPoint(0x34)>::DoInsertValue: in-place branch rep movsd 13 behind cSPMatrix3::Assign(0x41cb40)+Vector3Template copy ctor(0x4098a0); grow branch allocates nNewSize*0x34 via EASTL_Allocate(0x42dee0), moves [begin,pos) with 0x4ab4d0 and [pos,end) with 0x4ab640, frees with 0xf47380
+004aaac0  ?Insert@VecTK@@QAEXPAUTransformKey@@ABU2@@Z  # eastl::vector<TransformKey(0x3c = u32 + cSPTransform 0x38)>::DoInsertValue: copy ranges 0x4ab530, element ctor FUN_0040ce80(0x40ce80), assign cSPTransformOps::Assign(0x537dc0)
+004aae30  ?Insert@VecM33@@QAEXPAUcSPMatrix3@@ABU2@@Z  # eastl::vector<cSPMatrix3(0x24)>::DoInsertValue: copy range 0x4ab280, cSPMatrix3::Assign(0x41cb40), in-place shift is rep movsd 9
+004ab130  ?PushFront@DequeBase@@QAEPAXPAX@Z  # deque emplace_front tail: ReallocNodeMap(0x503470) at kSideFront when begin_.node == map, AllocNode(0x4ab320), DequeIt::SetSubarray(0x569340) on begin_ at +8, cur = last - 4, store v
+004ab350  ?DequeAlloc@DequeBase@@QAEXI@Z  # DequeBase::DoInit body: nNewPtrArraySize=(n>>6)+1, max_alt(8,n+2)->mapSize, DoAllocatePtrArray(0x56a240), fill AllocNode(0x4ab320), SetSubarray(0x569340) on begin_ +8 and end_ +0x18, end_.cur = end_.first + (n%0x40)*4
