@@ -14,3 +14,4 @@
 00b7e010   32  game-mode dtor: complete; vptr/base-dtor store schedule
 00b7e0b0   86  mode-change message handler: complete; switch jump-table/register assignment
 00b7e220   312 cube-map tile walker: complete; path-B threshold is ((uVar1>>1)+1)>>1 not ((uVar1>>2)+1)>>1; eax-return preserved; equivalence WEAK (199 valid/200 needed, 100% cov, 0 mismatches); register allocation/scheduling differ
+00b7daf0   777 SP::cPlanetRegistry::FUN_00b7daf0: complete; registry state-mask guards, universe/active-planet branch, property HasResource/OpenProperties/StoreProperties path with AutoRefCount release, list search + impostor property-list construction and AddRef/insert/Release all translated; frame size (0x34 vs 0x3c), callee-saved register assignment and PropRef/AutoRefCount stack slot placement differ; equivalence WEAK (183 valid/200 needed, 6.4% cov, 0 mismatches; unmapped callees faked)

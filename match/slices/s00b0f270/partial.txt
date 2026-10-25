@@ -1,2 +1,1 @@
 # incomplete / approximate (not counted as decompiled)
-00b0f270  1150  cTerrainCameraController::RunCameraScript: skeleton only (long straight-line VarMap::SetVar/GetVar sequence with PDB-known layout omitted)

@@ -50,6 +50,22 @@ static inline void ReleaseModel(Model* m)
     }
 }
 
+// SmallSort's first release site keeps the bool in a byte stack slot and reloads the whole
+// dword for the argument (retail behaviour); taking its address forces that spill.
+static inline void ReleaseModelSpill(Model* m)
+{
+    if (m) {
+        int n = m->refCount;
+        if (n > 1) {
+            m->refCount = n - 1;
+        } else {
+            bool b = (m->flags >> 31) & 1;
+            bool* pb = &b;
+            m->owner->Destroy(m, *pb);
+        }
+    }
+}
+
 struct Entry {
     Model* ref;
     float f;
@@ -453,7 +469,7 @@ void __cdecl SmallSort(Entry* pivot, Entry* first, Entry* last, void* ctx)
                 if (cur)
                     cur->refCount++;
                 p->ref = cur;
-                ReleaseModel(old);
+                ReleaseModelSpill(old);
             }
             p->f = pivot->f;
             if (obj)

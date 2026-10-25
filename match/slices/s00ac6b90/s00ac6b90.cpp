@@ -142,6 +142,7 @@ struct cGroundLayer {
     void* sdtor(uint flags);                             // 0x00ac6e20
 };
 
+struct cPathCtx;
 struct cPathBuffer {           // object built by buildMesh (0x00ac7120)
     char  pad00[8];
     void* p08;                 // +0x08
@@ -149,7 +150,16 @@ struct cPathBuffer {           // object built by buildMesh (0x00ac7120)
     int   i1c, i20, i24;       // +0x1c
     cSPTransform* mpBegin;     // +0x28
     cSPTransform* mpEnd;       // +0x2c
-    void buildMesh(void*, void*, void*, void*);          // 0x00ac7120
+    void buildMesh(void*, void*, void*, cPathCtx*);      // 0x00ac7120
+};
+
+// fourth argument of cPathBuffer::buildMesh (debug-render context)
+struct cPathCtx {
+    char  pad00[0x10];
+    void* pObject;             // +0x10 (released via 0x7c3c10)
+    int   iBuffer;             // +0x14 (released via 0x6ddef0)
+    char  pad18[0x10];
+    int   iBatch;              // +0x28
 };
 
 struct cGroundEditorRes {
@@ -206,13 +216,25 @@ cSPTransform::cSPTransform(const cSPTransform& o)
 // ================================================================================================
 // 0x00ac6c90 -- copy [first,last) into dst, raw 0x3c-byte element copies; returns advanced dst.
 // @ 0x00ac6c90
-struct Blob3c { uint d[15]; };
 cSPTransform* __cdecl do_copy_6c90(const cSPTransform* first, const cSPTransform* last, cSPTransform* dst)
 {
     while (first != last) {
-        *(Blob3c*)dst = *(const Blob3c*)first;
-        first++;
-        dst++;
+        if (dst != 0) {
+            dst->a = first->a;
+            dst->b = first->b;
+            dst->x = first->x;
+            dst->y = first->y;
+            dst->z = first->z;
+            dst->w = first->w;
+            // retail copies the nine matrix slots through a float temp stored back as bits
+            for (int i = 0; i < 9; ++i) {
+                float tmpF = first->mat.m[i];
+                *(uint*)&dst->mat.m[i] = *(const uint*)&tmpF;
+            }
+            dst->s = first->s;
+        }
+        ++first;
+        ++dst;
     }
     return dst;
 }
@@ -274,8 +296,7 @@ void VecT::DoInsertValue(cSPTransform* position, const cSPTransform* value)
             pv++;
         if (mpEnd)
             new ((void*)mpEnd) cSPTransform(*(mpEnd - 1));
-        if (position != mpEnd - 1)
-            do_copyBack_6de0(position, mpEnd - 1, mpEnd);
+        do_copyBack_6de0(position, mpEnd - 1, mpEnd);
         *position = *pv;
         position->s = pv->s;
         mpEnd += 1;
@@ -396,7 +417,7 @@ void cGroundLayer::addInterpolated(cSPTransform* src, float scale)
 // corner generation is reproduced below in scalar form; it is faithful to the arithmetic but is
 // NOT byte-identical (see scratch notes).
 // @ 0x00ac7120
-void cPathBuffer::buildMesh(void* a1, void* a2, void* a3, void* a4)
+void cPathBuffer::buildMesh(void* a1, void* a2, void* a3, cPathCtx* ctx)
 {
     (void)a1;
     (void)a2;
@@ -411,9 +432,9 @@ void cPathBuffer::buildMesh(void* a1, void* a2, void* a3, void* a4)
 
     void* viewer = *(void**)a3;
     FUN_007c40f0(viewer, &tmp);
-    i1c = *(int*)((char*)&tmp + 4);
-    i20 = *(int*)((char*)&tmp + 8);
-    i24 = *(int*)((char*)&tmp + 0xc);
+    i1c = *(int*)&tmp.x;
+    i20 = *(int*)&tmp.y;
+    i24 = *(int*)&tmp.z;
 
     viewer = *(void**)a3;
     if (!cViewer_Update(viewer))
@@ -439,10 +460,10 @@ void cPathBuffer::buildMesh(void* a1, void* a2, void* a3, void* a4)
     int idx = 0;
     if (count > 0) {
         do {
-            *(int*)((char*)a4 + 0x28) += 1;
+            ctx->iBatch += 1;
             int stride = 0;
             void* base = 0;
-            int n = FUN_006dde90((count - idx) * 4, &stride, &base, a4) / 4;
+            int n = FUN_006dde90((count - idx) * 4, &stride, &base, ctx) / 4;
             if (n <= 0 || stride != 0x18)
                 break;
             char* out = (char*)base;
@@ -478,16 +499,16 @@ void cPathBuffer::buildMesh(void* a1, void* a2, void* a3, void* a4)
 
 cleanup:
     FUN_006ddee0();
-    FUN_006ddef0((void*)*(int*)((char*)a4 + 0x14));
+    FUN_006ddef0((void*)ctx->iBuffer);
     g_16fa3a0 |= 0x10000000;
-    *(float*)&g_16f94ec = *(float*)((char*)&tmp + 4);
+    *(float*)&g_16f94ec = tmp.x;
     {
         cSPTransform* b = mpBegin;
         cSPTransform* e = mpEnd;
         do_assign_6da0(e, e, b);
         mpEnd = b;
     }
-    FUN_007c3c10(*(void**)((char*)a4 + 0x10));
+    FUN_007c3c10(ctx->pObject);
 }
 
 // ================================================================================================

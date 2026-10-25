@@ -67,13 +67,27 @@ extern "C" void  FUN_00692400(int a);
 extern "C" int   FUN_00690120();                       // SP::cJob::GetStatus
 extern "C" void  FUN_00a09890(int p);
 extern "C" void  FUN_00a09850(int p);
+extern "C" void  FUN_00ae6970(void* p);                 // EA::RefVector::Destroy
+extern "C" void  FUN_00571db0(int a, int b, int c, int d, int e); // EA::Messaging::RemoveHandler
+extern "C" void  FUN_0099d060();
 extern "C" void  FUN_00a098d0(void* a, void* b, void* c, void* d);
 extern "C" void  FUN_00a057f0(void* a, void* b);
 extern "C" void  FUN_00ac97a0(void* a, void* b, void* c);
 extern "C" void* FUN_009e0480(void* a, void* b);       // eastl vector<AnalysisInfo>::erase
+extern "C" void  FUN_009c4cc0(int p);                  // creature_instance_data::Release
+extern "C" void  FUN_0040f360(void* p);                // EA::Counted::Release
+
+// CRT memcpy (0x11e0744 in the original) — the teardown path copies a zero-length
+// range, so the call folds away.
+extern "C" void* memcpy(void* dst, const void* src, unsigned n);
 
 extern uint32 g_166c084;                               // DAT_0166c084
 extern uint32 g_164dc58;                               // DAT_0164dc58
+
+// eastl::basic_string<wchar_t>::RangeInitialize lives at 0x579a90: `this` (the
+// destination string) is in ecx and the source range pointer is a stack argument.
+struct eastl_wstring { void* mpBegin; void* mpEnd; void* mpCap; };
+#define RANGE_INIT(dst, src) ((void (__thiscall *)(void*, void*))FUN_00579a90)((void*)(dst), (void*)(src))
 
 static inline void* vfn(void* o, int off) { return *(void**)(*(char**)o + off); }
 
@@ -201,10 +215,10 @@ void* SL71::v09e70(void* a2, void* a3)
     *(void**)(self + 0xc)  = 0;
     *(void**)(self + 0x10) = 0;
     *(void**)(self + 0x14) = 0;
-    ((void (__fastcall *)(void*))FUN_00579a90)(a3);   // RangeInitialize(a3), ecx = this+0x18
+    ((void (__thiscall *)(void*, void*))FUN_00579a90)((void*)(self + 0xc), a3);  // RangeInitialize(this+0xc, a3)
     *(void**)(self + 0x1c) = a2;
     if (a2 != 0)
-        ((vt_v)*(void**)a2)(a2);
+        ((vt_v)vfn(a2, 0))(a2);
     *(unsigned*)(self + 0x20) = 1;
     *(void**)(self + 0x24) = 0;
     *(void**)(self + 0x28) = 0;
@@ -269,7 +283,8 @@ void SL71::v09f90()
 void SL71::v0a020()
 {
     char* self = (char*)this;
-    FUN_009c67e0(*(void**)(self + 0x28), *(void**)(self + 0x2c));
+    ((void (__thiscall *)(void*, void*, void*))FUN_009c67e0)(
+        (void*)(self + 0x28), *(void**)(self + 0x28), *(void**)(self + 0x2c));
     void* p = *(void**)(self + 0x28);
     if (p && *(int*)((char*)p - 4) != 0)
         FUN_00f47380(p);
@@ -293,35 +308,124 @@ void SL71::v0a020()
 // @ 0x00a0a0b0
 unsigned SL71::v0a0b0(void* a1, unsigned a2, unsigned a3)
 {
+    char* self = (char*)this;
     if (a3 == 0)
         return 0;
-    unsigned local_10 = (unsigned)(size_t)a1;
-    unsigned local_c  = a2;
-    unsigned local_8  = a3;
+    unsigned desc[3];
+    desc[0] = (unsigned)(size_t)a1;
+    desc[1] = a2;
+    desc[2] = a3;
+    // Retail passes the address of its first stack argument to the insert; the
+    // callee may write back through it, so model the two argument slots as one
+    // run and read the second slot afterwards (that is what `mov al,[esp+0x20]`
+    // observes).
+    struct { void* p; unsigned v; } arg;
+    arg.p = a1;
+    arg.v = a2;
     ((void (__fastcall *)(void*))FUN_009b3450)((void*)(size_t)a3);
-    FUN_00a09420(&a1, &local_10, (void*)(size_t)(a3 & 0xffffff00));
-    FUN_009c26a0((void*)(size_t)a3);
-    return a2 & 0xff;
+    ((void (__thiscall *)(void*, void*, void*, unsigned))FUN_00a09420)(
+        (void*)(self + 0x18), &arg, desc, a3 & 0xffffff00);
+    unsigned rel = ((unsigned (__thiscall *)(void*))FUN_009c26a0)((void*)(size_t)a3);
+    // The original stores only `al` after Release, so the upper 24 bits of eax are
+    // the value Release returned.
+    return (rel & 0xffffff00u) | (arg.v & 0xffu);
 }
 
-// 00a0a120 - (free) anonymous-namespace cResourceCheat::Execute over all resources
+// A 3-dword (begin,end,cap) list of 0xc-byte elements, as the resource query
+// returns them.  Named members match the retail frame slots E+0x34 / E+0x48.
+struct EaVec3List { void* mpBegin; void* mpEnd; void* mpCap; };
+// A 3-dword list of raw pointers, returned in the second slot (E+0x40) and the
+// pointer array at E+0x54.
+struct EaPtrList  { void* mpBegin; void* mpEnd; void* mpCap; };
+// The 8-byte filter/functor object handed to the manager query (E+0x1c):
+// a vftable pointer plus a tag word.
+struct ResFunctor  { void** mpVtbl; unsigned mnTag; };
+
+// 00a0a120 - (free) anonymous-namespace cResourceCheat::Execute over all resources.
+// __stdcall, 2 stack arguments (ret 8): the resource subsystem and per-resource list.
+//
+// Asks the resource manager (GetManager -> vcall 0x38) to enumerate resources into a
+// result block; for every enumerated object whose 0xc vcall returns the resource type
+// tag 0x34728492 it builds the object's wide name (vcall 0x28 + RangeInitialize),
+// wildcard-matches it against the caller's name table, and on a hit drives the
+// resource through vcall 0x34 (create/load), then releases the intermediate objects.
 // @ 0x00a0a120
-unsigned f0a120()
+unsigned __stdcall f0a120(SL71* pOwner, EaPtrList* pNames)
 {
-    void* local_40 = (void*)0x13eb428;
-    unsigned local_3c = 0xee17c6ad;
-    unsigned local_20 = 0;
+    EaVec3List  listA;      // 0xc-stride element array (E+0x34)
+    ResFunctor  filter;     // E+0x1c
+    EaVec3List  listC;      // E+0x48
+    EaPtrList   listB;      // E+0x40
+    EaPtrList   listD;      // 0x54 pointer array
+    unsigned    ok = 1;
+
+    listA.mpBegin = listA.mpEnd = listA.mpCap = 0;
+    listC.mpBegin = listC.mpEnd = listC.mpCap = 0;
+    listB.mpBegin = listB.mpEnd = listB.mpCap = 0;
+    listD.mpBegin = listD.mpEnd = listD.mpCap = 0;
+    filter.mpVtbl = (void**)0x13eb428;
+    filter.mnTag  = 0xee17c6ad;
+
     void* mgr = FUN_0067dcd0();
-    if (((vt_i)vfn(mgr, 0x38))(mgr) != 0)
+    if (((char (__thiscall*)(void*, void*, void*, void*))vfn(mgr, 0x38))(
+            mgr, &listA, &filter, &listC) != 0)
     {
-        // The full resource walk / WildcardMatch / job kick-off sequence is not
-        // reconstructed (unreachable-block warnings in the original). best-effort.
+        unsigned count = (unsigned)(((char*)listA.mpEnd - (char*)listA.mpBegin) / 0xc);
+        for (unsigned i = 0; i < count; ++i)
+        {
+            char* pElem = (char*)listA.mpBegin + i * 0xc;
+            void* pEntry = ((void**)listD.mpBegin)[i];
+            if (((int (__thiscall*)(void*))vfn(pEntry, 0xc))(pEntry) != 0x34728492)
+                continue;
+
+            // Build the resource's wide name for the wildcard test.
+            void* pNameSrc = ((void* (__thiscall*)(void*))vfn(pEntry, 0x28))(pEntry);
+            eastl_wstring name;
+            name.mpBegin = name.mpEnd = 0;
+            name.mpCap = 0;
+            RANGE_INIT(&name, pNameSrc);
+
+            unsigned nNames = (unsigned)(((char*)pNames->mpEnd - (char*)pNames->mpBegin) >> 4);
+            bool matched = false;
+            for (unsigned j = 0; j < nNames; ++j)
+            {
+                if (FUN_0093d470(0, *(wchar_t**)((char*)pNames->mpBegin + j * 0x10), 0))
+                {
+                    matched = true;
+                    break;
+                }
+            }
+            if (!matched)
+            {
+                // Hand the resource to the owner's load path.
+                void* pObjOut = 0;
+                if (((char (__thiscall*)(void*, void**, int, int, int, int))vfn(pOwner, 0x34))(
+                        pOwner, &pObjOut, 2, 6, 1, 0) != 0)
+                {
+                    void* pHandle = ((void* (__thiscall*)(void*))vfn(pOwner, 0x18))(pOwner);
+                    if (pHandle)
+                        ((void (__thiscall*)(void*))vfn(pHandle, 4))(pHandle);
+                    void* pJob = (void*)(size_t)FUN_00a088e0(*(void**)pElem);
+                    if (pJob)
+                        FUN_009a0d60(pJob, 1, &pHandle);
+                    if (pHandle)
+                        ((void (__thiscall*)(void*))vfn(pHandle, 8))(pHandle);
+                }
+                ((void (__thiscall*)(void*))vfn(pOwner, 0x24))(pOwner);
+                if (pObjOut)
+                    ((void (__thiscall*)(void*))vfn(pObjOut, 8))(pObjOut);
+            }
+
+            if (name.mpBegin && *(int*)((char*)name.mpBegin - 4) != 0)
+                FUN_00f47380(name.mpBegin);
+        }
     }
-    if (local_20 && *(int*)(local_20 - 4) != 0)
-        FUN_00f47380((void*)local_20);
-    (void)local_40;
-    (void)local_3c;
-    return 0;
+
+    if (listC.mpBegin && *(int*)((char*)listC.mpBegin - 4) != 0)
+        FUN_00f47380(listC.mpBegin);
+    if (listA.mpBegin && *(int*)((char*)listA.mpBegin - 4) != 0)
+        FUN_00f47380(listA.mpBegin);
+    return ok;
 }
 
 // 00a0a360 - insert one AutoRefCount element into the pointer vector
@@ -339,7 +443,7 @@ void SL71::v0a360(void* a2, void* a3)
             void* ref = *(void**)(end - 4);
             *(void**)end = ref;
             if (ref)
-                ((vt_v)*(void**)ref)(ref);
+                ((vt_v)vfn(ref, 0))(ref);
         }
         FUN_00ac97a0(a2, *(char**)(self + 4) - 4, *(char**)(self + 4));
         a3 = *(void**)a3;
@@ -347,7 +451,7 @@ void SL71::v0a360(void* a2, void* a3)
         if (a3 != old)
         {
             if (a3)
-                ((vt_v)*(void**)a3)(a3);
+                ((vt_v)vfn(a3, 0))(a3);
             *(void**)a2 = a3;
             if (old)
                 ((vt_v)vfn(old, 4))(old);
@@ -368,7 +472,7 @@ void SL71::v0a360(void* a2, void* a3)
     {
         *(void**)d = elem;
         if (elem)
-            ((vt_v)*(void**)elem)(elem);
+            ((vt_v)vfn(elem, 0))(elem);
     }
     char* d2 = (char*)FUN_00a11310(a2, *(void**)end, d + 4);
     char* oldp = *(char**)self;
@@ -426,7 +530,7 @@ unsigned SL71::v0a600()
         ((vt_v_i)vfn(self, 0x3c))(self, *(int*)(*(char**)(self + 0x24) + i * 4));
     void* src = *(void**)(self + 0x28);
     void* dst = *(void**)(self + 0x24);
-    FUN_00a11310(dst, src, 0);
+    memcpy(dst, src, 0);
     int diff = (int)((char*)src - (char*)dst) >> 2;
     *(int*)(self + 0x28) = *(int*)(self + 0x28) + diff * -4;
     void* r = *(void**)(self + 0x44);
@@ -461,31 +565,36 @@ void SL71::v0a6d0(void* a2)
 {
     char* self = (char*)this;
     char* c = (char*)a2;
-    if (c == 0 || *(void**)c == 0)
+    if (c == 0 || *(int*)(c + 0x17c) == 0)
         return;
-    if (*(void**)(c + 0x15c))
+    void* pEvtFilter = *(void**)(c + 0x15c);
+    if (pEvtFilter)
     {
         *(void**)(c + 0x15c) = 0;
-        FUN_00a05270(c);
+        ((void (__thiscall *)(void*))FUN_00a05270)(pEvtFilter);
     }
-    int inst = *(int*)c;
-    if (*(int*)(inst + 0x294))
+    int inst = *(int*)(c + 0x17c);
+    void* pFilter = *(void**)(inst + 0x294);
+    if (pFilter)
     {
-        *(int*)(inst + 0x294) = 0;
-        FUN_009c26a0((void*)(size_t)inst);
+        *(void**)(inst + 0x294) = 0;
+        ((void (__thiscall *)(void*))FUN_009c4cc0)(pFilter);
     }
     int saved = *(int*)inst;
     if (saved)
-        FUN_009b3450();
-    void* v2 = *(void**)(c + 0x30);
+        ((void (__fastcall *)(void*))FUN_009b3450)((void*)(size_t)saved);
+    void* v2 = *(void**)(c + 0x184);
     if (v2)
     {
-        FUN_00a007d0(1);
-        FUN_00a01c70();
+        ((void (__thiscall *)(void*, int))FUN_00a007d0)(v2, 1);
+        ((void (__thiscall *)(void*))FUN_00a01c70)(v2);
         FUN_00f47380(v2);
-        *(void**)(c + 0x30) = 0;
+        *(void**)(c + 0x184) = 0;
     }
-    *(void**)(c + 4) = 0;
+    void* pModel = *(void**)(c + 0x180);
+    if (*(int*)(inst + 0x2c0) == 0 && pModel != 0)
+        ((void (__thiscall *)(void*))FUN_0040f360)(pModel);
+    *(void**)(c + 0x180) = 0;
     int obj = *(int*)(inst + 0x2c0);
     void* keep = 0;
     if (obj)
@@ -511,20 +620,24 @@ void SL71::v0a6d0(void* a2)
         else
             k[0x10] -= 1;
     }
-    FUN_009c4d10((void*)(size_t)inst);
-    if (*(void**)c)
+    ((void (__thiscall *)(void*))FUN_009c4d10)((void*)(size_t)inst);
+    if (*(void**)(c + 0x17c))
     {
-        *(void**)c = 0;
-        FUN_009c26a0((void*)(size_t)inst);
+        *(void**)(c + 0x17c) = 0;
+        ((void (__thiscall *)(void*))FUN_009c4cc0)((void*)(size_t)inst);
     }
+    void* cSaved = (void*)(size_t)saved;
     if (saved)
     {
-        int iVar6 = FUN_009aa820(saved);
+        int iVar6 = ((int (__thiscall *)(void*, int))FUN_009aa820)(
+            (void*)(size_t)g_166c084, saved);
         int lc = FUN_009a37e0(saved);
         int slot = *(int*)(self + 0x1c);
         int local_4 = 0;
         lc = iVar6 + 1 + lc;
-        FUN_00a05730(&local_4, (void*)((char*)(size_t)saved + 0x310));
+        ((void (__thiscall *)(void*, void*, void*))FUN_00a05730)(
+            (void*)(size_t)(slot + 0x18), &local_4,
+            (void*)((char*)(size_t)saved + 0x310));
         int b = local_4 != slot + 0x1c;
         if (b)
             lc += 1;
@@ -534,12 +647,15 @@ void SL71::v0a6d0(void* a2)
             if (!b)
             {
                 FUN_009a3f50(saved, 0xffffffff);
-                if (saved)
-                    FUN_009c26a0((void*)(size_t)saved);
+                cSaved = 0;
+                ((void (__thiscall *)(void*))FUN_009c26a0)((void*)(size_t)saved);
             }
         }
     }
-    FUN_00a05270(c);
+    *(int*)(*(int*)(self + 0x24) + *(int*)(c + 0x194) * 4) = 0;
+    ((void (__thiscall *)(void*))FUN_00a05270)(c);
+    if (cSaved)
+        ((void (__thiscall *)(void*))FUN_009c26a0)(cSaved);
 }
 
 // 00a0a930 - advance the animation feedback event queue
@@ -600,21 +716,23 @@ void SL71::v0aa20(unsigned key)
 {
     char* self = (char*)this;
     unsigned k = key;
-    void* node = FUN_00e5c780(self + 0x30, &k);
+    void* node = 0;
+    ((void (__thiscall *)(void*, void**, unsigned*))FUN_00e5c780)(
+        (void*)(self + 0x34), &node, &k);
     char* n = (char*)node;
     if (n != self + 0x38)
     {
         if (*(int*)(n + 0x14) != 0)
         {
-            int st = FUN_0068f970();
+            int st = ((int (__thiscall *)(void*))FUN_0068f970)(*(void**)(n + 0x14));
             if (1 < (unsigned)(st - 7))
-                FUN_00692400(1);
+                ((void (__thiscall *)(void*, int))FUN_00692400)(*(void**)(n + 0x14), 1);
         }
         *(int*)(self + 0x48) -= 1;
         FUN_00921580(n);
         FUN_00921880(n, self + 0x38);
         if (*(int*)(n + 0x14) != 0)
-            FUN_00690120();
+            ((void (__thiscall *)(void*))FUN_00690120)(*(void**)(n + 0x14));
         FUN_00f47380(n);
     }
 }
@@ -626,16 +744,18 @@ void* SL71::v0ab90(void* a2)
     char* self = (char*)this;
     unsigned* p = (unsigned*)a2;
     unsigned* q = p;
-    FUN_00a057f0(&q, p);
+    ((void (__thiscall *)(void*, void*, void*))FUN_00a057f0)(this, &q, p);
     unsigned* r = q;
     if (r == (unsigned*)(self + 4) ||
         (p[1] <= r[5] && (p[1] < r[5] || *p < r[4])))
     {
-        unsigned local_10 = p[0];
-        unsigned local_c  = p[1];
-        unsigned local_8  = 0;
+        unsigned key[3];
+        key[0] = p[0];
+        key[1] = p[1];
+        key[2] = 0;
         unsigned* masked = (unsigned*)((size_t)r & 0xffffff00);
-        FUN_00a098d0(&masked, r, &local_10, masked);
+        ((void (__thiscall *)(void*, void*, void*, unsigned*, void*))FUN_00a098d0)(
+            this, &masked, r, key, masked);
         r = masked;
     }
     return (char*)r + 0x18;
@@ -658,7 +778,7 @@ void SL71::v0ac10(unsigned n)
         v099e0(end, n - size, &v);
         return;
     }
-    FUN_009e0480(begin + n * 0xc, end);
+    ((void (__thiscall *)(void*, void*, void*))FUN_009e0480)(self, begin + n * 0xc, end);
 }
 
 // 00a0aaa0 - destructor of the editor resource subsystem
@@ -678,15 +798,29 @@ void SL71::v0aaa0()
         if (v == 1)
         {
             *pc = 1;
-            ((vt_v_i)*(void**)pu)(pu, 1);
+            ((vt_v_i)vfn(pu, 0))(pu, 1);
         }
+    }
+    ((void (__thiscall *)(void*))FUN_00ae6970)((void*)(self + 0x68));
+    int handler = *(int*)(self + 0x54);
+    if (handler)
+    {
+        int a = *(int*)(self + 0x64);
+        int b = *(int*)(self + 0x60);
+        int c = *(int*)(self + 0x5c);
+        *(int*)(self + 0x54) = 0;
+        FUN_00571db0(handler, *(int*)(self + 0x58), c, b, a);
     }
     void* r = *(void**)(self + 0x50);
     if (r)
         ((vt_v)vfn(r, 4))(r);
-    FUN_00a09890(*(int*)(self + 0x40));
-    FUN_00a09850(*(int*)(self + 0x24));
+    ((void (__thiscall *)(void*, unsigned))FUN_00a09890)(
+        (void*)(self + 0x34), *(unsigned*)(self + 0x40));
+    ((void (__thiscall *)(void*, unsigned))FUN_00a09850)(
+        (void*)(self + 0x18), *(unsigned*)(self + 0x24));
+    if (*(int*)(self + 0x14) != 0)
+        ((void (__thiscall *)(void*))FUN_0099d060)(*(void**)(self + 0x14));
     *(void**)(self + 8) = (void*)0x13ec458;
-    *(void**)(self + 4) = (void*)0x1448f54;
+    *(void**)(self + 4) = (void*)0x13eb394;
     *(void**)(self + 0) = (void*)0x13eb938;
 }

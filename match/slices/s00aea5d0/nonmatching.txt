@@ -12,3 +12,5 @@
 00aeb030  31   destroy_hash_buckets: complete; near-miss (loop/regs)
 00aeb090  103  SpaceTool::Cleanup: complete; vtable slot calls via generic helpers change scheduling
 00aeb160  176  SpaceTool::AddEntry: near-miss (176 diff bytes); logic complete, but the emulated pool hands the two equivalence sides different arenas, so the returned entry pointer differs (FAIL-KEPT)
+00aeacc0  250  SerializeList (field serializer): complete (eastl::basic_string<wchar_t> RangeInitialize + copy ctor 0x56e2d0 + dealloc, ConvertToString16, Field/EndField, visitor loop); register allocation / stack layout differ (checked with /O2 /MD /Gy /TP /GS-, retail has no EH frames) [equiv: WEAK 202 valid, 12.6% coverage, no mismatch]
+00aeb240  299  SpaceTool::CreateEntry: complete (terrain-sphere update, civ/city casts + refcounted refs, vector insert, GetCivilization/GetPlayerCivilization/GetActivePlanet/FUN_00c74550 tail); register allocation / stack frame differ (checked with /O2 /MD /Gy /TP /GS-) [equiv: UNSUPPORTED 0/400 valid, uninitialized this/refcount faults]

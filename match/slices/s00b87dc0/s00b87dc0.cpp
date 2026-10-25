@@ -2,10 +2,12 @@
 // six 128x128 cube-map faces with a union-find over uint16 labels, MMX height comparison).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include <xmmintrin.h>
+#include <new>
 #include "types.h"
 
 void __cdecl operator_delete__(void* p);   // 0x00f47380
 void* __cdecl MemMove(void* dst, const void* src, unsigned int n);   // 0x011e0744 (memcpy thunk)
+extern "C" double __cdecl fabs(double);
 
 namespace SP {
 
@@ -101,7 +103,11 @@ struct Vector3 {
 
 struct Element20 {
   uint32_t mData[5];
+  Element20(const Element20& o);                  // 0x473460 (eastl::vector<cSPVector3> copy ctor)
+  Element20& operator=(const Element20& o);       // 0x473500
 };
+
+void FUN_00b85980(Element20* first, Element20* last, Element20* dest);   // 0x00b85980
 
 struct Vector20 {
   Element20* mpBegin;
@@ -144,27 +150,33 @@ void cPlanetModel::Refresh()
 // @ 0x00b88430
 void Vector20::insert(Element20* pos, const Element20* value)
 {
-  if (mpEnd == mpCapacity) {
+  if (mpEnd != mpCapacity) {
+    const Element20* v = value;
+    if (v >= pos && v < mpEnd)
+      v = v + 1;
+    if (mpEnd)
+      new (mpEnd) Element20(*(mpEnd - 1));
+    FUN_00b85980(pos, mpEnd - 1, mpEnd);
+    *pos = *v;
+    ++mpEnd;
+  } else {
     unsigned int count = (unsigned int)(mpEnd - mpBegin);
     unsigned int newCapacity = count ? count * 2 : 1;
-    Element20* buffer = (Element20*)operator new[](newCapacity * sizeof(Element20),
-        (const char*)0x13f09b4, 0, 0, (const char*)0x13ebb38, 0xd1);
-    unsigned int index = (unsigned int)(pos - mpBegin);
-    for (unsigned int i = 0; i < index; ++i)
-      buffer[i] = mpBegin[i];
-    buffer[index] = *value;
-    for (unsigned int i = index; i < count; ++i)
-      buffer[i + 1] = mpBegin[i];
+    Element20* buffer = newCapacity
+        ? (Element20*)operator new[](newCapacity * sizeof(Element20),
+            (const char*)0x13f09b4, 0, 0, (const char*)0x13ebb38, 0xd1)
+        : 0;
+    unsigned int prefixBytes = (unsigned int)((char*)pos - (char*)mpBegin);
+    Element20* newPos = (Element20*)MemMove(buffer, mpBegin, prefixBytes) + (pos - mpBegin);
+    if (newPos)
+      new (newPos) Element20(*value);
+    unsigned int suffixBytes = (unsigned int)((char*)mpEnd - (char*)pos);
+    Element20* newEnd = (Element20*)MemMove(newPos + 1, pos, suffixBytes) + (mpEnd - pos);
     if (mpBegin && ((int*)mpBegin)[-1] != 0)
       operator_delete__(mpBegin);
     mpBegin = buffer;
-    mpEnd = buffer + count + 1;
+    mpEnd = newEnd;
     mpCapacity = buffer + newCapacity;
-  } else {
-    for (Element20* p = mpEnd; p > pos; --p)
-      *p = *(p - 1);
-    *pos = *value;
-    ++mpEnd;
   }
 }
 
@@ -179,23 +191,23 @@ uint32_t cPlanetModel::GetCellValue(const Vector3* dir)
   float x = dir->x;
   float y = dir->y;
   float z = dir->z;
-  float ax = x < 0.0f ? -x : x;
-  float ay = y < 0.0f ? -y : y;
-  float az = z < 0.0f ? -z : z;
+  float ax = (float)fabs((double)x);
+  float ay = (float)fabs((double)y);
+  float az = (float)fabs((double)z);
 
   int u;
   int v;
   int face;
   if (az >= ax && az >= ay) {
-    u = (int)((x / az + 1.0f) * 64.0f);
+    u = (int)((x / z + 1.0f) * 64.0f);
     v = (int)((y / az + 1.0f) * 64.0f);
     face = z < 0.0f ? 1 : 0;
   } else if (ay >= ax) {
-    u = (int)((z / ay + 1.0f) * 64.0f);
+    u = (int)((z / y + 1.0f) * 64.0f);
     v = (int)((x / ay + 1.0f) * 64.0f);
     face = y < 0.0f ? 5 : 4;
   } else {
-    u = (int)((y / ax + 1.0f) * 64.0f);
+    u = (int)((y / x + 1.0f) * 64.0f);
     v = (int)((z / ax + 1.0f) * 64.0f);
     face = x < 0.0f ? 3 : 2;
   }

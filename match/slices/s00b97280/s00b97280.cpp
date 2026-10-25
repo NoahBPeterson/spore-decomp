@@ -144,7 +144,8 @@ __forceinline void CellDirection(int face, int x, int y, Vec3& out)
 // ---------------------------------------------------------------------------
 
 extern "C" void* __cdecl CopyBytes(void* dest, const void* src, unsigned int size);   // 0x011e0744
-extern "C" void* (__cdecl* const g_CopyBytesFast)(void*, const void*, unsigned int);   // 0x013cc480
+// the retail code calls memmove through its IAT slot (call dword ptr [0x13cc480])
+extern "C" void* (__cdecl* const __imp_memmove)(void*, const void*, unsigned int);     // 0x013cc480
 void* __cdecl EastlAllocate(unsigned int size, const char* name, int flags, int align,
                             const char* file, int line);                              // 0x00f473a0
 void  __cdecl EastlFree(void* p);                                                     // 0x00f47380
@@ -160,31 +161,29 @@ struct IntVector {
 // @ 0x00b97280
 void IntVector::insert(int* position, unsigned int count, const int* value)
 {
-    const int copy = *value;
     if (count <= (unsigned int)(mpCapacity - mpEnd)) {
-        if (count > 0) {
-            const unsigned int tail = (unsigned int)(mpEnd - position);
-            int* const oldEnd = mpEnd;
-            if (count < tail) {
-                CopyBytes(oldEnd, oldEnd - count, count * sizeof(int));
-                mpEnd += count;
-                const unsigned int bytes = (unsigned int)((oldEnd - count) - position) * sizeof(int);
-                g_CopyBytesFast(position + count, position, bytes);
-                for (int* p = position; p != position + count; ++p)
-                    *p = copy;
-            } else {
-                const unsigned int extra = count - tail;
-                int* p = oldEnd;
-                while (p != oldEnd + extra) {
-                    *p = copy;
-                    ++p;
-                }
-                mpEnd += extra;
-                CopyBytes(mpEnd, position, (unsigned int)(oldEnd - position) * sizeof(int));
-                mpEnd += tail;
-                for (p = position; p != oldEnd; ++p)
-                    *p = copy;
-            }
+        if (count == 0)
+            return;
+        const int copy = *value;
+        int* const oldEnd = mpEnd;
+        const unsigned int tail = (unsigned int)(oldEnd - position);
+        if (count < tail) {
+            CopyBytes(oldEnd, oldEnd - count, count * sizeof(int));
+            mpEnd += count;
+            const unsigned int bytes = (unsigned int)((oldEnd - count) - position) * sizeof(int);
+            __imp_memmove(position + count, position, bytes);
+            for (int* p = position; p != position + count; ++p)
+                *p = copy;
+        } else {
+            const unsigned int extra = count - tail;
+            int* p = oldEnd;
+            for (unsigned int i = 0; i != extra; ++i)
+                *p++ = copy;
+            mpEnd += extra;
+            CopyBytes(mpEnd, position, (unsigned int)(oldEnd - position) * sizeof(int));
+            mpEnd += tail;
+            for (p = position; p != oldEnd; ++p)
+                *p = copy;
         }
     } else {
         const unsigned int oldSize = (unsigned int)(mpEnd - mpBegin);
@@ -196,16 +195,19 @@ void IntVector::insert(int* position, unsigned int count, const int* value)
             ? (int*)EastlAllocate(newSize * sizeof(int), (const char*)0x013f09b4, 0, 0,
                                   (const char*)0x013ebb38, 0xd1)
             : 0;
-        CopyBytes(newData, mpBegin, oldSize * sizeof(int));
-        int* p = newData + oldSize;
+        /* the head copied is everything before `position`, not the whole vector */
+        const unsigned int headBytes = (unsigned int)(position - mpBegin) * sizeof(int);
+        CopyBytes(newData, mpBegin, headBytes);
+        const int copy = *value;
+        int* p = newData + (headBytes / sizeof(int));
         int* const fillEnd = p + count;
         while (p != fillEnd) {
             *p = copy;
             ++p;
         }
-        CopyBytes(newData + oldSize + count, position,
+        CopyBytes(newData + (headBytes / sizeof(int)) + count, position,
                   (unsigned int)(mpEnd - position) * sizeof(int));
-        int* const newEnd = newData + oldSize + count + (mpEnd - position);
+        int* const newEnd = newData + (headBytes / sizeof(int)) + count + (mpEnd - position);
         if (mpBegin != 0 && *((unsigned int*)mpBegin - 1) != 0)
             EastlFree(mpBegin);
         mpBegin = newData;
@@ -320,19 +322,78 @@ Rec34B* CopyBackward34(Rec34B* first, Rec34B* last, Rec34B* destEnd)
     return destEnd;
 }
 
+// ---- the shared sorted vector of 16-byte records at 0x0168890c ---------------
+struct Global16Record {
+    unsigned int m0;    // +0x00
+    unsigned int m4;    // +0x04
+    unsigned int m8;    // +0x08  the extra predicate value
+    unsigned int mC;    // +0x0c
+};
+
+struct Global16Key {
+    unsigned int m0;    // +0x00
+    unsigned int m4;    // +0x04
+};
+
+struct SpeciesArchetype {
+    char         pad00[0x14];     // +0x00
+    unsigned int mField14;        // +0x14
+};
+
+extern Global16Record* g_168890c;    // 0x0168890c  vector begin
+extern Global16Record* g_1688910;    // 0x0168910   vector end
+extern unsigned char   g_1688920;    // 0x0168920   range-compare flag
+
+// 0x00401090: cdecl, no arguments; returns the global at 0x15d0c24
+void* __cdecl GetGlobal15D0C24();                           // 0x00401090
+// 0x004e0050: thiscall with 2 stack arguments (pops them), object in ecx
+class SpeciesArchetypeOwner {
+public:
+    SpeciesArchetype* GetArchetype(void* a, void* b);        // 0x004e0050
+};
+// 0x00b96220: binary-searches [begin,end) for `key`; out[0]/out[1] are the bounds
+void __cdecl FindRange16(Global16Record** out, Global16Record* begin,
+                         Global16Record* end, const Global16Key* key,
+                         unsigned int flag);                 // 0x00b96220
+
+// EraseGlobal16 -- drop every record in the key's equal-range whose +0x08 slot
+// matches `matchValue` (or all of them when it is 0).  Each removal shifts the
+// tail down one record and re-runs the binary search.
 // @ 0x00b97600
-void EraseGlobal16(void* first, void* last, void* predicate, void* matchValue)
+void EraseGlobal16(void* a, void* b, void* c, unsigned int matchValue)
 {
-    // The original walks the shared 16-byte vector with the predicate helper
-    // at 0xb96220 and compacts matches.  Keep the observable mutation here.
-    (void)first; (void)last; (void)predicate;
-    char* begin = *reinterpret_cast<char**>(0x0168890c);
-    char* end = *reinterpret_cast<char**>(0x01688910);
-    if (matchValue == 0 || begin == end)
-        return;
-    for (char* p = begin; p != end; p += 0x10) {
-        if (*reinterpret_cast<void**>(p + 8) == matchValue)
-            CopyBytes(p, p + 0x10, (unsigned int)(end - (p + 0x10)));
+    SpeciesArchetype* archetype =
+        ((SpeciesArchetypeOwner*)GetGlobal15D0C24())->GetArchetype(b, c);
+
+    Global16Record* range[2];
+    Global16Record* end = g_1688910;
+    Global16Key key;
+    key.m0 = (unsigned int)a;                                // key+0x00
+    key.m4 = archetype->mField14;                            // archetype+0x14
+
+    FindRange16(range, g_168890c, end, &key, g_1688920);
+    Global16Record* first = range[0];
+    Global16Record* last  = range[1];
+    while (first != last) {
+        if (matchValue == 0 || matchValue == first->m8) {
+            Global16Record* src = first + 1;
+            Global16Record* dst = first;
+            if (src < end) {
+                do {
+                    *dst = *src;
+                    ++src;
+                    ++dst;
+                } while (src != end);
+            }
+            end = g_1688910;
+            end = end - 1;
+            g_1688910 = end;
+            FindRange16(range, g_168890c, end, &key, g_1688920);
+            first = range[0];
+            last  = range[1];
+        } else {
+            ++first;
+        }
     }
 }
 

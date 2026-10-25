@@ -257,6 +257,7 @@ void cPlanetModel::FUN_00b81a40(Vec3* out, const Vec3* dir, float a, float b)
 // =======================================================================================
 // 00b81c80 -- surface position along an arc between two directions
 // =======================================================================================
+// @ 0x00b81c80
 void cPlanetModel::FUN_00b81c80(Vec3* out, const Vec3* pa, const Vec3* pb, float s)
 {
     Vec3 va, vb;
@@ -385,6 +386,7 @@ void cPlanetModel::FUN_00b82110(Vec3* out, Vec3* pa, Vec3* pb)
 // =======================================================================================
 // 00b82310 -- surface radius of a subdivided world position
 // =======================================================================================
+// @ 0x00b82310
 long double cPlanetModel::FUN_00b82310(void* param)
 {
     int h = FUN_00b3d310();

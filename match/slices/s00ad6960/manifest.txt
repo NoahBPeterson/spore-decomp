@@ -11,3 +11,10 @@ slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad7810@CUID@@QAEXH@Z  00ad7810  /O2 /MD /
 slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad7860@CUID@@QAEXH@Z  00ad7860  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad78b0@CUID@@QAEXH@Z  00ad78b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad7900@CUID@@QAEXD@Z  00ad7900  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ad6960/s00ad6960.cpp  ?init@SimCmd@@QAEPAXXZ  00ad6b00  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad6ec0@CArgCmd2@@QAEPAXE@Z  00ad6ec0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad6f10@CArgCmd2@@QAEPAXE@Z  00ad6f10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad6f40@@YAXXZ  00ad6f40  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad7610@CUID@@QAEXH@Z  00ad7610  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad7670@CUID@@QAEXHMHHM@Z  00ad7670  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad76c0@CUID@@QAEXXZ  00ad76c0  /O2 /MD /Gy /EHsc /TP /arch:SSE

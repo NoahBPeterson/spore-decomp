@@ -35,6 +35,7 @@ extern float DAT_016881f0, DAT_016881f4, DAT_016881f8;
 // =======================================================================================
 // 00b7f5c0 -- uninitialized_copy of 0x18-byte elements through an output iterator
 // =======================================================================================
+// @ 0x00b7f5c0
 S18** FUN_00b7f5c0(S18** out, const S18* first, const S18* last, S18* dst)
 {
     *out = dst;
@@ -55,6 +56,7 @@ S18** FUN_00b7f5c0(S18** out, const S18* first, const S18* last, S18* dst)
 // =======================================================================================
 // 00b7f630 -- copy a range of 0x18-byte elements
 // =======================================================================================
+// @ 0x00b7f630
 S18* FUN_00b7f630(const S18* first, const S18* last, S18* dst)
 {
     while (first != last) {
@@ -71,6 +73,7 @@ S18* FUN_00b7f630(const S18* first, const S18* last, S18* dst)
 // =======================================================================================
 // 00b7f710 -- copy a range of 0x24-byte elements (layout A)
 // =======================================================================================
+// @ 0x00b7f710
 S24a* FUN_00b7f710(const S24a* first, const S24a* last, S24a* dst)
 {
     while (first != last) {
@@ -88,6 +91,7 @@ S24a* FUN_00b7f710(const S24a* first, const S24a* last, S24a* dst)
 // =======================================================================================
 // 00b7f780 -- uninitialized_copy of 0x24-byte elements (layout B) through an output iterator
 // =======================================================================================
+// @ 0x00b7f780
 void FUN_00b7f780(S24b** out, const S24b* first, const S24b* last, S24b* dst)
 {
     *out = dst;
@@ -111,22 +115,22 @@ void FUN_00b7f780(S24b** out, const S24b* first, const S24b* last, S24b* dst)
 // @ 0x00b7f800
 void* FUN_00b7f800(S24b* dst, unsigned count, const S24b* src)
 {
-    // The original only computes eax after the count>0 test, so a count==0 call
-    // returns the caller's incoming eax unchanged.
-    unsigned entryEax;
-    __asm { mov entryEax, eax }
-    if (count == 0)
-        return (void*)entryEax;
-    S24b* d = dst;
-    for (; count != 0; --count, ++d) {
-        if (d) {
-            d->a = src->a; d->b = src->b; d->c = src->c; d->d = src->d;
-            d->e = src->e; d->f = src->f; d->g = src->g; d->h = src->h;
-            d->i = src->i;
-        }
+    // The original only touches eax after the count>0 test, so a count==0 call hands
+    // back the caller's incoming eax unchanged; leave that path without a return.
+    if (count != 0) {
+        S24b* d = dst;
+        do {
+            if (d) {
+                d->a = src->a; d->b = src->b; d->c = src->c; d->d = src->d;
+                d->e = src->e; d->f = src->f; d->g = src->g; d->h = src->h;
+                d->i = src->i;
+            }
+            --count;
+            ++d;
+        } while (count != 0);
+        // The retail loop keeps its cursor biased to the `f` member (+0x14) in eax.
+        return (char*)d + 0x14;
     }
-    // The retail loop keeps its cursor biased to the `f` member (+0x14) in eax.
-    return (char*)d + 0x14;
 }
 
 // =======================================================================================
@@ -135,26 +139,26 @@ void* FUN_00b7f800(S24b* dst, unsigned count, const S24b* src)
 // @ 0x00b7f860
 void* FUN_00b7f860(S18* dst, unsigned count, const S18* src)
 {
-    // The original only computes eax after the count>0 test, so a count==0 call
-    // returns the caller's incoming eax unchanged.
-    unsigned entryEax;
-    __asm { mov entryEax, eax }
-    if (count == 0)
-        return (void*)entryEax;
-    S18* d = dst;
-    for (; count != 0; --count, ++d) {
-        if (d) {
-            d->a = src->a; d->b = src->b; d->c = src->c; d->d = src->d;
-            d->e = src->e; d->f = src->f; d->g = src->g;
-        }
+    // See FUN_00b7f800: void return, count==0 leaves eax untouched in the original.
+    if (count != 0) {
+        S18* d = dst;
+        do {
+            if (d) {
+                d->a = src->a; d->b = src->b; d->c = src->c; d->d = src->d;
+                d->e = src->e; d->f = src->f; d->g = src->g;
+            }
+            --count;
+            ++d;
+        } while (count != 0);
+        // The retail loop keeps its cursor biased to the `d` member (+0xc) in eax.
+        return (char*)d + 0x0c;
     }
-    // The retail loop keeps its cursor biased to the `d` member (+0xc) in eax.
-    return (char*)d + 0x0c;
 }
 
 // =======================================================================================
 // 00b7f8b0 -- copy a range of 0x24-byte elements (layout B)
 // =======================================================================================
+// @ 0x00b7f8b0
 S24b* FUN_00b7f8b0(const S24b* first, const S24b* last, S24b* dst)
 {
     while (first != last) {
@@ -177,6 +181,12 @@ struct cTerrainSphere {
     void        BuildSurfaceOrientation2(Quat* out, const Vec3& a, const Vec3& b);           // 0x00f9c660
     void        BuildPitchedSurfaceOrientation(Quat* out, const Vec3& a, const Vec3& b, float c); // 0x00f9cc50
     void        BuildSurfaceNormalOrientation(Quat* out, const Vec3& a, const Vec3& b, float c);  // 0x00f9d080
+};
+
+// Object returned by the mpISphere vtbl+0x0c accessor: it owns the terrain map at +0x0c and
+// the band/scale floats (+0x34 base, +0x38 scale, +0x3c amplitude, +0x48/+0x4c band range).
+struct cTerrainData {
+    void        FUN_00f92c20(Vec3* out, const Vec3* dir);   // 0x00f92c20 surface normal of a direction
 };
 
 struct cPlanetModel {
@@ -244,6 +254,7 @@ int cPlanetModel::FUN_ea80(const Vec3* v)
 // =======================================================================================
 // 00b7ec50 -- closest-surface radius for a direction (cached in +0x28)
 // =======================================================================================
+// @ 0x00b7ec50
 float cPlanetModel::FUN_ec50()
 {
     float out;
@@ -262,40 +273,43 @@ float cPlanetModel::FUN_ec50()
 // =======================================================================================
 // 00b7ecc0 -- sample the terrain map at a direction (cube-face UV)
 // =======================================================================================
+// @ 0x00b7ecc0
 float cPlanetModel::FUN_ecc0(const Vec3* v)
 {
-    void* s = mpISphere;
-    int m0 = ((int(__thiscall*)(void*))VTC(s, 0xc))(s);
+    int m0 = ((int(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
     void* map = *(void**)(m0 + 0xc);
     float f1 = v->x, f2 = v->y, f3 = v->z;
     float a1 = fabsf(f1), a2 = fabsf(f2), a3 = fabsf(f3);
-    float u, w;
-    if (a3 < a1 || a3 < a2) {
-        if (a2 < a1) {
-            u = (f2 / f1 + 1.0f) * 0.5f;
-            w = (f3 / a1 + 1.0f) * 0.5f;
-        } else {
-            u = (f3 / f2 + 1.0f) * 0.5f;
-            w = (f1 / a2 + 1.0f) * 0.5f;
-        }
+    // cube-face UV sample: u, v and the face index live in one 12-byte record
+    struct CubeUV { float u, v; int face; } uv;
+    if (a3 >= a1 && a3 >= a2) {
+        uv.u = (f1 / f3 + 1.0f) * 0.5f;
+        uv.v = (f2 / a3 + 1.0f) * 0.5f;
+        uv.face = (f3 < 0.0f) ? 1 : 0;
+    } else if (a2 >= a1) {
+        uv.u = (f3 / f2 + 1.0f) * 0.5f;
+        uv.v = (f1 / a2 + 1.0f) * 0.5f;
+        uv.face = (f2 < 0.0f) ? 5 : 4;
     } else {
-        u = (f1 / f3 + 1.0f) * 0.5f;
-        w = (f2 / a3 + 1.0f) * 0.5f;
+        uv.u = (f2 / f1 + 1.0f) * 0.5f;
+        uv.v = (f3 / a1 + 1.0f) * 0.5f;
+        uv.face = (f1 < 0.0f) ? 3 : 2;
     }
-    int m1 = ((int(__thiscall*)(void*))VTC(s, 0xc))(s);
+    int m1 = ((int(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
     float h = *(float*)(m1 + 0x38);
-    float r = ((cTerrainMapSet*)map)->GetFloat(&u);
+    float r = ((cTerrainMapSet*)map)->GetFloat((float*)&uv);
     return r * h;
 }
 
 // =======================================================================================
 // 00b7ee70 -- build a tangent frame at a direction (cross product of two axes)
 // =======================================================================================
+// @ 0x00b7ee70
 void cPlanetModel::FUN_ee70(Vec3* out, Vec3* in)
 {
     Vec3 n;
-    void* s = mpISphere;
-    ((void(__thiscall*)(void*, Vec3*, Vec3*))VTC(s, 0xc))(s, &n, in);
+    cTerrainData* d = (cTerrainData*)((void*(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
+    d->FUN_00f92c20(&n, in);          // surface normal of `in`
     float x = in->x, y = in->y, z = in->z;
     float inv = 1.0f / sqrtf(x * x + y * y + z * z);
     float nx = n.x, ny = n.y, nz = n.z;
@@ -310,6 +324,7 @@ void cPlanetModel::FUN_ee70(Vec3* out, Vec3* in)
 // =======================================================================================
 // 00b7ef70 -- surface radius at a direction
 // =======================================================================================
+// @ 0x00b7ef70
 float cPlanetModel::GetRadiusAt(unsigned coords)
 {
     if (mpSphere) {
@@ -331,6 +346,7 @@ float cPlanetModel::GetRadiusAt(unsigned coords)
 // =======================================================================================
 // 00b7efe0 -- radius clamped up to the terrain surface
 // =======================================================================================
+// @ 0x00b7efe0
 float cPlanetModel::FUN_efe0(float p)
 {
     float r = GetRadiusAt(*(unsigned*)&p);
@@ -356,6 +372,7 @@ float cPlanetModel::FUN_efe0(float p)
 // =======================================================================================
 // 00b7f060 -- sample position + surface normal against the terrain band
 // =======================================================================================
+// @ 0x00b7f060
 void cPlanetModel::FUN_f060(Vec3* out, const Vec3* v, float* frac)
 {
     void* s = mpISphere;
@@ -367,7 +384,7 @@ void cPlanetModel::FUN_f060(Vec3* out, const Vec3* v, float* frac)
         *frac = (r - lo) / (hi - lo);
         Vec3 n;
         FUN_ee70(&n, (Vec3*)v);
-        float inv = 1.0f / sqrtf(n.x * n.x + n.y * n.y + n.z * n.z + 1e-08f);
+        float inv = 1.0f / sqrtf(n.x * n.x + n.z * n.z + n.y * n.y + 1e-08f);
         out->x = -(inv * n.x);
         out->y = -(inv * n.y);
         out->z = -(inv * n.z);
@@ -381,6 +398,7 @@ void cPlanetModel::FUN_f060(Vec3* out, const Vec3* v, float* frac)
 // =======================================================================================
 // 00b7f190 -- BuildSurfaceOrientation (virtual, 1-arg form)
 // =======================================================================================
+// @ 0x00b7f190
 Quat* cPlanetModel::BuildSurfaceOrientation(Quat* out, const Vec3* a)
 {
     if (mpISphere) {
@@ -398,6 +416,7 @@ Quat* cPlanetModel::BuildSurfaceOrientation(Quat* out, const Vec3* a)
 // =======================================================================================
 // 00b7f1f0 -- cTerrainSphere::BuildSurfaceOrientation
 // =======================================================================================
+// @ 0x00b7f1f0
 Quat* cPlanetModel::BuildSurfaceOrientation_2(Quat* out, const Vec3* a, const Vec3* b)
 {
     if (mpISphere) {
@@ -414,6 +433,7 @@ Quat* cPlanetModel::BuildSurfaceOrientation_2(Quat* out, const Vec3* a, const Ve
 // =======================================================================================
 // 00b7f250 -- cTerrainSphere::BuildSurfaceOrientation2
 // =======================================================================================
+// @ 0x00b7f250
 Quat* cPlanetModel::BuildSurfaceOrientation2(Quat* out, const Vec3* a, const Vec3* b)
 {
     if (mpISphere) {
@@ -430,6 +450,7 @@ Quat* cPlanetModel::BuildSurfaceOrientation2(Quat* out, const Vec3* a, const Vec
 // =======================================================================================
 // 00b7f2b0 -- cTerrainSphere::BuildPitchedSurfaceOrientation
 // =======================================================================================
+// @ 0x00b7f2b0
 Quat* cPlanetModel::BuildPitchedSurfaceOrientation(Quat* out, const Vec3* a, const Vec3* b, float c)
 {
     if (mpISphere) {
@@ -446,6 +467,7 @@ Quat* cPlanetModel::BuildPitchedSurfaceOrientation(Quat* out, const Vec3* a, con
 // =======================================================================================
 // 00b7f320 -- cTerrainSphere::BuildSurfaceNormalOrientation
 // =======================================================================================
+// @ 0x00b7f320
 Quat* cPlanetModel::BuildSurfaceNormalOrientation(Quat* out, const Vec3* a, const Vec3* b, float c)
 {
     if (mpISphere) {
@@ -462,6 +484,7 @@ Quat* cPlanetModel::BuildSurfaceNormalOrientation(Quat* out, const Vec3* a, cons
 // =======================================================================================
 // 00b7f390 -- selection-type setter; drops the cached sphere on a usable transition
 // =======================================================================================
+// @ 0x00b7f390
 void cPlanetModel::FUN_f390(int v)
 {
     if (fec != v) {
@@ -479,6 +502,7 @@ void cPlanetModel::FUN_f390(int v)
 // =======================================================================================
 // 00b7f510 -- rehash the bucket array
 // =======================================================================================
+// @ 0x00b7f510
 void cPlanetModel::FUN_f510(unsigned n)
 {
     int table = FUN_00b7f4a0(n);

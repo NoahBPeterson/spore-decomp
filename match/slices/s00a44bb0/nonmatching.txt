@@ -4,3 +4,7 @@
 00a44f70  4    complete; hashtable find + iterator erase(it) (sret), frame 0x10 vs 0x8; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
 00a450c0  48   complete; fixed-string SSO ctor (128-byte buffer), EH frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (100% cov)
 00a458b0  259  complete; socket send path (strchr/atol/IPAddress::LookupName/0x1c send), register schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (19.5% cov)
+00a44e80  205  complete; hashtable find + empty-slot test + primitive-record build/insert (14.285714f/0 f32 fields), register schedule and stack frame differ; size 137 vs 226. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (95.2% cov)
+00a44fc0  208  complete; EASTL fixed_pool_base::init over this+0x8c + hashtable ctor (7 thiscall args) + prime_rehash_policy::GetBucketCount(m0c) with erase when m08 < n; EH frame and register schedule differ; size 198 vs 250. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (95.8% cov)
+00a45130  1031  complete; cSystem audio build-up (InitAT, resource-manager 0x38 query, symbol-list loop, cEmitterSndPlayer, event modifier Init, emitter map registrations, voice-manager/socket setup); inline scheduling differs; size 1015 vs 1233. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (221 valid, 6.4% cov)
+00a45780  229  complete; DoCommandMainThread cEapdMessage dispatch over command type, register schedule differs; size 290 vs 294. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (399 valid, 20.4% cov)

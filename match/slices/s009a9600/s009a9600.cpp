@@ -11,8 +11,6 @@ struct S9ac2a0 { void f(); };
 struct S9ae1c0 { void f(); };
 struct S99c970 { void f(); };
 struct S9ac2b0 { float f(); };
-struct S9ae350 { void f(); };
-extern void __stdcall FUN_009ae350(int, int, int, int);
 
 extern "C" __declspec(dllimport) unsigned long __stdcall
 GetFullPathNameA(const char*, unsigned long, char*, char**);
@@ -50,16 +48,239 @@ void S9a9640::f() {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x009a9680  (668 bytes; skeleton)
+// EASTL containers owned by cSPUILayoutManager: rbtree (0x1c) and vector (0x14).
 // ---------------------------------------------------------------------------
-struct S9a9680 { void f(); };
-void S9a9680::f() {}
+struct RbNodeBase {
+  RbNodeBase* mpNodeRight;              // +0x00
+  RbNodeBase* mpNodeLeft;               // +0x04
+  RbNodeBase* mpNodeParent;             // +0x08
+  char        mColor;                   // +0x0c
+};
+template<class V> struct RbNode : RbNodeBase { V mValue; };
+struct EmptyLess {};
+struct EmptyAlloc {};
+
+template<class V>
+struct RbTree {                         // 0x1c bytes
+  EmptyLess  mCompare;                  // +0x00
+  RbNodeBase mAnchor;                   // +0x04
+  unsigned   mnSize;                    // +0x14
+  EmptyAlloc mAllocator;                // +0x18
+  RbTree() : mAnchor() {
+    mAnchor.mpNodeRight = &mAnchor;
+    mAnchor.mpNodeLeft = &mAnchor;
+    mAnchor.mpNodeParent = 0;
+    mAnchor.mColor = 0;
+    mnSize = 0;
+  }
+};
+
+template<class T>
+struct SpVector {                       // 0x14 bytes
+  T*       mpBegin;                     // +0x00
+  T*       mpEnd;                       // +0x04
+  T*       mpCapacity;                  // +0x08
+  unsigned mAllocator[2];               // +0x0c (empty named allocator)
+  SpVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+};
+
+// Node values: a key at +0x10 followed by one pointer payload at +0x14.
+struct PayloadPtr { unsigned mKey; void* mpValue; };
+struct PayloadVec { unsigned mKey; SpVector<int>* mpValue; };
+
+// Element of mpVec2: a string with a one-byte inline buffer (0x14 bytes).
+struct AnimString {
+  char*    mpBegin;                     // +0x00
+  char*    mpEnd;                       // +0x04
+  char*    mpCapacity;                  // +0x08
+  unsigned mAllocator[2];               // +0x0c
+};
+
+extern void* __cdecl FUN_f473a0(unsigned size, const char* name, int flags, unsigned debugFlags,
+                                const char* file, int line);
+inline void* operator new(unsigned size, const char* pName, int flags, unsigned debugFlags,
+                          const char* file, int line) {
+  return FUN_f473a0(size, pName, flags, debugFlags, file, line);
+}
+
+extern void __cdecl FUN_9cabb0(void* p);        // delete element (dtor + free)
+extern bool __cdecl FUN_9feb30();
+void* __cdecl FUN_921580(void* node);           // eastl::RBTreeIncrement
+
+struct S9a3c40 { void f(void* node); };         // rbtree<...cWorld>::DoNukeSubtree
+struct S9a3c80 { void f(void* node); };         // second rbtree instantiation
+struct S9e1710 { void f(); };                   // node payload destructor
+struct S5d9320 { void FUN_5d9320(void* node); };
+struct S9ab880 { void FUN_9ab880(); };          // baked_anim_manager::Reset (jmp thunk)
+struct S9abce0 { void FUN_9abce0(); };          // baked_anim_manager destructor
+struct Sc2e4e0 { void f(); };
+struct S9ab430 { void* f(); };                  // baked_anim_manager constructor (returns this)
+
+struct cSPUILayoutManager {
+  RbTree<int>*         mpTree0;         // +0x00  rbtree<unsigned, pair<const unsigned, cWorld>>
+  RbTree<int>*         mpTree1;         // +0x04  second rbtree instantiation
+  int                  mn08;            // +0x08
+  SpVector<char*>*     mpVec0;          // +0x0c
+  SpVector<char*>*     mpVec1;          // +0x10
+  RbTree<PayloadPtr>*  mpTree2;         // +0x14
+  SpVector<AnimString>* mpVec2;         // +0x18
+  RbTree<int>*         mpTree3;         // +0x1c
+  RbTree<PayloadVec>*  mpTree4;         // +0x20
+  SpVector<int>*       mpVec3;          // +0x24
+  RbTree<int>*         mpTree5;         // +0x28
+  void*                mpMgr;           // +0x2c  baked_anim_manager
+  bool                 mbInitialized;   // +0x30
+  bool Init();
+  void Shutdown();
+};
 
 // ---------------------------------------------------------------------------
-// @ 0x009a9920  (591 bytes; skeleton)
+// @ 0x009a9680  cSPUILayoutManager::Shutdown
 // ---------------------------------------------------------------------------
-struct S9a9920 { void f(); };
-void S9a9920::f() {}
+void cSPUILayoutManager::Shutdown() {
+  if (!mbInitialized) return;
+  if (mpTree0) {
+    ((S9a3c40*)mpTree0)->f(mpTree0->mAnchor.mpNodeParent);
+    FUN_f47380(mpTree0);
+  }
+  mpTree0 = 0;
+  if (mpTree1) {
+    ((S9a3c80*)mpTree1)->f(mpTree1->mAnchor.mpNodeParent);
+    FUN_f47380(mpTree1);
+  }
+  mpTree1 = 0;
+  if (mpVec0) {
+    ((S9a9640*)mpVec0)->f();
+    FUN_f47380(mpVec0);
+  }
+  mpVec0 = 0;
+  for (unsigned i = 0; i < mpVec1->size(); ++i) FUN_9cabb0(mpVec1->mpBegin[i]);
+  if (mpVec1) {
+    if (mpVec1->mpBegin && ((int*)mpVec1->mpBegin)[-1]) FUN_f47380(mpVec1->mpBegin);
+    FUN_f47380(mpVec1);
+  }
+  mpVec1 = 0;
+  {
+    RbTree<PayloadPtr>* t = mpTree2;
+    RbNodeBase* end = &t->mAnchor;
+    for (RbNodeBase* n = t->mAnchor.mpNodeLeft; n != end; n = (RbNodeBase*)FUN_921580(n)) {
+      void* p = ((RbNode<PayloadPtr>*)n)->mValue.mpValue;
+      if (p) {
+        ((S9e1710*)p)->f();
+        FUN_f47380(p);
+      }
+    }
+    if (t) {
+      RbNode<PayloadPtr>* q = (RbNode<PayloadPtr>*)t->mAnchor.mpNodeParent;
+      while (q) {
+        ((S9a9600*)t)->f(q->mpNodeRight);
+        RbNode<PayloadPtr>* next = (RbNode<PayloadPtr>*)q->mpNodeLeft;
+        FUN_f47380(q);
+        q = next;
+      }
+      FUN_f47380(t);
+    }
+  }
+  mpTree2 = 0;
+  {
+    SpVector<AnimString>* v = mpVec2;
+    if (v) {
+      AnimString* const end = v->mpEnd;
+      for (AnimString* p = v->mpBegin; p < end; ++p)
+        if (p->mpCapacity - p->mpBegin > 1 && p->mpBegin) FUN_f47380(p->mpBegin);
+      if (v->mpBegin && ((int*)v->mpBegin)[-1]) FUN_f47380(v->mpBegin);
+      FUN_f47380(v);
+    }
+  }
+  mpVec2 = 0;
+  {
+    RbTree<int>* t = mpTree3;
+    if (t) {
+      RbNode<int>* q = (RbNode<int>*)t->mAnchor.mpNodeParent;
+      while (q) {
+        ((S9a9600*)t)->f(q->mpNodeRight);
+        RbNode<int>* next = (RbNode<int>*)q->mpNodeLeft;
+        FUN_f47380(q);
+        q = next;
+      }
+      FUN_f47380(t);
+    }
+  }
+  mpTree3 = 0;
+  {
+    RbTree<PayloadVec>* t = mpTree4;
+    RbNodeBase* end = &t->mAnchor;
+    for (RbNodeBase* n = t->mAnchor.mpNodeLeft; n != end; n = (RbNodeBase*)FUN_921580(n)) {
+      SpVector<int>* p = ((RbNode<PayloadVec>*)n)->mValue.mpValue;
+      if (p) {
+        if (p->mpBegin && ((int*)p->mpBegin)[-1]) FUN_f47380(p->mpBegin);
+        FUN_f47380(p);
+      }
+    }
+    if (t) {
+      RbNode<PayloadVec>* q = (RbNode<PayloadVec>*)t->mAnchor.mpNodeParent;
+      while (q) {
+        ((S9a9600*)t)->f(q->mpNodeRight);
+        RbNode<PayloadVec>* next = (RbNode<PayloadVec>*)q->mpNodeLeft;
+        FUN_f47380(q);
+        q = next;
+      }
+      FUN_f47380(t);
+    }
+  }
+  mpTree4 = 0;
+  {
+    SpVector<int>* v = mpVec3;
+    if (v) {
+      if (v->mpBegin && ((int*)v->mpBegin)[-1]) FUN_f47380(v->mpBegin);
+      FUN_f47380(v);
+    }
+  }
+  mpVec3 = 0;
+  {
+    RbTree<int>* t = mpTree5;
+    if (t) {
+      ((S5d9320*)t)->FUN_5d9320(t->mAnchor.mpNodeParent);
+      FUN_f47380(t);
+    }
+  }
+  mpTree5 = 0;
+  ((S9ab880*)mpMgr)->FUN_9ab880();
+  if (mpMgr) {
+    ((S9abce0*)mpMgr)->FUN_9abce0();
+    FUN_f47380(mpMgr);
+  }
+  mpMgr = 0;
+  mbInitialized = false;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x009a9920  cSPUILayoutManager::Init
+// ---------------------------------------------------------------------------
+bool cSPUILayoutManager::Init() {
+  if (mbInitialized) return true;
+  mpTree0 = new ("Anim/globals", 0, 0, 0, 0) RbTree<int>();
+  mn08 = 0;
+  mpTree1 = new ("Anim/globals", 0, 0, 0, 0) RbTree<int>();
+  mpVec0 = new ("Anim/globals", 0, 0, 0, 0) SpVector<char*>();
+  mpVec1 = new ("Anim/globals", 0, 0, 0, 0) SpVector<char*>();
+  mpTree2 = new ("Anim/globals", 0, 0, 0, 0) RbTree<PayloadPtr>();
+  mpVec2 = new ("Anim/globals", 0, 0, 0, 0) SpVector<AnimString>();
+  mpTree3 = new ("Anim/globals", 0, 0, 0, 0) RbTree<int>();
+  mpTree4 = new ("Anim/globals", 0, 0, 0, 0) RbTree<PayloadVec>();
+  mpVec3 = new ("Anim/globals", 0, 0, 0, 0) SpVector<int>();
+  mpTree5 = new ("Anim/globals", 0, 0, 0, 0) RbTree<int>();
+  S9ab430* mgr = (S9ab430*)FUN_f473a0(0x4c, "Anim/globals", 0, 0, 0, 0);
+  mpMgr = mgr ? mgr->f() : 0;
+  ((Sc2e4e0*)mpMgr)->f();
+  mbInitialized = true;
+  if (!FUN_9feb30()) {
+    Shutdown();
+    return false;
+  }
+  return true;
+}
 
 // ---------------------------------------------------------------------------
 // @ 0x009a9b70  GetFullPathNameA wrapper
@@ -207,18 +428,36 @@ void FUN_009a9c00(CreatureAnim* c, AnimState* a, float t) {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x009aa3a0  scale/seek helper (x87; approximate)
+// @ 0x009aa3a0  seek a baked animation to frame `n` (normalized time)
 // ---------------------------------------------------------------------------
-struct S9aa3a0 { void f(int, int, int*, int); };
-void S9aa3a0::f(int a, int b, int* p3, int p4) {
-  unsigned n = (*p3 == 0) ? 0 : *(unsigned*)(*p3 + 0x10);
-  float sc = ((S9ac2b0*)(size_t)p3)->f();
+namespace nSPCreatureAnim {
+struct baked_animation_data {
+  char     pad_00[0x0c];
+  uint32_t mElementCount;               // +0x0c  entries per frame
+  uint32_t mFrameCount;                 // +0x10
+  float    mScale;                      // +0x14
+  char     pad_18[0x20];
+};
+struct baked_animation {
+  baked_animation_data* mpData;         // +0x00
+  uint32_t field_04;                    // +0x04
+  uint32_t mID;                         // +0x08
+  char     mName[0x104];                // +0x0c
+  int      field_110;                   // +0x110
+  float GetScale() const;               // 0x009AC2B0
+};
+}  // namespace nSPCreatureAnim
+
+struct S9ae350 { void f(int n, float t, void* o, void* p2); };   // 0x009AE350
+
+void __cdecl F9aa3a0(void* o, void* p2, nSPCreatureAnim::baked_animation* b, unsigned n) {
+  unsigned count = b->mpData ? b->mpData->mFrameCount : 0;
+  float scale = b->GetScale();
   float frac;
-  if (n < 2) frac = 0.0f;
-  else frac = ((float)p4 * sc) / (float)(n - 1);
-  int fi = (int)frac;
-  FUN_009a9c00((CreatureAnim*)(size_t)a, (AnimState*)(size_t)b, frac);
-  FUN_009ae350(p4, fi, a, b);
+  if (count <= 1) frac = 0.0f;
+  else frac = (float)n * scale / (float)(count - 1);
+  FUN_009a9c00((CreatureAnim*)o, (AnimState*)p2, frac);
+  ((S9ae350*)b)->f((int)n, frac, o, p2);
 }
 
 // ---------------------------------------------------------------------------

@@ -45,6 +45,7 @@ extern "C" void  __cdecl RemoveHandler(int, int, int, int, int);                
 extern "C" void  __cdecl RBTreeErase(void* node, void* anchor);                            // 0x00921880
 extern "C" void* __cdecl RBTreeIncrement(void* node);                                      // 0x00921580
 extern "C" void* __cdecl PropertyManager(void);                                            // 0x0067de30
+extern "C" void* __cdecl EffectsManagerPtr(void);                                          // 0x0067ddd0
 extern "C" void* __cdecl GetServer(void);                                                  // 0x00883860
 extern "C" void  __cdecl GetPropertyAsKeyInstance(unsigned int key, void* obj, void* out); // 0x006a12a0
 extern "C" void* __stdcall NounManager(void* noun);                                        // 0x00b3d300
@@ -56,12 +57,18 @@ extern "C" void  __cdecl FUN_00b2acd0(void* src, void* pos, void* dst);         
 extern "C" void  __cdecl FUN_00ff3810(void* obj, float a, float b);                        // 0x00ff3810
 
 extern "C" int g_id_1568d3c;  // 0x01568d3c
+extern "C" float g_f1471064;  // 0x01471064
 
 // ---- virtual dispatch helpers ----------------------------------------------
 struct RCObj { virtual void AddRef(); virtual void Release(); };
 inline void AddRef(void* o) { if (o) ((RCObj*)o)->AddRef(); }
 inline void Release(void* o) { if (o) ((RCObj*)o)->Release(); }
 inline void* VFn(void* o, int byteoff) { return (*(void***)o)[byteoff / 4]; }
+typedef void (__thiscall *TC_vi)(void*, void*, int);
+typedef void (__thiscall *TC_vpii)(void*, void*, int, void*);
+typedef void (__thiscall *TC_vff)(void*, void*, float, float);
+typedef void (__thiscall *TC_vpi)(void*, unsigned int, void*);
+typedef char (__thiscall *TC_cpvp)(void*, void*, unsigned int, void*);
 
 struct RBNode { RBNode* pxRight; RBNode* pxLeft; RBNode* pxParent; int mColor; };
 
@@ -79,7 +86,7 @@ struct S {
   void  FUN_00b2d0f0();
   void* FUN_00b2d160(void* param);
   void  FUN_00b2d250(char* pos, char* value);
-  void* FUN_00b2d480(int* param_1);
+  void* FUN_00b2d480();
   void  FUN_00b2d660();
   void  FUN_00b2d7c0(unsigned a, unsigned b, void* param4);
   void  FUN_00b2d870(float* pos, float radius);
@@ -192,56 +199,106 @@ void S::FUN_00b2cd90() {
 
   int vec[3] = { 0, 0, 0 };
   void* pm = PropertyManager();
-  ((void(__fastcall*)(void*, int, int, void*))VFn(pm, 0x48))(pm, 0, g_id_1568d3c, vec);
+  ((TC_vpi)(*(void***)pm)[0x48 / 4])(pm, (unsigned int)g_id_1568d3c, vec);
   int count = (vec[1] - vec[0]) >> 2;
+  char* vbegin = (char*)vec[0];
+  void* cur = 0;
   for (int i = 0; i < count; i++) {
     pm = PropertyManager();
-    void* out = 0;
-    char ok = (char)((int(__fastcall*)(void*, int, void*, int, void*))VFn(pm, 0x2c))(pm, 0, *(void**)(vec[0] + i * 4), g_id_1568d3c, &out);
+    if (cur) {
+      void* c = cur;
+      cur = 0;
+      ((RCObj*)c)->Release();
+    }
+    void* obj = *(void**)(vbegin + i * 4);
+    char ok = ((TC_cpvp)(*(void***)pm)[0x2c / 4])(pm, obj, (unsigned int)g_id_1568d3c, &cur);
     if (ok) {
-      char elem[0x24];
-      *(void**)elem = (void*)0x145fd88;
-      *(void**)(elem + 4) = 0; *(void**)(elem + 8) = 0; *(void**)(elem + 0xc) = 0;
-      *(float*)(elem + 0x10) = 0.0f; *(float*)(elem + 0x14) = 0.0f; *(float*)(elem + 0x18) = 0.0f;
-      *(void**)(elem + 0x1c) = 0; *(void**)(elem + 0x20) = 0;
+      unsigned char elem[0x24];
+      *(void**)(elem + 0x00) = (void*)0x145fd88;
+      *(void**)(elem + 0x04) = 0;
+      *(void**)(elem + 0x08) = 0;
+      *(void**)(elem + 0x0c) = 0;
+      *(float*)(elem + 0x10) = 0.0f;
+      *(float*)(elem + 0x14) = 0.0f;
+      *(float*)(elem + 0x18) = 0.0f;
+      *(void**)(elem + 0x1c) = 0;
+      *(void**)(elem + 0x20) = 0;
 
-      void* obj = *(void**)(vec[0] + i * 4);
-      int sub = 0;
-      if (obj) {
-        char b = (char)((int(__fastcall*)(void*, int, int*, unsigned int))VFn(obj, 0x24))(obj, 0, &sub, 0x254cf89u);
-        if (b && *(unsigned short*)(sub + 0x12) == 0xd) {
-          void* d = (*(unsigned char*)(sub + 0x10) & 0x30) ? *(void**)sub : (void*)sub;
+      if (cur) {
+        void* tmp = 0;
+        if (((TC_cpvp)(*(void***)cur)[0x24 / 4])(cur, 0, 0x254cf89u, &tmp)
+            && *(unsigned short*)((char*)tmp + 0x12) == 0xd) {
+          void* d = (*(unsigned char*)((char*)tmp + 0x10) & 0x30) ? *(void**)tmp : tmp;
           *(float*)(elem + 0x10) = *(float*)d;
         }
-        sub = 0;
-        b = (char)((int(__fastcall*)(void*, int, int*, unsigned int))VFn(obj, 0x24))(obj, 0, &sub, 0x254cf8fu);
-        if (b && *(unsigned short*)(sub + 0x12) == 0xd) {
-          void* d = (*(unsigned char*)(sub + 0x10) & 0x30) ? *(void**)sub : (void*)sub;
-          *(float*)(elem + 0x14) = *(float*)d;
+        if (cur) {
+          if (((TC_cpvp)(*(void***)cur)[0x24 / 4])(cur, 0, 0x254cf8fu, &tmp)
+              && *(unsigned short*)((char*)tmp + 0x12) == 0xd) {
+            void* d = (*(unsigned char*)((char*)tmp + 0x10) & 0x30) ? *(void**)tmp : tmp;
+            *(float*)(elem + 0x14) = *(float*)d;
+          }
+          if (cur) {
+            if (((TC_cpvp)(*(void***)cur)[0x24 / 4])(cur, 0, 0x254cf97u, &tmp)
+                && *(unsigned short*)((char*)tmp + 0x12) == 0xd) {
+              void* d = (*(unsigned char*)((char*)tmp + 0x10) & 0x30) ? *(void**)tmp : tmp;
+              *(float*)(elem + 0x18) = *(float*)d;
+            }
+          }
         }
-        sub = 0;
-        b = (char)((int(__fastcall*)(void*, int, int*, unsigned int))VFn(obj, 0x24))(obj, 0, &sub, 0x254cf97u);
-        if (b && *(unsigned short*)(sub + 0x12) == 0xd) {
-          void* d = (*(unsigned char*)(sub + 0x10) & 0x30) ? *(void**)sub : (void*)sub;
-          *(float*)(elem + 0x18) = *(float*)d;
-        }
-      }
-      GetPropertyAsKeyInstance(0x279a9c8u, obj, elem + 0x1c);
-      if (*(int*)(elem + 0x1c) == 0x2ebcd6a6) *(int*)(elem + 0x1c) = 0;
-      GetPropertyAsKeyInstance(0xf9efbbu, obj, elem + 0x04);
-      GetPropertyAsKeyInstance(0xf9efbcu, obj, elem + 0x08);
-      GetPropertyAsKeyInstance(0xf9efbdu, obj, elem + 0x0c);
+        GetPropertyAsKeyInstance(0x279a9c8u, cur, elem + 0x1c);
+        if (*(int*)(elem + 0x1c) == 0x2ebcd6a6) *(int*)(elem + 0x1c) = 0;
 
-      char* vend = *(char**)(base + 0x180);
-      char* vcap = *(char**)(base + 0x184);
-      if (vend < vcap) {
-        if (vend) CopyBytes(vend, elem, 0x24);
-        *(char**)(base + 0x180) = vend + 0x24;
-      } else {
-        ((E*)(base + 0x17c))->c300(vend, elem);
+        {
+          void* tmp = 0;
+          if (cur && ((TC_cpvp)(*(void***)cur)[0x24 / 4])(cur, 0, 0x37575e5u, &tmp)
+              && *(unsigned short*)((char*)tmp + 0x12) == 1) {
+            void* d = (*(unsigned char*)((char*)tmp + 0x10) & 0x30) ? *(void**)tmp : tmp;
+            if (*(unsigned char*)d != 0) *(unsigned int*)(elem + 0x20) |= 1u;
+            else *(unsigned int*)(elem + 0x20) &= ~1u;
+          } else {
+            *(unsigned int*)(elem + 0x20) &= ~1u;
+          }
+        }
+        {
+          void* tmp = 0;
+          if (cur && ((TC_cpvp)(*(void***)cur)[0x24 / 4])(cur, 0, 0x37575ebu, &tmp)
+              && *(unsigned short*)((char*)tmp + 0x12) == 1) {
+            void* d = (*(unsigned char*)((char*)tmp + 0x10) & 0x30) ? *(void**)tmp : tmp;
+            if (*(unsigned char*)d != 0) *(unsigned int*)(elem + 0x20) |= 2u;
+            else *(unsigned int*)(elem + 0x20) &= ~2u;
+          } else {
+            *(unsigned int*)(elem + 0x20) &= ~2u;
+          }
+        }
+
+        GetPropertyAsKeyInstance(0xf9efbbu, cur, elem + 0x04);
+        if (*(int*)(elem + 0x04) == 0x2ebcd6a6) *(int*)(elem + 0x04) = 0;
+        GetPropertyAsKeyInstance(0xf9efbcu, cur, elem + 0x08);
+        if (*(int*)(elem + 0x08) == 0x2ebcd6a6) *(int*)(elem + 0x08) = 0;
+        GetPropertyAsKeyInstance(0xf9efbdu, cur, elem + 0x0c);
+        if (*(int*)(elem + 0x0c) == 0x2ebcd6a6) *(int*)(elem + 0x0c) = 0;
+
+        char* vend = *(char**)(base + 0x180);
+        char* vcap = *(char**)(base + 0x184);
+        if (vend < vcap) {
+          *(char**)(base + 0x180) = vend + 0x24;
+          *(void**)(vend + 0x00) = *(void**)(elem + 0x00);
+          *(void**)(vend + 0x20) = 0;
+          *(void**)(vend + 0x04) = *(void**)(elem + 0x04);
+          *(void**)(vend + 0x08) = *(void**)(elem + 0x08);
+          *(void**)(vend + 0x0c) = *(void**)(elem + 0x0c);
+          *(float*)(vend + 0x10) = *(float*)(elem + 0x10);
+          *(float*)(vend + 0x14) = *(float*)(elem + 0x14);
+          *(float*)(vend + 0x18) = *(float*)(elem + 0x18);
+          *(void**)(vend + 0x1c) = *(void**)(elem + 0x1c);
+          *(void**)(vend + 0x20) = *(void**)(elem + 0x20);
+        } else {
+          ((E*)(base + 0x17c))->c300(vend, elem);
+        }
       }
     }
   }
+  if (cur) ((RCObj*)cur)->Release();
   if (vec[0] && *(int*)((char*)vec[0] - 4) != 0) EastlDelete((void*)vec[0]);
 }
 
@@ -292,18 +349,18 @@ void* S::FUN_00b2d160(void* param) {
 // ---------------------------------------------------------------------------
 void S::FUN_00b2d250(char* pos, char* value) {
   char* base = (char*)this;
-  char* begin = *(char**)(base + 0);
   char* end = *(char**)(base + 4);
   char* cap = *(char**)(base + 8);
   if (end != cap) {
     char* v = value;
     if (pos <= value && value < end) v = value + 0x18;
-    if (end) ((E*)this)->aff0(end - 0x18);
+    if (end) ((E*)end)->aff0(end - 0x18);
     FUN_00b2ba70(pos, end - 0x18, end);
     ((E*)pos)->b040(v);
-    *(char**)(base + 4) = end + 0x18;
+    *(char**)(base + 4) += 0x18;
     return;
   }
+  char* begin = *(char**)(base + 0);
   int n = (int)((end - begin) / 0x18);
   int newcap;
   char* buf;
@@ -317,7 +374,7 @@ void S::FUN_00b2d250(char* pos, char* value) {
 have:
   char* p1 = (char*)FUN_00b2b7c0(begin, pos, buf);
   FUN_00b2acd0(begin, pos, buf);
-  if (p1) ((E*)this)->aff0(value);
+  if (p1) ((E*)p1)->aff0(value);
   char* endp = *(char**)(base + 4);
   char* p2 = (char*)FUN_00b2b7c0(pos, endp, p1 + 0x18);
   FUN_00b2acd0(pos, endp, p1 + 0x18);
@@ -330,38 +387,85 @@ have:
 // ---------------------------------------------------------------------------
 // @ 0x00b2d480 — big object constructor
 // ---------------------------------------------------------------------------
-void* S::FUN_00b2d480(int* param_1) {
-  *param_1 = (int)0x13eb384;
-  ((E*)(param_1 + 1))->gonzagoCtor();
-  *param_1 = (int)0x145fdf8;
-  param_1[1] = (int)0x145fda8;
-  param_1[2] = (int)0x145fda0;
-  param_1[8] = 0; param_1[9] = 0; param_1[10] = 0; param_1[0xb] = 0; param_1[0xc] = 0;
-  *(char*)(param_1 + 0xd) = 0;
-  param_1[0xe] = 0;
-  param_1[0xf] = 0; param_1[0x10] = 0; param_1[0x11] = 0; param_1[0x12] = 0; param_1[0x13] = 0;
-  param_1[0x18] = 0; param_1[0x19] = 0; param_1[0x1a] = 0;
-  param_1[0x1f] = 0; param_1[0x20] = 0; param_1[0x21] = 0;
-  param_1[0x26] = 0; param_1[0x27] = 0; param_1[0x28] = 0;
-  param_1[0x2d] = 0; param_1[0x2e] = 0; param_1[0x2f] = 0;
-  param_1[0x34] = 0; param_1[0x35] = 0; param_1[0x36] = 0;
-  param_1[0x3b] = 0; param_1[0x3c] = 0; param_1[0x3d] = 0;
-  param_1[0x42] = 0; param_1[0x43] = 0; param_1[0x44] = 0;
-  param_1[0x49] = 0; param_1[0x4a] = 0; param_1[0x4b] = 0;
-  param_1[0x50] = 0; param_1[0x51] = 0; param_1[0x52] = 0; param_1[0x53] = 0; param_1[0x54] = 0;
-  param_1[0x55] = 5;
-  param_1[0x56] = -1;
-  param_1[0x57] = 0; param_1[0x58] = 0; param_1[0x59] = 0;
-  int* p = param_1 + 0x5c; *p = (int)p; param_1[0x5d] = (int)p;
-  param_1[0x5f] = 0; param_1[0x60] = 0; param_1[0x61] = 0;
-  param_1[0x66] = 0; param_1[0x67] = 0; param_1[0x68] = 0;
-  p = param_1 + 0x65; *p = (int)p; param_1[0x66] = (int)p; param_1[0x67] = 0; *(char*)(param_1 + 0x68) = 0; param_1[0x69] = 0;
-  p = param_1 + 0x6c; param_1[0x6d] = 0; param_1[0x6e] = 0; param_1[0x6f] = 0;
-  *p = (int)p; param_1[0x6d] = (int)p; param_1[0x6e] = 0; *(char*)(param_1 + 0x6f) = 0; param_1[0x70] = 0;
-  p = param_1 + 0x73; param_1[0x74] = 0; param_1[0x75] = 0; param_1[0x76] = 0;
-  *p = (int)p; param_1[0x74] = (int)p; param_1[0x75] = 0; *(char*)(param_1 + 0x76) = 0; param_1[0x77] = 0;
-  EastlNewArray(param_1 + 0x11, 0, 0xfc);
-  return param_1;
+void* S::FUN_00b2d480() {
+  char* base = (char*)this;
+  *(void**)(base + 0x00) = (void*)0x13eb384;
+  ((E*)(base + 4))->gonzagoCtor();
+  *(void**)(base + 0x00) = (void*)0x145fdf8;
+  *(void**)(base + 0x04) = (void*)0x145fda8;
+  *(void**)(base + 0x08) = (void*)0x145fda0;
+
+  *(void**)(base + 0x20) = 0;
+  *(void**)(base + 0x28) = 0;
+  *(void**)(base + 0x2c) = 0;
+  *(void**)(base + 0x30) = 0;
+  *(unsigned char*)(base + 0x34) = 0;
+  *(void**)(base + 0x38) = 0;
+  *(float*)(base + 0x24) = 0.0f;
+  *(void**)(base + 0x3c) = 0;
+  *(void**)(base + 0x40) = 0;
+
+  int* p = (int*)(base + 0x44);
+  p[0] = 0; p[1] = 0; p[2] = 0;
+  p[7] = 0; p[8] = 0; p[9] = 0;
+  p[0xe] = 0; p[0xf] = 0; p[0x10] = 0;
+  p[0x15] = 0; p[0x16] = 0; p[0x17] = 0;
+  p[0x1c] = 0; p[0x1d] = 0; p[0x1e] = 0;
+  p[0x23] = 0; p[0x24] = 0; p[0x25] = 0;
+  p[0x2a] = 0; p[0x2b] = 0; p[0x2c] = 0;
+  p[0x31] = 0; p[0x32] = 0; p[0x33] = 0;
+  p[0x38] = 0; p[0x39] = 0; p[0x3a] = 0;
+
+  *(void**)(base + 0x140) = 0;
+  *(void**)(base + 0x144) = 0;
+  *(void**)(base + 0x148) = 0;
+  *(void**)(base + 0x14c) = 0;
+  *(void**)(base + 0x150) = 0;
+  *(void**)(base + 0x154) = (void*)5;
+  *(void**)(base + 0x158) = (void*)0xffffffff;
+  *(void**)(base + 0x15c) = 0;
+  *(void**)(base + 0x160) = 0;
+  *(void**)(base + 0x164) = 0;
+
+  void* list = (void*)(base + 0x170);
+  *(void**)(base + 0x170) = list;
+  *(void**)(base + 0x174) = list;
+  *(void**)(base + 0x17c) = 0;
+  *(void**)(base + 0x180) = 0;
+  *(void**)(base + 0x184) = 0;
+
+  *(void**)(base + 0x198) = 0;
+  *(void**)(base + 0x19c) = 0;
+  *(void**)(base + 0x1a0) = 0;
+  void* t1 = (void*)(base + 0x194);
+  *(void**)(base + 0x194) = t1;
+  *(void**)(base + 0x198) = t1;
+  *(void**)(base + 0x19c) = 0;
+  *(unsigned char*)(base + 0x1a0) = 0;
+  *(void**)(base + 0x1a4) = 0;
+
+  void* t2 = (void*)(base + 0x1b0);
+  *(void**)(base + 0x1b4) = 0;
+  *(void**)(base + 0x1b8) = 0;
+  *(void**)(base + 0x1bc) = 0;
+  *(void**)(base + 0x1b0) = t2;
+  *(void**)(base + 0x1b4) = t2;
+  *(void**)(base + 0x1b8) = 0;
+  *(unsigned char*)(base + 0x1bc) = 0;
+  *(void**)(base + 0x1c0) = 0;
+
+  void* t3 = (void*)(base + 0x1cc);
+  *(void**)(base + 0x1d0) = 0;
+  *(void**)(base + 0x1d4) = 0;
+  *(void**)(base + 0x1d8) = 0;
+  EastlNewArray(base + 0x44, 0, 0xfc);
+  *(void**)(base + 0x1cc) = t3;
+  *(void**)(base + 0x1d0) = t3;
+  *(void**)(base + 0x1d4) = 0;
+  *(unsigned char*)(base + 0x1d8) = 0;
+  *(void**)(base + 0x1dc) = 0;
+
+  return base;
 }
 
 // ---------------------------------------------------------------------------
@@ -370,18 +474,19 @@ void* S::FUN_00b2d480(int* param_1) {
 void S::FUN_00b2d660() {
   char* base = (char*)this;
   void* p1 = EastlNew(0x24, "Simulator", 0, 0, 0, 0);
-  if (!p1) p1 = 0;
-  else { ((E*)p1)->f8fa10(0x80, 0); *(void**)p1 = (void*)0x145fd5c; }
+  if (p1) { ((E*)p1)->f8fa10(0x80, 0); *(void**)p1 = (void*)0x145fd5c; }
+  else p1 = 0;
   *(void**)(base + 0x38) = p1;
 
   void* p2 = EastlNew(0x38, "Simulator", 0, 0, 0, 0);
-  if (!p2) p2 = 0;
-  else {
-    FUN_00ff3810(*(void**)(base + 0x38), 1.0f, 0.0f);
+  if (p2) {
+    ((TC_vff)FUN_00ff3810)(p2, *(void**)(base + 0x38), 1.0f, 0.0f);
+    float f = g_f1471064;
     *(void**)p2 = (void*)0x145fd2c;
     *(void**)((char*)p2 + 4) = (void*)0x145fd28;
-    *(int*)((char*)p2 + 0x34) = *(int*)0x1471064;
+    *(float*)((char*)p2 + 0x34) = f;
   }
+  else p2 = 0;
   void* old2 = *(void**)(base + 0x3c);
   if (p2 != old2) {
     if (p2) AddRef(p2);
@@ -389,15 +494,11 @@ void S::FUN_00b2d660() {
     if (old2) Release(old2);
   }
   {
-    void* fx = PropertyManager();
-    (void)fx;
-  }
-  {
-    void* fx = (void*)NounManager(0); (void)fx;
+    void* fx = EffectsManagerPtr();
+    ((TC_vpii)(*(void***)fx)[0x88 / 4])(fx, (void*)0x107ae878, 0, *(void**)(base + 0x3c));
   }
   void* p3 = EastlNew(0x380, "Simulator", 0, 0, 0, 0);
-  if (!p3) p3 = 0;
-  else {
+  if (p3) {
     ((E*)p3)->f62d80();
     *(void**)p3 = (void*)0x145fd90;
     *(void**)((char*)p3 + 4) = (void*)0x145fd8c;
@@ -405,6 +506,7 @@ void S::FUN_00b2d660() {
     *(void**)((char*)p3 + 0x250) = (char*)p3 + 0x2c0;
     *(void**)((char*)p3 + 0x254) = (void*)4;
   }
+  else p3 = 0;
   void* old3 = *(void**)(base + 0x40);
   if (p3 != old3) {
     if (p3) AddRef(p3);
@@ -509,8 +611,8 @@ void S::FUN_00b2da50() {
   if (server && handler) {
     for (unsigned off = 0; off < 0x14; off += 4) {
       int key = *(int*)(0x145fe38 + off);
-      ((void(__fastcall*)(void*, int, void*, int))VFn(server, 0x24))(server, 0, handler, key);
+      ((TC_vi)(*(void***)server)[9])(server, handler, key);
     }
   }
-  ((S*)base)->FUN_00b2d660();
+  ((S*)handler)->FUN_00b2d660();
 }

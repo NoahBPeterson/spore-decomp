@@ -1,3 +1,1 @@
-# va  diff-bytes  reason
-00bff2d0  1038  stub only (large mine-state dispatcher, not reconstructed)
-00bff7a0  816   stub only (per-tick mine update handler, not reconstructed)
+# va  reason

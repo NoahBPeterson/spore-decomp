@@ -1,1 +1,4 @@
 009a9600 ?f@S9a9600@@QAEXPAX@Z  # S9a9600::f migrated from s009a9600 (verbatim, slice spelling)
+009a9680 ?Shutdown@cSPUILayoutManager@@QAEXXZ  # cSPUILayoutManager::Shutdown; complete behavioural reconstruction (nonmatching)
+009a9920 ?Init@cSPUILayoutManager@@QAE_NXZ  # cSPUILayoutManager::Init; byte-exact
+009aa3a0 ?F9aa3a0@@YAXPAX0PAUbaked_animation@nSPCreatureAnim@@I@Z  # baked_animation seek helper; byte-exact

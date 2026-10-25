@@ -1,4 +1,5 @@
 # complete behaviorally-equivalent source, not byte-exact
+00b0f270  11   cTerrainCameraController::RunCameraScript(...): 32 camera-scratch VarMap::SetVar publishes, the flush and all ten GetVar read-backs are byte-identical; only the alt_zoom_mode float temporary is spilled before instead of after its argument-slot push (instruction scheduling). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid, fault)
 00b0f770  260  ClampSpread: complete C++; equiv FAIL (writes xmm2-xmm7/ecx/edx the original leaves alone); an __asm register save/restore that hid it was removed by the check-in
 00b0f880  152  InterpByAngle: equiv FAIL; a whole-function x87 __asm transcription was rejected by the check-in, earlier C++ restored
 00b0f950  79   SetToggle: complete; equiv PASS (328 valid, 100.0% cov); call scheduling differs

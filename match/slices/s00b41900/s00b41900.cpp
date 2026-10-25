@@ -198,37 +198,40 @@ void* __cdecl EAAllocate(uint32_t size, const char* pName, int a, int b, const c
 extern "C" void* __cdecl memset(void*, int, unsigned);    // 0x011e073e
 void __cdecl operator_delete(void* p);                    // 0x00f47380
 
-// raycast against the triangle fan in `verts`, appends contacts and their count.
-bool __cdecl CastFan(const void* self, void* a2, void* a3, void* a4, const void* contacts,
-                     int* pCount);                         // 0x00b3ef30
+// normalized normal of triangle (a, b, c); the third vertex is passed by value.
+void __cdecl TriangleNormal(Vector3* out, const Vector3* a, const Vector3* b, Vector3 c); // 0x00b3d8d0
 
-// normalized normal of triangle (a, b, c)
-void __cdecl TriangleNormal(Vector3* out, const Vector3* a, const Vector3* b, float cx, float cy,
-                            float cz);                     // 0x00b3d8d0
+// The raycast entry point is a member: the original enters CastFan with the caller's
+// `this` still in ecx, and both routines return with `ret 0x18` (six stack arguments).
+struct RaycastFanCaster {
+    bool CastFan(const float* fan, void* a2, void* a3, void* a4, const Vector3* contacts,
+                 int* pCount);                            // 0x00b3ef30
+    int CastFanTriangle(const float* fan, void* a2, void* a3, void* a4, Vector3* out,
+                        const Vector3* contacts);
+};
 
 // @ 0x00b41900
-int CastFanTriangle(const float* fan, void* a2, void* a3, void* a4, Vector3* out,
-                    const Vector3* contacts)
+int RaycastFanCaster::CastFanTriangle(const float* fan, void* a2, void* a3, void* a4,
+                                      Vector3* out, const Vector3* contacts)
 {
     int nContacts = 0;
     if (!CastFan(fan, a2, a3, a4, contacts, &nContacts))
         return 0;
 
     Vector3 normal;
-    TriangleNormal(&normal, (const Vector3*)fan, (const Vector3*)(fan + 3), fan[6], fan[7], fan[8]);
+    TriangleNormal(&normal, (const Vector3*)fan, (const Vector3*)(fan + 3),
+                   *(const Vector3*)(fan + 6));
 
     float d0 = fan[1] * normal.y + fan[2] * normal.z;
     d0 += fan[0] * normal.x;
 
     const Vector3* in = contacts;
-    for (int i = nContacts; i > 0; i--) {
-        Vector3 p = *in;
+    for (int i = 0; i < nContacts; i++) {
+        Vector3 p = in[i];
         float d = (p.z * normal.z + p.y * normal.y) + p.x * normal.x - d0;
-        out->x = p.x - d * normal.x;
-        out->y = p.y - d * normal.y;
-        out->z = p.z - d * normal.z;
-        out++;
-        in++;
+        out[i].x = p.x - d * normal.x;
+        out[i].y = p.y - d * normal.y;
+        out[i].z = p.z - d * normal.z;
     }
     return nContacts;
 }
@@ -495,13 +498,19 @@ struct MsgTableNode {
     MsgTableNode* mpNext;   // +0x8
 };
 
+// eastl::hashtable iterator: {node, bucket-link}.
+struct MsgTableIter {
+    MsgTableNode* mpNode;        // +0x0
+    MsgTableNode** mpBucket;     // +0x4
+};
+
 // eastl::hashtable<unsigned, eastl::pair<const unsigned, int>>
 struct MsgTable {
     uint32_t mRehashPolicy;      // +0x0
     MsgTableNode** mpBuckets;    // +0x4
     uint32_t mnBucketCount;      // +0x8
 
-    MsgTableNode* Find(const uint32_t* pKey) const;   // 0x00645ed0
+    void find(MsgTableIter* pOut, const uint32_t& key) const;   // 0x00645ed0
     MsgTableNode* End() const { return mpBuckets[mnBucketCount]; }
 };
 
@@ -513,7 +522,8 @@ struct cMessageContext {
 
 // object returned by the property lookup (creature / game data object)
 struct cSPProperty {
-    uint32_t pad00[(0x34 - 0x00) / 4];
+    G21 virtual uint32_t GetFlag58();    // vtable +0x58
+    uint32_t pad04[(0x34 - 0x04) / 4];
     uint32_t mName34;            // +0x34: name blob, hashed by 0x00f21a90
     uint32_t mFlags38;           // +0x38
     uint32_t pad3c[(0x10c - 0x3c) / 4];
@@ -524,8 +534,6 @@ struct cSPProperty {
     int mValueB1c;               // +0xb1c
     uint32_t padB20[(0xb58 - 0xb20) / 4];
     uint32_t mFlagsB58;          // +0xb58
-
-    virtual bool GetFlag58();    // vtable +0x58
 };
 
 class cCreatureBase {
@@ -547,6 +555,8 @@ public:
     virtual void v0a8(); virtual void v0ac(); virtual void v0b0(); virtual void v0b4();
     virtual void* GetSubObject(uint32_t id);            // +0xb8
 
+    uint32_t GetValue114();                             // 0x0096b8f0
+
     uint32_t pad00[(0x50 - 0x04) / 4];
     uint32_t mFlags50;           // +0x50
     uint32_t pad54[(0x110 - 0x54) / 4];
@@ -565,16 +575,18 @@ struct cPropertySource {
 
 class cPropertyRegistry {
 public:
-    cPropertySource* GetMessageSource();    // 0x00b532f0
+    uint32_t pad00[(0x20 - 0x00) / 4];
+    uint32_t m20;                           // +0x20
+
+    cPropertySource* GetMessageSource(uint32_t id);   // 0x00b532f0
 };
 
-extern cPropertyRegistry* g_pPropertyRegistry;   // 0x0167eae8
+cPropertyRegistry* __cdecl GetPropertyRegistry();       // 0x00b3d310
 
 cSPProperty* __cdecl FindProperty(void* self, uint32_t id);     // 0x00ac80d0
 uint32_t __cdecl HashName(const void* pName);                   // 0x00f21a90
 int __cdecl GetCurrentGameMode();                               // 0x00b5b800
-void* __cdecl CastObject(void* p);                              // 0x00c90460
-cSPProperty* __cdecl GetPropertySet(uint32_t id);               // 0x00b3d310
+void* __fastcall CastObject(void* p);                           // 0x00c90460
 
 // @ 0x00b41ee0
 uint32_t GetMessageValue(cCreatureBase* self, cMessageContext* pContext)
@@ -588,12 +600,12 @@ uint32_t GetMessageValue(cCreatureBase* self, cMessageContext* pContext)
 
     switch (self->GetMessageId()) {
     case 0x2a8fb3f:
-        key = self->mValue114;
+        key = ((self->GetMessageId() == 0x2a8fb3f) ? self : 0)->GetValue114();
         break;
 
     case 0x18c8f0c:
         if (!FindProperty(self, 0x18c8f0c)->GetFlag58())
-            return 0;
+            defaultValue = 0;
         break;
 
     case 0x18c6de8:
@@ -617,7 +629,7 @@ uint32_t GetMessageValue(cCreatureBase* self, cMessageContext* pContext)
         else if (pProp->m228 == 0x5d97f762)
             key = 0x5d97f762;
         else
-            return 0;
+            defaultValue = 0;
         break;
     }
 
@@ -627,16 +639,15 @@ uint32_t GetMessageValue(cCreatureBase* self, cMessageContext* pContext)
                 key = 0xd8c67022;
         break;
 
-    case 0x3a2511e:
-        if (self->mPtr134) {
-            cSPProperty* pSet = GetPropertySet(0x18c88e4);
-            cPropertyRegistry* pReg = (cPropertyRegistry*)pSet->mpObject10c;
-            pTable = &pReg->GetMessageSource()->mTable;
-            key = HashName(&self->mName130);
+    case 0x3a2511e: {
+        cCreatureBase* p = (self->GetMessageId() == 0x3a2511e) ? self : 0;
+        if (p->mPtr134) {
+            pTable = &GetPropertyRegistry()->GetMessageSource(0x18c88e4)->mTable;
+            key = HashName(&p->mName130);
         } else {
-            key = self->mValue114;
+            key = p->GetValue114();
             if (key == 0) {
-                switch (self->mType110) {
+                switch (p->mType110) {
                 case 1:
                     key = 0xe1c134a8;
                     break;
@@ -656,62 +667,32 @@ uint32_t GetMessageValue(cCreatureBase* self, cMessageContext* pContext)
             }
         }
         break;
+    }
 
     case 0x629bafe:
         if (!CastObject(FindProperty(self, 0x629bafe)->mpObject10c))
-            return 0;
+            defaultValue = 0;
         break;
 
-    case 0x52aa6122: {
-        uint32_t* pSet = (uint32_t*)GetPropertySet(0);
-        if (pSet[0x20 / 4])
-            return 0;
+    case 0x52aa6122:
+        if (GetPropertyRegistry()->m20)
+            defaultValue = 0;
         break;
     }
-    }
 
-    MsgTableNode* pNode = pTable->Find(&key);
-    if (pNode != pTable->End())
-        return pNode->mValue;
+    MsgTableIter it;
+    pTable->find(&it, key);
+    if (it.mpNode != pTable->End())
+        return it.mpNode->mValue;
     return defaultValue;
 }
 
 // ----------------------------------------------------------------------------
 // creature ranged attack update
 // ----------------------------------------------------------------------------
-// Object returned by 0x00b3d310.
-struct GameData {
-    uint32_t pad00[(0x20 - 0x00) / 4];
-    uint32_t m20;                          // +0x20
-};
-
 // One of the per-instance objects returned by the virtual at vtable offset 0xb8.
 struct AttackObject {
-    virtual void v0();
-    virtual void v1();
-    virtual void v2();
-    virtual bool Use(uint32_t id, uint32_t a, uint32_t* ppArg);   // +0x0c
-    virtual void v4();
-    virtual void v5();
-    virtual void v6();
-    virtual void v7();
-    virtual void v8();
-    virtual void v9();
-    virtual void v10();
-    virtual void v11();
-    virtual void v12();
-    virtual void v13();
-    virtual void v14();
-    virtual void v15();
-    virtual void v16();
-    virtual void v17();
-    virtual void v18();
-    virtual void v19();
-    virtual void v20();
-    virtual void v21();
-    virtual void v22();
-    virtual void v23();
-    virtual void Release();                // +0x60
+    G22 virtual void Release();            // +0x5c
 
     uint32_t pad04[(0xf90 - 0x04) / 4];
     uint8_t mFlagF90;                      // +0xf90
@@ -727,6 +708,8 @@ struct XformMsg {
     Vector3 mTranslation;                  // +0x04
     float mScale;                          // +0x10
     Matrix3 mRotation;                     // +0x14
+
+    void SetTarget(const Vector3& pos);    // 0x00571d40
 };
 
 class cAttackCreature {
@@ -745,38 +728,55 @@ public:
     virtual void v088(); virtual void v08c(); virtual void v090(); virtual void v094();
     virtual void v098(); virtual void v09c(); virtual void v0a0(); virtual void v0a4();
     virtual void v0a8(); virtual void v0ac(); virtual void v0b0(); virtual void v0b4();
-    virtual AttackObject* GetAttack();      // +0xb8
+    virtual AttackObject* GetAttack(uint32_t id);   // +0xb8
 
     uint32_t pad00[(0x50 - 0x04) / 4];
     uint32_t mFlags50;                     // +0x50
 };
 
-// A target that receives the attack effect message.
+// The effect object handed back by EffectsManager::Use.
 class cEffectHost {
 public:
     virtual void v00(); virtual void v04();
-    virtual void ReceiveMessage(void* msg);   // +0x08
+    virtual void Apply(uint32_t a);           // +0x08
     virtual void v0c(); virtual void v10(); virtual void v14();
-    virtual void Apply(void* msg);            // +0x18
+    virtual void ReceiveMessage(void* msg);   // +0x18
 };
 
-void* __cdecl GetActivePlanet();                        // 0x01021260
-float __cdecl GetPlanetLavaSomething();                 // 0x00c70a20
-void* __cdecl GetTerraformTuning();                     // 0x01049a10
-float __cdecl GetLavaThreshold(void* pTuning);          // 0x01049bf0
-float __cdecl GetTerraformHeight(float a, uint32_t b);  // 0x00b7e430
-AttackObject* __cdecl GetEffectsManager();              // 0x0067ddd0
-uint32_t* __cdecl AsPPTypeParam(void* pOut);            // 0x00a16f40
-void* __cdecl XformMsgCtor(void* self);                 // 0x00434040
-void __cdecl SetTarget(void* self, void* pTarget);      // 0x00571d40
+class cEffectsManager {
+public:
+    G10 virtual bool Use(uint32_t id, uint32_t a, uint32_t* pArg);   // +0x2c
+};
+
+class cPlanet {
+public:
+    float GetLavaSomething();              // 0x00c70a20
+};
+
+class cTerraformTuning {
+public:
+    float GetLavaThreshold();              // 0x01049bf0
+};
+
+class cTerraformHeight {
+public:
+    float GetTerraformHeight(const Vector3* pPos, bool b);   // 0x00b7e430
+};
+
+cPlanet* __cdecl GetActivePlanet();                     // 0x01021260
+cTerraformTuning* __cdecl GetTerraformTuning();         // 0x01049a10
+cTerraformHeight* __cdecl GetTerraformHeightObj();      // 0x00b3d350
+cEffectsManager* __cdecl GetEffectsManager();           // 0x0067ddd0
+void* __cdecl AsPPTypeParam(void* pOut);                // 0x00a16f40
+void __fastcall XformMsgCtor(XformMsg* self);           // 0x00434040
 void __cdecl Matrix3FromQuaternion(Matrix3* out, const void* pQuat);   // 0x0059c190
 
 extern float g_lavaScale;   // 0x0167eb78
 extern float h;             // 0x01471064 (0.5f)
 
 // @ 0x00b421b0
-void UpdateRangedAttacks(cAttackCreature* self, bool bActive, const void* pQuat,
-                         cEffectHost* pTarget)
+void UpdateRangedAttacks(cAttackCreature* self, bool bActive, const Vector3* pPos,
+                         const void* pQuat)
 {
     uint32_t flags = self->mFlags50;
     bool bWasActive = (flags & 0x1000) == 0x1000;
@@ -788,36 +788,35 @@ void UpdateRangedAttacks(cAttackCreature* self, bool bActive, const void* pQuat,
     if (bWasActive)
         return;
 
-    GetActivePlanet();
-    float height = GetPlanetLavaSomething();
-    float threshold = GetLavaThreshold(GetTerraformTuning());
+    float height = GetActivePlanet()->GetLavaSomething();
+    float threshold = GetTerraformTuning()->GetLavaThreshold();
     if (height > threshold)
         return;
 
-    AttackObject* pAttack = self->GetAttack();
-    if (!self->HasAttack() || height == 0.0f || !pQuat ||
-        (pAttack && !pAttack->mFlagF90))
+    AttackObject* pAttack = self->GetAttack(0xce9f6639);
+    if (!self->HasAttack() || !pPos || !pQuat ||
+        (pAttack != 0 && pAttack->mFlagF90 == 0))
         goto done;
 
-    if (GetTerraformHeight(height, 1) <= g_lavaScale)
+    if (GetTerraformHeightObj()->GetTerraformHeight(pPos, true) <= g_lavaScale)
         goto done;
 
     {
-        AttackObject* pManager = GetEffectsManager();
-        uint32_t* pArg = 0;
-        AsPPTypeParam(&pArg);
+        cEffectsManager* pManager = GetEffectsManager();
+        void* pEffect = 0;
+        uint32_t* pArg = (uint32_t*)AsPPTypeParam(&pEffect);
         if (!pManager->Use(0x7484a8e4, 0, pArg))
             goto done;
 
         XformMsg msg;
         XformMsgCtor(&msg);
-        SetTarget(&msg, 0);   // unused placeholder for the shared base ctor
+        msg.SetTarget(*pPos);
         Matrix3FromQuaternion(&msg.mRotation, pQuat);
-        msg.mTranslation.x = 0.0f;   // placeholders replaced below
         msg.mHeader.mFlags |= 2;
         msg.mHeader.mModCount++;
         msg.mScale = self->GetScale();
         msg.mHeader.mModCount++;
+        cEffectHost* pTarget = (cEffectHost*)pEffect;
         pTarget->ReceiveMessage(&msg);
         pTarget->Apply(0);
     }

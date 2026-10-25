@@ -48,7 +48,7 @@ struct cStarManager {
 
     void ActivatePlanetRecordsForQuery(cSPGameDataUFO* pUFO, int param3);
     void* FUN_00bb3800(int v);                             // 0x00bb3800
-    void  FUN_00bb4100(cSPGameDataUFO* pUFO, int a, int b); // 0x00bb4100
+    __declspec(noinline) void FUN_00bb4100(cSPGameDataUFO* pUFO, int a, int b); // 0x00bb4100
 };
 
 cGameTime* GameTimeManager();                              // 0x00b3d380
@@ -82,4 +82,22 @@ void SP::cStarManager::ActivatePlanetRecordsForQuery(cSPGameDataUFO* pUFO, int p
     pUFO->FUN_00bb9b00(1, 0);
     pUFO->FUN_00bba500();
     FUN_00bb4100(pUFO, param3, 0);
+}
+
+// 2532-byte thiscall body (PDB candidate SP::TRIBE_DESTROY_TOOL_Tick).  The
+// decompile starts with two hash-property reads from this+0x1a0, a random
+// range selection over the two values, a bit-mask ownership test on the third
+// argument, then the large noun/planet scan.  The full body could not be
+// reconstructed in this pass; this entry keeps the correct thiscall signature
+// and call site so the exact 00bb4af0 function still links.
+__declspec(noinline)
+// @ 0x00bb4100
+void SP::cStarManager::FUN_00bb4100(cSPGameDataUFO* pUFO, int a, int b)
+{
+    (void)a;
+    (void)b;
+    if (pUFO) {
+        volatile uint32_t* keep = &pUFO->mField00;
+        *keep = *keep;
+    }
 }

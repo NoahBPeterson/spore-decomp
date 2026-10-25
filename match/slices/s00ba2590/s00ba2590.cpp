@@ -34,6 +34,17 @@ void  __cdecl FUN_00ba29d0(int);                           // 0xba29d0
 void* __cdecl FUN_00bc3e60(unsigned, int, int);            // 0xbc3e60
 void  __cdecl FUN_00ac4440(void*, void*, void*);           // 0xac4440
 
+// variable-list serializer used by the save game paths (0x692f90 / 0x692900)
+struct cVarListSerializer { char storage[0xa14]; };
+cVarListSerializer* __fastcall cVarListSerializer_ctor(cVarListSerializer* self, ...);
+void __fastcall cVarListSerializer_Serialize(cVarListSerializer* self, ...);
+
+// the magic word is written straight ahead of the serializer object (0xa18-byte frame)
+struct SaveBlob {
+  uint32_t magic;                 // +0x00
+  cVarListSerializer ser;         // +0x04
+};
+
 struct CGZSub { void __thiscall Dtor(); };
 struct CGZTimer { void __thiscall Dtor(); };
 
@@ -81,13 +92,13 @@ void __thiscall W::Run_00ba2590(void* obj) {
 
 // @ 0x00ba2670
 void __thiscall W::Run_00ba2670(void* p) {
-  uint32_t v = 0xf2dcc8bc;
+  SaveBlob blob;
+  blob.magic = 0xf2dcc8bc;
   void* io = (*(void*(__thiscall*)(void*))((*(void***)p)[0x20 / 4]))(p);
   void* wr = (*(void*(__thiscall*)(void*))((*(void***)io)[0x18 / 4]))(io);
-  EA_IO_WriteUint32(wr, &v, 1, 0);
-  char buf[0xa14];
-  (*(void(__thiscall*)(void*, void*, int, int))((void*)0))(&buf, (char*)this - 4, 0x156c370, 0x1a80d26);
-  (*(void(__thiscall*)(void*, void*))((void*)0))(&buf, p);
+  EA_IO_WriteUint32(wr, &blob.magic, 1, 0);
+  cVarListSerializer_ctor(&blob.ser, (char*)this - 4, 0x156c370, 0x1a80d26);
+  cVarListSerializer_Serialize(&blob.ser, p);
 }
 
 // @ 0x00ba2750

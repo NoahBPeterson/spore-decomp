@@ -9,9 +9,10 @@
 
 #include "types.h"
 
-#define PV(n) virtual void pv##n()
-
+// In-place construction helper (placement new).
 inline void* operator new(unsigned int, void* p) { return p; }
+
+#define PV(n) virtual void pv##n()
 
 namespace EA {
 
@@ -58,12 +59,37 @@ class StyleManager;
 struct ICoreAllocator;
 
 struct TextStyle {
-    char pad00[0x1c];
-    int  mfSize;                   // +0x1c
-    char pad20[0x178];
-    int  mHAlignment;
-    char pad1fc[0x78];
-    int  mTextWrap;
+    wchar_t  mFamilyNameArray[32][8]; // +0x000
+    float    mfSize;                  // +0x200
+    int      mStyle;                  // +0x204
+    float    mfWeight;                // +0x208
+    int      mVariant;                // +0x20c
+    int      mPitch;                  // +0x210
+    int      mSmooth;                 // +0x214
+    int      mEffect;                 // +0x218
+    float    mfEffectX;               // +0x21c
+    float    mfEffectY;               // +0x220
+    uint32_t mColor;                  // +0x224
+    uint32_t mColorBackground;        // +0x228
+    uint32_t mEffectBaseColor;        // +0x22c
+    uint32_t mEffectColor;            // +0x230
+    uint32_t mHighLightColor;         // +0x234
+    uint32_t mnDecorationFlags;       // +0x238
+    int      mDirection;              // +0x23c
+    int      mOrientation;            // +0x240
+    int      mHAlignment;             // +0x244
+    int      mVAlignment;             // +0x248
+    int      mJustify;                // +0x24c
+    int      mTextWrap;               // +0x250
+    int      mTextOverflow;           // +0x254
+    int      mEmphasisStyle;          // +0x258
+    int      mEmphasisPosition;       // +0x25c
+    int      mDigitSubstitution;      // +0x260
+    int      mPasswordMode;           // +0x264
+    float    mfStretch;               // +0x268
+    float    mfLetterSpacing;         // +0x26c
+    float    mfWordSpacing;           // +0x270
+    float    mfLineSpace;             // +0x274
 
     TextStyle();                   // 0x008941d0
 };
@@ -113,11 +139,23 @@ class Message { public:
 class IWindowMgr { public:
     PV(0); PV(1); PV(2); PV(3); PV(4); PV(5); PV(6); PV(7);
     PV(8); PV(9); PV(10); PV(11); PV(12); PV(13); PV(14);
-    virtual void* GetCapture(int);                 // +0x3c
+    virtual void  GetPoint(void* pPoint);          // +0x3c
     PV(16); PV(17); PV(18); PV(19); PV(20);
     virtual void* GetCapture2(int);                // +0x54
     virtual void  SetCapture(int, void*);          // +0x58
     virtual void  SetCapture2(int, void*);         // +0x5c
+};
+
+// Second interface on the component container at WinDialog+0x38.
+struct CompContainerSub {
+    PV(0); PV(1); PV(2); PV(3); PV(4); PV(5); PV(6); PV(7);
+    PV(8); PV(9); PV(10); PV(11); PV(12); PV(13); PV(14);
+    PV(15); PV(16); PV(17); PV(18); PV(19); PV(20); PV(21);
+    PV(22); PV(23); PV(24); PV(25); PV(26); PV(27); PV(28);
+    PV(29); PV(30); PV(31); PV(32); PV(33); PV(34); PV(35);
+    PV(36); PV(37); PV(38); PV(39); PV(40); PV(41); PV(42);
+    PV(43); PV(44); PV(45); PV(46); PV(47); PV(48);
+    virtual void DrawPoint(const EA::Vec2* pPoint); // +0xc4
 };
 
 class IWindow { public:
@@ -175,13 +213,16 @@ class IWinButton { public:
 
 using EA::UTFWin::IWindow;
 using EA::UTFWin::IWindowMgr;
-using EA::UTFWin::IWindowMgr;
+using EA::UTFWin::CompContainerSub;
 using EA::UTFWinControls::IWinText;
 using EA::UTFWinControls::IWinButton;
 
 // Complete dialog object; only the offsets this slice touches are named.
 struct WinDialog : EA::UTFWin::WindowVt {
-    uint32_t pad04[(0x88 - 0x04) / 4];        // +0x04
+    uint32_t pad04[(0x34 - 0x04) / 4];        // +0x04
+    IWindowMgr* mpWindowMgr;                   // +0x34
+    void*       mpCompContainer;               // +0x38
+    uint32_t pad3c[(0x88 - 0x3c) / 4];         // +0x3c
     EA::RectF mArea;                           // +0x88
     uint32_t pad98[(0x210 - 0x98) / 4];       // +0x98
     bool     mbRefresh;                        // +0x210
@@ -219,6 +260,14 @@ struct DlgSub20c {
     void SetTitleTextColor(int v);                            // 0x0096b900
     void SetMinSize(float w, float h);                        // 0x0096b930
     void SetMaxSize(float w, float h);                        // 0x0096b990
+};
+
+// Channel-color storage at ConsoleWindow+0x20c (S_9677d0/S_9676f0 family).
+struct ChannelColors {
+    uint32_t mData[4];                                        // +0x00 .. +0x0f
+
+    uint32_t* InitChannelColors(int arg);                     // 0x009677d0
+    void      ResizeBuffers(unsigned count, int arg);         // 0x009676f0
 };
 
 // Sub-object at WinDialog+4 (the IWindow interface vtable).
@@ -271,36 +320,147 @@ struct ImageTable {
 // ---------------------------------------------------------------------------
 // External helpers (declarations only; resolved to the real addresses).
 // ---------------------------------------------------------------------------
-namespace Console {
-
-void InitChannelColors(void* sub, int arg);   // 0x009677d0
-void ResizeBuffers(void* sub, int count, int arg); // 0x009676f0
-
-} // namespace Console
-
 void __fastcall Window_ctor(void*);   // 0x00962a10
 
-// ConsoleWindow (0x0096ad00 / 0x0096b0b0). Layout accessed via raw offsets.
-struct ConsoleWindow {
-    ConsoleWindow(bool param2);                          // 0x0096b0b0
-    int  OnRebuild(EA::UTFWin::RenderContext* ctx);      // 0x0096ad00
-    char mDummy;
+// The Window base sub-object whose non-virtual SetFlag the constructor calls.
+struct WindowBase {
+    void SetFlag(unsigned flag, unsigned char value);       // 0x00961760
 };
 
 namespace EA {
 namespace Text {
 
 class Typesetter { public:
+    char mData[0x530];
+
+    Typesetter() {}
     Typesetter(bool unicode);      // 0x0089d820
+    void* LayoutParagraph(const wchar_t* text, uint32_t len, float x, float y,
+                          float x1, float y1, const TextStyle* style,
+                          void* out, void* arg9);              // 0x0089dc00
 };
 
 class LineLayout { public:
+    char mData[0x2c];
+
+    LineLayout() {}
     LineLayout(bool unicode);      // 0x00898bd0
     void Clear(bool arg);          // 0x0089cbc0
 };
 
 } // namespace Text
 } // namespace EA
+
+// Render batch returned by RenderContext::Begin2D.
+struct Batch2D {
+    PV(0);
+    virtual void SetColor(uint32_t c);                       // +0x04
+    PV(2); PV(3); PV(4);
+    virtual void SetClipRect(const EA::RectF* r);             // +0x14
+    PV(6);
+    virtual void DrawRect5(float, float, float, float, float); // +0x1c
+    PV(8); PV(9); PV(10); PV(11);
+    virtual void DrawText(void*, void*, void*);               // +0x30
+    PV(13);
+    virtual void FillRect(float, float, float, float);        // +0x38
+};
+
+// Scrollbar object at ConsoleWindow+0x864 and the interface it returns.
+struct ScrollHost {
+    PV(0); PV(1); PV(2); PV(3);
+    virtual void* GetContent();                              // +0x10
+};
+struct ScrollContent {
+    PV(0); PV(1); PV(2); PV(3); PV(4); PV(5); PV(6); PV(7);
+    PV(8); PV(9); PV(10); PV(11); PV(12);
+    virtual const EA::RectF* GetBounds();                    // +0x34
+};
+
+// One console line: circular-list node plus its text payload.
+struct ConsoleLine {
+    ConsoleLine* mpNext;                                     // +0x00
+    ConsoleLine* mpPrev;                                     // +0x04
+    char*        mpKey;                                      // +0x08
+    int          mnHeight;                                   // +0x0c
+    uint32_t     mnLength;                                   // +0x10
+    wchar_t      mText[1];                                   // +0x14
+};
+
+// Channel-color hash map at ConsoleWindow+0x238 (eastl hashtable subset).
+struct ConsoleMap {
+    void*     mp0;                                           // +0x00
+    uint32_t* mpBuckets;                                     // +0x04
+    int       mnBucketCount;                                 // +0x08
+    int       mn0c;                                          // +0x0c
+    float     mf10;                                          // +0x10
+    float     mf14;                                          // +0x14
+    int       mn18;                                          // +0x18
+    int       mn1c;                                          // +0x1c
+
+    int* Find(int* out, void** pkey);                        // 0x0096ab90
+};
+
+// ConsoleWindow (0x0096ad00 / 0x0096b0b0).
+struct ConsoleWindow {
+    uint32_t mPad000[0x88 / 4];                              // +0x000
+    EA::RectF mArea;                                         // +0x088
+    uint32_t mPad098;                                        // +0x098
+    float    mRenderTop;                                     // +0x09c
+    float    mRenderMid;                                     // +0x0a0
+    float    mRenderBottom;                                  // +0x0a4
+    char     mPad0a8[0x20c - 0x0a8];                         // +0x0a8
+    ChannelColors mChannels;                                 // +0x20c
+    int      mnScrollRange;                                  // +0x21c
+    int      mnPageSize;                                     // +0x220
+    int      mnScrollOffset;                                 // +0x224
+    int      mnContentHeight;                                // +0x228
+    ConsoleLine* mpListHead;                                 // +0x22c
+    ConsoleLine* mpListTail;                                 // +0x230
+    int      mnLineCount;                                    // +0x234
+    ConsoleMap mMap;                                         // +0x238
+    EA::Text::Typesetter mTypesetter;                        // +0x258
+    EA::Text::LineLayout mLineLayout;                        // +0x788
+    void*    mpDrawArg1;                                     // +0x7b4
+    char     mPad7b8[0x7dc - 0x7b8];                         // +0x7b8
+    void*    mpDrawArg2;                                     // +0x7dc
+    char     mPad7e0[0x838 - 0x7e0];                         // +0x7e0
+    float    mf838;                                          // +0x838
+    float    mf83c;                                          // +0x83c
+    float    mf840;                                          // +0x840
+    float    mf844;                                          // +0x844
+    int      mn848;                                          // +0x848
+    float    mfInsetLeft;                                    // +0x84c
+    float    mfInsetTop;                                     // +0x850
+    float    mfInsetRight;                                   // +0x854
+    float    mfInsetBottom;                                  // +0x858
+    int      mnColorMask;                                    // +0x85c
+    bool     mbFlag860;                                      // +0x860
+    bool     mbNeedLayout;                                   // +0x861
+    char     mPad862[2];                                     // +0x862
+    void*    mpScrollBar;                                    // +0x864
+    bool     mbHasScrollBar;                                 // +0x868
+    char     mPad869[3];                                     // +0x869
+    float    mf86c;                                          // +0x86c
+
+    ConsoleWindow(bool param2);                              // 0x0096b0b0
+    int  OnRebuild(EA::UTFWin::RenderContext* ctx);           // 0x0096ad00
+    void LayoutLines();                                      // 0x0096a790
+};
+
+// Constants loaded from the image.
+extern const float kf3;              // 0x01441a28
+extern float       gColorSeed;       // 0x0166b1bc
+extern const float kf169;            // 0x01441aa8
+extern const float kf86;             // 0x01441aa4
+extern const float kf145;            // 0x01441aa0
+extern const float kf110;            // 0x01441a9c
+extern const float kfOne;            // 0x01485720
+extern const float kfTwo;            // 0x01470f1c
+extern const float kfFour;           // 0x014853e0
+extern const float kfWeight;         // 0x0142eae0
+extern const float kfSize;           // 0x013f8734
+extern const float kfTwoPow32;       // 0x013f4fd0
+extern const wchar_t kConsoleFontName[]; // 0x01441ca0
 
 // ---------------------------------------------------------------------------
 // 0x0096b3a0  EA::UTFWinControls::WinDialog::Init
@@ -624,63 +784,67 @@ void* __stdcall Factory_ConsoleWindow_CreateInstance(int param1, void* param2)
 // ---------------------------------------------------------------------------
 ConsoleWindow::ConsoleWindow(bool param2)
 {
-    char* this_ = (char*)this;
-    char* esi = this_;
-    EA::UTFWin::WindowVt* self = (EA::UTFWin::WindowVt*)this_;
+    Window_ctor(this);
 
-    // UTFWin::Window::Window(this) -- base construction.
-    Window_ctor(this_);
+    *(void**)this = (void*)0x1441c18;            // primary vtable
+    *(void**)((char*)this + 4) = (void*)0x1441af8; // IWindow vtable
 
-    *(void**)esi = (void*)0x1441c18;            // primary vtable
-    *(void**)(esi + 4) = (void*)0x1441af8;      // IWindow vtable
+    mChannels.InitChannelColors(0);
 
-    Console::InitChannelColors(esi + 0x20c, 0);
+    mnScrollRange = 0x3e8;
+    mnPageSize = 0x1000;
+    mnScrollOffset = 0;
+    mnContentHeight = 0;
+    mpListHead = (ConsoleLine*)((char*)this + 0x22c);
+    mpListTail = (ConsoleLine*)((char*)this + 0x22c);
+    mnLineCount = 0;
+    mMap.mpBuckets = (uint32_t*)0x154df28;
+    mMap.mnBucketCount = 1;
+    mMap.mn0c = 0;
+    mMap.mf10 = kfOne;
+    mMap.mf14 = kfTwo;
+    mMap.mn18 = 0;
 
-    *(int*)(esi + 0x21c) = 0x3e8;
-    *(int*)(esi + 0x220) = 0x1000;
-    *(int*)(esi + 0x224) = 0;
-    *(int*)(esi + 0x228) = 0;
-    *(int*)(esi + 0x22c) = (int)(esi + 0x22c);
-    *(int*)(esi + 0x230) = (int)(esi + 0x22c);
-    *(int*)(esi + 0x234) = 0;
-    *(float*)(esi + 0x248) = 0.0f;
-    *(float*)(esi + 0x24c) = 0.0f;
-    *(int*)(esi + 0x240) = 1;
-    *(int*)(esi + 0x23c) = 0x154df28;
-    *(int*)(esi + 0x244) = 0;
-    *(int*)(esi + 0x250) = 0;
-    *(float*)(esi + 0x838) = 0.0f;
-    *(float*)(esi + 0x83c) = 0.0f;
-    *(float*)(esi + 0x840) = 0.0f;
-    *(float*)(esi + 0x844) = 0.0f;
+    new (&mTypesetter) EA::Text::Typesetter(false);
+    new (&mLineLayout) EA::Text::LineLayout(false);
 
-    // Typesetter / LineLayout sub-objects.
-    new (esi + 0x258) EA::Text::Typesetter(false);
-    new (esi + 0x788) EA::Text::LineLayout(false);
+    mn848 = -1;
+    float inset = kfFour;
+    mfInsetLeft = inset;
+    mfInsetTop = inset;
+    mfInsetRight = inset;
+    mfInsetBottom = inset;
+    mnColorMask = -1;
+    mbFlag860 = false;
+    mbNeedLayout = false;
+    mpScrollBar = 0;
+    mbHasScrollBar = param2;
+    mf86c = kfOne;
+    mf838 = 0.0f;
+    mf83c = 0.0f;
+    mf840 = 0.0f;
+    mf844 = 0.0f;
 
-    *(int*)(esi + 0x848)   = -1;
-    *(float*)(esi + 0x84c) = 0.0f;
-    *(float*)(esi + 0x850) = 0.0f;
-    *(float*)(esi + 0x854) = 0.0f;
-    *(float*)(esi + 0x858) = 0.0f;
-    *(int*)(esi + 0x85c)   = -1;
-    *(unsigned char*)(esi + 0x860) = 0;
-    *(unsigned char*)(esi + 0x861) = 0;
-    *(int*)(esi + 0x864)   = 0;
-    *(unsigned char*)(esi + 0x868) = param2 ? 1 : 0;
-    *(float*)(esi + 0x86c) = 0.0f;
-
-    Console::ResizeBuffers(esi + 0x20c, 0x1000, 0);
-    ((IWindow*)(esi + 4))->SetFlag(0x10, true);
+    mChannels.ResizeBuffers(0x1000, 0);
+    ((WindowBase*)((char*)this + 4))->SetFlag(0x10, 1);
 
     EA::Text::StyleManager* sm = EA::Text::GetStyleManager(true);
-    if (sm) {
+    if (sm != 0) {
         if (sm->GetStyle(0xefe945b2, 0) == 0) {
             EA::Text::TextStyle style;
-            // name copied from L"Trebuchet MS"
-            style.mfSize = 9.0f;
+            wchar_t* dst = &style.mFamilyNameArray[0][0];
+            int i = 0;
+            wchar_t c;
+            do {
+                c = kConsoleFontName[i];
+                dst[i] = c;
+                ++i;
+            } while (c != 0);
+            style.mfSize = kfSize;
             style.mHAlignment = 0;
-            style.mTextWrap = 0;
+            style.mfWeight = kfWeight;
+            style.mSmooth = 1;
+            style.mTextWrap = 4;
             sm->AddStyle(0xefe945b2, &style);
         }
     }
@@ -689,68 +853,165 @@ ConsoleWindow::ConsoleWindow(bool param2)
 // ---------------------------------------------------------------------------
 // 0x0096b460  EA::UTFWinControls::WinDialog::OnMouseDown
 // ---------------------------------------------------------------------------
-int WinDialog::OnMouseDown(int, float px, float py, unsigned eventType)
+int WinDialog::OnMouseDown(int arg1, float px, float py, unsigned eventType)
 {
     if (eventType != 8)
         return 0;
-    (void)px;
-    (void)py;
 
-    char* esi = (char*)this;
-    int comp = this->GetComponentAt(py, px);
-    *(int*)(esi + 0x218) = comp;
+    int comp = GetComponentAt(*(float*)&arg1, px);
+    mnSelectedComponent = comp;
     if (comp == -1)
         goto finish;
 
-    if (comp <= 9) {
+    if ((unsigned)comp <= 9) {
         switch (comp) {
         case 0:
         case 1:
-            if ((*(unsigned char*)(esi + 0x214) & 1) == 0) {
-                if ((*(unsigned char*)(esi + 0x214) & 2) == 0) {
-                    *(int*)(esi + 0x218) = -1;
-                }
-            }
+            if ((mnDialogFlags & 1) == 0)
+                mnSelectedComponent = -1;
             break;
-        default:
-            if ((*(unsigned char*)(esi + 0x214) & 2) == 0) {
-                *(int*)(esi + 0x218) = -1;
-            }
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+            if ((mnDialogFlags & 2) == 0)
+                mnSelectedComponent = -1;
             break;
         }
     }
-    if (*(int*)(esi + 0x218) == -1)
+    if (mnSelectedComponent == -1)
         goto finish;
 
     {
-        IWindowMgr* pMgr = *(IWindowMgr**)(esi + 0x34);
-        char* pWin = *(char**)(esi + 0x38);
-        void* pHit = pMgr ? pMgr->GetCapture(1) : 0;
-        (void)pHit;
+        EA::Vec2 pt;
+        mpWindowMgr->GetPoint(&pt);
+        ((CompContainerSub*)((char*)mpCompContainer + 4))->DrawPoint(&pt);
 
-        EA::Vec2 local;
-        pMgr->GetCapture(0);                   // placeholder for area query
-        (void)pWin;
-        (void)local;
+        switch (mnSelectedComponent) {
+        case 0:
+        case 1:
+        case 2:
+        case 4:
+        case 6:
+            mnCursorOffsetX = pt.x - mArea.x1;
+            mnCursorOffsetY = pt.y - mArea.y1;
+            break;
+        case 3:
+        case 5:
+        case 9:
+            mnCursorOffsetX = mArea.x2 - pt.x;
+            mnCursorOffsetY = mArea.y2 - pt.y;
+            break;
+        case 7:
+            mnCursorOffsetX = mArea.x2 - pt.x;
+            mnCursorOffsetY = pt.y - mArea.y1;
+            break;
+        case 8:
+            mnCursorOffsetX = pt.x - mArea.x1;
+            mnCursorOffsetY = mArea.y2 - pt.y;
+            break;
+        }
     }
+
     {
-        IWindowMgr* pMgr = *(IWindowMgr**)(esi + 0x34);
-        IWindow* pIWin = (IWindow*)(esi + 4);
-        if (pMgr->GetCapture2(1) != pIWin)
-            pMgr->SetCapture2(1, pIWin);
+        IWindow* pSelf = (IWindow*)((char*)this + 4);
+        if (mpWindowMgr->GetCapture2(1) != pSelf)
+            mpWindowMgr->SetCapture(1, pSelf);
     }
 
 finish:
-    ((IWindow*)(esi + 4))->Invalidate();
+    ((IWindow*)((char*)this + 4))->Invalidate();
     return 1;
 }
 
 // ---------------------------------------------------------------------------
 // 0x0096ad00  EA::UTFWinControls::ConsoleWindow::OnRebuild
 // ---------------------------------------------------------------------------
-int ConsoleWindow::OnRebuild(EA::UTFWin::RenderContext* ctx)
+int ConsoleWindow::OnRebuild(EA::UTFWin::RenderContext* volatile ctx)
 {
-    EA::UTFWin::RenderContext* pRC = (EA::UTFWin::RenderContext*)ctx;
-    pRC->Begin2D(0);
+    Batch2D* pBatch = (Batch2D*)ctx->Begin2D(0);
+
+    EA::RectF rect;
+    rect.x1 = 0.0f;
+    rect.y1 = 0.0f;
+    rect.x2 = mArea.x2 - mArea.x1;
+    rect.y2 = mArea.y2 - mArea.y1;
+
+    if (mbHasScrollBar) {
+        ScrollContent* pContent =
+            (ScrollContent*)((ScrollHost*)mpScrollBar)->GetContent();
+        const EA::RectF* pBounds = pContent->GetBounds();
+        rect.x2 -= (pBounds->x2 - pBounds->x1) + kf3;
+    }
+
+    uint32_t color1 = (((uint32_t)(unsigned char)(int)(gColorSeed * kf169 + kf86)) << 24) | 0x3d517f;
+    pBatch->SetColor(color1 & (uint32_t)mnColorMask);
+    pBatch->FillRect(0.0f, 0.0f, rect.x2 - rect.x1, rect.y2 - rect.y1);
+
+    uint32_t color2 = (((uint32_t)(unsigned char)(int)(gColorSeed * kf145 + kf110)) << 24) | 0x8a9dc4;
+    pBatch->SetColor(color2 & (uint32_t)mnColorMask);
+    pBatch->DrawRect5(0.0f, 0.0f, rect.x2 - rect.x1, rect.y2 - rect.y1, kfTwo);
+
+    rect.x1 += mfInsetLeft;
+    rect.y1 += mfInsetTop;
+    rect.x2 -= mfInsetRight;
+    rect.y2 -= mfInsetBottom;
+    pBatch->SetClipRect(&rect);
+
+    if (mbNeedLayout) {
+        mbNeedLayout = false;
+        LayoutLines();
+    }
+
+    EA::Text::StyleManager* sm = EA::Text::GetStyleManager(true);
+    if (sm == 0) {
+        ctx->End2D();
+        return 1;
+    }
+    const EA::Text::TextStyle* pStyle = sm->GetStyle(0xefe945b2, 0);
+
+    float base = mRenderBottom - mRenderTop - mfInsetBottom;
+    float cur = base + (float)mnScrollOffset;
+    if (cur > mfInsetTop) {
+        ConsoleLine* sentinel = (ConsoleLine*)&mpListHead;
+        ConsoleLine* end = sentinel->mpNext;
+        ConsoleLine* node = sentinel;
+        while (node != end) {
+            ConsoleLine* line = node->mpPrev;
+            float next = cur - (float)(unsigned)line->mnHeight;
+            if (base < next) {
+                uint32_t color;
+                if (line->mpKey == 0) {
+                    color = 0xffffffffu;
+                } else {
+                    int out[2];
+                    ConsoleMap* pMap = &mMap;
+                    int* pFound = pMap->Find(out, (void**)&line->mpKey);
+                    void* found = (void*)pFound[0];
+                    if (found == (void*)pMap->mpBuckets[pMap->mnBucketCount])
+                        color = 0xffa7b8ffu;
+                    else
+                        color = *(uint32_t*)((char*)found + 4);
+                }
+                pBatch->SetColor(color);
+
+                mLineLayout.Clear(true);
+                void* pLayout = mTypesetter.LayoutParagraph(
+                    line->mText, line->mnLength, rect.x1, cur, rect.x2,
+                    cur + (float)(unsigned)line->mnHeight, pStyle, &mLineLayout, (void*)0x14);
+                pBatch->DrawText(mpDrawArg1, mpDrawArg2, pLayout);
+            }
+            cur = next;
+            node = node->mpPrev;
+            if (!(cur > mfInsetTop))
+                break;
+        }
+    }
+
+    ctx->End2D();
     return 1;
 }

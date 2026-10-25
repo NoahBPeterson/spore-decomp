@@ -1,6 +1,6 @@
 00ac6b90 cGroundLayer::cGroundLayer  # ground-layer ctor: cGonzagoSubsystem base + vtables 0x1459f50/0x1459f4c/0x1459f3c, floats at +0x28..+0x40, empty point vector at +0x44
 00ac6c40 cSPTransform::cSPTransform  # copy ctor: two words, four floats at +4..+0x14, Matrix3::Assign (0x41cb40) on +0x14, float at +0x38
-00ac6c90 eastl::do_copy<cSPTransform*>  # raw 0x3c-byte element copy (first,last,dst), returns advanced dst
+00ac6c90 eastl::do_copy<cSPTransform*>  # element-wise 0x3c-byte copy (first,last,dst) with null-dst guard, returns advanced dst
 00ac6da0 eastl::do_assign<cSPTransform*>  # element copy through operator= (0x537dc0) plus the +0x38 float tail
 00ac6de0 eastl::copy_backward<cSPTransform*>  # backward element copy via operator= + float tail
 00ac6e20 cGroundLayer::scalar_deleting_dtor  # reset vtables, free the point vector at +0x44, destroy the cGonzagoSubsystem base

@@ -9,7 +9,6 @@
 
 struct Vector3 { float x, y, z; };
 struct cSPQuaternion { float x, y, z, w; };
-struct cSPMatrix3 { float m[9]; };
 
 // SP::cTerrainCameraController::cInterpolationData<T>
 template<class T> struct Interp
@@ -38,6 +37,13 @@ template<class T> struct Spline
     SpVector<T>     slopes;
 };
 
+struct cSPMatrix3
+{
+    float m[9];
+    void Assign(const void* src);                // 0x41cb40  Matrix33(const Matrix3&)
+    void CopyFrom(const cSPMatrix3* src);        // 0x41cb40  same ctor, copy form
+};
+
 struct cSPTransform
 {
     uint16_t mFlags;             // +0
@@ -45,7 +51,10 @@ struct cSPTransform
     Vector3  mTranslation;       // +4
     float    mScale;             // +0x10
     cSPMatrix3 mRotation;        // +0x14
-    void AssignRotation(const void* m);          // rw Matrix3::Assign          @0x41cb40
+    void PreRotateXAngle(float a);               // EcTransform_PreRotateX      @0x6ba940
+    void PreRotateYAngle(float a);               // EcTransform_PreRotateY      @0x6baa70
+    void ComposeWith(const cSPTransform* o);     // ComposeTransforms           @0x40ccb0
+    void AssignFrom(const cSPTransform* src);    // cSPTransform::operator=     @0x537dc0
     void PreRotateX(float a);                    // EA::Swarm::cTransform       @0x5a2d90
     void RotateY(float a);                       // Transform_RotateY           @0x4099b0
 };
@@ -130,6 +139,7 @@ struct cTerrainSphere
     float GetRadius();                                  // 0x00f987f0
     cTerrainMapSet* GetTerrainMap();                    // vfn [vtbl+0xc]
     cSPQuaternion* GetSurfaceOrientation(cSPQuaternion* out, const Vector3* dir); // vfn [vtbl+0x10c]
+    cSPQuaternion* BuildSurfaceOrientation(cSPQuaternion* out, const Vector3* dir, cSPQuaternion* q); // 0x00f9c960
 };
 struct cTerrainMapSet
 {
@@ -140,11 +150,6 @@ struct Basis3 { void* Build(void* out); };                  // 0x006b9440
 void Matrix3FromQuaternion(cSPMatrix3* out, const float* q); // 0x0059c190
 void FUN_00b118a0(cTerrainCameraController* self);          // 0x00b118a0
 cSPQuaternion* FUN_007dcb00(cSPQuaternion* out, const cSPQuaternion* in, const cSPQuaternion* rot); // 0x007dcb00
-cSPQuaternion* BuildSurfaceOrientation(cSPQuaternion* out, const Vector3* dir, cSPQuaternion* q);    // cTerrainSphere::BuildSurfaceOrientation
-void XForm2_PreRotateX(cSPTransform* t, uint32_t angle);    // 0x006ba940
-void XForm2_PreRotateY(cSPTransform* t, float angle);       // 0x006baa70
-void Modifier_Accumulate(cSPTransform* a, const cSPTransform* b);  // 0x0040ccb0
-void cSPTransform_Assign(cSPTransform* dst, const cSPTransform* src); // 0x00537dc0
 
 // @ 0x00b12890
 cTerrainCameraController* cTerrainCameraController::Construct(void* p)
@@ -196,7 +201,7 @@ cTerrainCameraController* cTerrainCameraController::Construct(void* p)
     mCameraToWorld.mTranslation.y = G_167bbfc;
     mCameraToWorld.mTranslation.z = G_167bc00;
     mCameraToWorld.mScale = 1.0f;
-    mCameraToWorld.AssignRotation(G_167bd14);
+    mCameraToWorld.mRotation.Assign(G_167bd14);
 
     mTransformNeedsUpdating = true;
     mCameraZoomProgramID = 0;
@@ -335,7 +340,7 @@ void cTerrainCameraController::FUN_00b12dd0(float* pos, int p3, bool b4)
     }
 }
 
-// @ 0x00b12f90  ?SlerpOrientation@@YAXPAUcSPQuaternion@@PBUVector3@@1PBU1@2@Z
+// @ 0x00b12f90
 void SlerpOrientation(cSPQuaternion* out, const Vector3* a, const Vector3* b,
                       const cSPQuaternion* q, const Vector3* c)
 {
@@ -381,10 +386,14 @@ void SlerpOrientation(cSPQuaternion* out, const Vector3* a, const Vector3* b,
         qin = qq;
         cSPQuaternion* r = FUN_007dcb00(&qin, &qq, q);
         *out = *r;
-        if (G_1567da4 != 0 && GetActiveTerrainSphere() != 0)
+        if (G_1567da4 != 0)
         {
-            cSPQuaternion* r2 = BuildSurfaceOrientation(&qq, b, out);
-            *out = *r2;
+            cTerrainSphere* sphere = GetActiveTerrainSphere();
+            if (sphere != 0)
+            {
+                cSPQuaternion* r2 = sphere->BuildSurfaceOrientation(&qq, b, out);
+                *out = *r2;
+            }
         }
         return;
     }
@@ -432,7 +441,7 @@ void cTerrainCameraController::FUN_00b134a0()
     t.mTranslation.z = G_167bc00;
     t.mFlags = 0;
     t.mScale = 1.0f;
-    t.AssignRotation(G_167bd14);
+    t.mRotation.Assign(G_167bd14);
     t.mFlags |= 4;
     t.mModificationCount = (uint16_t)(t.mModificationCount + 1);
 
@@ -441,8 +450,8 @@ void cTerrainCameraController::FUN_00b134a0()
     t.mTranslation.y += G_167bd48 * dt;
     t.mTranslation.z += G_167bd4c * dt;
 
-    XForm2_PreRotateX(&t, *(uint32_t*)&mCameraPitch.current ^ 0x80000000u);
-    XForm2_PreRotateY(&t, mCameraYaw.current);
+    t.PreRotateXAngle(-mCameraPitch.current);
+    t.PreRotateYAngle(mCameraYaw.current);
 
     if (mCameraAnchorOrientation.current.w < 1.0f)
     {
@@ -453,7 +462,7 @@ void cTerrainCameraController::FUN_00b134a0()
         q.mTranslation.y = G_167bbfc;
         q.mTranslation.z = G_167bc00;
         q.mScale = 1.0f;
-        q.AssignRotation(G_167bd14);
+        q.mRotation.Assign(G_167bd14);
 
         cSPMatrix3 m;
         Matrix3FromQuaternion(&m, &mCameraAnchorOrientation.current.x);
@@ -461,8 +470,14 @@ void cTerrainCameraController::FUN_00b134a0()
         q.mFlags |= 2;
         q.mModificationCount = (uint16_t)(q.mModificationCount + 1);
 
-        Modifier_Accumulate(&t, &q);
-        cSPTransform_Assign(&t, &q);
+        cSPTransform composed;
+        composed.mTranslation = q.mTranslation;
+        composed.mScale = q.mScale;
+        composed.mRotation.CopyFrom(&q.mRotation);
+        composed.mFlags = q.mFlags;
+        composed.mModificationCount = q.mModificationCount;
+        composed.ComposeWith(&t);
+        t.AssignFrom(&composed);
     }
 
     if ((G_167bd6c & 1) == 0)
@@ -478,7 +493,7 @@ void cTerrainCameraController::FUN_00b134a0()
     t.mTranslation.z += G_167bd68;
     t.PreRotateX(f26c);
     t.RotateY(f270);
-    cSPTransform_Assign(&mCameraToWorld, &t);
+    mCameraToWorld.AssignFrom(&t);
     mTransformNeedsUpdating = false;
 }
 

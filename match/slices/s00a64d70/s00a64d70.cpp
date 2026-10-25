@@ -115,7 +115,47 @@ void* HashtableBig::AllocNode(const void* value)
 // @ 0x00a65b10
 void* HashtableBig::EraseFn(void* out, void* node, void** bucket)
 {
-    return node;
+    HashNode20* n = (HashNode20*)node;          // edx
+    uint32_t* o = (uint32_t*)out;               // esi
+    void** b = bucket;                          // ebx (never advanced)
+    HashNode20* next = *(HashNode20**)((char*)n + 0x14);
+    o[1] = (uint32_t)b;
+    o[0] = (uint32_t)next;
+    /* if the next-link is null, advance the stored bucket cursor to the next
+       non-empty slot (the original bumps o->bucket, not the ebx copy) */
+    while (next == 0) {
+        o[1] += 4;
+        next = *(HashNode20**)o[1];
+        o[0] = (uint32_t)next;
+    }
+    /* unlink `node` from its chain: walk the +0x14 links to its predecessor */
+    HashNode20* p = *(HashNode20**)b;
+    if (p == n) {
+        *(HashNode20**)b = *(HashNode20**)((char*)p + 0x14);
+    } else {
+        HashNode20* c = p;
+        HashNode20* e = *(HashNode20**)((char*)c + 0x14);
+        while (e != n) {
+            c = e;
+            e = *(HashNode20**)((char*)e + 0x14);
+        }
+        *(HashNode20**)((char*)c + 0x14) = *(HashNode20**)((char*)e + 0x14);
+    }
+    uint32_t minus1 = 0xffffffffu;
+    if ((uint32_t*)n != *(uint32_t**)((char*)this + 0x50)) {
+        *(uint32_t*)((char*)this + 0x44) += minus1;
+        if ((void*)n >= *(void**)((char*)this + 0x38) &&
+            (void*)n <  *(void**)((char*)this + 0x3c)) {
+            *(uint32_t*)((char*)n) = *(uint32_t*)((char*)this + 0x40);
+            *(void**)((char*)this + 0x40) = n;
+            *(uint32_t*)((char*)this + 0x0c) += minus1;
+            return o;
+        }
+        typedef void (__thiscall* Fn)(void*, void*);
+        ((Fn)(*(void***)((char*)this + 0x28))[3])((char*)this + 0x28, n);
+    }
+    *(uint32_t*)((char*)this + 0x0c) += minus1;
+    return o;
 }
 
 // ===========================================================================
@@ -360,9 +400,9 @@ Hashtable* Hashtable::Construct(const void* nameSlot)
     mfMaxLoadFactor  = 1.0f;
     mnGrowthFactor   = 2;
     mnNextResize     = 0;
-    mPool.mInitAllocator.mpVtbl = (void*)0x1454fac;
-    mPool.mInitAllocator.mA     = slot[1];
-    mPool.mInitAllocator.mpName = (const char*)slot[2];
+    mPool.mpVtbl = (void*)0x1454fac;
+    mPool.mA     = slot[1];
+    mPool.mpName = (const char*)slot[2];
     mnBucketCount    = 1;
     mpBucketArray    = (HashNode16**)0x154df28;  // static empty-bucket sentinel
     return this;
@@ -392,8 +432,12 @@ void Hashtable::Dispose()
     DisposeArray2((void**)mpBucketArray, mnBucketCount);
     mnElementCount = 0;
     if (mnBucketCount > 1)
-        mPool.Free(mpBucketArray);
-    mPool.mInitAllocator.mpVtbl = (void*)0x1403934;
+    {
+        /* free the bucket array through the embedded allocator face (slot 3) */
+        typedef void (__thiscall* FreeFn)(void*, void*);
+        ((FreeFn)(*(void***)&mPool)[3])(&mPool, mpBucketArray);
+    }
+    mPool.mpVtbl = (void*)0x1403934;
 }
 
 // ===========================================================================
@@ -430,7 +474,8 @@ void Hashtable::Insert(InsertResult* out, const HashNode16* pair, const uint32_t
 
     uint32_t local[2];
     ((HashPolicy*)&mfMaxLoadFactor)->NextBucketCount(local, mnBucketCount, mnElementCount, 1);
-    HashNode16* fresh = (HashNode16*)mPool.AllocSize(0x10);
+    typedef void* (__thiscall* AllocFn)(void*, uint32_t);
+    HashNode16* fresh = (HashNode16*)((AllocFn)(*(void***)&mPool)[2])(&mPool, 0x10);
     if (fresh)
     {
         fresh->mKey = pair->mKey;
@@ -479,7 +524,8 @@ uint32_t Hashtable::Erase(uint32_t* key)
             if (*key != node->mKey)
                 break;
             *bucket = node->mpNext;
-            mPool.Free(node);
+            typedef void (__thiscall* FreeFn)(void*, void*);
+            ((FreeFn)(*(void***)&mPool)[3])(&mPool, node);
             --mnElementCount;
         }
     }
@@ -501,18 +547,95 @@ void GroupMap::DisposeInner()
 // Instance::~Instance
 // ===========================================================================
 // @ 0x00a65230
+// ===========================================================================
+// Instance::~Instance -- free the canvas, destroy every group in the
+// Instance/Group table, run the owner ClearLists pass, dispose the GroupMap and
+// the two embedded tables, and finally re-stamp the object's vtable.
+// ===========================================================================
+// @ 0x00a65230
 void Instance::Destroy()
 {
-    return;
+    pd_free(mpCanvas);                          // 0xa493d0
+
+    /* walk every group in mGroups and destroy/free it */
+    HashNode16** bucket = mGroups.mpBucketArray;
+    HashNode16* node = *bucket;
+    if (node == 0) {
+        while (*++bucket == 0) { }
+        node = *bucket;
+    }
+    if (mGroups.mpBucketArray[mGroups.mnBucketCount] != node) {
+        do {
+            HashNode16* cur = node;
+            node = cur->mpNext;
+            if (node == 0) {
+                while (*++bucket == 0) { }
+                node = *bucket;
+            }
+            AnyGroup* group = (AnyGroup*)cur->mV2;
+            void* samples = group->mpSamples;            // group->+0x00
+            if (samples != 0) {
+                /* the allocator sub-object begins at group+0x0c: its vtable is
+                   the pointer stored there and `this` is the address itself */
+                typedef void (__thiscall* Fn)(void*, void*);
+                ((Fn)(*(void***)&group->mpVtbl0c)[3])((void*)&group->mpVtbl0c, samples);
+            }
+            group->mpVtbl0c = (void*)0x1403934;
+            typedef void (__thiscall* FreeFn)(void*, void*);
+            ((FreeFn)(*(void***)this)[3])(this, group);
+        } while (mGroups.mpBucketArray[mGroups.mnBucketCount] != node);
+    }
+
+    void* owner = Eapd_GetOwnerA();             // 0xa67ce0
+    ((EapdOwner*)owner)->ClearLists(this);      // 0xa646a0
+
+    mGroupMap.mGroups.Dispose();                // 0xa65000
+    mGroupMap.mpVtbl = (void*)0x1455648;        // 0x01455648
+    mGroups.Finalize();                         // 0xa64b70
+    mpVtbl = (void*)0x1403934;                  // 0x01403934
 }
 
 // ===========================================================================
-// Instance::CreateGroup
+// Instance::CreateGroup -- find the symbol, and when it is absent allocate a
+// 0x20-byte group, initialise it (failing soft if Init returns false) and
+// insert {symbol, a3, group} into the Instance/Group table.
 // ===========================================================================
 // @ 0x00a65360
 void* Instance::CreateGroup(uint32_t* sym, void* a3, void* a4, uint32_t a5)
 {
-    return 0;
+    void* group = 0;
+    HashNode16* foundNode = 0;
+    /* The original keys the table on the caller's 4-byte symbol token (it hands
+       `find` the address of its own argument slot), not on the pointee. */
+    uint32_t key = (uint32_t)sym;
+    mGroups.FindNode(&foundNode, &key);
+    /* sentinel == foundNode means the symbol is absent -> build a group */
+    if (mGroups.mpBucketArray[mGroups.mnBucketCount] != foundNode)
+        return group;
+
+    typedef void* (__thiscall* AllocFn)(void*, uint32_t);
+    void* block = ((AllocFn)(*(void***)this)[2])(this, 0x20);
+    if (block)
+        group = ((GroupHelp*)block)->Init(this);
+    else
+        group = 0;
+    if (group == 0)
+        return group;
+
+    if (!((AnyGroup*)group)->Init(sym, a3, a4, a5)) {
+        ((AnyGroup*)group)->Destroy();
+        typedef void (__thiscall* FreeFn)(void*, void*);
+        ((FreeFn)(*(void***)this)[3])(this, group);
+        return 0;
+    }
+    HashNode16 pair;
+    pair.mKey = key;
+    pair.mV1  = (uint32_t)a3;
+    pair.mV2  = (uint32_t)group;
+    pair.mpNext = 0;
+    InsertResult res;
+    mGroups.Insert(&res, &pair, 0);
+    return group;
 }
 
 // ===========================================================================
@@ -543,11 +666,20 @@ GroupMap* GroupMap::GroupMapCtor(void* nameSlot)
 }
 
 // ===========================================================================
-// Instance ctor
+// Instance ctor -- install the vtables, name the Instance/Group table, build
+// the GroupMap wrapper, then stash the two caller pointers.
 // ===========================================================================
 // @ 0x00a65560
 Instance* Instance::InstanceCtor(void* sys, void* a3, void* a4)
 {
+    mpVtbl       = (void*)0x1454fac;
+    mField04     = *(uint32_t*)((char*)sys + 4);
+    mpClassName  = "EAPd/Instance";     // 0x014556ac
+    mGroups.InitNamed(sys, "EAPd/GroupMap");   // 0x0145569c
+    mGroupMap.GroupMapCtor(sys);
+    mField6c = (uint32_t)a4;
+    mpCanvas = a3;
+    mField74 = 1;
     return this;
 }
 
@@ -565,12 +697,35 @@ bool InstanceManager::CanvasOrId(void* a2, void* a3, uint32_t* out)
 }
 
 // ===========================================================================
-// InstanceManager::RemoveInstance
+// InstanceManager::RemoveInstance -- find the binding, unlink the node from the
+// map's intrusive iterator list, erase it (fixing the pool free list), then
+// destroy and free the Instance.  Returns true when something was removed.
 // ===========================================================================
 // @ 0x00a65cd0
 bool InstanceManager::RemoveInstance(uint32_t id)
 {
-    return false;
+    /* InstanceMap iterator node: +4 = prev link, +8 = next link, +0x10 = value */
+    void* iter[2];                       // {node, bucket}
+    mBindings.Find(iter, &id);
+    void* raw = iter[0];
+    if (raw == (void*)mBindings.mpBucketArray[mBindings.mnBucketCount])
+        return false;
+
+    uint32_t* node = (uint32_t*)raw;
+    uint32_t* next = *(uint32_t**)((char*)node + 8);
+    uint32_t* prev = *(uint32_t**)((char*)node + 4);
+    void* instance = *(void**)((char*)node + 0x10);
+    *next = (uint32_t)prev;
+    *(uint32_t**)((char*)prev + 4) = next;
+    *(uint32_t*)((char*)node + 4) = 0;
+    *(uint32_t*)((char*)node + 8) = 0;
+
+    mBindings.EraseFn(iter, raw, (void**)iter[1]);
+
+    ((Instance*)instance)->Destroy();
+    typedef void (__thiscall* FreeFn)(void*, void*);
+    ((FreeFn)(*(void***)((char*)this + 4))[3])((char*)this + 4, instance);
+    return true;
 }
 
 // ===========================================================================
@@ -590,12 +745,36 @@ void* InstanceManager::FindInstance(uint32_t id)
 }
 
 // ===========================================================================
-// InstanceManager::CreateCanvas  --  booked as nonmatching; body not recovered
+// InstanceManager::CreateCanvas  -- build a canvas for a {name,id} pair via the
+// canvas interface (vtable slot 3), register the filename symbols, then tell
+// the interface we are done (slot 4).  Returns the canvas id (0 on failure).
 // ===========================================================================
 // @ 0x00a655f0
 uint32_t InstanceManager::CreateCanvas(void* a2, void* a3, uint32_t a4, uint32_t a5)
 {
-    (void)a2; (void)a3; (void)a4; (void)a5;
-    return gCreateCanvasResult;
+    uint32_t uVar2 = 0;
+    /* Frame order matches the original: local_10/local_c are the two outputs of
+       the interface call, symHash/symName the pair GetGroupSymbol fills. */
+    uint32_t local_10;
+    uint32_t local_c;
+    uint32_t symHash;
+    uint32_t symName;
+    GetGroupSymbol(&symHash);                           // 0xa635d0
+    Canvas* cv = *(Canvas**)((char*)this + 0x38);
+    typedef uint8_t (__thiscall* Slot3Fn)(void*, uint32_t, uint32_t, void*, void*,
+                                          uint32_t, uint32_t, uint32_t*, uint32_t*);
+    uint8_t ok = ((Slot3Fn)(*(void***)cv)[3])(cv, symHash, symName, a2, a3,
+                                              g_1675864, g_1675868,
+                                              &local_10, &local_c);
+    if (ok) {
+        SetNewFilenameSymbol1(a2, a3);                   // 0xa4a410
+        SetNewFilenameSymbol2((void*)a4, (void*)a5);     // 0xa4a3f0
+        uVar2 = MakeCanvasId((void*)local_10, (void*)local_c); // 0xa47c00
+        SetNewFilenameSymbol1((void*)gEmptySymbol, (void*)g_16758a0);
+        SetNewFilenameSymbol2((void*)0, (void*)0);
+        typedef void (__thiscall* Slot4Fn)(void*, void*);
+        ((Slot4Fn)(*(void***)cv)[4])(cv, (void*)local_10);
+    }
+    return uVar2;
 }
 

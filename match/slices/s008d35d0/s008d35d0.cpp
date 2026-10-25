@@ -1,122 +1,195 @@
 // slice s008d35d0 -- TSI type-supplier / glyph-run list + sort utilities.
-// Compile: /O2 /MD /Gy /EHsc /TP /arch:SSE
+// Compile: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
 
-extern "C" int   FUN_008d3580(int a, int b, int c, int d);
-extern "C" char  FUN_008d3530(int a, int b, int c);
-extern "C" int   FUN_00c7ea30(int a, int b, int c);
-extern "C" void  FUN_00edba80(void* a, void* b, void* c);
-extern "C" void* PTR_FUN_01435990;
-extern "C" void* PTR_FUN_01435980;
-
 struct TSI;
+struct OwnerNode;
 
-// Non-member helpers (cdecl fastcall/plain) ---------------------------------
-void FUN_008d3750(unsigned* param_1, unsigned* param_2);
-void FUN_008d3820(unsigned* param_1, unsigned* param_2);
-unsigned* FUN_008d38d0(unsigned* a, unsigned* b, unsigned* c);
-void FUN_008d3a10(int param_1, int param_2, int param_3, unsigned param_4, unsigned param_5,
-                  unsigned param_6, unsigned param_7, unsigned param_8);
-void FUN_008d3b70(int param_1, int param_2, int param_3, int param_4, unsigned param_5,
-                  unsigned param_6, unsigned param_7, unsigned param_8, int param_9);
-void FUN_008d4040(int* a, int* b, int* c, int d);
-void FUN_008d40b0(int a, int b, int c);
-void FUN_008d4110(unsigned* a, int b, int c);
-void FUN_008d4250(unsigned* a, unsigned* b, unsigned c, unsigned d, unsigned e);
-void FUN_008d4320(unsigned* a, unsigned* b, unsigned* c, int d);
+// ---------------------------------------------------------------------------
+// Shared layouts
+// ---------------------------------------------------------------------------
 
-// __thiscall container functions as real C++ member functions (ecx = this).
-struct TSI;
-struct TSI {
-    char data[0x390];
-    void  FUN_008d35d0(int param_2);
-    void  FUN_008d3690(int* param_2);
-    char  FUN_008d36f0(int a, int b, int c);
-    unsigned FUN_008d3d30(int a, int b);
-    int   FUN_008d3ad0(int a);
-    int   FUN_008d3ae0(int a);
-    void  FUN_008d3b10(int* a);
-    int*  FUN_008d3dc0(int a, int* b, int c, int d, int e);
-    void  FUN_008d3e30(int* a, unsigned p3);
-    void  FUN_008d41b0(int* a);
-    void  FUN_008d4400(int* a, int* b);
+// One entry of the glyph-run table (0x1c bytes).
+struct RunRec {
+    OwnerNode*     mpOwner;   // +0x00
+    int            mKey4;     // +0x04
+    int            mKey8;     // +0x08
+    int            mKeyC;     // +0x0c
+    float          mf10;      // +0x10
+    signed char    mb14;      // +0x14
+    signed char    mb15;      // +0x15
+    unsigned short mFlags16;  // +0x16
+    unsigned short mDup18;    // +0x18
 };
 
-#define M(off) (*(int*)(data + (off)))
-#define MU(off) (*(unsigned*)(data + (off)))
+typedef void (*RunNotifyFn)(int, RunRec*, void*);
+
+// Per-node provider interface (slot4 at vtable +0x04, slotC at +0x0c).
+struct IRunProvider {
+    virtual void* slot0();
+    virtual void* slot4(void* key, void* a, void* b);   // vtable +0x04
+    virtual void* slot8();
+    virtual char  slotC(void* data, void* container);   // vtable +0x0c
+};
+
+// One node of TSI's intrusive list (0x1c bytes).
+struct OwnerNode {
+    OwnerNode*    mpNext;   // +0x00
+    OwnerNode*    mpPrev;   // +0x04
+    int           mKey8;    // +0x08
+    IRunProvider* mpIface;  // +0x0c
+    RunNotifyFn   mpFn;     // +0x10
+    void*         mpData;   // +0x14
+    unsigned char mFlag;    // +0x18
+};
+
+// eastl allocator interface (vtable +0x08 allocate, +0x0c deallocate).
+struct VAlloc {
+    virtual void  s0();
+    virtual void  s4();
+    virtual void* allocate(unsigned n, int a, void* name);
+    virtual void  deallocate(void* p, unsigned n);
+};
+
+// {begin,end,cap,alloc,name} vector core over 0x10-byte elements.
+struct VecCore {
+    void*   begin;   // +0x00
+    void*   end;     // +0x04
+    void*   cap;     // +0x08
+    VAlloc* alloc;   // +0x0c
+    void*   name;    // +0x10
+    void grow(void* p, void* value);   // 0x008d4400
+};
+
+extern "C" void* FUN_00c7ea30(void* first, void* last, void* dest);
+extern "C" void  FUN_00edba80(void* first, void* last, void* dest);
+extern "C" char  PTR_FUN_01435990;
+extern "C" char  PTR_FUN_01435980;
+
+// ---------------------------------------------------------------------------
+// TSI: two overlapping views of the same object.
+//   * glyph container: intrusive-list links at +0/+4, RunRec[0x20] at +8.
+//   * run table:       vtable at +0, two VecCore members at +4 and +0x18.
+// ---------------------------------------------------------------------------
+struct TSI {
+    union {
+        struct {
+            TSI*   mpNext;        // +0x000
+            TSI*   mpPrev;        // +0x004
+            RunRec mRuns[0x20];   // +0x008 (stride 0x1c)
+            int    mCount;        // +0x388
+            char   mFlag;         // +0x38c
+        };
+        struct {
+            void*   mVtbl;        // +0x00
+            VecCore mKeys;        // +0x04 (0x10-byte entries)
+            VecCore mRects;       // +0x18 (0x14-byte entries)
+            char    mDirty;       // +0x2c
+        };
+    };
+
+    void       FUN_008d35d0(RunRec* rec, int arg);                      // 0x008d35d0
+    void       FUN_008d3690(RunRec* rec);                               // 0x008d3690
+    char       FUN_008d36f0(int a, int b, int c);                       // 0x008d36f0
+    RunRec*    FUN_008d3530(int key, int b14, int b15);                 // 0x008d3530
+    RunRec*    FUN_008d3580(int key, int b14, int b15, unsigned mask);  // 0x008d3580
+    int        FUN_008d3ad0(int i);                                     // 0x008d3ad0
+    int        FUN_008d3ae0(int key);                                   // 0x008d3ae0
+    void       FUN_008d3b10(OwnerNode* node);                           // 0x008d3b10
+    TSI*       FUN_008d3c60(VAlloc* alloc);                             // 0x008d3c60
+    void       FUN_008d3ca0();                                          // 0x008d3ca0
+    bool       FUN_008d3d30(int key, TSI* container);                   // 0x008d3d30
+    TSI*       FUN_008d3da0();                                          // 0x008d3da0
+    OwnerNode* FUN_008d3dc0(void* key, int* pOut, void* a4, void* a5);  // 0x008d3dc0
+    void       FUN_008d3e30(RunRec* rec, unsigned flags);               // 0x008d3e30
+    void       FUN_008d41b0(OwnerNode* node);                           // 0x008d41b0
+};
+
+// Free helpers / non-matching slice functions.
+void      FUN_008d3750(unsigned* a, unsigned* b);
+void      FUN_008d3820(unsigned* a, unsigned* b);
+unsigned* FUN_008d38d0(unsigned* a, unsigned* b, unsigned* c);
+void*     FUN_008d3a10(int base, int start, int idx, unsigned k0, unsigned k1,
+                       unsigned k2, unsigned k3);
+void      FUN_008d3b70(int a, int b, int c, int d, unsigned e, unsigned f,
+                       unsigned g, unsigned h, int i);
+void* FUN_008d4040(void** pOut, void* head, void* tail, void* key, void* unused);
+void      FUN_008d40b0(int a, int b, int c);
+void      FUN_008d4110(unsigned* a, int b, int c);
+void      FUN_008d4250(unsigned* a, unsigned* b, unsigned c, unsigned d, unsigned e);
+void      FUN_008d4320(unsigned* a, unsigned* b, unsigned* c, int d);
 
 // ---------------------------------------------------------------------------
 // @ 0x008d35d0
-void TSI::FUN_008d35d0(int param_2)
+// Remove one run from the table, notify its owner, then free matching children.
+// ---------------------------------------------------------------------------
+void TSI::FUN_008d35d0(RunRec* rec, int arg)
 {
-    int local[7];
-    int i;
-    int* q;
-    for (i = 0; i < 7; i++)
-        local[i] = *(int*)(param_2 + i * 4);
-    --M(0x388);
-    q = (int*)(data + 8 + M(0x388) * 0x1c);
-    if ((unsigned)param_2 < (unsigned)q) {
-        for (i = 0; i < 7; i++)
-            *(int*)(param_2 + i * 4) = q[i];
+    RunRec local = *rec;
+    --mCount;
+    RunRec* last = &mRuns[mCount];
+    if ((unsigned)last > (unsigned)rec)
+        *rec = *last;
+
+    OwnerNode* owner = local.mpOwner;
+    if (owner != 0) {
+        if (owner->mpFn != 0 && (local.mFlags16 & 0x2000) == 0)
+            owner->mpFn(arg, &local, owner->mpData);
     }
-    if (local[0] != 0 && *(int*)(local[0] + 0x10) != 0 && ((unsigned)local[6] & 0x2000) == 0) {
-        ((void(*)(int, int*, int))*(int*)(local[0] + 0x10))(
-            param_2, local, *(int*)(local[0] + 0x14));
-    }
-    if (local[2] != 0 && ((unsigned)local[6] & 0x1000) == 0) {
-        int r = FUN_008d3580(local[2], (int)(char)local[5],
-                             (int)(char)((unsigned)local[5] >> 8), 0x1000);
+    if (local.mKey8 != 0 && (local.mFlags16 & 0x1000) == 0) {
+        RunRec* r = FUN_008d3580(local.mKey8, local.mb14, local.mb15, 0x1000);
         if (r != 0)
-            ((TSI*)r)->FUN_008d35d0(param_2);
+            FUN_008d35d0(r, arg);
     }
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3690
-void TSI::FUN_008d3690(int* param_2)
+// Set the duplicate flag from the number of matching runs, then unlink rec.
+// ---------------------------------------------------------------------------
+void TSI::FUN_008d3690(RunRec* rec)
 {
-    int* p;
-    int n;
-    unsigned c;
-    n = M(0x388);
-    c = 0;
+    unsigned c = 0;
+    int n = mCount;
     if (n != 0) {
-        p = (int*)(data + 0x14);
+        RunRec* p = mRuns;
         do {
-            if (p[-2] == param_2[1] && p[-3] == *param_2 && *p == param_2[3])
-                c = c + 1;
-            p = p + 7;
-            n = n - 1;
+            if (p->mKey4 == rec->mKey4 && p->mpOwner == rec->mpOwner &&
+                p->mKeyC == rec->mKeyC)
+                c++;
+            p++;
+            n--;
         } while (n != 0);
     }
-    *(unsigned short*)(param_2 + 6) = (unsigned short)(1 < c);
-    ((TSI*)param_2)->FUN_008d35d0(0x5ece0001);
+    rec->mDup18 = (unsigned short)(1 < c);
+    FUN_008d35d0(rec, 0x5ece0001);
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d36f0
+// ---------------------------------------------------------------------------
 char TSI::FUN_008d36f0(int param_2, int param_3, int param_4)
 {
-    char* eax;
-    unsigned u;
     if (param_2 != 0) {
-        u = 0;
-        unsigned cnt = MU(0x388);
+        unsigned u = 0;
+        unsigned cnt = (unsigned)mCount;
         if (u < cnt) {
-            eax = data + 0x1d;
+            RunRec* p = mRuns;
             do {
-                if (*(int*)(eax - 0x11) == param_2 &&
-                    (param_3 == -2 || param_3 == *eax) &&
-                    (param_4 == 7 || param_4 == eax[-1]))
+                if (p->mKey4 == param_2 && (param_3 == -2 || param_3 == p->mb15) &&
+                    (param_4 == 7 || param_4 == p->mb14))
                     return 1;
-                u = u + 1;
-                eax = eax + 0x1c;
+                u++;
+                p++;
             } while (u < cnt);
         }
     }
     return 0;
 }
 
-// @ 0x008d3750
+// ---------------------------------------------------------------------------
+// @ 0x008d3750 (non-matching: register allocation / branch layout differ)
+// ---------------------------------------------------------------------------
 void FUN_008d3750(unsigned* param_1, unsigned* param_2)
 {
     unsigned u1, u2, u3, u4;
@@ -154,7 +227,9 @@ void FUN_008d3750(unsigned* param_1, unsigned* param_2)
     }
 }
 
-// @ 0x008d3820
+// ---------------------------------------------------------------------------
+// @ 0x008d3820 (non-matching)
+// ---------------------------------------------------------------------------
 void FUN_008d3820(unsigned* param_1, unsigned* param_2)
 {
     unsigned u1, u2, u3, u4;
@@ -187,7 +262,9 @@ void FUN_008d3820(unsigned* param_1, unsigned* param_2)
     }
 }
 
-// @ 0x008d38d0
+// ---------------------------------------------------------------------------
+// @ 0x008d38d0 (non-matching)
+// ---------------------------------------------------------------------------
 unsigned* FUN_008d38d0(unsigned* param_1, unsigned* param_2, unsigned* param_3)
 {
     unsigned u1, u2, u3;
@@ -252,52 +329,55 @@ unsigned* FUN_008d38d0(unsigned* param_1, unsigned* param_2, unsigned* param_3)
     return param_2;
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3a10
-void FUN_008d3a10(int param_1, int param_2, int param_3, unsigned param_4, unsigned param_5,
-                  unsigned param_6, unsigned param_7, unsigned param_8)
+// Sift one 0x10-byte key up into the heap rooted at base[start..idx].
+// Returns the address of the destination slot.
+// ---------------------------------------------------------------------------
+void* FUN_008d3a10(int base, int start, int idx, unsigned k0, unsigned k1,
+                   unsigned k2, unsigned k3)
 {
-    unsigned u;
-    int i4, i6;
-    unsigned* p;
-    bool b;
-    (void)param_8;
-    while (param_2 < param_3) {
-        i6 = (param_3 - 1) >> 1;
-        i4 = i6 * 0x10;
-        u = *(unsigned*)(i4 + param_1);
-        p = (unsigned*)(i4 + param_1);
-        b = u < param_4;
-        if (u == param_4) {
-            b = (unsigned short)(param_6 >> 0x10) <= *(unsigned short*)((int)p + 10);
-            if (*(unsigned short*)((int)p + 10) == (unsigned short)(param_6 >> 0x10)) {
-                b = (unsigned short)param_6 <= (unsigned short)p[2];
-                if ((unsigned short)p[2] == (unsigned short)param_6)
-                    b = p[1] < param_5;
+    while (start < idx) {
+        int parent = (idx - 1) >> 1;
+        unsigned* p = (unsigned*)((char*)base + parent * 0x10);
+        unsigned p0 = p[0];
+        bool less = p0 < k0;
+        if (p0 == k0) {
+            less = (unsigned short)(k2 >> 0x10) <= *(unsigned short*)((char*)p + 0xa);
+            if (*(unsigned short*)((char*)p + 0xa) == (unsigned short)(k2 >> 0x10)) {
+                less = (unsigned short)k2 <= (unsigned short)p[2];
+                if ((unsigned short)p[2] == (unsigned short)k2)
+                    less = p[1] < k1;
             }
         }
-        if (!b) break;
-        *(unsigned*)(param_3 * 0x10 + param_1) = p[0];
-        *(unsigned*)(param_3 * 0x10 + param_1 + 4) = p[1];
-        *(unsigned*)(param_3 * 0x10 + param_1 + 8) = p[2];
-        *(unsigned*)(param_3 * 0x10 + param_1 + 0xc) = p[3];
-        param_3 = i6;
+        if (!less)
+            break;
+        unsigned* dst = (unsigned*)((char*)base + idx * 0x10);
+        dst[0] = p[0]; dst[1] = p[1]; dst[2] = p[2]; dst[3] = p[3];
+        idx = parent;
     }
-    p = (unsigned*)(param_3 * 0x10 + param_1);
-    p[0] = param_4; p[1] = param_5; p[2] = param_6; p[3] = param_7;
+    unsigned* dst = (unsigned*)((char*)base + idx * 0x10);
+    dst[0] = k0; dst[1] = k1; dst[2] = k2; dst[3] = k3;
+    return dst;
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3ad0
+// ---------------------------------------------------------------------------
 int TSI::FUN_008d3ad0(int param_2)
 {
-    return param_2 * 0x10 + M(4);
+    return param_2 * 0x10 + (int)mKeys.begin;
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3ae0
+// ---------------------------------------------------------------------------
 int TSI::FUN_008d3ae0(int param_2)
 {
-    int p = M(4);
+    int p = (int)mKeys.begin;
+    int e = (int)mKeys.end;
     while (true) {
-        if (p == M(8))
+        if (p == e)
             return 0;
         if (*(int*)(p + 4) == param_2) break;
         p = p + 0x10;
@@ -305,44 +385,45 @@ int TSI::FUN_008d3ae0(int param_2)
     return p;
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3b10
-void TSI::FUN_008d3b10(int* param_2)
+// Unlink node from the intrusive list, then purge every run owned by it.
+// ---------------------------------------------------------------------------
+void TSI::FUN_008d3b10(OwnerNode* node)
 {
-    TSI* self = this;
-    unsigned u;
-    int* p;
-    p = (int*)*(int*)self->data;
-    u = 0;
-    do {
-        if (p == (int*)self) {
-        L_done:
-            if (0 < MU(0x388)) {
-                p = (int*)(self->data + 8);
-                do {
-                    if ((int*)*p == param_2)
-                        ((TSI*)p)->FUN_008d35d0(0x5ece0002);
-                    else {
-                        u = u + 1;
-                        p = p + 7;
-                    }
-                } while (u < MU(0x388));
+    OwnerNode* p = (OwnerNode*)mpNext;
+    for (;;) {
+        if (p == (OwnerNode*)this)
+            break;
+        if (p == node) {
+            OwnerNode* pv = node->mpPrev;
+            OwnerNode* nx = node->mpNext;
+            pv->mpNext = nx;
+            nx->mpPrev = pv;
+            node->mpNext = 0;
+            node->mpPrev = 0;
+            break;
+        }
+        p = p->mpNext;
+    }
+
+    unsigned u = 0;
+    if ((unsigned)mCount > 0) {
+        RunRec* r = mRuns;
+        do {
+            if ((OwnerNode*)r->mpOwner == node)
+                FUN_008d35d0(r, 0x5ece0002);
+            else {
+                u++;
+                r++;
             }
-            return;
-        }
-        if (p == param_2) {
-            p = (int*)param_2[1];
-            int i1 = *param_2;
-            *p = i1;
-            *(int**)(i1 + 4) = p;
-            *param_2 = 0;
-            param_2[1] = 0;
-            goto L_done;
-        }
-        p = (int*)*p;
-    } while (true);
+        } while (u < (unsigned)mCount);
+    }
 }
 
-// @ 0x008d3b70
+// ---------------------------------------------------------------------------
+// @ 0x008d3b70 (non-matching)
+// ---------------------------------------------------------------------------
 void FUN_008d3b70(int param_1, int param_2, int param_3, int param_4, unsigned param_5,
                   unsigned param_6, unsigned param_7, unsigned param_8, int param_9)
 {
@@ -350,6 +431,7 @@ void FUN_008d3b70(int param_1, int param_2, int param_3, int param_4, unsigned p
     int i2, i3, i4, i6;
     unsigned* p;
     bool b;
+    (void)param_9;
     while (true) {
         i4 = param_4 * 2;
         i6 = i4 + 2;
@@ -384,223 +466,235 @@ void FUN_008d3b70(int param_1, int param_2, int param_3, int param_4, unsigned p
         *(unsigned*)(i6 + 0xc) = p[3];
         param_4 = i4 + 1;
     }
-    FUN_008d3a10(param_1, param_2, param_4, param_5, param_6, param_7, param_8, (unsigned)param_9);
+    FUN_008d3a10(param_1, param_2, param_4, param_5, param_6, param_7, param_8);
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3c60
-void FUN_008d3c60(int* param_1, int param_2)
+// Run-table constructor: install the vtable, two empty vectors and the
+// allocator.
+// ---------------------------------------------------------------------------
+TSI* TSI::FUN_008d3c60(VAlloc* alloc)
 {
-    param_1[0] = (int)&PTR_FUN_01435990;
-    param_1[1] = 0;
-    param_1[2] = 0;
-    param_1[3] = 0;
-    param_1[4] = param_2;
-    param_1[5] = 0;
-    param_1[6] = 0;
-    param_1[7] = 0;
-    param_1[8] = 0;
-    param_1[9] = param_2;
-    param_1[10] = 0;
-    *(char*)(param_1 + 0xb) = 0;
+    mVtbl = &PTR_FUN_01435990;
+    mKeys.begin = 0;
+    mKeys.end = 0;
+    mKeys.cap = 0;
+    mKeys.alloc = alloc;
+    mKeys.name = 0;
+    mRects.begin = 0;
+    mRects.end = 0;
+    mRects.cap = 0;
+    mRects.alloc = alloc;
+    mRects.name = 0;
+    mDirty = 0;
+    return this;
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3ca0
-void FUN_008d3ca0(int* param_1)
+// Run-table destructor: release both vectors through their allocators.
+// ---------------------------------------------------------------------------
+void TSI::FUN_008d3ca0()
 {
-    int i;
-    param_1[0] = (int)&PTR_FUN_01435990;
-    i = param_1[6];
-    if (i != 0)
-        ((void(*)(int, int))*(int*)(*(int*)param_1[9] + 0xc))(
-            i, ((param_1[8] - i) / 0x14) * 0x14);
-    i = param_1[1];
-    if (i != 0)
-        ((void(*)(int, int))*(int*)(*(int*)param_1[4] + 0xc))(
-            i, (param_1[3] - i >> 4) << 4);
-    param_1[0] = (int)&PTR_FUN_01435980;
+    mVtbl = &PTR_FUN_01435990;
+    if (mRects.begin != 0)
+        mRects.alloc->deallocate(mRects.begin,
+            (unsigned)((((int)mRects.cap - (int)mRects.begin) / 0x14) * 0x14));
+    if (mKeys.begin != 0)
+        mKeys.alloc->deallocate(mKeys.begin,
+            (unsigned)((((int)mKeys.cap - (int)mKeys.begin) >> 4) << 4));
+    mVtbl = &PTR_FUN_01435980;
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3d30
-unsigned TSI::FUN_008d3d30(int param_2, int param_3)
+// True when every non-zero key of the rect entry is present in container's runs.
+// ---------------------------------------------------------------------------
+bool TSI::FUN_008d3d30(int param_2, TSI* param_3)
 {
-    int* p1;
-    int* p2;
-    unsigned u;
-    int* p4;
-    p1 = *(int**)(data + 0x18);
-    while (true) {
-        if (p1 == *(int**)(data + 0x1c))
-            return 0;
-        if (*p1 == param_2) break;
-        p1 = p1 + 5;
-    }
-    u = 0;
-    p4 = p1;
+    int* r = (int*)mRects.begin;
+    int* e = (int*)mRects.end;
+    if (r == e)
+        return false;
     do {
-        p4 = p4 + 1;
-        if (*p4 != 0) {
-            p1 = 0;
-            if (*(int**)(param_3 + 0x388) == 0)
-            L_zero:
-                return 0;
-            p2 = (int*)(param_3 + 0xc);
-            while (*p2 != *p4) {
-                p1 = (int*)((int)p1 + 1);
-                p2 = p2 + 7;
-                if (*(int**)(param_3 + 0x388) <= p1) goto L_zero;
+        if (*r == param_2)
+            break;
+        r += 5;
+    } while (r != e);
+    if (r == e)
+        return false;
+
+    unsigned u = 0;
+    int* field = r + 1;
+    do {
+        int v = *field;
+        if (v != 0) {
+            if ((unsigned)param_3->mCount == 0)
+                return false;
+            unsigned i = 0;
+            int* k = &param_3->mRuns[0].mKey4;
+            while (*k != v) {
+                i++;
+                k += 7;
+                if ((unsigned)param_3->mCount <= i)
+                    return false;
             }
         }
-        u = u + 1;
-        if (3 < u)
-            return 1;
-    } while (true);
+        u++;
+        field++;
+    } while (u < 4);
+    return true;
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3da0
-void __fastcall FUN_008d3da0v(int self)
+// Initialise the intrusive-list sentinel and count.
+// ---------------------------------------------------------------------------
+TSI* TSI::FUN_008d3da0()
 {
-    int p = self;
-    *(int*)(p + 4) = p;
-    *(int*)(p + 0) = p;
-    *(int*)(p + 0x388) = 0;
-    *(char*)(p + 0x38c) = 1;
+    mpPrev = this;
+    mpNext = this;
+    mCount = 0;
+    mFlag = 1;
+    return this;
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3dc0
-int* TSI::FUN_008d3dc0(int param_2, int* param_3, int param_4, int param_5, int param_6)
+// Walk the list calling each node's provider; return the first node that
+// produces a run, storing the run pointer in *pOut.
+// ---------------------------------------------------------------------------
+OwnerNode* TSI::FUN_008d3dc0(void* key, int* pOut, void* a4, void* a5)
 {
-    int* p;
-    int* p1;
-    int i1, i2;
-    p1 = (int*)(void*)this;      // param_1
-    p = (int*)*(int*)p1;             // piVar1 = *param_1
-    while (true) {
-        if (p1 == p) return 0;
-        i1 = p1[1];
-        if (*(int*)(i1 + 0xc) != 0) {
-            i2 = ((int(*)(int, int, int))*(int*)(*(int*)(i1 + 0xc) + 4))(param_2, param_4, param_5);
-            *param_3 = i2;
-            if (i2 != 0) return (int*)i1;
+    OwnerNode* first = (OwnerNode*)mpNext;
+    if ((OwnerNode*)this == first)
+        return 0;
+    OwnerNode* p = (OwnerNode*)this;
+    for (;;) {
+        OwnerNode* node = p->mpPrev;
+        if (node->mpIface != 0) {
+            void* r = node->mpIface->slot4(key, a4, a5);
+            *pOut = (int)r;
+            if (r != 0)
+                return node;
         }
-        if ((*(unsigned char*)(i1 + 0x18) & 1) != 0) break;
-        p1 = (int*)p1[1];
+        if (node->mFlag & 1)
+            return 0;
+        p = p->mpPrev;
+        if (p == first)
+            return 0;
     }
-    (void)param_6;
-    return 0;
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d3e30
-void TSI::FUN_008d3e30(int* param_2, unsigned param_3)
+// Add one run to the table: merge duplicates, notify the owner and descend.
+// ---------------------------------------------------------------------------
+void TSI::FUN_008d3e30(RunRec* rec, unsigned flags)
 {
-    int* p1;
-    char* p5;
-    int i4;
-    int i6;
-    int* p7;
-    int* p8;
-    unsigned u9;
-    int local_24;
-    int local_20;
-    int local_1c;
-    char local_18;
-    if ((char)param_3 == '\0') {
-        i4 = FUN_008d3530(param_2[3], (int)(char)param_2[5], (int)*(char*)((int)param_2 + 0x15));
-        if (i4 != 0) {
-            ((TSI*)i4)->FUN_008d3690(param_2);
+    if ((char)flags == 0) {
+        RunRec* r = FUN_008d3530(rec->mKeyC, rec->mb14, rec->mb15);
+        if (r != 0) {
+            FUN_008d3690(r);
             return;
         }
-    } else if (MU(0x388) < 0x20) {
-        local_24 = param_2[2];
-        i4 = *param_2;
-        local_20 = param_2[1];
-        param_3 = (unsigned)*(unsigned short*)((int)param_2 + 0x16);
-        if (i4 == 0 || local_20 == 0) {
-            i4 = (int)this->FUN_008d3dc0(local_20, &local_1c, local_24, 0, 0);
-        }
-        if (i4 != 0 && *(int*)(i4 + 0x10) != 0) {
-            p1 = (int*)(data + M(0x388) * 0x1c + 8);
-            p7 = param_2;
-            p8 = p1;
-            for (i6 = 7; i6 != 0; i6 = i6 + -1) {
-                *p8 = *p7;
-                p7 = p7 + 1;
-                p8 = p8 + 1;
-            }
-            *(unsigned short*)(p1 + 6) = 0;
-            u9 = 0;
-            p5 = data;
-            if (M(0x388) != 0) {
+    } else if ((unsigned)mCount < 0x20) {
+        int local_24 = rec->mKey8;
+        OwnerNode* i4 = rec->mpOwner;
+        int local_20 = rec->mKey4;
+        flags = rec->mFlags16;
+        if (i4 == 0 || local_20 == 0)
+            i4 = FUN_008d3dc0(rec, &local_20, &flags, &local_24);
+        if (i4 != 0 && i4->mpFn != 0) {
+            RunRec* dst = &mRuns[mCount];
+            *dst = *rec;
+            dst->mDup18 = 0;
+
+            unsigned u = 0;
+            if (mCount != 0) {
+                RunRec* p = mRuns;
                 do {
-                    char* nx = p5 + 0x1c;
-                    if (param_2[3] == *(int*)(p5 + 0x14) && (char)param_2[5] == *nx &&
-                        *(char*)((int)param_2 + 0x15) == p5[0x1d])
+                    if (rec->mKeyC == p->mKeyC && rec->mb14 == p->mb14 &&
+                        rec->mb15 == p->mb15)
                         return;
-                    if (*(int*)(p5 + 0xc) == local_20 && *(int*)(p5 + 8) == i4 &&
-                        *nx == (char)param_2[5] && p5[0x1d] == *(char*)((int)param_2 + 0x15))
-                        *(unsigned short*)(p1 + 6) = 1;
-                    u9 = u9 + 1;
-                    p5 = nx;
-                } while (u9 < MU(0x388));
+                    if (p->mKey4 == local_20 && p->mpOwner == i4 &&
+                        p->mb14 == rec->mb14 && p->mb15 == rec->mb15)
+                        dst->mDup18 = 1;
+                    u++;
+                    p++;
+                } while (u < (unsigned)mCount);
             }
-            *p1 = i4;
-            p1[1] = local_20;
-            p1[2] = local_24;
-            *(unsigned short*)((int)p1 + 0x16) = (unsigned short)param_3;
-            if ((param_3 & 0x800) != 0)
-                p1[4] = p1[4] ^ 0x80000000;
-            M(0x388) = M(0x388) + 1;
-            if ((param_3 & 0x2000) == 0)
-                ((void(*)(int, int*, int))*(int*)(i4 + 0x10))(0x5ece0000, p1, *(int*)(i4 + 0x14));
-            if (local_24 != 0 && (param_3 & 0x1000) == 0) {
-                char c = ((char(*)(int, void*))*(int*)(*(int*)(i4 + 0xc) + 0xc))(
-                    local_24, (void*)this);
-                if (c != '\0') {
-                    local_24 = 0;
-                    local_20 = 0;
-                    local_1c = 0;
-                    local_18 = 0;
-                    this->FUN_008d3e30((int*)&local_24, 1);
+
+            dst->mpOwner = i4;
+            dst->mKey4 = local_20;
+            dst->mKey8 = local_24;
+            dst->mFlags16 = (unsigned short)flags;
+            if (flags & 0x800)
+                dst->mf10 = -dst->mf10;
+            mCount++;
+            if ((flags & 0x2000) == 0)
+                i4->mpFn(0x5ece0000, dst, i4->mpData);
+            if (local_24 != 0 && (flags & 0x1000) == 0) {
+                char c = i4->mpIface->slotC((void*)local_24, this);
+                if (c != 0) {
+                    RunRec tmp;
+                    tmp.mpOwner = i4;
+                    tmp.mKey4 = local_24;
+                    tmp.mKey8 = local_24;
+                    tmp.mKeyC = 0;
+                    tmp.mf10 = 0.0f;
+                    tmp.mb14 = dst->mb14;
+                    tmp.mb15 = dst->mb15;
+                    tmp.mFlags16 = 0x1000;
+                    tmp.mDup18 = 0;
+                    FUN_008d3e30(&tmp, 1);
                 }
             }
         }
     }
-    (void)local_18;
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d4040
-void FUN_008d4040(int* param_1, int* param_2, int* param_3, int param_4)
+// Binary search an intrusive list ordered by each node's key at +8.
+// ---------------------------------------------------------------------------
+void* FUN_008d4040(void** pOut, void* head, void* tail, void* key, void* unused)
 {
-    int* p;
-    int i2, i3, i4;
-    i2 = 0;
-    for (p = param_2; p != param_3; p = (int*)*p)
-        i2 = i2 + 1;
-    if (0 < i2) {
+    int n = 0;
+    for (void* p = head; p != tail; p = *(void**)p)
+        n++;
+    if (n > 0) {
+        int half;
         do {
-            i3 = i2 >> 1;
-            i4 = i3;
-            p = param_2;
-            if (i3 < 0) {
-                i4 = -i3;
+            half = n >> 1;
+            int i = half;
+            void* p = head;
+            if (half < 0) {
+                i = -half;
                 do {
-                    i4 = i4 - 1;
-                    p = (int*)p[1];
-                } while (i4 != 0);
+                    i--;
+                    p = *((void**)p + 1);
+                } while (i != 0);
             } else {
-                for (; i4 != 0; i4 = i4 - 1)
-                    p = (int*)*p;
+                for (; i != 0; i--)
+                    p = *(void**)p;
             }
-            if (p[2] <= *(int*)(param_4 + 8)) {
-                param_2 = (int*)*p;
-                i3 = i2 + (-1 - i3);
+            if (*(int*)((char*)p + 8) <= *(int*)((char*)key + 8)) {
+                head = *(void**)p;
+                half = n + (-1 - half);
             }
-            i2 = i3;
-        } while (0 < i3);
+            n = half;
+        } while (half > 0);
     }
-    *param_1 = (int)param_2;
+    *pOut = head;
+    (void)unused;
+    return pOut;
 }
 
-// @ 0x008d40b0
+// ---------------------------------------------------------------------------
+// @ 0x008d40b0 (non-matching)
+// ---------------------------------------------------------------------------
 void FUN_008d40b0(int param_1, int param_2, int param_3)
 {
     int i1, i2, i3;
@@ -618,7 +712,9 @@ void FUN_008d40b0(int param_1, int param_2, int param_3)
     }
 }
 
-// @ 0x008d4110
+// ---------------------------------------------------------------------------
+// @ 0x008d4110 (non-matching)
+// ---------------------------------------------------------------------------
 void FUN_008d4110(unsigned* param_1, int param_2, int param_3)
 {
     unsigned u1, u2, u3, u4;
@@ -637,38 +733,41 @@ void FUN_008d4110(unsigned* param_1, int param_2, int param_3)
     }
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d41b0
-void TSI::FUN_008d41b0(int* param_2)
+// Reinsert a run node in key order, then drop every run it no longer matches.
+// ---------------------------------------------------------------------------
+void TSI::FUN_008d41b0(OwnerNode* node)
 {
-    int* p1;
-    int i2;
-    unsigned u3;
-    int* p4;
-    int local_4;
-    int local_8;
-    p1 = param_2;
-    FUN_008d4040((int*)&param_2, (int*)*(int*)data, (int*)this, (int)param_2);
-    p4 = (int*)param_2[1];
-    param_2[1] = (int)p1;
-    *p4 = (int)p1;
-    u3 = 0;
-    p1[1] = (int)p4;
-    *p1 = (int)param_2;
-    if (M(0xe2 * 4) != 0) {
-        p4 = (int*)(data + 8);
+    OwnerNode* orig = node;
+    FUN_008d4040((void**)&node, (void*)mpNext, (void*)this, (void*)orig, (void*)orig);
+
+    OwnerNode* ins = node;
+    OwnerNode* pv = ins->mpPrev;
+    ins->mpPrev = orig;
+    pv->mpNext = orig;
+    orig->mpPrev = pv;
+    orig->mpNext = ins;
+
+    unsigned u = 0;
+    if (mCount != 0) {
+        RunRec* r = mRuns;
         do {
-            i2 = (int)this->FUN_008d3dc0(0, (int*)&param_2, local_8, local_4, 0);
-            if (*p4 == i2 && (int*)p4[1] == param_2) {
-                u3 = u3 + 1;
-                p4 = p4 + 7;
+            int localA, localB;
+            OwnerNode* found = FUN_008d3dc0(r, (int*)&node, &localA, &localB);
+            if ((OwnerNode*)r->mpOwner == found && (OwnerNode*)r->mKey4 == node) {
+                u++;
+                r++;
             } else {
-                ((TSI*)p4)->FUN_008d35d0(0x5ece0002);
+                FUN_008d35d0(r, 0x5ece0002);
             }
-        } while (u3 < MU(0x388));
+        } while (u < (unsigned)mCount);
     }
 }
 
-// @ 0x008d4250
+// ---------------------------------------------------------------------------
+// @ 0x008d4250 (non-matching)
+// ---------------------------------------------------------------------------
 void FUN_008d4250(unsigned* param_1, unsigned* param_2, unsigned param_3, unsigned param_4,
                  unsigned param_5)
 {
@@ -715,7 +814,9 @@ void FUN_008d4250(unsigned* param_1, unsigned* param_2, unsigned param_3, unsign
     }
 }
 
-// @ 0x008d4320
+// ---------------------------------------------------------------------------
+// @ 0x008d4320 (non-matching)
+// ---------------------------------------------------------------------------
 void FUN_008d4320(unsigned* param_1, unsigned* param_2, unsigned* param_3, int param_4)
 {
     unsigned u1, u2, u3, u4;
@@ -743,42 +844,54 @@ void FUN_008d4320(unsigned* param_1, unsigned* param_2, unsigned* param_3, int p
     FUN_008d4110(param_1, (int)param_2, param_4);
 }
 
+// ---------------------------------------------------------------------------
 // @ 0x008d4400
-void TSI::FUN_008d4400(int* param_2, int* param_3)
+// Grow (or shift within) the 0x10-byte-element vector core.
+// ---------------------------------------------------------------------------
+void VecCore::grow(void* p, void* value)
 {
-    int* p4;
-    int i1, i2, i3, i5;
-    p4 = (int*)M(4);
-    if (p4 != (int*)M(8)) {
-        if (param_2 <= param_3 && param_3 < p4)
-            param_3 = param_3 + 4;
-        if (p4 != 0) {
-            p4[0] = p4[-4]; p4[1] = p4[-3]; p4[2] = p4[-2]; p4[3] = p4[-1];
+    void* e = end;
+    if (e != cap) {
+        if (p <= value && value < e)
+            value = (char*)value + 0x10;
+        if (e != 0) {
+            ((int*)e)[0] = ((int*)e)[-4];
+            ((int*)e)[1] = ((int*)e)[-3];
+            ((int*)e)[2] = ((int*)e)[-2];
+            ((int*)e)[3] = ((int*)e)[-1];
         }
-        FUN_00edba80(param_2, (void*)(M(4) - 0x10), (void*)M(4));
-        param_2[0] = param_3[0]; param_2[1] = param_3[1];
-        param_2[2] = param_3[2]; param_2[3] = param_3[3];
-        M(4) = M(4) + 0x10;
+        FUN_00edba80(p, (char*)end - 0x10, end);
+        ((int*)p)[0] = ((int*)value)[0];
+        ((int*)p)[1] = ((int*)value)[1];
+        ((int*)p)[2] = ((int*)value)[2];
+        ((int*)p)[3] = ((int*)value)[3];
+        end = (char*)end + 0x10;
         return;
     }
-    i2 = (int)p4 - M(0) >> 4;
-    if (i2 == 0) {
-        i2 = 1;
+
+    int n = (int)((char*)e - (char*)begin) >> 4;
+    int cap2;
+    if (n == 0) {
+        n = 1;
+        cap2 = (int)alloc->allocate((unsigned)(n << 4), 0, name);
     } else {
-        i2 = i2 * 2;
-        if (i2 == 0) { i3 = 0; goto L_opt; }
+        n = n * 2;
+        if (n == 0)
+            cap2 = 0;
+        else
+            cap2 = (int)alloc->allocate((unsigned)(n << 4), 0, name);
     }
-    i3 = ((int(*)(int, int, int))*(int*)(*(int*)M(0xc) + 8))(i2 << 4, 0, M(0x10));
-L_opt:
-    p4 = (int*)FUN_00c7ea30(M(0), (int)param_2, i3);
-    if (p4 != 0) {
-        p4[0] = param_3[0]; p4[1] = param_3[1]; p4[2] = param_3[2]; p4[3] = param_3[3];
+    void* dst = FUN_00c7ea30(begin, p, (void*)cap2);
+    if (dst != 0) {
+        ((int*)dst)[0] = ((int*)value)[0];
+        ((int*)dst)[1] = ((int*)value)[1];
+        ((int*)dst)[2] = ((int*)value)[2];
+        ((int*)dst)[3] = ((int*)value)[3];
     }
-    i5 = FUN_00c7ea30((int)param_2, M(4), (int)(p4 + 4));
-    i1 = M(0);
-    if (i1 != 0)
-        ((void(*)(int, int))*(int*)(*(int*)M(0xc) + 0xc))(i1, (M(8) - i1 >> 4) << 4);
-    M(4) = i5;
-    M(8) = i2 * 0x10 + i3;
-    M(0) = i3;
+    void* ne = FUN_00c7ea30(p, end, (char*)dst + 0x10);
+    if (begin != 0)
+        alloc->deallocate(begin, (unsigned)((((int)cap - (int)begin) >> 4) << 4));
+    end = ne;
+    cap = (char*)cap2 + (n << 4);
+    begin = (void*)cap2;
 }

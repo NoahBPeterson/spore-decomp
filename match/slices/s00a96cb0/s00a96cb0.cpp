@@ -25,9 +25,29 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
 
 typedef uint32_t u32;
 typedef uint8_t  u8;
+
+// The game's float->int helpers (cvtss2si in inline asm, then a branchless fixup).
+static __forceinline int RoundToInt(float f)
+{
+    int r;
+    __asm {
+        movss xmm0, f
+        cvtss2si eax, xmm0
+        mov r, eax
+    }
+    return r;
+}
+
+static __forceinline int FloorToInt(float f)
+{
+    int i = RoundToInt(f);
+    int j = i - 1;
+    return (f < (float)i) ? j : i;
+}
 
 // ------------------------------------------------------------------ global pool
 extern int* gParticleFreeList;                         // 0x0167888c  free-list head
@@ -226,9 +246,9 @@ void cEmitter::SpawnC(float dt)
 // @ 0x00a97290
 void cEmitter::SpawnB(float dt)
 {
-    float acc = dt * (float)mSpawnRate + (float)mAccum;
-    mAccum = (double)acc;
-    if ((float)mStep <= acc) {
+    double acc = (double)dt * mSpawnRate + mAccum;
+    mAccum = acc;
+    if ((double)mStep <= acc) {
         float want = (float)(mDesc->mpCurve[0] * mRateScale);
         int per = (int)want;
         if ((float)per < want)
@@ -288,13 +308,17 @@ void cEmitter::SpawnB(float dt)
                     ((void(__thiscall*)(void*, int))((void**)mpVtbl)[3])((char*)this + 4, 0);
                     return;
                 }
-                if (0.0f <= d->mField20) {
-                    float lo = d->mField20;
-                    float hi = d->mField24;
+                if (d->mField20 >= 0.0f) {
+                    double lo = d->mField20;
+                    double hi = d->mField24;
                     double r = gRandomGlobal.RandomDouble();
                     double v = r * (hi - lo) + lo;
-                    if (v < hi && (v < lo))
-                        v = lo;
+                    if (v < hi) {
+                        if (v < lo)
+                            v = lo;
+                    } else {
+                        v = hi;
+                    }
                     mAccum = mAccum - v * mSpawnRate;
                     if (mAccum < (double)mStep) {
                         mInitialDelay = (float)(((double)mStep - mAccum) * d->mField74);
@@ -313,8 +337,8 @@ void cEmitter::SpawnB(float dt)
 // @ 0x00a96cb0
 void cEmitter::SpawnA(float dt)
 {
-    float t = dt;
-    if (dt <= 0.0f)
+    float total = dt;
+    if (!(dt > 0.0f))
         return;
     u32 flags = mDesc->mFlags;
     float rateScale = mRateScale;
@@ -329,26 +353,25 @@ void cEmitter::SpawnA(float dt)
     float dy = mOriginY - mField108;
     float dz = mOriginZ - mField10c;
     float spread = mDesc->mField7c;
-    if (0.0f < spread) {
+    if (spread > 0.0f) {
         float dist = sqrtf(dz * dz + (dy * dy + dx * dx));
-        rateScale = ((dist / dt) * spread + 1.0f) * rateScale;
+        rateScale = (dist / dt * spread + 1.0f) * rateScale;
     }
     bool repeat = false;
     do {
-        float step = (dt <= (1.0f / 15.0f)) ? dt : (1.0f / 15.0f);
+        float step = (dt > (1.0f / 15.0f)) ? (1.0f / 15.0f) : dt;
         int stepIdx = mStep + 1;
         double next = (double)step * mSpawnRate + mAccum;
         mAccum = next;
-        float remain = dt;
-        if ((float)stepIdx < (float)next) {
+        if ((double)stepIdx < next) {
             mStep = stepIdx;
             if ((mDesc->mFlags >> 9) & 1)
                 ((ListOps*)this)->Clear();
             cEmitterDesc* d = mDesc;
             if (d->mLoopCount == 0 || mStep != (int)d->mLoopCount) {
-                if (0.0f <= d->mField20) {
+                if (d->mField20 >= 0.0f) {
                     repeat = true;
-                    step = (float)((float)step - ((float)mAccum - (float)mStep) * d->mField74);
+                    step = (float)((double)step - (mAccum - (double)mStep) * d->mField74);
                     mAccum = (double)mStep;
                 }
             } else {
@@ -363,12 +386,12 @@ void cEmitter::SpawnA(float dt)
             }
         }
         cEmitterDesc* d = mDesc;
-        int span = (d->mCurveEnd - d->mpCurve) - 1;
+        unsigned int span = (d->mCurveEnd - d->mpCurve) - 1;
         float sample;
         if (span == 0) {
             sample = d->mpCurve[0];
         } else {
-            float u = (float)span * ((float)mAccum - (float)mStep);
+            float u = (float)((mAccum - (double)mStep) * (double)span);
             int i = (int)u;
             float f = u - (float)i;
             if (f <= 0.0f) {
@@ -380,16 +403,16 @@ void cEmitter::SpawnA(float dt)
         }
         float carry = (sample * step) * rateScale + mCarry;
         mCarry = carry;
-        int count = (int)carry;
-        if (carry < (float)count)
-            count -= 1;
+        int count = FloorToInt(carry);
         mCarry = mCarry - (float)count;
+        float remain = dt;
         int i = 0;
         if (0 < count) {
+            float per = step / (float)count;
             do {
                 cParticleNode* node = PopNode();
                 ((NodeOps*)this)->Reset(node);
-                float frac = remain / t;
+                float frac = remain / total;
                 node->mPosX -= dx * frac;
                 node->mPosY -= dy * frac;
                 node->mPosZ -= dz * frac;
@@ -429,31 +452,30 @@ void cEmitter::SpawnA(float dt)
                     if (node->mPosZ < mMinZ) mMinZ = node->mPosZ;
                     if (mMaxZ <= node->mPosZ && node->mPosZ != mMaxZ) mMaxZ = node->mPosZ;
                 }
-                remain = remain - step / (float)count;
+                remain = remain - per;
                 ++i;
             } while (i < count);
             remain = dt;
         }
-        dt = remain - step;
+        dt = dt - step;
         if (repeat) {
-            float lo = mDesc->mField20;
-            float hi = mDesc->mField24;
+            double lo = mDesc->mField20;
+            double hi = mDesc->mField24;
             double r = gRandomGlobal.RandomDouble();
             double v = r * (hi - lo) + lo;
             if (v < hi) {
-                float vv = (float)v;
-                if (vv < lo)
-                    vv = lo;
-                dt = (float)((double)dt - (double)vv);
+                if (v < lo)
+                    v = lo;
             } else {
-                dt = (float)((double)dt - (double)hi);
+                v = hi;
             }
+            dt = (float)((double)dt - v);
             if (dt < 0.0f) {
                 mInitialDelay = -dt;
                 return;
             }
         }
-        if (dt <= 0.0f)
+        if (!(dt > 0.0f))
             return;
     } while (true);
 }

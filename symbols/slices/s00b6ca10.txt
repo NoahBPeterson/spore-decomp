@@ -1,0 +1,9 @@
+00b6ca10 FUN_00b6ca10  # no PDB name; tool-trigger handler (ResolveVar/0xb69010/0xb6a720 tail)
+00b6cba0 FUN_00b6cba0  # no PDB name; fixed-vector handler tail
+00b6cc50 FUN_00b6cc50  # no PDB name; noun/empire level clamp + Apply
+00b6cde0 FUN_00b6cde0  # no PDB name; mpA query mode dispatch + handler tail
+00b6cf70 FUN_00b6cf70  # no PDB name; Execute query 0xee9b2232 + handler tail
+00b6d060 FUN_00b6d060  # no PDB name; Execute query 0x1007ae63 + handler tail
+00b6d160 FUN_00b6d160  # no PDB name; ShowHealthBar int/float store
+00b6d190 FUN_00b6d190  # no PDB name; tooltip singleton teardown
+00b6d1d0 FUN_00b6d1d0  # no PDB name; tooltip Stopwatch reset + noun-vector walk

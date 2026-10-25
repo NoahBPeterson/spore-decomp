@@ -1,2 +1,1 @@
-00a01f40  1087 approximate transliteration of the per-query animation update
-00a02530  562  approximate ray/box slab test; zero-denominator branch fixed, but alias/NaN-sensitive clamp still mismatches (FAIL 5/51 valid, first tMax ~35614 ulp)
+# va  diff-bytes  reason
