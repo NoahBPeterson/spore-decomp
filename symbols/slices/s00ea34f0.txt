@@ -4,3 +4,4 @@
 00ea3ab0 ?Destroy@cCityMusicNoteEditor@@QAEXXZ  # cCityMusicNoteEditor::Destroy migrated from s00ea34f0 (verbatim, slice spelling)
 00ea3b50 ?Update@cCityMusicNoteEditor@@QAEXXZ  # cCityMusicNoteEditor::Update migrated from s00ea34f0 (verbatim, slice spelling)
 00ea3c20 ??0cCityMusicNoteEditor@@QAE@PAUcPlayerCityMusicConfig@@@Z  # cCityMusicNoteEditor::cCityMusicNoteEditor migrated from s00ea34f0 (verbatim, slice spelling)
+00ea42c0 ?FUN_00ea42c0@@YG_NPBUMatchParam@@PAUParamVec@@@Z  # FUN_00ea42c0 migrated from s00ea34f0 (verbatim, slice spelling)

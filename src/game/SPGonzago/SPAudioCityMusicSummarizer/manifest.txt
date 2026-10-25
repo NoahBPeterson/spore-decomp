@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAudioCityMusicSummarizer.cpp  ?FUN_00ea42c0@@YG_NPBUMatchParam@@PAUParamVec@@@Z  00ea42c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
