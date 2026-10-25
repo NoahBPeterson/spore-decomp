@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPTribeToolView.cpp  ?UpdateModel@cTribeToolView@SP@@QAEXXZ  00c91a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
