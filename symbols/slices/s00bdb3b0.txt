@@ -1,0 +1,2 @@
+00bdb880 ?FUN_00bdb880@CStub@@QAEEH@Z  # CStub::FUN_00bdb880 migrated from s00bdb3b0 (verbatim, slice spelling)
+00bdba80 ?FUN_00bdba80@CStub@@QAEMXZ  # CStub::FUN_00bdba80 migrated from s00bdb3b0 (verbatim, slice spelling)

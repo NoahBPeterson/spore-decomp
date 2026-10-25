@@ -1,0 +1,34 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8140@@YIXPAUcCity@@PAXH@Z  00bd8140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8170@@YIXPAUcCity@@PAXH@Z  00bd8170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8200@@YAXXZ  00bd8200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8210@@YIXPAUIObj@@PAX@Z  00bd8210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8240@@YIHPAUcCity@@PAX@Z  00bd8240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8280@@YIHPAUcCity@@PAX@Z  00bd8280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd82c0@@YIHPAUcCity@@PAX@Z  00bd82c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8300@@YIXPAUcCity@@PAXH@Z  00bd8300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8380@@YIXPAUcCity@@PAXDM@Z  00bd8380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd83c0@@YIXPAPAXPAX@Z  00bd83c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8480@@YAPAXPAX00@Z  00bd8480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd84e0@@YIIPAUIObj@@PAX@Z  00bd84e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8500@@YIXPAUcCity@@PAXD1@Z  00bd8500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8590@@YIXPAUcCommunity@@PAX1@Z  00bd8590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8630@@YIHPAUcCity@@PAX@Z  00bd8630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8960@@YIHPAUcCity@@PAX@Z  00bd8960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd89c0@@YIHPAUcCity@@PAX@Z  00bd89c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8b10@@YIHPAUcCity@@PAX@Z  00bd8b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8b80@@YIHPAUcCity@@PAX@Z  00bd8b80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8f30@@YIDPAUcCity@@PAX@Z  00bd8f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8fe0@@YIXPAUcCity@@PAX11@Z  00bd8fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?ShowTransitionWarning@cCity_s00bd_91e0@@QAEXXZ  00bd91e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?HasTradePartner@cCity_s00bd_91e0@@QAE_NI@Z  00bd9260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?GetCityRadius@cCity_s00bd_91e0@@QAEMXZ  00bd9470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?GetWallsCenter@cCity_s00bd_91e0@@QAEPAUVector3@@PAU2@@Z  00bd9480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?SetField51C@cCity_s00bd_91e0@@QAEXPBU?$cVec@UVector3@@@@@Z  00bd9620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?GetCivilizationData@cCity_s00bd_91e0@@QAEPAXXZ  00bd99e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?CountEmptyTurrets@cCity_s00bd_91e0@@QAEHXZ  00bd9b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?CountEmptyBuildings@cCity_s00bd_91e0@@QAEHXZ  00bd9bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?GetCenter@cCity_s00bd_91e0@@QAEPAUVector3@@PAU2@@Z  00bd9ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdba80@CStub@@QAEMXZ  00bdba80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?ClearRefs@cAgentAction@@QAEPAUcRefList@@XZ  00be3fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_0132cb50@@YAXXZ  0132cb50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

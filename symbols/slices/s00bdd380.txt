@@ -1,24 +1,3 @@
-# slice s00bdd380 - 0x80-byte CElement copy/assign, eastl range copy helpers and the
-# cGameData / SP::cCity destructors.
-# Modelled types (retail member offsets):
-#   CElementSub      vtable @0x00, u04 @0x04, u08/u0c/u10/u14 @0x08..0x14, byte @0x18,
-#                    u1c @0x1c (0x20 bytes)
-#   CElement         8 dwords @0x00..0x1c, byte @0x20, floats @0x24/0x28/0x2c, sub A @0x30,
-#                    sub B @0x50, refcount ptr @0x70, byte @0x74, refcount ptr @0x78 (0x80)
-#   CRefCounted      vtable @0x00, AddRef = slot 0xbc, Release = slot 0xc0
-#   CGameDataBase    vtables @0x00/@0x04/@0x34, rest padding (0x3c base)
-#   CDerivedGameData m_p3c @0x3c, m_p58 @0x58, m_p70 @0x70, vector @0x84, timer @0xb0,
-#                    vectors @0xd0/@0xe4, arrays @0xf8/@0x100 and @0x108/@0x110,
-#                    refcounted object @0x11c (0x120 bytes)
-#   CGonzagoTimer    0x20 bytes, destructor at 0xb638b0
-#   CVtblObj         vtable @0x00, Release = slot 1, other dispatch through the vtable
-#   CRBTree          header @0x00, root @0x0c; node child @0x00, next @0x04; helper 0x9a9600
-#   CCity            CDerivedGameData + spatial block @0x120, PaintSystem @0x1f4 (member vtable
-#                    @0x20c), array @0x210/@0x218, ptr @0x298, vectors @0x308/@0x340/@0x354/
-#                    @0x548/@0x55c/@0x618/@0x62c, action circles @0x3ec/@0x450/@0x4b4,
-#                    RB-trees @0x570/@0x5a0/@0x5bc/@0x5d8/@0x7b8, timers @0x230/@0x250/@0x270/
-#                    @0x5f8/@0x6a0/@0x6c8/@0x6e8/@0x708/@0x728/@0x770/@0x790, placement ptr
-#                    @0x590, ptr @0x810 (0x814 bytes)
 00bdd380  CElement::CopyConstructFrom(src) -> CElement*  # this=dest, ecx; installs base/derived sub vtables, copies 8 dwords, byte @0x20, floats, both 0x20-byte subs, refcounted @0x70/@0x78 with AddRef-before-Release; byte-exact
 00bdd470  CElement::CopyAssignFrom(src) -> CElement*  # same field set as copy-construct but assigns existing refcounted slots (AddRef(new) then Release(old)); byte-exact
 00bdd580  FUN_00bdd580(cursor, first, last, dest) -> cursor  # *cursor=dest then range copy-construct; NOT byte-exact, see nonmatching.txt
@@ -27,4 +6,4 @@
 00bdd640  FUN_00bdd640(first, last, dest) -> dest  # backward range copy-assign (stride 0x80); byte-exact
 00bdd680  FUN_00bdd680(self) -> void  # CDerivedGameData destructor: release @0x11c, free arrays @0x108/@0xf8 when ((end-begin)&~1)>2, vector dtors @0xe4/@0xd0, timer @0xb0, vector @0x84 via DoInsertValue, free @0x70/@0x58/@0x3c, tail-jump to cGameData dtor 0xb184c0; byte-exact
 00bdd780  FUN_00bdd780(self) -> void  # SP::cCity destructor: vtables @0x00/@0x04/@0x34/@0x120/@0x1f4/@0x20c, release/free all members in retail order, PaintSystem + cSpatialObject sub-destructors, tail-jump to 00bdd680; NOT byte-exact, see nonmatching.txt
-00bddda0  CCity::FUN_00bddda0(a1..a6) -> int  # building placement epilogue: 0xbdca30 local setup, 0xbf57b0 seven-arg query on +0x590, m_p324 vtable[0x70] buffer, PlanetModel global + BuildSurfaceOrientation2, sub-object vtable[0x3c]/[0x40], FUN_00c88530(1.0f), returns the query object; NOT byte-exact, see nonmatching.txt
+00bddda0 ?FUN_00bddda0@CCity@@QAEHHHHHHH@Z  # CCity::FUN_00bddda0 migrated from s00bdd380 (verbatim, slice spelling)
