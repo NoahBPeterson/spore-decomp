@@ -19,8 +19,6 @@ extern "C" void  __cdecl op_delete_(void* p);
 extern "C" void  __cdecl op_delete(void* p);
 extern "C" void* __cdecl FUN_00bc4630();
 extern "C" void  __cdecl FUN_00bc4730();
-extern "C" void  __cdecl FUN_00bc7170(void* end, uint n, void* hint);
-extern "C" void  __cdecl FUN_00bc7110(void* dst, void* end);
 extern "C" void  __cdecl FUN_00bc5730(int a, int b, int c);
 extern "C" int*  __cdecl FUN_00bc79f0(void* last, void* first, void* dst);
 extern "C" int*  __cdecl FUN_00bc7a30(void* first, void* last, void* dst);
@@ -30,10 +28,17 @@ struct RefObj {
     virtual void Release();   // vtbl + 4
 };
 
-struct cHierGrid { char b[0x84]; };
-void __fastcall cHierGrid_ctor(void* p);
-void __fastcall cHierGrid_Shutdown(void* p);
-void __fastcall cHierGrid_Init(void* p, void* box, float v, int a, int b);
+struct Vec3f { float x, y, z; };
+
+struct cHierGrid {
+    char b[0x84];
+
+    void Remove(unsigned index);                                             // 0x00702da0
+    int  QuerySphereResult(float radius, float* pos, int maxN, void** out);  // 0x00702760
+    bool Init(const Vec3f& box, float v, int a, int b);                     // 0x00704260
+};
+void __fastcall cHierGrid_ctor(void* p);                                     // 0x00703ce0
+void __fastcall cHierGrid_Shutdown(void* p);                                 // 0x00704060
 
 struct Rec {
     unsigned flags;   // 0x00
@@ -57,6 +62,13 @@ struct Rec {
     Rec* FUN_00bc7920(Rec* src);   // assign / reset
 };
 
+struct CivTmp {
+    char b[0x7b4];
+
+    CivTmp* __thiscall FUN_00bc4630();   // 0x00bc4630 (returns this)
+    void    __thiscall FUN_00bc4730();   // 0x00bc4730
+};
+
 struct WE {
     Rec* begin;   // 0x00
     Rec* end;     // 0x04
@@ -68,6 +80,8 @@ struct WE {
     cHierGrid grid; // 0x1c .. 0xa0
 
     void  FUN_00bc74d0(uint n);
+    void  FUN_00bc7170(void* end, uint n, void* hint);   // 0x00bc7170
+    void  FUN_00bc7110(void* dst, void* end);            // 0x00bc7110
     int   FUN_00bc7680(int index);
     void  FUN_00bc77e0(int index);
     void** FUN_00bc7a70(void** out, Rec* at);
@@ -87,31 +101,78 @@ void WE::FUN_00bc74d0(uint param_2)
     Rec7* b = (Rec7*)begin;
     Rec7* e = (Rec7*)end;
     if ((uint)(e - b) < param_2) {
-        void* uVar1 = FUN_00bc4630();
-        FUN_00bc7170(end, param_2 - (uint)(e - b), uVar1);
-        FUN_00bc4730();
+        CivTmp tmp;
+        void* uVar1 = tmp.FUN_00bc4630();
+        this->FUN_00bc7170(end, param_2 - (uint)(((char*)end - (char*)begin) / 0x7b4), uVar1);
+        tmp.FUN_00bc4730();
         return;
     }
-    FUN_00bc7110((char*)begin + param_2 * 0x7b4, end);
+    this->FUN_00bc7110((char*)begin + param_2 * 0x7b4, end);
 }
 
 // ===========================================================================
-// @ 0x00bc7570 — (complex) load a civ list through PropertyManager; approximate.
+// @ 0x00bc7570 — load a civ list through PropertyManager and read each record.
 // ===========================================================================
-void __cdecl FUN_00bc7570(int param_1, int param_2, int param_3)
+struct IntVec { int* begin; int* end; int* cap; };
+struct PropMgr {
+    virtual void slot00(); virtual void slot01(); virtual void slot02(); virtual void slot03();
+    virtual void slot04(); virtual void slot05(); virtual void slot06(); virtual void slot07();
+    virtual void slot08(); virtual void slot09(); virtual void slot10(); virtual void slot11();
+    virtual void slot12(); virtual void slot13(); virtual void slot14(); virtual void slot15();
+    virtual void slot16(); virtual void slot17();
+    virtual void GetVector(int id, IntVec* out);   // vtbl +0x48
+};
+extern "C" PropMgr* __cdecl FUN_0067de30();        // 0x0067de30 SP::PropertyManager
+extern "C" void    __cdecl FUN_00f47380(void* p);   // 0x00f47380 operator delete
+
+void __cdecl FUN_00bc7570(int param_1, WE* self)
 {
-    // best-effort structural reproduction (not matched)
-    if (0 < (int)((param_3 - param_2) >> 2))
-        FUN_00bc5730(*(int*)param_2, param_1, param_3);
+    IntVec list;
+    list.begin = 0;
+    list.end = 0;
+    list.cap = 0;
+    PropMgr* pm = FUN_0067de30();
+    pm->GetVector(param_1, &list);
+    int count = (int)(list.end - list.begin);
+    self->FUN_00bc74d0(count);
+    if (0 < count) {
+        for (int i = 0; i < count; ++i)
+            FUN_00bc5730(list.begin[i], param_1, (int)((char*)self->begin + i * 0x7b4));
+    }
+    if (list.begin != 0 && *(int*)((char*)list.begin - 4) != 0)
+        FUN_00f47380(list.begin);
 }
 
 // ===========================================================================
-// @ 0x00bc7610 — (complex) hashtable lookup of a resource factory list; approx.
+// @ 0x00bc7610 — look up (or create) the world-event vector for a key.
 // ===========================================================================
-void* __cdecl FUN_00bc7610(int param_1, int param_2, char param_3)
+struct WEHash {
+    int   pad00;         // 0x00
+    int** mBuckets;      // 0x04
+    int   mBucketCount;  // 0x08
+
+    void find(int* out, const unsigned* key);          // 0x00aea1b0
+    WE*  FUN_00bc7440(const unsigned* key);            // 0x00bc7440
+};
+
+struct WEMap {
+    char   pad00[0x48];
+    WEHash mHash;        // 0x48
+    WE*    FUN_00bc7610(unsigned key, char create);
+};
+
+WE* WEMap::FUN_00bc7610(unsigned key, char create)
 {
-    (void)param_1; (void)param_2; (void)param_3;
-    return 0;
+    int iter[2];
+    iter[0] = 0;
+    iter[1] = 0;
+    mHash.find(iter, &key);
+    if (create == 0 && (int*)iter[0] != mHash.mBuckets[mHash.mBucketCount])
+        return (WE*)(iter[0] + 4);
+    WE* w = mHash.FUN_00bc7440(&key);
+    w->FUN_00bc7110(w->begin, w->end);
+    FUN_00bc7570((int)key, w);
+    return w;
 }
 
 // ===========================================================================
@@ -319,11 +380,43 @@ void** WE::FUN_00bc7a70(void** param_2, Rec* param_3)
 }
 
 // ===========================================================================
-// @ 0x00bc7ac0 — (complex) age records / expire the world events; approximate.
+// @ 0x00bc7ac0 — age the live records; retire the ones that expired.
 // ===========================================================================
-void __fastcall FUN_00bc7ac0(WE** param_1, int param_2)
+struct WERef {
+    WE* mEvents;   // 0x00
+    void FUN_00bc7ac0(unsigned delta);
+};
+
+void WERef::FUN_00bc7ac0(unsigned delta)
 {
-    (void)param_1; (void)param_2;
+    if (delta != 0) {
+        float step = (float)delta * 0.001f;
+        WE* w = mEvents;
+        Rec* at;
+        if ((unsigned)w->freeI < 0x3fffffff)
+            at = (Rec*)((char*)w->begin + w->freeI * 0x3c);
+        else
+            at = w->end;
+        Rec* end = w->end;
+        while (at != end) {
+            if (0.0f <= *(float*)((char*)at + 0x10)) {
+                *(float*)((char*)at + 0x10) -= step;
+                unsigned flags;
+                do {
+                    flags = *(unsigned*)at;
+                    at = (Rec*)((char*)at + 0x3c);
+                    if ((flags >> 0x1e) & 1)
+                        break;
+                } while ((int)*(unsigned*)at < 0);
+            }
+            else {
+                ((cHierGrid*)((char*)w + 0x1c))->Remove(*(unsigned*)((char*)at + 8));
+                Rec* next;
+                w->FUN_00bc7a70((void**)&next, at);
+                at = next;
+            }
+        }
+    }
 }
 
 // ===========================================================================
@@ -453,28 +546,28 @@ uint WE::FUN_00bc7e80(int param_2)
 {
     uint uVar3 = activeI;
     if (uVar3 == 0x3fffffff) {
-        ((Rec*)begin)->FUN_00bc7850((Rec*)param_2);
-        uVar3 = ((char*)end - (char*)begin) / 0x3c;
+        Rec tmp;                                    // body temp (record + 4)
+        tmp.FUN_00bc7850((Rec*)param_2);
+        uVar3 = (uint)(((char*)end - (char*)begin) / 0x3c);
         FUN_00bc7e20();
         if (uVar3 != 0) {
-            unsigned* puVar2 = (unsigned*)((char*)begin + (uVar3 - 1) * 0x3c);
-            *puVar2 = *puVar2 & 0xbfffffff;
+            unsigned* prev = (unsigned*)((char*)begin + (uVar3 - 1) * 0x3c);
+            *prev = *prev & 0xbfffffff;
         }
         int iVar1 = uVar3 * 0x3c;
-        *(unsigned*)((char*)begin + iVar1) |= 0x40000000;
-        *(unsigned*)((char*)begin + iVar1) &= 0x7fffffff;
-        if ((char*)begin + iVar1 + 4 != 0) {
-            ((Rec*)begin)->FUN_00bc7850((Rec*)param_2);
-        }
+        unsigned* rec = (unsigned*)((char*)begin + iVar1);
+        *rec = *rec | 0x40000000;
+        *rec = *rec & 0x7fffffff;
+        ((Rec*)((char*)begin + iVar1 + 4))->FUN_00bc7850(&tmp);
+        if (tmp.p24 != 0) ((RefObj*)tmp.p24)->Release();
+        if (tmp.p28 != 0) ((RefObj*)tmp.p28)->Release();
     }
     else {
         int iVar1 = uVar3 * 0x3c;
-        unsigned* puVar2 = (unsigned*)((char*)begin + iVar1);
-        activeI = *(unsigned*)((char*)begin + iVar1) & 0x3fffffff;
-        *puVar2 = *puVar2 & 0x7fffffff;
-        if ((char*)begin + iVar1 + 4 != 0) {
-            ((Rec*)begin)->FUN_00bc7850((Rec*)param_2);
-        }
+        unsigned* rec = (unsigned*)((char*)begin + iVar1);
+        activeI = *rec & 0x3fffffff;
+        *rec = *rec & 0x7fffffff;
+        ((Rec*)((char*)begin + iVar1 + 4))->FUN_00bc7850((Rec*)param_2);
     }
     if (uVar3 < (uint)freeI) {
         freeI = uVar3;
@@ -520,64 +613,134 @@ void __fastcall FUN_00bc8040(WE** param_1)
     }
 }
 
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned n);   // 0x011e0744
+
 // ===========================================================================
-// @ 0x00bc8080 — (complex) spatial query; approximate.
+// @ 0x00bc8080 — sphere query against the embedded hier grid, filtered.
 // ===========================================================================
-void __cdecl FUN_00bc8080(float* param_1, float param_2, int* param_3, int param_4)
+struct IntVector {
+    int* begin;   // +0x00
+    int* end;     // +0x04
+    int* cap;     // +0x08
+    void __thiscall insert(int* pos, unsigned n, const int* val);   // 0x00b97280
+    void __thiscall resize(unsigned n);                             // 0x00b98ea0
+    void __thiscall reserve(unsigned n);                            // 0x00d01790
+    void __thiscall DoInsertKey4(int* pos, const int* val);         // 0x00b96600
+};
+
+struct GridItem {
+    char  pad0[8];
+    int   mType;     // +0x08
+    char  padC[4];
+    float mRadius;   // +0x10
+    float mX;        // +0x14
+    float mY;        // +0x18
+    float mZ;        // +0x1c
+};
+
+struct WEHolder {
+    WE* mEvents;     // +0x00
+    void FUN_00bc8080(const float* pos, float radius, IntVector* out, int filter);
+};
+
+// @ 0x00bc8080
+void __thiscall WEHolder::FUN_00bc8080(const float* pos, float radius, IntVector* out, int filter)
 {
-    (void)param_1; (void)param_2; (void)param_3; (void)param_4;
+    int zero = 0;
+    int buf[0x100];
+    IntVector tmp;
+    tmp.begin = buf;
+    tmp.end = buf;
+    tmp.cap = buf + 0x100;
+    tmp.insert(buf, 0x100, &zero);
+
+    int n = ((cHierGrid*)((char*)mEvents + 0x1c))->QuerySphereResult(radius, (float*)pos, 0x100, (void**)tmp.begin);
+    tmp.resize(n);
+
+    char* blank_end = (char*)out->end;
+    memcpy(out->begin, out->end, 0);
+    int q = (int)(blank_end - (char*)out->begin) >> 2;
+    out->end = (int*)(blank_end - q * 4);
+    out->reserve(n);
+
+    for (int i = 0; i < n; ++i) {
+        GridItem* item = (GridItem*)buf[i];
+        if ((filter == -1 || filter == item->mType)) {
+            float dz = pos[2] - item->mZ;
+            float dx = pos[0] - item->mX;
+            float dy = pos[1] - item->mY;
+            float rr = item->mRadius + radius;
+            float d2 = dz * dz;
+            d2 = d2 + dx * dx;
+            d2 = d2 + dy * dy;
+            if (rr * rr > d2) {
+                if (out->end < out->cap) {
+                    *out->end = (int)item;
+                    out->end = out->end + 1;
+                } else {
+                    out->DoInsertKey4(out->end, (const int*)&item);
+                }
+            }
+        }
+    }
 }
 
 // ===========================================================================
-// @ 0x00bc8200 — (complex) re-init the embedded hier grid; approximate.
+// @ 0x00bc8200 — clear the events and re-initialise the embedded hier grid.
 // ===========================================================================
 extern float DAT_0168ab70;
 extern float DAT_0168ab74;
 extern float DAT_0168ab78;
 void __fastcall FUN_00bc8200(WE** param_1)
 {
-    WE* puVar1 = *param_1;
-    puVar1->FUN_00bc7c40((int)puVar1->begin, (int)puVar1->end);
-    puVar1->freeI = 0x3fffffff;
-    puVar1->activeI = 0x3fffffff;
-    WE* iVar3 = *param_1;
-    if (*(int*)((char*)iVar3 + 0x40) != *(int*)((char*)iVar3 + 0x44)) {
-        cHierGrid_Shutdown((char*)iVar3 + 0x1c);
+    WE* w = *param_1;
+    w->FUN_00bc7c40((int)w->begin, (int)w->end);
+    w->freeI = 0x3fffffff;
+    w->activeI = 0x3fffffff;
+    WE* w2 = *param_1;
+    if (*(int*)((char*)w2 + 0x40) != *(int*)((char*)w2 + 0x44)) {
+        cHierGrid_Shutdown((char*)w2 + 0x1c);
     }
-    float local_38[4];
-    float local_28;
-    float local_18, local_14, local_10, local_c, local_8, local_4;
-    local_c = DAT_0168ab70 + 650.0f;
-    local_8 = DAT_0168ab74 + 650.0f;
-    local_18 = DAT_0168ab70 - 650.0f;
-    local_14 = DAT_0168ab74 - 650.0f;
-    local_4 = DAT_0168ab78 + 650.0f;
-    local_10 = DAT_0168ab78 - 650.0f;
-    local_38[2] = local_4 - local_10;
-    local_38[0] = local_c - local_18;
-    local_38[1] = local_8 - local_14;
-    float* pfVar2 = local_38 + 1;
-    if (local_8 - local_14 <= local_c - local_18) {
-        pfVar2 = local_38;
+
+    Vec3f mn;
+    Vec3f mx;
+    Vec3f size;
+    mn.x = DAT_0168ab70 - 650.0f;
+    mn.y = DAT_0168ab74 - 650.0f;
+    mn.z = DAT_0168ab78 - 650.0f;
+    mx.x = DAT_0168ab70 + 650.0f;
+    mx.y = DAT_0168ab74 + 650.0f;
+    mx.z = DAT_0168ab78 + 650.0f;
+    size.x = mx.x - mn.x;
+    size.y = mx.y - mn.y;
+    size.z = mx.z - mn.z;
+
+    float* pmax = &size.y;
+    if (size.y <= size.x) {
+        pmax = &size.x;
     }
-    if (*pfVar2 <= local_38[2] && local_38[2] != *pfVar2) {
-        pfVar2 = local_38 + 2;
+    if (size.z != *pmax && *pmax <= size.z) {
+        pmax = &size.z;
     }
-    local_38[0] = *pfVar2 * 2.0f;
-    local_28 = local_38[0] * 9.999999f;
-    local_38[0] = local_38[0] * 0.01f;
-    int iVar3b = (int)(local_38[0] + 0.5f);
-    if ((float)iVar3b < local_38[0]) iVar3b = iVar3b + 1;
-    int iVar4 = 0;
-    for (; iVar3b != 0; iVar3b = iVar3b >> 1) iVar4 = iVar4 + 1;
-    int iVar3c = (int)(local_28 + 0.5f);
-    if ((float)iVar3c < local_28) iVar3c = iVar3c + 1;
-    int iVar5 = 0;
-    for (; iVar3c != 0; iVar3c = iVar3c >> 1) iVar5 = iVar5 + 1;
-    iVar3b = 0;
-    if (0 < iVar4 + -1) iVar3b = iVar4 + -1;
-    iVar4 = 7;
-    if (iVar5 + -1 < 7) iVar4 = iVar5 + -1;
-    if (iVar4 < iVar3b) iVar4 = iVar3b;
-    cHierGrid_Init((char*)*param_1 + 0x1c, &local_18, *pfVar2, iVar3b, iVar4);
+    float broad = *pmax * 2.0f;
+    float narrow = broad * 9.999999f;
+    broad = broad * 0.01f;
+
+    int n0 = (int)broad;
+    if ((float)n0 < broad) n0 = n0 + 1;
+    int bits0 = 0;
+    for (; n0 != 0; n0 = n0 >> 1) bits0 = bits0 + 1;
+
+    int n1 = (int)narrow;
+    if ((float)n1 < narrow) n1 = n1 + 1;
+    int bits1 = 0;
+    for (; n1 != 0; n1 = n1 >> 1) bits1 = bits1 + 1;
+
+    int level = 0;
+    if (0 < bits0 - 1) level = bits0 - 1;
+    int maxLevel = 7;
+    if (bits1 - 1 < 7) maxLevel = bits1 - 1;
+    if (maxLevel < level) maxLevel = level;
+
+    ((cHierGrid*)((char*)*param_1 + 0x1c))->Init(mn, *pmax, level, maxLevel);
 }

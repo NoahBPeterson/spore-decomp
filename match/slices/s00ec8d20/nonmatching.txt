@@ -10,3 +10,10 @@
 00ec9640   45  complete map pair lookup; same body but map find with this=map+0x34; equiv: PASS
 00ec9690   59  complete pair iteration; map find with this=map+0x18 and 8-byte elements; equiv: WEAK (282 valid, 0 mismatch, 57% coverage)
 00ec9ae0   36  complete index-of search; map find with this=map+0x50 and 4-byte elements; equiv: PASS
+00ec8f40  115  complete queue-drain loop with virtual calls on the fetched object; equiv: WEAK (232 valid, 0 mismatch, 10.9% coverage; most random object pointers fault). flags /O2 /MD /Gy /EHsc /TP
+00ec92b0  433  complete behavior-dialog builder (layout lookup, window property calls, id label loop); equiv: UNSUPPORTED (unresolved refs ??2@YAPAXI@Z, ?cSPUILayout_FindWindowByID). flags /O2 /MD /Gy /EHsc /TP
+00ec9530  182  complete map find-or-insert as TreeFind::FUN_00ec9530 (__thiscall, key node built through FUN_00ec8ff0); equiv: PASS (not byte-exact: temp value/vector construction and insertion path scheduling). flags /O2 /MD /Gy /EHsc /TP
+00ec9820  142  complete map find-or-insert as TreeFind2::FUN_00ec9820 (__thiscall, memcpy + FUN_00ec9750, key pointer with cleared low byte as the unused 4th arg); equiv: PASS. flags /O2 /MD /Gy /EHsc /TP
+00ec98d0  384  complete multi-map clear; equiv: UNSUPPORTED (unresolved ref ?DoNukeSubtree@@YAXH@Z). flags /O2 /MD /Gy /EHsc /TP
+00ec9b30  220  complete reference-struct builder: three map lookups (0x18/0x34/0x50) plus an 8-byte pair lookup; equiv: WEAK (136 valid, 0 mismatch, 93.3% coverage). flags /O2 /MD /Gy /EHsc /TP
+00ec9c70  230  complete compare/update path; FUN_00ec95f0/FUN_00ec9640 marked noinline so the call sequence matches the original; equiv: WEAK (160 valid, 0 mismatch, 99.3% coverage). flags /O2 /MD /Gy /EHsc /TP

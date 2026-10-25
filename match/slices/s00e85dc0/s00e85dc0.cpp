@@ -311,37 +311,45 @@ void FUN_00e86b60()
 void FUN_00e86bb0(const Vector3* a, float ra, const Vector3* b, float rb,
                   Vector3* out, float* outRadius)
 {
-  float dx = b->x - a->x;
-  float dy = b->y - a->y;
-  float dz = b->z - a->z;
-  float dist = sqrtf(dx * dx + dy * dy + dz * dz);
+  float delta[3];
+  delta[0] = b->x - a->x;
+  delta[1] = b->y - a->y;
+  delta[2] = b->z - a->z;
+  float sq = (delta[0] * delta[0] + delta[1] * delta[1]) + delta[2] * delta[2];
+  float dist = sqrtf(sq);
+  float sum = dist + ra;
 
-  if (dist + ra < rb) {
-    out->x = b->x;
-    out->y = b->y;
-    out->z = b->z;
+  if (sum < rb) {
+    *out = *b;
     *outRadius = rb;
     return;
   }
   if (dist + rb < ra) {
-    out->x = a->x;
-    out->y = a->y;
-    out->z = a->z;
+    *out = *a;
     *outRadius = ra;
     return;
   }
 
-  *outRadius = (dist + ra + rb) * 0.5f;
+  *outRadius = (sum + rb) * 0.5f;
   if (dist < 1.5258789e-05f) {
-    out->x = (a->x + b->x) * 0.5f;
-    out->y = (a->y + b->y) * 0.5f;
-    out->z = (a->z + b->z) * 0.5f;
+    float mx = a->x + b->x;
+    float my = a->y + b->y;
+    float mz = a->z + b->z;
+    out->x = mx * 0.5f;
+    out->y = my * 0.5f;
+    out->z = mz * 0.5f;
     return;
   }
 
   float inv = 1.0f / dist;
   float d = rb - ra;
-  out->x = (a->x + b->x + (inv * dx) * d) * 0.5f;
-  out->y = (a->y + b->y + (inv * dy) * d) * 0.5f;
-  out->z = (a->z + b->z + (inv * dz) * d) * 0.5f;
+  float cx = a->x + b->x;
+  float cy = a->y + b->y;
+  float cz = a->z + b->z;
+  float tx = (inv * delta[0]) * d;
+  float ty = (inv * delta[1]) * d;
+  float tz = (inv * delta[2]) * d;
+  out->x = (cx + tx) * 0.5f;
+  out->y = (cy + ty) * 0.5f;
+  out->z = (cz + tz) * 0.5f;
 }

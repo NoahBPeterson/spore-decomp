@@ -1,3 +1,1 @@
 # va  diff-bytes  reason
-00ed8950 -    incomplete: noun-vector iteration body replaced by a placeholder
-00ed9040 -    approximate: nearest-noun search omits the one-time atexit static-init guard

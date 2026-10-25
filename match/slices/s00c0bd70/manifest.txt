@@ -1,4 +1,5 @@
 # source  symbol  original VA  [cl flags override]
+slices/s00c0bd70/s00c0bd70.cpp  ?C0bd70@C@@QAEHPAX@Z  00c0bd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c0bd70/s00c0bd70.cpp  ?C0bee0@C@@QAEXHH@Z  00c0bee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c0bd70/s00c0bd70.cpp  ?GetA@C@@QAEMXZ  00c0c010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c0bd70/s00c0bd70.cpp  ?GetB@C@@QAEMXZ  00c0c040  /O2 /MD /Gy /TP /arch:SSE /fp:fast

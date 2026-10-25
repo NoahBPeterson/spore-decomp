@@ -1,1 +1,4 @@
 00ddbe40  Swarm::SpawnOne  # picks next resource key round-robin, creates two resources + transform holder, spawns a boid with random orientation/start position
+00ddc4a0  Swarm::FUN_00ddc4a0  # thiscall ret 0 -> Boid*: 100x retry loop over FUN_00ddaf70 + this+0x18 vtable slot 0x0c Create, effect lookup, 0x100-byte boid ctor, stopwatch/audio/origin wiring, push_back
+00ddc910  Swarm::FUN_00ddc910  # thiscall ret 0x10 (pos, dir, uchar, uchar): c4a0 + field copies + stopwatch + in-place direction normalise + 0x00dd91b0 basis quat + 0x016a0bb0 name-list vcall
+00ddcad0  Swarm::FUN_00ddcad0  # thiscall ret 8 (pos, dir): c4a0 + field copies + stopwatch + pos x up cross + 0x00dd91b0 + RandomDoubleUniform half-angle spin + 0x016a0bd8 name-list vcall

@@ -59,7 +59,32 @@ struct Mgr74 { void* p74; void* p78; void* p7c; };
 #define VCP3(vt,off,p,a,b) (((void*(__thiscall*)(void*,int,int))((void**)(vt))[(off)/4])((void*)(p),(int)(a),(int)(b)))
 
 // ---------------------------------------------------------------- shared stubs
-struct cString { void Load(int, int, int); };
+// cString is used as a plain POD here: the engine ctor/dtor are invoked explicitly
+// (0x006b5060 / 0x006b5240) so that 0x00eddc50 needs no unwind frame.
+struct cString {
+    int  f00;                        // +0x00
+    int  f04;                        // +0x04
+    int  f08;                        // +0x08
+    int  f0c;                        // +0x0c
+    int  f10;                        // +0x10
+    void Init();                     // 0x006b5060  ctor
+    void Dtor();                     // 0x006b5240  dtor
+    const wchar_t* GetText();        // 0x006b55c0  text of the current item
+    void Load(int, int, int);
+};
+
+// script parameter handed to the property/selection UI (0x00eddc50)
+struct ScriptParam {
+    int  v[3];                       // +0x00  copied into C::vec34
+    char pad0c[0x06];                // +0x0c
+    u16  kind;                       // +0x12  descriptor kind (0x0a = selection)
+};
+
+// object returned by Mgr::F3be60; only the selection index is touched
+struct ScriptSelection {
+    char pad00[0x80];                // +0x00
+    int  index;                      // +0x80
+};
 struct Element { char pad[4]; void SetChecked(int a, int b); };
 struct Checker { char pad[4]; bool F254d0(); int F25330(); int F25490(); };
 struct Sink    { char pad[4]; int F00830d10(int); };
@@ -99,7 +124,7 @@ struct C {
     void f00edda20();
     void f00eddb00();
     void f00eddbe0();
-    void f00eddc50(int* param_1);
+    void f00eddc50(ScriptParam* param_1);
     void f00edde30(int param);
     void f00edde90();
 };
@@ -597,45 +622,60 @@ void C::f00eddbe0()
 }
 
 // ============================================================ 0x00eddc50
-extern "C" void* EA_Audio_Eapd_Debug_ObjectError();
-extern "C" int  SP_GetPropertyAsText(void*, int, void*);
-extern "C" void SPUIHelpers_SetTooltipText(void*);
+extern "C" void* GetOTDBService();                        // 0x008de1a0  property database
+extern "C" int*  GetUInt();                               // 0x0041ea00  current selection id
+extern "C" int   SP_GetPropertyAsText(void*, int, void*); // 0x006a1360
+extern "C" void  SPUIHelpers_SetTooltipText(void*, const wchar_t*, int, int); // 0x00806de0
 // @ 0x00eddc50
-void C::f00eddc50(int* param_1)
+void C::f00eddc50(ScriptParam* param_1)
 {
     if (p30 != 0) {
         SetGlobalProperty(0x8dff6314, 0.0f);
         FUN_00572020(p30, 0);
         p30 = 0;
     }
-    vec34[0] = param_1[0];
-    vec34[1] = param_1[1];
-    vec34[2] = param_1[2];
-    void* local = 0;
-    void* e = EA_Audio_Eapd_Debug_ObjectError();
+    ScriptParam* p = param_1;
+    vec34[0] = p->v[0];
+    vec34[1] = p->v[1];
+    vec34[2] = p->v[2];
+
+    void* local = 0;                       // ref-counted property, released below
+    void* e = GetOTDBService();
     if (local != 0) {
+        void* old = local;
         local = 0;
-        VC0(local, 4);
+        VC0(old, 4);
     }
-    void* prop = 0;
-    VCP3(VTP(e), 0xc, e, (int)param_1, (int)&prop);
-    if (prop != 0) {
-        cString text;
-        if (SP_GetPropertyAsText(prop, 0x71e9bd1, &text)) {
-            void* win = *(void**)((char*)this + 0x20);
-            void* tt = VCP2(win, 0xf0, 0x7ccbd48, 1);
-            SPUIHelpers_SetTooltipText(tt);
+    // e->Lookup(p, &local, 0, 0, 0, 0): six stack arguments, thiscall (ret 0x18)
+    ((void (__thiscall*)(void*, int, int, int, int, int, int))
+        VTP(e)[0xc / 4])(e, (int)p, (int)&local, 0, 0, 0, 0);
+
+    if (local != 0) {
+        {
+            cString text;
+            text.Init();
+            if (SP_GetPropertyAsText(local, 0x71e9bd1, &text)) {
+                void* win = (void*)p20;
+                SPUIHelpers_SetTooltipText(VCP2(win, 0xf0, 0x7ccbd48, 1),
+                                           text.GetText(), -1, 1);
+            }
+            if (local != 0) {
+                if (((char (__thiscall*)(void*, int, void*))
+                        VTP(local)[0x24 / 4])(local, 0xb6878619, (void*)&param_1)
+                    && param_1->kind == 0xa)
+                    v2c = *GetUInt();
+            }
+            Mgr* m = MGR();
+            if (m != 0) {
+                ScriptSelection* r = (ScriptSelection*)m->F3be60(FUN_00efc520());
+                if (r != 0)
+                    r->index = v2c;
+            }
+            f00edda20();
+            text.Dtor();
         }
-        if (prop != 0) {
-            char rr = ((char(__thiscall*)(void*, int, void*))VTP(prop)[0x24/4])(prop, 0xb6878619, 0);
-            (void)rr;
-        }
-        if (*(int*)((char*)DAT_016c7aa4 + 0x74) != 0) {
-            int r = MGR()->F3be60(FUN_00efc520());
-            if (r != 0)
-                *(int*)(r + 0x80) = v2c;
-        }
-        f00edda20();
+        if (local != 0)
+            VC0(local, 4);
     }
 }
 
@@ -650,7 +690,7 @@ struct SubD4 { void F72b0(); };
 void Sub14::f00edddc0(int* param_2)
 {
     char* edi = (char*)this;
-    ((C*)(edi - 0x14))->f00eddc50(param_2);
+    ((C*)(edi - 0x14))->f00eddc50((ScriptParam*)param_2);
     if (*(int*)(edi + 0xc) != 0) {
         void* w = VCP2(*(void**)(edi + 0xc), 0xf0, 0x75f60b0, 1);
         if (w != 0) {

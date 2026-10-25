@@ -6,8 +6,6 @@
 00f19660  -    EachChild (135 bytes, ret 8): body not reconstructed. Iterates the 0x1ac-stride array calling a callback per element.
 00f196f0  -    EachChild2 (333 bytes): body not reconstructed.
 00f19840  -    ByIndex (168 bytes, ret 4): body not reconstructed.
-00f198f0  -    Apply (68 bytes, ret 8): body not reconstructed.
 00f19940  -    Setup (374 bytes, ret 0x24 — 9 stack args): body not reconstructed.
 00f19ac0  -    Remove (187 bytes, ret 8): body not reconstructed. Tests m90 == 3, resolves the singleton via 0xb3d300/0xb1fdb0 and walks vtable slot 0x2c.
 00f19d10  -    ScanFrac (228 bytes): body not reconstructed. Ends with an x87 fdivr against the argument at [esp+8] (a ratio of two accumulated distances).
-00f19e00  -    Pred (100 bytes): body not reconstructed.

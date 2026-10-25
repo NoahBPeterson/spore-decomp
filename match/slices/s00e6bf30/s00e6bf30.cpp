@@ -15,22 +15,20 @@ extern "C" {
     unsigned int DAT_016b44b0, DAT_016b44b4, DAT_016b44b8, DAT_016b44bc, DAT_016b44c0, DAT_016b44c4;
     unsigned int DAT_016b4498, DAT_016b449c;
     unsigned int DAT_016b3c0c;                // cLocalInputState* base (as int)
-    unsigned int g_CellGame;                  // base of SP::gspCellGame
-    unsigned int g_CellGfx;                   // base of SP::gspCellGfx
+    unsigned int g_CellGame;                  // 0x016b3c04 base of SP::gspCellGame
+    unsigned int g_CellGfx;                   // 0x016b3c08 base of SP::gspCellGfx
     extern double g_RandomState;               // 0x01601760 EA::Random singleton
 }
 
 extern "C" {
     int   FUN_00e679e0(unsigned int, unsigned int, unsigned int);
-    void  SP_CreateEffectSafe(unsigned int, unsigned int, unsigned int, void*);
+    void  FUN_00628450(unsigned int, unsigned int, unsigned int, void*);   // 0x00628450 CreateEffectSafe
     char  FUN_00e5afc0(unsigned int);
     void  FUN_00e68000(unsigned int, unsigned int, void*);
-    void  SP_sPartIntersectTarget(unsigned int, unsigned int, void*);
+    void  FUN_00e63480(unsigned int, unsigned int, void*);   // 0x00e63480 SP::sPartIntersectTarget
     void  FUN_00e65a00(unsigned int);
-    int   FUN_00b721d0(unsigned int);
     int   FUN_00b72210(unsigned int);
-    int   SP_sGetSourceLevel();
-    void  FUN_0040ce80(unsigned int);
+    int __fastcall FUN_00e4ee60(int, int);      // 0x00e4ee60 SP::sGetSourceLevel (level in edx)
     int   FUN_00e4ce40(void*);
     void  FUN_00743b50();
     void  FUN_00e82130();
@@ -60,14 +58,42 @@ extern "C" {
     void  FUN_005fdf40();
     float FUN_00e696a0(unsigned int, unsigned int, unsigned int, unsigned int);
     float FUN_00e69740(unsigned int, unsigned int, unsigned int, unsigned int);
-    int   EA_RefCountRelease(const char*, unsigned int, int);
+    int   FUN_00932e80(const char*, unsigned int, int);   // 0x00932e80 FNV1_String8 (hash of a name)
     void  FUN_007c4900(void*, void*);
 }
-namespace eastl { void vector_uint_DoInsertValue(void*, void*); }
+// The vector-grow helper at 0x004558a0 is a thiscall member: ecx is the vector,
+// the stack args are (insertion slot, const value&).  Original mangled name:
+// ?DoInsertValue@?$SimpleVector@I@SP@@QAEXPAIABI@Z.
+struct eastl_vector_uint
+{
+    void DoInsertValue(unsigned int* slot, const unsigned int& value);   // 0x004558a0
+};
 
 // The random helper at 0x009360d0 is a thiscall member: the original sets ecx to the
 // EA::Random singleton (mov ecx, 0x1601760) before calling it.
 class RandomLinearCongruential { public: double RandomDoubleUniform(); };   // 0x009360d0
+
+// Cell-game grid lookup at 0x00b721d0: thiscall (this = gspCellGame + 0x1c), one stack key.
+struct SP_cCellGameGrid
+{
+    int FUN_00b721d0(unsigned int key);   // 0x00b721d0
+};
+
+// The 0x38-byte transform copy at 0x0040ce80 (cXfCopy / cSwarmCopy): ecx is the
+// destination, the stack arg is the source.  Layout:
+//   +0x00 u16  +0x02 i16  +0x04 f32  +0x08 f32  +0x0c f32  +0x10 f32
+//   +0x14 3x3 matrix (9 floats)
+struct SP_cXfCopy
+{
+    unsigned short f00;
+    short          f02;
+    float          f04;
+    float          f08;
+    float          f0c;
+    float          f10;
+    float          mat[9];
+    void copyFrom(const void* src);   // 0x0040ce80
+};
 
 // @ 0x00e6bf30
 void SP_sUpdatePoisonReleaseEffect(unsigned int param_1, int* param_2, unsigned int param_3,
@@ -98,7 +124,7 @@ void SP_sUpdatePoisonReleaseEffect(unsigned int param_1, int* param_2, unsigned 
                 else
                 {
                     if (param_8 != 0)
-                        SP_CreateEffectSafe(param_1, 0x54c94a74u, 0, &local_80);
+                        FUN_00628450(param_1, 0x54c94a74u, 0, &local_80);
                     int* piVar2 = local_80;
                     if (param_9 == 0)
                     {
@@ -107,7 +133,7 @@ void SP_sUpdatePoisonReleaseEffect(unsigned int param_1, int* param_2, unsigned 
                             local_80 = 0;
                             ((void(__thiscall*)(void*))VFN(piVar2, 4))(piVar2);
                         }
-                        SP_CreateEffectSafe(param_1, 0x9cfd5e8au, 0, &local_80);
+                        FUN_00628450(param_1, 0x9cfd5e8au, 0, &local_80);
                         char cVar4 = FUN_00e5afc0(param_3);
                         if (cVar4 != 0)
                             ((void(__thiscall*)(void*, int, const char*, int))VFN(local_80, 0x44))
@@ -116,22 +142,21 @@ void SP_sUpdatePoisonReleaseEffect(unsigned int param_1, int* param_2, unsigned 
                     else if (param_6 == 1)
                     {
                         if (local_80 != 0) { local_80 = 0; ((void(__thiscall*)(void*))VFN(piVar2, 4))(piVar2); }
-                        SP_CreateEffectSafe(param_1, 0xf8eb2d4du, 0, &local_80);
+                        FUN_00628450(param_1, 0xf8eb2d4du, 0, &local_80);
                     }
                     else if (param_6 == 2)
                     {
                         if (local_80 != 0) { local_80 = 0; ((void(__thiscall*)(void*))VFN(piVar2, 4))(piVar2); }
-                        SP_CreateEffectSafe(param_1, 0x71877630u, 0, &local_80);
+                        FUN_00628450(param_1, 0x71877630u, 0, &local_80);
                     }
                     else if (param_6 == 3)
                     {
                         if (local_80 != 0) { local_80 = 0; ((void(__thiscall*)(void*))VFN(piVar2, 4))(piVar2); }
-                        SP_CreateEffectSafe(param_1, 0xa3572f53u, 0, &local_80);
+                        FUN_00628450(param_1, 0xa3572f53u, 0, &local_80);
                     }
                     ((void(__thiscall*)(void*, int))VFN(local_80, 8))(local_80, 1);
                     ((void(__thiscall*)(void*))VFN((void*)param_4, 0))((void*)param_4);
                     unsigned int* puVar1 = (unsigned int*)param_2[1];
-                    int* piStack_74 = local_80;
                     if (puVar1 < (unsigned int*)param_2[2])
                     {
                         param_2[1] = (int)(puVar1 + 1);
@@ -139,7 +164,7 @@ void SP_sUpdatePoisonReleaseEffect(unsigned int param_1, int* param_2, unsigned 
                     }
                     else
                     {
-                        eastl::vector_uint_DoInsertValue(puVar1, &piStack_74);
+                        ((eastl_vector_uint*)param_2)->DoInsertValue(puVar1, *(const unsigned int*)&local_80);
                     }
                 }
 
@@ -169,7 +194,7 @@ void SP_sUpdatePoisonReleaseEffect(unsigned int param_1, int* param_2, unsigned 
                 *(float*)(target + 0x0c) = fVar3 * 0.1f + *(float*)(target + 0x0c);
                 *(unsigned short*)(target + 0x00) = *(unsigned short*)(target + 0x00) | 4;
                 local_70 = uVar5;
-                SP_sPartIntersectTarget((unsigned int)local_80, param_5, target);
+                FUN_00e63480((unsigned int)local_80, param_5, target);
                 uVar5 = uVar5 + 1;
                 if (local_80 != 0)
                     ((void(__thiscall*)(void*))VFN(local_80, 4))(local_80);
@@ -189,40 +214,39 @@ void SP_sUpdatePoisonReleaseEffect(unsigned int param_1, int* param_2, unsigned 
 // @ 0x00e6c330
 void FUN_00e6c330(void)
 {
-    int iVar2 = FUN_00b721d0(*(unsigned int*)(g_CellGame + 0x411c));
+    int iVar2 = ((SP_cCellGameGrid*)(g_CellGame + 0x1c))->FUN_00b721d0(*(unsigned int*)(g_CellGame + 0x411c));
     if (iVar2 == 0)
         return;
 
     if ((DAT_016b44c8 & 1) == 0)
     {
         DAT_016b44c8 |= 1;
-        DAT_016b44a0 = EA_RefCountRelease("cell_hero_L1_decorations", 0x811c9dc5u, 1);
-        DAT_016b44a4 = EA_RefCountRelease("cell_hero_L2_decorations", 0x811c9dc5u, 1);
-        DAT_016b44a8 = EA_RefCountRelease("cell_hero_L4_decorations", 0x811c9dc5u, 1);
-        DAT_016b44ac = EA_RefCountRelease("cell_hero_L10_decorations", 0x811c9dc5u, 1);
-        DAT_016b44b0 = EA_RefCountRelease("cell_hero_L20_decorations", 0x811c9dc5u, 1);
-        DAT_016b44b4 = EA_RefCountRelease("cell_hero_L40_decorations", 0x811c9dc5u, 1);
-        DAT_016b44b8 = EA_RefCountRelease("cell_hero_L100_decorations", 0x811c9dc5u, 1);
-        DAT_016b44bc = EA_RefCountRelease("cell_hero_L200_decorations", 0x811c9dc5u, 1);
-        DAT_016b44c0 = EA_RefCountRelease("cell_hero_L400_decorations", 0x811c9dc5u, 1);
-        DAT_016b44c4 = EA_RefCountRelease("cell_hero_L400_decorations", 0x811c9dc5u, 1);
+        DAT_016b44a0 = FUN_00932e80("cell_hero_L1_decorations", 0x811c9dc5u, 1);
+        DAT_016b44a4 = FUN_00932e80("cell_hero_L2_decorations", 0x811c9dc5u, 1);
+        DAT_016b44a8 = FUN_00932e80("cell_hero_L4_decorations", 0x811c9dc5u, 1);
+        DAT_016b44ac = FUN_00932e80("cell_hero_L10_decorations", 0x811c9dc5u, 1);
+        DAT_016b44b0 = FUN_00932e80("cell_hero_L20_decorations", 0x811c9dc5u, 1);
+        DAT_016b44b4 = FUN_00932e80("cell_hero_L40_decorations", 0x811c9dc5u, 1);
+        DAT_016b44b8 = FUN_00932e80("cell_hero_L100_decorations", 0x811c9dc5u, 1);
+        DAT_016b44bc = FUN_00932e80("cell_hero_L200_decorations", 0x811c9dc5u, 1);
+        DAT_016b44c0 = FUN_00932e80("cell_hero_L400_decorations", 0x811c9dc5u, 1);
+        DAT_016b44c4 = FUN_00932e80("cell_hero_L400_decorations", 0x811c9dc5u, 1);
     }
     if ((DAT_016b44c8 & 2) == 0)
     {
         DAT_016b44c8 |= 2;
-        DAT_016b449c = EA_RefCountRelease("cell_hero_NoEyes", 0x811c9dc5u, 1);
+        DAT_016b449c = FUN_00932e80("cell_hero_NoEyes", 0x811c9dc5u, 1);
     }
     if ((DAT_016b44c8 & 4) == 0)
     {
         DAT_016b44c8 |= 4;
-        DAT_016b4498 = EA_RefCountRelease("cell_hero_OnePairEyes", 0x811c9dc5u, 1);
+        DAT_016b4498 = FUN_00932e80("cell_hero_OnePairEyes", 0x811c9dc5u, 1);
     }
 
-    int iVar3 = SP_sGetSourceLevel();
-    unsigned char s1[0x38];
-    unsigned char s2[0x40];
-    unsigned int uVar7;
-    void* puVar9;
+    int iVar3 = FUN_00e4ee60(*(int*)(g_CellGame + 0x5190),
+                              *(int*)(*(int*)(g_CellGame + 0x5190) + 0x1c));
+    SP_cXfCopy s1;
+    SP_cXfCopy s2;
 
     if (*(int*)(g_CellGfx + 0x16258) == iVar3 && *(int*)(g_CellGfx + 0x164) != 0)
     {
@@ -230,12 +254,10 @@ void FUN_00e6c330(void)
         char cVar1 = ((char(__thiscall*)(void*))VFN(p, 0x10))(p);
         if (cVar1 == 0)
             ((void(__thiscall*)(void*, int))VFN(*(void**)(g_CellGfx + 0x164), 8))(*(void**)(g_CellGfx + 0x164), 0);
-        FUN_0040ce80(iVar2 + 0xc0);
-        *(unsigned int*)(s1 + 0x10) = 0x3f800000u;
-        FUN_0040ce80(iVar2 + 0x48);
-        uVar7 = *(unsigned int*)(g_CellGfx + 0x164);
-        puVar9 = s1;
-        (void)s2;
+        s1.copyFrom((void*)(iVar2 + 0xc0));
+        s1.f10 = 1.0f;
+        s1.f02 = s1.f02 + 1;
+        s2.copyFrom((void*)(iVar2 + 0x48));
     }
     else
     {
@@ -247,24 +269,19 @@ void FUN_00e6c330(void)
         int iVar5 = FUN_00e4ce40(la);
         iVar5 = *(int*)(iVar5 + 0xe4);
         FUN_00e82130();
-        uVar7 = DAT_016b449c;
+        unsigned int uVar7 = DAT_016b449c;
         void* piVar6;
         if (iVar5 == 0)
         {
-            if (*(int*)(iVar4 + 0x1230) == 0)
-                piVar6 = *(void**)(g_CellGfx + 0x164);
-            else
-            {
+            if (*(int*)(iVar4 + 0x1230) != 0)
                 uVar7 = (&DAT_016b449c)[iVar3];
-                piVar6 = *(void**)(g_CellGfx + 0x164);
-            }
         }
         else
         {
             if (*(int*)(iVar4 + 0x1230) != 0 && (uVar7 = DAT_016b4498, 2 < *(int*)(iVar4 + 0x1230)))
                 uVar7 = (&DAT_016b449c)[iVar3];
-            piVar6 = *(void**)(g_CellGfx + 0x164);
         }
+        piVar6 = *(void**)(g_CellGfx + 0x164);
         if (piVar6 != 0)
         {
             ((void(__thiscall*)(void*, int))VFN(piVar6, 0xc))(piVar6, 1);
@@ -282,29 +299,17 @@ void FUN_00e6c330(void)
             *puVar8 = 0;
             ((void(__thiscall*)(void*))VFN(piVar6, 4))(piVar6);
         }
-        SP_CreateEffectSafe(*(unsigned int*)(g_CellGfx + 0x161c8), uVar7, 0, puVar8);
+        FUN_00628450(*(unsigned int*)(g_CellGfx + 0x161c8), uVar7, 0, puVar8);
         ((void(__thiscall*)(void*, int))VFN(*(void**)(g_CellGfx + 0x164), 8))(*(void**)(g_CellGfx + 0x164), 0);
 
-        *(unsigned short*)(s1 + 0x00) = *(unsigned short*)(iVar2 + 0xc0);
-        *(short*)(s1 + 0x02) = *(short*)(iVar2 + 0xc2);
-        *(unsigned int*)(s1 + 0x04) = *(unsigned int*)(iVar2 + 0xc4);
-        *(unsigned int*)(s1 + 0x08) = *(unsigned int*)(iVar2 + 200);
-        *(unsigned int*)(s1 + 0x0c) = *(unsigned int*)(iVar2 + 0xcc);
-        *(unsigned int*)(s1 + 0x10) = *(unsigned int*)(iVar2 + 0xd0);
-        *(unsigned int*)(s1 + 0x10) = 0x3f800000u;
-        *(short*)(s1 + 0x02) = *(short*)(s1 + 0x02) + 1;
-
-        *(unsigned int*)(s2 + 0x04) = *(unsigned int*)(iVar2 + 0x4c);
-        *(unsigned short*)(s2 + 0x00) = *(unsigned short*)(iVar2 + 0x48);
-        *(short*)(s2 + 0x02) = *(short*)(iVar2 + 0x4a);
-        *(unsigned int*)(s2 + 0x08) = *(unsigned int*)(iVar2 + 0x50);
-        *(unsigned int*)(s2 + 0x0c) = *(unsigned int*)(iVar2 + 0x54);
-        uVar7 = *(unsigned int*)(g_CellGfx + 0x164);
-        puVar9 = s1;
+        s1.copyFrom((void*)(iVar2 + 0xc0));
+        s1.f10 = 1.0f;
+        s1.f02 = s1.f02 + 1;
+        s2.copyFrom((void*)(iVar2 + 0x48));
     }
-    *(short*)(s2 + 0x02) = *(short*)(s2 + 0x02) + 1;
-    *(unsigned int*)(s2 + 0x10) = 0x3f800000u;
-    SP_sPartIntersectTarget(uVar7, (unsigned int)puVar9, s2);
+    s2.f02 = s2.f02 + 1;
+    s2.f10 = 1.0f;
+    FUN_00e63480(*(unsigned int*)(g_CellGfx + 0x164), (unsigned int)&s1, &s2);
 }
 
 // @ 0x00e6c780

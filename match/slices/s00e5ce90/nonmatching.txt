@@ -7,3 +7,6 @@
 00e5da10  115  key from pick result -> FUN_00e394f0: complete; equivalence PASS (873 valid, 100% coverage); out-pointers are &a[6]/&a[3]/&a[0]
 00e5daa0   19   show mission panel: complete; equivalence WEAK (857 valid, 0 mismatches, 56.2% coverage); tail path needs e[0x113]==0 && e[0x112]==0; only register/tail-jump schedule differs
 00e5daf0  150  callout config by pick result: complete; FNV/hash call schedule differs
+00e5ce90  752  creature/box pickup builder: complete; equivalence WEAK (99 valid, 0 mismatches, 47.1% coverage); retail passes the model manager in esi to sMyCreateModel (0xe4f000) and the effect object in edi to FUN_00e4efb0, a register convention C++ cannot express, so both wrappers are inlined with the same vtable calls
+00e5d2b0  128  random pickup size in [lo,hi]*level: complete; equivalence FAIL (5/52 valid mismatched on st0); retail is an x87 TU returning the float in st0 and keeps r*(hi-lo)+lo in 80-bit, while the /arch:SSE rebuild rounds the same formula to an adjacent float ulp
+00e5d7b0  423  mission slot tick: complete; equivalence UNSUPPORTED (0/200 valid; fault(read)=141, import:_vsnprintf=42); the raw fuzz inputs make retail dereference unset panel globals (0x167eb5c / 0x167eb60)

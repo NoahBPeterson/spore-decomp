@@ -2,6 +2,8 @@
 // Module flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
 
+#define NOINLINE __declspec(noinline)
+
 struct Ctx;
 struct Pair { int key; int val; };
 
@@ -46,10 +48,18 @@ void*__cdecl cSPUILayout_FindWindowByID(void* layout, int id, int b);
 // generic nuke on a rbtree node
 void __cdecl DoNukeSubtree(int node);
 
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned n);
+
 // ABI views of the callees (the slice's globals hold the object bases).
 struct KeyNode   { void __thiscall FUN_01012f30(void* a); };      // 0x01012f30 (this = node+0x10)
-struct TreeFind  { int* __thiscall FUN_00ec9530(int* key); };     // 0x00ec9530 (this = map+0x18)
-struct TreeFind2 { int* __thiscall FUN_00ec9820(int* key); };     // 0x00ec9820 (this = map+0x50)
+struct TreeFind  {
+    int* __thiscall FUN_00ec9530(int* key);                       // 0x00ec9530 (this = map+0x18)
+    void* __thiscall FUN_00ec8ff0(void* out, int* hint, void* value, int extra); // 0x00ec8ff0
+};
+struct TreeFind2 {
+    int* __thiscall FUN_00ec9820(int* key);                       // 0x00ec9820 (this = map+0x50)
+    void* __thiscall FUN_00ec9750(void* out, int* hint, void* value, int extra); // 0x00ec9750
+};
 // 6-arg debug allocator operator new(size, name, flags, debugFlags, file, line)
 void* __cdecl FUN_00f473a0(unsigned size, const char* name, int a, int b, const char* file, int line);
 
@@ -113,6 +123,7 @@ void FUN_00ec8d80(int param_1)
 }
 
 // ------------------------------------------------------------------ 0x00ec8e50
+// @ 0x00ec8e50
 void FUN_00ec8e50(int param_1, int param_2)
 {
     switch (param_1) {
@@ -148,6 +159,7 @@ void Vec32::Resize(unsigned n)
 }
 
 // ------------------------------------------------------------------ 0x00ec8f40
+// @ 0x00ec8f40
 void FUN_00ec8f40(int* p)
 {
     int n = p[0x22a];
@@ -240,6 +252,7 @@ void FUN_00ec9250(void)
 }
 
 // ------------------------------------------------------------------ 0x00ec92b0
+// @ 0x00ec92b0
 void FUN_00ec92b0(void)
 {
     FUN_00ec7a80();
@@ -300,8 +313,10 @@ void FUN_00ec94d0(void)
 }
 
 // ------------------------------------------------------------------ 0x00ec9530
-int* FUN_00ec9530(int param_1, int* param_2)
+// @ 0x00ec9530
+int* TreeFind::FUN_00ec9530(int* param_2)
 {
+    int param_1 = (int)this;
     int* head = (int*)(param_1 + 4);
     int* parent = head;
     if (*(int**)(param_1 + 0xc)) {
@@ -316,18 +331,19 @@ int* FUN_00ec9530(int param_1, int* param_2)
         } while (n);
     }
     if (parent == head || *param_2 < parent[4]) {
-        int local_18 = *param_2;
-        FUN_00ac20d0(0, param_2);
-        FUN_0076ffd0(&param_2, 0, 0, 0, param_2);
-        FUN_00ec8ff0(&param_2, parent, &local_18, param_2);
-        parent = param_2;
+        struct Value { int key; void* b; void* e; void* c; } value;
+        value.key = *param_2;
+        value.b = 0; value.e = 0; value.c = 0;
+        void* out;
+        this->FUN_00ec8ff0(&out, parent, &value, 0);
+        parent = (int*)out;
     }
     return parent + 5;
 }
 
 // ------------------------------------------------------------------ 0x00ec95f0 / 0x00ec9640
 // @ 0x00ec95f0
-long long FUN_00ec95f0(int param_1, int param_2)
+NOINLINE long long FUN_00ec95f0(int param_1, int param_2)
 {
     if (param_2 != -1) {
         int* ids = *(int**)((char*)g_16c757c + 4);
@@ -345,7 +361,7 @@ long long FUN_00ec95f0(int param_1, int param_2)
 }
 
 // @ 0x00ec9640
-long long FUN_00ec9640(int param_1, int param_2)
+NOINLINE long long FUN_00ec9640(int param_1, int param_2)
 {
     if (param_2 != -1) {
         int* ids = *(int**)((char*)g_16c757c + 4);
@@ -382,12 +398,25 @@ void FUN_00ec9690(int param_1, int param_2)
 // @ 0x00ec96f0
 void FUN_00ec96f0(int param_1, int param_2)
 {
-    FUN_00ec9690(param_1, param_2);
+    int* ids = *(int**)((char*)g_16c757c + 4);
+    int id = ids[param_1];
+    Pair** p = (Pair**)((TreeFind*)((char*)g_16c757c + 0x34))->FUN_00ec9530(&id);
+    Pair* it = p[0];
+    int i = 0;
+    if (p[1] - it > 0) {
+        do {
+            FUN_00ec7b90(param_2, (int)(it + i));
+            it = p[0];
+            ++i;
+        } while (i < p[1] - it);
+    }
 }
 
 // ------------------------------------------------------------------ 0x00ec9820
-int* FUN_00ec9820(int param_1, int* param_2)
+// @ 0x00ec9820
+int* TreeFind2::FUN_00ec9820(int* param_2)
 {
+    int param_1 = (int)this;
     int* head = (int*)(param_1 + 4);
     int* parent = head;
     if (*(int**)(param_1 + 0xc)) {
@@ -402,16 +431,22 @@ int* FUN_00ec9820(int param_1, int* param_2)
         } while (n);
     }
     if (parent == head || *param_2 < parent[4]) {
-        int local_18 = *param_2;
-        void* local_14 = 0;
-        FUN_00b93c60(0, &local_14);
-        FUN_00ec9750(&param_2, parent, &local_18, param_2);
-        parent = param_2;
+        struct Value { int key; void* b; void* e; void* c; } value;
+        value.key = *param_2;
+        value.b = 0; value.e = 0; value.c = 0;
+        memcpy(value.b, 0, 0);
+        void* out;
+        // the 4th argument is unused by the callee; the original passes the
+        // key pointer with its low byte cleared.
+        int extra = (int)((unsigned)(int)param_2 & 0xffffff00u);
+        this->FUN_00ec9750(&out, parent, &value, extra);
+        parent = (int*)out;
     }
     return parent + 5;
 }
 
 // ------------------------------------------------------------------ 0x00ec98d0
+// @ 0x00ec98d0
 void FUN_00ec98d0(void)
 {
     int* r = g_16c757c;
@@ -433,18 +468,17 @@ void FUN_00ec98d0(void)
 }
 
 // ------------------------------------------------------------------ 0x00ec9a80
-void FUN_00ec9a80(int param_1, int param_2)
+// @ 0x00ec9a80
+static __forceinline int LookupPair2(int a, int b)
 {
-    int x = param_2;
-    int result;
-    if (param_1 == -1 || param_2 == -1) {
-        result = -1;
-    } else {
-        int id = *(int*)(*(int*)(g_16c757c + 4) + param_1 * 4);
-        int* p = FUN_00ec9820((int)&id, (int*)&id);
-        result = *(int*)(*p + x * 4);
-    }
-    FUN_00ec9530((int)&result, &result);
+    int id = *(int*)(*(int*)((char*)g_16c757c + 4) + a * 4);
+    int* p = ((TreeFind2*)((char*)g_16c757c + 0x50))->FUN_00ec9820(&id);
+    return *(int*)(*p + b * 4);
+}
+int* FUN_00ec9a80(int param_1, int param_2)
+{
+    int result = (param_1 == -1 || param_2 == -1) ? -1 : LookupPair2(param_1, param_2);
+    return ((TreeFind*)((char*)g_16c757c + 0x6c))->FUN_00ec9530(&result);
 }
 
 // ------------------------------------------------------------------ 0x00ec9ae0
@@ -462,11 +496,12 @@ int FUN_00ec9ae0(int param_1, int param_2)
 }
 
 // ------------------------------------------------------------------ 0x00ec9b30
+// @ 0x00ec9b30
 int* FUN_00ec9b30(int* param_1, int* param_2)
 {
     int* out = param_1;
     int id0 = *param_2;
-    int* node = *(int**)(*(int*)(g_16c757c + 4) + id0 * 4);
+    int* node = *(int**)(*(int*)((char*)g_16c757c + 4) + id0 * 4);
     out[3] = (int)node;
     int iVar1 = param_2[1];
     int u4, u7;
@@ -474,7 +509,7 @@ int* FUN_00ec9b30(int* param_1, int* param_2)
         u7 = -1; u4 = -1;
     } else {
         int x = (int)node;
-        int* p = FUN_00ec9530((int)&x, &x);
+        int* p = ((TreeFind*)((char*)g_16c757c + 0x18))->FUN_00ec9530(&x);
         int base = *p;
         if (base == p[1]) { u4 = -1; u7 = -1; }
         else { u4 = *(int*)(base + iVar1 * 8); u7 = *(int*)(base + 4 + iVar1 * 8); }
@@ -484,8 +519,8 @@ int* FUN_00ec9b30(int* param_1, int* param_2)
     out[4] = u4;
     if (iVar1 == -1) { u4 = -1; u7 = -1; }
     else {
-        int x = *(int*)(*(int*)(g_16c757c + 4) + id0 * 4);
-        int* p = FUN_00ec9530((int)&x, &x);
+        int x = *(int*)(*(int*)((char*)g_16c757c + 4) + id0 * 4);
+        int* p = ((TreeFind*)((char*)g_16c757c + 0x34))->FUN_00ec9530(&x);
         int base = *p;
         if (base == p[1]) { u4 = -1; u7 = -1; }
         else { u4 = *(int*)(base + iVar1 * 8); u7 = *(int*)(base + 4 + iVar1 * 8); }
@@ -497,20 +532,20 @@ int* FUN_00ec9b30(int* param_1, int* param_2)
     if (iVar1 == -1 || iVar2 == -1) {
         u4 = -1;
     } else {
-        int x = *(int*)(*(int*)(g_16c757c + 4) + iVar1 * 4);
-        int* p = FUN_00ec9820((int)&x, &x);
+        int x = *(int*)(*(int*)((char*)g_16c757c + 4) + iVar1 * 4);
+        int* p = ((TreeFind2*)((char*)g_16c757c + 0x50))->FUN_00ec9820(&x);
         u4 = *(int*)(*p + iVar2 * 4);
     }
     int iVar3 = param_2[4];
     *out = u4;
     if (iVar3 != -1) {
-        int x = *param_2;
-        int y = param_2[3];
-        int* p = (int*)&x;
-        FUN_00ec9a80(x, y);
-        (void)p;
-        int* q = (int*)&y;
-        (void)q;
+        int* p = FUN_00ec9a80(param_2[0], param_2[3]);
+        int base = *p;
+        if (base != p[1]) {
+            out[1] = *(int*)(base + iVar3 * 8);
+            out[2] = *(int*)(base + 4 + iVar3 * 8);
+            return out;
+        }
     }
     out[1] = -1;
     out[2] = -1;
@@ -518,6 +553,7 @@ int* FUN_00ec9b30(int* param_1, int* param_2)
 }
 
 // ------------------------------------------------------------------ 0x00ec9c70
+// @ 0x00ec9c70
 void FUN_00ec9c70(int* param_1, int* param_2)
 {
     int* a = param_1;
@@ -525,39 +561,48 @@ void FUN_00ec9c70(int* param_1, int* param_2)
     if (*a != *b) {
         long long d10 = FUN_00ec95f0(*a, a[1]);
         long long d8 = FUN_00ec9640(*a, a[2]);
-        int x = *(int*)(*(int*)(g_16c757c + 4) + *b * 4);
-        int* p = FUN_00ec9530((int)&x, &x);
+        int x = *(int*)(*(int*)((char*)g_16c757c + 4) + *b * 4);
+        int* p = ((TreeFind*)((char*)g_16c757c + 0x18))->FUN_00ec9530(&x);
         b[1] = FUN_00ec6ea0_i((int)p, &d10);
-        x = *(int*)(*(int*)(g_16c757c + 4) + *b * 4);
-        p = FUN_00ec9530((int)&x, &x);
+        x = *(int*)(*(int*)((char*)g_16c757c + 4) + *b * 4);
+        p = ((TreeFind*)((char*)g_16c757c + 0x34))->FUN_00ec9530(&x);
         b[2] = FUN_00ec6ea0_i((int)p, &d8);
-        int iVar4 = a[3];
         int u3;
-        if (*a == -1 || iVar4 == -1) u3 = -1;
+        if (*a == -1 || a[3] == -1) u3 = -1;
         else {
-            x = *(int*)(*(int*)(g_16c757c + 4) + *a * 4);
-            int* q = FUN_00ec9820((int)&x, &x);
-            u3 = *(int*)(*q + iVar4 * 4);
+            x = *(int*)(*(int*)((char*)g_16c757c + 4) + *a * 4);
+            int* q = ((TreeFind2*)((char*)g_16c757c + 0x50))->FUN_00ec9820(&x);
+            u3 = *(int*)(*q + a[3] * 4);
+        }
+        int pair[2];
+        if (a[4] == -1) {
+            pair[0] = -1; pair[1] = -1;
+        } else {
+            int* q = FUN_00ec9a80(a[0], a[3]);
+            int base = *q;
+            if (base == q[1]) { pair[0] = -1; pair[1] = -1; }
+            else {
+                pair[0] = *(int*)(base + a[4] * 8);
+                pair[1] = *(int*)(base + 4 + a[4] * 8);
+            }
         }
         b[3] = FUN_00ec9ae0(*b, u3);
-        int xi = *b;
-        int yi = b[3];
-        FUN_00ec9a80(xi, yi);
-        b[4] = FUN_00ec6ea0_i(0, &d8);
+        b[4] = FUN_00ec6ea0_i((int)FUN_00ec9a80(*b, b[3]), pair);
         return;
     }
     if (a[3] == b[3])
         return;
-    long long d8;
-    int iVar1 = a[4];
-    if (iVar1 != -1) {
-        int* q = (int*)&iVar1;
-        FUN_00ec9a80(*a, a[3]);
-        (void)q;
+    int pair[2];
+    if (a[4] == -1) {
+        pair[0] = -1; pair[1] = -1;
+    } else {
+        int* q = FUN_00ec9a80(a[0], a[3]);
+        int base = *q;
+        if (base == q[1]) { pair[0] = -1; pair[1] = -1; }
+        else {
+            pair[0] = *(int*)(base + a[4] * 8);
+            pair[1] = *(int*)(base + 4 + a[4] * 8);
+        }
     }
-    ((int*)&d8)[0] = -1;
-    ((int*)&d8)[1] = -1;
-    int xi = *b, yi = b[3];
-    FUN_00ec9a80(xi, yi);
-    b[4] = FUN_00ec6ea0_i(0, &d8);
+    b[4] = FUN_00ec6ea0_i((int)FUN_00ec9a80(*b, b[3]), pair);
 }

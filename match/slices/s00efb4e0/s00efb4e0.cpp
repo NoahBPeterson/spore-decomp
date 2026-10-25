@@ -8,7 +8,7 @@
 struct Vector3 { float x, y, z; };
 
 extern int   g_16c7aa4;                 // 0x016c7aa4  (Simulator*)
-extern float gVecBase[];                // 0x015ad198  (Vector3 table used by FUN_00ef8390)
+extern Vector3 gVecBase[];              // 0x015ad198  (Vector3 table used by FUN_00ef8390)
 extern char  g_16c7b60[];               // 0x016c7b60
 
 struct Simulator;
@@ -22,6 +22,7 @@ typedef int   (__thiscall *FN1_ir)(void*, int);
 typedef void  (__thiscall *FN2_ii)(void*, int, int);
 typedef void* (__thiscall *FN0_p)(void*);
 typedef void* (__thiscall *FN2_pii)(void*, int, int);
+typedef void* (__thiscall *FN1_pi)(void*, int);
 typedef int   (__thiscall *FN0_i)(void*);
 
 // external helpers (defined elsewhere in the module)
@@ -31,6 +32,8 @@ void  __cdecl SetTimeLimit(void*, int, int);
 bool  __cdecl LimitStopwatch_IsTimeUp(void*);
 
 struct CUI {
+    uint8_t mPad00[0x30];               // +0x000
+    int     mCategory30;                // +0x030  category / checklist page
     void  f_efb4e0();
     void  f_efb9c0(int, int);
     void  f_efbbe0(int, int);
@@ -76,7 +79,34 @@ void  __cdecl SP_KillSetiEffects(int, int);
 void* __cdecl EA_GetSystemAT();
 void* __cdecl SP_ConfigManager();
 
+// cScenarioTutorials page hash map: find by integer key (eastl hash_map iterator pair).
+struct MapIter { void* first; void* second; };
+
+static __forceinline MapIter HashFind(char* map, int key)
+{
+    MapIter it;
+    uint32_t count = *(uint32_t*)(map + 8);          // +0x008 bucket count
+    void**   buckets = *(void***)(map + 4);          // +0x004 bucket array
+    uint32_t idx = (uint32_t)key % count;
+    void*    node = buckets[idx];
+    while (node != 0) {
+        if (*(int*)node == key) {
+            it.first = node;
+            it.second = &buckets[idx];
+            return it;
+        }
+        node = *(void**)((char*)node + 4);
+    }
+    it.first = buckets[count];
+    it.second = &buckets[count];
+    return it;
+}
+
 struct CSpace { void* f_00985e40(); void* f_00ed4b50(int); };
+struct cSPUILayout {
+    void* mpVtbl;                                       // +0x000
+    void* FindWindowByID(int id, int recursive);        // 0x008105b0
+};
 struct CMap { void f_00a23ef0(void*, void*); void f_00a23d20(void*); };
 struct CWindow { void* v(int); };
 struct CLimit { void SetTimeLimit(int, int); };
@@ -86,34 +116,48 @@ struct CLimit { void SetTimeLimit(int, int); };
 // ===========================================================================
 void CUI::f_efb4e0()
 {
-    char* self = (char*)this;
-    // Table of (window id, action) processed in order until a window is missing.
-    // action 0: create from Vector3, action 1: remove, action 2: seti effect.
-    struct Entry { int id; int action; int a; int b; int vec; };
-    static const Entry kEntries[] = {
-        { 0xa4, 0, 0, 0, 0x204 }, { 0xa6, 1, 0xa5, 0, 0 }, { 0xa7, 0, 0, 0, 0x210 },
-        { 0xa9, 1, 0xa8, 0, 0 }, { 0xab, 2, 0xaa, 0x218e06f7, 0 },
-        { 0xac, 2, 0xac, 0x55f3a99b, 0 },
-        { 0x87, 0, 0, 0, 0x198 }, { 0x88, 0, 0, 0, 0x1a4 }, { 0x8a, 1, 0x89, 0, 0 },
-        { 0x8b, 0, 0, 0, 0x1b0 }, { 0x8d, 2, 0x8c, 0x4f8dbb28, 0 }, { 0x8e, 0, 0, 0, 0x1bc },
-        { 0x90, 1, 0x8f, 0, 0 }, { 0x91, 0, 0, 0, 0x1c8 }, { 0x93, 2, 0x92, 0x624e5aa, 0 },
-        { 0x95, 2, 0x94, 0x5f3e51b0, 0 }, { 0x97, 2, 0x96, 0xcacb7102, 0 }, { 0x98, 0, 0, 0, 0x1d4 },
-        { 0x99, 2, 0x99, 0x50a2f4e4, 0 }, { 0x9e, 0, 0, 0, 0x1e0 }, { 0xa0, 1, 0x9f, 0, 0 },
-        { 0xa2, 2, 0xa1, 0xccbe21d, 0 }, { 0xa3, 0, 0, 0, 0x1ec }, { 0x9a, 0, 0, 0, 0x1f8 },
-        { 0x9c, 1, 0x9b, 0, 0 }, { 0x9d, 2, 0x9d, 0x56221c05, 0 },
-    };
-    for (int i = 0; i < (int)(sizeof(kEntries) / sizeof(kEntries[0])); i++) {
-        if (f_ef8820(kEntries[i].id))
-            continue;
-        if (kEntries[i].action == 0)
-            f_ef8390(*(Vector3*)((char*)gVecBase + kEntries[i].vec * 4), kEntries[i].id, 0, 0);
-        else if (kEntries[i].action == 1)
-            f_efa0b0(kEntries[i].a, 0);
-        else
-            f_efa110(kEntries[i].a, kEntries[i].b);
-        return;
+    switch (mCategory30) {
+    case 4:
+        if (!f_ef8820(0xa4)) { f_ef8390(gVecBase[9], 0xa4, 0, 0); return; }
+        if (!f_ef8820(0xa6)) { f_efa0b0(0xa5, 0); return; }
+        if (!f_ef8820(0xa7)) { f_ef8390(gVecBase[10], 0xa7, 0, 0); return; }
+        if (!f_ef8820(0xa9)) { f_efa0b0(0xa8, 0); return; }
+        if (!f_ef8820(0xab)) { f_efa110(0xaa, 0x218e06f7); return; }
+        if (!f_ef8820(0xac)) { f_efa110(0xac, 0x55f3a99b); return; }
+        break;
+
+    case 0:
+        if (!f_ef8820(0x87)) { f_ef8390(gVecBase[0], 0x87, 0, 0); return; }
+        if (!f_ef8820(0x88)) { f_ef8390(gVecBase[1], 0x88, 0, 0); return; }
+        if (!f_ef8820(0x8a)) { f_efa0b0(0x89, 0); return; }
+        if (!f_ef8820(0x8b)) { f_ef8390(gVecBase[2], 0x8b, 0, 0); return; }
+        if (!f_ef8820(0x8d)) { f_efa110(0x8c, 0x4f8dbb28); return; }
+        break;
+
+    case 1:
+        if (!f_ef8820(0x8e)) { f_ef8390(gVecBase[3], 0x8e, 0, 0); return; }
+        if (!f_ef8820(0x90)) { f_efa0b0(0x8f, 0); return; }
+        if (!f_ef8820(0x91)) { f_ef8390(gVecBase[4], 0x91, 0, 0); return; }
+        if (!f_ef8820(0x93)) { f_efa110(0x92, 0x624e5aa); return; }
+        if (!f_ef8820(0x95)) { f_efa110(0x94, 0x5f3e51b0); return; }
+        if (!f_ef8820(0x97)) { f_efa110(0x96, 0xcacb7102); return; }
+        if (!f_ef8820(0x98)) { f_ef8390(gVecBase[5], 0x98, 0, 0); return; }
+        if (!f_ef8820(0x99)) { f_efa110(0x99, 0x50a2f4e4); return; }
+        break;
+
+    case 3:
+        if (!f_ef8820(0x9e)) { f_ef8390(gVecBase[6], 0x9e, 0, 0); return; }
+        if (!f_ef8820(0xa0)) { f_efa0b0(0x9f, 0); return; }
+        if (!f_ef8820(0xa2)) { f_efa110(0xa1, 0xccbe21d); return; }
+        if (!f_ef8820(0xa3)) { f_ef8390(gVecBase[7], 0xa3, 0, 0); return; }
+        break;
+
+    case 2:
+        if (!f_ef8820(0x9a)) { f_ef8390(gVecBase[8], 0x9a, 0, 0); return; }
+        if (!f_ef8820(0x9c)) { f_efa0b0(0x9b, 0); return; }
+        if (!f_ef8820(0x9d)) { f_efa110(0x9d, 0x56221c05); return; }
+        break;
     }
-    (void)self;
 }
 
 // ===========================================================================
@@ -157,7 +201,27 @@ void CUI::f_efb9c0(int param_2, int param_3)
 afterWindow:
     if (*(int*)(self + 0x30) > 0) {
         void* w = ((FN2_pii)((*(void***)*(void**)(self + 0x14))[0x3c]))(*(void**)(self + 0x14), 100, 1);
-        (void)w;
+        ((FN2_ii)((*(void***)w)[0x1f]))(w, 1, 0);
+    }
+    for (int i = 1; i < *(int*)(self + 0x30); i++) {
+        void* w = ((FN2_pii)((*(void***)*(void**)(self + 0x14))[0x3c]))(*(void**)(self + 0x14), i + 100, 1);
+        ((FN2_ii)((*(void***)w)[0x1f]))(w, 1, 1);
+    }
+    for (int k = 0; k < *(int*)(self + 0x30); k++) {
+        char* tutorials = *(char**)((char*)gSimulator + 0xd4);
+        char* page = tutorials + *(int*)(self + 0x28) * 0x14c;
+        MapIter it = HashFind(page + 0x4a8, k);
+        bool changed = it.first != *(void**)(*(int*)(tutorials + 0x60) + *(int*)(tutorials + 100) * 4);
+        void* w = ((cSPUILayout*)*(void**)(self + 0x10))->FindWindowByID(k + 1000, 1);
+        void* target = 0;
+        if (w != 0)
+            target = ((FN1_pi)((*(void***)w)[3]))(w, 0x8ed27e7a);
+        ((FN2_ii)((*(void***)target)[10]))(target, 4, changed ? 1 : 0);
+        f_ef9000();
+        if (changed && k + 1 < *(int*)(self + 0x30)) {
+            void* w2 = ((FN2_pii)((*(void***)*(void**)(self + 0x14))[0x3c]))(*(void**)(self + 0x14), k + 101, 1);
+            ((FN2_ii)((*(void***)w2)[0x1f]))(w2, 1, 0);
+        }
     }
     (void)self;
 }

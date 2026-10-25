@@ -26,6 +26,9 @@ struct Stub {  // generic thiscall target carrier (only conventions matter)
     void* FUN_00a23ef0(int*, int*);
     void* FUN_00ef7ec0(int);
     void* FUN_00ef7b40();
+    void  SetBoolProperty();   // 0x0093a2e0 (cDirectPropertyList)
+    void  SetTimeLimit(unsigned, int);   // 0x0093a480 (LimitStopwatch)
+    void  ReleaseAll();        // 0x00ef7b40
     void* FUN_00ef7b90(void*);
     void* FUN_00ef7a00();
     void* FUN_00efa0b0(int, int);
@@ -40,11 +43,11 @@ struct VObj {  // polymorphic subobject (vtable slot access)
     virtual void s1();
     virtual void s2();
     virtual void* s3(unsigned);
-    virtual void* s4(unsigned);
+    virtual void* s4();
     virtual void* s5(unsigned);
     virtual void* s6(unsigned);
     virtual void* s7(unsigned);
-    virtual void* s8(unsigned);
+    virtual void* s8();
     virtual void* s9(unsigned);
     virtual void* s10(unsigned);
     virtual void* s11(unsigned);
@@ -52,7 +55,7 @@ struct VObj {  // polymorphic subobject (vtable slot access)
     virtual void* s13(unsigned);
     virtual void* s14(unsigned);
     virtual void* s15(unsigned);
-    virtual void* s16(unsigned);
+    virtual void* s16(unsigned, unsigned);
     virtual void* s17(unsigned);
     virtual void* s18(unsigned);
     virtual void* s19(unsigned);
@@ -124,53 +127,104 @@ bool CEditor::FUN_00ef84b0() {
 // ---------------------------------------------------------------------------
 // @ 0x00ef8550
 // ---------------------------------------------------------------------------
-void FUN_00ef8550(void* this_, int param_2) {
-    if ((char)param_2 == 0) {
-        ((Stub*)this_)->FUN_00ef7b40();
-    } else {
-        int r = 0;  // SP::ConfigManager()->HasProperty(0x4ea96cb)
-        if (r == 0)
+extern "C" void* __cdecl SP_ConfigManager();   // 0x67dd30
+
+struct ConfigMgr {              // SP::ConfigManager() result; only slot 0x30 is used here
+    virtual void s0();
+    virtual void s1();
+    virtual void s2();
+    virtual void s3();
+    virtual void s4();
+    virtual void s5();
+    virtual void s6();
+    virtual void s7();
+    virtual void s8();
+    virtual void s9();
+    virtual void s10();
+    virtual void s11();
+    virtual int  HasProperty(unsigned id);      // +0x30
+};
+
+struct CGadget {                // receiver (ecx) of the simulator gadget toggles
+    char   pad0[0x10];
+    void*  mpWindow;            // +0x10  window whose children are toggled
+    VObj*  mpFlash;             // +0x14  flash/video player
+    char   pad1[0x28 - 0x18];
+    int    m28;                 // +0x28
+    char   pad2[0x34 - 0x2c];
+    int    m34;                 // +0x34
+    void   releaseAll();        // 0x00ef7b40
+    void   Toggle(int show);    // 0x00ef8550
+    void   AudioToggle(int id); // 0x00ef8600
+};
+
+// @ 0x00ef8550
+void CGadget::Toggle(int show)
+{
+    if ((char)show != 0) {
+        if (((ConfigMgr*)SP_ConfigManager())->HasProperty(0x4ea96cb) == 0)
             return;
+    } else {
+        releaseAll();
     }
-    void* o = *(void**)((char*)this_ + 0x14);
+    VObj* o = mpFlash;
     if (o)
-        ((VObj*)o)->s27(param_2);
+        o->s31(1, show);
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x00ef8590
 // ---------------------------------------------------------------------------
-extern "C" int QueryPerformanceCounter_imp(void*);  // [0x13cc2b8]
-extern int g_16c7b60;
-extern int g_16c7b64;
-extern int g_16c7b78;
-extern int g_16c7b7c;
-extern int g_15acef0;
+struct Qpc {                       // LARGE_INTEGER
+    __int64 q;                     // +0x00
+};
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(Qpc* out);  // [0x13cc2b8]
+extern int     g_16c7b60;
+extern int     g_16c7b64;
+extern __int64 g_deadline;         // 0x16c7b78 (LARGE_INTEGER)
+extern int     g_15acef0;
+
+struct SimManager {                // the global simulator manager (0x016c7aa4)
+    char  pad0[0x14];
+    Stub* mpAudio;                 // +0x14  audio/voice object
+};
 
 // @ 0x00ef8590
 void FUN_00ef8590() {
-    if (g_16c7b60 != 0 || g_16c7b64 != 0) {
-        struct { unsigned lo; int hi; } t;
-        QueryPerformanceCounter_imp(&t);
-        unsigned long long end = ((unsigned long long)(unsigned)g_16c7b7c << 32) | (unsigned)g_16c7b78;
-        unsigned long long now = ((unsigned long long)(unsigned)t.hi << 32) | t.lo;
-        if (end - now > 0)
-            ((Stub*)((char*)&g_simMgr))->FUN_00ed4b50(g_15acef0);
-    }
+    if ((g_16c7b60 | g_16c7b64) == 0)
+        return;
+    Qpc now;
+    QueryPerformanceCounter(&now);
+    if (g_deadline - now.q >= 0)
+        return;
+    ((Stub*)&g_16c7b60)->SetBoolProperty();
+    Stub* audio = ((SimManager*)*(void**)&g_simMgr)->mpAudio;
+    Stub* r = (Stub*)audio->FUN_00ed4b50(g_15acef0);
+    return r->ReleaseAll();
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x00ef3770-family and larger bodies: behavioural reconstructions.
 // ---------------------------------------------------------------------------
+extern "C" void* __cdecl EA_Audio_GetSystemAT();   // 0xa206f0
+
 // @ 0x00ef8600
-void FUN_00ef8600(void* this_, int param_2) {
-    ((Stub*)this_)->FUN_00ef7b40();
-    void* w = ((Stub*)((char*)this_ + 0x10))->FindWindowByID(param_2 + 1000, 1);
-    w = ((VObj*)w)->s4(0);
-    ((VObj*)w)->s27(0);  // (2,1)
-    ((Stub*)((char*)&g_16c7b60))->FUN_00ed4b50(0);
-    *(int*)((char*)&g_15acef0) = *(int*)((char*)this_ + 0x28);
-    *(int*)((char*)this_ + 0x34) = param_2;
+void CGadget::AudioToggle(int id) {
+    releaseAll();
+    VObj* c = (VObj*)((VObj*)((Stub*)mpWindow)->FindWindowByID(id + 1000, 1))->s4();
+    c->s31(2, 1);
+    VObj* at = (VObj*)EA_Audio_GetSystemAT();
+    void* u = at ? at->s8() : 0;
+    VObj* at2 = (VObj*)EA_Audio_GetSystemAT();
+    if (at2) {
+        at2->s14(0x3475365);
+        at2->s16(0x3475381, 0x738674d7);
+        at2->s16(0x3475385, (unsigned)u);
+        at2->s22(0);
+    }
+    ((Stub*)&g_16c7b60)->SetTimeLimit(4, 1);
+    g_15acef0 = m28;
+    m34 = id;
 }
 
 // @ 0x00ef8770

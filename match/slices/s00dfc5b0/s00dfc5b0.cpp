@@ -27,7 +27,11 @@ struct Vec44 {
     void* mpCap;             // +0x08
     char  pad0c[0x14 - 0xc];
     void* mOwner;            // +0x14  (0 => self-allocating)
-    Vec44& operator=(const Vec44& o);            // 0x00dfcb00 (member asm)
+    Vec44& assignFrom(const Vec44& o);           // 0x00dfcb00 (retail: operator=)
+private:
+    // declared, never defined: suppresses the implicit memberwise copy-assign so that
+    // `vec = other` cannot silently copy the three pointers instead of the elements
+    Vec44& operator=(const Vec44& o);
 };
 
 // ---------------------------------------------------------------------------
@@ -41,11 +45,12 @@ struct Vec34M {
     void* mpCap;             // +0x08
     char  pad0c[0x14 - 0xc];
     void* mOwner;            // +0x14
-    void* alloc(u32 n, void* first, void* last);                 // 0x00dfc690
-    void* copyCtorRange(void* srcF, void* srcL, void* dst);      // 0x00dfc170
-    void  destroyRange(void* first, void* last);                 // 0x00dfb850
-    Vec34M& operator=(const Vec34M& o);                          // 0x00dfcee0
 };
+// the 0x34-element range helpers: this=ecx, real args on the stack, callee pops them
+extern "C" void* __fastcall FUN_00dfc690(void* self, int dummy, unsigned n, void* first,
+                                         void* last);                    // 0x00dfc690 (ret 0xc)
+extern "C" void* __cdecl FUN_00dfc170(void* first, void* last, void* dest); // 0x00dfc170 (caller cleans)
+extern "C" void  __fastcall FUN_00dfb850(void* self, int dummy, void* first, void* last); // 0x00dfb850
 
 struct Vec34 {
     void* mpBegin;           // +0x00
@@ -53,7 +58,9 @@ struct Vec34 {
     void* mpCap;             // +0x08
     char  pad0c[0x14 - 0xc];
     void* mOwner;            // +0x14
-    Vec34& operator=(const Vec34& o);            // 0x00dfcee0
+    Vec34& assignFrom(const Vec34& o);            // 0x00dfcee0 (retail: operator=)
+private:
+    Vec34& operator=(const Vec34& o);             // never defined (see Vec44)
 };
 
 extern "C" void  __cdecl vec34UninitCopy(void** out, void* f, void* l,
@@ -265,7 +272,7 @@ Entry188& Entry188::operator=(const Entry188& o) {
     m0c = o.m0c;
     m10 = o.m10;
     m14 = o.m14;
-    mVec = o.mVec;
+    mVec.assignFrom(o.mVec);
     m184 = o.m184;
     return *this;
 }
@@ -287,7 +294,7 @@ Entry188& Entry188::ctorr(const Entry188& o) {
     v->mpEnd   = beg;
     v->mpCap   = beg + 0x154;
     v->mOwner  = 0;
-    mVec = o.mVec;
+    mVec.assignFrom(o.mVec);
     m184 = o.m184;
     return *this;
 }
@@ -295,31 +302,32 @@ Entry188& Entry188::ctorr(const Entry188& o) {
 // ===========================================================================
 //  0x00dfcce0  BigRec copy ctor
 // ===========================================================================
-struct CString448 { CString448& operator=(const CString448& o); };      // 0x006b5430
-struct WString { void assign(void* first, void* last); };              // 0x00423650
-struct Tail4cc { void assign(const Tail4cc& o); };                     // 0x00c06b10
+// BigRec's tail helpers, called with the real (ret 4) convention.
+extern "C" void __fastcall FUN_00423650(void* self, int dummy, void* b, void* e); // 0x00423650 (ret 8)
+extern "C" void* __fastcall FUN_00c06b10(void* self, int dummy, const void* src); // 0x00c06b10
+extern "C" void* __fastcall FUN_006b5430(void* self, int dummy, const void* src); // 0x006b5430
 // @ 0x00dfcce0
 BigRec& BigRec::ctorr(const BigRec& o) {
     m00 = o.m00;
     m01 = o.m01;
     m02 = o.m02;
-    mVec04 = o.mVec04;
-    mVec170 = o.mVec170;
-    mVec2dc = o.mVec2dc;
-    ((CString448*)((char*)this + 0x448))->operator=(*(CString448*)((const char*)&o + 0x448));
+    mVec04.assignFrom(o.mVec04);
+    mVec170.assignFrom(o.mVec170);
+    mVec2dc.assignFrom(o.mVec2dc);
+    FUN_006b5430((char*)this + 0x448, 0, (const char*)&o + 0x448);
     if ((char*)&o + 0x45c != (char*)this + 0x45c)
-        ((WString*)((char*)this + 0x45c))->assign(o.mW45c, o.mW460);
+        FUN_00423650((char*)this + 0x45c, 0, o.mW45c, o.mW460);
     m46c = o.m46c;
     m470 = o.m470;
     if ((char*)&o + 0x474 != (char*)this + 0x474)
-        ((WString*)((char*)this + 0x474))->assign(o.mW474, o.mW478);
+        FUN_00423650((char*)this + 0x474, 0, o.mW474, o.mW478);
     f484 = o.f484;
     f488 = o.f488; f48c = o.f48c; f490 = o.f490; f494 = o.f494;
     f498 = o.f498; f49c = o.f49c; f4a0 = o.f4a0;
     m4a4 = o.m4a4; m4a8 = o.m4a8; m4ac = o.m4ac; m4b0 = o.m4b0;
     m4b4 = o.m4b4; m4b8 = o.m4b8; m4bc = o.m4bc; m4c0 = o.m4c0; m4c4 = o.m4c4;
     m4c8 = o.m4c8;
-    ((Tail4cc*)((char*)this + 0x4cc))->assign(*(const Tail4cc*)((const char*)&o + 0x4cc));
+    FUN_00c06b10((char*)this + 0x4cc, 0, (const char*)&o + 0x4cc);
     return *this;
 }
 
@@ -364,10 +372,10 @@ void BlobE90::dtor() {
 }
 
 // ===========================================================================
-//  0x00dfcee0  Vec34::operator=
+//  0x00dfcee0  Vec34::assignFrom   (retail: operator=)
 // ===========================================================================
 // @ 0x00dfcee0
-Vec34& Vec34::operator=(const Vec34& o) {
+Vec34& Vec34::assignFrom(const Vec34& o) {
     if ((void*)&o == (void*)this)
         return *this;
     Vec34M* t = (Vec34M*)this;
@@ -375,8 +383,8 @@ Vec34& Vec34::operator=(const Vec34& o) {
     unsigned n = (unsigned)((char*)s->mpEnd - (char*)s->mpBegin) / 0x34;
     unsigned c = (unsigned)((char*)t->mpCap - (char*)t->mpBegin) / 0x34;
     if (c < n) {
-        void* p = t->alloc(n, s->mpBegin, s->mpEnd);
-        t->destroyRange(t->mpBegin, t->mpEnd);
+        void* p = FUN_00dfc690(t, 0, n, s->mpBegin, s->mpEnd);
+        FUN_00dfb850(t, 0, t->mpBegin, t->mpEnd);
         if (t->mpBegin && *(int*)((char*)t->mpBegin - 4) != 0)
             operator_delete(t->mpBegin);
         t->mpEnd   = (char*)p + n * 0x34;
@@ -386,7 +394,7 @@ Vec34& Vec34::operator=(const Vec34& o) {
     }
     unsigned sz = (unsigned)((char*)t->mpEnd - (char*)t->mpBegin) / 0x34;
     if (sz < n) {
-        t->copyCtorRange(s->mpBegin, (char*)s->mpBegin + sz * 0x34, t->mpBegin);
+        FUN_00dfc170(s->mpBegin, (char*)s->mpBegin + sz * 0x34, t->mpBegin);
         void* srcEnd = s->mpEnd;
         void* dstMid = (char*)t->mpBegin + sz * 0x34;
         vec34UninitCopy(&t->mpEnd, (char*)s->mpBegin + sz * 0x34, srcEnd, dstMid,
@@ -394,8 +402,8 @@ Vec34& Vec34::operator=(const Vec34& o) {
         t->mpEnd = (char*)t->mpBegin + n * 0x34;
         return *this;
     }
-    void* p2 = t->copyCtorRange(s->mpBegin, s->mpEnd, t->mpBegin);
-    t->destroyRange(p2, t->mpEnd);
+    char* p2 = (char*)FUN_00dfc170(s->mpBegin, s->mpEnd, t->mpBegin);
+    FUN_00dfb850(t, 0, p2, t->mpEnd);
     t->mpEnd = (char*)t->mpBegin + n * 0x34;
     return *this;
 }
@@ -414,7 +422,7 @@ char* uninitCopy188(char* first, char* last, char* dst) {
         d->m0c = s->m0c;
         d->m10 = s->m10;
         d->m14 = s->m14;
-        d->mVec = s->mVec;
+        d->mVec.assignFrom(s->mVec);
         d->m184 = s->m184;
     }
     return dst;
@@ -429,7 +437,7 @@ Sub028& Sub028::operator=(const Sub028& o) {
     m10 = o.m10; m14 = o.m14; m18 = o.m18; m1c = o.m1c;
     f20 = o.f20;
     f24 = o.f24;
-    mVec28 = o.mVec28;
+    mVec28.assignFrom(o.mVec28);
     f1e0 = o.f1e0;
     f1e4 = o.f1e4;
     m1e8 = o.m1e8; m1ec = o.m1ec; m1f0 = o.m1f0; m1f4 = o.m1f4;
@@ -487,7 +495,7 @@ char** placeCopy188(char** cur, char* first, char* last, char* dst) {
             p->mVec.mpEnd   = (char*)p + 0x30;
             p->mVec.mOwner  = 0;
             p->mVec.mpCap   = (char*)p + 0x184;
-            p->mVec = s->mVec;
+            p->mVec.assignFrom(s->mVec);
             p->m184 = s->m184;
         }
         *cur = *cur + 0x188;
@@ -496,11 +504,207 @@ char** placeCopy188(char** cur, char* first, char* last, char* dst) {
 }
 
 // ===========================================================================
-//  Stubs restored from HEAD (dropped by the agent rewrite; still partial)
+// Helpers shared with the 0xdfb5b0 container family (bodies live there; these
+// declarations are the call ABI observed at the s00dfc5b0 call sites).
 // ===========================================================================
+extern "C" void* __cdecl UninitCopyD(void* out, const void* first, const void* last,
+                                     void* dest, const void* arg5);   // 0x00dfb8e0
+extern "C" void* __cdecl CopyAssignD(void* first, void* last, void* dest);   // 0x00dfb930
+extern "C" void* __cdecl placeCopy20(void** cur, void* first, void* last, void* dst,
+                                     const void* arg5);               // 0x00c04920
+extern "C" void  __fastcall FUN_00f28240(void* p, int dummy);   // 0x00f28240 (retail ret 4)
+extern "C" void  __cdecl FUN_00f47380(void* p);   // 0x00f47380 (EA_Free)
+extern "C" void  __fastcall FUN_00423650(void* self, int dummy, void* b, void* e);   // 0x00423650 (ret 8)
+extern "C" void  __fastcall FUN_00dfaaf0(void* self, int dummy, void* first, void* last); // 0x00dfaaf0
+extern "C" void* __fastcall FUN_00dfc1e0(void* self, int dummy, unsigned n, void* first,
+                                         void* last);                 // 0x00dfc1e0
+extern "C" void  __fastcall FUN_00dfa400(void* self, int dummy, unsigned n, void* srcBuf); // 0x00dfa400
+extern "C" void* __fastcall FUN_008105b0(void* self, int dummy, u32 id, int recursive); // 0x008105b0
+extern "C" void  __fastcall FUN_00812160(void* layout, int dummy, void* name, u32 type,
+                                         int a, u32 id);                  // 0x00812160
+extern "C" void  __fastcall FUN_0093a1a0(void* self, int dummy, int units);   // 0x0093a1a0
+extern "C" void  __fastcall FUN_007c4010(void* viewer, int dummy, int* out);  // 0x007c4010
+extern "C" void* __cdecl FUN_0067dd10();          // 0x0067dd10  SP::App
+
+// ===========================================================================
+//  0x00dfc6f0  cSPUILayout::Init for the "GGENewScenariov3" panel list
+// ===========================================================================
+struct GgeLayout {
+    char   pad_00[0x0c];
+    void*  mpVecBegin;       // +0x0c  eastl vector of 0x24-byte panel entries
+    void*  mpVecEnd;         // +0x10
+    void*  mpVecCap;         // +0x14
+    u8     pad_18[0x38 - 0x18];
+    u8     pad_38[0x48 - 0x38];
+    u8     mWin48[0x18];     // +0x48  UI window subobject
+    u8     mStop60[0x1c];    // +0x60  EA::Stopwatch
+    void Init();
+};
+
+struct GgeEntry {                      // 0x24-byte element of the +0x0c vector
+    u32      f0;                       // +0x00  label ID + index
+    u32      f4, f8;                   // +0x04, +0x08
+    u8       fC;                       // +0x0c
+    u8       pad0d[3];
+    void*    mpStrBegin;               // +0x10  wstring buffer (owned)
+    void*    mpStrEnd;                 // +0x14
+    void*    mpStrCap;                 // +0x18
+    u32      gap1c;                    // +0x1c  (not copied by the 0x24 copy ctor)
+    u32      f20;                      // +0x20
+    void Dtor();
+};
+
+void GgeEntry::Dtor() {
+    char* b = (char*)mpStrBegin;
+    if ((((int)((char*)mpStrCap - b) & 0xfffffffe)) > 2 && b)
+        FUN_00f47380(b);
+}
+
+struct GgeWin {
+    void  SetLocation(float x, float y);   // vtbl +0x64
+    float* GetArea();                      // vtbl +0x38
+    void  SetFlag(int a, int b);           // vtbl +0x7c
+};
+struct GgeRect { int left, top, right, bottom; };
+
+static __forceinline void* Vfn(void* p, int slot) { return (*(void***)p)[slot / 4]; }
+
+// One "GGENewScenariov3" panel entry: a 0x24-byte record whose WString is assigned
+// from the given literal, then appended to the layout's own vector at +0x0c.
+static __forceinline void AddPanelEntry(void* self, u32 i, const wchar_t* name) {
+    char* s = (char*)self;
+    GgeEntry e2;
+    e2.f0 = 0x7bfb2a0 + i;
+    e2.f4 = 0x5384d05 + i;
+    e2.f8 = 0x5933fe0 + i;
+    e2.mpStrBegin = e2.mpStrEnd = e2.mpStrCap = 0;
+    ((void (__fastcall*)(void*, int, const wchar_t*))0x579a90)(&e2.mpStrBegin, 0, name);
+    e2.fC = 1;
+    e2.f20 = i + 1;
+    GgeEntry* end = *(GgeEntry**)(s + 0x10);
+    if ((void*)end < *(void**)(s + 0x14)) {
+        *(void**)(s + 0x10) = (char*)end + 0x24;
+        if (end) ((void (__fastcall*)(void*, int, GgeEntry*))0xdfb130)(end, 0, &e2);
+    } else {
+        ((void (__fastcall*)(void*, int, void*, GgeEntry*))0xdfc000)(s + 0x0c, 0, end, &e2);
+    }
+    e2.Dtor();
+}
+
 // @ 0x00dfc6f0
-void __fastcall c6f0(void* self) { (void)self; }
+void GgeLayout::Init() {
+    char* self = (char*)this;
+    const wchar_t* base = (const wchar_t*)0x147ef18;      // L"GGENewScenariov3"
+    const wchar_t* e = base;
+    do { ++e; } while (*e);
+    FUN_00423650(self + 0x38, 0, (void*)base, (void*)e);
+    FUN_00812160(self + 0x48, 0, *(void**)(self + 0x38), 0x40464100u, 1, 0x5b598fau);
+    FUN_0093a1a0(self + 0x60, 0, 5);
+    GgeRect client;    void* app = FUN_0067dd10();
+    void* mainWin = ((void* (__fastcall*)(void*, int))Vfn(app, 0x58))(app, 0);
+    FUN_007c4010(mainWin, 0, (int*)&client);
+    float cx = (float)((client.right - client.left) / 2);
+    float cy = (float)((client.bottom - client.top) / 2);
+    void* win = FUN_008105b0(self + 0x48, 0, 0x733ebd5u, 1);
+    if (win) {
+        float* a = ((float* (__fastcall*)(void*, int))Vfn(win, 0x38))(win, 0);
+        const float k = *(float*)0x1471064;
+        ((void (__fastcall*)(void*, int, float, float))Vfn(win, 0x64))(
+            win, 0, cx - (a[2] - a[0]) * k, cy - (a[3] - a[1]) * k);
+        ((void (__fastcall*)(void*, int, int, int))Vfn(win, 0x7c))(win, 0, 1, 0);
+    }
+    AddPanelEntry(self, 0, (const wchar_t*)0x147eef4);     // "choose adventure"
+    AddPanelEntry(self, 1, (const wchar_t*)0x147eecc);     // "choose captain name"
+    AddPanelEntry(self, 2, (const wchar_t*)0x147eecc);     // "choose captain name"
+    AddPanelEntry(self, 3, (const wchar_t*)0x147eeb0);     // "choose posse"
+}
+
+// ===========================================================================
+//  0x00dfcb00  Vec44::assignFrom   (retail: operator=)
+// ===========================================================================
 // @ 0x00dfcb00
-void* __fastcall cb00(void* self, void* other) { (void)other; return self; }
+Vec44& Vec44::assignFrom(const Vec44& o) {
+    if ((void*)&o == (void*)this)
+        return *this;
+    unsigned n = (unsigned)((char*)o.mpEnd - (char*)o.mpBegin) / 0x44;
+    unsigned c = (unsigned)((char*)mpCap - (char*)mpBegin) / 0x44;
+    if (c < n) {
+        void* p = FUN_00dfc1e0(this, 0, n, o.mpBegin, o.mpEnd);
+        FUN_00dfaaf0(this, 0, mpBegin, mpEnd);
+        if (mpBegin && *(int*)((char*)mpBegin - 4) != 0)
+            operator_delete(mpBegin);
+        mpBegin = p;
+        mpCap   = (char*)p + n * 0x44;
+    } else {
+        unsigned sz = (unsigned)((char*)mpEnd - (char*)mpBegin) / 0x44;
+        if (sz < n) {
+            CopyAssignD(o.mpBegin, (char*)o.mpBegin + sz * 0x44, mpBegin);
+            void* srcEnd = o.mpEnd;
+            UninitCopyD(&srcEnd, (char*)o.mpBegin + sz * 0x44, o.mpEnd, mpEnd,
+                        o.mpEnd);
+        } else {
+            void* dst = CopyAssignD(o.mpBegin, o.mpEnd, mpBegin);
+            FUN_00dfaaf0(this, 0, dst, mpEnd);
+        }
+    }
+    mpEnd = (char*)mpBegin + n * 0x44;
+    return *this;
+}
+
+// ===========================================================================
+//  0x00dfd080  Huge copy ctor (self-allocating inline Vec44 buffers)
+// ===========================================================================
+struct Huge {
+    u8    m00, m01, m02;     // +0x00
+    u8    pad03;
+    Vec44 mVec04;            // +0x04  inline buffer at +0x1c, capacity 0x154
+    char  pad1c[0x170 - 0x1c];
+    Vec44 mVec170;           // +0x170
+    char  pad188[0x2dc - 0x188];
+    Vec44 mVec2dc;           // +0x2dc
+    char  pad2f4[0x448 - 0x2f4];
+    void* mSub448;           // +0x448  0x38-byte sub-object (0x00dfb280 copy ctor)
+    char  pad44c[0x484 - 0x44c];
+    float f484, f488, f48c, f490, f494, f498, f49c, f4a0;
+    u32   m4a4, m4a8, m4ac, m4b0, m4b4, m4b8, m4bc, m4c0, m4c4;
+    u8    m4c8;              // +0x4c8
+    char  pad4c9[0x4cc - 0x4c9];
+    void* mp4ccBegin;        // +0x4cc  eastl vector of 0x20-byte elements
+    void* mp4ccEnd;          // +0x4d0
+    void* mp4ccCap;          // +0x4d4
+    char  pad4d8[4];
+    Huge& copyCtor(const Huge& o);
+};
+extern "C" void* __fastcall FUN_00dfb280(void* self, int dummy, const void* src);  // 0x00dfb280
+
 // @ 0x00dfd080
-void* __fastcall d080(void* self, void* other) { (void)other; return self; }
+Huge& Huge::copyCtor(const Huge& o) {
+    m00 = o.m00;
+    m01 = o.m01;
+    m02 = o.m02;
+    struct Init { static void Run(Vec44* v) {
+        char* beg = (char*)v + 0x18;
+        v->mpBegin = beg;
+        v->mpEnd   = beg;
+        v->mpCap   = beg + 0x154;
+        v->mOwner  = 0;
+    } };
+    Init::Run(&mVec04);
+    mVec04.assignFrom(o.mVec04);
+    Init::Run(&mVec170);
+    mVec170.assignFrom(o.mVec170);
+    Init::Run(&mVec2dc);
+    mVec2dc.assignFrom(o.mVec2dc);
+    FUN_00dfb280((char*)this + 0x448, 0, (const char*)&o + 0x448);
+    f484 = o.f484; f488 = o.f488; f48c = o.f48c; f490 = o.f490;
+    f494 = o.f494; f498 = o.f498; f49c = o.f49c; f4a0 = o.f4a0;
+    m4a4 = o.m4a4; m4a8 = o.m4a8; m4ac = o.m4ac; m4b0 = o.m4b0;
+    m4b4 = o.m4b4; m4b8 = o.m4b8; m4bc = o.m4bc; m4c0 = o.m4c0; m4c4 = o.m4c4;
+    m4c8 = o.m4c8;
+    unsigned n = (unsigned)((char*)o.mp4ccEnd - (char*)o.mp4ccBegin) / 0x20;
+    FUN_00dfa400(&mp4ccBegin, 0, n, (char*)&o + 0x4d8);
+    void* cur = mp4ccBegin;
+    placeCopy20(&cur, o.mp4ccBegin, o.mp4ccEnd, mp4ccBegin, &o);
+    mp4ccEnd = cur;
+    return *this;
+}

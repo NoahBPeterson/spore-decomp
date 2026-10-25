@@ -378,9 +378,9 @@ void FUN_00f01c20()
       g_UI->m88 = pEnt->f220;
       // fall through: modes 1 and 3 measure the offset of the object
     case 3:
-      g_UI->maxT = (float)sqrtl((long double)pEnt->px * pEnt->px
-                                + (long double)pEnt->py * pEnt->py
-                                + (long double)pEnt->pz * pEnt->pz);
+      g_UI->maxT = (float)sqrt((double)((double)pEnt->px * pEnt->px
+                                       + (double)pEnt->py * pEnt->py
+                                       + (double)pEnt->pz * pEnt->pz));
       FUN_00efd970(handle);
       break;
     case 2: {

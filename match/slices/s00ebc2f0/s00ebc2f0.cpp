@@ -41,6 +41,7 @@ struct Quat { float x, y, z, w; };
 struct Matrix3 {
     float m[9];
     Matrix3() {}
+    void Assign(const Matrix3& src);                  // 0x0041cb40  (cSPMatrix3::Assign)
 };
 Matrix3* Matrix3FromQuaternion(Matrix3* out, const Quat* q);   // 0x0059c190 (cdecl)
 
@@ -243,6 +244,7 @@ struct ICombatant {
     PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17)
     PV(18) PV(19) PV(20) PV(21)
     virtual float GetScale();                      // +0x58
+    virtual void* GetComponent(unsigned id);       // +0x5c
 };
 
 // Mover component (SP::cSPGameDataUFO in this instantiation).
@@ -250,6 +252,7 @@ struct Mover {
     unsigned mData[0x714 / 4];                     // +0x000
     int      state;                                // +0x714 mUFOType: 0 / 3 = parked
     void ApplyVelocity(const Vec3& dir, float scale);   // 0x00c37f70
+    float GetHeight();                                  // 0x00c3be10
 };
 
 // Transform-update message (0x38 bytes); the constructor is 0x00434040 (slice s00433800).
@@ -273,6 +276,7 @@ struct Effects {
     FeedbackEventMap mEvents;      // +0x4c
 
     void PostUpdate(Mover* mover, float dt);   // 0x00ebcc80
+    void CreateToolEffect(ICombatant* target, float scale);   // 0x00ebc2f0
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -415,4 +419,375 @@ void EntryVec::Append()
 
     Entry value;
     grow((unsigned)mpEnd, (unsigned)&value);
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x00ebc2f0 -- effects for a tool being used on an object
+//
+// arg 1 is the object the tool acts on, arg 2 the tool's strength.  Four named components are
+// fetched from the object (two of the lookups are the same interface), the surface anchor points
+// inside the component's box are collected through a model-manager query, and for every anchor a
+// feedback event is spawned or refreshed.  Per-anchor property values from the anchor's property
+// list scale the magnitude and, for UFOs, drive an extra velocity kick; creatures additionally get
+// their own effect set spawned.
+// ---------------------------------------------------------------------------------------------
+
+// A property-list value (0x14 bytes): the payload lives inline at +0x00 unless bit 0x30 of the
+// flags says +0x00 holds a pointer to it.  Type ids used here: 0x0d = float, 0x01 = byte.
+struct Variant {
+    int            mData0;    // +0x00 inline payload, or pointer to it
+    int            mData4;    // +0x04
+    int            mData8;    // +0x08
+    int            mDataC;    // +0x0c
+    unsigned short mFlags;    // +0x10
+    unsigned short mTypeId;   // +0x12
+    float* GetFloat();        // 0x0041ea70
+};
+
+// The float/byte payload of a variant, whether stored inline or behind +0x00.
+inline void* VariantPayload(Variant* value)
+{
+    return (value->mFlags & 0x30) ? *(void**)&value->mData0 : (void*)value;
+}
+
+// Named property table (cNamedPropertyList); slot +0x24 fetches the variant for an id.
+struct PropertyList {
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8)
+    virtual bool GetVariant(unsigned id, Variant** out);        // +0x24
+};
+
+// Axis-aligned box: min +0x00, max +0x0c.
+struct Box {
+    Vec3 min;   // +0x00
+    Vec3 max;   // +0x0c
+};
+
+// Component returned by ICombatant::GetComponent(0x1186577); supplies the anchor box.
+struct IEffectSource {
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+    PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(20)
+    PV(21) PV(22) PV(23) PV(24) PV(25)
+    virtual const Box* GetCapsule();                // +0x68
+    virtual Box* GetBox(Box* out);                  // +0x6c
+};
+
+// One anchor point produced by the query (+0x0c world position, +0x90 property list).
+struct ICandidate {
+    unsigned      mPad00[3];                    // +0x00
+    Vec3          pos;                          // +0x0c
+    unsigned      mPad18[(0x90 - 0x18) / 4];    // +0x18
+    PropertyList* mpProperties;                 // +0x90
+};
+
+// Bit filter handed to the query: 0x40 bits plus two one-byte flags.
+struct ObjectFilter {
+    unsigned      mBits[5];       // +0x00
+    unsigned char mB14;           // +0x14
+    unsigned char mB15;           // +0x15
+};
+
+// 16-entry vector of anchors: header +0x00, inline storage +0x18.
+struct CandidateVec {
+    ICandidate** mpBegin;         // +0x00
+    ICandidate** mpEnd;           // +0x04
+    ICandidate** mpCap;           // +0x08
+    unsigned     mPad0c;          // +0x0c
+    ICandidate** mpBuffer;        // +0x10
+    unsigned     mPad14;          // +0x14
+    ICandidate*  mInline[16];     // +0x18
+};
+
+// In/out context handed to the query (the key instance out slot is reused afterwards).
+struct QueryContext {
+    void*    mpKeyInstance;       // +0x00
+    unsigned mKey;                // +0x04 : rbtree key = the anchor pointer
+    void*    mpCreature;          // +0x08
+    void*    mpUfo;               // +0x0c
+};
+
+struct ICandidateQuery {
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+    PV(11) PV(12) PV(13)
+    virtual void Query(QueryContext* ctx, float height, CandidateVec* out,
+                       const ObjectFilter* filter);           // +0x38
+};
+
+struct ModelManager {
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6)
+    virtual ICandidateQuery* GetQuery(unsigned id);                  // +0x1c
+    PV(8) PV(9)
+    virtual unsigned GetFilterIndex(unsigned id, int param);         // +0x28
+};
+ModelManager* GetModelManager();                                     // 0x0067dd80
+
+// Creature component returned by ICombatant::GetComponent(0xce9f6639).
+struct Creature {
+    unsigned char mPad000[0x137];              // +0x000
+    unsigned char mB137;                       // +0x137
+    unsigned char mPad138[0xb58 - 0x138];      // +0x138
+    unsigned      mB58;                        // +0xb58
+    void SpawnEffects(int a, int b, int c, int d, float e, int f, int g, void* h,
+                      int i, int j, int k);                        // 0x00c0bf10
+};
+
+// Resolves a property id to a key instance (free function: property list is a stack argument).
+void GetPropertyAsKeyInstance(PropertyList* props, unsigned id, void** out);  // 0x006a12a0
+
+// EARTL / EASTL allocator deallocate (operator delete).
+void EASTL_allocator_deallocate(void* p);                                     // 0x00f47380
+
+// Vectors the transform message's inlined constructor copies (runtime-initialised globals).
+extern Vec3    g_16c7440;    // 0x016c7440  zero vector
+extern Matrix3 g_16c741c;    // 0x016c741c  identity matrix
+
+// Same layout as XformMsg, but without the out-of-line constructor: 0x00ebc2f0 builds the default
+// message inline instead of calling 0x00434040.
+struct XformMessage {
+    unsigned short flags;      // +0x00
+    unsigned short count;      // +0x02
+    Vec3           pos;        // +0x04
+    float          scale;      // +0x10
+    Matrix3        rot;        // +0x14
+    void SetPos(const Vec3& v) { pos = v; flags |= 4; ++count; }
+    void SetRot(const Matrix3& m) { rot = m; flags |= 2; ++count; }
+};
+
+// ---------------------------------------------------------------------------------------------
+// @ 0x00ebc2f0
+void Effects::CreateToolEffect(ICombatant* target, float scale)
+{
+    IEffectSource* source = 0;
+    Mover*         ufo = 0;
+    Creature*      creature = 0;
+
+    if (target != 0)
+    {
+        target->GetComponent(0x1186577);                       // interface is claimed twice
+        ufo = (Mover*)target->GetComponent(0xb033b403);
+        creature = (Creature*)target->GetComponent(0xce9f6639);
+        source = (IEffectSource*)target->GetComponent(0x1186577);
+    }
+
+    // Centre of the source box.
+    Box box;
+    source->GetBox(&box);
+    Vec3 mid;
+    mid.x = (box.min.x + box.max.x) * 0.5f;
+    mid.y = (box.min.y + box.max.y) * 0.5f;
+    mid.z = (box.min.z + box.max.z) * 0.5f;
+
+    // Half the capsule height above the surface.
+    const Box* capsule = source->GetCapsule();
+    float height = (capsule->max.z - capsule->min.z) * 0.5f;
+
+    bool isZero = false;
+    bool parked = false;
+    if (ufo != 0)
+    {
+        int state = ufo->state;
+        isZero = (state == 0);
+        parked = (state == 0 || state == 3);
+        height = ufo->GetHeight();
+    }
+
+    if (creature != 0)
+    {
+        if (creature->mB137 == 0)
+            return;
+        unsigned flags = creature->mB58;
+        isZero = (flags >> 9) & 1;
+        parked = isZero || ((flags >> 8) & 1) != 0;
+    }
+
+    ModelManager* modelMgr = GetModelManager();
+    unsigned filterIndex = modelMgr->GetFilterIndex(0x6086e65, 0);
+    ICandidateQuery* query = modelMgr->GetQuery(0x3fbae24);
+
+    ObjectFilter filter;
+    filter.mBits[0] = 0;
+    filter.mBits[1] = 0;
+    filter.mBits[2] = 0;
+    filter.mBits[3] = 0;
+    filter.mBits[4] = 0;
+    filter.mB14 = 1;
+    filter.mB15 = 0;
+    if (filterIndex < 0x40)
+        filter.mBits[filterIndex >> 5] |= 1u << (filterIndex & 0x1f);
+
+    CandidateVec vec;
+    vec.mpBegin = vec.mInline;
+    vec.mpEnd = vec.mInline;
+    vec.mpCap = vec.mInline + 16;
+    vec.mpBuffer = vec.mInline;
+
+    QueryContext ctx;
+    ctx.mpKeyInstance = 0;
+    ctx.mKey = 0;
+    ctx.mpCreature = creature;
+    ctx.mpUfo = ufo;
+
+    query->Query(&ctx, height, &vec, &filter);
+
+    if (vec.mpBegin != vec.mpEnd)
+    {
+        Quat quat;
+        Quat* orient = GetPlanetModel()->BuildSurfaceOrientation(&quat, &mid);
+        Matrix3 rot;
+        Matrix3FromQuaternion(&rot, orient);
+
+        // Tool effects come in a parked and an active flavour.
+        unsigned keyId = isZero ? 0x0687b789u : 0x06932a26u;
+
+        for (ICandidate** it = vec.mpBegin; it != vec.mpEnd; ++it)
+        {
+            ICandidate* cand = *it;
+
+            // Record the anchor in the touched set.
+            WorldMap::InsertResult touched;
+            ctx.mKey = (unsigned)cand;
+            mWorlds.InsertUnique(&touched, &ctx.mKey, 0);
+
+            // Direction from the box centre towards the anchor (or away from the planet when the
+            // anchor sits on the centre itself).
+            Vec3 delta;
+            delta.x = cand->pos.x - mid.x;
+            delta.y = cand->pos.y - mid.y;
+            delta.z = cand->pos.z - mid.z;
+            // The original evaluates this in x87 (double) and rounds once to float.
+            float distance = (float)sqrt(delta.x * delta.x + delta.y * delta.y
+                                         + delta.z * delta.z);
+
+            Vec3 dir;
+            if (distance <= 0.0000152587890625f)          // 2^-16
+            {
+                float inv = (float)(1.0 / sqrt(mid.x * mid.x + mid.y * mid.y
+                                               + mid.z * mid.z));
+                dir.x = -(mid.x * inv);
+                dir.y = -(mid.y * inv);
+                dir.z = -(mid.z * inv);
+            }
+            else
+            {
+                float inv = 1.0f / distance;
+                dir.x = delta.x * inv;
+                dir.y = delta.y * inv;
+                dir.z = delta.z * inv;
+            }
+
+            float objectScale = target->GetScale();
+
+            // Per-anchor tuning values.
+            unsigned char scaleByInput = 0;        // 0x7a143d4
+            unsigned char scaleByObject = 0;       // 0x7a143d8
+            float noParkMul = 1.0f;                // 0x7a143db
+            float creatureMul = 1.0f;              // 0x7a14405
+            float magnitude = 0.0f;                // 0x61329ab
+
+            PropertyList* props = cand->mpProperties;
+            Variant* value;
+            if (props != 0 && props->GetVariant(0x61329ab, &value) && value->mTypeId == 0x0d)
+                magnitude = *(float*)VariantPayload(value);
+            if (props != 0 && props->GetVariant(0x7a143d4, &value) && value->mTypeId == 0x01)
+                scaleByInput = *(unsigned char*)VariantPayload(value);
+            if (props != 0 && props->GetVariant(0x7a143d8, &value) && value->mTypeId == 0x01)
+                scaleByObject = *(unsigned char*)VariantPayload(value);
+            if (props != 0 && props->GetVariant(0x7a143db, &value) && value->mTypeId == 0x0d)
+                noParkMul = *(float*)VariantPayload(value);
+            if (props != 0 && props->GetVariant(0x7a14405, &value) && value->mTypeId == 0x0d)
+                creatureMul = *(float*)VariantPayload(value);
+
+            if (scaleByInput)
+                magnitude *= scale;
+            if (scaleByObject)
+                magnitude *= objectScale;
+            if (!parked)
+                magnitude *= noParkMul;
+            if (creature != 0)
+                magnitude *= creatureMul;
+
+            if (scaleByInput && magnitude != 0.0f)
+                target->ApplyImpulse(magnitude, -1, 8, &dir, 0);
+
+            // UFOs also get a velocity kick scaled by their own property.
+            if (ufo != 0 && props != 0)
+            {
+                if (props->GetVariant(0x60b0498, &value) && value->mTypeId == 0x0d)
+                {
+                    float kick = *value->GetFloat();
+                    if (kick != 0.0f)
+                    {
+                        Vec3 vel;
+                        kick = -kick;
+                        vel.x = dir.x * kick;
+                        vel.y = dir.y * kick;
+                        vel.z = dir.z * kick;
+                        ufo->ApplyVelocity(vel, scale);
+                    }
+                }
+            }
+
+            // Creatures spawn their own effect set at the anchor.
+            if (creature != 0)
+            {
+                void* keyInstance = 0;
+                GetPropertyAsKeyInstance(props, 0x7a13cca, &keyInstance);
+                if (keyInstance != 0)
+                    creature->SpawnEffects(0, 0x20000, 0x1000, 0, 1.0f, 0, 0x4000000,
+                                           keyInstance, 0, 0, 0);
+            }
+
+            GetPropertyAsKeyInstance(props, keyId, &ctx.mpKeyInstance);
+            if (ctx.mpKeyInstance == 0)
+                continue;
+
+            // Look the feedback event up; a miss plays a new effect and registers it.
+            cFeedbackEvent* ev = 0;
+            FeedbackNode* node;
+            mEvents.Find(&node, &ctx.mKey);
+            if (node != mEvents.End())
+            {
+                ev = node->mpEvent;
+                if (ev)
+                    ev->AddRef();
+            }
+            else
+            {
+                EffectsManager* effects = GetEffectsManager();
+
+                AutoRefCount<cFeedbackEvent> created;
+                created.mpObject = 0;
+
+                if (effects->PlayEffect((unsigned)ctx.mpKeyInstance, 0, &created.mpObject))
+                {
+                    AutoRefCount<cFeedbackEvent>* slot = mEvents.Insert(&ctx.mKey, &created);
+                    *slot = created;
+                }
+
+                if (!scaleByInput && magnitude != 0.0f)
+                    target->ApplyImpulse(magnitude, -1, 8, &dir, 0);
+
+                ev = created.mpObject;
+                if (!ev)
+                    continue;
+            }
+
+            if (!ev->IsValid())
+                ev->Stop(0);
+
+            XformMessage xf;
+            xf.flags = 0;
+            xf.count = 0;
+            xf.pos = g_16c7440;
+            xf.scale = 1.0f;
+            xf.rot.Assign(g_16c741c);
+            xf.SetPos(mid);
+            xf.SetRot(rot);
+
+            ev->SetTransform(&xf);
+            ev->Release();
+        }
+    }
+
+    if (vec.mpBegin != 0 && vec.mpBegin != vec.mpBuffer)
+        EASTL_allocator_deallocate(vec.mpBegin);
 }

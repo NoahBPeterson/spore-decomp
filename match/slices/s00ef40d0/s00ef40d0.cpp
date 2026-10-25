@@ -171,6 +171,7 @@ struct cLayerKeyProvider {
     int      mKeyInstance;  // 0x030
     ResKey   mKeyA;         // 0x034
     ResKey   mKeyB;         // 0x040
+    void LayerInit(void* param);   // 0x006412c0 (__thiscall)
 };
 
 // ---------------------------------------------------------------------------
@@ -423,7 +424,7 @@ void __fastcall FUN_00ef4620(cLayerKeyProvider* self, void* dummy, void* param)
     void* pm;
     void* bag;
 
-    Layer_Init(self, 0, param);
+    self->LayerInit(param);
     bag = 0;
     pm = SP_PropertyManager();
     ResetWindow(&bag);

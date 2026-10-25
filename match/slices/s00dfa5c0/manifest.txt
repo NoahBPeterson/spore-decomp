@@ -10,3 +10,9 @@ slices/s00dfa5c0/s00dfa5c0.cpp  ?FUN_ae50@UI@@QAEXXZ  00dfae50  /O2 /MD /Gy /EHs
 slices/s00dfa5c0/s00dfa5c0.cpp  ?FUN_ae90@UI@@QAEXXZ  00dfae90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00dfa5c0/s00dfa5c0.cpp  ?FUN_af80@UI@@QAEXXZ  00dfaf80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00dfa5c0/s00dfa5c0.cpp  ?FUN_b040@UI@@QAEXHH@Z  00dfb040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dfa5c0/s00dfa5c0.cpp  ?Assign@TypeD@@QAEAAU1@ABU1@@Z  00dfb3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dfa5c0/s00dfa5c0.cpp  ?FUN_b0d0@UI@@QAEXD@Z  00dfb0d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dfa5c0/s00dfa5c0.cpp  ?Dtor@Vec44@@QAEXXZ  00dfb380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dfa5c0/s00dfa5c0.cpp  ?FUN_b430@UI@@QAEXH@Z  00dfb430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dfa5c0/s00dfa5c0.cpp  ?FUN_b450@UI@@QAEXXZ  00dfb450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dfa5c0/s00dfa5c0.cpp  ?FUN_b470@UI@@QAEXH@Z  00dfb470  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

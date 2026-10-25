@@ -106,9 +106,41 @@ EffectsMgr* EffectsManager();                                          // 0x0067
 uint FNV1_String16(const wchar_t* s, uint seed, int mode);             // 0x00932f30 (cdecl)
 
 struct StrRange { const wchar_t* mpBegin; const wchar_t* mpEnd; };
-extern StrRange g_effectName;                                          // [0x016a10ac]/[0x016a10b0]
+extern StrRange g_effectName;                                          // 0x016a109c
 
-struct Stopwatch { void SetUnits(int u); };                            // 0x0093a1a0 (ret 4)
+// ---- name-vector globals used by the boid's behaviour tail call -----------------------
+struct ObjVec { void** mpBegin; void** mpEnd; void** mpCapacity; };
+extern ObjVec gNames0bb0;                                              // 0x016a0bb0
+extern ObjVec gNames0bd8;                                              // 0x016a0bd8
+inline void* VFn(void* p, int off) { return *(void**)(*(char**)p + off); }
+
+// ---- audio system (EA::Audio::GetSystemAT) --------------------------------------------
+struct IAudioSystem
+{
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void* v20();                                               // +0x20
+};
+IAudioSystem* GetSystemAT();                                           // 0x00a206f0
+
+// ---- misc callees ---------------------------------------------------------------------
+void* FUN_00ddaf70(Key* out, int id);                                  // 0x00ddaf70 (cdecl)
+// Internal static helper: ecx = up, eax = dir, esi = out (results returned in eax).
+Quat* FUN_00dd91b0(const Vec3* up, const Vec3* dir, Quat* out);        // 0x00dd91b0
+extern "C" int __stdcall QueryPerformanceCounter(long long* ctr);      // import 0x13cc2b8
+extern "C" unsigned __int64 __cdecl __rdtsc();
+#pragma intrinsic(__rdtsc)
+
+struct Stopwatch                                                       // 0x18 bytes
+{
+    void SetUnits(int u);                                              // 0x0093a1a0 (ret 4)
+    uint32_t mStartLo;          // +0x00
+    uint32_t mStartHi;          // +0x04
+    uint32_t pad08;             // +0x08
+    uint32_t pad0c;             // +0x0c
+    int      mUnits;            // +0x10 (1 = rdtsc, otherwise QueryPerformanceCounter)
+    float    mScale;            // +0x14
+};
 
 // ---- the map manager at this+0x14 -----------------------------------------------------
 struct Resource { uint32_t pad0; uint32_t mFlags; uint32_t pad[(0x40 - 8) / 4]; int mRef; };
@@ -168,29 +200,32 @@ struct Boid                                                            // 0x100 
     Vec3      mPos;             // +0x0c
     Vec3      mV18;
     Vec3      mV24;
-    Vec3      mV30;
-    uint32_t  pad3c[3];
+    Vec3      mV30;             // +0x30
+    Vec3      mStartPos;        // +0x3c
     Quat      mRot;             // +0x48
-    uint32_t  pad58[16];
+    uint32_t  pad58[8];         // +0x58
+    Quat      mV78;             // +0x78
+    Quat      mV88;             // +0x88
     float     m98;              // +0x98
-    uint32_t  pad9c[3];
+    uint32_t  pad9c[3];         // +0x9c
     float     mA8;              // +0xa8
-    uint32_t  padac;
+    uint32_t  padac;            // +0xac
     Stopwatch mWatch;           // +0xb0
-    uint32_t  padb1[(0xc8 - 0xb1) / 4 + 0];
-    int       mC8;
-    int       mCC;
-    int       mD0;
-    char      mD4;
-    char      mD5;
-    char      padd6[6];
-    float     mDC;
-    float     mE0;
-    uint32_t  pade4;
+    int       mC8;              // +0xc8
+    int       mCC;              // +0xcc
+    int       mD0;              // +0xd0
+    char      mD4;              // +0xd4
+    char      mD5;              // +0xd5
+    char      mD6;              // +0xd6
+    char      mD7;              // +0xd7
+    char      padd8[4];         // +0xd8
+    float     mDC;              // +0xdc
+    float     mE0;              // +0xe0
+    uint32_t  pade4;            // +0xe4
     Vec3      mAxis;            // +0xe8
-    uint32_t  padf4;
+    uint32_t  padf4;            // +0xf4
     void*     mpF8;             // +0xf8
-    int       mFC;
+    int       mFC;              // +0xfc
     Boid();                                                            // 0x00dd9510 (fastcall ctor)
 };
 
@@ -231,7 +266,8 @@ struct Swarm : PtrVec<Boid*>
 {
     uint32_t pad[2];
     MapMgr*  mpMgr;                                                    // +0x14
-    uint32_t pad18[(0x70 - 0x18) / 4];
+    MapMgr*  mpMgr2;                                                   // +0x18 (second resource manager; slot 0x0c = Create)
+    uint32_t pad1c[(0x70 - 0x1c) / 4];
     ITimer*  mpTimer;                                                  // +0x70 (slot 0x24 takes the step + a flag)
     float    FindNearest(const Vec3* p, int group);                    // 0x00dda160 (ret 8)
     void     SpawnOne();                                               // 0x00ddbe40
@@ -409,16 +445,80 @@ extern ObjA* g_objA;                                     // [0x016a0b08]
 // (+0x40), resolves the caller's effect name through the EffectsManager (slots
 // 0x2c/0x00/0x08), builds the 0x100-byte boid (tagged operator new 0x00f473a0 +
 // ctor 0x00dd9510) and wires it up: +0x00 resource, +0x08 effect, +0x18/+0x24/
-// +0x30 = the global origin vector, +0x98 = 5.0f, +0x34 = the audio system's
-// slot 0x20 and +0xb0 stopwatch (SetUnits(5); rdtsc / QueryPerformanceCounter).
-// It then clears +0x04/+0xc8/+0xcc/+0xd0/+0xd4/+0xd5/+0xf8 and appends the boid
-// to this+0.
-// Stub only -- the straight-line initialiser, the allocation and the append are
-// not reconstructed (see partial.txt).
+// +0x30/+0x0c = the global origin vector, +0x98 = 5.0f, +0xd0 = the audio
+// system's slot 0x20 and the +0xb0 stopwatch (SetUnits(5); rdtsc /
+// QueryPerformanceCounter).  It then clears +0x04/+0xc8/+0xcc/+0xd4/+0xd5/+0xf8
+// and appends the boid to this+0.
 // @ 0x00ddc4a0
 Boid* Swarm::FUN_00ddc4a0()
 {
-    return 0;
+    uint32_t i;
+    Resource* res;
+    for (i = 0; i < 100; ++i)
+    {
+        Key key;
+        FUN_00ddaf70(&key, 0x98e03c0d);
+        res = mpMgr2->Create(key.a, key.c, 0);
+        if (res != 0)
+            break;
+    }
+    if (i == 100)
+        return 0;
+
+    res->mRef++;
+
+    IEff* eff = 0;
+    if (g_effectName.mpBegin != g_effectName.mpEnd)
+    {
+        EffectsMgr* em = EffectsManager();
+        em->Find(FNV1_String16(g_effectName.mpBegin, 0x811c9dc5, 1), 0, &eff);
+        if (eff)
+        {
+            eff->Slot0();
+            eff->Slot2(0);
+        }
+    }
+
+    Boid* boid = new("Simulator", 0, 0, 0, 0) Boid();
+    boid->mWatch.SetUnits(5);
+    if ((boid->mWatch.mStartLo | boid->mWatch.mStartHi) == 0)
+    {
+        if (boid->mWatch.mUnits == 1)
+        {
+            unsigned __int64 t = __rdtsc();
+            boid->mWatch.mStartLo = (uint32_t)t;
+            boid->mWatch.mStartHi = (uint32_t)(t >> 32);
+        }
+        else
+        {
+            long long ctr;
+            QueryPerformanceCounter(&ctr);
+            boid->mWatch.mStartLo = (uint32_t)ctr;
+            boid->mWatch.mStartHi = (uint32_t)(ctr >> 32);
+        }
+    }
+
+    boid->mC8 = 0;
+    boid->mD5 = 0;
+    boid->mResB = 0;
+    boid->mCC = 0;
+    boid->mpF8 = 0;
+    boid->mEffect = eff;
+
+    IAudioSystem* audio = GetSystemAT();
+    boid->mD0 = audio ? (int)audio->v20() : 0;
+
+    boid->mV18 = g_v0b0c;
+    boid->mV24 = g_v0b0c;
+    boid->mV30 = g_v0b0c;
+    boid->mPos = g_v0b0c;
+
+    boid->m98 = 5.0f;
+    boid->mD4 = 0;
+    boid->mResA = res;
+
+    push_back(boid);
+    return boid;
 }
 
 // ------------------------------------------------------------------ 0x00ddc820
@@ -507,21 +607,140 @@ void FUN_00ddc8d0()
 // ------------------------------------------------------------------ 0x00ddc910
 // Spawns a boid with position/direction: forwards to FUN_00ddc4a0 (the caller's
 // ecx), stores pos -> +0x0c/+0x3c and dir -> +0x30, seeds the stopwatch
-// (+0xb0/+0xc0), flags +0xd6/+0xd7, sets +0xfc = 1, normalises the direction
-// (1/sqrt(d2 + 1e-8)), copies the three quaternion lanes to +0x78/+0x48/+0x88,
-// points +0xf8 at the 0x016a0bb0 object and tail-calls its static vtable slot.
-// Stub only (see partial.txt).
+// (+0xb0/+0xb4: rdtsc when +0xc0 == 1, else QueryPerformanceCounter), flags
+// +0xd6/+0xd7, sets +0xfc = 1, normalises the direction (1/sqrt(d2 + 1e-8)),
+// copies the resulting quaternion lanes to +0x78/+0x48/+0x88, points +0xf8 at
+// the 0x016a0bb0 name list and tail-calls its first object's slot 0.
 // @ 0x00ddc910
 void Swarm::FUN_00ddc910(const Vec3* pos, const Vec3* dir, unsigned char a, unsigned char b)
 {
+    Boid* boid = FUN_00ddc4a0();
+    if (boid == 0)
+        return;
+
+    boid->mPos = *pos;
+    boid->mV30 = *dir;
+    boid->mStartPos = *pos;
+
+    if ((boid->mWatch.mStartLo | boid->mWatch.mStartHi) == 0)
+    {
+        if (boid->mWatch.mUnits == 1)
+        {
+            unsigned __int64 t = __rdtsc();
+            boid->mWatch.mStartLo = (uint32_t)t;
+            boid->mWatch.mStartHi = (uint32_t)(t >> 32);
+        }
+        else
+        {
+            long long ctr;
+            QueryPerformanceCounter(&ctr);
+            boid->mWatch.mStartLo = (uint32_t)ctr;
+            boid->mWatch.mStartHi = (uint32_t)(ctr >> 32);
+        }
+    }
+
+    boid->mD6 = a;
+    boid->mFC = 1;
+    boid->mD7 = b;
+
+    Vec3 d;
+    d.x = dir->x - pos->x;
+    d.y = dir->y - pos->y;
+    d.z = dir->z - pos->z;
+    float f = 1.0f / sqrtf((d.x * d.x + d.z * d.z + d.y * d.y) + 1e-8f);
+    d.x = f * d.x;
+    d.y = f * d.y;
+    d.z = f * d.z;
+
+    Quat q;
+    FUN_00dd91b0(&g_v0ba4, &d, &q);
+
+    boid->mV78 = q;
+    boid->mRot = q;
+    boid->mV88 = q;
+
+    boid->mpF8 = &gNames0bb0;
+    void* obj = *gNames0bb0.mpBegin;
+    ((void (__thiscall *)(void*, void*))VFn(obj, 0))(obj, boid);
 }
 
 // ------------------------------------------------------------------ 0x00ddcad0
 // Same spawn as 0x00ddc910 but derives the direction from a cross product
 // against the global at 0x016a0ba4 and a random angle (RandomDoubleUniform * the
 // global angle at 0x016a0b58, sin/cos), storing the result as a quaternion.
-// Stub only (see partial.txt).
 // @ 0x00ddcad0
 void Swarm::FUN_00ddcad0(const Vec3* pos, const Vec3* dir)
 {
+    Boid* boid = FUN_00ddc4a0();
+    if (boid == 0)
+        return;
+
+    boid->mPos = *pos;
+    boid->mV30 = *dir;
+    boid->mStartPos = *pos;
+
+    if ((boid->mWatch.mStartLo | boid->mWatch.mStartHi) == 0)
+    {
+        if (boid->mWatch.mUnits == 1)
+        {
+            unsigned __int64 t = __rdtsc();
+            boid->mWatch.mStartLo = (uint32_t)t;
+            boid->mWatch.mStartHi = (uint32_t)(t >> 32);
+        }
+        else
+        {
+            long long ctr;
+            QueryPerformanceCounter(&ctr);
+            boid->mWatch.mStartLo = (uint32_t)ctr;
+            boid->mWatch.mStartHi = (uint32_t)(ctr >> 32);
+        }
+    }
+
+    boid->mFC = 1;
+    boid->mD6 = 1;
+    boid->mD7 = 1;
+
+    Vec3 c;
+    c.x = pos->z * g_v0ba4.y - pos->y * g_v0ba4.z;
+    c.y = pos->x * g_v0ba4.z - pos->z * g_v0ba4.x;
+    c.z = pos->y * g_v0ba4.x - pos->x * g_v0ba4.y;
+
+    float n2 = 1.0f / sqrtf((dir->y * dir->y + dir->x * dir->x) + dir->z * dir->z + 1e-8f);
+    float n1 = 1.0f / sqrtf((pos->z * pos->z + (pos->y * pos->y + pos->x * pos->x)) + 1e-8f);
+    if ((dir->y * n2) * (pos->x * n1) - (pos->y * n1) * (dir->x * n2) < 0.0f)
+    {
+        c.x = -c.x;
+        c.y = -c.y;
+        c.z = -c.z;
+    }
+
+    Quat q;
+    FUN_00dd91b0(&g_v0ba4, &c, &q);
+    boid->mV78 = q;
+
+    double maxa = (double)g_maxAngle;
+    double r = g_Random.RandomDoubleUniform() * maxa;
+    double v;
+    if (r >= maxa)
+        v = maxa;
+    else
+    {
+        v = r;
+        if (v < 0.0)
+            v = 0.0;
+    }
+    float s = (float)sin(v * 0.5);
+    float co = (float)cos(v * 0.5);
+
+    Quat qa;
+    qa.x = s * g_v0ba4.x;
+    qa.y = s * g_v0ba4.y;
+    qa.z = s * g_v0ba4.z;
+    qa.w = co;
+    boid->mRot = qa;
+    boid->mV88 = qa;
+
+    boid->mpF8 = &gNames0bd8;
+    void* obj = *gNames0bd8.mpBegin;
+    ((void (__thiscall *)(void*, void*))VFn(obj, 0))(obj, boid);
 }

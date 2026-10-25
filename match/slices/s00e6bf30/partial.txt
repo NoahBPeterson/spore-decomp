@@ -1,3 +1,1 @@
 # va  diff-bytes  reason  (incomplete / approximate, or equiv did not confirm: not counted as decompiled)
-00e6bf30  652  SP::sUpdatePoisonReleaseEffect: main loop transcribed but the four-float "target" struct and the unaff_EBX vcall are approximated.
-00e6c330  502  cell-hero decoration effect: the two position/orientation structs (built from the cell transform) are approximated; the effect-id selection chain is faithful.

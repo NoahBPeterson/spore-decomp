@@ -1,9 +1,11 @@
 # va  diff-bytes  reason
-00edcbc0 100  FIXED selection mask: __stdcall (the original's ret 8) with a bool return, because the original's fail path clears only al and leaves the incoming eax upper bits; equiv PASS (400 valid, 80.4% coverage); chk ~size 119 vs 117 (schedule)
-00edcc90 41   window-enumeration loop: layout/iterator call shape differs; equiv: WEAK (41.2% coverage)
-00edcce0 40   id-list search: inner-loop register schedule differs; equiv: PASS
-00edce20 0    FIXED refcount/allocator swap: ObjCE20::p20 is at +0x20 (pad after p14), and GetAllocator is a __thiscall with ecx = p14 and no stack args; byte-exact MATCH, moved to manifest.txt; equiv PASS (274 valid, 100% coverage)
-00edcec0 40   index lookup: compare/return block layout differs; equiv: PASS
-00edcf30 35   FIXED id test: bool return, because the original's null path clears only al and leaves the incoming eax upper bits (a full-width int return zeroed them); equiv PASS (256 valid, 100% coverage); chk size 43 (schedule)
-00edcf60 34   slider set: cvtsi2ss/cvttss2si rounding shape differs; equiv: WEAK (11.4% coverage)
-00edc0e0 1700 complete tab-strip layout; fp/scheduling and block layout differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00edbfc0 164  EntryVec::DoInsertValue grown-insert path: the full-buffer branch allocates through EASTL's debug operator_new (six args: size, file string, 0, 0, allocator.h:0xd1) which our plain ::operator new does not reproduce, and the aliasing test/append scheduling differs, size 256 vs 277. flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00edc0e0 2017  complete tab-strip layout; fp/scheduling and block layout differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00edcbc0 100  FIXED selection mask: __stdcall (the original's ret 8) with a bool return, because the original's fail path clears only al and leaves the incoming eax upper bits; chk ~size 119 vs 117 (schedule). flags /O2 /MD /Gy /TP /arch:SSE
+00edcc90 41  window-enumeration loop: layout/iterator call shape differs. flags /O2 /MD /Gy /TP /arch:SSE
+00edcce0 40  id-list search: inner-loop register schedule differs. flags /O2 /MD /Gy /TP /arch:SSE
+00edcd30 74  message-handler register/unregister: our member form omits the original's `this != 0` test (MSVC proves a member this non-null and folds it to a dead `mov edi,edi`), the vtable-id walk uses scaled-index addressing instead of the original's `[edi + g_msgIds]` byte-offset form, size 149 vs 151. flags /O2 /MD /Gy /TP /arch:SSE
+00edce70 32  message handler: the original computes the null-checked handler before calling MessageServer, MSVC hoists the call and keeps `this` in esi instead of edi, and the vtable slot-1 dispatch uses a different register schedule. flags /O2 /MD /Gy /TP /arch:SSE
+00edcec0 40  index lookup: compare/return block layout differs. flags /O2 /MD /Gy /TP /arch:SSE
+00edcf30 35  FIXED id test: bool return, because the original's null path clears only al and leaves the incoming eax upper bits (a full-width int return zeroed them); chk size 43 (schedule). flags /O2 /MD /Gy /TP /arch:SSE
+00edcf60 34  slider set: cvtsi2ss/cvttss2si rounding shape differs. flags /O2 /MD /Gy /TP /arch:SSE

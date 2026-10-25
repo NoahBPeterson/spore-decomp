@@ -22,4 +22,5 @@
 00e4d550  LayerAabb_Init                 # initialises 0x2c-stride grid from bbox
 00e4d600  LayerAabb_EmitLeaves           # recursive leaf emit
 00e4d6c0  LayerGrid_Build                 # builds 4 sub-grids
+00e4d760  FUN_00e4d760                    # starts a separate function (bounds terminator)
 00e4d840  SP::LayerLoaderInit             # CellGame/Layers/ DatabaseDirectoryFiles

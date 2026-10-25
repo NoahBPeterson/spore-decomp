@@ -1,3 +1,7 @@
-slices/s00bf1ba0/s00bf1ba0.cpp  ?FUN_00bf2660@cGameData@@QAEHH@Z  00bf2660  /O2 /MD /Gy /EHsc /TP
+slices/s00bf1ba0/s00bf1ba0.cpp  ?FUN_00bf2660@cGameData@@QAEPAXH@Z  00bf2660  /O2 /MD /Gy /EHsc /TP
 slices/s00bf1ba0/s00bf1ba0.cpp  ?CallSlot1cForEach@@YA_NPAX0@Z  00bf2670  /O2 /MD /Gy /EHsc /TP
 slices/s00bf1ba0/s00bf1ba0.cpp  ?StarAssignForward@@YAXPAX00@Z  00bf28b0  /O2 /MD /Gy /EHsc /TP
+slices/s00bf1ba0/s00bf1ba0.cpp  ?StarCopyCtorRange2@@YAPAUStarRecord@@PAU1@00@Z  00bf2960  /O2 /MD /Gy /EHsc /TP
+slices/s00bf1ba0/s00bf1ba0.cpp  ?StarAssignForward2@@YAPAUStarRecord@@PAU1@00@Z  00bf29c0  /O2 /MD /Gy /EHsc /TP
+slices/s00bf1ba0/s00bf1ba0.cpp  ?StarAssignBackward@@YAPAUStarRecord@@PAU1@00@Z  00bf2a10  /O2 /MD /Gy /EHsc /TP
+slices/s00bf1ba0/s00bf1ba0.cpp  ?StarFillN@@YAXPAXI0@Z  00bf28f0  /O2 /MD /Gy /EHsc /TP

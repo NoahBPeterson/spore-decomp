@@ -35,7 +35,12 @@ void  FUN_00e84940(int);                                // 0x00e84940
 void  FUN_00e85a60(unsigned n, int a, void* b, int c, int d, int e); // 0x00e85a60
 void  SP_SetCachingType(int a, void* b);                // 0x006ac040
 void* SP_cSPMemPool_LockedAlloc(int a, int b, int c, int d, int e, int f); // 0x009289f0
-struct cLightCtx { void Dtor(void* p); };               // 0x009276c0 (ecx=g_16c8b44)
+void  FUN_00e4d1d0(float* in, float* out);              // 0x00e4d1d0 (defined later in this file)
+#define NOINLINE __declspec(noinline)
+struct cLightCtx {                                       // ecx = g_lightCtx (0x016c8b44)
+    void Dtor(void* p);                                 // 0x009276c0
+    void* LockedAlloc(int n, int a, int b, int c, int d, int e); // 0x009289f0
+};
 void* EA_ResourceMan_GetManager();                      // 0x0067dcd0
 void* SP_MessageServer();                               // 0x0067dcc0
 void* SP_CheatManager();                                // 0x0067de20
@@ -70,9 +75,11 @@ struct cCellAppData {                // object at g_pCellAppData
 };
 
 struct cCellDataObj {                // object at *g_pCellCellData
-    char pad00[0x18];
-    void* mp18;                     // +0x18
-    void* mp1c;                     // +0x1c
+    char pad00[8];
+    int  mKeyType[3];                // +0x08 key type ids copied from the caller
+    char pad14[4];
+    void* mp18;                     // +0x18 payload buffer
+    void* mp1c;                     // +0x1c payload size
 };
 
 struct cResourceMan {
@@ -230,8 +237,8 @@ void SP_CellDataShutdownForApp()
     void* rm = EA_ResourceMan_GetManager();
     void* g = g_pCellCellData;
     (*(void(__thiscall**)(void*, int, void*, int))((char*)Vt(rm) + 0x44))(rm, 0, *(void**)((char*)g + 4), 0);
-    void* cd = *(void**)g_pCellCellData;
-    if (cd) {
+    if (*(void**)g_pCellCellData != 0) {
+        void* cd = *(void**)g_pCellCellData;
         (*(void(__thiscall**)(void*))((char*)Vt(cd) + 0x1c))(cd);
         void* rm2 = EA_ResourceMan_GetManager();
         void* cd2 = *(void**)g_pCellCellData;
@@ -244,7 +251,6 @@ void SP_CellDataShutdownForApp()
         (*(void(__thiscall**)(void*, void*))((char*)Vt(cm2) + 0x1c))(cm2, *(void**)0x015a5dd8);
     }
     operator_delete__(g_pCellCellData);
-    g_pCellCellData = 0;
 }
 
 // =====================================================================
@@ -298,18 +304,30 @@ void* cLightObj::FUN_00e4ce80(unsigned flags)
     return this;
 }
 
+// An AutoRefCount-style handle: the destructor drops the held object.
+static void ReleaseObject(void* p)
+{
+    (*(void(__thiscall**)(void*))((char*)Vt(p) + 4))(p);
+}
+
 // =====================================================================
 // @ 0x00e4ced0  SP::PreloadAdvectMap
 // =====================================================================
 void SP_PreloadAdvectMap(void* key)
 {
-    int k[3]; k[0] = 0; k[1] = 0; k[2] = 0;
-    int local10 = 0;
-    (void)local10;
+    int key3[3];
+    key3[2] = 0;
+    key3[1] = 0x4805684;
+    key3[0] = (int)key;
+    void* local10 = 0;
+    void* local1c = 0;
     void* rm = EA_ResourceMan_GetManager();
-    (*(void(__thiscall**)(void*, int*, int*, int*, int, int, int, int))((char*)Vt(rm) + 0x10))
-        (rm, k, &local10, (int*)key, 0, 0, 0, 0);
-    (void)key;
+    if (local1c) { void* p = local1c; local1c = 0; ReleaseObject(p); }
+    if (local10) { void* p = local10; local10 = 0; ReleaseObject(p); }
+    (*(void(__thiscall**)(void*, int*, void**, void**, int, int, int, int, int))((char*)Vt(rm) + 0x10))
+        (rm, key3, &local10, &local1c, 0, 0, 0, 0, 0);
+    if (local1c) ReleaseObject(local1c);
+    if (local10) ReleaseObject(local10);
 }
 
 // =====================================================================
@@ -317,7 +335,7 @@ void SP_PreloadAdvectMap(void* key)
 // =====================================================================
 struct cCellFactoryBinary {
     bool ReadResource(void* stream, void* p3, void* p4, void* p5);      // 0x00e4cf80
-    unsigned char ReadResourceFromStream(void* s, void* a, void* b);     // 0x00e4d000
+    unsigned char ReadResourceFromStream(void* s, void* a, void* b, void* unused); // 0x00e4d000
 };
 bool cCellFactoryBinary::ReadResource(void* stream, void* p3, void* p4, void* p5)
 {
@@ -348,7 +366,7 @@ int __stdcall CellFactory_GetSupportedTypes(unsigned* out, unsigned n)
 // =====================================================================
 // @ 0x00e4d000  SP::cCellFactoryBinary::ReadResourceFromStream
 // =====================================================================
-unsigned char cCellFactoryBinary::ReadResourceFromStream(void* self, void* s, void* k)
+unsigned char cCellFactoryBinary::ReadResourceFromStream(void* self, void* s, void* k, void* unused)
 {
     unsigned char ok = 0;
     void* obj;
@@ -356,12 +374,11 @@ unsigned char cCellFactoryBinary::ReadResourceFromStream(void* self, void* s, vo
     else obj = 0;
     unsigned n = (*(unsigned(__thiscall**)(void*))((char*)Vt(self) + 0x1c))(self);
     cCellDataObj* c = (cCellDataObj*)obj;
-    c->mp18 = 0; c->mp1c = 0;   // overwritten below (keys copied in)
-    *(int*)((char*)obj + 8) = *(int*)k;
-    *(int*)((char*)obj + 0xc) = *((int*)k + 1);
-    *(int*)((char*)obj + 0x10) = *((int*)k + 2);
+    c->mKeyType[0] = *(int*)k;
+    c->mKeyType[1] = *((int*)k + 1);
+    c->mKeyType[2] = *((int*)k + 2);
     if (c->mp18) ((cLightCtx*)g_lightCtx)->Dtor(c->mp18);
-    void* mem = SP_cSPMemPool_LockedAlloc(n, 0, 0, 0, 0, 0);
+    void* mem = ((cLightCtx*)g_lightCtx)->LockedAlloc(n, 0, 0, 0, 0, 0);
     c->mp18 = mem;
     if (mem) {
         unsigned got = (*(unsigned(__thiscall**)(void*, void*, unsigned))((char*)Vt(self) + 0x30))(self, mem, n);
@@ -432,43 +449,39 @@ bool cProcObj::FUN_00e4d120(void* p2, void** out, int p4, int p5)
 }
 
 // =====================================================================
-// @ 0x00e4d1d0
-// =====================================================================
-void FUN_00e4d1d0(float* in, float* out)
-{
-    float f1 = in[3], f5 = in[4], f6 = in[5], f2 = in[2], f4 = in[0], f3 = in[1];
-    out[0] = in[0]; out[1] = in[1]; out[2] = in[2];
-    f4 = (f1 + f4) * 0.5f;
-    f5 = (f5 + f3) * 0.5f;
-    out[6] = f4;
-    f6 = (f6 + f2) * 0.5f;
-    out[3] = f4; out[4] = f5; out[5] = f6;
-    out[7] = in[1]; out[8] = 0.0f;
-    f1 = in[3];
-    out[10] = f5; out[9] = f1; out[0xb] = 0.0f;
-    f1 = in[0];
-    out[0xd] = f5; out[0xc] = f1; out[0xe] = 0.0f; out[0xf] = f4;
-    f1 = in[4];
-    out[0x12] = f4; out[0x10] = f1; out[0x13] = f5; out[0x14] = f6; out[0x11] = 0.0f;
-    out[0x15] = in[3]; out[0x16] = in[4]; out[0x17] = in[5];
-}
-
-// =====================================================================
 // @ 0x00e4d2b0
 // =====================================================================
-void FUN_00e4d2b0(int* cursor, int* parent, void* geo, void* factory, float* box, int depth)
+void FUN_00e4d2b0(int** cursor, int* parent, void* geo, void* factory, float* box, int depth)
 {
     float local[24];
-    local[0] = 3.402823466e38f; local[1] = 3.402823466e38f; local[2] = -3.402823466e38f;
-    local[3] = -3.402823466e38f; local[4] = -3.402823466e38f; local[5] = 3.402823466e38f;
-    local[6] = 3.402823466e38f; local[7] = 3.402823466e38f; local[8] = -3.402823466e38f;
-    local[9] = -3.402823466e38f; local[10] = -3.402823466e38f; local[11] = 3.402823466e38f;
-    local[12] = 3.402823466e38f; local[13] = 3.402823466e38f; local[14] = -3.402823466e38f;
-    local[15] = -3.402823466e38f; local[16] = -3.402823466e38f; local[17] = 3.402823466e38f;
-    local[18] = 3.402823466e38f; local[19] = 3.402823466e38f; local[20] = -3.402823466e38f;
-    local[21] = -3.402823466e38f; local[22] = -3.402823466e38f;
+    // Four AABBs in (minX,minY,minZ,maxX,maxY,maxZ) order; the first pass starts
+    // inverted so FUN_00e4d1d0's transform accumulates the source bounds.
+    local[3]  = -3.402823466e38f;
+    local[4]  = -3.402823466e38f;
+    local[5]  = -3.402823466e38f;
+    local[9]  = -3.402823466e38f;
+    local[10] = -3.402823466e38f;
+    local[11] = -3.402823466e38f;
+    local[15] = -3.402823466e38f;
+    local[16] = -3.402823466e38f;
+    local[17] = -3.402823466e38f;
+    local[21] = -3.402823466e38f;
+    local[22] = -3.402823466e38f;
+    local[23] = -3.402823466e38f;
+    local[0]  = 3.402823466e38f;
+    local[1]  = 3.402823466e38f;
+    local[2]  = 3.402823466e38f;
+    local[6]  = 3.402823466e38f;
+    local[7]  = 3.402823466e38f;
+    local[8]  = 3.402823466e38f;
+    local[12] = 3.402823466e38f;
+    local[13] = 3.402823466e38f;
+    local[14] = 3.402823466e38f;
+    local[18] = 3.402823466e38f;
+    local[19] = 3.402823466e38f;
+    local[20] = 3.402823466e38f;
     FUN_00e4d1d0(box, local);
-    float* p = local;
+    float* p = local + 1;      // p[-1] is the first component of each 6-float AABB
     int n = 4;
     int* out = parent;
     do {
@@ -477,10 +490,10 @@ void FUN_00e4d2b0(int* cursor, int* parent, void* geo, void* factory, float* box
         emit:
             if (depth == 3) { *out = 0; goto next; }
             {
-                int* node = (int*)*cursor;
-                *cursor = (int)node + 0x2c;
+                int* node = *cursor;
+                *cursor = (int*)((char*)node + 0x2c);
                 *out = (int)node;
-                *node = (int)parent;
+                *(int**)node = parent;
                 node[8] = *(int*)(p + 2);
                 node[9] = *(int*)(p + 3);
                 node[10] = *(int*)(p + 4);
@@ -503,21 +516,51 @@ void FUN_00e4d2b0(int* cursor, int* parent, void* geo, void* factory, float* box
 }
 
 // =====================================================================
+// @ 0x00e4d1d0
+// =====================================================================
+NOINLINE void FUN_00e4d1d0(float* in, float* out)
+{
+    int* iout = (int*)out;
+    int* iin = (int*)in;
+    float f1 = in[3], f5 = in[4], f6 = in[5], f2 = in[2], f4 = in[0], f3 = in[1];
+    iout[0] = iin[0]; iout[1] = iin[1]; iout[2] = iin[2];
+    f4 = (f1 + f4) * 0.5f;
+    f5 = (f5 + f3) * 0.5f;
+    out[6] = f4;
+    f6 = (f6 + f2) * 0.5f;
+    out[3] = f4; out[4] = f5; out[5] = f6;
+    iout[7] = iin[1]; iout[8] = 0;
+    f1 = in[3];
+    out[10] = f5; out[9] = f1; iout[0xb] = 0;
+    f1 = in[0];
+    out[0xd] = f5; out[0xc] = f1; iout[0xe] = 0; out[0xf] = f4;
+    f1 = in[4];
+    out[0x12] = f4; out[0x10] = f1; out[0x13] = f5; out[0x14] = f6; iout[0x11] = 0;
+    iout[0x15] = iin[3]; iout[0x16] = iin[4]; iout[0x17] = iin[5];
+}
+
+// =====================================================================
 // @ 0x00e4d550
 // =====================================================================
 unsigned FUN_00e4d550(void* self, void* geo, void* factory)
 {
-    float box[6];
-    box[2] = -1.0f; box[3] = -1.0f; box[0] = 1.0f; box[1] = 1.0f; box[4] = 0.0f; box[5] = 0.0f;
-    *(float*)((char*)self + 0x20) = 1.0f;
-    *(float*)((char*)self + 0x24) = -1.0f; *(float*)((char*)self + 0x28) = 0.0f;
-    *(float*)((char*)self + 0x14) = -1.0f; *(float*)((char*)self + 0x18) = 1.0f;
-    *(float*)((char*)self + 0x1c) = 0.0f;
+    float box[6];                        // local_18 .. local_4
+    box[3] = 1.0f;                       // local_c
+    *(float*)((char*)self + 0x20) = 1.0f;      // param_1[8]
+    box[0] = -1.0f;                      // local_18
+    box[1] = -1.0f;                      // local_14
+    box[4] = 1.0f;                       // local_8
+    *(float*)((char*)self + 0x24) = 1.0f;      // param_1[9]
+    *(float*)((char*)self + 0x14) = -1.0f;     // param_1[5]
+    box[5] = 0.0f;                       // local_4
+    *(float*)((char*)self + 0x28) = 0.0f;      // param_1[10]
+    *(float*)((char*)self + 0x18) = -1.0f;     // param_1[6]
+    box[2] = 0.0f;                       // local_10
+    *(float*)((char*)self + 0x1c) = 0.0f;      // param_1[7]
     *(int*)self = 0;
+
     int* cursor = (int*)((char*)self + 0xb * 4);
-    float* boxp = box;
-    FUN_00e4d2b0(cursor, (int*)self, geo, factory, boxp, 0);
-    (void)boxp;
+    FUN_00e4d2b0(&cursor, (int*)self, geo, factory, box, 0);
     return (unsigned)((char*)cursor - (char*)self) / 0x2c;
 }
 
@@ -550,19 +593,17 @@ void FUN_00e4d600(int* node, float** out, int depth, int maxDepth)
 // =====================================================================
 void FUN_00e4d6c0(void* a, void* b, int base)
 {
-    int* p = (int*)base;
     FUN_00e4d550((char*)base + 0x1168, a, b);
-    int local8;
-    int i = 0;
-    int* grid = (int*)((char*)base + 0x28);
+    int* root = (int*)((char*)base + 0x1168);
     int* cnt = (int*)((char*)base + 0x18);
+    int* grid = (int*)((char*)base + 0x28);
     int* extra = (int*)((char*)base + 0xc28);
     int* dst = (int*)((char*)base + 0x1138);
+    int i = 0;
     do {
-        (void)p;
-        local8 = (int)grid;
-        FUN_00e4d600(grid, (float**)&local8, i, 0);
-        unsigned n = (unsigned)(local8 - (int)grid) / 0xc;
+        float* local8 = (float*)grid;
+        FUN_00e4d600(root, &local8, i, 0);
+        unsigned n = (unsigned)((char*)local8 - (char*)grid) / 0xc;
         *cnt = n;
         FUN_00e85a60(n, (int)grid, (void*)0x01482c20, (int)grid, (int)dst, (int)extra);
         dst = (int*)((char*)dst + 0xc);

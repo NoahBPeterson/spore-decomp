@@ -13,8 +13,11 @@ void  __cdecl FUN_00572020(int, int);                   // 0x00572020
 void* __fastcall FUN_00e09c80(void*);                   // 0x00e09c80
 void* __cdecl FUN_00e09c90(void*, unsigned);            // 0x00e09c90
 void* __cdecl SP_MessageServer(void);                   // 0x0067dcc0
-void  __cdecl FUN_00ed8780(int);                        // 0x00ed8780
 void  __cdecl FUN_00ed8690(void);                       // 0x00ed8690
+int   __cdecl GetCurrentGameMode(void);                 // 0x00b5b800
+void  __cdecl AdvancedLaunch(void* req);                // 0x0064a990
+void* __cdecl CopyEntries(void* first, void* last, void* dst);    // 0x00c7ea30
+void  __cdecl CopyBackEntries(void* first, void* last, void* result); // 0x00edba80
 void  __cdecl EA_RemoveHandler(int, int, int, int, int);    // 0x00571db0
 void  __fastcall FUN_00ece300(char*);                   // 0x00ece300
 void* __cdecl FUN_00e7f54d0(void*);                     // 0x007f54d0
@@ -442,6 +445,35 @@ struct EntryVec {
     }
 };
 
+// EASTL vector<Entry>::DoInsertValue: insert one Entry before pos.
+// @ 0x00edbfc0
+void EntryVec::DoInsertValue(Entry* pos, const Entry& v)
+{
+    const Entry* pv = &v;
+    if (mpEnd != mpCap) {
+        if (pos <= pv && pv < mpEnd)
+            ++pv;
+        if (mpEnd != 0)
+            mpEnd[0] = mpEnd[-1];
+        CopyBackEntries(pos, mpEnd - 1, mpEnd);
+        *pos = *pv;
+        ++mpEnd;
+        return;
+    }
+    int n = (int)(mpEnd - mpBegin);
+    int newCap = n == 0 ? 1 : n * 2;
+    Entry* newBuf = newCap ? (Entry*)::operator new((unsigned)newCap * sizeof(Entry)) : 0;
+    Entry* p = (Entry*)CopyEntries(mpBegin, pos, newBuf);
+    if (p != 0)
+        *p = *pv;
+    Entry* newEnd = (Entry*)CopyEntries(pos, mpEnd, p + 1);
+    if (mpBegin != 0 && mpBegin != mpBuf)
+        ::operator delete(mpBegin);
+    mpEnd = newEnd;
+    mpCap = newBuf + newCap;
+    mpBegin = newBuf;
+}
+
 }  // namespace tb
 
 struct TabBar {
@@ -647,8 +679,141 @@ void TabBar::Update(int selected)
     }
 }
 
-// ---------------------------------------------------------------- stubs (incomplete)
-void FUN_00edbfc0(void) {}
-void FUN_00edcb40(void) {}
-void FUN_00edcd30(void) {}
-void FUN_00edce70(void) {}
+// ---------------------------------------------------------------- 0x00edcb40
+// Asset-browser launch: fill the 0x48-byte request object and call AdvancedLaunch.
+struct LaunchReq {                       // 0x48-byte request object
+    int   mId;          // +0x00
+    int   mMode;        // +0x04
+    int   m08;          // +0x08
+    int   m0c;          // +0x0c
+    char  b10;          // +0x10
+    char  b11, b12, b13;            // +0x11..+0x13
+    char  b14;          // +0x14
+    char  b15, b16, b17;            // +0x15..+0x17
+    int   m18;          // +0x18
+    int   m1c;          // +0x1c
+    int   m20;          // +0x20
+    char  b24;          // +0x24
+    char  b25, b26, b27, b28, b29, b2a, b2b;   // +0x25..+0x2b
+    int   m2c;          // +0x2c
+    int   m30;          // +0x30
+    int   m34;          // +0x34
+    int   m38;          // +0x38
+    int   m3c, m40, m44;            // +0x3c..+0x47
+    void ctor();                            // 0x00644b10
+    void dtor();                            // 0x00644b60
+};
+
+struct ObjCB40 {
+    char  pad[0x14];
+    char  sub14;        // +0x14
+    char  pad15[0x34 - 0x15];
+    int   p34;          // +0x34
+    int   p38;          // +0x38
+    int   p3c;          // +0x3c
+    void launch();
+};
+
+// @ 0x00edcb40
+void ObjCB40::launch()
+{
+    LaunchReq req;
+    req.ctor();
+    req.b14 = 0;
+    req.m30 = (int)0xad0e52;
+    req.mMode = GetCurrentGameMode();
+    req.m18 = p34;
+    req.mId = (int)0x3480259b;
+    req.m0c = 0;
+    req.m1c = p38;
+    req.m20 = p3c;
+    req.b24 = 0;
+    req.b10 = 0;
+    req.m38 = (int)&sub14;
+    AdvancedLaunch(&req);
+    req.dtor();
+}
+
+// ---------------------------------------------------------------- 0x00edcd30
+struct MessageServer {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8();
+    virtual void RegisterHandler(void* self, unsigned msg);  // +0x24
+    virtual void v10();
+    virtual void Send(void* self, unsigned msg, int flags);   // +0x2c
+};
+
+extern unsigned g_148a7bc[3];        // 0x0148a7bc
+struct Sub48 {                          // thiscall helper at +0x48 (0x00ed8780)
+    void reg(int on);                   // 0x00ed8780
+};
+
+struct ObjCD30 {
+    char  pad[0x48];
+    Sub48 sub48;        // +0x48
+    char  pad4c[0x70 - 0x4c];
+    MessageServer* p70; // +0x70
+    ObjCD30*       p74; // +0x74
+    unsigned*      p78; // +0x78
+    int            n7c; // +0x7c
+    int            p80; // +0x80
+    void setHandler(int on);
+};
+
+// @ 0x00edcd30
+void ObjCD30::setHandler(int on)
+{
+    sub48.reg(on);
+    if ((char)on != 0) {
+        MessageServer* server = (MessageServer*)SP_MessageServer();
+        p70 = server;
+        p74 = this;
+        p78 = g_148a7bc;
+        n7c = 3;
+        p80 = 0;
+        if (server != 0 && this != 0) {
+            for (unsigned i = 0; i < 3; ++i)
+                server->RegisterHandler(this, g_148a7bc[i]);
+        }
+        return;
+    }
+    if (p70 != 0) {
+        MessageServer* old = p70;
+        p70 = 0;
+        EA_RemoveHandler((int)old, (int)p74, (int)p78, n7c, p80);
+    }
+    FUN_00ed8690();
+}
+
+// ---------------------------------------------------------------- 0x00edce70
+struct MsgCE70 {
+    char pad[0x18];
+    char data;          // +0x18
+    char pad19[0x44 - 0x19];
+    char flag44;        // +0x44
+};
+
+struct ObjCE70Vt {
+    virtual void v0();
+    virtual void v1(void* arg);   // +0x04
+};
+
+struct ObjCE70 {
+    bool handler(int msgId, MsgCE70* msg);
+};
+
+// @ 0x00edce70
+bool ObjCE70::handler(int msgId, MsgCE70* msg)
+{
+    if (msgId == 0x30c11c7) {
+        if (msg->flag44 == 0) {
+            ObjCE70Vt* owner = (ObjCE70Vt*)((char*)this - 4);
+            owner->v1(&msg->data);
+        }
+        unsigned handler = (this != (ObjCE70*)4) ? (unsigned)(size_t)this : 0;
+        MessageServer* server = (MessageServer*)SP_MessageServer();
+        server->Send((void*)handler, 0x30c11c7, -0x270f);
+    }
+    return false;
+}

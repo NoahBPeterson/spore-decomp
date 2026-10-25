@@ -1,6 +1,4 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00e540b0  436  reposition two windows by mode: window vtable 0x38/0x6c/0x70 network not reconstructed
-00e54880   67  window visibility / state helper: not reconstructed
-00e548d0  221  cell UI state helper: not reconstructed
-00e549b0  250  cell UI state helper: not reconstructed
-00e54ab0  199  cell UI state helper: not reconstructed
+# partial: slices/s00e53c70/s00e53c70.cpp
+# Slice is complete: 1 byte-exact function (00e54880, manifest.txt) and 4
+# complete-but-not-exact functions (00e540b0, 00e548d0, 00e549b0, 00e54ab0 in
+# nonmatching.txt). No genuinely incomplete functions remain.

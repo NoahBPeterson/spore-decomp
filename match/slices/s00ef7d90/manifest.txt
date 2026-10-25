@@ -1,1 +1,2 @@
 # source  symbol  original VA  [flags override]
+slices/s00ef7d90/s00ef7d90.cpp  ?Toggle@CGadget@@QAEXH@Z  00ef8550

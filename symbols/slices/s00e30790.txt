@@ -1,2 +1,4 @@
 00e31050 UI::cUIFlashWindowManager::cUIFlashWindowManager  # vtable 0x1481948/0x1481940 (symbols/vtable_names.txt)
 00e31100 UTFWin::IWinProc::GetPriority  # symbols/vtable_names.txt
+00e30790 ?insert_@Vec1c@@QAEXPAUElem1c@@PBU2@@Z  # Vec1c::insert_ (approx name; slice spelling)
+00e30e20 ?AddOrUpdate@MgrCard@@QAEXHPAXIEH@Z  # MgrCard::AddOrUpdate (approx name; slice spelling)

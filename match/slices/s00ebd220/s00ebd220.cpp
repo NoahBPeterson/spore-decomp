@@ -99,6 +99,7 @@ struct Entry {                           // 0x50 bytes
     Timer timer;                         // +0x28
     EffectHandle* effect1;               // +0x48
     EffectHandle* effect2;               // +0x4c
+    void MoveFrom(Entry* src);           // 0x00ebbc10 ret 4
 };
 struct EntryVec {
     Entry* mpBegin;                      // +0
@@ -390,12 +391,13 @@ void cAnimViewer::FUN_00ebd220()
     shaderData->RegisterShaderDataInfo();
 
     int count = (int)(shaderData->m_end - shaderData->m_begin);
-    m_timers1c.EnsureElementCount(count);
+    TimerArray& timers = m_timers1c;
+    timers.EnsureElementCount(count);
 
     if (count > 0) {
         int offset = 0;
         do {
-            Timer* timer = (Timer*)((char*)m_timers1c.m_timers + offset);
+            Timer* timer = (Timer*)((char*)timers.m_timers + offset);
             timer->Restart();
             offset += 0x20;
             count--;
@@ -426,23 +428,36 @@ void cAnimViewer::FUN_00ebd220()
     }
 }
 
+static __forceinline Entry* MoveRange(Entry* dst, Entry* first, Entry* last)
+{
+    Entry* src = first;
+    for (; src != last; ++src) {
+        dst->MoveFrom(src);
+        ++dst;
+    }
+    return dst;
+}
+
 // @ 0x00ebd340
 void cAnimViewer::FUN_00ebd340()
 {
+    EntryVec& vec = mEntries;
     Entry* entry = mEntries.mpBegin;
     while (entry != mEntries.mpEnd) {
-        if (entry->effect1 != 0)
-            entry->effect1->Destroy(1);
-        if (entry->effect2 != 0)
-            entry->effect2->Destroy(1);
+        EffectHandle* h1 = entry->effect1;
+        if (h1 != 0)
+            h1->Destroy(1);
+        EffectHandle* h2 = entry->effect2;
+        if (h2 != 0)
+            h2->Destroy(1);
         entry += 1;
     }
 
-    Entry* oldBegin = mEntries.mpBegin;
-    Entry* oldEnd = mEntries.mpEnd;
-    mEntries.DestroyRange(oldBegin, oldEnd);
-    mEntries.mpEnd = (Entry*)((char*)mEntries.mpEnd +
-                              ((char*)oldEnd - (char*)oldBegin));
+    Entry* oldEnd = vec.mpEnd;
+    Entry* oldBegin = vec.mpBegin;
+    Entry* moved = MoveRange(vec.mpBegin, vec.mpEnd, vec.mpEnd);
+    vec.DestroyRange(moved, vec.mpEnd);
+    vec.mpEnd += (int)((char*)oldEnd - (char*)oldBegin) / 0x50;
 
     RbTree* tree = &mTree30;
     RbNode* node = tree->m_root;
