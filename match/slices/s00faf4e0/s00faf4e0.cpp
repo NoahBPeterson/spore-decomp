@@ -152,14 +152,15 @@ void cRibbonFacePoly::FUN_00fafda0()
     float maxY = FLT_MAX;
 
     int n = (int)(mpEnd - mpBegin);
-    for (int i = 0; i < n; i++)
+    const cRibbonFaceVertex* base = mpBegin;
+    for (unsigned i = 0; i < (unsigned)n; i++)
     {
-        float x = mpBegin[i].mPos.x;
-        float y = mpBegin[i].mPos.y;
-        if (x <= minX) minX = x;
-        if (maxX <= x) maxX = x;
-        if (y <= minY) minY = y;
-        if (maxY <= y) maxY = y;
+        float v = base[i].mPos.x;
+        if (!(v > minX)) minX = v;
+        if (!(maxX > v)) maxX = v;
+        v = base[i].mPos.y;
+        if (!(v > minY)) minY = v;
+        if (!(maxY > v)) maxY = v;
     }
 
     mMinX = minX;
