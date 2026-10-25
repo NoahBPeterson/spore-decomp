@@ -14,10 +14,10 @@ typedef unsigned __int64 u64;
 // ---------------------------------------------------------------------------
 extern "C" void* __cdecl op_new4(int size, const char* file, int flags, int align);
 extern "C" void* __cdecl op_new6(int size, const char* file, int flags, int align,
-                                 void* allocator, int line);
+                                 void* allocator, int line);  // 0x00f473a0
 extern "C" void  __cdecl op_del_array(void* p);
 extern "C" void* __cdecl memcpy_(void* dst, const void* src, unsigned size);
-extern "C" int   __stdcall QueryPerformanceCounter_ll(long long* out);
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(long long* out);
 extern "C" bool  __cdecl EA_WriteUint32(void* stream, u32* value, int count, int flags);
 
 struct KeySlot {
@@ -49,7 +49,7 @@ struct cKeySlotList {
 
     void ReleaseSlot(u32 idx);                              // 0x00b0d2a0
     u32  GetActiveValue();                                  // 0x00b0d350
-    void RemoveRangeTo(KeySlot** out, KeySlot* pos);        // 0x00b0d500
+    KeySlot** RemoveRangeTo(KeySlot** out, KeySlot* pos);   // 0x00b0d500
 };
 
 // ---------------------------------------------------------------------------
@@ -153,8 +153,8 @@ struct ObjVec {                             // +0 begin, +4 end, +8 capacity
     void** mpCap;
 
     void InsertN(void* at, u32 count, void** val);          // 0x00b0d710
-    void AssignVec(ObjVec* other);                          // 0x00b0ddd0
-    void EraseRange(void** first, void** last);             // 0x00b0dec0
+    ObjVec* AssignVec(ObjVec* other);                       // 0x00b0ddd0
+    void* EraseRange(void** first, void** last);            // 0x00b0dec0
 };
 
 struct AgentVec {                           // begin/end at +0x24 handled by caller
@@ -230,19 +230,20 @@ u32 cKeySlotList::GetActiveValue()
 // 0x00b0d500 -- release the slot at pos, then copy the resulting iterator.
 // ===========================================================================
 // @ 0x00b0d500
-void cKeySlotList::RemoveRangeTo(KeySlot** out, KeySlot* pos)
+KeySlot** cKeySlotList::RemoveRangeTo(KeySlot** out, KeySlot* pos)
 {
     ((ReleaseStub*)this)->Release((u32)(((char*)pos - (char*)mpSlots) >> 3));
 
     for (;;) {
         KeySlot* cur = pos;
-        pos = pos + 1;
+        pos = cur + 1;
         if (((cur->mBits >> 30) & 1) != 0)
             break;
-        if (((pos->mBits >> 31) & 1) != 0)
+        if (((pos->mBits >> 31) & 1) == 0)
             break;
     }
     *out = pos;
+    return out;
 }
 
 // ===========================================================================
@@ -494,7 +495,7 @@ void* cSkinner::Construct()
     *(u32*)((char*)this + 0x9c) = z;
     mbA0 = (u8)z;
 
-    void* sw = op_new4(0x18, STR_STOPWATCH, (int)z, (int)z);
+    void* sw = op_new6(0x18, STR_STOPWATCH, 0, 0, 0, 0);
     if (sw != 0)
         sw = ((Stopwatch*)sw)->Init(3, 0);
     *(void**)((char*)this + 0x20) = sw;
@@ -505,8 +506,8 @@ void* cSkinner::Construct()
             *(u32*)sw = (u32)t;
             *(u32*)((char*)sw + 4) = (u32)(t >> 32);
         } else {
-            long long q;
-            QueryPerformanceCounter_ll(&q);
+            unsigned long long q;
+            QueryPerformanceCounter((long long*)&q);
             *(u32*)sw = (u32)q;
             *(u32*)((char*)sw + 4) = (u32)(q >> 32);
         }
@@ -671,12 +672,12 @@ void cSkinner::ResetSlots()
 // 0x00b0ddd0 -- eastl::vector<AutoRefCount<cInteractionAgent>>::operator=
 // ===========================================================================
 // @ 0x00b0ddd0
-void ObjVec::AssignVec(ObjVec* other)
+ObjVec* ObjVec::AssignVec(ObjVec* other)
 {
     ObjVec* self = this;
 
     if (other == self)
-        return;
+        return self;
 
     void** srcBegin = other->mpBegin;
     void** srcEnd   = other->mpEnd;
@@ -690,39 +691,39 @@ void ObjVec::AssignVec(ObjVec* other)
         self->mpCap   = (void**)((char*)buf + n * 4);
         self->mpEnd   = (void**)((char*)buf + n * 4);
         self->mpBegin = (void**)buf;
-        return;
+        return self;
     }
 
     u32 have = (u32)(self->mpEnd - self->mpBegin);
     if (have < n) {
-        FUN_00b0d0d0(srcBegin, (char*)srcBegin + have * 4, self->mpEnd);
+        FUN_00b0d0d0(srcBegin, (char*)srcBegin + have * 4, self->mpBegin);
         FUN_00dc6730(&other, (char*)srcBegin + (u32)(self->mpEnd - self->mpBegin) * 4,
                      other->mpEnd, self->mpEnd, other);
         self->mpEnd = (void**)((char*)self->mpBegin + n * 4);
-        return;
+        return self;
     }
 
     void* res = FUN_00b0d0d0(srcBegin, srcEnd, self->mpBegin);
     ((VecGrowStub*)self)->Assign((void**)res, self->mpEnd);
     self->mpEnd = (void**)((char*)self->mpBegin + n * 4);
+    return self;
 }
 
 // ===========================================================================
 // 0x00b0dec0 -- destroy the range and shrink the vector.
 // ===========================================================================
 // @ 0x00b0dec0
-void ObjVec::EraseRange(void** first, void** last)
+void* ObjVec::EraseRange(void** first, void** last)
 {
-    ObjVec* self = this;
-
-    void** it = (void**)FUN_00b0d0d0(last, self->mpEnd, first);
-    void** end = self->mpEnd;
+    void** it = (void**)FUN_00b0d0d0(last, mpEnd, first);
+    void** end = mpEnd;
     for (; it < end; ++it) {
         void* obj = *it;
         if (obj != 0)
             ((void(__fastcall*)(void*))(*(void***)obj)[0x5c / 4])(obj);
     }
-    self->mpEnd = (void**)((char*)self->mpEnd + ((char*)last - (char*)first) * -1);
+    mpEnd = mpEnd - (last - first);
+    return first;
 }
 
 // ===========================================================================
@@ -791,8 +792,9 @@ void SlotVec::Insert(KeySlot* at, KeySlot* val)
 // @ 0x00b0e1d0
 bool cSkinner::RemoveAgent(void* agent)
 {
-    void** begin = (void**)mpAgentBegin;
-    void** end   = (void**)((char*)this + 0x28);
+    AgentVec* vec = (AgentVec*)((char*)this + 0x24);
+    void** begin = vec->mpBegin;
+    void** end   = vec->mpEnd;
     void** it    = begin;
     if (it != end) {
         for (;;) {
@@ -807,12 +809,12 @@ bool cSkinner::RemoveAgent(void* agent)
                 ((void(__fastcall*)(void*))(*(void***)agent)[0x34 / 4])(agent);
             ((void(__fastcall*)(void*))(*(void***)agent)[0x60 / 4])(agent);
 
-            void** curEnd = (void**)((char*)this + 0x28);
+            void** curEnd = vec->mpEnd;
             if (it + 1 < curEnd)
                 FUN_00b0d0d0(it + 1, curEnd, it);
-            *(void**)((char*)this + 0x28) = (char*)curEnd - 4;
+            vec->mpEnd = curEnd - 1;
 
-            void** last = *(void***)((char*)this + 0x28);
+            void** last = vec->mpEnd;
             if (*last != 0)
                 ((void(__fastcall*)(void*))(*(void***)*last)[0x5c / 4])(*last);
             ((void(__fastcall*)(void*))(*(void***)agent)[0x5c / 4])(agent);
