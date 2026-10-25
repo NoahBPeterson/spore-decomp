@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (all compiled /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00fefbb0 183 SP::AddInfectedAnimalsToHerd: complete; per-planet placement loop that creates objects (FUN_00c099e0) and pokes behavior-manager state.  Residual is register/scheduling churn over the 4-arg call sequence plus unresolved callee prototypes (FUN_00c03170/FUN_00c1d430 take the value in ecx); size 251 vs 276.  equiv WEAK: 258 valid, 11.8% coverage, no mismatch.

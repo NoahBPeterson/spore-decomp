@@ -3,3 +3,4 @@
 00fef5d0 ?ShutdownForGame@cSPMissionManager_s00fe_f140@@QAEXXZ  # cSPMissionManager_s00fe_f140::ShutdownForGame migrated from s00fef140 (verbatim, slice spelling)
 00fef670 ?FUN_00fef670@@YAPAXXZ  # FUN_00fef670 migrated from s00fef140 (verbatim, slice spelling)
 00fef6b0 ?FUN_00fef6b0@@YAXXZ  # FUN_00fef6b0 migrated from s00fef140 (verbatim, slice spelling)
+00fefbb0 ?FUN_00fefbb0@@YAXPAX0HII@Z  # FUN_00fefbb0 migrated from s00fef140 (verbatim, slice spelling)
