@@ -1,0 +1,34 @@
+00ffbe50 SP::GetUFOSimulator  # cdecl, no args, returns cSPSimulatorSpaceGame*
+00a1ad60 SP::cSPSimulatorSpaceGame::GetPlayerInventory  # thiscall, returns the object at simulator +0x40
+00c8b7e0 FUN_00c8b7e0  # thiscall on the simulator; returns byte; galaxy-view test in 0105e6d0
+00c83c70 FUN_00c83c70  # thiscall(inventory, bool); returns inventory +0x38 for true, +0x3c for false
+00c84120 SP::cSolarSystem::GetStarRadius  # cdecl int star-type, returns float
+005a9c40 IntersectRaySphere  # cdecl (origin, dir, center, radius, float* hitTime), returns bool
+00c8b550 FUN_00c8b550  # thiscall on the simulator; returns current star type
+00c70880 FUN_00c70880  # thiscall obstacle; returns obstacle kind from +0x13c->+0x28, else 2
+01021260 FUN_01021260  # cdecl, no args; returns active planet obstacle
+0059aed0 FUN_0059aed0  # cdecl (out, const Vector3* localAxis, const Quaternion* orientation), returns out
+006985b0 SP::OrthogonalVector  # cdecl (out, const Vector3*), returns out
+00b0fd00 RotateTowards  # cdecl (out, from, to, float maxAngle), returns out
+0069b600 SP::QuaternionFromFacingAndUp  # cdecl (out, facing, up), returns out
+00b3d2a0 SP::StarManager  # cdecl, no args, returns the star manager
+00885c90 FUN_00885c90  # thiscall star manager; returns current planet pointer
+00c376b0 FUN_00c376b0  # cdecl, no args; speed/distance limit used by 0105eb90
+00698e00 FUN_00698e00  # cdecl (out, segmentA, segmentB, point), returns closest point in out
+00449c20 SP::normalized_safe  # cdecl (out, const Vector3*), returns out
+00436ce0 Vector3_Normalize  # cdecl (out, const Vector3*), returns out
+016e2114 kOrigin  # zero vector (0,0,0), also used by 0105eb90
+016e2190 kAvoidOrigin  # zero vector (0,0,0), initial avoidance point in AvoidSolarObstacles
+015b8da8 kLocalForward  # local forward axis transformed by the UFO quaternion at +0x730
+013eb1bc kHitMiss  # -1.0f
+01485548 kAvoidRadiusScale  # 1.5f
+013ec4b4 kAvoidDistanceScale  # 0.9f
+013ec4b8 kVectorEpsilon  # 1e-8f
+01471064 kHalf  # 0.5f
+013ebc5c kSpeedScale  # 25.0f
+01485720 kOne  # 1.0f
+0149bfc0 kMinTargetLength  # 1.5258789e-05f
+015b8e18 kRadiusForKindOne  # obstacle kind 1 avoidance radius
+015b8e14 kRadiusForOtherKinds  # default obstacle avoidance radius
+015b8d8c kNormalSpeed  # normal desired-speed multiplier
+015b8d90 kBoostSpeed  # boosted desired-speed multiplier
