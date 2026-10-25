@@ -10,3 +10,5 @@ slices/s00922500/s00922500.cpp  ?FUN_00923440@@  00923440
 slices/s00922500/s00922500.cpp  ?FUN_009234a0@@  009234a0
 slices/s00922500/s00922500.cpp  ?GetServer@Trace@EA@@  009234c0
 slices/s00922500/s00922500.cpp  ?UpdateLogFilters@Trace@EA@@  009234e0
+slices/s00922500/s00922500.cpp  ?GetStatus@Thread@1EA@@QBE?AW4Status@112@PAH@Z  00922a10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00922500/s00922500.cpp  ?Alloc@EAThreadDynamicData@Thread@EA@@SAPAU123@XZ  00922d30  /O2 /MD /Gy /EHsc /TP /GS-
