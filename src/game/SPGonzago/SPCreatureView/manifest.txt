@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureView.cpp  ?FUN_00e8bd70@cCreatureView@SP@@QAEX_N@Z  00e8bd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureView.cpp  ?FUN_00e8bda0@cCreatureView@SP@@QAE_NXZ  00e8bda0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureView.cpp  ?UpdateInteractionEffects@cCreatureView@SP@@QAEXXZ  00e8be60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureView.cpp  ?UpdateMotiveEffects@cCreatureView@SP@@QAEXXZ  00e8bf20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureView.cpp  ?FUN_00e8c030@cCreatureView@SP@@QAEXXZ  00e8c030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureView.cpp  ?CreatureCitizenUpdate@cCreatureView@SP@@QAEXPAVcCreature@@@Z  00e8c070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureView.cpp  ?FUN_00e8c0c0@cCreatureView@SP@@QAEPAV12@E@Z  00e8c0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
