@@ -1,3 +1,1 @@
 # va  diff-bytes  reason
-00813980  -  partial: cSPUIMainWin::InitTitleScreen - layout init + float sizing summarised
-008141b0  -  partial: cSPUIMainWin constructor - only vtable stores + field zeroing

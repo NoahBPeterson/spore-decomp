@@ -218,6 +218,7 @@ struct MainWin {
     void ApplyToFocus(bool b);      // 0x813300
     void FUN_00950bb0(UIMsg* m);   // 0x950bb0
     void Dtor();                   // 0x813ca0
+    MainWin* Ctor();               // 0x8141b0
 };
 
 // @ 0x00813740
@@ -553,18 +554,33 @@ void cSPUITooltipManager::Init() {
 // ---------------------------------------------------------------------------
 // title screen
 // ---------------------------------------------------------------------------
-void* __cdecl CtorConnectionDialog(void*);        // 0x810000
-bool  __cdecl LayoutInit(void*, const wchar_t*, int, int, int); // 0x812160
-void* __cdecl LayoutFindByID(void*, int, int);    // 0x8105b0
-void  __cdecl GetMainWindowArea(void*);           // 0x805ea0
-void  __cdecl SP_Pollinator(void*, void*);        // 0x806d10
-void* __cdecl AddBoundingBox(void*, int, int);    // 0x67cad0
-void  __cdecl SP_Renderer(void*, int, int);       // 0x80d710
+struct Layout {
+    void  Init(const wchar_t*, unsigned, int, int);  // 0x812160
+    void* FindWindowByID(unsigned, int);             // 0x8105b0
+};
+struct LayoutWin {
+    virtual void w00(); virtual void w01(); virtual void w02(); virtual void w03();
+    virtual void w04(); virtual void w05(); virtual void w06(); virtual void w07();
+    virtual void w08(); virtual void w09(); virtual void w0a(); virtual void w0b();
+    virtual void w0c();
+    virtual float* GetRect();                        // 0x34
+    virtual void w0e(); virtual void w0f(); virtual void w10(); virtual void w11();
+    virtual void w12(); virtual void w13(); virtual void w14(); virtual void w15();
+    virtual void w16(); virtual void w17();
+    virtual void SetArea(float*);                    // 0x60
+    virtual void w19();
+    virtual void Scale(float, float);                // 0x68
+};
+struct ConnDialog { void* Ctor(); };                 // 0x810000
+struct Renderer   { void  Draw(void*, int, int); };  // 0x80d710
+Renderer* __cdecl GetRenderer();                     // 0x67cad0
+void  __cdecl GetMainWindowArea(void*);              // 0x805ea0
+void  __cdecl SP_Pollinator(void*, void*);           // 0x806d10
 
-// @ 0x00813980  (partial: allocation/refcount/init reproduced, float sizing summarised)
+// @ 0x00813980
 bool MainWin::InitTitleScreen() {
     void* p = ZoneObjectNew(0x18, "UI/TitleScreen", 0, 0, 0, 0);
-    if (p) p = CtorConnectionDialog(p);
+    if (p) p = ((ConnDialog*)p)->Ctor();
     else p = 0;
     void* old = *(void**)((char*)this + 0x244);
     if (p != old) {
@@ -572,20 +588,24 @@ bool MainWin::InitTitleScreen() {
         *(void**)((char*)this + 0x244) = p;
         if (old) ((Ref*)old)->r02();
     }
-    void* layout = *(void**)((char*)this + 0x244);
-    LayoutInit(layout, L"TitleScreen", 0x40464100, 1, 0x5b598fa);
-    if (LayoutFindByID(layout, 0x362c790, 1)) {
-        int area[4];
+    ((Layout*)*(void**)((char*)this + 0x244))->Init(L"TitleScreen", 0x40464100, 1, 0x5b598fa);
+    if (((Layout*)*(void**)((char*)this + 0x244))->FindWindowByID(0x362c790, 1)) {
+        float area[4];
         GetMainWindowArea(area);
-        void* w = LayoutFindByID(layout, 0x362c790, 1);
-        ((void(__thiscall*)(void*, void*))Vtbl(w)[0x60 / 4])(w, area);
-        void* w2 = LayoutFindByID(layout, 0x362d0b0, 1);
-        float f = ((float(__thiscall*)(void*))Vtbl(w2)[0x34 / 4])(w2);
-        (void)f;
+        LayoutWin* w = (LayoutWin*)((Layout*)*(void**)((char*)this + 0x244))->FindWindowByID(0x362c790, 1);
+        w->SetArea(area);
+        LayoutWin* w2 = (LayoutWin*)((Layout*)*(void**)((char*)this + 0x244))->FindWindowByID(0x362d0b0, 1);
+        float* pf = w2->GetRect();
+        float dx = pf[2] - pf[0];
+        float dy = pf[3] - pf[1];
+        float s1 = dx / (area[2] - area[0]);
+        float s2 = dy / (area[3] - area[1]);
+        float* sel = s2 > s1 ? &s2 : &s1;
+        float inv = 1.0f / *sel;
+        w2->Scale(inv * dx, inv * dy);
         SP_Pollinator(w2, area);
-        void* w3 = LayoutFindByID(layout, 0x362c790, 1);
-        void* bb = AddBoundingBox(w3, 1, 1);
-        SP_Renderer(bb, 1, 1);
+        GetRenderer()->Draw(
+            ((Layout*)*(void**)((char*)this + 0x244))->FindWindowByID(0x362c790, 1), 1, 1);
     }
     return true;
 }
@@ -618,13 +638,25 @@ void __cdecl SetBoolProperty(void*);            // 0x93a2e0
 void __cdecl FUN_008e2b20(void*);
 void __cdecl FUN_00962740(void*);
 void __cdecl FUN_008a7790(void*, void*, void*);
-void* __cdecl FUN_00805510();
-void  __cdecl FUN_008859e0(void*, int);
+void* __cdecl FUN_00805510(int);
+void  __cdecl FUN_008859e0(void*);
 void  __cdecl FUN_00900b10();
 void  __cdecl FUN_00f47410();
 void  __cdecl FUN_006abeb0();
-void  __cdecl StopwatchCtor(void*, int, int);   // 0x93a560
-void* __cdecl CtorWindowPlaceholder(void*);     // 0x962a10 UI::Window::Window
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(long long*);
+extern "C" unsigned long long __rdtsc(void);
+#pragma intrinsic(__rdtsc)
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
+struct WindowBase { void Ctor(); };                 // 0x962a10 UI::Window::Window
+struct Stopwatch {
+    unsigned long long start;   // +0
+    uint32_t pad8;              // +8
+    uint32_t padc;              // +0xc
+    int      units;             // +0x10
+    void Init(int, int);        // 0x93a560
+};
 
 static void ReleaseSlot(void* p, int slot) {
     if (p) ((void(__thiscall*)(void*))Vtbl(p)[slot / 4])(p);
@@ -667,30 +699,76 @@ void MainWin::Dtor() {
     FUN_00962740(t);
 }
 
-// @ 0x008141b0  (partial: field zeroing + vtable stores)
-void* MainWin_Ctor(MainWin* self) {
-    char* t = (char*)self;
-    // base Window ctor (relocation)
-    CtorWindowPlaceholder(t);
-    *(uint32_t*)(t + 0x20c) = 0x13ec458;
+// @ 0x008141b0
+MainWin* MainWin::Ctor() {
+    char* t = (char*)this;
+    ((WindowBase*)t)->Ctor();
+    *(volatile uint32_t*)(t + 0x20c) = 0x13ec458;
     *(uint32_t*)(t + 0x210) = 0;
-    *(uint32_t*)(t + 0x214) = 0x13eb384;
-    *(uint32_t*)(t + 0x0) = 0x1418838;
-    *(uint32_t*)(t + 0x4) = 0x1418718;
-    *(uint32_t*)(t + 0x20c) = 0x1418708;
-    *(uint32_t*)(t + 0x214) = 0x14186f8;
+    *(volatile uint32_t*)(t + 0x214) = 0x13eb384;
+    _ReadWriteBarrier();
+    *(volatile uint32_t*)(t + 0x0) = 0x1418838;
+    *(volatile uint32_t*)(t + 0x4) = 0x1418718;
+    *(volatile uint32_t*)(t + 0x20c) = 0x1418708;
+    *(volatile uint32_t*)(t + 0x214) = 0x14186f8;
     *(uint8_t*)(t + 0x218) = 0;
     *(uint32_t*)(t + 0x21c) = 0;
     *(uint8_t*)(t + 0x220) = 1;
     *(uint8_t*)(t + 0x221) = 0;
     *(uint8_t*)(t + 0x222) = 0;
     *(uint8_t*)(t + 0x223) = 1;
-    StopwatchCtor(t + 0x228, 5, 0);
-    for (int off = 0x240; off <= 0x280; off += 4) *(uint32_t*)(t + off) = 0;
+    Stopwatch* sw = (Stopwatch*)(t + 0x228);
+    sw->Init(5, 0);
+    *(uint32_t*)(t + 0x240) = 0;
+    *(uint32_t*)(t + 0x244) = 0;
+    *(uint32_t*)(t + 0x248) = 0;
+    *(uint32_t*)(t + 0x24c) = 0;
+    *(uint32_t*)(t + 0x250) = 0;
+    *(uint32_t*)(t + 0x254) = 0;
+    *(uint32_t*)(t + 0x258) = 0;
+    *(uint32_t*)(t + 0x25c) = 0;
+    *(uint32_t*)(t + 0x260) = 0;
+    *(uint32_t*)(t + 0x264) = 0;
+    *(uint32_t*)(t + 0x268) = 0;
+    *(uint32_t*)(t + 0x26c) = 0;
+    *(uint32_t*)(t + 0x270) = 0;
+    *(uint32_t*)(t + 0x274) = 0;
+    *(uint32_t*)(t + 0x278) = 0;
+    *(uint32_t*)(t + 0x27c) = 0;
+    *(uint32_t*)(t + 0x280) = 0;
     *(uint8_t*)(t + 0x284) = 0;
     *(uint8_t*)(t + 0x285) = 0;
     *(uint8_t*)(t + 0x286) = 0;
     *(uint8_t*)(t + 0x28d) = 0;
-    for (int off = 0x290; off <= 0x2a4; off += 4) *(uint32_t*)(t + off) = 0;
-    return self;
+    *(uint32_t*)(t + 0x290) = 0;
+    *(uint32_t*)(t + 0x294) = 0;
+    *(uint32_t*)(t + 0x298) = 0;
+    *(uint32_t*)(t + 0x29c) = 0;
+    *(uint32_t*)(t + 0x2a0) = 0;
+    *(uint32_t*)(t + 0x2a4) = 0;
+    _ReadWriteBarrier();
+    char* p = t + 0x2c0;
+    *(uint32_t*)(t + 0x2b8) = (uint32_t)p;
+    *(uint32_t*)(t + 0x2ac) = (uint32_t)p;
+    *(uint32_t*)(t + 0x2a8) = (uint32_t)p;
+    p += 0x10;
+    *(uint32_t*)(t + 0x2b0) = (uint32_t)p;
+    *(uint32_t*)(t + 0x2d0) = 0;
+    *(uint8_t*)(t + 0x2d4) = 0;
+    *(uint32_t*)(t + 0x2d8) = 0;
+    *(uint8_t*)(t + 0x2dc) = 0;
+    FUN_008a7790(FUN_006abeb0, FUN_00f47410, FUN_00900b10);
+    if (sw->start == 0) {
+        if (sw->units == 1) {
+            sw->start = __rdtsc();
+        } else {
+            long long q;
+            QueryPerformanceCounter(&q);
+            sw->start = q;
+        }
+    }
+    *(uint32_t*)(t + 0x287) = 0;
+    *(uint8_t*)(t + 0x28b) = 0;
+    FUN_008859e0(FUN_00805510(1));
+    return this;
 }
