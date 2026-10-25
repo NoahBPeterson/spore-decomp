@@ -4,3 +4,4 @@ slices/s0076cc00/s0076cc00.cpp  ?RasterFormatSize@@YAHHHH@Z           0076d820  
 slices/s0076cc00/s0076cc00.cpp  ?Teardown@SnapshotWrap@@QAEXHHHH@Z    0076d970  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s0076cc00/s0076cc00.cpp  ??0PageRecord@@QAE@ABU0@@Z            0076d9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s0076cc00/s0076cc00.cpp  ?OnCaptureMessage@@YG_NHPAX@Z         0076db00  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0076cc00/s0076cc00.cpp  ?CreateViewer@SnapshotWrap@@QAEXPAH@Z  0076d8e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
