@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPPosseSimulator.cpp  _F52c90  00d52c90  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPosseSimulator.cpp  ?F52df0@@YIHPAX@Z  00d52df0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPosseSimulator.cpp  ?F52e10@@YIHPAX@Z  00d52e10  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
