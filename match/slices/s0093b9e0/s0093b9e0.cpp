@@ -15,6 +15,10 @@ extern "C" void* AllocNamed(size_t n, void* alloc, int flags);               // 
 extern "C" void* DefaultAllocator();                                         // 0x00925cb0
 extern "C" int   fputs(const char*, void*);
 extern "C" void* __iob_func();
+extern "C" unsigned __cdecl strlen(const char*);
+extern "C" unsigned __cdecl wcslen(const wchar_t*);
+#pragma intrinsic(strlen)
+#pragma intrinsic(wcslen)
 
 namespace EA { namespace Text {
 int ConvertEncoding(const void* src, size_t srcCount, int srcEnc, void* dst, int* dstLen, int dstEnc); // 0x0093c950
@@ -24,26 +28,35 @@ int GetCharacterSize(int encoding);
 namespace EA { namespace IO {
 
 class SharedPointer { public:
-    void* vtable;            // +0
-    void* vtable2;           // +4
-    long  mnRefCount;        // +8
-    void* mpAllocator;       // +0c
-    long  field_10;          // +10
-    unsigned char field_14;  // +14
+    // +4 is a second base subobject (hkReferencedObject): its own vptr then a refcount.
+    struct SharedRef {
+        void* vtable;            // +0 (SharedPointer +4)
+        long  mnRefCount;        // +4 (SharedPointer +8)
+    };
+    void*     vtable;            // +0
+    SharedRef base2;             // +4
+    void*     mpAllocator;       // +0c
+    long      field_10;          // +10
+    unsigned char field_14;      // +14
     SharedPointer(void* pData, unsigned char freeData, void* alloc);
+    SharedPointer* Init(void* pData, unsigned nSize);                        // 0x0093bca0
+    SharedPointer* InitWithAlloc(void* pData, void* alloc, unsigned nSize);  // 0x0093bcf0
+    void* Destroy(unsigned char flags);                                      // 0x0093bd90
 };
 
 inline void SharedRelease(SharedPointer* p)
 {
     if (p != 0) {
-        if (_InterlockedDecrement(&p->mnRefCount) == 0) {
-            _InterlockedExchange(&p->mnRefCount, 1);
-            if (p->vtable2 != 0) {
-                // +4 is the second base's vptr (multiple inheritance): the original calls slot 0
-                // of that vtable with this = p + 4 (the base subobject), not with the vptr value
-                // (hybrid crash at 0x93bd97, 2026-10-12: a dtor ran on the vtable as `this`).
+        SharedPointer::SharedRef* r = &p->base2;
+        long remaining = _InterlockedDecrement(&r->mnRefCount);
+        if (remaining == 0) {
+            _InterlockedExchange(&r->mnRefCount, 1);
+            if (r != 0) {
+                // The second base's vtable slot 0 is its Release/delete hook; `this` is the
+                // base subobject (p + 4), not the vptr value (hybrid crash at 0x93bd97).
                 typedef void (__thiscall *Fn)(void*, int);
-                (*(Fn*)p->vtable2)((char*)p + 4, 1);
+                Fn fn = *(Fn*)r->vtable;
+                fn(r, 1);
             }
         }
     }
@@ -70,7 +83,7 @@ public:
 
 class MemoryStream : public IStream {
 public:
-    MemoryStream(void* pData, size_type nSize, unsigned char copy, int a, void* alloc);
+    MemoryStream(void* pData, size_type nSize, unsigned char copy, int a, void* alloc, int unused);
     ~MemoryStream();
 
     bool SetData(void* pData, size_type nSize, unsigned char copy, unsigned char freeData, void* alloc);
@@ -97,11 +110,11 @@ public:
 class GraphicsFactoryAsyncRequest {
 public:
     GraphicsFactoryAsyncRequest();
-    GraphicsFactoryAsyncRequest(void* pData, void* nSize);
+    GraphicsFactoryAsyncRequest(void* pData, void* nSize, int unused);
 
     float GetProperty(int index);
     void  SetProperty(int index, float value);
-    int   Attach(void* pData, size_type nSize);
+    bool  Attach(void* pData, size_type nSize);
 
     void*          mpVtbl;           // +00
     SharedPointer* mpData;           // +04
@@ -223,56 +236,69 @@ int __thiscall EA::IO::MemoryStream::ReadBuffer(void* pData, size_type nSize)
     return 0;
 }
 
+struct ICoreAllocator {
+    virtual void v0();
+    virtual void v1();
+    virtual void* Alloc(void* pData, unsigned nSize, int flags);  // slot 2
+    virtual void  Free(void* pData, int flags);                   // slot 3
+};
+
+extern void* g_vtbl_bg6;       // 0x013effb8 (first base vtable)
+extern void* g_vtbl_hkref;     // 0x013ef094 (second base vtable)
+extern void* g_vtbl_bg;        // 0x0143eb74 (BackgroundLoading vtable, +0)
+extern void* g_vtbl_bg2;       // 0x0143eb70 (BackgroundLoading vtable, +4)
+void* g_vtbl_bg = 0;           // stand-in storage: the real vtable lives in another object file
+extern void* g_vtbl_gfar;      // 0x013f3a68 (base vtable)
+extern void* g_vtbl_gfar_b;    // 0x0143eb78 (GraphicsFactoryAsyncRequest vtable)
+extern const float g_1_5f;     // 0x01485548
+
 namespace EA { namespace IO {
 
 // @ 0x0093bc40
 SharedPointer::SharedPointer(void* pData, unsigned char freeData, void* alloc)
 {
-    vtable = 0;
-    vtable2 = 0;
-    mnRefCount = 0;
+    vtable = (void*)&g_vtbl_bg6;
+    base2.vtable = (void*)&g_vtbl_hkref;
+    _InterlockedExchange(&base2.mnRefCount, 0);
+    vtable = (void*)&g_vtbl_bg;
+    base2.vtable = (void*)&g_vtbl_bg2;
+    if (alloc == 0)
+        alloc = DefaultAllocator();
     mpAllocator = alloc;
-    field_14 = freeData;
     field_10 = (long)pData;
-    if (mpAllocator == 0)
-        mpAllocator = DefaultAllocator();
+    field_14 = freeData;
 }
 
 } } // EA::IO
 
-extern void* g_vtbl_bgloading;
-void* g_vtbl_bgloading = 0;   // stand-in storage: the real BG6 vtable lives in another object file
-extern void* g_vtbl_bgloading_a;
-extern void* g_vtbl_bgloading_b;
-extern void* g_vtbl_gfar;   // 0x013f3a68 (equiv t3)
-extern void* g_vtbl_gfar_b; // 0x0143eb78 (GraphicsFactoryAsyncRequest vtable)
-
 // @ 0x0093bca0
-void* FUN_0093bca0(void* self, void* pData, size_type nSize, void* a)
+EA::IO::SharedPointer* EA::IO::SharedPointer::Init(void* pData, unsigned nSize)
 {
-    *(void**)self = (void*)&g_vtbl_bgloading;
-    ((long*)self)[1] = 0;
-    ((long*)self)[2] = 0;
-    ((long*)self)[3] = (long)&DefaultAllocator;
-    void* r = ((void*(__thiscall*)(void*, void*, void*, void*, int))((void**)DefaultAllocator())[2])(DefaultAllocator(), pData, a, 0, 0);
-    ((long*)self)[4] = (long)r;
-    *((char*)self + 0x14) = 1;
-    return self;
+    vtable = (void*)&g_vtbl_bg6;
+    base2.vtable = (void*)&g_vtbl_hkref;
+    _InterlockedExchange(&base2.mnRefCount, 0);
+    vtable = (void*)&g_vtbl_bg;
+    base2.vtable = (void*)&g_vtbl_bg2;
+    mpAllocator = DefaultAllocator();
+    field_10 = (long)((ICoreAllocator*)mpAllocator)->Alloc(pData, nSize, 0);
+    field_14 = 1;
+    return this;
 }
 
 // @ 0x0093bcf0
-void** __fastcall FUN_0093bcf0(void** self, void* unused_edx, void* pData, void* allocArg, void* a)
+EA::IO::SharedPointer* EA::IO::SharedPointer::InitWithAlloc(void* pData, void* alloc, unsigned nSize)
 {
-    *self = (void*)&g_vtbl_bgloading;
-    self[1] = 0;
-    self[2] = 0;
-    void* alloc = allocArg ? allocArg : DefaultAllocator();
-    self[3] = alloc;
-    // the allocator is a C++ object: slot 2 of *its* vtable allocates the data buffer
-    void* r = ((void*(__thiscall*)(void*, void*, void*, int))(*(void***)alloc)[2])(alloc, pData, a, 0);
-    self[4] = r;
-    *((char*)self + 0x14) = 1;
-    return self;
+    vtable = (void*)&g_vtbl_bg6;
+    base2.vtable = (void*)&g_vtbl_hkref;
+    _InterlockedExchange(&base2.mnRefCount, 0);
+    vtable = (void*)&g_vtbl_bg;
+    base2.vtable = (void*)&g_vtbl_bg2;
+    if (alloc == 0)
+        alloc = DefaultAllocator();
+    mpAllocator = alloc;
+    field_10 = (long)((ICoreAllocator*)alloc)->Alloc(pData, nSize, 0);
+    field_14 = 1;
+    return this;
 }
 
 // @ 0x0093bd50
@@ -293,29 +319,25 @@ void* __fastcall FUN_0093bd50(void* self, int unused, int unused2)
 }
 
 // @ 0x0093bd90
-void* FUN_0093bd90(void* self, unsigned char flags)
+void* EA::IO::SharedPointer::Destroy(unsigned char flags)
 {
-    *(void**)self = (void*)&g_vtbl_bgloading_a;
-    ((long*)self)[1] = (long)&g_vtbl_bgloading_b;
-    if (*((char*)self + 0x14) != 0) {
-        void* alloc = ((void**)self)[3];
-        void* data = ((void**)self)[4];
-        (*(void(__thiscall*)(void*, void*, int))((void**)alloc)[3])(alloc, data, 0);
-    }
-    *(void**)self = (void*)&g_vtbl_bgloading;
+    vtable = (void*)&g_vtbl_bg;
+    base2.vtable = (void*)&g_vtbl_bg2;
+    if (field_14 != 0)
+        ((ICoreAllocator*)mpAllocator)->Free((void*)field_10, 0);
+    base2.vtable = (void*)&g_vtbl_hkref;
+    vtable = (void*)&g_vtbl_bg6;
     if (flags & 1)
-        EASTL_deallocate(self);
-    return self;
+        EASTL_deallocate(this);
+    return this;
 }
 
 // @ 0x0093bde0
-void __fastcall FUN_0093bde0(void* self)
+void __fastcall FUN_0093bde0(EA::IO::GraphicsFactoryAsyncRequest* self)
 {
-    *(void**)self = (void*)&g_vtbl_gfar;
-    EA::IO::SharedPointer* p = (EA::IO::SharedPointer*)((void**)self)[1];
-    if (p != 0)
-        EA::IO::SharedRelease(p);
-    *(void**)self = (void*)&g_vtbl_gfar;
+    self->mpVtbl = (void*)&g_vtbl_gfar_b;
+    EA::IO::SharedRelease(self->mpData);
+    self->mpVtbl = (void*)&g_vtbl_gfar;
 }
 
 // @ 0x0093be30
@@ -341,7 +363,7 @@ bool __thiscall EA::IO::MemoryStream::SetData(void* pData, size_type nSize, unsi
             mpSharedPointer = sp;
             if (sp == 0)
                 goto done;
-            _InterlockedIncrement(&sp->mnRefCount);
+            _InterlockedIncrement(&sp->base2.mnRefCount);
             if (pData != 0 && nSize != 0 && copy == 0)
                 MemCpyThunk(data, pData, nSize);
         }
@@ -361,23 +383,24 @@ done:
 }
 
 // @ 0x0093bf70
-int __thiscall EA::IO::GraphicsFactoryAsyncRequest::Attach(void* pData, size_type nSize)
+bool __thiscall EA::IO::GraphicsFactoryAsyncRequest::Attach(void* pData, size_type nSize)
 {
     if (mpData != (EA::IO::SharedPointer*)pData) {
         if (pData != 0)
-            _InterlockedIncrement(&((EA::IO::SharedPointer*)pData)->mnRefCount);
+            _InterlockedIncrement(&((EA::IO::SharedPointer*)pData)->base2.mnRefCount);
         EA::IO::SharedRelease(mpData);
         mpData = (EA::IO::SharedPointer*)pData;
     }
-    if (mpData == 0) {
-        mnSize = 0;
-        mnCapacity = 0;
-    } else {
+    EA::IO::SharedPointer* p = mpData;
+    if (p != 0) {
         mnSize = nSize;
         mnCapacity = nSize;
+    } else {
+        mnSize = 0;
+        mnCapacity = 0;
     }
     mnPosition = 0;
-    return mpData != 0;
+    return p != 0;
 }
 
 // @ 0x0093c000
@@ -393,10 +416,10 @@ bool __thiscall EA::IO::MemoryStream::Grow(size_type nSize)
         sp = (SharedPointer*)AllocNamed(0x18, alloc, 0);
         if (sp == 0)
             return false;
-        sp = (SharedPointer*)FUN_0093bcf0((void**)sp, 0, (void*)nSize, alloc, 0);
+        sp->InitWithAlloc(0, alloc, nSize);
         if (sp == 0)
             return false;
-        _InterlockedIncrement(&sp->mnRefCount);
+        _InterlockedIncrement(&sp->base2.mnRefCount);
     }
     if (mpSharedPointer != 0) {
         if (sp != 0) {
@@ -490,9 +513,9 @@ void* FUN_0093c210(void* self, unsigned char flags)
 }
 
 // @ 0x0093c270
-EA::IO::GraphicsFactoryAsyncRequest::GraphicsFactoryAsyncRequest(void* pData, void* nSize)
+EA::IO::GraphicsFactoryAsyncRequest::GraphicsFactoryAsyncRequest(void* pData, void* nSize, int unused)
 {
-    *(void**)this = (void*)&g_vtbl_gfar;
+    *(void**)this = (void*)&g_vtbl_gfar_b;
     mpData = 0;
     mnField08 = 0;
     mnSize = 0;
@@ -507,9 +530,8 @@ EA::IO::GraphicsFactoryAsyncRequest::GraphicsFactoryAsyncRequest(void* pData, vo
 }
 
 // @ 0x0093c2c0
-EA::IO::MemoryStream::MemoryStream(void* pData, size_type nSize, unsigned char copy, int a, void* alloc)
+EA::IO::MemoryStream::MemoryStream(void* pData, size_type nSize, unsigned char copy, int a, void* alloc, int unused)
 {
-    *(void**)this = (void*)&g_vtbl_gfar;
     mpSharedPointer = 0;
     mnRefCount = 0;
     mnSize = 0;
@@ -595,82 +617,84 @@ struct EAString {
     void* mpBegin;   // +0
     void* mpEnd;     // +4
     void* mpCap;     // +8
+    void RangeInitialize(unsigned n);   // 0x00475ab0
+    void AllocateSelf(unsigned n);      // 0x00429760
 };
 
 // @ 0x0093c440
-void ConvertToString8Impl(void* outp, const wchar_t* src, unsigned count)
+EAString* ConvertToString8Impl(EAString* out, const wchar_t* src, unsigned count)
 {
-    EAString* out = (EAString*)outp;
-    if (count == 0xffffffff) {
-        const wchar_t* p = src;
-        while (*p) p++;
-        count = (unsigned)(p - src);
-    }
+    if (count == 0xffffffff)
+        count = wcslen(src);
     char buf[512];
     int len = 0x200;
     unsigned n = (unsigned)EA::Text::ConvertEncoding(src, count, 0x10, buf, &len, 8);
-    if (count > n) {
-        // did not fit: redo with an exact-size buffer
-        char* heap = (char*)EASTL_allocate(count * 4, 0, 0, 0, 0, 0);
-        len = count * 4;
-        EA::Text::ConvertEncoding(src, count, 0x10, heap, &len, 8);
+    if (n >= count) {
+        char* bufEnd = buf + len;
         out->mpBegin = 0; out->mpEnd = 0; out->mpCap = 0;
-        char* data = (char*)EASTL_allocate((size_t)len + 1, 0, 0, 0, 0, 0);
-        MemCpyThunk(data, heap, len);
-        data[len] = 0;
-        out->mpBegin = data; out->mpEnd = data + len; out->mpCap = data + len + 1;
-        EASTL_deallocate(heap);
-        return;
+        out->RangeInitialize((unsigned)(bufEnd - buf) + 1);
+        char* data = (char*)out->mpBegin;
+        MemCpyThunk(data, buf, (unsigned)(bufEnd - buf));
+        out->mpEnd = data + (bufEnd - buf);
+        *(char*)out->mpEnd = 0;
+        return out;
     }
+    len = count * 4;
+    char* tmp = new char[len];
+    EA::Text::ConvertEncoding(src, count, 0x10, tmp, &len, 8);
+    char* tmpEnd = tmp + len;
     out->mpBegin = 0; out->mpEnd = 0; out->mpCap = 0;
-    char* data = (char*)EASTL_allocate((size_t)len + 1, 0, 0, 0, 0, 0);
-    MemCpyThunk(data, buf, len);
-    data[len] = 0;
-    out->mpBegin = data; out->mpEnd = data + len; out->mpCap = data + len + 1;
+    out->RangeInitialize((unsigned)(tmpEnd - tmp) + 1);
+    char* data = (char*)out->mpBegin;
+    MemCpyThunk(data, tmp, (unsigned)(tmpEnd - tmp));
+    out->mpEnd = data + (tmpEnd - tmp);
+    *(char*)out->mpEnd = 0;
+    EASTL_deallocate(tmp);
+    return out;
 }
 
 // @ 0x0093c570
 void* ConvertToString8(void* out, const int* range)
 {
-    ConvertToString8Impl(out, (const wchar_t*)range[0], (unsigned)((range[1] - range[0]) >> 1));
+    ConvertToString8Impl((EAString*)out, (const wchar_t*)range[0], (unsigned)((range[1] - range[0]) >> 1));
     return out;
 }
 
-// @ 0x0093c5a0
-void ConvertToString16Impl(void* outp, const char* src, unsigned count)
+static __forceinline void AssignW(EAString* o, const wchar_t* pBegin, const wchar_t* pEnd)
 {
-    EAString* out = (EAString*)outp;
-    if (count == 0xffffffff) {
-        const char* p = src;
-        while (*p) p++;
-        count = (unsigned)(p - src);
-    }
+    o->mpBegin = 0; o->mpEnd = 0; o->mpCap = 0;
+    o->AllocateSelf((unsigned)(pEnd - pBegin) + 1);
+    wchar_t* data = (wchar_t*)o->mpBegin;
+    MemCpyThunk(data, pBegin, (unsigned)(pEnd - pBegin) * 2);
+    char* end = (char*)(data + (pEnd - pBegin));
+    o->mpEnd = end;
+    *(wchar_t*)end = 0;
+}
+
+// @ 0x0093c5a0
+EAString* ConvertToString16Impl(EAString* out, const char* src, unsigned count)
+{
+    if (count == 0xffffffff)
+        count = strlen(src);
     wchar_t buf[512];
     int len = 0x200;
     unsigned n = (unsigned)EA::Text::ConvertEncoding(src, count, 8, buf, &len, 0x10);
-    if (count <= n) {
-        out->mpBegin = 0; out->mpEnd = 0; out->mpCap = 0;
-        wchar_t* data = (wchar_t*)EASTL_allocate(((size_t)len + 1) * 2, 0, 0, 0, 0, 0);
-        MemCpyThunk(data, buf, (size_t)len * 2);
-        data[len] = 0;
-        out->mpBegin = data; out->mpEnd = data + len; out->mpCap = data + len + 1;
-        return;
+    if (n >= count) {
+        AssignW(out, buf, buf + len);
+        return out;
     }
-    wchar_t* heap = (wchar_t*)EASTL_allocate(((size_t)count * 2), 0, 0, 0, 0, 0);
-    len = count * 2;
-    EA::Text::ConvertEncoding(src, count, 8, heap, &len, 0x10);
-    out->mpBegin = 0; out->mpEnd = 0; out->mpCap = 0;
-    wchar_t* data = (wchar_t*)EASTL_allocate(((size_t)len + 1) * 2, 0, 0, 0, 0, 0);
-    MemCpyThunk(data, heap, (size_t)len * 2);
-    data[len] = 0;
-    out->mpBegin = data; out->mpEnd = data + len; out->mpCap = data + len + 1;
-    EASTL_deallocate(heap);
+    len = count;
+    wchar_t* tmp = new wchar_t[count];
+    EA::Text::ConvertEncoding(src, count, 8, tmp, &len, 0x10);
+    AssignW(out, tmp, tmp + len);
+    EASTL_deallocate(tmp);
+    return out;
 }
 
 // @ 0x0093c6d0
 void* ConvertToString16(void* out, const int* range)
 {
-    ConvertToString16Impl(out, (const char*)range[0], (unsigned)(range[1] - range[0]));
+    ConvertToString16Impl((EAString*)out, (const char*)range[0], (unsigned)(range[1] - range[0]));
     return out;
 }
 
@@ -701,32 +725,37 @@ int DetectEncoding(const unsigned char* p, unsigned count)
 {
     int result = 8;
     if (count > 1) {
-        if (p[0] == 0xfe && p[1] == 0xff)
-            return 0x4b1;
-        if (p[0] == 0xff && p[1] == 0xfe)
-            return 0x4b0;
-        if (count > 2 && p[0] == 0xef && p[1] == 0xbb && p[2] == 0xbf)
-            return 8;
-        unsigned zeroEven = 0, zeroOdd = 0, ascii = 0, lead = 0, cont = 0;
+        if (count >= 2) {
+            if (p[0] == 0xfe && p[1] == 0xff)
+                return 0x4b1;
+            if (p[0] == 0xff && p[1] == 0xfe)
+                return 0x4b0;
+            if (count >= 3 && p[0] == 0xef && p[1] == 0xbb && p[2] == 0xbf)
+                return 8;
+        }
+        unsigned zeroOdd = 0, zeroTotal = 0, zeroEven = 0, ascii = 0, mb = 0;
         for (unsigned i = 0; i < count; ++i) {
             unsigned char c = p[i];
             if (c == 0) {
-                if ((i & 1) == 0) cont++; else lead++;
-            } else if (c < 0x80) {
+                zeroTotal++;
+                if (i & 1) zeroOdd++; else zeroEven++;
+            } else if (c <= 0x7f) {
                 ascii++;
-            } else if (c > 0xc1 && c < 0xf0) {
-                zeroEven++;
+            } else if (c >= 0xc2) {
+                if (c < 0xf0)
+                    mb++;
             }
         }
         if (ascii == count)
             return 8;
-        if (count >> 2 < lead) {
-            if ((count >> 3 < cont) && (count >> 3 < zeroEven))
-                return (p[0] == 0) + 0x4b2;
-            return (zeroEven < cont) + 0x4b0;
-        }
-        if (zeroEven < count >> 2)
+        if (zeroTotal > (count >> 2)) {
+            if ((zeroEven > (count >> 3)) && (zeroOdd > (count >> 3)))
+                result = (p[0] == 0) + 0x4b2;
+            else
+                result = (zeroOdd < zeroEven) + 0x4b0;
+        } else if (mb < (count >> 2)) {
             result = 0x4b0;
+        }
     }
     return result;
 }
@@ -734,26 +763,26 @@ int DetectEncoding(const unsigned char* p, unsigned count)
 // @ 0x0093c850
 int ConvertEncoding_via_UTF16(const void* src, int srcLen, int srcEnc, void* dst, int* dstLen, int dstEnc)
 {
-    unsigned bufSize = (unsigned)srcLen * 2 + 4;
-    void* small = 0;
-    void* buf;
-    if (bufSize < 0x201) {
-        static unsigned char stackBuf[0x400];
+    unsigned len = (unsigned)srcLen * 2 + 4;
+    unsigned char stackBuf[0x200];
+    unsigned char* buf;
+    unsigned char* heap;
+    if (len <= 0x200) {
+        heap = 0;
         buf = stackBuf;
     } else {
-        buf = EASTL_allocate(bufSize, "EATextEncoding/LargeStringBuffer/char[]", 0, 0, 0, 0);
-        small = buf;
+        heap = (unsigned char*)EASTL_allocate(len, "EATextEncoding/LargeStringBuffer/char[]", 0, 0, 0, 0);
+        buf = heap;
     }
-    unsigned local = bufSize;
-    int n = EA::Text::ConvertEncoding(src, srcLen, srcEnc, buf, (int*)&local, 0x10);
+    int n = EA::Text::ConvertEncoding(src, srcLen, srcEnc, buf, (int*)&len, 0x10);
     if (n == srcLen) {
-        int r = EA::Text::ConvertEncoding(buf, local, 0x10, dst, dstLen, dstEnc);
-        if ((unsigned)r == local) {
-            EASTL_deallocate(small);
+        int r = EA::Text::ConvertEncoding(buf, len, 0x10, dst, dstLen, dstEnc);
+        if ((unsigned)r == len) {
+            EASTL_deallocate(heap);
             return srcLen;
         }
     }
-    EASTL_deallocate(small);
+    EASTL_deallocate(heap);
     *dstLen = 0;
     return 0;
 }

@@ -10,3 +10,4 @@
 0093c6f0  12   complete: fputs-to-stderr wrapper, call setup differs
 0093c710  4    complete: Strlen32 do/while, loop register order differs
 0093c920  40   complete: GetCharacterSize if-chain, compare order differs
+0093c730  117  complete: DetectEncoding; equiv PASS (UTF-8 lead-byte interval checks to two 8-bit compares in retail, MSVC folds them into add/cmp here; tail offsets shift 2 bytes)
