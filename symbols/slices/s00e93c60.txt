@@ -1,3 +1,4 @@
+00e93d70 ?SetupTribeView@cSpatialObjectView@SP@@QAEXPAX000@Z  # cSpatialObjectView::SetupTribeView migrated from s00e93c60 (verbatim, slice spelling)
 00e948b0 ?FUN_00e948b0@SP@@YGXPAVcEmitter@1@PAVcEffectTarget@1@@Z  # FUN_00e948b0 migrated from s00e93c60 (verbatim, slice spelling)
 00e94900 ?FUN_00e94900@SP@@YGXPAVcEmitter@1@PAVcEffectTarget@1@@Z  # FUN_00e94900 migrated from s00e93c60 (verbatim, slice spelling)
 00e94970 ?Init@cTribeView@SP@@QAEXPAX000@Z  # cTribeView::Init migrated from s00e93c60 (verbatim, slice spelling)

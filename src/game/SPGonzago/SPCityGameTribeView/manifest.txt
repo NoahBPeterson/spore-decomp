@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCityGameTribeView.cpp  ?SetupTribeView@cSpatialObjectView@SP@@QAEXPAX000@Z  00e93d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
