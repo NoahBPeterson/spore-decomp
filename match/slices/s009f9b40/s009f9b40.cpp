@@ -317,9 +317,9 @@ void fn_009fa170(AnimLayout* self)
 }
 
 // @ 0x009fa310
-// Reconstructed from the disassembly. The helper at 0x009AC7A0 is called as (D, &m0, &m1, 0) and
-// returns a pointer to four floats that are copied into self->m_quat; the roles of its arguments
-// could not be resolved, so this body is listed as approximate in partial.txt.
+// The helper at 0x009AC7A0 builds a quaternion from two 3-vectors (cross/dot, identity for
+// (nearly) opposite inputs) and returns its first argument, so the call is
+// fn_009ac7a0(D, v35c*f, R^T*D, 0) and the four floats are read back out of D.
 void fn_009fa310(AnimLayout* owner, AnimLayout* self)
 {
     AnimHierarchy* h = self->m_hier;
@@ -329,26 +329,32 @@ void fn_009fa310(AnimLayout* owner, AnimLayout* self)
         float f = owner->m_f70;
         AnimNodeBlock* nodes = self->m_nodes;
 
-        float v[3];
-        v[0] = h->m_v350[0] * f;
-        v[1] = h->m_v350[1] * f;
-        v[2] = h->m_v350[2] * f;
+        float vq[3];
+        vq[0] = h->m_v350[0] * f;
+        vq[1] = h->m_v350[1] * f;
+        vq[2] = h->m_v350[2] * f;
 
         float out1[3];
-        fn_0099c1a0(out1, nodes->m_src + 3, v);
+        fn_0099c1a0(out1, nodes->m_src + 3, vq);
 
         float P[3];
         P[0] = nodes->m_src[0] + out1[0];
         P[1] = nodes->m_src[1] + out1[1];
         P[2] = nodes->m_src[2] + out1[2];
 
-        float out2[3];
-        fn_0099c1a0(out2, self->m_src + 3, out1);
+        float vc[3];
+        vc[0] = h->m_v35c[0] * f;
+        vc[1] = h->m_v35c[1] * f;
+        vc[2] = h->m_v35c[2] * f;
 
-        float D[3];
+        float out2[3];
+        fn_0099c1a0(out2, self->m_src + 3, vc);
+
+        float D[4];
         D[0] = P[0] - (self->m_f1b0 - out2[0]);
         D[1] = P[1] - (self->m_f1b4 - out2[1]);
         D[2] = P[2] - (self->m_f1b8 - out2[2]);
+        D[3] = 0.0f;
 
         float A = nodes->m_src[3];
         float F = nodes->m_src[4];
@@ -360,29 +366,54 @@ void fn_009fa310(AnimLayout* owner, AnimLayout* self)
         float W = h->m_quat[3];
 
         float r1 = B * Dw + A * W - Z * E + C * F;
-        float r2 = E * B + Z * Dw + F * W - C * A;
+        float r2a = E * B;
+        float r2b = r2a + Z * Dw;
+        float r2c = r2b + F * W;
+        float r2 = r2c - C * A;
         float r3 = E * W - F * B + C * Dw + Z * A;
         float r4 = Dw * W - B * A - F * Z - C * E;
 
-        float m0 = D[0] + 2.0f * ((r2 * r1 + r4 * r3) * D[1]
-                                  + (r3 * r1 - r4 * r2) * D[2]
-                                  - (r2 * r2 + r3 * r3) * D[0]);
-        float m1 = D[1] + 2.0f * ((r3 * r2 + r4 * r1) * D[2]
-                                  - (r1 * r1 + r3 * r3) * D[1]
-                                  + (r2 * r1 - r4 * r3) * D[0]);
-        float m2 = D[2] + 2.0f * (-(r1 * r1 + r2 * r2) * D[2]
-                                  + (r3 * r2 - r4 * r1) * D[1]
-                                  + (r3 * r1 + r4 * r2) * D[0]);
+        // R^T * D built from the quaternion (x,y,z,w) = (r1,r2,r3,r4). The negated pairwise
+        // products are separate temporaries because the original builds them with a sign flip and
+        // then adds/subtracts them, which decides the sign of a propagated NaN.
+        float nr4r2 = -(r4 * r2);
+        float nr4r3 = -(r4 * r3);
+        float nr1r1 = -(r1 * r1);
+        float nr2r2 = -(r2 * r2);
+        float nr3r3 = -(r3 * r3);
+        float nr4r1 = -(r4 * r1);
 
-        float out3[2];
-        out3[0] = m1;
-        out3[1] = m2;
+        float c0a = r3 * r1 + nr4r2;
+        float c0b = r2 * r1 - nr4r3;
+        float c0c = nr2r2 + nr3r3;
 
-        float* q = fn_009ac7a0(D, &m0, out3, 0);
-        self->m_quat[0] = q[0];
-        self->m_quat[1] = q[1];
-        self->m_quat[2] = q[2];
-        self->m_quat[3] = q[3];
+        float c1a = r3 * r2 - nr4r1;
+        float c1b = nr3r3 + nr1r1;
+        float c1c = r2 * r1 + nr4r3;
+
+        float c2a = nr2r2 + nr1r1;
+        float c2b = r3 * r2 + nr4r1;
+        float c2c = r3 * r1 - nr4r2;
+
+        float t0 = c0a * D[2] + c0b * D[1];
+        float m0 = D[0] + 2.0f * (t0 + c0c * D[0]);
+
+        float t1 = c1a * D[2] + c1b * D[1];
+        float m1 = D[1] + 2.0f * (t1 + c1c * D[0]);
+
+        float t2 = c2a * D[2] + c2b * D[1];
+        float m2 = D[2] + 2.0f * (t2 + c2c * D[0]);
+
+        float M[3];
+        M[0] = m0;
+        M[1] = m1;
+        M[2] = m2;
+
+        fn_009ac7a0(D, vc, M, 0);
+        self->m_quat[0] = D[0];
+        self->m_quat[1] = D[1];
+        self->m_quat[2] = D[2];
+        self->m_quat[3] = D[3];
 
         if (g_01550afc != 0)
             fn_009fa170(self);
