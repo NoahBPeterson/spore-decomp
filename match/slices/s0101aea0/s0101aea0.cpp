@@ -24,10 +24,11 @@ extern int   DAT_016dd36c, DAT_016dd370, DAT_016dd3ac, DAT_016dd3b0;
 void* __cdecl FUN_00ffbe50();                        // SP::GetUFOSimulator
 int   __cdecl FUN_01021080();                        // GetUniverseContext
 void* __cdecl FUN_01021260();                        // GetActivePlanet
-int   __stdcall FUN_01021230(int);                   // 0x01021230
+void* __cdecl FUN_01021230();                        // 0x01021230
 void* __cdecl FUN_00a206f0();                        // EA::Audio::GetSystemAT
 void  __cdecl FUN_00435ed0(u32, int);                // KillSetiEffects
 void  __stdcall FUN_00d018d0(void*, void*);          // 0x00d018d0
+void  __cdecl FUN_01017fe0();                        // 0x01017fe0
 long long __cdecl FUN_0101aea0_x();                  // placeholder
 void* __cdecl FUN_00b3d350();                        // SP::PlanetModel
 void* __cdecl FUN_00c37360();                        // 0x00c37360
@@ -40,7 +41,8 @@ unsigned char __cdecl FUN_01044920();                // 0x01044920
 unsigned char __cdecl FUN_010422e0();                // TransitionFromSolarToGalaxy
 unsigned char __cdecl FUN_01042450();                // 0x01042450
 unsigned char __cdecl FUN_010423d0();                // 0x010423d0
-float __cdecl FUN_01042480(float*, float*);          // 0x01042480
+void  __cdecl FUN_01042480(float*, float*);          // 0x01042480
+float __cdecl FUN_00c375d0(float*);                  // 0x00c375d0
 float* __cdecl FUN_0105c3d0(void*, void*, float);    // 0x0105c3d0
 float* __cdecl FUN_0059aed0(void*, void*, void*);    // 0x0059aed0
 float __cdecl FUN_01017d30_x();                      // placeholder
@@ -90,6 +92,7 @@ struct UFO_SampleVec {
     UFO_Sample* end;
     UFO_Sample* cap;
     void FUN_00B534C0(UFO_Sample* e, UFO_Sample* s);   // 0x00b534c0
+    void FUN_Erase(UFO_Sample* first, UFO_Sample* last); // 0x00d018d0 eastl::vector::erase
 };
 
 struct UFO {
@@ -195,17 +198,22 @@ void UFO::b0f0() {
     char* s = (char*)raw;
     char* sw = s + 0x30;
     E(sw)->FUN_0093a1a0(5);
-    unsigned long long q;
+    u32 hi;
     if (*(int*)(sw + 0x10) == 1) {
-        q = __rdtsc();
+        unsigned long long t = __rdtsc();
+        *(u32*)sw = (u32)t;
+        hi = (u32)(t >> 32);
     } else {
-        QueryPerformanceCounter((long long*)&q);
+        unsigned long long t;
+        QueryPerformanceCounter((long long*)&t);
+        *(u32*)sw = (u32)t;
+        hi = (u32)(t >> 32);
     }
-    *(u32*)sw = (u32)q;
-    *(u32*)(sw + 4) = (u32)(q >> 32);
+    *(u32*)(sw + 4) = hi;
     *(u32*)(sw + 8) = 0;
     *(u32*)(sw + 0xc) = 0;
-    FUN_00d018d0(*(void**)(s + 0x48), *(void**)(s + 0x4c));
+    UFO_SampleVec* vec = (UFO_SampleVec*)(s + 0x48);
+    vec->FUN_Erase(vec->begin, vec->end);   // 0x00d018d0 eastl::vector::erase
     *(u32*)(s + 0x5c) = 0;
     *(float*)(s + 0x60) = 0.0f;
 }
@@ -217,18 +225,81 @@ void UFO::b0f0() {
 void UFO::b160(float p2, float p3) {
     char* s = (char*)raw;
     int ctx = FUN_01021080();
-    float fVar11 = *(float*)(s + 0x68);
-    float local_38 = 0.0f;
-    float fVar10;
-    if (ctx == 1) fVar10 = DAT_016dd3d0;
-    else if (ctx == 2) fVar10 = DAT_016dd384;
-    else fVar10 = 0.0f;
-    if (ctx == 1 || ctx == 2) local_38 = fVar10;
-    float local_34 = 0.0f;
-    fVar10 = DAT_016dd3b4;
-    if (ctx == 1 || ctx == 2) local_34 = (ctx == 1) ? DAT_016dd3b4 : DAT_016dd374;
+    float f = *(float*)(s + 0x68);
+    float speed = -(p2 * p3);
+    float lo = 0.0f;
+    if (ctx == 1) lo = DAT_016dd3d0;
+    else if (ctx == 2) lo = DAT_016dd384;
+    float clampLo = lo;
+    float hi = 0.0f;
+    if (ctx == 1) hi = DAT_016dd3b4;
+    else if (ctx == 2) hi = DAT_016dd374;
+    float clampHi = hi;
+    float nearT, farT;
+    if (ctx == 1) {
+        nearT = E(FUN_01021230())->FUN_00c8b800() ? DAT_016dd3cc : 400.0f;
+        farT = DAT_016dd3b8;
+    } else {
+        nearT = DAT_016dd380;
+        farT = DAT_016dd374;
+    }
+
     void* inv = E(FUN_00ffbe50())->FUN_00a1ad60();
-    (void)inv;
+    float cur = *(float*)(s + 0xb4);
+    char cKeep = *(char*)((char*)inv + 0x74c);
+    bool near = DAT_01495934 > fabs(f - cur);
+    bool outside = (cur <= lo) || (hi <= cur);
+    *(char*)(s + 0xd5) = cKeep && near && outside;
+
+    if (*(char*)(s + 0xd7) != 0) {
+        if (f >= nearT && farT >= f && fabs(speed) > DAT_01495934 && (cur - f) * speed < 0.0f)
+            *(char*)(s + 0xd7) = 0;
+    }
+
+    if (*(char*)(s + 0xd7) == 0) {
+        E(FUN_00ffbe50())->FUN_00a1ad60();
+        char trans;
+        if (ctx == 1) trans = FUN_010422e0();
+        else trans = FUN_01042450();
+        if (!trans || f > nearT) {
+            clampLo = nearT;
+            *(char*)(s + 0xd9) = 0;
+        } else if (f == nearT) {
+            if (!*(char*)(s + 0xd9)) {
+                *(char*)(s + 0xd9) = 1;
+                b0f0();
+                speed = 0.0f;
+            }
+        } else {
+            *(char*)(s + 0xd7) = 1;
+            *(float*)(s + 0xb4) = lo;
+            FUN_01017fe0();
+        }
+        if (ctx != 1 || !FUN_010423d0() || f < farT) {
+            clampHi = farT;
+            *(char*)(s + 0xda) = 0;
+        } else if (f == farT) {
+            if (!*(char*)(s + 0xda)) {
+                *(char*)(s + 0xda) = 1;
+                b0f0();
+                speed = 0.0f;
+            }
+        } else {
+            *(char*)(s + 0xd7) = 1;
+            *(float*)(s + 0xb4) = hi;
+            FUN_01017fe0();
+        }
+    }
+
+    *(char*)(s + 0xd6) = cKeep && near && *(float*)(s + 0xb4) == nearT && 0.0f > speed;
+
+    if (*(char*)(s + 0xd7) == 0) {
+        bool up = f > *(float*)(s + 0xb4);
+        float v = E(s)->FUN_01017790(0, up) * speed + f;
+        if (v < clampLo) v = clampLo;
+        if (v > clampHi) v = clampHi;
+        *(float*)(s + 0xb4) = v;
+    }
 }
 
 // ===========================================================================
@@ -301,16 +372,71 @@ void UFO::b670(float param) {
     if (!E(inv)->FUN_00c37170()) return;
     void* tm = FUN_00b3d4d0();
     if (*(int*)((char*)tm + 0x2c) == 1 || *(int*)((char*)tm + 0x2c) == 2) return;
-    void* pm = FUN_00c37360();
-    float f1 = E(pm)->FUN_00fb7ba0();
-    void* model = FUN_00b3d350();
-    float f2 = E(model)->FUN_00b7e4d0();
-    float local_24 = DAT_016dd3e8 + f2;
+
+    float camDist = E(FUN_00c37360())->FUN_00fb7ba0();
+    float radius = E(FUN_00b3d350())->FUN_00b7e4d0();
+    float farDist = radius + DAT_016dd3ec;
+    float nearDist = DAT_016dd3e8 + radius;
+
     float x = *(float*)((char*)inv + 0x718);
     float y = *(float*)((char*)inv + 0x71c);
     float z = *(float*)((char*)inv + 0x720);
-    float fv = x * x + y * y + z * z;
-    (void)f1; (void)local_24; (void)fv;
+    float dist = sqrtf(x * x + y * y + z * z);
+    float minDist = FUN_00c375d0((float*)E(s)->FUN_0107b70_getUFO()) + camDist;
+
+    float ratio = (dist - minDist) / (nearDist - minDist);
+    float clamped = ratio;
+    if (clamped < 0.0f) clamped = 0.0f;
+    if (clamped > 1.0f) clamped = 1.0f;
+    float rampT = (DAT_016dd414 - DAT_016dd418) * clamped + DAT_016dd418;
+
+    float alt = *(float*)(s + 0x8c);
+    if (alt == 0.0f) alt = E(s)->FUN_01017d30();
+    float height = E(inv)->FUN_00c37120();
+    float absAlt = fabs(alt);
+
+    if (absAlt > 0.1f) {
+        void* q = FUN_0067cac0();
+        int* o = *(int**)((char*)q + 0x4c);
+        if (o && o[2] == 0x1930f01e) {
+            E(q)->FUN_0067c8c0(0x1930f01e, 1);
+            E(FUN_010666a0())->FUN_01065d20();
+        }
+    }
+    if (*(char*)(s + 0x13d) != 0) {
+        if (fabs(dist - height) < 1.0f) *(char*)(s + 0x13d) = 0;
+    }
+
+    char canRamp = FUN_01044920();
+    if (*(char*)(s + 0x13d) == 0) {
+        if (!canRamp || nearDist > dist) {
+            *(char*)(s + 0x13e) = 0;
+        } else if (dist == nearDist) {
+            if (!*(char*)(s + 0x13e)) {
+                *(char*)(s + 0x13e) = 1;
+                b0f0();
+                E(inv)->FUN_00c3daa0(nearDist);
+                return;
+            }
+        } else {
+            *(char*)(s + 0x13d) = 1;
+            *(char*)(s + 0x13e) = 0;
+            *(u8*)(s + 0x194) = 1;
+            E(inv)->FUN_00c3daa0(height * 2.0f);
+            return;
+        }
+        if (absAlt > DAT_01495934) {
+            param = (height - dist) * DAT_015b6da8 + dist - alt * clamped * param;
+            float* pMax = &param;
+            if (minDist > param) pMax = &minDist;
+            E(inv)->FUN_00c3daa0(*pMax);
+        }
+        if (*(float*)(s + 0x60) > 0.0f || *(float*)(s + 0x8c) > 0.0f) *(u8*)(s + 0x194) = 0;
+        else if (*(float*)(s + 0x60) < 0.0f || *(float*)(s + 0x8c) < 0.0f) *(u8*)(s + 0x194) = 1;
+    }
+    if (canRamp) param = FUN_00b0f060(DAT_016dd3e4, DAT_016dd3e0, dist - radius);
+    else param = 0.0f;
+    E(FUN_00ffbe50())->FUN_00ffe3d0(param, *(u8*)(s + 0x194));
 }
 
 // ===========================================================================
@@ -363,9 +489,10 @@ void UFO::ba10(char param) {
 // @ 0x0101bad0
 void UFO::bad0(int a, int b) {
     (void)b;
+    int v = a;
     int local = 100;
-    int* p = &a;
-    if (a >= 100) p = &local;
+    int* p = &v;
+    if (v >= 100) p = &local;
     aea0((float)*p * 0.001f);
 }
 
@@ -401,9 +528,45 @@ void UFO::bb90(int param2, char param3) {
     void* planet = FUN_01021260();
     void* inv = E(FUN_00ffbe50())->FUN_00a1ad60();
     E(FUN_00ffbe50())->FUN_00ffe3d0(0.0f, 1);
-    void* p30 = ((void*(__thiscall*)(void*))VTP(planet)[0x30 / 4])(planet);
-    (void)p30; (void)param2; (void)param3; (void)inv;
+
+    float buf[3];
+    float* a = FUN_0059aed0(buf, (void*)param2,
+                            ((void*(__thiscall*)(void*))VTP(planet)[0x30 / 4])(planet));
+    float v[3];
+    v[0] = a[0];
+    v[1] = a[1];
+    v[2] = a[2];
+    FUN_01042480((float*)(s + 0x68), v);
+
+    b0f0();
+    b4c0(DAT_016dd3c8);
+
+    float* p = FUN_0105c3d0(buf, planet, E(inv)->FUN_00c3ae70());
+    *(float*)(s + 0x98) = *(float*)((char*)inv + 0x718) + p[0];
+    *(float*)(s + 0x9c) = *(float*)((char*)inv + 0x71c) + p[1];
+    *(float*)(s + 0xa0) = *(float*)((char*)inv + 0x720) + p[2];
+
     *(int*)(s + 0x88) = 1;
-    *(u32*)(s + 0xb4) = DAT_016dd3c4;
+    *(float*)(s + 0xb4) = DAT_016dd3c4;
     *(u8*)(s + 0xd7) = 1;
+    if (param3 != 0) {
+        ((void(__thiscall*)(void*, int))VTP(this)[0x64 / 4])(this, 1);
+        *(u8*)(s + 0xd8) = 0;
+    }
+
+    void* mgr = FUN_00b3d470();
+    void** slot = (void**)((char*)mgr + 0xc4);
+    if (*slot) {
+        mgr = FUN_00b3d470();
+        slot = (void**)((char*)mgr + 0xc4);
+        void* obj = *slot;
+        ((void(__thiscall*)(void*, int))VTP(obj)[0xc / 4])(obj, 1);
+        mgr = FUN_00b3d470();
+        slot = (void**)((char*)mgr + 0xc4);
+        void* old = *slot;
+        if (old) {
+            *slot = 0;
+            ((void(__thiscall*)(void*))VTP(old)[4 / 4])(old);
+        }
+    }
 }
