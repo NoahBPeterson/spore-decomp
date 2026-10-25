@@ -1,1 +1,1 @@
-0104a320 SP::cSpaceTokenTranslator::TranslateToken  # PDB anchor (dev 0x0090e950); the only symbol-bearing function in the slice
+0104a320 ?TranslateToken@cSpaceTokenTranslator@@UAE_NPB_WPAUcString@@@Z  # cSpaceTokenTranslator::TranslateToken migrated from s0104a320 (verbatim, slice spelling)
