@@ -11,3 +11,4 @@
 00ba45a0 54 backward range copy of 0xb0-byte elements; MSVC strength-reduced the dual decrement induction
 00ba4600 140 object post-spawn hookup; equivalence-WEAK, inlined accessors and vector walk diverge
 00ba46f0 35 object flag setter; equivalence-WEAK, thiscall vs stack arg for cGameData accessor differs
+00ba3a80 93 hashtable find-or-insert at Goal+0x40; real bucket+0x04/count+0x08 layout, 8-byte pair insert; equivalence-WEAK (inline-call tolerance)

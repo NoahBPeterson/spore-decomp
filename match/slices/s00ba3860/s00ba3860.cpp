@@ -75,11 +75,13 @@ struct Ht {
 };
 void Find645ed0(HIter* it, const void* key);                // 0x00645ed0
 
-// eastl::hashtable variant used at Goal+0x40 (buckets at +0, count at +4, size at +8).
+// eastl::hashtable variant used at Goal+0x40 (buckets at +0x04, count at +0x08, size at +0x0c).
 struct Eh {
-    HtNode** bucket;                                        // +0x00
-    uint     bucketCount;                                   // +0x04
-    uint     size;                                          // +0x08
+    char     pad00[4];
+    HtNode** bucket;                                        // +0x04
+    uint     bucketCount;                                   // +0x08
+    uint     size;                                          // +0x0c
+    char     pad10[0x10];
     void Find(HIter* it, const void* key);                  // 0x00645ed0
     void Insert2(HIter* it, const void* key, uint tag);     // 0x00ba3250
     void* GetOrAdd2(const void* key);                       // 0x00ba3a80
@@ -210,11 +212,15 @@ void* Eh::GetOrAdd2(const void* key) {
         return (char*)it.node + 4;
     void* ref = *(void**)key;
     if (ref) (*(void(__thiscall**)(void*))(*(void**)ref))(ref);
-    void* v = (void*)*(const uint*)key;
-    uint tag = (uint)(size_t)key;
-    Insert2(&it, &v, tag);
+    // The table maps uint -> int; the stored pair is {key, value} (8 bytes, value starts at 0).
+    uint pair[2];
+    pair[0] = (uint)(size_t)ref;
+    pair[1] = 0;
+    uint tag = (uint)(size_t)key & 0xffffff00u;
+    HIter out;
+    Insert2(&out, pair, tag);
     if (ref) (*(void(__thiscall**)(void*))((char*)*(void**)ref + 4))(ref);
-    return (char*)it.node + 4;
+    return (char*)out.node + 4;
 }
 
 // ================================================================ 0x00ba3b10
