@@ -41,7 +41,6 @@ struct S7 {
     void m6eb8c0(void* src);
     S7*  m6ebb80(void* src);
     S7*  mebf50();
-    void mec000();
     void mec090();
 };
 
@@ -96,27 +95,55 @@ void CEM7::UpdateCameraView(int a, uint flags)
 }
 
 // ---------------------------------------------------------------------------
+// The 0x68-byte render-entity element whose copy constructor is 0x006eb8c0. The compiler
+// generates the member-wise copy from these declarations; the non-trivial member destructors
+// are what make cl wrap the copy constructor in an exception frame (state 0 records `this`).
+struct RefCounted {
+    virtual void v0();
+    int mRefCount;                     // +0x4 (bumped by the +0x00 member's inlined copy)
+};
+struct RefCountedVirt {                // +0x60 member: its copy calls vtable slot 0
+    virtual void v0();
+    int mRefCount;
+};
+// +0x00 member: intrusive pointer, copy increments the pointee's refcount inline.
+struct SmartPtrRef {
+    RefCounted* mp;
+    SmartPtrRef() : mp(0) {}
+    SmartPtrRef(const SmartPtrRef& o) : mp(o.mp) { if (mp) mp->mRefCount++; }
+    ~SmartPtrRef() { if (mp) mp->mRefCount--; }
+};
+// +0x60 member: intrusive pointer, copy calls the pointee's virtual slot 0 inline.
+struct SmartPtrVirt {
+    RefCountedVirt* mp;
+    SmartPtrVirt() : mp(0) {}
+    SmartPtrVirt(const SmartPtrVirt& o) : mp(o.mp) { if (mp) mp->v0(); }
+    ~SmartPtrVirt() { if (mp) mp->mRefCount--; }
+};
+struct Matrix33 {                      // +0x2c (copy constructor 0x0041cb40, out of line)
+    float m[9];
+    Matrix33(const Matrix33&);
+};
+struct RenderEntity {
+    SmartPtrRef  mBase;                // +0x00
+    float        mF4, mF8, mFC, mF10, mF14;   // +0x04
+    unsigned short mW18, mW1A;         // +0x18
+    float        mG1C, mG20, mG24, mG28;      // +0x1c
+    Matrix33     mMat;                 // +0x2c
+    char         mA;                   // +0x50
+    char         mB;                   // +0x51
+    int          mI0, mI1, mI2;        // +0x54
+    SmartPtrVirt mExtra;               // +0x60
+    int          mI3;                  // +0x64
+    RenderEntity(const RenderEntity& src);
+};
+
 // @ 0x006eb8c0
-void S7::m6eb8c0(void* src)
-{
-    char* d = (char*)this;
-    char* s = (char*)src;
-    *(void**)d = *(void**)s;
-    if (*(void**)d)
-        (*(int*)((char*)*(void**)d + 4))++;
-    for (int off = 4; off <= 0x28; off += 4)
-        *(uint*)(d + off) = *(uint*)(s + off);
-    ((E7*)(d + 0x2c))->r41cb40(s + 0x2c);
-    *(uchar*)(d + 0x50) = *(uchar*)(s + 0x50);
-    *(uchar*)(d + 0x51) = *(uchar*)(s + 0x51);
-    *(uint*)(d + 0x54) = *(uint*)(s + 0x54);
-    *(uint*)(d + 0x58) = *(uint*)(s + 0x58);
-    *(uint*)(d + 0x5c) = *(uint*)(s + 0x5c);
-    *(void**)(d + 0x60) = *(void**)(s + 0x60);
-    if (*(void**)(d + 0x60))
-        ((void(__thiscall*)(void*))VFN(*(void**)(d + 0x60), 0))(*(void**)(d + 0x60));
-    *(uint*)(d + 0x64) = *(uint*)(s + 0x64);
-}
+RenderEntity::RenderEntity(const RenderEntity& src)
+    : mBase(src.mBase), mF4(src.mF4), mF8(src.mF8), mFC(src.mFC), mF10(src.mF10),
+      mF14(src.mF14), mW18(src.mW18), mW1A(src.mW1A), mG1C(src.mG1C), mG20(src.mG20),
+      mG24(src.mG24), mG28(src.mG28), mMat(src.mMat), mA(src.mA), mB(src.mB),
+      mI0(src.mI0), mI1(src.mI1), mI2(src.mI2), mExtra(src.mExtra), mI3(src.mI3) {}
 
 // ---------------------------------------------------------------------------
 // @ 0x006eb990
@@ -256,19 +283,52 @@ S7* S7::mebf50()
 }
 
 // ---------------------------------------------------------------------------
+// The class whose destructor is 0x006ec000. It has no virtual functions of its own: the shared
+// refcount dispatch table 0x013ef094 (the ICF-folded GmeRefCount vtable) is installed by its
+// constructor 0x006ebf50 and restored by the inlined base destructor at the end of ~FxEntity.
+// Layout: fixed-buffer vector at +0x08 (inline storage at +0x20), scalars +0x50..+0x68, a
+// refcounted pointer at +0x6c and an eastl::vector<AutoRefCount<cPropertyList>> at +0x70.
+struct RefBase {
+    void* mpTable;                     // +0x00  dispatch table (0x013ef094)
+    int   mRefCount;                   // +0x04
+    ~RefBase() { mpTable = (void*)0x013ef094; }
+};
+void __cdecl FreeBlock(void* p) throw();       // 0x00f47380 (operator delete)
+
+// +0x08: eastl vector with a fixed_vector_allocator whose inline storage begins at mpInline.
+struct FixedVec {
+    void* mpBegin;                     // +0x00
+    void* mpEnd;                       // +0x04
+    void* mpCap;                       // +0x08
+    void* mpReserved;                  // +0x0c
+    void* mpInline;                    // +0x10
+    ~FixedVec() { if (mpBegin && mpBegin != mpInline) FreeBlock(mpBegin); }
+};
+// +0x6c: intrusive pointer released through vtable slot +4.
+struct SmartRef {
+    void* mp;
+    ~SmartRef() { if (mp) ((void(__thiscall*)(void*))VFN(mp, 4))(mp); }
+};
+// +0x70: eastl vector whose destructor (0x007c80c0) is out of line.
+struct PropVec {
+    void* mpBegin; void* mpEnd; void* mpCap; void* mpReserved; void* mpInline;
+    ~PropVec();
+};
+struct FxEntity : RefBase {
+    FixedVec  mCont;                   // +0x08
+    int       mGap1C;                  // +0x1c
+    int       mInline[12];             // +0x20
+    Vec3      mV50;                    // +0x50
+    Vec3      mV5C;                    // +0x5c
+    float     mF68;                    // +0x68
+    SmartRef  mPtr6C;                  // +0x6c
+    PropVec   mProp;                   // +0x70
+    ~FxEntity();
+};
+
 // @ 0x006ec000
-void S7::mec000()
-{
-    char* p = (char*)this;
-    // vector dtor at +0x70 + refcount/vector teardown (EH); approximated
-    *(void**)p = (void*)0x13ef094;
-    void* r = *(void**)(p + 0x6c);
-    if (r)
-        ((void(__thiscall*)(void*))VFN(r, 4))(r);
-    int b = *(int*)(p + 8);
-    if (b != 0 && b != *(int*)(p + 0x18))
-        f_f47380((void*)b);
-}
+FxEntity::~FxEntity() {}
+
 
 // ---------------------------------------------------------------------------
 // @ 0x006ec090
