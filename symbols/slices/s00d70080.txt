@@ -1,0 +1,3 @@
+00d70080 ?FindAnimTargetPosition@WARN_AVATAR_memory_block@SP@@QAEPAUVec3@2@PAU32@PAVcSPCreatureBase_s00d7_0080@2@@Z  # WARN_AVATAR_memory_block::FindAnimTargetPosition migrated from s00d70080 (verbatim, slice spelling)
+00d70280 ?WARN_AVATAR_Tick@SP@@YA_NPAVcSPCreatureBase_s00d7_0080@1@HHHHPAH@Z  # WARN_AVATAR_Tick migrated from s00d70080 (verbatim, slice spelling)
+00d70310 ?AVATAR_PARTY_Activate@SP@@YA_NPAVcSPCreatureBase_s00d7_0080@1@HHHHPAH@Z  # AVATAR_PARTY_Activate migrated from s00d70080 (verbatim, slice spelling)

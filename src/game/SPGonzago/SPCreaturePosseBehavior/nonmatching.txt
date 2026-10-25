@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00d6f800 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 263 bytes - CRY_TO_AVATAR_Tick: direction normalisation mixes SSE moves with x87 fsqrt/fdivrp, which /fp:fast cannot regenerate.
+00d6f910 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 322 bytes - AVATAR_PARTY_Tick body not reconstructed.
+00d6fa60 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 772 bytes - POSSE_PARTY_Tick body not reconstructed.
+00d6fd70 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 371 bytes - party helper body not reconstructed.
+00d6fef0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 398 bytes - party helper body not reconstructed.
+00d70080 353 complete SP::WARN_AVATAR_memory_block::FindAnimTargetPosition; size 510 vs 502; call sequence/slots match (incl. the two avatar Loco::GetPosition calls), x87/SSE float scheduling and Vec3 temp slots differ; equiv WEAK (no mismatch)

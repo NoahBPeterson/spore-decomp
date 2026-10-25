@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCreaturePosseBehavior.cpp  ?WARN_AVATAR_Tick@SP@@YA_NPAVcSPCreatureBase_s00d7_0080@1@HHHHPAH@Z  00d70280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreaturePosseBehavior.cpp  ?AVATAR_PARTY_Activate@SP@@YA_NPAVcSPCreatureBase_s00d7_0080@1@HHHHPAH@Z  00d70310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
