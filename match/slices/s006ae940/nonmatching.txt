@@ -5,5 +5,11 @@
 006af670  99  record serializer: __thiscall with 1 stack arg; pre-loop writes match (0 mismatched), record loop unreachable (harness synthesizes empty containers); equiv WEAK (325 valid, 56.2% cov)
 006af8a0  83  destructor: MSVC EH prologue not reproduced; vtable slot order matches; equiv PASS (508 valid, 100% cov)
 006af960 110  resource ctor: MSVC EH prologue not reproduced; __thiscall with 2 stack args + interlocked refcount clear match; equiv PASS (595 valid, 100% cov)
-006af8a0   -  dtor: EH prologue not reproduced; equiv FAIL 5/7 mismatched
-006af960   -  ctor: EH prologue + vtable chain not reproduced; equiv FAIL 5/5 mismatched
+006ae940 180  async request poll/GC loop: MSVC EH prologue + tree/mutex scheduling differ; equiv PASS (204 valid, 84.0% cov)
+006aea90 276  job completion callback: EH prologue + vtable dispatch/scheduling differ; equiv WEAK (264 valid, 57.0% cov; fault(read)=100, fault(write)=26, fake-arity=10)
+006aec60 304  rbtree emplace/insert-hint with pooled nodes: EH prologue + register alloc differ; equiv PASS (343 valid, 69.1% cov)
+006aee60 434  build memory stream for a finished async request: EH prologue + long vtable-slot sequence; equiv UNSUPPORTED (0/400 valid: fault(read)=307, fault(write)=92)
+006af080 172  fixed_map find-or-emplace: EH prologue + register alloc differ; equiv PASS (286 valid, 100% cov)
+006af150 218  cAsyncResourceManager::AllocateRequest: EH prologue + vtable dispatch differ; equiv PASS (206 valid, 98.9% cov)
+006af260 789  large async submit (__stdcall, 7 args): EH prologue + long vtable/job sequence differ; equiv WEAK (326 valid, 13.9% cov)
+006af720 375  "1URL" MemoryStream read/append: EH prologue + stream vtable slots differ; equiv UNSUPPORTED (0/400 valid: fault(read)=378, fake-arity=21)
