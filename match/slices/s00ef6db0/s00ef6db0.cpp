@@ -409,6 +409,8 @@ int __stdcall FUN_00ef7330(int k)
     return ((k != 0x3a) - 1) & 2;
 }
 
+struct Vec3f { float x, y, z; };
+
 // @ 0x00ef73c0
 void __cdecl FUN_00ef73c0()
 {
@@ -418,6 +420,7 @@ void __cdecl FUN_00ef73c0()
     }
     Simulator* sim = gSimulator;
     int mode = *(int*)((char*)sim + 0xd0);
+    void* prefs = gAppPreferences;
     bool bIsSingle = (mode == 1 || mode == 2);
     bool bConfig = false;
     {
@@ -425,24 +428,32 @@ void __cdecl FUN_00ef73c0()
         bConfig = ((FN1_pi)((*(void***)cm)[0xc]))(cm, 0x4ea96cb) != 0;
     }
     char bKey = 0;
-    void* prefs = gAppPreferences;
     if (prefs != 0) {
-        if ((char)((FN2_ipr)((*(void***)prefs)[9]))(prefs, 0x7be69ad, 0) != 0) {
-            char* b = (char*)Property_GetBool();
-            bKey = *b;
+        char aux[0xc];
+        if ((char)((FN2_ipr)((*(void***)prefs)[9]))(prefs, 0x7be69ad, aux) != 0) {
+            void* prop = *(void**)aux;
+            if (*(short*)((char*)prop + 0x12) == 1) {
+                char* b = ((char* (__thiscall*)(void*))Property_GetBool)(prop);
+                bKey = *b;
+            }
         }
     }
     if (bIsSingle && bConfig && bKey == 0) {
         void* gt = SP_GameTimeManager();
         ((FN1_i)((*(void***)gt)[0x10]))(gt, 0x4bf38a7);
-        FUN_0067caf0();
-        FUN_0067aaf0();
-        FUN_0067caf0();
-        FUN_0067aaf0();
-        FUN_0067caf0();
-        FUN_0067aaf0();
-        FUN_0067caf0();
-        FUN_0067aaf0();
+        // four oriented marker units: position row from the 4x3 table, bookend column
+        // (-1,-1,0), and for the last one the placement object instead of the bookend
+        typedef void  (__thiscall *FN_MatInit)(void*, Vec3f, void*, int, Vec3f, int, int);
+        const float kNegOne = *(float*)0x013eb1bc;      // -1.0f
+        for (int i = 0; i < 4; ++i) {
+            const Vec3f pos = *(const Vec3f*)(0x015ad21c + i * 0xc);
+            const Vec3f dir = { kNegOne, kNegOne, 0.0f };
+            void* obj;
+            if (i == 3) obj = (void*)g_16c7b80;
+            else        obj = (void*)0;
+            void* base = FUN_0067caf0();
+            ((FN_MatInit)FUN_0067aaf0)(base, pos, obj, 0, dir, 0, 0);
+        }
     }
 }
 
