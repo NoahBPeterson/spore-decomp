@@ -1,1 +1,2 @@
 # va  size  reason
+008dbef0 35 FAIL-KEPT plain C++ HoleTree::DoInsert (thiscall) forwards ecx header + 3 args to FUN_008dbc20 with the 256-byte-aligned header as the trailing flag and returns ppOut; asm_audit clean; difftest PASS on every observable and the call trace, only retail's push ecx/pop ecx preservation of caller-saved ecx differs (not reproducible in C++ without asm)

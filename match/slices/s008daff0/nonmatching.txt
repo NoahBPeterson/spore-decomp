@@ -1,23 +1,23 @@
 # va  diff-bytes  reason
-008daff0 479 complete: PFIndexModifiable::Write (record/stream writer); full body reconstructed; buffer-building path differs
+008daff0 514 complete: PFIndexModifiable::Write (record/stream writer); header/record serialisation matches retail; difftest PASS (548 valid @1200 inputs, 99.0% cov)
 008db230 73 complete: PFIndexModifiable::SetIsSaved (hashtable bucket walk); register allocation of (bucketArray,bucketCount) swapped vs retail
-008db280 104 complete: PFIndexModifiable::CheckFilesInRange (bucket-array scan); loop/register allocation differs
+008db280 135 complete: PFIndexModifiable::CheckFilesInRange (bucket-array scan); range condition corrected (mnPosition-a vs b-a); difftest PASS (350 valid, 100.0% cov)
 008db310 94 complete: PFIndexModifiable::CheckFilesInSizeRange (bucket-array scan); loop/register allocation differs
-008db450 220 complete: HT::InsertUnique (hash-map insert w/ growth); bucket split/rehash reconstruction differs
-008db560 96 complete: RBTree::insertUnique (rbtree insert + alloc); register allocation (this/node in edi/esi) swapped vs retail
+008db450 292 complete: HT::InsertUnique (hash-map insert w/ growth); returns out (void*), rehash flag=byte[0]/count=[1]; difftest PASS (366 valid @800 inputs, 92.0% cov)
+008db560 98 complete: RBTree::insertUnique (rbtree insert + alloc); returns out (int*); difftest PASS (336 valid, 100.0% cov)
 008db5e0 72 complete: FUN_008db5e0 median/partition helper; register allocation differs
 008db630 80 complete: FUN_008db630 final sort pass; body shape differs
-008db730 54 complete: PFIndexModifiable ctor; vtable/alloc sequence close but differs
-008db7b0 92 complete: PFIndexModifiable::_virtual_dtor; vtable store order / allocator call differs
-008db850 99 complete: PFIndexModifiable::RemoveFile; hashtable erase iterator passed via struct-return/this-thunk; call shape differs
+008db730 49 complete: PFIndexModifiable ctor; difftest PASS (400 valid, 100.0% cov)
+008db7b0 76 complete: PFIndexModifiable::_virtual_dtor; hashtable teardown (freeNodes/vtable clear) fixed; difftest PASS (276 valid, 100.0% cov)
+008db850 21 complete: PFIndexModifiable::RemoveFile; erase(out,node,bucket) 3-arg call + iterator bucket pointer fixed; difftest PASS (243 valid, 100.0% cov)
 008db8c0 11 complete: HoleSet ctor; body identical, only `mov [eax],-1` scheduled after `xor edx,edx`/`lea ecx` (1 instruction order)
 008db8f0 120 complete: FUN_008db8f0 quicksort helper; body shape differs
-008db9b0 266 complete: PFIndexModifiable::Read (index-record parser); stream/alloc flow reconstructed; buffer handling differs
-008dbb10 73 complete: HT::GetFileInfoRef; hash lookup + insert-on-miss; InsertUnique val construction differs
-008dbcf0 157 complete: PFIndexModifiable::GetFiles (enumerate into vector); DoInsertValue 0x4e3e10 now a __thiscall member of KeyVec (mov ecx,vec), iteration/alloc differs; difftest WEAK (238 valid, 74% cov default; 94.5% at 2500 inputs, no mismatch)
+008db9b0 336 complete: PFIndexModifiable::Read (index-record parser); header/record decode rewritten to retail shape; difftest WEAK (1149 valid @1200 inputs, 41.3% cov; count>0 loop never reached because generated hash maps fault, no mismatch)
+008dbb10 124 complete: HT::GetFileInfoRef; insert-on-miss record built from key + junk high byte like retail; difftest PASS (554 valid @1200 inputs, 100.0% cov)
+008dbcf0 164 complete: PFIndexModifiable::GetFiles (enumerate into vector); DoInsertValue is a __thiscall member of KeyVec; difftest PASS (721 valid @1200 inputs, 94.5% cov)
 008dbdb0 212 complete: PFIndexModifiable::GetAllFiles (recursive enumeration); DoInsertValue now __thiscall on the vector; register allocation/iteration differs; difftest UNSUPPORTED (original faults on every generated input)
 008dbeb0 23 complete: PFIndexModifiable::PutFileInfo; field load/register assignment differs
-008dbef0 24 complete: FUN_008dbef0 thunk -> FUN_008dbc20; bool flag materialisation differs (push 0 vs stack byte temp)
-008dbf20 152 complete: HoleSet::AllocAt (rbtree insert + split); register allocation/insert path differs
-008dc000 201 complete: HoleSet::Release (rbtree erase + merge); register allocation/erase path differs
-008dc120 62 complete: HoleSet::MergeFrom (rbtree merge); register allocation differs
+008dbf20 134 complete: HoleSet::AllocAt (rbtree insert + split); anchor-address/tree-root and FUN_008dbc20 (pair,aligned) call fixed; difftest WEAK (107 valid, 72.6% cov, no mismatch)
+008dc000 228 complete: HoleSet::Release (rbtree erase + merge); anchor address, mTreeRoot start and FUN_008dbc20 pair/aligned args fixed; difftest PASS (337 valid, 78.4% cov)
+008dc120 54 complete: HoleSet::MergeFrom; tree-root traversal + DoNukeSubtree thunk fixed; difftest UNSUPPORTED (0/400 valid: original faults on every generated input)
+008dbef0 35 FAIL-KEPT: HoleTree::DoInsert plain C++ (thiscall) forwards the ecx header + 3 args to FUN_008dbc20 with the 256-byte-aligned header as the trailing flag and returns ppOut; transcribed asm removed; difftest matches every observable and the full call trace, only retail's push ecx/pop ecx preservation of caller-saved ecx differs (no C++ without asm)

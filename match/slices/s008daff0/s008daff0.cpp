@@ -42,6 +42,7 @@
 // external callees (direct calls only; rel32 targets are masked)
 // ---------------------------------------------------------------------------
 extern "C" void* __cdecl operator_delete__(void* p);                                    // 0xf47380
+extern "C" void  __cdecl ZoneObject_delete(void* p);                                    // 0x926060
 extern "C" void* __cdecl operator_new(int size, const char* name, int a, int b,
                                       const char* file, int line);                      // 0xf473a0
 extern "C" void* __cdecl RBTreeIncrement(void* node);                                   // 0x921580
@@ -50,12 +51,24 @@ extern "C" void* __cdecl RBTreeErase(void* node, void* header);                 
 extern "C" void* __cdecl RBTreeInsert(void* node, void* parent, void* header, int lazy); // 0x9216a0
 extern "C" void* __cdecl DoNukeSubtree(void* node);                                     // 0x9a9600
 struct RBTreeBase { void DoNukeSubtree(void* root); void* Erase(void* node); };
-extern "C" void  __cdecl FUN_00925f30();                                                // 0x925f30 (fixed-pool init)
-extern "C" void  __cdecl FUN_00921440(void* out, int a, void* b, int c);                // 0x921440
-extern "C" void  __cdecl FUN_008de690(int a);                                           // 0x8de690
-extern "C" void  __cdecl FUN_008dac90(void** pArray, unsigned n);                       // 0x8dac90 DoFreeNodes
-extern "C" void* __cdecl FUN_0088aa50();                                                // 0x88aa50 (hashtable erase)
-extern "C" int  __stdcall FUN_008dbc20(void* a, void* node, void* val, bool flags); // 0x8dbc20
+// The 0x9xxxx / 0x8xxxxx helpers are raw-address functions with __thiscall convention.
+// Declared extern "C" (so the FUN_<va> name resolves) and invoked through a
+// __thiscall function-pointer cast that supplies ecx explicitly.
+typedef void  (__thiscall* Fn925f30)(void*, void*, int, int);           // 0x925f30
+typedef void  (__thiscall* Fn925e60)(void*);                            // 0x925e60
+typedef void  (__thiscall* Fn921440)(void*, void*, unsigned, unsigned, int); // 0x921440
+typedef void  (__thiscall* Fn8de690)(void*, unsigned);                  // 0x8de690
+typedef void  (__thiscall* Fn8dac90)(void*, void*, unsigned);           // 0x8dac90
+typedef void* (__thiscall* Fn8dbc20)(void*, void*, void*, void*, unsigned); // 0x8dbc20
+extern "C" void  __cdecl FUN_00925f30(void* self, void* alloc, int a, int b);   // 0x925f30
+extern "C" void  __cdecl FUN_00925e60(void* self);                              // 0x925e60
+extern "C" void  __cdecl FUN_00921440(void* self, void* out, unsigned n,
+                                      unsigned load, int flag);                 // 0x921440
+extern "C" void  __cdecl FUN_008de690(void* self, unsigned n);                  // 0x8de690
+extern "C" void  __cdecl FUN_008dac90(void* self, void* pArray, unsigned n);    // 0x8dac90
+extern "C" void* __cdecl FUN_0088aa50();                                        // 0x88aa50
+extern "C" void* __cdecl FUN_008dbc20(void* self, void* a, void* b, void* c,
+                                      unsigned flags);                          // 0x8dbc20
 extern "C" void  __cdecl FUN_008dbba0(void* a, void* b, void* c);                       // 0x8dbba0
 extern "C" void  __cdecl FUN_008daeb0(int* a, int* b, int c);                           // 0x8daeb0
 extern "C" void  __cdecl FUN_008daef0(int* a, int* b, int c);                           // 0x8daef0
@@ -66,11 +79,14 @@ extern const int kTimeoutNone[];
 // shared types
 // ---------------------------------------------------------------------------
 struct HTNode {                 // 0x20-byte hashtable node for mItemsMap
-    char      d00[0xc];         // +0x00 (key: 3 dwords)
-    unsigned  mnOffset;         // +0x0c
-    unsigned  mnSize;           // +0x10
-    char      d14[6];           // +0x14
-    unsigned char mbSaved;      // +0x1a
+    unsigned  mInstance;        // +0x00  Key.mInstance
+    unsigned  mType;            // +0x04  Key.mType  (record "first offset")
+    unsigned  mGroup;           // +0x08  Key.mGroup (record "last offset")
+    unsigned  mnPosition;       // +0x0c  PFRecordInfo.mnPosition
+    unsigned  mnSize;           // +0x10  PFRecordInfo.mnSize
+    unsigned  mnSizeDecompressed; // +0x14
+    unsigned short mnCompressionType; // +0x18
+    unsigned char mbCommitted;  // +0x1a
     char      d1b;              // +0x1b
     HTNode*   mpNext;           // +0x1c
 };
@@ -98,20 +114,28 @@ struct HT {                     // the hashtable object (embedded at PFIndexModi
     unsigned   mnFlags;         // +0x20
 
     void find(void* out, const void* key);                    // 0x8db3d0
-    void InsertUnique(void* out, const void* val, unsigned flags); // 0x8db450
+    void* InsertUnique(void* out, const void* val, unsigned flags); // 0x8db450
     void* GetFileInfoRef(const void* key);                    // 0x8dbb10
-    void erase(HTIterator* it);                               // 0x88aa50
+    HTIterator* erase(HTIterator* out, HTNode* node, HTNode** bucket); // 0x88aa50
 };
 
 // hole-table rbtree node: position @+0x10, size @+0x14 (key not inline)
-struct HoleNode { char d10[0x10]; unsigned mnPos; unsigned mnSize; };
+struct HoleNode {
+    HoleNode* mpLeft;           // +0x00
+    HoleNode* mpRight;          // +0x04
+    HoleNode* mpParent;         // +0x08
+    char      d0c[4];           // +0x0c
+    unsigned  mnPos;            // +0x10
+    unsigned  mnSize;           // +0x14
+};
 
 struct HoleSet {                // EA::ResourceMan hole table (0x20 bytes)
     int        mExtent;         // +0x00
     char       d04[4];          // +0x04
     HoleNode*  mAnchor;         // +0x08 (past-the-end header)
     HoleNode*  mRoot;           // +0x0c
-    char       d10[8];          // +0x10
+    HoleNode*  mTreeRoot;       // +0x10 (tree header parent == root)
+    char       d14[4];          // +0x14
     int        mnSize;          // +0x18
     char       d1c[4];          // +0x1c
 
@@ -130,8 +154,7 @@ public:
     HT         mItemsMap;       // +0x28
     char       d4c[0x8];        // +0x4c..+0x53
 
-    bool Write(int flags, int* pSize, int count, void** ppBuf,
-               int a6, int a7, int a8);                  // 0x8daff0
+    bool Write(void** ppBuf, unsigned* pSize, unsigned count, char flag); // 0x8daff0
     void SetIsSaved();                                   // 0x8db230
     bool CheckFilesInRange(unsigned a, unsigned b);      // 0x8db280
     bool CheckFilesInSizeRange(unsigned a, unsigned b);  // 0x8db310
@@ -139,7 +162,7 @@ public:
     void* _virtual_dtor(int flags);                      // 0x8db7b0
     void* GetFileInfo(const void* key);                  // 0x8db810
     bool RemoveFile(const void* key, void* out);         // 0x8db850
-    int Read(unsigned* buf, unsigned a3, int count, char flag); // 0x8db9b0
+    bool Read(void* buf, unsigned a3, unsigned count, char flag); // 0x8db9b0
     int GetFiles(void* vec, void* filter);               // 0x8dbcf0
     unsigned GetAllFiles(int a2, unsigned a3, int a4, void* vec); // 0x8dbdb0
     void PutFileInfo(int a1, int* info);                 // 0x8dbeb0
@@ -149,14 +172,12 @@ public:
 // 0x8daff0  PFIndexModifiable::Write
 // ===========================================================================
 // @ 0x008daff0
-bool PFIndexModifiable::Write(int flags, int* pSize, int count, void** ppBuf,
-                              int a6, int a7, int a8)
+bool PFIndexModifiable::Write(void** ppBuf, unsigned* pSize, unsigned count, char flag)
 {
-    bool bSameOffset = true;
-    bool bSameSize = true;
+    bool bSameFirst = true;    // every record's key.mType equals the first record's
+    bool bSameLast = true;     // every record's key.mGroup equals the last record's
     unsigned nFirstOffset = 0;
     unsigned nLastOffset = 0;
-    (void)a6; (void)a7;
 
     HTNode** pb = mItemsMap.mpBucketArray;
     HTNode* p = *pb;
@@ -167,56 +188,57 @@ bool PFIndexModifiable::Write(int flags, int* pSize, int count, void** ppBuf,
         p = *pb;
     }
     if (mItemsMap.mnElementCount == 0) {
-        bSameOffset = false;
-        bSameSize = false;
+        bSameFirst = false;
+        bSameLast = false;
     } else {
-        nLastOffset = p->mnSize;
-        nFirstOffset = p->mnOffset;
+        nLastOffset = p->mGroup;
+        nFirstOffset = p->mType;
         p = p->mpNext;
         while (p == 0) { ++pb; p = *pb; }
     }
     while (p != mItemsMap.mpBucketArray[mItemsMap.mnBucketCount]) {
-        if (!bSameSize || p->mnOffset != nFirstOffset)
-            bSameSize = false;
-        if (bSameOffset && p->mnSize == nLastOffset)
-            bSameOffset = true;
+        if (!bSameFirst || p->mType != nFirstOffset)
+            bSameFirst = false;
+        if (bSameLast && p->mGroup == nLastOffset)
+            bSameLast = true;
         else
-            bSameOffset = false;
+            bSameLast = false;
         p = p->mpNext;
         while (p == 0) { ++pb; p = *pb; }
     }
     int nElem = 0x20;
     *pSize = 4;
-    if (bSameSize) {
+    if (bSameFirst) {
         *pSize = 8;
         nElem = 0x1c;
     }
-    if (bSameOffset) {
+    if (bSameLast) {
         *pSize += 4;
         nElem -= 4;
     }
     *pSize += 4;
-    int nTotal = *pSize + (nElem - 4) * count;
-    *pSize = nTotal;
+    int nTotal = (int)*pSize + (nElem - 4) * (int)count;
+    *pSize = (unsigned)nTotal;
     unsigned* pBuf = (unsigned*)((void* (__thiscall*)(void*, unsigned, const char*, int))
-                                 (*(void***)mpAllocator)[8 / 4])(mpAllocator, nTotal, (const char*)0x140a1dc, 0);
+                                 (*(void***)mpAllocator)[8 / 4])(mpAllocator, (unsigned)nTotal, (const char*)0x140a1dc, 0);
     *ppBuf = pBuf;
     if (pBuf == 0)
         return false;
 
+    unsigned* pOut = pBuf;
     int i = 1;
-    *pBuf = (-(unsigned)bSameOffset & 2) | ((flags >> 16) & 0xff) | 4;
-    if ((flags >> 16) & 0xff) {
+    *pOut = (-(unsigned)bSameLast & 2) | (bSameFirst ? 1u : 0u) | 4;
+    if (bSameFirst) {
         pBuf[1] = nFirstOffset;
         i = 2;
     }
-    if (bSameOffset) {
-        pBuf[i] = (unsigned)nLastOffset;
+    if (bSameLast) {
+        pBuf[i] = nLastOffset;
         ++i;
     }
     pBuf[i] = 0;
+    pOut = pBuf + i + 1;
 
-    unsigned* pOut = pBuf + i + 1;
     HTNode** pb2 = mItemsMap.mpBucketArray;
     HTNode* q = *pb2;
     if (q == 0) {
@@ -226,22 +248,16 @@ bool PFIndexModifiable::Write(int flags, int* pSize, int count, void** ppBuf,
     }
     HTNode* end = mItemsMap.mpBucketArray[mItemsMap.mnBucketCount];
     while (q != end) {
-        if ((flags >> 16) == 0) {
-            *pOut++ = q->mnOffset;
-        }
-        if ((flags >> 24) == 0) {
-            *pOut++ = q->mnSize;
-        }
-        *pOut = *(unsigned*)((char*)q + 0x00);
-        pOut[1] = *(unsigned*)((char*)q + 0x0c);
-        pOut[2] = *(unsigned*)((char*)q + 0x10) | 0x80000000;
-        pOut[3] = *(unsigned*)((char*)q + 0x14);
-        unsigned hi;
-        if (*(char*)((char*)q + 0x1a) == 0 && a8 == 0)
-            hi = 0;
-        else
-            hi = 0x10000;
-        pOut[4] = (unsigned short)*(unsigned*)((char*)q + 0x18) | hi;
+        if (!bSameFirst)
+            *pOut++ = q->mType;
+        if (!bSameLast)
+            *pOut++ = q->mGroup;
+        pOut[0] = q->mInstance;
+        pOut[1] = q->mnPosition;
+        pOut[2] = q->mnSize | 0x80000000;
+        pOut[3] = q->mnSizeDecompressed;
+        unsigned hi = (q->mbCommitted == 0 && flag == 0) ? 0u : 0x10000u;
+        pOut[4] = (unsigned)q->mnCompressionType | hi;
         pOut += 5;
         q = q->mpNext;
         while (q == 0) { ++pb2; q = *pb2; }
@@ -264,7 +280,7 @@ void PFIndexModifiable::SetIsSaved()
         p = *pb;
     }
     while (p != mItemsMap.mpBucketArray[mItemsMap.mnBucketCount]) {
-        p->mbSaved = 1;
+        p->mbCommitted = 1;
         p = p->mpNext;
         while (p == 0) { ++pb; p = *pb; }
     }
@@ -287,11 +303,10 @@ bool PFIndexModifiable::CheckFilesInRange(unsigned a, unsigned b)
     HTNode* end = mItemsMap.mpBucketArray[mItemsMap.mnBucketCount];
     while (p != end) {
         if (p->mnSize != 0) {
-            if ((unsigned)(b - (p->mnSize)) < (unsigned)p->mnOffset ||
-                (unsigned)p->mnOffset < a) {
-            } else {
+            if ((unsigned)(p->mnPosition - a) >= (unsigned)(b - a))
                 return false;
-            }
+            if (p->mnSize > (unsigned)(b - p->mnPosition))
+                return false;
         }
         p = p->mpNext;
         while (p == 0) { ++pb; p = *pb; }
@@ -318,7 +333,7 @@ bool PFIndexModifiable::CheckFilesInSizeRange(unsigned a, unsigned b)
     }
     HTNode* end = mItemsMap.mpBucketArray[mItemsMap.mnBucketCount];
     while (p != end) {
-        if (p->mnSize != 0 && p->mnOffset < nEnd && a < p->mnOffset + p->mnSize)
+        if (p->mnSize != 0 && p->mnPosition < nEnd && a < p->mnPosition + p->mnSize)
             return false;
         p = p->mpNext;
         while (p == 0) { ++pb; p = *pb; }
@@ -347,38 +362,43 @@ void HoleSet::Reset(int extent)
 // 0x8db450  PFIndexModifiable::InsertUnique
 // ===========================================================================
 // @ 0x008db450
-void HT::InsertUnique(void* out, const void* val, unsigned flags)
+void* HT::InsertUnique(void* out, const void* val, unsigned flags)
 {
-    (void)flags;
     const unsigned* v = (const unsigned*)val;
     unsigned hash = v[0] ^ v[2];
     unsigned bucket = hash % mnBucketCount;
     HTNode* node = mpBucketArray[bucket];
     while (node != 0) {
-        if (v[0] == *(unsigned*)((char*)node + 0x00) &&
-            v[1] == *(unsigned*)((char*)node + 0x04) &&
-            v[2] == *(unsigned*)((char*)node + 0x08)) {
+        if (v[0] == node->mInstance &&
+            v[1] == node->mType &&
+            v[2] == node->mGroup) {
             *(void**)out = node;
             *((char*)out + 8) = 0;
             *(void**)((char*)out + 4) = &mpBucketArray[bucket];
-            return;
+            return out;
         }
         node = node->mpNext;
     }
-    FUN_00921440(out, (int)mpCoreAllocator, mpCoreAllocator, 1);
-    HTNode* n = (HTNode*)((void* (__thiscall*)(void*, int, int, unsigned))
+    unsigned rehashInfo[2];
+    ((Fn921440)FUN_00921440)((char*)this + 0x10, &rehashInfo[0], mnBucketCount, mnElementCount, 1);
+    HTNode* n = (HTNode*)((void* (__thiscall*)(void*, int, unsigned, unsigned))
                           (*(void***)mpCoreAllocator)[8 / 4])(mpCoreAllocator, 0x20, 0, mnFlags);
     if (n != 0) {
         for (int k = 0; k < 7; ++k)
             ((unsigned*)n)[k] = v[k];
     }
     n->mpNext = 0;
+    if (*(char*)&rehashInfo[0]) {
+        bucket = hash % rehashInfo[1];
+        ((Fn8de690)FUN_008de690)(this, rehashInfo[1]);
+    }
     n->mpNext = mpBucketArray[bucket];
     mpBucketArray[bucket] = n;
     ++mnElementCount;
     *(void**)out = n;
     *((char*)out + 8) = 1;
     *(void**)((char*)out + 4) = &mpBucketArray[bucket];
+    return out;
 }
 
 // ===========================================================================
@@ -387,18 +407,25 @@ void HT::InsertUnique(void* out, const void* val, unsigned flags)
 // @ 0x008dbb10
 void* HT::GetFileInfoRef(const void* key)
 {
-    HTNode* out[2];
+    HTNode* out[3];
+    out[0] = 0;
+    out[1] = 0;
     find(&out[0], key);
     if (out[0] == mpBucketArray[mnBucketCount]) {
-        int val[7];
-        val[0] = *(int*)((char*)key + 0);
-        val[1] = *(int*)((char*)key + 4);
-        val[2] = *(int*)((char*)key + 8);
+        const unsigned* k = (const unsigned*)key;
+        // Retail builds the new record from an uninitialised stack dword and
+        // keeps only its top byte in the compression field; mirror that read.
+        volatile unsigned char junk[16];
+        unsigned hi = ((unsigned)junk[15]) << 24;
+        unsigned val[7];
+        val[0] = k[0];
+        val[1] = k[1];
+        val[2] = k[2];
         val[3] = 0;
         val[4] = 0;
         val[5] = 0;
-        val[6] = 0;
-        InsertUnique(&val[0], &val[0], 0);
+        val[6] = hi;
+        InsertUnique(&out[0], &val[0], (unsigned)key & 0xffffff00u);
     }
     return (char*)out[0] + 0xc;
 }
@@ -408,10 +435,10 @@ void* HT::GetFileInfoRef(const void* key)
 // ===========================================================================
 // @ 0x008db560
 struct RBTree {
-    void insertUnique(int* out, int* parent, int* value, char flag);   // 0x8db560
+    int* insertUnique(int* out, int* parent, int* value, char flag);  // 0x8db560
 };
 
-void RBTree::insertUnique(int* out, int* parent, int* value, char flag)
+int* RBTree::insertUnique(int* out, int* parent, int* value, char flag)
 {
     unsigned lazy = 0;
     if (flag == 0 && parent != (int*)((char*)this + 4) && *(int*)((char*)parent + 0x10) <= *value)
@@ -427,6 +454,7 @@ void RBTree::insertUnique(int* out, int* parent, int* value, char flag)
     RBTreeInsert((void*)node, (void*)parent, (void*)((char*)this + 4), (int)lazy);
     *(int*)((char*)this + 0x14) = *(int*)((char*)this + 0x14) + 1;
     *out = node;
+    return out;
 }
 
 // ===========================================================================
@@ -482,7 +510,7 @@ PFIndexModifiable::PFIndexModifiable(void* alloc)
     (void)alloc;
     vtbl = (void**)0x1436878;
     mpAllocator = alloc;
-    FUN_00925f30();
+    ((Fn925f30)FUN_00925f30)((char*)this + 8, alloc, 0x80, 0x20);
     *(float*)((char*)this + 0x38) = *(float*)0x1485720;
     *(float*)((char*)this + 0x3c) = *(float*)0x1470f1c;
     *(void**)((char*)this + 0x44) = (char*)this + 8;
@@ -499,21 +527,20 @@ PFIndexModifiable::PFIndexModifiable(void* alloc)
 // @ 0x008db7b0
 void* PFIndexModifiable::_virtual_dtor(int flags)
 {
-    FUN_008dac90((void**)((char*)this + 0x2c), *(unsigned*)((char*)this + 0x30));
+    ((Fn8dac90)FUN_008dac90)((char*)this + 0x28, *(void**)((char*)this + 0x2c),
+                             *(unsigned*)((char*)this + 0x30));
     *(unsigned*)((char*)this + 0x34) = 0;
     unsigned n = *(unsigned*)((char*)this + 0x30);
     if (n > 1) {
         void* a = *(void**)((char*)this + 0x44);
-        void* p = ((void* (__thiscall*)(void*))(((void**)(*(void**)a))[0xc / 4]))(a);
-        (void)p;
-        unsigned sz = n * 4 + 4;
         void* bucket = *(void**)((char*)this + 0x2c);
+        unsigned sz = n * 4 + 4;
         ((void (__thiscall*)(void*, void*, unsigned))(((void**)(*(void**)a))[0xc / 4]))(a, bucket, sz);
     }
-    FUN_008dac90((void**)((char*)this + 0x0c), *(unsigned*)((char*)this + 0x10));
+    ((Fn925e60)FUN_00925e60)((char*)this + 8);
     *(void**)this = (void*)0x13effb8;
     if (flags & 1)
-        operator_delete__(this);
+        ZoneObject_delete(this);
     return this;
 }
 
@@ -547,8 +574,8 @@ bool PFIndexModifiable::RemoveFile(const void* key, void* out)
         *(unsigned*)((char*)out + 0x0c) = *(unsigned*)((char*)node[0] + 0x18);
         HTIterator it;
         it.mpNode = node[0];
-        it.mpKey = (void*)key;
-        ht->erase(&it);
+        it.mpKey = node[1];
+        ht->erase(&it, (HTNode*)it.mpNode, (HTNode**)it.mpKey);
         return true;
     }
     return false;
@@ -606,68 +633,72 @@ extern "C" void FUN_008db8f0(int* lo, int* hi, int depth, int d)
 // 0x8db9b0  PFIndexModifiable::Read
 // ===========================================================================
 // @ 0x008db9b0
-int PFIndexModifiable::Read(unsigned* buf, unsigned a3, int count, char flag)
+bool PFIndexModifiable::Read(void* buf, unsigned a3, unsigned count, char flag)
 {
     (void)a3;
-    unsigned u = buf[0];
-    int i = 1;
+    unsigned* p = (unsigned*)buf;
+    unsigned u = p[0];
     if (((u >> 2) & 1) == 0)
-        return 0;
+        return false;
+    unsigned i = 1;
     unsigned firstOffset = 0xffffffff;
     if (u & 1) {
-        firstOffset = buf[1];
+        firstOffset = p[1];
         i = 2;
     }
     unsigned pos = 0xffffffff;
     if ((u >> 1) & 1) {
-        pos = buf[i];
+        pos = p[i];
         ++i;
     }
-    if (buf[i] != 0)
-        return 0;
+    if (p[i] != 0)
+        return false;
     if (count != 0) {
-        unsigned* p = buf + i + 1;
+        unsigned* q = p + i + 1;
         unsigned sel = u;
         do {
-            unsigned offset, ptemp, size, unused;
+            unsigned offset;
             if (sel & 1)
                 offset = firstOffset;
-            else { offset = p[0]; ++p; }
-            if ((u >> 1) & 1)
-                pos = pos;
-            else { pos = *p; ++p; }
-            ptemp = *p;
-            size = p[1];
-            unused = p[2];
-            unsigned flags = p[3];
-            p += 4;
-            unsigned short w;
-            if ((int)unused < 0) {
-                unsigned w2 = *p;
-                ++p;
-                (void)w2;
-                w = 0;
+            else { offset = *q; ++q; }
+            if (((u >> 1) & 1) == 0) { pos = *q; ++q; }
+
+            unsigned mi = q[0];
+            unsigned f1 = q[1];
+            unsigned f2 = q[2];
+            unsigned f3 = q[3];
+            q += 4;
+
+            unsigned comp;
+            if ((int)f2 < 0) {
+                unsigned x = *q;
+                ++q;
+                f2 &= 0x7fffffff;
+                comp = (x & 0xffff) | (((x >> 16) & 1) << 16);
             } else {
-                w = (unused == flags) ? 0 : 0xffff;
+                comp = (f2 == f3) ? 0u : 0xffffu;
             }
-            (void)ptemp;
             if (flag)
-                w |= 0x100;
-            int rec[7];
-            rec[0] = offset;
-            rec[1] = pos;
-            rec[2] = ptemp;
-            rec[3] = size;
-            rec[4] = (int)w;
-            rec[5] = 0;
-            mItemsMap.InsertUnique(&rec[0], &rec[0], 0);
+                comp = (comp & 0xffff) | 0x10000;
+
+            unsigned val[7];
+            val[0] = mi;
+            val[1] = offset;
+            val[2] = pos;
+            val[3] = f1;
+            val[4] = f2;
+            val[5] = f3;
+            val[6] = comp;
+            void* out[3];
+            mItemsMap.InsertUnique(&out[0], &val[0], 0);
+
             --count;
             if (count == 0)
                 break;
             sel = u & 0xff;
         } while (true);
     }
-    return 1;
+    return true;
 }
 
 // ===========================================================================
@@ -775,11 +806,19 @@ void PFIndexModifiable::PutFileInfo(int a1, int* info)
 // 0x8dbef0  helper
 // ===========================================================================
 // @ 0x008dbef0
-extern "C" int __stdcall FUN_008dbef0(int a1, int a2, int a3)
+// HoleTree::DoInsert - __thiscall (ecx = the tree header at HoleSet+4, ret 12). Forwards the
+// header and the three arguments to FUN_008dbc20 with the 256-byte-aligned header value as the
+// trailing flag, then returns its first argument (the out-parameter address).
+struct HoleTreeDoInsertThunk {
+    char d00[0x04];                                 // +0x00 tree header storage
+    void* DoInsert(void** ppOut, void* pAfter, const int* pRange);   // 0x8dbef0
+};
+
+void* HoleTreeDoInsertThunk::DoInsert(void** ppOut, void* pAfter, const int* pRange)
 {
-    bool flag = false;
-    FUN_008dbc20((void*)a1, (void*)a2, (void*)a3, flag);
-    return a1;
+    unsigned aligned = (unsigned)this & 0xffffff00u;
+    ((Fn8dbc20)FUN_008dbc20)(this, ppOut, pAfter, (void*)pRange, aligned);
+    return ppOut;
 }
 
 // ===========================================================================
@@ -788,10 +827,11 @@ extern "C" int __stdcall FUN_008dbef0(int a1, int a2, int a3)
 // @ 0x008dbf20
 HoleNode* HoleSet::AllocAt(int size)
 {
+    HoleNode* anchor = (HoleNode*)((char*)this + 8);
     HoleNode* p = mRoot;
-    HoleNode* best = mAnchor;
+    HoleNode* best = anchor;
     unsigned bestSize = 0xffffffff;
-    if (p != mAnchor) {
+    if (p != anchor) {
         do {
             unsigned holeSize = p->mnSize;
             if (holeSize >= (unsigned)size && holeSize < bestSize) {
@@ -801,8 +841,8 @@ HoleNode* HoleSet::AllocAt(int size)
                     break;
             }
             p = (HoleNode*)RBTreeIncrement(p);
-        } while (p != mAnchor);
-        if (best != mAnchor) {
+        } while (p != anchor);
+        if (best != anchor) {
             unsigned pos = best->mnPos;
             unsigned holeSize = best->mnSize;
             HoleNode* next = (HoleNode*)RBTreeIncrement(best);
@@ -812,9 +852,12 @@ HoleNode* HoleSet::AllocAt(int size)
             operator_delete__(best);
             unsigned rest = holeSize - (unsigned)size;
             if (rest != 0) {
-                void* args[1];
-                args[0] = (void*)rest;
-                FUN_008dbc20(&size, next, &pos, rest);
+                unsigned newPos = pos + (unsigned)size;
+                unsigned pair[2];
+                pair[0] = newPos;
+                pair[1] = rest;
+                unsigned aligned = newPos & 0xffffff00u;
+                ((Fn8dbc20)FUN_008dbc20)((char*)this + 4, &aligned, next, &pair[0], aligned);
             }
             return (HoleNode*)pos;
         }
@@ -830,14 +873,15 @@ HoleNode* HoleSet::AllocAt(int size)
 // @ 0x008dc000
 void HoleSet::Release(unsigned pos, int size)
 {
-    HoleNode* p = mRoot;
-    HoleNode* slot = mAnchor;
+    HoleNode* anchor = (HoleNode*)((char*)this + 8);
+    HoleNode* p = mTreeRoot;
+    HoleNode* slot = anchor;
     while (p != 0) {
-        if (p->mnPos < pos) {
-            p = (HoleNode*)p->d10;   // left
+        if ((int)p->mnPos < (int)pos) {
+            p = p->mpLeft;   // left
         } else {
             slot = p;
-            p = *(HoleNode**)((char*)p + 4);   // right
+            p = p->mpRight;  // right
         }
     }
     unsigned base = pos;
@@ -855,7 +899,7 @@ void HoleSet::Release(unsigned pos, int size)
             operator_delete__(prev);
         }
     }
-    if (slot == mAnchor) {
+    if (slot == anchor) {
         if (pos + size == (unsigned)mExtent) {
             mExtent -= size;
             return;
@@ -869,7 +913,11 @@ void HoleSet::Release(unsigned pos, int size)
         operator_delete__(slot);
         slot = next;
     }
-    FUN_008dbc20(&pos, slot, &base, pos & 0xffffff00);
+    unsigned pair[2];
+    pair[0] = base;
+    pair[1] = (unsigned)sz;
+    unsigned aligned = pos & 0xffffff00u;
+    ((Fn8dbc20)FUN_008dbc20)((char*)this + 4, &aligned, slot, &pair[0], aligned);
 }
 
 // ===========================================================================
@@ -878,20 +926,19 @@ void HoleSet::Release(unsigned pos, int size)
 // @ 0x008dc120
 void HoleSet::MergeFrom(HoleSet* other)
 {
-    for (HoleNode* p = other->mRoot; p != other->mAnchor; p = (HoleNode*)RBTreeIncrement(p))
+    HoleNode* anchor = (HoleNode*)((char*)other + 8);
+    for (HoleNode* p = other->mRoot; p != anchor; p = (HoleNode*)RBTreeIncrement(p))
         Release(p->mnPos, p->mnSize);
-    HoleNode* q = other->mRoot;
+    HoleNode* q = other->mTreeRoot;
     while (q != 0) {
-        DoNukeSubtree(*(void**)q);
+        ((RBTreeBase*)((char*)other + 4))->DoNukeSubtree(*(void**)q);
         HoleNode* n = *(HoleNode**)((char*)q + 4);
         operator_delete__(q);
         q = n;
     }
-    other->mRoot = 0;
-    other->mAnchor = 0;
+    other->mTreeRoot = 0;
     *(char*)((char*)other + 0x14) = 0;
     *(void**)((char*)other + 0x18) = 0;
-    HoleNode* hdr = (HoleNode*)((char*)other + 8);
-    *(void**)((char*)other + 0x0c) = hdr;
-    *(void**)((char*)other + 0x08) = hdr;
+    *(void**)((char*)other + 0x0c) = anchor;
+    *(void**)((char*)other + 0x08) = anchor;
 }
