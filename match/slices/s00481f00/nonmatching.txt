@@ -5,3 +5,4 @@
 00482130  193  GetP0: branch copy flavour (fld/fstp vs movss) and slots differ
 00482200  193  GetP1: branch copy flavour (fld/fstp vs movss) and slots differ
 004822d0  196  GetOrientation: semantics PASS (100% cov, mP1-mP0, __thiscall Assign, Mat3 basis); retail body is unoptimised-shaped
+004823b0  660  Update: full body (virtual GetHandlePos slot 19, cSPTransform copy/Invert/TransformPoint, model+overdraw transform sync); /Od frame slots differ (0x7c vs 0xe8); flags /Od /Ob1 /MD /Gy /TP /arch:SSE [equiv PASS 72% cov]
