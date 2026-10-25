@@ -545,6 +545,7 @@ void cSPEditorBlockAbilities::LayoutAbilitiesCompact(IWindow* pParent, bool bUse
     area.x2 = area.x1 + totalWidth;
     pParent->SetLayoutArea(area);
 }
+
 // SP::cEditorCameraController -- camera/zoom offsets pulled from the editor config properties.
 class cEditorCameraController { public:
     uint32_t pad00[4];                   // +0x00
