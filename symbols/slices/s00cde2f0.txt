@@ -1,0 +1,4 @@
+00cde5b0 ?FUN_00cde5b0@cMode@@QAEXXZ  # cMode::FUN_00cde5b0 migrated from s00cde2f0 (verbatim, slice spelling)
+00cde600 ?FUN_00cde600@cMode@@QAEXXZ  # cMode::FUN_00cde600 migrated from s00cde2f0 (verbatim, slice spelling)
+00cde660 ?FUN_00cde660@cMode@@QAEXH@Z  # cMode::FUN_00cde660 migrated from s00cde2f0 (verbatim, slice spelling)
+00cdec80 ?FUN_00cdec80@cModeSub@@QAEXHH@Z  # cModeSub::FUN_00cdec80 migrated from s00cde2f0 (verbatim, slice spelling)

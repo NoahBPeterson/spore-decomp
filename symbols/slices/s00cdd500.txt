@@ -1,0 +1,6 @@
+00c99550 ?UpdateGridAndHutArea@cTribe@SP@@QAEXM@Z  # SP::cTribe::UpdateGridAndHutArea (callee of s00cdd500, named from the dev publics; slice address comment)
+00cdd500 ?PreGameModeTransition@cTribeModeStrategy_s00cd_d500@@QAEXII@Z  # cTribeModeStrategy_s00cd_d500::PreGameModeTransition migrated from s00cdd500 (verbatim, slice spelling)
+00cdd960 ?FUN_00cdd960@@YAHXZ  # FUN_00cdd960 migrated from s00cdd500 (verbatim, slice spelling)
+00cdd9c0 ?FUN_00cdd9c0@@YAH_N@Z  # FUN_00cdd9c0 migrated from s00cdd500 (verbatim, slice spelling)
+00cddda0 ?ContinueLoading@cTribeModeStrategy_s00cd_d500@@QAEXXZ  # cTribeModeStrategy_s00cd_d500::ContinueLoading migrated from s00cdd500 (verbatim, slice spelling)
+00cde160 ?Read@cPlayer@@QAE_NPAUcIOStream@@@Z  # cPlayer::Read migrated from s00cdd500 (verbatim, slice spelling)

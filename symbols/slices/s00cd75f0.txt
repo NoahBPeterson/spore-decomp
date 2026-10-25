@@ -1,0 +1,1 @@
+00cd7d10 ?CreateGameDataVector@@YAPAUtGameDataVectorT@Simulator@@XZ  # CreateGameDataVector migrated from s00cd75f0 (verbatim, slice spelling)

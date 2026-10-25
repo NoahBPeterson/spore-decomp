@@ -1,0 +1,5 @@
+00cd91b0 ?GetSelectedCreatureCount@cTribeModeStrategy_s00cd_8e70@SP@@QAEIXZ  # cTribeModeStrategy_s00cd_8e70::GetSelectedCreatureCount migrated from s00cd8e70 (verbatim, slice spelling)
+00cd92b0 ?push_back@Vec12@SP@@QAEXABUElem12@2@@Z  # Vec12::push_back migrated from s00cd8e70 (verbatim, slice spelling)
+00cd9440 ?DestroyRange@Vec16@SP@@QAEXPAUElem16_s00cd_8e70@2@0@Z  # Vec16::DestroyRange migrated from s00cd8e70 (verbatim, slice spelling)
+00cd9a10 ??0cTribeModeStrategy_s00cd_8e70@SP@@QAE@XZ  # cTribeModeStrategy_s00cd_8e70::cTribeModeStrategy migrated from s00cd8e70 (verbatim, slice spelling)
+00cd9ce0 ?GetSelectedCreatureSet@cTribeModeStrategy_s00cd_8e70@SP@@UAEPAUSelSet@2@PAU32@@Z  # cTribeModeStrategy_s00cd_8e70::GetSelectedCreatureSet migrated from s00cd8e70 (verbatim, slice spelling)

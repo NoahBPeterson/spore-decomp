@@ -1,0 +1,2 @@
+00cd0260 ?FUN_00cd0260@@YGEPAX@Z  # FUN_00cd0260 migrated from s00ccfc20 (verbatim, slice spelling)
+00cd0660 ?F_cd0660@CInput@@QAEHPAX00@Z  # CInput::F_cd0660 migrated from s00ccfc20 (verbatim, slice spelling)

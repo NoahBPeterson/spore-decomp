@@ -1,0 +1,4 @@
+00cd6710 ?DestroyRange@@YAPAUcPosseInfo@@PAU1@00@Z  # DestroyRange migrated from s00cd6680 (verbatim, slice spelling)
+00cd6760 ?CopyRange@@YAPAUcPosseInfo@@PAU1@00@Z  # CopyRange migrated from s00cd6680 (verbatim, slice spelling)
+00cd67b0 ?CopyRangeBackward@@YAPAUcPosseInfo@@PAU1@00@Z  # CopyRangeBackward migrated from s00cd6680 (verbatim, slice spelling)
+00cd6fd0 ?DoDestroyValues@@YGXPAUcPosseInfo@@0@Z  # DoDestroyValues migrated from s00cd6680 (verbatim, slice spelling)

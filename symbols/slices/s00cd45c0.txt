@@ -1,21 +1,21 @@
 00cd45c0 FUN_00cd45c0  # tribe-mode flag/mask update (esi-held loop object); complete, 173 diff bytes (loop object in esi not eax)
-00cd46d0 ?FUN_00cd46d0@@YA_NPAPAX@Z  # byte-exact MATCH
-00cd4720 CRefHolder::FUN_00cd4720  # complete; vtable store / ref load scheduling permuted; equiv PASS
-00cd4770 FUN_00cd4770  # complete; mode-switch logic block layout differs, 586 vs 553 bytes
-00cd49a0 ?FUN_00cd49a0@@YAXXZ  # byte-exact MATCH
-00cd49d0 FUN_00cd49d0  # complete; same-size, register/scheduling differences throughout
-00cd4b70 ?FUN_00cd4b70@@YIXPADHH@Z  # byte-exact MATCH
-00cd4bc0 ?FUN_00cd4bc0@@YIXPADHD@Z  # byte-exact MATCH
-00cd4c70 ?FUN_00cd4c70@CTribeMode@@QAEDH@Z  # byte-exact MATCH
-00cd4d50 ?FUN_00cd4d50@@YIDPADH@Z  # byte-exact MATCH
-00cd4d90 ?FUN_00cd4d90@@YGXPAX@Z  # byte-exact MATCH
-00cd4e10 FUN_00cd4e10  # complete; abridged branch bodies (vtable stores expanded), 341 vs 380 bytes
-00cd4f90 ?FUN_00cd4f90@@YAXXZ  # byte-exact MATCH
-00cd5010 ?FUN_00cd5010@@YIXPADH0@Z  # byte-exact MATCH
-00cd5070 ?FUN_00cd5070@@YIXPADH0@Z  # byte-exact MATCH
-00cd50b0 CTribeMode::FUN_00cd50b0  # complete; vector-walk register allocation differs, 320 vs 323 bytes
-00cd5200 FUN_00cd5200  # complete; thiscall arg-push cleanup / frame size differ (unresolved CWinMgr::FindWindowByID)
-00cd52e0 FUN_00cd52e0  # complete; float store scheduling around fnstcw/fistp differs (same 216-byte body)
-00cd53e0 ?FUN_00cd53e0@CTribeMode@@QAEXXZ  # byte-exact MATCH
-00cd54c0 ?FUN_00cd54c0@@YIXPADH@Z  # byte-exact MATCH
-00cd54f0 FUN_00cd54f0  # complete; pointer select emits cmov instead of branch+return shape
+00cd46d0 ?FUN_00cd46d0@@YA_NPAPAX@Z  # FUN_00cd46d0 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd4720 ?FUN_00cd4720@CRefHolder@@QAEPAXPAXPAUcRefBase@@@Z  # CRefHolder::FUN_00cd4720 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd4770 ?FUN_00cd4770@@YAHPADPAX@Z  # FUN_00cd4770 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd49a0 ?FUN_00cd49a0@@YAXXZ  # FUN_00cd49a0 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd49d0 ?FUN_00cd49d0@@YAXPAD00@Z  # FUN_00cd49d0 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd4b70 ?FUN_00cd4b70@@YIXPADHH@Z  # FUN_00cd4b70 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd4bc0 ?FUN_00cd4bc0@@YIXPADHD@Z  # FUN_00cd4bc0 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd4c70 ?FUN_00cd4c70@CTribeMode@@QAEDH@Z  # CTribeMode::FUN_00cd4c70 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd4d50 ?FUN_00cd4d50@@YIDPADH@Z  # FUN_00cd4d50 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd4d90 ?FUN_00cd4d90@@YGXPAX@Z  # FUN_00cd4d90 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd4e10 ?FUN_00cd4e10@@YAXXZ  # FUN_00cd4e10 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd4f90 ?FUN_00cd4f90@@YAXXZ  # FUN_00cd4f90 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd5010 ?FUN_00cd5010@@YIXPADH0@Z  # FUN_00cd5010 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd5070 ?FUN_00cd5070@@YIXPADH0@Z  # FUN_00cd5070 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd50b0 ?FUN_00cd50b0@CTribeMode@@QAEXHPAX@Z  # CTribeMode::FUN_00cd50b0 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd5200 ?FUN_00cd5200@@YAXXZ  # FUN_00cd5200 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd52e0 ?FUN_00cd52e0@@YGPAXPAXMMM@Z  # FUN_00cd52e0 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd53e0 ?FUN_00cd53e0@CTribeMode@@QAEXXZ  # CTribeMode::FUN_00cd53e0 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd54c0 ?FUN_00cd54c0@@YIXPADH@Z  # FUN_00cd54c0 migrated from s00cd45c0 (verbatim, slice spelling)
+00cd54f0 ?FUN_00cd54f0@CTribeMode@@QAE_NXZ  # CTribeMode::FUN_00cd54f0 migrated from s00cd45c0 (verbatim, slice spelling)
