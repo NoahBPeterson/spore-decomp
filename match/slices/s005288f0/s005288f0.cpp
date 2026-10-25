@@ -19,7 +19,9 @@ struct RwDevice {
     virtual void v05();                                                                            // +0x14
     virtual int  v06(cRenderTargetRectID id);                                                      // +0x18
     virtual void v07(); virtual void v08(); virtual void v09(); virtual void v10();
-    virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void v11(); virtual void v12();
+    virtual void v13(int pageID, int allocID, void* camera, int flag);                             // +0x34
+    virtual void v14();
     virtual void v15(); virtual void v16(); virtual void v17();
     virtual void v18(cRenderTargetRectID id, const char* name);                                    // +0x48
 };
@@ -101,6 +103,7 @@ struct RwCamera {                        // object returned by FUN_00761380
     float mNear, mFar;                   // +0x70, +0x74
     uint32_t mVpX, mVpY, mVpW, mVpH;     // +0x78..+0x84
     float mDepthMin, mDepthMax;          // +0x88, +0x8c
+    bool Check();                        // 0x011f3f20
 };
 RwCamera* GetCamera();                   // 0x00761380
 inline void SetMatrix(RwCamera* c, const SseVec4& a, const SseVec4& b, const SseVec4& d, const SseVec4& e) {
@@ -136,6 +139,31 @@ class cRTTBuffer { public:                     // size 0x64
     EmbeddedState* PrepareState();               // 0x005293a0
     void Destroy();                              // 0x00528e20
     uint32_t ClampAndStream(uint32_t requested); // 0x00529520
+    bool RenderSingleModels();                   // 0x00528e90
+};
+
+// ---------------------------------------------------------------- RenderWare state mirrors
+// 0x016f91e0: table of current render-state values, indexed by D3D state number.
+struct RwRenderStateTable {
+    uint32_t mPad00[0x0e];       // +0x000  states 0..13
+    uint32_t mState0E;           // +0x038  state 14   (0x016f9218)
+    uint32_t mState0F;           // +0x03c  state 15   (0x016f921c)
+    uint32_t mPad40[6];          // +0x040  states 16..21
+    uint32_t mState16;           // +0x058  state 22   (0x016f9238)
+    uint32_t mState17;           // +0x05c  state 23   (0x016f923c)
+    uint32_t mState18;           // +0x060  state 24
+    uint32_t mState19;           // +0x064  state 25   (0x016f9244)
+    uint32_t mPad68[0x8e];       // +0x068  states 26..167
+    uint32_t mStateA8;           // +0x2a0  state 168  (0x016f9480)
+};
+
+// 0x015dea58: saved render states restored by cRTTBuffer::BeginDraw.
+struct SavedRenderState {
+    uint32_t mState0E;           // +0x00
+    uint32_t mBlendWasAlpha;     // +0x04
+    uint32_t mState19;           // +0x08
+    uint32_t mState16;           // +0x0c
+    uint32_t mStateA8;           // +0x10
 };
 
 // @ 0x005288f0
@@ -252,20 +280,37 @@ uint32_t cRTTBuffer::ClampAndStream(uint32_t requested)
 
 // @ 0x005295b0
 extern uint32_t* g_dec10;   // 0x015dec10
-void WriteBuffer(uint32_t* a, uint32_t* b, uint32_t* c, uint32_t d)
+
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int size);
+#pragma intrinsic(memcpy)
+
+struct QuadPos {                 // source quad position: supports operator[]
+    float x, y;
+    const float& operator[](int i) const { return (&x)[i]; }
+};
+struct QuadUV { float u, v; };
+struct QuadColor { float r, g, b; };
+struct VertexPos {
+    float x, y, z;
+    VertexPos() {}
+    VertexPos(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+};
+struct cQuadWriter {
+    void EmitVertex4(QuadPos* a, QuadUV* b, QuadColor* c, uint32_t d);   // 0x005295b0
+};
+
+// @ 0x005295b0
+void cQuadWriter::EmitVertex4(QuadPos* a, QuadUV* b, QuadColor* c, uint32_t d)
 {
-    uint32_t* p = g_dec10;
-    p[0] = a[0]; p[1] = a[1]; p[2] = 0;
-    g_dec10 = p + 3;
-    p = g_dec10;
-    p[0] = b[0]; p[1] = b[1];
-    g_dec10 = p + 2;
-    p = g_dec10;
-    p[0] = c[0]; p[1] = c[1]; p[2] = c[2];
-    g_dec10 = p + 3;
-    p = g_dec10;
-    p[0] = d;
-    g_dec10 = p + 1;
+    VertexPos pos((*a)[0], (*a)[1], 0.0f);
+    *(VertexPos*)g_dec10 = pos;
+    g_dec10 += 3;
+    memcpy(g_dec10, b, 8);
+    g_dec10 += 2;
+    memcpy(g_dec10, c, 12);
+    g_dec10 += 3;
+    *g_dec10 = d;
+    g_dec10 += 1;
 }
 
 // @ 0x00529690
@@ -292,16 +337,44 @@ void EffectsDispatch(Matrix44f* m, uint32_t type)
 }
 
 // @ 0x00528e90  SP::cEffectsRenderer::RenderSingleModels
-bool RenderSingleModels()
+bool cRTTBuffer::RenderSingleModels()
 {
-    RwDevice* dev = GetDevice();
-    (void)dev;
-    if (RwCheck() != 0) {
-        Matrix44f local;
-        for (int i = 0; i < 16; ++i)
-            local.m[i] = 0.0f;
-        EffectsDispatch(&local, 1);
-        return true;
-    }
-    return false;
+    GetDevice()->v13(mRTTRect.mPageID, mRTTRect.mAllocID, mCamera, 1);
+    if (!mCamera->Check())
+        return false;
+
+    material = 0;
+    maxparam = 0;
+    maxtexture = 0;
+
+    RwRenderStateTable* rs = (RwRenderStateTable*)0x016f91e0;
+    SavedRenderState* saved = (SavedRenderState*)0x015dea58;
+    uint32_t* dirty = (uint32_t*)0x016fa38c;
+
+    saved->mState16 = rs->mState16;
+    saved->mBlendWasAlpha = (rs->mState17 == 4) ? 1u : 0u;
+    saved->mState0E = rs->mState0E;
+    saved->mStateA8 = rs->mStateA8;
+    saved->mState19 = rs->mState19;
+
+    *dirty |= 0x8000;
+    rs->mState16 = 1;
+    *dirty |= 0x10000;
+    rs->mState17 = 8;
+    *dirty |= 0x80;
+    rs->mState0E = 0;
+    *dirty |= 0x100;
+    rs->mState0F = 0;
+    *dirty |= 0x40000;
+    rs->mState19 = 8;
+
+    Matrix44f mat;
+    for (int i = 0; i < 16; ++i)
+        mat.m[i] = 0.0f;
+    mat.m[0] = 1.0f;
+    mat.m[6] = 1.0f;
+    mat.m[9] = 1.0f;
+
+    EffectsDispatch(&mat, 4);
+    return true;
 }
