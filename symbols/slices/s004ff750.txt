@@ -1,1 +1,3 @@
-005001c0 ?FUN_005001c0@@YAXXZ  # FUN_005001c0 migrated from s004ff750 (verbatim, slice spelling)
+004ff750 ?BuildExportJoints@cExportHelper@@QAEXXZ  # nSPSkinner::cExportHelper::BuildExportJoints migrated from s004ff750 (slice spelling)
+004ffc40 ?BuildExportJointsRecursive@cExportHelper@@QAEIII@Z  # nSPSkinner::cExportHelper::BuildExportJointsRecursive migrated from s004ff750 (slice spelling)
+005001c0 ?ExportDummyStaticSkeleton@cExportHelper@@QAEXXZ  # nSPSkinner::cExportHelper::ExportDummyStaticSkeleton migrated from s004ff750 (slice spelling)
