@@ -43,6 +43,7 @@ struct E12 { u32 a; u32 b; void* p; };
 struct E12Vec {
   E12* b; E12* e; E12* c;
   void FUN_00aeb5b0(void* value);                 // 0x00aeb5b0 (__thiscall on the vector)
+  void FUN_00ae6970();                            // 0x00ae6970 vector dtor
 };
 extern "C" bool EA_ReadInt32(void* s, int* p, int n, int flags);        // 0x0093a780
 
@@ -92,6 +93,7 @@ struct HashTable {
     u32    mBucketCount;   // +0x00
     void** mpBuckets;      // +0x04
     u32    mEndIndex;      // +0x08
+    void FUN_00aeb030(void* table, u32 count);   // 0x00aeb030 destroy_hash_buckets
 };
 
 struct SpaceTool {
@@ -134,8 +136,7 @@ struct SpaceTool {
     void  FUN_00ae9f50();                                        // 0x00ae9f50 OnShutdown0
     void  FUN_00ae9700(E12* out);                                // 0x00ae9700 E12::Read
     void  FUN_00aea510(int n);                                   // 0x00aea510
-    void  FUN_00aeb030(void* table, u32 count);                  // 0x00aeb030 destroy_hash_buckets
-    void  FUN_00ae6970();                                        // 0x00ae6970 vector dtor
+    void  FUN_00b5b9a0();                                        // 0x00b5b9a0 base dtor (ecx == this)
     void  FUN_00de1270(int a);                                   // 0x00de1270 hash-resize
 };
 
@@ -490,26 +491,26 @@ void SpaceTool::FUN_00aeba50(void* stream)
 void SpaceTool::FUN_00aebb30()
 {
     char* s = (char*)this;
-    *(u32*)(s + 0x00) = 0x145bf20;
-    *(u32*)(s + 0x04) = 0x145bf1c;
-    *(u32*)(s + 0x1c) = 0x145bf14;
+    *(volatile u32*)(s + 0x00) = 0x145bf20;
+    *(volatile u32*)(s + 0x04) = 0x145bf1c;
+    *(volatile u32*)(s + 0x1c) = 0x145bf14;
 
-    int e = *(int*)(s + 0x64);
-    if (*(int*)(s + 0x6c) - e > 1 && e != 0)
+    int e = *(volatile int*)(s + 0x64);
+    if (*(volatile int*)(s + 0x6c) - e > 1 && e != 0)
         op_del((void*)(size_t)e);
 
-    FUN_00aeb030(*(void**)(s + 0x44), *(u32*)(s + 0x48));
-    char* ht = s + 0x40;
-    *(u32*)(ht + 0x0c) = 0;
-    if (*(u32*)(ht + 0x08) > 1)
-        op_del(*(void**)(ht + 0x04));
+    HashTable* ht = &mHash;
+    ht->FUN_00aeb030(ht->mpBuckets, ht->mEndIndex);
+    *(u32*)((char*)ht + 0x0c) = 0;
+    if (*(u32*)((char*)ht + 0x08) > 1)
+        op_del(*(void**)((char*)ht + 0x04));
 
     if (*(void**)(s + 0x3c)) {
         void* p = *(void**)(s + 0x3c);
         relref(p);
     }
 
-    FUN_00ae6970();
+    mVec.FUN_00ae6970();
     if (*(void**)(s + 0x20))
         relref(*(void**)(s + 0x20));
 
