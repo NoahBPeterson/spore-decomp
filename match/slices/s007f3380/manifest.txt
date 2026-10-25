@@ -4,3 +4,8 @@ slices/s007f3380/s007f3380.cpp  ?HandleMessage@IMEComp@@QAE_NHPAX@Z  007f36e0  /
 slices/s007f3380/s007f3380.cpp  ?Helper@IMEComp3@@QAEXH@Z  007f3be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s007f3380/s007f3380.cpp  ?HandleMessage@IMECand@@QAE_NHPAX@Z  007f4170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s007f3380/s007f3380.cpp  ?Shutdown@IMEProxy2@@QAE_NXZ  007f4250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f3380/s007f3380.cpp  ?IMECompositionShutdown@@YIXPAX@Z  007f35d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f3380/s007f3380.cpp  ?IMECandidateListCtor@@YIPAXPAX@Z  007f3c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f3380/s007f3380.cpp  ?IMECandidateListDtor@@YIXPAX@Z  007f3cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f3380/s007f3380.cpp  ?IMECandidateListShutdown@@YIXPAX@Z  007f4090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f3380/s007f3380.cpp  ?IMECandidateListScalarDtor@@YIPAXPAX0I@Z  007f4200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
