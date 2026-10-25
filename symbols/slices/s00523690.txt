@@ -1,4 +1,4 @@
-00523690 ?FUN_00523690@@YAXPAX@Z  # FUN_00523690 migrated from s00523690 (verbatim, slice spelling)
-00523900 ?BuildHit@Ctx9@@QAEXPAUHitRec9@@PAUParam9@@UcMeshPos9@@I@Z  # Ctx9::BuildHit migrated from s00523690 (verbatim, slice spelling)
-005240e0 ?FUN_005240e0@@YAXPAX@Z  # FUN_005240e0 migrated from s00523690 (verbatim, slice spelling)
-00524150 ?FUN_00524150@@YAXPAX@Z  # FUN_00524150 migrated from s00523690 (verbatim, slice spelling)
+00523690 ?FUN_00523690@@YIXPAUSkinJob9@@@Z  # SkinJob9 render-job teardown/cancel
+00523900 ?BuildHit@Ctx9@@QAEXPAUHitRec9@@PAUParam9@@UcMeshPos9@@I@Z  # Ctx9::BuildHit
+005240e0 ?FUN_005240e0@@YIXPAUCtx9@@UHitBuildArgs9@@@Z  # Ctx9 hit builder: BuildHit(out=ctx+0x40-0x38, p, pos, seed)
+00524150 ?FUN_00524150@@YIXPAUCtx9@@UHitLookupArgs9@@@Z  # Ctx9 mesh-position lookup then hit build
