@@ -1,3 +1,7 @@
+00df5670 255 flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (import: IsDebuggerPresent); cString temporary hoisted to function scope (orig keeps per-block stack frame, sub esp,0x14)
+00df5ac0 407 flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (no mismatch, low coverage); float clamp compiled to x87 fcompi instead of maxss/minss
+00df6330 248 flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (fake-arity: no call site before cccccccc); explicit `id` literal in FUN_00e00650 call (orig reuses edi)
+00df64c0 250 flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (fault: read at 007c4513, FUN_007c4510 thiscall ecx not set); local `best` pointer aliases the App() result register
 00df5830 176 flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (no mismatch, low coverage)
 00df5940 67 flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS
 00df59c0 135 flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (no mismatch, low coverage)
