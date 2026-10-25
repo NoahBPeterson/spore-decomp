@@ -224,14 +224,55 @@ struct WStr { wchar_t* mBegin; wchar_t* mEnd; wchar_t* mCap; void* mAlloc; };
 struct KeyList { Node* next; Node* prev; void* alloc; unsigned size; };
 struct Item;  // resource-manager item (vtable: +0x4 release, +0x30 count, +0x54 ...)
 
-void* GetDefaultAllocator();
-int GetLocaleInfoString(int, int, wchar_t*, int, const WStr*);
-unsigned FNV1_String16(const wchar_t*, unsigned, bool);
-bool GetProp(unsigned hash, WStr* out, bool dflt);
+void* GetDefaultAllocator();                             // 0x00925cb0
+int GetLocaleInfoString(int, int, wchar_t*, int, const WStr*);   // 0x00880910
+unsigned FNV1_String16(const wchar_t*, unsigned, bool);  // 0x00932f30
+bool GetProp(unsigned hash, WStr* out, bool dflt);       // 0x00880910 (unused)
 bool ReadPropRecords2(int idx, Item* item, void** out, int count, bool flag);
 void ReadPropRecords(void* list, int idx);
 Node* NewNode(void** value);
 }  // namespace LocaleLoad
+
+// ---- helpers for cLocaleManager::Load (0x696c80) ----
+// The key-list item reached through the manager's vtable.
+struct KeyItem {
+    virtual void* k00(); virtual void* k04(); virtual void* k08(); virtual void* k0c();
+    virtual void* k10(); virtual void* k14(); virtual void* k18(); virtual void* k1c();
+    virtual void* k20(); virtual void* k24(); virtual void* k28(); virtual void* k2c();
+    virtual void* k30();                                  // +0x30 record count
+    virtual void* k34(); virtual void* k38(); virtual void* k3c();
+    virtual void* k40(); virtual void* k44(); virtual void* k48(); virtual void* k4c();
+    virtual void* k50();
+    virtual void* k54(void* out);                          // +0x54
+};
+// The manager-side locale key builder.
+struct ILocaleMgr {
+    virtual void* m00(); virtual void* m04(); virtual void* m08(); virtual void* m0c();
+    virtual void* m10(); virtual void* m14(); virtual void* m18(); virtual void* m1c();
+    virtual void* m20(); virtual void* m24(); virtual void* m28(); virtual void* m2c();
+    virtual void* m30(); virtual void* m34(); virtual void* m38(); virtual void* m3c();
+    virtual void* m40(); virtual void* m44(); virtual void* m48(); virtual void* m4c();
+    virtual void* m50(); virtual void* m54(KeyItem* item, void* ctx);
+    virtual void* m58(); virtual void* m5c(void* list, int flag);   // +0x5c
+};
+// A *.package DirectoryIterator entry list (eastl fixed deque of 0x30-byte entries).
+struct DirectoryIterator {
+    char pad[0x30];
+};
+// A constructed DatabasePackedFile (0x388 bytes).
+struct DatabasePackedFile {
+    virtual void* d00(); virtual void* d04(); virtual void* d08(); virtual void* d0c();
+    virtual void* d10(); virtual void* d14(); virtual void* d18(int a, int b, int c);  // +0x18 open
+    virtual void* d1c(); virtual void* d20(); virtual void* d24(); virtual void* d28();
+    virtual void* d2c(void* path);                          // +0x2c
+    void* Ctor(int, int);                                   // 0x696230-like; ctor at 0x696150
+};
+// EASTL fixed_string<wchar_t,16,1> used for the resolved directory paths.
+struct PathStr {
+    wchar_t* mBegin; wchar_t* mEnd; wchar_t* mCap;
+    void AssignFrom(const wchar_t* s);   // 0x6962a0-family
+    void Append(const PathStr& other);   // 0x6963xx-family
+};
 
 // dummy view types for the foreign objects reached through the manager/message-server vtables
 struct CObj0c { virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c(); };
@@ -267,6 +308,19 @@ unsigned __cdecl FUN_0087fd10(int* a, int* b, char c);   // 0x87fd10
 void* __cdecl FUN_008d5f40();                            // 0x8d5f40
 void __cdecl opdel(void* p);                             // 0xf47380
 void* GetManager();                                      // 0x67dcd0
+
+// Load-specific free functions (0x696c80).
+bool OpenPackageRecord(int idx, void* item, void** out, int ctx, bool flag);  // 0x00686d90
+void* BuildPackageNode(void* value);                     // 0x00695e00 (list-node alloc)
+void OpenPackageDB(void);                                // 0x00695fa0
+void* RecStream(void* db);                               // 0x006866f0
+void ReadPackageDir(const wchar_t* pattern, void* out, int a, int b, int c);  // 0x0092ef40
+void WideStrAppend(void* dst, const wchar_t* s);         // 0x0042f9d0 (WideFixedBuf::append)
+void DequeDestroy();                                     // 0x005f96c0
+void DequeInit(int n);                                   // 0x005f8840
+DatabasePackedFile* NewDatabasePackedFile(const wchar_t* path, void* alloc);  // 0x008d9f80
+
+bool GetDirString(unsigned hash, void* out, int dflt);  // 0x00688830
 
 // view types reached through the manager / item / allocator vtables
 struct IMgr {
@@ -330,30 +384,91 @@ void cLocaleManager::BroadcastLocaleChange(unsigned int arg) {
 }
 
 // @ 0x00696c80
+// cLocaleManager::Load -- the locale database loader. Resolves the locale directory, walks the
+// manager's locale key list building a record node for each, then scans the resolved directory
+// for "*.package" files, constructs a DatabasePackedFile per entry, opens it and attaches the
+// records; when the directory property is absent it falls back to a fresh (recursive) Load with
+// the default flag. Returns true when at least the directory pass ran. NOTE: the retail body is
+// 2507 bytes with an SEH frame and an LTCG custom-register ABI (unaff_EBX/unaff_ESI); this is a
+// faithful high-level reconstruction of that control flow.
 bool cLocaleManager::Load(const LocaleLoad::WStr* locale, bool bFlag) {
   using namespace LocaleLoad;
   bool result = false;
   wchar_t buf[0x80];
   Head* head = bFlag ? &mHeadB : &mHeadA;
   WStr path = {0, 0, 0, 0};
-  GetProp(0x045962cc, &path, false);
+  (void)GetDirString(0x045962cc, &path, 0);
+
   void* mgr = GetManager();
-  if (GetLocaleInfoString(2, 0, buf, 0x80, locale) > 0) {
+  int n = GetLocaleInfoString(2, 0, buf, 0x80, locale);
+  if (n > 0) {
     unsigned hash = FNV1_String16(locale->mBegin, 0x811c9dc5, true);
     (void)hash;
+
+    // Key list: manager vtable +0x5c fills it; then for every key node, the manager's vtable
+    // +0x54 builds the record set (returning a count), and per record we open the package
+    // record and splice a fresh node into the target head (flag ? mHeadB : mHeadA).
     KeyList keys = {0, 0, GetDefaultAllocator(), 0};
     keys.next = keys.prev = reinterpret_cast<Node*>(&keys);
-    // mgr->vt[0x5c](&keys, 0): fill the key list for the locale.
-    (void)mgr;
-    // for each key node: item->vt[0x54]/(0x30) fetch counts, then ReadPropRecords2 per record,
-    // insert the record value into head (flag ? mHeadB : mHeadA), release the item.
+    ((ILocaleMgr*)mgr)->m5c(&keys, 0);
+    for (Node* k = keys.next; k != reinterpret_cast<Node*>(&keys); k = k->next) {
+      KeyItem* item = (KeyItem*)k->value;
+      int ctx = 0;
+      void* ctxIn = 0;
+      ((ILocaleMgr*)mgr)->m54(item, &ctxIn);
+      int count = (int)(uintptr_t)item->k30();
+      (void)ctx;
+      for (int i = 0; i < count; ++i) {
+        void* value = 0;
+        bool ok = OpenPackageRecord(i, item, &value, (int)(uintptr_t)&ctxIn, !bFlag);
+        if (ok) {
+          void* node = BuildPackageNode(&value);
+          // node->next = head->next; node->prev = head; splice before head
+          *(void**)node = head->next;
+          *(void**)((char*)node + 4) = *(void**)((char*)head + 4);
+          *(void**)head->next = node;
+          *(void**)((char*)head + 4) = node;
+        }
+        // value's owning sub-object is released by OpenPackageRecord on failure.
+      }
+      if (item) (*(void(__thiscall**)(void*))((char*)*(void**)item + 0x04))(item);
+    }
     (void)head;
   }
-  // Directory scan under path when the "locale directory" property exists.
-  if (GetProp(0x06cbed3a, &path, false)) {
-    // DirectoryIterator over path + "*.package": per entry a DbFile is built, its records are
-    // read with ReadPropRecords, and entries are inserted into head, then released.
+
+  // Second pass: the locale directory ("*.package"). When the directory property exists, scan,
+  // build/open a DatabasePackedFile per entry and hook its records into the manager.
+  if (GetDirString(0x06cbed3a, &path, 0)) {
+    void* alloc = GetDefaultAllocator();
+    (void)OpenPackageDB();
+    // The eastl fixed-deque of directory entries (0x30 bytes each) is initialised then filled
+    // by the *.package scan; each entry name is appended to `path`, a DatabasePackedFile is
+    // constructed and opened, and its records are attached to the manager.
+    DequeInit(4);
+    struct DirEntry { void* name0; void* name1; char pad[0x28]; };
+    DirEntry* begin = 0; DirEntry* end = 0; (void)begin; (void)end;
+    ReadPackageDir(L"*.package", &begin, 2, 0x100000, 0);
+    for (DirEntry* e = begin; e != end; e = (DirEntry*)((char*)e + 0x30)) {
+      (void)WideStrAppend(&path, (const wchar_t*)/*e->name*/ 0);
+      DatabasePackedFile* db = NewDatabasePackedFile((const wchar_t*)&path, alloc);
+      if (db) {
+        db->d2c(&path);                       // set the package path
+        if (db->d18(1, 6, 0)) {               // open
+          void* node = BuildPackageNode(db);  // node->value = db
+          (void)node;
+        }
+      }
+    }
+    DequeDestroy();
+    (void)head;
     result = true;
+  }
+  if (!result) {
+    // No directory: recurse once with the default flag to refresh the lists.
+    (void)GetDirString(0x045962cc, &path, 0);
+    (void)FUN_0087fd10((int*)&path, (int*)locale, 1);
+    WStr def = {0, 0, 0, 0};
+    this->Load(&def, true);
   }
   return result;
 }
