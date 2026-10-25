@@ -394,7 +394,7 @@ void __fastcall FUN_00f99520(TerrainSphere* self, void* dummy)
         if (len <= 1e-6) {
             arg = 0;
         } else {
-            float h = map->GetHeightAt(&v);
+            float h = self->mMap->GetHeightAt(&v);
             if (self->mFlag8ac == 0 && h < radius) {
                 arg = 0;
             } else {
