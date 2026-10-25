@@ -1,10 +1,10 @@
-00b335d0 789 front-end state dispatcher: 789-byte switch dispatch over state tags; not reconstructed (stub)
+00b335d0 789 complete; front-end state dispatcher: six-tag front/back test, eax-convention NextState call, ordered manager notifications, per-state hooks and SimTicker handoff.  Frame differs (809 vs 789: inline-asm eax shim forces a frame pointer); flag-slot and branch schedule differ.  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid, random state pointers fault on dereference).
 00b338f0 122 star-database reload loop: complete; 125 diff, index/count and mpBegin reload schedule differs
-00b33970 693 front-end state dispatcher (second half): not reconstructed (stub)
+00b33970 693 complete; front-end state dispatcher (second half): same tag tests, matching sequence of transition managers, viewer slot 0x58/0x54 hooks, and per-state helpers.  Frame/register schedule differs (681 vs 693).  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid, random state pointers fault on dereference).
 00b33c70 11 adjusting thunk: 2 diff, vtable-slot target stays in edx in the original (ours uses eax)
 00b33d00 30 state transition A: 2 diff, vtable-slot target stays in edx in the original (ours uses eax)
 00b33d20 17 state transition B: 2 diff, vtable-slot target stays in edx in the original (ours uses eax)
 00b33d40 134 state setter: 5 diff, case/default block order after the jump table is inverted
-00b33f50 815 render/viewer state handler: not reconstructed (stub)
+00b33f50 815 complete; render/viewer state handler: code 0xf copies to viewer A and forwards, 0x11 renders through viewer B (raster, clear colour, clear mask), 0x1a captures with modified flags (flags & ~0x800 | 0x7700) and restores the five global render-state words + device states.  Frame and local colour layout differ (797 vs 815).  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (395 valid, 17.0% coverage - random code values rarely hit 0xf/0x11/0x1a).
 00b34280 245 terrain height query: complete; 258 diff, x87/SSE mix and local-vector frame layout differ
-00b34380 644 per-noun draw pass: not reconstructed (stub)
+00b34380 644 complete; per-noun draw/particle pass over the draw list: filters on entity flag +0x64 / owner +0x180 / noun +0x75, mode 0 applies the Dot3 threshold 1.5258789e-05 (velocity = -dir.xy, +dir.z, scaled by 1/dt, transformed and applied with state 3), mode 1 forwards dt then a quaternion with the {q1,-q0,q3,-q2} conjugation when a creature or +0xd04 is present.  Register allocation and loop shape differ (500 vs 644).  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (154 valid, 11.6% coverage - random entity pointers fault early).
