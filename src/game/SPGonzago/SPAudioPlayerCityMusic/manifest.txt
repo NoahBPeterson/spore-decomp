@@ -1,0 +1,23 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?SetPosition@cPlayerCityMusic@Audio@SP@@QAEXPAM@Z  00eacd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?SelectRhythm@cPlayerCityMusic@Audio@SP@@QAE_NI@Z  00eacdb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?SelectInstrument@cPlayerCityMusic@Audio@SP@@QAE_NI@Z  00eace30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?PlayMelody@cPlayerCityMusic@Audio@SP@@QAEXI@Z  00eaceb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?PlayNote@cPlayerCityMusic@Audio@SP@@QAEXI@Z  00eacf10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00eacf70@cPlayerCityMusic@Audio@SP@@QAEXE@Z  00eacf70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00eacfb0@@YAPAUElem6c@@PAU1@00@Z  00eacfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?Pause@cPlayerCityMusic@Audio@SP@@QAEXE@Z  00eacff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00ead040@cPlayerCityMusic@Audio@SP@@QAEOXZ  00ead040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00ead090@cPlayerCityMusic@Audio@SP@@QAEXHM@Z  00ead090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?SetNoteDuration@cPlayerCityMusic@Audio@SP@@QAEXHM@Z  00ead0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00ead660@cMusicVec@@QAEXXZ  00ead660  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00ead6a0@cEditorResource_s00ea_d1a0@@QAEXXZ  00ead6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?Start@cPlayerCityMusic_s00ea_d1a0@Audio@SP@@QAEXH@Z  00ead6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00ead840@cQuery840@@QAE_NXZ  00ead840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00eada10@cList@@QAEXPBH@Z  00eada10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00eada50@@YGXPAUcListNode@@PAH1H@Z  00eada50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00eadab0@@YGXPAUcListNode@@IPBH@Z  00eadab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00eadb10@@YAXPAPAXH@Z  00eadb10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ??1cPlayerCityMusic_s00ea_d1a0@Audio@SP@@QAE@XZ  00eadb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?ScalarDeletingDtor@ResMusic@@QAEPAU1@E@Z  00eaf2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?do_fill_Music@@YAXPAUResMusic@@0PBU1@@Z  00eaf350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
