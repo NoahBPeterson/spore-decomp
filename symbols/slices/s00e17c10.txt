@@ -15,7 +15,7 @@
 00e18600  cPanelMsg0c::OnMessage(msg, arg) -> char  # this=panel+0x0c; handler sub-object message 0x65ff54a path (NOT byte-exact; see nonmatching.txt)
 00e186d0  cUIMissionCardPanel::OnNotify(a, b) -> void  # rebuild layout via cConnectionDialog, Init/SetParentWin/FindWindowByID, vtbl[0x104] (NOT byte-exact; see nonmatching.txt)
 00e18810  cUIMissionCardPanel::ShutdownCard() -> void  # release card, shutdown layout, reset field
-00e18860  cUIMissionCardPanel::SetVisibleSlot(v) -> void  # if layout: tail-call SetVisibility(layout, 1)
+00e18860 ?SetVisibleSlot@cUIMissionCardPanel@@QAEXH@Z  # cUIMissionCardPanel::SetVisibleSlot migrated from s00e17c10 (verbatim, slice spelling)
 00e188b0  cUIMissionCardPanel::InitHints(param) -> void*  # operator_new 0x18 -> cConnectionDialog ctor, swap @0x30, layout Init, SetVisibility, FindWindowByID, vtbl[0x104] (NOT byte-exact; see nonmatching.txt)
 00e18980  cUIMissionCardPanel::DestroyMembers() -> void  # reset vtables, free tree, RemoveHandler, release handler/layout (NOT byte-exact; see nonmatching.txt)
 00e18a30  cUIMissionCardPanel::ShutdownA() -> void  # unregister handler hash 0xf45f7d78, clear tree, hide layout (NOT byte-exact; see nonmatching.txt)

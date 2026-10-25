@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0107ac20 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 101 bytes - tool widget helper not reconstructed.
+0107ac90 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 339 bytes - tool widget helper not reconstructed.
+0107ae70 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 111 bytes - tool window constructor: three vtable stores (+0x00, +0x08, +0x0c) show a multiple-inheritance hierarchy with two extra vfptrs that the PDB-free source cannot pin down, plus Construct, Init, tooltip ctor, cString ctor and seven zeroed pointer fields.
+0107af00 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 152 bytes - tool widget helper not reconstructed.
+0107afa0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 377 bytes - tool widget helper not reconstructed.
+0107b120 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 317 bytes - cSPUITools::GetToolAvailability not reconstructed.

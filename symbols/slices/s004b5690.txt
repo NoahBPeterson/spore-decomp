@@ -1,11 +1,11 @@
-004b5ad0 eastl::vector<Vec3,sp_vector_allocator>::DoInsertValue  # byte-exact EASTL DoInsertValue reconstruction
-004b6000 eastl::vector<EA::AutoRefCount<SP::cPropertyList>,sp_vector_allocator>::DoInsertValue  # PDB name, byte-exact
-004b66b0 eastl::uninitialized_relocate<Vec3>  # byte-exact
-004b64b0 eastl::uninitialized_relocate<Record11c>  # byte-exact
 004b5980 eastl::rbtree<Key16>::rbtree  # byte-exact ctor (mAnchor(), mnSize(0), reset())
 004b5a20 eastl::rbtree<Key16>::reset  # byte-exact
 004b5a60 eastl::rbtree<uint32_t,pair>::DoNuke  # byte-exact
+004b5ad0 eastl::vector<Vec3,sp_vector_allocator>::DoInsertValue  # byte-exact EASTL DoInsertValue reconstruction
 004b5e90 eastl::rbtree<uint32_t,pair>::lower_bound  # byte-exact
 004b5f40 eastl::rbtree<Key16>::lower_bound  # byte-exact
+004b6000 ?DoInsertValue@?$vector_s004b_5690@V?$AutoRefCount_s004b_5690@VcPropertyList_s004b_5690@SP@@@EA@@Usp_vector_allocator_s004b_5690@eastl@@@eastl@@QAEXPAV?$AutoRefCount_s004b_5690@VcPropertyList_s004b_5690@SP@@@EA@@ABV34@@Z  # DoInsertValue migrated from s004b5690 (verbatim, slice spelling)
+004b64b0 eastl::uninitialized_relocate<Record11c>  # byte-exact
 004b6550 eastl::rbtree<uint32_t,pair>::DoInsertValue_hint  # byte-exact (iterator hint, unique keys)
+004b66b0 eastl::uninitialized_relocate<Vec3>  # byte-exact
 004b6710 eastl::rbtree<uint32_t,pair>::DoInsertValue_hint  # byte-exact (iterator hint, unique keys)

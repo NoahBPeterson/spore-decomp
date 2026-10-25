@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUITools.cpp  ?DoInsertValue@?$vector_s004b_5690@V?$AutoRefCount_s004b_5690@VcPropertyList_s004b_5690@SP@@@EA@@Usp_vector_allocator_s004b_5690@eastl@@@eastl@@QAEXPAV?$AutoRefCount_s004b_5690@VcPropertyList_s004b_5690@SP@@@EA@@ABV34@@Z  004b6000  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUITools.cpp  ?SetVisibleSlot@cUIMissionCardPanel@@QAEXH@Z  00e18860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUITools.cpp  ?FUN_0107adf0@cToolWindow@@QAEXXZ  0107adf0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITools.cpp  ?FUN_0107ae40@cToolWindow@@QAEXPAX@Z  0107ae40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITools.cpp  ?PopulateLeft@cToolsPanelLeft@@QAE_NIPAVcToolsEvent@@@Z  0107b6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
