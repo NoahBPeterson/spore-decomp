@@ -622,11 +622,11 @@ using namespace EA::XHTML::Text;
 // External border emitters (reconstructed in slice s008e9a10) and helpers.
 // ---------------------------------------------------------------------------
 // 0x008e9a10 / 0x008e9b10 / 0x008e9fe0 -- __stdcall: (rc, a, b, edgeIndices, flags[, ...]).
-void __stdcall BorderDrawEdges(RenderingContext* rc, float* a, float* b, int* c, uchar flags);
+void __stdcall BorderDrawEdges(RenderingContext* rc, float* a, float* b, int* c, uchar flags);  // 0x008e9a10
 void __stdcall BorderDrawDashes(RenderingContext* rc, float* a, float* b, int* c, uchar flags,
-                                float step);
+                                float step);  // 0x008e9b10
 void __stdcall BorderDrawGradients(RenderingContext* rc, float* a, float* b, int* c, float* colors,
-                                   uchar flags);
+                                   uchar flags);  // 0x008e9fe0
 
 const float kHalf = 0.5f;             // 0x01471064
 const float kNegZero = -0.0f;         // 0x013eb8b0
@@ -647,7 +647,7 @@ const float kEight = 8.0f;            // 0x013eeda0
 void Border::Draw(RenderingContext& rc, const RectT<float>* pRect, uchar flags)
 {
     // Per-phrase edge mask: a phrase only draws the edges it is selected for.
-    ushort edgeFlags[9] = {0};
+    volatile ushort edgeFlags[9] = {0};
     edgeFlags[mEdgeLeftPhraseIndex] |= 8;
     edgeFlags[mEdgeRightPhraseIndex] |= 2;
     edgeFlags[mEdgeTopPhraseIndex] |= 1;
@@ -666,9 +666,10 @@ void Border::Draw(RenderingContext& rc, const RectT<float>* pRect, uchar flags)
     if (flags & 4)
         borderBottom = 0.0f;
 
-    if (borderLeft == 0.0f && mEdgeLeftPhraseIndex == 0 && borderRight == 0.0f &&
-        mEdgeRightPhraseIndex == 0 && borderTop == 0.0f && mEdgeTopPhraseIndex == 0 &&
-        borderBottom == 0.0f && mEdgeBottomPhraseIndex == 0)
+    if (!((borderLeft != 0.0f && mEdgeLeftPhraseIndex != 0) ||
+          (borderRight != 0.0f && mEdgeRightPhraseIndex != 0) ||
+          (borderTop != 0.0f && mEdgeTopPhraseIndex != 0) ||
+          (borderBottom != 0.0f && mEdgeBottomPhraseIndex != 0)))
         return;
 
     const RectT<float>& rect = *pRect;
@@ -677,12 +678,14 @@ void Border::Draw(RenderingContext& rc, const RectT<float>* pRect, uchar flags)
 
     if (borderLeft + borderRight > width) {
         const float half = (float)floor((double)(width * kHalf));
-        borderLeft = (borderLeft > half) ? half : borderLeft;
+        if (borderLeft > half)
+            borderLeft = half;
         borderRight = width - borderLeft;
     }
     if (borderTop + borderBottom > height) {
         const float half = (float)floor((double)(height * kHalf));
-        borderTop = (borderTop > half) ? half : borderTop;
+        if (borderTop > half)
+            borderTop = half;
         borderBottom = height - borderTop;
     }
 
@@ -702,35 +705,56 @@ void Border::Draw(RenderingContext& rc, const RectT<float>* pRect, uchar flags)
     if (edgeFlags[3] != 0)
         BorderDrawEdges(&rc, a, b, (int*)this, (uchar)edgeFlags[3]);
     if (edgeFlags[1] != 0)
-        BorderDrawDashes(&rc, a, b, (int*)this, (uchar)edgeFlags[1], 1.0f);
+        BorderDrawDashes(&rc, a, b, (int*)this, (int)(ushort)edgeFlags[1], 1.0f);
     if (edgeFlags[2] != 0)
         BorderDrawDashes(&rc, a, b, (int*)this, (uchar)edgeFlags[2], kThree);
 
-    // The 1/3-inset dash rects.
+    // One-third-inset edge bands, drawn from the outer rect inwards and from
+    // the inner rect outwards.
     if (edgeFlags[4] != 0) {
-        float c0[4];
-        float c1[4];
-        const float il = (float)floor((double)((width)*kOneThird)) + kHalf;
-        const float it = (float)floor((double)((height)*kOneThird)) + kHalf;
-        const float ir = (float)floor((double)((borderRight)*kOneThird)) + kHalf;
-        const float ib = (float)floor((double)((borderBottom)*kOneThird)) + kHalf;
-        c0[0] = a[0]; c0[1] = a[1]; c0[2] = a[2] - il; c0[3] = a[3] - it;
-        c1[0] = a[0] + ir; c1[1] = a[1] + ib; c1[2] = a[2]; c1[3] = a[3];
-        BorderDrawEdges(&rc, c0, c1, (int*)this, (uchar)edgeFlags[4]);
-        BorderDrawEdges(&rc, c1, c0, (int*)this, (uchar)edgeFlags[4]);
+        const float f1 = (float)floor((double)(borderLeft * kOneThird + kHalf));
+        const float f2 = (float)floor((double)(borderTop * kOneThird + kHalf));
+        const float f3 = (float)floor((double)(borderRight * kOneThird + kHalf));
+        const float f4 = (float)floor((double)(borderBottom * kOneThird + kHalf));
+        float outerIn[4];
+        float innerOut[4];
+        outerIn[0] = a[0] + f1;
+        outerIn[1] = a[1] + f2;
+        outerIn[2] = a[2] - f3;
+        outerIn[3] = a[3] - f4;
+        innerOut[0] = b[0] - f1;
+        innerOut[1] = b[1] - f2;
+        innerOut[2] = b[2] + f3;
+        innerOut[3] = b[3] + f4;
+        BorderDrawEdges(&rc, a, outerIn, (int*)this, (uchar)edgeFlags[4]);
+        BorderDrawEdges(&rc, innerOut, b, (int*)this, (uchar)edgeFlags[4]);
     }
 
     // Corner banks: two 4-colour ramps swept in opposite directions.
     const float colsNeg[4] = {kNegPointTwo, kNegPointOne, kPointOne, kPointTwo};
     const float colsPos[4] = {kPointTwo, kPointOne, kNegPointOne, kNegPointTwo};
     if (edgeFlags[5] != 0 || edgeFlags[6] != 0) {
+        const float h1 = (float)floor((double)(borderLeft * kHalf));
+        const float h2 = (float)floor((double)(borderTop * kHalf));
+        const float h3 = (float)floor((double)(borderRight * kHalf));
+        const float h4 = (float)floor((double)(borderBottom * kHalf));
+        float outerIn[4];
+        float innerOut[4];
+        outerIn[0] = a[0] + h1;
+        outerIn[1] = a[1] + h2;
+        outerIn[2] = a[2] - h3;
+        outerIn[3] = a[3] - h4;
+        innerOut[0] = b[0] - h1;
+        innerOut[1] = b[1] - h2;
+        innerOut[2] = b[2] + h3;
+        innerOut[3] = b[3] + h4;
         if (edgeFlags[5] != 0) {
-            BorderDrawGradients(&rc, a, b, (int*)this, (float*)colsNeg, (uchar)edgeFlags[5]);
-            BorderDrawGradients(&rc, b, a, (int*)this, (float*)colsPos, (uchar)edgeFlags[5]);
+            BorderDrawGradients(&rc, a, outerIn, (int*)this, (float*)colsNeg, (uchar)edgeFlags[5]);
+            BorderDrawGradients(&rc, innerOut, b, (int*)this, (float*)colsPos, (uchar)edgeFlags[5]);
         }
         if (edgeFlags[6] != 0) {
-            BorderDrawGradients(&rc, a, b, (int*)this, (float*)colsPos, (uchar)edgeFlags[6]);
-            BorderDrawGradients(&rc, b, a, (int*)this, (float*)colsNeg, (uchar)edgeFlags[6]);
+            BorderDrawGradients(&rc, a, outerIn, (int*)this, (float*)colsPos, (uchar)edgeFlags[6]);
+            BorderDrawGradients(&rc, innerOut, b, (int*)this, (float*)colsNeg, (uchar)edgeFlags[6]);
         }
     }
     if (edgeFlags[7] != 0)
