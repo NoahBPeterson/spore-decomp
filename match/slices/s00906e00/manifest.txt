@@ -1,2 +1,3 @@
 # slice s00906e00 -- expat 2.0.1 xmlparse.c tokenizer / DTD helpers
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00906e00/s00906e00_dtd.cpp  _dtdCopy  00907070  /O2 /MD /Gy /TC -DXML_NS=1 -DXML_DTD=1 -DXML_CONTEXT_BYTES=1024 -DBYTEORDER=1234 -DHAVE_MEMMOVE -DXML_STATIC -DXML_UNICODE
