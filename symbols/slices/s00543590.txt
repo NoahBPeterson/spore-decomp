@@ -1,0 +1,7 @@
+00543590 SP::Feed::AtomParser::StartLink  # dev PDB candidate; rel/href/term attributes -> entry thumb/asset link or doc self link
+005439d0 SP::Feed::AtomParser::StartCategory  # term/scheme attributes -> mTags (String16) / mUintList (wcstoul)
+00543b90 SP::Feed::AtomParser::StartImage1  # byte-exact; calls the shared image helper with mode 1
+00543bb0 SP::Feed::AtomParser::StartImage2  # byte-exact; image helper, mode 2
+00543bd0 SP::Feed::AtomParser::StartImage3  # byte-exact; image helper, mode 3
+00543bf0 SP::Feed::AtomParser::StartImage4  # byte-exact; image helper, mode 4
+00543c10 SP::Feed::AtomParser::StartImage  # shared helper called by StartImage1..4; name inferred
