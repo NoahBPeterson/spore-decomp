@@ -24,3 +24,12 @@
 0167bd10 g_kClamp
 0167bd5c g_flagB
 0167bd5d g_flagA
+0142eae0 g_kBallisticHeight  # 700.0f
+0145ccf8 g_kKeyboardSpeed  # 10.0f
+0145cd00 g_kRadToDeg  # 57.29578f (radians -> degrees)
+0145cd6c g_kYawToDeg  # 5.729578f
+0147b9f0 g_kMaxInterpTime  # 6.0f
+01485ac0 g_kKeyboardAccelTime  # 0.7f
+0167bbf0 g_mouseDeltaX  # mouse delta x (int)
+0167bbf4 g_mouseDeltaY  # mouse delta y (int)
+0167bc78 g_cameraVarMap  # SP::VarMap camera scratch-variable table

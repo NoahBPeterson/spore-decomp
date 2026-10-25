@@ -36,11 +36,24 @@ extern const float g_cosC;      // 0x1567dbc = 5-degree angle; cos() taken at us
 extern const float g_fA;        // 0x1567d90
 extern const float g_lim20;     // 0x13eecd8 = 20.0f
 extern const float g_nlim20;    // 0x13fdf18 = -20.0f
+// camera-script defaults and unit conversions
+extern const float g_kKeyboardAccelTime;   // 0x1485ac0 = 0.7f
+extern const float g_kKeyboardSpeed;       // 0x145ccf8 = 10.0f
+extern const float g_kMaxInterpTime;       // 0x147b9f0 = 6.0f
+extern const float g_kBallisticHeight;     // 0x142eae0 = 700.0f
+extern const float g_kRadToDeg;            // 0x145cd00 = 57.29578f
+extern const float g_kYawToDeg;            // 0x145cd6c = 5.729578f
+extern int g_mouseDeltaX;           // 0x167bbf0
+extern int g_mouseDeltaY;           // 0x167bbf4
 
 void* FUN_0067dd50();                 // 0x67dd50
-void  VarMapSetVar(void* map, const char* name, float v);  // 0x7f25c0
-float VarMapGetVar(void* map, const char* name);           // 0x7f2590
-void  VarMapFlush(void* map);                              // 0x7f2500
+// SP::VarMap singleton (camera scratch variable table).
+struct VarMap {
+  float GetVar(const char* name);           // 0x7f2590
+  void  SetVar(const char* name, float v);  // 0x7f25c0
+  void  Flush();                            // 0x7f2500
+};
+extern VarMap g_cameraVarMap;         // 0x167bc78
 void* SP_GameInputManager();          // 0xb3d250
 void* FUN_0067cab0(int id);           // 0x67cab0
 struct CCursorAttachmentLayout {
@@ -300,9 +313,66 @@ float BezierEval(float* a, float* b, float* c, float* d, float p5, float p6) {
   return f3 * (((*d - ((p5 * p5) * f1 * 3.0f + f2)) / (p5 + p5) + f1 * f3) * f3 + f2) + *a;
 }
 
-// @ 0x00b0f270  (giant; see partial.txt)
-void cTerrainCameraController::RunCameraScript(int, int, int, int, int) {
-  // incomplete skeleton: long straight-line sequence of VarMap::SetVar/GetVar.
+// @ 0x00b0f270
+// Publishes the camera state into the camera scratch VarMap, runs the program
+// bound to it and reads the resulting values back into the controller.
+void cTerrainCameraController::RunCameraScript(int keyboard_scroll_x, int keyboard_scroll_y,
+                                               int direction, int keyboard_rotate,
+                                               int camera_delta_time) {
+  int* pi = (int*)vt0(FUN_0067dd50(), 7);   // 0x67dd50, vtable slot 7
+  // The five arguments arrive as 5 machine words (symbol is HHHHH); callers push
+  // float bit patterns for direction / keyboard_rotate / delta time.
+  float& fDirection = *(float*)&direction;
+  float& fKeyboardRotate = *(float*)&keyboard_rotate;
+  float& fScrollX = *(float*)&keyboard_scroll_x;
+  float& fScrollY = *(float*)&keyboard_scroll_y;
+  float& fDeltaTime = *(float*)&camera_delta_time;
+
+  g_cameraVarMap.SetVar("camera_scratch_var_0", m2b8);
+  g_cameraVarMap.SetVar("camera_scratch_var_1", m2bc);
+  g_cameraVarMap.SetVar("camera_scratch_var_2", m2c0);
+  g_cameraVarMap.SetVar("camera_scratch_var_3", m2c4);
+  g_cameraVarMap.SetVar("camera_scratch_var_4", m2c8);
+  g_cameraVarMap.SetVar("keyboard_acceleration_time", g_kKeyboardAccelTime);
+  g_cameraVarMap.SetVar("keyboard_translation_speed", g_kKeyboardSpeed);
+  g_cameraVarMap.SetVar("min_interpolation_time", g_kKeyboardAccelTime);
+  g_cameraVarMap.SetVar("max_interpolation_time", g_kMaxInterpTime);
+  g_cameraVarMap.SetVar("ballistic_max_height", g_kBallisticHeight);
+  g_cameraVarMap.SetVar("default_distance", m114);
+  g_cameraVarMap.SetVar("max_pitch", m2b0 * g_kRadToDeg);
+  g_cameraVarMap.SetVar("min_pitch", m2ac * g_kRadToDeg);
+  g_cameraVarMap.SetVar("direction", fDirection);
+  g_cameraVarMap.SetVar("distance", m114);
+  g_cameraVarMap.SetVar("pitch", m138 * g_kRadToDeg);
+  g_cameraVarMap.SetVar("yaw", m15c * g_kRadToDeg);
+  g_cameraVarMap.SetVar("edge_distance_x", *(float*)&g_edgeX);
+  g_cameraVarMap.SetVar("edge_distance_y", *(float*)&g_edgeY);
+  g_cameraVarMap.SetVar("avatar_speed", 0.0f);
+  g_cameraVarMap.SetVar("anchor_delta_x", 0.0f);
+  g_cameraVarMap.SetVar("anchor_delta_y", 0.0f);
+  g_cameraVarMap.SetVar("mouse_move_x", (float)g_mouseDeltaX / (float)pi[0]);
+  g_cameraVarMap.SetVar("mouse_move_y", (float)(-g_mouseDeltaY) / (float)pi[1]);
+  g_cameraVarMap.SetVar("keyboard_rotate", fKeyboardRotate);
+  g_cameraVarMap.SetVar("keyboard_scroll_x", fScrollX);
+  g_cameraVarMap.SetVar("keyboard_scroll_y", fScrollY);
+  g_cameraVarMap.SetVar("mouse_rotate_sensitivity_x", m298 * g_kRadToDeg);
+  g_cameraVarMap.SetVar("mouse_rotate_sensitivity_y", m29c * g_kYawToDeg);
+  g_cameraVarMap.SetVar("height_above_water", m274);
+  g_cameraVarMap.SetVar("camera_delta_time", fDeltaTime);
+  float altZoomMode = mb169 ? g_one : 0.0f;
+  g_cameraVarMap.SetVar("alt_zoom_mode", altZoomMode);
+  g_cameraVarMap.Flush();
+
+  m2b8 = g_cameraVarMap.GetVar("camera_scratch_var_0");
+  m2bc = g_cameraVarMap.GetVar("camera_scratch_var_1");
+  m2c0 = g_cameraVarMap.GetVar("camera_scratch_var_2");
+  m2c4 = g_cameraVarMap.GetVar("camera_scratch_var_3");
+  m2c8 = g_cameraVarMap.GetVar("camera_scratch_var_4");
+  m368 = g_cameraVarMap.GetVar("keyboard_acceleration_time");
+  m36c = g_cameraVarMap.GetVar("keyboard_translation_speed");
+  m374 = g_cameraVarMap.GetVar("min_interpolation_time");
+  m378 = g_cameraVarMap.GetVar("max_interpolation_time");
+  m37c = g_cameraVarMap.GetVar("ballistic_max_height");
 }
 
 // @ 0x00b0fd00  (giant x87 rotation; see partial.txt)
