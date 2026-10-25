@@ -1,0 +1,8 @@
+00e9fe40 ?FUN_00e9fe40@@YI_NPAX0II@Z  # FUN_00e9fe40 migrated from s00e9fca0 (verbatim, slice spelling)
+00e9fe90 ?FUN_00e9fe90@@YIXPAUcWindowPulse@@PAXPAUIWnd@@@Z  # FUN_00e9fe90 migrated from s00e9fca0 (verbatim, slice spelling)
+00e9ffb0 ?FUN_00e9ffb0@@YIXPAUcCityMusicEditor@@PAX1@Z  # FUN_00e9ffb0 migrated from s00e9fca0 (verbatim, slice spelling)
+00ea0010 ?FUN_00ea0010@@YIXPAUcCityMusicEditor@@PAXI@Z  # FUN_00ea0010 migrated from s00e9fca0 (verbatim, slice spelling)
+00ea0200 ?FUN_00ea0200@@YIXPAUcCityMusicEditor@@PAX@Z  # FUN_00ea0200 migrated from s00e9fca0 (verbatim, slice spelling)
+00ea0350 ?FUN_00ea0350@@YAXPAPAX00@Z  # FUN_00ea0350 migrated from s00e9fca0 (verbatim, slice spelling)
+00ea03e0 ?RecursiveButtonSelect@@YAXPAX0@Z  # RecursiveButtonSelect migrated from s00e9fca0 (verbatim, slice spelling)
+00ea0460 ?FUN_00ea0460@@YIXPAUcCityMusicEditor@@PAX@Z  # FUN_00ea0460 migrated from s00e9fca0 (verbatim, slice spelling)

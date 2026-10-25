@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ?FUN_00e9fe40@@YI_NPAX0II@Z  00e9fe40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ?FUN_00e9ffb0@@YIXPAUcCityMusicEditor@@PAX1@Z  00e9ffb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ?FUN_00ea0350@@YAXPAPAX00@Z  00ea0350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ?RecursiveButtonSelect@@YAXPAX0@Z  00ea03e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ??1PulseVec@@QAE@XZ  00ea0e60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ?FUN_00ea1200@@YAXPAXPAUcSPUILayout_s00ea_0910@@D@Z  00ea1200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
