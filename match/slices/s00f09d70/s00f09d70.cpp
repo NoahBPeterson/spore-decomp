@@ -45,7 +45,8 @@ struct CGameDataFns {
 };
 // HashTbl::TaskGroupLookup 0x00f09c90; thiscall, this = global hashtable @ 0x015ad558.
 struct HashTbl {
-    int* __thiscall TaskGroupLookup(int* key);   // 0x00f09c90
+    int* __thiscall TaskGroupLookup(int* key);        // 0x00f09c90
+    int* __thiscall FindOrInsertTextStyle(int* key);  // 0x00f09bf0
 };
 #define g_pHashTbl ((HashTbl*)0x015ad558)
 extern char** g_pp7d88;   // 0x016c7d88 (pointer to a 2-pointer global table)
@@ -167,36 +168,114 @@ int __fastcall FUN_00f09e00(void* p)
 // 0x00f09fc0  choose the nearest scenario (time based)
 // ---------------------------------------------------------------------------
 extern float SPUIHelpers_GetElapsedSeconds();     // 0x00805080
-extern float g_Elapsed;                           // 0x016c7d88[0..1]
-extern int   FUN_00b3d240();                      // 0x00b3d240
-extern int   FUN_00f07e90();                      // 0x00f07e90
-extern int   FUN_00f07e10();                      // 0x00f07e10
-extern float FUN_00f09bf0(void*);                 // 0x00f09bf0
-extern int   FUN_00f08350(int, void*);            // 0x00f08350
-extern int   FUN_006c0200();                      // 0x006c0200
+extern void* FUN_00b3d240();                      // 0x00b3d240 -> global UI manager object
+// PanelHasFlaggedEntry takes the window in ecx (thiscall-style) and returns bool.
+extern bool  __fastcall FUN_00f07e90(void* pWnd); // 0x00f07e90
+extern bool  FUN_00f07e10(void* pWnd);            // 0x00f07e10 CanOpenProgressPanel
+extern float FUN_00f08350(void*, void*);          // 0x00f08350 ScoreFacing
+extern void* __fastcall FUN_006c0200(void* pObj); // 0x006c0200 -> pObj->m18
+extern float g_fScoreSeed;                        // 0x013ef654 initial best score
+extern float g_fSearchRadius;                     // 0x014853bc distance limit handed to vf0x2c
+
+// cached selection at 0x016c7d88: the chosen window and its scenario index
+struct WndSel {
+    void* mpWnd;      // +0x00
+    int   mIndex;     // +0x04
+};
+inline WndSel* Sel() { return (WndSel*)g_pp7d88; }
+
+// candidate list filled by Wnd::vf0x2c: begin/end/cap over an inline buffer
+struct WndSearch {
+    void**   mpBegin;      // +0x00
+    void**   mpEnd;        // +0x04
+    void**   mpCap;        // +0x08
+    char     mPad0c[8];    // +0x0c
+    uint32_t mnFlags;      // +0x14
+    void*    maWnd[50];    // +0x18
+};
+
+// header the list allocator keeps in front of every block it hands out
+struct AllocHeader {
+    uint32_t mnOwner;   // -0x04, zero for a block the allocator did not own
+};
+
+// vtable slot helpers for the window objects (raw vfptr dispatch)
+inline void* WndAttr(void* pWnd, int nId)
+{
+    return (*(void*(__thiscall**)(void*, int))((char*)*(void**)pWnd + 0xb8))(pWnd, nId);
+}
+inline void WndAddRef(void* pWnd)
+{
+    (*(void(__thiscall**)(void*))((char*)*(void**)pWnd + 0xbc))(pWnd);
+}
+inline void WndRelease(void* pWnd)
+{
+    (*(void(__thiscall**)(void*))((char*)*(void**)pWnd + 0xc0))(pWnd);
+}
 
 // @ 0x00f09fc0
 uint8_t FUN_00f09fc0(void* owner, float* outT, void** outObj)
 {
-    float t = 0.0f;
-    SPUIHelpers_GetElapsedSeconds();
-    *outT = 0.0f;
-    float* g = (float*)*(char**)(g_pMagic + 0x10);   // placeholder
-    (void)g;
-    if (*(float*)(g_pTable + 4) != 0.0f) {
-        *outT = *(float*)(g_pTable);
-        *outObj = *(void**)(g_pTable + 4);
+    void** ppOutWnd = (void**)outT;
+    int*   pnOutIndex = (int*)outObj;
+    float  fElapsed = SPUIHelpers_GetElapsedSeconds();
+    WndSel* pSel = Sel();
+    *ppOutWnd = 0;
+    if (pSel->mIndex != 0) {
+        *ppOutWnd = pSel->mpWnd;
+        *pnOutIndex = pSel->mIndex;
         return 1;
     }
-    t = 0.0f;
-    (void)t;
+    WndSearch search;
+    search.mpBegin = search.maWnd;
+    search.mpEnd = search.maWnd;
+    search.mpCap = search.maWnd + 50;
+    search.mnFlags = 0;
+
+    void* pMgr = FUN_00b3d240();
+    void* pFocus = (*(void*(__thiscall**)(void*, float, WndSearch*, int, int, int))
+                    ((char*)*(void**)owner + 0x2c))(owner, g_fSearchRadius, &search, 0, 0, 0);
+    (*(void(__thiscall**)(void*, void*))((char*)*(void**)pMgr + 0x48))(pMgr, pFocus);
+
+    float fBest = g_fScoreSeed;
+    for (void** it = search.mpBegin; it != search.mpEnd; ++it) {
+        void* pWnd = *it;
+        void* pRec = 0;
+        if (pWnd)
+            pRec = WndAttr(pWnd, 0x17f243b);
+        if (FUN_006c0200(pRec) == 0 || pWnd == owner ||
+            !FUN_00f07e90(pWnd) || !FUN_00f07e10(pWnd))
+            continue;
+        // the score table is keyed by the window pointer; the entry is filled on
+        // first lookup and compared against the elapsed time
+        int* pKey = (int*)pWnd;
+        bool bSkip;
+        WndAddRef(pWnd);
+        bSkip = *(float*)g_pHashTbl->FindOrInsertTextStyle(pKey) > fElapsed;
+        WndRelease(pWnd);
+        if (bSkip)
+            continue;
+        float fScore = FUN_00f08350(owner, pWnd);
+        if (fScore > fBest) {
+            fBest = fScore;
+            *ppOutWnd = pWnd;
+        }
+    }
+    if (*ppOutWnd != 0)
+        *pnOutIndex = FUN_00f09e00(*ppOutWnd);
+    for (void** it = search.mpBegin; it != search.mpEnd; ++it) {
+        if (*it)
+            WndRelease(*it);
+    }
+    AllocHeader* pHeader = (AllocHeader*)search.mpBegin - 1;
+    if (search.mpBegin != 0 && pHeader->mnOwner != 0)
+        FUN_00f47380(search.mpBegin);
     return 0;
 }
 
 // ---------------------------------------------------------------------------
 // 0x00f0a1e0  per-scenario UI refresh
 // ---------------------------------------------------------------------------
-extern int   FUN_00f07e10(void*);                  // 0x00f07e10 CanOpenProgressPanel
 extern int   GetTriggerMgr();                      // 0x00b3d4d0
 extern void* FUN_007f8290(void*, void*, int, int, int, int); // 0x007f8290
 extern void  FUN_007f8d10(void*, void*, int);      // 0x007f8d10 cSPUIAnimator::AddAnimation
