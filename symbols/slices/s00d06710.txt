@@ -2,3 +2,4 @@
 00d068c0 ?FUN_00d068c0@SP@@YIXPAXH@Z  # FUN_00d068c0 migrated from s00d06710 (verbatim, slice spelling)
 00d06920 ?StartAlliance@cRelationshipManager@SP@@QAEXPAVcEmpire@2@0@Z  # SP::cRelationshipManager::StartAlliance migrated from s00d06710
 00d06c30 ?FUN_00d06c30@cCountedSlot@SP@@QAEXHH@Z  # cCountedSlot::FUN_00d06c30 migrated from s00d06710 (verbatim, slice spelling)
+00d070f0 ?E207@SP@@YAXXZ  # E207 migrated from s00d06710 (verbatim, slice spelling)

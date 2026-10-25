@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d070f0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 806 bytes - compiler-generated static initialiser $E207 (attribute registration) not reconstructed.
