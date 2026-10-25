@@ -14,21 +14,24 @@ struct E36 {
     Vec12 v;                        // +0x04 (ends +0x10)
     char  pad_10[8];                // +0x10
     int   a;                        // +0x18
-    bool  b;                        // +0x1c
+    unsigned char b;                // +0x1c
     int   c;                        // +0x20
 };
 struct ShadowBase { void Notify(); };
 struct Sub14 { void FreeRange(void* a, void* b); };
+struct Vector4 { float x, y, z, w; };
 
 void* EastlAllocate(unsigned int size, const char* name, int a, int b, const char* file, int line);
 void  EastlDeallocate(void* p, int a);
-void  FUN_00781a60(Vec12* self, const Vec12* src);
-void  FUN_00781b10(Vec12* self);
-void  FUN_00781c30(E36* self, int a, const void* src);
+void  __fastcall FUN_00781a60(Vec12* self, int dummy, const Vec12* src);
+void  __fastcall FUN_00781b10(Vec12* self, int dummy);
+E36*  __fastcall FUN_00781c30(E36* self, int dummy, E36 arg);
 E36*  FUN_00781b80(E36* first, E36* last, E36* dst);
 void  FUN_00781cb0(E36* first, E36* last, E36* dst);
 void  FUN_00782470(E36* first, E36* last, E36* dst);
-void  FUN_00782270(Vec12* self, const Vec12* src);
+void  __fastcall FUN_00782270(Vec12* self, int dummy, const Vec12* src);
+void  __fastcall FUN_00782A60(int p, int dummy, const E36* src);
+void  __fastcall FUN_00782860(int p, int dummy, const E36* pos, const E36* value);
 void  FUN_00782800(int a, int b);
 void  FUN_007806a0(void* self);
 void  FUN_00780ab0(void* self);
@@ -220,38 +223,41 @@ void __fastcall FUN_00782B00(int p)
 // ---------------------------------------------------------------------------
 // 0x00782B30 : build a temp E36 and push_back it
 // ---------------------------------------------------------------------------
+// @ 0x00782b30
 void __fastcall FUN_00782B30(int p)
 {
-    unsigned char b = *(unsigned char*)(p + 4);
-    int a = *(int*)(p + 0x21c);
-    int c = *(int*)(p + 0x218);
-    Vec12 v;
-    FUN_00781a60(&v, (const Vec12*)(p + 0x14));
+    E36 arg = {};
+    arg.p0 = *(void**)(p + 0x10);
+    FUN_00781a60(&arg.v, 0, (const Vec12*)(p + 0x14));
+    arg.a = *(int*)(p + 0x21c);
+    arg.b = *(unsigned char*)(p + 4);
+    arg.c = *(int*)(p + 0x218);
+
     E36 tmp;
-    FUN_00781c30(&tmp, *(int*)(p + 0x10), 0);
-    tmp.a = a; tmp.b = b; tmp.c = c;
-    // push_back(&mVec at p+0x28, &tmp) -- argument shape approximate
-    (void)v;
-    FUN_00781b10(&v);
+    FUN_00781c30(&tmp, 0, arg);         // deep-copies arg.v and destroys it
+    FUN_00782A60(p + 0x28, 0, &tmp);
+    FUN_00781b10(&tmp.v, 0);
 }
 
 // ---------------------------------------------------------------------------
 // 0x00782A60 : push_back(E36)
 // ---------------------------------------------------------------------------
-void __fastcall FUN_00782A60(int p, const E36* src)
+__declspec(noinline)
+// @ 0x00782a60
+void __fastcall FUN_00782A60(int p, int dummy, const E36* src)
 {
     E36* end = *(E36**)(p + 4);
     if (end < *(E36**)(p + 8)) {
-        *(E36**)(p + 4) = (E36*)((char*)end + 0x24);
+        *(E36**)(p + 4) = end + 1;
         if (end) {
             end->p0 = src->p0;
-            FUN_00781a60(&end->v, &src->v);
+            FUN_00781a60(&end->v, 0, &src->v);
             end->a = src->a;
             end->b = src->b;
             end->c = src->c;
         }
     } else {
-        // FUN_00782860(end, src) -- reallocation path (see partial.txt)
+        FUN_00782860(p, 0, end, src);
     }
 }
 
@@ -259,7 +265,7 @@ void __fastcall FUN_00782A60(int p, const E36* src)
 // 0x00782860 : insert into E36 vector (reallocation path)
 // ---------------------------------------------------------------------------
 // @ 0x00782860
-void __fastcall FUN_00782860(int p, const E36* pos, const E36* value)
+void __fastcall FUN_00782860(int p, int dummy, const E36* pos, const E36* value)
 {
     E36* end = *(E36**)(p + 4);
     if (end != *(E36**)(p + 8)) {
@@ -267,13 +273,13 @@ void __fastcall FUN_00782860(int p, const E36* pos, const E36* value)
             value = (const E36*)((const char*)value + 0x24);
         E36 tmp;
         tmp.p0 = end[-1].p0;
-        FUN_00781a60(&tmp.v, &end[-1].v);
+        FUN_00781a60(&tmp.v, 0, &end[-1].v);
         tmp.a = end[-1].a;
         tmp.b = end[-1].b;
         tmp.c = end[-1].c;
         FUN_00782470((E36*)pos, (E36*)((char*)end - 0x24), end);
         ((E36*)pos)->p0 = value->p0;
-        FUN_00782270(&((E36*)pos)->v, &value->v);
+        FUN_00782270(&((E36*)pos)->v, 0, &value->v);
         ((E36*)pos)->a = value->a;
         ((E36*)pos)->b = value->b;
         ((E36*)pos)->c = value->c;
@@ -289,7 +295,7 @@ void __fastcall FUN_00782860(int p, const E36* pos, const E36* value)
     FUN_00781cb0(*(E36**)p, (E36*)pos, buf);
     if (e1) {
         e1->p0 = value->p0;
-        FUN_00781a60(&e1->v, &value->v);
+        FUN_00781a60(&e1->v, 0, &value->v);
         e1->a = value->a;
         e1->b = value->b;
         e1->c = value->c;
@@ -307,85 +313,127 @@ void __fastcall FUN_00782860(int p, const E36* pos, const E36* value)
 // ---------------------------------------------------------------------------
 // 0x00782DB0 : associated Legendre P_l^m (x)
 // ---------------------------------------------------------------------------
+// @ 0x00782db0
 float FUN_00782db0(float lf, int m, float x)
 {
-    unsigned u = (unsigned)lf;
-    float f13 = 1.0f, f16 = 1.0f, f12;
+    union { float f; int i; } lb;
+    lb.f = lf;
+    int l = lb.i;
+
+    float f13 = 1.0f;
+    volatile float f16 = 1.0f;
+    volatile float acc;
     float local = 1.0f;
     if (0 < m) {
         int i = 1;
-        f12 = (float)sqrt((double)((1.0f - x) * (x + 1.0f)));
+        float f12 = (float)sqrt((double)((1.0f - x) * (x + 1.0f)));
         if (7 < m) {
             unsigned n = (unsigned)m >> 3;
             i = (int)(n * 8 + 1);
             do {
                 n = n - 1;
-                float a = (f13 + 2.0f) + 2.0f;
-                float b = a + 2.0f;
-                float c = b + 2.0f;
-                float d = c + 2.0f;
-                float e = d + 2.0f;
-                float f = e + 2.0f;
-                f16 = -f13 * f12 * f16;
-                f16 = -(f13 + 2.0f) * f12 * f16;
-                f16 = -a * f12 * f16;
-                f16 = -b * f12 * f16;
-                f16 = -c * f12 * f16;
-                f16 = -d * f12 * f16;
-                f16 = -e * f12 * f16;
-                f16 = -f * f12 * f16;
-                f13 = f + 2.0f;
-                local = f16;
+                float cf = f13;
+                acc = -cf; acc = acc * f12; acc = acc * f16; f16 = acc;
+                cf = cf + 2.0f;
+                acc = -cf; acc = acc * f12; acc = acc * f16; f16 = acc;
+                cf = cf + 2.0f;
+                acc = -cf; acc = acc * f12; acc = acc * f16; f16 = acc;
+                cf = cf + 2.0f;
+                acc = -cf; acc = acc * f12; acc = acc * f16; f16 = acc;
+                cf = cf + 2.0f;
+                acc = -cf; acc = acc * f12; acc = acc * f16; f16 = acc;
+                cf = cf + 2.0f;
+                acc = -cf; acc = acc * f12; acc = acc * f16; f16 = acc;
+                cf = cf + 2.0f;
+                acc = -cf; acc = acc * f12; acc = acc * f16; f16 = acc;
+                cf = cf + 2.0f;
+                acc = -cf; acc = acc * f12; acc = acc * f16; f16 = acc;
+                cf = cf + 2.0f;
+                f13 = cf;
             } while (n != 0);
         }
         if (i <= m) {
             int k = (m - i) + 1;
             do {
                 k = k - 1;
-                local = (-f13 * f12) * local;
+                acc = -f13; acc = acc * f12; acc = acc * f16; f16 = acc;
                 f13 = f13 + 2.0f;
             } while (k != 0);
         }
+        local = f16;
     }
-    if (lf != (float)m) {
-        f13 = ((float)(m * 2 + 1) * local) * x;
-        bool flag = lf != (float)(m + 1);
-        float result = f13;
-        if (flag) {
-            int i = m + 2;
-            result = 0.0f;
-            if (i <= (int)u) {
-                // eight-way unrolled recurrence (see partial.txt)
-                while (i <= (int)u) {
-                    float t = f13;
-                    result = (((float)(i * 2 - 1) * t) * x - (float)(i + m - 1) * local) / (float)(i - m);
-                    f13 = result;
-                    local = t;
-                    i = i + 1;
-                }
-            }
+    if (l == m)
+        return local;
+    float A0 = (float)(m * 2 + 1);
+    acc = A0 * local; acc = acc * x;
+    float prev1 = acc;
+    if (l == m + 1)
+        return prev1;
+    float result = 0.0f;
+    int i = m + 2;
+    if (i <= l) {
+        float prev2 = local;
+        while (i <= l) {
+            float A = (float)(i * 2 - 1);
+            acc = A * prev1; acc = acc * x;
+            float B = (float)(i + m - 1);
+            float bp = B * prev2;
+            acc = acc - bp;
+            acc = acc / (float)(i - m);
+            prev2 = prev1;
+            prev1 = acc;
+            result = acc;
+            i = i + 1;
         }
-        return result;
     }
-    return local;
+    return result;
 }
 
 // ---------------------------------------------------------------------------
 // 0x00783410 : rotate a packed Vector4 list by angle
 // ---------------------------------------------------------------------------
+// @ 0x00783410
 void FUN_00783410(float angle, int n, float* v)
 {
-    if (n <= 1)
+    if (n < 2)
         return;
     float co = (float)cos((double)angle);
     float si = (float)sin((double)angle);
-    float* p = v + 4;
-    // first column pair rotation (2x2)
-    float a = p[-4], b = p[-3], c = p[-2], d = p[-1];
-    p[-4] = co * a - si * p[0];
-    p[-3] = co * b - si * p[1];
-    p[-2] = co * c - si * p[2];
-    p[-1] = co * d - si * p[3];
-    (void)a; (void)b; (void)c; (void)d;
-    // remaining blocks (see partial.txt)
+    Vector4* q = (Vector4*)v;
+
+    __m128 CO = _mm_set_ss(co);
+    __m128 SI = _mm_set_ss(si);
+    __m128 cob = _mm_set1_ps(co);
+    __m128 sib = _mm_set1_ps(si);
+
+    __m128 lo1 = _mm_loadu_ps((const float*)&q[1]);
+    __m128 hi1 = _mm_loadu_ps((const float*)&q[3]);
+    _mm_storeu_ps((float*)&q[3], _mm_sub_ps(_mm_mul_ps(hi1, cob), _mm_mul_ps(lo1, sib)));
+    _mm_storeu_ps((float*)&q[1], _mm_add_ps(_mm_mul_ps(lo1, cob), _mm_mul_ps(hi1, sib)));
+
+    if (n < 3)
+        return;
+
+    float cs[1024];
+    cs[0] = co;
+    cs[1] = si;
+    for (int i = 2; i < n; i++) {
+        int pi = 2 * (i - 1);
+        __m128 cp = _mm_set_ss(cs[pi - 2]);
+        __m128 sp = _mm_set_ss(cs[pi - 1]);
+        __m128 c = _mm_sub_ss(_mm_mul_ss(cp, CO), _mm_mul_ss(sp, SI));
+        __m128 s = _mm_add_ss(_mm_mul_ss(cp, SI), _mm_mul_ss(sp, CO));
+        cs[pi] = _mm_cvtss_f32(c);
+        cs[pi + 1] = _mm_cvtss_f32(s);
+        for (int m = i; m >= 1; m--) {
+            __m128 cm = _mm_set1_ps(cs[2 * (m - 1)]);
+            __m128 sm = _mm_set1_ps(cs[2 * (m - 1) + 1]);
+            int lidx = i * i + i - m;
+            int hidx = i * i + i + m;
+            __m128 lv = _mm_loadu_ps((const float*)&q[lidx]);
+            __m128 hv = _mm_loadu_ps((const float*)&q[hidx]);
+            _mm_storeu_ps((float*)&q[hidx], _mm_sub_ps(_mm_mul_ps(cm, hv), _mm_mul_ps(sm, lv)));
+            _mm_storeu_ps((float*)&q[lidx], _mm_add_ps(_mm_mul_ps(sm, hv), _mm_mul_ps(cm, lv)));
+        }
+    }
 }
