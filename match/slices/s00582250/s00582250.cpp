@@ -85,6 +85,20 @@ struct string {
 };
 bool operator==(const string& a, const char* b);      // 0x00555020
 
+extern wchar_t gEmptyString16[];                      // 0x01667bac (eastl empty wide string)
+struct WString16 {                                    // 16-byte local basic_string<wchar_t>
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    uint32_t mAllocator;
+    WString16() : mpBegin(gEmptyString16), mpEnd(gEmptyString16), mpCapacity(gEmptyString16 + 1) {}
+    ~WString16()
+    {
+        if ((mpCapacity - mpBegin) > 1 && mpBegin != 0)
+            operator delete[](mpBegin);
+    }
+};
+
 // ---------------------------------------------------------------- editor types
 class cSPEditorBlock;
 
@@ -168,7 +182,8 @@ class cSPEditorHandle { public:
 };
 
 class cSPEditorModel { public:
-    uint32_t pad0[0x58 / 4];
+    virtual void SetName(const wchar_t* name);        // +0x00 (vtable[0])
+    uint32_t pad0[(0x58 - 0x04) / 4];
     uint32_t mModelType;                              // +0x58
 };
 
@@ -213,6 +228,44 @@ void SetSoundSymbol(uint32_t a, uint32_t b, const char* name);       // 0x005720
 void PlayEditorSound(uint32_t a, uint32_t b, float v, int c);         // 0x00435f40
 float CalculateModelSize(cSPEditorModel* model);                      // 0x0048ca10
 
+// ---------------------------------------------------------------- animated creatures (0x582d70)
+struct AnimatedCreature54 {
+    uint32_t mID;                                     // +0x00
+    uint32_t mPad[0x2c / 4];                          // +0x04 .. +0x2f
+};
+
+struct CreatureVector54 {                             // 0x30-byte elements, 12-byte header
+    AnimatedCreature54* mpBegin;
+    AnimatedCreature54* mpEnd;
+    AnimatedCreature54* mpCapacity;
+    int size() const { return (int)(mpEnd - mpBegin); }
+    AnimatedCreature54& operator[](int i) { return mpBegin[i]; }
+    void erase(AnimatedCreature54* pos);                                  // 0x0057ef50
+    void erase_range(AnimatedCreature54* first, AnimatedCreature54* last); // 0x009c69f0
+};
+
+struct cSPEditorAnimatedCreatureManager {
+    bool GetCreaturePosition(uint32_t creature, Vector3* out);            // 0x0059d110
+};
+
+struct cSPEditorAnimatedCreatureManager_s0059_c4c0 {
+    void RemoveCreature(uint32_t creature);                               // 0x0059c6e0
+};
+
+struct IMessageManager {
+    void SendXform(uint32_t id, uint32_t flags, const Vector3* pos);      // 0x0045af60
+};
+IMessageManager* MessageManager();                                        // 0x00401050
+
+struct cAppModeEditorBase_s0058_02f0 {
+    bool GetDefaultModelName(WString16* out);                             // 0x00580670
+};
+
+struct cEditorsTokenTranslator {
+    void SetOldModelName(const wchar_t* name);                            // 0x005d6090
+};
+extern cEditorsTokenTranslator* g_pEditorsTokenTranslator;                // 0x015eebec
+
 class cAppModeEditorBase {
 public:
     uint32_t pad0[0x98 / 4];
@@ -223,9 +276,25 @@ public:
     uint32_t pad154[(0x20c - 0x154) / 4];
     uint8_t pad20c[2];
     bool mbPlayModelSizeSound;                        // +0x20e
+    uint8_t pad20f;
+    uint32_t pad210[(0x360 - 0x210) / 4];
+    cSPEditorAnimatedCreatureManager* mpCreatureManager;  // +0x360
+    uint32_t mShadowCreatureID;                       // +0x364
+    uint32_t mEffectsCreatureID;                      // +0x368
+    CreatureVector54 mCreatures;                      // +0x36c
+    uint8_t pad378[0x385 - 0x378];
+    bool mbCreatureFlag;                              // +0x385
 
     bool IsManipulatorEnabled(uint32_t id);           // 0x005740e0
     bool OnBlockWheel(cSPEditorBlock* block, cSPEditorHandle* handle, int wheelDelta);
+    enum eAnimatedCreatureType {
+        eAnimatedCreatureType_0 = 0,
+        eAnimatedCreatureType_1 = 1,
+        eAnimatedCreatureType_2 = 2
+    };
+    void FUN_0057e340(int flag);                      // 0x0057e340
+    void SetDefaultModelName();                       // 0x00582d00
+    void DestroyAnimatedCreature(eAnimatedCreatureType kind, bool destroyAll, unsigned int id);  // 0x00582d70
 };
 
 // @ 0x00582250
@@ -397,9 +466,77 @@ bool cAppModeEditorBase::OnBlockWheel(cSPEditorBlock* block, cSPEditorHandle* ha
     return handled;
 }
 
-}  // namespace SP
+// @ 0x00582d00
+void cAppModeEditorBase::SetDefaultModelName()
+{
+    WString16 name;
+    ((cAppModeEditorBase_s0058_02f0*)this)->GetDefaultModelName(&name);
+    mpEditorModel->SetName(name.mpBegin);
+    g_pEditorsTokenTranslator->SetOldModelName(name.mpBegin);
+}
 
-// @ 0x00582d00  (106 bytes) -- not reconstructed (partial.txt)
-void FUN_00582d00() {}
-// @ 0x00582d70  (622 bytes) -- not reconstructed (partial.txt)
-void FUN_00582d70() {}
+// @ 0x00582d70
+void cAppModeEditorBase::DestroyAnimatedCreature(eAnimatedCreatureType kind, bool destroyAll,
+                                                unsigned int id)
+{
+    if (mpCreatureManager == 0)
+        return;
+
+    if (kind == eAnimatedCreatureType_1) {
+        if (destroyAll) {
+            if (mCreatures.size() == 0)
+                return;
+            Vector3 pos;
+            mpCreatureManager->GetCreaturePosition(mCreatures[mCreatures.size() - 1].mID, &pos);
+            MessageManager()->SendXform(0x3f1bf57, 0, &pos);
+            ((cSPEditorAnimatedCreatureManager_s0059_c4c0*)mpCreatureManager)
+                ->RemoveCreature(mCreatures[mCreatures.size() - 1].mID);
+            --mCreatures.mpEnd;
+            return;
+        }
+        if (id != 0) {
+            int count = mCreatures.size();
+            for (int i = 0; i < count; ++i) {
+                if (mCreatures[i].mID == id) {
+                    Vector3 pos;
+                    mpCreatureManager->GetCreaturePosition(mCreatures[i].mID, &pos);
+                    MessageManager()->SendXform(0x3f1bf57, 0, &pos);
+                    ((cSPEditorAnimatedCreatureManager_s0059_c4c0*)mpCreatureManager)
+                        ->RemoveCreature(mCreatures[i].mID);
+                    mCreatures.erase(&mCreatures[i]);
+                    return;
+                }
+            }
+            return;
+        }
+        int count = mCreatures.size();
+        for (int i = 0; i < count; ++i) {
+            Vector3 pos;
+            mpCreatureManager->GetCreaturePosition(mCreatures[i].mID, &pos);
+            MessageManager()->SendXform(0x3f1bf57, 0, &pos);
+            ((cSPEditorAnimatedCreatureManager_s0059_c4c0*)mpCreatureManager)
+                ->RemoveCreature(mCreatures[i].mID);
+        }
+        mCreatures.erase_range(mCreatures.mpBegin, mCreatures.mpEnd);
+        return;
+    }
+    if (kind == eAnimatedCreatureType_0) {
+        if (mShadowCreatureID == 0)
+            return;
+        if (mbCreatureFlag)
+            FUN_0057e340(0);
+        ((cSPEditorAnimatedCreatureManager_s0059_c4c0*)mpCreatureManager)
+            ->RemoveCreature(mShadowCreatureID);
+        mShadowCreatureID = 0;
+        return;
+    }
+    if (kind == eAnimatedCreatureType_2) {
+        if (mEffectsCreatureID == 0)
+            return;
+        ((cSPEditorAnimatedCreatureManager_s0059_c4c0*)mpCreatureManager)
+            ->RemoveCreature(mEffectsCreatureID);
+        mEffectsCreatureID = 0;
+    }
+}
+
+}  // namespace SP

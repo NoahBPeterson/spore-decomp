@@ -8,3 +8,6 @@
 00568680    0  complete range destroy of 0x28-stride elements; frame differs
 00568740   95  complete vector range constructor; frame differs; equiv: WEAK (75% coverage)
 005687d0   49  complete hashtable DoFreeNodes; the chain link is at node+8 (not node+0) and each bucket is cleared (pArr[i] = 0) after its chain is freed; equiv WEAK (177 valid/200 needed, 100% cov, 0 mismatches); /Od frame differs
+00567a90  916  complete; eastl vector DoInsertValue for 12-byte elements (host in ecx): grow path (capacity*2 / count+n, EASTL_Allocate, FUN_0050f8b0 move, FUN_00457450 fill, delete old) or in-place path (FUN_00512050 shift-right, element move-down loop, value fill; or FUN_00457450 tail fill + FUN_0050eb40 move-back). equiv WEAK (185 valid, 6.6% cov, 0 mismatches; the in-place fast paths need heap/pool state the generator rarely produces)
+00567e70  508  complete; eastl vector insert for 8-byte elements (host in ecx): grow path (count*2, EASTL_Allocate, FUN_004554f0 copy, delete old) or in-place path (shift the last element, move-down loop, write value; source skips the value slot when insertion point precedes it). equiv WEAK (24 valid, 45.3% cov, 0 mismatches)
+00568840  141  complete; lower_bound over 0x10-stride elements (two-key compare: int key at +4, then uint at +0), binary search narrowing [first,last); equiv PASS (329 valid, 100% coverage)

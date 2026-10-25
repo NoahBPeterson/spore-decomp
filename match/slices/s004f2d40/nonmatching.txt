@@ -1,2 +1,5 @@
 # va  diff-bytes  reason
+004f2d40  761  complete; /Od frame-slot (local name-hash) layout differs; matrix-return temporary adds one copy; equiv WEAK (195/200 valid, 46% cov, no mismatch)
+004f31c0  1050  complete; retail stub is behaviourally exact, unreachable full body differs in /Od frame/temps; equiv PASS (400 valid, 65.3% cov)
+004f3650  1121  complete; retail stub is behaviourally exact, unreachable full body differs in /Od frame/temps; equiv PASS (400 valid, 65.3% cov)
 004f3b40  223  complete; bitset-test /Od expansion and signedness differ

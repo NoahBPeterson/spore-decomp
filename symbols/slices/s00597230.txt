@@ -1,1 +1,2 @@
 00597d00 ?ASummaryMap  # SummaryMap::operator[]
+00597e00 ??0cCollectableItems@SP@@QAE@XZ  # SP::cCollectableItems::cCollectableItems

@@ -8,9 +8,9 @@
 005a2260 cTerrainUI compute-view vector
 005a22d0 cTerrainUI update-pitch
 005a2300 cTerrainUI vtable reset
-005a2370 ?SetCenterCameraOffset@@YAXPAX@Z  # SetCenterCameraOffset migrated from s005a1920 (verbatim, slice spelling)
-005a2400 ?SetPartModeCameraOffset@@YAXPAX@Z  # SetPartModeCameraOffset migrated from s005a1920 (verbatim, slice spelling)
-005a24c0 ?SetPaintModeCameraOffset@@YAXPAX@Z  # SetPaintModeCameraOffset migrated from s005a1920 (verbatim, slice spelling)
+005a2370 ?SetCenterCameraOffset@cEditorCameraController@SP@@QAEXXZ  # SP::cEditorCameraController::SetCenterCameraOffset (member, not a free function)
+005a2400 ?SetPartModeCameraOffset@cEditorCameraController@SP@@QAEXXZ  # SP::cEditorCameraController::SetPartModeCameraOffset (member)
+005a24c0 ?SetPaintModeCameraOffset@cEditorCameraController@SP@@QAEXXZ  # SP::cEditorCameraController::SetPaintModeCameraOffset (member)
 005a2580 cTerrainUI mouse-wheel -> cLocalInputState + zoom clamp
 00697a50 ?OnKeyDown@cLocalInputState@SP@@QAEXII@Z  # SP::cLocalInputState::OnKeyDown (callee of s005a1920, named from the dev publics; slice address comment)
 00697b40 ?OnMouseWheel@cLocalInputState@SP@@QAEXHMMI@Z  # SP::cLocalInputState::OnMouseWheel (callee of s005a1920, named from the dev publics; slice address comment)

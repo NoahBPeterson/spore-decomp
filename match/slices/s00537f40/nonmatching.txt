@@ -4,3 +4,7 @@
 00538a00  29  cSPSkinPaintParticlebrushCommand::Execute complete; /Od slot order (A/pDesc/this temps) differs [equiv: WEAK 116/200 valid, 61.8% cov]
 00538af0  7  cSPSkinPaintParticlechainCommand::Execute complete; only this/pDesc slot swap [equiv: UNSUPPORTED 0/400 valid, MainArguments throws on random input]
 00538b80  85  cSPSkinPaintParticlediffuseColorCommand::Execute complete; /Od slot order (index/color/hsv temps vs A) differs [equiv: UNSUPPORTED 0/400 valid, MainArguments throws]
+00538080  106  particle effect Update complete; /Od temp slot order (comp/ps/target) and an uninitialized -0x10 original temp differ (171 vs 180 bytes) [equiv: PASS 304 valid, 98.3% cov]
+00538180  117  particle effect dtor complete behaviourally (vcall slot 1 on the +8 secondary base, literal vptr stores), but the original has an EH prologue (__ehhandler 0x120bf58) that cannot be reproduced without exception semantics (72 vs 125 bytes) [equiv: PASS 384 valid, 100% cov]
+00538200  4  particle effect factory complete; original allocates new[](0xb8) with an unexplained 0x18 gap after the allocation temp (frame 0x24 vs 0xc, temp -0x24 vs -0xc) [equiv: UNSUPPORTED 0/400 valid]
+00538320  13  cPaintVarEvalList owner dtor complete with identical instruction stream; /Od frame/slot layout differs (frame 0x50, head -0x4c, loop var -0x3c) [equiv: WEAK 187 valid, 100% cov]

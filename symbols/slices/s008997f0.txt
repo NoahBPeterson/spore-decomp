@@ -2,3 +2,11 @@
 00899e10 Vec16::DoInsertValueN  # Claude-coined: eastl vector<E16>::DoInsertValue(position, count, value) - 16-byte expanded-run elements
 00899fb0 Vec12::InsertRange  # Claude-coined: eastl vector<AnalysisInfo>::insert(position, first, last) - 12-byte text analysis records
 0089a1b0 Vec8Range::InsertRange  # Claude-coined: eastl vector<GlyphInfo*>::insert(position, first, last) - 8-byte pointer elements
+008997f0 WString::set_capacity  # basic_string<wchar_t>::set_capacity, pre-1.11 allocate-copy-swap shrink path; 268 B exact, residual register/instruction-selection diff
+00899900 VecAnalysis::DoInsertValues  # eastl vector<AnalysisInfo>::DoInsertValues(position, n, value) - 12-byte analysis records
+00899c90 VecGlyph::DoInsertValues  # ResizableVec<GlyphLayoutInfo>::insert(position, n, value) - 32-byte glyph layout records
+0089a370 VecGlyph::InsertRange  # ResizableVec<GlyphLayoutInfo>::insert(position, first, last) - 32-byte range insert; 4th argument unused
+0089a5d0 VecItem::PushBackDefault  # vector<Typesetter::Item>::push_back() with a zero-filled default element
+0089a660 CvecU32::DoAllocateAndCopy  # cvec<unsigned int>::DoAllocateAndCopy(count, first, last)
+0089a6b0 RBTree::DoCopySubtree  # red-black tree subtree clone with placement-new of the ref-counted value
+0089a790 CvecU16::DoAllocateAndCopy  # cvec<unsigned short>::DoAllocateAndCopy(count, first, last)

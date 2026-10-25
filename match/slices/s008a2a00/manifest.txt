@@ -1,2 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s008a2a00/s008a2a00.cpp  ?PlaceGeneralGlyphCluster@Typesetter@Text@EA@@QAEXII@Z  008a2d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008a2a00/s008a2a00.cpp  ?SetupArabicGsubLookup@Text@EA@@YAXAAUFeatureLookupArray@12@PBUOTF@12@@Z  008a2a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008a2a00/s008a2a00.cpp  ?GetGeneralCharCluster@Typesetter@Text@EA@@QAEIIIPA_WAAI@Z  008a2ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008a2a00/s008a2a00.cpp  ?AppendHangulCharCluster@Typesetter@Text@EA@@QAEIIIPB_WIH@Z  008a3480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

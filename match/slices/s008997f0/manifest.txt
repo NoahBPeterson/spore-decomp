@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+
+slices/s008997f0/s008997f0_g8.cpp  ?PushBackDefault@VecItem@@QAEXXZ  0089a5d0  /O2 /MT /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc
+slices/s008997f0/s008997f0_g8.cpp  ?DoAllocateAndCopy@CvecU32@@QAEPAIIPBI0@Z  0089a660  /O2 /MT /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc
+slices/s008997f0/s008997f0_g8.cpp  ?DoCopySubtree@RBTree@@QAEPAURBNode@@PAU2@0@Z  0089a6b0  /O2 /MT /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc
+slices/s008997f0/s008997f0_g8.cpp  ?DoAllocateAndCopy@CvecU16@@QAEPAGIPBG0@Z  0089a790  /O2 /MT /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc

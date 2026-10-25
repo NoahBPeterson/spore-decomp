@@ -4,37 +4,74 @@
 #include "types.h"
 
 void operator_delete(void* p);
-void FUN_00921440(void* out, int buckets, int count, int force);
-int  FUN_00554250(uint32_t* key);
-void FUN_005542d0(int buckets);
-int  FUN_00554480(int buckets);
-int  FUN_00554560(uint32_t* key);
-void FUN_005545c0(int buckets);
 void FUN_00429410(void* self);
 void FUN_00554b10();
 void FUN_005550a0(void* first, int n, void* out);
 void FUN_00554760(void* first, void* last);
 extern char DAT_01667bac[];
 
+// ---- key types ---------------------------------------------------------------------------
+typedef unsigned long long Key64;
+struct Key3  { uint32_t a, b, c; };
+typedef unsigned long long Key2;
+
+inline bool Eq64(const Key64& x, const Key64& y) { return x == y; }
+inline bool Eq2 (const Key2&  x, const Key2&  y) { return x == y; }
+inline bool Eq3 (const Key3&  x, const Key3&  y) { return x.a  == y.a  && x.b  == y.b  && x.c == y.c; }
+inline bool Eq32(const uint32_t& x, const uint32_t& y) { return x == y; }
+inline uint32_t HashU32(uint32_t v) { uint32_t r = v; return r; }
+
+// ---- EASTL iterator / insert-result / rehash policy --------------------------------------
+struct IterBase {
+    void*  mpNode;
+    void** mpBucket;
+    IterBase(void* n, void** b) : mpNode(n), mpBucket(b) {}
+};
+struct Iter : IterBase {
+    Iter(void* n, void** b) : IterBase(n, b) {}
+    Iter(void** b) : IterBase(*b, b) {}
+};
+struct InsertResult {
+    Iter first;
+    bool second;
+    InsertResult(const Iter& it, const bool& b) : first(it), second(b) {}
+};
+struct IterV : IterBase {
+    IterV(void* n, void** b) : IterBase(n, b) {}
+    IterV(void** b) : IterBase(*b, b) {}
+    IterV(const IterV& x) : IterBase(x.mpNode, x.mpBucket) {}
+};
+struct InsertResultV {
+    IterV first;
+    bool second;
+    InsertResultV(const IterV& it, const bool& b) : first(it), second(b) {}
+};
+// iterator whose non-trivial copy ctor adds the extra return-value copy layer
+struct IterR : IterBase {
+    IterR(void* n, void** b) : IterBase(n, b) {}
+    IterR(void** b) : IterBase(*b, b) {}
+    IterR(const IterR& x) : IterBase(x.mpNode, x.mpBucket) {}
+};
+struct TrueType {};
+struct RehashResult { bool first; uint32_t second; };
+struct RehashPolicy {
+    uint32_t pad[4];
+    RehashResult GetRehashRequired(uint32_t bucketCount, uint32_t elementCount, uint32_t add);
+};
+
+// ---- legacy table used by the erase() / vector helpers (booked non-matching) --------------
 struct HT {
     char pad[0x100];
     int  Erase64(uint32_t* key);
     int* EraseIter(int* out, int node, int* bucket);
-    int* Insert64(int* out, uint32_t* key);
-    int* FindKey3(int* out, uint32_t* key);
-    int* FindKey3b(int* out, uint32_t* key);
     int  EraseKey3(uint32_t* key);
-    int* InsertKey3(int* out, uint32_t* key);
-    int* Find64(int* out, uint32_t* key);
     int  ErasePair(uint32_t* key);
-    int* InsertPair(int* out, uint32_t* key);
-    int* FindU32(int* out, uint32_t* key);
 };
 struct El { void Dtor(); };
 struct Vec16 {
     void FUN_00553b90();
     void FUN_00553be0(unsigned n);
-    void DestroyStorage();                       // 0x00554B10
+    void DestroyStorage();                        // 0x00554B10
     void ReserveRaw(void* pos, int n, void* out); // 0x005550A0
 };
 
@@ -85,77 +122,6 @@ int* HT::EraseIter(int* out, int node, int* bucket)
     return out;
 }
 
-// @ 0x00552d00
-int* HT::Insert64(int* out, uint32_t* key)
-{
-    char* s = (char*)this;
-    uint32_t h = *key % *(uint32_t*)(s + 8);
-    uint32_t* p = *(uint32_t**)(*(int*)(s + 4) + h * 4);
-    uint32_t* found;
-    for (;;) {
-        if (p == 0) { found = 0; break; }
-        if (*key == *p && key[1] == p[1]) { found = p; break; }
-        p = (uint32_t*)p[6];
-    }
-    if (found == 0) {
-        char rehash[4];
-        uint32_t newBuckets = 0;
-        FUN_00921440(rehash, *(int*)(s + 8), *(int*)(s + 0xc), 1);
-        int node = FUN_00554250(key);
-        if (rehash[0] != 0) {
-            h = *key % newBuckets;
-            FUN_005542d0((int)newBuckets);
-        }
-        *(int*)(node + 0x18) = *(int*)(*(int*)(s + 4) + h * 4);
-        *(int*)(*(int*)(s + 4) + h * 4) = node;
-        *(int*)(s + 0xc) = *(int*)(s + 0xc) + 1;
-        out[0] = node;
-        out[1] = *(int*)(s + 4) + h * 4;
-        *(char*)(out + 2) = 1;
-    } else {
-        out[0] = (int)found;
-        out[1] = *(int*)(s + 4) + h * 4;
-        *(char*)(out + 2) = 0;
-    }
-    return out;
-}
-
-// @ 0x00552f80
-int* HT::FindKey3(int* out, uint32_t* key)
-{
-    char* s = (char*)this;
-    uint32_t* p = *(uint32_t**)(*(int*)(s + 4) + ((key[0] ^ key[2]) % *(uint32_t*)(s + 8)) * 4);
-    uint32_t* found;
-    for (;;) {
-        if (p == 0) { found = 0; break; }
-        if (key[0] == p[0] && key[1] == p[1] && key[2] == p[2]) { found = p; break; }
-        p = (uint32_t*)p[6];
-    }
-    int local_24[2] = { 0, 0 };
-    int local_1c[2];
-    if (found == 0) { out[0] = local_24[0]; out[1] = local_24[1]; }
-    else { local_1c[0] = (int)found; local_1c[1] = 0; out[0] = local_1c[0]; out[1] = local_1c[1]; }
-    return out;
-}
-
-// @ 0x00553090
-int* HT::FindKey3b(int* out, uint32_t* key)
-{
-    char* s = (char*)this;
-    uint32_t* p = *(uint32_t**)(*(int*)(s + 4) + ((key[0] ^ key[2]) % *(uint32_t*)(s + 8)) * 4);
-    uint32_t* found;
-    for (;;) {
-        if (p == 0) { found = 0; break; }
-        if (key[0] == p[0] && key[1] == p[1] && key[2] == p[2]) { found = p; break; }
-        p = (uint32_t*)p[6];
-    }
-    int local_24[2] = { 0, 0 };
-    int local_1c[2];
-    if (found == 0) { out[0] = local_24[0]; out[1] = local_24[1]; }
-    else { local_1c[0] = (int)found; local_1c[1] = 0; out[0] = local_1c[0]; out[1] = local_1c[1]; }
-    return out;
-}
-
 // @ 0x005531b0
 int HT::EraseKey3(uint32_t* key)
 {
@@ -179,58 +145,6 @@ int HT::EraseKey3(uint32_t* key)
     }
 }
 
-// @ 0x005532f0
-int* HT::InsertKey3(int* out, uint32_t* key)
-{
-    char* s = (char*)this;
-    uint32_t h = (key[0] ^ key[2]) % *(uint32_t*)(s + 8);
-    uint32_t* p = *(uint32_t**)(*(int*)(s + 4) + h * 4);
-    uint32_t* found;
-    for (;;) {
-        if (p == 0) { found = 0; break; }
-        if (key[0] == p[0] && key[1] == p[1] && key[2] == p[2]) { found = p; break; }
-        p = (uint32_t*)p[6];
-    }
-    if (found == 0) {
-        char rehash[4];
-        uint32_t newBuckets = 0;
-        FUN_00921440(rehash, *(int*)(s + 8), *(int*)(s + 0xc), 1);
-        int node = FUN_00554250(key);
-        if (rehash[0] != 0) {
-            FUN_00554480((int)newBuckets);
-        }
-        *(int*)(node + 0x18) = *(int*)(*(int*)(s + 4) + h * 4);
-        *(int*)(*(int*)(s + 4) + h * 4) = node;
-        *(int*)(s + 0xc) = *(int*)(s + 0xc) + 1;
-        out[0] = node;
-        out[1] = *(int*)(s + 4) + h * 4;
-        *(char*)(out + 2) = 1;
-    } else {
-        out[0] = (int)found;
-        out[1] = *(int*)(s + 4) + h * 4;
-        *(char*)(out + 2) = 0;
-    }
-    return out;
-}
-
-// @ 0x00553510
-int* HT::Find64(int* out, uint32_t* key)
-{
-    char* s = (char*)this;
-    uint32_t* p = *(uint32_t**)(*(int*)(s + 4) + (*key % *(uint32_t*)(s + 8)) * 4);
-    uint32_t* found;
-    for (;;) {
-        if (p == 0) { found = 0; break; }
-        if (*key == p[0] && key[1] == p[1]) { found = p; break; }
-        p = (uint32_t*)p[2];
-    }
-    int local_24[2] = { 0, 0 };
-    int local_1c[2];
-    if (found == 0) { out[0] = local_24[0]; out[1] = local_24[1]; }
-    else { local_1c[0] = (int)found; local_1c[1] = 0; out[0] = local_1c[0]; out[1] = local_1c[1]; }
-    return out;
-}
-
 // @ 0x00553620
 int HT::ErasePair(uint32_t* key)
 {
@@ -250,58 +164,6 @@ int HT::ErasePair(uint32_t* key)
         operator_delete((void*)node);
         *(int*)(s + 0xc) = *(int*)(s + 0xc) - 1;
     }
-}
-
-// @ 0x00553750
-int* HT::InsertPair(int* out, uint32_t* key)
-{
-    char* s = (char*)this;
-    uint32_t h = *key % *(uint32_t*)(s + 8);
-    uint32_t* p = *(uint32_t**)(*(int*)(s + 4) + h * 4);
-    uint32_t* found;
-    for (;;) {
-        if (p == 0) { found = 0; break; }
-        if (*key == p[0] && key[1] == p[1]) { found = p; break; }
-        p = (uint32_t*)p[2];
-    }
-    if (found == 0) {
-        char rehash[4];
-        uint32_t newBuckets = 0;
-        FUN_00921440(rehash, *(int*)(s + 8), *(int*)(s + 0xc), 1);
-        int node = FUN_00554560(key);
-        if (rehash[0] != 0) {
-            FUN_005545c0((int)newBuckets);
-        }
-        *(int*)(node + 8) = *(int*)(*(int*)(s + 4) + h * 4);
-        *(int*)(*(int*)(s + 4) + h * 4) = node;
-        *(int*)(s + 0xc) = *(int*)(s + 0xc) + 1;
-        out[0] = node;
-        out[1] = *(int*)(s + 4) + h * 4;
-        *(char*)(out + 2) = 1;
-    } else {
-        out[0] = (int)found;
-        out[1] = *(int*)(s + 4) + h * 4;
-        *(char*)(out + 2) = 0;
-    }
-    return out;
-}
-
-// @ 0x005538f0
-int* HT::FindU32(int* out, uint32_t* key)
-{
-    char* s = (char*)this;
-    uint32_t* p = *(uint32_t**)(*(int*)(s + 4) + (*key % *(uint32_t*)(s + 8)) * 4);
-    uint32_t* found;
-    for (;;) {
-        if (p == 0) { found = 0; break; }
-        if (*key == p[0]) { found = p; break; }
-        p = (uint32_t*)p[4];
-    }
-    int local_24[2] = { 0, 0 };
-    int local_1c[2];
-    if (found == 0) { out[0] = local_24[0]; out[1] = local_24[1]; }
-    else { local_1c[0] = (int)found; local_1c[1] = 0; out[0] = local_1c[0]; out[1] = local_1c[1]; }
-    return out;
 }
 
 // @ 0x00553b90
@@ -330,4 +192,254 @@ void Vec16::FUN_00553be0(unsigned n)
     } else {
         FUN_00554760((void*)(n * 0x10 + *(int*)s), *(void**)(s + 4));
     }
+}
+
+// ---- find() instantiations ---------------------------------------------------------------
+// uint64 keys, node next at +0x08
+struct Node64F { Key64 key; Node64F* next; };
+struct Tbl64F {
+    uint32_t pad0;
+    Node64F** mpBucketArray;  // +4
+    uint32_t  mnBucketCount;  // +8
+    uint32_t  mnElementCount; // +0xc
+    RehashPolicy mPolicy;     // +0x10
+
+    __forceinline Node64F* DoFindNode(Node64F* pNode, const Key64& k) const
+    {
+        for (; pNode; pNode = pNode->next)
+            if (Eq64(k, pNode->key))
+                return pNode;
+        return 0;
+    }
+    Iter Find(const Key64& k);   // 0x00553510
+};
+
+// key3 keys, node next at +0x18; by-reference equality predicate
+struct Node3F { Key3 key; uint32_t pad[3]; Node3F* next; };
+struct Tbl3F {
+    uint32_t pad0;
+    Node3F** mpBucketArray;
+    uint32_t mnBucketCount;
+    uint32_t mnElementCount;
+    RehashPolicy mPolicy;
+
+    __forceinline Node3F* DoFindNode(Node3F* pNode, const Key3& k) const
+    {
+        for (; pNode; pNode = pNode->next)
+            if (Eq3(k, pNode->key))
+                return pNode;
+        return 0;
+    }
+    Iter Find(const Key3& k);    // 0x00552f80
+};
+
+// key3 keys, node next at +0x18; direct member-wise comparison
+struct Node3Fb { Key3 key; uint32_t pad[3]; Node3Fb* next; };
+struct Tbl3Fb {
+    uint32_t pad0;
+    Node3Fb** mpBucketArray;
+    uint32_t mnBucketCount;
+    uint32_t mnElementCount;
+    RehashPolicy mPolicy;
+
+    __forceinline Node3Fb* DoFindNode(Node3Fb* pNode, const Key3& k) const
+    {
+        for (; pNode; pNode = pNode->next)
+            if (Eq3(k, pNode->key))
+                return pNode;
+        return 0;
+    }
+    IterR Find(const Key3& k);   // 0x00553090
+};
+
+// uint32 keys, node next at +0x10
+struct Node32F { uint32_t key; uint32_t pad[3]; Node32F* next; };
+struct Tbl32F {
+    uint32_t pad0;
+    Node32F** mpBucketArray;
+    uint32_t mnBucketCount;
+    uint32_t mnElementCount;
+    RehashPolicy mPolicy;
+
+    __forceinline Node32F* DoFindNode(Node32F* pNode, const uint32_t& k) const
+    {
+        for (; pNode; pNode = pNode->next)
+            if (Eq32(k, pNode->key))
+                return pNode;
+        return 0;
+    }
+    IterR Find(const uint32_t& k); // 0x005538f0
+};
+
+// ---- DoInsertValue instantiations --------------------------------------------------------
+// uint64 keys, node next at +0x18
+struct Node64I { Key64 key; uint32_t pad[4]; Node64I* next; };
+struct Tbl64I {
+    uint32_t pad0;
+    Node64I** mpBucketArray;
+    uint32_t mnBucketCount;
+    uint32_t mnElementCount;
+    RehashPolicy mPolicy;
+
+    Node64I* DoAllocateNode(const Key64& v);
+    void     DoRehash(uint32_t n);
+    __forceinline Node64I* DoFindNode(Node64I* pNode, const Key64& k) const
+    {
+        for (; pNode; pNode = pNode->next)
+            if (Eq64(k, pNode->key))
+                return pNode;
+        return 0;
+    }
+    InsertResultV DoInsertValue(const Key64& value, TrueType);  // 0x00552d00
+};
+
+// key3 keys, node next at +0x18; direct member-wise comparison
+struct Node3I { Key3 key; uint32_t pad[3]; Node3I* next; };
+struct Tbl3I {
+    uint32_t pad0;
+    Node3I** mpBucketArray;
+    uint32_t mnBucketCount;
+    uint32_t mnElementCount;
+    RehashPolicy mPolicy;
+
+    Node3I* DoAllocateNode(const Key3& v);
+    void    DoRehash(uint32_t n);
+    __forceinline Node3I* DoFindNode(Node3I* pNode, const Key3& k) const
+    {
+        for (; pNode; pNode = pNode->next)
+            if (Eq3(k, pNode->key))
+                return pNode;
+        return 0;
+    }
+    InsertResultV DoInsertValue(const Key3& value, TrueType);   // 0x005532f0
+};
+
+// pair keys, node next at +0x08
+struct Node2I { Key2 key; Node2I* next; };
+struct Tbl2I {
+    uint32_t pad0;
+    Node2I** mpBucketArray;
+    uint32_t mnBucketCount;
+    uint32_t mnElementCount;
+    RehashPolicy mPolicy;
+
+    Node2I* DoAllocateNode(const Key2& v);
+    void    DoRehash(uint32_t n);
+    __forceinline Node2I* DoFindNode(Node2I* pNode, const Key2& k) const
+    {
+        for (; pNode; pNode = pNode->next)
+            if (Eq2(k, pNode->key))
+                return pNode;
+        return 0;
+    }
+    InsertResult DoInsertValue(const Key2& value, TrueType);   // 0x00553750
+};
+
+// @ 0x00552d00
+InsertResultV Tbl64I::DoInsertValue(const Key64& value, TrueType)
+{
+    const Key64& k = value;
+    uint32_t c = (uint32_t)k;
+    uint32_t n = (uint32_t)c % mnBucketCount;
+    Node64I* pNode = DoFindNode(mpBucketArray[n], k);
+
+    if (pNode == 0) {
+        RehashResult bRehash = mPolicy.GetRehashRequired(mnBucketCount, mnElementCount, 1);
+        Node64I* pNodeNew = DoAllocateNode(value);
+        if (bRehash.first) {
+            n = (uint32_t)c % bRehash.second;
+            DoRehash(bRehash.second);
+        }
+        pNodeNew->next = mpBucketArray[n];
+        mpBucketArray[n] = pNodeNew;
+        ++mnElementCount;
+        return InsertResultV(IterV(pNodeNew, (void**)(mpBucketArray + n)), true);
+    }
+    return InsertResultV(IterV(pNode, (void**)(mpBucketArray + n)), false);
+}
+
+// @ 0x005532f0
+InsertResultV Tbl3I::DoInsertValue(const Key3& value, TrueType)
+{
+    const Key3& k = value;
+    uint32_t c = k.a ^ k.c;
+    uint32_t n = (uint32_t)c % mnBucketCount;
+    Node3I* pNode = DoFindNode(mpBucketArray[n], k);
+
+    if (pNode == 0) {
+        RehashResult bRehash = mPolicy.GetRehashRequired(mnBucketCount, mnElementCount, 1);
+        Node3I* pNodeNew = DoAllocateNode(value);
+        if (bRehash.first) {
+            n = (uint32_t)c % bRehash.second;
+            DoRehash(bRehash.second);
+        }
+        pNodeNew->next = mpBucketArray[n];
+        mpBucketArray[n] = pNodeNew;
+        ++mnElementCount;
+        return InsertResultV(IterV(pNodeNew, (void**)(mpBucketArray + n)), true);
+    }
+    return InsertResultV(IterV(pNode, (void**)(mpBucketArray + n)), false);
+}
+
+// @ 0x00553750
+InsertResult Tbl2I::DoInsertValue(const Key2& value, TrueType)
+{
+    const Key2& k = value;
+    uint32_t c = (uint32_t)k;
+    uint32_t n = (uint32_t)c % mnBucketCount;
+    Node2I* pNode = DoFindNode(mpBucketArray[n], k);
+
+    if (pNode == 0) {
+        RehashResult bRehash = mPolicy.GetRehashRequired(mnBucketCount, mnElementCount, 1);
+        Node2I* pNodeNew = DoAllocateNode(value);
+        if (bRehash.first) {
+            n = (uint32_t)c % bRehash.second;
+            DoRehash(bRehash.second);
+        }
+        pNodeNew->next = mpBucketArray[n];
+        mpBucketArray[n] = pNodeNew;
+        ++mnElementCount;
+        return InsertResult(Iter(pNodeNew, (void**)(mpBucketArray + n)), true);
+    }
+    return InsertResult(Iter(pNode, (void**)(mpBucketArray + n)), false);
+}
+
+// @ 0x00553510
+Iter Tbl64F::Find(const Key64& k)
+{
+    uint32_t c = (uint32_t)k;
+    uint32_t n = (uint32_t)c % mnBucketCount;
+    Node64F* pNode = DoFindNode(mpBucketArray[n], k);
+    return pNode ? Iter(pNode, (void**)(mpBucketArray + n))
+                 : Iter((void**)(mpBucketArray + mnBucketCount));
+}
+
+// @ 0x00552f80
+Iter Tbl3F::Find(const Key3& k)
+{
+    uint32_t c = k.a ^ k.c;
+    uint32_t n = (uint32_t)c % mnBucketCount;
+    Node3F* pNode = DoFindNode(mpBucketArray[n], k);
+    return pNode ? Iter(pNode, (void**)(mpBucketArray + n))
+                 : Iter((void**)(mpBucketArray + mnBucketCount));
+}
+
+// @ 0x00553090
+IterR Tbl3Fb::Find(const Key3& k)
+{
+    uint32_t c = k.a ^ k.c;
+    uint32_t n = (uint32_t)c % mnBucketCount;
+    Node3Fb* pNode = DoFindNode(mpBucketArray[n], k);
+    return pNode ? IterR(pNode, (void**)(mpBucketArray + n))
+                 : IterR((void**)(mpBucketArray + mnBucketCount));
+}
+
+// @ 0x005538f0
+IterR Tbl32F::Find(const uint32_t& k)
+{
+    uint32_t c = HashU32(k);
+    uint32_t n = (uint32_t)c % mnBucketCount;
+    Node32F* pNode = DoFindNode(mpBucketArray[n], k);
+    return pNode ? IterR(pNode, (void**)(mpBucketArray + n))
+                 : IterR((void**)(mpBucketArray + mnBucketCount));
 }

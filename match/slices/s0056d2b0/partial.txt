@@ -1,1 +1,1 @@
-0056def0  133  hashtable lookup helper; partial stub
+# <va>  <diff-bytes>  <reason>

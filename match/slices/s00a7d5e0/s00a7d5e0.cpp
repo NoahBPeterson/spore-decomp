@@ -186,6 +186,38 @@ void cSPTransform::RotateVector(Vector3* v) {
   *v = r;
 }
 
+// @ 0x00a7d770
+// Inverts the transform in place: the scale becomes its reciprocal, the rotation is transposed and
+// the translation is scaled by -1/scale and then rotated by the transposed rotation.
+void cSPTransform::Invert() {
+  mScale = 1.0f / mScale;
+
+  Matrix3 transposed;
+  const float* pSrc = &mRotation.row[0].x;
+  float* pDst = &transposed.row[0].x;
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j)
+      pDst[i * 3 + j] = pSrc[j * 3 + i];
+  mRotation = transposed;
+
+  float negInverseScale = -mScale;
+  mTranslation.x *= negInverseScale;
+  mTranslation.y *= negInverseScale;
+  mTranslation.z *= negInverseScale;
+
+  Vector3 r;
+  r.x = mRotation.row[1].x * mTranslation.y;
+  r.x += mRotation.row[2].x * mTranslation.z;
+  r.x += mRotation.row[0].x * mTranslation.x;
+  r.y = mRotation.row[0].y * mTranslation.x;
+  r.y += mRotation.row[1].y * mTranslation.y;
+  r.y += mRotation.row[2].y * mTranslation.z;
+  r.z = mRotation.row[0].z * mTranslation.x;
+  r.z += mRotation.row[1].z * mTranslation.y;
+  r.z += mRotation.row[2].z * mTranslation.z;
+  mTranslation = r;
+}
+
 // ---------------------------------------------------------------------------------------------------
 // Quad-plane transforms.  The source object carries flags at +0x00 and a one-element quad vector at
 // +0x40/+0x44.  The output carries a transform followed by the plane normal and offset.

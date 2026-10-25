@@ -5,6 +5,11 @@
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* FUN_0042dee0(void* a, int size, int align, int flags);
 void FUN_00511f70(void* first, void* last, void* dst);
+void FUN_0050eb40(void* first, void* last, void* dst);
+void* FUN_0050f8b0(void* first, void* last, void* dst);
+void FUN_00457450(void* dst, int bytes, void* value, void* unused);
+void FUN_00512050(void* a, void* b, void* c, void* unused);
+void* FUN_004554f0(void* first, void* last, void* dst);
 void* FUN_00569980();
 void* FUN_005699f0(void* src, void* dst);
 void* FUN_00569b80(void* key);
@@ -34,16 +39,144 @@ struct NodeSlot {
     void FUN_00566c50(void* node);              // 0x566c50
 };
 
-// @ 0x00567a90  (large vector DoInsertValue helper)
-void* FUN_00567a90(void* this_, void* pos, int n, void* value) {
-    (void)this_; (void)pos; (void)n; (void)value;
-    return pos;
+// Vector helpers whose host is passed in ecx (the migrated markers omitted the hidden this).
+struct Vec12Stub {
+    void DoInsertValue(void* pos, int n, void* value);    // 0x567a90
+};
+struct Vec8Stub {
+    void InsertOne(void* pos, void* value);               // 0x567e70
+};
+
+// @ 0x00567a90  (large vector DoInsertValue helper, 12-byte elements)
+void Vec12Stub::DoInsertValue(void* pos, int n, void* value) {
+    struct Vec12 { char pad[0xc]; };
+    char* self = (char*)this;
+    int size = (*(int*)(self + 8) - *(int*)(self + 4)) / 0xc;
+    if ((unsigned)n > (unsigned)size) {
+        // --- grow ---
+        int oldCount = (*(int*)(self + 4) - *(int*)(self)) / 0xc;
+        int newCount;
+        if (oldCount == 0)
+            newCount = 1;
+        else
+            newCount = oldCount * 2;
+        int grow;
+        if (newCount < oldCount + n)
+            grow = oldCount + n;
+        else
+            grow = newCount;
+        char* mem;
+        if (grow == 0)
+            mem = 0;
+        else
+            mem = (char*)FUN_0042dee0(self + 0xc, grow * 0xc, 4, 0);
+        char* mid = (char*)FUN_0050f8b0(*(void**)(self + 0), *(void**)(self + 4), mem);
+        FUN_00457450(mid, n * 0xc, pos, value);
+        char* end2 = (char*)FUN_0050f8b0(mid + n * 0xc, *(void**)(self + 4), *(void**)(self + 4));
+        if (*(void**)(self + 0) != 0)
+            FUN_004e1780(*(void**)(self));
+        *(void**)(self + 0) = mem;
+        *(void**)(self + 4) = end2;
+        *(void**)(self + 8) = mem + grow * 0xc;
+        (void)end2;
+        (void)mid;
+    } else if (n != 0) {
+        // --- insert in place ---
+        Vec12 tmp = *(Vec12*)value;
+        int after = (*(int*)(self + 4) - (int)pos) / 0xc;
+        char* oldEnd = (char*)(*(int*)(self + 4));
+        if (n < after) {
+            FUN_00512050(*(void**)(self + 4), (void*)(*(int*)(self + 4) + n * -0xc), *(void**)(self + 4), 0);
+            *(int*)(self + 4) = n * 0xc + *(int*)(self + 4);
+            char* dst = oldEnd;
+            char* src = oldEnd + n * -0xc;
+            while (src != (char*)pos) {
+                *(int*)(dst - 0xc) = *(int*)(src - 0xc);
+                *(int*)(dst - 8) = *(int*)(src - 8);
+                *(int*)(dst - 4) = *(int*)(src - 4);
+                dst -= 0xc;
+                src -= 0xc;
+            }
+            char* it = (char*)pos;
+            char* stop = (char*)pos + n * 0xc;
+            while (it != stop) {
+                *(int*)(it + 0) = *(int*)&tmp;
+                *(int*)(it + 4) = *(int*)((char*)&tmp + 4);
+                *(int*)(it + 8) = *(int*)((char*)&tmp + 8);
+                it += 0xc;
+            }
+        } else {
+            FUN_00457450(*(void**)(self + 4), (n - after) * 0xc, value, 0);
+            *(int*)(self + 4) = (n - after) * 0xc + *(int*)(self + 4);
+            FUN_0050eb40(pos, oldEnd, *(void**)(self + 4));
+            *(int*)(self + 4) = after * 0xc + *(int*)(self + 4);
+            char* it = (char*)pos;
+            while (it != oldEnd) {
+                *(int*)(it + 0) = *(int*)&tmp;
+                *(int*)(it + 4) = *(int*)((char*)&tmp + 4);
+                *(int*)(it + 8) = *(int*)((char*)&tmp + 8);
+                it += 0xc;
+            }
+        }
+    }
+    (void)pos;
 }
 
-// @ 0x00567e70  (large vector insert helper)
-void* FUN_00567e70(void* this_, void* pos, int n, void* value) {
-    (void)this_; (void)pos; (void)n; (void)value;
-    return pos;
+// @ 0x00567e70  (large vector insert helper, 8-byte elements)
+void Vec8Stub::InsertOne(void* pos, void* value) {
+    char* self = (char*)this;
+    if (*(int*)(self + 4) == *(int*)(self + 8)) {
+        // --- grow ---
+        int oldCount = (*(int*)(self + 4) - *(int*)(self)) >> 3;
+        int grow;
+        if (oldCount == 0)
+            grow = 1;
+        else
+            grow = oldCount << 1;
+        char* mem;
+        if (grow == 0)
+            mem = 0;
+        else
+            mem = (char*)FUN_0042dee0(self + 0xc, grow << 3, 4, 0);
+        char* p = (char*)FUN_004554f0(*(void**)(self), pos, mem);
+        char* q;
+        if (p == 0) {
+            q = 0;
+        } else {
+            *(int*)p = *(int*)value;
+            *(int*)(p + 4) = *(int*)((char*)value + 4);
+            q = p;
+        }
+        char* end2 = (char*)FUN_004554f0(pos, *(void**)(self + 4), (char*)p + 8);
+        if (*(void**)(self) != 0)
+            FUN_004e1780(*(void**)(self));
+        *(void**)(self) = mem;
+        *(void**)(self + 4) = end2;
+        *(void**)(self + 8) = mem + (grow << 3);
+        (void)p;
+    } else {
+        // --- insert in place ---
+        char* src = (char*)value;
+        if ((unsigned)pos <= (unsigned)value && value < *(void**)(self + 4))
+            src = (char*)value + 8;
+        char* end = *(char**)(self + 4);
+        if (end != 0) {
+            *(int*)end = *(int*)(end - 8);
+            *(int*)(end + 4) = *(int*)(end - 4);
+        }
+        char* dst = end;
+        char* cur = end - 8;
+        while (cur != (char*)pos) {
+            *(int*)(dst - 8) = *(int*)(cur - 8);
+            *(int*)(dst - 4) = *(int*)(cur - 4);
+            dst -= 8;
+            cur -= 8;
+        }
+        *(int*)pos = *(int*)src;
+        *(int*)((char*)pos + 4) = *(int*)(src + 4);
+        *(int*)(self + 4) = *(int*)(self + 4) + 8;
+    }
+    (void)pos;
 }
 
 // @ 0x005680a0
@@ -201,9 +334,26 @@ void HashFreeStub::DoFreeNodes(void** pArr, unsigned n) {
     }
 }
 
-// @ 0x00568840
-void FUN_00568840(void* this_) {
-    (void)this_;
+// @ 0x00568840  (lower_bound over 0x10-stride elements: primary key at +4, secondary at +0)
+unsigned* FUN_00568840(unsigned* first, int last, unsigned* value) {
+    int len = (last - (int)first) >> 4;
+    while (len > 0) {
+        int half = len >> 1;
+        unsigned* mid = first + half * 4;
+        int moveRight;
+        if ((int)value[1] < (int)mid[1] ||
+            ((int)value[1] <= (int)mid[1] && *value <= *mid))
+            moveRight = 0;
+        else
+            moveRight = 1;
+        if (moveRight) {
+            first = mid + 4;
+            len = len - (half + 1);
+        } else {
+            len = half;
+        }
+    }
+    return first;
 }
 // --- equivalence checker address annotations
 

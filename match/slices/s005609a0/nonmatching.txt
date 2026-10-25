@@ -2,3 +2,9 @@
 00560d20    0  complete asset key equality; /Od frame differs; equiv PASS (ecx receiver fixed)
 00561090  154  complete cEditorResource constructor; vtable/frame schedule differs; equiv PASS (ecx receiver fixed)
 005611b0  103  complete cEditorResource destructor; frame schedule differs; equiv PASS 399 valid, 100% coverage
+005609a0  558  complete OTDB asset-registration driver (pollinator post, asset lookup/population decrease, map+set cleanup, 0x50-byte asset destroy/dtor); size 662 vs 651, /Od temp slots and helper call shapes differ; equiv UNSUPPORTED 2 unresolved refs (FeatVec54::clear, VecBase54::destroy)
+00560d60  367  complete asset registration driver (feature param save/get, key vector build, template DB insert, object template ctor, asset init); size 372 vs 446, /Od slot order and inline feature-value copies differ; equiv UNSUPPORTED 2 unresolved refs (FeatVec54::dtor, VecBase54::destroy)
+00560f20  293  complete OTDB job construction (operator new, job vtable ctor, parameter array fill, SetData, manager submit, Release); size 301 vs 354, /Od temp materialisation differs; equiv WEAK 303/400 valid, 23.1% coverage (need 60%)
+00561220  211  complete asset wrapper update (copy source asset, destroy payload, release old block); size 254 vs 276, /Od inline copy/destroy schedule differs; equiv UNSUPPORTED 1 unresolved ref (VecBase54::destroy)
+00561340 1120  complete large resource-wrapper driver (asset lookup, map equal_range/iterator walk, 0x50-byte asset copies, vector/map inserts, resource get, message send); size 1222 vs 1296, /Od frames and inline container helper calls differ; equiv UNSUPPORTED 2 unresolved refs (Map54::equal_range, MapIter54::increment)
+00561850  254  complete asset state update (map lookup, asset copy temp pair, Insert, weight blend, vector destroy); size 197 vs 276, original materialises extra copy/pair temps (frame 0xb8 vs 0x38); equiv UNSUPPORTED 2 unresolved refs (DBSub::Insert, VecDestroy54::destroy)

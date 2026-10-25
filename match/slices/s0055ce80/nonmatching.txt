@@ -1,3 +1,5 @@
 0055cff0  490  complete cSPObjectTemplateDB key-inclusion path; /Od frame/temps not reproduced
 0055d9e0  287  complete classifier-registration loop; intrusive-ptr temp schedule differs
 0055db30  373  complete summarizer-registration path; /Od register schedule differs
+0055d230  1157  parameter-table merge: group/weighted map levels, per-key set insertion, subtype and known-group bookkeeping; complete body, /Od temporary-slot order and EASTL copy-helper frames differ; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast [equiv: WEAK 191 valid inputs, 7.8% coverage]
+0055d790  482  parameter-table removal: find outer/inner maps, erase key and drop empty inner entries; complete body, /Od iterator/end-iterator local slots differ; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast [equiv: WEAK 204 valid inputs, 13.7% coverage]

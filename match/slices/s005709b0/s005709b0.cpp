@@ -35,6 +35,7 @@ struct KeyVector {
     Key12* mpCapacity;
     Allocator mAllocator;
 
+    ~KeyVector();                                                            // 0x5719a0 (frees the buffer)
     void erase(Key12* first, Key12* last);                                   // 0x50f740
     Key12* insert(Key12* position, const Key12& value);                      // 0x5718f0
 };
@@ -52,6 +53,12 @@ struct cFeatureVector : KeyVector {
     float mfLen;                   // +0x18
 
     cFeatureVector();                                        // 0x571640
+    // destruction: run over the elements, then let the base release the buffer.
+    ~cFeatureVector()                                        // out of line copy: 0x564470
+    {
+        for (Key12* p = mpBegin; p < mpEnd; ++p)
+            ;
+    }
     void clear();                                            // 0x571680
     Key12* begin();                                          // 0x5716c0
     Key12* end();                                            // 0x5716e0
@@ -175,13 +182,53 @@ InsertResult cFeatureVector::insertValue(const Key12& value)
 // ---------------------------------------------------------------------------
 // Large /Od dispatch / similarity functions.
 // ---------------------------------------------------------------------------
+// 8-byte {key, weight} entry of the weight vector (same type as s005709b0_g7.cpp).
+struct WeightPair {
+    uint32_t mKey;      // +0x00
+    float mVal;         // +0x04
+};
+
+struct WeightVector {
+    WeightPair* mpBegin;    // +0x00
+    WeightPair* mpEnd;      // +0x04
+};
+
+// @ 0x00571530
+// scales every feature of `a` by its lookup weight; false when a key is unknown.
+bool __cdecl IntersectWeights(const cFeatureVector* a, const WeightVector* b)
+{
+    WeightPair* wtIt = b->mpBegin;
+    WeightPair* wtEnd = b->mpEnd;
+    Key12* it = a->mpBegin;
+    Key12* end = a->mpEnd;
+    for (; it != end; ++it)
+    {
+        for (; wtIt != wtEnd && wtIt->mKey < it->mA; ++wtIt)
+            ;
+        if (wtIt == wtEnd || wtIt->mKey != it->mA)
+            return false;
+        it->mC = it->mC * wtIt->mVal;
+    }
+    return true;
+}
+
 struct cTraitQuery {
-    char pad[0x100];
+    char mUnk00[0x1c];              // +0x00
+    cFeatureVector mFeatures;       // +0x1c  the query's own feature vector
+    WeightVector mWeights;          // +0x38
+    char mUnk40[0x10];              // +0x40
+    unsigned char mWeighted;        // +0x50  non-zero: weight both inputs first
+    char mUnk51[3];                 // +0x51 .. +0x53
+    uint32_t mMode;                 // +0x54  similarity operator index
+
     float Compute(cFeatureVector* a, cFeatureVector* b);   // 0x5709b0
     float Op1(cFeatureVector* a, cFeatureVector* b);       // 0x570c40
     float Op2(cFeatureVector* a, cFeatureVector* b);       // 0x570e50
     float Op3(cFeatureVector* a, cFeatureVector* b);       // 0x571100
 };
+
+// result reported when the operator index is out of range: (float)0xFFFFFFFF
+static const float kfSimilarityError = 4294967296.0f;       // 0x13f4fd0
 
 // 0x555980 returns [position, position+1) when the key is present, else
 // [position, position); the callers keep the result in an 8-byte local.
@@ -193,21 +240,104 @@ struct cTraitSet : cFeatureVector {
 extern cTraitSet g_traitSet_15e4a1c;          // 0x15e4a1c  global trait-frequency set
 
 struct TraitData {
+    unsigned char mFlag;                                      // +0x00
+    TraitData() { mFlag = 0; }
     float Intersect(cFeatureVector* a, cFeatureVector* b);   // 0x005704c0 (ignores this)
 };
 
 // @ 0x005709b0
 float cTraitQuery::Compute(cFeatureVector* a, cFeatureVector* b)
 {
-    (void)a; (void)b;
-    return 0.0f;
+    if (mWeighted == 0)
+    {
+        switch (mMode)
+        {
+        case 0:
+        {
+            TraitData data;
+            return data.Intersect(a, b);
+        }
+        case 1:
+            return Op1(a, b);
+        case 2:
+            return Op2(a, b);
+        case 3:
+            return Op3(a, b);
+        }
+        return kfSimilarityError;
+    }
+
+    cFeatureVector fa;
+    cFeatureVector fb;
+    fa.assign(*a);
+    fb.assign(*b);
+    IntersectWeights(&fa, &mWeights);
+    IntersectWeights(&fb, &mWeights);
+
+    switch (mMode)
+    {
+    case 0:
+    {
+        TraitData data;
+        return data.Intersect(&fa, &fb);
+    }
+    case 1:
+        return Op1(&fa, &fb);
+    case 2:
+        return Op2(&fa, &fb);
+    case 3:
+        return Op3(&fa, &fb);
+    }
+    return kfSimilarityError;
 }
 
 // @ 0x00570c40
 float cTraitQuery::Op1(cFeatureVector* a, cFeatureVector* b)
 {
-    (void)a; (void)b;
-    return 0.0f;
+    Key12* itA = a->begin();
+    Key12* itB = b->begin();
+    Key12* endA = a->end();
+    Key12* endB = b->end();
+    float acc = 0.0f;
+    Key12* it = mFeatures.begin();
+    Key12* end = mFeatures.end();
+
+    for (; it != end; ++it)
+    {
+        Key12* cur = it;
+        float wA = 0.0f;
+        float wB = 0.0f;
+
+        if (itA != endA && *itA < *cur)
+            ++itA;
+        if (itB != endB && *itB < *cur)
+            ++itB;
+
+        Range r = g_traitSet_15e4a1c.FUN_00555980(*cur);
+        Key12* found = r.first != r.second ? r.first : g_traitSet_15e4a1c.mpEnd;
+        if (found == g_traitSet_15e4a1c.mpEnd)
+            continue;
+
+        if (itA != endA && *itA == *cur)
+        {
+            wA = itA->mC;
+            if (itB != endB && *itB == *cur)
+            {
+                wB = itB->mC;
+                acc = fabsf(wA - wB) * cur->mC + acc;
+            }
+            else
+            {
+                acc = wA * cur->mC + acc;
+            }
+        }
+        else if (itB != endB && *itB == *cur)
+        {
+            wB = itB->mC;
+            acc = wB * cur->mC + acc;
+        }
+    }
+    return acc;
 }
 
 // @ 0x00570e50

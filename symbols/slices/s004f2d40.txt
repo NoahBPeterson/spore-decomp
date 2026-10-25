@@ -1,5 +1,6 @@
-004f2d40 ?FUN_004f2d40@@YAXPAX00@Z  # FUN_004f2d40 migrated from s004f2d40 (verbatim, slice spelling)
-004f31c0 ?FUN_004f31c0@@YAXPAX00@Z  # FUN_004f31c0 migrated from s004f2d40 (verbatim, slice spelling)
-004f3650 ?FUN_004f3650@@YAXPAX00@Z  # FUN_004f3650 migrated from s004f2d40 (verbatim, slice spelling)
-004f3b40 ?FUN_004f3b40@@YAHUBits128@@0@Z  # FUN_004f3b40 migrated from s004f2d40 (verbatim, slice spelling)
-004f3c40 ?FUN_004f3c40@@YAHH@Z  # FUN_004f3c40 migrated from s004f2d40 (verbatim, slice spelling)
+004f2d40 ?FUN_004f2d40@@YAXPAUcSerializedEditorBlock@@PAUPropertyList@@PAUcSPBoundingBox@@0@Z  # GetBoundingBox: socket capsule / vertebra box / part box, then transform
+004f31c0 ?FUN_004f31c0@@YA_NPAUModel@@PAUValidityBits@@@Z  # validity test "intersecting end effectors" (retail stub + unreachable full body)
+004f3650 ?FUN_004f3650@@YA_NPAUModel@@PAUValidityBits@@@Z  # validity test "has floating parts" (retail stub + unreachable full body)
+004f3b40 ?FUN_004f3b40@@YAHUBits128@@0@Z  # first index (of 28) set in both 128-bit masks with the best metric
+004f3c40 ?FUN_004f3c40@@YAHH@Z  # first int field of g_150c920[i]
+015dabac ?gDefaultSocketOffset@@3UcSPVector3@@B  # cSPVector3 socket-connector default offset (BSS, zero-initialised)

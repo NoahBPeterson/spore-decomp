@@ -1,1 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0053e120/s0053e120.cpp  ?FUN_0053e120@@YAHHHPAH@Z  0053e120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0053e120/s0053e120.cpp  ?Set@cColor32@@QAEPAU1@EEEE@Z  0053e190  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0053e120/s0053e120.cpp  ?ApplyMask@cPaintKey@@QAEEE@Z  0053e3a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

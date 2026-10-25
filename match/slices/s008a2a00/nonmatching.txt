@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+008a2b10 357 EA::Text::Typesetter::ShapeArabic: complete, 582/580 bytes; pOTF and the running glyph count occupy swapped stack slots and the inlined FeatureLookupArray setup schedules its begin/end/capacity/fixed-buffer stores differently; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+008a2fe0 60 GlyphLayoutVector::DoInsertValue: complete, 294/291 bytes; the append path is byte-identical, the grow path computes the old-capacity byte count in EDI instead of retail's ECX and keeps pNewEnd on the stack instead of EDI; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+008a3110 486 EA::Text::Typesetter::AppendGeneralGlyphCluster: complete, 513/608 bytes; retail inlines the zero-value GlyphLayoutInfo push_back (fast path + zeroed temp for DoInsertValue), this build outlines it; remaining differences are register/slot assignment in the push_back fast paths; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
