@@ -15,3 +15,6 @@
 008f3640  108 CharStream::skip-until; redundant re-checks restored but ours writes edx (equiv FAIL: edx untouched by orig — reg-alloc/LTCG, not source-controllable)
 008f3710  108 CharStream::skip-until; redundant re-checks restored but ours writes edx (equiv FAIL: edx untouched by orig — reg-alloc/LTCG, not source-controllable)
 008f36c0  78  CharStream::consume newline; codegen differs (equiv PASS)
+008f3a80  358 CSSTokenReader::MatchEscape; complete reconstruction, hex-escape/erase codegen differs
+008f3c40  94  CSSTokenReader::MatchIdent; complete reconstruction, shared push-block layout differs
+008f3d90  738 CSSParser::Advance; complete reconstruction, jump-table reg-alloc differs

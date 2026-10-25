@@ -4,7 +4,7 @@
 008f3640 ?Fn8f3640@CharStream@@QAEHPAX@Z  # CharStream::Fn8f3640 migrated from s008f3530 (verbatim, slice spelling)
 008f36c0 ?Fn8f36c0@CharStream@@QAEXXZ  # CharStream::Fn8f36c0 migrated from s008f3530 (verbatim, slice spelling)
 008f3710 ?Fn8f3710@CharStream@@QAEHPAX@Z  # CharStream::Fn8f3710 migrated from s008f3530 (verbatim, slice spelling)
-008f3790 ?Fn8f3790@@YAXPAXPBX11@Z  # Fn8f3790 migrated from s008f3530 (verbatim, slice spelling)
+008f3790 ?Fn8f3790@@YAPAPAXPAPAXPAD1PAX@Z  # Fn8f3790 (eastl::equal_range) migrated from s008f3530; byte-exact
 008f3830 ?Fn8f3830@CharStream@@QAEDXZ  # CharStream::Fn8f3830 migrated from s008f3530 (verbatim, slice spelling)
 008f38b0 ?Fn8f38b0@CharStream@@QAEPAXPAG@Z  # CharStream::Fn8f38b0 migrated from s008f3530 (verbatim, slice spelling)
 008f3900 ?Fn8f3900@CSSParser@@QAEPAXHPAG0@Z  # CSSParser::Fn8f3900 migrated from s008f3530 (verbatim, slice spelling)
@@ -13,7 +13,7 @@
 008f3a10 ?Fn8f3a10@CharStream@@QAEDH@Z  # CharStream::Fn8f3a10 migrated from s008f3530 (verbatim, slice spelling)
 008f3a40 ?Fn8f3a40@CharStream@@QAEXH@Z  # CharStream::Fn8f3a40 migrated from s008f3530 (verbatim, slice spelling)
 008f3a80 ?Fn8f3a80@CharStream@@QAEDXZ  # CharStream::Fn8f3a80 migrated from s008f3530 (verbatim, slice spelling)
-008f3c40 ?Fn8f3c40@@YAHPAXH@Z  # Fn8f3c40 migrated from s008f3530 (verbatim, slice spelling)
+008f3c40 ?MatchIdent@CharStream@@QAEDXZ  # CharStream::MatchIdent migrated from s008f3530; nonmatching reconstruction
 008f3d20 ?Fn8f3d20@CharStream@@QAEHH@Z  # CharStream::Fn8f3d20 migrated from s008f3530 (verbatim, slice spelling)
 008f3d90 ?Fn8f3d90@CSSParser@@QAEXXZ  # CSSParser::Fn8f3d90 migrated from s008f3530 (verbatim, slice spelling)
 008f4290 ?Fn8f4290@CSSParser@@QAEDXZ  # CSSParser::Fn8f4290 migrated from s008f3530 (verbatim, slice spelling)
