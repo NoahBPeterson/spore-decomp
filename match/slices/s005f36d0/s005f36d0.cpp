@@ -3,6 +3,7 @@
 // subclass (cost display, cursor, rollover), plus eastl::vector<AutoRefCount<cMWModel>>::DoDestroyValues.
 // Retail cSPSwatch is 0x17c bytes (mID at +0x178); fields after it belong to the subclass.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+#include <float.h>
 #include <math.h>
 #include "types.h"
 
@@ -34,13 +35,13 @@ class AutoRefCount {
     }
     return *this;
   }
-  T*& AsOutParam() {
+  T** AsOutParam() {
     if (mpObject) {
       T* const p = mpObject;
       mpObject = 0;
       p->Release();
     }
-    return mpObject;
+    return &mpObject;
   }
   T* operator->() const { return mpObject; }
   operator T*() const { return mpObject; }
@@ -106,6 +107,41 @@ class RectT { public:
   bool Contains(const Point2D& p) const {
     return p.x >= left && p.y >= top && p.x < right && p.y < bottom;
   }
+  float GetWidth() const { return right - left; }
+  float GetHeight() const { return bottom - top; }
+};
+
+struct Vector3 { float x, y, z; };
+struct Matrix3 { float m[9]; };
+
+void FUN_00409930(void* transform);               // 0x00409930 (cSPTransform ctor)
+void FUN_006baa70(void* transform, float angle);  // 0x006baa70 (cSPTransform::PreRotateY)
+
+// cSPTransform: flags/version at +0, translation at +4, basis at +0x14 (0x38 bytes, which is exactly
+// the frame the retail code reserves for it in both functions below).
+struct cSPTransform {
+  uint16_t mFlags;         // +0x0
+  uint16_t mVersion;       // +0x2
+  Vector3 mTranslation;    // +0x4
+  uint32_t pad10;          // +0x10
+  float mBasis[9];         // +0x14
+  void Reset() { FUN_00409930(this); }                          // 0x00409930
+  void PreRotateY(float angle) { FUN_006baa70(this, angle); }   // 0x006baa70
+  void SetTranslation(const Vector3& t) { mFlags |= 4; mVersion++; mTranslation = t; }
+};
+
+// the editor bounding-box data a model property can carry
+class cSPBoundingBoxData {
+ public:
+  cSPBoundingBoxData* Init(void* source);   // 0x00511140
+};
+
+// cSPBoundingBox: the min/max box the renderer frames a model with
+struct BoundingBox {
+  Vector3 mMin;  // +0x0
+  Vector3 mMax;  // +0xc
+  void SetFrom(const cSPBoundingBoxData* data);   // 0x00571d60
+  void TransformBy(const cSPTransform* xf);       // 0x00409dd0
 };
 
 namespace UTFWin {
@@ -198,7 +234,12 @@ class AutoHandler { public:
 }  // namespace EA
 
 using EA::AutoRefCount;
+using EA::BoundingBox;
+using EA::cSPBoundingBoxData;
+using EA::cSPTransform;
+using EA::Matrix3;
 using EA::ResourceMan::Key;
+using EA::Vector3;
 using EA::UTFWin::IWindow;
 using EA::UTFWin::IWinProc;
 using EA::UTFWin::Message;
@@ -279,6 +320,7 @@ class cICamera {
   virtual cICameraController* Cast(uint32_t typeID);  // +0xc
 };
 class cViewer;
+class cModelProperty;
 class cICameraManager {
  public:
   PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6)
@@ -347,7 +389,8 @@ struct cItemCostInfo {
 class cModelWorld {
  public:
   PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14)
-  PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24)
+  PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23)
+  virtual BoundingBox* GetBoundingBox(struct cMWModel* model);  // +0x60
   virtual int GetEffectCount(struct cMWModel* model);  // +0x64
   PV(26) PV(27)
   virtual void StartEffect(cMWModel* model, uint32_t effectID, int a, float b, int index);  // +0x70
@@ -358,14 +401,19 @@ class cModelWorld {
   PV(85) PV(86) PV(87) PV(88) PV(89) PV(90) PV(91)
   virtual void DestroyModel(struct cMWModel* model, bool immediate);  // +0x170
 };
-struct cMWModel { private:
- public:
-  cModelWorld* mpWorld;  // +0x0
-  uint32_t mFlags;       // +0x4
-  uint32_t pad8[14];
-  int mRefCount;         // +0x40
+struct cMWModel {
+  cModelWorld* mpWorld;          // +0x0
+  uint32_t mFlags;               // +0x4
+  uint16_t mTransformFlags;      // +0x8 (bit1: basis dirty, bit2: position dirty)
+  uint16_t mTransformVersion;    // +0xa
+  Vector3 mTransformPosition;    // +0xc
+  float mTransformScale;         // +0x18
+  float mTransformBasis[9];      // +0x1c
+  int mRefCount;                 // +0x40
   void AddRef() { mRefCount++; }
   void Release();
+  char pad44[0x90 - 0x44];
+  cModelProperty* mpPropertyList;  // +0x90
 };
 class cModelWorldRelease {
  public:
@@ -401,7 +449,11 @@ class cSwatchTexture {
 };
 class cSwatchRenderer {
  public:
-  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14)
+  PV(0) PV(1) PV(2) PV(3) PV(4)
+  // frame one model into the swatch: box, target buffer, camera id, scale, draw flags, window aspect
+  virtual void RenderSwatch(const BoundingBox* box, void* buffer, uint32_t cameraID, float scale,
+                            int flags, float aspect);  // +0x14
+  PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14)
   PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28)
   PV(29) PV(30) PV(31) PV(32) PV(33)
   virtual void SetTexture(void* texture);  // +0x88
@@ -414,7 +466,7 @@ class cSwatch3DView { public:
   void* mAnimWorld;                     // +0x1c
   IWindow* mWindow;                     // +0x20
   cSwatchRenderer* mRenderer;           // +0x24
-  void* mCamera;                        // +0x28
+  class cCameraVt* mCamera;             // +0x28
   cSwatchTexture* mTexture;             // +0x2c
   class cISPCreatureAnimWorld* AddCreature(uint32_t modelID, void* key, int type);  // 0x005f3930
   void RenderFrame(int time);                                                       // 0x005f3810
@@ -466,6 +518,14 @@ class cSPSwatch : public IWinProc, public EA::RefCountVTemplate<int>, public EA:
         return true;
     }
     return false;
+  }
+  // the surface the 3D view renders into: the layered object's buffer, else the texture's
+  __forceinline void* GetFrameBuffer() {
+    if (m3DView.mLayeredObject)
+      return m3DView.mLayeredObject->GetBuffer();
+    if (m3DView.mTexture)
+      return m3DView.mTexture->FUN_0080d5f0();
+    return 0;
   }
   __forceinline bool AnyMouseButtonCaptured() const {
     for (unsigned int i = 0; i < 5; i++)
@@ -522,7 +582,7 @@ class cSPSwatch : public IWinProc, public EA::RefCountVTemplate<int>, public EA:
   bool mImageOverlay;                     // +0xfc
   bool mImageSet;                         // +0xfd
   uint32_t pad100[6];
-  AutoRefCount<cMWModel> mModel;          // +0x118
+  cMWModel* mModel;                       // +0x118 (owned elsewhere)
   uint32_t pad11c[17];
   bool mHasBeenFramed;                    // +0x160
   bool mModelLoaded;                      // +0x161
@@ -551,8 +611,6 @@ inline void cMWModel::Release() {
 
 // ==================== slice s005f36d0 ====================
 // ---- helper stubs (bodies are not linked; call targets are relocation-masked) ----
-struct Vector3 { float x, y, z; };
-
 class cViewer {
  public:
   void GetCameraLocationInfo(Vector3* out, int a, int b, int c);  // 0x007c3d30
@@ -564,7 +622,8 @@ class cRefObject {
 };
 class cAnimWorld : public cRefObject {
  public:
-  void SetLOD(int v);  // 0x00a04c80
+  Vector3* GetPosition();  // 0x00a048a0
+  void SetLOD(int v);      // 0x00a04c80
 };
 class cSwatchWindow {
  public:
@@ -575,11 +634,19 @@ class cSwatchWindow {
   PV(13) PV(14) PV(15)
   virtual void Vt40(cRefObject* a, void* b, int c);  // +0x40
 };
+// The swatch camera: slots named from the two call sites only (a key argument and a Vector3 the
+// renderer feeds the camera). Nothing in these two functions reveals more of the semantics.
 class cCameraVt {
  public:
-  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12)
-  PV(13) PV(14) PV(15) PV(16) PV(17) PV(18)
-  virtual int GetType();  // +0x4c
+  PV(0) PV(1) PV(2)
+  virtual void Apply();                                                     // +0x0c
+  PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11)
+  virtual void SetTargetKey(const void* key);                               // +0x30
+  PV(13)
+  virtual void SetTargetPosition(const Vector3* position, const void* key);  // +0x38
+  virtual void GetCameraPosition(Vector3* position);                        // +0x3c
+  PV(16) PV(17) PV(18)
+  virtual int GetType();                                                    // +0x4c
 };
 class cResourceManager {
  public:
@@ -591,27 +658,53 @@ cResourceManager* ResourceGetManager();  // 0x0067dcd0
 class cPropertyManager {
  public:
   PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
-  virtual bool GetConfigProperty(int config, uint32_t key, void** prop, bool* flag);  // +0x2c
+  virtual bool GetConfigProperty(int config, uint32_t key, cModelProperty** prop,
+                                 bool* flag = 0);  // +0x2c
 };
 cPropertyManager* PropertyManager();               // 0x0067de30
 int GetConfigFromModelType(uint32_t id);           // 0x00432f10
 bool GetPropertyAsKey(void* prop, uint32_t key, Key* out);  // 0x006a1250
 bool GetFloatProperty(void* prop, uint32_t key, float* out);  // 0x0040cf10
-void* FUN_00a048a0();                              // 0x00a048a0
-int FUN_0067ddb0();                                // 0x0067ddb0
-void FUN_00409930(void* transform);                // 0x00409930 (cSPTransform ctor)
-void FUN_006baa70(uint32_t v);                     // 0x006baa70
-void Matrix3_Assign(void* dst, const void* src);   // 0x0041cb40
-bool GetPropertyT_int(void* prop, uint32_t key, int* out);  // 0x005f2320-style helper
+cSwatchRenderer* GetSwatchRenderer();              // 0x0067ddb0
+void Matrix3_Assign(Matrix3* dst, const float* src);  // 0x0041cb40
+void* FUN_005f2320(void* property);                // 0x005f2320
+void FUN_004ad330();                               // 0x004ad330
+
+// the model an editor paint-theme lookup resolves to, and the intrusive handle that owns it
+class cSPEditorModel {
+ public:
+  bool SetWorld(void* world);   // 0x004ae260
+};
+struct cEditorModelRef {        // EA::AutoRefCountR<SP::cRefCountedResource>: handle prefixed to the model
+ public:
+  cSPEditorModel* mpObject;                 // +0x0
+  cEditorModelRef() : mpObject(0) {}
+  ~cEditorModelRef();                       // 0x004a9ae0
+  cEditorModelRef* Reset();                 // 0x005766b0
+};
+
+Vector3* FUN_0046bfd0(Vector3* out, cSPEditorModel* model);   // 0x0046bfd0 (returns out)
+void* FUN_006c10e0(void* owner);                              // 0x006c10e0
+void* cSPBoundingBox_AddBoundingBox(int a, int b, int c);     // 0x0067cad0
+bool cSPEditorPaintTheme_Apply(const Key* key, cEditorModelRef* model, int flags);  // 0x004badd0
+
+// the property object hanging off cMWModel::+0x90
+class cModelProperty {
+ public:
+  PV(0)
+  virtual int Release();                                   // +0x4
+  PV(2) PV(3) PV(4) PV(5) PV(6)
+  virtual bool HasProperty(uint32_t propertyID);           // +0x1c
+  PV(8) PV(9)
+  virtual void* GetProperty(uint32_t propertyID);          // +0x28
+};
 
 extern uint32_t DAT_0151c614;
-extern uint32_t DAT_0151c568;
 extern uint32_t DAT_0151c590;
 extern uint32_t DAT_0151c5f8;
-extern uint32_t DAT_0151c700;
-extern float DAT_015f1ce4;
-extern float DAT_015f1ce8;
-extern float DAT_015f1cec;
+extern float kSwatchRotationAngle;  // 0x0151c568
+extern float kSwatchLayeredScale;   // 0x0151c700
+extern Vector3 gSwatchZeroVector;   // 0x015f1ce4 (0,0,0)
 
 // @ 0x005F36D0
 uint32_t GetThumbnailCameraID(uint32_t modelType, uint32_t unused) {
@@ -633,7 +726,7 @@ uint32_t GetThumbnailCameraID(uint32_t modelType, uint32_t unused) {
   int config = GetConfigFromModelType(id);
   if (config != -1) {
     cPropertyManager* pm = PropertyManager();
-    void* prop = 0;
+    cModelProperty* prop = 0;
     bool flag = false;
     pm->GetConfigProperty(config, DAT_0151c614, &prop, &flag);
     if (prop) {
@@ -668,42 +761,45 @@ void cSPSwatch::OnBakingIsDone() {
 
 // @ 0x005F3810
 void cSwatch3DView::RenderFrame(int time) {
-  if (mWindow) {
+  cSwatchWindow* window = (cSwatchWindow*)mWindow;
+  if (window) {
     void* buffer;
-    if (!mLayeredObject)
-      buffer = mTexture ? mTexture->FUN_0080d5f0() : 0;
-    else
+    if (mLayeredObject)
       buffer = mLayeredObject->GetBuffer();
+    else if (mTexture)
+      buffer = mTexture->FUN_0080d5f0();
+    else
+      buffer = 0;
     float t = (float)time;
     if (time < 0)
       t += 4294967296.0f;
-    ((cSwatchWindow*)mWindow)->Vt24(t * 0.001f, buffer);
+    window->Vt24(t * 0.001f, buffer);
   }
-  if (mCamera) {
-    if (((cCameraVt*)mCamera)->GetType() == 0x5e5252a) {
-      cViewer* viewer = SwatchManager()->GetCameraManager()->GetActiveViewer();
-      Vector3 loc;
-      viewer->GetCameraLocationInfo(&loc, 0, 0, 0);
-      const void* p;
-      if (!mAnimWorld)
-        p = &DAT_015f1ce4;
-      else {
-        Vector3* v = (Vector3*)FUN_00a048a0();
-        loc = *v;
-        p = &loc;
-      }
-      cCameraVt* cam = (cCameraVt*)mCamera;
-      (void)p;
-      (void)cam;
-    }
+  if (!mCamera)
+    return;
+  if (mCamera->GetType() != 0x5e5252a)
+    return;
+  Vector3 cameraPosition;
+  SwatchManager()->GetCameraManager()->GetActiveViewer()->GetCameraLocationInfo(
+      &cameraPosition, 0, 0, 0);
+  if (mAnimWorld) {
+    Vector3* position = ((cAnimWorld*)mAnimWorld)->GetPosition();
+    Vector3 target;
+    target.x = position->x;
+    target.y = position->y;
+    target.z = position->z;
+    mCamera->SetTargetPosition(&target, &DAT_0151c590);
+  } else {
+    mCamera->SetTargetPosition(&gSwatchZeroVector, &DAT_0151c590);
   }
+  mCamera->GetCameraPosition(&cameraPosition);
+  mCamera->SetTargetKey(&DAT_0151c590);
+  mCamera->Apply();
 }
 
 int FUN_00641770(void* self);          // 0x00641770
 void* FUN_00bb9ae0();                  // 0x00bb9ae0
 void FUN_008eb830(void* self, void* v);  // 0x008eb830
-struct cSPTransform { uint32_t pad[16]; };
-struct Matrix3 { float m[9]; };
 
 // @ 0x005F3930
 cISPCreatureAnimWorld* cSwatch3DView::AddCreature(uint32_t modelID, void* key, int type) {
@@ -729,7 +825,7 @@ cISPCreatureAnimWorld* cSwatch3DView::AddCreature(uint32_t modelID, void* key, i
   }
   if (mWindow) {
     cAnimWorld* newWorld = (cAnimWorld*)((cSwatchWindow*)mWindow)
-        ->Vt30(modelID, key, &DAT_015f1ce4, &DAT_0151c5f8, 1);
+        ->Vt30(modelID, key, &gSwatchZeroVector, &DAT_0151c5f8, 1);
     cAnimWorld* old = (cAnimWorld*)mAnimWorld;
     if (newWorld != old) {
       if (newWorld)
@@ -768,86 +864,117 @@ void cSPSwatch::FrameModel() {
     mHasBeenFramed = true;
     return;
   }
-  void* frame;
-  if (m3DView.mLayeredObject)
-    frame = m3DView.mLayeredObject->GetBuffer();
-  else if (m3DView.mTexture)
-    frame = m3DView.mTexture->FUN_0080d5f0();
-  else
+  if (!GetFrameBuffer())
     return;
-  if (!frame)
-    return;
-  (void)frame;
-  cMWModel* model = mModel;
-  if (!model)
-    return;
-  bool hasTransforms = (*(void**)((char*)this + 0xf0) != 0);
-  if (!hasTransforms) {
-    cSPTransform t;
-    FUN_00409930(&t);
-    // box extents
-    cMWModel* extra = *(cMWModel**)((char*)this + 0x110);
-    (void)extra;
-  }
-  (void)model;
-}
+  bool hasLayers;                          // +0x13: the model is drawn over image layers
+  AutoRefCount<cModelProperty> prop;       // +0x14: the model key's config property
+  Vector3 translation;                     // +0x18: offset applied to the model transform
+  float aspect;                            // +0x24
+  float scale;                             // +0x28
+  BoundingBox box;                         // +0x2c
+  cSPBoundingBoxData data;                 // +0x44
+  cSPTransform xf;                         // +0x5c
 
-void* FUN_005766b0(int v);                                  // 0x005766b0
-bool cSPEditorPaintTheme_Apply(const Key* key, void* theme);  // 0x004badd0
-void* cSPBoundingBox_AddBoundingBox(int, int, int);         // 0x0067cad0
-void* FUN_0046bfd0(void* out, int v);                       // 0x0046bfd0
-void* FUN_006c10e0();                                       // 0x006c10e0
-void FUN_004ad330();                                        // 0x004ad330
-void FUN_004a9ae0();                                        // 0x004a9ae0
+  // the model's box: the editor's stored box property when the model has one, else its world box
+  box.mMin.x = FLT_MAX;
+  box.mMin.y = FLT_MAX;
+  box.mMin.z = FLT_MAX;
+  box.mMax.x = -FLT_MAX;
+  box.mMax.y = -FLT_MAX;
+  box.mMax.z = -FLT_MAX;
+
+  cMWModel* model = mModel;
+  cModelProperty* props = model->mpPropertyList;
+  if (props && props->HasProperty(0x1cbb2f62)) {
+    box.SetFrom(data.Init(FUN_005f2320(props->GetProperty(0x1cbb2f62))));
+  } else {
+    BoundingBox* worldBox = model->mpWorld->GetBoundingBox(model);
+    box.mMax = worldBox->mMax;
+    box.mMin = worldBox->mMin;
+  }
+
+  hasLayers = mpImageLayers != 0;
+  translation = gSwatchZeroVector;
+  if (!hasLayers) {
+    xf.Reset();
+    Vector3 negated;
+    negated.x = -((box.mMax.x + box.mMin.x) * 0.5f);
+    negated.y = -((box.mMax.y + box.mMin.y) * 0.5f);
+    negated.z = -((box.mMax.z + box.mMin.z) * 0.5f);
+    xf.SetTranslation(negated);
+    box.TransformBy(&xf);
+    translation = negated;
+  }
+
+  scale = 1.2f;
+  if (PropertyManager()->GetConfigProperty(mModelKey.mInstance, mModelKey.mGroup, prop.AsOutParam()) &&
+      prop->HasProperty(0x5cd5de9))
+    GetFloatProperty(prop.mpObject, 0x5cd5de9, &scale);
+  else if (mpImageLayers)
+    scale = kSwatchLayeredScale;
+
+  aspect = mBaseWindow->GetRealArea().GetWidth() / mBaseWindow->GetRealArea().GetHeight();
+  int flags = hasLayers ? 0 : 6;
+  GetSwatchRenderer()->RenderSwatch(&box, GetFrameBuffer(), mCamera, scale, flags, aspect);
+
+  if (!hasLayers) {
+    model->mTransformFlags |= 4;
+    model->mTransformVersion++;
+    model->mTransformPosition = translation;
+  }
+  mHasBeenFramed = true;
+}
 
 // @ 0x005F40B0
 void cSPSwatch::UpdateBakingTransform() {
   if (!mUseEditorCameraController)
     return;
-  if (*(void**)((char*)this + 0xf0) != 0)
+  if (mpImageLayers)
     return;
   if (!mBakedAsset)
     return;
-  if (!mModel)
-    return;
   cMWModel* model = mModel;
-  int p = *(int*)((char*)model + 0x90);
+  if (!model)
+    return;
+
   float scale = 1.0f;
-  if (p && GetFloatProperty((void*)p, 0xfba611, &scale) && scale > 0.0f) {
-    *(uint16_t*)((char*)model + 0xa) += 1;
-    *(float*)((char*)model + 0x18) = 1.0f / scale;
+  cSPEditorModel* paintModel;
+  Vector3 offset;
+  Matrix3 basis;
+  cSPTransform xf;
+
+  // bake scale: the model shrinks by the inverse of its configured bake scale
+  cModelProperty* props = model->mpPropertyList;
+  if (props && GetFloatProperty(props, 0xfba611, &scale) && scale > 0.0f) {
+    model->mTransformVersion++;
+    model->mTransformScale = 1.0f / scale;
   }
-  cSPTransform t;
-  FUN_00409930(&t);
-  FUN_006baa70(DAT_0151c568);
-  Matrix3 mtx;
-  Matrix3_Assign(&mtx, &t);
-  *(uint16_t*)((char*)model + 8) |= 2;
-  *(Matrix3*)((char*)model + 0x1c) = mtx;
-  *(uint16_t*)((char*)model + 0xa) += 1;
-  uint32_t v[3];
-  v[0] = *(uint32_t*)&DAT_015f1ce4;
-  v[1] = *(uint32_t*)&DAT_015f1ce8;
-  v[2] = *(uint32_t*)&DAT_015f1cec;
-  void* theme = FUN_005766b0(0);
-  if (cSPEditorPaintTheme_Apply(&mModelKey, theme)) {
-    cSPBoundingBox_AddBoundingBox(0, 0, 0);
-    int* q = (int*)FUN_0046bfd0(0, 0);
-    v[0] = q[0];
-    v[1] = q[1];
-    v[2] = q[2];
-    FUN_006c10e0();
+
+  // the bake is rendered from the fixed swatch rotation, not the on-screen one
+  xf.Reset();
+  xf.PreRotateY(kSwatchRotationAngle);
+  Matrix3_Assign(&basis, xf.mBasis);
+  model->mTransformFlags |= 2;
+  for (int i = 0; i < 9; i++)
+    model->mTransformBasis[i] = basis.m[i];
+  model->mTransformVersion++;
+
+  // the paint theme's model sits at the origin unless a box was built for it
+  offset = gSwatchZeroVector;
+  cEditorModelRef paintInfo;
+  if (cSPEditorPaintTheme_Apply(&mModelKey, paintInfo.Reset(), 0)) {
+    void* box = cSPBoundingBox_AddBoundingBox(0, 0, 0);
+    paintModel = paintInfo.mpObject;
+    paintModel->SetWorld(FUN_006c10e0(box));
+    offset = *FUN_0046bfd0(&offset, paintModel);
     FUN_004ad330();
   }
-  *(uint16_t*)((char*)model + 8) |= 4;
-  *(uint16_t*)((char*)model + 0xa) += 1;
-  v[0] ^= 0x80000000;
-  v[1] ^= 0x80000000;
-  v[2] ^= 0x80000000;
-  *(uint32_t*)((char*)model + 0xc) = v[0];
-  *(uint32_t*)((char*)model + 0x10) = v[1];
-  *(uint32_t*)((char*)model + 0x14) = v[2];
-  FUN_004a9ae0();
+
+  model->mTransformFlags |= 4;
+  model->mTransformVersion++;
+  model->mTransformPosition.x = -offset.x;
+  model->mTransformPosition.y = -offset.y;
+  model->mTransformPosition.z = -offset.z;
 }
 
 extern const wchar_t* const kSwatchMaterialNormal;  // 0x0151c41c
