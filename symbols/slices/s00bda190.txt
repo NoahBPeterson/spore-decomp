@@ -1,0 +1,4 @@
+# slice s00bda190 (gold8) - names inferred from the cards and PDB candidates
+#   cCulturalTarget  Simulator object: cGameData + a secondary vptr at +4, cCombatant at +0x38,
+#                    cSpatialObject at +0x100, attack bookkeeping at +0x1d4..+0x214
+00bdab60  Simulator::cCulturalTarget::cCulturalTarget() -> void  # constructor: base ctors, four vptrs, gate/political ids, empty vectors

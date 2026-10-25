@@ -6,3 +6,4 @@ slices/s00bda190/s00bda190.cpp  ?AssignRefPairObj@cRefOps@@QAEPAU1@PBUcAutoRef12
 slices/s00bda190/s00bda190.cpp  ?CopyRefPairs@@YAPAUcAutoRef12@@PAU1@00@Z  00bda8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bda190/s00bda190.cpp  ?DestroyRefPairsReturn@@YAPAUcAutoRef12@@PAU1@00@Z  00bda930  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bda190/s00bda190.cpp  ?AssignRefPairRange@@YAPAUcAutoRef12@@PAU1@00@Z  00bda980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bda190/s00bda190.cpp  ??0cCulturalTarget@Simulator@@QAE@XZ  00bdab60  /O2 /MD /Gy /TP /arch:SSE /fp:fast

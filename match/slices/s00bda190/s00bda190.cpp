@@ -1020,3 +1020,88 @@ cCity* cCity::FindTradePartnerCity(int32_t nNounID)
     }
     return pBest;
 }
+
+// ---------------------------------------------------------------------------
+// Simulator::cCulturalTarget constructor (gold8 function 00bdab60).
+// The retail class lives in namespace Simulator; the dtor above models the same
+// object at global scope, so this constructor uses its own same-layout view.
+// ---------------------------------------------------------------------------
+namespace Simulator {
+
+struct CGameDataPart {
+    void* volatile mpVtbl;  // +0x00
+    void Ctor();            // 0x00b18660
+};
+
+struct CCombatantPart {
+    void* volatile mpVtbl;  // +0x00
+    void Ctor();            // 0x00bfd4e0
+};
+
+struct CSpatialPart {
+    void* volatile mpVtbl;  // +0x00
+    void Ctor();            // 0x00c89630
+};
+
+struct VPtrVec {
+    void* volatile mpBegin;     // +0x00
+    void* volatile mpEnd;       // +0x04
+    void* volatile mpCapacity;  // +0x08
+};
+
+struct cCulturalTarget {
+    CGameDataPart  mGameData;                           // +0x000
+    void* volatile mpVtbl04;                            // +0x004
+    char           mPad008[0x30];                       // +0x008 .. +0x037
+    CCombatantPart mCombatant;                          // +0x038
+    char           mPad03c[0xc4];                       // +0x03c .. +0x0ff
+    CSpatialPart   mSpatial;                            // +0x100
+    char           mPad104[0xd0];                       // +0x104 .. +0x1d3
+    uint8_t        volatile mGateIndex;                 // +0x1d4
+    char           mPad1d5[3];                          // +0x1d5 .. +0x1d7
+    int32_t        volatile mAttackState;               // +0x1d8
+    uint32_t       volatile mAttackerPoliticalID;       // +0x1dc
+    VPtrVec        mAttackOrders;                       // +0x1e0
+    char           mPad1ec[8];                          // +0x1ec .. +0x1f3
+    VPtrVec        mAttackers;                          // +0x1f4
+    char           mPad200[8];                          // +0x200 .. +0x207
+    void*          volatile mpHitSphere;                // +0x208
+    float          mLastDancingCrowdFraction;           // +0x20c
+    float          mLastAngryCrowdFraction;             // +0x210
+    int32_t        volatile mAngerLevel;                // +0x214
+
+    cCulturalTarget();
+};
+
+typedef char cCulturalTargetSizeCheck[(sizeof(cCulturalTarget) == 0x218) ? 1 : -1];
+
+// @ 0x00bdab60
+cCulturalTarget::cCulturalTarget()
+{
+    mGameData.Ctor();
+    mCombatant.Ctor();
+    mSpatial.Ctor();
+
+    mAttackState = 0;
+
+    mGameData.mpVtbl = (void*)0x1468618;
+    mpVtbl04 = (void*)0x1468608;
+    mCombatant.mpVtbl = (void*)0x14685a0;
+    mSpatial.mpVtbl = (void*)0x14684d8;
+
+    mGateIndex = 0xff;
+    mAttackerPoliticalID = 0xffffffff;
+
+    mAttackOrders.mpBegin = 0;
+    mAttackOrders.mpEnd = 0;
+    mAttackOrders.mpCapacity = 0;
+    mAttackers.mpBegin = 0;
+    mAttackers.mpEnd = 0;
+    mAttackers.mpCapacity = 0;
+    mpHitSphere = 0;
+    mAngerLevel = 0;
+    mLastDancingCrowdFraction = 0.0f;
+    mLastAngryCrowdFraction = 0.0f;
+}
+
+}  // namespace Simulator
