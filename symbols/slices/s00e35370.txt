@@ -1,1 +1,2 @@
-00e35370 cSPUITCCCursorStrategy::UpdateCursorStrategy  # PDB name already on the card; dev ?UpdateCursorStrategy@cSPUITCCCursorStrategy@@UAE_NI@Z, ret 4 returning bool agrees
+00e2b9d0 ?Update@cSPUIPropertyLayout@@UAEXXZ  # cSPUIPropertyLayout::Update (callee of s00e35370, named from the dev publics; slice address comment)
+00e35370 ?UpdateCursorStrategy@cSPUITCCCursorStrategy@@QAE_NI@Z  # cSPUITCCCursorStrategy::UpdateCursorStrategy migrated from s00e35370 (verbatim, slice spelling)
