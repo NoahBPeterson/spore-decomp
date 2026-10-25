@@ -87,11 +87,15 @@ public:
     float      mfMaxLoadFactor;           // +0x10
     uint32_t   mnGrowthFactor;            // +0x14
     uint32_t   mnNextResize;              // +0x18
-    FixedPool  mPool;                     // +0x1c
+    // The small table embeds only a 12-byte allocator face (vtable, field,
+    // name) at +0x1c; the table itself is 0x28 bytes.  The 0x30-byte FixedPool
+    // is only used by the big tables.
+    NamedAllocator mPool;                 // +0x1c
 
     __declspec(noinline) Hashtable* Construct(const void* nameSlot);   // 0xa64f80
     __declspec(noinline) Hashtable* InitNamed(void* nameSlot, const char* name); // 0xa65180
     __declspec(noinline) void Dispose();                        // 0xa65000
+    void       Finalize();                                      // 0xa64b70
     void       BaseDtor();                                      // 0xa651e0
     void       Insert(InsertResult* out, const HashNode16* pair,
                       const uint32_t* pKey);                    // 0xa64d70
@@ -156,7 +160,7 @@ public:
     uint32_t   mField0c;   // +0x0c
     Hashtable  mGroups;    // +0x10
 
-    GroupMap*  GroupMapCtor(void* nameSlot);                 // 0xa654a0
+    __declspec(noinline) GroupMap* GroupMapCtor(void* nameSlot);   // 0xa654a0
     void       DisposeInner();                               // 0xa651e0
     GroupMap*  ScalarDtor(uint32_t flags);                   // 0xa65500
 };
@@ -190,7 +194,8 @@ public:
     GroupMap   mGroupMap;    // +0x34
     uint32_t   mField6c;     // +0x6c
     void*      mpCanvas;     // +0x70
-    uint32_t   mField74;     // +0x74
+    uint8_t    mField74;     // +0x74  (original writes a single byte here)
+    uint8_t    mPad75[3];    // +0x75
 
     Instance*  InstanceCtor(void* sys, void* a3, void* a4);   // 0xa65560
     void       Destroy();                                     // 0xa65230
@@ -230,9 +235,25 @@ using namespace EA::Audio::Eapd;
 // the group record (a junk pointer the free helper turns into a destroyed
 // object); 0xa52af0 is a thiscall taking the group in ecx.
 // ---------------------------------------------------------------------------
+// A group: the sample list at +0x00 and an allocator sub-object whose vtable
+// pointer lives at +0x0c (the teardown calls vtable[3] with this == &field0c).
+// ---------------------------------------------------------------------------
 class AnyGroup {
 public:
-    void Destroy();     // 0xa52af0
+    void*    mpSamples;   // +0x00  the group's sample list
+    uint32_t mField04;    // +0x04
+    uint32_t mField08;    // +0x08
+    void*    mpVtbl0c;    // +0x0c  vtable face of the trailing sub-object
+
+    bool Init(uint32_t* sym, void* a3, void* a4, uint32_t a5);  // 0xa52ff0
+    void Destroy();                                             // 0xa52af0
+};
+
+// The 0x20-byte block allocated by CreateGroup starts with this helper's own
+// vtable/state; Init(owner) turns it into the embeddable group header.
+class GroupHelp {
+public:
+    void* Init(void* owner);    // 0xa52f70
 };
 
 // ---- external helpers (bodies live in other slices / other TUs) -------------
@@ -247,6 +268,40 @@ void*    MakeEntryIter(void* self);                                  // 0xa646f0
 void     ResetAndClear(void* self);                                  // 0xa64710
 void    HashtableFind(void* map, void** out, const void* key);       // 0x685f30
 void    OperatorDelete(void* p);                                     // 0xf47380
+
+// ---- external helpers for the recovered Instance / canvas bodies ------------
+// 0xa52f70 / 0xa52ff0 / 0xa52af0 are thiscall; see AnyGroup and GroupHelp.
+
+// 0xa635d0 fill an eastl symbol from the interface's name tables
+void  GetGroupSymbol(uint32_t* out);                                 // 0xa635d0
+// 0xa4a410 / 0xa4a3f0 register a filename symbol pair on the debug/PD side
+void  SetNewFilenameSymbol1(void* a, void* b);                       // 0xa4a410
+void  SetNewFilenameSymbol2(void* a, void* b);                       // 0xa4a3f0
+uint32_t MakeCanvasId(void* a, void* b);                             // 0xa47c00
+
+// 0xa493d0 EA::Audio::Eapd::pd_free
+void  pd_free(void* p);                                              // 0xa493d0
+// Instance teardown helpers invoked from ~Instance
+void* Eapd_GetOwnerA();                                              // 0xa67ce0
+// the owner object (0xa646a0 is a thiscall with the Instance on the stack)
+class EapdOwner {
+public:
+    void ClearLists(void* instance);    // 0xa646a0
+};
+void  FixedPool_Dtor(void* pool);                                    // 0xa531b0
+
+// canvas globals touched by CreateCanvas (0x01575864 / 0x01575868 feed the
+// interface slot-3 call; 0x0157589c/0x015758a0 are the empty-symbol pair)
+extern uint32_t g_1675864;   // 0x01675864
+extern uint32_t g_1675868;   // 0x01675868
+extern uint32_t gEmptySymbol; // 0x0167589c
+extern uint32_t g_16758a0;   // 0x016758a0
+
+// the interface owned by the manager at +0x38 (only slots 3 and 4 are used)
+struct Canvas {
+    void* mpVtbl;   // +0x00
+};
+
 
 // ---------------------------------------------------------------------------
 // SymbolDispatchSlot (0xa64e60): a small object holding a pointer to an
