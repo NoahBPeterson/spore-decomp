@@ -4,3 +4,7 @@
 00806370  244 complete; rect-temp scheduling and frame differs
 008064c0  135 complete; rect-temp scheduling and frame differs
 00806610  294 complete; many vcall argument/order scheduling differences
+00805940  579 complete arc helper (swap a0/a1, fsin/fcos start+step points, radial scale from +0x1c/+0x20 or rad, +0x50 textured-vertex path / +0x4c triangle path); frame and x87/SSE scheduling differ (450 vs 623); difftest PASS 315 valid, 100.0% coverage (173/173). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00805bb0  655 complete ellipse/rect arc helper (max(|cos|,|sin|) normalisation, u/v from ny/nx, +0x50/+0x4c draw per step); frame/scheduling differ (697 vs 743); difftest PASS 312 valid, 100.0% coverage (193/193)
+00805fe0  159 complete (two mC0(Vec2*,Vec2) virtual calls; first corner saved, second from (width,height)); SSE scheduling/frame differ (159 vs 237); difftest WEAK 146 valid, 100.0% coverage (64/64)
+00806230  181 complete CreateImageFromResource2 (ctx ctor/query/dtor, key triple test, property lookup on 'itorButtonBounceDuration', allocator release); frame/scheduling differ (222 vs 227); difftest WEAK 291 valid, 46.1% coverage (35/76)

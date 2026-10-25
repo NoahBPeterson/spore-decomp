@@ -28,21 +28,32 @@ struct LayoutHelper {
     void* FindWindowByID(int, int);                                         // 0x008105b0
 };
 struct CtxHelper {
+    void* mVt0;                                                             // +0x00
+    void* mVt4;                                                             // +0x04
+    void* m08;                                                              // +0x08
     void FUN_00833790();                                                    // 0x00833790
     void FUN_00833a80();                                                    // 0x00833a80
     char FUN_00833ba0(void*, int, void*, int, int);                         // 0x00833ba0
 };
-struct AllocHelper { void* GetAllocator(); };                               // 0x007f54d0
+// 12-byte descriptor passed to CtxHelper::FUN_00833ba0.
+struct CtxSlot { void* m00; void** m04; int m08; };
+struct AllocHelper {
+    void* GetAllocator();                                                   // 0x007f54d0
+};
 struct DrawHelper { void* FUN_00830cf0(int); };                             // 0x00830cf0
 
 extern float g_13ec4d0;   // default window size
 extern unsigned char DAT_013f6b3c;
 extern char DAT_014178f4;
+extern char STR_0147d84e;  // 0x0147d84e property-name text
 
 typedef uint8_t  u8;
 typedef uint32_t u32;
 
 struct Vec4 { float x, y, z, w; };
+struct Vec2 { float x, y; };
+// Vertex layout used by the Painter's +0x50 "draw textured point(s)" slot.
+struct DrawVertex { float x, y; int color; float u, v; };
 
 // vtable stub macros: S(n) = no-arg virtual returning void*.
 #define S(n) virtual void* v##n();
@@ -77,7 +88,7 @@ struct W {
     virtual void  mAc(int);          // +0xac
     virtual void  mB0(void*);        // +0xb0
     S(b4) S(b8) S(bc)
-    virtual void* mC0(void*, int);   // +0xc0
+    virtual Vec2* mC0(Vec2*, Vec2);  // +0xc0
     S(c4) S(c8) S(cc) S(d0) S(d4)
     virtual void  mD8(void*);        // +0xd8
     S(dc) S(e0) S(e4) S(e8) S(ec) S(f0) S(f4) S(f8) S(fc) S(100) S(104) S(108)
@@ -189,12 +200,14 @@ Vec4* FUN_00805fe0(Vec4* out, W* w) {
     Vec4* r = (Vec4*)w->v38();
     float wdt = r->z - r->x;
     float hgt = r->w - r->y;
-    Vec4 p1;
-    p1.x = 0; p1.y = 0;
-    w->mC0(&p1, 0);
-    Vec4* q = (Vec4*)w->mC0(&p1, 0);
-    out->x = 0; out->y = 0; out->z = q->x; out->w = q->y;
-    (void)wdt; (void)hgt;
+    Vec2 tmp;
+    Vec2 org; org.x = 0.0f; org.y = 0.0f;
+    Vec2* p0 = w->mC0(&tmp, org);
+    float x0 = p0->x;
+    float y0 = p0->y;
+    Vec2 sz; sz.x = wdt; sz.y = hgt;
+    Vec2* p1 = w->mC0(&tmp, sz);
+    out->x = x0; out->y = y0; out->z = p1->x; out->w = p1->y;
     return out;
 }
 
@@ -238,37 +251,35 @@ void* GetImageFromLayout(void* layout, int id) {
 
 // @ 0x00806230 SPUIHelpers::CreateImageFromResource
 char CreateImageFromResource2(void* key, void** out, char flag, int a, int b) {
+    *out = 0;
     int* k = (int*)key;
     int k0 = k[0], k1 = k[1], k2 = k[2];
     (void)k2;
-    char ctx[0x1c];
-    *out = 0;
-    ((CtxHelper*)ctx)->FUN_00833790();
-    void** slot = (void**)(ctx + 0);
-    slot[0] = &DAT_014178f4;
-    slot[1] = out;
-    slot[2] = (void*)1;
+    CtxHelper ctx;
+    ctx.FUN_00833790();
+    CtxSlot slot;
+    slot.m00 = &DAT_014178f4;
+    slot.m04 = out;
+    slot.m08 = 1;
     *out = 0;
     char c;
-    if (k1 != 0 && k0 != 0) {
-        c = ((CtxHelper*)ctx)->FUN_00833ba0(slot, 0x3fd, &k0, a, b);
-        if (c != 0) { c = 1; goto done; }
-    }
-    c = 0;
-done:
+    if (k1 != 0 && k0 != 0)
+        c = ctx.FUN_00833ba0(&slot, 0x3fd, k, a, b) ? 1 : 0;
+    else
+        c = 0;
     if (*out != 0) ((W*)*out)->v00();
     if (c != 0 && flag != 0) {
         void* p = *(void**)((char*)*out + 4);
         void* v;
         if (p == 0) v = 0;
-        else v = ((W*)p)->m0c((int)"itorButtonBounceDuration");
+        else v = ((W*)p)->m0c((int)&STR_0147d84e);
         void* alloc = ((AllocHelper*)v)->GetAllocator();
         if ((*(u8*)((char*)alloc + 4) & 1) == 0) {
             W* m = (W*)FUN_0067dd60();
             (*(void(__thiscall**)(void*, void*))VSlot(m, 0x34))(m, alloc);
         }
     }
-    ((CtxHelper*)ctx)->FUN_00833a80();
+    ctx.FUN_00833a80();
     return c;
 }
 
@@ -411,111 +422,97 @@ void* FUN_00806880(W2* w, int index) {
 // @ 0x00805940
 void FUN_00805940(void* obj, float cx, float cy, float rad, int p5, int p6,
                   float a0, float a1, void* p9, float step) {
-    int* self = (int*)obj;
-    float f1 = a1;
-    int l3c = p6;
-    int l14 = p6;
-    if (a1 < a0) { a1 = a0; a0 = f1; }
+    if (a0 > a1) { float t = a0; a0 = a1; a1 = t; }
     if (rad < 0.1f && p9 != 0) rad = (float)*(int*)((char*)p9 + 0x20);
+    Vec2 center;
+    center.x = cx;
+    center.y = cy;
     float sa = sinf(a0);
     float ca = cosf(a0);
-    float l44 = cx, l40 = cy;
-    float l2c = cy - sa * rad;
-    float l30 = ca * rad + cx;
-    int l28 = p5;
+    Vec2 p0;
+    p0.x = ca * rad + center.x;
+    p0.y = center.y - sa * rad;
+    int color = p5;
     if (a1 <= a0) return;
-    float s = a0;
     for (;;) {
         float d = step;
         if (a1 - a0 < step) d = a1 - a0;
-        s = s + d;
-        a0 = s;
-        float s2 = sinf(s);
-        float c2 = cosf(s);
-        float l18 = cy - s2 * rad;
-        float l1c = c2 * rad + cx;
-        float lc = rad, l10 = rad;
+        float ang = a0 + d;
+        float p1x = cosf(ang) * rad + center.x;
+        float p1y = center.y - sinf(ang) * rad;
+        float su, sv;
         if (p9 != 0) {
-            lc = (float)*(int*)((char*)p9 + 0x20);
-            l10 = (float)*(int*)((char*)p9 + 0x1c);
-        }
-        l10 = 1.0f / l10;
-        lc = 1.0f / lc;
-        float l38 = l10 * l44;
-        float l34 = lc * l40;
-        float l24 = l10 * l30;
-        float l20 = lc * l2c;
-        float l10b = l10 * l1c;
-        float lcb = lc * l18;
-        (void)l38; (void)l34; (void)l24; (void)l20; (void)l10b; (void)lcb;
-        if (p9 == 0) {
-            float l54 = l30, l50 = l2c, l5c = l1c, l58 = l18, l4c = l44, l48 = l40;
-            (*(void(__thiscall**)(void*, void*, int, void*, int, void*, int))VSlot(self, 0x4c))(
-                self, &l4c, l3c, &l54, l28, &l5c, l14);
+            su = 1.0f / (float)*(int*)((char*)p9 + 0x1c);
+            sv = 1.0f / (float)*(int*)((char*)p9 + 0x20);
         } else {
-            VC2(void, self, 0x50, &l44, 1);
+            su = 1.0f / rad;
+            sv = 1.0f / rad;
         }
-        l30 = l1c;
-        l2c = l18;
+        if (p9 != 0) {
+            DrawVertex v;
+            v.x = center.x; v.y = center.y; v.color = p6;
+            v.u = su * center.x; v.v = sv * center.y;
+            (*(void(__thiscall**)(void*, DrawVertex*, int, void*))VSlot(obj, 0x50))(obj, &v, 1, p9);
+        } else {
+            Vec2 q1; q1.x = p1x; q1.y = p1y;
+            (*(void(__thiscall**)(void*, Vec2*, int, Vec2*, int, Vec2*, int))VSlot(obj, 0x4c))(
+                obj, &center, p6, &p0, color, &q1, p6);
+        }
+        p0.x = p1x;
+        p0.y = p1y;
+        color = p6;
+        a0 = ang;
         if (a1 <= a0) break;
-        l28 = l14;
     }
 }
 
 // @ 0x00805bb0
 void FUN_00805bb0(void* obj, float cx, float cy, float w, float h, int p6, int p7,
                   float a0, float a1, int p10, float step) {
-    int* self = (int*)obj;
-    float f10 = a1;
+    if (a0 > a1) { float t = a0; a0 = a1; a1 = t; }
     float hw = w * 0.5f;
     float hh = h * 0.5f;
-    if (a1 < a0) { a1 = a0; a0 = f10; }
     float sa = sinf(a0);
     float ca = cosf(a0);
-    float aa = ca < 0 ? -ca : ca;
-    float ab = sa < 0 ? -sa : sa;
-    float denom = aa;
-    if (aa <= ab) denom = ab;
+    float ac = fabsf(ca);
+    float as = fabsf(sa);
+    float denom = (ac >= as) ? ac : as;
     float nx = (1.0f / denom) * sa;
     float ny = (1.0f / denom) * ca;
+    float px0 = ny * hw + cx;
+    float py0 = cy - nx * hh;
     float u0 = (ny + 1.0f) * 0.5f;
     float v0 = (1.0f - nx) * 0.5f;
-    float py0 = cy - nx * hh;
-    float px0 = ny * hw + cx;
-    int l28 = p6;
-    int l3c = p7;
-    float f5 = cx, f6 = cy, f13 = px0, f11 = py0;
-    float f10b = 0, f12 = 0, f1 = 0, f2 = 0, f3 = 0, f4 = 0;
-    (void)u0; (void)v0; (void)f10b;
+    if (a1 <= a0) return;
     for (;;) {
-        f2 = f6; f1 = f5; f3 = f13; f4 = f11;
-        if (!(a0 < a1)) break;
         float d = step;
-        if (a1 - a0 < step) d = a1 - a0;
-        float ang = d + a0;
+        float diff = a1 - a0;
+        if (step > diff) d = diff;
+        float ang = a0 + d;
         float s2 = sinf(ang);
         float c2 = cosf(ang);
-        float ba = c2 < 0 ? -c2 : c2;
-        float bb = s2 < 0 ? -s2 : s2;
-        float dn = ba;
-        if (ba <= bb) dn = bb;
+        float bc = fabsf(c2);
+        float bs = fabsf(s2);
+        float dn = (bc >= bs) ? bc : bs;
         float nnx = (1.0f / dn) * s2;
         float nny = (1.0f / dn) * c2;
-        float py = cy - nnx * hh;
         float px = nny * hw + cx;
-        float l5c = px, l58 = py;
-        (void)l58;
-        if (p10 == 0) {
-            float l44 = f3, l40 = f4;
-            (*(void(__thiscall**)(void*, void*, int, void*, int, void*, int))VSlot(self, 0x4c))(
-                self, &l44, l3c, &f1, l28, &l5c, l3c);
+        float py = cy - nnx * hh;
+        float u1 = (nny + 1.0f) * 0.5f;
+        float v1 = (1.0f - nnx) * 0.5f;
+        if (p10 != 0) {
+            DrawVertex v;
+            v.x = px0; v.y = py0; v.color = p7; v.u = u0; v.v = v0;
+            (*(void(__thiscall**)(void*, DrawVertex*, int, void*))VSlot(obj, 0x50))(obj, &v, 1, (void*)p10);
         } else {
-            float l44 = f3, l40 = f4;
-            (*(void(__thiscall**)(void*, void*, int, void*))VSlot(self, 0x50))(
-                self, &l44, 1, (void*)p10);
+            Vec2 p0; p0.x = px0; p0.y = py0;
+            Vec2 cc; cc.x = cx;  cc.y = cy;
+            Vec2 p1; p1.x = px;  p1.y = py;
+            (*(void(__thiscall**)(void*, Vec2*, int, Vec2*, int, Vec2*, int))VSlot(obj, 0x4c))(
+                obj, &p0, p7, &cc, p6, &p1, p7);
         }
-        (void)f2; (void)f12;
-        if (a1 <= a0) break;
+        px0 = px; py0 = py; u0 = u1; v0 = v1;
         a0 = ang;
+        if (a1 <= a0) break;
     }
 }
