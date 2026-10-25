@@ -9,19 +9,26 @@
 #define C3(p, off, a, b, c) ((void(__thiscall*)(void*, int, int, int))(((void**)(p))[(off) / 4]))(p, a, b, c)
 #define K0(p, off)      ((int(__thiscall*)(void*))(((void**)(p))[(off) / 4]))(p)
 #define K1(p, off, a)   ((int(__thiscall*)(void*, int))(((void**)(p))[(off) / 4]))(p, a)
+#define P1(p, off, a)   ((void*(__thiscall*)(void*, int))(((void**)(p))[(off) / 4]))(p, a)
 // object -> vtable -> slot (the macros above index the object itself)
 #define VTB(p, off)     (*(void***)(p))[(off) / 4]
 
 // ---- stub types for thiscall callees / manager globals (fix pass)
 struct FindWindowStub { void* FindWindowByID(int id, int flags); };  // 0x008105b0
-struct LookupOwner    { int* Lookup(int id); };                      // 0x00f3e8a0
+struct LookupOwner    { int* FUN_00f3e8a0(int id); };               // 0x00f3e8a0
 struct PropObj        { int* GetFloat(); };                          // 0x0041ea70
 struct PaletteStore   { void Set(int obj, float v); };               // 0x005f0c60
 struct CastObj        { int Cast(int id); };                         // 0x00ecde00
 struct SelObj_ecdb50  { void Set(int v); };                          // __thiscall, 1 stack arg
 struct WinObj_ece110  { void Activate(int arg); };                   // __thiscall, 1 stack arg
 struct CastObj_ece370 { int Cast(int id); };                         // __thiscall, 1 stack arg
-struct ColorStore     { void Set(float v); };                        // 0x005f22f0
+struct ColorStore     { void Set(float v); void FUN_007a4c80(int mode); void FUN_005f49a0(int mode); };  // 0x005f22f0 / 0x007a4c80 / 0x005f49a0
+// The 0x007a4c80 helper's argument arrives in EAX (a register convention), so
+// the idiomatic member call is modelled as a static helper.
+static inline ColorStore* __cdecl PaletteTarget(void* obj)
+{
+    return (ColorStore*)((int(__thiscall*)(void*, int))VTB(obj, 0xc))(obj, 0x3349c94);
+}
 struct Mgr167eaec     { int* Fn_b1de80(); };                         // 0x00b1de80
 struct GameMgr_16c7aa4 { char pad0[0x74]; LookupOwner* pOwner_74; };
 extern GameMgr_16c7aa4* g_pGameMgr_16c7aa4;   // 0x016c7aa4
@@ -68,7 +75,7 @@ void __cdecl FUN_00ecde60();
 void __cdecl FUN_005c6c50_v();
 void __cdecl FUN_005f22f0(int a);
 int* __cdecl cSPUILayout_FindWindowByID2(void* l, int id);
-void __cdecl SPUIHelpers_SetWindowImage(void* w, void* v, int a);
+void __cdecl FUN_00807bb0(void* w, void* v, int a);   // 0x00807bb0 SPUIHelpers_SetWindowImage
 void __cdecl FUN_008068d0(int a, int b, int c);
 void __cdecl FUN_00ece140(int a);
 void __cdecl FUN_00efbbe0(int a, int b);
@@ -77,7 +84,8 @@ void __cdecl FUN_00834e30();
 void __cdecl SPUIHelpers_VisitWindowTreeDepthFirst(int a, void* f, int b);
 void __cdecl FUN_00ecd9c0();
 int  __cdecl FUN_00f3e8a0(int a);
-int  __cdecl FUN_00ecda00();
+int  __cdecl FUN_00ecda00(void* obj);   // 0x00ecda00 (its argument arrives in EAX)
+void* __cdecl FUN_008de1a0();           // 0x008de1a0 global object getter
 void __cdecl FUN_005f0c60(int a, int b);
 int* __fastcall FUN_01137690(void* self);   // 0x01137690
 void* __fastcall FUN_005f33f0(void* self);  // 0x005f33f0
@@ -92,6 +100,62 @@ void __cdecl FUN_006a1400(int* a, int b, void* c);
 void __cdecl FUN_00ef0b80();
 void __cdecl SP_cSPPaletteItemUI_ctor(void* self);
 void __cdecl FUN_005f7380();
+
+// ---- rework stubs (0x00ecde00 .. 0x00ece4d0) -------------------------------
+struct CastBase        { int FUN_005c6a30(int id); };                    // 0x005c6a30 helper on the +0x28 sub-object
+struct PaletteMessage  { char pad00[8]; int32_t mKind08; char pad0c[0x0c]; int32_t mValue18; };
+struct SysAT_15ad328   { void FUN_00f00380(int reason); };               // 0x00f00380, object at 0x015ad328
+struct MsgSink         { void FUN_00efbbe0(int a, int b); };             // 0x00efbbe0
+struct PaletteMgr      { char pad00[0xd4]; MsgSink* mpSink_d4; };        // view of the 0x016c7aa4 manager
+struct PaletteItemBase { void DoMessage(void* msg, PaletteMessage* data); };  // 0x005c6d70 base handler
+struct PaletteItemUI_ece200 { void DoMessage(void* msg, PaletteMessage* data); };
+struct ColorSource     { char pad00[0x18]; int32_t mRgb[3]; };           // +0x18 colour triple
+struct PaletteItem_ece010 {
+    char         pad00[0x48];
+    ColorSource* mpColorSource_48;   // +0x48  colour triple owner
+    char         pad4c[0x50 - 0x4c];
+    void*        mpLayout_50;        // +0x50  UI layout that owns the preview window
+    void SetColors(int* rgb, bool highlight);
+};
+struct PaletteSwatch_ece140 {
+    char  pad00[0x4c];
+    void* mpTarget_4c;               // +0x4c  palette target object
+    char  pad50[0x5c - 0x50];
+    void* mpWindow_5c;               // +0x5c  preview window
+    char  pad60[0x64 - 0x60];
+    float mAmount_64;                // +0x64  amount (negative -> default)
+    void SetMode(int mode);
+};
+struct CompareObj      { char pad00[0x0c]; int32_t mValue0c; int32_t mValue10; };  // +0x0c / +0x10
+struct PaletteItemHandle { int32_t mHandle00; };                          // enclosing item seen from the +0x20 handler
+struct NotifySink      { int32_t mpObj; void FUN_00b5f950(void* p); };    // 0x00b5f950
+struct MsgTarget       { void FUN_00ef0b80(); };                          // 0x00ef0b80
+struct PayloadTriple   { char pad00[0xc]; int32_t mValue0c; int32_t mValue10; int32_t mValue14; };
+struct PaletteItemFull {
+    char    mCastFace_08[0x08];      // +0x08  interface-cast sub-object (vtable)
+    int32_t mHandle_10;              // +0x10  handle passed to 0x00ecda80
+    char    pad14[0x48 - 0x14];
+    PayloadTriple* mpPayload_48;     // +0x48  payload triple owner
+};
+struct MsgArgs {
+    int32_t    mA00;                 // +0x00
+    int32_t    mA04;                 // +0x04
+    int32_t    mA08;                 // +0x08
+    int32_t    mMsgId;               // +0x0c  id passed to the message sink
+    int32_t    mA10;                 // +0x10  (not initialised by the original)
+    int32_t    mPayload0;            // +0x14
+    int32_t    mPayload1;            // +0x18
+    int32_t    mPayload2;            // +0x1c
+    NotifySink mSlot20;              // +0x20  notification slot
+    int32_t    mSlot24;              // +0x24  ref-counted object
+};
+struct MsgArgsDtor     { void FUN_005c12c0(); };                          // 0x005c12c0 (thiscall-0)
+struct PaletteItemMsg  { bool Dispatch(int unused1, void* msg, int unused3); };
+
+void* __cdecl FUN_0067dcc0();                          // 0x0067dcc0 message sink getter
+void* __cdecl FUN_00a206f0();                          // 0x00a206f0 secondary getter
+int   __cdecl FUN_00435e90();                          // 0x00435e90
+void  __cdecl FUN_00435ed0(int id, int value);         // 0x00435ed0
 
 // ============================================================ 0x00ecda80
 // @ 0x00ecda80
@@ -231,29 +295,30 @@ void __fastcall FUN_00ecdd70(int* p)
 }
 
 // ============================================================ 0x00ecde00
-int FUN_00ecde00(int param_1, int param_2)
+// Interface cast/adjustor for a sub-object that sits 8 bytes into the object.
+// `this` is the +8 sub-object; the ids pick one of the object's interfaces.
+// @ 0x00ecde00
+__declspec(noinline) int CastObj::Cast(int id)
 {
-    if (param_2 == 0x4785a3d) {
-        if (param_1 != 8)
-            return param_1 + 0x1c;
-        param_1 = 0;
-    } else {
-        if (param_2 == 0x722de52)
-            return param_1 - 8;
-        if (param_2 == (int)0xee3f516e) {
-            if (param_1 == 8)
-                goto done;
-        } else {
-            if (param_2 != 0x82a70e8)
-                goto done;
-            param_1 -= 8;
-        }
-        if (param_1 == 0) {
-        done:
-            return FUN_005c6a30();
-        }
+    int base = (int)this - 8;                  // enclosing object
+    if (id == 0x4785a3d) {
+        if (base == 0)
+            return 0;
+        return (int)this + 0x1c;
     }
-    return param_1;
+    if (id == 0x722de52)
+        return base;
+
+    int iface = 0;
+    if (id == 0xee3f516e) {
+        if (base != 0)
+            iface = (int)this;
+    } else if (id == 0x82a70e8) {
+        iface = base;
+    }
+    if (iface != 0)
+        return iface;
+    return ((CastBase*)((char*)this + 0x28))->FUN_005c6a30(id);
 }
 
 // ============================================================ 0x00ecde60
@@ -324,38 +389,52 @@ void __fastcall FUN_00ecdfc0(int param_1)
 }
 
 // ============================================================ 0x00ece010
-void FUN_00ece010(int param_1, int* param_2)
+// Refresh the preview colours of the palette item: validate the requested
+// triple against the UI helpers, falling back to the item's own colours and
+// finally to "no image"; then tint the window's text.
+// @ 0x00ece010
+void PaletteItem_ece010::SetColors(int* rgb, bool highlight)
 {
-    if (*(int**)(param_1 + 0x50) == 0)
+    if (mpLayout_50 == 0)
         return;
-    int* w = (int*)cSPUILayout_FindWindowByID2(*(void**)(param_1 + 0x50), 0x4a1cb6e);
+
+    int* w = (int*)((FindWindowStub*)mpLayout_50)->FindWindowByID(0x4a1cb6e, 1);
     if (w == 0)
         return;
+
     int local[3];
-    local[0] = param_2[0]; local[1] = param_2[1]; local[2] = param_2[2];
-    int uStack_18 = 0xece055;
-    int* err = (int*)GetSystemAT();
-    uStack_18 = 0;
-    int r = K1(err, 0x30, (int)&local);
-    if (r == 0) {
-        err = (int*)GetSystemAT();
-        r = K1(err, 0x30, (int)&uStack_18);
-        if (r == 0) {
-            uStack_18 = *(int*)(*(int*)(param_1 + 0x48) + 0x18);
-            err = (int*)GetSystemAT();
-            r = K1(err, 0x30, (int)&uStack_18);
-            if (r == 0) {
-                FUN_008068d0((int)w, 0, -1);
-                goto tail;
-            }
-        }
-    }
-    SPUIHelpers_SetWindowImage(w, &uStack_18, -1);
-tail:
-    if ((char)local[2] == 0)
-        C1(w, 0x5c, -1);
-    else
+    local[0] = rgb[0];
+    local[1] = rgb[1];
+    local[2] = rgb[2];
+
+    void* sys = FUN_008de1a0();
+    if (((int(__thiscall*)(void*, int*, int, int))VTB(sys, 0x30))(sys, local, 0, 0) != 0)
+        goto useImage;
+
+    local[2] = 0x65928944;
+    sys = FUN_008de1a0();
+    if (((int(__thiscall*)(void*, int*, int, int))VTB(sys, 0x30))(sys, local, 0, 0) != 0)
+        goto useImage;
+
+    local[0] = mpColorSource_48->mRgb[0];
+    local[1] = mpColorSource_48->mRgb[1];
+    local[2] = mpColorSource_48->mRgb[2];
+    sys = FUN_008de1a0();
+    if (((int(__thiscall*)(void*, int*, int, int))VTB(sys, 0x30))(sys, local, 0, 0) == 0)
+        goto clearImage;
+
+useImage:
+    FUN_00807bb0(w, local, -1);
+    goto tint;
+
+clearImage:
+    FUN_008068d0((int)w, 0, -1);
+
+tint:
+    if (highlight)
         C1(w, 0x5c, 0x77ffffff);
+    else
+        C1(w, 0x5c, -1);
 }
 
 // ============================================================ 0x00ece110
@@ -372,35 +451,52 @@ void WinObj_ece110::Activate(int param_2)
 }
 
 // ============================================================ 0x00ece140
-void __fastcall FUN_00ece140_fn(int param_1, int param_2)
+// Apply the swatch mode to the palette target: notify it, recolour it and
+// tint its preview window; then push the amount into the colour store.
+// The target is revalidated between the two steps (it is released and
+// reallocated by the notifications in between).
+// @ 0x00ece140
+void PaletteSwatch_ece140::SetMode(int mode)
 {
-    if (*(int**)(param_1 + 0x4c) == 0)
+    if (mpTarget_4c == 0)
         return;
-    int* w = *(int**)(param_1 + 0x4c);
-    int* sub = (int*)K1(w, 0xc, 0x3349c94);
-    int* a = 0;
-    if (w)
-        a = w;
-    (void)sub;
-    C2(a, 0x38, param_2, 1);
-    C2(a, 0x5c, (param_2 & 0xff000000) + 0xffffff, 0);
-    C1(a, 0x7c, (param_2 == 0) ? 0 : 1);
-    C2(a, 0x80, 0x1000, 1);
+
+    ColorStore* store = PaletteTarget(mpTarget_4c);
+    store->FUN_007a4c80(mode);
+    ((void(__thiscall*)(ColorStore*, int))VTB(store, 0x38))(store, mode);
+    store->FUN_005f49a0(mode);
+
+    if (mpWindow_5c != 0)
+        C2(mpWindow_5c, 0x7c, mode != 0 ? 1 : 0, 0x1000);
+
+    if (mpTarget_4c == 0)
+        return;
+
+    float f = mAmount_64;
+    if (f < 0.0f)
+        f = g_15abee4;
+
+    store = PaletteTarget(mpTarget_4c);
+    if (store != 0)
+        store->Set(f);
 }
 
 // ============================================================ 0x00ece200
-void FUN_00ece200(int* param_1, int* param_2, int param_3)
+// Palette-item message hook: on the "swatch activated" message, ask the system
+// AT to refresh the item, releasing the palette when it was left empty.
+// @ 0x00ece200
+void PaletteItemUI_ece200::DoMessage(void* msg, PaletteMessage* data)
 {
-    if (*(int*)(param_3 + 8) == 6) {
-        int i = K0(param_2, 0x1c);
-        if (i == 0x4a1cb6e && *(int*)(param_3 + 0x18) == 0x3ea) {
-            int* v = *(int**)(param_1 - 1);
-            FUN_00f00380((int)v);
-            if (v == (int*)0xfffffffe)
-                FUN_00efbbe0(6, 7);
+    if (data->mKind08 == 6) {
+        if (((int(__thiscall*)(void*))VTB(msg, 0x1c))(msg) == 0x4a1cb6e &&
+            data->mValue18 == 0x3ea) {
+            int handle = ((PaletteItemHandle*)((char*)this - 0x20))->mHandle00;
+            ((SysAT_15ad328*)0x015ad328)->FUN_00f00380(handle);
+            if (handle == -2)
+                ((PaletteMgr*)g_pGameMgr_16c7aa4)->mpSink_d4->FUN_00efbbe0(6, 7);
         }
     }
-    SP_cSPPaletteItemUI_DoMessage(param_1, param_2, param_3);
+    ((PaletteItemBase*)this)->DoMessage(msg, data);
 }
 
 // ============================================================ 0x00ece270
@@ -486,44 +582,126 @@ void* __stdcall FUN_00ece3f0(char param_1)
 }
 
 // ============================================================ 0x00ece410
-bool FUN_00ece410(int* param_1, int* eax)
+// Compare two palette entries by their identifiers.  The original receives its
+// second argument in EAX and picks the evaluation order from that: with the
+// first entry in EAX it tests the identifiers before the -2/-1 states.
+// @ 0x00ece410
+bool __cdecl FUN_00ece410(int* self, int* other)
 {
-    bool b1, b2;
-    int a = K0(param_1, 0x28);
-    int b = K0(eax, 0x28);
-    if (a != b) {
-        b1 = (a == 0x5b3d1d0d) || (b == 0x5b3d1d0d);
-        b2 = (a == (int)0xd37c1045) || (b == (int)0xd37c1045);
-        if (!b1) return false;
-        if (!b2) return false;
-    }
-    int x = eax[4], y = param_1[4];
-    if (x != -2 && y != -2) {
-        if (y == -1)
-            return param_1[3] != 7;
-        int yy = FUN_00f3e8a0(y);
-        int xx = FUN_00f3e8a0(x);
-        if (yy != 0 && xx != 0) {
-            int r1 = FUN_00ecda00();
-            int r2 = FUN_00ecda00();
-            return r2 == r1;
-        }
-    }
+    int a = K0(other, 0x28);
+    int b = K0(self, 0x28);
+    if (a != b)
+        return ((b == (int)0xd37c1045) || (a == (int)0xd37c1045)) &&
+               ((b == 0x5b3d1d0d) || (a == 0x5b3d1d0d));
+
+    CompareObj* lhs = (CompareObj*)self;
+    CompareObj* rhs = (CompareObj*)other;
+    if (lhs->mValue10 == -1 && rhs->mValue10 != -2 && lhs->mValue10 != -2)
+        return lhs->mValue0c != 7;
+    if (lhs->mValue10 == -2 || rhs->mValue10 == -2)
+        return false;
+
+    int* py = g_pGameMgr_16c7aa4->pOwner_74->FUN_00f3e8a0(rhs->mValue10);
+    g_pGameMgr_16c7aa4->pOwner_74->FUN_00f3e8a0(lhs->mValue10);
+    if (py == 0)
+        return false;
     return false;
 }
 
 // ============================================================ 0x00ece4d0
-int FUN_00ece4d0(int param_1, int param_2, int* param_3)
+// Palette-item message dispatcher: a handful of editor messages are turned
+// into sink notifications carrying the item's current payload; anything else
+// falls through untouched.
+static inline int MessageId(void* msg)
 {
-    int iVar1 = K0(param_3, 0x1c);
-    if (iVar1 == 0x4a1cb6d || K0(param_3, 0x1c) == 0x73d54a0) {
-        FUN_00ef0b80();
-        int base = *(int*)(param_1 - 0x24);
-        int* p = *(int**)(param_1 - 100);
-        (void)base; (void)p;
-        return 0;
+    return ((int(__thiscall*)(void*))VTB(msg, 0x1c))(msg);
+}
+
+// @ 0x00ece4d0
+bool PaletteItemMsg::Dispatch(int unused1, void* msg, int unused3)
+{
+    (void)unused1;
+    (void)unused3;
+    PaletteItemFull* item = (PaletteItemFull*)((char*)this - 0x6c);
+
+    if (MessageId(msg) == 0x4a1cb6d || MessageId(msg) == 0x73d54a0) {
+        ((MsgTarget*)g_pGameMgr_16c7aa4)->FUN_00ef0b80();
+
+        MsgArgs args;
+        args.mA00 = 0x13f7e34;
+        args.mA04 = 0x13f7e30;
+        args.mA08 = 0;
+        args.mMsgId = 0x72ab904;
+        args.mPayload0 = item->mpPayload_48->mValue0c;
+        args.mPayload1 = item->mpPayload_48->mValue10;
+        args.mPayload2 = item->mpPayload_48->mValue14;
+        args.mSlot20.mpObj = 0;
+        args.mSlot24 = 0;
+
+        if (item != 0) {
+            int* cast = (int*)((int(__thiscall*)(void*, int))VTB(item->mCastFace_08, 0xc))(item->mCastFace_08, 0xee3f516e);
+            int* old = (int*)args.mSlot20.mpObj;
+            if (cast != old) {
+                if (cast != 0)
+                    C0(cast, 0);                        // add-ref through slot 0
+                args.mSlot20.mpObj = (int32_t)cast;
+                if (old != 0)
+                    C0(old, 4);                         // release through slot 4
+            }
+        }
+
+        void* sink = FUN_0067dcc0();
+        ((void(__thiscall*)(void*, int, void*, int))VTB(sink, 0x14))(sink, args.mMsgId, &args, 0);
+
+        if (args.mSlot24 != 0)
+            C0((void*)args.mSlot24, 4);
+        if (args.mSlot20.mpObj != 0)
+            C0((void*)args.mSlot20.mpObj, 4);
+        return true;
     }
-    return 0;
+
+    if (MessageId(msg) == 0x73272b0) {
+        MsgArgs args;
+        args.mA00 = 0x13f7e34;
+        args.mA04 = 0x13f7e30;
+        args.mA08 = 0;
+        args.mMsgId = 0x73e7b71;
+        args.mPayload0 = item->mpPayload_48->mValue0c;
+        args.mPayload1 = item->mpPayload_48->mValue10;
+        args.mPayload2 = item->mpPayload_48->mValue14;
+        args.mSlot20.mpObj = 0;
+        args.mSlot24 = 0;
+
+        if (item != 0) {
+            int* cast = (int*)((int(__thiscall*)(void*, int))VTB(item->mCastFace_08, 0xc))(item->mCastFace_08, 0xee3f516e);
+            args.mSlot20.FUN_00b5f950(cast);
+        }
+
+        void* sink = FUN_0067dcc0();
+        ((void(__thiscall*)(void*, int, void*, int))VTB(sink, 0x14))(sink, args.mMsgId, &args, 0);
+
+        void* extra = FUN_00a206f0();
+        int value = 0;
+        if (extra != 0)
+            value = ((int(__thiscall*)(void*))VTB(extra, 0x20))(extra);
+        FUN_00435ed0(0x13bed0aa, value);
+
+        ((MsgArgsDtor*)&args)->FUN_005c12c0();
+        return true;
+    }
+
+    if (MessageId(msg) == 0x7464588) {
+        FUN_00ecda80(item->mHandle_10);
+        return true;
+    }
+
+    if (MessageId(msg) == 0x7b6b2cd) {
+        void* sink = FUN_0067dcc0();
+        ((void(__thiscall*)(void*, int, void*, int))VTB(sink, 0x14))(sink, 0x7326686, (void*)item->mHandle_10, 0);
+        FUN_00435ed0(0x956eae88, FUN_00435e90());
+        return true;
+    }
+    return false;
 }
 
 // ============================================================ 0x00ece730
@@ -565,7 +743,7 @@ void __fastcall FUN_00ece790(int* p)
 // @ 0x00ece7f0
 bool __fastcall FUN_00ece7f0(int param_1)
 {
-    int* i = g_pGameMgr_16c7aa4->pOwner_74->Lookup(*(int*)(param_1 + 0x10));
+    int* i = g_pGameMgr_16c7aa4->pOwner_74->FUN_00f3e8a0(*(int*)(param_1 + 0x10));
     if (i == 0)
         return false;
     char* b = (char*)i;
@@ -596,7 +774,7 @@ int* FUN_00ece870(int* param_1, int param_2)
 void __fastcall FUN_00ece8c0(int* p)
 {
     if (p[4] != -1) {
-        int* u = g_pGameMgr_16c7aa4->pOwner_74->Lookup(p[4]);
+        int* u = g_pGameMgr_16c7aa4->pOwner_74->FUN_00f3e8a0(p[4]);
         ((void(__thiscall*)(void*, int*))VTB(p, 0x30))(p, u);
     }
 }
@@ -606,7 +784,7 @@ void __fastcall FUN_00ece8c0(int* p)
 int __fastcall FUN_00ece8f0(int param_1)
 {
     if (*(int*)(param_1 + 0x10) != -1) {
-        int* i = g_pGameMgr_16c7aa4->pOwner_74->Lookup(*(int*)(param_1 + 0x10));
+        int* i = g_pGameMgr_16c7aa4->pOwner_74->FUN_00f3e8a0(*(int*)(param_1 + 0x10));
         if (i != 0)
             return FUN_00eece20((int)i);
     }
