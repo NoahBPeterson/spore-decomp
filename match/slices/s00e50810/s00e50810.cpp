@@ -170,6 +170,30 @@ bool FUN_00e50a10(float* a, float* b, float c, float d, float e) {
   return 1;
 }
 
+// @ 0x00e50af0
+struct cLayerRef {
+  void* p;
+  cLayerRef();    // 0x743b50 (scope guard ctor)
+  ~cLayerRef();   // 0xe82130 (scope guard dtor)
+};
+struct cLayerEntry { int kind; int id; int values[3]; };   // 20-byte record
+struct cLayerList { cLayerEntry* items; int count; };
+extern "C" int __cdecl FUN_00e4cce0(int);                  // 0xe4cce0
+
+int FUN_00e50af0(int kind, int id) {
+  cLayerRef refOuter;
+  char* obj = (char*)FUN_00e4ce40(&refOuter);
+  cLayerRef refInner;
+  cLayerList* list = (cLayerList*)thunk_FUN_00e823a0(*(int*)(obj + 0x84), &refInner);
+  int count = list->count;
+  for (int i = 0; i < count; ++i) {
+    cLayerEntry* item = &list->items[i];
+    if (item->kind == kind && item->id == id)
+      return item->values[kind];
+  }
+  return FUN_00e4cce0(9);
+}
+
 // @ 0x00e50b80
 void FUN_00e50b80(char* base, int* count, float* value, int cap) {
   if (*count < cap) { *(float*)(base + *count * 8) = 0.0f; ++*count; }
