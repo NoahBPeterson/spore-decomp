@@ -47,8 +47,9 @@ extern "C" void*  FUN_00b3d330();                                       // 0xb3d
 extern "C" void*  FUN_00b3d250();                                       // 0xb3d250 SP::GameInputManager
 extern "C" void*  FUN_00b3d300();                                       // 0xb3d300 SP_NounManager
 extern "C" void*  FUN_00b3d350(u32 a);                                  // 0xb3d350 SP::PlanetModel
-extern "C" void*  FUN_00b3d230(u32 a);                                  // 0xb3d230
-extern "C" void*  FUN_00b3d240(u32 a);                                  // 0xb3d240
+extern "C" void*  FUN_00b3d230();                                       // 0xb3d230 (no-arg getter)
+extern "C" void*  FUN_00b3d240();                                       // 0xb3d240 (no-arg getter)
+extern "C" void*  FUN_00b3d380();                                       // 0xb3d380 (no-arg getter)
 extern "C" void*  FUN_00b3d400();                                       // 0xb3d400
 extern "C" void*  FUN_00b3d4c0();                                       // 0xb3d4c0
 extern "C" void   FUN_00b5cde0(void* a);                                // 0xb5cde0
@@ -70,6 +71,7 @@ extern "C" void   FUN_00f32030();                                       // 0xf32
 extern "C" void   FUN_00f41cf0();                                       // 0xf41cf0
 extern "C" void   FUN_00ebd340();                                       // 0xebd340
 extern "C" void   FUN_00b0f6f0();                                       // 0xb0f6f0
+extern "C" void   FUN_00b0f6f0_tc(void* r);                              // 0xb0f6f0 thiscall form
 extern "C" void   FUN_00d491b0(int a);                                  // 0xd491b0
 extern "C" void   FUN_00d48a00();                                       // 0xd48a00
 extern "C" void   FUN_00f084a0();                                       // 0xf084a0
@@ -114,6 +116,14 @@ extern "C" void   FUN_00b76d20(float* v, float r, int a, int b, int c); // 0xb76
 extern u8          DAT_0169e380;      // 0x169e380
 extern u8          DAT_0169e381;      // 0x169e381
 extern float       DAT_0169e384;      // 0x169e384
+extern "C" void    FUN_00d48ae0();                                       // 0xd48ae0
+extern "C" void    FUN_00f24390();                                       // 0xf24390
+extern "C" void    FUN_00f096c0();                                       // 0xf096c0
+// 0xc2e4e0 is a bare `ret`; some call sites leave the receiver in ecx untouched
+// (plain call), others load it first (see CSimSingleton/SScenario::C2E4E0).
+extern "C" void    FUN_00c2e4e0();                                       // 0xc2e4e0 (bare call form)
+// 0xef0cd0 never reads ecx, so it is called as a plain function.
+extern "C" void    FUN_00ef0cd0_f();                                     // 0xef0cd0 (free form)
 
 
 // ---------------------------------------------------------------------------
@@ -137,6 +147,7 @@ struct SHandle {
     void __thiscall Eda130();      // 0xeda130
     void __thiscall Ed6a10();      // 0xed6a10
     void __thiscall B2F7E0(u32 tag);  // 0xb2f7e0
+    void __thiscall C2E4E0();         // 0xc2e4e0 (no-op; keeps ecx = receiver)
     void __thiscall B7E1D0();      // 0xb7e1d0
     void __thiscall F32440(int a); // 0xf32440
     void __thiscall Ef72b0();      // 0xef72b0
@@ -145,6 +156,68 @@ struct SHandle {
 struct SCtrl {
     void __thiscall SetMode(int a, int b, int c);      // 0xf45fd0
     void __thiscall ResetProgress();                   // 0xf190a0
+    void __thiscall F19130();                          // 0xf19130
+    void __thiscall F1F180();                          // 0xf1f180
+};
+
+// The scenario controller at +0x6c.
+struct SCtrl6C {
+    void __thiscall F10030(int b);                     // 0xf10030, ret 4
+    void __thiscall F0F8F0();                          // 0xf0f8f0
+};
+
+// SP_NounManager (0xb3d300) and its terrain-sphere query (0xf67d90).
+struct SNounMgr {
+    u8* __thiscall F67D90();                           // 0xf67d90, ret 0
+    void __thiscall B20FB0();                          // 0xb20fb0, ret 0
+    void __thiscall B5E9A0(u32 a);                     // 0xb5e9a0, ret 4
+    void __thiscall B5CDE0(u32 a);                     // 0xb5cde0, ret 4
+    void* __thiscall B1FDB0();                         // 0xb1fdb0 GetAvatar
+    void __thiscall B22930(u32 a);                     // 0xb22930, ret 4
+    void __thiscall B1FD50(u32 a);                     // 0xb1fd50, ret 4
+    void __thiscall B225D0(u32 a);                     // 0xb225d0, ret 4
+    void __thiscall B23610();                          // 0xb23610, ret 0
+};
+
+// cCitySimulator singleton (0x167a690).
+struct CCitySim {
+    void __thiscall Ctor();                            // 0xae6a70, ret 0
+    void __thiscall AE7350();                          // 0xae7350, ret 0
+    void __thiscall AE6570();                          // 0xae6570, ret 0
+};
+
+// SP::SimSingleton (0x168d824).
+struct CSimSingleton {
+    void __thiscall F311C0();                          // 0xf311c0, ret 0
+    void __thiscall C2E4E0();                          // 0xc2e4e0, no-op thiscall
+};
+
+// The 0x24-byte SimSingleton allocation constructor (called with the new block in ecx,
+// the constructed object comes back in eax).
+struct SSimCtor {
+    void* __thiscall F30BC0();                         // 0xf30bc0, ret 0
+};
+
+// The scenario object reached through FUN_00b3d3xx getters.
+struct SScenario {
+    void __thiscall B33CE0(u32 v);                     // 0xb33ce0, ret 4
+    void __thiscall B33CF0(u32 v);                     // 0xb33cf0, ret 4
+    void __thiscall C2E4E0();                          // 0xc2e4e0, no-op thiscall
+    void __thiscall E180D0();                          // 0xe180d0, ret 0
+    void __thiscall BA3310();                          // 0xba3310, ret 0
+};
+
+// The av
+// world object reached through FUN_00b3d380.
+struct SWorld {
+    int  __thiscall B320D0(u32 a);                     // 0xb320d0, ret 4
+    void __thiscall B32280(u32 a);                     // 0xb32280, ret 4
+    void __thiscall B32450(u32 a);                     // 0xb32450, ret 4
+};
+
+// The objective/"spot" object returned by the avatar query.
+struct SAvatar {
+    u32  __thiscall C04590();                          // 0xc04590, ret 0
 };
 
 struct SMovie {
@@ -416,8 +489,7 @@ void __thiscall Strategy::FUN_00ef0cd0()
         (viewer, cam, facing, up, 0);
     FUN_00f31830(q, facing, up);
 
-    void* p = FUN_00b3d230(0xb03af999);
-    FUN_00b5cde0(p);
+    ((SNounMgr*)FUN_00b3d230())->B5CDE0(0xb03af999);
 
     app = FUN_0067dd10();
     a2 = ((void*(__thiscall*)(void*))(*((char**)((char*)*(void**)app + 0x50))))(app);
@@ -481,74 +553,94 @@ void __thiscall Strategy::FUN_00ef0de0(u32 a)
 }
 
 // ===========================================================================
-// singleton helpers (the EAAllocate / Placement-new idiom)
-static void* FUN_00ef0ee0_alloc64(void** slot)
-{
-    if (*slot == 0) {
-        void* p = FUN_00f473a0(0x40, "Simulator/SimSingleton", 0, 0, 0, 0);
-        if (p == 0)
-            *slot = 0;
-        else {
-            FUN_00ae6a70(p);
-            *slot = p;
-        }
-    }
-    return *slot;
-}
-
-static void* FUN_00ef0ee0_alloc24(void** slot)
-{
-    if (*slot == 0) {
-        void* p = FUN_00f473a0(0x24, "Simulator/SimSingleton", 0, 0, 0, 0);
-        if (p == 0)
-            *slot = 0;
-        else
-            *slot = FUN_00f30bc0(p);
-    }
-    return *slot;
-}
-
-// ===========================================================================
 // @ 0x00ef0ee0
 void __thiscall Strategy::FUN_00ef0ee0()
 {
     Strategy* this_ = this;
-    void* nm = FUN_00b3d300();
-    if (FUN_00f67d90(nm) == 0) {
-        void* nm2 = FUN_00b3d300();
-        FUN_00b20fb0(nm2);
+    SNounMgr* nm = (SNounMgr*)FUN_00b3d300();
+    if (nm->F67D90() == 0) {
+        SNounMgr* nm2 = (SNounMgr*)FUN_00b3d300();
+        nm2->B20FB0();
     }
 
-    FUN_00ef0cd0();
+    FUN_00ef0cd0_f();
 
     ((SHandle*)((char*)this_ + 0xc8))->B2F7E0(0x5e51bb6);
+    FUN_00c2e4e0();
     FUN_00d48a00();
     FUN_00f084a0();
     ((SCtrl*)this_->mp78)->ResetProgress();
 
     { void* p = this_->mp68; ((void(__thiscall*)(void*))(*((char**)((char*)*(void**)p + 0x1c))))(p); }
 
-    FUN_00f10030(this_->mp6c, 0);
-    FUN_00f1f180(this_->mp78);
+    ((SCtrl6C*)this_->mp6c)->F10030(0);
+    ((SCtrl*)this_->mp78)->F1F180();
 
-    void* q = FUN_00b3d230(0);
-    FUN_00b5e9a0(q);
+    SNounMgr* n3 = (SNounMgr*)FUN_00b3d230();
+    n3->B5E9A0(0);
     FUN_00d491b0(1);
 
     void* tick = FUN_00b3d330();
-    void* city = FUN_00ef0ee0_alloc64(&DAT_0167a690);
-    void* sim = FUN_00ef0ee0_alloc24(&DAT_0168d824);
+
+    void* city = DAT_0167a690;
+    if (city == 0) {
+        void* p = FUN_00f473a0(0x40, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (p != 0) {
+            ((CCitySim*)p)->Ctor();
+            city = p;
+        } else
+            city = 0;
+        DAT_0167a690 = city;
+    }
+    ((CCitySim*)city)->AE7350();
+
+    city = DAT_0167a690;
+    if (city == 0) {
+        void* p = FUN_00f473a0(0x40, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (p != 0) {
+            ((CCitySim*)p)->Ctor();
+            city = p;
+        } else
+            city = 0;
+        DAT_0167a690 = city;
+    }
     ((void(__thiscall*)(void*, void*))(*((char**)((char*)*(void**)tick + 0x50))))(tick, city);
 
-    FUN_00b3d4c0();
-    void* r = FUN_00b3d240(0xd39010);
-    FUN_00b33ce0(r);
-    r = FUN_00b3d240(0xef00e0);
-    FUN_00b33cf0(r);
+    void* sim = DAT_0168d824;
+    if (sim == 0) {
+        void* p = FUN_00f473a0(0x24, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (p != 0)
+            sim = ((SSimCtor*)p)->F30BC0();
+        else
+            sim = 0;
+        DAT_0168d824 = sim;
+    }
+    ((CSimSingleton*)sim)->C2E4E0();
 
-    FUN_00ef0bkey();
+    sim = DAT_0168d824;
+    if (sim == 0) {
+        void* p = FUN_00f473a0(0x24, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (p != 0)
+            sim = ((SSimCtor*)p)->F30BC0();
+        else
+            sim = 0;
+        DAT_0168d824 = sim;
+    }
+    ((void(__thiscall*)(void*, void*))(*((char**)((char*)*(void**)tick + 0x50))))(tick, sim);
 
-    (void)sim;
+    ((SScenario*)FUN_00b3d4c0())->C2E4E0();
+    ((SScenario*)FUN_00b3d240())->B33CE0(0xd39010);
+    ((SScenario*)FUN_00b3d240())->B33CF0(0xef00e0);
+
+    void* app = FUN_0067dd10();
+    void* a2 = ((void*(__thiscall*)(void*))(*((char**)((char*)*(void**)app + 0x50))))(app);
+    void* a3 = ((void*(__thiscall*)(void*, u32))(*((char**)((char*)*(void**)a2 + 0x40))))(a2, 0xebb801);
+    if (a3 != 0) {
+        void* r = (void*)((u32(__thiscall*)(void*, u32))(*((char**)((char*)*(void**)a3 + 0xc))))(a3, 0x11966ed);
+        if (r != 0)
+            FUN_00b0f6f0_tc(r);
+    }
+
     ((CInputState*)((char*)this_ + 0x20))->Reset();
 }
 
@@ -557,28 +649,97 @@ void __thiscall Strategy::FUN_00ef0ee0()
 void __thiscall Strategy::FUN_00ef10c0()
 {
     Strategy* this_ = this;
-    (void)this_;
-    void* a = FUN_00b3d240(0);
-    FUN_00b33ce0(a);
-    a = FUN_00b3d240(0);
-    FUN_00b33cf0(a);
+
+    ((SScenario*)FUN_00b3d240())->B33CE0(0);
+    ((SScenario*)FUN_00b3d240())->B33CF0(0);
 
     DAT_0169e37c = 0;
 
-    void* b = FUN_00b3d400();
-    FUN_00e180d0(b);
+    ((SScenario*)FUN_00b3d400())->E180D0();
     FUN_00b6c280();
-    void* c = FUN_00b3d4c0();
-    FUN_00ba3310(c);
+    ((SScenario*)FUN_00b3d4c0())->BA3310();
 
+    {
     void* tick = FUN_00b3d330();
 
-    void* sim = FUN_00ef0ee0_alloc24(&DAT_0168d824);
-    FUN_00f311c0(sim);
+    void* sim = DAT_0168d824;
+    if (sim == 0) {
+        void* p = FUN_00f473a0(0x24, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (p != 0)
+            sim = ((SSimCtor*)p)->F30BC0();
+        else
+            sim = 0;
+        DAT_0168d824 = sim;
+    }
+    ((CSimSingleton*)sim)->F311C0();
+
+    sim = DAT_0168d824;
+    if (sim == 0) {
+        void* p = FUN_00f473a0(0x24, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (p != 0)
+            sim = ((SSimCtor*)p)->F30BC0();
+        else
+            sim = 0;
+        DAT_0168d824 = sim;
+    }
     ((void(__thiscall*)(void*, void*))(*((char**)((char*)*(void**)tick + 0x54))))(tick, sim);
 
-    void* city = FUN_00ef0ee0_alloc64(&DAT_0167a690);
+    void* city = DAT_0167a690;
+    if (city == 0) {
+        void* p = FUN_00f473a0(0x40, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (p != 0) {
+            ((CCitySim*)p)->Ctor();
+            city = p;
+        } else
+            city = 0;
+        DAT_0167a690 = city;
+    }
+    ((CCitySim*)city)->AE6570();
+
+    city = DAT_0167a690;
+    if (city == 0) {
+        void* p = FUN_00f473a0(0x40, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (p != 0) {
+            ((CCitySim*)p)->Ctor();
+            city = p;
+        } else
+            city = 0;
+        DAT_0167a690 = city;
+    }
     ((void(__thiscall*)(void*, void*))(*((char**)((char*)*(void**)tick + 0x54))))(tick, city);
+    }
+
+    ((SCtrl*)this_->mp78)->F19130();
+    ((SCtrl6C*)this_->mp6c)->F0F8F0();
+
+    { void* p = this_->mp68; ((void(__thiscall*)(void*))(*((char**)((char*)*(void**)p + 0x20))))(p); }
+
+    ((SHandle*)((char*)this_ + 0xc8))->B2F7B0();
+
+    ((SNounMgr*)FUN_00b3d230())->B5CDE0(0);
+
+    SNounMgr* nm = (SNounMgr*)FUN_00b3d300();
+    void* avatar = nm->B1FDB0();
+
+    ((SNounMgr*)FUN_00b3d300())->B22930(((SAvatar*)avatar)->C04590());
+    ((SNounMgr*)FUN_00b3d300())->B1FD50(0);
+    ((SNounMgr*)FUN_00b3d300())->B225D0((u32)avatar);
+
+    FUN_00f096c0();
+    FUN_00d48ae0();
+    FUN_00f24390();
+
+    if (this_->md0 != 2)
+        ((SNounMgr*)FUN_00b3d300())->B23610();
+
+    if (((SWorld*)FUN_00b3d380())->B320D0(0x4bf38a8) > 0)
+        ((SWorld*)FUN_00b3d380())->B32280(0x4bf38a8);
+
+    ((SWorld*)FUN_00b3d380())->B32450(0);
+
+    void* fx = FUN_0067ddd0();
+    void* o = ((void*(__thiscall*)(void*))(*((char**)((char*)*(void**)fx + 0x5c))))(fx);
+    ((void(__thiscall*)(void*))(*((char**)((char*)*(void**)o + 0x38))))(o);
 }
 
 // ===========================================================================
