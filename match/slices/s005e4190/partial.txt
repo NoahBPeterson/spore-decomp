@@ -1,1 +1,1 @@
-005e4560  -  UpdateRollover: skeleton only (EA::Variant property writes, rollover visibility, position update omitted)
+# every VA claimed for this slice is complete (see manifest.txt / nonmatching.txt)

@@ -38,29 +38,30 @@ union EmptyString {
   uint32_t mUint32;
   wchar_t mEmpty16[1];
 };
-extern EmptyString gEmptyString;
+extern EmptyString gEmptyString16;  // 0x01667bac
 
 class allocator { public:
   allocator() {}
 };
 
-class wstring {
+class wstring : private allocator {
  public:
   wchar_t* mpBegin;
   wchar_t* mpEnd;
   wchar_t* mpCapacity;
-  allocator mAllocator;
   wstring() { AllocateSelf(); }
   void AllocateSelf() {
-    mpBegin = gEmptyString.mEmpty16;
+    mpBegin = gEmptyString16.mEmpty16;
     mpEnd = mpBegin;
     mpCapacity = mpBegin + 1;
   }
   void DeallocateSelf() {
-    if ((mpCapacity - mpBegin) > 1)
+    if ((mpCapacity - mpBegin) > 1 && mpBegin)
       EASTL_allocator_deallocate(mpBegin);
   }
   ~wstring() { DeallocateSelf(); }
+  void range_initialize(const wchar_t* pStr);  // 0x00579a90
+  wstring(const wchar_t* pStr) : mpBegin(0), mpEnd(0), mpCapacity(0) { range_initialize(pStr); }
 };
 }  // namespace eastl
 
@@ -79,6 +80,13 @@ class Key { public:
 };
 }  // namespace ResourceMan
 
+struct Point {
+  float x;
+  float y;
+};
+}  // namespace EA
+
+namespace EA {
 namespace UTFWin {
 class IWinProc;
 
@@ -105,7 +113,8 @@ class IWindow {
   virtual void SetText(const wchar_t* text);          // +0x80
   PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39)
   PV(40) PV(41) PV(42) PV(43) PV(44) PV(45) PV(46) PV(47)
-  PV(48) PV(49) PV(50) PV(51) PV(52) PV(53)
+  virtual EA::Point ToClient(float x, float y);       // +0xc0
+  PV(49) PV(50) PV(51) PV(52) PV(53)
   virtual void AddWindow(IWindow* w);                 // +0xd8
   virtual void RemoveWindow(IWindow* w);              // +0xdc
 };
@@ -197,6 +206,17 @@ struct RawWStr {
   wchar_t* mpCapacity;
   uint32_t mAllocator;
 };
+
+// Wide-string buffer a callee fills in; released on scope exit like an eastl::wstring.
+struct WStrOut {
+  wchar_t* mpBegin;
+  wchar_t* mpEnd;
+  wchar_t* mpCapacity;
+  ~WStrOut() {
+    if ((mpCapacity - mpBegin) > 1 && mpBegin)
+      EASTL_allocator_deallocate(mpBegin);
+  }
+};
 int SPUIHelpers_GetImageFromLayout(void* key);  // 0x00458de0 (cdecl)
 char FUN_00806aa0(IWindow* w, int image, int flag);  // 0x00806aa0 (cdecl)
 
@@ -237,6 +257,57 @@ double __cdecl iat_floor(double x);  // 0x011e0906
 void FUN_00805940(void* p, float a, float b, float c, int d, int e, float f, float g, void* img, float h);  // 0x00805940
 
 namespace SP {
+// Localized-text holder (0x14 bytes) filled by GetPropertyAsText / cString::Load.
+class cString {
+ public:
+  cString();                 // 0x006b5060
+  ~cString();                // 0x006b5240
+  const wchar_t* GetText();  // 0x006b55c0
+ private:
+  uint32_t mField00;
+  uint32_t mField04;
+  uint32_t mField08;
+  uint32_t mField0c;
+  uint32_t mField10;
+};
+
+void GetPropertyAsText(cPropertyList* pProps, uint32_t id, cString* pText);  // 0x006a1360
+
+class cWindowManager {
+ public:
+  PV(0)
+  virtual IWindow* GetMainWindow();  // +0x04
+};
+cWindowManager* WindowManager();     // 0x0067caa0
+}  // namespace SP
+
+// Object behind the global pointer at 0x015ee298: the rounded icon level is mirrored here.
+struct cSPVerbLevelMirror {
+  uint32_t mPad00[0x16];  // +0x00..0x57
+  int mDisplayedLevel;    // +0x58
+};
+extern cSPVerbLevelMirror* g_p015ee298;  // 0x015ee298
+
+namespace EA {
+// Variant carrying a wide string: 0x10 bytes of payload, flags at +0x10, type id at +0x12.
+struct Variant {
+  uint32_t mData0;
+  uint32_t mData1;
+  uint32_t mData2;
+  uint32_t mData3;
+  uint16_t mFlags;   // +0x10
+  uint16_t mTypeId;  // +0x12
+  Variant(const void* pText) : mFlags(0), mTypeId(0) { Construct(0x13, 9, pText, 0x10, 1); }
+  ~Variant() {
+    if (mFlags & 4)
+      Destruct(false);
+  }
+  bool Construct(unsigned short type, unsigned short subType, const void* pData, unsigned int size, unsigned int flags);  // 0x0093dd80
+  void Destruct(bool arg);  // 0x0093db80
+};
+}  // namespace EA
+
+namespace SP {
 class cSPVerbIconRollover {
  public:
   cSPVerbIconRollover();
@@ -250,11 +321,14 @@ class cSPVerbIconRollover {
   PV(2) PV(3) PV(4) PV(5)
   PV(6)
   virtual void Slot7();   // +0x1c
+  virtual void Slot8();   // +0x20
   void FUN_00605300();    // 0x00605300
-  void SetVisibility(uint32_t key, bool visible);
-  void Layout();
-  IWindow* GetRootWindow();
-  void SetPositionAndOffset(float x, float y, float w, float h);
+  void FUN_006052f0();    // 0x006052f0
+  void SetVisibility(uint32_t key, bool visible);                          // 0x006052c0
+  void SetProperty(uint32_t key, const EA::Variant& value, bool a, bool b);  // 0x00828c30
+  void Layout();                                                           // 0x006053a0
+  IWindow* GetRootWindow();                                                // 0x00828100
+  void SetPositionAndOffset(float x, float y, float w, float h);           // 0x008283a0
 };
 
 class cSPEditorVerbIconData {
@@ -262,22 +336,22 @@ class cSPEditorVerbIconData {
   virtual int AddRef();                      // +0x00
   virtual int Release();                     // +0x04
   PV(2) PV(3) PV(4) PV(5) PV(6) PV(7)
-  virtual RawWStr* Slot20(RawWStr* out, int arg);   // +0x20
-  virtual void Slot24(void* out);            // +0x24
+  virtual RawWStr* Slot20(void* out, int arg);  // +0x20
+  virtual RawWStr* Slot24(void* out);           // +0x24
   PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
   uint32_t pad04[2];          // +0x04..0x0b
   bool mUseDescription;       // +0x0c
   bool mShowLevel;            // +0x0d
   bool mShowHotKey;           // +0x0e
   bool mShowZeroLevel;        // +0x0f
-  int mHotKeyProp;            // +0x10
+  bool mHotKeyEnabled;        // +0x10
   int mUnknown14;             // +0x14
   float mLevel;               // +0x18
   uint32_t pad1c[0xd];        // +0x1c..0x4f
   int mArrayIndex;            // +0x50
   uint32_t pad54[5];          // +0x54..0x67
-  uint32_t mUnknown68;        // +0x68
-  uint32_t pad6c[3];          // +0x6c..0x77
+  eastl::wstring mHotKeyText; // +0x68
+  uint32_t pad74;             // +0x74
   uint32_t mUnknown78;        // +0x78
   int mUnknown7c;             // +0x7c
   uint32_t pad80[4];          // +0x80..0x8f
@@ -511,7 +585,7 @@ void cSPEditorVerbIcon::InitData(cSPEditorVerbIconData* data) {
     if (mIsVisible) {
       UpdateLevelDisplay(mIconData->mLevel);
       if (mWin24 && mIconData->mUnknown7c != -1)
-        mWin24->SetText((const wchar_t*)mIconData->mUnknown68);
+        mWin24->SetText((const wchar_t*)mIconData->mHotKeyText.mpBegin);
     }
   }
   IWindow* dial = mWinChargeDial;
@@ -537,9 +611,51 @@ void cSPEditorVerbIcon::InitData(cSPEditorVerbIconData* data) {
 
 // @ 0x005e4560
 void cSPEditorVerbIcon::UpdateRollover(IWindow* parent) {
-  (void)parent;
-  // skeleton (see partial.txt): the volatile store keeps callers' calls from being elided as an empty function.
-  *(volatile int*)&mState = mState;
+  SP::cString text;
+  if (mIconData->mShowZeroLevel) {
+    g_p015ee298->mDisplayedLevel = (int)mIconData->mLevel;
+    SP::GetPropertyAsText(mIconData->mpPropList, 0x62d00e8, &text);
+    eastl::wstring levelText(text.GetText());
+    mRollover->SetProperty(0x4d97708, EA::Variant(&levelText), true, false);
+  } else {
+    static eastl::wstring sNoLevelText;
+    mRollover->SetProperty(0x4d97708, EA::Variant(&sNoLevelText), true, false);
+  }
+
+  WStrOut nameText;
+  mRollover->SetProperty(0x331cc0e, EA::Variant(mIconData->Slot20(&nameText, 0)), true, false);
+
+  WStrOut descriptionText;
+  mRollover->SetProperty(0x331cc0f, EA::Variant(mIconData->Slot24(&descriptionText)), true, false);
+
+  if (mIconData->mHotKeyEnabled && mIconData->mUnknown14 > -1) {
+    mRollover->SetVisibility(0x4d97710, true);
+    mRollover->SetProperty(0x4d97710, EA::Variant(&mIconData->mHotKeyText), true, false);
+  } else {
+    mRollover->SetVisibility(0x4d97710, false);
+  }
+
+  mRollover->Slot8();
+  mRollover->Layout();
+
+  // The rollover is centred on the parent's area and sized from the main window's world area.
+  const Math::Rectangle& area = parent->GetArea();
+  IWindow* pParent = parent->GetParent();
+  float centerY = (area.y2 + area.y1) * 0.5f;
+  float centerX = (area.x2 + area.x1) * 0.5f;
+  EA::Point client = pParent->ToClient(centerX, centerY);
+
+  const Math::Rectangle& realArea = SP::WindowManager()->GetMainWindow()->GetRealArea();
+  float width = (realArea.x2 - realArea.x1) * 0.025f;
+  float height = (realArea.y2 - realArea.y1) * 0.033333335f;
+  IWindow* pRoot = mRollover->GetRootWindow();
+  if (pRoot) {
+    const Math::Rectangle& rootArea = pRoot->GetArea();
+    width = -(rootArea.x2 - rootArea.x1) - width;
+  }
+
+  mRollover->FUN_006052f0();
+  mRollover->SetPositionAndOffset(client.x, client.y, width, height);
 }
 
 // @ 0x005e49c0

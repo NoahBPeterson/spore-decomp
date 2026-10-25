@@ -3,3 +3,9 @@
 00605220 ??0cSPVerbIconRollover@SP@@QAE@I@Z  # cSPVerbIconRollover(uint32) ctor, called from InitData 0x5e4190
 006051d0 ??0cSPVerbIconRollover@SP@@QAE@XZ  # cSPVerbIconRollover() ctor, called from InitData 0x5e4190
 013eb430 ?kEditorAllocName@@3QBDB  # "Editor" allocation-name string
+005e4190 ?InitData@cSPEditorVerbIcon@SP@@UAEXPAVcSPEditorVerbIconData@2@@Z  # cSPEditorVerbIcon::InitData(cSPEditorVerbIconData*)
+005e4560 ?UpdateRollover@cSPEditorVerbIcon@SP@@QAEXPAVIWindow@UTFWin@EA@@@Z  # cSPEditorVerbIcon::UpdateRollover(EA::UTFWin::IWindow*)
+005e4c90 ?UpdateLevelDisplay@cSPEditorVerbIcon@SP@@UAEXM@Z  # cSPEditorVerbIcon::UpdateLevelDisplay(float)
+005e4d30 ?FloatToInt@SP@@YAHM@Z  # SP::FloatToInt(float)
+005e4d60 ?SetIndex@cIconVerbHelper@SP@@QAEXH@Z  # SP::cIconVerbHelper::SetIndex(int)
+005e49c0 ?HandleMessage@cSPEditorVerbIcon@SP@@UAE_NPAVIWindow@UTFWin@EA@@PAX@Z  # cSPEditorVerbIcon::HandleMessage(EA::UTFWin::IWindow*, void*)
