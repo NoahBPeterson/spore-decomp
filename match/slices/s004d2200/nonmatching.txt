@@ -1,0 +1,1 @@
+004d2200  451  GetMatchingCreatureKeys complete (status fast path, default ConstraintVector, Constraint query via 0x558960, OTDB virtual query, avatar-profile filter loop, vector destructions); cl keeps a tighter /Od frame and evaluates the fast-path store address after the GetAvatarProfile call (521 vs 565 bytes); equiv WEAK
