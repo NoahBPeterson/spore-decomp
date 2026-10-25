@@ -180,12 +180,15 @@ void __cdecl FUN_00d1f160(uint32_t id, uint32_t* data, int count, void** arr)
 }
 
 // ===========================================================================
-// @ 0x00d1f400   (partial reconstruction -- see partial.txt)
+// @ 0x00d1f400
 // ===========================================================================
-struct TerrainSphere {
+struct cTerrainEditor {
     char  _p000[0x10fc];
     void* mpListA;                        // +0x10fc
     void* mpListB;                        // +0x1100
+    bool  GetFlagValue(uint32_t id, int* outValue);      // 0x00c77380
+    void  SetFlagValue(uint32_t id, uint32_t value);     // 0x00c79f00
+    bool  HasFlagOrInsert(uint32_t id);                  // 0x00c77bf0
 };
 
 struct IdVec {                            // grow-able uint32 vector
@@ -197,17 +200,14 @@ struct IdVec {                            // grow-able uint32 vector
 char g_1654c01;                           // 0x01654c01  game-mode tag
 char g_1654c02;                           // 0x01654c02
 
-void  FUN_00c79f00(const char*, uint32_t);          // 0x00c79f00 cdecl
-char  FUN_00c77380p(void*, const char*, uint32_t*); // 0x00c77380 thiscall
-void* FUN_00f67d90(void*);                          // 0x00f67d90 thiscall GetCurrentTerrainSphere
+void* FUN_00f67d90();                     // 0x00f67d90 thiscall GetCurrentTerrainSphere
 
 bool __cdecl FUN_00d1f400(uint32_t param_1)
 {
     uint32_t tag = *(uint32_t*)(param_1 + 8);
-    (void)tag;
 
     void* terr = SP_NounManager();
-    TerrainSphere* sphere = (TerrainSphere*)
+    cTerrainEditor* sphere = (cTerrainEditor*)
         ((void*(__thiscall*)(void*)) FUN_00f67d90)(terr);
 
     uint32_t foundA = 0;
@@ -215,17 +215,17 @@ bool __cdecl FUN_00d1f400(uint32_t param_1)
     IdVec vec;
     vec.mpBegin = 0; vec.mpEnd = 0; vec.mpCap = 0;
 
-    const char* nameA;
-    const char* nameB;
+    uint32_t nameA;
+    uint32_t nameB;
 
     void* mode = SP_GetCurrentGameMode();
     if (mode == (void*)&g_1654c01) {
-        nameA = "ability-5ff7927";
-        nameB = "ability-5ff7928";
+        nameA = 0x5ff7927;
+        nameB = 0x5ff7928;
         FUN_00555e80(sphere->mpListA, &vec);
     } else if (mode == (void*)&g_1654c02) {
-        nameA = "ability-5ff7baf";
-        nameB = "ability-5ff7bb6";
+        nameA = 0x5ff7baf;
+        nameB = 0x5ff7bb6;
         FUN_00555e80(sphere->mpListA, &vec);
         FUN_00555e80(sphere->mpListB, &vec);
     } else {
@@ -234,9 +234,8 @@ bool __cdecl FUN_00d1f400(uint32_t param_1)
         return false;
     }
 
-    char okA = FUN_00c77380p(terr, nameA, &foundA);
-    char okB = FUN_00c77380p(terr, nameB, &foundB);
-    if (okA == 0 || okB == 0) {
+    bool okA = sphere->GetFlagValue(nameA, (int*)&foundA);
+    if (okA == 0 || sphere->GetFlagValue(nameB, (int*)&foundB) == 0) {
         void* mode2 = SP_GetCurrentGameMode();
         uint32_t n = (uint32_t)(vec.mpEnd - vec.mpBegin);
         uint32_t flags = 0;
@@ -259,106 +258,370 @@ bool __cdecl FUN_00d1f400(uint32_t param_1)
                 else if (id == 0x5961d110)         flags |= 0x400000;
             }
         }
-        foundB = 0;
         foundA = flags;
-        FUN_00c79f00(nameA, flags);
-        FUN_00c79f00(nameB, 0);
+        foundB = 0;
+        sphere->SetFlagValue(nameA, flags);
+        sphere->SetFlagValue(nameB, foundB);
     }
+
+    // Pack the pair as (high=foundA, low=foundB) and test bit `tag`.
+    unsigned long long bits = (unsigned long long)foundB
+                            | ((unsigned long long)foundA << 32);
+    unsigned long long mask = 1ULL << tag;
+    bool result = (bits & mask) != 0;
 
     if (vec.mpBegin != 0 && *((int*)vec.mpBegin - 1) != 0)
         FUN_00f47380(vec.mpBegin);
-
-    // tail: 64-bit allshl bit test over (foundA, foundB) -- omitted, see partial.txt
-    return false;
+    return result;
 }
 
-// ===========================================================================
-// @ 0x00d1e930   (partial reconstruction -- see partial.txt)
-// ===========================================================================
-struct AbilityEntry {
+// ---------------------------------------------------------------------------
+// support types for SP::UseAbility
+// ---------------------------------------------------------------------------
+struct cAbilityEntry;
+struct cCreatureBase;
+
+struct cCreatureVtbl {
+    void* mSlots[0xb0 / 4];                                  // +0x000
+    int (__thiscall* fnB0)(cCreatureBase*);                  // +0x0b0  ability count
+    cAbilityEntry* (__thiscall* fnB4)(cCreatureBase*, int);  // +0x0b4  ability entry
+};
+
+struct cSubC0Vtbl {
+    void* mSlots[0x58 / 4];                                  // +0x000
+    char (__thiscall* fn58)(void*);                          // +0x058
+};
+
+struct cCreatureList {
+    cCreatureBase** mpBegin;                                 // +0x00
+    cCreatureBase** mpEnd;                                   // +0x04
+};
+
+struct cGameNounManager {
+    cCreatureList* GetItemID();                              // 0x00b1f9c0
+};
+
+struct cBehaviorStimuli {
+    void  Set(unsigned int a, unsigned int b, float c, void* d);  // 0x00bc97f0
+    void* Play(unsigned int a, unsigned int b);                   // 0x00bc96a0
+};
+
+struct Variant {
+    int            mD00, mD04, mD08, mD0c;                   // +0x00
+    unsigned short mFlags;                                   // +0x10
+    unsigned short mTypeId;                                  // +0x12
+    Variant& SetInt(const int& value);                       // 0x00671ba0
+    void     Destruct(int freeFlag);                         // 0x0093db80
+};
+
+struct cCitizen {
+    void* GiveOrder(void* a, void* b, void* c);              // 0x00c275b0
+};
+
+struct cUIHints {
+    void FUN_0067c830(unsigned int id);                      // 0x0067c830
+};
+
+struct cAbilityEntry {
     char  _p000[0x08];
-    void* mpParam;                        // +0x08
-    int   mMode;                          // +0x0c
-    char  _p010[0x115 - 0x10];
-    char  mFlag;                          // +0x115
+    int   mType;                                             // +0x08
+    int   mMode;                                             // +0x0c
+    char  _p010[0xa8 - 0x10];
+    float mF0a8;                                             // +0x0a8
+    char  _p0ac[0xf4 - 0xac];
+    float mF0f4;                                             // +0x0f4
+    char  _p0f8[0x104 - 0xf8];
+    float mF104;                                             // +0x104
+    char  _p108[0x115 - 0x108];
+    char  mB115;                                             // +0x115
+    float GetBound(int which);                               // 0x004d3d70
 };
 
-struct CreatureFields {
-    char  _p000[0xc0];
-    void* mpSubVtbl;                      // +0xc0
-    char  _p0c4[0xe70 - 0xc4];
-    void* mpE70;                          // +0xe70
-    void* mpE74;                          // +0xe74
+struct cCreatureBase {
+    cCreatureVtbl* mpVtbl;                                   // +0x000
+    char  _p004[0xc0 - 0x04];
+    char  mSubC0;                                            // +0x0c0
+    char  _pC1[0x110 - 0xc1];
+    unsigned int mFlags110;                                  // +0x110
+    char  _p114[0x137 - 0x114];
+    char  mB137;                                             // +0x137
+    char  _p138[0xb20 - 0x138];
+    void* mPtrB20;                                           // +0xb20
+    char  _pB24[0xb4c - 0xb24];
+    void* mPtrB4c;                                           // +0xb4c
+    char  _pB50[0xb58 - 0xb50];
+    unsigned int mB58;                                       // +0xb58
+    char  mB5c;                                              // +0xb5c
+    char  _pB5d[0xe70 - 0xb5d];
+    int   mE70;                                              // +0xe70
+    int   mE74;                                              // +0xe74
+
+    int   FUN_00c196a0(int a, int b, int c);                 // 0x00c196a0
+    void  FUN_00c1b020(int a);                               // 0x00c1b020
+    void  FUN_00c18370();                                    // 0x00c18370
+    void  FUN_00c13650();                                    // 0x00c13650
+    void  FUN_00c03c20(int a);                               // 0x00c03c20
+    void  FUN_00c03190(unsigned int a, unsigned int b, float c, int d, int e, int f, int g); // 0x00c03190
+    int   FUN_00c0c120();                                    // 0x00c0c120
+    int   FUN_00c0c130();                                    // 0x00c0c130
+    void  SetSprinting(int on);                              // 0x00c1ad10
+    void  SetStealthed(int a, int b);                        // 0x00c1aed0
+    void  Attack(int target, int flags);                     // 0x00c1e460
+    void* FUN_00c0ee60();                                    // 0x00c0ee60
+    void* GetTargetAsCreature();                             // 0x00c0ee70
+    int   FUN_00c0e0c0(int a);                               // 0x00c0e0c0
 };
 
-void* FUN_00d51660();                     // 0x00d51660 cdecl
-void  FUN_00ac80d0(void*, const char*);   // 0x00ac80d0 cdecl
-void* FUN_00c0ee70(void*);                // 0x00c0ee70 thiscall GetTargetAsCreature
-void  FUN_00c196a0(void*, void*, int, int); // 0x00c196a0 cdecl
-char  FUN_00c0c120(void*);                // 0x00c0c120 thiscall
-void* FUN_00b1f9c0(void*);                // 0x00b1f9c0 thiscall GetItemID
-void  FUN_00c1ad10(void*, int);           // 0x00c1ad10 thiscall SetSprinting
+void* FUN_00ac80d0(void* obj, void* type);                   // 0x00ac80d0
+void* FUN_00d51660();                                        // 0x00d51660
+void* FUN_00d2e340();                                        // 0x00d2e340
+float FUN_00d38a30(int a, void* b);                          // 0x00d38a30
+void* FUN_00ad26d0(void* p);                                 // 0x00ad26d0
+float FUN_00d99ac0(void* a, void* b, unsigned int c);        // 0x00d99ac0
+void* FUN_0067cac0();                                        // 0x0067cac0
 
-void __cdecl SP_UseAbility(void* self, int param_2)
+extern float g_147a2d8;                                      // 0x0147a2d8 FLT_MAX
+extern float g_1473c70;                                      // 0x01473c70 10.0f
+extern char  g_1582df5;                                      // 0x01582df5
+char g_1654c10;                                              // 0x01654c10 game-mode tag
+
+// ===========================================================================
+// @ 0x00d1e930   SP::UseAbility
+// ===========================================================================
+void __cdecl SP_UseAbility(cCreatureBase* self, int index)
 {
-    if (param_2 == -1)
+    if (index == -1)
         return;
 
-    int count = ((int(__thiscall*)(void*)) (*(void***)self)[0xb0 / 4])(self);
-    if (param_2 >= count)
+    cCreatureVtbl* vt = *(cCreatureVtbl**)self;
+    int count = vt->fnB0(self);
+    if (index >= count)
         return;
 
-    AbilityEntry* entry = (AbilityEntry*)
-        ((void*(__thiscall*)(void*, int)) (*(void***)self)[0xb4 / 4])(self, param_2);
+    cAbilityEntry* entry = vt->fnB4(self, index);
+    int type = entry->mType;
 
-    CreatureFields* cf = (CreatureFields*)self;
-    void* target = entry->mpParam;
     if (entry->mMode == 0)
-        cf->mpE74 = (void*)param_2;
+        self->mE74 = index;
     else if (entry->mMode == 1)
-        cf->mpE70 = (void*)param_2;
+        self->mE70 = index;
 
-    char c = ((char(__thiscall*)(void*))
-              (*(void***)((char*)self + 0xc0))[0x58 / 4])((char*)self + 0xc0);
-
-    if (c != 0 && entry->mFlag != 0) {
+    if (((cSubC0Vtbl*)*(void**)((char*)self + 0xc0))->fn58((char*)self + 0xc0) != 0
+        && entry->mB115 != 0) {
         void* x = FUN_00d51660();
-        if (((unsigned char)(*(uint32_t*)((char*)x + 0x6c) >> 4) & 1) != 0) {
-            FUN_00ac80d0(self, "/");
-            ((void(__thiscall*)(void*, int, int, float, int, int, int, int))
-                 (*(void***)x)[0xff / 4])(x, 0, 0x10, 0x7f7fffff, param_2, 0, 0, 0);
+        if (((*(unsigned int*)((char*)x + 0x6c) >> 4) & 1) != 0) {
+            ((cCreatureBase*)FUN_00ac80d0(self, (void*)0x18eb45e))
+                ->FUN_00c03190(0, 0x10, g_147a2d8, index, 0, 0, 0);
             return;
         }
     }
 
-    // dispatch on param_2: 45 cases (0x0d..0x56).  A representative subset is
-    // reconstructed here; the remaining action bodies are omitted -- see
-    // partial.txt.
-    switch (param_2) {
+    switch (type) {
+    // ---- 0x28 : interact / use ------------------------------------------
     case 0x28: {
-        void* tc = FUN_00c0ee70(self);
-        if (tc != 0) {
-            FUN_00c196a0((void*)target, (void*)param_2, 1, 0);
-            return;
-        }
-        break;
+        if (self->GetTargetAsCreature() == 0)
+            break;
+        self->FUN_00c196a0(index, 1, 0);
+        return;
     }
+
+    // ---- 0x27, 0x50 : sprint toggle -------------------------------------
     case 0x27:
     case 0x50: {
-        char sprinting = FUN_00c0c120(self);
-        if (sprinting == 0) {
-            FUN_00c196a0((void*)target, (void*)param_2, 1, 0);
-            FUN_00c1ad10(self, 1);
+        if (self->FUN_00c0c120() != 0) {
+            self->SetSprinting(0);
+            cCreatureList* list = ((cGameNounManager*)SP_NounManager())->GetItemID();
+            for (cCreatureBase** it = list->mpBegin; it != list->mpEnd; ++it)
+                (*it)->SetSprinting(0);
         } else {
-            FUN_00c1ad10(self, 0);
+            self->FUN_00c196a0(index, 0, 1);
+            self->SetSprinting(1);
+            cCreatureList* list = ((cGameNounManager*)SP_NounManager())->GetItemID();
+            for (cCreatureBase** it = list->mpBegin; it != list->mpEnd; ++it)
+                (*it)->SetSprinting(1);
         }
-        void* mgr = SP_NounManager();
-        int* list = (int*)FUN_00b1f9c0(mgr);
-        for (int* it = (int*)list[0]; it != (int*)list[1]; ++it)
-            FUN_00c1ad10((void*)*it, sprinting ? 0 : 1);
         return;
     }
+
+    // ---- 0x0d, 0x52 : stealth toggle ------------------------------------
+    case 0x0d:
+    case 0x52: {
+        if (self->FUN_00c0c130() != 0) {
+            self->SetStealthed(0, 0);
+            cCreatureList* list = ((cGameNounManager*)SP_NounManager())->GetItemID();
+            for (cCreatureBase** it = list->mpBegin; it != list->mpEnd; ++it)
+                (*it)->SetStealthed(0, 0);
+            return;
+        }
+        if (self->FUN_00c196a0(index, 0, 1) != (unsigned int)index)
+            break;
+        self->SetStealthed(1, 0);
+        cCreatureList* list = ((cGameNounManager*)SP_NounManager())->GetItemID();
+        for (cCreatureBase** it = list->mpBegin; it != list->mpEnd; ++it)
+            (*it)->SetStealthed(1, 0);
+        return;
+    }
+
+    // ---- 0x10 : play visual effect --------------------------------------
+    case 0x10: {
+        ((cCreatureBase*)FUN_00ac80d0(self, (void*)0x18eb45e))
+            ->FUN_00c03190(0x800, 0, g_147a2d8, 0, 0, 0, 0);
+        cTerrainEditor* sphere =
+            (cTerrainEditor*)((void*(__thiscall*)(void*))FUN_00f67d90)(SP_NounManager());
+        sphere->HasFlagOrInsert(0x52da1fa);
+        return;
+    }
+
+    // ---- 0x53 ------------------------------------------------------------
+    case 0x53: {
+        if (((self->mB58 >> 9) & 1) != 0) {
+            self->FUN_00c18370();
+            return;
+        }
+        if (self->mB137 != 0 || (self->mFlags110 & 0x1000) != 0)
+            goto useAbility;
+        break;
+    }
+
+    // ---- 0x11 ------------------------------------------------------------
+    case 0x11: {
+        if (self->mB137 == 0)
+            break;
+        if (SP_GetCurrentGameMode() == (void*)&g_1654c10
+            && ((self->mB58 >> 9) & 1) != 0
+            && *(unsigned int*)((char*)self->mPtrB20 + 0x610) > 2) {
+            self->FUN_00c13650();
+            return;
+        }
+        goto useAbility;
+    }
+
+    // ---- 0x12, 0x51 ------------------------------------------------------
+    case 0x12:
+    case 0x51: {
+        void* x = FUN_00d2e340();
+        if (*(int*)((char*)x + 8) <= 0)
+            break;
+        if (self->FUN_00c0e0c0(0x5485a4c) != 0)
+            break;
+        if (self->FUN_00c0e0c0(0x77300ff) != 0)
+            break;
+        if (type != 0x51)
+            --*(int*)((char*)FUN_00d2e340() + 8);
+        self->FUN_00c1b020((int)entry->mF104);
+        return;
+    }
+
+    // ---- 0x1d : attack ---------------------------------------------------
+    case 0x1d: {
+        if (((self->mB58 >> 9) & 1) == 0)
+            goto attack;
+        ((cCreatureBase*)FUN_00ac80d0(self, (void*)0x18eb45e))->FUN_00c03c20(index);
+        return;
+    }
+
+    // ---- 0x22..0x25, 0x40, 0x4c..0x4f, 0x54..0x56 : play order -----------
+    case 0x22: case 0x23: case 0x24: case 0x25:
+    case 0x40: case 0x4c: case 0x4d: case 0x4e: case 0x4f:
+    case 0x54: case 0x55: case 0x56: {
+        if (((self->mB58 >> 9) & 1) == 0)
+            break;
+        cCreatureBase* obj = (cCreatureBase*)FUN_00ac80d0(self, (void*)0x18eb45e);
+        void* cb = self->mPtrB4c;
+        if (*(int*)((char*)cb + 0x1d8) != 0x941bd4bf) {
+            obj->FUN_00c03190(0x10000, 0, g_147a2d8, 0, 0,
+                              (int)self->GetTargetAsCreature(), 0);
+            return;
+        }
+        cBehaviorStimuli* stim = (cBehaviorStimuli*)((char*)cb + 8);
+        stim->Set(0x10000000, 0, g_1473c70, 0);
+        void* r = stim->Play(0x10000000, 0);
+        *(int*)((char*)r + 0x10) = index;
+        *(int*)((char*)r + 0x0c) = 0;
+        return;
+    }
+
+    // ---- 0x1e..0x21, 0x3d, 0x3e, 0x41, 0x42, 0x48..0x4b : use on target --
+    case 0x1e: case 0x1f: case 0x20: case 0x21:
+    case 0x3d: case 0x3e: case 0x41: case 0x42:
+    case 0x48: case 0x49: case 0x4a: case 0x4b: {
+        cTerrainEditor* sphere =
+            (cTerrainEditor*)((void*(__thiscall*)(void*))FUN_00f67d90)(SP_NounManager());
+        sphere->HasFlagOrInsert(0x52da1fe);
+        if (self->FUN_00c0ee60() == 0)
+            break;
+        cAbilityEntry* entry2 = vt->fnB4(self, index);
+        float rangeFactor = FUN_00d38a30(0, self);
+        void* z = FUN_00ad26d0(self->FUN_00c0ee60());
+        float result = g_147a2d8;
+        if (z != 0) {
+            float bits = g_147a2d8;
+            *(unsigned char*)&bits = (unsigned char)(entry2->mMode == 1);
+            result = FUN_00d99ac0((void*)((char*)self + 0xc0), z, *(unsigned int*)&bits);
+        }
+        if (((self->mB58 >> 9) & 1) != 0
+            && !(((entry2->mF0f4 + entry2->mF0a8) * rangeFactor) < result)) {
+            if (!(result < entry2->GetBound((int)((self->mB58 >> 9) & 1)))) {
+                if (((self->mB58 >> 9) & 1) != 0) {
+                    ((cCreatureBase*)FUN_00ac80d0(self, (void*)0x18eb45e))
+                        ->FUN_00c03c20(index);
+                    return;
+                }
+                goto attack;
+            }
+        }
+        if (g_1582df5 != 0)
+            goto labAttack;
+        if (entry2->GetBound((int)((self->mB58 >> 9) & 1)) > result)
+            goto labAttack;
+        if (result > (entry2->mF0f4 + entry2->mF0a8) * rangeFactor)
+            goto labAttack;
+        if (((self->mB58 >> 9) & 1) == 0)
+            break;
+        if (!(entry2->GetBound(1) > result))
+            break;
+        if (SP_GetCurrentGameMode() == (void*)&g_1654c01)
+            ((cUIHints*)FUN_0067cac0())->FUN_0067c830(0xc30cd054);
+        return;
+    labAttack:
+        if (entry2->mMode == 1)
+            self->mB5c = 1;
+        ((cCreatureBase*)FUN_00ac80d0(self, (void*)0x18eb45e))
+            ->FUN_00c03190(0x20, 0, g_147a2d8, index, 0, 0, 0);
+        return;
+    }
+
+    // ---- 0x31..0x33 ------------------------------------------------------
+    case 0x31: case 0x32: case 0x33: {
+        ((cCreatureBase*)FUN_00ac80d0(self, (void*)0x18eb45e))
+            ->FUN_00c03190(0x8000, 0, g_147a2d8, index, 0, 0, 0);
+        return;
+    }
+
+    // ---- 0x34..0x39 : give order to citizen ------------------------------
+    case 0x34: case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: {
+        cCitizen* citizen = (cCitizen*)FUN_00ac80d0(self, (void*)0x18eb4b7);
+        if (citizen == 0)
+            break;
+        Variant v;
+        v.SetInt(index);
+        citizen->GiveOrder((void*)0x16, 0, &v);
+        if ((v.mFlags & 4) != 0)
+            v.Destruct(0);
+        return;
+    }
+
     default:
         break;
     }
+
+    return;
+
+useAbility:
+    self->FUN_00c1b020((int)entry->mF104);
+    return;
+
+attack:
+    self->Attack(index, 0);
+    return;
 }
