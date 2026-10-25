@@ -8,3 +8,4 @@
 00596fc0  167  category compare reloads argument each iteration in original
 00597060  72  local slot layout of the two counters differs
 005970d0  210  aligned frame (and esp,-8) and inlined operator[] differ
+005965e0  198  complete; concrete model of fixed_hash_map_storage<0x18,4,5,0x4c> copy ctor (aligned pool init, hashtable base ctor, policy 10000/2, GetBucketCount/rehash, source-bucket scan + range insert); remaining diff is /O2 temp layout for the allocator/policy and x87-vs-SSE float stores; equiv WEAK 158 valid / 96.4% cov, no mismatch

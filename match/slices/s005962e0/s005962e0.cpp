@@ -151,12 +151,18 @@ struct hashtable_iterator {
 
 struct true_type {};
 
+struct fixed_pool_base {
+    void* mpHead;
+    void init(void* pMemory, uint32_t memorySize, uint32_t nodeSize, uint32_t alignment, uint32_t alignmentOffset); // 0x00921260
+};
+
 struct prime_rehash_policy {
     float mfMaxLoadFactor;
     float mfGrowthFactor;
     uint32_t mnNextResize;
     struct RehashResult { bool first; uint32_t second; };
     RehashResult GetRehashRequired(uint32_t nBucketCount, uint32_t nElementCount, uint32_t nElementAdd);  // 0x00921440
+    uint32_t GetBucketCount(uint32_t nElementCount) const;   // 0x009213C0
 };
 
 // fixed_hashtable_allocator: node pool + embedded bucket buffer
@@ -1080,13 +1086,88 @@ void cCollectableItems::LockItemsBeyond(int count)
     }
 }
 
+// fixed_hash_map_storage<0x18, 4, 5, 0x4c>: node pool at +0x4c (4 nodes of 0x18),
+// embedded bucket buffer at +0x34 (6 slots), prime-rehash policy at +0x10.
+struct FixedAllocator {
+    void* mpPoolBegin;      // +0x00
+    void* mpNext;           // +0x04
+    void* mpCapacity;       // +0x08
+    uint32_t mnNodeSize;    // +0x0c
+    void* mpUnused;         // +0x10
+    void* mpBucketBuffer;   // +0x14
+};
+
+struct MapIterator {
+    void*  mpNode;
+    void** mpBucket;
+};
+
+uint32_t GetPrevBucketCountOnly(uint32_t n);   // 0x00921340
+
+struct ItemMapStorage {
+    uint32_t mHashCodeBase;                     // +0x00
+    void**   mpBucketArray;                     // +0x04
+    uint32_t mnBucketCount;                     // +0x08
+    uint32_t mnElementCount;                    // +0x0c
+    eastl::prime_rehash_policy mRehashPolicy;  // +0x10
+    FixedAllocator mAllocator;                  // +0x1c
+    void* mBucketBuffer[6];                     // +0x34
+    char  mPool[0x60];                          // +0x4c
+    ItemMapStorage(const ItemMapStorage& other);
+    void BaseConstruct(uint32_t nBucketCount, const uint32_t& hash, const uint32_t& h2,
+                       const uint32_t& h3, const uint32_t& eq, const uint32_t& ex,
+                       const FixedAllocator& alloc);       // 0x005946b0
+    void DoRehash(uint32_t nNewBucketCount);              // 0x00593e70
+    void DoInsertRange(MapIterator first, MapIterator last); // 0x005959a0
+};
+
 } // namespace SP
 
 // @ 0x005965b0 ?push_back@?$sp_vector@PAX
 template void SP::sp_vector<void*>::push_back(void* const&);
-// PARTIAL 0x005965e0: fixed_hash_map copy constructor not reconstructed (base ctor + range insert); stub only
-// @ 0x005965e0 ?CopyConstructStub
-void CopyConstructStub() {}
+
+// @ 0x005965e0
+SP::ItemMapStorage::ItemMapStorage(const ItemMapStorage& other)
+{
+    eastl::fixed_pool_base pool;
+    pool.mpHead = 0;
+    pool.init(mPool, sizeof(mPool), 0x18, 8, 0);
+
+    FixedAllocator allocator;
+    allocator.mpPoolBegin = pool.mpHead;
+    allocator.mpNext = 0;
+    allocator.mpCapacity = mPool + sizeof(mPool);
+    allocator.mnNodeSize = 0x18;
+    allocator.mpUnused = 0;
+    allocator.mpBucketBuffer = mBucketBuffer;
+    uint32_t dummy = other.mHashCodeBase;
+    BaseConstruct(SP::GetPrevBucketCountOnly(5), dummy, dummy, dummy, dummy, dummy, allocator);
+    mRehashPolicy.mfMaxLoadFactor = 10000.0f;
+    mRehashPolicy.mfGrowthFactor = 2.0f;
+    mRehashPolicy.mnNextResize = 0;
+    eastl::prime_rehash_policy policy;
+    policy.mfMaxLoadFactor = 10000.0f;
+    policy.mfGrowthFactor = 2.0f;
+    policy.mnNextResize = 0;
+    const uint32_t nBuckets = policy.GetBucketCount(mnElementCount);
+    if (nBuckets > mnBucketCount)
+        DoRehash(nBuckets);
+
+    void** pBucket = other.mpBucketArray;
+    MapIterator first;
+    first.mpBucket = pBucket;
+    first.mpNode = *pBucket;
+    if (!first.mpNode) {
+        do {
+            ++first.mpBucket;
+            first.mpNode = *first.mpBucket;
+        } while (!first.mpNode);
+    }
+    MapIterator last;
+    last.mpBucket = pBucket + other.mnBucketCount;
+    last.mpNode = *last.mpBucket;
+    DoInsertRange(first, last);
+}
 // --- equivalence checker address annotations
     void* operator new[](unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
     void operator delete[](void*); // 0x00f47380

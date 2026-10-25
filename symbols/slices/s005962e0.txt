@@ -1,0 +1,14 @@
+005965b0 ?push_back@?$sp_vector@PAX@SP@@QAEXABQAX@Z  # sp_vector<void*>::push_back
+005965e0 ??0ItemMapStorage@SP@@QAE@ABU01@@Z  # fixed_hash_map_storage<0x18,4,5,0x4c> copy constructor (concrete model)
+005968b0 ?DoRealloc@fixed_vector_u64@SP@@QAEPA_KIPA_K0@Z  # fixed_vector_u64::DoRealloc
+00596b70 ?IsSetInState@cCollectableItems@SP@@QAE_N_KHH@Z  # cCollectableItems::IsSetInState
+00596d70 ?LockItem@cCollectableItems@SP@@QAEX_K@Z  # cCollectableItems::LockItem
+00596da0 ?UnlockItem@cCollectableItems@SP@@QAE_N_KH@Z  # cCollectableItems::UnlockItem
+00596e10 ?ResetItem@cCollectableItems@SP@@QAE_N_K@Z  # cCollectableItems::ResetItem
+00596e40 ?GetItemFlags@cCollectableItems@SP@@QAEI_K@Z  # cCollectableItems::GetItemFlags
+005946b0 ?BaseConstruct@ItemMapStorage@SP@@QAEXIABI0000ABUFixedAllocator@2@@Z  # eastl hashtable base constructor (this, bucket count, functor refs, allocator)
+005959a0 ?DoInsertRange@ItemMapStorage@SP@@QAEXUMapIterator@2@0@Z  # eastl hashtable range insert (first, last)
+00593e70 ?DoRehash@ItemMapStorage@SP@@QAEXI@Z  # eastl hashtable rehash
+00921260 ?init@fixed_pool_base@eastl@@QAEXPAXIIII@Z  # eastl::fixed_pool_base::init
+009213c0 ?GetBucketCount@prime_rehash_policy@eastl@@QBEII@Z  # prime_rehash_policy::GetBucketCount(element count)
+00921340 ?GetPrevBucketCountOnly@SP@@YAII@Z  # GetPrevBucketCountOnly(bucket count hint)
