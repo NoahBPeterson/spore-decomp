@@ -1,1 +1,2 @@
 slices/s0132cde0/s0132cde0.cpp  ?InitCultureTargetInfoAttributes@Simulator@@YAXXZ  0132cde0
+slices/s0132cde0/s0132cde0.cpp  ?InitCultureTargetEventInfoAttributes@Simulator@@YAXXZ  0132d450  /O2 /MD /Gy /EHsc /TP

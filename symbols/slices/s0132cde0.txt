@@ -1,2 +1,3 @@
 # va  name  # evidence
 0132cde0 Simulator::tCultureTargetInfo_InitAttributes  # dynamic initializer of the 17-row Simulator::Attribute table at 0x0156e448; member names/offsets agree with ModAPI cCity.h tCultureTargetInfo (mBucketMaxPopulation 0x00, mConvertCheckTimer 0x30, mAttackTarget 0x70, mCultureObject 0x78)
+0132d450 Simulator::tCultureTargetEventInfo_InitAttributes  # dynamic initializer of the 6-row Simulator::Attribute table at 0x0156e880; mEventGuid 0x00, mTriggerTime 0x08 (int64), mUserFloat1 0x10, mUserFloat2 0x14, mUserUint1 0x18, mUserUint2 0x1c

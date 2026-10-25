@@ -165,4 +165,35 @@ void InitCultureTargetInfoAttributes()
     ADD(16, "mCultureObject", 0x068c3c4f, 0x78, OBJECT_ATTR)
 }
 
+// ---------------------------------------------------------------------------
+// Dynamic initializer of the Simulator::tCultureTargetEventInfo attribute table
+// (6 records at 0x0156e880..0x0156e9e8).  Same record layout as the table above.
+// ---------------------------------------------------------------------------
+
+bool Read_00aff840(ISerializerReadStream* pStream, void* pData);   // 0x00aff840
+bool Write_00aff870(ISerializerWriteStream* pStream, void* pData); // 0x00aff870
+void ReadText_00692fd0(const string8& text, void* pData);          // 0x00692fd0
+void WriteText_00694ec0(char* pBuffer, void* pData);               // 0x00694ec0
+void ReadText_00693090(const string8& text, void* pData);          // 0x00693090
+void WriteText_00694f00(char* pBuffer, void* pData);               // 0x00694f00
+bool ToXml_00675ca0(void* pData, const char* pName, int depth);    // 0x00675ca0
+bool ToXml_00595a70(void* pData, const char* pName, int depth);    // 0x00595a70
+
+extern AttrSlot tCultureTargetEventInfo_sAttributes[6];            // 0x0156e880
+
+#define UINT_ATTR   Read4<unsigned int>, Write4<unsigned int>, ReadText_00693090, WriteText_00694f00, AlwaysValid<unsigned int>, ToXml_00675ca0
+#define INT64_ATTR  Read_00aff840, Write_00aff870, ReadText_00692fd0, WriteText_00694ec0, AlwaysValid<__int64>, ToXml_00595a70
+#define ADD_EVT(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&tCultureTargetEventInfo_sAttributes[IDX] = a; }
+
+// @ 0x0132d450
+void InitCultureTargetEventInfoAttributes()
+{
+    ADD_EVT(0, "mEventGuid", 0x0664d6d1, 0x00, UINT_ATTR)
+    ADD_EVT(1, "mTriggerTime", 0x0664d6d2, 0x08, INT64_ATTR)
+    ADD_EVT(2, "mUserFloat1", 0x0664d6d3, 0x10, FLOAT_ATTR)
+    ADD_EVT(3, "mUserFloat2", 0x0664d6d4, 0x14, FLOAT_ATTR)
+    ADD_EVT(4, "mUserUint1", 0x0664d6d5, 0x18, UINT_ATTR)
+    ADD_EVT(5, "mUserUint2", 0x0664d6d6, 0x1c, UINT_ATTR)
+}
+
 }  // namespace Simulator
