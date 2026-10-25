@@ -1,2 +1,1 @@
-006b54b0  202  SP::cString::Load: structure present but resource-manager slot call / Resource stream plumbing approximated
-006b55c0  208  SP::cString::GetText: incomplete (empty-string allocation path approximated)
+# va  reason
