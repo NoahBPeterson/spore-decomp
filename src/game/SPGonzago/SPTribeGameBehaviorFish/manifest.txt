@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPTribeGameBehaviorFish.cpp  ?SP_ClearCellByIndex@@YAXPAUcSurfaceSampler@SP@@I@Z  00d726e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeGameBehaviorFish.cpp  ?SP_ClearCellAtPos@@YAXPBUcSPVector3@SP@@I@Z  00d72720  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeGameBehaviorFish.cpp  ?SP_GetCellByIndex@@YAPAXPAUcSurfaceSampler@SP@@I@Z  00d72770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeGameBehaviorFish.cpp  ?CalledByStimulus@cTribeGameBehaviorFish_s00d7_5400@@QAEXPAVcGameObject@@PAVcStimulus@@@Z  00d75400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
