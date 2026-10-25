@@ -1,1 +1,7 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b60110/s00b60110.cpp  ??0cPauseUIVisibleCommand@App@@QAE@XZ  00b60350  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b60110/s00b60110.cpp  ??0cStyleFilter@App@@QAE@XZ  00b604a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b60110/s00b60110.cpp  ?FUN_00b60830@cStyleFilter@App@@QAEPAXH@Z  00b60830  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b60110/s00b60110.cpp  ??0cAdventureLook@App@@QAE@XZ  00b60870  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b60110/s00b60110.cpp  ?FUN_00b60a70@UnnamedCommandA70@@QAEXPAUcArguments@ArgScript@EA@@@Z  00b60a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b60110/s00b60110.cpp  ?OnKeyDown@cAppModeSpace@@QAEXH@Z  00b60bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
