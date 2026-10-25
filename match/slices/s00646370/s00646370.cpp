@@ -480,6 +480,73 @@ bool __stdcall CloneModelAsset(Key key, Key* pOutKey, int size, bool bKeepParent
     return true;
 }
 
+// ---------------------------------------------------------------------------
+// @ 0x00646ae0  swatch owner: widen the template constraint set
+// ---------------------------------------------------------------------------
+#define PV(n) virtual void _pv##n();
+
+// A functional-match constraint; 9 dwords, destroyed element by element.
+class Constraint {
+public:
+    Constraint(void* pAllocator);                                    // 0x00558830
+    Constraint(uint32_t prop, int range, int32_t low, int32_t high); // 0x005589c0
+    ~Constraint();                                                   // 0x006066f0
+    uint32_t mData[9];
+};
+
+// The out-parameter vector (same three-pointer layout as the other vectors).
+struct ConstraintVec {
+    Constraint* mpBegin;      // +0x00
+    Constraint* mpEnd;        // +0x04
+    Constraint* mpCapacity;   // +0x08
+};
+
+// Plain element vector filled by the constraint source below.
+struct SpanVec {
+    void* mpBegin;            // +0x00
+    void* mpEnd;              // +0x04
+    void* mpCapacity;         // +0x08
+};
+
+// The object-template database hands the two constraints to its rule builder.
+class ObjectTemplateDB {
+public:
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12)
+    virtual void __cdecl Combine(ConstraintVec* pOut, Constraint specific,
+                                 Constraint wildcard);               // +0x34
+};
+ObjectTemplateDB* __cdecl SP_ObjectTemplateDB();                     // 0x0067cb40
+
+// Whatever object the swatch owner keeps at +0xb8; it fills the span vector.
+class ConstraintSource {
+public:
+    void CollectConstraints(SpanVec* pOut);                          // 0x006445c0
+};
+
+struct SwatchOwner {
+    uint32_t mData[0x2e];               // +0x00..0xb7
+    ConstraintSource* mpConstraintSource;  // +0xb8
+};
+
 // @ 0x00646ae0
-void __fastcall sub_646ae0(void*) {
+void __fastcall sub_646ae0(void* pSelf) {
+    SwatchOwner* const pOwner = (SwatchOwner*)pSelf;
+    if (pOwner->mpConstraintSource == 0) return;
+
+    SpanVec scratch;
+    scratch.mpBegin = 0;
+    scratch.mpEnd = 0;
+    scratch.mpCapacity = 0;
+
+    ObjectTemplateDB* const pTemplateDB = SP_ObjectTemplateDB();
+    Constraint wildcard((void*)0);
+    Constraint specific(0x2dc9d1e, 0, -2147483647 - 1, 2147483647);
+    ConstraintVec combined;
+    pTemplateDB->Combine(&combined, specific, wildcard);
+    for (Constraint* p = combined.mpBegin; p < combined.mpEnd; ++p)
+        p->~Constraint();
+    FreeChecked(combined.mpBegin);
+
+    pOwner->mpConstraintSource->CollectConstraints(&scratch);
+    FreeChecked(scratch.mpBegin);
 }
