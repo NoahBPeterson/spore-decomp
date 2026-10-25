@@ -24,7 +24,8 @@ extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void*);
 extern "C" void* FUN_007658f0();               // (unused here)
 extern "C" void* FUN_007654f0();
 extern "C" void  FUN_00704d80(void*);
-extern "C" void* FUN_0067dcd0_GetManager();
+struct IResManager;
+extern "C" IResManager* FUN_0067dcd0_GetManager();
 extern "C" void* FUN_0067de10();
 extern "C" void  FUN_0067dfe0(void*);
 extern "C" void* FUN_0067dd70_MaterialManager();
@@ -119,7 +120,6 @@ struct cTextRenderer {
 extern "C" void cTextRenderer_ctor(cTextRenderer*);      // 007a7210-ish init
 extern "C" void FUN_007a7d50(cTextRenderer*);
 extern "C" void FUN_007a8360();
-extern "C" void FUN_007a8810();
 
 // @ 0x007a82a0
 void cTextRenderer::SetStyle(int style)
@@ -305,7 +305,7 @@ cTextRenderer::~cTextRenderer()
 }
 
 // @ 0x007a8810
-void FUN_007a8810()
+extern "C" void* FUN_007a8810()
 {
     void* p = EASTL_allocator_allocate(0x1a8, "Graphics", 0, 0, 0, 0);
     if (p) {
@@ -321,6 +321,7 @@ void FUN_007a8810()
     ((void(__thiscall*)(void*, int, int))((*(void***)p)[0x10 / 4]))(p, 2, 1);
     ((void(__thiscall*)(void*, int, int))((*(void***)p)[0x08 / 4]))(p, 1, 0);
     FUN_0067dfe0(p);
+    return p;
 }
 
 // @ 0x007a88b0  scalar deleting destructor of the 0x1a8-byte render object
@@ -407,9 +408,314 @@ extern "C" void* FUN_007a8910(GlyphVec* self, void* position, void* value)
     return self->begin;
 }
 
-// @ 0x007a7d50  large render initialization; body omitted (partial)
-extern "C" void FUN_007a7d50(cTextRenderer* self)
+// ===========================================================================
+// SP::cGraphicsSystem::Init  (0x007a7d50)
+// ===========================================================================
+extern "C" long _InterlockedExchangeAdd(volatile long* addend, long value);
+#pragma intrinsic(_InterlockedExchangeAdd)
+
+// unnamed retail entry points
+struct IManager;
+extern "C" void  FUN_007c3a80();                 // thunk_FUN_007c3910
+extern "C" void  FUN_006ddf80();
+extern "C" void  FUN_007a41c0();
+extern "C" void  FUN_006e10a0();                 // CreateBufferCheats
+extern "C" void  FUN_006efb90();                 // CreateEffectsRendererSystem
+extern "C" void  FUN_0067df70(void*);
+extern "C" void  FUN_0067df80(void*);
+extern "C" void  FUN_0067df90(void*);
+extern "C" void  FUN_0067dfa0(void*);
+extern "C" void  FUN_0067dfb0(void*);
+extern "C" void  FUN_0067dfc0(void*);
+extern "C" void  FUN_0067dfd0(void*);
+extern "C" void  FUN_0067e010(void*);
+extern "C" void  FUN_0067e020(void*);
+extern "C" IManager* FUN_007ac410();
+extern "C" void* FUN_007a8810();                 // CreateTextRenderWareObject
+struct Obj2c;
+extern "C" Obj2c* CreateObj2c_76e610();          // 0x0076e610
+extern "C" IManager* FUN_00713c40();
+extern "C" IManager* FUN_0070a040();
+extern "C" IManager* FUN_0074fe70();
+extern "C" IManager* FUN_007b6af0();
+extern "C" char  FUN_007a49e0(int format);       // D3D format-support probe
+extern "C" int   sCameraFormats_153b69c[4];      // 0x0153b69c
+
+// six-argument placement allocation used by the "App" zone.  The `long` line parameter (vs `int` on
+// the Graphics-zone operator) keeps the two address annotations distinguishable for resolve.py.
+void* operator new(unsigned int size, const char* name, int flags, int debugFlags,
+                   const char* file, long line);   // 0x00f473a0
+void  operator delete(void* p, const char* name, int flags, int debugFlags,
+                      const char* file, long line);
+
+struct IRefCounted {
+    virtual int AddRef();                  // +0x00
+    virtual int Release();                 // +0x04
+};
+
+// manager interface: slot 0x08/0x0c/0x10 are the init/shutdown entry points used here
+struct IManager : IRefCounted {
+    virtual void v02();                    // +0x08
+    virtual void v03();                    // +0x0c
+    virtual void v04();                    // +0x10
+};
+
+// resource-manager singleton: slot 0x44 registers a resource
+struct IResManager {
+    virtual void r00(); virtual void r01(); virtual void r02(); virtual void r03();
+    virtual void r04(); virtual void r05(); virtual void r06(); virtual void r07();
+    virtual void r08(); virtual void r09(); virtual void r10(); virtual void r11();
+    virtual void r12(); virtual void r13(); virtual void r14(); virtual void r15();
+    virtual void r16();
+    virtual void Register(int kind, void* resource, int flags);   // +0x44
+};
+
+// renderer interface: slot 0x4c takes an effect object
+struct cIRenderer {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18();
+    virtual void AddEffectObject(void* object, int a, int b);     // +0x4c
+};
+
+// objects registered with the resource manager at startup (both zone "Graphics")
+struct GraphicsZoneObject {
+    static void* operator new(unsigned int size, const char* name, int flags, int debugFlags,
+                              const char* file, int line);    // 0x00926020
+    static void  operator delete(void* p, const char* name, int flags, int debugFlags,
+                                 const char* file, int line);
+};
+struct cRenderDeviceKey : GraphicsZoneObject {
+    char mData[0x0c];
+    cRenderDeviceKey();                    // 0x007654f0
+};
+struct cRenderInfoKey : GraphicsZoneObject {
+    char mData[0x08];
+    cRenderInfoKey();                      // 0x00704d80
+};
+
+struct cFilterChain : IRefCounted {
+    virtual void v02();
+    virtual void v03();
+    virtual void Initialize();             // +0x10
+    cFilterChain();
+    char mData[0x228 - 0x04];
+};
+
+struct cEffectsResources : IRefCounted {
+    void ResourceInit();                   // 0x006f1860
+    cEffectsResources();
+    char mData[0xc8 - 0x04];
+};
+
+struct cEffectsRenderer : IRefCounted {
+    virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05();
+    virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21();
+    virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25();
+    virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+    virtual void SetRenderLevel(int level);                     // +0x78
+    cEffectsRenderer();
+    char mData[0x388 - 0x04];
+};
+
+// first base carries its own vtable so the ref-count vtable lands at +0x08
+struct ShadowPrimary { virtual void v00(); int mPad; };
+struct cShadowWorld : ShadowPrimary, IRefCounted {   // ref-count vtable at +0x08
+    void Update();                               // 0x00780ab0
+    cShadowWorld();
+    char mData[0x228 - 0x0c];
+};
+
+// small two-vtable Havok object handed to the renderer
+extern char VT_hkReferencedObject_13ef094[];
+extern char VT_cFinalObj_140b778[];
+extern char VT_cFinalObj_14188c0[];
+struct cFinalObj {
+    void* mVtbl0;          // +0x00
+    void* volatile mVtbl4; // +0x04 (retail keeps the first vtable store)
+    int   mRefCount;       // +0x08
+    cFinalObj()
+    {
+        mVtbl4 = (void*)&VT_hkReferencedObject_13ef094;
+        mRefCount = 0;
+        mVtbl0 = (void*)&VT_cFinalObj_140b778;
+        mVtbl4 = (void*)&VT_cFinalObj_14188c0;
+    }
+};
+
+// AutoRefCount-style release used for the plain texture pointers: fetch-add -1, read back,
+// saturate at 1.  Mirrors the retail helper's shape (pointer kept in eax).
+inline void ReleaseRefCount(void* p, int rcOffset = 8)
 {
-    self->mInitialized = true;
-    self->Init();
+    if (p) {
+        volatile long* rc = (volatile long*)((char*)p + rcOffset);
+        _InterlockedExchangeAdd(rc, -1);
+        long cur = _InterlockedExchangeAdd(rc, 0);
+        if (cur < 1)
+            _InterlockedExchangeAdd(rc, 1);
+        else
+            _InterlockedExchangeAdd(rc, 0);
+    }
+}
+
+template <typename T>
+struct AutoRef {
+    T* mpObject;
+    T* operator->() const { return mpObject; }
+    // volatile-qualified read: retail reloads the handle with a volatile access before
+    // handing it to the manager-registration helpers
+    T* GetRaw() const volatile { return mpObject; }
+    AutoRef& operator=(T* p)
+    {
+        T* old = mpObject;
+        if (p != old) {
+            if (p)
+                p->AddRef();
+            mpObject = p;
+            if (old)
+                old->Release();
+        }
+        return *this;
+    }
+};
+
+struct AppPropsInner {
+    char pad000[0x130];
+    int  mFlag;                            // +0x130
+};
+struct AppProps {
+    char pad000[0x3c];
+    AppPropsInner* mpInner;                // +0x03c
+};
+extern "C" AppProps* _sAppProperties;      // 0x015fd918
+
+struct cGraphicsSystem {
+    void* vtbl0;                                   // +0x000
+    void* vtbl1;                                   // +0x004
+    int   pad008;                                  // +0x008
+    bool  mInitialized;                            // +0x00c
+    char  pad00d[3];
+    cIRenderer* mRenderer;                         // +0x010
+    AutoRef<IManager> mTextureManager;             // +0x014
+    AutoRef<IManager> mRTTManager;                 // +0x018
+    AutoRef<IManager> mThumbnailManager;           // +0x01c
+    AutoRef<IManager> mMaterialManager;            // +0x020
+    AutoRef<IManager> mLightingManager;            // +0x024
+    AutoRef<IManager> mModelManager;               // +0x028
+    void* mDebugDraw;                              // +0x02c
+    AutoRef<cFilterChain> mFilterChainRenderer;    // +0x030
+    AutoRef<cEffectsResources> mEffectsResources;  // +0x034
+    AutoRef<cEffectsRenderer> mEffectsRenderer;    // +0x038
+    AutoRef<cShadowWorld> mShadowWorld;            // +0x03c
+    char pad040[0x80 - 0x40];
+    void* mCameraSnapshotZTexture;                 // +0x080
+    char pad084[0x8c - 0x84];
+    void* mBakeBuffers[2];                         // +0x08c
+    char pad094[0x9c - 0x94];
+    void* mBufferTextures[4];                      // +0x09c
+    char pad0ac[0x16c - 0xac];
+    int   mCameraSnapshotFormat;                   // +0x16c
+    char pad170[0x190 - 0x170];
+    bool  mDebugFlushState;                        // +0x190
+
+    bool Init();
+    void CreateBuiltinModels();                    // 0x007a7210
+    void InitShadowTexture();                      // 0x007a57d0
+    void InitSnapshotTexture();                    // 0x007a5900
+    void InitBufferTexture(int index);             // 0x007a66c0
+};
+
+// @ 0x007a7d50
+bool cGraphicsSystem::Init()
+{
+    mInitialized = true;
+
+    FUN_0067dcd0_GetManager()->Register(1, new ("Graphics", 0, 0, 0, 0) cRenderDeviceKey(), 0);
+    FUN_0067dcd0_GetManager()->Register(1, new ("Graphics", 0, 0, 0, 0) cRenderInfoKey(), 0);
+
+    FUN_007c3a80();
+    FUN_006ddf80();
+    FUN_007a41c0();
+    FUN_006e10a0();
+
+    mTextureManager = FUN_007ac410();
+    mTextureManager->v03();
+    FUN_0067df80(mTextureManager.GetRaw());
+
+    FUN_007a8810();
+    mRTTManager = (IManager*)CreateObj2c_76e610();
+    mRTTManager->v02();
+    FUN_0067dfb0(mRTTManager.GetRaw());
+
+    mMaterialManager = FUN_00713c40();
+    mMaterialManager->v03();
+    FUN_0067df70(mMaterialManager.GetRaw());
+
+    mLightingManager = FUN_0070a040();
+    mLightingManager->v03();
+    FUN_0067dfa0(mLightingManager.GetRaw());
+
+    mModelManager = FUN_0074fe70();
+    mModelManager->v03();
+    FUN_0067df90(mModelManager.GetRaw());
+
+    CreateBuiltinModels();
+
+    mThumbnailManager = FUN_007b6af0();
+    mThumbnailManager->v03();
+    FUN_0067dfc0(mThumbnailManager.GetRaw());
+
+    mFilterChainRenderer = new ("App", 0, 0, 0, 0) cFilterChain();
+    mFilterChainRenderer->Initialize();
+
+    mEffectsResources = new ("App", 0, 0, 0, 0) cEffectsResources();
+    mEffectsResources->ResourceInit();
+    FUN_0067e010(mEffectsResources.GetRaw());
+
+    FUN_006efb90();
+
+    mEffectsRenderer = new ("App", 0, 0, 0, 0) cEffectsRenderer();
+    mEffectsRenderer->SetRenderLevel(0x1f);
+    FUN_0067e020(mEffectsRenderer.GetRaw());
+
+    mShadowWorld = new ("App", 0, 0, 0, 0) cShadowWorld();
+    mShadowWorld->Update();
+    FUN_0067dfd0(mShadowWorld.mpObject ? (char*)mShadowWorld.mpObject + 8 : 0);
+
+    mRenderer->AddEffectObject(new ("App", 0, 0, 0, 0) cFinalObj(), 0, 0);
+
+    mBufferTextures[0] = 0;
+    mBufferTextures[1] = 0;
+    mBufferTextures[2] = 0;
+    mBufferTextures[3] = 0;
+
+    InitShadowTexture();
+    InitSnapshotTexture();
+    for (unsigned int i = 0; i < 4; ++i)
+        InitBufferTexture((int)i);
+
+    mCameraSnapshotZTexture = 0;
+    for (int i = 0; i < 2; ++i) {
+        if (mBakeBuffers[i]) {
+            void* p = mBakeBuffers[i];
+            mBakeBuffers[i] = 0;
+            ReleaseRefCount(p);
+        }
+    }
+
+    mCameraSnapshotFormat = -1;
+    for (unsigned int i = 0; i < 4; ++i) {
+        if (FUN_007a49e0(sCameraFormats_153b69c[i])) {
+            mCameraSnapshotFormat = sCameraFormats_153b69c[i];
+            break;
+        }
+    }
+
+    mDebugFlushState = _sAppProperties->mpInner->mFlag != 0;
+    return true;
 }
