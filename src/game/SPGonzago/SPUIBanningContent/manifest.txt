@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?SomeObj_DoMessage@@YG_NPAXPAUSomeMessage@@@Z  00dd1250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?Init@cUIBanningContent@SP@@QAEXXZ  00dd12f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?Shutdown@cUIBanningContent@SP@@QAEXXZ  00dd14b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?SetModeWindows@cUIBanningContent@SP@@SAX_N@Z  00dd1520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?FUN_00dd1670@SP@@YIXPAUcBanUiObject@1@@Z  00dd1670  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?GetKey@cUIBanningContent@SP@@SAPAHPAUIQueryable@2@@Z  00dd1730  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?ToggleBanningContent@cUIBanningContent@SP@@SAX_N@Z  00dd17f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?EndBanMode@cUIBanningContent@SP@@SAX_N@Z  00dd1840  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?GetBannability@cUIBanningContent@SP@@SA_NPAUIQueryable@2@@Z  00dd18b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?GetBanMode@cUIBanningContent@SP@@SAHPAH@Z  00dd18d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
