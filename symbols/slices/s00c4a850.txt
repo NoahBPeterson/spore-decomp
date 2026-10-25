@@ -1,2 +1,6 @@
 00c4a850 ?ReadBannerList@cBannerListHost@@QAE_NPAX@Z  # cBannerListHost::ReadBannerList migrated from s00c4a850 (verbatim, slice spelling)
 00c4b760 ?ReturnForRewards@cSPMissionMultiDelivery@@QAEXXZ  # cSPMissionMultiDelivery::ReturnForRewards migrated from s00c4a850 (verbatim, slice spelling)
+00c4baa0 ?InitWrapper@cSPMissionMultiDelivery@@QAE_NXZ  # cSPMissionMultiDelivery::InitWrapper migrated from s00c4a850 (verbatim, slice spelling)
+00c4bb60 ?IsAtDeliveryTarget@cSPMissionMultiDelivery@@QAE_NPAXPAUResourceKey@@@Z  # cSPMissionMultiDelivery::IsAtDeliveryTarget migrated from s00c4a850 (verbatim, slice spelling)
+00c4bba0 ?GetCountA@cSPMissionMultiDelivery@@QAEHXZ  # cSPMissionMultiDelivery::GetCountA migrated from s00c4a850 (verbatim, slice spelling)
+00c4bbc0 ?GetCountB@cSPMissionMultiDelivery@@QAEHXZ  # cSPMissionMultiDelivery::GetCountB migrated from s00c4a850 (verbatim, slice spelling)

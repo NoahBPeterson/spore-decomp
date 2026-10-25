@@ -1,0 +1,18 @@
+# va  diff-bytes  reason   (all compiled /O2 /MD /Gy /EHsc /TP)
+00c4bca0 5 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 81 bytes - float helper over the mission object; body not reconstructed.
+00c4bf80 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 261 bytes - cSPMissionBiosphere::GetPlanetCount walks the planet list; body not reconstructed.
+00c4c090 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 152 bytes - biosphere helper body not reconstructed.
+00c4c130 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 378 bytes - biosphere event handler body not reconstructed.
+00c4c2f0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 156 bytes - Simulator::cMissionBiosphere constructor; the retail vtable stores and member-initialiser sequence are not reproduced.
+00c4c3f0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 85 bytes - biosphere helper body not reconstructed.
+00c4c450 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 89 bytes - biosphere helper body not reconstructed.
+00c4c4b0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 350 bytes - cSPMissionBiosphere::UpdateEventLog body not reconstructed.
+00c4c610 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 126 bytes - biosphere helper body not reconstructed.
+00c4c690 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 244 bytes - biosphere helper body not reconstructed.
+00c4c790 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 179 bytes - biosphere helper body not reconstructed.
+00c4c850 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 191 bytes - biosphere helper body not reconstructed.
+00c4c910 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 630 bytes - biosphere mission update body not reconstructed.
+00c4cb90 281 FindClosestDiseasedAnimal: complete; residual is loop/register scheduling and the register-promotion of out.mpEnd in the manual push_back (the original keeps it in ebx and stores it back, ours reloads).  equiv FAIL is a false positive: the sole differing observable is the undefined AH byte of the 16-bit view of the char return (AL, esp, ebx/esi/edi/ebp and every written byte agree); only 5/400 inputs are valid (27% coverage).
+00c4ccd0 624 FailCurrentPhase: complete; residual is call/stack scheduling and register allocation.  equiv WEAK (352 valid, 7.9% coverage, no mismatch).
+00c4d050 159 OnPlanetDeactivate: complete; residual is one extra stack slot plus the inner-loop register roles (the original assigns ebx=&members / ebp=j, ours the reverse) and branch layout.  equiv WEAK (240 valid, 45.8% coverage, no mismatch).
+00c4d150 737 UpdateStateMachine: complete; residual is call/stack scheduling across the large switch and register allocation.  equiv WEAK (252 valid, 8.3% coverage, no mismatch).

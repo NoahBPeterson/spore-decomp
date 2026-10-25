@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?InitWrapper@cSPMissionMultiDelivery@@QAE_NXZ  00c4baa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?IsAtDeliveryTarget@cSPMissionMultiDelivery@@QAE_NPAXPAUResourceKey@@@Z  00c4bb60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?GetCountA@cSPMissionMultiDelivery@@QAEHXZ  00c4bba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?GetCountB@cSPMissionMultiDelivery@@QAEHXZ  00c4bbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4bd00@SP@@YIXPAVcSPMissionBase_s00c4_bc00@1@H@Z  00c4bd00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4bd30@SP@@YIXPAVcSPMissionBase_s00c4_bc00@1@HPAUtUShortVector@1@@Z  00c4bd30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

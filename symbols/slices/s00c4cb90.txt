@@ -1,0 +1,4 @@
+00c4cb90 ?FindClosestDiseasedAnimal@cSPMissionBiosphere_s00c4_cb90@@QAEDPAXPAUVec3@@@Z  # cSPMissionBiosphere_s00c4_cb90::FindClosestDiseasedAnimal migrated from s00c4cb90 (verbatim, slice spelling)
+00c4ccd0 ?FailCurrentPhase@cSPMissionBiosphere_s00c4_cb90@@QAEHXZ  # cSPMissionBiosphere_s00c4_cb90::FailCurrentPhase migrated from s00c4cb90 (verbatim, slice spelling)
+00c4d050 ?OnPlanetDeactivate@cSPMissionBiosphere_s00c4_cb90@@QAEXXZ  # cSPMissionBiosphere_s00c4_cb90::OnPlanetDeactivate migrated from s00c4cb90 (verbatim, slice spelling)
+00c4d150 ?UpdateStateMachine@cSPMissionBiosphere_s00c4_cb90@@QAEHH@Z  # cSPMissionBiosphere_s00c4_cb90::UpdateStateMachine migrated from s00c4cb90 (verbatim, slice spelling)
