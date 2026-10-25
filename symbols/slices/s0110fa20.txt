@@ -1,4 +1,9 @@
-0110fa20 FUN_0110fa20  # undefined4 (undefined4*,int,float*,float*) float/vector routine; naked asm, byte-exact
-0110fc50 FUN_0110fc50  # void __fastcall (byte*) leaf; naked asm, byte-exact
-0110fd70 FUN_0110fd70  # void (byte*,int); naked asm, byte-exact
-0110fdd0 FUN_0110fdd0  # void (undefined1*,int*); naked asm, byte-exact
+# Slice s0110fa20 names.
+# 0110fa20  FUN_0110fa20              nonmatching (895 diff, 739 vs 555)
+# 0110fc50  hkGskManifold_removeUnusedVertices  nonmatching (261 diff, 278 vs 282)
+# 0110fd70  FUN_0110fd70              nonmatching (58 diff, 88 vs 88)
+# 0110fdd0  FUN_0110fdd0              nonmatching (90 diff, 87 vs 79)
+0110fa20 ?FUN_0110fa20@@YAHPAHPAEPAM2@Z  # nonmatching: hkGsk feature query, two vtable calls + getClosestFeature/sortFeatureIndices
+0110fc50 ?hkGskManifold_removeUnusedVertices@@YIXPAE@Z  # nonmatching: manifold vertex compaction
+0110fd70 ?FUN_0110fd70@@YAXPAEH@Z  # nonmatching: remove one manifold record and shift the index array
+0110fdd0 ?FUN_0110fdd0@@YAXPAEPAX@Z  # nonmatching: walk manifold records, dispatch vtbl[4], clear counts
