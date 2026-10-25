@@ -240,6 +240,8 @@ struct Vec1 {
 extern "C" void __fastcall FUN_00f8f330(Vec1* self, void*, u8* pos,
                                          unsigned int n, const u8* pvalue)
 {
+    unsigned savedEcx;
+    __asm { mov savedEcx, ecx }
     if (n > (unsigned int)(self->mpCap - self->mpEnd)) {
         int size = (int)(self->mpEnd - self->mpBegin);
         unsigned int newCap = (unsigned int)(size * 2);
@@ -289,4 +291,5 @@ extern "C" void __fastcall FUN_00f8f330(Vec1* self, void*, u8* pos,
                 *q = v;
         }
     }
+    __asm { mov ecx, savedEcx }
 }
