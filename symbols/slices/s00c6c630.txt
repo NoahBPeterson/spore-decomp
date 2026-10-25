@@ -1,0 +1,5 @@
+00c6c630 ?FUN_00c6c630@@YAXXZ  # FUN_00c6c630 migrated from s00c6c630 (verbatim, slice spelling)
+00c6c760 ?Write@@YAXXZ  # Write migrated from s00c6c630 (verbatim, slice spelling)
+00c6c8c0 ?RemoveOwner@cNest_s00c6_a550@SP@@QAEXXZ  # RemoveOwner migrated from s00c6c630 (verbatim, slice spelling)
+00c6cbf0 ?FUN_00c6cbf0@@YAXXZ  # FUN_00c6cbf0 migrated from s00c6c630 (verbatim, slice spelling)
+00c6cf10 ?AddEggInNest@@YAXXZ  # AddEggInNest migrated from s00c6c630 (verbatim, slice spelling)

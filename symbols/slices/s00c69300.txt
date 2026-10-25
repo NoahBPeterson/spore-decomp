@@ -1,0 +1,1 @@
+00c69db0 ?Cast@cObject@@QAEPAXH@Z  # cObject::Cast migrated from s00c69300 (verbatim, slice spelling)
