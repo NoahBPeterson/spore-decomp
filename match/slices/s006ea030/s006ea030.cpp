@@ -36,7 +36,15 @@ extern float  g1533c98;
 extern float  g1533c9c;
 extern float  g1533ca0;
 extern float  g1533ca4;
-extern void*  g15ddc84;
+extern void** g15ddc84;      // 0x15ddc84: singleton slot for cStaticBufferDraw
+extern void   f777b50(void*);   // 0x777b50 SP::SetShaderData            (cdecl, 1 arg)
+extern void   f11ee580(void*);  // 0x11ee580 rw::graphics::CompiledState::Dispatch (thiscall)
+extern void   f11f1280(int, void*); // 0x11f1280 rw::graphics::ActiveState::SetTexture
+extern void   f7a4710(void*);   // 0x7a4710 SP::cStaticBuffer::Flush      (thiscall)
+extern void   f700120();        // 0x700120 cFrustumCull::FrustumTestSphere (thiscall, 3 args)
+extern uint   g16f8b00;         // 0x16f8b00 raster-delta dirty mask
+extern uint   g16f9110;         // 0x16f9110 soft-state dirty mask
+extern int    g140afc4;         // 0x140afc4 identity/default quad state
 
 #define VFN(p, off)  (*(void***)(p))[((off) >> 2)]
 
@@ -53,7 +61,7 @@ struct S6 {
     // 0x6ea030 render pass A
     void m030(int a, int b, int c);
     // 0x6ea470 render pass B
-    void m470(int a, uint flags, int c);
+    void m470(int a, uint flags, int c, void* viewer);
     // 0x6ea920 EH dtor
     void m920();
     // 0x6ea9e0 setter
@@ -132,29 +140,166 @@ void S6::m030(int a, int b, int c)
 
 // ---------------------------------------------------------------------------
 // @ 0x006ea470
-void S6::m470(int a, uint flags, int c)
+// Render pass B: walk bucket `a`'s list of 8-byte {tag, entity} records.  Each
+// record's entity is filtered by the visibility mask / frustum, then state
+// changes (shader, textures, shader-data stack) are flushed lazily and the
+// entity is dispatched either through the state-batched path (bit 2 set) or
+// directly.  `c` is the draw-batch object, `viewer` the cViewer doing the pass.
+void S6::m470(int a, uint flags, int c, void* viewer)
 {
     char* self = (char*)this;
     *(int*)(self + 0x168) = -1;
-    uchar filt = 0;
-    if (flags & 0x20000) filt = 8;
-    if (flags & 0x40000) filt |= 0x40;
-    if (f7c4fd0() == 0)
+
+    uchar mask = 0;
+    if (flags & 0x20000) mask = 8;
+    if (flags & 0x40000) mask |= 0x40;
+
+    if (!((char(__thiscall*)(void*))f7c4fd0)(viewer))
         return;
+
     f777bf0();
     f6ddde0(3, 2);
-    int cur = *(int*)(self + 0x108 + a * 0x14);
-    int* end = (int*)(self + 0x108 + a * 0x14);
-    if (cur == *end) {
-        f6ddef0(c);
-        f777c10();
-        f7c3c10();
-        return;
+
+    int* rec = *(int**)(self + 0x104 + a * 0x14);
+    int** endp = (int**)(self + 0x108 + a * 0x14);
+    float mid[3];
+    mid[0] = mid[1] = mid[2] = 0.0f;
+
+    uchar changed = 0;    // local_5e: a shader-data push is live
+    uchar lastBit2 = 0;   // local_5d: previous entity's batched-draw bit
+    int shader68 = 0, shader5c = 0, shader60 = 0, tex28 = 0, tex2c = 0;
+
+    while (rec != *endp) {
+        int* e = (int*)rec[1];
+        uchar ef = *(uchar*)((char*)e + 0x12);
+        bool pass = (ef & mask) == mask;
+        bool skip = false;
+
+        if ((ef & 0x10) == 0) {
+            if (!pass) {
+                skip = true;
+            } else {
+                float b1[3], b2[3];
+                b1[0] = *(float*)((char*)e + 0x3c);
+                b1[1] = *(float*)((char*)e + 0x40);
+                b1[2] = *(float*)((char*)e + 0x44);
+                b2[0] = *(float*)((char*)e + 0x30);
+                b2[1] = *(float*)((char*)e + 0x34);
+                b2[2] = *(float*)((char*)e + 0x38);
+                uint r = ((uint(__thiscall*)(void*, float*, float*, uint))f700120)
+                    (self + 0x260, b2, b1, 0x200);
+                if ((r & 0x40) != 0)
+                    skip = true;
+            }
+        } else if (!pass) {
+            skip = true;
+        }
+
+        if (!skip && e[0] != 0) {
+            uchar bit2 = (uchar)((ef >> 2) & 1);
+            if (changed
+                || shader5c != e[0x17] || shader60 != e[0x18]
+                || tex28 != e[10] || tex2c != e[0xb]
+                || *(uint*)(self + 0x168) != (uint)*(uchar*)((char*)e + 0x10)
+                || shader68 != e[0x1a] || lastBit2 != bit2) {
+                f6ddef0(c);
+                if (changed)
+                    f777c10();
+                f777c10();
+                *(uint*)(self + 0x168) = (uint)*(uchar*)((char*)e + 0x10);
+                shader68 = e[0x1a];
+                shader5c = e[0x17];
+                shader60 = e[0x18];
+                tex28 = e[10];
+                tex2c = e[0xb];
+                f777bf0();
+                f777b50(*(void**)(shader5c + 4));
+                if ((ef & 3) != 0)
+                    f777ae0(0x223, 0, 1);
+                ((void(__thiscall*)(void*))f11ee580)(*(void**)(shader5c + 4));
+                if (e[10] != 0) {
+                    f11f1280(0, *(void**)e[10]);
+                    g16f8b00 |= 1;
+                }
+                if (e[0xb] != 0) {
+                    f11f1280(1, *(void**)e[0xb]);
+                    g16f8b00 |= 2;
+                }
+                if (e[0x18] != 0)
+                    ((void(__thiscall*)(void*))f7789d0)((void*)e[0x18]);
+                int outA, outB;
+                f6e6710((char)e[4], &outA, &outB);
+                f6ddde0(outA, outB);
+                lastBit2 = bit2;
+            }
+            f777bf0();
+            if (e[0x1a] != 0)
+                f777ae0(0x219, *(int*)e[0x1a], 0);
+            if (e[0x19] != 0)
+                f777ae0(0x206, e[0x19], 0);
+            if ((ef & 3) != 3) {
+                mid[0] = ((float)e[0x0f] + (float)e[0x0c]) * g1471064;
+                mid[1] = ((float)e[0x10] + (float)e[0x0d]) * g1471064;
+                mid[2] = ((float)e[0x11] + (float)e[0x0e]) * g1471064;
+                f777ae0(0x226, (int)mid, 1);
+            }
+            if (bit2 == 0) {
+                void* obj = (void*)e[0];
+                ((void(__thiscall*)(void*, void*))VFN(obj, 0))(obj, self + 4);
+            } else {
+                if (e[0x1b] == 0) {
+                    ((void(__thiscall*)(void*, int, int))f6e8e40)
+                        (self + 0x16c, 0, *(int*)(self + 0x168));
+                    void* obj = (void*)e[0];
+                    ((void(__thiscall*)(void*, void*))VFN(obj, 0))(obj, self + 0x16c);
+                    int* q = (int*)e[0x1b];
+                    if (q != 0) {
+                        e[0x1b] = 0;
+                        ((void(__thiscall*)(void*))VFN(q, 8))(q);
+                    }
+                    void** slot = (void**)g15ddc84;
+                    ((void(__thiscall*)(void*))f7a4710)(slot[0]);
+                    e[0x1b] = (int)slot[0];
+                    slot[0] = 0;
+                }
+                if (e[0x1b] != 0) {
+                    int quad[4];
+                    quad[0] = e[0x13]; quad[1] = e[0x14];
+                    quad[2] = e[0x15]; quad[3] = e[0x16];
+                    f6e6500(quad);
+                    g16f9110 |= 0x10;
+                    ((void(__thiscall*)(void*, int, int))f7a3e60)
+                        ((void*)e[0x1b], c, 0);
+                    uchar* pb = (uchar*)e[0x17];
+                    if (pb != 0 && pb[0] > 1) {
+                        int i = 1;
+                        do {
+                            ((void(__thiscall*)(void*))f11ee580)
+                                (*(void**)(pb + i * 4 + 4));
+                            ((void(__thiscall*)(void*, int, int))f7a3e60)
+                                ((void*)e[0x1b], c, 0);
+                            pb = (uchar*)e[0x17];
+                            i++;
+                        } while (i < (int)pb[0]);
+                    }
+                    f6e6500(&g140afc4);
+                    g16f9110 |= 0x10;
+                }
+            }
+            changed = (uchar)f777c90();
+            if (!changed)
+                f777c10();
+            *(int*)(self + 0x370) += 1;
+            endp = (int**)(self + 0x108 + a * 0x14);
+        }
+        rec += 2;
     }
-    // NOTE: full dispatch loop omitted (partial); see partial.txt
+
     f6ddef0(c);
+    if (changed)
+        f777c10();
     f777c10();
-    f7c3c10();
+    ((void(__thiscall*)(void*))f7c3c10)(viewer);
 }
 
 // ---------------------------------------------------------------------------
@@ -167,15 +312,15 @@ void S6::m920()
         ((void(__thiscall*)(void*))VFN(p, 8))(p);
     void* q = *(void**)(self + 0x2c);
     if (q) {
-        int* rc = (int*)((char*)q + 8);
-        if (--(*rc) < 1)
-            (*rc)++;
+        volatile long* rc = (volatile long*)((char*)q + 8);
+        if (_InterlockedDecrement(rc) < 1)
+            _InterlockedIncrement(rc);
     }
     void* r = *(void**)(self + 0x28);
     if (r) {
-        int* rc = (int*)((char*)r + 8);
-        if (--(*rc) < 1)
-            (*rc)++;
+        volatile long* rc = (volatile long*)((char*)r + 8);
+        if (_InterlockedDecrement(rc) < 1)
+            _InterlockedIncrement(rc);
     }
 }
 
